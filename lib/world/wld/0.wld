@@ -1343,6 +1343,28 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 BREAK
+#36
+Name:	Lucien's Test Chamber
+Desc:$
+   A simple laboratory, perfect for testing the latest world-breaking changes.
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	50
+Z:	50.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
 #40
 Name:	Hualpa's Cavern
 Desc:$
