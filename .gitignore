@@ -30,7 +30,7 @@
 *.exe
 *.out
 *.app
-bin/awake
+awake
 
 # OSX files
 .DS_Store
