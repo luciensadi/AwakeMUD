@@ -1,0 +1,21 @@
+DAMAGE
+
+Damage in Shadowrun is dealt with in levels of varying degrees.
+Imagine your total physical and mental health in terms of
+percentages, with full health being 100% and each box representing
+10%. 
+
+All damage dealt is at one of four levels: light; moderate; serious;
+or deadly. Light is 1 box of damage, moderate is 3, serious is 6 and
+deadly is 10.
+
+If you were to take a Moderate wound and then a Light wound you would
+end up with 4 boxes of damage marked off. When you take damage it stays
+the same type of damage you receive, either mental or physical, unless you
+are at 0 mental, then it overflows into physical.
+
+When you reach 0 mental or physical you fall unconcious (unless using a 
+pain editor). If your physical health overflow is greater than your body,
+you will die.
+
+^WSee Also: PAIN EDITOR, SCORE, PHYSICAL, MENTAL^n

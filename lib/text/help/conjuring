@@ -1,0 +1,11 @@
+CONJURING
+
+Linked Attribute: ^gWillpower^N
+
+Conjuring allows players with ^Wmagic^n ability to conjure or banish creatures.
+Only ^Wmages^n can conjure elementals, while only ^Wshamans^n can conjure nature
+spirits.  The higher this skill, the more powerful the elemental or spirit
+can be conjured.  Any drain suffered while conjuring is reduced by Charisma.
+
+^WSee Also: SORCERY, CONJURE^n
+

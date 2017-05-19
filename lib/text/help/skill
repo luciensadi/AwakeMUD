@@ -1,0 +1,22 @@
+SKILLS "SKILL LEVELS"
+
+This shows you what skills you have, and to what level you have trained them.
+
+This table will show you the numerical value for each skill level's name.
+
+Skill Level Name		Numerical Value
+------------------------------------------------
+'awful'					1
+'sloppy'				2
+'average'				3
+'above average'				4
+'good'					5
+'very good'				6
+'distinguished'				7
+'excellent'				8
+'superb'				9
+'learned'				10
+'amazing'				11-20
+
+^WSee Also: KARMA, ATTRIBUTES^n
+

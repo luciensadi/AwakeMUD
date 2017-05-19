@@ -1,0 +1,38 @@
+#302
+Name:	americar ford sleek black
+ShortDesc:	Ford Americar
+RoomDesc:	A sleek, black Ford is parked here
+LongDesc:$
+As one of the new standards of the American automotive industry, the Americar
+has been a stalwart of pedestrian driving for many years. The design is hardly
+groundbreaking, yet it still serves as the backbone for the majority of
+traffic on the streets. It looks like it can seat four people comfortably. 
+~
+Inside:$
+The car is neatly arranged at the front, and spacious in the back. Tinted
+windows have been installed, and small trideo screens are fixed into the back
+of the two front seats. Along the dashboard, a standard GPS monitoring console
+and the usual suspects of speedometers and gauges silently come to life as you
+turn the ignition. 
+~
+InsideRear:$
+You are inside a boring vehicle.~
+Leaving:	leaves
+Arriving:	arrives
+Handling:	4
+Speed:	105
+Accel:	8
+Body:	3
+Armour:	0
+Pilot:	0
+Sig:	2
+Autonav:	2
+Seating:	4
+SeatingBack:	0
+Load:	50
+Cost:	0
+Type:	2
+Flags:	0
+Engine:	3
+BREAK
+END

@@ -1,0 +1,9 @@
+"POLICE PROCEDURES"
+
+Linked Attribute: ^gIntelligence (Knowledge Based)^n
+
+This skill is used along with the examine command to tell you the legality of
+an item. It will give you both its general legality and the legality of it in the
+area you are currently in.
+
+^WSee Also: EXAMINE^n

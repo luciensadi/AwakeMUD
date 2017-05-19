@@ -1,0 +1,14 @@
+DISPELL
+
+Usage: ^gDISPELL <person> <spell>^n
+
+This command is used to dispell a spell effect that has been cast
+on a person, or an area affect spell if you know who the caster is.
+You must assense the person to find out the number of the spell in the
+persons spell affection list. You then pit your sorcery skill and spell 
+casting pool against the force of the spell you wish to dispell, and 
+will either weaken it or completly dispell it, depending on your skill.
+Each time you try an dispell a spell you face drain as though you had 
+just cast the spell you are trying to dispell.
+
+^WSee Also: CAST, ASSENSE^n

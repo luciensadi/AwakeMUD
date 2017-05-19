@@ -1,0 +1,13 @@
+REDIRECT
+
+Test: Control
+Utility: Camo
+Usage: ^gREDIRECT^n
+
+The redirect command is used to make it harder for Trace IC to locate
+your physical position. Every RTG you perform it on makes it more difficult
+for them to complete their locate cycle. This command can only be
+performed on an RTG.
+
+^WSee Also: MATRIX, UTILITIES^n
+

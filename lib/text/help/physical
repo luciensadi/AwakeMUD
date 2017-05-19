@@ -1,0 +1,23 @@
+PHYSICAL "PHYSICAL POINTS"
+
+Physical points are a measure of what physical condition you are in
+relative to your attributes.  This number ranges from -(BODY) to 10, with
+anything below 0 meaning you are on the verge of death.  The most you can
+fall below zero is equal to your body attribute.  Beyond this means 
+instant death.  This number, like your ^Wmental points^n, never raises beyond
+10.  The reason is that this number is affected by your attributes, so,
+for example, my physical condition of 10 may mean alot more than your
+condition of 10.  (This is why ^Wattributes^n and ^Wskills^n are so important as
+you ratings in those directly affect what your physical points really
+mean).
+
+To recover physical points, you must either get magical healing, visit a
+hospital, or rest (or ^Wsleep^n).  These are in order of most effective to
+least effective.
+
+Any weapon which is not blunt will strike for physical damage, with the
+end goal being death of your opponent.  If you don't wish to kill your
+oppenent, use a blunt weapon (including your hands).
+
+^WSee Also: MENTAL, CONDITION MONITOR^n
+

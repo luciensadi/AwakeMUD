@@ -1,0 +1,9 @@
+TRANSFER
+
+Usage: ^gTRANSFER <vehicle> <person>^n
+
+This command is used to transfer ownership of a vehicle to
+another person. Once used they become full owner and you lose
+any rights you had to the vehicle. This is not reversible.
+
+For usage with credsticks see ^WHELP BANK^N

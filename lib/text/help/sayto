@@ -1,0 +1,14 @@
+SAYTO
+
+Usage: ^gSAYTO <name> <message>^n
+
+This command is used to direct a say towards a specific person.
+The whole room can still read the message but it is prefixed by
+the targets name or description.
+
+For Example:
+^c< 10P 10M > sayto sean Do you ever leave dantes?^n
+People in the room would see:
+^cEnka says to Sean, in English, "Do you ever leave dantes?"^n
+
+^WSee Also: SAY^n

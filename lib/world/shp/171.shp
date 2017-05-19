@@ -1,0 +1,313 @@
+#17100
+Keeper:	17100
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	2006
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	2004
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	2008
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	2007
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	9907
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	17101
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	17100
+		Type:	Always
+		Stock:	0
+BREAK
+#17101
+Keeper:	17101
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	7
+Close:	23
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	9942
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	2402
+		Type:	Always
+		Stock:	0
+BREAK
+#17102
+Keeper:	17103
+ProfitBuy:	1.50
+ProfitSell:	0.90
+Random:	1
+Open:	6
+Close:	22
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	17159
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	17158
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	9963
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	9960
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	17111
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	17110
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	17109
+		Type:	Avail
+		Stock:	0
+	[SELL 7]
+		Vnum:	17108
+		Type:	Avail
+		Stock:	0
+	[SELL 8]
+		Vnum:	17107
+		Type:	Avail
+		Stock:	0
+	[SELL 9]
+		Vnum:	17106
+		Type:	Avail
+		Stock:	0
+	[SELL 10]
+		Vnum:	17105
+		Type:	Avail
+		Stock:	0
+	[SELL 11]
+		Vnum:	17104
+		Type:	Avail
+		Stock:	0
+	[SELL 12]
+		Vnum:	17103
+		Type:	Avail
+		Stock:	0
+BREAK
+#17103
+Keeper:	17107
+ProfitBuy:	1.00
+ProfitSell:	0.50
+Random:	0
+Open:	6
+Close:	22
+Type:	Legal
+NoSuchItemKeeper:	I no have that!
+NoSuchItemPlayer:	You no got that!
+NoNuyen:	You no got the money!
+DoesntBuy:	I no buy that!
+Buy:	%d nuyen!
+Sell:	Your %d nuyen!
+Flags:	100
+Races:	0
+Buytypes:	100000000110000000000000000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	1173
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	17113
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	17114
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	17115
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	17116
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	17118
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	17119
+		Type:	Avail
+		Stock:	0
+	[SELL 7]
+		Vnum:	17120
+		Type:	Avail
+		Stock:	0
+	[SELL 8]
+		Vnum:	17121
+		Type:	Avail
+		Stock:	0
+	[SELL 9]
+		Vnum:	17122
+		Type:	Avail
+		Stock:	0
+	[SELL 10]
+		Vnum:	17123
+		Type:	Avail
+		Stock:	0
+	[SELL 11]
+		Vnum:	17124
+		Type:	Avail
+		Stock:	0
+	[SELL 12]
+		Vnum:	9951
+		Type:	Avail
+		Stock:	0
+	[SELL 13]
+		Vnum:	1112
+		Type:	Avail
+		Stock:	0
+	[SELL 14]
+		Vnum:	1848
+		Type:	Avail
+		Stock:	0
+	[SELL 15]
+		Vnum:	1847
+		Type:	Avail
+		Stock:	0
+BREAK
+#17123
+Keeper:	17123
+ProfitBuy:	1.00
+ProfitSell:	0.20
+Random:	0
+Open:	3
+Close:	23
+Type:	Legal
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	100
+Races:	0
+Buytypes:	101001000000001000011000000000000010
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	1816
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	4921
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	29911
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	2109
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	1843
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	1818
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	393
+		Type:	Avail
+		Stock:	0
+	[SELL 7]
+		Vnum:	377
+		Type:	Avail
+		Stock:	0
+	[SELL 8]
+		Vnum:	5952
+		Type:	Avail
+		Stock:	0
+	[SELL 9]
+		Vnum:	5953
+		Type:	Avail
+		Stock:	0
+	[SELL 10]
+		Vnum:	5956
+		Type:	Avail
+		Stock:	0
+	[SELL 11]
+		Vnum:	31542
+		Type:	Avail
+		Stock:	0
+	[SELL 12]
+		Vnum:	64960
+		Type:	Avail
+		Stock:	0
+	[SELL 13]
+		Vnum:	1182
+		Type:	Avail
+		Stock:	0
+	[SELL 14]
+		Vnum:	1187
+		Type:	Avail
+		Stock:	0
+BREAK
+END

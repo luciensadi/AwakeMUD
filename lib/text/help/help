@@ -1,0 +1,20 @@
+HELP
+
+Following help is available:
+
+^YHELP help       - This text.
+HELP            - A list of some of the most useful commands.^n
+
+Help searches for a partial match of the entered word, including any
+spaces that may follow the word.
+
+Example:
+^c> 'help mag '^n
+   will not match anything.
+
+^c> 'help mag'^n
+   will match 'magic user' or 'magic' depending on first
+   occurence in the help file.
+
+^WSee Also: COMMANDS^n
+

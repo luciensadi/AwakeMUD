@@ -1,0 +1,11 @@
+KICK
+
+Usage: ^gKICK <door> [direction]^n
+
+This command is used to break down a door using your feet. Your
+strength attribute is used to calculate the power of the attack.
+Not all doors can be kicked down. The hit command can be used
+instead of kick if you want to use your currently wielding weapon
+to break down the door.
+
+^WSee Also: HIT, UNLOCK, BYPASS^n

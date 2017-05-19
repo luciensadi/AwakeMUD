@@ -1,0 +1,11 @@
+DRAW
+
+Usage: ^gDRAW^N
+
+This command is used to draw weapons from sheaths and holsters 
+directly into your hands ready for combat. This command is not
+always neccisary as you automatically draw when entering combat.
+
+Heavy weapons cannot be quickdrawed.
+
+^WSee Also: HOLSTER, SHEATH, READY^n

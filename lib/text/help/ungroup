@@ -1,0 +1,11 @@
+UNGROUP
+
+Usage: ^gUNGROUP
+       UNGROUP <target>^n
+
+UNGROUP can be used by group leaders to disband the entire group, or
+to kick a specific group member out of the group (and stop him/her from
+following the leader).
+
+^WSee Also: GROUP^n
+

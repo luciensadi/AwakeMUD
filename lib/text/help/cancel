@@ -1,0 +1,8 @@
+CANCEL
+
+Usage: ^gCANCEL <number>^n
+
+This command is used to cancel an order you have at a shop. The
+number of the order can be got by using the check command.
+
+^wSee Also: SHOPS, BUY, LIST, CHECK^n

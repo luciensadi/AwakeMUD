@@ -1,0 +1,13 @@
+READY DRAW
+
+Usage: ^gREADY <holster/sheath>
+       DRAW^n
+
+The ready command is used to ready a holster/sheath for drawing. A
+readied holster/sheath will be drawn from automatically when you
+enter combat. The ^WDraw^n command can be used to draw a weapon from
+a readied holster/sheath outside of combat.
+
+Heavy weapons cannot be quick drawed and readying them has no effect.
+
+^WSee Also: SHEATH, HOLSTER^n

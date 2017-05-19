@@ -1,0 +1,13 @@
+JUNK
+
+Usage: ^gJUNK <object>^n
+
+Use JUNK instead of ^RDROP^n if you want to keep the world a little cleaner.  If
+you JUNK something, it will disappear and you'll get a few nuyen for your troubles.
+
+
+^c< 10P 10M > junk cup
+< 10P 10M > junk all.bronze
+
+^WSee Also: DROP, DONATE^n
+

@@ -1,0 +1,10 @@
+LEASE
+
+Usage: ^gLEASE <apartment number>^n
+
+This command is used at an apartment block receptionist to
+pay for the first months rent of an apartment and bind it to
+you. This will also give you a copy of the key needed to
+unlock the door.
+
+^WSee Also: HOUSE, PAY, LEAVE, HOUSES, RETRIEVE, LIST^n

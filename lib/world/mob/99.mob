@@ -1,0 +1,1006 @@
+#9901
+Keywords:	DeeGee Rapper CUT C.U.T. Ork
+Name:	DeeGee
+RoomDesc:$
+DeeGee, famed rapper of C.U.T. stands here. 
+
+~
+LookDesc:$
+A Filipino ork stands here his wavy ebony hair hidden beneath a black and red
+L.A. Meat Cleaver Combat Biker baseball cap. He wears a black and red Adidas
+jump suit on the rest of his body and a few platinum chains around his neck.
+Closer inspection identifies him as DeeGee one of the rappers from C.U.T. 
+~
+ArriveMsg:	Skank, the local Mafioso
+LeaveMsg:	ø+„	¨6i
+MobFlags:	10000000100000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	4
+	Str:	9
+	Cha:	1
+	Int:	1
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	9
+	Impact:	6
+	Cash:	5
+	Bank:	300
+	Karma:	5
+[SKILLS]
+	unarmed combat:	6
+	firearms:	6
+BREAK
+#9902
+Keywords:	trog ganger
+Name:	a Trog ganger
+RoomDesc:$
+A Trogs gang member stands here. 
+
+~
+LookDesc:$
+Covered in scars and dressed in baggy red and black clothes this youth appears
+to be a member of the Troll and Ork gang the "Trogs" 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000111001001000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pierce
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	4
+	Str:	5
+	Cha:	1
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	3
+	Impact:	2
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#9903
+Keywords:	ork squatter orkish
+Name:	an orkish squatter
+RoomDesc:$
+An orkish squatter asks if you can spare any cred.
+
+~
+LookDesc:$
+Skuzzy even for an ork, this ork smells like dung and looks even worse.
+He probably hasn't bathed since goblinization, and is wearing second and
+third hand clothing he snagged from a dumpster.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000001010001100
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	1
+	Str:	3
+	Cha:	1
+	Int:	1
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	unarmed combat:	2
+BREAK
+#9904
+Keywords:	doc dodie ork doctor
+Name:	Doc Dodie
+RoomDesc:$
+Doc Dodie sits behind a counter examining some newly acquired goods.
+
+~
+LookDesc:$
+Doc Dodie is a very skinny pasty looking ork, with dark coal eyes behind his
+spectacles.  He is wearing a white lab coat stained with a great deal of
+blood.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	4
+	Str:	1
+	Cha:	1
+	Int:	5
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	50
+	Impact:	50
+	Cash:	1000
+	Bank:	10000
+[SKILLS]
+	:	10
+	unarmed combat:	2
+BREAK
+#9905
+Keywords:	Iceberg Slam
+Name:	Iceberg Slam
+RoomDesc:$
+The famous Troll Rapper Iceberg Slam stands here. 
+
+~
+LookDesc:$
+Leader of the OU rap group C.U.T. or Crazed Urban Trogs he is dressed in old
+Trogs black and red and wears a old Body Count T-shirt under his black and red
+jacket. A thick gold chain hangs down from his neck with a Onyx CUT emblem
+dangling from it. He looks to be of creole descent and his long ebony hair has
+been gathered into a pony tail. For facial hair he has a moustache and goatee
+with a noticeable mole on the right side of his face maybe half a inch from
+his nose.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bludgeon
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	7
+	Str:	11
+	Cha:	3
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	9
+	Impact:	8
+	Cash:	100
+	Karma:	25
+[SKILLS]
+	firearms:	7
+	unarmed combat:	5
+	street etiquette:	5
+BREAK
+#9906
+Keywords:	drug dealing dwarf dealer
+Name:	a drug dealing dwarf
+RoomDesc:$
+A drug dealing Dwarf stands here. 
+
+~
+LookDesc:$
+Dressed in old 1990's style gangsta clothes with baggy jeans and a FUBU jersey
+along with a few orichalcum chains he walks over and asks in a low voice "What
+you want? Electronic, Natural or Synth?" 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	7
+	Cha:	5
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Bank:	5
+[SKILLS]
+	unarmed combat:	1
+BREAK
+#9907
+Keywords:	groog ork salesman
+Name:	Groog
+RoomDesc:$
+Groog looks at you impatiently, waiting for you to buy something and leave. 
+
+~
+LookDesc:$
+"Whadaya lookin at?"  he says, "Buy something and leave chummer!"
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	10000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	5
+	Str:	7
+	Cha:	1
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	negotiation:	4
+BREAK
+#9908
+Keywords:	Chino XXL Ork Rapper
+Name:	Chino XXL
+RoomDesc:$
+The famed ork rapper Chino XXL stands here. 
+
+~
+LookDesc:$
+A well sized ork of Aztlan/African descent stands here. This ork is dressed in
+all black with a leather trench coat draped over his body. He looks to be a
+member of the OU rap group C.U.T. His ebony hair has been arranged into two
+long braids which hang down to his shoulders. His facial hair consists of a
+well groomed moustache and goatee. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000100000011010
+AffFlags:	1000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	12
+	Str:	12
+	Cha:	9
+	Int:	5
+	Wil:	5
+	Mag:	15
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	10
+	Impact:	8
+	Cash:	200
+	Karma:	5
+[SKILLS]
+	unarmed combat:	10
+	firearms:	9
+	sorcery:	20
+BREAK
+#9909
+Keywords:	huge rat
+Name:	a huge mutant rat
+RoomDesc:$
+A huge mutant rat squeals at you.
+
+~
+LookDesc:$
+A huge mutant rat that appears to glow in the dark.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	1
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#9910
+Keywords:	renaldo ork salesman techie dealer antique deckmeister
+Name:	Renaldo the Deckmeister
+RoomDesc:$
+Renaldo the deckmeister/antique dealer stands here.
+
+~
+LookDesc:$
+Though he runs an antique shop, it appears he has a technological bent, as
+well as modern goods behind the counter.  Maybe he is just the guy you are
+look ing for, for items of interest to deckers.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	3
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	4
+	Impact:	1
+	Cash:	10000
+	Bank:	100000
+[SKILLS]
+	unarmed combat:	5
+	computers:	7
+BREAK
+#9911
+Keywords:	rat disgusting mangy gross black
+Name:	a disgusting rat
+RoomDesc:$
+A disgusting rat is here, nibbling on something ghastly.
+
+~
+LookDesc:$
+A sickly disgusting rat with black fur, mange, and a bit of gunk smeared
+all over it.
+~
+ArriveMsg:	crawls in from
+LeaveMsg:	crawls
+MobFlags:	11001000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	stealth:	2
+	unarmed combat:	2
+BREAK
+#9912
+Keywords:	harmless spider
+Name:	a harmless spider
+RoomDesc:$
+A harmless spider skitters about here. 
+
+~
+LookDesc:$
+A plain brown spider, of a common species. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	10000001000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	6
+	Impact:	5
+[SKILLS]
+	unarmed combat:	8
+	armed combat:	8
+BREAK
+#9913
+Keywords:	hog ork ripley physad physical adept
+Name:	Hog Ripley
+RoomDesc:$
+Hog Ripley stands here, keeping trouble out of his coffin motel.
+
+~
+LookDesc:$
+A tall and proud ork, who hates cops, bigots, and trouble.  Ran the shadows
+in the mid-to-late forties and built up a nice reputation.  Now he caters
+to the kind of people he used to run with, and keeps an island of safety
+for the shadowrunner to hide or hole up in.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	6
+	Str:	8
+	Cha:	5
+	Int:	5
+	Wil:	6
+	Mag:	10
+[POINTS]
+	Height:	220
+	Weight:	100
+	Ballistic:	8
+	Impact:	6
+	Cash:	1000
+	Bank:	5650
+[SKILLS]
+	:	4
+	:	3
+	:	3
+	unarmed combat:	8
+BREAK
+#9914
+Keywords:	rumble ork arms dealer
+Name:	Rumble
+RoomDesc:$
+An ork arms dealer stands here glaring at you.
+
+~
+LookDesc:$
+An ugly ork with intense green eyes, smoking a Havana.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	4
+	Cha:	1
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	180
+	Ballistic:	10
+	Impact:	8
+[SKILLS]
+	firearms:	10
+BREAK
+#9915
+Keywords:	al alfred ray tusky mayor ork
+Name:	Alfred Tusky
+RoomDesc:$
+Alfred Tusky, the Mayor of the Underground stands here, admiring a statue.
+
+~
+LookDesc:$
+An elder ork in his late forties, wearing a pinstripe suit and a
+monocle.  Alfred Tusky is well known for his fight on the surface for
+the rights of all Orks and Trolls, dating back to the thirties, and
+the infamous Night of Rage.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000000001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	5
+	Str:	9
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	9
+[POINTS]
+	Height:	240
+	Weight:	175
+	Ballistic:	9
+	Impact:	8
+	Cash:	200
+	Karma:	10
+[SKILLS]
+	pistols:	8
+	sorcery:	8
+	unarmed combat:	8
+BREAK
+#9916
+Keywords:	troll patch leather biker
+Name:	Patch
+RoomDesc:$
+A huge troll in leathers, wearing an eyepatch aims his cue.
+
+~
+LookDesc:$
+Wearing leathers, chaps, and torn denim pants, and an eyepatch, he looks
+at least 9 feet tall and ready for a good fight.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000111000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	5
+	Str:	9
+	Cha:	4
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	295
+	Weight:	142
+	Ballistic:	8
+	Impact:	7
+[SKILLS]
+	clubs:	9
+	unarmed combat:	8
+	firearms:	6
+BREAK
+#9917
+Keywords:	DeeGee Rapper CUT C.U.T. Ork
+Name:	DeeGee
+RoomDesc:$
+DeeGee, famed rapper of C.U.T. stands here. 
+
+~
+LookDesc:$
+A Filipino ork stands here his wavy ebony hair hidden beneath a black and red
+L.A. Meat Cleaver Combat Biker baseball cap. He wears a black and red Adidas
+jump suit on the rest of his body and a few platinum chains around his neck.
+Closer inspection identifies him as DeeGee one of the rappers from C.U.T. 
+~
+ArriveMsg:	lumbers in from
+LeaveMsg:	lumbers away
+MobFlags:	10000000100000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	4
+	Str:	9
+	Cha:	1
+	Int:	1
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	9
+	Impact:	6
+	Cash:	5
+	Bank:	300
+	Karma:	5
+[SKILLS]
+	unarmed combat:	6
+	firearms:	6
+BREAK
+#9918
+Keywords:	ork brawler
+Name:	an Ork Brawler
+RoomDesc:$
+An Ork brawler stands here engaged in a fight with another ork.
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	2
+	Str:	3
+	Cha:	1
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	120
+	Ballistic:	4
+	Impact:	2
+	Cash:	250
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#9919
+Keywords:	ork patron
+Name:	an Ork patron of the Big Rhino
+RoomDesc:$
+A patron of the Big Rhino wanders about, drinking a mug of beer.
+
+~
+LookDesc:$
+An ork drinking beer.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001000
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	4
+	Cha:	2
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	195
+	Weight:	110
+	Ballistic:	3
+	Impact:	2
+	Cash:	200
+	Bank:	200
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#9920
+Keywords:	louis troll bartender
+Name:	Louis, the Troll Bartender
+RoomDesc:$
+A troll bartender looks at you and asks, "Whatcha Poison?"
+
+~
+LookDesc:$
+A troll wearing a pinstriped bartender uniform.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	5
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	230
+	Weight:	165
+	Ballistic:	4
+	Impact:	3
+[SKILLS]
+BREAK
+#9921
+Keywords:	bubba troll bouncer
+Name:	Bubba the Troll Bouncer
+RoomDesc:$
+Bubba the Troll Bouncer stands here, guarding the entrance to the lower level.
+
+~
+LookDesc:$
+A big troll of african descent.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000011000001010
+AffFlags:	1000000000
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	5
+	Str:	9
+	Cha:	1
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	254
+	Weight:	212
+	Ballistic:	9
+	Impact:	8
+	Cash:	20
+[SKILLS]
+	firearms:	7
+	unarmed combat:	8
+BREAK
+#9927
+Keywords:	skanky skank prostitute hooker whore ork
+Name:	a skanky prostitute
+RoomDesc:$
+A skanky prostitute tries to pick you up.
+
+~
+LookDesc:$
+A skanky ork prostitute wearing practically nothing.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	4
+	Cha:	2
+	Int:	2
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	196
+	Weight:	98
+	Ballistic:	2
+	Impact:	2
+[SKILLS]
+BREAK
+#9928
+Keywords:	blue patron ork
+Name:	an ork patron of Blue's
+RoomDesc:$
+An ork patron of Blue's stands here, checking out the show.
+
+~
+LookDesc:$
+An ork drinking and drooling over the females.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	4
+	Cha:	1
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	189
+	Weight:	100
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#9929
+Keywords:	ork stripper
+Name:	a female ork stripper
+RoomDesc:$
+A female ork stripper tries to turn you on.
+
+~
+LookDesc:$
+A lady ork stripper wearing nothing at all, doing a dance to the
+music, trying to turn on the orks who in turn put money on the rail.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	88
+	Ballistic:	5
+	Impact:	3
+[SKILLS]
+	unarmed combat:	5
+BREAK
+#9930
+Keywords:	ork pervert
+Name:	an ork pervert
+RoomDesc:$
+An ork pervert sits here, plugged into the x-rated simsense.
+
+~
+LookDesc:$
+Drooling, eyes rolled into the back of his head, with a simsense
+electrode on his forehead.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	1
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	210
+	Weight:	210
+	Ballistic:	2
+	Impact:	1
+	Cash:	100
+	Bank:	220
+[SKILLS]
+BREAK
+#9931
+Keywords:	cholly ork bartender
+Name:	Cholly
+RoomDesc:$
+An ork bartender grins as he watches the money pour into the club. 
+
+~
+LookDesc:$
+Wearing more gold than Mister T, and paying especially close attention to all
+the money coming into the club, this bartender seems to enjoy his job very
+much. A little too much for comfort perhaps. His hair is thin and blonde, and
+tied back in a ponytail.  He is clean in appearance, though he still seems
+greasy, despite his physical cleanliness. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	4
+	Str:	7
+	Cha:	2
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	14
+	Weight:	100
+	Level:	1
+	Ballistic:	12
+	Impact:	12
+	Cash:	1200
+	Bank:	1200
+[SKILLS]
+BREAK
+#9932
+Keywords:	Mugby big bad troll guard
+Name:	Mugby
+RoomDesc:$
+Mugby, the big bad troll guard stands here glaring at you. 
+
+~
+LookDesc:$
+A abominably large troll that looks like he has never seen the surface. His
+face is pale white, and his eyes are steel grey.  He has two large bony horns
+on his head, and black hair.  He wears a spiked trenchcoat and carries a big
+gun.  If your not an ork, it may be a good idea to leave now.... 
+~
+ArriveMsg:	walks in from
+LeaveMsg:	walks
+MobFlags:	100000000001000011010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	4
+	Str:	9
+	Cha:	1
+	Int:	1
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	212
+	Weight:	185
+[SKILLS]
+	unarmed combat:	10
+	shotguns:	10
+BREAK
+#9933
+Keywords:	Skank Italian Ork cigar puffing smoking grin fat money clip
+Name:	Skank, the local Mafioso
+RoomDesc:$
+A Italian looking Ork stands here puffing away at a cigar with a grin across
+his features and a fat money clip in his pocket 
+
+~
+LookDesc:$
+Though he keeps himself clean enough Skank can't help the mass of warts that
+mar his olive complexion. He's dressed in a nice enough suit though and his
+hair is greased back nicely. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001010
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	7
+	Str:	11
+	Cha:	3
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	6
+	Impact:	6
+	Cash:	20
+[SKILLS]
+	firearms:	5
+	unarmed combat:	4
+BREAK
+END

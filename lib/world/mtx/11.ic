@@ -1,0 +1,338 @@
+#1100
+Name:	Novatech Wailer
+LongDesc:	A small siren hovers here, screaming an alert.
+Description:$
+A small loudspeaker, hovering at head height, blares a warning. A small light
+attached to its underbelly flashes red as the whole unit bobs up and down. 
+~
+Rating:	4
+Type:	^WProbe^n
+Subtype:	0
+BREAK
+#1101
+Name:	Novatech Soldier
+LongDesc:	A thin robot stands here, holding a cattle prod.
+Description:$
+A thin, humanoid robat stands here. It appears made up of metal boxes and
+pipes, and in one hand it carries a large, menacing looking cattle prod. It
+eyes you warily, and hefts its weapon. 
+~
+Rating:	4
+Type:	^WKiller^n
+Subtype:	0
+BREAK
+#1102
+Name:	Novatech Tripwire
+LongDesc:	A tangle of metallic wire wraps itself around your legs.
+Description:$
+A length of metallic chromed wire wraps itself around your legs, like some
+sort of possessed creeper. At various intervals small barbs shoot out from the
+wire, and then shrink back. 
+~
+Rating:	4
+Type:	^WCrippler^n
+Subtype:	0
+BREAK
+#1103
+Name:	Novatech Silencer
+LongDesc:	A cloud of stinging insects is swarming you.
+Description:$
+Millions of tiny metallic stinging and biting insects swarm around your head
+and neck. They appear to be targetting your eyes and nose, confusing the
+senses. 
+~
+Rating:	4
+Type:	^WScramble^n
+Subtype:	0
+BREAK
+#1104
+Name:	Novatech Quicksand
+LongDesc:	A shiny pool of sand slowly flows around you.
+Description:$
+A metallic flowing sand begins to fill the room, making it increasingly
+difficult to move. It seems to be made of some sort of metal, and appears to
+be slowly corroding your lower half. 
+~
+Rating:	4
+Type:	^WTar Baby^n
+Subtype:	1
+BREAK
+#1110
+Name:	Novatech Sentinel
+LongDesc:	A man in black security armour watches the area carefully.
+Description:$
+A very average-looking man stands here. He's dressed in a black security
+overcoat with a matching black vest underneath, and holds a shiny, chromed
+assault rifle at the ready. He glares around him from under a black cap with
+"Security" printed on it. 
+~
+Rating:	4
+Type:	Blaster
+Subtype:	0
+BREAK
+#1111
+Name:	Novatech Endurance
+LongDesc:	A thick black smoke covers the floor.
+Description:$
+A thick black smoke is gathering here. Small flashes of red and orange light
+flicker below its surface, each releasing a burst of heat and a faint
+sulphurous smell. A sense of malevolance emenates from the cloud. 
+~
+Rating:	4
+Type:	Ripper
+Subtype:	0
+BREAK
+#1112
+Name:	Novatech Slammer
+LongDesc:	A large chome spider skitters toward you.
+Description:$
+A large four legged mechanical spider runs silently across the floor. Dozens
+of sharp spurs extend and retract from its body and limbs, and a dozen glowing
+red eyes throb in its head. 
+~
+Rating:	4
+Type:	Sparky
+Subtype:	1
+BREAK
+#1113
+Name:	Novatech Strainer
+LongDesc:	A pool of quicksilver is forming here.
+Description:$
+A pool of quicksilver has appeared, growing slowly. Small and large bubbles
+float to the surface, bursting and releasing a burst of heat with each one. It
+creeps over every surface it comes into contact with, corroding away anything
+it touches. 
+~
+Rating:	4
+Type:	Tar Pit
+Subtype:	1
+BREAK
+#1120
+Name:	Novatech Warden
+LongDesc:	A large troll in red and chrome patrols here, wielding a wicked looking axe.
+Description:$
+A large dark-coloured troll stands here in heavy, rivited metal armour. A red
+cape trails down his back. In both hands he brandishes a huge, serrated axe,
+gleaming razor sharp. His eyes glow a dull red and he seems perpetually
+standing in shadow. 
+~
+Rating:	4
+Type:	^LLethal Black^n
+Subtype:	0
+BREAK
+#1121
+Name:	Novatech Punisher
+LongDesc:	A pair of metal studded balls orbit around your head.
+Description:$
+A pair of fist shaped black balls orbit around you, studded with small metal
+spikes. They seem to be acting with some sort of primitive intelligence, and
+seem to be trying to herd you into a position so they can attack. 
+~
+Rating:	4
+Type:	^LNon-Lethal Black^n
+Subtype:	0
+BREAK
+#1130
+Name:	Novatech Acid
+LongDesc:	A small globule of a dark liquid hovers here.
+Description:$
+It looks like a small amount of liquid floats here in zero gravity. It appears
+very unstable, smaller globules escape occasionally and are reabsorbed by the
+larger mass. It quivers in space, and appears to have taken an interest in
+you. 
+~
+Rating:	2
+Type:	^WCrippler^n
+Subtype:	0
+BREAK
+#1131
+Name:	Novatech Cadet
+LongDesc:	A small man glares at you uncertainly.
+Description:$
+A small man sits here, trembling. In his shaking hands he holds a tiny squirt
+gun which he raises unsteadily to impede your path. 
+~
+Rating:	2
+Type:	^WKiller^n
+Subtype:	0
+BREAK
+#1132
+Name:	Novatech Flare
+LongDesc:	A bright flare lies here.
+Description:$
+A bright flare is lying here inanimate. The pool of light it is providing is
+slowly expanding toward you, as if guided by some malevolant intelligence. 
+~
+Rating:	2
+Type:	^WProbe^n
+Subtype:	0
+BREAK
+#1133
+Name:	Novatech Whitenoise
+LongDesc:	A light grey haze has begun forming.
+Description:$
+A light grey haze has begun filling the room, getting gradually thicker with
+time. Thin tendrils of fog move to obscure the room's lighting as things are
+plunged into a shade of grey. 
+~
+Rating:	2
+Type:	^WScramble^n
+Subtype:	0
+BREAK
+#1134
+Name:	Novatech Trapper
+LongDesc:	A small bear trap lies here, open.
+Description:$
+A small bear trap shuffles around here, trying to get ahold of you. Its
+gleaming teeth show no sign that it has ever caught anything though. 
+~
+Rating:	2
+Type:	^WTar Baby^n
+Subtype:	0
+BREAK
+#1140
+Name:	Novatech Ghost
+LongDesc:	A thin transparent form hangs here.
+Description:$
+It appears to be vaguely humanoid, see-through and cloaked in shadow. A thin
+echoey wail can be heard emenating from it, crying despair. 
+~
+Rating:	2
+Type:	Blaster
+Subtype:	0
+BREAK
+#1141
+Name:	Novatech Basher
+LongDesc:	An animate hammer flies around here.
+Description:$
+A hammer flies around you, gracefully swooping and diving, seeming to be going
+for your kneecaps. 
+~
+Rating:	2
+Type:	Ripper
+Subtype:	0
+BREAK
+#1142
+Name:	Novatech Rover
+LongDesc:	A small robotic dog sits here, barking at you.
+Description:$
+A small robotic pit bull. Its shiny razor sharp teeth give no question that
+this dog's bite is worse then its bark. 
+~
+Rating:	2
+Type:	Sparky
+Subtype:	0
+BREAK
+#1143
+Name:	Novatech Icicle
+LongDesc:	Icicles are forming on your body.
+Description:$
+The rooms temperature has not fallen, but iclicles have begun to form all over
+you. If left unchecked, you have no doubts that they would eventually freeze
+you solid. 
+~
+Rating:	2
+Type:	Tar Pit
+Subtype:	0
+BREAK
+#1150
+Name:	a drone painted in red and black
+LongDesc:	A Drone painted in red and black scans through the host.
+Description:$
+It's a sleek drone, with all manner of camera's, scanning the host dilligently
+watching for any unauthorized users. 
+~
+Rating:	6
+Type:	^WProbe^n
+Subtype:	0
+BREAK
+#1151
+Name:	a sleek drone painted in red and black
+LongDesc:	A sleek drone painted in red and black scans the host.
+Description:$
+Almost vicious in apperance, this drone is painted in red and black colours
+and seems to inspect every datatrail and visible icon. 
+~
+Rating:	8
+Type:	^WProbe^n
+Subtype:	0
+BREAK
+#1152
+Name:	a small roto-drone
+LongDesc:	A small roto-drone buzzes through the host.
+Description:$
+It is painted in the black and red of Knight Errent. It seems to be watching
+you very closely. 
+~
+Rating:	7
+Type:	^WScout^n
+Subtype:	0
+BREAK
+#1153
+Name:	a lithe humanoid in a red and black coat
+LongDesc:	A Lithe Humanoid in a red and black coat follows your icon around the node.
+Description:$
+The red and black trenchcoat covers a silver androgonous humanoid. His face is
+featureless but he still manages to follow your every move around the node. 
+~
+Rating:	7
+Type:	Trace
+Subtype:	0
+BREAK
+#1154
+Name:	a Knight-Errant marked Apache Helicopter
+LongDesc:	An Apache Helicopter with Knight-Errant markings hovers above you.
+Description:$
+It's a turn of the Century Apache Helicopter, but done up with Knight-Errant
+markings. It seems to be carrying a full payload of weapons. 
+~
+Rating:	7
+Type:	Ripper
+Subtype:	1
+BREAK
+#1155
+Name:	a westwind with Knight-Errant markings
+LongDesc:	A Eurocar Westwind 2000 with Knight-Errant markings tails you through the host.
+Description:$
+It's a Eurocar Westwind 2000, one of the fastest commercial cars in existance.
+It seems to be following you very closely, 2 Knight-Errant officers sitting
+inside. 
+~
+Rating:	7
+Type:	Trace
+Subtype:	0
+BREAK
+#1156
+Name:	a Knight-Errant officer
+LongDesc:	A Knight-Errant officer readies his weapon in your direction.
+Description:$
+Uh oh, this guy does not look friendly. He lowers his pistol towards you and
+takes aim. 
+~
+Rating:	7
+Type:	Blaster
+Subtype:	0
+BREAK
+#1157
+Name:	a Heavy Armoured Knight-Errant Officer
+LongDesc:	A Knight-Errant officer in heavy security armour stands guard in the host.
+Description:$
+This guy looks more like a machine than a man. His armour is bulging, removing
+any sembalance of humanity from his form. 
+~
+Rating:	9
+Type:	Blaster
+Subtype:	0
+BREAK
+#1158
+Name:	an Ares CityMaster with Knight-Errant markings
+LongDesc:	An Ares CityMaster with Knight-Errant markings cruises silently through the host.
+Description:$
+The guns on this thing are amazing, more than you would think would ever fit
+on a real CityMaster. Too bad it seems to be coming after you though. 
+~
+Rating:	11
+Type:	Sparky
+Subtype:	0
+BREAK
+END

@@ -1,0 +1,11 @@
+NEWS POLICY CREDITS VERSION INFO
+
+These commands show you important information about CircleMUD.  It is a good
+idea to read them every once in a while.
+
+^ginfo     - useful information about the game for beginners
+news     - latest changes to the code and areas
+policy   - policies on topics like playerkilling
+credits  - the people who made CircleMUD possible!
+version  - displays the current CircleMUD version number^n
+

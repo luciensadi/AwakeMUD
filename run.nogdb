@@ -1,0 +1,82 @@
+#!/bin/csh -f
+#
+# CircleMUD 2.0 autorun script
+# Originally by Fred C. Merkel
+# Copyright (c) 1993 The Trustees of The Johns Hopkins University
+# All Rights Reserved
+# See license.doc for more information
+# Modifed by Christopher Dickey, Rift, Dunkelzahn, Demise, and Root.
+# (c)2001 The AwakeMUD Consortium
+# If .fastboot exists, the script will sleep for only 5 seconds between reboot
+# attempts.  If .killscript exists, the script commit suicide (and remove
+# .killscript).  If pause exists, the script will repeatedly sleep for
+# 60 seconds and will not restart the mud until pause is removed.
+
+# these sets are now nullified since we're starting awake from gdb alone now,
+# changes go in utils/gdbcmds
+set PORT=4000
+set FLAGS=''
+
+limit core unlim
+
+while (1)
+
+  set DATE = (`date`);
+  echo "autoscript starting game $DATE" >> syslog
+
+  rm -rf syslog
+  touch syslog
+  
+  bin/awake $PORT >>& syslog
+  echo "" >> syslog
+
+  tail -25 syslog >> log/crashlog
+
+  fgrep "self-delete" syslog >> log/delete
+  fgrep "Running" syslog >> log/restarts
+  fgrep "advanced" syslog >> log/levels
+  fgrep "equipment lost" syslog >> log/rentgone
+  fgrep "usage" syslog >> log/usage
+  fgrep "CONNLOG" syslog >> log/connlog
+  fgrep "MISCLOG" syslog >> log/misclog
+  fgrep "SYSLOG" syslog >> log/syslog
+  fgrep "WIZLOG" syslog >> log/wizlog
+  fgrep "DEATHLOG" syslog >> log/deathlog
+  fgrep "CHEATLOG" syslog >> log/cheatlog
+  fgrep "Bad PW" syslog >> log/badpws
+
+# here we mail the syslog to whoever the admin is so they know the
+# mud crashed (if it crashed at all)
+
+# These aren't needed as the mud runs in GDB now.
+#  mv -f lib/core.1 lib/core.2 >>& ~/awake.out
+#  mv -f lib/core lib/core.1 >>& ~/awake.out
+
+  rm log/syslog.1
+  mv log/syslog.2 log/syslog.1
+  mv log/syslog.3 log/syslog.2
+  mv log/syslog.4 log/syslog.3
+  mv log/syslog.5 log/syslog.4
+  mv log/syslog.6 log/syslog.5
+  mv syslog       log/syslog.6
+  touch syslog
+
+  if (! -r .fastboot) then
+    sleep 15
+  else
+    rm .fastboot
+    sleep 5
+  endif
+
+  if (-r .killscript) then
+    set DATE = (`date`);
+    echo "autoscript killed $DATE"  >> syslog
+    rm .killscript
+    exit
+  endif 
+
+  while (-r pause) 
+    sleep 10
+  end
+
+end

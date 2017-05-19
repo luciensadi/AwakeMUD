@@ -1,0 +1,11 @@
+DIAGNOSE
+
+Usage: ^gDIAGNOSE <character>^n
+
+The DIAGNOSE command tells you how wounded a character looks.  If you are
+fighting someone, you can use DIAGNOSE with no arguments to diagnose the
+person you're fighting.
+
+^c< 10P 10M > diagnose
+< 10P 10M > diagnose rasmussen^n
+

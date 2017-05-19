@@ -1,0 +1,15 @@
+CHANNELS
+
+^ROut of Character Channels
+^Y-------------------------^n
+ooc     osay     newbie
+tell
+
+^RIn Character Channels
+^Y-------------------------^n
+say     emote    broadcast
+yell    shout    whisper
+ask     talk
+
+* Abuse of the channels is punnishable, please don't do it.
+

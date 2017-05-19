@@ -1,0 +1,25 @@
+BOND
+
+Usage: ^GBOND <modulator>
+       BOND <focus> <spell/category/spirit>
+       BOND <focus>^n
+
+
+Bond has two purposes: to personalize DocWagon modulators or to bond magical
+foci.  Anyone can use this to accomplish the former, but only awakened
+individuals can bond foci. Shamans and Mages can bond any type of foci, but
+adepts can only bond weapon foci. There is a karma cost associated with
+bonding foci that is dependant on the type of foci and force. Once bonded
+you cannot unbond a focus, but someone else can rebond it and sever your
+link with it, rendering it useless to you.
+If you stop bonding a focus halfway through you can restart it again later
+by bonding the focus without specifying the category. It will start the bonding
+process again but won't cost you any karma.
+
+Example:
+^c< 10P 10M > bond focus combat sense^n
+^c< 10P 10M > bond focus earth elemental^n
+^c< 10P 10M > bond focus combat^n
+
+^WSee Also: MAGES, SHAMANS, FOCI, UNBOND, ACTIVATE^N
+

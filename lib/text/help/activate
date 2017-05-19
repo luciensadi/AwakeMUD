@@ -1,0 +1,23 @@
+ACTIVATE DEACTIVATE
+
+Usage: ^gACTIVATE <item>
+       ACTIVATE <ranking> <power>
+       ACTIVATE PAIN EDITOR
+       ACTIVATE VOICE MODULATOR
+       DEACTIVATE PAIN EDITOR
+       DEACTIVATE VOICE MODULATOR
+       DEACTIVATE <focus/power>^n
+
+Activate is used to either activate a focus, adept power or pain editor
+or personalize a credstick that has no current owner. Only awakened beings 
+can activate foci, and the focus must be bonded to them before they try and 
+activate it. No awakened beings can have more foci activated than they have 
+intelligence.
+
+This command is also used to activate adept powers so that you may gain
+their benefits. You cannot have more than your magic rating in power points
+activated at any one time. To activate adept powers that are more than one
+word put the power name in quotation marks.
+
+^WSee Also: CREDSTICKS, TRANSFER, FOCI, BOND, DEACTIVATE^n
+

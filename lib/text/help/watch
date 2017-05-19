@@ -1,0 +1,8 @@
+WATCH
+
+Usage: ^gWATCH <direction>
+       WATCH^n
+
+Watch allows you to passively watch an adjacent room for people
+coming and going. You can only watch one room at a time. Watch is
+cancelled by typing WATCH on its own or moving.

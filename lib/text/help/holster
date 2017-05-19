@@ -1,0 +1,13 @@
+HOLSTER SHEATH STRAP
+
+Usage: ^gHOLSTER <weapon> <holster>
+       SHEATH <weapon> <sheath>^n
+
+This command is used to place a weapon into a holster/sheath, to
+prepare it for readying and drawing in combat.
+
+If you have more than one holster sharing a name you can access the
+items past the first by using 2.holster, 3.holster etc.
+
+^WSee Also: READY, DRAW^n
+

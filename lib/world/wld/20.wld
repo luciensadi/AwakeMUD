@@ -1,0 +1,4563 @@
+#2000
+Name:	W. Anselm and Cambridge Drive
+Desc:$
+   West Anselm Street meets with Cambridge Drive, a rather inconsequential
+road just one step above an alleyway.  A brand new streetlight has been put up
+here, with GridGuide functionality, and small cameras running with an SK to
+photograph traffic violations and send them to your friends at Lone Star
+Security Services.  Surrounding you is the city of Tacoma.  Tacoma is a suburb
+built on the memory of pain.  Modern times have not ignored it, for there are
+skyscrapers and shadowrunners, integration, and the influence of the
+megacorporations.  But while Downtown Seattle is an overwhelming chemistry of
+race and culture, and Portland is a polarized city of well-to-do noble elves,
+and the proletariat, just clawing for what they can get to survive, Tacoma is
+unified.  There are many historical sites that keep the notorious Night of
+Rage alive, as well as holidays set aside for certainly the most respectable.
+~
+Flags:	10000000000010000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+Tacoma sprawls eastward.
+~
+	ToVnum:	2001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2087
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2085
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2001
+Name:	W. Anselm Street and Lambert Avenue
+Desc:$
+   This is the oldest part of town, largely blighted buildings, brick
+warehouses torn down by ages of weather, and graffiti, line the streets.  To
+the north are the shipyards, and a public pier where the Seattle/Tacoma Ferry
+docks.  On the south end of Lambert, old, but well-kept Victorian Era
+buildings line the street, contrasting the decaying warehouses. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Lambert Avenue continues to the north.
+~
+	ToVnum:	2003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	2086
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	16204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Lambert Avenue continues southward.
+~
+	ToVnum:	2010
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+That way lies the beginning of Tacoma.
+~
+	ToVnum:	2000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2002
+Name:	Taxi Service
+Desc:$
+   This service provides access to a number of places. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Desc:$
+Lambert Avenue lies westward.
+~
+	ToVnum:	2001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2003
+Name:	Lambert Avenue North
+Desc:$
+   The blue-collar quality of this section of town remains, as the streets are
+lined with older-style tenements, covered in gang graffiti, and populated by
+shipyard workers and their many ganger children.  A thick aroma of something
+nasty is in the air, almost dung-like, but with an acidic thread to the scent.
+The Tacoma Aroma.  To the east is a thrift store, with a faded sign, reading
+"Crossworlds". 
+~
+Flags:	10000000000010000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+You can see a factory ahead.
+~
+	ToVnum:	2004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	22695
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Lambert Avenue continues to the south.
+~
+	ToVnum:	2001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2004
+Name:	Learson Shipyards
+Desc:$
+   Virtually unchanged in the last thirty years, the Learson Shipyards
+continue to be renowned for building commercial ships of the highest quality.
+The Shipyards employ about thirty percent of the populace  in Tacoma, and so
+occupy a central place in local politics. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	Desc:$
+The shipyards continue to the northeast.
+~
+	ToVnum:	2009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+That way lies Lambert Avenue.
+~
+	ToVnum:	2003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+The shipyards continue westward.
+~
+	ToVnum:	2005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2005
+Name:	Learson Construction Yard
+Desc:$
+   Here is where the ships are built, a hundred yards of space in which cranes
+carry sheets of metal back and forth to be used in production. The workers all
+move quickly and efficiently, appearing to be well-trained. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+The Learson Dock lies north.
+~
+	ToVnum:	2008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+The shipyards continue eastward.
+~
+	ToVnum:	2004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+The Tacoma Ferry Ticket Office lies west.
+~
+	ToVnum:	2006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2006
+Name:	Tacoma Ferry Ticket Office
+Desc:$
+   This is where tickets are purchased to travel on the Tacoma Ferry. It
+transports people and goods to and from three locations: Everett, Tacoma, and
+Downtown Seattle. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+The Tacoma Ferry Terminal lies north.
+~
+	ToVnum:	2007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+The Learson Construction Yard lies east.
+~
+	ToVnum:	2005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2007
+Name:	Tacoma Ferry Terminal
+Desc:$
+   The ferry is available for transport across the Elliott Bay. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+The Learson Dock lies east.
+~
+	ToVnum:	2008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+The Tacoma Ticket Office is south of here.
+~
+	ToVnum:	2006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2008
+Name:	Learson Dock West
+Desc:$
+   This is the best vantage point from which to view the Elliott Bay, which is
+actually quite beautiful despite the smoke and endless ship traffic.  
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+The Learson Dock stretches east.
+~
+	ToVnum:	2009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+The Learson Construction Yard lies south.
+~
+	ToVnum:	2005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+The Tacoma Ferry Terminal lies west.
+~
+	ToVnum:	2007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2009
+Name:	Learson Dock East
+Desc:$
+   The Learson company owns this dock, using it for the launching of their
+latest ships. One ship, the Sea Flyer, stands here.  It rests on the calm
+waters of the Elliott Bay. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	Desc:$
+The shipyards continue southwest.
+~
+	ToVnum:	2004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+The shipyard stretches west.
+~
+	ToVnum:	2008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2010
+Name:	Lambert Avenue/Interstate 5 Onramp
+Desc:$
+   This onramp is a recent addition to Tacoma's landscape, carrying traffic
+from the industrial/low class residential Lambert/Crescent district of West
+Tacoma onto and off of Interstate 5.  Traffic seems to move smoothly here, but
+the clean pavement and concrete is marred by Rovers graffiti all over it. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Lambert Avenue continues northward.
+~
+	ToVnum:	2001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	2011
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2011
+Name:	Interstate 5 - Lambert Avenue Exit
+Desc:$
+   The traffic flows at a regular pace, almost like the blood flow of the
+Seattle Tacoma metroplex.  Along the sound walls are extensive gang slogans,
+readable only to another ganger or one very well versed in the way of the
+street.  In obvious letters, however, you see "^WWEST SIDE ROVERZ CUZZ^n" and
+other such pieces that show exactly whose gang lays claim to this portion of
+Tacoma. 
+~
+Flags:	10100000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+Intercity 5 continues eastward.
+~
+	ToVnum:	2018
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+Intercity 5 continues west.
+~
+	ToVnum:	2012
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	2010
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2012
+Name:	Interstate 5
+Desc:$
+   From this section of Interstate 5, a Night of Rage memorial stands and is
+visible.  There are houses standing still but have never been repaired, and
+large sections blackened by fire stand out like scars.  Farther west, the
+freeway curves at a ninety degree turn, headed towards Fort Lewis and
+Puyallup. 
+~
+Flags:	10100000000010000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+That way lies the corner of Lambert and I5.
+~
+	ToVnum:	2011
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2088
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2013
+Name:	Cyberterminal
+Desc:$
+   This is the end of Cambridge Drive.   Here at the last stretch of a very
+minor road is a place called 'O'Malley's Alley', so named for the decker who
+used the cyberterminal situated here for shadowruns. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	1101
+IO:	300
+Bandwidth:	20
+Access:	-2
+Trace:	-2
+RTG:	1101
+JackID:	33210001
+Address:	Cambridge Drive, Tacoma
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	ToVnum:	2087
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2014
+Name:	Holoroom
+Desc:$
+   Patrons in this section of the bar can watch Urban Brawl games on the
+six-foot-high, wall-mounted holoscreen here. When Urban Brawl's not in season,
+the screen shows previous matches or repeats of a vanity film documenting
+DeClerry's career. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+The entrance to DeClerry's lies east.
+~
+	ToVnum:	2016
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+The restaraunt part of DeClerry's is south.
+~
+	ToVnum:	2015
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2015
+Name:	DeClerry's Restaraunt
+Desc:$
+   DeClerry's is famous for its liquor and infamous for its food. The
+restaraunt does brisk business anyway, largely on dares, but there are some
+menu items that a squatter wouldn't touch. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+The holoscreen lies north.
+~
+	ToVnum:	2014
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+The bar lies east.
+~
+	ToVnum:	2017
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2016
+Name:	DeClerry's Bar
+Desc:$
+   The brainchild of Vincent "Bonecrusher" DeClerry, an ex-Urban Brawl player,
+this bar caters to a tough crowd composed mostly of orks and orklike humans.
+The walls celebrate DeClerry's career, with pictures of himself and other
+players, as well as the occassional simsense starlet. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	oak door~~~~~~~~~~~~~~~
+	Desc:$
+Behind the north door, Tacoma awaits.
+~
+	ToVnum:	2087
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+The bar lies south.
+~
+	ToVnum:	2017
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+DeClerry's Bar continues to the west.
+~
+	ToVnum:	2014
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2017
+Name:	Bar
+Desc:$
+   The bar is simply designed, with great amounts of space between seats to
+allow the often large patrons room to manuever. It is often said by patrons
+that the bartender of DeClerry's has the easiest job in the world; he only has
+to pour shots and clean glasses. In the words of the owner, "Mixed drinks are
+for elves." 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+The entrance lies north.
+~
+	ToVnum:	2016
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+The restaraunt lies west.
+~
+	ToVnum:	2015
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2018
+Name:	Interstate 5
+Desc:$
+   Along the sides of Interstate 5 are some grungy slums.  Tall prefab
+tenements falling into decay, marred by the black stains of many years of acid
+rain, line the eight lane freeway.  From this vantage point, you can see
+Elliot Bay on a clear day, which isn't exactly commonplace.  Even on a clear
+day it doesn't look all that pretty, as the bay tends to have a murky green
+polluted color to it. 
+~
+Flags:	10100000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+I5 sprawls eastward.
+~
+	ToVnum:	2019
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2011
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2019
+Name:	Interstate 5 - Crescent Avenue Exit
+Desc:$
+   Interstate 5 runs through a rather dilapidated industrial district here,
+lined with factories and warehouses and shipyards north of here.  Crescent
+Avenue, populated by shipyard workers includes some of the more slummier
+portions of Tacoma.  The Rovers are very strong in presence on Crescent, one
+might guess by the increased amount of Rover graffiti along the road's sound
+walls and signs. 
+~
+Flags:	10100000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Crescent Ave. lies to the north.
+~
+	ToVnum:	2020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+I5 continues to the east.
+~
+	ToVnum:	2021
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+I5 leads west to DeClerry's Bar and O'Malley's Alley.
+~
+	ToVnum:	2018
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2020
+Name:	Crescent Avenue
+Desc:$
+   Another crumbling neighborhood in Tacoma, Crescent is inhabited mainly by
+shipyard workers and their families, of which many of their youth are
+recruited into the Rovers gang, which dominates the western end of Tacoma.
+The Rovers are frequently challenged by the Ancients from Puyallup, and the
+Brain Eaters from Renton and East Tacoma.  Just north of here, West Anselm
+crosses east to west through the West Side of Tacoma. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Crescent and Anselm connect ahead.
+~
+	ToVnum:	2022
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	2094
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+That way leads back on to I5.
+~
+	ToVnum:	2019
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2021
+Name:	Interstate 5
+Desc:$
+   Interstate 5 stretches east to west in a straight bar through the heart of
+Tacoma.  A sign on the westbound lane reads, "^gCrescent Avenue, 3 kilometers^n".
+The sign on the eastbound lane reads, "^gMarquez Street, 1 kilometer^n". 
+~
+Flags:	10100000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+I5 continues into the distance.
+~
+	ToVnum:	2031
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+I5 continues westward.
+~
+	ToVnum:	2019
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2022
+Name:	W. Anselm and Crescent Street
+Desc:$
+   A busy intersection in the center street of West Tacoma, Crescent sees all
+sorts of traffic, and angry motorists, as gridlock strikes often.  Houses on
+both sides of Crescent, northward and southward house shipyard workers and
+their lower working class families, many of whom have children actively in the
+Rovers gang that dominates these streets.  The Rovers fight fiercely over this
+area against the East Tacoma/Renton Brain Eaters gang, and the Ancients from
+out in Puyallup. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Ahead Crescent Ave. continues to the north.
+~
+	ToVnum:	2023
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+Anselm continues eastward.
+~
+	ToVnum:	2024
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Crescent lies to the south.
+~
+	ToVnum:	2020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2086
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2023
+Name:	Crescent Avenue
+Desc:$
+   This is the northern end of Crescent Avenue. A fairly large office building
+stands at the top of the road, its door displaying a small green 'OPEN' sign.
+A sign below it shows Zalensky's Electronic's new location between Whitman and
+Espanoza on Fourth Street, in Southeast Seattle. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	1100
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Cresent & Anselm meet to the south.
+~
+	ToVnum:	2022
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign~~~~~~~~~~~~~~~~~~~~~~
+	Desc:$
+New location of Zalensky's Electronics is between Whitman and Espanoza on
+Fourth street, Southeast Seattle. 
+~
+BREAK
+#2024
+Name:	West Anselm Street
+Desc:$
+   Partially-constructed office buildings line this portion of the street, as
+the planned creation of a corporate sector in this area continues. Anselm
+Street stretches several blocks westward, and a couple of blocks east, where
+it ends at a Stuffer Shack, only to begin again on the other side of Athens as
+East Anselm Street. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+Anselm continues to the east.
+~
+	ToVnum:	2029
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+Anselm continues to the west.
+~
+	ToVnum:	2022
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2025
+Name:	NightVision Entertainments
+Desc:$
+   This dimly and garishly lit hovel is one in a chain of stores providing
+access to simsense and trideo entertainment. There is a large amount of
+simsense, much of it in a lurid vein, but the trideo is both scant and
+out-of-date. The neighborhood is simply too unstable (and poor) to support a
+large quantities of trideo. 
+~
+Flags:	10000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+The trideo is lined against the north wall.
+~
+	ToVnum:	2028
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+Simsense lies against the east wall.
+~
+	ToVnum:	2026
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2026
+Name:	Simsense room
+Desc:$
+   There appears to be a great variety of simsense entertainments at first
+glance, but upon inspection it becomes clear there are many repeats and
+sequels. The great majority of titles are disturbingly violent fantasies in
+which power is amassed by killing or maiming hordes of people.  Simsense
+pornography, which at one time dominated sales, was outlawed in Seattle in
+2047 and can only be accessed through the black market. 
+~
+Flags:	10000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+The cashier lies north.
+~
+	ToVnum:	2027
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+The entrance to the simsense store is west.
+~
+	ToVnum:	2025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2027
+Name:	Simsense Cashier
+Desc:$
+   You can pay for any simsense purchases here. 
+~
+Flags:	10000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Desc:$
+That way lies the simsense.
+~
+	ToVnum:	2026
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+The trideo lies west.
+~
+	ToVnum:	2028
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2028
+Name:	Trideo room
+Desc:$
+   With print and celluloid virtually dead, trideo has become the favorite
+realm for popular art to inhabit. Simsense is lived; trideo is watched, albeit
+in three dimensions.  It is therefore a less private experience and tends to
+be more conventional in its trappings; trideos typically tell a story. 
+~
+Flags:	10000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+The cashwrap lies east.
+~
+	ToVnum:	2027
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+The entrance to the store lies south.
+~
+	ToVnum:	2025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2029
+Name:	W. Anselm and Marquez Street
+Desc:$
+   West Anselm comes to an abrupt end at a block of brick buildings, one of
+which directly east has a storefront on the lower floor, the omnipresent
+Stuffer Shack.  The brick and concrete buildings are defaced with ornate
+graffiti, with several gang slogans, all of which Rovers gang related.
+Marquez runs north to south here, one leading to Main Street which is the main
+thoroughfare for the north end of Tacoma, but hardly a main street in any real
+sense of the word.  South of here is an onramp onto Interstate 5, the true
+main thoroughfare of the western North American seaboard. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Marquez continues to the north.
+~
+	ToVnum:	2032
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	metal door~~~~~~~~~~~~~~~
+	Desc:$
+The Stuffer Shack lies to the east.
+~
+	ToVnum:	2043
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Marquez continues to the south.
+~
+	ToVnum:	2030
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+Anselm St. lies west.
+~
+	ToVnum:	2024
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2030
+Name:	Marquez St.
+Desc:$
+   Marquez St. was named for the twentieth-century Colombian author. It is
+part of the Crescent neighborhood, and would have made a fit subject for
+Garcia-Marquez in his capacity as a journalist. The Rovers have nearly
+complete control over this area. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Marquez connects with Anselm to the north.
+~
+	ToVnum:	2029
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	16208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	2565
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2590
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2031
+Name:	Interstate 5 - Marquez Street Exit
+Desc:$
+   Marquez Street is higher class than the eastern environs of Tacoma.  It is
+a largely commercial area, with office buildings lining the streets.  To the
+distant north you see bank building, a sharp tower of glass and steel.  A
+large motion billboard saying, "^LDante's Inferno - One ^RHELL^L of a Nightclub!^n"
+sits alongside the road. 
+~
+Flags:	10100000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	2565
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+You can continue on I5 to the east.
+~
+	ToVnum:	2047
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+The International District exit is that way.
+~
+	ToVnum:	2021
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2032
+Name:	Marquez St.
+Desc:$
+   Marquez Street is a busy street, despite its short length of a few blocks.
+On each side of the street are tall brick hi-rises left over from the 20th
+century, with graffiti sprawling over the faces of the lower levels of the
+stained brick Tacoma buildings.  A thick dung-like smell from processing
+plants on the Sound, north of here fills the air. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Marquez becomes North Main ahead.
+~
+	ToVnum:	2033
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Marquez continues south.
+~
+	ToVnum:	2029
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2033
+Name:	North Main & Marquez
+Desc:$
+   North Main, despite its name, runs from east to west through the northern
+edge of Tacoma.  Any farther north, and beyond the buildings that line the
+north side of this street, you reach swamplands where nothing can be built.
+Nonetheless, this is a busy street, though hardly anything like a main street,
+it still sees a bit of traffic and commerce.  Cement walls on the sides of the
+street are covered with sprawling white graffiti, the work of the Rovers gang
+that claims West Tacoma.  On the north side of the street is a clean, somewhat
+large building, the Velasquez Securities and Investments building. 
+~
+Flags:	10000000000010000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	engraved door~~~~~~~~~~~~~~~
+	Desc:$
+The Velazquez Securities & Investments building lies north.
+~
+	ToVnum:	2034
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+North Main continues east.
+~
+	ToVnum:	2046
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+North Main becomes Marquez to the south.
+~
+	ToVnum:	2032
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2034
+Name:	Velasquez Securities & Investments
+Desc:$
+   This medium-sized corporate lobby is businesslike without being
+ostentatious: all simple grey marble, synthwood furniture and brass fixtures.
+This is the main branch of VS & I, a bank which specializes in corporate loans
+to Hispanic-owned businesses. Unlike many of the banks and S&Ls in Seattle,
+this one has no racial biases and allows free access even to trolls and orks.
+An exit to Marquez Street is to the south, and the rest of the bank is to the
+east. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+The bank continues to the east.
+~
+	ToVnum:	2037
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door engraved
+	Desc:$
+An engraved door. 
+~
+	ToVnum:	2033
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2035
+Name:	The Vault
+Desc:$
+   This square, brightly-lit room is crisscrossed with the thin, telltale red
+beams of motion detectors. Security cameras bear silent witness from each
+corner of the ceiling. The walls are lined with safety deposit boxes, and a
+large, stainless-steel table sits in the center of the floor. The vault door
+is to the east. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door steel vault east
+	Desc:$
+The transaction machine is to the east.
+~
+	ToVnum:	2036
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	65197
+	LockRating:	14
+BREAK
+#2036
+Name:	Automated Teller Machines
+Desc:$
+   A row of ATMs, separated by privacy partitions, occupies the north wall of
+this small room. Security cameras are mounted on each corner of the ceiling,
+silently recording every movement. A reinforced steel door is to the west, and
+an ornate wooden door to the east. The rest of the bank is back to the south.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	engraved~~~~~~~~~~~~~~~
+	Desc:$
+The bank manager's office is behind the door.
+~
+	ToVnum:	2039
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	2001
+	LockRating:	7
+[EXIT south]
+	Desc:$
+The main area of the bank is to the south.
+~
+	ToVnum:	2037
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door steel vault west
+	Desc:$
+Behind the door stands the vault.
+~
+	ToVnum:	2035
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	65197
+	LockRating:	14
+BREAK
+#2037
+Name:	VS&I Main Area
+Desc:$
+   This is the central area of the bank. A row of formal but
+comfortable-looking couches sits against the south wall, obviously intended as
+a resting place for waiting customers. Small coffee tables in front of them
+offer a selection of business periodicals and newspapers. Several tellers sit
+behind a long marble counter along the west wall, safe behind a thick sheet of
+bulletproof glass. The building entrance is to the west, the Matrix terminals
+are to the east, and a heavily-guarded area is to the north. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+That way lies the transaction machine.
+~
+	ToVnum:	2036
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+To the east sits a node for accessing the Matrix.
+~
+	ToVnum:	2038
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+That way lies the main entrance of the bank.
+~
+	ToVnum:	2034
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2038
+Name:	VS&I Terminals
+Desc:$
+   Marble counters of varying heights line the walls of this small room.
+Perched upon them are Matrix terminals, each separated from the others by
+distance and a discreet grey privacy screen. The main area of the bank is to
+the west, and an exit to the street is to the south. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	70326
+IO:	500
+Bandwidth:	50
+Access:	-2
+Trace:	-2
+RTG:	1100
+JackID:	3210099
+Address:	VS&I Offices, Main Street, East Tacoma
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Desc:$
+That leads out of the bank---exit only!
+~
+	ToVnum:	2040
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+The main area of the bank lies west.
+~
+	ToVnum:	2037
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2039
+Name:	Bank Manager's Office
+Desc:$
+   This small but comfortable office is furnished in typical corporate
+fashion: large synthwood desk, three chairs, filing cabinet and small
+bookcase. Framed prints of the Space Needle and various local building
+projects hang from the walls. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	engraved~~~~~~~~~~~~~~~
+	Desc:$
+That way lies the transaction machine.
+~
+	ToVnum:	2036
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	2001
+	LockRating:	7
+BREAK
+#2040
+Name:	North Main & Little
+Desc:$
+   North Main cuts across the northern edge of the city of Tacoma.  It is a
+busy street, though not worthy of being dubbed the 'main' street, as it is in
+all actuality, a rather minor sidestreet that sees moderate traffic for the
+city.  Little Road is a sleazy road, despite its proximity to the Night of
+Rage memorial, that ends southwards on Interstate 5, where it ends at a
+half-cloverleaf highway junction.  The smell of poorly treated sewage fills
+the air, the notorious Tacoma Aroma. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+An entrance to the VS&I Bank. 
+~
+	ToVnum:	2038
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+North Main extends east.
+~
+	ToVnum:	2061
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Little Road goes southward.
+~
+	ToVnum:	2041
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2046
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2041
+Name:	Little Road
+Desc:$
+   Little Road runs through a more seedy stretch of road, lined with porn
+shops and simsense strip-bars.  There is a sense of blight over this stretch
+of road, but for all intents and purposes, this strip is neutral turf.  Some
+gang graffiti can be found on this street, but the Rovers do fear the Mafia,
+no? 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+North Main conjoins Little up ahead.
+~
+	ToVnum:	2040
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Little continues to the south.
+~
+	ToVnum:	2044
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2042
+Name:	Stuffer Shack Cashwrap
+Desc:$
+   The cashier sits on a stool behind bulletproof glass. You need only show
+your purchases to the cashier, and insert your credstick into the slot
+provided. A panicbutton sits in plain view near the cashier's hand. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	2043
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2043
+Name:	Stuffer Shack
+Desc:$
+   The Stuffer Shack is a popular convenience store, carrying a large
+assortment of prepackaged food. The store consists of several shelves lined
+with small colorless boxes which differ only in the writing printed upon them.
+The products are generally freezedried or soy, and designed to nuked and eaten
+quickly. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	2042
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	metal door~~~~~~~~~~~~~~~
+	Desc:$
+That leads out of the store.
+~
+	ToVnum:	2044
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	metal door~~~~~~~~~~~~~~~
+	Desc:$
+That leads away from the store.
+~
+	ToVnum:	2029
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2044
+Name:	Little Road
+Desc:$
+   This part of Little seems a tad less sleazy, despite its being nestled
+between two seedy blocks.  The Night of Rage Memorial east of here has an
+impact on the area surrounding this intersection.  To the far south you see
+Interstate 5, and to the north is North Main. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Little Road extends north.
+~
+	ToVnum:	2041
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+A statue lies to the east.
+~
+	ToVnum:	2058
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Little Road continues southward.
+~
+	ToVnum:	2045
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	metal door~~~~~~~~~~~~~~~
+	Desc:$
+The Stuffer Shack lies west.
+~
+	ToVnum:	2043
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2045
+Name:	Little Road
+Desc:$
+   The dingy concrete buildings that line this portion of the street are
+occupied mainly by simsense porn shops and the occasional seedy bar. Broken
+neon signs hang above the shadowy doorways, advertising various flavors of
+sex, violence and controlled substances. The sidewalks are cracked and
+littered with food wrappers, leaflets and sundry trash. Little Road continues
+to the north, an offramp to Interstate 5 lies to the south, and a solitary,
+still-somewhat-working neon sign above a building to the east flashes "^MCOFFI_
+HO_EL^n." A dingy glass storefront on the building to the west advertises
+"Beano's Collection Agency." 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Little Road extends north.
+~
+	ToVnum:	2044
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	2126
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+You see a sign saying "^GJunction Interstate 5 - Exit ^g==>^n". Ahead to the south
+is a set of single lane onramps and offramps arranged in a half-cloverleaf
+pattern that bring traffic to and from the freeway. 
+~
+	ToVnum:	2098
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door west
+	ToVnum:	42168
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2046
+Name:	North Main
+Desc:$
+   North Main runs across the absolute northern edge of the city of Tacoma.
+Nothing can be built any farther north of here; only swamplands and landfills
+exist north of this street. A 'miles of acid-treated horsedrek' smell fills
+the air.  Graffiti covers the southern walls of the street, but not the walls
+belonging to VS&I, north of here. The sidewalks are cracked and broken, and
+the road is worn, but not to the point of impassibility. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+North Main extends east.
+~
+	ToVnum:	2040
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	3085
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+North Main extends west.
+~
+	ToVnum:	2033
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2047
+Name:	Interstate 5
+Desc:$
+   Interstate 5 runs through here pretty much straight on an east to west
+path.  Along side the freeway are a smattering of tenements and apartment
+complexes of a poor to working class variety.  Billboards advertising
+everything from stock options to Crazy Lemmy's Used Cars line the freeway. 
+~
+Flags:	10100000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+The Little exit is to the east.
+~
+	ToVnum:	2048
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+I5 continues west.
+~
+	ToVnum:	2031
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2048
+Name:	Interstate 5 - Little Road Exit
+Desc:$
+   To the north of here is an offramp to Little Road.  Looking northward you
+see areas that were badly ravaged some time ago by the Night of Rage, and have
+seen very little renovation.  A neon sign north of here with the flashing word
+"^MHOTEL^n" catches your eye.  Beyond that are a smattering of fire scorched
+tenements probably slumlorded over the years and barely patched up after the
+rioting of that infamous night. 
+~
+Flags:	10100000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Little Avenue lies north.
+~
+	ToVnum:	2098
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+I5 stretches east.
+~
+	ToVnum:	2049
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+I5 stretches west.
+~
+	ToVnum:	2047
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2049
+Name:	Interstate 5
+Desc:$
+   In the eastbound lanes, there is a sign over the freeway that says, "Venice
+Street 2 kilometers", and on the westbound lanes, there is a sign over the
+freeway saying, "Little Street 1.5 kilometers."  The signs are covered with
+the graffiti of the Rovers gang, and have a lighting array so that they can be
+read at any time of the night or day. 
+~
+Flags:	10100000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+I5 crosses over with Venice to the east.
+~
+	ToVnum:	2050
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+I5 meets Little Avenue east.
+~
+	ToVnum:	2048
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2050
+Name:	Interstate 5 - Venice Street Exit
+Desc:$
+   Interstate 5 runs right over Venice Street which tunnels below you
+underneath the freeway.  In the north is an industrial/residential area that
+is considered by the Rovers to be their home ground.  Southward on Venice is a
+red light district. 
+~
+Flags:	10100000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	2096
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+You can stay on I5 to the east.
+~
+	ToVnum:	2052
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+You can continue on I5 to the west.
+~
+	ToVnum:	2049
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2051
+Name:	Interstate 5
+Desc:$
+   This stretch of eight lane freeway is busy at most hours, but due to its
+girth is rarely ever backed up in a traffic jam, save for when an accident
+involving a semi brings traffic to a standstill.  The freeway is lined with
+billboards for Aztechnology's food products and Nutri-Soy, as well as
+McDonald's and all your favorite fast food venues. 
+~
+Flags:	10100000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+Tacoma Mall stands to the east.
+~
+	ToVnum:	2053
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+I5 meets Venice to the west.
+~
+	ToVnum:	2052
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2052
+Name:	Interstate 5 - Patrick Way Exit
+Desc:$
+   A short street leads northward, up to a building with an ornate neon sign.
+A commercial stretch of Tacoma surrounds you, with office structures and
+stores on both sides of the freeway. 
+~
+Flags:	10100000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+A dark alley is up ahead to the north.
+~
+	ToVnum:	2068
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+I5 continues to the west; Northgate Mall is visible in the distance.
+~
+	ToVnum:	2051
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+I5 continues to the west.
+~
+	ToVnum:	2050
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2053
+Name:	Interstate 5
+Desc:$
+   Interstate 5 runs east to west through Eastern Tacoma, over some industrial
+and lower to working class residential areas.  Traffic runs fluidly through
+the eight lanes this freeway provides.  Backups are not common, but are not
+unheard of either. 
+~
+Flags:	10100000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+There is a ramp leading to the Northgate Mall to the east.
+~
+	ToVnum:	2054
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+There is a an alley leading north here.
+~
+	ToVnum:	2051
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2054
+Name:	Interstate 5 - Tacoma/Athens Road Exit
+Desc:$
+   The freeway changes from the curving and winding that characterized the
+Interstate between Seattle and Tacoma to a straight path that runs through
+Tacoma's center.  Athens Road, the easternmost Tacoma exit, lies to the north.
+~
+Flags:	10100000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Athens Road lies north.
+~
+	ToVnum:	2069
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	1300
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+I5 continues west.
+~
+	ToVnum:	2053
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2055
+Name:	Northgate Parking Lot
+Desc:$
+   This is the immense parking area for Northgate patrons. The mall itself,
+rebuilt after the Night of Rage, is one of the biggest malls but also among
+the most squalid. It is not uncommon to see squatters asking for  handouts
+inside, although patrols attempt to keep them as free of their infiltration as
+possible. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#2056
+Name:	Venice Street - Junction to Interstate 5
+Desc:$
+   Venice Street extends north and south from Tacoma all the way past I5 and
+through the International District to the south. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+That way leads to a part of the memorial strip.
+~
+	ToVnum:	2057
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door wooden thick~~~~~~~~~~~~~~~
+	ToVnum:	2095
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	2096
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Beneath an overpass. 
+~
+	ToVnum:	2097
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2057
+Name:	Venice Street
+Desc:$
+   To the west stands a memorial for the Night of Rage. Venice extends north
+and south.  Glass doors to the east lead into Nybbles & Bytes, a combination
+general-purpose technology and magical supply store. 
+~
+Flags:	10000000000010000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Venice continues north.
+~
+	ToVnum:	2059
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	doors door glass~~~~~~~~~~~~~~~
+	ToVnum:	1800
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	5
+[EXIT south]
+	Desc:$
+Venice continues south.
+~
+	ToVnum:	2056
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+A statue is visible in the distance.
+~
+	ToVnum:	2058
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2058
+Name:	Night of Rage Memorial
+Desc:$
+   This small memorial consists of a garden, with a statue set on a pedestal
+in its center. It commemorates the Night of Rage, during which over 800
+metahumans were killed nationwide in violent attacks by racist groups. While
+the death toll was bad enough, the damage done to human-metahuman relations
+was even more severe. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+Venice St. lies to the east.
+~
+	ToVnum:	2057
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+Little Road lies west.
+~
+	ToVnum:	2044
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2059
+Name:	Venice Street
+Desc:$
+   This part of Venice lies between the memorial strip and North Main.  It is
+relatively unmolested by gangs, due to its proximity to the Night of Rage
+memorial.  The sidewalks are well maintained, and see few cracks in them, and
+the road is well kept.  Southwards you see several stoplights, when visibility
+permits.  A neon sign stands on the west side of the street, blinking,
+"^mP^MU^mR^MP^mL^ME ^LH^WA^LZ^WE^n". 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+North Main conjoins with Venice here.
+~
+	ToVnum:	2060
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+The memorial strip is south of here.
+~
+	ToVnum:	2057
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	1840
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2060
+Name:	North Main & Venice
+Desc:$
+   North Main cuts through the northern edge of Tacoma, where the buildings
+meet the bogs and marshlands between here and Puget Sound.  To the distant
+north you see a white tower, the control station of the Gaeatronics sewage
+treatment plant.  Occasionally a foghorn from a ship coming into the shipyards
+will override the noises of traffic, but not often.  The street is lined with
+brick buildings, covered in graffiti from the Rovers gang.  Eastwards, you can
+see the neon lights advertising the entrance to the Afterlife.  To the north
+is a store, selling drones, a commodity amongst riggers. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Venice leads north.
+~
+	ToVnum:	2083
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+North Main goes east.
+~
+	ToVnum:	2062
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Venice goes south.
+~
+	ToVnum:	2059
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+Venice goes west.
+~
+	ToVnum:	2061
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2061
+Name:	North Main
+Desc:$
+   You are on North Main Street, the armpit of Tacoma, so to speak. Brick
+buildings line the streets, but nothing is built farther northwards, where a
+large sewage processing plant, a landfill, and a swamp all contribute to that
+nasty smell that hovers over this portion of the city. Just to the north, is
+an apartment complex, with its sign covered with gangland graffiti. A small
+24-hour drugstore is to the south. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+The Evergreen Multiplex lies north.
+~
+	ToVnum:	2201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+North Main continues east.
+~
+	ToVnum:	2060
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door south
+	Desc:$
+A small drugstore lies through an open doorway. 
+~
+	ToVnum:	42198
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+North Main continues west.
+~
+	ToVnum:	2040
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2062
+Name:	North Main
+Desc:$
+   Moving towards the eastern edge of North Main, you see a bright neon light
+display, advertising the Afterlife Club, a popular club amongst executives,
+shadowrunners, and low end organized crime.  The street sees alot of traffic,
+except during the wee hours of the morning, as much commerce finds its way on
+this road.  The brick buildings on each side of the street are covered with
+sprawling Rovers graffiti.  The corner of Venice and Main is just west of
+here. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+North Main continues east.
+~
+	ToVnum:	2063
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+North Main extends west.
+~
+	ToVnum:	2060
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2063
+Name:	North Main
+Desc:$
+   On the north side of the street, marked clearly by the Ares Macrotechnology
+insignia, and the very visible Knight-Errant guards on the inside, is the Ares
+Armor Store.  The street appears to be better kept on this side of Venice,
+than the pothole pockmarked other end of North Main.  Eastwards on North Main
+are the Ares Weapons Store and a large neon sign at the end of North Main,
+advertising the Afterlife club.  Westwards past a cracked and broken stretch
+of North Main is the VS&I building, a bank known for neutrality in matters of
+race. 
+~
+Flags:	10000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door bolted
+	Desc:$
+The Ares Armor Store lies north.
+~
+	ToVnum:	2079
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	2010
+	LockRating:	15
+[EXIT east]
+	Desc:$
+North Main continues east.
+~
+	ToVnum:	2084
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+North Main continues west.
+~
+	ToVnum:	2062
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2064
+Name:	Crenshaw's Main Node
+Desc:$
+   This is the Crenshaw's main access port to the Matrix. It is kept under
+lock and key for obvious reasons, although their datafiles are well guarded in
+any case. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	office~~~~~~~~~~~~~~~
+	Desc:$
+That way leads to the cashwrap.
+~
+	ToVnum:	2065
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	2010
+	LockRating:	10
+BREAK
+#2065
+Name:	Crenshaw Cashwrap
+Desc:$
+   Any purchases of decking equipment can be made here. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Desc:$
+That way leads to the southern end of the store.
+~
+	ToVnum:	2067
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	office~~~~~~~~~~~~~~~
+	Desc:$
+That way leads to the store's main matrix node.
+~
+	ToVnum:	2064
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	2010
+	LockRating:	10
+BREAK
+#2066
+Name:	Crenshaw Decker Store
+Desc:$
+   This does not, at first glance, appear to be a state-of-the-art decker
+store. Very little energy has been expended on keeping the place clean or
+organized, as the store consists largely of shelves with parts strewn on them.
+There doesn't seem to be any way to find what you need on your own, which is
+perhaps the idea. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+The store extends to the east.
+~
+	ToVnum:	2067
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2067
+Name:	Crenshaw Decker Store
+Desc:$
+   This is a particularly messy section of the store, in which deck repairs
+are done. The store owners decided to forgo shelves in this section, choosing
+to simply drop the assorted parts on the floor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+The cashwrap lies north.
+~
+	ToVnum:	2065
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+The store extends westward.
+~
+	ToVnum:	2066
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2068
+Name:	Patrick Way
+Desc:$
+   Patrick Way is a short street that ends abruptly at the Nybbles and Bytes
+complex, a store catering to magicians and deckers.  Above the entrance is a
+fancy neon sign array to attract attention. 
+~
+Flags:	100000000000010000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door side glass~~~~~~~~~~~~~~~
+	ToVnum:	1800
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	4
+[EXIT south]
+	Desc:$
+I5 lies to the south.
+~
+	ToVnum:	2052
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2069
+Name:	Athens Road
+Desc:$
+   A small wooden building to the east displays a hand-painted sign which
+reads, "Jim's Fixit."  Athens continues northward while going south will
+return you to I5. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Athens continues northward.
+~
+	ToVnum:	2070
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	1860
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+The entrance ramp to the Northgate Mall parking lot lies south.
+~
+	ToVnum:	2054
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2070
+Name:	East Anselm Street at Athens Road
+Desc:$
+   Interstate 5 is visible to the south.  The muted sounds of the monorail can
+be heard nearby.  Here, Anselm Street begins again, moving eastward into East
+Tacoma and Renton.  Traffic is heavy here, as a T intersection often creates a
+bottleneck in traffic flow.  The road opens up eastwards, past several
+stoplight marked intersection. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Athens leads north.
+~
+	ToVnum:	2071
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	1500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Athens Road leads south.
+~
+	ToVnum:	2069
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2071
+Name:	Athens Road
+Desc:$
+   This section of Athens Road is cluttered with the kipple from two cities.
+Local government has given up trying to keep this section clean, since the
+unsavory traffic here is overwhelming. To the east, a monorail station
+provides passage from Tacoma to Seattle. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Athens becomes North Main to the north.
+~
+	ToVnum:	2072
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+Oldtown Station lies east.
+~
+	ToVnum:	3000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Athens continues to the south.
+~
+	ToVnum:	2070
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2072
+Name:	North Main & Athens
+Desc:$
+   North Main ends here, becoming Athens Road to the south. Loud music drifts
+out of the open door to the Afterlife club, to the north. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Athens stretches south.
+~
+	ToVnum:	2071
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+North Main leads west.
+~
+	ToVnum:	2084
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2073
+Name:	Ares Showroom
+Desc:$
+   The Ares showroom is a tunnel with weapons shown on trideo on every side.
+Holographic images of smiling people protecting themselves with Ares firearms
+are projected in the air. The various features of their guns are extolled in a
+friendly, almost chatty manner. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+The tunnel leads east.
+~
+	ToVnum:	2074
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Desc:$
+You may leave down the stairs if you wish.
+~
+	ToVnum:	2077
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2074
+Name:	Ares Weapons Tunnel
+Desc:$
+   This is the Statistics Room, where Ares weapon reliability numbers are
+compared to those manufactured by other companies. As you might imagine, Ares
+comes out ahead in every head-to-head competition. More holographic images,
+this time of pie charts demonstrating the truth of their arguments. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Only one way to go!~
+	ToVnum:	2075
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2075
+Name:	Ares Weapons Tunnel
+Desc:$
+   In this room are holographic testimonials. A Lone Star officer appears and
+talks about an incident wherein a gun bought from a rival company backfired
+and almost cost him his life. A clerk tells of an attempted robbery foiled by
+an Ares Viper. Every story is in the same didactic vein: Buy Ares. Good
+Armament For Good People. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Desc:$
+West is the only exit!
+~
+	ToVnum:	2076
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2076
+Name:	Ares Weapons Cashwrap
+Desc:$
+   All of your purchases can be made here. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Desc:$
+You can go to the main entrance room this way.
+~
+	ToVnum:	2073
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2077
+Name:	Ares Weapons Store
+Desc:$
+   The Ares Weapons Store is very highly secured. This is the main entrance
+room, where a pair of Knight-Errant guards eye you suspiciously. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	steel door~~~~~~~~~~~~~~~
+	Desc:$
+That way lies North Main.
+~
+	ToVnum:	2084
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	2073
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2078
+Name:	Ares Armor Cashwrap
+Desc:$
+   Ares has made the cashwrap as comfortable as it possibly can. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Desc:$
+The stockroom is to the west.
+~
+	ToVnum:	2080
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2079
+Name:	Ares Armor Store
+Desc:$
+   A limited amount of armor equipment is available here. The signs in the
+store promise competetive prices, a six-month warranty, and a completely
+hassle-free shopping session. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+The store extends northward.
+~
+	ToVnum:	2080
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	bolted door~~~~~~~~~~~~~~~
+	Desc:$
+North Main lies outside the door.
+~
+	ToVnum:	2063
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2080
+Name:	Ares Armor Stockroom
+Desc:$
+   Various flak jackets and ballistic clothing pieces hang on the walls. A
+poster of The Protector, the Ares superhero which appears in their trideo
+commercials, sits on the north wall. A holographic image of a bullet
+impacting harmlessly against an Ares armor jacket captures your attention. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+You can pay for any purchases to the east.
+~
+	ToVnum:	2078
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+The Ares store continues south.
+~
+	ToVnum:	2079
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door multicolored~~~~~~~~~~~~~~~
+	Desc:$
+The Ares office sits to the west.
+~
+	ToVnum:	2081
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	2012
+	LockRating:	10
+BREAK
+#2081
+Name:	Ares Office
+Desc:$
+   The Ares Office is normally off-limits to consumers. Here the Ares main
+terminal is situated, which can access the customer files for armor buyers,
+and to a more limited extent, those who purchase weapons at Ares. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door~~~~~~~~~~~~~~~
+	Desc:$
+The stockroom leads east.
+~
+	ToVnum:	2080
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	2012
+	LockRating:	10
+BREAK
+#2082
+Name:	Vincent's Hideaway
+Desc:$
+   Vincent's Hideaway is a cubbyhole that shadowrunners can disappear to for
+awhile.  A desk sits on one side of the room, full of circuit boards and
+assorted tools. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door maglocked~~~~~~~~~~~~~~~
+	Desc:$
+You can leave Vincent's Hideaway to the south.
+~
+	ToVnum:	2083
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	2013
+	LockRating:	20
+BREAK
+#2083
+Name:	In Front of Vinnie's Drone Mart
+Desc:$
+   A good sized parking lot has been recently built here, with clearly marked
+parking spots, and parking zones.  To the north of here is a small building
+with a well lit sign reading, "Vinnie's Drone Mart".  The area smells of
+freshly laid-out asphalt and tar. 
+~
+Flags:	100000000000010000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	maglocked door
+	Desc:$
+A small hovel lies north.
+~
+	ToVnum:	37505
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	2013
+	LockRating:	20
+[EXIT south]
+	Desc:$
+That leads out of the alley.
+~
+	ToVnum:	2060
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2084
+Name:	North Main
+Desc:$
+   On the north side of the street is the Ares Weapon stores.  Huge
+holographic displays are mounted on the walls of the store, showing the
+specifications of many weapons, displayed at random between slogans for the
+corporation.  The road is well kept, and the sidewalks have been recently
+paved.  Some smatterings of graffiti cover the south side of the streets, the
+walls to a middle class apartment complex.  To the east is a brilliant neon
+sign advertising the Afterlife club. 
+~
+Flags:	10000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door steel
+	Desc:$
+An Ares Weapons Store lies north.
+~
+	ToVnum:	2077
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	2011
+	LockRating:	15
+[EXIT east]
+	Desc:$
+North Main connects with Athens.
+~
+	ToVnum:	2072
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+North Main leads west.
+~
+	ToVnum:	2063
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2085
+Name:	W. Anselm Street
+Desc:$
+   Anselm Street comes to an end just west of here.  The gates of the Crying
+Wall, a memorial in rememberence of the Night of Rage, are to the north.
+Eastwards, Tacoma is a busy town, with traffic problems, gangs, busy
+wageslaves working for subsidiaries of subsidiaries of the monolithic
+megacorps, and general urban blight. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Beyond a metal gate lies the Crying Wall.
+~
+	ToVnum:	1836
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	2000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2086
+Name:	W. Anselm Street
+Desc:$
+   West Anselm is a busy street, cutting through the mixed residential and
+industrial sectors of the run down side of Tacoma.  Large brick walls separate
+you from  the run down factories and warehouses, still in use.  Those brick
+walls are covered liberally with white and gray graffiti, indicative of the
+Rovers street gang. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	2022
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2087
+Name:	Cambridge Drive
+Desc:$
+   The pavement and sidewalks of Cambridge Drive are relatively clean
+(compared to many other roads you have seen), and numerous street lamps line
+the sides to illumine it during the night.  No cars are allowed onto
+Cambridge, due to its narrow width. 
+~
+Flags:	10000000000010000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+You see the city streets of Tacoma.
+~
+	ToVnum:	2000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	2013
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door oak south
+	Desc:$
+An ornate oak door leads into DeClerry's Bar. 
+~
+	ToVnum:	2016
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2088
+Name:	Interstate 5
+Desc:$
+   Interstate 5 bends south, eventually leading to Fort Lewis and even farther
+down through the Salish-Sidhe Council lands and Portland nearly a thousand
+kilometers to the south.  Interstate 5 has never been a major route for
+smugglers as it has always been the most heavily patrolled.  Some T-Bird
+jockeys think it an inviting challenge until they get their hoops kicked or
+come home in a bodybag. 
+~
+Flags:	10100000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	2012
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2089
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2089
+Name:	Interstate 5 - Tacoma Mall North Exit
+Desc:$
+   The eight lane freeway continues in a straight path southward, and
+northward it curves at a ninety degree angle, going eastward through the heart
+of Tacoma.  A rather large parking lot lies off to the west, and to the
+southwest you see a bright neon sign, flashing, "^MS^WH^MO^WP ^MT^WA^MC^WO^MM^WA ^MM^WA^ML^WL^n". 
+~
+Flags:	10100000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	2088
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2090
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2092
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2090
+Name:	Interstate 5
+Desc:$
+   West of here is a large mall decked out in colorful neon signs.  Flashing
+in bright pink and white the sign "^WS^MH^WO^MP ^WT^MA^WC^MO^WM^MA ^WM^MA^WL^ML^n" demands attention.
+Traffic continues fluidly north towards Tacoma proper, and south towards
+Puyallup and Fort Lewis. 
+~
+Flags:	10100000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	2089
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2091
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2091
+Name:	Interstate 5 - Tacoma Mall South Exit
+Desc:$
+   An exit ramp leads to the very large single story parking structure to the
+west, connected to the Tacoma Mall, which includes a vast array of stores,
+dealing in many of the commodities of the Sixth World.  Southward Interstate 5
+continues for a long way, then curves southwest. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	2090
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2302
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2093
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2092
+Name:	Parking lot
+Desc:$
+   Cars of all colors of the rainbow and of all types are parked in the
+available spaces, and a separate area has been set aside for motorcycles. 
+~
+Flags:	100000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	2089
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1900
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2093
+Name:	Parking lot
+Desc:$
+   Cars of all colors of the rainbow and of all types are parked in the
+available spaces, and a separate area has been set aside for motorcycles. 
+~
+Flags:	100000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	1919
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	2091
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2094
+Name:	Krackerjack's Hovel
+Desc:$
+   You enter a tiny hole in the wall type storefront, that has all sorts of
+antiques "for sale" all over the walls and behind various counters. Nothing of
+any real value to a shadowrunner could be found here, unless that shadowrunner
+has an interest in worthless old items that serve no purpose.  Behind the
+counter is a funny looking dwarf with six datajacks in his head, and plugs in
+three of them, even though he is seemingly responsive to the meat world.  A
+sign is on the counter here with red letters on white background. 
+~
+Flags:	1010011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	2020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign
+	Desc:$
+^RCASH FOR PREMIUM DATA^N 
+~
+BREAK
+#2095
+Name:	Phil's Smoke Shop
+Desc:$
+   The aromatic smell of the finest tobaccos in North America catches your
+olfactory sense as you walk into this small hole in the wall.  The shelves are
+lined with many different brands of cigar, and cigarettes, as well as pouches
+of the finest tobaccos.  A man who is in his late sixties, and has barely any
+hair sits behind a counter, puffing away on a Sativari Jamaican. 
+~
+Flags:	10011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door thick wooden~~~~~~~~~~~~~~~
+	ToVnum:	2056
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2096
+Name:	Interstate 5 - Venice Street Offramp
+Desc:$
+   The offramp has recently been retrofitted to fit the more intense traffic
+that has hit the Tacoma area in recent years.  Venice now runs underneath I-5
+and this offramp brings traffic from the interstate to Vence and vice versa. 
+~
+Flags:	10000000000010000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	2050
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	2056
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2097
+Name:	Venice Street - Beneath Interstate 5
+Desc:$
+   Venice Street runs underneath an eight-lane overpass here. The roar of
+trucks, buzz of racebikes and putter of commuter cars are somewhat muffled by
+the many meters of tarmac and concrete above. The sharp smell of hot peppers
+from the east adds a tang to the thick scents of exhaust and car oil. 
+~
+Flags:	10000000000010000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Venice Street continues northward into northern Tacoma. 
+~
+	ToVnum:	2056
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	east e
+	Desc:$
+A small, lively restaurant is there. 
+~
+	ToVnum:	42104
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Venice Street continues south. 
+~
+	ToVnum:	2551
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2098
+Name:	Little Road/Interstate 5 Offramp
+Desc:$
+   A half-cloverleaf of single lane road bringing traffic up and down from
+Interstate 5 to Little Road, and vice versa.  This appears to be a bottleneck
+of sorts, slowing traffic from Little Road to a near standstill.  Once cars
+get up on the freeway though, its smooth speeding. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Little Road begins north of here. 
+~
+	ToVnum:	2045
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+The lanes merge into Interstate 5 south of here. 
+~
+	ToVnum:	2048
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#2099
+Name:	Riding the Tacoma Ferry
+Desc:$
+   The ferry has been around for a while. The skeleton crew that still runs
+this ancient boat to and fro look frail and withered from their long nights in
+the harsh, bay wind and spray. Yet the boat itself is solid as a rock, and
+aside from some of the colouration in the water around you, you have nothing
+to fear. 
+~
+Flags:	11010000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+END

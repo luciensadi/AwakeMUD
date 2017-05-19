@@ -1,0 +1,10 @@
+BINDING
+
+Usage: ^gORDER <spirit> BINDING <target>^n
+
+The binding power causes a target to become stuck to the ground leaving
+them completely incapable of moving from the spot they are standing.
+This prevents movement from room to room and also prevents a target closing
+in melee combat.
+
+^WSee Also: ORDER^n

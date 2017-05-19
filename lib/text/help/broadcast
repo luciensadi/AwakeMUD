@@ -1,0 +1,11 @@
+BROADCAST
+
+Usage: ^gBROADCAST <message>
+       ,<message>^n
+
+Broadcast is available only to those who have radios or who have cybernetic
+radios installed.  When used, this sends a message at the frequency currently
+centered by the radio (radios in the off or scan modes cannot broadcast).
+
+^WSee Also: RADIO^n
+

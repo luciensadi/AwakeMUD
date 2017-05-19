@@ -1,0 +1,25 @@
+LEAVE
+
+Usage: ^gLEAVE
+        LEAVE <apartment>^n
+
+Leave is used mainly to leave vehicles, but will also make you leave an 
+indoors room to the nearest outdoor area. You must first stop a vehicle
+before you can leave it. To remove a vehicle from inside another vehicle
+you use the leave command while driving.
+
+This command is used when you no longer want to rent an apartment or other
+living area. This will relinquish your hold on it and forfeit any paid
+rent.
+
+^WSee Also: HOUSES, ENTER^n
+
+Also:
+
+Usage: ^gORDER <spirit> LEAVE^n
+
+This command causes the spirit to depart the physical and astral realms and
+return to the metaplanes. Nature spirits are gone for good when issued this
+command, but elementals will await further summoning.
+
+^WSee Also: ORDER^n

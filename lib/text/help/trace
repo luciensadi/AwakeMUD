@@ -1,0 +1,13 @@
+TRACE MXP
+
+Test: Index
+Utility: Browse
+Usage: ^gTRACE <MXP Address>^n
+
+This operation is used to find the virtual or physical origin of
+a decker's jackpoint. It can only be used on LTGs and RTGs. If you 
+are on the grid controlling the jackpoint the physical location
+will be returned, otherwise you will just receive a pointer to the
+controlling RTG.
+
+^WSee Also: SCAN, UTILITIES^n

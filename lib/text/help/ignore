@@ -1,0 +1,7 @@
+IGNORE
+
+Usage: ^gIGNORE
+       IGNORE <person>^n
+
+Ignore toggles the ability to receive OOC messages from other players on
+the MUD. Ignore on its own displays the list of people you have ignored, 

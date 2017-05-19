@@ -1,0 +1,16 @@
+ELEVATOR LIFT
+
+Elevators are located all over the place, especially in highrises. Using  
+the elevator is quite simple (contrary to popular belief)  
+  
+When ^Winside^n elevator:  
+^c< 10P 10M > look panel^n 
+lists all the buttons and shows your current floor.  
+^c< 10P 10M > push <button>^n
+Where <button> is one of the buttons on the panel.  
+When ^Woutside^n elevator:  
+^c< 10P 10M > look panel^n
+Displays the current floor the elevator is at.  
+^c< 10P 10M > push button^n
+Calls elevator to your floor.
+

@@ -1,0 +1,1536 @@
+#1300
+Name:	Interstate 5
+Desc:$
+   Tacoma spreads outwards to the west and east, truck stops giving way to
+shopping centers and residential areas where, going up and down the roller
+coaster of overpasses that runs through the city, tiny people can be made out
+going about their lives. 
+~
+Flags:	10100000000010000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT northeast]
+	ToVnum:	1301
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2054
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1301
+Name:	Interstate 5
+Desc:$
+   Bored faces gaze out of cars across the eight lanes of I-5, expressions as
+gray as the overcast sky.  A large green sign hanging from an approaching
+overpass indicates Seattle is about an hour away (if anyone pays attention to
+the speed limit). 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT northeast]
+	ToVnum:	1302
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	1300
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1302
+Name:	Interstate 5 at East Anselm Street
+Desc:$
+   After changing lanes with a quick swerve and fervent prayer, the caravan of
+8-wheelers is now a few cars behind, and a distance overpass with large green
+signs can be barely made out up ahead.  Overhead is the overpass for East
+Anselm Street, a major thoroughfare through East Tacoma.  An offramp takes
+traffic up onto the street above. 
+~
+Flags:	10100000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT north]
+	ToVnum:	1303
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	1503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	1301
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1303
+Name:	Interstate 5
+Desc:$
+   Cars choke the road, crawling along the curves of I-5 at a half dead pace.
+There are orange construction cones and a few stray concrete pylons preventing
+entryway onto the access road to the west, several trolls and a few orks in
+hard hats taking a break to glare at the rushing traffic. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT north]
+	ToVnum:	1304
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1302
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1304
+Name:	Interstate 5
+Desc:$
+   Bleak gray concrete pools outwards from the massive breadth of Interstate 5
+heading towards Tacoma, while screaming traffic charges forward towards
+another day of ineffectuality in the office, off to the clubs, or perhaps
+something more illicit  Maybe staring at that ork in the big red van just to
+the left isn't a very good idea. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT northeast]
+	ToVnum:	1305
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1303
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1305
+Name:	Interstate 5
+Desc:$
+   Nearing Tacoma, the bulletin boards lining I-5 suddenly explode in a garish
+mish-mash of color and annoying, cheesy slogans like "Dave the Dwarf's Driving
+Deals," somewhere off the Interstate in Seattle. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT north]
+	ToVnum:	1306
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	1304
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1306
+Name:	Interstate 5
+Desc:$
+   Whizzing through an overpass, the light fades for a moment, the concrete
+cave seemingly covered in primitive artwork where area gangers have braved the
+traffic to tag the structure.  As light and open air returns, a tiny Seatac
+airport can be glimpsed to the distant north, a large green sign proclaiming
+the distance and exit number to get there. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT south]
+	ToVnum:	1305
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	1307
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1307
+Name:	Interstate 5
+Desc:$
+   Passing through the edge of town, several abandoned buildings can be
+glimpsed in various stages of ruin, a few solid structures with busted windows
+down to single standing walls with rusty steel supports exposed like the
+bloody rotting carcasses of some herd of behemoths. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT north]
+	ToVnum:	1308
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	1306
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1308
+Name:	Interstate 5
+Desc:$
+   The leafless sticks along the side of I-5's massive eight lanes testify to
+a forgotten age of landscaping and beautification projects, adding to the
+sense of desolation that comes with passing through this abandoned, long dead
+section of town.  The traffic however seems to picking up life and speed, as
+though the drivers want to escape this desolate graveyard as quickly as
+possible. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT north]
+	ToVnum:	1309
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1307
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1309
+Name:	Interstate 5
+Desc:$
+   Loud and sickeningly colorful billboards begin to line the highway,
+blocking site of the dejected emptiness that fills the outskirts of Tacoma.
+Cars, trucks, and caravans of 8-wheelers pass by at mad speeds, the access
+roads alone a death defying challenge to get to. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT northeast]
+	ToVnum:	1310
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1308
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1310
+Name:	Interstate 5
+Desc:$
+   Up, over and down again at breakneck speed and the graffiti-encrusted
+overpass is already a dissipating memory, suddenly slowing down as an old
+couple in an ancient Lincoln Continental pulls into the lane from the access
+road, going at a snail's pace that could get them killed on this freeway of
+madmen. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT north]
+	ToVnum:	1311
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	1309
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1311
+Name:	Interstate 5
+Desc:$
+   A truck stop advertised on a billboard a few miles back comes into view, a
+tiny restaurant and gas station surrounded by an enormous parking lot and a
+few dozen semis lined up like neat little toy trucks.  Next to the truck stop
+is a small motel with an ugly neon Vacancy sign flashing. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT north]
+	ToVnum:	1312
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1310
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1312
+Name:	Interstate 5
+Desc:$
+   Heading north, Seatac Airport is a few miles and a couple of exits away
+going south, Seattle is about an hour's drive away.  Bored faces gaze out of
+cars across the eight lanes of I-5, expressions as gray as the overcast sky. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT northeast]
+	ToVnum:	1313
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1311
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1313
+Name:	Interstate 5
+Desc:$
+   Taking a large curve in the road at the insane speed that ironically
+guarantees survival on I-5, the monotony of the straight-arrow eight lanes is
+momentarily broken, as the steering wheel actually has to be used for a
+moment. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT southwest]
+	ToVnum:	1312
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	1314
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1314
+Name:	Interstate 5, a curve.
+Desc:$
+   A flood of cars rushes by, a few roaring 8-wheelers directly ahead belching
+out filthy black smoke, the pasted signs around their license plates
+advertising a few non-working 800 numbers to report bad driving. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT north]
+	ToVnum:	1315
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	1313
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1315
+Name:	Interstate 5, Route 18 Junction
+Desc:$
+   According to the large sign stretching across all eight lanes of the I-5,
+the junction to State Route 18, the route to Auburn, lies just up ahead. A few
+scraggly trees that have amazingly not been plowed through during a wreck over
+the years line the edge of the road. 
+~
+Flags:	10100000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT northeast]
+	ToVnum:	1316
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	45236
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1314
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1316
+Name:	Interstate 5
+Desc:$
+   There are signs of an accident further north along the interstate, the air
+thickened slightly as the wind carries a thick column of billowing smoke
+southward.  Traffic begins to slow. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT northeast]
+	ToVnum:	1317
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	1315
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1317
+Name:	Interstate 5
+Desc:$
+   There is a major pile up off the side of the road, EMS units closing off
+the two most eastern lanes.  A Lone Star officer is redirecting traffic, which
+is quickly beginning to back up. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT north]
+	ToVnum:	1318
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	1316
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1318
+Name:	Interstate 5
+Desc:$
+   Traffic crawls along, lights from Lone Star flashing to the south, an
+ominous pillar of thick smoke reaching up to the gray sky.  A jet roars
+overhead. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT north]
+	ToVnum:	1319
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1317
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1319
+Name:	Interstate 5
+Desc:$
+   Traffic heading north to Seattle zips by, while the southern flow is
+slowing and quickly turning into a cramped jam of angry commuters.  A green
+sign shows Seatac International Airport is three exits away.  The rumble of
+jets taking off can be heard. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT northeast]
+	ToVnum:	1320
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1318
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1320
+Name:	Interstate 5, Seattle/Tacoma Airport Exit
+Desc:$
+   A large green sign points out nearby Seattle to the north and Tacoma to the
+southwest, the southeast off-ramp leading to Seatac International Airport.  A
+caravan of black airport shuttles cuts into traffic from the access road. 
+~
+Flags:	10100000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT north]
+	ToVnum:	1322
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	1321
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	1319
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1321
+Name:	Offramp
+Desc:$
+   Seatac airport rises up to the north.  Several planes and jets can be seen
+in the long stretch of runway.  To the northwest Interstate 5 roars with the
+madness of rushing traffic. 
+~
+Flags:	10000000000010000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT north]
+	ToVnum:	19410
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	1320
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1322
+Name:	Interstate 5
+Desc:$
+   Loud, colorful billboards advertise gas stations, fast food joints and
+cheap motels in nearby Seattle.  Interstate 5 reaches north to the Seattle
+sprawl and south to distant Tacoma. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT north]
+	ToVnum:	1323
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1320
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1323
+Name:	Interstate 5
+Desc:$
+   A beat up station wagon carrying a crowded family of orcs zips by, going at
+least twenty over the speed limit, camping gear stuffed so tight the back
+window is cracked open.  The squeals of five or six kids are easy to make out.
+A large, faded billboard advertises a nearby campground.  
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT north]
+	ToVnum:	1324
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1322
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1324
+Name:	Interstate 5
+Desc:$
+   To the north the glow of distant Seattle can be seen at night, and traffic
+is fairly sparse along this lonely stretch of Interstate 5.  Heading south on
+the tree-lined highway eventually leads to Tacoma. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT northeast]
+	ToVnum:	1325
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1323
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1325
+Name:	Interstate 5
+Desc:$
+   Cars rush along at insane speeds, probably close to or over twice the legal
+limit.  Up on the shoulder of the road back along the tree line is what
+probably used to be a deer being picked over by crows, dried blood stains
+indicating it was probably dragged off of the highway. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT north]
+	ToVnum:	1326
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	1324
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1326
+Name:	Interstate 5
+Desc:$
+   The outskirts of Seattle meld empty country with the distant downtown
+skyline.  A lonely sign quickly passed gives the exit number for Seatac
+International Airport, shows Tacoma to be about an hours' drive away (under
+the speed limit, that is). 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT northeast]
+	ToVnum:	1327
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1325
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1327
+Name:	Interstate 5
+Desc:$
+   The Seattle sprawl is thin and sparse here, more populated to the north,
+while further south the land is slowly taken over by unused fields and stands
+of trees.  The main road is in decent repair, though some of the access roads
+along here look like they haven't been touched by maintenance crews in
+decades. 
+~
+Flags:	10100000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT north]
+	ToVnum:	1328
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	1326
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1328
+Name:	I-5, Approaching Downtown Seattle
+Desc:$
+   This ramp links Interstate 5 with the downtown Seattle traffic grid, a less
+than desirable portion of the city sprawling outward from the freeway, a huge
+mess of run down businesses, houses and apartments.  Traffic runs by,
+oblivious to those waiting on the ramp to get onto the freeway. 
+~
+Flags:	10100000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT north]
+	ToVnum:	32601
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1327
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1329
+Name:	Interstate 5
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+BREAK
+#1330
+Name:	Interstate 5
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+BREAK
+#1331
+Name:	Interstate 5
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+BREAK
+#1332
+Name:	Interstate 5
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+BREAK
+#1333
+Name:	Interstate 5
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+BREAK
+#1334
+Name:	Interstate 5
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+BREAK
+#1335
+Name:	Interstate 5
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+BREAK
+#1336
+Name:	Interstate 5
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+BREAK
+#1337
+Name:	Interstate 5
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+BREAK
+#1338
+Name:	Interstate 5
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+BREAK
+#1339
+Name:	Interstate 5
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+BREAK
+#1340
+Name:	Interstate 5
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+BREAK
+#1341
+Name:	Interstate 5
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+BREAK
+#1342
+Name:	Interstate 5
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+BREAK
+#1343
+Name:	Interstate 5
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+BREAK
+#1344
+Name:	Interstate 5
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+BREAK
+#1345
+Name:	Interstate 5
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+BREAK
+#1346
+Name:	Interstate 5
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+BREAK
+#1347
+Name:	Interstate 5
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+BREAK
+#1348
+Name:	Interstate 5
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+BREAK
+#1349
+Name:	Interstate 5
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+BREAK
+#1350
+Name:	An Onramp
+Desc:$
+   This is an onramp carrying traffic from I-5 to Ebernath Avenue in Auburn.
+A broken control stoplight is here. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT southeast]
+	ToVnum:	29015
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	45241
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1398
+Name:	Car Dealer Storage Room
+Desc:$
+   This room is to store the cars that car dealer would sell, until I can
+write a proper shop type system for them. wizload or zoneload any vehicles you
+want sold in here. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+BREAK
+#1399
+Name:	Crazy Lenny's Crazy Deals
+Desc:$
+   You are surrounded by a great number of cars, lining the whole lot from
+front to back, of more makes and models than most would ever dream.  Ford.
+Isuzu.  Mitsubishi.  Dodge.  Toyota.  Aztechnology.  Its all there, and its
+all for sale.  There is a crazy ork in a plaid zoot-suit walking up and down
+the lot, with a huge grin on his face. 
+~
+Flags:	100000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+[EXIT south]
+	ToVnum:	32670
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

@@ -1,0 +1,5661 @@
+#35500
+Name:	Entrance to Dante's Inferno
+Desc:$
+   The Novahot club that always remains ahead of the game of the nightclub
+scene.  Dante's Inferno is nine levels deep, not up, each level becoming more
+and more exclusive.  The music coming from the inside is the sounds of cutting
+edge chainsaw-techno, something to the ears of a twentieth century listener
+would be reminiscent of KMFDM or early Ministry.  There is a red glow on the
+walls on the inside. ^WA sign reads^L: ^RNO PARKING^y - Violators Will Be Towed^n.
+Arrows direct drivers to the northeast and southeast, into the Dante's Inferno
+underground garage. 
+~
+Flags:	10000000000010000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	35699
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	35501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	35698
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32661
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35501
+Name:	Abandon All Hope....
+Desc:$
+   The hallways here are a pseudo-stone colored white, with red lights bent to
+luminesce like fires.  The floor is covered with a sulfurous smoke.  A large
+troll with a large metal box checks people coming into the club for weaponry,
+and if they have weaponry he stores it.  Holographic imps and demons appear on
+the walls at random intervals.  A huge sign in front of the archway to the
+interior of the club reads, "Abandon all hope, oh ye who enter." 
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	8301
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	35502
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35502
+Name:	Descent...
+Desc:$
+   A downward staircase, made with black volcanic stone blanketed in sulfurous
+smoke.  The walls are a glowing red stone that seemingly doesn't give off
+heat.  They are very realistically crafted magma-like stones.  Holographs of
+tortured spirits flash on the wall at random patterns.  Occasional recordings
+of screams fill the air. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	35503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	35501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35503
+Name:	The First Hell
+Desc:$
+   Loud rhythmic music fills the air, vibrating every bone in your body.  The
+ceiling is covered in various hellish holographs and light schemes, and covers
+the area in bright lights that appear to engulf the people in the club in
+flames.  The ceiling is a see through glass ceiling with fire and magma
+sculptures and flames, either holographic or real below you.  Near the ceiling
+mounted on the walls are sinister-looking gargoyle figures, seemingly glaring
+down at the crowd. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	35504
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35507
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35502
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35504
+Name:	The First Hell
+Desc:$
+   The music vibrates through your skull in a sharp hypnotic rhythm.  The
+ceiling is covered with holographs and sculptures of hanging bodies, tortured
+souls, imps and daemons, and many other of the imagined minions of Hell.
+There are bright lights mounted on the ceiling, not classic incandescent
+nightclub lights, but phosphorescent morph-lighting that forms shapes,
+controlled by computer.  They cast a red furnace-light affect on everyone in
+the vicinity, seemingly engulfing the habitues of Dante's Inferno in flames. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	35505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35508
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35505
+Name:	The First Hell
+Desc:$
+   The music thickly fills the air, and small dancefloors are laid out at
+regular intervals, with see-through floors.  Under the glass tiles that make
+up the dance floors are rocks that luminesce a soft, ^rblood red^n color.  Red
+lights fill the air, coming from ceiling fixtures, creating a look of
+engulfment upon the people in the nightclub.  Sulfurous clouds of smoke
+regularly cover the floor and drift away. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	35512
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	35509
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35504
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35506
+Name:	The First Hell - Spiralling Down
+Desc:$
+   From the span to the south, the floor seems to begin moving downward,
+deeper in its descent to the next level.  Every fifteen meters or so, there is
+a step moving downward, making the incline gradual.  The air is thick with the
+smoke of the decadance of Seattle, adding to the fiery atmosphere.  The music
+is thick and rhythmical, making the bones vibrate in synchronicity to the
+sounds that fill the club. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35510
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35507
+Name:	Cavernous Booth
+Desc:$
+   A small cavern in the black obsidian walls of the club, etched out with
+stalagmites and red fire orbs for lighting.  The booth has two very
+comfortable red upholstry seats with some gothic-spire decorations.  On the
+table is a red glowing orb, resembling a small ball of magma. 
+~
+Flags:	10011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35508
+Name:	Cavernous Booth
+Desc:$
+   A small cavern in the black obsidian walls of the club, etched out with
+stalagmites and red fire orbs for lighting.  The booth has two very
+comfortable red upholstry seats with some gothic-spire decorations.  On the
+table is a red glowing orb, resembling a small ball of magma. 
+~
+Flags:	10011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35504
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35509
+Name:	Cavernous Booth
+Desc:$
+   A small cavern in the black obsidian walls of the club, etched out with
+stalagmites and red fire orbs for lighting.  The booth has two very
+comfortable red upholstry seats with some gothic-spire decorations.  On the
+table is a red glowing orb, resembling a small ball of magma. 
+~
+Flags:	10011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	ToVnum:	35505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35510
+Name:	Start of the Second Hell
+Desc:$
+   The spiral ends or begins here, upward to the south, and the First level of
+Dante's.  The music is thick and hypnotically rhythmic, and the dark red
+lights fluctuate, creating an illusory effect of the denizens of the club
+being on flames.  The walls are a dark red color that luminesces vaguely, and
+holographs of devils and daemons, imps and tortured souls appear on the
+ceiling and under the glass of the floor where you can see magma floating
+beneath you. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35517
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35511
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35511
+Name:	The Second Hell
+Desc:$
+   The music is dark, and the decorum is darker, as the hypnotic sounds cut to
+the bone.  Above the top of the walls are several gargoyles with flaming
+glowing red eyes that seem to move in such a way that is not common to
+statues.  The floors are clear glass, and beneath them are what appears to be
+flowing magma streams.  Above, where the ceiling is, are holographs of
+tortured souls, imps, and daemons. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35518
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	35510
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35513
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35512
+Name:	Edge of the Abyss
+Desc:$
+   Edge of the Abyss is a bar that serves the patrons of the First Hell.  Dark
+gothic designs cover the bar itself, and the bartender dresses as a fallen
+angel, with long bat wings, and a halo of a crimson color.  He serves drinks
+in glasses with a hellish bent, glass grails covered with etchings of daemons
+and imps. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	35505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35513
+Name:	The Second Hell
+Desc:$
+   The fires appear brighter, in the holographic lighting array, where you see
+holographic imps and daemons gnaw on tortured souls.  The music pounds through
+your bones with a hypnotic beat.  Beneath you is a glass floor, with a river
+of molten 'magma' that adds to the reddish cast.  The walls are sculpted
+obsidian with gargoyles and pseudo-incantations in 'hieroglyphic' form. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35519
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	35511
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35514
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35514
+Name:	The Second Hell
+Desc:$
+   Spiralling deep into the underground 'caverns' of Dante's Inferno, the
+Second Hell curves southward from here to where the Third level starts.
+Covering the ceiling are holographic dancing daemons and imps, torturing souls
+mounted on pikes.  Along the edge of the walls are statues of gargoyles with
+glowing red eyes, and sulfurous smoke eminating from their nostrils.  A large
+pole covered in ceramic human skulls shows where the level whips around
+southward, leading down farther into the Third Hell.  A Bulletin Board System
+is set up to the northwest, and a restaurant is set up to the west. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35520
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	35513
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	8302
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35515
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35516
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	35521
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35515
+Name:	The Second Hell, Spiralling Downward
+Desc:$
+   The Second Hell comes to an end here, as a staircase lined with ceramic
+skulls with ruby eyes leads down to the third level of Dante's Inferno.  The
+music is thick and hypnotic, causing every bone in your body to vibrate.  Red
+colored lights hit the dancers in the club, creating an 'engulfed' affect. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35514
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35522
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35516
+Name:	Searing Flesh
+Desc:$
+   An interesting name for an eatery, but it doesn't seem out of place in the
+hellish decorum of Dante's Inferno.  This is where to go to find stuffers to
+fill up on for a few levels.  Here you can find batwing sandwiches made of
+chicken, a juicy hellburger, and drinks of both the alcoholic and
+non-alcoholic variety.  Behind the bar is an ork with glowing red cybereyes
+wearing a chef's hat, and using a small pitchfork as a spatula. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	35514
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35517
+Name:	Cavernous Booth
+Desc:$
+   A small cavern in the black obsidian walls of the club, etched out with
+stalagmites and red fire orbs for lighting.  The booth has two very
+comfortable red upholstry seats with some gothic-spire decorations.  On  the
+table is a red glowing orb, resembling a small ball of magma. An RJ-715
+dataport in a wall plate provides matrix access. 
+~
+Flags:	10011100
+SecType:	Inside
+MatrixExit:	65091
+IO:	300
+Bandwidth:	20
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	92060660
+Address:	Dante's Inferno, Second Floor, Seattle
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	35510
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35518
+Name:	Cavernous Booth
+Desc:$
+   A small cavern in the black obsidian walls of the club, etched out with
+stalagmites and red fire orbs for lighting.  The booth has two very
+comfortable red upholstry seats with some gothic-spire decorations.  On  the
+table is a red glowing orb, resembling a small ball of magma. 
+~
+Flags:	10011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	35511
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35519
+Name:	Cavernous Booth
+Desc:$
+   A small cavern in the black obsidian walls of the club, etched out with
+stalagmites and red fire orbs for lighting.  The booth has two very
+comfortable red upholstry seats with some gothic-spire decorations.  On  the
+table is a red glowing orb, resembling a small ball of magma. 
+~
+Flags:	10011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	35513
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35520
+Name:	Cavernous Booth
+Desc:$
+   A small cavern in the black obsidian walls of the club, etched out with
+stalagmites and red fire orbs for lighting.  The booth has two very
+comfortable red upholstry seats with some gothic-spire decorations.  On  the
+table is a red glowing orb, resembling a small ball of magma. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	35514
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35521
+Name:	Bulletin Board System
+Desc:$
+    This corner of Dante's is set aside for one of several terminals that are
+used for communications in the Seattle/Tacoma metroplex.  There is a direct
+link between the dumb terminal here and the Shadowland Node of Seattle.  An
+RJ-715 jack is in the wall behind the Shadowland terminal, providing matrix
+access.  The terminal is clean and free of graffiti.  A hallway northwards
+leads to the underground parking garage that circles Dante's Inferno. 
+~
+Flags:	10011100
+SecType:	Inside
+MatrixExit:	65092
+IO:	300
+Bandwidth:	20
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	92060661
+Address:	Dante's Inferno, Second Floor, Seattle
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35692
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	35514
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	35524
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35522
+Name:	The Third Hell
+Desc:$
+   The third level downward into Dante's netherworld begins here, coming from
+the Second Hell north of here.  The music is a grinding rhythmic sound that
+cuts to the bone.  The floors are obsidian black, which eerily reflects the
+red lights coming from above.  Along the walls are statues of daemons and imps
+with a bit of puppetering technology thrown in, making them swivel and move,
+while breathing steam as their eyes glow red. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35515
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	35523
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35527
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35523
+Name:	The Third Hell
+Desc:$
+   The obsidian black floors reflect darkly the dark fire-red lights arranged
+up above.  Near the ceiling are statues of gargoyles and daemons moving and
+swivelling to the music as fire and steam comes out of their facial orifaces.
+The walls resemble volcanic rock, with the look of jet black obsidian.
+Torches are arranged along the walls. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	35525
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35528
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35522
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35524
+Name:	Bulletin Board System [OOC]
+Desc:$
+   A ladder brings you up to this room, where a simple computer terminal
+connects you with [OOC]-net, a network of computer terminals that is entirely
+out-of-character. 
+~
+Flags:	10011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	35521
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35525
+Name:	The Third Hell
+Desc:$
+   The black obsidian floors and walls eerily reflect and refract the crimson
+lights that have been mounted on arrays on the ceiling, coexisting with
+holographs of daemons and imps, devils and horrors, dancing rhythmically to
+the music, that crushes hypnotically through your bones.  Along the edge of
+the ceiling are statues of gargoyles with robotic puppetry mechanics in them
+to make them move slowly, as they breathe smoke and their eyes burn with red
+light. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	35526
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35529
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35523
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35526
+Name:	The Third Hell
+Desc:$
+   A staircase begins here, spiralling down to another dancefoor, the Fourth
+level of Dante's Inferno.  The floors are separated in this manner to keep the
+DJ'ed music on the upper floors from spilling into the live music of the lower
+levels.  Peering down the staircase you see red lights, brimstone smoke, and
+more frenetically charged clientele. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	35530
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35525
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	35531
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35527
+Name:	Cavernous Booth
+Desc:$
+   A small cavern in the black obsidian walls of the club, etched out with
+stalagmites and red fire orbs for lighting.  The booth has two very
+comfortable red upholstry seats with some gothic-spire decorations.  On the
+table is a red glowing orb, resembling a small ball of magma. 
+~
+Flags:	10011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35522
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35528
+Name:	Cavernous Booth
+Desc:$
+   A small cavern in the black obsidian walls of the club, etched out with
+stalagmites and red fire orbs for lighting.  The booth has two very
+comfortable red upholstry seets with some gothic spire-like decorations.  On
+the table is a red glowing orb, resembling a ball of magma.  Some soda is
+spilled on the table. 
+~
+Flags:	10011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35523
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35529
+Name:	Cavernous Booth
+Desc:$
+   A small cavern in the black obsidian walls of the club, etched out with
+stalagmites and red fire orbs for lighting.  The booth has two very
+comfortable red upholstry seets with some gothic spire-like decorations.  On
+the table is a red glowing orb, resembling a ball of magma.  Some graffiti is
+etched on the table. 
+~
+Flags:	10011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35525
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35530
+Name:	Cavernous Booth
+Desc:$
+   A small cavern in the black obsidian walls of the club, etched out with
+stalagmites and red fire orbs for lighting.  The booth has two very
+comfortable red upholstry seets with some gothic spire-like decorations.  On
+the table is a red orb, normally glowing, but has recently burned out, leaving
+this booth darkened. 
+~
+Flags:	10000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35526
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35531
+Name:	Spiraling Down The Abyss
+Desc:$
+   A long spiral staircase moving up and down, with stairs fashioned with the
+blackest obsidian.  Red lights are focused just above the stairs, giving them
+a magma fire effect.  At the end of each step, is a ceramic human skull with
+flames coming from the top of them.  Occasionally, some steam blankets the
+steps, crawling down from the third level to the fourth below. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	35526
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	35532
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35532
+Name:	The Fourth Hell
+Desc:$
+   The spiral staircase ends here as a wide expanse of a floor is laid out
+below a stage where musicians play live shows at regular intervals.  The floor
+is a clear glass, with flows of molten lava beneath the tiles.  Red lights
+seem to give a bloody color to everyone on the floor, as the dark crimson
+beams move rhythmically to the music. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	7
+Cover:	1
+X:	20
+Y:	30
+Z:	4.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	1
+	BackgroundType:	12
+[EXIT southwest]
+	ToVnum:	35533
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	35531
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35533
+Name:	The Fourth Hell - Dancefloor
+Desc:$
+   The dance floor is made of a glass like substance, and is perfectly
+transparent.  Above are an unholy dance of daemons and imps with pitchforks,
+dancing frenetically to the music that fills the room from the elevated stage.
+Below you, through the transparent tiles, you see molten lava glowing ^ra dull
+red^n color.  The music is very loud, but none of the clientele seems to mind. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	35532
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35534
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35534
+Name:	The Fourth Hell - Dancefloor
+Desc:$
+   The dance floor is a glass-like substance, perfectly transparent, allowing
+you to see the effects system beneath it, with its flows of hot magma, and
+skulls floating in it.  On the south wall are mounted gargoyles with flaming
+red eyes, and smoke coming from their nostrils.  The red lights from the
+lighting system fluctuate with the rhythm of the band on the stage, and are
+cast to create an 'engulfing' effect on the crowd on the dance floor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35539
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	35533
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35535
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35535
+Name:	The Fourth Hell - Dancefloor
+Desc:$
+   The clear dancefloor continues, this time hanging you over a cavernous pit.
+As you look down, you see the flows of magma from the east and west pouring
+over the edge into a crevass that seems to plunge into the fathomless depths
+of the heart of Hell. Even the skeletons floating in the boiling death-tide
+seem to howl in terror as their unending plummet begins. Above it all howls
+the music of Pink Freud, made all the more deliciously hellish by the flaring
+red lights. On the south wall the row of statues goes on, this time demons
+wielding spears and broadswords, glaring at the gargoyles in the east with a
+look that could only be called bloodlust. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35538
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	35534
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35577
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35536
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35536
+Name:	The Fourth Hell - Dancefloor
+Desc:$
+   A thick wall of black stone stands to the north, seperating this area from
+a direct view of the stage. The see-through dancefloor is still present, with
+its rivers of boiling red magma sweeping along the bones of the damned. Every
+so often a skeleton can be seen clawing at the underside of the floor, never
+quite finding the purchase to save itself from washing deeper into the bowels
+of Hell. The blaring music of Pink Freud fills the air to a deafening roar,
+and the red pulses from above give everyone the look of horrible, bloody
+wounds - just the sort of thing true Dante's devotees live for. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	35535
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35578
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	35537
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35537
+Name:	The Fourth Hell - Dancefloor
+Desc:$
+   This is the very edge of the dancefloor, with half the floor see-through
+and half dense black stone. Beneath the see-through flooring runs a blood-tide
+of magma and bone. The wall of stone prevents any view to the stage, but the
+music is still as loud. The wall itself is etched in a bas-relief of the court
+of the demon prince Malbolgia, with demons and monsters of all sorts fighting,
+feeding, and... mating wildly. Even the ceiling was not left out of the
+detailing, with the image of a monstrous spider's web acid-etched into the
+stone. A clockwork spider completes the look, occasionally spraying someone
+with blood-red paint - at least, you have to hope it's just paint. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	35542
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	35536
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35538
+Name:	The Fourth Hell - By the Stage
+Desc:$
+   While Jan LaRoan belts it out on the other side of the stage, Pink Freud
+floods the club with music from this end. Smoke from the machines pours over
+the edge, and the row of fire on stage makes it look like a gaping wound in
+the side of a giant. Truly devout habitues of Dante's dance to the marvel that
+is Pink Freud while bathing themselves in the smokey demon blood. The steps up
+the stage are neatly hidden under the blanket of smoke, more easily located by
+tripping over them than looking. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	35539
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35535
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	35540
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35539
+Name:	The Fourth Hell - By the Stage
+Desc:$
+   Up by the stage, one's attention tends to be less focused on the effects
+that fill the club, and more focused on the band itself.  Up above you, the
+novahot rock group, Pink Freud, a band that originally started as a tribute
+band but had evolved to their own style, is on the stage, playing their latest
+simsense music hit.  The lead singer, Jan LaRoan is up above you now. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	35534
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35538
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	35541
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35540
+Name:	The Fourth Hell - Stage
+Desc:$
+   The backdrop of the stage is a grotesque waterfall of blood and bones. The
+floor is blanketed thickly with dense white smoke which, thanks to the pulses
+red lights projected from above, seem to blend and merge with the bloodfalls
+into a hideous three-dimensional mockery of art. This parody of all things
+beautiful is continued by the band, who produce what only the most depraved
+would call music. Every so often, the holo-projectors giving the lighting
+display conjure up a chorus line of skeletons to rave to the noise. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	35541
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	35538
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35541
+Name:	The Fourth Hell - Stage
+Desc:$
+   A scene only a demon - or a habitue of Dante's - would enjoy exists on the
+stage. The backdrop is a waterfall of blood, with the occasional intact human
+or metahuman skeleton visible in the crimson waves. Even the bloodfalls
+themselves swirl into the demonic face of a screaming, tortured soul. At the
+front of the stage, a row of color-shifting magical fire keeps most of the
+dancers from charging the stage, and makes those who do regret it. The band
+can really wail, and the smoke around their feet is in constant frenetic
+motion as they dance to their own sound. Pulses of red light flood the stage,
+projected from above, making the roiling steam cloud seem to blend into the
+bloodfalls in random patches. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	35540
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	35539
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35542
+Name:	The Fourth Hell - By the Bar
+Desc:$
+   Run in front of the bar is a long row of tables. Each one has a top of the
+same high-durability see-through material as the dance floor and legs that
+look like the rib-bones of some horribly large creature. The chairs at the
+tables appear to be made of leg bones, with tight skins stretched between them
+to form seats and backs. The wall is carved with a scene of a demonic battle,
+perhaps a scene from the Bloodwars. If you can tell which ones are demons and
+which ones are devils, you either know your arcane history very well, or
+you've spent way too much time in Dante's. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	35543
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	35544
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	35537
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35543
+Name:	Damned Decadance
+Desc:$
+   Finally, the bar! With all that dancing and music and raving, a drink would
+be welcome (even with their selection). The bar is crafted of black-smoked
+wood and carved with a spider's web motif that looks far too intricate to have
+been done by living hands. Behind the spiderweb are the images of many
+creatures - humanoid and otherwise, even a dragon or two - locked away, most
+pulling at the spiderweb, seeking freedom that will never come. All of the
+lights are slow-moving red pulsers, giving the room the feeling of being
+filled with blood. Darting between it all is a tall, red-skinned troll with
+wings, the barkeep. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	35544
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	35542
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35544
+Name:	The Fourth Hell - By the Bar
+Desc:$
+   The row of bone-crafted chairs continues, forming another neat row. The
+wall this time is not carved with a scene at all. Instead, various visitors
+have scratched lines from appropriate poems into the softer black stone of
+this section. Favorite poets seem to be Edgar Allan Poe, Emily Dickenson, and
+William Blake, among others. The red lights are of course omnipresent, making
+reading the poetry a little eye-straining for the unaccustomed. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	8303
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	35545
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35542
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	35543
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	Emily Dickenson~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	Desc:$
+Because I could not stop for Death
+ He kindly stopped for me;
+ The carriage held but just ourselves 
+ And immortality. 
+ We slowly
+drove, he knew no haste, 
+ And I had put away 
+ My labor, and my leisure too, 
+ For his civility.
+ 
+~
+[EXTRADESC 1]
+	Keywords:	William Blake~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	Desc:$
+Those who restrain desire, do so because theirs is weak enough to be
+restrained; and the restrainer or reason usurps its place & governs the
+unwilling.
+ And being restrain'd it by degrees becomes passive till it is only the shadow
+of desire.
+ The history of this is written in Paradise Lost, & the Governor or Reason is
+call'd Messiah.
+ And the original Archangel or possessor of the command of the heavenly host,
+is call'd the Devil or Satan and his children are call'd Sin & Death.
+ But in the Book of Job Miltons Messiah is call'd Satan.
+ For this history
+has been adopted by both parties.
+ It indeed appear'd to Reason as if Desire was cast out, but the Devil's
+account is, that the Messiah fell, & formed a heaven of what he stole from the
+Abyss.
+ 
+~
+[EXTRADESC 2]
+	Keywords:	Edgar Allan Poe~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	Desc:$
+For the moon never beams without bringing me dreams
+ Of the beautiful Annabel Lee;
+ And the stars never rise but I feel the
+bright eyes
+ Of the beautiful Annabel Lee;
+ And so, all the night-time, I lie down by the side
+ Of my darling - my
+darling - my life and my bride,
+ In the sepulchre there by the sea,
+ In her tomb by the sounding sea.
+ 
+~
+BREAK
+#35545
+Name:	The Fourth Hell - Stairs Downward
+Desc:$
+   For those who survived the Fourth Hell and have the intestinal fortitude to
+go deeper, the stairs begin here. Thankfully, they are not see-through.
+Instead, each rail is an elongated bone. The stairs themselves are hollow and
+filled with red fluid. When stepped on, the stairs ripple internally, though
+their outer structure never moves. The howling music of Pink Freud can be
+heard here only dully, muted as it is by the bar area. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	35544
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	35546
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35546
+Name:	Spiralling Down the Abyss
+Desc:$
+   The blood-filled stairs gradually fade out, as does the intense heat and
+pounding noise from above. The stairs become pockets of cobalt-blue fluid that
+shift internally when stepped upon, and the lighting shifts from fiery red to
+an almost arctic blue. The bone rails are replaced first by bones encased in
+ice, then simply by long, thick plastic icicles. Water trickles endlessly down
+these poles, giving them the illusion of melting and reforming before your
+eyes. As the music of Pink Freud becomes a vauge memory, it is slowly overlaid
+with the music of the Fifth Hell - the Hell of Ice - which is a slow,
+crystalline sort of techno played entirely on electronic equipment, as no
+natural device could make a sound like that. 
+~
+Flags:	10000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	35545
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	35547
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35547
+Name:	The Fifth Hell
+Desc:$
+   The staircase ends in a relatively small, poorly lit room. It is somewhat
+chilly here, and the only light is a pale blue radiance emanating from the
+next room. The doorway into the Fifth Hell is a huge demon's face made of
+translucent plastic and lit from within by an unearthly cobalt-blue glow. To
+enter, you must walk between its teeth, into the gaping maw of Hell. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	35548
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	35546
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35548
+Name:	The Fifth Hell
+Desc:$
+   The Fifth Hell is wholly unlike the Hells above it. Instead of darkness or
+rock, fire or noise, the Fifth Hell is a Hell of Ice. The walls are all
+paneled in clear material that looks like ice, and, thanks to the over-cranked
+air conditioning and fog machines, coated in enough frost to give it an icy
+feeling as well. The frosty air is filled with creepy, chill ice-techno that
+no normal instrument could produce. Oddly enough, the floor is not slippery.
+Despite the cold, habitues of the Fifth Hell still come scantily clad, though
+skimpy furs are more common than leather. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35547
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	35552
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	35549
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35555
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35556
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35549
+Name:	The Fifth Hell - Heart of the Glacier
+Desc:$
+   The icy blue/white floor continues, as do the translucent walls. From the
+ceiling hang hundreds upon hundreds of long, thin icicles, every one of them
+looking poised to drop. About half of them glow brightly from within, shining
+a cobalt blue light out into the room. It is these shining spines that give
+most of the Fifth Hell it's frosty blue glow. It also gives this stretch the
+illusion of being under water. The hauntingly chilly techno music is just the
+slightest bit fainter here. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	35550
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35554
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35548
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35550
+Name:	The Fifth Hell
+Desc:$
+   The Fifth Hell nears its end in all its icy glory. To the east is another
+stylized demon's maw leading off toward the decent to the next Hell. The
+clusters of glowing icicles thin out, but the techno music becomes louder. The
+floor is shrouded in thick, heavy fog. The walls seem to weep as the ice
+melts. Occasionally, sections of wall slowly shift their form, giving the
+appearance of constantly reforming sheets of ice. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	35551
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35553
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35549
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	35552
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35551
+Name:	The Fifth Hell - Pathways of Ice
+Desc:$
+   Here begins a narrow chute. Made of something at least as slick as real
+ice, and again made to look just like it, the chute spirals tightly as it
+leads downward. The pale blue luminesence of the Fifth Hell seems to fade, as
+does the cold. It seems the air conditioning further down isn't cracked up
+quite so high. Where the chute leads is impossible to tell through the thick
+cloud of fog being blown across the shaft opening. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	35550
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	35557
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35552
+Name:	The Fifth Hell - The Cyber Pit
+Desc:$
+   This room is a miniature labyrinth unto itself - a maze of technological
+drek the likes of which you've never seen. It all seems to be tied together
+somehow, all for the purpose of filling the air with the creepy, almost
+paranormal, techno that gives the Hell of Ice it's atmosphere. Every bit of
+the machinery is built of plastics or ceramics in shades of blue and white,
+maintaining the ice motif. The air conditioning has been turned way up in
+here, supposedly to keep the machines cool, but somehow seeing your breath in
+the air adds to the frosty theme of the Fifth Hell. Upon closer inspection, it
+can be seen that all of this hodgepodge of equipment forms a half-circle
+originating on the back wall. There, the metal-encased torso of a man looks
+half-frozen into the wall... at least until he moves. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	35550
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	35548
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35553
+Name:	A Cavernous Booth
+Desc:$
+   The booth is spacious enough to seat a few trolls or considerably more of
+the smaller races. It is a three-quarter circle, done all in the blues and
+whites of the Fifth Hell, and air-conditioned a bit too much (most people
+don't like to see their breath in the air while eating). The round table has a
+clear plasticrete top, etched on the reverse side with a baphomet, a demon's
+face, at its center. This is held up by a single central support, a heavy
+column of plastic that looks like an icicle. The overstuffed booth bench is
+made of blue synth-leather. The translucent walls allow you to see intact
+humans and metahumans frozen in the smokey "ice." A plastic-and-glass
+stalactite dangling from the ceiling is actually a  combination lamp and white
+noise generator, and RJ-715 datapoint in the plasticrete wall provides Matrix
+access. 
+~
+Flags:	111000
+SecType:	Inside
+MatrixExit:	65094
+IO:	300
+Bandwidth:	20
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	9206
+Address:	Dante's Inferno, Fifth Floor, Seattle
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35550
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35554
+Name:	A Cavernous Booth
+Desc:$
+   The booth is spacious enough to seat a few trolls or considerably more
+smaller races. It is a three-quarter circle, all in the blues and whites of
+the Fifth Hell, and air-conditioned a bit too much (most people don't like to
+see their breath in the air while eating). The round table has a clear
+plasticrete top, etched on the reverse side with a baphomet, a demon's face at
+its center. This is held up by a single central support, a heavy column of
+plastic that looks like an icicle. The booth bench is made of blue
+syth-leather and overstuffed. The walls are made of translucent plasticrete,
+allowing you to see intact humans and metahumans frozen in the smokey "ice." A
+combination lamp and white noise generator hangs from the ceiling, sculpted of
+plastic and glass to look like a stalactite. 
+~
+Flags:	111000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35549
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35555
+Name:	A Cavernous Booth
+Desc:$
+   The booth is spacious enough to seat a few trolls or considerably more
+smaller races. It is a three-quarter circle, all in the blues and whites of
+the Fifth Hell, and air-conditioned a bit too much (most people don't like to
+see their breath in the air while eating). The round table has a clear
+plasticrete top, etched on the reverse side with a baphomet, a demon's face at
+its center. This is held up by a single central support, a heavy column of
+plastic that looks like an icicle. The booth bench is made of blue
+syth-leather and overstuffed. The walls are made of translucent plasticrete,
+allowing you to see intact humans and metahumans frozen in the smokey "ice." A
+combination lamp and white noise generator hangs from the ceiling, sculpted of
+plastic and glass to look like a stalactite. 
+~
+Flags:	111000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35548
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35556
+Name:	A Cavernous Booth
+Desc:$
+   The booth is spacious enough to seat a few trolls or considerably more
+smaller races. It is a three-quarter circle, all in the blues and whites of
+the Fifth Hell, and air-conditioned a bit too much (most people don't like to
+see their breath in the air while eating). The round table has a clear
+plasticrete top, etched on the reverse side with a baphomet, a demon's face at
+its center. This is held up by a single central support, a heavy column of
+plastic that looks like an icicle. The booth bench is made of blue
+syth-leather and overstuffed. The walls are made of translucent plasticrete,
+allowing you to see intact humans and metahumans frozen in the smokey "ice." A
+combination lamp and white noise generator hangs from the ceiling, sculpted of
+plastic and glass to look like a stalactite. 
+~
+Flags:	111000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	35548
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35557
+Name:	Spiralling Farther down the Abyss
+Desc:$
+   The ice along the cavern walls begins to melt and drip as you go farther
+down into the dark hellish landscape of Dante's Inferno.  Shrill music cuts
+into your spine, like the screams of the mythical plane of Pandemonia.
+Farther down the spiral you see the dull red glow more commonplace in this
+hellish place.  Steam coats the steps, and the steps are lined with (ceramic)
+human skulls with flames inside them. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	35551
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	35558
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35558
+Name:	The Sixth Hell
+Desc:$
+   The walls are covered with the bones of countless 'people' (ceramic, but
+hell it looks real enough) covered in a blood like fluid, with eyes that glow
+a dull red color.  The skeletons on the wall move as if they are suffering
+horrific tortures.  There are blacklights glowing rhythmically along the
+ceiling, giving the 'blood' a bright red color that contrasts sharply with the
+darkness of the Sixth Hell.  The music is thick but cacophonic, as the sounds
+of the band playing on the Fourth Floor conflict with the sounds of the DJ on
+the seventh. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35559
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	35557
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35559
+Name:	The Sixth Hell
+Desc:$
+   The Sixth Hell is a wide dance floor, running north to south, with the
+floor itself being glass with a 'volcanic' contour to it.  Along the darkened
+walls are ceramic skeletons that undulate to the music, wincing and spasming
+as if being tortured.  There are blacklights on the ceiling that make the
+blood covering the skeletons glow ^Rbright red^n, as their eyes glow ^rdull red^n. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35560
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35558
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35560
+Name:	The Sixth Hell
+Desc:$
+   The Sixth Hell comes to a close northeast of here as it curves to another
+staircase.  As you approach the staircase the glass floors narrow, as does the
+dancefloor.  The walls are covered in bones that are covered in blood that
+glows softly in the black lights. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	35561
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35559
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35561
+Name:	End of the Sixth Hell
+Desc:$
+   The glass turns into stairs that increase with their depth as you move
+northeast to the point where they begin to spiral.  Downstairs you hear the
+hippest dance grooves coming from wax spun by DJ Infernis.  The stairs spiral
+downward from here. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	35560
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	35562
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35562
+Name:	Spiraling Down the Abyss
+Desc:$
+   The sounds of the DJ farther down the spiralling staircase rack your skull
+in hypnotic rhythm.  The glass stairs move farther down the spiral to a well
+lit, colorful, place below.  The walls lining the stairs are covered in
+ceramic eyes that glisten from the dance lights that hit them at regular
+intervals. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	35561
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	35563
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35563
+Name:	The Seventh Hell
+Desc:$
+   The Seventh Circle of Dante's Inferno is a very hip place to be, a hangout
+for many of the rich and famous, and the media moguls.  There is always a DJ
+spinning the tracks here keeping the music on the plate 24/7/365.25.  The
+floor is made of glass, and has lights mounted inside that move in rhythm with
+the music.  The walls are mirrors, and the lights above spin rapidly to the
+music. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	35564
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	35562
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35564
+Name:	The Seventh Hell
+Desc:$
+   The Seventh level of Dante's is always packed at every hour with the most
+novahot and elite clientele.  Famous musicians, artists, poets, trid stars,
+and the like can be found here at almost any hour.  The music is always
+playing, and the liquor is always flowing, as this level is considered by many
+to be the where the elite go to party. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35563
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35565
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35565
+Name:	The Seventh Hell
+Desc:$
+   The mirror covered walls sharply reflect the lights that flash against them
+in rapid succession, in sync with the tracks being played by the resident
+master DJ, DJ Infernis.  This is the level where the hippest of the hip, the
+cream of the elite, the greatest of the great hang out to be seen at.  Hiding
+in the shadows are talented bouncers who watch for any signs of papparazzi who
+don't have clearance to be at this level. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35564
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	35566
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35566
+Name:	The Seventh Hell
+Desc:$
+   North from here is the booth where DJ Infernis spins the wax, laying down
+the novahot and fresh rhythms that the famous are the first to hear.  His
+tracks are used by DJ's continent wide, and are heard here months before they
+are ever heard at less elite places like Club Penumbra and the Epicenter.  The
+walls are covered in mirrors, so that the staff of Dante's can see everything
+in here, to spot a papparazzi or an unauthorized fanboy or girl trying to get
+a peek at the famous. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35567
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	35568
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	35576
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35575
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	35565
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35567
+Name:	Seventh Hell - DJ Infernis' Booth
+Desc:$
+   A very large collection of turntables and digital mixing equipment is laid
+out here, with a dark haired man wearing shades dancing and changing tracks
+without so much as a conflicted beat between tracks.  He stands on an elevated
+stand and is surrounded by mirrors.  His mixing table is made of pure crystal
+glass. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	35566
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35568
+Name:	The Seventh Hell
+Desc:$
+   With bright lights, floors of glass, and walls of mirrors, the Seventh Hell
+is considered by many the place to go to see and be seen, to party it up with
+the rich and famous.  This is the Hell of the deadly sin of Vanity, where the
+vain live it up with the proud.  The lights are bright and colorful, and the
+alcohol flows like a river in flood season.  The rich and famous have made
+this their home away from penthouse in Dante's. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35569
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	35566
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35569
+Name:	The Seventh Hell
+Desc:$
+   Northwest from here is a stairway going downwards, into the eighth level.
+Eastwards is a bar, catering to the very rich.  The walls are mirrors and the
+floor is glass.  The music is in the air, thick and hypnotic, as DJ Infernis
+spins the most SOTA tracks around.  You'll hear a dance track here long before
+you hear it at the Epicenter or Club Penumbra.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	35570
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35568
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	35571
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35570
+Name:	Brimstone Brewery
+Desc:$
+   The bar moves from here, the west end, eastward, where it comes to a halt.
+Behind the bar are large barrels where beer and ale are brewed.  A room is
+closed off far behind the bar, where the more intensive brewery is located,
+for shipping to the whole Seattle area.  Rumor says that back there is where
+the infamous Formula 666 is brewed as well. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	35572
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35569
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35571
+Name:	Stairs
+Desc:$
+   The seventh circle of Hell's glass floors end abruptly here, as they narrow
+to meet with a staircase, leading down to the Eighth Level.  The music is
+thick, but things seem quieter another level down.  A warning sign is on the
+wall here. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	35569
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	35574
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	warning sign~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	Desc:$
+Dante's Security Staff does not enforce any club rules beyond this point.  Any
+damage to yourself or your belongings beyond this point are not our
+responsibility.
+ -STAFF 
+~
+BREAK
+#35572
+Name:	Brimstone Brewery
+Desc:$
+   The bar moves from east to west, where it comes to a halt here on the
+eastern end.  Behind the bar are very large barrels where Brimstone Brewery
+makes their famous Brimstone Ale.  South of here is a booth, shaded from the
+view of the rest of the level. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	8304
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35573
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35570
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35573
+Name:	Back Booth
+Desc:$
+   This booth is set behind, a small nook to hide and do business, or just sit
+and enjoy your drinks to the music.  Unlike most of Dante's, this booth is one
+place where the 'hellish' motif has taken a break.  Except for the skull
+artwork embossed on the ashtray.  And the walls with eyeballs on them.  And
+the ceiling with what looks like hanging men swaying on their nooses. 
+~
+Flags:	10011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35572
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35574
+Name:	Spiraling down the Abyss
+Desc:$
+   The mirrors and glass all give way to volcanic rock and a lava motif.  The
+layout surrounding the stairs is very grim and dark, with stairs lined with
+ceramic skulls, with horns coming out of them.  They look human, excepting the
+horns.  The walls lining the spiralling stairs are pitch black, with strange
+glistening contours, reminiscent of obsidian.  The stairs are illuminated with
+a dull red light coming from above. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	35571
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	35580
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35575
+Name:	Booth
+Desc:$
+   A small enclosure surrounded by mirrors on every end, in fact the tables
+are made of mirrors as well.  The seats are covered with a comfortable
+upholstery with a mirror like threading that glints wildly in the reflected
+light. 
+~
+Flags:	10011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35566
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35576
+Name:	Booth
+Desc:$
+   A small enclosure surrounded by mirrors on every end, in fact the tables
+are made of mirrors as well.  The seats are covered with a comfortable
+upholstery with a mirror like threading that glints wildly in the reflected
+light. 
+   An RJ-715 dataport is mounted into one of the mirrors, providing matrix
+access. 
+~
+Flags:	10011100
+SecType:	Inside
+MatrixExit:	65093
+IO:	300
+Bandwidth:	20
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	92060663
+Address:	Dante's Inferno, Seventh Floor, Seattle
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	ToVnum:	35566
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35577
+Name:	Cavernous Booth
+Desc:$
+   A small cavern in the black obsidian walls of the club, etched out with
+stalagmites and red fire orbs for lighting.  The booth has two very
+comfortable red upholstery seats with some gothic-spire decorations.  On the
+table is a red glowing orb, resembling a small ball of magma.  
+~
+Flags:	10011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35535
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35578
+Name:	Cavernous Booth
+Desc:$
+   A small cavern in the black obsidian walls of the club, etched out with
+stalagmites and red fire orbs for lighting.  The booth has two very
+comfortable red upholstery seats with some gothic-spire decorations.  On the
+table is a red glowing orb, resembling a small ball of magma.  
+~
+Flags:	10011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35536
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35579
+Name:	Cavernous Booth
+Desc:$
+    A small cavern in the black obsidian walls of the club, etched out with
+stalagmites and red fire orbs for lighting.  The booth has two very
+comfortable red upholstry seats with some gothic-spire decorations.  On the
+table is a red glowing orb, resembling a small ball of magma. 
+~
+Flags:	10011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#35580
+Name:	The Eighth Hell
+Desc:$
+   The eighth circle of Dante's Inferno is not exactly large, it is more or
+less just a dancefloor that separates the seventh level from the den of
+debauchery that is the ninth level.  Its a modest sized dance floor, with the
+music from DJ Infernis up above.  Its the last bastion of any sort of normalcy
+before you reach the anarchy of the ninth level. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35581
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	35574
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35581
+Name:	The Eighth Hell
+Desc:$
+   A small circular dance floor with a similar motif to the upper levels of
+Dante's, dark red lights fluctuating to music, holographs of demons torturing
+souls, and skeletons on the walls.  There is a steam that covers the glass
+floor at regular intervals.  This is little more than a dance floor, with no
+amenities or booths to hide out in. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	35580
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35582
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35582
+Name:	The Eighth Hell
+Desc:$
+   The floor curves downward to the south from here, turning into glass steps
+as you move downward.  The sky is covered in a rhythmically active holographic
+motif of tortured souls on spikes, heads on pikes, gore and virtual hell.  The
+music, coming from the Seventh circle above you, is the cutting edge tracks of
+DJ Infernis. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	35581
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35583
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35583
+Name:	Eighth Hell - The Abyss deepens
+Desc:$
+   This is the end of the eighth circle of Dante's Inferno.  Down from here is
+an infamous den of debauchery, where Lone Star doesn't dare walk, where the
+powers that be do their dirty work.  The Ninth Circle.  Below here is a
+spiralling staircase made of black rock with glowing red veins.  The music
+coming from below is a bit more hardcore than anything you heard above.  This
+is the shadowrunners level, but it is considered neutral ground by organized
+crime, where Yakuza and Mafia alike can recruit. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35582
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	35584
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35584
+Name:	Spiralling deep into the Abyss
+Desc:$
+   The spiral staircase here goes down deep, into a large cavern through an
+oriface above you.  The cavern is a real underground cavern, with alot of
+activity, and psychedelic lights that fluctuate, creating many temporal
+hallucinations.  Down below are subcaverns and other rooms, and a bar and
+restaurant that sits at the center of it all, like a hub.  Above you are the
+many other levels of Dante's. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	35583
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	35585
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35585
+Name:	The Ninth Hell
+Desc:$
+   The Ninth Circle is not like the rest of Dante's Inferno, its been built
+out of an underground cavern.  There is a lot of activity down here, as this
+is where the top notch Johnsons seek out top notch runners, where Mafia and
+Yakuza do their relaxing and their recruiting.  A lot of major BTL deals are
+struck down here as well. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35586
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	35604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35594
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	35584
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35586
+Name:	The Ninth Hell
+Desc:$
+   You are approaching the center of the Ninth Circle, where a large bar is
+set up to serve the shadier clientele of Dante's Inferno.  Here you can find
+many things of the legal and quasi-legal categories, and you can find johnsons
+representing most, if not all of the major megacorporations.  To the criminal
+element, this place is considered neutral ground, and it is considered bad
+form to violate that neutrality with violence. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35587
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35585
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35587
+Name:	The Bottom of the Abyss
+Desc:$
+   The Bottom of the Abyss is a bar that is sunk into the rest of the cavern
+that the Ninth Circle was built out of.  Deep underground, this bar serves a
+vast variety of the criminal underworld of Seattle.  The bar is SOTA, with
+every form of bartending technology embedded into the bar, giving the
+bartender, Phobia, the ability to serve a lot of crooks at once. A very
+expensive trid unit is embedded in an outcrop overhead, humming softly. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35588
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	35592
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35586
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35590
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35588
+Name:	The Ninth Hell
+Desc:$
+   A large cavern has been carved out of many layers of bedrock deep under
+Seattle, to make the Ninth Level of Dante's.  Stalagmites in the ceiling are
+actually real as parts of this cavern were once a deep air pocket beneath the
+earth.  Music fills the air, people move about, mingling and cutting deals.
+This is where many deals that affect the lives of the city are made, secret
+deals that connect the criminal underground with the upper echelons of the
+corporate world. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35589
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35587
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35589
+Name:	The Ninth Hell
+Desc:$
+   The outer rim of the Ninth Circle of Dante's Inferno is lined with
+passageways, private rooms where many a deal are made, in the corporate world
+and in the underworld.  The criminal underworld has a silent agreement that
+this be neutral territory, as it is valuable in the strategies of every major
+player in Seattle.  Here a shadowrunner can find a top of the line Johnson
+looking for top of the line runners, and a decker can hide from those whose
+systems he is compromising. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	private door
+	Desc:$
+A private room is north of you. 
+~
+	ToVnum:	35614
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	35607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35588
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35590
+Name:	The Ninth Hell
+Desc:$
+   The Ninth Circle of Dante's Inferno was created from an already existing
+cavern deep underground, and has been carved to suit the needs of the
+nightclub. Many of the darkest deals are made here in the lowest level,
+affecting corporations and crime families alike. Lone Star never shows their
+face down here, except to cut a deal. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	35587
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35591
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35591
+Name:	The Ninth Hell
+Desc:$
+   The outer rim of the Ninth Circle is lined with private booths, doorways
+created for privacy.  Behind the doorways could be anything from a ruthless
+Yakuza boss, to a joygirl with a client, to the greatest of deckers eating
+Renraku's most ruthless IC like candy.  This place is considered a neutral
+zone amongst the criminal underground, and amongst corporations who are
+engaged in shadow wars. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35601
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	35590
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35600
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	private door
+	Desc:$
+A door leads into a private room. 
+~
+	ToVnum:	35611
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35592
+Name:	The Ninth Hell
+Desc:$
+   Large stalagmites hang directly overhead here, as this part of Dante's was
+made from a real underground cavern, the ninth circle of Hell.  In the center
+of the cavern is a large bar, with a large assortment of meals and drinks to
+imbibe.  All sorts of shady individuals frequent this level, as the security
+doesn't patrol this part of the bar.  Phobia the bartender acts as her own
+security and is quite effective at it.  She sports a rifle and can pick off
+anybody on this level, save for those in the private rooms. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	35593
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35587
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35593
+Name:	The Ninth Hell
+Desc:$
+   The Ninth Circle of Dante's Inferno is in a true underground cavern, and is
+not covered by the security staff upstairs.  They only come down here to buy
+BTL's, if ever.  Large cavernous walls lit with red lights that pulsate to the
+music, DJ Infernis coming through speakers under the floors pulsate in a
+hypnotic rhythm that creates temporal hallucinations if you stare at it too
+long.  Here the movers and shakers in the criminal underground and in the
+corporate upper tier make their dirty deals.  Shadowrunners find the Johnsons
+of the highest calibre here, as the ones down here are looking for the best of
+the best. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	private door
+	Desc:$
+The door leads into a private room. 
+~
+	ToVnum:	35617
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35592
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35594
+Name:	The Ninth Hell
+Desc:$
+   The Ninth circle of Dante's is the place to be to make deals or to find
+anything illegal or criminal, or to simply relax with the elite of the
+criminal underground.  The Ninth circle is neutral territory, so it is not
+uncommon to see Yakuza discussing matters peacefully with Mafia upper crust.
+The circle is built in the interior of a real underground cavern, with some
+areas cut into the bedrock.  In the center of the cavern is a bar, selling
+much in the way of consumables. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	35585
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	35600
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35595
+Name:	A Dark Tunnel
+Desc:$
+   You catapult yourself into a deep tunnel of pure blackness.  You find
+yourself being pulled lower and lower as the speed increases faster and
+faster. Surrounding you are the sounds of a trillion tortured souls and
+screams.  Below you at the very bottom of this abyss is a portal somewhere. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	2
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	3124
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35596
+Name:	A Dark Tunnel
+Desc:$
+   You catapult yourself into a deep tunnel of pure blackness.  You find
+yourself being pulled lower and lower as the speed increases faster and
+faster. Surrounding you are the sounds of a trillion tortured souls and
+screams.  Below you at the very bottom of this abyss is a portal somewhere. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	2
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	3124
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35597
+Name:	A Dark Tunnel
+Desc:$
+   You catapult yourself into a deep tunnel of pure blackness.  You find
+yourself being pulled lower and lower as the speed increases faster and
+faster. Surrounding you are the sounds of a trillion tortured souls and
+screams.  Below you at the very bottom of this abyss is a portal somewhere. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	2
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	3124
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35598
+Name:	A Dark Tunnel
+Desc:$
+   You catapult yourself into a deep tunnel of pure blackness.  You find
+yourself being pulled lower and lower as the speed increases faster and
+faster. Surrounding you are the sounds of a trillion tortured souls and
+screams.  Below you at the very bottom of this abyss is a portal somewhere. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	2
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	3124
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35599
+Name:	A Dark Tunnel
+Desc:$
+   You catapult yourself into a deep tunnel of pure blackness.  You find
+yourself being pulled lower and lower as the speed increases faster and
+faster. Surrounding you are the sounds of a trillion tortured souls and
+screams.  Below you at the very bottom of this abyss is a portal somewhere. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	2
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	3124
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35600
+Name:	The Ninth Hell
+Desc:$
+   The outer rim of the Ninth Circle is a trafficway between the many private
+rooms that surround it.  In the center of the circle is a bar selling a vast
+array of drinks, beverages and food.  Just west of here is a closeable door,
+leading into a private room that has been cut into the bedrock. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35591
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	35594
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	private door
+	Desc:$
+A private room's doorway. 
+~
+	ToVnum:	35610
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35601
+Name:	The Ninth Hell
+Desc:$
+   Dante's Inferno's ninth circle, the deepest level down is well known for
+being a den of debauchery, or a hive of 'scum and villainy'.  Mos Eisely has
+nothing on this place.  BTL dealers, shadowrunners, Yakuza, Seoulpa
+crimelords, and Mafioso can all be seen here cutting deals over a bottle of
+Grimm's.  This is not the meeting place for the weak of heart, most Johnsons
+down here are looking for the best of the best.  And this is where they can be
+found. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	35602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35591
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	private door
+	Desc:$
+A door leads into a private room. 
+~
+	ToVnum:	35612
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35602
+Name:	The Ninth Hell
+Desc:$
+   Dante's Inferno's ninth circle is the epitome of anarchy underground, where
+the criminal elements of Seattle make the rules and enforce them with ruthless
+acuity.  The level is made from the heart of a real underground cavern, lit up
+with red lights that give it a dirty feel to it.  Unlike the rest of the club,
+the floors are rock instead of glass. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	private door
+	Desc:$
+A private room is to the north, shut out by a door. 
+~
+	ToVnum:	35613
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	35589
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35603
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	35601
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35603
+Name:	Near the Elevator
+Desc:$
+   This elevator was placed to give a quick way up to the surface without
+going through the rest of the nightclub.  Straight up through a hydraulic tube
+is the first level of the club, a means to get you there with speed. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	8305
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35604
+Name:	The Ninth Hell
+Desc:$
+   The Ninth Circle spans out in a ring, that surrounds the bar in the center,
+sunken into the heart of the real cavern that has been adapted to a part of
+the nightclub.  This is the more criminal level of the nightclub, where deals
+are made between high rollers of organized crime and executives in the highest
+tiers of Seattle's megacorps.  Johnsons looking for runners have a place here,
+looking for the best of the best.  Famed shadowrunners such as Dodger and
+Hatchetman have been seen in these parts.  Private booths are available for
+the taking. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	35605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35585
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35605
+Name:	The Ninth Hell
+Desc:$
+   All along the eastern side of the Ninth Circle are private booths, which
+cut into the limestone that this natural cavern was etched out of.  Above you
+are stalagmites, reflecting a dull red color in the lighting of the level.
+The private booths are used by the elite of the criminal underground, by
+Johnsons meeting with runner teams, by organized crime cutting deals, and by
+corporations buying off officials, and many other shady operations.  This is
+the place for paydata, and this is the place to make a name for yourself. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	35593
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	private door
+	Desc:$
+A private room is to the east 
+~
+	ToVnum:	35618
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	35604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35606
+Name:	The Ninth Hell
+Desc:$
+   This is the outer rim of the Ninth Circle of Dante's, an area made popular
+with its many private rooms, several with jackpoints, and many with job
+opportunities.  The circle is made from a natural cavern, an air pocket many
+hundreds of meters underground.  You will never find a more wretched hive of
+scum and villainy, to plagiarize a certain movie character. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	private door
+	Desc:$
+A private room is here.  Through the window you can tell the lights are on. 
+~
+	ToVnum:	35616
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35593
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	35607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35607
+Name:	The Ninth Hell
+Desc:$
+   The northeastern corner of the Ninth Circle is underneath a large
+collection of stalagmites, some of them near enough to the floor of the level
+to where a troll or giant would have to duck.  A passageway northeast leads to
+a BBS center, where a terminal connects to Shadowland. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	private door
+	Desc:$
+A private room is north of here. 
+~
+	ToVnum:	35615
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	35608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	35606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35589
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35608
+Name:	Alcove
+Desc:$
+   Several terminals are lined up, with an interface to allow non-deckers to
+interact on the Shadowland system.  The alcove glows with the green glow of
+green monochrome CRT's, as the deckers who set up this system had an affinity
+with old-style Unix tty style terminals.  The table they are lined up on is
+made of a midnight black marble, and only the sharpest knives get to etch
+graffiti on it. 
+~
+Flags:	10011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	35609
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	35607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35609
+Name:	Edge of the Alcove [terminal here - OOC]
+Desc:$
+   The long line of Shadowland system terminals ends here, where the marble
+table is pushed into the bedrock walls.  The dull green color from the
+terminals is thick here, where the light from the club is unseen.  Benches
+allow access to the terminals.  An RJ-715 dataport is in the wall here,
+allowing connection to the matrix. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	65095
+IO:	300
+Bandwidth:	20
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	92066665
+Address:	Dante's Inferno, Ninth Floor, Seattle
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	35608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35610
+Name:	Private Room
+Desc:$
+   The lights are on whenever motion is in the room or has been in the room
+within the past 20 minutes, automatically illuminating whatever dark and shady
+deals are made here.  In the table in the center of the room is an embedded
+white noise generator, to keep listening devices from hearing anything that
+goes on here.  Considering that this is a corporate and organized crime
+meeting place, a lot of money goes into keeping this place secure and free of
+law enforcement eyes. 
+~
+Flags:	10011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+The doorway goes back to the club. 
+~
+	ToVnum:	35600
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35611
+Name:	Private Room
+Desc:$
+   The lights are on whenever motion is in the room or has been in the room
+within the past 20 minutes, automatically illuminating whatever dark and shady
+deals are made here.  In the table in the center of the room is an embedded
+white noise generator, to keep listening devices from hearing anything that
+goes on here.  Considering that this is a corporate and organized crime
+meeting place, a lot of money goes into keeping this place secure and free of
+law enforcement eyes. 
+~
+Flags:	10011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door private
+	Desc:$
+A door leads to the club. 
+~
+	ToVnum:	35591
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	Keywords:	door
+	ToVnum:	64900
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	64901
+	LockRating:	50
+	HiddenRating:	50
+BREAK
+#35612
+Name:	Private Room
+Desc:$
+   The lights are on whenever motion is in the room or has been in the room
+within the past 20 minutes, automatically illuminating whatever dark and shady
+deals are made here.  In the table in the center of the room is an embedded
+white noise generator, to keep listening devices from hearing anything that
+goes on here.  Considering that this is a corporate and organized crime
+meeting place, a lot of money goes into keeping this place secure and free of
+law enforcement eyes.  An RJ-715 dataport is in the wall, providing matrix
+access. 
+~
+Flags:	10011000
+SecType:	Inside
+MatrixExit:	65095
+IO:	300
+Bandwidth:	20
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	92060666
+Address:	Dante's Inferno, Ninth Floor, Seattle
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door private
+	Desc:$
+The door leads back into the club. 
+~
+	ToVnum:	35601
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35613
+Name:	Private Room
+Desc:$
+   The lights are on whenever motion is in the room or has been in the room
+within the past 20 minutes, automatically illuminating whatever dark and shady
+deals are made here.  In the table in the center of the room is an embedded
+white noise generator, to keep listening devices from hearing anything that
+goes on here.  Considering that this is a corporate and organized crime
+meeting place, a lot of money goes into keeping this place secure and free of
+law enforcement eyes. 
+~
+Flags:	10011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door private
+	Desc:$
+Going south, the door opens to the club. 
+~
+	ToVnum:	35602
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35614
+Name:	Private Room
+Desc:$
+   The lights are on whenever motion is in the room or has been in the room
+within the past 20 minutes, automatically illuminating whatever dark and shady
+deals are made here.  In the table in the center of the room is an embedded
+white noise generator, to keep listening devices from hearing anything that
+goes on here.  Considering that this is a corporate and organized crime
+meeting place, a lot of money goes into keeping this place secure and free of
+law enforcement eyes. 
+~
+Flags:	10011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	false wall
+	Desc:$
+a false wall 
+~
+	ToVnum:	9354
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	8
+[EXIT south]
+	Keywords:	door private
+	Desc:$
+The club is to the south. 
+~
+	ToVnum:	35589
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35615
+Name:	Private Room
+Desc:$
+   The lights are on whenever motion is in the room or has been in the room
+within the past 20 minutes, automatically illuminating whatever dark and shady
+deals are made here.  In the table in the center of the room is an embedded
+white noise generator, to keep listening devices from hearing anything that
+goes on here.  Considering that this is a corporate and organized crime
+meeting place, a lot of money goes into keeping this place secure and free of
+law enforcement eyes. 
+~
+Flags:	10011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door private
+	Desc:$
+The club is south. 
+~
+	ToVnum:	35607
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35616
+Name:	Private Room
+Desc:$
+   The lights are on whenever motion is in the room or has been in the room
+within the past 20 minutes, automatically illuminating whatever dark and shady
+deals are made here.  In the table in the center of the room is an embedded
+white noise generator, to keep listening devices from hearing anything that
+goes on here.  Considering that this is a corporate and organized crime
+meeting place, a lot of money goes into keeping this place secure and free of
+law enforcement eyes. 
+~
+Flags:	10011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door private club
+	Desc:$
+The door leads back into the club. 
+~
+	ToVnum:	35606
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35617
+Name:	Private Room
+Desc:$
+   The lights are on whenever motion is in the room or has been in the room
+within the past 20 minutes, automatically illuminating whatever dark and shady
+deals are made here.  In the table in the center of the room is an embedded
+white noise generator, to keep listening devices from hearing anything that
+goes on here.  Considering that this is a corporate and organized crime
+meeting place, a lot of money goes into keeping this place secure and free of
+law enforcement eyes. 
+~
+Flags:	10011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door private
+	Desc:$
+The door goes back to the club. 
+~
+	ToVnum:	35593
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35618
+Name:	Private Room
+Desc:$
+   The lights are on whenever motion is in the room or has been in the room
+within the past 20 minutes, automatically illuminating whatever dark and shady
+deals are made here.  In the table in the center of the room is an embedded
+white noise generator, to keep listening devices from hearing anything that
+goes on here.  Considering that this is a corporate and organized crime
+meeting place, a lot of money goes into keeping this place secure and free of
+law enforcement eyes. 
+~
+Flags:	10011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door private
+	Desc:$
+The door leads back into the club. 
+~
+	ToVnum:	35605
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35619
+Name:	Private Room
+Desc:$
+   The lights are on whenever motion is in the room or has been in the room
+within the past 20 minutes, automatically illuminating whatever dark and shady
+deals are made here.  In the table in the center of the room is an embedded
+white noise generator, to keep listening devices from hearing anything that
+goes on here.  Considering that this is a corporate and organized crime
+meeting place, a lot of money goes into keeping this place secure and free of
+law enforcement eyes. 
+~
+Flags:	10011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#35620
+Name:	Before the Elevator - Ground Floor
+Desc:$
+   A large dark red colored iron door covered in skulls and designs depicting
+the decapitation and dismembering of many unfortunate souls separates you from
+the elevator shaft behind the door.  Up above it, are several red numbers
+shaped like bones, reading, ^RG^n, ^RB1^n, ^RB2^n, ^RB3^n, ^RB4^n, ^RB5^n, ^RB6^n, ^RB7^n, ^RB8^n, ^RB9^n.  The
+brightest lit one is where the elevator is at this moment.  The music
+resonates around you, creating an echo effect reminiscient to the tales of the
+screaming noises in the caves of Pandaemonia. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	35501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35621
+Name:	Before the Elevator - The First Hell
+Desc:$
+   A large dark red colored iron door covered in skulls and designs depicting
+the decapitation and dismembering of many unfortunate souls separates you from
+the elevator shaft behind the door.  Up above it, are several red numbers
+shaped like bones, reading, ^RG^n, ^RB1^n, ^RB2^n, ^RB3^n, ^RB4^n, ^RB5^n, ^RB6^n, ^RB7^n, ^RB8^n, ^RB9^n.  The
+brightest lit one is where the elevator is at this moment.  The music
+resonates around you, creating an echo effect reminiscient to the tales of the
+screaming noises in the caves of Pandaemonia. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	35503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35622
+Name:	Before the Elevator - The Second Hell
+Desc:$
+   A large dark red colored iron door covered in skulls and designs depicting
+the decapitation and dismembering of many unfortunate souls separates you from
+the elevator shaft behind the door.  Up above it, are several red numbers
+shaped like bones, reading, ^RG^n, ^RB1^n, ^RB2^n, ^RB3^n, ^RB4^n, ^RB5^n, ^RB6^n, ^RB7^n, ^RB8^n, ^RB9^n.  The
+brightest lit one is where the elevator is at this moment.  The music
+resonates around you, creating an echo effect reminiscient to the tales of the
+screaming noises in the caves of Pandaemonia. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	ToVnum:	35514
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35623
+Name:	Before the Elevator - The Third Hell
+Desc:$
+   A large dark red colored iron door covered in skulls and designs depicting
+the decapitation and dismembering of many unfortunate souls separates you from
+the elevator shaft behind the door.  Up above it, are several red numbers
+shaped like bones, reading, ^RG^n, ^RB1^n, ^RB2^n, ^RB3^n, ^RB4^n, ^RB5^n, ^RB6^n, ^RB7^n, ^RB8^n, ^RB9^n.  The
+brightest lit one is where the elevator is at this moment.  The music
+resonates around you, creating an echo effect reminiscient to the tales of the
+screaming noises in the caves of Pandaemonia. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	35526
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35624
+Name:	Before the Elevator - The Fourth Hell
+Desc:$
+   A large dark red colored iron door covered in skulls and designs depicting
+the decapitation and dismembering of many unfortunate souls separates you from
+the elevator shaft behind the door.  Up above it, are several red numbers
+shaped like bones, reading, ^RG^n, ^RB1^n, ^RB2^n, ^RB3^n, ^RB4^n, ^RB5^n, ^RB6^n, ^RB7^n, ^RB8^n, ^RB9^n.  The
+brightest lit one is where the elevator is at this moment.  The music
+resonates around you, creating an echo effect reminiscient to the tales of the
+screaming noises in the caves of Pandaemonia. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	35544
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35625
+Name:	Before the Elevator - The Fifth Hell
+Desc:$
+   A large dark red colored iron door covered in skulls and designs depicting
+the decapitation and dismembering of many unfortunate souls separates you from
+the elevator shaft behind the door.  Up above it, are several red numbers
+shaped like bones, reading, ^RG^n, ^RB1^n, ^RB2^n, ^RB3^n, ^RB4^n, ^RB5^n, ^RB6^n, ^RB7^n, ^RB8^n, ^RB9^n.  The
+brightest lit one is where the elevator is at this moment.  The music
+resonates around you, creating an echo effect reminiscient to the tales of the
+screaming noises in the caves of Pandaemonia. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	35552
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35626
+Name:	Before the Elevator - The Sixth Hell
+Desc:$
+   A large dark red colored iron door covered in skulls and designs depicting
+the decapitation and dismembering of many unfortunate souls separates you from
+the elevator shaft behind the door.  Up above it, are several red numbers
+shaped like bones, reading, ^RG^n, ^RB1^n, ^RB2^n, ^RB3^n, ^RB4^n, ^RB5^n, ^RB6^n, ^RB7^n, ^RB8^n, ^RB9^n.  The
+brightest lit one is where the elevator is at this moment.  The music
+resonates around you, creating an echo effect reminiscient to the tales of the
+screaming noises in the caves of Pandaemonia. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	35560
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35627
+Name:	Before the Elevator - The Seventh Hell
+Desc:$
+   A large dark red colored iron door covered in skulls and designs depicting
+the decapitation and dismembering of many unfortunate souls separates you from
+the elevator shaft behind the door.  Up above it, are several red numbers
+shaped like bones, reading, ^RG^n, ^RB1^n, ^RB2^n, ^RB3^n, ^RB4^n, ^RB5^n, ^RB6^n, ^RB7^n, ^RB8^n, ^RB9^n.  The
+brightest lit one is where the elevator is at this moment.  The music
+resonates around you, creating an echo effect reminiscient to the tales of the
+screaming noises in the caves of Pandaemonia. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	35572
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35628
+Name:	Before the Elevator - The Eighth Hell
+Desc:$
+   A large dark red colored iron door covered in skulls and designs depicting
+the decapitation and dismembering of many unfortunate souls separates you from
+the elevator shaft behind the door.  Up above it, are several red numbers
+shaped like bones, reading, ^RG^n, ^RB1^n, ^RB2^n, ^RB3^n, ^RB4^n, ^RB5^n, ^RB6^n, ^RB7^n, ^RB8^n, ^RB9^n.  The
+brightest lit one is where the elevator is at this moment.  The music
+resonates around you, creating an echo effect reminiscient to the tales of the
+screaming noises in the caves of Pandaemonia. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	35583
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35629
+Name:	Before the Elevator - The Ninth Hell
+Desc:$
+   A large dark red colored iron door covered in skulls and designs depicting
+the decapitation and dismembering of many unfortunate souls separates you from
+the elevator shaft behind the door.  Up above it, are several red numbers
+shaped like bones, reading, ^RG^n, ^RB1^n, ^RB2^n, ^RB3^n, ^RB4^n, ^RB5^n, ^RB6^n, ^RB7^n, ^RB8^n, ^RB9^n.  The
+brightest lit one is where the elevator is at this moment.  The music
+resonates around you, creating an echo effect reminiscient to the tales of the
+screaming noises in the caves of Pandaemonia. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	35603
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35631
+Name:	Elevator
+Desc:$
+   Inside the elevator, the music doesn't stop, as tracks from DJ Infernis
+resonate in the small acoustically engineered space, with a strobe light
+switching between blue and red patterns that make your sense of time distort.
+A panel is set up here with several buttons to tell you what button goes
+where.  A sign which translates the buttons to the more well known level names
+sits above the panel. 
+~
+Flags:	101000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXTRADESC 0]
+	Keywords:	sign~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	Desc:$
+G  - Ground Floor
+B1 - Second Hell
+B2 - Fourth Hell
+B3 - Seventh Hell
+B4 - Ninth Hell
+~
+BREAK
+#35692
+Name:	Entrance to Dante's Inferno, Underground
+Desc:$
+   A rather basic entranceway, with a door and security cameras scans and
+records every individual who walks past this door.  More paranoid types may
+prefer attempting to get past Grog Tenderfoot and Nolan, as these scanners
+look bleeding edge state-of-the-art.  The loud screeching sound of music from
+the inside of Dante's reverberates through the halls. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	doorway
+	Desc:$
+A doorway leads out into the parking garage surrounding this level of Dante's
+Inferno. 
+~
+	ToVnum:	35693
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35521
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35693
+Name:	Dante's Garage
+Desc:$
+   A rather heavily used garage, despite the fresh paint smell that coincides
+with the brimstone smell of Dante's Inferno, already oil stains smear the
+concrete floor, dark patches of black against the fluctuating red glow that
+illuminates the lot.  A ramp curves upwards to the front of the nightclub,
+while an entranceway leads into the Second Hell. 
+~
+Flags:	110000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	35694
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	doorway
+	Desc:$
+A doorway leads to the inside of Dante's Inferno. 
+~
+	ToVnum:	35692
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	35699
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35694
+Name:	Dante's Garage
+Desc:$
+   The garage curves around here, west towards the surface, and southeast to
+the back of the garage.  A blood red glow fluctuates rhythmically, and the
+smell of brimstone fills the air. 
+~
+Flags:	110000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	35695
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	35693
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35695
+Name:	Dante's Garage
+Desc:$
+   The farthest part of the garage from the surface-side entrance, the garage
+curves around the easternmost end of Dante's Inferno.  The blood red glow of
+the lights fluctuates rhythmically, only broken by the occasional white of
+headlights. 
+~
+Flags:	110000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	35696
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	35694
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35696
+Name:	Dante's Garage
+Desc:$
+   The garage curves northeast to west here, hugging the outer wall of the
+infamous Dante's Inferno nightclub.  A blood red glow fills the air,
+fluctuating rhythmically, occasionally interrupted by the headlights of
+someone's car.  A devilishly evil looking graffiti mural covers the south
+wall, consisting of an eastern dragon toasting a modern city in flames. 
+~
+Flags:	110000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	35695
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	garage door
+	ToVnum:	4602
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	4600
+	HiddenRating:	12
+[EXIT west]
+	ToVnum:	35697
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35697
+Name:	Dante's Garage
+Desc:$
+   A dumpster sits at the far end of the garage here, with a chute that takes
+the refuse from Dante's Inferno and does away with it.  The red glow of the
+lighting fluctuates rhythmically, and the smell of brimstone floats past your
+nostrils. 
+~
+Flags:	110000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	35696
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	35698
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35698
+Name:	Ramp
+Desc:$
+   The ramp circles around the southern edge of Dante's Inferno, and leads
+downwards into a parking lot that circles the Second Hell.  The smell of
+brimstone seems to thicken a bit as you move downwards, while the smell of
+smog replaces it as you go back up towards the surface.  The parking lot is
+lit with a blood red glow that fluctuates in luminocity.  Some graffiti,
+indecipherable is painted on the wall in orange. 
+~
+Flags:	10000010000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	ToVnum:	35500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	35697
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35699
+Name:	Ramp
+Desc:$
+   The ramp circles around the northern edge of Dante's Inferno, and leads
+downwards into a parking lot that circles the Second Hell.  The smell of
+brimstone seems to thicken as you move downwards, and the smell of smog
+replaces it as you go back up to the surface.  The parking lot is lit with a
+blood red glow that fluctuates in luminocity. 
+~
+Flags:	10000010000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	35500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	35693
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

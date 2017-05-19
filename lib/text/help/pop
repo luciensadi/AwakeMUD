@@ -1,0 +1,9 @@
+POP
+
+Usage: ^gPOP <vehicle>^n
+
+This command is used on a stationary vehicle to reveal all its modifications
+to anyone looking at it regardless of their Vehicle B/R skills. You cannot
+drive the car until you close the hood again.
+
+^WSee Also: EXAMINE, DRIVE^n

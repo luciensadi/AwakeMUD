@@ -1,0 +1,48 @@
+"MAP SEA NE" "SEATTLE NE"
+                         
+ //
+       //
+      //
+     //                  <-
+    //                     \
+   //           1     E    3|     4
+  //       <-X--o-----o-----o-----o 7
+ //             |     |     |     |
+//              |  2->|     |     |
+Intercity       |     |     |     |
+   Five         o-----o-----o-----o 8
+                |     |     |     |
+                |     |     |     |        A 
+                |     |     |     |     5  |  6
+                o-----o-----o-----o-----o--+--o 9 
+                |     |     |     |     |  |  |
+             C--|     |     |     |     |  B  |
+                |     |     |     |     |     |
+           <-X--o-----o-----o-----o-----o-----o 10
+                |     |     |     |     |     |
+                o     |     |     |  D  |     |
+\                \    |     |     |  |  |     |
+\\                \   o-----o-----o-----o-----O 11
+ \\                \ /      |     |     |     |
+  \\                o       |     |     |     |
+   \\              /        |     |     |     |
+    \\           <-         o-----o-----o-----o 12
+     \\                                 |
+      \\                                |
+       \\                              \|/
+        \\___________________________________ Intercity
+         \___________________________________     90
+Key:  o - intersection
+      X - onramp link
+      A - Aztechnology Pyramid
+      B - Aztechnology Magic Academy
+      C - Mitsuhama Tower
+      D - UCASBank
+      E - Herbie's Herbals (Talismonger)
+Street Index:
+1. Fifth Street                 7.  Harrison Boulevard
+2. Sixth Street                 8.  Park Avenue
+3. Seventh Street               9.  Gray Street
+4. Eighth Street                10. Broadway   
+5. Ninth Street                 11. Espanoza Way  
+6. Tenth Street                 12. Ridgeway Street

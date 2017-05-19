@@ -1,0 +1,8 @@
+CHECK RECEIVE
+
+These two commands are used to check on the status of any
+orders you have placed with the shop keeper. If the keeper
+informs you that an item you have ordered has arrived, you
+can buy it with the receive command.
+
+^WSee Also: SHOPS, BUY, LIST, CANCEL^n

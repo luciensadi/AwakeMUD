@@ -1,0 +1,12 @@
+ABILITIES
+
+Usage: ^gABILITIES^n
+
+If you are an adept, over time you will gain various abilities that represent
+certain levels of mastery you've achieved with your body. This command will
+display any abilities you have learned, along with their level where applicable.
+
+The number in yellow displays how many ranks of that power you currently have
+activated.
+
+^WSee Also: ADEPTS, POWER POINTS, ACTIVATE^n

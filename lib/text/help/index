@@ -1,0 +1,15 @@
+INDEX
+
+The ^Windex^n command allows you to view the index for this set of help
+files.  Two forms of the command are available.
+
+Typing:
+^cindex^n
+
+by itself, will display the entire index.
+
+^cindex <letter>^n
+
+will display a list of all words in the help files which begin with that
+particular letter.
+

@@ -1,0 +1,8 @@
+REPORT
+
+This command sends a report of your current and max hp and mana to your
+group.  You can use this command to let potential rescuers know how
+low your hps are without forcing them to use the "^Wgroup^n" command.  It is
+designed as a convenience for groups with members who get lag or have slow
+modems.
+

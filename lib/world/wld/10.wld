@@ -1,0 +1,498 @@
+#1000
+Name:	Bridge of the Starship Enterprise
+Desc:$
+   From the bridge, any of the ship's operations can be overseen by the staff
+located at their stations. Consoles around the room display critical
+information about the ship, and its systems. The large video display is
+currently showing a detailed view of the current star system you're in. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+[EXIT north]
+	Desc:$
+To the north lies the Infinity Hallway.
+~
+	ToVnum:	1001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	Desc:$
+The door exits onto a hill.
+~
+	ToVnum:	1006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	1003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	1010
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+The exit leads to the builder's lounge.
+~
+	ToVnum:	1004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	1007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	1011
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	Desc:$
+You see a postal station to the northwest.
+~
+	ToVnum:	1005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	7
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Desc:$
+You see the lower part of this room, and the Penumbra's bar.
+~
+	ToVnum:	1002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#1001
+Name:	Bug Report Terminal - Admin Center
+Desc:$
+   The first thing you notice in the center of this large room with all sorts
+of computers with lights and levers and punchcards and monitors is a large
+array with beams and crystals being heavily encased in thick anti-radiation
+glass.  Engineers hustle and bustle left and right making sure that the Warp
+Core is sustained, and efficient.  The smell of chemicals and grease fills the
+air, despite the cleanliness of this section of the ship. 
+~
+Flags:	1000001000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	Keywords:	fluctuating~~~~~~
+	Desc:$
+An eerie haze clouds the way south.
+~
+	ToVnum:	1000
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+There's flies buzzing to the west. 
+~
+	ToVnum:	1066
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#1002
+Name:	Deep Thought - Mortal OOC Board
+Desc:$
+   Here stands the most powerful computer in the universe, capable of
+calculating any mathematical or metaphysical problem. It is far too
+intelligent and sophisticated for any mortal decker -- it even knows the
+answer to the question of Life, the Universe, and Everything.  Aside from Deep
+Thought, there is an escalator leading to the Club Penumbra. 
+~
+Flags:	1000001000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT up]
+	Desc:$
+You see Schrodinger's Board Room at the top of the spiral staircase.
+~
+	ToVnum:	1000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+[EXIT down]
+	Keywords:	escalator~~~~~~
+	Desc:$
+You see the chaotic excitement on the dance floor of the Club Penumbra.
+~
+	ToVnum:	2101
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#1003
+Name:	Holodeck -- Senate Quest/RP Board
+Desc:$
+   A basic training program is running on the holodeck, simulating basic
+weapons training, there are all sorts of weapons training programs to access.
+~
+Flags:	1001000
+SecType:	Hills
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	64900
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	1000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#1004
+Name:	Ten Forward: The Builders' Lounge
+Desc:$
+   You step into a large room, buzzing with the alternating echoes of work and
+play. Builders come here to congregate, brainstorm, and relax. You overhear
+stories of great feats of both building prowess and foul pranks played on
+unwitting new builders. In the centre of the room is an enormous glass
+coffeetable, which also doubles as a tropical fishtank. At the far end of the
+room is a huge boardroom table, covered in scribbled notes, blueprints,
+napkins, and various other builders tools. Beaming from all three surrounding
+walls are huge trideoscreens, displaying revolving structural outlines of the
+current Awake universe, and theoretical additions to its already complex
+architecture. As you approach the video screens to get a closer look, you are
+accosted by innumerable babbling people, all adding to the sheer volume and
+viscosity of the ideas that emanate from this strange dwelling. Welcome. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Desc:$
+The doorway exits to the main board room.
+~
+	ToVnum:	1000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#1005
+Name:	A Postal Substation
+Desc:$
+   This is the postal substation which serves between this plane and the
+physical plane in which Earth is located.  Set up by a team of mages, it
+delivers mail in a blink of an eye (a considerable feat considering the
+circumstances). 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	Desc:$
+You see the board room in that direction.
+~
+	ToVnum:	1000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#1006
+Name:	Shuttle Bay - Defunct Board
+Desc:$
+   Large shuttlecraft, and various gear to help the away teams line the room.
+With its own set of teleporters, and large shuttle bay doors, the Enterprise
+is equipped to transfer almost anyone to or from enterprise. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	Desc:$
+The hill leads towards a door to the southeast.
+~
+	ToVnum:	1000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#1007
+Name:	The Archives
+Desc:$
+   This is where the old changelogs are stored, and I mean old. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	1000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#1008
+Name:	Sick Bay of the Starship Enterprise
+Desc:$
+   A holographic doctor remains unactivated until such time that an emergency
+arises.  There are many many instruments used in the aid of preserving life. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#1009
+Name:	Stealth's Matrix Deli
+Desc:$
+   The doors give a satisfying 'star trek' like shwish as you enter the Matrix
+Deli. You are in the center of a large room containing a serving counter and
+several booths.The decor is art deco with a retro mid 20th century feel to it.
+Each booth contains one or more matrix access terminals. An odd establishment,
+considering you can not eat while in the matrix. I guess it's so you can grab
+a bite after a run or meet prior to beginning a run. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#1010
+Name:	Captain's Ready Room - Mortal RP Board
+Desc:$
+   On the far wall of this spacious office is a plaque, with all the differing
+versions of the Starship Enterprise, from NX-01 to NCC-1701E.  Next to the
+plaque is another with dedications to each incarnation of Awake, from the
+original Awakening MUD by Flynn and FlyGuy, to the current Awake II, as well
+as a dedication to each public release of the AwakeMUD codebase.  There is a
+replicator near the entrance, that will give coffee on demand, or hot Earl
+Grey tea if that is your choice.  A large desk is here, with a seat for the
+Captain of the famed starship. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	31549
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	1000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#1011
+Name:	The War Room - Changelog Terminal
+Desc:$
+   A rather plain appearing room compared to the rest of the Enterprise until
+you notice the tactical computer on the far left wall.  The computer has the
+entire galaxy with all known star systems, mapped out, with information on who
+resides where and who has influence where.  In the center is a large long
+table, with seats for the Captain, and all the Senior Crew of the Starship
+Enterprise. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	1000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#1050
+Name:	The Ice Box
+Desc:$
+   Hack'n'slashers who can't get with the program frequently end up here,
+encased in carbonite. 
+~
+Flags:	101000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#1060
+Name:	Hualpa's Alcove
+Desc:$
+You are in an unfinished room.
+~
+Flags:	100110000000001000000000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#1061
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#1066
+Name:	Python's room
+Desc:$
+   This room is a complete mess. Clothes are everywhere. There's a desk in the
+corner with a tortoise running Linux (Debian 22.1, if you must know), and old
+fashioned paper computer books everywhere. On the other end is a stereo with a
+old fashioned CD player; most of the titles are from bands that you've never
+heard of, like Squishy, Frequency Lab, Nuclear Assault, Emperor, Slayer, etc.
+There's papers everywhere with half-drawn UML diagrams, scribbled fragments of
+code in C or Perl, and a deck of 3x5 paper cards with use cases written on
+them. The Help Wanted ads are on the table and have been thoroughly combed
+over -- some of them go back to August of last year. 
+~
+Flags:	1000000000000000000011000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	1001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

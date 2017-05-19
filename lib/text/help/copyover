@@ -1,0 +1,9 @@
+COPYOVER
+
+A copyover is a way of rebooting the MUD without having to disconnect players.
+It works by "freezing" all the people connected to it, then fires up another instance
+of the server and copies all of the connections over. It allows us to update the MUD
+with minimal disruptance to players. The only downsides are that it resets all runs
+and all items on the floor outside of apartments and storage rooms are lost. Also
+all vehicles that are outside a garage or carpark will be moved to the Seattle
+Garage on Grey Street.

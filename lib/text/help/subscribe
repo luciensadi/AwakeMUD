@@ -1,0 +1,15 @@
+SUBSCRIBE
+
+Usage ^gSUBSCRIBE
+      SUBSCRIBE <vehicle>^n
+
+This is the command used to set in the firmware of a Remote Control
+Deck, a vehicle that can be accessed remotely with said deck.  It is
+also used to list currently subscribed vehicles in a Remote Control
+Deck. 
+
+When you login your subscriber list may be empty. That is normal, it
+will refresh next time the MUD hour ticks over.
+
+^WSee also: CONTROL, RIG, RIGGERS, UNSUBSCRIBE^N
+

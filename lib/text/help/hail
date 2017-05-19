@@ -1,0 +1,8 @@
+HAIL CAB TAXI
+
+Usage: ^gHAIL^N
+
+This command hails a cab for you. You must be in a city in order to hail one,
+and at times there will be no cabs available. The time you need to spend in
+the cab, depends on where you start from and your destination.
+

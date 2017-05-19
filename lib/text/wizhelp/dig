@@ -1,0 +1,13 @@
+DIG
+
+Usage: ^gDIG <direction> <room vnum>^n
+
+This command creates a two-way exit between two rooms. You dig between
+the room you are standing in, and another. Dig then creates an exit
+automatically. Dig cannot be used to make exits to ^WMatrix^n hosts, and all
+doors need to be edited manually in ^WRedit^n.
+
+^C< 10P 10M > dig east 1003^n
+
+^WSee Also: REDIT^n
+

@@ -1,0 +1,12 @@
+ENGULF
+
+Usage: ^gORDER <spirit> ENGULF <target>^n
+
+This power causes the spirit/elemental to surround the target and
+can cause great damage. The victim then has to strugle to break
+free from the spirit/elemental's grasp or they will continue to
+take damage every combat turn. Fire elementals who also have the
+Flame Aura power activated cause extra damage with their engulf
+attacks.
+
+^WSee Also: ORDER, FLAME AURA^n

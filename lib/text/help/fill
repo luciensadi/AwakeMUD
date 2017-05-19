@@ -1,0 +1,11 @@
+FILL
+
+Usage: ^gFILL <target> <source>^n
+
+If you want to fill a container you're holding with liquid from a fountain
+in the same room as you.
+
+^c< 10P 10M > fill canteen fountain^n
+
+^WSee Also: POUR^n
+

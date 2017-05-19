@@ -1,0 +1,10 @@
+MAX
+
+Usage: ^gMAX <number>^n
+
+This command is used in the matrix to set the upper limit to the amount of
+hacking pool dice you will use in a single action. You will never use more
+than the number you set, but may use less if you perform too many actions
+in quick succession.
+
+^WSee Also: HACKING POOL^N

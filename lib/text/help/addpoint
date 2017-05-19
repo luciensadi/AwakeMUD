@@ -1,0 +1,12 @@
+ADDPOINT
+
+Usage: ^gADDPOINT^n
+
+This command is used by adepts to purchase an additional powerpoint.
+This is seperate from an initiation as it does not increase the adepts
+grade. There is no refund possible for this.
+
+Extra power points cost 20 karma, and you can only buy 1 for every 50
+reputation you have earned.
+
+^WSee Also: INITIATION^n

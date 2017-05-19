@@ -1,0 +1,10 @@
+RAM
+
+Usage: ^gRAM <target>^n
+
+The ram command is used to run a mob, or character down with a vehicle.
+To use this command, you must be driving, rigging, or controlling the
+vehicle or drone remotely.
+
+^WSee Also: RIGGING, DRIVE, CONTROL^n
+

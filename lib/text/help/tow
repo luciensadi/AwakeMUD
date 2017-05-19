@@ -1,0 +1,10 @@
+TOW
+
+Usage: ^gTOW <vehicle>^n
+
+This command is used while in control of a vehicle to tow a different
+vehicle. Only cars can be towed, and you need a truck to do it with. The
+car to be towed must be unlocked and stationary. To stop towing a car type
+TOW again and you will leave it in the room you are in.
+
+^WSee Also: REPAIR^n

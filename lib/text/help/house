@@ -1,0 +1,21 @@
+HOUSE
+
+Usage: ^gHOUSE <player name>^n
+
+The HOUSE command is used to add or remove guests from your house's guest
+list.  You must be standing in your house to use this command.  Only the
+primary owner of a house (not guests) may change the guest list using the
+HOUSE command.
+
+Typing 'house' with no arguments gives a list of the people currently on
+your house's guest list.  Typing HOUSE with the name of a player will add
+that player to your guest list if the player is not on the list, or will
+remove the player from the guest list if the player is already on the list.
+The player specified must be in the player database for the MUD, although
+he or she does not necessarily have to be logged on at the time.
+
+Guests of your house will be able to enter your house until you remove them
+from the guest list.
+
+^WSee Also: HOUSES^n
+

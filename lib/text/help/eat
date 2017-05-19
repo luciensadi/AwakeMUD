@@ -1,0 +1,9 @@
+EAT
+
+If you're hungry or thirsty, these commands are for you!
+
+^c< 10P 10M > eat bread
+< 10P 10M > taste bread
+< 10P 10M > drink from cup
+< 10P 10M > sip fountain^n
+

@@ -1,0 +1,1221 @@
+#700
+Name:	The Room of Eternal Procrastination
+Desc:$
+   North - The Jerk
+   Up - Tacoma
+   Down - Boards
+   West - Staging Area
+   East - Newbie Board
+   South - Hell
+~
+Flags:	1000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	14
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	8032
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	702
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door~~~~
+	ToVnum:	701
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	2000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	1000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#701
+Name:	Run staging room
+Desc:$
+   You are in a cluttered room. 
+~
+Flags:	1000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door~~~~
+	ToVnum:	700
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#702
+Name:	^RHELL^n
+Desc:$
+   Fire, brimstone, agonizing pain.  Yup, this must be the place. 
+~
+Flags:	10000000000000001000101000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#703
+Name:	The Hell of Being Skinned Alive and Forced to Watch 'Highlander: Endgame' Repeatedly
+Desc:$
+   Sucks to be you. 
+~
+Flags:	10000000000000000010101000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	703
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	703
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	703
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	703
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	703
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	703
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	703
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	703
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	703
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	703
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#704
+Name:	A Jail Cell
+Desc:$
+      Ah the jail cell of the future! This model comes complete with a pair of
+rancid open air toilets, a ripped up pair of bunk beds, and photos of nude
+women, from orks and trolls to humans theres pictures of the comely ladies
+plastered all over the concrete walls. In between one layer of concrete and
+the next there is a fungus growing to provide a living wall in order to keep
+all astral instruders out. Multiple spell barriers have been set up in the
+area to keep all you awakened folks from trying something funny, course this
+doesn't stop the bored looking fire elemental who rests deep in the astral up
+in the corner of the cell watching you with disinterest. The door is made out
+of a super strong steel alloy thats also been layered with fungus. A moss
+covered vent has been covered with a steel plating with holes poked into it in
+order that a slight amount of air manages to come into the room. It is all in
+all a hot and muggy room full of the smells of dried gore, urine, feces, body
+odor and vomit. Your cell mate is a large dermal deposit covered troll who is
+currently smiling at you in a really weird way. Do try not to bend over too
+much.. 
+~
+Flags:	10000000000000100010101000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#705
+Name:	Black Circle Security HQ
+Desc:$
+   With flourescent lights buzzing overhead and lighting the carpetted room,
+you notice a large wooden table in the middle of it, with a black circle
+engraved upon it.  Surrounding the table are numerous black leather chairs in
+all  different positions.  You also notice a small file cabinet in the corner.
+The walls are deep black. 
+~
+Flags:	101000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	12513
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#706
+Name:	Lair of the Hunters
+Desc:$
+   This room is decorated with relics of many past hunts. The skulls of many
+beings line the shelves on the walls. Weapons lockers as tall as a man line
+two walls. On the floor there is a rug made of the wingflesh of a dragon
+whelp. Light comes from torches made from bones set in the wall every so
+often. 
+~
+Flags:	1000011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	6
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	Keywords:	door cliff face~~~~
+	Desc:$
+It's a door.  What the hell were you expecting? 
+~
+	ToVnum:	9232
+	Flags:	1
+	Material:	stone
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#707
+Name:	Street Drek Mercenaries Hideout
+Desc:$
+   The faint aroma of garbage stings your nostrils as you survey the chaotic
+doss before you.  Spent magazines of every variety litter the floor, along
+with rifle parts, and soykaf bar wrappers.  A few unnocupied, lumpy mattresses
+line the western wall, right beside the mostly disassembled remains of a
+cyberdeck. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	Keywords:	garbage~~~~
+	ToVnum:	3585
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+BREAK
+#708
+Name:	Dead Man, Inc. Headquarters
+Desc:$
+   This room is decorated in an odd, victorian/goth/fantasy art style, with
+black and white marble walls, and silver-gilded accents.  A carved oak shelf
+runs around the perimeter of the ceiling, housing gargoyles, dragons, and
+various other statuary and knick-knacks.  The floor is tiled in the same
+marble.  Lighting fixtures in ornately cast silver project evenly spaced along
+the walls.  The ceiling is plaster.  If you chance to turn out the lights, you
+notice that someone has painstakingly duplicated the constellations with small
+dots of glow-in-the-dark paint on the ceiling.  There is a comforting odor of
+stale incense, machine oil, and someone's good cooking.
+   Several areas of the room appear to be devoted to various works in progress
+-- in one cornor, a frankenstein's monstor of a computer sits, dysfunctional
+but impressive, surrounded by parts, mangled decks, wiring, tools, and other
+bits of detritous.  In another cornor lies, a variety of weapons in various
+states of disassembly, cleaning, and repair.  A third corner houses ornate
+tapestries, small tables and closed chests surrounded by candles and jars
+containing unidentifiable items.  The fourth is scattered with animal parts,
+found items, and other bits of natural material seldom seen in the heart of a
+city, with more candles, chests full of items, and small tables.
+   The center of the HQ houses a more ordinary relaxation and entertainment
+area, with leather sectional couches arranged around a trid set, and a stereo
+system.  Various games and movie chips litter the area, as do a variety of
+magazines.  You see 2600, Bud K, and others that survived the Awakening as
+well as a variety of newer publications.
+   Behind this area are a variety of bedding arrangements -- cots, mattresses,
+blankets and pillows.  Between the couches and the beds sits a large heating
+unit with ducts extending up through the ceiling, a stove and oven, and a
+fridge. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	Keywords:	manhole~~~~
+	ToVnum:	2536
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+	HiddenRating:	4
+BREAK
+#709
+Name:	A dank, dilapidated loft
+Desc:$
+   A small loft in a tenement with a leaky wooden ceiling. Wooden beams hold
+the ceiling up though they are cracked and greatly worn. Roaches scurry across
+the rotting linoleum floor and the smell of raw sewage fills the room. The
+sound of leaking water fills the air. A Concrete Dreams poster hangs on the
+northern wall and next to that is the elven screech-rock band Speed Coma's
+2049 Tour poster, both looking tattered and torn. Beer bottles and spent
+simsense chips are strewn everywhere and half-soaked matresses line the
+western wall. A trid set with rabbit-ear antennae buzzes softly on the eastern
+wall and an elf in Ancients colors watches a talk show zonked out of his
+gourd. 
+~
+Flags:	1000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	Keywords:	hatch fire escape stairs~~~~
+	ToVnum:	2493
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+BREAK
+#710
+Name:	Sculley's
+Desc:$
+   The first thing you notice upon entering is the smell of cigarette smoke,
+thickly floating in a cloud about head level.  There are tables arranged all
+throughout this cozy-looking, neatly arranged, if somewhat un-posh room. Signs
+appear all over the wall, each with a one liner, offering wisdom on the way
+life really is.  Surrounding the tables are various chairs, with ashtrays
+arranged at various intervals. Everything mounted on the wall, as well as the
+walls themselves are coated in a thin film of nicotine stains.  You hear in a
+small room in the back the sounds of a coffee pot churning. 
+~
+Flags:	10011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door wooden~~
+	Desc:$
+A wooden door.  There is a circle with a triangle inside of it on the door.
+ A sign says, "meetings held at 6AM, 12 Noon, 5 PM, and 8 PM."
+~
+	ToVnum:	30591
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#711
+Name:	OMEGA Central Headquarters
+Desc:$
+   You've entered the assumed omega headquarters. You aren't quite sure as if
+by heat or motion  sensors, however you are suddenly inspected by a rain of
+lasers they are evaluating you, determining  your worth. The antechamber you
+stand  in is expansive, full up of trid screens and racks of computer
+components. In front of each station is a well worn but very comfortable
+looking chair. Scribbled in  various areas- walls, celing and floor alike, are
+various number clusters, code strings ranging from  simple to very complex and
+technical, and algorhthns. You can smell the faint scent of silicon clinging
+to the air, underneath that however is a sweeter undertone... Honey? You can't
+be sure. All you can hear is the faint humming of the various equipments and
+the duller buzzing of the cirulation fans. There  is a jumble of lockers on
+the far left wall, labled not with names, but rather with numbers. Overall the
+scene is one of organised chaos, cluttered, yet there is a decided lack of any
+trash or dirt.  The most appealing part of the room is the farthest corner
+nook. It has a very apparent femanine  touch. There are two large and very
+appealing looking overstuffed chairs here, between them a large  elegant end
+table. On this end table is an ash tray,  a vase of silk fowers and an old
+antique lamp. Well worn novels and manuals are piled up on both sides of both
+chairs, and there are some very  plush looking pillows strewn about.  Rather
+than the flourecent lighting found in the main part of the  antechamber this
+area has several beatuiful candelabras with much apparent use hung from the
+walls, and sconces with breath taking trinkets on display adorning the walls.
+Only one string of code is  found here, and it is centered between the two
+chairs, it reads 09./12.15.22.05./25.15.21. Before you go about your business
+you note a damp looking hall way to your right, lighting very dim  and
+seemingly flickering. There are several doors to either side of the hall, and
+at the end a set of very  heavy looking and attractive double doors. Through
+the murk you can see a hand painted sign in  immaculate script forbidding
+entry to anyone other than Dev or Pandora Null. Turning your attentions back
+to the antechamber, you enter. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	Keywords:	door~~~~
+	ToVnum:	9821
+	Flags:	1
+	Material:	brick
+	Barrier:	8
+	KeyVnum:	28289
+	LockRating:	5
+	HiddenRating:	25
+BREAK
+#750
+Name:	Matrix Test Room
+Desc:$
+   A small room with a cyberterminal in the corner. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#751
+Name:	node 1
+Desc:$
+   a computer node 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	6
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#755
+Name:	^rDICKWAD^n
+Desc:$
+   ^YPEE WEE HERMAN JERKED AND YOU WERE BORN ^RPEE WEE HERMAN JERKED AND YOU WERE
+BORN ^YPEE WEE HERMAN JERKED AND YOU WERE BORN ^RPEE WEE HERMAN JERKED AND YOU
+WERE BORN ^YPEE WEE HERMAN JERKED AND YOU WERE BORN ^RPEE WEE HERMAN JERKED AND
+YOU WERE BORN ^YPEE WEE HERMAN JERKED AND YOU WERE BORN ^RPEE WEE HERMAN JERKED
+AND YOU WERE BORN ^YPEE WEE HERMAN JERKED AND YOU WERE BORN ^RPEE WEE HERMAN
+JERKED AND YOU WERE BORN ^YPEE WEE HERMAN JERKED AND YOU WERE BORN ^RPEE WEE
+HERMAN JERKED AND YOU WERE BORN ^YPEE WEE HERMAN JERKED AND YOU WERE BORN ^RPEE
+WEE HERMAN JERKED AND YOU WERE BORN ^YPEE WEE HERMAN JERKED AND YOU WERE BORN
+^RPEE WEE HERMAN JERKED AND YOU WERE BORN ^YPEE WEE HERMAN JERKED AND YOU WERE
+BORN ^RPEE WEE HERMAN JERKED AND YOU WERE BORN ^YPEE WEE HERMAN JERKED AND YOU
+WERE BORN ^RPEE WEE HERMAN JERKED AND YOU WERE BORN ^YPEE WEE HERMAN JERKED AND
+YOU WERE BORN ^RPEE WEE HERMAN JERKED AND YOU WERE BORN ^YPEE WEE HERMAN JERKED
+AND YOU WERE BORN ^RPEE WEE HERMAN JERKED AND YOU WERE BORN ^YPEE WEE HERMAN
+JERKED AND YOU WERE BORN ^RPEE WEE HERMAN JERKED AND YOU WERE BORN ^YPEE WEE
+HERMAN JERKED AND YOU WERE BORN ^RPEE WEE HERMAN JERKED AND YOU WERE BORN ^YPEE
+WEE HERMAN JERKED AND YOU WERE BORN ^RPEE WEE HERMAN JERKED AND YOU WERE BORN
+^YPEE WEE HERMAN JERKED AND YOU WERE BORN ^RPEE WEE HERMAN JERKED AND YOU WERE
+BORN ^YPEE WEE HERMAN JERKED AND YOU WERE BORN ^RPEE WEE HERMAN JERKED AND YOU
+WERE BORN ^YPEE WEE HERMAN JERKED AND YOU WERE BORN ^RPEE WEE HERMAN JERKED AND
+YOU WERE BORN ^YPEE WEE HERMAN JERKED AND YOU WERE BORN ^RPEE WEE HERMAN JERKED
+AND YOU WERE BORN ^YPEE WEE HERMAN JERKED AND YOU WERE BORN ^RPEE WEE HERMAN
+JERKED AND YOU WERE BORN ^YPEE WEE HERMAN JERKED AND YOU WERE BORN ^RPEE WEE
+HERMAN JERKED AND YOU WERE BORN ^YPEE WEE HERMAN JERKED AND YOU WERE BORN ^RPEE
+WEE HERMAN JERKED AND YOU WERE BORN ^YPEE WEE HERMAN JERKED AND YOU WERE BORN
+^RPEE WEE HERMAN JERKED AND YOU WERE BORN ^YPEE WEE HERMAN JERKED AND YOU WERE
+BORN ^RPEE WEE HERMAN JERKED AND YOU WERE BORN ^YPEE WEE HERMAN JERKED AND YOU
+WERE BORN ^RPEE WEE HERMAN JERKED AND YOU WERE BORN ^YPEE WEE HERMAN JERKED AND
+YOU WERE BORN ^RPEE WEE HERMAN JERKED AND YOU WERE BORN ^YPEE WEE HERMAN JERKED
+AND YOU WERE BORN ^RPEE WEE HERMAN JERKED AND YOU WERE BORN ^YPEE WEE HERMAN
+JERKED AND YOU WERE BORN ^RPEE WEE HERMAN JERKED AND YOU WERE BORN ^YPEE WEE
+HERMAN JERKED AND YOU WERE BORN ^RPEE WEE HERMAN JERKED AND YOU WERE BORN ^YPEE
+WEE HERMAN JERKED AND YOU WERE BORN ^RPEE WEE HERMAN JERKED AND YOU WERE BORN
+^YPEE WEE HERMAN JERKED AND YOU WERE BORN ^RPEE WEE HERMAN JERKED AND YOU WERE
+BORN ^YPEE WEE HERMAN JERKED AND YOU WERE BORN ^RPEE WEE HERMAN JERKED AND YOU
+WERE BORN 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#756
+Name:	^WTHWAP!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Desc:$
+   ^WTHWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP
+THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP
+THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP
+THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP
+THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP
+THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP
+THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP
+THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP
+THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP
+THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP
+THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP
+THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP
+THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP
+THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP
+THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP
+THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP
+THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP
+THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP
+THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP
+THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP THWAP
+   ^YYou have been thwapped.  Now go away.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#761
+Name:	tunnel-like room
+Desc:$
+   This room is a connecting hallway from outside to whatever lies within.  It
+seems strange, but all sounds seem somehow muffled, as if a permanent silence
+spell were erected here.  On second look, this room seems to serve as
+something as an airlock, preventing unauthorized access. 
+~
+Flags:	10000000000000000001100000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door security heavy duty~~~~
+	Desc:$
+A heavy duty security door. 
+~
+	ToVnum:	762
+	Flags:	2
+	Material:	metal
+	Barrier:	24
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door hidden out~~~~
+	Desc:$
+The inside of this door warns that allowing unauthorized access is punishable
+by magical castration. 
+~
+	ToVnum:	2010
+	Flags:	1
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	803
+	LockRating:	12
+BREAK
+#762
+Name:	The Circle of Kai-shiin
+Desc:$
+   An abandoned library with a strong background count that seems to fill the
+room with a strong empowering static.  The walls,  high vaulted ceiling and
+pillars are made of real gray marble, normally highly  polished; they have now
+been decorated with shamanic symbols of the various  totems. This room is
+circular with a very powerful hermetic circle permanently  inscribed in the
+floor. Over to the side is the remains of what used to be a  fairly impressive
+hardcopy hermetic library. It looks as if the more expensive collections have
+been sold off, not far from the library is a bunch of  shamanic equipment.
+Looks like some of the library was sold and used to buy  that.  Around the
+room are a bunch of couches for lounging and relaxing.  The air here has the
+slight musk smell associated with animals, reptiles in  particular.  On the
+wall is a huge map of Seattle and next to it pictures of  elves that have gone
+missing under mysterious circumstances. 
+~
+Flags:	110010010000000010000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	10
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	763
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	40
+[EXIT west]
+	Keywords:	door marble security~~~~
+	Desc:$
+This heavy duty security door has been lined with marble on the inside, to fit
+in with the rest of the room's decor. 
+~
+	ToVnum:	761
+	Flags:	2
+	Material:	metal
+	Barrier:	24
+	KeyVnum:	0
+BREAK
+#763
+Name:	Dark Paladins' Sleeping Area
+Desc:$
+   This part of the hall has been redone, but still contain the marble dcor of
+the main hall, but instead of being covered with shamanic symbols they are
+covered with hermetic designs.. Formerly it used to have apartments and some
+alcoves. Now the apartments have been taken out and more alcoves added, and
+the current ones expanded. The alcoves have heavy sound absorbing curtains to
+ensure privacy.  A typical example of an alcove has a very comfortable futon,
+a closet and a small desk/workspace for those who have their own hobbies and
+projects to pursue them. 
+~
+Flags:	1001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	762
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#770
+Name:	The OOC Room
+Desc:$
+   Your character no longer is in the game ICly, but you can interact OOCly in
+this room. 
+~
+Flags:	100000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#771
+Name:	^mP^MU^mR^MP^mL^ME ^mL^MA^mR ^MH^mE^ML^mL^n
+Desc:$
+   ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR
+LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR
+LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR
+LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR
+^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR
+LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR
+LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR
+LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR
+^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR
+LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR
+LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR
+LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR
+^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR
+LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR
+LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR
+LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR
+^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR
+LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR
+LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR
+LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR
+^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR
+LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR
+LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR
+LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR
+^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR
+LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR
+LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR
+LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR
+^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR
+LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR
+LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR
+LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR
+^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR
+LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR
+LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR
+LAR LAR LAR ^mLAR LAR LAR LAR ^MLAR LAR LAR LAR ^mLAR LAR LAR LAR 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#772
+Name:	^m*^Mg^mi^Mg^mg^Ml^me^M*
+Desc:$
+   ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE
+^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE
+^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE
+^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE
+^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE
+^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE
+^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE
+^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE
+^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE
+^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE
+^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE
+^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE
+^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE
+^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE
+^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE
+^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE
+^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE
+^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE
+^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE
+^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE
+^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE
+^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE
+^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE
+^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  ^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE
+^RG^yI^YG^GG^CL^BE ^RG^yI^YG^GG^CL^BE ^MG^RI^YG^GG^CL^BE ^MG^BI^YG^GG^CL^BE  
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#777
+Name:	A Masonic Temple
+Desc:$
+   A waft of incense smoke floats past your nostrils.  In the center of the
+room is a huge globe, made with solid gold.  The temple walls are high, with
+windows etched in Egyptian hieroglyphics.  A magical circle is drawn on the
+floor of the south end of the vast temple, and on the north end is a medicine
+lodge, followed by an altar the shape of an Egyptian pyramid. A Kabbalic Tree
+of Life shimmers over an open doorway to the north, blocking further passage.
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	2
+X:	20
+Y:	20
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+	Light:	0
+	Smoke:	0
+	Background:	3
+	BackgroundType:	9
+[EXIT south]
+	Keywords:	door golden~~~~
+	ToVnum:	4919
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	12
+BREAK
+#778
+Name:	The Masters Room
+Desc:$
+   The walls here look to be made of marble and covered with intricate
+patterns garnered from almost every religion that has ever existed. A huge
+magical circle covers the floor, its intense power almost crossing over into
+the physical plane. Aside from that the room is completely empty bar a small
+hanging light illuminating it. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	1
+X:	8
+Y:	8
+Z:	5.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	13
+[EXIT south]
+	ToVnum:	777
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#799
+Name:	The Hell of Being Skinned Alive and Forced to Listen to ABBA Eternally
+Desc:$
+   OMG it sucks to be you! 
+~
+Flags:	10000000000000000010101000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	799
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	799
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	799
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	799
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	799
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	799
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	799
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	799
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	799
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	799
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#900
+Name:	Bolthole
+Desc:$
+   You are in a small but clean space.  It seems that someone has build a
+secret room here; that would account for the odd 'L' shape of the room - it
+has to fit in with the legitimate rooms of the structure.  There is a large
+bed against one wall, as well as innumerable shelves and tables full of stuff.
+There is a small crawlspace to the north that must lead to another part of
+the bolthole. 
+~
+Flags:	1101000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	901
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#901
+Name:	Secret Lodge
+Desc:$
+   This is a small circular room.  It is filled with all manner of mystical
+fetishes, symbols, and such.  The occult nature of the room is somewhat
+dampened by a small computer in the corner, with a reference library of
+important magical works on optical chip.  A large summoning circle is
+inscribed in the ground as well . 
+~
+Flags:	110000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	6
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	900
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#902
+Name:	An unnamed room
+Desc:$
+   
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#998
+Name:	Roswell Security, office of James Roger Roswell
+Desc:$
+   Roswell Security is a corporate arm of the Draco Foundation, designated for
+investigation of bizarre sets of circumstances that threaten the continuity of
+the world.  The office is arranged neatly, with a fully stocked bar, and a
+noveau-chic desk with a computer console with the highest definition trideo
+screen money can't buy.  Upon the wall facing the desk, are trideo screens
+with many parts of the world in focus, many of which are "denied existence".
+Anywhere Roswell Security sniffs something being out of place, a camera can
+zoom into them within moments.  Roswell Security is the true "Big Brother" of
+the Sixth World. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#999
+Name:	Inside a Coffin
+Desc:$
+   You are dead now.  Rest in peace.  The worms crawl in, the worms crawl out.
+Hope your next life fares better, chummer. 
+~
+Flags:	100010111000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+END

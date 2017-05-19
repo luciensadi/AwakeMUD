@@ -1,0 +1,24 @@
+VEHICLES CARS
+Vehicles are cars, trucks, bikes, drones, panzers, thunderbirds,
+operatable by a player.  The player must have the proper skill to use
+the vehicle, and if he wishes to rig it or operate it remotely, he must
+have a vehicle control rig.
+
+The commands for using a vehicle are as follows:
+
+enter <vehicle keyword>
+Enters the car.
+
+drive
+Puts you behind the driver seat of the car.
+
+ram <target>
+causes your car to ram a target, may cause damage to your vehicle also.
+
+leave
+Gets out of the car.
+
+whisper <name>
+Lets you talk to people outside of the car
+
+^WSee also: RIG, CONTROL, SUBSCRIBE, RIGGERS, SPEED, DRIVE, ENTER^n

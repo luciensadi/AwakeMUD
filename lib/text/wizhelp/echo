@@ -1,0 +1,14 @@
+ECHO
+
+Usage: ^gECHO <message>^n
+
+This allows you to echo a message through to the room you are currently in. 
+The syntax is "echo" and then the message you wish to echo. For example:
+
+^c< 10P 10M > echo Lets kill Sean!^n
+
+- Everyone in the room would see:
+Lets kill Sean!
+
+^WSee Also: QECHO, GECHO, ZECHO, AECHO^n
+

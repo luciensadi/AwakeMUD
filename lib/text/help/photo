@@ -1,0 +1,12 @@
+CAMERA PHOTO
+
+Usage: ^gPHOTO <person/object>
+       PHOTO^n
+
+This command uses a camera to take a photo of a person, object or scene.
+It will display everything as though you had looked at the object and
+preserve it for future viewings. People with the invisibility spell will
+show up on cameras whether you can see them or not. Eye cameras require
+headware memory to operate correctly.
+
+^WSee Also: MEMORY, VIEW, LOOK^n

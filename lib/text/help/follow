@@ -1,0 +1,10 @@
+FOLLOW
+
+Usage: ^gFOLLOW <player>^n
+
+Use FOLLOW to automatically follow someone else.
+
+^c< 10P 10M > follow Flynn
+< 10P 10M > follow self^n
+
+^WSee Also: GROUP^n

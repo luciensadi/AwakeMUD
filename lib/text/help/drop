@@ -1,0 +1,16 @@
+DROP
+
+If you lose interest in a carried item, you can drop it on the ground.
+
+Usage: ^gDROP <item>
+       DROP all.<item>
+       DROP all
+       DROP <number> nuyen^n
+
+^c< 10P 10M > drop bottle
+< 10P 10M > drop all.bread
+< 10P 10M > drop all
+< 10P 10M > drop 1000 nuyen^n
+
+^WSee Also: GET, JUNK, DONATE^n
+

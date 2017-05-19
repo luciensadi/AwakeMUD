@@ -1,0 +1,12 @@
+FINGER
+
+Usage: ^gFINGER <player>^n
+
+This is a playerscan tool, showing you the name, title, and last logon of a
+player.  You can only finger players of your level and below.
+
+^c> finger lightning
+
+[     ] Lightning
+Last logon: Sat Oct 25 07:07:22 1997^n
+

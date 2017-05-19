@@ -1,0 +1,10 @@
+POSITION
+
+Usage: ^gPOSITION <position>
+       POSITION^n
+
+This command displays a short message at the end of your look description.
+Typing it on it's own, or changing positions with a sit or stand command
+will remove it.
+
+See Also: ^WSTAND^n

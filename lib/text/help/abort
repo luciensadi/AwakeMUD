@@ -1,0 +1,14 @@
+ABORT
+
+Test: CONTROL
+Utility: SWERVE
+Usage: ^gABORT^N
+
+This command is used to abort or delay a host shutdown, either
+triggered by another decker or by the security sheave. If you score
+twice as many successes as the decker who initiated the shutdown
+you will abort it completly, otherwise it will just be delayed.
+Shutdowns triggered by a security sheave cannot be stopped, only
+delayed.
+
+^WSee Also: MATRIX, UTILITIES, PROGRAMS, CRASH^n

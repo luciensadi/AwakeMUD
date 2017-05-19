@@ -1,0 +1,19 @@
+SOCIALS
+
+Usage: ^g<social> [<victim>]^n
+
+Socials are commands used to show your affective state to others.  The
+actor, victim and bystanders may receive different messages.  Generally,
+social commands are used only to express emotion, but it is possible that
+some mobs (or players) will take action based on the social.
+
+^c< 10P 10M > shake phobia
+< 10P 10M > applaud sean
+< 10P 10M > stare^n
+
+The SOCIALS command generates a canonical listing of all available socials.
+
+^c< 10P 10M > socials^n
+
+^WSee Also: EMOTE^n
+

@@ -1,0 +1,269 @@
+#1100
+Keywords:	Lynda receptionist
+Name:	Lynda
+RoomDesc:$
+Lynda, the receptionist, sits here at her terminal. 
+
+~
+LookDesc:$
+A sharply dressed woman sits here at her desk, quietly organising paperwork
+into various piles and occasionally filing something away into her desk. She
+appears oblivious to her surroundings and eternally bored with her work. 
+ 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	5
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	178
+	Weight:	54
+[SKILLS]
+	computers:	4
+	negotiation:	4
+	media etiquette:	6
+	corporate etiquette:	6
+BREAK
+#1102
+Keywords:	postal worker salesman man
+Name:	A salesman
+RoomDesc:$
+A salesman stands here, grinning. 
+
+~
+LookDesc:$
+An employee of the Tir Tairngire Royal Postal Service, he stands here in his
+crisply pressed uniform, offering to service your every postal need. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#1110
+Keywords:	salesman man well-dressed dressed playing
+Name:	A salesman
+RoomDesc:$
+A well-dressed salesman is playing Fashion Tetris on one of the machines. 
+
+~
+LookDesc:$
+A man in a fairly expensive suit, he stands at the most expensive looking
+machine in the room playing Fashion Tetris distractedly while he gazes around,
+waiting for customers. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000010000000001010
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#1111
+Keywords:	harried salesman man
+Name:	A salesman
+RoomDesc:$
+A harried looking salesman runs around here. 
+
+~
+LookDesc:$
+A man in a cheap, polyester suit. He wanders the room with a trapped look on
+his face, giving all the machines a very wide berth. He appears to be talking
+into an earpiece phone, and every few minutes jots something down in a
+notepad. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000010000000001010
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#1112
+Keywords:	salesman man assistant sales
+Name:	A salesman
+RoomDesc:$
+A sales assistant stands here, keying numbers into a pocket secretary. 
+
+~
+LookDesc:$
+A man in a pressed blue suit, he wanders the room slowly with a bored
+expression on his face. In his hands he is carrying a pocket secretary, and
+every few minutes he examines a machine and fiddles with it. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000001010000000001010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#1113
+Keywords:	salesman man young
+Name:	a salesman
+RoomDesc:$
+A young man in a shirt and tie leans back casually against a crate, smoking a
+cigarette. 
+
+~
+LookDesc:$
+This guy's appearance screams "FIRE ME!". His tie has been pulled loose and
+the top two buttons of his shirt are undone. He has a cigarette hanging limply
+between his lips, smoke curling slowly from his mouth. His 3 day growth makes
+him look in his late 20's, and his scraggly hair doesn't look like he brushed
+it this morning, or even this week.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+[SKILLS]
+BREAK
+#1150
+Keywords:	microdeck employee smiling human
+Name:	a Microdeck employee
+RoomDesc:$
+A Microdeck employee stands behind the counter waiting for you to approach
+him. 
+
+~
+LookDesc:$
+He is dressed in the standard uniform of a Microdeck outlet. A crisp blue
+shirt and black slacks, accompanied by a dark blue tie. He smiles broadly at
+you, hoping you'll ask him some question. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	95
+[SKILLS]
+BREAK
+#1151
+Keywords:	terell presented elf trenchcoat
+Name:	Terell Davis
+RoomDesc:$
+A well presented elf in a trenchcoat scans the crowds for some customers. 
+
+~
+LookDesc:$
+This elf is well dressed, wearing the latest in young fashion, his outfit
+easily costing more than the average person's rent. He seems sort of out of
+place in the crowd, but still pushes his way confidently through. Everyone
+seems to know him and he occasionally stops to talk to someone, packages
+swapping hands. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001100
+AffFlags:	10000000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	60
+[SKILLS]
+BREAK
+END

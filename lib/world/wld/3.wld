@@ -1,0 +1,563 @@
+#300
+Name:	A Great Tree
+Desc:$
+   You find yourself before a great tree in the middle of a beautiful
+clearing.  You can feel life energy of many living things surrounding you as
+you gaze into the wonderous sights in this mystic forest. The pleasant aroma
+of wildflowers flashes across your nose, brought on by a gentle, warm breeze.
+In the tree-tops you can hear many different kinds of birds singing their
+different songs, along with the sound of insects as they frolic and play in
+the tall grass. 
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#301
+Name:	A Forested Mountainside
+Desc:$
+   You are surrounded by a great amount of evergreen trees on a small shelf on
+a mountainside. There is a light snowpack all around, with sunlight beaming
+off of the small hills of snow with a cystaline, stunning beauty. The air is
+moist from the slow evaporation of the snow, but the temperature is very cool
+and doesn't allow much to melt away. There is various wildlife around, most
+notable though are the birds and the squirrels due to the sounds they make on
+this otherwise quiet mountainside. 
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#302
+Name:	A Large Tree Branch
+Desc:$
+   You are atop a large tree branch that is a part of a dead tree. There is a
+river below, full of fish jumping and other life in their most natural state.
+As you look around, you see the tops of all of the trees in this vast forest,
+each swaying in the light wind. The sun shining down upon you creates a very
+calming warmth throughout your entire body and makes the water below sparkle,
+showing off it's beauty even more. Just below the surface of the water you can
+see some beaver working away on their home, and several trout swimming
+upstream. 
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#303
+Name:	An Underwater Cavern
+Desc:$
+   You are floating in an awe-inspiring, underwater cavern. There are fish
+swimming about in plentiful numbers in a very carefree manner. The water is
+rather warm and gives a very tropical feel to the area and the underwater
+plant life shows it greatly. You notice some very brightly colored fish
+swimming by in schools of great size. 
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#304
+Name:	In the Plains
+Desc:$
+   You are standing in, and are surrounded by, tall grass and a vast hillside
+as far as you can see; all of the way to the horizon. You hear various birds
+singing thier songs as they fly overhead. Not far in the distance, you see a
+small pond where some cranes are gathering and performing their mating
+rituals. The smell of a fire is in the distance, and you notice that there is
+some smoke rising from beyond a hill. 
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#305
+Name:	A Dead Grove
+Desc:$
+   Surrounding you is a circle of dead and dying trees, decaying and seemingly
+void of all life. There is a faint scent of rotting flesh lingering in the air
+and an overall gloomy feeling all around. It would be quiet if the sounds of
+the raven, crowing far and near, were not present. You also notice the sky is
+filled with darkend clouds, covering much like a drab grey blanket. Along the
+ground, lying about in a few heaps, are piles of bones. In a few of them, you
+can make out several animal skulls...including a few that look very human... 
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#306
+Name:	A Small Park
+Desc:$
+   You are in the middle of a small park that appears to be right in the
+middle of a semi-busy section of a large city. There are quite a few people
+about, but they seem to all have very, very blank expressions on their faces,
+and are rather statuesque. You can only see across the street to the north and
+the west, where buildings promptly cut off your view, and the wall along the
+remaining sides of the park blocks the view in those directions. Even with the
+wall though, you can hear the sounds of a trainyard in the distance, and the
+occasional train passing by. The air is very smoggy and everything around is
+drab and dirty. 
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#307
+Name:	A Warm Room
+Desc:$
+   You are in what appears to be a living room of a house. It is lit and
+warmed by a glowing fire. The furnishings of this place are very scarce, just
+a rug in front of the fireplace and a chair with a small table in one corner.
+The only sound is that of the crackling fire and the only smell is of the wood
+burning. The walls are bare and there is but a single door opposite the
+fireplace. 
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#308
+Name:	A Dark and Dirty Room
+Desc:$
+   You look around to find yourself in a very dirty and unkept room. There are
+heaps of things lying about here and there, nothing of explicit interest or
+anything that really catches the eye. There is very little light in the room,
+only slightly illuminated by a single candle in the corner. The air is very
+stuffy and there appear to be no windows in the room at all, only a door along
+the northern wall. 
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#309
+Name:	An Oasis
+Desc:$
+   You look around to see that you are near a small body of water, surrounded
+by rolling hills of desert sand. The sky is very clear, and you can easily see
+many stars starting to appear in the dusk sky. There seems to be lots of life
+encompassing the water, various creatures make their appearance to take a
+quick drink, then again disappear back into the sandy background. Also near
+the water you notice that there are some beautiful flowers blooming, ready to
+spring to full life even in the middle of such a lifeless surrounding. 
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#310
+Name:	A Small Island in the Swamp
+Desc:$
+   You are upon a small island in the middle of very murky water. There are
+trees all around and moss is growing on almost everything you can see. The
+sunlight is dimmed greatly by the tree-top canopy covering as far as you can
+see in any direction. You hear sounds of crickets chirping, and mosquitos
+buzzing around your ear. Also, you notice the occasional bubbling from the
+water, seemingly caused by a fish, or perhaps an alligator. The ambient
+temperature is relatively warm, and it is very humid; but, for some reason, it
+feels much like home. 
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#311
+Name:	A Large Hollow Tree
+Desc:$
+   You are before a very large and gnarled tree. A good deal of the tree is
+hollow and turned into the home of a great, wise, fowl. Around the tree is a
+short patch of grassy clearing, and soon after is continuation of forested
+land. You hear the sweet sound of silence as nightfall is upon the land. Very
+few creatures are out and about at this time. There is a very quiet, calm
+feeling to the area; very serene, almost as if you could not fear any of it
+because you know so much about it...and call a place like this home. 
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#312
+Name:	A Grassy Stump
+Desc:$
+   You are just before a big stump in the center of a wide open field of tall
+grass. The grass almost covers the long dead tree, almost an attempt to
+swallow it and wipe it from existance. There are many, many small mammals
+skittering about, and you also take notice to the numerous amount of insects,
+large and small, flying and crawling all around you. The sky is clear and the
+sun has almost set, which will bring around the comforting cover of darkness
+to the land in just a short time. 
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#313
+Name:	A Small Stream
+Desc:$
+   You are very near to a small stream that seems to be running just outside
+of a city. You can see some houses not very far off and you can easily sense
+that there are many people in that direction. Just over the stream you see a
+hole, just large enough for a moderately sized mammal to call home. The air
+smells of rain and you can detect a bit of smoke as well, smoke that seems to
+be coming from a chimney of one of the houses. 
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#314
+Name:	A Grand Library
+Desc:$
+   You find yourself in the center of a grand, old style library. The ceiling
+is very high and there are various stained glass windows surrounding the
+endlessly long rows of bookshelves. You also take notice to the extreme
+cleanliness of this place. It appears to be centuries old but not on sign of
+wear is to be found. The library is in complete silence it seems that not a
+soul has traversed these halls in it's entire existance. 
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#315
+Name:	Ascension
+Desc:$
+   You find yourself floating in a complete void of darkenss. In irregular
+patterns, you see glowing swirls of life energy spawn into being, then
+completely disappear from existance. You can sense the life force of what
+seems to be every living being that has ever existed, in a calm, peaceful
+gathering among the cosmos. You no longer have any awareness of your physical
+self and are completely free of the bounds of astral space as well. This is
+the gateway to the metaplanes. 
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#316
+Name:	Ascension
+Desc:$
+   You find yourself floating in a dark void. You no longer sense any
+attachment to your physical body and you also cannot find the bounds of astral
+space. All around you, out of the darkness, you begin to notice many archane
+symbols appear and vanish in very rhythmic patterns. You can sense a great
+power all around you, one that seems to be the collective conciousness of
+every living being that has ever existed. This is the gateway to the
+metaplanes. 
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#317
+Name:	Elemental Plane of Fire
+Desc:$
+   You find yourself floating just above a vast sea of flames. Despite the
+proximity you feel no pain, but you do feel a great amount of heat. You can
+feel the collective lifeforce of the entire universe collected and radiating
+their energy through this metaplanular sea of fire. The flames spread as far
+as you can see, or sense on any level. Above the flames, in all directions is
+a void of darkness, seemingly keeping the metaphysical flames contained and at
+perfect balance. 
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#318
+Name:	Elemental Plane of Water
+Desc:$
+   Suspended between a pure, cloudless blue sky and a vast, but perfectly calm
+ocean, you're surrounded by the phenomenal expanse of the elemental plane of
+water, that extends almost as far as you can possibly see. From this high up,
+you can see that the water is spread in a perfect, flat circle, and the
+horizon is not a curvature of the land, but where the ocean fades into a black
+void. You hear the faint sound of falling water coming from all around you as
+the water disappears from the plane and into the darkness. 
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#319
+Name:	Elemental Plane of Wind
+Desc:$
+   Below a beautiful night sky, lit by thousands upon thousands of glimmering
+stars, the plane of wind extends infinitely into the distance. You're hovering
+in the midst of a few passing clouds, gazing down over a vast blackness. A
+cool breeze constantly blows in your face, and a soft rumble fills the air. 
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#320
+Name:	Elemental Plane of Earth
+Desc:$
+   Standing in a clearing of dusty red soil, you are shadowed in the towering
+expanse of a great canyon. Looking in both directions, it seems to go on
+forever. The walls are rough and jagged, looking as though they've been
+crumpled up from millions of years of seismic activity. They climb hundreds of
+feet into the air on a slight incline, giving you the feeling that you're
+under cover. At the ridge of the canyon an explosion of sunbeams from a
+brilliant red sunset fills the roof with light. 
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#321
+Name:	an unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#322
+Name:	an unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#323
+Name:	an unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#324
+Name:	an unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#325
+Name:	The Citadel
+Desc:$
+   You have finally done what you have come to do. For the time you are here,
+everything becomes very clear...you begin to feel as if your mind has linked
+with the collective knowledge of every being throughout the very mystic
+existance of the metaplanes...and beyond. Everything around you is very
+bright, vibrant, and so full of color and life. You have reached the Citadel,
+the heart of the magical energy in the metaplanes. 
+~
+Flags:	1111000
+SecType:	Flying
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#326
+Name:	Metaplanular Spirit Holding Room
+Desc:$
+   This room only holds the spirits for any given journey in the metaplanes.
+That's it chummers. 
+~
+Flags:	1111000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#420
+Name:	^gThe ^GGrowroom^n
+Desc:$
+   ^g_\|/_   ^G_\|/_   ^g_\|/_   ^G_\|/_   ^g_\|/_   ^G_\|/_    ^g_\|/_   ^G_\|/_   ^g_\|/_
+^G_\|/_   ^g_\|/_   ^G_\|/_    ^g_\|/_   ^G_\|/_   ^g_\|/_   ^G_\|/_   ^g_\|/_   ^G_\|/_
+^g_\|/_   ^G_\|/_   ^g_\|/_   ^G_\|/_   ^g_\|/_   ^G_\|/_    ^g_\|/_   ^G_\|/_   ^g_\|/_
+^G_\|/_   ^g_\|/_   ^G_\|/_    ^g_\|/_   ^G_\|/_   ^g_\|/_   ^G_\|/_   ^g_\|/_   ^G_\|/_
+^g_\|/_   ^G_\|/_   ^g_\|/_   ^G_\|/_   ^g_\|/_   ^G_\|/_    ^g_\|/_   ^G_\|/_   ^g_\|/_
+^G_\|/_   ^g_\|/_   ^G_\|/_    ^g_\|/_   ^G_\|/_   ^g_\|/_   ^G_\|/_   ^g_\|/_   ^G_\|/_
+^g_\|/_   ^G_\|/_   ^g_\|/_   ^G_\|/_   ^g_\|/_   ^G_\|/_    ^g_\|/_   ^G_\|/_   ^g_\|/_
+^G_\|/_   ^g_\|/_   ^G_\|/_    ^g_\|/_   ^G_\|/_   ^g_\|/_   ^G_\|/_   ^g_\|/_   ^G_\|/_
+^g_\|/_   ^G_\|/_   ^g_\|/_   ^G_\|/_   ^g_\|/_   ^G_\|/_    ^g_\|/_   ^G_\|/_   ^g_\|/_
+^G_\|/_   ^g_\|/_   ^G_\|/_    ^g_\|/_   ^G_\|/_   ^g_\|/_   ^G_\|/_   ^g_\|/_   ^G_\|/_
+^g_\|/_   ^G_\|/_   ^g_\|/_   ^G_\|/_   ^g_\|/_   ^G_\|/_    ^N 
+~
+Flags:	1000000000000011000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT down]
+	ToVnum:	1000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

@@ -1,0 +1,45 @@
+DISPLAY PROMPT
+
+These commands may be used to change one's current prompt.  Prompts have been
+made completely customizable, and can show any number of things.  The
+following are valid variables and substitutes:
+
+  @a - astral pool
+  @b - ballistic
+  @c - combat pool
+  @C - persona condition
+  @d - dodge pool, @D - body pool
+  @e - current active memory, @E - total active memory
+  @f - casting pool, @F - drain pool
+  @g - current ammo of primary weapon, @G - max ammo of primary weapon
+  @h - hacking pool
+  @H - current hour
+  @i - impact
+  @k - karma
+  @l - weight carried, @L - max weight to carry
+  @m - mental, @M - max mental
+  @n - nuyen
+  @o - offense pool
+  @p - physical, @P - max physical
+  @r - current storage memory, @R - total storage memory
+  @s - current ammo of secondary weapon, @S - max ammo of secondary weapon
+  @t - magic pool
+  @T - current number of sustained spells
+  @u - spell defense pool
+  @U - reflection pool
+  @w - invis level (immortals only)
+  @W - incog level (immortals only)
+  @v - vnum of current room (immortals only)
+  @z - currently switched zone number (immortals only)
+  @@ - @
+
+Color codes may also be used in prompts.  For instance,
+
+^c< 10P 10M > prompt [^^B@p/@PP^^n|^^Y@m/@MM^^n (@o/@d)]-^n
+
+would produce a prompt similar to:
+
+[^B10/10P^n|^Y8/10M^n (3/2)]-
+
+^WSee Also: ANSI COLOR, TOGGLE^n
+

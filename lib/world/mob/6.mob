@@ -1,0 +1,193 @@
+#600
+Keywords:	driver cab taxi man chubby
+Name:	a cab driver
+RoomDesc:$
+The driver spins his way through the city, happily puffing on a doobie. 
+
+~
+LookDesc:$
+The Cab driver is pretty handsome. Ooooooh yesss! Ain't he pretty! Sweat, dirt
+and city pollution cover his skin like a thirty day old clingfilm suit. He
+reeks of dope smoke and soybeer, mixing with scum not worth your shite on a
+bad day. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000011011
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	25
+	Impact:	25
+[SKILLS]
+BREAK
+#650
+Keywords:	cab driver taxi elven
+Name:	an elven cab driver
+RoomDesc:$
+The driver spins his way through the city, occasionally sipping his coffee. 
+
+~
+LookDesc:$
+The cab driver is an elf, and kind of scruffy looking in a Alice Cooper sort
+of way. He wears a black cabbie hat and has long black hair that is rarely if
+ever combed.  He drives and acts with a little twitchiness, common to those
+who are addicted to caffeine. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000011010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	25
+	Impact:	25
+[SKILLS]
+BREAK
+#665
+Keywords:	Zack big guy jerk
+Name:	Zack
+RoomDesc:$
+You see a big jerk drinking here. 
+
+~
+LookDesc:$
+This is Zack, Emily's ex. He's a big guy with a lot of muscles. He looks at
+you with a sneer that you want to smack clear off his face. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	4
+	Int:	6
+	Wil:	4
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	6
+	Impact:	4
+	Cash:	1000
+	Bank:	500
+[SKILLS]
+	unarmed combat:	9
+	:	2
+	:	2
+	:	1
+	:	2
+BREAK
+#667
+Keywords:	Sherriff Barnum
+Name:	Sherriff Barnum
+RoomDesc:$
+ Sherriff Barnum is here, grinning and nodding. 
+
+~
+LookDesc:$
+You've heard about this guy and you don't like him. Sherriff Barnum is
+renouned for his mistreatment of prisoners, and there are rumors about the
+things that he likes to do to deckers. Especially to YOUNG deckers. He works
+for UCAS, and rumor has it that they sent him in to break up a UB cell in
+Pittsburgh, and that he succeeded single-handedly. The autopsy reports on the
+former UB cultists were sealed...rumors are that he did "unspeakable things"
+to the corpses. The thought of this guy doing these things to your corpse
+sends shivers up your spine. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000010000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	6
+	Str:	8
+	Cha:	2
+	Int:	3
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	100
+	Ballistic:	7
+	Impact:	4
+[SKILLS]
+	unarmed combat:	10
+	clubs:	10
+	interrogation:	8
+	assault rifles:	9
+BREAK
+#668
+Keywords:	elf guard elite soldier
+Name:	elite Peace Guard solidier
+RoomDesc:$
+An elite member of the Peace Guard watches this area. 
+
+~
+LookDesc:$
+This is an elite member of the Peace Guard. You get the sense that she could
+probably kill you before you had a chance to draw your weapon. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	15
+	Str:	6
+	Cha:	8
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	55
+[SKILLS]
+	edged weapons:	12
+	:	3
+	:	2
+	pistols:	12
+BREAK
+END

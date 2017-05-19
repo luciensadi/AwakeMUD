@@ -1,0 +1,65 @@
+CUSTOMIZE
+
+Usage: ^gCUSTOMIZE <reflection/persona/physical/background>^n
+
+This allows you to customize the three descriptions you may have in Awake: your
+Astral Reflection, your physical appearance, and your Matrix Persona. With
+this command, you can customize all of their characteristics. You can also use
+it to write a character background. This is visible only to imms and may come
+into use during imm runs.
+
+^C1) Alias:^n
+This is for the keywords that will work for interaction with others in
+the same room as you.  Always make sure your name is one of the aliases
+in the list.
+
+^C2) Short Description:^n
+This is what you will appear as, the 'name' of you in the room.  This is
+not the same as your character name, in fact it is preferred to be
+something descriptive of your character, like for example:
+
+^cA hairy stout elf with yellow eyes^n
+
+^C3) Room Description:^n
+This is what people will see when they glance in a room that you are
+present in.  Like for example:
+
+^cA hairy elf covered in tattoos is standing here.^n
+
+If you are customizing your physical description, this is replaced with
+voice. For example:
+
+^cA deep throaty male voice^n
+
+^C4) Look Description:^n
+This is the description people will see when they look directly at you.
+We suggest you go crazy with your creativity and make a nice description
+that covers many details about your character.
+
+To end the description editors, you simply type '@' alone on
+the last line.  To exit the customize menu type 'q' to quit.
+
+^C5) Arriving Text:^n
+This is the text that people see when you arrive in a room. The format is:
+^c<Short Description> <Arriving Text> the <Direction>^n 
+For Example a leaving description of:
+^ccasually strolls from^n
+Would display the message:
+^cA hairy elf covered in tattoos casually strolls from the north.^n
+
+^C6) Leaving Text:^n
+This is the text that people see when you leave a room. The format is:
+^c<Short Description> <Leaving Text> <Direction>^n
+For Example a leaving description of:
+^csneaks^n
+Would display the message:
+^cA hairy elf covered in tattoos sneaks south.^n
+
+^C6) Height:
+7) Weight:^n
+These are used to set your height and weight, you can choose the rough size
+your character is and it will randomly generate the height and weight within
+those limits. You cannot set this once you are out of Newbie status.
+
+^WSee Also: DESCRIPTION, REMEMBER, POSITION^n
+

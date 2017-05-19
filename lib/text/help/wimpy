@@ -1,0 +1,19 @@
+WIMPY
+
+Use the "wimpy" command to automatically wimp out of a fight.
+
+^c< 10P 10M > wimpy 5^n
+
+will make your character automatically ^Wflee^n a fight if he/she has less
+than 6 physical points.
+
+^c< 10P 10M > wimpy 0^n
+
+turns off wimpy mode.
+
+^c< 10P 10M > wimpy^n
+
+shows you your current wimpy status.
+
+^WSee also: TOGGLE, FLEE^n
+

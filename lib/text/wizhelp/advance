@@ -1,0 +1,7 @@
+ADVANCE
+
+Usage: ^gADVANCE <character> <level>^n
+
+This advances the specified character to the specified level.  And since only
+Owners have access to this command, this help file is rather useless.
+

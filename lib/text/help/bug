@@ -1,0 +1,11 @@
+BUG TYPO IDEA                  
+
+Usage: ^g{BUG | TYPO | IDEA} <text>^n
+
+For making useful suggestions to the Powers that Be. When using this
+command try and be as thorough as possible. If reporting a bug include
+enough information to replicate the bug.
+
+^c< 10P 10M > bug the entire game crashes when I type 'put bag in bag'
+< 10P 10M > idea make a restaurant in Club Penumbra
+< 10P 10M > typo 'sence' should be spelled 'sense'^n

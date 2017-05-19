@@ -1,0 +1,14 @@
+MAGIC "MAGIC ATTRIBUTE"
+
+Your magic attribute is a rating of how much magical energy you can control.
+If you are a mundane, you are a mundane for life, ie, you'll never be able to
+raise your magic rating above 0.  Your magic rating determines how powerful
+a spell you can ^Wcast^n, so with a magic rating of 6 you can safely cast force
+6 spells and take only mental drain.  If you cast a spell above your magic
+rating, you will take physical damage as the power overloads your mind
+and bursts cells and blood vessels.  Your magic rating also increases your
+ability to perform in astral space.  You can raise your magic rating by
+becoming an initiate or joining a magical group.
+
+^WSee Also: ESSENCE, CAST, MAGIC LOSS^n
+

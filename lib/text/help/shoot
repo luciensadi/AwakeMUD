@@ -1,0 +1,17 @@
+SHOOT
+
+Usage: ^gSHOOT <target> <direction>^n
+
+This command allows you to shoot someone from a distance. You can shoot in any
+of the existing directions. You can only shoot up to four rooms away, which
+depends on sight magnification or eye cyberware that would allow you to see
+further. You can only shoot as far as you can scan, and as far as your gun
+will reach. Thus, pistols will obviously not reach as far as sniper rifles,
+no matter how good your sight is. Be wary however, because some mobs will not
+tolerate being shot at, and will come right after you. At the same time, others
+will just turn and run. To use:
+
+^c< 10P 10M > shoot duhamel east^n
+
+^WSee Also: RANGED COMBAT, MODE, RECOIL^n
+

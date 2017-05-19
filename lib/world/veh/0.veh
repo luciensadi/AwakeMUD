@@ -1,0 +1,30 @@
+#0
+Name:	banshee gmc huge
+ShortDesc:	a Banshee
+RoomDesc:	A huge GMC Banshee is parked here.
+LongDesc:$
+It's a fairly gigantic vehicle, perfectly suited for efficient military
+insertion and support in hostile zones. Armed to the teeth and suited with
+enough armour to withstand a fairly vicious firefight, they are perfect for
+black ops and full field duty alike. 
+~
+Inside:$
+
+~
+Leaving:	leaves
+Arriving:	arrives
+Handling:	6
+Speed:	9
+Accel:	8
+Body:	10
+Armour:	10
+Pilot:	0
+Sig:	0
+Autonav:	0
+Seating:	2
+Load:	0
+Cost:	245000000
+Type:	0
+Flags:	0
+BREAK
+END

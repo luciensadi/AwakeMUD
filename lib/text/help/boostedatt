@@ -1,0 +1,13 @@
+"BOOSTED ATTRIBUTES"
+
+Usage: ^gBOOST <QUICKNESS/STRENGTH/BODY>^n
+
+This is a limited version of the Improved Attribute power. Although
+much cheaper it only lasts for a limited time which depends on the
+attribute being boosted and the user's magic rating. Once the boost
+wears off the user risks facing drain depending how high their
+attribute is boosted.
+
+The power must first be activated before you can boost with it.
+
+^WSee Also: ACTIVATE^n

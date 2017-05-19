@@ -1,0 +1,14 @@
+PRIORITIES
+
+All players have 5 priority slots, labelled from A to E (highest to lowest,
+respectively), and 5 priorities: attributes, magic, race, resources, skills.
+The higher an item is located on the priorities list the larger the gain in
+that particular area will be. 
+
+Full mages must take magic at priority A. Aspected mages or adepts can take
+magic at priority B instead.
+
+Race is automatically set during chargen depending on the race you choose.
+
+
+^WSee Also: ATTRIBUTES^n

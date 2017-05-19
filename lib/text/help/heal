@@ -1,0 +1,11 @@
+HEAL
+
+Usage: ^gHEAL <target> <damage Level>^n
+
+This command uses an adepts empathic healing power to heal a target
+of physical wounds by transfering them to the adept. The target must
+be lying down or unconcious and the adept must be able to physically
+touch them. An adept cannot take more damage from a target than he could
+otherwise sustain without becoming mortally wounded.
+
+^WSee Also: EMPATHIC HEALING^n

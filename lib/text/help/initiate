@@ -1,0 +1,12 @@
+INITIATE
+
+Usage: ^gINITIATE^n
+
+This command is used to purchase an initiation and use the initiation
+menu. Here they can chose to take a metamagic technique, change their 
+astral signature or shed a gaes.
+
+You will not be charged until you select your option so you can
+quit from it without penalty.
+
+^WSee Also: INITIATION, TRAIN, METAMAGIC^n

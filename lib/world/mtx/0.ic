@@ -1,0 +1,11 @@
+#0
+Name:	An unfinished IC
+LongDesc:	An unfinished IC guards the node.
+Description:$
+It looks like an unfinished IC.
+~
+Rating:	0
+Type:	^WCrippler^n
+Subtype:	0
+BREAK
+END

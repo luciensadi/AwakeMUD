@@ -1,0 +1,13 @@
+LOCATE
+
+Test: INDEX
+Utility: BROWSE
+Usage: ^gLOCATE <host/file/ic/decker/paydata> <name>^n
+
+This is a matrix command used for finding objects in the matrix. Searching
+for Paydata, IC and Deckers don't require arguments, but host and file do.
+You will need a rough idea of what you're looking for to be able to
+find anything, reading the host description can give you clues.
+
+^WSee ALso: LOGON, MATRIX, UTILITIES, PROGRAMS^n
+

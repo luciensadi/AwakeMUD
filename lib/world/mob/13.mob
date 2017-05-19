@@ -1,0 +1,30 @@
+#1300
+Keywords:	crazy lenny
+Name:	Crazy Lenny
+RoomDesc:$
+An unfinished mob stands here.
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+BREAK
+END

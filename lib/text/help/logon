@@ -1,0 +1,13 @@
+LOGON
+
+Test: ACCESS
+Utility: DECEPTION
+Usage: ^gLOGON <address>
+       LOGON RTG/LTG/PLTG^n
+
+This matrix command is used to gain access to hosts. Logging on to
+an RTG, LTG or PLTG require no arguments other than those. To find
+the address of a host you will need to use the ^WLOCATE^n command.
+
+^WSee Also: LOCATE, MATRIX, UTILITIES, PROGRAMS^n
+

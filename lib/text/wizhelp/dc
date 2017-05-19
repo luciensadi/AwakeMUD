@@ -1,0 +1,12 @@
+DC
+
+Usage: ^gDC <player/*>^n
+
+This disconnects a user from the MUD itself. The command is used by typing
+"dc" and then the name of the player.  There is also "dc *", which
+disconnects all connected sockets which do not hold playing characters.
+This command is not to be abused, with result of severe punishment. It is
+used only for dire situations or other circumstances that call for the
+disconnection of a player.
+
+

@@ -1,0 +1,8 @@
+BR "Build Repair" BR/CAR BR/BIKE BR/DRONE BR/TRUCK
+
+Linked Attribute: ^gIntelligence^n
+
+Build/Repair skills are used to build, repair and upgrade various
+items, depending on the skill.
+
+^WSee Also: UPGRADE, REPAIR^n

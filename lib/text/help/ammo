@@ -1,0 +1,31 @@
+AMMUNITION AMMO
+
+There are 6 major types of ammunition in Shadowrun. Normal
+ammunition is just that, it has no special effects. The others
+are:
+
+ o APDS (Armour Piercing Discarding Sabot)
+   APDS is used to blast through heavily armoured enemies. It
+   halves their ballistic armour rating.
+ 
+ o Explosive
+   Explosive rounds are solid slugs that are designed to fragment
+   once they hit their target. This increases the Power by 1.
+
+ o EX (Enhanced eXplosive)
+   EX is a more damaging version of the Explosive ammunition. It
+   increases the Power by 2.
+
+ o Flechette
+   Flechette ammunition fragments as it leaves the barrel, causing
+   massive damage to unarmoured opponents, but is easily stopped by
+   most armour. It increases the damage level by 1, but the Power
+   is lowered by either the ballistic armour of the target, or twice
+   their impact, whichever is higher.
+
+ o Gel
+   Gel ammunition is non-lethal. They are designed to take down targets
+   without killing them. The Power of all rounds fired is reduced by 2
+   and do stun damage.
+
+^WSee Also: RELOAD^n

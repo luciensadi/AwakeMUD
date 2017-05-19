@@ -1,0 +1,9 @@
+DATASTORE DS
+
+A Datastore. Datastores are usually the most valuable parts of any system,
+second to the CPU. Datastores hold information, or files. From any decker's
+point of view, this is where all the loot is. Datastores also tend to be
+heavily loaded with protective IC.
+
+^WSee Also: MATRIX, DECKER, UPLOAD, DOWNLOAD^n
+

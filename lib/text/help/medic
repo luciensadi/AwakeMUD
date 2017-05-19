@@ -1,0 +1,10 @@
+MEDIC
+
+A medic utility repairs damage to the persona. The higher the program's
+rating, the greater the chance of extensive repair. A medic utility
+degrades after use, but the rating can be restored by loading in a fresh
+copy from storage memory during the run. The greater the damage done, the
+harder it is for the Medic to heal.
+
+^WSee Also: UTILITIES^n
+

@@ -1,0 +1,518 @@
+#700
+Keywords:	piggy bank
+Name:	a piggy bank
+RoomDesc:$
+a piggy bank stands here 
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	999999
+[SKILLS]
+BREAK
+#701
+Keywords:	troll marvin stubbins
+Name:	Marvin Stubbins
+RoomDesc:$
+A large troll is standing here. 
+
+~
+LookDesc:$
+Marvin Stubbins is almost a legend on the streets - mainly because he was one
+of the best deckers around and just happened to be a troll.  Since he had an
+unfortunate encounter with some Black IC, Marvin has been working as a fixer
+on the streets. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000000001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	280
+	Weight:	250
+	Ballistic:	40
+	Impact:	40
+[SKILLS]
+	unarmed combat:	10
+	electronics:	10
+	computers:	12
+BREAK
+#702
+Keywords:	shadowrunner runner
+Name:	a shadowrunner
+RoomDesc:$
+A shadowrunner slouches here. 
+
+~
+LookDesc:$
+He looks gruff and dirty, but quite capable of killing you. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	2
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	93
+[SKILLS]
+	firearms:	6
+	unarmed combat:	6
+BREAK
+#703
+Keywords:	dog cyberdog
+Name:	a cyberdog
+RoomDesc:$
+A dog with a crazed look in its eyes stands here. 
+
+~
+LookDesc:$
+It looks like someone has taken a huge Rottweiler and done horrible things to
+it.  It has been scarred and operated on to the point where it might actually
+be more metal than meat. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	8
+	Str:	6
+	Cha:	1
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	110
+	Weight:	60
+	Ballistic:	5
+	Impact:	3
+	Karma:	20
+[SKILLS]
+	unarmed combat:	6
+BREAK
+#704
+Keywords:	cyberdog dog
+Name:	a cyberdog
+RoomDesc:$
+A scary looking dog snarls at you. 
+
+~
+LookDesc:$
+It looks like someone has taken this poor doggy and crammed it full of nasty
+cyberware.  It's really pissed off and tough as a result. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	8
+	Str:	5
+	Cha:	1
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	110
+	Weight:	60
+	Ballistic:	5
+	Impact:	5
+	Karma:	20
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#705
+Keywords:	snowhawk elf mage metamage
+Name:	Snowhawk
+RoomDesc:$
+^WAn extraordinarily handsome elf stands here, with a glowing aura.^n 
+
+~
+LookDesc:$
+Long silver white hair, and violet eyes, his appearance though unique is
+nearly angelic.  He moves with such grace that you never before seen, and has
+a natural air of confidence and form.  He wears a very elegantly designed
+white italian suit, with a silver and black string-tie that has a silvery tie
+clasp with an odd glow.  He wears an emerald ring on his right hand, and his
+long silver hair is tied in a ponytail.  His shoes are black leather dress
+shoes of an elegant and unique design. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101110000000011010
+AffFlags:	1000001001000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	11
+	Str:	8
+	Cha:	15
+	Int:	8
+	Wil:	20
+	Mag:	12
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	4
+	Ballistic:	50
+	Impact:	50
+	Cash:	20000
+	Bank:	25000
+[SKILLS]
+	sorcery:	15
+	elf etiquette:	12
+	street etiquette:	10
+	conjuring:	13
+	pistols:	6
+BREAK
+#706
+Keywords:	zeddik alien evil beast hideous monster scaly slimy slithering tentacles
+Name:	a Zeddik drone
+RoomDesc:$
+A massive, hideous, slimy creature with twelve tentacles stands here looking
+for something to destroy. 
+
+~
+LookDesc:$
+The first thing you notice is the smell.  The smell of raw sewage, to the
+exponentiation of itself, causes your lungs to clog and makes you cough.  You
+gaze upon the creature, and it has scales, dripping and oozing with slime.  It
+has twelve tentacles, perfectly smooth, scaly and slimy, with a hardened point
+on the end of each.  Its eyes are a dull red, and it hisses as it gazes
+around, looking for something, anything to destroy. 
+~
+ArriveMsg:	hisses, lumbering in from
+LeaveMsg:	hisses hideously, and lumbers off
+MobFlags:	101110000000001010
+AffFlags:	1000000000001000001000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	40
+	Qui:	40
+	Str:	40
+	Cha:	1
+	Int:	12
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	750
+	Weight:	512
+	Ballistic:	50
+	Impact:	50
+[SKILLS]
+	unarmed combat:	50
+	armed combat:	50
+	firearms:	50
+	gunnery:	50
+	:	4
+BREAK
+#707
+Keywords:	newcomer alcoholic AA drunk
+Name:	an AA Newcomer
+RoomDesc:$
+An AA newcomer is pouring people's coffee. 
+
+~
+LookDesc:$
+His clothes are ragged, he smells of vomit, alcohol, and urine.  Looks like
+he's in the right place.  He comes up to you, twitching and asks, "can I pour
+you some coffee?" 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	2
+	Cha:	2
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	65
+	Cash:	2
+[SKILLS]
+BREAK
+#708
+Keywords:	white giant gator alligator
+Name:	a giant white alligator
+RoomDesc:$
+A giant white alligator stands here. 
+
+~
+LookDesc:$
+As you look at the giant white gator you realize the more than earthly
+intelligence lurks behind those cold yellow eyes. He is huge and only there to
+stop intruders from defiling the home of the person that freed him from
+bondage and made him a free spirit. 
+~
+ArriveMsg:	crawls from
+LeaveMsg:	crawls 
+MobFlags:	111000001001000
+AffFlags:	11000000000000010
+Race:	Spirit
+Gender:	Neutral
+DefaultPos:	Sitting
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	25
+	Qui:	20
+	Str:	30
+	Cha:	7
+	Int:	15
+	Wil:	15
+	Mag:	10
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	12
+	Impact:	12
+[SKILLS]
+	unarmed combat:	8
+	:	3
+	stealth:	8
+	:	8
+	:	4
+BREAK
+#709
+Keywords:	Smiling mass dermal deposits slanted eyes shank
+Name:	Your Cell Mate
+RoomDesc:$
+A smiling mass of dermal deposits with slanted eyes and a shank resting in his
+hands stands here. 
+
+~
+LookDesc:$
+Oh look its a Troll...a Samoan troll! Now as you know Samoans are already huge
+humans who easily rival many Orks in size and this Troll happens to be Samoan
+as well as a Troll making him quite a bit larger than your average troll. His
+arms are huge and look capable of crushing you with one blow as well as the
+curling ram horns atop his head and the dermal deposits which rip out of his
+ussually smooth brown skin in odd angles. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	14
+	Qui:	6
+	Str:	14
+	Cha:	1
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	unarmed combat:	10
+BREAK
+#710
+Keywords:	Fire Elemental Floats Bored Hell
+Name:	A Fire Watcher
+RoomDesc:$
+A fire elemental floats here looking bored as hell 
+
+~
+LookDesc:$
+Its a humanoid Lizard covered in flames and currently this watcher looks
+really bored. Theres really not much for a fire elemental to do to pass the
+time except watch your cellmate get friendly with you. A part of you feels
+sorry fo this creature's shitty lot in life...than you remember that he's here
+to screw you over and all pity is washed from your mind 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001010000000001010
+AffFlags:	0
+Race:	Elemental
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	50
+	Str:	3
+	Cha:	1
+	Int:	3
+	Wil:	6
+	Mag:	20
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	5
+[SKILLS]
+	sorcery:	10
+	unarmed combat:	10
+BREAK
+#750
+Keywords:	dick clarke headless body
+Name:	the headless body of Dick Clarke
+RoomDesc:$
+the headless body of Dick Clarke stands here. 
+
+~
+LookDesc:$
+Holy Shit! It's Dick Clarke's reanimated body - and it doesn't have a head! 
+~
+ArriveMsg:	shambles in from
+LeaveMsg:	shambles
+MobFlags:	1010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	20
+	Str:	20
+	Cha:	20
+	Int:	20
+	Wil:	20
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	100
+	Ballistic:	20
+	Impact:	20
+	Cash:	10000
+[SKILLS]
+	unarmed combat:	10
+BREAK
+#777
+Keywords:	timothy shin small black man
+Name:	Timothy Shin
+RoomDesc:$
+A small man in black robes stands by the doorway at the north. 
+
+~
+LookDesc:$
+He is clearly of asian heritage, though not a fullblooded one himself. His
+face is blank as he seemingly stands guard by the shimmering doorway. The
+robes covering his body seem to hide any hint of what lays beneath. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000100000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	16
+[POINTS]
+	Height:	162
+	Weight:	55
+[SKILLS]
+	sorcery:	12
+BREAK
+#778
+Keywords:	master meditating
+Name:	The Master
+RoomDesc:$
+The Master sits in the middle of the room meditating. 
+
+~
+LookDesc:$
+The Master sits in the center of the room engrossed in his meditation. The
+hood of his robe is down uncovering his dark black hair and youthful features.
+He doesn't seem to be a day over 21 even though his knowledge of the Magical
+Arts far exceeds that of nearly all in the metroplex. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000100000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	1
+	Str:	2
+	Cha:	12
+	Int:	10
+	Wil:	12
+	Mag:	28
+[POINTS]
+	Height:	181
+	Weight:	67
+	Level:	2
+[SKILLS]
+	sorcery:	18
+BREAK
+END

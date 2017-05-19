@@ -1,0 +1,11 @@
+SOFTWARE
+
+Usage: ^gSOFTWARE^n
+
+This will show any installed programs and parts on a cyberdeck. Also
+it will show the various ratings. Inside the matrix it will also
+show any programs loaded into active memory. Any program postfixed with
+an asterisk will load by default when you connect to the matrix.
+
+^WSee Also: CYBERDECK, MATRIX, DECKERS, PROGRAMS, UTILITIES, DEFAULT, LOAD^n
+

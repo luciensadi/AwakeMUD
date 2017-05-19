@@ -1,0 +1,10 @@
+"ASSAULT CANNONS" "HEAVY WEAPONS" "MACHINE GUNS"
+
+Linked Attribute: ^gStrength^n
+
+Heavy weapons comprise of everything the size of a machine gun or greater.
+This includes assault cannons and miniguns aswell as machine guns. You need 
+atleast 8 Strength and 8 Body to wield an assault cannon without a mount of 
+some kind (either a vehicle or a gyromount).
+
+^WSee Also: GYROMOUNT^n

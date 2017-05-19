@@ -1,0 +1,25 @@
+#700
+Keeper:	707
+ProfitBuy:	1.000000
+ProfitSell:	1.000000
+Random:	3
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Um, I dunno.
+NoSuchItemPlayer:	Erm, sit down and listen I think its gonna be a good meeting.
+NoNuyen:	Seventh Tradition says, "Every AA Group ought to be fully self-supporting, declining outside contributions."
+DoesntBuy:	This ain't a shop.
+Buy:	That's %d nuyen.  Keep coming back!
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	17112
+		Type:	Always
+		Stock:	0
+BREAK
+END

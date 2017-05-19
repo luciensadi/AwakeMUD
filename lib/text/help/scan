@@ -1,0 +1,27 @@
+SCAN
+
+Usage: ^gSCAN <direction>^n
+
+Scan is used to look in every room adjacent to you, through open exits but
+not through closed ones. If a mob exists in any of the rooms scanned, it
+will show up after you scan. Scanning is the most useful utility for
+^WRanged Combat^n as it allows you to shoot mobs without being in the same
+room as you. All players can only scan one room away from themselves, but
+one can improve your range up to four rooms away from you with cybernetic
+enhancements. The better then enhancement, the further you can see.
+With enhancements, you can only scan in one direction at a time.
+
+Also
+
+Test: SPECIAL
+Utility: SCANNER
+Usage: ^gSCAN <decker>^n
+
+This command reveals extra information about a decker than just using
+the analyze icon command. The target for this test is the opposing 
+decker's masking and sleaze minus your scanner utility rating. This does not
+add to your security tally. The more successes scored the more information
+that will be revealed. It can reveals the ratings of the MPCP, Persona
+Programs, Condition and Response Increases of the opposing decker.
+
+^WSee Also: MATRIX, UTILITIES^n

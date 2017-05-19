@@ -1,0 +1,24 @@
+"MAP INDEX" MAP
+
+The map index is as follows, keywords for viewing the various maps available
+in the Awake Atlas Database.  To view the map of the given area, just type
+"help <keyword>"
+
+^rNote: this database is a work in progress and is incomplete.  Do not report
+missing entries as bugs or the like.  Thank you.  Until this system is complete, 
+keywords that are included to date will have a ^Y+^r symbol by them.  Partial
+entries have a ^Yo^r symbol by them.^n
+
+Keyword                                  Location Viewed
+============================================================================
+MAP OF SEATTLE^Y+^n                      Downtown Seattle
+I-5^Yo^n                                 Interstate 5
+I-405                                    Interstate 405
+I-90                                     Interstate 90
+TACOMA^Y+^n                              Tacoma
+MAP OF REDMOND^Y+^n                      Redmond Barrens
+PUYALLUP^Y+^n                            Puyallup Barrens and Tarislar  
+MAP OF COUNCIL ISLAND^Y+^n               Council Island
+MAP OF PORTLAND                          Downtown Portland
+
+^cMore maps will be added as areas are laid out.^n

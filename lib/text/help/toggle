@@ -1,0 +1,28 @@
+TOGGLE
+
+TOGGLE shows you the current values of various toggles available on the MUD.
+Use "toggle _____" to change the value of one of the available options.
+Some common toggle features areas follows:
+
+afk         Sets the AFK bit, which tells others that you are AFK
+autoexits   Shows the obvious exits after the room description
+compact     Represses content expansion in equipment command
+echo        Tells and broadcasts are echoed to your screen
+fightgag    Hides the fight details between other characters
+movegag     Hides the movement of other characters
+noshout     Represses shouts from being shown
+notell      Does not let others ^Wtell^n you anything
+pker        Turns on the PKER flag, meaning you can kill and be killed by
+            other players.  Note: once turned on, you can NOT turn this off.
+hired       Toggles the HIRED flag, which assures players/imms running
+            (non-automated) runs that you are taking part in it.
+autoassist  You will automatically join in any fights a group member is
+            taking part in.
+driveby     You will take part in any driveby's ordered by the driver of
+            the car you are in.
+longexits   Autoexits will display exits as though you used the exit command
+            instead of just directions.
+hardcore    Hardcore Mode is explained in HELP HARDCORE
+
+^WSee Also: DISPLAY, WIMPY, PKER, HARDCORE^n
+

@@ -1,0 +1,10 @@
+SPEED IDLE CRUISE SPEEDING MAX
+
+Usage: ^gSPEED <idle/cruise/speeding/max>^n
+
+The speed command is used to toggle between speeds when driving.  The
+faster you are moving, the harder your driving tests are, but the harder
+you are to hit.
+
+^WSee also: VEHICLES, RIGGER, DRIVE, RIG, CONTROL, SUBSCRIBE
+

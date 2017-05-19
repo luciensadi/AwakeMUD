@@ -1,0 +1,13 @@
+"ESSENCE INDEX"
+
+Commonly confused with Essence, the Essence Index determines how many points 
+of Bioware a runner's body can accept before it has adverse effects on the body.
+Essence Index is determined by the current Essence rating + 3.  For example, 
+someone with an Essence of 6 has an Essence Index of 9. Once Bioware exceeds the 
+Essence Index, damage overflow ratings and healing rates are reduced with every 
+point of Bioware that exceeds the EI.
+For example, if the total bio index lost is 5 points, and your essence index is 4, 
+then you lose 1 point of physical overflow damage and your healing rates are reduced.
+
+^WSee also: ESSENCE, BIOWARE INDEX, ATTRIBUTES^n
+

@@ -1,0 +1,10 @@
+BYPASS
+
+Usage: ^gBYPASS <direction>^n
+
+This is the modern version of the old "pick" command. Nowadays, noone uses
+a lockpick, they use an electronics kit. With such a kit, one can "bypass"
+locks. This can only be used on regular doors, not car doors.
+
+Bypassing the maglock authentication allows you to lock or unlock maglocked
+doors.

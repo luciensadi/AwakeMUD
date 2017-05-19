@@ -1,0 +1,10 @@
+RETRACT
+
+Usage: ^gRETRACT <Cyberware>^n
+
+This command is used to extend and retract any retractable cyberware you
+have. While they are retracted they are not visible except to people who
+assense you and any combat will use your fists and deal stun damage. Once 
+they are extended you will use them in any hand to hand combat, using the 
+Cyber Implants skill.
+

@@ -1,0 +1,16 @@
+AT
+
+Usage: ^gAT <mob/player> <commands>^n
+
+This command allows the user to perform an action, in a room that he is not
+physically in. This command, albeit near impossible to explain, is incredible
+fun.  For example, if you were in room 1234 and Pook was in room 4065:
+
+^c< 10P 10 M > at pook lick pook^n
+
+- You would not move, but Pook would see "Bob licks you."
+
+This command can be used with commands such as look, kill, etc.
+
+^WSee Also: SOCIALS^n
+

@@ -1,0 +1,11 @@
+LODGE
+
+Lodges are where a Shaman performs powerful magic and both designs and learns
+spells. They are bound to the shaman that created them and are dedicated to 
+that shamans totem. Any shaman inside a lodge is protected by an astral barrier 
+equal to the force of the lodge. It costs (force * 500) nuyen to build a lodge.
+
+Only one lodge or hermetic circle can be present in a room at any given time.
+
+^WSee Also: SHAMAN, BUILD^N
+

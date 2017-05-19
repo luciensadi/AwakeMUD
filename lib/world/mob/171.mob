@@ -1,0 +1,1093 @@
+#17100
+Keywords:	labu indian stuffer shack clerk
+Name:	Labu the Stuffer Shack clerk
+RoomDesc:$
+An Indian man stands here behind the counter. 
+
+~
+LookDesc:$
+A tall lanky Indian, with a smile on his face and a Stuffer Shack uniform. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	65
+	Cash:	150
+	Bank:	150
+[SKILLS]
+BREAK
+#17101
+Keywords:	ed edwin barkeep bartender
+Name:	Ed the Bartender
+RoomDesc:$
+Ed the bartender looks at you gravely as he polishes a mug. 
+
+~
+LookDesc:$
+Wearing a white shirt, black tie, and apron.  He has dark thick curly black
+hair with some graying along the sides, thick sideburns that go down to his
+earlobes, and is wearing an ankh-shaped earring. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	2
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	177
+	Weight:	88
+	Ballistic:	10
+	Impact:	10
+	Cash:	1000
+	Bank:	1000
+[SKILLS]
+BREAK
+#17102
+Keywords:	vampire vampiress club habitue
+Name:	a vampiress
+RoomDesc:$
+A habitue of Krishna's stands here looking goth. 
+
+~
+LookDesc:$
+She is wearing all black, with spiderweb stockings, a patent leather dress,
+and black hair, and has pale white skin. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	12
+	Str:	12
+	Cha:	12
+	Int:	12
+	Wil:	12
+	Mag:	12
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	8
+	Impact:	6
+[SKILLS]
+	unarmed combat:	10
+	armed combat:	10
+	sorcery:	12
+BREAK
+#17103
+Keywords:	herbie talismonger man shaman
+Name:	Herbie the Talismonger
+RoomDesc:$
+Herbie stands here, mixing up an herbal potion. 
+
+~
+LookDesc:$
+Herbie has long blond dreadlocks, and is wearing a rastafarian colored shirt.
+He has fetishes of what would appear to be wolven figures around his neck. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	7
+	Wil:	10
+	Mag:	9
+[POINTS]
+	Height:	175
+	Weight:	98
+	Level:	1
+	Ballistic:	14
+	Impact:	14
+	Cash:	120000
+	Bank:	320000
+[SKILLS]
+	sorcery:	9
+	unarmed combat:	10
+	:	3
+BREAK
+#17104
+Keywords:	figg trainer
+Name:	Figg
+RoomDesc:$
+Figg stands here on a rubber mat, waiting for someone to train. 
+
+~
+LookDesc:$
+Figg is a tall, heavily tanned man who looks like he might have once been a
+hopeful for the Mr. Universe competition, with tattoo's all over his body and
+dark hair and mustache.  He wears a septum ring on his nose. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	6
+	Str:	6
+	Cha:	2
+	Int:	2
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	95
+	Level:	1
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	athletics:	10
+BREAK
+#17105
+Keywords:	reporter ksaf taylor white
+Name:	KSAF Reporter Taylor White
+RoomDesc:$
+A reporter stands here. 
+
+~
+LookDesc:$
+A short Anglo man in a three piece suit, holding a microphone. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	5
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	75
+	Ballistic:	4
+	Impact:	3
+	Cash:	1200
+	Bank:	1200
+[SKILLS]
+BREAK
+#17106
+Keywords:	paul clerk receptionist hotel manager
+Name:	Paul
+RoomDesc:$
+Paul sits behind the counter here, waiting for his next customer. 
+
+~
+LookDesc:$
+Paul is wearing a three-piece Armani suit, and has olive skin and black hair.
+His eyes are a deep hazel and he wears a mustache. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	181
+	Weight:	76
+	Ballistic:	8
+	Impact:	8
+	Bank:	200
+[SKILLS]
+BREAK
+#17107
+Keywords:	hung vietnamese man
+Name:	Hung
+RoomDesc:$
+Hung stands behind the counter here, going over inventory. 
+
+~
+LookDesc:$
+A short Vietnamese man, who knows very little English, but really knows how to
+run a store.  He is *always* busy doing something, and is the glue that keeps
+this store together. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	145
+	Weight:	53
+	Cash:	10000
+	Bank:	100000
+[SKILLS]
+	negotiation:	7
+	computers:	7
+	electronics:	7
+BREAK
+#17108
+Keywords:	sniper tir elf paladin
+Name:	a TPF Paladin Sniper
+RoomDesc:$
+An elf in a black jumpsuit points his rifle at you. 
+
+~
+LookDesc:$
+An elf, with a cold steel look in his eyes, wearing a black jumpsuit. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000001010101010100000111010
+AffFlags:	1000010100001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	8
+	Str:	5
+	Cha:	5
+	Int:	8
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	198
+	Weight:	88
+	Ballistic:	8
+	Impact:	5
+	Cash:	800
+	Karma:	75
+[SKILLS]
+	rifles:	10
+	stealth:	9
+BREAK
+#17109
+Keywords:	sniper cop lone star police man black
+Name:	a Lone Star Sniper
+RoomDesc:$
+A man in all black, wearing black makeup hides in a shadow. 
+
+~
+LookDesc:$
+He looks like he is one with the shadow he hides in. A glint of metal reveals
+that he is wielding a very powerful sniper rifle. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000011010
+AffFlags:	1000001000001000001010
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	12
+	Str:	12
+	Cha:	5
+	Int:	12
+	Wil:	20
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	80
+	Ballistic:	20
+	Impact:	20
+	Cash:	800
+[SKILLS]
+	rifles:	20
+	unarmed combat:	8
+	gunnery:	10
+BREAK
+#17110
+Keywords:	mitsuhama security guard company man
+Name:	a Mitsuhama Security guard
+RoomDesc:$
+A man in the Mitsuhama Security colors stands here at guard. 
+
+~
+LookDesc:$
+Ever vigilant, he watches for anyone and everyone who looks out of place in
+this secure corporate environment. 
+~
+ArriveMsg:	walks in from
+LeaveMsg:	walks
+MobFlags:	10000001000001011100
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	6
+	Str:	6
+	Cha:	4
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	85
+	Level:	1
+	Ballistic:	10
+	Impact:	8
+	Cash:	100
+[SKILLS]
+	sub-machine guns:	8
+	corporate etiquette:	4
+	unarmed combat:	4
+	clubs:	4
+	police procedures:	6
+BREAK
+#17111
+Keywords:	mitsuhama receptionist janine reyes beautiful woman
+Name:	Janine Reyes
+RoomDesc:$
+A beautiful woman in a business suit sits behind the reception desk. 
+
+~
+LookDesc:$
+A petite, beautiful woman, wearing a Mitsuhama corporate id on her chest.  She
+stands roughly 140 cm high, and weights 48 kg.  She is perfectly proportioned,
+and has brunette hair and emerald green eyes.  She looks rather busy here, as
+she keeps track of visitors who have appointments with various Mitsuhama
+executives.  A glint of metal appears on her left temple, sign of a datajack.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000011001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	3
+	Cha:	5
+	Int:	4
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	140
+	Weight:	48
+	Ballistic:	2
+	Impact:	1
+	Cash:	250
+	Bank:	200
+[SKILLS]
+	athletics:	2
+	unarmed combat:	2
+	corporate etiquette:	5
+BREAK
+#17112
+Keywords:	yukiya dahayoto mitsuhama executive samurai company man tall well built japanese
+Name:	Yukiya Dahayoto
+RoomDesc:$
+A tall, well built Japanese man in an expensive business suit stands here. 
+
+~
+LookDesc:$
+Tall and muscular, with a keen eye and the grace of a lion, he looks like more
+than just a typical Mitsuhama executive. When you look upon his hand you can
+see that it is brushing against the hilt of a katana, and that his hand is
+made of metal. 
+~
+ArriveMsg:	walks in from
+LeaveMsg:	walks
+MobFlags:	10101010000000011010
+AffFlags:	100010000001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	9
+	Str:	9
+	Cha:	6
+	Int:	6
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	201
+	Weight:	130
+	Ballistic:	5
+	Impact:	3
+	Bank:	200
+	Karma:	66
+[SKILLS]
+	athletics:	5
+	edged weapons:	10
+BREAK
+#17113
+Keywords:	air elemental spirit wind gust
+Name:	an air elemental
+RoomDesc:$
+A gust of wind rushes through here. 
+
+~
+LookDesc:$
+A swiftly moving gust of wind rushes through here, with an aura of bright blue
+static surrounding it. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010
+AffFlags:	0
+Race:	Elemental
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	20
+	Str:	20
+	Cha:	20
+	Int:	20
+	Wil:	20
+	Mag:	20
+[POINTS]
+	Height:	100
+	Weight:	1
+	Level:	3
+	Ballistic:	5
+	Impact:	5
+	Karma:	150
+[SKILLS]
+	unarmed combat:	20
+	sorcery:	20
+BREAK
+#17114
+Keywords:	mitsuhama security guard elite forces
+Name:	a Mitsuhama Elite Forces Security Guard
+RoomDesc:$
+A Mitsuhama Elite Forces security guard stands here, vigilant. 
+
+~
+LookDesc:$
+Wired to the hilt, this guard looks like he would jump if he saw as much as a
+cockroach that looked out of place.  He is dual-wielding submachine guns, with
+smartlinks jacked into his palms.  He is wearing a full suit of security
+armor, and watches over everything here like a hawk. 
+~
+ArriveMsg:	walks in from
+LeaveMsg:	walks
+MobFlags:	1001100000111010
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	12
+	Str:	12
+	Cha:	4
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	100
+	Ballistic:	9
+	Impact:	7
+	Cash:	20
+[SKILLS]
+	sub-machine guns:	10
+	unarmed combat:	12
+	police procedures:	8
+	assault rifles:	10
+	clubs:	12
+BREAK
+#17115
+Keywords:	kubiyano takatishi japanese mitsuhama mage robed guard
+Name:	Kubiyano Takatishi
+RoomDesc:$
+A man in a blood red robe covered in Japanese magical symbols stands here. 
+
+~
+LookDesc:$
+Tall, and wearing a blood red robe covered with Japanese sigils, with eyes of
+deep black coal.  He is tall and slender, and middle aged, and has his hair
+cropped short, in a flat-top styled haircut.  He has dragons tattoed all over
+his dark skin, and appears to have his canines filed sharply. 
+~
+ArriveMsg:	strides in from
+LeaveMsg:	strides
+MobFlags:	1111100000111010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	12
+[POINTS]
+	Height:	206
+	Weight:	84
+	Level:	3
+	Ballistic:	13
+	Impact:	13
+	Bank:	200
+[SKILLS]
+	edged weapons:	12
+	unarmed combat:	12
+	corporate etiquette:	10
+	sorcery:	12
+	firearms:	3
+BREAK
+#17116
+Keywords:	fire elemental spirit flame ball
+Name:	a fire elemental
+RoomDesc:$
+A bright ball of ^Rred^n flame hovers here. 
+
+~
+LookDesc:$
+Looks like a miniature sun, floating in the hallway giving a reddish cast to
+the area around it. 
+~
+ArriveMsg:	hovers in from
+LeaveMsg:	hovers
+MobFlags:	101000000001010
+AffFlags:	0
+Race:	Elemental
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	10
+	Str:	6
+	Cha:	8
+	Int:	8
+	Wil:	8
+	Mag:	8
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	8
+[SKILLS]
+	unarmed combat:	5
+	sorcery:	5
+BREAK
+#17117
+Keywords:	yuzikawa toho director seattle mitsuhama executive officer greasy haired short man
+Name:	Yuzikawa Toho
+RoomDesc:$
+A short, greasy-haired Japanese man sits behind the desk. 
+
+~
+LookDesc:$
+Wearing a pinstripe suit, he is a middle aged Japanese man with black greasy
+hair tied back in a short ponytail.  He is the head Executive Officer of
+Seattle's Mitsuhama subsidiary, and has plenty of men to back him up, and
+plenty of nuyen in his bank account. 
+~
+ArriveMsg:	walks in from
+LeaveMsg:	walks
+MobFlags:	10001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	0
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	120
+	Ballistic:	4
+	Impact:	3
+	Bank:	100
+	Karma:	33
+[SKILLS]
+	unarmed combat:	4
+	corporate etiquette:	9
+BREAK
+#17118
+Keywords:	samurai armored bodyguard chromed
+Name:	a chromed Samurai
+RoomDesc:$
+A chromed bodyguard in polymer Samurai armor stands guarding Executive Toho. 
+
+~
+LookDesc:$
+Wearing a blood red suit of Samurai armor, made of high-impact polymer,
+wielding a very large LMG. 
+~
+ArriveMsg:	walks in from
+LeaveMsg:	walks
+MobFlags:	1000001001000000101010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	15
+	Str:	15
+	Cha:	4
+	Int:	8
+	Wil:	15
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	120
+	Ballistic:	13
+	Impact:	13
+[SKILLS]
+	unarmed combat:	12
+	gunnery:	18
+BREAK
+#17119
+Keywords:	mitsuhama executive
+Name:	a Mitsuhama executive
+RoomDesc:$
+An executive walks through here carrying a briefcase. 
+
+~
+LookDesc:$
+Pretty much your run-of-the-mill Mitsuhama executive, he is Japanese, wearing
+an expensive suit, and looks like he is constantly in a hurry. 
+~
+ArriveMsg:	hurries in from
+LeaveMsg:	hurries
+MobFlags:	11011000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	80
+	Ballistic:	2
+	Impact:	2
+	Bank:	100
+[SKILLS]
+	unarmed combat:	2
+	corporate etiquette:	5
+BREAK
+#17120
+Keywords:	torikawa shizikuyuma mitsuhama executive
+Name:	Torikawa Shizikuyuma
+RoomDesc:$
+Torikawa Shizikuyama sits behind his desk, tapping data into his computer. 
+
+~
+LookDesc:$
+A medium sized, mild mannered mitsuhama executive, wearing an expensive suit
+and packing a sidearm. 
+~
+ArriveMsg:	hurries in from
+LeaveMsg:	hurries
+MobFlags:	11011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	80
+	Ballistic:	4
+	Impact:	3
+	Bank:	150
+[SKILLS]
+	unarmed combat:	2
+	corporate etiquette:	5
+	firearms:	5
+BREAK
+#17121
+Keywords:	stephen alister mitsuhama executive
+Name:	Stephen Alister
+RoomDesc:$
+Stephen Alister sits behind his desk with his feet propped up. 
+
+~
+LookDesc:$
+A Mitsuhama executive who apparently enjoys his job a little too much.  He
+sits back in his cushy chair, with his hands behind his head,  and his feet
+propped up on his desk.  He is blonde, of Anglo descent and of average height
+and build. 
+~
+ArriveMsg:	walks in from
+LeaveMsg:	walks
+MobFlags:	1000000000000000000000011011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	80
+	Ballistic:	2
+	Impact:	2
+	Bank:	200
+[SKILLS]
+	unarmed combat:	2
+	corporate etiquette:	5
+	firearms:	4
+BREAK
+#17122
+Keywords:	mitsuhama sarariman wage slave
+Name:	a Mitsuhama sarariman
+RoomDesc:$
+A sarariman strides through, carrying a briefcase. 
+
+~
+LookDesc:$
+An average Mitsuhama employee, he is Japanese, wearing an average suit, and
+looks like he is constantly in a hurry. 
+~
+ArriveMsg:	hurries in from
+LeaveMsg:	hurries
+MobFlags:	11011000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	2
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	80
+	Ballistic:	2
+	Impact:	2
+	Cash:	100
+	Bank:	200
+[SKILLS]
+	unarmed combat:	2
+	corporate etiquette:	5
+BREAK
+#17123
+Keywords:	mike haynes action computers owner
+Name:	Mike Haynes, the store's owner
+RoomDesc:$
+Mike stands behind the counter, with a friendly smile. 
+
+~
+LookDesc:$
+Mike is a little shorter than average, pudgy but not fat, and dresses well for
+a middle aged man running what on the first glance would look like a warehouse
+electronics store.  He bright eyes, and a gray mustache. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	155
+	Weight:	100
+[SKILLS]
+BREAK
+#17124
+Keywords:	ksaf reporter edward ray patterson
+Name:	KSAF Reporter Edward Ray Patterson
+RoomDesc:$
+A reporter stands here. 
+
+~
+LookDesc:$
+A short Anglo man in a three piece suit, holding a microphone. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	5
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	75
+	Ballistic:	4
+	Impact:	3
+	Cash:	1200
+	Bank:	1200
+[SKILLS]
+BREAK
+#17195
+Keywords:	masked voice shadow broadcaster
+Name:	**MASKED VOICE**
+RoomDesc:$
+A guy in black with a datajack and coke bottle glasses stands here toying with
+a radio. 
+
+~
+LookDesc:$
+Kinda nerdy. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#17196
+Keywords:	tir tairngire tpf spec ops blackops specops agent
+Name:	a Tir SpecOps Agent
+RoomDesc:$
+An elf in a black bodysuit stands tall here. 
+
+~
+LookDesc:$
+Very tall, and athletically built, but with a nondescript look about him. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000001010
+AffFlags:	1000000111000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	12
+	Str:	12
+	Cha:	7
+	Int:	8
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	8
+	Ballistic:	40
+	Impact:	40
+[SKILLS]
+	stealth:	20
+	rifles:	15
+	pistols:	8
+	unarmed combat:	12
+	edged weapons:	16
+BREAK
+#17197
+Keywords:	shadow broadcaster
+Name:	*
+RoomDesc:$
+A guy in black with a datajack and coke bottle glasses stands here toying with
+a radio. 
+
+~
+LookDesc:$
+Kinda nerdy. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#17198
+Keywords:	mother your momma bitch crack ho
+Name:	Your Mother
+RoomDesc:$
+Your mother stands here, looking to suck dicks for rock. 
+
+~
+LookDesc:$
+She's fat, she's ugly, she's your mother! 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1110
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	2
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	4
+[SKILLS]
+BREAK
+#17199
+Keywords:	mickey rodgers child infant baby toddler
+Name:	Baby Mickey
+RoomDesc:$
+A caucasian toddler in a red and white t-shirt stands in a daze. 
+
+~
+LookDesc:$
+A toddler in a red and white t-shirt, wearing diapers and Nike tennis shoes. 
+~
+ArriveMsg:	toddles in from
+LeaveMsg:	toddles away
+MobFlags:	1001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	3
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+END

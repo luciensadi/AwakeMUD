@@ -1,0 +1,9 @@
+UPLOAD
+
+Usage: ^gUPLOAD <filename>^n
+
+This will transfer a file from your cyberdeck's storage memory to the
+Datastore.  It can only be used when connected to the Matrix.
+
+^WSee Also: DOWNLOAD, MATRIX, CYBERDECK, DATASTORE^n
+

@@ -1,0 +1,12 @@
+DECRYPT DISARM
+
+Test: FILES
+Utility: Decrypt or Defuse
+Usage: ^gDECRYPT <file>
+       DISARM <file>^n
+
+These commands are used to remove any IC that may be protecting
+a file. Decrypt is used against Scramble IC and Disarm is for
+remove Data Bomb and Pavlov ICs.
+
+^WSee Also: DOWNLOAD, ANALYZE, UTILITIES, MATRIX^n

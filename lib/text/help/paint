@@ -1,0 +1,7 @@
+PAINT
+
+Usage: ^gPAINT <vehicle>^n
+
+This command is used at a paint shop to restring a vehicle. Once this
+command is used you are locked into restringing the vehicle. It takes
+3 MUD days and 20,000 nuyen to restring a vehicle.

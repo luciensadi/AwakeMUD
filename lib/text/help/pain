@@ -1,0 +1,11 @@
+"PAIN RESISTANCE"
+
+Target modifiers are normally applied to those whose physical and mental
+points are below maximum.  With pain resistance, an adept ignores these
+modifiers until the sum of his lost physical and lost mental points is
+greater than his pain resistance rating.
+
+Cost: .5 per point
+
+^WSee Also: ABILITIES^n
+

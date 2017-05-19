@@ -1,0 +1,17 @@
+ALERTS
+
+There are two different types of Alert in all Matrix systems: Passive and
+Active.
+
+PASSIVE - This is triggered when the system detects a Decker attempting
+anything illegal. This is usually when the security tally rises above a
+certain level. On a passive alert, all IC in the system have %50 added 
+to their ratings, but remain invisible and peaceful. The length of any
+alert depends on how much extra activity has happened after it was triggered
+and the security rating of the host.
+
+ACTIVE - An active alert can only be triggered if a Passive Alert has been
+already triggered. In an Active alert, all IC become visible and aggressive.
+
+^WSee Also: IC, MATRIX COMBAT, SECURITY TALLY^n
+

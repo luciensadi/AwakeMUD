@@ -1,0 +1,8 @@
+TALLY "SECURITY TALLY"
+
+While on the Matrix, your security tally is a register of how
+aware the host is of your presence. Every time you try to take
+any action on the Matrix the host will notice your presence.
+How much it notices is dependant on your Detection Factor
+(Higher is better). As your Tally raises you will trigger alerts,
+IC and even host shutdowns.

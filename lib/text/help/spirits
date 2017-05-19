@@ -1,0 +1,26 @@
+SPIRITS
+
+Usage: ^gSPIRITS^n
+
+This command is used to show the spirits currently under your control.
+The number next to it is used to refer to the spirit in any orders you wish
+to give them.
+
+Type of Spirits:
+  Hearth (Indoors)
+  City
+  Field
+  Forest
+  Mountain
+  River
+  Sea
+  Prairie
+  Lake
+  Swamp
+  Sky Spirits
+    Mist
+    Storm
+    Wind
+
+^WSee Also: CONJURING, ORDER, DOMAIN^n
+

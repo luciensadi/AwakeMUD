@@ -1,0 +1,14 @@
+REFLECTION
+
+Usage: ^gREFLECT <dice>^n
+
+Reflection is a metamagic technique that reflects hostile spells
+back onto the person that cast them. The more dice you have allocated
+to your spell reflection pool the more chance you have of sending
+the spell back where it came from.
+
+If you have enough dice in the reflection pool you may also increase
+the power of the spell before it strikes the original caster.
+Reflection will never affect beneficial spells.
+
+^WSee Also: DRAIN, SDEFENSE, METAMAGIC^n

@@ -1,0 +1,3360 @@
+#32600
+Name:	Broadway, under Intercity 90
+Desc:$
+   Broadway runs right under the massive ten lane freeway that separates the
+northeast and southeast commercial sectors of Seattle.  Up near the top of the
+embankment you see a few cardboard shelters made up by a few scruffy looking
+squatters.  Graffiti covers the embankments, in Japanese and English, an
+indicator of the gang activity prevalent all over the metroplex, despite Lone
+Star's heavy presence in this area. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32715
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32599
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32601
+Name:	Intercity 5
+Desc:$
+   The traffic gets thicker, yet picks up space as you get closer to Seattle.
+From the elevated freeway you can see a very large portion of Seattle's
+skyline.  The Space Needle, Renraku Arcology, and the more distant
+Aztechnology Pyramid northeast of here stand tall, creating a panorama of
+architecture. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	32602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1328
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32602
+Name:	Intercity 5
+Desc:$
+   Intercity 5 is surrounded by factories and construction on one side, and
+towering skyscrapers on the other.  Sound walls have been erected in spots,
+and are covered by graffiti.  Traffic zips through here at a very high rate. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	32603
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	32601
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32603
+Name:	Intercity 5, Seneca Street Junction
+Desc:$
+   A green sign is over the lanes here, saying Seneca Street, Exit 15 with an
+arrow sign (pointing to the southeast).  The sign is covered in graffiti and
+stains from the years of acid rain.  A sign to the side of it says "Espanoza
+Way, 1 km." 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	32604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	32617
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	32602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32604
+Name:	Intercity 5, over Spring Street
+Desc:$
+   There is no exit here, but I-5 does run over Spring Street on an overpass
+here.  You can see both sides of the street, eastwards headed into the dense
+commercial sector with skyscrapers, and westwards into an area populated with
+factories and construction. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	32603
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32605
+Name:	Intercity 5, over Ridgeway Street
+Desc:$
+   There is no exit here, but I-5 does run over Ridgeway Street on an overpass
+here.  You can see both sides of the street, eastwards headed into the dense
+commercial sector with skyscrapers, and westwards into an area populated with
+factories and construction. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32606
+Name:	Intercity 5, Espanoza Way Junction
+Desc:$
+   A green sign is over the lanes here, saying Espanoza Way, Exit 16 with an
+arrow sign (pointing to the southwest).  The sign is covered in graffiti and
+stains from the years of acid rain.  A sign to the side of it says "Broadway,
+1 km." 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32605
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	32618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32607
+Name:	Intercity 5, over Whitman Road
+Desc:$
+   There is no exit here, but I-5 does run over Whitman Road on an overpass
+here.  You can see both sides of the street, eastwards headed into the dense
+commercial sector with skyscrapers, and westwards into an area populated with
+factories and construction.  I-5 curves to the northeast and to the south
+here. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	32608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32608
+Name:	Intercity 5, Broadway Junction
+Desc:$
+   A green sign is over the lanes here, saying Broadway, Exit 17 with an arrow
+sign (pointing to the northwest).  The sign is covered in graffiti and stains
+from the years of acid rain.  A sign to the side of it says "Junction I-90,
+1/2 km."  To the northeast you see a large cloverleaf ramp structure. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	32609
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	32607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	32619
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32609
+Name:	Intercity 5 and Intercity 90
+Desc:$
+   A very large mish-mash of exit off- and on-ramps make this place
+interesting.  When you boil it down to which way goes where though, I-5 runs
+southwest to northeast and I-90 runs southeast from here, then up the road
+curves east. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	32610
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	32624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	32608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32610
+Name:	Intercity 5
+Desc:$
+   I-5 is a mixed bag here, with traffic running northeast to northwest.
+During rush hours it can be quite congested, as the highway runs north to
+Renton and Everett.  Along the east and west sides of the freeway are mixed
+residential and commercial districts, and to the distant east you can see the
+Aztechnology Pyramid in all its glory.  A sign is here saying "Harrison Exit
+1/2 km, Exit 19". 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	32611
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	32609
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32611
+Name:	Intercity 5, Harrison Street Junction
+Desc:$
+   Harrison Street is a mixed neighborhood that runs east to west under I-5
+here.  The exit is off to the south, and a ramp runs down to the street.
+Complimentary to the exit sign is another sign saying, "Highland Drive, 2
+kilometers." 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	32612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32620
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	32610
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32612
+Name:	Intercity 5
+Desc:$
+   Intercity 5 runs northeast to southwest here, southwest to the more denser
+portions of Downtown Seattle, northerly to a residential district's exit, and
+even farther north to Renton and Everett. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	32613
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	32611
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32613
+Name:	Intercity 5
+Desc:$
+   Intercity 5 runs northeast to southwest here, southwest to the more denser
+portions of Downtown Seattle, northerly to a residential district's exit, and
+even farther north to Renton and Everett.  Some sound walls have been erected
+on each side of the street, to block the sounds of the freeways from making
+the nearby neighborhoods any louder than needed.  A sign says, "Highland
+Drive, 1 kilometer." 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	32614
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	32612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32614
+Name:	Intercity 5
+Desc:$
+   Intercity 5 curves north and southwest here.  The road is surrounded by
+sound walls, making any sight of the neighborhoods to the east and west of
+here impossible. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	32613
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32615
+Name:	I-5 at Highland Drive
+Desc:$
+   Sound walls cover each side of the street, making it nearly impossible to
+see what is occuring in the neighborhoods on each side of the street.  A sign
+with an arrow pointing to the west says, "Exit 20, Highland Drive." 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32616
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32614
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32621
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32616
+Name:	Intercity 5
+Desc:$
+   I-5 is backed up in both lanes north of here, to an impassible level.  Some
+construction has traffic moving at a slow fraction of a trickle. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	32615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32617
+Name:	Onramp
+Desc:$
+   The onramp carries traffic up onto I-5. 
+~
+Flags:	10000000000010000000100
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32583
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	32603
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32618
+Name:	Onramp
+Desc:$
+   The onramp connects Espanoza to I-5.  Traffic is backed up pretty thickly
+here. 
+~
+Flags:	10000000000010000000100
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	32606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	32559
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32619
+Name:	Onramp
+Desc:$
+   An onramp with traffic going up to Intercity 5. 
+~
+Flags:	10000000000010000000100
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	32608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	32571
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32620
+Name:	Onramp
+Desc:$
+   The onramp has a traffic meter used to keep congestion under control on the
+freeway.  Ahead is Intercity 5, the juglar vein of traffic through the
+metroplex. 
+~
+Flags:	10000000000010000000100
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32611
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32756
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32621
+Name:	Onramp
+Desc:$
+   This is one of the main arterys of the city, pouring the lifeblood of
+traffic in and out of this district. 
+~
+Flags:	10000000000010000000100
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	30540
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32622
+Name:	Onramp
+Desc:$
+   An onramp up to I-90 from Ninth Street. 
+~
+Flags:	10000000000010000000100
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	32629
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	32714
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32623
+Name:	Onramp
+Desc:$
+   This onramp carries traffic from I-90 to Broadway in the Southeast sector
+of Downtown Seattle. 
+~
+Flags:	10000000000010000000100
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32599
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32624
+Name:	Intercity 90, Broadway Exit
+Desc:$
+   Intercity 90 takes form here, just to the northwest, a vast cloverleaf
+structure where the freeway begins.  On both sides, I-90 is dominated by tall
+corporate structures, skyscrapers, arcologies, and pseudo-arcologies.  A sign
+overlaps the elevated freeway, saying, "Broadway, Exit 1" with an exit sign
+pointing to the offramp going south. 
+~
+Flags:	10000000000010000000100
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	32625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32623
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	32609
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32625
+Name:	Intercity 90
+Desc:$
+   I-90 is dominated on both sides by mammoth skyscrapers, arcologies, and
+pseudo-arcologies.  North of here you can see the Mitsuhama Tower, and to the
+south and west, the Renraku Arcology and the Space Needle. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	32626
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	32624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32626
+Name:	Intercity 90
+Desc:$
+   I-90 is dominated on both sides by mammoth skyscrapers, arcologies, and
+pseudo-arcologies.  Northwest of here you can see the Mitsuhama Tower, and to
+the south, the Renraku Arcology and the Space Needle. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	32627
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	32625
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32627
+Name:	Intercity 90
+Desc:$
+   I-90 is dominated on both sides by mammoth skyscrapers, arcologies, and
+pseudo-arcologies.  Northwest of here you can see the Mitsuhama Tower, and to
+the south, the Renraku Arcology and the Space Needle.  A sign says, "Ninth
+Street, Exit 2, 1 kilometer."  The road curves east and northwest here. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32628
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	32626
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32628
+Name:	Intercity 90
+Desc:$
+   I-90 is dominated on both sides by mammoth skyscrapers, arcologies, and
+pseudo-arcologies.  Northwest of here you can see the Mitsuhama Tower, and to
+the southwest, the Renraku Arcology and the Space Needle.  A sign says, "Ninth
+Street, Exit 2, 1 kilometer."  The road curves east and northwest here.  North
+of here you can see the Aztechnology pyramid. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32629
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32627
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32629
+Name:	Intercity 90, Ninth Street Exit
+Desc:$
+   Intercity 90 runs east to west here, through a dense commercial area.
+Farther east you can see a less dense area, becoming barren to the far east.
+A sign is over the road, with an arrow pointing southwest, saying "Ninth
+Street, Exit 2." 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32630
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	32622
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32628
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32630
+Name:	Intercity 90
+Desc:$
+   To the west you can see the brilliance of the architecture of the Seattle
+skyline.  Northerly to the west, the Aztechnology Pyramid stands tall, strong
+in its presence.  Southerly to the west, the Renraku Arcology and the Space
+Needle stand.  East of here the road drifts through some less populated areas.
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32631
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32629
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32631
+Name:	Intercity 90
+Desc:$
+   To the west you can see the brilliance of the architecture of the Seattle
+skyline.  Northerly to the west, the Aztechnology Pyramid stands tall, strong
+in its presence.  Southerly to the west, the Renraku Arcology and the Space
+Needle stand.  East of here the road drifts through some less populated areas.
+To the distant east are Bellevue, Council Island, and Redmond. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	17501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32630
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32632
+Name:	Seneca Street
+Desc:$
+   As one of the major streets in the district, Seneca is naturally inundated
+with expensive real estate and an emerging cafe society. It paves the way east
+and west alongside several of the larger corporate headquarters and shopping
+malls. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	12701
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32633
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32584
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32633
+Name:	Second and Seneca Street
+Desc:$
+   Second Street comes to a halt here, and swiftly divides its traffic onto
+Seneca, which then turns east and west, spreading out. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32634
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32658
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32632
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32634
+Name:	Second Street
+Desc:$
+   Second Street runs up along the western borough of the southern commercial
+district, and is home to a lot of the more vibrant shopping citadels. The
+streets are almost always packed, and the constant flow of consumers can
+almost make you lose your way. Luckily, you can see intersections a little
+north and south of here. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32635
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32633
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32635
+Name:	Second and Spring Street
+Desc:$
+   As you step onto the cold paving of the intersection, the huge, pounding
+chaos of the Big Rhino sweeps across the street, and throws a couple of random
+punters onto the street. Literally. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32637
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32655
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	3521
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32634
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32636
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32636
+Name:	Spring Street
+Desc:$
+   Spring Street is a largely anglo and orkish working class neighborhood.
+Orks who polish up their images to the point to where they can be accepted for
+low level wageslave jobs are a common sight in this region, as are a myriad of
+wageslaves in raincoats and breathers of all colours. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32635
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32586
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32637
+Name:	Second Street
+Desc:$
+   A rather average looking street in the working class end of the commercial
+district.  Several competing newsstands line the streets, and large dumpsters
+full of trash are lined up at the curb.  The air smells of smog, acid rain
+fumes, and trash.  A PanicButton(tm) is on a telephone pole, allowing a
+citizen to dial up for quick help from Lone Star in the event of a crime.  A
+large trid billboard for Novatech is on the west side of the street, full of
+vibrant colour. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32638
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32635
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32638
+Name:	Second and Ridgeway Street
+Desc:$
+   Tall ten and fifteen story high-rises sit on each corner here.  A line of
+neon signs cover the sides of the buildings up northward on Second, a shopping
+area for the working class of Downtown Seattle. A stoplight appears to be
+malfunctioning here, constantly flashing red instead of its normal
+red/yellow/green setup.  The street smells of garbage and smog. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32640
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32652
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32637
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32639
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32639
+Name:	Ridgeway Street
+Desc:$
+   A more bohemian stretch of the commercial southeast sector of Seattle,
+Ridgeway is lined with various coffee shops and nightclubs where up and coming
+artists play songs from their diversified repertoires.  Telephone poles on the
+street are plastered with various handbills advertising showings of various
+musical groups and artists, and art showings at the galleries that can be
+found on this street. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32638
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32588
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32640
+Name:	Second Street
+Desc:$
+   Second Street is thick with neon signs on both sides of the street, and a
+very large trid billboard for Aztechnology's latest technology and programs.
+There are a number of dojos and gyms on this street, from "Figg's Gym" to
+"Fong Ki's Dojo".  There is a bit of an Asian ethnic presence on this block,
+giving it the feel of a "Chinatown away from Chinatown." 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32641
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32638
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	17108
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32641
+Name:	Second Street and Espanoza Way
+Desc:$
+   Espanoza meets Second Street here, on the western end of the southeast
+district of Downtown Seattle.  Huge crowds wait for the stoplights to change,
+allowing them to cross crowded crosswalks.  Lines of traffic go all ways,
+sometimes backed up to the next intersection.  Neon lights cover the streets
+to the north and south, as Second Street is a large shopping area for the
+working class. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32643
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32644
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32640
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32642
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32642
+Name:	Espanoza Way
+Desc:$
+   Espanoza Way is filled with traffic, lined up from one end of the crowded
+block to the next.  People in breathers fill the jammed sidewalks on both
+sides of the streets.  Huge dumpsters filled with heaps of garbage are equally
+spaced on the curb just past the sidewalk, taking up parking area, and giving
+the place a rather thick decaying smell to enhance the general aroma of smog.
+Graffiti and handbills mar the plasticrete walls of the various apartment
+complexes and shops.  A Stuffer Shack is south of here. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32641
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32590
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32643
+Name:	Second Street
+Desc:$
+   Large arrays of neon signs from "Fu Ching's Speedy Noodle", to "Jin's Dress
+Outlets" mark the sides of the street here, a generalized shopping area for
+the working class of Seattle.  People on breathers walk through crowded
+sidewalks, and large heaps of garbage line the streets in front of the myriad
+of restaurants and apartment buildings, waiting to be taken away by the waste
+management conglomerates.   A 'lost pet' poster is plastered against a
+streetlight post. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32594
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	30501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32641
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	22494
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	6
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32644
+Name:	Espanoza Way
+Desc:$
+   Espanoza Way is jammed with traffic on all ends, from stoplight to
+stoplight from block to block.  The Easy Diver coffin motel is on the north
+end of the street, with a broken up but still functional in parts neon sign
+advertising it.  East of here, tall steel towers line the streets, as the
+commercial district takes on a life of its own.  The streets are crowded with
+a myriad of people, from wageslaves in breathers and raincoats, to gangers and
+gutterpunks.  A kite tail is hanging from the stoplight here. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	30500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32645
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32641
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32645
+Name:	Third and Espanoza Way
+Desc:$
+   The buildings rise up seemingly to heaven itself here, great steel and
+plasticrete ziggurats dedicated to the gods of wealth.  East of here the
+buildings get even taller than life itself, showing the mammoth wealth scale
+the megacorporations exist under.  Up and down Third are a line of prefab
+office towers filled with bored office workers. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32646
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32670
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32650
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32644
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32646
+Name:	Third Street
+Desc:$
+   Third Street is lined from end to end with prefab office buildings of
+various shades of gray.  There are a few billboards up with trideo advertises
+of every megacorp and a few lesser corporations.  The sky is dominated by the
+twenty and thirty story tall size of these large, gray beasts.  The southern
+floors are generally storefronts and restaurants, selling technology or
+selling noodles and soy products. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32647
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32645
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32647
+Name:	Third Street and Whitman Road
+Desc:$
+   Third Street and Whitman meet at a busy intersection, with stoplights that
+sync with the GridGuide systems in most automobiles, and motion sensors to
+gather data about the non-GridGuide traffic that fills these streets.  There
+are security cameras over the stoplights designed to monitor for traffic
+violations and send the data regarding them back to Lone Star. There is a
+PanicButton(tm) installed on a telephone pole on the northwest corner of this
+intersection. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32648
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32673
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32646
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32649
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32648
+Name:	Third Street
+Desc:$
+   Tall twenty story, drab gray prefab office buildings line this street here.
+On the first stories of these are shops and small restaurants catering to a
+myriad of foreign tastes.  Dumpsters full of trash are lined up at the curbs,
+taking up most of the usual parking area.  There are parking meters spaced at
+every parking spot, with signs that say "Two Hour Metered Parking".  The air
+is thick with the smell of spice from the restaurants, drek from the trash,
+stench from the smog, and fumes from the acid rain.  Traffic flows at a near
+constant rate, excepting in peak hours when traffic is jammed.  There is a
+PanicButton(tm) on a pole here. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32598
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32647
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32649
+Name:	Whitman Road
+Desc:$
+   Whitman Road runs east to west through the southeast district of Downtown
+Seattle, a commercial area.  Prefab office buildings with rather common
+storefronts, including clothing outlets and media stores on their first floors
+line the street.  People in breathers and rain jackets crowd the street, the
+many colors of rain jackets striking to the eyes, a sharp contrast against the
+thickly gray city. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32647
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32594
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32650
+Name:	Third Street
+Desc:$
+   Third Street is largely populated by towering prefab office buildings with
+many floors that look like every other floor.  On the lower floors of these
+buildings are some storefronts, including Action Computers, a famous decking
+equipment store. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32645
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	17116
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32651
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32651
+Name:	Third and Ridgeway Street
+Desc:$
+   Third and Ridgeway, to major streets meet here at a very busy intersection
+with a complex stoplight and crosswalk system in place.  There are security
+cams that monitor traffic with motion sensors, and delegate who gets the green
+light based on the street with more traffic.  It also has the secondary
+function of recording every traffic violation and sending the trideo data of
+every incident to Lone Star Security. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32650
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32667
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32653
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32652
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32652
+Name:	Ridgeway Street
+Desc:$
+   The largely commercial Ridgeway Street is dominated by older brick office
+buildings that have been well-kept since the late twentieth century when they
+were built.  Ivy covers a large portion of the buildings, growing thick in
+season.  The street is lined with a myriad of art galleries, coffee shops,
+with regular poetry meetings and open mike nights, and nightclubs of the mid
+to upper scale. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32651
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32638
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32653
+Name:	Third Street
+Desc:$
+   Third Street is lined with prefab towers and highrise buildings, with
+various restaurants populating the bottom floor of each, excepting the
+occasional Brute Power(tm) day labour outlets.  Mounds of garbage accumulated
+from weeks of poor waste management line each curb at regular intervals.
+Above, are many office spaces full of bored workers for various corporations
+renting the space. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32651
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32654
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32654
+Name:	Third and Spring Street
+Desc:$
+   Third and Spring meet at a busy intersection, with traffic flowing at a
+near constant speed.  Third and Spring become one-way streets as you go east
+and north of here, as an effort to engineer traffic to remain constantly in
+motion, rather than at a standstill like the streets west of here.  East of
+here are great towers and monoliths of plasticrete and steel, temples of the
+great god Nuyen who rules this age. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32653
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32663
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32656
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32655
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32655
+Name:	Spring Street
+Desc:$
+   Spring Street becomes cleaner the closer to the corporate occupied zone you
+get.  Various prefab hirise buildings line the street, each with newsstands,
+convienence stores, and fast food joints such as McDonald's and Nukit Burger
+fill the first floor storefronts, and many floors of drab office space fill
+the floors above them. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32654
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32635
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32656
+Name:	Third Street
+Desc:$
+   As you step neatly over yet more garbage bags arranged in a chaotic
+pyramid, crowds of different workers and drones come out to keep the place
+organised. While this many businesses in one vicinity will always cause havoc
+for the state of the streets, they all try to do their part to keep the
+neighbourhood as attractive as possible. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32654
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32657
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32657
+Name:	Third and Seneca
+Desc:$
+   At the intersection, a fairly large traffic pileup has resulted from one
+too many shoppers hesitating about their most recent purchase just after
+having left their parking space. It has now escalated to the point that
+traffic for a few blocks north appears to be at a halt. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32656
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32659
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32658
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32658
+Name:	Seneca Street
+Desc:$
+   Across the street from you, a large clothing boutique bustles with
+activity, and the usual tridscreen/coffee company combination lies up on the
+fifth floor of the building. Passers by bump each other gently with their
+rhythmically undulating shopping bags, paying more attention to the latest
+outfits than to the oncoming traffic. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32657
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32633
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32659
+Name:	Seneca Street
+Desc:$
+   Despite its clean and overall sparkly sheen, the commercial district is
+still home to a fair amount of street crime and theft. Naturally, the city has
+gone to great lengths to make the streets safe for shoppers again, and the
+multitude of cameras and hidden imaging systems no doubt help to ease tension.
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32660
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32657
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32660
+Name:	Fourth and Seneca Street
+Desc:$
+   Fourth Street slopes slightly as it reaches Seneca street, and then
+branches out east and west, leading traffic along the southern edge of the
+city limits. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32661
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32685
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32659
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32661
+Name:	Fourth Street
+Desc:$
+   Just south of here, Fourth Street comes to a halt and divides its traffic
+left and right. On the corner, a rumbling tempo seeps out of a designer
+clothes store that seems to be attracting a lot of attention with its glowing
+window displays. Further north, the road winds away into the distance
+inbetween the skyscrapers. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32662
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32660
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32662
+Name:	Fourth and Spring Street
+Desc:$
+   Fourth and Spring meet here at a major intersection in the corporate
+sector.  Stoplights automated with a GridGuide(tm) expert system and a motion
+sensor array attempt to manage traffic. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32664
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32681
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32661
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32663
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32663
+Name:	Spring Street
+Desc:$
+   Spring runs through a working class commercial sector, between third and
+fourth.  A few nondescript office buildings line this block, with storefronts
+on the bottom selling shoes and magazines. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32662
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32654
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32664
+Name:	Fourth Street
+Desc:$
+   Fourth Street runs northward towards Seattle Center then ends at Intercity
+90 several streets up.  Southwards, Fourth runs a few blocks in between some
+office buildings. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32665
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32662
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32665
+Name:	Fourth and Ridgway Street
+Desc:$
+   Fourth and Ridgeway meet at a busy intersection, one of the four corners of
+the Seattle Center area.  The Seattle Center complex includes the monorail
+stations, the Space Needle, and many tourist attractions that draw large
+crowds.  Surrounding you in every direction are mammoth skyscrapers of
+plasticrete and steel. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32668
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32679
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32664
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32667
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32667
+Name:	Ridgeway Street
+Desc:$
+   Ridgeway becomes less bohemian and more corporate here, as the ivy covered
+brick buildings give way to neon trimmed plassteel.  The sidewalks are filled
+with a large number of nameless individuals, wageslaves, moving like ants
+through an ant colony. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32665
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32651
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32668
+Name:	Fourth Street at Seattle Center
+Desc:$
+   Fourth street runs north to south here alongside Seattle Center, a mammoth
+complex including a transit station connected to the Seattle Monorail, the
+Space Needle, and a large shopping complex full of gift shops and tourist
+traps.  To the west is a two story building, dedicated to linguistic arts. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32669
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32665
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	30701
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32669
+Name:	Fourth Street and Espanoza Way
+Desc:$
+   Fourth Street and Espanoza is one of the more notorious intersections for
+large traffic jams instigated by automotive accidents.  The turn signal setup
+seems bizarre to any rationally minded driver, confusing just about anybody
+who comes up to this intersection and needs to change lanes or turn.  One lane
+you can turn left, the next lane you can turn right, the next lane you better
+turn right or you will run into a curb on the other side of the street as you
+get cut off, and so forth. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32671
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32674
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32668
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32670
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32670
+Name:	Espanoza Way
+Desc:$
+   On the south side of the street, you are dwarfed by the mammoth skyscrapers
+that densely populate the Seattle skyline.  To the north is a used car lot
+with huge neon signs, saying "CRAZY LENNY'S CRAZY DEALS!!!"  A 'lost pet'
+poster is plastered against the wall. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	1399
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32669
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32645
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32671
+Name:	Fourth Street
+Desc:$
+   Fourth Street continues northward, to where it ends abruptly at an
+embankment on the south side of Intercity 90.  Towering skycrapers of steel
+and neon surround you, and traffic runs thickly and fluidly down this street,
+often jamming up to the south of here.  There is an electronics store to the
+east. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32672
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door~~~~~~~~~~~~~~~~~
+	ToVnum:	1816
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32669
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32672
+Name:	Whitman Road and Fourth Street
+Desc:$
+   Whitman curves to the west here as Fourth ends abruptly at the embankment
+where Intercity 90 rolls through the heart of Downtown Seattle. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	32671
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32673
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32673
+Name:	Whitman Road
+Desc:$
+   Whitman Road runs along the northern end of the southeast sector, against
+Intercity 90, which is up on a very large concrete embankment that towers up
+at least five stories high.  The embankment is covered in graffiti and
+handbills advertising various media events. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32672
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32647
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32674
+Name:	Espanoza Way, at Seattle Center
+Desc:$
+   Espanoza shifts direction just a few blocks from here, sifting traffic away
+from the Seattle Center. It's enormous structure stands firmly in the center
+of the commercial district, flanked by promenades and an open square,
+generally packed with sightseers and pedestrians. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32676
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32669
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32675
+Name:	Fifth Street, at Seattle Center
+Desc:$
+   The street is almost completely bathed in the twin shadows of the Seattle
+Center and Renraku Arcology down the street. This is effectively the center of
+the city, and the sheer traffic congestion backs that up. Down to the west,
+you can see an almost endless line of boutiques, restaurants and cafes, all
+sweeping weary pedestrians off the streets. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32676
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32678
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32676
+Name:	Fifth Street and Espanoza Way
+Desc:$
+   Fifth Street finally ends here, at the northern corner of the commercial
+district. Further northeast, Espanoza continues underneath Intercity 90. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	32677
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32675
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32674
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32677
+Name:	Espanoza Way, under Intercity 90
+Desc:$
+   Espanoza Way curls northwards, sneaking under the shadow the highway above.
+The gigantic concrete supports send off the odd vibration of massive cargo
+trucks passing overheard at speed, and the sidewalk is coated in an almost
+dusty mist. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	32725
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	32676
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32678
+Name:	Ridgeway and Fifth Street
+Desc:$
+   Looking over your shoulder, the Arcology firmly blocks your view of the
+southeast. The street ahead turns briefly to the east, leading into the
+Arcology's parking lot. From here, Ridgeway moves west, along the center of
+the commercial district taking you along the more popular shopping promenades.
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32675
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	8519
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32680
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32679
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32679
+Name:	Ridgeway at Seattle Center
+Desc:$
+   A large portion of the traffic, both on the street and on the road seems
+immediately drained from view, and sucked in towards the Seattle Center. Not
+unlike the centrepiece of the downtown neighbourhood, it attracts both
+residents and tourists alike, with its huge structure containing a wealth of
+different restaurants, boutiques, and other consumer heavens. The wide
+concrete square surrounding the center gives space to people to relax and
+pause along the tree-lined promenades that lead you into the Center.  A two
+story structure is dwarfed to the south, a plasticrete school of sorts. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32678
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	8031
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32665
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	9821
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32680
+Name:	Fifth Street
+Desc:$
+   Your steps take you along the west side of Renraku Arcology, leading you
+north and south. Various storefronts have scrambled for a tiny space on one of
+the most expensive boardwalks in downtown Seattle. Many pedestrians around you
+have actually stopped walking, and take a moment to photograph the monstrosity
+beside you. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32678
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32682
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32681
+Name:	Spring Street
+Desc:$
+   Just up ahead, Spring Street hits a large junction, and traffic appears to
+quadruple as Renraku Arcology shifts into view. The concrete on the pavement
+appears to improve as you move further east, and no doubt less shade is found
+within the buildings that lie in the glow of the towering structure. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32682
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32662
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32682
+Name:	Fifth and Spring Street
+Desc:$
+   Spring Street runs along the southern edge of the Arcology, and intersects
+here with Fifth Street. Traffic flows north and west from here, and commuters
+seem to be in packs, heading north. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32680
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32690
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32683
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32681
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32683
+Name:	Fifth Street
+Desc:$
+   As you move further north, the enormous outline of the Renraku Arcology
+comes into view. Taking up a vast section of the downtown district, it's
+gleaming walls are home to thousands of individuals, both employees and
+habitual shoppers. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32682
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32684
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32684
+Name:	Fifth and Seneca Street
+Desc:$
+   Seneca Street cuts east and west, briefly intersecting with Fifth Street.
+On the opposite corner, a huge triangular department store lures hordes of
+young customers to the piping sounds of cash registers and high heels. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32683
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32689
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32686
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32685
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32685
+Name:	Seneca Street
+Desc:$
+   The dim mood lighting of several jewellery stores bathes the pavement in a
+comfortable yellow and orange wash, slowly introducing the evening to the city
+as shoppers begin to thin out. Even though several smaller shops will
+generally close around five or six in the afternoon, the larger malls and
+boutiques take pride in staying open far later, just to mop up the last
+remnants of the day's consumers. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	5000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32684
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32660
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32686
+Name:	Fifth Street
+Desc:$
+   Fifth Street lines along the central route cutting through the commercial
+district. Further north, you can see several intersections, almost stacked
+against each other within the huge collections of office blocks and shopping.
+Just around the corner, the strong aroma of chinese food drifts towards you,
+and the steady bustle of activity beckons from the shadows. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32684
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32687
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31101
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32687
+Name:	Fifth and Boren
+Desc:$
+   The southeast corner of the downtown commercial district is one of the most
+lucrative and sought after regions inside the metroplex nowadays. The streets
+are clean and well kept, and several office blocks of varying hight enjoy an
+unusually expansive view from the southern borders of the city. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32686
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32688
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32688
+Name:	Boren Avenue
+Desc:$
+   During the construction of greater Seattle, this avenue was originally
+considered a down and out sector, merely lining the edge of the metroplex
+against the forests and wastelands further south. However, the neighbourhood
+appears vibrant, the steady hum of business drifting down from the tower
+blocks to your left.  A small DocWagon outlet is to the north of here. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	16202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32695
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32687
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32689
+Name:	Seneca Street
+Desc:$
+   The traffic has begun to slowly diminish, as you head towards the further
+reaches of the commercial district. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32693
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32684
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32690
+Name:	Spring Street, at Renraku Arcology
+Desc:$
+   Spring Street is suddenly overshadowed by the vast structure of the
+Arcology, which lies just north of here. Traffic generally slows down a little
+to take in the view, and the pedestrian traffic veers northwards, as if drawn
+by some unseen magnetic force. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	8680
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32691
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32682
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32691
+Name:	Sixth and Spring Street
+Desc:$
+   Heading east and west, Spring Street lines the grassy outcrops that
+surround the arcology just north of here. Sixth Street, only a short alley in
+Seattle terms, ends here and splits the traffic in both directions. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32697
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32692
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32690
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32692
+Name:	Sixth Street
+Desc:$
+   A little further north from here, the gleaming silver structure of Renraku
+Arcology leans across your view of the downtown skyline. In the opposite
+direction, Sixth Street leads south, towards the outer border of the district.
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32691
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32693
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32693
+Name:	Sixth and Seneca Street
+Desc:$
+   The corner leans slightly to the south, to make room for a fairly oversized
+factory across the street. Pungent fumes of old woodchips and chemical burners
+waft drearily through the corrugated iron window blinds. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32692
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32700
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32694
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32689
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32694
+Name:	Sixth Street
+Desc:$
+   Just further south from here, Sixth Street comes to an end, reaching the
+southern limit of the commercial sector. Back north, it continues a few blocks
+up towards Renraku Arcology. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32693
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32695
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32695
+Name:	Boren Avenue and Sixth Street
+Desc:$
+   The avenue breaks and splits northwards, allowing Sixth Street to take you
+back towards the center of the commercial district. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32694
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32753
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32688
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32696
+Name:	Seventh and Spring Street
+Desc:$
+   Seventh Street ends here, and routes the traffic back south a few blocks.
+Spring Street meanwhile continues to trundle at a leisurely pace past various
+shoe and handbag boutiques, all calmly nestled in the dull glow of opposing
+restaurants and cafes. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32702
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32698
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32697
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32697
+Name:	Spring Street
+Desc:$
+   Just north of here, a huge expanse of the Arcology's surroundings and the
+Expressway mesh together, obscuring the nearby district from view. Continuing
+east, Spring Street heads towards the eastern edge of the city limits, slowly
+sinking into the shade of larger office blocks away from the main shopping
+neighbourhoods. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32696
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32691
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32698
+Name:	Seventh Street
+Desc:$
+   The twin sides of the alley appear to be almost leaning in on you, and as
+you gaze further upon the structures, such an assumption is not entirely
+incorrect. While the office blocks and multiplex buildings that populate the
+area are fairly well constructed by regulation, it's not uncommon for many of
+them to need some significant repairs. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32696
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32699
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#32699
+Name:	Seventh and Seneca
+Desc:$
+   A thick, dank odour rises up from a steamvent next to you, coating the
+sidewalk in an almost glutinous dark substance, staining your shoes. The tower
+blocks around you offer no explanation of how or why this stuff is roaming
+free on the streets, and pedestrians appear to avoid it out of instinct. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32698
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32701
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	32751
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32700
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

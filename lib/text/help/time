@@ -1,0 +1,9 @@
+TIME
+
+Usage: ^gTIME^n
+
+Gives you the current game time.  Your initial reaction to the output of
+this command may be one of surprise, but you'll get used to it.  You'll
+have to, at any rate, since certain things in the game depend on this
+particular notion of time; the opening hours of the ^Wshops^n, for example.
+1 hour of mud time is equal to 2 minutes of real time.

@@ -1,0 +1,15 @@
+PROGRAMS PERSONAS
+
+All Deckers must have certain programs just for their deck to run. Programs
+are much like the skeleton of the Deck, without them one cannot jack in.
+
+There are four programs: Bod, Evasion, Masking and Sensors.
+
+Only Bod and Sensors are needed to start up a cyberdeck. But trying to run
+on the matrix without Evasion and Masking is very difficult.
+
+The total ratings of all four programs cannot exceed three times the ^WMPCP^n
+of the deck.
+
+^WSee Also: MPCP, CYBERDECK, BOD, EVASION, MASKING, SENSORS, UTILITIES^n
+

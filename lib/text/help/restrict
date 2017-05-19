@@ -1,0 +1,12 @@
+RESTRICT
+
+Test: CONTROL
+Utility: Validate
+Usage:  ^gRESTRICT <test/detection> <icon>^n
+
+This operation is used to interfere with an icon, either by inhibiting it's
+operations or lowering it's detection factor. It can only be used against
+other deckers you have located. The opposing icon's detection factor is
+added to the control test.
+
+^WSee Also: UTILITIES^n

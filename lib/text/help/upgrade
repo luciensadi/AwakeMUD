@@ -1,0 +1,17 @@
+UPGRADE
+
+Usage: ^gUPGRADE <vehicle> <part>^n
+
+This takes an automotive upgrade, and installs it into a vehicle.
+
+^WExample:^n
+^c< 10P 10M > inventory^n
+You are carrying:
+A nitrous oxide injector system
+
+^c< 10P 10M > upgrade harley nitro^n
+>You go to work on a Harley Scorpion.
+
+After which your Harley has a nitrous oxide injector system.
+
+^wSee Also: UNINSTALL, POP, REPAIR^n

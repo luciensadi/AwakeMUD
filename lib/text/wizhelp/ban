@@ -1,0 +1,11 @@
+BAN
+
+Usage ^gBAN <type> <address>^n
+
+This allows you to ban a certain address from the game. There are
+two types of ban. ^WSelect^n, and ^WAll^n. Select only allows in
+players with the SITEOK flag, which only CEO's or OWNERS can place.
+All, bans every single player from that address.
+
+^WSee Also: UNBAN^n
+

@@ -1,0 +1,9 @@
+REPAIR
+
+Usage: ^gREPAIR <vehicle>^n
+
+This command is used to repair damages vehicles and drones. While lightly damaged
+vehicles can be fixed anywhere using only a toolkit, wrecked and heavily damaged
+vehicles must be taken to a somewhere with a garage set up.
+
+^WSee Also: TOW, UPGRADE^n

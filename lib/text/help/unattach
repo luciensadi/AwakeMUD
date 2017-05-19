@@ -1,0 +1,12 @@
+UNATTACH
+
+Usage: ^gUNATTACH <accesory> <weapon>
+       UNATTACH <mount number>
+       UNATTACH <drone> <mount number>^n
+
+This allows you to remove an accessory from a weapon. It is
+also used when removing weapons from vehicular and drone
+mounting points.
+
+^WSee Also: ATTACH^n
+

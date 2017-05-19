@@ -1,0 +1,22 @@
+"RANGED COMBAT"
+
+Syntax: ^gSHOOT <target> <direction>^n
+
+Ranged combat is the system of survival in the Sprawl. If you don't have a gun,
+don't expect to last long chummer. You can always see people further than the
+room you're standing in, so you can use ^Wscan^n to check the adjacent
+rooms for possible targets. No one can scan more than one room away without
+the aid of magnifying devices. The range of the gun also plays a large
+role. You won't be able to shoot someone, if he's out of your gun's range.
+
+The direction is which direction the mob is from you. So if you scan and see
+a mob north of you that you want to shoot, you'd type in:
+
+^c< 10P 10M > shoot mob north^n
+
+This would shoot the mob once, and then combat is commenced. Many mobs have
+different reactions to being shot from a distance. You will come across these
+reactions as you use the system more and more.
+
+^WSee Also: SCAN, WIMPY, GRENADES^n
+

@@ -1,0 +1,9 @@
+NERVESTRIKE
+
+Usage: ^gNERVESTRIKE^n
+
+This command is used to toggle the adept power of Nerve Strike.
+When it is toggled on it will override all other adept melee powers
+like Killing Hands and Distance Strike.
+
+^WSee Also: NERVE STRIKE^n

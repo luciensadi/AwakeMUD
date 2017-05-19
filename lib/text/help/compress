@@ -1,0 +1,9 @@
+COMPRESS DECOMPRESS
+
+Usage: ^gCOMPRESS <file>
+       DECOMPRESS <file>^n
+
+This command is used in conjuction with the data compactor and
+headware memory cyberware. It reduces the size of a file in
+headware memory by 20% x Rating of the data compactor. Files that
+are compressed must be decompressed before they are used.

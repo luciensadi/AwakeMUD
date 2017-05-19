@@ -1,0 +1,5 @@
+To properly do a player wipe in a way that will clean the
+player directory, just run ./pwipe.sh in this directory.
+
+DONT ever run it unless you are certain that a player wipe
+is EXACTLY what you want to do.

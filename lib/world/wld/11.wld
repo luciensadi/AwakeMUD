@@ -1,0 +1,453 @@
+#1100
+Name:	Lobby
+Desc:$
+   A large immaculate lobby, brightly lit by subtly disguised fluorescent
+lighting. The silence is broken only by the gentle sweep of the revolving
+doors, providing access to the street. A bored looking receptionist doesn't
+look up at your approach, and continues slowly organising her desk. A small
+tiled corridor leads off to the west and an unremarkable door with a small
+'Staff Only' sign is behind the reception desk to the north. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	1104
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	1100
+	LockRating:	10
+[EXIT east]
+	ToVnum:	1105
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	2023
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	1101
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1101
+Name:	Corridor
+Desc:$
+   You are in a small, tiled corridor. Various promotional posters line the
+walls, advertising various overpriced matrix services. The corridor ends at a
+set of large double doors, propped open, with another smaller door off to one
+side. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	1103
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	1100
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	1102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1102
+Name:	The main showroom
+Desc:$
+   A large showroom. Glass display cases line the walls, each with small
+holographic images of what appear to be small mechanical robots spinning
+slowly in space. Small metal plaques are mounted beneath each, with what
+appear to be model numbers etched on them, corresponding to numbers on a large
+sign mounted in a frame on one wall. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	1101
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign~~~~~~~~~~~~~
+	Desc:$
+ Model #     Name               Price
+ NOVP41100   Novatech Wailer    10,000
+ NOVK41101   Novatech Soldier   12,500
+ NOVC41102   Novatech Tripwire  10,000
+ NOVS41103   Novatech Silencer  12,500
+ NOVT41104   Novatech Quicksand 12,500
+ NOVC21130   Novatech Acid       8,200
+ NOVK21131   Novatech Cadet      8,450
+ NOVP21132   Novatech Flare      8,200
+ NOVS21133   Novatech Whitenoise 8,280
+ NOVT21134   Novatech Trapper    8,250
+50
+~
+BREAK
+#1103
+Name:	A Small Showroom
+Desc:$
+   A table sits in the middle of this small, carpeted room. A terminal on it
+shows a series of images of small robotic constructs, each with a basic
+feature list next to it. A sign hanging on the wall lists prices. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	1101
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign~~~~~~~~~~~~~
+	Desc:$
+ Model #     Name               Price
+ NOVB41110   Novatech Sentinel  15,000
+ NOVR41111   Novatech Endurance 15,000
+ NOVS41112   Novatech Slammer   17,500
+ NOVT41113   Novatech Strainer  15,000
+ NOVB21140   Novatech Ghost     10,000
+ NOVR21141   Novatech Basher    11,500
+ NOVS21142   Novatech Rover     10,000
+ NOVT21143   Novatech Icicle    11,890
+~
+BREAK
+#1104
+Name:	A cluttered workroom
+Desc:$
+   A small room, lined with benches playing host to hordes of unrecognisable
+electronic parts. A few complete terminals flicker occasionally, showing brief
+glimpses of some project or another. A large paper sign is pinned to a notice
+board here, along with numerous other small post-it notes and scribblings. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	1100
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	1100
+	LockRating:	1
+[EXTRADESC 0]
+	Keywords:	sign~~~~~~~~
+	Desc:$
+ Model #     Name               Price
+ NOVL41120   Novatech Warden    20,000
+ NOVN41121   Novatech Punisher  20,000
+~
+BREAK
+#1105
+Name:	The elevators
+Desc:$
+   A pair of elevators are set into this wall, each with a small dial, like a
+clock face, indicating their current floor. A floor directory sits between
+them, above a single call button. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	1100
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	directory~~~~~~~~~~~
+	Desc:$
+A small sign, reading:
+ 'Hardware sales, 1st floor.'
+ 'Development - staff only, 2nd floor.'
+~
+BREAK
+#1106
+Name:	The elevator
+Desc:$
+   A large mirror dominates the elevator, a failed attempt to make it seem
+roomy. A small panel is set beside the doors, a brief description of each
+floor by each button. 
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXTRADESC 0]
+	Keywords:	panel~~~~~~~~~~~~~~~~
+	Desc:$
+A small panel with three buttons lit from behind by a subtle blue glow.
+ 2 - Research and Devlopment / Sales
+ 1 - Conference rooms / Security
+ G -
+Sales / Showrooms
+ A small red sticker below the buttons reads 'Authorised Personnel Only'.
+~
+BREAK
+#1107
+Name:	First floor
+Desc:$
+   Soft, classical music fills a clean, bright foyer. The light yellow walls
+and blue-rimmed desks create a very late twentieth-century feel. A pair of
+posters flank the doorway to a corridor, advertising the latest and greatest
+of the new 'retro-look' line. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	Keywords:	door
+	ToVnum:	1108
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	4
+BREAK
+#1108
+Name:	A spotless hallway
+Desc:$
+   The light yellow walls here are highlighted by a series of steady, white
+fluorescent tubes, placed at intervals down the hallway. Soft, classical music
+can be heard, filtering from the small foyer to one end of the hallway, and a
+soft hum can be heard coming from a doorway off the corridor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	1112
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	1107
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	1109
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1109
+Name:	A spotless hallway
+Desc:$
+   Very faint music can be heard coming from one end of the light yellow
+hallway. An open doorway ends the corridor here, and another doorway leads off
+to one side, each leading to separate showrooms. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	1111
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	1108
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	1110
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1110
+Name:	A modest showroom
+Desc:$
+   This room is full of large, rack mounted computers, on display as the best
+of the best. Here and there small patches of light yellow wall can be
+glimpsed, but almost every spare inch has been covered. White, overhead
+lighting creates odd shadows on the floor, and the buzz from the various
+machines seems to work as an effective white noise generator, blocking out all
+sounds of the outside world. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	1109
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1111
+Name:	A modest showroom
+Desc:$
+   A pair of fluorescent tubes casts everthing in a sharp white light, the
+single window here has its blinds pulled closed. The walls are the same light
+yellow as the hallway outside, and a number of tables are pushed hard up
+against them. On these tables, a series of computer towers and flat monitors
+sit, quietly humming. This year's models are all finished in stylish black
+with chrome highlights and are reminiscent of late twentieth century machines.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	1109
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1112
+Name:	A modest showroom
+Desc:$
+   Opposite the door, a set of large windows here look out onto the street
+below. Two tables, one on either side of the window, sit against the walls
+prominently displaying a line of laptop computers. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	1108
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1113
+Name:	Second floor
+Desc:$
+   You are in a small foyer, the floor here seems to be plain concrete. West
+from here, the floor opens up into one large room, which looks more like
+storage than a display area.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	1114
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1114
+Name:	A Cluttered Showroom
+Desc:$
+   Stacks of large boxes and crates make this place seem more like a warehouse
+athan a showroom. A microtronics workshop has been set up in the center of the
+clutter, to allow prospective customers to get a feel for what it offers.
+Despite the mess surrounding them, the tools are set up neatly and the
+workshop seems to shine with that "just been polished" gleam.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	1113
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1150
+Name:	A Microdeck Software Outlet
+Desc:$
+    As you walk past the trid units displaying company advertisements in the
+window into the shop proper, the gleam and shine of the place hits you. It
+seems as though someone has went over everything with a thick layer of polish.
+From the trid displays showing abstract representations of various programs in
+action to cyberdecks and cyberterminals lined up in displays for testing, the
+place reeks class. A smiling, middle aged human stands behind the counter,
+waiting for you to ask for help.  
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	29010
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

@@ -1,0 +1,11 @@
+CONSIDER
+
+Usage: ^gCONSIDER <persona>^n
+
+This command will compare your relative abilities with that of the monster's.
+It will only give you a rough estimate, and by no means should be taken as
+gospel.
+
+Example:
+^c< 10P 10M > consider phobia^n
+

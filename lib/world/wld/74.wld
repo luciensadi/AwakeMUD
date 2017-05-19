@@ -1,0 +1,2322 @@
+#7400
+Name:	Broadway Avenue East
+Desc:$
+   Surrounding you in all directions are giant steel and glass towers,
+reminders of the corporate powers in control.  Ahead of you there is a large
+building, though not the largest in Seattle, very unique.  It appears to be a
+giant Aztec step pyramid, built in this modern time. 
+~
+Flags:	10000000000000000000100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7401
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	8256
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7401
+Name:	Entrance to the Aztechnology Pyramid
+Desc:$
+   Ahead of you is the entrance to the centralpyramid of the Aztechnology
+Northwest Complex.
+   The walls of Aztechnology appear to be made of a grey carved stone.  You
+see laser carved images of ancient Aztec and Mayan gods surrounding you.
+An impressing carving of the Aztec god, Quetzecoatl adorns the front
+entrance.
+~
+NightDesc:$
+   Ahead of you is the entrance to the central pyramid of the Aztechnology
+Northwest Complex.
+   The walls of Aztechology glow in amber and white illumination, very
+dazzling and impressive to the eyes.  Carvings of Aztech and Mayan gods glow
+brightly in the night.  You see tourists in helicopters and dirigibles above
+you, taking pictures and catching eyefuls of the impressive sight of the
+glowing carvings that adorn the walls of the Aztechnology Pyramid.  The most
+impressive carving is that of the Aztech god, Quetzecoatl that covers the
+entrance archway. 
+~
+Flags:	100000000000000000000100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7402
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	30539
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7402
+Name:	^WAztechnology ^RReception ^GArea^n
+Desc:$
+   You enter a spacious lobby with a very high crystalline ceiling, adorned
+with Aztec and Mayan gods and heroes.  The walls are made with polished white
+marble, etched with Aztec hieroglyphics.  Ahead of you is a large information
+and reception desk, staffed with ten security guards, eight secretaries, four
+information attendants, and a terminal.  There is a fountain just beyond the
+reception desk, and an elevator ahead of the fountain. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7403
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7415
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7401
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7403
+Name:	Aztechnology Reception Area
+Desc:$
+   You step a little closer to the center of the reception lobby, and weave
+through all the businesswomen and men going to and fro, and reach the desk.
+The immensity of the lobby begins to appear to grow, as you can see that it is
+still a ways to the fountain and the elevator.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7404
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7414
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7402
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7416
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7404
+Name:	Aztechnology Reception Area
+Desc:$
+   You continue to weave thru the execs, sararimen, and other suits, and you
+finally approach the Reception and Information Center.  You see a large
+circular desk staffed by eight secretaries working hard, as Aztech has no
+qualms about overworking their wage slaves to near exaustion for very little
+nuyen.  Probably make more nuyen running the shadows if they could gather the
+bravery, and had the skills.  Several armed agents of Aztechnology are nearby,
+just to make sure that the corporate order is well maintained.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7405
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7413
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7403
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7405
+Name:	Aztechnology Reception Area
+Desc:$
+   You finally reach the center of the reception lobby, and now the high domed
+ceiling looks really high.  Sararimen and other suits gather around a small
+cart that sells soy espresso, talking of their jobs and careers, and otherwise
+boring garbage.  Right next to the cart in the absolute center of the
+reception lobby is a fountain, decorated with Mayan hieroglyphics. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7406
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7412
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7404
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7417
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7406
+Name:	Aztechnology Reception Area
+Desc:$
+   Ahead of you to the north are the elevators, while to the south are an
+espresso stand and large ornate fountain.  Beyond that to the south are the
+information desk and the exit.  Above you is an immensely ornate ceiling
+etched white marble with Aztec gods and heroes. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7407
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7411
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7405
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7418
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7407
+Name:	Aztechnology Reception Area
+Desc:$
+   To your south is the exit, a long ways across a crowded and immense lobby,
+And just to your north are the elevators.  You see to the west, hallways that
+go to offices, and to your east, two large rows of stores.  Above you is a
+monstrous ceiling etched in marble with Aztec legends. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7408
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7410
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7406
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7419
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7408
+Name:	Aztechnology Reception Area - at the Elevators
+Desc:$
+   You are at the far north end of the reception lobby.  Right by you is a
+large elevator, with a golden polished brass doorway.  The walls at this end
+are made with white marble and are etched with Aztec hieroglyphs.  To your
+south a ways is a fountain, and an espresso cart, and a little farther, is a
+huge reception desk.  A ways more, you see the exit of the lobby.  To the
+west, are some hallways that lead to offices and meeting rooms, and to your
+east there are two rows of stores. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7409
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7407
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7420
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7409
+Name:	Aztechnology Reception Area
+Desc:$
+   You are at the north end of the reception lobby, near the elevators.  To
+your south are a fountain, an espresso cart, and a large reception desk.
+Above you is a beautifully etched marble dome ceiling, etched with the gods
+and heroes of Aztec myth.  The walls are white marble, etched with beautiful
+Aztec hieroglyphics. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	7410
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7408
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7410
+Name:	Aztechnology Reception Lobby
+Desc:$
+   You are near the northen end of the Aztechnology reception lobby.  Just to
+the north of you are the elevators, while to the south of you are the exit,
+front desk, an espresso cart, and a fountain.  The ceiling above you is very
+ornate, etched in marble with the heroes and gods of Aztec myth. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7409
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7411
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7407
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7411
+Name:	Aztechnology Reception Lobby
+Desc:$
+   You are in an immense reception lobby, where execs and wageslaves busily
+walk to and fro.  To the east, there are two rows of stores, one of which is
+directly east of you.  To your west there are two rows of meeting rooms, and
+to your south are the main reception and information desk, a fountain, an
+espresso and soykaf cart, and the exit.  North of you are the elevators. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7410
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7412
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7406
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7412
+Name:	Aztechnology Reception Area
+Desc:$
+   You are on the eastern end of the Aztechnology reception lobby, where a
+large planter sits.  in this planter there is a large Saguaro cactus, probably
+genetically enhanced to handle the seattle moisture. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7411
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7421
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7413
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7405
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7413
+Name:	Aztechnology Reception Area
+Desc:$
+   Here on the eastern end of the reception lobby, there is a hallway lined
+with stores.  To your north you see a large Saguaro cactus.
+   Directly west of you, is the main Reception desk area, staffed by a number
+of Aztechnology employees.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7412
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7414
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7404
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7414
+Name:	Aztechnology Reception Area
+Desc:$
+   Directly to the north of you is a large Saguaro cactus that towers nearly
+to the finely etched crystalline ceiling.  To your west is a fountain and
+soykaf cart, and to your east there is a very artful mural depicting the Aztec
+legend of Quetzecoatl. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7413
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7415
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7403
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7415
+Name:	Aztechnology Reception Area
+Desc:$
+   You are on the southeastern end of the Aztechnology Pyramid reception
+lobby.  Aways to the north are the elevators, and directly north of you is a
+large Saguaro cactus in a huge planter.  Hmm, genetic engineering maybe? 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7414
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7402
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7416
+Name:	Aztechnology Reception Area
+Desc:$
+   You are in the Aztechnology Pyramid's vast reception lobby.  Above you is a
+fantastic ornate ceiling with gold and silver renditions of Aztec gods and
+heroes, and the walls are etched in marble.  People fill this lobby, mostly
+wageslaves and sararimen going to and fro, getting to their appointment on
+time, etc. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7417
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7403
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7417
+Name:	Aztechnology Reception Area
+Desc:$
+   You continue thru the Aztechnology Pyramid reception lobby, and approach
+the area near the center of the lobby.  Everything looks so dang large and
+makes you look so fragging small.  At the center of the lobby, just to the
+east of you is a large fountain.  By the fountain is a lady hawking espressoss
+and soykaf. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7418
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7405
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7416
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7433
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7418
+Name:	Aztechnology Reception Area
+Desc:$
+   You are in a busy section near the east mall wing of Aztechnology's famous
+Seattle Pyramid.  Here workers and shoppers bustle to and fro to get to their
+appointments, homes, etc. on time. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7419
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7406
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7417
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7419
+Name:	Aztechnology Reception Area
+Desc:$
+   You are getting closer to the elevators.  Here a long line of people
+begins, hoping to get into the elevator in this go-around.  Could be a long
+wait. Near you is a small statue of a mythical Aztec hero with a spear,
+slaying a scaly beast. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7420
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7407
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7418
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7420
+Name:	Aztech Reception Area
+Desc:$
+   This is the northern end of the reception area. The white marble walls are
+decorated with artfully exquisite renditions of Aztec hieroglyphs. A large
+elevator with a polished brass door is to the east. To the south is a fountain
+and an espresso cart; the reception desk lies even further south. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7408
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7419
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7421
+Name:	Mall Entrance, East Wing
+Desc:$
+   You enter the entrance to the east wing of the Aztechnology Pyramid's
+shopping mall.  You see shoppers and workers bustling to and fro, trying to
+get to where they need to go on time. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	7422
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	7430
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7412
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7422
+Name:	Aztechnology Shopping Mall
+Desc:$
+   Shoppers, shoppers and more shoppers make this area a very crowded place.
+To your north, a store catches your eye.  A large sign made with the latest
+holographic technology reads Hugo's Sports Emporium.  Near you is a bench
+sitting by a planter with a small Joshua tree inside of it.  By the planter is
+a waste paper basket. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7448
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7423
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7421
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7423
+Name:	Aztechnology Shopping Mall
+Desc:$
+   This place is crowded.  You can hardly find any elbow room as tourists and
+shoppers move to and fro.  Some of the most posh stores can be found on this
+wing of the mall. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7449
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7424
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7422
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7424
+Name:	Aztechnology Shopping Mall
+Desc:$
+   The crowd seems to go thicker as you move through this part of the mall.
+You hardly can see your surroundings, other than the crystalline artificial
+sun lights directly above you. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7450
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7425
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7423
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7425
+Name:	Aztechnology Shopping Mall
+Desc:$
+   The crowd seems to disperse a bit here, as you get closer to the food
+court.  The hallway widens a bit, giving you more elbow room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	7426
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7424
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7426
+Name:	Food Court
+Desc:$
+   Above you artificial sunlight streams down through a crystalline ceiling.
+Around you are people at benches eating various types of cuisine, ranging from
+the classic "Hot Dog on a Stick" to "Nukit Burgers" and "Nacho Mama." 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7425
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7427
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7434
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	7431
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7427
+Name:	Aztechnology Shopping Mall
+Desc:$
+   A thickly crowded portion of the mall.  A thick wall of jungle brush
+separates this part from the northeast wing of the mall. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7426
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7428
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7428
+Name:	Aztechnology Shopping Area
+Desc:$
+   You see a stand with some guy trying to sell raffle tickets to win a new
+Eurocar Westwind 2000.  Behind him is a shiny blue Eurocar. A few people stand
+by, looking at the car, drooling. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7427
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7429
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7429
+Name:	Aztechnology Shopping Area
+Desc:$
+   You navigate your way through the bustling crowds of tourists, shoppers,
+wageslaves, and others who frequent this part of the Aztech mall.  A thick
+wall of brush blocks your way north, and a set of stores are lined up to the
+south. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7428
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7430
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7430
+Name:	Aztechnology Shopping Mall
+Desc:$
+   Above you, shimmering in about a million different colors is a crystalline
+ceiling.  To your east, are a set of several shops that are being frequented
+by many shoppers, some of them residential wageslaves, others shoppers from
+throughout Seattle. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7429
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	7421
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7431
+Name:	A staircase
+Desc:$
+   A white marble staircase, built very wide.  Shoppers climb up the stair to
+and fro with dazed countenances, not knowing the motives of those dark forces
+surrounding them. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT up]
+	ToVnum:	7432
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	7426
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7432
+Name:	Food Court, Level 2
+Desc:$
+   At the other end of the Food Court, the crowd is sparse.  You see a few
+tourists taking a break from sightseeing over a pizza from "Papa Siciliano's"
+and an old man sipping on a soda by a planter. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7435
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	7469
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	7431
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7433
+Name:	Mall Entrance, West Wing
+Desc:$
+   You walk into the west wing of the mall, and you see a large selection of
+stores. People busily move to and fro.  A large statue of Juan Aztacapolco,
+the CEO of Aztechnology stands here.  In this depiction he is wearing the
+ancient Aztec battle dress. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7417
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7447
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	7437
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7434
+Name:	A small dining area
+Desc:$
+   A set of benches and tables surrounding a fountain.  The fountain is about
+10 feet tall, spraying water into a black marble tub etched with Aztec
+hieroglyphics. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7426
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	7436
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7435
+Name:	Dining Area, Level 2
+Desc:$
+   Just above the crystalline sunpanes sits another dining area with more
+typical phosphorescent lighting.  Benches surround you, and the crowd is
+rather sparse, only a few businessmen talking over at one bench eating
+Chinese, and an old lady reading a book by the edge railing. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	7432
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	7436
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7436
+Name:	A wide white marble staircase
+Desc:$
+   A wide white marble staircase, with gold railings.  Everything here is
+bigger than life.  The shoppers and others here seem oblivious your presence
+here. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT up]
+	ToVnum:	7435
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	7434
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7437
+Name:	Aztechnology Shopping Mall
+Desc:$
+   You enter the main part of the shopping mall.  A glass artificial skylight
+shines bright artificial sunlight over you.  To your south is a wall of jungle
+plants.  To your north is a line of stores. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	7433
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7438
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7438
+Name:	Aztechnology Shopping Mall
+Desc:$
+   A large crystalline sculpture of a feathered serpent sits in a fountain to
+your south.  Surrounding the fountain is a plaza with benches. Executives
+typing in their laptop computers, talking in their cellular vidphones, and
+shoppers taking a break sit upon these benches.  A set of tourists stand by
+the fountain taking pictures. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7459
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7437
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7451
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7439
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7439
+Name:	Aztechnology Shopping Mall
+Desc:$
+   You are in the Northwest wing of the Aztechnology Pyramid Mall where a
+large wall of jungle plants stands to your south, and a line of stores stand
+to your north.  Above you is an artificial sunlight. Surrounding you are
+shoppers and tourists, making this a very active place. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7438
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7440
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7440
+Name:	Aztechnology Shopping Mall
+Desc:$
+   You are at the northwest corner of the Aztechnology Pyramid Shopping
+Center, where a malt shoppe sits to the north of you, and to your south and
+west is a trid theater. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7439
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7441
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7441
+Name:	Aztechnology Shopping Mall
+Desc:$
+   You are in the Aztechnology Shopping Mall.  To your north and south are two
+lines of stores, and right by you is a busy staircase, going up to the
+mezzanine and second level of the mall.  To your west is a large movie
+theater, with a long line of people waiting to see the latest trid film,
+"Spiral" starring Maria Mercurial. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7440
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7444
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7453
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	7442
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7442
+Name:	A staircase
+Desc:$
+   You are walking on a long staircase, wide enough to carry a lot of foot
+traffic.  The steps are white marble, etched with Aztec patterns, and the
+railing on each side is a polished golden brass. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT up]
+	ToVnum:	7443
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	7441
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7443
+Name:	Aztechnology Shopping Mall, Level 2
+Desc:$
+   The upper level of the mall.  There are stores on this level, though not as
+many as down below.  A few shoppers sit on the benches on the sides of the
+walkway. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7461
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	7442
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7444
+Name:	Aztechnology Shopping Mall
+Desc:$
+   You are in a corner in the Aztechnology Pyramid's mall.  Just to the north
+of you is a busy staircase that will take you up to the second level and
+mezzanine. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7441
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7445
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7445
+Name:	Aztechnology Shopping Area
+Desc:$
+   You are in the Aztechnology Shopping Mall.  A line of stores stand to your
+south.  North of you is a wall of jungle-type plants, and the mall runs
+east-west. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7446
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7458
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7444
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7446
+Name:	Aztechnology Shopping Mall
+Desc:$
+   A large crystalline sculpture of a feathered serpent sits in the center of
+a fountain directly to your north.  To your south are a line of stores. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7451
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7447
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7445
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7447
+Name:	Aztechnology Shopping Mall
+Desc:$
+   A line of stores to the south of you catch your eye with brilliant neon and
+holographic signs.  Directly to your south is a computer store. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	7433
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7452
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7446
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7448
+Name:	Hugo's Sports Emporium
+Desc:$
+   A small store, relatively, considering the large amounts of sporting goods
+that the owners managed to fit into this place.  The walls are lined with
+every kind of sporting equipment one can think of, as well as the aisles. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7457
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7422
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7449
+Name:	Pets Plus
+Desc:$
+   Caged animals line the walls of this store.  You hear all sorts of barking,
+growling, meowing, cawing, and chirping coming from all directions.  In one
+part of the store is a large aquarium filled with all sorts of fish. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	7423
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7450
+Name:	Media Hype
+Desc:$
+   Advertised as the largest chain of simsense and trid media stores in North
+America, Media Hype has a massive selection of trideo entertainment systems,
+simsense systems, chips, disks, and just about anything else in the field of
+media you can think of. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	7424
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7451
+Name:	^GPlaza ^Rof ^Ythe ^BSerpent^n
+Desc:$
+   The floor here is a white marble with a greenish vein, and a spectacular
+sculpture of a feathered serpent sits in the center of a huge fountain.
+Tourists stand by, taking pictures of the fountain, and executives lounge on
+the benches that surround the fountain. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7438
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7446
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7452
+Name:	Bits and Bytes
+Desc:$
+   Bits and Bytes has a large selection of the best computer technology
+avaliable today.  Or so they say.  You see holographic wall monitors for
+todays matrix multimedia applications, cyberterminal demos, and all sorts of
+other fun but relatively useless items. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7447
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7453
+Name:	Aztech Cineplex Lobby
+Desc:$
+   You are in a fancy old-style movie theater lobby, with ticket counters,
+ushers, a popcorn and snack stand, and long lines.  Holographic posters depict
+stars such as Maria Mercurial, Joseph Ray, and Karinne in flicks such as
+"Spiral," "Dementia," and "The Threshold of Destruction."  The feature
+attraction is "Spiral," the newest of the James Bond series starring Maria
+Mercurial. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7441
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7454
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7454
+Name:	A hallway in the theater
+Desc:$
+   You are walking through a long darkened hall, lightened only by the lights
+of the coming attractions posters, and the row of lights near the floor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7453
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7456
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	7455
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7455
+Name:	A dark balcony
+Desc:$
+   You see the trid flick, "Spiral" on a screen.  From here, you can see the
+rest of the theater.  The balcony is well maintained, unlike many of the
+theaters you have seen throughout the city, this one is actually clean. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT down]
+	ToVnum:	7454
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7456
+Name:	Inside the Theater
+Desc:$
+   You are inside of the Aztech Cineplex Theater, where a huge holoscreen
+displays the new Maria Mercurial flick, "Spiral."  The deafening sound of the
+action on the screen comes from 4 giant quadrophonic speakers. There is a
+large crowd of people who came in for the showing of the film, which is one of
+the top money makers this year. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7454
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7457
+Name:	^GHugo's ^RSports ^BEmporium^n
+Desc:$
+   You are stunned by the amount of sporting goods that can fit in such a
+small area.  The walls are lined with all sorts of balls, hockey sticks,
+hunting rifles, uniforms, hats, and any other thing you can think of. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	7448
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7458
+Name:	Mortimer of London
+Desc:$
+   You are surrounded by business suits of the highest executive calibre. This
+is where the top mobsters, execs, and otherwise rich motherfraggers get their
+best clothes.  Even the clothes racks and hangers are gold plated here.  You
+better have a decent roll of nuyen if you want to shop here. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7445
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7459
+Name:	Universal Omnitech Front Lobby
+Desc:$
+   You are in the front lobby to the Aztechnology Pyramid outlet of the
+Universal Omnitech corporation.  Around you are several couches where people
+waiting for their appointments sit and wait. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7460
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7438
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7460
+Name:	Universal Omnitech
+Desc:$
+   You enter the operation room of Universal Omnitech.  You see a clean
+operation table, a clean set of scalpels and laser operation instruments, and
+clean walls and ceiling.  Not like most street docs you have seen, but very
+professional. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	7459
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7461
+Name:	West Mezzanine
+Desc:$
+   You are in the Aztechnology Pyramid Mall Mezzanine, a less populated part
+of the mall.  A security guard walks along the rail, looking at shoppers on
+the lower level, whistling some tune.  The ceiling is a tile mosaic of Aztec
+heroes from ancient ages long past.  You see a small shop to the east a ways.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7462
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7443
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7462
+Name:	West Mezzanine
+Desc:$
+   This part of the mall includes a small round plaza, with a statue of an
+Aztec warrior in ancient battle dress holding a spear.  To your north is the
+local Radio Shack, and to your northwest is a coffee bar.  The other store is
+currently unopen, walled off with a large sign saying, "Coming Soon!!! NeRpS
+the Store!" 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	7463
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7465
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7461
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	7464
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7463
+Name:	A Small Unnamed Software Store
+Desc:$
+   Crammed between two larger stores, this software shop inhabits what
+probably used to be a phone booth. It is barely 2 meters wide and extends back
+about 5 times that. The walls are lined with small chip dispensers, filled
+mostly with skillsofts and para-legal cyberdeck utilities. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	7462
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7464
+Name:	Coffee People
+Desc:$
+   Covering the walls in this retro 1990's coffee bar is a great deal of
+artwork, with jump-in-your-face style paintings of black coffee, incredibly
+wired individuals, and black tigers.  A painting on the north wall of the
+words  "Coffee People" leaps at you. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	7462
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7465
+Name:	West Mezzanine
+Desc:$
+   You are on the sparsest part of the mezzanine, people-wise.  A few signs
+line the walls, advertising Aztechnology products, and stores to open here
+soon. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7466
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7462
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7466
+Name:	Mezzanine
+Desc:$
+   You are on the second level mezzanine of the entrance lobby of the
+Aztechnology Pyramid.  You see in intracate detail the great dome, over the
+lobby, showing a mighty battle between Aztec gods. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	7467
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7465
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7467
+Name:	Mezzanine
+Desc:$
+   You are on a curved overhang overlooking a crowded lobby for the entrance
+of the Aztechnology pyramid.  You can see hundreds of people rushing fro and
+to, and hoardes of tourists checking out the Aztec artwork. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7468
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7466
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7468
+Name:	Mezzanine
+Desc:$
+   You are on a large curved overhanging mezzanine overlooking the entrance to
+the Aztechnology Pyramid.  Down below, tourists and businessmen, and people of
+all colors and metatypes crowd the lobby.  Above you is a vast carving of a
+war between Aztec gods and heroes. 
+~
+Flags:	100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	7469
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7467
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7469
+Name:	Mezzanine
+Desc:$
+   The mezzanine ends here, just entering the food court to the southeast. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	7432
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7468
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7470
+Name:	A small closet
+Desc:$
+   A small closet with a whole bunch of technological oddities strewn about,
+cyberdecks, and a computer with a jackpoint that makes a loud buzzing sound.
+There is a smell of burnt flesh and potato chips in the air. 
+~
+Flags:	10000000000000001000000000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+BREAK
+#7471
+Name:	System Access Node
+Desc:$
+   Essentially, this node follows the UMS standards for what a system access
+node should look like.  A rectangular white portal. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	4
+[EXIT north]
+	ToVnum:	7472
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7472
+Name:	A hexagonal node
+Desc:$
+   You are in an octagonal node, which is indicative of the node's function as
+a subprocessing unit. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	4
+[EXIT north]
+	ToVnum:	7473
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7471
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7473
+Name:	A hexagonal node
+Desc:$
+   You are in a hexagonal node, indicative of the nodes function as an SPU. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	4
+[EXIT north]
+	ToVnum:	7475
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7472
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7474
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7474
+Name:	A cramped cube
+Desc:$
+   This node is cube shaped.  Datastore by universal matrix standards. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	4
+[EXIT east]
+	ToVnum:	7473
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7475
+Name:	A hexagonal node
+Desc:$
+   You are in a hexagonal node, indicative of this node's function as a
+subprocessing unit.  However, the words "^RDANGER ^yahead^n" written in blood on the
+walls are a variation on the UMS.  You might want to proceed with caution. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	4
+[EXIT north]
+	ToVnum:	7476
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7473
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7476
+Name:	A hexagonal node
+Desc:$
+   This is a hexagonal node, indicative of its function as a subprocessor.
+However, its flashing ^rcrimson^n lights unnerve you.  Is the host on alert, or
+are just trying to say that its not a safe place to be? 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	7
+[EXIT north]
+	ToVnum:	7477
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7475
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7477
+Name:	An octagonal node
+Desc:$
+   This node is in an octagonal shape, indicative of its function as the
+host's main Central Processing Unit. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	8
+[EXIT south]
+	ToVnum:	7476
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7698
+Name:	The Temple Library
+Desc:$
+   Here is a hermetic blood mages dream.  A nice sacrificial alter to get the
+mana flowing, a few books and formulas here and there, etc, etc... 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+BREAK
+#7699
+Name:	A teleportation chamber
+Desc:$
+   You are surrounded by shimmering gates to many other realms.  This is the
+nexus of reality.  From here you could go almost anywhere. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	14
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	4500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	2100
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	4000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	3201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	2501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4900
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	5000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	13
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	1000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

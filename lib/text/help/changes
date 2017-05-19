@@ -1,0 +1,15 @@
+CHANGES
+
+Here lies all of the changes made during the version upgrade from 0.77 to 0.80A
+
+New Help System Backend
+Help Files Updated
+Now displays non-hidden closed and locked doors to non-perceiving/projecting chars
+Knock command
+Weather changing re-enabled
+Weather/Time specific messages when leaving a building
+New Newbie Guild and Chargen Process
+Player death messages changed
+Critical Combat bug affecting dodge fixed (Was using TN equal to power of the weapon, not 4)
+Hunger, Thirst, Drunk Messages Changed
+

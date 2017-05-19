@@ -1,0 +1,18 @@
+! |
+
+Use ! to repeat the last command typed at the keyboard.
+
+Use | to replace a string from the last command with a new string.  The
+syntax is the same as in csh: "|old-string|replacement"  For example:
+
+^c< 10P 10M > tell rasmusse Hi there, how are you?^n
+^yNo-one by that name here.^n
+
+^c< 10P 10M > |rasmusse|rasmussen^n
+^yYou tell Rasmussen, 'Hi there, how are you?'^n
+
+^c< 10P 10M > |you|you doing|^n
+^yYou tell Rasmussen, 'Hi there, how are you doing?'^n
+
+^WSee also: ALIAS^n
+

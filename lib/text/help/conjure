@@ -1,0 +1,20 @@
+CONJURE
+
+Usage: ^gCONJURE <force> <spirit/elemental>^n
+
+Mages and shamans have the ability to conjure spirits and elementals
+to do their bidding. Only mages can conjure elementals and only
+shamans can conjure spirits. 
+To conjure an elemental a mage must be in a room with a conjuring library
+and a hermetic circle of force equal to or greater than the force of the
+elemental they wish to conjure. Once conjured the elemental will owe the
+mage a certain amount of services, and can be sent back to the metaplanes
+to await the mage calling on them again. Conjuring an elemental takes time
+a number of hours equal to the force of the elemental. The mage also needs
+conjuring materials of a force equal to the force of the elemental.
+Shamans can conjure spirits at anytime, but only of the domain they are in.
+Drain from conjuring is reduced by Charisma.
+
+^WSee Also: CONJURING, LODGE, HERMETIC CIRCLE, SHAMAN, MAGE, HERMETIC LIBRARY,
+            DOMAIN, RELEASE, ORDER^n
+

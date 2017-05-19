@@ -1,0 +1,11 @@
+CPOOL
+
+Usage: ^gCPOOL <Dodge> <Body> <Offense>^n
+
+This command is used to quickly set your pools to your desired values.
+All three fields must be entered even if you wish to set 0 extra dice.
+If more dice are alloted to offense than your skill in the weapon you
+are currently wielding then they will be automatically put into the dodge 
+pool.
+
+^WSee Also: POOLS, COMBAT POOL, BODY POOL, DODGE POOL^n

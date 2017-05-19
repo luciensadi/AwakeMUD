@@ -1,0 +1,2102 @@
+#60500
+Keywords:	neil trainer man
+Name:	Neil
+RoomDesc:$
+Neil, a trainer of the Guild, is ready to help you increase your attributes. 
+
+~
+LookDesc:$
+Neil appears to have had quite a number of cosmetic modifications, most likely
+covering old scars or cyber replacements. Familiar with all of the development
+equipment, Neil is one of the Guild's best trainers. 
+~
+ArriveMsg:	Ð°X°
+LeaveMsg:	Gears
+MobFlags:	10000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	40
+	Qui:	40
+	Str:	40
+	Cha:	40
+	Int:	40
+	Wil:	40
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	200
+	Ballistic:	15
+	Impact:	15
+[SKILLS]
+BREAK
+#60501
+Keywords:	cassandra teacher mage magician
+Name:	Cassandra
+RoomDesc:$
+Cassandra is draped in a mage's robe, ready to help you learn. 
+
+~
+LookDesc:$
+Cassandra is currently reading a few ancient, old parchments related to magic.
+She's ready to teach you the fundamentals to manipulating and controlling
+magic in the world. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	40
+	Qui:	40
+	Str:	40
+	Cha:	40
+	Int:	40
+	Wil:	40
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	50
+	Ballistic:	15
+	Impact:	15
+[SKILLS]
+BREAK
+#60502
+Keywords:	dante teacher trainer man
+Name:	Dante
+RoomDesc:$
+A teacher stands here: his LCD nametag reads: "Dante". 
+
+~
+LookDesc:$
+A fairly young invididual, Dante can teach you the skills necessary for basic
+survival. 
+~
+ArriveMsg:	
+LeaveMsg:	
+MobFlags:	10000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	40
+	Qui:	40
+	Str:	40
+	Cha:	40
+	Int:	40
+	Wil:	40
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	15
+	Impact:	15
+[SKILLS]
+BREAK
+#60503
+Keywords:	Von Richter linguistics teacher
+Name:	Von Richter
+RoomDesc:$
+A linguistics teacher with a long gray mustache stands here. 
+
+~
+LookDesc:$
+He has a long gray mustache, and short gray hair. His mustache is curled at
+the ends, handlebar style. 
+~
+ArriveMsg:	
+LeaveMsg:	
+MobFlags:	1000000000000000000000000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#60504
+Keywords:	gears teacher practice rigger dwarf
+Name:	Gears
+RoomDesc:$
+A dwarf stands here holding a wrench, ready to teach you. 
+
+~
+LookDesc:$
+Covered in grease, this dwarf teaches all manner of vehicle skills.
+ Type "prac" to see what skills you can learn, and "prac <skillname>" (no
+<>'s) to practice a specific skill that is available. 
+~
+ArriveMsg:	
+LeaveMsg:	
+MobFlags:	1000000000000001010000000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	8
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	116
+	Weight:	114
+[SKILLS]
+BREAK
+#60505
+Keywords:	jet adept trainer agile oriental man
+Name:	Jet
+RoomDesc:$
+An agile oriental man practices his combat forms. 
+
+~
+LookDesc:$
+Jet shows incredible agility in practicing his martial arts, even for a
+physical adept. His nametag says, "Jet L." 
+~
+ArriveMsg:	
+LeaveMsg:	
+MobFlags:	10000000001011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	40
+	Qui:	40
+	Str:	40
+	Cha:	40
+	Int:	40
+	Wil:	40
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	15
+	Cash:	1000
+	Bank:	5000
+[SKILLS]
+	unarmed combat:	10
+	armed combat:	10
+	stealth:	10
+	leadership:	10
+	athletics:	10
+BREAK
+#60506
+Keywords:	mick teacher firearm
+Name:	Mick
+RoomDesc:$
+A firearm enthusiast named Mick is here, shooting at a stationary target. 
+
+~
+LookDesc:$
+Dressed in the uniform of the Neophytic Guild, Mick is ready to teach you how
+to operate a firearm. 
+~
+ArriveMsg:	
+LeaveMsg:	
+MobFlags:	10000000001011
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	40
+	Qui:	40
+	Str:	40
+	Cha:	40
+	Int:	40
+	Wil:	40
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	15
+	Cash:	1000
+	Bank:	5000
+[SKILLS]
+	unarmed combat:	10
+	firearms:	10
+	leadership:	10
+	armed combat:	10
+BREAK
+#60507
+Keywords:	bruce trainer adept
+Name:	Bruce
+RoomDesc:$
+A master adept sits here, teaching his abilities. 
+
+~
+LookDesc:$
+A rather small man, capable of incredible feats, the Adept Master's movements
+seem more fluid than even the latest move-by-wire system.  His nametag reads,
+"Bruce L." 
+~
+ArriveMsg:	
+LeaveMsg:	
+MobFlags:	10000000001011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	40
+	Qui:	40
+	Str:	40
+	Cha:	40
+	Int:	40
+	Wil:	40
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	15
+[SKILLS]
+	unarmed combat:	10
+	leadership:	10
+	stealth:	10
+	athletics:	10
+	armed combat:	10
+BREAK
+#60508
+Keywords:	zahn master man mage
+Name:	Zahn
+RoomDesc:$
+Zahn, a First Master, hovers above the ground. 
+
+~
+LookDesc:$
+Zahn is a certified First Master of the Hermetic Order, answerable only to
+Second or Third Masters (of which there are very few).  He is garbed in a
+deep, midnight blue cloak, which matches the color of his eyes with a stark
+exactness. 
+~
+ArriveMsg:	
+LeaveMsg:	
+MobFlags:	10000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	40
+	Qui:	40
+	Str:	40
+	Cha:	40
+	Int:	40
+	Wil:	40
+	Mag:	10
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	15
+	Cash:	2000
+	Bank:	6000
+[SKILLS]
+	sorcery:	10
+	:	10
+	unarmed combat:	10
+	conjuring:	10
+	stealth:	10
+BREAK
+#60509
+Keywords:	serphon master shaman man
+Name:	Serphon
+RoomDesc:$
+Serphon stands here, surrounded by a sense of power. 
+
+~
+LookDesc:$
+Serphon was once shaman of a far-away tribe, known far and wide across the
+Sioux Nation.  Due to unfortunate events, he fled to Seattle, where he has
+taken residency at the Guild to teach new shamans his art. 
+~
+ArriveMsg:	
+LeaveMsg:	
+MobFlags:	10000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	40
+	Qui:	40
+	Str:	40
+	Cha:	40
+	Int:	40
+	Wil:	40
+	Mag:	10
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	15
+	Cash:	2000
+	Bank:	6000
+[SKILLS]
+	:	10
+	sorcery:	10
+	conjuring:	10
+	unarmed combat:	10
+	throwing weapons:	10
+BREAK
+#60510
+Keywords:	doc holiday cybertechnician doctor
+Name:	Doc Holiday
+RoomDesc:$
+Doc Holiday, the Bodyware specialist, is cleaning some surgical tools. 
+
+~
+LookDesc:$
+Doc Holiday used to work for DocWagon. After being indited in a UCAS spanning
+organ-smuggling operation, he vanished from the face of the earth. He now
+seems to be somewhat atoning by his sins by working for the Neophyte Guild. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	70
+[SKILLS]
+BREAK
+#60511
+Keywords:	toby firearms specialist
+Name:	Toby the Firearms Specialist
+RoomDesc:$
+Toby the Firearms Specialist is here, ready to sell you a gun. 
+
+~
+LookDesc:$
+A card-carrying member of the NRA, this bearded man in a plaid shirt is ready
+to sell you equipment that could drop anything that moves. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+BREAK
+#60512
+Keywords:	erik smithy danish
+Name:	Erik the Smithy
+RoomDesc:$
+A danish man is at the forge, pounding a heated piece of metal into shape. 
+
+~
+LookDesc:$
+He's able to withstand the sweltering heat from the forge to craft various
+blades and weapons for incoming Neophytes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	90
+[SKILLS]
+BREAK
+#60513
+Keywords:	ave neophyte tailor
+Name:	Ave the Neophyte Tailor
+RoomDesc:$
+Ave, the Neophyte Guild tailor, is mending a torn seam. 
+
+~
+LookDesc:$
+An elderly man with thick spectacles that allow him to sew and mend with
+greater accuracy. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	60
+[SKILLS]
+BREAK
+#60514
+Keywords:	gremlin sword short stubby
+Name:	Gremlin the Dwarf
+RoomDesc:$
+A short, stubby looking Dwarf is tinkering with a few electronic devices. 
+
+~
+LookDesc:$
+It's surprising he can even see what he's doing, considering his massive,
+unshaved beard extends all over his face. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	120
+	Weight:	40
+[SKILLS]
+BREAK
+#60515
+Keywords:	dave bowie clerk
+Name:	Dave Bowie
+RoomDesc:$
+Dave Bowie the Survival Store Clerk is behind the counter, sharpening a knife.
+
+~
+LookDesc:$
+He's sharpening a wicked looking Bowie knife on a whetstone, and looks like
+he's lived in the wild all his life. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	90
+[SKILLS]
+BREAK
+#60516
+Keywords:	benjgy firearm accessory clerk
+Name:	Benjy
+RoomDesc:$
+Benjy, the Firearm Accessory Clerk, is digging through a crate of ammunition.
+
+~
+LookDesc:$
+A pudgy looking Ork, Benjy's catalouging the Neophyte Guild's stock of
+ammunition. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	100
+[SKILLS]
+BREAK
+#60517
+Keywords:	padded melee training robot
+Name:	A padded melee training robot
+RoomDesc:$
+A training robot has been set up for you to practice attacking. 
+
+~
+LookDesc:$
+Looks like this robot's taken quite a few beatings in the past. Once you're
+done thrashing it, proceed south. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	2
+	Str:	1
+	Cha:	1
+	Int:	2
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	20
+[SKILLS]
+BREAK
+#60518
+Keywords:	perforated target dummy
+Name:	A perforated target dummy
+RoomDesc:$
+A dummy is suspended in the air for people at the Shooting range to blast. 
+
+~
+LookDesc:$
+A perforated target dummy, riddled with bullet holes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	20
+[SKILLS]
+BREAK
+#60519
+Keywords:	joe johnson neophyte scuzzy man
+Name:	Jack Johnson
+RoomDesc:$
+A scuzzy man smokes a cigarette, huddled in the shadow. 
+
+~
+LookDesc:$
+He wears a greasy old beige trenchcoat and a wide brimmed fedora, that covers
+most of his face.  Under the fedora all you can see is his mustache with
+handlebars, and his goatee mottled with gray and black hair.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	100
+[SKILLS]
+BREAK
+#60520
+Keywords:	mob unfinished
+Name:	Ricky the Cook
+RoomDesc:$
+Ricky the Cook is here, swatting at a fly. 
+
+~
+LookDesc:$
+He's a greasy, pudgy looking man. His yellowed chef's apron bears grease
+stains on grease stains, making you suddenly regard the food served at Ricky's
+with caution. He's not cooking, however, and there doesn't seem to be any food
+left in the kitchen. Maybe he's got a problem that you can help solve? 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	130
+[SKILLS]
+BREAK
+#60521
+Keywords:	vicious rabid rat
+Name:	A vicious, rabid rat
+RoomDesc:$
+An enormous, drooling rat is here, looking for something to gnaw on. 
+
+~
+LookDesc:$
+This rat is abnormally large: either radition or the Awakening must have
+somehow affected it. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	1
+	Cha:	2
+	Int:	2
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	10
+	Weight:	1
+[SKILLS]
+BREAK
+#60522
+Keywords:	entrancing young clerk female neophyte
+Name:	An entrancing young clerk
+RoomDesc:$
+An entrancing young female clerk is behind the counter, looking bored. 
+
+~
+LookDesc:$
+She doesn't look very interesting in minding the store, and doesn't pay too
+much attention to the customers. Instead, she's sitting behind the counter
+daydreaming about a Prince Charming that will wisk her away from her wage
+slave job. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	40
+[SKILLS]
+BREAK
+#60523
+Keywords:	angela receptionist blonde
+Name:	Angela the Receptionist
+RoomDesc:$
+A blonde receptionist is here, sorting out the keys to the Neophyte Guild
+rooms. 
+
+~
+LookDesc:$
+Her blonde hair has been cut short, and barely reaches the base of her neck.
+Her attractive looks, combined with her charismatic smile, make her perfectly
+suitable for a job as a receptionist at a hotel. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	5
+	Str:	2
+	Cha:	6
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	50
+[SKILLS]
+BREAK
+#60524
+Keywords:	helen waitress ricky neophyte
+Name:	Helen, Ricky's Waitress
+RoomDesc:$
+Helen, the waitress of this.. fine establishment, is running about fulfilling
+orders. 
+
+~
+LookDesc:$
+Her red hair has been tied back, and she's dressed in the uniform of Ricky's
+Eatery. She's pretty young: must be doing this job to pay for college. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	50
+[SKILLS]
+BREAK
+#60525
+Keywords:	dwarf dynamite jim mechanic
+Name:	Dynamite Jim
+RoomDesc:$
+A rugged looking dwarf is here, fixing up a beat-up pickup. 
+
+~
+LookDesc:$
+It's Dynamite Jim, the Guild Mechanic. Buy a title from him, and you'll be
+able to claim a vehicle at the end of the guild. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	120
+	Weight:	80
+[SKILLS]
+BREAK
+#60526
+Keywords:	postman stanley dorky
+Name:	Stanley the Postman
+RoomDesc:$
+A dorky postman in a blue suit sifts through sacks of undelivered mail. 
+
+~
+LookDesc:$
+He's in the traditional blue uniform of the postman, even though no one in
+their right mind even uses traditional Snail Mail anymore. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	180
+[SKILLS]
+BREAK
+#60527
+Keywords:	howie decker store keeper
+Name:	Howie the Decker
+RoomDesc:$
+Howie the Storekeeper stands behind the counter, installing a chip into one of
+his decks. 
+
+~
+LookDesc:$
+A skinny looking Ork, Howie is installing a new program into a beat up,
+second-hand deck as you look around his shop for something to purchase. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	50
+[SKILLS]
+BREAK
+#60528
+Keywords:	bored geek decker
+Name:	A bored dwarven geek
+RoomDesc:$
+A bored dwarven geek sits behind the counter. 
+
+~
+LookDesc:$
+He looks short, hairy, and geeky.  You get the feeling that he's amazingly
+bored, quite possibly from the drool slowly making its way from the right
+corner of his mouth. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#60529
+Keywords:	cracked decker crazy hacker
+Name:	A cracked-out decker
+RoomDesc:$
+A cracked-out decker sits here, burning persona chips. 
+
+~
+LookDesc:$
+This guy looks like he's hit the Black IC one too many times, but he's making
+gear for your deck, so don't bring it up. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#60530
+Keywords:	otaku child decker weird bald
+Name:	A weird child with a datajack
+RoomDesc:$
+A weird child with a datajack stares at you with disdain. 
+
+~
+LookDesc:$
+This kid looks smart, really smart.  He's looking at you like you're a dog, a
+stray dog that is soaking wet and wandering through his house.  You think that
+he's friendly enough though, and really, who could he be kidding, he's just a
+kid. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	8
+	Int:	9
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#60531
+Keywords:	jarmine dirty unkept
+Name:	Jarmine, the talismonger
+RoomDesc:$
+A dirty, unkept rat shaman sits on the floor working with some foci. 
+
+~
+LookDesc:$
+Your stereotypical rat shaman, dirty as hell and grinning from ear to ear. She
+is working hard making foci for all the Neophytes who come through. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#60532
+Keywords:	deadlock otaku burnt out man
+Name:	Deadlock, the burnt out Otaku
+RoomDesc:$
+Deadlock, the burnt out otaku, rests behind a desk covered with design notes.
+
+~
+LookDesc:$
+Dante is a unshaven, gruff looking male human in his late 20's, he used to be
+an Otaku but lost his powers as he got older. Now he specializes in teaching
+Neophytes programming skills. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	182
+	Weight:	66
+[SKILLS]
+BREAK
+#60533
+Keywords:	lucy mature lady
+Name:	Lucy, the etiquette trainer
+RoomDesc:$
+A mature lady in a flowing black dress sits here drinking a cup of tea. 
+
+~
+LookDesc:$
+Lucy was around at the turn on the century, and she'll probably be around at
+the next. She has been hired by the Neophyte guild to teach Neophytes to
+Seattle the basics of Etiquette and Negotiation. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	42
+[SKILLS]
+BREAK
+#60534
+Keywords:	steve bored middle aged
+Name:	Steve
+RoomDesc:$
+A very bored looking middle aged man sits here in an otherwise empty lecture
+theater. 
+
+~
+LookDesc:$
+He looks bored and annoyed, probably not too happy with his appointment as
+Survival Skills trainer. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	179
+	Weight:	80
+[SKILLS]
+BREAK
+#60535
+Keywords:	doc greenwood cyberdoc
+Name:	Doc Greenwood
+RoomDesc:$
+Doc Greenwood stands here, ready to implant you with any desired cyberware. 
+
+~
+LookDesc:$
+Doc Greenwood comes from a very well-to-do family who requires that their sons
+spend 5 years working in the real world to prepare them for "retirement". Due
+to this, he has next to no idea what he's doing. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	48
+[SKILLS]
+BREAK
+#60536
+Keywords:	winchester doc
+Name:	Doc Winchester
+RoomDesc:$
+Doc Winchester is here, with a scalpel and a large grin. 
+
+~
+LookDesc:$
+Doc Winchester has never been a stable man, infact, you may say he's downright
+crazy. But don't let that worry you, he's been replacing people's body parts
+since you were still a mere pup. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	169
+	Weight:	57
+[SKILLS]
+BREAK
+#60537
+Keywords:	doc tanaki
+Name:	Doc Tanaki
+RoomDesc:$
+Doc Tanaki stands here, reading through some cyberware installation manuals. 
+
+~
+LookDesc:$
+Now, Doc Tanaki, literally a guy pulled in off the street. He used to sell
+coffee to executives in Novatech, now, through luck of random lottery, he
+installs cyberware into people's heads in the Neophyte Guild. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	149
+	Weight:	43
+[SKILLS]
+BREAK
+#60538
+Keywords:	Doc Bell
+Name:	Doc Bell
+RoomDesc:$
+Doc Bell stands here, poking at a human eyeball in a jar. 
+
+~
+LookDesc:$
+Doc Bell, prize son of Ma and Pa Bell, is what you would call "A sandwiches
+short of a picnic", but he is fully qualified none the less. His favourite
+pasttime is saving all the eye's he's replaced and poking at them with a pen,
+as he is doing now. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	143
+	Weight:	95
+[SKILLS]
+BREAK
+#60600
+Keywords:	zahn tall aztlan
+Name:	Zahn of the Blue Flame
+RoomDesc:$
+A tall aztlan man wearing a ornate trenchcoat covered in blue runes stands
+here. 
+
+~
+LookDesc:$
+Zahn is a representive of the Order of the Blue Flame, a magical group
+composed solely of Fire Elementalists. To try and combat the bad image they
+have received they do alot of charity work, including helping Neophytes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	10
+[POINTS]
+	Height:	190
+	Weight:	55
+[SKILLS]
+BREAK
+#60601
+Keywords:	shianra young svelte elf
+Name:	Shianra
+RoomDesc:$
+A young, svelte elven girl of asian descent sits here slowly strumming a
+guitar. 
+
+~
+LookDesc:$
+This girl doesn't look any older than 16 or 17, what she's doing here teaching
+is beyond you. She is dressed in plain clothes, jeans and a t-shirt, and
+barely regards you as she continues to strum on her guitar. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	15
+[POINTS]
+	Height:	158
+	Weight:	40
+[SKILLS]
+BREAK
+#60602
+Keywords:	old man lone star oswald
+Name:	Detective Oswald
+RoomDesc:$
+An old man wearing a black suit with a Lone Star badged pinned to the front
+sits behind a desk here with his arms folded. 
+
+~
+LookDesc:$
+Oh no, it's the Fuzz, is there anywhere these guys don't have their sticky
+mits these days. It looks like his intentions here go beyond the call of duty
+though, teaching detection spells to neophyte Shadowrunners, what would his
+superiors say. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	7
+[POINTS]
+	Height:	182
+	Weight:	74
+[SKILLS]
+BREAK
+#60603
+Keywords:	peter mayes dwarf male
+Name:	Peter Mayes
+RoomDesc:$
+A stocky male dwarf sits here smoking a large cigar. 
+
+~
+LookDesc:$
+It's Peter Mayes, he works Megamedia creating elaborate special affects for
+their latest Trid flicks. Seems he wants to impart his knowledge on a younger
+generation so he's volunteering at the Neophytic Guild. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	10
+[POINTS]
+	Height:	110
+	Weight:	120
+[SKILLS]
+BREAK
+#60604
+Keywords:	buxom brunette
+Name:	Katie
+RoomDesc:$
+A buxom brunette dressed in flowing blue robes poses non-chalanatly in the
+middle of the room. 
+
+~
+LookDesc:$
+Dressed in elaborate flowing blue robes, this young lady seems like she's
+trying to fulfill every cliche of the beautiful sorceress. She is obviously
+wanting to leave a lasting impression on the Neophytes that pass through. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	8
+[POINTS]
+	Height:	139
+	Weight:	38
+[SKILLS]
+BREAK
+#60605
+Keywords:	yoshitaka old japanese
+Name:	Dr. Yoshitaka
+RoomDesc:$
+An old japanese man stands here, flicking through an IKEA catalogue. 
+
+~
+LookDesc:$
+Dr. Yoshitaka was once a leading researcher in the field of BioTechnology.
+However he is now retired, and volunteers at the Neophytic Guild helping new
+comers find their feet. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	167
+	Weight:	46
+[SKILLS]
+BREAK
+#60606
+Keywords:	beatrix fotar short round
+Name:	Beatrix Fotar
+RoomDesc:$
+A short, round woman with brown-hair stands here, snacking on a donut. 
+
+~
+LookDesc:$
+Beatrix was on the research team that discovered how to intergrate the
+Symbiotic micro-organisms into the metahuman body. She tested it on herself,
+and while they worked for a while, the test was in the end, a failure. She was
+left without the helpful organisms but she retained the unhealthy eating habit
+she had picked up trying to satiate the Symbiotes hunger. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	143
+	Weight:	98
+[SKILLS]
+BREAK
+#60607
+Keywords:	young clean cut markus martin
+Name:	Dr. Markus Martin
+RoomDesc:$
+A young, clean cut ork man stands here in a lab coat. 
+
+~
+LookDesc:$
+The recenetly goblinised brother of Dr. Kimberly and Dr. Rick Martin, Markus
+has been ostrasized from the bioware business. Due to the large amounts of
+money flowing through Universal Omnitech, they thought it wrong to keep an Ork
+in a business dominated by primarily Human customers. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	92
+[SKILLS]
+BREAK
+#60608
+Keywords:	dashing elf duto
+Name:	Duto D'Entracasteux
+RoomDesc:$
+A dashing young elf wearing half a mask poses haughtily in the middle of the
+room. 
+
+~
+LookDesc:$
+Only son of rich elven nobles, Duto flew through Univesity in the elven nation
+of Tir Tairngire to become a well respected mind in the Bioware trade.
+However, his haughtiness and braggardish nature quickly bought him down, and
+now he puts his skills to use in the only place that will hire him, The
+Neophytic Guild. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	184
+	Weight:	49
+[SKILLS]
+BREAK
+#60622
+Keywords:	james human male thing
+Name:	James
+RoomDesc:$
+A very thin male human stands here, showing of his collection to some other
+Neophytes. 
+
+~
+LookDesc:$
+James looks almost emanciated, his bones clearly visible through his clothing.
+He is probably one of those obsessive compulsives who spends all day playing
+with his gun. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	174
+	Weight:	45
+[SKILLS]
+BREAK
+#60623
+Keywords:	brody dark brooding
+Name:	Brody
+RoomDesc:$
+A dark brooding man stands in the corner fondling a smg. 
+
+~
+LookDesc:$
+Brody, the resident creep. Most people around here thinks he commits unnatural
+acts with the weapons here, they're probably right. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	82
+[SKILLS]
+BREAK
+#60624
+Keywords:	sandy female human
+Name:	Sandy
+RoomDesc:$
+A slender female human sits here, cleaning an assault rifle. 
+
+~
+LookDesc:$
+She is carefully dismantling and cleaning all of the rifles in the shop, she
+seems to know what she's doing. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	164
+	Weight:	52
+[SKILLS]
+BREAK
+#60625
+Keywords:	godfrey aristocratic elf
+Name:	Godfrey
+RoomDesc:$
+An aristocratic looking elf in a sports jacket stands here. 
+
+~
+LookDesc:$
+All class, or sleaze, it's not obviously apparent. He wears a generic sports
+jacket and stands around looking haughty, the kind of guy who who send his
+begals down a rabbit hole while he stands around smoking a pipe. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	169
+	Weight:	64
+[SKILLS]
+BREAK
+#60626
+Keywords:	grant trog ork
+Name:	Grant
+RoomDesc:$
+A large male Ork wearing Trogs colours stands here, posing with a machine gun.
+
+~
+LookDesc:$
+Grant was picked up by the Neophyte Guild harassing its members out the front
+one day. He was dragged inside and brain washed, now he just hangs around and
+plays with the heavy weapons. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	172
+	Weight:	98
+[SKILLS]
+BREAK
+#60627
+Keywords:	vending machine ammunition
+Name:	An Ammunition Vending Machine
+RoomDesc:$
+A bank of ammunition vending machines sits here. 
+
+~
+LookDesc:$
+The machines are all emblazoned with adds for snack foods, some as old as the
+late 20th century. Looks like the Neophyte guild struck on hard times and took
+to scavanging dumps. 
+~
+ArriveMsg:	
+LeaveMsg:	
+MobFlags:	1010
+AffFlags:	0
+Race:	Undefined
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#60628
+Keywords:	vending machine ammunition
+Name:	An Ammunition Vending Machine
+RoomDesc:$
+A bank of ammunition vending machines sits here. 
+
+~
+LookDesc:$
+The machines are all emblazoned with adds for snack foods, some as old as the
+late 20th century. Looks like the Neophyte guild struck on hard times and took
+to scavanging dumps. 
+~
+ArriveMsg:	
+LeaveMsg:	
+MobFlags:	1010
+AffFlags:	0
+Race:	Undefined
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#60629
+Keywords:	vending machine ammunition
+Name:	An Ammunition Vending Machine
+RoomDesc:$
+A bank of ammunition vending machines sits here. 
+
+~
+LookDesc:$
+The machines are all emblazoned with adds for snack foods, some as old as the
+late 20th century. Looks like the Neophyte guild struck on hard times and took
+to scavanging dumps. 
+~
+ArriveMsg:	
+LeaveMsg:	
+MobFlags:	1010
+AffFlags:	0
+Race:	Undefined
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#60630
+Keywords:	vending machine ammunition
+Name:	An Ammunition Vending Machine
+RoomDesc:$
+A bank of ammunition vending machines sits here. 
+
+~
+LookDesc:$
+The machines are all emblazoned with adds for snack foods, some as old as the
+late 20th century. Looks like the Neophyte guild struck on hard times and took
+to scavanging dumps. 
+~
+ArriveMsg:	
+LeaveMsg:	
+MobFlags:	1010
+AffFlags:	0
+Race:	Undefined
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#60631
+Keywords:	hank dwarf
+Name:	Hank
+RoomDesc:$
+A slightly large male dwarf wearing a red plaid shirt sits behind the counter
+here. 
+
+~
+LookDesc:$
+He looks like he just stumbled in from chopping wood in the mountains. His red
+plaid shirt is offset by his large build and long beard, making him fit the
+stereotype well. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Dwarf
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	120
+	Weight:	80
+[SKILLS]
+BREAK
+#60632
+Keywords:	vending machine ammunition
+Name:	An Ammunition Vending Machine
+RoomDesc:$
+A bank of ammunition vending machines sits here. 
+
+~
+LookDesc:$
+The machines are all emblazoned with adds for snack foods, some as old as the
+late 20th century. Looks like the Neophyte guild struck on hard times and took
+to scavanging dumps. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Undefined
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#60634
+Keywords:	mana young female satyr
+Name:	Mana
+RoomDesc:$
+A young female satyr is using the workshop here, making a sword. 
+
+~
+LookDesc:$
+Mana makes all the weapons she sells here from scratch. Although young, her
+craftsman ship is second to none. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Satyr
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#60635
+Keywords:	grey human male
+Name:	Grey
+RoomDesc:$
+An male human wearing leather pants and no shirt stands here. 
+
+~
+LookDesc:$
+His glistening torso shines in the dim light of the room, sweat dripping down
+over his leather pants. He cracks a whip, someone menacingly in the middle of
+the room. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	48
+[SKILLS]
+BREAK
+#60636
+Keywords:	dwarf gruff stereotypical
+Name:	Graham
+RoomDesc:$
+A gruff looking dwarf sits here, ready to take on his stereotypical dwarven
+roll. 
+
+~
+LookDesc:$
+Beard, gut, beer, large axe, oh yeah this guy is a dwarf. He probably played
+far too much D&D as a kid and now has the dwarven warrior role down to a T. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Dwarf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	125
+	Weight:	98
+[SKILLS]
+BREAK
+#60637
+Keywords:	chris semi-bald bald old man
+Name:	Chris, the tailor
+RoomDesc:$
+A semi-bald old man stands here, measuring tape in hand. 
+
+~
+LookDesc:$
+Chris was sent to the Neophyte Guild by Armante to properly tailor any
+armoured suits to the specifications of any newbie coming through. He has a
+very noticable hunch. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	168
+	Weight:	52
+[SKILLS]
+BREAK
+#60638
+Keywords:	male oni kenji
+Name:	Kenji
+RoomDesc:$
+A male oni is here sorting the armour out. 
+
+~
+LookDesc:$
+Spurned by most of the world, Kenji has taken a job with the Neophyte Guild
+selling armour to newbies. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Oni
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	183
+	Weight:	93
+[SKILLS]
+BREAK
+END

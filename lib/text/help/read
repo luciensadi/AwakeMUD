@@ -1,0 +1,11 @@
+READ
+
+When you want to read something.
+
+READ is also used to read messages on bulletin boards; type HELP TERMINALS
+for more information.
+
+^c< 10P 10M > read note^n
+
+^WSee Also: TERMINALS^n
+

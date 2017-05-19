@@ -1,0 +1,10 @@
+UNSUBSCRIBE
+
+Usage: ^gUNSUBSCRIBE <entry to be removed>^N
+
+Unsubscribe is the command used to take a remote controlled drone or
+vehicle off the subscription.  To view the subscription list on a
+remote control deck, type 'subscribe' with no arguments, then type:
+
+^WSee Also: ^WSUBSCRIBE, CONTROL, RIG^n
+

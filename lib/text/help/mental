@@ -1,0 +1,26 @@
+MENTAL "MENTAL POINTS"
+
+Your mental points (abbreviated M on your prompt) are a display of your
+current mental condition.  This number ranges from 0 to 10.  If it
+falls to 0 (or below), you will immediately fall unconscious.  Any
+damage taken in addition to falling unconscious will begin to
+subtract from your ^Wphysical points^n, until you are dead.  Your mental
+condition is particularly important to spell users, as casting spells
+will sometimes drain your mental points.  If you fall unconscious,
+any sustained spells will be dropped immediately.  Just like physical
+points, mental points always remain at a maximum of 10.
+
+To recover mental points, you must spend some time resting, if not
+sleeping.  Sleeping obviously recovers mental points quicker.
+
+^RNote:  Any damage done to you, or which you deal in which you are using
+       a blunt weapon, will do mental damage only.  Once they are knocked
+       unconscious, you can begin to do physical damage to them.  The
+       reason is that you don't always need to kill everyone, and somtimes,
+       just knocking an oppenent unconscious is a better solution.  Once
+       they fall unconscious, you will stop hitting them.  If you wish to
+       continue damaging them, you must keep attacking (this keeps you from
+       accidentally killing someone you were trying to subdue).^n
+
+^WSee Also: PHYSICAL, CONDITION MONITOR^n
+

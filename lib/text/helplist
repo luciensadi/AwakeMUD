@@ -1,0 +1,49 @@
+		   ^rAwake 2062 Help Directory^n
+==========================================================================
+		     ^WIndex of Information
+^yMovement and Observation^n: north, south, east, west, up, down, look, 
+enter, leave, sleep, wake, rest, sit, stand, lock, unlock, open, close,
+rig, drive, follow, scan, exits
+
+^yCommunication^n: say, shout, yell, tell, reply, ask, whisper, mail,
+exclaim, receive, check, radio, ooc, osay, newbie
+
+^yInformation^n: score, help, info, who, news, time, weather,
+consider, wizlist, credits, policy, toggle, flags, status, software,
+subscribe, abilities, gname, skills, pools, spells, vehicles, display,
+finger, balance, cyberware, bioware
+
+^yObjects^n: get, drop, junk, donate, put, give, wear, wield,
+grab, inventory, equipment, remove, examine, eat, drink, taste, sip, pour
+
+^yCombat^n: kill, defense, shoot, throw, flee, retreat, assist, hit, 
+cast, ram, holster, sheath, ready, reload
+
+^yFinancial^n: activate, balance, credsticks, withdraw, deposit, transfer
+
+^yUtility^n: !, bug, idea, typo, quit, rent, brief, title,
+commands, socials, drag, buy, sell, hail, repair, house
+
+^yRoleplay^n: rp, osay, ooc, description, background, law,
+customize, remember, emote, vemote, shadowruns, jobs, johnsons
+
+^yMagic^n: cast, status, bond, project, perceive, spells,
+initiation, abilities, return, release, order
+
+^yDecking^n: cyberdecks, matrix, software, install, uninstall,
+load, run, bod, evasion, masking, sensors, attack, sleaze, decrypt, medic,
+shield, deception, programs, shutdown, datajacks, cancel, persona
+programs, unload, IC, alerts, intrusion countermeasures
+
+^yRigging and Driving^n: remote control decks, vehicle control rigs,
+datajacks, rig, subscribe, control, return, ram, drones, vehicles,
+upgrade, drive, unsubscribe
+
+^yAttributes^n: body, quickness, strength, charisma, intelligence,
+willpower, essence, magic, reaction, bio index, initiative dice, condition
+monitor, wound levels
+
+^yElectronics^n: bypass, crack
+
+^yCharacter Generation and Archetype Info^n: priorities, priority table,
+archetypes

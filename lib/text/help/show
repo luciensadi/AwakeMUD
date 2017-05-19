@@ -1,0 +1,9 @@
+SHOW
+
+Usage: ^gSHOW <item> <person>^n
+
+This command lets you show the long description of an item to a person.
+It is equivalent of them examining it. You can show them items from your
+inventory and also ones you are wearing.
+
+^WSee Also: EXAMINE^n

@@ -1,0 +1,30 @@
+MAXIMUMS
+
+Each race has a racial maximum that sets the boundary for physical perfection.
+
+                   Bod    Qui    Str    Int    Wil    Cha    Rea           
+
+^WHuman               6      6      6      6      6      6      6
+^wElf                 6      7      6      6      6      8      6
+^WDwarf               7      6      8      6      7      6      6
+^wOrk                 9      6      8      5      6      5      5
+^WTroll              11      5     10      4      6      4      4
+^wCyclops            11      5     12      4      6      4      4
+^WKoborokuru          7      6      8      6      7      6      6
+^wFomori             10      5      9      4      6      6      6
+^WMenehune            8      6      7      6      7      6      6   
+^wHobgoblin           8      6      8      6      6      5      6  
+^WGiant              11      5     11      4      6      4      4
+^wOni                 8      6      8      5      7      5      5
+^WWakyambi            6      6      6      6      7      8      6    
+^wOgre                9      6      8      5      6      6      5   
+^WMinotaur           10      5      9      5      6      5      5     
+^wSatyr               9      5      8      5      7      5      5    
+^WNight-One           6      8      6      6      6      8      7       
+^wGnome               7      6      7      6      8      6      6    
+^N
+No runner can ever take their stats naturally over these maximums. With
+^WCyberware^n and ^WBioware^n however, that's a different story.
+
+^WSee Also: RACES, BIOWARE, CYBERWARE, ATTRIBUTES^n
+

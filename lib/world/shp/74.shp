@@ -1,0 +1,313 @@
+#7400
+Keeper:	7400
+ProfitBuy:	1.00
+ProfitSell:	0.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	You want what?
+NoSuchItemPlayer:	Don't mess around, chummer.
+NoNuyen:	It costs more than ya got, chummer.
+DoesntBuy:	I only sell coffee.
+Buy:	That'll be %d.
+Sell:	Here ya go, %d nuyen.
+Flags:	100
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	7403
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	7402
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	7401
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	7400
+		Type:	Always
+		Stock:	0
+BREAK
+#7401
+Keeper:	7407
+ProfitBuy:	1.20
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough creds!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d creds.
+Sell:	Here's your %d creds.
+Flags:	100
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	961
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	828
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	7412
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	7411
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	7410
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	7409
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	640
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	7407
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	7406
+		Type:	Always
+		Stock:	0
+BREAK
+#7402
+Keeper:	7408
+ProfitBuy:	1.80
+ProfitSell:	1.00
+Random:	0
+Open:	6
+Close:	21
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough creds!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d creds.
+Sell:	Here's your %d creds.
+Flags:	100
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	7418
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	1112
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	1174
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	1175
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	38041
+		Type:	Avail
+		Stock:	0
+BREAK
+#7403
+Keeper:	7409
+ProfitBuy:	1.40
+ProfitSell:	1.00
+Random:	1
+Open:	6
+Close:	19
+Type:	Legal
+NoSuchItemKeeper:	We dont sell that kind of drivel here!
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	Hrmph!  Obviously you seem to think this is one of those low class stores!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d creds.
+Sell:	Here's your %d creds.
+Flags:	100
+Races:	0
+Buytypes:	0
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	7432
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	7431
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	7430
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	7419
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	7422
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	7421
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	7420
+		Type:	Always
+		Stock:	0
+BREAK
+#7404
+Keeper:	7410
+ProfitBuy:	1.50
+ProfitSell:	1.00
+Random:	6
+Open:	6
+Close:	18
+Type:	Legal
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough creds!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d creds.
+Sell:	Here's your %d creds.
+Flags:	10
+Races:	0
+Buytypes:	0
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	418
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	401
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	405
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	406
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	407
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	413
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	414
+		Type:	Avail
+		Stock:	0
+	[SELL 7]
+		Vnum:	415
+		Type:	Avail
+		Stock:	0
+	[SELL 8]
+		Vnum:	416
+		Type:	Avail
+		Stock:	0
+	[SELL 9]
+		Vnum:	417
+		Type:	Avail
+		Stock:	0
+	[SELL 10]
+		Vnum:	419
+		Type:	Avail
+		Stock:	0
+	[SELL 11]
+		Vnum:	60610
+		Type:	Avail
+		Stock:	0
+	[SELL 12]
+		Vnum:	60609
+		Type:	Avail
+		Stock:	0
+	[SELL 13]
+		Vnum:	60608
+		Type:	Avail
+		Stock:	0
+	[SELL 14]
+		Vnum:	60607
+		Type:	Avail
+		Stock:	0
+	[SELL 15]
+		Vnum:	60618
+		Type:	Avail
+		Stock:	0
+	[SELL 16]
+		Vnum:	60617
+		Type:	Avail
+		Stock:	0
+BREAK
+#7414
+Keeper:	7414
+ProfitBuy:	1.50
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Legal
+NoSuchItemKeeper:	I can't find that machine.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	Not enough nuyen for that one.
+DoesntBuy:	We don't buy anything here.
+Buy:	%d nuyen for that one.
+Sell:	Sorry, we're closed.
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	7429
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	7428
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	7427
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	7426
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	7425
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	7424
+		Type:	Always
+		Stock:	13361
+BREAK
+END

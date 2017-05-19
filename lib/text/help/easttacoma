@@ -1,0 +1,56 @@
+"MAP E TACOMA" "EAST TACOMA"
+        
+               To Renton
+                  / G
+                 /
+                o-----o F
+                |     | 
+                |     |
+                |     |
+                o-----o-----o E
+                |     |     |
+                |     |     |
+                |     |     |
+          o-----o-----o-----o D
+          |     |     |     |
+          |     |     |     |
+          |     |     |     |
+    o-----o-----o-----o-----o C
+    |     |     |     |     |
+    |     |  7  |     |--3  |             5
+    |     |     |     |     |            /
+    o-----o-----o-----o-----o-----o-----o B
+    |     |     |     |     |     |     |
+    |     |  8  |  1  |     |     |  6--|
+    |     |     |     |     |     |  |  |
+<---o-----o-----o-----o-----o-----o-----o A
+To  |     |     |     |     |     |     |
+West|     |     |     |  2  |     |     |
+Tac.|     |     |     |     |     |     |
+    o-----o-----o-----o-----o-----o-----o H
+    J     K     |     |     |     |     |
+                |     |     |     |     |
+                |     |     |     |  4  |
+                o-----o-----o-----o-----o I.
+                L     M     N     O     P
+                
+Street Index
+A: East Anselm Street    I: South Tacoma Way
+B: Bridgeport Avenue     J: Moreland Way
+C: Callahan Street       K: Cleary Avenue
+D: Donnelly Street       L: Newman Street
+E: Edwards Street        M: Parker Boulevard
+F: Federal Avenue        N: Rockefeller Street
+G: Grady Way             O: Edison Avenue
+H: Bremerton Avenue      P: Allen Street
+          
+Locations
+1. Knight Center
+2. Yametetsu SeaTac Plaza
+3. Parker Center
+4. BurnsCo Truck Stop
+5. Offramp to I-405
+6. Pook's Place
+7. Proteus A.G.
+8. United Oily
+

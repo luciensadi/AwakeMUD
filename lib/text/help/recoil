@@ -1,0 +1,8 @@
+RECOIL
+
+Firing more than one bullet in a phase causes a drop in accuracy because
+of the recoil of the weapon. This is an increase to the TN of one per round
+fired. Many different attachments, including gas vents and tripods can be
+used to try and negate recoil.
+
+^WSee Also: MODE, SHOOT, KILL, TN, PRONE^n

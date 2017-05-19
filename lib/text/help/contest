@@ -1,0 +1,14 @@
+CONTEST
+
+Usage: ^gCONTEST <spirit/elemental>^n
+
+This command is used to contest control of a spirit or elemental
+bound by another awakened person. You pit your conjuring skill
+against your opponents and the winner comes away with control of
+the spirit/elemental. You will take drain wether you succeed or fail
+the test, but if you win, the spirit/elemental will be under your
+control. Only hermetic mages can contest elementals and only shamanic
+mages can contest nature spirits.
+
+^WSee Also: CONJURE, HERMETIC MAGE, SHAMANS^n
+

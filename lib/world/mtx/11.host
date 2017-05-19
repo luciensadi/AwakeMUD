@@ -1,0 +1,502 @@
+#1100
+Name:	Seattle LTG
+Keywords:	Seattle LTG
+Description:$
+Before you floats a perfect representation of the city of Seattle. It sits
+upon a huge floating stone, suspended above an endless void. The level of
+detail is amazing; data streams zoom along the streets below, weaving in and
+out of buildings. The Seattle LTG provides links to every number within
+Seattle, and you can clearly see where the huge masses of data stream out of
+the Renraku Arcology and the Mitsuhama Towers, amongst others. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	1102
+Colour:	1
+Security:	4
+Difficulty:	0
+Access:	6
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	9
+ControlTrapdoor:	0
+Index:	6
+IndexTrapdoor:	0
+Files:	6
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	6
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	LTG
+[EXITS]
+	[EXIT 0]
+		Exit:	70342
+		Number:	92061200
+	[EXIT 1]
+		Exit:	1107
+		Number:	3206-9584
+	[EXIT 2]
+		Exit:	70315
+		Number:	9206-1104
+	[EXIT 3]
+		Exit:	70318
+		Number:	9206-1111
+	[EXIT 4]
+		Exit:	70314
+		Number:	9206-1103
+	[EXIT 5]
+		Exit:	70313
+		Number:	9206-1102
+	[EXIT 6]
+		Exit:	38000
+		Number:	2206-0933
+	[EXIT 7]
+		Exit:	65099
+		Number:	3206-3593
+	[EXIT 8]
+		Exit:	65090
+		Number:	9206-0666
+	[EXIT 9]
+		Exit:	60300
+		Number:	2206-3554
+	[EXIT 10]
+		Exit:	26000
+		Number:	7206-6754
+	[EXIT 11]
+		Exit:	65050
+		Number:	5206-1929
+	[EXIT 12]
+		Exit:	65053
+		Number:	0206-1037
+	[EXIT 13]
+		Exit:	65056
+		Number:	9206-0930
+	[EXIT 14]
+		Exit:	17100
+		Number:	6206-2266
+	[EXIT 15]
+		Exit:	1105
+		Number:	2206-9529
+	[EXIT 16]
+		Exit:	70310
+		Number:	9206-1101
+	[EXIT 17]
+		Exit:	70342
+		Number:	9206-1200
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	60
+		Alert:	No Alert
+		IC:	1158
+	[TRIGGER 1]
+		Step:	55
+		Alert:	No Alert
+		IC:	1157
+	[TRIGGER 2]
+		Step:	45
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	40
+		Alert:	No Alert
+		IC:	1156
+	[TRIGGER 4]
+		Step:	35
+		Alert:	No Alert
+		IC:	1155
+	[TRIGGER 5]
+		Step:	30
+		Alert:	No Alert
+		IC:	1154
+	[TRIGGER 6]
+		Step:	25
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 7]
+		Step:	20
+		Alert:	No Alert
+		IC:	1153
+	[TRIGGER 8]
+		Step:	15
+		Alert:	No Alert
+		IC:	1152
+	[TRIGGER 9]
+		Step:	10
+		Alert:	No Alert
+		IC:	1151
+	[TRIGGER 10]
+		Step:	5
+		Alert:	No Alert
+		IC:	1150
+BREAK
+#1101
+Name:	Tacoma LTG
+Keywords:	tacoma ltg
+Description:$
+You float above an idyllic cityscape; morning birds chirp loudly from the
+roofs of glass and steel towers. Clean white fluffy clouds float by you, set
+in an impossibly blue sky. What appears to be cars silently skimming through
+the streets are actually data packets, hurrying between the myriad hosts that
+comprise the Tacoma LTG. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	1102
+Colour:	1
+Security:	4
+Difficulty:	0
+Access:	6
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	8
+ControlTrapdoor:	0
+Index:	6
+IndexTrapdoor:	0
+Files:	6
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	6
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	LTG
+[EXITS]
+	[EXIT 11]
+		Exit:	65000
+		Number:	0321-7001
+	[EXIT 12]
+		Exit:	64900
+		Number:	0321-4229
+	[EXIT 13]
+		Exit:	65052
+		Number:	5321-5398
+	[EXIT 14]
+		Exit:	70320
+		Number:	1321-1111
+	[EXIT 15]
+		Exit:	70326
+		Number:	0321-0099
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	60
+		Alert:	No Alert
+		IC:	1158
+	[TRIGGER 1]
+		Step:	55
+		Alert:	No Alert
+		IC:	1157
+	[TRIGGER 2]
+		Step:	45
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	40
+		Alert:	No Alert
+		IC:	1156
+	[TRIGGER 4]
+		Step:	35
+		Alert:	No Alert
+		IC:	1155
+	[TRIGGER 5]
+		Step:	30
+		Alert:	No Alert
+		IC:	1154
+	[TRIGGER 6]
+		Step:	25
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 7]
+		Step:	20
+		Alert:	No Alert
+		IC:	1153
+	[TRIGGER 8]
+		Step:	15
+		Alert:	No Alert
+		IC:	1152
+	[TRIGGER 9]
+		Step:	10
+		Alert:	No Alert
+		IC:	1151
+	[TRIGGER 10]
+		Step:	5
+		Alert:	No Alert
+		IC:	1150
+BREAK
+#1102
+Name:	UCAS RTG
+Keywords:	UCAS
+Description:$
+You fly over what seems to be a massive roadmap of the UCAS. It's a
+three-dimensional version of the maps found in street directories, with major
+cities and towns rising out of the otherwise flat plains. Detached from the
+rest of the UCAS and floating high above the landscape is the Seattle
+Metroplex. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	0
+Colour:	1
+Security:	4
+Difficulty:	0
+Access:	6
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	8
+ControlTrapdoor:	0
+Index:	6
+IndexTrapdoor:	0
+Files:	6
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	6
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	RTG
+[EXITS]
+	[EXIT 11]
+		Exit:	1100
+		Number:	838-0206-0000
+	[EXIT 12]
+		Exit:	1101
+		Number:	838-0321-0000
+	[EXIT 13]
+		Exit:	1103
+		Number:	NA-TT
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	60
+		Alert:	No Alert
+		IC:	1158
+	[TRIGGER 1]
+		Step:	55
+		Alert:	No Alert
+		IC:	1157
+	[TRIGGER 2]
+		Step:	45
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	40
+		Alert:	No Alert
+		IC:	1156
+	[TRIGGER 4]
+		Step:	35
+		Alert:	No Alert
+		IC:	1155
+	[TRIGGER 5]
+		Step:	30
+		Alert:	No Alert
+		IC:	1154
+	[TRIGGER 6]
+		Step:	25
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 7]
+		Step:	20
+		Alert:	No Alert
+		IC:	1153
+	[TRIGGER 8]
+		Step:	15
+		Alert:	No Alert
+		IC:	1152
+	[TRIGGER 9]
+		Step:	10
+		Alert:	No Alert
+		IC:	1151
+	[TRIGGER 10]
+		Step:	5
+		Alert:	No Alert
+		IC:	1150
+BREAK
+#1103
+Name:	Tir Tairngire RTG
+Keywords:	tir tairngire
+Description:$
+The sky of stars surrounds you, and a vast forest spans out in every direction
+below you.  With a wave of your hand, you can see that the stars respond to
+your motions, with a vague twinkling.  Storm clouds roll over parts of the
+sky, indicative of the high security of this RTG.
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	0
+Colour:	2
+Security:	5
+Difficulty:	0
+Access:	5
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	5
+ControlTrapdoor:	0
+Index:	5
+IndexTrapdoor:	0
+Files:	6
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	6
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	RTG
+[EXITS]
+	[EXIT 11]
+		Exit:	1104
+		Number:	820-0503-0000
+	[EXIT 12]
+		Exit:	1102
+		Number:	NA-UCAS
+BREAK
+#1104
+Name:	Portland LTG
+Keywords:	portland pdx
+Description:$
+Surrounding you is a goliath, yet idealized and golden version of the Portland
+skyline. Great bridges carry data over a river that carries much data itself.
+Great towers, representative of the hosts inside, match their physical skyline
+counterparts, especially the Telestrian Habitat and the TTB Tower. A sea of
+stars fills the sky overhead, with storm clouds that fly over at high speed,
+flashing lightning forebodingly. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	1103
+Colour:	1
+Security:	5
+Difficulty:	0
+Access:	5
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	5
+ControlTrapdoor:	0
+Index:	5
+IndexTrapdoor:	0
+Files:	5
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	6
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	LTG
+[EXITS]
+	[EXIT 13]
+		Exit:	70301
+		Number:	0503-1224
+	[EXIT 14]
+		Exit:	70203
+		Number:	0503-1123
+	[EXIT 15]
+		Exit:	70340
+		Number:	0503-1230
+BREAK
+#1105
+Name:	Shadowland
+Keywords:	shadowlands lands board
+Description:$
+Chaos reigns. Flashes of light and motion momentarily gain substance, then
+abrupty fade into pitch darkness or explosions of light. Noises fly past you
+and off into the maelstrom, so intense they can almost be felt, insane
+wailings and famous quotes mingled together. And through all this, lines of
+text appear and vanish, scrolling at impossible speeds, but freezing in place
+as you observe them. The only constant among all this is a single ^Wsilver^n wire
+that moves like a glittering serpent before abruptly vanishing at one end. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	1100
+Colour:	1
+Security:	6
+Difficulty:	1
+Access:	6
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	6
+ControlTrapdoor:	0
+Index:	8
+IndexTrapdoor:	0
+Files:	6
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	6
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	PLTG
+[EXITS]
+	[EXIT 16]
+		Exit:	1106
+		Number:	silver
+BREAK
+#1106
+Name:	Shadowland (OOC)
+Keywords:	ooc board shadowlands shadow lands
+Description:$
+Bright trails of light spin up into the heavens, following immense fibre optic
+cables anchored to the ground of circuitry below like impossibly tall trees.
+Much smaller but still huge cables tangle between the main 'trunks', creating
+a series of small landings, at which the cable has been peeled back and
+impromptu dataports installed. A myriad of figures moves between these points,
+soaking up what information they can. A single, bright ^Wsilver^n wire winds
+between this all, back onto itself and simply fades out of existance. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	0
+Colour:	1
+Security:	6
+Difficulty:	1
+Access:	6
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	6
+ControlTrapdoor:	0
+Index:	8
+IndexTrapdoor:	0
+Files:	6
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	6
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	PLTG
+[EXITS]
+	[EXIT 17]
+		Exit:	1105
+		Number:	silver
+BREAK
+#1107
+Name:	Council Island PLTG
+Keywords:	council island
+Description:$
+Currents of fresh forest air hold you suspended above an idyllic island
+setting. Trees of impossibly healthy green dot the landscape, which ranges
+from forests down to beaches of impossibly clean sand. A small settlement of
+wood and brick sits slightly west of the center, woodsmoke slowly curling into
+the sky. 
+~
+ShutdownStart:	A forest bird lets out a panicked cry.
+ShutdownStop:	The host slowly fades toward black, then abruptly snaps back in vivid colour.
+Parent:	1100
+Colour:	1
+Security:	6
+Difficulty:	1
+Access:	6
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	6
+ControlTrapdoor:	0
+Index:	6
+IndexTrapdoor:	0
+Files:	8
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	8
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	LTG
+[EXITS]
+	[EXIT 18]
+		Exit:	70338
+		Number:	3206-9585
+	[EXIT 19]
+		Exit:	1100
+		Number:	seattle
+BREAK
+END

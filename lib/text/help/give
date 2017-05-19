@@ -1,0 +1,11 @@
+GIVE
+
+Usage: ^gGIVE <object> <victim>
+       GIVE <number> nuyen <victim>^n
+
+If you feel benevolent, you may give some stuff to someone in need.
+
+^c< 10P 10M > give predator Sean
+< 10P 10M > give all.krillbar Gran
+< 10P 10M > give 400 nuyen Duhamel^n
+

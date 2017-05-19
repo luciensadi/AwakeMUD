@@ -1,0 +1,9 @@
+DRIVEBY
+
+Usage: ^gDRIVEBY <target> <direction to drive to>^n
+
+This command is used for executing driveby shootings on mobs or characters
+from a vehicle.
+
+^WSee Also: Vehicles^n
+

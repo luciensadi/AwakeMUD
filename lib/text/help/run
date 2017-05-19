@@ -1,0 +1,10 @@
+RUN
+
+Usage: ^gRUN <program>
+       RUN <program> <target>^n
+
+This is used by personas to execute programs already loaded into active
+memory.
+
+^WSee Also: LOAD, MATRIX, PROGRAMS^n
+

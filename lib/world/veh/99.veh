@@ -1,0 +1,35 @@
+#9900
+Name:	fat hawg harley chopper
+ShortDesc:	A Fat Hawg(tm) Harley Davidson chopper
+RoomDesc:	A "Chopper" style motorcycle is parked here
+LongDesc:$
+This bike is very large, built for a troll or somebody who is more adventurous
+than your standard biker.  Powerful V-Twin engines roar when driven, making
+windows rattle nearly a kilometer away.  Definitely a bike for a mad troll
+biker. 
+~
+Inside:$
+Man, this fucker vibrates under you, and the power tears into the concrete as
+you peel down the road.  This is not a bike for sissies, not by a long-shot. 
+~
+InsideRear:$
+You are inside a boring vehicle.~
+Leaving:	roars
+Arriving:	roars in from
+Handling:	0
+Speed:	0
+Accel:	0
+Body:	0
+Armour:	0
+Pilot:	0
+Sig:	0
+Autonav:	0
+Seating:	0
+SeatingBack:	0
+Load:	0
+Cost:	0
+Type:	1
+Flags:	0
+Engine:	0
+BREAK
+END

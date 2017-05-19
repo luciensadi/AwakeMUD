@@ -1,0 +1,18 @@
+GET TAKE
+
+Usage: ^gGET <item>
+       GET <item> <container>
+       GET Tooth
+       GET Finger
+       GET Body^n
+
+Get is used to retrieve an item from a location into your inventory.
+The normal numbers (1.object, 2.object, etc) and all (all.object) work
+with it for getting from the ground or a container. It is also used to
+retrieve items from cyberware compartments.
+
+If you have more than one item sharing a name you can access the
+items past the first by using 2.itemname, 3.itemname etc.
+
+^WSee Also: DROP, PUT, STEAL^n
+

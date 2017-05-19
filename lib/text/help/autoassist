@@ -1,0 +1,9 @@
+AUTOASSIST
+
+Usage: ^gToggle autoassist^n
+
+If autoassist is toggled on you will automatically ^Rassist^n any members of the group
+you are currently a part of when they go into combat. Wether it is initiated by them
+or not.
+
+^WSee Also: ASSIST, TOGGLE^n

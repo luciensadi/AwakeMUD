@@ -1,0 +1,11 @@
+TARGET
+
+Usage: ^gTARGET [mount number] <mob/vehicle>^n
+
+This command is used to target a mounted weapon at a target.
+If you are rigging a vehicle you can select which mount to
+target by putting the number refered to the mount in the
+^WMOUNTS^n command in. Otherwise it will fire the gun you are
+currently manning or all of them.
+
+^WSee Also: MOUNT, MAN^n

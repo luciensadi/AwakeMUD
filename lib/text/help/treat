@@ -1,0 +1,13 @@
+TREAT
+
+Usage: ^gTREAT <victim>^n
+
+This will attempt to treat a wounded person other than oneself.  It utilises
+the ^Wbiotech^n skill, and a rather large target modifier is applied for those
+without a medkit.  If successful, however, the victim will recover a varying
+number of physical points.  When administered (regardless of whether it is
+successful or not), the treated character may not be treated again, by
+anyone, for some time.
+
+^WSee Also: PATCH^n
+

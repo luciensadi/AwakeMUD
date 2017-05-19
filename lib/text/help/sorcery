@@ -1,0 +1,23 @@
+SORCERY
+
+Linked Attribute: ^gWillpower^n
+
+Skill in sorcery is vital if you have magical ability and wish to cast ^Wspells^n.
+With it, you are able to manipulate magical energies and control them in the
+form of ^Wspells^n.
+
+Also
+
+Usage: ^gORDER <spirit> SORCERY^n
+
+This command is used when you want an elemental to assist you with casting
+your next spell. Elementals can only be assist a spell of the same domain.
+
+Elemental Domains:
+  Fire - Combat  
+  Air - Detection 
+  Water - Illusion
+  Earth - Manipulation
+
+^WSee Also: CONJURING, CASTING, ORDER^n
+

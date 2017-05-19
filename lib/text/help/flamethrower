@@ -1,0 +1,10 @@
+FLAMETHROWER
+
+Usage: ^gORDER <spirit> FLAMETHROWER <target>^n
+
+This power commands the spirit to cast the spell Flamethrower
+on a target. This causes damage upon hitting the target but can
+also cause them to erupt in flames, causing more damage over the
+following turns.
+
+^WSee Also: ORDER^N

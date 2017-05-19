@@ -1,0 +1,12 @@
+COOK
+
+Usage: ^gCOOK <program>^N
+
+This command is used as the final step in programming anything. To use it
+you need to have a complete program, a desktop computer, a chip cooker and
+some optical chips. The value of optical chips you need is equal to the size
+of the program in MP divided by 2. You don't need to monitor a cook operation,
+you will be informed automatically when it is complete. Chips are removed with
+the uninstall command.
+
+^WSee Also: BUILD, UNINSTALL^n

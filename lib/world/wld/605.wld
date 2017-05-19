@@ -1,0 +1,3651 @@
+#60500
+Name:	Welcome to Awakened Worlds!
+Desc:$
+    Welcome to Awakened Worlds. This room stands on the event horizon of a great
+rift, the rift connecting our world to that which lies beyond. You stand now
+at the sole entrance to this realm. As you explore these hallowed halls, you
+will discover everything you need to know to survive in the cruel, cold world
+the Earth has become in what is our present - midway through the 21st century.
+Mind you, here you will only be taught the theory of what you must do. Living
+long enough to learn how to apply it is completely up to you. Welcome, and
+good luck.
+    Type NORTH or N to continue on your journey.
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60501
+Name:	All About Your Surroundings
+Desc:$
+   A MUD is a virtual world. To look around this world, just type 'look' or
+'l' for short. This will give you the description of the area you are in and
+show any objects, people, and/or monsters in the same area.  If you use the
+look command right now you will see this room description again.  You can look
+at objects, people, monsters, and even in directions (such as 'look south' or
+'l s' for short).  In order to move around the world, you type in the name of
+the direction you wish to travel, such as north, south, east, west, up, or
+down.  If there is not a path in that direction, the mud will let you know.
+To continue, go north (by typing 'north' or 'n').  To see who or what else is
+in the rooms adjacent to your own room, type 'scan'. Sometimes doors or
+objects can obstruct your view or path. In that case, try to 'open' a door by
+typing 'open door (direction)'. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60502
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60502
+Name:	Getting To Know Yourself
+Desc:$
+   The next thing you need to know is how to find out information about
+yourself.  There are several commands which give you information needed to
+play here.  These commands are 'score', 'inventory', 'equipment', 'skills',
+and 'spells'.  All commands on the mud may be abbreviated, therefore you can
+type 'sc' for score, 'i' for inventory, 'eq' for equipment, and so on. The
+first thing you should do is try out these commands.  To pick up an item you
+see on the floor, type 'get (item)'. If the item is in a container, you can
+type 'get (item) (container)' to retrieve it. If you'd like to equip the item,
+simply type 'wear (item)'. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60503
+Name:	A Steel Staircase Leading Down
+Desc:$
+   You've arrived at a metal staircase leading to the floor below. The
+Neophyte Guild is designed to assist you in becoming a capable member of the
+Awakened Worlds playerbase. The levels of the building will guide you through
+character generation, roleplaying, and rules and policy. Proceed DOWN to
+continue. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	60502
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	60504
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60504
+Name:	Interacting in the Shadowrun Universe
+Desc:$
+   The Shadowrun universe is set in the year 2060, when international
+corporations have a strong grasp on the power in the world, surpassing the
+authority of whole nations. The long lost practices of magic have also
+emerged, creating a large variety of metahuman races in addition to returning
+the forces of magic to the world. Awake allows you to interact with this
+fantasy world through your CHARACTER- your avatar in the Shadowrun Universe.
+You control this character, and act as if you were actually in this world.
+This section of the tutorial will allow you to customize your character by
+assigning him skills, attributes, and careers. Proceed SOUTH to begin. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	60505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60505
+Name:	All About Your Attributes
+Desc:$
+   Attributes determine the strengths and weaknesses of your character in the
+Shadowrun Universe, and form the essential backbone to the character. If you
+type SCORE, the lefthand column will display your character's attributes:
+BODY, QUICKNESS, STRENGTH, INTELLIGENCE, CHARISMA, and WILLPOWER are the main
+attributes, and the other values are determined from these six main stats. For
+more detailed help on your statistics, type "HELP (Statistic)".
+   An Attribute Trainer is also present in this room. Type TRAIN and follow
+the directions to allocate attribute points.
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60504
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60506
+Name:	The Neophyte Skill Center
+Desc:$
+   Skills are another essential aspect to a Shadowrunner, someone who performs
+illegal deeds for pay. Skills make up your character, and determine what tasks
+they are capable of performing, and how well they can perform them. 
+   If you type EXITS, you can see the various rooms that teach those essential 
+skills to new runners. To see the skills you already possess, type SKILLS. 
+When you encounter a skill trainer, type PRACTICE to see what he is capable of
+teaching. To learn a new skill, simply type PRACTICE (skill name). Type it
+again to become more proficient in the skill you just aquired.  Proceed into 
+the skill trainer rooms to learn the abilities essential to your survival. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	60507
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60508
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	60509
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60513
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	60512
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60511
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	60510
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	60593
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60507
+Name:	Melee Skill Training
+Desc:$
+   The skills offered in this room are all derived from your STRENGTH
+attribute. Type PRACTICE to see the list of avaliable melee and strength-based
+skills. EDGED WEAPONS, WHIPS AND FLAILS, POLE ARMS, and CLUBS determines your
+abilities with various hand held melee weapons. PROJECTILES is the skill
+related to bow and crossbow-type weapons, exotic in the world of 2060.
+THROWING WEAPONS is the skill that is required for those that wish to be able
+to use grenades, throwing knives, or shuriken. UNARMED COMBAT is the skill
+essential for those who wish to be able to fight effectively with their fists.
+CYBER IMPLANTS, while similar to UNARMED COMBAT, is necessary for those who
+wish to fight with cybernetically installed weapons such as hand razors, bone
+lacing, and spurs. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	ToVnum:	60506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60508
+Name:	Ranged Combat Skill Training
+Desc:$
+   Combat in 2060 is not much different from modern-day warfare: firearms are
+abundant, and within reach of nearly anyone that has the money for them. This
+room trains characters with the skills for operating and firing guns. Type
+PRACTICE to see what firearms training is offered. Careful: legality of
+firearms is still present in the world of 2060. Anything larger than a simple
+pistol is very likely to attract unwanted attention from law enforcement. It
+is best to keep firearms concealed unless you actually need to use them. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	60506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60509
+Name:	Vehicle Skill Training
+Desc:$
+   Vehicle skills are avaliable in this room. Type PRACTICE to see what's
+avaliable. DRIVING type skills are necessary for operation of cars, trucks,
+and other vehicles. BR skills, or Build and Repair skills, determines a
+character's ability to repair or construct a vehicle. These skills are
+essential for Rigger characters, whose specialties revolve around the
+operation of vehicles and drones. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northwest]
+	ToVnum:	60506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60510
+Name:	Magical Skill Training
+Desc:$
+   Magical skills are essential for magically attuned characters, but are not
+very useful for the mundane. This room allows you to home your abilities in
+SORCERY and CONJURING, aswell as aura reading. SORCERY determines the 
+spellcaster's capabilities with casting spells, and will determine their 
+success with spellcasting. CONJURING allows mages to summon elementals to 
+do their bidding, and also allows shamans to conjure spirits to do theirs. 
+AURA READING helps awakened people gain extra information about a person or
+items aura.
+   To practice these abilities, type PRACTICE, followed by the skill name.
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	60506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60511
+Name:	Decking and Electronics Skill Training
+Desc:$
+   Deckers are the computer hackers of 2062. Connecting their braing directly
+to the matrix they risk life and limb to break into corporate systems, steal
+files, and provide security overwatch for their chummers in the real world.
+Type PRACTICE to see what the Trainer has to offer. Typing "HELP (Skillname)"
+will provide you with more information on the skill you are trying to learn.
+Skills to help with Programming are to the WEST. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60591
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60512
+Name:	Language Training
+Desc:$
+   Despite the changing territories and nation boundaries in 2060 that
+incorporated members of various ethnic nationalities into a jumble of
+territories, language barriers still exist in the Shadowrun Universe. While
+all characters start with mastery of the English language, knowing other
+languages is always a useful skill when interacting with others. Sometimes you
+may not be able to understand someone else in a conversation: this is due to a
+failed dice roll based on your language skill. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	60506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	60592
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60513
+Name:	A Marble Hallway
+Desc:$
+    Have you spent all your Attribute and Skill points? If not, you may want
+to turn back and spend the rest of them. The next few rooms allow you to
+choose an archetype for your character, to pick a specialty or specialties
+that your character excels at. While the Shadowrun system does not restrict a
+player on the professions they want their characters to take, it is
+recommended that you stick to one profession if you are new to the Shadowrun
+system. Proceed SOUTH to continue. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60514
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60514
+Name:	Career Archetype Paths
+Desc:$
+   Here the path splits off into three directions. The Mundane characters,
+those who do not have magical abilities, should proceed westward, where they
+can learn more about STREET SAMURAI, DECKER, and RIGGER professions. Those who
+are gifted with spellcasting abilities should proceed to the EAST, where they
+can learn more about HERMETIC and SHAMANIC magic. Finally, those who are
+ADEPTS, people who use magic to augment their physical capabilities, should
+head SOUTH to learn more about their profession. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60513
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60520
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60518
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60515
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60515
+Name:	The Path of the Mundane
+Desc:$
+   So you weren't born with magical abilities. Who needs 'em? Mundanes can
+augment themselves with cyberware and bioware, artificial enhancements, to
+greatly increase their physical and mental capabilities. Mundanes also can
+excel at tasks mages and Adepts can't- rigging vehicles and hacking into the
+Matrix, the virtual reality system of computers, for example. Cyberware
+detracts from the character's essence, representing the loss of humanity of a
+character after installing foreign, unnatural objects into their bodies.
+Cyberware and bioware may not be for everybody, as cyberware installation is a
+sickening process. For those who can stomach it, however, the possibilities
+are great. Continue WEST to learn more.
+   
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60514
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60516
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60516
+Name:	Street Samurai, Riggers, and Deckers
+Desc:$
+   In this room you'll learn about Street Samurai, Deckers, and Riggers.
+   STREET SAMURAI- A general term that refers to any character that installs
+cyberware into their bodies to augment their fighting capabilities. These
+characters tend to be the most combat intensive of the Shadowrun archetypes.
+   DECKERS- The futuristic hacker, DECKERS hack into the Matrix, an artificial
+reality system of computers similar to the World Wide Web. DECKERS connect
+their minds into the computers themselves through machines called CYBERDECKS
+and DATAJACK cyberware.
+   RIGGERS- The futuristic mechanic, RIGGERS can synchronize their mind with
+those of vehicles, effectively controlling vehicles and drones with their
+VEHICLE CONTROL RIGS and REMOTE CONTROL DECKS. Riggers can become quite
+formidable with a legion of machines backing them up. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60515
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60517
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60517
+Name:	Cyberware Central
+Desc:$
+   Cyberware is one of the sixth worlds greatest achievements, it blends man
+and machine, working together seemless, to bring otherwise mundane metahumans
+up to levels only dreamed of by even the most power adept or mage. It is not
+without its drawbacks however, along with costing alot of nuyen, it also takes
+up essence. Essence is a measurement of how much your spirit binds with your
+body. Everyone starts with 6 essence and it cannot be raised. If your essence
+ever drops to 0, your spirit flees your body and you die. Low essence also
+makes it hard for benificial spells to bind with your body. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60611
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60516
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60610
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	60614
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60613
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	60612
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	60615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	datajack~~~~~~~~~~~~~~~~~~
+	Desc:$
+A DATAJACK is necessary for a decker or a rigger to interface their mind with
+a machine. 
+~
+[EXTRADESC 1]
+	Keywords:	smartlink system~~~~~~~~~~~~~~~~~~
+	Desc:$
+The SMARTLINK system allows the user to use a smartlink accessorized firearm,
+granting them greater accuracy in ranged combat. If the weapon is outfitted
+with a SMARTLINK accessory and the user has a SMARTLINK system installed, the
+feature is automatically used. 
+~
+[EXTRADESC 2]
+	Keywords:	spurs razors retractable~~~~~~~~~~~~~~~~~~
+	Desc:$
+Spurs/Razors are blades attached to the hands of the user, providing them with
+a handy weapon in a fist fight. When installed, the spurs/razors are
+automatically used when the character enters unarmed combat, and success is
+based on the CYBERIMPLANT COMBAT skill. 
+~
+[EXTRADESC 3]
+	Keywords:	Vehicle control rig~~~~~~~~~~~~~~~~~~
+	Desc:$
+The VEHICLE CONTROL RIG and a DATAJACK is necessary for someone who wants to
+be able to mentally control a vehicle. An explanation of RIGGING is provided
+later in the guild. 
+~
+[EXTRADESC 4]
+	Keywords:	wired reflexes~~~~~~~~~~~~~~~~~~
+	Desc:$
+Wired Reflexes, while costly to the user's essence, enhance their REACTION and
+INITIATIVE, allowing them to attack more often than an unaugmented person.
+Wired Reflexes are known to cause some people to be extra jumpy. 
+~
+BREAK
+#60518
+Name:	The Path of the Adept
+Desc:$
+   Adepts, also referred to as Somatic Mages, are awakened people who focus
+their magic inward, unlike hermetic and shamanic mages who focus their magic
+into the world. This allows adepts to seem superhuman, like the heroes in
+martial arts movies. Adept powers range from straight out killing to healing.
+Like all awakened beings however, their powers are hampered by cyberware and
+bioware, which should be avoided as they cause random ability loss. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60514
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60519
+Name:	Adept Power Training
+Desc:$
+   Adepts can purchase abilities here using their starting power points. All
+adepts start off with their magic rating in Power points. Type TRAIN to see
+what the trainer has to offer. All abilities have help files associated with
+them, so if you require any extra information about then make sure to read
+through them. Typing TRAIN and then the name of the ability you would like to
+learn to advance that ability another level.  
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	60525
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60520
+Name:	The Path of the Magician
+Desc:$
+   Following the Awakening in 2019, the world experienced a surge of magical
+energy. In addition to the emergence of metahuman races such as elves,
+dwarves, and trolls, mankind once again became capable of manipulating magical
+energy from the Earth. Two divisions of mages formed: Hermetic Mages, who view
+magic as a science and approach it in a scientific manner, and Shamans, who
+consider magic to be more spiritual in nature. In Shadowrun, mages are capable
+of casting spells, conjuring spirits or elementals to aid them, and also
+astral projection, which will be explained later in the tutorial. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60521
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60514
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60521
+Name:	All About Hermetic Magic
+Desc:$
+   Hermetic Mages consider magic to be like a science: because they know spell
+formulas and are capable of managing the complex computations in their heads,
+Hermetics usually consider magic to be theirs to use and manipulate. Hermetics
+are capable of conjuring elementals, if they have access to a hermetic library
+and various conjuring materials. The strength of the earth, fire, wind, or
+water elemental depends on the force of the library used, and the abilities of
+the summoner. Hermetic mages are also capable of astral projection and
+perception. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60523
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60520
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60522
+Name:	Conjuring
+Desc:$
+   Conjuring is different for hermetic mages and shamans. Shamans can conjure
+a spirit anywhere, but they will disappear at sunrise or sunset. Mages require
+hermetic circles and conjuring libraries, but their elementals can wait in the
+metaplanes for aslong as the mage desires and be called out at any time to
+help.
+   Spirits are ordered to perform services with the ORDER command, most orders
+take up a service, once a spirits services run out they will vanish never to
+be seen from again. If a spirit is disrupted (IE. Killed), it will vanish to
+the metaplanes and be available to be summoned back again if conjured by a
+hermetic mage.
+   Spirits can be CONTESTed by other mages, hermetic mages can only contest
+elementals and shamans can only contest nature spirits. Contesting control of
+a spirit or elemental will let you take control of it if you are succesfull.
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60594
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60524
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60523
+Name:	All About Shamanic Magic
+Desc:$
+   Totemic Shamans consdier magic to be of a spiritual nature: their Totem,
+through its divine knowledge, calls upon its loyal services to carry out its
+will. Shamans are capable of conjuring spirits based on the domain of their
+immediate surroundings. If they were in a forest, for example, they could
+conjure up a Forest spirit. Likewise, if they were in the mountains they could
+conjure a Mountain Spirit, or if they were in the city streets they could
+summon a Spirit-of-Man. Shamans are also capable of astral projection and
+perception. All Shamans must abide by the rules set forth by  their Totem.
+Failure to obey the Totem, or deviation from the Totem philosophy,  will
+result in the loss of magic abilities by the Shaman.  
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60524
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60521
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60524
+Name:	Spellcasting
+Desc:$
+   The two main commands that mages of either type will use the most is
+CONJURE and CAST. Take your time to read the help files now.  There are alot
+of factors that affect casting success, depending on your condition and the
+spell being cast. Some spells are dependant on their victims stats, set
+targets, or even their essence (Most health spells follow this). There are 3
+types of spells, Instant, which effects happen as soon as you cast them;
+Sustaining, which will stay in affect for as long as you concentrate; and
+Permanent, which require you to concentrate for a set period of time before
+the affects can not be undone.
+   Concentrating on a spell distracts you from other tasks, and if it's not
+being sustained by a spirit or focus (explained later) it will cause you to
+have a harder time doing things that require concentration.  
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60522
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60523
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60525
+Name:	Introduction to Complex Commands
+Desc:$
+   Awake has developed a large number of complex commands and features unique
+to this MUD. While not all of them can be explained in this area, the basic,
+essential fuctions will be described in the rooms to come. A staircase leads
+back up to the Career Archetype area in case you'd like to learn more about
+the archetypes. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60526
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60514
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60526
+Name:	Managing Your Bank Account: ATMs and Credsticks
+Desc:$
+   The world of 2060 is all about nuyen (the standard currency in thes world).
+Managing your finances is an important aspect of running the shadows. People
+who carry their life savings with them all the time tend to lose it very
+quickly.
+   Characters can store their funds in bank accounts. At an ATM, type BALANCE
+to see how much money is in the account, DEPOSIT to deposit your funds, or
+WITHDRAW to make a transaction.
+   Credsticks, small pen shaped credit cards, are also a safe way to store
+money. Credsticks can be personalized by someone to keep their funds safe, but
+can also be rigged by someone who is proficient in ELECTRONICS. To personalize
+a credstick, simply ACTIVATE it. If the credstick has already been activated,
+you must CRACK the security with your ELECTRONICS skill before you can access
+the nuyen within. You can use credsticks to make purchases, although some
+illegal street dealers will only accept rolls of nuyen.
+   To move funds from a credstick to an ATM, type "TRANSFER <amount> ACCOUNT".
+To transfer funds from an ATM to a credstick, type "TRANSFER <amount>
+CREDSTICK". 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60527
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60525
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60527
+Name:	All About Radio Broadcasting
+Desc:$
+    The radios used by Shadowrunners in 2064 are specialized Matrix terminals
+linked through the Shadowland network. This allows them heavy security from
+most normal law enforcement agencies, but it is still possible to track
+someone down through it.
+   Radio's are an IN-CHARACTER form of communication: disregard the way you
+behave and think about how your character would act.
+   To operate a radio use the RADIO command. This will show you it's current
+settings. To center the radio at a frequency (the most common is 8mhz), type
+RADIO CENTER <frequency>. To scan through all frequencies type RADIO SCAN.
+Encryption rating can be set by typing RADIO CRYPT <rating>. Only radios with
+an encryption rating greater than or equal to what you have it set at can
+receive them.
+   To broadcast a message type BROADCAST <message>. Turning the radio off can
+be accomplised with RADIO OFF. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60528
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60526
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60528
+Name:	E.T. Phone Hoooome.
+Desc:$
+   Phones are a more private form of communation. When you aquire a phone and
+wish to use it, you must first find the eight digit telephone numbers of the
+people you want to call. Type PHONE to see your settings. Type CALL (########)
+to start calling someone. If they answer, use TALK (message) to start talking
+with them. Type HELP PHONE for more information on settings and calls. Head
+NORTH to learn about channels. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60540
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60527
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60529
+Name:	Score Screen
+Desc:$
+   There are a few entries on the score sheet that may not be obvious.
+   Karma is basically your experience in the world, you gain more by killing
+other people and completing Shadowruns, how you go about this is up to you.
+Your total karma is divided into two sections; Reputation, the karma gained
+through performing Shadowruns and Immortal Awards; and Notoriety the karma
+gained through killing. Reputation affects the maximums amount of PowerPoints
+adepts can get, what Shadowruns you can do and other things, Notoriety affects
+nothing.
+   Essence Index is the amount of Bioware you can handle before you start
+having negative affects, like slow healing, illness, etc. It is equal to your
+Essence + 3. Essence is the amount of humanity you have left, or how well
+attached your spirit is to your body, cyberware will reduce it. As your
+essence drops so does your magic rating, and the amount that beneficial magic
+will affect you. Bioware Index is the amount of Bioware your body can take,
+bioware also reduces magic like cyberware, but only at half the value you have
+installed.
+   Awakened Characters also have a Grade, which is how many times they have
+initiated, this is explained later. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60540
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60530
+Name:	Operating Elevators
+Desc:$
+   Elevators are essential to travelling about the many, many buildings and
+areas in Awake. When you are in front of an elevator, type LOOK PANEL to see
+where the elevator currently is. To call the elevator, type PUSH BUTTON. The
+next area of the tutorial can only be accessed through an elevator. Try
+calling it now by pushing the button and walking north once the elevator doors
+open. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	60608
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60531
+Name:	Inside the Neophyte Elevator
+Desc:$
+   You're inside the Neophyte Elevator. Good job! Try looking at the elevator
+panel again to see which floors this elevator is connected to. Head to a
+specific floor by typing PUSH (floor number you wish to go to). To proceed to
+the next area, you need to head to the lower of the two floors offered in this
+elevator. 
+~
+Flags:	10000000000000011000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+BREAK
+#60532
+Name:	Worlds Within our World: Facets of Reality
+Desc:$
+   In the world of Shadowrun, the physical world is just one of many facets of
+reality. With the resurgance of magic and amazing advances in technological
+development, whole new worlds have been opened up for the people of 2060.
+Riggers can directly connect their minds with their vehicles, essentially
+"becoming" their cars. Deckers can similarily connect their minds with
+machines, specifically the artificial reality construct known as the Matrix.
+The Matrix, a global connection of the world's computer systems, is a virtual
+world that directly stimulates the senses of the Deckers enter use it through
+technology called Simsense. Magically attuned characters like mages and Adepts
+are also capable of interacting with the Astral Plane, a metaphysical realm
+that mirrors the real world. Through the Astral Plane, mages can leave their
+physical bodies and sense lifeforce and auras of all living things that they
+come into contact with. Head on SOUTH to learn more about these worlds that
+Awake has to offer. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	60533
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60533
+Name:	Specialty Commands: Driving, Astral Projection, Decking, Rigging
+Desc:$
+   A Rigger, Decker, or Magic-type character has access to Rigging, Decking,
+and the Astral Plane, respectively. Adepts are also capable of accessing the
+Astral Plane, but only if they purchased the Astral Perception power, and they
+are incapable of leaving their bodies through Astral Projection. Type EXITS.
+The rooms in this area explain the details to interacting with these other
+worlds, and will tell you the important commands that are necessary.  
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60532
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60535
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60538
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60534
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60537
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	60536
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60534
+Name:	The Astral Plane
+Desc:$
+   Awakened Character, Hermetic and Shamanic Mages and Adepts, have access to
+the astral plane in some form. Aspected Mages and magicians can only perceive
+the astral plane, while full mages can fully remove their spirit from their
+bodies and explore the astral plane freely.
+   PROJECT and PERCEIVE are used to perform these actions. To stop projecting
+type RETURN, to stop perceiving toggle it off again with PERCEIVE. Astral
+Perception makes concentrating on both the physical and astral planes
+difficult and gives you penalties to any actions that involve concentration.
+While projecting your essence will slowly decrease, at a rate of 1 per mud
+hour. If it falls to 0 you will die. It returns at a rate of 1 every mud hour
+while in your physical body however. There are various actions that can only
+be undertaken while in the astral plane, these are explained to the WEST. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60533
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60609
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60535
+Name:	Decking: There is No Spoon
+Desc:$
+   Decking is a fairly complex art, almost a whole game unto itself. To
+connect to the matrix, find a room that mentions a dataport and CONNECT. From
+there you have a variety of options: You can LOCATE another host, then LOGON
+to it. You can attempt to LOCATE files and DOWNLOAD them.
+   But first you need a cyberdeck and four 'persona' programs - body, evasion,
+sensors and masking. You must INSTALL these programs to access even the most
+basic of hosts. Once you get started, you'll realise that a lot of operations
+fail. To improve your chances of succeeding, you can add additional utilities
+to your deck. Use the SOFTWARE command to get the values and names of software
+you have installed.
+    See the help files: MATRIX, IC, CYBERDECKS, PROGRAMS, UTILITIES, LOCATE,
+LOGON, ANALYZE, DOWNLOAD, SOFTWARE and RUN for more information. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	60533
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60536
+Name:	Rigging: Danger! Danger, Will Robinson!
+Desc:$
+   Rigging is a complex task. A rigger must aquire three things before they
+can even think about rigging: a Vehicle Control Rig, and Datajack, and a
+Remote Control Deck. Once those are aquired, they simply need to purchase a
+vehicle or a drone. First the rigger must register the vehicle with the
+SUBSCRIBE command to add it to their RC deck. When subscribed, a vehicle will
+be given a control number. To start controlling a vehicle on your SUBSCRIBE
+list, type CONTROL (number of the vehicle). To adjust the speed at which you
+are travelling, type SPEED (idle/cruise/speeding/max). To return back to your
+physical body, type RETURN. While in control of a vehicle, it is possible to
+attack those who are hostile with the RAM function. Excessive ramming will
+result in damage to the vehicle. If the vehicle is destroyed while the rigger
+is in control of it, he will suffer extreme damage known as DUMPSHOCK, in
+which his brain is wracked by the damage sustained while in control of the
+vehicle. Weapons can also be attached to a drone, providing a safer method of
+attack.
+    Some useful help files: VEHICLES, RIGGING, DRIVE, RIG, CONTROL, SUBSCRIBE,
+UPGRADE, UNINSTALL, ATTACH, TARGET, and REPAIR.
+   
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT up]
+	ToVnum:	60533
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60537
+Name:	Driving: Vroom vroom, dukka dukka
+Desc:$
+    Driving is not too different from rigging. To enter a vehicle, first
+UNLOCK the door and ENTER it. To begin driving, type DRIVE. To adjust speed,
+type SPEED (idle/cruise/speeding/max). To defend yourself from someone who's
+attacking your vehicle, you can RAM him, which will result in damage to your
+vehicle. If your vehicle is destroyed, all passengers will be flung out into
+the street, where they will take heavy crash damage in addition to being in
+the unenviable position of confronting whatever destroyed their vehicle. In
+the world of 2060, the isolated city-state of Seattle is surrounded by
+unfriendly nations, all of which firmly patrol their borders and shoot
+intruders on sight. It is not recommended that you attempt to drive past a
+border fortification.
+   Useful help files: VEHICLES, DRIVER, UPGRADE, UNINSTALL, REPAIR, GRIDGUIDE
+   The man in this room also can sell a vehicle to you if you have the money
+for one. He won't give you the actual car itself, but he will give you a TITLE
+that you cash in for a vehicle at the end of the area. Driving isn't
+essential, however, as Seattle boasts an effective cab system: simply type
+HAIL when you're out on the street to flag down a cab. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT down]
+	ToVnum:	60533
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60538
+Name:	A Metal Staircase Leading Downward
+Desc:$
+   Finished learning about the special features of Awake? Head down to the
+next level to continue making your character by outfitting him/her with some
+equipment. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60533
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	60539
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60539
+Name:	All About Your Equipment
+Desc:$
+   Equipment is essential to survival in the harsh world of 2060. Someone will
+always be better equipped than you, and if you ever come into conflict, you'll
+want to make the most out of what you have. To wear a piece of equipment, type
+WEAR (equipment). To start using a weapon, type WIELD (weapon). Watch out,
+security forces in sensitive areas like corporate territory will attack
+anything that looks like a threat: be sure you're not wearing illegal
+equipment such as armor or weapons unless you like being shot at. Continue
+NORTH to learn about the types of equipment in 2060. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60541
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60538
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60540
+Name:	Doors and Maglocks
+Desc:$
+   Most doors in 2064 are Maglocks, Magnetic Locks. Keys normally take the
+form of a passcode, biometric scan or keycard. Tumbler locks still exist, but
+they are so rare as to be considered obscure knowledge.
+   Doors can be locked and unlocked using the LOCK and UNLOCK commands,
+directions or door names can be used as arguments. To "pick" a lock you use
+the BYPASS command. To do this you need an electronics kit however.
+   It is also possible to kick or shoot doors down, using the KICK or SHOOT
+commands. Also, the KNOCK command can be used to alert someone on the other
+side of a closed door. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60529
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60528
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60541
+Name:	Neophyte Gear Central
+Desc:$
+   This area sells everything you could possibly need as a neophyte. The rooms
+around you offer various types of equipment. Buy what you need before
+continuing, you lose any money you have left once you leave the guild.
+   You buy items from stores using the BUY command, and sell items back using
+the SELL command. VALUE is used to give a rough estimate of how much you will
+get payed for an item. INFO will show a brief explanation of what a item is,
+it's ratings, etc. CHECK and RECEIVE are used along with availiblity to see
+how long is remaining until an item arrives and to receive delivery of it.
+   If an item has a time listed in the "Availibility" column then it is
+subject to an availiblity test. The time listed is the least amount time it
+will take, the better you score on the availiblity test the less time it will
+take.
+   Once ordered you can go about your business as normal, even log off, it
+will be availible in the amount of time the shopkeeper responds. All time
+listed is MUD time. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60549
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	60545
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60546
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	60547
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60539
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	60544
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60543
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	60542
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	60590
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60542
+Name:	Toby's Firearms and Ammunition
+Desc:$
+       Toby will provide you with firearms, provided you have enough money to
+pay for his services. Remember that a weapon is only as good as its user: if
+you don't have any skill in handling a weapon, it's not going to be of much
+use to you. Type LIST to see what's avaliable. After you make your selection,
+you can head into the storage room ABOVE to accessorize the weapon or purchase
+ammunition. Be careful: ammunition will only work with your weapon if the clip
+capacity is the same as the maximum ammo of your weapon, and if the clip is of
+the same weapon type. To reload, type RELOAD when your weapon is out of ammo.
+   Light Pistols: Fichetti Security, Colt American
+   Machine Pistols: Ceska
+Black Scorpion
+   Heavy Pistols: Ares Predator, Colt Manhunter, Ruger Super Warhawk, Colt
+Peacemaker
+   Submachine Guns: Ingram Smartgun, Uzi III
+   Rifles: Remington 950
+   Light Machine Guns: Ingram Valiant
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	60541
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60548
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60543
+Name:	Erik's Forge: Melee Weapons
+Desc:$
+   Racks of various melee weapons are lined against the wall, and Erik stands
+at the forge pounding a sheet of metal. Type LIST to see what he has to offer.
+   EDGED WEAPONS- Combat Axe, Katana, Rapier, Survival Knife, Two Handed
+Sword
+   CLUBS- Stun Baton, Staff, Nightstick
+   WHIPS/FLAILS- Nunchaku, Leather Whip
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60541
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60544
+Name:	Ave's Protective Gear: Armor and Clothing
+Desc:$
+   Here protective armor can be purchased to better guard yourself from
+hostile attacks. Security forces frown upon armor, however, so be careful
+where you wear it. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	60541
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60545
+Name:	Gremlin's Gadgets: Electronics and Machines
+Desc:$
+   Gremlin sells various electronic devices that someone new to the Seattle
+metroplex might need. Type LIST to see what's avaliable. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	ToVnum:	60541
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60546
+Name:	Howie's Decks: Cyberdecks and Rigging Decks
+Desc:$
+   Here a decker or rigger can purchase the equipment they need to get their
+job done. Glass cases store CYBERDECKS and PROGRAMS, both of which are needed
+to successfully DECK the MATRIX. Rigger equipment is also sold here, and
+various electronic devices are stored in storage lockers. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	60541
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60587
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	60588
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60547
+Name:	Bowie's Hunting Shop: Survival Gear
+Desc:$
+   Bowie, a long, long, distant descendant of the famous Jim Bowie, stands
+behind the counter selling items that someone might need to survive in a harsh
+environment. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northwest]
+	ToVnum:	60541
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60548
+Name:	Gun Accessories
+Desc:$
+    Here you can purchase gun accessories to outfit your firearm. To attach an
+accessorry to a gun, use the ATTACH command. Help ATTACH for more information.
+   A Smartlink accesory adapts a gun to the Smartlink cyberware, allowing
+someone to shoot more accurately if they have a Smartlink installed in their
+bodies.
+   A laser sight can be attached for those who do not have a smartlink for
+increased accuracy.
+   Gas Vents can reduce the recoil of a weapon, reducing the target modifiers
+for firing in burst fire mode.
+   
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT down]
+	ToVnum:	60542
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60549
+Name:	Restrings
+Desc:$
+   All equipped? If you haven't spent all your starting funds, you may want
+to, they won't follow you outside character generation.
+   Any item can have it's description customized using the restring command.
+This changes only the name of the item, not it's look description or it's room
+description. Anyone can do this at any time for the cost of 2.5 Karma,
+however, you have received 5 free restrings that are valid while you are in
+character generation only. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	60541
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	60550
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60550
+Name:	Entrance to the Neophyte Guild Combat Simulation
+Desc:$
+   This section of the Neophyte Guild will teach basic combat. Characters who
+have high QUICKNESS, INTELLIGENCE, and REACTION will tend to get more attacks
+than their opponents. To initiate combat, type KILL (target). If you are using
+a weapon that deals stun damage, you will only stun your opponent instead of
+killing them. Killing should only be initiated on MOBs (mobiles, computer
+controlled non-player characters). All your kills with gain you a fraction of 
+a karma point, but also increases your NOTORIETY. And don't even think about trying
+to start a fight with another player unless you both have toggled your
+player-killer flags- you won't do any damage at all, wheras your opponent will
+be able to hurt you. Continue SOUTH to learn more about combat.  
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	60551
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60549
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60551
+Name:	Melee Combat Tutorial
+Desc:$
+   This section will teach you about basic, same-room combat. When both
+opponents are in the same room, you can initiate a fight with the KILL
+command. If both characters are using melee weapons, they'll just duke it out.
+Likewise, if both characters are using firearms, they'll take turns shooting
+at each other. However, if one character is using a melee weapon and their
+opponent has a firearm, they will need to "close the distance" before they can
+try to attack their opponent. It is difficult to attack someone with a sword
+if they happen to be spraying you with full automatic fire. Your success at
+closing the distance between the attackers is dependant on your QUICKNESS
+rating. As such, attrbitues like QUICKNESS, INTELLIGENCE, and WILLPOWER are
+all very important for combat. BODY is also important for determining damage
+resistance, and STRENGTH is useful for increasing the power of your attacks if
+you're using a melee weapon.
+   Combat can also be initiated in other ways: Casting a combat spell on
+someone will start a fight, and casting spells in the middle of combat
+requires intense concentration- the harder the spell, the longer it will take
+to cast it.  
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60550
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60552
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60552
+Name:	Ranged Combat Tutorial: Distance Attacks
+Desc:$
+   Tested your basic combat abilities on those training robots? Now it's time
+to learn about ranged attacks. If you're using a ranged weapon like a firearm,
+you can attack people from other rooms. Type SCAN now to see WEST into the
+Shooting Range. You can hit people in other rooms with the SHOOT command. To
+fire at someone, type SHOOT (target) (direction). Naturally, it is more
+difficult to shoot someone from far away than it is if they're in the same
+room: gun accessories like smartlinks, laser sights, gas vents, and scopes can
+make the task easier. If a mage has a direct line of sight, they can also cast
+a combat spell from a distance. Type syntax is CAST '(spell)' (target)
+(direction). The same can be done from Astral Space against an Astral form.
+Practice ranged combat here if you want, and head SOUTH to learn more about
+combat. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60551
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60554
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60553
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60553
+Name:	On the Shooting Range
+Desc:$
+   What are you doing out in the middle of the Shooting range? Are you crazy?
+Go back east before you get shot! 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60552
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60554
+Name:	Advanced Combat Tactics: Tips for Survival
+Desc:$
+   Combat can be a difficult task. Thankfully, this section teaches you some
+commands that can make survival easier. If you've gone in over your head and
+started a fight with someone that you're losing, you can FLEE to try to run
+away. Fleeing will attempt to move your character out of the room through a
+random exit- you may escape the fight, or you may run into more opposition if
+you're not careful. For a more precise, but more difficult method of escaping
+combat, try to RETREAT. You can run away from a specific direction if you try
+to RETREAT (direction). The WIMPY command can be used to set your character to
+automatically flee once they're wounded enough. 
+   What if you don't want to run away from a fight? To avoid getting hit, you
+have a COMBAT POOL. Your COMBAT POOL is determined by your QUICKNESS,
+INTELLIGENCE, and WILLPOWER attributes. In combat, your COMBAT POOL will add
+dice to either your defense (allowing you to dodge attacks) or offense
+(allowing you do deal more damage, or hit someone) dice rolls. To set your
+combat pool, type DEFENSE.
+   Wounds: The weapons in Shadowrun all have a set, realistic damage rating:
+Light, Moderate, Serious, and Deadly. Based on the skill of your weapon
+handling, you can increase the amount of damage you deal to an opponent. For
+example, someone who is skilled enough with a Light weapon can make it deal
+Moderate, Serious, or even Deadly damage if they're good enough. A weapon is
+only as good as its user. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60552
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60555
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60555
+Name:	A Metal Staircase Leading Downwards
+Desc:$
+   You've essentially learned all the basic game mechanics that you'll need to
+know to play here. Once you've passed the next few rooms which discuss the MUD
+policy, rules, and roleplaying, you'll be ready to start playing in the
+Shadowrun Universe. Head DOWN to start. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60554
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	60556
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60556
+Name:	Entrance to the Awakened Worlds' Disclaimer Area
+Desc:$
+    You're about to enter the Disclaimer area. It is vital that you read
+everything in the following area carefully. Awake exists for the enjoyment of
+the players and the staff: when people fail to obey the rules, they ruin the
+enjoyment of other players, which ruins the enjoyment of the staff, which in
+turn will forcibly ruin the enjoyment of the offender with strict punishment,
+and if the situation is serious enough, banning. We are not kidding around,
+and we are dead serious about this. Continue NORTH. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60557
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60555
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60557
+Name:	"Info" Help
+Desc:$
+   Type ^YINFO^n right now. Read every single bit of it. Once you are done,
+continue north. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60558
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60556
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60558
+Name:	Having Fun: Most Important Feature of this MUD
+Desc:$
+   The main purpose of this MUD is to have fun, RP if you want, go around and
+kill everything if you feel like it. Only time this doesn't apply is if you
+are deliberatly spoiling someone elses fun. Use your common sense and don't be
+an arse. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60559
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60557
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60559
+Name:	Character Descriptions
+Desc:$
+   It is recommended you create a custom description to benefit more fully
+from the MUD. It is difficult to interact with others when you have no
+description set at all to describe what your character looks like. To set your
+descriptions, type CUSTOMIZE. Mages will have to make two descriptions: one
+for their physical body and one for their Astral reflection. The same goes for
+Deckers. For more detail, type HELP CUSTOMIZE and HELP DESCRIPTION.  
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60560
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60558
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60560
+Name:	Law Enforcement in 2060
+Desc:$
+   There are some automated law enforcement systems in place, these will
+trigger if you attack police officers or try and raid corporate installations
+(either physically or through the matrix). 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	60561
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60559
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60561
+Name:	Awake's Policy and Rules
+Desc:$
+   Type ^YPOLICY^N right now. Read every single bit of it. Understand all of it.
+Once you're done reading, head SOUTH. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60560
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60562
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60562
+Name:	Acknowledgement of the MUD's rules
+Desc:$
+   Have you thoroughly read each and every single sentence in this Policy
+area, and do you understand and agree with ALL of it? If you haven't read it,
+go back and do so. If you disagree with our rules here, you're free to leave,
+and we'd prefer if you do instead of coming into conflict in the future.
+   If you understand and accept this and are ready to play, simply say...
+   "^YI have read the rules and policies, understand them, and agree to abide
+by them during my stay here.^n"
+   
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60561
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60563
+Name:	In the Lobby of the Neophyte Guild
+Desc:$
+   You've finally finished the Neophyte Guild! In the Lobby area of the
+Neophyte Guild, there are a few people to the EAST that need some jobs done.
+Maybe you should talk to them.  
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60585
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	60566
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60573
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60569
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	60570
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60564
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	60565
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60564
+Name:	Recap: Chute Leading Back to the Tutorial
+Desc:$
+   Miss something from the tutorial? Something needs clarification? Go UP in
+this room to return to the start of the Neophyte Guild.
+   This is a ONE WAY EXIT back to the start of the guild. It is HIGHLY
+recommended that you store your money in an ATM, unless you want to lose it
+all when you go through the guild for the second time.
+   ^RNo items, cash or credit are to be exchanged within the tutorial area.^n
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60563
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60565
+Name:	The Neophyte Hotel
+Desc:$
+   A receptionist stands behind the counter to this coffin motel. The
+accomodations are shoddy, as can be expected from a Coffin Motel, which rents
+out miniscule little rooms for the ever increasing population of Seattle. To
+exit the game, you must RENT. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	60563
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60566
+Name:	Shadowland: In-Character Message Board
+Desc:$
+   A computer terminal has been placed here and is linked to Shadowland, a
+connection in the Matrix that serves at a database for all Shadowrunners. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60567
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	60563
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60567
+Name:	The OOC-Board: Out-of-Character Communications
+Desc:$
+   An Out-Of-Character Board is here for your convenience, allowing you to
+talk about things that should not be addressed through In-Character methods.
+You can also visit the forums at www.awakenedworlds.net if you need further
+assistance. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60568
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60566
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60568
+Name:	The Post Office
+Desc:$
+       The postal station is just a large computer database that helps to keep
+track of all the WPS mail that goes in and out of the Neophytic Guild each
+day.  
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	60567
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60569
+Name:	The Neophyte Guild Store
+Desc:$
+   The Neophyte Supply Store stocks items that you may need: ammunition,
+flashlights, and rations. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60563
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60570
+Name:	The Salvation Army
+Desc:$
+    You enter a cold concrete building lined up from wall to wall with bins,
+filled with all sorts of objects, some things just useless trinkets, others
+downright useful.  Signs all over the building say things such as "ALL ITEMS
+SOLD AS IS" and "NO REFUNDS" and "NO WARRANTY".  The items in these bins are
+various things of all types, donated by the community for the less fortunate.
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	60563
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60572
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60571
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60571
+Name:	The Salvation Army
+Desc:$
+    You enter a cold concrete building lined up from wall to wall with bins,
+filled with all sorts of objects, some things just useless trinkets, others
+downright useful.  Signs all over the building say things such as "ALL ITEMS
+SOLD AS IS" and "NO REFUNDS" and "NO WARRANTY".  The items in these bins are
+various things of all types, donated by the community for the less fortunate.
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60570
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60572
+Name:	The Salvation Army
+Desc:$
+    You enter a cold concrete building lined up from wall to wall with bins,
+filled with all sorts of objects, some things just useless trinkets, others
+downright useful.  Signs all over the building say things such as "ALL ITEMS
+SOLD AS IS" and "NO REFUNDS" and "NO WARRANTY".  The items in these bins are
+various things of all types, donated by the community for the less fortunate.
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	60570
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60573
+Name:	Ricky's Eatery
+Desc:$
+   In the world of 2060, everyone has something that needs to be done. People
+with money can hire Shadowrunners like you to do their task for them instead
+of getting their own hands dirty. Ricky's Eatery, a fairly dingy fast food
+joint, always has a few people around that need something done.
+   In Awake, and in the Shadowrun Universe, the main source of karma and money
+is from a Shadowrun. Shadowruns are jobs or missions provided by middlemen
+known as Johnsons. In Awake, Shadowruns are automated by the AUTOJOHNSON
+system. Type HELP SHADOWRUN for more information on jobs. The Immortal Staff
+also holds Roleplaying Events on a very regular basis here: always be on the
+lookout for opportunities to roleplay, and don't be surprised at all if the
+MOBS respond and interact with you. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60575
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60574
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60563
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60574
+Name:	A Small, Shadowy Booth
+Desc:$
+    A small enclosed corner of the neophyte guild, that is almost like a back
+alley, with a concrete floor and a brick wall covered in graffiti. The smell
+of cigarette smoke pervades this little booth. A Johnson is sitting in this
+booth, maybe you should ask him for work. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60573
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60575
+Name:	Inside Ricky's Kitchen
+Desc:$
+   Participating in Immortal-held Roleplaying Events, in combination with
+Autojohnson Shadowruns, a character will earn Karma. Karma can be used to
+increase character attributes and skills, provided the character can find
+appropriate trainers and teachers outside of the Neophyte Guild. Karma is
+divided into two values: Reputation is "good" karma that you earn from jobs
+and events, Notoriety is "bad" karma that you gain by killing people. To
+discourage power gaming, characters with too much notoriety (more than the
+repuation value) will be given a Power Gaming flag on their characters, which
+will significantly reduce their ability to carry out tasks like fighting.
+There are plenty of Autojohnsons out there in the Seattle Metroplex, which
+means there are plently of job opportunities for characters. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	60573
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	door trapdoor hatch
+	ToVnum:	60576
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60576
+Name:	In a Dark, Dank Basement
+Desc:$
+   The area below Ricky's Eatery is not the most pleasant place in the world.
+Mildew and mold grows on the walls in abundance, and waste water drips down
+from the ceiling into wet puddles on the floor. The area is barely
+illuminated, and incredibly large, vicious rats scamper throughout the area. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60577
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60583
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Keywords:	door trapdoor hatch
+	ToVnum:	60575
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60577
+Name:	In a Dark, Dank Basement
+Desc:$
+    The area below Ricky's Eatery is not the most pleasant place in the world.
+Mildew and mold grows on the walls in abundance, and waste water drips down
+from the ceiling into wet puddles on the floor. The area is barely
+illuminated, and incredibly large, vicious rats scamper throughout the area.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60578
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60576
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60578
+Name:	In a Dark, Dank Basement
+Desc:$
+    The area below Ricky's Eatery is not the most pleasant place in the world.
+Mildew and mold grows on the walls in abundance, and waste water drips down
+from the ceiling into wet puddles on the floor. The area is barely
+illuminated, and incredibly large, vicious rats scamper throughout the area.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60579
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60577
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60579
+Name:	In a Dark, Dank Basement
+Desc:$
+    The area below Ricky's Eatery is not the most pleasant place in the world.
+Mildew and mold grows on the walls in abundance, and waste water drips down
+from the ceiling into wet puddles on the floor. The area is barely
+illuminated, and incredibly large, vicious rats scamper throughout the area.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	60580
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60578
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60580
+Name:	In a Dark, Dank Basement
+Desc:$
+    The area below Ricky's Eatery is not the most pleasant place in the world.
+Mildew and mold grows on the walls in abundance, and waste water drips down
+from the ceiling into wet puddles on the floor. The area is barely
+illuminated, and incredibly large, vicious rats scamper throughout the area.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60579
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60581
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60584
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60581
+Name:	In a Dark, Dank Basement
+Desc:$
+    The area below Ricky's Eatery is not the most pleasant place in the world.
+Mildew and mold grows on the walls in abundance, and waste water drips down
+from the ceiling into wet puddles on the floor. The area is barely
+illuminated, and incredibly large, vicious rats scamper throughout the area.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60580
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60582
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60582
+Name:	In a Dark, Dank Basement
+Desc:$
+    The area below Ricky's Eatery is not the most pleasant place in the world.
+Mildew and mold grows on the walls in abundance, and waste water drips down
+from the ceiling into wet puddles on the floor. The area is barely
+illuminated, and incredibly large, vicious rats scamper throughout the area.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60581
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60583
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60583
+Name:	In a Dark, Dank Basement
+Desc:$
+    The area below Ricky's Eatery is not the most pleasant place in the world.
+Mildew and mold grows on the walls in abundance, and waste water drips down
+from the ceiling into wet puddles on the floor. The area is barely
+illuminated, and incredibly large, vicious rats scamper throughout the area.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60576
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60582
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60584
+Name:	Inside a Dusty Storeroom
+Desc:$
+   It doesn't look like anyone's been in here for ages. Crate after crate of
+food has been stacked, most of them gnawed through by the ravenous rats in the
+area. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60580
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60585
+Name:	Entrance to the Neophyte Guild
+Desc:$
+      The entrance to the guild has no door - it instead consists of a narrow
+opening covered by a slightly-visible field of red light.  The building itself
+is made of a greyish stone, and has no visible windows on this side of the
+building.  
+   Brand new characters should check out the Dantes Inferno nightclub for
+quick, simple work to build their reputation in the shadows, and also to
+develop contacts with other characters. To travel around the city, you can
+HAIL a cab outside, get inside, and tell the driver where you want to go. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	32679
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60586
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60563
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60586
+Name:	The Neophyte Parking Lot
+Desc:$
+      A very basic parking structure with a single level, yellow walls with
+numbers by each parking space, and ugly florescent lights on the cold gray
+concrete ceiling.  An exit to the east leads to the outside, but a large sign
+in red block letters near the outer gate states plainly: ^R/**/ THIS IS A ONE
+WAY EXIT.  VEHICLES LEAVING PAST THIS POINT WILL NOT RETURN TO THE NEOPHYTE
+GUILD, THEY ARE ON THE OUTSIDE FOR GOOD.  YOU HAVE BEEN WARNED.^N   
+~
+Flags:	110000000000000000011000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	32680
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60585
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60587
+Name:	Howie's Decks: Programs and Utilities
+Desc:$
+   Here a decker can purchase the SOFTWARE they need to interact properly in
+the MATRIX with the shiny new CYBERDECK they bought downstairs.  Shelves
+contain all the latest tools in shrink-wrapped boxes, but you notice that the
+authenticity seals are missing.... 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT down]
+	ToVnum:	60546
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60588
+Name:	Howie's Decks: Entry-level Persona Chips
+Desc:$
+     Every decker knows that a CYBERDECK isn't complete without PERSONA chips.
+These chips determine your attributes in the MATRIX, your ability to withstand
+attacks, sense your surroundings, and hide yourself from the IC.  The maximum
+rating of any of these chips is the MPCP of your CYBERDECK, and the combined
+ratings of all the chips cannot exceed MPCP x 3. 
+   Just to the east in the basement you see a much cleaner lab staffed by a
+more professional man, perhaps the higher-quality chips can be had over there.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60589
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60546
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60589
+Name:	Howie's Decks: The Good Stuff
+Desc:$
+   Just a glance inside this room you can tell that this is where the good
+stuff is kept.  A young child with a datajack stands behind the counter
+looking at you condescendly.  Here you see a small selection of quality
+SOFTWARE for your CYBERDECK as well as some high-end PERSONA chips. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	60588
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60590
+Name:	Jarmines Talismongery
+Desc:$
+   Here mages of either shamanic or hermetic traditions can buy FOCI to help
+augment their spell casting, conjuring and general magic abilities. If you
+still have force points left over, you can use them now to BOND the FOCI,
+otherwise it will cost you karma depending on the type, and force of the FOCI.
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT up]
+	ToVnum:	60541
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60591
+Name:	Programming Skills Training
+Desc:$
+   Not all deckers are primarily concerned with surfing the matrix all the
+time. Some provide services to other deckers, like building a deck or
+programming novahot utils. The skills here are to help with the program design
+phase of program creation. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60511
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60592
+Name:	Etiquette Skills Training
+Desc:$
+   Etiquette skills are a must for anyone trying to buy items illegally. The
+more you score on an etiquette test the quicker the shop keeper will get the
+item in for you. Failure on the test will mean you will have to wait a MUD day
+(48 real minutes) to try again. Negotiation is used seperately, and can aid
+you with better prices in shops, and better rewards from johnsons. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	60512
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60593
+Name:	Runner Survival Skills Training
+Desc:$
+   The skills in here are skills that didn't quite fit into other categories,
+best reffered to as runners survival skills. Things that almost everyone has
+atleast a couple of ranks in. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT up]
+	ToVnum:	60506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60594
+Name:	Spirit Combat
+Desc:$
+   Spirits are very dangerous in combat, especially to people without any
+astral abilities. They have an immunity to physical weapons so can only be
+effectively attacked in the astral plane. Mages can also BANISH spirits, any
+mage can banish any spirit or elemental, even if they could not normally
+control them.
+   Banishing is dangerous to both parties however, as it can cause the mage to
+temporarily lose magic, and if reduced to no magic, they may suffer permanent
+magic loss.
+   Any spirit that is banished is gone forever. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60595
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60522
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60595
+Name:	Aspected Mages
+Desc:$
+   Aspected Mages are people who have not fully awakened, they only have
+access to part of the astral plane. Because of this no Aspected mage can
+project, and they are very limited to what they can do with mage. Conjurers
+can only conjure elementals and Sorcerers can only cast spells.
+   Shamanists are a shaman only aspect, and they only have access to spells
+and spirits that their totem gives them a bonus for.
+   Elementalists are the most complex of the aspects, they are a purely
+hermetic aspect. They can only cast spells and conjure spirits that correspond
+to their element; Fire is Combat; Earth is Manipulation; Water is Illusion and
+Air is Detection. No elementalist can cast Health spells.
+   Aspected magicians can still astrally perceive and banish any spirit or
+elemental. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60596
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60594
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60596
+Name:	Astral Projection
+Desc:$
+   Full Mages have complete access to the astral plane in the form of Astral
+Projection. The mages leave their body behind and travel purely in spirit
+form. This allows them to access areas they otherwise couldn't. When in astral
+space, they can't interact with the physical plane in anyway, they are
+completly non-corporal. Astral forms may MANIFEST though, which allows them to
+be seen by people without astral vision, they can also be heard, though the
+voice is purely in their head and can't be recorded.
+   Only Mana based spells can be cast in astral space, and then, they can only
+be cast on astral or dual beings, purely physical bodies cannot be targeted
+from the astral plane. All drain taken in the astral plane causes physical
+damage, regardless of force. You can also TRACK astral signatutes in the
+astral plane. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60597
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60595
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60597
+Name:	Bonding Foci
+Desc:$
+   Foci are magical artifacts that help with spell casting. They can only be
+used by a mage that has previously bonded them. The "HELP FOCI" file covers
+them in more detail. Foci cost karma and time to bond, if you don't have
+enough karma you will be told how much you need. Also, in Character Generation
+you can bond Foci with Force Points.
+   If you find a foci bonded by another mage, you can TRACK it back to its
+owner with astral tracking or rebond it, which severes its link with its
+previous owner and makes it usable by you. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60598
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60596
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60598
+Name:	Spells
+Desc:$
+   Now we come to the meat of awakened beings, spells. You have already been
+awarded some Force Points based on wether you are a Full or Aspected Magician.
+You can buy extra force points for the cost of 25000 nuyen by typing LEARN
+FORCE. Also, mages can buy conjuring materials for the cost of 1 force point
+per 1000 nuyen worth by typing LEARN CONJURING. The spells are divided into
+categories. Go DOWN to continue with the tutorial. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60600
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	60601
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60602
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	60603
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60604
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60597
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	60525
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60599
+Name:	The Neophyte Guild Hotel Room
+Desc:$
+   This is the hotel room you're staying at. To return to the Neophyte Guild,
+head down the stairs below. 
+~
+Flags:	10011100
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT down]
+	ToVnum:	60565
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60600
+Name:	Combat Spell Training
+Desc:$
+   Combat spells are quick and dirty. They are designed specifically to
+release mana in the most destructive fashion possible. They require little
+concentration to cast, just the ability to channel alot of mana quickly. Mana
+and stun spells only affect living targets, where as the others affect all
+targets. Combat spells are represented by the Fire element. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	60598
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60601
+Name:	Health Spell Training
+Desc:$
+   Health spells are designed to heal and manipulate the body. They are often
+gentle spells, requiring intense concentration and physical contact with the
+target of the spell. Health spells range from Healing to detoxifying the body
+and increasing stats. Health spells have no elemental representitive. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	ToVnum:	60598
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60602
+Name:	Detection Spell Training
+Desc:$
+   Detection spells give the caster new senses, these sense are purely
+magical, and operate beyond the 5 they are born with. This requires intense
+concentration, as the caster is absorbing mana from the surrounding area and
+analyzing it to provide the new sense. Detection spells are represented by the
+Air Element. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	60598
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60603
+Name:	Illusion Spell Training
+Desc:$
+   Illusion spells operate in a manner similar to manipulation spells. The
+caster molds mana into specific constructs, creating intense visual
+hallucinations. Most illusion spells only affect the minds of viewers, but
+some also affect technological sensors, these are a lot harder to cast and are
+on the border between manipulation and illusion spells. Illusion spells are
+represented by the Water Elemental. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northwest]
+	ToVnum:	60598
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60604
+Name:	Manipulation Spell Training
+Desc:$
+   Manipulation spells are concerned soley with creating solid constructs and
+changing the laws of physics. They have the most widely varied effects of any
+category of spells and even Earth Elementalists can fulfill a wide range of
+rolls. Manipulation requires intense concentration and chanelling of vast
+amounts of mana. Manipulation spells are represented by the Earth Element. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60598
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60605
+Name:	Combat Spell Training
+Desc:$
+You are in an unfinished room.
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+BREAK
+#60606
+Name:	Purchasing Power Points
+Desc:$
+   To further improve their abilities adepts must gain more power points.
+There are two methods for this, initiation or buying them with karma.
+Powerpoints cost an adept 20 karma, and only 1 can be bought for every 50
+reputation they have. To buy one, ask any Immortal, they all have the ability
+to award them to you. Initiation will be covered later as it affects all
+awakened characters. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60607
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60519
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60607
+Name:	Adept Commands
+Desc:$
+   Adepts have a few commands to go along with their powers. The Nerve Strike
+power can be toggled on and off using the NERVESTRIKE command. While toggled
+on, the adepts hand-to-hand combat will do no damage, but follow rules for
+Nerve Strike. if the adept is wielding anything Nerve Strike will not be
+triggered.
+   To use the Empathic Healing power the HEAL command is used, this requires a
+target that is either lying down or unconcious. Pain relief uses the RELIEVE
+command, and also requires a lying or unconcious target. Boosted attributes
+are boosted by typing BOOST and then the name of the attribute that requires
+boosting. Adepts with the Astral Perception power can also astrally perceiving
+using the PERCEIVE command. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60518
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60606
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60608
+Name:	Armour
+Desc:$
+   There are two kinds of Armour in the world of Shadowrun; Ballistic and
+Impact. Ballistic protects against bullets. Impact protects against slower
+moving projectiles like arrows, fists, swords and explosions.
+   Once more than one piece of armour is being worn at once a process known as
+layering takes place. The highest rating piece of armour is applied in full,
+then half the value of all other pieces is applied. The full total of all
+pieces is used to calculate penalties though.
+   If the unlayered value of your ballistic or impact armour values is greater
+than your modified quickness you begin to experience penalties due to your
+movement being restricted. You will move slower, lose combat pool, and have a
+harder time using quickness based skills like athletics or ranged combat. Form
+fitting armour is not included in the calculations for layering penalties
+however. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60530
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60529
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60609
+Name:	Astral Actions
+Desc:$
+   Assensing is the process of carefully looking at the aura of a person,
+spell or object and discerning otherwise unknown information from it. It can
+be used to find out how much of a persons spirit remains in their body, the
+location of any cyberware, who cast a spell and what force. Anything that is
+magically active has an aura and so can be assenssed.
+   ASSENSE is the command used to perform this action. People, foci, hermetic
+circles, lodges, spirits and spells can all be assenssed for more information.
+Infact you may wish to assense them before taking further action, so you don't
+end up a big astral stain. The help file contains more information on the use
+of this command.
+   Astral Tracking is the process of taking a spell aura, and finding the
+source. It can track anyone, anywhere in the world, aslong as you have an
+astral link to them, this can be a spell they've cast, foci, a conjured
+spirit, or even a shamanic lodge, anything they've left an astral signature
+on. It takes time to TRACK someone, and if it takes more time than you can
+stay projected due to essence loss you will have to resume again later. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60534
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	60533
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60610
+Name:	Headware Cyberware
+Desc:$
+   Headware is all types of cyberware that go inside your head, but does not
+include eye modifications. Help files can be found for most of the non-self
+explanitory cyberware listed here. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60517
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60611
+Name:	Eye modification Cyberware
+Desc:$
+   Eye modification is a booming business in 2064, anything from cosmetic
+modification to retinal duplicators to image magnification. If eye
+modifications are bought in a package, essence reductions apply, so it is
+usually best to do it this way. However, not always can you find your desired
+modification in a package and will have to buy it seperatley. All vision
+modifiers given by cyberware is treated as natural vision, and as such, mages
+with electronic magnification cannot cast any spells that require line of
+sight without projecting or perceiving. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	60517
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60612
+Name:	Hand-based Cyberware
+Desc:$
+   Cyberware that belongs in your hands is sold here. Retractable cyberweapons
+can be retracted and extended with the RETRACT command. Non-retractable
+cyberweapons, and cyberweapons that are extended may arouse suspision from law
+enforcement and corporate guards, so watch out. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	60517
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60613
+Name:	Bodyware Cyberware
+Desc:$
+   The majority of cyberware is classified as bodyware, it has been seperated
+into 2 categories here however so as to avoid information overload. This
+section has everything that doesn't compeltly replace a system, help can be
+found on most items here. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60517
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60614
+Name:	Systems Replacement Cyberware
+Desc:$
+   The cyberware here is made to replace one or more systems. From the
+imposing obvious cyberskulls and torsos to the subtle dermal sheathing.
+Obvious cyberware imposes serious social consequences, as even in 2064, most
+people don't like dealing with someone packed full of machines. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	60517
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60615
+Name:	Bioware Central
+Desc:$
+   Bioware aims to replace biological systems in your body with improved, man
+made versions. This process is very complicated as it requires the new organs
+to be matched closely to your body's existing biological makeup. While bioware
+can offer great benefits, it is far more dangerous than Cyberware. Where
+excessive Cyberware leads people to be very emotionally detached and
+psychotic, Bioware causes intense physical problems. Lowered resistance to
+diseases, longer healing periods and less resistance to deadly damage. All
+characters can have a maximum of 9 Body Index points of Bioware. But once it
+starts to exceed Essence Index (Essence + 3) the severe drawbacks begin to
+kick in. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60618
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60617
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60619
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60616
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60517
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	60525
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60616
+Name:	Muscle Based Bioware
+Desc:$
+   Muscle based cyberware aims to replace the muscles with stronger vat grown
+substitutes. The result is Muscle Augmentation and Muscle Toner. Replacements
+for certain parts of muscles that either increase their strength, or increase
+their speed. Enhanced Articulation makes your joints more flexible, allowing a
+greater freedom of movement. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	60615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60617
+Name:	Cultured Bioware
+Desc:$
+   Cultured Bioware is protein matched to your unique DNA pattern to help
+facilitate a more harmonic relationship with the body. The result is lower
+Body Index cost. It does however cost a great deal more, and take a lot longer
+to get ahold of as it must be individually grown to the users unique DNA. Some
+bioware however has to be cultured to prevent the body from rejecting it. Any
+bioware that is implanted in the brain must be Cultured, it does not however
+receive the normal cultured bonuses as they are already factored in. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	60615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60618
+Name:	Health Based Bioware
+Desc:$
+   Health Based bioware replaces the functions of the lungs, kidneys and bone
+marrow to help defend the body against poisons, disease and damage. Some of
+them have their own drawbacks however. Nephritic Screens don't discriminate
+between beneficial and non-beneficial substances in the blood stream. And
+Platelet Factories can cause brain hemorrhage's and heart attacts due to
+clotting of the blood. Symbiotes also require you to eat much more food to
+stay healthy. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	60615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60619
+Name:	Misc. Bioware
+Desc:$
+   All the bioware that didn't fit into other sections is here. From eye
+modifications to heart upgrades. There is little that Bioware can't
+accomplish. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	60615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

@@ -1,0 +1,18 @@
+MODE
+
+Usage: ^gMODE
+       MODE <SS/SA/BF>
+       MODE FA <amount of rounds>^n
+
+This command is used both to display the firing modes your
+currently wielded weapon has and to set the firing mode. 
+The amount of rounds fired in fully automatic mode must be
+between 3 and 10.
+
+Firing Modes Are:
+SS	- Single Shot
+SA	- Semi-Automatic
+BF	- Burst Fire
+FA	- Fully Automatic
+
+^WSee Also: RECOIL^n

@@ -1,0 +1,15 @@
+LOOK
+
+Usage: ^gLOOK
+       LOOK <target>
+       LOOK IN <target>^n
+
+This command is used to look at your surroundings. Look just displays
+a view of the room, while looking at a target displays more details
+about an object, person, direction, or vehicle. You will not see the
+contents of an item unless you LOOK IN it.
+
+Looking in a direction is also useful for finding hidden doors.
+
+^WSee Also: EXAMINE, READ^n
+

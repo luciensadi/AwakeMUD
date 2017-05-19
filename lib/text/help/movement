@@ -1,0 +1,9 @@
+MOVEMENT
+
+Usage: ^gORDER <spirit> MOVEMENT <target> <INCREASE/DECREASE>^n
+
+This power causes the spirit to either speed up or slow down a target 
+in combat. This causes the target to have an easier or harder time
+closing in melee combat.
+
+^WSee Also: ORDER^N

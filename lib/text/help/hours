@@ -1,0 +1,8 @@
+HOURS
+
+Usage: ^gHOURS^n
+
+This command will display the hours the shop you are
+currently at will be open.
+
+^WSee Also: SHOPS^n

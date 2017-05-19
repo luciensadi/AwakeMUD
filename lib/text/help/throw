@@ -1,0 +1,12 @@
+THROW
+
+Usage: ^gTHROW <direction>^n
+
+This allows you to throw weapons at people, or mobs. Most often used with
+projectile weapons such as grenades, shuriken and throwing knives, this
+can often be a very good way of wearing someone out. You need to be wielding
+the object you will throw, however, before you throw it. This will only
+ever throw the weapon one room.
+
+^WSee Also: GRENADES^n
+

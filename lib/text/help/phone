@@ -1,0 +1,27 @@
+PHONE CALL HANGUP ANSWER TALK
+
+Usage: ^gPHONE <on|off|ring|silent>
+       CALL <number>
+       TALK <message>
+       HANGUP
+       ANSWER^n
+
+Phones, be they cellular, cybernetic, home or office phone 
+or public, all serve the same purpose as they do in real life.  
+Public phones function as the others, except you can not turn 
+them on or off, turn on or off the ringer, or dial into them 
+from another phone.  You must be carrying a phone, have a commlink 
+(cybernetic phone) installed, or be in a public phone to use 
+these commands.
+
+Typing ^Rphone^n by itself will display the currently set options
+for the phone, the phones number, and the number of the phone either
+trying to connect to your phone or connected (a caller ID function).
+
+You can toggle whether the phone makes noise by using either ^Rphone ring^n
+or ^Rphone silent^n.
+
+Call is used to initiate a phonecall with another phone. Type in the
+number as it appears in the phone command but without dashes.
+
+See also: ^WTELL, RADIO, BROADCAST^n

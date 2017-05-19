@@ -1,0 +1,11 @@
+INFO
+
+Usage: ^gINFO <item name>
+       INFO #<item number>^n
+
+This command is used to display extra info on an item in a shops list. It
+will tell you useful information which varies on the type of item you are
+using it on. For example, guns will tell you the type of gun, the accessories,
+the strength and the ammo capacity, decks will tell you the memory, mpcp, etc.
+
+^WSee Also: SHOPS, BUY, LIST^N

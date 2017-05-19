@@ -1,0 +1,52 @@
+"MAP SEA SW" "SEATTLE SW"
+                
+                         12
+                        /
+                       /
+                      o
+                    _/|
+                  _/  |
+                 /    |
+        11      o-----o-----o-----o
+                |     |     |     |\_
+                |  C  |     |     |  \_   A
+                |  |  |     |     |    \ /
+        10      o-----o-----o-----o-----o
+                |     |     |     |     |
+                |     |     |     |     |
+                |     |     |     |     |       //
+        9       o-----o-----o-----o-----o--X-> //
+                |     |     |     |           //
+                |     |     |     |          //
+                |     |     |     |         //
+        8       o-----o-----o-----o---->   ||
+                |     |     |     |        ||
+                |     |     |     |        ||  
+                |     |     |     |        ||  
+        7       o-----o-----o-----o--X->   ||  
+                |     |     |     |        ||     
+                |_D   |  E  |     |        ||
+                |     |  |  |     |        ||
+        6     B-o-----o-----o-----o---->   ||
+                1     |     |     |        ||
+                      |     |     o        ||
+                      |     |    /         ||
+        5             o-----o---o--->      ||
+                      2     3   4          ||
+                                        Intercity
+                                          Five
+Key:  o = interchange  
+      X = onramp link to freeway
+      A = Seattle State Park
+      B = Seattle Docks
+      C = Biohyde
+      D = Hellhound Bus Depot
+      E = Shintaru Technologies
+Street Index:
+1 = Harbour Avenue      7 = Espanoza Way 
+2 = Roy Street          8 = Whitman Road
+3 = Market Street       9 = Broadway
+4 = Main Street         10 = Gray Street
+5 = Spring Street       11 = Park Avenue
+6 = Ridgeway Street     12 = Denny Way
+        

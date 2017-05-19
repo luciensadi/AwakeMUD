@@ -1,0 +1,2776 @@
+#17100
+Name:	Stuffer Shack
+Desc:$
+   You enter a small Stuffer Shack, filled to the brim with all sorts of junk
+food, soy bars, drinks, magazines, and other things you might need. A tall
+lanky Indian sits behind the register eyeing the kids who are eyeing the candy
+aisle. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	32702
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17101
+Name:	Edwin's Pub
+Desc:$
+   You walk into a dismal little pub, with a pool table, and a bunch of angry
+drinkers who look at you as if you murdered their niece.  The stench of
+cigarette and cigar smoke fills the air here, as well as the stench of stale
+beer. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	9689
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17102
+Name:	Entrance to Krishna's
+Desc:$
+   The first thing you notice as you enter this underground rocker club is the
+loud buzzsawing music, and the second thing you notice is its dark gothic
+atmosphere.  Everywhere you look people are dressed in dark patent synth-
+leathers, with spikes, and all sorts of other exotic dress, all black.  The
+only light colors you see here are the pale colors of the faces of the club
+habitues. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	17103
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32595
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17103
+Name:	Krishna's
+Desc:$
+   The music is buzzsawing loudly, as a band plays on the stage, and the
+people in this gothic rock club seem to be into their own thing, gathering in
+cliques and circles.  All of a sudden a cold chill hits your spine.  Nothing
+appears too weird about this club, but something is amiss. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	17104
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	17105
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	17102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17104
+Name:	Krishna's Dance Floor
+Desc:$
+   People dance here frenetically to the chainsawing sounds of the band on
+stage.  Their dress seems to follow a common pattern.  Black.  Insignias of
+the magical variety seem commonplace here in the dress and jewelry of the
+habitues of this club. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	17106
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	17103
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17105
+Name:	Krishna's
+Desc:$
+   Various booths and tables are scattered about this part of the club.  In
+here people in black gather.  The lights cast a crimson hue over the club, as
+the dark buzzsawing music fills the air. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	17106
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17103
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17106
+Name:	Krishna's Bar
+Desc:$
+   You jander up to the bar, where the music grinds through your very being.
+At the bar, there is a myriad of drinks to choose from, and a myriad of people
+drinking.  There is a mirror behind the bar where you can see a reflection of
+the band at the stage.  The band is playing black buzzsawing music that cuts
+deep. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	17105
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17104
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17107
+Name:	Herbie's Herbals
+Desc:$
+   The first thing you notice as you enter this shop is the strong smell of
+burned sage.  All sorts of herbal formulas and medicines line the shelves of
+this shop, in various labelled bottles.  Rumor has it that this is the  place
+to go if you are looking for a magical formula. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	30503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17108
+Name:	Entrance to Figg's Gym
+Desc:$
+   You jander into a large concrete room, smelling of the sweat of the boxers
+and athletes who train here.  Up to the north is the boxing ring, to the west
+is the locker room, and to the east is the exercise gym. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	17109
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	17112
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	Keywords:	~~
+	ToVnum:	32640
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17111
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17109
+Name:	By the Boxing Ring
+Desc:$
+   *slam* *bam* *bam* *POW!* is what you hear here, as two boxers up in the
+ring duke it out.  You are close enough to the ring to where the sweat
+splashes on you from the combat in the ring. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	17108
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	17110
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17110
+Name:	In the Boxing Ring
+Desc:$
+   You are in the ring with the boxers who spar here.  They are slamming their
+fists against each others facemasks, practicing for the big fight. 
+~
+Flags:	1000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	17109
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17111
+Name:	A Locker Room
+Desc:$
+   You are in a locker room where athletes change their clothes, put on their
+gear, and chat about the big fight coming up, as well as other things in their
+lives. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	17108
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17112
+Name:	Exercise Room
+Desc:$
+   Here in the exercise room are all sorts of exercise equipment, such as
+barbells, dumbells, various weights and trainers.  On a rubber mat stands the
+owner of the gym, who will train your physical attributes for the right price.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	17108
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17113
+Name:	Entrance to Le Caberone' Hotel
+Desc:$
+   Posh.  That is the first word that enters your mind when you take a gander
+at this  elegant five-star hotel.  The walls are shiny white marble with
+silver vein, and huge chandaliers adorn the ceiling.  Sararimen in suits walk
+to and fro, and bell-hops in fancy uniforms dash around, keeping the service
+here at its high level. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	17114
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	6404
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17114
+Name:	La Caberone' Reception
+Desc:$
+   A huge mahogany hotel desk sits here, with a receptionist sitting behind
+the desk. Computer monitors keep track of every hallway and shadowy corner of
+this hotel, and a security person keeps watch.  Keys line the wall behind the
+clerk, who is waiting for his next customer. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	17113
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	17115
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17115
+Name:	A Luxurious Suite
+Desc:$
+   This pad has everything.  A huge trid screen covers an entire wall to the
+forward of a huge king-sized feather bed.  There is a Jacuzzi in the far
+corner of the room, and a patio with a view of the whole of Seattle. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	17114
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17116
+Name:	Action Computers and Electronics
+Desc:$
+   The ultimate hacker shop, Action Computers has every kind of technological
+goodie that a decker could need.  Cables, memory upgrades, cyberdecks, and
+tortoises, as well as ASIST reality filters, and all sorts of software line
+the shelves of this store.  Behind the counter you see a short Vietnamese
+fellow who speaks little English, but knows his tech. On the east end of the
+room is another counter. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	17180
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32650
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17117
+Name:	A Long Ladder
+Desc:$
+   This ladder climbs up to a tower at the top of the Columbia Gate.  It is
+roughly 50 meters high, and as you climb up you can get a view of the
+landscape to the north.  The wall blocks the view to the south until you reach
+the very top, where the tower is. 
+~
+Flags:	10000000000000000010000000
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	17118
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	17597
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17118
+Name:	Inside the Tower
+Desc:$
+   You enter a steel walled tower, and inside you can see all along the
+Columbia Wall, across the Columbia Bridge and into the land of Tir Tairngire
+to the south.  You see all sorts of surveillance equipment and sensors,
+ranging from high powered digital telescopes that could pick up a fly crawling
+on a rock on Mount Rainier, to holographic x-ray detectors. 
+~
+Flags:	10000000000000000010001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	17117
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17119
+Name:	A cold cell
+Desc:$
+   You are in a cold prison cell.  In the corner is a toilet that obviously
+hasn't been cleaned since the 2030's, there are cockroaches hiding in every
+crack in the wall.  You can see graffiti scratched in the cold white paint of
+the plasticrete walls of this cell, counting the days, months, and years that
+many a hardened criminal have spent in this hellhole of a prison.  There are
+no windows, just a bright cold white light hanging from the ceiling.  On the
+south end of the room is a set of electrified bars.  There are two bunk beds
+on the east end of the room. 
+~
+Flags:	1100010101000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#17120
+Name:	Entrance to Mitsuhama
+Desc:$
+   You stand dwarfed by the tall skyscraper at which you are at the threshold.
+The doors are a revolving door, designed to keep the climate control on the
+inside functioning, but allowing free movement in and out of Mitsuhama. 
+~
+Flags:	10000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	17121
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	32722
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17121
+Name:	Mitsuhama Lobby
+Desc:$
+   You are in a spacious lobby, with steel walls, and a reception desk made
+out of high-impact glass.  A receptionist sits at the desk, directing people
+to the offices of the executives when they have an appointment.  The ceiling
+is very high, probably around 75 meters up.  Directly north of you is an
+elevator, and south is towards the intersection of Sixth and Marion in
+Downtown Seattle.  On the north wall is a huge metallic, sterile Mitsuhama
+logo, with a light behind it to illuminate it. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	17120
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17122
+Name:	A Steel Elevator
+Desc:$
+   This elevator is made of stainless steel, and is clean and sterile.  A
+computer system is on the south wall of the elevator, by the door of the
+elevator.  The system is connected to a slave node, that keeps the matrix
+system in control of the elevator.  There is a camera on the northwest corner
+of the elevator.  The floor is a rubbery grip-strip, designed for traction. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#17123
+Name:	A Steel Elevator
+Desc:$
+   This elevator is made of stainless steel, and is clean and sterile.  A
+computer system is on the south wall of the elevator, by the door of the
+elevator.  The system is connected to a slave node, that keeps the matrix
+system in control of the elevator.  There is a camera on the northwest corner
+of the elevator.  The floor is a rubbery grip-strip, designed for traction. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#17124
+Name:	A Steel Elevator
+Desc:$
+   This elevator is made of stainless steel, and is clean and sterile.  A
+computer system is on the south wall of the elevator, by the door of the
+elevator.  The system is connected to a slave node, that keeps the matrix
+system in control of the elevator.  There is a camera on the northwest corner
+of the elevator.  The floor is a rubbery grip-strip, designed for traction. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#17125
+Name:	A Steel Elevator
+Desc:$
+   This elevator is made of stainless steel, and is clean and sterile.  A
+computer system is on the south wall of the elevator, by the door of the
+elevator.  The system is connected to a slave node, that keeps the matrix
+system in control of the elevator.  There is a camera on the northwest corner
+of the elevator.  The floor is a rubbery grip-strip, designed for traction. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#17126
+Name:	A Clean Room
+Desc:$
+   The room is bright white in color, with the fluorescent lighting overhead,
+and the sterile clean tables and walls with scientists, mostly japanese,
+working on some sort of project.  Electronic systems are being experimented on
+and tested in the hopes that some sort of profitable product can be brought to
+the economy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	17172
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	17127
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17127
+Name:	Research Level
+Desc:$
+   A long corridor, sterile, clean polished white tile covers the walls and
+floor.  The ceiling is lined with high-grade fluorescent lighting, keeping a
+bright, yet glareless cast of light over the corridor.  Northwards is a clean
+room, heavily guarded. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	17126
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17128
+Name:	A Hallway
+Desc:$
+   A hallway with steel walls, and bright white doors on each side, each with
+a small sign stating whose office the door goes into.  The hallway is very
+well lit, with bright flourescent lights on the celing.  Sararimen hustle and
+bustle through these halls, making appointments and meetings as if their lives
+depended on their next paycheck. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	17139
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	17129
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17140
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17129
+Name:	A Hallway
+Desc:$
+   A hallway with steel walls, and bright white doors on each side, each with
+a small sign stating whose office the door goes into.  The hallway is very
+well lit, with bright flourescent lights on the celing.  Sararimen hustle and
+bustle through these halls, making appointments and meetings as if their lives
+depended on their next paycheck. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	17128
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	17141
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17142
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17130
+Name:	A Hallway
+Desc:$
+   A hallway with steel walls, and bright white doors on each side, each with
+a small sign stating whose office the door goes into.  The hallway is very
+well lit, with bright flourescent lights on the celing.  Sararimen hustle and
+bustle through these halls, making appointments and meetings as if their lives
+depended on their next paycheck. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#17131
+Name:	A Hallway
+Desc:$
+   A hallway with steel walls, and bright white doors on each side, each with
+a small sign stating whose office the door goes into.  The hallway is very
+well lit, with bright flourescent lights on the celing.  Sararimen hustle and
+bustle through these halls, making appointments and meetings as if their lives
+depended on their next paycheck. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	17143
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	17132
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17144
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17132
+Name:	A Hallway
+Desc:$
+   A hallway with steel walls, and bright white doors on each side, each with
+a small sign stating whose office the door goes into.  The hallway is very
+well lit, with bright flourescent lights on the celing.  Sararimen hustle and
+bustle through these halls, making appointments and meetings as if their lives
+depended on their next paycheck. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	17131
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	17145
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17146
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17133
+Name:	A Hallway
+Desc:$
+   A hallway with steel walls, and bright white doors on each side, each with
+a small sign stating whose office the door goes into. The hallway is very well
+lit, with bright flourescent lights on the ceiling. Sararimen hustle and
+bustle through these halls, making appointments and meetings as if their lives
+depended on their next paycheck. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	17147
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	17134
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17148
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17134
+Name:	A Hallway
+Desc:$
+   A hallway with steel walls, and bright white doors on each side, each with
+a small sign stating whose office the door goes into.  The hallway is very
+well lit, with bright flourescent lights on the celing.  Sararimen hustle and
+bustle through these halls, making appointments and meetings as if their lives
+depended on their next paycheck. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	17133
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	17149
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17150
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17135
+Name:	A Hallway
+Desc:$
+   A hallway with steel walls, and bright white doors on each side, each with
+a small sign stating whose office the door goes into.  The hallway is very
+well lit, with bright flourescent lights on the celing.  Sararimen hustle and
+bustle through these halls, making appointments and meetings as if their lives
+depended on their next paycheck.  The office west of here has been blown
+completely off, and is cordoned off by a barrier, with the words "Crime Scene"
+in English and Japanese printed on it. 
+~
+Flags:	10000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	17151
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	17136
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17136
+Name:	A Hallway
+Desc:$
+   A hallway with steel walls, and bright white doors on each side, each with
+a small sign stating whose office the door goes into.  The hallway is very
+well lit, with bright flourescent lights on the celing.  Sararimen hustle and
+bustle through these halls, making appointments and meetings as if their lives
+depended on their next paycheck. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	17135
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	17153
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17154
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17137
+Name:	A Hallway
+Desc:$
+   White doors line each side of this bright, steel-walled hallway, each with
+a small sign stating whose office lies behind. Sararimen hustle and bustle
+through the halls, making appointments and meetings as if their lives depended
+on their next paycheck. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	17155
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	17138
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17156
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17138
+Name:	A Hallway
+Desc:$
+   A hallway with steel walls, and bright white doors on each side, each with
+a small sign stating whose office the door goes into.  The hallway is very
+well lit, with bright flourescent lights on the celing.  Sararimen hustle and
+bustle through these halls, making appointments and meetings as if their lives
+depended on their next paycheck. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	17137
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	17157
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	17159
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	17158
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17139
+Name:	An Executive's Office
+Desc:$
+   You are in a very tidy office, with a calendar on the wall, and a modern
+desk with a computer on top of the desk.  The executive's family is in
+holographic pictures that sit upon the desk, and the computer displays a
+screen saver.  There is a seat for visitors and a great view of Downtown
+Seattle outside the window. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	17128
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17140
+Name:	An Executive's Office
+Desc:$
+   You are in a very tidy office, with a calendar on the wall, and a modern
+desk with a computer on top of the desk.  The executive's family is in
+holographic pictures that sit upon the desk, and the computer displays a
+screen saver.  There is a seat for visitors and a great view of Downtown
+Seattle outside the window. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	17128
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17141
+Name:	An Executive's Office
+Desc:$
+   You are in a very tidy office, with a calendar on the wall, and a modern
+desk with a computer on top of the desk.  The executive's family is in
+holographic pictures that sit upon the desk, and the computer displays a
+screen saver.  There is a seat for visitors and a great view of Downtown
+Seattle outside the window. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	17129
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17142
+Name:	An Executive's Office
+Desc:$
+   You are in a very tidy office, with a calendar on the wall, and a modern
+desk with a computer on top of the desk.  The executive's family is in
+holographic pictures that sit upon the desk, and the computer displays a
+screen saver.  There is a seat for visitors and a great view of Downtown
+Seattle outside the window. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	17129
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17143
+Name:	An Executive's Office
+Desc:$
+   You are in a very tidy office, with a calendar on the wall, and a modern
+desk with a computer on top of the desk.  The executive's family is in
+holographic pictures that sit upon the desk, and the computer displays a
+screen saver.  There is a seat for visitors and a great view of Downtown
+Seattle outside the window. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	17131
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17144
+Name:	An Executive's Office
+Desc:$
+   You are in a very tidy office, with a calendar on the wall, and a modern
+desk with a computer on top of the desk.  The executive's family is in
+holographic pictures that sit upon the desk, and the computer displays a
+screen saver.  There is a seat for visitors and a great view of Downtown
+Seattle outside the window. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	17131
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17145
+Name:	An Executive's Office
+Desc:$
+   You are in a very tidy office, with a calendar on the wall, and a modern
+desk with a computer on top of the desk.  The executive's family is in
+holographic pictures that sit upon the desk, and the computer displays a
+screen saver.  There is a seat for visitors and a great view of Downtown
+Seattle outside the window. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	17132
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17146
+Name:	An Executive's Office
+Desc:$
+   You are in a very tidy office, with a calendar on the wall, and a modern
+desk with a computer on top of the desk.  The executive's family is in
+holographic pictures that sit upon the desk, and the computer displays a
+screen saver.  There is a seat for visitors and a great view of Downtown
+Seattle outside the window. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	17132
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17147
+Name:	An Executive's Office
+Desc:$
+   You are in a very tidy office, with a calendar on the wall, and a modern
+desk with a computer on top of the desk.  The executive's family is in
+holographic pictures that sit upon the desk, and the computer displays a
+screen saver.  There is a seat for visitors and a great view of Downtown
+Seattle outside the window. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	17133
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17148
+Name:	An Executive's Office
+Desc:$
+   You are in a very tidy office, with a calendar on the wall, and a modern
+desk with a computer on top of the desk.  The executive's family is in
+holographic pictures that sit upon the desk, and the computer displays a
+screen saver.  There is a seat for visitors and a great view of Downtown
+Seattle outside the window. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	17133
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17149
+Name:	An Executive's Office
+Desc:$
+   You are in a very tidy office, with a calendar on the wall, and a modern
+desk with a computer on top of the desk.  The executive's family is in
+holographic pictures that sit upon the desk, and the computer displays a
+screen saver.  There is a seat for visitors and a great view of Downtown
+Seattle outside the window. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	17134
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17150
+Name:	An Executive's Office
+Desc:$
+   You are in a very tidy office, with a calendar on the wall, and a modern
+desk with a computer on top of the desk.  The executive's family is in
+holographic pictures that sit upon the desk, and the computer displays a
+screen saver.  There is a seat for visitors and a great view of Downtown
+Seattle outside the window. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	17134
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17151
+Name:	Miyoko Hamamoto's Office
+Desc:$
+   You are in a very tidy office, with a calendar on the wall, and a modern
+desk with a computer on top of the desk.  The executive's family is in
+holographic pictures that sit upon the desk, and the computer displays a
+screen saver.  There is a seat for visitors and a great view of Downtown
+Seattle outside the window. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	17135
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17152
+Name:	Front Office of SDM, Incorporated
+Desc:$
+   You are in a spacious office, overlooking most of Downtown Seattle.  There
+is a refrigerator behind the desk, and a computer on top of the desk, state of
+the art in PC technology.  Upon the walls are various certificates, pictures
+of various batallions in uniforms, framed glass displays of various patches
+and insignia from many different companies and military organizations, ranging
+from Aztlan Leopard Guard to the UCAS Navy Seal Team Six.  There are pictures
+of a massive fomori wearing many different military uniforms, and pictures of
+many military grade weapons on the wall. 
+~
+Flags:	10101000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	closet door~~~
+	ToVnum:	17175
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	17161
+	LockRating:	32
+	HiddenRating:	32
+BREAK
+#17153
+Name:	An Executive's Office
+Desc:$
+   You are in a very tidy office, with a calendar on the wall, and a modern
+desk with a computer on top of the desk.  The executive's family is in
+holographic pictures that sit upon the desk, and the computer displays a
+screen saver.  There is a seat for visitors and a great view of Downtown
+Seattle outside the window. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	17136
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17154
+Name:	An Executive's Office
+Desc:$
+   You are in a very tidy office, with a calendar on the wall, and a modern
+desk with a computer on top of the desk.  The executive's family is in
+holographic pictures that sit upon the desk, and the computer displays a
+screen saver.  There is a seat for visitors and a great view of Downtown
+Seattle outside the window. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	17136
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17155
+Name:	Torikawa Shizikuyuma's Office
+Desc:$
+   You are in a very tidy office, with a calendar on the wall, and a modern
+desk with a computer on top of the desk.  The executive's family is in
+holographic pictures that sit upon the desk, and the computer displays a
+screen saver.  There is a seat for visitors and a great view of Downtown
+Seattle outside the window. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	17137
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17156
+Name:	Stephen Alister's Office
+Desc:$
+   You are in a very tidy office, with a calendar on the wall, and a modern
+desk with a computer on top of the desk.  The executive's family is in
+holographic pictures that sit upon the desk, and the computer displays a
+screen saver.  There is a seat for visitors and a great view of Downtown
+Seattle outside the window. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	17137
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17157
+Name:	Yukiya Dahayoto's Office
+Desc:$
+   You are in a very tidy office, with a calendar on the wall, and a modern
+desk with a computer on top of the desk.  The executive's family is in
+holographic pictures that sit upon the desk, and the computer displays a
+screen saver.  There is a seat for visitors and a great view of Downtown
+Seattle outside the window. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	17138
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Keywords:	vent~~~
+	ToVnum:	17161
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	10
+BREAK
+#17158
+Name:	Tasha Janesfield's Office
+Desc:$
+   You are in a very tidy office, with a calendar on the wall, and a modern
+desk with a computer on top of the desk.  The executive's family is in
+holographic pictures that sit upon the desk, and the computer displays a
+screen saver.  There is a seat for visitors and a great view of Downtown
+Seattle outside the window. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	17138
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17159
+Name:	Juhi Izawakaya's Office
+Desc:$
+   You are in a very tidy office, with a calendar on the wall, and a modern
+desk with a computer on top of the desk.  The executive's family is in
+holographic pictures that sit upon the desk, and the computer displays a
+screen saver.  There is a seat for visitors and a great view of Downtown
+Seattle outside the window. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	17138
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	panel hidden
+	Desc:$
+A hidden panel in the wall. 
+~
+	ToVnum:	17176
+	Flags:	1
+	Material:	adv. plastics
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	12
+BREAK
+#17160
+Name:	An Executive's Office
+Desc:$
+   You are in a very tidy office, with a calendar on the wall, and a modern
+desk with a computer on top of the desk.  The executive's family is in
+holographic pictures that sit upon the desk, and the computer displays a
+screen saver.  There is a seat for visitors and a great view of Downtown
+Seattle outside the window. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#17161
+Name:	Inside the Ventilation Duct
+Desc:$
+   A very long, cramped ventilation duct, with air moving swiftly past you.
+The sides, top and bottom of the duct are stainless steel, and the wind is a
+constant twenty degrees celsius.  The air has a fresh scent to it that is
+obviously artificial. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	17162
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	vent~~~
+	ToVnum:	17157
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	10
+BREAK
+#17162
+Name:	Inside the Ventilation Duct
+Desc:$
+   A very long, cramped ventilation duct, with air moving swiftly past you.
+The sides, top and bottom of the duct are stainless steel, and the wind is a
+constant twenty degrees celsius.  The air has a fresh scent to it that is
+obviously artificial. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	17161
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	17163
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17163
+Name:	Inside the Ventilation Duct
+Desc:$
+   A very long, cramped ventilation duct, with air moving swiftly past you.
+The sides, top and bottom of the duct are stainless steel, and the wind is a
+constant twenty degrees celsius.  The air has a fresh scent to it that is
+obviously artificial. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	17164
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	17162
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17164
+Name:	Inside the Ventilation Duct
+Desc:$
+   A very long, cramped ventilation duct, with air moving swiftly past you.
+The sides, top and bottom of the duct are stainless steel, and the wind is a
+constant twenty degrees celsius.  The air has a fresh scent to it that is
+obviously artificial. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	17165
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	17163
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17165
+Name:	Inside the Ventilation Duct
+Desc:$
+   A very long, cramped ventilation duct, with air moving swiftly past you.
+The sides, top and bottom of the duct are stainless steel, and the wind is a
+constant twenty degrees celsius.  The air has a fresh scent to it that is
+obviously artificial. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	17166
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	17164
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17166
+Name:	Inside the Ventilation Duct
+Desc:$
+   A very long, cramped ventilation duct, with air moving swiftly past you.
+The sides, top and bottom of the duct are stainless steel, and the wind is a
+constant twenty degrees celsius.  The air has a fresh scent to it that is
+obviously artificial. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	17171
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	17165
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17167
+Name:	Inside the Ventilation Duct
+Desc:$
+   A very long, cramped ventilation duct, with air moving swiftly past you.
+The sides, top and bottom of the duct are stainless steel, and the wind is a
+constant twenty degrees celsius.  The air has a fresh scent to it that is
+obviously artificial. 
+~
+Flags:	100001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	17168
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	17171
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17168
+Name:	Inside the Ventilation Duct
+Desc:$
+   A very long, cramped ventilation duct, with air moving swiftly past you.
+The sides, top and bottom of the duct are stainless steel, and the wind is a
+constant twenty degrees celsius.  The air has a fresh scent to it that is
+obviously artificial. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	17167
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	17169
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17169
+Name:	Inside the Ventilation Duct
+Desc:$
+   A very long, cramped ventilation duct, with air moving swiftly past you.
+The sides, top and bottom of the duct are stainless steel, and the wind is a
+constant twenty degrees celsius.  The air has a fresh scent to it that is
+obviously artificial. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	17168
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	17170
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17170
+Name:	Inside the Ventilation Duct
+Desc:$
+   A very long, cramped ventilation duct, with air moving swiftly past you.
+The sides, top and bottom of the duct are stainless steel, and the wind is a
+constant twenty degrees celsius.  The air has a fresh scent to it that is
+obviously artificial. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	vent
+	ToVnum:	17172
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	17169
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17171
+Name:	Circulation Fan
+Desc:$
+   A huge fan whirs here, blocking the way to the next part of the ventilation
+duct, and keeping the air circulating throughout the Mitsuhama complex.  You
+can cross here, to go northward towards the continuing ventilation system, if
+you can time your crossing right. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	17167
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	17166
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17172
+Name:	A Clean Room
+Desc:$
+   The room has brightly lit white walls, and people running around in
+anti-static suits.  You see various electronic equipment, all very high tech,
+all disgustingly expensive, being used to test new chips viability and
+performance.  Scientists discuss among each other the aspects of each item
+being tested. The room is being heavily guarded by Mitsuhama's best of the
+best, carrying the highest tech mil-spec weaponry.  They look jumpy, as if
+they were wired to the hilt. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door steel thick~~~
+	ToVnum:	17173
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	17145
+	LockRating:	12
+[EXIT south]
+	Keywords:	vent duct~~~
+	ToVnum:	17170
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	10
+[EXIT southwest]
+	ToVnum:	17126
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17173
+Name:	A Well Lit Hallway
+Desc:$
+   The walls are clean, sterile white, and the ceiling is made entirely of
+fluorescent lighting, making the hallway bright white.  There are no doors on
+either side of the hall, but there is a door about 20 meters north, that is
+made entirely out of thick steel.  The floor is made of white marble with a
+golden vein. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door steel thick metal~~~
+	ToVnum:	17174
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	17146
+	LockRating:	12
+[EXIT south]
+	Keywords:	door steel~~~
+	ToVnum:	17172
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	17145
+	LockRating:	12
+BREAK
+#17174
+Name:	A Spacious Office, overlooking Downtown Seattle
+Desc:$
+   The entire north wall of this room is made of glass, overlooking Downtown
+Seattle with a panoramic view.  The streets below are crowded, filled with all
+sorts of people, vehicles stuck in traffic, hustling and bustling and moving
+towards their destinations.  The view overlooking the Seattle skyline is
+second to none, you can see all the major skyscrapers from here, from the
+Renraku Arcology, to the Space Needle.  The western wall is made of steel, and
+a panel is removed, revealing a vault. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	17173
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	17146
+BREAK
+#17175
+Name:	Back Storeroom
+Desc:$
+   In sharp contrast to the office you came through, this room is dark, musty,
+and rather disorganized.  There are various racks on the wall sporting all
+sorts of weapons and armor.  There are beer bottles and whisky bottles strewn
+about, and it looks as though a party had happened here recently, with various
+stains about. The room is lightly illuminated, though not much so, by a single
+florescent lamp on the far end of the room. 
+~
+Flags:	1101000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	closet door~~~
+	ToVnum:	17152
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	17161
+	LockRating:	32
+	HiddenRating:	4
+BREAK
+#17176
+Name:	Back Storeroom
+Desc:$
+   The storeroom is of a moderate size, roughly 10 meters by 10 meters, and is
+filled with crates and computer equipment whose status is defunct.  Aisles of
+crates and stacked dead and obsoleted mainframes make this room cramped for
+anyone larger than an ork, and uncomfortably full for anyone smaller. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	panel
+	Desc:$
+A panel separates the office north from this storeroom. 
+~
+	ToVnum:	17159
+	Flags:	1
+	Material:	adv. plastics
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17180
+Name:	Action Computers and Electronics, End of Counter
+Desc:$
+   Surrounding you is a large array of aisles filled with every sort of
+electronics trinket you can imagine.  There are displays set up, in a corner,
+some fat human who looks like he is zonked on some medication of some kind is
+hoisting computer cases up onto an upper shelf.  Behind the counter is a man
+in a pinstripe suit, with gray hair and bright blue eyes. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	17116
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

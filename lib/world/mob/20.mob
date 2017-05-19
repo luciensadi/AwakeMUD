@@ -1,0 +1,854 @@
+#2001
+Keywords:	dock worker
+Name:	the Dock Worker
+RoomDesc:$
+The dock worker appears quite busy.
+
+~
+LookDesc:$
+You see a dock worker.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	4
+	Cha:	3
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	10
+[SKILLS]
+BREAK
+#2002
+Keywords:	bartender
+Name:	DeClerry's Bartender
+RoomDesc:$
+The bartender looks at you and is unimpressed.
+
+~
+LookDesc:$
+You see a confident and thickly built ork.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11001010
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	1
+	Str:	7
+	Cha:	1
+	Int:	1
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	10
+[SKILLS]
+BREAK
+#2003
+Keywords:	bob tripp
+Name:	Bob Tripp
+RoomDesc:$
+Bob Tripp stands here, wanting to sell you something.
+
+~
+LookDesc:$
+You see a short blond man in a disheveled suit muttering to himself.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	2
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	10
+[SKILLS]
+BREAK
+#2004
+Keywords:	kristen decker
+Name:	Kristen
+RoomDesc:$
+Kristen stands here, apparently lost in thought.
+
+~
+LookDesc:$
+Kristen is dressed in gaudy hodgepodge, as she pays little attention
+to her appearance. Her thoughts are consumed by the Matrix.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11001000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	3
+	Cha:	2
+	Int:	5
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	15
+	Bank:	15
+[SKILLS]
+BREAK
+#2005
+Keywords:	veronica cashier
+Name:	Veronica
+RoomDesc:$
+Veronica, the cashier, looks bored.
+
+~
+LookDesc:$
+Veronica is dressed very typically for a teenager in 2050, a multicolored
+jumpsuit of doubtful practicality.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	2
+	Str:	1
+	Cha:	3
+	Int:	2
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	10
+[SKILLS]
+BREAK
+#2006
+Keywords:	slacker rover
+Name:	Slacker
+RoomDesc:$
+Slacker, the Rover leader, stands here.
+
+~
+LookDesc:$
+You see a wildly dressed, dangerous looking young punk. She incessantly
+fingers a knife in one hand.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	4
+	Cha:	2
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	40
+[SKILLS]
+BREAK
+#2007
+Keywords:	bridget waitress
+Name:	Bridget the Waitress
+RoomDesc:$
+Bridget the Waitress stand here discontentedly.
+
+~
+LookDesc:$
+You see a cute blonde standing here, waiting for you to order something.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11001100
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	1
+	Cha:	3
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	10
+[SKILLS]
+BREAK
+#2008
+Keywords:	derek waiter
+Name:	Derek the Waiter
+RoomDesc:$
+Derek the Waiter is standing here.
+
+~
+LookDesc:$
+You see, surprisingly, an elf. Elves would generally not allow them-
+selves to be so debased as to take a waiter's job. He must have been
+disgraced in some way.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11001100
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	1
+	Cha:	2
+	Int:	2
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	10
+[SKILLS]
+BREAK
+#2009
+Keywords:	rover gang member
+Name:	a Rover Gang Member
+RoomDesc:$
+A Rover gang member protects his turf here.
+
+~
+LookDesc:$
+You see a young punk standing here, ably swaggering but lacking a
+truly threatening posture.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	1
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	15
+[SKILLS]
+BREAK
+#2010
+Keywords:	danny cashier
+Name:	Danny
+RoomDesc:$
+Danny the cashier sits here picking his nose.
+
+~
+LookDesc:$
+You see a man of wide girth and a cropped haircut staring vacantly into
+space. He has the build of an aging Urban Brawl player and the manners of
+an Ork.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	1
+	Str:	4
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	10
+[SKILLS]
+BREAK
+#2011
+Keywords:	street preacher
+Name:	a Street Preacher
+RoomDesc:$
+The Street Preacher stands here exclaiming about the end of the world. 
+
+~
+LookDesc:$
+You see a man dressed in feathered rags with paint smeared over most of his
+body. He is constantly pacing back and forth, all the while yelling about the
+coming of the 7th World and the worship of Quetzalcoatl. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	1
+	Int:	2
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	10
+[SKILLS]
+BREAK
+#2012
+Keywords:	drunk
+Name:	a drunk
+RoomDesc:$
+A drunk stumbles pathetically about.
+
+~
+LookDesc:$
+You see a drunk wobbling here.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	2
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	MaxMent:	2
+	Cash:	12
+[SKILLS]
+BREAK
+#2013
+Keywords:	lone star officer
+Name:	Lone Star Officer
+RoomDesc:$
+The Lone Star Officer stands here, keeping the peace.
+
+~
+LookDesc:$
+You see an authoritative and stern-looking police officer.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	2
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	38
+[SKILLS]
+BREAK
+#2014
+Keywords:	wanda cashier
+Name:	Wanda
+RoomDesc:$
+Wanda, the cashier, sits here looking vacant.
+
+~
+LookDesc:$
+You see a middle-aged woman with frizzy hair and an expression of such
+utter blankness that it is probable she is some sort of addict.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	2
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	2
+	Impact:	3
+	Cash:	10
+[SKILLS]
+BREAK
+#2015
+Keywords:	roberto manager bank
+Name:	Roberto the Bank Manager
+RoomDesc:$
+Roberto stands here, waiting to do business.
+
+~
+LookDesc:$
+You see a well-dressed, upwardly mobile middle-aged man.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	4
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	10
+[SKILLS]
+BREAK
+#2016
+Keywords:	curley decker
+Name:	Curley the Decker
+RoomDesc:$
+Curley the dwarf stands here chewing on a cigar and grinning.
+
+~
+LookDesc:$
+You see a unkempt dwarf dressed in smelly overalls. He saws the air with his
+cigar when he talks, and chews on it when he isn't.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	2
+	Str:	3
+	Cha:	2
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	10
+[SKILLS]
+BREAK
+#2017
+Keywords:	ares armor salesman
+Name:	Ares Sales Representative
+RoomDesc:$
+The Ares Sales Representative is here, smiling and looking secure.
+
+~
+LookDesc:$
+You see a tall, bland individual who bears the look of a man who has a 
+safe job and a steady income.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	2
+	Str:	3
+	Cha:	4
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	1
+	Impact:	2
+	Cash:	10
+	Bank:	200
+[SKILLS]
+BREAK
+#2018
+Keywords:	knight-errant security guard
+Name:	Knight-Errant Security Guard
+RoomDesc:$
+The Knight-Errant Security Guard scans the room carefully.
+
+~
+LookDesc:$
+The Knight-Errant Security Guard looks calm, collected, and dangerous.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	4
+	Cha:	2
+	Int:	2
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	5
+	Impact:	3
+	Bank:	500
+[SKILLS]
+BREAK
+#2019
+Keywords:	ares manager
+Name:	Ares Sales Manager
+RoomDesc:$
+The Ares Sales Manager is sitting here working at a terminal.
+
+~
+LookDesc:$
+You see a relaxed and confident woman who obviously is very busy.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	50
+	Bank:	75
+[SKILLS]
+BREAK
+#2020
+Keywords:	reggie ork decker
+Name:	Reggie
+RoomDesc:$
+Reggie sits behind a counter toying with a disassembled credstick. 
+
+~
+LookDesc:$
+A scrawny looking ork with a datajack in his head, and a tattoo of some sort
+of schematics on his left forearm. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000011011
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	207
+	Weight:	100
+	Ballistic:	100
+	Impact:	100
+	Cash:	1
+	Bank:	1
+[SKILLS]
+BREAK
+#2021
+Keywords:	ares weapons salesman
+Name:	Ares Sales Representative
+RoomDesc:$
+The Ares Sales Representative is waiting for your purchases.
+
+~
+LookDesc:$
+You see a bland individual who wants nothing more than for you to spend nuyen.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	2
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	10
+[SKILLS]
+BREAK
+#2022
+Keywords:	sweeper janitor street
+Name:	a street sweeper
+RoomDesc:$
+A street sweeper is working here trying to keep the streets somewhat clean.
+
+~
+LookDesc:$
+You see a man standing around 1.5 meters tall and wearing a grey jumpsuit.  A
+patch on his arm signifies he works for the Sanitation Department of the City
+of Seattle.  His unshaven face and distant look give you the impression he
+is not to interested in his job.
+~
+ArriveMsg:	walks in from
+LeaveMsg:	walks
+MobFlags:	11001001
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	60
+	Ballistic:	2
+	Impact:	3
+	Cash:	12
+[SKILLS]
+BREAK
+#2023
+Keywords:	dwarf decker fence krackerjack datajacks plugged wingnut
+Name:	Krackerjack
+RoomDesc:$
+A mangy dwarf with six datajacks in his head gives you a squinty stare. 
+
+~
+LookDesc:$
+Greasy haired, with a nice shiny bald spot in the middle of his lightly
+sunburnt head. He has six datajacks in his head, and cables plugged into three
+of them. He is still paying attention to the world around him, fiddling with
+the innards of a dual Athlon Thunderbird III 3Ghz PC from 2004.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000001010000000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	5
+	Str:	8
+	Cha:	6
+	Int:	6
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	135
+	Weight:	90
+	Cash:	40000
+	Bank:	40000
+[SKILLS]
+	negotiation:	8
+	data brokerage:	8
+BREAK
+#2024
+Keywords:	man old ticket clerk grizzled
+Name:	an old man
+RoomDesc:$
+A grizzled old man in a trenchcoat leans against the old ticket counter. 
+
+~
+LookDesc:$
+Looking more than a bit dodgy and less than all-out dangerous, this old sea is
+the only person you can speak to about catching ferry from here. Best to treat
+him nicely. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#2098
+Keywords:	phil storekeep
+Name:	Phil
+RoomDesc:$
+Phil stands here, puffing on a Sativari Cigar. 
+
+~
+LookDesc:$
+An old white man, balding, wearing Ben Davis overalls, with very very
+^rbloodshot^n eyes, and a goofy grin on his face. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	4
+	Int:	3
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	146
+	Weight:	106
+	Level:	2
+	Cash:	1300
+	Bank:	1300
+[SKILLS]
+BREAK
+#2099
+Keywords:	test mob
+Name:	test mob
+RoomDesc:$
+test mob 
+
+~
+LookDesc:$
+test mob 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	1
+[SKILLS]
+BREAK
+END

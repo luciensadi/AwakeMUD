@@ -1,0 +1,33 @@
+RADIO
+
+Radios are necessary for wide-range communication.  The "radio" command can
+be used to change the mode of one's cybernetic or standard radio.
+
+^cradio^n
+
+Lists the current settings of your radio.
+
+^cradio off^n
+
+Turns your radio off, making it impossible to send and receive broadcasts.
+
+^cradio scan^n
+
+Sets your radio to scan mode, where it can receive broadcasts from all
+frequencies but not send any.
+
+^cradio center <frequency>^n
+
+Centers your radio around the given frequency.  Broadcasts within the radio's
+range of the centered frequency will be received, and any broadcasts sent
+will be at the centered frequency.
+
+^cradio crypt <level | off>^n
+
+Turns the radio's crypt mode on or off.  With crypt mode on, only other
+radios with a crypt rating greater than or equal to yours will receive your
+broadcasts (note: others' crypt does not need to be on to decrypt incoming
+messages).
+
+^WSee Also: BROADCAST^n
+

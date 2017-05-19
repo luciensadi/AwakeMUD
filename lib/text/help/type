@@ -1,0 +1,10 @@
+TYPE
+
+Usage: ^gTYPE <credstick> <passcode>^n
+
+This command allows a character to try to guess the 6-digit passcode of a
+standard credstick.  If guessed successfully, the credstick's security is
+deactivated.
+
+^WSee Also: CRACK, CREDSTICKS, USE^n
+

@@ -1,0 +1,9 @@
+RETRIEVE
+
+Usage: ^gRETRIEVE <apartment name>^n
+
+This command is used to get another key for an apartment you
+currently own. It cannot be used to get a key for an apartment
+you are a guest in.
+
+^WSee Also: HOUSE^n

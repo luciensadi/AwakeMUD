@@ -1,0 +1,14 @@
+VEMOTE
+
+The vemote command is a variation on emote, used for a driving automobile,
+bike or drone.
+
+Examples:
+vemote does a wheelie down Ridgeway Street
+< 10P 10M >Your vehicle does a wheelie down Ridgeway Street.
+
+People would see (if you were riding a Yamaha Rapier)
+A Yamaha Rapier does a wheelie down Ridgeway Street.
+
+^WSee also: DRIVE, RIG^n
+

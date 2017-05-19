@@ -1,0 +1,56 @@
+"MAP SEA SE" "SEATTLE SE"
+                
+     //                                 \\     
+    //       <-o-----o---X--> 7          \\       
+   //          |     |                    \\ 
+  //           |-M   |                     \\
+ //            |     |                      \\
+||     <-o-----o-----o-----o 6               \\___ Intercity
+||       |     |     |     |        ^         \___     90
+||       |     |  D  |  H  |-K     /
+||       |     |  |  |  |  |      /
+||     <-o-----o-----o-----o-----o 5
+||       |     |     |     |  |  |
+||       |  E--|     |-L   |--A--|
+||       |     |     |     |  |  |
+||     <-o-----o-----o-----o-----o 4                     ^
+||       |     |     |     |  |  |                       |
+||     N-|     |     |     |  G  |  B           J        X
+||       |     |     |     |     |  |           |        |
+||     <-o-----o-----o-----o-----o-----o-----o-----o-----o 3
+||       |     |\    |     |     |     |     |     |     |
+||       |     | C   |     |--F  |     |     |     |     |
+||       |     |     |     |     |     |     |     |     |
+|| X-----o-----o-----o-----o-----o-----o-----o-----o-----o 2
+||       8     9     10    11    |     |     |     |     16
+||                               |     |     |     |
+||                               |     |     |     |
+||                               o-----o-----o-----o 1
+                                12    13    14    15
+Intercity
+  Five
+Downtown Seattle/Southeast Commercial Sector
+Key:    A. Seattle Center/Space Needle/Monorail Complex
+        B. Renraku Arcology
+        C. Big Rhino
+        D. Easy Diver Coffin Motel
+        E. Figg's Gym
+        F. Dante's Inferno
+        G. Neophytic Guild
+        H. Crazy Lenny's Driving Deals
+        J. Stuffer Shack
+(I omitted to avoid confusing with a path)
+        K. Zalensky's Electronics 
+        L. Action Computers and Electronics
+        M. Krishna's
+        N. Club Penumbra
+Street Index:
+1. Boren Avenue                 9. Second Street
+2. Seneca Street                10. Third Street
+3. Spring Street                11. Fourth Street
+4. Ridgeway Street              12. Fifth Street
+5. Espanoza Way                 13. Sixth Street
+6. Whitman Road                 14. Seventh Street
+7. Broadway                     15. Eighth Street
+8. First Street                 16. Ninth Street
+

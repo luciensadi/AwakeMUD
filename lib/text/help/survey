@@ -1,0 +1,9 @@
+SURVEY
+
+Usage: ^gSURVEY^n
+
+This command is used to display extra information about the
+room you are presently in, like the size and how much cover
+there is.
+
+^WSee Also: TALL^n

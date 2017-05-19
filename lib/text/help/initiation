@@ -1,0 +1,31 @@
+INITIATION INITIATE
+
+Usage: ^gINITIATE^n
+
+Initiation is a magician's way of advancement, whether the magician
+be a shaman, mage, or adept.  When your character is initiated, its
+magic rating increases by one point.
+
+When you reach the requirements for an initiation you can use the
+^WINITIATE^N command to enter the initiation menu and choose how you wish
+to spend your initiation. You can either increase your magic and gain
+a metamagic technique, increase your magic and change your astral
+signature, or shed any gaes you currently have.
+
+The cost for an initiation is 5 plus the desired grade times 3. So
+if you wished to initiate to grade 2 it would cost you (5+2)*3=21.
+
+There is also an additional cost of nuyen and a requirement of TKE
+
+Requirements are:
+
+            TKE      NUYEN
+Grade 1:      0      50000
+  "   2:    100      75000
+  "   3:    200     125000
+  "   4:    400     225000
+  "   5:    600     425000
+  "  6+:   +200     825000
+
+^WSee Also: MAGIC, INITIATE, METAMAGIC^n
+

@@ -1,0 +1,1772 @@
+#0
+Name:	A Bright Light
+Desc:$
+   What... oh no.... you're not dead are you? Better take one last grab at
+life while you still can.  
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	16295
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#1
+Name:	Limbo
+Desc:$
+   You are floating in a formless void, detached from all sensation of
+physical matter, surrounded by swirling glowing light, which fades into the
+relative darkness around you without any trace of edges or shadow.
+   There is a "No Tipping" notice pinned to the darkness.
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#2
+Name:	Che's Den of Iniquity
+Desc:$
+   There are Japanese Schoolgirl Lolitas everywhere!  Dancing around and
+stuff. There are Tentacled Beasts everywhere!  And robotic monsters who plan
+to destroy all so some hentai flick will have a so-called plot.  But mostly
+what its all about is schoolgirls being seduced by tentacled beasts.  There's
+also a shrine to Jerry Garcia on the far end of the room, with a copy of the
+Koran on the altar. 
+~
+Flags:	100000000000000000001000001100
+SecType:	Inside
+MatrixExit:	1100
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+Address:	An undisclosed location
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+	Light:	0
+	Smoke:	0
+	Background:	5
+	BackgroundType:	13
+[EXIT north]
+	Desc:$
+~
+	ToVnum:	2000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#3
+Name:	Dunkelzahn's Office
+Desc:$
+   You enter an office made entirely out of finely veneered wood, with
+orichalcum trimmings and ornimentation.  Above a mantle over a fireplace rests
+an ancient katana, crafted by Masamune, the master blacksmith of legend.  In a
+frame sitting on a wall behind a large oaken desk, is some words of wisdom.
+The floor is made of some very ornately designed ancient rugs, made by master
+weavers in ancient times, with names long forgotten.  On one end of the room
+is a window, with a view of Mount Shasta, an ancient volcano whose mystical
+beauty is of great renown.  A portal on the south side of the room is open to
+the Seattle Center, and is a means to get back quickly into the sprawl. 
+~
+Flags:	100110000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A big mahogany door. 
+~
+	ToVnum:	33
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	35500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	1000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4
+Name:	Foo's Lair
+Desc:$
+           dfdfsggpg   
+         dhioasdhfopc
+        fdsa      ssdf
+      ssaaf      pdfsaq
+      ssdfs      bsdscd
+      ssdfs
+      ssadf    
+      ssfdf              fsdgsdfggsgz
+      ssdfs            sdfasfsfsdsgfpoj 
+   ppdasdffddfyq     sdk;lds      zk;gppp
+   bddfdsfadastd    dsjkl;          zzyp[p
+      sfdsf        dsdfgd            zzfgdp        dddfsdklfso    
+      ssdff       dsdgfg              gsgdpp     dddklfgfdggogo
+      ssdfs       qdfgs               zssdfb    ddsdfasdfdfdfxvo
+      sfsdf       qfsggd              ffggdb  ssdajf      sdfssd
+      sdsff        qdfgsd            fsagsb  sadjkdd       sdfsd    
+     psdfdscq       dfgfsds         zqdggs                dsfgd  
+     ddsfsdfb         sdfgsdgasdfsdggffsd               dsfgoo             
+                        sdsdggfgsffdsso              dsfgggg       
+                                                  dfgdasdd       
+ ****************Welcome to*******************  dsfgasdhjkasdljqoq      
+ ****************FOO's LAIR******************* dsafasfasdfasdfdfbd
+~
+Flags:	100001000000000000000100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	5
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#5
+Name:	Foo's Unrestrained Sex Pit
+Desc:$
+                   :AMMMMMMMMMMMMA:
+                :AMMMMMMMMMMMMMMMMMMA:
+              :AMMMMMMMMMHHHHHMMMMMMMMA:
+             :AMHMMMMHHMHIHHIMMMHMMMMHHA:
+            :AM'MMMMMMHHIHHHIMMMMMIMMHHHH:
+            AM:IMMMMMHHIHIHHHIMMHHHHHHHHHH
+           AMIIHMMMMMHIHHHIHHIHHHHHHHHHHHH:
+           MMIHHMMMMMHHIHHHIHHHHHHHHHHHHHHH
+          AMMMMMHHHHHHI;;;;;;;IHHHI;;IHHHHH
+          MMMMHIIII;:AMMMMA        ,77, HH
+          MMMMHII;  AW''''         ::   HH
+         IHHIHIII;:'' ,GFMF7       7MM7: IH
+         AHHIHII;::': ;7P,7  ;;   ::::  IH
+        IHHHIHII;;::         :7;:        ;H
+        AHHHHHII;;;:: :     : 7  :       ;H
+        IHHIIHI:7;;;:: ;   ; ; ,  ,      IH
+        IHHIIHH:7;;;: ;   ;: '::: ';   IH
+        IHHIIHI:7;;: ::: ;    ,,,,    '  HH
+       :IHHHIHHMMA;:::    7;;      7;   AMI
+       ;IHHHHIIHMM;: : :   ;;7,,,,7;    HHI
+       IIHHMMHHIHHM;::       '  '     AMHI
+       IIHHMMHMHHIIIM;::              AMMHI
+       IHHHMMHMHMHHHIHI;::          :AMMMHI
+       IHHHMMMMHMMHHHII;;;;::   :,;; MMMHHI
+       IHHHMMHHHHMMHHHI;:;;;;;;    MMMIH'
+       ;IHHMMHMMMMHFHHII            MMMHH
+        IHHMMHV;;::    HHII;:      : MMHHI
+        IHHMV;;:::      HHII;:   : : MMHI;
+        IHMV;;:: :       HII;:   :: MMI;
+       :IHV;::  :          'HI:   :: MM;
+       :IHV;::  :          'HI:   :: MM;
+       IHV;::  :            HA;:   : '
+       IV;:: :   :          II;:    ;
+      :IH;::  :              III;:    ;
+      IH;;:::  :              ;;;I:   ;
+      HV;::: :   :            ';;;HI:  '
+     ;M;;:::: :                ';;;HI:  '
+     MH;;::::           :        ';;HI:  ;
+    IM;;;::: :         :7;         ';II: ;
+    M;;;::: :   :      7;;,:          '  : '
+    ;;::::    :       ::''                : ':
+   ;;:::   :         :                     ': :
+  :;;::  :          ::                       ':'
+  ;;::  :  :        :                          '':
+ ;;:: :            :                           :;,:
+ ;;::  :          ::                           ;777,:
+:;;::    :        :                            ;;777;':
+;;:: : :         7::       : :                  ;7777;;7,
+;::   :         7;;;:     : :,                   77777'77;
+;:: :          :M;;:       : :,7                  7777 77'
+;:     :        7::        : ::7                  ;7' ;7
+;:   :           7:         : ::7                 :'  :'
+:: :: :           ,           :::;7              :'  :;
+:   ::             ':          : :::;7          ::'  :;
+ ::  ;               :          : ::::;7:,,::;;I'   ;;
+  ;;:;: : :           :          :::::::: '  ' I77;'
+   ;;;::     :         :          '::::'       ;
+    ;;;::  :   :       :
+      ;;;::    :   :     :                    ;
+-Welcome to Foo's Unrestrained Sex Pit
+(jello wrestling room up)
+~
+Flags:	100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#6
+Name:	Flynn's Workshop
+Desc:$
+   Instead of a room, which most people expect, you enter what looks like
+another world.  You stand on a beach looking out to a beautiful ocean, and
+oddly enough, the door you came from is in the middle of a jungle.  There is a
+smooth white piano on the shore of the beach with wires plugged directly into
+the sand.  It would seem that Flynn creates the fabric of the universe through
+a simple tool, the piano.  Music from Beethoven's Moonlight Sonata fills the
+air. 
+~
+Flags:	100000000000001000000100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+A dock lies to the north.
+~
+	ToVnum:	8
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	Desc:$
+You can hear the political exhortations of "If 6 Was 9" to the east.
+~
+	ToVnum:	7
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	15
+BREAK
+#7
+Name:	Immortal Work Room
+Desc:$
+   This small, circular room is quite odd.  It has a few lounge chairs in the
+middle of the room, and a stairway leads down to the rest of the immortal
+realm.  At the eastside of the room, on the wall, is an oldschool bulletin
+board used to keep job postings and applications.  To the north is a black
+looking hole in the wall, possibly a portal to another dimension? 
+~
+Flags:	110000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	portal
+	Desc:$
+A large portal to another world is here, with a large chain keeping you from
+entering it normally. 
+~
+	ToVnum:	33
+	Flags:	2
+	Material:	brick
+	Barrier:	32
+	KeyVnum:	0
+	LockRating:	50
+	HiddenRating:	50
+[EXIT east]
+	Keywords:	door net
+	Desc:$
+An inflated, net covered doorway 
+~
+	ToVnum:	65075
+	Flags:	2
+	Material:	adv. plastics
+	Barrier:	32
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	1000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#8
+Name:	A boat dock
+Desc:$
+   Before you spreads a small boating dock.  Wooden planks supported by tree
+thick columns feel sturdy beneath your feet.  The dock continues about a
+hundred feet north over the ocean leading to a single boat at the far end.
+Water laps tranquily beneath the dock with a gentle breeze.  
+~
+Flags:	100000000000000000000000
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+The end of the boat dock lies north.
+~
+	ToVnum:	9
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+The shore lies in that direction.
+~
+	ToVnum:	6
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#9
+Name:	End of the dock
+Desc:$
+   From the color of the water, it would appear the dock ends here in rather
+deep water.  Anchored to the end of the dock is a small sail boat, probably
+suitable for no more than two people.  To the south the dock reaches the
+shores of an empty beach. 
+~
+Flags:	100000000000000000000000
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Stepping off the dock, you can climb into the main cabin of the sailboat.
+~
+	ToVnum:	10
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+The dock continues to the south.
+~
+	ToVnum:	8
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10
+Name:	The Cockpit
+Desc:$
+   From this vantage point you can clearly see in every direction.  The ocean
+surrounds you in every direction but the south where a lone dock stands. Small
+but functional, the cockpit is lined with wood covered seating while a wooden
+tiller projects from the back end.  Both the mainsail and the jib are furled
+and the deck shines white in the sun.  The companionway leads below to the
+main cabin. 
+~
+Flags:	100000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+The Deck
+~
+	ToVnum:	12
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+The boat is anchored to a dock to the south.
+~
+	ToVnum:	9
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Desc:$
+The main cabin can be seen through the companionway.
+~
+	ToVnum:	11
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#11
+Name:	The Cabin
+Desc:$
+   Inside this cabin reside the bare necessities for life at sea.  On one side
+there is a table for meals surrounded by padded benches which can further
+serve as small cots.  On the other side however is a comfortable looking bed
+large enough for two people with enough head room to sit.  Along one wall is a
+sink and kitchen area while the other wall has a tiny, but functional toilet
+enclosed in closet.  Next that closet is a larger storage closet housing
+everything from clothing to supplies.  The decoration is somewhat sparse
+though a large world map is on one wall marking the journey of this ship and
+crew.  One thing is certain--living on this boat would require you to spend
+alot of time very close to the other person. 
+~
+Flags:	100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	Desc:$
+The companionway leads back up towards the cockpit.
+~
+	ToVnum:	10
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#12
+Name:	On the deck
+Desc:$
+   The sunwarmed deck beckons to you to stretch out upon its length. An
+oversized beach towel has been spread out across the deck and looks as if
+someone had just been using it to sunbathe on. The boat rocks softly back and
+forth in the gentle waves and the soft sound of the water on the boat mingles
+with that of the seabirds overhead.  A Northeast wind blows softly across the
+water, cooling you in the afternoon heat. 
+~
+Flags:	100000000000001000010000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Desc:$
+The Cockpit
+~
+	ToVnum:	10
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#13
+Name:	Kyrin's Space
+Desc:$
+   Penguins ate my description. 
+~
+Flags:	110000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#14
+Name:	Loki's Room
+Desc:$
+   ^Y:) HAPPY PLACE :)^c 
+~
+Flags:	110000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	1000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#15
+Name:	A Wide Open Pasture
+Desc:$
+   Cows graze peacefully here. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	10
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#16
+Name:	A plassteel elevator
+Desc:$
+   The walls and ceilings of the elevator are made entirely of plassteel,
+allowing you to see the interior of the black tube in which it passes.
+Exciting. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#17
+Name:	Phrodo's Lair
+Desc:$
+   Welcome to Phrodo's Office... there are ficus trees everywhere, and a large
+vidscreen on the far wall. You also notice a large floor to ceiling aquarium
+in the corner fo the room, filled with exotic fish. The floors are marble, and
+the desk is mahagony, with a Fairlight Excalibur built into the side of it...
+It would appear that being an imp pays rather well. 
+~
+Flags:	1000000001000111000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door oak double~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	ToVnum:	18
+	Flags:	2
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	1
+	LockRating:	9
+BREAK
+#18
+Name:	Phrodo's Receptionist Area
+Desc:$
+   This is the reception area for Phrodo's office... There are comfy chairs
+strategically located about the room, and several plants hanging about. There
+is a girl seated behind a desk, making sure that everyone has an appointment.
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door oak double~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	Desc:$
+There are huge double doors made of solid oak to the north. 
+~
+	ToVnum:	17
+	Flags:	2
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	1
+	LockRating:	9
+[EXIT east]
+	ToVnum:	1004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#19
+Name:	Fastjack's Room	
+Desc:$
+Fastjack's room will be repaired as soon as I find the original description.
+~
+Flags:	10000000000000000010110000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	6
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#20
+Name:	A Barn
+Desc:$
+   Cows get milked here, but they are all out grazing at the moment. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#21
+Name:	The Hall of Nyarlathotep
+Desc:$
+   A massive hall, at least a hundred meters from end to end, this room is a
+combination of splendour and the bizarre.  The floor is highly polished
+obsidian, so black and shiny you can see infinity if you look too deeply.  The
+walls are mahogany paneled with ornate window frames bearing stained glass
+windows, some of which depict the most unspeakable creatures, are all at least
+extremely bizarre.  The ceiling is a gigantic bas relief in sandstone,
+carrying many of the same images of the windows, though they are much more
+difficult to follow.  Tentacles are plentiful.  The ceiling, and the sandstone
+columns carven with strange writing that hold it up, are both equally obvious
+that they are not the work of human hands.  Hanging from the pillars are
+golden braziers with brass bowls.  The smoke given off has no odor, but it
+makes one feel vaguely ill to breathe it.  At the head of the room, across
+from the giant oak double doors, is a large throne made of a strange greenish
+material not unlike soapstone, but with golden flecks throughout the material.
+It is also carven with ornate designs, and while most of them are not
+identifiable, those that are make you wish none of them were.  It, like the
+pillars, is also clearly not the work of human hands. 
+~
+Flags:	10000000000000011000
+SecType:	Inside
+MatrixExit:	1100
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+Address:	An undisclosed location
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#22
+Name:	Rifkin's Diningroom
+Desc:$
+   This is a room of glass, tread lightly, for one wrong step could be the
+end.  Beautiful, yes, yet fragile, easily broken.  Sun shines in, is blinds
+and burns, darkness, sets over, and comsumes, Isn't it great to live in a
+glass cube?
+   A large table sits in the middle of this room, holding nothing upon it.  It
+just sits there unused, gleaming, such a shiny finish.  Chairs surround it,
+all shiny from a glossy finish,  all with cloth seat covers.  Everything is
+perfectly set up, with compulsive neatness.  There is light from a sparkling
+chandelier, which is set to give off dim amounts of light.   The rug is
+Persian, made of the finest materials, coming from Persia.  Its background is
+blue and depicts the slaying of Dunkelzahn.  A picture of the mighty dragon is
+here on the wall, reminding all of who he once was, making his presence in the
+room, strong and forceful.  He watches over. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	28600
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	21
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#23
+Name:	Illuminatus Station
+Desc:$
+^l|    ^BMortal IC ^RAdmin ^GMortal OOC
+^l|             ^B\  ^R|  ^G/
+^l|              ^B\ ^R| ^G/
+^l|               ^B\^R|^G/
+^l|  ^YBug Report ---^w+^L--- Questor
+^l|               ^C/^W|^M\
+^l|              ^C/ ^W| ^M\
+^l|             ^C/  ^W|  ^M\
+^l|   ^CMatrix IC ^WBuilder ^MPost Office^l..
+..
+~
+Flags:	1000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22903
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	22904
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	22906
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	22909
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22908
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	22907
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	22905
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	22902
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	22901
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	22900
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#24
+Name:	The Nexus
+Desc:$
+   if you are not dan, steve, jeff, nyar, stew or kat, you should not be in my
+room, so get the fuck out 
+~
+Flags:	100000000000001000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	14
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	1000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#25
+Name:	Digitalsmear's Play House
+Desc:$
+   Welcome to Digialsmear's Play House! 
+~
+Flags:	1000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	2000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	25
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	25
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	25
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22495
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	25
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	25
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	25
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	25
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	25
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#26
+Name:	Novinha's Suffering
+Desc:$
+   The inside of the hut is painted grey and the floor is cement.  A broken
+lightbulb hangs from the curved ceiling and spots of blood dot the floor and
+the many razorblades scattered around the room. This doesn't look like a happy
+place.  A thick black curtain hangs over the door of the dwelling, blocking
+most the light from outside. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	21899
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#27
+Name:	A Shimmering Mirage
+Desc:$
+   You are standing by an oasis, a glistening refreshing pool surrounded by
+date palms. But the ground seems to shift under your feet, were those stars
+you just saw through the sifting sands. The sky faded in and out, into
+nothingness. Your eyes ache as they try to catch fleeting images that display
+in the sand, water and sky. Images of space, an electronic world, Seattle, and
+a void. Or so it seems. 
+~
+Flags:	100000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#28
+Name:	Coax's hideout
+Desc:$
+        ______         /_____/\        /_____\\ \       /_____\ \\ /
+/_____/ \/ / /      /_____/ /   \//\      \_____\//\   / /       \_____/ / /\
+/       \_____/ \\ \         \_____\ \\          \_____\/ 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#29
+Name:	Deep in the Andes Mountains
+Desc:$
+   You're standing on top of a tall mountain. It's a cold and crisp night, and
+the pitch black sky is lit up by thousands of bright stars. The stars light up
+some of the mountains, and you see silhouettes of snow covered tops against
+the dark red western horizon. Sound cannot reach this place, and it's very
+peaceful and relaxing, almost like you're in another world. 
+~
+Flags:	10000000000000111000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#30
+Name:	Gene's room of self worship
+Desc:$
+   This is Gene's room, noted by the sign "Gene's Room, Keep the fuck out".
+There is a computer desk running an old 486, with the case removed from the
+top. Diet Coke and Pepsi cans litter the place and large t.v. seems to replay
+a dvd of "tombstone" over and over again. The room reeks of stale cigarettes.
+~
+Flags:	1100000010000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	0
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Desc:$
+the crap room
+ 
+~
+	ToVnum:	1000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#33
+Name:	The Throne Room
+Desc:$
+   To the west, a great archway stands, with a mammoth dark Icania wood
+doorway, with deep, almost black grain.  On the eastern end of the room, an
+elevated dais, where two thrones sit.  Behind the thrones, a gargantuan
+tapestry hangs from the high ceiling.  Inlaid into the ceiling is a
+crystalline lens of some sort that refracts prismatic colors into the room at
+all hours.  The tapestry is of two green bars, with an eight pointed Ki'ronyx
+symbol over a white bar, framed in teal, then gold bars that create a border
+between the white and green.  The thrones are made of gold, with red velvet
+upholstery supporting the back and the seat. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	15
+[EXIT south]
+	Keywords:	Bookshelf shelf door
+	Desc:$
+The southern wall of the room is actually a fake bookshelf.  How rare. 
+~
+	ToVnum:	7
+	Flags:	2
+	Material:	brick
+	Barrier:	32
+	KeyVnum:	0
+	LockRating:	50
+	HiddenRating:	50
+[EXIT west]
+	Keywords:	door
+	ToVnum:	3
+	Flags:	2
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#35
+Name:	A tribute to josh.
+Desc:$
+   . 
+~
+Flags:	10000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	15
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40
+Name:	Hualpa's Cavern
+Desc:$
+   This is a cavern stablished deep dark in the Ande's mountain range, near
+the Amazonia, where the mighty plumed serpent Hualpa rules. The cave is very
+dark and in perfect silence. Light cant reach this point. 
+~
+Flags:	10000000000000001001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	Desc:$
+A portal leading to Tacoma 
+~
+	ToVnum:	2000
+	Flags:	0
+	Material:	organic
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#50
+Name:	The Heart of the Sun
+Desc:$
+   This needs to be described 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#69
+Name:	A Hollowed-Out Redwood Tree
+Desc:$
+   Inside of this mighty tree, a small room has been carved.  A little bed is
+up near the ceiling, a small ladder leading up to it, carved in the side of a
+bookshelf, filled with all sorts of random types of knowledge.  You run your
+finger over the bindings of the books, noting subjects on Wicca, old movies,
+Harry Potter, and ever a few that look to be unlabeled, even bound in loose
+leather. A little hammock-chair is suspended in one corner, looking quite
+inviting. The entire room smells of tree sap and incense, which puts you into
+a calm, soothed feeling. 
+~
+Flags:	110000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#70
+Name:	whore
+Desc:$
+   whore 
+~
+Flags:	110000010000001001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door sliding bedroom~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	ToVnum:	71
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	31337
+	LockRating:	50
+BREAK
+#71
+Name:	whore	
+Desc:$
+whore
+~
+Flags:	101000011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door sliding bedroom~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	ToVnum:	70
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	31337
+	LockRating:	50
+BREAK
+#77
+Name:	Dunkelzahn's Trailer in the Sticks
+Desc:$
+   Inside a trailer, in the middle of Arkansas, Dunkelzahn has his hideout,
+since he has faked his death.  Being the information junkie he is, he has all
+sorts of manuals of technology dating back from the 1960's, to the manuals of
+cutting edge technology.  The room is a mess, as the books, old pizzas, and
+pieces of techno-junk are strewn all over the floor. 
+~
+Flags:	110000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	2000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	1000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#78
+Name:	Dunkelzahn's Cave
+Desc:$
+   A deep dark cave in the heart of the Lake Louise micro-kingdom of
+Dunkelzahn, filled with an unbelieveable amount of treasure.  In the very back
+of the cave is a collection of technological goods from all eras, ranging from
+a stack of TRS-80's and IBM AT's to the most SOTA Fairlight and Telestrien
+cyberdecks.  As Dunkelzahn is known for being an information junkie, all sorts
+of books can be seen here, strewn about, from the manuals of cutting edge
+ASIST technology to primers on running a punchcard-based mainframe computer
+from the 1960's. 
+~
+Flags:	110000000000000001000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	2000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	1000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#88
+Name:	Twiggys Room
+Desc:$
+   Darkness surrounds, and terror follows.  The feeling of light is fading
+from you quickly, and soon another scream cries for releaf from somewhere in
+the darkness.  Hope, there is none, pleasure, non existant.  An eeriee green
+glow kicks up and you see bodies, not dead ones but suffering live people,
+dangling from chains, and needles or rings inserted in various parts of their
+body.  Low moans accompany their obvious suffering, and woe.  Still as the
+light brightens, you see teeth marks on their flesh, and places where the whip
+has also bitten through the tender skin. In the middle of it all, there is a
+place, with blood stained feathers around it, that looks to be the resting
+place of their torturer. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	2000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	Desc:$
+~
+	ToVnum:	20998
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	1003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	1011
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+~
+	ToVnum:	2199
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	1006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+~
+	ToVnum:	710
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	13
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	1004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Desc:$
+A hole, under the chair. 
+~
+	ToVnum:	1000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#93
+Name:	Inside a Helicopter
+Desc:$
+   You are in the back of a helicopter.
+    No way out. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#98
+Name:	Lofwyr's Room
+Desc:$
+   Nothing here to see, move along. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	2000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#99
+Name:	A Simple Garden
+Desc:$
+   Somewhere in the most distant reaches of the most distant metaplanes, is a
+simple garden.  There are no fancy or exotic plants or flowers, but there are
+daffodils, roses, and various vegetables.
+   The sections of this garden are very orderly and neat.  The tomatoes,
+carrots, peas, onions, garlic, and herbs are all very neatly in their
+sections.  A simple faucet with a simple garden hose with a spray nozzle sits
+at the edge of the garden, for the use of watering the garden. 
+~
+Flags:	100000000000000110000
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#100
+Name:	The Nexus of Creation
+Desc:$
+   You are surrounded by transcendental energies showing the interconnected
+manner of the world.  There is no substance here, only energy and entropy.
+From here, you can choose where your life begins in the vast Sixth World. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+END

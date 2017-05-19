@@ -1,0 +1,13 @@
+PRACTICE PRACTISE
+
+Usage: ^gPRACTICE
+       PRACTICE <skill name>^n
+
+Practice is used to train skills to higher levels. You must be at a 
+skill trainer to train your skills. Using the command by itself
+will display a list of skills available at the trainer and the cost
+to increase them to the next level.
+
+This is non-reversable.
+
+

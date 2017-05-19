@@ -1,0 +1,16 @@
+"PAIN EDITOR"
+
+Usage: ^gACTIVATE PAIN EDITOR^n
+
+A Pain editor is one of the more powerful pieces of bioware available.
+When activated it totally removes all sensation of pain. Someone hit
+by a bullet with a pain editor activated wouldn't even notice it until
+they saw the wound with their own eyes. All penalties from mental damage
+are removed, and if you reach 0 mental condition you will not fall
+unconcious, however damage will still overflow into physical. Being reduced
+to 0 physical condition will still render you mortally wounded however.
+
+When the pain editor is activated it grants a willpower bonus, but reduces
+intelligence and make tactile perception very difficult. When deactivated
+all penalties from the wounds suffered are applied instantly, including
+unconciousness from mental damage.

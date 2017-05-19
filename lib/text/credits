@@ -1,0 +1,68 @@
+                                 AwakeMUD
+
+AwakeMUD began in the summer of 1994 as a pet project.  After a 
+wonderful hard drive crash, it was started again in December of 1994.
+It is based off of CircleMUD 3.0 (see below), and was started by 
+Christopher J. Dickey until he gave up in early 1997. Since then, the mud
+has advanced incredibly through the work of Pook and Rift.
+
+Toward the end of 1998, Awake 2050 (The mud this codebase was built from),
+lost its server due to situations that were beyond our power.  The codebase
+just stuck on various hard drives and well, did nothing.  Awake was believed
+by many to be dead for good.  Rift and Pook went to college, and got on with
+their lives.
+
+Fastjack and Dunkelzahn, two chummers from Awake 2050 were working on a 
+secondary project called Beyond the Shadows: 2084. Dunkelzahn through Finn
+met Jerkweed, who offered server space for Beyond the Shadows.  Fastjack and
+Dunk accepted, and then Dunk got brave and asked if he could put a second
+mud on the box.  (awake.infomatrix.org)  He was most gracious.  Dunkelzahn
+did some searching to find Phrodo and Rift, who both had copies of Awake's
+then dusty codebase.  By February 2nd 2000, Awake was back up and running.
+
+Coders who have worked on this codebase after Christopher Dickey (Flynn) and 
+Andrew Hynek (Rift) are as follows:  Fastjack (mostly), Demise (who's work
+is documented under /doc/CHANGES.demise), Terra, Washu, Jerkweed (our host
+at awake.infomatrix.org), Shadowen, Che, and Dunkelzahn *a spec change here, an
+addition to a table there... I didn't actually write any code --Dunk*, and
+last but definately not least, Phrodo.  (Who was also our host at one of our
+old servers, the old shadowrun.org [Not affiliated in any way with the 
+current owners of shadowrun.org])
+
+Also, last but not least TONS of credit goes to the wonderful people at the
+FASA corporation (yeah we know its dead now) for if it weren't for their 
+creativity and ideas, Awake 2050, and its codebase, AwakeMUD would not exist.
+
+============================================================================
+
+                    C  I  R  C  L  E  M  U  D     3  .  0
+
+
+CircleMUD was developed from DikuMUD (Gamma 0.0) by Jeremy "Ras" Elson at
+Johns Hopkins University's Department of Computer Science.  All code unique
+to CircleMUD is protected under a copyright by the Trustees of the Johns
+Hopkins University.
+
+CircleMUD is available for anonymous FTP at ftp.cs.jhu.edu in pub/CircleMUD.
+Its author can be contacted at jelson@cs.jhu.edu.
+
+Type HELP CIRCLEMUD for more information.
+
+============================================================================
+
+
+
+                   Original game idea, concept, and design:
+
+          Katja Nyboe               [Superwoman] (katz@freja.diku.dk)
+          Tom Madsen              [Stormbringer] (noop@freja.diku.dk)
+          Hans Henrik Staerfeldt           [God] (bombman@freja.diku.dk)
+          Michael Seifert                 [Papi] (seifert@freja.diku.dk)
+          Sebastian Hammer               [Quinn] (quinn@freja.diku.dk)
+
+------------------------------------------------------------------------------
+Additional contributions from Michael Curran, Bill Wisner, Mads Haar, and
+Stephan Dahl.
+
+Originally developed at:
+  DIKU - The Department of Computer Science at the University of Copenhagen.

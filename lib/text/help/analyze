@@ -1,0 +1,19 @@
+ANALYZE
+
+Test: CONTROL
+Utility: ANALYZE
+Usage: ^gANALYZE <host/security>
+       ANALYZE <IC/File/Subsystem>^n
+
+If you want to check out the stats of a host or make sure
+the security tally isn't sky rocketing, you will make use of
+this matrix command. You can also use it to find out the type
+and rating of IC or find out if a file has any IC protecting it.
+
+When analyzing a host it will return the values in the form of
+#/#/#/#/#. This represents the hosts Access, Control, Index, Files
+and Slave ratings, respectively. This is commonly refered to as
+the ACIFS rating of a host.
+
+^WSee ALso: MATRIX, UTILITIES, PROGRAMS, DECRYPT, DISARM, DOWNLOAD^n
+
