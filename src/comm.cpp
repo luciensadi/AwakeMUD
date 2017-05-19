@@ -883,7 +883,7 @@ void make_prompt(struct descriptor_data * d)
   if (d->str)
     write_to_descriptor(d->descriptor, "] ");
   else if (d->showstr_point)
-    write_to_descriptor(d->descriptor, "« Press [return] to continue, [q] to quit »");
+    write_to_descriptor(d->descriptor, " Press [return] to continue, [q] to quit ");
   else if (STATE(d) == CON_POCKETSEC)
     write_to_descriptor(d->descriptor, " > ");  
   else if (!d->connected)

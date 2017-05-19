@@ -339,7 +339,7 @@ int parse_race(struct descriptor_data *d, char *arg)
     default:
       return RACE_UNDEFINED;
     }
-    strcat(buf2, "\r\nª Press [return] to continue ´");
+    strcat(buf2, "\r\n Press [return] to continue");
     SEND_TO_Q(buf2, d);
     d->ccr.temp = CCR_RACE;
     d->ccr.mode = CCR_AWAIT_CR;
@@ -369,7 +369,7 @@ int parse_totem(struct descriptor_data *d, char *arg)
   {
     i = atoi(++temp);
     display_help(buf2, (char *)totem_types[i]);
-    strcat(buf2, "\r\nª Press [return] to continue ´");
+    strcat(buf2, "\r\n Press [return] to continue ");
     SEND_TO_Q(buf2, d);
     d->ccr.temp = CCR_TOTEM;
     d->ccr.mode = CCR_AWAIT_CR;
@@ -446,7 +446,7 @@ void priority_menu(struct descriptor_data *d)
     sprintf(buf2, "%-10c", 'A' + i);
     switch (d->ccr.pr[i]) {
     case PR_NONE:
-      sprintf(buf2, "%s?           %-2d           %-2d        %d ¥ / %d\r\n",
+      sprintf(buf2, "%s?           %-2d           %-2d        %d \xC2\xA5 / %d\r\n",
               buf2, attrib_vals[i], skill_vals[i], nuyen_vals[i], force_vals[i]);
       break;
     case PR_RACE:
@@ -506,7 +506,7 @@ void priority_menu(struct descriptor_data *d)
               skill_vals[i]);
       break;
     case PR_RESOURCE:
-      sprintf(buf2, "%sResources   -            -         %d ¥ / %d\r\n",
+      sprintf(buf2, "%sResources   -            -         %d \xC2\xA5 / %d\r\n",
               buf2, nuyen_vals[i], force_vals[i]);
       break;
     }
@@ -750,7 +750,7 @@ void create_parse(struct descriptor_data *d, char *arg)
         d->ccr.points += resource_table[1][d->ccr.pr[PO_RESOURCES]];
         sprintf(buf, " ");
         for (int x = 0; x < 8; x++)
-          sprintf(ENDOF(buf), " %d) %8d¥   (%2d points)\r\n ", x+1, resource_table[0][x], resource_table[1][x]);
+          sprintf(ENDOF(buf), " %d) %8d\xC2\xA5   (%2d points)\r\n ", x+1, resource_table[0][x], resource_table[1][x]);
         SEND_TO_Q(buf, d);
         send_to_char(CH, "Enter desired amount of nuyen points (^c%d^n available): ", d->ccr.points);
         d->ccr.mode = CCR_PO_RESOURCES;
@@ -1213,7 +1213,7 @@ void create_parse(struct descriptor_data *d, char *arg)
       break;
     case '?':
       display_help(buf2, "priorities");
-      strcat(buf2, "\r\nª Press [return] to continue ´");
+      strcat(buf2, "\r\n Press [return] to continue ");
       SEND_TO_Q(buf2, d);
       d->ccr.temp = CCR_PRIORITY;
       d->ccr.mode = CCR_AWAIT_CR;

@@ -875,7 +875,7 @@ void list_detailed_quest(struct char_data *ch, long rnum)
           ((float)quest_table[rnum].karma / 100), quest_table[rnum].reward);
 
   for (i = 0; i < quest_table[rnum].num_mobs; i++)
-    sprintf(buf + strlen(buf), "M%2d) %d¥/%0.2f: V%ld; %s (%d); %s (%d)\r\n",
+    sprintf(buf + strlen(buf), "M%2d) %d\xC2\xA5/%0.2f: V%ld; %s (%d); %s (%d)\r\n",
             i, quest_table[rnum].mob[i].nuyen,
             ((float)quest_table[rnum].mob[i].karma / 100),
             quest_table[rnum].mob[i].vnum, sml[(int)quest_table[rnum].mob[i].load],
@@ -885,7 +885,7 @@ void list_detailed_quest(struct char_data *ch, long rnum)
 
 
   for (i = 0; i < quest_table[rnum].num_objs; i++)
-    sprintf(buf + strlen(buf), "O%2d) %d¥/%0.2f: V%ld; %s (%d/%d); %s (%d)\r\n",
+    sprintf(buf + strlen(buf), "O%2d) %d\xC2\xA5/%0.2f: V%ld; %s (%d/%d); %s (%d)\r\n",
             i, quest_table[rnum].obj[i].nuyen,
             ((float)quest_table[rnum].obj[i].karma / 100),
             quest_table[rnum].obj[i].vnum, sol[(int)quest_table[rnum].obj[i].load],
@@ -1181,7 +1181,7 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
               QUEST->obj[i].l_data);
       break;
     }
-    sprintf(buf + strlen(buf), "\r\n    Award %d ¥ & %0.2f karma for ",
+    sprintf(buf + strlen(buf), "\r\n    Award %d \xC2\xA5 & %0.2f karma for ",
             QUEST->obj[i].nuyen, ((float)QUEST->obj[i].karma / 100));
     switch (QUEST->obj[i].objective) {
     case QUEST_NONE:
@@ -1252,22 +1252,22 @@ void qedit_list_mob_objectives(struct descriptor_data *d)
     }
     switch (QUEST->mob[i].objective) {
     case QUEST_NONE:
-      sprintf(buf + strlen(buf), "\r\n    Award %d ¥ & %0.2f karma for "
+      sprintf(buf + strlen(buf), "\r\n    Award %d \xC2\xA5 & %0.2f karma for "
               "nothing\r\n", QUEST->mob[i].nuyen,
               ((float)QUEST->mob[i].karma / 100));
       break;
     case QMO_LOCATION:
-      sprintf(buf + strlen(buf), "\r\n    Award %d ¥ & %0.2f karma for "
+      sprintf(buf + strlen(buf), "\r\n    Award %d \xC2\xA5 & %0.2f karma for "
               "escorting target to room %d\r\n", QUEST->mob[i].nuyen,
               ((float)QUEST->mob[i].karma / 100), QUEST->mob[i].o_data);
       break;
     case QMO_KILL_ONE:
-      sprintf(buf + strlen(buf), "\r\n    Award %d ¥ & %0.2f karma for "
+      sprintf(buf + strlen(buf), "\r\n    Award %d \xC2\xA5 & %0.2f karma for "
               "killing target\r\n", QUEST->mob[i].nuyen,
               ((float)QUEST->mob[i].karma / 100));
       break;
     case QMO_KILL_MANY:
-      sprintf(buf + strlen(buf), "\r\n    Award %d ¥ & %0.2f karma for "
+      sprintf(buf + strlen(buf), "\r\n    Award %d \xC2\xA5 & %0.2f karma for "
               "each target killed\r\n", QUEST->mob[i].nuyen,
               ((float)QUEST->mob[i].karma / 100));
       break;
