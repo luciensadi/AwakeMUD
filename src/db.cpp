@@ -254,8 +254,9 @@ void boot_world(void)
 {
   mysql = mysql_init(NULL);
   if (!mysql_real_connect(mysql, mysql_host, mysql_user, mysql_password, mysql_db, 0, NULL, 0)) {
-    sprintf(buf, "ERROR: %s\r\n\r\n", mysql_error(mysql));
+    sprintf(buf, "FATAL ERROR: %s\r\n", mysql_error(mysql));
     log(buf);
+    log("Suggestion: Make sure your DB is running and that you've specified your connection info in src/mysql_config.cpp.\r\n");
     shutdown();
   }
   log("Booting MYSQL database.");
