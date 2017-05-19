@@ -519,11 +519,11 @@ void assign_objects(void)
   ASSIGNOBJ(1847, desktop);
   ASSIGNOBJ(1848, desktop);
   ASSIGNOBJ(1904, clock);  // clock
-  ASSIGNOBJ(1946, bank);  // atm */
-  ASSIGNOBJ(2104, gen_board);     /* mortal board   */
-  ASSIGNOBJ(2106, gen_board);      /* immortal board */
-  ASSIGNOBJ(2107, gen_board);      /* freeze board   */
-/*ASSIGNOBJ(2108, bank);         // atm
+  ASSIGNOBJ(1946, bank);  // atm
+  ASSIGNOBJ(2104, gen_board);     // mortal board
+  ASSIGNOBJ(2106, gen_board);      // immortal board
+  ASSIGNOBJ(2107, gen_board);      // freeze board
+  ASSIGNOBJ(2108, bank);         // atm
   ASSIGNOBJ(2506, anticoagulant);
   ASSIGNOBJ(42130, anticoagulant);
   ASSIGNOBJ(3012, vendtix);

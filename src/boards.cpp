@@ -15,7 +15,7 @@ Written by Jeremy "Ras" Elson (jelson@cs.jhu.edu)
 TO ADD A NEW BOARD, simply follow our easy 4-step program:
  
 1 - Create a new board object in the object files
-2 - Increase the NUM_OF_BOARDS constant in board.h
+2 - Increase the NUM_OF_BOARDS constant in awake.h
 3 - Add a new line to the board_info array below.  The fields, in order, are:
         Board's virtual number.
         Min level one must be to look at this board or read messages on it.
@@ -50,13 +50,11 @@ TO ADD A NEW BOARD, simply follow our easy 4-step program:
 #include "newmatrix.h"
 
 /* format:      vnum, read lvl, write lvl, remove lvl, filename
-   Be sure to also change NUM_OF_BOARDS in board.h */
+   Be sure to also change NUM_OF_BOARDS in awake.h */
 
 struct board_info_type board_info[NUM_OF_BOARDS] =
   {
-    {
-      3   , LVL_BUILDER, LVL_BUILDER, LVL_VICEPRES, "etc/board.rift"
-    },
+    {3   , LVL_BUILDER, LVL_BUILDER, LVL_VICEPRES, "etc/board.rift"},
     {4   , LVL_BUILDER, LVL_BUILDER, LVL_PRESIDENT, "etc/board.pook"},
     {12  , LVL_FIXER, LVL_FIXER, LVL_VICEPRES, "etc/board.dunkelzahn"},
     {22  , LVL_ADMIN, LVL_ADMIN, LVL_ADMIN, "etc/board.oldchange"},
@@ -66,17 +64,17 @@ struct board_info_type board_info[NUM_OF_BOARDS] =
     {50  , LVL_BUILDER, LVL_BUILDER, LVL_VICEPRES, "etc/board.harlequin"},
     {1006, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.builder"},
     {1007, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.coder"},
-    {66  , LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.lofwyr"},
-    {2104, 0, 0, LVL_ADMIN, "etc/board.mort"},
-    {2106, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immort"},
-    {64900, 0, 0, LVL_BUILDER, "etc/board.rpe"},
-    {65207, 0, 0, LVL_ADMIN, "etc/board.teamBackstage"},
-    {4603, 0, 0, LVL_ADMIN, "etc/board.teamdds"},
-    {65126, 0, 0, LVL_ADMIN, "etc/board.seattlevoice"},
-    {26150, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.initiation"},
-    {11482, 0, 0, LVL_BUILDER, "etc/board.hooligan"},
-    {70405, 0, 0, LVL_BUILDER, "etc/board.marund"},
-    {71025, 0, 0, LVL_BUILDER, "etc/board.shadowcourier"}
+    {66  , LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.lofwyr"}
+//  {2104, 0, 0, LVL_ADMIN, "etc/board.mort"},
+//  {2106, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immort"},
+//  {64900, 0, 0, LVL_BUILDER, "etc/board.rpe"},
+//  {65207, 0, 0, LVL_ADMIN, "etc/board.teamBackstage"},
+//  {4603, 0, 0, LVL_ADMIN, "etc/board.teamdds"},
+//  {65126, 0, 0, LVL_ADMIN, "etc/board.seattlevoice"},
+//  {26150, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.initiation"},
+//  {11482, 0, 0, LVL_BUILDER, "etc/board.hooligan"},
+//  {70405, 0, 0, LVL_BUILDER, "etc/board.marund"},
+//  {71025, 0, 0, LVL_BUILDER, "etc/board.shadowcourier"}
   };
 
 
@@ -134,14 +132,20 @@ void BoardInit(void)
     msg_storage_taken[i] = 0;
   }
 
+  bool will_die = FALSE;
   for (i = 0; i < NUM_OF_BOARDS; i++) {
     if (real_object(BOARD_VNUM(i)) == -1) {
-      log("--Board #%d does not exist; disabling _entire_ system",
-          BOARD_VNUM(i));
-      break;
+      // Changed this logic to print all broken board vnums instead of just one.
+      log("--Board #%d does not exist.", BOARD_VNUM(i));
+      will_die = TRUE;
     }
   }
+  if (will_die){
+    // Is this true, though? I don't see anything in the logic that would cause this. -Lucien
+    log("WARNING: Missing boards were found (vnums above). Entire board system will be disabled.");
+  }
 
+  log("INFO: Loading boards. Any boards that log errors here will be functional but empty.");
   for (i = 0; i < NUM_OF_BOARDS; i++) {
     num_of_msgs[i] = 0;
     for (j = 0; j < MAX_BOARD_MESSAGES; j++) {
@@ -150,6 +154,7 @@ void BoardInit(void)
     }
     Board_load_board(i);
   }
+  log("INFO: Board load complete.");
 
   CMD_READ = find_command("read");
   CMD_WRITE = find_command("write");
@@ -757,7 +762,8 @@ void Board_load_board(int board_type)
   char *tmp1 = NULL, *tmp2 = NULL;
 
   if (!(fl = fopen(FILENAME(board_type), "rb"))) {
-    perror("Error reading board");
+    sprintf(buf, "Error reading board file %s", FILENAME(board_type));
+    perror(buf);
     return;
   }
   fread(&(num_of_msgs[board_type]), sizeof(int), 1, fl);

@@ -1893,12 +1893,14 @@ void TransportInit()
   init_elevators();
 }
 
+/* Also known as the 'cause a segfault randomly' function. 
+   This would work if the rooms being referenced actually existed. */
 void MonorailProcess(void)
 {
-  process_seatac_monorail();
+  //process_seatac_monorail();
   //process_seattle_ferry();
   //process_seatac_ferry();
-  process_hellhound_bus();
+  //process_hellhound_bus();
   //process_lightrail_train();
   //process_camas_ferry();
   //process_grenada_plane();

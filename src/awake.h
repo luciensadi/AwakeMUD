@@ -1821,7 +1821,7 @@ enum {
 
 /* Boards */
 
-#define NUM_OF_BOARDS           26 /* change if needed! */
+#define NUM_OF_BOARDS           11 /* change if needed! */
 #define MAX_BOARD_MESSAGES      300     /* arbitrary -- change if needed */
 #define MAX_MESSAGE_LENGTH      5120    /* arbitrary -- change if needed */
 #define INDEX_SIZE         ((NUM_OF_BOARDS*MAX_BOARD_MESSAGES) + 5)
