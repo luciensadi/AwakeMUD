@@ -30,6 +30,7 @@
 *.exe
 *.out
 *.app
+bin/awake
 
 # OSX files
 .DS_Store
