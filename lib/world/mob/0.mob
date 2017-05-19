@@ -29,7 +29,7 @@ AttackType:	Bite
 [POINTS]
 	Height:	0
 	Weight:	0
-	Karma:	76
+	Karma:	75
 [SKILLS]
 BREAK
 #4
@@ -164,7 +164,7 @@ Her hair is curly, and raven black in color, and her eyes are a deep sky blue.
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	10000100000000001011
+MobFlags:	10000100000000001010
 AffFlags:	1000000000001000001000
 Race:	Human
 Gender:	Neutral
@@ -324,7 +324,7 @@ DefaultPos:	Standing
 	Weight:	70
 	Level:	9
 [SKILLS]
-	unarmed combat:	50
+	:	50
 	pistols:	50
 	edged weapons:	50
 	sorcery:	50
@@ -2393,7 +2393,7 @@ AttackType:	Cannon
 	Level:	1
 	Ballistic:	20
 	Impact:	20
-	Karma:	170
+	Karma:	152
 [SKILLS]
 BREAK
 #105
