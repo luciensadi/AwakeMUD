@@ -2,8 +2,11 @@
 AwakeMUD requires MySQL to function. Once you have your MySQL installation set up, perform the following commands:
 
 CREATE DATABASE AwakeMUD;
+
 USE AwakeMUD;
+
 CREATE USER 'awakemud'@'localhost' IDENTIFIED BY 'some unique password here';
+
 GRANT ALL PRIVILEGES ON AwakeMUD.* TO 'awakemud'@'localhost';
 
 After this, execute the commands found in the 'SQL Table Generation' file.
