@@ -2112,7 +2112,6 @@ char *colorize(struct descriptor_data *d, char *str)
   return &buffer[0];
 }
 
-char buf3[MAX_STRING_LENGTH];
 void send_to_char(struct char_data * ch, const char * const messg, ...)
 {
   if (!ch->desc || !messg)

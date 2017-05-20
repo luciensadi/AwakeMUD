@@ -421,7 +421,7 @@ struct command_info cmd_info[] =
     { "beg"      , POS_RESTING , do_action   , 0, 0, FREE },
     { "bioware"  , POS_DEAD    , do_bioware  , 0, 0, FREE },
     { "bite"     , POS_RESTING , do_action   , 0, 0, FREE },
-    { "blastoff" , POS_RESTING , do_not_here , 0, 0, FREE },
+//  { "blastoff" , POS_RESTING , do_not_here , 0, 0, FREE },
     { "blink"    , POS_LYING   , do_action   , 0, 0, FREE },
     { "bleed"    , POS_LYING   , do_action   , 0, 0, FREE },
     { "blush"    , POS_LYING   , do_action   , 0, 0, FREE },

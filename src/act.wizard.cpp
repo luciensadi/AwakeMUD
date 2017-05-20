@@ -2180,7 +2180,7 @@ ACMD(do_poofset)
 
   *msg = str_dup(argument);
 
-  sprintf(buf, "UPDATE pfiles_immortdata SET poofin='%s', poofout='%s' WHERE idnum=%ld;", POOFIN(ch), POOFOUT(ch), GET_IDNUM(ch));
+  sprintf(buf, "UPDATE pfiles_immortdata SET poofin='%s', poofout='%s' WHERE idnum=%ld;", prepare_quotes(buf2, POOFIN(ch)), prepare_quotes(buf3, POOFOUT(ch)), GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
   send_to_char(OK, ch);
 }
@@ -2557,7 +2557,7 @@ ACMD(do_wiztitle)
       set_whotitle(ch, argument);
       sprintf(buf, "Okay, your whotitle is now %s.\r\n", GET_WHOTITLE(ch));
       send_to_char(buf, ch);
-      sprintf(buf, "UPDATE pfiles SET Whotitle='%s' WHERE idnum=%ld;", GET_WHOTITLE(ch), GET_IDNUM(ch));
+      sprintf(buf, "UPDATE pfiles SET Whotitle='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_WHOTITLE(ch)), GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
     }
   } else if (subcmd == SCMD_PRETITLE) {
@@ -2567,7 +2567,7 @@ ACMD(do_wiztitle)
     }
     skip_spaces(&argument);
     if (GET_LEVEL(ch) < LVL_BUILDER && *argument)
-      strcat(argument, "^n");
+      strcat(buf, "^n");
     if (strstr((const char *)argument, "^l")) {
       send_to_char("Whotitles can't contain pure black.\r\n", ch);
     } else if (strlen(argument) > (MAX_TITLE_LENGTH -2)) {
