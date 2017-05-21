@@ -1131,7 +1131,7 @@ void make_prompt(struct descriptor_data * d)
   }
 }
 
-void write_to_q(char *txt, struct txt_q * queue, int aliased)
+void write_to_q(const char *txt, struct txt_q * queue, int aliased)
 {
   struct txt_block *temp = new txt_block;
   temp->text = new char[strlen(txt) + 1];
@@ -1399,7 +1399,7 @@ int process_output(struct descriptor_data *t) {
   return result;
 }
 
-int write_to_descriptor(int desc, char *txt) {
+int write_to_descriptor(int desc, const char *txt) {
   int total, bytes_written;
 
   total = strlen(txt);
@@ -2151,7 +2151,7 @@ void send_to_icon(struct matrix_icon * icon, const char * const messg, ...)
 }
 
 
-void send_to_all(char *messg)
+void send_to_all(const char *messg)
 {
   struct descriptor_data *i;
 
@@ -2232,7 +2232,7 @@ void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, 
   }
 }
 
-void send_to_room(char *messg, int room)
+void send_to_room(const char *messg, int room)
 {
   struct char_data *i;
   struct veh_data *v;

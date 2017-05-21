@@ -90,7 +90,7 @@ ACMD(do_copyover)
   FILE *fp;
   struct descriptor_data *d, *d_next;
   int mesnum = number(0, 18);
-  char *messages[] =
+  const char *messages[] =
     {
       "This copyover has been brought to you by NERPS.  Its more than a lubricant, its a lifestyle!\r\n",
       "Yes, the mud is lagging.  Deal with it.\r\n",
@@ -779,7 +779,7 @@ void do_stat_veh(struct char_data *ch, struct veh_data * k)
   send_to_char(buf, ch);
 }
 
-char *workshops[] = {
+const char *workshops[] = {
                       "General",
                       "Electronics",
                       "Microtronics",

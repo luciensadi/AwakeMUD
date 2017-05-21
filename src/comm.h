@@ -22,11 +22,11 @@ void shutdown(int code = FAILURE);
 #define COPYOVER_FILE "copyover.dat"
 
 /* comm.c */
-void    send_to_all(char *messg);
+void    send_to_all(const char *messg);
 void    send_to_char(char *messg, struct char_data *ch);
 void    send_to_char(const char *messg, struct char_data *ch);
 void    send_to_char(struct char_data *ch, const char * const messg, ...);
-void    send_to_room(char *messg, int room);
+void    send_to_room(const char *messg, int room);
 void    send_to_driver(char *messg, struct veh_data *veh);
 void    send_to_host(vnum_t room, char *messg, struct matrix_icon *icon, bool needsee);
 void    send_to_icon(struct matrix_icon *icon, const char * const messg, ...);
@@ -47,8 +47,8 @@ void    act(const char *str, int hide_invisible, struct char_data *ch,
 int connect();
 #endif
 
-int     write_to_descriptor(int desc, char *txt);
-void    write_to_q(char *txt, struct txt_q *queue, int aliased);
+int     write_to_descriptor(int desc, const char *txt);
+void    write_to_q(const char *txt, struct txt_q *queue, int aliased);
 void    write_to_output(const char *txt, struct descriptor_data *d);
 void    page_string(struct descriptor_data *d, char *str, int keep_internal);
 
