@@ -60,7 +60,7 @@ char *fname(char *namelist)
 }
 
 
-int isname(char *str, char *namelist)
+int isname(const char *str, const char *namelist)
 {
   if(namelist == NULL)
     return 0;
@@ -69,7 +69,7 @@ int isname(char *str, char *namelist)
   if (namelist[0] == '\0')
     return 0;
 
-  register char *curname, *curstr;
+  register const char *curname, *curstr;
 
   curname = namelist;
   for (;;) {

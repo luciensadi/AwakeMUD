@@ -720,7 +720,7 @@ ACMD(do_move)
   perform_move(ch, subcmd - 1, LEADER, NULL);
 }
 
-int find_door(struct char_data *ch, char *type, char *dir, char *cmdname)
+int find_door(struct char_data *ch, const char *type, char *dir, const char *cmdname)
 {
   int door;
 
@@ -811,7 +811,7 @@ struct obj_data *find_workshop(struct char_data * ch, int type)
 #define NEED_UNLOCKED   4
 #define NEED_LOCKED     8
 
-char *cmd_door[] = {
+const char *cmd_door[] = {
                      "open",
                      "close",
                      "unlock",
@@ -1016,7 +1016,7 @@ ACMD(do_gen_door)
     if ((obj) || (door >= 0)) {
       keynum = DOOR_KEY(ch, obj, door);
       if (!(DOOR_IS_OPENABLE(ch, obj, door)))
-        act("You can't $F that!", FALSE, ch, 0, cmd_door[subcmd], TO_CHAR);
+        act("You can't $F that!", FALSE, ch, 0, &(cmd_door[subcmd]), TO_CHAR);
       else if (!DOOR_IS_OPEN(ch, obj, door) && IS_SET(flags_door[subcmd], NEED_OPEN))
         send_to_char("But it's already closed!\r\n", ch);
       else if (!DOOR_IS_CLOSED(ch, obj, door) && IS_SET(flags_door[subcmd], NEED_CLOSED))

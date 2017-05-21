@@ -25,7 +25,7 @@ bool	affected_by_power(struct char_data *ch, int type);
 void    affect_veh(struct veh_data *veh, byte loc, sbyte mod);
 void    spell_modify(struct char_data *ch, struct sustain_data *sust, bool add);
 /* utility */
-int isname(char *str, char *namelist);
+int isname(const char *str, const char *namelist);
 char    *fname(char *namelist);
 int     get_number(char **name);
 int from_ip_zone(int vnum);

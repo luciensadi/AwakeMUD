@@ -635,7 +635,7 @@ void log(const char *format, ...)
  * mudlog -- log mud messages to a file & to online imm's syslogs
  * based on syslog by Fen Jul 3, 1992
  */
-void mudlog(char *str, struct char_data *ch, int log, bool file)
+void mudlog(const char *str, struct char_data *ch, int log, bool file)
 {
   char buf[MAX_STRING_LENGTH], buf2[MAX_STRING_LENGTH];
   extern struct descriptor_data *descriptor_list;

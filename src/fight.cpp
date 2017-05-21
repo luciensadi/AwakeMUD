@@ -2186,8 +2186,8 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
   }
   int comp = 0;
   bool trauma = FALSE, pain = FALSE;
-  if (attacktype != TYPE_BIOWARE)
-    for (bio = victim->bioware; bio; bio = bio->next_content)
+  if (attacktype != TYPE_BIOWARE) {
+    for (bio = victim->bioware; bio; bio = bio->next_content) {
       if (GET_OBJ_VAL(bio, 0) == BIO_PLATELETFACTORY && dam >= 3 && is_physical)
         dam--;
       else if (GET_OBJ_VAL(bio, 0) == BIO_DAMAGECOMPENSATOR)
@@ -2196,6 +2196,8 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
         trauma = TRUE;
       else if (GET_OBJ_VAL(bio, 0) == BIO_PAINEDITOR && GET_OBJ_VAL(bio, 3))
         pain = TRUE;
+    }
+  }
 
   if (GET_PHYSICAL(victim) > 0)
     awake = FALSE;
@@ -3774,7 +3776,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         act(buf, FALSE, world[nextroom].people, 0, 0, TO_CHAR);
       }
       return;
-    } else if (!success_test(temp+GET_OFFENSE(ch), 5) < 2) {
+    } else if (!(success_test(temp+GET_OFFENSE(ch), 5) < 2)) {
       left = -1;
       right = -1;
       if (dir < UP) {
@@ -4161,7 +4163,7 @@ void perform_violence(void)
             } else
               switch (GET_SPARE1(ch)) {
               case ELEM_FIRE:
-                dam = convert_damage(stage(-success_test(GET_BOD(ssust->target), GET_SPARE2(ch) - GET_IMPACT(ssust->target) + MOB_FLAGGED(ch, MOB_FLAMEAURA) ? 2 : 0), MODERATE));
+                dam = convert_damage(stage(-success_test(GET_BOD(ssust->target), GET_SPARE2(ch) - GET_IMPACT(ssust->target) + (MOB_FLAGGED(ch, MOB_FLAMEAURA) ? 2 : 0)), MODERATE));
                 act("$n can be heard screaming from inside $s prison of flames!", TRUE, ssust->target, 0, 0, TO_ROOM);
                 send_to_char("The flames continue to burn you, causing horrendous pain!\r\n", ssust->target);
                 if (dam > 0)

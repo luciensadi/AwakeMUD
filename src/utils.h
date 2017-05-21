@@ -33,7 +33,7 @@ char *str_str( const char *str1, const char *str2 );
 int     str_cmp(const char *arg1, const char *arg2);
 int strn_cmp(const char *arg1, const char *arg2, int n);
 void    log(const char *format, ...);
-void    mudlog(char *str, struct char_data *ch, int log, bool file);
+void    mudlog(const char *str, struct char_data *ch, int log, bool file);
 void    log_death_trap(struct char_data *ch);
 int     number(int from, int to);
 int     dice(int number, int size);

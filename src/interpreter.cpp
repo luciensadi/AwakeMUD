@@ -1678,7 +1678,7 @@ char *two_arguments(char *argument, char *first_arg, char *second_arg)
  *
  * returns 1 if arg1 is an abbreviation of arg2
  */
-int is_abbrev(char *arg1, const char *arg2)
+int is_abbrev(const char *arg1, const char *arg2)
 {
   if (!*arg1)
     return 0;
