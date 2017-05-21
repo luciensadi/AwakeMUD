@@ -63,7 +63,7 @@ void medit_parse(struct descriptor_data *d, char *arg);
 void qedit_parse(struct descriptor_data *d, char *arg);
 void shedit_parse(struct descriptor_data *d, char *arg);
 void zedit_parse(struct descriptor_data *d, char *arg);
-void hedit_parse(struct descriptor_data *d, char *arg);
+void hedit_parse(struct descriptor_data *d, const char *arg);
 void icedit_parse(struct descriptor_data *d, char *arg);
 void pedit_parse(struct descriptor_data *d, char *arg);
 void dbuild_parse(struct descriptor_data *d, char *arg);

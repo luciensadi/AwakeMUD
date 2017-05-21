@@ -52,7 +52,7 @@ extern void icedit_disp_menu(struct descriptor_data *d);
 // mem class
 extern class memoryClass *Mem;
 
-void write_index_file(char *suffix)
+void write_index_file(const char *suffix)
 {
   FILE *fp;
   int i, found, j;

@@ -7,7 +7,7 @@
 #define NUM_AFF_FLAGS           22
 
 // extern functions
-extern void write_index_file(char *suffix);
+extern void write_index_file(const char *suffix);
 
 #define CH              d->character
 #define CLS(ch)         send_to_char("\033[H\033[J", ch)

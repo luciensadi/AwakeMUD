@@ -43,7 +43,7 @@ char    *delete_doubledollar(char *string);
 
 struct command_info
 {
-  char *command;
+  const char *command;
   byte minimum_position;
   void (*command_pointer)
   (struct char_data *ch, char * argument, int cmd, int subcmd);

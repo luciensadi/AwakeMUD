@@ -948,7 +948,7 @@ bool PLR_TOG_CHK(char_data *ch, dword offset)
   return PLR_FLAGS(ch).IsSet(offset);
 }
 
-char * buf_mod(char *rbuf, char *name, int bonus)
+char * buf_mod(char *rbuf, const char *name, int bonus)
 {
   if ( !rbuf )
     return rbuf;
@@ -963,7 +963,7 @@ char * buf_mod(char *rbuf, char *name, int bonus)
   return rbuf;
 }
 
-char * buf_roll(char *rbuf, char *name, int bonus)
+char * buf_roll(char *rbuf, const char *name, int bonus)
 {
   if ( !rbuf )
     return rbuf;
