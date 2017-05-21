@@ -80,4 +80,26 @@ Material:	metal
 	Val0:	1000
 	Val1:	5
 BREAK
+#10003
+Keywords:	ring invisibility test
+Name:	A tester's ring of invisibility
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Worn
+WearFlags:	11
+ExtraFlags:	0
+AffFlags:	10000000000000000000000000000000000000000000
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
 END

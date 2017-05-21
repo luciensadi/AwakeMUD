@@ -49,12 +49,15 @@ PCIndex playerDB;
 int mysql_wrapper(MYSQL *mysql, char *query)
 {
   char buf[MAX_STRING_LENGTH];
+  sprintf(buf, "Executing query: %s", query);
+  log(buf);
+  
   int result = mysql_query(mysql, query);
 
   if (mysql_errno(mysql)) {
     sprintf(buf, "MYSQLERROR: %s", mysql_error(mysql));
     log(buf);
-    log(query);
+    // log(query);
   }
   return result;
 }
@@ -163,7 +166,7 @@ static void init_char_strings(char_data *ch)
     sprintf(temp, "A %s %s", genders[(int)GET_SEX(ch)], pc_race_types[(int)GET_RACE(ch)]);
     ch->player.physical_text.name = str_dup(temp);
 
-    sprintf(temp, "A %s %s voice.", genders[(int)GET_SEX(ch)], pc_race_types[(int)GET_RACE(ch)]);
+    sprintf(temp, "A %s %s voice", genders[(int)GET_SEX(ch)], pc_race_types[(int)GET_RACE(ch)]);
     ch->player.physical_text.room_desc = str_dup(temp);
 
     ch->player.physical_text.look_desc = str_dup("A fairly nondescript thing.\n");    

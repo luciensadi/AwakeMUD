@@ -865,14 +865,14 @@ ACMD(do_gen_comm)
         if (success > 0) {
           int suc = success_test(GET_SKILL(tmp, GET_LANGUAGE(ch)), 4);
           if (suc > 0 || IS_NPC(tmp))
-            sprintf(buf, "%s$n shouts, in %s, \"%s\"^N\r\n",
+            sprintf(buf, "%s$z shouts, in %s, \"%s\"^N\r\n",
                     com_msgs[subcmd][3], skills[GET_LANGUAGE(ch)].name, argument);
           else
-            sprintf(buf, "%s$n shouts in a language you don't understand.\r\n", com_msgs[subcmd][3]);
+            sprintf(buf, "%s$z shouts in a language you don't understand.\r\n", com_msgs[subcmd][3]);
         } else
-          sprintf(buf, "$n shouts incoherently.\r\n");
+          sprintf(buf, "$z shouts incoherently.\r\n");
         if (IS_NPC(ch))
-          sprintf(buf, "%s$n shouts, \"%s^n\"\r\n", com_msgs[subcmd][3], argument);
+          sprintf(buf, "%s$z shouts, \"%s^n\"\r\n", com_msgs[subcmd][3], argument);
         act(buf, FALSE, ch, NULL, tmp, TO_VICT);
       }
 
@@ -882,7 +882,7 @@ ACMD(do_gen_comm)
     if (ch->in_veh) {
       was_in = ch->in_veh->in_room;
       ch->in_room = was_in;
-      sprintf(buf1, "%sFrom inside %s, $n %sshouts, '%s'^N", com_msgs[subcmd][3], GET_VEH_NAME(ch->in_veh),
+      sprintf(buf1, "%sFrom inside %s, $z %sshouts, '%s'^N", com_msgs[subcmd][3], GET_VEH_NAME(ch->in_veh),
               com_msgs[subcmd][3], argument);
       act(buf1, FALSE, ch, 0, 0, TO_ROOM);
     } else {

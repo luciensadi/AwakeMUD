@@ -83,7 +83,7 @@ CREATE TABLE `pfiles_immortdata` (
   `idnum` mediumint(5) unsigned unique default '0', 
   `InvisLevel` tinyint(1) default '0', 
   `IncogLevel` tinyint(1) default '0', 
-  `Zonenumber` mediumint(3), 
+  `Zonenumber` mediumint(3) default '1', 
   `PoofIn` varchar(200) default 'Someone appears from nowhere', 
   `PoofOut` varchar(200) default 'You blink and someone is gone', 
   PRIMARY KEY (`idnum`) 

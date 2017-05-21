@@ -2271,6 +2271,29 @@ void perform_act(const char *orig, struct char_data * ch, struct obj_data * obj,
   {
     if (*orig == '$') {
       switch (*(++orig)) {
+        case 'z':
+          if (to == ch)
+            i = "you";
+          else if (CAN_SEE(to, ch))
+            if (IS_SENATOR(to) && !IS_NPC(ch))
+              i = GET_CHAR_NAME(ch);
+            else
+              i = make_desc(to, ch, buf, TRUE);
+            else {
+              if (IS_NPC(ch))
+                i = GET_NAME(ch);
+              else {
+                if (IS_SENATOR(ch)) {
+                  i = "an invisible staff member";
+                } else if ((mem = found_mem(GET_MEMORY(to), ch))) {
+                  sprintf(temp, "%s(%s)", ch->player.physical_text.room_desc, CAP(mem->mem));
+                  i = temp;
+                } else {
+                  i = ch->player.physical_text.room_desc;
+                } 
+              } 
+            } 
+          break;
       case 'n':
         if (to == ch)
           i = "you";

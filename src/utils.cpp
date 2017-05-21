@@ -467,12 +467,17 @@ int return_general(int skill_num)
             }
           }
 
-// capitalize a string
+// capitalize a string, now allows for color strings at the beginning
 char *capitalize(const char *source)
 {
   static char dest[MAX_STRING_LENGTH];
   strcpy(dest, source);
-  *dest = UPPER(*dest);
+  
+  char* first_actual_char = dest;
+  while (*first_actual_char == '^')
+    first_actual_char += 2;
+  *first_actual_char = UPPER(*first_actual_char);
+  
   return dest;
 }
 

@@ -1927,9 +1927,9 @@ ACMD(do_advance)
       mysql_free_result(res);
       sprintf(buf, "INSERT INTO pfiles_immortdata (idnum) VALUES (%ld);", GET_IDNUM(victim));
       mysql_wrapper(mysql, buf);
-    }
-    if (res)
+    } else {
       mysql_free_result(res);
+    }
     sprintf(buf, "UPDATE pfiles SET rank=%d WHERE idnum=%ld;", GET_LEVEL(victim), GET_IDNUM(victim));
     mysql_wrapper(mysql, buf);
   }
