@@ -20,7 +20,7 @@
 extern MYSQL *mysql;
 extern int mysql_wrapper(MYSQL *mysql, char *buf);
 extern char *prepare_quotes(char *dest, const char *str);
-extern void display_help(char *help, char *arg);
+extern void display_help(char *help, const char *arg);
 
 const char *pc_race_types[] =
   {

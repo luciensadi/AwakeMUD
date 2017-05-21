@@ -47,6 +47,7 @@ extern class helpList WizHelp;
 extern char *short_object(int virt, int where);
 extern const char *dist_name[];
 
+extern char *prepare_quotes(char *dest, const char *str);
 extern int same_obj(struct obj_data * obj1, struct obj_data * obj2);
 extern int find_sight(struct char_data *ch);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
@@ -2217,11 +2218,11 @@ return;/*
 */
 }
 
-void display_help(char *help, char *arg) {
+void display_help(char *help, const char *arg) {
   char query[MAX_STRING_LENGTH];
   MYSQL_RES *res;
   MYSQL_ROW row;
-  sprintf(query, "SELECT * FROM help_topic WHERE name LIKE '%%%s%%' ORDER BY name ASC", arg);
+  sprintf(query, "SELECT * FROM help_topic WHERE name LIKE '%%%s%%' ORDER BY name ASC", prepare_quotes(buf, arg));
   if (mysql_wrapper(mysql, query)) {
     sprintf(help, "No such help file exists.\r\n");
     return;
@@ -2233,7 +2234,7 @@ void display_help(char *help, char *arg) {
     sprintf(help, "No such help file exists.\r\n");
   else if (x > 5) {
     mysql_free_result(res);
-    sprintf(query, "SELECT * FROM help_topic WHERE name LIKE '%s%%' ORDER BY name ASC", arg);
+    sprintf(query, "SELECT * FROM help_topic WHERE name LIKE '%s%%' ORDER BY name ASC", prepare_quotes(buf, arg));
     if (mysql_wrapper(mysql, query)) {
       sprintf(help, "%d articles returned, please narrow your search.aa\r\n", x);
       return;
