@@ -766,9 +766,9 @@ struct descriptor_data
 
 struct msg_type
 {
-  char *attacker_msg;  /* message to attacker */
-  char *victim_msg;    /* message to victim   */
-  char *room_msg;      /* message to room     */
+  const char *attacker_msg;  /* message to attacker */
+  const char *victim_msg;    /* message to victim   */
+  const char *room_msg;      /* message to room     */
 
   msg_type() :
       attacker_msg(NULL), victim_msg(NULL), room_msg(NULL)
@@ -913,9 +913,9 @@ struct sustain_data {
 
 struct attack_hit_type
 {
-  char *singular;
-  char *plural;
-  char *different;
+  const char *singular;
+  const char *plural;
+  const char *different;
 };
 
 struct spirit_sustained
@@ -931,7 +931,7 @@ struct spirit_sustained
 
 struct mod_data
 {
-  char *name;
+  const char *name;
   int tools;
 };
 
@@ -949,7 +949,7 @@ struct spell_queue
 
 struct ammo_data
 {
-  char *name;
+  const char *name;
   unsigned char tn;
   float time;
   float weight;

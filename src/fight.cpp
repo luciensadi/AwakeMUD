@@ -777,9 +777,10 @@ void group_gain(struct char_data * ch, struct char_data * victim)
       perform_group_gain(f->follower, base, victim);
 }
 
-char *replace_string(char *str, char *weapon_singular, char *weapon_plural,
-                     char *weapon_different)
+char *replace_string(const char *str, const char *weapon_singular, const char *weapon_plural,
+                     const char *weapon_different)
 {
+  // TODO: Doesn't this run the risk of being invalidated at scope end?
   static char buf[256];
   char *cp;
 
