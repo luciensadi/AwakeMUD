@@ -2803,7 +2803,7 @@ ACMD(do_show)
   SPECIAL(call_elevator);
 
   struct show_struct {
-    char *cmd;
+    const char *cmd;
     char level;
   }
   fields[] = {
@@ -3212,7 +3212,7 @@ ACMD(do_set)
   int parse_class(struct descriptor_data *d, char *arg);
 
   struct set_struct {
-    char *cmd;
+    const char *cmd;
     char level;
     char pcnpc;
     char type;
