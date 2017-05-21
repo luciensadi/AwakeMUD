@@ -1446,7 +1446,7 @@ int get_number(char **name)
 
   *number = '\0';
 
-  if ((ppos = strchr((const char *)*name, '.'))) {
+  if ((ppos = strchr(*name, '.'))) {
     *ppos++ = '\0';
     strcpy(number, *name);
     strcpy(*name, ppos);
