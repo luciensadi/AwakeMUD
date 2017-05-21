@@ -1622,7 +1622,7 @@ ACMD(do_examine)
           send_to_char("It has not been activated.\r\n", ch);
         send_to_char(ch, "The account display shows %d nuyen.\r\n", GET_OBJ_VAL(tmp_object, 0));
       }
-    } else if (GET_OBJ_TYPE(tmp_object) == ITEM_GUN_CLIP) {
+    } else if (GET_OBJ_TYPE(tmp_object) == ITEM_GUN_MAGAZINE) {
       send_to_char(ch, "It has %d %s round%s left.\r\n", GET_OBJ_VAL(tmp_object, 9),
                    ammo_type[GET_OBJ_VAL(tmp_object, 2)].name,GET_OBJ_VAL(tmp_object, 9) != 1 ? "s" : "");
       send_to_char(ch, "It can hold a maximum of %d %s round%s.\r\n", GET_OBJ_VAL(tmp_object, 0), weapon_type[GET_OBJ_VAL(tmp_object, 1)],

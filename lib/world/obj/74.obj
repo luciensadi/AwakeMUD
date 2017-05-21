@@ -356,14 +356,14 @@ Material:	fabric
 	Val0:	50
 BREAK
 #7414
-Keywords:	5 bullet rifle magazine clip
-Name:	a five-bullet rifle clip
+Keywords:	5 bullet rifle magazine magazine
+Name:	a five-bullet rifle magazine
 RoomDesc:$
 A 5-bullet rifle magazine sits here.~
 LookDesc:$
 A five bullet rifle magazine.
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0

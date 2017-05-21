@@ -414,7 +414,7 @@ void make_corpse(struct char_data * ch)
   {
     obj = o->next_content;
     obj_from_char(o);
-    if (GET_OBJ_TYPE(o) == ITEM_GUN_CLIP && !GET_OBJ_VAL(o, 1))
+    if (GET_OBJ_TYPE(o) == ITEM_GUN_MAGAZINE && !GET_OBJ_VAL(o, 1))
       extract_obj(o);
     else { 
       obj_to_obj(o, corpse);
@@ -1492,9 +1492,9 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
     break;
   case DAMOBJ_FIRE:
   case DAMOBJ_EXPLODE:
-    if (GET_OBJ_TYPE(obj) == ITEM_GUN_CLIP && success == 2 && vict) {
+    if (GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE && success == 2 && vict) {
       act("$p ignites, spraying bullets about!", FALSE, vict, obj, 0, TO_CHAR);
-      act("One of $n's clips ignites, spraying bullets about!",
+      act("One of $n's magazines ignites, spraying bullets about!",
           FALSE, vict, obj, 0, TO_ROOM);
       target = (int)(GET_OBJ_VAL(obj, 0) / 4);
       switch (GET_OBJ_VAL(obj, 1) + 300) {
@@ -2960,7 +2960,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
   char rbuf[MAX_STRING_LENGTH];
   int type, vtype = 0;
   struct veh_data *veh = NULL;
-  struct obj_data *clip = NULL, *attach = NULL;
+  struct obj_data *magazine = NULL, *attach = NULL;
   bool is_physical = TRUE, v_is_physical = TRUE, melee = FALSE, vtall = TRUE, ctall = TRUE, heavy = FALSE;
   int tdistance = 0, recoil = 0, tdualwield = 0, burst = 0, tawake = 0, tsmartlink = 0, tsight = 0, tsleep = 0, tcansee = 0;
   int power = 0, damage_total = 0, base_target = 0, skill_total = 0, recoilcomp = 0, modtarget = 0, success = 0;
@@ -3029,7 +3029,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
       tdistance += 2;
     if (!has_ammo(ch, weapon))
       return;
-    clip = weapon->contains;
+    magazine = weapon->contains;
   }
 
   if ((type == TYPE_HIT || type == TYPE_BLUDGEON || type == TYPE_PUNCH ||
@@ -3132,12 +3132,12 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
     if (IS_AUTO(weapon))
       burst = GET_OBJ_TIMER(weapon) - 1;
     if (burst) {
-      if (!IS_NPC(ch) && !clip) {
+      if (!IS_NPC(ch) && !magazine) {
         burst = MIN(burst, GET_OBJ_VAL(weapon, 6));
         GET_OBJ_VAL(weapon, 6) -= burst;
-      } else if (clip) {
-        burst = MIN(burst, GET_OBJ_VAL(clip, 9));
-        GET_OBJ_VAL(clip, 9) -= burst;
+      } else if (magazine) {
+        burst = MIN(burst, GET_OBJ_VAL(magazine, 9));
+        GET_OBJ_VAL(magazine, 9) -= burst;
         if (IS_NPC(ch))
           GET_OBJ_VAL(weapon, 6) -= burst;
       }
@@ -3333,8 +3333,8 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
   if (weapon) {
     power = (IS_GUN(GET_OBJ_VAL(weapon, 3)) ? GET_OBJ_VAL(weapon, 0) : GET_OBJ_VAL(weapon, 2) + GET_STR(ch)) + burst;
     if (IS_GUN(GET_OBJ_VAL(weapon, 3))) {
-      if (clip)
-        switch (GET_OBJ_VAL(clip, 2)) {
+      if (magazine)
+        switch (GET_OBJ_VAL(magazine, 2)) {
         case AMMO_APDS:
           power -= (int)(GET_BALLISTIC(victim) / 2);
           break;

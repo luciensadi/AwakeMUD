@@ -342,7 +342,7 @@ FOUNTAIN          - item is a fountain
 CYBERWARE         - !!DO NOT USE!!
 CYBERDECK         - item is a cyberdeck
 PROGRAM           - item is a cyberdeck program
-GUN_CLIP          - item is a clip
+GUN_MAGAZINE      - item is a magazine
 GUN_ACCESSORY     - item is a gun attachment
 SPELL_FORMULA     - item is a spell formula
 WORKING_GEER      - item is a kit

@@ -1934,18 +1934,18 @@ ACMD(do_bond)
   if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
     if (IS_GUN(GET_OBJ_VAL(obj, 3))) {
       for (struct obj_data *i = ch->carrying; i; i = i->next_content) {
-        if (GET_OBJ_TYPE(i) == ITEM_GUN_CLIP && !GET_OBJ_VAL(i, 0)) {
+        if (GET_OBJ_TYPE(i) == ITEM_GUN_MAGAZINE && !GET_OBJ_VAL(i, 0)) {
           GET_OBJ_VAL(i, 0) = GET_OBJ_VAL(obj, 5);
           GET_OBJ_VAL(i, 1) = GET_OBJ_VAL(obj, 3);
-          sprintf(buf, "a %d-round %s clip", GET_OBJ_VAL(i, 0), weapon_type[GET_OBJ_VAL(i, 1)]);
+          sprintf(buf, "a %d-round %s magazine", GET_OBJ_VAL(i, 0), weapon_type[GET_OBJ_VAL(i, 1)]);
           if (i->restring)
             delete [] i->restring;
           i->restring = strdup(buf);
-          send_to_char(ch, "You bond a new clip to %s.\r\n", GET_OBJ_NAME(obj));
+          send_to_char(ch, "You bond a new magazine to %s.\r\n", GET_OBJ_NAME(obj));
           return;
         }
       }
-    } else send_to_char("There is no need to bond a clip to that weapon.\r\n", ch);
+    } else send_to_char("There is no need to bond a magazine to that weapon.\r\n", ch);
     return;
   }
   if (GET_OBJ_TYPE(obj) == ITEM_FOCUS) {

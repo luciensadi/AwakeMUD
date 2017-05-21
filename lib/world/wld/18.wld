@@ -464,7 +464,7 @@ BREAK
 #1812
 Name:	Ammunition
 Desc:$
-   Underneath a glass display case lies a large array of gun clips. 
+   Underneath a glass display case lies a large array of gun magazines. 
 ~
 Flags:	1000
 SecType:	Inside

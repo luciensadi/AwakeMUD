@@ -1859,14 +1859,14 @@ Material:	metal
 	LegalPermit:	0
 BREAK
 #17182
-Keywords:	clip 28-bullet smg apds
-Name:	a 28-bullet APDS SMG clip
+Keywords:	magazine 28-bullet smg apds
+Name:	a 28-bullet APDS SMG magazine
 RoomDesc:$
-A long SMG clip lies here.~
+A long SMG magazine lies here.~
 LookDesc:$
-It's a long clip destined for use in a submachine gun. 
+It's a long magazine destined for use in a submachine gun. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	0
 ExtraFlags:	0
 AffFlags:	0

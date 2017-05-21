@@ -65,7 +65,7 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
         act("$p won't fit in $P.", FALSE, ch, obj, cont, TO_CHAR);
         return;
       }
-    else if (GET_OBJ_TYPE(obj) == ITEM_GUN_CLIP)
+    else if (GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE)
       if (GET_OBJ_VAL(cont, 1)) {
         GET_OBJ_VAL(cont, 1)--;
         GET_OBJ_TIMER(obj) = 1;

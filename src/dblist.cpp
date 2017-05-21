@@ -203,7 +203,7 @@ void objList::UpdateCounters(void)
     }
 
     if (OBJ->in_room != NOWHERE && !OBJ->in_obj && !OBJ->carried_by &&
-       ((GET_OBJ_TYPE(OBJ) == ITEM_GUN_CLIP && !GET_OBJ_VAL(OBJ, 9)) || (GET_OBJ_TYPE(OBJ) == ITEM_MONEY && !GET_OBJ_VAL(OBJ, 0))) 
+       ((GET_OBJ_TYPE(OBJ) == ITEM_GUN_MAGAZINE && !GET_OBJ_VAL(OBJ, 9)) || (GET_OBJ_TYPE(OBJ) == ITEM_MONEY && !GET_OBJ_VAL(OBJ, 0))) 
         && ++GET_OBJ_TIMER(OBJ) == 3) {
         act("$p is lost on the ground.", TRUE, world[temp->data->in_room].people,
                 OBJ, 0, TO_CHAR);

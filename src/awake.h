@@ -953,53 +953,53 @@ enum {
 
 /* item types: used by obj_data.obj_flags.type_flag */
 
-#define ITEM_LIGHT      1               /* Item is a light source       */
-#define ITEM_WORKSHOP   2               /* Item is a scroll             */
-#define ITEM_CAMERA     3               /* Item is a wand               */
-#define ITEM_PART	4
-#define ITEM_WEAPON     5               /* Item is a weapon             */
-#define ITEM_FIREWEAPON 6               /* Item is bow/xbow             */
-#define ITEM_MISSILE    7               /* Item is arrow/bolt   */
-#define ITEM_CUSTOM_DECK 8               /* Item is a treasure, not nuyen        */
-#define ITEM_GYRO       9               /* Item is Gyroscopic Harness   */
-#define ITEM_DRUG      10               /* Item is a potion             */
-#define ITEM_WORN      11               /* Item is worn, not armor      */
-#define ITEM_OTHER     12               /* Misc object                  */
-#define ITEM_MAGIC_TOOL 13
-#define ITEM_DOCWAGON  14               /* Item is a docwagon contract  */
-#define ITEM_CONTAINER 15               /* Item is a container          */
-#define ITEM_RADIO     16               /* Item is radio                */
-#define ITEM_DRINKCON  17               /* Item is a drink container    */
-#define ITEM_KEY       18               /* Item is a key                */
-#define ITEM_FOOD      19               /* Item is food                 */
-#define ITEM_MONEY     20               /* Item is money (nuyen/credstick)      */
-#define ITEM_PHONE     21               /* Item is a phone              */
-#define ITEM_BIOWARE   22               /* Item is bioware            */
-#define ITEM_FOUNTAIN  23               /* Item is a fountain           */
-#define ITEM_CYBERWARE 24               /* Item is cyberware            */
-#define ITEM_CYBERDECK 25               /* Item is a cyberdeck          */
-#define ITEM_PROGRAM   26               /* Item is a program            */
-#define ITEM_GUN_CLIP  27               /* Item is a gun clip           */
-#define ITEM_GUN_ACCESSORY 28           /* Item is a gun accessory      */
-#define ITEM_SPELL_FORMULA 29           /* Item is a spell formula      */
-#define ITEM_FOCUS      31              /* magical foci of various types */
-#define ITEM_PATCH      32              /* type of slap patch  */
-#define ITEM_CLIMBING   33              /* climbing gear  */
-#define ITEM_QUIVER     34              /* holds projectiles   */
-#define ITEM_DECK_ACCESSORY 35       /* decking accessory   */
-#define ITEM_RCDECK     36
-#define ITEM_CHIP 	37
-#define ITEM_MOD     	38
-#define ITEM_HOLSTER 	39
-#define ITEM_DESIGN	40
-#define ITEM_QUEST	41
-#define ITEM_GUN_AMMO	42
-#define NUM_ITEMS	43
+#define ITEM_LIGHT          1        /* Item is a light source            */
+#define ITEM_WORKSHOP       2        /* Item is a workshop (veh, etc)     */
+#define ITEM_CAMERA         3        /* Item is a camera                  */
+#define ITEM_PART	          4        /* Item is a component of something  */
+#define ITEM_WEAPON         5        /* Item is a weapon                  */
+#define ITEM_FIREWEAPON     6        /* Item is bow/xbow                  */
+#define ITEM_MISSILE        7        /* Item is arrow/bolt                */
+#define ITEM_CUSTOM_DECK    8        /* Item is a custom cyberdeck        */
+#define ITEM_GYRO           9        /* Item is Gyroscopic Harness        */
+#define ITEM_DRUG           10       /* Item is a drug                    */
+#define ITEM_WORN           11       /* Item is worn, includes armor      */
+#define ITEM_OTHER          12       /* Misc object                       */
+#define ITEM_MAGIC_TOOL     13       /* Item is a library, etc            */
+#define ITEM_DOCWAGON       14       /* Item is a docwagon contract       */
+#define ITEM_CONTAINER      15       /* Item is a container               */
+#define ITEM_RADIO          16       /* Item is radio                     */
+#define ITEM_DRINKCON       17       /* Item is a drink container         */
+#define ITEM_KEY            18       /* Item is a key                     */
+#define ITEM_FOOD           19       /* Item is food                      */
+#define ITEM_MONEY          20       /* Item is money (nuyen/credstick)   */
+#define ITEM_PHONE          21       /* Item is a phone                   */
+#define ITEM_BIOWARE        22       /* Item is bioware                   */
+#define ITEM_FOUNTAIN       23       /* Item is a fountain                */
+#define ITEM_CYBERWARE      24       /* Item is cyberware                 */
+#define ITEM_CYBERDECK      25       /* Item is a cyberdeck               */
+#define ITEM_PROGRAM        26       /* Item is a program                 */
+#define ITEM_GUN_MAGAZINE   27       /* Item is a gun magazine            */
+#define ITEM_GUN_ACCESSORY  28       /* Item is a gun accessory           */
+#define ITEM_SPELL_FORMULA  29       /* Item is a spell formula           */
+#define ITEM_FOCUS          31       /* magical foci of various types     */
+#define ITEM_PATCH          32       /* type of slap patch                */
+#define ITEM_CLIMBING       33       /* climbing gear                     */
+#define ITEM_QUIVER         34       /* holds projectiles                 */
+#define ITEM_DECK_ACCESSORY 35       /* decking accessory                 */
+#define ITEM_RCDECK         36       /* remote control deck               */
+#define ITEM_CHIP 	        37
+#define ITEM_MOD     	      38
+#define ITEM_HOLSTER 	      39
+#define ITEM_DESIGN	        40
+#define ITEM_QUEST	        41
+#define ITEM_GUN_AMMO	      42
+#define NUM_ITEMS	          43
 
 
 /* take/wear flags: used by obj_data.obj_flags.wear_flags */
 
-#define ITEM_WEAR_TAKE          0  /* Item can be takes          */
+#define ITEM_WEAR_TAKE          0  /* Item can be taken          */
 #define ITEM_WEAR_FINGER        1  /* Can be worn on finger      */
 #define ITEM_WEAR_NECK          2  /* Can be worn around neck    */
 #define ITEM_WEAR_BODY          3  /* Can be worn on body        */
@@ -1015,7 +1015,7 @@ enum {
 #define ITEM_WEAR_WIELD         13 /* Can be wielded             */
 #define ITEM_WEAR_HOLD          14 /* Can be held                */
 #define ITEM_WEAR_EYES          15 /* worn on eyes          */
-#define ITEM_WEAR_EAR          16 /* can be worn on/in ear  */
+#define ITEM_WEAR_EAR           16 /* can be worn on/in ear  */
 #define ITEM_WEAR_UNDER  17
 #define ITEM_WEAR_BACK  18
 #define ITEM_WEAR_ANKLE  19

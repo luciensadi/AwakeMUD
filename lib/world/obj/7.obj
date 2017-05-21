@@ -1069,7 +1069,7 @@ RoomDesc:$
 A sleek machine pistol lies here.~
 LookDesc:$
 The Crusader is a light pistol capable of burst fire.  It comes with an
-extended clip and an improved gas vent II system. 
+extended magazine and an improved gas vent II system. 
 ~
 Type:	Weapon
 WearFlags:	10000000000001
@@ -1502,7 +1502,7 @@ Name:	a Beretta Model 70
 RoomDesc:$
 A Beretta submachinegun lies here.~
 LookDesc:$
-The Beretta Model 70 holds the distinction of having one of the large clips
+The Beretta Model 70 holds the distinction of having one of the large magazines
 available for a smg. It also comes with an integral laser sight. 
 ~
 Type:	Weapon
@@ -1676,7 +1676,7 @@ A deadly little submachine gun lies here.~
 LookDesc:$
 The Ingram SuperMach actually fires light pistol rounds in incredible six
 round bursts.  It has a very distinctive profile due to it's 40 round tube
-clip. 
+magazine. 
 ~
 Type:	Weapon
 WearFlags:	10000000000001
@@ -3676,9 +3676,9 @@ Name:	a 2-shot speedloader
 RoomDesc:$
 Two bullets are linked together in a tiny speedloader here.~
 LookDesc:$
-It looks like a tiny clip for a holdout pistol. 
+It looks like a tiny magazine for a holdout pistol. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -3697,14 +3697,14 @@ Material:	metal
 	Val1:	21
 BREAK
 #926
-Keywords:	5-bullet clip
-Name:	a 5-bullet pistol clip
+Keywords:	5-bullet magazine
+Name:	a 5-bullet pistol magazine
 RoomDesc:$
-A small clip has been dropped here.~
+A small magazine has been dropped here.~
 LookDesc:$
-It's a small clip intended for use in a pistol. 
+It's a small magazine intended for use in a pistol. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -3723,14 +3723,14 @@ Material:	metal
 	Val1:	21
 BREAK
 #927
-Keywords:	4-bullet clip
-Name:	a 4-bullet pistol clip
+Keywords:	4-bullet magazine
+Name:	a 4-bullet pistol magazine
 RoomDesc:$
-A small clip is lying here.~
+A small magazine is lying here.~
 LookDesc:$
-It's a small pistol clip. 
+It's a small pistol magazine. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -3749,14 +3749,14 @@ Material:	metal
 	Val1:	21
 BREAK
 #928
-Keywords:	26-bullet machine clip
-Name:	a 26-bullet machine pistol clip
+Keywords:	26-bullet machine magazine
+Name:	a 26-bullet machine pistol magazine
 RoomDesc:$
-A long pistol clip is lying here.~
+A long pistol magazine is lying here.~
 LookDesc:$
-It looks like a long clip for use in a machine pistol. 
+It looks like a long magazine for use in a machine pistol. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -3775,14 +3775,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #929
-Keywords:	24-bullet machine clip
-Name:	a 24-bullet machine pistol clip
+Keywords:	24-bullet machine magazine
+Name:	a 24-bullet machine pistol magazine
 RoomDesc:$
-A long clip is lying here.~
+A long magazine is lying here.~
 LookDesc:$
-It's a long clip for use with a machine pistol. 
+It's a long magazine for use with a machine pistol. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -3801,14 +3801,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #930
-Keywords:	22-bullet clip
-Name:	a 22-bullet pistol clip
+Keywords:	22-bullet magazine
+Name:	a 22-bullet pistol magazine
 RoomDesc:$
-A pistol clip is lying here.~
+A pistol magazine is lying here.~
 LookDesc:$
-It's a pistol clip.  What else do you need to know? 
+It's a pistol magazine.  What else do you need to know? 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -3827,14 +3827,14 @@ Material:	metal
 	Val1:	21
 BREAK
 #931
-Keywords:	40-bullet machine clip
-Name:	a 40-bullet machine pistol clip
+Keywords:	40-bullet machine magazine
+Name:	a 40-bullet machine pistol magazine
 RoomDesc:$
-A long pistol clip lies here.~
+A long pistol magazine lies here.~
 LookDesc:$
-It's a long clip for use in a machine pistol. 
+It's a long magazine for use in a machine pistol. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -3853,14 +3853,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #932
-Keywords:	35-bullet machine clip
-Name:	a 35-bullet machine pistol clip
+Keywords:	35-bullet machine magazine
+Name:	a 35-bullet machine pistol magazine
 RoomDesc:$
-A long pistol clip is lying here.~
+A long pistol magazine is lying here.~
 LookDesc:$
-It looks like a long clip intended for use in a machine pistol. 
+It looks like a long magazine intended for use in a machine pistol. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -3879,14 +3879,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #933
-Keywords:	12-bullet machine clip
-Name:	a 12-bullet machine pistol clip
+Keywords:	12-bullet machine magazine
+Name:	a 12-bullet machine pistol magazine
 RoomDesc:$
-A heavy pistol clip lies here.~
+A heavy pistol magazine lies here.~
 LookDesc:$
-It's a clip for a heavy caliber machine pistol. 
+It's a magazine for a heavy caliber machine pistol. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -3905,14 +3905,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #934
-Keywords:	4-dart dart clip taser
-Name:	a 4-dart taser clip
+Keywords:	4-dart dart magazine taser
+Name:	a 4-dart taser magazine
 RoomDesc:$
-A small taser clip lies here.~
+A small taser magazine lies here.~
 LookDesc:$
-It looks like a clip of 4 heavy taser darts. 
+It looks like a magazine of 4 heavy taser darts. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -3931,14 +3931,14 @@ Material:	metal
 	Val1:	21
 BREAK
 #935
-Keywords:	clip 30-bullet SMG
-Name:	a 30-bullet SMG clip
+Keywords:	magazine 30-bullet SMG
+Name:	a 30-bullet SMG magazine
 RoomDesc:$
-A SMG clip lies here.~
+A SMG magazine lies here.~
 LookDesc:$
-Just your standard 30-bullet submachine gun clip. 
+Just your standard 30-bullet submachine Gun Magazine. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -3957,14 +3957,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #936
-Keywords:	clip 32-bullet SMG
-Name:	a 32-bullet SMG clip
+Keywords:	magazine 32-bullet SMG
+Name:	a 32-bullet SMG magazine
 RoomDesc:$
-A long SMG clip lies here.~
+A long SMG magazine lies here.~
 LookDesc:$
-It's a long clip destined for use in a submachine gun. 
+It's a long magazine destined for use in a submachine gun. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -3983,14 +3983,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #937
-Keywords:	28-bullet smg clip
-Name:	a 28-bullet SMG clip
+Keywords:	28-bullet smg magazine
+Name:	a 28-bullet SMG magazine
 RoomDesc:$
-A long smg clip lies here.~
+A long smg magazine lies here.~
 LookDesc:$
-It looks like a clip for a smg. 
+It looks like a magazine for a smg. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4009,14 +4009,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #938
-Keywords:	20-bullet smg clip
-Name:	a 20-bullet SMG clip
+Keywords:	20-bullet smg magazine
+Name:	a 20-bullet SMG magazine
 RoomDesc:$
-A smg clip is lying here.~
+A smg magazine is lying here.~
 LookDesc:$
-It's a clip for your smg. 
+It's a magazine for your smg. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4035,14 +4035,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #939
-Keywords:	40-bullet smg clip
-Name:	a 40-bullet smg clip
+Keywords:	40-bullet smg magazine
+Name:	a 40-bullet smg magazine
 RoomDesc:$
-A long smg clip lies here.~
+A long smg magazine lies here.~
 LookDesc:$
-It's a long clip for a submachine gun. 
+It's a long magazine for a submachine gun. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4061,14 +4061,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #940
-Keywords:	24-bullet smg clip
-Name:	a 24-bullet SMG clip
+Keywords:	24-bullet smg magazine
+Name:	a 24-bullet SMG magazine
 RoomDesc:$
-A smg clip lies on the ground.~
+A smg magazine lies on the ground.~
 LookDesc:$
-It's a short clip for your submachine gun. 
+It's a short magazine for your submachine gun. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4087,14 +4087,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #941
-Keywords:	5-bullet rifle clip
-Name:	a 5-bullet rifle clip
+Keywords:	5-bullet rifle magazine
+Name:	a 5-bullet rifle magazine
 RoomDesc:$
-A short rifle clip lies here.~
+A short rifle magazine lies here.~
 LookDesc:$
-It's a small clip for use in a rifle. 
+It's a small magazine for use in a rifle. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4113,16 +4113,16 @@ Material:	metal
 	Val1:	23
 BREAK
 #942
-Keywords:	a barret 121 14 bullet clip
-Name:	a 14-bullet Barret 121 clip
+Keywords:	a barret 121 14 bullet magazine
+Name:	a 14-bullet Barret 121 magazine
 RoomDesc:$
-A rifle clip is on the ground.~
+A rifle magazine is on the ground.~
 LookDesc:$
-This is a clip of ammunition holding the customized rounds that a Barret 121
+This is a magazine of ammunition holding the customized rounds that a Barret 121
 rifle would take. This ammo is very similar in design to APDS rounds, and
 function much the same.  
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4142,15 +4142,15 @@ Material:	metal
 	Val2:	1
 BREAK
 #943
-Keywords:	6-bullet rifle clip
-Name:	a 6-bullet rifle clip
+Keywords:	6-bullet rifle magazine
+Name:	a 6-bullet rifle magazine
 RoomDesc:$
-A small rifle clip lies here.~
+A small rifle magazine lies here.~
 LookDesc:$
-It's a small clip for your damn rifle.  You think writing these descriptions
+It's a small magazine for your damn rifle.  You think writing these descriptions
 are fun? 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4169,14 +4169,14 @@ Material:	metal
 	Val1:	23
 BREAK
 #944
-Keywords:	10-bullet rifle clip
-Name:	a 10-bullet rifle clip
+Keywords:	10-bullet rifle magazine
+Name:	a 10-bullet rifle magazine
 RoomDesc:$
-A rifle clip lies in the dust.~
+A rifle magazine lies in the dust.~
 LookDesc:$
-It's a short clip intended for a semi-automatic rifle. 
+It's a short magazine intended for a semi-automatic rifle. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4195,14 +4195,14 @@ Material:	metal
 	Val1:	23
 BREAK
 #945
-Keywords:	10-shell autoshotgun clip
-Name:	a 10-shell autoshotgun clip
+Keywords:	10-shell autoshotGun Magazine
+Name:	a 10-shell autoshotGun Magazine
 RoomDesc:$
-A shotgun clip is lying here.~
+A shotGun Magazine is lying here.~
 LookDesc:$
-It looks like a clip for use in an autoshotgun. 
+It looks like a magazine for use in an autoshotgun. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4228,7 +4228,7 @@ A handful of shotgun shells is lying here.~
 LookDesc:$
 It looks like 5 shells; perfect for reloading that Defiance T-250. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4247,14 +4247,14 @@ Material:	metal
 	Val1:	24
 BREAK
 #947
-Keywords:	42-bullet assault rifle clip
-Name:	a 42-bullet assault rifle clip
+Keywords:	42-bullet assault rifle magazine
+Name:	a 42-bullet assault rifle magazine
 RoomDesc:$
-An assault rifle clip is lying here.~
+An assault rifle magazine is lying here.~
 LookDesc:$
-It looks like a long clip for an assault rifle. 
+It looks like a long magazine for an assault rifle. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4273,14 +4273,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #948
-Keywords:	38-bullet assault rifle clip
-Name:	a 38-bullet assault rifle clip
+Keywords:	38-bullet assault rifle magazine
+Name:	a 38-bullet assault rifle magazine
 RoomDesc:$
-An assault rifle clip is lying here.~
+An assault rifle magazine is lying here.~
 LookDesc:$
-It's a long clip for use in an assault rifle. 
+It's a long magazine for use in an assault rifle. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4299,14 +4299,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #949
-Keywords:	40-bullet assault rifle clip
-Name:	a 40-bullet assault rifle clip
+Keywords:	40-bullet assault rifle magazine
+Name:	a 40-bullet assault rifle magazine
 RoomDesc:$
-An assault rifle clip is lying here.~
+An assault rifle magazine is lying here.~
 LookDesc:$
-It's a damn clip for your rifle. 
+It's a damn magazine for your rifle. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4325,14 +4325,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #950
-Keywords:	35-bullet assault rifle clip
-Name:	a 35-bullet assault rifle clip
+Keywords:	35-bullet assault rifle magazine
+Name:	a 35-bullet assault rifle magazine
 RoomDesc:$
-An assault rifle clip is lying here.~
+An assault rifle magazine is lying here.~
 LookDesc:$
-It's a long clip for use in an assault rifle. 
+It's a long magazine for use in an assault rifle. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4351,14 +4351,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #951
-Keywords:	50-bullet assault rifle clip
-Name:	a 50-bullet assault rifle clip
+Keywords:	50-bullet assault rifle magazine
+Name:	a 50-bullet assault rifle magazine
 RoomDesc:$
-An assault rifle clip is lying here.~
+An assault rifle magazine is lying here.~
 LookDesc:$
-It's a very long clip for an assault rifle. 
+It's a very long magazine for an assault rifle. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4377,14 +4377,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #952
-Keywords:	80-bullet lmg clip 
-Name:	an 80-bullet lmg clip
+Keywords:	80-bullet lmg magazine 
+Name:	an 80-bullet lmg magazine
 RoomDesc:$
-A light machine gun clip is lying here.~
+A light machine Gun Magazine is lying here.~
 LookDesc:$
-It's a very long clip for use in a light machine gun. 
+It's a very long magazine for use in a light machine gun. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4403,14 +4403,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #953
-Keywords:	50-bullet machine gun clip 
-Name:	a 50-bullet machine gun clip
+Keywords:	50-bullet machine Gun Magazine 
+Name:	a 50-bullet machine Gun Magazine
 RoomDesc:$
-A machine gun clip is lying here.~
+A machine Gun Magazine is lying here.~
 LookDesc:$
-It's a big clip for a machine gun. 
+It's a big magazine for a machine gun. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4429,14 +4429,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #954
-Keywords:	40-bullet machine gun clip
-Name:	a 40-bullet machine gun clip
+Keywords:	40-bullet machine Gun Magazine
+Name:	a 40-bullet machine Gun Magazine
 RoomDesc:$
-A machine gun clip is lying here.~
+A machine Gun Magazine is lying here.~
 LookDesc:$
-You see a long clip for use in a machine gun. 
+You see a long magazine for use in a machine gun. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4462,7 +4462,7 @@ A battery pack is lying here.~
 LookDesc:$
 It's a belt pack of batteries for use in a laser weapon. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	100000000001
 ExtraFlags:	0
 AffFlags:	0
@@ -4481,14 +4481,14 @@ Material:	metal
 	Val1:	22
 BREAK
 #956
-Keywords:	20-round cannon clip assault
-Name:	a 20-round cannon clip
+Keywords:	20-round cannon magazine assault
+Name:	a 20-round cannon magazine
 RoomDesc:$
-An assault cannon clip is lying here.~
+An assault cannon magazine is lying here.~
 LookDesc:$
-It's a clip of massive cannon shells. 
+It's a magazine of massive cannon shells. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4507,14 +4507,14 @@ Material:	metal
 	Val1:	26
 BREAK
 #957
-Keywords:	22-round cannon clip assault
-Name:	a 22-round cannon clip
+Keywords:	22-round cannon magazine assault
+Name:	a 22-round cannon magazine
 RoomDesc:$
-An assault cannon clip is lying here.~
+An assault cannon magazine is lying here.~
 LookDesc:$
-You see a clip of huge shells for use in an assault cannon. 
+You see a magazine of huge shells for use in an assault cannon. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4533,14 +4533,14 @@ Material:	metal
 	Val1:	26
 BREAK
 #958
-Keywords:	clip six-minigrenade 6-minigrenade minigrenade grenade
-Name:	a six-minigrenade clip
+Keywords:	magazine six-minigrenade 6-minigrenade minigrenade grenade
+Name:	a six-minigrenade magazine
 RoomDesc:$
-A clip of grenades is lying here.~
+A magazine of grenades is lying here.~
 LookDesc:$
-It's a clip of minigrenades for use in a launcher of some sort. 
+It's a magazine of minigrenades for use in a launcher of some sort. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4559,14 +4559,14 @@ Material:	metal
 	Val1:	19
 BREAK
 #959
-Keywords:	clip 12-minigrenade grenade minigrenades
-Name:	a 12-minigrenade clip
+Keywords:	magazine 12-minigrenade grenade minigrenades
+Name:	a 12-minigrenade magazine
 RoomDesc:$
-A long clip of grenades lies here.~
+A long magazine of grenades lies here.~
 LookDesc:$
-It looks like a clip of 12 minigrenades for a launcher. 
+It looks like a magazine of 12 minigrenades for a launcher. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4593,7 +4593,7 @@ LookDesc:$
 It looks like a pack of 4 rockets for use in a rocket launcher.  Did you
 really need me to tell you that? 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4612,14 +4612,14 @@ Material:	metal
 	Val1:	20
 BREAK
 #961
-Keywords:	clip 32-bullet smg
-Name:	a 32-bullet SMG gel clip
+Keywords:	magazine 32-bullet smg
+Name:	a 32-bullet SMG gel magazine
 RoomDesc:$
-A long SMG clip sits here.~
+A long SMG magazine sits here.~
 LookDesc:$
-This long ammunition clip is intended for use in a submachine gun. 
+This long ammunition magazine is intended for use in a submachine gun. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4639,14 +4639,14 @@ Material:	metal
 	Val2:	5
 BREAK
 #962
-Keywords:	clip 28-bullet smg
-Name:	a 28-bullet SMG gel clip
+Keywords:	magazine 28-bullet smg
+Name:	a 28-bullet SMG gel magazine
 RoomDesc:$
-A long SMG clip lies here.~
+A long SMG magazine lies here.~
 LookDesc:$
-This ammunition clip is intended to hold up to 28 gel bullets. 
+This ammunition magazine is intended to hold up to 28 gel bullets. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4666,14 +4666,14 @@ Material:	metal
 	Val2:	5
 BREAK
 #963
-Keywords:	clip 10 pistol
-Name:	a 10-bullet pistol AP clip
+Keywords:	magazine 10 pistol
+Name:	a 10-bullet pistol AP magazine
 RoomDesc:$
-A 10-bullet pistol clip lays here.~
+A 10-bullet pistol magazine lays here.~
 LookDesc:$
-A pistol clip, capable of holding 10 bullets.
+A pistol magazine, capable of holding 10 bullets.
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -4862,7 +4862,7 @@ these business outfits have a flat, smooth and sharp no-frills style.  As with
 previous lines, integrated Kevlar fibers and custom-shaped carbon-ceramic
 plates provided adequate protection.  The Actioneer long-coat designs are
 specially tailored for bodyguards and feature built-in concealed holsters and
-ammo-clip pockets. 
+ammo-magazine pockets. 
 ~
 Type:	Worn
 WearFlags:	10000000001

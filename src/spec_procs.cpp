@@ -1499,7 +1499,7 @@ SPECIAL (captain)
              "clean it up.", 0, 0);
       return TRUE;
     case 4:
-      act("$n removes the clip from his pistol and checks the bullets.",
+      act("$n removes the magazine from his pistol and checks the bullets.",
           FALSE, ch, 0, 0, TO_ROOM);
       return TRUE;
   }

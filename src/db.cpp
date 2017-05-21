@@ -2196,7 +2196,7 @@ int vnum_object_armors(char *searchname, struct char_data * ch)
   return (found);
 }
 
-int vnum_object_clips(char *searchname, struct char_data * ch)
+int vnum_object_magazines(char *searchname, struct char_data * ch)
 {
   int nr, found = 0;
   int capacity, type;
@@ -2206,7 +2206,7 @@ int vnum_object_clips(char *searchname, struct char_data * ch)
     for( capacity = 101; capacity >= 0; capacity-- )
     {
       for (nr = 0; nr <= top_of_objt; nr++) {
-        if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_GUN_CLIP)
+        if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_GUN_MAGAZINE)
           continue;
         if (GET_OBJ_VAL(&obj_proto[nr],0) < capacity && capacity != 0)
           continue;
@@ -2340,8 +2340,8 @@ int vnum_object(char *searchname, struct char_data * ch)
     return vnum_object_weapons(searchname,ch);
   if (!strcmp(searchname,"armorslist"))
     return vnum_object_armors(searchname,ch);
-  if (!strcmp(searchname,"clipslist"))
-    return vnum_object_clips(searchname,ch);
+  if (!strcmp(searchname,"magazineslist"))
+    return vnum_object_magazines(searchname,ch);
   if (!strcmp(searchname,"focilist"))
     return vnum_object_foci(searchname,ch);
   if (!strcmp(arg1,"objtype"))
@@ -2522,7 +2522,7 @@ struct obj_data *read_object(int nr, int type)
     }
     GET_OBJ_VAL(obj, 3) = atoi(buf);
     GET_OBJ_VAL(obj, 6) = number(0, 9999);
-  } else if (GET_OBJ_TYPE(obj) == ITEM_GUN_CLIP)
+  } else if (GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE)
     GET_OBJ_VAL(obj, 9) = GET_OBJ_VAL(obj, 0);
   else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
     for (int i = 7; i < 10; i++)

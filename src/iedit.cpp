@@ -298,9 +298,9 @@ void iedit_disp_val1_menu(struct descriptor_data * d)
   case ITEM_PROGRAM:
     iedit_program_types_menu(d);
     break;
-  case ITEM_GUN_CLIP:
+  case ITEM_GUN_MAGAZINE:
   case ITEM_GUN_AMMO:
-    send_to_char("Number of bullets clip contains (must match max load of weapon): ", CH);
+    send_to_char("Number of bullets magazine contains (must match max load of weapon): ", CH);
     break;
   case ITEM_DOCWAGON:
     send_to_char("  1) Basic contract\r\n  2) Gold contract\r\n  3) Platinum contract\r\nDocWagon type: ", CH);
@@ -451,7 +451,7 @@ void iedit_disp_val2_menu(struct descriptor_data * d)
     send_to_char("Focus force: ", CH);
     break;
   case ITEM_GUN_AMMO:
-  case ITEM_GUN_CLIP:
+  case ITEM_GUN_MAGAZINE:
     iedit_disp_weapon_menu(d);
     break;
   case ITEM_RADIO:
@@ -473,7 +473,7 @@ void iedit_disp_val2_menu(struct descriptor_data * d)
       send_to_char("Load space taken up: ", d->character);
     break;
   case ITEM_WORN:
-    send_to_char("Space for clips: ", CH);
+    send_to_char("Space for magazines: ", CH);
     break;
   case ITEM_OTHER:
     send_to_char("Enter Value 0: ", CH);
@@ -523,7 +523,7 @@ void iedit_disp_val3_menu(struct descriptor_data * d)
     else iedit_disp_menu(d);
     break;
   case ITEM_GUN_AMMO:
-  case ITEM_GUN_CLIP:
+  case ITEM_GUN_MAGAZINE:
     send_to_char("  0) Normal             1) APDS\r\n"
                  "  2) Explosive          3) EX\r\n"
                  "  4) Flechette          5) Gel\r\n"
@@ -1878,10 +1878,10 @@ void iedit_parse(struct descriptor_data * d, char *arg)
         return;
       }
       break;
-    case ITEM_GUN_CLIP:
+    case ITEM_GUN_MAGAZINE:
     case ITEM_GUN_AMMO:
       if (number < 1 || number > MAX_WEAP) {
-        send_to_char("Invalid option!\r\nClip type: ", CH);
+        send_to_char("Invalid option!\r\nMagazine type: ", CH);
         return;
       }
       break;
@@ -2029,7 +2029,7 @@ void iedit_parse(struct descriptor_data * d, char *arg)
       }
       break;
     case ITEM_GUN_AMMO:
-    case ITEM_GUN_CLIP:
+    case ITEM_GUN_MAGAZINE:
       if (number < 0 || number > 5) {
         send_to_char("INVALID TYPE!\r\nSelect Type: ", CH);
         return;

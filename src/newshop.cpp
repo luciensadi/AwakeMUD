@@ -596,7 +596,7 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       break;
   if (!sell)
   {
-    if (!shop_table[shop_nr].flags.IsSet(SHOP_NORESELL) && GET_OBJ_TYPE(obj) != ITEM_GUN_CLIP && GET_OBJ_TYPE(obj) != 
+    if (!shop_table[shop_nr].flags.IsSet(SHOP_NORESELL) && GET_OBJ_TYPE(obj) != ITEM_GUN_MAGAZINE && GET_OBJ_TYPE(obj) != 
         ITEM_CYBERWARE && GET_OBJ_TYPE(obj) != ITEM_BIOWARE) {
       sell = new shop_sell_data;
       sell->type = SELL_BOUGHT;
@@ -938,7 +938,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
                                                                                      (GET_OBJ_VAL(obj, 0) == 1 ? "barrel" : "bottom")));
     break;
   case ITEM_GUN_AMMO:
-    sprintf(ENDOF(buf), " a box of ammunition for reloading %s clips.", weapon_type[GET_OBJ_VAL(obj, 1)]);
+    sprintf(ENDOF(buf), " a box of ammunition for reloading %s magazines.", weapon_type[GET_OBJ_VAL(obj, 1)]);
     break;
   case ITEM_FOCUS:
     sprintf(ENDOF(buf), " a rating %d %s focus.", GET_OBJ_VAL(obj, 1), foci_type[GET_OBJ_VAL(obj, 0)]);

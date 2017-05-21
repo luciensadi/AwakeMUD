@@ -2445,14 +2445,14 @@ Material:	plastic
 	LegalPermit:	0
 BREAK
 #380
-Keywords:	9 clip round
-Name:	a 9-round clip
+Keywords:	9 magazine round
+Name:	a 9-round assault cannon magazine
 RoomDesc:$
-A clip made for an assault cannon lies here.~
+A magazine made for an assault cannon lies here.~
 LookDesc:$
 Designed to fit exclusively in the panther assault cannon.
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0

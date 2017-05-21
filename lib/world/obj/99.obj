@@ -242,14 +242,14 @@ Material:	paper
 	Val2:	13
 BREAK
 #9910
-Keywords:	clip
-Name:	a thirty-two bullet clip
+Keywords:	magazine
+Name:	a thirty-two bullet magazine
 RoomDesc:$
-A submachine gun clip is lying here.~
+A submachine gun magazine is lying here.~
 LookDesc:$
-A submachine gun clip that holds thirty-two bullets.
+A submachine gun magazine that holds thirty-two bullets.
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -268,14 +268,14 @@ Material:	paper
 	Val1:	25
 BREAK
 #9911
-Keywords:	clip
-Name:	a fifteen bullet clip
+Keywords:	magazine
+Name:	a fifteen bullet magazine
 RoomDesc:$
-A heavy pistol clip is lying here.~
+A heavy pistol magazine is lying here.~
 LookDesc:$
-A heavy pistol clip that holds 15 rounds.
+A heavy pistol magazine that holds 15 rounds.
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -301,7 +301,7 @@ A big belt of ammunition is lying here.~
 LookDesc:$
 A one-hundred-round belt of ammunition.
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -767,7 +767,7 @@ A battery pack with a belt lies here.~
 LookDesc:$
 A 20-shot laser battery pack
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	100000000001
 ExtraFlags:	0
 AffFlags:	0

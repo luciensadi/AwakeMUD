@@ -488,27 +488,27 @@ void clearMemory(struct char_data * ch)
 bool attempt_reload(struct char_data *mob, int pos)
 {
   // I would call the reload routine for players, but this is slightly faster
-  struct obj_data *clip, *gun = NULL;
+  struct obj_data *magazine, *gun = NULL;
   bool found = FALSE;
 
   if (!(gun = GET_EQ(mob, pos)) || GET_OBJ_TYPE(GET_EQ(mob, pos)) != ITEM_WEAPON)
     return FALSE;
 
-  for (clip = mob->carrying; clip; clip = clip->next_content)
+  for (magazine = mob->carrying; magazine; magazine = magazine->next_content)
   {
-    if (GET_OBJ_TYPE(clip) == ITEM_GUN_CLIP &&
-        !GET_OBJ_VAL(clip, 0)) {
-      GET_OBJ_VAL(clip, 9) = GET_OBJ_VAL(clip, 0) = GET_OBJ_VAL(gun, 5);
-      GET_OBJ_VAL(clip, 1) = GET_OBJ_VAL(gun, 3);
-      sprintf(buf, "a %d-round %s clip", GET_OBJ_VAL(clip, 0), weapon_type[GET_OBJ_VAL(clip, 1)]);
-      if (clip->restring)
-        delete [] clip->restring;
-      clip->restring = strdup(buf);
+    if (GET_OBJ_TYPE(magazine) == ITEM_GUN_MAGAZINE &&
+        !GET_OBJ_VAL(magazine, 0)) {
+      GET_OBJ_VAL(magazine, 9) = GET_OBJ_VAL(magazine, 0) = GET_OBJ_VAL(gun, 5);
+      GET_OBJ_VAL(magazine, 1) = GET_OBJ_VAL(gun, 3);
+      sprintf(buf, "a %d-round %s magazine", GET_OBJ_VAL(magazine, 0), weapon_type[GET_OBJ_VAL(magazine, 1)]);
+      if (magazine->restring)
+        delete [] magazine->restring;
+      magazine->restring = strdup(buf);
       found = TRUE;
       break;      
-    } else if (GET_OBJ_TYPE(clip) == ITEM_GUN_CLIP &&
-        GET_OBJ_VAL(clip, 0) == GET_OBJ_VAL(gun, 5) &&
-        GET_OBJ_VAL(clip, 1) == (GET_OBJ_VAL(gun, 3))) {
+    } else if (GET_OBJ_TYPE(magazine) == ITEM_GUN_MAGAZINE &&
+        GET_OBJ_VAL(magazine, 0) == GET_OBJ_VAL(gun, 5) &&
+        GET_OBJ_VAL(magazine, 1) == (GET_OBJ_VAL(gun, 3))) {
       found = TRUE;
       break;
     } 
@@ -524,9 +524,9 @@ bool attempt_reload(struct char_data *mob, int pos)
     obj_from_obj(tempobj);
     obj_to_room(tempobj, mob->in_room);
   }
-  obj_from_char(clip);
-  obj_to_obj(clip, gun);
-  GET_OBJ_VAL(gun, 6) = GET_OBJ_VAL(clip, 9);
+  obj_from_char(magazine);
+  obj_to_obj(magazine, gun);
+  GET_OBJ_VAL(gun, 6) = GET_OBJ_VAL(magazine, 9);
 
   act("$n reloads $p.", TRUE, mob, gun, 0, TO_ROOM);
   act("You reload $p.", FALSE, mob, gun, 0, TO_CHAR);

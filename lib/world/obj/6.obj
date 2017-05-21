@@ -85,14 +85,14 @@ Material:	metal
 	LegalPermit:	0
 BREAK
 #601
-Keywords:	clip 16-bullet pistol
-Name:	a 16-bullet pistol clip
+Keywords:	magazine 16-bullet pistol
+Name:	a 16-bullet pistol magazine
 RoomDesc:$
-An ammunition clip for a pistol lies here.~
+An ammunition magazine for a pistol lies here.~
 LookDesc:$
-A pistol clip, capable of holding 16 bullets.
+A pistol magazine, capable of holding 16 bullets.
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -111,14 +111,14 @@ Material:	metal
 	Val1:	21
 BREAK
 #602
-Keywords:	clip 18-bullet pistol
-Name:	an 18-bullet pistol clip
+Keywords:	magazine 18-bullet pistol
+Name:	an 18-bullet pistol magazine
 RoomDesc:$
-A clip for a pistol lies here, '18' marked on its side.~
+A magazine for a pistol lies here, '18' marked on its side.~
 LookDesc:$
-A pistol clip, capable of holding 18 bullets.
+A pistol magazine, capable of holding 18 bullets.
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -137,14 +137,14 @@ Material:	metal
 	Val1:	21
 BREAK
 #603
-Keywords:	clip 15-bullet pistol
-Name:	a 15-bullet pistol clip
+Keywords:	magazine 15-bullet pistol
+Name:	a 15-bullet pistol magazine
 RoomDesc:$
-A standard pistol clip sits on the floor.~
+A standard pistol magazine sits on the floor.~
 LookDesc:$
-A pistol clip, capable of holding 15 bullets.
+A pistol magazine, capable of holding 15 bullets.
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -163,14 +163,14 @@ Material:	metal
 	Val1:	21
 BREAK
 #604
-Keywords:	clip 10-bullet pistol
-Name:	a 10-bullet pistol clip
+Keywords:	magazine 10-bullet pistol
+Name:	a 10-bullet pistol magazine
 RoomDesc:$
-A 10-bullet pistol clip lies here.~
+A 10-bullet pistol magazine lies here.~
 LookDesc:$
-A pistol clip, capable of holding 10 bullets.
+A pistol magazine, capable of holding 10 bullets.
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -189,14 +189,14 @@ Material:	metal
 	Val1:	21
 BREAK
 #605
-Keywords:	clip six-bullet 6-bullet pistol speedloader
+Keywords:	magazine six-bullet 6-bullet pistol speedloader
 Name:	a 6-bullet speedloader
 RoomDesc:$
 A small speedloader lies here.~
 LookDesc:$
 A six-shot speedloader, for rapid reloading of revolvers. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -215,14 +215,14 @@ Material:	metal
 	Val1:	21
 BREAK
 #606
-Keywords:	clip 12-bullet pistol
-Name:	a 12-bullet pistol clip
+Keywords:	magazine 12-bullet pistol
+Name:	a 12-bullet pistol magazine
 RoomDesc:$
-A pistol clip sits upright.~
+A pistol magazine sits upright.~
 LookDesc:$
-A Universal Pistol clip, capable of holding 12 bullets.
+A Universal Pistol magazine, capable of holding 12 bullets.
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -241,14 +241,14 @@ Material:	metal
 	Val1:	21
 BREAK
 #607
-Keywords:	clip 11-bullet pistol
-Name:	an 11-bullet pistol clip
+Keywords:	magazine 11-bullet pistol
+Name:	an 11-bullet pistol magazine
 RoomDesc:$
-An uncommon pistol clip rests on the ground.~
+An uncommon pistol magazine rests on the ground.~
 LookDesc:$
-A pistol clip, capable of holding 11 bullets.
+A pistol magazine, capable of holding 11 bullets.
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -267,14 +267,14 @@ Material:	metal
 	Val1:	21
 BREAK
 #608
-Keywords:	clip eight-shell 8-shell shotgun
-Name:	an 8-shell clip
+Keywords:	magazine eight-shell 8-shell shotgun
+Name:	an 8-shell magazine
 RoomDesc:$
-An 8-shell shotgun clip lies here.~
+An 8-shell shotGun Magazine lies here.~
 LookDesc:$
-A shotgun clip capable of holding eight shells. 
+A shotGun Magazine capable of holding eight shells. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -293,14 +293,14 @@ Material:	metal
 	Val1:	24
 BREAK
 #609
-Keywords:	clip 10-shell shotgun
-Name:	a 10-shell clip
+Keywords:	magazine 10-shell shotgun
+Name:	a 10-shell magazine
 RoomDesc:$
-A shotgun clip has been discarded.~
+A shotGun Magazine has been discarded.~
 LookDesc:$
-A shotgun clip, capable of holding 10 shells.
+A shotGun Magazine, capable of holding 10 shells.
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -319,14 +319,14 @@ Material:	metal
 	Val1:	24
 BREAK
 #610
-Keywords:	clip 38-round assault rifle
-Name:	a 38-round assault rifle clip
+Keywords:	magazine 38-round assault rifle
+Name:	a 38-round assault rifle magazine
 RoomDesc:$
-An assault rifle clip rests on its side.~
+An assault rifle magazine rests on its side.~
 LookDesc:$
-An assault rifle clip, capable of holding 38 bullets.
+An assault rifle magazine, capable of holding 38 bullets.
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -345,14 +345,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #611
-Keywords:	clip 35-round rifle
-Name:	a 35-round assault rifle clip
+Keywords:	magazine 35-round rifle
+Name:	a 35-round assault rifle magazine
 RoomDesc:$
-A rifle clip sits in the corner.~
+A rifle magazine sits in the corner.~
 LookDesc:$
-A clip for assault rifles with an ammo capacity of 35 rounds. 
+A magazine for assault rifles with an ammo capacity of 35 rounds. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -371,14 +371,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #612
-Keywords:	clip 40-round assault rifle
-Name:	a 40-round assault rifle clip
+Keywords:	magazine 40-round assault rifle
+Name:	a 40-round assault rifle magazine
 RoomDesc:$
-A slightly curved assault rifle clip sits here.~
+A slightly curved assault rifle magazine sits here.~
 LookDesc:$
-An assault rifle clip, capable of holding 40 bullets.
+An assault rifle magazine, capable of holding 40 bullets.
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -397,14 +397,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #613
-Keywords:	clip 32-round assault rifle
-Name:	a 32-round assault rifle clip
+Keywords:	magazine 32-round assault rifle
+Name:	a 32-round assault rifle magazine
 RoomDesc:$
-An assault rifle clip marked '32' lies on the floor.~
+An assault rifle magazine marked '32' lies on the floor.~
 LookDesc:$
-An assault rifle clip, capable of holding 32 bullets.
+An assault rifle magazine, capable of holding 32 bullets.
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -423,14 +423,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #614
-Keywords:	clip 50-round machinegun
-Name:	a 50-round machine gun clip
+Keywords:	magazine 50-round machinegun
+Name:	a 50-round machine Gun Magazine
 RoomDesc:$
-A typical machine gun clip waits to be used.~
+A typical machine Gun Magazine waits to be used.~
 LookDesc:$
-A machine gun clip, capable of holding 50 bullets.
+A machine Gun Magazine, capable of holding 50 bullets.
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -449,14 +449,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #615
-Keywords:	clip 40-round machinegun
-Name:	a 40-round machinegun clip
+Keywords:	magazine 40-round machinegun
+Name:	a 40-round machineGun Magazine
 RoomDesc:$
-A non-standard machine gun clip sits on the ground.~
+A non-standard machine Gun Magazine sits on the ground.~
 LookDesc:$
-A machine gun clip, capable of holding 40 bullets.
+A machine Gun Magazine, capable of holding 40 bullets.
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -475,14 +475,14 @@ Material:	metal
 	Val1:	25
 BREAK
 #616
-Keywords:	clip six 6 mini-grenades
-Name:	a clip of six mini-grenades
+Keywords:	magazine six 6 mini-grenades
+Name:	a magazine of six mini-grenades
 RoomDesc:$
-A clip of mini-grenades sits here.~
+A magazine of mini-grenades sits here.~
 LookDesc:$
-A grenade launcher clip, capable of holding 6 mini grenades.
+A grenade launcher magazine, capable of holding 6 mini grenades.
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -508,7 +508,7 @@ A large belt of cannon shells is on the ground.~
 LookDesc:$
 A belt of 22 cannon shells.
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -594,14 +594,14 @@ Material:	metal
 	Val10:	4
 BREAK
 #620
-Keywords:	clip 25 pistol
-Name:	a 25-bullet pistol clip
+Keywords:	magazine 25 pistol
+Name:	a 25-bullet pistol magazine
 RoomDesc:$
-A large pistol clip has been discarded.~
+A large pistol magazine has been discarded.~
 LookDesc:$
-A non-standard pistol clip, mainly used by Fichetti guns.
+A non-standard pistol magazine, mainly used by Fichetti guns.
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -725,7 +725,7 @@ RoomDesc:$
 A Colt heavy pistol has been left here.~
 LookDesc:$
 A very popular gun among shadowrunners, this heavy pistol combines
-large clip size and power.
+large magazine size and power.
 ~
 Type:	Weapon
 WearFlags:	10000000000001
@@ -1990,14 +1990,14 @@ Material:	metal
 	Val9:	-1
 BREAK
 #667
-Keywords:	clip eight-round 8-round rifle
-Name:	an eight-round rifle clip
+Keywords:	magazine eight-round 8-round rifle
+Name:	an eight-round rifle magazine
 RoomDesc:$
-A clip is lying here.~
+A magazine is lying here.~
 LookDesc:$
-A standard rifle clip that holds up to eight rounds. 
+A standard rifle magazine that holds up to eight rounds. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	100000000000001
 ExtraFlags:	0
 AffFlags:	0
@@ -2021,7 +2021,7 @@ Name:	an Ares Predator
 RoomDesc:$
 An Ares Predator rests here.~
 LookDesc:$
-You see what many consider the premier heavy pistol.  It uses a clip and
+You see what many consider the premier heavy pistol.  It uses a magazine and
 looks deadly.
 ~
 Type:	Weapon
@@ -2049,15 +2049,15 @@ Material:	metal
 	Val10:	4
 BREAK
 #669
-Keywords:	clip 16-bullet rifle ares cc10
-Name:	an Ares CC-10 clip
+Keywords:	magazine 16-bullet rifle ares cc10
+Name:	an Ares CC-10 magazine
 RoomDesc:$
-A shiny black sniper rifle clip lies here.~
+A shiny black sniper rifle magazine lies here.~
 LookDesc:$
-Specifically designed for the Ares CC-10 Sniper Rifle, this clip holds 16
+Specifically designed for the Ares CC-10 Sniper Rifle, this magazine holds 16
 rounds of ammunition. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -2102,14 +2102,14 @@ Material:	adv. plastics
 	Val1:	1
 BREAK
 #671
-Keywords:	clip pistol bullet 35-bullet
-Name:	a 35-bullet pistol clip
+Keywords:	magazine pistol bullet 35-bullet
+Name:	a 35-bullet pistol magazine
 RoomDesc:$
-A 35-bullet pistol clip is here.~
+A 35-bullet pistol magazine is here.~
 LookDesc:$
-This clip holds 35 rounds and looks like it would fit a pistol. 
+This magazine holds 35 rounds and looks like it would fit a pistol. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -2163,14 +2163,14 @@ Material:	metal
 	Val9:	-1
 BREAK
 #674
-Keywords:	clip pistol 30-round
-Name:	a 30-round pistol clip
+Keywords:	magazine pistol 30-round
+Name:	a 30-round pistol magazine
 RoomDesc:$
-A 30-round pistol clip sits here.~
+A 30-round pistol magazine sits here.~
 LookDesc:$
-You see a pistol clip holding 30 bullets. 
+You see a pistol magazine holding 30 bullets. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -2189,13 +2189,13 @@ Material:	brick
 	Val1:	25
 BREAK
 #675
-Keywords:	clip five-shell five-shell shotgun
-Name:	a five-shell clip
+Keywords:	magazine five-shell five-shell shotgun
+Name:	a five-shell magazine
 RoomDesc:$
-A five-shell shotgun clip sits here.~
+A five-shell shotGun Magazine sits here.~
 LookDesc:$
 You see 5 shells in a narrow tube which is inserted into the shotgun.~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -2482,14 +2482,14 @@ Material:	metal
 	Val9:	-1
 BREAK
 #685
-Keywords:	clip smg submachinegun 27
-Name:	a 27-bullet SMG clip
+Keywords:	magazine smg submachinegun 27
+Name:	a 27-bullet SMG magazine
 RoomDesc:$
-A black steel clip lies here.~
+A black steel magazine lies here.~
 LookDesc:$
-A black steel clip that holds 27 rounds. 
+A black steel magazine that holds 27 rounds. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -2520,7 +2520,7 @@ Using a special synthetic pad on the handle of the gun, Aztechnology has made
 it automatically attach itself to the user. The gun itself will not fire
 unless this attachment is secure. Therefore, since this synthetic lock is one
 of Aztechnology's most prized secrets, noone knows how to use them. The inside
-of the gun is equally perfectly crafted. Carrying a compressed clip of 25
+of the gun is equally perfectly crafted. Carrying a compressed magazine of 25
 "bolts", the pistol releases each crafted bullet linked to a highly
 sophisticated Smartlink-Zeta prototype. On impact, the APDS-II head pierces
 almost any armour produced, and ignites the explosive-flechette compound

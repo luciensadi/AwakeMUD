@@ -62,7 +62,7 @@ RoomDesc:$
 An unfinished object is lying here.~
 LookDesc:$
 It looks pretty much like an unfinished object~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0

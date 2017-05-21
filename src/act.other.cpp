@@ -1124,17 +1124,17 @@ ACMD(do_skills)
   send_to_char(buf, ch);
 }
 
-struct obj_data * find_clip(struct obj_data *gun, struct obj_data *i)
+struct obj_data * find_magazine(struct obj_data *gun, struct obj_data *i)
 {
   for (; i; i = i->next_content)
   {
-    if (GET_OBJ_TYPE(i) == ITEM_GUN_CLIP) {
+    if (GET_OBJ_TYPE(i) == ITEM_GUN_MAGAZINE) {
       if (GET_OBJ_VAL(i, 0) == GET_OBJ_VAL(gun, 5) && GET_OBJ_VAL(i, 1) == GET_OBJ_VAL(gun, 3))
         return i;
     }
     if (i->contains && GET_OBJ_TYPE(i) == ITEM_WORN) {
       struct obj_data *found;
-      found = find_clip(gun, i->contains);
+      found = find_magazine(gun, i->contains);
       if ( found )
         return found;
     }
@@ -1230,12 +1230,12 @@ ACMD(do_reload)
        return;    
      }
      for (i = ch->carrying; i; i = i->next_content)
-       if (GET_OBJ_TYPE(i) == ITEM_GUN_CLIP && !GET_OBJ_VAL(gun, 9) &&
+       if (GET_OBJ_TYPE(i) == ITEM_GUN_MAGAZINE && !GET_OBJ_VAL(gun, 9) &&
            (GET_OBJ_VAL(i, 1) == GET_OBJ_VAL(gun, 1) || (GET_OBJ_VAL(gun, 1) == WEAP_LIGHT_PISTOL &&
            GET_OBJ_VAL(i, 1) == WEAP_MACHINE_PISTOL))
            && GET_OBJ_VAL(i, 9) < GET_OBJ_VAL(i, 0)) {
          if (GET_OBJ_VAL(gun, 2) != GET_OBJ_VAL(i, 2) && GET_OBJ_VAL(i, 9) > 0) {
-           send_to_char("You cannot mix ammunition types in clips.\r\n", ch);
+           send_to_char("You cannot mix ammunition types in magazines.\r\n", ch);
            return;
          }
          n = MIN((GET_OBJ_VAL(i, 0) - GET_OBJ_VAL(i, 9)), GET_OBJ_VAL(gun, 0));
@@ -1247,7 +1247,7 @@ ACMD(do_reload)
          act(buf, FALSE, ch, i, NULL, TO_CHAR);
          return;
        }
-     act("You have no clips to load rounds from $p into.", FALSE, ch, gun, NULL, TO_CHAR);
+     act("You have no magazines to load rounds from $p into.", FALSE, ch, gun, NULL, TO_CHAR);
      return;
    }
 
@@ -1293,9 +1293,9 @@ ACMD(do_reload)
   }
 
   if (!*buf1)
-    i = find_clip(gun, ch->carrying);
+    i = find_magazine(gun, ch->carrying);
   else if (!generic_find(buf1, FIND_OBJ_EQUIP | FIND_OBJ_INV, ch, &tmp_char, &i)) {
-    send_to_char(ch, "You don't have that clip.\r\n");
+    send_to_char(ch, "You don't have that magazine.\r\n");
     return;
   }
   if (!i)
@@ -1303,19 +1303,19 @@ ACMD(do_reload)
       if (GET_EQ(ch, x))
         if (GET_EQ(ch, x)->contains && GET_OBJ_TYPE(GET_EQ(ch, x)) != ITEM_WEAPON) {
           struct obj_data *found;
-          found = find_clip(gun, GET_EQ(ch, x));
+          found = find_magazine(gun, GET_EQ(ch, x));
           if (found)
             i = found;
         }
   if (!i) {
-    act("You can't find a clip that would work in $p.",
+    act("You can't find a magazine that would work in $p.",
         FALSE, ch, gun, 0, TO_CHAR);
     return;
   }
-  if (!(GET_OBJ_TYPE(i) == ITEM_GUN_CLIP)
+  if (!(GET_OBJ_TYPE(i) == ITEM_GUN_MAGAZINE)
       || !(GET_OBJ_VAL(i, 0) == GET_OBJ_VAL(gun, 5))
       || !(GET_OBJ_VAL(i, 1) == GET_OBJ_VAL(gun, 3))) {
-    send_to_char(ch, "That clip doesn't fit in there.\r\n");
+    send_to_char(ch, "That magazine doesn't fit in there.\r\n");
     return;
   }
 
@@ -1327,8 +1327,8 @@ ACMD(do_reload)
       old->vfront = ch->vfront;
     } else
       obj_to_room(old, ch->in_room);
-    act("$n ejects a clip from $p.", FALSE, ch, gun, NULL, TO_ROOM);
-    act("You eject a clip from $p.", FALSE, ch, gun, NULL, TO_CHAR);
+    act("$n ejects a magazine from $p.", FALSE, ch, gun, NULL, TO_ROOM);
+    act("You eject a magazine from $p.", FALSE, ch, gun, NULL, TO_CHAR);
   }
   if (i->carried_by)
     obj_from_char(i);
@@ -1351,15 +1351,15 @@ ACMD(do_reload)
 ACMD(do_eject)
 {
   if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_WIELD)->contains) {
-    struct obj_data *clip = GET_EQ(ch, WEAR_WIELD)->contains;
-    obj_from_obj(clip);
+    struct obj_data *magazine = GET_EQ(ch, WEAR_WIELD)->contains;
+    obj_from_obj(magazine);
     if (ch->in_veh) {
-      obj_to_veh(clip, ch->in_veh);
-      clip->vfront = ch->vfront;
+      obj_to_veh(magazine, ch->in_veh);
+      magazine->vfront = ch->vfront;
     } else
-      obj_to_room(clip, ch->in_room);
-    act("$n ejects a clip from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
-    act("You eject a clip from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+      obj_to_room(magazine, ch->in_room);
+    act("$n ejects a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
+    act("You eject a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
   }
 }
 

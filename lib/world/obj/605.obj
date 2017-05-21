@@ -5,7 +5,7 @@ RoomDesc:$
 One of Colt's light pistols was left on the floor.~
 LookDesc:$
 Manufactured by one of America's finest gun manufacturers, the Colt American
-is a sleek pistol with a decent clip capacity. 
+is a sleek pistol with a decent magazine capacity. 
 ~
 Type:	Weapon
 WearFlags:	10000000000001
@@ -411,14 +411,14 @@ Material:	paper
 	Val1:	1
 BREAK
 #60542
-Keywords:	clip 6 pistol speedloader
+Keywords:	magazine 6 pistol speedloader
 Name:	a 6-bullet speedloader
 RoomDesc:$
 A small speedloader lies here.~
 LookDesc:$
 A six-shot speedloader, for rapid reloading of revolvers. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -437,14 +437,14 @@ Material:	metal
 	Val1:	21
 BREAK
 #60546
-Keywords:	5-bullet rifle clip
-Name:	a 5-bullet rifle clip
+Keywords:	5-bullet rifle magazine
+Name:	a 5-bullet rifle magazine
 RoomDesc:$
-A short rifle clip lies here.~
+A short rifle magazine lies here.~
 LookDesc:$
-It's a small clip for use in a rifle. 
+It's a small magazine for use in a rifle. 
 ~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -463,13 +463,13 @@ Material:	metal
 	Val1:	23
 BREAK
 #60548
-Keywords:	5-shell clip
-Name:	a 5-shell clip
+Keywords:	5-shell magazine
+Name:	a 5-shell magazine
 RoomDesc:$
-A 5-shell clip sits here.~
+A 5-shell magazine sits here.~
 LookDesc:$
 You see 5 shells in a narrow tube which is inserted into the shotgun.~
-Type:	Gun Clip
+Type:	Gun Magazine
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
