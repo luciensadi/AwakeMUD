@@ -2254,7 +2254,7 @@ char *ACTNULL = "<NULL>";
 
 
 /* higher-level communication: the act() function */
-void perform_act(char *orig, struct char_data * ch, struct obj_data * obj,
+void perform_act(const char *orig, struct char_data * ch, struct obj_data * obj,
                  void *vict_obj, struct char_data * to)
 {
   extern char *make_desc(char_data *ch, char_data *i, char *buf, int act);
@@ -2373,7 +2373,7 @@ void perform_act(char *orig, struct char_data * ch, struct obj_data * obj,
 /* modified to include spell creation menu */
 #define SENDOK(ch) ((ch)->desc && (AWAKE(ch) || sleep) && !(PLR_FLAGGED((ch), PLR_WRITING) || PLR_FLAGGED((ch), PLR_EDITING) || PLR_FLAGGED((ch), PLR_MAILING) || PLR_FLAGGED((ch), PLR_CUSTOMIZE)) && (STATE(ch->desc) != CON_SPELL_CREATE))
 
-void act(char *str, int hide_invisible, struct char_data * ch,
+void act(const char *str, int hide_invisible, struct char_data * ch,
          struct obj_data * obj, void *vict_obj, int type)
 {
   struct char_data *to, *next;

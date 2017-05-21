@@ -36,10 +36,10 @@ void    send_to_outdoor(char *messg);
 void    free_editing_structs(descriptor_data *d, int state);
 void    close_socket(struct descriptor_data *d);
 
-void    perform_act(char *orig, struct char_data *ch, struct obj_data *obj,
+void    perform_act(const char *orig, struct char_data *ch, struct obj_data *obj,
                     void *vict_obj, struct char_data *to);
 
-void    act(char *str, int hide_invisible, struct char_data *ch,
+void    act(const char *str, int hide_invisible, struct char_data *ch,
             struct obj_data *obj, void *vict_obj, int type);
 
 #ifndef connect
