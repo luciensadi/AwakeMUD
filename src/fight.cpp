@@ -2769,7 +2769,6 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
        been_heard[MAX_STRING_LENGTH], temp[20];
   struct obj_data *obj = NULL;
   rnum_t was_in = 0, room1 = 0, room2 = 0, room3 = 0, rnum = 0;
-  int door1, door2, door3;
 
   if (burst <= 1) {
     strcpy(buf, "single ");
@@ -2857,86 +2856,88 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   was_in = ch->in_room;
  
   /* Make sure the sound doesn't 'echo' back */
-  sprintf( been_heard, "%ld", ch->in_room );
+  /* Bracketing periods prevent edge case of room 11 not hearing gunshots if room 111 already heard them. */
+  sprintf( been_heard, ".%ld.", ch->in_room );
   
-  for (door1 = 0; door1 < NUM_OF_DIRS; door1++ ) {
-    if ( EXIT( ch, door1 ) ) {
-      if ( (room1 = EXIT( ch, door1 )->to_room) == was_in || world[EXIT(ch, door1)->to_room].silence[0])
+  for (int door1 = 0; door1 < NUM_OF_DIRS; door1++ ) {
+    if ( world[ch->in_room].dir_option[door1] ) {
+      room1 = world[ch->in_room].dir_option[door1]->to_room;
+      if ( room1 == was_in || world[room1].silence[0])
         continue;
      
-      for ( door2 = 0; door2 < NUM_OF_DIRS; door2++ ) {
-        if ( EXIT( ch, door2 ) ) {
-          if ( (room2 = EXIT( ch, door2 )->to_room) == room1 || world[EXIT(ch, door2)->to_room].silence[0])
+      for (int door2 = 0; door2 < NUM_OF_DIRS; door2++ ) {
+        if ( world[room1].dir_option[door2] ) {
+          room2 = world[room1].dir_option[door2]->to_room;
+          if ( room2 == room1 || room2 == was_in || world[room2].silence[0])
             continue;
 
-          for ( door3 = 0; door3 < NUM_OF_DIRS; door3++ ) {
-            if ( EXIT( ch, door3 ) ) {
-              if ( (room3 = EXIT( ch, door3 )->to_room) == room2 || world[EXIT(ch, door3)->to_room].silence[0])
+          for (int door3 = 0; door3 < NUM_OF_DIRS; door3++ ) {
+            if ( world[room2].dir_option[door3] ) {
+              room3 = world[room2].dir_option[door3]->to_room;
+              if ( room3 == room2 || room3 == room2 ||room3 == was_in || world[room3].silence[0])
                 continue;
-  
-              ch->in_room = room3;
           
-              sprintf( temp, "%ld", ch->in_room );
+              sprintf( temp, ".%ld.", room3 );
   
-              if ( !strstr( been_heard, temp ) ) { 
-                act("You hear gunshots nearby!", FALSE, ch, 0, 0, TO_ROOM);
-                for (struct char_data *tch = world[ch->in_room].people; tch; tch = tch->next_in_room)
+              if ( !strstr( been_heard, temp ) ) {
+                // Send gunshot notifications to everyone in ripple radius 1.
+                // act("You hear gunshots nearby!", FALSE, ch, 0, 0, TO_ROOM);
+                send_to_room("You hear gunshots nearby!", room3);
+                
+                // Process guard and helper ranged responses.
+                for (struct char_data *tch = world[room3].people; tch; tch = tch->next_in_room)
                   if (IS_NPC(tch))
                     if ((MOB_FLAGGED(tch, MOB_GUARD) || MOB_FLAGGED(tch, MOB_HELPER))
-                        && number(0, 6) >= 2 && (IS_NPC(ch) && !IS_NPC(tch))) {
+                        && number(0, 6) >= 2 && (IS_NPC(tch) && !IS_NPC(ch))) {
                       GET_MOBALERT(tch) = MALERT_ALARM;
                       GET_MOBALERTTIME(tch) = 20;
-                      ch->in_room = was_in;
                       ranged_response(ch, tch);
-                      ch->in_room = room3;
                     }
                 strcat( been_heard, temp );
               }
-              ch->in_room = room2;
             }
           }
-          ch->in_room = room2;
-          sprintf( temp, "%ld", ch->in_room );
+          sprintf( temp, ".%ld.", room2 );
     
           if ( !strstr( been_heard, temp ) ) {
-            act("You hear gunshots not far off.", FALSE, ch, 0, 0, TO_ROOM);
+            // Send gunshot notifications to everyone in ripple radius 2.
+            // act("You hear gunshots not far off.", FALSE, ch, 0, 0, TO_ROOM);
+            send_to_room("You hear gunshots not far off.", room2);
+            
+            // Process guard and helper ranged responses.
             for (struct char_data *tch = world[ch->in_room].people; tch; tch = tch->next_in_room)
               if (IS_NPC(tch))
                 if ((MOB_FLAGGED(tch, MOB_GUARD) || MOB_FLAGGED(tch, MOB_HELPER))
-                    && number(0, 6) >= 2 && (IS_NPC(ch) && !IS_NPC(tch))) {
+                    && number(0, 6) >= 2 && (IS_NPC(tch) && !IS_NPC(ch))) {
                   GET_MOBALERT(tch) = MALERT_ALARM;
                   GET_MOBALERTTIME(tch) = 20;
-                  ch->in_room = was_in;
                   ranged_response(ch, tch);
-                  ch->in_room = room2;
                 }
             strcat( been_heard, temp );
           }
-          ch->in_room = room1;
         }
       }
-      ch->in_room = room1;
                
-      sprintf( temp, "%ld", ch->in_room );
+      sprintf( temp, ".%ld.", room1 );
   
       if ( !strstr( been_heard, temp ) ) {
-        act("You hear gunshots in the distance.", FALSE, ch, 0, 0, TO_ROOM);
+        // Send gunshot notifications to everyone in ripple radius 3.
+        // act("You hear gunshots in the distance.", FALSE, ch, 0, 0, TO_ROOM);
+        send_to_room("You hear gunshots in the distance.", room1);
+        
+        // Process guard and helper ranged responses.
         for (struct char_data *tch = world[ch->in_room].people; tch; tch = tch->next_in_room)
           if (IS_NPC(tch))
             if ((MOB_FLAGGED(tch, MOB_GUARD) || MOB_FLAGGED(tch, MOB_HELPER))
-                && number(0, 6) >= 2 && (IS_NPC(ch) && !IS_NPC(tch))) {
+                && number(0, 6) >= 2 && (IS_NPC(tch) && !IS_NPC(ch))) {
               GET_MOBALERT(tch) = MALERT_ALARM;
               GET_MOBALERTTIME(tch) = 20;
-              ch->in_room = was_in;
               ranged_response(ch, tch);
-              ch->in_room = room1;
             }
         strcat( been_heard, temp );
       }
-      ch->in_room = was_in;
     }
-  }    
-  ch->in_room = was_in;
+  }
 }
 
 void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon, struct obj_data *vict_weapon)

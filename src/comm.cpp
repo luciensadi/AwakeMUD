@@ -2432,7 +2432,8 @@ void act(const char *str, int hide_invisible, struct char_data * ch,
   else
   {
     log("SYSERR: no valid target to act()!");
-    log(str);
+    sprintf(buf, "Invocation: act('%s', '%d', char_data, obj_data, vict_obj, '%d').", str, hide_invisible, type);
+    log(buf);
     return;
   }
 
@@ -2460,9 +2461,7 @@ void act(const char *str, int hide_invisible, struct char_data * ch,
     else
       next = to->next_in_room;
     if (SENDOK(to)
-        && !(hide_invisible
-             && ch
-             && !CAN_SEE(to, ch))
+        && !(hide_invisible && ch && !CAN_SEE(to, ch))
         && (to != ch) && !(PLR_FLAGGED(to, PLR_REMOTE) || PLR_FLAGGED(to, PLR_MATRIX))
         && (type == TO_ROOM || type == TO_ROLLS || (to != vict_obj)))
       perform_act(str, ch, obj, vict_obj, to);
