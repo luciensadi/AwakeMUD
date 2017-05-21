@@ -1983,7 +1983,7 @@ ACMD(do_pour)
 
 void wear_message(struct char_data * ch, struct obj_data * obj, int where)
 {
-  char *wear_messages[][2] = {
+  const char *wear_messages[][2] = {
                                {"$n activates $p and holds it.",
                                 "You activate $p and hold it."},
 
@@ -2145,7 +2145,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
                             ITEM_WEAR_BELLY, ITEM_WEAR_WAIST, ITEM_WEAR_THIGH, ITEM_WEAR_THIGH,
                             ITEM_WEAR_LEGS, ITEM_WEAR_ANKLE, ITEM_WEAR_ANKLE, ITEM_WEAR_SOCK, ITEM_WEAR_FEET };
 
-  char *already_wearing[] = {
+  const char *already_wearing[] = {
                               "You're already using a light.\r\n",
                               "You're already wearing something on your head.\r\n",
                               "You're already wearing something on your eyes.\r\n",

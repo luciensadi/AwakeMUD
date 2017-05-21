@@ -205,7 +205,7 @@ struct spell_data
 
 struct spell_types
 {
-  char *name;
+  const char *name;
   bool physical;
   sh_int category;
   sh_int vector;

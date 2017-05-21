@@ -218,7 +218,7 @@ void zedit_disp_data_menu(struct descriptor_data *d)
   d->edit_mode = ZEDIT_DATA_MENU;
 }
 
-char *get_type(char c)
+const char *get_type(char c)
 {
   switch (c) {
   case 'M':
