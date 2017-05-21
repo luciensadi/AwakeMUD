@@ -1,0 +1,2053 @@
+#0
+Keywords:	bug
+Name:	a bug
+RoomDesc:$
+An unnamed object sits here.~
+LookDesc:$
+You see an uncreative object.~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.01
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1
+Keywords:	formula spell blank
+Name:	a blank spell formula
+RoomDesc:$
+A spell formula lies here.~
+LookDesc:$
+Cryptic writing covers the paper.
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.01
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#2
+Keywords:	hide puff
+Name:	the hide of Puff
+RoomDesc:$
+A brilliant fractal filled piece of fabric lies here.~
+LookDesc:$
+Fractalized to an infinite degree, looking at the Hide of Puff starts to
+make you dizzy.
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	100000000001
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	1000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	15
+	Val6:	15
+BREAK
+#3
+Keywords:	laptop g4 darwin black transclucent
+Name:	a translucent black G4 laptop
+RoomDesc:$
+An old laptop sits on a desk, softly absorbing light.~
+LookDesc:$
+The laptop is smoothly designed, and composed of translucent black plastic.  A
+black apple is faintly visible on its cover, and a series of technologically
+archaic ports lines the back. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	3.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4
+Keywords:	oldschool school bulletin board
+Name:	an oldschool bulletin board
+RoomDesc:$
+An oldschool bulletin board is attached to the wall.~
+LookDesc:$
+This terminal is used for job posts and resume posts. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#5
+Keywords:	scroll dark blue
+Name:	a scroll scribed in dark blue
+RoomDesc:$
+An ancient scroll lies here, its runes etched elaborately in dark blue ink.~
+LookDesc:$
+The elaborate text, written English, reads, 'Let thy searing light roll'. All
+else is undecipherable to the mundane. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	6000
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	48
+BREAK
+#6
+Keywords:	dagger astral
+Name:	the astral dagger
+RoomDesc:$
+A magical dagger lies here, glowing softly.~
+LookDesc:$
+A glowing dagger, whose blade appears to be no more than an illusion, until it
+rends your flesh. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1001010010
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	3.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val2:	4
+	Val3:	311
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#7
+Keywords:	robes crimson
+Name:	Long crimson robes
+RoomDesc:$
+A blood red cloak lies here.~
+LookDesc:$
+A blood red robe, worn by an arcanist. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	1010000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	6.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	50
+	Val6:	50
+BREAK
+#8
+Keywords:	flesh ring
+Name:	a flesh ring
+RoomDesc:$
+A ring fashioned from human flesh is rotting here.~
+LookDesc:$
+It looks as though someone has labored long hours to perfect it--
+some fine craftsman has intricately woven delicate strips of human
+flesh into a form resemblant of a ring.  Rot has set in, however,
+and the reek of putrification hangs about it...it also seems as 
+though some oppurtunistic maggots have made it their home.
+~
+Type:	Worn
+WearFlags:	11
+ExtraFlags:	100000011010
+AffFlags:	1010000000000000
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#9
+Keywords:	cannon big
+Name:	Lowly's big motherfucking cannon
+RoomDesc:$
+Lowly's big motherfucking cannon is sitting here heavily.~
+LookDesc:$
+Damn, that's big!
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	100000000000
+AffFlags:	10000000000000
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val3:	326
+	Val4:	22
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#10
+Keywords:	leggings pants skin
+Name:	Some humanskin leggings
+RoomDesc:$
+Some humanskin leggings are lying here, collecting dust.~
+LookDesc:$
+You wonder where the skin that made them was procured...
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	100000011010
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#11
+Keywords:	claw silver
+Name:	a silver claw
+RoomDesc:$
+A silver claw is lying here.~
+LookDesc:$
+It's silver, clawlike and deadly!
+~
+Type:	Weapon
+WearFlags:	1
+ExtraFlags:	11000
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val3:	308
+	Val4:	4
+	Val5:	-1
+	Val6:	-1
+BREAK
+#12
+Keywords:	computer terminal novatech esquire cyberterminal board
+Name:	a Novatech Esquire cyberterminal
+RoomDesc:$
+A cyberterminal is on the desk, with electrodes for interfacing.~
+LookDesc:$
+What?  You really shouldn't be seeing this.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#13
+Keywords:	Root's pager
+Name:	a Sleek Black Pager
+RoomDesc:$
+A sleek black pager sits here.~
+LookDesc:$
+It looks pretty much like a normal alphanumeric pager. 
+~
+Type:	Other
+WearFlags:	100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	100
+[AFFECT 1]
+	Location:	Init Dice
+	Modifier:	100
+[AFFECT 2]
+	Location:	Ballistic
+	Modifier:	100
+[AFFECT 3]
+	Location:	Impact
+	Modifier:	100
+[AFFECT 4]
+	Location:	Combat Pool
+	Modifier:	100
+BREAK
+#14
+Keywords:	unix plain english second edition book
+Name:	a copy of UNIX in Plain English Second Addition
+RoomDesc:$
+A very worn copy of the UNIX in Plain English Second Edition.~
+LookDesc:$
+The Second Edition of UNIX in Plain English looks very drab, plain, boring.
+It's a reference manual for converting some of the lesser known UNIX commands
+to plain english.  Many of the pages are stained with coffee and dogeared from
+reading. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#15
+Keywords:	cookie frosting covered
+Name:	a frosting-covered cookie
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+A VERY special cookie, very rare indeed!  A sugar-cookie, with butter
+frosting, the best kind. Mmm mmm. Written on the top, in pink frosting, with
+very curvy writing is, "Made by Archangel." Hmm... still sure you want to eat
+that?  
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	30
+BREAK
+#16
+Keywords:	pile nuyen
+Name:	a big pile of nuyen
+RoomDesc:$
+A big pile of nuyen.~
+LookDesc:$
+It's a lot of nuyen. 
+~
+Type:	Money
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	25000
+BREAK
+#17
+Keywords:	credstick stick
+Name:	a standard credstick
+RoomDesc:$
+A credstick has been left here.~
+LookDesc:$
+It's a pretty generic credstick. 
+~
+Type:	Money
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.21
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	25000
+	Val1:	1
+	Val2:	3
+BREAK
+#19
+Keywords:	computer terminal
+Name:	a computer terminal
+RoomDesc:$
+A computer terminal is set up on the desk here.~
+LookDesc:$
+It's a standard computer terminal, though modified to fit FJ's needs ;) 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	101000001000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#20
+Keywords:	terminal computer board state art
+Name:	a state-of-the-art computer terminal
+RoomDesc:$
+A state-of-the-art computer terminal displays a holographic screen saver.~
+LookDesc:$
+You shouldn't be seeing this. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#21
+Keywords:	terminal sgi workstation computer
+Name:	a terminal
+RoomDesc:$
+An ancient SGI workstation sits here, displaying a 3-dimensional screen saver.~
+LookDesc:$
+Hey!  You shouldnt be seeing this! 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	10000.00
+	Barrier:	1
+	Cost:	1090000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22
+Keywords:	terminal computer alpha server
+Name:	a computer terminal
+RoomDesc:$
+A computer sits atop the desk, displaying the senator's bulletin board.~
+LookDesc:$
+You shouldn't be seeing this unless something is b0rked. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2147483648.00
+	Barrier:	1
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#23
+Keywords:	terminal cabinet street fighter
+Name:	a vintage Street Fighter 7 Super Ultra Alpha Cabnet
+RoomDesc:$
+A vintage Street Fighter 7 Super Ultra Alpha Cabnet made into a terminal is here.~
+LookDesc:$
+This vintage arcade game cabinet is one of the last games ever made for play
+outside the matrix and its in surprisingly good condition, its age considered.
+By the looks of it, digitalsmear must have spent a long time customizing this
+system so that it would fit perfectly in the cabinet. A customized terminal
+screen saver runs showing clips from the old game and a modified control deck
+has a keyboard for typing messages. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#24
+Keywords:	tux tshirt t-shirt linux penguin
+Name:	a ^LTux ^Ythe ^LLinux penguin t-shirt^n
+RoomDesc:$
+A t-shirt with a cute penguin on it lies here.~
+LookDesc:$
+The infamous image of Tux the Linux Penguin adorns this black t-shirt. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	101000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	1000
+	Val6:	1000
+BREAK
+#25
+Keywords:	giants hat baseball ball cap
+Name:	a San Francisco Giants baseball cap
+RoomDesc:$
+A baseball cap with the SF logo on it lies here.~
+LookDesc:$
+A black custom-fit baseball hat, with the SF logo on it. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	101000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#26
+Keywords:	terminal dumb console computer shadowland access portal
+Name:	a dumb terminal
+RoomDesc:$
+An old-style dumb terminal rigged for Shadowland access sits on the table.~
+LookDesc:$
+A cursor blinks idly.  The terminal is not connected to the mainframe. There
+is a problem here and it needs to be reported to an immortal. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	10
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	10.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#27
+Keywords:	book scieno diagnetix dianetics hubbard scientology huckster huxter lies garbage
+Name:	"Diagnetix" by L. Ron Huckster
+RoomDesc:$
+A book with a volcano exploding on the cover lies here.~
+LookDesc:$
+Diagnetix, by L. Ron Huckster -- the book that the evil Cult of Xenu publishes
+tons of copies of, that is full of pseudo-psychological programming that ends
+up brainwashing you.  It's garbage, chuck it. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#28
+Keywords:	computer terminal apple macintosh
+Name:	an Apple Macintosh
+RoomDesc:$
+An ancient Apple Macintosh sits here on a table, displaying an AfterDark screensaver.~
+LookDesc:$
+What?  You shouldn't see this!  It's bug report time baby yeah! 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	1000000000.00
+	Barrier:	32
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29
+Keywords:	book
+Name:	a book
+RoomDesc:$
+A book lies here.~
+LookDesc:$
+test object.  read page1, page2, page3 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30
+Keywords:	server case pieces computer parts broken
+Name:	a server in parts
+RoomDesc:$
+A server case is here, lying in pieces amongst the clothes.~
+LookDesc:$
+This server case is stock full of half functioning hardware and barely
+functioning fans.  From what you can tell it seems to be a Pentium II with
+about nine hard drives attached amongst various other pieces of hardware. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31
+Keywords:	terminal computer tactical system board
+Name:	a tactical computer
+RoomDesc:$
+A computer is mounted on the wall for logging changes to the codebase.~
+LookDesc:$
+If you are seeing this, either the spec-code isn't in yet or THERE IS A BUG! 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	1000000000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#32
+Keywords:	badge lone star
+Name:	a Lone Star Badge
+RoomDesc:$
+A shiny badge with the LS logo is lying here.~
+LookDesc:$
+It's oval in shape, in leather, and a golden metal piece with the LS logo and
+an inscription saying "Detective". 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	24
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#33
+Keywords:	mask face facemask abraham lincoln
+Name:	an Abraham Lincoln face mask
+RoomDesc:$
+A plastic mask is lying here, gathering dust.~
+LookDesc:$
+A basic plastic face mask depicting abraham lincon, with an elastic string to
+go around the back of your head. weee i'm abraham lincon!  
+~
+Type:	Worn
+WearFlags:	100000000000000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#34
+Keywords:	fastjack head pike
+Name:	Fastjack's Head on a Pike
+RoomDesc:$
+A head on a pike sits in the ground here.~
+LookDesc:$
+Fastjack's head on a pike.  
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#35
+Keywords:	Antique OpenBSD laptop
+Name:	an Antique OpenBSD laptop
+RoomDesc:$
+An old looking laptop sits here.~
+LookDesc:$
+An antique laptop that weighs around 10 pounds and is 4 inches thick. It uses
+an 11.5 inch LCD standard floppy drive, and a MFM 3.5 inch hard drive. The
+owner has installed OpenBSD on it, an old OS from the 20th century. It also
+comes with a full sized keyboard. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#36
+Keywords:	straw mcdonalds
+Name:	a McDonalds Straw
+RoomDesc:$
+A straw is lying here.~
+LookDesc:$
+A basic McDonalds straw that has some white powder on it. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#37
+Keywords:	mirror stained cocaine powder
+Name:	a mirror stained with cocaine powder
+RoomDesc:$
+A mirror stained with some powder lies here.~
+LookDesc:$
+A basic mirror with some white powder covering the surface. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#38
+Keywords:	testtube pipe methamphetamine resin
+Name:	a testtube pipe with methamphetamine resin
+RoomDesc:$
+A pipe is lying here.~
+LookDesc:$
+A long testtube with a metal straw attached to the side for easy, accessable
+smoking. 
+~
+Type:	Other
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39
+Keywords:	spoon
+Name:	a Spoon
+RoomDesc:$
+A spoon, fear.~
+LookDesc:$
+Made out of silver, the spoon has a concaved space, used for holding food and
+liquids. The spoon has the elven symbol for "Spoon Mage" carved into it's
+handle. 
+~
+Type:	Other
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#40
+Keywords:	moonsilver chainmail armor
+Name:	A full suit of moonsilver chainmail
+RoomDesc:$
+A silver chainmail suit with a bright sheen lies here, glinting bright.~
+LookDesc:$
+One of the rarest and little known magical metals was used to create this suit
+of chainmail armor.  The sheen of silver, with the strength of titanium, the
+weight of aluminum, and the magical properties of orichalcum.  Where the chest
+ends under the chin, is a seal, an eight-pointed star, symbolic of the
+Ki'ronyx, the banner that flew over ancient elven cities in Tirlannon, a land
+almost forgotten, echoed in legend as Avalon and ancient Tir Na Nog. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	111010000000001000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	7
+	Val6:	12
+BREAK
+#50
+Keywords:	flat panel display monitor terminal board floating
+Name:	A Floating Display Panel
+RoomDesc:$
+A liquid crystal display that floats in the middle of the room, viewable from both sides~
+LookDesc:$
+You shouldn't see this description.  There is a bug.  Report it. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2147483648.00
+	Barrier:	1
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#66
+Keywords:	An X-Box hooked up with Linux
+Name:	An X-Box hooked up with Linux
+RoomDesc:$
+A Gray box hooked to a monitor is here~
+LookDesc:$
+An X-Box hooked up with Linux 
+~
+Type:	UNDEFINED
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#81
+Keywords:	blue light saber
+Name:	A blue light saber
+RoomDesc:$
+A Louisville Slugger~
+LookDesc:$
+Hot damn, it's a blue light saber 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	101000000011
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	50000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val2:	4
+	Val3:	301
+	Val4:	3
+	Val5:	-1
+BREAK
+#82
+Keywords:	wad of nuyen
+Name:	a wad of nuyen
+RoomDesc:$
+A wad of nuyen is lying here.~
+LookDesc:$
+A wad of nuyen is here 
+~
+Type:	Money
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	25000
+BREAK
+#83
+Keywords:	can sprite drink
+Name:	A Can of Sprite
+RoomDesc:$
+This is a can of sprite with bubbles and everything~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.45
+	Barrier:	1
+	Cost:	60
+	AvailTN:	6
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	24
+	Val2:	3
+BREAK
+#100
+Keywords:	credstick plastic
+Name:	a plastic credstick
+RoomDesc:$
+A standard plastic credstick has been left here.~
+LookDesc:$
+A plastic cylinder, with a computer at the sharpened end used for making
+transactions.  A 10-digit keypad decorates part of it.
+~
+Type:	Money
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.21
+	Barrier:	4
+	Cost:	125
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	1
+BREAK
+#101
+Keywords:	credstick steel
+Name:	a steel credstick
+RoomDesc:$
+A shiny steel credstick is lying here.~
+LookDesc:$
+Much like the plastic version, only more durable.
+~
+Type:	Money
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	275
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	1
+BREAK
+#102
+Keywords:	credstick silver
+Name:	a silver credstick
+RoomDesc:$
+A silver credstick lies here.~
+LookDesc:$
+Much more valuable than the standard credsticks, the silver has a
+thumbprint pad instead of a 10-digit keypad.
+~
+Type:	Money
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	1250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+BREAK
+#103
+Keywords:	credstick titanium
+Name:	a titanium credstick
+RoomDesc:$
+A metallic credstick lies on the ground.~
+LookDesc:$
+While housing the same technology as the silver model, the titanium
+is the most durable model of all.
+~
+Type:	Money
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	12
+	Cost:	2500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+BREAK
+#104
+Keywords:	credstick platinum
+Name:	a platinum credstick
+RoomDesc:$
+Someone has dropped their platinum credstick!~
+LookDesc:$
+The most expensive and most secure model of the credsticks, the platinum
+requires a successful retinal scan to access an account.
+~
+Type:	Money
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	9250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	3
+BREAK
+#105
+Keywords:	credstick emerald
+Name:	an emerald credstick
+RoomDesc:$
+A green crystalline credstick is lying here.~
+LookDesc:$
+Although it offers no technological advantages over the silver model,
+the emerald credstick is much more stylish.
+~
+Type:	Money
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	12750
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	3
+BREAK
+#106
+Keywords:	optical chip datafile
+Name:	a blank optical chip
+RoomDesc:$
+A tiny optical chip glints on the floor.~
+LookDesc:$
+It is an optical chip used for storing data. Probably holds all sorts of
+secret information you shouldn't be reading. 
+~
+Type:	Decking Accessory
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.02
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	1
+BREAK
+#107
+Keywords:	datadisk
+Name:	a blank program design
+RoomDesc:$
+Someone has dropped a datadisk here.~
+LookDesc:$
+It's a datadisk with the words 'Program Design X' written on the cover. It
+contains the designs to an as of yet unmade program. 
+~
+Type:	Program Design
+WearFlags:	1
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.02
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#108
+Keywords:	optical chip
+Name:	a blank program
+RoomDesc:$
+An optical chip has been left here.~
+LookDesc:$
+It's an optical chip, probably storing some wiz new program for you to use. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.02
+	Barrier:	3
+	Cost:	0
+	AvailTN:	2
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#109
+Keywords:	blank photo
+Name:	a blank photo
+RoomDesc:$
+Someone has discarded a photo here.~
+LookDesc:$
+Actually, now that you look closer, it's not blank. It's a photograph of the
+most terrifying thing you could ever imagine. 
+~
+Type:	Decking Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.01
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	15
+	Val2:	1
+BREAK
+#110
+Keywords:	nuyen roll
+Name:	a roll of nuyen
+RoomDesc:$
+A roll of nuyen is lying here.~
+LookDesc:$
+It's a roll of nuyen, just ready for you to grab and run. 
+~
+Type:	Money
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#111
+Keywords:	mail paper letter
+Name:	a piece of mail
+RoomDesc:$
+Someone has left a piece of mail here.~
+LookDesc:$
+It's filled with the most haunting passage of text you've ever seen, this is
+not something you will easily forget. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#112
+Keywords:	blank part design
+Name:	a blank part design
+RoomDesc:$
+Someone has left the designs for a cyberdeck part here.~
+LookDesc:$
+It contains the plans for a cyberdeck part. 
+~
+Type:	Deck Part
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#113
+Keywords:	non-descript cyberdeck deck
+Name:	a non-descript cyberdeck
+RoomDesc:$
+Someone has left a cyberdeck here.~
+LookDesc:$
+It is a featureless cyberdeck. 
+~
+Type:	Custom Deck
+WearFlags:	10001000100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	4
+	LegalCode:	16
+	LegalPermit:	1
+[VALUES]
+	Val9:	1
+BREAK
+#114
+Keywords:	shamanic lodge
+Name:	a shamanic lodge
+RoomDesc:$
+A ramshackle shamanic lodge has been constructed here.~
+LookDesc:$
+Filled with all manner of nik-naks and various magic and semi-magic artifacts,
+this lodge has been set up by a shaman. 
+~
+Type:	Magic Tool
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+BREAK
+#115
+Keywords:	hermetic circle
+Name:	a hermetic circle
+RoomDesc:$
+A hermetic circle takes up a large space on the floor here.~
+LookDesc:$
+Hermetic circles are the corner stone of a mage's summoning ritual. It is an
+elaborate design, drawn in chalk that takes up most of the floor space in the
+room. 
+~
+Type:	Magic Tool
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	0.00
+	Barrier:	16
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+BREAK
+#116
+Keywords:	conjuring materials pile
+Name:	some conjuring materials
+RoomDesc:$
+A pile of conjuring materials is carefully stacked here.~
+LookDesc:$
+It contains representative portions of each true element, water, earth, fire
+and air. Very useful to any mage trying to conjure elementals. 
+~
+Type:	Magic Tool
+WearFlags:	1
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+BREAK
+#117
+Keywords:	spell formula
+Name:	a blank spell formula
+RoomDesc:$
+Someone has left a formula here.~
+LookDesc:$
+It's a blank spell formula. 
+~
+Type:	Spell Formula
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#118
+Keywords:	folder
+Name:	a blank pocket secretary folder
+RoomDesc:$
+IF YOU SEE THIS HAIL AN IMM.~
+LookDesc:$
+It's a folder off of a pocket secretary. How are you looking at it? 
+~
+Type:	Other
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#119
+Keywords:	neophyte guild housing card
+Name:	a Neophyte Guild housing subsidy card
+RoomDesc:$
+A small card bearing the logo of the Neophyte Guild lays here.~
+LookDesc:$
+This card, bought from the Neophyte Guild, gives you subsidies on your
+housing. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.75
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#120
+Keywords:	ucas army dress uniform
+Name:	^gA UCAS Army dress uniform shirt^n
+RoomDesc:$
+Army dress greens lie here, folded meticulously.~
+LookDesc:$
+A UCAS Army dress green uniform shirt, with a brass pin etched with the word
+"Straten" upon it, and three stars denoting Major General rank on the collar
+and on the shoulders. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	1200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#121
+Keywords:	beret black rangers special forces ucas army
+Name:	^LA UCAS Army Rangers Beret^n
+RoomDesc:$
+A black beret is lying here, with a UCAS Rangers insignia.~
+LookDesc:$
+A black beret, with the UCAS Army Rangers insignia.  Worn by the 117th Rangers
+and the 82nd Airborne Rangers brigades. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	400
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#122
+Keywords:	armor jacket ucas army dress uniform overcoat
+Name:	^LA UCAS Navy Dress Uniform overcoat
+RoomDesc:$
+A lined UCAS Navy dress overcoat lies here, folded neatly.~
+LookDesc:$
+The black overcoat that is a part of the UCAS Navy's Dress Uniform. The
+insides are lined with kevlar, and polymer mesh creating a layer of ballistic
+and impact protection. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	8
+	Cost:	15000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	6
+	Val4:	4
+	Val5:	5
+	Val6:	3
+	Val7:	2
+BREAK
+#123
+Keywords:	keyn jraye hood white
+Name:	a white hood enshrouds the face
+RoomDesc:$
+A white hood, covered in indecipherable runes lies here.~
+LookDesc:$
+A white hood that is a part of the Keyn J'raye cloak.  It is covered in
+indecipherable runes, not found in any Earth language, not even the more
+arcane and ancient tongues. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	1
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#124
+Keywords:	white cloak alien keyn jraye
+Name:	a white cloak covered in bizarre runes
+RoomDesc:$
+A white cloak, covered in indecipherable runes lies here in a heap.~
+LookDesc:$
+A white cloak, covered in runes that can not be found in any human or
+metahuman language, no matter how ancient or arcane.  It is made of a high
+quality, soft, but somewhat odd linen. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	2
+	Val6:	1
+BREAK
+#125
+Keywords:	white tunic keyn jraye
+Name:	a white tunic
+RoomDesc:$
+A white tunic is folded neatly here.~
+LookDesc:$
+A plain white tunic, made of a soft, high-quality linen.  The fabric feels
+odd, as if its not made of anything... earthly. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#126
+Keywords:	silver cord
+Name:	a silver cord
+RoomDesc:$
+A silver cord lies here rolled neatly.~
+LookDesc:$
+A fine silver rope cord. 
+~
+Type:	Worn
+WearFlags:	100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#140
+Keywords:	customized cc10 ares sniper rifle
+Name:	a Customized Ares CC-10 Sniper Rifle
+RoomDesc:$
+A sleek black sniper rifle lies here.~
+LookDesc:$
+A sniper rifle with a huge scope on it, and shock pads to counter recoil. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000001000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	9.00
+	Barrier:	12
+	Cost:	46750
+	AvailTN:	14
+	AvailDay:	30.00
+	LegalNum:	2
+	LegalCode:	9
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	3
+	Val3:	323
+	Val4:	12
+	Val5:	16
+	Val6:	16
+	Val7:	367
+	Val8:	-1
+	Val9:	670
+	Val10:	2
+BREAK
+#154
+Keywords:	renraku shutdown t-shirt shirt tshirt
+Name:	A "I survived the Renraku Shutdown and all I got were these lousy cybereyes" t-shirt
+RoomDesc:$
+A t-shirt lies here.~
+LookDesc:$
+A T-shirt with the slogan "I survived the Renraku Shutdown and all I got were
+these lousy cybereyes." 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#155
+Keywords:	mister jingles mr mouse
+Name:	a mouse named Mr. Jingles
+RoomDesc:$
+A little mouse scurries about here.~
+LookDesc:$
+A highly intelligent but common appearing mouse, Mister Jingles is barely the
+size of a half dollar, and is quite quick. 
+~
+Type:	Food
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	30
+	Val3:	5
+[AFFECT 0]
+	Location:	Charisma
+	Modifier:	1
+[AFFECT 1]
+	Location:	Weight
+	Modifier:	1
+[AFFECT 2]
+	Location:	Target Numbers
+	Modifier:	1
+BREAK
+#180
+Keywords:	keyn j'raye jraye spirit blade
+Name:	^WA spirit blade^n
+RoomDesc:$
+A blade of ^Wluminescent energy^n lies here, glowing softly.~
+LookDesc:$
+Shaped something like a scimitar, with a long curved blade, made of pure
+energy, as it moves it whistles slightly in the air.  It glows ^Wbright white^n,
+and emits a soft humming sound. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	11
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	1000000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	3
+	Val3:	303
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#187
+Keywords:	mini nuclear automatic railgun
+Name:	a mini nuclear automatic railgun
+RoomDesc:$
+a automatic railgun is lying here.~
+LookDesc:$
+This is one of the worlds most powerfulest guns in the world. It is nuclear
+powered so there is no changing the battery. This SMRG is still in its
+prototype stage. 
+~
+Type:	Weapon
+WearFlags:	1
+ExtraFlags:	10000000
+AffFlags:	1000000100000000000000
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val2:	4
+	Val3:	323
+	Val4:	15
+	Val5:	50
+	Val6:	50
+BREAK
+#190
+Keywords:	Mobile Combat Armor
+Name:	Andra Predator Mobile Combat Armor
+RoomDesc:$
+It's a high tech armor suit, that enhances defense greatly, as well as artificially enhancing reaction times, among other things.~
+LookDesc:$
+A suit of form fitting high tech armor lies here 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	1000000010
+AffFlags:	1000000000001000000000
+Material:	metal
+[POINTS]
+	Weight:	50.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	6
+	Val2:	4
+	Val3:	4
+	Val4:	6
+	Val5:	14
+	Val6:	10
+	Val7:	-4
+BREAK
+#199
+Keywords:	ring wedding gold
+Name:	Zack's wedding ring
+RoomDesc:$
+A gold wedding ring is lying here~
+LookDesc:$
+This is a gold wedding ring, with the inscription "Zack and Emily." 
+~
+Type:	Worn
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

@@ -1,0 +1,5905 @@
+#300
+Keywords:	boosted reflexes 1
+Name:	a boosted reflexes I
+RoomDesc:$
+A treatment of boosted reflexes lies here.~
+LookDesc:$
+This one-time electro-chemical treatment and modification increases the body's
+natural reflexes without the need for cybernetic response amplifiers and
+neural-enhancement circuitry. Not compatible with Wired Reflexes or a Vehicle
+Control Rig.) 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	15000
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	1
+	Val4:	50
+[AFFECT 0]
+	Location:	Init Dice
+	Modifier:	1
+BREAK
+#301
+Keywords:	boosted reflexes 2
+Name:	a boosted reflexes II
+RoomDesc:$
+A treatment of boosted reflexes lies here.~
+LookDesc:$
+This one-time electro-chemical treatment and modification increases the body's
+natural reflexes without the need for cybernetic response amplifiers and
+neural-enhancement circuitry. (Not compatible with Wired Reflexes or a Vehicle
+Control Rig.) 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	40000
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	2
+	Val4:	125
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	1
+[AFFECT 1]
+	Location:	Init Dice
+	Modifier:	1
+BREAK
+#302
+Keywords:	smartlink-2 system
+Name:	a smartlink-2 system
+RoomDesc:$
+Smartgun link II~
+LookDesc:$
+This is an upgraded version of the regulat smartgun link. It provides better a
+accuracy than the regular version. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	3500
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	45
+	Val1:	2
+	Val4:	50
+BREAK
+#303
+Keywords:	boosted reflexes 3
+Name:	a boosted reflexes III
+RoomDesc:$
+A treatment of boosted reflexes lies here.~
+LookDesc:$
+This one-time electro-chemical treatment and modification increases the
+body's natural reflexes without the need for cybernetic responses amplifiers
+and neural-enhancement circuitry.  (Not compatible with Wired Reflexes or
+a Vehicle Control Rig.  Non-upgradable)
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	90000
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	3
+	Val4:	280
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	2
+[AFFECT 1]
+	Location:	Init Dice
+	Modifier:	2
+BREAK
+#304
+Keywords:	datajack
+Name:	a datajack
+RoomDesc:$
+An uninstalled datajack is here.~
+LookDesc:$
+When installed, it lets information travel from a computer, or more commonly,
+the Matrix, directly into the user's brain.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val4:	20
+BREAK
+#305
+Keywords:	flare compensation cybereyes
+Name:	a flare compensation
+RoomDesc:$
+Small pieces of cyberware lay here.~
+LookDesc:$
+Once installed, they help reduce damage done to the eyes caused by
+instantaneous, blinding flashes of light.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	2000
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val3:	8
+	Val4:	10
+BREAK
+#306
+Keywords:	low-light low light vision
+Name:	a low-light vision
+RoomDesc:$
+A set of low-light vision has been discarded here.~
+LookDesc:$
+Designed to allow humans to have low-light vision.  Not as good as the
+natural option belonging to Elves and Orcs, but better than nothing.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	10000000000000
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	3000
+	AvailTN:	4
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val3:	32
+	Val4:	20
+BREAK
+#307
+Keywords:	thermographic vision
+Name:	a thermographic vision
+RoomDesc:$
+Cyber thermographic vision waits to be installed.~
+LookDesc:$
+Like the low-light version, this allows those born without thermographic
+vision to attain it.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	1000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	3000
+	AvailTN:	4
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val3:	512
+	Val4:	20
+BREAK
+#308
+Keywords:	muscle replacement
+Name:	a muscle replacement I
+RoomDesc:$
+Some vat-grown, synthesized muscles lay here.~
+LookDesc:$
+Synthetically grown in vats, these replace the natural set.  They increase
+strength and quickness by the rating.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	20000
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	46
+	Val1:	1
+	Val4:	100
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	1
+[AFFECT 1]
+	Location:	Quickness
+	Modifier:	1
+BREAK
+#309
+Keywords:	muscle replacement
+Name:	a muscle replacement II
+RoomDesc:$
+Some synthesized, vat-grown muscles lay here.~
+LookDesc:$
+They increase strength and quickness by the rating.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	40000
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	46
+	Val1:	2
+	Val4:	200
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	2
+[AFFECT 1]
+	Location:	Quickness
+	Modifier:	2
+BREAK
+#310
+Keywords:	muscle replacement
+Name:	a muscle replacement III
+RoomDesc:$
+Synthesized, vat-grown muscles lay here.~
+LookDesc:$
+They increase strength and quickness by the rating.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	60000
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	46
+	Val1:	3
+	Val4:	300
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	3
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	3
+BREAK
+#311
+Keywords:	muscle replacement
+Name:	a muscle replacement IV
+RoomDesc:$
+A set of synthesized, vat-grown muscles lies here.~
+LookDesc:$
+They increase strength and quickness by the rating.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	80000
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	46
+	Val1:	4
+	Val4:	400
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	4
+[AFFECT 1]
+	Location:	Quickness
+	Modifier:	4
+BREAK
+#312
+Keywords:	smartlink
+Name:	a smartlink system
+RoomDesc:$
+A smartlink system is here.~
+LookDesc:$
+Used with an appropriate weapon to increase accuracy. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	2500
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	45
+	Val1:	1
+	Val4:	50
+BREAK
+#313
+Keywords:	dermal plating
+Name:	a dermal plating I
+RoomDesc:$
+A set of dermal plating lies in the corner.~
+LookDesc:$
+This invasive protection system uses hard plastic and metal fibers plates
+bonded to the user's skin. Dermal plating is anything but subtle, and limits
+skin flexability. The armor plates may be tailored to any surface texture or
+color. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	6000
+	AvailTN:	4
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	1
+	Val4:	50
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+BREAK
+#314
+Keywords:	dermal plating
+Name:	a dermal plating II
+RoomDesc:$
+A set of dermal plating lies in the corner.~
+LookDesc:$
+This invasive protection system uses hard plastic and metal fibers plates
+bonded to the user's skin. Dermal plating is anything but subtle, and limits
+skin flexability. The armor plates may be tailored to any surface texture or
+color.  
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	15.00
+	Barrier:	1
+	Cost:	15000
+	AvailTN:	4
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	2
+	Val4:	100
+[AFFECT 0]
+	Location:	Body
+	Modifier:	2
+BREAK
+#315
+Keywords:	dermal plating
+Name:	a dermal plating III
+RoomDesc:$
+A set of dermal plating lies in the corner.~
+LookDesc:$
+This invasive protection system uses hard plastic and metal fibers plates
+bonded to the user's skin. Dermal plating is anything but subtle, and limits
+skin flexability. The armor plates may be tailored to any surface texture or
+color.  
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	20.00
+	Barrier:	1
+	Cost:	45000
+	AvailTN:	4
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	3
+	Val4:	150
+[AFFECT 0]
+	Location:	Body
+	Modifier:	3
+BREAK
+#316
+Keywords:	lacing titanium bone pool cyberware
+Name:	a titanium bone lacing
+RoomDesc:$
+A shining pool of liquid metal is lying here.~
+LookDesc:$
+The pool looks like some form of liquid metal, obviously created for
+Cyberware purposes.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	75000
+	AvailTN:	5
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val3:	2
+	Val4:	225
+[AFFECT 0]
+	Location:	Body
+	Modifier:	2
+[AFFECT 1]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 2]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#317
+Keywords:	lacing bone aluminum pool cyberware
+Name:	an aluminium bone lacing
+RoomDesc:$
+A shining pool of liquid metal is lying here.~
+LookDesc:$
+The liquid looks like some sort of metal film for limbs.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	7.00
+	Barrier:	1
+	Cost:	25000
+	AvailTN:	5
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val3:	1
+	Val4:	115
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#318
+Keywords:	plastic bone lacing pool
+Name:	a plastic bone lacing
+RoomDesc:$
+A pool of plastic coating is lying here.~
+LookDesc:$
+The plastic has been reduced to liquid form, for some sort of protection
+purpose.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	7500
+	AvailTN:	5
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val4:	50
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+BREAK
+#319
+Keywords:	wired reflexes
+Name:	a wired reflexes I
+RoomDesc:$
+The components of wired reflexes lay here.~
+LookDesc:$
+This increases the player's reaction by replacing a few 'meat' parts with
+cyberware.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	55000
+	AvailTN:	4
+	AvailDay:	8.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	1
+	Val4:	200
+BREAK
+#320
+Keywords:	wired reflexes
+Name:	a wired reflexes II
+RoomDesc:$
+The components of wired reflexes lay here.~
+LookDesc:$
+Wired reflexes are implanted neural boosters and adrenaline stimulators. Each
+level adds +2 to the user's reaction and gives +1d6 initiative die. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	165000
+	AvailTN:	4
+	AvailDay:	8.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	2
+	Val4:	300
+BREAK
+#321
+Keywords:	wired reflexes
+Name:	a wired reflexes III
+RoomDesc:$
+The components of wired reflexes lay here.~
+LookDesc:$
+Wired reflexes are implanted neural boosters and adrenaline stimulators. Each
+level adds +2 to the user's reaction and gives +1d6 initiative die.      
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	500000
+	AvailTN:	8
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	3
+	Val4:	500
+BREAK
+#322
+Keywords:	dermal sheathing
+Name:	a dermal sheathing I
+RoomDesc:$
+Numerous semi-flexible plates are compiled in a box.~
+LookDesc:$
+A variation of dermal plating, dermal sheathing has better regenerative
+properties, is less obvious, and inceased flexibility.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	24000
+	AvailTN:	6
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	40
+	Val1:	1
+	Val4:	70
+[AFFECT 0]
+	Location:	Body
+	Modifier:	2
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#323
+Keywords:	dermal sheathing
+Name:	a dermal sheathing II
+RoomDesc:$
+Various plates lay compiled in a box.~
+LookDesc:$
+The improved, more flexible version of dermal plating.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	7.00
+	Barrier:	1
+	Cost:	60000
+	AvailTN:	6
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	40
+	Val1:	2
+	Val4:	140
+[AFFECT 0]
+	Location:	Body
+	Modifier:	3
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#324
+Keywords:	dermal sheathing
+Name:	a dermal sheathing III
+RoomDesc:$
+Various plates lay compiled in a box.~
+LookDesc:$
+The improved, more flexible version of dermal plating.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	120000
+	AvailTN:	8
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	40
+	Val1:	3
+	Val4:	210
+[AFFECT 0]
+	Location:	Body
+	Modifier:	4
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	2
+BREAK
+#325
+Keywords:	single-slot slot chipjack
+Name:	a single-slot chipjack
+RoomDesc:$
+An uninstalled chipjack rests here.~
+LookDesc:$
+Similar to a datajack, but only allowing access to a skillsoft or datasoft.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	3
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val3:	1
+	Val4:	20
+BREAK
+#326
+Keywords:	boosted reflexes alpha
+Name:	a boosted reflexes I -alpha
+RoomDesc:$
+Upgraded boosted reflexes is here.~
+LookDesc:$
+This is an improved, more essence-friendly version of boosted reflexes, rating
+2
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	30000
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	1
+	Val2:	1
+	Val4:	40
+[AFFECT 0]
+	Location:	Init Dice
+	Modifier:	1
+BREAK
+#327
+Keywords:	boosted reflexes alpha
+Name:	a boosted reflexes III -alpha
+RoomDesc:$
+Upgraded boosted reflexes.~
+LookDesc:$
+More essence-friendly than the normal boosted reflexes 3.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	180000
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	3
+	Val2:	1
+	Val4:	224
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	2
+[AFFECT 1]
+	Location:	Init Dice
+	Modifier:	2
+BREAK
+#328
+Keywords:	boosted reflexes beta
+Name:	a boosted reflexes II -beta
+RoomDesc:$
+Upgraded boosted reflexes.~
+LookDesc:$
+More essence-friendly then the normal, or alpha boosted reflexes 2.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	160000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	2
+	Val2:	2
+	Val4:	74
+[AFFECT 0]
+	Location:	Init Dice
+	Modifier:	1
+[AFFECT 1]
+	Location:	Reaction
+	Modifier:	1
+BREAK
+#329
+Keywords:	boosted reflexes beta
+Name:	a boosted reflexes III -beta
+RoomDesc:$
+Upgraded boosted reflexes.~
+LookDesc:$
+More essence-friendly then the normal, or alpha boosted reflexes 3.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	360000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	3
+	Val2:	2
+	Val4:	167
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	2
+[AFFECT 1]
+	Location:	Init Dice
+	Modifier:	2
+BREAK
+#330
+Keywords:	boosted reflexes delta
+Name:	a boosted reflexes II -delta
+RoomDesc:$
+Upgraded boosted reflexes.~
+LookDesc:$
+More essence-friendly than normal, alpha, and beta boosted reflexes 2.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	320000
+	AvailTN:	12
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	2
+	Val2:	3
+	Val4:	62
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	1
+[AFFECT 1]
+	Location:	Init Dice
+	Modifier:	1
+BREAK
+#331
+Keywords:	boosted reflexes delta
+Name:	a boosted reflexes III -delta
+RoomDesc:$
+Upgraded boosted reflexes.~
+LookDesc:$
+More essence-friendly than normal, alpha, and beta boosted reflexes 3.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	720000
+	AvailTN:	12
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	3
+	Val2:	3
+	Val4:	140
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	2
+[AFFECT 1]
+	Location:	Init Dice
+	Modifier:	2
+BREAK
+#332
+Keywords:	muscle replacement alpha
+Name:	a muscle replacement III -alpha
+RoomDesc:$
+Upgraded muscle replacement.~
+LookDesc:$
+More essence-friendly than normal muscle replacement 3.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	120000
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	46
+	Val1:	3
+	Val2:	1
+	Val4:	240
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	3
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	3
+BREAK
+#333
+Keywords:	muscle replacement alpha
+Name:	a muscle replacement IV -alpha
+RoomDesc:$
+Upgraded muscle replacement.~
+LookDesc:$
+More essnce-friendly than normal muscle replacement 4.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	160000
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	46
+	Val1:	4
+	Val2:	1
+	Val4:	320
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	4
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	4
+BREAK
+#334
+Keywords:	muscle replacement beta
+Name:	a muscle replacement III -beta
+RoomDesc:$
+Upgraded muscle replacement.~
+LookDesc:$
+More essence-friendly than normal & alpha muscle replacement 3.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	240000
+	AvailTN:	9
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	46
+	Val1:	3
+	Val2:	2
+	Val4:	179
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	3
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	3
+BREAK
+#335
+Keywords:	muscle replacement beta
+Name:	a muscle replacement IV -beta
+RoomDesc:$
+Upgraded muscle replacement.~
+LookDesc:$
+More essence-friendly than normal & alpha muscle replacement 4.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	320000
+	AvailTN:	9
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	46
+	Val1:	4
+	Val2:	2
+	Val4:	239
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	4
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	4
+BREAK
+#336
+Keywords:	muscle replacement delta
+Name:	a muscle replacement III -delta
+RoomDesc:$
+Upgraded muscle replacement.~
+LookDesc:$
+More essence-friendly than normal, alpha, & beta muscle replacement 3.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	480000
+	AvailTN:	13
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	46
+	Val1:	3
+	Val2:	3
+	Val4:	150
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	3
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	3
+BREAK
+#337
+Keywords:	muscle replacement delta
+Name:	a muscle replacement IV -delta
+RoomDesc:$
+Upgraded muscle replacement.~
+LookDesc:$
+More essence-friendly than normal, alpha, & beta muscle replacement 4.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	640000
+	AvailTN:	13
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	46
+	Val1:	4
+	Val2:	3
+	Val4:	200
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	4
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	4
+BREAK
+#338
+Keywords:	smartlink system alpha
+Name:	a smartlink system -alpha
+RoomDesc:$
+An alpha version of the smartlink system lies here.~
+LookDesc:$
+This is a more essence-friendly version of the standard smartlink. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	5000
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	45
+	Val1:	1
+	Val2:	1
+	Val4:	40
+BREAK
+#339
+Keywords:	smartlink system beta
+Name:	a smartlink system -beta
+RoomDesc:$
+A beta version of the smartlink system is lying here.~
+LookDesc:$
+This is a more essence-friendly version of the standard smartlink. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	10000
+	AvailTN:	8
+	AvailDay:	2.25
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	45
+	Val1:	1
+	Val2:	2
+	Val4:	29
+BREAK
+#340
+Keywords:	smartlink system delta
+Name:	a smartlink system -delta
+RoomDesc:$
+Upgraded smartlink.~
+LookDesc:$
+More essence-friendly version of normal smartlink. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	20000
+	AvailTN:	12
+	AvailDay:	4.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	45
+	Val1:	1
+	Val2:	3
+	Val4:	25
+BREAK
+#341
+Keywords:	dermal plating alpha
+Name:	dermal plating III -alpha
+RoomDesc:$
+Upgraded dermal plating.~
+LookDesc:$
+More essence-friendly version of dermal plating. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	15.00
+	Barrier:	1
+	Cost:	90000
+	AvailTN:	4
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	3
+	Val2:	1
+	Val4:	120
+[AFFECT 0]
+	Location:	Body
+	Modifier:	3
+BREAK
+#342
+Keywords:	dermal plating beta
+Name:	a dermal plating III -beta
+RoomDesc:$
+Upgraded dermal plating.~
+LookDesc:$
+More essence-friendly than normal & alpha dermal plating 3.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	15.00
+	Barrier:	1
+	Cost:	180000
+	AvailTN:	9
+	AvailDay:	18.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	3
+	Val2:	2
+	Val4:	89
+[AFFECT 0]
+	Location:	Body
+	Modifier:	3
+BREAK
+#343
+Keywords:	dermal plating delta
+Name:	a dermal plating III -delta
+RoomDesc:$
+Upgraded dermal plating.~
+LookDesc:$
+More essence-friendly than normal, alpha, & beta dermal plating 3.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	15.00
+	Barrier:	1
+	Cost:	360000
+	AvailTN:	13
+	AvailDay:	36.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	3
+	Val2:	3
+	Val4:	75
+[AFFECT 0]
+	Location:	Body
+	Modifier:	3
+BREAK
+#344
+Keywords:	titanium bone lacing alpha
+Name:	a titanium bone lacing -alpha
+RoomDesc:$
+A pool of liquid metal is lying here.~
+LookDesc:$
+The pool looks like some form of liquid metal, obviously created for
+Cyberware purposes.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	150000
+	AvailTN:	5
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val2:	1
+	Val3:	2
+	Val4:	180
+[AFFECT 0]
+	Location:	Body
+	Modifier:	2
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+[AFFECT 2]
+	Location:	Ballistic
+	Modifier:	1
+BREAK
+#345
+Keywords:	aluminum bone lacing alpha cyberware
+Name:	an aluminium bone lacing -alpha
+RoomDesc:$
+A shining pool of liquid metal is lying here.~
+LookDesc:$
+The liquid looks like some sort of metal film for limbs.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	7.00
+	Barrier:	1
+	Cost:	50000
+	AvailTN:	5
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val2:	1
+	Val3:	1
+	Val4:	92
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+[AFFECT 2]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#346
+Keywords:	lacing bone titanium cyberware pool
+Name:	a titanium bone lacing -beta
+RoomDesc:$
+A pool of liquid metal is lying here.~
+LookDesc:$
+The pool looks like some form of liquid metal, obviously created for
+Cyberware purposes.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	300000
+	AvailTN:	10
+	AvailDay:	21.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val2:	2
+	Val3:	2
+	Val4:	134
+[AFFECT 0]
+	Location:	Body
+	Modifier:	2
+[AFFECT 1]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 2]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#347
+Keywords:	lacing bone aluminum beta cyberware
+Name:	an aluminium bone lacing -beta
+RoomDesc:$
+A shining pool of liquid metal is lying here.~
+LookDesc:$
+The liquid looks like some sort of metal film for limbs.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	7.00
+	Barrier:	1
+	Cost:	100000
+	AvailTN:	10
+	AvailDay:	21.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val2:	2
+	Val3:	1
+	Val4:	68
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+[AFFECT 2]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#348
+Keywords:	lacing bone cyberware titanium pool
+Name:	a titanium bone lacing -delta
+RoomDesc:$
+A pool of liquid metal is lying here.~
+LookDesc:$
+The pool looks like some form of liquid metal, obviously created for
+Cyberware purposes.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	600000
+	AvailTN:	14
+	AvailDay:	42.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val2:	3
+	Val3:	2
+	Val4:	112
+[AFFECT 0]
+	Location:	Body
+	Modifier:	2
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+[AFFECT 2]
+	Location:	Ballistic
+	Modifier:	1
+BREAK
+#349
+Keywords:	lacing bone aluminum cyberware pool
+Name:	an aluminium bone lacing -delta
+RoomDesc:$
+A shining pool of liquid metal is lying here.~
+LookDesc:$
+The liquid looks like some sort of metal film for limbs.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	7.00
+	Barrier:	1
+	Cost:	200000
+	AvailTN:	14
+	AvailDay:	42.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val2:	3
+	Val3:	1
+	Val4:	57
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#350
+Keywords:	wired reflexes alpha
+Name:	a wired reflexes II -alpha
+RoomDesc:$
+Upgraded wired reflexes.~
+LookDesc:$
+Less essence cost than the normal wired reflexes 2.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	330000
+	AvailTN:	4
+	AvailDay:	8.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	2
+	Val2:	1
+	Val4:	240
+BREAK
+#351
+Keywords:	wired reflexes alpha
+Name:	a wired reflexes III -alpha
+RoomDesc:$
+Upgraded wired reflexes.~
+LookDesc:$
+More essence-friendly than the normal wired reflexes 3.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1000000
+	AvailTN:	8
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	3
+	Val2:	1
+	Val4:	400
+BREAK
+#352
+Keywords:	wired reflexes beta
+Name:	a wired reflexes II -beta
+RoomDesc:$
+Upgraded wired reflexes.~
+LookDesc:$
+More essence-friendly than normal & alpha wired reflexes 2.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	660000
+	AvailTN:	9
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	2
+	Val2:	2
+	Val4:	179
+BREAK
+#353
+Keywords:	wired reflexes beta
+Name:	a wired reflexes III -beta
+RoomDesc:$
+Upgraded wired reflexes.~
+LookDesc:$
+More essence-friendly than normal & alpha wired reflexes 3.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	2000000
+	AvailTN:	13
+	AvailDay:	21.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	3
+	Val2:	2
+	Val4:	299
+BREAK
+#354
+Keywords:	wired reflexes delta
+Name:	a wired reflexes II -delta
+RoomDesc:$
+Upgraded wired reflexes.~
+LookDesc:$
+Less essence cost than normal, alpha, & beta wired reflexes 2.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1320000
+	AvailTN:	13
+	AvailDay:	24.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	2
+	Val2:	3
+	Val4:	150
+BREAK
+#355
+Keywords:	wired reflexes delta
+Name:	a wired reflexes III -delta
+RoomDesc:$
+Upgraded wired reflexes.~
+LookDesc:$
+More essence-friendly than normal, alpha, & beta wired reflexes 3.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	4000000
+	AvailTN:	17
+	AvailDay:	42.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	3
+	Val2:	3
+	Val4:	250
+BREAK
+#356
+Keywords:	dermal sheathing alpha
+Name:	a dermal sheathing II -alpha
+RoomDesc:$
+Upgraded dermal sheathing.~
+LookDesc:$
+More essence-friendly than the normal dermal sheathing 2.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	7.00
+	Barrier:	1
+	Cost:	120000
+	AvailTN:	6
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	40
+	Val1:	2
+	Val2:	1
+	Val4:	112
+[AFFECT 0]
+	Location:	Body
+	Modifier:	3
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#357
+Keywords:	dermal sheathing alpha
+Name:	a dermal sheathing III -alpha
+RoomDesc:$
+Upgraded dermal sheathing.~
+LookDesc:$
+Less essence cost than the normal dermal sheathing 3.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	240000
+	AvailTN:	8
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	40
+	Val1:	3
+	Val2:	1
+	Val4:	168
+[AFFECT 0]
+	Location:	Body
+	Modifier:	4
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	2
+BREAK
+#358
+Keywords:	dermal sheathing beta
+Name:	a dermal sheathing II -beta
+RoomDesc:$
+Upgraded dermal sheathing.~
+LookDesc:$
+More essence-friendly than normal & alpha dermal sheathing.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	7.00
+	Barrier:	1
+	Cost:	240000
+	AvailTN:	11
+	AvailDay:	21.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	40
+	Val1:	2
+	Val2:	2
+	Val4:	83
+[AFFECT 0]
+	Location:	Body
+	Modifier:	3
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#359
+Keywords:	dermal sheathing beta
+Name:	a dermal sheathing III -beta
+RoomDesc:$
+Upgraded dermal sheathing.~
+LookDesc:$
+More essence-friendly than normal & alpha dermal sheathing.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	480000
+	AvailTN:	13
+	AvailDay:	21.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	40
+	Val1:	3
+	Val2:	2
+	Val4:	125
+[AFFECT 0]
+	Location:	Body
+	Modifier:	4
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	2
+BREAK
+#360
+Keywords:	dermal sheathing delta
+Name:	a dermal sheathing II -delta
+RoomDesc:$
+Upgraded dermal sheathing.~
+LookDesc:$
+Less essence cost than normal, alpha, & beta dermal sheathing 2.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	480000
+	AvailTN:	15
+	AvailDay:	42.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	40
+	Val1:	2
+	Val2:	3
+	Val4:	70
+[AFFECT 0]
+	Location:	Body
+	Modifier:	3
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#361
+Keywords:	dermal sheathing delta
+Name:	a dermal sheathing III -delta
+RoomDesc:$
+Upgraded dermal sheathing.~
+LookDesc:$
+More essence-friendly than normal, alpha, & beta dermal sheathing 3.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	960000
+	AvailTN:	17
+	AvailDay:	42.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	40
+	Val1:	3
+	Val2:	3
+	Val4:	105
+[AFFECT 0]
+	Location:	Body
+	Modifier:	4
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	2
+BREAK
+#362
+Keywords:	optical magnification
+Name:	an optical magnification I
+RoomDesc:$
+Optical Magnification rating 1.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	100000000000000000
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	2500
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	1
+	Val3:	1024
+	Val4:	20
+BREAK
+#363
+Keywords:	optical magnification
+Name:	an optical magnification II
+RoomDesc:$
+Optical magnification rating 2.~
+LookDesc:$
+Optical magnification lets you see farther.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	100000000000000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	4000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	2048
+	Val4:	20
+BREAK
+#364
+Keywords:	optical magnification
+Name:	an optical magnification III
+RoomDesc:$
+Optical magnification rating 3.~
+LookDesc:$
+This lets you see farther with grater accuracy.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	1000000000000000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	6000
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	3
+	Val3:	4096
+	Val4:	20
+BREAK
+#365
+Keywords:	electronic magnification
+Name:	an electronic magnification I
+RoomDesc:$
+Electronic magnification rating 1~
+LookDesc:$
+This is the electronic equivalent of optical magnification 1.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	100000000000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	3500
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	1
+	Val3:	8192
+	Val4:	10
+BREAK
+#366
+Keywords:	electronic magnification
+Name:	an electronic magnification II
+RoomDesc:$
+Electronic magnification~
+LookDesc:$
+The equivalent of optical magnification rating 2.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	100000000000000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	7500
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	16384
+	Val4:	10
+BREAK
+#367
+Keywords:	electronic magnification
+Name:	an electronic magnification III
+RoomDesc:$
+Electronic magnification rating 3~
+LookDesc:$
+The equivalent of optical magnification rating 3.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	1000000000000000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	11000
+	AvailTN:	8
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	3
+	Val3:	32768
+	Val4:	10
+BREAK
+#368
+Keywords:	razors hand handrazors retractable
+Name:	a retractable hand razors
+RoomDesc:$
+Some hand razors lie on the floor.~
+LookDesc:$
+Sharp metal blades, man's counterpart to claws.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	7500
+	AvailTN:	3
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val3:	1
+	Val4:	10
+BREAK
+#369
+Keywords:	spurs spur hand retractable
+Name:	a set of retractable hand spurs
+RoomDesc:$
+Uninstalled hand spurs lie here.~
+LookDesc:$
+They look painful..
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	11500
+	AvailTN:	5
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	13
+	Val3:	1
+	Val4:	30
+BREAK
+#370
+Keywords:	forearm snap blades
+Name:	a forearm snap blades
+RoomDesc:$
+A strange-looking forearm guard lies here.~
+LookDesc:$
+When you look closer, you see that there are three holes on the guard from
+which blades emerge.
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	850
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	4
+	LegalCode:	2
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val3:	301
+	Val4:	3
+	Val5:	-1
+BREAK
+#371
+Keywords:	radio
+Name:	a radio
+RoomDesc:$
+An uninstalled cybernetic radio.~
+LookDesc:$
+A small, delicate device.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	2000
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	1
+	Val3:	3
+	Val4:	75
+	Val5:	3
+BREAK
+#372
+Keywords:	radio receiver
+Name:	a radio receiver
+RoomDesc:$
+An uninstalled cybernetic radio receiver.~
+LookDesc:$
+A small, delicate device.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	8000
+	AvailTN:	9
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val2:	3
+	Val4:	10
+	Val5:	3
+BREAK
+#373
+Keywords:	phone
+Name:	a headware phone
+RoomDesc:$
+A commlink seems to shimmer.~
+LookDesc:$
+A commlink, used in place of a phone once installed.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	3700
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val4:	50
+BREAK
+#374
+Keywords:	radio
+Name:	a radio
+RoomDesc:$
+A simple radio transceiver lies here.~
+LookDesc:$
+A palm sized black box with a knob for frequency and volume, and a broadcast
+trigger on the side.  An extendable antennae, about 20cm long, is attached to
+the top. 
+~
+Type:	Radio
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	500
+	AvailTN:	1
+	AvailDay:	2.00
+	LegalNum:	8
+	LegalCode:	18
+	LegalPermit:	1
+BREAK
+#375
+Keywords:	radio receiver
+Name:	a radio receiver
+RoomDesc:$
+An uninstalled radio receiver.~
+LookDesc:$
+It looks like an unfinished object.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	2000
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	1
+	Val4:	75
+	Val5:	4
+BREAK
+#376
+Keywords:	large heavy axe
+Name:	a large axe
+RoomDesc:$
+A long, heavy axe is here.~
+LookDesc:$
+Measuring close to six feet, you'd guess it weighs close to 20 pounds!
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	1000010000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	16.00
+	Barrier:	1
+	Cost:	15000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	4
+	Val3:	303
+	Val4:	3
+	Val5:	-1
+BREAK
+#377
+Keywords:	low light goggles
+Name:	a set of low-light goggles
+RoomDesc:$
+A pair of low-light goggles lies here.~
+LookDesc:$
+This enables the user to see with minimal light, similar to the natural
+ability of elves and orcs.
+~
+Type:	Worn
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	10000000000000
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	2000
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#378
+Keywords:	thermo thermographic goggles set pair
+Name:	a pair of thermographic goggles
+RoomDesc:$
+A set of thermographic goggles is here.~
+LookDesc:$
+It gives the wearer thermographic vision, similar to that of trolls and
+dwarves. ~
+Type:	Worn
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	1000000000
+Material:	plastic
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	2200
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#380
+Keywords:	9 clip round
+Name:	a 9-round clip
+RoomDesc:$
+A clip made for an assault cannon lies here.~
+LookDesc:$
+Designed to fit exclusively in the panther assault cannon.
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	26
+BREAK
+#381
+Keywords:	pager
+Name:	a pager
+RoomDesc:$
+Someone has left their pager here~
+LookDesc:$
+It is a small black box with a backlight LCD screen on the front that displays
+the number of the last person to call it. 
+~
+Type:	Phone
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#382
+Keywords:	inanimate carbon rod
+Name:	an inanimate carbon rod
+RoomDesc:$
+An inanimate carbon rod is here.~
+LookDesc:$
+Once used in a nuclear power plant, the inanimate carbon rod now glows
+with an eerie light.
+~
+Type:	Light
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	1010
+Material:	toxic wastes
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	5
+BREAK
+#383
+Keywords:	program slow
+Name:	a Slow program R:10
+RoomDesc:$
+A data disk lies here.~
+LookDesc:$
+It's a data disk containing the slow program.
+~
+Type:	Program
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	400000
+	AvailTN:	16
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	10
+	Val2:	400
+	Val3:	300
+BREAK
+#384
+Keywords:	galactic cyberdeck
+Name:	a galactic cyberdeck
+RoomDesc:$
+A nonexistant cyberdeck sits here.~
+LookDesc:$
+On the side of this strange piece of technology is stamped:
+Made in Andromeda.
+~
+Type:	Cyberdeck
+WearFlags:	100010000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	5.00
+	Barrier:	3
+	Cost:	100000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	25
+	Val2:	5000
+	Val3:	30000
+	Val4:	1000
+BREAK
+#385
+Keywords:	bod program
+Name:	a Bod program R:20
+RoomDesc:$
+A data disk lies on the ground.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	588000
+	AvailTN:	16
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	14
+	Val2:	588
+	Val3:	313
+	Val5:	318
+BREAK
+#386
+Keywords:	attack program
+Name:	an Attack program R:20
+RoomDesc:$
+A highly protected disk lies here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	392000
+	AvailTN:	16
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	14
+	Val2:	392
+	Val3:	2
+	Val5:	327
+BREAK
+#387
+Keywords:	attack program sword
+Name:	a matrix sword R:4
+RoomDesc:$
+A strange computerized sword lies here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	9600
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	4
+	Val2:	48
+	Val3:	3
+	Val5:	311
+BREAK
+#388
+Keywords:	allegiance psi cyberdeck cyber deck
+Name:	an Allegiance Psi
+RoomDesc:$
+An inexpensive cyberdeck lies on the ground.~
+LookDesc:$
+The upgrade from the basic Allegiance Sigma cyberdeck. 
+~
+Type:	Cyberdeck
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	48000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	2
+	Val2:	250
+	Val3:	500
+	Val4:	250
+BREAK
+#389
+Keywords:	bod program
+Name:	a Bod program R:6
+RoomDesc:$
+A data disk lies here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	21600
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	6
+	Val2:	108
+	Val3:	300
+	Val5:	313
+BREAK
+#390
+Keywords:	tandycorp tandy cyberdeck pcd-1000
+Name:	a Tandycorp PCD-1000
+RoomDesc:$
+A primitive cyberdeck.~
+LookDesc:$
+A cheap cyberdeck 
+~
+Type:	Cyberdeck
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	21000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val2:	100
+	Val3:	250
+	Val4:	100
+BREAK
+#391
+Keywords:	upgrade reaction
+Name:	a reaction upgrade L3
+RoomDesc:$
+A cyberdeck enhancement lies here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Decking Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	5
+	Val2:	3
+	Val3:	3
+BREAK
+#392
+Keywords:	sensor program
+Name:	a Sensor program R:20
+RoomDesc:$
+A sensor program is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	392000
+	AvailTN:	16
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	14
+	Val2:	392
+	Val3:	300
+	Val4:	1
+	Val5:	300
+BREAK
+#393
+Keywords:	pair smartgoggles goggles
+Name:	a pair of smart goggles
+RoomDesc:$
+Someone has left a pair of goggles with a jack in the side here.~
+LookDesc:$
+These goggles completly cover the eyes, but still allow for a full field of
+vision. Not much of a fashion statement, these goggles are useless without a
+weapon with a smartgun link installed. 
+~
+Type:	Gun Accessory
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.10
+	Barrier:	6
+	Cost:	3000
+	AvailTN:	2
+	AvailDay:	1.50
+	LegalNum:	4
+	LegalCode:	13
+	LegalPermit:	1
+[VALUES]
+	Val1:	7
+BREAK
+#395
+Keywords:	program medic
+Name:	a Medic program R:6
+RoomDesc:$
+A medic program.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	28800
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	6
+	Val2:	144
+	Val3:	311
+	Val5:	328
+BREAK
+#396
+Keywords:	program deception
+Name:	a Deception program R:6
+RoomDesc:$
+A data disk is here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	14400
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	13
+	Val1:	6
+	Val2:	72
+	Val3:	299
+BREAK
+#398
+Keywords:	file test
+Name:	a test file
+RoomDesc:$
+A test file lies here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Decking Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	100
+	Val2:	5
+BREAK
+#399
+Keywords:	electronic neo anarchists' anarechists guide awake 2062 naga manual shadowland publications	
+Name:	The Neo-Anarchists' Guide to Awake 2062
+RoomDesc:$
+An electronic manual with the Shadowland Publications logo lies here.~
+LookDesc:$
+^wIf you are new to this mud, read a very important OOC (out of
+character) note by typing 'read ooc' with this item in your hand,
+regarding this guide.
+^n
+^R>>>^LBEGIN DOCUMENT SHADOWLAND_MANUAL_3.0, 42 mp.^R<<<
+^n
+^r>>>^WWelcome to Shadowland 3.0
+^C"I have taken all knowledge to be my province."
+			^w--Francis Bacon, 1592.
+^L---------------------------------------------------------------
+^yUTILITY SECTIONS^n                             ^GGO TO^n
+^n
+^Wo^n ^cMessage Base/Mail System                ^w(^WOK^w) ^BUT1^n
+^Wo^n ^cSprawl Crosstraining                    ^w(^WOK^w) ^BUT2^n
+^Wo^n ^cCommunications Systems                  ^w(^WOK^w) ^BUT3^n
+^Wo^n ^cMatrix Systems 101                      ^w(^WOK^w) ^BUT4^n
+^Wo^n ^cMagical and Astral Powers               ^w(^WOK^w) ^BUT5^n
+^Wo^n ^cCybernetics and Bioware                 ^w(^WOK^w) ^BUT6^n
+^Wo^n ^cGuns N' Ammo                            ^w(^WOK^w) ^BUT7^n
+^Wo^n ^cCar and Driver                          ^w(^WOK^w) ^BUT8^n
+^n
+^WTo view next section type "read ^BSL2^W"^n.
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	ooc
+	Desc:$
+(out of character note.  This is an in-character publication from
+Shadowland Publications, an e-document that every aspiring runner
+in the shadows would keep as their bible.  It is chock full of in
+character data, on the world of Shadowrun.  If you want information
+on Shadowrun itself, the Role Playing Game by FanPro and WizKids, LLC,
+check out their official webpage at http://www.shadowrunrpg.com/ . to
+view each section of the document, read <keyword> of each section,
+the keyword appearing after the ^w(^WOK^w)^n in ^Bbright blue^n.  For
+help with the commands integral to the mud read the help files and
+feel free to ask questions on the newbie channel until you are beyond
+newbie grade (rep level 16).  This item is to function as a basic
+'mini-sourcebook' of in character information that would be readily
+available to any runner in the 'plex, as well as a few plot-tie ins
+and pieces of information that fixer/conspirator immortals can use.
+The level of reliability of the rumors and 'hot paydata' found in
+this file, is up to the RP staff.  Reality contradicts itself, why
+cant we? ;) )
+~
+[EXTRADESC 1]
+	Keywords:	sl2
+	Desc:$
+^R>>>^LDISPLAY_INDEX_TWO^R<<<
+^n
+^r>>>^WWelcome to Shadowland 3.0
+^C"Humankind cannot bear very much reality."
+			^w--T.S. Eliot.
+^L---------------------------------------------------------------
+^yINFORMATION SECTIONS^n                         ^GGO TO^n
+^n
+^Wo^n ^cSeattle Metroplex                       ^w(^WOK^w) ^BSE1^n
+	^Wo^n ^cDowntown                        ^w(^WOK^w) ^BSE2^n
+	^Wo^n ^cTacoma                          ^w(^WOK^w) ^BTAC^n
+	^Wo^n ^cPuyallup                        ^w(^WOK^w) ^BPUY^n
+	^Wo^n ^cChinatown                       ^LFILE CORRUPTED^n
+	^Wo^n ^cTarislar                        ^w(^WOK^w) ^BTAR^n
+	^Wo^n ^cRedmond                         ^w(^WOK^w) ^BRED^n
+	^Wo^n ^cAuburn/Renton                   ^LFILE CORRUPTED^n
+	^Wo^n ^cSnohomish                       ^LFILE CORRUPTED^n
+	^Wo^n ^cFort Lewis                      ^LFILE CORRUPTED^n
+	^Wo^n ^cRenton                          ^LFILE CORRUPTED^n
+^n
+^Wo^n ^cNative American Nations                 ^w(^WOK^w) ^BNAN^n
+	^Wo^n ^cCouncil Island                  ^w(^WOK^w) ^BCOI^n
+	^Wo^n ^cSinsearach Counci               ^w(^WOK^w) ^BSIN^n
+	^Wo^n ^cCascade Ork                     ^LFILE CORRUPTED^n
+	^Wo^n ^cCascade Crow                    ^LFILE CORRUPTED^n
+	^Wo^n ^cMakaw Council                   ^LFILE CORRUPTED^n
+^n
+^Wo^n ^cTir Tairngire                           ^w(^WOK^w) ^BTIR^n
+	^Wo^n ^cPortland                        ^w(^WOK^w) ^BPOR^n
+	^Wo^n ^cGresham                         ^w(^WOK^w) ^BGRE^n
+	^Wo^n ^cBeaverton/Progress/Tigard       ^LFILE CORRUPTED^n
+	^Wo^n ^cClackamas                       ^LFILE CORRUPTED^n
+	^Wo^n ^cRoyal Hill                      ^LFILE CORRUPTED^n
+~
+[EXTRADESC 2]
+	Keywords:	ut1
+	Desc:$
+^cMessage Base/Mail System^n
+Shadowland's Mail System is composed of multiple mailing stations.
+Several exist within the area of the Northwest, including a mail
+station in Tacoma at the mall, and a postal station in Portland,
+Tir Tairngire.
+Any basic text message can be relayed this way, through the Matrix.
+There are also terminals for various topics, Special Interest Groups
+(or SIGs) that access portions of the Shadowland network.  One of these
+is the terminal that can be found at a bar called "Pook's Place", 
+the Club Penumbra in Seattle, or the Afterlife Club in Tacoma.
+(ooc:
+The commands for using a postal station are at the post office, you
+simply type 'mail <name>', write your letter, finish with the @ sign
+on a new line, and off its sent.  To use a terminal, you type at
+that terminal 'write <message topic>' and exit from it the same
+way you would from a mail message, with a @ on a new line.  There
+are OOC usage terminals at the Tacoma Mall, Neophyte Guild, and the
+Pook's Place bar.)
+~
+[EXTRADESC 3]
+	Keywords:	ut2
+	Desc:$
+^cSprawl Crosstraining^n
+In our constant drive to better ourselves, many have asked of places
+where schools can be found, and what to do when we got there.  Well,
+new runners often find themselves at a place known as the Neophytic
+Guild, that plug ugly little building south of the Space Needle.  This
+place isn't the place to go for your novahot runners, but its a place
+to start from.  I will introduce you to each of the trainers at the
+Neophytic Guild, by their name and their specialties.
+(>) Roswell
+^WTYPE: 'read ^BJAC^W' to view next portion of this section.^n
+~
+[EXTRADESC 4]
+	Keywords:	jac
+	Desc:$
+>>>Hall of Fighting, by Jackie C.
+	Greetings new runners to the sprawl.  I'm the specialist for
+	many forms of martial arts training.  As a black belt in
+	all the common martial arts ranging from Aikido to Tae Kwon Do
+	to the more obscure martial art forms like the Elven Carromeleg
+	martial art.  I also specialize in some weapons related skills
+	and can be quite helpful in getting a new runner started.
+(OOC NOTE BEGIN)
+Skills trained up to level 6 (very good) by Jackie:
+  edged weapons
+  pole arms
+  whips & flails
+  clubs
+  unarmed combat
+  cyber implants
+  projectiles
+  throwing weapons
+(OOC NOTE END)
+<<<
+(>) Jackie C, Seattle Neophytic Guild
+^WTYPE: 'read ^BKYL^W' to view next portion of this section.^n
+~
+[EXTRADESC 5]
+	Keywords:	kyl
+	Desc:$
+>>>Training Room, by Kyle
+	Hoi.  Now some snot nosed upstart little punks in the sprawl
+	think they know a lot about guns.  Well you could go try to
+	learn how to shoot a pea shooter from one of these gangers,
+	or you can come to me to show you the real drek on guns and
+	ammo.  I've been in desert wars six times and have plenty
+	a scar to vouch for my presence there.  I'm doing time in
+	the Neophyte Guild 'cause the cred is good.  And its cred
+	I follow.  Doesn't mean I like you punks.
+(OOC NOTE BEGIN)
+Skills trained up to level 6 (very good) by Kyle:
+  pistols
+  rifles
+  shotguns
+  assault rifle3s
+  sub-machine guns
+  machine guns
+  missile launchers
+  assault cannons
+(OOC NOTE END)
+<<<
+(>) Kyle, Seattle Neophytic Guild
+~
+[EXTRADESC 6]
+	Keywords:	eli
+	Desc:$
+>>>Near the Exit of the Neophyte Guild, by Eliuth
+	Good day chummer.  As an aging decker, there isn't much
+	drive to keep up with the SOTA anymore, but there is still
+	alot I can contribute to the shadows at large.  I've ran
+	for years, even learned a bit about rigging, and was very
+	much a professional in my exploits.  So if you are new to
+	the shadows, there is much I can teach you yet.
+(OOC NOTE BEGIN)
+Skills trained up to level 6 (very good) by Eliuth:
+  stealth
+  athletics
+  computers
+  electronics
+  computer theory
+  biotech
+  driving/Bike
+  driving/Car
+(OOC NOTE END)
+<<<
+(>) Eliuth, Seattle Neophytic Guild
+^WTYPE: 'read ^BTHO^W' to view the next section.^n
+~
+[EXTRADESC 7]
+	Keywords:	tho
+	Desc:$
+PLACE HOLDER.  NOT COMPLETE YET.
+~
+BREAK
+#400
+Keywords:	factory platelet
+Name:	a platelet factory
+RoomDesc:$
+A small vial of cells sits upright.~
+LookDesc:$
+Platelet factory.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	30000
+	AvailTN:	5
+	AvailDay:	8.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val4:	40
+BREAK
+#401
+Keywords:	symbiotes
+Name:	symbiotes I
+RoomDesc:$
+A small container filled with cells is here.~
+LookDesc:$
+Symbiotes.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	15000
+	AvailTN:	5
+	AvailDay:	10.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	1
+	Val4:	40
+BREAK
+#402
+Keywords:	orthoskin
+Name:	an orthoskin I
+RoomDesc:$
+Some strange semi-natural flesh is here.~
+LookDesc:$
+Orthoskin, rating 1.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	25000
+	AvailTN:	8
+	AvailDay:	8.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	1
+	Val4:	50
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#403
+Keywords:	orthoskin
+Name:	an orthoskin II
+RoomDesc:$
+Some semi-natural flesh lies here.~
+LookDesc:$
+Orthoskin, rating 2.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	60000
+	AvailTN:	8
+	AvailDay:	8.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	2
+	Val4:	100
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#404
+Keywords:	orthoskin
+Name:	an orthoskin III
+RoomDesc:$
+Some semi-natural fles lies here.~
+LookDesc:$
+Orthoskin, rating 3.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	100000
+	AvailTN:	8
+	AvailDay:	8.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val4:	150
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	2
+BREAK
+#405
+Keywords:	pheromones tailored
+Name:	a tailored pheromones I
+RoomDesc:$
+A small vial is sitting here.~
+LookDesc:$
+Tailored pheromones, rating 1.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	20000
+	AvailTN:	12
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	1
+	Val4:	40
+BREAK
+#406
+Keywords:	pheromones tailored
+Name:	a tailored pheromones II
+RoomDesc:$
+A small vial is sitting here.~
+LookDesc:$
+Tailored pheromones, rating 2.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	45000
+	AvailTN:	12
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	2
+	Val4:	60
+BREAK
+#407
+Keywords:	pump adrenal
+Name:	an adrenal pump I
+RoomDesc:$
+A delicate organ pulses softly.~
+LookDesc:$
+Adrenal pump, rating 1.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	60000
+	AvailTN:	10
+	AvailDay:	16.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val4:	125
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	1
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	1
+[AFFECT 2]
+	Location:	Willpower
+	Modifier:	1
+[AFFECT 3]
+	Location:	Reaction
+	Modifier:	2
+BREAK
+#408
+Keywords:	pump adrenal
+Name:	an adrenal pump II
+RoomDesc:$
+A delicate organ pulses softly.~
+LookDesc:$
+Adrenal pump, rating 2.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	100000
+	AvailTN:	10
+	AvailDay:	16.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val4:	250
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	2
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	2
+[AFFECT 2]
+	Location:	Willpower
+	Modifier:	2
+[AFFECT 3]
+	Location:	Reaction
+	Modifier:	4
+BREAK
+#409
+Keywords:	gland suprathyroid
+Name:	a suprathyroid gland
+RoomDesc:$
+A throbbing gland sits here.~
+LookDesc:$
+Suprathyroid gland.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	50000
+	AvailTN:	8
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	13
+	Val1:	1
+	Val4:	140
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	1
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	1
+[AFFECT 2]
+	Location:	Reaction
+	Modifier:	1
+[AFFECT 3]
+	Location:	Body
+	Modifier:	1
+BREAK
+#410
+Keywords:	booster cerebral
+Name:	a cerebral booster I
+RoomDesc:$
+A strange brain-looking thang is here.~
+LookDesc:$
+Cerebral booster, rating 1.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	50000
+	AvailTN:	6
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	19
+	Val1:	1
+	Val2:	6
+	Val4:	40
+[AFFECT 0]
+	Location:	Intelligence
+	Modifier:	1
+BREAK
+#411
+Keywords:	booster cerebral
+Name:	a cerebral booster II
+RoomDesc:$
+A brainish-looking creature stares you in the face.~
+LookDesc:$
+Cerebral booster, rating 2.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	110000
+	AvailTN:	6
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	19
+	Val1:	2
+	Val2:	6
+	Val4:	80
+[AFFECT 0]
+	Location:	Intelligence
+	Modifier:	2
+[AFFECT 1]
+	Location:	Task Pool (Int)
+	Modifier:	1
+BREAK
+#412
+Keywords:	editor pain
+Name:	a pain editor
+RoomDesc:$
+A funkadelic pain editor smiles happily.~
+LookDesc:$
+Pain editor.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	60000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	1
+	Val2:	7
+	Val4:	60
+BREAK
+#413
+Keywords:	accelerator synaptic
+Name:	a synaptic accelerator I
+RoomDesc:$
+A spinal cord adapter lies here.~
+LookDesc:$
+Synaptic accelerator, rating 1.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	75000
+	AvailTN:	6
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	23
+	Val1:	1
+	Val2:	8
+	Val4:	40
+[AFFECT 0]
+	Location:	Init Dice
+	Modifier:	1
+BREAK
+#414
+Keywords:	accelerator synaptic
+Name:	a synaptic accelerator II
+RoomDesc:$
+A spinal cord adapter lies here.~
+LookDesc:$
+Synaptic accelerator, rating 2.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	200000
+	AvailTN:	6
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	23
+	Val1:	2
+	Val2:	8
+	Val4:	100
+[AFFECT 0]
+	Location:	Init Dice
+	Modifier:	2
+BREAK
+#415
+Keywords:	articulation enhanced
+Name:	enhanced articulation
+RoomDesc:$
+Small ligaments seem to move on their own.~
+LookDesc:$
+Enhanced articulation.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	40000
+	AvailTN:	5
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	1
+	Val4:	60
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	1
+BREAK
+#416
+Keywords:	augmentation muscle
+Name:	muscle augmentation I
+RoomDesc:$
+Unimplanted muscles cover the floor.~
+LookDesc:$
+Muscle augmentation, rating 1.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	20000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	1
+	Val4:	40
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	1
+BREAK
+#417
+Keywords:	augmentation muscle
+Name:	muscle augmentation II
+RoomDesc:$
+Unimplanted muscles cover the floor.~
+LookDesc:$
+Muscle augmentation, rating 2.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	40000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	2
+	Val4:	80
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	2
+BREAK
+#418
+Keywords:	augmentation muscle
+Name:	muscle augmentation III
+RoomDesc:$
+Unimplanted muscles cover the floor.~
+LookDesc:$
+Muscle augmentation, rating 3.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	60000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	3
+	Val4:	120
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	3
+BREAK
+#419
+Keywords:	augmentation muscle
+Name:	muscle augmentation IV
+RoomDesc:$
+Unimplanted muscles cover the floor.~
+LookDesc:$
+Muscle augmentation, rating 4.
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	80000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	4
+	Val4:	160
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	4
+BREAK
+#420
+Keywords:	symbiotes
+Name:	symbiotes II
+RoomDesc:$
+A small container filled with cells is here.~
+LookDesc:$
+A small container, filled with cells. 
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	35000
+	AvailTN:	5
+	AvailDay:	10.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	2
+	Val4:	70
+BREAK
+#421
+Keywords:	symbiotes
+Name:	symbiotes III
+RoomDesc:$
+A small container filled with cells is here.~
+LookDesc:$
+A small container, filled with cells. 
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	60000
+	AvailTN:	5
+	AvailDay:	10.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	3
+	Val4:	100
+BREAK
+#422
+Keywords:	reflexes move-by-wire mbw
+Name:	a move-by-wire I
+RoomDesc:$
+Some advanced reflexes lie here.~
+LookDesc:$
+It's an experimental reflex system. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	250000
+	AvailTN:	8
+	AvailDay:	10.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	43
+	Val1:	1
+	Val4:	250
+BREAK
+#423
+Keywords:	move-by-wire reflexes mbw
+Name:	a move-by-wire II
+RoomDesc:$
+Advanced reflexes lie here.~
+LookDesc:$
+It's an experimental reflex system. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	500000
+	AvailTN:	12
+	AvailDay:	20.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	43
+	Val1:	2
+	Val4:	400
+BREAK
+#424
+Keywords:	mbw move-by-wire reflexes
+Name:	a move-by-wire III
+RoomDesc:$
+Advanced reflexes lie here.~
+LookDesc:$
+It's an experimental reflex system. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	1000000
+	AvailTN:	18
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	43
+	Val1:	3
+	Val4:	550
+BREAK
+#425
+Keywords:	mbw move-by-wire alpha reflexes
+Name:	a move-by-wire -alpha
+RoomDesc:$
+Advanced reflexes lie here.~
+LookDesc:$
+It's an experimental reflex system. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	500000
+	AvailTN:	8
+	AvailDay:	10.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	43
+	Val1:	1
+	Val2:	1
+	Val4:	200
+BREAK
+#426
+Keywords:	mbw move-by-wire alpha reflexes
+Name:	a move-by-wire II -alpha
+RoomDesc:$
+An advanced reflex system lies here.~
+LookDesc:$
+It's an experimental reflex system.   
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	1000000
+	AvailTN:	12
+	AvailDay:	20.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	43
+	Val1:	2
+	Val2:	1
+	Val4:	320
+BREAK
+#427
+Keywords:	rig vehicle control
+Name:	a vehicle control rig I
+RoomDesc:$
+A mass of thin wires and processors lies here.~
+LookDesc:$
+A mass of thin wires, used to create the nervous system of the rigger. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	12000
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	1
+	Val4:	200
+	Val5:	6
+BREAK
+#428
+Keywords:	rig vehicle control
+Name:	a vehicle control rig II
+RoomDesc:$
+A mass of thin wires and processors lies here.~
+LookDesc:$
+A mass of thin wires, used to create the nervous system of the rigger. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	60000
+	AvailTN:	8
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	2
+	Val4:	300
+	Val5:	6
+BREAK
+#429
+Keywords:	rig vehicle control
+Name:	a vehicle control rig III
+RoomDesc:$
+A mass of thin wires and processors lies here.~
+LookDesc:$
+A mass of thin wires, used to create the nervous system of the rigger. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	300000
+	AvailTN:	8
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	3
+	Val4:	500
+	Val5:	6
+BREAK
+#431
+Keywords:	razors hand handrazors retractable
+Name:	a retractable hand razors -alpha
+RoomDesc:$
+Some hand razors lie on the floor.~
+LookDesc:$
+These sharp thin blades extend and retract from underneath your fingernails.
+They are very sharp and deadly. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	15000
+	AvailTN:	3
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val2:	1
+	Val3:	1
+	Val4:	8
+BREAK
+#432
+Keywords:	razors hand handrazors retractable
+Name:	a set of retractable hand razors -beta
+RoomDesc:$
+Some hand razors lie on the floor.~
+LookDesc:$
+These sharp thin blades extend and retract from underneath your fingernails.
+They are very sharp and deadly.  They are very well made and you hardly know
+they are there. I guess the extra nuyen for betaware is worth it. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	30000
+	AvailTN:	8
+	AvailDay:	4.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val2:	2
+	Val3:	1
+	Val4:	5
+BREAK
+#433
+Keywords:	spurs spur hand retractable
+Name:	a set of retractable hand spurs -alpha
+RoomDesc:$
+Uninstalled hand spurs lie here.~
+LookDesc:$
+These are a set of Alphaware retractable hand spurs. This narrow blade is
+attached to the user's bone, similar to a razor can be withdrawn along the
+long bone. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	23000
+	AvailTN:	5
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	13
+	Val2:	1
+	Val3:	1
+	Val4:	24
+BREAK
+#434
+Keywords:	spurs spur hand retractable
+Name:	a set of retractable hand spurs -beta
+RoomDesc:$
+Uninstalled hand spurs lie here.~
+LookDesc:$
+This is a set of Betaware retractable hand spurs. This narrow blade is
+attached to the user's bone, similar to a razor can be withdrawn along the
+long bone.    
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	46000
+	AvailTN:	10
+	AvailDay:	4.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	13
+	Val2:	2
+	Val3:	1
+	Val4:	17
+BREAK
+#435
+Keywords:	dermal plating
+Name:	a dermal plating I -alpha
+RoomDesc:$
+A set of dermal plating lies in the corner.~
+LookDesc:$
+This invasive protection system uses hard plastic and metal fibers plates
+bonded to the user's skin. Dermal plating is anything but subtle, and limits
+skin flexability. The armor plates may be tailored to any surface texture or
+color. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	6.00
+	Barrier:	1
+	Cost:	12000
+	AvailTN:	4
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	1
+	Val2:	1
+	Val4:	40
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+BREAK
+#436
+Keywords:	dermal plating
+Name:	a dermal plating I -beta
+RoomDesc:$
+A set of dermal plating lies in the corner.~
+LookDesc:$
+This invasive protection system uses hard plastic and metal fibers plates
+bonded to the user's skin. Dermal plating is anything but subtle, and limits
+skin flexability. The armor plates may be tailored to any surface texture or
+color. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	6.00
+	Barrier:	1
+	Cost:	24000
+	AvailTN:	9
+	AvailDay:	18.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	1
+	Val2:	2
+	Val4:	29
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+BREAK
+#437
+Keywords:	dermal plating
+Name:	a dermal plating II -alpha
+RoomDesc:$
+A set of dermal plating lies in the corner.~
+LookDesc:$
+This invasive protection system uses hard plastic and metal fibers plates
+bonded to the user's skin. Dermal plating is anything but subtle, and limits
+skin flexability. The armor plates may be tailored to any surface texture or
+color.  
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	15.00
+	Barrier:	1
+	Cost:	30000
+	AvailTN:	4
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	2
+	Val2:	1
+	Val4:	80
+[AFFECT 0]
+	Location:	Body
+	Modifier:	2
+BREAK
+#438
+Keywords:	dermal plating
+Name:	a dermal plating II -beta
+RoomDesc:$
+A set of dermal plating lies in the corner.~
+LookDesc:$
+This invasive protection system uses hard plastic and metal fibers plates
+bonded to the user's skin. Dermal plating is anything but subtle, and limits
+skin flexability. The armor plates may be tailored to any surface texture or
+color.  
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	60000
+	AvailTN:	9
+	AvailDay:	18.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	2
+	Val2:	2
+	Val4:	59
+[AFFECT 0]
+	Location:	Body
+	Modifier:	2
+BREAK
+#439
+Keywords:	Cybereye package
+Name:	Eye package w/LL, FC and EM II
+RoomDesc:$
+A complex set of cybereyes have been discarded here.~
+LookDesc:$
+These cybereyes include low-light vision, flare compensation and electronic
+magnification level II. All of this has been included at no additional essence
+cst, however the price of these are more expensive. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	100000010000000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	16500
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val3:	16426
+	Val4:	20
+BREAK
+#440
+Keywords:	Cybereye package
+Name:	Eye Package w/TH, FC and EM I
+RoomDesc:$
+A complex set of cybereyes have been discarded here.~
+LookDesc:$
+These cyber eyes include thermographic vision, flare compensation and
+electronic magnification level I. All of this has been included at no
+additional essence cst, however the price of these are more expensive.   
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	100000001000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	12500
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val3:	8714
+	Val4:	20
+BREAK
+#441
+Keywords:	thermographic vision alpha
+Name:	thermographic vision -alpha
+RoomDesc:$
+Cyber thermographic vision waits to be installed.~
+LookDesc:$
+These cybereyes are alphaware and grant thermographic vision. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	1000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	6000
+	AvailTN:	4
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val2:	1
+	Val3:	512
+	Val4:	16
+BREAK
+#442
+Keywords:	Cybereye package
+Name:	Eye package w/LL, TH and FC
+RoomDesc:$
+A complex set of cybereyes have been discarded here.~
+LookDesc:$
+These cybereyes have low-light vision, thermographic and flare compensation.
+Perfect for the person who wants flexability in their vision. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	10001000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	12000
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val3:	554
+	Val4:	20
+BREAK
+#443
+Keywords:	low-light low light vision
+Name:	an eye package w/ll,fc and om III -beta
+RoomDesc:$
+A set of very complex cybereyes are lying here.~
+LookDesc:$
+This is a set of betware cybereyes with lowlight vision, flare compensation
+and optical magnification level III. They are expensive but worth it. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	1000000010000000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	44000
+	AvailTN:	10
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val2:	2
+	Val3:	4136
+	Val4:	29
+BREAK
+#444
+Keywords:	datajack
+Name:	a datajack -alpha
+RoomDesc:$
+An uninstalled datajack is here.~
+LookDesc:$
+hen installed, it lets information travel from a computer, or more commonly,
+the Matrix, directly into the user's brain.  This is alphaware so a bit more
+expensive, but well worth the cost. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	2000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val2:	1
+	Val4:	16
+BREAK
+#445
+Keywords:	articulation enhanced
+Name:	enhanced articulation -cultured
+RoomDesc:$
+Small ligaments seem to move on their own.~
+LookDesc:$
+This is enhanced articulation but it has been specially customized for you. It
+saves on body cost, but increases the money cost. 
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	160000
+	AvailTN:	7
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	1
+	Val2:	1
+	Val4:	45
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	1
+BREAK
+#446
+Keywords:	gland suprathyroid
+Name:	suprathyroid gland -cultured
+RoomDesc:$
+A throbbing gland sits here.~
+LookDesc:$
+This is a customized suprathyroid gland. it increases your str, body and
+quickness, at a price of eating more. This also costs a pretty penny. 
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	200000
+	AvailTN:	10
+	AvailDay:	60.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	13
+	Val1:	1
+	Val2:	1
+	Val4:	105
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	1
+[AFFECT 1]
+	Location:	Quickness
+	Modifier:	1
+[AFFECT 2]
+	Location:	Reaction
+	Modifier:	1
+[AFFECT 3]
+	Location:	Body
+	Modifier:	1
+BREAK
+#447
+Keywords:	augmentation muscle
+Name:	muscle augmentation I -cultured
+RoomDesc:$
+Unimplanted muscles cover the floor.~
+LookDesc:$
+Muscle augmentation, rating 1 which has been customized. 
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	80000
+	AvailTN:	8
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	1
+	Val2:	1
+	Val4:	30
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	1
+BREAK
+#448
+Keywords:	augmentation muscle
+Name:	muscle augmentation II -cultured
+RoomDesc:$
+Unimplanted muscles cover the floor.~
+LookDesc:$
+Muscle augmentation, rating 2.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	160000
+	AvailTN:	8
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	2
+	Val2:	1
+	Val4:	60
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	2
+BREAK
+#449
+Keywords:	augmentation muscle
+Name:	muscle augmentation III -cultured
+RoomDesc:$
+Unimplanted muscles cover the floor.~
+LookDesc:$
+Muscle augmentation, rating 3.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	240000
+	AvailTN:	8
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	3
+	Val2:	1
+	Val4:	90
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	3
+BREAK
+#450
+Keywords:	medkit small
+Name:	a medkit
+RoomDesc:$
+A small medkit is lying here.~
+LookDesc:$
+The Medkit, while hardly luxurious supplies you with the bare essentials to
+keep a shot up runner alive. Useful. 
+~
+Type:	Kit
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	500
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#451
+Keywords:	patch trauma light pharmaceutical
+Name:	a thin trauma patch
+RoomDesc:$
+A small patch is lying here on the ground.~
+LookDesc:$
+This thin patch is the mildest over-the-counter wound recovery aid you can
+buy. Essentially a medicated band-aid, this small slap patch is individually
+wrapped for your protection. Unpeel and place over your little booboo. 
+~
+Type:	Patch
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	1
+BREAK
+#452
+Keywords:	patch trauma small
+Name:	a small trauma patch
+RoomDesc:$
+A small patch is lying here on the ground.~
+LookDesc:$
+Soothe minor wounds and first to second degree burns with this wound recovery
+trauma slap patch by Cure-Ad. 
+~
+Type:	Patch
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	600
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	3
+BREAK
+#453
+Keywords:	patch trauma
+Name:	a trauma patch
+RoomDesc:$
+A restorative slap patch is lying here on the ground.~
+LookDesc:$
+Stops bleeding fast and kickstarts your coagulants in and around the wound
+site. Makes patients into outpatients in no time. 
+~
+Type:	Patch
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	500
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	6
+BREAK
+#456
+Keywords:	accelerator synaptic
+Name:	a synaptic accelerator I
+RoomDesc:$
+A spinal cord adapter lies here.~
+LookDesc:$
+Synaptic accelerator rating I and this has been customized. 
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	75000
+	AvailTN:	6
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	23
+	Val1:	1
+	Val2:	8
+	Val4:	40
+[AFFECT 0]
+	Location:	Init Dice
+	Modifier:	1
+BREAK
+#457
+Keywords:	accelerator synaptic
+Name:	a synaptic accelerator II
+RoomDesc:$
+A spinal cord adapter lies here.~
+LookDesc:$
+Synaptic accelerator, rating 2.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	200000
+	AvailTN:	6
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	23
+	Val1:	2
+	Val2:	8
+	Val4:	100
+[AFFECT 0]
+	Location:	Init Dice
+	Modifier:	2
+BREAK
+#458
+Keywords:	symbiotes
+Name:	symbiotes II -cultured
+RoomDesc:$
+A small container filled with cells is here.~
+LookDesc:$
+A small container, filled with cells. 
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	140000
+	AvailTN:	7
+	AvailDay:	50.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	2
+	Val2:	1
+	Val4:	52
+BREAK
+#459
+Keywords:	orthoskin
+Name:	orthoskin I -cultured
+RoomDesc:$
+Some strange semi-natural flesh is here.~
+LookDesc:$
+Orthoskin rating 1 customized. Orhtoskin weaves an energy-diffusing material
+under the skin that gives the recipient the equivalent of personal armor. 
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	100000
+	AvailTN:	10
+	AvailDay:	40.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	1
+	Val2:	1
+	Val4:	37
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#460
+Keywords:	pheromones tailored
+Name:	tailored pheromones I -cultured
+RoomDesc:$
+A small vial is sitting here.~
+LookDesc:$
+Tailored pheromones, rating 1.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	80000
+	AvailTN:	14
+	AvailDay:	70.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	1
+	Val2:	1
+	Val4:	30
+BREAK
+#461
+Keywords:	augmentation muscle
+Name:	muscle augmentation IV -cultured
+RoomDesc:$
+Unimplanted muscles cover the floor.~
+LookDesc:$
+Muscle augmentation, rating 4.
+~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	320000
+	AvailTN:	8
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	4
+	Val2:	1
+	Val4:	120
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	4
+BREAK
+#462
+Keywords:	lacing kevlar bone cyberware
+Name:	a kevlar bone lacing
+RoomDesc:$
+Some interesting bonelacing is lying here.~
+LookDesc:$
+This is some sort of kevlar cyberware lacing. It increases your abilty  take
+ballistic hits. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	20000
+	AvailTN:	6
+	AvailDay:	21.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val3:	3
+	Val4:	100
+[AFFECT 1]
+	Location:	Body
+	Modifier:	1
+[AFFECT 2]
+	Location:	Ballistic
+	Modifier:	1
+BREAK
+#463
+Keywords:	lacing ceramic bone cyberware
+Name:	a ceramic bone lacing
+RoomDesc:$
+Some interesting bonelacing is lying here.~
+LookDesc:$
+This is some sort of ceramic bonelacing. It increases your impact armor. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	40000
+	AvailTN:	6
+	AvailDay:	21.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val3:	4
+	Val4:	150
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	2
+BREAK
+#464
+Keywords:	vehicle control rig alpha ii 2 two
+Name:	a vehicle control rig II -alpha
+RoomDesc:$
+A bunch of wires lie here.~
+LookDesc:$
+A bunch of wires with a chipset at the center with an icon of a car. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	24
+	Cost:	120000
+	AvailTN:	8
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	2
+	Val2:	1
+	Val4:	240
+BREAK
+#465
+Keywords:	vehicle control rig beta ii 2 two
+Name:	a vehicle control rig II -beta
+RoomDesc:$
+A bunch of wires lie here.~
+LookDesc:$
+A bunch of wires with a chipset at the center with an icon of a car. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	240000
+	AvailTN:	13
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	2
+	Val2:	2
+	Val4:	179
+BREAK
+#466
+Keywords:	vehicle control rig alpha iii 3 three
+Name:	a vehicle control rig III -alpha
+RoomDesc:$
+A bunch of wires lie here.~
+LookDesc:$
+A bunch of wires with a chipset at the center with an icon of a car. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	600000
+	AvailTN:	8
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	3
+	Val2:	1
+	Val4:	400
+BREAK
+#467
+Keywords:	vehicle control rig iii beta 3 three
+Name:	a vehicle control rig III -beta
+RoomDesc:$
+A bunch of wires lie here.~
+LookDesc:$
+A bunch of wires with a chipset at the center with an icon of a car. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	1200000
+	AvailTN:	13
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	3
+	Val2:	2
+	Val4:	299
+BREAK
+#468
+Keywords:	reflex trigger
+Name:	a reflex trigger
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	13000
+	AvailTN:	4
+	AvailDay:	8.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	23
+	Val4:	20
+BREAK
+#469
+Keywords:	hydraulic jack
+Name:	hydraulic jacks II
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10000
+	AvailTN:	5
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	42
+	Val1:	2
+	Val4:	125
+BREAK
+#470
+Keywords:	cyberfin
+Name:	a set of cyberfins
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	105000
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	37
+	Val4:	30
+BREAK
+#471
+Keywords:	blood filter III
+Name:	a blood filter III
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	30000
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	17
+	Val1:	3
+	Val3:	1
+	Val4:	60
+BREAK
+#472
+Keywords:	trachea filter III
+Name:	a trachea filter III
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	45000
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	17
+	Val1:	3
+	Val4:	30
+BREAK
+#473
+Keywords:	stomach filter III
+Name:	a stomach filter III
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	30000
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	17
+	Val1:	3
+	Val3:	2
+	Val4:	60
+BREAK
+#474
+Keywords:	reaction enhancer
+Name:	a reaction enhancer
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	60000
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	22
+	Val1:	1
+	Val4:	30
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	1
+BREAK
+#475
+Keywords:	fingertip compartment
+Name:	a fingertip compartment
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	3000
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val4:	10
+BREAK
+#476
+Keywords:	handblade
+Name:	a handblade
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	5.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	11
+	Val4:	10
+BREAK
+#477
+Keywords:	retractable handblade
+Name:	a retractable handblade
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10000
+	AvailTN:	6
+	AvailDay:	5.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	11
+	Val3:	1
+	Val4:	25
+BREAK
+#478
+Keywords:	a set of handrazors
+Name:	a set of handrazors
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	7500
+	AvailTN:	3
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val4:	10
+BREAK
+#479
+Keywords:	improved handrazors
+Name:	a set of improved handrazors
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	9000
+	AvailTN:	5
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val3:	2
+	Val4:	25
+BREAK
+#480
+Keywords:	hand spurs
+Name:	a set of hand spurs
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	7000
+	AvailTN:	3
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	13
+	Val4:	10
+BREAK
+#481
+Keywords:	climbing claws
+Name:	a set of climbing claws
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10000
+	AvailTN:	5
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	44
+	Val4:	30
+BREAK
+#482
+Keywords:	obvious cybertorso torso
+Name:	an obvious cybertorso
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	90000
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	39
+	Val4:	150
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+BREAK
+#483
+Keywords:	synthetic cybertorso torso
+Name:	a synthetic cybertorso
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	120000
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	39
+	Val3:	1
+	Val4:	150
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+BREAK
+#484
+Keywords:	obvious cyberskull skull
+Name:	an obvious cyberskull
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	35000
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	38
+	Val4:	75
+BREAK
+#485
+Keywords:	synthetic cyberskull skull
+Name:	a synthetic cyberskull
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	55000
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	38
+	Val3:	1
+	Val4:	75
+BREAK
+#486
+Keywords:	datajack induction
+Name:	an induction datajack
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	3000
+	AvailTN:	5
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val3:	1
+	Val4:	30
+BREAK
+#487
+Keywords:	dual-slot chipjack
+Name:	a dual-slot chipjack
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	2000
+	AvailTN:	3
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val3:	2
+	Val4:	25
+BREAK
+#488
+Keywords:	tri-slot chipjack
+Name:	a tri-slot chipjack
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	3000
+	AvailTN:	3
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val3:	3
+	Val4:	30
+BREAK
+#489
+Keywords:	quad-slot chipjack
+Name:	a quad-slot chipjack
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	4000
+	AvailTN:	3
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val3:	4
+	Val4:	35
+BREAK
+#490
+Keywords:	datalock
+Name:	a datalock
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val4:	20
+BREAK
+#491
+Keywords:	knowsoft link
+Name:	a knowsoft link
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val4:	10
+BREAK
+#492
+Keywords:	tooth compartment
+Name:	a breakable tooth compartment
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	750
+	AvailTN:	3
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val3:	1
+BREAK
+#493
+Keywords:	oral dart
+Name:	an oral dart
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	3600
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	25
+	Val4:	25
+BREAK
+#494
+Keywords:	oral gun
+Name:	an oral gun
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	5600
+	AvailTN:	6
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	26
+	Val4:	40
+BREAK
+#495
+Keywords:	towering green humboldt skunk marijuana plant
+Name:	^gA towering ^Ghumboldt skunk^g plant^n
+RoomDesc:$
+^gA towering ^Ghumboldt skunk^g plant is tied up and bagged here.~
+LookDesc:$
+My god what a huge fucking plant!  Its covered with the stickiest, skunkiest,
+greenest, most potent Humboldt Skunk #1 buds imaginable. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	12.00
+	Barrier:	1
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#496
+Keywords:	crack torch butane lighter
+Name:	a crack torch
+RoomDesc:$
+A high-powered windproof lighter lies here.~
+LookDesc:$
+A windproof, high powered, hot-flame crack torch. 
+~
+Type:	Light
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	5
+BREAK
+#497
+Keywords:	towering green humboldt skunk marijuana plant
+Name:	^gA towering ^Ghumboldt skunk^g plant^n
+RoomDesc:$
+^gA towering ^Ghumboldt skunk^g plant rises up to the roof of the greenhouse.^n~
+LookDesc:$
+My god what a huge fucking plant!  Its covered with the stickiest, skunkiest,
+greenest, most potent Humboldt Skunk #1 buds imaginable. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1200.00
+	Barrier:	1
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#498
+Keywords:	gigantic green bud pot plant buds
+Name:	^gA gigantic ^Ggreen bud^n
+RoomDesc:$
+^gA gigantic ^Ggreen bud^g grows here.^N~
+LookDesc:$
+A huge sticky Humboldt Skunk #1 bud, aromatic with a rich skunky smell,
+covered in pure THC crystals and dripping THC clear goo.  Good shit man. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	12.00
+	Barrier:	1
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#499
+Keywords:	buds green pot bud huge
+Name:	^ga huge green bud^n
+RoomDesc:$
+^gA huge green bud lies on a table ready for your smoking pleasure.^n~
+LookDesc:$
+A huge sticky Humboldt Skunk #1 bud, oozing with pure THC. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	4.00
+	Barrier:	1
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

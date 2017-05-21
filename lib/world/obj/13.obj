@@ -1,0 +1,255 @@
+#1300
+Keywords:	nitrous injector
+Name:	A nitrous oxide injector
+RoomDesc:$
+A thingy that does something is here.~
+LookDesc:$
+It does something to cars. Something that includes laughing gas. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	3500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	15
+	Val5:	20
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	100
+BREAK
+#1301
+Keywords:	plates titanium body armor plating
+Name:	titanium body plating
+RoomDesc:$
+Some plates of titanium are bundled here.~
+LookDesc:$
+Plates of steel titanium, for mounting on a vehicle. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	10
+	Val4:	2
+[AFFECT 0]
+	Location:	Intelligence
+	Modifier:	2
+BREAK
+#1302
+Keywords:	remote control deck RCD rigger vehicle rating 1 one
+Name:	a generic Remote Control Deck
+RoomDesc:$
+A vehicle remote control deck sits here.~
+LookDesc:$
+It is a shiny black box with a small UHF antenna, used for remotely
+controlling a vehicle or drone. 
+~
+Type:	Rigger Control Deck
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	5000
+	AvailTN:	4
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#1303
+Keywords:	toyota ecr-3 remote control deck
+Name:	A Toyota ECR-3 Remote Control Deck
+RoomDesc:$
+A remote control deck with the Toyota logo on it sits here.~
+LookDesc:$
+A remote control deck with a moderate control capability, the ECR-3 consists
+of a small UHF antenna and a black box with a cable that interfaces with a
+datajack.  It includes a battery pack. 
+~
+Type:	Rigger Control Deck
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	15000
+	AvailTN:	4
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+BREAK
+#1304
+Keywords:	toyota ecr-5 remote control deck
+Name:	A Toyota ECR-5 Remote Control Deck
+RoomDesc:$
+A remote control deck with the Toyota logo on it sits here.~
+LookDesc:$
+A remote control deck with a moderate control capability, the ECR-5 consists
+of a small UHF antenna and a black box with a cable that interfaces with a
+datajack.  It includes a battery pack. 
+~
+Type:	Rigger Control Deck
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	25000
+	AvailTN:	4
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#1305
+Keywords:	mitsubishi ZX-7 remote control deck electronic rigger
+Name:	A Mitsubishi ZX-7 Remote Control Deck
+RoomDesc:$
+An electronic rigger deck sits in the corner.~
+LookDesc:$
+The Mitsubishi ZX-7 Remote Control Deck is a high grade deck, used by
+professional security and military riggers.  The ZX-7 also comes with a strap
+for carrying on one's back. 
+~
+Type:	Rigger Control Deck
+WearFlags:	1000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	35000
+	AvailTN:	4
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+BREAK
+#1306
+Keywords:	chevrolet autoworks toolkit kit diagnostics system computer tools
+Name:	a Chevrolet Autoworks toolkit and diagnostics system
+RoomDesc:$
+A high grade tool kit with a diagnostics system lies here.~
+LookDesc:$
+This is a powerful tool kit, with every kind of wrench, screwdriver, wire
+cutter, soldering gun, cutter, hammer, you name it available in carefully
+organized drawers.  The top lid of the tool case when opened exposes a high
+grade expert system designed for intelligent diagnostics of an automobile's
+problem.  Just enter the make and model of the car you have a problem with,
+describe the problem with easy to use menus, and you are on your way. 
+~
+Type:	Workshop
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	9.00
+	Barrier:	24
+	Cost:	65000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	1
+BREAK
+#1307
+Keywords:	mini-turret turret mount atachment box
+Name:	a mini-turret attachment
+RoomDesc:$
+A large box marked "Mini-Turret" is lying here.~
+LookDesc:$
+This vehicle upgrade comes with all the parts to do a quick and easy install,
+thus allowing your vehicle to load a weapon. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	25.00
+	Barrier:	12
+	Cost:	5000
+	AvailTN:	12
+	AvailDay:	27.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	5
+	Val4:	2
+	Val6:	27
+BREAK
+#1360
+Keywords:	deck remote control rigging honda HR-X 
+Name:	A Honda HR-X Remote Control Deck
+RoomDesc:$
+A sleek red remote control deck has been propped up here.~
+LookDesc:$
+The Honda HR-X is a work of art, and seriously novahot gear to boot. Its sleek
+lines and easy modular upgradability make it the deck of choice for the
+rigging elite, both corporate and private. 
+~
+Type:	Rigger Control Deck
+WearFlags:	10000000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	50000
+	AvailTN:	4
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+BREAK
+END

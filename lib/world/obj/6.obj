@@ -1,0 +1,2939 @@
+#600
+Keywords:	sign metal
+Name:	a metal sign
+RoomDesc:$
+A small rusty sign is pinned to the seat in front of you.~
+LookDesc:$
+The keyword for each location is listed after the location name.  Say the keyword to the driver, and for a small fee, he will drive you to your destination.
+--------------------------------------------
+^yAreas of Town^N
+Auburn                  - ^YAuburn^N
+Chinatown               - ^YChinatown^N
+Council Island          - ^YCouncil^N
+Little Chiba            - ^YChiba^N
+Puyallup                - ^YPuyallup^N
+Redmond                 - ^YRedmond^N
+Seattle                 - ^YSeattle^N
+Tacoma                  - ^YTacoma^N
+Tarislar                - ^YTarislar
+^cCorporate Parks^N
+Aztechnology Pyramid    - ^CAztech^N
+Knight Center           - ^CKnight^N
+Mitsuhama Towers        - ^CMitsuhama^N
+Novatech Seattle        - ^CNovatech^N
+Shintaru Technology     - ^CShintaru^N
+^gTourist Attractions^N
+Seattle First Methodist - ^GMethodist^N
+Seattle Public Library  - ^GLibrary^N
+Seattle State Park      - ^GPark^N
+Le Cinema Vieux         - ^GCinema^N
+^rTransportation^N
+Hellhound Bus Stop      - ^RHellhound^N
+SeaTac Airport          - ^RAirport^N
+Seattle Dockyards       - ^RDocks^N
+Seattle Parking Garage  - ^RGarage
+^mRestaurants and Nightclubs^N
+The Afterlife           - ^MAfterlife^N
+The Big Rhino           - ^MBig^N
+The Blue Wyvern         - ^MWyvern^N
+Club Penumbra           - ^MPenumbra^N
+Dante's Inferno         - ^MDante^N
+The Epicenter           - ^MEpicenter^N
+Kristin's               - ^MKristins^N
+Platinum Club           - ^MPlatinum^N
+Pook's Place            - ^MPooks^N
+Quinn's                 - ^MQuinns^N
+Sculleys                - ^MSculleys^N
+SyberSpace              - ^MSyberspace^N
+The Reaper              - ^MReaper^N
+The Stop Gap            - ^MStop^N
+Yoshi's Sushi Bar       - ^MYoshi^N
+Italiano                - ^MItaliano^N
+^bShopping^N
+Action Computers        - ^BAction^N
+Lysleul Plaza           - ^BLysleul^N
+Microdeck Outlet Store  - ^BMicrodeck^N
+Modern Magik            - ^BModern^N
+Moonlight Mall          - ^BMoonlight^N
+Nybbles and Bytes       - ^BNybbles^N
+SDA Plaza               - ^BSDA^N
+Seattle Formal Wear     - ^BFormal^N
+Tacoma Weapons Emporium - ^BTWE^N
+^gAccomodation^N
+Easy Diver Coffin Hotel - ^GDiver^N
+Redmond Apartment Block - ^GApartment^N
+Tacoma Coffin Hotel     - ^GCoffin^n
+Evergreen Apartments    - ^GEvergreen^n
+^rHospitals^N
+Council Island Hospital - ^RHospital^N
+Humana Hospital         - ^RHumana^n
+^n
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#601
+Keywords:	clip 16-bullet pistol
+Name:	a 16-bullet pistol clip
+RoomDesc:$
+An ammunition clip for a pistol lies here.~
+LookDesc:$
+A pistol clip, capable of holding 16 bullets.
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.40
+	Barrier:	6
+	Cost:	32
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	21
+BREAK
+#602
+Keywords:	clip 18-bullet pistol
+Name:	an 18-bullet pistol clip
+RoomDesc:$
+A clip for a pistol lies here, '18' marked on its side.~
+LookDesc:$
+A pistol clip, capable of holding 18 bullets.
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.45
+	Barrier:	6
+	Cost:	36
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	18
+	Val1:	21
+BREAK
+#603
+Keywords:	clip 15-bullet pistol
+Name:	a 15-bullet pistol clip
+RoomDesc:$
+A standard pistol clip sits on the floor.~
+LookDesc:$
+A pistol clip, capable of holding 15 bullets.
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.38
+	Barrier:	6
+	Cost:	30
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	21
+BREAK
+#604
+Keywords:	clip 10-bullet pistol
+Name:	a 10-bullet pistol clip
+RoomDesc:$
+A 10-bullet pistol clip lies here.~
+LookDesc:$
+A pistol clip, capable of holding 10 bullets.
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	20
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	21
+BREAK
+#605
+Keywords:	clip six-bullet 6-bullet pistol speedloader
+Name:	a 6-bullet speedloader
+RoomDesc:$
+A small speedloader lies here.~
+LookDesc:$
+A six-shot speedloader, for rapid reloading of revolvers. 
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.15
+	Barrier:	6
+	Cost:	12
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	21
+BREAK
+#606
+Keywords:	clip 12-bullet pistol
+Name:	a 12-bullet pistol clip
+RoomDesc:$
+A pistol clip sits upright.~
+LookDesc:$
+A Universal Pistol clip, capable of holding 12 bullets.
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.30
+	Barrier:	6
+	Cost:	24
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	21
+BREAK
+#607
+Keywords:	clip 11-bullet pistol
+Name:	an 11-bullet pistol clip
+RoomDesc:$
+An uncommon pistol clip rests on the ground.~
+LookDesc:$
+A pistol clip, capable of holding 11 bullets.
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.28
+	Barrier:	6
+	Cost:	22
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	11
+	Val1:	21
+BREAK
+#608
+Keywords:	clip eight-shell 8-shell shotgun
+Name:	an 8-shell clip
+RoomDesc:$
+An 8-shell shotgun clip lies here.~
+LookDesc:$
+A shotgun clip capable of holding eight shells. 
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.20
+	Barrier:	6
+	Cost:	16
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	24
+BREAK
+#609
+Keywords:	clip 10-shell shotgun
+Name:	a 10-shell clip
+RoomDesc:$
+A shotgun clip has been discarded.~
+LookDesc:$
+A shotgun clip, capable of holding 10 shells.
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	20
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	24
+BREAK
+#610
+Keywords:	clip 38-round assault rifle
+Name:	a 38-round assault rifle clip
+RoomDesc:$
+An assault rifle clip rests on its side.~
+LookDesc:$
+An assault rifle clip, capable of holding 38 bullets.
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.95
+	Barrier:	6
+	Cost:	76
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	38
+	Val1:	25
+BREAK
+#611
+Keywords:	clip 35-round rifle
+Name:	a 35-round assault rifle clip
+RoomDesc:$
+A rifle clip sits in the corner.~
+LookDesc:$
+A clip for assault rifles with an ammo capacity of 35 rounds. 
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.88
+	Barrier:	6
+	Cost:	70
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	35
+	Val1:	25
+BREAK
+#612
+Keywords:	clip 40-round assault rifle
+Name:	a 40-round assault rifle clip
+RoomDesc:$
+A slightly curved assault rifle clip sits here.~
+LookDesc:$
+An assault rifle clip, capable of holding 40 bullets.
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	80
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	40
+	Val1:	25
+BREAK
+#613
+Keywords:	clip 32-round assault rifle
+Name:	a 32-round assault rifle clip
+RoomDesc:$
+An assault rifle clip marked '32' lies on the floor.~
+LookDesc:$
+An assault rifle clip, capable of holding 32 bullets.
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.80
+	Barrier:	6
+	Cost:	64
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	32
+	Val1:	25
+BREAK
+#614
+Keywords:	clip 50-round machinegun
+Name:	a 50-round machine gun clip
+RoomDesc:$
+A typical machine gun clip waits to be used.~
+LookDesc:$
+A machine gun clip, capable of holding 50 bullets.
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.25
+	Barrier:	6
+	Cost:	100
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	25
+BREAK
+#615
+Keywords:	clip 40-round machinegun
+Name:	a 40-round machinegun clip
+RoomDesc:$
+A non-standard machine gun clip sits on the ground.~
+LookDesc:$
+A machine gun clip, capable of holding 40 bullets.
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	80
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	40
+	Val1:	25
+BREAK
+#616
+Keywords:	clip six 6 mini-grenades
+Name:	a clip of six mini-grenades
+RoomDesc:$
+A clip of mini-grenades sits here.~
+LookDesc:$
+A grenade launcher clip, capable of holding 6 mini grenades.
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.50
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	19
+BREAK
+#617
+Keywords:	belt 22 cannon shells
+Name:	a belt of 22 cannon shells
+RoomDesc:$
+A large belt of cannon shells is on the ground.~
+LookDesc:$
+A belt of 22 cannon shells.
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	27.50
+	Barrier:	6
+	Cost:	990
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	22
+	Val1:	26
+BREAK
+#618
+Keywords:	beretta 101t pistol
+Name:	a Beretta 101T
+RoomDesc:$
+A nicely-fashioned light pistol rests here.~
+LookDesc:$
+The 101T is a light pistol favoured highly amongst corporate personel as a
+sidearm. The design is very light and streamlined, allowing you to carry it
+without problem. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	350
+	AvailTN:	3
+	AvailDay:	0.50
+	LegalNum:	8
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	6
+	Val1:	1
+	Val3:	321
+	Val4:	11
+	Val5:	12
+	Val6:	12
+	Val9:	-1
+	Val10:	4
+BREAK
+#619
+Keywords:	fichetti security 500a pistol
+Name:	a Fichetti Security 500a
+RoomDesc:$
+A light security pistol.~
+LookDesc:$
+Used by many lesser security companies, the Fichetti Security 500a
+is very customizable.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.25
+	Barrier:	6
+	Cost:	550
+	AvailTN:	3
+	AvailDay:	0.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	1
+	Val3:	321
+	Val4:	11
+	Val5:	25
+	Val6:	25
+	Val9:	692
+	Val10:	4
+BREAK
+#620
+Keywords:	clip 25 pistol
+Name:	a 25-bullet pistol clip
+RoomDesc:$
+A large pistol clip has been discarded.~
+LookDesc:$
+A non-standard pistol clip, mainly used by Fichetti guns.
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.62
+	Barrier:	6
+	Cost:	50
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	25
+	Val1:	21
+BREAK
+#621
+Keywords:	predator ares pistol
+Name:	an Ares Predator II
+RoomDesc:$
+An Ares Predator II has been dropped here.~
+LookDesc:$
+A more reliable version of the original Predator. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	8
+	Cost:	550
+	AvailTN:	4
+	AvailDay:	1.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	321
+	Val4:	11
+	Val5:	15
+	Val6:	15
+	Val8:	630
+	Val9:	-1
+	Val10:	4
+BREAK
+#622
+Keywords:	browning max-power max power pistol
+Name:	a Browning Max-Power
+RoomDesc:$
+A heavy pistol with the Browning logo on it is here.~
+LookDesc:$
+The barrel is shorter than most heavy pistols, but it holds the
+same amount of power.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	600
+	AvailTN:	3
+	AvailDay:	2.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	321
+	Val4:	11
+	Val5:	10
+	Val6:	10
+	Val9:	-1
+	Val10:	4
+BREAK
+#623
+Keywords:	warhawk super ruger pistol
+Name:	a Ruger Super Warhawk
+RoomDesc:$
+A Ruger Super Warhawk rests on the ground.~
+LookDesc:$
+An up-to-date version of the original, with much added power.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	8
+	Cost:	300
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	10
+	Val1:	2
+	Val3:	321
+	Val4:	11
+	Val5:	6
+	Val6:	6
+	Val8:	-1
+	Val9:	-1
+	Val10:	2
+BREAK
+#624
+Keywords:	manhunter colt pistol
+Name:	a Colt Manhunter
+RoomDesc:$
+A Colt heavy pistol has been left here.~
+LookDesc:$
+A very popular gun among shadowrunners, this heavy pistol combines
+large clip size and power.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	8
+	Cost:	425
+	AvailTN:	4
+	AvailDay:	1.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	321
+	Val4:	11
+	Val5:	16
+	Val6:	16
+	Val9:	-1
+	Val10:	4
+BREAK
+#625
+Keywords:	ceska vz120 pistol
+Name:	a Ceska vz/120
+RoomDesc:$
+A foreign-made light pistol lies here.~
+LookDesc:$
+On it, there is a stamp which reads, 'Made in the Czech Republic.'
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	500
+	AvailTN:	3
+	AvailDay:	0.50
+	LegalNum:	8
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	6
+	Val1:	1
+	Val3:	321
+	Val4:	11
+	Val5:	18
+	Val6:	18
+	Val9:	-1
+	Val10:	4
+BREAK
+#626
+Keywords:	sight laser
+Name:	a laser sight
+RoomDesc:$
+An uninstalled laser sight has been tossed aside.~
+LookDesc:$
+A small, cylindrical attachment, which projects a thin red laser
+to improve speed and accuracy.
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	100000000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.25
+	Barrier:	4
+	Cost:	500
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+BREAK
+#627
+Keywords:	sight magnification level-1
+Name:	a level-1 magnification sight
+RoomDesc:$
+A small gun sight lies here.~
+LookDesc:$
+Used to improve accuracy with distance shooting.
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	100000000000000000
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	600
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+BREAK
+#628
+Keywords:	sight magnification level-2
+Name:	a level-2 magnification sight
+RoomDesc:$
+A medium-sized gun sight lies here.~
+LookDesc:$
+Used to improve accuracy with distance shooting.
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	100000000000000000000
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	900
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+BREAK
+#629
+Keywords:	sight magnification level-3
+Name:	a level-3 magnification sight
+RoomDesc:$
+A rather large gun sight lies here.~
+LookDesc:$
+Used to improve accuracy with distance shooting.
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	1000000000000000000000
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	1300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+BREAK
+#630
+Keywords:	smartgun link smartlink
+Name:	a smartgun link
+RoomDesc:$
+A smartgun link sits on the floor.~
+LookDesc:$
+When used with a cybernetic receiver, this increases the accuracy
+with which one shoots.
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	600
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	4
+	LegalCode:	13
+	LegalPermit:	1
+[VALUES]
+	Val0:	2
+	Val1:	1
+BREAK
+#631
+Keywords:	enfield shotgun as-7
+Name:	an Enfield AS-7
+RoomDesc:$
+An Enfield shotgun leans against a wall.~
+LookDesc:$
+A typical double-barrel shotgun.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	8
+	Cost:	1000
+	AvailTN:	8
+	AvailDay:	8.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	8
+	Val1:	3
+	Val3:	324
+	Val4:	13
+	Val5:	10
+	Val6:	10
+	Val9:	-1
+	Val10:	12
+BREAK
+#632
+Keywords:	katana sword sharp
+Name:	a katana
+RoomDesc:$
+A sharp katana gleams in the dim light.~
+LookDesc:$
+With a razor-sharp edge, the katana is an ancient sword which has
+survived throughout the centuries due to its light weight and
+durability.
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	1000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	5
+	LegalCode:	2
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val3:	303
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#633
+Keywords:	sword long
+Name:	a long sword
+RoomDesc:$
+A sheathed long sword lies on its side.~
+LookDesc:$
+Made like the swords of western medieval europe, the long sword
+is approximately four and a half feet long with a dual-edge.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	500
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	4
+	LegalCode:	2
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	303
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#634
+Keywords:	spear
+Name:	a spear
+RoomDesc:$
+A metal-tipped spear has been thrust into the ground.~
+LookDesc:$
+A sturdy wooden shaft and a sharpened metal tip make this a
+considerable weapon in skilled hands.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	4.00
+	Barrier:	3
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	4
+	Val3:	311
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#635
+Keywords:	baton stun
+Name:	a stun baton
+RoomDesc:$
+A standard-style stun baton sways on the ground.~
+LookDesc:$
+A small club infused with a not-so-mild electric current.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	750
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	5
+	LegalCode:	3
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	3
+	Val3:	314
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#636
+Keywords:	monosword ares monofilament sword
+Name:	an Ares monosword
+RoomDesc:$
+A monofilament sword has been left here.~
+LookDesc:$
+A street samurai's choice of weapon for up-close-and-lethal confrontations.
+The Ares monosword enjoys a high profile among swordsmen for its lighter
+weight and easier balance, and its rugged dependability makes it well worth
+the price. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	1000
+	AvailTN:	4
+	AvailDay:	1.00
+	LegalNum:	3
+	LegalCode:	2
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val3:	303
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#637
+Keywords:	axe laser centurion
+Name:	a Centurion laser axe
+RoomDesc:$
+A shining laser axe has its edge stuck in a wall.~
+LookDesc:$
+Made like the old-fashioned combat axes, with a slight modification.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.20
+	Barrier:	8
+	Cost:	3500
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	3
+	LegalCode:	2
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val3:	310
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#638
+Keywords:	monoknife knife
+Name:	a monoknife
+RoomDesc:$
+A monoknife sits on its own.~
+LookDesc:$
+Just think of it as a portable (concealable) monosword.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.75
+	Barrier:	4
+	Cost:	120
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	3
+	Val3:	303
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#639
+Keywords:	bow wooden
+Name:	a bow
+RoomDesc:$
+A wooden bow leans against the wall.~
+LookDesc:$
+It's made from a strong wood, and strung with the toughest bowstring.
+~
+Type:	Bow/X-bow
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	425
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	317
+	Val4:	124
+	Val6:	4
+BREAK
+#640
+Keywords:	bow ranger-x ranger
+Name:	a Ranger-X bow
+RoomDesc:$
+A dull-polished Ranger-X bow catches your attention.~
+LookDesc:$
+A much more powerful version of the standard bow.
+~
+Type:	Bow/X-bow
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	385
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	4
+	Val3:	317
+	Val4:	24
+	Val6:	1
+BREAK
+#641
+Keywords:	crossbow medium
+Name:	a medium crossbow
+RoomDesc:$
+A medium-sized crossbow sits on the floor.~
+LookDesc:$
+With a quick-drawback feature, this crossbow is designed for medium
+strength and power.
+~
+Type:	Bow/X-bow
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	510
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val3:	317
+	Val4:	125
+	Val5:	1
+	Val6:	4
+BREAK
+#642
+Keywords:	arrow
+Name:	an arrow
+RoomDesc:$
+A carefully designed arrow sticks from the wall.~
+LookDesc:$
+A perfectly straight shaft, combined with durable feathers and a
+sharp tip, the arrow can cause as much pain as a bullet.
+~
+Type:	Arrow/bolt
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	11
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#643
+Keywords:	bolt
+Name:	a crossbow bolt
+RoomDesc:$
+A short, metal crossbow bolt rolls on the ground.~
+LookDesc:$
+A shorter version of the arrow, the metal crossbow bolt is much more
+durable than its counterpart.
+~
+Type:	Arrow/bolt
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	6
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#644
+Keywords:	quiver leather
+Name:	a quiver
+RoomDesc:$
+A leather quiver hangs from a peg.~
+LookDesc:$
+Made of synthetic leather, this particular quiver can hold
+approximately 25 arrows.
+~
+Type:	Quiver
+WearFlags:	1000000110000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	35
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	25
+BREAK
+#645
+Keywords:	quiver bolt
+Name:	a bolt quiver
+RoomDesc:$
+A nearly-new bolt quiver lies on a table.~
+LookDesc:$
+Akin to the arrow quiver, but smaller in size to hold 25 bolts.
+~
+Type:	Quiver
+WearFlags:	100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	29
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	25
+	Val1:	1
+BREAK
+#646
+Keywords:	shuriken throwing star
+Name:	a shuriken
+RoomDesc:$
+A shuriken is stuck neatly in the floor.~
+LookDesc:$
+A sharp, four-pointed throwing star.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val3:	315
+	Val4:	27
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#647
+Keywords:	knife throwing
+Name:	a throwing knife
+RoomDesc:$
+A perfectly-balanced throwing knife rests on the ground.~
+LookDesc:$
+Perfectly balanced and designed to be aerodynamic.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val3:	316
+	Val4:	27
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#648
+Keywords:	strap knife holder
+Name:	a knife strap
+RoomDesc:$
+A knife strap sits here.~
+LookDesc:$
+A shoulder-to-waist strap, made to hold several throwing knives.
+~
+Type:	Quiver
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	3
+BREAK
+#649
+Keywords:	pockets velcro sleeve
+Name:	Velcro sleeve pockets
+RoomDesc:$
+A set of Velcro sleeve pockets is here.~
+LookDesc:$
+Specially-shaped pockets designed to hold shurikens, the sleeve pockets
+are made with new-age Velcro to attach to any jacket sleeves.
+~
+Type:	Worn
+WearFlags:	100000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val3:	12
+	Val4:	3
+BREAK
+#650
+Keywords:	vent gas improved
+Name:	an improved gas vent II
+RoomDesc:$
+An unattached gas vent lies here.~
+LookDesc:$
+A small device used to lessen recoil.
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	450
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	3
+	Val2:	-2
+BREAK
+#651
+Keywords:	pad shock
+Name:	a shock pad
+RoomDesc:$
+A shock pad attachment sits here.~
+LookDesc:$
+Used to slightly reduce recoil on fast-firing guns.
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.25
+	Barrier:	3
+	Cost:	200
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	4
+BREAK
+#652
+Keywords:	knife small lightweight
+Name:	a knife
+RoomDesc:$
+A small, lightweight knife lies here.~
+LookDesc:$
+A plain knife, not made for fighting. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	30
+	AvailTN:	2
+	AvailDay:	0.10
+	LegalNum:	8
+	LegalCode:	1
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val3:	311
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#653
+Keywords:	gas vent improved
+Name:	an improved gas vent III
+RoomDesc:$
+An unattached gas vent is lying here.~
+LookDesc:$
+It looks like a barrel mounted recoil compensator for your favorite gun. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.75
+	Barrier:	4
+	Cost:	700
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	3
+	Val2:	-3
+BREAK
+#654
+Keywords:	improved gas vent
+Name:	an improved gas vent I
+RoomDesc:$
+An unattached gas vent is lying here.~
+LookDesc:$
+It looks like a gas vent recoil system for a gun. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	300
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	3
+	Val2:	-1
+BREAK
+#655
+Keywords:	pole arm
+Name:	a pole arm
+RoomDesc:$
+A pole arm is lying here.~
+LookDesc:$
+A spear-like weapon, this one features an axe style head on the end for
+maximum carnage. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	3
+	Val3:	309
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#656
+Keywords:	wooden staff
+Name:	a wooden staff
+RoomDesc:$
+A wooden staff is lying here.~
+LookDesc:$
+A large, heavy stick.  Popular with magicians for that traditional look. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val3:	307
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#657
+Keywords:	club
+Name:	a club
+RoomDesc:$
+A club has been dropped on the ground.~
+LookDesc:$
+It looks like a meter long piece of wood with a rusty nail stuck on the
+business end. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	10
+	AvailTN:	2
+	AvailDay:	0.25
+	LegalNum:	6
+	LegalCode:	3
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	305
+	Val4:	6
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#658
+Keywords:	large combat axe
+Name:	a combat axe
+RoomDesc:$
+A large axe is lying here.~
+LookDesc:$
+It's a tungsten alloy axe.  If you're wielding this, you've probably seen too
+many Neil the Ork Barbarian movies. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	750
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	3
+	LegalCode:	2
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val3:	310
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#659
+Keywords:	sharp knife fineblade
+Name:	a fineblade knife
+RoomDesc:$
+A sharp knife is stuck in the ground here.~
+LookDesc:$
+Manufactured by Cougar, the fineblade is made with a revolutionary
+monomolecular bonding process.  The result is a sharp, dependable weapon. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	1600
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val3:	311
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#660
+Keywords:	whip monowhip monofilament
+Name:	a monofilament whip
+RoomDesc:$
+You almost trip on a whip lying here.~
+LookDesc:$
+The monofilament whip is an uncommon and feared weapon on the streets.  It
+consists of a short haft that holds the monofilament line when not in use.
+This weapon can be just as deadly for the wielder as for the victim - the
+unskilled had best beware. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	6
+	Cost:	9000
+	AvailTN:	24
+	AvailDay:	14.00
+	LegalNum:	1
+	LegalCode:	10
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val3:	302
+	Val4:	5
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#662
+Keywords:	sword dikote monosword shiny
+Name:	a dikote sword
+RoomDesc:$
+A very shiny sword is lying here.~
+LookDesc:$
+For some bizarre reason, someone has applied a Dikote(tm) coating to this Ares
+Monosword.  Pretty pointless, since the Dikote film covers the monofilament
+edge.  Might as well be a regular sword. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	16
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	303
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#663
+Keywords:	dikote combat axe sharp
+Name:	a dikote combat axe
+RoomDesc:$
+A very sharp looking axe is lying here.~
+LookDesc:$
+It looks like a combat axe with a thin diamond 'glaze' on it.  This process
+makes it extremely durable and sharp. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	16
+	Cost:	15000
+	AvailTN:	6
+	AvailDay:	14.00
+	LegalNum:	3
+	LegalCode:	2
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val2:	1
+	Val3:	310
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#664
+Keywords:	chainsaw
+Name:	a chainsaw
+RoomDesc:$
+A chainsaw is lying here.~
+LookDesc:$
+It's a well used chainsaw, perfect for disposing of corpses.  Or making them.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000010
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	2
+	Val3:	309
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#665
+Keywords:	large hammer sledgehammer
+Name:	a sledgehammer
+RoomDesc:$
+A large hammer is lying here.~
+LookDesc:$
+It looks like a large hammer suitable for breaking things or people. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val3:	305
+	Val4:	6
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#666
+Keywords:	katana shiny monokatana
+Name:	a monokatana
+RoomDesc:$
+A shiny katana lies here.~
+LookDesc:$
+It looks like a katana with a monofilament line bonded along the cutting edge.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	8
+	Cost:	1750
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	2
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	4
+	Val3:	303
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#667
+Keywords:	clip eight-round 8-round rifle
+Name:	an eight-round rifle clip
+RoomDesc:$
+A clip is lying here.~
+LookDesc:$
+A standard rifle clip that holds up to eight rounds. 
+~
+Type:	Gun Clip
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.20
+	Barrier:	4
+	Cost:	16
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	23
+BREAK
+#668
+Keywords:	ares predator pistol
+Name:	an Ares Predator
+RoomDesc:$
+An Ares Predator rests here.~
+LookDesc:$
+You see what many consider the premier heavy pistol.  It uses a clip and
+looks deadly.
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.25
+	Barrier:	3
+	Cost:	450
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	321
+	Val4:	11
+	Val5:	15
+	Val6:	15
+	Val9:	-1
+	Val10:	4
+BREAK
+#669
+Keywords:	clip 16-bullet rifle ares cc10
+Name:	an Ares CC-10 clip
+RoomDesc:$
+A shiny black sniper rifle clip lies here.~
+LookDesc:$
+Specifically designed for the Ares CC-10 Sniper Rifle, this clip holds 16
+rounds of ammunition. 
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.40
+	Barrier:	24
+	Cost:	32
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	23
+BREAK
+#670
+Keywords:	smartlink smart link accessory
+Name:	a smartlink accessory
+RoomDesc:$
+A smartlink accessory is lying on the ground here.~
+LookDesc:$
+It's a smartlink accessory, plug it in and start blasting. Fun. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	600
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	1
+BREAK
+#671
+Keywords:	clip pistol bullet 35-bullet
+Name:	a 35-bullet pistol clip
+RoomDesc:$
+A 35-bullet pistol clip is here.~
+LookDesc:$
+This clip holds 35 rounds and looks like it would fit a pistol. 
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.88
+	Barrier:	2
+	Cost:	70
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	35
+	Val1:	21
+BREAK
+#672
+Keywords:	sword monosword
+Name:	a monosword
+RoomDesc:$
+A monofilament sword lies here.~
+LookDesc:$
+The monosword is a popular weapon of choice for those that prefer the more
+traditional approach to combat. Honed to a deadly fine edge and incredibly
+durable, this is the perfect weapon for the skilled swordsman. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val3:	303
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#674
+Keywords:	clip pistol 30-round
+Name:	a 30-round pistol clip
+RoomDesc:$
+A 30-round pistol clip sits here.~
+LookDesc:$
+You see a pistol clip holding 30 bullets. 
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.75
+	Barrier:	3
+	Cost:	60
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	30
+	Val1:	25
+BREAK
+#675
+Keywords:	clip five-shell five-shell shotgun
+Name:	a five-shell clip
+RoomDesc:$
+A five-shell shotgun clip sits here.~
+LookDesc:$
+You see 5 shells in a narrow tube which is inserted into the shotgun.~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.12
+	Barrier:	3
+	Cost:	10
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	24
+BREAK
+#676
+Keywords:	shotgun enfield
+Name:	an Enfield AS-7/D
+RoomDesc:$
+A large shotgun lies here in the dust.~
+LookDesc:$
+The Enfield AS-7/D is a variant of the wildly popular AS-7 model.  The  'D'
+designation is due to the 50 shell drum used for ammunition, making this a
+perfect weapon for protracted battles in urban environments. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	6
+	Cost:	3000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	3
+	Val3:	324
+	Val4:	13
+	Val5:	50
+	Val6:	50
+	Val9:	-1
+	Val10:	4
+BREAK
+#677
+Keywords:	grenade offensive thermite
+Name:	a thermite offensive grenade
+RoomDesc:$
+A powerful hand grenade made of thermite sits unactivated on the ground.~
+LookDesc:$
+Thermite is the leading soft explosive on the market today, and
+the offensive grenade ensures that with accurate aim, no target
+is safe from its blast.
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.25
+	Barrier:	4
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	3
+	Val3:	318
+	Val4:	26
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#678
+Keywords:	vest security kevlar
+Name:	a security vest
+RoomDesc:$
+A kevlar-plated vest lies here.~
+LookDesc:$
+A heavy kevlar security vest. 
+~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	160
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	3
+	Val6:	2
+BREAK
+#679
+Keywords:	coat long trenchcoat secure
+Name:	a Secure long coat
+RoomDesc:$
+A Secure-brand trench coat is crumpled on the floor.~
+LookDesc:$
+A long, dark grey coat, with hidden armor layered on the inside for
+protection.
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	650
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	4
+	Val5:	4
+	Val6:	2
+	Val7:	2
+BREAK
+#680
+Keywords:	shirt secure
+Name:	a Secure shirt
+RoomDesc:$
+A Secure-brand shirt is here.~
+LookDesc:$
+Another fine product from the people at Secure, this shirt is actually
+armor!
+~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.50
+	Barrier:	4
+	Cost:	450
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	1
+	Val5:	3
+BREAK
+#681
+Keywords:	jacket secure
+Name:	a Secure jacket
+RoomDesc:$
+An armored jacket with the Secure logo on it has been left here.~
+LookDesc:$
+One of the most widely-used armors today, the jacket is light, (somewhat)
+disguised, and gives good protection.
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	850
+	AvailTN:	4
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	2
+	Val4:	3
+	Val5:	5
+	Val6:	3
+	Val7:	4
+BREAK
+#682
+Keywords:	vest secure
+Name:	a Secure vest
+RoomDesc:$
+A padded vest lies on the floor.~
+LookDesc:$
+A highly-concealable vest which gives decent protection.
+~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.75
+	Barrier:	4
+	Cost:	175
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	2
+	Val6:	1
+BREAK
+#683
+Keywords:	vest ultra secure ultra-vest
+Name:	a Secure ultra-vest
+RoomDesc:$
+An armored vest hangs from a wall.~
+LookDesc:$
+The Secure ultra-vest trades concealability and weight for protection.
+~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	350
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	3
+	Val6:	2
+	Val7:	-1
+BREAK
+#684
+Keywords:	survival knife
+Name:	a survival knife
+RoomDesc:$
+A common survival knife lies here.~
+LookDesc:$
+Its blade is sharp, although it is quite small.  Still, it's better than
+your fists (unless you have titanium bone lacing, of course).
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.75
+	Barrier:	6
+	Cost:	450
+	AvailTN:	3
+	AvailDay:	0.25
+	LegalNum:	6
+	LegalCode:	1
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+	Val3:	311
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#685
+Keywords:	clip smg submachinegun 27
+Name:	a 27-bullet SMG clip
+RoomDesc:$
+A black steel clip lies here.~
+LookDesc:$
+A black steel clip that holds 27 rounds. 
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.68
+	Barrier:	24
+	Cost:	54
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	27
+	Val1:	25
+BREAK
+#686
+Keywords:	rattlesnake heavy silver crafted pistol azt
+Name:	an AZT Rattlesnake
+RoomDesc:$
+A steel-crafted heavy pistol lies on the floor.~
+LookDesc:$
+The Azt Rattlesnake is a weapon of perfection. Used only by the legendary
+Leopard Guards in Aztechnology's security core, these guns are impossible to
+find, buy, or for that matter, be used by anyone other than a Leopard Guard.
+Using a special synthetic pad on the handle of the gun, Aztechnology has made
+it automatically attach itself to the user. The gun itself will not fire
+unless this attachment is secure. Therefore, since this synthetic lock is one
+of Aztechnology's most prized secrets, noone knows how to use them. The inside
+of the gun is equally perfectly crafted. Carrying a compressed clip of 25
+"bolts", the pistol releases each crafted bullet linked to a highly
+sophisticated Smartlink-Zeta prototype. On impact, the APDS-II head pierces
+almost any armour produced, and ignites the explosive-flechette compound
+inside. From there on, it gets pretty graphic. 
+~
+Type:	Weapon
+WearFlags:	1
+ExtraFlags:	100
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	3
+	Val3:	321
+	Val4:	11
+	Val5:	25
+	Val6:	25
+	Val9:	-1
+	Val10:	4
+BREAK
+#687
+Keywords:	Walther H10 Protector Pistol
+Name:	Walther H10 Protector
+RoomDesc:$
+A small protection pistol is lying here.~
+LookDesc:$
+The first protection pistol to boast power comparable to the Ares Predator.
+The very sleek and deadly H10 Protector features an integral laser sight. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	100000000000000
+Material:	orichalcum
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	4000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	321
+	Val4:	11
+	Val5:	8
+	Val6:	8
+	Val9:	-1
+	Val10:	4
+BREAK
+#688
+Keywords:	armor partial heavy
+Name:	partial heavy armor
+RoomDesc:$
+Some heavy armor has been left here.~
+LookDesc:$
+This armor is styled to intimidate as well as to protect.  The torso is
+covered by rigid plates attached to an undersuit with a kevlar weave. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	16.00
+	Barrier:	16
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	4
+	LegalCode:	11
+	LegalPermit:	0
+[VALUES]
+	Val5:	6
+	Val6:	4
+	Val7:	-3
+BREAK
+#689
+Keywords:	ares predator pistol III
+Name:	an Ares Predator III
+RoomDesc:$
+Someone has left a large pistol here.~
+LookDesc:$
+The Ares Predator III is the latest variant of the street sam's favourite
+weapon. It comes with an intergral smartlink-II system. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.25
+	Barrier:	12
+	Cost:	650
+	AvailTN:	5
+	AvailDay:	1.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	321
+	Val4:	11
+	Val5:	15
+	Val6:	15
+	Val8:	31111
+	Val9:	-1
+	Val10:	4
+BREAK
+#690
+Keywords:	colt asp light pistol
+Name:	a Colt Asp
+RoomDesc:$
+A small light pistol has been left here.~
+LookDesc:$
+The Colt Asp is a cheap, effective weapon, most commonly carried for corporate
+personal for personel protection. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	200
+	AvailTN:	3
+	AvailDay:	0.50
+	LegalNum:	8
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	6
+	Val1:	1
+	Val3:	321
+	Val4:	11
+	Val5:	6
+	Val6:	6
+	Val8:	-1
+	Val9:	-1
+	Val10:	4
+BREAK
+#691
+Keywords:	gas vent iv materials
+Name:	an improved gas vent IV
+RoomDesc:$
+Someone has left the materials for a gas vent system here.~
+LookDesc:$
+Gas Vent IV is the pinacle of venting technology. It vents gasses much more
+effectivly than any other system of the same type, nearly eliminating recoil.
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.75
+	Barrier:	3
+	Cost:	1000
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	3
+	Val2:	-4
+BREAK
+#692
+Keywords:	underbarrel weight
+Name:	an underbarrel weight
+RoomDesc:$
+A small weight has been left here.~
+LookDesc:$
+This small weight is designed to slot onto the front of most firearms and
+helps weigh the front of the barrel down, slightly compensating for recoil. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	16
+	Cost:	50
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	4
+BREAK
+#693
+Keywords:	telescoping staff
+Name:	a telescoping staff
+RoomDesc:$
+A fully retracted telescoping staff has been forgotten here.~
+LookDesc:$
+When collapsed, this weapon is the size of a small club. A quick spin
+telescopes sturdy staffs from each end, nearly tripling it's length. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	100
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	8
+	LegalCode:	3
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	305
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#694
+Keywords:	kusarigama chain ball sickle
+Name:	a kusarigama
+RoomDesc:$
+A long chain with a sickle on one end and ball on the other has been left here.~
+LookDesc:$
+The kusarigama consists of a sickle attached to a long length of chain ending
+in a weighted ball. The chain is used to strangle or entangle an opponent
+while the sickle and ball are used to slice and pummel the target. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	200
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	5
+	LegalCode:	3
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	303
+	Val4:	5
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#695
+Keywords:	morning star ball chain
+Name:	a morning star
+RoomDesc:$
+A ball and chain have been left here.~
+LookDesc:$
+A morning star is a length of chain with a spiked ball attached to the end. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	250
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	4
+	LegalCode:	3
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	309
+	Val4:	5
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#696
+Keywords:	3 section three staff
+Name:	a 3-section staff
+RoomDesc:$
+A three section staff is sitting on the ground.~
+LookDesc:$
+A larger version of the nunchaku, this two-handed weapon is made up of three
+lengths of metal connected by chain. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	200
+	AvailTN:	5
+	AvailDay:	3.00
+	LegalNum:	8
+	LegalCode:	3
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	305
+	Val4:	5
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#697
+Keywords:	bipod
+Name:	a bipod
+RoomDesc:$
+Someone has left an attachable bipod laying here.~
+LookDesc:$
+It attaches to the bottom of a weapon and helps provide recoil compensation. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	400
+	AvailTN:	6
+	AvailDay:	0.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	8
+BREAK
+#699
+Keywords:	sign metal
+Name:	a metal sign
+RoomDesc:$
+A small handwritten sign is pinned to the seat infront of you.~
+LookDesc:$
+Say the keyword for one of these destinations and the driver
+will take you there for a fee.
+----------------------------------------------------------------
+Keyword:
+Satyricon          - The Satyricon, on Broadway in Old Town
+Habitat            - The Telestrian Habitat
+Toadstool          - The Toadstool, off Burnside
+Powell             - Powell's Books Main Store
+Hospital           - Tir Tairngire Royal Hospital
+City               - Portland City Center Garage
+Bank               - TTBank Tower
+Hellhound          - Hellhound Bus Lines/Blanchet House
+Postal             - Royal Postal Station
+Rocco              - Rocco's Pizza
+Hard               - Hard Times
+Bank               - TTBank
+Tower              - TTBank Tower
+^n
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

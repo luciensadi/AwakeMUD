@@ -1,0 +1,50 @@
+#32500
+Keywords:	kevlar police lone star armor vest plated
+Name:	A Lone Star police vest
+RoomDesc:$
+A blue-and-gold kevlar police vest lies here.~
+LookDesc:$
+A standard-issue Lone Star kevlar police vest. While the plates between its
+kevlar layers make it bulky, they also provide it with superior ballistic and
+impact protection. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	24
+	Cost:	700
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#32700
+Keywords:	keycard electronic allen associates gold
+Name:	a gold keycard
+RoomDesc:$
+A gold keycard lies here.~
+LookDesc:$
+This simple gold keycard has the Allen & Associates logo emobossed in its
+center. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

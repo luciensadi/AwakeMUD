@@ -1,0 +1,1323 @@
+#60501
+Keywords:	colt american l36 light pistol
+Name:	A Colt American L36
+RoomDesc:$
+One of Colt's light pistols was left on the floor.~
+LookDesc:$
+Manufactured by one of America's finest gun manufacturers, the Colt American
+is a sleek pistol with a decent clip capacity. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	1
+	Val3:	321
+	Val4:	11
+	Val5:	11
+	Val6:	11
+BREAK
+#60512
+Keywords:	combat axe steel
+Name:	A steel combat axe
+RoomDesc:$
+A combat axe is resting against a nearby wall.~
+LookDesc:$
+A hefty looking, one edged combat axe with a tip for thrusting and a blunt
+edge for bashing. This wicked looking piece of steel looks like it would make
+quite a mess when used.. 
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	1001000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	16
+	Cost:	750
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val3:	309
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#60514
+Keywords:	thin steel fencing foil rapier
+Name:	A thin, steel rapier
+RoomDesc:$
+A fencing foil is resting against a nearby wall.~
+LookDesc:$
+With a flexible steel blade designed for thrusting instead of stabbing, this
+graceful, rarely seen weapon represents an era that has long past. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	311
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+BREAK
+#60519
+Keywords:	black wooden nightstick
+Name:	A black wooden nightstick
+RoomDesc:$
+A nightstick is here, waiting to club someone.~
+LookDesc:$
+A sleek black nightstick, used by law enforcement to subdue anyone that ticks
+them off. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	75
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	305
+	Val4:	6
+	Val5:	-1
+	Val6:	-1
+BREAK
+#60520
+Keywords:	wooden nunchaku
+Name:	A wooden pair of nunchaku
+RoomDesc:$
+Some nunchaku have been left on the floor.~
+LookDesc:$
+Made famous by Bruce Lee, these babies look like they can bring people into a
+world of hurt. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	305
+	Val4:	5
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#60521
+Keywords:	coiled leather whip
+Name:	A coiled leather whip
+RoomDesc:$
+A leather whip has been neatly coiled and left on the floor.~
+LookDesc:$
+A nasty looking whip, this looks like it would sting quite a bit if used
+correctly, or incorrectly for that matter.. 
+~
+Type:	Weapon
+WearFlags:	110100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	10
+	LegalCode:	3
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val3:	302
+	Val4:	5
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#60522
+Keywords:	sheath leather sword worn
+Name:	a worn ^yleather^n sword sheath
+RoomDesc:$
+A leather sword sheath has been propped up against the wall.~
+LookDesc:$
+This leather sheath seems perfect for concealing a deadly edged weapon. Keep
+in mind, though, that security frowns upon not just weapons, but also weapon
+containers. 
+~
+Type:	Holster
+WearFlags:	1000100100000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#60530
+Keywords:	phone mobile cell
+Name:	a cellular phone
+RoomDesc:$
+Someone has left their phone here.~
+LookDesc:$
+This is an oldstyle phone, with only microphone and speakers, no vid-screen.
+~
+Type:	Phone
+WearFlags:	1
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#60531
+Keywords:	radio simple
+Name:	a radio
+RoomDesc:$
+A simple radio has been tossed away.~
+LookDesc:$
+A small black box, filled with electronic circuitry connected to a
+cheap frequency-response speaker.
+~
+Type:	Radio
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+BREAK
+#60532
+Keywords:	basic electronics kit
+Name:	a basic electronics kit
+RoomDesc:$
+A small toolkit of electronic equipment is sitting on the floor.~
+LookDesc:$
+Various tools and gadgets that can help you when dealing with electronic
+devices. 
+~
+Type:	Workshop
+WearFlags:	100000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+BREAK
+#60534
+Keywords:	backpack plain black
+Name:	a plain black backpack
+RoomDesc:$
+A black backpack lies here.~
+LookDesc:$
+Just your standard black backpack, with straps along the back and several
+zippered compartments for storing things in. 
+~
+Type:	Container
+WearFlags:	1000100000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	1
+	Val2:	-1
+BREAK
+#60535
+Keywords:	neophyte guild duffel bag
+Name:	A Neophyte Guild duffelbag
+RoomDesc:$
+A plain grey duffelbag is leaning against a wall.~
+LookDesc:$
+A duffel bag that you can sling over your shoulder. 
+~
+Type:	Container
+WearFlags:	1000100000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	1
+	Val2:	-1
+BREAK
+#60536
+Keywords:	bowie knife
+Name:	A Bowie Knife
+RoomDesc:$
+A common survival knife lies here.~
+LookDesc:$
+A wicked looking blade that looks like it'd be able to sever limbs with a
+single swipe. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+	Val3:	311
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+BREAK
+#60537
+Keywords:	small medkit
+Name:	A small medkit
+RoomDesc:$
+A small white box with a red cross on it is lying on the floor.~
+LookDesc:$
+Filled with various medical supplies and bandages. 
+~
+Type:	Workshop
+WearFlags:	100000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	1
+BREAK
+#60542
+Keywords:	clip 6 pistol speedloader
+Name:	a 6-bullet speedloader
+RoomDesc:$
+A small speedloader lies here.~
+LookDesc:$
+A six-shot speedloader, for rapid reloading of revolvers. 
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.15
+	Barrier:	6
+	Cost:	12
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	21
+BREAK
+#60546
+Keywords:	5-bullet rifle clip
+Name:	a 5-bullet rifle clip
+RoomDesc:$
+A short rifle clip lies here.~
+LookDesc:$
+It's a small clip for use in a rifle. 
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.12
+	Barrier:	4
+	Cost:	10
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	23
+BREAK
+#60548
+Keywords:	5-shell clip
+Name:	a 5-shell clip
+RoomDesc:$
+A 5-shell clip sits here.~
+LookDesc:$
+You see 5 shells in a narrow tube which is inserted into the shotgun.~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.12
+	Barrier:	3
+	Cost:	10
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	24
+BREAK
+#60550
+Keywords:	worn used leather holster
+Name:	A worn, used ^yleather^N holster
+RoomDesc:$
+A beat up leather holster was thrown on the floor.~
+LookDesc:$
+Leather's peeling away and it looks like it'll fall apart any minute now, but
+it's a functional holster. 
+~
+Type:	Holster
+WearFlags:	10000000100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60551
+Keywords:	vent gas improved
+Name:	an improved gas vent II
+RoomDesc:$
+An unattached gas vent lies here.~
+LookDesc:$
+A small device used to lessen recoil.
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	450
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	3
+	Val2:	-2
+BREAK
+#60552
+Keywords:	laser sight attachable
+Name:	an attachable ^rlaser^N sight
+RoomDesc:$
+A laser sight is on the floor.~
+LookDesc:$
+A laser sight, for increased accuracy. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	100000000000000
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	500
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	2
+BREAK
+#60553
+Keywords:	electronic imaging scope
+Name:	an electronic imaging scope
+RoomDesc:$
+An electronic scope is getting dirt on its sensitive lens.~
+LookDesc:$
+Looks like you can pick out targets from longer distances if you have this
+attached to your firearm. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	100000000000000000000
+Material:	electronics
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	800
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+BREAK
+#60554
+Keywords:	firearm smartlink accessory
+Name:	A firearm smartlink accessory
+RoomDesc:$
+A smartlink accessory for a firearm is on the floor.~
+LookDesc:$
+When attached to a modified firearm, the user will be able to link his
+smartlink cyberware with his weapon, enabling increased accuracy. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	600
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	1
+BREAK
+#60555
+Keywords:	ration bar
+Name:	a ration bar
+RoomDesc:$
+A preserved ration bar sits here.~
+LookDesc:$
+While it doesn't have much taste, it will sustain you for some time.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+BREAK
+#60556
+Keywords:	canteen water
+Name:	a canteen
+RoomDesc:$
+A canteen has been discarded.~
+LookDesc:$
+Made of a special material to keep its contents cool.
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	15
+BREAK
+#60557
+Keywords:	hamburger burger
+Name:	a big, fresh-grilled hamburger
+RoomDesc:$
+A delicious looking hamburger is sitting around, not being eaten.~
+LookDesc:$
+Lettuce. Tomato. Onions. Melted cheese. Grilled sesame bun. Double slabs of
+grilled beef patty. Mmmm.. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+BREAK
+#60558
+Keywords:	strawberry milkshake
+Name:	A ^Rstrawberry^N milkshake
+RoomDesc:$
+A strawberry milkshake sitting on a table makes your mouth salivate.~
+LookDesc:$
+Fresh strawberries blended with icecream and milk. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+	Val2:	7
+BREAK
+#60559
+Keywords:	pancakes plate homemade
+Name:	A plate of homemade pancakes
+RoomDesc:$
+A plate of pancakes was left on a nearby table.~
+LookDesc:$
+Warm, fluffy pancakes drenched with syrup and topped with fresh blueberries. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+BREAK
+#60598
+Keywords:	skeleton
+Name:	A skeleton wrapped in tattered cloth
+RoomDesc:$
+A white skeleton is in the corner of the room, swarming with rats.~
+LookDesc:$
+The clothing the skeleton barely makes out the world "Ricky's Eatery". Looks
+like the skeleton used to be Ricky's assistant, and it looks like he failed to
+bring up some food.. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60599
+Keywords:	ricky crate food wooden
+Name:	Ricky's crate of food
+RoomDesc:$
+A large wooden crate of food is here.~
+LookDesc:$
+It's sealed shut, and the rats haven't broken into it. This must be what Ricky
+was looking for. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	1000000100
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	5.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60600
+Keywords:	pathogenic defense i
+Name:	pathogenic defense I
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	24000
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	11
+	Val1:	1
+	Val4:	20
+BREAK
+#60601
+Keywords:	pathogenic defense ii
+Name:	pathogenic defense II
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	24000
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	11
+	Val1:	2
+	Val4:	40
+BREAK
+#60602
+Keywords:	pathogenic defense iii
+Name:	pathogenic defense III
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	24000
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	11
+	Val1:	3
+	Val4:	60
+BREAK
+#60603
+Keywords:	toxin extractor
+Name:	a toxin extractor
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	17
+BREAK
+#60604
+Keywords:	tracheal filter
+Name:	a tracheal filter
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	18
+BREAK
+#60605
+Keywords:	metabolic arrestor
+Name:	a metabolic arrestor
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	20000
+	AvailTN:	6
+	AvailDay:	8.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val4:	60
+BREAK
+#60606
+Keywords:	nephritic screen
+Name:	a nephritic screen
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	20000
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val4:	40
+BREAK
+#60607
+Keywords:	muscle toner i
+Name:	muscle toner I
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	25000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	1
+	Val4:	40
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	1
+BREAK
+#60608
+Keywords:	muscle toner ii
+Name:	muscle toner II
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	50000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	2
+	Val4:	80
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	2
+BREAK
+#60609
+Keywords:	muscle toner iii
+Name:	muscle toner III
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	75000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	3
+	Val4:	120
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	3
+BREAK
+#60610
+Keywords:	muscle toner iv
+Name:	muscle toner IV
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	100000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	4
+	Val4:	160
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	4
+BREAK
+#60611
+Keywords:	trauma dampener
+Name:	a trauma dampener
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	40000
+	AvailTN:	6
+	AvailDay:	8.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	25
+	Val1:	1
+	Val4:	40
+BREAK
+#60612
+Keywords:	damage compensator i
+Name:	a damage compensator I
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	25000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	1
+	Val4:	20
+BREAK
+#60613
+Keywords:	damage compensator ii
+Name:	a damage compensator II
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	50000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	2
+	Val4:	40
+BREAK
+#60614
+Keywords:	synthacardium i
+Name:	synthacardium I
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	6000
+	AvailTN:	4
+	AvailDay:	10.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	1
+	Val4:	20
+BREAK
+#60615
+Keywords:	synthacardium ii
+Name:	synthacardium II
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	15000
+	AvailTN:	4
+	AvailDay:	10.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	2
+	Val4:	30
+BREAK
+#60616
+Keywords:	nictating membranes
+Name:	nictating membranes
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	8000
+	AvailTN:	4
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val4:	10
+BREAK
+#60617
+Keywords:	extended volume i
+Name:	extended volume I
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	8000
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	1
+	Val4:	20
+BREAK
+#60618
+Keywords:	extened volume ii
+Name:	extended volume II
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	15000
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	2
+	Val4:	30
+BREAK
+#60619
+Keywords:	extended volume iii
+Name:	extended volume III
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	25000
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	3
+	Val4:	40
+BREAK
+END

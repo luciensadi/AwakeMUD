@@ -1,0 +1,982 @@
+#10000
+Keywords:	library
+Name:	a hermetic library
+RoomDesc:$
+A hermetic library has been installed here for testing purposes.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Magic Tool
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	15
+BREAK
+#10100
+Keywords:	sheet paper spell formula
+Name:	Dunkelzahn's Spell Formula #9
+RoomDesc:$
+A sheet of paper marked #9 is lying here.~
+LookDesc:$
+A sheet of notebook paper with a few scribblings on it.
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	3000
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	33
+BREAK
+#10101
+Keywords:	bfg big fucking fragging gun 9000 morningstar
+Name:	a Morningstar Militech BFG-9000
+RoomDesc:$
+A massively large gun that looks like it could knock an astroid off course lies here.~
+LookDesc:$
+You see an uncreative object.~
+Type:	Weapon
+WearFlags:	10000000000000
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	50000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val3:	15
+	Val4:	19
+	Val5:	-1
+	Val6:	-1
+BREAK
+#10102
+Keywords:	dragon scale long coat
+Name:	a dragon scale long coat
+RoomDesc:$
+A blue and silver coat, made of dragon scales lies here in a heap.~
+LookDesc:$
+A blue and silver dragon scale long coat.
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	101001000000
+AffFlags:	1000001000000000010100
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	50
+	Val6:	50
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	50
+[AFFECT 1]
+	Location:	Magic Pool
+	Modifier:	50
+[AFFECT 2]
+	Location:	Target Numbers
+	Modifier:	-50
+[AFFECT 3]
+	Location:	Init Dice
+	Modifier:	10
+[AFFECT 4]
+	Location:	Hacking Pool
+	Modifier:	50
+BREAK
+#10104
+Keywords:	Assault Cannon
+Name:	Assault Cannon
+RoomDesc:$
+An assault cannon large enough to knock a plane out of the sky lies here.~
+LookDesc:$
+A heavily modified Panther Assault Cannon.  Whoever his armorer is,
+he did a damn good job redesigning this weapon for maximum power.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1001000000000
+AffFlags:	100000100000000000000
+Material:	metal
+[POINTS]
+	Weight:	35.00
+	Barrier:	32
+	Cost:	6500
+	AvailTN:	16
+	AvailDay:	14.00
+	LegalNum:	2
+	LegalCode:	10
+	LegalPermit:	0
+[VALUES]
+	Val0:	18
+	Val1:	4
+	Val3:	18
+	Val4:	21
+	Val5:	6
+	Val6:	6
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+	Val10:	2
+BREAK
+#10106
+Keywords:	a gold credstick
+Name:	a gold credstick
+RoomDesc:$
+A gold credstick~
+LookDesc:$
+a gold credstick
+~
+Type:	Money
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+BREAK
+#10107
+Keywords:	tachyon flash ray gun
+Name:	a Tachyon Flash Ray gun
+RoomDesc:$
+An alien ray gun lies here.~
+LookDesc:$
+an alien ray gun
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val3:	18
+	Val4:	21
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#10108
+Keywords:	machine vending
+Name:	A large vending machine
+RoomDesc:$
+A large vending machine sits against the wall.~
+LookDesc:$
+This vending machine has a spot for dispensing beverages on the right, and
+snacks on the left. It appears to in good order, and is kept well stocked. In
+the center is the slot to accept nuyen, and the keypad for making your
+selection just below it. A sturdy steel fence is mounted over the glass
+display, to prevent the more milacious from breaking it open. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	10
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	200
+	Val1:	14
+	Val2:	-1
+	Val3:	20
+BREAK
+#10109
+Keywords:	Pepsi large bottle
+Name:	a large bottle of Pepsi
+RoomDesc:$
+A large bottle of Pepsi sits here.~
+LookDesc:$
+Ah, good old Pepsi. This bottle is a little bit larger than normal, containing
+36oz of the refreshing liquid in order to satisfy the larger metahumans. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	18
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+	Val1:	24
+	Val2:	1
+BREAK
+#10110
+Keywords:	Pepsi Diet Large Bottle
+Name:	a large bottle of diet Pepsi
+RoomDesc:$
+A large bottle of diet Pepsi sits here.~
+LookDesc:$
+Ah, good old Pepsi, and now with fewer calories! This bottle is a little bit
+larger than normal, containing 36oz of the refreshing liquid in order to
+satisfy the larger metahumans. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	18
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+	Val1:	24
+	Val2:	1
+BREAK
+#10111
+Keywords:	Mountain Dew large bottle
+Name:	a large bottle of Mountain Dew
+RoomDesc:$
+A large bottle of Mountain Dew is sitting here.~
+LookDesc:$
+Mountain Dew, an oldie but a goodie. This bottle is a little bit larger than
+normal, containing 36oz of the refreshing liquid in order to satisfy the
+larger metahumans. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	18
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+	Val1:	24
+	Val2:	1
+BREAK
+#10112
+Keywords:	Lipton Brisk Iced Tea Large Bottle
+Name:	a large bottle of Brisk Iced Tea
+RoomDesc:$
+A large bottle of Lipton Brisk Iced Tea sits here.~
+LookDesc:$
+Refreshing Lipton Brisk Iced Tea, cools you to the core! This bottle is a
+little bit larger than normal, containing 36oz of the refreshing liquid in
+order to satisfy the larger metahumans. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	18
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+	Val1:	24
+	Val2:	1
+BREAK
+#10113
+Keywords:	Candy King Sized Kit Kat Bar
+Name:	a king sized Kit Kat Bar
+RoomDesc:$
+A tasty looking Kit Kat bar lies here.~
+LookDesc:$
+Covered in an orange wrapping with "Kit Kat" printed in hard to miss
+lettering, this is probably one of the best candy bars known to man. King
+sized too. Life is good, chummer. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	12
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#10114
+Keywords:	Truffles Package Dark Chocolate
+Name:	a package of Dark Chocolate Truffles
+RoomDesc:$
+A package of dark chocolate truffles lays here.~
+LookDesc:$
+A small package containing 4 round, dark chocolate truffles. A thin dark
+chocolate shell on the outside covers the center. The middle of these tasty
+treats is filled with a thick and gooey dark chocolate, along with a couple
+small, delicious crispy beads. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	14
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#10115
+Keywords:	Candy King Sized Snickers
+Name:	a king sized Snickers
+RoomDesc:$
+A king sized Snickers lays here.~
+LookDesc:$
+A king among candy bars, even in size... The Snickers consists of Chocolate,
+creamy caramel, nougat, and is jam packed full of peanuts. Definatly a treat
+to be savored with the upmost indulgence. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	12
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#10116
+Keywords:	Candy King Sized Charleston Chew
+Name:	a king sized Charleston Chew
+RoomDesc:$
+A king sized Charleston Chew has been discarded on the floor.~
+LookDesc:$
+A long stick of chewy vanilla coated in a pleasant layer of milk chocolate. It
+looks like quite the tasty snack. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	12
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#10117
+Keywords:	Candy King Sized Skor
+Name:	a king sized Skor
+RoomDesc:$
+A king sized Skor has been discarded here.~
+LookDesc:$
+The long, thin Skor consists of a thin chocolate layer covering a tasteful
+center of crunchy goodness. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	12
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#10118
+Keywords:	Dorritos Chips Cooler Ranch Bag
+Name:	a bag of Cooler Ranch Dorritos
+RoomDesc:$
+A plastic bag of Cooler Ranch Dorritos has been left here.~
+LookDesc:$
+A bag about 1.5 times the size of the typical 'grab bag' of Dorritos, made in
+an effort to lure larger metatypes to the product. This particular variety is
+the "Cooler Ranch" flavor. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	14
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#10119
+Keywords:	Dorritos Nacho Cheesier Cheese Bag Chips
+Name:	a bag of Nacho Cheesier Dorritos
+RoomDesc:$
+A plastic bag of Nacho Cheesier Dorritos has been left here.~
+LookDesc:$
+A bag about 1.5 times the size of the typical 'grab bag' of Dorritos, made in
+an effort to lure larger metatypes to the product. This particular variety is
+the "Nacho Cheesier" flavor.  
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	14
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#10120
+Keywords:	Keycard Key Card 1A
+Name:	a keycard to 1A
+RoomDesc:$
+The keycard to '1A' sits here.~
+LookDesc:$
+A small plastic card, with a magnetic strip on the side of it, made to be slid
+through a maglock. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#10121
+Keywords:	Keycard Key Card 2A
+Name:	a keycard to 2A
+RoomDesc:$
+The keycard to '2A' sits here.~
+LookDesc:$
+A small plastic card, with a magnetic strip on the side of it, made to be slid
+through a maglock. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#10122
+Keywords:	Keycard Key Card 3A
+Name:	a keycard to 3A
+RoomDesc:$
+The keycard to '3A' sits here.~
+LookDesc:$
+A small plastic card, with a magnetic strip on the side of it, made to be slid
+through a maglock. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#10123
+Keywords:	Keycard Key Card 4A
+Name:	a keycard to 4A
+RoomDesc:$
+The keycard to '4A' sits here.~
+LookDesc:$
+A small plastic card, with a magnetic strip on the side of it, made to be slid
+through a maglock. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#10124
+Keywords:	Keycard Key Card 5A
+Name:	a keycard to 5A
+RoomDesc:$
+The keycard to '5A' sits here.~
+LookDesc:$
+A small plastic card, with a magnetic strip on the side of it, made to be slid
+through a maglock. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#10125
+Keywords:	Keycard Key Card 6A
+Name:	a keycard to 6A
+RoomDesc:$
+The keycard to '6A' sits here.~
+LookDesc:$
+A small plastic card, with a magnetic strip on the side of it, made to be slid
+through a maglock. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#10126
+Keywords:	Keycard Key Card 1B
+Name:	a keycard to 1B
+RoomDesc:$
+The keycard to '1B' sits here.~
+LookDesc:$
+A small plastic card, with a magnetic strip on the side of it, made to be slid
+through a maglock. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#10127
+Keywords:	Keycard Key Card 2B
+Name:	a keycard to 2B
+RoomDesc:$
+The keycard to '2B' sits here.~
+LookDesc:$
+A small plastic card, with a magnetic strip on the side of it, made to be slid
+through a maglock. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#10128
+Keywords:	Keycard Key Card 3B
+Name:	a keycard to 3B
+RoomDesc:$
+The keycard to '3B' sits here.~
+LookDesc:$
+A small plastic card, with a magnetic strip on the side of it, made to be slid
+through a maglock. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#10129
+Keywords:	Keycard Key Card 4B
+Name:	a keycard to 4B
+RoomDesc:$
+The keycard to '4B' sits here.~
+LookDesc:$
+A small plastic card, with a magnetic strip on the side of it, made to be slid
+through a maglock. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#10130
+Keywords:	Keycard Key Card 5B
+Name:	a keycard to 5B
+RoomDesc:$
+The keycard to '5B' sits here.~
+LookDesc:$
+A small plastic card, with a magnetic strip on the side of it, made to be slid
+through a maglock. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#10131
+Keywords:	Keycard Key Card 6B
+Name:	a keycard to 6B
+RoomDesc:$
+The keycard to '6B' sits here.~
+LookDesc:$
+A small plastic card, with a magnetic strip on the side of it, made to be slid
+through a maglock. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#10132
+Keywords:	Candy king sized Mr Good bar Goodbar
+Name:	a king sized Mr. Goodbar
+RoomDesc:$
+A king sized Mr. Goodbar has wastefully been discarded here.~
+LookDesc:$
+With a bold yellow wrapper, reading "Mr. Goodbar" in bright red letters, this
+candy bar dares you not to eat it. Not that this is a bad thing, the
+combination of peanuts and expertly crafted milk chocolate create a flavor
+that is almost unthinkably delicious. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	12
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#10133
+Keywords:	Candy king sized Nestle's Crunch
+Name:	a king sized Nestle's Crunch bar
+RoomDesc:$
+A king sized Nestle's Crunch has been left here.~
+LookDesc:$
+A Nestle's Crunch bar consists of a tasty milk chocolate littered with
+numerous crunchy, puffed rice bits. Many people might consider this to be the
+"loudest" candybar known to metahumanity. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	12
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#10134
+Keywords:	Candy king sized Coffee Crisp bar
+Name:	a king sized Coffee Crisp bar
+RoomDesc:$
+A foreign looking candy bar has been dropped here.~
+LookDesc:$
+Chocolate coated wafers make up the majority of this tasty delight, but
+contained in between the wafers is the delightful flavor of coffee to accent
+the other tastes with a welcomed touch. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	12
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#10135
+Keywords:	Candy king sized 100 grand bar
+Name:	a king sized 100 Grand bar
+RoomDesc:$
+A 100 Grand candy bar lies discarded here.~
+LookDesc:$
+Named 100 Grand for reasons no one knows, but the most common presumption is
+that it tastes like it's worth that much. Chocolate, caramel, and crispy
+little crunchies all combined into 1 flavorful candy bar for your enjoyment. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	12
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#10150
+Keywords:	baseball bat huge nails
+Name:	A huge baseball bat with nails sticking out
+RoomDesc:$
+A very large baseball bat with rusty nails sticking out of the side lies here.~
+LookDesc:$
+Its a very big bat, a troll-sized Louisville Slugger, the kind used by trolls
+who play in the Unlimited Baseball league.  Its got three very large rusty
+nails run right through it, creating jagged edges that hurt. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	2
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+END

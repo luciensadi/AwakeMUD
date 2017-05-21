@@ -1,0 +1,1663 @@
+#9900
+Keywords:	red black adidas jump suit
+Name:	a ^Rred^n and ^Lblack^n Adidas jump suit
+RoomDesc:$
+A red and black jumpsuit lies here.~
+LookDesc:$
+An old school hip hop Adidas jumpsuit with thin armor plating running down the
+inside. It is completely ebony except for the red Adidas logo and stripes
+running up and down the arms and legs.  
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	4.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	4
+	Val5:	3
+	Val6:	2
+	Val7:	2
+BREAK
+#9901
+Keywords:	mugbys shotgun gun shot
+Name:	a jury-rigged troll-sized shotgun
+RoomDesc:$
+A heavily modified troll sized shotgun is lying here.~
+LookDesc:$
+It looks like it was once a CMDT combat shotgun, but it was
+heavily worked on and now is something completely different.
+It has the words "Elfy killer" painted on the side of it.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	324
+	Val4:	13
+	Val5:	8
+	Val6:	22
+	Val9:	-1
+	Val10:	12
+BREAK
+#9902
+Keywords:	gold chain
+Name:	a heavy ^Ygold^n chain necklace
+RoomDesc:$
+A heavy gold chain necklace is lying here.~
+LookDesc:$
+A thick and heavy gold chain
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#9903
+Keywords:	Fedora Black Red Band
+Name:	A black fedora with a red band
+RoomDesc:$
+A red and black fedora sits here begging you to wear it~
+LookDesc:$
+It looks as if this fedora is preferred by those of the Trogs gang as most the
+sizes it comes in are made to fit a troll or ork's head. There are even
+versions complete with horn holes so trolls can wear it. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val3:	3
+BREAK
+#9904
+Keywords:	gold chain bracelet
+Name:	a ^Ygold^n chain bracelet
+RoomDesc:$
+A gold chain bracelet is lying here.~
+LookDesc:$
+A gold chain bracelet.
+~
+Type:	Worn
+WearFlags:	1000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#9905
+Keywords:	Body Count T-Shirt
+Name:	Body Count T-shirt
+RoomDesc:$
+A Body Count T-shirt lies here in a heap.~
+LookDesc:$
+A badass Body Count Copkiller T-shirt from way back in the 1990's 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#9906
+Keywords:	armored black red leather jacket
+Name:	an armored ^Lblack^n and ^Rred^n leather jacket
+RoomDesc:$
+A armored black and red jacket lies here in a heap~
+LookDesc:$
+A wiz black and red leather jacket popular among gangers. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	600
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val5:	4
+	Val6:	3
+	Val7:	1
+BREAK
+#9907
+Keywords:	whiskey whisky grimms
+Name:	Grimm's Whiskey
+RoomDesc:$
+A bottle of Grimm's Whiskey is sitting here.~
+LookDesc:$
+A black labeled bottle of whiskey with a skull and crossbones on it, and
+the words "Grimm's Whiskey" printed under the logo.
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	25
+	Val1:	25
+	Val2:	23
+BREAK
+#9908
+Keywords:	can cola troll kola
+Name:	Troll Kola
+RoomDesc:$
+A can of Troll Kola is sitting here.~
+LookDesc:$
+Troll Kola!  Made wif 99% elfies blood!
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	35
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+	Val1:	24
+	Val2:	13
+BREAK
+#9910
+Keywords:	clip
+Name:	a thirty-two bullet clip
+RoomDesc:$
+A submachine gun clip is lying here.~
+LookDesc:$
+A submachine gun clip that holds thirty-two bullets.
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.80
+	Barrier:	1
+	Cost:	64
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	32
+	Val1:	25
+BREAK
+#9911
+Keywords:	clip
+Name:	a fifteen bullet clip
+RoomDesc:$
+A heavy pistol clip is lying here.~
+LookDesc:$
+A heavy pistol clip that holds 15 rounds.
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.38
+	Barrier:	1
+	Cost:	30
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	21
+BREAK
+#9913
+Keywords:	ammo belt
+Name:	a 100-round ammo belt
+RoomDesc:$
+A big belt of ammunition is lying here.~
+LookDesc:$
+A one-hundred-round belt of ammunition.
+~
+Type:	Gun Clip
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.50
+	Barrier:	1
+	Cost:	200
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	100
+	Val1:	25
+BREAK
+#9914
+Keywords:	bar nutri soy
+Name:	a Nutri-Soy (tm) bar
+RoomDesc:$
+A Nutri-Soy (tm) bar is lying here.~
+LookDesc:$
+Coming in 5 flavors, these are the bars that millions depend on for their
+daily nutritional needs.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+BREAK
+#9915
+Keywords:	chip data underground passage datachip optical
+Name:	a datachip
+RoomDesc:$
+A datachip marked "Underground Passage" is lying on the desk here.~
+LookDesc:$
+A red optical datachip is lying here with the words "Underground Passage"
+labeled on it.
+~
+Type:	Decking Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	12
+	Val2:	7
+	Val3:	4
+BREAK
+#9916
+Keywords:	portfolio
+Name:	the Underground Passage Portfolio
+RoomDesc:$
+A portfolio marked "Underground Passage" is lying on the desk here.~
+LookDesc:$
+A ten page portfolio detailing the Mafia operation distributing BTL's and
+drugs to the rest of Seattle thru the Ork Underground.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#9917
+Keywords:	key vent
+Name:	a small key
+RoomDesc:$
+A small key is lying here.~
+LookDesc:$
+A small key
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#9918
+Keywords:	cyberdeck deck novatech hyperdeck clone homemade cyber
+Name:	a homemade Novatech Hyperdeck-6 clone
+RoomDesc:$
+A homemade cyberdeck is lying here.~
+LookDesc:$
+Comes complete with a very generic case and parts.
+~
+Type:	Cyberdeck
+WearFlags:	1000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	137500
+	AvailTN:	4
+	AvailDay:	5.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	3
+	Val2:	1000
+	Val3:	2000
+	Val4:	10
+BREAK
+#9919
+Keywords:	novatech deck clone homemade cyberdeck hyperdeck
+Name:	A Novatech Hyperdeck-6 Clone
+RoomDesc:$
+A homemade cyberdeck is lying here.~
+LookDesc:$
+A very generic looking cyberdeck.
+~
+Type:	Cyberdeck
+WearFlags:	1000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	518000
+	AvailTN:	4
+	AvailDay:	5.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	4
+	Val2:	500
+	Val3:	1000
+	Val4:	500
+BREAK
+#9920
+Keywords:	clone cyberdeck deck novatech homemade cyber
+Name:	a Novatech Slimcase-10 clone
+RoomDesc:$
+A homemade cyberdeck is lying here.~
+LookDesc:$
+A generic cyberdeck.
+~
+Type:	Cyberdeck
+WearFlags:	1000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1410000
+	AvailTN:	16
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	5
+	Val2:	2000
+	Val3:	2500
+	Val4:	480
+BREAK
+#9921
+Keywords:	bod program
+Name:	a level-4 bod program
+RoomDesc:$
+A datachip is lying here.~
+LookDesc:$
+A program for a cyberdeck, marked "bod" with a label of some kind.
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	9600
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	4
+	Val2:	48
+	Val3:	305
+BREAK
+#9922
+Keywords:	bod program
+Name:	a level-5 bod program
+RoomDesc:$
+A datachip is lying here.~
+LookDesc:$
+A datachip marked "bod" with a tiny lable.
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	15000
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	5
+	Val2:	75
+	Val3:	300
+BREAK
+#9923
+Keywords:	evasion program
+Name:	a level-4 evasion program
+RoomDesc:$
+A datachip is lying here.~
+LookDesc:$
+A program marked "evasion."
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	9600
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	4
+	Val2:	48
+	Val3:	300
+BREAK
+#9924
+Keywords:	evasion program
+Name:	a level-5 evasion program
+RoomDesc:$
+A datachip is lying here.~
+LookDesc:$
+An evasion program.
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	15000
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	5
+	Val2:	75
+	Val3:	300
+BREAK
+#9925
+Keywords:	masking program
+Name:	a level-5 masking program
+RoomDesc:$
+A datachip is lying here.~
+LookDesc:$
+A masking program
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10000
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	5
+	Val2:	50
+	Val3:	300
+BREAK
+#9926
+Keywords:	masking program
+Name:	a level-4 masking program
+RoomDesc:$
+A datachip is lying here.~
+LookDesc:$
+a masking program
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	6400
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	4
+	Val2:	32
+	Val3:	300
+BREAK
+#9927
+Keywords:	chip sensors program
+Name:	a level-4 sensors program
+RoomDesc:$
+A datachip is lying here.~
+LookDesc:$
+A sensors program
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	6400
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	4
+	Val2:	32
+	Val3:	300
+BREAK
+#9928
+Keywords:	sensors program utility
+Name:	a level-5 sensors program
+RoomDesc:$
+A datachip is lying here.~
+LookDesc:$
+A sensors program
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10000
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	5
+	Val2:	50
+	Val3:	301
+BREAK
+#9929
+Keywords:	attack program chip
+Name:	a level-5 attack program
+RoomDesc:$
+A datachip is lying here.~
+LookDesc:$
+An attack program
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	20000
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	5
+	Val2:	100
+	Val3:	4
+BREAK
+#9932
+Keywords:	battery pack 20 shot laser
+Name:	a 20-shot laser battery pack
+RoomDesc:$
+A battery pack with a belt lies here.~
+LookDesc:$
+A 20-shot laser battery pack
+~
+Type:	Gun Clip
+WearFlags:	100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	40
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	22
+BREAK
+#9933
+Keywords:	canvas troll big large backpack back pack bag
+Name:	a troll-sized canvas backpack
+RoomDesc:$
+A troll-sized canvas backpack sits here.~
+LookDesc:$
+A huge camoflage backpack.
+~
+Type:	Container
+WearFlags:	1000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	5.00
+	Barrier:	4
+	Cost:	350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	55
+	Val1:	1
+	Val2:	-1
+BREAK
+#9934
+Keywords:	grenade ipe offensive
+Name:	an IPE offensive grenade
+RoomDesc:$
+A grenade sits here.~
+LookDesc:$
+Your standard IPE offensive grenade. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	3
+	Val3:	318
+	Val4:	27
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#9937
+Keywords:	pinstripe suit
+Name:	a Pinstripe Suit
+RoomDesc:$
+A pinstripe Armante suit lies here neatly.~
+LookDesc:$
+A blue Armante suit with white pinstripes.  Very chic.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	400
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val5:	4
+	Val6:	4
+BREAK
+#9938
+Keywords:	monocle mono eye glass
+Name:	a glass monocle
+RoomDesc:$
+A glass monocle lies here~
+LookDesc:$
+A glass monocle.
+~
+Type:	Worn
+WearFlags:	1000000000000001
+ExtraFlags:	1000000
+AffFlags:	100000000000000000
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#9939
+Keywords:	cue stick pool
+Name:	a cue stick
+RoomDesc:$
+A cue stick is lying here.~
+LookDesc:$
+A professional screw-together cue stick.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+	Val3:	305
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#9940
+Keywords:	patch leather jacket
+Name:	Patch's Leather Jacket
+RoomDesc:$
+A heavy leather with biker patches on it lays here in a heap.~
+LookDesc:$
+A heavy leather jacket, adorned with pins and biker patches.
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	4.00
+	Barrier:	6
+	Cost:	800
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	3
+	Val4:	2
+	Val5:	1
+	Val6:	3
+BREAK
+#9941
+Keywords:	torn denim pants
+Name:	Torn denim pants
+RoomDesc:$
+A torn pair of denim pants are lying here.~
+LookDesc:$
+A torn pair of denim pants.
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#9942
+Keywords:	beer mug large
+Name:	a large mug of beer
+RoomDesc:$
+A large mug of beer lays here.~
+LookDesc:$
+A large mug of frothy beer.
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	10
+BREAK
+#9943
+Keywords:	grimms whiskey whisky
+Name:	a fifth of Grimm's Whiskey
+RoomDesc:$
+A fifth of Grimm's Whiskey stands here upright.~
+LookDesc:$
+A fifth of Grimm's Tennessee Whiskey, 96 proof
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	12
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	15
+	Val2:	23
+BREAK
+#9944
+Keywords:	cola troll kola
+Name:	Troll Kola
+RoomDesc:$
+A can of Troll Kola stands here upright.~
+LookDesc:$
+Drink Troll Kola!  Made with 99% ^RElfie's Blood!
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	8
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	15
+	Val2:	13
+BREAK
+#9945
+Keywords:	monocle mono eye glass
+Name:	a glass monocle
+RoomDesc:$
+A glass monocle lies here~
+LookDesc:$
+A glass monocle.
+~
+Type:	Worn
+WearFlags:	1000000000000001
+ExtraFlags:	1000000
+AffFlags:	1000000000000000000000
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#9946
+Keywords:	pretzel
+Name:	a pretzel
+RoomDesc:$
+A pretzel covered with thick salt crystals lies here.~
+LookDesc:$
+Looks like a pretty tasty pretzel. It's even made with soft dough. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	2
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+BREAK
+#9947
+Keywords:	beer spud spudweiser bottle
+Name:	a Bottle of Spudweiser Beer
+RoomDesc:$
+A bottle with the Spudweiser(tm) logo on it.~
+LookDesc:$
+A brown bottle with the Spudweiser logo on it, filled with beer. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	8
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	8
+	Val2:	10
+BREAK
+#9948
+Keywords:	steak food meal
+Name:	a T-bone steak with mashed potatos and gravy
+RoomDesc:$
+A plate with food on it is sitting here.~
+LookDesc:$
+A large, well done T-bone steak with a side order of mashed potatos and gravy.
+It looks really good, and should fill up even the hungriest of Trolls. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	40
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	32
+BREAK
+#9949
+Keywords:	blt sandwich
+Name:	a large, delicious looking BLT
+RoomDesc:$
+A BLT on a plate is sitting here.~
+LookDesc:$
+A large bacon/lettuce/tomato sandwich on toasted sourdough bread. It looks too
+delicious to be described with words. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#9950
+Keywords:	water glass
+Name:	a huge glass of water
+RoomDesc:$
+A huge glass of water is sitting here.~
+LookDesc:$
+A very large and tall glass of water, made specifily for Trolls and Orks. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	8
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	5
+BREAK
+#9951
+Keywords:	deck cyberdeck foxfire fox turtle 2
+Name:	a FoxFire 'Turtle II' cyberdeck
+RoomDesc:$
+A cheap looking cyberdeck is sitting here.~
+LookDesc:$
+A cheap looking cyberdeck made in assembely line style, this deck was made for
+the script kiddie decker on a tight budget. It'll get you on the Matrix, but
+don't expect more than that. It does, however, feature a retractable waist
+strap for easy carrying. 
+~
+Type:	Cyberdeck
+WearFlags:	1000000100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	4.00
+	Barrier:	4
+	Cost:	14000
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	4
+	LegalCode:	16
+	LegalPermit:	1
+[VALUES]
+	Val0:	2
+	Val1:	2
+	Val2:	500
+	Val3:	200
+	Val4:	400
+BREAK
+#9952
+Keywords:	Blue Green Fedora Ancients
+Name:	A blue fedora with a green band
+RoomDesc:$
+A Blue and Green fedora sits here in the dirt begging to be worn~
+LookDesc:$
+A favorite among the Ancients this is a fedora that is a dark blue color with
+a evergreen band sorrounding it. It comes in many sizes but the most common
+ones are of course of a smaller size due to the mainly elven population that
+would want one. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val3:	3
+BREAK
+#9953
+Keywords:	Black Orange Fedora Band
+Name:	A black fedora with a orange band
+RoomDesc:$
+A black and orange fedora sits here begging to be worn~
+LookDesc:$
+Obviously a favorite for the Weeners down in redmond this purty little number
+isn't found often due to the fact that the weeners aren't very big on the
+nostalgic classic gangster look like some of the other gangs are. Its still a
+well crafted Fedora at a cheap price though. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val3:	3
+BREAK
+#9954
+Keywords:	Crazed Urban Trogs Beanie
+Name:	A Crazed Urban Trogs beanie
+RoomDesc:$
+A CUT beanie sits here in a lump~
+LookDesc:$
+This knit cap features the Crazed Urban Trogs logo which is CUT spelled out by
+knives set up to make the letters. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#9955
+Keywords:	(hed) PE mesh baseball cap
+Name:	A (hed) PE mesh baseball cap
+RoomDesc:$
+A (hed) PE mesh baseball cap sits here in the dirt~
+LookDesc:$
+In old school mesh baseball cap style this (hed) PE cap is black with the
+yellow (hed) PE logo on the front of it. Bad Ass 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#9960
+Keywords:	book spell formula analyze device encyclopedia
+Name:	an old encyclopedia
+RoomDesc:$
+An old book is lying here.~
+LookDesc:$
+An old encylopedia featuring listings of all different types of plants,
+animals, minerals, and objects. As you flip through it, the writing on the
+first page seems centuries old, while near the back of the book, it seems as
+if it was just written yesterday. The last few pages are blank. It seems to
+glow with a faint light blue aura. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	1
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	400
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	8
+BREAK
+#9961
+Keywords:	glowing red potion bottle flask vial
+Name:	a flask of bright ^Rred^n liquid (Armor, F: 2)
+RoomDesc:$
+A flask of bright red liquid has been left here.~
+LookDesc:$
+A odd shaped flask, with a slim neck and a wide base. It's corked shut and is
+filled with a bright ^Rred^n liquid that's softly glowing. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	1
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val3:	7
+BREAK
+#9962
+Keywords:	bottle flask liquid vial glowing
+Name:	a flask filled with a ^Wsilver^n liquid (Invisibility, F: 4)
+RoomDesc:$
+A flask of silver liquid sits here, discarded.~
+LookDesc:$
+A small flask of shimmering ^Wsilver^n liquid. It has a metalic sheen to it,
+almost like liquid metal, and it glows slightly. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	1
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val3:	23
+BREAK
+#9963
+Keywords:	feather hawk analyze
+Name:	a hawk's feather
+RoomDesc:$
+The feather of a hawk lies here.~
+LookDesc:$
+A beautiful looking hawk's feather. It's shimering brown and white surface
+entrances you... 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	400
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	8
+	Val2:	1
+BREAK
+#9964
+Keywords:	black leather trenchcoat spikes shoulders spiked
+Name:	A black leather trenchcoat with spiked shoulders
+RoomDesc:$
+A spiked black trench coat is lying here.~
+LookDesc:$
+A very large, thick black leather trenchcoat, with spikes on the shoulders,
+dull except at the tips, where the lead-like metal protrudes to a point.  On
+the back, in bright red letters, are the words, "^RTROG LIBERATION NOW^n" 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	101100000000000000000
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	4.00
+	Barrier:	8
+	Cost:	55
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	3
+	Val2:	2
+	Val4:	4
+	Val5:	6
+	Val6:	3
+BREAK
+#9965
+Keywords:	A Fubu Jersey
+Name:	A FUBU jersey
+RoomDesc:$
+A FUBU jersey sits here in the dirt.~
+LookDesc:$
+Standing for: For Us By Us this old FUBU jersey has had quite a bit of armor
+stitched in beneath making it a very effective armored jacket. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	3000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	3
+	Val2:	2
+	Val3:	10
+	Val4:	5
+	Val5:	4
+	Val6:	4
+	Val7:	-1
+BREAK
+#9980
+Keywords:	custom sleaze program level four
+Name:	a custom level four ^WSleaze^n program
+RoomDesc:$
+A program chip with the number four on it sits here.~
+LookDesc:$
+A pretty plain looking chip.  On it is the number 4.  Looks like a standard
+decking utility. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	9600
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	4
+	Val2:	48
+BREAK
+#9981
+Keywords:	custom sleaze program level five
+Name:	a custom level five ^WSleaze^n program
+RoomDesc:$
+A program chip with the number five on it sits here.~
+LookDesc:$
+A pretty plain looking chip.  On it is the number 5.  Looks like a standard
+decking utility. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	15000
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	5
+	Val2:	75
+BREAK
+#9982
+Keywords:	program chip custom browse utility level five
+Name:	a level five custom ^GBrowse^n utility program
+RoomDesc:$
+A program chip lies here, with the number five labelled onto it.~
+LookDesc:$
+Pretty much a regular datachip, containing a browse utility for decking. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	5000
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	17
+	Val1:	5
+	Val2:	25
+BREAK
+#9998
+Keywords:	tshirt lousy
+Name:	a "Harlequin did a PWIPE and all I got was this lousy t-shirt" t-shirt
+RoomDesc:$
+A white t-shirt with black letters lies in a heap here.~
+LookDesc:$
+A white t-shirt with the black bold letter: "Dunkelzahn did a PWIPE and all I
+got was this lousy t-shirt" 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#9999
+Keywords:	sandwich fat sub submarine
+Name:	a fat submarine sandwich
+RoomDesc:$
+A fat sub is lying here, waiting to be eaten.~
+LookDesc:$
+All kinds of meats, tomatoes, lettuce, onions, fill this submarine sandwich,
+on white bread. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	35
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	95
+BREAK
+END

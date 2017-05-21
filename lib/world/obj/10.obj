@@ -1,0 +1,1369 @@
+#1000
+Keywords:	piano
+Name:	a beautiful piano
+RoomDesc:$
+^nA beautiful, ^Wwhite^n piano sits here in the sand.^G~
+LookDesc:$
+The materials of this piano are constructed from something you have never
+encountered before.  The smoothness repels everything, including dust.  You
+also notice several wires plugged directly into the sand.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	101
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	1000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	key
+	Desc:$
+Like the rest of the piano, the keys are perfectly smooth and show no signs
+of wear.~
+[EXTRADESC 1]
+	Keywords:	wires
+	Desc:$
+The wires run from the piano into the sand.  They look too dangerous to touch
+though (besides the fact you might anger Flynn).~
+BREAK
+#1001
+Keywords:	dermal plating
+Name:	a dermal plating I
+RoomDesc:$
+A set of dermal plating made from plastisteel is here.~
+LookDesc:$
+You see an uncreative object.~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	6000
+	AvailTN:	4
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	1
+	Val4:	50
+[AFFECT 0]
+	Location:	Body
+	Modifier:	3
+BREAK
+#1002
+Keywords:	wired reflexes
+Name:	a wired reflexes I
+RoomDesc:$
+A set of prototype wired reflexes lie here.~
+LookDesc:$
+You see an uncreative object.~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	55000
+	AvailTN:	4
+	AvailDay:	8.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	1
+	Val4:	200
+BREAK
+#1003
+Keywords:	laser cannon flynns
+Name:	Flynn's Laser Cannon
+RoomDesc:$
+Flynn's giant laser cannon is sitting here waiting to hand out death.~
+LookDesc:$
+This piece of modern technology is huge!  The barrel is about a foot in 
+diameter and stretches around 4 feet long.~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	100000000010
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	40.00
+	Barrier:	3
+	Cost:	1000000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val2:	1
+	Val3:	323
+	Val4:	18
+BREAK
+#1004
+Keywords:	derringer flyguys
+Name:	FlyGuy's Derringer
+RoomDesc:$
+FlyGuy's steel derringer has been dropped here.~
+LookDesc:$
+This a tiny but, for some reason, incredibly deadly weapon.
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	100000000010
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	40.00
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val2:	1
+	Val3:	324
+	Val4:	11
+BREAK
+#1005
+Keywords:	laser sight
+Name:	a laser sight
+RoomDesc:$
+A laser sight lies here.~
+LookDesc:$
+It appears to be just a standard laser sight.
+~
+Type:	Gun Accessory
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	100000000000000
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	500
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	-1
+BREAK
+#1006
+Keywords:	terminal computer
+Name:	a terminal
+RoomDesc:$
+A terminal displaying a screen saver sits here on the table.~
+LookDesc:$
+This is your standard terminal designed for communications between groups
+of people.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	1000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1007
+Keywords:	terminal kthx
+Name:	a terminal
+RoomDesc:$
+A small terminal rests here.~
+LookDesc:$
+It's a small terminal used primarily for note keeping.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1008
+Keywords:	roomflag scroll
+Name:	a roomflag scroll
+RoomDesc:$
+A roomflag scroll sits here.~
+LookDesc:$
+(DARK)             - if no light sources, only infravision can see in here
+(DEATH)            - players die when they enter this room
+(!MOB)             - no npcs can enter this room
+(INDOORS)          - no weather messages get sent to these rooms, not outdoors
+(PEACEFUL)         - players cannot perform offensive actions (kill, cast,
+etc) (SOUNDPROOF)       - no gossip, auc, gratz, or tells are heard in this
+room
+(!TRACK)           - players can't track through these rooms
+(!MAGIC)           - players can't cast magic in these rooms
+(TUNNEL)           - only one player fits in this room at a time
+(PRIVATE)          - if 2 people are in the room, imms cannot 'goto' it
+(MGRROOM)          - only level 3+ can 'goto' these rooms
+(HOUSE)            - DO NOT USE - used by mud internally
+(HOUSE CRASH)      - DO NOT USE - used by mud internally
+(ATRIUM)           - DO NOT USE - used by mud internally
+(OLC)              - DO NOT USE - used by mud internally
+(*)                - DO NOT USE - used by mud internally
+(LOW_LIGHT)        - if no light, only low-light and infravision can see here
+(MATRIX)           - required if this is a matrix room
+(CRIME_OK)         - DO NOT USE - will become useless soon
+(LIBRARY)          - room is a hermetic library (mages can create spells)
+(LODGE)            - room is a medicine lodge (shamans can create spells)
+(FALL)             - players fall when they enter
+(CEOROOM)          - only 4+ can 'got' these rooms
+(COIMPROOM)        - only 5+ can 'goto' these rooms
+(IMPROOM)          - only 6s can 'goto' these rooms
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1009
+Keywords:	sector type scroll
+Name:	a sector type scroll
+RoomDesc:$
+A sector type scroll is sitting here.~
+LookDesc:$
+INSIDE                 - not outside in the open
+CITY                   - in the city
+FIELD                  - in a field
+FOREST                 - in the forest
+HILLS                  - in the hills
+MOUNTAIN               - in the mountains
+WATER (swim)           - players can enter if they can swim
+WATER (noswim)         - players need a boat or to fly to enter this room
+UNDERWATER             - underwater, need an underwater vehicle
+FLYING                 - need to be flying to enter this room
+BLUE                   - blue matrix node (no security)
+GREEN                  - green matrix node (small security)
+ORANGE                 - orange matrix node (medium security)
+RED                    - red matrix node (high security)
+BLACK                  - black matrix node (ultra security)
+Notes: Sector types outside the matrix affect many things including what
+       type of light there is during the night.  Sector types in the 
+       matrix MUST be from BLUE to BLACK.  Matrix sector types are always
+       universal in the system, so that a system with blue sectors will
+       have blue sectors throughout it.  Remember that high security costs
+       money, and lots of it, so generally, unless its a big corp, it won't
+       be able to afford much more than GREEN.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1010
+Keywords:	itemtype scroll
+Name:	an itemtype scroll
+RoomDesc:$
+An itemtype scroll is sitting here.~
+LookDesc:$
+LIGHT             - item is a light source
+SCROLL            - item is a scroll
+WAND              - item is a wand
+STAFF             - item is a (magical) staff
+WEAPON            - item is a weapon
+FIREWEAPON        - item is a bow/crossbow
+MISSILE           - item is an arrow/bolt
+TREASURE          - item is a treasure, not a credstick
+ARMOR             - item is armor
+POTION            - item is a potion
+WORN              - item is worn (not armor)
+OTHER             - misc object
+TRASH             - shopkeepers won't buy
+DOCWAGON          - item is a DocWagon contract
+CONTAINER         - item is a container
+RADIO             - item is a radio (lets mortals see gossip/etc)
+DRINKCON          - item is a drink container
+KEY               - item is a keycard
+FOOD              - item is food
+MONEY             - item is a credstick
+PHONE             - item is a phone (lets mortals use tell)
+BIOWARE           - !!DO NOT USE!!
+FOUNTAIN          - item is a fountain
+CYBERWARE         - !!DO NOT USE!!
+CYBERDECK         - item is a cyberdeck
+PROGRAM           - item is a cyberdeck program
+GUN_CLIP          - item is a clip
+GUN_ACCESSORY     - item is a gun attachment
+SPELL_FORMULA     - item is a spell formula
+WORKING_GEER      - item is a kit
+FOCUS             - item is a magical focus/spell lock
+PATCH             - item is a stim/trauma/antidote/tranq patch
+CLIMBING          - item is climbing gear
+QUIVER            - item holds projectile or throwing weapons
+DECK_ACCESSORY    - item is a cyberdeck accessory
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1011
+Keywords:	extras item scroll
+Name:	an item extras scroll
+RoomDesc:$
+An item extras scroll lies here.~
+LookDesc:$
+  NB!!: DNS = Do Not Set
+(GLOW)              - item is glowing
+(HUM)               - item is humming
+(!RENT)             - player cannot leave game with item
+(!DONATE)           - item cannot be donated
+(!INVIS)            - item cannot be made invisible
+(INVISIBLE)         - item is invisible
+(MAGIC)             - item is magical
+(!DROP)             - item cannot be dropped
+(BLESS)             - item is blessed
+(!SELL)             - item cannot be sold
+(CORPSE)            - DNS
+(GOD_ONLY)          - only immortals can wear object
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1012
+Keywords:	affect flag scroll
+Name:	a mob affect scroll
+RoomDesc:$
+An mob affect scroll lies here.~
+LookDesc:$
+  NB!!: DNS = Do Not Set
+BLIND               - mob is blind
+INVIS               - mob is invis
+DET-ALIGN           - mob can detect align (DNS, no use)
+DET-INVIS           - mob can detect invis
+DET-MAGIC           - mob can detect magic (DNS, no use)
+SENSE-LIFE          - mob can sense hidden chars (DNS, no use)
+WATWALK             - mob can walk on water
+SANCT               - DNS, there is no sanctuary
+GROUP               - DNS, serves no purpose
+CURSE               - mob is cursed
+INFRA               - mob has infravision
+POISON              - mob is poisoned
+PROT-EVIL           - DNS, has no use
+PROT-GOOD           - DNS, has no use
+SLEEP               - mob has been slept
+LL-EYES             - mob has low-light eyes
+LASER-SIGHT         - DNS
+SNEAK               - mob is sneaking
+HIDE                - mob is hiding
+VISION x1           - mob can see 2 rooms away
+CHARM               - DNS
+ACTION              - DNS
+VISION              - mob can see 3 rooms away
+VISION x3           - mob can see 4 rooms away
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1013
+Keywords:	mobflags scroll
+Name:	a mobflags scroll
+RoomDesc:$
+A mobflags scroll lies here.~
+LookDesc:$
+ NB!!!:  DNS = Do Not Set
+(SPEC)                       - DNS - mob has a special procedure
+(SENTINEL)                   - mob does not move
+(SCAVENGER)                  - mob picks up objects in room
+(ISNPC)                      - do not remove
+(AWARE)                      - DNS - mob cannot be backstabbed (useless)
+(AGGR)                       - mob is aggressive to all players
+(STAY_ZONE)                  - mob will not leave its current zone
+(WIMPY)                      - mob will flee if phys drops too low
+(AGGR_ORK)                   - mob attacks orkish players
+(AGGR_ELF)                   - mob attacks elvish players
+(AGGR_DWARF)                 - mob attacks dwarvish players
+(MEMORY)                     - mob will remember who attacked it
+(HELPER)                     - mob will assist mobs fighting players
+(!CHARM)                     - mob cannot be charmed (influence spell)
+(DUAL)                       - mob is dual-natured
+(!EXPLODE)                   - explosions don't hurt mob
+(AGGR_TROLL)                 - mob attacks trollish players
+(!BLIND)                     - equiv. of flare compensation
+(ASTRAL)                     - mob exists on astral plane only
+(GUARD)                      - mob follows ZSP (zone security protocol)
+(AGGR_HUMAN)                 - mob attacks human players
+(SNIPER)                     - mob can attack PCs outside if its room
+(PRIVATE)                    - mob cannot be statted
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1014
+Keywords:	mob notes set
+Name:	a set of mob notes
+RoomDesc:$
+A set of mob notes lies here.~
+LookDesc:$
+Notes on creating mobs:
+There are many things which will determine values to be used on a mob.
+The important thing to remember is that the mud treats the mobs JUST LIKE
+PLAYERS.  What this means is that they have skills, attributes, and eq,
+and those things determine how well the mob will perform in any
+situation.  To determine things such as attributes for the mob, consider
+this.  The highest number any human can have in any attribute (without
+cyber modification) is 6.  What does this mean?  It means if you have a
+mob, that is human sized, and it has strength 6, you are telling the mud
+it's as strong as, say, Conan the Barbarian.  That's strong!  6 is the
+strongest a human can be naturally!  Obviously something like a bear on
+the other hand would have a strength of 9 to 12.  Perhaps the best way to
+let you all see what sort of values exist, I'll put the maximum values
+for the different races and an animal or three.
+               Human   Elf    Dwarf   Ork    Troll   Bear  Dragon   Bat
+Body:            6      6       7      9      11       9     15      1
+Quickness:       6      7       5      6       5       4      7      5
+Strength:        6      6       8      8      10       9     40      0
+Charisma:        6      8       6      5       4       -      4      -
+Intelligence:    6      6       6      5       4       2      4      1
+Willpower:       6      6       7      6       5       2      8      1
+Essence:         6      6       6      6       6       6      8      6
+Magic:           6      6       6      6       6       -      -      -
+Reaction:        6      6       5      5       4       5      5      6
+Another quick note is that a creature should NOT have a magic attribute
+above 0 unless you want it to cast spells!
+As far as skills are concerend, use your judgement.  They don't all have
+to have skills but it's good if they have skills related to what they
+do.  If it's a secretary, give it corporate etiquette of 4 or 5.  Here's
+a list of how good the values really are.
+Skill level:
+     0         unlearned
+     1         knows a little
+     2         practiced
+     3         average
+     4         above average
+     5         good
+     6         excellent
+     7         great
+     8         superb
+     9         expert
+For a character to know something at level 9, they are basically an
+expert if not THE expert in what they do.  However, certain mobs, say a
+doctor for example, would HAVE to have biotech of at least 8 or more
+(unless you want them to be a shoddy doctor!).
+As far as mob flags and such are concerned, if you're not sure if it
+needs it, don't put it!  Though this is a fantasy world, we want it to be
+logical.  Characters shouldn't just be running around with 'magical'
+abilities granted by the mud.  Alot of flags were created to give the
+mobs a fighting chance, but this was needed for the old system.  Trust
+me, mobs are deadly enough without extra protection (=.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1015
+Keywords:	equation
+Name:	an unfinished equation
+RoomDesc:$
+A piece of a mathematical equation is here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1017
+Keywords:	underoos shazam
+Name:	Shazam underoos
+RoomDesc:$
+A set of Shazam underoos have been left here!~
+LookDesc:$
+You see a set of red briefs with a gold lightning bolt running across the top.
+~
+Type:	Worn
+WearFlags:	100000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1018
+Keywords:	aquatic flippers
+Name:	a set of aquatic flippers
+RoomDesc:$
+There's a set of aquatic flippers lying here.~
+LookDesc:$
+They're blue, trapezoid, and webbed.
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	0
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1019
+Keywords:	chain mail hauberk
+Name:	a chainmail hauberk
+RoomDesc:$
+What the hell's a chainmail hauberk doing here?~
+LookDesc:$
+You see a medieval armored chainlink shirt.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	0
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1020
+Keywords:	gold chains
+Name:	gold chains
+RoomDesc:$
+Damn, there's some gold chains here!~
+LookDesc:$
+These are some nice gold chains...real pretty.
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	0
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1021
+Keywords:	pinky brain shirt
+Name:	a Pinky & the Brain t-shirt
+RoomDesc:$
+YES! Someone has left a Pinky & the Brain t-shirt here!~
+LookDesc:$
+On the front, the Brain has Pinky strapped to a chair. On the back, Pinky
+is electrocuted by the Brain. No, it doesn't make sense.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	0
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1022
+Keywords:	paper note
+Name:	a note
+RoomDesc:$
+A note lies here.~
+LookDesc:$
+You see an uncreative object.~
+Type:	Radio
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1023
+Keywords:	shorts jeans
+Name:	a pair of faded jean shorts
+RoomDesc:$
+A comfortable pair of jean shorts lie here.~
+LookDesc:$
+They look well worn and comfortable.
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1024
+Keywords:	shirt t-shirt
+Name:	a baggy t-shirt
+RoomDesc:$
+A baggy t-shirt lies here.~
+LookDesc:$
+With soft, comfortable cotton, this baggy t-shirt seems is an obvious
+favorite for warm weather.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1025
+Keywords:	shoes tennis k-swiss
+Name:	a pair of K-Swiss
+RoomDesc:$
+A nice looking pair of K-Swiss lie here.~
+LookDesc:$
+Almost all white, except the K-Swiss logo, these shoes look comfortable,
+stylish, and durable.
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1026
+Keywords:	bouquet white roses
+Name:	a bouquet of white roses
+RoomDesc:$
+A bouquet of white roses is here.~
+LookDesc:$
+You see a dozen white roses in a beautiful arrangement.
+~
+Type:	Worn
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1027
+Keywords:	note
+Name:	a note
+RoomDesc:$
+A note is here.~
+LookDesc:$
+Goodnight!
+Love,
+FlyGuy
+~
+Type:	UNDEFINED
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1028
+Keywords:	dress
+Name:	a flowery summer dress
+RoomDesc:$
+A summer dress in a soft floral print lies here.~
+LookDesc:$
+A soft cotton summer dress smelling faintly of coconut suntan lotion 
+lies draped in your arms.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1029
+Keywords:	hat
+Name:	a wide-brimmed straw hat
+RoomDesc:$
+A wide-brimmed straw hat has been casually tossed here.~
+LookDesc:$
+This hat is perfect for shading Aerial's eyes from the harsh Texas
+sun. (you know how sensitive northerners eyes can be)
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1030
+Keywords:	sandals
+Name:	a pair of strappy sandals
+RoomDesc:$
+A pair of strappy sandals lie here.~
+LookDesc:$
+These sandals go perfectly with Aerial's summer dress.
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1033
+Keywords:	collar
+Name:	a red collar
+RoomDesc:$
+Sebastian has left his red collar here.~
+LookDesc:$
+A sturdy, leather collar, just big enough to fit around Sebastian's neck.
+A small locator chip is implanted in it so that Aerial can always locate
+her beloved cat.
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1034
+Keywords:	combat sense spell formula
+Name:	a combat sense spell formula
+RoomDesc:$
+A spell formula is lying here.~
+LookDesc:$
+It is titled: Combat Sense Spell Formula
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1500
+	AvailTN:	3
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	11
+BREAK
+#1035
+Keywords:	shades foster grants
+Name:	FlyGuy's Foster Grants
+RoomDesc:$
+FlyGuy's Foster Grants have been dropped here.~
+LookDesc:$
+These are cool, if admittedly retro, shades.
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	100000000000
+AffFlags:	10000000000000
+Material:	orichalcum
+[POINTS]
+	Weight:	400.00
+	Barrier:	24
+	Cost:	75000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Weight
+	Modifier:	30
+BREAK
+#1036
+Keywords:	wine
+Name:	a bottle of chilled wine
+RoomDesc:$
+A bottle of chilled wine sits here, ready to open.~
+LookDesc:$
+This bottle of palate-tempting semi-sweet wine is made from the grapes of the
+Washington Cascade Valley. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+	Val1:	24
+	Val2:	26
+BREAK
+#1037
+Keywords:	bread
+Name:	a crusty loaf of french bread
+RoomDesc:$
+A crusty loaf of french bread sits here, ready for you to break into.~
+LookDesc:$
+The bread is still warm from the oven, the delicious smells of it
+causing your stomache to quietly rumble.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1038
+Keywords:	terminal computer
+Name:	a terminal
+RoomDesc:$
+A computer terminal rests here on the hill.~
+LookDesc:$
+It has a screen saver of scenes from Star Wars.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	10000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1039
+Keywords:	display schematic
+Name:	Ship Schematic
+RoomDesc:$
+A ship's schematic is displayed here~
+LookDesc:$
+This terminal displays a schematic of the ship. It appears that by touching an
+item or area of the ship's diagram, you will be shown details of that area.
+The areas available are:
+Page 1   (Room 1000) Bridge of the Starship Enterprise (General Topics Board)
+Page 2   (Room 1001) Administration Centre (Unused Board)
+Page 3   (Room 1002) Deep Thought  (Mortal OOC Board)
+Page 4   (Room 1003) Holodeck  (Senate Quest/RP Board)
+Page 5   (Room 1004) Ten Forward ( Builders Board)
+Page 6   (Room 1005) A Postal Substation
+Page 7   (Room 1006) Shuttle Bay of the Starship Enterprise (Unused Board)
+Page 8   (Room 1007) Bug Heaven  (Coders Board)
+Page 9   (Room 1010) Captain's Ready Room (linked to Pook's Mortal IC Board)
+Page 10  (Room 1011) The War Room ( Senate Proposal/Bill/Amendment Board)
+ 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1050
+Keywords:	cap goat horn
+Name:	a goat-horn cap
+RoomDesc:$
+A goat-horn cap sits on the floor.~
+LookDesc:$
+A simple black cotton cap, with great, curling goat horns attached to
+either side.  It seems typical for an Enchanter's costume.
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1051
+Keywords:	robe tattered black
+Name:	a tattered black robe
+RoomDesc:$
+A tattered black robe lies in a heap.~
+LookDesc:$
+It might have been a great garment, once, but since its fabrication it
+has undergone many trials of thorns and fire, leaving it a bundle of
+tattered rags.
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1052
+Keywords:	staff wooden thin
+Name:	a thin wooden staff
+RoomDesc:$
+A thin wooden staff leans against a wall.~
+LookDesc:$
+A straight stick of wood, possibly made of oak.  It has burn marks on
+either end.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	305
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#1066
+Keywords:	scarf silk magenta
+Name:	a magenta scarf
+RoomDesc:$
+A magenta scarf is lying here.~
+LookDesc:$
+This is a designer Anne Klein IV scarf. It probably cost a month's rent. 
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1074
+Keywords:	computer terminal board
+Name:	a computer terminal
+RoomDesc:$
+A terminal is here connected to the warp core.~
+LookDesc:$
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	2147483648.00
+	Barrier:	32
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1075
+Keywords:	computer terminal board kthx
+Name:	a computer terminal
+RoomDesc:$
+A computer terminal is setting on a desk here.~
+LookDesc:$
+Blah!! 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	2147483648.00
+	Barrier:	32
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1076
+Keywords:	test map
+Name:	A Test Map
+RoomDesc:$
+A test map is lying here.~
+LookDesc:$
+^n
+^n
+^n      -----
+^n     |     |
+^n     |     |
+^n     o-----o
+^n     |     |
+^n     |     |
+^n     o-----o-----o
+^n     |     |     |
+^n     |     |     |
+^n     o-----o-----o
+^n           |     |
+^n           |     |
+^n           o-----o---^BX^n
+^n
+^n^B~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1093
+Keywords:	ignore mavricks cheatlog his trigger went off
+Name:	ignore mavricks cheatlog his trigger went off
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	UNDEFINED
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1098
+Keywords:	Character fixer
+Name:	a character fixer
+RoomDesc:$
+A character fixer is lying here.~
+LookDesc:$
+It fixes characters. 
+~
+Type:	Worn
+WearFlags:	111
+ExtraFlags:	10
+AffFlags:	1111111111111111111110
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1099
+Keywords:	clairvoyance spell formula scroll
+Name:	a clairvoyance spell forumla
+RoomDesc:$
+A scroll is lying here.~
+LookDesc:$
+It's a spell formula for 'clairvoyance.' 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	101001000001
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	600
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	10
+BREAK
+END
