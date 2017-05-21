@@ -1417,8 +1417,8 @@ ACMD(do_alias)
       skip_spaces(&repl);
       delete_doubledollar(repl);
       a->replacement = str_dup(repl);
-      if (strchr((const char *)repl, ALIAS_SEP_CHAR) ||
-          strchr((const char *)repl, ALIAS_VAR_CHAR))
+      if (strchr(repl, ALIAS_SEP_CHAR) ||
+          strchr(repl, ALIAS_VAR_CHAR))
         a->type = ALIAS_COMPLEX;
       else
         a->type = ALIAS_SIMPLE;
@@ -1704,7 +1704,7 @@ void half_chop(char *string, char *arg1, char *arg2)
 }
 
 /* Used in specprocs, mostly.  (Exactly) matches "command" to cmd number */
-int find_command(char *command)
+int find_command(const char *command)
 {
   int cmd;
 

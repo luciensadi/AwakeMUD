@@ -1724,7 +1724,7 @@ void load_zones(File &fl)
     shutdown();
   }
   fl.GetLine(buf, 256, FALSE);
-  if ((ptr = strchr((const char *)buf, '~')) != NULL)   /* take off the '~' if it's there */
+  if ((ptr = strchr(buf, '~')) != NULL)   /* take off the '~' if it's there */
     *ptr = '\0';
   Z.name = str_dup(buf);
 
@@ -1763,7 +1763,7 @@ void load_zones(File &fl)
     ptr++;
 
     error = 0;
-    if (strchr((const char *)"MVOENPDHL", ZCMD.command) == NULL) { /* a 3-arg command */
+    if (strchr("MVOENPDHL", ZCMD.command) == NULL) { /* a 3-arg command */
       if (sscanf(ptr, " %d %ld %ld ", &tmp, &ZCMD.arg1, &ZCMD.arg2) != 3)
         error = 1;
     } else {
@@ -3057,12 +3057,12 @@ char *fread_string(FILE * fl, char *error)
       shutdown();
     }
     /* If there is a '~', end the string; else put an "\r\n" over the '\n'. */
-    if ((point = strchr((const char *)tmp, '~')) != NULL) {
+    if ((point = strchr(tmp, '~')) != NULL) {
       *point = '\0';
       done = 1;
       /* Instead of an unconditional 'else', we only replace on what we want
       to replace, instead of acting blindly. */
-    } else if ((point = strchr((const char *)tmp, '\n')) != NULL) {
+    } else if ((point = strchr(tmp, '\n')) != NULL) {
       *(point++) = '\r';
       *(point++) = '\n';
       *point = '\0';

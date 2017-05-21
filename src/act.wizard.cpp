@@ -394,7 +394,7 @@ sh_int find_target_room(struct char_data * ch, char *rawroomstr)
     send_to_char("You must supply a room number or name.\r\n", ch);
     return NOWHERE;
   }
-  if (isdigit(*roomstr) && !strchr((const char *)roomstr, '.'))
+  if (isdigit(*roomstr) && !strchr(roomstr, '.'))
   {
     tmp = atoi(roomstr);
     if ((location = real_room(tmp)) < 0) {

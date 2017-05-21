@@ -149,7 +149,7 @@ void    update_pos(struct char_data *victim);
 // Calls a function that uses a static buffer.  Good.
 #define CAP(st)  capitalize((st))
 
-#define AN(string) (strchr((const char *)"aeiouAEIOU", *string) ? "an" : "a")
+#define AN(string) (strchr("aeiouAEIOU", *string) ? "an" : "a")
 
 
 #define CREATE(result, type, number)  do {\
