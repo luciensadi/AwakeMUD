@@ -45,8 +45,8 @@ Material:	metal
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
-	Val0:	1
-	Val1:	1
+	Val0:	50
+	Val1:	4
 	Val3:	5
 	Val4:	11
 	Val5:	1000

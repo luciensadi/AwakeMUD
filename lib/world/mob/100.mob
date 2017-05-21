@@ -1,0 +1,37 @@
+#10000
+Keywords:	being wreathed white fire protecting protector celestial guardian
+Name:	a celestial guardian
+RoomDesc:$
+A being wreathed in white fire stands here, protecting those around it. 
+
+~
+LookDesc:$
+Designed for testing purposes, this NPC's sole purpose is to beat the living
+hell out of anyone who commits violence within its line of sight. 
+~
+ArriveMsg:	soars in from
+LeaveMsg:	soars
+MobFlags:	10000001000000001000
+AffFlags:	1000000000001000000000
+Race:	Dragon
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	200
+	Weight:	500
+	Level:	9
+	Ballistic:	50
+	Impact:	50
+[SKILLS]
+	rifles:	50
+BREAK
+END

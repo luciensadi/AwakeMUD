@@ -2315,19 +2315,30 @@ void perform_act(const char *orig, struct char_data * ch, struct obj_data * obj,
               if (IS_SENATOR(ch)) {
                 i = "an invisible staff member";
               } else {
-                // Voice is new and must be deleted.
-                char* voice = strip_ending_punctuation_new(ch->player.physical_text.room_desc);
+                // Easy case: If it's a modulator, use that voice.
+                bool masked = FALSE;
+                for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
+                  if (GET_OBJ_VAL(obj, 0) == CYB_VOICEMOD && GET_OBJ_VAL(obj, 3)) {
+                    masked = TRUE;
+                    break;
+                  }
+                }
+                if (masked) {
+                  sprintf(temp, "a masked voice");
+                } else {
+                  // Voice is new and must be deleted.
+                  char* voice = strip_ending_punctuation_new(ch->player.physical_text.room_desc);
                 
-                // todo: voice modulator
-                if ((mem = found_mem(GET_MEMORY(to), ch)))
-                  sprintf(temp, "%s(%s)", voice, CAP(mem->mem));
-                else
-                  sprintf(temp, "%s", voice);
+                  if ((mem = found_mem(GET_MEMORY(to), ch)))
+                    sprintf(temp, "%s(%s)", voice, CAP(mem->mem));
+                  else
+                    sprintf(temp, "%s", voice);
                 
-                i = temp;
+                  i = temp;
                 
-                // Voice deleted here.
-                delete voice;
+                  // Voice deleted here.
+                  delete voice;
+                }
               }
             }
           }

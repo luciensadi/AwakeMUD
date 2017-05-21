@@ -88,14 +88,14 @@ ACMD(do_say)
             if (success > 0) {
               suc = success_test(GET_SKILL(tmp, GET_LANGUAGE(ch)), 4);
               if (suc > 0 || IS_NPC(tmp))
-                sprintf(buf, "$n says%s, in %s, \"%s^n\"",
+                sprintf(buf, "$z says%s in %s, \"%s^n\"",
                         (to ? buf2 : ""), skills[GET_LANGUAGE(ch)].name, argument);
               else
-                sprintf(buf, "$n speaks%s in a language you don't understand.", (to ? buf2 : ""));
+                sprintf(buf, "$z speaks%s in a language you don't understand.", (to ? buf2 : ""));
             } else
-              sprintf(buf, "$n mumbles incoherently.");
+              sprintf(buf, "$z mumbles incoherently.");
             if (IS_NPC(ch))
-              sprintf(buf, "$n says%s, \"%s^n\"", (to ? buf2 : ""), argument);
+              sprintf(buf, "$z says%s, \"%s^n\"", (to ? buf2 : ""), argument);
             act(buf, FALSE, ch, NULL, tmp, TO_VICT);
           }
       }
@@ -115,7 +115,7 @@ ACMD(do_say)
     } else {
       /** new code by WASHU **/
       if(subcmd == SCMD_OSAY) {
-        sprintf(buf,"$n ^nsays ^mOOCly^n, \"%s^n\"",argument);
+        sprintf(buf,"$z ^nsays ^mOOCly^n, \"%s^n\"",argument);
         act(buf, FALSE, ch, NULL, NULL, TO_ROOM);
       } else {
         success = success_test(GET_SKILL(ch, GET_LANGUAGE(ch)), 4);
@@ -131,14 +131,14 @@ ACMD(do_say)
             if (success > 0) {
               suc = success_test(GET_SKILL(tmp, GET_LANGUAGE(ch)), 4);
               if (suc > 0 || IS_NPC(tmp))
-                sprintf(buf, "$n says%s, in %s, \"%s^n\"",
+                sprintf(buf, "$z says%s in %s, \"%s^n\"",
                         (to ? buf2 : ""), skills[GET_LANGUAGE(ch)].name, argument);
               else
-                sprintf(buf, "$n speaks%s in a language you don't understand.", (to ? buf2 : ""));
+                sprintf(buf, "$z speaks%s in a language you don't understand.", (to ? buf2 : ""));
             } else
-              sprintf(buf, "$n mumbles incoherently.");
+              sprintf(buf, "$z mumbles incoherently.");
             if (IS_NPC(ch))
-              sprintf(buf, "$n says%s, \"%s^n\"", (to ? buf2 : ""), argument);
+              sprintf(buf, "$z says%s, \"%s^n\"", (to ? buf2 : ""), argument);
             act(buf, FALSE, ch, NULL, tmp, TO_VICT);
           }
       }
@@ -169,7 +169,7 @@ ACMD(do_exclaim)
   else if (affected_by_spell(ch, SPELL_STEALTH) || world[ch->in_veh ? ch->in_veh->in_room : ch->in_room].silence[0])
     send_to_char("You can't seem to make any noise.\r\n", ch);
   else {
-    sprintf(buf, "$n ^nexclaims, \"%s!^n\"", argument);
+    sprintf(buf, "$z ^nexclaims, \"%s!^n\"", argument);
     act(buf, FALSE, ch, 0, 0, TO_ROOM);
     if (PRF_FLAGGED(ch, PRF_NOREPEAT))
       send_to_char(OK, ch);
@@ -269,7 +269,7 @@ ACMD(do_ask)
   else if (affected_by_spell(ch, SPELL_STEALTH) || world[ch->in_veh ? ch->in_veh->in_room : ch->in_room].silence[0])
     send_to_char("You can't seem to make any noise.\r\n", ch);
   else {
-    sprintf(buf, "$n asks, \"%s?^n\"", argument);
+    sprintf(buf, "$z asks, \"%s?^n\"", argument);
     act(buf, FALSE, ch, 0, 0, TO_ROOM);
     if (PRF_FLAGGED(ch, PRF_NOREPEAT))
       send_to_char(OK, ch);
@@ -288,11 +288,11 @@ ACMD(do_spec_comm)
   if (subcmd == SCMD_WHISPER) {
     action_sing = "whisper to";
     action_plur = "whispers to";
-    action_others = "$n whispers something to $N.";
+    action_others = "$z whispers something to $N.";
   } else {
     action_sing = "ask";
     action_plur = "asks";
-    action_others = "$n asks $N something.";
+    action_others = "$z asks $N something.";
   }
 
   half_chop(argument, buf, buf2);
@@ -317,12 +317,12 @@ ACMD(do_spec_comm)
         act(buf, FALSE, ch, NULL, vict, TO_CHAR);
         suc = success_test(GET_SKILL(vict, GET_LANGUAGE(ch)), 4);
         if (suc > 0)
-          sprintf(buf, "$n^n leans out of %s, and says, in %s, \"%s^n\"\r\n",
+          sprintf(buf, "From within %s^n, $z says to you in %s, \"%s^n\"\r\n",
                   GET_VEH_NAME(ch->in_veh), skills[GET_LANGUAGE(ch)].name, buf2);
         else
-          sprintf(buf, "$n^n leans out and speaks in a language you don't understand.\r\n");
+          sprintf(buf, "From within %s^n, $z speaks in a language you don't understand.\r\n", GET_VEH_NAME(ch->in_veh));
       } else
-        sprintf(buf, "$n leans out and mumbles incoherently.\r\n");
+        sprintf(buf, "$z mumbles incoherently from %s.\r\n", GET_VEH_NAME(ch->in_veh));
       act(buf, FALSE, ch, NULL, vict, TO_VICT);
     }
     ch->in_room = NOWHERE;
@@ -349,11 +349,11 @@ ACMD(do_spec_comm)
         if (success > 0) {
           suc = success_test(GET_SKILL(vict, GET_LANGUAGE(ch)), 4);
           if (suc > 0)
-            sprintf(buf, "$n^n leans in and says, in %s, \"%s^n\"\r\n", skills[GET_LANGUAGE(ch)].name, buf2);
+            sprintf(buf, "From outside, $z^n says into the vehicle in %s, \"%s^n\"\r\n", skills[GET_LANGUAGE(ch)].name, buf2);
           else
-            sprintf(buf, "$n^n leans in and speaks in a language you don't understand.\r\n");
+            sprintf(buf, "From outside, $z^n speaks into the vehicle in a language you don't understand.\r\n");
         } else
-          sprintf(buf, "$n leans in and mumbles incoherently.\r\n");
+          sprintf(buf, "From outside, $z mumbles incoherently into the vehicle.\r\n");
         act(buf, FALSE, ch, NULL, vict, TO_VICT);
       }
       return;
@@ -361,15 +361,15 @@ ACMD(do_spec_comm)
     if (success > 0) {
       suc = success_test(GET_SKILL(vict, GET_LANGUAGE(ch)), 4);
       if (suc > 1)
-        sprintf(buf, "$n %s you, in %s, \"%s^n\"\r\n", action_plur,
+        sprintf(buf, "$z %s you in %s, \"%s^n\"\r\n", action_plur,
                 skills[GET_LANGUAGE(ch)].name, buf2);
       else if (suc == 1)
-        sprintf(buf, "$n %s in %s, but you don't understand.\r\n",
+        sprintf(buf, "$z %s in %s, but you don't understand.\r\n",
                 action_plur, skills[GET_LANGUAGE(ch)].name);
       else
-        sprintf(buf, "$n %s you, in a language you don't understand.\r\n", action_plur);
+        sprintf(buf, "$z %s you in a language you don't understand.\r\n", action_plur);
     } else
-      sprintf(buf, "$n %s to you incoherently.\r\n", action_plur);
+      sprintf(buf, "$z %s to you incoherently.\r\n", action_plur);
     act(buf, FALSE, ch, 0, vict, TO_VICT);
     if (PRF_FLAGGED(ch, PRF_NOREPEAT))
       send_to_char(OK, ch);
@@ -865,7 +865,7 @@ ACMD(do_gen_comm)
         if (success > 0) {
           int suc = success_test(GET_SKILL(tmp, GET_LANGUAGE(ch)), 4);
           if (suc > 0 || IS_NPC(tmp))
-            sprintf(buf, "%s$z shouts, in %s, \"%s\"^N\r\n",
+            sprintf(buf, "%s$z shouts in %s, \"%s\"^N\r\n",
                     com_msgs[subcmd][3], skills[GET_LANGUAGE(ch)].name, argument);
           else
             sprintf(buf, "%s$z shouts in a language you don't understand.\r\n", com_msgs[subcmd][3]);
@@ -902,14 +902,14 @@ ACMD(do_gen_comm)
             if (success > 0) {
               int suc = success_test(GET_SKILL(tmp, GET_LANGUAGE(ch)), 4);
               if (suc > 0 || IS_NPC(tmp))
-                sprintf(buf, "%s$n shouts, in %s, \"%s\"^N\r\n",
+                sprintf(buf, "%s$z shouts in %s, \"%s\"^N\r\n",
                         com_msgs[subcmd][3], skills[GET_LANGUAGE(ch)].name, argument);
               else
-                sprintf(buf, "%s$n shouts in a language you don't understand.\r\n", com_msgs[subcmd][3]);
+                sprintf(buf, "%s$z shouts in a language you don't understand.\r\n", com_msgs[subcmd][3]);
             } else
-              sprintf(buf, "$n shouts incoherently.\r\n");
+              sprintf(buf, "$z shouts incoherently.\r\n");
             if (IS_NPC(ch))
-              sprintf(buf, "%s$n shouts, \"%s^n\"\r\n", com_msgs[subcmd][3], argument);
+              sprintf(buf, "%s$z shouts, \"%s^n\"\r\n", com_msgs[subcmd][3], argument);
             act(buf, FALSE, ch, NULL, tmp, TO_VICT);
           }
         ch->in_room = was_in;
@@ -1212,10 +1212,10 @@ ACMD(do_phone)
     
     if (success_test(GET_SKILL(ch, GET_LANGUAGE(ch)), 4) > 0) {
       sprintf(buf, "^Y%s on the other end of the line says in %s, \"%s\"", voice, skills[GET_LANGUAGE(ch)].name, argument);
-      sprintf(buf2, "$n says into $s phone in %s, \"%s\"", skills[GET_LANGUAGE(ch)].name, argument);
+      sprintf(buf2, "$z says into $s phone in %s, \"%s\"", skills[GET_LANGUAGE(ch)].name, argument);
     } else {
       sprintf(buf, "^Y$v on the other end of the line mumbles incoherently.");
-      sprintf(buf2, "$n mumbles incoherently into $s phone.\r\n");
+      sprintf(buf2, "$z mumbles incoherently into $s phone.\r\n");
     }
     send_to_char(ch, "^YYou say, \"%s\"\r\n", argument);
     if (phone->dest->persona && phone->dest->persona->decker && phone->dest->persona->decker->ch)
@@ -1241,7 +1241,7 @@ ACMD(do_phone)
           if (success_test(GET_SKILL(tch, GET_LANGUAGE(ch)), 4) > 0)
             act(buf2, FALSE, ch, 0, tch, TO_VICT);
           else
-            act("$n speaks into $s phone in a language you don't understand.", FALSE, ch, 0, tch, TO_VICT);
+            act("$z speaks into $s phone in a language you don't understand.", FALSE, ch, 0, tch, TO_VICT);
         }
     }
   } else {
