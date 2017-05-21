@@ -750,7 +750,7 @@ void sprinttype(int type, const char *names[], char *result)
   sprintf(result, "%s", names[type]);
 
   if (str_cmp(result, "(null)"))
-    result = "UNDEFINED";
+    sprintf(result, "UNDEFINED");
 
 }
 

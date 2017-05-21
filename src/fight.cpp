@@ -825,9 +825,9 @@ void dam_message(int dam, struct char_data * ch, struct char_data * victim, int 
 
   static struct dam_weapon_type
   {
-    char *to_room;
-    char *to_char;
-    char *to_victim;
+    const char *to_room;
+    const char *to_char;
+    const char *to_victim;
   }
   dam_weapons[] = {
                     {

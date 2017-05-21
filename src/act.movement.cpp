@@ -1038,7 +1038,7 @@ ACMD(do_gen_door)
 
 }
 
-void enter_veh(struct char_data *ch, struct veh_data *found_veh, char *argument, bool drag)
+void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *argument, bool drag)
 {
   struct veh_data *inveh = NULL;
   RIG_VEH(ch, inveh);
@@ -1112,7 +1112,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, char *argument,
       if ((door > 0 && door == k->follower->in_room) && (GET_POS(k->follower) >= POS_STANDING)) {
         act("You follow $N.\r\n", FALSE, k->follower, 0, ch, TO_CHAR);
         if (!found_veh->seating[front])
-          strcpy(argument, "rear");
+          argument = "rear";
         enter_veh(k->follower, found_veh, argument, FALSE);
       }
     }
