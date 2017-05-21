@@ -1588,7 +1588,7 @@ char *delete_doubledollar(char *string)
 {
   char *read, *write;
 
-  if ((write = strchr((const char *)string, '$')) == NULL)
+  if ((write = strchr(string, '$')) == NULL)
     return string;
 
   read = write;
