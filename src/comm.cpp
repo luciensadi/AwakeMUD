@@ -2252,6 +2252,21 @@ char *ACTNULL = "<NULL>";
 
 #define CHECK_NULL(pointer, expression)  if ((pointer) == NULL) i = ACTNULL; else i = (expression);
 
+// Uses NEW-- make sure you delete!
+char* strip_ending_punctuation_new(const char* orig) {
+  int len = strlen(orig);
+  char* stripped = new char[len];
+  
+  strcpy(stripped, orig);
+  
+  char* c = stripped + len - 1;
+
+  if (*c == '.' || *c == '!' || *c == '?')
+    *c = '\0';
+  
+  return stripped;
+}
+
 
 /* higher-level communication: the act() function */
 void perform_act(const char *orig, struct char_data * ch, struct obj_data * obj,
@@ -2272,27 +2287,50 @@ void perform_act(const char *orig, struct char_data * ch, struct obj_data * obj,
     if (*orig == '$') {
       switch (*(++orig)) {
         case 'z':
-          if (to == ch)
+          // You always know if it's you.
+          if (to == ch) {
             i = "you";
-          else if (CAN_SEE(to, ch))
-            if (IS_SENATOR(to) && !IS_NPC(ch))
+          }
+          
+          // Staff ignore visibility checks.
+          else if (IS_SENATOR(to)) {
+            if (!IS_NPC(ch)) {
               i = GET_CHAR_NAME(ch);
-            else
+            } else {
               i = make_desc(to, ch, buf, TRUE);
+            }
+          }
+    
+          // If they're visible, it's simple.
+          else if (CAN_SEE(to, ch)) {
+            i = make_desc(to, ch, buf, TRUE);
+          }
+          
+          // If we've gotten here, the speaker is an invisible player or staff member.
+          else {
+            // Since $z is only used for speech, and since NPCs can't be remembered, we display their name when NPCs speak.
+            if (IS_NPC(ch))
+              i = GET_NAME(ch);
             else {
-              if (IS_NPC(ch))
-                i = GET_NAME(ch);
-              else {
-                if (IS_SENATOR(ch)) {
-                  i = "an invisible staff member";
-                } else if ((mem = found_mem(GET_MEMORY(to), ch))) {
-                  sprintf(temp, "%s(%s)", ch->player.physical_text.room_desc, CAP(mem->mem));
-                  i = temp;
-                } else {
-                  i = ch->player.physical_text.room_desc;
-                } 
-              } 
-            } 
+              if (IS_SENATOR(ch)) {
+                i = "an invisible staff member";
+              } else {
+                // Voice is new and must be deleted.
+                char* voice = strip_ending_punctuation_new(ch->player.physical_text.room_desc);
+                
+                // todo: voice modulator
+                if ((mem = found_mem(GET_MEMORY(to), ch)))
+                  sprintf(temp, "%s(%s)", voice, CAP(mem->mem));
+                else
+                  sprintf(temp, "%s", voice);
+                
+                i = temp;
+                
+                // Voice deleted here.
+                delete voice;
+              }
+            }
+          }
           break;
       case 'n':
         if (to == ch)
