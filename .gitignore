@@ -5,7 +5,7 @@
 *.slo
 *.lo
 *.o
-*.obj
+# *.obj Awake uses .obj for game object files.
 
 # Precompiled Headers
 *.gch
