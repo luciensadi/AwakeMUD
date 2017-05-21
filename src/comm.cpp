@@ -2200,7 +2200,7 @@ void send_to_host(vnum_t room, char *messg, struct matrix_icon *icon, bool needs
         if (!needsee || (needsee && has_spotted(i, icon)))
           send_to_icon(i, messg);
 }
-void send_to_veh(char *messg, struct veh_data *veh, struct char_data *ch, bool torig, ...)
+void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, bool torig, ...)
 {
   struct char_data *i;
 
@@ -2216,7 +2216,7 @@ void send_to_veh(char *messg, struct veh_data *veh, struct char_data *ch, bool t
   }
 }
 
-void send_to_veh(char *messg, struct veh_data *veh, struct char_data *ch, struct char_data *cha, bool torig)
+void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, struct char_data *cha, bool torig)
 {
   struct char_data *i;
 
