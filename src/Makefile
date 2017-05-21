@@ -14,8 +14,7 @@ SHELL = /bin/sh
 .PHONY : 
 CXX = g++
 CC = gcc
-# LIBS = -lcrypt -L/usr/local/lib -lmysqlclient -lz -lm -lnsl
-LIBS = -L/usr/local/lib -lmysqlclient -lz -lm
+
 PROFILE = -ggdb
 CVS = cvs
 
@@ -23,9 +22,15 @@ CVS = cvs
 # in order to find any problems such as not freeing up pointers properly.
 # The obvious drawback is that it's time consuming, so once things go
 # smooth, the define can be removed.
-# MYFLAGS = -ggdb3 -Wall -Wno-unused -DDEBUG -Dlinux -O
-# MYFLAGS = -DDEBUG -Dlinux -Wno-deprecated -I /usr/local/include/
+
+# OSX? Uncomment these:
+LIBS = -L/usr/local/lib -lmysqlclient -lz -lm
 MYFLAGS = -DDEBUG -Dosx -Wno-deprecated -I /usr/local/include/
+
+# Linux / others? Uncomment these:
+# LIBS = -lcrypt -L/usr/local/lib -lmysqlclient -lz -lm -lnsl
+# MYFLAGS = -DDEBUG -Dlinux -Wno-deprecated -I /usr/local/include/
+
 CPPFLAGS = $(MYFLAGS) $(PROFILE)
 
 sourcefiles = $(wildcard *.cpp)
