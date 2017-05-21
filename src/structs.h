@@ -227,7 +227,7 @@ typedef struct teach_data
 {
   vnum_t vnum;
   sh_int s[8];
-  char *msg;
+  const char *msg;
   sh_int type;
 }
 teach_t;
