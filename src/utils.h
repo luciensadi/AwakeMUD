@@ -98,9 +98,9 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data
 void    mental_gain(struct char_data *ch);
 void    physical_gain(struct char_data *ch);
 void    advance_level(struct char_data *ch);
-void    set_title(struct char_data *ch, char *title);
-void    set_pretitle(struct char_data *ch, char *title);
-void    set_whotitle(struct char_data *ch, char *title);
+void    set_title(struct char_data *ch, const char *title);
+void    set_pretitle(struct char_data *ch, const char *title);
+void    set_whotitle(struct char_data *ch, const char *title);
 int     gain_exp(struct char_data *ch, int gain, bool rep);
 void    gain_exp_regardless(struct char_data *ch, int gain);
 void    gain_condition(struct char_data *ch, int condition, int value);

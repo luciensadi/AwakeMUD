@@ -283,7 +283,7 @@ ACMD(do_spec_comm)
 {
   struct veh_data *veh = NULL;
   struct char_data *vict;
-  char *action_sing, *action_plur, *action_others;
+  const char *action_sing, *action_plur, *action_others;
   int success, suc;
   if (subcmd == SCMD_WHISPER) {
     action_sing = "whisper to";

@@ -158,48 +158,60 @@ void physical_gain(struct char_data * ch)
   update_pos(ch);
 }
 
-void set_title(struct char_data * ch, char *title)
-{
+const char* get_new_kosherized_title(const char *title, unsigned short max_length) {
   if (title == NULL)
     title = "";
+  
+  // Uses NEW.
+  char* mutable_title = str_dup(title);
+  
+  if (strlen(mutable_title) > max_length)
+    mutable_title[max_length] = '\0';
+  
+  return mutable_title;
+}
 
-  if (strlen(title) > MAX_TITLE_LENGTH)
-    title[MAX_TITLE_LENGTH] = '\0';
-
-  if (GET_TITLE(ch))
+void set_title(struct char_data * ch, const char *title)
+{
+  // Invokes NEW.
+  const char* kosherized_title = (const char*) get_new_kosherized_title(title, MAX_TITLE_LENGTH);
+  
+  if (GET_TITLE(ch) != NULL)
     delete [] GET_TITLE(ch);
 
-  GET_TITLE(ch) = str_dup(title);
+  GET_TITLE(ch) = str_dup(kosherized_title);
+  
+  // Clean up after NEW.
+  delete kosherized_title;
 }
 
 
-void set_whotitle(struct char_data * ch, char *title)
+void set_whotitle(struct char_data * ch, const char *title)
 {
-  if (title == NULL)
-    title = "title";
-
-  if (strlen(title) > MAX_WHOTITLE_LENGTH)
-    title[MAX_WHOTITLE_LENGTH] = '\0';
-
+  // Invokes NEW.
+  const char* kosherized_title = (const char*) get_new_kosherized_title(title, MAX_WHOTITLE_LENGTH);
 
   if (GET_WHOTITLE(ch) != NULL)
     delete [] GET_WHOTITLE(ch);
 
   GET_WHOTITLE(ch) = str_dup(title);
+  
+  // Clean up after NEW.
+  delete kosherized_title;
 }
 
-void set_pretitle(struct char_data * ch, char *title)
+void set_pretitle(struct char_data * ch, const char *title)
 {
-  if (title == NULL)
-    title = "";
-
-  if (strlen(title) > MAX_TITLE_LENGTH)
-    title[MAX_TITLE_LENGTH] = '\0';
+  // Invokes NEW.
+  const char* kosherized_title = (const char*) get_new_kosherized_title(title, MAX_TITLE_LENGTH);
 
   if (GET_PRETITLE(ch) != NULL)
     delete [] GET_PRETITLE(ch);
 
   GET_PRETITLE(ch) = str_dup(title);
+  
+  // Clean up after NEW.
+  delete kosherized_title;
 }
 
 int gain_exp(struct char_data * ch, int gain, bool rep)
