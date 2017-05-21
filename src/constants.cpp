@@ -799,7 +799,7 @@ const char *item_types[] =
     "Cyberware",
     "Cyberdeck",
     "Program",
-    "Gun Clip",
+    "Gun Magazine",
     "Gun Accessory",
     "Spell Formula",
     "Kit",
