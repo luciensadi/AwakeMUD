@@ -52,6 +52,8 @@ void target_explode(struct char_data *ch, struct obj_data *weapon,
 void forget(struct char_data * ch, struct char_data * victim);
 void remember(struct char_data * ch, struct char_data * victim);
 void order_list(bool first,...);
+bool can_hurt(struct char_data *ch, struct char_data *victim);
+
 extern int success_test(int number, int target);
 extern int resisted_test(int num_for_ch, int tar_for_ch, int num_for_vict,
                            int tar_for_vict);
@@ -1915,7 +1917,7 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
               world[vict->in_room].number);
       break;
     case 2:
-      sprintf(buf2, "%s has a fatal heart attack.  Wuss. {%s (%ld)}",
+      sprintf(buf2, "%s had a fatal heart attack.  Wuss. {%s (%ld)}",
               GET_CHAR_NAME(vict), world[vict->in_room].name,
               world[vict->in_room].number);
       break;
@@ -2061,6 +2063,71 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
 
 #define IS_AUTO(eq)    (GET_OBJ_TYPE(eq) == ITEM_WEAPON && \
                         GET_OBJ_VAL(eq, 11) == MODE_FA)
+
+bool would_become_killer(struct char_data * ch, struct char_data * vict)
+{
+  char_data *attacker;
+  
+  if (IS_NPC(ch) && (ch->desc == NULL || ch->desc->original == NULL))
+    return false;
+  
+  if (!IS_NPC(ch))
+    attacker = ch;
+  else
+    attacker = ch->desc->original;
+  
+  if (!IS_NPC(vict) &&
+      !PLR_FLAGS(vict).AreAnySet(PLR_KILLER, ENDBIT) &&
+      !(ROOM_FLAGGED(ch->in_room, ROOM_ARENA) && ROOM_FLAGGED(vict->in_room, ROOM_ARENA)) &&
+      (!PRF_FLAGGED(attacker, PRF_PKER) || !PRF_FLAGGED(vict, PRF_PKER)) &&
+      !PLR_FLAGGED(attacker, PLR_KILLER) && attacker != vict && !IS_SENATOR(attacker))
+  {
+    return true;
+  }
+  return false;
+}
+
+// Basically ripped the logic from damage(). Used to adjust combat messages for edge cases.
+bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype) {
+  if (IS_NPC(victim)) {
+    // Shopkeeper protection.
+    if (mob_index[GET_MOB_RNUM(victim)].func == shop_keeper)
+      return false;
+    
+    // Nokill protection.
+    if (MOB_FLAGGED(victim,MOB_NOKILL))
+      return false;
+    
+    // Some things can't be exploded.
+    if (attacktype == TYPE_EXPLOSION && (IS_ASTRAL(victim) || MOB_FLAGGED(victim, MOB_IMMEXPLODE)))
+      return false;
+    
+    // Whatever the hell protection this is.
+    if (( (!IS_NPC(ch)
+           && IS_SENATOR(ch)
+           && !access_level(ch, LVL_ADMIN))
+         || (IS_NPC(ch)
+             && ch->master
+             && AFF_FLAGGED(ch, AFF_CHARM)
+             && !IS_NPC(ch->master)
+             && IS_SENATOR(ch->master)
+             && !access_level(ch->master, LVL_ADMIN)))
+        && !from_ip_zone(GET_MOB_VNUM(victim)))
+    {
+      return false;
+    }
+  } else {
+    // Known ignored edge case: if the player is not a killer but would become a killer because of this action.
+    if (ch != victim && would_become_killer(ch, victim))
+      return false;
+    
+    if (PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(victim))
+      return false;
+  }
+  
+  // Looks like ch can hurt vict after all.
+  return true;
+}
 
 // return 1 if victim died, 0 otherwise
 bool damage(struct char_data *ch, struct char_data *victim, int dam, int attacktype,
@@ -2316,7 +2383,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
     if (IS_NPC(victim))
       act("$n is dead!  R.I.P.", FALSE, victim, 0, 0, TO_ROOM);
     else
-      act("$n slumps in a pile. You hear sirens as docwagon rush in and grab $m.", FALSE, victim, 0, 0, TO_ROOM);
+      act("$n slumps in a pile. You hear sirens as a Docwagon rushes in and grabs $m.", FALSE, victim, 0, 0, TO_ROOM);
     send_to_char("You feel the world slip in to darkness, you better hope a wandering Docwagon finds you.\r\n", victim);
     break;
   default:                      /* >= POSITION SLEEPING */
@@ -2768,7 +2835,8 @@ void remove_throwing(struct char_data *ch)
 void combat_message_process_ranged_response(struct char_data *ch, rnum_t rnum) {
   for (struct char_data *tch = world[rnum].people; tch; tch = tch->next_in_room) {
     if (IS_NPC(tch) && !IS_NPC(ch)) {
-      if ((MOB_FLAGGED(tch, MOB_GUARD) || MOB_FLAGGED(tch, MOB_HELPER)) && number(0, 6) >= 2) {
+      if ((MOB_FLAGGED(tch, MOB_GUARD) || MOB_FLAGGED(tch, MOB_HELPER))
+          && (true || !(FIGHTING(tch) || FIGHTING_VEH(tch))) && number(0, 6) >= 2) {
         GET_MOBALERT(tch) = MALERT_ALARM;
         GET_MOBALERTTIME(tch) = 20;
         ranged_response(ch, tch);
@@ -2785,7 +2853,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   char buf[MAX_MESSAGE_LENGTH], buf1[MAX_MESSAGE_LENGTH], buf2[MAX_MESSAGE_LENGTH], buf3[MAX_MESSAGE_LENGTH],
        been_heard[MAX_STRING_LENGTH], temp[20];
   struct obj_data *obj = NULL;
-  rnum_t was_in = 0, room1 = 0, room2 = 0, room3 = 0, rnum = 0, temp_room = 0;
+  rnum_t room1 = 0, room2 = 0, rnum = 0;
 
   if (burst <= 1) {
     if (GET_OBJ_VAL(weapon, 4) == SKILL_SHOTGUNS || GET_OBJ_VAL(weapon, 4) == SKILL_ASSAULT_CANNON)
@@ -2871,7 +2939,6 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   if (world[ch->in_room].silence[0])
     return;
   
-  was_in = ch->in_room;
   sprintf( been_heard, ".%ld.", ch->in_room );
   
   // Initialize gunshot queue.
@@ -2888,7 +2955,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
         continue;
       
       // Send gunshot notifications to the selected room. Process guard/helper responses.
-      send_to_room("You hear gunshots nearby!", room1);
+      send_to_room("You hear gunshots nearby!\r\n", room1);
       combat_message_process_ranged_response(ch, room1);
       strcat(been_heard, temp);
         
@@ -2909,7 +2976,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     if (strstr(been_heard, temp) != 0)
       continue;
     
-    send_to_room("You hear gunshots not far off.", room1);
+    send_to_room("You hear gunshots not far off.\r\n", room1);
     combat_message_process_ranged_response(ch, room1);
     strcat(been_heard, temp);
         
@@ -2929,10 +2996,72 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     if (strstr(been_heard, temp) != 0)
       continue;
     
-    send_to_room("You hear gunshots in the distance.", room1);
+    send_to_room("You hear gunshots in the distance.\r\n", room1);
     combat_message_process_ranged_response(ch, room1);
     strcat(been_heard, temp);
   }
+}
+
+int get_weapon_damage_type(struct obj_data* weapon) {
+  if (!weapon)
+    return TYPE_HIT;
+
+  int type;
+  switch (GET_OBJ_VAL(weapon, 3)) {
+    case WEAP_EDGED:
+    case WEAP_POLEARM:
+      type = TYPE_SLASH;
+      break;
+    case WEAP_WHIP:
+    case WEAP_CLUB:
+    case WEAP_GLOVE:
+      type = TYPE_POUND;
+      break;
+    case WEAP_SMG:
+    case WEAP_ASSAULT_RIFLE:
+    case WEAP_LMG:
+    case WEAP_MMG:
+    case WEAP_HMG:
+    case WEAP_MINIGUN:
+      type = TYPE_MACHINE_GUN;
+      break;
+    case WEAP_SHOTGUN:
+      type = TYPE_SHOTGUN;
+      break;
+    case WEAP_TASER:
+      type = TYPE_TASER;
+      break;
+    case WEAP_CANNON:
+      type = TYPE_CANNON;
+      break;
+    case WEAP_SPORT_RIFLE:
+    case WEAP_SNIPER_RIFLE:
+      type = TYPE_RIFLE;
+      break;
+    case WEAP_MISS_LAUNCHER:
+    case WEAP_GREN_LAUNCHER:
+      type = TYPE_ROCKET;
+      break;
+    default:
+      type = TYPE_PISTOL;
+      break;
+  }
+  
+  return type;
+}
+
+/* Combat rules:
+1) All dice pools refresh.
+2) Calculate initiative for all parties (reaction + dice)
+   - Highest goes first
+3) Characters take actions on their combat phase.
+4) Return to step 1.
+*/
+
+bool char_too_tall_for_their_room(struct char_data *ch) {
+  assert(ch != NULL);
+  
+  return ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) >= world[ch->in_room].z*100;
 }
 
 void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon, struct obj_data *vict_weapon)
@@ -2940,7 +3069,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
   char rbuf[MAX_STRING_LENGTH];
   int type, vtype = 0;
   struct veh_data *veh = NULL;
-  struct obj_data *magazine = NULL, *attach = NULL;
+  struct obj_data *clip = NULL, *attach = NULL;
   bool is_physical = TRUE, v_is_physical = TRUE, melee = FALSE, vtall = TRUE, ctall = TRUE, heavy = FALSE;
   int tdistance = 0, recoil = 0, tdualwield = 0, burst = 0, tawake = 0, tsmartlink = 0, tsight = 0, tsleep = 0, tcansee = 0;
   int power = 0, damage_total = 0, base_target = 0, skill_total = 0, recoilcomp = 0, modtarget = 0, success = 0;
@@ -2955,7 +3084,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
     vtall = FALSE;
   if (!ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) || (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) < world[ch->in_room].z*100))
     ctall = FALSE;
-
+  
   RIG_VEH(ch, veh);
   if (weapon) {
     switch (GET_OBJ_VAL(weapon, 3)) {
@@ -2969,7 +3098,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
       case WEAP_CLUB:
       case WEAP_GLOVE:
         type = TYPE_POUND;
-        break; 
+        break;
       case WEAP_SMG:
       case WEAP_ASSAULT_RIFLE:
       case WEAP_LMG:
@@ -2999,9 +3128,9 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
         type = TYPE_PISTOL;
         break;
     }
-  } else 
+  } else
     type = TYPE_HIT;
-
+  
   if (!weapon || !IS_GUN(GET_OBJ_VAL(weapon, 3)))
     melee = TRUE;
   else {
@@ -3009,13 +3138,13 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
       tdistance += 2;
     if (!has_ammo(ch, weapon))
       return;
-    magazine = weapon->contains;
+    clip = weapon->contains;
   }
-
+  
   if ((type == TYPE_HIT || type == TYPE_BLUDGEON || type == TYPE_PUNCH ||
        type == TYPE_TASER || type == TYPE_CRUSH || type == TYPE_POUND))
     is_physical = FALSE;
-
+  
   if (melee) {
     if (ch->in_room != victim->in_room) {
       stop_fighting(ch);
@@ -3025,7 +3154,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
       int total = 4 + GET_IMPACT(victim) + modify_target(ch);
       skill_total = get_skill(ch, SKILL_UNARMED_COMBAT, total) + MIN(GET_OFFENSE(ch), GET_SKILL(ch, SKILL_UNARMED_COMBAT));
       if (GET_QUI(victim) <= 0)
-      success = 0;
+        success = 0;
       else success = success_test(skill_total, total);
       if (success > 0) {
         GET_TEMP_QUI_LOSS(victim) += success * 2;
@@ -3046,7 +3175,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
       }
       return;
     }
- 
+    
     if (vict_weapon)
       switch (GET_OBJ_VAL(vict_weapon, 3)) {
         case WEAP_EDGED:
@@ -3059,7 +3188,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
         case WEAP_CLUB:
         case WEAP_GLOVE:
           vtype = TYPE_POUND;
-          break; 
+          break;
         case WEAP_SMG:
         case WEAP_ASSAULT_RIFLE:
         case WEAP_LMG:
@@ -3097,27 +3226,27 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
          vtype == TYPE_TASER || vtype == TYPE_CRUSH || vtype == TYPE_POUND))
       v_is_physical = FALSE;
   } else {
-    if ((GET_OBJ_VAL(weapon, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(weapon, 4) <= SKILL_ASSAULT_CANNON) && (GET_STR(ch) < 8 || 
-        GET_BOD(ch) < 8) && !(AFF_FLAGGED(ch, AFF_PRONE) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG) || AFF_FLAGGED(ch, AFF_MANNING))) {
+    if ((GET_OBJ_VAL(weapon, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(weapon, 4) <= SKILL_ASSAULT_CANNON) && (GET_STR(ch) < 8 ||
+                                                                                                             GET_BOD(ch) < 8) && !(AFF_FLAGGED(ch, AFF_PRONE) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG) || AFF_FLAGGED(ch, AFF_MANNING))) {
       for (int q = 0; q < NUM_WEARS; q++)
         if (GET_EQ(ch, q) && GET_OBJ_TYPE(GET_EQ(ch, q)) == ITEM_GYRO)
           heavy = TRUE;
       if (!heavy) {
         send_to_char("You can't lift the barrel high enough to fire.\r\n", ch);
         return;
-      }   
+      }
     }
     if (IS_BURST(weapon))
       burst = 2;
     if (IS_AUTO(weapon))
       burst = GET_OBJ_TIMER(weapon) - 1;
     if (burst) {
-      if (!IS_NPC(ch) && !magazine) {
+      if (!IS_NPC(ch) && !clip) {
         burst = MIN(burst, GET_OBJ_VAL(weapon, 6));
         GET_OBJ_VAL(weapon, 6) -= burst;
-      } else if (magazine) {
-        burst = MIN(burst, GET_OBJ_VAL(magazine, 9));
-        GET_OBJ_VAL(magazine, 9) -= burst;
+      } else if (clip) {
+        burst = MIN(burst, GET_OBJ_VAL(clip, 9));
+        GET_OBJ_VAL(clip, 9) -= burst;
         if (IS_NPC(ch))
           GET_OBJ_VAL(weapon, 6) -= burst;
       }
@@ -3169,7 +3298,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
           for (distance = 1; (nextroom != NOWHERE) && (distance <= range) &&
                !vict_found; distance++) {
             for (vict = world[nextroom].people; vict;
-                vict = vict->next_in_room)
+                 vict = vict->next_in_room)
               if (vict == victim) {
                 tdistance += 2 * distance;
                 vict_found = TRUE;
@@ -3199,10 +3328,10 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
   sprintf( rbuf+strlen(rbuf), "|%s", GET_CHAR_NAME( victim ) );
   rbuf[7] = 0;
   sprintf( rbuf+strlen(rbuf),
-           ">Targ: (b/r %d-%d) ",
-           burst, recoilcomp );
+          ">Targ: (b/r %d-%d) ",
+          burst, recoilcomp );
   modtarget = modify_target_rbuf(ch, rbuf);
-            
+  
   buf_mod( rbuf, "Recoil", recoil);
   buf_mod( rbuf, "Sleep", tsleep);
   buf_mod( rbuf, "Cansee", tcansee);
@@ -3211,20 +3340,20 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
   buf_mod( rbuf, "Distance", tdistance);
   buf_mod( rbuf, "Sight", tsight);
   buf_mod( rbuf, "Awake", tawake);
-
+  
   base_target = 4 + modtarget + recoil + tsleep + tcansee
-                + tdualwield + tsmartlink + tdistance + tsight + tawake;
-    
+  + tdualwield + tsmartlink + tdistance + tsight + tawake;
+  
   buf_roll( rbuf, "Total", base_target);
   act( rbuf, 1, ch, NULL, NULL, TO_ROLLS );
- 
+  
   if (melee) {
     if (vict_weapon && GET_OBJ_TYPE(vict_weapon) != ITEM_WEAPON)
       vict_weapon = NULL;
     int reach = GET_REACH(victim) - GET_REACH(ch);
-    int victtarget = 4 + modify_target(victim) + (CAN_SEE(victim, ch) ? 0 : 
-                     ((AFF_FLAGGED(victim, AFF_DETECT_INVIS) || GET_POWER(victim, ADEPT_BLIND_FIGHTING)) ? 4 : 8)) - (reach > 0 ?
-                     reach : 0);
+    int victtarget = 4 + modify_target(victim) + (CAN_SEE(victim, ch) ? 0 :
+                                                  ((AFF_FLAGGED(victim, AFF_DETECT_INVIS) || GET_POWER(victim, ADEPT_BLIND_FIGHTING)) ? 4 : 8)) - (reach > 0 ?
+                                                                                                                                                   reach : 0);
     int vict_skill = SKILL_UNARMED_COMBAT;
     if (IS_SPIRIT(victim) || IS_ELEMENTAL(victim)) {
       skill_total = GET_WIL(ch);
@@ -3238,17 +3367,17 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
           if (GET_OBJ_VAL(vict_weapon, 9) &&
               real_object(GET_OBJ_VAL(vict_weapon, 9)) > 0 &&
               (attach = &obj_proto[real_object(GET_OBJ_VAL(vict_weapon, 9))]) &&
-              GET_OBJ_VAL(attach, 1) == ACCESS_BAYONET) 
+              GET_OBJ_VAL(attach, 1) == ACCESS_BAYONET)
             vict_skill = SKILL_POLE_ARMS;
           else vict_skill = SKILL_CLUBS;
-        else vict_skill = GET_OBJ_VAL(vict_weapon, 4);
+          else vict_skill = GET_OBJ_VAL(vict_weapon, 4);
       }
       vict_skill = get_skill(victim, vict_skill, victtarget) + (vtall ? 0 : MIN(GET_SKILL(victim, vict_skill), GET_OFFENSE(victim)));
       int skillnum = SKILL_UNARMED_COMBAT;
       if (weapon)
         skillnum = GET_OBJ_VAL(weapon, 4);
       skill_total = get_skill(ch, skillnum, base_target) +
-                    MIN(GET_SKILL(ch, skillnum), GET_OFFENSE(ch));
+      MIN(GET_SKILL(ch, skillnum), GET_OFFENSE(ch));
     }
     if (reach < 0)
       base_target += reach;
@@ -3263,10 +3392,10 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
     act("$n clashes with $N in melee combat.", FALSE, ch, 0, victim, TO_ROOM);
     act("You clash with $N in melee combat.", FALSE, ch, 0, victim, TO_CHAR);
     sprintf(rbuf, "%s> sk %d targ %d\r\n"
-                  "%s> sk %d targ %d\r\n Reach %c%d Success %d", GET_CHAR_NAME(ch), skill_total, base_target,
-                                                         GET_CHAR_NAME(victim), vict_skill, victtarget, reach > 0 ? 'b' : 't', reach < 0 ? -reach : reach, success);
+            "%s> sk %d targ %d\r\n Reach %c%d Success %d", GET_CHAR_NAME(ch), skill_total, base_target,
+            GET_CHAR_NAME(victim), vict_skill, victtarget, reach > 0 ? 'b' : 't', reach < 0 ? -reach : reach, success);
     act( rbuf, 1, ch, NULL, NULL, TO_ROLLS );
- 
+    
     if (success < 0) {
       weapon = vict_weapon;
       type = vtype;
@@ -3280,7 +3409,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
       vtall = ctall;
       ctall = ttall;
       success *= -1;
-    } 
+    }
   } else {
     skill_total = get_skill(ch, GET_OBJ_VAL(weapon, 4), base_target) + (ctall ? 0 : MIN(GET_SKILL(ch, GET_OBJ_VAL(weapon, 4)), GET_OFFENSE(ch)));
     success = success_test(skill_total, base_target);
@@ -3292,10 +3421,10 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
     int anchor = 0;
     for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content)
       if (GET_OBJ_VAL(cyber, 0) == CYB_FOOTANCHOR && !GET_OBJ_VAL(cyber, 9))
-        anchor++;   
+        anchor++;
     sprintf(rbuf, "Fight: Ski %d, TN %d, Suc %d", skill_total, base_target, success);
     act( rbuf, 1, ch, NULL, NULL, TO_ROLLS );
-   
+    
     if (AWAKE(victim) && total < GET_QUI(victim) && !vtall && !AFF_FLAGGED(victim, AFF_PRONE)) {
       success -= MAX(success_test(GET_DEFENSE(victim) + (GET_DEFENSE(victim) ? GET_POWER(victim, ADEPT_SIDESTEP) : 0), 4 + damage_modifier(victim, buf) + (int)(burst / 3) + anchor), 0);
       sprintf(rbuf, "Dodge: Dod %d, TN %d, NetSuc %d", GET_DEFENSE(victim) + (GET_DEFENSE(victim) ? GET_POWER(victim, ADEPT_SIDESTEP) : 0),
@@ -3309,31 +3438,31 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
       return;
     }
   }
-
+  
   if (weapon) {
     power = (IS_GUN(GET_OBJ_VAL(weapon, 3)) ? GET_OBJ_VAL(weapon, 0) : GET_OBJ_VAL(weapon, 2) + GET_STR(ch)) + burst;
     if (IS_GUN(GET_OBJ_VAL(weapon, 3))) {
-      if (magazine)
-        switch (GET_OBJ_VAL(magazine, 2)) {
-        case AMMO_APDS:
-          power -= (int)(GET_BALLISTIC(victim) / 2);
-          break;
-        case AMMO_EX:
-          power++;
-        case AMMO_EXPLOSIVE:
-          power -= GET_BALLISTIC(victim) - 1;
-          break;
-        case AMMO_FLECHETTE:
-          if (!GET_IMPACT(victim) && !GET_BALLISTIC(victim))
-            damage_total++;
-          else
-            power -= MAX(GET_BALLISTIC(victim), GET_IMPACT(victim) * 2);
-          break;
-        case AMMO_GEL:
-          power -= GET_BALLISTIC(victim) + 2;
-          break;   
-        default:
-          power -= GET_BALLISTIC(victim);
+      if (clip)
+        switch (GET_OBJ_VAL(clip, 2)) {
+          case AMMO_APDS:
+            power -= (int)(GET_BALLISTIC(victim) / 2);
+            break;
+          case AMMO_EX:
+            power++;
+          case AMMO_EXPLOSIVE:
+            power -= GET_BALLISTIC(victim) - 1;
+            break;
+          case AMMO_FLECHETTE:
+            if (!GET_IMPACT(victim) && !GET_BALLISTIC(victim))
+              damage_total++;
+            else
+              power -= MAX(GET_BALLISTIC(victim), GET_IMPACT(victim) * 2);
+            break;
+          case AMMO_GEL:
+            power -= GET_BALLISTIC(victim) + 2;
+            break;
+          default:
+            power -= GET_BALLISTIC(victim);
         }
       else
         power -= GET_BALLISTIC(victim);
@@ -3349,58 +3478,58 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
     } else {
       for (struct obj_data *obj = ch->cyberware;
            obj && !damage_total;
-           obj = obj->next_content) 
-        if (!GET_OBJ_VAL(obj, 9)) 
-         switch (GET_OBJ_VAL(obj, 0)) {
-          case CYB_HANDBLADE:
-            damage_total = LIGHT;
-            power += 3;
-            type = TYPE_STAB;
-            is_physical = TRUE; 
-            break;
-          case CYB_HANDRAZOR:
-            damage_total = LIGHT;
-            is_physical = TRUE;
-            type = TYPE_SLASH;
-            if (IS_SET(GET_OBJ_VAL(obj, 3), CYBERWEAPON_IMPROVED))
-              power += 2;
-            break;
-          case CYB_FIN:
-            damage_total = LIGHT;
-            is_physical = TRUE;
-            type = TYPE_SLASH;
-            power--;
-            break;
-          case CYB_FOOTANCHOR:
-            damage_total = MODERATE;
-            is_physical = TRUE;   
-            type = TYPE_STAB;
-            power--;
-            break;
-          case CYB_HANDSPUR:
-            is_physical = TRUE;  
-            type = TYPE_SLASH;
-            damage_total = MODERATE;
-            break;
-          case CYB_CLIMBINGCLAWS:
-            is_physical = TRUE;
-            type = TYPE_SLASH;
-            power--;
-            damage_total = LIGHT;
-            break;
+           obj = obj->next_content)
+        if (!GET_OBJ_VAL(obj, 9))
+          switch (GET_OBJ_VAL(obj, 0)) {
+            case CYB_HANDBLADE:
+              damage_total = LIGHT;
+              power += 3;
+              type = TYPE_STAB;
+              is_physical = TRUE;
+              break;
+            case CYB_HANDRAZOR:
+              damage_total = LIGHT;
+              is_physical = TRUE;
+              type = TYPE_SLASH;
+              if (IS_SET(GET_OBJ_VAL(obj, 3), CYBERWEAPON_IMPROVED))
+                power += 2;
+              break;
+            case CYB_FIN:
+              damage_total = LIGHT;
+              is_physical = TRUE;
+              type = TYPE_SLASH;
+              power--;
+              break;
+            case CYB_FOOTANCHOR:
+              damage_total = MODERATE;
+              is_physical = TRUE;
+              type = TYPE_STAB;
+              power--;
+              break;
+            case CYB_HANDSPUR:
+              is_physical = TRUE;
+              type = TYPE_SLASH;
+              damage_total = MODERATE;
+              break;
+            case CYB_CLIMBINGCLAWS:
+              is_physical = TRUE;
+              type = TYPE_SLASH;
+              power--;
+              damage_total = LIGHT;
+              break;
           }
         else if (GET_OBJ_VAL(obj, 0) == CYB_BONELACING) {
           switch (GET_OBJ_VAL(obj, 3)) {
-          case BONE_PLASTIC:
-            power += 2;
-            break;
-          case BONE_ALUMINIUM:
-          case BONE_CERAMIC:
-            power += 3;
-            break;
-          case BONE_TITANIUM:
-            power += 4;
-            break;
+            case BONE_PLASTIC:
+              power += 2;
+              break;
+            case BONE_ALUMINIUM:
+            case BONE_CERAMIC:
+              power += 3;
+              break;
+            case BONE_TITANIUM:
+              power += 4;
+              break;
           }
           damage_total = MODERATE;
           break;
@@ -3410,7 +3539,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
       power -= MAX(0, GET_IMPACT(victim) - GET_POWER(ch, ADEPT_PENETRATINGSTRIKE));
     else power -= GET_IMPACT(victim);
     if (!damage_total)
-      damage_total = MODERATE;   
+      damage_total = MODERATE;
   }
   if (IS_SPIRIT(victim) || IS_ELEMENTAL(victim)) {
     if (power <= GET_LEVEL(victim) * 2) {
@@ -3427,20 +3556,27 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
     bod_success = 0;
   else
     bod_success = success_test(bod, power);
-      
-  success -= bod_success;  
+  
+  success -= bod_success;
   int old_damage_total = damage_total;
-  int staged_damage = stage(success, damage_total);
+  int staged_damage;
+  
+  // Adjust messaging for unkillable entities.
+  if (can_hurt(ch, victim, type))
+    staged_damage = stage(success, damage_total);
+  else
+    staged_damage = -1;
+  
   damage_total = convert_damage(staged_damage);
-            
+  
   sprintf(rbuf, "Fight: Bod %d+%d, Pow %d, ResSuc %d.  %s(%d)->%d.  %d%c.",
           GET_BOD(victim), (vtall ? -1 : GET_BODY(victim)), power, bod_success,
-          wound_name[MIN(DEADLY, old_damage_total)], success, staged_damage, damage_total, is_physical ? 'P' : 'M');  
+          wound_name[MIN(DEADLY, old_damage_total)], success, staged_damage, damage_total, is_physical ? 'P' : 'M');
   act( rbuf, 1, ch, NULL, NULL, TO_ROLLS );
   if (!melee)
     combat_message(ch, victim, weapon, MAX(0, staged_damage), burst);
   damage(ch, victim, damage_total, type, is_physical);
-
+  
   if (!IS_NPC(ch) && IS_NPC(victim)) {
     GET_LASTHIT(victim) = GET_IDNUM(ch);
   }
@@ -3559,7 +3695,7 @@ void ranged_response(struct char_data *ch, struct char_data *vict)
         nextroom = NOWHERE;
       for (distance = 1; !found && ((nextroom != NOWHERE) && (distance <= 4)); distance++) {
         for (temp = world[nextroom].people; !found && temp; temp = temp->next_in_room)
-          if (temp == ch && (distance > range || distance > sight)) {
+          if (temp == ch && (distance > range || distance > sight) && !(IS_NPC(vict) && MOB_FLAGGED(vict, MOB_SENTINEL))) {
             act("$n runs after $s distant attacker.", TRUE, vict, 0, 0, TO_ROOM);
             act("You charge after $N.", FALSE, vict, 0, ch, TO_CHAR);
             char_from_room(vict); 
