@@ -43,8 +43,8 @@ Bitfield::Bitfield(dword offset)
 // testing funcs
 // ______________________________
 
-#define BITFIELD_IDX offset / bits_per_var
-#define BITFIELD_FLAG offset % bits_per_var
+#define BITFIELD_IDX (offset / bits_per_var)
+#define BITFIELD_FLAG (offset % bits_per_var)
 bool Bitfield::IsSet(dword offset) const
 {
   return (data[BITFIELD_IDX] & (1 << BITFIELD_FLAG));

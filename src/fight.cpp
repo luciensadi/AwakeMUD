@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <math.h>
 #include <time.h>
+#include <queue>
 
 #include "structs.h"
 #include "awake.h"
@@ -2776,12 +2777,15 @@ void combat_message_process_ranged_response(struct char_data *ch, rnum_t rnum) {
   }
 }
 
+// Pick your favorite.
+#define COMBAT_MESSAGE_DEBUG_LOG(str) log(str);
+//#define COMBAT_MESSAGE_DEBUG_LOG(str) ;
 void combat_message(struct char_data *ch, struct char_data *victim, struct obj_data *weapon, int damage, int burst)
 {
   char buf[MAX_MESSAGE_LENGTH], buf1[MAX_MESSAGE_LENGTH], buf2[MAX_MESSAGE_LENGTH], buf3[MAX_MESSAGE_LENGTH],
        been_heard[MAX_STRING_LENGTH], temp[20];
   struct obj_data *obj = NULL;
-  rnum_t was_in = 0, room1 = 0, room2 = 0, room3 = 0, rnum = 0;
+  rnum_t was_in = 0, room1 = 0, room2 = 0, room3 = 0, rnum = 0, temp_room = 0;
 
   if (burst <= 1) {
     if (GET_OBJ_VAL(weapon, 4) == SKILL_SHOTGUNS || GET_OBJ_VAL(weapon, 4) == SKILL_ASSAULT_CANNON)
@@ -2868,91 +2872,67 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     return;
   
   was_in = ch->in_room;
- 
-  /* Make sure the sound doesn't 'echo' back */
-  /* Bracketing periods prevent edge case of room 11 not hearing gunshots if room 111 already heard them. */
   sprintf( been_heard, ".%ld.", ch->in_room );
   
+  // Initialize gunshot queue.
+  std::queue<rnum_t> room_queue;
+  std::queue<rnum_t> secondary_room_queue;
+  
+  // Scan the shooter's room's exits and add notifications to any valid adjacent rooms.
+  // 'Valid' is defined as 'exists and is not flagged as silent'.
   for (int door1 = 0; door1 < NUM_OF_DIRS; door1++) {
-    if (!(world[ch->in_room].dir_option[door1]) || world[ch->in_room].dir_option[door1]->to_room == NOWHERE)
-      continue;
-    
-    room1 = world[ch->in_room].dir_option[door1]->to_room;
-    // sprintf(buf2, "Ripple 1: Evaluating rnum %ld dictated by the %s exit from room %ld.", world[room1].number, fulldirs[door1], world[ch->in_room].number);
-    // log(buf2);
-    
-    if (room1 == was_in || world[room1].silence[0]) {
-      // log("1.. Skip.");
-      continue;
-    }
-     
-    for (int door2 = 0; door2 < NUM_OF_DIRS; door2++ ) {
-      if (!(world[room1].dir_option[door2]) || world[room1].dir_option[door2]->to_room == NOWHERE)
+    if (world[ch->in_room].dir_option[door1] && (room1 = world[ch->in_room].dir_option[door1]->to_room) != NOWHERE && !(world[room1].silence[0])) {
+      // If the room is in the heard-it-already list, skip to the next one.
+      sprintf(temp, ".%ld.", room1);
+      if (strstr(been_heard, temp) != 0)
         continue;
       
-      room2 = world[room1].dir_option[door2]->to_room;
-      //sprintf(buf2, "Ripple 2: Evaluating rnum %ld dictated by the %s exit from room %ld.", world[room2].number, fulldirs[door2], world[room1].number);
-      //log(buf2);
-      
-      if (room2 == room1 || room2 == was_in || world[room2].silence[0]) {
-        //log("2.. Skip.");
-        continue;
-      }
-
-      for (int door3 = 0; door3 < NUM_OF_DIRS; door3++ ) {
-        if (!(world[room2].dir_option[door3]) || world[room2].dir_option[door3]->to_room == NOWHERE)
-          continue;
-        
-        room3 = world[room2].dir_option[door3]->to_room;
-        //sprintf(buf2, "Ripple 3: Evaluating rnum %ld dictated by the %s exit from room %ld.", world[room3].number, fulldirs[door3], world[room2].number);
-        //log(buf2);
-        
-        if ( room3 == room2 || room3 == room2 ||room3 == was_in || world[room3].silence[0]) {
-          //log("3.. Skip.");
-          continue;
-        }
-          
-        sprintf( temp, ".%ld.", room3 );
-        if (!strstr(been_heard, temp)) {
-          // Send gunshot notifications to everyone in ripple radius 3.
-          send_to_room("You hear gunshots nearby!", room3);
-          
-          // Process guard and helper ranged responses.
-          combat_message_process_ranged_response(ch, room3);
-          
-          // Add this room to the temporary heard-it-already list.
-          strcat(been_heard, temp);
-        }
-      }
-      
-      sprintf( temp, ".%ld.", room2 );
-    
-      if (!strstr(been_heard, temp)) {
-        // Send gunshot notifications to everyone in ripple radius 2.
-        send_to_room("You hear gunshots not far off.", room2);
-        
-        // Process guard and helper ranged responses.
-        combat_message_process_ranged_response(ch, room2);
-        
-        // Add this room to the temporary heard-it-already list.
-        strcat(been_heard, temp);
-      }
-    }
-    
-    sprintf( temp, ".%ld.", room1 );
-    
-    if (!strstr(been_heard, temp)) {
-      // Send gunshot notifications to everyone in ripple radius 2.
-      send_to_room("You hear gunshots not far off.", room1);
-      
-      // Process guard and helper ranged responses.
+      // Send gunshot notifications to the selected room. Process guard/helper responses.
+      send_to_room("You hear gunshots nearby!", room1);
       combat_message_process_ranged_response(ch, room1);
-      
-      // Add this room to the temporary heard-it-already list.
       strcat(been_heard, temp);
+        
+      // Add the room's exits to the list.
+      for (int door2 = 0; door2 < NUM_OF_DIRS; door2++)
+        if (world[room1].dir_option[door2] && (room2 = world[room1].dir_option[door2]->to_room) != NOWHERE && !(world[room2].silence[0]))
+          room_queue.push(room2);
     }
   }
-  //log("Ripple eval complete.");
+  
+  // Scan the list of near-adjacent rooms and send messages to all non-heard ones. Add their exits to the secondary queue.
+  while (!room_queue.empty()) {
+    room1 = room_queue.front();
+    room_queue.pop();
+    
+    // If the room is in the heard-it-already list, skip to the next one.
+    sprintf(temp, ".%ld.", room1);
+    if (strstr(been_heard, temp) != 0)
+      continue;
+    
+    send_to_room("You hear gunshots not far off.", room1);
+    combat_message_process_ranged_response(ch, room1);
+    strcat(been_heard, temp);
+        
+    // Add the room's exits to the list.
+    for (int door = 0; door < NUM_OF_DIRS; door++)
+      if (world[room1].dir_option[door] && (room2 = world[room1].dir_option[door]->to_room) != NOWHERE && !(world[room2].silence[0]))
+        secondary_room_queue.push(room2);
+  }
+  
+  // Scan the list of distant rooms and message them as appropriate.
+  while (!secondary_room_queue.empty()) {
+    room1 = secondary_room_queue.front();
+    secondary_room_queue.pop();
+    
+    // If the room is in the heard-it-already list, skip to the next one.
+    sprintf(temp, ".%ld.", room1);
+    if (strstr(been_heard, temp) != 0)
+      continue;
+    
+    send_to_room("You hear gunshots in the distance.", room1);
+    combat_message_process_ranged_response(ch, room1);
+    strcat(been_heard, temp);
+  }
 }
 
 void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon, struct obj_data *vict_weapon)
