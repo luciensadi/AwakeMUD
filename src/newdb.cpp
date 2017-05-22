@@ -49,8 +49,10 @@ PCIndex playerDB;
 int mysql_wrapper(MYSQL *mysql, char *query)
 {
   char buf[MAX_STRING_LENGTH];
+#ifdef DEBUG
   sprintf(buf, "Executing query: %s", query);
   log(buf);
+#endif
   
   int result = mysql_query(mysql, query);
 
