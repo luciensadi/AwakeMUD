@@ -1,7 +1,9 @@
 		 ^bWelcome to AwakeMUD...
 ^R--------------------------------------------------------------
 
-        ^BWELCOME:^N To AwakeMUD 0.8.20 RELEASE
-					^R--^r<^WChe^r>^R--^n
+     ^WSELF-ADVANCE MODE IS ENABLED. You may advance yourself
+       up to Immortal Level 9 by entering ^YADVANCE SELF 9.^n
+
+     ^WPlease make good use of the BUG, TYPO, and IDEA commands!^n
 
 ^R--------------------------------------------------------------^N
