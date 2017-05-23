@@ -1,0 +1,9 @@
+Information about new features will be written into this changelog, as will information about major bugfixes. Minor bugfixes and related code-quality changes can be found in the commit log (git log).
+
+2017/5/22:
+- Rewrote gunshot sound propagation to be breadth-first instead of depth-first. Behavior is now much more reliable.
+- Modified mysql_wrapper to print the query to the console, but only if the DEBUG flag is enabled.
+
+2017/5/21:
+- Added $z parser flag, which shows the actor's desc, or prints their voice if you are unable to see them.
+- Refactored MUD to describe magazines as magazines instead of clips.
