@@ -1852,6 +1852,109 @@ ACMD(do_purge)
   }
 }
 
+ACMD(do_self_advance)
+{
+  struct char_data *victim;
+  char *name = arg, *level = buf2;
+  int newlevel, i;
+  void do_start(struct char_data *ch);
+  extern void check_autowiz(struct char_data * ch);
+  
+  two_arguments(argument, name, level);
+  
+  if (*name) {
+    if (!(victim = get_char_vis(ch, name))) {
+      send_to_char("That player is not here.\r\n", ch);
+      return;
+    }
+  } else {
+    send_to_char("Advance who?\r\n", ch);
+    return;
+  }
+  
+  if (GET_LEVEL(ch) <= GET_LEVEL(victim)
+      && ch != victim) {
+    send_to_char("Maybe that's not such a great idea.\r\n", ch);
+    return;
+  }
+  if (IS_NPC(victim)) {
+    send_to_char("NO!  Not on NPC's.\r\n", ch);
+    return;
+  }
+  if (!*level || (newlevel = atoi(level)) <= 0) {
+    send_to_char("That's not a level!\r\n", ch);
+    return;
+  }
+  // You can only advance to level 9 unless you're the President.
+  int max_ch_can_advance_to = GET_LEVEL(ch) < LVL_MAX ? LVL_MAX - 1 : LVL_MAX;
+  if (newlevel > max_ch_can_advance_to) {
+    sprintf(buf, "%d is the highest possible level you can advance someone to.\r\n", max_ch_can_advance_to);
+    send_to_char(buf, ch);
+    return;
+  }
+  /*
+  if (!access_level(ch, newlevel) ) {
+    send_to_char("Yeah, right.\r\n", ch);
+    return;
+  }
+  */
+  if (newlevel < GET_LEVEL(victim)) {
+    do_start(victim);
+    GET_LEVEL(victim) = newlevel;
+  } else {
+    act("$n makes some strange gestures.\r\n"
+        "A strange feeling comes upon you,\r\n"
+        "Like a giant hand, light comes down\r\n"
+        "from above, grabbing your body, that\r\n"
+        "begins to pulse with colored lights\r\n"
+        "from inside.\r\n\r\n"
+        "Your head seems to be filled with demons\r\n"
+        "from another plane as your body dissolves\r\n"
+        "to the elements of time and space itself.\r\n"
+        "Suddenly a silent explosion of light\r\n"
+        "snaps you back to reality.\r\n\r\n"
+        "You feel slightly different.", FALSE, ch, 0, victim, TO_VICT);
+  }
+  
+  send_to_char(OK, ch);
+  
+  sprintf(buf, "%s has advanced %s to %s (from %s)",
+          GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), status_ratings[newlevel],
+          status_ratings[(int)GET_LEVEL(victim)]);
+  GET_LEVEL(victim) = newlevel;
+  if (IS_SENATOR(victim)) {
+    for (i = 0; i < 3; i++)
+      GET_COND(victim, i) = (char) -1;
+    if (PLR_FLAGS(victim).IsSet(PLR_NEWBIE)) {
+      PLR_FLAGS(victim).RemoveBit(PLR_NEWBIE);
+      PLR_FLAGS(victim).RemoveBit(PLR_AUTH);
+    }
+    PRF_FLAGS(victim).SetBit(PRF_HOLYLIGHT);
+    PRF_FLAGS(victim).SetBit(PRF_CONNLOG);
+    PRF_FLAGS(victim).SetBit(PRF_ROOMFLAGS);
+    PRF_FLAGS(victim).SetBit(PRF_NOHASSLE);
+    PRF_FLAGS(victim).SetBit(PRF_AUTOINVIS);
+  }
+  
+  mudlog(buf, ch, LOG_WIZLOG, TRUE);
+  sprintf(buf, "SELECT * FROM pfiles_immortdata WHERE idnum=%ld;", GET_IDNUM(victim));
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+  if (!mysql_wrapper(mysql, buf)) {
+    res = mysql_use_result(mysql);
+    row = mysql_fetch_row(res);
+    if (!row && mysql_field_count(mysql)) {
+      mysql_free_result(res);
+      sprintf(buf, "INSERT INTO pfiles_immortdata (idnum) VALUES (%ld);", GET_IDNUM(victim));
+      mysql_wrapper(mysql, buf);
+    } else {
+      mysql_free_result(res);
+    }
+    sprintf(buf, "UPDATE pfiles SET rank=%d WHERE idnum=%ld;", GET_LEVEL(victim), GET_IDNUM(victim));
+    mysql_wrapper(mysql, buf);
+  }
+}
+
 ACMD(do_advance)
 {
   struct char_data *victim;

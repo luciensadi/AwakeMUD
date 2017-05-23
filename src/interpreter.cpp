@@ -255,6 +255,7 @@ ACMD(do_rig);
 ACMD(do_say);
 ACMD(do_scan);
 ACMD(do_score);
+ACMD(do_self_advance);
 ACMD(do_send);
 ACMD(do_set);
 ACMD(do_settime);
@@ -400,7 +401,12 @@ struct command_info cmd_info[] =
     { "assense"  , POS_LYING   , do_assense  , 0, 0 },
     { "at"       , POS_DEAD    , do_at       , LVL_BUILDER, 0, FREE },
     { "attach"   , POS_RESTING , do_attach   , 0, 0 },
+#ifdef SELFADVANCE
+    // Allows running an unattended test port where anyone can bump themselves up to level 9.
+    { "advance"  , POS_DEAD    , do_self_advance, 0, 0, FREE },
+#else
     { "advance"  , POS_DEAD    , do_advance  , LVL_PRESIDENT, 0, FREE },
+#endif
     { "alias"    , POS_DEAD    , do_alias    , 0, 0, FREE },
     { "accuse"   , POS_SITTING , do_action   , 0, 0, FREE },
     { "answer"   , POS_LYING   , do_phone    , 0, SCMD_ANSWER },
