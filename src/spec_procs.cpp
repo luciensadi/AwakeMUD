@@ -3034,7 +3034,7 @@ SPECIAL(newbie_car)
       return TRUE;
     }
     if (ch->in_veh) {
-      send_to_char("You cannot collect a vehilce while in another vehicle.\r\n", ch);
+      send_to_char("You cannot collect a vehicle while in another vehicle.\r\n", ch);
       return TRUE;
     }
     switch (GET_OBJ_VNUM(obj)) {
@@ -3064,7 +3064,7 @@ SPECIAL(newbie_car)
     veh->locked = TRUE;
     veh->owner = GET_IDNUM(ch);
     veh_to_room(veh, ch->in_room);
-    veh->idnum = number(0, 1000000);
+    veh->idnum = number(0, 1000000);  // TODO: why is this not unique
     veh->flags.SetBit(VFLAG_NEWBIE);
     sprintf(buf, "%s is wheeled out into the garage.\r\n", veh->short_description);
     send_to_room(buf, ch->in_room);
@@ -3084,7 +3084,7 @@ void Crash_rent_deadline(struct char_data * ch, struct char_data * recep,
     return;
   
   rent_deadline = ((GET_NUYEN(ch) + GET_BANK(ch)) / cost);
-  if (rent_deadline >= 10)
+  if (rent_deadline >= 50)
     sprintf(buf, "$n tells you, \"You can rent forever with the nuyen you have.\"");
   else
     sprintf(buf, "$n tells you, \"You can rent for %ld night%s with the nuyen you have.\r\n",

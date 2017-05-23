@@ -1710,6 +1710,9 @@ enum {
 #define SCMD_REFLECT	1
 #define SCMD_SDEFENSE	2
 
+/* do_crash_mud */
+#define SCMD_BOOM 1337
+
 /* END SUBCOMMANDS SECTION */
 
 #define FREE		0

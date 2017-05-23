@@ -119,6 +119,7 @@ ACMD(do_cook);
 ACMD(do_costtime);
 ACMD(do_cpool);
 ACMD(do_crack);
+ACMD(do_crash_mud);
 ACMD(do_create);
 ACMD(do_credits);
 ACMD(do_customize);
@@ -478,6 +479,8 @@ struct command_info cmd_info[] =
     { "cough"    , POS_LYING   , do_action   , 0, 0, FREE },
     { "cpool"    , POS_DEAD    , do_cpool    , 0, 0, FREE },
     { "crack"    , POS_RESTING , do_crack    , 0, 0, NOCOMBAT },
+    { "crashmu"  , POS_STANDING, do_crash_mud, LVL_PRESIDENT, 0, FREE },
+    { "crashmud" , POS_STANDING, do_crash_mud, LVL_PRESIDENT, SCMD_BOOM, FREE },
     { "create"   , POS_LYING   , do_create   , 0, 0, NOCOMBAT },
     { "credits"  , POS_DEAD    , do_gen_ps   , 0, SCMD_CREDITS, FREE },
     { "cringe"   , POS_LYING   , do_action   , 0, 0, FREE },
