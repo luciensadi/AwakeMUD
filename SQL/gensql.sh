@@ -3,8 +3,8 @@
 echo "This script will set up your MySQL DB with a localhost-only user and will install the AwakeMUD tables."
 
 DBHOST="localhost"
-DBNAME="tempdb"
-DBUSER="tempuser"
+DBNAME="AwakeMUD"
+DBUSER="AwakeMUD"
 DBPASS=`openssl rand -base64 32`
 
 echo "Testing for MySQL..."
