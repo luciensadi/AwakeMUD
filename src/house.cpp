@@ -33,7 +33,7 @@ ACMD(do_say);
 
 struct life_data
 {
-  char *name;
+  const char *name;
   sh_int cost;
 };
 

@@ -2355,7 +2355,7 @@ ACMD(do_dc)
 ACMD(do_wizlock)
 {
   int value;
-  char *when;
+  const char *when;
 
   one_argument(argument, arg);
   if (*arg) {

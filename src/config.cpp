@@ -4,10 +4,10 @@
 int max_exp_gain = 250; /* max gainable per kill */
 int max_npc_corpse_time = 3;
 int max_pc_corpse_time = 10;
-char *OK = "Okay.\r\n";
-char *NOPERSON = "You don't see that person here.\r\n";
-char *TOOBUSY = "You're too busy.\r\n";
-char *NOOBJECT = "You don't see that here.\r\n";
+const char *OK = "Okay.\r\n";
+const char *NOPERSON = "You don't see that person here.\r\n";
+const char *TOOBUSY = "You're too busy.\r\n";
+const char *NOOBJECT = "You don't see that here.\r\n";
 long newbie_start_room = 60500;
 //long mortal_start_room = 30700;
 long mortal_start_room = 35500;
@@ -23,7 +23,7 @@ int max_filesize = 50000;
 int max_bad_pws = 3;
 int nameserver_is_slow = FALSE;
 
-char *MENU =
+const char *MENU =
   "\r\n"
   "^YWelcome ^Cto ^BAwakened Worlds^n!\r\n"
   "^R0^n) Exit from ^BAwakened Worlds^n.\r\n"
@@ -34,7 +34,7 @@ char *MENU =
   "\r\n"
   "   Make your choice: ";
 
-char *QMENU =
+const char *QMENU =
   "\r\n"
   "Current options:\r\n"
   "^R0^n) Exit from ^BAwakened Worlds^n.\r\n"
@@ -42,7 +42,7 @@ char *QMENU =
   "\r\n"
   "   Make your choice: ";
 
-char *GREETINGS =
+const char *GREETINGS =
   "\r\n"
   "Administration Email: luciensadi@gmail.com\r\n"
   "The following mud is based on CircleMUD 3.0 by Jeremy Elson.  It is a\r\n"
@@ -71,12 +71,12 @@ char *GREETINGS =
   "\r\n"
   "Slot me some identification, chummer: ";
 
-char *WELC_MESSG =
+const char *WELC_MESSG =
   "\r\n"
   "Welcome to the future, 2064, the Sixth World to some, an Awakening to all.\r\n"
   "\r\n\r\n";
 
-char *START_MESSG =
+const char *START_MESSG =
   "Welcome to the future, 2064, where mankind has entered what the Mayans would\r\n"
   "call the Sixth World.  New races, magic, and technology all clash in what we\r\n"
   "call Awakened Worlds.  If you have never experienced this world before, typing\r\n"

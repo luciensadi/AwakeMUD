@@ -1185,7 +1185,7 @@ void perform_drop_gold(struct char_data * ch, int amount, byte mode, vnum_t RDR)
 #define VANISH(mode) ((mode == SCMD_DONATE || mode == SCMD_JUNK) ? "  It vanishes into a recycling bin!" : "")
 
 int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
-                 char *sname, vnum_t RDR)
+                 const char *sname, vnum_t RDR)
 {
   int value;
 
@@ -1298,7 +1298,7 @@ ACMD(do_drop)
   rnum_t RDR = 0;
   byte mode = SCMD_DROP;
   int dotmode, amount = 0;
-  char *sname;
+  const char *sname;
 
   switch (subcmd) {
   case SCMD_JUNK:
