@@ -95,8 +95,7 @@ ACMD(do_crash_mud) {
   sprintf(buf, "%s has chosen to crash the MUD on purpose. Hope there's a good reason!", GET_CHAR_NAME(ch));
   log(buf);
   
-  int bad_access_array[1];
-  bad_access_array[10] = 31337;
+  assert(1 == 0);
 #else
   send_to_char("Sorry, but you can only deliberately crash the MUD when it's running with the DEBUG flag enabled.", ch);
 #endif
