@@ -1185,8 +1185,6 @@ void look_at_room(struct char_data * ch, int ignore_brief)
 
 void look_in_direction(struct char_data * ch, int dir)
 {
-  bool found = FALSE;
-
   if (EXIT(ch, dir))
   {
     if (IS_SET(EXIT(ch, dir)->exit_info, EX_HIDDEN)) {
@@ -1195,7 +1193,7 @@ void look_in_direction(struct char_data * ch, int dir)
         return;
       } else {
         REMOVE_BIT(EXIT(ch, dir)->exit_info, EX_HIDDEN);
-        found = TRUE;
+        send_to_char("You discover an exit...\r\n", ch);
       }
     }
 
@@ -1204,15 +1202,24 @@ void look_in_direction(struct char_data * ch, int dir)
     else
       send_to_char("You see nothing special.\r\n", ch);
 
-    if (found)
-      send_to_char("You discover an exit...\r\n", ch);
-
     if (IS_SET(EXIT(ch, dir)->exit_info, EX_DESTROYED) && EXIT(ch, dir)->keyword)
       send_to_char(ch, "The %s is destroyed.\r\n", fname(EXIT(ch, dir)->keyword));
     else if (IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED) && EXIT(ch, dir)->keyword)
       send_to_char(ch, "The %s is closed.\r\n", fname(EXIT(ch, dir)->keyword));
     else if (IS_SET(EXIT(ch, dir)->exit_info, EX_ISDOOR) && EXIT(ch, dir)->keyword)
       send_to_char(ch, "The %s is open.\r\n", fname(EXIT(ch, dir)->keyword));
+    
+    if(ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)){
+      /* Apartments have peepholes. */
+      int original_loc = ch->in_room, targ_loc = EXIT(ch, dir)->to_room;
+      send_to_char("Through the peephole, you see:\r\n", ch);
+      
+      char_from_room(ch);
+      char_to_room(ch, targ_loc);
+      look_at_room(ch, 0);
+      char_from_room(ch);
+      char_to_room(ch, original_loc);
+    }
   } else
     send_to_char("You see nothing special.\r\n", ch);
 }
