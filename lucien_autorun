@@ -1,0 +1,73 @@
+#!/bin/bash
+#
+# CircleMUD 2.0 autorun script
+# Originally by Fred C. Merkel
+# Copyright (c) 1993 The Trustees of The Johns Hopkins University
+# All Rights Reserved
+# See license.doc for more information
+# Modifed by Christopher Dickey, Rift, Dunkelzahn, Demise, and Root.
+# (c)2001 The AwakeMUD Consortium
+# If .fastboot exists, the script will sleep for only 5 seconds between reboot
+# attempts.  If .killscript exists, the script commit suicide (and remove
+# .killscript).  If pause exists, the script will repeatedly sleep for
+# 60 seconds and will not restart the mud until pause is removed.
+
+# these sets are now nullified since we're starting awake from gdb alone now,
+# changes go in utils/gdbcmds
+
+while true; do
+  rm -f syslog.txt
+  touch syslog.txt
+
+  set DATE = $(date)
+  echo "autoscript starting game $DATE" >> syslog.txt
+
+  # Takes advantage of the config done in ~/.gdbinit (not replicated here).
+  gdb bin/awake |& tee syslog.txt
+  echo "" >> syslog.txt
+
+  tail -n 500 syslog.txt >> log/crashlog
+  echo "" >> log/crashlog
+
+  fgrep "self-delete" syslog.txt >> log/delete
+  fgrep "Running" syslog.txt >> log/restarts
+  fgrep "advanced" syslog.txt >> log/levels
+  fgrep "equipment lost" syslog.txt >> log/rentgone
+  fgrep "usage" syslog.txt >> log/usage
+  fgrep "CONNLOG" syslog.txt >> log/connlog
+  fgrep "MISCLOG" syslog.txt >> log/misclog
+  fgrep "SYSLOG" syslog.txt >> log/syslog
+  fgrep "WIZLOG" syslog.txt >> log/wizlog
+  fgrep "DEATHLOG" syslog.txt >> log/deathlog
+  fgrep "CHEATLOG" syslog.txt >> log/cheatlog
+  fgrep "Bad PW" syslog.txt >> log/badpws
+
+# here we mail the syslog to whoever the admin is so they know the
+# mud crashed (if it crashed at all)
+
+# These aren't needed as the mud runs in GDB now.
+#  mv -f lib/core.1 lib/core.2 >>& ~/awake.out
+#  mv -f lib/core lib/core.1 >>& ~/awake.out
+
+  rm log/syslog.6
+  mv log/syslog.5 log/syslog.6
+  mv log/syslog.4 log/syslog.5
+  mv log/syslog.3 log/syslog.4
+  mv log/syslog.2 log/syslog.3
+  mv log/syslog.1 log/syslog.2
+  mv syslog.txt   log/syslog.1
+  touch syslog.txt
+
+    sleep 5
+
+  if [ -e .killscript ]; then
+    set DATE = $(date)
+    echo "autoscript killed $DATE" >> syslog.txt
+    rm .killscript
+    exit
+  fi
+
+  while [ -e pause ]; do
+    sleep 10
+  done
+done

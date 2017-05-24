@@ -35,3 +35,7 @@ awake
 # OSX files
 .DS_Store
 
+# Demo MUD files
+gdb.txt
+syslog.txt
+log/
