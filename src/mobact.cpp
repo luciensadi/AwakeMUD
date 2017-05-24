@@ -185,33 +185,43 @@ void mobile_activity(void)
 
     /* Helper Mobs */
     if (!has_acted && MOB_FLAGGED(ch, MOB_HELPER)) {
-      for (vict = world[ch->in_room].people; vict; vict = vict->next_in_room)
+      for (vict = world[ch->in_room].people; vict; vict = vict->next_in_room) {
         if (ch != vict &&
-            IS_NPC(vict) &&
             FIGHTING(vict) &&
-            !IS_NPC(FIGHTING(vict)) &&
             ch != FIGHTING(vict) &&
             CAN_SEE(ch, FIGHTING(vict))) {
-          if (FIGHTING(vict)->in_room == ch->in_room) {
-            act("$n jumps to the aid of $N!",
-                FALSE, ch, 0, vict, TO_ROOM);
-            stop_fighting(ch);
-            
-            // Close-ranged response.
-            set_fighting(ch, FIGHTING(vict));
-          } else {
-            // Long-ranged response.
-            if (ranged_response(FIGHTING(vict), ch)) {
-              // TODO: This doesn't fire a message if the NPC is wielding a ranged weapon.
-              act("$n jumps to $N's aid against $S distant attacker!",
+          if (IS_NPC(vict) && !IS_NPC(FIGHTING(vict))) {
+            // An NPC in my area is being attacked by a player.
+            if (FIGHTING(vict)->in_room == ch->in_room) {
+              act("$n jumps to the aid of $N!",
                   FALSE, ch, 0, vict, TO_ROOM);
+              stop_fighting(ch);
+              
+              // Close-ranged response.
+              set_fighting(ch, FIGHTING(vict));
             } else {
+              // Long-ranged response.
+              if (ranged_response(FIGHTING(vict), ch)) {
+                // TODO: This doesn't fire a message if the NPC is wielding a ranged weapon.
+                act("$n jumps to $N's aid against $S distant attacker!",
+                    FALSE, ch, 0, vict, TO_ROOM);
+              }
             }
+            has_acted = TRUE;
+            break;
+          } else if (!IS_NPC(vict) && IS_NPC(FIGHTING(vict))) {
+            // A player in my area is attacking an NPC.
+            act("$n jumps to the aid of $N!", FALSE, ch, 0, FIGHTING(vict), TO_ROOM);
+            stop_fighting(ch);
+              
+            // Close-ranged response.
+            set_fighting(ch, vict);
+              
+            has_acted = TRUE;
+            break;
           }
-          
-          has_acted = TRUE;
-          break;
         }
+      }
     }
 
     if (!ch->in_veh)

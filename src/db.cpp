@@ -3474,6 +3474,7 @@ void clear_char(struct char_data * ch)
   ch->mob_specials.default_pos = POS_STANDING;
   if (ch->points.max_mental < 1000)
     ch->points.max_mental = 1000;
+  ch->player.time.logon = time(0);
 }
 
 /* Clear ALL the vars of an object; don't free up space though */

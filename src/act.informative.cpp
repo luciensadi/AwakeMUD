@@ -1927,8 +1927,7 @@ ACMD(do_score)
     sprintf(buf, "%s^b/^L/ ^nQuickness     ^w%2d (^W%2d^w)"
             "    Encumbrance: ^W%3.2f^w kilos carried, ^W%3d^w max ^L/^b/\r\n",
             buf, GET_REAL_QUI(ch), GET_QUI(ch), IS_CARRYING_W(ch) ,CAN_CARRY_W(ch));
-    playing_time = real_time_passed((time(0) - ch->player.time.logon) +
-                                    ch->player.time.played, 0);
+    playing_time = real_time_passed(time(0) + ch->player.time.played, ch->player.time.logon);
     sprintf(buf, "%s^L/^b/ ^nStrength      ^w%2d (^W%2d^w)"
             "    You have played for ^W%2d^w days, ^W%2d^w hours.   ^b/^L/\r\n",
             buf, GET_REAL_STR(ch), GET_STR(ch), playing_time.day, playing_time.hours);

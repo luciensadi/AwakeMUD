@@ -781,7 +781,6 @@ void sprint_obj_mods(struct obj_data *obj, char *result)
   return;
 }
 
-
 /* Calculate the REAL time passed over the last t2-t1 centuries (secs) */
 struct time_info_data real_time_passed(time_t t2, time_t t1)
 {
