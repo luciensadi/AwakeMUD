@@ -39,4 +39,5 @@ awake
 gdb.txt
 syslog.txt
 log/
+src/mysql_config.cpp
 mysql_config.cpp
