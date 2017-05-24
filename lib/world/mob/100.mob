@@ -27,7 +27,7 @@ AttackType:	Blast
 	Mag:	50
 [POINTS]
 	Height:	200
-	Weight:	500
+	Weight:	2
 	Level:	9
 	Ballistic:	50
 	Impact:	50
