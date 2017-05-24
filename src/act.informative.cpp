@@ -3384,3 +3384,8 @@ ACMD(do_mort_show)
   act("You show $p to $N.", TRUE, ch, obj, vict, TO_CHAR);
   show_obj_to_char(obj, vict, 5);
 }
+
+ACMD(do_tke){
+  sprintf(buf, "Your current TKE is %d.\r\n", GET_TKE(ch));
+  send_to_char(buf, ch);
+}

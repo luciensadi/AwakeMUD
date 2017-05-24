@@ -288,6 +288,7 @@ ACMD(do_think);
 ACMD(do_throw);
 ACMD(do_time);
 ACMD(do_title);
+ACMD(do_tke);
 ACMD(do_toggle);
 ACMD(do_tow);
 ACMD(do_track);
@@ -907,6 +908,7 @@ struct command_info cmd_info[] =
     { "tickle"   , POS_RESTING , do_action   , 0, 0 },
     { "time"     , POS_DEAD    , do_time     , 0, SCMD_NORMAL },
     { "tiptoe"   , POS_RESTING , do_action   , 0, 0 },
+    { "tke"      , POS_DEAD    , do_tke      , 0, 0 },
     { "toggle"   , POS_DEAD    , do_toggle   , 0, 0 },
     { "tongue"   , POS_LYING   , do_action   , 0, 0 },
     { "torture"  , POS_RESTING , do_action   , 0, 0 },
