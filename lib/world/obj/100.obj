@@ -45,8 +45,7 @@ Material:	metal
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
-	Val0:	50
-	Val1:	4
+	Val1:	1
 	Val3:	5
 	Val4:	11
 	Val5:	1000
@@ -101,5 +100,142 @@ Material:	paper
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+BREAK
+#10004
+Keywords:	testing armor
+Name:	a suit of testing armor
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	1000
+	Val2:	1000
+	Val3:	1000
+	Val4:	1000
+	Val5:	10000
+	Val6:	10000
+	Val7:	-1000
+BREAK
+#10005
+Keywords:	lsa dominator sniper rifle
+Name:	a LSA Dominator-class sniper rifle
+RoomDesc:$
+A chunky sniper rifle has been left here.~
+LookDesc:$
+Seemingly formed out of a solid block of matte-black alloy, this advanced
+sniper rifle uses a curious combination of an electronic firing system and
+self-guiding munitions to enable precision shooting even while on the move. 
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	1000000001101000001000
+AffFlags:	100000000010001000000000
+Material:	metal
+[POINTS]
+	Weight:	12.00
+	Barrier:	32
+	Cost:	10000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	100
+	LegalCode:	10
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val3:	12
+	Val4:	12
+	Val5:	1000000
+	Val6:	1
+	Val8:	10007
+	Val10:	4
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	-50
+[AFFECT 1]
+	Location:	Target Numbers
+	Modifier:	-50
+[AFFECT 2]
+	Location:	Target Numbers
+	Modifier:	-50
+[AFFECT 3]
+	Location:	Target Numbers
+	Modifier:	-50
+[AFFECT 4]
+	Location:	Target Numbers
+	Modifier:	-50
+[AFFECT 5]
+	Location:	Target Numbers
+	Modifier:	-50
+BREAK
+#10006
+Keywords:	lsa ammunition cell chunk black alloy strangely port
+Name:	an LSA ammunition cell
+RoomDesc:$
+A chunk of black alloy with a strangely-shaped port has been left here.~
+LookDesc:$
+A simple block of black alloy with an intricate port in the top. Etched along
+the side are the words, "Any sufficiently-advanced technology is
+indistinguishable from magic." 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	101000001000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000000
+	Val1:	12
+	Val2:	1
+BREAK
+#10007
+Keywords:	sleek rifle suppressor
+Name:	a sleek rifle suppressor
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	5
 BREAK
 END

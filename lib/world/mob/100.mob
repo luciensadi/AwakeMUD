@@ -34,4 +34,73 @@ AttackType:	Blast
 [SKILLS]
 	rifles:	50
 BREAK
+#10001
+Keywords:	responsive target dummy
+Name:	a responsive target dummy
+RoomDesc:$
+A responsive target dummy has been erected here, waiting to receive your
+punishment. 
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000010101000000000
+Race:	Undefined
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	2
+	Weight:	100
+	Ballistic:	500
+	Impact:	500
+[SKILLS]
+	rifles:	50
+BREAK
+#10002
+Keywords:	armed guard
+Name:	a heavily-armed guard
+RoomDesc:$
+A heavily-armed guard stands here, daring you to make his day. 
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	10000
+	Impact:	10000
+[SKILLS]
+	rifles:	50
+BREAK
 END
