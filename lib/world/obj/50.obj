@@ -1,0 +1,29 @@
+#5001
+Keywords:	object unfinished
+Name:	a rating 12 sorcery library
+RoomDesc:$
+A large collection of books and charts dedicated to sorcery fill the room.~
+LookDesc:$
+It's everything a hermetic mage could want for designing and learning spells,
+and much much more. Even a mundane could find something interesting to peruse
+in this collection. 
+~
+Type:	Magic Tool
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	55.00
+	Barrier:	4
+	Cost:	144000
+	AvailTN:	12
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	12
+BREAK
+END
