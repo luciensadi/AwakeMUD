@@ -1598,7 +1598,7 @@ ACMD(do_iload)
   one_argument(argument, buf2);
 
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -4066,7 +4066,7 @@ ACMD(do_zlist)
   two_arguments(argument, buf, buf1);
   
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -4199,7 +4199,7 @@ ACMD(do_zlist)
 ACMD(do_mlist)
 {
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -4244,7 +4244,7 @@ ACMD(do_mlist)
 ACMD(do_ilist)
 {
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -4292,7 +4292,7 @@ ACMD(do_ilist)
 ACMD(do_vlist)
 {
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -4335,7 +4335,7 @@ ACMD(do_vlist)
 ACMD(do_qlist)
 {
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -4381,7 +4381,7 @@ ACMD(do_qlist)
 ACMD(do_rlist)
 {
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -4427,7 +4427,7 @@ ACMD(do_rlist)
 ACMD(do_hlist)
 {
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -4473,7 +4473,7 @@ ACMD(do_hlist)
 ACMD(do_iclist)
 {
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -4519,7 +4519,7 @@ ACMD(do_iclist)
 ACMD(do_slist)
 {
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 

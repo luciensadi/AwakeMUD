@@ -39,10 +39,10 @@ the Johns Hopkins University * * CircleMUD is based on DikuMUD, Copyright (C) 19
 
 extern class memoryClass *Mem;
 
-extern char *MENU;
-extern char *QMENU;
-extern char *WELC_MESSG;
-extern char *START_MESSG;
+extern const char *MENU;
+extern const char *QMENU;
+extern const char *WELC_MESSG;
+extern const char *START_MESSG;
 extern int restrict;
 extern MYSQL *mysql;
 extern int mysql_wrapper(MYSQL *mysql, char *query);

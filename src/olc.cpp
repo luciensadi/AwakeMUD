@@ -26,6 +26,7 @@
 #include "handler.h"
 #include "constants.h"
 #include "newmatrix.h"
+#include "config.h"
 
 extern class objList ObjList;
 extern sh_int mortal_start_room;
@@ -146,7 +147,7 @@ ACMD (do_redit)
   int counter, found = 0;
 
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -286,7 +287,7 @@ ACMD (do_redit)
 ACMD(do_rclone)
 {
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -420,7 +421,7 @@ ACMD(do_dig)
   any_one_arg(any_one_arg(argument, arg), buf);
 
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -512,7 +513,7 @@ ACMD(do_rdelete)
   int num, counter, i, found = 0;
 
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -680,7 +681,7 @@ ACMD (do_vedit)
   struct veh_data *veh;
   int counter, found = 0;
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -813,7 +814,7 @@ ACMD (do_iedit)
   int counter, found = 0;
 
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -967,7 +968,7 @@ ACMD(do_iclone)
 {
 
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -1079,7 +1080,7 @@ ACMD(do_idelete)
 {
   int num, counter, i, found = 0;
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -1193,7 +1194,7 @@ ACMD(do_medit)
 
   // they must be flagged with olc to edit
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -1344,7 +1345,7 @@ ACMD(do_mclone)
 {
 
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -1445,7 +1446,7 @@ ACMD(do_mdelete)
   one_argument(argument, buf);
 
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -1566,7 +1567,7 @@ ACMD(do_qedit)
   struct quest_data *qst;
 
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -1691,7 +1692,7 @@ ACMD(do_shedit)
   struct descriptor_data *d;
 
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -1829,7 +1830,7 @@ ACMD(do_zswitch)
 
   // they must be flagged with olc to zswitch
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -1881,7 +1882,7 @@ ACMD(do_zedit)
 
   // they must be flagged with olc to edit
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -2021,7 +2022,7 @@ ACMD(do_hedit)
   int counter, found = 0;
   long host_num, number;
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 
@@ -2161,7 +2162,7 @@ ACMD(do_icedit)
   int counter, found = 0;
   long ic_num, number;
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
-    send_to_char("Privileged operation.\r\n", ch);
+    send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
 

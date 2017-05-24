@@ -247,10 +247,10 @@ extern int olc_state;
 #endif
 
 #ifndef __CONFIG_CC__
-extern char     *OK;
-extern char     *NOPERSON;
-extern char	*TOOBUSY;
-extern char	*NOOBJECT;
+extern const char *OK;
+extern const char *NOPERSON;
+extern const char	*TOOBUSY;
+extern const char	*NOOBJECT;
 #endif
 
 #endif

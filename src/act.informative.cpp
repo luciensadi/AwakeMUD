@@ -2274,7 +2274,6 @@ ACMD(do_help)
 
 ACMD(do_wizhelp)
 {
-  
   struct char_data *vict = NULL;
   int no, cmd_num;
   
