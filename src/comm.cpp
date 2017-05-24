@@ -444,7 +444,7 @@ int init_socket(int port)
 int get_max_players(void)
 {
   int max_descs = 0;
-  char *method;
+  const char *method;
   
   /*
    * First, we'll try using getrlimit/setrlimit.  This will probably work
@@ -2248,7 +2248,7 @@ void send_to_room(const char *messg, int room)
   }
 }
 
-char *ACTNULL = "<NULL>";
+const char *ACTNULL = "<NULL>";
 
 #define CHECK_NULL(pointer, expression)  if ((pointer) == NULL) i = ACTNULL; else i = (expression);
 

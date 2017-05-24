@@ -57,7 +57,7 @@ extern MYSQL *mysql;
 
 /* blood stuff */
 
-char* blood_messages[] = {
+const char* blood_messages[] = {
                            "If you see this, alert an immort.\r\n", /* 0 */
                            "^rThere is a little blood here.\r\n",
                            "^rYou are standing in a pool of blood.\r\n",

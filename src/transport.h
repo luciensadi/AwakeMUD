@@ -27,7 +27,7 @@
 
 struct dest_data
 {
-  char *keyword, *str;
+  const char *keyword, *str;
   vnum_t vnum;
 };
 

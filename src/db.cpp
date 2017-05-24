@@ -178,7 +178,7 @@ int file_to_string_alloc(char *name, char **buf);
 void check_start_rooms(void);
 void renum_world(void);
 void renum_zone_table(void);
-void log_zone_error(int zone, int cmd_no, char *message);
+void log_zone_error(int zone, int cmd_no, const char *message);
 void reset_time(void);
 void clear_char(struct char_data * ch);
 void kill_ems(char *);
@@ -2593,7 +2593,7 @@ void zone_update(void)
   }
 }
 
-void log_zone_error(int zone, int cmd_no, char *message)
+void log_zone_error(int zone, int cmd_no, const char *message)
 {
   char buf[256];
 

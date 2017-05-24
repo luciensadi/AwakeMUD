@@ -3176,7 +3176,7 @@ int gen_receptionist(struct char_data * ch, struct char_data * recep,
 {
   int cost = 0;
   vnum_t save_room;
-  char *action_table[] = {"smile", "dance", "sigh", "blush", "burp", "cough",
+  const char *action_table[] = {"smile", "dance", "sigh", "blush", "burp", "cough",
     "fart", "twiddle", "yawn"};
   ACMD(do_say);
   ACMD(do_action);

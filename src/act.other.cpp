@@ -761,7 +761,8 @@ ACMD(do_display)
 ACMD(do_gen_write)
 {
   FILE *fl;
-  char *tmp, *filename;
+  char *tmp;
+  const char *filename;
   struct stat fbuf;
   extern int max_filesize;
   time_t ct;
