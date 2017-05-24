@@ -354,6 +354,8 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define CHAR_Y(ch)		((ch)->char_specials.coord[1])
 #define CHAR_Z(ch)		((ch)->char_specials.coord[2])
 
+#define SHOOTING_DIR(ch)        ((ch)->char_specials.shooting_dir)
+
 #define GET_LANGUAGE(ch)      ((ch)->char_specials.saved.cur_lang)
 #define GET_NUM_FIGHTING(ch)  ((ch)->char_specials.fightList.NumItems())
 #define GET_NUM_ATTACKING(ch) ((ch)->char_specials.defendList.NumItems())

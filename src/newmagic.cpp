@@ -3775,7 +3775,7 @@ bool init_cost(struct char_data *ch, bool spend)
   int karmacost = (GET_GRADE(ch) + 6) * 300;
   long nuyencost = MIN(825000, (25000 + (25000 * 1<<GET_GRADE(ch)))), tke = 0;
   if (karmacost > GET_KARMA(ch)) {
-    send_to_char("You do not have enough karma to initiate\n\r", ch);
+    send_to_char("You do not have enough karma to initiate.\n\r", ch);
     return FALSE;
   }
   if (nuyencost > GET_NUYEN(ch)) {

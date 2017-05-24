@@ -405,6 +405,7 @@ struct char_special_data
   int tempquiloss;
   int cost_breakup;
   int avail_offset;
+  int shooting_dir;
 
   byte position;               /* Standing, fighting, sleeping, etc.   */
   char *defined_position;
