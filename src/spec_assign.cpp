@@ -370,14 +370,13 @@ void assign_mobiles(void)
   ASSIGNMOB(60526, postmaster);
 
   /* Various Tacoma */
-/*
   ASSIGNMOB(1823, aegnor);
   ASSIGNMOB(1832, fixer);
   ASSIGNMOB(1833, purple_haze_bartender);
   ASSIGNMOB(1900, postmaster);
   ASSIGNMOB(1902, receptionist);
   ASSIGNMOB(1916, generic_guard);
-*/
+  
   /* Tacoma */
   ASSIGNMOB(2013, generic_guard);
   ASSIGNMOB(2020, hacker);
@@ -514,18 +513,17 @@ void assign_objects(void)
   ASSIGNOBJ(1124, desktop);
   ASSIGNOBJ(1125, desktop);
   ASSIGNOBJ(1126, desktop);
-/*ASSIGNOBJ(1845, desktop);
+  ASSIGNOBJ(1845, desktop);
   ASSIGNOBJ(1846, desktop);
   ASSIGNOBJ(1847, desktop);
   ASSIGNOBJ(1848, desktop);
   ASSIGNOBJ(1904, clock);  // clock
-  ASSIGNOBJ(1946, bank);  // atm
+  ASSIGNOBJ(1946, bank);  /*// atm
   ASSIGNOBJ(2104, gen_board);     // mortal board
   ASSIGNOBJ(2106, gen_board);      // immortal board
   ASSIGNOBJ(2107, gen_board);      // freeze board
   ASSIGNOBJ(2108, bank);         // atm
   ASSIGNOBJ(2506, anticoagulant);
-  ASSIGNOBJ(42130, anticoagulant);
   ASSIGNOBJ(3012, vendtix);
   ASSIGNOBJ(4006, clock);
   ASSIGNOBJ(4216, clock);
@@ -537,6 +535,7 @@ void assign_objects(void)
   ASSIGNOBJ(9329, vending_machine);*/
   ASSIGNOBJ(10011, desktop);
   ASSIGNOBJ(10108, vending_machine);
+  ASSIGNOBJ(42130, anticoagulant);
 /*ASSIGNOBJ(9406, hand_held_scanner);
   ASSIGNOBJ(29997, gen_board);  // Loki's Board
   ASSIGNOBJ(22445, bank);

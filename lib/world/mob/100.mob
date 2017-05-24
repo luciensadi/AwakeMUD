@@ -136,4 +136,36 @@ DefaultPos:	Standing
 	Impact:	10000
 [SKILLS]
 BREAK
+#10005
+Keywords:	passive target dummy
+Name:	a passive target dummy
+RoomDesc:$
+A passive target dummy has been erected here. 
+
+~
+LookDesc:$
+Perfect for shooting. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000000000000001010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+BREAK
 END

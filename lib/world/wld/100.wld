@@ -5,7 +5,7 @@ Desc:$
 of this well-outfitted laboratory. The floor, a freshly-waxed tile, gives off
 the faintest scent of lemon, offsetting the otherwise-sterile atmosphere. 
 ~
-Flags:	10000000000000011000
+Flags:	10000000000000001000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -20,7 +20,7 @@ RoomType:	9
 	Light:	0
 	Smoke:	0
 	Background:	0
-	BackgroundType:	0
+	BackgroundType:	15
 [EXIT north]
 	Keywords:	door armored firing range
 	Desc:$
@@ -72,10 +72,13 @@ RoomType:	0
 	Background:	0
 	BackgroundType:	15
 [EXIT east]
+	Desc:$
+A partition stands here, blocking fire. 
+~
 	ToVnum:	10002
-	Flags:	0
-	Material:	brick
-	Barrier:	4
+	Flags:	1
+	Material:	metal
+	Barrier:	32
 	KeyVnum:	0
 [EXIT south]
 	Keywords:	door armored
@@ -90,6 +93,12 @@ Laboratory.'
 	Barrier:	32
 	KeyVnum:	0
 	LockRating:	50
+[EXIT west]
+	ToVnum:	10014
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 BREAK
 #10002
 Name:	^W(^cIMMHQ^W)^C A Guarded Target
@@ -114,10 +123,14 @@ RoomType:	0
 	Background:	0
 	BackgroundType:	15
 [EXIT west]
+	Keywords:	partition door
+	Desc:$
+A partition stands here, blocking fire. 
+~
 	ToVnum:	10001
-	Flags:	0
-	Material:	brick
-	Barrier:	4
+	Flags:	1
+	Material:	metal
+	Barrier:	32
 	KeyVnum:	0
 BREAK
 #10003
@@ -566,6 +579,136 @@ RoomType:	0
 	BackgroundType:	0
 [EXIT east]
 	ToVnum:	10000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10014
+Name:	^W(^cIMMHQ^W)^C A Close-Range Target
+Desc:$
+   The firing range stretches westward, with the shooting stands to the east.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	10001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10015
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10015
+Name:	^W(^cIMMHQ^W)^C A Mid-Range Target
+Desc:$
+   The firing range stretches westward, with the shooting stands to the east.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	10014
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10016
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10016
+Name:	^W(^cIMMHQ^W)^C A Long-Range Target
+Desc:$
+   The firing range stretches westward, with the shooting stands to the east.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	10015
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10017
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10017
+Name:	^W(^cIMMHQ^W)^C An Extreme-Range Target
+Desc:$
+   The firing range stretches westward, with the shooting stands to the east.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	10016
 	Flags:	0
 	Material:	brick
 	Barrier:	4

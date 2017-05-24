@@ -1015,8 +1015,11 @@ ACMD(do_gen_door)
 
     if ((obj) || (door >= 0)) {
       keynum = DOOR_KEY(ch, obj, door);
-      if (!(DOOR_IS_OPENABLE(ch, obj, door)))
-        act("You can't $F that!", FALSE, ch, 0, &(cmd_door[subcmd]), TO_CHAR);
+      if (!(DOOR_IS_OPENABLE(ch, obj, door))) {
+        char temp[50];
+        sprintf(temp, "You can't %s that!", cmd_door[subcmd]);
+        act(temp, FALSE, ch, 0, 0, TO_CHAR);
+      }
       else if (!DOOR_IS_OPEN(ch, obj, door) && IS_SET(flags_door[subcmd], NEED_OPEN))
         send_to_char("But it's already closed!\r\n", ch);
       else if (!DOOR_IS_CLOSED(ch, obj, door) && IS_SET(flags_door[subcmd], NEED_CLOSED))
