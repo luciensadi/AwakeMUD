@@ -2841,15 +2841,15 @@ void combat_message_process_ranged_response(struct char_data *ch, rnum_t rnum) {
       GET_MOBALERT(tch) = MALERT_ALERT;
       
       // Guards and helpers will actively try to fire on a player using a gun.
-      if (!IS_NPC(ch)
+      if (!IS_NPC(ch) && FIGHTING(ch)
           && (MOB_FLAGGED(tch, MOB_GUARD) || MOB_FLAGGED(tch, MOB_HELPER))
-          && (!(FIGHTING(tch) || FIGHTING_VEH(tch)))
-          && !(FIGHTING(ch) && IS_NPC(FIGHTING(ch)) && MOB_FLAGGED(FIGHTING(ch), MOB_INANIMATE))) {
+          && !(FIGHTING(tch) || FIGHTING_VEH(tch))
+          && !(IS_NPC(FIGHTING(ch)) && MOB_FLAGGED(FIGHTING(ch), MOB_INANIMATE))) {
         if (number(0, 6) >= 2) {
           GET_MOBALERT(tch) = MALERT_ALARM;
           rnum_t was_in = tch->in_room;
           if (ranged_response(ch, tch) && tch->in_room == was_in) {
-            act("$n levels $s weapon at a distant threat!",
+            act("$n aims $s weapon at a distant threat!",
                 FALSE, tch, 0, ch, TO_ROOM);
           }
         }

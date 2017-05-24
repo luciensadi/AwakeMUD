@@ -525,7 +525,7 @@ void init_char_sql(struct char_data *ch)
                GET_CHAR_NAME(ch), GET_PASSWD(ch), GET_RACE(ch), GET_SEX(ch), MAX(1, GET_LEVEL(ch)),
                prepare_quotes(buf2, ch->player.physical_text.room_desc), GET_KEYWORDS(ch), GET_NAME(ch), GET_WHOTITLE(ch),
                GET_HEIGHT(ch), GET_WEIGHT(ch), ch->player.host, GET_TRADITION(ch), ch->player.time.birth, "A blank slate.",
-               "A nondescript person.", "A nondescript entity.", "A nondescript entity.");
+               "A nondescript person.\r\n", "A nondescript entity.\r\n", "A nondescript entity.\r\n");
   mysql_wrapper(mysql, buf);
   if (PLR_FLAGGED(ch, PLR_AUTH)) {
     sprintf(buf, "INSERT INTO pfiles_chargendata (idnum, AttPoints, SkillPoints, ForcePoints) VALUES"\

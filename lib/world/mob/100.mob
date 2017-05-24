@@ -137,16 +137,112 @@ DefaultPos:	Standing
 [SKILLS]
 BREAK
 #10005
-Keywords:	passive target dummy
-Name:	a passive target dummy
+Keywords:	close passive target dummy
+Name:	a close-range passive target dummy
 RoomDesc:$
-A passive target dummy has been erected here. 
+A close-range passive target dummy has been erected here. 
+
+~
+LookDesc:$
+Perfect for shooting. 
+~
+ArriveMsg:	
+LeaveMsg:	leaves
+MobFlags:	100000000000000000000000000001010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+BREAK
+#10006
+Keywords:	medium-range passive target dummy
+Name:	a medium-range passive target dummy
+RoomDesc:$
+A medium-range passive target dummy has been erected here. 
 
 ~
 LookDesc:$
 Perfect for shooting. 
 ~
 ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000000000000001010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+BREAK
+#10007
+Keywords:	long-range passive target dummy
+Name:	a long-range passive target dummy
+RoomDesc:$
+A long-range passive target dummy has been erected here. 
+
+~
+LookDesc:$
+Perfect for shooting. 
+~
+ArriveMsg:	
+LeaveMsg:	leaves
+MobFlags:	100000000000000000000000000001010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+BREAK
+#10008
+Keywords:	extreme-range passive target dummy
+Name:	an extreme-range passive target dummy
+RoomDesc:$
+An extreme-range passive target dummy has been erected here. 
+
+~
+LookDesc:$
+Perfect for shooting. 
+~
+ArriveMsg:	
 LeaveMsg:	leaves
 MobFlags:	100000000000000000000000000001010
 AffFlags:	0
