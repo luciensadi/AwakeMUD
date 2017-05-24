@@ -2274,6 +2274,36 @@ ACMD(do_help)
 
 ACMD(do_wizhelp)
 {
+  
+  struct char_data *vict = NULL;
+  int no, cmd_num;
+  
+  if (!ch->desc)
+    return;
+  
+  skip_spaces(&argument);
+  
+  if (!*argument || ((vict = get_char_vis(ch, argument)) && !IS_NPC(vict) &&
+                     access_level(vict, LVL_BUILDER))) {
+    if (!vict)
+      vict = ch;
+    sprintf(buf, "The following privileged commands are available to %s:\r\n",
+            vict == ch ? "you" : GET_CHAR_NAME(vict));
+    
+    /* cmd_num starts at 1, not 0, to remove 'RESERVED' */
+    for (no = 1, cmd_num = 1; *cmd_info[cmd_num].command != '\n'; cmd_num++)
+      if (cmd_info[cmd_num].minimum_level >= LVL_BUILDER
+          && GET_LEVEL(vict) >= cmd_info[cmd_num].minimum_level) {
+        sprintf(buf + strlen(buf), "%-13s", cmd_info[cmd_num].command);
+        if (!(no % 6))
+          strcat(buf, "\r\n");
+        no++;
+      }
+    strcat(buf, "\r\n");
+    send_to_char(buf, ch);
+    return;
+  } 
+
 return;
 /*
   struct char_data *vict = NULL;
