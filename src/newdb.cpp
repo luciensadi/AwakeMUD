@@ -416,7 +416,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
 
   ch->player.time.lastdisc = atol(row[64]);
   ch->player.time.birth = atol(row[65]);
-  ch->player.time.played = atoi(row[66]);
+  ch->player.time.played = atol(row[66]);
   GET_COND(ch, FULL) = atoi(row[67]);
   GET_COND(ch, THIRST) = atoi(row[68]);
   GET_COND(ch, DRUNK) = atoi(row[69]);
