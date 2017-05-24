@@ -22,11 +22,18 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
+	Keywords:	door armored firing range
+	Desc:$
+Thick and sturdy, this hardened steel door is designed to stop rounds from
+even the strongest weapon. Embossed in the metal are the words 'To Firing
+Range.'  
+~
 	ToVnum:	10001
-	Flags:	0
-	Material:	brick
-	Barrier:	4
+	Flags:	2
+	Material:	metal
+	Barrier:	32
 	KeyVnum:	0
+	LockRating:	50
 BREAK
 #10001
 Name:	The Firing Range
@@ -51,7 +58,7 @@ RoomType:	0
 	Light:	0
 	Smoke:	0
 	Background:	0
-	BackgroundType:	0
+	BackgroundType:	15
 [EXIT east]
 	ToVnum:	10002
 	Flags:	0
@@ -59,11 +66,18 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
+	Keywords:	door armored
+	Desc:$
+Thick and sturdy, this hardened steel door is designed to stop rounds from
+even the strongest weapon. Embossed in the metal are the words 'To
+Laboratory.'  
+~
 	ToVnum:	10000
-	Flags:	0
-	Material:	brick
-	Barrier:	4
+	Flags:	2
+	Material:	metal
+	Barrier:	32
 	KeyVnum:	0
+	LockRating:	50
 BREAK
 #10002
 Name:	A Guarded Target
@@ -86,7 +100,7 @@ RoomType:	0
 	Light:	0
 	Smoke:	0
 	Background:	0
-	BackgroundType:	0
+	BackgroundType:	15
 [EXIT west]
 	ToVnum:	10001
 	Flags:	0

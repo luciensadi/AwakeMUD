@@ -1,0 +1,34 @@
+#5001
+Keywords:	bella bunny rabbit
+Name:	Bella
+RoomDesc:$
+A gray-white bunny with floppy ears hops around here. 
+
+~
+LookDesc:$
+Such a cute little creature. Your heart melts. 
+~
+ArriveMsg:	scampers in from the
+LeaveMsg:	scampers off
+MobFlags:	1000
+AffFlags:	0
+Race:	Undef
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	10
+	Weight:	2
+	Ballistic:	50
+	Impact:	50
+[SKILLS]
+BREAK
+END
