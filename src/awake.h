@@ -773,6 +773,7 @@ enum {
 #define SKILL_LATIN		  90
 #define SKILL_GAELIC              91
 #define SKILL_FRENCH	          92
+// Also see SKILL_SIGN_LANGUAGE and the other language additions below.
 
 #define SKILL_ANIMAL_HANDLING     93
 #define SKILL_ANIMAL_TAMING       94
@@ -814,7 +815,12 @@ enum {
 #define SKILL_BRACERGUN           130
 #define SKILL_BLOWGUN             131
 #define SKILL_PHARMA              132
-#define MAX_SKILLS		  133
+
+// TODO: Not yet implemented.
+#define SKILL_SIGN_LANGUAGE       133
+#define SKILL_IMMORTAL_LANGUAGE   134
+
+#define MAX_SKILLS		  135
 
 #define ADEPT_PERCEPTION	1
 #define ADEPT_COMBAT_SENSE	2
