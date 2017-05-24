@@ -2846,7 +2846,8 @@ void combat_message_process_ranged_response(struct char_data *ch, rnum_t rnum) {
           && (!(FIGHTING(tch) || FIGHTING_VEH(tch)))){
         if (number(0, 6) >= 2) {
           GET_MOBALERT(tch) = MALERT_ALARM;
-          if (ranged_response(ch, tch)) {
+          rnum_t was_in = tch->in_room;
+          if (ranged_response(ch, tch) && tch->in_room == was_in) {
             act("$n levels $s weapon at a distant threat!",
                 FALSE, tch, 0, ch, TO_ROOM);
           }
@@ -3793,7 +3794,7 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
         for (temp = world[nextroom].people; !is_responding && temp; temp = temp->next_in_room) {
           if (temp == ch && (distance > range || distance > sight) && !(IS_NPC(vict) && MOB_FLAGGED(vict, MOB_SENTINEL))) {
             is_responding = TRUE;
-            act("$n runs after $s distant attacker.", TRUE, vict, 0, 0, TO_ROOM);
+            act("$n charges towards $s distant foe.", TRUE, vict, 0, 0, TO_ROOM);
             act("You charge after $N.", FALSE, vict, 0, ch, TO_CHAR);
             char_from_room(vict);
             char_to_room(vict, EXIT2(room, dir)->to_room);
@@ -3810,12 +3811,13 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
           nextroom = NOWHERE;
       }
     }
+    is_responding = TRUE;
     set_fighting(vict, ch);
   } else if (!(IS_NPC(vict) && MOB_FLAGGED(vict, MOB_SENTINEL))) {
     for (dir = 0; dir < NUM_OF_DIRS && !is_responding; dir++) {
       if (CAN_GO2(vict->in_room, dir) && EXIT2(vict->in_room, dir)->to_room == ch->in_room) {
         is_responding = TRUE;
-        act("$n runs after $s distant attacker.", TRUE, vict, 0, 0, TO_ROOM);
+        act("$n charges towards $s distant foe.", TRUE, vict, 0, 0, TO_ROOM);
         act("You charge after $N.", FALSE, vict, 0, ch, TO_CHAR);
         char_from_room(vict);
         char_to_room(vict, ch->in_room);
