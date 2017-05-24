@@ -27,7 +27,7 @@ AttackType:	Blast
 	Mag:	50
 [POINTS]
 	Height:	200
-	Weight:	2
+	Weight:	4
 	Level:	9
 	Ballistic:	50
 	Impact:	50
@@ -102,5 +102,38 @@ AttackType:	Rifle
 	Impact:	10000
 [SKILLS]
 	rifles:	50
+BREAK
+#10004
+Keywords:	receptionist
+Name:	the Shamanic receptionist
+RoomDesc:$
+A receptionist is seated here, waiting to assist you in renting a lodge. 
+
+~
+LookDesc:$
+Fairly nondescript. Floating above her in ethereal silver light are the words,
+"Please do not harass the receptionist." 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101110000000011010
+AffFlags:	10001000001000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	10000
+	Impact:	10000
+[SKILLS]
 BREAK
 END

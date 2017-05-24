@@ -1,5 +1,5 @@
 #10000
-Name:	The Testing Laboratory
+Name:	^W(^cIMMHQ^W)^C A Grand Laboratory
 Desc:$
    Pristine polymer countertops and gleaming metal fume hoods line the walls
 of this well-outfitted laboratory. The floor, a freshly-waxed tile, gives off
@@ -34,9 +34,21 @@ Range.'
 	Barrier:	32
 	KeyVnum:	0
 	LockRating:	50
+[EXIT east]
+	ToVnum:	10004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10013
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 BREAK
 #10001
-Name:	The Firing Range
+Name:	^W(^cIMMHQ^W)^C A Firing Range
 Desc:$
    Long, open lanes stretch to the west, solidly-built targets standing at
 various distances along them to challenge even the most skilled shooter. To
@@ -80,7 +92,7 @@ Laboratory.'
 	LockRating:	50
 BREAK
 #10002
-Name:	A Guarded Target
+Name:	^W(^cIMMHQ^W)^C A Guarded Target
 Desc:$
    A target dominates the center of this firing lane, flanked by two armed
 guards whose sole purpose is to return fire. 
@@ -103,6 +115,457 @@ RoomType:	0
 	BackgroundType:	15
 [EXIT west]
 	ToVnum:	10001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10003
+Name:	^W(^cIMMHQ^W)^C Amongst the Hermetic Tomes
+Desc:$
+   Away from the open spaces of the main reading room, you find yourself in an
+area of comfortable silence. Motes of dust drift languidly through the air
+here, glimmering in the warm light of the incandescent bulbs above. The great
+mahogany shelves that line these aisles seem to deal exclusively with the
+Hermetic tradition. 
+~
+Flags:	100000000010000000000000011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	13
+[EXIT south]
+	ToVnum:	10004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10004
+Name:	^W(^cIMMHQ^W)^C The Central Library
+Desc:$
+   Absolutely packed with dusty tomes, this magical library seems to hold
+every secret in the world-- if only you had the time to find them. Between the
+large oaken reading tables stands a white marble pedestal, upon which sits a
+pristine copy of Richard Bartle's "Designing Virtual Worlds."   
+~
+Flags:	10000000000000011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10005
+	Flags:	0
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10005
+Name:	^W(^cIMMHQ^W)^C A Hallway of Shamanic Lodges
+Desc:$
+   Eschewing the stacks of printed materials that entrance the Hermetic mages
+to the north, this rotunda is instead devoted to paintings and sculptures of
+the aspects of various Shamanic totems. Nestled amongst the iconography are
+doors, each leading to a reserveable room to build your Shamanic lodge in. 
+~
+Flags:	10000010000000011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	13
+[EXIT north]
+	Keywords:	door wooden simple
+	Desc:$
+A simple wooden door has been installed here. 
+~
+	ToVnum:	10004
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	10010
+	LockRating:	1
+[EXIT northeast]
+	Keywords:	door wooden simple
+	Desc:$
+A simple wooden door has been installed here. 
+~
+	ToVnum:	10006
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	10010
+	LockRating:	1
+[EXIT east]
+	Keywords:	door wooden simple
+	Desc:$
+A simple wooden door has been installed here. 
+~
+	ToVnum:	10007
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	10010
+	LockRating:	1
+[EXIT southeast]
+	Keywords:	door wooden simple
+	Desc:$
+A simple wooden door has been installed here. 
+~
+	ToVnum:	10008
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	10010
+	LockRating:	1
+[EXIT south]
+	Keywords:	door wooden simple
+	Desc:$
+A simple wooden door has been installed here. 
+~
+	ToVnum:	10009
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	10010
+	LockRating:	1
+[EXIT southwest]
+	Keywords:	door wooden simple
+	Desc:$
+A simple wooden door has been installed here. 
+~
+	ToVnum:	10010
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	10010
+	LockRating:	1
+[EXIT west]
+	Keywords:	door wooden simple
+	Desc:$
+A simple wooden door has been installed here. 
+~
+	ToVnum:	10011
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	10010
+	LockRating:	1
+[EXIT northwest]
+	Keywords:	door wooden simple
+	Desc:$
+A simple wooden door has been installed here. 
+~
+	ToVnum:	10012
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	10010
+	LockRating:	1
+BREAK
+#10006
+Name:	^W(^cIMMHQ^W)^C A Quiet Room
+Desc:$
+   Sparsely-decorated, this room awaits its owner's personalizing touch. 
+~
+Flags:	100000000010000000000000011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	13
+[EXIT southwest]
+	Keywords:	door wooden simple
+	Desc:$
+A simple wooden door has been installed here. 
+~
+	ToVnum:	10005
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	10010
+	LockRating:	1
+BREAK
+#10007
+Name:	^W(^cIMMHQ^W)^C A Quiet Room
+Desc:$
+   Sparsely-decorated, this room awaits its owner's personalizing touch. 
+~
+Flags:	100000000010000000000000011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	13
+[EXIT west]
+	Keywords:	door wooden simple
+	Desc:$
+A simple wooden door has been installed here. 
+~
+	ToVnum:	10005
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	10010
+	LockRating:	1
+BREAK
+#10008
+Name:	^W(^cIMMHQ^W)^C A Quiet Room
+Desc:$
+   Sparsely-decorated, this room awaits its owner's personalizing touch. 
+~
+Flags:	100000000010000000000000011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	13
+[EXIT northwest]
+	Keywords:	door wooden simple
+	Desc:$
+A simple wooden door has been installed here. 
+~
+	ToVnum:	10005
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	10010
+	LockRating:	1
+BREAK
+#10009
+Name:	^W(^cIMMHQ^W)^C A Quiet Room
+Desc:$
+   Sparsely-decorated, this room awaits its owner's personalizing touch. 
+~
+Flags:	100000000010000000000000011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	13
+[EXIT north]
+	Keywords:	door wooden simple
+	Desc:$
+A simple wooden door has been installed here. 
+~
+	ToVnum:	10005
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	10010
+	LockRating:	1
+BREAK
+#10010
+Name:	^W(^cIMMHQ^W)^C A Quiet Room
+Desc:$
+   Sparsely-decoraed, this room awaits its owner's personalizing touch. 
+~
+Flags:	100000000010000000100000011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	13
+[EXIT northeast]
+	Keywords:	door wooden simple
+	Desc:$
+A simple wooden door has been installed here. 
+~
+	ToVnum:	10005
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	10010
+	LockRating:	1
+BREAK
+#10011
+Name:	^W(^cIMMHQ^W)^C A Quiet Room
+Desc:$
+   Sparsely-decorated, this room awaits its owner's personalizing touch. 
+~
+Flags:	100000000010000000000000011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	13
+[EXIT east]
+	Keywords:	door wooden simple
+	Desc:$
+A simple wooden door has been installed here. 
+~
+	ToVnum:	10005
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	10010
+	LockRating:	1
+BREAK
+#10012
+Name:	^W(^cIMMHQ^W)^C A Quiet Room
+Desc:$
+   Sparsely-decorated, this room awaits its owner's personalizing touch. 
+~
+Flags:	100000000010000000000000011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	13
+[EXIT southeast]
+	Keywords:	door wooden simple
+	Desc:$
+A simple wooden door has been installed here. 
+~
+	ToVnum:	10005
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	10010
+	LockRating:	1
+BREAK
+#10013
+Name:	^W(^cIMMHQ^W)^C A Climate-Controlled Server Farm
+Desc:$
+   Enormous banks of humming machinery stretch throughout this air-conditioned
+complex, kept online by redundant power supplies that are nothing short of
+enormous. Neat rows of network cabling split and weave amongst the racks. The
+outlets of an industrial-grade halon fire suppression system suggest that this
+may not be the healthiest room to spend your time in. 
+~
+Flags:	100000000010000000000010011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	10000
 	Flags:	0
 	Material:	brick
 	Barrier:	4

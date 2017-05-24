@@ -1,17 +1,18 @@
 #10000
-Keywords:	library
-Name:	a hermetic library
+Keywords:	massive hermetic library mahogany shelves
+Name:	a massive hermetic library
 RoomDesc:$
-A hermetic library has been installed here for testing purposes.~
+Mahogany shelves line the walls, groaning under the weight of centuries of knowledge.~
 LookDesc:$
-It looks pretty much like an unfinished object~
+Wait a minute, are all these books just Shadowrun manuals bound in leather? 
+~
 Type:	Magic Tool
 WearFlags:	0
 ExtraFlags:	0
 AffFlags:	0
 Material:	metal
 [POINTS]
-	Weight:	0.00
+	Weight:	500000.00
 	Barrier:	32
 	Cost:	0
 	AvailTN:	0
@@ -237,5 +238,109 @@ Material:	metal
 [VALUES]
 	Val0:	1
 	Val1:	5
+BREAK
+#10008
+Keywords:	pile dusty conjuring books
+Name:	a great stack of conjuring materials
+RoomDesc:$
+A pile of dusty conjuring books has been set aside on one of the tables.~
+LookDesc:$
+Someone has kindly taken the time to sort these conjuring-related tomes out
+from the rest of the library. 
+~
+Type:	Magic Tool
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	500000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	15
+BREAK
+#10009
+Keywords:	summoning materials
+Name:	an extensive library of summoning materials
+RoomDesc:$
+An extensive collection of summoning materials is arrayed about the room.~
+LookDesc:$
+You're not sure what the tiny Stay-Puft Marshmallow Man figurine is intended
+to be used for. 
+~
+Type:	Magic Tool
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	500000.00
+	Barrier:	32
+	Cost:	1410065407
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	15
+BREAK
+#10010
+Keywords:	skeleton key
+Name:	a skeleton key
+RoomDesc:$
+A skeleton key has been dropped here.~
+LookDesc:$
+It looks like it's designed to work with the doors in the Immortal HQ. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#10011
+Keywords:	cart monitor mechanical keyboard
+Name:	a server interface
+RoomDesc:$
+Hooked into one of the servers is a cart bearing a wide-screen monitor and mechanical keyboard.~
+LookDesc:$
+Excellent for those long working sessions. You're not here to play games on
+it, right? 
+~
+Type:	Decking Accessory
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	500000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	100000000
+	Val2:	100000000
 BREAK
 END

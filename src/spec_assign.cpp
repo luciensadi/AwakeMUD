@@ -535,6 +535,7 @@ void assign_objects(void)
   ASSIGNOBJ(8004, gen_board);  // newbie board
   ASSIGNOBJ(8013, gen_board);  // newbie board
   ASSIGNOBJ(9329, vending_machine);*/
+  ASSIGNOBJ(10011, desktop);
   ASSIGNOBJ(10108, vending_machine);
 /*ASSIGNOBJ(9406, hand_held_scanner);
   ASSIGNOBJ(29997, gen_board);  // Loki's Board
