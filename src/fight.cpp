@@ -42,7 +42,7 @@ ACMD(do_flee);
 ACMD(do_action);
 void docwagon(struct char_data *ch);
 void roll_individual_initiative(struct char_data *ch);
-void ranged_response(struct char_data *ch, struct char_data *vict);
+bool ranged_response(struct char_data *ch, struct char_data *vict);
 int find_weapon_range(struct char_data *ch, struct obj_data *weapon);
 void weapon_scatter(struct char_data *ch, struct char_data *victim,
                     struct obj_data *weapon);
@@ -2834,12 +2834,22 @@ void remove_throwing(struct char_data *ch)
 
 void combat_message_process_ranged_response(struct char_data *ch, rnum_t rnum) {
   for (struct char_data *tch = world[rnum].people; tch; tch = tch->next_in_room) {
-    if (IS_NPC(tch) && !IS_NPC(ch)) {
-      if ((MOB_FLAGGED(tch, MOB_GUARD) || MOB_FLAGGED(tch, MOB_HELPER))
-          && (true || !(FIGHTING(tch) || FIGHTING_VEH(tch))) && number(0, 6) >= 2) {
-        GET_MOBALERT(tch) = MALERT_ALARM;
-        GET_MOBALERTTIME(tch) = 20;
-        ranged_response(ch, tch);
+    if (IS_NPC(tch)) {
+      // Everyone ends up on edge when they hear gunfire nearby.
+      GET_MOBALERTTIME(tch) = 20;
+      GET_MOBALERT(tch) = MALERT_ALERT;
+      
+      // Guards and helpers will actively try to fire on a player using a gun.
+      if (!IS_NPC(ch)
+          && (MOB_FLAGGED(tch, MOB_GUARD) || MOB_FLAGGED(tch, MOB_HELPER))
+          && (!(FIGHTING(tch) || FIGHTING_VEH(tch)))){
+        if (number(0, 6) >= 2) {
+          GET_MOBALERT(tch) = MALERT_ALARM;
+          if (ranged_response(ch, tch)) {
+            act("$n levels $s weapon at a distant threat!",
+                FALSE, tch, 0, ch, TO_ROOM);
+          }
+        }
       }
     }
   }
@@ -2929,15 +2939,21 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   act(buf2, FALSE, ch, weapon, victim, TO_CHAR);
   act(buf3, FALSE, ch, weapon, victim, TO_NOTVICT);
 
+  // If the player's in a silent room, don't propagate the gunshot.
+  if (world[ch->in_room].silence[0])
+    return;
+  
+  // If the player has a silencer or suppressor, restrict the propagation of the gunshot.
+  bool has_suppressor = FALSE;
   for (int i = 7; i < 10; i++) {
     if (GET_OBJ_VAL(weapon, i) > 0 &&
         (rnum = real_object(GET_OBJ_VAL(weapon, i))) > -1 &&
         (obj = &obj_proto[rnum]) && GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY)
-      if (GET_OBJ_VAL(obj, 1) == 5)
-        return;
+      if (GET_OBJ_VAL(obj, 1) == ACCESS_SILENCER || GET_OBJ_VAL(obj, 1) == ACCESS_SOUNDSUPP) {
+        has_suppressor = TRUE;
+        break;
+      }
   }
-  if (world[ch->in_room].silence[0])
-    return;
   
   sprintf( been_heard, ".%ld.", ch->in_room );
   
@@ -2954,17 +2970,26 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
       if (strstr(been_heard, temp) != 0)
         continue;
       
-      // Send gunshot notifications to the selected room. Process guard/helper responses.
-      send_to_room("You hear gunshots nearby!\r\n", room1);
-      combat_message_process_ranged_response(ch, room1);
-      strcat(been_heard, temp);
+      if (has_suppressor) {
+        // Special case: If they're using a suppressed weapon, print a muffled-gunfire message and terminate.
+        send_to_room("You hear muffled gunshots nearby.\r\n", room1);
+        combat_message_process_ranged_response(ch, room1);
+        strcat(been_heard, temp);
+      } else {
+        // Send gunshot notifications to the selected room. Process guard/helper responses.
+        send_to_room("You hear gunshots nearby!\r\n", room1);
+        combat_message_process_ranged_response(ch, room1);
+        strcat(been_heard, temp);
         
-      // Add the room's exits to the list.
-      for (int door2 = 0; door2 < NUM_OF_DIRS; door2++)
-        if (world[room1].dir_option[door2] && (room2 = world[room1].dir_option[door2]->to_room) != NOWHERE && !(world[room2].silence[0]))
-          room_queue.push(room2);
+        // Add the room's exits to the list.
+        for (int door2 = 0; door2 < NUM_OF_DIRS; door2++)
+          if (world[room1].dir_option[door2] && (room2 = world[room1].dir_option[door2]->to_room) != NOWHERE && !(world[room2].silence[0]))
+            room_queue.push(room2);
+      }
     }
   }
+  
+  if (has_suppressor) return;
   
   // Scan the list of near-adjacent rooms and send messages to all non-heard ones. Add their exits to the secondary queue.
   while (!room_queue.empty()) {
@@ -3666,48 +3691,51 @@ int find_weapon_range(struct char_data *ch, struct obj_data *weapon)
   }
 }
 
-void ranged_response(struct char_data *ch, struct char_data *vict)
+bool ranged_response(struct char_data *ch, struct char_data *vict)
 {
-  int range, sight, distance, dir, found = 0;
+  int range, sight, distance, dir;
   long room, nextroom = NOWHERE;
   struct char_data *temp;
+  bool is_responding = FALSE;
 
-  if (!vict || ch->in_room == vict->in_room ||
-      GET_POS(vict) <= POS_STUNNED || vict->in_room == NOWHERE)
-    return;
-
-  if (vict->in_room == NOWHERE)
-    return;
-  if (IS_NPC(vict) && (MOB_FLAGGED(vict, MOB_INANIMATE) || MOB_FLAGGED(vict, MOB_NOKILL)))
-    return;
+  // Precondition checking.
+  if (!vict
+      || ch->in_room == vict->in_room
+      || GET_POS(vict) <= POS_STUNNED
+      || vict->in_room == NOWHERE
+      || (IS_NPC(vict) && (MOB_FLAGGED(vict, MOB_INANIMATE)))
+      || FIGHTING(vict)) {
+    return FALSE;
+  }
+  
   if (GET_POS(vict) < POS_FIGHTING)
     GET_POS(vict) = POS_STANDING;
-  if (MOB_FLAGGED(vict, MOB_WIMPY) && !AFF_FLAGGED(vict, AFF_PRONE))
+  if (!AFF_FLAGGED(vict, AFF_PRONE) && (IS_NPC(vict) && MOB_FLAGGED(vict, MOB_WIMPY) && !MOB_FLAGGED(vict, MOB_SENTINEL))) {
     do_flee(vict, "", 0, 0);
-  else if (RANGE_OK(vict) && !FIGHTING(vict)) {
+  } else if (RANGE_OK(vict)) {
     sight = find_sight(vict);
     range = find_weapon_range(vict, GET_EQ(vict, WEAR_WIELD));
-    for (dir = 0; dir < NUM_OF_DIRS  && !found; dir++) {
+    for (dir = 0; dir < NUM_OF_DIRS  && !is_responding; dir++) {
       room = vict->in_room;
-      if (CAN_GO2(room, dir))
+      if (CAN_GO2(room, dir)) {
         nextroom = EXIT2(room, dir)->to_room;
-      else
+      } else {
         nextroom = NOWHERE;
-      for (distance = 1; !found && ((nextroom != NOWHERE) && (distance <= 4)); distance++) {
-        for (temp = world[nextroom].people; !found && temp; temp = temp->next_in_room)
+      }
+      for (distance = 1; !is_responding && ((nextroom != NOWHERE) && (distance <= 4)); distance++) {
+        for (temp = world[nextroom].people; !is_responding && temp; temp = temp->next_in_room) {
           if (temp == ch && (distance > range || distance > sight) && !(IS_NPC(vict) && MOB_FLAGGED(vict, MOB_SENTINEL))) {
+            is_responding = TRUE;
             act("$n runs after $s distant attacker.", TRUE, vict, 0, 0, TO_ROOM);
             act("You charge after $N.", FALSE, vict, 0, ch, TO_CHAR);
             char_from_room(vict); 
             char_to_room(vict, EXIT2(room, dir)->to_room);
-            found = 1;
             if (vict->in_room == ch->in_room) {
-              act("$n arrives in a rush of fury, immediately attacking $N!",
-                  TRUE, vict, 0, ch, TO_NOTVICT);
-              act("$n arrives in a rush of fury, rushing straight towards you!",
-                  TRUE, vict, 0, ch, TO_VICT);
+              act("$n arrives in a rush of fury, immediately attacking $N!", TRUE, vict, 0, ch, TO_NOTVICT);
+              act("$n arrives in a rush of fury, rushing straight towards you!", TRUE, vict, 0, ch, TO_VICT);
             }
           }
+        }
         room = nextroom;
         if (CAN_GO2(room, dir))
           nextroom = EXIT2(room, dir)->to_room;
@@ -3716,9 +3744,10 @@ void ranged_response(struct char_data *ch, struct char_data *vict)
       }
     }
     set_fighting(vict, ch);
-  } else if (!FIGHTING(vict)) {
-    for (dir = 0; dir < NUM_OF_DIRS && !found; dir++) {
+  } else if (!(IS_NPC(vict) && MOB_FLAGGED(vict, MOB_SENTINEL))) {
+    for (dir = 0; dir < NUM_OF_DIRS && !is_responding; dir++) {
       if (CAN_GO2(vict->in_room, dir) && EXIT2(vict->in_room, dir)->to_room == ch->in_room) {
+        is_responding = TRUE;
         act("$n runs after $s distant attacker.", TRUE, vict, 0, 0, TO_ROOM);
         act("You charge after $N.", FALSE, vict, 0, ch, TO_CHAR);
         char_from_room(vict);
@@ -3729,7 +3758,7 @@ void ranged_response(struct char_data *ch, struct char_data *vict)
       }
     }
   }
-  return;
+  return is_responding;
 }
 
 void explode(struct char_data *ch, struct obj_data *weapon, int room)
@@ -4406,7 +4435,8 @@ void perform_violence(void)
             (GET_EQ(ch, WEAR_HOLD) && (IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_HOLD), 3)) ||
                                        GET_OBJ_VAL(GET_EQ(ch, WEAR_HOLD), 3) == TYPE_ARROW)) ||
             (GET_EQ(FIGHTING(ch), WEAR_WIELD) && !(IS_GUN(GET_OBJ_VAL(GET_EQ(FIGHTING(ch), WEAR_WIELD), 3)))) ||
-             (GET_EQ(FIGHTING(ch), WEAR_HOLD) && !(IS_GUN(GET_OBJ_VAL(GET_EQ(FIGHTING(ch), WEAR_HOLD), 3))))) {
+             (GET_EQ(FIGHTING(ch), WEAR_HOLD) && !(IS_GUN(GET_OBJ_VAL(GET_EQ(FIGHTING(ch), WEAR_HOLD), 3)))) ||
+             ch->in_room != FIGHTING(ch)->in_room) {
           AFF_FLAGS(ch).RemoveBit(AFF_APPROACH);
           AFF_FLAGS(FIGHTING(ch)).RemoveBit(AFF_APPROACH);
         } else {

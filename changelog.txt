@@ -1,5 +1,10 @@
 Information about new features will be written into this changelog, as will information about major bugfixes. Minor bugfixes and related code-quality changes can be found in the commit log (git log).
 
+2017/05/23:
+- NPCs will no longer keep closing the distance when their target is not there.
+- Updated ranged response code for sanity, including messaging.
+- Silencers and suppressors now both work for muffling gunshots (sound radius 1 instead of 3).
+
 2017/5/22:
 - Rewrote gunshot sound propagation to be breadth-first instead of depth-first. Behavior is now much more reliable.
 - Modified mysql_wrapper to print the query to the console, but only if the DEBUG flag is enabled.

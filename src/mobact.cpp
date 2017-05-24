@@ -36,6 +36,8 @@ extern void perform_remove(struct char_data *, int);
 extern bool is_escortee(struct char_data *mob);
 extern bool hunting_escortee(struct char_data *ch, struct char_data *vict);
 
+extern bool ranged_response(struct char_data *ch, struct char_data *vict);
+
 bool memory(struct char_data *ch, struct char_data *vict);
 int violates_zsp(int security, struct char_data *ch, int pos, struct char_data *mob);
 bool attempt_reload(struct char_data *mob, int pos);
@@ -108,6 +110,7 @@ void mobile_activity(void)
       perform_move(ch, door, CHECK_SPECIAL | LEADER, NULL);
       has_acted = TRUE;
     }
+    
     /* Mob Driving */
     if (!has_acted && ch->in_veh && AFF_FLAGGED(ch, AFF_PILOT)
         && (door = number(0, 18)) < NUM_OF_DIRS && EXIT(ch->in_veh, door) &&
@@ -116,8 +119,8 @@ void mobile_activity(void)
       perform_move(ch, door, LEADER, NULL);
       has_acted = TRUE;
     }
+    
     /* Aggressive Mobs */
-
     if (!ch->in_veh && !ROOM_FLAGGED(ch->in_room, ROOM_PEACEFUL))
       if (!has_acted &&
           (MOB_FLAGS(ch).AreAnySet(MOB_AGGRESSIVE, MOB_AGGR_TO_RACE, ENDBIT) || GET_MOBALERT(ch) == MALERT_ALARM)) {
@@ -187,11 +190,25 @@ void mobile_activity(void)
             IS_NPC(vict) &&
             FIGHTING(vict) &&
             !IS_NPC(FIGHTING(vict)) &&
-            ch != FIGHTING(vict)) {
-          act("$n jumps to the aid of $N!",
-              FALSE, ch, 0, vict, TO_ROOM);
-          stop_fighting(ch);
-          set_fighting(ch, FIGHTING(vict));
+            ch != FIGHTING(vict) &&
+            CAN_SEE(ch, FIGHTING(vict))) {
+          if (FIGHTING(vict)->in_room == ch->in_room) {
+            act("$n jumps to the aid of $N!",
+                FALSE, ch, 0, vict, TO_ROOM);
+            stop_fighting(ch);
+            
+            // Close-ranged response.
+            set_fighting(ch, FIGHTING(vict));
+          } else {
+            // Long-ranged response.
+            if (ranged_response(FIGHTING(vict), ch)) {
+              // TODO: This doesn't fire a message if the NPC is wielding a ranged weapon.
+              act("$n jumps to $N's aid against $S distant attacker!",
+                  FALSE, ch, 0, vict, TO_ROOM);
+            } else {
+            }
+          }
+          
           has_acted = TRUE;
           break;
         }
