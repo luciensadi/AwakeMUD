@@ -626,7 +626,7 @@ void log(const char *str) {
   
   tmstr = asctime(localtime(&ct));
   *(tmstr + strlen(tmstr) - 1) = '\0';
-  fprintf(stderr, "%-15.15s :: %s", tmstr + 4, str);
+  fprintf(stderr, "%-15.15s :: %s\n", tmstr + 4, str);
 }
 
 void log_vfprintf(const char *format, ...)
