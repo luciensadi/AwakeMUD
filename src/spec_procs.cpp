@@ -39,7 +39,7 @@ void add_follower(struct char_data * ch, struct char_data * leader);
 extern void docwagon(struct char_data *ch);
 extern void die(struct char_data * ch);
 extern void affect_total(struct char_data * ch);
-extern struct obj_data *get_first_credstick(struct char_data *ch, char *arg);
+extern struct obj_data *get_first_credstick(struct char_data *ch, const char *arg);
 extern struct char_data *give_find_vict(struct char_data * ch, char *arg);
 extern int perform_give(struct char_data * ch, struct char_data * vict, struct obj_data * obj);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);

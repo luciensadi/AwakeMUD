@@ -37,7 +37,7 @@ using namespace std;
 #include "constants.h"
 #include "quest.h"
 
-char *CCHAR;
+const char *CCHAR;
 
 /* extern variables */
 extern class objList ObjList;

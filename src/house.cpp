@@ -478,7 +478,7 @@ SPECIAL(landlord_spec)
           send_to_char(ch, "Your housing card has %d nuyen left on it.\r\n", GET_OBJ_VAL(obj, 1));
         }
       }
-      do_say(recep, "You are payed up for the next period.", 0, 0);
+      do_say(recep, "You are paid up for the next period.", 0, 0);
       room->date += SECS_PER_REAL_DAY*30;
       House_save_control();
     }
@@ -496,7 +496,7 @@ SPECIAL(landlord_spec)
     else {
       if (room->date - time(0) < 0)
         strcpy(buf2, "Your rent has expired on that apartment.");
-      else sprintf(buf2, "You are payed for another %d days.", (int)((room->date - time(0)) / 86400));
+      else sprintf(buf2, "You are paid for another %d days.", (int)((room->date - time(0)) / 86400));
       do_say(recep, buf2, 0, 0);
     }
     return TRUE;
@@ -507,7 +507,7 @@ SPECIAL(landlord_spec)
 /* should do sanity checks on vnums & remove invalid records */
 void House_boot(void)
 {
-  vnum_t real_house, owner, land, payed;
+  vnum_t real_house, owner, land, paid;
   FILE *fl;
   int num_land;
   char line[256], name[20];
@@ -539,7 +539,7 @@ void House_boot(void)
     for (int x = 0; x < templ->num_room; x++) {
       get_line(fl, line);
       if (sscanf(line, "%ld %ld %d %d %s %ld %d %ld", &real_house, &land, t, t + 1, name,
-                 &owner, t + 2, &payed) != 8) {
+                 &owner, t + 2, &paid) != 8) {
         fprintf(stderr, "Format error in landlord #%d room #%d.\r\n", i, x);
         return;
       }
@@ -549,7 +549,7 @@ void House_boot(void)
       temp->atrium = TOROOM(real_room(real_house), t[0]);
       temp->exit_num = t[0];
       temp->owner = owner;
-      temp->date = payed;
+      temp->date = paid;
       temp->mode = t[1];
       temp->name = str_dup(name);
       for (int q = 0; q < MAX_GUESTS; q++)

@@ -2162,7 +2162,7 @@ void send_to_all(const char *messg)
       }
 }
 
-void send_to_outdoor(char *messg)
+void send_to_outdoor(const char *messg)
 {
   struct descriptor_data *i;
   

@@ -17,7 +17,7 @@
 #include "constants.h"
 
 extern struct time_info_data time_info;
-extern struct obj_data *get_first_credstick(struct char_data *ch, char *arg);
+extern struct obj_data *get_first_credstick(struct char_data *ch, const char *arg);
 extern const char *pc_race_types[];
 extern void reduce_abilities(struct char_data *vict);
 ACMD(do_say);
@@ -1390,7 +1390,7 @@ void shedit_disp_menu(struct descriptor_data *d)
   d->edit_mode = SHEDIT_MAIN_MENU;
 }
 
-void shedit_parse(struct descriptor_data *d, char *arg)
+void shedit_parse(struct descriptor_data *d, const char *arg)
 {
   int number = atoi(arg);
   float profit;

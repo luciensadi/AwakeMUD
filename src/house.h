@@ -15,7 +15,7 @@ struct house_control_rec
   dir_t exit_num;             /* direction of house's exit    */
   int mode;                    /* mode of ownership            */
   long owner;                  /* idnum of house's owner       */
-  long date;                   /* date rent is payed to        */
+  long date;                   /* date rent is paid to        */
   long guests[MAX_GUESTS];     /* idnums of house's guests     */
   char *name;  
   struct house_control_rec *next;  

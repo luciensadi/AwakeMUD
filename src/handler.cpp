@@ -2262,7 +2262,7 @@ int belongs_to(struct char_data *ch, struct obj_data *obj)
     return 0;
 }
 
-struct obj_data *get_first_credstick(struct char_data *ch, char *arg)
+struct obj_data *get_first_credstick(struct char_data *ch, const char *arg)
 {
   struct obj_data *obj;
   int i;

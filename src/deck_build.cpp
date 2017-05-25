@@ -361,25 +361,25 @@ ACMD(do_cook) {
             send_to_char(ch, "There isn't a free chip encoder here.\r\n");
             return;
         }
-        int cost = GET_OBJ_VAL(chip, 2) / 2, payed = 0;
+        int cost = GET_OBJ_VAL(chip, 2) / 2, paid = 0;
         for (struct obj_data *obj = ch->in_veh ? ch->in_veh->contents : world[ch->in_room].contents; obj; obj = obj->next_content)
             if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_PARTS && GET_OBJ_VAL(obj, 1) && GET_OBJ_COST(obj) >= cost) {
                 GET_OBJ_COST(obj) -= cost;
                 if (!GET_OBJ_COST(obj))
                     extract_obj(obj);
-                payed = 1;
+                paid = 1;
                 break;
             }
-        if (!payed)
+        if (!paid)
             for (struct obj_data *obj = ch->carrying;obj; obj = obj->next_content)
                 if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_PARTS && GET_OBJ_VAL(obj, 1) && GET_OBJ_COST(obj) >= cost) {
                     GET_OBJ_COST(obj) -= cost;
                     if (!GET_OBJ_COST(obj))
                         extract_obj(obj);
-                    payed = 1;
+                    paid = 1;
                     break;
                 }
-        if (!payed) {
+        if (!paid) {
             send_to_char(ch, "You don't have a large enough optical chip to encode that onto.\r\n");
             return;
         }

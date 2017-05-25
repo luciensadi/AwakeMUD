@@ -37,7 +37,7 @@ void another_hour(void)
 {
   bool new_month = FALSE;
   struct char_data *ch, *next;
-  char *temp;
+  const char *temp;
 
   time_info.hours++;
 
