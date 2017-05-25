@@ -226,7 +226,7 @@ train_t;
 typedef struct teach_data
 {
   vnum_t vnum;
-  sh_int s[8];
+  sh_int s[NUM_TEACHER_SKILLS];
   const char *msg;
   sh_int type;
 }

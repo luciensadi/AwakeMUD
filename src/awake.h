@@ -822,6 +822,9 @@ enum {
 
 #define MAX_SKILLS		  135
 
+// Defines the size of the teach_t array. Changing this means you have to change every teacher too.
+#define NUM_TEACHER_SKILLS 9
+
 #define ADEPT_PERCEPTION	1
 #define ADEPT_COMBAT_SENSE	2
 #define ADEPT_BLIND_FIGHTING	3
@@ -1841,6 +1844,7 @@ enum {
 #define NEWBIE          1
 #define AMATEUR         2
 #define ADVANCED        3
+#define GODLY           4
 
 /* sun state for weather_data */
 

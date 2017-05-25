@@ -38,9 +38,10 @@ teach_t metamagict[] = {
 /*                       { 24806, { META_REFLECTING, META_CLEANSING, 0, 0, 0, 0, 0, 0 }, "", 0 },
                          { 4250, { META_ANCHORING, META_QUICKENING, 0, 0, 0, 0, 0, 0 }, "", 0 },
                          { 4251, { META_ANCHORING, META_POSSESSING, 0, 0, 0, 0, 0, 0 }, "", 0 }, */
-                         { 35538, { META_MASKING, META_CLEANSING, META_CENTERING, 0, 0, 0, 0, 0 }, "", 0},
+                         { 10010, { META_ANCHORING, META_CENTERING, META_CLEANSING, META_INVOKING, META_MASKING, META_POSSESSING, META_QUICKENING, META_REFLECTING, META_SHIELDING }, "", 0},
+                         { 35538, { META_MASKING, META_CLEANSING, META_CENTERING, 0, 0, 0, 0, 0, 0 }, "", 0},
 //                       { 27426, { META_SHIELDING, META_POSSESSING, META_INVOKING, META_MASKING, 0, 0, 0, 0 }, "", 0},
-                         { 0, { 0, 0, 0, 0, 0, 0, 0, 0 }, "", 0}
+                         { 0, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "", 0}
                        };
 
 teach_t teachers[] = {
@@ -67,29 +68,31 @@ teach_t teachers[] = {
                          "After hours of study and magical practice, you feel like you've learned\r\nsomething.\r\n", AMATEUR },
                        { 4257, { SKILL_ASSAULT_RIFLES, SKILL_TASERS, 0, 0, 0, 0, 0, 0 },
                          "After hours of study and weapon practice, you feel like you've learned\r\nsomething.\r\n", AMATEUR }, */
-                       { 60501, { SKILL_SORCERY, SKILL_CONJURING, SKILL_AURA_READING, SKILL_SPELLDESIGN, SKILL_ENCHANTING, SKILL_CENTERING, SKILL_TALISMONGERING, 0 },
+  { 4250, { SKILL_SORCERY, SKILL_CONJURING, SKILL_AURA_READING, SKILL_SPELLDESIGN, SKILL_ENCHANTING, SKILL_CENTERING, SKILL_TALISMONGERING, SKILL_MEDITATION, 0 /*, SKILL_GETTING_THROWN_OFF_OF_A_TOWER */ },
+    "After what feels like seven years of magical study, you feel like you've learned something.\r\n", GODLY },
+                       { 60501, { SKILL_SORCERY, SKILL_CONJURING, SKILL_AURA_READING, SKILL_SPELLDESIGN, SKILL_ENCHANTING, SKILL_CENTERING, SKILL_TALISMONGERING, 0, 0 },
                          "After hours of study and practice, you feel like you've learned\r\nsomething.\r\n", NEWBIE },
                        { 60502, { SKILL_COMPUTER, SKILL_BR_COMPUTER, SKILL_ELECTRONICS, SKILL_BR_ELECTRONICS, SKILL_CYBERTERM_DESIGN,
-                         SKILL_DATA_BROKERAGE, 0, 0 }, "After hours of study and practice, you feel like you've learned\r\nsomething.\r\n", NEWBIE },
+                         SKILL_DATA_BROKERAGE, 0, 0, 0 }, "After hours of study and practice, you feel like you've learned\r\nsomething.\r\n", NEWBIE },
                        { 60503, { SKILL_ENGLISH, SKILL_JAPANESE, SKILL_CHINESE, SKILL_KOREAN,
-                         SKILL_SPERETHIEL, SKILL_SPANISH, SKILL_ITALIAN, SKILL_RUSSIAN },
+                         SKILL_SPERETHIEL, SKILL_SPANISH, SKILL_ITALIAN, SKILL_RUSSIAN, 0 },
                          "Von Richter runs through basic conjugation and sentance structure with you.\r\n", NEWBIE },
                        { 60504, { SKILL_PILOT_CAR, SKILL_PILOT_BIKE, SKILL_PILOT_TRUCK, SKILL_BR_BIKE,
-                         SKILL_BR_DRONE, SKILL_BR_CAR, SKILL_BR_TRUCK, 0 }, "After hours of study and practice, "
+                         SKILL_BR_DRONE, SKILL_BR_CAR, SKILL_BR_TRUCK, 0, 0 }, "After hours of study and practice, "
                          "you feel like you've learned\r\nsomething.\r\n", NEWBIE },
                        { 60505, { SKILL_EDGED_WEAPONS, SKILL_WHIPS_FLAILS, SKILL_POLE_ARMS, SKILL_CLUBS,
-                         SKILL_PROJECTILES, SKILL_THROWING_WEAPONS, SKILL_UNARMED_COMBAT, SKILL_CYBER_IMPLANTS },
+                         SKILL_PROJECTILES, SKILL_THROWING_WEAPONS, SKILL_UNARMED_COMBAT, SKILL_CYBER_IMPLANTS, 0 },
                          "After hours of study and practice, you feel like you've learned\r\nsomething.\r\n", NEWBIE },
                        { 60506, { SKILL_PISTOLS, SKILL_RIFLES, SKILL_SHOTGUNS, SKILL_SMG, SKILL_ASSAULT_RIFLES,
-                         SKILL_GUNNERY, SKILL_MACHINE_GUNS, SKILL_PROJECTILES },  "After hours of study and practice, "
+                         SKILL_GUNNERY, SKILL_MACHINE_GUNS, SKILL_PROJECTILES, 0 },  "After hours of study and practice, "
                          "you feel like you've learned\r\nsomething.\r\n", NEWBIE },
                        { 60532, { SKILL_PROGRAM_COMBAT, SKILL_PROGRAM_DEFENSIVE, SKILL_PROGRAM_OPERATIONAL, SKILL_PROGRAM_SPECIAL,
-                         SKILL_PROGRAM_CYBERTERM, 0, 0, 0 }, "Deadlock picks up some design plans from his desk and runs through"
+                         SKILL_PROGRAM_CYBERTERM, 0, 0, 0, 0 }, "Deadlock picks up some design plans from his desk and runs through"
                          "the basic process of setting one up, you feel like you've learned\r\nsomething.\r\n", NEWBIE},
                        { 60533, { SKILL_NEGOTIATION, SKILL_CORPORATE_ETIQUETTE, SKILL_MEDIA_ETIQUETTE, SKILL_STREET_ETIQUETTE,
-                         SKILL_ELF_ETIQUETTE, SKILL_TRIBAL_ETIQUETTE, 0, 0 }, "Lucy runs through the proper decorum to use in certain"
+                         SKILL_ELF_ETIQUETTE, SKILL_TRIBAL_ETIQUETTE, 0, 0, 0 }, "Lucy runs through the proper decorum to use in certain"
                          " situations, you feel like you've learned\r\nsomething.\r\n", NEWBIE},
-                       { 60534, { SKILL_ATHLETICS, SKILL_STEALTH, SKILL_BIOTECH, SKILL_ORALSTRIKE, SKILL_POLICE_PROCEDURES, 0, 0, 0 },
+                       { 60534, { SKILL_ATHLETICS, SKILL_STEALTH, SKILL_BIOTECH, SKILL_ORALSTRIKE, SKILL_POLICE_PROCEDURES, 0, 0, 0, 0 },
                          "Steve roughly throws you a text book and tells you to read it, you feel like you've learned\r\nsomething.\r\n", NEWBIE},
 /*                     { 30700, { SKILL_ENGLISH, SKILL_JAPANESE, SKILL_CHINESE, SKILL_KOREAN,
                          SKILL_SPERETHIEL, SKILL_SALISH, SKILL_ITALIAN, SKILL_NEGOTIATION }, "Socrates shows you the intricities "
@@ -107,9 +110,9 @@ teach_t teachers[] = {
                          SKILL_AURA_READING, SKILL_SPELLDESIGN, SKILL_TALISMONGERING }, "Hermes imparts his wisdom upon you.\r\n", AMATEUR },
                        { 37500, { SKILL_BR_CAR, SKILL_BR_BIKE, SKILL_BR_DRONE, SKILL_BR_TRUCK, 0, 0, 0, 0 }, "Marty shows you a few tricks of the "
                          "trade and you emerge more skilled than before.\r\n", AMATEUR }, */
-                       { 35502, { SKILL_STREET_ETIQUETTE, 0, 0, 0, 0, 0, 0, 0 }, "You spend some time talking to the people in"
+                       { 35502, { SKILL_STREET_ETIQUETTE, 0, 0, 0, 0, 0, 0, 0, 0 }, "You spend some time talking to the people in"
                          " line.\r\n", AMATEUR },
-                       { 17111, { SKILL_CORPORATE_ETIQUETTE, SKILL_NEGOTIATION, 0, 0, 0, 0, 0, 0 }, "You spend some time making small talk with"
+                       { 17111, { SKILL_CORPORATE_ETIQUETTE, SKILL_NEGOTIATION, 0, 0, 0, 0, 0, 0, 0 }, "You spend some time making small talk with"
                          " the secretary.\r\n", AMATEUR },
 /*                     { 65106, { SKILL_MEDIA_ETIQUETTE, SKILL_STEALTH, 0, 0, 0, 0, 0, 0 }, "You talk to the reporter about current events for"
                          " a while.\r\n", AMATEUR },
@@ -119,15 +122,16 @@ teach_t teachers[] = {
                        { 18312, { SKILL_COMPUTER, SKILL_ELECTRONICS, SKILL_BR_COMPUTER, SKILL_CYBERTERM_DESIGN,
                                   SKILL_BR_ELECTRONICS, SKILL_DATA_BROKERAGE, SKILL_PROGRAM_CYBERTERM, SKILL_PROGRAM_SPECIAL },
                          "You read through various technological journals.\r\n", LIBRARY }, */
-                       { 0, { 0, 0, 0, 0, 0, 0, 0, 0 }, "Report this bug!\r\n", 0 } // this MUST be last
+                       { 0, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Report this bug!\r\n", 0 } // this MUST be last
                      };
 
 adept_t adepts[] = {
+                     { 10011,{ 0, 1, 50, 1, 1, 50, 1, 1, 1, 50, 50, 50, 50, 50, 50, 50, 50, 1, 1, 1, 50, 50, 50, 50, 50, 1, 1, 50, 50, 50, 50, 50, 1, 50, 1, 1, 1, 1, 50, 50, 50, 50}, 0 },
                      { 60507,{ 0, 1, 3, 1, 1, 4, 1, 1, 1, 3, 6, 6, 6, 6, 6, 6, 3, 1, 1, 1, 3, 10, 3, 3, 3, 1, 1, 6, 6, 6, 6, 6, 1, 3, 1, 1, 1, 1, 3, 6, 3, 3}, 1 },
-/*                   { 7223, { 0, 1, 3, 0, 1, 4, 1, 0, 0, 3, 0, 6, 0, 0, 6, 0, 6, 0, 0, 0, 0, 10, 0, 0, 6, 1, 1, 2, 0, 6, 0,0, 0, 0, 0, 0, 1, 0, 3, 4, 1, 6}, 0 },
-                     { 2701, { 0, 1, 3, 0, 0, 4, 0, 1, 1, 0, 6, 0, 6, 6, 0, 6, 0, 1, 1, 1, 4,  0, 3, 3, 0, 0, 0, 4, 2, 0, 0,0, 1, 0, 0, 1, 0, 1, 2, 0, 1, 6}, 0 },
-                     { 3603, { 0, 0, 3, 1, 1, 4, 1, 1, 1, 3, 6, 0, 0, 0, 0, 6, 0, 1, 1, 1, 4, 10, 6, 0, 0, 0, 0, 4, 0, 0, 6,6, 1, 3, 0, 1, 0, 1, 0, 0, 1, 0}, 0 },
-                     { 20326,{ 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 4,  5, 2, 2, 2, 0, 1, 2, 1, 2, 6,3, 0, 2, 1, 0, 1, 0, 3, 0, 1, 0}, 0 }, */
+/*                   { 7223, { 0, 1, 3, 0, 1, 4, 1, 0, 0, 3, 0, 6, 0, 0, 6, 0, 6, 0, 0, 0, 0, 10, 0, 0, 6, 1, 1, 2, 0, 6, 0, 0, 0, 0, 0, 0, 1, 0, 3, 4, 1, 6}, 0 },
+                     { 2701, { 0, 1, 3, 0, 0, 4, 0, 1, 1, 0, 6, 0, 6, 6, 0, 6, 0, 1, 1, 1, 4,  0, 3, 3, 0, 0, 0, 4, 2, 0, 0, 0, 1, 0, 0, 1, 0, 1, 2, 0, 1, 6}, 0 },
+                     { 3603, { 0, 0, 3, 1, 1, 4, 1, 1, 1, 3, 6, 0, 0, 0, 0, 6, 0, 1, 1, 1, 4, 10, 6, 0, 0, 0, 0, 4, 0, 0, 6, 6, 1, 3, 0, 1, 0, 1, 0, 0, 1, 0}, 0 },
+                     { 20326,{ 0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 4,  5, 2, 2, 2, 0, 1, 2, 1, 2, 6, 3, 0, 2, 1, 0, 1, 0, 3, 0, 1, 0}, 0 }, */
                      { 0, { 0, 0, 0, 0 }, 0 } // this MUST be last
                    };
 

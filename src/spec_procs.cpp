@@ -370,7 +370,7 @@ SPECIAL(metamagic_teacher)
 
   if (!*argument) {
     send_to_char("Your teacher can teach you the following techniques: \r\n", ch);
-    for (; i < 5; i++)
+    for (; i < NUM_TEACHER_SKILLS; i++)
       if (metamagict[ind].s[i])
         send_to_char(ch, "  %s\r\n", metamagic[metamagict[ind].s[i]]);
     return TRUE;
@@ -458,6 +458,8 @@ SPECIAL(teacher)
     max = NORMAL_MAX_SKILL;
   else if (teachers[ind].type == ADVANCED)
     max = LEARNED_LEVEL;
+  else if (teachers[ind].type == GODLY)
+    max = 100;
   else if (teachers[ind].type == LIBRARY)
     max = LIBRARY_SKILL;
   else
@@ -465,7 +467,7 @@ SPECIAL(teacher)
 
   if (!*argument) {
     sprintf(buf, "Your teacher can teach you the following:\r\n");
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < NUM_TEACHER_SKILLS; i++) {
       if (teachers[ind].s[i] > 0) {
         if (GET_SKILL_POINTS(ch) > 0)
           sprintf(buf, "%s  %s\r\n", buf, skills[teachers[ind].s[i]].name);
@@ -507,7 +509,7 @@ SPECIAL(teacher)
   }
 
   i = 0;
-  for (i = 0; i < 8; i++)
+  for (i = 0; i < NUM_TEACHER_SKILLS; i++)
     if (skill_num == teachers[ind].s[i])
       break;
   if (i >= 8) {

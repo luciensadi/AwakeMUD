@@ -467,4 +467,44 @@ Material:	metal
 	Val0:	3
 	Val1:	1
 BREAK
+#10017
+Keywords:	stat tweaker
+Name:	an immortal's stat-tweaker
+RoomDesc:$
+report this~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Worn
+WearFlags:	1111111111111111111111111
+ExtraFlags:	101000001000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	127
+[AFFECT 1]
+	Location:	Reaction
+	Modifier:	127
+[AFFECT 2]
+	Location:	Target Numbers
+	Modifier:	-127
+[AFFECT 3]
+	Location:	Init Dice
+	Modifier:	127
+[AFFECT 4]
+	Location:	Target Numbers
+	Modifier:	-127
+[AFFECT 5]
+	Location:	Target Numbers
+	Modifier:	-127
+BREAK
 END
