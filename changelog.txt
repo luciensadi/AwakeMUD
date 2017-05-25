@@ -1,5 +1,16 @@
 Information about new features will be written into this changelog, as will information about major bugfixes. Minor bugfixes and related code-quality changes can be found in the commit log (git log).
 
+2017/05/25:
+- Moved old log() function to log_vfprintf(); added new log function. See Issue #2.
+
+2017/05/24:
+- Built the Immortal HQ for centralized testing of code. Start room is 10000, or GOTO IMMHQ.
+- Made the "Privileged operation." message more user-friendly.
+- Brought in changes from the old snippets thread, including:
+  - Stealing requires PK on both parties
+  - Peepholes are built into apartment doors (LOOK <dir>)
+- Added more bugfixes, including to ranged response code and the time-played function.
+
 2017/05/23:
 - NPCs will no longer keep closing the distance when their target is not there.
 - Updated ranged response code for sanity, including messaging.
