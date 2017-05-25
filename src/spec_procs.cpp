@@ -398,11 +398,11 @@ SPECIAL(metamagic_teacher)
     return TRUE;
   }
   
-  for (; x < 5; x++)
+  for (; x < NUM_TEACHER_SKILLS; x++)
     if (metamagict[ind].s[x] == i)
       break;
 
-  if (x == 5) {
+  if (x == NUM_TEACHER_SKILLS) {
     send_to_char("You can't train that here.\r\n", ch);
     return TRUE;
   }
