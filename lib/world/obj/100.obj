@@ -343,4 +343,128 @@ Material:	metal
 	Val1:	100000000
 	Val2:	100000000
 BREAK
+#10012
+Keywords:	electronics workbench
+Name:	an electronics workbench
+RoomDesc:$
+A workbench strewn with electronics stands along the southern wall.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Workshop
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	500000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	3
+BREAK
+#10013
+Keywords:	microtronics setup
+Name:	a microtronics setup
+RoomDesc:$
+A microtronics setup by the door provides tools for cyberdeck construction.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Workshop
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	50000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	3
+BREAK
+#10014
+Keywords:	slot optical chip cooker
+Name:	an integrated chip cooker
+RoomDesc:$
+The slot of an optical chip cooker is visible on one of the racks.~
+LookDesc:$
+Fancy! 
+~
+Type:	Decking Accessory
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+BREAK
+#10015
+Keywords:	rack parts
+Name:	a rack of parts
+RoomDesc:$
+An organized rack of replacement server parts has been installed here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Decking Accessory
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	500000.00
+	Barrier:	32
+	Cost:	999999999
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+BREAK
+#10016
+Keywords:	blank optical chips stack
+Name:	a stack of blank optical chips
+RoomDesc:$
+A stack of blank optical chips teeters by the cart.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Decking Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	50000.00
+	Barrier:	32
+	Cost:	99999999
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	1
+BREAK
 END

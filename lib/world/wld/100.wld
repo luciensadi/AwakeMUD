@@ -5,7 +5,7 @@ Desc:$
 of this well-outfitted laboratory. The floor, a freshly-waxed tile, gives off
 the faintest scent of lemon, offsetting the otherwise-sterile atmosphere. 
 ~
-Flags:	10000000000000001000
+Flags:	10000000000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -326,7 +326,7 @@ Name:	^W(^cIMMHQ^W)^C A Quiet Room
 Desc:$
    Sparsely-decorated, this room awaits its owner's personalizing touch. 
 ~
-Flags:	100000000010000000000000011000
+Flags:	10000000000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -359,7 +359,7 @@ Name:	^W(^cIMMHQ^W)^C A Quiet Room
 Desc:$
    Sparsely-decorated, this room awaits its owner's personalizing touch. 
 ~
-Flags:	100000000010000000000000011000
+Flags:	10000000000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -392,7 +392,7 @@ Name:	^W(^cIMMHQ^W)^C A Quiet Room
 Desc:$
    Sparsely-decorated, this room awaits its owner's personalizing touch. 
 ~
-Flags:	100000000010000000000000011000
+Flags:	10000000000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -425,7 +425,7 @@ Name:	^W(^cIMMHQ^W)^C A Quiet Room
 Desc:$
    Sparsely-decorated, this room awaits its owner's personalizing touch. 
 ~
-Flags:	100000000010000000000000011000
+Flags:	10000000000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -458,7 +458,7 @@ Name:	^W(^cIMMHQ^W)^C A Quiet Room
 Desc:$
    Sparsely-decoraed, this room awaits its owner's personalizing touch. 
 ~
-Flags:	100000000010000000100000011000
+Flags:	10000000100000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -491,7 +491,7 @@ Name:	^W(^cIMMHQ^W)^C A Quiet Room
 Desc:$
    Sparsely-decorated, this room awaits its owner's personalizing touch. 
 ~
-Flags:	100000000010000000000000011000
+Flags:	10000000000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -524,7 +524,7 @@ Name:	^W(^cIMMHQ^W)^C A Quiet Room
 Desc:$
    Sparsely-decorated, this room awaits its owner's personalizing touch. 
 ~
-Flags:	100000000010000000000000011000
+Flags:	10000000000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0

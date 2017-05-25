@@ -264,4 +264,37 @@ DefaultPos:	Standing
 	Impact:	10
 [SKILLS]
 BREAK
+#10009
+Keywords:	transmitter small beacon immhq immortal headquarters hq
+Name:	the Immortal HQ Beacon
+RoomDesc:$
+A small transmitter has been erected on a workbench here. 
+
+~
+LookDesc:$
+A meter-tall structure, this steel antenna hums with latent power. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000000001101010000000001010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	10
+	Ballistic:	30000
+	Impact:	30000
+[SKILLS]
+BREAK
 END
