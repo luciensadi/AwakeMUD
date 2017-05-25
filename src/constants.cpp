@@ -247,14 +247,14 @@ const char *room_bits[] =
     "!MAGIC",
     "TUNNEL",
     "ARENA",
-    "LIT",
+    "STREETLIGHTS",
     "HOUSE",
     "HCRSH",
     "ATRIUM",
     "OLC",
     "*",                          /* BFS MARK */
     "LOW_LIGHT",
-    "!USED",
+    "!USED", // Empty slot.
     "!RADIO",
     "!BIKE",
     "!WALK",

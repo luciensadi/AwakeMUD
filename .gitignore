@@ -40,4 +40,6 @@ gdb.txt
 syslog.txt
 log/
 src/mysql_config.cpp
+SQL/mysql_config.cpp
 mysql_config.cpp
+lib/house/*

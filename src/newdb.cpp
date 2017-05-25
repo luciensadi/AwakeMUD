@@ -1343,8 +1343,8 @@ char_data *CreateChar(char_data *ch)
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
   if (!row && mysql_field_count(mysql)) {
-    log_vfprintf("%s promoted to President, by virtue of first-come, first-serve.",
-        GET_CHAR_NAME(ch));
+    log_vfprintf("%s promoted to %s by virtue of first-come, first-serve.",
+        GET_CHAR_NAME(ch), status_ratings[LVL_MAX]);
     
     // TODO: Add NODELETE, OLC on
 
@@ -1352,14 +1352,14 @@ char_data *CreateChar(char_data *ch)
       GET_COND(ch, i) = (char) -1;
 
     GET_KARMA(ch) = 0;
-    GET_LEVEL(ch) = LVL_PRESIDENT;
+    GET_LEVEL(ch) = LVL_MAX;
     GET_REP(ch) = 0;
     GET_NOT(ch) = 0;
     GET_TKE(ch) = 0;
     GET_IDNUM(ch) = 1;
 
-    PLR_FLAGS(ch).RemoveBit(PLR_NEWBIE);
-    PLR_FLAGS(ch).RemoveBit(PLR_AUTH);
+    PLR_FLAGS(ch).RemoveBits(PLR_NEWBIE, PLR_AUTH, ENDBIT);
+    PLR_FLAGS(ch).SetBits(PLR_OLC, PLR_NODELETE, ENDBIT);
     PRF_FLAGS(ch).SetBits(PRF_HOLYLIGHT, PRF_CONNLOG, PRF_ROOMFLAGS,
                           PRF_NOHASSLE, PRF_AUTOINVIS, PRF_AUTOEXIT, ENDBIT);
   } else {
@@ -1389,8 +1389,8 @@ char_data *PCIndex::CreateChar(char_data *ch)
 
   // if this is the first character, make him president
   if (entry_cnt < 1) {
-    log_vfprintf("%s promoted to President, by virtue of first-come, first-serve.",
-        GET_CHAR_NAME(ch));
+    log_vfprintf("%s promoted to %s, by virtue of first-come, first-serve.",
+        status_ratings[LVL_MAX], GET_CHAR_NAME(ch));
     
     // TODO: this is a duplicate of the other president code, can they be consolidated?
 
@@ -1398,7 +1398,7 @@ char_data *PCIndex::CreateChar(char_data *ch)
       GET_COND(ch, i) = (char) -1;
 
     GET_KARMA(ch) = 0;
-    GET_LEVEL(ch) = LVL_PRESIDENT;
+    GET_LEVEL(ch) = LVL_MAX;
     GET_REP(ch) = 0;
     GET_NOT(ch) = 0;
     GET_TKE(ch) = 0;
