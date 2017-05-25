@@ -203,7 +203,7 @@ int main(int argc, char **argv)
         log("Suppressing assignment of special routines.");
         break;
       default:
-        log("SYSERR: Unknown option -%c in argument string.", *(argv[pos] + 1));
+        log_vfprintf("SYSERR: Unknown option -%c in argument string.", *(argv[pos] + 1));
         break;
     }
     pos++;
@@ -224,14 +224,14 @@ int main(int argc, char **argv)
     exit(1);
   }
   
-  log("Using %s as data directory.", dir);
+  log_vfprintf("Using %s as data directory.", dir);
   
   if (scheck) {
     boot_world();
     log("Done.");
     exit(0);
   } else {
-    log("Running game on port %d.", port);
+    log_vfprintf("Running game on port %d.", port);
     init_game(port);
   }
   
@@ -501,13 +501,13 @@ int get_max_players(void)
   max_descs = MIN(MAX_PLAYERS, max_descs - NUM_RESERVED_DESCS);
   
   if (max_descs <= 0) {
-    log("Non-positive max player limit!  (Set at %d using %s).",
+    log_vfprintf("Non-positive max player limit!  (Set at %d using %s).",
         max_descs, method);
     
     exit(1);
   }
   
-  log("Setting player limit to %d using %s.", max_descs, method);
+  log_vfprintf("Setting player limit to %d using %s.", max_descs, method);
   
   return max_descs;
 }
@@ -826,7 +826,7 @@ void record_usage(void)
       sockets_playing++;
   }
   
-  log("usage: %-3d sockets connected, %-3d sockets playing",
+  log_vfprintf("usage: %-3d sockets connected, %-3d sockets playing",
       sockets_connected, sockets_playing);
   
 #ifdef RUSAGE

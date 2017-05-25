@@ -1190,7 +1190,7 @@ void assign_shopkeepers(void)
     if (shop_table[index].keeper <= 0)
       continue;
     if ((rnum = real_mobile(shop_table[index].keeper)) < 0)
-      log("Shopkeeper #%d does not exist (shop #%d)",
+      log_vfprintf("Shopkeeper #%d does not exist (shop #%d)",
           shop_table[index].keeper, shop_table[index].vnum);
     else if (mob_index[rnum].func != shop_keeper && shop_table[index].keeper != 1151) {
       mob_index[rnum].sfunc = mob_index[rnum].func;

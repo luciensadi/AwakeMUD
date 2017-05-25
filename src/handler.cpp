@@ -227,7 +227,7 @@ void affect_modify(struct char_data * ch,
     GET_TASK_POOL(ch, REA) += mod;
     break;
   default:
-    log("SYSLOG: Unknown apply adjust: %s/%d.", GET_NAME(ch), loc);
+    log_vfprintf("SYSLOG: Unknown apply adjust: %s/%d.", GET_NAME(ch), loc);
     break;
   }                             /* switch */
 }
@@ -302,7 +302,7 @@ void affect_veh(struct veh_data *veh, byte loc, sbyte mod)
     veh->pilot = mod;
     break;
   default:
-    log("SYSLOG: Unknown apply adjust: %s/%d.", veh->short_description, loc);
+    log_vfprintf("SYSLOG: Unknown apply adjust: %s/%d.", veh->short_description, loc);
     break;
 
 
@@ -1340,7 +1340,7 @@ void equip_char(struct char_data * ch, struct obj_data * obj, int pos)
 
   if (GET_EQ(ch, pos))
   {
-    log("SYSLOG: Char is already equipped: %s, %s",
+    log_vfprintf("SYSLOG: Char is already equipped: %s, %s",
         GET_NAME(ch), obj->text.name);
     return;
   }
@@ -1390,10 +1390,10 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus)
   struct obj_data *obj;
 
   if (pos < 0 || pos >= NUM_WEARS)
-    log("SYSERR: pos < 0 || pos >= NUM_WEARS, %s - %d", GET_NAME(ch), pos);
+    log_vfprintf("SYSERR: pos < 0 || pos >= NUM_WEARS, %s - %d", GET_NAME(ch), pos);
 
   if (!GET_EQ(ch, pos))
-    log("SYSERR: Trying to remove non-existent item from %s at %d", GET_NAME(ch), pos);
+    log_vfprintf("SYSERR: Trying to remove non-existent item from %s at %d", GET_NAME(ch), pos);
 
   obj = GET_EQ(ch, pos);
   obj->worn_by = NULL;
@@ -1851,7 +1851,7 @@ void extract_obj(struct obj_data * obj)
     extract_obj(obj->contains);
 
   if (!ObjList.Remove(obj))
-    log("ObjList.Remove returned FALSE!  (%d)", GET_OBJ_VNUM(obj));
+    log_vfprintf("ObjList.Remove returned FALSE!  (%d)", GET_OBJ_VNUM(obj));
 
   if (GET_OBJ_RNUM(obj) >= 0)
     (obj_index[GET_OBJ_RNUM(obj)].number)--;

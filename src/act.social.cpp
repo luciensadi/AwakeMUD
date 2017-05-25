@@ -156,7 +156,7 @@ void perform_wizsocial(char *orig, struct char_data * ch, struct char_data *vict
         i = "$";
         break;
       default:
-        log("SYSERR: Illegal $-code to wf():\nSYSERR: %s", orig);
+        log_vfprintf("SYSERR: Illegal $-code to wf():\nSYSERR: %s", orig);
         break;
       }
       while ((*buf = *(i++)))
@@ -363,7 +363,7 @@ void boot_social_messages(void)
     if (*next_soc == '$')
       break;
     if ((nr = find_command(next_soc)) < 0)
-      log("Unknown social '%s' in social file", next_soc);
+      log_vfprintf("Unknown social '%s' in social file", next_soc);
 
     if (fscanf(fl, " %d %d \n", &hide, &min_pos) != 2) {
       fprintf(stderr, "Format error in social file near social '%s'\n",

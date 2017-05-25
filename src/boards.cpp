@@ -136,7 +136,7 @@ void BoardInit(void)
   for (i = 0; i < NUM_OF_BOARDS; i++) {
     if (real_object(BOARD_VNUM(i)) == -1) {
       // Changed this logic to print all broken board vnums instead of just one.
-      log("--Board #%d does not exist.", BOARD_VNUM(i));
+      log_vfprintf("--Board #%d does not exist.", BOARD_VNUM(i));
       will_die = TRUE;
     }
   }

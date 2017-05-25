@@ -32,7 +32,8 @@ char    *str_dup(const char *source);
 char *str_str( const char *str1, const char *str2 );
 int     str_cmp(const char *arg1, const char *arg2);
 int strn_cmp(const char *arg1, const char *arg2, int n);
-void    log(const char *format, ...);
+void    log(const char *str);
+void    log_vfprintf(const char *format, ...);
 void    mudlog(const char *str, struct char_data *ch, int log, bool file);
 void    log_death_trap(struct char_data *ch);
 int     number(int from, int to);
@@ -154,7 +155,7 @@ void    update_pos(struct char_data *victim);
 
 #define CREATE(result, type, number)  do {\
  if ((number) * sizeof(type) <= 0) \
-  log("SYSERR: Zero bytes or less requested at %s:%d.", __FILE__, __LINE__); \
+  log_vfprintf("SYSERR: Zero bytes or less requested at %s:%d.", __FILE__, __LINE__); \
  if (!((result) = (type *) calloc ((number), sizeof(type)))) \
   { perror("SYSERR: malloc failure"); exit(1); } } while(0)
 

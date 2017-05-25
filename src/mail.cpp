@@ -174,14 +174,14 @@ int scan_file(void)
 
   file_end_pos = ftell(mail_file);
   fclose(mail_file);
-  log("   %ld bytes read.", file_end_pos);
+  log_vfprintf("   %ld bytes read.", file_end_pos);
 
   if (file_end_pos % BLOCK_SIZE) {
     log("SYSERR: Error booting mail system -- Mail file corrupt!");
     log("SYSERR: Mail disabled!");
     return 0;
   }
-  log("   Mail file read -- %d messages.", total_messages);
+  log_vfprintf("   Mail file read -- %d messages.", total_messages);
   return 1;
 }                               /* end of scan_file */
 

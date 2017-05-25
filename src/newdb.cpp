@@ -1310,7 +1310,7 @@ bool PCIndex::Save()
   }
 
   if (!index) {
-    log("--Error: Could not open player index file %s\n",
+    log_vfprintf("--Error: Could not open player index file %s\n",
         INDEX_FILENAME);
     return false;
   }
@@ -1343,8 +1343,10 @@ char_data *CreateChar(char_data *ch)
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
   if (!row && mysql_field_count(mysql)) {
-    log("%s promoted to president, by virtue of first-come, first-serve.",
+    log_vfprintf("%s promoted to President, by virtue of first-come, first-serve.",
         GET_CHAR_NAME(ch));
+    
+    // TODO: Add NODELETE, OLC on
 
     for (int i = 0; i < 3; i++)
       GET_COND(ch, i) = (char) -1;
@@ -1387,8 +1389,10 @@ char_data *PCIndex::CreateChar(char_data *ch)
 
   // if this is the first character, make him president
   if (entry_cnt < 1) {
-    log("%s promoted to president, by virtue of first-come, first-serve.",
+    log_vfprintf("%s promoted to President, by virtue of first-come, first-serve.",
         GET_CHAR_NAME(ch));
+    
+    // TODO: this is a duplicate of the other president code, can they be consolidated?
 
     for (int i = 0; i < 3; i++)
       GET_COND(ch, i) = (char) -1;
@@ -1591,7 +1595,7 @@ void PCIndex::sorted_insert(const entry *info)
 
   tab[i] = *info;
 
-  log("--Inserting %s's (id#%d) entry into position %d",
+  log_vfprintf("--Inserting %s's (id#%d) entry into position %d",
       info->name, info->id, i);
 
   // update entry_cnt, and we're done

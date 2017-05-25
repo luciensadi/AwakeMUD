@@ -117,7 +117,7 @@ char *File::ReadString()
 
   while (!done) {
     if (!GetLine(line, 512, FALSE)) {
-      log("Error: format error in %s, line %d: expecting ~-terminated string",
+      log_vfprintf("Error: format error in %s, line %d: expecting ~-terminated string",
           Filename(), LineNumber());
       break;
     }
@@ -136,7 +136,7 @@ char *File::ReadString()
     if ((buf_len + line_len) >= (size_t)MAX_STRING_LENGTH) {
       // we can handle this gracefully: just fill buf, then set skip_to_end
 
-      log("Error: string too long (%s, line %d) -- truncating",
+      log_vfprintf("Error: string too long (%s, line %d) -- truncating",
           Filename(), LineNumber());
 
       strncpy(buf+buf_len, line, MAX_STRING_LENGTH - buf_len);
@@ -157,7 +157,7 @@ char *File::ReadString()
     // if we're here, we need to find the '~'
     while (!EoF()) {
       if (!GetLine(line, 512, FALSE)) {
-        log("Error: format error in %s, line %d: expecting ~-termed string",
+        log_vfprintf("Error: format error in %s, line %d: expecting ~-termed string",
             Filename(), LineNumber());
         break;
       }

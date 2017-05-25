@@ -583,7 +583,7 @@ int strn_cmp(const char *arg1, const char *arg2, int n)
   int chk, i;
 
   if (arg1 == NULL || arg2 == NULL) {
-    log("SYSERR: strn_cmp() passed a NULL pointer, %p or %p.", arg1, arg2);
+    log_vfprintf("SYSERR: strn_cmp() passed a NULL pointer, %p or %p.", arg1, arg2);
     return (0);
   }
 
@@ -619,7 +619,17 @@ void log_death_trap(struct char_data * ch)
   mudlog(buf, ch, LOG_DEATHLOG, TRUE);
 }
 
-void log(const char *format, ...)
+void log(const char *str) {
+  va_list args;
+  time_t ct = time(0);
+  char *tmstr;
+  
+  tmstr = asctime(localtime(&ct));
+  *(tmstr + strlen(tmstr) - 1) = '\0';
+  fprintf(stderr, "%-15.15s :: %s", tmstr + 4, str);
+}
+
+void log_vfprintf(const char *format, ...)
 {
   va_list args;
   time_t ct = time(0);

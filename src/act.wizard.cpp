@@ -1397,19 +1397,19 @@ ACMD(do_shutdown)
   one_argument(argument, arg);
 
   if (!*arg) {
-    log("Shutdown by %s.", GET_CHAR_NAME(ch));
+    log_vfprintf("Shutdown by %s.", GET_CHAR_NAME(ch));
     send_to_all("Shutting down.\r\n");
     shutdown(SUCCESS);
   } else if (!str_cmp(arg, "reboot")) {
-    log("Reboot by %s.", GET_CHAR_NAME(ch));
+    log_vfprintf("Reboot by %s.", GET_CHAR_NAME(ch));
     send_to_all("Rebooting.. come back in a minute or two.\r\n");
     shutdown(SUCCESS);
   } else if (!str_cmp(arg, "die")) {
-    log("Shutdown by %s.", GET_CHAR_NAME(ch));
+    log_vfprintf("Shutdown by %s.", GET_CHAR_NAME(ch));
     send_to_all("Shutting down for maintenance.\r\n");
     shutdown(SUCCESS);
   } else if (!str_cmp(arg, "pause")) {
-    log("Shutdown by %s.", GET_CHAR_NAME(ch));
+    log_vfprintf("Shutdown by %s.", GET_CHAR_NAME(ch));
     send_to_all("Shutting down for maintenance.\r\n");
     shutdown(SUCCESS);
   } else

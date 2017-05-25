@@ -367,7 +367,7 @@ void DBInit()
   TransportInit();
 
   for (i = 0; i <= top_of_zone_table; i++) {
-    log("Resetting %s (rooms %d-%d).", zone_table[i].name,
+    log_vfprintf("Resetting %s (rooms %d-%d).", zone_table[i].name,
         (i ? (zone_table[i - 1].top + 1) : 0), zone_table[i].top);
     reset_zone(i, 1);
     extern void write_zone_to_disk(int vnum);
@@ -411,7 +411,7 @@ void reset_time(void)
   else
     weather_info.sunlight = SUN_DARK;
 
-  log("   Current Gametime: %d/%d/%d %d:00.", time_info.month,
+  log_vfprintf("   Current Gametime: %d/%d/%d %d:00.", time_info.month,
       time_info.day, time_info.year,
       (time_info.hours % 12) == 0 ? 12 : time_info.hours % 12);
 
@@ -656,7 +656,7 @@ void discrete_load(File &fl, int mode)
 
     if (*line == '#') {
       if (sscanf(line, "#%ld", &nr) != 1) {
-        log("Format error in %s, line %d",
+        log_vfprintf("Format error in %s, line %d",
             fl.Filename(), fl.LineNumber());
         shutdown();
       }
@@ -690,7 +690,7 @@ void discrete_load(File &fl, int mode)
           break;
         }
     } else {
-      log("Format error in %s, line %d",
+      log_vfprintf("Format error in %s, line %d",
           fl.Filename(), fl.LineNumber());
       shutdown();
     }
@@ -762,12 +762,12 @@ void parse_host(File &fl, long nr)
   static DBIndex::rnum_t rnum = 0, zone = 0;
   char field[64];
   if (nr <= (zone ? zone_table[zone - 1].top : -1)) {
-    log("Host #%d is below zone %d.\n", nr, zone_table[zone].number);
+    log_vfprintf("Host #%d is below zone %d.\n", nr, zone_table[zone].number);
     shutdown();
   }
   while (nr > zone_table[zone].top)
     if (++zone > top_of_zone_table) {
-      log("Room %d is outside of any zone.\n", nr);
+      log_vfprintf("Room %d is outside of any zone.\n", nr);
       shutdown();
     }
   host_data *host = matrix+rnum;
@@ -870,12 +870,12 @@ void parse_ic(File &fl, long nr)
   ic->number = rnum;
 
   if (nr <= (zone ? zone_table[zone - 1].top : -1)) {
-    log("IC #%d is below zone %d.\n", nr, zone);
+    log_vfprintf("IC #%d is below zone %d.\n", nr, zone);
     shutdown();
   }
   while (nr > zone_table[zone].top)
     if (++zone > top_of_zone_table) {
-      log("IC%d is outside of any zone.\n", nr);
+      log_vfprintf("IC%d is outside of any zone.\n", nr);
       shutdown();
     }
 
@@ -899,12 +899,12 @@ void parse_room(File &fl, long nr)
   static DBIndex::rnum_t rnum = 0, zone = 0;
 
   if (nr <= (zone ? zone_table[zone - 1].top : -1)) {
-    log("Room #%d is below zone %d.\n", nr, zone_table[zone].number);
+    log_vfprintf("Room #%d is below zone %d.\n", nr, zone_table[zone].number);
     shutdown();
   }
   while (nr > zone_table[zone].top)
     if (++zone > top_of_zone_table) {
-      log("Room %d is outside of any zone.\n", nr);
+      log_vfprintf("Room %d is outside of any zone.\n", nr);
       shutdown();
     }
 
@@ -967,7 +967,7 @@ void parse_room(File &fl, long nr)
       int to_vnum = data.GetInt(field, -1);
 
       if (to_vnum < 0) {
-        log("Room #%d's %s exit had invalid destination -- skipping",
+        log_vfprintf("Room #%d's %s exit had invalid destination -- skipping",
             nr, fulldirs[i]);
         continue;
       }
@@ -1026,7 +1026,7 @@ void parse_room(File &fl, long nr)
       char *keywords = str_dup(data.GetString(field, NULL));
 
       if (!*keywords) {
-        log("Room #%d's extra description #%d had no keywords -- skipping",
+        log_vfprintf("Room #%d's extra description #%d had no keywords -- skipping",
             nr, i);
         continue;
       }
@@ -1433,7 +1433,7 @@ void parse_object(File &fl, long nr)
       int loc = data.LookupInt(field, apply_types, APPLY_NONE);
 
       if (loc == APPLY_NONE) {
-        log("Item #%d's affect #%d had no location -- skipping", nr, i);
+        log_vfprintf("Item #%d's affect #%d had no location -- skipping", nr, i);
         continue;
       }
 
@@ -1456,7 +1456,7 @@ void parse_object(File &fl, long nr)
       char *keywords = str_dup(data.GetString(field, NULL));
 
       if (!keywords) {
-        log("Room #%d's extra description #%d had no keywords -- skipping",
+        log_vfprintf("Room #%d's extra description #%d had no keywords -- skipping",
             nr, i);
         continue;
       }
@@ -1635,12 +1635,12 @@ void parse_shop(File &fl, long virtual_nr)
   static DBIndex::rnum_t rnum = 0, zone = 0;
   char field[64];
   if (virtual_nr <= (zone ? zone_table[zone - 1].top : -1)) {
-    log("Shop #%d is below zone %d.\n", virtual_nr, zone_table[zone].number);
+    log_vfprintf("Shop #%d is below zone %d.\n", virtual_nr, zone_table[zone].number);
     shutdown();
   }
   while (virtual_nr > zone_table[zone].top)
     if (++zone > top_of_zone_table) {
-      log("Shop %d is outside of any zone.\n", virtual_nr);
+      log_vfprintf("Shop %d is outside of any zone.\n", virtual_nr);
       shutdown();
     }
   shop_data *shop = shop_table+rnum;

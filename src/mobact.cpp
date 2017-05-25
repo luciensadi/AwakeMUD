@@ -70,7 +70,7 @@ void mobile_activity(void)
     /* Examine call for special procedure */
     if (MOB_FLAGGED(ch, MOB_SPEC) && !no_specials) {
       if (mob_index[GET_MOB_RNUM(ch)].func == NULL) {
-        log("%s (#%d): Attempting to call non-existing mob func",
+        log_vfprintf("%s (#%d): Attempting to call non-existing mob func",
             GET_NAME(ch), GET_MOB_VNUM(ch));
 
         MOB_FLAGS(ch).RemoveBit(MOB_SPEC);

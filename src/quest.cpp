@@ -838,7 +838,7 @@ void assign_johnsons(void)
 
   for (i = 0; i < top_of_questt; i++) {
     if ((rnum = real_mobile(quest_table[i].johnson)) < 0)
-      log("Johnson #%d does not exist (quest #%d)",
+      log_vfprintf("Johnson #%d does not exist (quest #%d)",
           quest_table[i].johnson, quest_table[i].vnum);
     else if (mob_index[rnum].func != johnson) {
       mob_index[rnum].sfunc = mob_index[rnum].func;
@@ -1054,7 +1054,7 @@ int write_quests_to_disk(int zone)
   sprintf(buf, "world/qst/%d.qst", zone_table[zone].number);
 
   if (!(fp = fopen(buf, "w+"))) {
-    log("SYSERR: could not open file %d.qst", zone_table[zone].number);
+    log_vfprintf("SYSERR: could not open file %d.qst", zone_table[zone].number);
 
     fclose(fp);
     return 0;

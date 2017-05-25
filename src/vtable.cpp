@@ -101,7 +101,7 @@ int  VTable::Parse(File *in)
     //    printf("depth=%d, d=%d, line_ptr=%s\n", depth, d, line_ptr);
 
     if (d > depth) {
-      log("Warning: depth doesn't match field depth (%d != %d) (%s, line %d)",
+      log_vfprintf("Warning: depth doesn't match field depth (%d != %d) (%s, line %d)",
           d, depth, in->Filename(), in->LineNumber());
       SKIP;
     } else
@@ -168,7 +168,7 @@ int  VTable::Parse(File *in)
 
     // make sure we've got a field name
     if (!*line_ptr) {
-      log("Invalid field: '%s' (%s, line %d)",
+      log_vfprintf("Invalid field: '%s' (%s, line %d)",
           line, in->Filename(), in->LineNumber());
       SKIP;
     }
