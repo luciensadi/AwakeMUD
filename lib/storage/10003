@@ -1,8 +1,8 @@
 [HOUSE]
 	[Object 0]
-		Vnum:	10009
+		Vnum:	10000
 		Inside:	0
-		Value 0:	4
+		Value 0:	1
 		Value 1:	15
 		Value 2:	0
 		Value 3:	0
@@ -17,7 +17,7 @@
 		Condition:	32
 		Timer:	2
 		Attempt:	0
-		Cost:	1410065407
+		Cost:	0
 		ExtraFlags:	0
 	[Object 1]
 		Vnum:	10008
@@ -40,9 +40,9 @@
 		Cost:	0
 		ExtraFlags:	0
 	[Object 2]
-		Vnum:	10000
+		Vnum:	10009
 		Inside:	0
-		Value 0:	1
+		Value 0:	4
 		Value 1:	15
 		Value 2:	0
 		Value 3:	0
@@ -57,5 +57,5 @@
 		Condition:	32
 		Timer:	2
 		Attempt:	0
-		Cost:	0
+		Cost:	1410065407
 		ExtraFlags:	0

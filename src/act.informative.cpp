@@ -1081,7 +1081,7 @@ void look_at_room(struct char_data * ch, int ignore_brief)
     if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
       ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH,
                                         room_bits, ROOM_MAX);
-      sprintf(buf2, "^C[%5ld] %s [ %s]^n", world[ch->in_room].number,
+      sprintf(buf2, "^C[%5ld] %s [ %s ]^n", world[ch->in_room].number,
               world[ch->in_room].name, buf);
       send_to_char(buf2, ch);
     } else
@@ -1174,7 +1174,7 @@ void look_at_room(struct char_data * ch, int ignore_brief)
     }
   }
   if (world[ch->in_room].poltergeist[0])
-    send_to_char("^cAn invisible force is whiping small objects around the area.^n\r\n", ch);
+    send_to_char("^cAn invisible force is whipping small objects around the area.^n\r\n", ch);
   if (world[ch->in_room].icesheet[0])
     send_to_char("^CIce covers the floor.^n\r\n", ch);
   /* now list characters & objects */
@@ -2933,7 +2933,7 @@ ACMD(do_consider)
     if (diff <= -18)
       send_to_char("Now where did that chicken go?\r\n", ch);
     else if (diff <= -12)
-      send_to_char("You could do it with a needle!\r\n", ch);
+      send_to_char("You could kill it with a needle!\r\n", ch);
     else if (diff <= -6)
       send_to_char("Easy.\r\n", ch);
     else if (diff <= -3)

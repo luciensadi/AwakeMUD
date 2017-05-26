@@ -2211,7 +2211,7 @@ void nanny(struct descriptor_data * d, char *arg)
       playerDB.SaveChar(d->character, GET_LOADROOM(d->character));
       if (isbanned(d->host) == BAN_SELECT &&
           !PLR_FLAGGED(d->character, PLR_SITEOK)) {
-        SEND_TO_Q("Sorry, this char has not been cleared for login >from your site!\r\n", d);
+        SEND_TO_Q("Sorry, this char has not been cleared for login from your site!\r\n", d);
         STATE(d) = CON_CLOSE;
         sprintf(buf, "Connection attempt for %s denied from %s",
                 GET_CHAR_NAME(d->character), d->host);
@@ -2220,7 +2220,7 @@ void nanny(struct descriptor_data * d, char *arg)
       }
       if (!access_level(d->character, restrict)) {
         if (restrict == LVL_MAX)
-          SEND_TO_Q("The mud is about to reboot.  Please try again in a few minutes.\r\n", d);
+          SEND_TO_Q("The mud is about to reboot. Please try again in a few minutes.\r\n", d);
         else
           SEND_TO_Q("The game is temporarily restricted.. try again later.\r\n", d);
         STATE(d) = CON_CLOSE;
