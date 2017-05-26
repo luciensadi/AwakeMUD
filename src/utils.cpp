@@ -1091,6 +1091,14 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
 
 int get_skill(struct char_data *ch, int skill, int &target)
 {
+  // Wearing too much armor? That'll hurt.
+  if (skills[skill].attribute == QUI) {
+    if (GET_TOTALIMP(ch) > GET_QUI(ch))
+      target += GET_TOTALIMP(ch) - GET_QUI(ch);
+    if (GET_TOTALBAL(ch) > GET_QUI(ch))
+      target += GET_TOTALBAL(ch) - GET_QUI(ch);
+  }
+  
   if (GET_SKILL(ch, skill))
   {
     int totalskill, mbw = 0, enhan = 0, synth = 0;
@@ -1128,22 +1136,10 @@ int get_skill(struct char_data *ch, int skill, int &target)
     if (enhan && (skills[skill].attribute == QUI || skill == SKILL_BR_CAR || skill == SKILL_BR_BIKE ||
         skill == SKILL_BR_COMPUTER || skill == SKILL_BR_ELECTRONICS || skill == SKILL_BR_TRUCK ||
         skill == SKILL_BR_DRONE))
-      totalskill++; 
-    if (skills[skill].attribute == QUI) {
-      if (GET_TOTALIMP(ch) > GET_QUI(ch))
-        target += GET_TOTALIMP(ch) - GET_QUI(ch);
-      if (GET_TOTALBAL(ch) > GET_QUI(ch))
-        target += GET_TOTALBAL(ch) - GET_QUI(ch);
-    }
+      totalskill++;
     return totalskill;
   } else
   {
-    if (skills[skill].attribute == QUI) {
-      if (GET_TOTALIMP(ch) > GET_QUI(ch))
-        target += GET_TOTALIMP(ch) - GET_QUI(ch);
-      if (GET_TOTALBAL(ch) > GET_QUI(ch))
-        target += GET_TOTALBAL(ch) - GET_QUI(ch);
-    }
     if (target >= 8)
       return 0;
     target += 4;

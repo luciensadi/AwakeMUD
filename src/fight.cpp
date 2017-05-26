@@ -2944,7 +2944,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     act(buf3, FALSE, ch, weapon, victim, TO_NOTVICT);
     // End same-room messaging.
   } else {
-    // Ranged messaging. TODO    
+    // Ranged messaging. TODO
     if (damage < 0) {
       switch (number(1, 3)) {
         case 1:
@@ -3158,100 +3158,54 @@ bool char_too_tall_for_their_room(struct char_data *ch) {
   return ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) >= world[ch->in_room].z*100;
 }
 
+bool is_damtype_physical(int type) {
+  return (type == TYPE_HIT || type == TYPE_BLUDGEON || type == TYPE_PUNCH || type == TYPE_TASER || type == TYPE_CRUSH || type == TYPE_POUND);
+}
+
 void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon, struct obj_data *vict_weapon)
 {
   char rbuf[MAX_STRING_LENGTH];
   int type, vtype = 0;
   struct veh_data *veh = NULL;
-  struct obj_data *clip = NULL, *attach = NULL;
+  struct obj_data *magazine = NULL, *attach = NULL;
   bool is_physical = TRUE, v_is_physical = TRUE, melee = FALSE, vtall = TRUE, ctall = TRUE, heavy = FALSE;
-  int tdistance = 0, recoil = 0, tdualwield = 0, burst = 0, tawake = 0, tsmartlink = 0, tsight = 0, tsleep = 0, tcansee = 0;
+  int tdistance = 0, recoil = 0, tdualwield = 0, burst = 0, tawake = 0, tsmartlink = 0, tsight = 0, tsleep = 0;
   int power = 0, damage_total = 0, base_target = 0, skill_total = 0, recoilcomp = 0, modtarget = 0, success = 0;
+  
+  // Precondition: If you're asleep or paralyzed, you don't get to fight. TODO: How to handle characters wielding non-weapons?
   if (!AWAKE(ch) || GET_QUI(ch) <= 0 || (weapon && GET_OBJ_TYPE(weapon) != ITEM_WEAPON))
     return;
+  
+  // Precondition: If your foe is astral, you don't belong here.
   if (IS_ASTRAL(victim)) {
     if (IS_DUAL(ch) || IS_ASTRAL(ch))
       astral_fight(ch, victim);
     return;
   }
-  if (!AFF_FLAGGED(victim, AFF_SURPRISE) && (!ROOM_FLAGGED(victim->in_room, ROOM_INDOORS) || (ROOM_FLAGGED(victim->in_room, ROOM_INDOORS) && GET_HEIGHT(victim) < world[victim->in_room].z*100)))
-    vtall = FALSE;
-  if (!ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) || (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) < world[ch->in_room].z*100))
-    ctall = FALSE;
   
-  RIG_VEH(ch, veh);
-  if (weapon) {
-    switch (GET_OBJ_VAL(weapon, 3)) {
-      case WEAP_EDGED:
-      case WEAP_POLEARM:
-        type = TYPE_SLASH;
-        break;
-      case WEAP_WHIP:
-        type = TYPE_POUND;
-        break;
-      case WEAP_CLUB:
-      case WEAP_GLOVE:
-        type = TYPE_POUND;
-        break;
-      case WEAP_SMG:
-      case WEAP_ASSAULT_RIFLE:
-      case WEAP_LMG:
-      case WEAP_MMG:
-      case WEAP_HMG:
-      case WEAP_MINIGUN:
-        type = TYPE_MACHINE_GUN;
-        break;
-      case WEAP_SHOTGUN:
-        type = TYPE_SHOTGUN;
-        break;
-      case WEAP_TASER:
-        type = TYPE_TASER;
-        break;
-      case WEAP_CANNON:
-        type = TYPE_CANNON;
-        break;
-      case WEAP_SPORT_RIFLE:
-      case WEAP_SNIPER_RIFLE:
-        type = TYPE_RIFLE;
-        break;
-      case WEAP_MISS_LAUNCHER:
-      case WEAP_GREN_LAUNCHER:
-        type = TYPE_ROCKET;
-        break;
-      default:
-        type = TYPE_PISTOL;
-        break;
-    }
-  } else
-    type = TYPE_HIT;
+  // Precondition: If you're wielding a ranged weapon and it's empty, you don't get to fight. TODO: What if I want to pistol-whip?
+  if (!has_ammo(ch, weapon))
+    return;
   
-  if (!weapon || !IS_GUN(GET_OBJ_VAL(weapon, 3)))
-    melee = TRUE;
-  else {
-    if (GET_RACE(ch) == RACE_CYCLOPS)
-      tdistance += 2;
-    if (!has_ammo(ch, weapon))
-      return;
-    clip = weapon->contains;
-  }
-  
-  if ((type == TYPE_HIT || type == TYPE_BLUDGEON || type == TYPE_PUNCH ||
-       type == TYPE_TASER || type == TYPE_CRUSH || type == TYPE_POUND))
-    is_physical = FALSE;
-  
-  if (melee) {
+  // Precondition: If you're in melee combat and your foe isn't present, stop fighting.
+  if ((melee = (!weapon || !IS_GUN(GET_OBJ_VAL(weapon, 3))))) {
     if (ch->in_room != victim->in_room) {
       stop_fighting(ch);
       return;
     }
+  }
+  
+  // Early execution: Nerve strike doesn't require as much setup, so perform it here to save on resources.
+  if (melee) {
+    // Perform nerve strike.
     if (IS_NERVE(ch) && !weapon) {
-      int total = 4 + GET_IMPACT(victim) + modify_target(ch);
-      skill_total = get_skill(ch, SKILL_UNARMED_COMBAT, total) + MIN(GET_OFFENSE(ch), GET_SKILL(ch, SKILL_UNARMED_COMBAT));
+      int target_num = 4 + GET_IMPACT(victim) + modify_target(ch);
+      skill_total = get_skill(ch, SKILL_UNARMED_COMBAT, target_num) + MIN(GET_OFFENSE(ch), GET_SKILL(ch, SKILL_UNARMED_COMBAT));
       if (GET_QUI(victim) <= 0)
         success = 0;
-      else success = success_test(skill_total, total);
+      else success = success_test(skill_total, target_num);
       if (success > 0) {
-        GET_TEMP_QUI_LOSS(victim) += success * 2;
+        GET_TEMP_QUI_LOSS(victim) += (int) (success / 2); // This used to be * 2!
         affect_total(victim);
         if (GET_QUI(victim) <= 0) {
           act("You hit $N's pressure points succesfully, $e is paralyzed!", FALSE, ch, 0, victim, TO_CHAR);
@@ -3269,82 +3223,80 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
       }
       return;
     }
-    
-    if (vict_weapon)
-      switch (GET_OBJ_VAL(vict_weapon, 3)) {
-        case WEAP_EDGED:
-        case WEAP_POLEARM:
-          vtype = TYPE_SLASH;
-          break;
-        case WEAP_WHIP:
-          vtype = TYPE_POUND;
-          break;
-        case WEAP_CLUB:
-        case WEAP_GLOVE:
-          vtype = TYPE_POUND;
-          break;
-        case WEAP_SMG:
-        case WEAP_ASSAULT_RIFLE:
-        case WEAP_LMG:
-        case WEAP_MMG:
-        case WEAP_HMG:
-        case WEAP_MINIGUN:
-          vtype = TYPE_MACHINE_GUN;
-          break;
-        case WEAP_SHOTGUN:
-          vtype = TYPE_SHOTGUN;
-          break;
-        case WEAP_TASER:
-          vtype = TYPE_TASER;
-          break;
-        case WEAP_CANNON:
-          vtype = TYPE_CANNON;
-          break;
-        case WEAP_SPORT_RIFLE:
-        case WEAP_SNIPER_RIFLE:
-          vtype = TYPE_RIFLE;
-          break;
-        case WEAP_MISS_LAUNCHER:
-        case WEAP_GREN_LAUNCHER:
-          vtype = TYPE_ROCKET;
-          break;
-        default:
-          vtype = TYPE_PISTOL;
-          break;
-      }
-    else
-      vtype = TYPE_HIT;
-    if (vict_weapon && IS_GUN(GET_OBJ_VAL(vict_weapon, 3)))
-      vtype = TYPE_BLUDGEON;
-    if ((vtype == TYPE_HIT || vtype == TYPE_BLUDGEON || vtype == TYPE_PUNCH ||
-         vtype == TYPE_TASER || vtype == TYPE_CRUSH || vtype == TYPE_POUND))
-      v_is_physical = FALSE;
-  } else {
-    if ((GET_OBJ_VAL(weapon, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(weapon, 4) <= SKILL_ASSAULT_CANNON) && (GET_STR(ch) < 8 ||
-                                                                                                             GET_BOD(ch) < 8) && !(AFF_FLAGGED(ch, AFF_PRONE) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG) || AFF_FLAGGED(ch, AFF_MANNING))) {
-      for (int q = 0; q < NUM_WEARS; q++)
-        if (GET_EQ(ch, q) && GET_OBJ_TYPE(GET_EQ(ch, q)) == ITEM_GYRO)
+  }
+  
+  // Setup: Determine damage types.
+  type = get_weapon_damage_type(weapon);
+  vtype = get_weapon_damage_type(vict_weapon);
+  
+  // Setup: Calculate sight penalties. TODO: fog etc?
+  // TODO: Why would someone handling a vehicle or manning a turret negate visibility penalties?
+  if (!CAN_SEE(ch, victim) && !(ch->in_veh || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_MANNING))) {
+    tsight = 8;
+    if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) || GET_POWER(ch, ADEPT_BLIND_FIGHTING))
+      tsight /= 2;
+  }
+  
+  // Setup: Height checks.
+  vtall = AFF_FLAGGED(victim, AFF_SURPRISE) || char_too_tall_for_their_room(victim);
+  ctall = char_too_tall_for_their_room(ch);
+  
+  // Setup: If the character is rigging a vehicle or is in a vehicle, set veh to that vehicle.
+  RIG_VEH(ch, veh);
+  
+  // Setup: Decide if we're doing physical damage.
+  is_physical = is_damtype_physical(type);
+  v_is_physical = is_damtype_physical(vtype);
+  
+  // Setup for ranged combat.
+  if (!melee) {
+    // Precondition: If you're using a heavy weapon, you must be strong enough, or assisted.
+    if ((GET_OBJ_VAL(weapon, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(weapon, 4) <= SKILL_ASSAULT_CANNON)
+        && (GET_STR(ch) < 8 || GET_BOD(ch) < 8)
+        && !(AFF_FLAGGED(ch, AFF_PRONE)
+             || PLR_FLAGGED(ch, PLR_REMOTE)
+             || AFF_FLAGGED(ch, AFF_RIG)
+             || AFF_FLAGGED(ch, AFF_MANNING)))
+    {
+      for (int q = 0; q < NUM_WEARS; q++) {
+        if (GET_EQ(ch, q) && GET_OBJ_TYPE(GET_EQ(ch, q)) == ITEM_GYRO) {
           heavy = TRUE;
+          break;
+        }
+      }
       if (!heavy) {
         send_to_char("You can't lift the barrel high enough to fire.\r\n", ch);
         return;
       }
     }
+    
+    // Setup: Cyclops suffer a +2 ranged-combat modifier.
+    if (GET_RACE(ch) == RACE_CYCLOPS)
+      tdistance += 2;
+    
+    magazine = weapon->contains;
+    
+    // Setup: Determine the burst value of the weapon.
     if (IS_BURST(weapon))
-      burst = 2;
-    if (IS_AUTO(weapon))
-      burst = GET_OBJ_TIMER(weapon) - 1;
+      burst = 3;
+    else if (IS_AUTO(weapon))
+      burst = GET_OBJ_TIMER(weapon);
+    
+    // Why was this designed to save a bullet every time it fired in burst mode?
+    
+    // Setup: Limit the burst of the weapon to the available ammo, and decrement ammo appropriately.
     if (burst) {
-      if (!IS_NPC(ch) && !clip) {
+      if (!IS_NPC(ch) && !magazine) {
         burst = MIN(burst, GET_OBJ_VAL(weapon, 6));
         GET_OBJ_VAL(weapon, 6) -= burst;
-      } else if (clip) {
-        burst = MIN(burst, GET_OBJ_VAL(clip, 9));
-        GET_OBJ_VAL(clip, 9) -= burst;
+      } else if (magazine) {
+        burst = MIN(burst, GET_OBJ_VAL(magazine, 9));
+        GET_OBJ_VAL(magazine, 9) -= burst;
         if (IS_NPC(ch))
           GET_OBJ_VAL(weapon, 6) -= burst;
       }
-      burst++;
+      
+      // Setup: Compute recoil.
       recoil = MAX(0, burst - (recoilcomp = check_recoil(ch, weapon)));
       switch (GET_OBJ_VAL(weapon, 4)) {
         case SKILL_SHOTGUNS:
@@ -3353,9 +3305,11 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
           recoil *= 2;
       }
     }
+    
+    // Setup: Modify recoil based on vehicular stats.
     if (veh) {
       if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG))
-        recoil = MAX(0, recoil - 2);
+        recoil = MAX(0, recoil - 2); // TODO: You don't get speed penalties if you're manning/rigging?
       else if (get_speed(veh) > 0) {
         if (get_speed(veh) < 60)
           recoil++;
@@ -3367,37 +3321,46 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
           recoil += 4;
       }
     }
+    
+    // Setup: If you're dual-wielding, take that penalty, otherwise you get your smartlink bonus.
     if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD))
       tdualwield += 2;
-    else tsmartlink -= check_smartlink(ch, weapon);
+    else
+      tsmartlink -= check_smartlink(ch, weapon);
+    
+    // Setup: Trying to fire a sniper rifle at close range is tricky.
     if (IS_OBJ_STAT(weapon, ITEM_SNIPER) && ch->in_room == victim->in_room)
       tdistance += 6;
+    
+    // Setup: Compute modifiers to the TN based on the victim's current state.
     if (!AWAKE(victim))
       tawake -= 2;
     if (AFF_FLAGGED(victim, AFF_PRONE))
       tawake--;
+    
+    // Setup: Determine distance penalties.
     if (ch->in_room != victim->in_room && !veh) {
       struct char_data *vict;
       bool vict_found = FALSE;
-      int dir, range, distance;
       long room, nextroom;
+      
+      int weapon_range;
       if (weapon && IS_RANGED(weapon)) {
-        range = MIN(find_sight(ch), find_weapon_range(ch, weapon));
-        for (dir = 0; dir < NUM_OF_DIRS && !vict_found; dir++) {
+        weapon_range = MIN(find_sight(ch), find_weapon_range(ch, weapon));
+        for (int dir = 0; dir < NUM_OF_DIRS && !vict_found; dir++) {
           room = ch->in_room;
           if (CAN_GO2(room, dir))
             nextroom = EXIT2(room, dir)->to_room;
           else
             nextroom = NOWHERE;
-          for (distance = 1; (nextroom != NOWHERE) && (distance <= range) &&
-               !vict_found; distance++) {
-            for (vict = world[nextroom].people; vict;
-                 vict = vict->next_in_room)
+          for (int distance = 1; (nextroom != NOWHERE) && (distance <= weapon_range) && !vict_found; distance++) {
+            for (vict = world[nextroom].people; vict; vict = vict->next_in_room) {
               if (vict == victim) {
                 tdistance += 2 * distance;
                 vict_found = TRUE;
                 break;
               }
+            }
             room = nextroom;
             if (CAN_GO2(room, dir))
               nextroom = EXIT2(room, dir)->to_room;
@@ -3412,11 +3375,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
       }
     }
   }
-  if (!CAN_SEE(ch, victim) && !(ch->in_veh || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_MANNING))) {
-    tsight = 8;
-    if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) || GET_POWER(ch, ADEPT_BLIND_FIGHTING))
-      tsight /= 2;
-  }
+  // TODO: Where do melee characters get tdualwield calculated? Do they not have it?
   sprintf( rbuf, "%s", GET_CHAR_NAME( ch ) );
   rbuf[3] = 0;
   sprintf( rbuf+strlen(rbuf), "|%s", GET_CHAR_NAME( victim ) );
@@ -3428,26 +3387,31 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
   
   buf_mod( rbuf, "Recoil", recoil);
   buf_mod( rbuf, "Sleep", tsleep);
-  buf_mod( rbuf, "Cansee", tcansee);
   buf_mod( rbuf, "2Weap", tdualwield);
   buf_mod( rbuf, "Smart", tsmartlink);
   buf_mod( rbuf, "Distance", tdistance);
   buf_mod( rbuf, "Sight", tsight);
   buf_mod( rbuf, "Awake", tawake);
   
-  base_target = 4 + modtarget + recoil + tsleep + tcansee
+  base_target = 4 + modtarget + recoil + tsleep
   + tdualwield + tsmartlink + tdistance + tsight + tawake;
   
   buf_roll( rbuf, "Total", base_target);
   act( rbuf, 1, ch, NULL, NULL, TO_ROLLS );
   
+  // Setup for melee combat.
   if (melee) {
+    // If your opponent is wielding a gun, they get to beat you with it.
+    if (vict_weapon && IS_GUN(GET_OBJ_VAL(vict_weapon, 3)))
+      vtype = TYPE_BLUDGEON;
+    
     if (vict_weapon && GET_OBJ_TYPE(vict_weapon) != ITEM_WEAPON)
       vict_weapon = NULL;
+    // todo shouldn't this change vtype
+    
     int reach = GET_REACH(victim) - GET_REACH(ch);
-    int victtarget = 4 + modify_target(victim) + (CAN_SEE(victim, ch) ? 0 :
-                                                  ((AFF_FLAGGED(victim, AFF_DETECT_INVIS) || GET_POWER(victim, ADEPT_BLIND_FIGHTING)) ? 4 : 8)) - (reach > 0 ?
-                                                                                                                                                   reach : 0);
+    int victtarget = 4 + modify_target(victim) +
+                      (CAN_SEE(victim, ch) ? 0 : ((AFF_FLAGGED(victim, AFF_DETECT_INVIS) || GET_POWER(victim, ADEPT_BLIND_FIGHTING)) ? 4 : 8)) - MAX(reach, 0);
     int vict_skill = SKILL_UNARMED_COMBAT;
     if (IS_SPIRIT(victim) || IS_ELEMENTAL(victim)) {
       skill_total = GET_WIL(ch);
@@ -3536,8 +3500,8 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weapon
   if (weapon) {
     power = (IS_GUN(GET_OBJ_VAL(weapon, 3)) ? GET_OBJ_VAL(weapon, 0) : GET_OBJ_VAL(weapon, 2) + GET_STR(ch)) + burst;
     if (IS_GUN(GET_OBJ_VAL(weapon, 3))) {
-      if (clip)
-        switch (GET_OBJ_VAL(clip, 2)) {
+      if (magazine)
+        switch (GET_OBJ_VAL(magazine, 2)) {
           case AMMO_APDS:
             power -= (int)(GET_BALLISTIC(victim) / 2);
             break;

@@ -816,11 +816,13 @@ enum {
 #define SKILL_BLOWGUN             131
 #define SKILL_PHARMA              132
 
-// TODO: Not yet implemented.
+#define MAX_SKILLS		  133
+
+/* TODO: Not yet implemented.
 #define SKILL_SIGN_LANGUAGE       133
 #define SKILL_IMMORTAL_LANGUAGE   134
-
 #define MAX_SKILLS		  135
+*/
 
 // Defines the size of the teach_t array. Changing this means you have to change every teacher too.
 #define NUM_TEACHER_SKILLS 9
@@ -1928,7 +1930,10 @@ enum {
 #define MAX_RAW_INPUT_LENGTH    4096     /* Max size of *raw* input */
 #define MAX_MESSAGES            100
 #define MAX_NAME_LENGTH         20  /* Used in char_file_u *DO*NOT*CHANGE* */
+
+// MAX_PWD_LENGTH is bullshit though, crypt() truncates it to 8. Go go 90s security!
 #define MAX_PWD_LENGTH          30  /* Used in char_file_u *DO*NOT*CHANGE* */
+
 #define MAX_TITLE_LENGTH        50  /* Used in char_file_u *DO*NOT*CHANGE* */
 #define MAX_WHOTITLE_LENGTH     10  /* Used in char_file_u *DO*NOT*CHANGE* */
 #define HOST_LENGTH             50 
