@@ -2063,3 +2063,14 @@ const char *fire_mode[] =
   "Burst Fire",
   "Full Automatic"
 };
+
+const char *combat_modifiers[] =
+{
+  "Recoil",
+  "Movement",
+  "2Weap",
+  "Smart",
+  "Distance",
+  "Visibility",
+  "Position"
+};

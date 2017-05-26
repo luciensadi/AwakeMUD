@@ -646,13 +646,13 @@ ACMD(do_retract)
   else if ((GET_OBJ_VAL(cyber, 0) == CYB_HANDRAZOR || GET_OBJ_VAL(cyber, 0) == CYB_HANDSPUR || GET_OBJ_VAL(cyber, 0) == CYB_HANDBLADE) && !IS_SET(GET_OBJ_VAL(cyber, 3), CYBERWEAPON_RETRACTABLE))
     send_to_char("That cyberweapon isn't retractable.\r\n",ch );
   else {
-    if (GET_OBJ_VAL(cyber, 9)) {
-      GET_OBJ_VAL(cyber, 9)--;
+    if (GET_OBJ_VAL(cyber, CYBER_DISABLED_BIT)) {
+      GET_OBJ_VAL(cyber, CYBER_DISABLED_BIT) = 0;
       sprintf(buf, "$n extends %s.", GET_OBJ_NAME(cyber)+2);
       act(buf, TRUE, ch, 0, 0, TO_ROOM);
       send_to_char(ch, "You extend %s.\r\n", GET_OBJ_NAME(cyber)+2);
     } else {
-      GET_OBJ_VAL(cyber, 9)++;
+      GET_OBJ_VAL(cyber, CYBER_DISABLED_BIT) = 1;
       sprintf(buf, "$n retracts %s.", GET_OBJ_NAME(cyber)+2);
       act(buf, TRUE, ch, 0, 0, TO_ROOM);
       send_to_char(ch, "You retract a %s.\r\n", GET_OBJ_NAME(cyber)+2);
