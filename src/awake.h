@@ -1240,6 +1240,8 @@ enum {
 #define CYB_MUSCLEREP		46
 #define NUM_CYBER		47
 
+#define CYBER_DISABLED_BIT 9
+
 #define BIO_ADRENALPUMP		0
 #define BIO_CATSEYES		1
 #define BIO_DIGESTIVEEXPANSION	2
@@ -1942,6 +1944,16 @@ enum {
 #define MAX_AFFECT              32  /* Used in char_file_u *DO*NOT*CHANGE* */
 #define MAX_OBJ_AFFECT          6 /* Used in obj_file_elem *DO*NOT*CHANGE* */
 #define IDENT_LENGTH            8
+
+#define COMBAT_MOD_RECOIL   0
+#define COMBAT_MOD_MOVEMENT 1
+#define COMBAT_MOD_DUAL_WIELDING 2
+#define COMBAT_MOD_SMARTLINK 3
+#define COMBAT_MOD_DISTANCE 4
+#define COMBAT_MOD_VISIBILITY 5
+#define COMBAT_MOD_POSITION 6
+
+#define NUM_COMBAT_MODS 7
 
 /* ban struct */
 struct ban_list_element

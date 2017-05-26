@@ -957,3 +957,33 @@ struct ammo_data
   unsigned char cost;
 };
 #endif
+
+/* Combat data. */
+struct combat_data
+{
+  int modifiers[NUM_COMBAT_MODIFIERS];
+  bool too_tall;
+  
+  unsigned char dam_type;
+  bool is_physical;
+  
+  unsigned char burst_count;
+  unsigned char recoil_comp;
+  
+  struct char_data *ch;
+  
+  struct veh_data *veh;
+  
+  bool weapon_is_gun;
+  struct obj_data *weapon;
+  struct obj_data *magazine;
+  struct obj_data *gyro;
+  
+  combat_data(struct obj_data *weap) :
+    modifiers({0}), ch(NULL), veh(NULL), weapon(NULL), magazine(NULL), gyro(NULL)
+  {
+    weapon = weap;
+    weapon_is_gun = weapon && IS_GUN(GET_OBJ_VAL((weapon), 3));
+    if (weapon_is_gun) maazine = weapon->contains;
+  }
+};
