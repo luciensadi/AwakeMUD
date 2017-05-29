@@ -55,11 +55,35 @@ int mysql_wrapper(MYSQL *mysql, char *query)
 #endif
   
   int result = mysql_query(mysql, query);
-
-  if (mysql_errno(mysql)) {
+  int errnum = mysql_errno(mysql);
+  
+  if (errnum) {
     sprintf(buf, "MYSQLERROR: %s", mysql_error(mysql));
     log(buf);
-    // log(query);
+    sprintf(buf, "Offending query: %s", query);
+    log(buf);
+    
+    // Recovery procedures for certain errors.
+    switch (errnum) {
+      case 2006:
+        // 'MySQL server has gone away.'
+        log("The MySQL server connection appears to have dropped. Attempting to establish a new one.");
+        mysql_close(mysql);
+        mysql = mysql_init(NULL);
+        if (!mysql_real_connect(mysql, mysql_host, mysql_user, mysql_password, mysql_db, 0, NULL, 0)) {
+          sprintf(buf, "FATAL ERROR: %s\r\n", mysql_error(mysql));
+          log(buf);
+          log("Suggestion: Make sure your DB is running and that you've specified your connection info in src/mysql_config.cpp.\r\n");
+          
+          // High chance this won't succeed-- the calling function will likely attempt to read
+          //  the results of the query, but the query had no results and will refuse a read.
+          //  This is crash-inducing behavior 99% of the time.
+          shutdown();
+        }
+        break;
+      default:
+        break;
+    }
   }
   return result;
 }

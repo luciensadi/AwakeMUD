@@ -123,6 +123,7 @@ char *colorize(struct descriptor_data *d, char *str);
 
 /* extern fcnts */
 extern void DBInit();
+extern void DBFinalize();
 void boot_world(void);
 void zone_update(void);
 void spec_update(void);
@@ -358,6 +359,8 @@ void init_game(int port)
     close_socket(descriptor_list);
   
   close(mother_desc);
+  
+  DBFinalize();
   
   if (circle_reboot) {
     log("Rebooting.");
