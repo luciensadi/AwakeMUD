@@ -3312,13 +3312,39 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     }
   }
   
+  // Setup: Height checks. Removed 'surprised ||' from the defender's check.
+  att->too_tall = is_char_too_tall(ch);
+  def->too_tall = is_char_too_tall(victim);
+  
+  // Setup: Calculate sight penalties.
+  att->modifiers[COMBAT_MOD_VISIBILITY] += calculate_vision_penalty(ch, victim);
+  def->modifiers[COMBAT_MOD_VISIBILITY] += calculate_vision_penalty(victim, ch);
+  
   // Early execution: Nerve strike doesn't require as much setup, so perform it here to save on resources.
   if (melee && IS_NERVE(ch) && !(att->weapon)) {
-    // TODO: Tallness checks?
-    // TODO: Sight penalties?
-    // Perform nerve strike.
-    att->tn = 4 + GET_IMPACT(victim) + modify_target(ch);
-    att->dice = get_skill(ch, SKILL_UNARMED_COMBAT, att->tn) + MIN(GET_OFFENSE(ch), GET_SKILL(ch, SKILL_UNARMED_COMBAT));
+    // TODO: machines, spirits, zombies, etc are immune to nerve-- check for these
+    // Calculate and display pre-success-test information.
+    sprintf( rbuf, "%s", GET_CHAR_NAME( ch ) );
+    rbuf[3] = 0;
+    sprintf( rbuf+strlen(rbuf), "|%s", GET_CHAR_NAME( victim ) );
+    rbuf[7] = 0;
+    sprintf( rbuf+strlen(rbuf),
+            ">Nerve Targ: Base 4 + impact %d ", GET_IMPACT(victim));
+    
+    att->tn = 4 + GET_IMPACT(victim) + modify_target_rbuf_raw(ch, rbuf, att->modifiers[COMBAT_MOD_VISIBILITY]);
+    for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
+      buf_mod(rbuf, combat_modifiers[mod_index], att->modifiers[mod_index]);
+      att->tn += att->modifiers[mod_index];
+    }
+    
+    buf_roll( rbuf, "Total", att->tn);
+    act( rbuf, 1, ch, NULL, NULL, TO_ROLLS );
+    
+    // Calculate the attacker's total skill and execute a success test.
+    att->dice = get_skill(ch, SKILL_UNARMED_COMBAT, att->tn);
+    if (!att->too_tall)
+      att->dice += MIN(GET_SKILL(ch, SKILL_UNARMED_COMBAT), GET_OFFENSE(ch));
+    
     if (GET_QUI(victim) <= 0)
       att->successes = 0;
     else
@@ -3347,6 +3373,10 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
   att = populate_cyberware(ch, att);
   def = populate_cyberware(victim, def);
   
+  // Setup: Find their bayonet (if any).
+  att->weapon_has_bayonet = weapon_has_bayonet(att->weapon);
+  def->weapon_has_bayonet = weapon_has_bayonet(def->weapon);
+  
   // Setup: Determine damage types.
   att->dam_type = get_weapon_damage_type(att->weapon);
   def->dam_type = get_weapon_damage_type(def->weapon);
@@ -3354,14 +3384,6 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
   // Setup: Determine if we're doing physical damage.
   att->is_physical = is_damtype_physical(att->dam_type);
   def->is_physical = is_damtype_physical(def->dam_type);
-  
-  // Setup: Calculate sight penalties.
-  att->modifiers[COMBAT_MOD_VISIBILITY] += calculate_vision_penalty(ch, victim);
-  def->modifiers[COMBAT_MOD_VISIBILITY] += calculate_vision_penalty(victim, ch);
-  
-  // Setup: Height checks. Removed 'surprised ||' from the defender's check.
-  att->too_tall = is_char_too_tall(ch);
-  def->too_tall = is_char_too_tall(victim);
   
   // Setup: If the character is rigging a vehicle or is in a vehicle, set veh to that vehicle.
   RIG_VEH(ch, att->veh);
@@ -3507,7 +3529,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     
     //todo penalty for in melee combat
     
-    // Setup: If your attacker is closing the distance (running), take a penalty per Core p112. TODO-- does aff_approach mean closing, or closed?
+    // Setup: If your attacker is closing the distance (running), take a penalty per Core p112.
     if (AFF_FLAGGED(victim, AFF_APPROACH))
       att->modifiers[COMBAT_MOD_MOVEMENT] += 2;
     
@@ -3524,7 +3546,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
             ">Targ: (burst/comp %d-%d, Base 4) ",
             att->burst_count, att->recoil_comp);
     
-    att->tn = 4 + modify_target_rbuf(ch, rbuf);
+    att->tn = 4 + modify_target_rbuf_raw(ch, rbuf, att->modifiers[COMBAT_MOD_VISIBILITY]);
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
       buf_mod(rbuf, combat_modifiers[mod_index], att->modifiers[mod_index]);
       att->tn += att->modifiers[mod_index];
@@ -3582,27 +3604,14 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
   // Melee combat.
   else {
     // Decide what skills we'll be using for our tests.
-    att->weapon_has_bayonet = weapon_has_bayonet(att->weapon);
     att->skill = get_melee_skill(att);
-    
-    def->weapon_has_bayonet = weapon_has_bayonet(def->weapon);
     def->skill = get_melee_skill(def);
-    
-    // Calculate the net reach.
-    int net_reach = GET_REACH(victim) - GET_REACH(ch);
     
     // Setup: Calculate position modifiers.
     if (AFF_FLAGGED(ch, AFF_PRONE))
       def->modifiers[COMBAT_MOD_POSITION] -= 2;
     if (AFF_FLAGGED(victim, AFF_PRONE))
       att->modifiers[COMBAT_MOD_POSITION] -= 2;
-    
-    // TODO: Should this go to rolls for the victim?
-    def->tn = 4 + modify_target(victim) - MAX(net_reach, 0);
-    for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
-      buf_mod(rbuf, combat_modifiers[mod_index], def->modifiers[mod_index]);
-      def->tn += def->modifiers[mod_index];
-    }
     
     // TODO: Integrate spirit fighting with the rest of the logic.
     if (IS_SPIRIT(victim) || IS_ELEMENTAL(victim)) {
@@ -3619,12 +3628,30 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     // Adepts get bonus dice when counterattacking. Ip Man approves.
     def->dice += GET_POWER(victim, ADEPT_COUNTERSTRIKE);
     
-    /* Reach indicates how long a weapon is and provides a bonus to the wielder. First, calculate the difference between the Reach Ratings of opponents. The character with the longer (higher) Reach can choose to apply this number as either a neg- ative target number modifier to his attack test OR as a positive modifier to his opponent’s target number. This reflects the abil- ity of a character to use the reach of his weapon to beat the opponent’s defenses or make himself harder to hit. For exam- ple, an opponent with a sword (Reach 1) could apply a –1 tar- get modifier to his attack tests against an unarmed opponent. Or, he could choose to add a +1 target number modifier to his opponent’s attack test. Trolls have a natural Reach of 1 that is cumulative with weapon Reach. */
-    if (net_reach < 0)
-      att->tn += net_reach;
+    // Calculate the net reach.
+    int net_reach = GET_REACH(ch) - GET_REACH(victim);
     
+    // Reach is always used offensively. TODO: Add option to use it defensively instead.
+    if (net_reach > 0)
+      att->modifiers[COMBAT_MOD_REACH] -= net_reach;
     
-    /* TODO: rolls messaging and application of modifiers. */
+    // Calculate and display pre-success-test information.
+    sprintf( rbuf, "%s", GET_CHAR_NAME( ch ) );
+    rbuf[3] = 0;
+    sprintf( rbuf+strlen(rbuf), "|%s", GET_CHAR_NAME( victim ) );
+    rbuf[7] = 0;
+    sprintf( rbuf+strlen(rbuf), ">Targ: (Base 4) ");
+    
+    att->tn = 4 + modify_target_rbuf_raw(ch, rbuf, att->modifiers[COMBAT_MOD_VISIBILITY]) - MAX(net_reach, 0);
+    for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
+      buf_mod(rbuf, combat_modifiers[mod_index], att->modifiers[mod_index]);
+      att->tn += att->modifiers[mod_index];
+    }
+    
+    buf_roll( rbuf, "Total", att->tn);
+    act( rbuf, 1, ch, NULL, NULL, TO_ROLLS );
+
+    // ----------------------
     
     int net_successes;
     if (AWAKE(victim) && !AFF_FLAGGED(victim, AFF_SURPRISE)) {
@@ -3767,6 +3794,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     }
     // No cyberweapons active-- check for bone lacing, then proceed with adept/standard slapping.
     else {
+      // TODO: Implement option to use bone lacing to cause physical damage at half power.
       if (att->bone_lacing_power) {
         att->power += att->bone_lacing_power;
         att->damage_level = MODERATE;

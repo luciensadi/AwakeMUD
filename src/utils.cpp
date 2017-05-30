@@ -247,8 +247,9 @@ int damage_modifier(struct char_data *ch, char *rbuf)
   }
   return base_target;
 }
-int modify_target_rbuf(struct char_data *ch, char *rbuf)
-{
+
+// Adds the combat_mode toggle
+int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibility_penalty) {
   extern time_info_data time_info;
   int base_target = 0, light_target = 0;
   base_target += damage_modifier(ch, rbuf);
@@ -263,8 +264,7 @@ int modify_target_rbuf(struct char_data *ch, char *rbuf)
   {
     base_target += 2;
     buf_mod(rbuf, "AstralPercep", 2);
-  } else
-  {
+  } else if (current_visibility_penalty < 8) {
     switch (light_level(ch->in_room)) {
     case LIGHT_FULLDARK:
       if (CURRENT_VISION(ch) == THERMOGRAPHIC) {
@@ -339,50 +339,56 @@ int modify_target_rbuf(struct char_data *ch, char *rbuf)
       light_target += world[ch->in_room].shadow[1];
       buf_mod(rbuf, "ShadowSpell", world[ch->in_room].shadow[1]);
     }
-    base_target += light_target;
+    int smoke_target = 0;
 
     if (world[ch->in_room].vision[1] == LIGHT_MIST)
       if (CURRENT_VISION(ch) == NORMAL || (CURRENT_VISION(ch) == LOWLIGHT && NATURAL_VISION(ch) == LOWLIGHT)) {
-        base_target += 2;
+        smoke_target += 2;
         buf_mod(rbuf, "Mist", 2);
       }
     if (world[ch->in_room].vision[1] == LIGHT_LIGHTSMOKE || (weather_info.sky == SKY_RAINING &&
         world[ch->in_room].sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))) {
       if (CURRENT_VISION(ch) == NORMAL || (CURRENT_VISION(ch) == LOWLIGHT && NATURAL_VISION(ch) != LOWLIGHT)) {
-        base_target += 4;
+        smoke_target += 4;
         buf_mod(rbuf, "LSmoke", 4);
       } else if (CURRENT_VISION(ch) == LOWLIGHT) {
-        base_target += 2;
+        smoke_target += 2;
         buf_mod(rbuf, "LSmoke", 2);
       }
     }
     if (world[ch->in_room].vision[1] == LIGHT_HEAVYSMOKE || (weather_info.sky == SKY_LIGHTNING &&
         world[ch->in_room].sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))) {
       if (CURRENT_VISION(ch) == NORMAL || (CURRENT_VISION(ch) == LOWLIGHT && NATURAL_VISION(ch) == NORMAL)) {
-        base_target += 6;
+        smoke_target += 6;
         buf_mod(rbuf, "HSmoke", 6);
       } else if (CURRENT_VISION(ch) == LOWLIGHT) {
-        base_target += 4;
+        smoke_target += 4;
         buf_mod(rbuf, "HSmoke", 4);
       } else if (CURRENT_VISION(ch) == THERMOGRAPHIC && NATURAL_VISION(ch) != THERMOGRAPHIC) {
-        base_target++;
+        smoke_target++;
         buf_mod(rbuf, "HSmoke", 1);
       }
     }
     if (world[ch->in_room].vision[1] == LIGHT_THERMALSMOKE) {
       if (CURRENT_VISION(ch) == NORMAL || CURRENT_VISION(ch) == LOWLIGHT) {
-        base_target += 4;
+        smoke_target += 4;
         buf_mod(rbuf, "TSmoke", 4);
       } else {
         if (NATURAL_VISION(ch) == THERMOGRAPHIC) {
-          base_target += 6;
+          smoke_target += 6;
           buf_mod(rbuf, "TSmoke", 6);
         } else {
-          base_target += 8;
+          smoke_target += 8;
           buf_mod(rbuf, "TSmoke", 8);
         }
       }
     }
+    // The maximum visibility penalty we apply is +8 TN to avoid things like an invisible person in a smoky pitch-black room getting +24 to hit TN.
+    if (light_target + smoke_target + current_visibility_penalty > 8) {
+      buf_mod(rbuf, "ButVisPenaltyMaxIs8", (8 - current_visibility_penalty) - light_target + smoke_target);
+      base_target += 8 - current_visibility_penalty;
+    } else
+      base_target += light_target + smoke_target;
   }
   base_target += GET_TARGET_MOD(ch);
   buf_mod( rbuf, "GET_TARGET_MOD", GET_TARGET_MOD(ch) );
@@ -436,9 +442,14 @@ int modify_target_rbuf(struct char_data *ch, char *rbuf)
   return base_target;
 }
 
+int modify_target_rbuf(struct char_data *ch, char *rbuf)
+{
+  return modify_target_rbuf_raw(ch, rbuf, 0);
+}
+
 int modify_target(struct char_data *ch)
 {
-  return modify_target_rbuf(ch, NULL);
+  return modify_target_rbuf_raw(ch, NULL, 0);
 }
 
 // this returns the general skill
@@ -1089,6 +1100,7 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
 
 }
 
+// I hate this name. This isn't just a getter, it's a setter as well. -LS
 int get_skill(struct char_data *ch, int skill, int &target)
 {
   // Wearing too much armor? That'll hurt.
@@ -1099,6 +1111,10 @@ int get_skill(struct char_data *ch, int skill, int &target)
       target += GET_TOTALBAL(ch) - GET_QUI(ch);
   }
   
+  // Core p38
+  if (target < 2)
+    target = 2;
+  
   // TODO: Adept power Improved Ability.
   
   if (GET_SKILL(ch, skill))
@@ -1107,7 +1123,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
     totalskill = GET_SKILL(ch, skill);
     if (REAL_SKILL(ch, skill) == GET_SKILL(ch, skill))
       totalskill += MIN(REAL_SKILL(ch, skill), GET_TASK_POOL(ch, skills[skill].attribute));
-    else if (ch->cyberware) {
+    if (ch->cyberware) {
       int expert = 0;
       bool chip = FALSE;;
       for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
@@ -1121,7 +1137,8 @@ int get_skill(struct char_data *ch, int skill, int &target)
               chip = TRUE;
       if (chip && expert)
         totalskill += MIN(REAL_SKILL(ch, skill), expert);
-    } else if (ch->bioware) {
+    }
+    if (ch->bioware) {
       for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
         if (GET_OBJ_VAL(bio, 0) == BIO_REFLEXRECORDER && GET_OBJ_VAL(bio, 3) == skill)
           totalskill++;
