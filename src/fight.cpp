@@ -784,7 +784,6 @@ void group_gain(struct char_data * ch, struct char_data * victim)
 char *replace_string(const char *str, const char *weapon_singular, const char *weapon_plural,
                      const char *weapon_different)
 {
-  // TODO: Doesn't this run the risk of being invalidated at scope end?
   static char buf[256];
   char *cp;
   
@@ -2565,21 +2564,23 @@ int check_smartlink(struct char_data *ch, struct obj_data *weapon)
         && (access = &obj_proto[real_object(GET_OBJ_VAL(weapon, i))])
         && GET_OBJ_VAL(access, 1) == ACCESS_SMARTLINK) {
       for (obj = ch->cyberware; !mod && obj; obj = obj->next_content)
-        if (GET_OBJ_VAL(obj, 0) == CYB_SMARTLINK) {
-          if (GET_OBJ_VAL(obj, 1) == 1 || GET_OBJ_VAL(access, 2) < 2)
-            mod = 2;
-          else
-            mod = 4; // TODO: What kind of smartlink grants a -4 TN?
+        if (GET_OBJ_VAL(obj, 0) == CYB_SMARTLINK && (GET_OBJ_VAL(obj, 1) == 1 || GET_OBJ_VAL(access, 2) < 2)) {
+          // Smartlink plus cyber found-- full value.
+          return 2;
         }
-      if (!mod &&  GET_EQ(ch, WEAR_EYES) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_EYES)) == ITEM_GUN_ACCESSORY &&
-          GET_OBJ_VAL(GET_EQ(ch, WEAR_EYES), 1) == 7)
-        mod = 1;
+      if (!mod && GET_EQ(ch, WEAR_EYES) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_EYES)) == ITEM_GUN_ACCESSORY &&
+          GET_OBJ_VAL(GET_EQ(ch, WEAR_EYES), 1) == ACCESS_SMARTGOGGLE) {
+        // Smartlink plus goggle found-- half value.
+        return 1;
+      }
       access = NULL;
     }
   }
   
-  if (mod < 1 && AFF_FLAGGED(ch, AFF_LASER_SIGHT))
+  if (mod < 1 && AFF_FLAGGED(ch, AFF_LASER_SIGHT)) {
+    // Lasers apply when no smartlink was found.
     mod = 1;
+  }
   
   return mod;
 }
@@ -3158,6 +3159,25 @@ bool is_char_too_tall(struct char_data *ch) {
   return ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) >= world[ch->in_room].z*100;
 }
 
+int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
+  // TODO: Why would someone handling a vehicle or manning a turret negate visibility penalties?
+  // !(ch->in_veh || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_MANNING))
+  int modifier = 0;
+  if (!CAN_SEE(ch, victim)) {
+    modifier = 8;
+    if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) || GET_POWER(ch, ADEPT_BLIND_FIGHTING))
+      modifier = 4;
+    
+    /* TODO: Environmental conditions such as darkness or smoke occa- sionally affect combat; how much depends on the type of vision the attacker is using. Consult the Visibility Table for appropriate modifiers. P112 in Core Rulebook.
+     If the number listed is split by a slash, the first modifier applies to cybernetic or electronic vision and the second to natural vision. Modifiers listed singly apply equally to all types of vision.
+     
+     Looks like these are handled in util.cpp modify_target_rbuf().
+     
+     TODO: modify_target_rbuf() reapplies some modifiers already considered here (ex: if you're in darkness, you get +8 from hit() and +8 from modify_target_rbuf(). That's some bullshit. */
+  }
+  return modifier;
+}
+
 // TODO: Macro this for compiler speed.
 bool is_damtype_physical(int type) {
   return !(type == TYPE_HIT || type == TYPE_BLUDGEON || type == TYPE_PUNCH || type == TYPE_TASER || type == TYPE_CRUSH || type == TYPE_POUND);
@@ -3165,24 +3185,116 @@ bool is_damtype_physical(int type) {
 
 //todo: single shot weaps can only be fired once per combat phase-- what does this mean for us?
 
+struct combat_data *populate_cyberware(struct char_data *ch, struct combat_data *cd) {
+  // Pull info on all the character's active cyberware.
+  for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
+    if (!GET_OBJ_VAL(obj, CYBER_DISABLED_BIT)) {
+      switch (GET_OBJ_VAL(obj, 0)) {
+        case CYB_CLIMBINGCLAWS:
+          cd->climbingclaws++;
+          cd->num_cyberweapons++;
+          break;
+        case CYB_FIN:
+          cd->fins++;
+          cd->num_cyberweapons++;
+          break;
+        case CYB_HANDBLADE:
+          cd->handblades++;
+          cd->num_cyberweapons++;
+          break;
+        case CYB_HANDRAZOR:
+          if (IS_SET(GET_OBJ_VAL(obj, 3), CYBERWEAPON_IMPROVED))
+            cd->improved_handrazors++;
+          else
+            cd->handrazors++;
+          cd->num_cyberweapons++;
+          break;
+        case CYB_HANDSPUR:
+          cd->handspurs++;
+          cd->num_cyberweapons++;
+          break;
+        case CYB_FOOTANCHOR:
+          cd->footanchors++;
+          cd->num_cyberweapons++;
+          break;
+          
+      }
+    } else if (GET_OBJ_VAL(obj, 0) == CYB_BONELACING) {
+      switch (GET_OBJ_VAL(obj, 3)) {
+        case BONE_PLASTIC:
+          cd->bone_lacing_power = MAX(cd->bone_lacing_power, 2);
+          break;
+        case BONE_ALUMINIUM:
+        case BONE_CERAMIC:
+          cd->bone_lacing_power = MAX(cd->bone_lacing_power, 3);
+          break;
+        case BONE_TITANIUM:
+          cd->bone_lacing_power = MAX(cd->bone_lacing_power, 4);
+          break;
+      }
+    }
+  }
+  return cd;
+}
+
+bool weapon_has_bayonet(struct obj_data *weapon) {
+  // Precondition: Weapon must exist, must be a weapon-class item, and must be a gun.
+  if (!(weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(weapon, 3))))
+    return FALSE;
+
+  long attach_obj;
+  struct obj_data *attach_proto = NULL;
+  
+  return (GET_OBJ_VAL(weapon, ACCESS_LOCATION_UNDER)
+          && (attach_obj = real_object(GET_OBJ_VAL(weapon, ACCESS_LOCATION_UNDER))) > 0
+          && (attach_proto = &obj_proto[attach_obj])
+          && GET_OBJ_VAL(attach_proto, 1) == ACCESS_BAYONET);
+}
+
+int get_melee_skill(struct combat_data *cd) {
+  int skill;
+  if (cd->weapon && GET_OBJ_TYPE(cd->weapon) == ITEM_WEAPON) {
+    // If you're wielding a gun, you get to beat your opponent with it (or stab them, if it has a bayonet).
+    if (cd->weapon_is_gun) {
+      if (cd->weapon_has_bayonet)
+        skill = SKILL_POLE_ARMS;
+      else
+        skill = SKILL_CLUBS;
+    }
+    // Non-gun weapons.
+    else {
+      skill = GET_OBJ_VAL(cd->weapon, 4);
+    }
+  } else {
+    // If the character has active cyber weapons, use the cyber implants skill.
+    if (cd->num_cyberweapons > 0) {
+      skill = SKILL_CYBER_IMPLANTS;
+    }
+    // Otherwise, they use their standard unarmed skill.
+    else {
+      skill = SKILL_UNARMED_COMBAT;
+    }
+  }
+  
+  return skill;
+}
+
+//todo: messaging for all these stop_fighting calls
 void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap)
 {
   // Initialize our data structures for holding this round's fight-related data.
   struct combat_data attacker_data(ch, weap);
-  struct combat_data defender_data(vict, vict_weap);
+  struct combat_data defender_data(victim, vict_weap);
   
   // Allows for switching roles, which can happen during melee counterattacks.
-  struct combat_data *att = attacker_data;
-  struct combat_data *def = defender_data;
+  struct combat_data *att = &attacker_data;
+  struct combat_data *def = &defender_data;
   
   char rbuf[MAX_STRING_LENGTH];
-  struct obj_data *attach = NULL;
   bool melee = FALSE;
-  int recoil = 0, burst = 0;
-  int power = 0, damage_total = 0, base_target = 0, skill_total = 0, recoilcomp = 0, modtarget = 0, success = 0;
   
   // Precondition: If you're asleep, paralyzed, or out of ammo, you don't get to fight. TODO: How to handle characters wielding non-weapons?
-  if (!AWAKE(ch) || GET_QUI(ch) <= 0 || !has_ammo(ch, att->weapon) || (weapon && GET_OBJ_TYPE(att->weapon) != ITEM_WEAPON))
+  if (!AWAKE(ch) || GET_QUI(ch) <= 0 || !has_ammo(ch, att->weapon) || (att->weapon && GET_OBJ_TYPE(att->weapon) != ITEM_WEAPON))
     return;
   
   // Precondition: If your foe is astral, you don't belong here.
@@ -3205,13 +3317,14 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     // TODO: Tallness checks?
     // TODO: Sight penalties?
     // Perform nerve strike.
-    int target_num = 4 + GET_IMPACT(victim) + modify_target(ch);
-    skill_total = get_skill(ch, SKILL_UNARMED_COMBAT, target_num) + MIN(GET_OFFENSE(ch), GET_SKILL(ch, SKILL_UNARMED_COMBAT));
+    att->tn = 4 + GET_IMPACT(victim) + modify_target(ch);
+    att->dice = get_skill(ch, SKILL_UNARMED_COMBAT, att->tn) + MIN(GET_OFFENSE(ch), GET_SKILL(ch, SKILL_UNARMED_COMBAT));
     if (GET_QUI(victim) <= 0)
-      success = 0;
-    else success = success_test(skill_total, target_num);
-    if (success > 0) {
-      GET_TEMP_QUI_LOSS(victim) += (int) (success / 2); // This used to be * 2!
+      att->successes = 0;
+    else
+      att->successes = success_test(att->dice, att->tn);
+    if (att->successes > 0) {
+      GET_TEMP_QUI_LOSS(victim) += (int) (att->successes / 2); // This used to be * 2!
       affect_total(victim);
       if (GET_QUI(victim) <= 0) {
         act("You hit $N's pressure points succesfully, $e is paralyzed!", FALSE, ch, 0, victim, TO_CHAR);
@@ -3230,6 +3343,10 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     return;
   }
   
+  // Setup: Populate character cyberware.
+  att = populate_cyberware(ch, att);
+  def = populate_cyberware(victim, def);
+  
   // Setup: Determine damage types.
   att->dam_type = get_weapon_damage_type(att->weapon);
   def->dam_type = get_weapon_damage_type(def->weapon);
@@ -3238,21 +3355,13 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
   att->is_physical = is_damtype_physical(att->dam_type);
   def->is_physical = is_damtype_physical(def->dam_type);
   
-  // Setup: Calculate sight penalties. TODO: fog etc?
-  // TODO: Why would someone handling a vehicle or manning a turret negate visibility penalties?
-  // !(ch->in_veh || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_MANNING))
-  if (!CAN_SEE(ch, victim)) {
-    att->modifiers[COMBAT_MOD_VISIBILITY] = 8;
-    if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) || GET_POWER(ch, ADEPT_BLIND_FIGHTING))
-      att->modifiers[COMBAT_MOD_VISIBILITY] /= 2;
-    
-    /* TODO: Environmental conditions such as darkness or smoke occa- sionally affect combat; how much depends on the type of vision the attacker is using. Consult the Visibility Table for appropriate modifiers. P112 in Core Rulebook.
-     If the number listed is split by a slash, the first modifier applies to cybernetic or electronic vision and the second to natural vision. Modifiers listed singly apply equally to all types of vision.*/
-  }
+  // Setup: Calculate sight penalties.
+  att->modifiers[COMBAT_MOD_VISIBILITY] += calculate_vision_penalty(ch, victim);
+  def->modifiers[COMBAT_MOD_VISIBILITY] += calculate_vision_penalty(victim, ch);
   
-  // Setup: Height checks. TODO: why surprised
-  def->too_tall = AFF_FLAGGED(victim, AFF_SURPRISE) || char_too_tall_for_their_room(victim);
-  att->too_tall = char_too_tall_for_their_room(ch);
+  // Setup: Height checks. Removed 'surprised ||' from the defender's check.
+  att->too_tall = is_char_too_tall(ch);
+  def->too_tall = is_char_too_tall(victim);
   
   // Setup: If the character is rigging a vehicle or is in a vehicle, set veh to that vehicle.
   RIG_VEH(ch, att->veh);
@@ -3260,17 +3369,18 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
   // Setup for ranged combat.
   if (!melee) {
     // Setup: Find the character's gyroscopic stabilizer (if any).
-    if (!(PLR_FLAGGED(ch, PLR_REMOTE) || !AFF_FLAGGED(ch, AFF_RIG) || !AFF_FLAGGED(ch, AFF_REMOTE))) {
+    if (!(PLR_FLAGGED(ch, PLR_REMOTE) || !AFF_FLAGGED(ch, AFF_RIG) || !AFF_FLAGGED(ch, AFF_MANNING))) {
       for (int q = 0; q < NUM_WEARS; q++) {
         if (GET_EQ(ch, q) && GET_OBJ_TYPE(GET_EQ(ch, q)) == ITEM_GYRO) {
           att->gyro = GET_EQ(ch, q);
+          // todo: what's the gyro's modifier?
           break;
         }
       }
       
-      // Precondition: If you're using a heavy weapon, you must be strong enough, or assisted.
+      // Precondition: If you're using a heavy weapon, you must be strong enough to wield it, or else be using a gyro.
       if (!att->gyro
-          && (GET_OBJ_VAL(weapon, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(weapon, 4) <= SKILL_ASSAULT_CANNON)
+          && (GET_OBJ_VAL(att->weapon, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(att->weapon, 4) <= SKILL_ASSAULT_CANNON)
           && (GET_STR(ch) < 8 || GET_BOD(ch) < 8)
           && !(AFF_FLAGGED(ch, AFF_PRONE)))
       {
@@ -3285,9 +3395,9 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     
     // Setup: Determine the burst value of the weapon.
     if (IS_BURST(att->weapon))
-      burst = 3;
+      att->burst_count = 3;
     else if (IS_AUTO(att->weapon))
-      burst = GET_OBJ_TIMER(att->weapon);
+      att->burst_count = GET_OBJ_TIMER(att->weapon);
     
     // Why was this designed to save a bullet every time it fired in burst mode? ans: because it must subtract another round elsewhere
     
@@ -3298,54 +3408,57 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     /* TODO: The attacker declares how many rounds are fired from the weapon at a specific target. Each round fired imposes a +1 recoil modifier for the entire burst, modified as appropriate by recoil compensation. Make a Success Test, augmented by dice from the Combat Pool if desired, to resolve each full-auto burst. The Power Rating of the weapon increases by 1 point for every round in that full-auto burst. The Damage Level of the weapon also increases by one level for every three full rounds in the full-auto burst, to a maximum of Deadly (D). Weapons capable of full auto can fire up to 10 rounds in one Combat Phase. */
     
     // Setup: Limit the burst of the weapon to the available ammo, and decrement ammo appropriately.
-    if (burst) {
-      // todo: gyros provide recoil comp and movement modifier comp (see p113 of core)
+    if (att->burst_count) {
       if (!IS_NPC(ch) && !att->magazine) {
-        burst = MIN(burst, GET_OBJ_VAL(att->weapon, 6));
-        GET_OBJ_VAL(att->weapon, 6) -= burst;
+        att->burst_count = MIN(att->burst_count, GET_OBJ_VAL(att->weapon, 6));
+        GET_OBJ_VAL(att->weapon, 6) -= att->burst_count;
       } else if (att->magazine) {
-        burst = MIN(burst, GET_OBJ_VAL(att->magazine, 9));
-        GET_OBJ_VAL(att->magazine, 9) -= burst;
+        att->burst_count = MIN(att->burst_count, GET_OBJ_VAL(att->magazine, 9));
+        GET_OBJ_VAL(att->magazine, 9) -= att->burst_count;
         
         //todo what is this for
         if (IS_NPC(ch))
-          GET_OBJ_VAL(att->weapon, 6) -= burst;
+          GET_OBJ_VAL(att->weapon, 6) -= att->burst_count;
       }
       
       // Setup: Compute recoil.
-      recoil = MAX(0, burst - (recoilcomp = check_recoil(ch, att->weapon)));
+      att->recoil_comp = check_recoil(ch, att->weapon);
+      att->modifiers[COMBAT_MOD_RECOIL] += MAX(0, att->burst_count - att->recoil_comp);
       switch (GET_OBJ_VAL(att->weapon, 4)) {
         case SKILL_SHOTGUNS:
         case SKILL_MACHINE_GUNS:
         case SKILL_ASSAULT_CANNON:
-          recoil *= 2;
+          att->modifiers[COMBAT_MOD_RECOIL] *= 2;
       }
     }
     
     // Setup: Modify recoil based on vehicular stats.
     if (att->veh) {
-      if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG))
-        recoil = MAX(0, recoil - 2); // TODO: You don't get speed penalties if you're manning/rigging?
-      else if (get_speed(att->veh) > 0) {
-        if (get_speed(att->veh) < 60)
-          recoil++;
-        else if (get_speed(att->veh) < 120)
-          recoil += 2;
-        else if (get_speed(att->veh) < 200)
-          recoil += 3;
-        else
-          recoil += 4;
+      if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG)) {
+        att->modifiers[COMBAT_MOD_RECOIL] += MAX(0, att->modifiers[COMBAT_MOD_RECOIL] - 2); // TODO: You don't get speed penalties if you're manning/rigging?
+      } else {
+        // Core p153: Unmounted weapons get +2 TN.
+        att->modifiers[COMBAT_MOD_MOVEMENT] += 2;
+        
+        // We assume all targets are standing still.
+        // Per Core p153, manual gunnery modifier is +1 per 30m/CT.
+        att->modifiers[COMBAT_MOD_MOVEMENT] += (int) (get_speed(att->veh) / 30);
       }
+      
+      // TODO: Penalty for damaged veh.
+      
+      // TODO: vehicle-to-vehicle combat has additional modifiers for speeds
     }
     
     // Setup: If you're dual-wielding, take that penalty, otherwise you get your smartlink bonus.
     if (GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD))
       att->modifiers[COMBAT_MOD_DUAL_WIELDING] += 2;
     else
-      att->modifiers[COMBAT_MOD_SMARTLINK] -= check_smartlink(ch, weapon);
+      att->modifiers[COMBAT_MOD_SMARTLINK] -= check_smartlink(ch, att->weapon);
     
     // Setup: Trying to fire a sniper rifle at close range is tricky.
-    if (IS_OBJ_STAT(weapon, ITEM_SNIPER) && ch->in_room == victim->in_room)
+    // TODO: This doesn't seem to be canon, but I understand the reasoning behind it. Research and possibly reduce penalty.
+    if (IS_OBJ_STAT(att->weapon, ITEM_SNIPER) && ch->in_room == victim->in_room)
       att->modifiers[COMBAT_MOD_DISTANCE] += 6;
     
     // Setup: Compute modifiers to the TN based on the victim's current state.
@@ -3356,7 +3469,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
       att->modifiers[COMBAT_MOD_POSITION]--;
     
     // Setup: Determine distance penalties.
-    if (ch->in_room != victim->in_room && !veh) {
+    if (ch->in_room != victim->in_room && !att->veh) {
       struct char_data *vict;
       bool vict_found = FALSE;
       long room, nextroom;
@@ -3394,9 +3507,12 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     
     //todo penalty for in melee combat
     
-    // Setup: If your attacker is closing the distance (running), take a penalty per Core p112.
-    if (AFF_FLAGGED(vict, AFF_APPROACH))
+    // Setup: If your attacker is closing the distance (running), take a penalty per Core p112. TODO-- does aff_approach mean closing, or closed?
+    if (AFF_FLAGGED(victim, AFF_APPROACH))
       att->modifiers[COMBAT_MOD_MOVEMENT] += 2;
+    
+    // Setup: If you have a gyro mount, it reduces recoil and movement penalties. TODO
+    att->modifiers[COMBAT_MOD_GYRO] -= MIN(att->modifiers[COMBAT_MOD_MOVEMENT] + att->modifiers[COMBAT_MOD_RECOIL], 0 /* TODO: gyro rating here */);
     
     // TODO: Consolidate into a single method (jump point a)
     // Calculate and display pre-success-test information.
@@ -3406,301 +3522,333 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     rbuf[7] = 0;
     sprintf( rbuf+strlen(rbuf),
             ">Targ: (burst/comp %d-%d, Base 4) ",
-            burst, recoilcomp );
-    modtarget = modify_target_rbuf(ch, rbuf);
+            att->burst_count, att->recoil_comp);
     
-    base_target = 4;
-    for (int mod_index = 0; mod_index < NUM_COMBAT_MODS; mod_index++) {
+    att->tn = 4 + modify_target_rbuf(ch, rbuf);
+    for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
       buf_mod(rbuf, combat_modifiers[mod_index], att->modifiers[mod_index]);
-      base_target += att->modifiers[mod_index];
+      att->tn += att->modifiers[mod_index];
     }
     
-    buf_roll( rbuf, "Total", base_target);
+    buf_roll( rbuf, "Total", att->tn);
     act( rbuf, 1, ch, NULL, NULL, TO_ROLLS );
     
     // Calculate the attacker's total skill and execute a success test.
-    skill_total = get_skill(ch, GET_OBJ_VAL(att->weapon, 4), base_target)
+    att->dice = get_skill(ch, GET_OBJ_VAL(att->weapon, 4), att->tn);
     if (!att->too_tall)
-      skill_total += MIN(GET_SKILL(ch, GET_OBJ_VAL(weapon, 4)), GET_OFFENSE(ch));
+      att->dice += MIN(GET_SKILL(ch, GET_OBJ_VAL(att->weapon, 4)), GET_OFFENSE(ch));
     
-    success = success_test(skill_total, base_target);
+    att->successes = success_test(att->dice, att->tn);
     
     // Display post-test information.
-    sprintf(rbuf, "Fight: Ski %d, TN %d, Suc %d", skill_total, base_target, success);
+    sprintf(rbuf, "Fight: Ski %d, TN %d, Suc %d", att->dice, att->tn, att->successes);
     act( rbuf, 1, ch, NULL, NULL, TO_ROLLS );
     
+    /*
     // Setup: Armor encumbrance penalties.
     int armor_encumbrance_total = 0;
     if (GET_TOTALBAL(victim) > GET_QUI(victim))
       armor_encumbrance_total += GET_TOTALBAL(victim) - GET_QUI(victim);
     if (GET_TOTALIMP(victim) > GET_QUI(victim))
-      armor_encumbrance_total += GET_TOTALIMP(victim) - GET_QUI(victim);
+      armor_encumbrance_total += GET_TOTALIMP(victim) - GET_QUI(victim); */
     
-    // Setup: If you have a foot anchor, it's harder to dodge.
-    int anchor = 0;
-    for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content)
-      if (GET_OBJ_VAL(cyber, 0) == CYB_FOOTANCHOR && !GET_OBJ_VAL(cyber, CYBER_DISABLED_BIT))
-        anchor++;
-    
-    if (AWAKE(victim) && armor_encumbrance_total < GET_QUI(victim) && !vtall && !AFF_FLAGGED(victim, AFF_PRONE)) {
-      success -= MAX(success_test(GET_DEFENSE(victim) + (GET_DEFENSE(victim) ? GET_POWER(victim, ADEPT_SIDESTEP) : 0), 4 + damage_modifier(victim, buf) + (int)(burst / 3) + anchor), 0);
-      sprintf(rbuf, "Dodge: Dod %d, TN %d, NetSuc %d", GET_DEFENSE(victim) + (GET_DEFENSE(victim) ? GET_POWER(victim, ADEPT_SIDESTEP) : 0),
-              4 + damage_modifier(victim, buf) + (int)(burst / 3) + anchor, success);
+    /* TODO: Wearing armor can be burdensome and tiring, and it tends to slow down characters in combat. To reflect this, for every 2 full points that a character’s separate Ballistic or Impact Armor Rat- ing exceed Quickness Attribute, reduce his or her Combat Pool by one die. For example, a character with Quickness 3 wearing an armor jacket (5/3) would lose one die from her Combat Pool.
+     
+     Sounds like armor encumbrance should be checked during wear/remove and cpool commands, not in combat.
+     */
+    // TODO: Where are the rules for tallness?
+    if (AWAKE(victim) && !def->too_tall && !AFF_FLAGGED(victim, AFF_PRONE)) { // Removed armor_encumbrance_total < GET_QUI(victim) &&
+      // Previous code only allowed you to sidestep if you had also allocated at least one normal dodge die. Why?
+      def->dice = GET_DEFENSE(victim) + GET_POWER(victim, ADEPT_SIDESTEP);
+      def->tn = 4 + damage_modifier(victim, buf) + (int)(att->burst_count / 3) + def->footanchors; /* TODO: Why damage_modifier instead of modify_target? Can you dodge what you can't see? */
+      def->successes = MAX(success_test(def->dice, def->tn), 0);
+      att->successes -= def->successes;
+      
+      //success -= MAX(success_test(GET_DEFENSE(victim) + (GET_DEFENSE(victim) ? GET_POWER(victim, ADEPT_SIDESTEP) : 0), 4 + damage_modifier(victim, buf) + (int)(burst / 3) + anchor), 0);
+      sprintf(rbuf, "Dodge: Dice %d, TN %d, Suc %d. NetSuc %d", def->dice, def->tn, def->successes, att->successes);
       act( rbuf, 1, ch, NULL, NULL, TO_ROLLS );
     } else
-      success = MAX(success, 1);
-    if (success < 1) {
-      combat_message(ch, victim, weapon, -1, burst);
-      damage(ch, victim, -1, type, 0);
+      att->successes = MAX(att->successes, 1);
+    
+    // If the attack failed, print the relevant message and terminate.
+    if (att->successes < 1) {
+      combat_message(ch, victim, att->weapon, -1, att->burst_count);
+      damage(ch, victim, -1, att->dam_type, 0);
       return;
     }
+    
+    // But wait-- there's more! Next we jump down to dealing damage.
   }
+  // Melee combat.
   else {
-    // If your opponent is wielding a gun, they get to beat you with it.
-    if (vict_weapon && IS_GUN(GET_OBJ_VAL(vict_weapon, 3)))
-      vtype = TYPE_BLUDGEON;
+    // Decide what skills we'll be using for our tests.
+    att->weapon_has_bayonet = weapon_has_bayonet(att->weapon);
+    att->skill = get_melee_skill(att);
     
-    if (vict_weapon && GET_OBJ_TYPE(vict_weapon) != ITEM_WEAPON)
-      vict_weapon = NULL;
-    // todo shouldn't this change vtype
+    def->weapon_has_bayonet = weapon_has_bayonet(def->weapon);
+    def->skill = get_melee_skill(def);
     
-    // TODO: Consolidate into one method.
-    // TODO: Where do melee characters get tdualwield calculated? Do they not have it?
-    sprintf( rbuf, "%s", GET_CHAR_NAME( ch ) );
-    rbuf[3] = 0;
-    sprintf( rbuf+strlen(rbuf), "|%s", GET_CHAR_NAME( victim ) );
-    rbuf[7] = 0;
-    sprintf( rbuf+strlen(rbuf),
-            ">Targ: (b/r %d-%d, Base 4) ",
-            burst, recoilcomp );
-    modtarget = modify_target_rbuf(ch, rbuf);
+    // Calculate the net reach.
+    int net_reach = GET_REACH(victim) - GET_REACH(ch);
     
-    buf_mod( rbuf, "Recoil", recoil);
-    buf_mod( rbuf, "2Weap", tdualwield);
-    buf_mod( rbuf, "Smart", tsmartlink);
-    buf_mod( rbuf, "Distance", tdistance);
-    buf_mod( rbuf, "Sight", tsight);
-    buf_mod( rbuf, "Awake", tawake);
-    
-    base_target = 4 + modtarget + recoil
-    + tdualwield + tsmartlink + tdistance + tsight + tawake;
-    
-    buf_roll( rbuf, "Total", base_target);
-    act( rbuf, 1, ch, NULL, NULL, TO_ROLLS );
-    
-    int reach = GET_REACH(victim) - GET_REACH(ch);
-    int victtarget = 4 + modify_target(victim) +
-    (CAN_SEE(victim, ch) ? 0 : ((AFF_FLAGGED(victim, AFF_DETECT_INVIS) || GET_POWER(victim, ADEPT_BLIND_FIGHTING)) ? 4 : 8)) - MAX(reach, 0);
-    int vict_skill = SKILL_UNARMED_COMBAT;
-    if (IS_SPIRIT(victim) || IS_ELEMENTAL(victim)) {
-      skill_total = GET_WIL(ch);
-      vict_skill = GET_REA(victim);
-    } else if (IS_SPIRIT(ch) || IS_ELEMENTAL(ch)) {
-      skill_total = GET_REA(ch);
-      vict_skill = GET_WIL(victim);
-    } else {
-      if (vict_weapon) {
-        if (IS_GUN(GET_OBJ_VAL(vict_weapon, 3))) {
-          if (GET_OBJ_VAL(vict_weapon, 9) &&
-              real_object(GET_OBJ_VAL(vict_weapon, 9)) > 0 &&
-              (attach = &obj_proto[real_object(GET_OBJ_VAL(vict_weapon, 9))]) &&
-              GET_OBJ_VAL(attach, 1) == ACCESS_BAYONET) {
-            vict_skill = SKILL_POLE_ARMS;
-          } else vict_skill = SKILL_CLUBS;
-        } else vict_skill = GET_OBJ_VAL(vict_weapon, 4);
-      }
-      vict_skill = get_skill(victim, vict_skill, victtarget) + (vtall ? 0 : MIN(GET_SKILL(victim, vict_skill), GET_OFFENSE(victim)));
-      int skillnum = SKILL_UNARMED_COMBAT;
-      if (weapon)
-        skillnum = GET_OBJ_VAL(weapon, 4);
-      skill_total = get_skill(ch, skillnum, base_target) +
-      MIN(GET_SKILL(ch, skillnum), GET_OFFENSE(ch));
-    }
-    if (reach < 0)
-      base_target += reach;
-    vict_skill += GET_POWER(victim, ADEPT_COUNTERSTRIKE);
+    // Setup: Calculate position modifiers.
     if (AFF_FLAGGED(ch, AFF_PRONE))
-      victtarget -=2;
+      def->modifiers[COMBAT_MOD_POSITION] -= 2;
     if (AFF_FLAGGED(victim, AFF_PRONE))
-      base_target -= 2;
-    if (AWAKE(victim) && !AFF_FLAGGED(victim, AFF_SURPRISE))
-      success = success_test(skill_total, base_target) - success_test(vict_skill, victtarget);
-    else success = MAX(1, success_test(skill_total, base_target));
+      att->modifiers[COMBAT_MOD_POSITION] -= 2;
+    
+    // TODO: Should this go to rolls for the victim?
+    def->tn = 4 + modify_target(victim) - MAX(net_reach, 0);
+    for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
+      buf_mod(rbuf, combat_modifiers[mod_index], def->modifiers[mod_index]);
+      def->tn += def->modifiers[mod_index];
+    }
+    
+    // TODO: Integrate spirit fighting with the rest of the logic.
+    if (IS_SPIRIT(victim) || IS_ELEMENTAL(victim)) {
+      att->dice = GET_WIL(ch);
+      def->dice = GET_REA(victim);
+    } else if (IS_SPIRIT(ch) || IS_ELEMENTAL(ch)) {
+      att->dice = GET_REA(ch);
+      def->dice = GET_WIL(victim);
+    } else {
+      def->dice = get_skill(victim, def->skill, def->tn) + (def->too_tall ? 0 : MIN(GET_SKILL(victim, def->skill), GET_OFFENSE(victim)));
+      att->dice = get_skill(ch, att->skill, att->tn) + (att->too_tall ? 0 : MIN(GET_SKILL(ch, att->skill), GET_OFFENSE(ch)));
+    }
+    
+    // Adepts get bonus dice when counterattacking. Ip Man approves.
+    def->dice += GET_POWER(victim, ADEPT_COUNTERSTRIKE);
+    
+    /* Reach indicates how long a weapon is and provides a bonus to the wielder. First, calculate the difference between the Reach Ratings of opponents. The character with the longer (higher) Reach can choose to apply this number as either a neg- ative target number modifier to his attack test OR as a positive modifier to his opponent’s target number. This reflects the abil- ity of a character to use the reach of his weapon to beat the opponent’s defenses or make himself harder to hit. For exam- ple, an opponent with a sword (Reach 1) could apply a –1 tar- get modifier to his attack tests against an unarmed opponent. Or, he could choose to add a +1 target number modifier to his opponent’s attack test. Trolls have a natural Reach of 1 that is cumulative with weapon Reach. */
+    if (net_reach < 0)
+      att->tn += net_reach;
+    
+    
+    /* TODO: rolls messaging and application of modifiers. */
+    
+    int net_successes;
+    if (AWAKE(victim) && !AFF_FLAGGED(victim, AFF_SURPRISE)) {
+      att->successes = success_test(att->dice, att->tn);
+      def->successes = success_test(def->dice, def->tn);
+      net_successes = att->successes - def->successes;
+    } else {
+      att->successes = MAX(1, success_test(att->dice, att->tn));
+      net_successes = att->successes;
+    }
+    
     act("$n clashes with $N in melee combat.", FALSE, ch, 0, victim, TO_ROOM);
     act("You clash with $N in melee combat.", FALSE, ch, 0, victim, TO_CHAR);
     sprintf(rbuf, "%s> sk %d targ %d\r\n"
-            "%s> sk %d targ %d\r\n Reach %c%d Success %d", GET_CHAR_NAME(ch), skill_total, base_target,
-            GET_CHAR_NAME(victim), vict_skill, victtarget, reach > 0 ? 'b' : 't', reach < 0 ? -reach : reach, success);
+            "%s> sk %d targ %d\r\n Reach %c%d Success %d", GET_CHAR_NAME(ch), att->dice, att->tn,
+            GET_CHAR_NAME(victim), def->dice, def->tn, net_reach > 0 ? 'b' : 't', net_reach < 0 ? -net_reach : net_reach, att->successes);
     act( rbuf, 1, ch, NULL, NULL, TO_ROLLS );
     
-    if (success < 0) {
-      weapon = vict_weapon;
-      type = vtype;
-      struct char_data *temp = ch;
-      bool vphys = v_is_physical;
-      v_is_physical = is_physical;
-      is_physical = vphys;
+    // If your enemy got more successes than you, guess what? You're the one who gets their face caved in.
+    if (net_successes < 0) {
+      struct combat_data *temp_cd = att;
+      att = def;
+      def = temp_cd;
+      
+      struct char_data *temp_ch = ch;
       ch = victim;
-      victim = temp;
-      bool ttall = vtall;
-      vtall = ctall;
-      ctall = ttall;
-      success *= -1;
+      victim = temp_ch;
+      
+      att->successes = -1 * net_successes;
     }
   }
   
-  if (weapon) {
-    power = (IS_GUN(GET_OBJ_VAL(weapon, 3)) ? GET_OBJ_VAL(weapon, 0) : GET_OBJ_VAL(weapon, 2) + GET_STR(ch)) + burst;
-    if (IS_GUN(GET_OBJ_VAL(weapon, 3))) {
-      if (magazine)
-        switch (GET_OBJ_VAL(magazine, 2)) {
+  // Calculate the power of the attack (applies to both melee and ranged).
+  if (att->weapon) {
+    // Ranged weapon?
+    if (att->weapon_is_gun) {
+      att->power = GET_OBJ_VAL(att->weapon, 0) + att->burst_count;
+      att->damage_level = GET_OBJ_VAL(att->weapon, 1) + (int)(att->burst_count / 3);
+      
+      // Calculate effects of armor on the power of the attack.
+      if (att->magazine) {
+        switch (GET_OBJ_VAL(att->magazine, 2)) {
           case AMMO_APDS:
-            power -= (int)(GET_BALLISTIC(victim) / 2);
+            att->power -= (int)(GET_BALLISTIC(victim) / 2);
             break;
           case AMMO_EX:
-            power++;
+            att->power++;
           case AMMO_EXPLOSIVE:
-            power -= GET_BALLISTIC(victim) - 1;
+            att->power -= GET_BALLISTIC(victim) - 1;
             break;
           case AMMO_FLECHETTE:
             if (!GET_IMPACT(victim) && !GET_BALLISTIC(victim))
-              damage_total++;
-            else
-              power -= MAX(GET_BALLISTIC(victim), GET_IMPACT(victim) * 2);
+              att->damage_level++;
+            else {
+              att->power -= MAX(GET_BALLISTIC(victim), GET_IMPACT(victim) * 2);
+            }
             break;
           case AMMO_GEL:
-            power -= GET_BALLISTIC(victim) + 2;
+            att->power -= GET_BALLISTIC(victim) + 2;
             break;
           default:
-            power -= GET_BALLISTIC(victim);
+            att->power -= GET_BALLISTIC(victim);
         }
-      else
-        power -= GET_BALLISTIC(victim);
-      if (GET_SKILL(ch, GET_OBJ_VAL(weapon, 4)) >= 8 && !SHOTS_TRIGGERED(ch))
+      }
+      // Weapon fired without a magazine (probably by an NPC)-- we assume its ammo type is normal.
+      else {
+        att->power -= GET_BALLISTIC(victim);
+      }
+      
+      // Increment character's shots_fired.
+      if (GET_SKILL(ch, GET_OBJ_VAL(att->weapon, 4)) >= 8 && !SHOTS_TRIGGERED(ch))
         SHOTS_FIRED(ch)++;
-    } else power -= GET_IMPACT(victim);
-    damage_total = GET_OBJ_VAL(weapon, 1) + (int)(burst / 3);
-  } else {
-    power = GET_STR(ch);
-    if (GET_POWER(ch, ADEPT_KILLING_HANDS)) {
-      damage_total = GET_POWER(ch, ADEPT_KILLING_HANDS);
-      is_physical = TRUE;
-    } else {
-      for (struct obj_data *obj = ch->cyberware;
-           obj && !damage_total;
-           obj = obj->next_content)
-        if (!GET_OBJ_VAL(obj, CYBER_DISABLED_BIT))
-          switch (GET_OBJ_VAL(obj, 0)) {
-              // todo: use the best available cyberware, even if multiple are deployed
-            case CYB_HANDBLADE:
-              damage_total = LIGHT;
-              power += 3;
-              type = TYPE_STAB;
-              is_physical = TRUE;
-              break;
-            case CYB_HANDRAZOR:
-              damage_total = LIGHT;
-              is_physical = TRUE;
-              type = TYPE_SLASH;
-              if (IS_SET(GET_OBJ_VAL(obj, 3), CYBERWEAPON_IMPROVED))
-                power += 2;
-              break;
-            case CYB_FIN:
-              damage_total = LIGHT;
-              is_physical = TRUE;
-              type = TYPE_SLASH;
-              power--;
-              break;
-            case CYB_FOOTANCHOR:
-              damage_total = MODERATE;
-              is_physical = TRUE;
-              type = TYPE_STAB;
-              power--;
-              break;
-            case CYB_HANDSPUR:
-              is_physical = TRUE;
-              type = TYPE_SLASH;
-              damage_total = MODERATE;
-              break;
-            case CYB_CLIMBINGCLAWS:
-              is_physical = TRUE;
-              type = TYPE_SLASH;
-              power--;
-              damage_total = LIGHT;
-              break;
-          }
-        else if (GET_OBJ_VAL(obj, 0) == CYB_BONELACING) {
-          // todo: if you have bone lacing in your cyber list before your deployed weapon, bone lacing overrides. fix.
-          switch (GET_OBJ_VAL(obj, 3)) {
-            case BONE_PLASTIC:
-              power += 2;
-              break;
-            case BONE_ALUMINIUM:
-            case BONE_CERAMIC:
-              power += 3;
-              break;
-            case BONE_TITANIUM:
-              power += 4;
-              break;
-          }
-          damage_total = MODERATE;
-          break;
-        }
     }
-    if (GET_POWER(ch, ADEPT_PENETRATINGSTRIKE) && !GET_POWER(ch, ADEPT_DISTANCE_STRIKE))
-      power -= MAX(0, GET_IMPACT(victim) - GET_POWER(ch, ADEPT_PENETRATINGSTRIKE));
-    else power -= GET_IMPACT(victim);
-    if (!damage_total)
-      damage_total = MODERATE;
+    // Melee weapon.
+    else {
+      att->power = GET_OBJ_VAL(att->weapon, 2) + GET_STR(ch);
+      att->power -= GET_IMPACT(victim);
+    }
+    
+    // Core p113.
+    if (att->power < 2)
+      att->power = 2;
+    
+    // todo: ensure damtype and is_phys are already set
   }
+  // Cyber and unarmed combat.
+  else {
+    // Base power for melee attacks is character's strength.
+    att->power = GET_STR(ch);
+    att->damage_level = MODERATE;
+    att->dam_type = TYPE_HIT;
+    att->is_physical = FALSE;
+    
+    // Check for active cyberweapons.
+    if (att->num_cyberweapons) {
+      if (att->num_cyberweapons >= 2) {
+        // Dual cyberweapons gives a power bonus per Core p121.
+        att->power += (int) (GET_STR(ch) / 2);
+      }
+      
+      // Select the best cyberweapon and use its stats.
+      if (att->handspurs) {
+        att->damage_level = MODERATE;
+        att->dam_type = TYPE_SLASH;
+        att->is_physical = TRUE;
+      }
+      else if (att->handblades) {
+        att->power += 3;
+        att->damage_level = LIGHT;
+        att->dam_type = TYPE_STAB;
+        att->is_physical = TRUE;
+      }
+      else if (att->improved_handrazors) {
+        att->power += 2;
+        att->damage_level = LIGHT;
+        att->dam_type = TYPE_STAB;
+        att->is_physical = TRUE;
+      }
+      else if (att->handrazors) {
+        att->damage_level = LIGHT;
+        att->dam_type = TYPE_STAB;
+        att->is_physical = TRUE;
+      }
+      else if (att->fins || att->climbingclaws) {
+        att->power -= 1;
+        att->damage_level = LIGHT;
+        att->dam_type = TYPE_SLASH;
+        att->is_physical = TRUE;
+      }
+      else if (att->footanchors) {
+        att->power -= 1;
+        att->damage_level = LIGHT;
+        att->dam_type = TYPE_STAB;
+        att->is_physical = TRUE;
+      }
+      else {
+        sprintf(buf, "SYSERR in hit(): num_cyberweapons %d but no weapons found.", att->num_cyberweapons);
+        log(buf);
+      }
+    }
+    // No cyberweapons active-- check for bone lacing, then proceed with adept/standard slapping.
+    else {
+      if (att->bone_lacing_power) {
+        att->power += att->bone_lacing_power;
+        att->damage_level = MODERATE;
+        att->is_physical = FALSE;
+      }
+      
+      // Check for Adept powers.
+      // TODO: Elemental Strike (SotA64 p65)
+      
+      // Apply Killing Hands.
+      if (GET_POWER(ch, ADEPT_KILLING_HANDS)) {
+        att->damage_level = GET_POWER(ch, ADEPT_KILLING_HANDS);
+        att->is_physical = TRUE;
+      }
+      
+      // Apply impact armor reduction to attack power.
+      if (GET_POWER(ch, ADEPT_PENETRATINGSTRIKE) && !GET_POWER(ch, ADEPT_DISTANCE_STRIKE))
+        att->power -= MAX(0, GET_IMPACT(victim) - GET_POWER(ch, ADEPT_PENETRATINGSTRIKE));
+      else
+        att->power -= GET_IMPACT(victim);
+    }
+  }
+  
+  // Handle spirits and elementals being little divas with their special combat rules.
   if (IS_SPIRIT(victim) || IS_ELEMENTAL(victim)) {
-    if (power <= GET_LEVEL(victim) * 2) {
+    if (att->power <= GET_LEVEL(victim) * 2) {
       if (!melee)
-        combat_message(ch, victim, weapon, 0, burst);
-      else damage(ch, victim, 0, type, is_physical);
+        combat_message(ch, victim, att->weapon, 0, att->burst_count);
+      else
+        damage(ch, victim, 0, att->dam_type, att->is_physical);
       return;
-    } else power -= GET_LEVEL(victim) * 2;
+    }
+    else
+      att->power -= GET_LEVEL(victim) * 2;
   }
-  int bod_success=0, bod = GET_BOD(victim) + (vtall ? 0 : GET_BODY(victim));
+  
+  // Perform body test for damage resistance.
+  // TODO: dermal armor
+  int bod_success=0, bod = GET_BOD(victim) + (def->too_tall ? 0 : GET_BODY(victim));
   if (IS_SPIRIT(ch) && GET_MAG(victim) > 0 && GET_SKILL(victim, SKILL_CONJURING))
-    bod_success = success_test(MAX(bod, GET_SKILL(victim, SKILL_CONJURING)), power);
+    bod_success = success_test(MAX(bod, GET_SKILL(victim, SKILL_CONJURING)), att->power);
   else if (!AWAKE(victim))
     bod_success = 0;
   else
-    bod_success = success_test(bod, power);
+    bod_success = success_test(bod, att->power);
   
-  success -= bod_success;
-  int old_damage_total = damage_total;
+  att->successes -= bod_success;
+  
   int staged_damage;
   
   // Adjust messaging for unkillable entities.
-  if (can_hurt(ch, victim, type))
-    staged_damage = stage(success, damage_total);
+  if (can_hurt(ch, victim, att->dam_type))
+    staged_damage = stage(att->successes, att->damage_level);
   else
     staged_damage = -1;
   
-  damage_total = convert_damage(staged_damage);
+  int damage_total = convert_damage(staged_damage);
   
   sprintf(rbuf, "Fight: Bod %d+%d, Pow %d, ResSuc %d.  %s(%d)->%d.  %d%c.",
-          GET_BOD(victim), (vtall ? -1 : GET_BODY(victim)), power, bod_success,
-          wound_name[MIN(DEADLY, old_damage_total)], success, staged_damage, damage_total, is_physical ? 'P' : 'M');
+          GET_BOD(victim), bod, att->power, bod_success,
+          wound_name[MIN(DEADLY, att->damage_level)], att->successes, staged_damage, damage_total, att->is_physical ? 'P' : 'M');
   act( rbuf, 1, ch, NULL, NULL, TO_ROLLS );
   if (!melee)
-    combat_message(ch, victim, weapon, MAX(0, staged_damage), burst);
-  damage(ch, victim, damage_total, type, is_physical);
+    combat_message(ch, victim, att->weapon, MAX(0, staged_damage), att->burst_count);
+  damage(ch, victim, damage_total, att->dam_type, att->is_physical);
   
   if (!IS_NPC(ch) && IS_NPC(victim)) {
     GET_LASTHIT(victim) = GET_IDNUM(ch);
   }
-  if (weapon && GET_OBJ_VAL(weapon, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(weapon, 4) <= SKILL_ASSAULT_CANNON &&
+  
+  // If you're firing a heavy weapon without a gyro, you need to test against the damage of the recoil.
+  if (att->weapon && GET_OBJ_VAL(att->weapon, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(att->weapon, 4) <= SKILL_ASSAULT_CANNON &&
       !(PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG) || AFF_FLAGGED(ch, AFF_MANNING)))
   {
     for (int i = 0; i < (NUM_WEARS - 1); i++)
       if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_GYRO)
-        return; // todo what?
-    damage(ch, ch, convert_damage(stage(-success_test(GET_BOD(ch) + GET_BODY(ch), GET_OBJ_VAL(weapon, 0) / 2 + modify_target(ch)), LIGHT))
+        return;
+    damage(ch, ch, convert_damage(stage(-success_test(GET_BOD(ch) + GET_BODY(ch), GET_OBJ_VAL(att->weapon, 0) / 2 + modify_target(ch)), LIGHT))
            , TYPE_HIT, FALSE);
   }
+  
+  // Set the violence background count.
   if (ch->in_room && !world[ch->in_room].background[0]) {
     world[ch->in_room].background[0] = 1;
     world[ch->in_room].background[1] = AURA_PLAYERCOMBAT;

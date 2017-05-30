@@ -1464,6 +1464,10 @@ enum {
 #define ACCESS_TRIPOD		9
 #define ACCESS_BAYONET		10
 
+#define ACCESS_LOCATION_TOP    7
+#define ACCESS_LOCATION_BARREL 8
+#define ACCESS_LOCATION_UNDER  9
+
 #define MOD_NOWHERE		0
 #define MOD_INTAKE_FRONT	1
 #define MOD_INTAKE_MID		2
@@ -1952,8 +1956,9 @@ enum {
 #define COMBAT_MOD_DISTANCE 4
 #define COMBAT_MOD_VISIBILITY 5
 #define COMBAT_MOD_POSITION 6
+#define COMBAT_MOD_GYRO 7
 
-#define NUM_COMBAT_MODS 7
+#define NUM_COMBAT_MODIFIERS 8
 
 /* ban struct */
 struct ban_list_element

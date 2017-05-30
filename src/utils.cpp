@@ -1099,6 +1099,8 @@ int get_skill(struct char_data *ch, int skill, int &target)
       target += GET_TOTALBAL(ch) - GET_QUI(ch);
   }
   
+  // TODO: Adept power Improved Ability.
+  
   if (GET_SKILL(ch, skill))
   {
     int totalskill, mbw = 0, enhan = 0, synth = 0;
