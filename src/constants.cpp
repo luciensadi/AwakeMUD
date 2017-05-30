@@ -2073,5 +2073,6 @@ const char *combat_modifiers[] =
   "Visibility",
   "Position",
   "Gyro",
-  "Reach"
+  "Reach",
+  "VehDamaged"
 };
