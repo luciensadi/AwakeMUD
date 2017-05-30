@@ -1915,50 +1915,53 @@ enum {
 
 #define QUEST_TIMER	15
 
-#define OPT_USEC        100000  /* 10 passes per second */
-#define PASSES_PER_SEC  (1000000 / OPT_USEC)
-#define RL_SEC          * PASSES_PER_SEC
+#define OPT_USEC                 100000  /* 10 passes per second */
+#define PASSES_PER_SEC           (1000000 / OPT_USEC)
+#define RL_SEC                   * PASSES_PER_SEC
 
-#define PULSE_ZONE      (3 RL_SEC)
-#define PULSE_SPECIAL   (10 RL_SEC)
-#define PULSE_MOBILE    (10 RL_SEC)
-#define PULSE_VIOLENCE  (3 RL_SEC)
-#define PULSE_MONORAIL  (5 RL_SEC)
+#define PULSE_ZONE               (3 RL_SEC)
+#define PULSE_SPECIAL            (10 RL_SEC)
+#define PULSE_MOBILE             (10 RL_SEC)
+#define PULSE_VIOLENCE           (3 RL_SEC)
+#define PULSE_MONORAIL           (5 RL_SEC)
 
-#define MAX_SOCK_BUF            (12 * 1024) /* Size of kernel's sock buf   */
-#define MAX_PROMPT_LENGTH       96          /* Max length of prompt        */
-#define GARBAGE_SPACE           32
-#define SMALL_BUFSIZE           1024
+#define MAX_SOCK_BUF             (12 * 1024) /* Size of kernel's sock buf   */
+#define MAX_PROMPT_LENGTH        96          /* Max length of prompt        */
+#define GARBAGE_SPACE            32
+#define SMALL_BUFSIZE            1024
 #define LARGE_BUFSIZE    (MAX_SOCK_BUF - GARBAGE_SPACE - MAX_PROMPT_LENGTH)
 
-#define MAX_STRING_LENGTH       8192
-#define MAX_INPUT_LENGTH        2048     /* Max length per *line* of input */
-#define MAX_RAW_INPUT_LENGTH    4096     /* Max size of *raw* input */
-#define MAX_MESSAGES            100
-#define MAX_NAME_LENGTH         20  /* Used in char_file_u *DO*NOT*CHANGE* */
+#define MAX_STRING_LENGTH        8192
+#define MAX_INPUT_LENGTH         2048     /* Max length per *line* of input */
+#define MAX_RAW_INPUT_LENGTH     4096     /* Max size of *raw* input */
+#define MAX_MESSAGES             100
+#define MAX_NAME_LENGTH          20  /* Used in char_file_u *DO*NOT*CHANGE* */
 
 // MAX_PWD_LENGTH is bullshit though, crypt() truncates it to 8. Go go 90s security!
-#define MAX_PWD_LENGTH          30  /* Used in char_file_u *DO*NOT*CHANGE* */
+#define MAX_PWD_LENGTH           30  /* Used in char_file_u *DO*NOT*CHANGE* */
 
-#define MAX_TITLE_LENGTH        50  /* Used in char_file_u *DO*NOT*CHANGE* */
-#define MAX_WHOTITLE_LENGTH     10  /* Used in char_file_u *DO*NOT*CHANGE* */
-#define HOST_LENGTH             50 
-#define LINE_LENGTH             80  /* Used in char_file_u *DO*NOT*CHANGE* */
-#define EXDSCR_LENGTH           2040/* Used in char_file_u *DO*NOT*CHANGE* */
-#define MAX_AFFECT              32  /* Used in char_file_u *DO*NOT*CHANGE* */
-#define MAX_OBJ_AFFECT          6 /* Used in obj_file_elem *DO*NOT*CHANGE* */
-#define IDENT_LENGTH            8
+#define MAX_TITLE_LENGTH         50  /* Used in char_file_u *DO*NOT*CHANGE* */
+#define MAX_WHOTITLE_LENGTH      10  /* Used in char_file_u *DO*NOT*CHANGE* */
+#define HOST_LENGTH              50
+#define LINE_LENGTH              80  /* Used in char_file_u *DO*NOT*CHANGE* */
+#define EXDSCR_LENGTH            2040/* Used in char_file_u *DO*NOT*CHANGE* */
+#define MAX_AFFECT               32  /* Used in char_file_u *DO*NOT*CHANGE* */
+#define MAX_OBJ_AFFECT           6 /* Used in obj_file_elem *DO*NOT*CHANGE* */
+#define IDENT_LENGTH             8
 
-#define COMBAT_MOD_RECOIL   0
-#define COMBAT_MOD_MOVEMENT 1
+// New combat modifiers used in the rework of hit().
+#define COMBAT_MOD_RECOIL        0
+#define COMBAT_MOD_MOVEMENT      1
 #define COMBAT_MOD_DUAL_WIELDING 2
-#define COMBAT_MOD_SMARTLINK 3
-#define COMBAT_MOD_DISTANCE 4
-#define COMBAT_MOD_VISIBILITY 5
-#define COMBAT_MOD_POSITION 6
-#define COMBAT_MOD_GYRO 7
+#define COMBAT_MOD_SMARTLINK     3
+#define COMBAT_MOD_DISTANCE      4
+#define COMBAT_MOD_VISIBILITY    5
+#define COMBAT_MOD_POSITION      6
+#define COMBAT_MOD_GYRO          7
+#define COMBAT_MOD_REACH         8
 
-#define NUM_COMBAT_MODIFIERS 8
+#define NUM_COMBAT_MODIFIERS     9
+// End new combat modifiers.
 
 /* ban struct */
 struct ban_list_element
