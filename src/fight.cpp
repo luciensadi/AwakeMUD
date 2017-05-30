@@ -3279,7 +3279,6 @@ int get_melee_skill(struct combat_data *cd) {
   return skill;
 }
 
-//todo: messaging for all these stop_fighting calls
 void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap)
 {
   // Initialize our data structures for holding this round's fight-related data.
@@ -3307,6 +3306,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
   // Precondition: If you're in melee combat and your foe isn't present, stop fighting.
   if ((melee = !(att->weapon_is_gun))) {
     if (ch->in_room != victim->in_room) {
+      send_to_char(ch, "You relax with the knowledge that your opponent is no longer present.\r\n");
       stop_fighting(ch);
       return;
     }
@@ -3395,7 +3395,6 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
       for (int q = 0; q < NUM_WEARS; q++) {
         if (GET_EQ(ch, q) && GET_OBJ_TYPE(GET_EQ(ch, q)) == ITEM_GYRO) {
           att->gyro = GET_EQ(ch, q);
-          // todo: what's the gyro's modifier?
           break;
         }
       }
@@ -3423,12 +3422,6 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     
     // Why was this designed to save a bullet every time it fired in burst mode? ans: because it must subtract another round elsewhere
     
-    /* TODO: For the pur- poses of resolving burst damage, treat the weapon as having a Power Level 3 points greater than the level listed and raise the Damage Level by one. For example, a 5M weapon firing in burst-fire mode would have a Power Rating of 8 and a Damage Level of S. */
-    
-    /* TODO: If a burst ends up being a round short because of insufficient ammunition in the clip, the Power Rating increases by +2, but the Damage Level does not increase. A +2 recoil modifier also applies. If a burst consists of only one round due to insufficient ammu- nition, resolve it as a single-shot attack. */
-    
-    /* TODO: The attacker declares how many rounds are fired from the weapon at a specific target. Each round fired imposes a +1 recoil modifier for the entire burst, modified as appropriate by recoil compensation. Make a Success Test, augmented by dice from the Combat Pool if desired, to resolve each full-auto burst. The Power Rating of the weapon increases by 1 point for every round in that full-auto burst. The Damage Level of the weapon also increases by one level for every three full rounds in the full-auto burst, to a maximum of Deadly (D). Weapons capable of full auto can fire up to 10 rounds in one Combat Phase. */
-    
     // Setup: Limit the burst of the weapon to the available ammo, and decrement ammo appropriately.
     if (att->burst_count) {
       if (!IS_NPC(ch) && !att->magazine) {
@@ -3438,7 +3431,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
         att->burst_count = MIN(att->burst_count, GET_OBJ_VAL(att->magazine, 9));
         GET_OBJ_VAL(att->magazine, 9) -= att->burst_count;
         
-        //todo what is this for
+        //todo what is this for, wouldn't this drive the npc's ammo count negative
         if (IS_NPC(ch))
           GET_OBJ_VAL(att->weapon, 6) -= att->burst_count;
       }
@@ -3478,17 +3471,16 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     else
       att->modifiers[COMBAT_MOD_SMARTLINK] -= check_smartlink(ch, att->weapon);
     
-    // Setup: Trying to fire a sniper rifle at close range is tricky.
-    // TODO: This doesn't seem to be canon, but I understand the reasoning behind it. Research and possibly reduce penalty.
+    // Setup: Trying to fire a sniper rifle at close range is tricky. This is non-canon to reduce twinkery.
     if (IS_OBJ_STAT(att->weapon, ITEM_SNIPER) && ch->in_room == victim->in_room)
       att->modifiers[COMBAT_MOD_DISTANCE] += 6;
     
+    /* Non-canon, removed.
     // Setup: Compute modifiers to the TN based on the victim's current state.
     if (!AWAKE(victim))
       att->modifiers[COMBAT_MOD_POSITION] -= 2;
-    // TODO: Wouldn't this mean that if your vic is asleep you get a -3 modifier total? Is that kosher?
-    if (AFF_FLAGGED(victim, AFF_PRONE))
-      att->modifiers[COMBAT_MOD_POSITION]--;
+    else if (AFF_FLAGGED(victim, AFF_PRONE))
+      att->modifiers[COMBAT_MOD_POSITION]--; */
     
     // Setup: Determine distance penalties.
     if (ch->in_room != victim->in_room && !att->veh) {
@@ -3522,6 +3514,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
         }
       }
       if (!vict_found) {
+        send_to_char(ch, "You squint around, but you can't find your opponent anywhere.\r\n");
         stop_fighting(ch);
         return;
       }
@@ -3533,10 +3526,10 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     if (AFF_FLAGGED(victim, AFF_APPROACH))
       att->modifiers[COMBAT_MOD_MOVEMENT] += 2;
     
-    // Setup: If you have a gyro mount, it reduces recoil and movement penalties. TODO
-    att->modifiers[COMBAT_MOD_GYRO] -= MIN(att->modifiers[COMBAT_MOD_MOVEMENT] + att->modifiers[COMBAT_MOD_RECOIL], 0 /* TODO: gyro rating here */);
+    // Setup: If you have a gyro mount, it negates recoil and movement penalties up to its rating.
+    if (att->gyro)
+      att->modifiers[COMBAT_MOD_GYRO] -= MIN(att->modifiers[COMBAT_MOD_MOVEMENT] + att->modifiers[COMBAT_MOD_RECOIL], GET_OBJ_VAL(att->gyro, 1));
     
-    // TODO: Consolidate into a single method (jump point a)
     // Calculate and display pre-success-test information.
     sprintf( rbuf, "%s", GET_CHAR_NAME( ch ) );
     rbuf[3] = 0;
@@ -3672,6 +3665,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     
     // If your enemy got more successes than you, guess what? You're the one who gets their face caved in.
     if (net_successes < 0) {
+      act("You successfully counter $N's attack!", FALSE, ch, 0, victim, TO_CHAR);
       struct combat_data *temp_cd = att;
       att = def;
       def = temp_cd;
@@ -3832,7 +3826,6 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
   }
   
   // Perform body test for damage resistance.
-  // TODO: dermal armor
   int bod_success=0, bod = GET_BOD(victim) + (def->too_tall ? 0 : GET_BODY(victim));
   if (IS_SPIRIT(ch) && GET_MAG(victim) > 0 && GET_SKILL(victim, SKILL_CONJURING))
     bod_success = success_test(MAX(bod, GET_SKILL(victim, SKILL_CONJURING)), att->power);
@@ -3853,9 +3846,9 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
   
   int damage_total = convert_damage(staged_damage);
   
-  sprintf(rbuf, "Fight: Bod %d+%d, Pow %d, ResSuc %d.  %s(%d)->%d.  %d%c.",
-          GET_BOD(victim), bod, att->power, bod_success,
-          wound_name[MIN(DEADLY, att->damage_level)], att->successes, staged_damage, damage_total, att->is_physical ? 'P' : 'M');
+  sprintf(rbuf, "Bod %d+%d, Pow %d, Suc %d, ResSuc %d.  %s(%d)->%s.  %d%c.",
+          GET_BOD(victim), bod, bod_success, att->power, att->successes,
+          wound_name[MIN(DEADLY, att->damage_level)], att->successes, wound_name[MAX(0, MIN(DEADLY, staged_damage))], damage_total, att->is_physical ? 'P' : 'M');
   act( rbuf, 1, ch, NULL, NULL, TO_ROLLS );
   if (!melee)
     combat_message(ch, victim, att->weapon, MAX(0, staged_damage), att->burst_count);
@@ -3866,14 +3859,14 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
   }
   
   // If you're firing a heavy weapon without a gyro, you need to test against the damage of the recoil.
-  if (att->weapon && GET_OBJ_VAL(att->weapon, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(att->weapon, 4) <= SKILL_ASSAULT_CANNON &&
-      !(PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG) || AFF_FLAGGED(ch, AFF_MANNING)))
+  if (att->weapon && !att->gyro && GET_OBJ_VAL(att->weapon, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(att->weapon, 4) <= SKILL_ASSAULT_CANNON
+      && !(PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG) || AFF_FLAGGED(ch, AFF_MANNING)))
   {
-    for (int i = 0; i < (NUM_WEARS - 1); i++)
-      if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_GYRO)
-        return;
-    damage(ch, ch, convert_damage(stage(-success_test(GET_BOD(ch) + GET_BODY(ch), GET_OBJ_VAL(att->weapon, 0) / 2 + modify_target(ch)), LIGHT))
-           , TYPE_HIT, FALSE);
+    int recoil_successes = success_test(GET_BOD(ch) + GET_BODY(ch), GET_OBJ_VAL(att->weapon, 0) / 2 + modify_target(ch));
+    int staged_dam = stage(-recoil_successes, LIGHT);
+    sprintf(rbuf, "Heavy Recoil: %d successes, L->%s wound.", recoil_successes, staged_dam == LIGHT ? "L" : "no");
+    act( rbuf, 1, ch, NULL, NULL, TO_ROLLS );
+    damage(ch, ch, convert_damage(staged_dam), TYPE_HIT, FALSE);
   }
   
   // Set the violence background count.

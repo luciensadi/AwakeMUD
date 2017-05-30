@@ -973,14 +973,14 @@ struct combat_data
   // Weapon / unarmed damage data.
   int dam_type;
   bool is_physical;
-  unsigned char power;
-  unsigned char damage_level; // Light/Med/etc
+  char power;
+  char damage_level; // Light/Med/etc
   
   // Gun data.
   bool weapon_is_gun;
   bool weapon_has_bayonet;
-  unsigned char burst_count;
-  unsigned char recoil_comp;
+  char burst_count;
+  char recoil_comp;
   
   // Cyberware data.
   unsigned char climbingclaws;
