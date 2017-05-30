@@ -256,6 +256,12 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
   if (FIGHTING(ch) || FIGHTING_VEH(ch))
     return;
   
+  if (IS_NPC(ch)) {
+    // Prevents you from surprising someone who's attacking you already.
+    GET_MOBALERTTIME(ch) = 20;
+    GET_MOBALERT(ch) = MALERT_ALERT;
+  }
+  
   ch->next_fighting = combat_list;
   combat_list = ch;
   
@@ -2146,7 +2152,8 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
     return 0;                   /* -je, 7/7/92 */
   }
   
-  sprintf(rbuf,"Damage: ");
+  sprintf(rbuf,"Damage (%s vs %s, %s %d): ", GET_CHAR_NAME(ch), GET_CHAR_NAME(victim),
+          wound_name[MIN(DEADLY, MAX(0, dam))], attacktype);
   if (( (!IS_NPC(ch)
          && IS_SENATOR(ch)
          && !access_level(ch, LVL_ADMIN))
@@ -2173,7 +2180,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
   if(IS_NPC(victim) && MOB_FLAGGED(victim,MOB_NOKILL))
   {
     dam =-1;
-    buf_mod(rbuf,"Nokill",dam);
+    buf_mod(rbuf,"NoKill",dam);
   }
   
   if (victim != ch)
@@ -2216,7 +2223,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
     do_return(victim, "", 0, 0);
     WAIT_STATE(victim, PULSE_VIOLENCE);
   }
-  /* Firgure out how to do WANTED flag*/
+  /* Figure out how to do WANTED flag*/
   
   if (ch != victim)
   {
@@ -2232,6 +2239,11 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
     dam = -1;
     buf_mod(rbuf,"ImmExplode",dam);
   }
+  if (dam == 0)
+    sprintf(rbuf + strlen(rbuf), " 0");
+  else if (dam > 0)
+    buf_mod(rbuf, "", dam);
+  
   act(rbuf, 0, ch, 0, victim, TO_ROLLS);
   
   if (dam == -1)
@@ -2335,7 +2347,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
    * death blow, send a skill_message if one exists; if not, default to a
    * dam_message. Otherwise, always send a dam_message.
    */
-  if (attacktype > 0 && ch != victim && attacktype < TYPE_SUFFERING && attacktype < TYPE_HAND_GRENADE)
+  if (attacktype > 0 && ch != victim && attacktype < TYPE_HAND_GRENADE)
   {
     if (!IS_WEAPON(attacktype)) {
       skill_message(dam, ch, victim, attacktype);
@@ -2392,7 +2404,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
       
       if (GET_PHYSICAL(victim) < (GET_MAX_PHYSICAL(victim) >> 2))
         send_to_char(victim, "%sYou wish that your wounds would stop "
-                     "^RBLEEDING^n so much!%s\r\n", CCRED(victim, C_SPR),
+                     "^RBLEEDING^r so much!%s\r\n", CCRED(victim, C_SPR),
                      CCNRM(victim, C_SPR));
       
       if (MOB_FLAGGED(victim, MOB_WIMPY) && !AFF_FLAGGED(victim, AFF_PRONE) && ch != victim &&
@@ -3252,7 +3264,9 @@ bool weapon_has_bayonet(struct obj_data *weapon) {
 }
 
 int get_melee_skill(struct combat_data *cd) {
-  int skill;
+  assert(cd != NULL);
+  
+  int skill = 0;
   if (cd->weapon && GET_OBJ_TYPE(cd->weapon) == ITEM_WEAPON) {
     // If you're wielding a gun, you get to beat your opponent with it (or stab them, if it has a bayonet).
     if (cd->weapon_is_gun) {
@@ -3289,7 +3303,12 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
   struct combat_data *att = &attacker_data;
   struct combat_data *def = &defender_data;
   
+  // Set the base TNs to accommodate get_skill() changing the TNs like the special snowflake it is.
+  att->tn = 4;
+  def->tn = 4;
+  
   char rbuf[MAX_STRING_LENGTH];
+  char *rbuf_start_address = rbuf;
   bool melee = FALSE;
   
   // Precondition: If you're asleep, paralyzed, or out of ammo, you don't get to fight. TODO: How to handle characters wielding non-weapons?
@@ -3331,7 +3350,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     sprintf( rbuf+strlen(rbuf),
             ">Nerve Targ: Base 4 + impact %d ", GET_IMPACT(victim));
     
-    att->tn = 4 + GET_IMPACT(victim) + modify_target_rbuf_raw(ch, rbuf, att->modifiers[COMBAT_MOD_VISIBILITY]);
+    att->tn += GET_IMPACT(victim) + modify_target_rbuf_raw(ch, rbuf, att->modifiers[COMBAT_MOD_VISIBILITY]);
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
       buf_mod(rbuf, combat_modifiers[mod_index], att->modifiers[mod_index]);
       att->tn += att->modifiers[mod_index];
@@ -3539,7 +3558,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
             ">Targ: (burst/comp %d-%d, Base 4) ",
             att->burst_count, att->recoil_comp);
     
-    att->tn = 4 + modify_target_rbuf_raw(ch, rbuf, att->modifiers[COMBAT_MOD_VISIBILITY]);
+    att->tn += modify_target_rbuf_raw(ch, rbuf, att->modifiers[COMBAT_MOD_VISIBILITY]);
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
       buf_mod(rbuf, combat_modifiers[mod_index], att->modifiers[mod_index]);
       att->tn += att->modifiers[mod_index];
@@ -3575,7 +3594,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     if (AWAKE(victim) && !def->too_tall && !AFF_FLAGGED(victim, AFF_PRONE)) { // Removed armor_encumbrance_total < GET_QUI(victim) &&
       // Previous code only allowed you to sidestep if you had also allocated at least one normal dodge die. Why?
       def->dice = GET_DEFENSE(victim) + GET_POWER(victim, ADEPT_SIDESTEP);
-      def->tn = 4 + damage_modifier(victim, buf) + (int)(att->burst_count / 3) + def->footanchors; /* TODO: Why damage_modifier instead of modify_target? Can you dodge what you can't see? */
+      def->tn += damage_modifier(victim, buf) + (int)(att->burst_count / 3) + def->footanchors; /* TODO: Why damage_modifier instead of modify_target? Can you dodge what you can't see? */
       def->successes = MAX(success_test(def->dice, def->tn), 0);
       att->successes -= def->successes;
       
@@ -3614,6 +3633,9 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
       att->dice = GET_REA(ch);
       def->dice = GET_WIL(victim);
     } else {
+      // TODO: Calling this shitty get_skill here (and all other earlier instances) means nothing since TN is reset during messaging.
+      //        This would have been easier to diagnose if this setter was not named get.
+      // TODO: Figure out who named a modifying method 'get' and mail them a fresh bag of horse shit for all the mysterious bugs they've caused.
       def->dice = get_skill(victim, def->skill, def->tn) + (def->too_tall ? 0 : MIN(GET_SKILL(victim, def->skill), GET_OFFENSE(victim)));
       att->dice = get_skill(ch, att->skill, att->tn) + (att->too_tall ? 0 : MIN(GET_SKILL(ch, att->skill), GET_OFFENSE(ch)));
     }
@@ -3628,6 +3650,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     if (net_reach > 0)
       att->modifiers[COMBAT_MOD_REACH] -= net_reach;
     
+    // -------------------------------------------------------------------------------------------------------
     // Calculate and display pre-success-test information.
     sprintf( rbuf, "%s", GET_CHAR_NAME( ch ) );
     rbuf[3] = 0;
@@ -3635,10 +3658,15 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     rbuf[7] = 0;
     sprintf( rbuf+strlen(rbuf), ">Targ: (Base 4) ");
     
-    att->tn = 4 + modify_target_rbuf_raw(ch, rbuf, att->modifiers[COMBAT_MOD_VISIBILITY]) - MAX(net_reach, 0);
+    att->tn += modify_target_rbuf_raw(ch, rbuf, att->modifiers[COMBAT_MOD_VISIBILITY]) - MAX(net_reach, 0);
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
       buf_mod(rbuf, combat_modifiers[mod_index], att->modifiers[mod_index]);
       att->tn += att->modifiers[mod_index];
+    }
+    
+    def->tn += modify_target_rbuf_raw(ch, NULL, def->modifiers[COMBAT_MOD_VISIBILITY]);
+    for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
+      def->tn += def->modifiers[mod_index];
     }
     
     buf_roll( rbuf, "Total", att->tn);
@@ -3659,13 +3687,16 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     act("$n clashes with $N in melee combat.", FALSE, ch, 0, victim, TO_ROOM);
     act("You clash with $N in melee combat.", FALSE, ch, 0, victim, TO_CHAR);
     sprintf(rbuf, "%s> sk %d targ %d\r\n"
-            "%s> sk %d targ %d\r\n Reach %c%d Success %d", GET_CHAR_NAME(ch), att->dice, att->tn,
-            GET_CHAR_NAME(victim), def->dice, def->tn, net_reach > 0 ? 'b' : 't', net_reach < 0 ? -net_reach : net_reach, att->successes);
+            "%s> sk %d targ %d\r\n Reach %c%d NetSucc %d (att %d, def %d)", GET_CHAR_NAME(ch), att->dice, att->tn,
+            GET_CHAR_NAME(victim), def->dice, def->tn, net_reach > 0 ? 'b' : 't', net_reach < 0 ? -net_reach : net_reach, net_successes,
+            att->successes, def->successes);
     act( rbuf, 1, ch, NULL, NULL, TO_ROLLS );
     
     // If your enemy got more successes than you, guess what? You're the one who gets their face caved in.
     if (net_successes < 0) {
-      act("You successfully counter $N's attack!", FALSE, ch, 0, victim, TO_CHAR);
+      act("You successfully counter $N's attack!", FALSE, victim, 0, ch, TO_CHAR);
+      act("$n deflects your attack and counterstrikes!", FALSE, victim, 0, ch, TO_VICT);
+      act("$n deflects $N's attack and counterstrikes!", FALSE, victim, 0, ch, TO_NOTVICT);
       struct combat_data *temp_cd = att;
       att = def;
       def = temp_cd;
@@ -3675,7 +3706,8 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
       victim = temp_ch;
       
       att->successes = -1 * net_successes;
-    }
+    } else
+      att->successes = net_successes;
   }
   
   // Calculate the power of the attack (applies to both melee and ranged).
@@ -3846,9 +3878,11 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
   
   int damage_total = convert_damage(staged_damage);
   
-  sprintf(rbuf, "Bod %d+%d, Pow %d, Suc %d, ResSuc %d.  %s(%d)->%s.  %d%c.",
-          GET_BOD(victim), bod, bod_success, att->power, att->successes,
-          wound_name[MIN(DEADLY, att->damage_level)], att->successes, wound_name[MAX(0, MIN(DEADLY, staged_damage))], damage_total, att->is_physical ? 'P' : 'M');
+  sprintf(rbuf, "Bod %d+%d, Pow %d, BodSuc %d, ResSuc %d: Dam %s->%s. %d%c.",
+          GET_BOD(victim), bod, att->power, bod_success, att->successes,
+          wound_name[MIN(DEADLY, MAX(0, att->damage_level))],
+          wound_name[MIN(DEADLY, MAX(0, staged_damage))],
+          damage_total, att->is_physical ? 'P' : 'M');
   act( rbuf, 1, ch, NULL, NULL, TO_ROLLS );
   if (!melee)
     combat_message(ch, victim, att->weapon, MAX(0, staged_damage), att->burst_count);
@@ -4864,7 +4898,7 @@ void chkdmg(struct veh_data * veh)
     if (veh->cspeed >= SPEED_IDLE) {
       stop_chase(veh);
       send_to_veh("You are hurled into the street as your ride is wrecked!\r\n", veh, NULL, TRUE);
-      sprintf(buf, "%s careens off the road, it's occupants hurled to the street!\r\n", GET_VEH_NAME(veh));
+      sprintf(buf, "%s careens off the road, its occupants hurled to the street!\r\n", GET_VEH_NAME(veh));
       send_to_room(buf, veh->in_room);
       veh->cspeed = SPEED_OFF;
       veh->dest = 0;

@@ -1234,8 +1234,7 @@ const char *adept_powers[] =
 
 struct skill_data skills[] =
   {
-    {"OMGWTFBBQ", BOD, 0
-    },
+    {"OMGWTFBBQ", BOD, 0},
     {"athletics", BOD, 0},
     {"armed combat", STR, 0},
     {"edged weapons", STR, 0},
