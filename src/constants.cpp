@@ -1858,7 +1858,7 @@ const char *room_types[] =
     "Suburban Street",
     "Highway",
     "Field",
-    "Forrest",
+    "Forest",
     "Indoors (Shop)",
     "Indoors (Warehouse)",
     "Indoors (Club)",
@@ -2072,5 +2072,6 @@ const char *combat_modifiers[] =
   "Smart",
   "Distance",
   "Visibility",
-  "Position"
+  "Position",
+  "Gyro"
 };

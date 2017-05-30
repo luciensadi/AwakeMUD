@@ -97,4 +97,5 @@ extern const char *legality_codes[][2];
 extern const char *background_types[];
 extern const char *fire_mode[];
 extern const char *weapon_type[];
+extern const char *combat_modifiers[];
 #endif
