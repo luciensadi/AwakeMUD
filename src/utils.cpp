@@ -1103,13 +1103,23 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
 // I hate this name. This isn't just a getter, it's a setter as well. -LS
 int get_skill(struct char_data *ch, int skill, int &target)
 {
+  char rbuf[MAX_STRING_LENGTH];
+  
   // Wearing too much armor? That'll hurt.
   if (skills[skill].attribute == QUI) {
-    if (GET_TOTALIMP(ch) > GET_QUI(ch))
-      target += GET_TOTALIMP(ch) - GET_QUI(ch);
-    if (GET_TOTALBAL(ch) > GET_QUI(ch))
-      target += GET_TOTALBAL(ch) - GET_QUI(ch);
+    int increase = 0;
+    if (GET_TOTALIMP(ch) > GET_QUI(ch)) {
+      increase = GET_TOTALIMP(ch) - GET_QUI(ch);
+      buf_mod(rbuf, "OverImp", increase);
+      target += increase;
+    }
+    if (GET_TOTALBAL(ch) > GET_QUI(ch)) {
+      increase = GET_TOTALBAL(ch) - GET_QUI(ch);
+      buf_mod(rbuf, "OverBal", increase);
+      target += increase;
+    }
   }
+  act(rbuf, 1, ch, NULL, NULL, TO_ROLLS);
   
   // Core p38
   if (target < 2)
@@ -1162,6 +1172,7 @@ int get_skill(struct char_data *ch, int skill, int &target)
     if (target >= 8)
       return 0;
     target += 4;
+    act("Unskilled: +4 TN", 1, ch, NULL, NULL, TO_ROLLS);
     return GET_ATT(ch, skills[skill].attribute);
   }
 }
