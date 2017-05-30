@@ -3179,21 +3179,12 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
     modifier = 8;
     if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) || GET_POWER(ch, ADEPT_BLIND_FIGHTING))
       modifier = 4;
-    
-    /* TODO: Environmental conditions such as darkness or smoke occa- sionally affect combat; how much depends on the type of vision the attacker is using. Consult the Visibility Table for appropriate modifiers. P112 in Core Rulebook.
-     If the number listed is split by a slash, the first modifier applies to cybernetic or electronic vision and the second to natural vision. Modifiers listed singly apply equally to all types of vision.
-     
-     Looks like these are handled in util.cpp modify_target_rbuf().
-     
-     TODO: modify_target_rbuf() reapplies some modifiers already considered here (ex: if you're in darkness, you get +8 from hit() and +8 from modify_target_rbuf(). That's some bullshit. */
   }
   return modifier;
 }
 
 // TODO: Macro this for compiler speed.
-bool is_damtype_physical(int type) {
-  return !(type == TYPE_HIT || type == TYPE_BLUDGEON || type == TYPE_PUNCH || type == TYPE_TASER || type == TYPE_CRUSH || type == TYPE_POUND);
-}
+#define IS_DAMTYPE_PHYSICAL(type) !((type) == TYPE_HIT || (type) == TYPE_BLUDGEON || (type) == TYPE_PUNCH || (type) == TYPE_TASER || (type) == TYPE_CRUSH || (type) == TYPE_POUND)
 
 //todo: single shot weaps can only be fired once per combat phase-- what does this mean for us?
 
@@ -3340,8 +3331,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
   def->modifiers[COMBAT_MOD_VISIBILITY] += calculate_vision_penalty(victim, ch);
   
   // Early execution: Nerve strike doesn't require as much setup, so perform it here to save on resources.
-  if (melee && IS_NERVE(ch) && !(att->weapon)) {
-    // TODO: machines, spirits, zombies, etc are immune to nerve-- check for these
+  if (melee && IS_NERVE(ch) && !(att->weapon) && !(IS_SPIRIT(victim) || IS_ELEMENTAL(victim))) {
     // Calculate and display pre-success-test information.
     sprintf( rbuf, "%s", GET_CHAR_NAME( ch ) );
     rbuf[3] = 0;
@@ -3401,8 +3391,8 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
   def->dam_type = get_weapon_damage_type(def->weapon);
   
   // Setup: Determine if we're doing physical damage.
-  att->is_physical = is_damtype_physical(att->dam_type);
-  def->is_physical = is_damtype_physical(def->dam_type);
+  att->is_physical = IS_DAMTYPE_PHYSICAL(att->dam_type);
+  def->is_physical = IS_DAMTYPE_PHYSICAL(def->dam_type);
   
   // Setup: If the character is rigging a vehicle or is in a vehicle, set veh to that vehicle.
   RIG_VEH(ch, att->veh);
@@ -3451,8 +3441,8 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
         GET_OBJ_VAL(att->magazine, 9) -= att->burst_count;
         
         //todo what is this for, wouldn't this drive the npc's ammo count negative
-        if (IS_NPC(ch))
-          GET_OBJ_VAL(att->weapon, 6) -= att->burst_count;
+        // if (IS_NPC(ch))
+        //   GET_OBJ_VAL(att->weapon, 6) -= att->burst_count;
       }
       
       // Setup: Compute recoil.
@@ -3469,19 +3459,34 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     // Setup: Modify recoil based on vehicular stats.
     if (att->veh) {
       if (AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG)) {
-        att->modifiers[COMBAT_MOD_RECOIL] += MAX(0, att->modifiers[COMBAT_MOD_RECOIL] - 2); // TODO: You don't get speed penalties if you're manning/rigging?
+        att->modifiers[COMBAT_MOD_RECOIL] += MAX(0, att->modifiers[COMBAT_MOD_RECOIL] - 2);
       } else {
         // Core p153: Unmounted weapons get +2 TN.
         att->modifiers[COMBAT_MOD_MOVEMENT] += 2;
-        
-        // We assume all targets are standing still.
-        // Per Core p153, manual gunnery modifier is +1 per 30m/CT.
-        att->modifiers[COMBAT_MOD_MOVEMENT] += (int) (get_speed(att->veh) / 30);
       }
       
-      // TODO: Penalty for damaged veh.
+      // We assume all targets are standing still.
+      // Per Core p153, movement gunnery modifier is +1 per 30m/CT.
+      att->modifiers[COMBAT_MOD_MOVEMENT] += (int) (get_speed(att->veh) / 30);
       
-      // TODO: vehicle-to-vehicle combat has additional modifiers for speeds
+      // Penalty for damaged veh.
+      switch ((att->veh)->damage) {
+        case 1:
+        case 2:
+          att->modifiers[COMBAT_MOD_VEHICLE_DAMAGE] += 1;
+          break;
+        case 3:
+        case 4:
+        case 5:
+          att->modifiers[COMBAT_MOD_VEHICLE_DAMAGE] += 2;
+          break;
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+          att->modifiers[COMBAT_MOD_VEHICLE_DAMAGE] += 3;
+          break;
+      }
     }
     
     // Setup: If you're dual-wielding, take that penalty, otherwise you get your smartlink bonus.
@@ -3539,14 +3544,12 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
       }
     }
     
-    //todo penalty for in melee combat
-    
     // Setup: If your attacker is closing the distance (running), take a penalty per Core p112.
     if (AFF_FLAGGED(victim, AFF_APPROACH))
       att->modifiers[COMBAT_MOD_MOVEMENT] += 2;
     
     // Setup: If you have a gyro mount, it negates recoil and movement penalties up to its rating.
-    if (att->gyro)
+    if (att->gyro && !(AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || AFF_FLAGGED(ch, AFF_PILOT)))
       att->modifiers[COMBAT_MOD_GYRO] -= MIN(att->modifiers[COMBAT_MOD_MOVEMENT] + att->modifiers[COMBAT_MOD_RECOIL], GET_OBJ_VAL(att->gyro, 1));
     
     // Calculate and display pre-success-test information.
@@ -3578,27 +3581,14 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     sprintf(rbuf, "Fight: Ski %d, TN %d, Suc %d", att->dice, att->tn, att->successes);
     act( rbuf, 1, ch, NULL, NULL, TO_ROLLS );
     
-    /*
-    // Setup: Armor encumbrance penalties.
-    int armor_encumbrance_total = 0;
-    if (GET_TOTALBAL(victim) > GET_QUI(victim))
-      armor_encumbrance_total += GET_TOTALBAL(victim) - GET_QUI(victim);
-    if (GET_TOTALIMP(victim) > GET_QUI(victim))
-      armor_encumbrance_total += GET_TOTALIMP(victim) - GET_QUI(victim); */
-    
-    /* TODO: Wearing armor can be burdensome and tiring, and it tends to slow down characters in combat. To reflect this, for every 2 full points that a character’s separate Ballistic or Impact Armor Rat- ing exceed Quickness Attribute, reduce his or her Combat Pool by one die. For example, a character with Quickness 3 wearing an armor jacket (5/3) would lose one die from her Combat Pool.
-     
-     Sounds like armor encumbrance should be checked during wear/remove and cpool commands, not in combat.
-     */
-    // TODO: Where are the rules for tallness?
-    if (AWAKE(victim) && !def->too_tall && !AFF_FLAGGED(victim, AFF_PRONE)) { // Removed armor_encumbrance_total < GET_QUI(victim) &&
+    // Dodge test.
+    if (AWAKE(victim) && !AFF_FLAGGED(victim, AFF_SURPRISE) && !def->too_tall && !AFF_FLAGGED(victim, AFF_PRONE)) {
       // Previous code only allowed you to sidestep if you had also allocated at least one normal dodge die. Why?
       def->dice = GET_DEFENSE(victim) + GET_POWER(victim, ADEPT_SIDESTEP);
-      def->tn += damage_modifier(victim, buf) + (int)(att->burst_count / 3) + def->footanchors; /* TODO: Why damage_modifier instead of modify_target? Can you dodge what you can't see? */
+      def->tn += damage_modifier(victim, buf) + (int)(att->burst_count / 3) + def->footanchors;
       def->successes = MAX(success_test(def->dice, def->tn), 0);
       att->successes -= def->successes;
       
-      //success -= MAX(success_test(GET_DEFENSE(victim) + (GET_DEFENSE(victim) ? GET_POWER(victim, ADEPT_SIDESTEP) : 0), 4 + damage_modifier(victim, buf) + (int)(burst / 3) + anchor), 0);
       sprintf(rbuf, "Dodge: Dice %d, TN %d, Suc %d. NetSuc %d", def->dice, def->tn, def->successes, att->successes);
       act( rbuf, 1, ch, NULL, NULL, TO_ROLLS );
     } else
@@ -3625,7 +3615,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     if (AFF_FLAGGED(victim, AFF_PRONE))
       att->modifiers[COMBAT_MOD_POSITION] -= 2;
     
-    // TODO: Integrate spirit fighting with the rest of the logic.
+    // Spirits use different dice than the rest of us plebs.
     if (IS_SPIRIT(victim) || IS_ELEMENTAL(victim)) {
       att->dice = GET_WIL(ch);
       def->dice = GET_REA(victim);
@@ -3633,9 +3623,6 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
       att->dice = GET_REA(ch);
       def->dice = GET_WIL(victim);
     } else {
-      // TODO: Calling this shitty get_skill here (and all other earlier instances) means nothing since TN is reset during messaging.
-      //        This would have been easier to diagnose if this setter was not named get.
-      // TODO: Figure out who named a modifying method 'get' and mail them a fresh bag of horse shit for all the mysterious bugs they've caused.
       def->dice = get_skill(victim, def->skill, def->tn) + (def->too_tall ? 0 : MIN(GET_SKILL(victim, def->skill), GET_OFFENSE(victim)));
       att->dice = get_skill(ch, att->skill, att->tn) + (att->too_tall ? 0 : MIN(GET_SKILL(ch, att->skill), GET_OFFENSE(ch)));
     }
@@ -3694,9 +3681,11 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     
     // If your enemy got more successes than you, guess what? You're the one who gets their face caved in.
     if (net_successes < 0) {
+      /* This messaging gets a little annoying.
       act("You successfully counter $N's attack!", FALSE, victim, 0, ch, TO_CHAR);
       act("$n deflects your attack and counterstrikes!", FALSE, victim, 0, ch, TO_VICT);
       act("$n deflects $N's attack and counterstrikes!", FALSE, victim, 0, ch, TO_NOTVICT);
+      */
       struct combat_data *temp_cd = att;
       att = def;
       def = temp_cd;
@@ -3760,8 +3749,6 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     // Core p113.
     if (att->power < 2)
       att->power = 2;
-    
-    // todo: ensure damtype and is_phys are already set
   }
   // Cyber and unarmed combat.
   else {
@@ -4676,7 +4663,7 @@ void perform_violence(void)
           GET_EXTRA(mage) = 0;
           GET_EXTRA(spirit) = 1;
           GET_TEMP_MAGIC_LOSS(mage) -= success;
-          send_to_char(mage, "You lock minds with %s but are beaten back by it's force!\r\n", GET_NAME(spirit));
+          send_to_char(mage, "You lock minds with %s but are beaten back by its force!\r\n", GET_NAME(spirit));
         } else if (success == 0) {
           send_to_char(mage, "You lock minds with %s but fail to gain any ground.\r\n",
                        GET_NAME(spirit));
@@ -4690,7 +4677,7 @@ void perform_violence(void)
         affect_total(spirit);
         if (GET_LEVEL(spirit) < 1) {
           send_to_char(mage, "You drain %s off the last of its magical force, banishing it to the metaplanes!\r\n", GET_NAME(spirit));
-          act("$N is banished to the metaplanes as $n drains the last of it's magical force.", FALSE, mage, 0, spirit, TO_ROOM);
+          act("$N is banished to the metaplanes as $n drains the last of its magical force.", FALSE, mage, 0, spirit, TO_ROOM);
           stop_fighting(spirit);
           stop_fighting(mage);
           end_spirit_existance(spirit, TRUE);
