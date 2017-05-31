@@ -9,6 +9,8 @@
 #include "awake.h"
 #include "list.h"
 #include "bitfield.h"
+#include "utils.h"
+
 #define SPECIAL(name) \
    int (name)(struct char_data *ch, void *me, int cmd, char *argument)
 #define WSPEC(name) \
@@ -955,5 +957,64 @@ struct ammo_data
   float time;
   float weight;
   unsigned char cost;
+};
+
+/* Combat data. */
+struct combat_data
+{
+  // Generic combat data.
+  char modifiers[NUM_COMBAT_MODIFIERS];
+  bool too_tall;
+  int skill;
+  int tn;
+  int dice;
+  int successes;
+  
+  // Weapon / unarmed damage data.
+  int dam_type;
+  bool is_physical;
+  char power;
+  char damage_level; // Light/Med/etc
+  
+  // Gun data.
+  bool weapon_is_gun;
+  bool weapon_has_bayonet;
+  char burst_count;
+  char recoil_comp;
+  
+  // Cyberware data.
+  unsigned char climbingclaws;
+  unsigned char fins;
+  unsigned char handblades;
+  unsigned char handrazors;
+  unsigned char improved_handrazors;
+  unsigned char handspurs;
+  unsigned char footanchors;
+  unsigned char bone_lacing_power;
+  unsigned char num_cyberweapons;
+  
+  // Pointers.
+  struct char_data *ch;
+  struct veh_data *veh;
+  struct obj_data *weapon;
+  struct obj_data *magazine;
+  struct obj_data *gyro;
+  
+  combat_data(struct char_data *character, struct obj_data *weap) :
+    skill(0), tn(0), dice(0), successes(0), dam_type(0), power(0), damage_level(0),
+    burst_count(0), recoil_comp(0), climbingclaws(0), handblades(0), handrazors(0), improved_handrazors(0),
+    handspurs(0), fins(0), footanchors(0), bone_lacing_power(0), num_cyberweapons(0),
+    too_tall(FALSE), is_physical(FALSE), weapon_is_gun(FALSE), weapon_has_bayonet(FALSE),
+    ch(NULL), veh(NULL), weapon(NULL), magazine(NULL), gyro(NULL)
+  {
+    memset(modifiers, 0, sizeof(modifiers));
+    
+    ch = character;
+    weapon = weap;
+    
+    weapon_is_gun = (weapon && IS_GUN(GET_OBJ_VAL((weapon), 3)));
+    if (weapon_is_gun)
+      magazine = weapon->contains;
+  }
 };
 #endif

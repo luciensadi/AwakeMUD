@@ -384,6 +384,12 @@ void DBInit()
   log("Boot db -- DONE.");
 }
 
+/* A simple method to clean up after our DB. */
+void DBFinalize() {
+  if (mysql)
+    mysql_close(mysql);
+}
+
 /* reset the time in the game from file
    weekday is lost on reboot.... implement
    something different if this is mission

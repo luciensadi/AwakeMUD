@@ -55,11 +55,35 @@ int mysql_wrapper(MYSQL *mysql, char *query)
 #endif
   
   int result = mysql_query(mysql, query);
-
-  if (mysql_errno(mysql)) {
+  int errnum = mysql_errno(mysql);
+  
+  if (errnum) {
     sprintf(buf, "MYSQLERROR: %s", mysql_error(mysql));
     log(buf);
-    // log(query);
+    sprintf(buf, "Offending query: %s", query);
+    log(buf);
+    
+    // Recovery procedures for certain errors.
+    switch (errnum) {
+      case 2006:
+        // 'MySQL server has gone away.'
+        log("The MySQL server connection appears to have dropped. Attempting to establish a new one.");
+        mysql_close(mysql);
+        mysql = mysql_init(NULL);
+        if (!mysql_real_connect(mysql, mysql_host, mysql_user, mysql_password, mysql_db, 0, NULL, 0)) {
+          sprintf(buf, "FATAL ERROR: %s\r\n", mysql_error(mysql));
+          log(buf);
+          log("Suggestion: Make sure your DB is running and that you've specified your connection info in src/mysql_config.cpp.\r\n");
+          
+          // High chance this won't succeed-- the calling function will likely attempt to read
+          //  the results of the query, but the query had no results and will refuse a read.
+          //  This is crash-inducing behavior 99% of the time.
+          shutdown();
+        }
+        break;
+      default:
+        break;
+    }
   }
   return result;
 }
@@ -1343,8 +1367,8 @@ char_data *CreateChar(char_data *ch)
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
   if (!row && mysql_field_count(mysql)) {
-    log_vfprintf("%s promoted to President, by virtue of first-come, first-serve.",
-        GET_CHAR_NAME(ch));
+    log_vfprintf("%s promoted to %s by virtue of first-come, first-serve.",
+        GET_CHAR_NAME(ch), status_ratings[LVL_MAX]);
     
     // TODO: Add NODELETE, OLC on
 
@@ -1352,14 +1376,14 @@ char_data *CreateChar(char_data *ch)
       GET_COND(ch, i) = (char) -1;
 
     GET_KARMA(ch) = 0;
-    GET_LEVEL(ch) = LVL_PRESIDENT;
+    GET_LEVEL(ch) = LVL_MAX;
     GET_REP(ch) = 0;
     GET_NOT(ch) = 0;
     GET_TKE(ch) = 0;
     GET_IDNUM(ch) = 1;
 
-    PLR_FLAGS(ch).RemoveBit(PLR_NEWBIE);
-    PLR_FLAGS(ch).RemoveBit(PLR_AUTH);
+    PLR_FLAGS(ch).RemoveBits(PLR_NEWBIE, PLR_AUTH, ENDBIT);
+    PLR_FLAGS(ch).SetBits(PLR_OLC, PLR_NODELETE, ENDBIT);
     PRF_FLAGS(ch).SetBits(PRF_HOLYLIGHT, PRF_CONNLOG, PRF_ROOMFLAGS,
                           PRF_NOHASSLE, PRF_AUTOINVIS, PRF_AUTOEXIT, ENDBIT);
   } else {
@@ -1389,8 +1413,8 @@ char_data *PCIndex::CreateChar(char_data *ch)
 
   // if this is the first character, make him president
   if (entry_cnt < 1) {
-    log_vfprintf("%s promoted to President, by virtue of first-come, first-serve.",
-        GET_CHAR_NAME(ch));
+    log_vfprintf("%s promoted to %s, by virtue of first-come, first-serve.",
+        status_ratings[LVL_MAX], GET_CHAR_NAME(ch));
     
     // TODO: this is a duplicate of the other president code, can they be consolidated?
 
@@ -1398,7 +1422,7 @@ char_data *PCIndex::CreateChar(char_data *ch)
       GET_COND(ch, i) = (char) -1;
 
     GET_KARMA(ch) = 0;
-    GET_LEVEL(ch) = LVL_PRESIDENT;
+    GET_LEVEL(ch) = LVL_MAX;
     GET_REP(ch) = 0;
     GET_NOT(ch) = 0;
     GET_TKE(ch) = 0;

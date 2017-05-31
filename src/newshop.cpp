@@ -246,7 +246,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       }
       if ((GET_OBJ_VAL(obj, 0) == BIO_PATHOGENICDEFENSE || GET_OBJ_VAL(obj, 0) == BIO_TOXINEXTRACTOR) && 
           GET_OBJ_VAL(obj, 1) > GET_REAL_BOD(ch) / 2) {
-        send_to_char("Your body can not support pathogenic defense of that level.\r\n", ch);
+        send_to_char("Your body cannot support pathogenic defense of that level.\r\n", ch);
         return FALSE;
       }
       for (check = ch->bioware; check; check = check->next_content) {
