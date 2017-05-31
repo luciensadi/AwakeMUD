@@ -273,6 +273,7 @@ ACMD(do_sneak);
 ACMD(do_snoop);
 ACMD(do_spec_comm);
 ACMD(do_spells);
+ACMD(do_spellset);
 //ACMD(do_spray);
 ACMD(do_spool);
 ACMD(do_stand);
@@ -864,6 +865,7 @@ struct command_info cmd_info[] =
     { "spool"    , POS_DEAD    , do_spool    , 0, 0, FREE }, 
     { "speed"    , POS_RESTING , do_speed    , 0, 0 },
     { "spells"   , POS_SLEEPING, do_spells   , 0, 0 },
+    { "spellset" , POS_SLEEPING, do_spellset , LVL_DEVELOPER, 0 },
     { "spank"    , POS_LYING   , do_action   , 0, 0 },
     { "spirits"  , POS_LYING   , do_elemental, 0, 0 },
     { "spit"     , POS_STANDING, do_action   , 0, 0 },
