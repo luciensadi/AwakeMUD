@@ -3397,7 +3397,7 @@ ACMD(do_set)
                { "holylight", LVL_ADMIN, PC, BINARY },
                { "wanted",       LVL_ADMIN, PC, BINARY },
                { "authorize", LVL_ADMIN, PC, BINARY },//60
-               { "edcon",           LVL_ADMIN, PC, BINARY },
+               { "edcon",           LVL_ADMIN, PC, BINARY }, // 'edit rooms in a connected zone' (for low-level builders)
                { "notoriety",       LVL_ADMIN, PC, NUMBER },
                { "pg",              LVL_ADMIN,      PC,     BINARY },
                { "rpe",      LVL_ADMIN, PC, BINARY },

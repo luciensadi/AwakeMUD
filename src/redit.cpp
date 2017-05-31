@@ -197,7 +197,7 @@ void redit_disp_flag_menu(struct descriptor_data * d)
   CLS(CH);
   for (counter = 0; counter < ROOM_MAX; counter += 2)
   {
-    send_to_char(CH, "%2d) %-10s        %2d) %-10s\r\n",
+    send_to_char(CH, "%2d) %-12s      %2d) %-12s\r\n",
                  counter + 1, room_bits[counter],
                  counter + 2, counter + 1 < ROOM_MAX ?
                  room_bits[counter + 1] : "");

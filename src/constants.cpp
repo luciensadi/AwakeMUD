@@ -247,14 +247,14 @@ const char *room_bits[] =
     "!MAGIC",
     "TUNNEL",
     "ARENA",
-    "LIT",
+    "STREETLIGHTS",
     "HOUSE",
     "HCRSH",
     "ATRIUM",
     "OLC",
     "*",                          /* BFS MARK */
     "LOW_LIGHT",
-    "!USED",
+    "!USED", // Empty slot.
     "!RADIO",
     "!BIKE",
     "!WALK",
@@ -1234,8 +1234,7 @@ const char *adept_powers[] =
 
 struct skill_data skills[] =
   {
-    {"OMGWTFBBQ", BOD, 0
-    },
+    {"OMGWTFBBQ", BOD, 0},
     {"athletics", BOD, 0},
     {"armed combat", STR, 0},
     {"edged weapons", STR, 0},
@@ -1858,7 +1857,7 @@ const char *room_types[] =
     "Suburban Street",
     "Highway",
     "Field",
-    "Forrest",
+    "Forest",
     "Indoors (Shop)",
     "Indoors (Warehouse)",
     "Indoors (Club)",
@@ -2062,4 +2061,18 @@ const char *fire_mode[] =
   "Semi-Automatic",
   "Burst Fire",
   "Full Automatic"
+};
+
+const char *combat_modifiers[] =
+{
+  "Recoil",
+  "Movement",
+  "2Weap",
+  "Smart",
+  "Distance",
+  "Visibility",
+  "Position",
+  "Gyro",
+  "Reach",
+  "VehDamaged"
 };
