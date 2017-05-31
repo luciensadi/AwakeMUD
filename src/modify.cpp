@@ -556,6 +556,15 @@ void string_add(struct descriptor_data *d, char *str)
 }
 
 
+/* **********************************************************************
+*  Modification of character spells                                     *
+********************************************************************** */
+
+ACMD(do_spellset)
+{
+
+}
+
 
 /* **********************************************************************
 *  Modification of character skills                                     *
