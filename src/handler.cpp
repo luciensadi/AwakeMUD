@@ -484,8 +484,8 @@ void affect_total(struct char_data * ch)
   /* effects of bioware */
   for (cyber = ch->bioware; cyber; cyber = cyber->next_content)
   {
-    if (GET_OBJ_VAL(cyber, 0) != BIO_ADRENALPUMP || (GET_OBJ_VAL(cyber, 0) == BIO_ADRENALPUMP &&
-                                       GET_OBJ_VAL(cyber, 5) > 0))
+    if ((GET_OBJ_VAL(cyber, 0) != BIO_ADRENALPUMP || (GET_OBJ_VAL(cyber, 0) == BIO_ADRENALPUMP))
+        && GET_OBJ_VAL(cyber, 5) > 0)
       for (j = 0; j < MAX_OBJ_AFFECT; j++)
         affect_modify(ch,
                       cyber->affected[j].location,
@@ -530,7 +530,9 @@ void affect_total(struct char_data * ch)
     GET_IMPACT(ch) = mob_proto[GET_MOB_RNUM(ch)].points.impact[0];
   } else
     GET_BALLISTIC(ch) = GET_IMPACT(ch) = 0;
+  
   GET_TOTALBAL(ch) = GET_TOTALIMP(ch) = 0;
+  
   for (obj = ch->carrying; obj; obj = obj->next_content)
     if (GET_OBJ_TYPE(obj) == ITEM_FOCUS)
       apply_focus_effect(ch, obj);
@@ -627,8 +629,11 @@ void affect_total(struct char_data * ch)
       has_wired = GET_OBJ_VAL(cyber, 1);
     else if (GET_OBJ_VAL(cyber, 0) == CYB_MOVEBYWIRE)
       has_mbw = GET_OBJ_VAL(cyber, 1);
-    else if (GET_OBJ_VAL(cyber, 0) == CYB_DERMALSHEATHING && GET_OBJ_VAL(cyber, 3) == 1 && !wearing)
-      AFF_FLAGS(ch).SetBit(AFF_INVISIBLE);
+    else if (GET_OBJ_VAL(cyber, 0) == CYB_DERMALSHEATHING || GET_OBJ_VAL(cyber, 0) == CYB_DERMALPLATING) {
+      if (GET_OBJ_VAL(cyber, 0) == CYB_DERMALSHEATHING && GET_OBJ_VAL(cyber, 3) == 1 && !wearing)
+        AFF_FLAGS(ch).SetBit(AFF_INVISIBLE);
+      // todo
+    }
     for (j = 0; j < MAX_OBJ_AFFECT; j++)
       affect_modify(ch,
                     cyber->affected[j].location,

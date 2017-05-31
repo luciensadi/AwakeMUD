@@ -1408,7 +1408,7 @@ ACMD(do_sit)
     act("You have to wake up first.", FALSE, ch, 0, 0, TO_CHAR);
     break;
   case POS_FIGHTING:
-    act("Sit down while fighting? are you MAD?", FALSE, ch, 0, 0, TO_CHAR);
+    act("Sit down while fighting? Are you MAD?", FALSE, ch, 0, 0, TO_CHAR);
     break;
   default:
     act("You stop floating around, and sit down.", FALSE, ch, 0, 0, TO_CHAR);
