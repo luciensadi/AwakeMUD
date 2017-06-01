@@ -1445,7 +1445,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         send_to_char("The acid splashes against you causing a mild burning sensation.\r\n", vict);
       } else {
         act("The acid splashes on $n, but $e doesn't seem to flinch.", FALSE, vict, 0, ch, TO_ROOM);
-        send_to_char("You are splashed by the acid, but it causes nothing more than a moments irritation.\r\n", vict);
+        send_to_char("You are splashed by the acid, but it causes nothing more than a moment's irritation.\r\n", vict);
       }
       damage_equip(ch, vict, force, TYPE_ACID);
       AFF_FLAGS(vict).SetBit(AFF_ACID);
