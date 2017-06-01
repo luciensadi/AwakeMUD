@@ -507,4 +507,26 @@ Material:	metal
 	Location:	Target Numbers
 	Modifier:	-127
 BREAK
+#10018
+Keywords:	whiteboard board message immortal
+Name:	an Immortal message board
+RoomDesc:$
+A whiteboard bears scrawled notes and reminders for the staff.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	100010001100
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	500000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
 END
