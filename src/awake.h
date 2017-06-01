@@ -1841,14 +1841,14 @@ enum {
 
 /* Boards */
 
-#define NUM_OF_BOARDS           11 /* change if needed! */
+#define NUM_OF_BOARDS           12 /* change if needed! */
 #define MAX_BOARD_MESSAGES      300     /* arbitrary -- change if needed */
 #define MAX_MESSAGE_LENGTH      5120    /* arbitrary -- change if needed */
 #define INDEX_SIZE         ((NUM_OF_BOARDS*MAX_BOARD_MESSAGES) + 5)
 
 /* teacher modes */
 
-#define LIBRARY		0
+#define LIBRARY		      0
 #define NEWBIE          1
 #define AMATEUR         2
 #define ADVANCED        3
@@ -1860,10 +1860,11 @@ enum {
 #define SUN_RISE        1
 #define SUN_LIGHT       2
 #define SUN_SET         3
-#define MOON_NEW  0
-#define MOON_WAX  1
-#define MOON_FULL  2
-#define MOON_WANE  3
+
+#define MOON_NEW        0
+#define MOON_WAX        1
+#define MOON_FULL       2
+#define MOON_WANE       3
 
 /* sky conditions for weather_data */
 
@@ -1883,35 +1884,35 @@ enum {
 
 /* MATRIX HOSTS TYPES */
 #define HOST_DATASTORE	0
-#define HOST_LTG	1
-#define HOST_RTG	2
-#define HOST_PLTG	3
-#define HOST_SECURITY	4
+#define HOST_LTG	      1
+#define HOST_RTG	      2
+#define HOST_PLTG	      3
+#define HOST_SECURITY	  4
 #define HOST_CONTOLLER	5
 
 /* IC Options */
-#define IC_ARMOUR	1
-#define IC_CASCADE	2
-#define IC_EX_DEFENSE	3
-#define IC_EX_OFFENSE	4
-#define IC_SHIELD	5
-#define IC_SHIFT	6
-#define IC_TRAP		7
+#define IC_ARMOUR	      1
+#define IC_CASCADE	    2
+#define IC_EX_DEFENSE  	3
+#define IC_EX_OFFENSE	  4
+#define IC_SHIELD	      5
+#define IC_SHIFT	      6
+#define IC_TRAP		      7
 
-#define ZONE_SEATTLE	0
-#define ZONE_PORTLAND	1
-#define ZONE_CARIB	2
-#define ZONE_OCEAN	3
+#define ZONE_SEATTLE	  0
+#define ZONE_PORTLAND	  1
+#define ZONE_CARIB	    2
+#define ZONE_OCEAN	    3
 
 /* MOB Alert Levels */
-#define MALERT_CALM	0
-#define MALERT_ALERT	1
-#define MALERT_ALARM	2
+#define MALERT_CALM	    0
+#define MALERT_ALERT	  1
+#define MALERT_ALARM	  2
 
-#define LIGHT 1
-#define MODERATE 2
-#define SERIOUS 3
-#define DEADLY 4
+#define LIGHT           1
+#define MODERATE        2
+#define SERIOUS         3
+#define DEADLY          4
 
 #define QUEST_TIMER	15
 

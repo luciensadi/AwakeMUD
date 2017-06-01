@@ -64,7 +64,8 @@ struct board_info_type board_info[NUM_OF_BOARDS] =
     {50  , LVL_BUILDER, LVL_BUILDER, LVL_VICEPRES, "etc/board.harlequin"},
     {1006, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.builder"},
     {1007, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.coder"},
-    {66  , LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.lofwyr"}
+    {66  , LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.lofwyr"},
+    {10018, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immhq"}
 //  {2104, 0, 0, LVL_ADMIN, "etc/board.mort"},
 //  {2106, LVL_BUILDER, LVL_BUILDER, LVL_ADMIN, "etc/board.immort"},
 //  {64900, 0, 0, LVL_BUILDER, "etc/board.rpe"},
