@@ -38,7 +38,7 @@ extern void free_quest(struct quest_data *quest);
 extern bool resize_qst_array(void);
 extern char *cleanup(char *, const char *);
 
-ACMD(do_say);
+ACMD_CONST(do_say);
 ACMD(do_action);
 SPECIAL(johnson);
 

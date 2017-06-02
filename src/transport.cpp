@@ -386,7 +386,7 @@ ACMD(do_hail)
 SPECIAL(taxi)
 {
   extern bool memory(struct char_data *ch, struct char_data *vict);
-  ACMD(do_say);
+  ACMD_CONST(do_say);
   ACMD(do_action);
 
   struct char_data *temp = NULL, *driver = (struct char_data *) me;

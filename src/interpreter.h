@@ -16,7 +16,9 @@
 */
 
 #define ACMD(name)   \
-     void (name)(struct char_data *ch, char *argument, int cmd, int subcmd)
+    void (name)(struct char_data *ch, char *argument, int cmd, int subcmd)
+#define ACMD_CONST(name)   \
+    void (name)(struct char_data *ch, const char *argument, int cmd, int subcmd)
 
 const int RETURN_HELP = -37;
 
