@@ -1001,10 +1001,9 @@ struct combat_data
   struct obj_data *gyro;
   
   combat_data(struct char_data *character, struct obj_data *weap) :
-    skill(0), tn(0), dice(0), successes(0), dam_type(0), power(0), damage_level(0),
-    burst_count(0), recoil_comp(0), climbingclaws(0), handblades(0), handrazors(0), improved_handrazors(0),
-    handspurs(0), fins(0), footanchors(0), bone_lacing_power(0), num_cyberweapons(0),
-    too_tall(FALSE), is_physical(FALSE), weapon_is_gun(FALSE), weapon_has_bayonet(FALSE),
+    too_tall(FALSE), skill(0), tn(0), dice(0), successes(0), dam_type(0), is_physical(FALSE), power(0), damage_level(0),
+    weapon_is_gun(FALSE), weapon_has_bayonet(FALSE), burst_count(0), recoil_comp(0), climbingclaws(0), fins(0),
+    handblades(0), handrazors(0), improved_handrazors(0), handspurs(0), footanchors(0), bone_lacing_power(0), num_cyberweapons(0),
     ch(NULL), veh(NULL), weapon(NULL), magazine(NULL), gyro(NULL)
   {
     memset(modifiers, 0, sizeof(modifiers));

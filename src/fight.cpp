@@ -2877,7 +2877,7 @@ void combat_message_process_ranged_response(struct char_data *ch, rnum_t rnum) {
 void combat_message(struct char_data *ch, struct char_data *victim, struct obj_data *weapon, int damage, int burst)
 {
   char buf[MAX_MESSAGE_LENGTH], buf1[MAX_MESSAGE_LENGTH], buf2[MAX_MESSAGE_LENGTH], buf3[MAX_MESSAGE_LENGTH],
-  buf4[MAX_MESSAGE_LENGTH], been_heard[MAX_STRING_LENGTH], temp[20];
+  been_heard[MAX_STRING_LENGTH], temp[20];
   struct obj_data *obj = NULL;
   rnum_t room1 = 0, room2 = 0, rnum = 0;
   
@@ -3299,7 +3299,6 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
   def->tn = 4;
   
   char rbuf[MAX_STRING_LENGTH];
-  char *rbuf_start_address = rbuf;
   bool melee = FALSE;
   
   // Precondition: If you're asleep, paralyzed, or out of ammo, you don't get to fight. TODO: How to handle characters wielding non-weapons?

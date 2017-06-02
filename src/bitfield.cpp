@@ -20,7 +20,6 @@ static const int NUM_BUFFERS = 8;
 static const int BUFFER_SIZE = 256;
 static char buffer_tab[NUM_BUFFERS][BUFFER_SIZE];
 static int  buffer_idx = 0;
-static const int LOOP_BREAK = 100;
 
 // ______________________________
 //
