@@ -23,7 +23,7 @@
 extern class helpList Help;
 extern class helpList WizHelp;
 extern MYSQL *mysql;
-extern int mysql_wrapper(MYSQL *mysql, char *query);
+extern int mysql_wrapper(MYSQL *mysql, const char *query);
 char *prepare_quotes(char *dest, const char *str);
 
 // extern funcs
@@ -263,9 +263,10 @@ void objList::CallSpec()
 {
   nodeStruct<struct obj_data *> *temp;
 
+  char empty_argument = '\0';
   for (temp = head; temp; temp = temp->next)
     if (GET_OBJ_SPEC(temp->data) != NULL)
-      GET_OBJ_SPEC(temp->data) (NULL, temp->data, 0, "");
+      GET_OBJ_SPEC(temp->data) (NULL, temp->data, 0, &empty_argument);
 }
 
 void objList::RemoveObjNum(int num)

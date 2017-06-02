@@ -39,7 +39,7 @@ void    nanny(struct descriptor_data *d, char *arg);
 int     is_abbrev(const char *arg1, const char *arg2);
 int     is_number(char *str);
 int     find_command(const char *command);
-int     find_mcommand(char *command);
+int     find_mcommand(const char *command);
 void    skip_spaces(char **string);
 char    *delete_doubledollar(char *string);
 

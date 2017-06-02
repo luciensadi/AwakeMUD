@@ -584,7 +584,7 @@ void House_boot(void)
 
 /* "House Control" functions */
 
-char *HCONTROL_FORMAT =
+const char *HCONTROL_FORMAT =
   "Usage:  hcontrol destroy <house vnum>\r\n"
   "       hcontrol show\r\n";
 void hcontrol_list_houses(struct char_data *ch)

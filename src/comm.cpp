@@ -2194,7 +2194,7 @@ void send_to_driver(char *messg, struct veh_data *veh)
         SEND_TO_Q(messg, i->desc);
 }
 
-void send_to_host(vnum_t room, char *messg, struct matrix_icon *icon, bool needsee)
+void send_to_host(vnum_t room, const char *messg, struct matrix_icon *icon, bool needsee)
 {
   struct matrix_icon *i;
   if (messg)

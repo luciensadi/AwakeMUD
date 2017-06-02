@@ -14,7 +14,7 @@
 #include <mysql/mysql.h>
 
 extern MYSQL *mysql;
-extern int mysql_wrapper(MYSQL *mysql, char *buf);
+extern int mysql_wrapper(MYSQL *mysql, const char *buf);
 
 #define CH d->character
 #define SEC d->edit_obj

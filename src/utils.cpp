@@ -50,7 +50,7 @@ extern const char *log_types[];
 extern long beginning_of_time;
 extern int ability_cost(int abil, int level);
 extern MYSQL *mysql;
-extern int mysql_wrapper(MYSQL *mysql, char *buf);
+extern int mysql_wrapper(MYSQL *mysql, const char *buf);
 
 /* creates a random number in interval [from;to] */
 int number(int from, int to)

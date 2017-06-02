@@ -19,7 +19,7 @@ void roll_individual_initiative(struct char_data *ch);
 void order_list(struct char_data *start);
 int find_first_step(vnum_t src, vnum_t target);
 int move_vehicle(struct char_data *ch, int dir);
-ACMD(do_return);
+ACMD_CONST(do_return);
 
 #define VEH ch->in_veh
 

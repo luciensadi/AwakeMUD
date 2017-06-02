@@ -80,7 +80,7 @@ ACMD(do_assist)
   }
 }
 
-int messageless_find_door(struct char_data *ch, char *type, char *dir, char *cmdname)
+int messageless_find_door(struct char_data *ch, char *type, char *dir, const char *cmdname)
 {
   int door;
 
@@ -117,7 +117,7 @@ int messageless_find_door(struct char_data *ch, char *type, char *dir, char *cmd
   }
 }
 
-bool perform_hit(struct char_data *ch, char *argument, char *cmdname)
+bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
 {
   //  extern struct index_data *mob_index;
   struct char_data *vict = NULL;
@@ -535,6 +535,11 @@ ACMD(do_throw)
     range_combat(ch, NULL, weapon, 1, dir);
   else
     range_combat(ch, arg1, weapon, 1, dir);
+}
+
+ACMD_CONST(do_flee) {
+  ACMD(do_flee);
+  do_flee(ch, NULL, cmd, subcmd);
 }
 
 ACMD(do_flee)

@@ -18,7 +18,7 @@
 #define CH d->character
 
 extern MYSQL *mysql;
-extern int mysql_wrapper(MYSQL *mysql, char *buf);
+extern int mysql_wrapper(MYSQL *mysql, const char *buf);
 extern char *prepare_quotes(char *dest, const char *str);
 extern void display_help(char *help, const char *arg);
 
