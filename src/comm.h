@@ -28,7 +28,7 @@ void    send_to_char(const char *messg, struct char_data *ch);
 void    send_to_char(struct char_data *ch, const char * const messg, ...);
 void    send_to_room(const char *messg, int room);
 void    send_to_driver(char *messg, struct veh_data *veh);
-void    send_to_host(vnum_t room, char *messg, struct matrix_icon *icon, bool needsee);
+void    send_to_host(vnum_t room, const char *messg, struct matrix_icon *icon, bool needsee);
 void    send_to_icon(struct matrix_icon *icon, const char * const messg, ...);
 void    send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, bool torig, ...);
 void    send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, struct char_data *cha, bool torig);

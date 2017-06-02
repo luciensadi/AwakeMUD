@@ -49,7 +49,7 @@
 extern class memoryClass *Mem;
 extern class objList ObjList;
 extern MYSQL *mysql;
-extern int mysql_wrapper(MYSQL *mysql, char *buf);
+extern int mysql_wrapper(MYSQL *mysql, const char *buf);
 
 /*   external vars  */
 extern FILE *player_fl;
@@ -1383,7 +1383,7 @@ ACMD(do_stat)
 
 ACMD(do_shutdown)
 {
-  ACMD(do_not_here);
+  ACMD_CONST(do_not_here);
 
   if (IS_NPC(ch) || !access_level(ch, LVL_DEVELOPER)) {
     do_not_here(ch, "", 0, 0);
@@ -1519,6 +1519,11 @@ ACMD(do_wizpossess)
     victim->desc = ch->desc;
     ch->desc = NULL;
   }
+}
+
+ACMD_CONST(do_return) {
+  ACMD(do_return);
+  do_return(ch, NULL, cmd, subcmd);
 }
 
 ACMD(do_return)

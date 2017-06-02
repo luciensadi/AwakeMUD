@@ -29,7 +29,7 @@ extern char *cleanup(char *dest, const char *src);
 extern void ASSIGNMOB(long mob, SPECIAL(fname));
 extern void add_phone_to_list(struct obj_data *obj);
 struct landlord *landlords = NULL;
-ACMD(do_say);
+ACMD_CONST(do_say);
 
 struct life_data
 {
@@ -584,7 +584,7 @@ void House_boot(void)
 
 /* "House Control" functions */
 
-char *HCONTROL_FORMAT =
+const char *HCONTROL_FORMAT =
   "Usage:  hcontrol destroy <house vnum>\r\n"
   "       hcontrol show\r\n";
 void hcontrol_list_houses(struct char_data *ch)

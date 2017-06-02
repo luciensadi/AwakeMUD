@@ -69,15 +69,16 @@ void mobile_activity(void)
 
     /* Examine call for special procedure */
     if (MOB_FLAGGED(ch, MOB_SPEC) && !no_specials) {
+      char empty = '\0';
       if (mob_index[GET_MOB_RNUM(ch)].func == NULL) {
         log_vfprintf("%s (#%d): Attempting to call non-existing mob func",
             GET_NAME(ch), GET_MOB_VNUM(ch));
 
         MOB_FLAGS(ch).RemoveBit(MOB_SPEC);
-      } else if ((mob_index[GET_MOB_RNUM(ch)].func) (ch, ch, 0, ""))
+      } else if ((mob_index[GET_MOB_RNUM(ch)].func) (ch, ch, 0, &empty))
         continue;
       else if (mob_index[GET_MOB_RNUM(ch)].sfunc != NULL)
-        if ((mob_index[GET_MOB_RNUM(ch)].sfunc) (ch, ch, 0, ""))
+        if ((mob_index[GET_MOB_RNUM(ch)].sfunc) (ch, ch, 0, &empty))
           continue;
     }
 

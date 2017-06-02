@@ -38,7 +38,7 @@ extern void free_quest(struct quest_data *quest);
 extern bool resize_qst_array(void);
 extern char *cleanup(char *, const char *);
 
-ACMD(do_say);
+ACMD_CONST(do_say);
 ACMD(do_action);
 SPECIAL(johnson);
 
@@ -1454,7 +1454,7 @@ void qedit_disp_menu(struct descriptor_data *d)
   d->edit_mode = QEDIT_MAIN_MENU;
 }
 
-void qedit_parse(struct descriptor_data *d, char *arg)
+void qedit_parse(struct descriptor_data *d, const char *arg)
 {
   int number;
   float karma;

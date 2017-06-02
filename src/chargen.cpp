@@ -18,7 +18,7 @@
 #define CH d->character
 
 extern MYSQL *mysql;
-extern int mysql_wrapper(MYSQL *mysql, char *buf);
+extern int mysql_wrapper(MYSQL *mysql, const char *buf);
 extern char *prepare_quotes(char *dest, const char *str);
 extern void display_help(char *help, const char *arg);
 
@@ -240,7 +240,7 @@ void init_create_vars(struct descriptor_data *d)
   d->ccr.temp = 0;
 }
 
-int parse_race(struct descriptor_data *d, char *arg)
+int parse_race(struct descriptor_data *d, const char *arg)
 {
   switch (LOWER(*arg))
   {
@@ -360,9 +360,11 @@ bool valid_totem(struct char_data *ch, int i)
   return TRUE;
 }
 
-int parse_totem(struct descriptor_data *d, char *arg)
+int parse_totem(struct descriptor_data *d, const char *arg)
 {
-  char *temp = arg;
+  char parsebuf[MAX_STRING_LENGTH];
+  strcpy(parsebuf, arg);
+  char *temp = parsebuf;
   int i;
 
   if (*temp == '?')
@@ -381,7 +383,7 @@ int parse_totem(struct descriptor_data *d, char *arg)
   return i;
 }
 
-int parse_assign(struct descriptor_data *d, char *arg)
+int parse_assign(struct descriptor_data *d, const char *arg)
 {
   int i;
 
@@ -683,7 +685,7 @@ void points_menu(struct descriptor_data *d)
   SEND_TO_Q(buf, d);
 }              
 
-void create_parse(struct descriptor_data *d, char *arg)
+void create_parse(struct descriptor_data *d, const char *arg)
 {
   int i = MIN(120, atoi(arg)), ok;
   long shirts[5] = { 38072, 16218, 1024, 28462, 22680 }, pants[5] = { 1023, 39828, 17954, 38009, 22683 };

@@ -262,7 +262,7 @@ void medit_disp_att_menu(struct descriptor_data *d)
 // *  Main Loop                                                            *
 // ***************************************************************************
 
-void medit_parse(struct descriptor_data *d, char *arg)
+void medit_parse(struct descriptor_data *d, const char *arg)
 {
 
   int number;

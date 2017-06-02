@@ -110,7 +110,7 @@ void icedit_disp_menu(struct descriptor_data *d)
   d->edit_mode = ICEDIT_MAIN_MENU;
 }
 
-void icedit_parse(struct descriptor_data *d, char *arg)
+void icedit_parse(struct descriptor_data *d, const char *arg)
 {
   long number, ic_num;
   int i = 0;

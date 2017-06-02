@@ -38,9 +38,9 @@ mysql -u root -p < gen_temp.sql
 
 rm gen_temp.sql
 
-echo "char *mysql_host =     \"$DBHOST\";" > mysql_config.cpp
-echo "char *mysql_password = \"$DBPASS\";" >> mysql_config.cpp
-echo "char *mysql_user =     \"$DBUSER\";" >> mysql_config.cpp
-echo "char *mysql_db =       \"$DBNAME\";" >> mysql_config.cpp
+echo "const char *mysql_host =     \"$DBHOST\";" > mysql_config.cpp
+echo "const char *mysql_password = \"$DBPASS\";" >> mysql_config.cpp
+echo "const char *mysql_user =     \"$DBUSER\";" >> mysql_config.cpp
+echo "const char *mysql_db =       \"$DBNAME\";" >> mysql_config.cpp
 
 echo "DB creation script complete. Please copy the mysql_config.cpp file from this directory into your src directory."
