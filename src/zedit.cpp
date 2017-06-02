@@ -254,7 +254,7 @@ const char *get_type(char c)
   }
 }
 
-char get_real_type(char *i)
+char get_real_type(const char *i)
 {
   switch (*i) {
   case '1':
@@ -467,7 +467,7 @@ void zedit_disp_command_menu(struct descriptor_data *d)
 
 
 // MAIN LOOP!
-void zedit_parse(struct descriptor_data *d, char *arg)
+void zedit_parse(struct descriptor_data *d, const char *arg)
 {
   int number, i = 0, zone;
 
@@ -1118,9 +1118,9 @@ void zedit_parse(struct descriptor_data *d, char *arg)
       return;
     }
 
-    sprintf(arg, "%s set zone %d to connected %d (was %d)",
+    sprintf(buf, "%s set zone %d to connected %d (was %d)",
             GET_CHAR_NAME( CH ), ZON->number, number, ZON->connected );
-    mudlog(arg, CH, LOG_WIZLOG, TRUE);
+    mudlog(buf, CH, LOG_WIZLOG, TRUE);
 
     ZON->connected = number;
     zedit_disp_data_menu(d);

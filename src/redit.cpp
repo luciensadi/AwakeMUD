@@ -50,7 +50,7 @@ void redit_disp_exit_flag_menu(struct descriptor_data * d);
 void redit_disp_flag_menu(struct descriptor_data * d);
 void redit_disp_sector_menu(struct descriptor_data * d);
 void redit_disp_menu(struct descriptor_data * d);
-void redit_parse(struct descriptor_data * d, char *arg);
+void redit_parse(struct descriptor_data * d, const char *arg);
 void write_world_to_disk(int vnum);
 /**************************************************************************
  Menu functions
@@ -322,7 +322,7 @@ void redit_disp_menu(struct descriptor_data * d)
   The main loop
  **************************************************************************/
 
-void redit_parse(struct descriptor_data * d, char *arg)
+void redit_parse(struct descriptor_data * d, const char *arg)
 {
   extern struct room_data *world;
   SPECIAL(cpu);

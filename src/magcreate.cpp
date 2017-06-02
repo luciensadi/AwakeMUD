@@ -61,7 +61,7 @@ void create_spell(struct char_data *ch)
   spedit_disp_menu(ch->desc);
 }
 
-void spedit_parse(struct descriptor_data *d, char *arg)
+void spedit_parse(struct descriptor_data *d, const char *arg)
 {
   int number = atoi(arg), i = 0, x = 1;
   switch(d->edit_mode)
