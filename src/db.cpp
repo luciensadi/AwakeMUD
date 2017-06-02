@@ -173,8 +173,8 @@ void assign_johnsons(void);
 void randomize_shop_prices(void);
 int zone_is_empty(int zone_nr);
 void reset_zone(int zone, int reboot);
-int file_to_string(char *name, char *buf);
-int file_to_string_alloc(char *name, char **buf);
+int file_to_string(const char *name, char *buf);
+int file_to_string_alloc(const char *name, char **buf);
 void check_start_rooms(void);
 void renum_world(void);
 void renum_zone_table(void);
@@ -2562,10 +2562,11 @@ struct obj_data *read_object(int nr, int type)
 void spec_update(void)
 {
   int i;
+  char empty_argument = '\0';
 
   for (i = 0; i < top_of_world; i++)
     if (world[i].func != NULL)
-      world[i].func (NULL, world + i, 0, "");
+      world[i].func (NULL, world + i, 0, &empty_argument);
 
   ObjList.CallSpec();
 }
@@ -3399,7 +3400,7 @@ void free_shop(struct shop_data *shop)
 }
 
 /* read contets of a text file, alloc space, point buf to it */
-int file_to_string_alloc(char *name, char **buf)
+int file_to_string_alloc(const char *name, char **buf)
 {
   char temp[MAX_STRING_LENGTH];
 
@@ -3415,7 +3416,7 @@ int file_to_string_alloc(char *name, char **buf)
 }
 
 /* read contents of a text file, and place in buf */
-int file_to_string(char *name, char *buf)
+int file_to_string(const char *name, char *buf)
 {
   FILE *fl;
   char tmp[128];

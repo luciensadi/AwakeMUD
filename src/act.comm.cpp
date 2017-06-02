@@ -37,6 +37,7 @@ int find_skill_num(char *name);
 ACMD_CONST(do_say) {
   char not_const[MAX_STRING_LENGTH];
   strcpy(not_const, argument);
+  ACMD(do_say);
   do_say(ch, not_const, cmd, subcmd);
 }
 

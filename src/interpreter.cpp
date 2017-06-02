@@ -45,7 +45,7 @@ extern const char *WELC_MESSG;
 extern const char *START_MESSG;
 extern int restrict;
 extern MYSQL *mysql;
-extern int mysql_wrapper(MYSQL *mysql, char *query);
+extern int mysql_wrapper(MYSQL *mysql, const char *query);
 
 /* external functions */
 void echo_on(struct descriptor_data * d);
@@ -1725,7 +1725,7 @@ int find_command(const char *command)
 
   return -1;
 }
-int find_mcommand(char *command)
+int find_mcommand(const char *command)
 {
   int cmd;
 

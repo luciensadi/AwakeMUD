@@ -46,7 +46,7 @@ PCIndex playerDB;
 // PCIndex -- the PC database class: implementation
 // ____________________________________________________________________________
 
-int mysql_wrapper(MYSQL *mysql, char *query)
+int mysql_wrapper(MYSQL *mysql, const char *query)
 {
   char buf[MAX_STRING_LENGTH];
 #ifdef DEBUG

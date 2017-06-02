@@ -386,7 +386,7 @@ void remove_patch(struct char_data *ch)
 void check_idling(void)
 {
   void perform_immort_invis(struct char_data *ch, int level);
-  ACMD(do_return);
+  ACMD_CONST(do_return);
   ACMD(do_disconnect);
   struct char_data *ch, *next;
 
@@ -572,7 +572,7 @@ void point_update(void)
   struct char_data *i, *next_char;
   FILE *fl;
   extern struct time_info_data time_info;
-  ACMD(do_who);
+  ACMD_CONST(do_who);
   if (character_list)
     do_who(character_list, "", 0, 1);
   /* characters */  
@@ -948,7 +948,7 @@ void misc_update(void)
 
     if (AFF_FLAGGED(ch, AFF_FEAR)) {
       if (!number(0, 2)) {
-        extern ACMD(do_flee);
+        extern ACMD_CONST(do_flee);
         do_flee(ch, "", 0, 0);
         continue;
       } else {

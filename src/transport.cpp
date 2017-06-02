@@ -983,9 +983,10 @@ void ElevatorProcess(void)
 {
   int i, rnum;
 
+  char empty_argument = '\0';
   for (i = 0; i < num_elevators; i++)
     if (elevator && (rnum = real_room(elevator[i].room)) > -1)
-      process_elevator(&world[rnum], NULL, 0, "");
+      process_elevator(&world[rnum], NULL, 0, &empty_argument);
 }
 
 // ______________________________

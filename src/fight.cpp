@@ -38,7 +38,7 @@ char *fread_action(FILE * fl, int nr);
 char *fread_string(FILE * fl, char *error);
 void stop_follower(struct char_data * ch);
 ACMD(do_assist);
-ACMD(do_flee);
+ACMD_CONST(do_flee);
 ACMD(do_action);
 void docwagon(struct char_data *ch);
 void roll_individual_initiative(struct char_data *ch);
@@ -2144,7 +2144,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
   bool total_miss = FALSE, awake = TRUE;
   struct obj_data *bio;
   ACMD(do_disconnect);
-  ACMD(do_return);
+  ACMD_CONST(do_return);
   
   if (GET_POS(victim) <= POS_DEAD)
   {
@@ -4774,8 +4774,10 @@ void perform_violence(void)
       }
       
       if (MOB_FLAGGED(ch, MOB_SPEC) &&
-          mob_index[GET_MOB_RNUM(ch)].func != NULL)
-        (mob_index[GET_MOB_RNUM(ch)].func) (ch, ch, 0, "");
+          mob_index[GET_MOB_RNUM(ch)].func != NULL) {
+        char empty_argument = '\0';
+        (mob_index[GET_MOB_RNUM(ch)].func) (ch, ch, 0, &empty_argument);
+      }
     }
   }
 }

@@ -1876,7 +1876,7 @@ void extract_char(struct char_data * ch)
 
   extern struct char_data *combat_list;
 
-  ACMD(do_return);
+  ACMD_CONST(do_return);
 
   void die_follower(struct char_data * ch);
 

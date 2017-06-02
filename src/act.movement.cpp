@@ -53,7 +53,8 @@ int can_move(struct char_data *ch, int dir, int extra)
   if (IS_AFFECTED(ch, AFF_PETRIFY))
     return 0;
 
-  if (IS_SET(extra, CHECK_SPECIAL) && special(ch, convert_dir[dir], ""))
+  char empty_argument = '\0';
+  if (IS_SET(extra, CHECK_SPECIAL) && special(ch, convert_dir[dir], &empty_argument))
     return 0;
 
   if (world[ch->in_room].icesheet[0] && !IS_ASTRAL(ch))
@@ -493,7 +494,8 @@ void move_vehicle(struct char_data *ch, int dir)
     send_to_char("You cannot go that way...\r\n", ch);
     return;
   }
-  if (special(ch, convert_dir[dir], ""))
+  char empty_argument = '\0';
+  if (special(ch, convert_dir[dir], &empty_argument))
     return;
   if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_HOUSE) && !House_can_enter(ch, world[EXIT(veh, dir)->to_room].number)) {
     send_to_char("You can't use other people's garages without permission.\r\n", ch);
@@ -934,6 +936,7 @@ int ok_pick(struct char_data *ch, int keynum, int pickproof, int scmd, int lock_
 ACMD_CONST(do_gen_door) {
   char not_const[MAX_STRING_LENGTH];
   strcpy(not_const, argument);
+  ACMD(do_gen_door);
   do_gen_door(ch, not_const, cmd, subcmd);
 }
 
