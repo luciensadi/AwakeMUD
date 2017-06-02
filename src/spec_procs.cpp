@@ -52,7 +52,7 @@ bool memory(struct char_data *ch, struct char_data *vict);
 extern MYSQL *mysql;
 extern int mysql_wrapper(MYSQL *mysql, char *query);
 
-ACMD(do_say);
+ACMD_CONST(do_say);
 ACMD(do_echo);
 ACMD(do_time);
 ACMD(do_gen_door);

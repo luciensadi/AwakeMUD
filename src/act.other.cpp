@@ -48,7 +48,7 @@ extern MYSQL *mysql;
 extern int mysql_wrapper(MYSQL *mysql, char *buf);
 
 /* extern procedures */
-ACMD(do_say);
+ACMD_CONST(do_say);
 SPECIAL(shop_keeper);
 SPECIAL(spraypaint);
 extern char *how_good(int percent);
