@@ -631,7 +631,6 @@ void log_death_trap(struct char_data * ch)
 }
 
 void log(const char *str) {
-  va_list args;
   time_t ct = time(0);
   char *tmstr;
   
@@ -686,7 +685,6 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
   if (file)
     fprintf(stderr, "%-19.19s :: %s: %s%s\n", tmp, log_types[log], buf2, str);
   
-  ct = ct;
   sprintf(buf, "^g[%s: %s%s]^n\r\n", log_types[log], buf2, str);
   
   for (i = descriptor_list; i; i = i->next)

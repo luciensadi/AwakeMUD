@@ -42,7 +42,7 @@ extern int find_first_step(vnum_t src, vnum_t target);
 static struct elevator_data *elevator = NULL;
 static int num_elevators = 0;
 
-static const int NUM_SEATTLE_STATIONS = 6;
+// static const int NUM_SEATTLE_STATIONS = 6;
 static const int NUM_SEATAC_STATIONS = 6;
 
 static struct dest_data destinations[] =
