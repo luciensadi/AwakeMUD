@@ -1,3 +1,4 @@
 Lucien   (May 24) [ 1000] creating a new zone did not automatically add it to the zone index
 Lucien   (May 24) [    5] never mind that last bug
 Lucien   (May 24) [10000] removing peace flag did not remove peace from room
+Lucien   (Jun  2) [10000] entering password on login takes first 8 chars, changing password requires all chars

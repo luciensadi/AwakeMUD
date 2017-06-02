@@ -50,12 +50,12 @@ extern void check_quest_kill(struct char_data *ch, struct char_data *victim);
 extern void wire_nuyen(struct char_data *ch, struct char_data *target, int amount, bool isfile);
 bool memory(struct char_data *ch, struct char_data *vict);
 extern MYSQL *mysql;
-extern int mysql_wrapper(MYSQL *mysql, char *query);
+extern int mysql_wrapper(MYSQL *mysql, const char *query);
 
-ACMD(do_say);
+ACMD_CONST(do_say);
 ACMD(do_echo);
-ACMD(do_time);
-ACMD(do_gen_door);
+ACMD_CONST(do_time);
+ACMD_CONST(do_gen_door);
 
 struct social_type
 {
@@ -1381,7 +1381,6 @@ SPECIAL(pike)
 
 SPECIAL(jeff)
 {
-  ACMD(do_gen_door);
   struct char_data *jeff = (struct char_data *) me;
   if (!AWAKE(jeff))
     return FALSE;
@@ -1622,7 +1621,6 @@ SPECIAL(mugger_park)
 
 SPECIAL(gate_guard_park)
 {
-  ACMD(do_gen_door);
   struct char_data *guard = (char_data *) me;
   
   if (!AWAKE(guard) || FIGHTING(guard))
@@ -1943,7 +1941,6 @@ SPECIAL(saeder_guard)
 {
   struct char_data *guard = (char_data *) me;
   struct obj_data *obj;
-  ACMD(do_gen_door);
   bool found = FALSE;
   
   if (!AWAKE(guard) || (GET_POS(guard) == POS_FIGHTING))
@@ -3187,7 +3184,8 @@ int gen_receptionist(struct char_data * ch, struct char_data * recep,
   
   if (!cmd && !number(0, 5))
   {
-    do_action(recep, "", find_command(action_table[number(0, 8)]), 0);
+    char empty_argument = '\0';
+    do_action(recep, &empty_argument, find_command(action_table[number(0, 8)]), 0);
     return FALSE;
   }
   if (!CMD_IS("offer") && !CMD_IS("rent"))

@@ -136,7 +136,7 @@ void partbuild_disp_types(struct descriptor_data *d) {
     d->edit_mode = DEDIT_TYPE;
 }
 
-void pbuild_parse(struct descriptor_data *d, char *arg) {
+void pbuild_parse(struct descriptor_data *d, const char *arg) {
     int number = atoi(arg);
     switch (d->edit_mode) {
     case DEDIT_MAIN:
@@ -272,7 +272,7 @@ void deckbuild_main_menu(struct descriptor_data *d) {
     d->edit_mode = DEDIT_MAIN;
 }
 
-void dbuild_parse(struct descriptor_data *d, char *arg) {
+void dbuild_parse(struct descriptor_data *d, const char *arg) {
     switch(d->edit_mode) {
     case DEDIT_MAIN:
         switch (*arg) {

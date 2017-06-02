@@ -386,7 +386,7 @@ ACMD(do_hail)
 SPECIAL(taxi)
 {
   extern bool memory(struct char_data *ch, struct char_data *vict);
-  ACMD(do_say);
+  ACMD_CONST(do_say);
   ACMD(do_action);
 
   struct char_data *temp = NULL, *driver = (struct char_data *) me;
@@ -983,9 +983,10 @@ void ElevatorProcess(void)
 {
   int i, rnum;
 
+  char empty_argument = '\0';
   for (i = 0; i < num_elevators; i++)
     if (elevator && (rnum = real_room(elevator[i].room)) > -1)
-      process_elevator(&world[rnum], NULL, 0, "");
+      process_elevator(&world[rnum], NULL, 0, &empty_argument);
 }
 
 // ______________________________

@@ -65,7 +65,7 @@ void iedit_disp_menu(struct descriptor_data * d);
 void iedit_disp_drinktype_menu(struct descriptor_data *d);
 
 void iedit_disp_patch_menu(struct descriptor_data *d);
-void iedit_parse(struct descriptor_data * d, char *arg);
+void iedit_parse(struct descriptor_data * d, const char *arg);
 void iedit_disp_spells_menu(struct descriptor_data * d);
 void iedit_disp_cybertype_menu(struct descriptor_data * d);
 void iedit_program_types_menu(struct descriptor_data *d);
@@ -1153,7 +1153,7 @@ void iedit_disp_menu(struct descriptor_data * d)
  ***************************************************************************/
 
 
-void iedit_parse(struct descriptor_data * d, char *arg)
+void iedit_parse(struct descriptor_data * d, const char *arg)
 {
   long             number, j;
   long            obj_number;   /* the RNUM */

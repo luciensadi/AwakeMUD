@@ -45,10 +45,10 @@ extern char *prepare_quotes(char *dest, const char *str);
 extern int ident;
 extern class memoryClass *Mem;
 extern MYSQL *mysql;
-extern int mysql_wrapper(MYSQL *mysql, char *buf);
+extern int mysql_wrapper(MYSQL *mysql, const char *buf);
 
 /* extern procedures */
-ACMD(do_say);
+ACMD_CONST(do_say);
 SPECIAL(shop_keeper);
 SPECIAL(spraypaint);
 extern char *how_good(int percent);
@@ -144,6 +144,11 @@ ACMD(do_quit)
 
 /* generic function for commands which are normally overridden by
    special procedures - i.e., shop commands, mail commands, etc. */
+ACMD_CONST(do_not_here) {
+  ACMD(do_not_here);
+  do_not_here(ch, NULL, 0, 0);
+}
+
 ACMD(do_not_here)
 {
   send_to_char("Sorry, but you cannot do that here!\r\n", ch);

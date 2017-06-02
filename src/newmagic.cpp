@@ -2938,7 +2938,7 @@ POWER(spirit_fear)
       send_to_char("An all consuming terror overcomes you!\r\n", tch);
       sprintf(buf, "%s succeeds in instilling fear in $N.", CAP(GET_NAME(spirit)));
       act(buf, FALSE, ch, 0, tch, TO_CHAR);
-      extern ACMD(do_flee);
+      extern ACMD_CONST(do_flee);
       do_flee(tch, "", 0, 0);
     }
     spiritdata->services--;

@@ -52,7 +52,7 @@ extern int same_obj(struct obj_data * obj1, struct obj_data * obj2);
 extern int find_sight(struct char_data *ch);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
 extern char *colorize(struct descriptor_data *, char *);
-extern int mysql_wrapper(MYSQL *mysql, char *query);
+extern int mysql_wrapper(MYSQL *mysql, const char *query);
 extern MYSQL *mysql;
 
 /* blood stuff */
@@ -2152,6 +2152,13 @@ ACMD(do_equipment)
   }
 }
 
+ACMD_CONST(do_time) {
+  char not_const[MAX_STRING_LENGTH];
+  strcpy(not_const, argument);
+  ACMD(do_time);
+  do_time(ch, not_const, cmd, subcmd);
+}
+
 ACMD(do_time)
 {
   sh_int year, month, day, hour, minute, pm;
@@ -2188,7 +2195,7 @@ ACMD(do_time)
 
 ACMD(do_weather)
 {
-  static char *sky_look[] =
+  static const char *sky_look[] =
   {
     "cloudless",
     "cloudy",
@@ -2347,6 +2354,13 @@ ACMD(do_wizhelp)
 }
 
 #define WHO_FORMAT "format: who [sort] [quest] [pker] [immortal] [mortal] [hardcore] [ooc] [newbie]\r\n"
+
+ACMD_CONST(do_who) {
+  char not_const[MAX_STRING_LENGTH];
+  strcpy(not_const, argument);
+  ACMD(do_who);
+  do_who(ch, not_const, cmd, subcmd);
+}
 
 ACMD(do_who)
 {
@@ -2614,7 +2628,8 @@ ACMD(do_users)
 {
   extern const char *connected_types[];
   char line[200], line2[220], idletime[10];
-  char state[30], *timeptr, *format, mode;
+  char state[30], *timeptr, mode;
+  const char *format;
   char name_search[MAX_INPUT_LENGTH], host_search[MAX_INPUT_LENGTH];
   struct char_data *tch;
   struct descriptor_data *d;

@@ -33,7 +33,7 @@ void show_string(struct descriptor_data *d, char *input);
 void qedit_disp_menu(struct descriptor_data *d);
 
 extern MYSQL *mysql;
-extern int mysql_wrapper(MYSQL *mysql, char *query);
+extern int mysql_wrapper(MYSQL *mysql, const char *query);
 extern char *prepare_quotes(char *dest, const char *str);
 /* ************************************************************************
 *  modification of malloc'ed strings                                      *
@@ -704,7 +704,8 @@ void page_string(struct descriptor_data *d, char *str, int keep_internal)
   } else
     d->showstr_point = str;
 
-  show_string(d, "");
+  char empty_argument = '\0';
+  show_string(d, &empty_argument);
 }
 
 void show_string(struct descriptor_data *d, char *input)

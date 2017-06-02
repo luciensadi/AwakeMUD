@@ -45,7 +45,7 @@ extern const char *WELC_MESSG;
 extern const char *START_MESSG;
 extern int restrict;
 extern MYSQL *mysql;
-extern int mysql_wrapper(MYSQL *mysql, char *query);
+extern int mysql_wrapper(MYSQL *mysql, const char *query);
 
 /* external functions */
 void echo_on(struct descriptor_data * d);
@@ -53,23 +53,23 @@ void echo_off(struct descriptor_data * d);
 void do_start(struct char_data * ch);
 int special(struct char_data * ch, int cmd, char *arg);
 int isbanned(char *hostname);
-void create_parse(struct descriptor_data *d, char *arg);
 void init_create_vars(struct descriptor_data *d);
-void vedit_parse(struct descriptor_data * d, char *arg);
 // for olc
-void iedit_parse(struct descriptor_data *d, char *arg);
-void redit_parse(struct descriptor_data *d, char *arg);
-void medit_parse(struct descriptor_data *d, char *arg);
-void qedit_parse(struct descriptor_data *d, char *arg);
+void vedit_parse(struct descriptor_data * d, const char *arg);
+void create_parse(struct descriptor_data *d, const char *arg);
+void iedit_parse(struct descriptor_data *d, const char *arg);
+void redit_parse(struct descriptor_data *d, const char *arg);
+void medit_parse(struct descriptor_data *d, const char *arg);
+void qedit_parse(struct descriptor_data *d, const char *arg);
 void shedit_parse(struct descriptor_data *d, const char *arg);
-void zedit_parse(struct descriptor_data *d, char *arg);
+void zedit_parse(struct descriptor_data *d, const char *arg);
 void hedit_parse(struct descriptor_data *d, const char *arg);
-void icedit_parse(struct descriptor_data *d, char *arg);
-void pedit_parse(struct descriptor_data *d, char *arg);
-void dbuild_parse(struct descriptor_data *d, char *arg);
-void pbuild_parse(struct descriptor_data *d, char *arg);
-void spedit_parse(struct descriptor_data *d, char *arg);
-void aedit_parse(struct descriptor_data *d, char *arg);
+void icedit_parse(struct descriptor_data *d, const char *arg);
+void pedit_parse(struct descriptor_data *d, const char *arg);
+void dbuild_parse(struct descriptor_data *d, const char *arg);
+void pbuild_parse(struct descriptor_data *d, const char *arg);
+void spedit_parse(struct descriptor_data *d, const char *arg);
+void aedit_parse(struct descriptor_data *d, const char *arg);
 void free_shop(struct shop_data *shop);
 void free_quest(struct quest_data *quest);
 void init_parse(struct descriptor_data *d, char *arg);
@@ -1725,7 +1725,7 @@ int find_command(const char *command)
 
   return -1;
 }
-int find_mcommand(char *command)
+int find_mcommand(const char *command)
 {
   int cmd;
 

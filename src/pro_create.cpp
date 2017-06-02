@@ -53,7 +53,7 @@ void pedit_disp_program_menu(struct descriptor_data *d)
   send_to_char("Program type: ", d->character);
   d->edit_mode = PEDIT_TYPE;
 }
-void pedit_parse(struct descriptor_data *d, char *arg)
+void pedit_parse(struct descriptor_data *d, const char *arg)
 {
   int number = atoi(arg);
   switch(d->edit_mode)
