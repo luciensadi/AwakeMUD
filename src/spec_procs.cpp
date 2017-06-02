@@ -55,7 +55,7 @@ extern int mysql_wrapper(MYSQL *mysql, char *query);
 ACMD_CONST(do_say);
 ACMD(do_echo);
 ACMD(do_time);
-ACMD(do_gen_door);
+ACMD_CONST(do_gen_door);
 
 struct social_type
 {

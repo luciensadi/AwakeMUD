@@ -61,7 +61,7 @@ void aedit_disp_type_menu(struct descriptor_data *d)
   d->edit_mode = AEDIT_TYPE;  
 }
 
-void aedit_parse(struct descriptor_data *d, char *arg)
+void aedit_parse(struct descriptor_data *d, const char *arg)
 {
   int number = atoi(arg);
   switch(d->edit_mode)

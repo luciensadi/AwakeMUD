@@ -1454,7 +1454,7 @@ void qedit_disp_menu(struct descriptor_data *d)
   d->edit_mode = QEDIT_MAIN_MENU;
 }
 
-void qedit_parse(struct descriptor_data *d, char *arg)
+void qedit_parse(struct descriptor_data *d, const char *arg)
 {
   int number;
   float karma;

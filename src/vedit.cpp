@@ -121,7 +121,7 @@ void vedit_disp_flag_menu(struct descriptor_data *d)
 }
 
 
-void vedit_parse(struct descriptor_data * d, char *arg)
+void vedit_parse(struct descriptor_data * d, const char *arg)
 {
   int             number;
   int             veh_number;   /* the RNUM */
