@@ -564,7 +564,7 @@ ACMD(do_spellset)
 {
   struct char_data *vict;
   char name[100], buf2[100], buf[100], help[MAX_STRING_LENGTH];
-  int spell, force, i, qend;
+  int spelltoset, force, i, qend;
   extern struct spell_data spells[];
 
   argument = one_argument(argument, name);
@@ -613,7 +613,7 @@ ACMD(do_spellset)
   }
   strcpy(help, (argument + 1));
   help[qend - 1] = '\0';
-  if ((spell = find_spell_num(help)) <= 0) {
+  if ((spelltoset = find_spell_num(help)) <= 0) {
     send_to_char("Unrecognized spell.\r\n", ch);
     return;
   }
@@ -635,7 +635,7 @@ ACMD(do_spellset)
     return;
   }
   if (IS_NPC(vict)) {
-    send_to_char("You can't set NPC skills.\r\n", ch);
+    send_to_char("You can't set NPC spells.\r\n", ch);
     return;
   }
 
