@@ -44,3 +44,4 @@ SQL/mysql_config.cpp
 mysql_config.cpp
 lib/house/*
 lib/storage/*
+lib/copyover.dat
