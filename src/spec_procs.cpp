@@ -24,6 +24,7 @@
 #include "quest.h"
 #include "mail.h"
 #include "pocketsec.h"
+#include "limits.h"
 
 /*   external vars  */
 extern struct time_info_data time_info;
@@ -1294,6 +1295,8 @@ SPECIAL(car_dealer)
     else
       sprintf(buf, "You buy a %s. It is wheeled out into the yard.\r\n", newveh->short_description);
     send_to_char(buf, ch);
+    
+    save_vehicles();
     return TRUE;
   }
   return FALSE;
@@ -3069,6 +3072,8 @@ SPECIAL(newbie_car)
     send_to_room(buf, ch->in_room);
     obj_from_char(obj);
     extract_obj(obj);
+    
+    save_vehicles();
     return TRUE;
   }
   return FALSE;
@@ -3497,6 +3502,8 @@ SPECIAL(painter)
         sprintf(buf, "%s is wheeled out into the parking lot.", GET_VEH_NAME(veh));
         act(buf, FALSE, world[real_room(29399)].people, 0, 0, TO_ROOM);
         act(buf, FALSE, world[real_room(29399)].people, 0, 0, TO_CHAR);
+        
+        save_vehicles();
       }
     }
   if (!CMD_IS("paint"))
@@ -3805,4 +3812,3 @@ SPECIAL(trideo)
  }
  return FALSE;
 }
-
