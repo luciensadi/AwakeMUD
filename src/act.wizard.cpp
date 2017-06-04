@@ -42,6 +42,7 @@
 #include "constants.h"
 #include "config.h"
 #include "newmatrix.h"
+#include "limits.h"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -140,6 +141,7 @@ ACMD(do_copyover)
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
 
 
+  log("Disconnecting players.");
   /* For each playing descriptor, save its state */
   for (d = descriptor_list; d ; d = d_next) {
     struct char_data * och = d->character;
@@ -160,8 +162,14 @@ ACMD(do_copyover)
 
   fprintf (fp, "-1\n");
   fclose (fp);
+  
+  log("Saving houses.");
   House_save_all();
   /* Close reserve and other always-open files and release other resources */
+  
+  // Save vehicles.
+  log("Saving vehicles.");
+  save_vehicles();
 
 
   sprintf (buf, "%d", port);
