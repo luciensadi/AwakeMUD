@@ -171,6 +171,8 @@ void gettimeofday(struct timeval *t, struct timezone *dummy)
 
 int main(int argc, char **argv)
 {
+  signal(SIGPIPE, SIG_IGN); // Lets us error-handle sigpipe.
+  
   int pos = 1;
   char *dir;
   port = DFLT_PORT;
