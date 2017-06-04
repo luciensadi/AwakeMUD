@@ -13,6 +13,7 @@
 #include "house.h"
 #include "transport.h"
 #include "constants.h"
+#include "limits.h"
 
 void die_follower(struct char_data *ch);
 void roll_individual_initiative(struct char_data *ch);
