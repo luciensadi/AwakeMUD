@@ -94,6 +94,7 @@ ACMD(do_crash_mud) {
   }
   
   sprintf(buf, "%s has chosen to crash the MUD on purpose. Hope there's a good reason!", GET_CHAR_NAME(ch));
+  mudlog(buf, ch, LOG_WIZLOG, TRUE);
   log(buf);
   
   assert(1 == 0);
@@ -109,7 +110,7 @@ ACMD(do_copyover)
   int mesnum = number(0, 18);
   const char *messages[] =
     {
-      "This copyover has been brought to you by NERPS.  Its more than a lubricant, its a lifestyle!\r\n",
+      "This copyover has been brought to you by NERPS.  It's more than a lubricant, its a lifestyle!\r\n",
       "Yes, the mud is lagging.  Deal with it.\r\n",
       "I like copyovers, yes I do!  Eating player corpses in copyover stew!\r\n",
       "A Haiku while you wait: Copyover time.  Your quests and corpses are fucked.  Ha ha ha ha ha.\r\n",

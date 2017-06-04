@@ -1,7 +1,37 @@
 Information about new features will be written into this changelog, as will information about major bugfixes. Minor bugfixes and related code-quality changes can be found in the commit log (git log).
 
+
+2017/06/04:
+- Fixes for vehicles not saving in certain circumstances after purchase/transfer/etc.
+
+2017/06/03:
+- Added copyover.dat to the .gitignore file.
+
+2017/06/02:
+- Fixed the majority of the deprecated-conversion-from-const-char-to-char warnings.
+- Fixed the majority of -Wall warnings.
+- Pulled in old spec-procs from 0.8.16B.
+
+2017/06/01:
+- Added note board to the Immortal HQ at 10000 for staff collaboration.
+
+2017/05/30:
+- Further combat rewrites.
+
+2017/05/29:
+- Initial combat rewrite to eliminate bugs.
+
+2017/05/28:
+- Added DB cleanup to shutdown. Also added potential recovery for DB-has-gone-away issue.
+
+2017/05/26:
+- Fix for blank skill issue for immortals.
+
 2017/05/25:
 - Moved old log() function to log_vfprintf(); added new log function. See Issue #2.
+- Clarified LIT room tag to read as STREETLIGHTS.
+- Fixed SQL sanitization issues.
+- Added some staff-assistance files to doc/staffdoc (thanks Finster!)
 
 2017/05/24:
 - Built the Immortal HQ for centralized testing of code. Start room is 10000, or GOTO IMMHQ.
