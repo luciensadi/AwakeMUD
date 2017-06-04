@@ -1888,6 +1888,8 @@ ACMD(do_transfer)
     act(buf2, 0, ch, 0, targ, TO_VICT);
     veh->owner = GET_IDNUM(targ);
     veh->sub = FALSE;
+    
+    save_vehicles();
   }
 }
  
