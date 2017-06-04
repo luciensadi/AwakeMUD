@@ -63,6 +63,7 @@ typedef SOCKET  socket_t;
 #include "newshop.h"
 #include "quest.h"
 #include "newmatrix.h"
+#include "limits.h"
 
 /* externs */
 extern int restrict;
@@ -151,7 +152,6 @@ void randomize_shop_prices(void);
 void process_autonav(void);
 void update_buildrepair(void);
 void process_boost(void);
-void save_vehicles(void);
 class memoryClass *Mem = new memoryClass();
 void show_string(struct descriptor_data * d, char *input);
 
