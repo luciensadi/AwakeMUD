@@ -565,7 +565,7 @@ ACMD(do_spellset)
   struct char_data *vict;
   char name[100], buf2[100], buf[100], help[MAX_STRING_LENGTH];
   int spelltoset, force, i, qend;
-  extern struct spell_data spells[];
+  extern struct spell_types spells[];
 
   argument = one_argument(argument, name);
 
@@ -639,7 +639,16 @@ ACMD(do_spellset)
     return;
   }
 
-  //TODO Actually do something!
+  struct spell_data *spell = new spell_data;
+
+  // Three lines away from working spellset command. How do I get the damn values?
+
+  //spell->name = FIXME 
+  //spell->type = FIXME
+  //spell->subtype = FIXME
+  spell->force = force;
+  spell->next = GET_SPELLS(ch);
+  GET_SPELLS(ch) = spell;
 
 }
 
