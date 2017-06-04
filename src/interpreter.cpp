@@ -212,6 +212,7 @@ ACMD(do_order);
 ACMD(do_packup);
 ACMD(do_page);
 ACMD(do_patch);
+ACMD(do_pgroup);
 ACMD(do_photo);
 ACMD(do_poofset);
 ACMD(do_pour);
@@ -728,6 +729,7 @@ struct command_info cmd_info[] =
     { "peer"     , POS_LYING   , do_action   , 0, 0 },
     { "penalize" , POS_DEAD    , do_penalize , LVL_FIXER, 0 },
     { "perceive" , POS_LYING   , do_astral   , 0, SCMD_PERCEIVE },
+    { "pgroup"   , POS_DEAD    , do_pgroup   , 0, 0 },
     { "phone"    , POS_LYING   , do_phone    , 0, 0 },
     { "phonelist", POS_DEAD    , do_phonelist, LVL_BUILDER, 0 },
     { "photo"    , POS_RESTING , do_photo    , 0, 0 },
@@ -2073,6 +2075,9 @@ void nanny(struct descriptor_data * d, char *arg)
     break;
   case CON_CCREATE:
     create_parse(d, arg);
+    break;
+  case CON_PGEDIT:
+    pgedit_parse(d, arg);
     break;
   case CON_GET_NAME:            /* wait for input of name */
     d->idle_tics = 0;
