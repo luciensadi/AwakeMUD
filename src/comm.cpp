@@ -1690,6 +1690,10 @@ void free_editing_structs(descriptor_data *d, int state)
     Mem->DeleteIcon(d->edit_icon);
     d->edit_icon = NULL;
   }
+  if (d->edit_pgroup) {
+    delete d->edit_pgroup;
+    d->edit_pgroup = NULL;
+  }
 }
 
 void close_socket(struct descriptor_data *d)
