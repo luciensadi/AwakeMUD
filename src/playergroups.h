@@ -61,6 +61,8 @@ class Playergroup {
   
   Bitfield settings;
 public:
+  Playergroup *next_pgroup;
+
   // Constructors and destructors.
   Playergroup();
   Playergroup(long id_to_load);
@@ -71,6 +73,7 @@ public:
   const char *get_tag() { return tag; }
   const char *get_name() { return name; }
   const char *get_alias() { return alias; }
+  long get_idnum() { return idnum; }
   
   // Setters
   void set_founded(bool founded);
