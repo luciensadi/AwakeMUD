@@ -27,7 +27,7 @@ char *prepare_quotes(char *dest, const char *str);
 int mysql_wrapper(MYSQL *mysql, const char *query);
 
 // The linked list of loaded playergroups.
-Playergroup *loaded_playergroups;
+Playergroup *loaded_playergroups = NULL;
 
 struct pgroup_cmd_struct {
   const char *cmd;
@@ -280,6 +280,7 @@ void pgedit_parse(struct descriptor_data * d, const char *arg) {
           delete GET_PGROUP_DATA(CH)->title;
         GET_PGROUP_DATA(CH)->title = str_dup("Leader");
       }
+      send_to_char("OK.\r\n", CH);
       
       // Return character to game.
       STATE(d) = CON_PLAYING;
@@ -523,6 +524,11 @@ bool Playergroup::load_pgroup_from_db(long load_idnum) {
     raw_set_tag(row[3]);
     settings.FromString(row[4]);
     mysql_free_result(res);
+    
+    // Add the group to the linked list.
+    next_pgroup = loaded_playergroups;
+    loaded_playergroups = this;
+    
     return TRUE;
   } else {
     sprintf(buf, "Error loading playergroup from DB-- group %ld does not seem to exist.", load_idnum);
