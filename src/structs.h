@@ -215,7 +215,6 @@ struct spell_types
   sh_int duration;
   sh_int drainpower;
   sh_int draindamage;
-  ubyte type;
 };
 
 typedef struct train_data
