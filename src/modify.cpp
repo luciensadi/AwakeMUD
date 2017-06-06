@@ -556,6 +556,102 @@ void string_add(struct descriptor_data *d, char *str)
 }
 
 
+/* **********************************************************************
+*  Modification of character spells                                     *
+********************************************************************** */
+
+ACMD(do_spellset)
+{
+  struct char_data *vict;
+  char name[100], buf2[100], buf[100], help[MAX_STRING_LENGTH];
+  int spelltoset, force, i, qend;
+  extern struct spell_types spells[];
+
+  argument = one_argument(argument, name);
+
+  if (!*name) {                 /* no arguments. print an informative text */
+    send_to_char("Syntax: spellset <name> '<spell>' <force>\r\n", ch);
+    strcpy(help, "Spell being one of the following:\r\n");
+    for ( i = 0; i < MAX_SPELLS; i++) {
+      if (*spells[i].name == '!')
+        continue;
+      sprintf(help + strlen(help), "%18s", spells[i].name);
+      if (i % 4 == 3) {
+        strcat(help, "\r\n");
+        send_to_char(help, ch);
+        *help = '\0';
+      }
+    }
+    if (*help)
+      send_to_char(help, ch);
+    send_to_char("\r\n", ch);
+    return;
+  }
+  if (!(vict = get_char_vis(ch, name))) {
+    send_to_char(NOPERSON, ch);
+    return;
+  }
+  skip_spaces(&argument);
+
+  /* If there is no chars in argument */
+  if (!*argument) {
+    send_to_char("Spell name expected.\r\n", ch);
+    return;
+  }
+  if (*argument != '\'') {
+    send_to_char("Spell must be enclosed in: ''\r\n", ch);
+    return;
+  }
+  /* Locate the last quote && lowercase the magic words (if any) */
+
+  for (qend = 1; *(argument + qend) && (*(argument + qend) != '\''); qend++)
+    *(argument + qend) = LOWER(*(argument + qend));
+
+  if (*(argument + qend) != '\'') {
+    send_to_char("Spell must be enclosed in: ''\r\n", ch);
+    return;
+  }
+  strcpy(help, (argument + 1));
+  help[qend - 1] = '\0';
+  if ((spelltoset = find_spell_num(help)) <= 0) {
+    send_to_char("Unrecognized spell.\r\n", ch);
+    return;
+  }
+  argument += qend + 1;         /* skip to next parameter */
+  argument = one_argument(argument, buf);
+
+  if (!*buf) {
+    send_to_char("Force value expected.\r\n", ch);
+    return;
+  }
+  force = atoi(buf);
+  if (force < 1) {
+    send_to_char("Minimum force is 1.\r\n", ch);
+    return;
+  }
+  // TODO Does the magic attribute or sorcery skill limit the force? 
+  if (force > 100) {
+    send_to_char("Max value for force is 100.\r\n", ch);
+    return;
+  }
+  if (IS_NPC(vict)) {
+    send_to_char("You can't set NPC spells.\r\n", ch);
+    return;
+  }
+
+  struct spell_data *spell = new spell_data;
+
+  // Three lines away from working spellset command. How do I get the damn values?
+
+  //spell->name = FIXME 
+  //spell->type = FIXME
+  //spell->subtype = FIXME
+  spell->force = force;
+  spell->next = GET_SPELLS(ch);
+  GET_SPELLS(ch) = spell;
+
+}
+
 
 /* **********************************************************************
 *  Modification of character skills                                     *
