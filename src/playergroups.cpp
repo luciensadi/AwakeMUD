@@ -213,37 +213,7 @@ void do_pgroup_invitations(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_invite(struct char_data *ch, char *argument) {
-  struct char_data *target = NULL;
-  one_argument(argument, arg);
-  
-  if (!*arg) {
-    send_to_char("Whom would you like to invite to your group?\r\n", ch);
-  } else if (!(target = get_char_room_vis(ch, arg))) {
-    send_to_char("They aren't here.\r\n", ch);
-  } else if (ch == target) {
-    send_to_char("Why would you want to invite yourself?\r\n", ch);
-  } else if (IS_NPC(target)) {
-    send_to_char("NPCs aren't interested in player groups.\r\n", ch);
-  } else if (GET_POS(target) < POS_LYING) {
-    send_to_char("They can't hear you.\r\n", ch);
-  } else if (GET_TKE(target) < 100) {
-    send_to_char("That person isn't experienced enough to be a valuable addition to your team.\r\n", ch);
-    strcpy(buf, "$n wanted to invite you to $s playergroup, but you don't have the 100 TKE required to participate.\r\n");
-    act(buf, FALSE, ch, NULL, target, TO_VICT);
-  } else {
-    strcpy(buf, "You invite $N to join your group.");
-    act(buf, FALSE, ch, NULL, target, TO_CHAR);
-    sprintf(buf, "$n invites you to join their playergroup, '%s'.\r\n"
-            "(You can use PGROUP ACCEPT to accept, or PGROUP DECLINE to decline.)\r\n",
-            GET_PGROUP(ch)->get_name());
-    act(buf, FALSE, ch, NULL, target, TO_VICT);
-    
-    struct pgroup_invitation *temp = new pgroup_invitation;
-    temp->next = ch->pgroup_invitations;
-    ch->pgroup_invitations = temp;
-    
-    // TODO: Save this invitation.
-  }
+  GET_PGROUP(ch)->invite(ch, argument);
 }
 
 void do_pgroup_lease(struct char_data *ch, char *argument) {
