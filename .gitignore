@@ -39,9 +39,14 @@ awake
 gdb.txt
 syslog.txt
 log/
+
+# Files you really don't want to share
 src/mysql_config.cpp
 SQL/mysql_config.cpp
 mysql_config.cpp
+
+# Game / runtime files
 lib/house/*
 lib/storage/*
 lib/copyover.dat
+lib/veh/*
