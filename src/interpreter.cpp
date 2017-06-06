@@ -729,7 +729,7 @@ struct command_info cmd_info[] =
     { "peer"     , POS_LYING   , do_action   , 0, 0 },
     { "penalize" , POS_DEAD    , do_penalize , LVL_FIXER, 0 },
     { "perceive" , POS_LYING   , do_astral   , 0, SCMD_PERCEIVE },
-    { "pgroup"   , POS_DEAD    , do_pgroup   , 0, 0 },
+    { "pgroup"   , POS_LYING   , do_pgroup   , 0, 0 },
     { "phone"    , POS_LYING   , do_phone    , 0, 0 },
     { "phonelist", POS_DEAD    , do_phonelist, LVL_BUILDER, 0 },
     { "photo"    , POS_RESTING , do_photo    , 0, 0 },
