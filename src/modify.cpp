@@ -28,6 +28,7 @@
 #include "quest.h"
 #include "newmagic.h"
 #include "newmatrix.h"
+#include "constants.h"
 
 void show_string(struct descriptor_data *d, char *input);
 void qedit_disp_menu(struct descriptor_data *d);
@@ -563,9 +564,8 @@ void string_add(struct descriptor_data *d, char *str)
 ACMD(do_spellset)
 {
   struct char_data *vict;
-  char name[100], buf2[100], buf[100], help[MAX_STRING_LENGTH];
+  char name[100], help[MAX_STRING_LENGTH];
   int spelltoset, force, i, qend;
-  extern struct spell_types spells[];
 
   argument = one_argument(argument, name);
 
@@ -587,10 +587,24 @@ ACMD(do_spellset)
     send_to_char("\r\n", ch);
     return;
   }
+  
   if (!(vict = get_char_vis(ch, name))) {
     send_to_char(NOPERSON, ch);
     return;
   }
+  
+  // Moved this to the top for quicker precondition failure (we don't care about args if they can't set the person's values in the first place).
+  if (IS_NPC(vict)) {
+    send_to_char("You can't set NPC spells.\r\n", ch);
+    return;
+  }
+  
+  // Added staff-level checking.
+  if (GET_LEVEL(vict) > GET_LEVEL(ch)) {
+    send_to_char("You can't modify the spells of someone more powerful than you.\r\n", ch);
+    return;
+  }
+  
   skip_spaces(&argument);
 
   /* If there is no chars in argument */
@@ -606,9 +620,9 @@ ACMD(do_spellset)
 
   for (qend = 1; *(argument + qend) && (*(argument + qend) != '\''); qend++)
     *(argument + qend) = LOWER(*(argument + qend));
-
+  
   if (*(argument + qend) != '\'') {
-    send_to_char("Spell must be enclosed in: ''\r\n", ch);
+    send_to_char("Skill must be enclosed in: ''\r\n", ch);
     return;
   }
   strcpy(help, (argument + 1));
@@ -618,13 +632,15 @@ ACMD(do_spellset)
     return;
   }
   argument += qend + 1;         /* skip to next parameter */
-  argument = one_argument(argument, buf);
+  
+  char force_arg[MAX_STRING_LENGTH];
+  argument = one_argument(argument, force_arg);
 
-  if (!*buf) {
+  if (!*force_arg) {
     send_to_char("Force value expected.\r\n", ch);
     return;
   }
-  force = atoi(buf);
+  force = atoi(force_arg);
   if (force < 1) {
     send_to_char("Minimum force is 1.\r\n", ch);
     return;
@@ -634,22 +650,63 @@ ACMD(do_spellset)
     send_to_char("Max value for force is 100.\r\n", ch);
     return;
   }
-  if (IS_NPC(vict)) {
-    send_to_char("You can't set NPC spells.\r\n", ch);
-    return;
+  
+  int subtype = 0;
+  strcpy(buf, spells[spelltoset].name);
+  // Require that the attribute spells have an attribute specified (see spell->subtype comment).
+  if (spelltoset == SPELL_INCATTR || spelltoset == SPELL_INCCYATTR ||
+      spelltoset == SPELL_DECATTR || spelltoset == SPELL_DECCYATTR) {
+    // Check for the argument.
+    if (!*argument) {
+      send_to_char("You must supply one of 'bod', 'qui', 'str', 'int', 'wil', 'cha', 'rea'.\r\n", ch);
+      return;
+    }
+    
+    // Compare against the new short_attributes consts in constants.cpp and find the applicable one.
+    for (subtype = 0; subtype < 6; subtype++) {
+      if (!strncmp(argument, short_attributes[subtype], strlen(argument))) {
+        // The goal here is to find the index number the argument represents.
+        //  Once we find it, update the spell's name, then break.
+        sprintf(ENDOF(buf), " (%s)", attributes[subtype]);
+        break;
+      }
+    }
+    
+    // If we hit 6, the argument did not match the list.
+    if (subtype >= 6) {
+      send_to_char("You must supply one of 'bod', 'qui', 'str', 'int', 'wil', 'cha', 'rea'.\r\n", ch);
+      return;
+    }
   }
-
+  
+  // TODO: Checks for validity (if the character is unable to use the spell, don't set it).
+  // TODO: What if you want to remove a spell from someone?
+  
   struct spell_data *spell = new spell_data;
 
   // Three lines away from working spellset command. How do I get the damn values?
 
-  //spell->name = FIXME 
-  //spell->type = FIXME
-  //spell->subtype = FIXME
+  /* spell->name is a pointer to a char, and other code (spell release etc) deletes what it points to
+      on cleanup. Thus, you need to clone the spell_type's name into the spell_data to assign your
+      new spell a name. */
+  spell->name = str_dup(buf);
+  
+  /* The index of the spells[] table is a 1:1 mapping of the SPELL_ type, so you can just set the
+      spell->type field to your spelltoset value. */
+  spell->type = spelltoset;
+  
+  /* This one's the tricky one. Via newmagic.cpp's do_learn, we know that subtype is used for the attribute
+      spells to decide which attribute is being increased/decreased. To find this, I've included an optional
+      parameter in the command after force that specifies 'str', 'bod' etc. */
+  spell->subtype = subtype;
+  
   spell->force = force;
-  spell->next = GET_SPELLS(ch);
-  GET_SPELLS(ch) = spell;
-
+  spell->next = GET_SPELLS(vict);
+  GET_SPELLS(vict) = spell;
+  
+  send_to_char("OK.\r\n", ch);
+  sprintf(buf, "$n has set your '%s' spell to Force %d.", spells[spelltoset].name, force);
+  act(buf, TRUE, ch, NULL, vict, TO_VICT);
 }
 
 
@@ -662,7 +719,6 @@ ACMD(do_skillset)
   struct char_data *vict;
   char name[100], buf2[100], buf[100], help[MAX_STRING_LENGTH];
   int skill, value, i, qend;
-  extern struct skill_data skills[];
 
   argument = one_argument(argument, name);
 
