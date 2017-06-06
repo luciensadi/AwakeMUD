@@ -30,7 +30,7 @@ int mysql_wrapper(MYSQL *mysql, const char *query);
 // The linked list of loaded playergroups.
 extern Playergroup *loaded_playergroups;
 
-/* Playergroup Class implementation */
+/************* Constructors *************/
 Playergroup::Playergroup() :
 idnum(0), tag(NULL), name(NULL), alias(NULL)
 {}
@@ -50,6 +50,7 @@ idnum(0), tag(NULL), name(NULL), alias(NULL)
   settings.SetBit(PGROUP_CLONE);
 }
 
+/************* Destructor *************/
 Playergroup::~Playergroup() {
   if (tag)
     delete tag;
@@ -59,6 +60,10 @@ Playergroup::~Playergroup() {
     delete alias;
 }
 
+/************* Getters *************/
+// Almost all of these are declared inline in playergroup_class.h.
+
+/************* Setters *************/
 // Control whether or not the group is officially founded.
 void Playergroup::set_founded(bool founded) {
   if (founded)
@@ -76,13 +81,14 @@ void Playergroup::set_disabled(bool disabled) {
 }
 
 // Control whether or not the group's membership list is hidden.
-void Playergroup::set_membership_secret(bool secret) {
+void Playergroup::set_secret(bool secret) {
   if (secret)
     settings.SetBit(PGROUP_SECRETSQUIRREL);
   else
     settings.RemoveBit(PGROUP_SECRETSQUIRREL);
 }
 
+/************* Setters w/ Validity Checks *************/
 // Performs validity checks before setting. Returns TRUE if set succeeded, FALSE otherwise.
 bool Playergroup::set_tag(const char *newtag, struct char_data *ch) {
   // TODO: Validity checks.
@@ -148,6 +154,7 @@ bool Playergroup::set_alias(const char *newalias, struct char_data *ch) {
   // TODO: Race condition. Two people in the edit buf at the same time can use the same alias.
 }
 
+/************* Setters w/ Bypassed Validity Checks *************/
 // Does not perform validity checks before setting.
 void Playergroup::raw_set_tag(const char *newtag) {
   if (tag)
@@ -181,6 +188,7 @@ void Playergroup::raw_set_alias(const char *newalias) {
   alias = str_dup(newalias);
 }
 
+/************* Misc Methods *************/
 // Saves the playergroup to the database.
 bool Playergroup::save_pgroup_to_db() {
   char querybuf[MAX_STRING_LENGTH];
@@ -240,5 +248,61 @@ bool Playergroup::load_pgroup_from_db(long load_idnum) {
     log(buf);
     mysql_free_result(res);
     return FALSE;
+  }
+}
+
+// From comm.cpp
+#define SENDOK(ch) ((ch)->desc && AWAKE(ch) && !(PLR_FLAGGED((ch), PLR_WRITING) || PLR_FLAGGED((ch), PLR_EDITING) || PLR_FLAGGED((ch), PLR_MAILING) || PLR_FLAGGED((ch), PLR_CUSTOMIZE)) && (STATE(ch->desc) != CON_SPELL_CREATE))
+void Playergroup::invite(struct char_data *ch, char *argument) {
+  struct char_data *target = NULL;
+  char arg[strlen(argument) + 1];
+  one_argument(argument, arg);
+  
+  if (!*arg) {
+    send_to_char("Whom would you like to invite to your group?\r\n", ch);
+  } else if (!(target = get_char_room_vis(ch, arg))) {
+    send_to_char("They aren't here.\r\n", ch);
+  } else if (ch == target) {
+    send_to_char("Why would you want to invite yourself?\r\n", ch);
+  } else if (IS_NPC(target)) {
+    send_to_char("NPCs aren't interested in player groups.\r\n", ch);
+  } else if (!SENDOK(target)) {
+    send_to_char("They can't hear you.\r\n", ch);
+  } else if (GET_TKE(target) < 100) {
+    send_to_char("That person isn't experienced enough to be a valuable addition to your team.\r\n", ch);
+  } else if (FALSE) {
+    // TODO: The ability to auto-decline invitations / block people / not be harassed by invitation spam.
+  } else {
+    // Check to see if the player has already been invited to your group.
+    struct pgroup_invitation *temp = target->pgroup_invitations;
+    
+    while (temp) {
+      if (temp->pgroup == this) {
+        send_to_char("They've already been invited to your group.\r\n", ch);
+        return;
+      }
+      temp = temp->next;
+    }
+    
+    strcpy(buf, "You invite $N to join your group.");
+    act(buf, FALSE, ch, NULL, target, TO_CHAR);
+    sprintf(buf, "$n has invited you to join their playergroup, '%s'.\r\n", get_name());
+    act(buf, FALSE, ch, NULL, target, TO_VICT);
+    
+    // Calculate invitation expiration time.
+    time_t current_time;
+    time(&current_time);
+    struct tm* tm = localtime(&current_time);
+    tm->tm_mday += 7;
+    time_t expiration_time = mktime(tm);
+    
+    // Add the invitation to their queue.
+    temp = new pgroup_invitation;
+    temp->pgroup = this;
+    temp->expires_on = expiration_time;
+    temp->next = target->pgroup_invitations;
+    target->pgroup_invitations = temp;
+    
+    // TODO: Save this invitation in DB.
   }
 }

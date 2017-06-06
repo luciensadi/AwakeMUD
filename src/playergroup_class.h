@@ -33,7 +33,7 @@ public:
   // Setters
   void set_founded(bool founded);
   void set_disabled(bool disabled);
-  void set_membership_secret(bool secret);
+  void set_secret(bool secret);
   void set_idnum(long newnum) { idnum = newnum; }
   
   // Versions of setters that perform validity checks
@@ -49,11 +49,12 @@ public:
   // Checkers
   bool is_founded() { return settings.IsSet(PGROUP_FOUNDED); }
   bool is_clone() { return settings.IsSet(PGROUP_CLONE); }
+  bool is_secret() { return settings.IsSet(PGROUP_SECRETSQUIRREL); }
   
-  // Methods
+  // Misc Methods
   bool save_pgroup_to_db();
   bool load_pgroup_from_db(long load_idnum);
-  void invite(struct char_data *ch);
+  void invite(struct char_data *ch, char *argument);
 };
 
 #endif
