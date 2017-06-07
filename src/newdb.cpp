@@ -851,6 +851,24 @@ bool load_char(const char *name, char_data *ch, bool logon)
   } else {
     mysql_free_result(res);
   }
+  
+  // Load pgroup invitation data.
+  sprintf(buf, "SELECT * FROM `playergroup_invitations` WHERE `idnum`=%ld;", GET_IDNUM(ch));
+  mysql_wrapper(mysql, buf);
+  res = mysql_use_result(mysql);
+  Pgroup_invitation *pgi;
+  time_t expiration;
+  while ((row = mysql_fetch_row(res))) {
+    expiration = atol(row[2]);
+    if (!(Pgroup_invitation::is_expired(expiration))) {
+      pgi = new Pgroup_invitation(atol(row[1]), expiration);
+      pgi->next = ch->pgroup_invitations;
+      if (ch->pgroup_invitations)
+        ch->pgroup_invitations->prev = pgi;
+      ch->pgroup_invitations = pgi;
+    } // Expired ones are deleted when they interact with their invitations or quit.
+  }
+  mysql_free_result(res);
 
   STOP_WORKING(ch);
   AFF_FLAGS(ch).RemoveBits(AFF_MANNING, AFF_RIG, AFF_PILOT, AFF_BANISH, AFF_FEAR, AFF_STABILIZE, AFF_SPELLINVIS, AFF_SPELLIMPINVIS, AFF_DETOX, AFF_RESISTPAIN, AFF_TRACKING, AFF_TRACKED, AFF_PRONE, ENDBIT);

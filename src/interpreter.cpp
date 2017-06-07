@@ -84,6 +84,7 @@ extern void mag_menu_system(struct descriptor_data * d, char *arg);
 
 /* prototypes for all do_x functions. */
 ACMD(do_olcon);
+ACMD(do_accept);
 ACMD(do_action);
 ACMD(do_activate);
 ACMD(do_advance);
@@ -127,6 +128,7 @@ ACMD(do_cyberware);
 ACMD(do_date);
 ACMD(do_dc);
 ACMD(do_deactivate);
+ACMD(do_decline);
 ACMD(do_decorate);
 ACMD(do_default);
 ACMD(do_delete);
@@ -371,6 +373,7 @@ ACMD(do_connect);
 ACMD(do_hlist);
 ACMD(do_software);
 ACMD(do_design);
+ACMD(do_invitations);
 
 struct command_info cmd_info[] =
   {
@@ -398,6 +401,7 @@ struct command_info cmd_info[] =
     { "abilities", POS_SLEEPING, do_skills   , 0, SCMD_ABILITIES, FREE },
     { "activate" , POS_LYING , do_activate , 0, 0 },
     { "aecho"     , POS_SLEEPING, do_echo     , LVL_ARCHITECT, SCMD_AECHO, FREE },
+    { "accept"   , POS_LYING   , do_accept   , 0, 0, FREE },
     { "addpoint" , POS_DEAD    , do_initiate  , 0, SCMD_POWERPOINT, NOCOMBAT },
     { "agree"    , POS_LYING   , do_action   , 0, 0, FREE },
     { "assense"  , POS_LYING   , do_assense  , 0, 0 },
@@ -504,6 +508,7 @@ struct command_info cmd_info[] =
     { "daydream" , POS_SLEEPING, do_action   , 0, 0, FREE },
     { "dc"       , POS_DEAD    , do_dc       , LVL_EXECUTIVE, 0, FREE },
     { "deactivate", POS_RESTING, do_deactivate, 0, 0, FREE },
+    { "decline"  , POS_LYING   , do_decline  , 0, 0, FREE },
     { "decompress", POS_LYING  , do_compact  , 0, 1 },
     { "decorate" , POS_DEAD    , do_decorate , 0, 0, NOCOMBAT },
     { "delete"   , POS_SLEEPING, do_delete   , 0, 0 },
@@ -640,6 +645,7 @@ struct command_info cmd_info[] =
     { "innocent" , POS_LYING   , do_action   , 0, 0, FREE },
     { "insult"   , POS_LYING   , do_insult   , 0, 0, FREE },
     { "invis"    , POS_DEAD    , do_invis    , LVL_BUILDER, 0, FREE },
+    { "invitations", POS_LYING , do_invitations, 0, 0, FREE },
 
     { "jack"     , POS_SITTING , do_jack     , 0, 0 },
     { "jig"      , POS_STANDING, do_action   , 0, 0, FREE },
