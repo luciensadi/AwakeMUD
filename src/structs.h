@@ -10,7 +10,7 @@
 #include "list.h"
 #include "bitfield.h"
 #include "utils.h"
-#include "playergroup_class.h"
+#include "playergroup_classes.h"
 
 #define SPECIAL(name) \
    int (name)(struct char_data *ch, void *me, int cmd, char *argument)
@@ -63,18 +63,6 @@ struct pgroup_data
   
   pgroup_data() :
     pgroup(NULL), title(NULL)
-  {}
-};
-
-struct pgroup_invitation
-{
-  Playergroup *pgroup;
-  time_t expires_on;
-  
-  pgroup_invitation *next;
-  
-  pgroup_invitation() :
-    pgroup(NULL), expires_on(0), next(NULL)
   {}
 };
 
@@ -685,14 +673,14 @@ struct char_data
   struct spell_data *spells;                     /* linked list of spells          */
   
   struct pgroup_data *pgroup;                   /* Data concerning the player group this char is part of. */
-  struct pgroup_invitation *pgroup_invitations; /* The list of open group invitations associated with this player. */
+  Pgroup_invitation *pgroup_invitations; /* The list of open group invitations associated with this player. */
 
 
   char_data() :
       player_specials(NULL), in_veh(NULL), persona(NULL), squeue(NULL), sustained(NULL), ssust(NULL),
       carrying(NULL), desc(NULL), cyberware(NULL), bioware(NULL), next_in_room(NULL), next(NULL),
       next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL), next_watching(NULL), followers(NULL),
-      master(NULL), spells(NULL), pgroup(NULL)
+      master(NULL), spells(NULL), pgroup(NULL), pgroup_invitations(NULL)
   {}
 };
 /* ====================================================================== */

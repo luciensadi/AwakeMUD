@@ -55,6 +55,37 @@ public:
   bool save_pgroup_to_db();
   bool load_pgroup_from_db(long load_idnum);
   void invite(struct char_data *ch, char *argument);
+  static Playergroup *find_pgroup(long idnum);
+};
+
+class Pgroup_invitation {
+  time_t expires_on;
+public:
+  long pg_idnum;
+  struct char_data *ch;
+  
+  Pgroup_invitation *prev;
+  Pgroup_invitation *next;
+  
+  // Constructors
+  Pgroup_invitation();
+  Pgroup_invitation(long idnum);
+  Pgroup_invitation(long idnum, time_t expiration);
+  
+  // Getters
+  time_t get_expiration() { return expires_on; }
+  
+  // Setters
+  void set_expiration(time_t expiration);
+  
+  // Checkers
+  bool is_expired();
+  static bool is_expired(time_t tm);
+  
+  // Misc Methods
+  time_t calculate_expiration();
+  bool save_invitation_to_db();
+  static void prune_expired(struct char_data *ch);
 };
 
 #endif

@@ -16,7 +16,7 @@
 #include "interpreter.h"
 #include "constants.h"
 #include "playergroups.h"
-#include "playergroup_class.h"
+#include "playergroup_classes.h"
 #include "olc.h"
 #include "handler.h"
 #include "comm.h"
@@ -30,6 +30,105 @@ int mysql_wrapper(MYSQL *mysql, const char *query);
 
 // The linked list of loaded playergroups.
 Playergroup *loaded_playergroups = NULL;
+
+// The invitations command, for viewing your pgroup invitations.
+ACMD(do_invitations) {
+  if (IS_NPC(ch)) {
+    send_to_char("NPCs don't get playergroup invitations.\r\n", ch);
+    return;
+  }
+  
+  if (ch->pgroup_invitations == NULL) {
+    send_to_char("You have no playergroup invitations at this time.\r\n", ch);
+    return;
+  }
+  
+  // Remove any expired invitations.
+  Pgroup_invitation::prune_expired(ch);
+  
+  char expiration_string[20];
+  Pgroup_invitation *pgi = ch->pgroup_invitations;
+  Playergroup *pgr = NULL;
+  send_to_char("You have invitations from: \r\n", ch);
+  while (pgi) {
+    pgr = Playergroup::find_pgroup(pgi->pg_idnum);
+    time_t expiration = pgi->get_expiration();
+    strftime(expiration_string, 20, "%Y-%m-%d %H:%M:%S", localtime(&expiration));
+    sprintf(buf, " '%s' (%s), which expires on %s\r\n", pgr->get_name(), pgr->get_alias(), expiration_string);
+    pgi = pgi->next;
+  }
+  send_to_char(buf, ch);
+}
+
+// The accept command.
+ACMD(do_accept) {
+  if (IS_NPC(ch)) {
+    send_to_char("NPCs don't get playergroup invitations.\r\n", ch);
+    return;
+  }
+  
+  if (ch->pgroup_invitations == NULL) {
+    send_to_char("You have no playergroup invitations at this time.\r\n", ch);
+    return;
+  }
+  
+  if (!*argument) {
+    send_to_char(ch, "Syntax: ACCEPT <alias of playergroup>.\r\n", ch);
+    do_invitations(ch, NULL, 0, 0);
+    return;
+  }
+  
+  // Remove any expired invitations.
+  Pgroup_invitation::prune_expired(ch);
+  
+  Pgroup_invitation *pgi = ch->pgroup_invitations;
+  while (pgi) {
+    // if argument matches case-insensitively with invitation's group's alias
+    // add player to group
+    // remove invitation from player and player db
+  }
+}
+
+// The decline command.
+ACMD(do_decline) {
+  if (IS_NPC(ch)) {
+    send_to_char("NPCs don't get playergroup invitations.\r\n", ch);
+    return;
+  }
+  
+  if (ch->pgroup_invitations == NULL) {
+    send_to_char("You have no playergroup invitations at this time.\r\n", ch);
+    return;
+  }
+  
+  if (!*argument) {
+    send_to_char(ch, "Syntax: DECLINE <alias of playergroup>.\r\n", ch);
+    do_invitations(ch, NULL, 0, 0);
+    return;
+  }
+  
+  // Remove any expired invitations.
+  Pgroup_invitation::prune_expired(ch);
+}
+
+// Find or load the specified group.
+Playergroup *Playergroup::find_pgroup(long idnum) {
+  Playergroup *pgr = loaded_playergroups;
+  
+  if (!idnum) {
+    log_vfprintf("SYSERR: Illegal pgroup num %ld passed to find_pgroup.", idnum);
+    return NULL;
+  }
+  
+  while (pgr) {
+    if (pgr->get_idnum() == idnum)
+      return pgr;
+    
+    pgr = pgr->next_pgroup;
+  }
+  
+  return new Playergroup(idnum);
+}
 
 struct pgroup_cmd_struct {
   const char *cmd;
