@@ -270,6 +270,9 @@ void Playergroup::invite(struct char_data *ch, char *argument) {
     send_to_char("They can't hear you.\r\n", ch);
   } else if (GET_TKE(target) < 100) {
     send_to_char("That person isn't experienced enough to be a valuable addition to your team.\r\n", ch);
+  } else if (GET_PGROUP_DATA(target) && GET_PGROUP(target) && GET_PGROUP(target) == GET_PGROUP(ch)) {
+    send_to_char("They're already part of your group!\r\n", ch);
+    // TODO: If the group is secret, this is info disclosure.
   } else if (FALSE) {
     // TODO: The ability to auto-decline invitations / block people / not be harassed by invitation spam.
   } else {
@@ -291,7 +294,6 @@ void Playergroup::invite(struct char_data *ch, char *argument) {
     
     // Create a new invitation and add it to the user's list.
     temp = new Pgroup_invitation(GET_PGROUP(ch)->get_idnum());
-    temp->ch = target;
     
     // Add it to the linked list.
     temp->next = target->pgroup_invitations;
@@ -299,25 +301,90 @@ void Playergroup::invite(struct char_data *ch, char *argument) {
       target->pgroup_invitations->prev = temp;
     target->pgroup_invitations = temp;
     
-    temp->save_invitation_to_db();
+    temp->save_invitation_to_db(GET_IDNUM(target));
   }
+}
+
+void Playergroup::add_member(struct char_data *ch) {
+  if (IS_NPC(ch))
+    return;
+  
+  if (GET_PGROUP_DATA(ch)) {
+    if (GET_PGROUP(ch)) {
+      log_vfprintf("WARNING: add_member called on %s for group %s when they were already part of %s.",
+          GET_NAME(ch), get_name(), GET_PGROUP(ch)->get_name());
+    } else {
+      log("SYSERR: overriding add_member call, also %s had pgroup_data but no pgroup.");
+    }
+    delete GET_PGROUP_DATA(ch);
+  }
+  GET_PGROUP_DATA(ch) = new Pgroup_data();
+  GET_PGROUP_DATA(ch)->pgroup = this;
+  GET_PGROUP_DATA(ch)->rank = 1;
+  if (GET_PGROUP_DATA(ch)->title)
+    delete GET_PGROUP_DATA(ch)->title;
+  GET_PGROUP_DATA(ch)->title = str_dup("Member");
+  
+  // Save the character.
+  playerDB.SaveChar(ch);
+  
+  // Delete the invitation and remove it from the character's linked list.
+  Pgroup_invitation *pgi = ch->pgroup_invitations;
+  while (pgi) {
+    if (pgi->pg_idnum == idnum) {
+      if (pgi->prev)
+        pgi->prev->next = pgi->next;
+      else {
+        // This is the head of the list.
+        ch->pgroup_invitations = pgi->next;
+      }
+      
+      if (pgi->next)
+        pgi->next->prev = pgi->prev;
+      
+      pgi->delete_invitation_from_db(GET_IDNUM(ch));
+      delete pgi;
+      pgi = NULL;
+    } else {
+      pgi = pgi->next;
+    }
+  }
+}
+
+void Playergroup::remove_member(struct char_data *ch) {
+  if (IS_NPC(ch))
+    return;
+  
+  if (!GET_PGROUP_DATA(ch) || !GET_PGROUP(ch)) {
+    log_vfprintf("SYSERR: pgroup->remove_member() called on %s, who does not have an associated group.",
+                 GET_NAME(ch));
+    return;
+  }
+  
+  delete GET_PGROUP_DATA(ch);
+  GET_PGROUP_DATA(ch) = NULL;
+  
+  // Save the character.
+  playerDB.SaveChar(ch);
 }
 
 /*************** Invitation methods. *****************/
 Pgroup_invitation::Pgroup_invitation() :
-pg_idnum(0), prev(NULL), next(NULL)
+pg(NULL), pg_idnum(0), prev(NULL), next(NULL)
 {
   expires_on = calculate_expiration();
+  log_vfprintf("Expiration calculated as %ld seconds.", expires_on);
 }
 
 Pgroup_invitation::Pgroup_invitation(long idnum) :
-pg_idnum(idnum), prev(NULL), next(NULL)
+pg(NULL), pg_idnum(idnum), prev(NULL), next(NULL)
 {
   expires_on = calculate_expiration();
+  log_vfprintf("Expiration calculated as %ld seconds.", expires_on);
 }
 
 Pgroup_invitation::Pgroup_invitation(long idnum, time_t expiration) :
-pg_idnum(idnum), prev(NULL), next(NULL)
+pg(NULL), pg_idnum(idnum), prev(NULL), next(NULL)
 {
   set_expiration(expiration);
 }
@@ -342,12 +409,13 @@ bool Pgroup_invitation::is_expired(time_t tm) {
 
 time_t Pgroup_invitation::calculate_expiration() {
   time_t current_time;
+  time(&current_time);
   struct tm* tm = localtime(&current_time);
   tm->tm_mday += 7;
   return mktime(tm);
 }
 
-bool Pgroup_invitation::save_invitation_to_db() {
+bool Pgroup_invitation::save_invitation_to_db(long ch_idnum) {
   char querybuf[MAX_STRING_LENGTH];
   
   const char * pinv_save_query_format =
@@ -356,11 +424,11 @@ bool Pgroup_invitation::save_invitation_to_db() {
   "DELETE FROM `playergroup_invitations` WHERE `idnum` = '%ld' AND `Group` = '%ld'";
   
   // Execute deletion.
-  sprintf(querybuf, pinv_delete_query_format, GET_IDNUM(ch), pg_idnum);
+  sprintf(querybuf, pinv_delete_query_format, ch_idnum, pg_idnum);
   mysql_wrapper(mysql, querybuf);
   
   // Execute save.
-  sprintf(querybuf, pinv_save_query_format, GET_IDNUM(ch), pg_idnum, expires_on);
+  sprintf(querybuf, pinv_save_query_format, ch_idnum, pg_idnum, expires_on);
   mysql_wrapper(mysql, querybuf);
   
   return mysql_errno(mysql) != 0;
@@ -378,17 +446,40 @@ void Pgroup_invitation::prune_expired(struct char_data *ch) {
       send_to_char(ch, "Your invitation from '%s' has expired.\r\n",
                    Playergroup::find_pgroup(pgi->pg_idnum)->get_name());
       
-      sprintf(buf, "DELETE FROM `playergroup_invitations` WHERE `idnum`='%ld' AND `Group`='%ld'", GET_IDNUM(ch), pgi->pg_idnum);
-      mysql_wrapper(mysql, buf);
+      pgi->delete_invitation_from_db(GET_IDNUM(ch));
       
-      if (pgi->prev)
+      if (pgi->prev) {
         pgi->prev->next = pgi->next;
+      } else {
+        // This is the head of the linked list.
+        ch->pgroup_invitations = pgi->next;
+      }
+      
       if (pgi->next)
         pgi->next->prev = pgi->prev;
       
       temp = pgi->next;
       delete pgi;
       pgi = temp;
+    } else {
+      pgi = pgi->next;
     }
   }
+}
+
+void Pgroup_invitation::delete_invitation_from_db(long ch_idnum) {
+  Pgroup_invitation::delete_invitation_from_db(pg_idnum, ch_idnum);
+}
+
+void Pgroup_invitation::delete_invitation_from_db(long pgr_idnum, long ch_idnum) {
+  sprintf(buf, "DELETE FROM `playergroup_invitations` WHERE `idnum`='%ld' AND `Group`='%ld'", ch_idnum, pgr_idnum);
+  mysql_wrapper(mysql, buf);
+}
+
+Playergroup *Pgroup_invitation::get_pg() {
+  if (pg)
+    return pg;
+  
+  pg = Playergroup::find_pgroup(pg_idnum);
+  return pg;
 }

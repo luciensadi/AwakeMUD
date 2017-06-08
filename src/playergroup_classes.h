@@ -51,18 +51,24 @@ public:
   bool is_clone() { return settings.IsSet(PGROUP_CLONE); }
   bool is_secret() { return settings.IsSet(PGROUP_SECRETSQUIRREL); }
   
-  // Misc Methods
+  // Misc methods.
+  static Playergroup *find_pgroup(long idnum);
+  
+  // DB management.
   bool save_pgroup_to_db();
   bool load_pgroup_from_db(long load_idnum);
+  
+  // Membership management.
   void invite(struct char_data *ch, char *argument);
-  static Playergroup *find_pgroup(long idnum);
+  void add_member(struct char_data *ch);
+  void remove_member(struct char_data *ch);
 };
 
 class Pgroup_invitation {
   time_t expires_on;
+  Playergroup *pg;
 public:
   long pg_idnum;
-  struct char_data *ch;
   
   Pgroup_invitation *prev;
   Pgroup_invitation *next;
@@ -84,8 +90,25 @@ public:
   
   // Misc Methods
   time_t calculate_expiration();
-  bool save_invitation_to_db();
+  bool save_invitation_to_db(long ch_idnum);
+  void delete_invitation_from_db(long ch_idnum);
+  static void delete_invitation_from_db(long pgr_idnum, long ch_idnum);
   static void prune_expired(struct char_data *ch);
+  Playergroup *get_pg();
+};
+
+// Converted from a struct to a class so I can write a deconstructor.
+class Pgroup_data
+{
+public:
+  Playergroup *pgroup;
+  
+  byte rank;
+  const char *title;
+  Bitfield privileges;
+  
+  Pgroup_data() : pgroup(NULL), title(NULL) {}
+  ~Pgroup_data() { if (title) delete title; }
 };
 
 #endif

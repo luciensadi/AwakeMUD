@@ -823,7 +823,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   res = mysql_use_result(mysql);
   if ((row = mysql_fetch_row(res))) {
     long pgroup_idnum = atol(row[1]);
-    GET_PGROUP_DATA(ch) = new pgroup_data;
+    GET_PGROUP_DATA(ch) = new Pgroup_data();
     GET_PGROUP_DATA(ch)->rank = atoi(row[2]);
     GET_PGROUP_DATA(ch)->privileges.FromString(row[3]);
     mysql_free_result(res);
