@@ -84,7 +84,6 @@ extern void mag_menu_system(struct descriptor_data * d, char *arg);
 
 /* prototypes for all do_x functions. */
 ACMD(do_olcon);
-ACMD(do_accept);
 ACMD(do_action);
 ACMD(do_activate);
 ACMD(do_advance);
@@ -128,7 +127,6 @@ ACMD(do_cyberware);
 ACMD(do_date);
 ACMD(do_dc);
 ACMD(do_deactivate);
-ACMD(do_decline);
 ACMD(do_decorate);
 ACMD(do_default);
 ACMD(do_delete);
@@ -214,7 +212,6 @@ ACMD(do_order);
 ACMD(do_packup);
 ACMD(do_page);
 ACMD(do_patch);
-ACMD(do_pgroup);
 ACMD(do_photo);
 ACMD(do_poofset);
 ACMD(do_pour);
@@ -373,7 +370,6 @@ ACMD(do_connect);
 ACMD(do_hlist);
 ACMD(do_software);
 ACMD(do_design);
-ACMD(do_invitations);
 
 struct command_info cmd_info[] =
   {
@@ -401,7 +397,6 @@ struct command_info cmd_info[] =
     { "abilities", POS_SLEEPING, do_skills   , 0, SCMD_ABILITIES, FREE },
     { "activate" , POS_LYING , do_activate , 0, 0 },
     { "aecho"     , POS_SLEEPING, do_echo     , LVL_ARCHITECT, SCMD_AECHO, FREE },
-    { "accept"   , POS_LYING   , do_accept   , 0, 0, FREE },
     { "addpoint" , POS_DEAD    , do_initiate  , 0, SCMD_POWERPOINT, NOCOMBAT },
     { "agree"    , POS_LYING   , do_action   , 0, 0, FREE },
     { "assense"  , POS_LYING   , do_assense  , 0, 0 },
@@ -508,7 +503,6 @@ struct command_info cmd_info[] =
     { "daydream" , POS_SLEEPING, do_action   , 0, 0, FREE },
     { "dc"       , POS_DEAD    , do_dc       , LVL_EXECUTIVE, 0, FREE },
     { "deactivate", POS_RESTING, do_deactivate, 0, 0, FREE },
-    { "decline"  , POS_LYING   , do_decline  , 0, 0, FREE },
     { "decompress", POS_LYING  , do_compact  , 0, 1 },
     { "decorate" , POS_DEAD    , do_decorate , 0, 0, NOCOMBAT },
     { "delete"   , POS_SLEEPING, do_delete   , 0, 0 },
@@ -645,7 +639,6 @@ struct command_info cmd_info[] =
     { "innocent" , POS_LYING   , do_action   , 0, 0, FREE },
     { "insult"   , POS_LYING   , do_insult   , 0, 0, FREE },
     { "invis"    , POS_DEAD    , do_invis    , LVL_BUILDER, 0, FREE },
-    { "invitations", POS_LYING , do_invitations, 0, 0, FREE },
 
     { "jack"     , POS_SITTING , do_jack     , 0, 0 },
     { "jig"      , POS_STANDING, do_action   , 0, 0, FREE },
@@ -735,7 +728,6 @@ struct command_info cmd_info[] =
     { "peer"     , POS_LYING   , do_action   , 0, 0 },
     { "penalize" , POS_DEAD    , do_penalize , LVL_FIXER, 0 },
     { "perceive" , POS_LYING   , do_astral   , 0, SCMD_PERCEIVE },
-    { "pgroup"   , POS_LYING   , do_pgroup   , 0, 0 },
     { "phone"    , POS_LYING   , do_phone    , 0, 0 },
     { "phonelist", POS_DEAD    , do_phonelist, LVL_BUILDER, 0 },
     { "photo"    , POS_RESTING , do_photo    , 0, 0 },
@@ -2081,9 +2073,6 @@ void nanny(struct descriptor_data * d, char *arg)
     break;
   case CON_CCREATE:
     create_parse(d, arg);
-    break;
-  case CON_PGEDIT:
-    pgedit_parse(d, arg);
     break;
   case CON_GET_NAME:            /* wait for input of name */
     d->idle_tics = 0;
