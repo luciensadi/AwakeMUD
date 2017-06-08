@@ -51,7 +51,7 @@ ACMD(do_invitations) {
   Playergroup *pgr = NULL;
   send_to_char("You have invitations from: \r\n", ch);
   while (pgi) {
-    pgr = Playergroup::find_pgroup(pgi->pg_idnum);
+    pgr = pgi->get_pg();
     time_t expiration = pgi->get_expiration();
     strftime(expiration_string, 20, "%Y-%m-%d %H:%M:%S", localtime(&expiration));
     sprintf(buf, " '%s' (%s), which expires on %s\r\n", pgr->get_name(), pgr->get_alias(), expiration_string);
@@ -82,11 +82,20 @@ ACMD(do_accept) {
   Pgroup_invitation::prune_expired(ch);
   
   Pgroup_invitation *pgi = ch->pgroup_invitations;
+  Playergroup *pgr;
   while (pgi) {
     // if argument matches case-insensitively with invitation's group's alias
-    // add player to group
-    // remove invitation from player and player db
+    pgr = pgi->get_pg();
+    if (str_cmp(argument, pgr->get_name()) != 0) {
+      // add player to group
+      send_to_char(ch, "You accept the invitation and declare yourself a member of '%s'.\r\n", pgr->get_name());
+      pgr->add_member(ch);
+      return;
+    }
+    pgi = pgi->next;
   }
+  
+  send_to_char(ch, "You don't seem to have any invitations from '%s'.\r\n", argument);
 }
 
 // The decline command.
@@ -109,6 +118,30 @@ ACMD(do_decline) {
   
   // Remove any expired invitations.
   Pgroup_invitation::prune_expired(ch);
+  
+  Pgroup_invitation *pgi = ch->pgroup_invitations;
+  Playergroup *pgr;
+  while (pgi) {
+    // if argument matches case-insensitively with invitation's group's alias
+    pgr = pgi->get_pg();
+    if (str_cmp(argument, pgr->get_name()) != 0) {
+      // drop the invitation
+      send_to_char(ch, "You decline the invitation from '%s'.\r\n", pgr->get_name());
+      // TODO: log the rejection
+      
+      if (pgi->prev)
+        pgi->prev->next = pgi->next;
+      else
+        ch->pgroup_invitations = pgi->next;
+      if (pgi->next)
+        pgi->next->prev = pgi->prev;
+      delete pgi;
+      return;
+    }
+    pgi = pgi->next;
+  }
+  
+  send_to_char(ch, "You don't seem to have any invitations from '%s'.\r\n", argument);
 }
 
 // Find or load the specified group.
@@ -336,7 +369,15 @@ void do_pgroup_promote(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_resign(struct char_data *ch, char *argument) {
-  send_to_char("resign", ch);
+  skip_spaces(&argument);
+  
+  if (!*argument || str_cmp(argument, "confirm") != 0) {
+    send_to_char(ch, "If you're sure you want to resign from '%s', type PGROUP RESIGN CONFIRM.\r\n",
+                 GET_PGROUP(ch)->get_name());
+    return;
+  }
+  send_to_char(ch, "You resign your position in '%s'.\r\n", GET_PGROUP(ch)->get_name());
+  GET_PGROUP(ch)->remove_member(ch);
 }
 
 void do_pgroup_revoke(struct char_data *ch, char *argument) {
@@ -475,7 +516,7 @@ void pgedit_parse(struct descriptor_data * d, const char *arg) {
         // Make the character a member of this temporary group.
         if (GET_PGROUP_DATA(CH))
           delete GET_PGROUP_DATA(CH);
-        GET_PGROUP_DATA(CH) = new pgroup_data;
+        GET_PGROUP_DATA(CH) = new Pgroup_data();
         GET_PGROUP_DATA(CH)->pgroup = d->edit_pgroup;
         GET_PGROUP_DATA(CH)->rank = MAX_PGROUP_RANK;
         GET_PGROUP_DATA(CH)->privileges.SetBit(PRIV_LEADER);

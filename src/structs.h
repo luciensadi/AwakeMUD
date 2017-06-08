@@ -52,20 +52,6 @@ struct text_data
 }
 ;
 
-/* Pgroup association data */
-struct pgroup_data
-{
-  Playergroup *pgroup;
-  
-  byte rank;
-  const char *title;
-  Bitfield privileges;
-  
-  pgroup_data() :
-    pgroup(NULL), title(NULL)
-  {}
-};
-
 /* object-related structures ******************************************/
 
 /* object flags; used in obj_data */
@@ -672,7 +658,7 @@ struct char_data
   struct char_data *master;             /* Who is char following?        */
   struct spell_data *spells;                     /* linked list of spells          */
   
-  struct pgroup_data *pgroup;                   /* Data concerning the player group this char is part of. */
+  Pgroup_data *pgroup;                   /* Data concerning the player group this char is part of. */
   Pgroup_invitation *pgroup_invitations; /* The list of open group invitations associated with this player. */
 
 
