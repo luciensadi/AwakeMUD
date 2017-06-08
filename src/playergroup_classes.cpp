@@ -189,6 +189,30 @@ void Playergroup::raw_set_alias(const char *newalias) {
 }
 
 /************* Misc Methods *************/
+void Playergroup::audit_log(const char *msg) {
+  // Stub. TODO
+  mudlog(msg, NULL, LOG_MISCLOG, TRUE);
+}
+
+char playergroup_log_buf[MAX_STRING_LENGTH];
+void Playergroup::audit_log_vfprintf(const char *format, ...)
+{
+  va_list args;
+  time_t ct = time(0);
+  char *tmstr;
+  
+  tmstr = asctime(localtime(&ct));
+  *(tmstr + strlen(tmstr) - 1) = '\0';
+  sprintf(playergroup_log_buf, "%-15.15s :: ", tmstr + 4);
+  
+  va_start(args, format);
+  vsprintf(playergroup_log_buf, format, args);
+  va_end(args);
+  
+  //sprintf(playergroup_log_buf, "\r\n");
+  mudlog(playergroup_log_buf, NULL, LOG_MISCLOG, TRUE);
+}
+
 // Saves the playergroup to the database.
 bool Playergroup::save_pgroup_to_db() {
   char querybuf[MAX_STRING_LENGTH];
@@ -249,6 +273,17 @@ bool Playergroup::load_pgroup_from_db(long load_idnum) {
     mysql_free_result(res);
     return FALSE;
   }
+}
+
+int Playergroup::sql_count_members() {
+  char query_buf[MAX_STRING_LENGTH];
+  sprintf(query_buf, "SELECT count(idnum) FROM `pfiles_playergroups` WHERE `group` = %ld", get_idnum());
+  mysql_wrapper(mysql, query_buf);
+  MYSQL_RES *res = mysql_use_result(mysql);
+  MYSQL_ROW row = mysql_fetch_row(res);
+  int count = atoi(row[0]);
+  mysql_free_result(res);
+  return count;
 }
 
 // From comm.cpp
@@ -443,6 +478,8 @@ void Pgroup_invitation::prune_expired(struct char_data *ch) {
   
   while (pgi) {
     if (pgi->is_expired()) {
+      // TODO: If the group is disabled, the character may not know they have this invitation.
+      // Gag expiration messages on disabled-group-invites?
       send_to_char(ch, "Your invitation from '%s' has expired.\r\n",
                    Playergroup::find_pgroup(pgi->pg_idnum)->get_name());
       

@@ -52,6 +52,13 @@ ACMD(do_invitations) {
   send_to_char("You have invitations from: \r\n", ch);
   while (pgi) {
     pgr = pgi->get_pg();
+    
+    // Skip over anything from a disabled group.
+    if (pgr->is_disabled()) {
+      pgi = pgi->next;
+      continue;
+    }
+    
     time_t expiration = pgi->get_expiration();
     strftime(expiration_string, 20, "%Y-%m-%d %H:%M:%S", localtime(&expiration));
     sprintf(buf, " '%s' (%s), which expires on %s\r\n", pgr->get_name(), pgr->get_alias(), expiration_string);
@@ -84,8 +91,15 @@ ACMD(do_accept) {
   Pgroup_invitation *pgi = ch->pgroup_invitations;
   Playergroup *pgr;
   while (pgi) {
-    // if argument matches case-insensitively with invitation's group's alias
     pgr = pgi->get_pg();
+    
+    // Skip over anything from a disabled group.
+    if (pgr->is_disabled()) {
+      pgi = pgi->next;
+      continue;
+    }
+    
+    // if argument matches case-insensitively with invitation's group's alias
     if (str_cmp(argument, pgr->get_name()) != 0) {
       // add player to group
       send_to_char(ch, "You accept the invitation and declare yourself a member of '%s'.\r\n", pgr->get_name());
@@ -124,6 +138,13 @@ ACMD(do_decline) {
   while (pgi) {
     // if argument matches case-insensitively with invitation's group's alias
     pgr = pgi->get_pg();
+    
+    // Skip over anything from a disabled group.
+    if (pgr->is_disabled()) {
+      pgi = pgi->next;
+      continue;
+    }
+    
     if (str_cmp(argument, pgr->get_name()) != 0) {
       // drop the invitation
       send_to_char(ch, "You decline the invitation from '%s'.\r\n", pgr->get_name());
@@ -210,6 +231,7 @@ ACMD(do_pgroup) {
     return;
   }
   
+  skip_spaces(&argument);
   half_chop(argument, command, buf);
   
   // In the absence of a command, show help and exit.
@@ -246,6 +268,17 @@ ACMD(do_pgroup) {
     return;
   }
   
+  // Precondition: If your group is disabled, the only commands you can use are LOGS, STATUS, and RESIGN.
+  if (GET_PGROUP(ch)->is_disabled()) {
+    if (pgroup_commands[cmd_index].command_pointer != do_pgroup_status
+        && pgroup_commands[cmd_index].command_pointer != do_pgroup_resign
+        && pgroup_commands[cmd_index].command_pointer != do_pgroup_logs) {
+      send_to_char("You can't perform that action after your group has been disbanded.\r\n", ch);
+      display_pgroup_help(ch);
+      return;
+    }
+  }
+  
   // Precondition: If the command requires a kosherized group, you must be part of one.
   if (!pgroup_commands[cmd_index].valid_while_group_not_founded
       && (!GET_PGROUP_DATA(ch) || !GET_PGROUP(ch)->is_founded())) {
@@ -256,7 +289,7 @@ ACMD(do_pgroup) {
   // Precondition: You must have the appropriate privilege to perform this command.
   if (pgroup_commands[cmd_index].privilege_required != PRIV_NONE) {
     if (!(GET_PGROUP_DATA(ch)->privileges.AreAnySet(pgroup_commands[cmd_index].privilege_required, PRIV_LEADER, ENDBIT))) {
-      sprintf(buf, "You must be a %s within your group to do that.\r\n",
+      send_to_char(ch, "You must be a %s within your group to do that.\r\n",
               pgroup_privileges[pgroup_commands[cmd_index].privilege_required]);
       return;
     }
@@ -314,7 +347,45 @@ void do_pgroup_design(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_disband(struct char_data *ch, char *argument) {
-  send_to_char("disband", ch);
+  if (!*argument || str_cmp(argument, "confirm") != 0) {
+    send_to_char(ch, "If you're sure you want to disband '%s', type PGROUP DISBAND CONFIRM.\r\n",
+                 GET_PGROUP(ch)->get_name());
+    return;
+  }
+  
+  send_to_char(ch, "You disband the group '%s'.\r\n", GET_PGROUP(ch)->get_name());
+  GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_NAME(ch));
+  
+  // Disable the group.
+  GET_PGROUP(ch)->set_disabled(TRUE);
+  
+  // Kick all members.
+  char query_buf[512];
+  sprintf(query_buf, "SELECT idnum FROM pfiles WHERE `pgroup` = %ld", GET_PGROUP(ch)->get_idnum());
+  mysql_wrapper(mysql, query_buf);
+  MYSQL_RES *res = mysql_use_result(mysql);
+  MYSQL_ROW row = mysql_fetch_row(res);
+  sprintf(buf, "The following characters are about to be kicked from '%s' (%s, %ld) due to disbanding by %s: ",
+          GET_PGROUP(ch)->get_name(),
+          GET_PGROUP(ch)->get_alias(),
+          GET_PGROUP(ch)->get_idnum(),
+          GET_NAME(ch));
+  while (row) {
+    sprintf(ENDOF(buf), "%s ", row[0]);
+    row = mysql_fetch_row(res);
+  }
+  mysql_free_result(res);
+  log(buf);
+  
+  // Remove this group from all active players' char_data structs. Delete members' pgroup_data pointers.
+  
+  // Remove all players from the group in the DB.
+  // sprintf(query_buf, "UPDATE pfiles SET `pgroup` = 0 WHERE `pgroup` == %ld", GET_PGROUP(ch)->get_idnum);
+  // mysql_wrapper(mysql, query_buf);
+  
+  // Remove all pfiles_playergroups entries matching this group and log the items removed.
+  
+  // Remove all invitations issued by this group. (necessary)?
 }
 
 void do_pgroup_edit(struct char_data *ch, char *argument) {
@@ -329,7 +400,31 @@ void do_pgroup_edit(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_found(struct char_data *ch, char *argument) {
-  send_to_char("found", ch);
+  if (GET_PGROUP(ch)->is_founded()) {
+    send_to_char("Your group has already been founded.\r\n", ch);
+    return;
+  }
+
+  if (GET_NUYEN(ch) < COST_TO_FOUND_GROUP) {
+    send_to_char(ch, "You need to have %d nuyen on hand to found your group.\r\n", COST_TO_FOUND_GROUP);
+    return;
+  }
+  
+  int member_count = GET_PGROUP(ch)->sql_count_members();
+  if (member_count < NUM_MEMBERS_NEEDED_TO_FOUND) {
+    send_to_char(ch, "You need %d members to found your group, but you only have %d.\r\n",
+                 NUM_MEMBERS_NEEDED_TO_FOUND, member_count);
+    return;
+  }
+  
+  // TODO: Should this be done in a specific place or in the presence of a specific NPC for RP reasons?
+  
+  send_to_char(ch, "You pay %d nuyen to found '%s'.\r\n", COST_TO_FOUND_GROUP, GET_PGROUP(ch)->get_name());
+  GET_NUYEN(ch) -= COST_TO_FOUND_GROUP;
+  playerDB.SaveChar(ch);
+  
+  GET_PGROUP(ch)->set_founded(TRUE);
+  GET_PGROUP(ch)->save_pgroup_to_db();
 }
 
 void do_pgroup_grant(struct char_data *ch, char *argument) {
@@ -369,8 +464,6 @@ void do_pgroup_promote(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_resign(struct char_data *ch, char *argument) {
-  skip_spaces(&argument);
-  
   if (!*argument || str_cmp(argument, "confirm") != 0) {
     send_to_char(ch, "If you're sure you want to resign from '%s', type PGROUP RESIGN CONFIRM.\r\n",
                  GET_PGROUP(ch)->get_name());
@@ -417,11 +510,26 @@ void display_pgroup_help(struct char_data *ch) {
     return;
   }
   
+  // If their group is disabled, the only commands available for consideration are LOG, STATUS, RESIGN.
+  if (GET_PGROUP(ch)->is_disabled()) {
+    for (int cmd_index = 1; *(pgroup_commands[cmd_index].cmd) != '\n'; cmd_index++) {
+      if ((pgroup_commands[cmd_index].privilege_required == PRIV_NONE
+          || (GET_PGROUP_DATA(ch)->privileges.AreAnySet(pgroup_commands[cmd_index].privilege_required, PRIV_LEADER, ENDBIT)))
+          && (pgroup_commands[cmd_index].command_pointer == do_pgroup_logs
+              || pgroup_commands[cmd_index].command_pointer == do_pgroup_status
+              || pgroup_commands[cmd_index].command_pointer == do_pgroup_resign)) {
+        sprintf(ENDOF(buf), " %-11s%s", pgroup_commands[cmd_index].cmd, cmds_written++ % 5 == 4 ? "\r\n" : "");
+      }
+    }
+    sprintf(ENDOF(buf), "\r\n");
+    send_to_char(buf, ch);
+    return;
+  }
+  
   // Iterate over all commands other than create and show them the ones they have privileges for.
   for (int cmd_index = 1; *(pgroup_commands[cmd_index].cmd) != '\n'; cmd_index++) {
     if (pgroup_commands[cmd_index].privilege_required == PRIV_NONE
-        || (GET_PGROUP_DATA(ch)->privileges.AreAnySet(
-                                                      pgroup_commands[cmd_index].privilege_required, PRIV_LEADER, ENDBIT))) {
+        || (GET_PGROUP_DATA(ch)->privileges.AreAnySet(pgroup_commands[cmd_index].privilege_required, PRIV_LEADER, ENDBIT))) {
       sprintf(ENDOF(buf), " %-11s%s", pgroup_commands[cmd_index].cmd, cmds_written++ % 5 == 4 ? "\r\n" : "");
     }
   }
