@@ -10,6 +10,7 @@
 #include "list.h"
 #include "bitfield.h"
 #include "utils.h"
+#include "playergroup_classes.h"
 
 #define SPECIAL(name) \
    int (name)(struct char_data *ch, void *me, int cmd, char *argument)
@@ -656,13 +657,16 @@ struct char_data
   struct follow_type *followers;        /* List of chars followers       */
   struct char_data *master;             /* Who is char following?        */
   struct spell_data *spells;                     /* linked list of spells          */
+  
+  Pgroup_data *pgroup;                   /* Data concerning the player group this char is part of. */
+  Pgroup_invitation *pgroup_invitations; /* The list of open group invitations associated with this player. */
 
 
   char_data() :
       player_specials(NULL), in_veh(NULL), persona(NULL), squeue(NULL), sustained(NULL), ssust(NULL),
       carrying(NULL), desc(NULL), cyberware(NULL), bioware(NULL), next_in_room(NULL), next(NULL),
       next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL), next_watching(NULL), followers(NULL),
-      master(NULL), spells(NULL)
+      master(NULL), spells(NULL), pgroup(NULL), pgroup_invitations(NULL)
   {}
 };
 /* ====================================================================== */
@@ -752,6 +756,9 @@ struct descriptor_data
   struct veh_data *edit_veh;    /* vedit */
   struct host_data *edit_host;  /* hedit */
   struct matrix_icon *edit_icon; /* icedit */
+  
+  Playergroup *edit_pgroup; /* playergroups */
+  
   // this is for spell creation
 
   descriptor_data() :

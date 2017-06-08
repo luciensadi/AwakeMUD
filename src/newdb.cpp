@@ -33,6 +33,7 @@ static const char *const INDEX_FILENAME = "etc/pfiles/index";
 extern char *cleanup(char *dest, const char *src);
 extern MYSQL *mysql;
 extern void add_phone_to_list(struct obj_data *);
+extern Playergroup *loaded_playergroups;
 
 // ____________________________________________________________________________
 //
@@ -815,6 +816,59 @@ bool load_char(const char *name, char_data *ch, bool logon)
     }
     mysql_free_result(res);
   }
+  
+  // Load pgroup membership data.
+  sprintf(buf, "SELECT * FROM pfiles_playergroups WHERE idnum=%ld;", GET_IDNUM(ch));
+  mysql_wrapper(mysql, buf);
+  res = mysql_use_result(mysql);
+  if ((row = mysql_fetch_row(res))) {
+    long pgroup_idnum = atol(row[1]);
+    GET_PGROUP_DATA(ch) = new Pgroup_data();
+    GET_PGROUP_DATA(ch)->rank = atoi(row[2]);
+    GET_PGROUP_DATA(ch)->privileges.FromString(row[3]);
+    mysql_free_result(res);
+  
+    // TODO: Find the pgroup in the list. If it's not there, load it.
+    Playergroup *ptr = loaded_playergroups;
+    while (ptr) {
+      if (ptr->get_idnum() == pgroup_idnum)
+        break;
+      ptr = ptr->next_pgroup;
+    }
+    
+    if (ptr == NULL) {
+      // Load it from the DB and add it to the list.
+      log_vfprintf("Loading playergroup %ld.", pgroup_idnum);
+      ptr = new Playergroup(pgroup_idnum);
+      //*ptr->next_pgroup = loaded_playergroups;
+      //loaded_playergroups = *ptr;
+    } else {
+      log_vfprintf("Using loaded playergroup %ld.", pgroup_idnum);
+    }
+    
+    // Initialize character pgroup struct.
+    GET_PGROUP_DATA(ch)->pgroup = ptr;
+  } else {
+    mysql_free_result(res);
+  }
+  
+  // Load pgroup invitation data.
+  sprintf(buf, "SELECT * FROM `playergroup_invitations` WHERE `idnum`=%ld;", GET_IDNUM(ch));
+  mysql_wrapper(mysql, buf);
+  res = mysql_use_result(mysql);
+  Pgroup_invitation *pgi;
+  time_t expiration;
+  while ((row = mysql_fetch_row(res))) {
+    expiration = atol(row[2]);
+    if (!(Pgroup_invitation::is_expired(expiration))) {
+      pgi = new Pgroup_invitation(atol(row[1]), expiration);
+      pgi->next = ch->pgroup_invitations;
+      if (ch->pgroup_invitations)
+        ch->pgroup_invitations->prev = pgi;
+      ch->pgroup_invitations = pgi;
+    } // Expired ones are deleted when they interact with their invitations or quit.
+  }
+  mysql_free_result(res);
 
   STOP_WORKING(ch);
   AFF_FLAGS(ch).RemoveBits(AFF_MANNING, AFF_RIG, AFF_PILOT, AFF_BANISH, AFF_FEAR, AFF_STABILIZE, AFF_SPELLINVIS, AFF_SPELLIMPINVIS, AFF_DETOX, AFF_RESISTPAIN, AFF_TRACKING, AFF_TRACKED, AFF_PRONE, ENDBIT);
@@ -957,13 +1011,18 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
 
   if (player->in_veh && player->in_veh->owner == GET_IDNUM(player))
     inveh = player->in_veh->idnum;
+  
+  long pgroup_num = 0;
+  if (GET_PGROUP_DATA(player) && GET_PGROUP(player))
+    pgroup_num = GET_PGROUP(player)->get_idnum();
+  
   sprintf(buf, "UPDATE pfiles SET AffFlags='%s', PlrFlags='%s', PrfFlags='%s', Bod=%d, "\
                "Qui=%d, Str=%d, Cha=%d, Intel=%d, Wil=%d, EssenceTotal=%d, EssenceHole=%d, "\
                "BiowareIndex=%d, HighestIndex=%d, Pool_MaxHacking=%d, Pool_Body=%d, "\
                "Pool_Dodge=%d, Cash=%ld, Bank=%ld, Karma=%d, Rep=%d, Notor=%d, TKE=%d, "\
                "Dead=%d, Physical=%d, PhysicalLoss=%d, Mental=%d, MentalLoss=%d, "\
                "PermBodLoss=%d, WimpLevel=%d, Loadroom=%ld, LastRoom=%ld, LastD=%ld, Hunger=%d, Thirst=%d, Drunk=%d, "\
-               "ShotsFired='%d', ShotsTriggered='%d', "\
+               "ShotsFired='%d', ShotsTriggered='%d', pgroup='%ld', "\
                "Inveh=%ld WHERE idnum=%ld;",
                AFF_FLAGS(player).ToString(), PLR_FLAGS(player).ToString(), 
                PRF_FLAGS(player).ToString(), GET_REAL_BOD(player), GET_REAL_QUI(player),
@@ -976,7 +1035,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                GET_MENTAL(player), GET_MENTAL_LOSS(player), GET_PERM_BOD_LOSS(player), GET_WIMP_LEV(player),
                GET_LOADROOM(player), GET_LAST_IN(player), time(0), GET_COND(player, FULL), 
                GET_COND(player, THIRST), GET_COND(player, DRUNK),
-               SHOTS_FIRED(player), SHOTS_TRIGGERED(player), 
+               SHOTS_FIRED(player), SHOTS_TRIGGERED(player), pgroup_num,
                inveh, GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   for (temp = player->carrying; temp; temp = next_obj) {
@@ -1302,6 +1361,20 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
   if (GET_LEVEL(player) > 1) {
     sprintf(buf, "UPDATE pfiles_immortdata SET InvisLevel=%d, IncogLevel=%d, Zonenumber=%d WHERE idnum=%ld;",
                  GET_INVIS_LEV(player), GET_INCOG_LEV(player), player->player_specials->saved.zonenum, GET_IDNUM(player));
+    mysql_wrapper(mysql, buf);
+  }
+  
+  // Save pgroup membership data.
+  if (GET_PGROUP_DATA(player) && GET_PGROUP(player)) {
+    sprintf(buf, "INSERT INTO pfiles_playergroups (`idnum`, `group`, `Rank`, `Privileges`) VALUES ('%ld', '%ld', '%d', '%s')"
+                 " ON DUPLICATE KEY UPDATE"
+                 "   `group` = VALUES(`group`),"
+                 "   `Rank` = VALUES(`Rank`),"
+                 "   `Privileges` = VALUES(`Privileges`)",
+                 GET_IDNUM(player),
+                 GET_PGROUP(player)->get_idnum(),
+                 GET_PGROUP_DATA(player)->rank,
+                 GET_PGROUP_DATA(player)->privileges.ToString());
     mysql_wrapper(mysql, buf);
   }
 
