@@ -3945,7 +3945,7 @@ ACMD(do_logwatch)
   one_argument(argument, buf);
 
   if (!*buf) {
-    sprintf(buf, "You are currently watching the following:\r\n%s%s%s%s%s%s%s%s%s%s",
+    sprintf(buf, "You are currently watching the following:\r\n%s%s%s%s%s%s%s%s%s%s%s",
             (PRF_FLAGGED(ch, PRF_CONNLOG) ? "  ConnLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_DEATHLOG) ? "  DeathLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_MISCLOG) ? "  MiscLog\r\n" : ""),
@@ -3955,7 +3955,8 @@ ACMD(do_logwatch)
             (PRF_FLAGGED(ch, PRF_CHEATLOG) ? "  CheatLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_BANLOG) ? "  BanLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_GRIDLOG) ? "  GridLog\r\n" : ""),
-            (PRF_FLAGGED(ch, PRF_WRECKLOG) ? "  WreckLog\r\n" : ""));
+            (PRF_FLAGGED(ch, PRF_WRECKLOG) ? "  WreckLog\r\n" : ""),
+            (PRF_FLAGGED(ch, PRF_PGROUPLOG) ? "  PGroupLog\r\n" : ""));
 
     send_to_char(buf, ch);
     return;
@@ -3989,33 +3990,41 @@ ACMD(do_logwatch)
     if (PRF_FLAGGED(ch, PRF_WIZLOG)) {
       send_to_char("You no longer watch the WizLog.\r\n", ch);
       PRF_FLAGS(ch).RemoveBit(PRF_WIZLOG);
-    } else {
+    } else if (access_level(ch, LVL_VICEPRES)) {
       send_to_char("You will now see the WizLog.\r\n", ch);
       PRF_FLAGS(ch).SetBit(PRF_WIZLOG);
+    } else {
+      send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
     }
   } else if (is_abbrev(buf, "syslog") && access_level(ch, LVL_ADMIN)) {
     if (PRF_FLAGGED(ch, PRF_SYSLOG)) {
       send_to_char("You no longer watch the SysLog.\r\n", ch);
       PRF_FLAGS(ch).RemoveBit(PRF_SYSLOG);
-    } else {
+    } else if (access_level(ch, LVL_ADMIN)) {
       send_to_char("You will now see the SysLog.\r\n", ch);
       PRF_FLAGS(ch).SetBit(PRF_SYSLOG);
+    } else {
+      send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
     }
   } else if (is_abbrev(buf, "zonelog") && access_level(ch, LVL_ADMIN)) {
     if (PRF_FLAGGED(ch, PRF_ZONELOG)) {
       send_to_char("You no longer watch the ZoneLog.\r\n", ch);
       PRF_FLAGS(ch).RemoveBit(PRF_ZONELOG);
-    } else {
+    } else if (access_level(ch, LVL_ADMIN)) {
       send_to_char("You will now see the ZoneLog.\r\n", ch);
       PRF_FLAGS(ch).SetBit(PRF_ZONELOG);
+    } else {
+      send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
     }
   } else if (is_abbrev(buf, "cheatlog") && access_level(ch, LVL_VICEPRES)) {
     if (PRF_FLAGGED(ch, PRF_CHEATLOG)) {
       send_to_char("You no longer watch the CheatLog.\r\n", ch);
       PRF_FLAGS(ch).RemoveBit(PRF_CHEATLOG);
-    } else {
+    } else if (access_level(ch, LVL_VICEPRES)) {
       send_to_char("You will now see the CheatLog.\r\n", ch);
       PRF_FLAGS(ch).SetBit(PRF_CHEATLOG);
+    } else {
+      send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
     }
   } else if (is_abbrev(buf, "banlog")) {
     if (PRF_FLAGGED(ch, PRF_BANLOG)) {
@@ -4029,31 +4038,45 @@ ACMD(do_logwatch)
     if (PRF_FLAGGED(ch, PRF_GRIDLOG)) {
       send_to_char("You no longer watch the GridLog.\r\n", ch);
       PRF_FLAGS(ch).RemoveBit(PRF_GRIDLOG);
-    } else {
+    } else if (access_level(ch, LVL_FIXER)) {
       send_to_char("You will now see the GridLog.\r\n", ch);
       PRF_FLAGS(ch).SetBit(PRF_GRIDLOG);
+    } else {
+      send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
     }
   } else if (is_abbrev(buf, "wrecklog")) {
     if (PRF_FLAGGED(ch, PRF_WRECKLOG)) {
       send_to_char("You no longer watch the WreckLog.\r\n", ch);
       PRF_FLAGS(ch).RemoveBit(PRF_WRECKLOG);
-    } else {
+    } else if (access_level(ch, LVL_FIXER)) {
       send_to_char("You will now see the WreckLog.\r\n", ch);
       PRF_FLAGS(ch).SetBit(PRF_WRECKLOG);
+    } else {
+      send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
+    }
+  } else if (is_abbrev(buf, "pgrouplog")) {
+    if (PRF_FLAGGED(ch, PRF_PGROUPLOG)) {
+      send_to_char("You no longer watch the PGroupLog.\r\n", ch);
+      PRF_FLAGS(ch).RemoveBit(PRF_PGROUPLOG);
+    } else if (access_level(ch, LVL_VICEPRES)) {
+      send_to_char("You will now see the PGroupLog.\r\n", ch);
+      PRF_FLAGS(ch).SetBit(PRF_PGROUPLOG);
+    } else {
+      send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
     }
   } else if (is_abbrev(buf, "all")) {
-    if (!PRF_FLAGGED(ch, PRF_GRIDLOG))
-      PRF_FLAGS(ch).SetBit(PRF_CONNLOG);
     if (!PRF_FLAGGED(ch, PRF_CONNLOG))
       PRF_FLAGS(ch).SetBit(PRF_CONNLOG);
+    if (!PRF_FLAGGED(ch, PRF_DEATHLOG))
+      PRF_FLAGS(ch).SetBit(PRF_DEATHLOG);
+    if (!PRF_FLAGGED(ch, PRF_MISCLOG))
+      PRF_FLAGS(ch).SetBit(PRF_MISCLOG);
     if (!PRF_FLAGGED(ch, PRF_BANLOG))
       PRF_FLAGS(ch).SetBit(PRF_BANLOG);
     if (!PRF_FLAGGED(ch, PRF_GRIDLOG) && access_level(ch, LVL_FIXER))
       PRF_FLAGS(ch).SetBit(PRF_GRIDLOG);
     if (!PRF_FLAGGED(ch, PRF_WRECKLOG) && access_level(ch, LVL_FIXER))
       PRF_FLAGS(ch).SetBit(PRF_WRECKLOG);
-    if (!PRF_FLAGGED(ch, PRF_MISCLOG) && access_level(ch, LVL_VICEPRES))
-      PRF_FLAGS(ch).SetBit(PRF_MISCLOG);
     if (!PRF_FLAGGED(ch, PRF_WIZLOG) && access_level(ch, LVL_VICEPRES))
       PRF_FLAGS(ch).SetBit(PRF_WIZLOG);
     if (!PRF_FLAGGED(ch, PRF_SYSLOG) && access_level(ch, LVL_ADMIN))
@@ -4062,10 +4085,13 @@ ACMD(do_logwatch)
       PRF_FLAGS(ch).SetBit(PRF_ZONELOG);
     if (!PRF_FLAGGED(ch, PRF_CHEATLOG) && access_level(ch, LVL_VICEPRES))
       PRF_FLAGS(ch).SetBit(PRF_CHEATLOG);
+    if (!PRF_FLAGGED(ch, PRF_PGROUPLOG) && access_level(ch, LVL_VICEPRES))
+      PRF_FLAGS(ch).SetBit(PRF_PGROUPLOG);
     send_to_char("All available logs have been activated.\r\n", ch);
   } else if (is_abbrev(buf, "none")) {
     PRF_FLAGS(ch).RemoveBits(PRF_CONNLOG, PRF_DEATHLOG, PRF_MISCLOG, PRF_WIZLOG,
-                             PRF_SYSLOG, PRF_ZONELOG, PRF_CHEATLOG, PRF_BANLOG, PRF_GRIDLOG, ENDBIT);
+                             PRF_SYSLOG, PRF_ZONELOG, PRF_CHEATLOG, PRF_BANLOG, PRF_GRIDLOG,
+                             PRF_WRECKLOG, PRF_PGROUPLOG, ENDBIT);
     send_to_char("All logs have been disabled.\r\n", ch);
   } else
     send_to_char("Watch what log?\r\n", ch);

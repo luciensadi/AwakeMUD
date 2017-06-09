@@ -1007,6 +1007,7 @@ const char *log_types[] =
     "BANLOG",
     "GRIDLOG",
     "WRECKLOG",
+    "PGROUPLOG",
     "\n"
   };
 

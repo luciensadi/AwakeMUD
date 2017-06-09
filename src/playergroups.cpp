@@ -305,6 +305,7 @@ ACMD(do_pgroup) {
 }
 
 void do_pgroup_abdicate(struct char_data *ch, char *argument) {
+  // TODO: Log.
   send_to_char("", ch);
 }
 
@@ -313,14 +314,18 @@ void do_pgroup_balance(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_buy(struct char_data *ch, char *argument) {
+  // TODO: Log.
   send_to_char("", ch);
 }
 
 void do_pgroup_contest(struct char_data *ch, char *argument) {
+  // TODO: Log.
   send_to_char("", ch);
 }
 
 void do_pgroup_create(struct char_data *ch, char *argument) {
+  // TODO: Log.
+  
   // If the player is already in a group, they can't create a new one.
   if (GET_PGROUP_DATA(ch)) {
     send_to_char("You are already part of a playergroup. You'll need to leave it first.\r\n", ch);
@@ -344,14 +349,17 @@ void do_pgroup_create(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_deposit(struct char_data *ch, char *argument) {
+  // TODO: Log.
   send_to_char("deposit", ch);
 }
 
 void do_pgroup_design(struct char_data *ch, char *argument) {
+  // TODO: Log.
   send_to_char("design", ch);
 }
 
 void do_pgroup_disband(struct char_data *ch, char *argument) {
+  // TODO: Log.
   if (!*argument || str_cmp(argument, "confirm") != 0) {
     send_to_char(ch, "If you're sure you want to disband '%s', type PGROUP DISBAND CONFIRM.\r\n",
                  GET_PGROUP(ch)->get_name());
@@ -394,6 +402,7 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_edit(struct char_data *ch, char *argument) {
+  // TODO: Log.
   // Create a clone from the player's current group.
   ch->desc->edit_pgroup = new Playergroup(GET_PGROUP(ch));
   
@@ -405,6 +414,7 @@ void do_pgroup_edit(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_found(struct char_data *ch, char *argument) {
+  // TODO: Log.
   if (GET_PGROUP(ch)->is_founded()) {
     send_to_char("Your group has already been founded.\r\n", ch);
     return;
@@ -433,6 +443,7 @@ void do_pgroup_found(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_grant(struct char_data *ch, char *argument) {
+  // TODO: Log.
   send_to_char("grant", ch);
 }
 
@@ -441,14 +452,17 @@ void do_pgroup_help(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_invitations(struct char_data *ch, char *argument) {
+  // TODO: Log. (but only on revoke)
   send_to_char("invitations", ch);
 }
 
 void do_pgroup_invite(struct char_data *ch, char *argument) {
+  // TODO: Log.
   GET_PGROUP(ch)->invite(ch, argument);
 }
 
 void do_pgroup_lease(struct char_data *ch, char *argument) {
+  // TODO: Log.
   send_to_char("lease", ch);
 }
 
@@ -457,18 +471,33 @@ void do_pgroup_logs(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_note(struct char_data *ch, char *argument) {
-  send_to_char("notes", ch);
+  // TODO: Log.
+  if (!*argument) {
+    send_to_char("You must specify something to notate in the logs.\r\n", ch);
+    return;
+  }
+  
+  if (strlen(argument) > MAX_PGROUP_LOG_LENGTH) {
+    send_to_char(ch, "Sorry, log entries can only be %d characters long.", MAX_PGROUP_LOG_LENGTH);
+    return;
+  }
+  
+  GET_PGROUP(ch)->audit_log_vfprintf("Note from %s: %s", GET_NAME(ch), argument);
+  send_to_char("OK.\r\n", ch);
 }
 
 void do_pgroup_outcast(struct char_data *ch, char *argument) {
+  // TODO: Log.
   send_to_char("outcast", ch);
 }
 
 void do_pgroup_promote(struct char_data *ch, char *argument) {
+  // TODO: Log.
   send_to_char("promote", ch);
 }
 
 void do_pgroup_resign(struct char_data *ch, char *argument) {
+  // TODO: Log.
   if (!*argument || str_cmp(argument, "confirm") != 0) {
     send_to_char(ch, "If you're sure you want to resign from '%s', type PGROUP RESIGN CONFIRM.\r\n",
                  GET_PGROUP(ch)->get_name());
@@ -479,6 +508,7 @@ void do_pgroup_resign(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_revoke(struct char_data *ch, char *argument) {
+  // TODO: Log.
   send_to_char("revoke", ch);
 }
 
@@ -491,6 +521,7 @@ void do_pgroup_status(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_transfer(struct char_data *ch, char *argument) {
+  // TODO: Log.
   send_to_char("transfer", ch);
 }
 
@@ -499,6 +530,7 @@ void do_pgroup_vote(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_withdraw(struct char_data *ch, char *argument) {
+  // TODO: Log.
   send_to_char("withdraw", ch);
 }
 

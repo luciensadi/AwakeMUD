@@ -2,6 +2,7 @@
 DROP TABLE IF EXISTS `pfiles_playergroups`;
 DROP TABLE IF EXISTS `playergroups`;
 DROP TABLE IF EXISTS `playergroup_invitations`;
+DROP TABLE IF EXISTS `pgroup_logs`;
 CREATE TABLE `playergroups` (
   `idnum` mediumint(5) unsigned unique default '0',
   `Name` varchar(80) default 'An Unimaginative Player Group',
@@ -27,6 +28,13 @@ CREATE TABLE `playergroup_invitations` (
   `Expiration` bigint(32) default '0',
   KEY (`idnum`),
   KEY (`Group`)
+);
+
+CREATE TABLE `pgroup_logs` (
+  `idnum` mediumint(5) unsigned default '0',
+  `message` varchar(1000) NOT NULL,
+  `date` timestamp,
+  KEY (`idnum`)
 );
 
 ALTER TABLE `pfiles` ADD `pgroup` mediumint(5) unsigned default '0';

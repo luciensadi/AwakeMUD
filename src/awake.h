@@ -319,25 +319,25 @@ enum {
 
 /* preference flags: used by char_data.player_specials.pref */
 
-#define PRF_PACIFY               0
+#define PRF_PACIFY              0
 #define PRF_COMPACT             1 
-#define PRF_AUTOEXIT         2  /* Display exits in a room       */
-#define PRF_FIGHTGAG         3  /* Gag extra fight messages  */
+#define PRF_AUTOEXIT            2  /* Display exits in a room       */
+#define PRF_FIGHTGAG            3  /* Gag extra fight messages  */
 #define PRF_MOVEGAG             4  /* Gag extra movement messages    */
 #define PRF_DEAF                5  /* Can't hear shouts     */
 #define PRF_NOTELL              6  /* Can't receive tells     */
 #define PRF_NORADIO             7  /* Can't hear radio frequencies     */
-#define PRF_NONEWBIE         8  /* Can't hear newbie channel    */
-#define PRF_NOREPEAT         9  /* No repetition of comm commands  */
-#define PRF_HARDCORE		10
+#define PRF_NONEWBIE            8  /* Can't hear newbie channel    */
+#define PRF_NOREPEAT            9  /* No repetition of comm commands  */
+#define PRF_HARDCORE	        	10
 #define PRF_PKER                11 /* is able to pk/be pked        */
 #define PRF_QUEST               12 /* On quest        */
-#define PRF_AFK              13 /* Afk   */
-#define PRF_NOHASSLE         16 /* Aggr mobs won't attack  */
-#define PRF_ROOMFLAGS        17 /* Can see room flags (ROOM_x) */
-#define PRF_HOLYLIGHT        18 /* Can see in dark   */
+#define PRF_AFK                 13 /* Afk   */
+#define PRF_NOHASSLE            16 /* Aggr mobs won't attack  */
+#define PRF_ROOMFLAGS           17 /* Can see room flags (ROOM_x) */
+#define PRF_HOLYLIGHT           18 /* Can see in dark   */
 #define PRF_CONNLOG             19 /* Views ConnLog      */
-#define PRF_DEATHLOG         20 /* Views DeathLog        */
+#define PRF_DEATHLOG            20 /* Views DeathLog        */
 #define PRF_MISCLOG             21 /* Views MiscLog          */
 #define PRF_WIZLOG              22 /* Views WizLog          */
 #define PRF_SYSLOG              23 /* Views SysLog         */
@@ -345,19 +345,20 @@ enum {
 #define PRF_LONGEXITS           25
 #define PRF_ROLLS               26 /* sees details on rolls        */
 #define PRF_NOOOC               27 /* can't hear ooc channel      */
-#define PRF_AUTOINVIS         28 /* to toggle auto-invis for immortals    */
+#define PRF_AUTOINVIS           28 /* to toggle auto-invis for immortals    */
 #define PRF_CHEATLOG            29 /* Views CheatLog         */
-#define PRF_ASSIST  30 /* auto assist */
+#define PRF_ASSIST              30 /* auto assist */
 #define PRF_BANLOG              31
-#define PRF_NORPE  32
-#define PRF_NOHIRED 33
-#define PRF_GRIDLOG 34
-#define PRF_WRECKLOG 35
-#define PRF_QUESTOR 36
-#define PRF_NEWBIEHELPER	37
-#define PRF_MENUGAG		38
-#define PRF_LONGWEAPON		39
-#define PRF_MAX   		40
+#define PRF_NORPE               32
+#define PRF_NOHIRED             33
+#define PRF_GRIDLOG             34
+#define PRF_WRECKLOG            35
+#define PRF_QUESTOR             36
+#define PRF_NEWBIEHELPER	      37
+#define PRF_MENUGAG		          38
+#define PRF_LONGWEAPON	      	39
+#define PRF_PGROUPLOG           40
+#define PRF_MAX   		          41
 
 /* log watch */
 
@@ -370,8 +371,9 @@ enum {
 #define LOG_CHEATLOG       6
 #define LOG_WIZITEMLOG     7
 #define LOG_BANLOG    	   8
-#define LOG_GRIDLOG	   9
-#define LOG_WRECKLOG	   10
+#define LOG_GRIDLOG	       9
+#define LOG_WRECKLOG	     10
+#define LOG_PGROUPLOG      11
 
 /* player conditions */
 

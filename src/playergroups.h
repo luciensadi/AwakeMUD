@@ -46,9 +46,10 @@
 
 // Maximums.
 #define MAX_PGROUP_RANK             10
-#define MAX_PGROUP_NAME_LENGTH      80 // If you change this, update your SQL tables too.
-#define MAX_PGROUP_ALIAS_LENGTH     20 // If you change this, update your SQL tables too.
-#define MAX_PGROUP_TAG_LENGTH       30 // If you change this, update your SQL tables too.
+#define MAX_PGROUP_NAME_LENGTH      80  // If you change this, update your SQL tables too.
+#define MAX_PGROUP_ALIAS_LENGTH     20  // If you change this, update your SQL tables too.
+#define MAX_PGROUP_TAG_LENGTH       30  // If you change this, update your SQL tables too.
+#define MAX_PGROUP_LOG_LENGTH       256 // If you change this, update your SQL tables too.
 
 // Function prototypes.
 long get_new_pgroup_idnum();

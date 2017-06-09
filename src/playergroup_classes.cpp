@@ -190,8 +190,15 @@ void Playergroup::raw_set_alias(const char *newalias) {
 
 /************* Misc Methods *************/
 void Playergroup::audit_log(const char *msg) {
-  // Stub. TODO
-  mudlog(msg, NULL, LOG_MISCLOG, TRUE);
+  char query_buf[MAX_STRING_LENGTH];
+  char quoted_msg[strlen(msg) * 2 + 1];
+  prepare_quotes(quoted_msg, msg);
+  
+  const char *query_fmt = "INSERT INTO pgroup_logs (`idnum`, `message`, `date`) VALUES ('%ld', '%s', NOW())";
+  sprintf(query_buf, query_fmt, get_idnum(), quoted_msg);
+  mysql_wrapper(mysql, query_buf);
+  
+  mudlog(msg, NULL, LOG_PGROUPLOG, TRUE);
 }
 
 char playergroup_log_buf[MAX_STRING_LENGTH];
@@ -210,7 +217,7 @@ void Playergroup::audit_log_vfprintf(const char *format, ...)
   va_end(args);
   
   //sprintf(playergroup_log_buf, "\r\n");
-  mudlog(playergroup_log_buf, NULL, LOG_MISCLOG, TRUE);
+  audit_log(playergroup_log_buf);
 }
 
 // Saves the playergroup to the database.
