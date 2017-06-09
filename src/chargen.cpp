@@ -14,6 +14,7 @@
 #include "newmagic.h"
 #include "awake.h"
 #include "constants.h"
+#include "config.h"
 
 #define CH d->character
 
@@ -543,8 +544,10 @@ void init_char_sql(struct char_data *ch)
   mysql_wrapper(mysql, buf);
   if (GET_LEVEL(ch) > 0) {
     sprintf(buf, "INSERT INTO pfiles_immortdata (idnum, InvisLevel, IncogLevel, Zonenumber, Poofin, Poofout) VALUES ("\
-                 "%ld, %d, %d, %d, '%s', '%s');", GET_IDNUM(ch), GET_INVIS_LEV(ch), GET_INCOG_LEV(ch), ch->player_specials->saved.zonenum,
-                 POOFIN(ch), POOFOUT(ch));
+                 "%ld, %d, %d, %d, '%s', '%s');",
+                 GET_IDNUM(ch), GET_INVIS_LEV(ch), GET_INCOG_LEV(ch), ch->player_specials->saved.zonenum,
+                (POOFIN(ch) ? POOFIN(ch) : DEFAULT_POOFIN_STRING),
+                (POOFOUT(ch) ? POOFOUT(ch) : DEFAULT_POOFOUT_STRING));
     mysql_wrapper(mysql, buf);
   }
 }

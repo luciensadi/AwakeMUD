@@ -2296,6 +2296,11 @@ ACMD(do_poofset)
   skip_spaces(&argument);
 
   if (!*argument) {
+    if (!POOFIN(ch))
+      POOFIN(ch) = str_dup(DEFAULT_POOFIN_STRING);
+    if (!POOFOUT(ch))
+      POOFOUT(ch) = str_dup(DEFAULT_POOFOUT_STRING);
+  
     if (subcmd == SCMD_POOFIN)
       sprintf(buf, "Your current poofin is: ^m%s^n\r\n", POOFIN(ch));
     else
