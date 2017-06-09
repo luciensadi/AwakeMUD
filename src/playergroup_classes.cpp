@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <mysql/mysql.h>
+#include <stdarg.h>
 
 #include "awake.h"
 #include "structs.h"
