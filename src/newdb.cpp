@@ -459,8 +459,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
       ch->player_specials->saved.invis_level = atoi(row[1]);
       ch->player_specials->saved.incog_level = atoi(row[2]);
       ch->player_specials->saved.zonenum = atoi(row[3]);
-      POOFIN(ch) = str_dup((*row[4] == '\0' ? DEFAULT_POOFIN_STRING : row[4]));
-      POOFOUT(ch) = str_dup((*row[5] == '\0' ? DEFAULT_POOFOUT_STRING : row[5]));
+      POOFIN(ch) = str_dup((strcmp(row[4], "(null)") == 0 ? DEFAULT_POOFIN_STRING : row[4]));
+      POOFOUT(ch) = str_dup((strcmp(row[5], "(null)") == 0 ? DEFAULT_POOFOUT_STRING : row[5]));
     }
   } else {
     sprintf(buf, "SELECT * FROM pfiles_drugs WHERE idnum=%ld;", GET_IDNUM(ch));
