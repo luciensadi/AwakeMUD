@@ -251,46 +251,51 @@ ACMD(do_pgroup) {
     return;
   }
   
-  // Precondition: If the command is not 'create', you must be part of a group.
-  if (pgroup_commands[cmd_index].command_pointer != do_pgroup_create && !GET_PGROUP_DATA(ch)) {
-    send_to_char("You need to be a member of a playergroup to do that.\r\n", ch);
-    return;
-  }
-  
-  // Precondition: Your data structures must be correctly initialized.
-  if (GET_PGROUP_DATA(ch) && !GET_PGROUP(ch)) {
-    sprintf(buf, "SYSERR: Somehow, %s (%ld) is part of an invalid group.",
-            GET_CHAR_NAME(ch), GET_IDNUM(ch));
-    mudlog(buf, ch, LOG_MISCLOG, TRUE);
-    log(buf);
-    send_to_char("We're sorry, but your character is currently bugged. Please log out and back in.\r\n"
-                 "If that doesn't fix the problem, please reach out to the staff for help.\r\n", ch);
-    return;
-  }
-  
-  // Precondition: If your group is disabled, the only commands you can use are LOGS, STATUS, and RESIGN.
-  if (GET_PGROUP(ch)->is_disabled()) {
-    if (pgroup_commands[cmd_index].command_pointer != do_pgroup_status
-        && pgroup_commands[cmd_index].command_pointer != do_pgroup_resign
-        && pgroup_commands[cmd_index].command_pointer != do_pgroup_logs) {
-      send_to_char("You can't perform that action after your group has been disbanded.\r\n", ch);
-      display_pgroup_help(ch);
+  // Is a member of a group.
+  if (GET_PGROUP_DATA(ch)) {
+    // Precondition: Your data structures must be correctly initialized.
+    if (!GET_PGROUP(ch)) {
+      sprintf(buf, "SYSERR: Somehow, %s (%ld) is part of an invalid group.",
+              GET_CHAR_NAME(ch), GET_IDNUM(ch));
+      mudlog(buf, ch, LOG_MISCLOG, TRUE);
+      log(buf);
+      send_to_char("We're sorry, but your character is currently bugged. Please log out and back in.\r\n"
+                   "If that doesn't fix the problem, please reach out to the staff for help.\r\n", ch);
       return;
+    }
+    
+    // Precondition: If your group is disabled, the only commands you can use are LOGS, STATUS, and RESIGN.
+    if (GET_PGROUP(ch)->is_disabled()) {
+      if (pgroup_commands[cmd_index].command_pointer != do_pgroup_status
+          && pgroup_commands[cmd_index].command_pointer != do_pgroup_resign
+          && pgroup_commands[cmd_index].command_pointer != do_pgroup_logs) {
+        send_to_char("You can't perform that action after your group has been disbanded.\r\n", ch);
+        display_pgroup_help(ch);
+        return;
+      }
+    }
+    
+    // Precondition: If the command requires a kosherized group, you must be part of one.
+    if (!pgroup_commands[cmd_index].valid_while_group_not_founded && (!GET_PGROUP(ch)->is_founded())) {
+      send_to_char("You need to be a member of a fully-fledged playergroup to do that.\r\n", ch);
+      return;
+    }
+    
+    // Precondition: You must have the appropriate privilege to perform this command.
+    if (pgroup_commands[cmd_index].privilege_required != PRIV_NONE) {
+      if (!(GET_PGROUP_DATA(ch)->privileges.AreAnySet(pgroup_commands[cmd_index].privilege_required, PRIV_LEADER, ENDBIT))) {
+        send_to_char(ch, "You must be a %s within your group to do that.\r\n",
+                     pgroup_privileges[pgroup_commands[cmd_index].privilege_required]);
+        return;
+      }
     }
   }
   
-  // Precondition: If the command requires a kosherized group, you must be part of one.
-  if (!pgroup_commands[cmd_index].valid_while_group_not_founded
-      && (!GET_PGROUP_DATA(ch) || !GET_PGROUP(ch)->is_founded())) {
-    send_to_char("You need to be a member of a fully-fledged playergroup to do that.\r\n", ch);
-    return;
-  }
-  
-  // Precondition: You must have the appropriate privilege to perform this command.
-  if (pgroup_commands[cmd_index].privilege_required != PRIV_NONE) {
-    if (!(GET_PGROUP_DATA(ch)->privileges.AreAnySet(pgroup_commands[cmd_index].privilege_required, PRIV_LEADER, ENDBIT))) {
-      send_to_char(ch, "You must be a %s within your group to do that.\r\n",
-              pgroup_privileges[pgroup_commands[cmd_index].privilege_required]);
+  // Not a member of a group.
+  else {
+    // Precondition: If you are not part of a group, the only command you can use is CREATE.
+    if (pgroup_commands[cmd_index].command_pointer != do_pgroup_create) {
+      send_to_char("You need to be a member of a playergroup to do that.\r\n", ch);
       return;
     }
   }
@@ -404,7 +409,7 @@ void do_pgroup_found(struct char_data *ch, char *argument) {
     send_to_char("Your group has already been founded.\r\n", ch);
     return;
   }
-
+  
   if (GET_NUYEN(ch) < COST_TO_FOUND_GROUP) {
     send_to_char(ch, "You need to have %d nuyen on hand to found your group.\r\n", COST_TO_FOUND_GROUP);
     return;
@@ -514,12 +519,12 @@ void display_pgroup_help(struct char_data *ch) {
   if (GET_PGROUP(ch)->is_disabled()) {
     for (int cmd_index = 1; *(pgroup_commands[cmd_index].cmd) != '\n'; cmd_index++) {
       if ((pgroup_commands[cmd_index].privilege_required == PRIV_NONE
-          || (GET_PGROUP_DATA(ch)->privileges.AreAnySet(pgroup_commands[cmd_index].privilege_required, PRIV_LEADER, ENDBIT)))
+           || (GET_PGROUP_DATA(ch)->privileges.AreAnySet(pgroup_commands[cmd_index].privilege_required, PRIV_LEADER, ENDBIT)))
           && (pgroup_commands[cmd_index].command_pointer == do_pgroup_logs
               || pgroup_commands[cmd_index].command_pointer == do_pgroup_status
               || pgroup_commands[cmd_index].command_pointer == do_pgroup_resign)) {
-        sprintf(ENDOF(buf), " %-11s%s", pgroup_commands[cmd_index].cmd, cmds_written++ % 5 == 4 ? "\r\n" : "");
-      }
+            sprintf(ENDOF(buf), " %-11s%s", pgroup_commands[cmd_index].cmd, cmds_written++ % 5 == 4 ? "\r\n" : "");
+          }
     }
     sprintf(ENDOF(buf), "\r\n");
     send_to_char(buf, ch);

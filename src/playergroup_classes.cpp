@@ -396,6 +396,8 @@ void Playergroup::remove_member(struct char_data *ch) {
     return;
   }
   
+  // TODO: DB updates.
+  
   delete GET_PGROUP_DATA(ch);
   GET_PGROUP_DATA(ch) = NULL;
   
