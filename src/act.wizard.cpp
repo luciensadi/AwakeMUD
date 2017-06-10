@@ -3751,7 +3751,7 @@ ACMD(do_set)
       return;
     }
 
-    RANGE(0, LVL_MAX);
+    RANGE(1, LVL_MAX);
     vict->player.level = (byte) value;
     break;
   case 31:
