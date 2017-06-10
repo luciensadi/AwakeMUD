@@ -89,7 +89,8 @@ ACMD(do_quit)
     
     if (ROOM_FLAGGED(save_room, ROOM_HOUSE) && House_can_enter(ch, world[save_room].number)) {
       GET_LOADROOM(ch) = world[save_room].number;
-      playerDB.SaveChar(ch, GET_LOADROOM(ch));
+      // Saving occurs in extract_char.
+      // playerDB.SaveChar(ch, GET_LOADROOM(ch));
     } else {
       ch->in_room = save_room;
       if (!GET_LOADROOM(ch)) {
