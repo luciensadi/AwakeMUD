@@ -70,26 +70,6 @@ ACMD(do_quit)
   if (IS_NPC(ch) || !ch->desc)
     return;
 
-  GET_LAST_IN(ch) = ch->in_room;
-  int save_room = ch->in_room;
-  if (GET_QUEST(ch))
-    end_quest(ch);
-
-  if (ROOM_FLAGGED(save_room, ROOM_HOUSE) && House_can_enter(ch, world[save_room].number)) {
-    GET_LOADROOM(ch) = world[save_room].number;
-    playerDB.SaveChar(ch, GET_LOADROOM(ch));
-  } else {
-    ch->in_room = save_room;
-    if (!GET_LOADROOM(ch)) {
-      if (PLR_FLAGGED(ch, PLR_NEWBIE))
-        GET_LOADROOM(ch) = 8039;
-      else
-        GET_LOADROOM(ch) = 30700;
-    }
-
-    playerDB.SaveChar(ch, GET_LOADROOM(ch));
-  }
-
   if (GET_POS(ch) == POS_FIGHTING)
     send_to_char("No way!  You're fighting for your life!\r\n", ch);
   else if (ROOM_FLAGGED(ch->in_room, ROOM_NOQUIT))
@@ -102,6 +82,27 @@ ACMD(do_quit)
     send_to_char("You're unconscious!  You can't leave now!\r\n", ch);
     return;
   } else {
+    GET_LAST_IN(ch) = ch->in_room;
+    int save_room = ch->in_room;
+    if (GET_QUEST(ch))
+      end_quest(ch);
+    
+    if (ROOM_FLAGGED(save_room, ROOM_HOUSE) && House_can_enter(ch, world[save_room].number)) {
+      GET_LOADROOM(ch) = world[save_room].number;
+      playerDB.SaveChar(ch, GET_LOADROOM(ch));
+    } else {
+      ch->in_room = save_room;
+      if (!GET_LOADROOM(ch)) {
+        if (PLR_FLAGGED(ch, PLR_NEWBIE))
+          GET_LOADROOM(ch) = 8039;
+        else
+          GET_LOADROOM(ch) = 30700;
+      }
+      
+      // Saving occurs in extract_char.
+      // playerDB.SaveChar(ch, GET_LOADROOM(ch));
+    }
+    
     /*
      * Get the last room they were in, in case they try to come in before the time
      * limit is up.

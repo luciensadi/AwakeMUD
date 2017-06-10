@@ -3288,7 +3288,14 @@ ACMD(do_show)
 
 #define RANGE(low, high) (value = MAX((low), MIN((high), (value))))
 
-#define SET_CLEANUP(save) \
+#define SET_CLEANUP(save)                        \
+if ((save) && !IS_NPC(vict)) {                   \
+  if (is_file) {                                 \
+    extract_char(vict);                          \
+  } else {                                       \
+    playerDB.SaveChar(vict, GET_LOADROOM(vict)); \
+  }                                              \
+}
 
 ACMD(do_vset)
 {
@@ -3940,8 +3947,6 @@ ACMD(do_set)
   if (is_file) {
     SET_CLEANUP(true);
     send_to_char("Saved in file.\r\n", ch);
-  } else if (!IS_NPC(vict)) {
-    playerDB.SaveChar(vict, GET_LOADROOM(vict));
   }
 }
 
