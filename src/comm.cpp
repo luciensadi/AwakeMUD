@@ -320,11 +320,18 @@ void copyover_recover()
       else
         load_room = real_room(GET_LOADROOM(d->character));
       char_to_room(d->character, load_room);
-      look_at_room(d->character, 0);
+      //look_at_room(d->character, 0);
     }
   }
   fclose (fp);
   
+  // Force all player characters to look now that everyone's properly loaded.
+  struct char_data *plr = character_list;
+  while (plr) {
+    if (!IS_NPC(plr))
+      look_at_room(plr, 0);
+    plr = plr->next;
+  }
 }
 
 
