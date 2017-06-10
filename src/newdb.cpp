@@ -63,6 +63,7 @@ int mysql_wrapper(MYSQL *mysql, const char *query)
     sprintf(buf, "Offending query: %s", query);
     log(buf);
     
+    // Eventual TODO: https://dev.mysql.com/doc/refman/5.7/en/mysql-ping.html -> auto-reconnect feature
     // Recovery procedures for certain errors.
     switch (errnum) {
       case 2006:
@@ -273,6 +274,7 @@ static void init_char_strings(char_data *ch)
   ch->player.matrixprompt = str_dup("< @pP @mM > ");
 }
 
+// Eventual TODO: https://dev.mysql.com/doc/refman/5.7/en/mysql-real-escape-string-quote.html
 char *prepare_quotes(char *dest, const char *str)
 {
   if (!str)
