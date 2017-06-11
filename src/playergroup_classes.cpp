@@ -178,8 +178,8 @@ bool Playergroup::set_alias(const char *newalias, struct char_data *ch) {
   sprintf(querybuf, "SELECT idnum FROM playergroups WHERE alias = '%s'", prepare_quotes(buf, newalias));
   mysql_wrapper(mysql, querybuf);
   MYSQL_RES *res = mysql_use_result(mysql);
-  MYSQL_ROW row = mysql_fetch_row(res);
-  if (!row && mysql_field_count(mysql)) {
+  MYSQL_ROW row;
+  if (!res || (!(row = mysql_fetch_row(res)) && mysql_field_count(mysql))) {
     raw_set_alias(newalias);
     mysql_free_result(res);
     return TRUE;
@@ -298,8 +298,8 @@ bool Playergroup::load_pgroup_from_db(long load_idnum) {
   sprintf(querybuf, pgroup_load_query_format, load_idnum);
   mysql_wrapper(mysql, querybuf);
   MYSQL_RES *res = mysql_use_result(mysql);
-  MYSQL_ROW row = mysql_fetch_row(res);
-  if (row) {
+  MYSQL_ROW row;
+  if (res && (row = mysql_fetch_row(res))) {
     set_idnum(atol(row[0]));
     raw_set_name(row[1]);
     raw_set_alias(row[2]);
@@ -325,10 +325,15 @@ int Playergroup::sql_count_members() {
   sprintf(query_buf, "SELECT count(idnum) FROM `pfiles_playergroups` WHERE `group` = %ld", get_idnum());
   mysql_wrapper(mysql, query_buf);
   MYSQL_RES *res = mysql_use_result(mysql);
-  MYSQL_ROW row = mysql_fetch_row(res);
-  int count = atoi(row[0]);
-  mysql_free_result(res);
-  return count;
+  if (res) {
+    MYSQL_ROW row = mysql_fetch_row(res);
+    int count = atoi(row[0]);
+    mysql_free_result(res);
+    return count;
+  } else {
+    log_vfprintf("SYSERR: Attempting to count members for a group with no members.\r\n");
+    return -1;
+  }
 }
 
 // From comm.cpp
