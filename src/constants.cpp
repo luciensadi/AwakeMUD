@@ -557,6 +557,8 @@ const char *preference_bits[] =
     "NEWBIEHELPER",
     "MENUGAG",
     "LONGWEAPON",
+    "PGROUPLOG",
+    "SHOWGROUPTAG",
     "\n"
   };
 

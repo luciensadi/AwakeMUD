@@ -887,7 +887,9 @@ const char *tog_messages[][2] = {
                             {"You will now see OOC in menus.\r\n",
                              "You will no longer see OOC in menus.\r\n"},
                             {"You will no longer see if people are wielding weapons in room descriptions.\r\n",
-                             "You will now see weapons in room descriptions.\r\n"}
+                             "You will now see weapons in room descriptions.\r\n"},
+                            {"You will no longer display your playergroup affiliation in the wholist.\r\n",
+                             "You will now display your playergroup affiliation in the wholist.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -907,11 +909,11 @@ ACMD(do_toggle)
       sprintf(buf2, "%-3d", GET_WIMP_LEV(ch));
     if (!IS_SENATOR(ch))
       sprintf(buf,
-              "       Fightgag: %-3s              NoOOC: %-3s               Hired: %-3s\r\n"
-              "        Movegag: %-3s            Compact: %-3s               AutoExits: %-3s\r\n"
+              "       Fightgag: %-3s              NoOOC: %-3s              Hired: %-3s\r\n"
+              "        Movegag: %-3s            Compact: %-3s          AutoExits: %-3s\r\n"
               "     AutoAssist: %-3s            NoShout: %-3s               Echo: %-3s\r\n"
-              "           Pker: %-3s         Long Exits: %-3s               Wimp Level: %-3s\r\n"
-              "        Menugag: %-3s        Long Weapon: %-3s",
+              "           Pker: %-3s         Long Exits: %-3s         Wimp Level: %-3s\r\n"
+              "        Menugag: %-3s        Long Weapon: %-3s        Show PG Tag: %-3s",
 
               ONOFF(PRF_FLAGGED(ch, PRF_FIGHTGAG)),
               ONOFF(PRF_FLAGGED(ch, PRF_NOOOC)),
@@ -926,17 +928,18 @@ ACMD(do_toggle)
               ONOFF(PRF_FLAGGED(ch, PRF_LONGEXITS)),
               buf2, 
               ONOFF(PRF_FLAGGED(ch, PRF_MENUGAG)),
-              YESNO(PRF_FLAGGED(ch, PRF_LONGWEAPON)));
+              YESNO(PRF_FLAGGED(ch, PRF_LONGWEAPON)),
+              YESNO(PRF_FLAGGED(ch, PRF_SHOWGROUPTAG)));
     else
       sprintf(buf,
-              "       Fightgag: %-3s              NoOOC: %-3s               Quest: %-3s\r\n"
-              "        Movegag: %-3s            Compact: %-3s               AutoExits: %-3s\r\n"
+              "       Fightgag: %-3s              NoOOC: %-3s              Quest: %-3s\r\n"
+              "        Movegag: %-3s            Compact: %-3s          AutoExits: %-3s\r\n"
               "         NoTell: %-3s            NoShout: %-3s               Echo: %-3s\r\n"
-              "         Newbie: %-3s           Nohassle: %-3s               Menugag: %-3s\r\n"
+              "         Newbie: %-3s           Nohassle: %-3s            Menugag: %-3s\r\n"
               "      Holylight: %-3s          Roomflags: %-3s               Pker: %-3s\r\n"
-              "          Radio: %-3s         Long Exits: %-3s               Wimp Level: %-3s\r\n"
-              "         Pacify: %-3s         AutoAssist: %-3s               Autoinvis: %-3s\r\n"
-              "    Long Weapon: %-3s",
+              "          Radio: %-3s         Long Exits: %-3s         Wimp Level: %-3s\r\n"
+              "         Pacify: %-3s         AutoAssist: %-3s          Autoinvis: %-3s\r\n"
+              "    Long Weapon: %-3s        Show PG Tag: %-3s",
               ONOFF(PRF_FLAGGED(ch, PRF_FIGHTGAG)),
               ONOFF(PRF_FLAGGED(ch, PRF_NOOOC)),
               YESNO(PRF_FLAGGED(ch, PRF_QUEST)),
@@ -958,7 +961,8 @@ ACMD(do_toggle)
               ONOFF(PRF_FLAGGED(ch, PRF_ASSIST)),
               ONOFF(PRF_FLAGGED(ch, PRF_AUTOINVIS)),
               ONOFF(PRF_FLAGGED(ch, PRF_PACIFY)),
-              YESNO(PRF_FLAGGED(ch, PRF_LONGWEAPON)));
+              YESNO(PRF_FLAGGED(ch, PRF_LONGWEAPON)),
+              YESNO(PRF_FLAGGED(ch, PRF_SHOWGROUPTAG)));
     send_to_char(buf, ch);
   } else {
     if (is_abbrev(argument, "afk"))
@@ -1062,6 +1066,9 @@ ACMD(do_toggle)
       }
       mode = 24;
       result = 1;
+    } else if (is_abbrev(argument, "showpgtag")) {
+      result = PRF_TOG_CHK(ch, PRF_SHOWGROUPTAG);
+      mode = 27;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;

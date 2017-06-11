@@ -89,13 +89,50 @@ void Playergroup::set_secret(bool secret) {
     settings.RemoveBit(PGROUP_SECRETSQUIRREL);
 }
 
+// Determines if a letter belongs to a color code.
+bool iscolor(char c) {
+  return (c == 'l' || c == 'r' || c == 'g' || c == 'y' || c == 'b' || c == 'm' || c == 'n' || c == 'c'
+          || c == 'w' || c == 'L' || c == 'R' || c == 'G' || c == 'Y' || c == 'B' || c == 'M' || c == 'N'
+          || c == 'C' || c == 'W');
+}
+
 /************* Setters w/ Validity Checks *************/
 // Performs validity checks before setting. Returns TRUE if set succeeded, FALSE otherwise.
 bool Playergroup::set_tag(const char *newtag, struct char_data *ch) {
   // TODO: Validity checks.
   if (strlen(newtag) > (MAX_PGROUP_TAG_LENGTH - 1)) {
-    sprintf(buf, "Sorry, tags can't be longer than %d characters.\r\n", MAX_PGROUP_TAG_LENGTH - 1);
-    send_to_char(buf, ch);
+    send_to_char(ch, "Sorry, tags can't be longer than %d characters.\r\n", MAX_PGROUP_TAG_LENGTH - 1);
+    return FALSE;
+  }
+  
+  const char *ptr = newtag;
+  int len = 0;
+  while (*ptr) {
+    if (*ptr == '^') {
+      if (*(ptr+1) == '\0') {
+        send_to_char("Sorry, tags can't end with the ^ character.\r\n", ch);
+        return FALSE;
+      }
+      else if (iscolor(*(ptr+1)))
+        ptr += 2;
+      else {
+        len += 1;
+        ptr += 1;
+      }
+    } else {
+      len += 1;
+      ptr += 1;
+    }
+  }
+  
+  if (len < 1) {
+    send_to_char("Tags must contain at least one printable character.\r\n", ch);
+    return FALSE;
+  }
+  
+  if (len > (MAX_PGROUP_TAG_LENGTH_WITHOUT_COLOR)) {
+    send_to_char(ch, "Sorry, the non-colorized part of tags can't be longer than %d characters.\r\n",
+                 MAX_PGROUP_TAG_LENGTH_WITHOUT_COLOR);
     return FALSE;
   }
   

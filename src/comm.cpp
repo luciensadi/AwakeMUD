@@ -1970,7 +1970,7 @@ char *colorize(struct descriptor_data *d, char *str)
   // it is possible that this could over flow if only because the color
   // codes take up several characters--however, I certainly am not
   // gonna allocate a new one every time (=
-  static char buffer[MAX_STRING_LENGTH];
+  static char buffer[MAX_STRING_LENGTH]; // TODO: Multiply this by the size of the color codes.
   register char *temp = &buffer[0];
   register const char *color;
   
