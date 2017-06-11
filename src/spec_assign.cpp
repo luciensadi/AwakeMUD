@@ -79,21 +79,21 @@ teach_t teachers[] = {
                          "Von Richter runs through basic conjugation and sentance structure with you.\r\n", NEWBIE },
                        { 60504, { SKILL_PILOT_CAR, SKILL_PILOT_BIKE, SKILL_PILOT_TRUCK, SKILL_BR_BIKE,
                          SKILL_BR_DRONE, SKILL_BR_CAR, SKILL_BR_TRUCK, 0, 0 }, "After hours of study and practice, "
-                         "you feel like you've learned\r\nsomething.\r\n", NEWBIE },
+                         "you feel like you've learned something.\r\n", NEWBIE },
                        { 60505, { SKILL_EDGED_WEAPONS, SKILL_WHIPS_FLAILS, SKILL_POLE_ARMS, SKILL_CLUBS,
                          SKILL_PROJECTILES, SKILL_THROWING_WEAPONS, SKILL_UNARMED_COMBAT, SKILL_CYBER_IMPLANTS, 0 },
-                         "After hours of study and practice, you feel like you've learned\r\nsomething.\r\n", NEWBIE },
+                         "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
                        { 60506, { SKILL_PISTOLS, SKILL_RIFLES, SKILL_SHOTGUNS, SKILL_SMG, SKILL_ASSAULT_RIFLES,
                          SKILL_GUNNERY, SKILL_MACHINE_GUNS, SKILL_PROJECTILES, 0 },  "After hours of study and practice, "
-                         "you feel like you've learned\r\nsomething.\r\n", NEWBIE },
+                         "you feel like you've learned something.\r\n", NEWBIE },
                        { 60532, { SKILL_PROGRAM_COMBAT, SKILL_PROGRAM_DEFENSIVE, SKILL_PROGRAM_OPERATIONAL, SKILL_PROGRAM_SPECIAL,
-                         SKILL_PROGRAM_CYBERTERM, 0, 0, 0, 0 }, "Deadlock picks up some design plans from his desk and runs through"
-                         "the basic process of setting one up, you feel like you've learned\r\nsomething.\r\n", NEWBIE},
+                         SKILL_PROGRAM_CYBERTERM, 0, 0, 0, 0 }, "Deadlock picks up some design plans from his desk and runs through "
+                         "the basic process of setting one up, you feel like you've learned something.\r\n", NEWBIE},
                        { 60533, { SKILL_NEGOTIATION, SKILL_CORPORATE_ETIQUETTE, SKILL_MEDIA_ETIQUETTE, SKILL_STREET_ETIQUETTE,
-                         SKILL_ELF_ETIQUETTE, SKILL_TRIBAL_ETIQUETTE, 0, 0, 0 }, "Lucy runs through the proper decorum to use in certain"
-                         " situations, you feel like you've learned\r\nsomething.\r\n", NEWBIE},
+                         SKILL_ELF_ETIQUETTE, SKILL_TRIBAL_ETIQUETTE, 0, 0, 0 }, "Lucy runs through the proper decorum to use in certain "
+                         "situations, you feel like you've learned something.\r\n", NEWBIE},
                        { 60534, { SKILL_ATHLETICS, SKILL_STEALTH, SKILL_BIOTECH, SKILL_ORALSTRIKE, SKILL_POLICE_PROCEDURES, 0, 0, 0, 0 },
-                         "Steve roughly throws you a text book and tells you to read it, you feel like you've learned\r\nsomething.\r\n", NEWBIE},
+                         "Steve roughly throws you a text book and tells you to read it, you feel like you've learned something.\r\n", NEWBIE},
 /*                     { 30700, { SKILL_ENGLISH, SKILL_JAPANESE, SKILL_CHINESE, SKILL_KOREAN,
                          SKILL_SPERETHIEL, SKILL_SALISH, SKILL_ITALIAN, SKILL_NEGOTIATION }, "Socrates shows you the intricities "
                          "of the language and you emerge with a greater understanding.\r\n", AMATEUR },
@@ -110,10 +110,9 @@ teach_t teachers[] = {
                          SKILL_AURA_READING, SKILL_SPELLDESIGN, SKILL_TALISMONGERING }, "Hermes imparts his wisdom upon you.\r\n", AMATEUR },
                        { 37500, { SKILL_BR_CAR, SKILL_BR_BIKE, SKILL_BR_DRONE, SKILL_BR_TRUCK, 0, 0, 0, 0 }, "Marty shows you a few tricks of the "
                          "trade and you emerge more skilled than before.\r\n", AMATEUR }, */
-                       { 35502, { SKILL_STREET_ETIQUETTE, 0, 0, 0, 0, 0, 0, 0, 0 }, "You spend some time talking to the people in"
-                         " line.\r\n", AMATEUR },
-                       { 17111, { SKILL_CORPORATE_ETIQUETTE, SKILL_NEGOTIATION, 0, 0, 0, 0, 0, 0, 0 }, "You spend some time making small talk with"
-                         " the secretary.\r\n", AMATEUR },
+                       { 35502, { SKILL_STREET_ETIQUETTE, 0, 0, 0, 0, 0, 0, 0, 0 }, "You spend some time talking to the people in line.\r\n", AMATEUR },
+                       { 17111, { SKILL_CORPORATE_ETIQUETTE, SKILL_NEGOTIATION, 0, 0, 0, 0, 0, 0, 0 }, "You spend some time making small talk with "
+                         "the secretary.\r\n", AMATEUR },
 /*                     { 65106, { SKILL_MEDIA_ETIQUETTE, SKILL_STEALTH, 0, 0, 0, 0, 0, 0 }, "You talk to the reporter about current events for"
                          " a while.\r\n", AMATEUR },
                        { 18311, { SKILL_STREET_ETIQUETTE, SKILL_MEDIA_ETIQUETTE, SKILL_ELF_ETIQUETTE, SKILL_CORPORATE_ETIQUETTE, 
