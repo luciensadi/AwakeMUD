@@ -331,7 +331,7 @@ int get_skill_price(struct char_data *ch, int i)
 {
   if (!GET_SKILL(ch, i))
     return 1;
-  if (GET_SKILL(ch, i) + 1 <= GET_REAL_ATT(ch, skills[i].attribute) <= GET_SKILL(ch, i))
+  if (GET_SKILL(ch, i) + 1 <= GET_REAL_ATT(ch, skills[i].attribute))
   {
     if (skills[i].type)
       return GET_SKILL(ch, i) + 1;
@@ -1540,14 +1540,10 @@ SPECIAL(rodgers)
 
 SPECIAL(lone_star_park)
 {
-  struct char_data *tch, *evil;
-  int max_evil;
+  struct char_data *tch;
   
   if (cmd || !AWAKE(ch) || FIGHTING(ch))
     return FALSE;
-  
-  max_evil = 1000;
-  evil = 0;
   
   for (tch = world[ch->in_room].people; tch; tch = tch->next_in_room) {
     if (CAN_SEE(ch, tch) && PLR_FLAGGED(tch, PLR_KILLER)) {
