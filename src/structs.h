@@ -974,7 +974,7 @@ struct combat_data
   int dam_type;
   bool is_physical;
   char power;
-  char damage_level; // Light/Med/etc
+  int damage_level; // Light/Med/etc
   
   // Gun data.
   bool weapon_is_gun;

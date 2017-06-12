@@ -3864,12 +3864,10 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
   
   int damage_total = convert_damage(staged_damage);
   
-  unsigned int pre_convert_dam_index = MIN(DEADLY, MAX(0, att->damage_level));
-  unsigned int post_convert_dam_index = MIN(DEADLY, MAX(0, staged_damage));
   sprintf(rbuf, "Bod %d+%d, Pow %d, BodSuc %d, ResSuc %d: Dam %s->%s. %d%c.",
           GET_BOD(victim), bod, att->power, bod_success, att->successes,
-          wound_name[pre_convert_dam_index],
-          wound_name[post_convert_dam_index],
+          wound_name[MIN(DEADLY, MAX(0, att->damage_level))],
+          wound_name[MIN(DEADLY, MAX(0, staged_damage))],
           damage_total, att->is_physical ? 'P' : 'M');
   act( rbuf, 1, ch, NULL, NULL, TO_ROLLS );
   if (!melee)
