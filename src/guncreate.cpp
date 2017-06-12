@@ -81,7 +81,7 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
     case 'q':
       send_to_char(CH, "Ammo design saved!\r\n");
       sprintf(buf, "a box of %s %s ammunition", ammo_type[GET_OBJ_VAL(OBJ, 2)].name, weapon_type[GET_OBJ_VAL(OBJ, 1)]);
-      OBJ->restring = str_dup(buf);
+      STR_DUP(OBJ->restring, buf);
       GET_OBJ_VAL(OBJ, 9) = GET_IDNUM(CH);
       obj_to_char(OBJ, CH);
       STATE(d) = CON_PLAYING;

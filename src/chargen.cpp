@@ -555,7 +555,7 @@ void init_char_sql(struct char_data *ch)
 static void start_game(descriptor_data *d)
 {
   CreateChar(d->character);
-  d->character->player.host = str_dup(d->host);
+  STR_DUP(d->character->player.host, d->host);
 
   GET_SKILL(d->character, SKILL_ENGLISH) = 10;
   GET_LANGUAGE(d->character) = SKILL_ENGLISH;

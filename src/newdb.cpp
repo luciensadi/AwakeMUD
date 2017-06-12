@@ -1633,7 +1633,9 @@ bool does_player_exist(char *name)
   char buf[MAX_STRING_LENGTH];
   if (!name || !*name)
     return FALSE;
-  sprintf(buf, "SELECT idnum FROM pfiles WHERE Name='%s';", name);
+  
+  char safename[strlen(name) * 2 + 1];
+  sprintf(buf, "SELECT idnum FROM pfiles WHERE Name='%s';", prepare_quotes(safename, name));
   if (mysql_wrapper(mysql, buf))
     return FALSE;
   MYSQL_RES *res = mysql_use_result(mysql);
@@ -1664,7 +1666,8 @@ bool does_player_exist(long id)
 vnum_t get_player_id(char *name)
 {
   char buf[MAX_STRING_LENGTH];
-  sprintf(buf, "SELECT idnum FROM pfiles WHERE name=\"%s\";", name);
+  char safename[strlen(name) * 2 + 1];
+  sprintf(buf, "SELECT idnum FROM pfiles WHERE name='%s';", prepare_quotes(safename, name));
   mysql_wrapper(mysql, buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);

@@ -35,7 +35,6 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
 void mount_fire(struct char_data *ch);
 /* External procedures */
 char *fread_action(FILE * fl, int nr);
-char *fread_string(FILE * fl, char *error);
 void stop_follower(struct char_data * ch);
 ACMD(do_assist);
 ACMD_CONST(do_flee);
@@ -393,10 +392,10 @@ void make_corpse(struct char_data * ch)
     sprintf(buf1, "^rThe belongings of %s are lying here.^n", GET_NAME(ch));
     sprintf(buf2, "^rthe belongings of %s^n", GET_NAME(ch));
   }
-  corpse->text.keywords = str_dup(buf);
-  corpse->text.room_desc = str_dup(buf1);
-  corpse->text.name = str_dup(buf2);
-  corpse->text.look_desc = str_dup("What once was living is no longer. Poor sap.\r\n");
+  STR_DUP(corpse->text.keywords, buf);
+  STR_DUP(corpse->text.room_desc, buf1);
+  STR_DUP(corpse->text.name, buf2);
+  STR_DUP(corpse->text.look_desc, "What once was living is no longer. Poor sap.\r\n");
   GET_OBJ_TYPE(corpse) = ITEM_CONTAINER;
   (corpse)->obj_flags.wear_flags.SetBits(ITEM_WEAR_TAKE, ENDBIT);
   (corpse)->obj_flags.extra_flags.SetBits(ITEM_NODONATE, ITEM_NORENT,

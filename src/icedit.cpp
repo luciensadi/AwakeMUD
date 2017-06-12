@@ -260,7 +260,7 @@ void icedit_parse(struct descriptor_data *d, const char *arg)
     case '3':
       send_to_char("Enter IC description:\r\n", CH);
       d->edit_mode = ICEDIT_DESC;
-      d->str = new (char *);
+      EQUALS_NEW(d->str, (char *));
       if (!d->str) {
         mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
         shutdown();
@@ -330,15 +330,11 @@ void icedit_parse(struct descriptor_data *d, const char *arg)
     icedit_disp_menu(d);
     break;
   case ICEDIT_NAME:
-    if (d->edit_icon->name)
-      delete [] d->edit_icon->name;
-    d->edit_icon->name = str_dup(arg);
+    STR_DUP(d->edit_icon->name, arg);
     icedit_disp_menu(d);
     break;
   case ICEDIT_ROOM:
-    if (d->edit_icon->look_desc)
-      delete [] d->edit_icon->look_desc;
-    d->edit_icon->look_desc = str_dup(arg);
+    STR_DUP(d->edit_icon->look_desc, arg);
     icedit_disp_menu(d);
     break;
   case ICEDIT_TYPE:

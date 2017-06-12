@@ -96,9 +96,9 @@ bool House_load(struct house_control_rec *house)
     vnum = data.GetLong(buf, 0);
     if ((obj = read_object(vnum, VIRTUAL))) {
       sprintf(buf, "%s/Name", sect_name);
-      obj->restring = str_dup(data.GetString(buf, NULL));
+      STR_DUP(obj->restring, data.GetString(buf, NULL));
       sprintf(buf, "%s/Photo", sect_name);
-      obj->photo = str_dup(data.GetString(buf, NULL));
+      STR_DUP(obj->photo, data.GetString(buf, NULL));
       for (x = 0; x < NUM_VALUES; x++) {
         sprintf(buf, "%s/Value %d", sect_name, x);
         GET_OBJ_VAL(obj, x) = data.GetInt(buf, GET_OBJ_VAL(obj, x));
@@ -551,7 +551,7 @@ void House_boot(void)
       temp->owner = owner;
       temp->date = paid;
       temp->mode = t[1];
-      temp->name = str_dup(name);
+      STR_DUP(temp->name, name);
       for (int q = 0; q < MAX_GUESTS; q++)
         temp->guests[q] = 0;
       if (temp->owner) {
@@ -684,7 +684,7 @@ ACMD(do_decorate)
     send_to_char("Enter your new room description.  Terminate with a @ on a new line.\r\n", ch);
     act("$n starts to move things around the room.", TRUE, ch, 0, 0, TO_ROOM);
     STATE(ch->desc) = CON_DECORATE;
-    ch->desc->str = new (char *);
+    EQUALS_NEW(ch->desc->str, (char *));
     *ch->desc->str = NULL;
     ch->desc->max_str = MAX_MESSAGE_LENGTH;
     ch->desc->mail_to = 0;
