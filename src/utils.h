@@ -617,9 +617,10 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 /* Hopefully making memory management a little easier. */
 
-#define STR_DUP(target, string) {if ((target)) delete (target); (target) = str_dup((string));}
+#define STR_DUP(target, string) {if ((target)) delete [] (target); (target) = str_dup((string));}
 
 #define EQUALS_NEW(target, item) {if ((target)) delete (target); (target) = new item;}
+#define EQUALS_NEW_ARRAY(target, item) {if ((target)) delete [] (target); (target) = new item;}
 
 /* OS compatibility ******************************************************/
 

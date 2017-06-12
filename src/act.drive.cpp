@@ -1561,7 +1561,7 @@ ACMD(do_gridguide)
     else {
       REMOVE_FROM_LIST(grid, veh->grid, next);
       if (grid->name)
-        delete grid->name;
+        delete [] grid->name;
       delete grid;
       send_to_char("You remove the destination from the system.\r\n", ch);
       act("$n punches something into the autonav.", FALSE, ch, 0 , 0, TO_ROOM);

@@ -1391,7 +1391,7 @@ ACMD(do_ignore)
       char *name = get_player_name(a->idnum);
       if (name) {
         send_to_char(ch, "%s\r\n", name);
-        delete name;
+        delete [] name;
       }
     }
   } else {
