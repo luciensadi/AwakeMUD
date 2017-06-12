@@ -1815,8 +1815,7 @@ ACMD(do_purge)
 
   one_argument(argument, buf);
 
-  if (*buf) {                   /* argument supplied. destroy single object
-                                                                                     * or char */
+  if (*buf) {                   /* argument supplied. destroy single object, character, or vehicle. */
     if ((vict = get_char_room_vis(ch, buf))) {
       if (!IS_NPC(vict) &&
           ((GET_LEVEL(ch) <= GET_LEVEL(vict)) ||
@@ -1838,6 +1837,12 @@ ACMD(do_purge)
     } else if ((obj = get_obj_in_list_vis(ch, buf, world[ch->in_room].contents))) {
       act("$n destroys $p.", FALSE, ch, obj, 0, TO_ROOM);
       extract_obj(obj);
+    } else if ((veh = get_veh_list(buf, world[ch->in_room].vehicles, ch))) {
+      sprintf(buf1, "$n purges %s.", GET_VEH_NAME(veh));
+      act(buf1, FALSE, ch, NULL, 0, TO_ROOM);
+      sprintf(buf1, "%s purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
+      mudlog(buf1, ch, LOG_WIZLOG, TRUE);
+      extract_veh(veh);
     } else {
       send_to_char("Nothing here by that name.\r\n", ch);
       return;
