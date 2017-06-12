@@ -53,8 +53,13 @@ void wire_nuyen(struct char_data *ch, struct char_data *targ, int amount, long i
     GET_BANK(targ) += amount;
   sprintf(buf, "%s has wired %d nuyen to your account.\r\n", GET_CHAR_NAME(ch), amount);
   store_mail(targ ? GET_IDNUM(targ) : isfile, GET_IDNUM(ch), buf);
-  sprintf(buf, "%s wired %d nuyen to %s.", GET_CHAR_NAME(ch), amount, targ ? GET_CHAR_NAME(targ) : get_player_name(isfile));
+  
+  char *delete_your_damn_str_dup_variables_people = get_player_name(isfile);
+  sprintf(buf, "%s wired %d nuyen to %s.", GET_CHAR_NAME(ch), amount, targ ? GET_CHAR_NAME(targ) : delete_your_damn_str_dup_variables_people);
   mudlog(buf, ch, LOG_GRIDLOG, TRUE);
+  
+  if (delete_your_damn_str_dup_variables_people)
+    delete delete_your_damn_str_dup_variables_people;
 }
 
 void pocketsec_phonemenu(struct descriptor_data *d)

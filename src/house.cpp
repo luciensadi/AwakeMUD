@@ -599,13 +599,18 @@ void hcontrol_list_houses(struct char_data *ch)
     for (struct house_control_rec *house = llord->rooms; house; house = house->next)
       if (house->owner)
       {
-        own_name = str_dup(get_player_name(house->owner));
+        if (own_name) {
+          delete own_name;
+          own_name = get_player_name(house->owner);
+        }
         if (!own_name)
           own_name = str_dup("<UNDEF>");
         sprintf(buf, "%7ld %7ld    0     %-12s\r\n",
                 house->vnum, world[house->atrium].number, CAP(own_name));
         send_to_char(buf, ch);
       }
+  if (own_name)
+    delete own_name;
 }
 
 void hcontrol_destroy_house(struct char_data * ch, char *arg)
@@ -794,6 +799,9 @@ void House_list_guests(struct char_data *ch, struct house_control_rec *i, int qu
     sprintf(buf2, "%s, ", temp);
     strcat(buf, CAP(buf2));
     x++;
+    
+    if (temp)
+      delete temp;
   }
   if (!x)
     strcat(buf, "None");

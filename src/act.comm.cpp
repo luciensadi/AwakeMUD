@@ -1390,8 +1390,10 @@ ACMD(do_ignore)
     send_to_char("You are currently ignoring: \r\n", ch);
     for (struct remem *a = GET_IGNORE(ch); a; a = a->next) {
       char *name = get_player_name(a->idnum);
-      if (name)
+      if (name) {
         send_to_char(ch, "%s\r\n", name);
+        delete name;
+      }
     }
   } else {
     struct remem *list;

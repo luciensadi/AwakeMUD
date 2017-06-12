@@ -2732,7 +2732,10 @@ SPECIAL(bank)
           return TRUE;
         }
       wire_nuyen(ch, vict, amount, isfile);
-      send_to_char(ch, "You wire %d nuyen to %s's account.\r\n", amount, vict ? GET_CHAR_NAME(vict) : get_player_name(isfile));
+      char *str_dupped_name = get_player_name(isfile);
+      send_to_char(ch, "You wire %d nuyen to %s's account.\r\n", amount, vict ? GET_CHAR_NAME(vict) : str_dupped_name);
+      if (str_dupped_name)
+        delete str_dupped_name;
     }
     return TRUE;
   }
