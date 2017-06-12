@@ -1382,7 +1382,7 @@ ACMD(do_mount)
 {
   int i = 0;
   struct veh_data *veh;
-  struct obj_data *obj, *gun = NULL, *ammo = NULL, *bin = NULL;
+  struct obj_data *obj, *gun = NULL, *ammo = NULL; /* Appears unused:  *bin = NULL; */
   RIG_VEH(ch, veh);
   if (!veh) {
     send_to_char("You must be in a vehicle to use that.\r\n", ch);
@@ -1401,8 +1401,9 @@ ACMD(do_mount)
         ammo = x;
       else if (GET_OBJ_TYPE(x) == ITEM_WEAPON)
         gun = x;
+      /* Code appears to be unused:
       else if (GET_OBJ_TYPE(x) == ITEM_MOD)
-        bin = x;
+        bin = x; */
     if (gun)
       sprintf(buf, "%2d) %-20s (Mounting %s) (Ammo %d/%d)", i, GET_OBJ_NAME(obj),
               GET_OBJ_NAME(gun), ammo ? GET_OBJ_VAL(ammo, 0) : 0, GET_OBJ_VAL(gun, 5) * 2);
