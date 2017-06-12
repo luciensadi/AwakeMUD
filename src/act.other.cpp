@@ -1157,7 +1157,7 @@ struct obj_data * find_magazine(struct obj_data *gun, struct obj_data *i)
 
 ACMD(do_reload)
 {
-  struct obj_data *i, *gun = NULL, *m = NULL, *ammo = NULL, *bin = NULL;
+  struct obj_data *i, *gun = NULL, *m = NULL, *ammo = NULL; /* Appears unused:  *bin = NULL; */
   struct char_data *tmp_char;
   int n, def = 0, mount = 0;
   struct veh_data *veh;
@@ -1190,8 +1190,9 @@ ACMD(do_reload)
           gun = search;
         else if (GET_OBJ_TYPE(search) == ITEM_GUN_AMMO)
           ammo = search;
+        /* Code does not appear to be used.
         else if (GET_OBJ_TYPE(search) == ITEM_MOD)
-          bin = search;
+          bin = search; */
       if (!gun) {
         send_to_char("There is no weapon attached to that mount.\r\n", ch);
         return;
