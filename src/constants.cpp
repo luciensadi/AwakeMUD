@@ -1660,6 +1660,17 @@ const char *attributes[] =
     "Reaction"
   };
 
+const char *short_attributes[] =
+{
+  "bod",
+  "qui",
+  "str",
+  "cha",
+  "int",
+  "wil",
+  "rea"
+};
+
 struct drug_data drug_types[] =
   {
     { "Nothing", 0, 0, 0, 0, 0, 0, 0, 0
