@@ -448,8 +448,10 @@ ACMD(do_radio)
     send_to_char("You have to have a radio to do that!\r\n", ch);
     return;
   }
-  one = new char[MAX_INPUT_LENGTH];
-  two = new char[MAX_INPUT_LENGTH];
+  char why_declare_new_when_you_can_use_a_scoped_var_instead__one[MAX_INPUT_LENGTH];
+  char why_declare_new_when_you_can_use_a_scoped_var_instead__two[MAX_INPUT_LENGTH];
+  one = why_declare_new_when_you_can_use_a_scoped_var_instead__one;
+  two = why_declare_new_when_you_can_use_a_scoped_var_instead__two;
   any_one_arg(any_one_arg(argument, one), two);
 
   if (!*one) {
@@ -506,9 +508,6 @@ ACMD(do_radio)
     }
   } else
     send_to_char("That's not a valid option.\r\n", ch);
-
-  delete one;
-  delete two;
 }
 
 ACMD(do_broadcast)
