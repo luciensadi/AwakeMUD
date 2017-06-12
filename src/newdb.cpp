@@ -965,7 +965,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                "Pool_Dodge=%d, Cash=%ld, Bank=%ld, Karma=%d, Rep=%d, Notor=%d, TKE=%d, "\
                "Dead=%d, Physical=%d, PhysicalLoss=%d, Mental=%d, MentalLoss=%d, "\
                "PermBodLoss=%d, WimpLevel=%d, Loadroom=%ld, LastRoom=%ld, LastD=%ld, Hunger=%d, Thirst=%d, Drunk=%d, "\
-               "ShotsFired='%d', ShotsTriggered='%d', "\
+               "ShotsFired='%d', ShotsTriggered='%d', Tradition=%d, "\
                "Inveh=%ld WHERE idnum=%ld;",
                AFF_FLAGS(player).ToString(), PLR_FLAGS(player).ToString(), 
                PRF_FLAGS(player).ToString(), GET_REAL_BOD(player), GET_REAL_QUI(player),
@@ -978,7 +978,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                GET_MENTAL(player), GET_MENTAL_LOSS(player), GET_PERM_BOD_LOSS(player), GET_WIMP_LEV(player),
                GET_LOADROOM(player), GET_LAST_IN(player), time(0), GET_COND(player, FULL), 
                GET_COND(player, THIRST), GET_COND(player, DRUNK),
-               SHOTS_FIRED(player), SHOTS_TRIGGERED(player), 
+               SHOTS_FIRED(player), SHOTS_TRIGGERED(player), GET_TRADITION(player),
                inveh, GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   for (temp = player->carrying; temp; temp = next_obj) {

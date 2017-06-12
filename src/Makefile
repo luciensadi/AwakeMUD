@@ -25,11 +25,11 @@ CVS = cvs
 
 # OSX? Uncomment these:
 LIBS = -L/usr/local/lib -lmysqlclient -lz -lm
-MYFLAGS = -DDEBUG -DSELFADVANCE -Dosx -I /usr/local/include/ -Wall
+MYFLAGS = -DDEBUG -DSELFADVANCE -Dosx -Wall -I /usr/local/include/
 
 # Linux / others? Uncomment these:
-# LIBS = -lcrypt -L/usr/local/lib -lmysqlclient -lz -lm -lnsl
-# MYFLAGS = -DDEBUG -DSELFADVANCE -Dlinux -Wall -I /usr/local/include/
+#LIBS = -lcrypt -L/usr/local/lib -lmysqlclient -lz -lm -lnsl
+#MYFLAGS = -DDEBUG -DSELFADVANCE -Dlinux -Wall -I /usr/local/include/
 
 CPPFLAGS = $(MYFLAGS) $(PROFILE)
 
