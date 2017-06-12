@@ -173,45 +173,21 @@ const char* get_new_kosherized_title(const char *title, unsigned short max_lengt
 
 void set_title(struct char_data * ch, const char *title)
 {
-  // Invokes NEW.
-  const char* kosherized_title = (const char*) get_new_kosherized_title(title, MAX_TITLE_LENGTH);
-  
-  if (GET_TITLE(ch) != NULL)
-    delete [] GET_TITLE(ch);
-
-  GET_TITLE(ch) = str_dup(kosherized_title);
-  
-  // Clean up after NEW.
-  delete kosherized_title;
+  DELETE_ARRAY_IF_EXTANT(GET_TITLE(ch));
+  GET_TITLE(ch) = get_new_kosherized_title(title, MAX_TITLE_LENGTH);
 }
 
 
 void set_whotitle(struct char_data * ch, const char *title)
 {
-  // Invokes NEW.
-  const char* kosherized_title = (const char*) get_new_kosherized_title(title, MAX_WHOTITLE_LENGTH);
-
-  if (GET_WHOTITLE(ch) != NULL)
-    delete [] GET_WHOTITLE(ch);
-
-  GET_WHOTITLE(ch) = str_dup(title);
-  
-  // Clean up after NEW.
-  delete kosherized_title;
+  DELETE_ARRAY_IF_EXTANT(GET_WHOTITLE(ch));
+  GET_WHOTITLE(ch) = get_new_kosherized_title(title, MAX_TITLE_LENGTH);
 }
 
 void set_pretitle(struct char_data * ch, const char *title)
 {
-  // Invokes NEW.
-  const char* kosherized_title = (const char*) get_new_kosherized_title(title, MAX_TITLE_LENGTH);
-
-  if (GET_PRETITLE(ch) != NULL)
-    delete [] GET_PRETITLE(ch);
-
-  GET_PRETITLE(ch) = str_dup(title);
-  
-  // Clean up after NEW.
-  delete kosherized_title;
+  DELETE_ARRAY_IF_EXTANT(GET_PRETITLE(ch));
+  GET_PRETITLE(ch) = get_new_kosherized_title(title, MAX_TITLE_LENGTH);
 }
 
 int gain_exp(struct char_data * ch, int gain, bool rep)
