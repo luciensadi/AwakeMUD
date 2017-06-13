@@ -2537,6 +2537,7 @@ ACMD(do_who)
     register char *temp = &buffer[0];
     register const char *color;
     char *str = str_dup(buf);
+    char *ptr = str;
     while(*str) {
       if (*str == '^') {
         switch (*++str) {
@@ -2613,7 +2614,7 @@ ACMD(do_who)
         *temp++ = *str++;
     }
     *temp = '\0';
-    delete str;
+    delete [] ptr;
     if (!(fl = fopen("text/wholist", "w"))) {
       mudlog("SYSERR: Cannot open wholist for write", NULL, LOG_SYSLOG, FALSE);
       return;
