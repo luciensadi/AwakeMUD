@@ -131,12 +131,12 @@ void pocketsec_mailmenu(struct descriptor_data *d)
     mail->photo = read_delete(GET_IDNUM(CH), sender);
     
     if (*sender)
-      mail->restring = str_dup(CAP(sender));
-    else mail->restring = str_dup("Alert");
+      STR_DUP(mail->restring, CAP(sender))
+    else
+      STR_DUP(mail->restring, "Alert")
 
     if (mail->photo == NULL)
-      mail->photo =
-        str_dup("Mail system error - please report.  Error #11.\r\n");
+      STR_DUP(mail->photo, "Mail system error - please report.  Error #11.\r\n");
 
     obj_to_obj(mail, folder);
   }
@@ -233,7 +233,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
           break;
       file = read_object(118, VIRTUAL);       
       obj_to_obj(file, folder);
-      file->restring = str_dup(arg);
+      STR_DUP(file->restring, arg);
       send_to_char("Enter Number: ", CH);
       d->edit_mode = SEC_PHONEADD2;
       break;
@@ -241,7 +241,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
       for (folder = SEC->contains; folder; folder = folder->next_content)
         if (!strcmp(folder->restring, "Phonebook"))
           break;
-      folder->contains->photo = str_dup(arg);
+      STR_DUP(folder->contains->photo, arg);
       pocketsec_phonemenu(d);
       break;
     case SEC_PHONEDEL:
@@ -302,9 +302,9 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
           break;
       file = read_object(118, VIRTUAL);       
       obj_to_obj(file, folder);
-      file->restring = str_dup(arg);
+      STR_DUP(file->restring, arg);
       send_to_char("Write note body. Use @ on a new line to finish.\r\n", CH);
-      d->str = new (char *);
+      EQUALS_NEW(d->str, (char *));
       *(d->str) = NULL;
       d->max_str = MAX_MESSAGE_LENGTH;
       d->mail_to = 0;
@@ -399,7 +399,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
         send_to_char("Write your message. Use @ on a new line to finish.\r\n", CH);
         PLR_FLAGS(CH).SetBits(PLR_MAILING, PLR_WRITING, ENDBIT);
         d->mail_to = x;
-        d->str = new (char *);
+        EQUALS_NEW(d->str , (char *));
         if (!d->str)
         {
           mudlog("Malloc failure!", NULL, LOG_SYSLOG, TRUE);
@@ -433,16 +433,16 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
     case SEC_INIT:
       if (LOWER(*arg) == 'y') {
         folder = read_object(118, VIRTUAL);
-        folder->restring = str_dup("Mail");
+        STR_DUP(folder->restring, "Mail");
         obj_to_obj(folder, SEC);
         folder = read_object(118, VIRTUAL);
-        folder->restring = str_dup("Notes");
+        STR_DUP(folder->restring, "Notes");
         obj_to_obj(folder, SEC);
         folder = read_object(118, VIRTUAL);
-        folder->restring = str_dup("Phonebook");
+        STR_DUP(folder->restring, "Phonebook");
         obj_to_obj(folder, SEC);
         folder = read_object(118, VIRTUAL);
-        folder->restring = str_dup("Files");
+        STR_DUP(folder->restring, "Files");
         obj_to_obj(folder, SEC);
         send_to_char("Pocket Secretary Initialised.\r\n", CH);
         pocketsec_menu(d);

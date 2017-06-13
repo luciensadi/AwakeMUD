@@ -129,7 +129,7 @@ void redit_disp_exit_menu(struct descriptor_data * d)
   /* if exit doesn't exist, alloc/create it and clear it*/
   if(!DOOR)
   {
-    DOOR = new room_direction_data;
+    EQUALS_NEW(DOOR, room_direction_data);
     memset((char *) DOOR, 0, sizeof (struct room_direction_data));
     DOOR->barrier = 4;
     DOOR->condition = DOOR->barrier;
@@ -588,7 +588,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     case '2':
       send_to_char("Enter room description:\r\n", d->character);
       d->edit_mode = REDIT_DESC;
-      d->str = new (char *);
+      EQUALS_NEW(d->str, (char *));
       if (!d->str) {
         mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
         shutdown();
@@ -601,7 +601,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     case '3':
       send_to_char("Enter room nighttime desc description:\r\n", d->character);
       d->edit_mode = REDIT_NDESC;
-      d->str = new (char *);
+      EQUALS_NEW(d->str, (char *));
       if (!d->str) {
         mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
         shutdown();
@@ -676,7 +676,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     case 'l':
       /* if extra desc doesn't exist . */
       if (!d->edit_room->ex_description) {
-        d->edit_room->ex_description = new extra_descr_data;
+        EQUALS_NEW(d->edit_room->ex_description, extra_descr_data);
         memset((char *) d->edit_room->ex_description, 0,
                sizeof(struct extra_descr_data));
       }
@@ -788,9 +788,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     redit_disp_mtx_menu(d);
     break;
   case REDIT_ADDRESS:
-    if (d->edit_room->address)
-      delete [] d->edit_room->address;
-    d->edit_room->address = str_dup(arg);
+    STR_DUP(d->edit_room->address, arg);
     redit_disp_mtx_menu(d);
     break;
   case REDIT_BACKGROUND2:
@@ -810,9 +808,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     d->edit_mode = REDIT_BACKGROUND2;
     break;
   case REDIT_NAME:
-    if (d->edit_room->name)
-      delete [] d->edit_room->name;
-    d->edit_room->name = str_dup(arg);
+    STR_DUP(d->edit_room->name, arg);
     redit_disp_menu(d);
     break;
   case REDIT_DESC:
@@ -945,7 +941,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       break;
     case '2':
       d->edit_mode = REDIT_EXIT_DESCRIPTION;
-      d->str = new (char *);
+      EQUALS_NEW(d->str, (char *));
       if (!d->str) {
         mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
         shutdown();
@@ -1012,9 +1008,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     /* we should NEVER get here */
     break;
   case REDIT_EXIT_KEYWORD:
-    if (d->edit_room->dir_option[d->edit_number2]->keyword)
-      delete [] d->edit_room->dir_option[d->edit_number2]->keyword;
-    d->edit_room->dir_option[d->edit_number2]->keyword = str_dup(arg);
+    STR_DUP(d->edit_room->dir_option[d->edit_number2]->keyword, arg);
     redit_disp_exit_menu(d);
     break;
   case REDIT_EXIT_KEY:
@@ -1082,9 +1076,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     }
     break;
   case REDIT_EXTRADESC_KEY:
-    if (((struct extra_descr_data *) *d->misc_data)->keyword)
-      delete [] (((struct extra_descr_data *) *d->misc_data)->keyword);
-    ((struct extra_descr_data *) * d->misc_data)->keyword = str_dup(arg);
+    STR_DUP(((struct extra_descr_data *) * d->misc_data)->keyword, arg);
     redit_disp_extradesc_menu(d);
     break;
   case REDIT_EXTRADESC_MENU:
@@ -1114,7 +1106,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     case 2:
       d->edit_mode = REDIT_EXTRADESC_DESCRIPTION;
       send_to_char("Enter extra description:\r\n", d->character);
-      d->str = new (char *);
+      EQUALS_NEW(d->str, (char *));
       if (!d->str) {
         mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
         shutdown();
@@ -1136,7 +1128,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
           d->misc_data = (void **) &((struct extra_descr_data *) * d->misc_data)->next;
         else {
           /* make new extra, attach at end */
-          new_extra = new extra_descr_data;
+          EQUALS_NEW(new_extra, extra_descr_data);
           memset((char *) new_extra, 0, sizeof(extra_descr_data));
           ((struct extra_descr_data *) * d->misc_data)->next = new_extra;
           d->misc_data =

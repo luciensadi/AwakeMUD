@@ -342,7 +342,7 @@ void vedit_parse(struct descriptor_data * d, const char *arg)
       /* let's go out to modify.c */
       send_to_char("Enter long desc:\r\n", d->character);
       d->edit_mode = VEDIT_LONGDESC;
-      d->str = new (char *);
+      EQUALS_NEW(d->str, (char *));
       if (!d->str) {
         mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
         shutdown();
@@ -354,7 +354,7 @@ void vedit_parse(struct descriptor_data * d, const char *arg)
     case '5':
       send_to_char("Enter inside desc:\r\n", d->character);
       d->edit_mode = VEDIT_INSDESC;
-      d->str = new (char *);
+      EQUALS_NEW(d->str, (char *));
       if (!d->str) {
         mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
         shutdown();
@@ -366,7 +366,7 @@ void vedit_parse(struct descriptor_data * d, const char *arg)
     case '6':
       send_to_char("Enter inside rear desc:\r\n", d->character);
       d->edit_mode = VEDIT_REARDESC;
-      d->str = new (char *);
+      EQUALS_NEW(d->str, (char *));
       if (!d->str) {
         mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
         shutdown();
@@ -628,33 +628,23 @@ void vedit_parse(struct descriptor_data * d, const char *arg)
     break;
 
   case VEDIT_EDIT_NAMELIST:
-    if (d->edit_veh->name)
-      delete [] d->edit_veh->name;
-    d->edit_veh->name = str_dup(arg);
+    STR_DUP(d->edit_veh->name, arg);
     vedit_disp_menu(d);
     break;
   case VEDIT_SHORTDESC:
-    if (d->edit_veh->short_description)
-      delete [] d->edit_veh->short_description;
-    d->edit_veh->short_description = str_dup(arg);
+    STR_DUP(d->edit_veh->short_description, arg);
     vedit_disp_menu(d);
     break;
   case VEDIT_DESC:
-    if (d->edit_veh->description)
-      delete [] d->edit_veh->description;
-    d->edit_veh->description = str_dup(arg);
+    STR_DUP(d->edit_veh->description, arg);
     vedit_disp_menu(d);
     break;
   case VEDIT_ARRIVE:
-    if (d->edit_veh->arrive)
-      delete [] d->edit_veh->arrive;
-    d->edit_veh->arrive = str_dup(arg);
+    STR_DUP(d->edit_veh->arrive, arg);
     vedit_disp_menu(d);
     break;
   case VEDIT_LEAVE:
-    if (d->edit_veh->leave)
-      delete [] d->edit_veh->leave;
-    d->edit_veh->leave = str_dup(arg);
+    STR_DUP(d->edit_veh->leave, arg);
     vedit_disp_menu(d);
     break;
   case VEDIT_FLAGS:

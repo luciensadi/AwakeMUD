@@ -126,8 +126,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       pedit_disp_menu(d);
       return;
     }
-    delete [] d->edit_obj->restring;
-    d->edit_obj->restring = str_dup(arg);
+    STR_DUP(d->edit_obj->restring, arg);
     pedit_disp_menu(d);
     break;
   case PEDIT_WOUND:
@@ -154,7 +153,7 @@ void create_program(struct char_data *ch)
 {
   struct obj_data *design = read_object(107, VIRTUAL);
   STATE(ch->desc) = CON_PRO_CREATE;
-  design->restring = str_dup("A blank program");
+  STR_DUP(design->restring, "A blank program");
   ch->desc->edit_obj = design;
   pedit_disp_menu(ch->desc);
 }
@@ -405,7 +404,7 @@ ACMD(do_copy)
 
     GET_OBJ_VAL(comp, 3) += GET_OBJ_VAL(prog, 2);
     struct obj_data *newp = read_object(108, VIRTUAL);
-    newp->restring = str_dup(GET_OBJ_NAME(prog));
+    STR_DUP(newp->restring, GET_OBJ_NAME(prog));
     GET_OBJ_VAL(newp, 0) = GET_OBJ_VAL(prog, 0);
     GET_OBJ_VAL(newp, 1) = GET_OBJ_VAL(prog, 1);
     GET_OBJ_VAL(newp, 2) = GET_OBJ_VAL(prog, 2);
@@ -496,7 +495,7 @@ void update_buildrepair(void)
           else {
             send_to_char(desc->character, "You complete programming %s.\r\n", GET_OBJ_NAME(PROG));
             struct obj_data *newp = read_object(108, VIRTUAL);
-            newp->restring = str_dup(GET_OBJ_NAME(PROG));
+            STR_DUP(newp->restring, GET_OBJ_NAME(PROG));
             GET_OBJ_VAL(newp, 0) = GET_OBJ_VAL(PROG, 0);
             GET_OBJ_VAL(newp, 1) = GET_OBJ_VAL(PROG, 1);
             GET_OBJ_VAL(newp, 2) = GET_OBJ_VAL(PROG, 6);

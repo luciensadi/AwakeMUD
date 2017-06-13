@@ -939,7 +939,7 @@ void boot_one_quest(struct quest_data *quest)
   quest_table[quest_nr].num_objs = quest->num_objs;
   if (quest_table[quest_nr].num_objs > 0)
   {
-    quest_table[quest_nr].obj = new struct quest_om_data[quest_table[quest_nr].num_objs];
+    EQUALS_NEW(quest_table[quest_nr].obj, struct quest_om_data[quest_table[quest_nr].num_objs]);
     for (i = 0; i < quest_table[quest_nr].num_objs; i++)
       quest_table[quest_nr].obj[i] = quest->obj[i];
   } else
@@ -948,18 +948,18 @@ void boot_one_quest(struct quest_data *quest)
   quest_table[quest_nr].num_mobs = quest->num_mobs;
   if (quest_table[quest_nr].num_mobs > 0)
   {
-    quest_table[quest_nr].mob = new struct quest_om_data[quest_table[quest_nr].num_mobs];
+    EQUALS_NEW(quest_table[quest_nr].mob, struct quest_om_data[quest_table[quest_nr].num_mobs]);
     for (i = 0; i < quest_table[quest_nr].num_mobs; i++)
       quest_table[quest_nr].mob[i] = quest->mob[i];
   } else
     quest_table[quest_nr].mob = NULL;
 
-  quest_table[quest_nr].intro = str_dup(quest->intro);
-  quest_table[quest_nr].decline = str_dup(quest->decline);
-  quest_table[quest_nr].quit = str_dup(quest->quit);
-  quest_table[quest_nr].finish = str_dup(quest->finish);
-  quest_table[quest_nr].info = str_dup(quest->info);
-  quest_table[quest_nr].done = str_dup(quest->done);
+  STR_DUP(quest_table[quest_nr].intro, quest->intro);
+  STR_DUP(quest_table[quest_nr].decline, quest->decline);
+  STR_DUP(quest_table[quest_nr].quit, quest->quit);
+  STR_DUP(quest_table[quest_nr].finish, quest->finish);
+  STR_DUP(quest_table[quest_nr].info, quest->info);
+  STR_DUP(quest_table[quest_nr].done, quest->done);
 
   if ((i = real_mobile(quest_table[quest_nr].johnson)) > 0 &&
       mob_index[i].func != johnson)
@@ -1001,7 +1001,7 @@ void reboot_quest(int rnum, struct quest_data *quest)
 
   if (quest_table[rnum].num_objs > 0)
   {
-    quest_table[rnum].obj = new quest_om_data[quest_table[rnum].num_objs];
+    EQUALS_NEW(quest_table[rnum].obj, quest_om_data[quest_table[rnum].num_objs]);
 
     for (i = 0; i < quest_table[rnum].num_objs; i++)
       quest_table[rnum].obj[i] = quest->obj[i];
@@ -1013,36 +1013,19 @@ void reboot_quest(int rnum, struct quest_data *quest)
 
   if (quest_table[rnum].num_mobs > 0)
   {
-    quest_table[rnum].mob = new quest_om_data[quest_table[rnum].num_mobs];
+    EQUALS_NEW(quest_table[rnum].mob, quest_om_data[quest_table[rnum].num_mobs]);
 
     for (i = 0; i < quest_table[rnum].num_mobs; i++)
       quest_table[rnum].mob[i] = quest->mob[i];
   } else
     quest_table[rnum].mob = NULL;
 
-  if (quest_table[rnum].intro)
-    delete [] quest_table[rnum].intro;
-  quest_table[rnum].intro = str_dup(quest->intro);
-
-  if (quest_table[rnum].decline)
-    delete [] quest_table[rnum].decline;
-  quest_table[rnum].decline = str_dup(quest->decline);
-
-  if (quest_table[rnum].quit)
-    delete [] quest_table[rnum].quit;
-  quest_table[rnum].quit = str_dup(quest->quit);
-
-  if (quest_table[rnum].finish)
-    delete [] quest_table[rnum].finish;
-  quest_table[rnum].finish = str_dup(quest->finish);
-
-  if (quest_table[rnum].info)
-    delete [] quest_table[rnum].info;
-  quest_table[rnum].info = str_dup(quest->info);
-
-  if (quest_table[rnum].done)
-    delete [] quest_table[rnum].done;
-  quest_table[rnum].done = str_dup(quest->done);
+  STR_DUP(quest_table[rnum].intro, quest->intro);
+  STR_DUP(quest_table[rnum].decline, quest->decline);
+  STR_DUP(quest_table[rnum].quit, quest->quit);
+  STR_DUP(quest_table[rnum].finish, quest->finish);
+  STR_DUP(quest_table[rnum].info, quest->info);
+  STR_DUP(quest_table[rnum].done, quest->done);
 }
 
 int write_quests_to_disk(int zone)
@@ -1580,7 +1563,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     case 'C':
       send_to_char("Enter informational text:\r\n", d->character);
       d->edit_mode = QEDIT_INFO;
-      d->str = new (char *);
+      EQUALS_NEW(d->str, (char *));
       if (!d->str) {
         mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
         shutdown();
@@ -2092,27 +2075,19 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case QEDIT_INTRO:
-    if (QUEST->intro)
-      delete [] QUEST->intro;
-    QUEST->intro = str_dup(arg);
+    STR_DUP(QUEST->intro, arg);
     qedit_disp_menu(d);
     break;
   case QEDIT_DECLINE:
-    if (QUEST->decline)
-      delete [] QUEST->decline;
-    QUEST->decline = str_dup(arg);
+    STR_DUP(QUEST->decline, arg);
     qedit_disp_menu(d);
     break;
   case QEDIT_QUIT:
-    if (QUEST->quit)
-      delete [] QUEST->quit;
-    QUEST->quit = str_dup(arg);
+    STR_DUP(QUEST->quit, arg);
     qedit_disp_menu(d);
     break;
   case QEDIT_FINISH:
-    if (QUEST->finish)
-      delete [] QUEST->finish;
-    QUEST->finish = str_dup(arg);
+    STR_DUP(QUEST->finish, arg);
     qedit_disp_menu(d);
     break;
   case QEDIT_INFO:
@@ -2147,21 +2122,15 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case QEDIT_SSTRING:
-    if (QUEST->s_string)
-      delete [] QUEST->s_string;
-    QUEST->s_string = str_dup(arg);
+    STR_DUP(QUEST->s_string, arg);
     qedit_disp_menu(d);
     break;
   case QEDIT_ESTRING:
-    if (QUEST->e_string)
-      delete [] QUEST->e_string;
-    QUEST->e_string = str_dup(arg);
+    STR_DUP(QUEST->e_string, arg);
     qedit_disp_menu(d);
     break;
   case QEDIT_DONE:
-    if (QUEST->done)
-      delete [] QUEST->done;
-    QUEST->done = str_dup(arg);
+    STR_DUP(QUEST->done, arg);
     qedit_disp_menu(d);
     break;
   }
