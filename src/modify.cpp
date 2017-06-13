@@ -151,7 +151,8 @@ void format_string(struct descriptor_data *d, int indent)
   i = MAX(strlen(format)-1, 3);
   if (format[i] == '\n' && format[i-1] == '\r' && format[i-2] == '\n' && format[i-3] == '\r')
     format[i-1] = '\0';
-  delete [] *d->str;
+  
+  DELETE_ARRAY_IF_EXTANT(*d->str);
   *d->str = format;
 }
 
@@ -186,7 +187,8 @@ void string_add(struct descriptor_data *d, char *str)
       *(str + d->max_str) = '\0';
       terminator = 1;
     }
-    *d->str = new char[strlen(str) + 3];
+    DELETE_ARRAY_IF_EXTANT(*d->str);
+    EQUALS_NEW(*d->str, char[strlen(str) + 3]);
     strcpy(*d->str, str);
   } else
   {
@@ -200,9 +202,9 @@ void string_add(struct descriptor_data *d, char *str)
         shutdown();
         ;
       }
-      strcpy (temp, *d->str);
+      strcpy(temp, *d->str);
       strcat(temp, str);
-      delete [] *d->str;
+      DELETE_ARRAY_IF_EXTANT(*d->str);
       *d->str = temp;
     }
   }
@@ -543,7 +545,7 @@ void string_add(struct descriptor_data *d, char *str)
       }
       strcpy (ptr, *d->str);
       strcat(ptr, tmp);
-      delete [] *d->str;
+      DELETE_ARRAY_IF_EXTANT(*d->str);
       *d->str = ptr;
       Board_save_board(d->mail_to - BOARD_MAGIC);
       d->mail_to = 0;
@@ -850,7 +852,7 @@ void page_string(struct descriptor_data *d, char *str, int keep_internal)
 {
   if (keep_internal)
   {
-    d->showstr_head = new char[strlen(str) + 1];
+    EQUALS_NEW(d->showstr_head, char[strlen(str) + 1]);
     strcpy(d->showstr_head, str);
     d->showstr_point = d->showstr_head;
   } else

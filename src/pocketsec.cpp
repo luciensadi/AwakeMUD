@@ -127,6 +127,7 @@ void pocketsec_mailmenu(struct descriptor_data *d)
       break;
   while (has_mail(GET_IDNUM(CH))) {
     mail = read_object(111, VIRTUAL);
+    DELETE_ARRAY_IF_EXTANT(mail->photo)
     mail->photo = read_delete(GET_IDNUM(CH), sender);
     
     if (*sender)

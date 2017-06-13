@@ -609,6 +609,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
           if (seen->idnum == icon->idnum) {
             struct seen_data *temp;
             REMOVE_FROM_LIST(seen, targ->decker->seen, next);
+            delete seen;
             break;
           }
       } else
@@ -885,7 +886,7 @@ ACMD(do_locate)
         GET_OBJ_VAL(obj, 4) = matrix[PERSONA->in_host].colour;
         GET_OBJ_VAL(obj, 7) = PERSONA->idnum;
         sprintf(buf, "Paydata %s - %dMp", matrix[PERSONA->in_host].name, GET_OBJ_VAL(obj, 2));
-        obj->restring = str_dup(buf);
+        STR_DUP(obj->restring, buf);
         int defense[5][6] = {{ 0, 0, 0, 1, 1, 1 },
                              { 0, 0, 1, 1, 2, 2 },
                              { 0, 1, 1, 2, 2, 3 },
@@ -1288,24 +1289,24 @@ ACMD(do_connect)
   icon = Mem->GetIcon();
   icon->condition = 10;
   if (ch->player.matrix_text.name)
-    icon->name = str_dup(ch->player.matrix_text.name);
+    STR_DUP(icon->name, ch->player.matrix_text.name)
   else
-    icon->name = str_dup("a nondescript persona");
+    STR_DUP(icon->name, "a nondescript persona")
   if (ch->player.matrix_text.room_desc)
-    icon->look_desc = str_dup(ch->player.matrix_text.room_desc);
+    STR_DUP(icon->look_desc, ch->player.matrix_text.room_desc)
   else
-    icon->look_desc = str_dup("A nondescript persona stands idly here.\r\n");
+    STR_DUP(icon->look_desc, "A nondescript persona stands idly here.\r\n")
   if (ch->player.matrix_text.look_desc)
-    icon->long_desc = str_dup(ch->player.matrix_text.look_desc);
+    STR_DUP(icon->long_desc, ch->player.matrix_text.look_desc)
   else
-    icon->long_desc = str_dup("A nondescript persona stands idly here.\r\n");
+    STR_DUP(icon->long_desc, "A nondescript persona stands idly here.\r\n")
 
   if (GET_OBJ_TYPE(cyberdeck) == ITEM_CUSTOM_DECK && GET_OBJ_VAL(cyberdeck, 9)) {
     send_to_char(ch, "That deck is missing some components.\r\n");
     return;
   }
   PERSONA = icon;
-  DECKER = new deck_info;
+  EQUALS_NEW(DECKER, deck_info);
   if (GET_OBJ_VNUM(cyberdeck) == 113) {
     struct obj_data *parts = cyberdeck->contains;
     for (; parts; parts = parts->next_content)
@@ -1328,7 +1329,7 @@ ACMD(do_connect)
     }
   }
   DECKER->ch = ch;
-  DECKER->phone = new phone_data;
+  EQUALS_NEW(DECKER->phone, phone_data);
   DECKER->phone->next = phone_list;
   phone_list = DECKER->phone;
   DECKER->phone->persona = PERSONA;
@@ -1381,7 +1382,7 @@ ACMD(do_connect)
           continue;
         struct obj_data *active = read_object(GET_OBJ_RNUM(soft), REAL);
         if (soft->restring)
-          active->restring = str_dup(soft->restring);
+          STR_DUP(active->restring, soft->restring);
         for (int x = 0; x < 10; x++)
           GET_OBJ_VAL(active, x) = GET_OBJ_VAL(soft, x);
         DECKER->active -= GET_OBJ_VAL(active, 2);
@@ -1526,6 +1527,7 @@ ACMD(do_redirect)
     for (int x = 0; x < DECKER->redirect - 1; x++)
       temp[x] = DECKER->redirectedon[x];
     temp[DECKER->redirect - 1] = PERSONA->in_host;
+    DELETE_ARRAY_IF_EXTANT(DECKER->redirectedon);
     DECKER->redirectedon = temp;
     send_to_icon(PERSONA, "You successfully redirect your datatrail.\r\n");
   } else
@@ -1888,7 +1890,7 @@ void process_upload(struct matrix_icon *persona)
           } else {
             struct obj_data *active = read_object(GET_OBJ_RNUM(soft), REAL);
             if (soft->restring)
-              active->restring = str_dup(soft->restring);
+              STR_DUP(active->restring, soft->restring);
             for (int x = 0; x < 10; x++)
               GET_OBJ_VAL(active, x) = GET_OBJ_VAL(soft, x);
             active->next_content = persona->decker->software;

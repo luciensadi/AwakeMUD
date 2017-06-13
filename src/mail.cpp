@@ -519,11 +519,11 @@ void postmaster_receive_mail(struct char_data * ch, struct char_data *mailman,
   while (has_mail(GET_IDNUM(ch)))
   {
     obj = read_object(111, VIRTUAL);
+    DELETE_ARRAY_IF_EXTANT(obj->photo);
     obj->photo = read_delete(GET_IDNUM(ch), buf);
 
     if (obj->photo == NULL)
-      obj->photo =
-        str_dup("Mail system error - please report.  Error #11.\r\n");
+      obj->photo = str_dup("Mail system error - please report.  Error #11.\r\n");
 
     obj_to_char(obj, ch);
 

@@ -55,8 +55,8 @@ void create_spell(struct char_data *ch)
   GET_OBJ_VAL(design, 0) = 1;
   GET_OBJ_VAL(design, 2) = GET_TRADITION(ch) == TRAD_SHAMANIC ? 1 : 0;
   GET_OBJ_VAL(design, 8) = GET_IDNUM(ch);
-  design->restring = str_dup("A blank spell formula");
-  design->photo = str_dup("It looks very blank.");
+  STR_DUP(design->restring, "A blank spell formula");
+  STR_DUP(design->photo, "It looks very blank.");
   ch->desc->edit_obj = design;
   spedit_disp_menu(ch->desc);
 }
@@ -75,7 +75,7 @@ void spedit_parse(struct descriptor_data *d, const char *arg)
     case '2':
       send_to_char(CH, "Enter spell design description:\r\n");
       d->edit_mode = SPEDIT_DESC;
-      d->str = new (char *);
+      EQUALS_NEW(d->str, (char *));
       *(d->str) = NULL;
       d->max_str = MAX_MESSAGE_LENGTH;
       d->mail_to = 0;
@@ -131,9 +131,7 @@ void spedit_parse(struct descriptor_data *d, const char *arg)
         spedit_disp_menu(d);
         return;
       }
-      if (SPELL->restring)
-        delete [] SPELL->restring;
-      SPELL->restring = str_dup(arg);
+      STR_DUP(SPELL->restring, arg);
       spedit_disp_menu(d);
       break;
     case SPEDIT_FORCE: 

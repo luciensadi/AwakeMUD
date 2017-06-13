@@ -31,15 +31,15 @@ memoryClass::memoryClass()
 
 memoryClass::memoryClass(const memoryClass & mClass)
 {
-  Obj = new stackClass<obj_data>;
+  //Obj = new stackClass<obj_data>;
   Obj = mClass.Obj;
-  Ch = new stackClass<char_data>;
+  //Ch = new stackClass<char_data>;
   Ch = mClass.Ch;
-  Veh = new stackClass<veh_data>;
+  //Veh = new stackClass<veh_data>;
   Veh = mClass.Veh;
-  Host = new stackClass<host_data>;
+  //Host = new stackClass<host_data>;
   Host = mClass.Host;
-  Icon = new stackClass<matrix_icon>;
+  //Icon = new stackClass<matrix_icon>;
   Icon = mClass.Icon;
 }
 

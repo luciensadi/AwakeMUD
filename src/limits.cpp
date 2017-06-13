@@ -158,7 +158,7 @@ void physical_gain(struct char_data * ch)
   update_pos(ch);
 }
 
-const char* get_new_kosherized_title(const char *title, unsigned short max_length) {
+char* get_new_kosherized_title(const char *title, unsigned short max_length) {
   if (title == NULL)
     title = "";
   

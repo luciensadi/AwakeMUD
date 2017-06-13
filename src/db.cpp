@@ -1699,12 +1699,13 @@ void parse_shop(File &fl, long virtual_nr)
     else {
       end->next = sell;
       end = sell;
-      /* O(n^2)? Seriously? */
+      /* O(n^2)? Seriously?
       for (struct shop_sell_data *temp = templist;; temp = temp->next)
         if (temp->next == NULL) {
           temp->next = sell;
           break;
         }
+      */
     }
   }
   shop->selling = templist;
