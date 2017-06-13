@@ -761,7 +761,8 @@ ACMD(do_display)
                  LINE_LENGTH - 1);
     return;
   } else {
-    delete [] GET_PROMPT(tch);
+    if (GET_PROMPT(tch))
+      delete [] GET_PROMPT(tch);
     GET_PROMPT(tch) = str_dup(buf);
     send_to_char(OK, ch);
     sprintf(buf, "UPDATE pfiles SET%sPrompt='%s' WHERE idnum=%ld;", PLR_FLAGGED((ch), PLR_MATRIX) ? " Matrix" : " ", GET_PROMPT(ch), GET_IDNUM(ch));

@@ -3469,6 +3469,7 @@ void reset_char(struct char_data * ch)
     GET_MENTAL(ch) = 100;
 }
 
+// TODO: this doesn't even clear 50% of the working variables, wat
 /* clear ALL the working variables of a char; do NOT free any space alloc'ed */
 void clear_char(struct char_data * ch)
 {
