@@ -1695,45 +1695,31 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case SHEDIT_NSIK:
-    if (SHOP->no_such_itemk)
-      delete [] SHOP->no_such_itemk;
-    SHOP->no_such_itemk = str_dup(arg);
+    STR_DUP(SHOP->no_such_itemk, arg);
     shedit_disp_text_menu(d);
     break;
   case SHEDIT_NSIP:
-    if (SHOP->no_such_itemp)
-      delete [] SHOP->no_such_itemp;
-    SHOP->no_such_itemp = str_dup(arg);
+    STR_DUP(SHOP->no_such_itemp, arg);
     shedit_disp_text_menu(d);
     break;
   case SHEDIT_NEN:
-    if (SHOP->not_enough_nuyen)
-      delete [] SHOP->not_enough_nuyen;
-    SHOP->not_enough_nuyen = str_dup(arg);
+    STR_DUP(SHOP->not_enough_nuyen, arg);
     shedit_disp_text_menu(d);
     break;
   case SHEDIT_NOBUY:
-    if (SHOP->doesnt_buy)
-      delete [] SHOP->doesnt_buy;
-    SHOP->doesnt_buy = str_dup(arg);
+    STR_DUP(SHOP->doesnt_buy, arg);
     shedit_disp_text_menu(d);
     break;
   case SHEDIT_BUYMSG:
-    if (SHOP->buy)
-      delete [] SHOP->buy;
-    SHOP->buy = str_dup(arg);
+    STR_DUP(SHOP->buy, arg);
     shedit_disp_text_menu(d);
     break;
   case SHEDIT_SELLMSG:
-    if (SHOP->sell)
-      delete [] SHOP->sell;
-    SHOP->sell = str_dup(arg);
+    STR_DUP(SHOP->sell, arg);
     shedit_disp_text_menu(d);
     break;
   case SHEDIT_SHOPNAME:
-    if (SHOP->shopname)
-      delete [] SHOP->shopname;
-    SHOP->shopname = str_dup(arg);
+    STR_DUP(SHOP->shopname, arg);
     shedit_disp_text_menu(d);
     break;
   case SHEDIT_SELLING_MENU:
