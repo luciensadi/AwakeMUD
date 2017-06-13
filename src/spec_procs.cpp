@@ -986,7 +986,7 @@ SPECIAL(spell_trainer)
       send_to_char(ch, "%s sits you down and teaches you the ins and outs of casting %s at force %d.\r\n",
                    GET_NAME(trainer), spelltrainers[i].name, force);
       struct spell_data *spell = new spell_data;
-      spell->name = str_dup(spelltrainers[i].name);
+      STR_DUP(spell->name, spelltrainers[i].name);
       spell->type = spelltrainers[i].type;
       spell->subtype = spelltrainers[i].subtype;
       spell->force = force;
@@ -2728,7 +2728,10 @@ SPECIAL(bank)
           return TRUE;
         }
       wire_nuyen(ch, vict, amount, isfile);
-      send_to_char(ch, "You wire %d nuyen to %s's account.\r\n", amount, vict ? GET_CHAR_NAME(vict) : get_player_name(isfile));
+      char *str_dupped_name = get_player_name(isfile);
+      send_to_char(ch, "You wire %d nuyen to %s's account.\r\n", amount, vict ? GET_CHAR_NAME(vict) : str_dupped_name);
+      if (str_dupped_name)
+        delete str_dupped_name;
     }
     return TRUE;
   }
@@ -3528,9 +3531,9 @@ SPECIAL(painter)
     sprintf(buf, "%s is wheeled into the painting booth.", GET_VEH_NAME(veh));
     act(buf, FALSE, painter, 0, 0, TO_ROOM);
     if (!veh->restring)
-      veh->restring = str_dup(veh->short_description);
+      STR_DUP(veh->restring, veh->short_description);
     if (!veh->restring_long)
-      veh->restring_long = str_dup(veh->long_description);
+      STR_DUP(veh->restring_long, veh->long_description);
     STATE(ch->desc) = CON_VEHCUST;
     PLR_FLAGS(ch).SetBit(PLR_WRITING);
     vehcust_menu(ch->desc);
@@ -3636,36 +3639,36 @@ SPECIAL(bouncer_troll)
   if (!(PLR_FLAGGED(ch, PLR_KILLER) || PLR_FLAGGED(ch, PLR_BLACKLIST)))
     return FALSE;
   int toroom = -1;
-  char *dir = NULL, *dir2 = str_dup("nothing");
+  char *dir = NULL, *dir2 = str_dup("nothing"); /* <-- THIS IS WHY WE CAN'T HAVE NICE THINGS. */
   switch (world[troll->in_room].number) {
     case 32300:
       toroom = 32653;
-      dir = str_dup("east");
+      STR_DUP(dir, "east");
       break;
     case 2100:
       toroom = 32587;
-      dir = str_dup("west");
+      STR_DUP(dir, "west");
       break;
     case 31700:
       toroom = 30579;
-      dir = str_dup("ne");
-      dir2 = str_dup("northeast");
+      STR_DUP(dir, "ne");
+      STR_DUP(dir2, "northeast");
       break;
     case 3100:
       toroom = 30612;
-      dir = str_dup("north");
+      STR_DUP(dir, "north");
       break;
     case 5001:
       toroom = 5000;
-      dir = str_dup("east");
+      STR_DUP(dir, "east");
       break;
     case 35692:
       toroom = 35693;
-      dir = str_dup("south");
+      STR_DUP(dir, "south");
       break;
     case 35500:
       toroom = 32661;
-      dir = str_dup("east");
+      STR_DUP(dir, "east");
       break;
   }
   if (toroom == -1)
@@ -3676,6 +3679,9 @@ SPECIAL(bouncer_troll)
     char_from_room(ch);
     char_to_room(ch, real_room(toroom));
     act("$n comes flying out of the club, literally.", TRUE, ch, 0, 0, TO_ROOM);
+    
+    DELETE_ARRAY_IF_EXTANT(dir);
+    DELETE_ARRAY_IF_EXTANT(dir2);
     return TRUE;
   }
   return FALSE;

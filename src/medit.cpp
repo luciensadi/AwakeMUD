@@ -513,7 +513,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     case '3':
       send_to_char("Enter room description:", CH);
       d->edit_mode = MEDIT_REG_DESCR;
-      d->str = new (char *);
+      EQUALS_NEW(d->str, (char *));
       if (!d->str) {
         mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
         shutdown();
@@ -527,7 +527,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       // go to modify.cc
       send_to_char("Enter look description:\r\n", CH);
       d->edit_mode = MEDIT_LONG_DESCR;
-      d->str = new (char *);
+      EQUALS_NEW(d->str, (char *));
       if (!d->str) {
         mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
         shutdown();
@@ -627,30 +627,22 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     break;
 
   case MEDIT_EDIT_NAMELIST:
-    if (MOB->player.physical_text.keywords)
-      delete [] MOB->player.physical_text.keywords;
-    MOB->player.physical_text.keywords = str_dup(arg);
+    STR_DUP(MOB->player.physical_text.keywords, arg);
     medit_disp_menu(d);
     break;
 
   case MEDIT_SHORT_DESCR:
-    if (MOB->player.physical_text.name)
-      delete [] MOB->player.physical_text.name;
-    MOB->player.physical_text.name = str_dup(arg);
+    STR_DUP(MOB->player.physical_text.name, arg);
     medit_disp_menu(d);
     break;
 
   case MEDIT_ARRIVE_MSG:
-    if (MOB->char_specials.arrive)
-      delete [] MOB->char_specials.arrive;
-    MOB->char_specials.arrive = str_dup(arg);
+    STR_DUP(MOB->char_specials.arrive, arg);
     medit_disp_menu(d);
     break;
 
   case MEDIT_LEAVE_MSG:
-    if (MOB->char_specials.leave)
-      delete [] MOB->char_specials.leave;
-    MOB->char_specials.leave = str_dup(arg);
+    STR_DUP(MOB->char_specials.leave, arg);
     medit_disp_menu(d);
     break;
 

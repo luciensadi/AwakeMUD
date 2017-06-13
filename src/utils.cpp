@@ -912,11 +912,9 @@ void die_follower(struct char_data * ch)
 /* will arise. CH will follow leader                               */
 void add_follower(struct char_data * ch, struct char_data * leader)
 {
-  struct follow_type *k;
+  struct follow_type *k = new follow_type;
   
   ch->master = leader;
-  
-  k = new follow_type;
   
   k->follower = ch;
   k->next = leader->followers;

@@ -2318,10 +2318,7 @@ ACMD(do_poofset)
     return;
   }
 
-  if (*msg)
-    delete [] *msg;
-
-  *msg = str_dup(argument);
+  STR_DUP(*msg, argument);
 
   sprintf(buf, "UPDATE pfiles_immortdata SET poofin='%s', poofout='%s' WHERE idnum=%ld;", prepare_quotes(buf2, POOFIN(ch)), prepare_quotes(buf3, POOFOUT(ch)), GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
@@ -2446,7 +2443,7 @@ ACMD(do_last)
   bool from_file = FALSE;
   int level = 0;
   long idnum = 0, lastdisc = 0;
-  char *name, *host;
+  char *name = NULL, *host = NULL;
 
   one_argument(argument, arg);
   if (!*arg) {
@@ -2456,26 +2453,27 @@ ACMD(do_last)
 
   if (!(vict = get_player_vis(ch, arg, FALSE))) {
     prepare_quotes(buf2, arg);
-    if (!does_player_exist(buf2)) {
-      send_to_char("There is no such player.\r\n", ch);
-      return;
-    }
     from_file = TRUE;
     sprintf(buf, "SELECT Idnum, Rank, Host, LastD, Name FROM pfiles WHERE name='%s';", buf2);
     mysql_wrapper(mysql, buf);
     MYSQL_RES *res = mysql_use_result(mysql);
     MYSQL_ROW row = mysql_fetch_row(res);
+    if (!row && mysql_field_count(mysql)) {
+      mysql_free_result(res);
+      send_to_char("There is no such player.\r\n", ch);
+      return;
+    }
     idnum = atol(row[0]);
     level = atoi(row[1]);
-    host = str_dup(row[2]);
+    STR_DUP(host, row[2]);
     lastdisc = atol(row[3]);
-    name = str_dup(arg);
+    STR_DUP(name, arg);
     mysql_free_result(res);
   } else {
     level = GET_LEVEL(vict);
-    name = str_dup(GET_CHAR_NAME(vict));
+    STR_DUP(name, GET_CHAR_NAME(vict));
     idnum = GET_IDNUM(vict);
-    host = str_dup(vict->player.host);
+    STR_DUP(host, vict->player.host);
     lastdisc = vict->player.time.lastdisc;
   }
 
@@ -4668,9 +4666,9 @@ ACMD(do_tail)
   char *temp;
   int i = 0;
   char *buf;
-
-  out = new FILE;
-  buf = new char[MAX_STRING_LENGTH];
+  
+  char when_you_declare_a_pointer_as_a_new_char_array_then_dont_delete_it_that_is_a_leak[MAX_STRING_LENGTH];
+  buf = when_you_declare_a_pointer_as_a_new_char_array_then_dont_delete_it_that_is_a_leak;
 
   two_arguments(argument, arg, buf);
 

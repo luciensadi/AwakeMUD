@@ -615,6 +615,16 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define OUTSIDE(ch)           (!ROOM_FLAGGED(((ch)->in_veh ? (ch)->in_veh->in_room : (ch)->in_room), ROOM_INDOORS))
 
 
+/* Hopefully making memory management a little easier. */
+
+#define STR_DUP(target, string) {if ((target)) delete [] (target); (target) = str_dup((string));}
+
+#define EQUALS_NEW(target, item) {if ((target)) delete (target); (target) = new item;}
+#define EQUALS_NEW_ARRAY(target, item) {if ((target)) delete [] (target); (target) = new item;}
+
+#define DELETE_IF_EXTANT(target) {if ((target)) delete (target);}
+#define DELETE_ARRAY_IF_EXTANT(target) {if ((target)) delete [] (target);}
+
 /* OS compatibility ******************************************************/
 
 

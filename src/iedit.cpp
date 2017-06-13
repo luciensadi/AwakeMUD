@@ -1416,7 +1416,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           /* let's go out to modify.c */
           send_to_char("Enter long desc:\r\n", d->character);
           d->edit_mode = IEDIT_LONGDESC;
-          d->str = new (char *);
+          EQUALS_NEW(d->str, (char *));
           if (!d->str) {
             mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
             shutdown();
@@ -1506,21 +1506,15 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       break;                      /* end of IEDIT_MAIN_MENU */
       
     case IEDIT_EDIT_NAMELIST:
-      if (d->edit_obj->text.keywords)
-        delete [] d->edit_obj->text.keywords;
-      d->edit_obj->text.keywords = str_dup(arg);
+      STR_DUP(d->edit_obj->text.keywords, arg);
       iedit_disp_menu(d);
       break;
     case IEDIT_SHORTDESC:
-      if (d->edit_obj->text.name)
-        delete [] d->edit_obj->text.name;
-      d->edit_obj->text.name = str_dup(arg);
+      STR_DUP(d->edit_obj->text.name, arg);
       iedit_disp_menu(d);
       break;
     case IEDIT_DESC:
-      if (d->edit_obj->text.room_desc)
-        delete [] d->edit_obj->text.room_desc;
-      d->edit_obj->text.room_desc = str_dup(arg);
+      STR_DUP(d->edit_obj->text.room_desc, arg);
       iedit_disp_menu(d);
       break;
     case IEDIT_LONGDESC:
@@ -2424,9 +2418,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       iedit_disp_prompt_apply_menu(d);
       break;
     case IEDIT_EXTRADESC_KEY:
-      if (((struct extra_descr_data *) *d->misc_data)->keyword)
-        delete [] ((struct extra_descr_data *) *d->misc_data)->keyword;
-      ((struct extra_descr_data *) * d->misc_data)->keyword = str_dup(arg);
+      STR_DUP(((struct extra_descr_data *) * d->misc_data)->keyword, arg);
       iedit_disp_extradesc_menu(d);
       break;
     case IEDIT_MATERIAL:
@@ -2477,7 +2469,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           d->edit_mode = IEDIT_EXTRADESC_DESCRIPTION;
           send_to_char("Enter description:\r\n", d->character);
           /* send out to modify.c */
-          d->str = new (char *);
+          EQUALS_NEW(d->str, (char *));
           if (!d->str) {
             mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
             shutdown();

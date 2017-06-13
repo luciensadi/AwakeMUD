@@ -2536,7 +2536,8 @@ ACMD(do_who)
     static char buffer[MAX_STRING_LENGTH*4];
     register char *temp = &buffer[0];
     register const char *color;
-    char *str = str_dup(buf);
+    char *dup = str_dup(buf);
+    char *str = dup;
     while(*str) {
       if (*str == '^') {
         switch (*++str) {
@@ -2613,6 +2614,8 @@ ACMD(do_who)
         *temp++ = *str++;
     }
     *temp = '\0';
+    if (dup)
+      delete [] dup;
     if (!(fl = fopen("text/wholist", "w"))) {
       mudlog("SYSERR: Cannot open wholist for write", NULL, LOG_SYSLOG, FALSE);
       return;
@@ -3336,9 +3339,7 @@ ACMD(do_position)
     send_to_char(ch, "You can't set your position while fighting.\r\n");
     return;
   }
-  if (GET_DEFPOS(ch))
-    delete [] GET_DEFPOS(ch);
-  GET_DEFPOS(ch) = str_dup(argument);
+  STR_DUP(GET_DEFPOS(ch), argument);
   send_to_char(ch, "Position set.\r\n");
 }
 

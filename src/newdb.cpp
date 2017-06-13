@@ -165,40 +165,21 @@ static void init_char(struct char_data * ch)
 
 static void init_char_strings(char_data *ch)
 {
-  if (ch->player.physical_text.keywords)
-    delete [] ch->player.physical_text.keywords;
-
   size_t len = strlen(GET_CHAR_NAME(ch)) + 1; // + strlen(race) + 2;
-  ch->player.physical_text.keywords = new char[len];
+  EQUALS_NEW(ch->player.physical_text.keywords, char[len]);
 
   strcpy(ch->player.physical_text.keywords, GET_CHAR_NAME(ch));
   *(ch->player.physical_text.keywords) =
     LOWER(*ch->player.physical_text.keywords);
 
-  if (ch->player.physical_text.name)
-    delete [] ch->player.physical_text.name;
+  char temp[256];
 
-  if (ch->player.physical_text.room_desc)
-    delete [] ch->player.physical_text.room_desc;
-
-  if (ch->player.background)
-    delete [] ch->player.background;
-
-  if (ch->player.physical_text.look_desc)
-    delete [] ch->player.physical_text.look_desc;
-
-  {
-    char temp[256];
-
-    sprintf(temp, "A %s %s", genders[(int)GET_SEX(ch)], pc_race_types[(int)GET_RACE(ch)]);
-    ch->player.physical_text.name = str_dup(temp);
-
-    sprintf(temp, "A %s %s voice", genders[(int)GET_SEX(ch)], pc_race_types[(int)GET_RACE(ch)]);
-    ch->player.physical_text.room_desc = str_dup(temp);
-
-    ch->player.physical_text.look_desc = str_dup("A fairly nondescript thing.\n");    
-    ch->player.background = str_dup("A boring character.\n");
-  }
+  sprintf(temp, "A %s %s", genders[(int)GET_SEX(ch)], pc_race_types[(int)GET_RACE(ch)]);
+  STR_DUP(ch->player.physical_text.name, temp);
+  sprintf(temp, "A %s %s voice", genders[(int)GET_SEX(ch)], pc_race_types[(int)GET_RACE(ch)]);
+  STR_DUP(ch->player.physical_text.room_desc, temp);
+  STR_DUP(ch->player.physical_text.look_desc, "A fairly nondescript thing.\n");
+  STR_DUP(ch->player.background, "A boring character.\n");
 
   set_title(ch, "^y(Newbie)^n");
   set_pretitle(ch, NULL);
@@ -270,8 +251,8 @@ static void init_char_strings(char_data *ch)
     set_whotitle(ch, "CHKLG"); /* Will set incase the players */
   }        /* race is undeterminable      */
 
-  GET_PROMPT(ch) = str_dup("< @pP @mM > ");
-  ch->player.matrixprompt = str_dup("< @pP @mM > ");
+  STR_DUP(GET_PROMPT(ch), "< @pP @mM > ");
+  STR_DUP(ch->player.matrixprompt, "< @pP @mM > ");
 }
 
 // Eventual TODO: https://dev.mysql.com/doc/refman/5.7/en/mysql-real-escape-string-quote.html
@@ -372,7 +353,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     return FALSE;
   }
   GET_IDNUM(ch) = atoi(row[0]);
-  ch->player.char_name = str_dup(row[1]);
+  STR_DUP(ch->player.char_name, row[1]);
   strcpy(GET_PASSWD(ch), row[2]);
   GET_RACE(ch) = atoi(row[3]);
   GET_SEX(ch) = atoi(row[4]);
@@ -381,29 +362,29 @@ bool load_char(const char *name, char_data *ch, bool logon)
   PLR_FLAGS(ch).FromString(row[7]);
   PRF_FLAGS(ch).FromString(row[8]);
 
-  ch->player.physical_text.room_desc = str_dup(row[9]);
-  ch->player.background = str_dup(row[10]);
-  ch->player.physical_text.keywords = str_dup(row[11]);
-  ch->player.physical_text.name = str_dup(row[12]);
-  ch->player.physical_text.look_desc = str_dup(row[13]);
+  STR_DUP(ch->player.physical_text.room_desc, row[9]);
+  STR_DUP(ch->player.background, row[10]);
+  STR_DUP(ch->player.physical_text.keywords, row[11]);
+  STR_DUP(ch->player.physical_text.name, row[12]);
+  STR_DUP(ch->player.physical_text.look_desc, row[13]);
 
-  ch->player.matrix_text.keywords = str_dup(row[14]);
-  ch->player.matrix_text.name = str_dup(row[15]);
-  ch->player.matrix_text.room_desc = str_dup(row[16]);
-  ch->player.matrix_text.look_desc = str_dup(row[17]);
+  STR_DUP(ch->player.matrix_text.keywords, row[14]);
+  STR_DUP(ch->player.matrix_text.name, row[15]);
+  STR_DUP(ch->player.matrix_text.room_desc, row[16]);
+  STR_DUP(ch->player.matrix_text.look_desc, row[17]);
 
-  ch->player.astral_text.keywords = str_dup(row[18]);
-  ch->player.astral_text.name = str_dup(row[19]);
-  ch->player.astral_text.room_desc = str_dup(row[20]);
-  ch->player.astral_text.look_desc = str_dup(row[21]);
-  ch->char_specials.leave = str_dup(row[22]);
-  ch->char_specials.arrive = str_dup(row[23]);
-  GET_TITLE(ch) = str_dup(row[24]);
-  GET_PRETITLE(ch) = str_dup(row[25]);
-  GET_WHOTITLE(ch) = str_dup(row[26]);
-  ch->player.prompt = str_dup(row[27]);
-  ch->player.matrixprompt = str_dup(row[28]);
-  ch->player.host = str_dup(row[29]);
+  STR_DUP(ch->player.astral_text.keywords, row[18]);
+  STR_DUP(ch->player.astral_text.name, row[19]);
+  STR_DUP(ch->player.astral_text.room_desc, row[20]);
+  STR_DUP(ch->player.astral_text.look_desc, row[21]);
+  STR_DUP(ch->char_specials.leave, row[22]);
+  STR_DUP(ch->char_specials.arrive, row[23]);
+  STR_DUP(GET_TITLE(ch), row[24]);
+  STR_DUP(GET_PRETITLE(ch), row[25]);
+  STR_DUP(GET_WHOTITLE(ch), row[26]);
+  STR_DUP(ch->player.prompt, row[27]);
+  STR_DUP(ch->player.matrixprompt, row[28]);
+  STR_DUP(ch->player.host, row[29]);
   GET_REAL_BOD(ch) = atoi(row[30]);
   GET_REAL_QUI(ch) = atoi(row[31]);
   GET_REAL_STR(ch) = atoi(row[32]);
@@ -461,8 +442,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
       ch->player_specials->saved.invis_level = atoi(row[1]);
       ch->player_specials->saved.incog_level = atoi(row[2]);
       ch->player_specials->saved.zonenum = atoi(row[3]);
-      POOFIN(ch) = str_dup((strcmp(row[4], "(null)") == 0 ? DEFAULT_POOFIN_STRING : row[4]));
-      POOFOUT(ch) = str_dup((strcmp(row[5], "(null)") == 0 ? DEFAULT_POOFOUT_STRING : row[5]));
+      STR_DUP(POOFIN(ch), (strcmp(row[4], "(null)") == 0 ? DEFAULT_POOFIN_STRING : row[4]));
+      STR_DUP(POOFOUT(ch), (strcmp(row[5], "(null)") == 0 ? DEFAULT_POOFOUT_STRING : row[5]));
     }
   } else {
     sprintf(buf, "SELECT * FROM pfiles_drugs WHERE idnum=%ld;", GET_IDNUM(ch));
@@ -538,7 +519,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
       res = mysql_use_result(mysql);
       while ((row = mysql_fetch_row(res))) {
         spell_data *spell = new spell_data;
-        spell->name = str_dup(row[1]);
+        STR_DUP(spell->name, row[1]);
         spell->type = atoi(row[2]);
         spell->subtype = atoi(row[3]);
         spell->force = atoi(row[4]);
@@ -582,8 +563,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
   res = mysql_use_result(mysql);
   while ((row = mysql_fetch_row(res))) {
     alias *a = new alias;
-    a->command = str_dup(row[1]);
-    a->replacement = str_dup(row[2]);
+    STR_DUP(a->command, row[1]);
+    STR_DUP(a->replacement, row[2]);
 
     if (strchr(a->replacement, ALIAS_SEP_CHAR) ||
         strchr(a->replacement, ALIAS_VAR_CHAR))
@@ -602,7 +583,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   while ((row = mysql_fetch_row(res))) {
     remem *a = new remem;
     a->idnum = atol(row[1]);
-    a->mem = str_dup(row[2]);
+    STR_DUP(a->mem, row[2]);
     a->next = GET_MEMORY(ch);
     GET_MEMORY(ch) = a;
   }
@@ -648,9 +629,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
       if (vnum > 0 && (obj = read_object(vnum, VIRTUAL))) {
         GET_OBJ_COST(obj) = atoi(row[2]);
         if (*row[3])
-          obj->restring = str_dup(row[3]);
+          STR_DUP(obj->restring, row[3]);
         if (*row[4])
-          obj->photo = str_dup(row[4]);
+          STR_DUP(obj->photo, row[4]);
         for (int x = 0, y = 5; x < NUM_VALUES; x++, y++)
           GET_OBJ_VAL(obj, x) = atoi(row[y]);
         if (GET_OBJ_VAL(obj, 0) == CYB_PHONE && GET_OBJ_VAL(obj, 7))
@@ -706,9 +687,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
       if (vnum > 0 && (obj = read_object(vnum, VIRTUAL))) {
         GET_OBJ_COST(obj) = atoi(row[2]);
         if (*row[3])
-          obj->restring = str_dup(row[3]);
+          STR_DUP(obj->restring, row[3]);
         if (*row[4])
-          obj->photo = str_dup(row[4]);
+          STR_DUP(obj->photo, row[4]);
         for (int x = 0, y = 5; x < NUM_VALUES; x++, y++)
           GET_OBJ_VAL(obj, x) = atoi(row[y]);
         if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_OBJ_VAL(obj, 2))
@@ -768,9 +749,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
       if (vnum > 0 && (obj = read_object(vnum, VIRTUAL))) {
         GET_OBJ_COST(obj) = atoi(row[2]);
         if (*row[3])
-          obj->restring = str_dup(row[3]);
+          STR_DUP(obj->restring, row[3]);
         if (*row[4])
-          obj->photo = str_dup(row[4]);
+          STR_DUP(obj->photo, row[4]);
         for (int x = 0, y = 5; x < NUM_VALUES; x++, y++)
           GET_OBJ_VAL(obj, x) = atoi(row[y]);
         if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_OBJ_VAL(obj, 2))
@@ -1468,7 +1449,7 @@ char_data *PCIndex::LoadChar(const char *name, bool logon)
   // load the character data
   char_data *ch = Mem->GetCh();
 
-  ch->player_specials = new player_special_data;
+  EQUALS_NEW(ch->player_specials, player_special_data);
   memset(ch->player_specials, 0, sizeof(player_special_data));
 
   load_char(name, ch, logon);
@@ -1652,7 +1633,9 @@ bool does_player_exist(char *name)
   char buf[MAX_STRING_LENGTH];
   if (!name || !*name)
     return FALSE;
-  sprintf(buf, "SELECT * FROM pfiles WHERE Name='%s';", name);
+  
+  char safename[strlen(name) * 2 + 1];
+  sprintf(buf, "SELECT idnum FROM pfiles WHERE Name='%s';", prepare_quotes(safename, name));
   if (mysql_wrapper(mysql, buf))
     return FALSE;
   MYSQL_RES *res = mysql_use_result(mysql);
@@ -1668,7 +1651,7 @@ bool does_player_exist(char *name)
 bool does_player_exist(long id)
 {
   char buf[MAX_STRING_LENGTH];
-  sprintf(buf, "SELECT * FROM pfiles WHERE idnum=%ld;", id);
+  sprintf(buf, "SELECT idnum FROM pfiles WHERE idnum=%ld;", id);
   mysql_wrapper(mysql, buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
@@ -1683,7 +1666,8 @@ bool does_player_exist(long id)
 vnum_t get_player_id(char *name)
 {
   char buf[MAX_STRING_LENGTH];
-  sprintf(buf, "SELECT idnum FROM pfiles WHERE name=\"%s\";", name);
+  char safename[strlen(name) * 2 + 1];
+  sprintf(buf, "SELECT idnum FROM pfiles WHERE name='%s';", prepare_quotes(safename, name));
   mysql_wrapper(mysql, buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);

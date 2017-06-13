@@ -362,16 +362,22 @@ char *read_delete(long recipient, char *sender)
   tmstr = asctime(localtime(&header.header_data.mail_time));
   *(tmstr + strlen(tmstr) - 1) = '\0';
 
-  if (get_player_name(header.header_data.from))
-    strcpy(sender, get_player_name(header.header_data.from));
+  char *this_is_why_this_game_leaks_so_much_memory = get_player_name(header.header_data.from);
+  if (this_is_why_this_game_leaks_so_much_memory) {
+    strcpy(sender, this_is_why_this_game_leaks_so_much_memory);
+    delete this_is_why_this_game_leaks_so_much_memory;
+  }
 
   sprintf(buf, "^W * * * * Shadowland Mail System * * * *\r\n"
           "^YDate: %s\r\n"
           "  ^BTo: %s\r\n"
           "^CFrom: %s^n\r\n\r\n",
           tmstr,
-          get_player_name(recipient),
+          (this_is_why_this_game_leaks_so_much_memory = get_player_name(recipient)),
           sender);
+  
+  if (this_is_why_this_game_leaks_so_much_memory)
+    delete this_is_why_this_game_leaks_so_much_memory;
 
   string_size = (sizeof(char) * (strlen(buf) + strlen(header.txt) + 1));
   message = new char[string_size];
@@ -513,11 +519,11 @@ void postmaster_receive_mail(struct char_data * ch, struct char_data *mailman,
   while (has_mail(GET_IDNUM(ch)))
   {
     obj = read_object(111, VIRTUAL);
+    DELETE_ARRAY_IF_EXTANT(obj->photo);
     obj->photo = read_delete(GET_IDNUM(ch), buf);
 
     if (obj->photo == NULL)
-      obj->photo =
-        str_dup("Mail system error - please report.  Error #11.\r\n");
+      obj->photo = str_dup("Mail system error - please report.  Error #11.\r\n");
 
     obj_to_char(obj, ch);
 

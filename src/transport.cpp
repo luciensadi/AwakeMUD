@@ -193,7 +193,7 @@ static int process_elevator(struct room_data *room,
 
 void open_taxi_door(vnum_t room, int dir, int taxi)
 {
-  world[room].dir_option[dir] = new room_direction_data;
+  EQUALS_NEW(world[room].dir_option[dir], room_direction_data);
   memset((char *) world[room].dir_option[dir], 0,
          sizeof (struct room_direction_data));
   world[room].dir_option[dir]->to_room = taxi;
@@ -203,7 +203,7 @@ void open_taxi_door(vnum_t room, int dir, int taxi)
 
   dir = rev_dir[dir];
 
-  world[taxi].dir_option[dir] = new room_direction_data;
+  EQUALS_NEW(world[taxi].dir_option[dir], room_direction_data);
   memset((char *) world[taxi].dir_option[dir], 0,
          sizeof (struct room_direction_data));
   world[taxi].dir_option[dir]->to_room = room;
@@ -660,7 +660,7 @@ static void open_elevator_doors(struct room_data *room, int num, int floor)
   rnum = real_room(elevator[num].floor[floor].vnum);
   dir = elevator[num].floor[floor].doors;
 
-  room->dir_option[dir] = new room_direction_data;
+  EQUALS_NEW(room->dir_option[dir], room_direction_data);
   memset((char *) room->dir_option[dir], 0, sizeof (struct room_direction_data));
   room->dir_option[dir]->to_room = rnum;
   room->dir_option[dir]->barrier = 8;
@@ -669,7 +669,7 @@ static void open_elevator_doors(struct room_data *room, int num, int floor)
 
   dir = rev_dir[dir];
 
-  world[rnum].dir_option[dir] = new room_direction_data;
+  EQUALS_NEW(world[rnum].dir_option[dir], room_direction_data);
   memset((char *) world[rnum].dir_option[dir], 0, sizeof (struct room_direction_data));
   world[rnum].dir_option[dir]->to_room = real_room(room->number);
   world[rnum].dir_option[dir]->barrier = 8;
@@ -1053,7 +1053,7 @@ void EscalatorProcess(void)
 static void open_doors(int car, int to, int room, int from)
 {
   if (!world[car].dir_option[to]) {
-    world[car].dir_option[to] = new room_direction_data;
+    EQUALS_NEW(world[car].dir_option[to], room_direction_data);
     memset((char *) world[car].dir_option[to], 0,
            sizeof(struct room_direction_data));
     world[car].dir_option[to]->to_room = room;
@@ -1063,7 +1063,7 @@ static void open_doors(int car, int to, int room, int from)
     world[car].dir_option[to]->material = 8;
   }
   if (!world[room].dir_option[from]) {
-    world[room].dir_option[from] = new room_direction_data;
+    EQUALS_NEW(world[room].dir_option[from], room_direction_data);
     memset((char *) world[room].dir_option[from], 0,
            sizeof(struct room_direction_data));
     world[room].dir_option[from]->to_room = car;
@@ -1188,7 +1188,7 @@ void extend_walkway_st(int ferry, int to, int room, int from)
   assert(room > 0);
   
   if (!world[ferry].dir_option[to]) {
-    world[ferry].dir_option[to] = new room_direction_data;
+    EQUALS_NEW(world[ferry].dir_option[to], room_direction_data);
     memset((char *) world[ferry].dir_option[to], 0,
            sizeof(struct room_direction_data));
     world[ferry].dir_option[to]->to_room = room;
@@ -1198,7 +1198,7 @@ void extend_walkway_st(int ferry, int to, int room, int from)
     world[ferry].dir_option[to]->material = 8;
   }
   if (!world[room].dir_option[from]) {
-    world[room].dir_option[from] = new room_direction_data;
+    EQUALS_NEW(world[room].dir_option[from], room_direction_data);
     memset((char *) world[room].dir_option[from], 0,
            sizeof(struct room_direction_data));
     world[room].dir_option[from]->to_room = ferry;
@@ -1292,7 +1292,7 @@ struct transport_type hellhound[2] =
 void open_busdoor(int bus, int to, int room, int from)
 {
   if (!world[bus].dir_option[to]) {
-    world[bus].dir_option[to] = new room_direction_data;
+    EQUALS_NEW(world[bus].dir_option[to], room_direction_data);
     memset((char *) world[bus].dir_option[to], 0,
            sizeof(struct room_direction_data));
     world[bus].dir_option[to]->to_room = room;
@@ -1302,7 +1302,7 @@ void open_busdoor(int bus, int to, int room, int from)
     world[bus].dir_option[to]->material = 8;
   }
   if (!world[room].dir_option[from]) {
-    world[room].dir_option[from] = new room_direction_data;
+    EQUALS_NEW(world[room].dir_option[from], room_direction_data);
     memset((char *) world[room].dir_option[from], 0,
            sizeof(struct room_direction_data));
     world[room].dir_option[from]->to_room = bus;
@@ -1383,7 +1383,7 @@ struct transport_type camas[2] =
 void camas_extend(int bus, int to, int room, int from)
 {
   if (!world[bus].dir_option[to]) {
-    world[bus].dir_option[to] = new room_direction_data;
+    EQUALS_NEW(world[bus].dir_option[to], room_direction_data);
     memset((char *) world[bus].dir_option[to], 0,
            sizeof(struct room_direction_data));
     world[bus].dir_option[to]->to_room = room;
@@ -1393,7 +1393,7 @@ void camas_extend(int bus, int to, int room, int from)
     world[bus].dir_option[to]->material = 8;
   }
   if (!world[room].dir_option[from]) {
-    world[room].dir_option[from] = new room_direction_data;
+    EQUALS_NEW(world[room].dir_option[from], room_direction_data);
     memset((char *) world[room].dir_option[from], 0,
            sizeof(struct room_direction_data));
     world[room].dir_option[from]->to_room = bus;
@@ -1478,7 +1478,7 @@ struct transport_type lightrail[4] =
 void open_lightraildoor(int lightrail, int to, int room, int from)
 {
   if (!world[lightrail].dir_option[to]) {
-    world[lightrail].dir_option[to] = new room_direction_data;
+    EQUALS_NEW(world[lightrail].dir_option[to], room_direction_data);
     memset((char *) world[lightrail].dir_option[to], 0,
            sizeof(struct room_direction_data));
     world[lightrail].dir_option[to]->to_room = room;
@@ -1488,7 +1488,7 @@ void open_lightraildoor(int lightrail, int to, int room, int from)
     world[lightrail].dir_option[to]->material = 8;
   }
   if (!world[room].dir_option[from]) {
-    world[room].dir_option[from] = new room_direction_data;
+    EQUALS_NEW(world[room].dir_option[from], room_direction_data);
     memset((char *) world[room].dir_option[from], 0,
            sizeof(struct room_direction_data));
     world[room].dir_option[from]->to_room = lightrail;
@@ -1606,7 +1606,7 @@ void extend_walkway(int ferry, int to, int room, int from)
   assert(room > 0);
   
   if (!world[ferry].dir_option[to]) {
-    world[ferry].dir_option[to] = new room_direction_data;
+    EQUALS_NEW(world[ferry].dir_option[to], room_direction_data);
     memset((char *) world[ferry].dir_option[to], 0,
            sizeof(struct room_direction_data));
     world[ferry].dir_option[to]->to_room = room;
@@ -1616,7 +1616,7 @@ void extend_walkway(int ferry, int to, int room, int from)
     world[ferry].dir_option[to]->material = 8;
   }
   if (!world[room].dir_option[from]) {
-    world[room].dir_option[from] = new room_direction_data;
+    EQUALS_NEW(world[room].dir_option[from], room_direction_data);
     memset((char *) world[room].dir_option[from], 0,
            sizeof(struct room_direction_data));
     world[room].dir_option[from]->to_room = ferry;
@@ -1805,7 +1805,7 @@ struct transport_type grenada[2] =
 void grenada_extend(int bus, int to, int room, int from)
 {
   if (!world[bus].dir_option[to]) {
-    world[bus].dir_option[to] = new room_direction_data;
+    EQUALS_NEW(world[bus].dir_option[to], room_direction_data);
     memset((char *) world[bus].dir_option[to], 0,
            sizeof(struct room_direction_data));
     world[bus].dir_option[to]->to_room = room;
@@ -1815,7 +1815,7 @@ void grenada_extend(int bus, int to, int room, int from)
     world[bus].dir_option[to]->material = 8;
   }
   if (!world[room].dir_option[from]) {
-    world[room].dir_option[from] = new room_direction_data;
+    EQUALS_NEW(world[room].dir_option[from], room_direction_data);
     memset((char *) world[room].dir_option[from], 0,
            sizeof(struct room_direction_data));
     world[room].dir_option[from]->to_room = bus;

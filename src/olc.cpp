@@ -212,25 +212,25 @@ ACMD (do_redit)
     *room = world[room_num];
     /* allocate space for all strings  */
     if (world[room_num].name)
-      room->name = str_dup (world[room_num].name);
+      STR_DUP(room->name, world[room_num].name);
     if (world[room_num].description)
-      room->description = str_dup (world[room_num].description);
+      STR_DUP(room->description , world[room_num].description);
     if (world[room_num].address)
-      room->address = str_dup (world[room_num].address);
+      STR_DUP(room->address, world[room_num].address);
     room->zone = world[room_num].zone;
     /* exits - alloc only if necessary */
     for (counter = 0; counter < NUM_OF_DIRS; counter++) {
       if (world[room_num].dir_option[counter]) {
-        room->dir_option[counter] = new room_direction_data;
+        EQUALS_NEW(room->dir_option[counter], room_direction_data);
         /* copy numbers over */
         *room->dir_option[counter] = *world[room_num].dir_option[counter];
         /* malloc strings */
         if (world[room_num].dir_option[counter]->general_description)
-          room->dir_option[counter]->general_description =
-            str_dup(world[room_num].dir_option[counter]->general_description);
+          STR_DUP(room->dir_option[counter]->general_description,
+                  world[room_num].dir_option[counter]->general_description);
         if (world[room_num].dir_option[counter]->keyword)
-          room->dir_option[counter]->keyword =
-            str_dup(world[room_num].dir_option[counter]->keyword);
+          STR_DUP(room->dir_option[counter]->keyword,
+                  world[room_num].dir_option[counter]->keyword);
       }
     }
     if (world[room_num].ex_description) {
@@ -238,12 +238,11 @@ ACMD (do_redit)
 
       temp = new extra_descr_data;
       room->ex_description = temp;
-      for (This = world[room_num].ex_description;
-           This; This = This->next) {
+      for (This = world[room_num].ex_description; This; This = This->next) {
         if (This->keyword)
-          temp->keyword = str_dup (This->keyword);
+          STR_DUP(temp->keyword, This->keyword);
         if (This->description)
-          temp->description = str_dup (This->description);
+          STR_DUP(temp->description, This->description);
         if (This->next) {
           temp2 = new extra_descr_data;
 
@@ -271,9 +270,9 @@ ACMD (do_redit)
      */
     d->edit_room = Mem->GetRoom();
     //memset((char *) d->edit_room, 0, sizeof(struct room_data));
-    d->edit_room->name = str_dup("An unfinished room");
-    d->edit_room->description = str_dup("You are in an unfinished room.\r\n");
-    d->edit_room->address = str_dup("An undiscolsed location");
+    STR_DUP(d->edit_room->name, "An unfinished room");
+    STR_DUP(d->edit_room->description, "You are in an unfinished room.\r\n");
+    STR_DUP(d->edit_room->address, "An undiscolsed location");
     int i = 0;
     while ((d->edit_number > zone_table[i].top) && (i < top_of_zone_table))
       ++i;
@@ -358,25 +357,25 @@ ACMD(do_rclone)
   *room = world[num1];
   /* allocate space for all strings  */
   if (world[num1].name)
-    room->name = str_dup (world[num1].name);
+    STR_DUP(room->name, world[num1].name);
   if (world[num1].description)
-    room->description = str_dup (world[num1].description);
+    STR_DUP(room->description, world[num1].description);
   if (world[num1].address)
-    room->address = str_dup (world[num1].address);
+    STR_DUP(room->address, world[num1].address);
   room->zone = world[num1].zone;
   /* exits - alloc only if necessary */
   for (counter = 0; counter < NUM_OF_DIRS; counter++) {
     if (world[num1].dir_option[counter]) {
-      room->dir_option[counter] = new room_direction_data;
+      EQUALS_NEW(room->dir_option[counter], room_direction_data);
       /* copy numbers over */
       *room->dir_option[counter] = *world[num1].dir_option[counter];
       /* malloc strings */
       if (world[num1].dir_option[counter]->general_description)
-        room->dir_option[counter]->general_description =
-          str_dup(world[num1].dir_option[counter]->general_description);
+        STR_DUP(room->dir_option[counter]->general_description,
+                world[num1].dir_option[counter]->general_description);
       if (world[num1].dir_option[counter]->keyword)
-        room->dir_option[counter]->keyword =
-          str_dup(world[num1].dir_option[counter]->keyword);
+        STR_DUP(room->dir_option[counter]->keyword,
+                world[num1].dir_option[counter]->keyword);
     }
   }
   // now do any extra descriptions
@@ -387,9 +386,9 @@ ACMD(do_rclone)
     room->ex_description = temp;
     for (This = world[num1].ex_description; This; This = This->next) {
       if (This->keyword)
-        temp->keyword = str_dup (This->keyword);
+        STR_DUP(temp->keyword, This->keyword);
       if (This->description)
-        temp->description = str_dup (This->description);
+        STR_DUP(temp->description, This->description);
       if (This->next) {
         temp2 = new extra_descr_data;
 
@@ -484,7 +483,7 @@ ACMD(do_dig)
     return;
   }
 
-  world[ch->in_room].dir_option[dir] = new room_direction_data;
+  EQUALS_NEW(world[ch->in_room].dir_option[dir], room_direction_data);
   memset((char *) world[ch->in_room].dir_option[dir], 0, sizeof (struct room_direction_data));
   world[ch->in_room].dir_option[dir]->to_room = room;
   world[ch->in_room].dir_option[dir]->barrier = 4;
@@ -492,7 +491,7 @@ ACMD(do_dig)
   world[ch->in_room].dir_option[dir]->exit_info = 0;
   world[ch->in_room].dir_option[dir]->to_room_vnum = world[room].number;
   dir = rev_dir[dir];
-  world[room].dir_option[dir] = new room_direction_data;
+  EQUALS_NEW(world[room].dir_option[dir], room_direction_data);
   memset((char *) world[room].dir_option[dir], 0, sizeof (struct room_direction_data));
   world[room].dir_option[dir]->to_room = ch->in_room;
   world[room].dir_option[dir]->barrier = 4;
@@ -763,18 +762,15 @@ ACMD (do_vedit)
      * copy all strings over
      */
     if (veh_proto[veh_num].name)
-
-      veh->name = str_dup (veh_proto[veh_num].name);
+      STR_DUP(veh->name, veh_proto[veh_num].name);
     if (veh_proto[veh_num].short_description)
-      veh->short_description = str_dup (veh_proto[veh_num].short_description);
+      STR_DUP(veh->short_description, veh_proto[veh_num].short_description);
     if (veh_proto[veh_num].description)
-      veh->description = str_dup(veh_proto[veh_num].description);
-    if (veh_proto[veh_num].description)
-      veh->description = str_dup (veh_proto[veh_num].description);
+      STR_DUP(veh->description, veh_proto[veh_num].description);
     if (veh_proto[veh_num].long_description)
-      veh->long_description = str_dup (veh_proto[veh_num].long_description);
+      STR_DUP(veh->long_description, veh_proto[veh_num].long_description);
     if (veh_proto[veh_num].inside_description)
-      veh->inside_description = str_dup(veh_proto[veh_num].inside_description);
+      STR_DUP(veh->inside_description, veh_proto[veh_num].inside_description);
     d->edit_veh = veh;
 #if CONFIRM_EXISTING
 
@@ -792,10 +788,10 @@ ACMD (do_vedit)
      * create dummy object!
      */
     d->edit_veh = Mem->GetVehicle();
-    d->edit_veh->name = str_dup ("unfinished object");
-    d->edit_veh->description = str_dup ("An unfinished object is lying here.");
-    d->edit_veh->short_description = str_dup ("an unfinished object");
-    d->edit_veh->long_description = str_dup ("It looks pretty much like an unfinished object");
+    STR_DUP(d->edit_veh->name, "unfinished object");
+    STR_DUP(d->edit_veh->description, "An unfinished object is lying here.");
+    STR_DUP(d->edit_veh->short_description, "an unfinished object");
+    STR_DUP(d->edit_veh->long_description, "It looks pretty much like an unfinished object");
     d->edit_mode = VEDIT_CONFIRM_EDIT;
     return;
   }
@@ -899,13 +895,13 @@ ACMD (do_iedit)
      * copy all strings over
      */
     if (obj_proto[obj_num].text.keywords)
-      obj->text.keywords = str_dup(obj_proto[obj_num].text.keywords);
+      STR_DUP(obj->text.keywords, obj_proto[obj_num].text.keywords);
     if (obj_proto[obj_num].text.name)
-      obj->text.name = str_dup(obj_proto[obj_num].text.name);
+      STR_DUP(obj->text.name, obj_proto[obj_num].text.name);
     if (obj_proto[obj_num].text.room_desc)
-      obj->text.room_desc = str_dup(obj_proto[obj_num].text.room_desc);
+      STR_DUP(obj->text.room_desc, obj_proto[obj_num].text.room_desc);
     if (obj_proto[obj_num].text.look_desc)
-      obj->text.look_desc = str_dup(obj_proto[obj_num].text.look_desc);
+      STR_DUP(obj->text.look_desc, obj_proto[obj_num].text.look_desc);
 
     if (obj_proto[obj_num].ex_description) {
       /*
@@ -916,9 +912,9 @@ ACMD (do_iedit)
       for (This = obj_proto[obj_num].ex_description;
            This; This = This->next) {
         if (This->keyword)
-          temp->keyword = str_dup (This->keyword);
+          STR_DUP(temp->keyword, This->keyword);
         if (This->description)
-          temp->description = str_dup (This->description);
+          STR_DUP(temp->description, This->description);
         if (This->next) {
           temp2 = new extra_descr_data;
 
@@ -947,12 +943,12 @@ ACMD (do_iedit)
      */
     d->edit_obj = Mem->GetObject();
     //clear_object (d->edit_obj);
-    d->edit_obj->text.keywords = str_dup("object unfinished");
-    d->edit_obj->text.name = str_dup("an unfinished object");
-    d->edit_obj->text.room_desc =
-      str_dup("An unfinished object is lying here.");
-    d->edit_obj->text.look_desc =
-      str_dup("It looks pretty much like an unfinished object");
+    STR_DUP(d->edit_obj->text.keywords, "object unfinished");
+    STR_DUP(d->edit_obj->text.name, "an unfinished object");
+    STR_DUP(d->edit_obj->text.room_desc,
+            "An unfinished object is lying here.");
+    STR_DUP(d->edit_obj->text.look_desc,
+            "It looks pretty much like an unfinished object");
 
     d->edit_obj->obj_flags.wear_flags.SetBit(ITEM_WEAR_TAKE);
 
@@ -1038,13 +1034,13 @@ ACMD(do_iclone)
 
   // copy the strings over
   if (obj_proto[obj_num1].text.keywords)
-    obj->text.keywords = str_dup(obj_proto[obj_num1].text.keywords);
+    STR_DUP(obj->text.keywords, obj_proto[obj_num1].text.keywords);
   if (obj_proto[obj_num1].text.name)
-    obj->text.name = str_dup(obj_proto[obj_num1].text.name);
+    STR_DUP(obj->text.name, obj_proto[obj_num1].text.name);
   if (obj_proto[obj_num1].text.room_desc)
-    obj->text.room_desc = str_dup(obj_proto[obj_num1].text.room_desc);
+    STR_DUP(obj->text.room_desc, obj_proto[obj_num1].text.room_desc);
   if (obj_proto[obj_num1].text.look_desc)
-    obj->text.look_desc = str_dup(obj_proto[obj_num1].text.look_desc);
+    STR_DUP(obj->text.look_desc, obj_proto[obj_num1].text.look_desc);
 
   // extra descriptions done next
   if (obj_proto[obj_num1].ex_description) {
@@ -1053,9 +1049,9 @@ ACMD(do_iclone)
     obj->ex_description = temp;
     for (This = obj_proto[obj_num1].ex_description; This; This = This->next) {
       if (This->keyword)
-        temp->keyword = str_dup (This->keyword);
+        STR_DUP(temp->keyword, This->keyword);
       if (This->description)
-        temp->description = str_dup (This->description);
+        STR_DUP(temp->description, This->description);
       if (This->next) {
         temp2 = new extra_descr_data;
 
@@ -1273,22 +1269,22 @@ ACMD(do_medit)
 
     // copy all strings over
     if (mob_proto[mob_num].player.physical_text.keywords)
-      mob->player.physical_text.keywords =
-        str_dup(mob_proto[mob_num].player.physical_text.keywords);
+      STR_DUP(mob->player.physical_text.keywords,
+              mob_proto[mob_num].player.physical_text.keywords);
     if (mob_proto[mob_num].player.physical_text.name)
-      mob->player.physical_text.name =
-        str_dup(mob_proto[mob_num].player.physical_text.name);
+      STR_DUP(mob->player.physical_text.name,
+              mob_proto[mob_num].player.physical_text.name);
     if (mob_proto[mob_num].player.physical_text.room_desc)
-      mob->player.physical_text.room_desc =
-        str_dup(mob_proto[mob_num].player.physical_text.room_desc);
+      STR_DUP(mob->player.physical_text.room_desc,
+              mob_proto[mob_num].player.physical_text.room_desc);
     if (mob_proto[mob_num].player.physical_text.look_desc)
-      mob->player.physical_text.look_desc =
-        str_dup(mob_proto[mob_num].player.physical_text.look_desc);
+      STR_DUP(mob->player.physical_text.look_desc,
+              mob_proto[mob_num].player.physical_text.look_desc);
 
     if (mob_proto[mob_num].char_specials.arrive)
-      mob->char_specials.arrive = str_dup(mob_proto[mob_num].char_specials.arrive);
+      STR_DUP(mob->char_specials.arrive, mob_proto[mob_num].char_specials.arrive);
     if (mob_proto[mob_num].char_specials.leave)
-      mob->char_specials.leave = str_dup(mob_proto[mob_num].char_specials.leave);
+      STR_DUP(mob->char_specials.leave, mob_proto[mob_num].char_specials.leave);
     if (mob_proto[mob_num].player_specials)
       mob->player_specials = &dummy_mob;
 
@@ -1310,17 +1306,15 @@ ACMD(do_medit)
 
     d->edit_mob->player_specials = &dummy_mob;
 
-    d->edit_mob->player.physical_text.keywords = str_dup("mob unfinished");
-    d->edit_mob->player.physical_text.name =
-      str_dup("an unfinished mob");
-    d->edit_mob->player.physical_text.room_desc =
-      str_dup("An unfinished mob stands here.");
-    d->edit_mob->player.physical_text.look_desc =
-      str_dup("It looks barely coherent as it waits to be created.\r\n");
+    STR_DUP(d->edit_mob->player.physical_text.keywords, "mob unfinished");
+    STR_DUP(d->edit_mob->player.physical_text.name, "an unfinished mob");
+    STR_DUP(d->edit_mob->player.physical_text.room_desc, "An unfinished mob stands here.");
+    STR_DUP(d->edit_mob->player.physical_text.look_desc,
+            "It looks barely coherent as it waits to be created.\r\n");
 
     d->edit_mob->player.title = NULL;
-    d->edit_mob->char_specials.arrive = str_dup("arrives from");
-    d->edit_mob->char_specials.leave = str_dup("leaves");
+    STR_DUP(d->edit_mob->char_specials.arrive, "arrives from");
+    STR_DUP(d->edit_mob->char_specials.leave, "leaves");
 
     d->edit_mob->desc = NULL;
 
@@ -1415,17 +1409,17 @@ ACMD(do_mclone)
 
   // copy all strings over
   if (mob_proto[mob_num1].player.physical_text.keywords)
-    mob->player.physical_text.keywords =
-      str_dup(mob_proto[mob_num1].player.physical_text.keywords);
+    STR_DUP(mob->player.physical_text.keywords,
+            mob_proto[mob_num1].player.physical_text.keywords);
   if (mob_proto[mob_num1].player.physical_text.name)
-    mob->player.physical_text.name =
-      str_dup(mob_proto[mob_num1].player.physical_text.name);
+    STR_DUP(mob->player.physical_text.name,
+            mob_proto[mob_num1].player.physical_text.name);
   if (mob_proto[mob_num1].player.physical_text.room_desc)
-    mob->player.physical_text.room_desc =
-      str_dup(mob_proto[mob_num1].player.physical_text.room_desc);
+    STR_DUP(mob->player.physical_text.room_desc,
+            mob_proto[mob_num1].player.physical_text.room_desc);
   if (mob_proto[mob_num1].player.physical_text.look_desc)
-    mob->player.physical_text.look_desc =
-      str_dup(mob_proto[mob_num1].player.physical_text.look_desc);
+    STR_DUP(mob->player.physical_text.look_desc,
+            mob_proto[mob_num1].player.physical_text.look_desc);
 
   if (mob_proto[mob_num1].player_specials)
     mob->player_specials = &dummy_mob;
@@ -1632,26 +1626,28 @@ ACMD(do_qedit)
 
     *qst = quest_table[rnum];
 
+    DELETE_ARRAY_IF_EXTANT(qst->obj);
     qst->obj = new struct quest_om_data[QMAX_OBJS];
     for (i = 0; i < qst->num_objs; i++)
       qst->obj[i] = quest_table[rnum].obj[i];
 
+    DELETE_ARRAY_IF_EXTANT(qst->mob);
     qst->mob = new struct quest_om_data[QMAX_MOBS];
     for (i = 0; i < qst->num_mobs; i++)
       qst->mob[i] = quest_table[rnum].mob[i];
 
     if (quest_table[rnum].intro)
-      qst->intro = str_dup(quest_table[rnum].intro);
+      STR_DUP(qst->intro, quest_table[rnum].intro);
     if (quest_table[rnum].decline)
-      qst->decline = str_dup(quest_table[rnum].decline);
+      STR_DUP(qst->decline, quest_table[rnum].decline);
     if (quest_table[rnum].quit)
-      qst->quit = str_dup(quest_table[rnum].quit);
+      STR_DUP(qst->quit, quest_table[rnum].quit);
     if (quest_table[rnum].finish)
-      qst->finish = str_dup(quest_table[rnum].finish);
+      STR_DUP(qst->finish, quest_table[rnum].finish);
     if (quest_table[rnum].info)
-      qst->info = str_dup(quest_table[rnum].info);
+      STR_DUP(qst->info, quest_table[rnum].info);
     if (quest_table[rnum].done)
-      qst->done = str_dup(quest_table[rnum].done);
+      STR_DUP(qst->done, quest_table[rnum].done);
 
     d->edit_quest = qst;
 #if CONFIRM_EXISTING
@@ -1667,19 +1663,19 @@ ACMD(do_qedit)
   } else {
     send_to_char("That quest does not exist, create it?\r\n", ch);
 
-    d->edit_quest = new quest_data;
+    EQUALS_NEW(d->edit_quest, quest_data);
     d->edit_quest->vnum = d->edit_number;
+    DELETE_ARRAY_IF_EXTANT(d->edit_quest->obj);
     d->edit_quest->obj = new struct quest_om_data[QMAX_OBJS];
+    DELETE_ARRAY_IF_EXTANT(d->edit_quest->mob);
     d->edit_quest->mob = new struct quest_om_data[QMAX_MOBS];
 
-    d->edit_quest->intro = str_dup("I've got an incomplete quest for you.");
-    d->edit_quest->decline = str_dup("That's too bad...later, chummer.");
-    d->edit_quest->quit =
-      str_dup("Null sweat, chummer.  Someone else'll finish the job");
-    d->edit_quest->finish = str_dup("Well done.");
-    d->edit_quest->info =
-      str_dup("Well you see, this quest is rather incomplete, "
-              "so I've got no info on it.");
+    STR_DUP(d->edit_quest->intro, "I've got an incomplete quest for you.");
+    STR_DUP(d->edit_quest->decline, "That's too bad...later, chummer.");
+    STR_DUP(d->edit_quest->quit, "Null sweat, chummer.  Someone else'll finish the job");
+    STR_DUP(d->edit_quest->finish, "Well done.");
+    STR_DUP(d->edit_quest->info,
+            "Well you see, this quest is rather incomplete, so I've got no info on it.");
 
     d->edit_mode = QEDIT_CONFIRM_EDIT;
   }
@@ -1778,19 +1774,19 @@ ACMD(do_shedit)
     shop->open = shop_table[number].open;
     shop->close = shop_table[number].close;
     if (shop_table[number].no_such_itemk)
-      shop->no_such_itemk = str_dup(shop_table[number].no_such_itemk);
+      STR_DUP(shop->no_such_itemk, shop_table[number].no_such_itemk);
     if (shop_table[number].no_such_itemp)
-      shop->no_such_itemp = str_dup(shop_table[number].no_such_itemp);
+      STR_DUP(shop->no_such_itemp, shop_table[number].no_such_itemp);
     if (shop_table[number].not_enough_nuyen)
-      shop->not_enough_nuyen = str_dup(shop_table[number].not_enough_nuyen);
+      STR_DUP(shop->not_enough_nuyen, shop_table[number].not_enough_nuyen);
     if (shop_table[number].doesnt_buy)
-      shop->doesnt_buy = str_dup(shop_table[number].doesnt_buy);
+      STR_DUP(shop->doesnt_buy, shop_table[number].doesnt_buy);
     if (shop_table[number].buy)
-      shop->buy = str_dup(shop_table[number].buy);
+      STR_DUP(shop->buy, shop_table[number].buy);
     if (shop_table[number].sell)
-      shop->sell = str_dup(shop_table[number].sell);
+      STR_DUP(shop->sell, shop_table[number].sell);
     if (shop_table[number].shopname)
-      shop->shopname = str_dup(shop_table[number].shopname);
+      STR_DUP(shop->shopname, shop_table[number].shopname);
     d->edit_shop = shop;
 #if CONFIRM_EXISTING
 
@@ -1803,18 +1799,18 @@ ACMD(do_shedit)
 
   } else {
     send_to_char("That shop does not exist...create it?\r\n", ch);
-    d->edit_shop = new shop_data;
+    EQUALS_NEW(d->edit_shop, shop_data);
     memset((char *) d->edit_shop, 0, sizeof(struct shop_data));
     d->edit_shop->vnum = d->edit_number;
     d->edit_shop->profit_buy = 1.0;
     d->edit_shop->profit_sell = 1.0;
     d->edit_shop->buytypes = 0;
-    d->edit_shop->no_such_itemk = str_dup("Sorry, we don't have that.");
-    d->edit_shop->no_such_itemp = str_dup("You don't seem to have that.");
-    d->edit_shop->not_enough_nuyen = str_dup("You don't have enough nuyen!");
-    d->edit_shop->doesnt_buy = str_dup("We don't buy that.");
-    d->edit_shop->buy = str_dup("That'll be %d nuyen.");
-    d->edit_shop->sell = str_dup("Here's your %d nuyen.");
+    STR_DUP(d->edit_shop->no_such_itemk, "Sorry, we don't have that.");
+    STR_DUP(d->edit_shop->no_such_itemp, "You don't seem to have that.");
+    STR_DUP(d->edit_shop->not_enough_nuyen, "You don't have enough nuyen!");
+    STR_DUP(d->edit_shop->doesnt_buy, "We don't buy that.");
+    STR_DUP(d->edit_shop->buy, "That'll be %d nuyen.");
+    STR_DUP(d->edit_shop->sell, "Here's your %d nuyen.");
     d->edit_shop->keeper = -1;
     d->edit_shop->open = 0;
     d->edit_shop->type = SHOP_GREY;
@@ -1956,7 +1952,7 @@ ACMD(do_zedit)
       d->edit_mode = ZEDIT_CONFIRM_ADD_CMD;
 #else
 
-      d->edit_cmd = new reset_com;
+      EQUALS_NEW(d->edit_cmd, reset_com);
       d->edit_cmd->command = '*';
       zedit_disp_command_menu(d);
 #endif
@@ -2087,15 +2083,15 @@ ACMD(do_hedit)
     host = Mem->GetHost();
     *host = matrix[host_num];
     if (matrix[host_num].name)
-      host->name = str_dup(matrix[host_num].name);
+      STR_DUP(host->name, matrix[host_num].name);
     if (matrix[host_num].keywords)
-      host->keywords = str_dup(matrix[host_num].keywords);
+      STR_DUP(host->keywords, matrix[host_num].keywords);
     if (matrix[host_num].desc)
-      host->desc = str_dup(matrix[host_num].desc);
+      STR_DUP(host->desc, matrix[host_num].desc);
     if (matrix[host_num].shutdown_start)
-      host->shutdown_start = str_dup(matrix[host_num].shutdown_start);
+      STR_DUP(host->shutdown_start, matrix[host_num].shutdown_start);
     if (matrix[host_num].shutdown_stop)
-      host->shutdown_stop = str_dup(matrix[host_num].shutdown_stop);
+      STR_DUP(host->shutdown_stop, matrix[host_num].shutdown_stop);
     if (matrix[host_num].trigger) {
       struct trigger_step *This, *temp, *temp2;
 
@@ -2120,7 +2116,7 @@ ACMD(do_hedit)
       for (This = matrix[host_num].exit; This; This = This->next) {
         *temp = *This;
         if (This->number)
-          temp->number = str_dup(This->number);
+          STR_DUP(temp->number, This->number);
         if (This->next) {
           temp2 = new exit_data;
           temp->next = temp2;
@@ -2144,11 +2140,12 @@ ACMD(do_hedit)
   } else {
     send_to_char ("That host does not exist, create it?\r\n", ch);
     d->edit_host = Mem->GetHost();
-    d->edit_host->name = str_dup("An unfinished host");
-    d->edit_host->keywords = str_dup("unfinished host");
-    d->edit_host->desc = str_dup("This host is unfinished.");
-    d->edit_host->shutdown_start = str_dup("A deep echoing voice announces a host shutdown.\r\n");
-    d->edit_host->shutdown_stop = str_dup("A deep echoing voice announces the shutdown has been aborted.\r\n");
+    STR_DUP(d->edit_host->name, "An unfinished host");
+    STR_DUP(d->edit_host->keywords, "unfinished host");
+    STR_DUP(d->edit_host->desc, "This host is unfinished.");
+    STR_DUP(d->edit_host->shutdown_start, "A deep echoing voice announces a host shutdown.\r\n");
+    STR_DUP(d->edit_host->shutdown_stop,
+            "A deep echoing voice announces the shutdown has been aborted.\r\n");
     d->edit_mode = HEDIT_CONFIRM_EDIT;
     return;
   }
@@ -2228,11 +2225,11 @@ ACMD(do_icedit)
     *icon = ic_proto[ic_num];
     d->edit_icon = icon;
     if (ic_proto[ic_num].name)
-      d->edit_icon->name = str_dup(ic_proto[ic_num].name);
+      STR_DUP(d->edit_icon->name, ic_proto[ic_num].name);
     if (ic_proto[ic_num].look_desc)
-      d->edit_icon->look_desc = str_dup(ic_proto[ic_num].look_desc);
+      STR_DUP(d->edit_icon->look_desc, ic_proto[ic_num].look_desc);
     if (ic_proto[ic_num].long_desc)
-      d->edit_icon->long_desc = str_dup(ic_proto[ic_num].long_desc);
+      STR_DUP(d->edit_icon->long_desc, ic_proto[ic_num].long_desc);
 #if CONFIRM_EXISTING
 
     send_to_char ("An IC already exists at that number. Do you wish to edit it?\r\n", ch);
@@ -2246,9 +2243,9 @@ ACMD(do_icedit)
   } else {
     send_to_char ("That IC does not exist, create it?\r\n", ch);
     d->edit_icon = Mem->GetIcon();
-    d->edit_icon->name = str_dup("An unfinished IC");
-    d->edit_icon->look_desc = str_dup("An unfinished IC guards the node.");
-    d->edit_icon->long_desc = str_dup("It looks like an unfinished IC.\r\n");
+    STR_DUP(d->edit_icon->name, "An unfinished IC");
+    STR_DUP(d->edit_icon->look_desc, "An unfinished IC guards the node.");
+    STR_DUP(d->edit_icon->long_desc, "It looks like an unfinished IC.\r\n");
     d->edit_mode = ICEDIT_CONFIRM_EDIT;
     return;
   }

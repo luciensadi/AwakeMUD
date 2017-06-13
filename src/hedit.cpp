@@ -298,7 +298,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     case '4':
       send_to_char("Enter Host description:\r\n", d->character);
       d->edit_mode = HEDIT_DESC;
-      d->str = new (char *);
+      EQUALS_NEW(d->str, (char *));
       if (!d->str) {
         mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
         shutdown();
@@ -640,8 +640,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
       send_to_char(CH, "Invalid choice!\r\n");
       hedit_disp_trigger_menu(d);
     } else {
-      struct trigger_step *trigger;
-      trigger = new trigger_step;
+      struct trigger_step *trigger = new trigger_step;
       trigger->step = number;
       if (HOST->trigger)
         trigger->next = HOST->trigger;
@@ -695,8 +694,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
       send_to_char(CH, "Invalid choice!\r\n");
       hedit_disp_exit_menu(d);
     } else {
-      struct exit_data *exit;
-      exit = new exit_data;
+      struct exit_data *exit = new exit_data;
       exit->host = number;
       if (HOST->exit)
         exit->next = HOST->exit;

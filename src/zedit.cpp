@@ -477,13 +477,13 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     switch (*arg) {
     case 'y':
     case 'Y':
-      d->edit_zon = new zone_data;
+      EQUALS_NEW(d->edit_zon, zone_data);
       // we do need to zero it out since we are accessing its elements
       memset((char *) ZON, 0, sizeof(struct zone_data));
 
       *d->edit_zon = zone_table[d->edit_number];
       if (zone_table[d->edit_number].name)
-        d->edit_zon->name = str_dup(zone_table[d->edit_number].name);
+        STR_DUP(d->edit_zon->name, zone_table[d->edit_number].name);
       zedit_disp_data_menu(d);
       break;
     case 'n':
@@ -501,12 +501,12 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     switch (*arg) {
     case 'y':
     case 'Y':
-      d->edit_zon = new zone_data;
+      EQUALS_NEW(d->edit_zon, zone_data);
       // we do need to zero it out since we are accessing its elements
       memset((char *) ZON, 0, sizeof(struct zone_data));
 
       // set a few vars
-      ZON->name = str_dup("an unfinished zone");
+      STR_DUP(ZON->name, "an unfinished zone");
       ZON->number = CH->player_specials->saved.zonenum;
       ZON->top = ZON->number * 100 + 99;
       zedit_disp_data_menu(d);
@@ -593,7 +593,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     switch (*arg) {
     case 'y':
     case 'Y':
-      COM = new reset_com;
+      EQUALS_NEW(COM, reset_com);
       COM->command = '*';
       zedit_disp_command_menu(d);
       break;
@@ -612,7 +612,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     switch (*arg) {
     case 'y':
     case 'Y':
-      COM = new reset_com;
+      EQUALS_NEW(COM, reset_com);
       COM->command = '*';
       // so it knows to insert if they decide to save
       d->edit_number2 = TRUE;
@@ -633,7 +633,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     switch (*arg) {
     case 'y':
     case 'Y':
-      COM = new reset_com;
+      EQUALS_NEW(COM, reset_com);
       *COM = zone_table[real_zone(ZONENUM)].cmd[d->edit_number];
       zedit_disp_command_menu(d);
       break;
@@ -1083,9 +1083,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     break;
 
   case ZEDIT_ZONE_NAME:
-    if (ZON->name)
-      delete [] ZON->name;
-    ZON->name = str_dup(arg);
+    STR_DUP(ZON->name, arg);
     zedit_disp_data_menu(d);
     break;
 

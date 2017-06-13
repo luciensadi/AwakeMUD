@@ -2183,7 +2183,7 @@ ACMD(do_cast)
     ch->squeue->spell = spell->type;
     ch->squeue->sub = spell->subtype;
     ch->squeue->force = force;
-    ch->squeue->arg = str_dup(buf1);
+    STR_DUP(ch->squeue->arg, buf1);
   } else cast_spell(ch, spell->type, spell->subtype, force, buf1);
   
 }
@@ -2496,9 +2496,9 @@ ACMD(do_learn)
       GET_OBJ_VAL(obj, 1) == SPELL_DECATTR || GET_OBJ_VAL(obj, 1) == SPELL_DECCYATTR) {
     strcpy(buf, spells[GET_OBJ_VAL(obj, 1)].name);
     sprintf(ENDOF(buf), " (%s)", attributes[GET_OBJ_VAL(obj, 3)]);
-    spell->name = str_dup(buf);
+    STR_DUP(spell->name, buf);
   } else
-    spell->name = str_dup(spells[GET_OBJ_VAL(obj, 1)].name);
+    STR_DUP(spell->name, spells[GET_OBJ_VAL(obj, 1)].name);
   spell->type = GET_OBJ_VAL(obj, 1);
   spell->subtype = GET_OBJ_VAL(obj, 3);
   spell->force = force;
