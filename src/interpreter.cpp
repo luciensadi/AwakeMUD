@@ -2361,7 +2361,11 @@ void nanny(struct descriptor_data * d, char *arg)
           STATE(d) = CON_CLOSE;
           return;
         }
-        d->character = playerDB.LoadChar(GET_CHAR_NAME(d->character), false);
+        // TODO: If you died and then hit 1, your old character's data is leaked here.
+        char char_name[strlen(GET_CHAR_NAME(d->character))+1];
+        strcpy(char_name, GET_CHAR_NAME(d->character));
+        free_char(d->character);
+        d->character = playerDB.LoadChar(char_name, false);
         d->character->desc = d;
         PLR_FLAGS(d->character).RemoveBit(PLR_JUST_DIED);
         if (PLR_FLAGGED(d->character, PLR_NEWBIE)) {
