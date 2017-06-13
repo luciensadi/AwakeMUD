@@ -83,7 +83,7 @@ bool House_load(struct house_control_rec *house)
   {
     sprintf(buf, "GUESTS/Guest%d", i);
     long p = data.GetLong(buf, 0);
-    if (!(does_player_exist(p)))
+    if (!p || !(does_player_exist(p)))
       p = 0;
     house->guests[i] = p;
   }
@@ -547,6 +547,10 @@ void House_boot(void)
       temp->vnum = real_house;
       temp->key = land;
       temp->atrium = TOROOM(real_room(real_house), t[0]);
+      if (temp->atrium == NOWHERE) {
+        log_vfprintf("You have an error in your house control file-- there is no valid %s (%d) exit for room %ld.",
+                     dirs[t[0]], t[0], temp->vnum);
+      }
       temp->exit_num = t[0];
       temp->owner = owner;
       temp->date = paid;
