@@ -244,6 +244,7 @@ void objList::UpdateCounters(void)
       }
     }
   }
+  delete [] trid;
 }
 
 // this function updates the objects in the list whose real numbers are
