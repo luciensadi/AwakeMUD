@@ -1652,7 +1652,7 @@ bool does_player_exist(char *name)
   char buf[MAX_STRING_LENGTH];
   if (!name || !*name)
     return FALSE;
-  sprintf(buf, "SELECT * FROM pfiles WHERE Name='%s';", name);
+  sprintf(buf, "SELECT idnum FROM pfiles WHERE Name='%s';", name);
   if (mysql_wrapper(mysql, buf))
     return FALSE;
   MYSQL_RES *res = mysql_use_result(mysql);
@@ -1668,7 +1668,7 @@ bool does_player_exist(char *name)
 bool does_player_exist(long id)
 {
   char buf[MAX_STRING_LENGTH];
-  sprintf(buf, "SELECT * FROM pfiles WHERE idnum=%ld;", id);
+  sprintf(buf, "SELECT idnum FROM pfiles WHERE idnum=%ld;", id);
   mysql_wrapper(mysql, buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
