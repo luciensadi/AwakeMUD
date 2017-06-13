@@ -418,7 +418,7 @@ ACMD(do_page)
 ACMD(do_radio)
 {
   struct obj_data *obj, *radio = NULL;
-  char *one, *two;
+  char one[MAX_INPUT_LENGTH], two[MAX_INPUT_LENGTH];
   int i;
   bool cyberware = FALSE, vehicle = FALSE;
 
@@ -448,8 +448,6 @@ ACMD(do_radio)
     send_to_char("You have to have a radio to do that!\r\n", ch);
     return;
   }
-  one = new char[MAX_INPUT_LENGTH];
-  two = new char[MAX_INPUT_LENGTH];
   any_one_arg(any_one_arg(argument, one), two);
 
   if (!*one) {
@@ -506,9 +504,6 @@ ACMD(do_radio)
     }
   } else
     send_to_char("That's not a valid option.\r\n", ch);
-
-  delete one;
-  delete two;
 }
 
 ACMD(do_broadcast)
@@ -1390,8 +1385,10 @@ ACMD(do_ignore)
     send_to_char("You are currently ignoring: \r\n", ch);
     for (struct remem *a = GET_IGNORE(ch); a; a = a->next) {
       char *name = get_player_name(a->idnum);
-      if (name)
+      if (name) {
         send_to_char(ch, "%s\r\n", name);
+        delete [] name;
+      }
     }
   } else {
     struct remem *list;
