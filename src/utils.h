@@ -614,6 +614,10 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 #define OUTSIDE(ch)           (!ROOM_FLAGGED(((ch)->in_veh ? (ch)->in_veh->in_room : (ch)->in_room), ROOM_INDOORS))
 
+/* Memory management *****************************************************/
+
+#define DELETE_ARRAY_IF_EXTANT(target) {if ((target)) delete [] (target); (target) = NULL;}
+#define DELETE_IF_EXTANT(target) {if ((target)) delete (target); (target) = NULL;}
 
 /* OS compatibility ******************************************************/
 

@@ -1039,8 +1039,7 @@ void parse_room(File &fl, long nr)
 
 
       extra_descr_data *desc = new extra_descr_data;
-      desc->keyword = str_dup(keywords);
-      delete [] keywords;
+      desc->keyword = keywords;
       sprintf(field, "%s/Desc", sect);
       desc->description = str_dup(data.GetString(field, NULL));
       desc->next = room->ex_description;
@@ -1468,8 +1467,7 @@ void parse_object(File &fl, long nr)
       }
 
       extra_descr_data *desc = new extra_descr_data;
-      desc->keyword = str_dup(keywords);
-      delete [] keywords;
+      desc->keyword = keywords;
       sprintf(field, "%s/Desc", sect);
       desc->description = str_dup(data.GetString(field, NULL));
 
@@ -3109,6 +3107,42 @@ void free_char(struct char_data * ch)
   struct alias *a, *temp, *next;
   struct remem *b, *nextr;
   extern void free_alias(struct alias * a);
+  
+  /* clean up spells */
+  {
+    struct spell_data *next = NULL, *temp = GET_SPELLS(ch);
+    while (temp) {
+      next = temp->next;
+      if (temp->name)
+        delete [] temp->name;
+      delete temp;
+      temp = next;
+    }
+    GET_SPELLS(ch) = NULL;
+  }
+  
+  /* Not sure if enabling this code is a good idea yet, so I'm leaving it off. -LS
+  // clean up matrix data
+  if (ch->persona) {
+    DELETE_ARRAY_IF_EXTANT(ch->persona->long_desc);
+    DELETE_ARRAY_IF_EXTANT(ch->persona->look_desc);
+    
+    // BWAAAAAAAAAAAAAAAAA (inception horn)
+    if (ch->persona->decker) {
+      struct seen_data *next = NULL, *temp = ch->persona->decker->seen;
+      for (; temp; temp = next) {
+        next = temp->next;
+        delete temp;
+      }
+    }
+    
+    // All kinds of things are being ignored here (what happens to your phone? hitcher? etc?),
+    //  but if you've called the delete-this-character-and-everything-associated-in-it-from-memory
+    //  method without first handling that stuff, that's on you. Try calling extract_char() first.
+    
+    delete ch->persona;
+    ch->persona = NULL;
+  } */
 
   if (ch->player_specials != NULL && ch->player_specials != &dummy_mob)
   {
@@ -3121,36 +3155,31 @@ void free_char(struct char_data * ch)
 
     for (b = GET_MEMORY(ch); b; b = nextr) {
       nextr = b->next;
-      delete [] b->mem;
+      DELETE_ARRAY_IF_EXTANT(b->mem);
       delete b;
     }
 
-    if (ch->player_specials->mob_complete)
-      delete [] ch->player_specials->mob_complete;
-    if (ch->player_specials->obj_complete)
-      delete [] ch->player_specials->obj_complete;
+    DELETE_ARRAY_IF_EXTANT(ch->player_specials->mob_complete);
+    DELETE_ARRAY_IF_EXTANT(ch->player_specials->obj_complete);
+    
+    delete ch->player_specials;
 
     if (IS_NPC(ch))
       log("SYSERR: Mob had player_specials allocated!");
   }
   if (!IS_NPC(ch) || (IS_NPC(ch) && GET_MOB_RNUM(ch) == -1))
   {
-    if (ch->player.prompt)
-      delete [] ch->player.prompt;
-    if (ch->player.poofin)
-      delete [] ch->player.poofin;
-    if (ch->player.poofout)
-      delete [] ch->player.poofout;
-    if (ch->player.title)
-      delete [] ch->player.title;
-    if (ch->player.pretitle)
-      delete [] ch->player.pretitle;
-    if (ch->player.whotitle)
-      delete [] ch->player.whotitle;
-    if (ch->char_specials.arrive)
-      delete [] ch->char_specials.arrive;
-    if (ch->char_specials.leave)
-      delete [] ch->char_specials.leave;
+    DELETE_ARRAY_IF_EXTANT(ch->player.prompt);
+    DELETE_ARRAY_IF_EXTANT(ch->player.poofin);
+    DELETE_ARRAY_IF_EXTANT(ch->player.poofout);
+    DELETE_ARRAY_IF_EXTANT(ch->player.title);
+    DELETE_ARRAY_IF_EXTANT(ch->player.pretitle);
+    DELETE_ARRAY_IF_EXTANT(ch->player.whotitle);
+    DELETE_ARRAY_IF_EXTANT(ch->char_specials.arrive);
+    DELETE_ARRAY_IF_EXTANT(ch->char_specials.leave);
+    DELETE_ARRAY_IF_EXTANT(ch->player.background);
+    DELETE_ARRAY_IF_EXTANT(ch->player.matrixprompt);
+    DELETE_ARRAY_IF_EXTANT(GET_NAME(ch));
 
     {
       text_data *tab[3] = {
@@ -3163,31 +3192,31 @@ void free_char(struct char_data * ch)
         text_data *ptr = tab[i];
 
         if (ptr->keywords) {
-          ptr->keywords = NULL;
           delete [] ptr->keywords;
+          ptr->keywords = NULL;
         }
 
         if (ptr->name) {
-          ptr->name = NULL;
           delete [] ptr->name;
+          ptr->name = NULL;
         }
 
         if (ptr->room_desc) {
-          ptr->room_desc = NULL;
           delete [] ptr->room_desc;
+          ptr->room_desc = NULL;
         }
 
         if (ptr->look_desc) {
-          ptr->look_desc = NULL;
           delete [] ptr->look_desc;
+          ptr->look_desc = NULL;
         }
       }
     }
 
     if(!IS_NPC(ch))
       if (ch->player.host) {
-        ch->player.host = NULL;
         delete [] ch->player.host;
+        ch->player.host = NULL;
       }
   } else if ((i = GET_MOB_RNUM(ch)) > -1 &&
              GET_MOB_VNUM(ch) != 20 && GET_MOB_VNUM(ch) != 22)
