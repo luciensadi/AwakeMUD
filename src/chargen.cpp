@@ -523,12 +523,12 @@ void init_char_sql(struct char_data *ch)
   char buf2[MAX_STRING_LENGTH];
   sprintf(buf, "INSERT INTO pfiles (idnum, name, password, race, gender, Rank, Voice,"\
                "Physical_Keywords, Physical_Name, Whotitle, Height, Weight, Host,"\
-               "Tradition, Born, Background, Physical_LookDesc, Matrix_LookDesc, Astral_LookDesc) VALUES ('%ld', '%s', '%s', %d, '%d',"\
-               "'%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%ld', '%s', '%s', '%s', '%s');", GET_IDNUM(ch),
+               "Tradition, Born, Background, Physical_LookDesc, Matrix_LookDesc, Astral_LookDesc, LastD) VALUES ('%ld', '%s', '%s', %d, '%d',"\
+               "'%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%ld', '%s', '%s', '%s', '%s', %ld);", GET_IDNUM(ch),
                GET_CHAR_NAME(ch), GET_PASSWD(ch), GET_RACE(ch), GET_SEX(ch), MAX(1, GET_LEVEL(ch)),
                prepare_quotes(buf2, ch->player.physical_text.room_desc), GET_KEYWORDS(ch), GET_NAME(ch), GET_WHOTITLE(ch),
                GET_HEIGHT(ch), GET_WEIGHT(ch), ch->player.host, GET_TRADITION(ch), ch->player.time.birth, "A blank slate.",
-               "A nondescript person.\r\n", "A nondescript entity.\r\n", "A nondescript entity.\r\n");
+               "A nondescript person.\r\n", "A nondescript entity.\r\n", "A nondescript entity.\r\n", time(0));
   mysql_wrapper(mysql, buf);
   if (PLR_FLAGGED(ch, PLR_AUTH)) {
     sprintf(buf, "INSERT INTO pfiles_chargendata (idnum, AttPoints, SkillPoints, ForcePoints) VALUES"\
