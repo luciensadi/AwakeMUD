@@ -2209,6 +2209,8 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     case '1':
       if (STATE(d) == CON_BCUSTOMIZE) {
         d->edit_mode = CEDIT_DESC;
+        if (d->str)
+          delete d->str;
         d->str = new (char *);
 
         if (!d->str) {
@@ -2244,6 +2246,8 @@ void cedit_parse(struct descriptor_data *d, char *arg)
         d->edit_mode = CEDIT_VOICE;
       else {
         d->edit_mode = CEDIT_DESC;
+        if (d->str)
+          delete d->str;
         d->str = new (char *);
 
         if (!d->str) {
@@ -2260,6 +2264,8 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     case '4':
       send_to_char("Enter long (active) description (@ on a blank line to end):\r\n", CH);
       d->edit_mode = CEDIT_LONG_DESC;
+      if (d->str)
+        delete d->str;
       d->str = new (char *);
 
       if (!d->str) {
@@ -3786,6 +3792,8 @@ ACMD(do_tridlog)
   } else if (is_abbrev(arg, "add")) {
     send_to_char("Enter message to be displayed. (Insert Line Breaks With \\r\\n):\r\n", ch);
     STATE(ch->desc) = CON_TRIDEO;
+    if (ch->desc->str)
+      delete ch->desc->str;
     ch->desc->str = new (char *);
     *ch->desc->str = NULL;
     ch->desc->max_str = MAX_MESSAGE_LENGTH;
