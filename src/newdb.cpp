@@ -1775,7 +1775,7 @@ void idle_delete()
     deleted++;
 #else
     log_vfprintf("IDLEDELETE- Would delete %s, but IDLEDELETE_DRYRUN is enabled.", row[0]);
-#end
+#endif
   }
   mysql_free_result(res);
   mysql_close(mysqlextra);
