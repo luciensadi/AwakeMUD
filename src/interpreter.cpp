@@ -1306,9 +1306,12 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
       return;
     }
     
-    if (PLR_FLAGGED(ch, PLR_FROZEN) && !access_level(ch, LVL_VICEPRES)) {
-      send_to_char("You try, but the mind-numbing cold prevents you...\r\n", ch);
-      return;
+    if (PLR_FLAGGED(ch, PLR_FROZEN)) {
+      if (!access_level(ch, LVL_VICEPRES)) {
+        send_to_char("You try, but the mind-numbing cold prevents you...\r\n", ch);
+        return;
+      } else
+        send_to_char("The ice covering you crackles alarmingly as you slam your sovereign will through it.", ch);
     }
     
     if (AFF_FLAGGED(ch, AFF_PETRIFY) && cmd_info[cmd].minimum_position > POS_DEAD) {
@@ -1329,7 +1332,7 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
         send_to_char("You are currently being engulfed!\r\n", ch);
         return;
       } else
-        send_to_char("A sheen of administrative power protects you from being paralyzed by your engulfment.\r\n", ch);
+        send_to_char("Administrative power roars through your veins as you muscle through your engulfment.\r\n", ch);
     }
     
     if (GET_QUI(ch) <= 0 && cmd_info[cmd].minimum_position != POS_DEAD) {
@@ -1337,7 +1340,7 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
         send_to_char("You are paralyzed!\r\n", ch);
         return;
       } else
-        send_to_char("You buckle down and force your paralyzed body to respond.\r\n", ch);
+        send_to_char("You draw upon your mantle of administrative power and push through your paralysis.\r\n", ch);
     }
     
     if (GET_POS(ch) < cmd_info[cmd].minimum_position) {
