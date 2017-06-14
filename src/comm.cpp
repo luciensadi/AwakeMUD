@@ -1757,6 +1757,7 @@ void close_socket(struct descriptor_data *d)
             delete [] one->name;
           delete one;
         }
+      d->character->spells = NULL;
       Mem->DeleteCh(d->character);
     }
   }
