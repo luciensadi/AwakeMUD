@@ -171,7 +171,6 @@ Material:	orichalcum
 [VALUES]
 	Val1:	4
 	Val2:	4
-	Val3:	311
 	Val4:	3
 	Val5:	-1
 	Val6:	-1
@@ -313,7 +312,7 @@ Material:	stone
 [VALUES]
 	Val1:	2
 	Val2:	3
-	Val3:	308
+	Val3:	2
 	Val4:	4
 	Val5:	-1
 	Val6:	-1
@@ -1092,7 +1091,6 @@ Material:	electronics
 	Val0:	50
 	Val1:	4
 	Val2:	4
-	Val3:	301
 	Val4:	3
 	Val5:	-1
 BREAK
@@ -1146,6 +1144,31 @@ Material:	paper
 	Val0:	6
 	Val1:	24
 	Val2:	3
+BREAK
+#99
+Keywords:	a sign
+Name:	a sign
+RoomDesc:$
+An arrow suspended in the dimness points you to the north.~
+LookDesc:$
+Che didn't include the Docwagon or similar recovery rooms in the distributed
+code, so for now everyone who dies is loading in to this room. Head north to
+go to Dante's Inferno. Other exits may be added by popular request. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
 BREAK
 #100
 Keywords:	credstick plastic
@@ -1858,7 +1881,7 @@ Material:	metal
 [VALUES]
 	Val0:	14
 	Val1:	3
-	Val3:	323
+	Val3:	11
 	Val4:	12
 	Val5:	16
 	Val6:	16
@@ -1954,7 +1977,6 @@ Material:	electronics
 [VALUES]
 	Val1:	3
 	Val2:	3
-	Val3:	303
 	Val4:	3
 	Val5:	-1
 	Val6:	-1
@@ -1990,7 +2012,7 @@ Material:	metal
 	Val0:	50
 	Val1:	4
 	Val2:	4
-	Val3:	323
+	Val3:	10
 	Val4:	15
 	Val5:	50
 	Val6:	50
