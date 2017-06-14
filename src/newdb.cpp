@@ -1770,8 +1770,12 @@ void idle_delete()
   MYSQL_RES *res = mysql_use_result(mysqlextra);
   MYSQL_ROW row;
   while ((row = mysql_fetch_row(res))) {
+#ifndef IDLEDELETE_DRYRUN
     DeleteChar(atol(row[0]));
-    deleted++;    
+    deleted++;
+#else
+    log_vfprintf("IDLEDELETE- Would delete %s, but IDLEDELETE_DRYRUN is enabled.", row[0]);
+#end
   }
   mysql_free_result(res);
   mysql_close(mysqlextra);
