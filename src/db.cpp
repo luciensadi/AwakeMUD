@@ -3269,10 +3269,10 @@ void free_room(struct room_data *room)
   struct extra_descr_data *This, *next_one;
 
   // first free up the strings
-  if (room->name)
-    delete [] room->name;
-  if (room->description)
-    delete [] room->description;
+  DELETE_ARRAY_IF_EXTANT(room->name);
+  DELETE_ARRAY_IF_EXTANT(room->description);
+  DELETE_ARRAY_IF_EXTANT(room->night_desc);
+  DELETE_ARRAY_IF_EXTANT(room->address);
 
   // then free up the exits
   for (int counter = 0; counter < NUM_OF_DIRS; counter++)
