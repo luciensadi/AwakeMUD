@@ -3676,8 +3676,12 @@ SPECIAL(bouncer_troll)
     char_from_room(ch);
     char_to_room(ch, real_room(toroom));
     act("$n comes flying out of the club, literally.", TRUE, ch, 0, 0, TO_ROOM);
+    DELETE_ARRAY_IF_EXTANT(dir1);
+    DELETE_ARRAY_IF_EXTANT(dir2);
     return TRUE;
   }
+  DELETE_ARRAY_IF_EXTANT(dir1);
+  DELETE_ARRAY_IF_EXTANT(dir2);
   return FALSE;
 }
 

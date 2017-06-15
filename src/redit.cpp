@@ -588,6 +588,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     case '2':
       send_to_char("Enter room description:\r\n", d->character);
       d->edit_mode = REDIT_DESC;
+      DELETE_ARRAY_IF_EXTANT(d->str);
       d->str = new (char *);
       if (!d->str) {
         mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
@@ -601,6 +602,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     case '3':
       send_to_char("Enter room nighttime desc description:\r\n", d->character);
       d->edit_mode = REDIT_NDESC;
+      DELETE_ARRAY_IF_EXTANT(d->str);
       d->str = new (char *);
       if (!d->str) {
         mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
@@ -945,6 +947,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       break;
     case '2':
       d->edit_mode = REDIT_EXIT_DESCRIPTION;
+      DELETE_ARRAY_IF_EXTANT(d->str);
       d->str = new (char *);
       if (!d->str) {
         mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
@@ -1114,6 +1117,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     case 2:
       d->edit_mode = REDIT_EXTRADESC_DESCRIPTION;
       send_to_char("Enter extra description:\r\n", d->character);
+      DELETE_ARRAY_IF_EXTANT(d->str);
       d->str = new (char *);
       if (!d->str) {
         mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
