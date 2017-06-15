@@ -1580,6 +1580,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     case 'C':
       send_to_char("Enter informational text:\r\n", d->character);
       d->edit_mode = QEDIT_INFO;
+      DELETE_ARRAY_IF_EXTANT(d->str);
       d->str = new (char *);
       if (!d->str) {
         mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
