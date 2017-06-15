@@ -2446,11 +2446,11 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       number = atoi(arg);
       switch (number) {
         case 0: {
-          if (((struct extra_descr_data *) * d->misc_data) {
+          if (((struct extra_descr_data *) * d->misc_data)) {
             DELETE_ARRAY_IF_EXTANT(((struct extra_descr_data *) * d->misc_data)->keyword);
             DELETE_ARRAY_IF_EXTANT(((struct extra_descr_data *) * d->misc_data)->description);
             
-            DELETE_AND_NULL((struct extra_descr_data *) *d->misc_data);
+            DELETE_AND_NULL(d->misc_data);
           }
           
           iedit_disp_menu(d);
