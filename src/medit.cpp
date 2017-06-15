@@ -513,6 +513,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     case '3':
       send_to_char("Enter room description:", CH);
       d->edit_mode = MEDIT_REG_DESCR;
+      DELETE_ARRAY_IF_EXTANT(d->str);
       d->str = new (char *);
       if (!d->str) {
         mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
@@ -527,6 +528,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       // go to modify.cc
       send_to_char("Enter look description:\r\n", CH);
       d->edit_mode = MEDIT_LONG_DESCR;
+      DELETE_ARRAY_IF_EXTANT(d->str);
       d->str = new (char *);
       if (!d->str) {
         mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);

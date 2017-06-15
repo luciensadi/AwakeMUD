@@ -257,7 +257,7 @@ void pbuild_parse(struct descriptor_data *d, const char *arg) {
             partbuild_main_menu(d);
             return;
         }
-        delete [] PART->restring;
+        DELETE_ARRAY_IF_EXTANT(PART->restring);
         PART->restring = str_dup(arg);
         partbuild_main_menu(d);
         break;
@@ -283,6 +283,7 @@ void dbuild_parse(struct descriptor_data *d, const char *arg) {
         case '2':
             send_to_char(CH, "Enter cyberdeck description:\r\n");
             d->edit_mode = DEDIT_TYPE;
+            DELETE_ARRAY_IF_EXTANT(d->str);
             d->str = new (char *);
             *(d->str) = NULL;
             d->max_str = MAX_MESSAGE_LENGTH;

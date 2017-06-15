@@ -1416,6 +1416,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           /* let's go out to modify.c */
           send_to_char("Enter long desc:\r\n", d->character);
           d->edit_mode = IEDIT_LONGDESC;
+          DELETE_ARRAY_IF_EXTANT(d->str);
           d->str = new (char *);
           if (!d->str) {
             mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
@@ -2477,6 +2478,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           d->edit_mode = IEDIT_EXTRADESC_DESCRIPTION;
           send_to_char("Enter description:\r\n", d->character);
           /* send out to modify.c */
+          DELETE_ARRAY_IF_EXTANT(d->str);
           d->str = new (char *);
           if (!d->str) {
             mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);

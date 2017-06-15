@@ -609,6 +609,7 @@ void hcontrol_list_houses(struct char_data *ch)
         sprintf(buf, "%7ld %7ld    0     %-12s\r\n",
                 house->vnum, world[house->atrium].number, CAP(own_name));
         send_to_char(buf, ch);
+        DELETE_ARRAY_IF_EXTANT(own_name);
       }
 }
 
@@ -683,6 +684,7 @@ ACMD(do_decorate)
     send_to_char("Enter your new room description.  Terminate with a @ on a new line.\r\n", ch);
     act("$n starts to move things around the room.", TRUE, ch, 0, 0, TO_ROOM);
     STATE(ch->desc) = CON_DECORATE;
+    DELETE_ARRAY_IF_EXTANT(ch->desc->str);
     ch->desc->str = new (char *);
     *ch->desc->str = NULL;
     ch->desc->max_str = MAX_MESSAGE_LENGTH;
@@ -798,6 +800,7 @@ void House_list_guests(struct char_data *ch, struct house_control_rec *i, int qu
     sprintf(buf2, "%s, ", temp);
     strcat(buf, CAP(buf2));
     x++;
+    DELETE_ARRAY_IF_EXTANT(temp);
   }
   if (!x)
     strcat(buf, "None");

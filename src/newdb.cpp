@@ -270,7 +270,9 @@ static void init_char_strings(char_data *ch)
     set_whotitle(ch, "CHKLG"); /* Will set incase the players */
   }        /* race is undeterminable      */
 
+  DELETE_ARRAY_IF_EXTANT(GET_PROMPT(ch));
   GET_PROMPT(ch) = str_dup("< @pP @mM > ");
+  DELETE_ARRAY_IF_EXTANT(ch->player.matrixprompt);
   ch->player.matrixprompt = str_dup("< @pP @mM > ");
 }
 
