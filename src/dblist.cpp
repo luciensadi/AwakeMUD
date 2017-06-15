@@ -213,8 +213,7 @@ void objList::UpdateCounters(void)
         struct obj_data *chip = OBJ->contains;
         act("$p beeps loudly, signalling completion.", FALSE, 0, OBJ, 0, TO_ROOM);
         if (GET_OBJ_TIMER(chip) == -1) {
-          if (chip->restring)
-            delete [] chip->restring;
+          DELETE_ARRAY_IF_EXTANT(chip->restring);
           chip->restring = str_dup("a ruined optical chip");
         } else
           GET_OBJ_TIMER(chip) = 1;

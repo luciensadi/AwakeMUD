@@ -1766,7 +1766,7 @@ void extract_icon(struct matrix_icon * icon)
       temp2 = seen->next;
       delete seen;
     }
-    delete icon->decker;
+    DELETE_AND_NULL(icon->decker);
   } else
   {
     ic_index[icon->number].number--;

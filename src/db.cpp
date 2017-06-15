@@ -3007,7 +3007,7 @@ bool resize_world_array()
 
   top_of_world_array += world_chunk_size;
 
-  delete [] world;
+  DELETE_ARRAY_IF_EXTANT(world);
   world = new_world;
 
   sprintf(buf, "World array resized to %d.", top_of_world_array);
@@ -3034,7 +3034,7 @@ bool resize_qst_array(void)
 
   top_of_quest_array += quest_chunk_size;
 
-  delete [] quest_table;
+  DELETE_ARRAY_IF_EXTANT(quest_table);
   quest_table = new_qst;
 
   sprintf(buf, "Quest array resized to %d", top_of_quest_array);
@@ -3113,9 +3113,8 @@ void free_char(struct char_data * ch)
     struct spell_data *next = NULL, *temp = GET_SPELLS(ch);
     while (temp) {
       next = temp->next;
-      if (temp->name)
-        delete [] temp->name;
-      delete temp;
+      DELETE_ARRAY_IF_EXTANT(temp->name);
+      DELETE_AND_NULL(temp);
       temp = next;
     }
     GET_SPELLS(ch) = NULL;
@@ -3156,13 +3155,13 @@ void free_char(struct char_data * ch)
     for (b = GET_MEMORY(ch); b; b = nextr) {
       nextr = b->next;
       DELETE_ARRAY_IF_EXTANT(b->mem);
-      delete b;
+      DELETE_AND_NULL(b);
     }
 
     DELETE_ARRAY_IF_EXTANT(ch->player_specials->mob_complete);
     DELETE_ARRAY_IF_EXTANT(ch->player_specials->obj_complete);
     
-    delete ch->player_specials;
+    DELETE_IF_EXTANT(ch->player_specials);
 
     if (IS_NPC(ch))
       log("SYSERR: Mob had player_specials allocated!");
@@ -3191,33 +3190,17 @@ void free_char(struct char_data * ch)
       for (int i = 0; i < 3; i++) {
         text_data *ptr = tab[i];
 
-        if (ptr->keywords) {
-          delete [] ptr->keywords;
-          ptr->keywords = NULL;
-        }
-
-        if (ptr->name) {
-          delete [] ptr->name;
-          ptr->name = NULL;
-        }
-
-        if (ptr->room_desc) {
-          delete [] ptr->room_desc;
-          ptr->room_desc = NULL;
-        }
-
-        if (ptr->look_desc) {
-          delete [] ptr->look_desc;
-          ptr->look_desc = NULL;
-        }
+        DELETE_ARRAY_IF_EXTANT(ptr->keywords);
+        DELETE_ARRAY_IF_EXTANT(ptr->name);
+        DELETE_ARRAY_IF_EXTANT(ptr->room_desc);
+        DELETE_ARRAY_IF_EXTANT(ptr->look_desc);
       }
     }
 
-    if(!IS_NPC(ch))
-      if (ch->player.host) {
-        delete [] ch->player.host;
-        ch->player.host = NULL;
-      }
+    if(!IS_NPC(ch)) {
+      DELETE_ARRAY_IF_EXTANT(ch->player.host);
+    }
+    
   } else if ((i = GET_MOB_RNUM(ch)) > -1 &&
              GET_MOB_VNUM(ch) != 20 && GET_MOB_VNUM(ch) != 22)
   {
@@ -3241,34 +3224,28 @@ void free_char(struct char_data * ch)
       text_data *proto_ptr = proto_tab[i];
 
       if (ptr->keywords && ptr->keywords != proto_ptr->keywords) {
-        delete [] ptr->keywords;
-        ptr->keywords = NULL;
+        DELETE_AND_NULL_ARRAY(ptr->keywords);
       }
 
       if (ptr->name && ptr->name != proto_ptr->name) {
-        delete [] ptr->name;
-        ptr->name = NULL;
+        DELETE_AND_NULL_ARRAY(ptr->name);
       }
 
       if (ptr->room_desc && ptr->room_desc != proto_ptr->room_desc) {
-        delete [] ptr->room_desc;
-        ptr->room_desc = NULL;
+        DELETE_AND_NULL_ARRAY(ptr->room_desc);
       }
 
       if (ptr->look_desc && ptr->look_desc != proto_ptr->look_desc) {
-        delete [] ptr->look_desc;
-        ptr->look_desc = NULL;
+        DELETE_AND_NULL_ARRAY(ptr->look_desc);
       }
     }
     
     if (ch->char_specials.arrive && ch->char_specials.arrive != proto->char_specials.arrive) {
-      delete [] ch->char_specials.arrive;
-      ch->char_specials.arrive = NULL;
+      DELETE_AND_NULL_ARRAY(ch->char_specials.arrive);
     }
     
     if (ch->char_specials.leave && ch->char_specials.leave != proto->char_specials.leave) {
-      delete [] ch->char_specials.leave;
-      ch->char_specials.leave = NULL;
+      DELETE_AND_NULL_ARRAY(ch->char_specials.leave);
     }
     
     // TODO: Is mob memory (memory_rec *(ch->mob_specials->memory)) leaked here?
@@ -3291,24 +3268,22 @@ void free_room(struct room_data *room)
   for (int counter = 0; counter < NUM_OF_DIRS; counter++)
   {
     if (room->dir_option[counter]) {
-      if (room->dir_option[counter]->general_description)
-        delete [] room->dir_option[counter]->general_description;
-      if (room->dir_option[counter]->keyword)
-        delete [] room->dir_option[counter]->keyword;
-      delete room->dir_option[counter];
+      DELETE_ARRAY_IF_EXTANT(room->dir_option[counter]->general_description);
+      DELETE_ARRAY_IF_EXTANT(room->dir_option[counter]->keyword);
+      DELETE_IF_EXTANT(room->dir_option[counter]);
     }
   }
   // now the extra descriptions
-  if (room->ex_description)
+  if (room->ex_description) {
     for (This = room->ex_description; This; This = next_one)
     {
       next_one = This->next;
-      if (This->keyword)
-        delete [] This->keyword;
-      if (This->description)
-        delete [] This->description;
-      delete This;
+      DELETE_ARRAY_IF_EXTANT(This->keyword);
+      DELETE_ARRAY_IF_EXTANT(This->description);
+      DELETE_IF_EXTANT(This);
     }
+    DELETE_IF_EXTANT(room->ex_description);
+  }
 
   clear_room(room);
 }
@@ -3320,27 +3295,21 @@ void free_veh(struct veh_data * veh)
 
 void free_host(struct host_data * host)
 {
-  if (host->name)
-    delete [] host->name;
-  if (host->keywords)
-    delete [] host->keywords;
-  if (host->desc)
-    delete [] host->desc;
-  if (host->shutdown_start)
-    delete [] host->shutdown_start;
-  if (host->shutdown_stop)
-    delete [] host->shutdown_stop;
+  DELETE_ARRAY_IF_EXTANT(host->name);
+  DELETE_ARRAY_IF_EXTANT(host->keywords);
+  DELETE_ARRAY_IF_EXTANT(host->desc);
+  DELETE_ARRAY_IF_EXTANT(host->shutdown_start);
+  DELETE_ARRAY_IF_EXTANT(host->shutdown_stop);
   clear_host(host);
 }
 
 void free_icon(struct matrix_icon * icon)
 {
-  if (icon->name && !icon->number)
-    delete [] icon->name;
-  if (icon->long_desc && !icon->number)
-    delete [] icon->long_desc;
-  if (icon->look_desc && !icon->number)
-    delete [] icon->look_desc;
+  if (!icon->number) {
+    DELETE_ARRAY_IF_EXTANT(icon->name);
+    DELETE_ARRAY_IF_EXTANT(icon->long_desc);
+    DELETE_ARRAY_IF_EXTANT(icon->look_desc);
+  }
   clear_icon(icon);
 }
 /* release memory allocated for an obj struct */
@@ -3350,95 +3319,74 @@ void free_obj(struct obj_data * obj)
   struct extra_descr_data *this1, *next_one;
   if ((nr = GET_OBJ_RNUM(obj)) == -1)
   {
-    if (obj->text.keywords)
-      delete [] obj->text.keywords;
-    if (obj->text.name)
-      delete [] obj->text.name;
-    if (obj->text.room_desc)
-      delete [] obj->text.room_desc;
-    if (obj->text.look_desc)
-      delete [] obj->text.look_desc;
+    DELETE_ARRAY_IF_EXTANT(obj->text.keywords);
+    DELETE_ARRAY_IF_EXTANT(obj->text.name);
+    DELETE_ARRAY_IF_EXTANT(obj->text.room_desc);
+    DELETE_ARRAY_IF_EXTANT(obj->text.look_desc);
 
-    if (obj->ex_description)
+    if (obj->ex_description) {
       for (this1 = obj->ex_description; this1; this1 = next_one) {
         next_one = this1->next;
-        if (this1->keyword)
-          delete [] this1->keyword;
-        if (this1->description)
-          delete [] this1->description;
-        delete this1;
+        DELETE_ARRAY_IF_EXTANT(this1->keyword);
+        DELETE_ARRAY_IF_EXTANT(this1->description);
+        DELETE_IF_EXTANT(this1);
       }
+      DELETE_IF_EXTANT(obj->ex_description);
+    }
   } else
   {
-    if (obj->text.keywords &&
-        obj->text.keywords != obj_proto[nr].text.keywords)
-      delete [] obj->text.keywords;
+    if (obj->text.keywords && obj->text.keywords != obj_proto[nr].text.keywords) {
+      DELETE_AND_NULL_ARRAY(obj->text.keywords);
+    }
 
-    if (obj->text.name &&
-        obj->text.name != obj_proto[nr].text.name)
-      delete [] obj->text.name;
+    if (obj->text.name && obj->text.name != obj_proto[nr].text.name) {
+      DELETE_AND_NULL_ARRAY(obj->text.name);
+    }
 
-    if (obj->text.room_desc &&
-        obj->text.room_desc != obj_proto[nr].text.room_desc)
-      delete [] obj->text.room_desc;
+    if (obj->text.room_desc && obj->text.room_desc != obj_proto[nr].text.room_desc) {
+      DELETE_AND_NULL_ARRAY(obj->text.room_desc);
+    }
 
-    if (obj->text.look_desc &&
-        obj->text.look_desc != obj_proto[nr].text.look_desc)
-      delete [] obj->text.look_desc;
+    if (obj->text.look_desc && obj->text.look_desc != obj_proto[nr].text.look_desc) {
+      DELETE_AND_NULL_ARRAY(obj->text.look_desc);
+    }
 
-    if (obj->ex_description && obj->ex_description != obj_proto[nr].ex_description)
+    if (obj->ex_description && obj->ex_description != obj_proto[nr].ex_description) {
       for (this1 = obj->ex_description; this1; this1 = next_one) {
         next_one = this1->next;
-        if (this1->keyword)
-          delete [] this1->keyword;
-        if (this1->description)
-          delete [] this1->description;
-        delete this1;
+        DELETE_ARRAY_IF_EXTANT(this1->keyword);
+        DELETE_ARRAY_IF_EXTANT(this1->description);
+        DELETE_IF_EXTANT(this1);
       }
+      DELETE_IF_EXTANT(obj->ex_description);
+    }
   }
-  if (obj->restring)
-    delete [] obj->restring;
-  if (obj->graffiti)
-    delete [] obj->graffiti;
-  if (obj->photo)
-    delete [] obj->photo;
+  DELETE_ARRAY_IF_EXTANT(obj->restring);
+  DELETE_ARRAY_IF_EXTANT(obj->graffiti);
+  DELETE_ARRAY_IF_EXTANT(obj->photo);
   clear_object(obj);
 }
 
 void free_quest(struct quest_data *quest)
 {
-  if (quest->obj)
-    delete [] quest->obj;
-  if (quest->mob)
-    delete [] quest->mob;
-  if (quest->intro)
-    delete [] quest->intro;
-  if (quest->decline)
-    delete [] quest->decline;
-  if (quest->quit)
-    delete [] quest->quit;
-  if (quest->finish)
-    delete [] quest->finish;
-  if (quest->info)
-    delete [] quest->info;
-  if (quest->done)
-    delete [] quest->done;
+  DELETE_ARRAY_IF_EXTANT(quest->obj);
+  DELETE_ARRAY_IF_EXTANT(quest->mob);
+  DELETE_ARRAY_IF_EXTANT(quest->intro);
+  DELETE_ARRAY_IF_EXTANT(quest->decline);
+  DELETE_ARRAY_IF_EXTANT(quest->quit);
+  DELETE_ARRAY_IF_EXTANT(quest->finish);
+  DELETE_ARRAY_IF_EXTANT(quest->info);
+  DELETE_ARRAY_IF_EXTANT(quest->done);
 }
 
 void free_shop(struct shop_data *shop)
 {
-  if (shop->no_such_itemk)
-    delete [] shop->no_such_itemk;
-  if (shop->no_such_itemp)
-    delete [] shop->no_such_itemp;
-  if (shop->not_enough_nuyen)
-    delete [] shop->not_enough_nuyen;
-  if (shop->doesnt_buy)
-    delete [] shop->doesnt_buy;
-  if (shop->buy)
-    delete [] shop->buy;
-  if (shop->sell)
-    delete [] shop->sell;
+  DELETE_ARRAY_IF_EXTANT(shop->no_such_itemk);
+  DELETE_ARRAY_IF_EXTANT(shop->no_such_itemp);
+  DELETE_ARRAY_IF_EXTANT(shop->not_enough_nuyen);
+  DELETE_ARRAY_IF_EXTANT(shop->doesnt_buy);
+  DELETE_ARRAY_IF_EXTANT(shop->buy);
+  DELETE_ARRAY_IF_EXTANT(shop->sell);
 }
 
 /* read contets of a text file, alloc space, point buf to it */
@@ -3449,8 +3397,7 @@ int file_to_string_alloc(const char *name, char **buf)
   if (file_to_string(name, temp) < 0)
     return -1;
 
-  if (*buf)
-    delete [] *buf;
+  DELETE_ARRAY_IF_EXTANT(*buf);
 
   *buf = str_dup(temp);
 

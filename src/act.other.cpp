@@ -761,8 +761,7 @@ ACMD(do_display)
                  LINE_LENGTH - 1);
     return;
   } else {
-    if (GET_PROMPT(tch))
-      delete [] GET_PROMPT(tch);
+    DELETE_ARRAY_IF_EXTANT(GET_PROMPT(tch));
     GET_PROMPT(tch) = str_dup(buf);
     send_to_char(OK, ch);
     sprintf(buf, "UPDATE pfiles SET%sPrompt='%s' WHERE idnum=%ld;", PLR_FLAGGED((ch), PLR_MATRIX) ? " Matrix" : " ", GET_PROMPT(ch), GET_IDNUM(ch));
@@ -2073,15 +2072,12 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       PLR_FLAGS(CH).RemoveBit(PLR_CUSTOMIZE);
       strcpy(buf2, "UPDATE pfiles SET ");
       if (STATE(d) == CON_BCUSTOMIZE) {
-        if (CH->player.background)
-          delete [] CH->player.background;
+        DELETE_ARRAY_IF_EXTANT(CH->player.background);
         CH->player.background = str_dup(d->edit_mob->player.background);
         sprintf(ENDOF(buf2), "background='%s'", prepare_quotes(buf3, CH->player.background));
       } else if (STATE(d) == CON_FCUSTOMIZE) {
         
-        if (CH->player.physical_text.keywords)
-          delete [] CH->player.physical_text.keywords;
-
+        DELETE_ARRAY_IF_EXTANT(CH->player.physical_text.keywords);
         if (!strstr(GET_KEYWORDS(d->edit_mob), GET_CHAR_NAME(d->character))) {
           sprintf(buf, "%s %s", GET_KEYWORDS(d->edit_mob), GET_CHAR_NAME(d->character));
           CH->player.physical_text.keywords = str_dup(buf);
@@ -2089,81 +2085,57 @@ void cedit_parse(struct descriptor_data *d, char *arg)
           CH->player.physical_text.keywords = str_dup(GET_KEYWORDS(d->edit_mob));
         sprintf(ENDOF(buf2), "Physical_Keywords='%s'", prepare_quotes(buf3, CH->player.physical_text.keywords)); 
 
-        if (CH->player.physical_text.name)
-          delete [] CH->player.physical_text.name;
-        CH->player.physical_text.name =
-          str_dup(d->edit_mob->player.physical_text.name);
+        DELETE_ARRAY_IF_EXTANT(CH->player.physical_text.name);
+        CH->player.physical_text.name = str_dup(d->edit_mob->player.physical_text.name);
         sprintf(ENDOF(buf2), ", Physical_Name='%s'", prepare_quotes(buf3, CH->player.physical_text.name)); 
 
-        if (CH->player.physical_text.room_desc)
-          delete [] CH->player.physical_text.room_desc;
-        CH->player.physical_text.room_desc =
-          str_dup(d->edit_mob->player.physical_text.room_desc);
+        DELETE_ARRAY_IF_EXTANT(CH->player.physical_text.room_desc);
+        CH->player.physical_text.room_desc = str_dup(d->edit_mob->player.physical_text.room_desc);
         sprintf(ENDOF(buf2), ", Voice='%s'", prepare_quotes(buf3, CH->player.physical_text.room_desc)); 
 
-        if (CH->player.physical_text.look_desc)
-          delete [] CH->player.physical_text.look_desc;
-        CH->player.physical_text.look_desc =
-          str_dup(d->edit_mob->player.physical_text.look_desc);
-        sprintf(ENDOF(buf2), ", Physical_LookDesc='%s'", prepare_quotes(buf3, CH->player.physical_text.look_desc)); 
-
-        if (CH->char_specials.arrive)
-          delete [] CH->char_specials.arrive;
+        DELETE_ARRAY_IF_EXTANT(CH->player.physical_text.look_desc);
+        CH->player.physical_text.look_desc = str_dup(d->edit_mob->player.physical_text.look_desc);
+        sprintf(ENDOF(buf2), ", Physical_LookDesc='%s'", prepare_quotes(buf3, CH->player.physical_text.look_desc));
+        
+        DELETE_ARRAY_IF_EXTANT(CH->char_specials.arrive);
         CH->char_specials.arrive = str_dup(d->edit_mob->char_specials.arrive);
         sprintf(ENDOF(buf2), ", EnterMsg='%s'", prepare_quotes(buf3, CH->char_specials.arrive)); 
 
-        if (CH->char_specials.leave)
-          delete [] CH->char_specials.leave;
+        DELETE_ARRAY_IF_EXTANT(CH->char_specials.leave);
         CH->char_specials.leave = str_dup(d->edit_mob->char_specials.leave);
-        sprintf(ENDOF(buf2), ", LeaveMsg='%s', Height=%d, Weight=%d", prepare_quotes(buf3, CH->char_specials.leave), GET_HEIGHT(CH), GET_WEIGHT(CH));
+        sprintf(ENDOF(buf2), ", LeaveMsg='%s', Height=%d, Weight=%d", prepare_quotes(buf3, CH->char_specials.leave),
+                GET_HEIGHT(CH), GET_WEIGHT(CH));
       } else if (STATE(d) == CON_PCUSTOMIZE) {
-        if (CH->player.matrix_text.keywords)
-          delete [] CH->player.matrix_text.keywords;
-        CH->player.matrix_text.keywords =
-          str_dup(GET_KEYWORDS(d->edit_mob));
+        DELETE_ARRAY_IF_EXTANT(CH->player.matrix_text.keywords);
+        CH->player.matrix_text.keywords = str_dup(GET_KEYWORDS(d->edit_mob));
         sprintf(ENDOF(buf2), "Matrix_Keywords='%s'", prepare_quotes(buf3, CH->player.matrix_text.keywords)); 
 
-        if (CH->player.matrix_text.name)
-          delete [] CH->player.matrix_text.name;
-        CH->player.matrix_text.name =
-          str_dup(d->edit_mob->player.physical_text.name);
+        DELETE_ARRAY_IF_EXTANT(CH->player.matrix_text.name);
+        CH->player.matrix_text.name = str_dup(d->edit_mob->player.physical_text.name);
         sprintf(ENDOF(buf2), ", Matrix_Name='%s'", prepare_quotes(buf3, CH->player.matrix_text.name));
 
-        if (CH->player.matrix_text.room_desc)
-          delete [] CH->player.matrix_text.room_desc;
-        CH->player.matrix_text.room_desc =
-          str_dup(d->edit_mob->player.physical_text.room_desc);
+        DELETE_ARRAY_IF_EXTANT(CH->player.matrix_text.room_desc);
+        CH->player.matrix_text.room_desc = str_dup(d->edit_mob->player.physical_text.room_desc);
         sprintf(ENDOF(buf2), ", Matrix_RoomDesc='%s'", prepare_quotes(buf3, CH->player.matrix_text.room_desc)); 
 
-        if (CH->player.matrix_text.look_desc)
-          delete [] CH->player.matrix_text.look_desc;
-        CH->player.matrix_text.look_desc =
-          str_dup(d->edit_mob->player.physical_text.look_desc);
+        DELETE_ARRAY_IF_EXTANT(CH->player.matrix_text.look_desc);
+        CH->player.matrix_text.look_desc = str_dup(d->edit_mob->player.physical_text.look_desc);
         sprintf(ENDOF(buf2), ", Matrix_LookDesc='%s'", prepare_quotes(buf3, CH->player.matrix_text.look_desc)); 
       } else {
-        if (CH->player.astral_text.keywords)
-          delete [] CH->player.astral_text.keywords;
-        CH->player.astral_text.keywords =
-          str_dup(GET_KEYWORDS(d->edit_mob));
+        DELETE_ARRAY_IF_EXTANT(CH->player.astral_text.keywords);
+        CH->player.astral_text.keywords = str_dup(GET_KEYWORDS(d->edit_mob));
         sprintf(ENDOF(buf2), "Astral_Keywords='%s'", prepare_quotes(buf3, CH->player.astral_text.keywords));
 
-        if (CH->player.astral_text.name)
-          delete [] CH->player.astral_text.name;
-        CH->player.astral_text.name =
-          str_dup(d->edit_mob->player.physical_text.name);
+        DELETE_ARRAY_IF_EXTANT(CH->player.astral_text.name);
+        CH->player.astral_text.name = str_dup(d->edit_mob->player.physical_text.name);
         sprintf(ENDOF(buf2), ", Astral_Name='%s'", prepare_quotes(buf3, CH->player.astral_text.name));
 
-        if (CH->player.astral_text.room_desc)
-          delete [] CH->player.astral_text.room_desc;
-        CH->player.astral_text.room_desc =
-          str_dup(d->edit_mob->player.physical_text.room_desc);
+        DELETE_ARRAY_IF_EXTANT(CH->player.astral_text.room_desc);
+        CH->player.astral_text.room_desc = str_dup(d->edit_mob->player.physical_text.room_desc);
         sprintf(ENDOF(buf2), ", Astral_RoomDesc='%s'", prepare_quotes(buf3, CH->player.astral_text.room_desc));
 
-
-        if (CH->player.astral_text.look_desc)
-          delete [] CH->player.astral_text.look_desc;
-        CH->player.astral_text.look_desc =
-          str_dup(d->edit_mob->player.physical_text.look_desc);
+        DELETE_ARRAY_IF_EXTANT(CH->player.astral_text.look_desc);
+        CH->player.astral_text.look_desc = str_dup(d->edit_mob->player.physical_text.look_desc);
         sprintf(ENDOF(buf2), ", Astral_LookDesc='%s'", prepare_quotes(buf3, CH->player.astral_text.look_desc));
       }
 
@@ -2209,8 +2181,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     case '1':
       if (STATE(d) == CON_BCUSTOMIZE) {
         d->edit_mode = CEDIT_DESC;
-        if (d->str)
-          delete d->str;
+        DELETE_ARRAY_IF_EXTANT(d->str);
         d->str = new (char *);
 
         if (!d->str) {
@@ -2246,8 +2217,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
         d->edit_mode = CEDIT_VOICE;
       else {
         d->edit_mode = CEDIT_DESC;
-        if (d->str)
-          delete d->str;
+        DELETE_ARRAY_IF_EXTANT(d->str);
         d->str = new (char *);
 
         if (!d->str) {
@@ -2264,8 +2234,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     case '4':
       send_to_char("Enter long (active) description (@ on a blank line to end):\r\n", CH);
       d->edit_mode = CEDIT_LONG_DESC;
-      if (d->str)
-        delete d->str;
+      DELETE_ARRAY_IF_EXTANT(d->str);
       d->str = new (char *);
 
       if (!d->str) {
@@ -2324,9 +2293,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       return;
     }
 
-    if (d->edit_mob->player.physical_text.keywords)
-      delete [] d->edit_mob->player.physical_text.keywords;
-
+    DELETE_ARRAY_IF_EXTANT(d->edit_mob->player.physical_text.keywords);
     d->edit_mob->player.physical_text.keywords = str_dup(arg);
     cedit_disp_menu(d, 0);
 
@@ -2338,9 +2305,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       return;
     }
 
-    if (d->edit_mob->player.physical_text.room_desc)
-      delete [] d->edit_mob->player.physical_text.room_desc;
-
+    DELETE_ARRAY_IF_EXTANT(d->edit_mob->player.physical_text.room_desc);
     d->edit_mob->player.physical_text.room_desc = str_dup(arg);
     cedit_disp_menu(d, 0);
 
@@ -2350,8 +2315,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       cedit_disp_menu(d, 1);
       return;
     }
-    if (d->edit_mob->char_specials.arrive)
-      delete [] d->edit_mob->char_specials.arrive;
+    DELETE_ARRAY_IF_EXTANT(d->edit_mob->char_specials.arrive);
     d->edit_mob->char_specials.arrive = str_dup(arg);
     cedit_disp_menu(d, 0);
     break;
@@ -2360,8 +2324,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       cedit_disp_menu(d, 1);
       return;
     }
-    if (d->edit_mob->char_specials.leave)
-      delete [] d->edit_mob->char_specials.leave;
+    DELETE_ARRAY_IF_EXTANT(d->edit_mob->char_specials.leave);
     d->edit_mob->char_specials.leave = str_dup(arg);
     cedit_disp_menu(d, 0);
     break;
@@ -2370,8 +2333,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       cedit_disp_menu(d, 1);
       return;
     }
-    if (d->edit_mob->player.physical_text.name)
-      delete [] d->edit_mob->player.physical_text.name;
+    DELETE_ARRAY_IF_EXTANT(d->edit_mob->player.physical_text.name);
     d->edit_mob->player.physical_text.name = str_dup(arg);
     cedit_disp_menu(d, 0);
     break;
@@ -2401,7 +2363,7 @@ ACMD(do_remember)
   else {
     for (temp = GET_MEMORY(ch); temp; temp = temp->next)
       if (GET_IDNUM(vict) == temp->idnum) {
-        delete [] temp->mem;
+        DELETE_AND_NULL_ARRAY(temp->mem);
         temp->mem = str_dup(buf2);
         sprintf(buf, "Remembered %s as %s\r\n", GET_NAME(vict), buf2);
         send_to_char(buf, ch);
@@ -3792,8 +3754,7 @@ ACMD(do_tridlog)
   } else if (is_abbrev(arg, "add")) {
     send_to_char("Enter message to be displayed. (Insert Line Breaks With \\r\\n):\r\n", ch);
     STATE(ch->desc) = CON_TRIDEO;
-    if (ch->desc->str)
-      delete ch->desc->str;
+    DELETE_ARRAY_IF_EXTANT(ch->desc->str);
     ch->desc->str = new (char *);
     *ch->desc->str = NULL;
     ch->desc->max_str = MAX_MESSAGE_LENGTH;

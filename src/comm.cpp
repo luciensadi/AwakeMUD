@@ -1177,8 +1177,8 @@ int get_from_q(struct txt_q * queue, char *dest, int *aliased)
   *aliased = queue->head->aliased;
   queue->head = queue->head->next;
   
-  delete [] tmp->text;
-  delete tmp;
+  DELETE_AND_NULL_ARRAY(tmp->text);
+  DELETE_AND_NULL(tmp);
   
   return 1;
 }
@@ -1342,7 +1342,7 @@ int new_descriptor(int s)
       close(desc);
       sprintf(buf2, "Connection attempt denied from [%s]", newd->host);
       mudlog(buf2, NULL, LOG_BANLOG, TRUE);
-      delete newd;
+      DELETE_AND_NULL(newd);
       return 0;
     }
     
@@ -1648,7 +1648,8 @@ int perform_subst(struct descriptor_data *t, char *orig, char *subst)
 void free_editing_structs(descriptor_data *d, int state)
 {
   if (d->edit_obj) {
-    if (d->connected == CON_PART_CREATE || d->connected == CON_AMMO_CREATE || d->connected == CON_SPELL_CREATE || (d->connected >= CON_PRO_CREATE && d->connected <= CON_DECK_CREATE))
+    if (d->connected == CON_PART_CREATE || d->connected == CON_AMMO_CREATE || d->connected == CON_SPELL_CREATE
+        || (d->connected >= CON_PRO_CREATE && d->connected <= CON_DECK_CREATE))
       extract_obj(d->edit_obj);
     else
       Mem->DeleteObject(d->edit_obj);
@@ -1667,27 +1668,21 @@ void free_editing_structs(descriptor_data *d, int state)
   
   if (d->edit_quest) {
     free_quest(d->edit_quest);
-    delete d->edit_quest;
-    d->edit_quest = NULL;
+    DELETE_AND_NULL(d->edit_quest);
   }
   
   if (d->edit_shop) {
     free_shop(d->edit_shop);
-    delete d->edit_shop;
-    d->edit_shop = NULL;
+    DELETE_AND_NULL(d->edit_shop);
   }
   
   if (d->edit_zon) {
-    if (d->edit_zon->name)
-      delete [] d->edit_zon->name;
-    delete d->edit_zon;
-    d->edit_zon = NULL;
+    DELETE_ARRAY_IF_EXTANT(d->edit_zon->name);
+    DELETE_AND_NULL_ARRAY(d->edit_zon);
   }
   
-  if (d->edit_cmd) {
-    delete d->edit_cmd;
-    d->edit_cmd = NULL;
-  }
+  DELETE_IF_EXTANT(d->edit_cmd);
+  
   if (d->edit_veh) {
     Mem->DeleteVehicle(d->edit_veh);
     d->edit_veh = NULL;
@@ -1755,9 +1750,8 @@ void close_socket(struct descriptor_data *d)
       if (d->character->spells)
         for (one = d->character->spells; one; one = next) {
           next = one->next;
-          if (one->name)
-            delete [] one->name;
-          delete one;
+          DELETE_ARRAY_IF_EXTANT(one->name);
+          DELETE_AND_NULL(one);
         }
       d->character->spells = NULL;
       Mem->DeleteCh(d->character);
@@ -1770,8 +1764,7 @@ void close_socket(struct descriptor_data *d)
   
   REMOVE_FROM_LIST(d, descriptor_list, next);
   
-  if (d->showstr_head)
-    delete [] d->showstr_head;
+  DELETE_ARRAY_IF_EXTANT(d->showstr_head);
   
   delete d;
 }

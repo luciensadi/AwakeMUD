@@ -529,8 +529,7 @@ bool attempt_reload(struct char_data *mob, int pos)
       GET_OBJ_VAL(magazine, 9) = GET_OBJ_VAL(magazine, 0) = GET_OBJ_VAL(gun, 5);
       GET_OBJ_VAL(magazine, 1) = GET_OBJ_VAL(gun, 3);
       sprintf(buf, "a %d-round %s magazine", GET_OBJ_VAL(magazine, 0), weapon_type[GET_OBJ_VAL(magazine, 1)]);
-      if (magazine->restring)
-        delete [] magazine->restring;
+      DELETE_ARRAY_IF_EXTANT(magazine->restring);
       magazine->restring = strdup(buf);
       found = TRUE;
       break;      

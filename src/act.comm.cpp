@@ -1286,7 +1286,7 @@ ACMD(do_phone)
           return;
         }
         REMOVE_FROM_LIST(phone, phone_list, next);
-        delete phone;
+        DELETE_AND_NULL(phone);
       }
       return;
     }
@@ -1387,7 +1387,7 @@ ACMD(do_ignore)
       char *name = get_player_name(a->idnum);
       if (name) {
         send_to_char(ch, "%s\r\n", name);
-        delete [] name;
+        DELETE_AND_NULL_ARRAY(name);
       }
     }
   } else {
@@ -1399,7 +1399,7 @@ ACMD(do_ignore)
       else if ((list = found_mem(GET_IGNORE(ch), tch))) {
         struct remem *temp;
         REMOVE_FROM_LIST(list, GET_IGNORE(ch), next);
-        delete list;
+        DELETE_AND_NULL(list);
         send_to_char(ch, "You can now hear %s.\r\n", GET_CHAR_NAME(tch));
       } else {
         list = new remem;

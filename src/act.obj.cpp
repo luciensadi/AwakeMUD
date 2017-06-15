@@ -1661,7 +1661,7 @@ void name_from_drinkcon(struct obj_data *obj)
 
   // only delete the object name if this object has a unique name
   if (GET_OBJ_RNUM(obj) < 0 || obj->text.keywords != obj_proto[GET_OBJ_RNUM(obj)].text.keywords)
-    delete [] obj->text.keywords;
+    DELETE_AND_NULL_ARRAY(obj->text.keywords);
   // otherwise it just gets pointed to the new namelist
   obj->text.keywords = str_dup(buf2);
 }
@@ -1678,7 +1678,7 @@ void name_to_drinkcon(struct obj_data *obj, int type)
 
   if (GET_OBJ_RNUM(obj) == NOTHING ||
       obj->text.keywords != obj_proto[GET_OBJ_RNUM(obj)].text.keywords)
-    delete [] obj->text.keywords;
+    DELETE_AND_NULL_ARRAY(obj->text.keywords);
 
   obj->text.keywords = new_name;
 }
