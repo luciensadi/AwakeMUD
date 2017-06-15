@@ -3177,6 +3177,8 @@ void free_char(struct char_data * ch)
     DELETE_ARRAY_IF_EXTANT(ch->player.whotitle);
     DELETE_ARRAY_IF_EXTANT(ch->player.background);
     DELETE_ARRAY_IF_EXTANT(ch->player.matrixprompt);
+    DELETE_ARRAY_IF_EXTANT(ch->char_specials.arrive);
+    DELETE_ARRAY_IF_EXTANT(ch->char_specials.leave);
     DELETE_ARRAY_IF_EXTANT(GET_NAME(ch));
 
     {
@@ -3259,12 +3261,18 @@ void free_char(struct char_data * ch)
       }
     }
     
+    if (ch->char_specials.arrive && ch->char_specials.arrive != proto->char_specials.arrive) {
+      delete [] ch->char_specials.arrive;
+      ch->char_specials.arrive = NULL;
+    }
+    
+    if (ch->char_specials.leave && ch->char_specials.leave != proto->char_specials.leave) {
+      delete [] ch->char_specials.leave;
+      ch->char_specials.leave = NULL;
+    }
+    
     // TODO: Is mob memory (memory_rec *(ch->mob_specials->memory)) leaked here?
   }
-  
-  // Clean up char specials (these aren't pointers so we don't worry about proto rewrites).
-  DELETE_ARRAY_IF_EXTANT(ch->char_specials.arrive);
-  DELETE_ARRAY_IF_EXTANT(ch->char_specials.leave);
   
   clear_char(ch);
 }
