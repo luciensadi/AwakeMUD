@@ -260,6 +260,7 @@ void icedit_parse(struct descriptor_data *d, const char *arg)
     case '3':
       send_to_char("Enter IC description:\r\n", CH);
       d->edit_mode = ICEDIT_DESC;
+      DELETE_ARRAY_IF_EXTANT(d->str);
       d->str = new (char *);
       if (!d->str) {
         mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
