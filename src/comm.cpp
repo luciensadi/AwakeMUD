@@ -583,7 +583,6 @@ void game_loop(int mother_desc)
      * However, I think it is easier to check for an EINTR error return from
      * this select() call rather than to block and unblock signals.
      */
-#define GOTTAGOFAST
 #ifndef GOTTAGOFAST
     do {
       errno = 0;                /* clear error condition */
