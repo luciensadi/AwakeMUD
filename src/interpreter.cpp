@@ -2258,7 +2258,7 @@ void nanny(struct descriptor_data * d, char *arg)
         sprintf(buf, "%s [%s] has connected.",
                 GET_CHAR_NAME(d->character), d->host);
       if (d->character->player.host)
-        delete d->character->player.host;
+        delete [] d->character->player.host;
       d->character->player.host = strdup(d->host);
       playerDB.SaveChar(d->character);
       mudlog(buf, d->character, LOG_CONNLOG, TRUE);

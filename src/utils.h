@@ -124,7 +124,7 @@ void    update_pos(struct char_data *victim);
 #define BFS_NO_PATH             -3
 
 /* mud-life time */
-#define SECS_PER_MUD_MINUTE 2
+#define SECS_PER_MUD_MINUTE 1 // usually 2
 #define SECS_PER_MUD_HOUR       (60*SECS_PER_MUD_MINUTE)
 #define SECS_PER_MUD_DAY        (24*SECS_PER_MUD_HOUR)
 #define SECS_PER_MUD_MONTH      (30*SECS_PER_MUD_DAY)

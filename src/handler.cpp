@@ -1794,10 +1794,9 @@ void extract_obj(struct obj_data * obj)
     if (unequip_char(obj->worn_by, obj->worn_on, TRUE) != obj)
       log("SYSLOG: Inconsistent worn_by and worn_on pointers!!");
   if (GET_OBJ_TYPE(obj) == ITEM_PHONE ||
-      (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE && GET_OBJ_VAL(obj, 0) == CYB_PHONE))
-    for (phone = phone_list; phone; phone = phone->next)
-      if (phone->phone == obj)
-      {
+      (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE && GET_OBJ_VAL(obj, 0) == CYB_PHONE)) {
+    for (phone = phone_list; phone; phone = phone->next) {
+      if (phone->phone == obj) {
         if (phone->dest) {
           phone->dest->dest = NULL;
           phone->dest->connected = FALSE;
@@ -1826,31 +1825,28 @@ void extract_obj(struct obj_data * obj)
         delete phone;
         break;
       }
+    }
+  }
   
-  if (obj->in_room != NOWHERE || obj->in_veh != NULL)
-  {
+  if (obj->in_room != NOWHERE || obj->in_veh != NULL) {
     obj_from_room(obj);
-    set
-    = TRUE;
+    set = TRUE;
   }
-  if (obj->carried_by)
-  {
+  
+  if (obj->carried_by) {
     obj_from_char(obj);
-    if (set
-        )
+    if (set)
       log("SYSLOG: More than one list pointer set!");
-    set
-    = TRUE;
+    set = TRUE;
   }
-  if (obj->in_obj)
-  {
+  
+  if (obj->in_obj) {
     obj_from_obj(obj);
-    if (set
-        )
+    if (set)
       log("SYSLOG: More than one list pointer set!");
-    set
-    = TRUE;
+    set = TRUE;
   }
+  
   /* Get rid of the contents of the object, as well. */
   while (obj->contains && GET_OBJ_TYPE(obj) != ITEM_PART)
     extract_obj(obj->contains);
