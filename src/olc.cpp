@@ -1311,10 +1311,8 @@ ACMD(do_medit)
     d->edit_mob->player_specials = &dummy_mob;
 
     d->edit_mob->player.physical_text.keywords = str_dup("mob unfinished");
-    d->edit_mob->player.physical_text.name =
-      str_dup("an unfinished mob");
-    d->edit_mob->player.physical_text.room_desc =
-      str_dup("An unfinished mob stands here.");
+    d->edit_mob->player.physical_text.name = str_dup("an unfinished mob");
+    d->edit_mob->player.physical_text.room_desc = str_dup("An unfinished mob stands here.");
     d->edit_mob->player.physical_text.look_desc =
       str_dup("It looks barely coherent as it waits to be created.\r\n");
 
