@@ -4712,10 +4712,8 @@ void perform_violence(void)
         }
         if (ch->squeue) {
           cast_spell(ch, ch->squeue->spell, ch->squeue->sub, ch->squeue->force, ch->squeue->arg);
-          if (ch->squeue->arg)
-            delete [] ch->squeue->arg;
-          delete [] ch->squeue;
-          ch->squeue = NULL;
+          DELETE_ARRAY_IF_EXTANT(ch->squeue->arg);
+          DELETE_AND_NULL(ch->squeue);
           continue;
         }
       }

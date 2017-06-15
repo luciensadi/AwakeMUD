@@ -303,8 +303,7 @@ void dbuild_parse(struct descriptor_data *d, const char *arg) {
             deckbuild_main_menu(d);
             return;
         }
-        if (PART->restring)
-            delete [] PART->restring;
+        DELETE_ARRAY_IF_EXTANT(PART->restring);
         PART->restring = str_dup(arg);
         deckbuild_main_menu(d);
         break;

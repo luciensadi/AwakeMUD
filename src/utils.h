@@ -124,7 +124,7 @@ void    update_pos(struct char_data *victim);
 #define BFS_NO_PATH             -3
 
 /* mud-life time */
-#define SECS_PER_MUD_MINUTE 1 // usually 2
+#define SECS_PER_MUD_MINUTE 2
 #define SECS_PER_MUD_HOUR       (60*SECS_PER_MUD_MINUTE)
 #define SECS_PER_MUD_DAY        (24*SECS_PER_MUD_HOUR)
 #define SECS_PER_MUD_MONTH      (30*SECS_PER_MUD_DAY)
@@ -616,8 +616,13 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 /* Memory management *****************************************************/
 
-#define DELETE_ARRAY_IF_EXTANT(target) {if ((target)) delete [] (target); (target) = NULL;}
-#define DELETE_IF_EXTANT(target) {if ((target)) delete (target); (target) = NULL;}
+// This guarantees that the pointer will be null after deletion (something that's plagued this codebase for years).
+#define DELETE_AND_NULL_ARRAY(target) {delete [] (target); (target) = NULL;}
+#define DELETE_AND_NULL(target) {delete (target); (target) = NULL;}
+
+// Checks for existence and deletes the pointed value if extant.
+#define DELETE_ARRAY_IF_EXTANT(target) {if ((target)) DELETE_AND_NULL_ARRAY((target))}
+#define DELETE_IF_EXTANT(target) {if ((target)) DELETE_AND_NULL((target))}
 
 /* OS compatibility ******************************************************/
 

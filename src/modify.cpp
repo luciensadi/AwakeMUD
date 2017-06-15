@@ -171,8 +171,7 @@ void string_add(struct descriptor_data *d, char *str)
   {
     SEND_TO_Q("Aborted.\r\n", d);
     d->mail_to = 0;
-    delete [] *d->str;
-    d->str = NULL;
+    DELETE_ARRAY_IF_EXTANT(*d->str);
     if (!IS_NPC(d->character))
       PLR_FLAGS(d->character).RemoveBits(PLR_MAILING, PLR_WRITING, ENDBIT);
     return;
@@ -228,219 +227,177 @@ void string_add(struct descriptor_data *d, char *str)
     extern void pocketsec_notemenu(struct descriptor_data *d);
 
     if (STATE(d) == CON_DECK_CREATE && d->edit_mode == 1) {
-      if (d->edit_obj->photo)
-        delete [] d->edit_obj->photo;
+      DELETE_ARRAY_IF_EXTANT(d->edit_obj->photo);
       format_string(d, 0);
       d->edit_obj->photo = str_dup(*d->str);
+      /* This delete for d->str is more stringent than the others. Why?
       delete [] *d->str;
-      delete d->str;
+      delete d->str; */
+      DELETE_ARRAY_IF_EXTANT(d->str);
       deckbuild_main_menu(d);
     } else if (STATE(d) == CON_VEHCUST) {
-      if (d->edit_veh->restring_long) 
-        delete [] d->edit_veh->restring_long;
+      DELETE_ARRAY_IF_EXTANT(d->edit_veh->restring_long);
       format_string(d, 0);
       d->edit_veh->restring_long = str_dup(*d->str);
-      delete [] *d->str;
-      delete d->str;
+      DELETE_ARRAY_IF_EXTANT(d->str);
       vehcust_menu(d); 
     } else if (STATE(d) == CON_TRIDEO) {
       (*d->str)[strlen(*d->str)-2] = '\0';
       sprintf(buf, "INSERT INTO trideo_broadcast (author, message) VALUES (%ld, '%s')", GET_IDNUM(d->character), prepare_quotes(buf2, *d->str));
       mysql_wrapper(mysql, buf);
-      delete [] *d->str;
-      delete d->str;
+      DELETE_ARRAY_IF_EXTANT(d->str);
       STATE(d) = CON_PLAYING;
     } else if (STATE(d) == CON_DECORATE) {
-      delete [] world[d->character->in_room].description;
+      DELETE_ARRAY_IF_EXTANT(world[d->character->in_room].description);
       format_string(d, 0);
       world[d->character->in_room].description = str_dup(*d->str);
       write_world_to_disk(zone_table[world[d->character->in_room].zone].number);
-      delete [] *d->str;
-      delete d->str;
+      DELETE_ARRAY_IF_EXTANT(d->str);
       STATE(d) = CON_PLAYING;
     } else if (STATE(d) == CON_SPELL_CREATE && d->edit_mode == 3) {
-      if (d->edit_obj->photo) 
-        delete [] d->edit_obj->photo;
+      DELETE_ARRAY_IF_EXTANT(d->edit_obj->photo);
       format_string(d, 0);
       d->edit_obj->photo = str_dup(*d->str);
-      delete [] *d->str;
-      delete d->str;
+      DELETE_ARRAY_IF_EXTANT(d->str);
       spedit_disp_menu(d);
     } else if (STATE(d) == CON_IEDIT) {
       switch(d->edit_mode) {
       case IEDIT_EXTRADESC_DESCRIPTION:
-        if (((struct extra_descr_data *)*d->misc_data)->description)
-          delete [] ((struct extra_descr_data *)*d->misc_data)->description;
+        DELETE_ARRAY_IF_EXTANT(((struct extra_descr_data *)*d->misc_data)->description);
         format_string(d, 0);
-        ((struct extra_descr_data *)*d->misc_data)->description =
-          str_dup(*d->str);
-        delete [] *d->str;
-        delete d->str;
+        ((struct extra_descr_data *)*d->misc_data)->description = str_dup(*d->str);
+        DELETE_ARRAY_IF_EXTANT(d->str);
         iedit_disp_extradesc_menu(d);
         break;
       case IEDIT_LONGDESC:
-        if (d->edit_obj->text.look_desc)
-          delete [] d->edit_obj->text.look_desc;
+        DELETE_ARRAY_IF_EXTANT(d->edit_obj->text.look_desc);
         format_string(d, 0);
         d->edit_obj->text.look_desc = str_dup(*d->str);
-        delete [] *d->str;
-        delete d->str;
+        DELETE_ARRAY_IF_EXTANT(d->str);
         iedit_disp_menu(d);
         break;
       }
     } else if (STATE(d) == CON_MEDIT) {
       switch(d->edit_mode) {
       case MEDIT_LONG_DESCR:
-        if (d->edit_mob->player.physical_text.look_desc)
-          delete [] d->edit_mob->player.physical_text.look_desc;
+        DELETE_ARRAY_IF_EXTANT(d->edit_mob->player.physical_text.look_desc);
         format_string(d, 0);
         d->edit_mob->player.physical_text.look_desc = str_dup(*d->str);
-        delete [] *d->str;
-        delete d->str;
+        DELETE_ARRAY_IF_EXTANT(d->str);
         medit_disp_menu(d);
         break;
       case MEDIT_REG_DESCR:
-        if (d->edit_mob->player.physical_text.room_desc)
-          delete [] d->edit_mob->player.physical_text.room_desc;
+        DELETE_ARRAY_IF_EXTANT(d->edit_mob->player.physical_text.room_desc);
         format_string(d, 0);
         d->edit_mob->player.physical_text.room_desc = str_dup(*d->str);
-        delete [] *d->str;
-        delete d->str;
+        DELETE_ARRAY_IF_EXTANT(d->str);
         medit_disp_menu(d);
         break;
       }
     } else if (STATE(d) == CON_VEDIT) {
       switch(d->edit_mode) {
       case VEDIT_LONGDESC:
-        if (d->edit_veh->long_description)
-          delete [] d->edit_veh->long_description;
+        DELETE_ARRAY_IF_EXTANT(d->edit_veh->long_description);
         format_string(d, 0);
         d->edit_veh->long_description = str_dup(*d->str);
-        delete [] *d->str;
-        delete d->str;
+        DELETE_ARRAY_IF_EXTANT(d->str);
         vedit_disp_menu(d);
         break;
       case VEDIT_INSDESC:
-        if (d->edit_veh->inside_description)
-          delete [] d->edit_veh->inside_description;
+        DELETE_ARRAY_IF_EXTANT(d->edit_veh->inside_description);
         format_string(d, 0);
         d->edit_veh->inside_description = str_dup(*d->str);
-        delete [] *d->str;
-        delete d->str;
+        DELETE_ARRAY_IF_EXTANT(d->str);
         vedit_disp_menu(d);
         break;
       case VEDIT_REARDESC:
-        if (d->edit_veh->rear_description)
-          delete [] d->edit_veh->rear_description;
+        DELETE_ARRAY_IF_EXTANT(d->edit_veh->rear_description);
         format_string(d, 0);
         d->edit_veh->rear_description = str_dup(*d->str);
-        delete [] *d->str;
-        delete d->str;
+        DELETE_ARRAY_IF_EXTANT(d->str);
         vedit_disp_menu(d);
         break;
       }
     } else if (STATE(d) == CON_HEDIT) {
       switch(d->edit_mode) {
       case HEDIT_DESC:
-        if (d->edit_host->desc)
-          delete [] d->edit_host->desc;
+        DELETE_ARRAY_IF_EXTANT(d->edit_host->desc);
         format_string(d, 0);
         d->edit_host->desc = str_dup(*d->str);
-        delete [] *d->str;
-        delete d->str;
+        DELETE_ARRAY_IF_EXTANT(d->str);
         hedit_disp_data_menu(d);
         break;
       }
     } else if (STATE(d) == CON_ICEDIT) {
       switch(d->edit_mode) {
       case ICEDIT_DESC:
-        if (d->edit_icon->long_desc)
-          delete [] d->edit_icon->long_desc;
+        DELETE_ARRAY_IF_EXTANT(d->edit_icon->long_desc);
         format_string(d, 0);
         d->edit_icon->long_desc = str_dup(*d->str);
-        delete [] *d->str;
-        delete d->str;
+        DELETE_ARRAY_IF_EXTANT(d->str);
         icedit_disp_menu(d);
         break;
       }
     } else if (STATE(d) == CON_REDIT) {
       switch(d->edit_mode) {
       case REDIT_DESC:
-        if (d->edit_room->description)
-          delete [] d->edit_room->description;
+        DELETE_ARRAY_IF_EXTANT(d->edit_room->description);
         format_string(d, 1);
         d->edit_room->description = str_dup(*d->str);
-        delete [] *d->str;
-        delete d->str;
+        DELETE_ARRAY_IF_EXTANT(d->str);
         redit_disp_menu(d);
         break;
       case REDIT_NDESC:
-        if (d->edit_room->night_desc)
-          delete [] d->edit_room->night_desc;
+        DELETE_ARRAY_IF_EXTANT(d->edit_room->night_desc);
         format_string(d, 1);
         if (strlen(*d->str) > 5) {
           d->edit_room->night_desc = str_dup(*d->str);
         } else
           d->edit_room->night_desc = NULL;
-        delete [] *d->str;
-        delete d->str;
+        DELETE_ARRAY_IF_EXTANT(d->str);
         redit_disp_menu(d);
         break;
       case REDIT_EXTRADESC_DESCRIPTION:
-        if (((struct extra_descr_data *)*d->misc_data)->description)
-          delete ((struct extra_descr_data *)*d->misc_data)->description;
+        DELETE_ARRAY_IF_EXTANT(((struct extra_descr_data *)*d->misc_data)->description);
         format_string(d, 0);
-        ((struct extra_descr_data *)*d->misc_data)->description =
-          str_dup(*d->str);
-        delete [] *d->str;
-        delete d->str;
+        ((struct extra_descr_data *)*d->misc_data)->description = str_dup(*d->str);
+        DELETE_ARRAY_IF_EXTANT(d->str);
         redit_disp_extradesc_menu(d);
         break;
       case REDIT_EXIT_DESCRIPTION:
-        if (d->edit_room->dir_option[d->edit_number2]->general_description)
-          delete [] d->edit_room->dir_option[d->edit_number2]->general_description;
+        DELETE_ARRAY_IF_EXTANT(d->edit_room->dir_option[d->edit_number2]->general_description);
         format_string(d, 0);
-        d->edit_room->dir_option[d->edit_number2]->general_description =
-          str_dup(*d->str);
-        delete [] *d->str;
-        delete d->str;
+        d->edit_room->dir_option[d->edit_number2]->general_description = str_dup(*d->str);
+        DELETE_ARRAY_IF_EXTANT(d->str);
         redit_disp_exit_menu(d);
         break;
       }
     } else if (STATE(d) == CON_QEDIT && d->edit_mode == QEDIT_INFO) {
-      if (d->edit_quest->info)
-        delete [] d->edit_quest->info;
+      DELETE_ARRAY_IF_EXTANT(d->edit_quest->info);
       format_string(d, 0);
       d->edit_quest->info = str_dup(*d->str);
-      delete [] *d->str;
-      delete d->str;
+      DELETE_ARRAY_IF_EXTANT(d->str);
       qedit_disp_menu(d);
     } else if (STATE(d) == CON_BCUSTOMIZE && d->edit_mode == CEDIT_DESC) {
-      if (d->edit_mob->player.background)
-        delete [] d->edit_mob->player.background;
+      DELETE_ARRAY_IF_EXTANT(d->edit_mob->player.background);
       format_string(d, 0);
       d->edit_mob->player.background = str_dup(*d->str);
-      delete [] *d->str;
-      delete d->str;
+      DELETE_ARRAY_IF_EXTANT(d->str);
       cedit_disp_menu(d, 0);
     } else if (STATE(d) == CON_PCUSTOMIZE || STATE(d) == CON_ACUSTOMIZE || STATE(d) == CON_FCUSTOMIZE) {
       switch(d->edit_mode) {
       case CEDIT_LONG_DESC:
-        if (d->edit_mob->player.physical_text.look_desc)
-          delete [] d->edit_mob->player.physical_text.look_desc;
+        DELETE_ARRAY_IF_EXTANT(d->edit_mob->player.physical_text.look_desc);
         format_string(d, 0);
         d->edit_mob->player.physical_text.look_desc = str_dup(*d->str);
-        delete [] *d->str;
-        delete d->str;
+        DELETE_ARRAY_IF_EXTANT(d->str);
         cedit_disp_menu(d, 0);
         break;
       case CEDIT_DESC:
-        if (d->edit_mob->player.physical_text.room_desc)
-          delete [] d->edit_mob->player.physical_text.room_desc;
+        DELETE_ARRAY_IF_EXTANT(d->edit_mob->player.physical_text.room_desc);
         format_string(d, 0);
         d->edit_mob->player.physical_text.room_desc = str_dup(*d->str);
-        delete [] *d->str;
-        delete d->str;
+        DELETE_ARRAY_IF_EXTANT(d->str);
         cedit_disp_menu(d, 0);
         break;
       }
@@ -451,18 +408,15 @@ void string_add(struct descriptor_data *d, char *str)
           file = file->contains;
           break;
         }
-      if (file->photo)
-        delete [] file->photo;
+      DELETE_ARRAY_IF_EXTANT(file->photo);
       format_string(d, 0);
       file->photo = str_dup(*d->str);
-      delete [] *d->str;
-      delete d->str;
+      DELETE_ARRAY_IF_EXTANT(d->str);
       pocketsec_notemenu(d);
     } else if (PLR_FLAGGED(d->character, PLR_MAILING)) {
       store_mail(d->mail_to, GET_IDNUM(d->character), *d->str);
       d->mail_to = 0;
-      delete [] *d->str;
-      delete d->str;
+      DELETE_ARRAY_IF_EXTANT(d->str);
       SEND_TO_Q("Message sent.\r\n", d);
       if (!IS_NPC(d->character))
         PLR_FLAGS(d->character).RemoveBits(PLR_MAILING, PLR_WRITING, ENDBIT);
@@ -872,10 +826,7 @@ void show_string(struct descriptor_data *d, char *input)
 
   if (*buf)
   {
-    if (d->showstr_head) {
-      delete [] d->showstr_head;
-      d->showstr_head = 0;
-    }
+    DELETE_ARRAY_IF_EXTANT(d->showstr_head);
     d->showstr_point = 0;
     return;
   }
@@ -893,10 +844,7 @@ void show_string(struct descriptor_data *d, char *input)
       for (chk = d->showstr_point; isspace(*chk); chk++)
         ;
       if (!*chk) {
-        if (d->showstr_head) {
-          delete [] d->showstr_head;
-          d->showstr_head = 0;
-        }
+        DELETE_ARRAY_IF_EXTANT(d->showstr_head);
         d->showstr_point = 0;
       }
       return;

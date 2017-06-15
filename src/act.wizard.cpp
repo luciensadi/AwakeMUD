@@ -2318,9 +2318,7 @@ ACMD(do_poofset)
     return;
   }
 
-  if (*msg)
-    delete [] *msg;
-
+  DELETE_ARRAY_IF_EXTANT(*msg);
   *msg = str_dup(argument);
 
   sprintf(buf, "UPDATE pfiles_immortdata SET poofin='%s', poofout='%s' WHERE idnum=%ld;", prepare_quotes(buf2, POOFIN(ch)), prepare_quotes(buf3, POOFOUT(ch)), GET_IDNUM(ch));
@@ -4729,11 +4727,9 @@ ACMD(do_destring)
     return;
   }
   GET_KARMA(ch) += 125;
-  delete [] obj->restring;
-  obj->restring = NULL;
+  DELETE_AND_NULL_ARRAY(obj->restring);
   sprintf(buf2, "%s successfully destrung.\r\n", obj->text.name);
   send_to_char(ch, buf2);
-
 }
 
 ACMD(do_restring)
@@ -4773,8 +4769,8 @@ ACMD(do_restring)
   }
   sprintf(buf2, "%s restrung '%s' to '%s'", GET_CHAR_NAME(ch), obj->text.name, buf);
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
-  if (obj->restring)
-    delete [] obj->restring;
+  
+  DELETE_ARRAY_IF_EXTANT(obj->restring);
   obj->restring = strdup(buf);
   sprintf(buf2, "%s successfully restrung.\r\n", obj->text.name);
   send_to_char(ch, buf2);
