@@ -362,16 +362,21 @@ char *read_delete(long recipient, char *sender)
   tmstr = asctime(localtime(&header.header_data.mail_time));
   *(tmstr + strlen(tmstr) - 1) = '\0';
 
-  if (get_player_name(header.header_data.from))
-    strcpy(sender, get_player_name(header.header_data.from));
+  char *player_name = get_player_name(header.header_data.from);
+  if (player_name) {
+    strcpy(sender, player_name);
+    delete [] player_name;
+  }
 
+  player_name = get_player_name(recipient);
   sprintf(buf, "^W * * * * Shadowland Mail System * * * *\r\n"
           "^YDate: %s\r\n"
           "  ^BTo: %s\r\n"
           "^CFrom: %s^n\r\n\r\n",
           tmstr,
-          get_player_name(recipient),
+          player_name,
           sender);
+  DELETE_ARRAY_IF_EXTANT(player_name);
 
   string_size = (sizeof(char) * (strlen(buf) + strlen(header.txt) + 1));
   message = new char[string_size];

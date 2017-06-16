@@ -630,12 +630,9 @@ void Board_delete_msg(int board_type, int ind)
     if (!d->connected && d->str == &(msg_storage[slot_num]))
       return;
 
-  if (msg_storage[slot_num])
-    delete [] msg_storage[slot_num];
-  msg_storage[slot_num] = 0;
+  DELETE_ARRAY_IF_EXTANT(msg_storage[slot_num]);
   msg_storage_taken[slot_num] = 0;
-  if (MSG_HEADING(board_type, ind))
-    delete [] MSG_HEADING(board_type, ind);
+  DELETE_ARRAY_IF_EXTANT(MSG_HEADING(board_type, ind));
 
   for (; ind < num_of_msgs[board_type] - 1; ind++) {
     MSG_HEADING(board_type, ind) = MSG_HEADING(board_type, ind + 1);
@@ -810,10 +807,8 @@ void Board_reset_board(int board_type)
   int i;
 
   for (i = 0; i < MAX_BOARD_MESSAGES; i++) {
-    if (MSG_HEADING(board_type, i))
-      delete [] MSG_HEADING(board_type, i);
-    if (msg_storage[MSG_SLOTNUM(board_type, i)])
-      delete msg_storage[MSG_SLOTNUM(board_type, i)];
+    DELETE_ARRAY_IF_EXTANT(MSG_HEADING(board_type, i));
+    DELETE_IF_EXTANT(msg_storage[MSG_SLOTNUM(board_type, i)]);
     msg_storage_taken[MSG_SLOTNUM(board_type, i)] = 0;
     memset((char *)&(msg_index[board_type][i]),0,sizeof(struct board_msginfo));
     msg_index[board_type][i].slot_num = -1;

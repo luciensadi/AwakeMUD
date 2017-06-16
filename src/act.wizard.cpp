@@ -2318,9 +2318,7 @@ ACMD(do_poofset)
     return;
   }
 
-  if (*msg)
-    delete [] *msg;
-
+  DELETE_ARRAY_IF_EXTANT(*msg);
   *msg = str_dup(argument);
 
   sprintf(buf, "UPDATE pfiles_immortdata SET poofin='%s', poofout='%s' WHERE idnum=%ld;", prepare_quotes(buf2, POOFIN(ch)), prepare_quotes(buf3, POOFOUT(ch)), GET_IDNUM(ch));
@@ -2446,7 +2444,7 @@ ACMD(do_last)
   bool from_file = FALSE;
   int level = 0;
   long idnum = 0, lastdisc = 0;
-  char *name, *host;
+  char *name = NULL, *host = NULL;
 
   one_argument(argument, arg);
   if (!*arg) {
@@ -2455,16 +2453,16 @@ ACMD(do_last)
   }
 
   if (!(vict = get_player_vis(ch, arg, FALSE))) {
-    prepare_quotes(buf2, arg);
-    if (!does_player_exist(buf2)) {
-      send_to_char("There is no such player.\r\n", ch);
-      return;
-    }
     from_file = TRUE;
-    sprintf(buf, "SELECT Idnum, Rank, Host, LastD, Name FROM pfiles WHERE name='%s';", buf2);
+    sprintf(buf, "SELECT Idnum, Rank, Host, LastD, Name FROM pfiles WHERE name='%s';", prepare_quotes(buf2, arg));
     mysql_wrapper(mysql, buf);
     MYSQL_RES *res = mysql_use_result(mysql);
     MYSQL_ROW row = mysql_fetch_row(res);
+    if (!row && mysql_field_count(mysql)) {
+      mysql_free_result(res);
+      send_to_char("There is no such player.\r\n", ch);
+      return;
+    }
     idnum = atol(row[0]);
     level = atoi(row[1]);
     host = str_dup(row[2]);
@@ -4667,10 +4665,9 @@ ACMD(do_tail)
   int lines = 20;
   char *temp;
   int i = 0;
-  char *buf;
 
-  out = new FILE;
-  buf = new char[MAX_STRING_LENGTH];
+  //out = new FILE;
+  char buf[MAX_STRING_LENGTH];
 
   two_arguments(argument, arg, buf);
 
@@ -4730,11 +4727,9 @@ ACMD(do_destring)
     return;
   }
   GET_KARMA(ch) += 125;
-  delete [] obj->restring;
-  obj->restring = NULL;
+  DELETE_AND_NULL_ARRAY(obj->restring);
   sprintf(buf2, "%s successfully destrung.\r\n", obj->text.name);
   send_to_char(ch, buf2);
-
 }
 
 ACMD(do_restring)
@@ -4774,8 +4769,8 @@ ACMD(do_restring)
   }
   sprintf(buf2, "%s restrung '%s' to '%s'", GET_CHAR_NAME(ch), obj->text.name, buf);
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
-  if (obj->restring)
-    delete [] obj->restring;
+  
+  DELETE_ARRAY_IF_EXTANT(obj->restring);
   obj->restring = strdup(buf);
   sprintf(buf2, "%s successfully restrung.\r\n", obj->text.name);
   send_to_char(ch, buf2);

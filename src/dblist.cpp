@@ -135,13 +135,25 @@ void objList::UpdateCounters(void)
   MYSQL_ROW row;
   char *trid = NULL;
   static nodeStruct<struct obj_data *> *temp, *next;
+  
+  // Select the trideo broadcast message we'll be using this tick.
   mysql_wrapper(mysql, "SELECT message FROM trideo_broadcast ORDER BY RAND() LIMIT 1");
   res = mysql_use_result(mysql);
   row = mysql_fetch_row(res);
   trid = str_dup(row[0]);
   mysql_free_result(res);
+  
+  // Iterate through the list.
   for (temp = head; temp; temp = next) {
     next = temp->next;
+    
+    // Precondition: The object being examined must exist.
+    if (!OBJ) {
+      mudlog("SYSERR: UpdateCounters encountered a non-existent object.", NULL, LOG_SYSLOG, TRUE);
+      continue;
+    }
+    
+    // Decay evaluate programs.
     if (GET_OBJ_TYPE(OBJ) == ITEM_PROGRAM && GET_OBJ_VAL(temp->data, 0) == SOFT_EVALUATE) {
       if (!GET_OBJ_VAL(OBJ, 5)) {
         GET_OBJ_VAL(OBJ, 5) = time(0);
@@ -154,15 +166,26 @@ void objList::UpdateCounters(void)
       }
       continue;
     }
+    
+    // Decrement the attempt counter (mostly used by credstick cracking).
     if (GET_OBJ_ATTEMPT(OBJ) >  0)
       GET_OBJ_ATTEMPT(OBJ)--;
 
+    // Send out the trideo messages. We assume anything that is a trideo box is not anything else.
     if (GET_OBJ_SPEC(OBJ) == trideo && GET_OBJ_VAL(OBJ, 0)) {
       sprintf(buf, "$p broadcasts, \"%s\"", trid);
       act(buf, TRUE, 0, OBJ, 0, TO_ROOM);
+      continue;
     }
+    
+    // Packing / unpacking of workshops.
     if (GET_OBJ_TYPE(OBJ) == ITEM_WORKSHOP && GET_OBJ_VAL(OBJ, 3)) {
       struct char_data *ch;
+      if (!OBJ->in_veh && (OBJ->in_room == NOWHERE || real_room(OBJ->in_room) < 0)) {
+        // Something's fucky.
+        continue;
+      }
+      
       for (ch = OBJ->in_veh ? OBJ->in_veh->people : world[OBJ->in_room].people; ch; ch = OBJ->in_veh ? ch->next_in_veh : ch->next_in_room)
         if (AFF_FLAGGED(ch, AFF_PACKING)) {
           if (!--GET_OBJ_VAL(OBJ, 3)) {
@@ -183,25 +206,29 @@ void objList::UpdateCounters(void)
         continue;
       GET_OBJ_VAL(OBJ, 3) = 0;
     }
+    
+    // Cook chips.
     if (GET_OBJ_TYPE(OBJ) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(OBJ, 0) == TYPE_COOKER && OBJ->contains && GET_OBJ_VAL(OBJ, 9) > 0) {
       if (--GET_OBJ_VAL(OBJ, 9) < 1) {
         struct obj_data *chip = OBJ->contains;
         act("$p beeps loudly, signalling completion.", FALSE, 0, OBJ, 0, TO_ROOM);
         if (GET_OBJ_TIMER(chip) == -1) {
-          if (chip->restring)
-            delete [] chip->restring;
+          DELETE_ARRAY_IF_EXTANT(chip->restring);
           chip->restring = str_dup("a ruined optical chip");
         } else
           GET_OBJ_TIMER(chip) = 1;
       }
+      continue;
     }
 
+    // In-game this is a UCAS dress shirt. I suspect the files haven't been updated.
     if (GET_OBJ_VNUM(OBJ) == 120 && ++GET_OBJ_TIMER(OBJ) >= 72) {
       next = temp->next;
       extract_obj(OBJ);
       continue;
     }
 
+    // Time out objects that end up on the floor a lot (magazines, cash, etc).
     if (OBJ->in_room != NOWHERE && !OBJ->in_obj && !OBJ->carried_by &&
        ((GET_OBJ_TYPE(OBJ) == ITEM_GUN_MAGAZINE && !GET_OBJ_VAL(OBJ, 9)) || (GET_OBJ_TYPE(OBJ) == ITEM_MONEY && !GET_OBJ_VAL(OBJ, 0))) 
         && ++GET_OBJ_TIMER(OBJ) == 3) {
@@ -211,11 +238,12 @@ void objList::UpdateCounters(void)
       extract_obj(OBJ);
       continue;
     }
+    
     /* anti-twink measure...no decay until there's no eq in it */
-    if ( IS_OBJ_STAT(OBJ, ITEM_CORPSE) && GET_OBJ_VAL(OBJ, 4)
-         && OBJ->contains != NULL )
+    if ( IS_OBJ_STAT(OBJ, ITEM_CORPSE) && GET_OBJ_VAL(OBJ, 4) && OBJ->contains != NULL )
       continue;
 
+    // Corpse decay.
     if (IS_OBJ_STAT(OBJ, ITEM_CORPSE)) {
       if (GET_OBJ_TIMER(OBJ) > 1) {
         GET_OBJ_TIMER(OBJ)--;
@@ -244,6 +272,7 @@ void objList::UpdateCounters(void)
       }
     }
   }
+  DELETE_ARRAY_IF_EXTANT(trid);
 }
 
 // this function updates the objects in the list whose real numbers are

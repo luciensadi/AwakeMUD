@@ -1119,10 +1119,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
       send_to_char(buf2, ch);
       GET_POS(ch) = POS_SITTING;
     }
-    if (GET_DEFPOS(ch)) {
-      delete [] GET_DEFPOS(ch);
-      GET_DEFPOS(ch) = NULL;
-    }
+    DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
     for (k = ch->followers; k; k = next)
     {
       next = k->next;
@@ -1386,10 +1383,7 @@ ACMD(do_stand)
     GET_POS(ch) = POS_STANDING;
     break;
   }
-  if (GET_DEFPOS(ch)) {
-    delete [] GET_DEFPOS(ch);
-    GET_DEFPOS(ch) = NULL;
-  }
+  DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
 }
 
 ACMD(do_sit)
@@ -1431,10 +1425,7 @@ ACMD(do_sit)
     break;
   }
   AFF_FLAGS(ch).RemoveBit(AFF_SNEAK);
-  if (GET_DEFPOS(ch)) {
-    delete [] GET_DEFPOS(ch);
-    GET_DEFPOS(ch) = NULL;
-  }
+  DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
 }
 
 ACMD(do_rest)
@@ -1479,10 +1470,7 @@ ACMD(do_rest)
     GET_POS(ch) = POS_SITTING;
     break;
   }
-  if (GET_DEFPOS(ch)) {
-    delete [] GET_DEFPOS(ch);
-    GET_DEFPOS(ch) = NULL;
-  }
+  DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
 }
 
 ACMD(do_lay)
@@ -1528,10 +1516,7 @@ ACMD(do_lay)
     GET_POS(ch) = POS_LYING;
     break;
   }
-  if (GET_DEFPOS(ch)) {
-    delete [] GET_DEFPOS(ch);
-    GET_DEFPOS(ch) = NULL;
-  }
+  DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
 }
 
 ACMD(do_sleep)
@@ -1583,10 +1568,7 @@ ACMD(do_sleep)
         end_sustained_spell(ch, sust);
     }
   }
-  if (GET_DEFPOS(ch)) {
-    delete [] GET_DEFPOS(ch);
-    GET_DEFPOS(ch) = NULL;
-  }
+  DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
 }
 
 ACMD(do_wake)
@@ -1625,10 +1607,7 @@ ACMD(do_wake)
       act("$n awakens.", TRUE, ch, 0, 0, TO_ROOM);
     GET_POS(ch) = POS_SITTING;
   }
-  if (GET_DEFPOS(ch)) {
-    delete [] GET_DEFPOS(ch);
-    GET_DEFPOS(ch) = NULL;
-  }
+  DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
 }
 
 ACMD(do_follow)

@@ -394,5 +394,7 @@ void boot_social_messages(void)
   /* close file & set top */
   fclose(fl);
   list_top = curr_soc;
-  soc_mess_list[0] = soc_mess_list[1];
+  
+  // Why tho? --LS
+  // soc_mess_list[0] = soc_mess_list[1];
 }

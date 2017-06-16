@@ -298,6 +298,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     case '4':
       send_to_char("Enter Host description:\r\n", d->character);
       d->edit_mode = HEDIT_DESC;
+      DELETE_ARRAY_IF_EXTANT(d->str);
       d->str = new (char *);
       if (!d->str) {
         mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
@@ -496,26 +497,22 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case HEDIT_NAME:
-    if (d->edit_host->name)
-      delete [] d->edit_host->name;
+    DELETE_ARRAY_IF_EXTANT(d->edit_host->name);
     d->edit_host->name = str_dup(arg);
     hedit_disp_data_menu(d);
     break;
   case HEDIT_KEYWORDS:
-    if (d->edit_host->keywords)
-      delete [] d->edit_host->keywords;
+    DELETE_ARRAY_IF_EXTANT(d->edit_host->keywords);
     d->edit_host->keywords = str_dup(arg);
     hedit_disp_data_menu(d);
     break;
   case HEDIT_SSTOP:
-    if (d->edit_host->shutdown_stop)
-      delete [] d->edit_host->shutdown_stop;
+    DELETE_ARRAY_IF_EXTANT(d->edit_host->shutdown_stop);
     d->edit_host->shutdown_stop = str_dup(arg);
     hedit_disp_data_menu(d);
     break;
   case HEDIT_SSTART:
-    if (d->edit_host->shutdown_start)
-      delete [] d->edit_host->shutdown_start;
+    DELETE_ARRAY_IF_EXTANT(d->edit_host->shutdown_start);
     d->edit_host->shutdown_start = str_dup(arg);
     hedit_disp_data_menu(d);
     break;
@@ -683,7 +680,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
         hedit_disp_exit_menu(d);
       } else {
         REMOVE_FROM_LIST(exit, HOST->exit, next);
-        delete [] exit->number;
+        DELETE_ARRAY_IF_EXTANT(exit->number);
         delete [] exit;
         hedit_disp_exit_menu(d);
       }
@@ -706,8 +703,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case HEDIT_EXIT_ADD2:
-    if (d->edit_host->exit->number)
-      delete [] d->edit_host->exit->number;
+    DELETE_ARRAY_IF_EXTANT(d->edit_host->exit->number);
     d->edit_host->exit->number = str_dup(arg);
     hedit_disp_exit_menu(d);
     break;

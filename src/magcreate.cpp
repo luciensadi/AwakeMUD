@@ -75,6 +75,7 @@ void spedit_parse(struct descriptor_data *d, const char *arg)
     case '2':
       send_to_char(CH, "Enter spell design description:\r\n");
       d->edit_mode = SPEDIT_DESC;
+      DELETE_ARRAY_IF_EXTANT(d->str);
       d->str = new (char *);
       *(d->str) = NULL;
       d->max_str = MAX_MESSAGE_LENGTH;
@@ -131,8 +132,7 @@ void spedit_parse(struct descriptor_data *d, const char *arg)
         spedit_disp_menu(d);
         return;
       }
-      if (SPELL->restring)
-        delete [] SPELL->restring;
+      DELETE_ARRAY_IF_EXTANT(SPELL->restring);
       SPELL->restring = str_dup(arg);
       spedit_disp_menu(d);
       break;

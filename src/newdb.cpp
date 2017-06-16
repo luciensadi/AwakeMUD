@@ -165,15 +165,13 @@ static void init_char(struct char_data * ch)
 
 static void init_char_strings(char_data *ch)
 {
-  if (ch->player.physical_text.keywords)
-    delete [] ch->player.physical_text.keywords;
+  DELETE_ARRAY_IF_EXTANT(ch->player.physical_text.keywords);
 
   size_t len = strlen(GET_CHAR_NAME(ch)) + 1; // + strlen(race) + 2;
   ch->player.physical_text.keywords = new char[len];
 
   strcpy(ch->player.physical_text.keywords, GET_CHAR_NAME(ch));
-  *(ch->player.physical_text.keywords) =
-    LOWER(*ch->player.physical_text.keywords);
+  *(ch->player.physical_text.keywords) = LOWER(*ch->player.physical_text.keywords);
 
   if (ch->player.physical_text.name)
     delete [] ch->player.physical_text.name;
@@ -270,7 +268,9 @@ static void init_char_strings(char_data *ch)
     set_whotitle(ch, "CHKLG"); /* Will set incase the players */
   }        /* race is undeterminable      */
 
+  DELETE_ARRAY_IF_EXTANT(GET_PROMPT(ch));
   GET_PROMPT(ch) = str_dup("< @pP @mM > ");
+  DELETE_ARRAY_IF_EXTANT(ch->player.matrixprompt);
   ch->player.matrixprompt = str_dup("< @pP @mM > ");
 }
 

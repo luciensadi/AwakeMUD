@@ -614,6 +614,15 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 #define OUTSIDE(ch)           (!ROOM_FLAGGED(((ch)->in_veh ? (ch)->in_veh->in_room : (ch)->in_room), ROOM_INDOORS))
 
+/* Memory management *****************************************************/
+
+// This guarantees that the pointer will be null after deletion (something that's plagued this codebase for years).
+#define DELETE_AND_NULL_ARRAY(target) {delete [] (target); (target) = NULL;}
+#define DELETE_AND_NULL(target) {delete (target); (target) = NULL;}
+
+// Checks for existence and deletes the pointed value if extant.
+#define DELETE_ARRAY_IF_EXTANT(target) {if ((target)) DELETE_AND_NULL_ARRAY((target))}
+#define DELETE_IF_EXTANT(target) {if ((target)) DELETE_AND_NULL((target))}
 
 /* OS compatibility ******************************************************/
 
