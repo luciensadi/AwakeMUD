@@ -151,7 +151,7 @@ void format_string(struct descriptor_data *d, int indent)
   i = MAX(strlen(format)-1, 3);
   if (format[i] == '\n' && format[i-1] == '\r' && format[i-2] == '\n' && format[i-3] == '\r')
     format[i-1] = '\0';
-  DELETE_ARRAY_IF_EXTANT(d->str);
+  CLEANUP_AND_INITIALIZE_D_STR(d);
   *d->str = format;
 }
 
@@ -171,7 +171,7 @@ void string_add(struct descriptor_data *d, char *str)
   {
     SEND_TO_Q("Aborted.\r\n", d);
     d->mail_to = 0;
-    DELETE_ARRAY_IF_EXTANT(*d->str);
+    CLEANUP_AND_INITIALIZE_D_STR(d);
     if (!IS_NPC(d->character))
       PLR_FLAGS(d->character).RemoveBits(PLR_MAILING, PLR_WRITING, ENDBIT);
     return;
@@ -185,7 +185,7 @@ void string_add(struct descriptor_data *d, char *str)
       *(str + d->max_str) = '\0';
       terminator = 1;
     }
-    DELETE_ARRAY_IF_EXTANT(*d->str);
+    CLEANUP_AND_INITIALIZE_D_STR(d);
     *d->str = new char[strlen(str) + 3];
     strcpy(*d->str, str);
   } else
@@ -202,7 +202,7 @@ void string_add(struct descriptor_data *d, char *str)
       }
       strcpy (temp, *d->str);
       strcat(temp, str);
-      DELETE_ARRAY_IF_EXTANT(d->str);
+      CLEANUP_AND_INITIALIZE_D_STR(d);
       *d->str = temp;
     }
   }
@@ -230,35 +230,32 @@ void string_add(struct descriptor_data *d, char *str)
       DELETE_ARRAY_IF_EXTANT(d->edit_obj->photo);
       format_string(d, 0);
       d->edit_obj->photo = str_dup(*d->str);
-      /* This delete for d->str is more stringent than the others. Why?
-      delete [] *d->str;
-      delete d->str; */
-      DELETE_ARRAY_IF_EXTANT(d->str);
+      CLEANUP_AND_INITIALIZE_D_STR(d);
       deckbuild_main_menu(d);
     } else if (STATE(d) == CON_VEHCUST) {
       DELETE_ARRAY_IF_EXTANT(d->edit_veh->restring_long);
       format_string(d, 0);
       d->edit_veh->restring_long = str_dup(*d->str);
-      DELETE_ARRAY_IF_EXTANT(d->str);
+      CLEANUP_AND_INITIALIZE_D_STR(d);
       vehcust_menu(d); 
     } else if (STATE(d) == CON_TRIDEO) {
       (*d->str)[strlen(*d->str)-2] = '\0';
       sprintf(buf, "INSERT INTO trideo_broadcast (author, message) VALUES (%ld, '%s')", GET_IDNUM(d->character), prepare_quotes(buf2, *d->str));
       mysql_wrapper(mysql, buf);
-      DELETE_ARRAY_IF_EXTANT(d->str);
+      CLEANUP_AND_INITIALIZE_D_STR(d);
       STATE(d) = CON_PLAYING;
     } else if (STATE(d) == CON_DECORATE) {
       DELETE_ARRAY_IF_EXTANT(world[d->character->in_room].description);
       format_string(d, 0);
       world[d->character->in_room].description = str_dup(*d->str);
       write_world_to_disk(zone_table[world[d->character->in_room].zone].number);
-      DELETE_ARRAY_IF_EXTANT(d->str);
+      CLEANUP_AND_INITIALIZE_D_STR(d);
       STATE(d) = CON_PLAYING;
     } else if (STATE(d) == CON_SPELL_CREATE && d->edit_mode == 3) {
       DELETE_ARRAY_IF_EXTANT(d->edit_obj->photo);
       format_string(d, 0);
       d->edit_obj->photo = str_dup(*d->str);
-      DELETE_ARRAY_IF_EXTANT(d->str);
+      CLEANUP_AND_INITIALIZE_D_STR(d);
       spedit_disp_menu(d);
     } else if (STATE(d) == CON_IEDIT) {
       switch(d->edit_mode) {
@@ -266,14 +263,14 @@ void string_add(struct descriptor_data *d, char *str)
         DELETE_ARRAY_IF_EXTANT(((struct extra_descr_data *)*d->misc_data)->description);
         format_string(d, 0);
         ((struct extra_descr_data *)*d->misc_data)->description = str_dup(*d->str);
-        DELETE_ARRAY_IF_EXTANT(d->str);
+        CLEANUP_AND_INITIALIZE_D_STR(d);
         iedit_disp_extradesc_menu(d);
         break;
       case IEDIT_LONGDESC:
         DELETE_ARRAY_IF_EXTANT(d->edit_obj->text.look_desc);
         format_string(d, 0);
         d->edit_obj->text.look_desc = str_dup(*d->str);
-        DELETE_ARRAY_IF_EXTANT(d->str);
+        CLEANUP_AND_INITIALIZE_D_STR(d);
         iedit_disp_menu(d);
         break;
       }
@@ -283,14 +280,14 @@ void string_add(struct descriptor_data *d, char *str)
         DELETE_ARRAY_IF_EXTANT(d->edit_mob->player.physical_text.look_desc);
         format_string(d, 0);
         d->edit_mob->player.physical_text.look_desc = str_dup(*d->str);
-        DELETE_ARRAY_IF_EXTANT(d->str);
+        CLEANUP_AND_INITIALIZE_D_STR(d);
         medit_disp_menu(d);
         break;
       case MEDIT_REG_DESCR:
         DELETE_ARRAY_IF_EXTANT(d->edit_mob->player.physical_text.room_desc);
         format_string(d, 0);
         d->edit_mob->player.physical_text.room_desc = str_dup(*d->str);
-        DELETE_ARRAY_IF_EXTANT(d->str);
+        CLEANUP_AND_INITIALIZE_D_STR(d);
         medit_disp_menu(d);
         break;
       }
@@ -300,21 +297,21 @@ void string_add(struct descriptor_data *d, char *str)
         DELETE_ARRAY_IF_EXTANT(d->edit_veh->long_description);
         format_string(d, 0);
         d->edit_veh->long_description = str_dup(*d->str);
-        DELETE_ARRAY_IF_EXTANT(d->str);
+        CLEANUP_AND_INITIALIZE_D_STR(d);
         vedit_disp_menu(d);
         break;
       case VEDIT_INSDESC:
         DELETE_ARRAY_IF_EXTANT(d->edit_veh->inside_description);
         format_string(d, 0);
         d->edit_veh->inside_description = str_dup(*d->str);
-        DELETE_ARRAY_IF_EXTANT(d->str);
+        CLEANUP_AND_INITIALIZE_D_STR(d);
         vedit_disp_menu(d);
         break;
       case VEDIT_REARDESC:
         DELETE_ARRAY_IF_EXTANT(d->edit_veh->rear_description);
         format_string(d, 0);
         d->edit_veh->rear_description = str_dup(*d->str);
-        DELETE_ARRAY_IF_EXTANT(d->str);
+        CLEANUP_AND_INITIALIZE_D_STR(d);
         vedit_disp_menu(d);
         break;
       }
@@ -324,7 +321,7 @@ void string_add(struct descriptor_data *d, char *str)
         DELETE_ARRAY_IF_EXTANT(d->edit_host->desc);
         format_string(d, 0);
         d->edit_host->desc = str_dup(*d->str);
-        DELETE_ARRAY_IF_EXTANT(d->str);
+        CLEANUP_AND_INITIALIZE_D_STR(d);
         hedit_disp_data_menu(d);
         break;
       }
@@ -334,7 +331,7 @@ void string_add(struct descriptor_data *d, char *str)
         DELETE_ARRAY_IF_EXTANT(d->edit_icon->long_desc);
         format_string(d, 0);
         d->edit_icon->long_desc = str_dup(*d->str);
-        DELETE_ARRAY_IF_EXTANT(d->str);
+        CLEANUP_AND_INITIALIZE_D_STR(d);
         icedit_disp_menu(d);
         break;
       }
@@ -344,7 +341,7 @@ void string_add(struct descriptor_data *d, char *str)
         DELETE_ARRAY_IF_EXTANT(d->edit_room->description);
         format_string(d, 1);
         d->edit_room->description = str_dup(*d->str);
-        DELETE_ARRAY_IF_EXTANT(d->str);
+        CLEANUP_AND_INITIALIZE_D_STR(d);
         redit_disp_menu(d);
         break;
       case REDIT_NDESC:
@@ -354,21 +351,21 @@ void string_add(struct descriptor_data *d, char *str)
           d->edit_room->night_desc = str_dup(*d->str);
         } else
           d->edit_room->night_desc = NULL;
-        DELETE_ARRAY_IF_EXTANT(d->str);
+        CLEANUP_AND_INITIALIZE_D_STR(d);
         redit_disp_menu(d);
         break;
       case REDIT_EXTRADESC_DESCRIPTION:
         DELETE_ARRAY_IF_EXTANT(((struct extra_descr_data *)*d->misc_data)->description);
         format_string(d, 0);
         ((struct extra_descr_data *)*d->misc_data)->description = str_dup(*d->str);
-        DELETE_ARRAY_IF_EXTANT(d->str);
+        CLEANUP_AND_INITIALIZE_D_STR(d);
         redit_disp_extradesc_menu(d);
         break;
       case REDIT_EXIT_DESCRIPTION:
         DELETE_ARRAY_IF_EXTANT(d->edit_room->dir_option[d->edit_number2]->general_description);
         format_string(d, 0);
         d->edit_room->dir_option[d->edit_number2]->general_description = str_dup(*d->str);
-        DELETE_ARRAY_IF_EXTANT(d->str);
+        CLEANUP_AND_INITIALIZE_D_STR(d);
         redit_disp_exit_menu(d);
         break;
       }
@@ -376,13 +373,13 @@ void string_add(struct descriptor_data *d, char *str)
       DELETE_ARRAY_IF_EXTANT(d->edit_quest->info);
       format_string(d, 0);
       d->edit_quest->info = str_dup(*d->str);
-      DELETE_ARRAY_IF_EXTANT(d->str);
+      CLEANUP_AND_INITIALIZE_D_STR(d);
       qedit_disp_menu(d);
     } else if (STATE(d) == CON_BCUSTOMIZE && d->edit_mode == CEDIT_DESC) {
       DELETE_ARRAY_IF_EXTANT(d->edit_mob->player.background);
       format_string(d, 0);
       d->edit_mob->player.background = str_dup(*d->str);
-      DELETE_ARRAY_IF_EXTANT(d->str);
+      CLEANUP_AND_INITIALIZE_D_STR(d);
       cedit_disp_menu(d, 0);
     } else if (STATE(d) == CON_PCUSTOMIZE || STATE(d) == CON_ACUSTOMIZE || STATE(d) == CON_FCUSTOMIZE) {
       switch(d->edit_mode) {
@@ -390,14 +387,14 @@ void string_add(struct descriptor_data *d, char *str)
         DELETE_ARRAY_IF_EXTANT(d->edit_mob->player.physical_text.look_desc);
         format_string(d, 0);
         d->edit_mob->player.physical_text.look_desc = str_dup(*d->str);
-        DELETE_ARRAY_IF_EXTANT(d->str);
+        CLEANUP_AND_INITIALIZE_D_STR(d);
         cedit_disp_menu(d, 0);
         break;
       case CEDIT_DESC:
         DELETE_ARRAY_IF_EXTANT(d->edit_mob->player.physical_text.room_desc);
         format_string(d, 0);
         d->edit_mob->player.physical_text.room_desc = str_dup(*d->str);
-        DELETE_ARRAY_IF_EXTANT(d->str);
+        CLEANUP_AND_INITIALIZE_D_STR(d);
         cedit_disp_menu(d, 0);
         break;
       }
@@ -411,12 +408,12 @@ void string_add(struct descriptor_data *d, char *str)
       DELETE_ARRAY_IF_EXTANT(file->photo);
       format_string(d, 0);
       file->photo = str_dup(*d->str);
-      DELETE_ARRAY_IF_EXTANT(d->str);
+      CLEANUP_AND_INITIALIZE_D_STR(d);
       pocketsec_notemenu(d);
     } else if (PLR_FLAGGED(d->character, PLR_MAILING)) {
       store_mail(d->mail_to, GET_IDNUM(d->character), *d->str);
       d->mail_to = 0;
-      DELETE_ARRAY_IF_EXTANT(d->str);
+      CLEANUP_AND_INITIALIZE_D_STR(d);
       SEND_TO_Q("Message sent.\r\n", d);
       if (!IS_NPC(d->character))
         PLR_FLAGS(d->character).RemoveBits(PLR_MAILING, PLR_WRITING, ENDBIT);
@@ -498,7 +495,7 @@ void string_add(struct descriptor_data *d, char *str)
       }
       strcpy (ptr, *d->str);
       strcat(ptr, tmp);
-      DELETE_ARRAY_IF_EXTANT(d->str);
+      CLEANUP_AND_INITIALIZE_D_STR(d);
       *d->str = ptr;
       Board_save_board(d->mail_to - BOARD_MAGIC);
       d->mail_to = 0;

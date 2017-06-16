@@ -298,13 +298,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     case '4':
       send_to_char("Enter Host description:\r\n", d->character);
       d->edit_mode = HEDIT_DESC;
-      DELETE_ARRAY_IF_EXTANT(d->str);
-      d->str = new (char *);
-      if (!d->str) {
-        mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
-        shutdown();
-      }
-      *(d->str) = NULL;
+      CLEANUP_AND_INITIALIZE_D_STR(d);
       d->max_str = MAX_MESSAGE_LENGTH;
       d->mail_to = 0;
       break;

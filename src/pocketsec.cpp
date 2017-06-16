@@ -395,14 +395,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
         send_to_char("Write your message. Use @ on a new line to finish.\r\n", CH);
         PLR_FLAGS(CH).SetBits(PLR_MAILING, PLR_WRITING, ENDBIT);
         d->mail_to = x;
-        DELETE_ARRAY_IF_EXTANT(d->str);
-        d->str = new (char *);
-        if (!d->str)
-        {
-          mudlog("Malloc failure!", NULL, LOG_SYSLOG, TRUE);
-          exit(1);
-        }
-        *(d->str) = NULL;
+        CLEANUP_AND_INITIALIZE_D_STR(d);
         d->max_str = MAX_MAIL_SIZE;
       }
       break;

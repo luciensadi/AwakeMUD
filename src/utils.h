@@ -621,8 +621,25 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define DELETE_AND_NULL(target) {delete (target); (target) = NULL;}
 
 // Checks for existence and deletes the pointed value if extant.
-#define DELETE_ARRAY_IF_EXTANT(target) {if ((target)) DELETE_AND_NULL_ARRAY((target))}
-#define DELETE_IF_EXTANT(target) {if ((target)) DELETE_AND_NULL((target))}
+#define DELETE_ARRAY_IF_EXTANT(target) {if ((target)) delete [] (target); (target) = NULL;}
+#define DELETE_IF_EXTANT(target) {if ((target)) delete (target); (target) = NULL;}
+
+// Getting tired of dealing with this special snowflake double pointer.
+#define CLEANUP_AND_INITIALIZE_D_STR(d) {                                              \
+  if ((d)) {                                                                           \
+    if ((d)->str) {                                                                    \
+      DELETE_ARRAY_IF_EXTANT(*((d)->str));                                             \
+      DELETE_AND_NULL_ARRAY((d)->str);                                                 \
+    }                                                                                  \
+    (d)->str = new (char *);                                                           \
+    if (!(d)->str) {                                                                   \
+      mudlog("SYSERR: Failed to allocate memory for d->str.", NULL, LOG_SYSLOG, TRUE); \
+      shutdown();                                                                      \
+    } else {                                                                           \
+      *((d)->str) = NULL;                                                              \
+    }                                                                                  \
+  }                                                                                    \
+}                                                                                      \
 
 /* OS compatibility ******************************************************/
 
