@@ -63,6 +63,7 @@ extern void obj_from_bioware(struct obj_data *);
 extern char *cleanup(char *dest, const char *src);
 extern void add_phone_to_list(struct obj_data *);
 extern void idle_delete();
+extern void clearMemory(struct char_data * ch);
 
 /**************************************************************************
 *  declarations of most of the 'global' variables                         *
@@ -3157,9 +3158,9 @@ void free_char(struct char_data * ch)
       DELETE_ARRAY_IF_EXTANT(b->mem);
       DELETE_AND_NULL(b);
     }
-
-    DELETE_ARRAY_IF_EXTANT(ch->player_specials->mob_complete);
+    
     DELETE_ARRAY_IF_EXTANT(ch->player_specials->obj_complete);
+    DELETE_ARRAY_IF_EXTANT(ch->player_specials->mob_complete);
     
     DELETE_IF_EXTANT(ch->player_specials);
 
@@ -3168,19 +3169,22 @@ void free_char(struct char_data * ch)
   }
   if (!IS_NPC(ch) || (IS_NPC(ch) && GET_MOB_RNUM(ch) == -1))
   {
-    DELETE_ARRAY_IF_EXTANT(ch->player.prompt);
-    DELETE_ARRAY_IF_EXTANT(ch->player.poofin);
-    DELETE_ARRAY_IF_EXTANT(ch->player.poofout);
+    DELETE_ARRAY_IF_EXTANT(ch->player.char_name);
+    DELETE_ARRAY_IF_EXTANT(ch->player.background);
     DELETE_ARRAY_IF_EXTANT(ch->player.title);
     DELETE_ARRAY_IF_EXTANT(ch->player.pretitle);
     DELETE_ARRAY_IF_EXTANT(ch->player.whotitle);
-    DELETE_ARRAY_IF_EXTANT(ch->player.background);
+    DELETE_ARRAY_IF_EXTANT(ch->player.prompt);
     DELETE_ARRAY_IF_EXTANT(ch->player.matrixprompt);
+    DELETE_ARRAY_IF_EXTANT(ch->player.poofin);
+    DELETE_ARRAY_IF_EXTANT(ch->player.poofout);
     DELETE_ARRAY_IF_EXTANT(ch->char_specials.arrive);
     DELETE_ARRAY_IF_EXTANT(ch->char_specials.leave);
-    DELETE_ARRAY_IF_EXTANT(GET_NAME(ch));
+    
+    if(!IS_NPC(ch))
+      DELETE_ARRAY_IF_EXTANT(ch->player.host);
 
-    {
+    { // Delete physical, astral, and matrix text fields.
       text_data *tab[3] = {
                             &ch->player.physical_text,
                             &ch->player.astral_text,
@@ -3195,10 +3199,6 @@ void free_char(struct char_data * ch)
         DELETE_ARRAY_IF_EXTANT(ptr->room_desc);
         DELETE_ARRAY_IF_EXTANT(ptr->look_desc);
       }
-    }
-
-    if(!IS_NPC(ch)) {
-      DELETE_ARRAY_IF_EXTANT(ch->player.host);
     }
     
   } else if ((i = GET_MOB_RNUM(ch)) > -1 &&
@@ -3247,9 +3247,10 @@ void free_char(struct char_data * ch)
     if (ch->char_specials.leave && ch->char_specials.leave != proto->char_specials.leave) {
       DELETE_AND_NULL_ARRAY(ch->char_specials.leave);
     }
-    
-    // TODO: Is mob memory (memory_rec *(ch->mob_specials->memory)) leaked here?
   }
+  
+  if (IS_NPC(ch))
+    clearMemory(ch);
   
   clear_char(ch);
 }

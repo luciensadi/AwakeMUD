@@ -2083,6 +2083,8 @@ void extract_char(struct char_data * ch)
         STATE(ch->desc) = CON_MENU;
         SEND_TO_Q(MENU, ch->desc);
       }
+    } else {
+      Mem->DeleteCh(ch);
     }
   } else
   {
