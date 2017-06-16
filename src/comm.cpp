@@ -533,7 +533,11 @@ int get_max_players(void)
 void game_loop(int mother_desc)
 {
   fd_set input_set, output_set, exc_set;
+#ifndef GOTTAGOFAST
   struct timeval last_time, now, timespent, timeout, opt_time;
+#else
+  struct timeval last_time, opt_time;
+#endif
   char comm[MAX_INPUT_LENGTH];
   struct descriptor_data *d, *next_d;
   int pulse = 0, maxdesc, aliased;

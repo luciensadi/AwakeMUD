@@ -1778,9 +1778,7 @@ void vehcust_parse(struct descriptor_data *d, char *arg)
         case '2':
           send_to_char(CH, "Enter new vehicle description:\r\n");
           d->edit_mode = VEHCUST_DESC;
-          DELETE_ARRAY_IF_EXTANT(d->str);
-          d->str = new (char *);
-          *(d->str) = NULL;
+          CLEANUP_AND_INITIALIZE_D_STR(d);
           d->max_str = MAX_MESSAGE_LENGTH;
           d->mail_to = 0;
           break;
