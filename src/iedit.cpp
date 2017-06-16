@@ -2440,12 +2440,35 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       number = atoi(arg);
       switch (number) {
         case 0: {
-          if (((struct extra_descr_data *) * d->misc_data)) {
-            DELETE_ARRAY_IF_EXTANT(((struct extra_descr_data *) * d->misc_data)->keyword);
-            DELETE_ARRAY_IF_EXTANT(((struct extra_descr_data *) * d->misc_data)->description);
+#define MISCDATA ((struct extra_descr_data *) * d->misc_data)
+          /* if something got left out, delete the extra desc
+           when backing out to menu */
+          if (!MISCDATA->keyword || !MISCDATA->description) {
+            DELETE_ARRAY_IF_EXTANT(MISCDATA->keyword);
+            DELETE_ARRAY_IF_EXTANT(MISCDATA->description);
             
-            DELETE_AND_NULL(d->misc_data);
+            /* Null out the ex_description linked list pointer to this object. */
+            struct extra_descr_data *temp = d->edit_obj->ex_description, *next = NULL;
+            if (temp == MISCDATA) {
+              d->edit_obj->ex_description = NULL;
+            } else {
+              for (; temp; temp = next) {
+                next = temp->next;
+                if (next == MISCDATA) {
+                  if (next->next) {
+                    temp->next = next->next;
+                  } else {
+                    temp->next = NULL;
+                  }
+                  break;
+                }
+              }
+            }
+            
+            delete MISCDATA;
+            *d->misc_data = NULL;
           }
+#undef MISCDATA
           
           iedit_disp_menu(d);
         }

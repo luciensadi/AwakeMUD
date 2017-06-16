@@ -1076,10 +1076,8 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       /* if something got left out, delete the extra desc
        when backing out to menu */
         if (!MISCDATA->keyword || !MISCDATA->description) {
-          if (MISCDATA->keyword)
-            delete [] MISCDATA->keyword;
-          if (MISCDATA->description)
-            delete [] MISCDATA->description;
+          DELETE_ARRAY_IF_EXTANT(MISCDATA->keyword);
+          DELETE_ARRAY_IF_EXTANT(MISCDATA->description);
 
           /* Null out the ex_description linked list pointer to this object. */
           struct extra_descr_data *temp = d->edit_room->ex_description, *next = NULL;
