@@ -3300,6 +3300,26 @@ void free_host(struct host_data * host)
   DELETE_ARRAY_IF_EXTANT(host->desc);
   DELETE_ARRAY_IF_EXTANT(host->shutdown_start);
   DELETE_ARRAY_IF_EXTANT(host->shutdown_stop);
+  
+  { // Clean up the trigger steps.
+    struct trigger_step *trigger = NULL, *next = NULL;
+    for (trigger = host->trigger; trigger; trigger = next) {
+      next = trigger->next;
+      delete trigger;
+    }
+    host->trigger = NULL;
+  }
+  
+  { // Clean up the exits.
+    struct exit_data *exit = NULL, *next = NULL;
+    for (exit = host->exit; exit; exit = next) {
+      next = exit->next;
+      DELETE_ARRAY_IF_EXTANT(exit->number);
+      delete exit;
+    }
+    host->exit = NULL;
+  }
+  
   clear_host(host);
 }
 

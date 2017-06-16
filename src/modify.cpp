@@ -185,7 +185,7 @@ void string_add(struct descriptor_data *d, char *str)
       *(str + d->max_str) = '\0';
       terminator = 1;
     }
-    DELETE_ARRAY_IF_EXTANT(d->str);
+    DELETE_ARRAY_IF_EXTANT(*d->str);
     *d->str = new char[strlen(str) + 3];
     strcpy(*d->str, str);
   } else
