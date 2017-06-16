@@ -29,7 +29,7 @@ echo "If you have a DB and want to save it, use CTRL-C to abort this script."
 echo "Otherwise, enter your MySQL root user's password when prompted."
 
 echo "DROP DATABASE IF EXISTS $DBNAME;" > gen_temp.sql
-echo "DROP USER IF EXISTS '$DBUSER'@'DBHOST';" >> gen_temp.sql
+echo "DROP USER IF EXISTS '$DBUSER'@'$DBHOST';" >> gen_temp.sql
 echo "FLUSH PRIVILEGES;" >> gen_temp.sql
 
 echo "CREATE DATABASE $DBNAME;" >> gen_temp.sql
