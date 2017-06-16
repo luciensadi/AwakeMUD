@@ -1429,8 +1429,8 @@ char_data *PCIndex::CreateChar(char_data *ch)
     GET_NOT(ch) = 0;
     GET_TKE(ch) = 0;
 
-    PLR_FLAGS(ch).RemoveBit(PLR_NEWBIE);
-    PLR_FLAGS(ch).RemoveBit(PLR_AUTH);
+    PLR_FLAGS(ch).RemoveBits(PLR_NEWBIE, PLR_AUTH, ENDBIT);
+    PLR_FLAGS(ch).SetBits(PLR_OLC, PLR_NODELETE, ENDBIT);
     PRF_FLAGS(ch).SetBits(PRF_HOLYLIGHT, PRF_CONNLOG, PRF_ROOMFLAGS,
                           PRF_NOHASSLE, PRF_AUTOINVIS, PRF_AUTOEXIT, ENDBIT);
   } else {
@@ -1770,8 +1770,12 @@ void idle_delete()
   MYSQL_RES *res = mysql_use_result(mysqlextra);
   MYSQL_ROW row;
   while ((row = mysql_fetch_row(res))) {
+#ifndef IDLEDELETE_DRYRUN
     DeleteChar(atol(row[0]));
-    deleted++;    
+    deleted++;
+#else
+    log_vfprintf("IDLEDELETE- Would delete %s, but IDLEDELETE_DRYRUN is enabled.", row[0]);
+#endif
   }
   mysql_free_result(res);
   mysql_close(mysqlextra);

@@ -24,15 +24,26 @@ if [ ! -f awakemud.sql ]; then
   exit 2
 fi
 
-echo "Initializing DB. Please enter your MySQL root user's password when prompted."
+echo "WARNING: IF YOUR DATABASE ALREADY EXISTS, THIS WILL PURGE IT."
+echo "If you have a DB and want to save it, use CTRL-C to abort this script."
+echo "Otherwise, enter your MySQL root user's password when prompted."
 
-echo "CREATE DATABASE $DBNAME;" > gen_temp.sql
+echo "DROP DATABASE IF EXISTS $DBNAME;" > gen_temp.sql
+echo "DROP USER IF EXISTS '$DBUSER'@'$DBHOST';" >> gen_temp.sql
+echo "FLUSH PRIVILEGES;" >> gen_temp.sql
+
+echo "CREATE DATABASE $DBNAME;" >> gen_temp.sql
 echo "USE $DBNAME;" >> gen_temp.sql
 echo "CREATE USER '$DBUSER'@'$DBHOST' IDENTIFIED BY '$DBPASS';" >> gen_temp.sql
 echo "GRANT ALL PRIVILEGES ON $DBNAME.* TO '$DBUSER'@'$DBHOST';" >> gen_temp.sql
 echo "FLUSH PRIVILEGES;" >> gen_temp.sql
 echo "" >> gen_temp.sql
 cat awakemud.sql >> gen_temp.sql
+
+if [ -f "playergroups.sql" ]; then
+  echo "" >> gen_temp.sql
+  cat playergroups.sql >> gen_temp.sql
+fi
 
 mysql -u root -p < gen_temp.sql
 

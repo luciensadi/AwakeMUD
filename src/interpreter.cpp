@@ -1296,21 +1296,54 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
           break;
 
     // this was added so we can make the special respond to any text they type
-    if (*cmd_info[cmd].command == '\n')
+    if (*cmd_info[cmd].command == '\n') {
       nonsensical_reply(ch);
-    else if (IS_PROJECT(ch) && AFF_FLAGGED(ch->desc->original, AFF_TRACKING) && cmd != find_command("track"))
+      return;
+    }
+    
+    if (IS_PROJECT(ch) && AFF_FLAGGED(ch->desc->original, AFF_TRACKING) && cmd != find_command("track")) {
       send_to_char("You are too busy astrally tracking someone...\r\n", ch);
-    else if (PLR_FLAGGED(ch, PLR_FROZEN) && !access_level(ch, LVL_VICEPRES))
-      send_to_char("You try, but the mind-numbing cold prevents you...\r\n", ch);
-    else if (AFF_FLAGGED(ch, AFF_PETRIFY) && cmd_info[cmd].minimum_position > POS_DEAD)
-      send_to_char("Your muscles don't respond to your impulse.\r\n", ch);
-    else if (cmd_info[cmd].command_pointer == NULL)
+      return;
+    }
+    
+    if (PLR_FLAGGED(ch, PLR_FROZEN)) {
+      if (!access_level(ch, LVL_VICEPRES)) {
+        send_to_char("You try, but the mind-numbing cold prevents you...\r\n", ch);
+        return;
+      } else
+        send_to_char("The ice covering you crackles alarmingly as you slam your sovereign will through it.", ch);
+    }
+    
+    if (AFF_FLAGGED(ch, AFF_PETRIFY) && cmd_info[cmd].minimum_position > POS_DEAD) {
+      if (!access_level(ch, LVL_VICEPRES)) {
+        send_to_char("Your muscles don't respond to your impulse.\r\n", ch);
+        return;
+      } else
+        send_to_char("You abuse your administrative powers and force your petrified body to respond.\r\n", ch);
+    }
+    
+    if (cmd_info[cmd].command_pointer == NULL) {
       send_to_char("Sorry, that command hasn't been implemented yet.\r\n", ch);
-    else if (affected_by_power(ch, ENGULF) && cmd_info[cmd].minimum_position != POS_DEAD)
-      send_to_char("You are currently being engulfed!\r\n", ch);
-    else if (GET_QUI(ch) <= 0 && cmd_info[cmd].minimum_position != POS_DEAD)
-      send_to_char("You are paralyzed!\r\n", ch);
-    else if (GET_POS(ch) < cmd_info[cmd].minimum_position)
+      return;
+    }
+    
+    if (affected_by_power(ch, ENGULF) && cmd_info[cmd].minimum_position != POS_DEAD) {
+      if (!access_level(ch, LVL_VICEPRES)) {
+        send_to_char("You are currently being engulfed!\r\n", ch);
+        return;
+      } else
+        send_to_char("Administrative power roars through your veins as you muscle through your engulfment.\r\n", ch);
+    }
+    
+    if (GET_QUI(ch) <= 0 && cmd_info[cmd].minimum_position != POS_DEAD) {
+      if (!access_level(ch, LVL_VICEPRES)) {
+        send_to_char("You are paralyzed!\r\n", ch);
+        return;
+      } else
+        send_to_char("You draw upon your mantle of administrative power and push through your paralysis.\r\n", ch);
+    }
+    
+    if (GET_POS(ch) < cmd_info[cmd].minimum_position) {
       switch (GET_POS(ch)) {
       case POS_DEAD:
         send_to_char("Lie still; you are DEAD!!! :-(\r\n", ch);
@@ -1335,7 +1368,10 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
         send_to_char("No way!  You're fighting for your life!\r\n", ch);
         break;
       }
-    else if (no_specials || !special(ch, cmd, line))
+      return;
+    }
+    
+    if (no_specials || !special(ch, cmd, line))
       ((*cmd_info[cmd].command_pointer) (ch, line, cmd, cmd_info[cmd].subcmd));
   }
 }
