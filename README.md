@@ -3,6 +3,11 @@ A fork of the Awakened Worlds MUD codebase. Pull requests welcome!
 
 Join us at mudtest.mooo.com port 4000 to participate in playtesting.
 
+## Features
+- Significant reductions in memory leaks
+- Significantly reduced ticklag
+- A slew of bugfixes to everything from combat code to sound propagation
+
 ## OS Support
 Tested on:
 - OSX 10.12
