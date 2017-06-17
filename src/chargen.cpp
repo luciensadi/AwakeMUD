@@ -560,6 +560,7 @@ static void start_game(descriptor_data *d)
   GET_SKILL(d->character, SKILL_ENGLISH) = 10;
   GET_LANGUAGE(d->character) = SKILL_ENGLISH;
   GET_RESTRING_POINTS(d->character) = 5;
+  GET_LOADROOM(d->character) = 60500;
 
   init_char_sql(d->character);
   if(PLR_FLAGGED(d->character,PLR_AUTH)) {
