@@ -1743,8 +1743,8 @@ void check_adrenaline(struct char_data *ch, int mode)
   {
     GET_OBJ_VAL(pump, 5) = dice(GET_OBJ_VAL(pump, 1), 6);
     GET_OBJ_VAL(pump, 6) = GET_OBJ_VAL(pump, 5);
-    send_to_char("Your body is wracked with renewed vitality as adrenaline "
-                 "pumps into your\r\nbloodstream.\r\n", ch);
+    send_to_char("Your body is wracked with renewed vitality as adrenaline pumps into your\r\n"
+                 "bloodstream.\r\n", ch);
     for (i = 0; i < MAX_OBJ_AFFECT; i++)
       affect_modify(ch,
                     pump->affected[i].location,
