@@ -154,7 +154,7 @@ void objList::UpdateCounters(void)
     }
     
     // Decay evaluate programs.
-    if (GET_OBJ_TYPE(OBJ) == ITEM_PROGRAM && GET_OBJ_VAL(temp->data, 0) == SOFT_EVALUATE) {
+    if (GET_OBJ_TYPE(OBJ) == ITEM_PROGRAM && GET_OBJ_VAL(OBJ, 0) == SOFT_EVALUATE) {
       if (!GET_OBJ_VAL(OBJ, 5)) {
         GET_OBJ_VAL(OBJ, 5) = time(0);
         GET_OBJ_VAL(OBJ, 6) = GET_OBJ_VAL(OBJ, 5);

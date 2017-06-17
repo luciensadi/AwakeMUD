@@ -215,6 +215,8 @@ ACMD (do_redit)
       room->name = str_dup (world[room_num].name);
     if (world[room_num].description)
       room->description = str_dup (world[room_num].description);
+    if (world[room_num].night_desc)
+      room->night_desc = str_dup (world[room_num].night_desc);
     if (world[room_num].address)
       room->address = str_dup (world[room_num].address);
     room->zone = world[room_num].zone;

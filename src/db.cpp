@@ -3273,6 +3273,7 @@ void free_room(struct room_data *room)
       DELETE_ARRAY_IF_EXTANT(room->dir_option[counter]->keyword);
       DELETE_IF_EXTANT(room->dir_option[counter]);
     }
+    room->dir_option[counter] = NULL;
   }
   // now the extra descriptions
   if (room->ex_description) {
@@ -3283,7 +3284,7 @@ void free_room(struct room_data *room)
       DELETE_ARRAY_IF_EXTANT(This->description);
       DELETE_IF_EXTANT(This);
     }
-    DELETE_IF_EXTANT(room->ex_description);
+    room->ex_description = NULL;
   }
 
   clear_room(room);
@@ -3352,7 +3353,7 @@ void free_obj(struct obj_data * obj)
         DELETE_ARRAY_IF_EXTANT(this1->description);
         DELETE_IF_EXTANT(this1);
       }
-      DELETE_IF_EXTANT(obj->ex_description);
+      obj->ex_description = NULL;
     }
   } else
   {
@@ -3379,7 +3380,7 @@ void free_obj(struct obj_data * obj)
         DELETE_ARRAY_IF_EXTANT(this1->description);
         DELETE_IF_EXTANT(this1);
       }
-      DELETE_IF_EXTANT(obj->ex_description);
+      obj->ex_description = NULL;
     }
   }
   DELETE_ARRAY_IF_EXTANT(obj->restring);
