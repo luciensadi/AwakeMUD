@@ -588,26 +588,14 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     case '2':
       send_to_char("Enter room description:\r\n", d->character);
       d->edit_mode = REDIT_DESC;
-      d->str = new (char *);
-      if (!d->str) {
-        mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
-        shutdown();
-      }
-
-      *(d->str) = NULL;
+      CLEANUP_AND_INITIALIZE_D_STR(d);
       d->max_str = MAX_MESSAGE_LENGTH;
       d->mail_to = 0;
       break;
     case '3':
       send_to_char("Enter room nighttime desc description:\r\n", d->character);
       d->edit_mode = REDIT_NDESC;
-      d->str = new (char *);
-      if (!d->str) {
-        mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
-        shutdown();
-      }
-
-      *(d->str) = NULL;
+      CLEANUP_AND_INITIALIZE_D_STR(d);
       d->max_str = MAX_MESSAGE_LENGTH;
       d->mail_to = 0;
       break;
@@ -945,13 +933,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       break;
     case '2':
       d->edit_mode = REDIT_EXIT_DESCRIPTION;
-      d->str = new (char *);
-      if (!d->str) {
-        mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
-        shutdown();
-      }
-
-      *(d->str) = NULL;
+      CLEANUP_AND_INITIALIZE_D_STR(d);
       d->max_str = MAX_MESSAGE_LENGTH;
       d->mail_to = 0;
       send_to_char("Enter exit description:\r\n", d->character);
@@ -1082,8 +1064,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     }
     break;
   case REDIT_EXTRADESC_KEY:
-    if (((struct extra_descr_data *) *d->misc_data)->keyword)
-      delete [] (((struct extra_descr_data *) *d->misc_data)->keyword);
+    DELETE_ARRAY_IF_EXTANT((((struct extra_descr_data *) *d->misc_data)->keyword));
     ((struct extra_descr_data *) * d->misc_data)->keyword = str_dup(arg);
     redit_disp_extradesc_menu(d);
     break;
@@ -1091,18 +1072,35 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     number = atoi(arg);
     switch (number) {
     case 0: {
-        /* if something got left out, delete the extra desc
-         when backing out to menu */
-        if (!((struct extra_descr_data *) * d->misc_data)->keyword ||
-            !((struct extra_descr_data *) * d->misc_data)->description) {
-          if (((struct extra_descr_data *) * d->misc_data)->keyword)
-            delete [] ((struct extra_descr_data *) * d->misc_data)->keyword;
-          if (((struct extra_descr_data *) * d->misc_data)->description)
-            delete [] ((struct extra_descr_data *) * d->misc_data)->description;
+#define MISCDATA ((struct extra_descr_data *) * d->misc_data)
+      /* if something got left out, delete the extra desc
+       when backing out to menu */
+        if (!MISCDATA->keyword || !MISCDATA->description) {
+          DELETE_ARRAY_IF_EXTANT(MISCDATA->keyword);
+          DELETE_ARRAY_IF_EXTANT(MISCDATA->description);
 
-          delete (struct extra_descr_data *) *d->misc_data;
+          /* Null out the ex_description linked list pointer to this object. */
+          struct extra_descr_data *temp = d->edit_room->ex_description, *next = NULL;
+          if (temp == MISCDATA) {
+            d->edit_room->ex_description = NULL;
+          } else {
+            for (; temp; temp = next) {
+              next = temp->next;
+              if (next == MISCDATA) {
+                if (next->next) {
+                  temp->next = next->next;
+                } else {
+                  temp->next = NULL;
+                }
+                break;
+              }
+            }
+          }
+          
+          delete MISCDATA;
           *d->misc_data = NULL;
         }
+#undef MISCDATA
         /* else, we don't need to do anything.. jump to menu */
         redit_disp_menu(d);
       }
@@ -1114,13 +1112,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     case 2:
       d->edit_mode = REDIT_EXTRADESC_DESCRIPTION;
       send_to_char("Enter extra description:\r\n", d->character);
-      d->str = new (char *);
-      if (!d->str) {
-        mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
-        shutdown();
-      }
-
-      *(d->str) = NULL;
+      CLEANUP_AND_INITIALIZE_D_STR(d);
       d->max_str = MAX_MESSAGE_LENGTH;
       d->mail_to = 0;
       break;
@@ -1139,8 +1131,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
           new_extra = new extra_descr_data;
           memset((char *) new_extra, 0, sizeof(extra_descr_data));
           ((struct extra_descr_data *) * d->misc_data)->next = new_extra;
-          d->misc_data =
-            (void **) &((struct extra_descr_data *) * d->misc_data)->next;
+          d->misc_data = (void **) &((struct extra_descr_data *) * d->misc_data)->next;
         }
         redit_disp_extradesc_menu(d);
       }

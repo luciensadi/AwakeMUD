@@ -257,7 +257,7 @@ void pbuild_parse(struct descriptor_data *d, const char *arg) {
             partbuild_main_menu(d);
             return;
         }
-        delete [] PART->restring;
+        DELETE_ARRAY_IF_EXTANT(PART->restring);
         PART->restring = str_dup(arg);
         partbuild_main_menu(d);
         break;
@@ -283,8 +283,7 @@ void dbuild_parse(struct descriptor_data *d, const char *arg) {
         case '2':
             send_to_char(CH, "Enter cyberdeck description:\r\n");
             d->edit_mode = DEDIT_TYPE;
-            d->str = new (char *);
-            *(d->str) = NULL;
+            CLEANUP_AND_INITIALIZE_D_STR(d);
             d->max_str = MAX_MESSAGE_LENGTH;
             d->mail_to = 0;
             break;
@@ -302,8 +301,7 @@ void dbuild_parse(struct descriptor_data *d, const char *arg) {
             deckbuild_main_menu(d);
             return;
         }
-        if (PART->restring)
-            delete [] PART->restring;
+        DELETE_ARRAY_IF_EXTANT(PART->restring);
         PART->restring = str_dup(arg);
         deckbuild_main_menu(d);
         break;

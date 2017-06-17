@@ -614,6 +614,32 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 #define OUTSIDE(ch)           (!ROOM_FLAGGED(((ch)->in_veh ? (ch)->in_veh->in_room : (ch)->in_room), ROOM_INDOORS))
 
+/* Memory management *****************************************************/
+
+// This guarantees that the pointer will be null after deletion (something that's plagued this codebase for years).
+#define DELETE_AND_NULL_ARRAY(target) {delete [] (target); (target) = NULL;}
+#define DELETE_AND_NULL(target) {delete (target); (target) = NULL;}
+
+// Checks for existence and deletes the pointed value if extant.
+#define DELETE_ARRAY_IF_EXTANT(target) {if ((target)) delete [] (target); (target) = NULL;}
+#define DELETE_IF_EXTANT(target) {if ((target)) delete (target); (target) = NULL;}
+
+// Getting tired of dealing with this special snowflake double pointer.
+#define CLEANUP_AND_INITIALIZE_D_STR(d) {                                              \
+  if ((d)) {                                                                           \
+    if ((d)->str) {                                                                    \
+      DELETE_ARRAY_IF_EXTANT(*((d)->str));                                             \
+      DELETE_AND_NULL((d)->str);                                                 \
+    }                                                                                  \
+    (d)->str = new (char *);                                                           \
+    if (!(d)->str) {                                                                   \
+      mudlog("SYSERR: Failed to allocate memory for d->str.", NULL, LOG_SYSLOG, TRUE); \
+      shutdown();                                                                      \
+    } else {                                                                           \
+      *((d)->str) = NULL;                                                              \
+    }                                                                                  \
+  }                                                                                    \
+}                                                                                      \
 
 /* OS compatibility ******************************************************/
 

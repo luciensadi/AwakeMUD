@@ -127,14 +127,14 @@ void stop_chase(struct veh_data *veh)
   {
     k = veh->following->followers;
     veh->following->followers = k->next;
-    delete k;
+    DELETE_AND_NULL(k);
   } else
   {
     for (k = veh->following->followers; k->next->follower != veh; k = k->next)
       ;
     j = k->next;
     k->next = j->next;
-    delete j;
+    DELETE_AND_NULL(j);
   }
   veh->following = NULL;
 }
@@ -1561,6 +1561,8 @@ ACMD(do_gridguide)
       send_to_char("That destination doesn't seem to be in the system.\r\n", ch);
     else {
       REMOVE_FROM_LIST(grid, veh->grid, next);
+      DELETE_ARRAY_IF_EXTANT(grid->name);
+      DELETE_AND_NULL(grid);
       send_to_char("You remove the destination from the system.\r\n", ch);
       act("$n punches something into the autonav.", FALSE, ch, 0 , 0, TO_ROOM);
     }
@@ -1776,8 +1778,7 @@ void vehcust_parse(struct descriptor_data *d, char *arg)
         case '2':
           send_to_char(CH, "Enter new vehicle description:\r\n");
           d->edit_mode = VEHCUST_DESC;
-          d->str = new (char *);
-          *(d->str) = NULL;
+          CLEANUP_AND_INITIALIZE_D_STR(d);
           d->max_str = MAX_MESSAGE_LENGTH;
           d->mail_to = 0;
           break;
@@ -1794,8 +1795,7 @@ void vehcust_parse(struct descriptor_data *d, char *arg)
         vehcust_menu(d);
         return;
       }
-      if (d->edit_veh->restring)
-        delete [] d->edit_veh->restring;
+      DELETE_ARRAY_IF_EXTANT(d->edit_veh->restring);
       d->edit_veh->restring = str_dup(arg);
       vehcust_menu(d);
       break;

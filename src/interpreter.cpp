@@ -1393,11 +1393,9 @@ struct alias *find_alias(struct alias *alias_list, char *str)
 
 void free_alias(struct alias *a)
 {
-  if (a->command)
-    delete [] a->command;
-  if (a->replacement)
-    delete [] a->replacement;
-  delete a;
+  DELETE_ARRAY_IF_EXTANT(a->command);
+  DELETE_ARRAY_IF_EXTANT(a->replacement);
+  DELETE_AND_NULL(a);
 }
 
 /* The interface to the outside world: do_alias */
@@ -1996,28 +1994,29 @@ int perform_dupe_check(struct descriptor_data *d)
     if (d->edit_obj)
       Mem->DeleteObject(d->edit_obj);
     d->edit_obj = NULL;
+    
     if (d->edit_room)
       Mem->DeleteRoom(d->edit_room);
     d->edit_room = NULL;
+    
     if (d->edit_mob)
       Mem->DeleteCh(d->edit_mob);
     d->edit_mob = NULL;
+    
     if (d->edit_shop) {
       free_shop(d->edit_shop);
-      delete d->edit_shop;
-      d->edit_shop = NULL;
+      DELETE_AND_NULL(d->edit_shop);
     }
+    
     if (d->edit_quest) {
       free_quest(d->edit_quest);
-      delete d->edit_quest;
-      d->edit_quest = NULL;
+      DELETE_AND_NULL(d->edit_quest);
     }
-    if (d->edit_zon)
-      delete d->edit_zon;
-    d->edit_zon = NULL;
-    if (d->edit_cmd)
-      delete d->edit_cmd;
-    d->edit_cmd = NULL;
+    
+    DELETE_IF_EXTANT(d->edit_zon);
+    
+    DELETE_IF_EXTANT(d->edit_cmd);
+    
     if (d->edit_veh)
       Mem->DeleteVehicle(d->edit_veh);
     d->edit_veh = NULL;
@@ -2160,6 +2159,7 @@ void nanny(struct descriptor_data * d, char *arg)
           }
         if (d->character == NULL) {
           d->character = Mem->GetCh();
+          DELETE_IF_EXTANT(d->character->player_specials);
           d->character->player_specials = new player_special_data;
           // make sure to clear it up here
           memset(d->character->player_specials, 0,
@@ -2206,8 +2206,7 @@ void nanny(struct descriptor_data * d, char *arg)
       STATE(d) = CON_NEWPASSWD;
     } else if (*arg == 'n' || *arg == 'N') {
       SEND_TO_Q("Okay, what IS it, then? ", d);
-      delete [] d->character->player.char_name;
-      d->character->player.char_name = NULL;
+      DELETE_ARRAY_IF_EXTANT(d->character->player.char_name);
       STATE(d) = CON_GET_NAME;
     } else {
       SEND_TO_Q("Please type Yes or No: ", d);
@@ -2292,6 +2291,7 @@ void nanny(struct descriptor_data * d, char *arg)
       else
         sprintf(buf, "%s [%s] has connected.",
                 GET_CHAR_NAME(d->character), d->host);
+      DELETE_ARRAY_IF_EXTANT(d->character->player.host);
       d->character->player.host = strdup(d->host);
       playerDB.SaveChar(d->character);
       mudlog(buf, d->character, LOG_CONNLOG, TRUE);
@@ -2395,7 +2395,11 @@ void nanny(struct descriptor_data * d, char *arg)
           STATE(d) = CON_CLOSE;
           return;
         }
-        d->character = playerDB.LoadChar(GET_CHAR_NAME(d->character), false);
+        // TODO: If you died and then hit 1, your old character's data is leaked here.
+        char char_name[strlen(GET_CHAR_NAME(d->character))+1];
+        strcpy(char_name, GET_CHAR_NAME(d->character));
+        free_char(d->character);
+        d->character = playerDB.LoadChar(char_name, false);
         d->character->desc = d;
         PLR_FLAGS(d->character).RemoveBit(PLR_JUST_DIED);
         if (PLR_FLAGGED(d->character, PLR_NEWBIE)) {
