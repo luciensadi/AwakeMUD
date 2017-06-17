@@ -950,8 +950,15 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     loadroom = GET_LOADROOM(player);
 
   if (player->in_room != NOWHERE) {
+    /* This code means that any imm who does GOTO 1 is going to have weird behavior. Beats crashing, though. */
     if (world[player->in_room].number <= 1) {
-      GET_LAST_IN(player) = world[player->was_in_room].number;
+      if (player->was_in_room < 0) {
+        sprintf(buf, "SYSERR: save_char(): %s is at %ld and has was_in_room (world array index) %ld.",
+                GET_CHAR_NAME(player), world[player->in_room].number, player->was_in_room);
+        mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+        GET_LAST_IN(player) = 35500;
+      } else
+        GET_LAST_IN(player) = world[player->was_in_room].number;
     } else {
       GET_LAST_IN(player) = world[player->in_room].number;
     }
