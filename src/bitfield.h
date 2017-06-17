@@ -14,6 +14,7 @@ class Bitfield
   typedef unsigned int bitfield_t;
   static const int BITFIELD_SIZE = 4;
   static const int bits_per_var = sizeof(bitfield_t) * 8;
+  static const int total_width = bits_per_var*BITFIELD_SIZE;
 
   bitfield_t data[BITFIELD_SIZE];
 
@@ -62,7 +63,7 @@ public:
   // static TotalWidth() - total number of bits contained
   static int TotalWidth()
   {
-    return (bits_per_var*BITFIELD_SIZE);
+    return total_width;
   }
 };
 
