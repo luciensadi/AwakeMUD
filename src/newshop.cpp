@@ -75,7 +75,7 @@ bool is_ok_char(struct char_data * keeper, struct char_data * ch, vnum_t shop_nr
   if (!access_level(ch, LVL_ADMIN)
       && !(CAN_SEE(keeper, ch)))
   {
-    do_say(keeper, "I don't trade with someone I can't see", cmd_say, 0);
+    do_say(keeper, "I don't trade with someone I can't see.", cmd_say, 0);
     return FALSE;
   }
   if (IS_PROJECT(ch))
@@ -96,7 +96,7 @@ bool is_ok_char(struct char_data * keeper, struct char_data * ch, vnum_t shop_nr
           GET_RACE(ch) == RACE_CYCLOPS || GET_RACE(ch) == RACE_GIANT ||
           GET_RACE(ch) == RACE_MINOTAUR || GET_RACE(ch) == RACE_FOMORI)))
   {
-    sprintf(buf, "%s We don't sell to your type here", GET_CHAR_NAME(ch));
+    sprintf(buf, "%s We don't sell to your type here.", GET_CHAR_NAME(ch));
     do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     return FALSE;
   }
@@ -303,7 +303,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
   } else
   {
     if (IS_CARRYING_N(ch) + 1 > CAN_CARRY_N(ch)) {
-      send_to_char("You can't carry any more items.", ch);
+      send_to_char("You can't carry any more items.\r\n", ch);
       return FALSE;
     }
     if (IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj) > CAN_CARRY_W(ch)) {
@@ -1470,6 +1470,7 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
         mob_index[i].func = shop_keeper;
       }
       write_shops_to_disk(CH->player_specials->saved.zonenum);
+      delete d->edit_shop;
       d->edit_shop = NULL;
       d->edit_number = 0;
       STATE(d) = CON_PLAYING;

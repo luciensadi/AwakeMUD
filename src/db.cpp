@@ -3398,6 +3398,8 @@ void free_quest(struct quest_data *quest)
   DELETE_ARRAY_IF_EXTANT(quest->quit);
   DELETE_ARRAY_IF_EXTANT(quest->finish);
   DELETE_ARRAY_IF_EXTANT(quest->info);
+  DELETE_ARRAY_IF_EXTANT(quest->s_string);
+  DELETE_ARRAY_IF_EXTANT(quest->e_string);
   DELETE_ARRAY_IF_EXTANT(quest->done);
 }
 
@@ -3409,6 +3411,7 @@ void free_shop(struct shop_data *shop)
   DELETE_ARRAY_IF_EXTANT(shop->doesnt_buy);
   DELETE_ARRAY_IF_EXTANT(shop->buy);
   DELETE_ARRAY_IF_EXTANT(shop->sell);
+  DELETE_ARRAY_IF_EXTANT(shop->shopname);
 }
 
 /* read contets of a text file, alloc space, point buf to it */
