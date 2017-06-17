@@ -4682,18 +4682,18 @@ ACMD(do_tail)
       lines = atoi( arg );
       if ( lines < 0 )
         lines = 0 - lines;
-      strcpy( arg, buf );
+      // strcpy( arg, buf );
     }
-
-    /* Remove the semi-colon shell access security problem */
-    if ( (temp = strstr( arg, ";" )) || (temp = strstr(arg, "/")) || (temp = strstr(arg, "|"))) {
-      for ( i = 0; i < (signed)strlen(arg); i++ ) {
-        if ( arg[i] == (signed)*temp ) {
-          arg[i] = '\0';
-          break;
-        }
-      }
+    
+    // Only allow lower-case letters, periods, and numbers.
+    int index = 0;
+    for (char *ptr = buf; *ptr && index < MAX_STRING_LENGTH; ptr++) {
+      if (!isalnum(*ptr) && *ptr != '.')
+        continue;
+      else
+        arg[index++] = *ptr;
     }
+    arg[index] = '\0';
 
     sprintf( buf, "tail -%d ../log/%s", lines, arg );
     send_to_char( buf, ch );
