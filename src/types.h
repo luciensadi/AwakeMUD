@@ -19,6 +19,10 @@ typedef unsigned int u_int;
 typedef unsigned char                    byte;
 #endif
 
+#ifdef NO_UINT8_T
+typedef unsigned char uint8_t;
+#endif
+
 typedef signed long rnum_t;
 typedef signed long vnum_t;
 
