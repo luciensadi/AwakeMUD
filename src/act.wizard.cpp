@@ -4665,8 +4665,6 @@ ACMD(do_tail)
   char arg[MAX_STRING_LENGTH];
   FILE *out;
   int lines = 20;
-  char *temp;
-  int i = 0;
 
   //out = new FILE;
   char buf[MAX_STRING_LENGTH];
