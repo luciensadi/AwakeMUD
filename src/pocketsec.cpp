@@ -53,7 +53,9 @@ void wire_nuyen(struct char_data *ch, struct char_data *targ, int amount, long i
     GET_BANK(targ) += amount;
   sprintf(buf, "%s has wired %d nuyen to your account.\r\n", GET_CHAR_NAME(ch), amount);
   store_mail(targ ? GET_IDNUM(targ) : isfile, GET_IDNUM(ch), buf);
-  sprintf(buf, "%s wired %d nuyen to %s.", GET_CHAR_NAME(ch), amount, targ ? GET_CHAR_NAME(targ) : get_player_name(isfile));
+  char *player_name = NULL;
+  sprintf(buf, "%s wired %d nuyen to %s.", GET_CHAR_NAME(ch), amount, targ ? GET_CHAR_NAME(targ) : (player_name = get_player_name(isfile)));
+  DELETE_ARRAY_IF_EXTANT(player_name);
   mudlog(buf, ch, LOG_GRIDLOG, TRUE);
 }
 
@@ -393,13 +395,7 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
         send_to_char("Write your message. Use @ on a new line to finish.\r\n", CH);
         PLR_FLAGS(CH).SetBits(PLR_MAILING, PLR_WRITING, ENDBIT);
         d->mail_to = x;
-        d->str = new (char *);
-        if (!d->str)
-        {
-          mudlog("Malloc failure!", NULL, LOG_SYSLOG, TRUE);
-          exit(1);
-        }
-        *(d->str) = NULL;
+        CLEANUP_AND_INITIALIZE_D_STR(d);
         d->max_str = MAX_MAIL_SIZE;
       }
       break;

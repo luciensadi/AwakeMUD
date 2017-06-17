@@ -342,21 +342,13 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         } // end for loop
 
         // now you can free the old prototype and put in the new one
-        if (mob_proto[mob_number].player.physical_text.keywords)
-          delete [] mob_proto[mob_number].player.physical_text.keywords;
-        if (mob_proto[mob_number].player.title)
-          delete [] mob_proto[mob_number].player.title;
-        if (mob_proto[mob_number].player.physical_text.name)
-          delete [] mob_proto[mob_number].player.physical_text.name;
-        if (mob_proto[mob_number].player.physical_text.room_desc)
-          delete [] mob_proto[mob_number].player.physical_text.room_desc;
-        if (mob_proto[mob_number].player.physical_text.look_desc)
-          delete [] mob_proto[mob_number].player.physical_text.look_desc;
-        if (mob_proto[mob_number].char_specials.arrive)
-          delete [] mob_proto[mob_number].char_specials.arrive;
-        if (mob_proto[mob_number].char_specials.leave)
-          delete [] mob_proto[mob_number].char_specials.leave;
-
+        DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].player.physical_text.keywords);
+        DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].player.title);
+        DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].player.physical_text.name);
+        DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].player.physical_text.room_desc);
+        DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].player.physical_text.look_desc);
+        DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].char_specials.arrive);
+        DELETE_ARRAY_IF_EXTANT(mob_proto[mob_number].char_specials.leave);
 
         mob_proto[mob_number] = *d->edit_mob;
         mob_proto[mob_number].nr = mob_number;
@@ -513,13 +505,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     case '3':
       send_to_char("Enter room description:", CH);
       d->edit_mode = MEDIT_REG_DESCR;
-      d->str = new (char *);
-      if (!d->str) {
-        mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
-        shutdown();
-      }
-
-      *(d->str) = NULL;
+      CLEANUP_AND_INITIALIZE_D_STR(d);
       d->max_str = MAX_REG_DESC_LENGTH;
       d->mail_to = 0;
       break;
@@ -527,13 +513,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       // go to modify.cc
       send_to_char("Enter look description:\r\n", CH);
       d->edit_mode = MEDIT_LONG_DESCR;
-      d->str = new (char *);
-      if (!d->str) {
-        mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
-        shutdown();
-      }
-
-      *(d->str) = NULL;
+      CLEANUP_AND_INITIALIZE_D_STR(d);
       d->max_str = MAX_MESSAGE_LENGTH;
       d->mail_to = 0;
       break;
@@ -627,29 +607,25 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     break;
 
   case MEDIT_EDIT_NAMELIST:
-    if (MOB->player.physical_text.keywords)
-      delete [] MOB->player.physical_text.keywords;
+    DELETE_ARRAY_IF_EXTANT(MOB->player.physical_text.keywords);
     MOB->player.physical_text.keywords = str_dup(arg);
     medit_disp_menu(d);
     break;
 
   case MEDIT_SHORT_DESCR:
-    if (MOB->player.physical_text.name)
-      delete [] MOB->player.physical_text.name;
+    DELETE_ARRAY_IF_EXTANT(MOB->player.physical_text.name);
     MOB->player.physical_text.name = str_dup(arg);
     medit_disp_menu(d);
     break;
 
   case MEDIT_ARRIVE_MSG:
-    if (MOB->char_specials.arrive)
-      delete [] MOB->char_specials.arrive;
+    DELETE_ARRAY_IF_EXTANT(MOB->char_specials.arrive);
     MOB->char_specials.arrive = str_dup(arg);
     medit_disp_menu(d);
     break;
 
   case MEDIT_LEAVE_MSG:
-    if (MOB->char_specials.leave)
-      delete [] MOB->char_specials.leave;
+    DELETE_ARRAY_IF_EXTANT(MOB->char_specials.leave);
     MOB->char_specials.leave = str_dup(arg);
     medit_disp_menu(d);
     break;
