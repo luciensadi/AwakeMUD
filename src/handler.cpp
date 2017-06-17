@@ -106,19 +106,15 @@ void affect_modify(struct char_data * ch,
                    bool add
                    )
 {
-  if (add
-      )
-  {
+  if (add) {
     AFF_FLAGS(ch).SetAll(bitv);
   }
-  else
-  {
+  else {
     AFF_FLAGS(ch).RemoveAll(bitv);
     mod = -mod;
   }
   
-  switch (loc)
-  {
+  switch (loc) {
     case APPLY_NONE:
       break;
       
