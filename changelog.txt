@@ -1,7 +1,45 @@
 Information about new features will be written into this changelog, as will information about major bugfixes. Minor bugfixes and related code-quality changes can be found in the commit log (git log).
 
 
+2017/06/17:
+- Efficiency overhaul to bitfield.cpp has significantly accelerated tick performance.
+- More memory leak fixes. See commit log.
+
+2017/06/16:
+- More memory leak fixes. See commit log.
+- Further updates to SQL script to allow compatibility with MySQL < 5.7.8.
+
+2017/06/15:
+- Updated SQL script to overwrite the old DB when run and to allow for better error recovery.
+- More memory leak fixes. See commit log.
+
+2017/06/14:
+- More memory leak fixes. See commit log.
+
+2017/06/13:
+- Removed a plethora of memory leaks.
+- Fixed house loading code and the distributed house file; the boot phase is now more reliable.
+- Added first-pass fix for brand-new characters being glitched by an immediate copyover.
+
+2017/06/12:
+- Large overhaul to warnings and code quality. Details in commit log.
+
+2017/06/11:
+- Vehicles can now be PURGEd by staff.
+
+2017/06/10:
+- Forced behavior after copyovers is now much more reliable.
+
+2017/06/09:
+- Poofs being unexpectedly (null) will no longer occur.
+
+2017/06/06:
+- .gitignore now won't try to check in your vehicle files.
+- Added in skeleton of spellset command for staff (still needs enhancement, see Issue #36)
+- Fixed typos in poofin/poofout defaults.
+
 2017/06/04:
+- Updates to credits and various other textfiles.
 - Fixes for vehicles not saving in certain circumstances after purchase/transfer/etc.
 
 2017/06/03:
