@@ -2330,9 +2330,9 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
     total += GET_TOTALIMP(ch) - GET_QUI(ch);
   if (total >= GET_QUI(ch))
     send_to_char("You are wearing so much armour that you can't move!\r\n", ch);
-  else if (total >= GET_QUI(ch) * 3/4)
+  else if (total >= (float) GET_QUI(ch) * 3/4)
     send_to_char("Your movement is severely restricted by your armour.\r\n", ch);
-  else if (total >= GET_QUI(ch) / 2)
+  else if (total >= (float) GET_QUI(ch) / 2)
     send_to_char("Your movement is restricted by your armour.\r\n", ch);
   else if (total)
     send_to_char("Your movement is mildly restricted by your armour.\r\n", ch);
