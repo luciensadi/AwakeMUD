@@ -629,7 +629,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
   if ((d)) {                                                                           \
     if ((d)->str) {                                                                    \
       DELETE_ARRAY_IF_EXTANT(*((d)->str));                                             \
-      DELETE_AND_NULL_ARRAY((d)->str);                                                 \
+      DELETE_AND_NULL((d)->str);                                                 \
     }                                                                                  \
     (d)->str = new (char *);                                                           \
     if (!(d)->str) {                                                                   \

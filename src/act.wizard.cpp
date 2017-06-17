@@ -493,8 +493,10 @@ ACMD(do_goto)
 {
   sh_int location;
 
-  if ((location = find_target_room(ch, argument)) <= 0)
+  if ((location = find_target_room(ch, argument)) <= 1) {
+    send_to_char("You're not able to GOTO that room. If you need to do something there, use AT.", ch);
     return;
+  }
 
   if (POOFOUT(ch))
     act(POOFOUT(ch), TRUE, ch, 0, 0, TO_ROOM);
