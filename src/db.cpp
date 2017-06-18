@@ -1462,7 +1462,7 @@ void parse_object(File &fl, long nr)
       char *keywords = str_dup(data.GetString(field, NULL));
 
       if (!keywords) {
-        log_vfprintf("Room #%d's extra description #%d had no keywords -- skipping",
+        log_vfprintf("Item #%d's extra description #%d had no keywords -- skipping",
             nr, i);
         continue;
       }
