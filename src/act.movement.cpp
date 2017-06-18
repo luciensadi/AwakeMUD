@@ -786,33 +786,6 @@ int has_key(struct char_data *ch, int key)
   return 0;
 }
 
-bool has_kit(struct char_data * ch, int type)
-{
-  for (struct obj_data *o = ch->carrying; o; o = o->next_content)
-    if (GET_OBJ_TYPE(o) == ITEM_WORKSHOP && GET_OBJ_VAL(o, 0) == type && GET_OBJ_VAL(o, 1) == TYPE_KIT)
-      return TRUE;
-
-  if (GET_EQ(ch, WEAR_HOLD))
-    if (GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WORKSHOP &&
-        GET_OBJ_VAL(GET_EQ(ch, WEAR_HOLD), 0) == type && GET_OBJ_VAL(GET_EQ(ch, WEAR_HOLD), 1) == TYPE_KIT)
-      return TRUE;
-
-  return FALSE;
-}
-
-// TODO: Replace this with flagging the room as having a workshop instead of scanning all objects.
-//  Imagine the lag from hoarders sitting in apartments with thousands of items all day.
-struct obj_data *find_workshop(struct char_data * ch, int type)
-{
-  if (!ch->in_veh && (ch->in_room == NOWHERE || real_room(ch->in_room) < 0))
-    return NULL;
-  
-  for (struct obj_data *o = ch->in_veh ? ch->in_veh->contents : world[ch->in_room].contents; o; o = o->next_content)
-    if (GET_OBJ_TYPE(o) == ITEM_WORKSHOP && GET_OBJ_VAL(o, 0) == type && GET_OBJ_VAL(o, 2) && GET_OBJ_VAL(o, 1) > TYPE_KIT)
-      return o;
-
-  return NULL;
-}
 #define NEED_OPEN       1
 #define NEED_CLOSED     2
 #define NEED_UNLOCKED   4

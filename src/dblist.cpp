@@ -182,7 +182,7 @@ void objList::UpdateCounters(void)
     if (GET_OBJ_TYPE(OBJ) == ITEM_WORKSHOP && GET_OBJ_VAL(OBJ, 3)) {
       struct char_data *ch;
       if (!OBJ->in_veh && (OBJ->in_room == NOWHERE || real_room(OBJ->in_room) < 0)) {
-        // Something's fucky.
+        // It's being carried by a character (or is in a container, etc).
         continue;
       }
       
@@ -193,10 +193,18 @@ void objList::UpdateCounters(void)
               send_to_char(ch, "You finish packing up %s.\r\n", GET_OBJ_NAME(OBJ));
               act("$n finishes packing up $P", FALSE, ch, 0, OBJ, TO_ROOM);
               GET_OBJ_VAL(OBJ, 2)--;
+              
+              // Handle the room's workshop[] array.
+              if (OBJ->in_room != NOWHERE && real_room(OBJ->in_room) >= 0)
+                remove_workshop_from_room(OBJ);
             } else {
               send_to_char(ch, "You finish setting up %s.\r\n", GET_OBJ_NAME(OBJ));
               act("$n finishes setting up $P", FALSE, ch, 0, OBJ, TO_ROOM);
               GET_OBJ_VAL(OBJ, 2)++;
+              
+              // Handle the room's workshop[] array.
+              if (OBJ->in_room != NOWHERE && real_room(OBJ->in_room) >= 0)
+                add_workshop_to_room(OBJ);
             }
             AFF_FLAGS(ch).RemoveBit(AFF_PACKING);
           }
