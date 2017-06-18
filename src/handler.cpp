@@ -26,6 +26,7 @@
 #include "constants.h"
 #include "newmatrix.h"
 #include "newmagic.h"
+#include "playergroups.h"
 
 // memory object
 
@@ -1877,7 +1878,6 @@ void extract_char(struct char_data * ch)
   extern struct char_data *combat_list;
   
   ACMD_CONST(do_return);
-  
   void die_follower(struct char_data * ch);
   
   if (!IS_NPC(ch))
@@ -2060,6 +2060,10 @@ void extract_char(struct char_data * ch)
     ch->char_specials.rigging = NULL;
     PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
   }
+
+  // Clean up playergroup info.
+  if (GET_PGROUP_DATA(ch))
+    delete GET_PGROUP_DATA(ch);
   
   /* pull the char from the list */
   REMOVE_FROM_LIST(ch, character_list, next);

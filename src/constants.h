@@ -99,4 +99,5 @@ extern const char *background_types[];
 extern const char *fire_mode[];
 extern const char *weapon_type[];
 extern const char *combat_modifiers[];
+extern const char *pgroup_privileges[];
 #endif

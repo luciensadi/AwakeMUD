@@ -171,6 +171,8 @@ void gettimeofday(struct timeval *t, struct timezone *dummy)
 
 int main(int argc, char **argv)
 {
+  signal(SIGPIPE, SIG_IGN); // Lets us error-handle sigpipe.
+  
   int pos = 1;
   char *dir;
   port = DFLT_PORT;
@@ -1698,6 +1700,10 @@ void free_editing_structs(descriptor_data *d, int state)
   if (d->edit_icon) {
     Mem->DeleteIcon(d->edit_icon);
     d->edit_icon = NULL;
+  }
+  if (d->edit_pgroup) {
+    delete d->edit_pgroup;
+    d->edit_pgroup = NULL;
   }
 }
 

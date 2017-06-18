@@ -2087,3 +2087,20 @@ const char *combat_modifiers[] =
   "Reach",
   "VehDamaged"
 };
+
+const char *pgroup_privileges[] =
+{
+  "Administrator",
+  "Auditor",
+  "Architect",
+  "Co-Conspirator",
+  "Driver",
+  "Landlord",
+  "Leader",
+  "Manager",
+  "Mechanic",
+  "Procurer",
+  "Recruiter",
+  "Tenant",
+  "Treasurer"
+};
