@@ -1663,6 +1663,17 @@ const char *attributes[] =
     "Reaction"
   };
 
+const char *short_attributes[] =
+{
+  "bod",
+  "qui",
+  "str",
+  "cha",
+  "int",
+  "wil",
+  "rea"
+};
+
 struct drug_data drug_types[] =
   {
     { "Nothing", 0, 0, 0, 0, 0, 0, 0, 0
@@ -1671,7 +1682,7 @@ struct drug_data drug_types[] =
     { "Hyper", 6, SERIOUS, 0, 0, 0, 0, 0, 0 },
     { "Jazz", 0, 0, 4, 5, 2, 2, 8, 3 },
     { "Kamikaze", 0, 0, 0, 5, 2, 2, 10, 2 },
-    { "Psyche", 0, 4, 0, 2, 10, 20, 7 },
+    { "Psyche", 0, 4, 0, 2, 10, 20, 7, 0 },
     { "Bliss", 0, 0, 5, 5, 2, 2, 30, 2 },
     { "Burn", 3, DEADLY, 2, 0, 2, 20, 100, 1 },
     { "Cram", 0, 0, 4, 0, 2, 5, 50, 2 },

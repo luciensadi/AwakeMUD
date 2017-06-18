@@ -58,7 +58,6 @@ ACMD(do_invitations) {
       pgi = pgi->next;
       continue;
     }
-    
     time_t expiration = pgi->get_expiration();
     strftime(expiration_string, 20, "%Y-%m-%d %H:%M:%S", localtime(&expiration));
     sprintf(buf, " '%s' (%s), which expires on %s\r\n", pgr->get_name(), pgr->get_alias(), expiration_string);
@@ -306,26 +305,25 @@ ACMD(do_pgroup) {
 
 void do_pgroup_abdicate(struct char_data *ch, char *argument) {
   // TODO: Log.
-  send_to_char("", ch);
+  send_to_char("abdicate", ch);
 }
 
 void do_pgroup_balance(struct char_data *ch, char *argument) {
-  send_to_char("", ch);
+  send_to_char("balance", ch);
 }
 
 void do_pgroup_buy(struct char_data *ch, char *argument) {
   // TODO: Log.
-  send_to_char("", ch);
+  send_to_char("buy", ch);
 }
 
 void do_pgroup_contest(struct char_data *ch, char *argument) {
   // TODO: Log.
-  send_to_char("", ch);
+  send_to_char("contest", ch);
 }
 
 void do_pgroup_create(struct char_data *ch, char *argument) {
   // TODO: Log.
-  
   // If the player is already in a group, they can't create a new one.
   if (GET_PGROUP_DATA(ch)) {
     send_to_char("You are already part of a playergroup. You'll need to leave it first.\r\n", ch);
@@ -444,6 +442,10 @@ void do_pgroup_found(struct char_data *ch, char *argument) {
 
 void do_pgroup_grant(struct char_data *ch, char *argument) {
   // TODO: Log.
+  send_to_char("found", ch);
+}
+
+void do_pgroup_grant(struct char_data *ch, char *argument) {
   send_to_char("grant", ch);
 }
 
@@ -498,6 +500,8 @@ void do_pgroup_promote(struct char_data *ch, char *argument) {
 
 void do_pgroup_resign(struct char_data *ch, char *argument) {
   // TODO: Log.
+  skip_spaces(&argument);
+  
   if (!*argument || str_cmp(argument, "confirm") != 0) {
     send_to_char(ch, "If you're sure you want to resign from '%s', type PGROUP RESIGN CONFIRM.\r\n",
                  GET_PGROUP(ch)->get_name());

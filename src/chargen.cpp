@@ -14,6 +14,7 @@
 #include "newmagic.h"
 #include "awake.h"
 #include "constants.h"
+#include "config.h"
 
 #define CH d->character
 
@@ -522,12 +523,12 @@ void init_char_sql(struct char_data *ch)
   char buf2[MAX_STRING_LENGTH];
   sprintf(buf, "INSERT INTO pfiles (idnum, name, password, race, gender, Rank, Voice,"\
                "Physical_Keywords, Physical_Name, Whotitle, Height, Weight, Host,"\
-               "Tradition, Born, Background, Physical_LookDesc, Matrix_LookDesc, Astral_LookDesc) VALUES ('%ld', '%s', '%s', %d, '%d',"\
-               "'%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%ld', '%s', '%s', '%s', '%s');", GET_IDNUM(ch),
+               "Tradition, Born, Background, Physical_LookDesc, Matrix_LookDesc, Astral_LookDesc, LastD) VALUES ('%ld', '%s', '%s', %d, '%d',"\
+               "'%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%ld', '%s', '%s', '%s', '%s', %ld);", GET_IDNUM(ch),
                GET_CHAR_NAME(ch), GET_PASSWD(ch), GET_RACE(ch), GET_SEX(ch), MAX(1, GET_LEVEL(ch)),
                prepare_quotes(buf2, ch->player.physical_text.room_desc), GET_KEYWORDS(ch), GET_NAME(ch), GET_WHOTITLE(ch),
                GET_HEIGHT(ch), GET_WEIGHT(ch), ch->player.host, GET_TRADITION(ch), ch->player.time.birth, "A blank slate.",
-               "A nondescript person.\r\n", "A nondescript entity.\r\n", "A nondescript entity.\r\n");
+               "A nondescript person.\r\n", "A nondescript entity.\r\n", "A nondescript entity.\r\n", time(0));
   mysql_wrapper(mysql, buf);
   if (PLR_FLAGGED(ch, PLR_AUTH)) {
     sprintf(buf, "INSERT INTO pfiles_chargendata (idnum, AttPoints, SkillPoints, ForcePoints) VALUES"\
@@ -543,8 +544,10 @@ void init_char_sql(struct char_data *ch)
   mysql_wrapper(mysql, buf);
   if (GET_LEVEL(ch) > 0) {
     sprintf(buf, "INSERT INTO pfiles_immortdata (idnum, InvisLevel, IncogLevel, Zonenumber, Poofin, Poofout) VALUES ("\
-                 "%ld, %d, %d, %d, '%s', '%s');", GET_IDNUM(ch), GET_INVIS_LEV(ch), GET_INCOG_LEV(ch), ch->player_specials->saved.zonenum,
-                 POOFIN(ch), POOFOUT(ch));
+                 "%ld, %d, %d, %d, '%s', '%s');",
+                 GET_IDNUM(ch), GET_INVIS_LEV(ch), GET_INCOG_LEV(ch), ch->player_specials->saved.zonenum,
+                (POOFIN(ch) ? POOFIN(ch) : DEFAULT_POOFIN_STRING),
+                (POOFOUT(ch) ? POOFOUT(ch) : DEFAULT_POOFOUT_STRING));
     mysql_wrapper(mysql, buf);
   }
 }
@@ -557,6 +560,7 @@ static void start_game(descriptor_data *d)
   GET_SKILL(d->character, SKILL_ENGLISH) = 10;
   GET_LANGUAGE(d->character) = SKILL_ENGLISH;
   GET_RESTRING_POINTS(d->character) = 5;
+  GET_LOADROOM(d->character) = 60500;
 
   init_char_sql(d->character);
   if(PLR_FLAGGED(d->character,PLR_AUTH)) {

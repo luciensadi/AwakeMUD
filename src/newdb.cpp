@@ -64,6 +64,7 @@ int mysql_wrapper(MYSQL *mysql, const char *query)
     sprintf(buf, "Offending query: %s", query);
     log(buf);
     
+    // Eventual TODO: https://dev.mysql.com/doc/refman/5.7/en/mysql-ping.html -> auto-reconnect feature
     // Recovery procedures for certain errors.
     switch (errnum) {
       case 2006:
@@ -165,15 +166,13 @@ static void init_char(struct char_data * ch)
 
 static void init_char_strings(char_data *ch)
 {
-  if (ch->player.physical_text.keywords)
-    delete [] ch->player.physical_text.keywords;
+  DELETE_ARRAY_IF_EXTANT(ch->player.physical_text.keywords);
 
   size_t len = strlen(GET_CHAR_NAME(ch)) + 1; // + strlen(race) + 2;
   ch->player.physical_text.keywords = new char[len];
 
   strcpy(ch->player.physical_text.keywords, GET_CHAR_NAME(ch));
-  *(ch->player.physical_text.keywords) =
-    LOWER(*ch->player.physical_text.keywords);
+  *(ch->player.physical_text.keywords) = LOWER(*ch->player.physical_text.keywords);
 
   if (ch->player.physical_text.name)
     delete [] ch->player.physical_text.name;
@@ -270,10 +269,13 @@ static void init_char_strings(char_data *ch)
     set_whotitle(ch, "CHKLG"); /* Will set incase the players */
   }        /* race is undeterminable      */
 
+  DELETE_ARRAY_IF_EXTANT(GET_PROMPT(ch));
   GET_PROMPT(ch) = str_dup("< @pP @mM > ");
+  DELETE_ARRAY_IF_EXTANT(ch->player.matrixprompt);
   ch->player.matrixprompt = str_dup("< @pP @mM > ");
 }
 
+// Eventual TODO: https://dev.mysql.com/doc/refman/5.7/en/mysql-real-escape-string-quote.html
 char *prepare_quotes(char *dest, const char *str)
 {
   if (!str)
@@ -460,8 +462,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
       ch->player_specials->saved.invis_level = atoi(row[1]);
       ch->player_specials->saved.incog_level = atoi(row[2]);
       ch->player_specials->saved.zonenum = atoi(row[3]);
-      POOFIN(ch) = str_dup(row[4]);
-      POOFOUT(ch) = str_dup(row[5]);
+      POOFIN(ch) = str_dup((strcmp(row[4], "(null)") == 0 ? DEFAULT_POOFIN_STRING : row[4]));
+      POOFOUT(ch) = str_dup((strcmp(row[5], "(null)") == 0 ? DEFAULT_POOFOUT_STRING : row[5]));
     }
   } else {
     sprintf(buf, "SELECT * FROM pfiles_drugs WHERE idnum=%ld;", GET_IDNUM(ch));
@@ -1002,8 +1004,15 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     loadroom = GET_LOADROOM(player);
 
   if (player->in_room != NOWHERE) {
+    /* This code means that any imm who does GOTO 1 is going to have weird behavior. Beats crashing, though. */
     if (world[player->in_room].number <= 1) {
-      GET_LAST_IN(player) = world[player->was_in_room].number;
+      if (player->was_in_room < 0) {
+        sprintf(buf, "SYSERR: save_char(): %s is at %ld and has was_in_room (world array index) %ld.",
+                GET_CHAR_NAME(player), world[player->in_room].number, player->was_in_room);
+        mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+        GET_LAST_IN(player) = 35500;
+      } else
+        GET_LAST_IN(player) = world[player->was_in_room].number;
     } else {
       GET_LAST_IN(player) = world[player->in_room].number;
     }
@@ -1021,8 +1030,8 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                "BiowareIndex=%d, HighestIndex=%d, Pool_MaxHacking=%d, Pool_Body=%d, "\
                "Pool_Dodge=%d, Cash=%ld, Bank=%ld, Karma=%d, Rep=%d, Notor=%d, TKE=%d, "\
                "Dead=%d, Physical=%d, PhysicalLoss=%d, Mental=%d, MentalLoss=%d, "\
-               "PermBodLoss=%d, WimpLevel=%d, Loadroom=%ld, LastRoom=%ld, LastD=%ld, Hunger=%d, Thirst=%d, Drunk=%d, "\
-               "ShotsFired='%d', ShotsTriggered='%d', pgroup='%ld', "\
+               "PermBodLoss=%d, WimpLevel=%d, Loadroom=%ld, LastRoom=%ld, LastD=%ld, Hunger=%d, Thirst=%d, Drunk=%d, " \
+               "ShotsFired='%d', ShotsTriggered='%d', Tradition=%d, pgroup='%ld', "\
                "Inveh=%ld WHERE idnum=%ld;",
                AFF_FLAGS(player).ToString(), PLR_FLAGS(player).ToString(), 
                PRF_FLAGS(player).ToString(), GET_REAL_BOD(player), GET_REAL_QUI(player),
@@ -1035,7 +1044,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                GET_MENTAL(player), GET_MENTAL_LOSS(player), GET_PERM_BOD_LOSS(player), GET_WIMP_LEV(player),
                GET_LOADROOM(player), GET_LAST_IN(player), time(0), GET_COND(player, FULL), 
                GET_COND(player, THIRST), GET_COND(player, DRUNK),
-               SHOTS_FIRED(player), SHOTS_TRIGGERED(player), pgroup_num,
+               SHOTS_FIRED(player), SHOTS_TRIGGERED(player), GET_TRADITION(player), pgroup_num,
                inveh, GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   for (temp = player->carrying; temp; temp = next_obj) {
@@ -1500,8 +1509,8 @@ char_data *PCIndex::CreateChar(char_data *ch)
     GET_NOT(ch) = 0;
     GET_TKE(ch) = 0;
 
-    PLR_FLAGS(ch).RemoveBit(PLR_NEWBIE);
-    PLR_FLAGS(ch).RemoveBit(PLR_AUTH);
+    PLR_FLAGS(ch).RemoveBits(PLR_NEWBIE, PLR_AUTH, ENDBIT);
+    PLR_FLAGS(ch).SetBits(PLR_OLC, PLR_NODELETE, ENDBIT);
     PRF_FLAGS(ch).SetBits(PRF_HOLYLIGHT, PRF_CONNLOG, PRF_ROOMFLAGS,
                           PRF_NOHASSLE, PRF_AUTOINVIS, PRF_AUTOEXIT, ENDBIT);
   } else {
@@ -1723,7 +1732,7 @@ bool does_player_exist(char *name)
   char buf[MAX_STRING_LENGTH];
   if (!name || !*name)
     return FALSE;
-  sprintf(buf, "SELECT * FROM pfiles WHERE Name='%s';", name);
+  sprintf(buf, "SELECT idnum FROM pfiles WHERE Name='%s';", name);
   if (mysql_wrapper(mysql, buf))
     return FALSE;
   MYSQL_RES *res = mysql_use_result(mysql);
@@ -1739,7 +1748,7 @@ bool does_player_exist(char *name)
 bool does_player_exist(long id)
 {
   char buf[MAX_STRING_LENGTH];
-  sprintf(buf, "SELECT * FROM pfiles WHERE idnum=%ld;", id);
+  sprintf(buf, "SELECT idnum FROM pfiles WHERE idnum=%ld;", id);
   mysql_wrapper(mysql, buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
@@ -1841,8 +1850,12 @@ void idle_delete()
   MYSQL_RES *res = mysql_use_result(mysqlextra);
   MYSQL_ROW row;
   while ((row = mysql_fetch_row(res))) {
+#ifndef IDLEDELETE_DRYRUN
     DeleteChar(atol(row[0]));
-    deleted++;    
+    deleted++;
+#else
+    log_vfprintf("IDLEDELETE- Would delete %s, but IDLEDELETE_DRYRUN is enabled.", row[0]);
+#endif
   }
   mysql_free_result(res);
   mysql_close(mysqlextra);

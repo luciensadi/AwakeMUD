@@ -5,6 +5,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdint.h>
 
 #include "bitfield.h"
 #include "structs.h"
@@ -20,6 +21,18 @@ static const int NUM_BUFFERS = 8;
 static const int BUFFER_SIZE = 256;
 static char buffer_tab[NUM_BUFFERS][BUFFER_SIZE];
 static int  buffer_idx = 0;
+
+// Byte bits-set lookup function, because why the hell are we using so many for-loops for a bitfield?
+uint8_t count_ones (uint8_t byte)
+{
+  static const uint8_t NIBBLE_LOOKUP [16] =
+  {
+    0, 1, 1, 2, 1, 2, 2, 3,
+    1, 2, 2, 3, 2, 3, 3, 4
+  };
+  
+  return NIBBLE_LOOKUP[byte & 0x0F] + NIBBLE_LOOKUP[byte >> 4];
+}
 
 // ______________________________
 //
@@ -81,17 +94,16 @@ int  Bitfield::GetNumSet() const
 {
   int count = 0;
 
-  for (int i = 0; i < TotalWidth(); i++)
-    if (IsSet(i))
-      count++;
+  for (int i = 0; i < BITFIELD_SIZE; i++)
+    count += count_ones(data[i]);
 
   return count;
 }
 
 bool Bitfield::AreAnyShared(const Bitfield &test) const
 {
-  for (int i = 0; i < TotalWidth(); i++)
-    if (IsSet(i) && test.IsSet(i))
+  for (int i = 0; i < BITFIELD_SIZE; i++)
+    if (data[i] & test.data[i])
       return true;
 
   return false;
@@ -100,15 +112,10 @@ bool Bitfield::AreAnyShared(const Bitfield &test) const
 int  Bitfield::GetNumShared(const Bitfield &test) const
 {
   int count = 0;
-
+  
   for (int i = 0; i < BITFIELD_SIZE; i++)
-    for (int j = 0; j < bits_per_var; j++) {
-      const int flag = 1 << j;
-
-      if ((test.data[i] & flag) && (this->data[i] & flag))
-        count++;
-    }
-
+    count += count_ones(data[i] & test.data[i]);
+  
   return count;
 }
 
@@ -129,10 +136,10 @@ void Bitfield::Clear()
 
 void Bitfield::SetBit(dword offset)
 {
-  const int idx = offset / bits_per_var;
-  const int flag = offset % bits_per_var;
+  //const int idx = offset / bits_per_var;
+  //const int flag = offset % bits_per_var;
 
-  data[idx] |= (1 << flag);
+  data[(offset / bits_per_var)] |= (1 << (offset % bits_per_var));
 }
 
 void Bitfield::SetBits(dword one, ...)
@@ -161,17 +168,16 @@ void Bitfield::SetBits(dword one, ...)
 
 void Bitfield::SetAll(const Bitfield &two)
 {
-  for (int i = 0; i < TotalWidth(); i++)
-    if (two.IsSet(i) && i > 0)
-      SetBit(i);
+  for (int i = 0; i < BITFIELD_SIZE; i++)
+    data[i] |= two.data[i];
 }
 
 void Bitfield::RemoveBit(dword offset)
 {
-  const int idx = offset / bits_per_var;
-  const int flag = offset % bits_per_var;
+  //const int idx = offset / bits_per_var;
+  //const int flag = offset % bits_per_var;
 
-  data[idx] &= ~(1 << flag);
+  data[(offset / bits_per_var)] &= ~(1 << (offset % bits_per_var));
 }
 
 void Bitfield::RemoveBits(dword one, ...)
@@ -200,17 +206,16 @@ void Bitfield::RemoveBits(dword one, ...)
 
 void Bitfield::RemoveAll(const Bitfield &two)
 {
-  for (int i = 0; i < TotalWidth(); i++)
-    if (IsSet(i) && two.IsSet(i))
-      RemoveBit(i);
+  for (int i = 0; i < BITFIELD_SIZE; i++)
+    data[i] &= ~two.data[i];
 }
 
 void Bitfield::ToggleBit(dword offset)
 {
-  const int idx = offset / bits_per_var;
-  const int flag = offset % bits_per_var;
+  //const int idx = offset / bits_per_var;
+  //const int flag = offset % bits_per_var;
 
-  data[idx] ^= (1 << flag);
+  data[(offset / bits_per_var)] ^= (1 << (offset % bits_per_var));
 }
 
 void Bitfield::ToggleBits(dword one, ...)

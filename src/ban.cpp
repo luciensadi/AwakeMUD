@@ -219,7 +219,7 @@ ACMD(do_unban)
           GET_CHAR_NAME(ch), ban_types[ban_node->type], ban_node->site);
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
 
-  delete ban_node;
+  DELETE_AND_NULL(ban_node);
   write_ban_list();
 }
 

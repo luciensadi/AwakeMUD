@@ -33,6 +33,7 @@ struct remem *found_mem(struct remem *mem, struct char_data *ch);
 int recog(struct char_data *ch, struct char_data *i, char *name);
 void phone_check();
 int find_skill_num(char *name);
+int find_spell_num(char *name);
 /* ******** objects *********** */
 
 void    obj_to_char(struct obj_data *object, struct char_data *ch);
@@ -129,6 +130,4 @@ void    process_vcombat(struct veh_data *veh);
 void    chkdmg(struct veh_data * veh);
 void    disp_mod(struct veh_data *veh, struct char_data *ch, int i);
 void    stop_chase(struct veh_data *veh);
-bool    has_kit(struct char_data *ch, int type);
-struct obj_data *find_workshop(struct char_data *ch, int type);
 #endif

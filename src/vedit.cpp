@@ -342,36 +342,21 @@ void vedit_parse(struct descriptor_data * d, const char *arg)
       /* let's go out to modify.c */
       send_to_char("Enter long desc:\r\n", d->character);
       d->edit_mode = VEDIT_LONGDESC;
-      d->str = new (char *);
-      if (!d->str) {
-        mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
-        shutdown();
-      }
-      *(d->str) = NULL;
+      CLEANUP_AND_INITIALIZE_D_STR(d);
       d->max_str = MAX_MESSAGE_LENGTH;
       d->mail_to = 0;
       break;
     case '5':
       send_to_char("Enter inside desc:\r\n", d->character);
       d->edit_mode = VEDIT_INSDESC;
-      d->str = new (char *);
-      if (!d->str) {
-        mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
-        shutdown();
-      }
-      *(d->str) = NULL;
+      CLEANUP_AND_INITIALIZE_D_STR(d);
       d->max_str = MAX_MESSAGE_LENGTH;
       d->mail_to = 0;
       break;
     case '6':
       send_to_char("Enter inside rear desc:\r\n", d->character);
       d->edit_mode = VEDIT_REARDESC;
-      d->str = new (char *);
-      if (!d->str) {
-        mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
-        shutdown();
-      }
-      *(d->str) = NULL;
+      CLEANUP_AND_INITIALIZE_D_STR(d);
       d->max_str = MAX_MESSAGE_LENGTH;
       d->mail_to = 0;
       break;

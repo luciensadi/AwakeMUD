@@ -215,6 +215,8 @@ ACMD (do_redit)
       room->name = str_dup (world[room_num].name);
     if (world[room_num].description)
       room->description = str_dup (world[room_num].description);
+    if (world[room_num].night_desc)
+      room->night_desc = str_dup (world[room_num].night_desc);
     if (world[room_num].address)
       room->address = str_dup (world[room_num].address);
     room->zone = world[room_num].zone;
@@ -1311,10 +1313,8 @@ ACMD(do_medit)
     d->edit_mob->player_specials = &dummy_mob;
 
     d->edit_mob->player.physical_text.keywords = str_dup("mob unfinished");
-    d->edit_mob->player.physical_text.name =
-      str_dup("an unfinished mob");
-    d->edit_mob->player.physical_text.room_desc =
-      str_dup("An unfinished mob stands here.");
+    d->edit_mob->player.physical_text.name = str_dup("an unfinished mob");
+    d->edit_mob->player.physical_text.room_desc = str_dup("An unfinished mob stands here.");
     d->edit_mob->player.physical_text.look_desc =
       str_dup("It looks barely coherent as it waits to be created.\r\n");
 

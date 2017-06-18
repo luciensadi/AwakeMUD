@@ -786,28 +786,6 @@ int has_key(struct char_data *ch, int key)
   return 0;
 }
 
-bool has_kit(struct char_data * ch, int type)
-{
-  for (struct obj_data *o = ch->carrying; o; o = o->next_content)
-    if (GET_OBJ_TYPE(o) == ITEM_WORKSHOP && GET_OBJ_VAL(o, 0) == type && GET_OBJ_VAL(o, 1) == TYPE_KIT)
-      return TRUE;
-
-  if (GET_EQ(ch, WEAR_HOLD))
-    if (GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_WORKSHOP &&
-        GET_OBJ_VAL(GET_EQ(ch, WEAR_HOLD), 0) == type && GET_OBJ_VAL(GET_EQ(ch, WEAR_HOLD), 1) == TYPE_KIT)
-      return TRUE;
-
-  return FALSE;
-}
-
-struct obj_data *find_workshop(struct char_data * ch, int type)
-{
-  for (struct obj_data *o = ch->in_veh ? ch->in_veh->contents : world[ch->in_room].contents; o; o = o->next_content)
-    if (GET_OBJ_TYPE(o) == ITEM_WORKSHOP && GET_OBJ_VAL(o, 0) == type && GET_OBJ_VAL(o, 2) && GET_OBJ_VAL(o, 1) > TYPE_KIT)
-      return o;
-
-  return NULL;
-}
 #define NEED_OPEN       1
 #define NEED_CLOSED     2
 #define NEED_UNLOCKED   4
@@ -1114,10 +1092,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
       send_to_char(buf2, ch);
       GET_POS(ch) = POS_SITTING;
     }
-    if (GET_DEFPOS(ch)) {
-      delete [] GET_DEFPOS(ch);
-      GET_DEFPOS(ch) = NULL;
-    }
+    DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
     for (k = ch->followers; k; k = next)
     {
       next = k->next;
@@ -1381,10 +1356,7 @@ ACMD(do_stand)
     GET_POS(ch) = POS_STANDING;
     break;
   }
-  if (GET_DEFPOS(ch)) {
-    delete [] GET_DEFPOS(ch);
-    GET_DEFPOS(ch) = NULL;
-  }
+  DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
 }
 
 ACMD(do_sit)
@@ -1426,10 +1398,7 @@ ACMD(do_sit)
     break;
   }
   AFF_FLAGS(ch).RemoveBit(AFF_SNEAK);
-  if (GET_DEFPOS(ch)) {
-    delete [] GET_DEFPOS(ch);
-    GET_DEFPOS(ch) = NULL;
-  }
+  DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
 }
 
 ACMD(do_rest)
@@ -1474,10 +1443,7 @@ ACMD(do_rest)
     GET_POS(ch) = POS_SITTING;
     break;
   }
-  if (GET_DEFPOS(ch)) {
-    delete [] GET_DEFPOS(ch);
-    GET_DEFPOS(ch) = NULL;
-  }
+  DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
 }
 
 ACMD(do_lay)
@@ -1523,10 +1489,7 @@ ACMD(do_lay)
     GET_POS(ch) = POS_LYING;
     break;
   }
-  if (GET_DEFPOS(ch)) {
-    delete [] GET_DEFPOS(ch);
-    GET_DEFPOS(ch) = NULL;
-  }
+  DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
 }
 
 ACMD(do_sleep)
@@ -1578,10 +1541,7 @@ ACMD(do_sleep)
         end_sustained_spell(ch, sust);
     }
   }
-  if (GET_DEFPOS(ch)) {
-    delete [] GET_DEFPOS(ch);
-    GET_DEFPOS(ch) = NULL;
-  }
+  DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
 }
 
 ACMD(do_wake)
@@ -1620,10 +1580,7 @@ ACMD(do_wake)
       act("$n awakens.", TRUE, ch, 0, 0, TO_ROOM);
     GET_POS(ch) = POS_SITTING;
   }
-  if (GET_DEFPOS(ch)) {
-    delete [] GET_DEFPOS(ch);
-    GET_DEFPOS(ch) = NULL;
-  }
+  DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
 }
 
 ACMD(do_follow)

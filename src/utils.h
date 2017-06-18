@@ -27,11 +27,11 @@ struct char_data;
 struct obj_data;
 
 /* public functions in utils.c */
-bool     has_cyberweapon(struct char_data *ch);
+bool    has_cyberweapon(struct char_data *ch);
 char    *str_dup(const char *source);
-char *str_str( const char *str1, const char *str2 );
+char    *str_str( const char *str1, const char *str2 );
 int     str_cmp(const char *arg1, const char *arg2);
-int strn_cmp(const char *arg1, const char *arg2, int n);
+int     strn_cmp(const char *arg1, const char *arg2, int n);
 void    log(const char *str);
 void    log_vfprintf(const char *format, ...);
 void    mudlog(const char *str, struct char_data *ch, int log, bool file);
@@ -40,7 +40,7 @@ int     number(int from, int to);
 int     dice(int number, int size);
 void    sprintbit(long vektor, const char *names[], char *result);
 void    sprinttype(int type, const char *names[], char *result);
-void sprint_obj_mods(struct obj_data *obj, char *result);
+void    sprint_obj_mods(struct obj_data *obj, char *result);
 int     get_line(FILE *fl, char *buf);
 struct time_info_data age(struct char_data *ch);
 int     convert_damage(int damage);
@@ -49,21 +49,25 @@ int     success_test(int number, int target);
 int     resisted_test(int num4ch, int tar4ch, int num4vict, int tar4vict);
 int     stage(int successes, int wound);
 bool    access_level(struct char_data *ch, int level);
-char * buf_mod(char *buf, const char *name, int bonus);
-char * buf_roll(char *buf, const char *name, int bonus);
-int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibility_penalty);
-int modify_target_rbuf(struct char_data *ch, char *rbuf);
-int modify_target(struct char_data *ch);
-int damage_modifier(struct char_data *ch, char *rbuf);
-char * capitalize(const char *source);
-int get_speed(struct veh_data *veh);
-int negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy);
-float gen_size(int race, bool height, int size, int sex);
-int get_skill(struct char_data *ch, int skill, int &target);
-void add_follower(struct char_data *ch, struct char_data *leader);
-int light_level(rnum_t room);
-bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct char_data *ch);
-void magic_loss(struct char_data *ch, int magic, bool msg);
+char *  buf_mod(char *buf, const char *name, int bonus);
+char *  buf_roll(char *buf, const char *name, int bonus);
+int     modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibility_penalty);
+int     modify_target_rbuf(struct char_data *ch, char *rbuf);
+int     modify_target(struct char_data *ch);
+int     damage_modifier(struct char_data *ch, char *rbuf);
+char *  capitalize(const char *source);
+int     get_speed(struct veh_data *veh);
+int     negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy);
+float   gen_size(int race, bool height, int size, int sex);
+int     get_skill(struct char_data *ch, int skill, int &target);
+void    add_follower(struct char_data *ch, struct char_data *leader);
+int     light_level(rnum_t room);
+bool    biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct char_data *ch);
+void    magic_loss(struct char_data *ch, int magic, bool msg);
+bool    has_kit(struct char_data *ch, int type);
+struct obj_data *find_workshop(struct char_data *ch, int type);
+void    add_workshop_to_room(struct obj_data *obj);
+void    remove_workshop_from_room(struct obj_data *obj);
 
 /* undefine MAX and MIN so that our functions are used instead */
 #ifdef MAX
@@ -614,6 +618,32 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 #define OUTSIDE(ch)           (!ROOM_FLAGGED(((ch)->in_veh ? (ch)->in_veh->in_room : (ch)->in_room), ROOM_INDOORS))
 
+/* Memory management *****************************************************/
+
+// This guarantees that the pointer will be null after deletion (something that's plagued this codebase for years).
+#define DELETE_AND_NULL_ARRAY(target) {delete [] (target); (target) = NULL;}
+#define DELETE_AND_NULL(target) {delete (target); (target) = NULL;}
+
+// Checks for existence and deletes the pointed value if extant.
+#define DELETE_ARRAY_IF_EXTANT(target) {if ((target)) delete [] (target); (target) = NULL;}
+#define DELETE_IF_EXTANT(target) {if ((target)) delete (target); (target) = NULL;}
+
+// Getting tired of dealing with this special snowflake double pointer.
+#define CLEANUP_AND_INITIALIZE_D_STR(d) {                                              \
+  if ((d)) {                                                                           \
+    if ((d)->str) {                                                                    \
+      DELETE_ARRAY_IF_EXTANT(*((d)->str));                                             \
+      DELETE_AND_NULL((d)->str);                                                 \
+    }                                                                                  \
+    (d)->str = new (char *);                                                           \
+    if (!(d)->str) {                                                                   \
+      mudlog("SYSERR: Failed to allocate memory for d->str.", NULL, LOG_SYSLOG, TRUE); \
+      shutdown();                                                                      \
+    } else {                                                                           \
+      *((d)->str) = NULL;                                                              \
+    }                                                                                  \
+  }                                                                                    \
+}                                                                                      \
 
 /* OS compatibility ******************************************************/
 

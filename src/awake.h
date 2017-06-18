@@ -1346,6 +1346,7 @@ enum {
 #define TYPE_SHOP		2
 #define TYPE_FACILITY		3
 
+// Kit/Workshop/Facility types.
 #define TYPE_GENERAL		0
 #define TYPE_ELECTRONIC		1
 #define TYPE_MICROTRONIC	2
@@ -1354,6 +1355,7 @@ enum {
 #define TYPE_WEAPON		5
 #define TYPE_MEDICAL		6
 #define TYPE_AMMO		7
+#define NUM_WORKSHOP_TYPES 8
 /* modifier constants used with obj affects ('A' fields) */
 
 #define APPLY_NONE               0      /* No effect                    */

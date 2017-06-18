@@ -1661,7 +1661,7 @@ void name_from_drinkcon(struct obj_data *obj)
 
   // only delete the object name if this object has a unique name
   if (GET_OBJ_RNUM(obj) < 0 || obj->text.keywords != obj_proto[GET_OBJ_RNUM(obj)].text.keywords)
-    delete [] obj->text.keywords;
+    DELETE_AND_NULL_ARRAY(obj->text.keywords);
   // otherwise it just gets pointed to the new namelist
   obj->text.keywords = str_dup(buf2);
 }
@@ -1678,7 +1678,7 @@ void name_to_drinkcon(struct obj_data *obj, int type)
 
   if (GET_OBJ_RNUM(obj) == NOTHING ||
       obj->text.keywords != obj_proto[GET_OBJ_RNUM(obj)].text.keywords)
-    delete [] obj->text.keywords;
+    DELETE_AND_NULL_ARRAY(obj->text.keywords);
 
   obj->text.keywords = new_name;
 }
@@ -2330,9 +2330,9 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
     total += GET_TOTALIMP(ch) - GET_QUI(ch);
   if (total >= GET_QUI(ch))
     send_to_char("You are wearing so much armour that you can't move!\r\n", ch);
-  else if (total >= GET_QUI(ch) * 3/4)
+  else if (total >= (float) GET_QUI(ch) * 3/4)
     send_to_char("Your movement is severely restricted by your armour.\r\n", ch);
-  else if (total >= GET_QUI(ch) / 2)
+  else if (total >= (float) GET_QUI(ch) / 2)
     send_to_char("Your movement is restricted by your armour.\r\n", ch);
   else if (total)
     send_to_char("Your movement is mildly restricted by your armour.\r\n", ch);

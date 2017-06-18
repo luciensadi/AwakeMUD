@@ -493,8 +493,10 @@ ACMD(do_goto)
 {
   sh_int location;
 
-  if ((location = find_target_room(ch, argument)) <= 0)
+  if ((location = find_target_room(ch, argument)) <= 1) {
+    send_to_char("You're not able to GOTO that room. If you need to do something there, use AT.", ch);
     return;
+  }
 
   if (POOFOUT(ch))
     act(POOFOUT(ch), TRUE, ch, 0, 0, TO_ROOM);
@@ -1815,8 +1817,7 @@ ACMD(do_purge)
 
   one_argument(argument, buf);
 
-  if (*buf) {                   /* argument supplied. destroy single object
-                                                                                     * or char */
+  if (*buf) {                   /* argument supplied. destroy single object, character, or vehicle. */
     if ((vict = get_char_room_vis(ch, buf))) {
       if (!IS_NPC(vict) &&
           ((GET_LEVEL(ch) <= GET_LEVEL(vict)) ||
@@ -1838,6 +1839,12 @@ ACMD(do_purge)
     } else if ((obj = get_obj_in_list_vis(ch, buf, world[ch->in_room].contents))) {
       act("$n destroys $p.", FALSE, ch, obj, 0, TO_ROOM);
       extract_obj(obj);
+    } else if ((veh = get_veh_list(buf, world[ch->in_room].vehicles, ch))) {
+      sprintf(buf1, "$n purges %s.", GET_VEH_NAME(veh));
+      act(buf1, FALSE, ch, NULL, 0, TO_ROOM);
+      sprintf(buf1, "%s purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
+      mudlog(buf1, ch, LOG_WIZLOG, TRUE);
+      extract_veh(veh);
     } else {
       send_to_char("Nothing here by that name.\r\n", ch);
       return;
@@ -2296,6 +2303,11 @@ ACMD(do_poofset)
   skip_spaces(&argument);
 
   if (!*argument) {
+    if (!POOFIN(ch))
+      POOFIN(ch) = str_dup(DEFAULT_POOFIN_STRING);
+    if (!POOFOUT(ch))
+      POOFOUT(ch) = str_dup(DEFAULT_POOFOUT_STRING);
+  
     if (subcmd == SCMD_POOFIN)
       sprintf(buf, "Your current poofin is: ^m%s^n\r\n", POOFIN(ch));
     else
@@ -2308,9 +2320,7 @@ ACMD(do_poofset)
     return;
   }
 
-  if (*msg)
-    delete [] *msg;
-
+  DELETE_ARRAY_IF_EXTANT(*msg);
   *msg = str_dup(argument);
 
   sprintf(buf, "UPDATE pfiles_immortdata SET poofin='%s', poofout='%s' WHERE idnum=%ld;", prepare_quotes(buf2, POOFIN(ch)), prepare_quotes(buf3, POOFOUT(ch)), GET_IDNUM(ch));
@@ -2436,7 +2446,7 @@ ACMD(do_last)
   bool from_file = FALSE;
   int level = 0;
   long idnum = 0, lastdisc = 0;
-  char *name, *host;
+  char *name = NULL, *host = NULL;
 
   one_argument(argument, arg);
   if (!*arg) {
@@ -2445,16 +2455,16 @@ ACMD(do_last)
   }
 
   if (!(vict = get_player_vis(ch, arg, FALSE))) {
-    prepare_quotes(buf2, arg);
-    if (!does_player_exist(buf2)) {
-      send_to_char("There is no such player.\r\n", ch);
-      return;
-    }
     from_file = TRUE;
-    sprintf(buf, "SELECT Idnum, Rank, Host, LastD, Name FROM pfiles WHERE name='%s';", buf2);
+    sprintf(buf, "SELECT Idnum, Rank, Host, LastD, Name FROM pfiles WHERE name='%s';", prepare_quotes(buf2, arg));
     mysql_wrapper(mysql, buf);
     MYSQL_RES *res = mysql_use_result(mysql);
     MYSQL_ROW row = mysql_fetch_row(res);
+    if (!row && mysql_field_count(mysql)) {
+      mysql_free_result(res);
+      send_to_char("There is no such player.\r\n", ch);
+      return;
+    }
     idnum = atol(row[0]);
     level = atoi(row[1]);
     host = str_dup(row[2]);
@@ -3283,7 +3293,14 @@ ACMD(do_show)
 
 #define RANGE(low, high) (value = MAX((low), MIN((high), (value))))
 
-#define SET_CLEANUP(save) \
+#define SET_CLEANUP(save)                        \
+if ((save) && !IS_NPC(vict)) {                   \
+  if (is_file) {                                 \
+    extract_char(vict);                          \
+  } else {                                       \
+    playerDB.SaveChar(vict, GET_LOADROOM(vict)); \
+  }                                              \
+}
 
 ACMD(do_vset)
 {
@@ -3739,7 +3756,7 @@ ACMD(do_set)
       return;
     }
 
-    RANGE(0, LVL_MAX);
+    RANGE(1, LVL_MAX);
     vict->player.level = (byte) value;
     break;
   case 31:
@@ -3935,8 +3952,6 @@ ACMD(do_set)
   if (is_file) {
     SET_CLEANUP(true);
     send_to_char("Saved in file.\r\n", ch);
-  } else if (!IS_NPC(vict)) {
-    playerDB.SaveChar(vict, GET_LOADROOM(vict));
   }
 }
 
@@ -4676,12 +4691,9 @@ ACMD(do_tail)
   char arg[MAX_STRING_LENGTH];
   FILE *out;
   int lines = 20;
-  char *temp;
-  int i = 0;
-  char *buf;
 
-  out = new FILE;
-  buf = new char[MAX_STRING_LENGTH];
+  //out = new FILE;
+  char buf[MAX_STRING_LENGTH];
 
   two_arguments(argument, arg, buf);
 
@@ -4693,18 +4705,18 @@ ACMD(do_tail)
       lines = atoi( arg );
       if ( lines < 0 )
         lines = 0 - lines;
-      strcpy( arg, buf );
+      // strcpy( arg, buf );
     }
-
-    /* Remove the semi-colon shell access security problem */
-    if ( (temp = strstr( arg, ";" )) || (temp = strstr(arg, "/")) || (temp = strstr(arg, "|"))) {
-      for ( i = 0; i < (signed)strlen(arg); i++ ) {
-        if ( arg[i] == (signed)*temp ) {
-          arg[i] = '\0';
-          break;
-        }
-      }
+    
+    // Only allow lower-case letters, periods, and numbers.
+    int index = 0;
+    for (char *ptr = buf; *ptr && index < MAX_STRING_LENGTH; ptr++) {
+      if (!isalnum(*ptr) && *ptr != '.')
+        continue;
+      else
+        arg[index++] = *ptr;
     }
+    arg[index] = '\0';
 
     sprintf( buf, "tail -%d ../log/%s", lines, arg );
     send_to_char( buf, ch );
@@ -4741,11 +4753,9 @@ ACMD(do_destring)
     return;
   }
   GET_KARMA(ch) += 125;
-  delete [] obj->restring;
-  obj->restring = NULL;
+  DELETE_AND_NULL_ARRAY(obj->restring);
   sprintf(buf2, "%s successfully destrung.\r\n", obj->text.name);
   send_to_char(ch, buf2);
-
 }
 
 ACMD(do_restring)
@@ -4785,8 +4795,8 @@ ACMD(do_restring)
   }
   sprintf(buf2, "%s restrung '%s' to '%s'", GET_CHAR_NAME(ch), obj->text.name, buf);
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
-  if (obj->restring)
-    delete [] obj->restring;
+  
+  DELETE_ARRAY_IF_EXTANT(obj->restring);
   obj->restring = strdup(buf);
   sprintf(buf2, "%s successfully restrung.\r\n", obj->text.name);
   send_to_char(ch, buf2);

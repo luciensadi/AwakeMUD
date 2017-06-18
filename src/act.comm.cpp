@@ -418,7 +418,7 @@ ACMD(do_page)
 ACMD(do_radio)
 {
   struct obj_data *obj, *radio = NULL;
-  char *one, *two;
+  char one[MAX_INPUT_LENGTH], two[MAX_INPUT_LENGTH];
   int i;
   bool cyberware = FALSE, vehicle = FALSE;
 
@@ -448,8 +448,6 @@ ACMD(do_radio)
     send_to_char("You have to have a radio to do that!\r\n", ch);
     return;
   }
-  one = new char[MAX_INPUT_LENGTH];
-  two = new char[MAX_INPUT_LENGTH];
   any_one_arg(any_one_arg(argument, one), two);
 
   if (!*one) {
@@ -506,9 +504,6 @@ ACMD(do_radio)
     }
   } else
     send_to_char("That's not a valid option.\r\n", ch);
-
-  delete one;
-  delete two;
 }
 
 ACMD(do_broadcast)
@@ -1291,7 +1286,7 @@ ACMD(do_phone)
           return;
         }
         REMOVE_FROM_LIST(phone, phone_list, next);
-        delete phone;
+        DELETE_AND_NULL(phone);
       }
       return;
     }
@@ -1390,8 +1385,10 @@ ACMD(do_ignore)
     send_to_char("You are currently ignoring: \r\n", ch);
     for (struct remem *a = GET_IGNORE(ch); a; a = a->next) {
       char *name = get_player_name(a->idnum);
-      if (name)
+      if (name) {
         send_to_char(ch, "%s\r\n", name);
+        DELETE_AND_NULL_ARRAY(name);
+      }
     }
   } else {
     struct remem *list;
@@ -1402,7 +1399,7 @@ ACMD(do_ignore)
       else if ((list = found_mem(GET_IGNORE(ch), tch))) {
         struct remem *temp;
         REMOVE_FROM_LIST(list, GET_IGNORE(ch), next);
-        delete list;
+        DELETE_AND_NULL(list);
         send_to_char(ch, "You can now hear %s.\r\n", GET_CHAR_NAME(tch));
       } else {
         list = new remem;

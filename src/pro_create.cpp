@@ -126,7 +126,7 @@ void pedit_parse(struct descriptor_data *d, const char *arg)
       pedit_disp_menu(d);
       return;
     }
-    delete [] d->edit_obj->restring;
+    DELETE_ARRAY_IF_EXTANT(d->edit_obj->restring);
     d->edit_obj->restring = str_dup(arg);
     pedit_disp_menu(d);
     break;

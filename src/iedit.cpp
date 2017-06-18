@@ -1208,25 +1208,20 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             // in the mud
             ObjList.UpdateObjs(d->edit_obj, obj_number);
             /* now safe to free old proto and write over */
-            if (obj_proto[obj_number].text.keywords)
-              delete [] obj_proto[obj_number].text.keywords;
-            if (obj_proto[obj_number].text.name)
-              delete [] obj_proto[obj_number].text.name;
-            if (obj_proto[obj_number].text.room_desc)
-              delete [] obj_proto[obj_number].text.room_desc;
-            if (obj_proto[obj_number].text.look_desc)
-              delete [] obj_proto[obj_number].text.look_desc;
+            DELETE_ARRAY_IF_EXTANT(obj_proto[obj_number].text.keywords);
+            DELETE_ARRAY_IF_EXTANT(obj_proto[obj_number].text.name);
+            DELETE_ARRAY_IF_EXTANT(obj_proto[obj_number].text.room_desc);
+            DELETE_ARRAY_IF_EXTANT(obj_proto[obj_number].text.look_desc);
             
-            if (obj_proto[obj_number].ex_description)
-              for (This = obj_proto[obj_number].ex_description;
-                   This; This = next_one) {
+            if (obj_proto[obj_number].ex_description) {
+              for (This = obj_proto[obj_number].ex_description; This; This = next_one) {
                 next_one = This->next;
-                if (This->keyword)
-                  delete [] This->keyword;
-                if (This->description)
-                  delete [] This->description;
-                delete This;
+                DELETE_ARRAY_IF_EXTANT(This->keyword);
+                DELETE_ARRAY_IF_EXTANT(This->description);
+                DELETE_AND_NULL(This);
               }
+              obj_proto[obj_number].ex_description = NULL;
+            }
             
             obj_proto[obj_number] = *d->edit_obj;
             obj_proto[obj_number].item_number = obj_number;
@@ -1302,8 +1297,8 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             ObjList.UpdateNums(d->edit_obj->item_number);
             
             /* free and replace old tables */
-            delete [] obj_proto;
-            delete [] obj_index;
+            DELETE_AND_NULL_ARRAY(obj_proto);
+            DELETE_AND_NULL_ARRAY(obj_index);
             obj_proto = new_obj_proto;
             obj_index = new_obj_index;
             
@@ -1416,12 +1411,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           /* let's go out to modify.c */
           send_to_char("Enter long desc:\r\n", d->character);
           d->edit_mode = IEDIT_LONGDESC;
-          d->str = new (char *);
-          if (!d->str) {
-            mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
-            shutdown();
-          }
-          *(d->str) = NULL;
+          CLEANUP_AND_INITIALIZE_D_STR(d);
           d->max_str = MAX_MESSAGE_LENGTH;
           d->mail_to = 0;
           break;
@@ -1506,20 +1496,17 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       break;                      /* end of IEDIT_MAIN_MENU */
       
     case IEDIT_EDIT_NAMELIST:
-      if (d->edit_obj->text.keywords)
-        delete [] d->edit_obj->text.keywords;
+      DELETE_ARRAY_IF_EXTANT(d->edit_obj->text.keywords);
       d->edit_obj->text.keywords = str_dup(arg);
       iedit_disp_menu(d);
       break;
     case IEDIT_SHORTDESC:
-      if (d->edit_obj->text.name)
-        delete [] d->edit_obj->text.name;
+      DELETE_ARRAY_IF_EXTANT(d->edit_obj->text.name);
       d->edit_obj->text.name = str_dup(arg);
       iedit_disp_menu(d);
       break;
     case IEDIT_DESC:
-      if (d->edit_obj->text.room_desc)
-        delete [] d->edit_obj->text.room_desc;
+      DELETE_ARRAY_IF_EXTANT(d->edit_obj->text.room_desc);
       d->edit_obj->text.room_desc = str_dup(arg);
       iedit_disp_menu(d);
       break;
@@ -2424,8 +2411,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       iedit_disp_prompt_apply_menu(d);
       break;
     case IEDIT_EXTRADESC_KEY:
-      if (((struct extra_descr_data *) *d->misc_data)->keyword)
-        delete [] ((struct extra_descr_data *) *d->misc_data)->keyword;
+      DELETE_ARRAY_IF_EXTANT(((struct extra_descr_data *) *d->misc_data)->keyword);
       ((struct extra_descr_data *) * d->misc_data)->keyword = str_dup(arg);
       iedit_disp_extradesc_menu(d);
       break;
@@ -2454,18 +2440,36 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       number = atoi(arg);
       switch (number) {
         case 0: {
-          /* if something got left out */
-          if (!((struct extra_descr_data *) * d->misc_data)->keyword ||
-              !((struct extra_descr_data *) * d->misc_data)->description) {
-            if (((struct extra_descr_data *) * d->misc_data)->keyword)
-              delete [] ((struct extra_descr_data *) * d->misc_data)->keyword;
-            if (((struct extra_descr_data *) * d->misc_data)->description)
-              delete [] ((struct extra_descr_data *) * d->misc_data)->description;
+#define MISCDATA ((struct extra_descr_data *) * d->misc_data)
+          /* if something got left out, delete the extra desc
+           when backing out to menu */
+          if (!MISCDATA->keyword || !MISCDATA->description) {
+            DELETE_ARRAY_IF_EXTANT(MISCDATA->keyword);
+            DELETE_ARRAY_IF_EXTANT(MISCDATA->description);
             
-            delete (struct extra_descr_data *) *d->misc_data;
+            /* Null out the ex_description linked list pointer to this object. */
+            struct extra_descr_data *temp = d->edit_obj->ex_description, *next = NULL;
+            if (temp == MISCDATA) {
+              d->edit_obj->ex_description = NULL;
+            } else {
+              for (; temp; temp = next) {
+                next = temp->next;
+                if (next == MISCDATA) {
+                  if (next->next) {
+                    temp->next = next->next;
+                  } else {
+                    temp->next = NULL;
+                  }
+                  break;
+                }
+              }
+            }
+            
+            delete MISCDATA;
             *d->misc_data = NULL;
           }
-          /* else, we don't need to do anything.. jump to menu */
+#undef MISCDATA
+          
           iedit_disp_menu(d);
         }
           break;
@@ -2477,13 +2481,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           d->edit_mode = IEDIT_EXTRADESC_DESCRIPTION;
           send_to_char("Enter description:\r\n", d->character);
           /* send out to modify.c */
-          d->str = new (char *);
-          if (!d->str) {
-            mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
-            shutdown();
-          }
-          
-          *(d->str) = NULL;
+          CLEANUP_AND_INITIALIZE_D_STR(d);
           d->max_str = MAX_MESSAGE_LENGTH;
           d->mail_to = 0;
           break;

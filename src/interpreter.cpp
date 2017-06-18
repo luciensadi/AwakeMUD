@@ -1,8 +1,12 @@
-/* ************************************************************************ * File: interpreter.c Part of
-CircleMUD * * Usage: parse user commands, search for specials, call ACMD functions * * * * All rights
-reserved.  See license.doc for complete information.  * * * * Copyright (C) 1993, 94 by the Trustees of
-the Johns Hopkins University * * CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.  *
-************************************************************************ */
+/*************************************************************************
+* File: interpreter.c Part of CircleMUD                                  *
+* Usage: parse user commands, search for specials, call ACMD functions   *
+*                                                                        *
+* All rights reserved.  See license.doc for complete information.        *
+*                                                                        *
+* Copyright (C) 1993, 94 by the Trustees of the Johns Hopkins University *
+* CircleMUD is based on DikuMUD, Copyright (C) 1990, 1991.               *
+**************************************************************************/
 
 #define __INTERPRETER_CC__
 
@@ -276,6 +280,7 @@ ACMD(do_sneak);
 ACMD(do_snoop);
 ACMD(do_spec_comm);
 ACMD(do_spells);
+ACMD(do_spellset);
 //ACMD(do_spray);
 ACMD(do_spool);
 ACMD(do_stand);
@@ -381,337 +386,338 @@ struct command_info cmd_info[] =
     }
     ,   /* this must be first -- for specprocs */
     /* directions must come before other commands but after RESERVED */
-    { "north"    , POS_SITTING, do_move     , 0, SCMD_NORTH, EXCLUSIVE },
-    { "east"     , POS_SITTING, do_move     , 0, SCMD_EAST, EXCLUSIVE },
-    { "south"    , POS_SITTING, do_move     , 0, SCMD_SOUTH, EXCLUSIVE },
-    { "west"     , POS_SITTING, do_move     , 0, SCMD_WEST, EXCLUSIVE },
-    { "up"       , POS_SITTING, do_move     , 0, SCMD_UP, EXCLUSIVE },
-    { "down"     , POS_SITTING, do_move     , 0, SCMD_DOWN, EXCLUSIVE },
-    { "ne"       , POS_SITTING, do_move     , 0, SCMD_NORTHEAST, EXCLUSIVE },
-    { "se"       , POS_SITTING, do_move     , 0, SCMD_SOUTHEAST, EXCLUSIVE },
-    { "sw"       , POS_SITTING, do_move     , 0, SCMD_SOUTHWEST, EXCLUSIVE },
-    { "nw"       , POS_SITTING, do_move     , 0, SCMD_NORTHWEST, EXCLUSIVE },
-    { "northeast", POS_SITTING, do_move     , 0, SCMD_NORTHEAST, EXCLUSIVE },
-    { "southeast", POS_SITTING, do_move     , 0, SCMD_SOUTHEAST, EXCLUSIVE },
-    { "southwest", POS_SITTING, do_move     , 0, SCMD_SOUTHWEST, EXCLUSIVE },
-    { "northwest", POS_SITTING, do_move     , 0, SCMD_NORTHWEST, EXCLUSIVE },
+    { "north"    , POS_SITTING, do_move     , 0, SCMD_NORTH },
+    { "east"     , POS_SITTING, do_move     , 0, SCMD_EAST },
+    { "south"    , POS_SITTING, do_move     , 0, SCMD_SOUTH },
+    { "west"     , POS_SITTING, do_move     , 0, SCMD_WEST },
+    { "up"       , POS_SITTING, do_move     , 0, SCMD_UP },
+    { "down"     , POS_SITTING, do_move     , 0, SCMD_DOWN },
+    { "ne"       , POS_SITTING, do_move     , 0, SCMD_NORTHEAST },
+    { "se"       , POS_SITTING, do_move     , 0, SCMD_SOUTHEAST },
+    { "sw"       , POS_SITTING, do_move     , 0, SCMD_SOUTHWEST },
+    { "nw"       , POS_SITTING, do_move     , 0, SCMD_NORTHWEST },
+    { "northeast", POS_SITTING, do_move     , 0, SCMD_NORTHEAST },
+    { "southeast", POS_SITTING, do_move     , 0, SCMD_SOUTHEAST },
+    { "southwest", POS_SITTING, do_move     , 0, SCMD_SOUTHWEST },
+    { "northwest", POS_SITTING, do_move     , 0, SCMD_NORTHWEST },
 
 
     /* now, the main list */
-    { "abilities", POS_SLEEPING, do_skills   , 0, SCMD_ABILITIES, FREE },
+    { "abilities", POS_SLEEPING, do_skills   , 0, SCMD_ABILITIES },
     { "activate" , POS_LYING , do_activate , 0, 0 },
-    { "aecho"     , POS_SLEEPING, do_echo     , LVL_ARCHITECT, SCMD_AECHO, FREE },
-    { "accept"   , POS_LYING   , do_accept   , 0, 0, FREE },
-    { "addpoint" , POS_DEAD    , do_initiate  , 0, SCMD_POWERPOINT, NOCOMBAT },
-    { "agree"    , POS_LYING   , do_action   , 0, 0, FREE },
+    { "agree"    , POS_LYING   , do_action   , 0, 0 },
+    { "aecho"     , POS_SLEEPING, do_echo     , LVL_ARCHITECT, SCMD_AECHO },
+    { "accept"   , POS_LYING   , do_accept   , 0, 0 },
+    { "addpoint" , POS_DEAD    , do_initiate  , 0, SCMD_POWERPOINT },
+    { "agree"    , POS_LYING   , do_action   , 0, 0 },
     { "assense"  , POS_LYING   , do_assense  , 0, 0 },
-    { "at"       , POS_DEAD    , do_at       , LVL_BUILDER, 0, FREE },
+    { "at"       , POS_DEAD    , do_at       , LVL_BUILDER, 0 },
     { "attach"   , POS_RESTING , do_attach   , 0, 0 },
 #ifdef SELFADVANCE
     // Allows running an unattended test port where anyone can bump themselves up to level 9.
-    { "advance"  , POS_DEAD    , do_self_advance, 0, 0, FREE },
+    { "advance"  , POS_DEAD    , do_self_advance, 0, 0 },
 #else
-    { "advance"  , POS_DEAD    , do_advance  , LVL_PRESIDENT, 0, FREE },
+    { "advance"  , POS_DEAD    , do_advance  , LVL_PRESIDENT, 0 },
 #endif
-    { "alias"    , POS_DEAD    , do_alias    , 0, 0, FREE },
-    { "accuse"   , POS_SITTING , do_action   , 0, 0, FREE },
+    { "alias"    , POS_DEAD    , do_alias    , 0, 0 },
+    { "accuse"   , POS_SITTING , do_action   , 0, 0 },
     { "answer"   , POS_LYING   , do_phone    , 0, SCMD_ANSWER },
-    { "apologize", POS_LYING   , do_action   , 0, 0, FREE },
-    { "applaud"  , POS_LYING   , do_action   , 0, 0, FREE },
-    { "assist"   , POS_FIGHTING, do_assist   , 1, 0, FREE },
-    { "ask"      , POS_LYING   , do_spec_comm, 0, 0, FREE },
-    { "award"    , POS_DEAD    , do_award    , LVL_FIXER, 0, FREE },
-    { "availoffset", POS_DEAD  , do_availoffset, 0, 0, FREE },
+    { "apologize", POS_LYING   , do_action   , 0, 0 },
+    { "applaud"  , POS_LYING   , do_action   , 0, 0 },
+    { "assist"   , POS_FIGHTING, do_assist   , 1, 0 },
+    { "ask"      , POS_LYING   , do_spec_comm, 0, 0 },
+    { "award"    , POS_DEAD    , do_award    , LVL_FIXER, 0 },
+    { "availoffset", POS_DEAD  , do_availoffset, 0, 0 },
 
-    { "bounce"   , POS_STANDING, do_action   , 0, 0, FREE },
-    { "bond"     , POS_RESTING , do_bond     , 0, 0, NOCOMBAT },
-    { "ban"      , POS_DEAD    , do_ban      , LVL_EXECUTIVE, 0, FREE },
+    { "bounce"   , POS_STANDING, do_action   , 0, 0 },
+    { "bond"     , POS_RESTING , do_bond     , 0, 0 },
+    { "ban"      , POS_DEAD    , do_ban      , LVL_EXECUTIVE, 0 },
     { "banish"   , POS_STANDING, do_banish   , 0, 0 },
-    { "balance"  , POS_LYING   , do_gold     , 0, 0, FREE },
-    { "bat"      , POS_RESTING , do_action   , 0, 0, FREE },
-    { "beam"     , POS_LYING   , do_action   , 0, 0, FREE },
-    { "bearhug"  , POS_STANDING, do_action   , 0, 0, FREE },
-    { "beg"      , POS_RESTING , do_action   , 0, 0, FREE },
-    { "bioware"  , POS_DEAD    , do_bioware  , 0, 0, FREE },
-    { "bite"     , POS_RESTING , do_action   , 0, 0, FREE },
-//  { "blastoff" , POS_RESTING , do_not_here , 0, 0, FREE },
-    { "blink"    , POS_LYING   , do_action   , 0, 0, FREE },
-    { "bleed"    , POS_LYING   , do_action   , 0, 0, FREE },
-    { "blush"    , POS_LYING   , do_action   , 0, 0, FREE },
-    { "boggle"   , POS_LYING   , do_action   , 0, 0, FREE },
-    { "bonk"     , POS_STANDING, do_action   , 0, 0, FREE },
+    { "balance"  , POS_LYING   , do_gold     , 0, 0 },
+    { "bat"      , POS_RESTING , do_action   , 0, 0 },
+    { "beam"     , POS_LYING   , do_action   , 0, 0 },
+    { "bearhug"  , POS_STANDING, do_action   , 0, 0 },
+    { "beg"      , POS_RESTING , do_action   , 0, 0 },
+    { "bioware"  , POS_DEAD    , do_bioware  , 0, 0 },
+    { "bite"     , POS_RESTING , do_action   , 0, 0 },
+//  { "blastoff" , POS_RESTING , do_not_here , 0, 0 },
+    { "blink"    , POS_LYING   , do_action   , 0, 0 },
+    { "bleed"    , POS_LYING   , do_action   , 0, 0 },
+    { "blush"    , POS_LYING   , do_action   , 0, 0 },
+    { "boggle"   , POS_LYING   , do_action   , 0, 0 },
+    { "bonk"     , POS_STANDING, do_action   , 0, 0 },
     { "boost"    , POS_LYING   , do_boost    , 0, 0 },
-    { "bow"      , POS_STANDING, do_action   , 0, 0, FREE },
-    { "brb"      , POS_LYING   , do_action   , 0, 0, FREE },
-    { "break"    , POS_LYING   , do_break    , 0, 0, FREE },
-    { "broadcast", POS_LYING   , do_broadcast, 0, 0, FREE },
-    { ","  , POS_LYING, do_broadcast, 0, 0, FREE },
-    { "brick"    , POS_STANDING, do_action   , 0, 0, FREE },
-    { "build"    , POS_RESTING , do_build    , 0, 0, NOCOMBAT },
-    { "burn"     , POS_STANDING, do_not_here , 0, 0, NOCOMBAT },
-    { "burp"     , POS_LYING   , do_action   , 0, 0, FREE },
-    { "buy"      , POS_SITTING , do_not_here , 0, 0, NOCOMBAT },
-    { "bug"      , POS_DEAD    , do_gen_write, 0, SCMD_BUG, FREE },
-    { "bypass"   , POS_STANDING, do_gen_door , 0, SCMD_PICK, NOCOMBAT },
+    { "bow"      , POS_STANDING, do_action   , 0, 0 },
+    { "brb"      , POS_LYING   , do_action   , 0, 0 },
+    { "break"    , POS_LYING   , do_break    , 0, 0 },
+    { "broadcast", POS_LYING   , do_broadcast, 0, 0 },
+    { ","  , POS_LYING, do_broadcast, 0, 0 },
+    { "brick"    , POS_STANDING, do_action   , 0, 0 },
+    { "build"    , POS_RESTING , do_build    , 0, 0 },
+    { "burn"     , POS_STANDING, do_not_here , 0, 0 },
+    { "burp"     , POS_LYING   , do_action   , 0, 0 },
+    { "buy"      , POS_SITTING , do_not_here , 0, 0 },
+    { "bug"      , POS_DEAD    , do_gen_write, 0, SCMD_BUG },
+    { "bypass"   , POS_STANDING, do_gen_door , 0, SCMD_PICK },
 
-    { "cast"     , POS_SITTING , do_cast     , 1, 0, EXCLUSIVE },
+    { "cast"     , POS_SITTING , do_cast     , 1, 0 },
     { "call"     , POS_LYING   , do_phone    , 0, SCMD_RING },
-    { "cancel"   , POS_RESTING , do_not_here , 0, 0, NOCOMBAT },
-    { "cackle"   , POS_LYING   , do_action   , 0, 0, FREE },
+    { "cancel"   , POS_RESTING , do_not_here , 0, 0 },
+    { "cackle"   , POS_LYING   , do_action   , 0, 0 },
     { "chase"  , POS_SITTING , do_chase    , 0, 0 },
-    { "chuckle"  , POS_LYING   , do_action   , 0, 0, FREE },
-    { "chillout" , POS_RESTING , do_action   , 0, 0, FREE },
-    { "check"    , POS_RESTING , do_not_here , 0, 0, NOCOMBAT },
-    { "cheer"    , POS_LYING   , do_action   , 0, 0, FREE },
-    { "clap"     , POS_LYING   , do_action   , 0, 0, FREE },
+    { "chuckle"  , POS_LYING   , do_action   , 0, 0 },
+    { "chillout" , POS_RESTING , do_action   , 0, 0 },
+    { "check"    , POS_RESTING , do_not_here , 0, 0 },
+    { "cheer"    , POS_LYING   , do_action   , 0, 0 },
+    { "clap"     , POS_LYING   , do_action   , 0, 0 },
     { "cleanse"  , POS_LYING   , do_cleanse  , 0, 0 },
-    { "clear"    , POS_DEAD    , do_gen_ps   , 0, SCMD_CLEAR, FREE },
-    { "climb"    , POS_STANDING, do_not_here , 0, 0, NOCOMBAT },
+    { "clear"    , POS_DEAD    , do_gen_ps   , 0, SCMD_CLEAR },
+    { "climb"    , POS_STANDING, do_not_here , 0, 0 },
     { "close"    , POS_SITTING , do_gen_door , 0, SCMD_CLOSE },
-    { "cls"      , POS_DEAD    , do_gen_ps   , 0, SCMD_CLEAR, FREE },
-    { "cockeye"  , POS_RESTING , do_action   , 0, 0, FREE },
-    { "collapse" , POS_STANDING, do_action   , 0, 0, FREE },
-    { "collect"  , POS_RESTING , do_not_here , 0, 0, NOCOMBAT },
-    { "comb"     , POS_RESTING , do_action   , 0, 0, FREE },
-    { "comfort"  , POS_RESTING , do_action   , 0, 0, FREE },
-    { "consider" , POS_LYING   , do_consider , 0, 0, FREE },
-    { "confused" , POS_LYING   , do_action   , 0, 0, FREE },
-    { "congrat"  , POS_LYING   , do_action   , 0, 0, FREE },
+    { "cls"      , POS_DEAD    , do_gen_ps   , 0, SCMD_CLEAR },
+    { "cockeye"  , POS_RESTING , do_action   , 0, 0 },
+    { "collapse" , POS_STANDING, do_action   , 0, 0 },
+    { "collect"  , POS_RESTING , do_not_here , 0, 0 },
+    { "comb"     , POS_RESTING , do_action   , 0, 0 },
+    { "comfort"  , POS_RESTING , do_action   , 0, 0 },
+    { "consider" , POS_LYING   , do_consider , 0, 0 },
+    { "confused" , POS_LYING   , do_action   , 0, 0 },
+    { "congrat"  , POS_LYING   , do_action   , 0, 0 },
     { "conjure"  , POS_RESTING , do_conjure  , 0, 0 },
-    { "connect"  , POS_RESTING , do_connect  , 0, 0, NOCOMBAT },
-    { "convince" , POS_LYING   , do_action   , 0, 0, FREE },
+    { "connect"  , POS_RESTING , do_connect  , 0, 0 },
+    { "convince" , POS_LYING   , do_action   , 0, 0 },
     { "contest"  , POS_SITTING , do_contest  , 0, 0 },
     { "control"  , POS_SITTING , do_control  , 0, 0 },
-    { "copy"     , POS_SITTING , do_copy     , 0, 0, NOCOMBAT },
-    { "copyover" , POS_DEAD    , do_copyover , LVL_ADMIN, 0, FREE },
-    { "commands" , POS_DEAD    , do_commands , 0, SCMD_COMMANDS, FREE },
+    { "copy"     , POS_SITTING , do_copy     , 0, 0 },
+    { "copyover" , POS_DEAD    , do_copyover , LVL_ADMIN, 0 },
+    { "commands" , POS_DEAD    , do_commands , 0, SCMD_COMMANDS },
     { "compress" , POS_LYING   , do_compact  , 0, 0 },
-    { "cook"     , POS_SITTING , do_cook     , 0, 0, NOCOMBAT },
-    { "costtime" , POS_DEAD    , do_costtime , 0, 0, FREE },
-    { "cough"    , POS_LYING   , do_action   , 0, 0, FREE },
-    { "cpool"    , POS_DEAD    , do_cpool    , 0, 0, FREE },
-    { "crack"    , POS_RESTING , do_crack    , 0, 0, NOCOMBAT },
-    { "crashmu"  , POS_STANDING, do_crash_mud, LVL_PRESIDENT, 0, FREE },
-    { "crashmud" , POS_STANDING, do_crash_mud, LVL_PRESIDENT, SCMD_BOOM, FREE },
-    { "create"   , POS_LYING   , do_create   , 0, 0, NOCOMBAT },
-    { "credits"  , POS_DEAD    , do_gen_ps   , 0, SCMD_CREDITS, FREE },
-    { "cringe"   , POS_LYING   , do_action   , 0, 0, FREE },
-    { "cry"      , POS_LYING   , do_action   , 0, 0, FREE },
-    { "cuddle"   , POS_LYING   , do_action   , 0, 0, FREE },
-    { "curse"    , POS_LYING   , do_action   , 0, 0, FREE },
-    { "curtsey"  , POS_STANDING, do_action   , 0, 0, FREE },
-    { "customize", POS_SLEEPING, do_customize, 0, 0, FREE },
-    { "cyberware", POS_DEAD    , do_cyberware, 0, 0, FREE },
+    { "cook"     , POS_SITTING , do_cook     , 0, 0 },
+    { "costtime" , POS_DEAD    , do_costtime , 0, 0 },
+    { "cough"    , POS_LYING   , do_action   , 0, 0 },
+    { "cpool"    , POS_DEAD    , do_cpool    , 0, 0 },
+    { "crack"    , POS_RESTING , do_crack    , 0, 0 },
+    { "crashmu"  , POS_STANDING, do_crash_mud, LVL_PRESIDENT, 0 },
+    { "crashmud" , POS_STANDING, do_crash_mud, LVL_PRESIDENT, SCMD_BOOM },
+    { "create"   , POS_LYING   , do_create   , 0, 0 },
+    { "credits"  , POS_DEAD    , do_gen_ps   , 0, SCMD_CREDITS },
+    { "cringe"   , POS_LYING   , do_action   , 0, 0 },
+    { "cry"      , POS_LYING   , do_action   , 0, 0 },
+    { "cuddle"   , POS_LYING   , do_action   , 0, 0 },
+    { "curse"    , POS_LYING   , do_action   , 0, 0 },
+    { "curtsey"  , POS_STANDING, do_action   , 0, 0 },
+    { "customize", POS_SLEEPING, do_customize, 0, 0 },
+    { "cyberware", POS_DEAD    , do_cyberware, 0, 0 },
 
-    { "dance"    , POS_STANDING, do_action   , 0, 0, FREE },
-    { "date"     , POS_DEAD    , do_date     , 0, SCMD_DATE, FREE },
-    { "daydream" , POS_SLEEPING, do_action   , 0, 0, FREE },
-    { "dc"       , POS_DEAD    , do_dc       , LVL_EXECUTIVE, 0, FREE },
-    { "deactivate", POS_RESTING, do_deactivate, 0, 0, FREE },
-    { "decline"  , POS_LYING   , do_decline  , 0, 0, FREE },
+    { "dance"    , POS_STANDING, do_action   , 0, 0 },
+    { "date"     , POS_DEAD    , do_date     , 0, SCMD_DATE },
+    { "daydream" , POS_SLEEPING, do_action   , 0, 0 },
+    { "dc"       , POS_DEAD    , do_dc       , LVL_EXECUTIVE, 0 },
+    { "deactivate", POS_RESTING, do_deactivate, 0, 0 },
+    { "decline"  , POS_LYING   , do_decline  , 0, 0 },
     { "decompress", POS_LYING  , do_compact  , 0, 1 },
-    { "decorate" , POS_DEAD    , do_decorate , 0, 0, NOCOMBAT },
+    { "decorate" , POS_DEAD    , do_decorate , 0, 0 },
     { "delete"   , POS_SLEEPING, do_delete   , 0, 0 },
-    { "deposit"  , POS_STANDING, do_not_here , 1, 0, NOCOMBAT },
-    { "default"  , POS_RESTING , do_default  , 0, 0, NOCOMBAT },
-    { "dennis"     , POS_SITTING, do_move     , 0, SCMD_DOWN, EXCLUSIVE },
-    { "design"   , POS_RESTING , do_design   , 0, 0, NOCOMBAT },
-    { "destroy"  , POS_STANDING, do_destroy  , 0, 0, NOCOMBAT },
-    { "destring" , POS_DEAD    , do_destring , 0, 0, NOCOMBAT },
-    { "diagnose" , POS_RESTING , do_diagnose , 0, 0, FREE },
-    { "dice"     , POS_DEAD    , do_dice     , 0, 0, FREE },
-    { "die"      , POS_DEAD    , do_die      , 0, 0, FREE },
-    { "dig"      , POS_RESTING , do_dig      , LVL_BUILDER, 0, FREE },
-    { "dis"      , POS_LYING   , do_action   , 0, 0, FREE },
-    { "disagree" , POS_LYING   , do_action   , 0, 0, FREE },
-    { "disco"    , POS_RESTING , do_action   , 0, 0, FREE },
+    { "deposit"  , POS_STANDING, do_not_here , 1, 0 },
+    { "default"  , POS_RESTING , do_default  , 0, 0 },
+    { "dennis"     , POS_SITTING, do_move     , 0, SCMD_DOWN },
+    { "design"   , POS_RESTING , do_design   , 0, 0 },
+    { "destroy"  , POS_STANDING, do_destroy  , 0, 0 },
+    { "destring" , POS_DEAD    , do_destring , 0, 0 },
+    { "diagnose" , POS_RESTING , do_diagnose , 0, 0 },
+    { "dice"     , POS_DEAD    , do_dice     , 0, 0 },
+    { "die"      , POS_DEAD    , do_die      , 0, 0 },
+    { "dig"      , POS_RESTING , do_dig      , LVL_BUILDER, 0 },
+    { "dis"      , POS_LYING   , do_action   , 0, 0 },
+    { "disagree" , POS_LYING   , do_action   , 0, 0 },
+    { "disco"    , POS_RESTING , do_action   , 0, 0 },
     { "dispell"  , POS_SITTING , do_dispell  , 0, 0 },
-    { "display"  , POS_DEAD    , do_display  , 0, 0, FREE },
-    { "disregard", POS_LYING   , do_action   , 0, 0, FREE },
-    { "doh"      , POS_LYING   , do_action   , 0, 0, FREE },
-    { "domain"   , POS_LYING   , do_domain   , 0, 0, FREE },
-    { "donate"   , POS_RESTING , do_drop     , 0, SCMD_DONATE, NOCOMBAT },
-    { "drag"     , POS_STANDING, do_drag     , 0, 0, EXCLUSIVE },
-    { "dribble"  , POS_LYING   , do_action   , 0, 0, FREE },
+    { "display"  , POS_DEAD    , do_display  , 0, 0 },
+    { "disregard", POS_LYING   , do_action   , 0, 0 },
+    { "doh"      , POS_LYING   , do_action   , 0, 0 },
+    { "domain"   , POS_LYING   , do_domain   , 0, 0 },
+    { "donate"   , POS_RESTING , do_drop     , 0, SCMD_DONATE },
+    { "drag"     , POS_STANDING, do_drag     , 0, 0 },
+    { "dribble"  , POS_LYING   , do_action   , 0, 0 },
     { "drink"    , POS_RESTING , do_drink    , 0, SCMD_DRINK },
     { "drive"    , POS_SITTING , do_drive    , 0, 0 },
-    { "drop"     , POS_LYING   , do_drop     , 0, SCMD_DROP, FREE },
+    { "drop"     , POS_LYING   , do_drop     , 0, SCMD_DROP },
     { "draw"     , POS_RESTING , do_draw     , 0, 0 },
     { "driveby"  , POS_SITTING , do_driveby  , 0, 0 },
-    { "drool"    , POS_LYING   , do_action   , 0, 0, FREE },
-    { "dunce"    , POS_LYING   , do_action   , 0, 0, FREE },
+    { "drool"    , POS_LYING   , do_action   , 0, 0 },
+    { "dunce"    , POS_LYING   , do_action   , 0, 0 },
 
     { "eat"      , POS_RESTING , do_eat      , 0, SCMD_EAT },
-    { "echo"     , POS_SLEEPING, do_echo     , 0, SCMD_ECHO, FREE },
-    { "eject"    , POS_RESTING , do_eject    , 0, 0, FREE }, 
-    { "elemental", POS_DEAD    , do_elemental, 0, 0, FREE },
-    { "emote"    , POS_LYING   , do_echo     , 0, SCMD_EMOTE, FREE },
-    { ":"        , POS_LYING   , do_echo     , 0, SCMD_EMOTE, FREE },
-    { "embrace"  , POS_LYING   , do_action   , 0, 0, FREE },
+    { "echo"     , POS_SLEEPING, do_echo     , 0, SCMD_ECHO },
+    { "eject"    , POS_RESTING , do_eject    , 0, 0 }, 
+    { "elemental", POS_DEAD    , do_elemental, 0, 0 },
+    { "emote"    , POS_LYING   , do_echo     , 0, SCMD_EMOTE },
+    { ":"        , POS_LYING   , do_echo     , 0, SCMD_EMOTE },
+    { "embrace"  , POS_LYING   , do_action   , 0, 0 },
     { "enter"    , POS_SITTING, do_enter    , 0, 0 },
-    { "envy"     , POS_LYING   , do_action   , 0, 0, FREE },
-    { "equipment", POS_SLEEPING, do_equipment, 0, 0, FREE },
-    { "exits"    , POS_LYING   , do_exits    , 0, 0, FREE },
-    { "examine"  , POS_RESTING , do_examine  , 0, 0, FREE },
-    { "exclaim"  , POS_LYING   , do_exclaim  , 0, 0, FREE },
-    { "eyebrow"  , POS_LYING   , do_action   , 0, 0, FREE },
+    { "envy"     , POS_LYING   , do_action   , 0, 0 },
+    { "equipment", POS_SLEEPING, do_equipment, 0, 0 },
+    { "exits"    , POS_LYING   , do_exits    , 0, 0 },
+    { "examine"  , POS_RESTING , do_examine  , 0, 0 },
+    { "exclaim"  , POS_LYING   , do_exclaim  , 0, 0 },
+    { "eyebrow"  , POS_LYING   , do_action   , 0, 0 },
     { "extend"  , POS_SITTING , do_retract  , 0, 0 },
 
-    { "facepalm" , POS_SITTING , do_action   , 0, 0, FREE },
-    { "force"    , POS_SLEEPING, do_force    , LVL_CONSPIRATOR, 0, FREE },
-    { "forget"   , POS_DEAD    , do_forget   , 0, 0, FREE },
-    { "forgive"  , POS_LYING   , do_action   , 0, 0, FREE },
-    { "fart"     , POS_LYING   , do_action   , 0, 0, FREE },
+    { "facepalm" , POS_SITTING , do_action   , 0, 0 },
+    { "force"    , POS_SLEEPING, do_force    , LVL_CONSPIRATOR, 0 },
+    { "forget"   , POS_DEAD    , do_forget   , 0, 0 },
+    { "forgive"  , POS_LYING   , do_action   , 0, 0 },
+    { "fart"     , POS_LYING   , do_action   , 0, 0 },
     { "fill"     , POS_SITTING , do_pour     , 0, SCMD_FILL },
-    { "finger"   , POS_DEAD    , do_last     , 0, SCMD_FINGER, FREE },
-    { "fix"      , POS_SITTING , do_repair   , 0, 0, NOCOMBAT },
-    { "flee"     , POS_FIGHTING, do_flee     , 0, 0, EXCLUSIVE },
-    { "flex"     , POS_STANDING, do_action   , 0, 0, FREE },
-    { "flip"     , POS_SITTING , do_flip     , 0, 0, SIMPLE },
-    { "flirt"    , POS_LYING   , do_action   , 0, 0, FREE },
+    { "finger"   , POS_DEAD    , do_last     , 0, SCMD_FINGER },
+    { "fix"      , POS_SITTING , do_repair   , 0, 0 },
+    { "flee"     , POS_FIGHTING, do_flee     , 0, 0 },
+    { "flex"     , POS_STANDING, do_action   , 0, 0 },
+    { "flip"     , POS_SITTING , do_flip     , 0, 0 },
+    { "flirt"    , POS_LYING   , do_action   , 0, 0 },
     { "focus"    , POS_RESTING , do_focus    , 0, 0 },
-    { "follow"   , POS_RESTING , do_follow   , 0, 0, FREE },
-    { "fondle"   , POS_LYING   , do_action   , 0, 0, FREE },
-    { "freeze"   , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_FREEZE, FREE },
-    { "french"   , POS_LYING   , do_action   , 0, 0, FREE },
-    { "frown"    , POS_LYING   , do_action   , 0, 0, FREE },
-    { "fume"     , POS_LYING   , do_action   , 0, 0, FREE },
+    { "follow"   , POS_RESTING , do_follow   , 0, 0 },
+    { "fondle"   , POS_LYING   , do_action   , 0, 0 },
+    { "freeze"   , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_FREEZE },
+    { "french"   , POS_LYING   , do_action   , 0, 0 },
+    { "frown"    , POS_LYING   , do_action   , 0, 0 },
+    { "fume"     , POS_LYING   , do_action   , 0, 0 },
 
     { "get"      , POS_RESTING , do_get      , 0, 0 },
-    { "gasp"     , POS_LYING   , do_action   , 0, 0, FREE },
-    { "gaecho"    , POS_DEAD    , do_gecho    , LVL_CONSPIRATOR, SCMD_AECHO, FREE },
-    { "gecho"    , POS_DEAD    , do_gecho    , LVL_CONSPIRATOR, 0, FREE },
-    { "giggle"   , POS_LYING   , do_action   , 0, 0, FREE },
+    { "gasp"     , POS_LYING   , do_action   , 0, 0 },
+    { "gaecho"    , POS_DEAD    , do_gecho    , LVL_CONSPIRATOR, SCMD_AECHO },
+    { "gecho"    , POS_DEAD    , do_gecho    , LVL_CONSPIRATOR, 0 },
+    { "giggle"   , POS_LYING   , do_action   , 0, 0 },
     { "give"     , POS_RESTING , do_give     , 0, 0 },
-    { "glare"    , POS_RESTING , do_action   , 0, 0, FREE },
-    { "goto"     , POS_SLEEPING, do_goto     , LVL_BUILDER, 0, FREE },
-    { "group"    , POS_RESTING , do_group    , 1, 0, FREE },
+    { "glare"    , POS_RESTING , do_action   , 0, 0 },
+    { "goto"     , POS_SLEEPING, do_goto     , LVL_BUILDER, 0 },
+    { "group"    , POS_RESTING , do_group    , 1, 0 },
     { "grab"     , POS_RESTING , do_grab     , 0, 0 },
-    { "greet"    , POS_LYING   , do_action   , 0, 0, FREE },
-    { "gridguide", POS_RESTING , do_gridguide, 0, 0, FREE },
-    { "grin"     , POS_LYING   , do_action   , 0, 0, FREE },
-    { "grimace"  , POS_LYING   , do_action   , 0, 0, FREE },
-    { "groan"    , POS_LYING   , do_action   , 0, 0, FREE },
-    { "grope"    , POS_LYING   , do_action   , 0, 0, FREE },
-    { "grovel"   , POS_LYING   , do_action   , 0, 0, FREE },
-    { "growl"    , POS_LYING   , do_action   , 0, 0, FREE },
-    { "grumble"  , POS_LYING   , do_action   , 0, 0, FREE },
-    { "grunt"    , POS_LYING   , do_action   , 0, 0, FREE },
+    { "greet"    , POS_LYING   , do_action   , 0, 0 },
+    { "gridguide", POS_RESTING , do_gridguide, 0, 0 },
+    { "grin"     , POS_LYING   , do_action   , 0, 0 },
+    { "grimace"  , POS_LYING   , do_action   , 0, 0 },
+    { "groan"    , POS_LYING   , do_action   , 0, 0 },
+    { "grope"    , POS_LYING   , do_action   , 0, 0 },
+    { "grovel"   , POS_LYING   , do_action   , 0, 0 },
+    { "growl"    , POS_LYING   , do_action   , 0, 0 },
+    { "grumble"  , POS_LYING   , do_action   , 0, 0 },
+    { "grunt"    , POS_LYING   , do_action   , 0, 0 },
 
-    { "help"     , POS_DEAD    , do_help     , 0, 0, FREE },
-    { "hair"     , POS_RESTING , do_action   , 0, 0, FREE },
-    { "hail"     , POS_STANDING, do_hail     , 0, 0, NOCOMBAT },
-    { "happy"    , POS_LYING   , do_action   , 0, 0, FREE },
-    { "hand"     , POS_LYING   , do_action   , 0, 0, FREE },
+    { "help"     , POS_DEAD    , do_help     , 0, 0 },
+    { "hair"     , POS_RESTING , do_action   , 0, 0 },
+    { "hail"     , POS_STANDING, do_hail     , 0, 0 },
+    { "happy"    , POS_LYING   , do_action   , 0, 0 },
+    { "hand"     , POS_LYING   , do_action   , 0, 0 },
     { "hangup"   , POS_LYING   , do_phone    , 0, SCMD_HANGUP },
-    { "hate"     , POS_LYING   , do_action   , 0, 0, FREE },
-    { "handbook" , POS_DEAD    , do_gen_ps   , LVL_BUILDER, SCMD_HANDBOOK, FREE },
-    { "hcontrol" , POS_DEAD    , do_hcontrol , LVL_EXECUTIVE, 0, FREE },
+    { "hate"     , POS_LYING   , do_action   , 0, 0 },
+    { "handbook" , POS_DEAD    , do_gen_ps   , LVL_BUILDER, SCMD_HANDBOOK },
+    { "hcontrol" , POS_DEAD    , do_hcontrol , LVL_EXECUTIVE, 0 },
     { "heal"     , POS_STANDING, do_heal     , 0, 0 },
-    { "hedit"    , POS_DEAD    , do_hedit    , LVL_BUILDER, 0, FREE },
-    { "hhold"    , POS_LYING   , do_action   , 0, 0, FREE },
-    { "hiccup"   , POS_LYING   , do_action   , 0, 0, FREE },
-    { "hit"      , POS_FIGHTING, do_hit      , 0, SCMD_HIT, FREE },
-    { "hifive"   , POS_STANDING, do_action   , 0, 0, FREE },
-    { "hlist"    , POS_DEAD    , do_hlist    , LVL_BUILDER, 0 , FREE},
-    { "hoi"      , POS_LYING   , do_action   , 0, 0, FREE },
+    { "hedit"    , POS_DEAD    , do_hedit    , LVL_BUILDER, 0 },
+    { "hhold"    , POS_LYING   , do_action   , 0, 0 },
+    { "hiccup"   , POS_LYING   , do_action   , 0, 0 },
+    { "hit"      , POS_FIGHTING, do_hit      , 0, SCMD_HIT },
+    { "hifive"   , POS_STANDING, do_action   , 0, 0 },
+    { "hlist"    , POS_DEAD    , do_hlist    , LVL_BUILDER, 0 },
+    { "hoi"      , POS_LYING   , do_action   , 0, 0 },
     { "hold"     , POS_RESTING , do_grab     , 1, 0 },
     { "holster"  , POS_RESTING , do_holster  , 0, 0 },
-    { "hop"      , POS_LYING   , do_action   , 0, 0, FREE },
-    { "hours"    , POS_LYING   , do_not_here , 0, 0, NOCOMBAT },
-    { "howl"     , POS_LYING   , do_action   , 0, 0, FREE },
-    { "house"    , POS_LYING   , do_house    , 0, 0, NOCOMBAT },
-    { "ht"       , POS_DEAD    , do_gen_comm , 0, SCMD_HIREDTALK, FREE },
-    { "hkiss"    , POS_STANDING, do_action   , 0, 0, FREE },
-    { "hug"      , POS_RESTING , do_action   , 0, 0, FREE },
+    { "hop"      , POS_LYING   , do_action   , 0, 0 },
+    { "hours"    , POS_LYING   , do_not_here , 0, 0 },
+    { "howl"     , POS_LYING   , do_action   , 0, 0 },
+    { "house"    , POS_LYING   , do_house    , 0, 0 },
+    { "ht"       , POS_DEAD    , do_gen_comm , 0, SCMD_HIREDTALK },
+    { "hkiss"    , POS_STANDING, do_action   , 0, 0 },
+    { "hug"      , POS_RESTING , do_action   , 0, 0 },
 
-    { "inventory", POS_DEAD    , do_inventory, 0, 0, FREE },
-    { "install"  , POS_RESTING , do_put      , 0, SCMD_INSTALL, NOCOMBAT },
-    { "icedit"   , POS_DEAD    , do_icedit   , LVL_BUILDER, 0, FREE },
-    { "iclist"   , POS_DEAD    , do_iclist   , LVL_BUILDER, 0, FREE },
-    { "iclone"   , POS_DEAD    , do_iclone   , LVL_BUILDER, 0, FREE },
-    { "idea"     , POS_DEAD    , do_gen_write, 0, SCMD_IDEA, FREE },
-    { "idelete"  , POS_DEAD    , do_idelete  , LVL_PRESIDENT, 0, FREE },
-    { "iedit"    , POS_DEAD    , do_iedit    , LVL_BUILDER, 0, FREE },
-    { "ignore"   , POS_DEAD    , do_ignore   , 0, 0, FREE },
-    { "ilist"    , POS_DEAD    , do_ilist    , LVL_BUILDER, 0, FREE },
-    { "iload"    , POS_DEAD    , do_iload    , LVL_BUILDER, 0, FREE },
-    { "imotd"    , POS_DEAD    , do_gen_ps   , LVL_BUILDER, SCMD_IMOTD, FREE },
-    { "immlist"  , POS_DEAD    , do_gen_ps   , 0, SCMD_IMMLIST, FREE },
-    { "incognito", POS_DEAD    , do_incognito, LVL_BUILDER, 0, FREE },
-    { "index"    , POS_SLEEPING, do_index    , 0, 0, FREE },
-    { "info"     , POS_SLEEPING, do_gen_ps   , 0, SCMD_INFO, FREE },
-    { "initiate" , POS_DEAD    , do_initiate , 0, SCMD_INITIATE, NOCOMBAT },
-    { "innocent" , POS_LYING   , do_action   , 0, 0, FREE },
-    { "insult"   , POS_LYING   , do_insult   , 0, 0, FREE },
-    { "invis"    , POS_DEAD    , do_invis    , LVL_BUILDER, 0, FREE },
-    { "invitations", POS_LYING , do_invitations, 0, 0, FREE },
+    { "inventory", POS_DEAD    , do_inventory, 0, 0 },
+    { "install"  , POS_RESTING , do_put      , 0, SCMD_INSTALL },
+    { "icedit"   , POS_DEAD    , do_icedit   , LVL_BUILDER, 0 },
+    { "iclist"   , POS_DEAD    , do_iclist   , LVL_BUILDER, 0 },
+    { "iclone"   , POS_DEAD    , do_iclone   , LVL_BUILDER, 0 },
+    { "idea"     , POS_DEAD    , do_gen_write, 0, SCMD_IDEA },
+    { "idelete"  , POS_DEAD    , do_idelete  , LVL_PRESIDENT, 0 },
+    { "iedit"    , POS_DEAD    , do_iedit    , LVL_BUILDER, 0 },
+    { "ignore"   , POS_DEAD    , do_ignore   , 0, 0 },
+    { "ilist"    , POS_DEAD    , do_ilist    , LVL_BUILDER, 0 },
+    { "iload"    , POS_DEAD    , do_iload    , LVL_BUILDER, 0 },
+    { "imotd"    , POS_DEAD    , do_gen_ps   , LVL_BUILDER, SCMD_IMOTD },
+    { "immlist"  , POS_DEAD    , do_gen_ps   , 0, SCMD_IMMLIST },
+    { "incognito", POS_DEAD    , do_incognito, LVL_BUILDER, 0 },
+    { "index"    , POS_SLEEPING, do_index    , 0, 0 },
+    { "info"     , POS_SLEEPING, do_gen_ps   , 0, SCMD_INFO },
+    { "initiate" , POS_DEAD    , do_initiate , 0, SCMD_INITIATE },
+    { "innocent" , POS_LYING   , do_action   , 0, 0 },
+    { "insult"   , POS_LYING   , do_insult   , 0, 0 },
+    { "invis"    , POS_DEAD    , do_invis    , LVL_BUILDER, 0 },
+    { "invitations", POS_LYING , do_invitations, 0, 0 },
 
     { "jack"     , POS_SITTING , do_jack     , 0, 0 },
-    { "jig"      , POS_STANDING, do_action   , 0, 0, FREE },
-    { "jeer"     , POS_LYING   , do_action   , 0, 0, FREE },
-    { "jump"     , POS_RESTING , do_action   , 0, 0, FREE },
-    { "junk"     , POS_RESTING , do_drop     , 0, SCMD_JUNK, FREE },
+    { "jig"      , POS_STANDING, do_action   , 0, 0 },
+    { "jeer"     , POS_LYING   , do_action   , 0, 0 },
+    { "jump"     , POS_RESTING , do_action   , 0, 0 },
+    { "junk"     , POS_RESTING , do_drop     , 0, SCMD_JUNK },
 
-    { "kil"      , POS_FIGHTING, do_kil      , 0, 0, FREE },
-    { "kill"     , POS_FIGHTING, do_kill     , 0, SCMD_KILL, FREE },
-    { "kiss"     , POS_LYING  , do_action   , 0, 0, FREE },
-    { "kick"     , POS_STANDING, do_kick     , 0, 0, FREE },
+    { "kil"      , POS_FIGHTING, do_kil      , 0, 0 },
+    { "kill"     , POS_FIGHTING, do_kill     , 0, SCMD_KILL },
+    { "kiss"     , POS_LYING  , do_action   , 0, 0 },
+    { "kick"     , POS_STANDING, do_kick     , 0, 0 },
     { "knock"    , POS_STANDING, do_gen_door , 0, SCMD_KNOCK },
 
-    { "look"     , POS_LYING   , do_look     , 0, SCMD_LOOK, FREE },
-    { "land"     , POS_RESTING , do_not_here , 0, 0, FREE },
+    { "look"     , POS_LYING   , do_look     , 0, SCMD_LOOK },
+    { "land"     , POS_RESTING , do_not_here , 0, 0 },
     { "lay"      , POS_RESTING , do_lay      , 0, 0 },
-    { "language" , POS_DEAD    , do_language , 0, 0, FREE },
-    { "lap"      , POS_STANDING, do_action   , 0, 0, FREE },
-    { "laugh"    , POS_LYING   , do_action   , 0, 0, FREE },
-    { "last"     , POS_DEAD    , do_last     , LVL_BUILDER, 0, FREE },
-    { "learn"    , POS_RESTING , do_learn    , 0, 0, NOCOMBAT },
-    { "lease"    , POS_RESTING , do_not_here , 1, 0, NOCOMBAT },
-    { "leave"    , POS_SITTING, do_leave    , 0, 0, NOCOMBAT },
-    { "light"    , POS_STANDING, do_not_here , 0, 0, NOCOMBAT },
+    { "language" , POS_DEAD    , do_language , 0, 0 },
+    { "lap"      , POS_STANDING, do_action   , 0, 0 },
+    { "laugh"    , POS_LYING   , do_action   , 0, 0 },
+    { "last"     , POS_DEAD    , do_last     , LVL_BUILDER, 0 },
+    { "learn"    , POS_RESTING , do_learn    , 0, 0 },
+    { "lease"    , POS_RESTING , do_not_here , 1, 0 },
+    { "leave"    , POS_SITTING, do_leave    , 0, 0 },
+    { "light"    , POS_STANDING, do_not_here , 0, 0 },
     { "link"     , POS_SLEEPING, do_link    , 0, 0 },
-    { "list"     , POS_RESTING, do_not_here , 0, 0, NOCOMBAT },
-    { "listen"   , POS_LYING   , do_action   , 0, 0, FREE },
-    { "lick"     , POS_LYING   , do_action   , 0, 0, FREE },
+    { "list"     , POS_RESTING, do_not_here , 0, 0 },
+    { "listen"   , POS_LYING   , do_action   , 0, 0 },
+    { "lick"     , POS_LYING   , do_action   , 0, 0 },
     { "lock"     , POS_SITTING , do_gen_door , 0, SCMD_LOCK },
     { "load"     , POS_RESTING , do_wizload  , 0, 0 },
-    { "lol"      , POS_LYING   , do_action   , 0, 0, FREE },
-    { "love"     , POS_LYING   , do_action   , 0, 0, FREE },
-    { "logwatch" , POS_DEAD    , do_logwatch , LVL_BUILDER, 0, FREE },
+    { "lol"      , POS_LYING   , do_action   , 0, 0 },
+    { "love"     , POS_LYING   , do_action   , 0, 0 },
+    { "logwatch" , POS_DEAD    , do_logwatch , LVL_BUILDER, 0 },
 
     { "man"      , POS_SITTING , do_man      , 0, 0 },
     { "manifest" , POS_RESTING , do_manifest , 0, 0 },
-    { "mellow"   , POS_RESTING , do_action   , 0, 0, FREE },
-    { "memory"   , POS_SLEEPING, do_memory   , 0, 0, FREE },
-    { "metamagic", POS_DEAD    , do_metamagic, 0, 0, FREE },
-    { "mclone"   , POS_DEAD    , do_mclone   , LVL_BUILDER, 0, FREE },
-    { "mdelete"  , POS_DEAD    , do_mdelete  , LVL_PRESIDENT, 0, FREE },
-    { "medit"    , POS_DEAD    , do_medit    , LVL_BUILDER, 0, FREE },
-    { "mlist"    , POS_DEAD    , do_mlist    , LVL_BUILDER, 0, FREE },
-    { "mode"     , POS_LYING   , do_mode     , 0, 0, SIMPLE },
-    { "moan"     , POS_LYING   , do_action   , 0, 0, FREE },
-    { "mosh"     , POS_STANDING, do_action   , 0, 0, FREE },
-    { "moon"     , POS_STANDING, do_action   , 0, 0, FREE },
-    { "motd"     , POS_DEAD    , do_gen_ps   , 0, SCMD_MOTD, FREE },
+    { "mellow"   , POS_RESTING , do_action   , 0, 0 },
+    { "memory"   , POS_SLEEPING, do_memory   , 0, 0 },
+    { "metamagic", POS_DEAD    , do_metamagic, 0, 0 },
+    { "mclone"   , POS_DEAD    , do_mclone   , LVL_BUILDER, 0 },
+    { "mdelete"  , POS_DEAD    , do_mdelete  , LVL_PRESIDENT, 0 },
+    { "medit"    , POS_DEAD    , do_medit    , LVL_BUILDER, 0 },
+    { "mlist"    , POS_DEAD    , do_mlist    , LVL_BUILDER, 0 },
+    { "mode"     , POS_LYING   , do_mode     , 0, 0 },
+    { "moan"     , POS_LYING   , do_action   , 0, 0 },
+    { "mosh"     , POS_STANDING, do_action   , 0, 0 },
+    { "moon"     , POS_STANDING, do_action   , 0, 0 },
+    { "motd"     , POS_DEAD    , do_gen_ps   , 0, SCMD_MOTD },
     { "mount"    , POS_RESTING , do_mount    , 0, 0 },
-    { "mail"     , POS_STANDING, do_not_here , 0, 0, NOCOMBAT},
+    { "mail"     , POS_STANDING, do_not_here , 0, 0},
     { "mask"     , POS_RESTING , do_masking  , 0, 0 },
-    { "massage"  , POS_RESTING , do_action   , 0, 0, FREE },
-    { "muthafucka",POS_RESTING , do_action   , 0, 0, FREE },
-    { "mute"     , POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_SQUELCH, FREE },
-    { "muteooc"  , POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_SQUELCHOOC, FREE },
-    { "murder"   , POS_FIGHTING, do_hit      , 0, SCMD_MURDER, FREE },
+    { "massage"  , POS_RESTING , do_action   , 0, 0 },
+    { "muthafucka",POS_RESTING , do_action   , 0, 0 },
+    { "mute"     , POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_SQUELCH },
+    { "muteooc"  , POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_SQUELCHOOC },
+    { "murder"   , POS_FIGHTING, do_hit      , 0, SCMD_MURDER },
 
-    { "news"     , POS_SLEEPING, do_gen_ps   , 0, SCMD_NEWS, FREE },
-    { "newbie"   , POS_DEAD    , do_gen_comm , 0, SCMD_NEWBIE, FREE },
-    { "nervestrike", POS_DEAD  , do_nervestrike, 0, 0, FREE },
-    { "nibble"   , POS_RESTING , do_action   , 0, 0, FREE },
-    { "nod"      , POS_LYING   , do_action   , 0, 0, FREE },
-    { "noogie"   , POS_STANDING, do_action   , 0, 0, FREE },
-    { "notitle"  , POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_NOTITLE, FREE },
-    { "nudge"    , POS_LYING   , do_action   , 0, 0, FREE },
-    { "nuzzle"   , POS_LYING   , do_action   , 0, 0, FREE },
+    { "news"     , POS_SLEEPING, do_gen_ps   , 0, SCMD_NEWS },
+    { "newbie"   , POS_DEAD    , do_gen_comm , 0, SCMD_NEWBIE },
+    { "nervestrike", POS_DEAD  , do_nervestrike, 0, 0 },
+    { "nibble"   , POS_RESTING , do_action   , 0, 0 },
+    { "nod"      , POS_LYING   , do_action   , 0, 0 },
+    { "noogie"   , POS_STANDING, do_action   , 0, 0 },
+    { "notitle"  , POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_NOTITLE },
+    { "nudge"    , POS_LYING   , do_action   , 0, 0 },
+    { "nuzzle"   , POS_LYING   , do_action   , 0, 0 },
 
     { "order"    , POS_LYING   , do_order    , 1, 0 },
     { "offer"    , POS_RESTING , do_not_here , 0, 0 },
@@ -758,9 +764,9 @@ struct command_info cmd_info[] =
     { "practice" , POS_RESTING , do_practice , 1, 0 },
     { "prance"   , POS_STANDING, do_action   , 0, 0 },
     { "pray"     , POS_SITTING , do_action   , 0, 0 },
-    { "program"  , POS_RESTING , do_program  , 0, 0, NOCOMBAT },
-    { "progress" , POS_RESTING , do_progress , 0, 0, NOCOMBAT },
-    { "prone"    , POS_FIGHTING, do_prone    , 0, 0, FREE },
+    { "program"  , POS_RESTING , do_program  , 0, 0 },
+    { "progress" , POS_RESTING , do_progress , 0, 0 },
+    { "prone"    , POS_FIGHTING, do_prone    , 0, 0 },
     { "propose"  , POS_STANDING, do_action   , 0, 0 },
     { "psychoanalyze", POS_RESTING, do_action, 0, 0 },
     { "push"     , POS_SITTING , do_push     , 0, 0 },
@@ -869,9 +875,10 @@ struct command_info cmd_info[] =
     { "socials"  , POS_DEAD    , do_commands , 0, SCMD_SOCIALS },
     { "sob"      , POS_LYING   , do_action   , 0, 0 },
     { "software" , POS_LYING   , do_software , 0, 0 },
-    { "spool"    , POS_DEAD    , do_spool    , 0, 0, FREE }, 
+    { "spool"    , POS_DEAD    , do_spool    , 0, 0 }, 
     { "speed"    , POS_RESTING , do_speed    , 0, 0 },
     { "spells"   , POS_SLEEPING, do_spells   , 0, 0 },
+    { "spellset" , POS_SLEEPING, do_spellset , LVL_DEVELOPER, 0 },
     { "spank"    , POS_LYING   , do_action   , 0, 0 },
     { "spirits"  , POS_LYING   , do_elemental, 0, 0 },
     { "spit"     , POS_STANDING, do_action   , 0, 0 },
@@ -889,7 +896,7 @@ struct command_info cmd_info[] =
     { "strut"    , POS_STANDING, do_action   , 0, 0 },
     { "strangle" , POS_STANDING, do_action   , 0, 0 },
     { "subscribe", POS_SITTING , do_subscribe, 0, 0 },
-    { "subpoint" , POS_DEAD    , do_subpoint , LVL_ARCHITECT, 0, 0 },
+    { "subpoint" , POS_DEAD    , do_subpoint , LVL_ARCHITECT, 0 },
     { "sulk"     , POS_LYING   , do_action   , 0, 0 },
     { "survey"   , POS_LYING   , do_survey   , 0, 0 },
     { "swat"     , POS_RESTING , do_action   , 0, 0 },
@@ -1298,21 +1305,54 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
           break;
 
     // this was added so we can make the special respond to any text they type
-    if (*cmd_info[cmd].command == '\n')
+    if (*cmd_info[cmd].command == '\n') {
       nonsensical_reply(ch);
-    else if (IS_PROJECT(ch) && AFF_FLAGGED(ch->desc->original, AFF_TRACKING) && cmd != find_command("track"))
+      return;
+    }
+    
+    if (IS_PROJECT(ch) && AFF_FLAGGED(ch->desc->original, AFF_TRACKING) && cmd != find_command("track")) {
       send_to_char("You are too busy astrally tracking someone...\r\n", ch);
-    else if (PLR_FLAGGED(ch, PLR_FROZEN) && !access_level(ch, LVL_VICEPRES))
-      send_to_char("You try, but the mind-numbing cold prevents you...\r\n", ch);
-    else if (AFF_FLAGGED(ch, AFF_PETRIFY) && cmd_info[cmd].minimum_position > POS_DEAD)
-      send_to_char("Your muscles don't respond to your impulse.\r\n", ch);
-    else if (cmd_info[cmd].command_pointer == NULL)
+      return;
+    }
+    
+    if (PLR_FLAGGED(ch, PLR_FROZEN)) {
+      if (!access_level(ch, LVL_VICEPRES)) {
+        send_to_char("You try, but the mind-numbing cold prevents you...\r\n", ch);
+        return;
+      } else
+        send_to_char("The ice covering you crackles alarmingly as you slam your sovereign will through it.", ch);
+    }
+    
+    if (AFF_FLAGGED(ch, AFF_PETRIFY) && cmd_info[cmd].minimum_position > POS_DEAD) {
+      if (!access_level(ch, LVL_VICEPRES)) {
+        send_to_char("Your muscles don't respond to your impulse.\r\n", ch);
+        return;
+      } else
+        send_to_char("You abuse your administrative powers and force your petrified body to respond.\r\n", ch);
+    }
+    
+    if (cmd_info[cmd].command_pointer == NULL) {
       send_to_char("Sorry, that command hasn't been implemented yet.\r\n", ch);
-    else if (affected_by_power(ch, ENGULF) && cmd_info[cmd].minimum_position != POS_DEAD)
-      send_to_char("You are currently being engulfed!\r\n", ch);
-    else if (GET_QUI(ch) <= 0 && cmd_info[cmd].minimum_position != POS_DEAD)
-      send_to_char("You are paralyzed!\r\n", ch);
-    else if (GET_POS(ch) < cmd_info[cmd].minimum_position)
+      return;
+    }
+    
+    if (affected_by_power(ch, ENGULF) && cmd_info[cmd].minimum_position != POS_DEAD) {
+      if (!access_level(ch, LVL_VICEPRES)) {
+        send_to_char("You are currently being engulfed!\r\n", ch);
+        return;
+      } else
+        send_to_char("Administrative power roars through your veins as you muscle through your engulfment.\r\n", ch);
+    }
+    
+    if (GET_QUI(ch) <= 0 && cmd_info[cmd].minimum_position != POS_DEAD) {
+      if (!access_level(ch, LVL_VICEPRES)) {
+        send_to_char("You are paralyzed!\r\n", ch);
+        return;
+      } else
+        send_to_char("You draw upon your mantle of administrative power and push through your paralysis.\r\n", ch);
+    }
+    
+    if (GET_POS(ch) < cmd_info[cmd].minimum_position) {
       switch (GET_POS(ch)) {
       case POS_DEAD:
         send_to_char("Lie still; you are DEAD!!! :-(\r\n", ch);
@@ -1337,7 +1377,10 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
         send_to_char("No way!  You're fighting for your life!\r\n", ch);
         break;
       }
-    else if (no_specials || !special(ch, cmd, line))
+      return;
+    }
+    
+    if (no_specials || !special(ch, cmd, line))
       ((*cmd_info[cmd].command_pointer) (ch, line, cmd, cmd_info[cmd].subcmd));
   }
 }
@@ -1359,11 +1402,9 @@ struct alias *find_alias(struct alias *alias_list, char *str)
 
 void free_alias(struct alias *a)
 {
-  if (a->command)
-    delete [] a->command;
-  if (a->replacement)
-    delete [] a->replacement;
-  delete a;
+  DELETE_ARRAY_IF_EXTANT(a->command);
+  DELETE_ARRAY_IF_EXTANT(a->replacement);
+  DELETE_AND_NULL(a);
 }
 
 /* The interface to the outside world: do_alias */
@@ -1962,28 +2003,29 @@ int perform_dupe_check(struct descriptor_data *d)
     if (d->edit_obj)
       Mem->DeleteObject(d->edit_obj);
     d->edit_obj = NULL;
+    
     if (d->edit_room)
       Mem->DeleteRoom(d->edit_room);
     d->edit_room = NULL;
+    
     if (d->edit_mob)
       Mem->DeleteCh(d->edit_mob);
     d->edit_mob = NULL;
+    
     if (d->edit_shop) {
       free_shop(d->edit_shop);
-      delete d->edit_shop;
-      d->edit_shop = NULL;
+      DELETE_AND_NULL(d->edit_shop);
     }
+    
     if (d->edit_quest) {
       free_quest(d->edit_quest);
-      delete d->edit_quest;
-      d->edit_quest = NULL;
+      DELETE_AND_NULL(d->edit_quest);
     }
-    if (d->edit_zon)
-      delete d->edit_zon;
-    d->edit_zon = NULL;
-    if (d->edit_cmd)
-      delete d->edit_cmd;
-    d->edit_cmd = NULL;
+    
+    DELETE_IF_EXTANT(d->edit_zon);
+    
+    DELETE_IF_EXTANT(d->edit_cmd);
+    
     if (d->edit_veh)
       Mem->DeleteVehicle(d->edit_veh);
     d->edit_veh = NULL;
@@ -2129,6 +2171,7 @@ void nanny(struct descriptor_data * d, char *arg)
           }
         if (d->character == NULL) {
           d->character = Mem->GetCh();
+          DELETE_IF_EXTANT(d->character->player_specials);
           d->character->player_specials = new player_special_data;
           // make sure to clear it up here
           memset(d->character->player_specials, 0,
@@ -2175,8 +2218,7 @@ void nanny(struct descriptor_data * d, char *arg)
       STATE(d) = CON_NEWPASSWD;
     } else if (*arg == 'n' || *arg == 'N') {
       SEND_TO_Q("Okay, what IS it, then? ", d);
-      delete [] d->character->player.char_name;
-      d->character->player.char_name = NULL;
+      DELETE_ARRAY_IF_EXTANT(d->character->player.char_name);
       STATE(d) = CON_GET_NAME;
     } else {
       SEND_TO_Q("Please type Yes or No: ", d);
@@ -2261,6 +2303,7 @@ void nanny(struct descriptor_data * d, char *arg)
       else
         sprintf(buf, "%s [%s] has connected.",
                 GET_CHAR_NAME(d->character), d->host);
+      DELETE_ARRAY_IF_EXTANT(d->character->player.host);
       d->character->player.host = strdup(d->host);
       playerDB.SaveChar(d->character);
       mudlog(buf, d->character, LOG_CONNLOG, TRUE);
@@ -2364,7 +2407,11 @@ void nanny(struct descriptor_data * d, char *arg)
           STATE(d) = CON_CLOSE;
           return;
         }
-        d->character = playerDB.LoadChar(GET_CHAR_NAME(d->character), false);
+        // TODO: If you died and then hit 1, your old character's data is leaked here.
+        char char_name[strlen(GET_CHAR_NAME(d->character))+1];
+        strcpy(char_name, GET_CHAR_NAME(d->character));
+        free_char(d->character);
+        d->character = playerDB.LoadChar(char_name, false);
         d->character->desc = d;
         PLR_FLAGS(d->character).RemoveBit(PLR_JUST_DIED);
         if (PLR_FLAGGED(d->character, PLR_NEWBIE)) {

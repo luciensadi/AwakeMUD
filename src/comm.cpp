@@ -291,10 +291,11 @@ void copyover_recover()
     
     /* Now, find the pfile */
     
-    CREATE(d->character, struct char_data, 1);
-    clear_char(d->character);
-    CREATE(d->character->player_specials, struct player_special_data, 1);
-    d->character->desc = d;
+    /* Why would you create a new character, then immediately discard it and load a new one from the DB? */
+    //CREATE(d->character, struct char_data, 1);
+    //clear_char(d->character);
+    //CREATE(d->character->player_specials, struct player_special_data, 1);
+    //d->character->desc = d;
     
     if ((d->character = playerDB.LoadChar(name, FALSE))) {
       d->character->desc = d;
@@ -322,11 +323,18 @@ void copyover_recover()
       else
         load_room = real_room(GET_LOADROOM(d->character));
       char_to_room(d->character, load_room);
-      look_at_room(d->character, 0);
+      //look_at_room(d->character, 0);
     }
   }
   fclose (fp);
   
+  // Force all player characters to look now that everyone's properly loaded.
+  struct char_data *plr = character_list;
+  while (plr) {
+    if (!IS_NPC(plr))
+      look_at_room(plr, 0);
+    plr = plr->next;
+  }
 }
 
 
@@ -527,7 +535,11 @@ int get_max_players(void)
 void game_loop(int mother_desc)
 {
   fd_set input_set, output_set, exc_set;
+#ifndef GOTTAGOFAST
   struct timeval last_time, now, timespent, timeout, opt_time;
+#else
+  struct timeval last_time, opt_time;
+#endif
   char comm[MAX_INPUT_LENGTH];
   struct descriptor_data *d, *next_d;
   int pulse = 0, maxdesc, aliased;
@@ -577,6 +589,7 @@ void game_loop(int mother_desc)
      * However, I think it is easier to check for an EINTR error return from
      * this select() call rather than to block and unblock signals.
      */
+#ifndef GOTTAGOFAST
     do {
       errno = 0;                /* clear error condition */
       
@@ -592,6 +605,7 @@ void game_loop(int mother_desc)
           exit(1);
         }
     } while (errno);
+#endif
     
     /* record the time for the next pass */
     gettimeofday(&last_time, (struct timezone *) 0);
@@ -1169,8 +1183,8 @@ int get_from_q(struct txt_q * queue, char *dest, int *aliased)
   *aliased = queue->head->aliased;
   queue->head = queue->head->next;
   
-  delete [] tmp->text;
-  delete tmp;
+  DELETE_AND_NULL_ARRAY(tmp->text);
+  DELETE_AND_NULL(tmp);
   
   return 1;
 }
@@ -1334,7 +1348,7 @@ int new_descriptor(int s)
       close(desc);
       sprintf(buf2, "Connection attempt denied from [%s]", newd->host);
       mudlog(buf2, NULL, LOG_BANLOG, TRUE);
-      delete newd;
+      DELETE_AND_NULL(newd);
       return 0;
     }
     
@@ -1640,7 +1654,8 @@ int perform_subst(struct descriptor_data *t, char *orig, char *subst)
 void free_editing_structs(descriptor_data *d, int state)
 {
   if (d->edit_obj) {
-    if (d->connected == CON_PART_CREATE || d->connected == CON_AMMO_CREATE || d->connected == CON_SPELL_CREATE || (d->connected >= CON_PRO_CREATE && d->connected <= CON_DECK_CREATE))
+    if (d->connected == CON_PART_CREATE || d->connected == CON_AMMO_CREATE || d->connected == CON_SPELL_CREATE
+        || (d->connected >= CON_PRO_CREATE && d->connected <= CON_DECK_CREATE))
       extract_obj(d->edit_obj);
     else
       Mem->DeleteObject(d->edit_obj);
@@ -1659,27 +1674,21 @@ void free_editing_structs(descriptor_data *d, int state)
   
   if (d->edit_quest) {
     free_quest(d->edit_quest);
-    delete d->edit_quest;
-    d->edit_quest = NULL;
+    DELETE_AND_NULL(d->edit_quest);
   }
   
   if (d->edit_shop) {
     free_shop(d->edit_shop);
-    delete d->edit_shop;
-    d->edit_shop = NULL;
+    DELETE_AND_NULL(d->edit_shop);
   }
   
   if (d->edit_zon) {
-    if (d->edit_zon->name)
-      delete [] d->edit_zon->name;
-    delete d->edit_zon;
-    d->edit_zon = NULL;
+    DELETE_ARRAY_IF_EXTANT(d->edit_zon->name);
+    DELETE_AND_NULL_ARRAY(d->edit_zon);
   }
   
-  if (d->edit_cmd) {
-    delete d->edit_cmd;
-    d->edit_cmd = NULL;
-  }
+  DELETE_IF_EXTANT(d->edit_cmd);
+  
   if (d->edit_veh) {
     Mem->DeleteVehicle(d->edit_veh);
     d->edit_veh = NULL;
@@ -1751,10 +1760,10 @@ void close_socket(struct descriptor_data *d)
       if (d->character->spells)
         for (one = d->character->spells; one; one = next) {
           next = one->next;
-          if (one->name)
-            delete [] one->name;
-          delete one;
+          DELETE_ARRAY_IF_EXTANT(one->name);
+          DELETE_AND_NULL(one);
         }
+      d->character->spells = NULL;
       Mem->DeleteCh(d->character);
     }
   }
@@ -1765,8 +1774,7 @@ void close_socket(struct descriptor_data *d)
   
   REMOVE_FROM_LIST(d, descriptor_list, next);
   
-  if (d->showstr_head)
-    delete [] d->showstr_head;
+  DELETE_ARRAY_IF_EXTANT(d->showstr_head);
   
   delete d;
 }

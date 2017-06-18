@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS `pfiles_playergroups`;
 DROP TABLE IF EXISTS `playergroups`;
 DROP TABLE IF EXISTS `playergroup_invitations`;
 DROP TABLE IF EXISTS `pgroup_logs`;
+
 CREATE TABLE `playergroups` (
   `idnum` mediumint(5) unsigned unique default '0',
   `Name` varchar(80) default 'An Unimaginative Player Group',

@@ -128,6 +128,8 @@ listClass<T>::~listClass()
 template <class T>
 bool listClass<T>::AddItem(nodeStruct<T> *node, T item)
 {
+  assert(item != NULL);
+  
   /* AddItem adds the item AFTER the node, if it's NULL it goes at the head */
   nodeStruct<T> *NewNode = new nodeStruct<T>;
   assert(NewNode != NULL);
@@ -153,6 +155,7 @@ bool listClass<T>::AddItem(nodeStruct<T> *node, T item)
 template <class T>
 bool listClass<T>::RemoveItem(nodeStruct<T> *node)
 {
+  assert(node != NULL);
   // Remove item assumes you have alread found the node, so child classes
   // will have to define their own rules to find items based on data type
   nodeStruct<T> *found;

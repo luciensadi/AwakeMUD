@@ -568,16 +568,28 @@ void raw_kill(struct char_data * ch)
         i = real_room(60500);
       else switch (zone_table[world[ch->in_room].zone].juridiction) {
         case ZONE_SEATTLE:
-          i = real_room(16295);
+          /* i = real_room(16295); // This room doesn't exist in the public CE world. */
+          i = real_room(100);
           break;
         case ZONE_PORTLAND:
-          i = real_room(14709);
+          /* i = real_room(14709); // This room doesn't exist in the public CE world. */
+          i = real_room(100);
           break;
         case ZONE_CARIB:
-          i = real_room(62300);
+          /* i = real_room(62300); // This room doesn't exist in the public CE world. */
+          i = real_room(100);
           break;
         case ZONE_OCEAN:
-          i = real_room(62502);
+          /* i = real_room(62502); // This room doesn't exist in the public CE world. */
+          i = real_room(100);
+          break;
+        default:
+          sprintf(buf, "SYSERR: Bad jurisdiction type %d in room %ld encountered in raw_kill() while transferring %s (%ld).",
+                  zone_table[world[ch->in_room].zone].juridiction,
+                  world[ch->in_room].number,
+                  GET_CHAR_NAME(ch), GET_IDNUM(ch));
+          mudlog(buf, ch, LOG_SYSLOG, TRUE);
+          i = real_room(100);
           break;
       }
       char_from_room(ch);
@@ -1731,8 +1743,8 @@ void check_adrenaline(struct char_data *ch, int mode)
   {
     GET_OBJ_VAL(pump, 5) = dice(GET_OBJ_VAL(pump, 1), 6);
     GET_OBJ_VAL(pump, 6) = GET_OBJ_VAL(pump, 5);
-    send_to_char("Your body is wracked with renewed vitality as adrenaline "
-                 "pumps into your\r\nbloodstream.\r\n", ch);
+    send_to_char("Your body is wracked with renewed vitality as adrenaline pumps into your\r\n"
+                 "bloodstream.\r\n", ch);
     for (i = 0; i < MAX_OBJ_AFFECT; i++)
       affect_modify(ch,
                     pump->affected[i].location,
@@ -4700,10 +4712,8 @@ void perform_violence(void)
         }
         if (ch->squeue) {
           cast_spell(ch, ch->squeue->spell, ch->squeue->sub, ch->squeue->force, ch->squeue->arg);
-          if (ch->squeue->arg)
-            delete [] ch->squeue->arg;
-          delete [] ch->squeue;
-          ch->squeue = NULL;
+          DELETE_ARRAY_IF_EXTANT(ch->squeue->arg);
+          DELETE_AND_NULL(ch->squeue);
           continue;
         }
       }

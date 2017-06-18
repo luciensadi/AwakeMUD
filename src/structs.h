@@ -110,8 +110,8 @@ struct obj_data
   struct char_data *targ;	  /* Data for mounts */
   struct veh_data *tveh;
   obj_data() :
-      ex_description(NULL), restring(NULL), photo(NULL), graffiti(NULL), carried_by(NULL), worn_by(NULL),
-      in_obj(NULL), contains(NULL), next_content(NULL), targ(NULL), tveh(NULL)
+      in_veh(NULL), ex_description(NULL), restring(NULL), photo(NULL), graffiti(NULL), carried_by(NULL),
+      worn_by(NULL), in_obj(NULL), contains(NULL), next_content(NULL), targ(NULL), tveh(NULL)
   {}
 };
 /* ======================================================================= */
@@ -181,12 +181,21 @@ struct room_data
   struct char_data *people;    /* List of NPC / PC in room           */
   struct veh_data *vehicles;
   struct char_data *watching;
+  
+  struct obj_data *best_workshop[NUM_WORKSHOP_TYPES];
 
   room_data() :
-      name(NULL), description(NULL), night_desc(NULL), ex_description(NULL), matrix(0), access(0), io(0), trace(0),
+      name(NULL), description(NULL), night_desc(NULL), ex_description(NULL),
+      matrix(0), access(0), io(0), trace(0),
       bandwidth(0), jacknumber(0), address(NULL), peaceful(0), func(NULL), contents(NULL),
       people(NULL), vehicles(NULL), watching(NULL)
-  {}
+  {
+    for (int i = 0; i < NUM_OF_DIRS; i++)
+      dir_option[i] = NULL;
+    
+    for (int i = 0; i < NUM_WORKSHOP_TYPES; i++)
+      best_workshop[i] = NULL;
+  }
 }
 ;
 /* ====================================================================== */
@@ -311,7 +320,7 @@ struct char_player_data
   char *host;   /* player host    */
 
   char_player_data() :
-      char_name(NULL), title(NULL), pretitle(NULL), whotitle(NULL),
+      char_name(NULL), background(NULL), title(NULL), pretitle(NULL), whotitle(NULL),
       prompt(NULL), matrixprompt(NULL), poofin(NULL), poofout(NULL), tradition(2), host(NULL)
   {}
 }
@@ -608,12 +617,16 @@ struct veh_data
 
   veh_data() :
       name(NULL), description(NULL), short_description(NULL), restring(NULL),
-      long_description(NULL), restring_long(NULL), inside_description(NULL), followers(NULL),
-      following(NULL), followch(NULL), idnum(0), owner(0), spare(0), spare2(0), dest(0),
-      contents(NULL), people(NULL), fighting(NULL), fight_veh(NULL), next_veh(NULL), 
+      long_description(NULL), restring_long(NULL), inside_description(NULL), rear_description(NULL),
+      followers(NULL), following(NULL), followch(NULL), mount(NULL),
+      idnum(0), owner(0), spare(0), spare2(0), dest(0),
+      contents(NULL), people(NULL), rigger(NULL), fighting(NULL), fight_veh(NULL), next_veh(NULL),
       next_sub(NULL), carriedvehs(NULL), in_veh(NULL), towing(NULL), grid(NULL), 
       leave(NULL), arrive(NULL), next(NULL)
-  {}
+  {
+    for (int i = 0; i < NUM_MODS; i++)
+      mod[i] = NULL;
+  }
 }
 ;
 
@@ -667,7 +680,10 @@ struct char_data
       carrying(NULL), desc(NULL), cyberware(NULL), bioware(NULL), next_in_room(NULL), next(NULL),
       next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL), next_watching(NULL), followers(NULL),
       master(NULL), spells(NULL), pgroup(NULL), pgroup_invitations(NULL)
-  {}
+  {
+    for (int i = 0; i < NUM_WEARS; i++)
+      equipment[i] = NULL;
+  }
 };
 /* ====================================================================== */
 
@@ -762,11 +778,11 @@ struct descriptor_data
   // this is for spell creation
 
   descriptor_data() :
-      showstr_head(NULL), showstr_point(NULL), output(NULL),
+      showstr_head(NULL), showstr_point(NULL), str(NULL), output(NULL),
       large_outbuf(NULL), character(NULL), original(NULL), snooping(NULL),
-      snoop_by(NULL), next(NULL), edit_obj(NULL), edit_room(NULL),
+      snoop_by(NULL), next(NULL), misc_data(NULL), edit_obj(NULL), edit_room(NULL),
       edit_mob(NULL), edit_quest(NULL), edit_shop(NULL), edit_zon(NULL),
-      edit_cmd(NULL)
+      edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL)
   {}
 }
 ;
@@ -793,6 +809,10 @@ struct message_type
   struct msg_type hit_msg;       /* messages when hit                    */
   struct msg_type god_msg;       /* messages when hit on god             */
   struct message_type *next;     /* to next messages of this kind.       */
+  
+  message_type():
+    next(NULL)
+  {}
 };
 
 struct message_list
@@ -800,6 +820,10 @@ struct message_list
   int a_type;                    /* Attack type                          */
   int number_of_attacks;         /* How many attack messages to chose from. */
   struct message_type *msg;      /* List of messages.                    */
+  
+  message_list() :
+    msg(NULL)
+  {}
 };
 
 struct weather_data
@@ -833,6 +857,9 @@ struct remem
   char *mem;
   struct remem *next;
 
+  remem() :
+    mem(NULL), next(NULL)
+  {}
 };
 
 struct phone_data
@@ -981,7 +1008,7 @@ struct combat_data
   int dam_type;
   bool is_physical;
   char power;
-  char damage_level; // Light/Med/etc
+  int damage_level; // Light/Med/etc
   
   // Gun data.
   bool weapon_is_gun;

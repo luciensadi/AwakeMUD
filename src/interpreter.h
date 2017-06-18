@@ -20,7 +20,7 @@
 #define ACMD_CONST(name)   \
     void (name)(struct char_data *ch, const char *argument, int cmd, int subcmd)
 
-const int RETURN_HELP = -37;
+const int RETURN_HELP = 127;
 
 #define CMD_NAME (cmd_info[cmd].command)
 #define CMD_IS(cmd_name) (!strcmp(cmd_name, cmd_info[cmd].command))
@@ -51,7 +51,6 @@ struct command_info
   (struct char_data *ch, char * argument, int cmd, int subcmd);
   sh_int minimum_level;
   int  subcmd;
-  byte  action;
 };
 
 #ifndef __INTERPRETER_CC__

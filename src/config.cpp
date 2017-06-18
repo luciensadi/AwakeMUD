@@ -9,6 +9,8 @@ const char *NOPERSON = "You don't see that person here.\r\n";
 const char *TOOBUSY = "You're too busy.\r\n";
 const char *NOOBJECT = "You don't see that here.\r\n";
 const char *YOU_NEED_OLC_FOR_THAT = "Please SET SELF OLC ON (or ask a higher-level staff member to do it).\r\n";
+const char *DEFAULT_POOFIN_STRING = "$n appears out of nowhere.";
+const char *DEFAULT_POOFOUT_STRING = "$n disappears in a flash of light.";
 long newbie_start_room = 60500;
 //long mortal_start_room = 30700;
 long mortal_start_room = 35500;
@@ -49,8 +51,8 @@ const char *GREETINGS =
   "The following mud is based on CircleMUD 3.0 by Jeremy Elson.  It is a\r\n"
   "derivative of DikuMUD (GAMMA 0.0) by Hans Henrik Staerfeldt, Katja Nyboe,\r\n"
   "Tom Madsen, Michael Seifert, and Sebastian Hammer.\r\n"
-  "AwakeMUD Code Level 0.8.19 BETA, by Flynn, Fastjack, Rift, Washu, and Che.\r\n"
-  "Modifications by Lucien Sadi.\r\n"
+  "AwakeMUD Code Level 0.8.20 BETA, by Flynn, Fastjack, Rift, Washu, and Che.\r\n"
+  "AwakeMUD Community Edition 0.9.1, by Lucien, Finster, and the community.\r\n"
   "\r\n"
   "_____   .                    A            .              .   .       .\r\n"
   "o o o\\            .        _/_\\_                                  |\\\r\n"

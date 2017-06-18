@@ -153,12 +153,9 @@ void icedit_parse(struct descriptor_data *d, const char *arg)
               i->next_in_host = temp->next_in_host;
               Mem->ClearIcon(temp);
             }
-          if (ic_proto[ic_num].name)
-            delete [] ic_proto[ic_num].name;
-          if (ic_proto[ic_num].look_desc)
-            delete [] ic_proto[ic_num].look_desc;
-          if (ic_proto[ic_num].long_desc)
-            delete [] ic_proto[ic_num].long_desc;
+          DELETE_ARRAY_IF_EXTANT(ic_proto[ic_num].name);
+          DELETE_ARRAY_IF_EXTANT(ic_proto[ic_num].look_desc);
+          DELETE_ARRAY_IF_EXTANT(ic_proto[ic_num].long_desc);
           ic_proto[ic_num] = *d->edit_icon;
         } else {
           int             counter;
@@ -207,8 +204,8 @@ void icedit_parse(struct descriptor_data *d, const char *arg)
             d->edit_icon->number = top_of_ic + 1;
           }
           top_of_ic++;
-          delete [] ic_proto;
-          delete [] ic_index;
+          DELETE_ARRAY_IF_EXTANT(ic_proto);
+          DELETE_ARRAY_IF_EXTANT(ic_index);
           ic_proto = new_ic_proto;
           ic_index = new_ic_index;
         }
@@ -260,12 +257,7 @@ void icedit_parse(struct descriptor_data *d, const char *arg)
     case '3':
       send_to_char("Enter IC description:\r\n", CH);
       d->edit_mode = ICEDIT_DESC;
-      d->str = new (char *);
-      if (!d->str) {
-        mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);
-        shutdown();
-      }
-      *(d->str) = NULL;
+      CLEANUP_AND_INITIALIZE_D_STR(d);
       d->max_str = MAX_MESSAGE_LENGTH;
       d->mail_to = 0;
       break;
@@ -330,14 +322,12 @@ void icedit_parse(struct descriptor_data *d, const char *arg)
     icedit_disp_menu(d);
     break;
   case ICEDIT_NAME:
-    if (d->edit_icon->name)
-      delete [] d->edit_icon->name;
+    DELETE_ARRAY_IF_EXTANT(d->edit_icon->name);
     d->edit_icon->name = str_dup(arg);
     icedit_disp_menu(d);
     break;
   case ICEDIT_ROOM:
-    if (d->edit_icon->look_desc)
-      delete [] d->edit_icon->look_desc;
+    DELETE_ARRAY_IF_EXTANT(d->edit_icon->look_desc);
     d->edit_icon->look_desc = str_dup(arg);
     icedit_disp_menu(d);
     break;
