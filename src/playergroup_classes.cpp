@@ -133,7 +133,6 @@ bool Playergroup::set_tag(const char *newtag, struct char_data *ch) {
   if (len > (MAX_PGROUP_TAG_LENGTH_WITHOUT_COLOR)) {
     send_to_char(ch, "Sorry, the non-colorized part of tags can't be longer than %d characters.\r\n",
                  MAX_PGROUP_TAG_LENGTH_WITHOUT_COLOR);
-=======
     sprintf(buf, "Sorry, tags can't be longer than %d characters.\r\n", MAX_PGROUP_TAG_LENGTH - 1);
     send_to_char(buf, ch);
     return FALSE;

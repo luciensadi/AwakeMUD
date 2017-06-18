@@ -442,10 +442,6 @@ void do_pgroup_found(struct char_data *ch, char *argument) {
 
 void do_pgroup_grant(struct char_data *ch, char *argument) {
   // TODO: Log.
-  send_to_char("found", ch);
-}
-
-void do_pgroup_grant(struct char_data *ch, char *argument) {
   send_to_char("grant", ch);
 }
 
