@@ -27,10 +27,6 @@ CVS = cvs
 LIBS = -L/usr/local/lib -lmysqlclient -lz -lm
 MYFLAGS = -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
 
-# Rasbian? Uncomment these:
-#LIBS = -lcrypt -L/usr/local/lib -lmysqlclient -lz -lm -lnsl
-#MYFLAGS = -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter -DNO_UINT8_T
-
 # Linux / others? Uncomment these:
 #LIBS = -lcrypt -L/usr/local/lib -lmysqlclient -lz -lm -lnsl
 #MYFLAGS = -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter

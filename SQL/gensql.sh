@@ -80,7 +80,7 @@ if [ -f ../src/mysql_config.cpp ]; then
   echo "DB creation script complete, but the config file cannot be automatically installed due to a conflict."
   echo "Please copy the mysql_config.cpp file from this directory into your ../src directory."
 else
-  mv mysql_config ../src
+  mv mysql_config.cpp ../src
   echo "DB creation script complete. Installed mysql_config.cpp file into your src directory."
 fi
 

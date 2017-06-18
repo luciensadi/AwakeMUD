@@ -11,6 +11,7 @@ Join us at mudtest.mooo.com port 4000 to participate in playtesting.
 ## OS Support
 Tested on:
 - OSX 10.12
+- Ubuntu 14.04.2 LTS
 - Raspbian Jessie
 
 ## Installation
