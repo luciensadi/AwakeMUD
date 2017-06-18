@@ -130,6 +130,4 @@ void    process_vcombat(struct veh_data *veh);
 void    chkdmg(struct veh_data * veh);
 void    disp_mod(struct veh_data *veh, struct char_data *ch, int i);
 void    stop_chase(struct veh_data *veh);
-bool    has_kit(struct char_data *ch, int type);
-struct obj_data *find_workshop(struct char_data *ch, int type);
 #endif

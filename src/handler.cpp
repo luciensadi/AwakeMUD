@@ -1604,6 +1604,10 @@ void obj_to_room(struct obj_data * object, long room)
     
     object->in_room = room;
     object->carried_by = NULL;
+    
+    // If it's a workshop, make sure the room's workshops[] table reflects this.
+    if (GET_OBJ_TYPE(object) == ITEM_WORKSHOP)
+      add_workshop_to_room(object);
   }
 }
 
@@ -1621,8 +1625,12 @@ void obj_from_room(struct obj_data * object)
   {
     object->in_veh->usedload -= GET_OBJ_WEIGHT(object);
     REMOVE_FROM_LIST(object, object->in_veh->contents, next_content);
-  } else
+  } else {
+    // Handle workshop removal.
+    if (GET_OBJ_TYPE(object) == ITEM_WORKSHOP)
+      remove_workshop_from_room(object);
     REMOVE_FROM_LIST(object, world[object->in_room].contents, next_content);
+  }
   
   object->in_veh = NULL;
   object->in_room = NOWHERE;

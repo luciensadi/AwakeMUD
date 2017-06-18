@@ -180,14 +180,20 @@ struct room_data
   struct char_data *people;    /* List of NPC / PC in room           */
   struct veh_data *vehicles;
   struct char_data *watching;
+  
+  struct obj_data *best_workshop[NUM_WORKSHOP_TYPES];
 
   room_data() :
-      name(NULL), description(NULL), night_desc(NULL), ex_description(NULL), matrix(0), access(0), io(0), trace(0),
+      name(NULL), description(NULL), night_desc(NULL), ex_description(NULL),
+      matrix(0), access(0), io(0), trace(0),
       bandwidth(0), jacknumber(0), address(NULL), peaceful(0), func(NULL), contents(NULL),
       people(NULL), vehicles(NULL), watching(NULL)
   {
     for (int i = 0; i < NUM_OF_DIRS; i++)
       dir_option[i] = NULL;
+    
+    for (int i = 0; i < NUM_WORKSHOP_TYPES; i++)
+      best_workshop[i] = NULL;
   }
 }
 ;
