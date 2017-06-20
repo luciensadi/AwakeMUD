@@ -359,7 +359,8 @@ enum {
 #define PRF_LONGWEAPON	      	39
 #define PRF_PGROUPLOG           40
 #define PRF_SHOWGROUPTAG        41
-#define PRF_MAX   		          42
+#define PRF_KEEPALIVE           42
+#define PRF_MAX   		          43
 
 /* log watch */
 

@@ -915,7 +915,8 @@ ACMD(do_toggle)
               "        Movegag: %-3s            Compact: %-3s          AutoExits: %-3s\r\n"
               "     AutoAssist: %-3s            NoShout: %-3s               Echo: %-3s\r\n"
               "           Pker: %-3s         Long Exits: %-3s         Wimp Level: %-3s\r\n"
-              "        Menugag: %-3s        Long Weapon: %-3s        Show PG Tag: %-3s",
+              "        Menugag: %-3s        Long Weapon: %-3s        Show PG Tag: %-3s\r\n"
+              "     Keep-Alive: %-3s",
 
               ONOFF(PRF_FLAGGED(ch, PRF_FIGHTGAG)),
               ONOFF(PRF_FLAGGED(ch, PRF_NOOOC)),
@@ -931,7 +932,8 @@ ACMD(do_toggle)
               buf2, 
               ONOFF(PRF_FLAGGED(ch, PRF_MENUGAG)),
               YESNO(PRF_FLAGGED(ch, PRF_LONGWEAPON)),
-              YESNO(PRF_FLAGGED(ch, PRF_SHOWGROUPTAG)));
+              YESNO(PRF_FLAGGED(ch, PRF_SHOWGROUPTAG)),
+              ONOFF(PRF_FLAGGED(ch, PRF_KEEPALIVE)));
     else
       sprintf(buf,
               "       Fightgag: %-3s              NoOOC: %-3s              Quest: %-3s\r\n"
@@ -941,7 +943,7 @@ ACMD(do_toggle)
               "      Holylight: %-3s          Roomflags: %-3s               Pker: %-3s\r\n"
               "          Radio: %-3s         Long Exits: %-3s         Wimp Level: %-3s\r\n"
               "         Pacify: %-3s         AutoAssist: %-3s          Autoinvis: %-3s\r\n"
-              "    Long Weapon: %-3s        Show PG Tag: %-3s",
+              "    Long Weapon: %-3s        Show PG Tag: %-3s         Keep-Alive: %-3s",
               ONOFF(PRF_FLAGGED(ch, PRF_FIGHTGAG)),
               ONOFF(PRF_FLAGGED(ch, PRF_NOOOC)),
               YESNO(PRF_FLAGGED(ch, PRF_QUEST)),
@@ -964,7 +966,8 @@ ACMD(do_toggle)
               ONOFF(PRF_FLAGGED(ch, PRF_AUTOINVIS)),
               ONOFF(PRF_FLAGGED(ch, PRF_PACIFY)),
               YESNO(PRF_FLAGGED(ch, PRF_LONGWEAPON)),
-              YESNO(PRF_FLAGGED(ch, PRF_SHOWGROUPTAG)));
+              YESNO(PRF_FLAGGED(ch, PRF_SHOWGROUPTAG)),
+              ONOFF(PRF_FLAGGED(ch, PRF_KEEPALIVE)));
     send_to_char(buf, ch);
   } else {
     if (is_abbrev(argument, "afk"))

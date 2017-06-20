@@ -121,6 +121,7 @@ void make_prompt(struct descriptor_data * point);
 void check_idle_passwords(void);
 void init_descriptor (struct descriptor_data *newd, int desc);
 char *colorize(struct descriptor_data *d, char *str);
+void send_keepalives();
 
 /* extern fcnts */
 extern void DBInit();
@@ -761,6 +762,7 @@ void game_loop(int mother_desc)
     
     if (!(pulse % (60 * PASSES_PER_SEC))) {
       check_idling();
+      send_keepalives();
       // johnson_update();
     }
     
@@ -893,6 +895,24 @@ void echo_on(struct descriptor_data *d)
   };
   
   SEND_TO_Q(on_string, d);
+}
+
+// Sends a keepalive pulse to the given descriptor.
+void keepalive(struct descriptor_data *d) {
+  char keepalive[] = {
+    (char) IAC,
+    (char) NOP,
+    (char) 0
+  };
+  
+  SEND_TO_Q(keepalive, d);
+}
+
+// Sends keepalives to everyone who's enabled them.
+void send_keepalives() {
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next)
+    if (d->character && PRF_FLAGGED(d->character, PRF_KEEPALIVE))
+      keepalive(d);
 }
 
 void make_prompt(struct descriptor_data * d)

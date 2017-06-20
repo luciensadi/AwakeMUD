@@ -559,6 +559,7 @@ const char *preference_bits[] =
     "LONGWEAPON",
     "PGROUPLOG",
     "SHOWGROUPTAG",
+    "KEEPALIVE",
     "\n"
   };
 
