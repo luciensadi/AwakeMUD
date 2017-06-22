@@ -825,7 +825,7 @@ enum {
 */
 
 // Defines the size of the teach_t array. Changing this means you have to change every teacher too.
-#define NUM_TEACHER_SKILLS 9
+#define NUM_TEACHER_SKILLS 20
 
 #define ADEPT_PERCEPTION	1
 #define ADEPT_COMBAT_SENSE	2
