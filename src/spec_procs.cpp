@@ -513,8 +513,8 @@ SPECIAL(teacher)
   for (i = 0; i < NUM_TEACHER_SKILLS; i++)
     if (skill_num == teachers[ind].s[i])
       break;
-  if (i >= 8) {
-    send_to_char("You teacher doesn't seem to know about that subject.\r\n", ch);
+  if (i >= NUM_TEACHER_SKILLS) {
+    send_to_char("Your teacher doesn't seem to know about that subject.\r\n", ch);
     return TRUE;
   }
 
