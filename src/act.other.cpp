@@ -848,7 +848,7 @@ ACMD(do_gen_write)
   // Get our curl instance.
   curl = curl_easy_init();
   if (curl) {
-    char title[256];
+    char title[85];
     char body[strlen(argument) + 1];
     char labels[256];
     
@@ -873,10 +873,15 @@ ACMD(do_gen_write)
     }
     char *title_ptr = ENDOF(title), *body_ptr = body;
     for (char *ptr = argument; *ptr; ptr++) {
-      if (ptr - argument > 80)
+      if ((title_ptr - &(title[0]) > 80))
         *(body_ptr++) = *(argument++);
       else
         *(title_ptr++) = *(argument++);
+    }
+    // Add ellipsis for overflowing titles.
+    if (body_ptr != &(body[0])) {
+      for (int i = 0; i < 3; i++)
+        *(title_ptr++) = '.';
     }
     *title_ptr = '\0';
     *body_ptr = '\0';
@@ -891,6 +896,7 @@ ACMD(do_gen_write)
             "    %s\r\n"
             "  ]\r\n"
             "}", title, body, labels);
+    log(post_body);
     
     // Set our URL and auth (github_config.cpp)
     curl_easy_setopt(curl, CURLOPT_URL, github_issues_url);
