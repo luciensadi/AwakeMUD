@@ -1269,7 +1269,7 @@ SPECIAL(car_dealer)
   int car_room = ch->in_room - 1;
 
   if (CMD_IS("list")) {
-    send_to_char("Available Vehicles are:\r\n", ch);
+    send_to_char("Available vehicles are:\r\n", ch);
     for (veh = world[car_room].vehicles; veh; veh = veh->next_veh) {
       sprintf(buf, "%8d - %s\r\n", veh->cost, veh->short_description);
       send_to_char(buf, ch);
@@ -1278,7 +1278,7 @@ SPECIAL(car_dealer)
   } else if (CMD_IS("buy")) {
     argument = one_argument(argument, buf);
     if (!(veh = get_veh_list(buf, world[car_room].vehicles, ch))) {
-      send_to_char("There is no such vehicle for sales.\r\n", ch);
+      send_to_char("There is no such vehicle for sale.\r\n", ch);
       return TRUE;
     }
     if (GET_NUYEN(ch) < veh->cost) {
@@ -1291,7 +1291,7 @@ SPECIAL(car_dealer)
     newveh->owner = GET_IDNUM(ch);
     newveh->idnum = number(0, 1000000);
     if (veh->type == VEH_DRONE)
-      sprintf(buf, "You buy a %s. It is bought out into the room.\r\n", newveh->short_description);
+      sprintf(buf, "You buy a %s. It is brought out into the room.\r\n", newveh->short_description);
     else
       sprintf(buf, "You buy a %s. It is wheeled out into the yard.\r\n", newveh->short_description);
     send_to_char(buf, ch);

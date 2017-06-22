@@ -155,7 +155,19 @@ ACMD(do_copyover)
 
     } else {
       fprintf (fp, "%d %s %s\n", d->descriptor, GET_CHAR_NAME(och), d->host);
-      GET_LAST_IN(och) = world[och->in_room].number;
+      if (och->in_room != NOWHERE)
+        GET_LAST_IN(och) = world[och->in_room].number;
+      else if (och->in_veh && och->in_veh->in_room != NOWHERE)
+        GET_LAST_IN(och) = world[och->in_veh->in_room].number;
+      else if (och->in_veh && och->in_veh->in_veh && och->in_veh->in_veh->in_room != NOWHERE)
+        GET_LAST_IN(och) = world[och->in_veh->in_veh->in_room].number;
+      else {
+        // Fuck it, send them to Grog's.
+        sprintf(buf, "%s's location could not be determined by the current copyover logic. %s will load at Grog's (35500).",
+                GET_CHAR_NAME(och), HSSH(och));
+        mudlog(buf, och, LOG_SYSLOG, TRUE);
+        GET_LAST_IN(och) = 35500;
+      }
       playerDB.SaveChar(och, GET_LOADROOM(och));
       write_to_descriptor(d->descriptor, messages[mesnum]);
     }
@@ -494,7 +506,8 @@ ACMD(do_goto)
   sh_int location;
 
   if ((location = find_target_room(ch, argument)) <= 1) {
-    send_to_char("You're not able to GOTO that room. If you need to do something there, use AT.", ch);
+    if (location == 1)
+      send_to_char("You're not able to GOTO that room. If you need to do something there, use AT.", ch);
     return;
   }
 

@@ -2970,7 +2970,7 @@ int zone_is_empty(int zone_nr)
   struct descriptor_data *i;
 
   for (i = descriptor_list; i; i = i->next)
-    if (!i->connected)
+    if (!i->connected && i->character->in_room != NOWHERE)
       if (world[i->character->in_room].zone == zone_nr)
         return 0;
 

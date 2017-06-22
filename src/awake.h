@@ -1968,6 +1968,8 @@ enum {
 #define NUM_COMBAT_MODIFIERS      10
 // End new combat modifiers.
 
+#define NEWBIE_LOADROOM 60565 // The Neophyte Hotel.
+
 /* ban struct */
 struct ban_list_element
 {

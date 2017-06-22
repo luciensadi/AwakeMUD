@@ -100,7 +100,7 @@ ACMD(do_quit)
       ch->in_room = save_room;
       if (!GET_LOADROOM(ch)) {
         if (PLR_FLAGGED(ch, PLR_NEWBIE))
-          GET_LOADROOM(ch) = 8039;
+          GET_LOADROOM(ch) = NEWBIE_LOADROOM;
         else
           GET_LOADROOM(ch) = 30700;
       }
@@ -835,7 +835,7 @@ ACMD(do_gen_write)
     return;
   }
   fprintf(fl, "%-8s (%6.6s) [%5ld] %s\n", (ch->desc->original ? GET_CHAR_NAME(ch->desc->original) :
-          GET_CHAR_NAME(ch)), (tmp + 4), world[ch->in_room].number, argument);
+                                           GET_CHAR_NAME(ch)), (tmp + 4), ch->in_room != NOWHERE ? world[ch->in_room].number : -1, argument);
   fclose(fl);
   
 #ifdef GITHUB_INTEGRATION
@@ -849,7 +849,7 @@ ACMD(do_gen_write)
   curl = curl_easy_init();
   if (curl) {
     char title[100];
-    char body[strlen(argument) + 4];
+    char body[MAX_STRING_LENGTH];
     memset(body, 0, sizeof(body));
     char temp_body[strlen(argument) + 1];
     char labels[256];
@@ -877,7 +877,7 @@ ACMD(do_gen_write)
     // Compose the issue title and body.
     char *title_ptr = ENDOF(title), *body_ptr = temp_body, *argument_ptr = argument;
     while (*argument_ptr) {
-      if ((title_ptr - &(title[0]) > 80)) {
+      if (title_ptr - &(title[0]) > 80) {
         // Escape reserved characters.
         if (*argument_ptr == '\\' || *argument_ptr == '"')
           *(body_ptr++) = '\\';
@@ -890,14 +890,45 @@ ACMD(do_gen_write)
       }
     }
     // Add ellipsis for overflowing titles.
-    if (body_ptr != &(body[0])) {
+    if (body_ptr != &(temp_body[0])) {
+      // We're currently pointing to the uninitialized character directly after the end of the string. Go back one.
+      title_ptr--;
+      
+      // Track back to discard spaces from title_ptr's end.
+      while (isspace(*title_ptr) && title_ptr != &(title[0]))
+        title_ptr--;
+      
+      // Restore our title pointer to point to the character right after the text.
+      title_ptr++;
+      
+      // Add the ellipsis to the title.
       for (int i = 0; i < 3; i++)
         *(title_ptr++) = '.';
     }
+    // Null-terminate both body and title strings.
     *title_ptr = '\0';
     *body_ptr = '\0';
+    
+    // Format the temp body with preceding ellipsis if it exists.
     if (*temp_body) {
-      sprintf(body, "...%s", temp_body);
+      sprintf(body, "...%s\\r\\n\\r\\n", temp_body);
+    }
+    
+    // Fill out the character and location details where applicable.
+    sprintf(ENDOF(body), "Filed by %s (id %ld)", GET_CHAR_NAME(ch), (ch->desc->original ? GET_IDNUM(ch->desc->original) : GET_IDNUM(ch)));
+    if (ch->in_room != NOWHERE) {
+      sprintf(ENDOF(body), " from room %ld.", world[ch->in_room].number);
+    } else if (ch->in_veh) {
+      sprintf(ENDOF(body), " from the %s of a vehicle of vnum %ld", ch->vfront ? "front" : "rear", veh_index[ch->in_veh->veh_number].vnum);
+      if (ch->in_veh->in_veh) {
+        sprintf(ENDOF(body), ", located inside another vehicle of vnum %ld.", veh_index[ch->in_veh->in_veh->veh_number].vnum);
+      } else if (ch->in_veh->in_room != NOWHERE) {
+        sprintf(ENDOF(body), ", located in room %ld.", world[ch->in_veh->in_room].number);
+      } else {
+        sprintf(ENDOF(body), ".");
+      }
+    } else {
+      sprintf(ENDOF(body), ".");
     }
     
     // Compose our post body.
@@ -922,17 +953,17 @@ ACMD(do_gen_write)
     
     // Perform POST request, storing the curl response code.
     res = curl_easy_perform(curl);
-    /* Check for errors */
+    // Check for errors
     if(res != CURLE_OK)
-      fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+      fprintf(stderr, "curl_easy_perform() failed: %s\r\n", curl_easy_strerror(res));
     
-    /* always cleanup */
+    // always cleanup
     curl_easy_cleanup(curl);
   }
   curl_global_cleanup();
 #endif
 
-  send_to_char("Okay.   Thanks!\r\n", ch);
+  send_to_char("Okay. Thanks!\r\n", ch);
 }
 
 const char *tog_messages[][2] = {
