@@ -910,7 +910,7 @@ ACMD(do_gen_write)
   return 0;
 #endif
 
-  send_to_char("Okay. Thanks!\r\n", ch);
+  send_to_char("Okay.   Thanks!\r\n", ch);
 }
 
 const char *tog_messages[][2] = {
