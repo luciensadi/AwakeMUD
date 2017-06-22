@@ -24,12 +24,13 @@ CVS = cvs
 # smooth, the define can be removed.
 
 # OSX? Uncomment these:
-LIBS = -L/usr/local/lib -lmysqlclient -lz -lm
-MYFLAGS = -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
+LIBS = -L/usr/local/lib -lmysqlclient -lz -lm -lcurl
+MYFLAGS = -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DGITHUB_INTEGRATION -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
 
 # Linux / others? Uncomment these:
-#LIBS = -lcrypt -L/usr/local/lib -lmysqlclient -lz -lm -lnsl
+#LIBS = -lcrypt -L/usr/local/lib -lmysqlclient -lz -lm -lnsl -lcurl
 #MYFLAGS = -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
+# If you want GitHub integration, add -DGITHUB_INTEGRATION to the above and fill out your basic auth credentials in github_config.cpp.
 
 CPPFLAGS = $(MYFLAGS) $(PROFILE)
 
