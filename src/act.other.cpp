@@ -848,8 +848,10 @@ ACMD(do_gen_write)
   // Get our curl instance.
   curl = curl_easy_init();
   if (curl) {
-    char title[85];
-    char body[strlen(argument) + 1];
+    char title[100];
+    char body[strlen(argument) + 4];
+    memset(body, 0, sizeof(body));
+    char temp_body[strlen(argument) + 1];
     char labels[256];
     
     // Select our issue label.
@@ -871,12 +873,21 @@ ACMD(do_gen_write)
         curl_global_cleanup();
         return;
     }
-    char *title_ptr = ENDOF(title), *body_ptr = body;
-    for (char *ptr = argument; *ptr; ptr++) {
-      if ((title_ptr - &(title[0]) > 80))
-        *(body_ptr++) = *(argument++);
-      else
-        *(title_ptr++) = *(argument++);
+    
+    // Compose the issue title and body.
+    char *title_ptr = ENDOF(title), *body_ptr = temp_body, *argument_ptr = argument;
+    while (*argument_ptr) {
+      if ((title_ptr - &(title[0]) > 80)) {
+        // Escape reserved characters.
+        if (*argument_ptr == '\\' || *argument_ptr == '"')
+          *(body_ptr++) = '\\';
+        *(body_ptr++) = *(argument_ptr++);
+      } else {
+        // Escape reserved characters.
+        if (*argument_ptr == '\\' || *argument_ptr == '"')
+          *(title_ptr++) = '\\';
+        *(title_ptr++) = *(argument_ptr++);
+      }
     }
     // Add ellipsis for overflowing titles.
     if (body_ptr != &(body[0])) {
@@ -885,6 +896,9 @@ ACMD(do_gen_write)
     }
     *title_ptr = '\0';
     *body_ptr = '\0';
+    if (*temp_body) {
+      sprintf(body, "...%s", temp_body);
+    }
     
     // Compose our post body.
     char post_body[MAX_STRING_LENGTH];
