@@ -314,7 +314,7 @@ void do_start(struct char_data * ch)
   GET_COND(ch, THIRST) = 24;
   GET_COND(ch, FULL) = 24;
   GET_COND(ch, DRUNK) = 0;
-  GET_LOADROOM(ch) = 8039;
+  GET_LOADROOM(ch) = NEWBIE_LOADROOM;
 
   PLR_FLAGS(ch).SetBit(PLR_NEWBIE);
   PRF_FLAGS(ch).SetBits(PRF_AUTOEXIT, PRF_LONGEXITS, ENDBIT);
