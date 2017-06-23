@@ -1507,3 +1507,28 @@ void remove_workshop_from_room(struct obj_data *obj) {
     }
   }
 }
+
+vnum_t get_absolute_in_room(struct char_data *ch) {
+  vnum_t return_val = NOWHERE;
+  
+  if (ch->in_room != NOWHERE)
+    return_val = ch->in_room;
+  
+  if (ch->in_veh) {
+    // Un-nest the Matryoshka doll of vehicles players sometimes get themselves into.
+    struct veh_data *tmp = ch->in_veh;
+    while (tmp->in_veh)
+      tmp = tmp->in_veh;
+    
+    // Eventually we'll hit a vehicle that's actually in a room.
+    return_val = tmp->in_room;
+  }
+  
+  if (return_val == NOWHERE) {
+    log_vfprintf("ERROR: No viable in_room available for %s (%ld). Shutting down to protect against bad access.",
+                 GET_CHAR_NAME(ch), GET_IDNUM(ch));
+    shutdown();
+    return 0;
+  } else
+    return return_val;
+}

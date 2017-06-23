@@ -1185,14 +1185,15 @@ ACMD(do_enter)
       return;
     }
 
-    for (door = 0; door < NUM_OF_DIRS; door++)
-      if (EXIT(ch, door))
-        if (EXIT(ch, door)->keyword && !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED))
-          if (!str_cmp(EXIT(ch, door)->keyword, buf)) {
-            perform_move(ch, door, CHECK_SPECIAL | LEADER, NULL);
-            return;
-          }
-
+    if (ch->in_room != NOWHERE) {
+      for (door = 0; door < NUM_OF_DIRS; door++)
+        if (EXIT(ch, door))
+          if (EXIT(ch, door)->keyword && !IS_SET(EXIT(ch, door)->exit_info, EX_DESTROYED))
+            if (!str_cmp(EXIT(ch, door)->keyword, buf)) {
+              perform_move(ch, door, CHECK_SPECIAL | LEADER, NULL);
+              return;
+            }
+    }
 
     sprintf(buf2, "There is no %s here.\r\n", buf);
     send_to_char(buf2, ch);

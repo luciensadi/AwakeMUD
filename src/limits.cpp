@@ -752,12 +752,12 @@ void save_vehicles(void)
   fprintf(fl, "%d\n", num_veh);
   fclose(fl);
   for (veh = veh_list, v = 0; veh && v < num_veh; veh = veh->next) {
-    if (veh->owner < 1 || (veh->damage >= 10 && !(veh->in_veh || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE))))
-      continue;
     if (!does_player_exist(veh->owner)) {
       veh->owner = 0;
       continue;
     }
+    if (veh->owner < 1 || (veh->damage >= 10 && !(veh->in_veh || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE))))
+      continue;
     
     sprintf(buf, "veh/%07ld", v);
     v++;
@@ -781,9 +781,11 @@ void save_vehicles(void)
         }
     
     room = veh->in_room;
-    if (!ROOM_FLAGGED(room, ROOM_GARAGE))
+    if (room != NOWHERE && !ROOM_FLAGGED(room, ROOM_GARAGE))
+      // All stray cars save to Dante's Garage.
       switch (zone_table[world[veh->in_room].zone].juridiction) {
         case ZONE_PORTLAND:
+          /*
           switch (number(0, 2)) {
             case 0:
               room = real_room(2751 + number(0, 2));
@@ -795,15 +797,16 @@ void save_vehicles(void)
               room = real_room(2762 + number(0, 2));
               break;
           }
-          break;
-        case ZONE_SEATTLE:
-          room = real_room(22670 + number(0, 16));
-          break;
+          break; */
         case ZONE_CARIB:
-          room = real_room(62334);
-          break;
+          /* room = real_room(62334);
+          break; */
         case ZONE_OCEAN:
-          room = real_room(62504);
+          /* room = real_room(62504);
+          break; */
+        case ZONE_SEATTLE:
+          //room = real_room(22670 + number(0, 16)); This previously was the parking garage.
+          room = real_room(35693 + number(0,4)); // Dante's Garage
           break;
       }
     fprintf(fl, "[VEHICLE]\n");
@@ -893,7 +896,7 @@ void save_vehicles(void)
     fclose(fl);
   }
   if (!(fl = fopen("etc/consist", "w"))) {
-    mudlog("SYSERR: Can't Open Consistentcy File For Write.", NULL, LOG_SYSLOG, FALSE);
+    mudlog("SYSERR: Can't Open Consistency File For Write.", NULL, LOG_SYSLOG, FALSE);
     return;
   }
   for (int m = 0; m < 5; m++) {

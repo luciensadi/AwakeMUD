@@ -68,6 +68,7 @@ bool    has_kit(struct char_data *ch, int type);
 struct obj_data *find_workshop(struct char_data *ch, int type);
 void    add_workshop_to_room(struct obj_data *obj);
 void    remove_workshop_from_room(struct obj_data *obj);
+vnum_t  get_absolute_in_room(struct char_data *ch);
 
 /* undefine MAX and MIN so that our functions are used instead */
 #ifdef MAX
@@ -225,7 +226,7 @@ void    update_pos(struct char_data *victim);
   ((ch->desc && ch->desc->original) \
    ? PRF_FLAGS(ch->desc->original).IsSet((flag)) \
    : PRF_FLAGS(ch).IsSet((flag)))
-#define ROOM_FLAGGED(loc, flag) (ROOM_FLAGS(loc).IsSet((flag)))
+#define ROOM_FLAGGED(loc, flag) (loc != NOWHERE && ROOM_FLAGS(loc).IsSet((flag)))
 
 /* IS_AFFECTED for backwards compatibility */
 #define IS_AFFECTED(ch, skill) (AFF_FLAGGED((ch), (skill)))
@@ -240,7 +241,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
     world[(room)].sector_type : SPIRIT_HEARTH)
 #define IS_WATER(room) (SECT((room)) == SPIRIT_LAKE || SECT((room)) == SPIRIT_RIVER || SECT((room)) == SPIRIT_SEA)
 
-#define IS_DARK(room)  (light_level((room)) == ITEM_FULLDARK)
+#define IS_DARK(room)  (light_level((room)) == LIGHT_FULLDARK)
 #define IS_LIGHT(room)  (light_level((room)) <= LIGHT_NORMALNOLIT || light_level((room)) == LIGHT_PARTLIGHT)
 #define IS_LOW(room)	(light_level((room)) == LIGHT_MINLIGHT || light_level((room)) == LIGHT_PARTLIGHT)
 

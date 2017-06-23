@@ -40,6 +40,12 @@ Range.'
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10019
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT west]
 	ToVnum:	10013
 	Flags:	0
@@ -709,6 +715,61 @@ RoomType:	0
 	BackgroundType:	0
 [EXIT east]
 	ToVnum:	10016
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10018
+Name:	^W(^cIMMHQ^W)^C The Car Storage Room
+Desc:$
+Hacky as shit, this room is used to specify the list of vehicles for sale in
+10019. Load vehicles in here to have them for sale there. 
+~
+Flags:	100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	100
+Y:	100
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#10019
+Name:	^W(^cIMMHQ^W)^C A Cavernous Garage
+Desc:$
+A far cry from the pleasant decor of the rest of the complex, this massive
+space has a look that could best be described as 'post-apocalyptic chic'.
+Reinforced concrete, scrap metal, disassembled vehicles, and an utter lack of
+anything soft combine to make a hybrid scrapyard and garage that's perfect for
+working with vehicles of any make or model. 
+~
+Flags:	100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	100
+Y:	100
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10000
 	Flags:	0
 	Material:	brick
 	Barrier:	4

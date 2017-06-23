@@ -628,6 +628,7 @@ void assign_rooms(void)
 
 
   ASSIGNROOM(1399, car_dealer);
+  ASSIGNROOM(10019, car_dealer); // IMM HQ
 /*ASSIGNROOM(14798, car_dealer);
   ASSIGNROOM(14796, car_dealer);
   ASSIGNROOM(37505, car_dealer);
