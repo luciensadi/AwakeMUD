@@ -48,7 +48,7 @@ ACMD(do_say)
   skip_spaces(&argument);
   if (!*argument)
     send_to_char(ch, "Yes, but WHAT do you want to say?\r\n");
-  else if (subcmd != SCMD_OSAY && !PLR_FLAGGED(ch, PLR_MATRIX) && (affected_by_spell(ch, SPELL_STEALTH) || world[ch->in_veh ? ch->in_veh->in_room : ch->in_room].silence[0]))
+  else if (subcmd != SCMD_OSAY && !PLR_FLAGGED(ch, PLR_MATRIX) && (affected_by_spell(ch, SPELL_STEALTH) || world[get_absolute_in_room(ch)].silence[0]))
     send_to_char("You can't seem to make any noise.\r\n", ch);
   else {
     if (AFF_FLAGGED(ch, AFF_RIG)) {
@@ -60,7 +60,7 @@ ACMD(do_say)
         send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
         send_to_icon(ch->persona, "You say, \"%s^n\"\r\n", argument);
       } else {
-        for (struct char_data *targ = world[ch->in_room].people; targ; targ = targ->next_in_room)
+        for (struct char_data *targ = world[get_absolute_in_room(ch)].people; targ; targ = targ->next_in_room)
           if (targ != ch && PLR_FLAGGED(targ, PLR_MATRIX))
             send_to_char(targ, "Your hitcher says, \"%s^n\"\r\n", argument);
         send_to_char(ch, "You send, down the line, \"%s^n\"\r\n", argument);
@@ -124,7 +124,7 @@ ACMD(do_say)
         act(buf, FALSE, ch, NULL, NULL, TO_ROOM);
       } else {
         success = success_test(GET_SKILL(ch, GET_LANGUAGE(ch)), 4);
-        for (tmp = world[ch->in_room].people; tmp; tmp = tmp->next_in_room)
+        for (tmp = world[get_absolute_in_room(ch)].people; tmp; tmp = tmp->next_in_room)
           if (tmp != ch && !(IS_ASTRAL(ch) && !CAN_SEE(tmp, ch))) {
             if (to) {
               if (to == tmp)
@@ -171,7 +171,7 @@ ACMD(do_exclaim)
 
   if (!*argument)
     send_to_char(ch, "Yes, but WHAT do you like to exclaim?\r\n");
-  else if (affected_by_spell(ch, SPELL_STEALTH) || world[ch->in_veh ? ch->in_veh->in_room : ch->in_room].silence[0])
+  else if (affected_by_spell(ch, SPELL_STEALTH) || world[get_absolute_in_room(ch)].silence[0])
     send_to_char("You can't seem to make any noise.\r\n", ch);
   else {
     sprintf(buf, "$z ^nexclaims, \"%s!^n\"", argument);
@@ -271,7 +271,7 @@ ACMD(do_ask)
 
   if (!*argument)
     send_to_char(ch, "Yes, but WHAT do you like to ask?\r\n");
-  else if (affected_by_spell(ch, SPELL_STEALTH) || world[ch->in_veh ? ch->in_veh->in_room : ch->in_room].silence[0])
+  else if (affected_by_spell(ch, SPELL_STEALTH) || world[get_absolute_in_room(ch)].silence[0])
     send_to_char("You can't seem to make any noise.\r\n", ch);
   else {
     sprintf(buf, "$z asks, \"%s?^n\"", argument);
@@ -303,7 +303,7 @@ ACMD(do_spec_comm)
   half_chop(argument, buf, buf2);
   success = success_test(GET_SKILL(ch, GET_LANGUAGE(ch)), 4);
 
-  if (affected_by_spell(ch, SPELL_STEALTH) || world[ch->in_veh ? ch->in_veh->in_room : ch->in_room].silence[0]) {
+  if (affected_by_spell(ch, SPELL_STEALTH) || world[get_absolute_in_room(ch)].silence[0]) {
     send_to_char("You can't seem to make any noise.\r\n", ch);
     return;
   }
@@ -315,7 +315,7 @@ ACMD(do_spec_comm)
       send_to_char("You're going to hit your head on a lamppost if you try that.\r\n", ch);
       return;
     }
-    ch->in_room = ch->in_veh->in_room;
+    ch->in_room = get_absolute_in_room(ch);
     if ((vict = get_char_room_vis(ch, buf))) {
       if (success > 0) {
         sprintf(buf, "You lean out towards $N and say, \"%s\"", buf2);
@@ -332,7 +332,7 @@ ACMD(do_spec_comm)
     }
     ch->in_room = NOWHERE;
   } else if (!(vict = get_char_room_vis(ch, buf)) &&
-             !((veh = get_veh_list(buf, world[ch->in_room].vehicles, ch)) && subcmd == SCMD_WHISPER))
+             !((veh = get_veh_list(buf, world[get_absolute_in_room(ch)].vehicles, ch)) && subcmd == SCMD_WHISPER))
     send_to_char(NOPERSON, ch);
   else if (vict == ch)
     send_to_char("You can't get your mouth close enough to your ear...\r\n", ch);
@@ -580,7 +580,7 @@ ACMD(do_broadcast)
     return;
   }
 
-  if ((affected_by_spell(ch, SPELL_STEALTH) || world[ch->in_veh ? ch->in_veh->in_room : ch->in_room].silence[0]) && !cyberware) {
+  if ((affected_by_spell(ch, SPELL_STEALTH) || world[get_absolute_in_room(ch)].silence[0]) && !cyberware) {
     send_to_char("You can't seem to make any noise.\r\n", ch);
     return;
   }
@@ -604,7 +604,7 @@ ACMD(do_broadcast)
       break;
     }
   sprintf(buf3, "*static* %s", buf4);
-  if (ROOM_FLAGGED(ch->in_room, ROOM_NO_RADIO))
+  if (ROOM_FLAGGED(get_absolute_in_room(ch), ROOM_NO_RADIO))
     strcpy(argument, buf3);
 
   
@@ -640,15 +640,15 @@ ACMD(do_broadcast)
     send_to_char(OK, ch);
   else
     act(buf, FALSE, ch, 0, 0, TO_CHAR);
-  if (!ROOM_FLAGGED(ch->in_room, ROOM_SOUNDPROOF))
+  if (!ROOM_FLAGGED(get_absolute_in_room(ch), ROOM_SOUNDPROOF))
     for (d = descriptor_list; d; d = d->next) {
       if (!d->connected && d != ch->desc && d->character &&
           !PLR_FLAGS(d->character).AreAnySet(PLR_WRITING,
                                              PLR_MAILING,
                                              PLR_EDITING, PLR_MATRIX, ENDBIT)
           && !IS_PROJECT(d->character) &&
-          !ROOM_FLAGGED(d->character->in_room, ROOM_SOUNDPROOF) &&
-          !ROOM_FLAGGED(d->character->in_room, ROOM_SENT)) {
+          !ROOM_FLAGGED(get_absolute_in_room(d->character), ROOM_SOUNDPROOF) &&
+          !ROOM_FLAGGED(get_absolute_in_room(d->character), ROOM_SENT)) {
         if (!IS_NPC(d->character) && !IS_SENATOR(d->character)) {
           radio = NULL;
           cyberware = FALSE;
@@ -678,7 +678,7 @@ ACMD(do_broadcast)
                   if (GET_OBJ_TYPE(obj2) == ITEM_RADIO)
                     radio = obj2;
             }
-          for (obj = world[d->character->in_room].contents; obj && !radio;
+          for (obj = world[get_absolute_in_room(ch)].contents; obj && !radio;
                obj = obj->next_content)
             if (GET_OBJ_TYPE(obj) == ITEM_RADIO && !CAN_WEAR(obj, ITEM_WEAR_TAKE))
               radio = obj;
@@ -699,7 +699,7 @@ ACMD(do_broadcast)
               if (to_room) {
                 if (success > 0 || IS_NPC(ch))
                   if (suc > 0 || IS_NPC(ch))
-                    if (ROOM_FLAGGED(d->character->in_room, ROOM_NO_RADIO))
+                    if (ROOM_FLAGGED(get_absolute_in_room(d->character), ROOM_NO_RADIO))
                       act(buf4, FALSE, ch, 0, d->character, TO_VICT);
                     else
                       act(buf, FALSE, ch, 0, d->character, TO_VICT);
@@ -710,7 +710,7 @@ ACMD(do_broadcast)
               } else {
                 if (success > 0 || IS_NPC(ch))
                   if (suc > 0 || IS_NPC(ch))
-                    if (ROOM_FLAGGED(d->character->in_room, ROOM_NO_RADIO))
+                    if (ROOM_FLAGGED(get_absolute_in_room(d->character), ROOM_NO_RADIO))
                       act(buf4, FALSE, ch, 0, d->character, TO_VICT);
                     else 
                       act(buf, FALSE, ch, 0, d->character, TO_VICT);
@@ -730,8 +730,8 @@ ACMD(do_broadcast)
   for (d = descriptor_list; d; d = d->next)
     if (!d->connected &&
         d->character &&
-        ROOM_FLAGGED(d->character->in_room, ROOM_SENT))
-      ROOM_FLAGS(d->character->in_room).RemoveBit(ROOM_SENT);
+        ROOM_FLAGGED(get_absolute_in_room(d->character), ROOM_SENT))
+      ROOM_FLAGS(get_absolute_in_room(d->character)).RemoveBit(ROOM_SENT);
 }
 
 /**********************************************************************
@@ -800,7 +800,7 @@ ACMD(do_gen_comm)
     return;
   }
 
-  if (subcmd == SCMD_SHOUT && (affected_by_spell(ch, SPELL_STEALTH) || world[ch->in_veh ? ch->in_veh->in_room : ch->in_room].silence[0])) {
+  if (subcmd == SCMD_SHOUT && (affected_by_spell(ch, SPELL_STEALTH) || world[get_absolute_in_room(ch)].silence[0])) {
     send_to_char("You can't seem to make any noise.\r\n", ch);
     return;
   }
@@ -823,7 +823,7 @@ ACMD(do_gen_comm)
     return;
   }
 
-  if (ROOM_FLAGGED(ch->in_room, ROOM_SOUNDPROOF) && subcmd == SCMD_SHOUT) {
+  if (ROOM_FLAGGED(get_absolute_in_room(ch), ROOM_SOUNDPROOF) && subcmd == SCMD_SHOUT) {
     send_to_char("The walls seem to absorb your words.\r\n", ch);
     return;
   }
@@ -860,7 +860,7 @@ ACMD(do_gen_comm)
     int was_in;
     struct char_data *tmp;
     int success = success_test(GET_SKILL(ch, GET_LANGUAGE(ch)), 4);
-    for (tmp = world[ch->in_room].people; tmp; tmp = tmp->next_in_room)
+    for (tmp = world[get_absolute_in_room(ch)].people; tmp; tmp = tmp->next_in_room)
       if (tmp != ch) {
         if (success > 0) {
           int suc = success_test(GET_SKILL(tmp, GET_LANGUAGE(ch)), 4);
@@ -880,14 +880,14 @@ ACMD(do_gen_comm)
     act(buf1, FALSE, ch, 0, 0, TO_CHAR);
 
     if (ch->in_veh) {
-      was_in = ch->in_veh->in_room;
+      was_in = get_absolute_in_room(ch);
       ch->in_room = was_in;
       sprintf(buf1, "%sFrom inside %s, $z %sshouts, '%s'^N", com_msgs[subcmd][3], GET_VEH_NAME(ch->in_veh),
               com_msgs[subcmd][3], argument);
       act(buf1, FALSE, ch, 0, 0, TO_ROOM);
     } else {
       was_in = ch->in_room;
-      for (veh = world[ch->in_room].vehicles; veh; veh = veh->next_veh) {
+      for (veh = world[get_absolute_in_room(ch)].vehicles; veh; veh = veh->next_veh) {
         ch->in_veh = veh;
         act(buf, FALSE, ch, NULL, NULL, TO_ROOM);
         ch->in_veh = NULL;
@@ -897,7 +897,7 @@ ACMD(do_gen_comm)
     for (int door = 0; door < NUM_OF_DIRS; door++)
       if (CAN_GO(ch, door)) {
         ch->in_room = world[was_in].dir_option[door]->to_room;
-        for (tmp = world[ch->in_room].people; tmp; tmp = tmp->next_in_room)
+        for (tmp = world[get_absolute_in_room(ch)].people; tmp; tmp = tmp->next_in_room)
           if (tmp != ch) {
             if (success > 0) {
               int suc = success_test(GET_SKILL(tmp, GET_LANGUAGE(ch)), 4);
@@ -957,7 +957,7 @@ ACMD(do_gen_comm)
                                            PLR_MAILING,
                                            PLR_EDITING, ENDBIT) &&
         !IS_PROJECT(i->character) &&
-        !(ROOM_FLAGGED(i->character->in_room, ROOM_SOUNDPROOF) && subcmd == SCMD_SHOUT)) {
+        !(ROOM_FLAGGED(get_absolute_in_room(i->character), ROOM_SOUNDPROOF) && subcmd == SCMD_SHOUT)) {
       if (subcmd == SCMD_NEWBIE && !(PLR_FLAGGED(i->character, PLR_NEWBIE) ||
                                      IS_SENATOR(i->character) || PRF_FLAGGED(i->character, PRF_NEWBIEHELPER)))
         continue;
@@ -1200,7 +1200,7 @@ ACMD(do_phone)
       send_to_char(ch, "No one has answered it yet.\r\n");
       return;
     }
-    if (affected_by_spell(ch, SPELL_STEALTH) || world[ch->in_veh ? ch->in_veh->in_room : ch->in_room].silence[0]) {
+    if (affected_by_spell(ch, SPELL_STEALTH) || world[get_absolute_in_room(ch)].silence[0]) {
       send_to_char("You can't seem to make any noise.\r\n", ch);
       return;
     }
@@ -1236,7 +1236,7 @@ ACMD(do_phone)
         act("^Y$v speaks in a language you don't understand.", FALSE, ch, 0, tch, TO_VICT);
     }
     if (!cyber) {
-      for (tch = ch->in_veh ? ch->in_veh->people : world[ch->in_room].people; tch; tch = ch->in_veh ? tch->next_in_veh : tch->next_in_room)
+      for (tch = ch->in_veh ? ch->in_veh->people : world[get_absolute_in_room(ch)].people; tch; tch = ch->in_veh ? tch->next_in_veh : tch->next_in_room)
         if (tch != ch) {
           if (success_test(GET_SKILL(tch, GET_LANGUAGE(ch)), 4) > 0)
             act(buf2, FALSE, ch, 0, tch, TO_VICT);

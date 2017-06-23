@@ -1,0 +1,551 @@
+act.comm.cpp:51:  else if (subcmd != SCMD_OSAY && !PLR_FLAGGED(ch, PLR_MATRIX) && (affected_by_spell(ch, SPELL_STEALTH) || world[ch->in_veh ? ch->in_veh->in_room : ch->in_room].silence[0]))
+act.comm.cpp:63:        for (struct char_data *targ = world[ch->in_room].people; targ; targ = targ->next_in_room)
+act.comm.cpp:127:        for (tmp = world[ch->in_room].people; tmp; tmp = tmp->next_in_room)
+act.comm.cpp:174:  else if (affected_by_spell(ch, SPELL_STEALTH) || world[ch->in_veh ? ch->in_veh->in_room : ch->in_room].silence[0])
+act.comm.cpp:274:  else if (affected_by_spell(ch, SPELL_STEALTH) || world[ch->in_veh ? ch->in_veh->in_room : ch->in_room].silence[0])
+act.comm.cpp:306:  if (affected_by_spell(ch, SPELL_STEALTH) || world[ch->in_veh ? ch->in_veh->in_room : ch->in_room].silence[0]) {
+act.comm.cpp:335:             !((veh = get_veh_list(buf, world[ch->in_room].vehicles, ch)) && subcmd == SCMD_WHISPER))
+act.comm.cpp:583:  if ((affected_by_spell(ch, SPELL_STEALTH) || world[ch->in_veh ? ch->in_veh->in_room : ch->in_room].silence[0]) && !cyberware) {
+act.comm.cpp:681:          for (obj = world[d->character->in_room].contents; obj && !radio;
+act.comm.cpp:803:  if (subcmd == SCMD_SHOUT && (affected_by_spell(ch, SPELL_STEALTH) || world[ch->in_veh ? ch->in_veh->in_room : ch->in_room].silence[0])) {
+act.comm.cpp:863:    for (tmp = world[ch->in_room].people; tmp; tmp = tmp->next_in_room)
+act.comm.cpp:890:      for (veh = world[ch->in_room].vehicles; veh; veh = veh->next_veh) {
+act.comm.cpp:900:        for (tmp = world[ch->in_room].people; tmp; tmp = tmp->next_in_room)
+act.comm.cpp:1203:    if (affected_by_spell(ch, SPELL_STEALTH) || world[ch->in_veh ? ch->in_veh->in_room : ch->in_room].silence[0]) {
+act.comm.cpp:1239:      for (tch = ch->in_veh ? ch->in_veh->people : world[ch->in_room].people; tch; tch = ch->in_veh ? tch->next_in_veh : tch->next_in_room)
+act.drive.cpp:398:  if (world[veh->in_room].peaceful) {
+act.drive.cpp:409:      !(tveh = get_veh_list(arg, world[veh->in_room].vehicles, ch))) {
+act.drive.cpp:495:  if (!(veh = get_veh_list(buf1, ch->in_veh ? ch->in_veh->carriedvehs : world[ch->in_room].vehicles, ch))) {
+act.drive.cpp:898:                veh->in_veh ? world[veh->in_veh->in_room].name : world[veh->in_room].name, veh->damage);
+act.drive.cpp:912:    else veh = get_veh_list(buf, world[ch->in_veh->in_room].vehicles, ch);
+act.drive.cpp:914:    veh = get_veh_list(buf, world[ch->in_room].vehicles, ch);
+act.drive.cpp:954:  if (!(veh = get_veh_list(argument, ch->in_veh ? ch->in_veh->carriedvehs : world[ch->in_room].vehicles, ch))) {
+act.drive.cpp:1046:  if (!(vict = get_char_in_list_vis(ch, arg, world[ch->in_veh->in_room].people))) {
+act.drive.cpp:1228:  if (!(tveh = get_veh_list(arg, world[veh->in_room].vehicles, ch)) &&
+act.drive.cpp:1319:      !(tveh = get_veh_list(arg, world[veh->in_room].vehicles, ch)) && (vict && !CAN_SEE(ch, vict))) {
+act.drive.cpp:1670:  if (!veh && (!(veh = get_veh_list(argument, world[ch->in_room].vehicles, ch)))) {
+act.drive.cpp:1686:    if (ch->in_veh && world[ch->in_veh->in_room].people) {
+act.drive.cpp:1688:      act(buf, FALSE, world[ch->in_veh->in_room].people, 0, 0, TO_ROOM);
+act.drive.cpp:1689:      act(buf, FALSE, world[ch->in_veh->in_room].people, 0, 0, TO_CHAR);
+act.drive.cpp:1714:    if (world[veh->in_room].people) {
+act.drive.cpp:1716:      act(buf, FALSE, world[veh->in_room].people, 0, 0, TO_ROOM);
+act.drive.cpp:1717:      act(buf, FALSE, world[veh->in_room].people, 0, 0, TO_CHAR);
+act.drive.cpp:1724:  if (!(tveh = get_veh_list(argument, world[veh->in_room].vehicles, ch))) {
+act.drive.cpp:1744:    if (world[veh->in_room].people) {
+act.drive.cpp:1746:      act(buf, FALSE, world[veh->in_room].people, 0, 0, TO_ROOM);
+act.drive.cpp:1747:      act(buf, FALSE, world[veh->in_room].people, 0, 0, TO_CHAR);
+act.drive.cpp:1824:      if (world[ch->in_veh->in_room].people)
+act.drive.cpp:1825:        act(buf2, 0, world[ch->in_veh->in_room].people, 0, ch, TO_NOTVICT);
+act.drive.cpp:1835:    if (!(veh = get_veh_list(buf, world[ch->in_room].vehicles, ch)) || !(found_veh = get_veh_list(buf1, world[ch->in_room].vehicles, ch))) {
+act.drive.cpp:1880:  else if (!(veh = get_veh_list(buf, world[ch->in_room].vehicles, ch)))
+act.informative.cpp:1039:      send_to_char(ch, "\r\n^CAround you is %s\r\n", world[veh->in_room].name);
+act.informative.cpp:1041:        if (world[veh->in_room].night_desc && weather_info.sunlight == SUN_DARK)
+act.informative.cpp:1042:          send_to_char(ch, world[veh->in_room].night_desc);
+act.informative.cpp:1044:          send_to_char(ch, world[veh->in_room].description);
+act.informative.cpp:1052:      list_obj_to_char(world[veh->in_room].contents, ch, 0, FALSE, FALSE);
+act.informative.cpp:1055:      list_char_to_char(world[veh->in_room].people, ch);
+act.informative.cpp:1057:      list_veh_to_char(world[veh->in_room].vehicles, ch);
+act.informative.cpp:1084:      sprintf(buf2, "^C[%5ld] %s [ %s ]^n", world[ch->in_room].number,
+act.informative.cpp:1085:              world[ch->in_room].name, buf);
+act.informative.cpp:1088:      send_to_char(ch, "^C%s^n", world[ch->in_room].name, ch);
+act.informative.cpp:1094:    if (world[ch->in_room].night_desc && weather_info.sunlight == SUN_DARK)
+act.informative.cpp:1095:      send_to_char(world[ch->in_room].night_desc, ch);
+act.informative.cpp:1097:      send_to_char(world[ch->in_room].description, ch);
+act.informative.cpp:1106:  if (world[ch->in_room].background[0] && (IS_ASTRAL(ch) || IS_DUAL(ch))) {
+act.informative.cpp:1107:    if (world[ch->in_room].background[1] == AURA_POWERSITE) {
+act.informative.cpp:1108:      switch (world[ch->in_room].background[0]) {
+act.informative.cpp:1125:    } else if (world[ch->in_room].background[0] < 6) {
+act.informative.cpp:1127:      switch (world[ch->in_room].background[0]) {
+act.informative.cpp:1144:      sprintf(ENDOF(buf), " aura of %s pervades the area.^n\r\n", background_types[world[ch->in_room].background[1]]);
+act.informative.cpp:1150:  if (world[ch->in_room].vision[1])
+act.informative.cpp:1151:    switch (world[ch->in_room].vision[1])
+act.informative.cpp:1176:  if (world[ch->in_room].poltergeist[0])
+act.informative.cpp:1178:  if (world[ch->in_room].icesheet[0])
+act.informative.cpp:1184:  list_obj_to_char(world[ch->in_room].contents, ch, 0, FALSE, FALSE);
+act.informative.cpp:1187:  list_obj_to_char(world[ch->in_room].contents, ch, 0, FALSE, TRUE);
+act.informative.cpp:1188:  list_char_to_char(world[ch->in_room].people, ch);
+act.informative.cpp:1190:  list_veh_to_char(world[ch->in_room].vehicles, ch);
+act.informative.cpp:1246:                                                  world[ch->in_room].vehicles, ch))))
+act.informative.cpp:1381:    found_veh = get_veh_list(arg, ch->in_veh ? ch->in_veh->carriedvehs : world[ch->in_room].vehicles, ch);
+act.informative.cpp:1418:  if (ch->in_room != NOWHERE && (desc = find_exdesc(arg, world[ch->in_room].ex_description)) != NULL)
+act.informative.cpp:1453:    for (obj = world[ch->in_room].contents; obj && !found; obj = obj->next_content)
+act.informative.cpp:1544:    found_veh = get_veh_list(arg, ch->in_veh ? ch->in_veh->carriedvehs : world[ch->in_room].vehicles, ch);
+act.informative.cpp:2823:    sprintf(buf + strlen(buf), "[%5ld] %s\r\n", world[obj->in_room].number,
+act.informative.cpp:2824:            world[obj->in_room].name);
+act.informative.cpp:2856:                      GET_CHAR_NAME(i), world[d->character->in_room].number,
+act.informative.cpp:2857:                      world[d->character->in_veh->in_room].name, GET_NAME(d->character),
+act.informative.cpp:2861:                      GET_CHAR_NAME(i), world[d->character->in_room].number,
+act.informative.cpp:2862:                      world[d->character->in_room].name, GET_NAME(d->character));
+act.informative.cpp:2868:                        world[i->in_veh->in_room].number, world[i->in_veh->in_room].name, GET_VEH_NAME(i->in_veh));
+act.informative.cpp:2872:                        world[i->in_room].number, world[i->in_room].name);
+act.informative.cpp:2885:                (i->in_veh ? world[i->in_veh->in_room].number : world[i->in_room].number),
+act.informative.cpp:2886:                (i->in_veh ? GET_VEH_NAME(i->in_veh) : world[i->in_room].name));
+act.movement.cpp:60:  if (world[ch->in_room].icesheet[0] && !IS_ASTRAL(ch))
+act.movement.cpp:61:    if (success_test(GET_QUI(ch), world[ch->in_room].icesheet[0] + modify_target(ch)) < 1)
+act.movement.cpp:90:  if (world[ch->in_room].func && world[ch->in_room].func == escalator)
+act.movement.cpp:99:    target = MAX(2, world[ch->in_room].rating);
+act.movement.cpp:157:  GET_LASTROOM(ch) = world[ch->in_room].number;
+act.movement.cpp:159:  if (world[ch->in_room].dir_option[dir]->to_room >= real_room(FIRST_CAB) &&
+act.movement.cpp:160:      world[ch->in_room].dir_option[dir]->to_room <= real_room(LAST_CAB))
+act.movement.cpp:183:    if (world[ch->in_room].silence[0])
+act.movement.cpp:184:      tchtarg += world[ch->in_room].silence[1];
+act.movement.cpp:185:    for (tch = world[ch->in_room].people; tch; tch = tch->next_in_room) {
+act.movement.cpp:194:    for (tch = world[ch->in_room].people; tch; tch = tch->next_in_room)
+act.movement.cpp:197:    for (tveh = world[ch->in_room].vehicles; tveh; tveh = tveh->next_veh)
+act.movement.cpp:201:    if (world[ch->in_room].watching)
+act.movement.cpp:202:      for (struct char_data *tch = world[ch->in_room].watching; tch; tch = tch->next_watching)
+act.movement.cpp:232:  if (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) >= world[ch->in_room].z * 100)
+act.movement.cpp:259:    if (world[ch->in_room].silence[0])
+act.movement.cpp:260:      tchtarg += world[ch->in_room].silence[1];
+act.movement.cpp:261:    for (tch = world[ch->in_room].people; tch; tch = tch->next_in_room) {
+act.movement.cpp:281:    for (tch = world[ch->in_room].people; tch; tch = tch->next_in_room)
+act.movement.cpp:284:    for (tveh = world[ch->in_room].vehicles; tveh; tveh = tveh->next_veh)
+act.movement.cpp:288:    if (world[ch->in_room].watching)
+act.movement.cpp:289:      for (struct char_data *tch = world[ch->in_room].watching; tch; tch = tch->next_watching)
+act.movement.cpp:291:    for (tch = world[ch->in_room].people; tch; tch = tch->next_in_room) {
+act.movement.cpp:346:  int base_target = world[ch->in_room].rating + modify_target(ch);
+act.movement.cpp:390:    meters += world[ch->in_room].z;
+act.movement.cpp:420:              GET_CHAR_NAME(ch), world[ch->in_room].number);
+act.movement.cpp:507:  if (world[veh->in_room].people)
+act.movement.cpp:509:    act(buf1, FALSE, world[veh->in_room].people, 0, 0, TO_ROOM);
+act.movement.cpp:510:    act(buf1, FALSE, world[veh->in_room].people, 0, 0, TO_CHAR);
+act.movement.cpp:512:  if (world[veh->in_room].watching)
+act.movement.cpp:513:    for (struct char_data *tch = world[veh->in_room].watching; tch; tch = tch->next_watching)
+act.movement.cpp:521:  if (world[veh->in_room].people)
+act.movement.cpp:523:    act(buf2, FALSE, world[veh->in_room].people, 0, 0, TO_ROOM);
+act.movement.cpp:524:    act(buf2, FALSE, world[veh->in_room].people, 0, 0, TO_CHAR);
+act.movement.cpp:526:  if (world[veh->in_room].watching)
+act.movement.cpp:527:    for (struct char_data *tch = world[veh->in_room].watching; tch; tch = tch->next_watching)
+act.movement.cpp:588:    if ((get_speed(v->follower) > 80 && SECT(v->follower->in_room) == SPIRIT_CITY) || world[v->follower->in_room].icesheet[0] || SECT(v->follower->in_room) == SPIRIT_HEARTH) 
+act.movement.cpp:600:  for (tch = world[veh->in_room].people; tch; tch = tch->next_in_room)
+act.movement.cpp:609:  if ((get_speed(veh) > 80 && SECT(veh->in_room) == SPIRIT_CITY) || world[veh->in_room].icesheet[0])
+act.movement.cpp:637:        !ROOM_FLAGGED(world[ch->in_room].dir_option[dir]->to_room, ROOM_NOMOB)))) {
+act.movement.cpp:960:             !(veh = get_veh_list(type, world[ch->in_room].vehicles, ch)))
+act.movement.cpp:1066:      if (world[inveh->in_room].people)
+act.movement.cpp:1067:        act(buf, 0, world[inveh->in_room].people, 0, 0, TO_ROOM);
+act.movement.cpp:1139:  if ((dir = search_block(buf2, lookdirs, FALSE)) == -1 && !(veh = get_veh_list(buf2, world[ch->in_room].vehicles, ch))) {
+act.movement.cpp:1239:    if (world[veh->in_room].people) {
+act.movement.cpp:1240:      act(buf, 0, world[veh->in_room].people, 0, 0, TO_ROOM);
+act.movement.cpp:1241:      act(buf, 0, world[veh->in_room].people, 0, 0, TO_CHAR);
+act.obj.cpp:557:        for (struct char_data *vict = world[ch->in_room].people; vict; vict = vict->next_in_room)
+act.obj.cpp:739:      for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : world[ch->in_room].people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room)
+act.obj.cpp:760:      for (struct char_data *tmp = ch->in_veh ? ch->in_veh->people : world[ch->in_room].people; tmp; tmp = ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)
+act.obj.cpp:798:      obj = get_obj_in_list_vis(ch, arg, world[ch->in_room].contents);
+act.obj.cpp:823:      obj = world[ch->in_room].contents;
+act.obj.cpp:931:        veh = get_veh_list(arg2, ch->in_veh ? ch->in_veh->carriedvehs : world[ch->in_room].vehicles, ch);
+act.obj.cpp:1111:      for (cont = world[ch->in_room].contents; cont; cont = cont->next_content)
+act.obj.cpp:1704:    if (!(temp = get_obj_in_list_vis(ch, arg, world[ch->in_room].contents))) {
+act.obj.cpp:1888:    if (!(from_obj = get_obj_in_list_vis(ch, arg2, world[ch->in_room].contents))) {
+act.offensive.cpp:61:    for (opponent = world[ch->in_room].people; opponent && (FIGHTING(opponent) != helpee);
+act.offensive.cpp:128:  if (world[ch->char_specials.rigging ? ch->char_specials.rigging->in_room : ch->in_room].peaceful)
+act.offensive.cpp:145:  } else if (!(vict = get_char_room_vis(ch, arg)) && !(veh = get_veh_list(arg, world[ch->in_room].vehicles, ch)))
+act.offensive.cpp:402:                GET_NAME(ch), world[vict->in_room].name,
+act.offensive.cpp:403:                world[vict->in_room].number);
+act.offensive.cpp:551:                                !ROOM_FLAGGED(world[ch->in_room].dir_option[attempt]->to_room, ROOM_NOMOB))) {
+act.offensive.cpp:604:  else if (world[ch->in_room].peaceful)
+act.other.cpp:838:                                           GET_CHAR_NAME(ch)), (tmp + 4), ch->in_room != NOWHERE ? world[ch->in_room].number : -1, argument);
+act.other.cpp:920:      sprintf(ENDOF(body), " from room %ld.", world[ch->in_room].number);
+act.other.cpp:926:        sprintf(ENDOF(body), ", located in room %ld.", world[ch->in_veh->in_room].number);
+act.other.cpp:1305:  } else if ((veh = get_veh_list(buf, world[ch->in_room].vehicles, ch))) {
+act.other.cpp:1526:    if (ch->in_veh || !(veh = get_veh_list(buf1, world[ch->in_room].vehicles, ch))) {
+act.other.cpp:1677:  if (!ch->in_veh && (veh = get_veh_list(buf1, world[ch->in_room].vehicles, ch))) {
+act.other.cpp:2553:      if ((found_veh = get_veh_list(argument, world[ch->in_room].vehicles, ch))) {
+act.other.cpp:2555:        sprintf(buf, "^c%s in %s^n\r\n%s", GET_VEH_NAME(found_veh), world[ch->in_room].name, GET_VEH_DESC(found_veh));
+act.other.cpp:2567:                world[ch->in_room].name, i->player.physical_text.look_desc);
+act.other.cpp:2607:        sprintf(buf, "^c%s in %s^n\r\n%s", GET_OBJ_NAME(found_obj), world[ch->in_room].name, found_obj->photo ? found_obj->photo : found_obj->text.look_desc);
+act.other.cpp:2615:      } else if ((desc = find_exdesc(arg, world[ch->in_room].ex_description))) {
+act.other.cpp:2617:        sprintf(buf, "^c%s in %s^n\r\n%s", argument, world[ch->in_room].name, desc);
+act.other.cpp:2628:    sprintf(buf2, "a photo of %s", world[ch->in_room].name);
+act.other.cpp:2629:    sprintf(buf, "^c%s^n\r\n%s", world[ch->in_room].name, world[ch->in_room].description);
+act.other.cpp:2630:    for (struct char_data *tch = world[ch->in_room].people; tch; tch = tch->next_in_room)
+act.other.cpp:2660:    for (struct obj_data *obj = world[ch->in_room].contents; obj; obj = obj->next_content) {
+act.other.cpp:2673:    for (struct veh_data *vehicle = world[ch->in_room].vehicles; vehicle; vehicle = vehicle->next_veh) {
+act.other.cpp:2859:  if (world[ch->in_room].background[1] == AURA_POWERSITE)
+act.other.cpp:2860:    skill += world[ch->in_room].background[0];
+act.other.cpp:2861:  else target += world[ch->in_room].background[0];
+act.other.cpp:3271:  for (shop = ch->in_veh ? ch->in_veh->contents : world[ch->in_room].contents; shop; shop = shop->next_content)
+act.other.cpp:3296:  for (shop = ch->in_veh ? ch->in_veh->contents : world[ch->in_room].contents; shop; shop = shop->next_content)
+act.wizard.cpp:159:        GET_LAST_IN(och) = world[och->in_room].number;
+act.wizard.cpp:161:        GET_LAST_IN(och) = world[och->in_veh->in_room].number;
+act.wizard.cpp:163:        GET_LAST_IN(och) = world[och->in_veh->in_veh->in_room].number;
+act.wizard.cpp:246:        if (zone_table[world[d->character->in_room].zone].number == zone_table[world[ch->in_room].zone].number &&
+act.wizard.cpp:251:            zone_table[world[ch->in_room].zone].number);
+act.wizard.cpp:297:      for (vict = world[ch->in_room].people; vict; vict = vict->next_in_room)
+act.wizard.cpp:304:        for (struct char_data *targ = ch->in_veh ? ch->in_veh->people : world[ch->in_room].people; targ; targ = ch->in_veh ? targ->next_in_veh : targ->next_in_room)
+act.wizard.cpp:335:          for (veh = world[ch->in_room].vehicles; veh; veh = veh->next_veh)
+act.wizard.cpp:349:              GET_CHAR_NAME(ch), buf, world[ch->in_room].number);
+act.wizard.cpp:572:              world[ch->in_room].name);
+act.wizard.cpp:606:  else if (!(veh = get_veh_list(buf, (ch->in_veh ? world[ch->in_veh->in_room].vehicles :
+act.wizard.cpp:607:                                      world[ch->in_room].vehicles), ch)))
+act.wizard.cpp:688:  struct room_data *rm = &world[ch->in_room];
+act.wizard.cpp:890:    sprintf(ENDOF(buf), "%ld", world[j->in_room].number);
+act.wizard.cpp:1093:          GET_CHAR_NAME(k), GET_IDNUM(k), world[k->in_room].number);
+act.wizard.cpp:1258:          GET_NAME(k), world[k->in_room].number);
+act.wizard.cpp:1386:    else if ((veh = get_veh_list(buf1, ch->in_veh ? world[ch->in_veh->in_room].vehicles :
+act.wizard.cpp:1387:                                 world[ch->in_room].vehicles, ch)))
+act.wizard.cpp:1394:    else if ((object = get_obj_in_list_vis(ch, buf1, world[ch->in_room].contents)))
+act.wizard.cpp:1826:       zone_table[world[ch->in_room].zone].number)) {
+act.wizard.cpp:1852:    } else if ((obj = get_obj_in_list_vis(ch, buf, world[ch->in_room].contents))) {
+act.wizard.cpp:1855:    } else if ((veh = get_veh_list(buf, world[ch->in_room].vehicles, ch))) {
+act.wizard.cpp:1872:    for (vict = world[ch->in_room].people; vict; vict = next_v) {
+act.wizard.cpp:1878:    for (obj = world[ch->in_room].contents; obj; obj = next_o) {
+act.wizard.cpp:1882:    for (veh = world[ch->in_room].vehicles; veh; veh = next_ve) {
+act.wizard.cpp:2249:    for (tch = world[ch->in_room].people; tch; tch = tch->next_in_room) {
+act.wizard.cpp:2550:            GET_CHAR_NAME(ch), world[ch->in_room].number, to_force);
+act.wizard.cpp:2553:    for (vict = world[ch->in_room].people; vict; vict = next_force) {
+act.wizard.cpp:2632:                world[tch->in_room].number, tch->char_specials.timer);
+act.wizard.cpp:2636:                GET_CHAR_NAME(tch), world[tch->in_room].number);
+act.wizard.cpp:2677:    i = world[ch->in_room].zone;
+act.wizard.cpp:3016:        print_zone_to_buf(buf, world[ch->in_room].zone, 1);
+act.wizard.cpp:3018:        print_zone_to_buf(buf, world[ch->in_room].zone, 0);
+act.wizard.cpp:3328:  if (!(veh = get_veh_list(name, ch->in_veh ? world[ch->in_veh->in_room].vehicles :
+act.wizard.cpp:3329:                           world[ch->in_room].vehicles, ch))) {
+boards.cpp:116:    for (obj = world[ch->in_room].contents; obj; obj = obj->next_content)
+comm.cpp:1125:                sprintf(str, "%ld", world[d->character->in_room].number);
+comm.cpp:2513:    to = world[ch->in_room].people;
+comm.cpp:2515:    to = world[obj->in_room].people;
+db.cpp:2974:      if (world[i->character->in_room].zone == zone_nr)
+dblist.cpp:189:      for (ch = OBJ->in_veh ? OBJ->in_veh->people : world[OBJ->in_room].people; ch; ch = OBJ->in_veh ? ch->next_in_veh : ch->next_in_room)
+dblist.cpp:243:        act("$p is lost on the ground.", TRUE, world[temp->data->in_room].people,
+dblist.cpp:266:                 (world[temp->data->in_room].people)) {
+dblist.cpp:267:          act("$p is taken away by the coroner.", TRUE, world[temp->data->in_room].people,
+dblist.cpp:269:          act("$p is taken away by the coroner.", TRUE, world[temp->data->in_room].people,
+dblist.cpp:323:      else if (temp->data->in_room != NOWHERE && world[temp->data->in_room].people) {
+dblist.cpp:324:        act("$p disintegrates.", TRUE, world[temp->data->in_room].people,
+dblist.cpp:326:        act("$p disintegrates.", TRUE, world[temp->data->in_room].people,
+deck_build.cpp:342:    for (struct obj_data *comp = ch->in_veh ? ch->in_veh->contents : world[ch->in_room].contents; comp; comp = comp->next_content)
+deck_build.cpp:355:        for (cooker = ch->in_veh ? ch->in_veh->contents : world[ch->in_room].contents; cooker; cooker = cooker->next_content)
+deck_build.cpp:363:        for (struct obj_data *obj = ch->in_veh ? ch->in_veh->contents : world[ch->in_room].contents; obj; obj = obj->next_content)
+deck_build.cpp:445:        if (!(obj = get_obj_in_list_vis(ch, arg1, world[ch->in_room].contents))) {
+deck_build.cpp:447:                for (obj = world[ch->in_room].contents; obj; obj = obj->next_content)
+deck_build.cpp:458:                for (obj = world[ch->in_room].contents; obj; obj = obj->next_content)
+deck_build.cpp:576:                for (struct obj_data *find = world[ch->in_room].contents; find; find = find->next_content)
+deck_build.cpp:740:    for (struct obj_data *obj = world[ch->in_room].contents; obj; obj = obj->next_content)
+fight.cpp:242:            GET_CHAR_NAME(vict), world[vict->in_room].name);
+fight.cpp:569:      else switch (zone_table[world[ch->in_room].zone].juridiction) {
+fight.cpp:588:                  zone_table[world[ch->in_room].zone].juridiction,
+fight.cpp:589:                  world[ch->in_room].number,
+fight.cpp:633:    if (!world[ch->in_room].background[0] || world[ch->in_room].background[1] == AURA_PLAYERCOMBAT) {
+fight.cpp:634:      world[ch->in_room].background[0] = 1;
+fight.cpp:635:      world[ch->in_room].background[1] = AURA_PLAYERDEATH;
+fight.cpp:666:          world[ch->in_room].name, world[ch->in_room].number );
+fight.cpp:955:  for (witness = world[victim->in_room].people; witness; witness = witness->next_in_room)
+fight.cpp:959:    for (witness = world[ch->in_room].people; witness; witness = witness->next_in_room)
+fight.cpp:1096:  for (vict = world[victim->in_room].people; vict; vict = vict->next_in_room)
+fight.cpp:1132:    for (vict = world[victim->in_room].people; vict; vict = vict->next_in_room)
+fight.cpp:1653:                   MAX(zone_table[world[ch->in_room].zone].security, 4)) > 0)
+fight.cpp:1676:      for (struct char_data *temp = world[ch->in_room].people; temp; temp = temp->next_in_room)
+fight.cpp:1702:    switch (zone_table[world[ch->in_room].zone].juridiction) {
+fight.cpp:1781:                  GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:1782:                  world[vict->in_room].number);
+fight.cpp:1786:                  GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:1787:                  world[vict->in_room].number);
+fight.cpp:1791:                  GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:1792:                  world[vict->in_room].number);
+fight.cpp:1796:                  GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:1797:                  world[vict->in_room].number);
+fight.cpp:1801:                  GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:1802:                  world[vict->in_room].number);
+fight.cpp:1811:                  world[vict->in_room].name,
+fight.cpp:1812:                  world[vict->in_room].number);
+fight.cpp:1817:                  world[vict->in_room].name, world[vict->in_room].number);
+fight.cpp:1822:                  world[vict->in_room].name, world[vict->in_room].number);
+fight.cpp:1827:                  world[vict->in_room].name, world[vict->in_room].number);
+fight.cpp:1832:                  world[vict->in_room].name, world[vict->in_room].number);
+fight.cpp:1841:                  world[vict->in_room].name,
+fight.cpp:1842:                  world[vict->in_room].number);
+fight.cpp:1847:                  world[vict->in_room].name, world[vict->in_room].number);
+fight.cpp:1852:                  world[vict->in_room].name,
+fight.cpp:1853:                  world[vict->in_room].number);
+fight.cpp:1859:                  world[vict->in_room].name, world[vict->in_room].number);
+fight.cpp:1864:                  world[vict->in_room].name, world[vict->in_room].number);
+fight.cpp:1872:                  world[vict->in_room].name, world[vict->in_room].number);
+fight.cpp:1876:                  GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:1877:                  world[vict->in_room].number);
+fight.cpp:1881:                  GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:1882:                  world[vict->in_room].number);
+fight.cpp:1886:                  "{%s (%ld)}", GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:1887:                  world[vict->in_room].number);
+fight.cpp:1892:                  world[vict->in_room].name, world[vict->in_room].number);
+fight.cpp:1900:                  GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:1901:                  world[vict->in_room].number);
+fight.cpp:1905:                  GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:1906:                  world[vict->in_room].number);
+fight.cpp:1911:                  world[vict->in_room].name, world[vict->in_room].number);
+fight.cpp:1915:                  "{%s (%ld)}", GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:1916:                  world[vict->in_room].number);
+fight.cpp:1920:                  world[vict->in_room].name, world[vict->in_room].number);
+fight.cpp:1930:                  world[vict->in_room].name, world[vict->in_room].number);
+fight.cpp:1934:                  GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:1935:                  world[vict->in_room].number);
+fight.cpp:1939:                  GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:1940:                  world[vict->in_room].number);
+fight.cpp:1944:                  GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:1945:                  world[vict->in_room].number);
+fight.cpp:1949:                  GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:1950:                  world[vict->in_room].number);
+fight.cpp:1959:                  world[vict->in_room].name,
+fight.cpp:1960:                  world[vict->in_room].number);
+fight.cpp:1966:                  world[vict->in_room].name, world[vict->in_room].number);
+fight.cpp:1970:                  GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:1971:                  world[vict->in_room].number);
+fight.cpp:1975:                  "{%s (%ld)}", GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:1976:                  world[vict->in_room].number);
+fight.cpp:1982:                  world[vict->in_room].name, world[vict->in_room].number);
+fight.cpp:1988:              GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:1989:              world[vict->in_room].number);
+fight.cpp:1993:              GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:1994:              world[vict->in_room].number);
+fight.cpp:1999:              GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:2000:              world[vict->in_room].number);
+fight.cpp:2004:              GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:2005:              world[vict->in_room].number);
+fight.cpp:2011:                  GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:2012:                  world[vict->in_room].number);
+fight.cpp:2016:                  GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:2017:                  world[vict->in_room].number);
+fight.cpp:2024:                GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:2025:                world[vict->in_room].number);
+fight.cpp:2030:                    GET_CHAR_NAME(ch), world[vict->in_room].name,
+fight.cpp:2031:                    world[vict->in_room].number);
+fight.cpp:2035:                    GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:2036:                    world[vict->in_room].number);
+fight.cpp:2040:                    GET_CHAR_NAME(vict), GET_CHAR_NAME(ch), world[vict->in_room].name,
+fight.cpp:2041:                    world[vict->in_room].number);
+fight.cpp:2045:                    GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:2046:                    world[vict->in_room].number);
+fight.cpp:2050:                    GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), world[vict->in_room].name,
+fight.cpp:2051:                    world[vict->in_room].number);
+fight.cpp:2055:                    GET_CHAR_NAME(vict), GET_CHAR_NAME(ch), world[vict->in_room].name,
+fight.cpp:2056:                    world[vict->in_room].number);
+fight.cpp:2683:            GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), world[vict->in_room].name);
+fight.cpp:3037:  if (world[ch->in_room].silence[0])
+fight.cpp:3061:    if (world[ch->in_room].dir_option[door1] && (room1 = world[ch->in_room].dir_option[door1]->to_room) != NOWHERE && !(world[room1].silence[0])) {
+fight.cpp:3183:  return ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) >= world[ch->in_room].z*100;
+fight.cpp:3905:  if (ch->in_room && !world[ch->in_room].background[0]) {
+fight.cpp:3906:    world[ch->in_room].background[0] = 1;
+fight.cpp:3907:    world[ch->in_room].background[1] = AURA_PLAYERCOMBAT;
+fight.cpp:4191:  if (world[ch->char_specials.rigging ? ch->char_specials.rigging->in_room : ch->in_room].peaceful)
+fight.cpp:4298:    } else if (world[vict->in_room].peaceful) {
+fight.cpp:4576:    if (ch->in_room && world[ch->in_room].poltergeist[0]) {
+fight.cpp:4577:      int dam = convert_damage(stage(-success_test(GET_QUI(ch), world[ch->in_room].poltergeist[1] - GET_IMPACT(ch)), LIGHT));
+fight.cpp:4754:          if (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) > world[ch->in_room].z*100) {
+fight.cpp:4755:            if (GET_HEIGHT(ch) > world[ch->in_room].z * 200)
+handler.cpp:369:          world[ch->in_room].poltergeist[0]++;
+handler.cpp:370:          if (sust->force > world[ch->in_room].poltergeist[1])
+handler.cpp:371:            world[ch->in_room].poltergeist[1] = sust->force;
+handler.cpp:372:        } else if (!--world[ch->in_room].poltergeist[0])
+handler.cpp:373:          world[ch->in_room].poltergeist[1] = 0;
+handler.cpp:379:          world[ch->in_room].light[0]++;
+handler.cpp:380:          if (sust->force > world[ch->in_room].light[1])
+handler.cpp:381:            world[ch->in_room].light[1] = MIN(sust->force, sust->success);
+handler.cpp:382:        } else if (!--world[ch->in_room].light[0])
+handler.cpp:383:          world[ch->in_room].light[1] = 0;
+handler.cpp:389:          world[ch->in_room].shadow[0]++;
+handler.cpp:390:          if (sust->force > world[ch->in_room].shadow[1])
+handler.cpp:391:            world[ch->in_room].shadow[1] = MIN(sust->force, sust->success);
+handler.cpp:392:        } else if (!--world[ch->in_room].shadow[0])
+handler.cpp:393:          world[ch->in_room].shadow[1] = 0;
+handler.cpp:411:          world[ch->in_room].silence[0]++;
+handler.cpp:412:          if (sust->force > world[ch->in_room].silence[1])
+handler.cpp:413:            world[ch->in_room].silence[1] = MIN(sust->force, sust->success);
+handler.cpp:414:        } else if (!--world[ch->in_room].silence[0])
+handler.cpp:415:          world[ch->in_room].silence[1] = 0;
+handler.cpp:968:    REMOVE_FROM_LIST(veh, world[veh->in_room].vehicles, next_veh);
+handler.cpp:969:    world[veh->in_room].light[0]--;
+handler.cpp:993:        world[ch->in_room].light[0]--;
+handler.cpp:994:  if (affected_by_spell(ch, SPELL_LIGHT) && !--world[ch->in_room].light[0])
+handler.cpp:995:    world[ch->in_room].light[1] = 0;
+handler.cpp:996:  if (affected_by_spell(ch, SPELL_SHADOW) && !--world[ch->in_room].shadow[0])
+handler.cpp:997:    world[ch->in_room].shadow[1] = 0;
+handler.cpp:998:  if (affected_by_spell(ch, SPELL_POLTERGEIST) && !--world[ch->in_room].poltergeist[0])
+handler.cpp:999:    world[ch->in_room].poltergeist[1] = 0;
+handler.cpp:1000:  if (affected_by_spell(ch, SPELL_SILENCE) && !--world[ch->in_room].silence[0])
+handler.cpp:1001:    world[ch->in_room].silence[1] = 0;
+handler.cpp:1010:    if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_PACIFY) && world[ch->in_room].peaceful > 0)
+handler.cpp:1011:      world[ch->in_room].peaceful--;
+handler.cpp:1012:    REMOVE_FROM_LIST(ch, world[ch->in_room].people, next_in_room);
+handler.cpp:1130:    world[ch->in_room].peaceful++;
+handler.cpp:1195:              GET_CHAR_NAME(ch) ? GET_CHAR_NAME(ch) : GET_NAME(ch), world[object->in_room].number);
+handler.cpp:1376:        world[ch->in_room].light[0]++;
+handler.cpp:1408:        world[ch->in_room].light[0]--;
+handler.cpp:1633:    REMOVE_FROM_LIST(object, world[object->in_room].contents, next_content);
+handler.cpp:2156:  for (i = world[ch->in_room].people; i && j <= number; i = i->next_in_room)
+handler.cpp:2251:  if ((i = get_obj_in_list_vis(ch, name, world[ch->in_room].contents)))
+handler.cpp:2499:    } else if ((*tar_obj = get_obj_in_list_vis(ch, name, world[ch->in_room].contents)))
+interpreter.cpp:1824:  for (i = ch->in_veh ? ch->in_veh->contents : world[ch->in_room].contents; i; i = i->next_content)
+interpreter.cpp:1832:    for (k = world[ch->in_room].people; k; k = k->next_in_room) {
+interpreter.cpp:1996:      for (struct char_data *temp = world[d->character->in_room].people; temp; temp = temp->next_in_room)
+limits.cpp:445:  target = MAX(2, world[ch->in_room].rating);
+limits.cpp:785:      switch (zone_table[world[veh->in_room].zone].juridiction) {
+limits.cpp:1155:      if (world[ch->in_room].sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && weather_info.sky >= SKY_RAINING)
+magcreate.cpp:183:  struct obj_data *lib = world[ch->in_room].contents;
+mobact.cpp:87:      if (world[ch->in_room].contents && !number(0, 10)) {
+mobact.cpp:90:        for (obj = world[ch->in_room].contents; obj; obj = obj->next_content)
+mobact.cpp:110:         (world[EXIT(ch, door)->to_room].zone == world[ch->in_room].zone))) {
+mobact.cpp:130:          for (veh = world[ch->in_room].vehicles; veh; veh = veh->next_veh)
+mobact.cpp:138:          for (vict = world[ch->in_room].people; vict; vict = vict->next_in_room) {
+mobact.cpp:171:      for (vict = world[ch->in_room].people; vict; vict = vict->next_in_room) {
+mobact.cpp:189:      for (vict = world[ch->in_room].people; vict; vict = vict->next_in_room) {
+mobact.cpp:230:        for (veh = world[ch->in_room].vehicles; veh; veh = veh->next_veh)
+mobact.cpp:237:        for (vict = world[ch->in_room].people;
+mobact.cpp:245:                  violates_zsp(zone_table[world[ch->in_room].zone].security,
+mobact.cpp:262:            world[EXIT2(room, dir)->to_room].zone == world[ch->in_room].zone)
+mobact.cpp:281:                      violates_zsp(zone_table[world[ch->in_room].zone].security, vict, i, ch)) {
+mobact.cpp:324:              world[EXIT2(room, dir)->to_room].zone == world[ch->in_room].zone)
+modify.cpp:247:      REPLACE_STRING(world[d->character->in_room].description);
+modify.cpp:248:      write_world_to_disk(zone_table[world[d->character->in_room].zone].number);
+newdb.cpp:1008:    if (world[player->in_room].number <= 1) {
+newdb.cpp:1011:                GET_CHAR_NAME(player), world[player->in_room].number, player->was_in_room);
+newdb.cpp:1017:      GET_LAST_IN(player) = world[player->in_room].number;
+newmagic.cpp:117:  else if (GET_TOTEM(ch) == TOTEM_PUMA && world[ch->in_room].crowd > 4)
+newmagic.cpp:438:  if (world[ch->in_room].background[1] != 13)
+newmagic.cpp:439:    force += world[ch->in_room].background[0] / 2;
+newmagic.cpp:491:  for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : world[ch->in_room].people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room) {
+newmagic.cpp:512:  if (world[ch->in_room].background[1] != 13)
+newmagic.cpp:513:    target += (world[ch->in_room].background[0] / 2);
+newmagic.cpp:607:  if (world[ch->in_room].background[1] == AURA_POWERSITE)
+newmagic.cpp:608:    skill += world[ch->in_room].background[0];
+newmagic.cpp:609:  else target += world[ch->in_room].background[0];
+newmagic.cpp:755:  if (world[ch->in_room].peaceful) {
+newmagic.cpp:1185:    if (world[ch->in_room].peaceful) {
+newmagic.cpp:1263:      world[ch->in_room].icesheet[0] = (int)(3.14 * ((GET_MAG(ch) * GET_MAG(ch)) / 10000));
+newmagic.cpp:1264:      world[ch->in_room].icesheet[1] = force + MIN(force, success / 2);
+newmagic.cpp:1589:        if (!world[ch->in_room].icesheet[1])
+newmagic.cpp:2240:    for (struct obj_data *obj = world[ch->in_room].contents; obj; obj = obj->next_content)
+newmagic.cpp:2298:    if (world[ch->in_room].background[1] == AURA_POWERSITE)
+newmagic.cpp:2299:      skill += world[ch->in_room].background[0];
+newmagic.cpp:2300:    else target += world[ch->in_room].background[0];
+newmagic.cpp:2428:  struct obj_data *library = world[ch->in_room].contents;
+newmagic.cpp:2799:    for (struct char_data *mob = world[spirit->in_room].people; mob; mob = mob->next)
+newmagic.cpp:3428:  if (!(obj = get_obj_in_list_vis(ch, argument, world[ch->in_room].contents))) {
+newmagic.cpp:4039:  else if (!world[ch->in_room].background[0])
+newmagic.cpp:4041:  else if (world[ch->in_room].background[0] > GET_GRADE(ch) || world[ch->in_room].background[0] > 5)
+newmagic.cpp:4043:  else if (world[ch->in_room].background[1] == AURA_POWERSITE)
+newmagic.cpp:4046:    int success = success_test(GET_SKILL(ch, SKILL_SORCERY), world[ch->in_room].background[0] * 2), background = world[ch->in_room].background[0];
+newmagic.cpp:4051:      world[ch->in_room].background[0] = MAX(0, world[ch->in_room].background[0] - success);
+newmagic.cpp:4052:      if (!world[ch->in_room].background[0]) {
+newmagic.cpp:4059:      for (struct char_data *targ = world[ch->in_room].people; targ; targ = targ->next_in_room)
+newmatrix.cpp:596:        icon->ic.subtype += world[targ->decker->ch->in_room].trace;
+newmatrix.cpp:1176:    for (struct char_data *temp = world[ch->in_room].people; temp; temp = temp->next_in_room)
+newmatrix.cpp:1220:  if ((!world[ch->in_room].matrix || (host = real_host(world[ch->in_room].matrix)) < 1)) {
+newmatrix.cpp:1247:  for (temp = world[ch->in_room].people; temp; temp = temp->next_in_room)
+newmatrix.cpp:1253:            for (struct char_data *temp2 = world[ch->in_room].people; temp2; temp2 = temp2->next_in_room)
+newmatrix.cpp:1335:  DECKER->phone->rtg = world[ch->in_room].rtg;
+newmatrix.cpp:1336:  DECKER->phone->number = world[ch->in_room].jacknumber;
+newmatrix.cpp:1347:  if (world[ch->in_room].io == 0)
+newmatrix.cpp:1349:  else if (world[ch->in_room].io == -1)
+newmatrix.cpp:1352:    DECKER->io = MIN(world[ch->in_room].io, GET_OBJ_VAL(cyberdeck, 4));
+newmatrix.cpp:2450:            sprintf(buf, "Your search returns:\r\nJackpoint Location: %s\r\n", world[icon->decker->ch->in_room].address);
+newmatrix.cpp:2550:    struct obj_data *library = world[ch->in_room].contents;
+olc.cpp:161:    number = world[ch->in_room].number;
+olc.cpp:460:    if (world[ch->in_room].number >= (zone_table[counter].number * 100) &&
+olc.cpp:461:        world[ch->in_room].number <= zone_table[counter].top)
+olc.cpp:484:  if (world[ch->in_room].dir_option[dir] || world[room].dir_option[rev_dir[dir]]) {
+olc.cpp:489:  world[ch->in_room].dir_option[dir] = new room_direction_data;
+olc.cpp:490:  memset((char *) world[ch->in_room].dir_option[dir], 0, sizeof (struct room_direction_data));
+olc.cpp:491:  world[ch->in_room].dir_option[dir]->to_room = room;
+olc.cpp:492:  world[ch->in_room].dir_option[dir]->barrier = 4;
+olc.cpp:493:  world[ch->in_room].dir_option[dir]->material = 5;
+olc.cpp:494:  world[ch->in_room].dir_option[dir]->exit_info = 0;
+olc.cpp:495:  world[ch->in_room].dir_option[dir]->to_room_vnum = world[room].number;
+olc.cpp:503:  world[room].dir_option[dir]->to_room_vnum = world[ch->in_room].number;
+pro_create.cpp:172:    for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : world[ch->in_room].people; vict; vict = vict->next_in_room)
+pro_create.cpp:177:    for (comp = ch->in_veh ? ch->in_veh->contents : world[ch->in_room].contents; comp; comp = comp->next_content)
+pro_create.cpp:529:        if (world[CH->in_room].background[1] == AURA_POWERSITE) 
+pro_create.cpp:530:          skill += world[CH->in_room].background[0];
+pro_create.cpp:531:        else target += world[CH->in_room].background[0];
+quest.cpp:369:        world[ch->in_room].number == quest_table[GET_QUEST(ch)].obj[i].o_data)
+quest.cpp:392:        world[mob->in_room].number == quest_table[GET_QUEST(ch)].mob[i].o_data)
+quest.cpp:645:      for (temp = world[johnson->in_room].people; temp; temp = temp->next_in_room)
+spec_procs.cpp:250:  for (vict = world[mob->in_room].people; vict; vict = vict->next_in_room)
+spec_procs.cpp:256:  for (vict = world[mob->in_room].people; vict; vict = vict->next_in_room)
+spec_procs.cpp:272:  for (tch = world[ch->in_room].people; tch; tch = tch->next_in_room)
+spec_procs.cpp:1117:  for (vict = world[ch->in_room].people; vict; vict = vict->next_in_room)
+spec_procs.cpp:1174:  for (i = world[jan->in_room].contents; i; i = i->next_content) {
+spec_procs.cpp:1219:  for (tch = world[ch->in_room].people; tch; tch = tch->next_in_room)
+spec_procs.cpp:1230:      for (tch = world[ch->in_room].people; tch; tch = tch->next_in_room)
+spec_procs.cpp:1244:      for (tch = world[ch->in_room].people; tch; tch = tch->next_in_room)
+spec_procs.cpp:1338:      if (world[pike->in_room].number != 2337) {
+spec_procs.cpp:1367:    if (perform_move(ch, WEST, LEADER, NULL) && world[pike->in_room].number == 2337) {
+spec_procs.cpp:1418:      if (world[jeff->in_room].number != 2326) {
+spec_procs.cpp:1433:    if (perform_move(ch, EAST, LEADER, NULL) && world[jeff->in_room].number == 2326) {
+spec_procs.cpp:1548:  for (tch = world[ch->in_room].people; tch; tch = tch->next_in_room) {
+spec_procs.cpp:1561:  for (tch = world[ch->in_room].people; tch; tch = tch->next_in_room) {
+spec_procs.cpp:1595:    for (obj = world[ch->in_room].contents; obj; obj = obj->next_content)
+spec_procs.cpp:1603:    for (vict = world[ch->in_room].people; vict; vict = vict->next_in_room) {
+spec_procs.cpp:1646:        world[guard->in_room].number == MANSION_GATE) {
+spec_procs.cpp:1688:  for(vict = world[ch->in_room].people; vict; vict = vict->next_in_room) {
+spec_procs.cpp:1716:    for (vict = world[ch->in_room].people; vict; vict = vict->next_in_room) {
+spec_procs.cpp:1719:          world[ch->in_room].number == 4098) {
+spec_procs.cpp:1762:    for(vict = world[tsuyama->in_room].people; vict; vict = vict->next_in_room) {
+spec_procs.cpp:1765:              && number(0,3) && world[tsuyama->in_room].number == 4101)) {
+spec_procs.cpp:1784:  for (vict = world[tsuyama->in_room].people; vict; vict = vict->next_in_room)
+spec_procs.cpp:1804:  for (vict = world[ch->in_room].people; vict; vict = vict->next_in_room)
+spec_procs.cpp:1948:  if (CMD_IS("east") && CAN_SEE(guard, ch) && world[guard->in_room].number == 4930) {
+spec_procs.cpp:1970:  if ((world[guard->in_room].number == 10075 && CMD_IS("east")) ||
+spec_procs.cpp:1971:      (world[guard->in_room].number == 10077 && CMD_IS("west"))) {
+spec_procs.cpp:2327:  if (CMD_IS("west") && world[troll->in_room].number == 9437 && CAN_SEE(troll, ch)) {
+spec_procs.cpp:2358:      if (world[ch->in_room].number == 1844 ||
+spec_procs.cpp:2359:          world[ch->in_room].number == 1846) {
+spec_procs.cpp:2365:      if (world[ch->in_room].number == 1844 ||
+spec_procs.cpp:2366:          world[ch->in_room].number == 1845) {
+spec_procs.cpp:2380:      world[yukiya->in_room].number == YUKIYA_OFFICE) {
+spec_procs.cpp:2539:  if (world[ch->in_room].dir_option[dir] &&
+spec_procs.cpp:2540:      world[ch->in_room].dir_option[dir]->to_room != NOWHERE) {
+spec_procs.cpp:2542:      if (world[ch->in_room].dir_option[i] &&
+spec_procs.cpp:2543:          world[ch->in_room].dir_option[i]->to_room != NOWHERE)
+spec_procs.cpp:2544:        for (temp = world[world[ch->in_room].dir_option[i]->to_room].people;
+spec_procs.cpp:2584:  if (zone_table[world[ch->in_room].zone].number == 30)
+spec_procs.cpp:2955:  for (temp = world[ch->in_room].people; temp && !found; temp = temp->next_in_room)
+spec_procs.cpp:2959:    if ((world[ch->in_room].number == 10075 && CMD_IS("east")) || (world[ch->in_room].number == 10077 &&
+spec_procs.cpp:2985:              world[ch->in_room].name, world[ch->in_room].number );
+spec_procs.cpp:3151:  GET_LOADROOM(ch) = world[ch->in_room].number;
+spec_procs.cpp:3223:  save_room = find_hotel_room(world[ch->in_room].number);
+spec_procs.cpp:3229:    sprintf(buf, "%s has rented at %ld", GET_CHAR_NAME(ch), world[ch->in_room].number);
+spec_procs.cpp:3486:      int x = world[ch->in_room].number - (world[ch->in_room].number * 3), y = world[ch->in_room].number + 100;
+spec_procs.cpp:3523:  if (!(veh = get_veh_list(argument, world[ch->in_room].vehicles, ch)))
+spec_procs.cpp:3647:  switch (world[troll->in_room].number) {
+spec_procs.cpp:3699:  struct obj_data *locker = world[ch->in_room].contents, *next = NULL;
+spec_procs.cpp:3723:      for (locker = world[ch->in_room].contents; locker; locker = locker->next_content)
+spec_procs.cpp:3739:      for (locker = world[ch->in_room].contents; locker; locker = locker->next_content)
+spec_procs.cpp:3757:    for (locker = world[ch->in_room].contents; locker; locker = locker->next_content)
+transport.cpp:280:    if (!world[ch->in_room].dir_option[dir])
+transport.cpp:288:  if (world[ch->in_room].sector_type != SPIRIT_CITY || !empty ||
+transport.cpp:368:    if (!world[ch->in_room].dir_option[dir]) {
+transport.cpp:400:    for (temp = world[driver->in_room].people; temp; temp = temp->next_in_room)
+transport.cpp:524:      if (world[ch->in_room].dir_option[i]) {
+transport.cpp:525:        i = world[ch->in_room].dir_option[i]->to_room;
+transport.cpp:563:      if (world[ch->in_room].dir_option[i]) {
+transport.cpp:564:        dest = world[ch->in_room].dir_option[i]->to_room;
+transport.cpp:735:      if (elevator[i].floor[j].vnum == world[ch->in_room].number)
+transport.cpp:765:      elevator[index].destination = world[ch->in_room].number;
+utils.cpp:331:    if (light_target > 0 && world[ch->in_room].light[1]) {
+utils.cpp:332:      if (world[ch->in_room].light[2]) {
+utils.cpp:333:        light_target = MAX(0, light_target - world[ch->in_room].light[2]);
+utils.cpp:334:        buf_mod(rbuf, "LightSpell", - world[ch->in_room].light[2]);
+utils.cpp:338:    if (world[ch->in_room].shadow[0]) {
+utils.cpp:339:      light_target += world[ch->in_room].shadow[1];
+utils.cpp:340:      buf_mod(rbuf, "ShadowSpell", world[ch->in_room].shadow[1]);
+utils.cpp:344:    if (world[ch->in_room].vision[1] == LIGHT_MIST)
+utils.cpp:349:    if (world[ch->in_room].vision[1] == LIGHT_LIGHTSMOKE || (weather_info.sky == SKY_RAINING &&
+utils.cpp:350:                                                             world[ch->in_room].sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))) {
+utils.cpp:359:    if (world[ch->in_room].vision[1] == LIGHT_HEAVYSMOKE || (weather_info.sky == SKY_LIGHTNING &&
+utils.cpp:360:                                                             world[ch->in_room].sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))) {
+utils.cpp:372:    if (world[ch->in_room].vision[1] == LIGHT_THERMALSMOKE) {
+utils.cpp:400:  if (world[ch->in_room].poltergeist[0] && !IS_ASTRAL(ch) && !IS_DUAL(ch))
+utils.cpp:430:    float heightdif = GET_HEIGHT(ch) / (world[ch->in_room].z*100);
+utils.cpp:629:          world[ch->in_room].number, world[ch->in_room].name);
+utils.cpp:678:            world[ch->in_room].number,
+utils.cpp:681:    sprintf(buf2, "[%5ld] ", world[ch->in_room].number);
+utils.cpp:1420:    return world[ch->in_room].best_workshop[type];
+utils.cpp:1469:  struct obj_data *current = world[obj->in_room].best_workshop[GET_OBJ_VAL(obj, 0)];
+utils.cpp:1474:  world[obj->in_room].best_workshop[GET_OBJ_VAL(obj, 0)] = obj;
+utils.cpp:1482:  if (world[obj->in_room].best_workshop[GET_OBJ_VAL(obj, 0)] != obj)
+utils.cpp:1486:  world[obj->in_room].best_workshop[GET_OBJ_VAL(obj, 0)] = NULL;
+utils.cpp:1489:  for (struct obj_data *o = world[obj->in_room].contents; o; o = o->next_content) {
+utils.cpp:1494:          world[obj->in_room].best_workshop[GET_OBJ_VAL(o, 0)] = o;
+utils.cpp:1498:          world[obj->in_room].best_workshop[GET_OBJ_VAL(o, 0)] = o;
+utils.h:560:  (!(world[sub->in_room].silence[0] > 0 || affected_by_spell(obj, SPELL_STEALTH)) && AFF_FLAGGED(sub, AFF_DETECT_INVIS)) || \
+utils.h:610:#define EXIT(ch, door)  (world[(ch)->in_room].dir_option[door])
+utils.h:613:           world[(ch)->in_room].dir_option[door]->key_level)
