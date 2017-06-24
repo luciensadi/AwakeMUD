@@ -100,9 +100,9 @@ ACMD(do_quit)
       ch->in_room = save_room;
       if (!GET_LOADROOM(ch)) {
         if (PLR_FLAGGED(ch, PLR_NEWBIE))
-          GET_LOADROOM(ch) = NEWBIE_LOADROOM;
+          GET_LOADROOM(ch) = RM_NEWBIE_LOADROOM;
         else
-          GET_LOADROOM(ch) = 30700;
+          GET_LOADROOM(ch) = RM_ENTRANCE_TO_DANTES;
       }
       
       // Saving occurs in extract_char.

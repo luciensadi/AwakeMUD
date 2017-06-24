@@ -3299,11 +3299,11 @@ SPECIAL(auth_room)
       for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content)
         GET_OBJ_COST(obj) = 1;
       char_from_room(ch);
-      char_to_room(ch, real_room(60563));
+      char_to_room(ch, real_room(RM_NEWBIE_LOBBY));
       send_to_char(ch, "^YYou are now Authorized. Welcome to Awakened Worlds.^n\r\n");
-      if (real_object(60531)>-1)
+      if (real_object(OBJ_NEWBIE_RADIO)>-1)
       {
-        struct obj_data *radio = read_object(60531, VIRTUAL);
+        struct obj_data *radio = read_object(OBJ_NEWBIE_RADIO, VIRTUAL);
         GET_OBJ_VAL(radio, 0) = 8;
         obj_to_char(radio, ch);
         send_to_char(ch, "You have been given a radio.^n\r\n");
@@ -3357,22 +3357,22 @@ SPECIAL(terell_davis)
     int toroom = NOWHERE;
     switch (number(0, 5)) {
       case 0:
-        toroom = real_room(5008);
-        break;
+        /* toroom = real_room(5008);
+        break; */
       case 1:
-        toroom = real_room(3104);
-        break;
+        /* toroom = real_room(3104);
+        break; */
       case 2:
-        toroom = real_room(35502);
-        break;
+        /* toroom = real_room(39854);
+         break; */
       case 3:
-        toroom = real_room(16227);
-        break;
+        /* toroom = real_room(16227);
+        break; */
       case 4:
-        toroom = real_room(2113);
-        break;
+        /* toroom = real_room(2113);
+        break; */
       case 5:
-        toroom = real_room(39854);
+        toroom = real_room(RM_DANTES_DESCENT);
         break;
     }
     act("$n finishes up his business and walks out of the club.", FALSE, ch, 0, 0, TO_ROOM);
@@ -3499,12 +3499,12 @@ SPECIAL(painter)
   if ((veh = world[painter->in_room+1].vehicles))
     if (veh->spare <= time(0)) {
       veh_from_room(veh);
-      veh_to_room(veh, real_room(29399));
+      veh_to_room(veh, real_room(RM_PAINTER_LOT));
       veh->spare = 0;
-      if (world[real_room(29399)].people) {
+      if (world[real_room(RM_PAINTER_LOT)].people) {
         sprintf(buf, "%s is wheeled out into the parking lot.", GET_VEH_NAME(veh));
-        act(buf, FALSE, world[real_room(29399)].people, 0, 0, TO_ROOM);
-        act(buf, FALSE, world[real_room(29399)].people, 0, 0, TO_CHAR);
+        act(buf, FALSE, world[real_room(RM_PAINTER_LOT)].people, 0, 0, TO_ROOM);
+        act(buf, FALSE, world[real_room(RM_PAINTER_LOT)].people, 0, 0, TO_CHAR);
 
         save_vehicles();
       }
@@ -3550,11 +3550,11 @@ SPECIAL(multnomah_gate)
   if (!cmd)
     return FALSE;
   long in_room = ch->in_veh ? ch->in_veh->in_room : ch->in_room, to_room = 0;
-  if (world[in_room].number == 17598)
-    to_room = real_room(17599);
-  else to_room = real_room(17598);
+  if (world[in_room].number == RM_MULTNOMAH_GATE_NORTH)
+    to_room = real_room(RM_MULTNOMAH_GATE_SOUTH);
+  else to_room = real_room(RM_MULTNOMAH_GATE_NORTH);
 
-  if ((world[in_room].number == 17598 && CMD_IS("south")) || (world[in_room].number == 17599 && CMD_IS("north"))) {
+  if ((world[in_room].number == RM_MULTNOMAH_GATE_NORTH && CMD_IS("south")) || (world[in_room].number == RM_MULTNOMAH_GATE_SOUTH && CMD_IS("north"))) {
     if (!PLR_FLAGGED(ch, PLR_VISA)) {
       send_to_char("The gate refuses to open for you.\r\n", ch);
       return TRUE;
@@ -3592,7 +3592,7 @@ SPECIAL(multnomah_guard)
     skip_spaces(&argument);
     struct char_data *guard = (struct char_data *) me;
     struct obj_data *visa = get_obj_in_list_vis(ch, argument, ch->carrying);
-    if (visa && GET_OBJ_VNUM(visa) == 17513) {
+    if (visa && GET_OBJ_VNUM(visa) == OBJ_MULTNOMAH_VISA) {
       if (GET_OBJ_VAL(visa, 0) == GET_IDNUM(ch)) {
         PLR_FLAGS(ch).SetBit(PLR_VISA);
         sprintf(arg, "%s Everything seems to be in order, proceed.", GET_CHAR_NAME(ch));

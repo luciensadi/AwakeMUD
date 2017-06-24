@@ -786,24 +786,24 @@ void save_vehicles(void)
         case ZONE_PORTLAND:
           switch (number(0, 2)) {
             case 0:
-              room = real_room(2751 + number(0, 2));
+              room = real_room(RM_PORTLAND_PARKING_GARAGE);
               break;
             case 1:
-              room = real_room(2756 + number(0, 2));
+              room = real_room(RM_PORTLAND_PARKING_GARAGE);
               break;
             case 2:
-              room = real_room(2762 + number(0, 2));
+              room = real_room(RM_PORTLAND_PARKING_GARAGE);
               break;
           }
           break;
         case ZONE_SEATTLE:
-          room = real_room(22670 + number(0, 16));
+          room = real_room(RM_SEATTLE_PARKING_GARAGE);
           break;
         case ZONE_CARIB:
-          room = real_room(62334);
+          room = real_room(RM_CARIB_PARKING_GARAGE);
           break;
         case ZONE_OCEAN:
-          room = real_room(62504);
+          room = real_room(RM_OCEAN_PARKING_GARAGE);
           break;
       }
     fprintf(fl, "[VEHICLE]\n");

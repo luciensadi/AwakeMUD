@@ -1968,7 +1968,29 @@ enum {
 #define NUM_COMBAT_MODIFIERS      10
 // End new combat modifiers.
 
-#define NEWBIE_LOADROOM 60565 // The Neophyte Hotel.
+// Locations, to remove the magic numbers from the code.
+#define RM_CHARGEN_START_ROOM      60500
+#define RM_NEWBIE_LOADROOM         60565 // The Neophyte Hotel.
+#define RM_NEWBIE_LOBBY            60563
+#define RM_ENTRANCE_TO_DANTES      35500
+#define RM_DANTES_GARAGE           35693 + number(0,4)
+#define RM_DANTES_DESCENT          35502
+#define RM_SEATTLE_DOCWAGON        RM_ENTRANCE_TO_DANTES
+#define RM_PORTLAND_DOCWAGON       RM_ENTRANCE_TO_DANTES
+#define RM_CARIB_DOCWAGON          RM_ENTRANCE_TO_DANTES
+#define RM_OCEAN_DOCWAGON          RM_ENTRANCE_TO_DANTES
+#define RM_SEATTLE_PARKING_GARAGE  RM_DANTES_GARAGE
+#define RM_CARIB_PARKING_GARAGE    RM_DANTES_GARAGE
+#define RM_OCEAN_PARKING_GARAGE    RM_DANTES_GARAGE
+#define RM_PORTLAND_PARKING_GARAGE RM_DANTES_GARAGE
+#define RM_PAINTER_LOT             1
+#define RM_MULTNOMAH_GATE_NORTH    1
+#define RM_MULTNOMAH_GATE_SOUTH    1
+
+// Objects, to remove the magic numbers from the code.
+#define OBJ_NEWBIE_RADIO           60531
+#define OBJ_MULTNOMAH_VISA         1
+#define OBJ_MAP_OF_SEATTLE         2041
 
 /* ban struct */
 struct ban_list_element
