@@ -51,3 +51,5 @@ lib/house/*
 lib/storage/*
 lib/copyover.dat
 lib/veh/*
+lib/etc/consist
+lib/text/wholist
