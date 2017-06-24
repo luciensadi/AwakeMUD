@@ -3301,13 +3301,6 @@ SPECIAL(auth_room)
       char_from_room(ch);
       char_to_room(ch, real_room(60563));
       send_to_char(ch, "^YYou are now Authorized. Welcome to Awakened Worlds.^n\r\n");
-      if (real_object(60531)>-1)
-      {
-        struct obj_data *radio = read_object(60531, VIRTUAL);
-        GET_OBJ_VAL(radio, 0) = 8;
-        obj_to_char(radio, ch);
-        send_to_char(ch, "You have been given a radio.^n\r\n");
-      }
       sprintf(buf, "DELETE FROM pfiles_chargendata WHERE idnum=%ld;", GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
     }
