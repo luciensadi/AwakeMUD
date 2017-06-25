@@ -1073,7 +1073,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
     send_to_char(ch, "There is no room in the %s of that vehicle.\r\n", front ? "front" : "rear");
   else {
     if (inveh && ch->vfront) {
-      send_to_char("You have to be in the back to get into a that.\r\n", ch);
+      send_to_char("You have to be in the back to get into that.\r\n", ch);
       return;
     }
     door = ch->in_room;
