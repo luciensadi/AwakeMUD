@@ -402,9 +402,17 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
   }
   if (!(sell = find_obj_shop(arg, shop_nr, &obj)))
   {
-    sprintf(buf, "%s %s", GET_CHAR_NAME(ch), shop_table[shop_nr].no_such_itemk);
-    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-    return;
+    if (atoi(arg) > 0) {
+      // Adapt for the player probably meaning an item number instead of an item with a numeric keyword.
+      char oopsbuf[strlen(arg) + 2];
+      sprintf(oopsbuf, "#%s", arg);
+      sell = find_obj_shop(oopsbuf, shop_nr, &obj);
+    }
+    if (!sell) {
+      sprintf(buf, "%s %s", GET_CHAR_NAME(ch), shop_table[shop_nr].no_such_itemk);
+      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+      return;
+    }
   }
   one_argument(arg, buf);
   if (!str_cmp(buf, "cash"))
