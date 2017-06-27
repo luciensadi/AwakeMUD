@@ -81,6 +81,9 @@ int mysql_wrapper(MYSQL *mysql, const char *query)
           //  the results of the query, but the query had no results and will refuse a read.
           //  This is crash-inducing behavior 99% of the time.
           shutdown();
+        } else {
+          log("MySQL successfully reconnected.");
+          result = mysql_wrapper(mysql, query);
         }
         break;
       default:
