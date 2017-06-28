@@ -196,7 +196,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
         act(buf2, TRUE, ch, 0, tch, TO_VICT);
     for (tveh = world[ch->in_room].vehicles; tveh; tveh = tveh->next_veh)
       for (tch = tveh->people; tch; tch = tch->next_in_veh)
-        if (tveh->cspeed <= SPEED_IDLE || (tveh->cspeed > SPEED_IDLE && success_test(GET_INT(tch), 4)))
+        if (tveh->cspeed <= SPEED_IDLE || success_test(GET_INT(tch), 4))
           act(buf2, TRUE, ch, 0, tch, TO_VICT);
     if (world[ch->in_room].watching)
       for (struct char_data *tch = world[ch->in_room].watching; tch; tch = tch->next_watching)
@@ -283,7 +283,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
         act(buf2, TRUE, ch, 0, tch, TO_VICT);
     for (tveh = world[ch->in_room].vehicles; tveh; tveh = tveh->next_veh)
       for (tch = tveh->people; tch; tch = tch->next_in_veh)
-        if (tveh->cspeed <= SPEED_IDLE || (tveh->cspeed > SPEED_IDLE && success_test(GET_INT(tch), 4)))
+        if (tveh->cspeed <= SPEED_IDLE || success_test(GET_INT(tch), 4))
           act(buf2, TRUE, ch, 0, tch, TO_VICT);
     if (world[ch->in_room].watching)
       for (struct char_data *tch = world[ch->in_room].watching; tch; tch = tch->next_watching)
@@ -446,7 +446,7 @@ void perform_fall(struct char_data *ch)
         feettarg += (int)((meters - 5) / 4);
         if (success_test(GET_QUI(ch), feettarg)) {
           act("$e manages to land on $s feet, an hydraulic woosh coming from $s legs!", FALSE, ch, 0, 0, TO_ROOM);
-          send_to_char(ch, "You manage to land on your feet, your hydraulic jacks absorbing some from of the fall!\r\n");
+          send_to_char(ch, "You manage to land on your feet, your hydraulic jacks absorbing some of the impact!\r\n");
           power -= GET_OBJ_VAL(cyber, 1);
         }
       }
@@ -467,6 +467,7 @@ void move_vehicle(struct char_data *ch, int dir)
   struct veh_data *veh;
   struct veh_follow *v, *nextv;
   extern void crash_test(struct char_data *);
+  char empty_argument = '\0';
 
   RIG_VEH(ch, veh);
   if (!veh || veh->damage >= 10)
@@ -481,22 +482,23 @@ void move_vehicle(struct char_data *ch, int dir)
     send_to_char("You might want to speed up a little.\r\n", ch);
     return;
   }
-  if (!EXIT(veh, dir) ||
- EXIT(veh, dir)->to_room == NOWHERE ||
-      (!ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_ROAD) && 
-!ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_GARAGE) && 
-(veh->type != VEH_DRONE && veh->type != VEH_BIKE)) ||
-      IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED) || 
-(veh->type == VEH_BIKE && ROOM_FLAGGED(EXIT(veh, dir)->to_room,  ROOM_NOBIKE)) ||
- ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_DEATH) ||
- ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_FALL))
+  if (!EXIT(veh, dir)
+      || EXIT(veh, dir)->to_room == NOWHERE
+      || (!ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_ROAD)
+          && !ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_GARAGE)
+          && (veh->type != VEH_DRONE && veh->type != VEH_BIKE))
+      || IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED)
+      || (veh->type == VEH_BIKE && ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_NOBIKE))
+      || ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_DEATH)
+      || ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_FALL))
   {
     send_to_char("You cannot go that way...\r\n", ch);
     return;
   }
-  char empty_argument = '\0';
+  
   if (special(ch, convert_dir[dir], &empty_argument))
     return;
+  
   if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_HOUSE) && !House_can_enter(ch, world[EXIT(veh, dir)->to_room].number)) {
     send_to_char("You can't use other people's garages without permission.\r\n", ch);
     return;
@@ -504,16 +506,21 @@ void move_vehicle(struct char_data *ch, int dir)
 
   sprintf(buf2, "%s %s from %s.", GET_VEH_NAME(veh), veh->arrive, thedirs[rev_dir[dir]]);
   sprintf(buf1, "%s %s to %s.", GET_VEH_NAME(veh), veh->leave, thedirs[dir]);
+  
   if (world[veh->in_room].people)
   {
     act(buf1, FALSE, world[veh->in_room].people, 0, 0, TO_ROOM);
     act(buf1, FALSE, world[veh->in_room].people, 0, 0, TO_CHAR);
   }
+  
   if (world[veh->in_room].watching)
     for (struct char_data *tch = world[veh->in_room].watching; tch; tch = tch->next_watching)
       act(buf2, FALSE, ch, 0, 0, TO_CHAR);
-  for (int r = 1; r >= 0; r--)
-    veh->lastin[r+1] = veh->lastin[r];
+  // for (int r = 1; r >= 0; r--)        <-- Why.
+  //  veh->lastin[r+1] = veh->lastin[r];
+  veh->lastin[2] = veh->lastin[1];
+  veh->lastin[1] = veh->lastin[0];
+  
   was_in = EXIT(veh, dir)->to_room;
   veh_from_room(veh);
   veh_to_room(veh, was_in);
