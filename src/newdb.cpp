@@ -81,6 +81,9 @@ int mysql_wrapper(MYSQL *mysql, const char *query)
           //  the results of the query, but the query had no results and will refuse a read.
           //  This is crash-inducing behavior 99% of the time.
           shutdown();
+        } else {
+          log("MySQL successfully reconnected.");
+          result = mysql_wrapper(mysql, query);
         }
         break;
       default:
@@ -314,7 +317,7 @@ void do_start(struct char_data * ch)
   GET_COND(ch, THIRST) = 24;
   GET_COND(ch, FULL) = 24;
   GET_COND(ch, DRUNK) = 0;
-  GET_LOADROOM(ch) = 8039;
+  GET_LOADROOM(ch) = NEWBIE_LOADROOM;
 
   PLR_FLAGS(ch).SetBit(PLR_NEWBIE);
   PRF_FLAGS(ch).SetBits(PRF_AUTOEXIT, PRF_LONGEXITS, ENDBIT);

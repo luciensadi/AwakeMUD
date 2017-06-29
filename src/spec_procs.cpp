@@ -513,8 +513,8 @@ SPECIAL(teacher)
   for (i = 0; i < NUM_TEACHER_SKILLS; i++)
     if (skill_num == teachers[ind].s[i])
       break;
-  if (i >= 8) {
-    send_to_char("You teacher doesn't seem to know about that subject.\r\n", ch);
+  if (i >= NUM_TEACHER_SKILLS) {
+    send_to_char("Your teacher doesn't seem to know about that subject.\r\n", ch);
     return TRUE;
   }
 
@@ -1269,7 +1269,7 @@ SPECIAL(car_dealer)
   int car_room = ch->in_room - 1;
 
   if (CMD_IS("list")) {
-    send_to_char("Available Vehicles are:\r\n", ch);
+    send_to_char("Available vehicles are:\r\n", ch);
     for (veh = world[car_room].vehicles; veh; veh = veh->next_veh) {
       sprintf(buf, "%8d - %s\r\n", veh->cost, veh->short_description);
       send_to_char(buf, ch);
@@ -1278,7 +1278,7 @@ SPECIAL(car_dealer)
   } else if (CMD_IS("buy")) {
     argument = one_argument(argument, buf);
     if (!(veh = get_veh_list(buf, world[car_room].vehicles, ch))) {
-      send_to_char("There is no such vehicle for sales.\r\n", ch);
+      send_to_char("There is no such vehicle for sale.\r\n", ch);
       return TRUE;
     }
     if (GET_NUYEN(ch) < veh->cost) {
@@ -1291,7 +1291,7 @@ SPECIAL(car_dealer)
     newveh->owner = GET_IDNUM(ch);
     newveh->idnum = number(0, 1000000);
     if (veh->type == VEH_DRONE)
-      sprintf(buf, "You buy a %s. It is bought out into the room.\r\n", newveh->short_description);
+      sprintf(buf, "You buy a %s. It is brought out into the room.\r\n", newveh->short_description);
     else
       sprintf(buf, "You buy a %s. It is wheeled out into the yard.\r\n", newveh->short_description);
     send_to_char(buf, ch);
@@ -3299,13 +3299,6 @@ SPECIAL(auth_room)
       char_from_room(ch);
       char_to_room(ch, real_room(60563));
       send_to_char(ch, "^YYou are now Authorized. Welcome to Awakened Worlds.^n\r\n");
-      if (real_object(60531)>-1)
-      {
-        struct obj_data *radio = read_object(60531, VIRTUAL);
-        GET_OBJ_VAL(radio, 0) = 8;
-        obj_to_char(radio, ch);
-        send_to_char(ch, "You have been given a radio.^n\r\n");
-      }
       sprintf(buf, "DELETE FROM pfiles_chargendata WHERE idnum=%ld;", GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
     }

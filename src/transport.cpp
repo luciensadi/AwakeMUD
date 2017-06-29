@@ -702,12 +702,19 @@ static void close_elevator_doors(struct room_data *room, int num, int floor)
 
   dir = rev_dir[dir];
 
-  if (world[rnum].dir_option[dir]->keyword)
-    delete [] world[rnum].dir_option[dir]->keyword;
-  if (world[rnum].dir_option[dir]->general_description)
-    delete [] world[rnum].dir_option[dir]->general_description;
-  delete world[rnum].dir_option[dir];
-  world[rnum].dir_option[dir] = NULL;
+  // Recover from the rare case of an elevator having a one-way exit.
+  if (world[rnum].dir_option[dir]) {
+    if (world[rnum].dir_option[dir]->keyword)
+      delete [] world[rnum].dir_option[dir]->keyword;
+    if (world[rnum].dir_option[dir]->general_description)
+      delete [] world[rnum].dir_option[dir]->general_description;
+    delete world[rnum].dir_option[dir];
+    world[rnum].dir_option[dir] = NULL;
+  } else {
+    sprintf(buf, "SYSERR: Elevator %ld had a one-way %s exit to %ld.",
+            world[num].number, dirs[rev_dir[dir]], world[rnum].number);
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+  }
 
   if (world[rnum].people)
   {

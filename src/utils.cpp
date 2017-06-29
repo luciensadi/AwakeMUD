@@ -1418,7 +1418,7 @@ struct obj_data *find_workshop(struct char_data * ch, int type)
     return NULL;
   
   // If they're in a valid room, return the room's workshop field for MAXIMUM EFFICIENCY.
-  if (ch->in_room)
+  if (ch->in_room != NOWHERE)
     return world[ch->in_room].best_workshop[type];
   
   // If we've gotten here, they must be in a vehicle. Iterate through and find the best candidate.
