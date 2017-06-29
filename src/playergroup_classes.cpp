@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <mysql/mysql.h>
+#include <stdarg.h>
 
 #include "awake.h"
 #include "structs.h"
@@ -88,11 +89,50 @@ void Playergroup::set_secret(bool secret) {
     settings.RemoveBit(PGROUP_SECRETSQUIRREL);
 }
 
+// Determines if a letter belongs to a color code.
+bool iscolor(char c) {
+  return (c == 'l' || c == 'r' || c == 'g' || c == 'y' || c == 'b' || c == 'm' || c == 'n' || c == 'c'
+          || c == 'w' || c == 'L' || c == 'R' || c == 'G' || c == 'Y' || c == 'B' || c == 'M' || c == 'N'
+          || c == 'C' || c == 'W');
+}
+
 /************* Setters w/ Validity Checks *************/
 // Performs validity checks before setting. Returns TRUE if set succeeded, FALSE otherwise.
 bool Playergroup::set_tag(const char *newtag, struct char_data *ch) {
   // TODO: Validity checks.
   if (strlen(newtag) > (MAX_PGROUP_TAG_LENGTH - 1)) {
+    send_to_char(ch, "Sorry, tags can't be longer than %d characters.\r\n", MAX_PGROUP_TAG_LENGTH - 1);
+    return FALSE;
+  }
+  
+  const char *ptr = newtag;
+  int len = 0;
+  while (*ptr) {
+    if (*ptr == '^') {
+      if (*(ptr+1) == '\0') {
+        send_to_char("Sorry, tags can't end with the ^ character.\r\n", ch);
+        return FALSE;
+      }
+      else if (iscolor(*(ptr+1)))
+        ptr += 2;
+      else {
+        len += 1;
+        ptr += 1;
+      }
+    } else {
+      len += 1;
+      ptr += 1;
+    }
+  }
+  
+  if (len < 1) {
+    send_to_char("Tags must contain at least one printable character.\r\n", ch);
+    return FALSE;
+  }
+  
+  if (len > (MAX_PGROUP_TAG_LENGTH_WITHOUT_COLOR)) {
+    send_to_char(ch, "Sorry, the non-colorized part of tags can't be longer than %d characters.\r\n",
+                 MAX_PGROUP_TAG_LENGTH_WITHOUT_COLOR);
     sprintf(buf, "Sorry, tags can't be longer than %d characters.\r\n", MAX_PGROUP_TAG_LENGTH - 1);
     send_to_char(buf, ch);
     return FALSE;
@@ -140,8 +180,8 @@ bool Playergroup::set_alias(const char *newalias, struct char_data *ch) {
   sprintf(querybuf, "SELECT idnum FROM playergroups WHERE alias = '%s'", prepare_quotes(buf, newalias));
   mysql_wrapper(mysql, querybuf);
   MYSQL_RES *res = mysql_use_result(mysql);
-  MYSQL_ROW row = mysql_fetch_row(res);
-  if (!row && mysql_field_count(mysql)) {
+  MYSQL_ROW row;
+  if (!res || (!(row = mysql_fetch_row(res)) && mysql_field_count(mysql))) {
     raw_set_alias(newalias);
     mysql_free_result(res);
     return TRUE;
@@ -189,6 +229,37 @@ void Playergroup::raw_set_alias(const char *newalias) {
 }
 
 /************* Misc Methods *************/
+void Playergroup::audit_log(const char *msg) {
+  char query_buf[MAX_STRING_LENGTH];
+  char quoted_msg[strlen(msg) * 2 + 1];
+  prepare_quotes(quoted_msg, msg);
+  
+  const char *query_fmt = "INSERT INTO pgroup_logs (`idnum`, `message`, `date`) VALUES ('%ld', '%s', NOW())";
+  sprintf(query_buf, query_fmt, get_idnum(), quoted_msg);
+  mysql_wrapper(mysql, query_buf);
+  
+  mudlog(msg, NULL, LOG_PGROUPLOG, TRUE);
+}
+
+char playergroup_log_buf[MAX_STRING_LENGTH];
+void Playergroup::audit_log_vfprintf(const char *format, ...)
+{
+  va_list args;
+  time_t ct = time(0);
+  char *tmstr;
+  
+  tmstr = asctime(localtime(&ct));
+  *(tmstr + strlen(tmstr) - 1) = '\0';
+  sprintf(playergroup_log_buf, "%-15.15s :: ", tmstr + 4);
+  
+  va_start(args, format);
+  vsprintf(playergroup_log_buf, format, args);
+  va_end(args);
+  
+  //sprintf(playergroup_log_buf, "\r\n");
+  audit_log(playergroup_log_buf);
+}
+
 // Saves the playergroup to the database.
 bool Playergroup::save_pgroup_to_db() {
   char querybuf[MAX_STRING_LENGTH];
@@ -229,8 +300,8 @@ bool Playergroup::load_pgroup_from_db(long load_idnum) {
   sprintf(querybuf, pgroup_load_query_format, load_idnum);
   mysql_wrapper(mysql, querybuf);
   MYSQL_RES *res = mysql_use_result(mysql);
-  MYSQL_ROW row = mysql_fetch_row(res);
-  if (row) {
+  MYSQL_ROW row;
+  if (res && (row = mysql_fetch_row(res))) {
     set_idnum(atol(row[0]));
     raw_set_name(row[1]);
     raw_set_alias(row[2]);
@@ -248,6 +319,22 @@ bool Playergroup::load_pgroup_from_db(long load_idnum) {
     log(buf);
     mysql_free_result(res);
     return FALSE;
+  }
+}
+
+int Playergroup::sql_count_members() {
+  char query_buf[MAX_STRING_LENGTH];
+  sprintf(query_buf, "SELECT count(idnum) FROM `pfiles_playergroups` WHERE `group` = %ld", get_idnum());
+  mysql_wrapper(mysql, query_buf);
+  MYSQL_RES *res = mysql_use_result(mysql);
+  if (res) {
+    MYSQL_ROW row = mysql_fetch_row(res);
+    int count = atoi(row[0]);
+    mysql_free_result(res);
+    return count;
+  } else {
+    log_vfprintf("SYSERR: Attempting to count members for a group with no members.\r\n");
+    return -1;
   }
 }
 
@@ -361,6 +448,7 @@ void Playergroup::remove_member(struct char_data *ch) {
     return;
   }
   
+  // TODO: DB updates.
   delete GET_PGROUP_DATA(ch);
   GET_PGROUP_DATA(ch) = NULL;
   
@@ -443,6 +531,8 @@ void Pgroup_invitation::prune_expired(struct char_data *ch) {
   
   while (pgi) {
     if (pgi->is_expired()) {
+      // TODO: If the group is disabled, the character may not know they have this invitation.
+      // Gag expiration messages on disabled-group-invites?
       send_to_char(ch, "Your invitation from '%s' has expired.\r\n",
                    Playergroup::find_pgroup(pgi->pg_idnum)->get_name());
       

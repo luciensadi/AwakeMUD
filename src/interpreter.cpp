@@ -405,6 +405,7 @@ struct command_info cmd_info[] =
     /* now, the main list */
     { "abilities", POS_SLEEPING, do_skills   , 0, SCMD_ABILITIES },
     { "activate" , POS_LYING , do_activate , 0, 0 },
+    { "agree"    , POS_LYING   , do_action   , 0, 0 },
     { "aecho"     , POS_SLEEPING, do_echo     , LVL_ARCHITECT, SCMD_AECHO },
     { "accept"   , POS_LYING   , do_accept   , 0, 0 },
     { "addpoint" , POS_DEAD    , do_initiate  , 0, SCMD_POWERPOINT },

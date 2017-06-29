@@ -7,44 +7,50 @@
 #define _playergroups_h
 
 // Privileges.
-#define PRIV_ADMINISTRATOR     0      // Can assign any priv they possess except Admin.
-#define PRIV_AUDITOR           1      // Can view the logs.
-#define PRIV_ARCHITECT         2      // Can edit the PGHQ blueprints.
-#define PRIV_COCONSPIRATOR     3      // In groups where membership is secret, allows viewing of roster.
-#define PRIV_DRIVER            4      // Can lock/unlock and drive any PG vehicle.
-#define PRIV_LANDLORD          5      // Can lease apts, relinquish apts, and add guests.
-#define PRIV_LEADER            6      // Can do anything.
-#define PRIV_MANAGER           7      // Can promote, demote, and outcast.
-#define PRIV_MECHANIC          8      // Can perform modifications to PG vehicles.
-#define PRIV_PROCURER          9      // Can purchase/sell PG vehicles.
-#define PRIV_RECRUITER         10     // Can invite members.
-#define PRIV_TENANT            11     // Can enter PG apartments.
-#define PRIV_TREASURER         12     // Can withdraw from the PG bank account.
-#define PRIV_NONE              10000  // No privilege required.
+#define PRIV_ADMINISTRATOR                  0      // Can assign any priv they possess except Admin.
+#define PRIV_AUDITOR                        1      // Can view the logs.
+#define PRIV_ARCHITECT                      2      // Can edit the PGHQ blueprints.
+#define PRIV_COCONSPIRATOR                  3      // In groups where membership is secret, allows viewing of roster.
+#define PRIV_DRIVER                         4      // Can lock/unlock and drive any PG vehicle.
+#define PRIV_LANDLORD                       5      // Can lease apts, relinquish apts, and add guests.
+#define PRIV_LEADER                         6      // Can do anything.
+#define PRIV_MANAGER                        7      // Can promote, demote, and outcast.
+#define PRIV_MECHANIC                       8      // Can perform modifications to PG vehicles.
+#define PRIV_PROCURER                       9      // Can purchase/sell PG vehicles.
+#define PRIV_RECRUITER                      10     // Can invite members.
+#define PRIV_TENANT                         11     // Can enter PG apartments.
+#define PRIV_TREASURER                      12     // Can withdraw from the PG bank account.
+#define PRIV_NONE                           10000  // No privilege required.
 
 // Playergroup settings.
-#define PGROUP_FOUNDED         0 // Set by PGROUP FOUND, indicates that group is fully founded/active.
-#define PGROUP_DISABLED        1 // Set by PGROUP DISBAND.
-#define PGROUP_SECRETSQUIRREL  2 // TODO: Membership is secret and requires PRIV_COCONSPIRATOR to view.
-#define PGROUP_CLONE           3 // This group is a clone used for pgedit.
+#define PGROUP_FOUNDED                      0 // Set by PGROUP FOUND, indicates that group is fully founded/active.
+#define PGROUP_DISABLED                     1 // Set by PGROUP DISBAND.
+#define PGROUP_SECRETSQUIRREL               2 // TODO: Membership is secret and requires PRIV_COCONSPIRATOR to view.
+#define PGROUP_CLONE                        3 // This group is a clone used for pgedit.
 
 // Edit modes.
-#define PGEDIT_CONFIRM_EDIT    0
-#define PGEDIT_MAIN_MENU       1
-#define PGEDIT_CHANGE_NAME     2
-#define PGEDIT_CHANGE_ALIAS    3
-#define PGEDIT_CHANGE_TAG      4
-#define PGEDIT_CONFIRM_SAVE    5
+#define PGEDIT_CONFIRM_EDIT                 0
+#define PGEDIT_MAIN_MENU                    1
+#define PGEDIT_CHANGE_NAME                  2
+#define PGEDIT_CHANGE_ALIAS                 3
+#define PGEDIT_CHANGE_TAG                   4
+#define PGEDIT_CONFIRM_SAVE                 5
+
+// Configurables.
+#define NUM_MEMBERS_NEEDED_TO_FOUND         2 // Should be 3, but decreased for testing purposes.
+#define COST_TO_FOUND_GROUP                 100000
 
 // Helper functions.
-#define GET_PGROUP_DATA(ch)  (ch)->pgroup
-#define GET_PGROUP(ch)       (ch)->pgroup->pgroup
+#define GET_PGROUP_DATA(ch)                 (ch)->pgroup
+#define GET_PGROUP(ch)                      (ch)->pgroup->pgroup
 
 // Maximums.
-#define MAX_PGROUP_RANK          10
-#define MAX_PGROUP_NAME_LENGTH   80 // If you change this, update your SQL tables too.
-#define MAX_PGROUP_ALIAS_LENGTH  20 // If you change this, update your SQL tables too.
-#define MAX_PGROUP_TAG_LENGTH    30 // If you change this, update your SQL tables too.
+#define MAX_PGROUP_RANK                     10
+#define MAX_PGROUP_NAME_LENGTH              80  // If you change this, update your SQL tables too.
+#define MAX_PGROUP_ALIAS_LENGTH             20  // If you change this, update your SQL tables too.
+#define MAX_PGROUP_TAG_LENGTH               23  // If you change this, update your SQL tables too. Suggested formula: ((without_color + 1) * 3)
+#define MAX_PGROUP_TAG_LENGTH_WITHOUT_COLOR 7
+#define MAX_PGROUP_LOG_LENGTH               256 // If you change this, update your SQL tables too.
 
 // Function prototypes.
 long get_new_pgroup_idnum();

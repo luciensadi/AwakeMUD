@@ -701,7 +701,7 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
       
       if (ch
           && !access_level(tch, GET_INVIS_LEV(ch))
-          && !access_level(tch, LVL_VICEPRES))
+          && !access_level(tch, LVL_BUILDER)) // Decreased from VICEPRES-- we already have priv checks to toggle logs in the first place.
         continue;
       switch (log) {
         case LOG_CONNLOG:
@@ -737,6 +737,8 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
         case LOG_WRECKLOG:
           check_log = PRF_WRECKLOG;
           break;
+        case LOG_PGROUPLOG:
+          check_log = PRF_PGROUPLOG;
       }
       if (PRF_FLAGGED(tch, check_log))
         SEND_TO_Q(buf, i);

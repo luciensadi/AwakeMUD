@@ -557,6 +557,9 @@ const char *preference_bits[] =
     "NEWBIEHELPER",
     "MENUGAG",
     "LONGWEAPON",
+    "PGROUPLOG",
+    "SHOWGROUPTAG",
+    "KEEPALIVE",
     "\n"
   };
 
@@ -1007,6 +1010,7 @@ const char *log_types[] =
     "BANLOG",
     "GRIDLOG",
     "WRECKLOG",
+    "PGROUPLOG",
     "\n"
   };
 
