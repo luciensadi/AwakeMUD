@@ -360,7 +360,8 @@ enum {
 #define PRF_PGROUPLOG           40
 #define PRF_SHOWGROUPTAG        41
 #define PRF_KEEPALIVE           42
-#define PRF_MAX   		          43
+#define PRF_SCREENREADER        43
+#define PRF_MAX   		          44
 
 /* log watch */
 

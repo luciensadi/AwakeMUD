@@ -332,7 +332,7 @@ void copyover_recover()
   // Force all player characters to look now that everyone's properly loaded.
   struct char_data *plr = character_list;
   while (plr) {
-    if (!IS_NPC(plr))
+    if (!IS_NPC(plr) && !PRF_FLAGGED(plr, PRF_SCREENREADER))
       look_at_room(plr, 0);
     plr = plr->next;
   }
