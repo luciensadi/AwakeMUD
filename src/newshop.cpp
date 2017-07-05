@@ -484,8 +484,12 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
       sell->lastidnum[0] = GET_IDNUM(ch);
     } else {
       float totaltime = ((GET_OBJ_AVAILDAY(obj) * buynum) / success) + (2 * GET_AVAIL_OFFSET(ch));
-      sprintf(buf, "%s That will take about %d %s to come in.", GET_CHAR_NAME(ch),
-              totaltime < 1 ? (int)(24 * totaltime) : (int)totaltime, totaltime < 1 ? "hours" : (totaltime == 1 ? "day" : "days"));
+      if (totaltime < 1) {
+        int hours = (int)(24 * totaltime);
+        sprintf(buf, "%s That will take about %d %s to come in.", GET_CHAR_NAME(ch), hours, hours == 1 ? "hour" : "hours");
+      } else {
+        sprintf(buf, "%s That will take about %d %s to come in.", GET_CHAR_NAME(ch), (int) totaltime, totaltime == 1 ? "day" : "days");
+      }
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       struct shop_order_data *order = shop_table[shop_nr].order;
       for (; order; order = order->next)
