@@ -54,3 +54,4 @@ lib/veh/*
 lib/etc/consist
 lib/text/wholist
 lib/order
+syslog
