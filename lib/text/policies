@@ -1,1 +1,2 @@
 You may create your MUD's policy by editing the lib/text/policies file.
+Be sure to end the file with a new line.
