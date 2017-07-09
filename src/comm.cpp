@@ -2539,9 +2539,9 @@ void act(const char *str, int hide_invisible, struct char_data * ch,
     to = ch->in_veh->people;
   else
   {
-    log("SYSERR: no valid target to act()!");
+    mudlog("SYSERR: no valid target to act()!", NULL, LOG_SYSLOG, TRUE);
     sprintf(buf, "Invocation: act('%s', '%d', char_data, obj_data, vict_obj, '%d').", str, hide_invisible, type);
-    log(buf);
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
     return;
   }
   
