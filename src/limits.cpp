@@ -1117,8 +1117,7 @@ void misc_update(void)
               success_test(GET_REAL_BOD(ch), drug_types[GET_DRUG_AFFECT(ch)].tolerance + GET_DRUG_EDGE(ch, GET_DRUG_AFFECT(ch))))
             GET_DRUG_TOLERANT(ch, GET_DRUG_AFFECT(ch))++;
         }
-      }
-      else if (GET_DRUG_STAGE(ch) == 2) {
+      } else if (GET_DRUG_STAGE(ch) == 2) {
         send_to_char(ch, "The aftereffects of the %s begin to wear off.\r\n", drug_types[GET_DRUG_AFFECT(ch)].name);
         GET_DRUG_STAGE(ch) = GET_DRUG_DOSE(ch) = GET_DRUG_AFFECT(ch) = 0;
         if (AFF_FLAGGED(ch, AFF_DETOX))

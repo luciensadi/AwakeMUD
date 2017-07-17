@@ -2060,7 +2060,6 @@ void extract_char(struct char_data * ch)
     ch->char_specials.rigging = NULL;
     PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
   }
-
   // Clean up playergroup info.
   if (GET_PGROUP_DATA(ch))
     delete GET_PGROUP_DATA(ch);

@@ -376,6 +376,24 @@ void redit_parse(struct descriptor_data * d, const char *arg)
              as a temporary measure */
           d->edit_room->contents = world[room_num].contents;
           d->edit_room->people = world[room_num].people;
+          
+          // Update the peace values.
+          bool edit_room_peaceful = d->edit_room->room_flags.IsSet(ROOM_PEACEFUL);
+          bool world_room_peaceful = world[room_num].room_flags.IsSet(ROOM_PEACEFUL);
+          if (edit_room_peaceful && !world_room_peaceful) {
+            d->edit_room->peaceful += 1;
+          }
+          // More complex case: Room was peaceful and now is not.
+          else if (world_room_peaceful && !edit_room_peaceful) {
+            d->edit_room->peaceful -= 1;
+            if (d->edit_room->peaceful < 0) {
+              sprintf(buf, "SYSERR: Changing PEACEFUL flag of room caused world[room_num].peaceful to be %d.",
+                      d->edit_room->peaceful);
+              mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+              d->edit_room->peaceful = 0;
+            }
+          }
+          
           // we use free_room here because we are not ready to turn it over
           // to the stack just yet as we are gonna use it immediately
           free_room(world + room_num);

@@ -2468,10 +2468,31 @@ ACMD(do_who)
           sprintf(buf1, "^L");
           break;
       }
-      sprintf(buf2, "%10s :^N %s%s%s %s ^n", (GET_WHOTITLE(tch) ? GET_WHOTITLE(tch) : ""),
-              (GET_PRETITLE(tch) ? GET_PRETITLE(tch) : ""), (GET_PRETITLE(tch) &&
-                                                             strlen(GET_PRETITLE(tch)) ? " " : ""), GET_CHAR_NAME(tch), GET_TITLE(tch));
+      if (PRF_FLAGGED(tch, PRF_SHOWGROUPTAG) && GET_PGROUP_DATA(tch) && GET_PGROUP(tch)) {
+        sprintf(buf2, "%10s :^N %s%s^N%s%s%s %s^n",
+                (GET_WHOTITLE(tch) ? GET_WHOTITLE(tch) : ""),
+                (GET_PGROUP(tch)->get_tag()),
+                (strlen(GET_PGROUP(tch)->get_tag()) ? " " : ""),
+                (GET_PRETITLE(tch) ? GET_PRETITLE(tch) : ""),
+                (GET_PRETITLE(tch) && strlen(GET_PRETITLE(tch)) ? " " : ""),
+                GET_CHAR_NAME(tch),
+                GET_TITLE(tch));
+      } else {
+        sprintf(buf2, "%10s :^N %s%s%s %s^n",
+                (GET_WHOTITLE(tch) ? GET_WHOTITLE(tch) : ""),
+                (GET_PRETITLE(tch) ? GET_PRETITLE(tch) : ""),
+                (GET_PRETITLE(tch) && strlen(GET_PRETITLE(tch)) ? " " : ""),
+                GET_CHAR_NAME(tch),
+                GET_TITLE(tch));
+      }
       strcat(buf1, buf2);
+      
+      if ((GET_PGROUP_DATA(tch) && GET_PGROUP(tch) && !(GET_PGROUP(tch)->is_secret()))
+          && (GET_PGROUP_DATA(ch) && GET_PGROUP(ch))
+          && GET_PGROUP(ch) == GET_PGROUP(tch)) {
+        sprintf(buf2, " ^G(^g%s^G)^n", GET_PGROUP(tch)->get_alias());
+        strcat(buf1, buf2);
+      }
       
       if (PRF_FLAGGED(tch, PRF_AFK))
         strcat(buf1, " (AFK)");

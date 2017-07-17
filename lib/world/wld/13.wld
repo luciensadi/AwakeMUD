@@ -220,7 +220,7 @@ Name:	Interstate 5
 Desc:$
    Whizzing through an overpass, the light fades for a moment, the concrete
 cave seemingly covered in primitive artwork where area gangers have braved the
-traffic to tag the structure.  As light and open air returns, a tiny Seatac
+traffic to tag the structure.  As light and open air returns, a tiny Sea-Tac
 airport can be glimpsed to the distant north, a large green sign proclaiming
 the distance and exit number to get there. 
 ~
@@ -432,7 +432,7 @@ BREAK
 #1312
 Name:	Interstate 5
 Desc:$
-   Heading north, Seatac Airport is a few miles and a couple of exits away
+   Heading north, Sea-Tac Airport is a few miles and a couple of exits away
 going south, Seattle is about an hour's drive away.  Bored faces gaze out of
 cars across the eight lanes of I-5, expressions as gray as the overcast sky. 
 ~
@@ -680,7 +680,7 @@ Name:	Interstate 5
 Desc:$
    Traffic heading north to Seattle zips by, while the southern flow is
 slowing and quickly turning into a cramped jam of angry commuters.  A green
-sign shows Seatac International Airport is three exits away.  The rumble of
+sign shows Sea-Tac International Airport is three exits away.  The rumble of
 jets taking off can be heard. 
 ~
 Flags:	10000000000010000000000
@@ -714,7 +714,7 @@ BREAK
 Name:	Interstate 5, Seattle/Tacoma Airport Exit
 Desc:$
    A large green sign points out nearby Seattle to the north and Tacoma to the
-southwest, the southeast off-ramp leading to Seatac International Airport.  A
+southwest, the southeast off-ramp leading to Sea-Tac International Airport.  A
 caravan of black airport shuttles cuts into traffic from the access road. 
 ~
 Flags:	10100000000010000000000
@@ -753,7 +753,7 @@ BREAK
 #1321
 Name:	Offramp
 Desc:$
-   Seatac airport rises up to the north.  Several planes and jets can be seen
+   Sea-Tac airport rises up to the north.  Several planes and jets can be seen
 in the long stretch of runway.  To the northwest Interstate 5 roars with the
 madness of rushing traffic. 
 ~
@@ -926,7 +926,7 @@ BREAK
 Name:	Interstate 5
 Desc:$
    The outskirts of Seattle meld empty country with the distant downtown
-skyline.  A lonely sign quickly passed gives the exit number for Seatac
+skyline.  A lonely sign quickly passed gives the exit number for Sea-Tac
 International Airport, shows Tacoma to be about an hours' drive away (under
 the speed limit, that is). 
 ~

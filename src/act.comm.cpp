@@ -1125,25 +1125,19 @@ ACMD(do_phone)
     if (k->persona) {
       send_to_icon(k->persona, "A small telephone symbol blinks in the top left of your view.\r\n");
     } else {
-      tch = k->phone->carried_by;
-      if (!tch)
-        tch = k->phone->worn_by;
+      tch = k->phone->carried_by ? k->phone->carried_by : k->phone->worn_by;
       if (!tch && k->phone->in_obj)
-        tch = k->phone->in_obj->carried_by;
-      if (!tch && k->phone->in_obj)
-        tch = k->phone->in_obj->worn_by;
+        tch = k->phone->in_obj->carried_by ? k->phone->in_obj->carried_by : k->phone->in_obj->worn_by;
       if (tch) {
         if (GET_POS(tch) == POS_SLEEPING) {
-          if (success_test(GET_WIL(tch), 4)) {
+          if (success_test(GET_WIL(tch), 4)) { // Why does it take a successful Willpower test to hear your phone?
             GET_POS(tch) = POS_RESTING;
             send_to_char("You are woken by your phone ringing.\r\n", tch);
-          } else if (!GET_OBJ_VAL(k->phone, 3)) {
+            if (!GET_OBJ_VAL(k->phone, 3))
+              act("$n is startled awake by the ringing of $s phone.", FALSE, tch, 0, 0, TO_ROOM);
+          } else if (!GET_OBJ_VAL(k->phone, 3))
             act("$n's phone rings.", FALSE, tch, 0, 0, TO_ROOM);
-            return;
-          } else
-            return;
-        }
-        if (!GET_OBJ_VAL(k->phone, 3)) {
+        } else if (!GET_OBJ_VAL(k->phone, 3)) {
           act("Your phone rings.", FALSE, tch, 0, 0, TO_CHAR);
           act("$n's phone rings.", FALSE, tch, NULL, NULL, TO_ROOM);
         } else {
@@ -1152,7 +1146,9 @@ ACMD(do_phone)
         }
       } else {
         sprintf(buf, "%s rings.", GET_OBJ_NAME(k->phone));
-        send_to_room(buf, k->phone->in_room);
+        if (k->phone->in_room || k->phone->in_veh)
+          act(buf, FALSE, NULL, k->phone, 0, TO_ROOM);
+        // Edge case: A phone inside a container inside a container won't ring. But do we even want it to?
       }
     }
     send_to_char("It begins to ring.\r\n", ch);
@@ -1355,9 +1351,14 @@ void phone_check()
         tch = k->phone->in_obj->worn_by;
       if (tch) {
         if (GET_POS(tch) == POS_SLEEPING) {
-          if (success_test(GET_WIL(tch), 4)) {
-            GET_POS(tch) = POS_RESTING;
-            send_to_char("You are woken by your phone ringing.\r\n", tch);
+          if (GET_POS(tch) == POS_SLEEPING) {
+            if (success_test(GET_WIL(tch), 4)) { // Why does it take a successful Willpower test to hear your phone?
+              GET_POS(tch) = POS_RESTING;
+              send_to_char("You are woken by your phone ringing.\r\n", tch);
+              if (!GET_OBJ_VAL(k->phone, 3))
+                act("$n is startled awake by the ringing of $s phone.", FALSE, tch, 0, 0, TO_ROOM);
+            } else if (!GET_OBJ_VAL(k->phone, 3))
+              act("$n's phone rings.", FALSE, tch, 0, 0, TO_ROOM);
           } else if (!GET_OBJ_VAL(k->phone, 3)) {
             act("$n's phone rings.", FALSE, tch, 0, 0, TO_ROOM);
             continue;
@@ -1372,8 +1373,9 @@ void phone_check()
             act("You feel your phone ring.", FALSE, tch, 0, 0, TO_CHAR);
         }
       } else {
-        sprintf(buf, "%s rings.\r\n", GET_OBJ_NAME(k->phone));
-        send_to_room(buf, k->phone->in_room);
+        sprintf(buf, "%s rings.", GET_OBJ_NAME(k->phone));
+        if (k->phone->in_room || k->phone->in_veh)
+          act(buf, FALSE, NULL, k->phone, 0, TO_ROOM);
       }
     }
   }

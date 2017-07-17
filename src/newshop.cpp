@@ -402,9 +402,17 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
   }
   if (!(sell = find_obj_shop(arg, shop_nr, &obj)))
   {
-    sprintf(buf, "%s %s", GET_CHAR_NAME(ch), shop_table[shop_nr].no_such_itemk);
-    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-    return;
+    if (atoi(arg) > 0) {
+      // Adapt for the player probably meaning an item number instead of an item with a numeric keyword.
+      char oopsbuf[strlen(arg) + 2];
+      sprintf(oopsbuf, "#%s", arg);
+      sell = find_obj_shop(oopsbuf, shop_nr, &obj);
+    }
+    if (!sell) {
+      sprintf(buf, "%s %s", GET_CHAR_NAME(ch), shop_table[shop_nr].no_such_itemk);
+      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+      return;
+    }
   }
   one_argument(arg, buf);
   if (!str_cmp(buf, "cash"))
@@ -476,8 +484,12 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
       sell->lastidnum[0] = GET_IDNUM(ch);
     } else {
       float totaltime = ((GET_OBJ_AVAILDAY(obj) * buynum) / success) + (2 * GET_AVAIL_OFFSET(ch));
-      sprintf(buf, "%s That will take about %d %s to come in.", GET_CHAR_NAME(ch),
-              totaltime < 1 ? (int)(24 * totaltime) : (int)totaltime, totaltime < 1 ? "hours" : (totaltime == 1 ? "day" : "days"));
+      if (totaltime < 1) {
+        int hours = (int)(24 * totaltime);
+        sprintf(buf, "%s That will take about %d %s to come in.", GET_CHAR_NAME(ch), hours, hours == 1 ? "hour" : "hours");
+      } else {
+        sprintf(buf, "%s That will take about %d %s to come in.", GET_CHAR_NAME(ch), (int) totaltime, totaltime == 1 ? "day" : "days");
+      }
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
       struct shop_order_data *order = shop_table[shop_nr].order;
       for (; order; order = order->next)
@@ -748,11 +760,26 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     return;
   struct obj_data *obj;
   skip_spaces(&arg);
+  
+  if (!*arg) {
+    send_to_char(ch, "Syntax: INFO <item>\r\n");
+    return;
+  }
+  
   if (!find_obj_shop(arg, shop_nr, &obj))
   {
-    sprintf(buf, "%s I don't have that item.", GET_CHAR_NAME(ch));
-    do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-    return;
+    bool successful = FALSE;
+    if (atoi(arg) > 0) {
+      // Adapt for the player probably meaning an item number instead of an item with a numeric keyword.
+      char oopsbuf[strlen(arg) + 2];
+      sprintf(oopsbuf, "#%s", arg);
+      successful = (find_obj_shop(oopsbuf, shop_nr, &obj) != NULL);
+    }
+    if (!successful) {
+      sprintf(buf, "%s I don't have that item.", GET_CHAR_NAME(ch));
+      do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+      return;
+    }
   }
   sprintf(buf, "%s %s is", GET_CHAR_NAME(ch), CAP(obj->text.name));
   switch (GET_OBJ_TYPE(obj))

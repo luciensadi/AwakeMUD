@@ -121,6 +121,7 @@ void make_prompt(struct descriptor_data * point);
 void check_idle_passwords(void);
 void init_descriptor (struct descriptor_data *newd, int desc);
 char *colorize(struct descriptor_data *d, char *str);
+void send_keepalives();
 
 /* extern fcnts */
 extern void DBInit();
@@ -331,7 +332,7 @@ void copyover_recover()
   // Force all player characters to look now that everyone's properly loaded.
   struct char_data *plr = character_list;
   while (plr) {
-    if (!IS_NPC(plr))
+    if (!IS_NPC(plr) && !PRF_FLAGGED(plr, PRF_SCREENREADER))
       look_at_room(plr, 0);
     plr = plr->next;
   }
@@ -761,6 +762,7 @@ void game_loop(int mother_desc)
     
     if (!(pulse % (60 * PASSES_PER_SEC))) {
       check_idling();
+      send_keepalives();
       // johnson_update();
     }
     
@@ -893,6 +895,24 @@ void echo_on(struct descriptor_data *d)
   };
   
   SEND_TO_Q(on_string, d);
+}
+
+// Sends a keepalive pulse to the given descriptor.
+void keepalive(struct descriptor_data *d) {
+  char keepalive[] = {
+    (char) IAC,
+    (char) NOP,
+    (char) 0
+  };
+  
+  SEND_TO_Q(keepalive, d);
+}
+
+// Sends keepalives to everyone who's enabled them.
+void send_keepalives() {
+  for (struct descriptor_data *d = descriptor_list; d; d = d->next)
+    if (d->character && PRF_FLAGGED(d->character, PRF_KEEPALIVE))
+      keepalive(d);
 }
 
 void make_prompt(struct descriptor_data * d)
@@ -1978,7 +1998,7 @@ char *colorize(struct descriptor_data *d, char *str)
   // it is possible that this could over flow if only because the color
   // codes take up several characters--however, I certainly am not
   // gonna allocate a new one every time (=
-  static char buffer[MAX_STRING_LENGTH];
+  static char buffer[MAX_STRING_LENGTH]; // TODO: Multiply this by the size of the color codes.
   register char *temp = &buffer[0];
   register const char *color;
   
@@ -2519,9 +2539,9 @@ void act(const char *str, int hide_invisible, struct char_data * ch,
     to = ch->in_veh->people;
   else
   {
-    log("SYSERR: no valid target to act()!");
+    mudlog("SYSERR: no valid target to act()!", NULL, LOG_SYSLOG, TRUE);
     sprintf(buf, "Invocation: act('%s', '%d', char_data, obj_data, vict_obj, '%d').", str, hide_invisible, type);
-    log(buf);
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
     return;
   }
   

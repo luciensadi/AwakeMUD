@@ -81,6 +81,9 @@ int mysql_wrapper(MYSQL *mysql, const char *query)
           //  the results of the query, but the query had no results and will refuse a read.
           //  This is crash-inducing behavior 99% of the time.
           shutdown();
+        } else {
+          log("MySQL successfully reconnected.");
+          result = mysql_wrapper(mysql, query);
         }
         break;
       default:
@@ -823,7 +826,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   sprintf(buf, "SELECT * FROM pfiles_playergroups WHERE idnum=%ld;", GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
   res = mysql_use_result(mysql);
-  if ((row = mysql_fetch_row(res))) {
+  if (res && (row = mysql_fetch_row(res))) {
     long pgroup_idnum = atol(row[1]);
     GET_PGROUP_DATA(ch) = new Pgroup_data();
     GET_PGROUP_DATA(ch)->rank = atoi(row[2]);
@@ -860,7 +863,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   res = mysql_use_result(mysql);
   Pgroup_invitation *pgi;
   time_t expiration;
-  while ((row = mysql_fetch_row(res))) {
+  while (res && (row = mysql_fetch_row(res))) {
     expiration = atol(row[2]);
     if (!(Pgroup_invitation::is_expired(expiration))) {
       pgi = new Pgroup_invitation(atol(row[1]), expiration);
