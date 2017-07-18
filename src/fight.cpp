@@ -565,23 +565,19 @@ void raw_kill(struct char_data * ch)
         }
       GET_DRUG_AFFECT(ch) = GET_DRUG_DURATION(ch) = GET_DRUG_STAGE(ch) = 0;
       if (PLR_FLAGGED(ch, PLR_AUTH))
-        i = real_room(60500);
+        i = real_room(RM_CHARGEN_START_ROOM);
       else switch (zone_table[world[ch->in_room].zone].juridiction) {
         case ZONE_SEATTLE:
-          /* i = real_room(16295); // This room doesn't exist in the public CE world. */
-          i = real_room(100);
+          i = real_room(RM_SEATTLE_DOCWAGON);
           break;
         case ZONE_PORTLAND:
-          /* i = real_room(14709); // This room doesn't exist in the public CE world. */
-          i = real_room(100);
+          i = real_room(RM_PORTLAND_DOCWAGON);
           break;
         case ZONE_CARIB:
-          /* i = real_room(62300); // This room doesn't exist in the public CE world. */
-          i = real_room(100);
+          i = real_room(RM_CARIB_DOCWAGON);
           break;
         case ZONE_OCEAN:
-          /* i = real_room(62502); // This room doesn't exist in the public CE world. */
-          i = real_room(100);
+          i = real_room(RM_OCEAN_DOCWAGON);
           break;
         default:
           sprintf(buf, "SYSERR: Bad jurisdiction type %d in room %ld encountered in raw_kill() while transferring %s (%ld).",
@@ -589,7 +585,7 @@ void raw_kill(struct char_data * ch)
                   world[ch->in_room].number,
                   GET_CHAR_NAME(ch), GET_IDNUM(ch));
           mudlog(buf, ch, LOG_SYSLOG, TRUE);
-          i = real_room(100);
+          i = real_room(RM_ENTRANCE_TO_DANTES);
           break;
       }
       char_from_room(ch);
@@ -1701,22 +1697,22 @@ void docwagon(struct char_data *ch)
     send_to_char("\r\n\r\nYour last conscious memory is the arrival of a DocWagon.\r\n", ch);
     switch (zone_table[world[ch->in_room].zone].juridiction) {
       case ZONE_SEATTLE:
-        i = real_room(16295);
+        i = real_room(RM_SEATTLE_DOCWAGON);
         break;
       case ZONE_PORTLAND:
-        i = real_room(14709);
+        i = real_room(RM_PORTLAND_DOCWAGON);
         break;
       case ZONE_CARIB:
-        i = real_room(62300);
+        i = real_room(RM_CARIB_DOCWAGON);
         break;
       case ZONE_OCEAN:
-        i = real_room(62502);
+        i = real_room(RM_OCEAN_DOCWAGON);
         break;
     }
     char_from_room(ch);
     char_to_room(ch, i);
     creds = MAX((number(8, 12) * 500 / GET_OBJ_VAL(docwagon, 0)), (int)(GET_NUYEN(ch) / 10));
-    send_to_char(ch, "Docwagon demand %d nuyen for your rescue.\r\n", creds);
+    send_to_char(ch, "DocWagon demands %d nuyen for your rescue.\r\n", creds);
     if ((GET_NUYEN(ch) + GET_BANK(ch)) < creds) {
       send_to_char("Not finding sufficient payment, your DocWagon contract was retracted.\r\n", ch);
       extract_obj(docwagon);

@@ -2430,7 +2430,7 @@ void nanny(struct descriptor_data * d, char *arg)
       character_list = d->character;
       d->character->player.time.logon = time(0);
 
-      if (GET_LOADROOM(d->character) == NEWBIE_LOADROOM && !PLR_FLAGGED(d->character, PLR_NEWBIE))
+      if (GET_LOADROOM(d->character) == RM_NEWBIE_LOADROOM && !PLR_FLAGGED(d->character, PLR_NEWBIE))
         GET_LOADROOM(d->character) = mortal_start_room;
 
       if ((load_room = GET_LAST_IN(d->character)) != NOWHERE)
@@ -2443,7 +2443,7 @@ void nanny(struct descriptor_data * d, char *arg)
         sprintf(buf, "SYSERR: Character %s is loading in with invalid load room %ld (%ld). Changing to Grog's place (35500).",
                      GET_CHAR_NAME(d->character), GET_LOADROOM(d->character), load_room);
         mudlog(buf, d->character, LOG_SYSLOG, TRUE);
-        load_room = real_room(35500);
+        load_room = real_room(RM_ENTRANCE_TO_DANTES);
       }
       
       if (ROOM_FLAGGED(load_room, ROOM_HOUSE) && !House_can_enter(d->character, world[load_room].number))
@@ -2454,7 +2454,7 @@ void nanny(struct descriptor_data * d, char *arg)
 
       if (load_room == NOWHERE) {
         if (PLR_FLAGGED(d->character, PLR_NEWBIE))
-          load_room = real_room(NEWBIE_LOADROOM); // The Neophyte Hotel (previously 8039 which does not exist)
+          load_room = real_room(RM_NEWBIE_LOADROOM); // The Neophyte Hotel (previously 8039 which does not exist)
         else
           load_room = real_room(mortal_start_room);
       }
