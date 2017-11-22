@@ -38,7 +38,7 @@
 
 // Configurables.
 #define NUM_MEMBERS_NEEDED_TO_FOUND         2 // Should be 3, but decreased for testing purposes.
-#define COST_TO_FOUND_GROUP                 100000
+#define COST_TO_FOUND_GROUP                 100000 // Nuyen that must be paid by the founding player in order to make a group official.
 
 // Helper functions.
 #define GET_PGROUP_DATA(ch)                 (ch)->pgroup
@@ -46,11 +46,13 @@
 
 // Maximums.
 #define MAX_PGROUP_RANK                     10
-#define MAX_PGROUP_NAME_LENGTH              80  // If you change this, update your SQL tables too.
-#define MAX_PGROUP_ALIAS_LENGTH             20  // If you change this, update your SQL tables too.
-#define MAX_PGROUP_TAG_LENGTH               23  // If you change this, update your SQL tables too. Suggested formula: ((without_color + 1) * 3)
+#define MAX_PGROUP_NAME_LENGTH              80  // If you change this, update your SQL tables too. SQL field length should be 2x+1 this (or greater).
+#define MAX_PGROUP_ALIAS_LENGTH             20  // If you change this, update your SQL tables too. SQL field length should be 2x+1 this (or greater).
+#define MAX_PGROUP_LOG_LENGTH               256 // If you change this, update your SQL tables too. SQL field length should be 2x+1 this (or greater).
+
+// Tag maximums: Only update tag-without-color, and update your SQL tables too. SQL field length should be 2(tag length with color)+1 (or greater).
 #define MAX_PGROUP_TAG_LENGTH_WITHOUT_COLOR 7
-#define MAX_PGROUP_LOG_LENGTH               256 // If you change this, update your SQL tables too.
+#define MAX_PGROUP_TAG_LENGTH               (MAX_PGROUP_TAG_LENGTH_WITHOUT_COLOR * 3 + 2) // Accounts for color codes before each letter as well as a ^n at the end.
 
 // Function prototypes.
 long get_new_pgroup_idnum();

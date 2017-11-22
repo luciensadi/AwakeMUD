@@ -100,9 +100,11 @@ ACMD(do_accept) {
     
     // if argument matches case-insensitively with invitation's group's alias
     if (str_cmp(argument, pgr->get_name()) != 0) {
-      // add player to group
       send_to_char(ch, "You accept the invitation and declare yourself a member of '%s'.\r\n", pgr->get_name());
+      
+      // Add the player to the group. This function also removes the invitation and logs the character's joining (if applicable).
       pgr->add_member(ch);
+      
       return;
     }
     pgi = pgi->next;
@@ -135,20 +137,23 @@ ACMD(do_decline) {
   Pgroup_invitation *pgi = ch->pgroup_invitations;
   Playergroup *pgr;
   while (pgi) {
-    // if argument matches case-insensitively with invitation's group's alias
     pgr = pgi->get_pg();
     
     // Skip over anything from a disabled group.
     if (pgr->is_disabled()) {
+      // TODO: Should disabled-group invitations be deleted from the player's invite queue?
       pgi = pgi->next;
       continue;
     }
     
+    // If argument matches case-insensitively with invitation's group's alias:
     if (str_cmp(argument, pgr->get_name()) != 0) {
-      // drop the invitation
       send_to_char(ch, "You decline the invitation from '%s'.\r\n", pgr->get_name());
-      // TODO: log the rejection
       
+      // TODO: should we log the rejection? Code is below, but I don't know if it should be there.
+      pgr->audit_log_vfprintf("%s has declined an invitation to the group.", GET_NAME(ch));
+      
+      // Drop the invitation.
       if (pgi->prev)
         pgi->prev->next = pgi->next;
       else
@@ -275,7 +280,7 @@ ACMD(do_pgroup) {
     }
     
     // Precondition: If the command requires a kosherized group, you must be part of one.
-    if (!pgroup_commands[cmd_index].valid_while_group_not_founded && (!GET_PGROUP(ch)->is_founded())) {
+    if (!GET_PGROUP(ch)->is_founded() && !pgroup_commands[cmd_index].valid_while_group_not_founded) {
       send_to_char("You need to be a member of a fully-fledged playergroup to do that.\r\n", ch);
       return;
     }
@@ -283,7 +288,8 @@ ACMD(do_pgroup) {
     // Precondition: You must have the appropriate privilege to perform this command.
     if (pgroup_commands[cmd_index].privilege_required != PRIV_NONE) {
       if (!(GET_PGROUP_DATA(ch)->privileges.AreAnySet(pgroup_commands[cmd_index].privilege_required, PRIV_LEADER, ENDBIT))) {
-        send_to_char(ch, "You must be a %s within your group to do that.\r\n",
+        send_to_char(ch, "You must be %s %s within your group to do that.\r\n",
+                     strchr((const char *)"aeiouyAEIOUY", *pgroup_privileges[pgroup_commands[cmd_index].privilege_required]) ? "an" : "a",
                      pgroup_privileges[pgroup_commands[cmd_index].privilege_required]);
         return;
       }
@@ -305,6 +311,7 @@ ACMD(do_pgroup) {
 
 void do_pgroup_abdicate(struct char_data *ch, char *argument) {
   // TODO: Log.
+  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_NAME(ch));
   send_to_char("abdicate", ch);
 }
 
@@ -314,16 +321,17 @@ void do_pgroup_balance(struct char_data *ch, char *argument) {
 
 void do_pgroup_buy(struct char_data *ch, char *argument) {
   // TODO: Log.
+  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_NAME(ch));
   send_to_char("buy", ch);
 }
 
 void do_pgroup_contest(struct char_data *ch, char *argument) {
   // TODO: Log.
+  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_NAME(ch));
   send_to_char("contest", ch);
 }
 
 void do_pgroup_create(struct char_data *ch, char *argument) {
-  // TODO: Log.
   // If the player is already in a group, they can't create a new one.
   if (GET_PGROUP_DATA(ch)) {
     send_to_char("You are already part of a playergroup. You'll need to leave it first.\r\n", ch);
@@ -341,18 +349,19 @@ void do_pgroup_create(struct char_data *ch, char *argument) {
   ch->desc->edit_pgroup->raw_set_name("An Unimaginative Player Group");
   ch->desc->edit_pgroup->raw_set_alias("newgroup");
   
-  // Put character into the playergroup edit menu.
+  // Put character into the playergroup edit menu. Logging is handled there.
   ch->desc->edit_mode = PGEDIT_MAIN_MENU;
   pgedit_disp_menu(ch->desc);
 }
 
 void do_pgroup_deposit(struct char_data *ch, char *argument) {
   // TODO: Log.
+  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_NAME(ch));
   send_to_char("deposit", ch);
 }
 
 void do_pgroup_design(struct char_data *ch, char *argument) {
-  // TODO: Log.
+  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_NAME(ch));
   send_to_char("design", ch);
 }
 
@@ -376,35 +385,35 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
   mysql_wrapper(mysql, query_buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
-  sprintf(buf, "The following characters are about to be kicked from '%s' (%s, %ld) due to disbanding by %s: ",
+  sprintf(buf, "The following character IDs are being kicked from '%s' (%s, %ld) due to disbanding by %s: ",
           GET_PGROUP(ch)->get_name(),
           GET_PGROUP(ch)->get_alias(),
           GET_PGROUP(ch)->get_idnum(),
           GET_NAME(ch));
   while (row) {
+    // TODO: Eventually this should give names not IDs, but that's another lookup for each name...
     sprintf(ENDOF(buf), "%s ", row[0]);
     row = mysql_fetch_row(res);
   }
   mysql_free_result(res);
   log(buf);
   
-  // Remove this group from all active players' char_data structs. Delete members' pgroup_data pointers.
+  // TODO: Remove this group from all active players' char_data structs. Delete members' pgroup_data pointers.
   
-  // Remove all players from the group in the DB.
+  // TODO: Remove all players from the group in the DB.
   // sprintf(query_buf, "UPDATE pfiles SET `pgroup` = 0 WHERE `pgroup` == %ld", GET_PGROUP(ch)->get_idnum);
   // mysql_wrapper(mysql, query_buf);
   
-  // Remove all pfiles_playergroups entries matching this group and log the items removed.
+  // TODO: Remove all pfiles_playergroups entries matching this group and log the items removed.
   
-  // Remove all invitations issued by this group. (necessary)?
+  // TODO: Remove all invitations issued by this group. (necessary)?
 }
 
 void do_pgroup_edit(struct char_data *ch, char *argument) {
-  // TODO: Log.
   // Create a clone from the player's current group.
   ch->desc->edit_pgroup = new Playergroup(GET_PGROUP(ch));
   
-  // Put character into the playergroup edit menu.
+  // Put character into the playergroup edit menu. Logging is handled there.
   PLR_FLAGS(ch).SetBit(PLR_EDITING);
   STATE(ch->desc) = CON_PGEDIT;
   ch->desc->edit_mode = PGEDIT_MAIN_MENU;
@@ -412,17 +421,19 @@ void do_pgroup_edit(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_found(struct char_data *ch, char *argument) {
-  // TODO: Log.
+  // Precondition: The group may not have already been founded.
   if (GET_PGROUP(ch)->is_founded()) {
     send_to_char("Your group has already been founded.\r\n", ch);
     return;
   }
   
+  // Precondition: The player must have enough nuyen to found the group.
   if (GET_NUYEN(ch) < COST_TO_FOUND_GROUP) {
     send_to_char(ch, "You need to have %d nuyen on hand to found your group.\r\n", COST_TO_FOUND_GROUP);
     return;
   }
   
+  // Precondition: The group must meet the minimum membership requirements.
   int member_count = GET_PGROUP(ch)->sql_count_members();
   if (member_count < NUM_MEMBERS_NEEDED_TO_FOUND) {
     send_to_char(ch, "You need %d members to found your group, but you only have %d.\r\n",
@@ -431,13 +442,15 @@ void do_pgroup_found(struct char_data *ch, char *argument) {
   }
   
   // TODO: Should this be done in a specific place or in the presence of a specific NPC for RP reasons?
-  
   send_to_char(ch, "You pay %d nuyen to found '%s'.\r\n", COST_TO_FOUND_GROUP, GET_PGROUP(ch)->get_name());
   GET_NUYEN(ch) -= COST_TO_FOUND_GROUP;
   playerDB.SaveChar(ch);
   
   GET_PGROUP(ch)->set_founded(TRUE);
   GET_PGROUP(ch)->save_pgroup_to_db();
+  
+  // Make a note in the group's audit log.
+  GET_PGROUP(ch)->audit_log_vfprintf("%s has officially founded the group.", GET_NAME(ch));
 }
 
 void do_pgroup_grant(struct char_data *ch, char *argument) {
@@ -455,7 +468,7 @@ void do_pgroup_invitations(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_invite(struct char_data *ch, char *argument) {
-  // TODO: Log.
+  // Wrapper for pgroup's invitation method. Logging is handled there.
   GET_PGROUP(ch)->invite(ch, argument);
 }
 
@@ -465,18 +478,31 @@ void do_pgroup_lease(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_logs(struct char_data *ch, char *argument) {
+  // Retrieve the logs for the last X days, where X = 7 unless specified.
+  
+  int days;
+  if (!*argument) {
+    days = 7;
+  } else {
+    days = atoi(argument);
+    if (!days) {
+      send_to_char("Syntax: PGROUP LOGS (number of days prior to read)", ch);
+      return;
+    }
+  }
+  
+  // TODO.
   send_to_char("logs", ch);
 }
 
 void do_pgroup_note(struct char_data *ch, char *argument) {
-  // TODO: Log.
   if (!*argument) {
     send_to_char("You must specify something to notate in the logs.\r\n", ch);
     return;
   }
   
   if (strlen(argument) > MAX_PGROUP_LOG_LENGTH) {
-    send_to_char(ch, "Sorry, log entries can only be %d characters long.", MAX_PGROUP_LOG_LENGTH);
+    send_to_char(ch, "Sorry, log entries must be %d characters or fewer.", MAX_PGROUP_LOG_LENGTH);
     return;
   }
   
@@ -647,6 +673,13 @@ void pgedit_parse(struct descriptor_data * d, const char *arg) {
       break;
     case PGEDIT_CONFIRM_SAVE:
       if (d->edit_pgroup->is_clone()) {
+        // Log the information about who edited it and what the values are.
+        GET_PGROUP(CH)->audit_log_vfprintf("%s modified the group's information (name %s, alias %s, tag %s).",
+                                           GET_NAME(CH),
+                                           d->edit_pgroup->get_name(),
+                                           d->edit_pgroup->get_alias(),
+                                           d->edit_pgroup->get_tag());
+        
         // Group is a clone of an existing group. Update the cloned group.
         GET_PGROUP(CH)->raw_set_name(d->edit_pgroup->get_name());
         GET_PGROUP(CH)->raw_set_alias(d->edit_pgroup->get_alias());
@@ -668,6 +701,13 @@ void pgedit_parse(struct descriptor_data * d, const char *arg) {
         if (GET_PGROUP_DATA(CH)->title)
           delete GET_PGROUP_DATA(CH)->title;
         GET_PGROUP_DATA(CH)->title = str_dup("Leader");
+        
+        // Log the information about who created it and what the values are.
+        GET_PGROUP(CH)->audit_log_vfprintf("%s created the group (name %s, alias %s, tag %s).",
+                                           GET_NAME(CH),
+                                           d->edit_pgroup->get_name(),
+                                           d->edit_pgroup->get_alias(),
+                                           d->edit_pgroup->get_tag());
       }
       send_to_char("OK.\r\n", CH);
       

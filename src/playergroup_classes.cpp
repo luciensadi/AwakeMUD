@@ -229,34 +229,39 @@ void Playergroup::raw_set_alias(const char *newalias) {
 }
 
 /************* Misc Methods *************/
-void Playergroup::audit_log(const char *msg) {
+void Playergroup::audit_log(const char *original_msg) {
+  char msg[MAX_STRING_LENGTH];
   char query_buf[MAX_STRING_LENGTH];
+  
+  // Prepend the timestamp to the message.
+  time_t ct = time(0);
+  char *tmstr = asctime(localtime(&ct));
+  *(tmstr + strlen(tmstr) - 1) = '\0';
+  sprintf(msg, "%-15.15s :: %s", tmstr + 4, original_msg);
+  
+  // Quote the message for some pretense of DB safety.
   char quoted_msg[strlen(msg) * 2 + 1];
   prepare_quotes(quoted_msg, msg);
   
+  // Format the query and execute it.
   const char *query_fmt = "INSERT INTO pgroup_logs (`idnum`, `message`, `date`) VALUES ('%ld', '%s', NOW())";
   sprintf(query_buf, query_fmt, get_idnum(), quoted_msg);
   mysql_wrapper(mysql, query_buf);
   
-  mudlog(msg, NULL, LOG_PGROUPLOG, TRUE);
+  // Reuse the query buf to format the message for MUD-level logging.
+  sprintf(query_buf, "[%s (%ld)]: %s", get_alias(), get_idnum(), msg);
+  mudlog(query_buf, NULL, LOG_PGROUPLOG, TRUE);
 }
 
-char playergroup_log_buf[MAX_STRING_LENGTH];
 void Playergroup::audit_log_vfprintf(const char *format, ...)
 {
+  char playergroup_log_buf[MAX_STRING_LENGTH];
   va_list args;
-  time_t ct = time(0);
-  char *tmstr;
-  
-  tmstr = asctime(localtime(&ct));
-  *(tmstr + strlen(tmstr) - 1) = '\0';
-  sprintf(playergroup_log_buf, "%-15.15s :: ", tmstr + 4);
   
   va_start(args, format);
   vsprintf(playergroup_log_buf, format, args);
   va_end(args);
   
-  //sprintf(playergroup_log_buf, "\r\n");
   audit_log(playergroup_log_buf);
 }
 
@@ -346,7 +351,7 @@ void Playergroup::invite(struct char_data *ch, char *argument) {
   one_argument(argument, arg);
   
   if (!*arg) {
-    send_to_char("Whom would you like to invite to your group?\r\n", ch);
+    send_to_char("Whom would you like to invite to join your group?\r\n", ch);
   } else if (!(target = get_char_room_vis(ch, arg))) {
     send_to_char("They aren't here.\r\n", ch);
   } else if (ch == target) {
@@ -356,7 +361,7 @@ void Playergroup::invite(struct char_data *ch, char *argument) {
   } else if (!SENDOK(target)) {
     send_to_char("They can't hear you.\r\n", ch);
   } else if (GET_TKE(target) < 100) {
-    send_to_char("That person isn't experienced enough to be a valuable addition to your team.\r\n", ch);
+    send_to_char("That person isn't experienced enough to be a valuable addition to your group yet.\r\n", ch);
   } else if (GET_PGROUP_DATA(target) && GET_PGROUP(target) && GET_PGROUP(target) == GET_PGROUP(ch)) {
     send_to_char("They're already part of your group!\r\n", ch);
     // TODO: If the group is secret, this is info disclosure.
@@ -379,7 +384,10 @@ void Playergroup::invite(struct char_data *ch, char *argument) {
     sprintf(buf, "$n has invited you to join their playergroup, '%s'.", get_name());
     act(buf, FALSE, ch, NULL, target, TO_VICT);
     
-    // Create a new invitation and add it to the user's list.
+    // TODO: What if the group is secret? Is this okay?
+    audit_log_vfprintf("%s has invited %s to join the group.", GET_NAME(ch), GET_NAME(target));
+    
+    // Create a new invitation.
     temp = new Pgroup_invitation(GET_PGROUP(ch)->get_idnum());
     
     // Add it to the linked list.
@@ -414,6 +422,10 @@ void Playergroup::add_member(struct char_data *ch) {
   
   // Save the character.
   playerDB.SaveChar(ch);
+  
+  // Log the character's joining.
+  // TODO: Should we conceal this info in a secret group?
+  audit_log_vfprintf("%s has joined the group.", GET_NAME(ch));
   
   // Delete the invitation and remove it from the character's linked list.
   Pgroup_invitation *pgi = ch->pgroup_invitations;
