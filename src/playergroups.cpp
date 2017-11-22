@@ -479,20 +479,39 @@ void do_pgroup_lease(struct char_data *ch, char *argument) {
 
 void do_pgroup_logs(struct char_data *ch, char *argument) {
   // Retrieve the logs for the last X days, where X = 7 unless specified.
-  
+  // TODO: Potentially allow PGROUP LOGS (x) (y) to select logs between days X and Y.
   int days;
+  
   if (!*argument) {
     days = 7;
   } else {
     days = atoi(argument);
-    if (!days) {
-      send_to_char("Syntax: PGROUP LOGS (number of days prior to read)", ch);
+    if (days < 1) {
+      send_to_char("Syntax: PGROUP LOGS [number of days prior to read]", ch);
+      return;
+    }
+    if (days > MAX_PGROUP_LOG_READBACK) {
+      send_to_char(ch, "You can only view the logs created in the last %d days.\r\n", MAX_PGROUP_LOG_READBACK);
       return;
     }
   }
   
-  // TODO.
-  send_to_char("logs", ch);
+  // Select the logs between this moment and X days in the past, then display in descending order.
+  char querybuf[MAX_STRING_LENGTH];
+  const char *query_fmt = "SELECT message FROM pgroup_logs                            "
+                          "  WHERE DATE_SUB(CURDATE(), INTERVAL %d DAY) <= DATE(date) "
+                          "  ORDER BY date DESC";
+  sprintf(querybuf, query_fmt, days);
+  mysql_wrapper(mysql, querybuf);
+  
+  // Process and display the results.
+  MYSQL_RES *res = mysql_use_result(mysql);
+  MYSQL_ROW row;
+  send_to_char(ch, "Log entries in the last %d days:\r\n", days);
+  while ((row = mysql_fetch_row(res))) {
+    send_to_char(ch, " %s\r\n", row[0]);
+  }
+  mysql_free_result(res);
 }
 
 void do_pgroup_note(struct char_data *ch, char *argument) {
@@ -506,7 +525,7 @@ void do_pgroup_note(struct char_data *ch, char *argument) {
     return;
   }
   
-  GET_PGROUP(ch)->audit_log_vfprintf("Note from %s: %s", GET_NAME(ch), argument);
+  GET_PGROUP(ch)->audit_log_vfprintf("Note from %s: %s", GET_CHAR_NAME(ch), argument);
   send_to_char("OK.\r\n", ch);
 }
 
@@ -675,7 +694,7 @@ void pgedit_parse(struct descriptor_data * d, const char *arg) {
       if (d->edit_pgroup->is_clone()) {
         // Log the information about who edited it and what the values are.
         GET_PGROUP(CH)->audit_log_vfprintf("%s modified the group's information (name %s, alias %s, tag %s).",
-                                           GET_NAME(CH),
+                                           GET_CHAR_NAME(CH),
                                            d->edit_pgroup->get_name(),
                                            d->edit_pgroup->get_alias(),
                                            d->edit_pgroup->get_tag());
@@ -704,7 +723,7 @@ void pgedit_parse(struct descriptor_data * d, const char *arg) {
         
         // Log the information about who created it and what the values are.
         GET_PGROUP(CH)->audit_log_vfprintf("%s created the group (name %s, alias %s, tag %s).",
-                                           GET_NAME(CH),
+                                           GET_CHAR_NAME(CH),
                                            d->edit_pgroup->get_name(),
                                            d->edit_pgroup->get_alias(),
                                            d->edit_pgroup->get_tag());

@@ -385,7 +385,7 @@ void Playergroup::invite(struct char_data *ch, char *argument) {
     act(buf, FALSE, ch, NULL, target, TO_VICT);
     
     // TODO: What if the group is secret? Is this okay?
-    audit_log_vfprintf("%s has invited %s to join the group.", GET_NAME(ch), GET_NAME(target));
+    audit_log_vfprintf("%s has invited %s to join the group.", GET_CHAR_NAME(ch), GET_CHAR_NAME(target));
     
     // Create a new invitation.
     temp = new Pgroup_invitation(GET_PGROUP(ch)->get_idnum());
@@ -407,7 +407,7 @@ void Playergroup::add_member(struct char_data *ch) {
   if (GET_PGROUP_DATA(ch)) {
     if (GET_PGROUP(ch)) {
       log_vfprintf("WARNING: add_member called on %s for group %s when they were already part of %s.",
-          GET_NAME(ch), get_name(), GET_PGROUP(ch)->get_name());
+          GET_CHAR_NAME(ch), get_name(), GET_PGROUP(ch)->get_name());
     } else {
       log("SYSERR: overriding add_member call, also %s had pgroup_data but no pgroup.");
     }
@@ -425,7 +425,7 @@ void Playergroup::add_member(struct char_data *ch) {
   
   // Log the character's joining.
   // TODO: Should we conceal this info in a secret group?
-  audit_log_vfprintf("%s has joined the group.", GET_NAME(ch));
+  audit_log_vfprintf("%s has joined the group.", GET_CHAR_NAME(ch));
   
   // Delete the invitation and remove it from the character's linked list.
   Pgroup_invitation *pgi = ch->pgroup_invitations;
@@ -456,7 +456,7 @@ void Playergroup::remove_member(struct char_data *ch) {
   
   if (!GET_PGROUP_DATA(ch) || !GET_PGROUP(ch)) {
     log_vfprintf("SYSERR: pgroup->remove_member() called on %s, who does not have an associated group.",
-                 GET_NAME(ch));
+                 GET_CHAR_NAME(ch));
     return;
   }
   
