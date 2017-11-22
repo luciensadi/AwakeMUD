@@ -4719,6 +4719,7 @@ ACMD(do_tail)
   two_arguments(argument, arg, buf);
 
   if ( !*arg ) {
+    send_to_char( "Syntax note: tail <lines into history to read> <logfile>", ch );
     send_to_char( "The following logs are available:\r\n", ch );
     sprintf( buf, "ls -C ../log" );
   } else {
@@ -4729,10 +4730,10 @@ ACMD(do_tail)
       // strcpy( arg, buf );
     }
     
-    // Only allow lower-case letters, periods, and numbers.
+    // Only allow letters, periods, numbers, and dashes.
     int index = 0;
     for (char *ptr = buf; *ptr && index < MAX_STRING_LENGTH; ptr++) {
-      if (!isalnum(*ptr) && *ptr != '.')
+      if (!isalnum(*ptr) && *ptr != '.' && *ptr != '-')
         continue;
       else
         arg[index++] = *ptr;
