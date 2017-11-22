@@ -46,7 +46,7 @@ void aedit_disp_weapon_menu(struct descriptor_data *d)
     send_to_char(CH, "  %2d) %-15s %2d) %s\r\n",
                  counter, weapon_type[counter + WEAP_HOLDOUT],
                  counter + 1, counter + 1 < WEAP_CANNON - WEAP_HOLDOUT ?
-                 weapon_type[counter + 1 + WEAP_HOLDOUT] : "");
+                 weapon_type[counter + 1 + WEAP_HOLDOUT] : "(none)");
   }
   send_to_char("Weapon type: ", d->character);
   d->edit_mode = AEDIT_WEAPON;
@@ -99,7 +99,7 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
    break; 
   case AEDIT_WEAPON:
    number += WEAP_HOLDOUT;
-   if (number >= WEAP_CANNON)
+   if (number >= WEAP_CANNON || number < WEAP_HOLDOUT)
      send_to_char("Invalid selection.\r\nWeapon Type: ", CH);
    else {
      GET_OBJ_VAL(OBJ, 1) = number;
@@ -107,6 +107,8 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
    }
    break; 
   case AEDIT_QUANTITY:
+   if (number < 0)
+     number = 0;
    GET_OBJ_VAL(OBJ, 3) = (number / 10) * 10;
    aedit_disp_menu(d);
    break;
