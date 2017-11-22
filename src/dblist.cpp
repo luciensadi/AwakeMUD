@@ -181,21 +181,23 @@ void objList::UpdateCounters(void)
     // Packing / unpacking of workshops.
     if (GET_OBJ_TYPE(OBJ) == ITEM_WORKSHOP && GET_OBJ_VAL(OBJ, 3)) {
       struct char_data *ch;
-      if (!OBJ->in_veh && (OBJ->in_room == NOWHERE || real_room(OBJ->in_room) < 0)) {
+      if (!OBJ->in_veh && OBJ->in_room == NOWHERE) {
         // It's being carried by a character (or is in a container, etc).
         continue;
       }
       
-      for (ch = OBJ->in_veh ? OBJ->in_veh->people : world[OBJ->in_room].people; ch; ch = OBJ->in_veh ? ch->next_in_veh : ch->next_in_room)
+      for (ch = OBJ->in_veh ? OBJ->in_veh->people : world[OBJ->in_room].people;
+            ch;
+           ch = OBJ->in_veh ? ch->next_in_veh : ch->next_in_room) {
         if (AFF_FLAGGED(ch, AFF_PACKING)) {
           if (!--GET_OBJ_VAL(OBJ, 3)) {
             if (GET_OBJ_VAL(OBJ, 2)) {
               send_to_char(ch, "You finish packing up %s.\r\n", GET_OBJ_NAME(OBJ));
-              act("$n finishes packing up $P", FALSE, ch, 0, OBJ, TO_ROOM);
+              act("$n finishes packing up $P", FALSE, ch, 0, OBJ, TO_ROOM); // TODO: Does this work if they're in a vehicle too?
               GET_OBJ_VAL(OBJ, 2)--;
               
               // Handle the room's workshop[] array.
-              if (OBJ->in_room != NOWHERE && real_room(OBJ->in_room) >= 0)
+              if (OBJ->in_room != NOWHERE)
                 remove_workshop_from_room(OBJ);
             } else {
               send_to_char(ch, "You finish setting up %s.\r\n", GET_OBJ_NAME(OBJ));
@@ -203,15 +205,20 @@ void objList::UpdateCounters(void)
               GET_OBJ_VAL(OBJ, 2)++;
               
               // Handle the room's workshop[] array.
-              if (OBJ->in_room != NOWHERE && real_room(OBJ->in_room) >= 0)
+              if (OBJ->in_room != NOWHERE)
                 add_workshop_to_room(OBJ);
             }
             AFF_FLAGS(ch).RemoveBit(AFF_PACKING);
           }
           break;
         }
+      }
+      
+      // If we already handled it, continue to the next thing to be handled.
       if (ch)
         continue;
+      
+      // If there were no characters in the room working on it, clear its pack/unpack counter.
       GET_OBJ_VAL(OBJ, 3) = 0;
     }
     

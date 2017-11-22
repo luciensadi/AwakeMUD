@@ -887,7 +887,7 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
     strcat(buf, "Nowhere");
   else
   {
-    sprintf(ENDOF(buf), "%ld", world[j->in_room].number);
+    sprintf(ENDOF(buf), "%ld (IR %ld)", world[j->in_room].number, j->in_room);
   }
   strcat(buf, ", In object: ");
   strcat(buf, j->in_obj ? j->in_obj->text.name : "None");
@@ -901,6 +901,11 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
     strcat(buf, GET_CHAR_NAME(j->worn_by) ? GET_CHAR_NAME(j->worn_by): "BROKEN");
   else
     strcat(buf, "Nobody");
+  strcat(buf, ", In vehicle: ");
+  if (j->in_veh)
+    sprintf(ENDOF(buf), "%ld", j->in_veh->veh_number);
+  else
+    strcat(buf, "None");
 
   strcat(buf, "\r\n");
 
@@ -1189,6 +1194,9 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
 
   PRF_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, preference_bits, PRF_MAX);
   sprintf(ENDOF(buf), "PRF: ^g%s^n\r\n", buf2);
+  
+  AFF_FLAGS(k).PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
+  sprintf(ENDOF(buf), "AFF: ^y%s^n\r\n", buf2);
 
   sprintf(ENDOF(buf), "Height: %d cm, Weight: %d kg\r\n", GET_HEIGHT(k), GET_WEIGHT(k));
 
