@@ -90,7 +90,7 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case AEDIT_TYPE:
-   if (number > AMMO_GEL)
+   if (number > AMMO_GEL || number < AMMO_NORMAL)
      send_to_char("Invalid selection.\r\nAmmo Type: ", CH);
    else {
      GET_OBJ_VAL(OBJ, 2) = number;
