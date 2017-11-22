@@ -251,16 +251,30 @@ ACMD(do_reboot)
   send_to_char(OK, ch);
 }
 
-void boot_world(void)
-{
+void initialize_and_connect_to_mysql() {
+  // Set up our mysql client object.
   mysql = mysql_init(NULL);
+  
+  // Configure the client to attempt auto-reconnection.
+  my_bool reconnect = 1;
+  mysql_options(mysql, MYSQL_OPT_RECONNECT, &reconnect);
+  
+  // Perform the actual connection.
   if (!mysql_real_connect(mysql, mysql_host, mysql_user, mysql_password, mysql_db, 0, NULL, 0)) {
     sprintf(buf, "FATAL ERROR: %s\r\n", mysql_error(mysql));
     log(buf);
     log("Suggestion: Make sure your DB is running and that you've specified your connection info in src/mysql_config.cpp.\r\n");
     shutdown();
   }
+}
+
+void boot_world(void)
+{
+  
   log("Booting MYSQL database.");
+  initialize_and_connect_to_mysql();
+  
+  log("Handling idle deletion.");
   idle_delete();
 
   log("Loading zone table.");
