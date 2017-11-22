@@ -6,9 +6,9 @@ DROP TABLE IF EXISTS `pgroup_logs`;
 
 CREATE TABLE `playergroups` (
   `idnum` mediumint(5) unsigned unique default '0',
-  `Name` varchar(80) default 'An Unimaginative Player Group',
-  `Alias` varchar(20) default 'newgroup',
-  `Tag` varchar(30) default '^R[^WEMPTY^R]^n',
+  `Name` varchar(161) default 'An Unimaginative Player Group',
+  `Alias` varchar(41) default 'newgroup',
+  `Tag` varchar(47) default '^R[^WEMPTY^R]^n',
   `Settings` varchar(128) default '0',
   PRIMARY KEY (`idnum`),
   KEY (`Alias`)
@@ -33,7 +33,7 @@ CREATE TABLE `playergroup_invitations` (
 
 CREATE TABLE `pgroup_logs` (
   `idnum` mediumint(5) unsigned default '0',
-  `message` varchar(1000) NOT NULL,
+  `message` varchar(513) NOT NULL,
   `date` timestamp,
   KEY (`idnum`)
 );
