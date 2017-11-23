@@ -10,6 +10,7 @@
 /* Playergroup Class */
 class Playergroup {
   long idnum;
+  unsigned long bank;
   const char *tag;
   const char *name;
   const char *alias;
@@ -29,6 +30,7 @@ public:
   const char *get_name() { return name; }
   const char *get_alias() { return alias; }
   long get_idnum() { return idnum; }
+  unsigned long get_bank() { return bank; }
   
   // Setters
   void set_disabled(bool disabled);
@@ -40,6 +42,7 @@ public:
   bool set_tag(const char *newtitle, struct char_data *ch);
   bool set_name(const char *newname, struct char_data *ch);
   bool set_alias(const char *newalias, struct char_data *ch);
+  void set_bank(unsigned long amount);
   
   // Versions of setters that do not perform validity checks (avoid using unless you're completely sure)
   void raw_set_tag(const char *newtitle);

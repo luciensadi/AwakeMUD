@@ -61,6 +61,7 @@ long get_new_pgroup_idnum();
 void display_pgroup_help(struct char_data *ch);
 void pgedit_parse(struct descriptor_data *d, const char *arg);
 void pgedit_disp_menu(struct descriptor_data *d);
+bool has_valid_pocket_secretary(struct char_data *ch);
 
 // Command prototypes.
 void do_pgroup_abdicate(struct char_data *ch, char *argument);
@@ -68,7 +69,7 @@ void do_pgroup_balance(struct char_data *ch, char *argument);
 void do_pgroup_buy(struct char_data *ch, char *argument);
 void do_pgroup_contest(struct char_data *ch, char *argument);
 void do_pgroup_create(struct char_data *ch, char *argument);
-void do_pgroup_deposit(struct char_data *ch, char *argument);
+void do_pgroup_donate(struct char_data *ch, char *argument);
 void do_pgroup_design(struct char_data *ch, char *argument);
 void do_pgroup_disband(struct char_data *ch, char *argument);
 void do_pgroup_edit(struct char_data *ch, char *argument);

@@ -33,17 +33,17 @@ extern Playergroup *loaded_playergroups;
 
 /************* Constructors *************/
 Playergroup::Playergroup() :
-idnum(0), tag(NULL), name(NULL), alias(NULL)
+idnum(0), bank(0), tag(NULL), name(NULL), alias(NULL)
 {}
 
 Playergroup::Playergroup(long id_to_load) :
-idnum(0), tag(NULL), name(NULL), alias(NULL)
+idnum(0), bank(0), tag(NULL), name(NULL), alias(NULL)
 {
   load_pgroup_from_db(id_to_load);
 }
 
 Playergroup::Playergroup(Playergroup *clone_strings_from) :
-idnum(0), tag(NULL), name(NULL), alias(NULL)
+idnum(0), bank(0), tag(NULL), name(NULL), alias(NULL)
 {
   raw_set_tag(clone_strings_from->tag);
   raw_set_name(clone_strings_from->name);
@@ -228,6 +228,11 @@ void Playergroup::raw_set_alias(const char *newalias) {
   alias = str_dup(newalias);
 }
 
+// Raw setter for bank values (no validity checking).
+void Playergroup::set_bank(unsigned long amount) {
+  bank = amount;
+}
+
 /************* Misc Methods *************/
 void Playergroup::audit_log(const char *original_msg) {
   char msg[MAX_STRING_LENGTH];
@@ -274,12 +279,13 @@ bool Playergroup::save_pgroup_to_db() {
   char quotedsettings[settings.TotalWidth()];
   
   const char * pgroup_save_query_format =
-  "INSERT INTO playergroups (idnum, Name, Alias, Tag, Settings) VALUES ('%ld', '%s', '%s', '%s', '%s')"
+  "INSERT INTO playergroups (idnum, Name, Alias, Tag, Settings, bank) VALUES ('%ld', '%s', '%s', '%s', '%s', '%lu')"
   " ON DUPLICATE KEY UPDATE"
   "   Name = VALUES(Name),"
   "   Alias = VALUES(Alias),"
   "   Tag = VALUES(Tag),"
-  "   Settings = VALUES(Settings)";
+  "   Settings = VALUES(Settings),"
+  "   bank = VALUES(bank)";
   
   if (!idnum) {
     // We've never saved this group before. Give it a new idnum.
@@ -291,7 +297,8 @@ bool Playergroup::save_pgroup_to_db() {
           prepare_quotes(quotedname, name),
           prepare_quotes(quotedalias, alias),
           prepare_quotes(quotedtag, tag),
-          prepare_quotes(quotedsettings, settings.ToString()));
+          prepare_quotes(quotedsettings, settings.ToString()),
+          bank);
   mysql_wrapper(mysql, querybuf);
   
   return mysql_errno(mysql) != 0;
@@ -302,16 +309,25 @@ bool Playergroup::load_pgroup_from_db(long load_idnum) {
   char querybuf[MAX_STRING_LENGTH];
   const char * pgroup_load_query_format = "SELECT * FROM playergroups WHERE idnum = %ld";
   
+  // Defines for the purposes of avoiding magic numbers.
+#define PGROUP_DB_ROW_IDNUM    0
+#define PGROUP_DB_ROW_NAME     1
+#define PGROUP_DB_ROW_ALIAS    2
+#define PGROUP_DB_ROW_TAG      3
+#define PGROUP_DB_ROW_SETTINGS 4
+#define PGROUP_DB_ROW_BANK     5
+  
   sprintf(querybuf, pgroup_load_query_format, load_idnum);
   mysql_wrapper(mysql, querybuf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row;
   if (res && (row = mysql_fetch_row(res))) {
-    set_idnum(atol(row[0]));
-    raw_set_name(row[1]);
-    raw_set_alias(row[2]);
-    raw_set_tag(row[3]);
-    settings.FromString(row[4]);
+    set_idnum(atol(row[PGROUP_DB_ROW_IDNUM]));
+    set_bank(strtoul(row[PGROUP_DB_ROW_BANK], NULL, 0));
+    raw_set_name(row[PGROUP_DB_ROW_NAME]);
+    raw_set_alias(row[PGROUP_DB_ROW_ALIAS]);
+    raw_set_tag(row[PGROUP_DB_ROW_TAG]);
+    settings.FromString(row[PGROUP_DB_ROW_SETTINGS]);
     mysql_free_result(res);
     
     // Add the group to the linked list.

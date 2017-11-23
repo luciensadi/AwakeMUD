@@ -193,36 +193,37 @@ struct pgroup_cmd_struct {
   dword privilege_required;
   void (*command_pointer) (struct char_data *ch, char *argument);
   bool valid_while_group_not_founded;
+  bool requires_pocket_secretary;
 } pgroup_commands[] = {
-  { "abdicate"   , PRIV_LEADER        , do_pgroup_abdicate    , FALSE },
-  { "balance"    , PRIV_TREASURER     , do_pgroup_balance     , FALSE },
-  { "buy"        , PRIV_PROCURER      , do_pgroup_buy         , FALSE },
-  { "contest"    , PRIV_NONE          , do_pgroup_contest     , FALSE },
-  { "create"     , PRIV_NONE          , do_pgroup_create      , TRUE  },
-  { "demote"     , PRIV_MANAGER       , do_pgroup_promote     , FALSE },
-  { "deposit"    , PRIV_NONE          , do_pgroup_deposit     , FALSE },
-  { "design"     , PRIV_ARCHITECT     , do_pgroup_design      , FALSE },
-  { "disband"    , PRIV_LEADER        , do_pgroup_disband     , TRUE  },
-  { "edit"       , PRIV_LEADER        , do_pgroup_edit        , TRUE  },
-  { "found"      , PRIV_LEADER        , do_pgroup_found       , TRUE  },
-  { "grant"      , PRIV_ADMINISTRATOR , do_pgroup_grant       , FALSE },
-  { "help"       , PRIV_NONE          , do_pgroup_help        , TRUE  },
-  { "invitations", PRIV_RECRUITER     , do_pgroup_invitations , TRUE  },
-  { "invite"     , PRIV_RECRUITER     , do_pgroup_invite      , TRUE  },
-  { "lease"      , PRIV_LANDLORD      , do_pgroup_lease       , FALSE },
-  { "logs"       , PRIV_AUDITOR       , do_pgroup_logs        , TRUE  },
-  { "note"       , PRIV_NONE          , do_pgroup_note        , TRUE  },
-  { "outcast"    , PRIV_MANAGER       , do_pgroup_outcast     , TRUE  },
-  { "promote"    , PRIV_MANAGER       , do_pgroup_promote     , FALSE },
-  { "quit"       , PRIV_NONE          , do_pgroup_resign      , TRUE  },
-  { "resign"     , PRIV_NONE          , do_pgroup_resign      , TRUE  },
-  { "revoke"     , PRIV_ADMINISTRATOR , do_pgroup_revoke      , FALSE },
-  { "roster"     , PRIV_NONE          , do_pgroup_roster      , TRUE  },
-  { "status"     , PRIV_NONE          , do_pgroup_status      , TRUE  },
-  { "transfer"   , PRIV_PROCURER      , do_pgroup_transfer    , FALSE },
-  { "vote"       , PRIV_NONE          , do_pgroup_vote        , FALSE },
-  { "withdraw"   , PRIV_TREASURER     , do_pgroup_withdraw    , FALSE },
-  { "\n"         , 0                  , 0                     , FALSE } // This must be last.
+  { "abdicate"   , PRIV_LEADER        , do_pgroup_abdicate    , FALSE , FALSE },
+  { "balance"    , PRIV_TREASURER     , do_pgroup_balance     , FALSE , TRUE  },
+  { "buy"        , PRIV_PROCURER      , do_pgroup_buy         , FALSE , TRUE  },
+  { "contest"    , PRIV_NONE          , do_pgroup_contest     , FALSE , TRUE  },
+  { "create"     , PRIV_NONE          , do_pgroup_create      , TRUE  , TRUE  },
+  { "demote"     , PRIV_MANAGER       , do_pgroup_promote     , FALSE , TRUE  },
+  { "donate"     , PRIV_NONE          , do_pgroup_donate      , FALSE , FALSE },
+  { "design"     , PRIV_ARCHITECT     , do_pgroup_design      , FALSE , TRUE  },
+  { "disband"    , PRIV_LEADER        , do_pgroup_disband     , TRUE  , TRUE  },
+  { "edit"       , PRIV_LEADER        , do_pgroup_edit        , TRUE  , TRUE  },
+  { "found"      , PRIV_LEADER        , do_pgroup_found       , TRUE  , TRUE  },
+  { "grant"      , PRIV_ADMINISTRATOR , do_pgroup_grant       , FALSE , TRUE  },
+  { "help"       , PRIV_NONE          , do_pgroup_help        , TRUE  , FALSE },
+  { "invitations", PRIV_RECRUITER     , do_pgroup_invitations , TRUE  , TRUE  },
+  { "invite"     , PRIV_RECRUITER     , do_pgroup_invite      , TRUE  , TRUE  },
+  { "lease"      , PRIV_LANDLORD      , do_pgroup_lease       , FALSE , TRUE  },
+  { "logs"       , PRIV_AUDITOR       , do_pgroup_logs        , TRUE  , TRUE  },
+  { "note"       , PRIV_NONE          , do_pgroup_note        , TRUE  , TRUE  },
+  { "outcast"    , PRIV_MANAGER       , do_pgroup_outcast     , TRUE  , TRUE  },
+  { "promote"    , PRIV_MANAGER       , do_pgroup_promote     , FALSE , TRUE  },
+  { "quit"       , PRIV_NONE          , do_pgroup_resign      , TRUE  , FALSE },
+  { "resign"     , PRIV_NONE          , do_pgroup_resign      , TRUE  , FALSE },
+  { "revoke"     , PRIV_ADMINISTRATOR , do_pgroup_revoke      , FALSE , TRUE  },
+  { "roster"     , PRIV_NONE          , do_pgroup_roster      , TRUE  , TRUE  },
+  { "status"     , PRIV_NONE          , do_pgroup_status      , TRUE  , TRUE  },
+  { "transfer"   , PRIV_PROCURER      , do_pgroup_transfer    , FALSE , TRUE  },
+  { "vote"       , PRIV_NONE          , do_pgroup_vote        , FALSE , TRUE  },
+  { "withdraw"   , PRIV_TREASURER     , do_pgroup_withdraw    , FALSE , FALSE },
+  { "\n"         , 0                  , 0                     , FALSE , FALSE } // This must be last.
 };
 
 /* Main Playergroup Command */
@@ -305,6 +306,12 @@ ACMD(do_pgroup) {
     }
   }
   
+  // Precondition: You must have an accessible pocket secretary if one is required.
+  if (pgroup_commands[cmd_index].requires_pocket_secretary && !has_valid_pocket_secretary(ch)) {
+    send_to_char("You must have an unlocked pocket secretary to do that.\r\n", ch);
+    return;
+  }
+  
   // Execute the subcommand.
   ((*pgroup_commands[cmd_index].command_pointer) (ch, buf));
 }
@@ -316,7 +323,7 @@ void do_pgroup_abdicate(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_balance(struct char_data *ch, char *argument) {
-  send_to_char("balance", ch);
+  send_to_char(ch, "%s currently has %lu nuyen in its accounts.", GET_PGROUP(ch)->get_name(), GET_PGROUP(ch)->get_bank());
 }
 
 void do_pgroup_buy(struct char_data *ch, char *argument) {
@@ -354,10 +361,16 @@ void do_pgroup_create(struct char_data *ch, char *argument) {
   pgedit_disp_menu(ch->desc);
 }
 
-void do_pgroup_deposit(struct char_data *ch, char *argument) {
+void do_pgroup_donate(struct char_data *ch, char *argument) {
   // TODO: Log.
   // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_NAME(ch));
-  send_to_char("deposit", ch);
+  
+  /* General rules:
+      1) You can only donate cash nuyen (no paper/electronic trail for the Star).
+      2) Cash nuyen can only be donated at the PGHQ or a mail station (put in envelope and mail).
+      3) All donations are logged, and may have a reason for the donation supplied.
+   */
+  send_to_char("donate", ch);
 }
 
 void do_pgroup_design(struct char_data *ch, char *argument) {
@@ -515,6 +528,12 @@ void do_pgroup_logs(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_note(struct char_data *ch, char *argument) {
+  // This functionality requires a pocket secretary.
+  if (!has_valid_pocket_secretary(ch)) {
+    send_to_char("You must have an unlocked pocket secretary to do that.\r\n", ch);
+    return;
+  }
+  
   if (!*argument) {
     send_to_char("You must specify something to notate in the logs.\r\n", ch);
     return;
@@ -526,7 +545,8 @@ void do_pgroup_note(struct char_data *ch, char *argument) {
   }
   
   GET_PGROUP(ch)->audit_log_vfprintf("Note from %s: %s", GET_CHAR_NAME(ch), argument);
-  send_to_char("OK.\r\n", ch);
+  send_to_char("You take a moment and type your note in to your pocket secretary.\r\n", ch);
+  WAIT_STATE(ch, 1 RL_SEC); // Lessens spam.
 }
 
 void do_pgroup_outcast(struct char_data *ch, char *argument) {
@@ -771,3 +791,45 @@ long get_new_pgroup_idnum() {
     return new_num;
   }
 }
+
+// Search character's inventory and worn items for an accessible pocket secretary. If found, return true.
+bool has_valid_pocket_secretary(struct char_data *ch) {
+  SPECIAL(pocket_sec);
+  
+  // Check worn items.
+  for (int i = 0; i < NUM_WEARS; i++) {
+    if (GET_EQ(ch, i) && GET_OBJ_SPEC(ch->equipment[i]) == pocket_sec)
+      if (GET_OBJ_VAL(ch->equipment[i], 1) == 0 || GET_OBJ_VAL(ch->equipment[i], 1) == GET_IDNUM(ch)))
+        return TRUE;
+  }
+  
+  // Check carried items.
+  for (struct obj_data *i = ch->carrying; i; i = i->next_content) {
+    if (GET_OBJ_SPEC(i) == pocket_sec)
+      if (GET_OBJ_VAL(i, 1) == 0 || GET_OBJ_VAL(i, 1) == GET_IDNUM(ch)))
+        return TRUE;
+  }
+  
+  // Nothing we found was kosher-- return false.
+  return FALSE;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
