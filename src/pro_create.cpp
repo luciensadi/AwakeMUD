@@ -569,7 +569,7 @@ void update_buildrepair(void)
         CH->char_specials.timer = 0;
         STOP_WORKING(CH);
       } else if (AFF_FLAGGED(CH, AFF_AMMOBUILD) && --GET_OBJ_VAL(PROG, 4) < 1) {
-        if (GET_OBJ_VAL(PROG, 4) <= -1)
+        if (GET_OBJ_VAL(PROG, 4) <= -2) // --(-1) = -2; prevents penalizing people who ace the test.
           send_to_char("You seem to have messed up the batch of ammo.\r\n", CH);
         else {
           send_to_char("You have completed a batch of ammo.\r\n", CH);
