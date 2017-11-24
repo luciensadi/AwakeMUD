@@ -545,7 +545,7 @@ void do_pgroup_note(struct char_data *ch, char *argument) {
   }
   
   GET_PGROUP(ch)->audit_log_vfprintf("Note from %s: %s", GET_CHAR_NAME(ch), argument);
-  send_to_char("You take a moment and type your note in to your pocket secretary.\r\n", ch);
+  send_to_char("You take a moment and type your note into your pocket secretary.\r\n", ch);
   WAIT_STATE(ch, 1 RL_SEC); // Lessens spam.
 }
 
@@ -600,7 +600,7 @@ void do_pgroup_withdraw(struct char_data *ch, char *argument) {
 }
 
 
-/* Help messaging for main pgroup command. */
+/* Help messaging for main pgroup command. Specific help on these commands should be written into helpfiles (eg HELP PGROUP FOUND). */
 void display_pgroup_help(struct char_data *ch) {
   int cmds_written = 0;
   sprintf(buf, "Valid PGROUP commands for you are: \r\n");
@@ -813,23 +813,3 @@ bool has_valid_pocket_secretary(struct char_data *ch) {
   // Nothing we found was kosher-- return false.
   return FALSE;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
