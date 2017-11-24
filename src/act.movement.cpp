@@ -644,7 +644,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
       send_to_char("You start moving away for a clever escape.\r\n", ch);
     } else {
       act("$n attempts a retreat, but fails.", TRUE, ch, 0, 0, TO_ROOM);
-      send_to_char("PANIC!  You couldn't escape!\r\n", ch);
+      send_to_char("PANIC! You couldn't escape!\r\n", ch);
       return 0;
     }
   }

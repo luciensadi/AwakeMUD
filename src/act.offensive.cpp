@@ -544,20 +544,37 @@ ACMD_CONST(do_flee) {
 
 ACMD(do_flee)
 {
-  int i, attempt;
-  for (i = 0; i < 6; i++) {
-    attempt = number(0, NUM_OF_DIRS - 2);       /* Select a random direction */
-    if (CAN_GO(ch, attempt) && (!IS_NPC(ch) ||
-                                !ROOM_FLAGGED(world[ch->in_room].dir_option[attempt]->to_room, ROOM_NOMOB))) {
+  // You get six tries to escape per flee command.
+  for (int tries = 0; tries < 6; tries++) {
+    int attempt = number(0, NUM_OF_DIRS - 2);       /* Select a random direction */
+    if (CAN_GO(ch, attempt) && (!IS_NPC(ch) || !ROOM_FLAGGED(world[ch->in_room].dir_option[attempt]->to_room, ROOM_NOMOB))) {
+      // Supply messaging and put the character into a wait state to match wait state in perform_move.
       act("$n panics, and attempts to flee!", TRUE, ch, 0, 0, TO_ROOM);
-      if (do_simple_move(ch, attempt, CHECK_SPECIAL | LEADER, NULL))
+      WAIT_STATE(ch, PULSE_VIOLENCE * 2);
+      
+      // If the character is fighting in melee combat, they must pass a test to escape.
+      if (GET_POS(ch) >= POS_FIGHTING && FIGHTING(ch) && !AFF_FLAGGED(ch, AFF_PRONE)) {
+        if (!success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch)))) {
+          act("$N cuts you off as you try to escape!", TRUE, ch, 0, FIGHTING(ch), TO_CHAR);
+          act("You lunge forward and block $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_VICT);
+          act("$N lunges forward and blocks $n's escape.", TRUE, ch, 0, FIGHTING(ch), TO_NOTVICT);
+          return;
+        }
+      }
+      
+      // Attempt to move through the selected exit.
+      if (do_simple_move(ch, attempt, CHECK_SPECIAL | LEADER, NULL)) {
         send_to_char("You flee head over heels.\r\n", ch);
-      else
+      } else {
         act("$n tries to flee, but can't!", TRUE, ch, 0, 0, TO_ROOM);
+      }
+      
+      // Once we've selected a valid direction,
       return;
     }
   }
-  send_to_char("PANIC!  You couldn't escape!\r\n", ch);
+  send_to_char("PANIC! You couldn't escape!\r\n", ch);
+  WAIT_STATE(ch, PULSE_VIOLENCE * 2);
 }
 
 ACMD(do_kick)
