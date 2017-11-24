@@ -208,7 +208,6 @@ struct pgroup_cmd_struct {
   { "found"      , PRIV_LEADER        , do_pgroup_found       , TRUE  , TRUE  },
   { "grant"      , PRIV_ADMINISTRATOR , do_pgroup_grant       , FALSE , TRUE  },
   { "help"       , PRIV_NONE          , do_pgroup_help        , TRUE  , FALSE },
-  { "invitations", PRIV_RECRUITER     , do_pgroup_invitations , TRUE  , TRUE  },
   { "invite"     , PRIV_RECRUITER     , do_pgroup_invite      , TRUE  , TRUE  },
   { "lease"      , PRIV_LANDLORD      , do_pgroup_lease       , FALSE , TRUE  },
   { "logs"       , PRIV_AUDITOR       , do_pgroup_logs        , TRUE  , TRUE  },
@@ -469,15 +468,12 @@ void do_pgroup_found(struct char_data *ch, char *argument) {
 void do_pgroup_grant(struct char_data *ch, char *argument) {
   // TODO: Log.
   send_to_char("grant", ch);
+  
+  // TODO: Make this work for offline characters as well.
 }
 
 void do_pgroup_help(struct char_data *ch, char *argument) {
   send_to_char("help", ch);
-}
-
-void do_pgroup_invitations(struct char_data *ch, char *argument) {
-  // TODO: Log. (but only on revoke)
-  send_to_char("invitations", ch);
 }
 
 void do_pgroup_invite(struct char_data *ch, char *argument) {
@@ -552,11 +548,15 @@ void do_pgroup_note(struct char_data *ch, char *argument) {
 void do_pgroup_outcast(struct char_data *ch, char *argument) {
   // TODO: Log.
   send_to_char("outcast", ch);
+  
+  // TODO: Make this work for offline characters as well.
 }
 
 void do_pgroup_promote(struct char_data *ch, char *argument) {
   // TODO: Log.
   send_to_char("promote", ch);
+  
+  // TODO: Make this work for offline characters as well.
 }
 
 void do_pgroup_resign(struct char_data *ch, char *argument) {
@@ -575,6 +575,8 @@ void do_pgroup_resign(struct char_data *ch, char *argument) {
 void do_pgroup_revoke(struct char_data *ch, char *argument) {
   // TODO: Log.
   send_to_char("revoke", ch);
+  
+  // TODO: Make this work for offline characters as well.
 }
 
 void do_pgroup_roster(struct char_data *ch, char *argument) {
