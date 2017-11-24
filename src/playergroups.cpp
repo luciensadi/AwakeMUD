@@ -799,14 +799,14 @@ bool has_valid_pocket_secretary(struct char_data *ch) {
   // Check worn items.
   for (int i = 0; i < NUM_WEARS; i++) {
     if (GET_EQ(ch, i) && GET_OBJ_SPEC(ch->equipment[i]) == pocket_sec)
-      if (GET_OBJ_VAL(ch->equipment[i], 1) == 0 || GET_OBJ_VAL(ch->equipment[i], 1) == GET_IDNUM(ch)))
+      if (GET_OBJ_VAL(ch->equipment[i], 1) == 0 || GET_OBJ_VAL(ch->equipment[i], 1) == GET_IDNUM(ch))
         return TRUE;
   }
   
   // Check carried items.
   for (struct obj_data *i = ch->carrying; i; i = i->next_content) {
     if (GET_OBJ_SPEC(i) == pocket_sec)
-      if (GET_OBJ_VAL(i, 1) == 0 || GET_OBJ_VAL(i, 1) == GET_IDNUM(ch)))
+      if (GET_OBJ_VAL(i, 1) == 0 || GET_OBJ_VAL(i, 1) == GET_IDNUM(ch))
         return TRUE;
   }
   
