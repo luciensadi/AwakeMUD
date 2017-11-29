@@ -421,8 +421,8 @@ enum {
 #define AFF_PROGRAM	 	32
 #define AFF_PART_DESIGN		33
 #define AFF_PART_BUILD		34
-#define AFF_WITHDRAWL_FORCE	35
-#define AFF_WITHDRAWL		36
+#define AFF_WITHDRAWAL_FORCE	35
+#define AFF_WITHDRAWAL		36
 #define AFF_BONDING		37
 #define AFF_CONJURE		38
 #define AFF_LODGE		39

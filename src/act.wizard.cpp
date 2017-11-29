@@ -128,7 +128,7 @@ ACMD(do_copyover)
       "Someone says \x1B[0;35mOOCly\x1B[0m, \"I'm going to get fired for this.\"\r\n",
       "Yum Yum Copyover Stew, out with the old code, in with the new!\r\n",
       "Deleting player corpses, please wait...\r\n",
-      "\x1B[0;35m[\x1B[0mSerge\x1B[0;35m] \x1B[0;31m(\x1B[0mOOC\x1B[0;31m)\x1B[0m, \"This porn's taking too long to download, needs more bandwith. So the Mud'll be back up in a bit.\"\r\n"
+      "\x1B[0;35m[\x1B[0mSerge\x1B[0;35m] \x1B[0;31m(\x1B[0mOOC\x1B[0;31m)\x1B[0m, \"This porn's taking too long to download, needs more bandwidth. So the Mud'll be back up in a bit.\"\r\n"
     };
 
   fp = fopen (COPYOVER_FILE, "w");
@@ -825,7 +825,7 @@ const char *workshops[] = {
                       "Microtronics",
                       "Cyberware",
                       "Vehicle",
-                      "Weaponary",
+                      "Weaponry",
                       "Medical",
                       "Ammunition"
                     };
@@ -2304,7 +2304,7 @@ ACMD(do_invis)
       send_to_char("You can't go invisible above your own level.\r\n", ch);
     } else if (!access_level(ch, LVL_VICEPRES)
                && level > LVL_BUILDER) {
-      send_to_char("All senators are equal and there is no need for above level 2 invisability.\r\n", ch);
+      send_to_char("All senators are equal and there is no need for above level 2 invisibility.\r\n", ch);
     } else if (level < 1) {
       perform_immort_vis(ch);
     } else {
@@ -2930,13 +2930,13 @@ void print_zone_to_buf(char *bufptr, int zone, int detailed)
     sprintf(bufptr, "Zone %d (%d): %s\r\n"
             "Age: %d, Commands: %d, Reset: %d (%d), Top: %d\r\n"
             "Rooms: %d, Mobiles: %d, Objects: %d, Shops: %d, Vehicles: %d\r\n"
-            "Security: %d, Status: %s\r\nJuridiction: %s, Editors: ",
+            "Security: %d, Status: %s\r\nJurisdiction: %s, Editors: ",
             zone_table[zone].number, zone, zone_table[zone].name,
             zone_table[zone].age, zone_table[zone].num_cmds,
             zone_table[zone].lifespan, zone_table[zone].reset_mode,
             zone_table[zone].top, rooms, mobs, objs, shops, vehs,
             zone_table[zone].security,
-            zone_table[zone].connected ? "Connected" : "In Progress", jurid[zone_table[zone].juridiction]);
+            zone_table[zone].connected ? "Connected" : "In Progress", jurid[zone_table[zone].jurisdiction]);
 /* FIXCHE   for (i = 0; i < 5; i++) {
       const char *name = playerDB.GetNameV(zone_table[zone].editor_ids[i]);
 
@@ -4291,7 +4291,7 @@ ACMD(do_mlist)
   two_arguments(argument, buf, buf2);
 
   if (!*buf || !*buf2) {
-    send_to_char("Usage: mlist <begining number> <ending number>\r\n", ch);
+    send_to_char("Usage: mlist <beginning number> <ending number>\r\n", ch);
     return;
   }
 
@@ -4337,7 +4337,7 @@ ACMD(do_ilist)
   two_arguments(argument, buf, buf2);
 
   if (!*buf || !*buf2) {
-    send_to_char("Usage: ilist <begining number> <ending number>\r\n", ch);
+    send_to_char("Usage: ilist <beginning number> <ending number>\r\n", ch);
     return;
   }
   first = atoi(buf);
@@ -4385,7 +4385,7 @@ ACMD(do_vlist)
   two_arguments(argument, buf, buf2);
 
   if (!*buf || !*buf2) {
-    send_to_char("Usage: vlist <begining number> <ending number>\r\n", ch);
+    send_to_char("Usage: vlist <beginning number> <ending number>\r\n", ch);
     return;
   }
   first = atoi(buf);
@@ -4428,7 +4428,7 @@ ACMD(do_qlist)
   two_arguments(argument, buf, buf2);
 
   if (!*buf || !*buf2) {
-    send_to_char("Usage: qlist <begining number> <ending number>\r\n", ch);
+    send_to_char("Usage: qlist <beginning number> <ending number>\r\n", ch);
     return;
   }
 
@@ -4474,7 +4474,7 @@ ACMD(do_rlist)
   two_arguments(argument, buf, buf2);
 
   if (!*buf || !*buf2) {
-    send_to_char("Usage: rlist <begining number> <ending number>\r\n", ch);
+    send_to_char("Usage: rlist <beginning number> <ending number>\r\n", ch);
     return;
   }
 
@@ -4520,7 +4520,7 @@ ACMD(do_hlist)
   two_arguments(argument, buf, buf2);
 
   if (!*buf || !*buf2) {
-    send_to_char("Usage: hlist <begining number> <ending number>\r\n", ch);
+    send_to_char("Usage: hlist <beginning number> <ending number>\r\n", ch);
     return;
   }
 
@@ -4566,7 +4566,7 @@ ACMD(do_iclist)
   two_arguments(argument, buf, buf2);
 
   if (!*buf || !*buf2) {
-    send_to_char("Usage: iclist <begining number> <ending number>\r\n", ch);
+    send_to_char("Usage: iclist <beginning number> <ending number>\r\n", ch);
     return;
   }
 
@@ -4612,7 +4612,7 @@ ACMD(do_slist)
   two_arguments(argument, buf, buf2);
 
   if (!*buf || !*buf2) {
-    send_to_char("Usage: slist <begining number> <ending number>\r\n", ch);
+    send_to_char("Usage: slist <beginning number> <ending number>\r\n", ch);
     return;
   }
 

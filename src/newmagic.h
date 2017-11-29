@@ -35,4 +35,4 @@ extern void elemental_fulfilled_services(struct char_data *ch, struct char_data 
 
 #define INIT_MAIN	0
 #define INIT_META	1
-#define INIT_GAES	2
+#define INIT_GEAS	2

@@ -275,7 +275,7 @@ ACMD (do_redit)
     //memset((char *) d->edit_room, 0, sizeof(struct room_data));
     d->edit_room->name = str_dup("An unfinished room");
     d->edit_room->description = str_dup("You are in an unfinished room.\r\n");
-    d->edit_room->address = str_dup("An undiscolsed location");
+    d->edit_room->address = str_dup("An undisclosed location");
     int i = 0;
     while ((d->edit_number > zone_table[i].top) && (i < top_of_zone_table))
       ++i;

@@ -1465,7 +1465,7 @@ char_data *PCIndex::CreateChar(char_data *ch)
 
   if (strlen(GET_CHAR_NAME(ch)) >= MAX_NAME_LENGTH) {
     log("--Fatal error: Could not fit name into player index..\n"
-        "             : Inrease MAX_NAME_LENGTH");
+        "             : Increase MAX_NAME_LENGTH");
     shutdown();
   }
 

@@ -304,7 +304,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   if (ROOM_FLAGGED(ch->in_room, ROOM_DEATH) && !IS_NPC(ch) &&
       !IS_SENATOR(ch))
   {
-    send_to_char("You feel the world slip into darkness, you better hope a wandering Docwagon finds you.\r\n", ch);
+    send_to_char("You feel the world slip into darkness, you better hope a wandering DocWagon finds you.\r\n", ch);
     death_cry(ch);
     act("$n vanishes into thin air.", FALSE, ch, 0, 0, TO_ROOM);
     death_penalty(ch);
@@ -395,7 +395,7 @@ void perform_fall(struct char_data *ch)
     act("^R$n falls in from above!^n", TRUE, ch, 0, 0, TO_ROOM);
     if (ROOM_FLAGGED(ch->in_room, ROOM_DEATH) && !IS_NPC(ch) &&
         !IS_SENATOR(ch)) {
-      send_to_char("You feel the world slip into darkness, you better hope a wandering Docwagon finds you.\r\n", ch);
+      send_to_char("You feel the world slip into darkness, you better hope a wandering DocWagon finds you.\r\n", ch);
       death_cry(ch);
       act("$n vanishes into thin air.", FALSE, ch, 0, 0, TO_ROOM);
       death_penalty(ch);
@@ -443,7 +443,7 @@ void perform_fall(struct char_data *ch)
         int feettarg = 5;
         feettarg += (int)((meters - 5) / 4);
         if (success_test(GET_QUI(ch), feettarg)) {
-          act("$e manages to land on $s feet, an hydraulic woosh coming from $s legs!", FALSE, ch, 0, 0, TO_ROOM);
+          act("$e manages to land on $s feet, a hydraulic whoosh coming from $s legs!", FALSE, ch, 0, 0, TO_ROOM);
           send_to_char(ch, "You manage to land on your feet, your hydraulic jacks absorbing some of the impact!\r\n");
           power -= GET_OBJ_VAL(cyber, 1);
         }

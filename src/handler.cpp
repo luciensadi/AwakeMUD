@@ -766,11 +766,11 @@ void affect_total(struct char_data * ch)
       }
     }
   }
-  if (AFF_FLAGGED(ch, AFF_WITHDRAWL_FORCE))
+  if (AFF_FLAGGED(ch, AFF_WITHDRAWAL_FORCE))
   {
     GET_MAX_MENTAL(ch) -= 300;
     GET_TARGET_MOD(ch) += 6;
-  } else if (AFF_FLAGGED(ch, AFF_WITHDRAWL))
+  } else if (AFF_FLAGGED(ch, AFF_WITHDRAWAL))
   {
     GET_TARGET_MOD(ch) += 4;
   }

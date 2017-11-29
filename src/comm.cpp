@@ -261,7 +261,7 @@ void copyover_recover()
     
   {
     perror ("copyover_recover:fopen");
-    log ("Copyover file not found. Exitting.\n\r");
+    log ("Copyover file not found. Exiting.\n\r");
     exit (1);
   }
   

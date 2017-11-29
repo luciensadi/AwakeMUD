@@ -226,7 +226,7 @@ void objList::UpdateCounters(void)
     if (GET_OBJ_TYPE(OBJ) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(OBJ, 0) == TYPE_COOKER && OBJ->contains && GET_OBJ_VAL(OBJ, 9) > 0) {
       if (--GET_OBJ_VAL(OBJ, 9) < 1) {
         struct obj_data *chip = OBJ->contains;
-        act("$p beeps loudly, signalling completion.", FALSE, 0, OBJ, 0, TO_ROOM);
+        act("$p beeps loudly, signaling completion.", FALSE, 0, OBJ, 0, TO_ROOM);
         if (GET_OBJ_TIMER(chip) == -1) {
           DELETE_ARRAY_IF_EXTANT(chip->restring);
           chip->restring = str_dup("a ruined optical chip");

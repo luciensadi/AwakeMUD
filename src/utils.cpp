@@ -1243,7 +1243,7 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
         case CYB_DERMALPLATING:
         case CYB_DERMALSHEATHING:
           if (GET_OBJ_VAL(cyber2, 0) == CYB_DERMALPLATING || GET_OBJ_VAL(cyber2, 0) == CYB_DERMALSHEATHING) {
-            send_to_char("You already have an skin modifiaction.\r\n", ch);
+            send_to_char("You already have an skin modification.\r\n", ch);
             return FALSE;
           }
           break;

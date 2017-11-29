@@ -319,7 +319,7 @@ void iedit_disp_val1_menu(struct descriptor_data * d)
       send_to_char("  0) Top\r\n  1) Barrel\r\n 2) Under\r\nLocation to mount accessory: ", CH);
       break;
     case ITEM_FOCUS:
-      send_to_char("  0) Expendable Spell\r\n  1) Specific Spell\r\n  2) Spell Catagory\r\n  3) Spirit\r\n"
+      send_to_char("  0) Expendable Spell\r\n  1) Specific Spell\r\n  2) Spell Category\r\n  3) Spirit\r\n"
                    "  4) Power\r\n  5) Sustaining\r\n  6) Weapon\r\nFocus type: ", CH);
       break;
     case ITEM_CLIMBING:
@@ -822,7 +822,7 @@ void iedit_disp_val8_menu(struct descriptor_data * d)
         iedit_disp_menu(d);
       break;
     case ITEM_WORN:
-      send_to_char("Concealibility rating (+harder -easier): ", CH);
+      send_to_char("Concealability rating (+harder -easier): ", CH);
       break;
     default:
       iedit_disp_menu(d);
@@ -1078,7 +1078,7 @@ void iedit_disp_legality_menu(struct descriptor_data *d) {
                  "18) Class A (Paralegal) Equipment\r\n"
                  "19) Class B (Security Grade) Equipment\r\n"
                  "20) Class C (Military Grade) Equipment\r\n"
-                 "21) Class A (Pharmacuticals) Controlled\r\n"
+                 "21) Class A (Pharmaceuticals) Controlled\r\n"
                  "22) Class B (BTL) Controlled\r\n"
                  "23) Class C (Biological Agents) Controlled\r\n"
                  "Select Security Category (0 for other): ", CH);
@@ -1442,7 +1442,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           break;
         case 'b':
         case 'B':
-          send_to_char(CH, "Enter Availibilty TN: ");
+          send_to_char(CH, "Enter Availability TN: ");
           d->edit_mode = IEDIT_AVAILTN;
           break;
         case 'c':

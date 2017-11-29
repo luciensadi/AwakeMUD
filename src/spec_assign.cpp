@@ -247,7 +247,7 @@ void ASSIGNMOB(long mob, SPECIAL(fname))
     mob_index[rnum].sfunc = mob_index[rnum].func;
     mob_index[rnum].func = fname;
   } else
-    log_vfprintf("SYSERR: Attempt to assign spec to non-existant mob #%d", mob);
+    log_vfprintf("SYSERR: Attempt to assign spec to non-existent mob #%d", mob);
 }
 
 void ASSIGNOBJ(long obj, SPECIAL(fname))
@@ -255,7 +255,7 @@ void ASSIGNOBJ(long obj, SPECIAL(fname))
   if (real_object(obj) >= 0)
     obj_index[real_object(obj)].func = fname;
   else
-    log_vfprintf("SYSERR: Attempt to assign spec to non-existant obj #%d", obj);
+    log_vfprintf("SYSERR: Attempt to assign spec to non-existent obj #%d", obj);
 }
 
 void ASSIGNWEAPON(long weapon, WSPEC(fname))
@@ -263,7 +263,7 @@ void ASSIGNWEAPON(long weapon, WSPEC(fname))
   if (real_object(weapon) >= 0)
     obj_index[real_object(weapon)].wfunc = fname;
   else
-    log_vfprintf("SYSERR: Attempt to assign spec to non-existant weapon #%d", weapon);
+    log_vfprintf("SYSERR: Attempt to assign spec to non-existent weapon #%d", weapon);
 }
 
 void ASSIGNROOM(long room, SPECIAL(fname))
@@ -271,7 +271,7 @@ void ASSIGNROOM(long room, SPECIAL(fname))
   if (real_room(room) >= 0)
     world[real_room(room)].func = fname;
   else
-    log_vfprintf("SYSERR: Attempt to assign spec to non-existant rm. #%d", room);
+    log_vfprintf("SYSERR: Attempt to assign spec to non-existent rm. #%d", room);
 }
 
 

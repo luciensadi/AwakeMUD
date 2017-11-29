@@ -250,7 +250,7 @@ void taxi_leaves(void)
         close_taxi_door(to, rev_dir[i], j);
         if (world[to].people) {
           if (j >= real_room(FIRST_PORTCAB))
-            sprintf(buf, "The taxi doors slide shut and it pulls off from the kerb.");
+            sprintf(buf, "The taxi doors slide shut and it pulls off from the curb.");
           else sprintf(buf, "The taxi door slams shut as its wheels churn up a cloud of smoke.");
           act(buf, FALSE, world[to].people, 0, 0, TO_ROOM);
           act(buf, FALSE, world[to].people, 0, 0, TO_CHAR);
@@ -368,7 +368,7 @@ ACMD(do_hail)
     if (!world[ch->in_room].dir_option[dir]) {
       open_taxi_door(ch->in_room, dir, cab);
       if (portland)
-      sprintf(buf, "A nice looking red and white cab pulls up smoothly to the kerb, "
+      sprintf(buf, "A nice looking red and white cab pulls up smoothly to the curb, "
               "and its door opens to the %s.", fulldirs[dir]);
       else sprintf(buf, "A beat-up yellow cab screeches to a halt, "
               "and its door opens to the %s.", fulldirs[dir]);
@@ -565,7 +565,7 @@ SPECIAL(taxi)
         close_taxi_door(dest, rev_dir[i], ch->in_room);
         if (world[dest].people) {
           if (portland)
-            sprintf(buf, "The taxi doors slide shut and it pulls off from the kerb.");
+            sprintf(buf, "The taxi doors slide shut and it pulls off from the curb.");
           else sprintf(buf, "The taxi door slams shut as its wheels churn up a cloud of smoke.");
           act(buf, FALSE, world[dest].people, 0, 0, TO_ROOM);
           act(buf, FALSE, world[dest].people, 0, 0, TO_CHAR);
@@ -1522,7 +1522,7 @@ void close_lightraildoor(int lightrail, int to, int room, int from)
     delete [] world[room].dir_option[from]->general_description;
   delete world[room].dir_option[from];
   world[room].dir_option[from] = NULL;
-  send_to_room("The lightrail's doors slide shut and a tone eminates around the platform, signaling its departure.\r\n", room);
+  send_to_room("The lightrail's doors slide shut and a tone emanates around the platform, signaling its departure.\r\n", room);
   send_to_room("The lightrail's doors slide shut and a tone signals as it begins moving.\r\n", lightrail);
 }
 

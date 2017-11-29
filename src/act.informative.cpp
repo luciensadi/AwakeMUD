@@ -192,7 +192,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     if (GET_OBJ_VNUM(object) == 108 && !GET_OBJ_TIMER(object))
       sprintf(ENDOF(buf), " (Uncooked)");
     if (GET_OBJ_TYPE(object) == ITEM_FOCUS && GET_OBJ_VAL(object, 9) == GET_IDNUM(ch))
-      sprintf(ENDOF(buf), " ^Y(Gaes)^n");
+      sprintf(ENDOF(buf), " ^Y(Geas)^n");
   } else if (GET_OBJ_NAME(object) && ((mode == 2) || (mode == 3) || (mode == 4) || (mode == 7)))
     strcpy(buf, GET_OBJ_NAME(object));
   else if (mode == 5)
@@ -217,7 +217,7 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       if (GET_OBJ_VAL(object, 4))
         strcat(buf, " ^m(Activated Focus)^n");
       if (GET_OBJ_VAL(object, 9) == GET_IDNUM(ch))
-        strcat(buf, " ^Y(Gaes)^n");
+        strcat(buf, " ^Y(Geas)^n");
     }
   }
   if (mode != 3)

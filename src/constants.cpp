@@ -601,8 +601,8 @@ const char *affected_bits[] =
     "Programming",
     "Part Designing",
     "Part Building",
-    "Withdrawl (Forced)",
-    "Withdrawl",
+    "Withdrawal (Forced)",
+    "Withdrawal",
     "Bonding Focus",
     "Conjuring",
     "Building Lodge",
@@ -1370,7 +1370,7 @@ struct skill_data skills[] =
     {"Gun Cane", QUI, 0},
     {"Bracer Gun", QUI, 0},
     {"Blowgun", QUI, 0},
-    {"Pharmacuticals", INT, 0}
+    {"Pharmaceuticals", INT, 0}
   };
 
 int rev_dir[] =
@@ -1959,7 +1959,7 @@ const char *cyber_types[] = {
   "Oral Dart",
   "Oral Gun",
   "Oral Slasher",
-  "ASIST Interfance",
+  "ASIST Interface",
   "Chipjack Expert Driver",
   "Cranial Cyberdeck",
   "Data Compactor",

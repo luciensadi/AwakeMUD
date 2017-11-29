@@ -484,7 +484,7 @@ void get_check_money(struct char_data * ch, struct obj_data * obj)
       } else
         return;
     } else {
-      act("$p dissloves in your hands!", FALSE, ch, obj, 0, TO_CHAR);
+      act("$p dissolves in your hands!", FALSE, ch, obj, 0, TO_CHAR);
       mudlog("ERROR: Nuyen value < 1", ch, LOG_SYSLOG, TRUE);
     }
     extract_obj(obj);
@@ -1441,10 +1441,40 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
   if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
        || IS_OBJ_STAT( obj, ITEM_WIZLOAD) )
   {
+    // Default/preliminary logging message; this is appended to where necessary.
     sprintf(buf, "%s gives %s: (obj %ld) %s%s",
             GET_CHAR_NAME(ch), GET_CHAR_NAME(vict),
             GET_OBJ_VNUM( obj ), obj->text.name,
-            IS_OBJ_STAT(obj,ITEM_WIZLOAD) ? " *" : "");
+            IS_OBJ_STAT(obj,ITEM_WIZLOAD) ? " [wizloaded]" : "");
+    
+    /*
+    // TODO: Special logging for credsticks, parts, and anything else with an inherent value.
+    switch(GET_OBJ_TYPE(obj)) {
+        // List of items:
+        // credsticks √
+        // computer parts
+        // optical chips
+        // ammo
+        // summoning materials
+        // spell materials? is that a thing?
+      case ITEM_MONEY:
+        // The only time we'll ever hit perform_give with money is if it's a credstick.
+        sprintf(ENDOF(buf), ", containing %d nuyen", GET_OBJ_VAL(obj, 0));
+        break;
+      case ITEM_DECK_ACCESSORY:
+        // Computer parts.
+        if (GET_OBJ_VAL(obj, 0) == TYPE_PARTS) {
+          
+        }
+        break;
+      case ITEM_GUN_AMMO:
+        // A box of ammunition.
+        break;
+      default:
+        break;
+    }
+     */
+    
     mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
   }
 

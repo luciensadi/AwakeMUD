@@ -136,7 +136,7 @@ void set_attributes(struct char_data *ch, int magic)
     GET_REAL_BOD(ch) += 5;
     GET_REAL_STR(ch) += 6;
     GET_ATT_POINTS(ch) -= 11;
-    send_to_char("You spend 11 attribute points to raise your attributes to their mininums.\r\n", ch);
+    send_to_char("You spend 11 attribute points to raise your attributes to their minimums.\r\n", ch);
     break;
   case RACE_KOBOROKURU:
     GET_REAL_BOD(ch)++;

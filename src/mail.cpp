@@ -158,7 +158,7 @@ int scan_file(void)
   int total_messages = 0, block_num = 0;
 
   if (!(mail_file = fopen(MAIL_FILE, "r"))) {
-    log("Mail file non-existant... creating new file.");
+    log("Mail file non-existent... creating new file.");
     mail_file = fopen(MAIL_FILE, "w");
     fclose(mail_file);
     return 1;
@@ -457,7 +457,7 @@ void postmaster_send_mail(struct char_data * ch, struct char_data *mailman,
   /* Keep astral beings from using mail */
   if( IS_ASTRAL(ch))
   {
-    send_to_char("If the postal employee could detect the astral plane you stillwould be ignored!\n\r",ch);
+    send_to_char("If the postal employee could detect the astral plane you still would be ignored!\n\r",ch);
     return;
   }
   one_argument(arg, buf);

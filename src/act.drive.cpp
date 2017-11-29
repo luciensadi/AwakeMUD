@@ -289,7 +289,7 @@ ACMD(do_rig)
       break;
     }
   if (!has_datajack) {
-    send_to_char("You need atleast a datajack to do that.\r\n", ch);
+    send_to_char("You need at least a datajack to do that.\r\n", ch);
     return;
   }
 
@@ -1189,7 +1189,7 @@ ACMD(do_speed)
       send_to_char("You put your foot on the accelerator.\r\n", ch);
     send_to_veh("You speed up.", veh, ch, TRUE);
   } else {
-    send_to_char("But you're already travelling that fast!\r\n", ch);
+    send_to_char("But you're already traveling that fast!\r\n", ch);
     return;
   }
   veh->cspeed = i;
@@ -1246,7 +1246,7 @@ ACMD(do_chase)
       k->next = tveh->followers;
     tveh->followers = k;
     if (veh->cspeed == SPEED_IDLE) {
-      send_to_char(ch, "You put your foot on the accelarator.\r\n");
+      send_to_char(ch, "You put your foot on the accelerator.\r\n");
       send_to_veh("You speed up.\r\n", veh, ch, FALSE);
       veh->cspeed = SPEED_CRUISING;
     }
@@ -1351,7 +1351,7 @@ ACMD(do_target)
   if (vict) {
     for (struct obj_data *obj2 = veh->mount; obj2; obj2 = obj2->next_content)
       if (obj2->targ == vict) {
-        send_to_char("Someone is already targetting that.\r\n", ch);
+        send_to_char("Someone is already targeting that.\r\n", ch);
         return;
       }
     set_fighting(ch, vict);

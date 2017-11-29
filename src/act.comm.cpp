@@ -231,7 +231,7 @@ ACMD(do_tell)
            PLR_FLAGGED(vict, PLR_MAILING))
     act("$E's writing a message right now; try again later.", FALSE, ch, 0, vict, TO_CHAR);
   else if (PRF_FLAGGED(vict, PRF_AFK))
-    act("$E's afk at the moment.", FALSE, ch, 0, vict, TO_CHAR);
+    act("$E's AFK at the moment.", FALSE, ch, 0, vict, TO_CHAR);
   else if (PLR_FLAGGED(vict, PLR_EDITING))
     act("$E's editing right now, try again later.", FALSE, ch, 0, vict, TO_CHAR);
   else
@@ -625,12 +625,12 @@ ACMD(do_broadcast)
     if(crypt) {
       sprintf(buf, "^y\\%s^y/[All Frequencies, %s](CRYPTO-%d): %s^N", voice, skills[GET_LANGUAGE(ch)].name, crypt, argument);
       sprintf(buf2, "^y\\Garbled Static^y/[All Frequencies, Unknown](CRYPTO-%d): ***ENCRYPTED DATA***^N", crypt);
-      sprintf(buf4, "^y\\Unintelligable Voice^y/[All Frequencies, Unknown](CRYPTO-%d): %s", crypt, buf3);
+      sprintf(buf4, "^y\\Unintelligible Voice^y/[All Frequencies, Unknown](CRYPTO-%d): %s", crypt, buf3);
       sprintf(buf3, "^y\\%s^y/[All Frequencies, Unknown](CRYPTO-%d): (something incoherent...)^N", voice, crypt);
     } else {
       sprintf(buf, "^y\\%s^y/[All Frequencies, %s]: %s^N", voice, skills[GET_LANGUAGE(ch)].name, argument);
       sprintf(buf2, "^y\\%s^y/[All Frequencies, Unknown]: %s^N", voice, argument);
-      sprintf(buf4, "^y\\Unintelligable Voice^y/[All Frequencies, Unknown]: %s", buf3);
+      sprintf(buf4, "^y\\Unintelligible Voice^y/[All Frequencies, Unknown]: %s", buf3);
       sprintf(buf3, "^y\\%s^y/[All Frequencies, Unknown]: (something incoherent...)^N", voice);
     }
   }

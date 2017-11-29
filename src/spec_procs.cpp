@@ -813,7 +813,7 @@ SPECIAL(trainer)
       GET_KARMA(ch) -= (GET_REAL_WIL(ch) + 1) * 200;
     GET_REAL_WIL(ch)++;
     affect_total(ch);
-    send_to_char(ch, "Through a strict regimine of work and study, your Willpower raises "
+    send_to_char(ch, "Through a strict regimen of work and study, your Willpower raises "
                  "to %d.\r\n", GET_REAL_WIL(ch));
   } else {
     if (GET_ATT_POINTS(ch) > 0) {
@@ -1720,7 +1720,7 @@ SPECIAL(adept_guard)
             FALSE, ch, 0, vict, TO_NOTVICT);
         act("A streak of pain courses through your body!",
             FALSE, ch, 0, vict, TO_VICT);
-        act("Sensing an oppurtune moment, you come out of hiding and draw upon "
+        act("Sensing an oppertune moment, you come out of hiding and draw upon "
             "your mystic abilities to kill $N.", FALSE, ch, 0, vict, TO_CHAR);
         damage(ch, vict, 1, 0, PHYSICAL);
         return(TRUE);
@@ -1766,7 +1766,7 @@ SPECIAL(takehero_tsuyama)
                 FALSE, tsuyama, 0, vict, TO_NOTVICT);
             act("$n unsheathes his deadly katana, swiftly attacking you!",
                 FALSE, tsuyama, 0, vict, TO_VICT);
-            act("You unsheath your katana and switly attack $N!",
+            act("You unsheathe your katana and swiftly attack $N!",
                 FALSE, tsuyama, 0, vict, TO_CHAR);
             damage(tsuyama, vict, 2, TYPE_SLASH, PHYSICAL);
             return(TRUE);
@@ -1853,7 +1853,7 @@ SPECIAL(branson)
       do_say(ch, "Do you understand what I'm trying to do? Do you?", 0, 0);
       return TRUE;
     case 2:
-      do_say(ch, "Noone else has a character to rival mine.", 0, 0);
+      do_say(ch, "No-one else has a character to rival mine.", 0, 0);
       return TRUE;
     case 3:
       act("$n switches the trid to CNN and checks the latest stock updates.",
@@ -2411,7 +2411,7 @@ SPECIAL(smiths_bouncer)
         do_say(ch, "Look, no invitation, no entry. It's that simple, ya see.", 0, 0);
         return TRUE;
       case 92:
-        do_say(ch, "You're a friend of who? Nice fraggin'try.", 0, 0);
+        do_say(ch, "You're a friend of who? Nice fraggin' try.", 0, 0);
         return TRUE;
       case 147:
         act("As someone tries to sneak past, $n grabs them by the collar and "
@@ -2777,7 +2777,7 @@ SPECIAL(traffic)
                      real_room(room->number));
         break;
       case 4:
-        if (zone_table[room->zone].juridiction == 0)
+        if (zone_table[room->zone].jurisdiction == 0)
           send_to_room("A Lone Star squad car drives by, sirens blaring loudly.\r\n",
                        real_room(room->number));
         break;
@@ -2932,7 +2932,7 @@ SPECIAL(waterfall)
     if (success_test(GET_STR(ch), 10)) {
       act("You push your way through the rushing water and tumble into a vast cavern.",
           FALSE, ch, 0, 0, TO_CHAR);
-      act("$n pushes $s way through the waterfall and dissapears.", TRUE, ch, 0, 0, TO_ROOM);
+      act("$n pushes $s way through the waterfall and disappears.", TRUE, ch, 0, 0, TO_ROOM);
       return FALSE;
     } else {
       act("You succumb to the heavy waves and crack your skull on the floor!", FALSE, ch, 0, 0, TO_CHAR);
@@ -2999,9 +2999,9 @@ SPECIAL(circulation_fan)
     }
   } else {
     if (room->people != NULL) {
-      act("A loud hum signals the powerup of the fan.",
+      act("A loud hum signals the power-up of the fan.",
           FALSE, room->people, 0, 0, TO_CHAR);
-      act("A loud hum signals the powerup of the fan.",
+      act("A loud hum signals the power-up of the fan.",
           FALSE, room->people, 0, 0, TO_ROOM);
     }
 
