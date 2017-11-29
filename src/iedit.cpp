@@ -495,8 +495,8 @@ void iedit_disp_val3_menu(struct descriptor_data * d)
   {
     case ITEM_WORKSHOP:
       if (GET_OBJ_VAL(OBJ, 0) == TYPE_AMMO && GET_OBJ_VAL(OBJ, 1) == TYPE_KIT) {
-        for (c = 1; c < AMMO_GEL; c++)
-          send_to_char(CH, "%d) %s\r\n", c, ammo_type[c]);
+        for (c = AMMO_NORMAL; c <= AMMO_GEL; c++)
+          send_to_char(CH, "%d) %s\r\n", c, ammo_type[c].name);
         send_to_char("Select ammunition type: ", CH);
       } else iedit_disp_menu(d);
       

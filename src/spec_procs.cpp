@@ -2704,7 +2704,7 @@ SPECIAL(bank)
       GET_BANK(ch) -= amount;
       sprintf(buf, "%d nuyen transferred from your account to $p.", amount);
     } else {
-      send_to_char("Transfer from what? (Type out \"credstick\" or \"account\", please.)\r\n", ch);
+      send_to_char("Transfer to what? (Type out \"credstick\" or \"account\", please.)\r\n", ch);
       return TRUE;
     }
     act(buf, FALSE, ch, credstick, 0, TO_CHAR);

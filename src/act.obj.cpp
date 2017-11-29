@@ -1447,33 +1447,32 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
             GET_OBJ_VNUM( obj ), obj->text.name,
             IS_OBJ_STAT(obj,ITEM_WIZLOAD) ? " [wizloaded]" : "");
     
-    /*
     // TODO: Special logging for credsticks, parts, and anything else with an inherent value.
     switch(GET_OBJ_TYPE(obj)) {
-        // List of items:
-        // credsticks √
-        // computer parts
-        // optical chips
-        // ammo
-        // summoning materials
-        // spell materials? is that a thing?
       case ITEM_MONEY:
         // The only time we'll ever hit perform_give with money is if it's a credstick.
         sprintf(ENDOF(buf), ", containing %d nuyen", GET_OBJ_VAL(obj, 0));
         break;
       case ITEM_DECK_ACCESSORY:
-        // Computer parts.
+        // Computer parts and optical chips.
         if (GET_OBJ_VAL(obj, 0) == TYPE_PARTS) {
-          
+          sprintf(ENDOF(buf), ", containing %d nuyen worth of %s", GET_OBJ_COST(obj), GET_OBJ_VAL(obj, 1) ? "chips" : "parts");
+        }
+        break;
+      case ITEM_MAGIC_TOOL:
+        // Summoning materials.
+        if (GET_OBJ_VAL(obj, 0) == TYPE_SUMMONING) {
+          sprintf(ENDOF(buf), ", containing %d nuyen worth of summoning materials", GET_OBJ_COST(obj));
         }
         break;
       case ITEM_GUN_AMMO:
         // A box of ammunition.
+        sprintf(ENDOF(buf), ", containing %d units of %s %s ammo", GET_OBJ_VAL(obj, 0),
+                ammo_type[GET_OBJ_VAL(obj, 2)].name, weapon_type[GET_OBJ_VAL(obj, 1)]);
         break;
       default:
         break;
     }
-     */
     
     mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
   }
