@@ -385,22 +385,18 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
     return;
   }
   
-  send_to_char(ch, "You disband the group '%s'.\r\n", GET_PGROUP(ch)->get_name());
-  GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_NAME(ch));
-  
-  // Disable the group.
-  GET_PGROUP(ch)->set_disabled(TRUE);
+  Playergroup *pgr = GET_PGROUP(ch);
   
   // Kick all members.
   char query_buf[512];
-  sprintf(query_buf, "SELECT idnum FROM pfiles WHERE `pgroup` = %ld", GET_PGROUP(ch)->get_idnum());
+  sprintf(query_buf, "SELECT idnum FROM pfiles WHERE `pgroup` = %ld", pgr->get_idnum());
   mysql_wrapper(mysql, query_buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
   sprintf(buf, "The following character IDs are being kicked from '%s' (%s, %ld) due to disbanding by %s: ",
-          GET_PGROUP(ch)->get_name(),
-          GET_PGROUP(ch)->get_alias(),
-          GET_PGROUP(ch)->get_idnum(),
+          pgr->get_name(),
+          pgr->get_alias(),
+          pgr->get_idnum(),
           GET_NAME(ch));
   while (row) {
     // TODO: Eventually this should give names not IDs, but that's another lookup for each name...
@@ -413,12 +409,18 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
   // TODO: Remove this group from all active players' char_data structs. Delete members' pgroup_data pointers.
   
   // TODO: Remove all players from the group in the DB.
-  // sprintf(query_buf, "UPDATE pfiles SET `pgroup` = 0 WHERE `pgroup` == %ld", GET_PGROUP(ch)->get_idnum);
+  // sprintf(query_buf, "UPDATE pfiles SET `pgroup` = 0 WHERE `pgroup` == %ld", pgr->get_idnum);
   // mysql_wrapper(mysql, query_buf);
   
   // TODO: Remove all pfiles_playergroups entries matching this group and log the items removed.
   
   // TODO: Remove all invitations issued by this group. (necessary)?
+  
+  // Disable the group.
+  pgr->set_disabled(TRUE);
+  
+  send_to_char(ch, "You disband the group '%s'.\r\n", pgr->get_name());
+  pgr->audit_log_vfprintf("%s disbanded the group.", GET_NAME(ch));
 }
 
 void do_pgroup_edit(struct char_data *ch, char *argument) {
