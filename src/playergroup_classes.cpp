@@ -100,8 +100,8 @@ bool iscolor(char c) {
 // Performs validity checks before setting. Returns TRUE if set succeeded, FALSE otherwise.
 bool Playergroup::set_tag(const char *newtag, struct char_data *ch) {
   // TODO: Validity checks.
-  if (strlen(newtag) > (MAX_PGROUP_TAG_LENGTH - 1)) {
-    send_to_char(ch, "Sorry, tags can't be longer than %d characters.\r\n", MAX_PGROUP_TAG_LENGTH - 1);
+  if (strlen(newtag) > MAX_PGROUP_TAG_LENGTH) {
+    send_to_char(ch, "Sorry, tags can't be longer than %d characters.\r\n", MAX_PGROUP_TAG_LENGTH);
     return FALSE;
   }
   
@@ -130,10 +130,10 @@ bool Playergroup::set_tag(const char *newtag, struct char_data *ch) {
     return FALSE;
   }
   
-  if (len > (MAX_PGROUP_TAG_LENGTH_WITHOUT_COLOR)) {
+  if (len > MAX_PGROUP_TAG_LENGTH_WITHOUT_COLOR) {
     send_to_char(ch, "Sorry, the non-colorized part of tags can't be longer than %d characters.\r\n",
                  MAX_PGROUP_TAG_LENGTH_WITHOUT_COLOR);
-    sprintf(buf, "Sorry, tags can't be longer than %d characters.\r\n", MAX_PGROUP_TAG_LENGTH - 1);
+    sprintf(buf, "Sorry, tags can't be longer than %d characters.\r\n", MAX_PGROUP_TAG_LENGTH);
     send_to_char(buf, ch);
     return FALSE;
   }
@@ -145,8 +145,8 @@ bool Playergroup::set_tag(const char *newtag, struct char_data *ch) {
 // Performs validity checks before setting. Returns TRUE if set succeeded, FALSE otherwise.
 bool Playergroup::set_name(const char *newname, struct char_data *ch) {
   // Check for length.
-  if (strlen(newname) > (MAX_PGROUP_NAME_LENGTH - 1)) {
-    sprintf(buf, "Sorry, playergroup names can't be longer than %d characters.\r\n", MAX_PGROUP_NAME_LENGTH - 1);
+  if (strlen(newname) > MAX_PGROUP_NAME_LENGTH) {
+    sprintf(buf, "Sorry, playergroup names can't be longer than %d characters.\r\n", MAX_PGROUP_NAME_LENGTH);
     send_to_char(buf, ch);
     return FALSE;
   }
@@ -158,8 +158,8 @@ bool Playergroup::set_name(const char *newname, struct char_data *ch) {
 // Performs validity checks before setting. Returns TRUE if set succeeded, FALSE otherwise.
 bool Playergroup::set_alias(const char *newalias, struct char_data *ch) {
   // Check for length.
-  if (strlen(newalias) > (MAX_PGROUP_ALIAS_LENGTH - 1)) {
-    sprintf(buf, "Sorry, aliases can't be longer than %d characters.\r\n", MAX_PGROUP_ALIAS_LENGTH - 1);
+  if (strlen(newalias) > MAX_PGROUP_ALIAS_LENGTH) {
+    sprintf(buf, "Sorry, aliases can't be longer than %d characters.\r\n", MAX_PGROUP_ALIAS_LENGTH);
     send_to_char(buf, ch);
     return FALSE;
   }
@@ -201,7 +201,7 @@ void Playergroup::raw_set_tag(const char *newtag) {
     delete tag;
   
   // If you used raw_set and didn't follow the rules, enjoy your halt.
-  assert(strlen(newtag) <= MAX_PGROUP_TAG_LENGTH - 1);
+  assert(strlen(newtag) <= MAX_PGROUP_TAG_LENGTH);
   
   tag = str_dup(newtag);
 }
@@ -212,7 +212,7 @@ void Playergroup::raw_set_name(const char *newname) {
     delete name;
   
   // If you used raw_set and didn't follow the rules, enjoy your halt.
-  assert(strlen(newname) <= MAX_PGROUP_NAME_LENGTH - 1);
+  assert(strlen(newname) <= MAX_PGROUP_NAME_LENGTH);
   
   name = str_dup(newname);
 }
@@ -223,7 +223,7 @@ void Playergroup::raw_set_alias(const char *newalias) {
     delete alias;
   
   // If you used raw_set and didn't follow the rules, enjoy your halt.
-  assert(strlen(newalias) <= MAX_PGROUP_ALIAS_LENGTH - 1);
+  assert(strlen(newalias) <= MAX_PGROUP_ALIAS_LENGTH);
   
   alias = str_dup(newalias);
 }
@@ -273,9 +273,9 @@ void Playergroup::audit_log_vfprintf(const char *format, ...)
 // Saves the playergroup to the database.
 bool Playergroup::save_pgroup_to_db() {
   char querybuf[MAX_STRING_LENGTH];
-  char quotedname[MAX_PGROUP_NAME_LENGTH * 2];
-  char quotedalias[MAX_PGROUP_ALIAS_LENGTH * 2];
-  char quotedtag[MAX_PGROUP_TAG_LENGTH * 2];
+  char quotedname[MAX_PGROUP_NAME_LENGTH * 2 + 1];
+  char quotedalias[MAX_PGROUP_ALIAS_LENGTH * 2 + 1];
+  char quotedtag[MAX_PGROUP_TAG_LENGTH * 2 + 1];
   char quotedsettings[settings.TotalWidth()];
   
   const char * pgroup_save_query_format =

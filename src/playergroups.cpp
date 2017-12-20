@@ -524,12 +524,6 @@ void do_pgroup_logs(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_note(struct char_data *ch, char *argument) {
-  // This functionality requires a pocket secretary.
-  if (!has_valid_pocket_secretary(ch)) {
-    send_to_char("You must have an unlocked pocket secretary to do that.\r\n", ch);
-    return;
-  }
-  
   if (!*argument) {
     send_to_char("You must specify something to notate in the logs.\r\n", ch);
     return;

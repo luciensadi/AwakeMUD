@@ -37,7 +37,7 @@
 #define PGEDIT_CONFIRM_SAVE                 5
 
 // Configurables.
-#define NUM_MEMBERS_NEEDED_TO_FOUND         2 // Should be 3, but decreased for testing purposes.
+#define NUM_MEMBERS_NEEDED_TO_FOUND         2 // TODO: Should be 3, but decreased for testing purposes.
 #define COST_TO_FOUND_GROUP                 100000 // Nuyen that must be paid by the founding player in order to make a group official.
 
 // Helper functions.
