@@ -151,7 +151,7 @@ ACMD(do_decline) {
       send_to_char(ch, "You decline the invitation from '%s'.\r\n", pgr->get_name());
       
       // TODO: should we log the rejection? Code is below, but I don't know if it should be there.
-      pgr->audit_log_vfprintf("%s has declined an invitation to the group.", GET_NAME(ch));
+      pgr->audit_log_vfprintf("%s has declined an invitation to the group.", GET_CHAR_NAME(ch));
       
       // Drop the invitation.
       if (pgi->prev)
@@ -317,7 +317,7 @@ ACMD(do_pgroup) {
 
 void do_pgroup_abdicate(struct char_data *ch, char *argument) {
   // TODO: Log.
-  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_NAME(ch));
+  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_CHAR_NAME(ch));
   send_to_char("abdicate", ch);
 }
 
@@ -327,13 +327,13 @@ void do_pgroup_balance(struct char_data *ch, char *argument) {
 
 void do_pgroup_buy(struct char_data *ch, char *argument) {
   // TODO: Log.
-  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_NAME(ch));
+  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_CHAR_NAME(ch));
   send_to_char("buy", ch);
 }
 
 void do_pgroup_contest(struct char_data *ch, char *argument) {
   // TODO: Log.
-  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_NAME(ch));
+  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_CHAR_NAME(ch));
   send_to_char("contest", ch);
 }
 
@@ -362,7 +362,7 @@ void do_pgroup_create(struct char_data *ch, char *argument) {
 
 void do_pgroup_donate(struct char_data *ch, char *argument) {
   // TODO: Log.
-  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_NAME(ch));
+  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_CHAR_NAME(ch));
   
   /* General rules:
       1) You can only donate cash nuyen (no paper/electronic trail for the Star).
@@ -373,7 +373,7 @@ void do_pgroup_donate(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_design(struct char_data *ch, char *argument) {
-  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_NAME(ch));
+  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_CHAR_NAME(ch));
   send_to_char("design", ch);
 }
 
@@ -389,7 +389,7 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
   
   // Kick all members.
   char query_buf[512];
-  sprintf(query_buf, "SELECT idnum FROM pfiles WHERE `pgroup` = %ld", pgr->get_idnum());
+  sprintf(query_buf, "SELECT idnum, Rank, Privileges FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
   mysql_wrapper(mysql, query_buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
@@ -397,30 +397,48 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
           pgr->get_name(),
           pgr->get_alias(),
           pgr->get_idnum(),
-          GET_NAME(ch));
+          GET_CHAR_NAME(ch));
   while (row) {
     // TODO: Eventually this should give names not IDs, but that's another lookup for each name...
-    sprintf(ENDOF(buf), "%s ", row[0]);
+    sprintf(ENDOF(buf), "%s (rank %s, privs %s)", row[0], row[1], row[2]);
     row = mysql_fetch_row(res);
   }
   mysql_free_result(res);
   log(buf);
   
-  // TODO: Remove this group from all active players' char_data structs. Delete members' pgroup_data pointers.
+  // Delete pfile pgroup associations.
+  sprintf(query_buf, "DELETE FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
+  mysql_wrapper(mysql, query_buf);
   
-  // TODO: Remove all players from the group in the DB.
-  // sprintf(query_buf, "UPDATE pfiles SET `pgroup` = 0 WHERE `pgroup` == %ld", pgr->get_idnum);
-  // mysql_wrapper(mysql, query_buf);
+  // Delete pgroup's invitations.
+  sprintf(query_buf, "DELETE FROM playergroup_invitations WHERE `Group` = %ld", pgr->get_idnum());
+  mysql_wrapper(mysql, query_buf);
   
-  // TODO: Remove all pfiles_playergroups entries matching this group and log the items removed.
+  // TODO: How should we handle old logfiles?
   
-  // TODO: Remove all invitations issued by this group. (necessary)?
+  // Remove this group from all active players' char_data structs. Delete members' pgroup_data pointers.
+  for (struct char_data* i = character_list; i; i = i->next) {
+    if (!IS_NPC(i) && GET_PGROUP_DATA(i) && GET_PGROUP(i)->get_idnum() == pgr->get_idnum()) {
+      // Notify the character, unless they're the person doing the disbanding.
+      if (i != ch) {
+        send_to_char(i, "The playergroup %s has been disbanded.", pgr->get_name());
+      }
+      
+      // Wipe out the data and null the pointer.
+      delete GET_PGROUP_DATA(i);
+      GET_PGROUP_DATA(i) = NULL;
+    }
+  }
+  
+  // Notify the ex-leader that the job is (nearly) complete.
+  send_to_char(ch, "You disband the group '%s'.\r\n", pgr->get_name());
+  pgr->audit_log_vfprintf("%s disbanded the group.", GET_CHAR_NAME(ch));
   
   // Disable the group.
   pgr->set_disabled(TRUE);
   
-  send_to_char(ch, "You disband the group '%s'.\r\n", pgr->get_name());
-  pgr->audit_log_vfprintf("%s disbanded the group.", GET_NAME(ch));
+  // Save the changes to the DB.
+  pgr->save_pgroup_to_db();
 }
 
 void do_pgroup_edit(struct char_data *ch, char *argument) {
@@ -464,7 +482,7 @@ void do_pgroup_found(struct char_data *ch, char *argument) {
   GET_PGROUP(ch)->save_pgroup_to_db();
   
   // Make a note in the group's audit log.
-  GET_PGROUP(ch)->audit_log_vfprintf("%s has officially founded the group.", GET_NAME(ch));
+  GET_PGROUP(ch)->audit_log_vfprintf("%s has officially founded the group.", GET_CHAR_NAME(ch));
 }
 
 void do_pgroup_grant(struct char_data *ch, char *argument) {
@@ -697,14 +715,20 @@ void pgedit_parse(struct descriptor_data * d, const char *arg) {
       }
       break;
     case PGEDIT_CHANGE_NAME:
+      // TODO: Don't allow duplicate names.
+      
       d->edit_pgroup->set_name(arg, CH);
       pgedit_disp_menu(d);
       break;
     case PGEDIT_CHANGE_ALIAS:
+      // TODO: Don't allow duplicate aliases.
+      
       d->edit_pgroup->set_alias(arg, CH);
       pgedit_disp_menu(d);
       break;
     case PGEDIT_CHANGE_TAG:
+      // TODO: Don't allow duplicate tags.
+      
       d->edit_pgroup->set_tag(arg, CH);
       pgedit_disp_menu(d);
       break;
@@ -752,6 +776,9 @@ void pgedit_parse(struct descriptor_data * d, const char *arg) {
       STATE(d) = CON_PLAYING;
       d->edit_pgroup = NULL;
       PLR_FLAGS(CH).RemoveBit(PLR_EDITING);
+      
+      // Save the character to ensure the DB reflects their new membership.
+      playerDB.SaveChar(CH, GET_LOADROOM(CH));
       break;
     default:
       sprintf(buf, "SYSERR: Unknown edit mode %d referenced from pgedit_parse.", d->edit_mode);
