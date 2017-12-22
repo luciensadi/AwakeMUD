@@ -486,10 +486,50 @@ void do_pgroup_found(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_grant(struct char_data *ch, char *argument) {
-  // TODO: Log.
-  send_to_char("grant", ch);
+  // Can't overflow the substring buffer if the substring buffer is always the length of your string.
+  char name[strlen(argument)];
+  char privilege[strlen(argument)];
+  int priv;
   
-  // TODO: Make this work for offline characters as well.
+  // Parse argument into name and privilege.
+  half_chop(argument, name, privilege);
+  
+  // Find the index number of the requested privilege by comparing the typed name with the privs table.
+  for (priv = 0; priv < PRIV_MAX; priv++)
+    if (is_abbrev(privilege, pgroup_privileges[priv]))
+      break;
+  
+  // If the privilege requested doesn't match a privilege, fail.
+  switch (priv) {
+    case PRIV_MAX: // No privilege was found matching the string. Fail.
+      send_to_char(ch, "'%s' is not a valid privilege.", privilege);
+      // TODO: List valid privileges they can assign here.
+      return;
+    case PRIV_LEADER: // LEADER cannot be handed out. Fail.
+      send_to_char("That's not a privilege you can assign.", ch);
+      return;
+    case PRIV_ADMINISTRATOR: // ADMINISTRATOR cannot be handed out. Fail.
+      if (!(GET_PGROUP_DATA(ch)->privileges.IsSet(PRIV_LEADER))) {
+        send_to_char("Only the leader of the group may grant that privilege.", ch);
+        return;
+      }
+      break;
+  }
+  
+  // If the invoker does not have the privilege requested, fail.
+  if (!(GET_PGROUP_DATA(ch)->privileges.AreAnySet(priv, PRIV_LEADER, ENDBIT))) {
+    send_to_char("You must first be assigned that privilege before you can grant it to others.", ch);
+    return;
+  }
+  
+  // Now that we know the privilege is kosher, we can do the more expensive character validity check.
+  // TODO: Ensure targeted character exists (either online or offline).
+  // TODO: Ensure targeted character is part of the same group as the invoking character.
+  // TODO: Ensure targeted character is below the invoker's rank.
+  
+  // TODO: Update the character with the privilege requested.
+  // TODO: Save the character.
+  // TODO: Log.
 }
 
 void do_pgroup_help(struct char_data *ch, char *argument) {

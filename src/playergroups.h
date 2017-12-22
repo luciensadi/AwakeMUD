@@ -20,6 +20,8 @@
 #define PRIV_RECRUITER                      10     // Can invite members.
 #define PRIV_TENANT                         11     // Can enter PG apartments.
 #define PRIV_TREASURER                      12     // Can withdraw from the PG bank account.
+#define PRIV_MAX                            13     /* Not an actual priv-- used for iteration over pgroup_privileges[].
+                                                      Must always be equal to total number of privileges, not including priv_none of course. */
 #define PRIV_NONE                           10000  // No privilege required.
 
 // Playergroup settings.
