@@ -490,9 +490,17 @@ void do_pgroup_grant(struct char_data *ch, char *argument) {
   char name[strlen(argument)];
   char privilege[strlen(argument)];
   int priv;
+  struct char_data *vict = NULL;
+  bool vict_is_logged_in = TRUE;
   
   // Parse argument into name and privilege.
   half_chop(argument, name, privilege);
+  
+  if (!*name || !*privilege) {
+    send_to_char("Syntax: PGROUP GRANT <character> <privilege>\r\n", ch);
+    // TODO: List valid privileges they can assign here.
+    return;
+  }
   
   // Find the index number of the requested privilege by comparing the typed name with the privs table.
   for (priv = 0; priv < PRIV_MAX; priv++)
@@ -502,15 +510,15 @@ void do_pgroup_grant(struct char_data *ch, char *argument) {
   // If the privilege requested doesn't match a privilege, fail.
   switch (priv) {
     case PRIV_MAX: // No privilege was found matching the string. Fail.
-      send_to_char(ch, "'%s' is not a valid privilege.", privilege);
+      send_to_char(ch, "'%s' is not a valid privilege.\r\n", privilege);
       // TODO: List valid privileges they can assign here.
       return;
     case PRIV_LEADER: // LEADER cannot be handed out. Fail.
-      send_to_char("That's not a privilege you can assign.", ch);
+      send_to_char("Sorry, leadership cannot be assigned in this way.\r\n", ch);
       return;
     case PRIV_ADMINISTRATOR: // ADMINISTRATOR cannot be handed out. Fail.
       if (!(GET_PGROUP_DATA(ch)->privileges.IsSet(PRIV_LEADER))) {
-        send_to_char("Only the leader of the group may grant that privilege.", ch);
+        send_to_char("Only the leader of the group may grant that privilege.\r\n", ch);
         return;
       }
       break;
@@ -518,18 +526,68 @@ void do_pgroup_grant(struct char_data *ch, char *argument) {
   
   // If the invoker does not have the privilege requested, fail.
   if (!(GET_PGROUP_DATA(ch)->privileges.AreAnySet(priv, PRIV_LEADER, ENDBIT))) {
-    send_to_char("You must first be assigned that privilege before you can grant it to others.", ch);
+    send_to_char("You must first be assigned that privilege before you can grant it to others.\r\n", ch);
     return;
   }
   
   // Now that we know the privilege is kosher, we can do the more expensive character validity check.
-  // TODO: Ensure targeted character exists (either online or offline).
-  // TODO: Ensure targeted character is part of the same group as the invoking character.
-  // TODO: Ensure targeted character is below the invoker's rank.
   
-  // TODO: Update the character with the privilege requested.
-  // TODO: Save the character.
-  // TODO: Log.
+  // Search the online characters for someone matching the specified name.
+  for (vict = character_list; vict; vict = vict->next) {
+    if (!IS_NPC(vict) && (isname(name, GET_KEYWORDS(vict)) || isname(name, GET_CHAR_NAME(vict)) || recog(ch, vict, name)))
+      break;
+  }
+  
+  // If they weren't online, attempt to load them from the DB.
+  if (!vict) {
+    vict_is_logged_in = FALSE;
+    if (!(vict = playerDB.LoadChar(name, false))) {
+      // We were unable to find them online or load them from DB-- fail out.
+      send_to_char("There is no such player.\r\n", ch);
+      return;
+    }
+  }
+  
+  // Ensure targeted character is part of the same group as the invoking character.
+  // TODO: secret squirrel info disclosure fix
+  if (!(GET_PGROUP_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
+    send_to_char("They're not part of your group.\r\n", ch);
+    return;
+  }
+  
+  // Ensure targeted character is below the invoker's rank.
+  // TODO: secret squirrel info disclosure fix
+  if (GET_PGROUP_DATA(vict)->rank >= GET_PGROUP_DATA(ch)->rank) {
+    send_to_char("You can only grant privileges to people who are lower-ranked than you.\r\n", ch);
+    return;
+  }
+  
+  // Ensure targeted character does not already have this rank.
+  // TODO: secret squirrel info disclosure fix
+  if (GET_PGROUP_DATA(vict)->privileges.IsSet(priv)) {
+    send_to_char("They already have that privilege.\r\n", ch);
+    return;
+  }
+
+  // Update the character with the privilege requested.
+  GET_PGROUP_DATA(vict)->privileges.SetBit(priv);
+  
+  // Write to the log.
+  GET_PGROUP(ch)->audit_log_vfprintf("%s granted %s the %s privilege.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), pgroup_privileges[priv]);
+  
+  // Write to the relevant characters' screens.
+  // TODO: Should this be act() to allow for name hiding?
+  send_to_char(ch, "You grant %s the %s privilege in '%s'.\r\n", GET_CHAR_NAME(vict), pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
+  send_to_char(vict, "%s has granted you the %s privilege in '%s'.\r\n", GET_CHAR_NAME(ch), pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
+  
+  // Save the character.
+  if (vict_is_logged_in) {
+    // Online characters are saved to the DB without unloading.
+    playerDB.SaveChar(vict, GET_LOADROOM(vict));
+  } else {
+    // Loaded characters are unloaded (saving happens during extract_char).
+    extract_char(vict);
+  }
 }
 
 void do_pgroup_help(struct char_data *ch, char *argument) {
