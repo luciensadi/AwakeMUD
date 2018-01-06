@@ -194,35 +194,36 @@ struct pgroup_cmd_struct {
   void (*command_pointer) (struct char_data *ch, char *argument);
   bool valid_while_group_not_founded;
   bool requires_pocket_secretary;
+  bool valid_while_group_disabled;
 } pgroup_commands[] = {
-  { "abdicate"   , PRIV_LEADER        , do_pgroup_abdicate    , FALSE , FALSE },
-  { "balance"    , PRIV_TREASURER     , do_pgroup_balance     , FALSE , TRUE  },
-  { "buy"        , PRIV_PROCURER      , do_pgroup_buy         , FALSE , TRUE  },
-  { "contest"    , PRIV_NONE          , do_pgroup_contest     , FALSE , TRUE  },
-  { "create"     , PRIV_NONE          , do_pgroup_create      , TRUE  , TRUE  },
-  { "demote"     , PRIV_MANAGER       , do_pgroup_promote     , FALSE , TRUE  },
-  { "donate"     , PRIV_NONE          , do_pgroup_donate      , FALSE , FALSE },
-  { "design"     , PRIV_ARCHITECT     , do_pgroup_design      , FALSE , TRUE  },
-  { "disband"    , PRIV_LEADER        , do_pgroup_disband     , TRUE  , TRUE  },
-  { "edit"       , PRIV_LEADER        , do_pgroup_edit        , TRUE  , TRUE  },
-  { "found"      , PRIV_LEADER        , do_pgroup_found       , TRUE  , TRUE  },
-  { "grant"      , PRIV_ADMINISTRATOR , do_pgroup_grant       , FALSE , TRUE  },
-  { "help"       , PRIV_NONE          , do_pgroup_help        , TRUE  , FALSE },
-  { "invite"     , PRIV_RECRUITER     , do_pgroup_invite      , TRUE  , TRUE  },
-  { "lease"      , PRIV_LANDLORD      , do_pgroup_lease       , FALSE , TRUE  },
-  { "logs"       , PRIV_AUDITOR       , do_pgroup_logs        , TRUE  , TRUE  },
-  { "note"       , PRIV_NONE          , do_pgroup_note        , TRUE  , TRUE  },
-  { "outcast"    , PRIV_MANAGER       , do_pgroup_outcast     , TRUE  , TRUE  },
-  { "promote"    , PRIV_MANAGER       , do_pgroup_promote     , FALSE , TRUE  },
-  { "quit"       , PRIV_NONE          , do_pgroup_resign      , TRUE  , FALSE },
-  { "resign"     , PRIV_NONE          , do_pgroup_resign      , TRUE  , FALSE },
-  { "revoke"     , PRIV_ADMINISTRATOR , do_pgroup_revoke      , FALSE , TRUE  },
-  { "roster"     , PRIV_NONE          , do_pgroup_roster      , TRUE  , TRUE  },
-  { "status"     , PRIV_NONE          , do_pgroup_status      , TRUE  , TRUE  },
-  { "transfer"   , PRIV_PROCURER      , do_pgroup_transfer    , FALSE , TRUE  },
-  { "vote"       , PRIV_NONE          , do_pgroup_vote        , FALSE , TRUE  },
-  { "withdraw"   , PRIV_TREASURER     , do_pgroup_withdraw    , FALSE , FALSE },
-  { "\n"         , 0                  , 0                     , FALSE , FALSE } // This must be last.
+  { "abdicate"   , PRIV_LEADER        , do_pgroup_abdicate    , FALSE , FALSE , FALSE },
+  { "balance"    , PRIV_TREASURER     , do_pgroup_balance     , FALSE , TRUE  , FALSE },
+  { "buy"        , PRIV_PROCURER      , do_pgroup_buy         , FALSE , TRUE  , FALSE },
+  { "contest"    , PRIV_NONE          , do_pgroup_contest     , FALSE , TRUE  , FALSE },
+  { "create"     , PRIV_NONE          , do_pgroup_create      , TRUE  , TRUE  , FALSE },
+  { "demote"     , PRIV_MANAGER       , do_pgroup_promote     , FALSE , TRUE  , FALSE },
+  { "donate"     , PRIV_NONE          , do_pgroup_donate      , FALSE , FALSE , FALSE },
+  { "design"     , PRIV_ARCHITECT     , do_pgroup_design      , FALSE , TRUE  , FALSE },
+  { "disband"    , PRIV_LEADER        , do_pgroup_disband     , TRUE  , TRUE  , FALSE },
+  { "edit"       , PRIV_LEADER        , do_pgroup_edit        , TRUE  , TRUE  , FALSE },
+  { "found"      , PRIV_LEADER        , do_pgroup_found       , TRUE  , TRUE  , FALSE },
+  { "grant"      , PRIV_ADMINISTRATOR , do_pgroup_grant       , FALSE , TRUE  , FALSE },
+  { "help"       , PRIV_NONE          , do_pgroup_help        , TRUE  , FALSE , FALSE },
+  { "invite"     , PRIV_RECRUITER     , do_pgroup_invite      , TRUE  , TRUE  , FALSE },
+  { "lease"      , PRIV_LANDLORD      , do_pgroup_lease       , FALSE , TRUE  , FALSE },
+  { "logs"       , PRIV_AUDITOR       , do_pgroup_logs        , TRUE  , TRUE  , TRUE  },
+  { "note"       , PRIV_NONE          , do_pgroup_note        , TRUE  , TRUE  , FALSE },
+  { "outcast"    , PRIV_MANAGER       , do_pgroup_outcast     , TRUE  , TRUE  , FALSE },
+  { "promote"    , PRIV_MANAGER       , do_pgroup_promote     , FALSE , TRUE  , FALSE },
+  { "quit"       , PRIV_NONE          , do_pgroup_resign      , TRUE  , FALSE , FALSE },
+  { "resign"     , PRIV_NONE          , do_pgroup_resign      , TRUE  , FALSE , TRUE  },
+  { "revoke"     , PRIV_ADMINISTRATOR , do_pgroup_revoke      , FALSE , TRUE  , FALSE },
+  { "roster"     , PRIV_NONE          , do_pgroup_roster      , TRUE  , TRUE  , FALSE },
+  { "status"     , PRIV_NONE          , do_pgroup_status      , TRUE  , TRUE  , TRUE  },
+  { "transfer"   , PRIV_PROCURER      , do_pgroup_transfer    , FALSE , TRUE  , FALSE },
+  { "vote"       , PRIV_NONE          , do_pgroup_vote        , FALSE , TRUE  , FALSE },
+  { "withdraw"   , PRIV_TREASURER     , do_pgroup_withdraw    , FALSE , FALSE , FALSE },
+  { "\n"         , 0                  , 0                     , FALSE , FALSE , FALSE } // This must be last.
 };
 
 /* Main Playergroup Command */
@@ -269,14 +270,10 @@ ACMD(do_pgroup) {
     }
     
     // Precondition: If your group is disabled, the only commands you can use are LOGS, STATUS, and RESIGN.
-    if (GET_PGROUP(ch)->is_disabled()) {
-      if (pgroup_commands[cmd_index].command_pointer != do_pgroup_status
-          && pgroup_commands[cmd_index].command_pointer != do_pgroup_resign
-          && pgroup_commands[cmd_index].command_pointer != do_pgroup_logs) {
-        send_to_char("You can't perform that action after your group has been disbanded.\r\n", ch);
-        display_pgroup_help(ch);
-        return;
-      }
+    if (GET_PGROUP(ch)->is_disabled() && !pgroup_commands[cmd_index].valid_while_group_disabled) {
+      send_to_char("You can't perform that action after your group has been disbanded.\r\n", ch);
+      display_pgroup_help(ch);
+      return;
     }
     
     // Precondition: If the command requires a kosherized group, you must be part of one.
@@ -726,29 +723,32 @@ void display_pgroup_help(struct char_data *ch) {
     return;
   }
   
-  // If their group is disabled, the only commands available for consideration are LOG, STATUS, RESIGN.
-  if (GET_PGROUP(ch)->is_disabled()) {
-    for (int cmd_index = 1; *(pgroup_commands[cmd_index].cmd) != '\n'; cmd_index++) {
-      if ((pgroup_commands[cmd_index].privilege_required == PRIV_NONE
-           || (GET_PGROUP_DATA(ch)->privileges.AreAnySet(pgroup_commands[cmd_index].privilege_required, PRIV_LEADER, ENDBIT)))
-          && (pgroup_commands[cmd_index].command_pointer == do_pgroup_logs
-              || pgroup_commands[cmd_index].command_pointer == do_pgroup_status
-              || pgroup_commands[cmd_index].command_pointer == do_pgroup_resign)) {
-            sprintf(ENDOF(buf), " %-11s%s", pgroup_commands[cmd_index].cmd, cmds_written++ % 5 == 4 ? "\r\n" : "");
-          }
+  for (int cmd_index = 0; *(pgroup_commands[cmd_index].cmd) != '\n'; cmd_index++) {
+    // If they don't have the privileges to use the current command, skip it.
+    if (!(pgroup_commands[cmd_index].privilege_required == PRIV_NONE
+          || (GET_PGROUP_DATA(ch)->privileges.AreAnySet(pgroup_commands[cmd_index].privilege_required, PRIV_LEADER, ENDBIT)))) {
+      continue;
     }
-    sprintf(ENDOF(buf), "\r\n");
-    send_to_char(buf, ch);
-    return;
-  }
-  
-  // Iterate over all commands other than create and show them the ones they have privileges for.
-  for (int cmd_index = 1; *(pgroup_commands[cmd_index].cmd) != '\n'; cmd_index++) {
-    if (pgroup_commands[cmd_index].privilege_required == PRIV_NONE
-        || (GET_PGROUP_DATA(ch)->privileges.AreAnySet(pgroup_commands[cmd_index].privilege_required, PRIV_LEADER, ENDBIT))) {
-      sprintf(ENDOF(buf), " %-11s%s", pgroup_commands[cmd_index].cmd, cmds_written++ % 5 == 4 ? "\r\n" : "");
+    
+    // If the group is not yet founded and the command is not valid while not founded, skip it.
+    if (!(GET_PGROUP(ch)->is_founded() || pgroup_commands[cmd_index].valid_while_group_not_founded)) {
+      continue;
     }
+    
+    // If the group is disabled and the command is not valid while the group is disabled, skip it.
+    if (GET_PGROUP(ch)->is_disabled() && !pgroup_commands[cmd_index].valid_while_group_disabled) {
+      continue;
+    }
+    
+    // If the command is 'create', don't show it (that's only valid for people not in groups).
+    if (pgroup_commands[cmd_index].command_pointer == do_pgroup_create) {
+      continue;
+    }
+    
+    // If we've gotten here, the command is assumed kosher for this character and group combo-- print it in our list.
+    sprintf(ENDOF(buf), " %-11s%s", pgroup_commands[cmd_index].cmd, cmds_written++ % 5 == 4 ? "\r\n" : "");
   }
+
   sprintf(ENDOF(buf), "\r\n");
   send_to_char(buf, ch);
 }
