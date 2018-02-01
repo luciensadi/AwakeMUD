@@ -2,28 +2,59 @@
 
 echo "This script will set up your MySQL DB with a localhost-only user and will install the AwakeMUD tables."
 
+# Parameters for creating your AwakeMUD user, password, and DB.
 DBHOST="localhost"
-DBNAME="AwakeMUD"
-DBUSER="AwakeMUD"
+DBNAME="AwakeMUD1"
+DBUSER="AwakeMUD1"
 DBPASS=`openssl rand -base64 32`
 
-echo "Testing for MySQL..."
-MYSQLVER=`mysql --version | grep -o -e 'Distrib [^,]*'`
-MYSQLMAJORVER=`echo $MYSQLVER | grep -o -e ' 5' | tr -d [:space:]`
-if [ "$MYSQLMAJORVER" != "5" ]; then
-  echo "Error: You must have MySQL version 5 installed to use this script."
-  exit 1
-fi
-MYSQLMINORVER=`echo $MYSQLVER | grep -o -e '\.[0-9]*\.' | tr -d [:space:] | tr -d "\."`
-if [ "$MYSQLMINORVER" -ge "7" ]; then
-  MYSQLSUBVERSION=`echo $MYSQLVER | grep -o -e '\.[0-9]*$' | tr -d "\."`
-  if [ "$MYSQLSUBVERSION" -ge "8" ]; then
-    MYSQLCANDROPUSERIFEXISTS=1
+# Set programmatically; if true, bypass MySQL version requirement check.
+MYSQL_VERSION_CHECK_BYPASS=false
+
+# Parse command-line flags.
+while test $# -gt 0; do
+  case "$1" in
+    -h|--help)
+      echo "$0 - create an empty AwakeMUD-compatible database"
+      echo " "
+      echo "$0 [options] application [arguments]"
+      echo " "
+      echo "options:"
+      echo "-h, --help                show brief help"
+      echo "-s, --skip-check          skip the MySQL version check"
+      echo ""
+      exit 0
+      ;;
+    -s|--skip-check)
+      shift
+      echo "Bypassing MySQL version check."
+      MYSQL_VERSION_CHECK_BYPASS=true
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
+if [ ! "$MYSQL_VERSION_CHECK_BYPASS" = true ]; then
+  echo "Testing for MySQL..."
+  MYSQLVER=`mysql --version | grep -o -e 'Distrib [^,]*'`
+  MYSQLMAJORVER=`echo $MYSQLVER | grep -o -e ' 5' | tr -d [:space:]`
+  if [ "$MYSQLMAJORVER" != "5" ]; then
+    echo "Error: You must have MySQL version 5 installed to use this script."
+    exit 1
+  fi
+  MYSQLMINORVER=`echo $MYSQLVER | grep -o -e '\.[0-9]*\.' | tr -d [:space:] | tr -d "\."`
+  if [ "$MYSQLMINORVER" -ge "7" ]; then
+    MYSQLSUBVERSION=`echo $MYSQLVER | grep -o -e '\.[0-9]*$' | tr -d "\."`
+    if [ "$MYSQLSUBVERSION" -ge "8" ]; then
+      MYSQLCANDROPUSERIFEXISTS=1
+    else
+      MYSQLCANDROPUSERIFEXISTS=0
+    fi
   else
     MYSQLCANDROPUSERIFEXISTS=0
   fi
-else
-  MYSQLCANDROPUSERIFEXISTS=0
 fi
 
 echo "Testing for OpenSSL..."
@@ -46,7 +77,7 @@ if [ "$MYSQLCANDROPUSERIFEXISTS" == "1" ]; then
   echo "DROP USER IF EXISTS '$DBUSER'@'$DBHOST';" >> gen_temp.sql
   echo "FLUSH PRIVILEGES;" >> gen_temp.sql
 else
-  echo "Your version of MySQL is less than 5.7.8, so you'll need to enter your password twice."
+  echo "Your database could not be confirmed compatible with 'DROP USER IF EXISTS', so you'll need to enter your DB root password twice."
   COUNT=`mysql -u root -p -e "SELECT COUNT(*) FROM mysql.user WHERE User='$DBUSER' AND Host='$DBHOST'" | grep -o -e "[0-9]*" | tr -d [:space:]`
   if [ "$COUNT" -ge "1" ]; then
     echo "DROP USER '$DBUSER'@'$DBHOST';" >> gen_temp.sql
