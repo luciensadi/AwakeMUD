@@ -4,8 +4,8 @@ echo "This script will set up your MySQL DB with a localhost-only user and will 
 
 # Parameters for creating your AwakeMUD user, password, and DB.
 DBHOST="localhost"
-DBNAME="AwakeMUD1"
-DBUSER="AwakeMUD1"
+DBNAME="AwakeMUD"
+DBUSER="AwakeMUD"
 DBPASS=`openssl rand -base64 32`
 
 # Set programmatically; if true, bypass MySQL version requirement check.
