@@ -832,7 +832,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     break;
 
   case ZEDIT_CONFIRM_SAVECMDS:
-    int zone_num, top_of_cmds;
+    int top_of_cmds;
     switch (*arg) {
     case 'y':
     case 'Y':
