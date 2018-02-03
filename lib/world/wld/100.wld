@@ -563,7 +563,14 @@ may not be the healthiest room to spend your time in.
 ~
 Flags:	100000000010000000000010011000
 SecType:	Inside
-MatrixExit:	0
+MatrixExit:	10013
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+Address:	An undisclosed location
 Crowd:	0
 Cover:	0
 X:	20

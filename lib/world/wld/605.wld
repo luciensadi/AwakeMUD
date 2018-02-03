@@ -798,18 +798,18 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXTRADESC 0]
-	Keywords:	datajack~~~~~~~~~~~~~~~~~~
+	Keywords:	wired reflexes~~~~~~~~~~~~~~~~~~
 	Desc:$
-A DATAJACK is necessary for a decker or a rigger to interface their mind with
-a machine. 
+Wired Reflexes, while costly to the user's essence, enhance their REACTION and
+INITIATIVE, allowing them to attack more often than an un-augmented person.
+Wired Reflexes are known to cause some people to be extra jumpy. 
 ~
 [EXTRADESC 1]
-	Keywords:	smartlink system~~~~~~~~~~~~~~~~~~
+	Keywords:	Vehicle control rig~~~~~~~~~~~~~~~~~~
 	Desc:$
-The SMARTLINK system allows the user to use a smartlink accessorized firearm,
-granting them greater accuracy in ranged combat. If the weapon is outfitted
-with a SMARTLINK accessory and the user has a SMARTLINK system installed, the
-feature is automatically used. 
+The VEHICLE CONTROL RIG and a DATAJACK is necessary for someone who wants to
+be able to mentally control a vehicle. An explanation of RIGGING is provided
+later in the guild. 
 ~
 [EXTRADESC 2]
 	Keywords:	spurs razors retractable~~~~~~~~~~~~~~~~~~
@@ -820,18 +820,18 @@ automatically used when the character enters unarmed combat, and success is
 based on the CYBERIMPLANT COMBAT skill. 
 ~
 [EXTRADESC 3]
-	Keywords:	Vehicle control rig~~~~~~~~~~~~~~~~~~
+	Keywords:	smartlink system~~~~~~~~~~~~~~~~~~
 	Desc:$
-The VEHICLE CONTROL RIG and a DATAJACK is necessary for someone who wants to
-be able to mentally control a vehicle. An explanation of RIGGING is provided
-later in the guild. 
+The SMARTLINK system allows the user to use a smartlink accessorized firearm,
+granting them greater accuracy in ranged combat. If the weapon is outfitted
+with a SMARTLINK accessory and the user has a SMARTLINK system installed, the
+feature is automatically used. 
 ~
 [EXTRADESC 4]
-	Keywords:	wired reflexes~~~~~~~~~~~~~~~~~~
+	Keywords:	datajack~~~~~~~~~~~~~~~~~~
 	Desc:$
-Wired Reflexes, while costly to the user's essence, enhance their REACTION and
-INITIATIVE, allowing them to attack more often than an un-augmented person.
-Wired Reflexes are known to cause some people to be extra jumpy. 
+A DATAJACK is necessary for a decker or a rigger to interface their mind with
+a machine. 
 ~
 BREAK
 #60518
@@ -1407,7 +1407,7 @@ Z:	2.50
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
-	Rating:	0
+	Rating:	1
 	Light:	0
 	Smoke:	0
 	Background:	0
@@ -3524,13 +3524,21 @@ BREAK
 #60584
 Name:	Inside a Dusty Storeroom
 Desc:$
-   It doesn't look like anyone's been in here for ages. Crate after crate of
-food has been stacked, most of them gnawed through by the ravenous rats in the
-area. 
+It doesn't look like anyone's been in here for ages. Crate after crate of food
+has been stacked, most of them gnawed through by the ravenous rats in the
+area. Someone has jury-rigged a jackpoint into the matrix line that runs up
+into the building above. 
 ~
 Flags:	1100
 SecType:	Inside
-MatrixExit:	0
+MatrixExit:	1100
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	2064897
+Address:	The basement of Ricky's Eatery
 Crowd:	0
 Cover:	0
 X:	20
@@ -3540,7 +3548,7 @@ RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
-	Light:	0
+	Light:	4
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
