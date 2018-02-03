@@ -206,7 +206,7 @@ void spell_design(struct char_data *ch, struct obj_data *formula)
       target = 2;
     }
     if (skill < GET_OBJ_VAL(formula, 0)) {
-      send_to_char("You don't have the neccesary skills to design this spell.\r\n", ch);
+      send_to_char("You don't have the necessary skills to design this spell.\r\n", ch);
       return;
     }
     int drain = spells[GET_OBJ_VAL(formula, 1)].draindamage;

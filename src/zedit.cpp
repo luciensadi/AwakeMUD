@@ -62,7 +62,7 @@ void write_zone_to_disk(int vnum)
   // write it out!
   fprintf(fp, "#%d\n", vnum);
   fprintf(fp, "%s~\n", ZONE.name);
-  fprintf(fp, "%d %d %d %d %d %d\n", ZONE.top, ZONE.lifespan, ZONE.reset_mode, ZONE.security, ZONE.connected, ZONE.juridiction);
+  fprintf(fp, "%d %d %d %d %d %d\n", ZONE.top, ZONE.lifespan, ZONE.reset_mode, ZONE.security, ZONE.connected, ZONE.jurisdiction);
   fprintf(fp, "%d %d %d %d %d\n", ZONE.editor_ids[0], ZONE.editor_ids[1],
           ZONE.editor_ids[2], ZONE.editor_ids[3], ZONE.editor_ids[4]);
   for (i = 0; i < ZONE.num_cmds; ++i) {
@@ -204,7 +204,7 @@ void zedit_disp_data_menu(struct descriptor_data *d)
   send_to_char(CH, "^G3^Y) ^WLifespan: ^c%d^n\r\n", ZON->lifespan );
   send_to_char(CH, "^G4^Y) ^WReset mode: ^c%s^n\r\n", reset_mode[ZON->reset_mode] );
   send_to_char(CH, "^G5^Y) ^WSecurity level: ^c%d^n\r\n", ZON->security );
-  send_to_char(CH, "^G6^Y) ^WJuridiction: ^c%s^n\r\n", jurid[ZON->juridiction]);
+  send_to_char(CH, "^G6^Y) ^WJurisdiction: ^c%s^n\r\n", jurid[ZON->jurisdiction]);
   if (access_level(CH, LVL_VICEPRES))
   {
     send_to_char(CH, "^G7^Y) ^WEditor's ID Numbers: ^c%d^w, ^c%d^w, ^c%d^w, ^c%d^w, ^c%d^n\r\n",
@@ -525,8 +525,8 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case ZEDIT_CONFIRM_SAVEDATA:
+    int zone_num;
     switch (*arg) {
-      int zone_num;
     case 'y':
     case 'Y':
       zone_num = real_zone(ZON->number);
@@ -690,7 +690,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
                    "1) Portland\r\n"
                    "2) Carribean\r\n"
                    "3) Ocean\r\n"
-                   "Enter juridiction: ", CH);
+                   "Enter jurisdiction: ", CH);
       d->edit_mode = ZEDIT_JURID;
       break;
     case '7':
@@ -698,7 +698,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
         send_to_char("That's not a valid choice.\r\n", CH);
         return;
       }
-      send_to_char("Enter ID list seperated by spaces:\r\n", CH);
+      send_to_char("Enter ID list separated by spaces:\r\n", CH);
       d->edit_mode = ZEDIT_ID_LIST;
       break;
     case '8':
@@ -832,7 +832,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     break;
 
   case ZEDIT_CONFIRM_SAVECMDS:
-    int zone_num, top_of_cmds;
+    int top_of_cmds;
     switch (*arg) {
     case 'y':
     case 'Y':
@@ -1178,10 +1178,10 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     number = atoi(arg);
     if (number < 0 || number > 3) {
       send_to_char("Invalid choice.  Please enter from 0 to 1.\r\n", CH);
-      send_to_char("Enter Juridiction: ", CH);
+      send_to_char("Enter Jurisdiction: ", CH);
       return;
     } else
-      ZON->juridiction = number;
+      ZON->jurisdiction = number;
     zedit_disp_data_menu(d);
     break;
   }

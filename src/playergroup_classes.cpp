@@ -33,17 +33,17 @@ extern Playergroup *loaded_playergroups;
 
 /************* Constructors *************/
 Playergroup::Playergroup() :
-idnum(0), tag(NULL), name(NULL), alias(NULL)
+idnum(0), bank(0), tag(NULL), name(NULL), alias(NULL)
 {}
 
 Playergroup::Playergroup(long id_to_load) :
-idnum(0), tag(NULL), name(NULL), alias(NULL)
+idnum(0), bank(0), tag(NULL), name(NULL), alias(NULL)
 {
   load_pgroup_from_db(id_to_load);
 }
 
 Playergroup::Playergroup(Playergroup *clone_strings_from) :
-idnum(0), tag(NULL), name(NULL), alias(NULL)
+idnum(0), bank(0), tag(NULL), name(NULL), alias(NULL)
 {
   raw_set_tag(clone_strings_from->tag);
   raw_set_name(clone_strings_from->name);
@@ -100,8 +100,8 @@ bool iscolor(char c) {
 // Performs validity checks before setting. Returns TRUE if set succeeded, FALSE otherwise.
 bool Playergroup::set_tag(const char *newtag, struct char_data *ch) {
   // TODO: Validity checks.
-  if (strlen(newtag) > (MAX_PGROUP_TAG_LENGTH - 1)) {
-    send_to_char(ch, "Sorry, tags can't be longer than %d characters.\r\n", MAX_PGROUP_TAG_LENGTH - 1);
+  if (strlen(newtag) > MAX_PGROUP_TAG_LENGTH) {
+    send_to_char(ch, "Sorry, tags can't be longer than %d characters.\r\n", MAX_PGROUP_TAG_LENGTH);
     return FALSE;
   }
   
@@ -130,10 +130,10 @@ bool Playergroup::set_tag(const char *newtag, struct char_data *ch) {
     return FALSE;
   }
   
-  if (len > (MAX_PGROUP_TAG_LENGTH_WITHOUT_COLOR)) {
+  if (len > MAX_PGROUP_TAG_LENGTH_WITHOUT_COLOR) {
     send_to_char(ch, "Sorry, the non-colorized part of tags can't be longer than %d characters.\r\n",
                  MAX_PGROUP_TAG_LENGTH_WITHOUT_COLOR);
-    sprintf(buf, "Sorry, tags can't be longer than %d characters.\r\n", MAX_PGROUP_TAG_LENGTH - 1);
+    sprintf(buf, "Sorry, tags can't be longer than %d characters.\r\n", MAX_PGROUP_TAG_LENGTH);
     send_to_char(buf, ch);
     return FALSE;
   }
@@ -145,8 +145,8 @@ bool Playergroup::set_tag(const char *newtag, struct char_data *ch) {
 // Performs validity checks before setting. Returns TRUE if set succeeded, FALSE otherwise.
 bool Playergroup::set_name(const char *newname, struct char_data *ch) {
   // Check for length.
-  if (strlen(newname) > (MAX_PGROUP_NAME_LENGTH - 1)) {
-    sprintf(buf, "Sorry, playergroup names can't be longer than %d characters.\r\n", MAX_PGROUP_NAME_LENGTH - 1);
+  if (strlen(newname) > MAX_PGROUP_NAME_LENGTH) {
+    sprintf(buf, "Sorry, playergroup names can't be longer than %d characters.\r\n", MAX_PGROUP_NAME_LENGTH);
     send_to_char(buf, ch);
     return FALSE;
   }
@@ -158,8 +158,8 @@ bool Playergroup::set_name(const char *newname, struct char_data *ch) {
 // Performs validity checks before setting. Returns TRUE if set succeeded, FALSE otherwise.
 bool Playergroup::set_alias(const char *newalias, struct char_data *ch) {
   // Check for length.
-  if (strlen(newalias) > (MAX_PGROUP_ALIAS_LENGTH - 1)) {
-    sprintf(buf, "Sorry, aliases can't be longer than %d characters.\r\n", MAX_PGROUP_ALIAS_LENGTH - 1);
+  if (strlen(newalias) > MAX_PGROUP_ALIAS_LENGTH) {
+    sprintf(buf, "Sorry, aliases can't be longer than %d characters.\r\n", MAX_PGROUP_ALIAS_LENGTH);
     send_to_char(buf, ch);
     return FALSE;
   }
@@ -201,7 +201,7 @@ void Playergroup::raw_set_tag(const char *newtag) {
     delete tag;
   
   // If you used raw_set and didn't follow the rules, enjoy your halt.
-  assert(strlen(newtag) <= MAX_PGROUP_TAG_LENGTH - 1);
+  assert(strlen(newtag) <= MAX_PGROUP_TAG_LENGTH);
   
   tag = str_dup(newtag);
 }
@@ -212,7 +212,7 @@ void Playergroup::raw_set_name(const char *newname) {
     delete name;
   
   // If you used raw_set and didn't follow the rules, enjoy your halt.
-  assert(strlen(newname) <= MAX_PGROUP_NAME_LENGTH - 1);
+  assert(strlen(newname) <= MAX_PGROUP_NAME_LENGTH);
   
   name = str_dup(newname);
 }
@@ -223,58 +223,69 @@ void Playergroup::raw_set_alias(const char *newalias) {
     delete alias;
   
   // If you used raw_set and didn't follow the rules, enjoy your halt.
-  assert(strlen(newalias) <= MAX_PGROUP_ALIAS_LENGTH - 1);
+  assert(strlen(newalias) <= MAX_PGROUP_ALIAS_LENGTH);
   
   alias = str_dup(newalias);
 }
 
+// Raw setter for bank values (no validity checking).
+void Playergroup::set_bank(unsigned long amount) {
+  bank = amount;
+}
+
 /************* Misc Methods *************/
-void Playergroup::audit_log(const char *msg) {
+void Playergroup::audit_log(const char *original_msg) {
+  char msg[MAX_STRING_LENGTH];
   char query_buf[MAX_STRING_LENGTH];
+  
+  // Prepend the timestamp to the message.
+  time_t ct = time(0);
+  char *tmstr = asctime(localtime(&ct));
+  *(tmstr + strlen(tmstr) - 1) = '\0';
+  sprintf(msg, "%-15.15s :: %s", tmstr + 4, original_msg);
+  
+  // Quote the message for some pretense of DB safety.
   char quoted_msg[strlen(msg) * 2 + 1];
   prepare_quotes(quoted_msg, msg);
   
+  // Format the query and execute it.
   const char *query_fmt = "INSERT INTO pgroup_logs (`idnum`, `message`, `date`) VALUES ('%ld', '%s', NOW())";
   sprintf(query_buf, query_fmt, get_idnum(), quoted_msg);
   mysql_wrapper(mysql, query_buf);
   
-  mudlog(msg, NULL, LOG_PGROUPLOG, TRUE);
+  // Reuse the query buf to format the message for MUD-level logging.
+  sprintf(query_buf, "[%s (%ld)]: %s", get_alias(), get_idnum(), msg);
+  mudlog(query_buf, NULL, LOG_PGROUPLOG, TRUE);
 }
 
-char playergroup_log_buf[MAX_STRING_LENGTH];
 void Playergroup::audit_log_vfprintf(const char *format, ...)
 {
+  char playergroup_log_buf[MAX_STRING_LENGTH];
   va_list args;
-  time_t ct = time(0);
-  char *tmstr;
-  
-  tmstr = asctime(localtime(&ct));
-  *(tmstr + strlen(tmstr) - 1) = '\0';
-  sprintf(playergroup_log_buf, "%-15.15s :: ", tmstr + 4);
   
   va_start(args, format);
   vsprintf(playergroup_log_buf, format, args);
   va_end(args);
   
-  //sprintf(playergroup_log_buf, "\r\n");
   audit_log(playergroup_log_buf);
 }
 
 // Saves the playergroup to the database.
 bool Playergroup::save_pgroup_to_db() {
   char querybuf[MAX_STRING_LENGTH];
-  char quotedname[MAX_PGROUP_NAME_LENGTH * 2];
-  char quotedalias[MAX_PGROUP_ALIAS_LENGTH * 2];
-  char quotedtag[MAX_PGROUP_TAG_LENGTH * 2];
+  char quotedname[MAX_PGROUP_NAME_LENGTH * 2 + 1];
+  char quotedalias[MAX_PGROUP_ALIAS_LENGTH * 2 + 1];
+  char quotedtag[MAX_PGROUP_TAG_LENGTH * 2 + 1];
   char quotedsettings[settings.TotalWidth()];
   
   const char * pgroup_save_query_format =
-  "INSERT INTO playergroups (idnum, Name, Alias, Tag, Settings) VALUES ('%ld', '%s', '%s', '%s', '%s')"
+  "INSERT INTO playergroups (idnum, Name, Alias, Tag, Settings, bank) VALUES ('%ld', '%s', '%s', '%s', '%s', '%lu')"
   " ON DUPLICATE KEY UPDATE"
   "   Name = VALUES(Name),"
   "   Alias = VALUES(Alias),"
   "   Tag = VALUES(Tag),"
-  "   Settings = VALUES(Settings)";
+  "   Settings = VALUES(Settings),"
+  "   bank = VALUES(bank)";
   
   if (!idnum) {
     // We've never saved this group before. Give it a new idnum.
@@ -286,7 +297,8 @@ bool Playergroup::save_pgroup_to_db() {
           prepare_quotes(quotedname, name),
           prepare_quotes(quotedalias, alias),
           prepare_quotes(quotedtag, tag),
-          prepare_quotes(quotedsettings, settings.ToString()));
+          prepare_quotes(quotedsettings, settings.ToString()),
+          bank);
   mysql_wrapper(mysql, querybuf);
   
   return mysql_errno(mysql) != 0;
@@ -297,16 +309,25 @@ bool Playergroup::load_pgroup_from_db(long load_idnum) {
   char querybuf[MAX_STRING_LENGTH];
   const char * pgroup_load_query_format = "SELECT * FROM playergroups WHERE idnum = %ld";
   
+  // Defines for the purposes of avoiding magic numbers.
+#define PGROUP_DB_ROW_IDNUM    0
+#define PGROUP_DB_ROW_NAME     1
+#define PGROUP_DB_ROW_ALIAS    2
+#define PGROUP_DB_ROW_TAG      3
+#define PGROUP_DB_ROW_SETTINGS 4
+#define PGROUP_DB_ROW_BANK     5
+  
   sprintf(querybuf, pgroup_load_query_format, load_idnum);
   mysql_wrapper(mysql, querybuf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row;
   if (res && (row = mysql_fetch_row(res))) {
-    set_idnum(atol(row[0]));
-    raw_set_name(row[1]);
-    raw_set_alias(row[2]);
-    raw_set_tag(row[3]);
-    settings.FromString(row[4]);
+    set_idnum(atol(row[PGROUP_DB_ROW_IDNUM]));
+    set_bank(strtoul(row[PGROUP_DB_ROW_BANK], NULL, 0));
+    raw_set_name(row[PGROUP_DB_ROW_NAME]);
+    raw_set_alias(row[PGROUP_DB_ROW_ALIAS]);
+    raw_set_tag(row[PGROUP_DB_ROW_TAG]);
+    settings.FromString(row[PGROUP_DB_ROW_SETTINGS]);
     mysql_free_result(res);
     
     // Add the group to the linked list.
@@ -346,7 +367,7 @@ void Playergroup::invite(struct char_data *ch, char *argument) {
   one_argument(argument, arg);
   
   if (!*arg) {
-    send_to_char("Whom would you like to invite to your group?\r\n", ch);
+    send_to_char("Whom would you like to invite to join your group?\r\n", ch);
   } else if (!(target = get_char_room_vis(ch, arg))) {
     send_to_char("They aren't here.\r\n", ch);
   } else if (ch == target) {
@@ -356,7 +377,7 @@ void Playergroup::invite(struct char_data *ch, char *argument) {
   } else if (!SENDOK(target)) {
     send_to_char("They can't hear you.\r\n", ch);
   } else if (GET_TKE(target) < 100) {
-    send_to_char("That person isn't experienced enough to be a valuable addition to your team.\r\n", ch);
+    send_to_char("That person isn't experienced enough to be a valuable addition to your group yet.\r\n", ch);
   } else if (GET_PGROUP_DATA(target) && GET_PGROUP(target) && GET_PGROUP(target) == GET_PGROUP(ch)) {
     send_to_char("They're already part of your group!\r\n", ch);
     // TODO: If the group is secret, this is info disclosure.
@@ -379,7 +400,10 @@ void Playergroup::invite(struct char_data *ch, char *argument) {
     sprintf(buf, "$n has invited you to join their playergroup, '%s'.", get_name());
     act(buf, FALSE, ch, NULL, target, TO_VICT);
     
-    // Create a new invitation and add it to the user's list.
+    // TODO: What if the group is secret? Is this okay?
+    audit_log_vfprintf("%s has invited %s to join the group.", GET_CHAR_NAME(ch), GET_CHAR_NAME(target));
+    
+    // Create a new invitation.
     temp = new Pgroup_invitation(GET_PGROUP(ch)->get_idnum());
     
     // Add it to the linked list.
@@ -399,7 +423,7 @@ void Playergroup::add_member(struct char_data *ch) {
   if (GET_PGROUP_DATA(ch)) {
     if (GET_PGROUP(ch)) {
       log_vfprintf("WARNING: add_member called on %s for group %s when they were already part of %s.",
-          GET_NAME(ch), get_name(), GET_PGROUP(ch)->get_name());
+          GET_CHAR_NAME(ch), get_name(), GET_PGROUP(ch)->get_name());
     } else {
       log("SYSERR: overriding add_member call, also %s had pgroup_data but no pgroup.");
     }
@@ -414,6 +438,10 @@ void Playergroup::add_member(struct char_data *ch) {
   
   // Save the character.
   playerDB.SaveChar(ch);
+  
+  // Log the character's joining.
+  // TODO: Should we conceal this info in a secret group?
+  audit_log_vfprintf("%s has joined the group.", GET_CHAR_NAME(ch));
   
   // Delete the invitation and remove it from the character's linked list.
   Pgroup_invitation *pgi = ch->pgroup_invitations;
@@ -444,7 +472,7 @@ void Playergroup::remove_member(struct char_data *ch) {
   
   if (!GET_PGROUP_DATA(ch) || !GET_PGROUP(ch)) {
     log_vfprintf("SYSERR: pgroup->remove_member() called on %s, who does not have an associated group.",
-                 GET_NAME(ch));
+                 GET_CHAR_NAME(ch));
     return;
   }
   

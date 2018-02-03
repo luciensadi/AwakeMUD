@@ -251,16 +251,30 @@ ACMD(do_reboot)
   send_to_char(OK, ch);
 }
 
-void boot_world(void)
-{
+void initialize_and_connect_to_mysql() {
+  // Set up our mysql client object.
   mysql = mysql_init(NULL);
+  
+  // Configure the client to attempt auto-reconnection.
+  my_bool reconnect = 1;
+  mysql_options(mysql, MYSQL_OPT_RECONNECT, &reconnect);
+  
+  // Perform the actual connection.
   if (!mysql_real_connect(mysql, mysql_host, mysql_user, mysql_password, mysql_db, 0, NULL, 0)) {
     sprintf(buf, "FATAL ERROR: %s\r\n", mysql_error(mysql));
     log(buf);
     log("Suggestion: Make sure your DB is running and that you've specified your connection info in src/mysql_config.cpp.\r\n");
     shutdown();
   }
+}
+
+void boot_world(void)
+{
+  
   log("Booting MYSQL database.");
+  initialize_and_connect_to_mysql();
+  
+  log("Handling idle deletion.");
   idle_delete();
 
   log("Loading zone table.");
@@ -1736,7 +1750,7 @@ void load_zones(File &fl)
   fl.GetLine(buf, 256, FALSE);
   if (sscanf(buf, " %d %d %d %d %d %d",
              &Z.top, &Z.lifespan, &Z.reset_mode,
-             &Z.security, &Z.connected, &Z.juridiction) < 5) {
+             &Z.security, &Z.connected, &Z.jurisdiction) < 5) {
     fprintf(stderr, "Format error in 5-constant line of %s", fl.Filename());
     shutdown();
   }
@@ -2774,7 +2788,7 @@ void reset_zone(int zone, int reboot)
     case 'G':                 /* obj_to_char */
       if (!mob) {
         if (!no_mob)
-          ZONE_ERROR("attempt to give obj to non-existant mob");
+          ZONE_ERROR("attempt to give obj to non-existent mob");
         break;
       }
       if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
@@ -2790,7 +2804,7 @@ void reset_zone(int zone, int reboot)
     case 'E':                 /* object to equipment list */
       if (!mob) {
         if (!no_mob) {
-          ZONE_ERROR("trying to equip non-existant mob");
+          ZONE_ERROR("trying to equip non-existent mob");
           ZCMD.command = '*';
         }
         break;
@@ -2812,7 +2826,7 @@ void reset_zone(int zone, int reboot)
     case 'N':  // give x number of items to a mob
       if (!mob) {
         if (!no_mob)
-          ZONE_ERROR("attempt to give obj to non-existant mob");
+          ZONE_ERROR("attempt to give obj to non-existent mob");
         break;
       }
       last_cmd = 0;
@@ -2828,7 +2842,7 @@ void reset_zone(int zone, int reboot)
     case 'C': // give mob bio/cyberware
       if (!mob) {
         if (!no_mob)
-          ZONE_ERROR("attempt to give obj to non-existant mob");
+          ZONE_ERROR("attempt to give obj to non-existent mob");
         break;
       }
       obj = read_object(ZCMD.arg1, REAL);

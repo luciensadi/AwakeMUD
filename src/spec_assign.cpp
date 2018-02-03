@@ -73,14 +73,14 @@ teach_t teachers[] = {
 			 "After what feels like seven years of magical study, you feel like you've learned something.\r\n", GODLY },
                        { 60501, { SKILL_SORCERY, SKILL_CONJURING, SKILL_AURA_READING, SKILL_SPELLDESIGN, SKILL_ENCHANTING, SKILL_CENTERING,
 			 SKILL_TALISMONGERING, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                         "After hours of study and practice, you feel like you've learned\r\nsomething.\r\n", NEWBIE },
+                         "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
                        { 60502, { SKILL_COMPUTER, SKILL_BR_COMPUTER, SKILL_ELECTRONICS, SKILL_BR_ELECTRONICS, SKILL_CYBERTERM_DESIGN,
                          SKILL_DATA_BROKERAGE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			 "After hours of study and practice, you feel like you've learned\r\nsomething.\r\n", NEWBIE },
+			 "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
                        { 60503, { SKILL_ARABIC, SKILL_CHINESE, SKILL_CROW, SKILL_ENGLISH, SKILL_FRENCH, SKILL_GAELIC, SKILL_GERMAN,
 			 SKILL_ITALIAN, SKILL_JAPANESE, SKILL_KOREAN, SKILL_LATIN, SKILL_MAKAW, SKILL_NAVAJO, SKILL_ORZET,
 			 SKILL_RUSSIAN, SKILL_SALISH, SKILL_SIOUX, SKILL_SPANISH, SKILL_SPERETHIEL, SKILL_UTE }, 
-                         "Von Richter runs through basic conjugation and sentance structure with you.\r\n", NEWBIE },
+                         "Von Richter runs through basic conjugation and sentence structure with you.\r\n", NEWBIE },
                        { 60504, { SKILL_PILOT_CAR, SKILL_PILOT_BIKE, SKILL_PILOT_TRUCK, SKILL_BR_BIKE,
                          SKILL_BR_DRONE, SKILL_BR_CAR, SKILL_BR_TRUCK, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 			 "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
@@ -247,7 +247,7 @@ void ASSIGNMOB(long mob, SPECIAL(fname))
     mob_index[rnum].sfunc = mob_index[rnum].func;
     mob_index[rnum].func = fname;
   } else
-    log_vfprintf("SYSERR: Attempt to assign spec to non-existant mob #%d", mob);
+    log_vfprintf("SYSERR: Attempt to assign spec to non-existent mob #%d", mob);
 }
 
 void ASSIGNOBJ(long obj, SPECIAL(fname))
@@ -255,7 +255,7 @@ void ASSIGNOBJ(long obj, SPECIAL(fname))
   if (real_object(obj) >= 0)
     obj_index[real_object(obj)].func = fname;
   else
-    log_vfprintf("SYSERR: Attempt to assign spec to non-existant obj #%d", obj);
+    log_vfprintf("SYSERR: Attempt to assign spec to non-existent obj #%d", obj);
 }
 
 void ASSIGNWEAPON(long weapon, WSPEC(fname))
@@ -263,7 +263,7 @@ void ASSIGNWEAPON(long weapon, WSPEC(fname))
   if (real_object(weapon) >= 0)
     obj_index[real_object(weapon)].wfunc = fname;
   else
-    log_vfprintf("SYSERR: Attempt to assign spec to non-existant weapon #%d", weapon);
+    log_vfprintf("SYSERR: Attempt to assign spec to non-existent weapon #%d", weapon);
 }
 
 void ASSIGNROOM(long room, SPECIAL(fname))
@@ -271,7 +271,7 @@ void ASSIGNROOM(long room, SPECIAL(fname))
   if (real_room(room) >= 0)
     world[real_room(room)].func = fname;
   else
-    log_vfprintf("SYSERR: Attempt to assign spec to non-existant rm. #%d", room);
+    log_vfprintf("SYSERR: Attempt to assign spec to non-existent rm. #%d", room);
 }
 
 

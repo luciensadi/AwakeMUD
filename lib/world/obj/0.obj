@@ -1701,23 +1701,22 @@ Material:	fabric
 	LegalPermit:	0
 BREAK
 #121
-Keywords:	beret black rangers special forces ucas army
-Name:	^LA UCAS Army Rangers Beret^n
+Keywords:	box ammo ammunition
+Name:	a box of ammunition
 RoomDesc:$
-A black beret is lying here, with a UCAS Rangers insignia.~
+A box of ammunition has been left here.~
 LookDesc:$
-A black beret, with the UCAS Army Rangers insignia.  Worn by the 117th Rangers
-and the 82nd Airborne Rangers brigades. 
+It is a box of ammo. 
 ~
-Type:	Worn
+Type:	Ammo Box
 WearFlags:	10001
 ExtraFlags:	0
 AffFlags:	0
-Material:	fabric
+Material:	plastic
 [POINTS]
-	Weight:	1.00
-	Barrier:	32
-	Cost:	400
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0

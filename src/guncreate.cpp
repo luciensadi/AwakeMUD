@@ -46,7 +46,7 @@ void aedit_disp_weapon_menu(struct descriptor_data *d)
     send_to_char(CH, "  %2d) %-15s %2d) %s\r\n",
                  counter, weapon_type[counter + WEAP_HOLDOUT],
                  counter + 1, counter + 1 < WEAP_CANNON - WEAP_HOLDOUT ?
-                 weapon_type[counter + 1 + WEAP_HOLDOUT] : "");
+                 weapon_type[counter + 1 + WEAP_HOLDOUT] : "(none)");
   }
   send_to_char("Weapon type: ", d->character);
   d->edit_mode = AEDIT_WEAPON;
@@ -90,7 +90,7 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case AEDIT_TYPE:
-   if (number > AMMO_GEL)
+   if (number > AMMO_GEL || number < AMMO_NORMAL)
      send_to_char("Invalid selection.\r\nAmmo Type: ", CH);
    else {
      GET_OBJ_VAL(OBJ, 2) = number;
@@ -99,7 +99,7 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
    break; 
   case AEDIT_WEAPON:
    number += WEAP_HOLDOUT;
-   if (number >= WEAP_CANNON)
+   if (number >= WEAP_CANNON || number < WEAP_HOLDOUT)
      send_to_char("Invalid selection.\r\nWeapon Type: ", CH);
    else {
      GET_OBJ_VAL(OBJ, 1) = number;
@@ -107,6 +107,8 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
    }
    break; 
   case AEDIT_QUANTITY:
+   if (number < 0)
+     number = 0;
    GET_OBJ_VAL(OBJ, 3) = (number / 10) * 10;
    aedit_disp_menu(d);
    break;
@@ -168,17 +170,38 @@ void ammo_build(struct char_data *ch, struct obj_data *obj)
   if (GET_OBJ_VAL(obj, 9) != GET_IDNUM(ch))
     send_to_char("You cannot build this batch of ammunition.\r\n", ch);
   else {
+    // Find a deployed workshop in the room.
     struct obj_data *workshop = find_workshop(ch, TYPE_AMMO);
-
-    if (!workshop)
-      for (workshop = ch->carrying; workshop; workshop = workshop->next_content)
-        if (GET_OBJ_TYPE(workshop) == ITEM_WORKSHOP && GET_OBJ_VAL(workshop, 0) == TYPE_AMMO && 
-            GET_OBJ_VAL(workshop, 1) == TYPE_KIT && (GET_OBJ_VAL(obj, 2) == AMMO_NORMAL ||
-            (GET_OBJ_VAL(obj, 2) == GET_OBJ_VAL(workshop, 2))))
-          break;
+    bool kitwarn = FALSE;
 
     if (!workshop) {
-      send_to_char("You need an ammunition workshop or kit.\r\n", ch);
+      // Find a kit in the character's inventory.
+      for (workshop = ch->carrying; workshop; workshop = workshop->next_content) {
+        if (GET_OBJ_TYPE(workshop) == ITEM_WORKSHOP && GET_OBJ_VAL(workshop, 0) == TYPE_AMMO && 
+            GET_OBJ_VAL(workshop, 1) == TYPE_KIT) {
+          // Ensure that, if a kit was found, the kit is of the right type.
+          if (GET_OBJ_VAL(obj, 2) == AMMO_NORMAL || (GET_OBJ_VAL(obj, 2) == GET_OBJ_VAL(workshop, 2)))
+            break;
+          else
+            kitwarn = TRUE;
+        }
+        
+      }
+    }
+
+    if (!workshop) {
+      if (kitwarn) {
+        send_to_char(ch, "Your ammunition kit doesn't have the right tooling for %s ammo. You'll need a different kit or an ammunition workshop.",
+                     ammo_type[GET_OBJ_VAL(obj, 2)].name);
+      } else {
+        if (GET_OBJ_VAL(obj, 2) != AMMO_NORMAL) {
+          send_to_char(ch, "You need an ammunition workshop or %s %s ammunition kit.\r\n",
+                       strchr((const char *)"aeiouyAEIOUY", *ammo_type[GET_OBJ_VAL(obj, 2)].name) ? "an" : "a",
+                       ammo_type[GET_OBJ_VAL(obj, 2)].name);
+        } else {
+          send_to_char("You need an ammunition workshop or kit.\r\n", ch);
+        }
+      }
       return;
     }
 

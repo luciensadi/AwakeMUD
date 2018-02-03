@@ -601,8 +601,8 @@ const char *affected_bits[] =
     "Programming",
     "Part Designing",
     "Part Building",
-    "Withdrawl (Forced)",
-    "Withdrawl",
+    "Withdrawal (Forced)",
+    "Withdrawal",
     "Bonding Focus",
     "Conjuring",
     "Building Lodge",
@@ -1370,7 +1370,7 @@ struct skill_data skills[] =
     {"Gun Cane", QUI, 0},
     {"Bracer Gun", QUI, 0},
     {"Blowgun", QUI, 0},
-    {"Pharmacuticals", INT, 0}
+    {"Pharmaceuticals", INT, 0}
   };
 
 int rev_dir[] =
@@ -1609,12 +1609,13 @@ const char *ic_option_long[] =
 
 struct ammo_data ammo_type[] =
   {
-    {"normal", 2, 1, .25, 2},
-    {"APDS", 14, 14, .25, 7},
-    {"explosive", 3, 1.5, .75, 5},
-    {"EX", 6, 3, .75, 10},
-    {"flechette", 3, 1.5, .5, 10},
-    {"gel", 4, 2, .25, 3}
+    // name      tn  time  weight  cost
+    {"normal",    2,    1,    .25,    2},
+    {"APDS",     14,   14,    .25,    7},
+    {"explosive", 3,  1.5,    .75,    5},
+    {"EX",        6,    3,    .75,   10},
+    {"flechette", 3,  1.5,    .5,    10},
+    {"gel",       4,    2,    .25,    3}
   };
 
 const char *positions[] =
@@ -1959,7 +1960,7 @@ const char *cyber_types[] = {
   "Oral Dart",
   "Oral Gun",
   "Oral Slasher",
-  "ASIST Interfance",
+  "ASIST Interface",
   "Chipjack Expert Driver",
   "Cranial Cyberdeck",
   "Data Compactor",

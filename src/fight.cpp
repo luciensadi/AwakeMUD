@@ -565,31 +565,27 @@ void raw_kill(struct char_data * ch)
         }
       GET_DRUG_AFFECT(ch) = GET_DRUG_DURATION(ch) = GET_DRUG_STAGE(ch) = 0;
       if (PLR_FLAGGED(ch, PLR_AUTH))
-        i = real_room(60500);
-      else switch (zone_table[world[ch->in_room].zone].juridiction) {
+        i = real_room(RM_CHARGEN_START_ROOM);
+      else switch (zone_table[world[ch->in_room].zone].jurisdiction) {
         case ZONE_SEATTLE:
-          /* i = real_room(16295); // This room doesn't exist in the public CE world. */
-          i = real_room(100);
+          i = real_room(RM_SEATTLE_DOCWAGON);
           break;
         case ZONE_PORTLAND:
-          /* i = real_room(14709); // This room doesn't exist in the public CE world. */
-          i = real_room(100);
+          i = real_room(RM_PORTLAND_DOCWAGON);
           break;
         case ZONE_CARIB:
-          /* i = real_room(62300); // This room doesn't exist in the public CE world. */
-          i = real_room(100);
+          i = real_room(RM_CARIB_DOCWAGON);
           break;
         case ZONE_OCEAN:
-          /* i = real_room(62502); // This room doesn't exist in the public CE world. */
-          i = real_room(100);
+          i = real_room(RM_OCEAN_DOCWAGON);
           break;
         default:
           sprintf(buf, "SYSERR: Bad jurisdiction type %d in room %ld encountered in raw_kill() while transferring %s (%ld).",
-                  zone_table[world[ch->in_room].zone].juridiction,
+                  zone_table[world[ch->in_room].zone].jurisdiction,
                   world[ch->in_room].number,
                   GET_CHAR_NAME(ch), GET_IDNUM(ch));
           mudlog(buf, ch, LOG_SYSLOG, TRUE);
-          i = real_room(100);
+          i = real_room(RM_ENTRANCE_TO_DANTES);
           break;
       }
       char_from_room(ch);
@@ -1699,24 +1695,24 @@ void docwagon(struct char_data *ch)
       }
     ch->points.fire[0] = 0;
     send_to_char("\r\n\r\nYour last conscious memory is the arrival of a DocWagon.\r\n", ch);
-    switch (zone_table[world[ch->in_room].zone].juridiction) {
+    switch (zone_table[world[ch->in_room].zone].jurisdiction) {
       case ZONE_SEATTLE:
-        i = real_room(16295);
+        i = real_room(RM_SEATTLE_DOCWAGON);
         break;
       case ZONE_PORTLAND:
-        i = real_room(14709);
+        i = real_room(RM_PORTLAND_DOCWAGON);
         break;
       case ZONE_CARIB:
-        i = real_room(62300);
+        i = real_room(RM_CARIB_DOCWAGON);
         break;
       case ZONE_OCEAN:
-        i = real_room(62502);
+        i = real_room(RM_OCEAN_DOCWAGON);
         break;
     }
     char_from_room(ch);
     char_to_room(ch, i);
     creds = MAX((number(8, 12) * 500 / GET_OBJ_VAL(docwagon, 0)), (int)(GET_NUYEN(ch) / 10));
-    send_to_char(ch, "Docwagon demand %d nuyen for your rescue.\r\n", creds);
+    send_to_char(ch, "DocWagon demands %d nuyen for your rescue.\r\n", creds);
     if ((GET_NUYEN(ch) + GET_BANK(ch)) < creds) {
       send_to_char("Not finding sufficient payment, your DocWagon contract was retracted.\r\n", ch);
       extract_obj(docwagon);
@@ -2407,8 +2403,8 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
       if (IS_NPC(victim))
         act("$n is dead!  R.I.P.", FALSE, victim, 0, 0, TO_ROOM);
       else
-        act("$n slumps in a pile. You hear sirens as a Docwagon rushes in and grabs $m.", FALSE, victim, 0, 0, TO_ROOM);
-      send_to_char("You feel the world slip in to darkness, you better hope a wandering Docwagon finds you.\r\n", victim);
+        act("$n slumps in a pile. You hear sirens as a DocWagon rushes in and grabs $m.", FALSE, victim, 0, 0, TO_ROOM);
+      send_to_char("You feel the world slip in to darkness, you better hope a wandering DocWagon finds you.\r\n", victim);
       break;
     default:                      /* >= POSITION SLEEPING */
       if (dam > ((int)(GET_MAX_PHYSICAL(victim) / 100) >> 2))
@@ -3373,11 +3369,11 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
       GET_TEMP_QUI_LOSS(victim) += (int) (att->successes / 2); // This used to be * 2!
       affect_total(victim);
       if (GET_QUI(victim) <= 0) {
-        act("You hit $N's pressure points succesfully, $e is paralyzed!", FALSE, ch, 0, victim, TO_CHAR);
+        act("You hit $N's pressure points successfully, $e is paralyzed!", FALSE, ch, 0, victim, TO_CHAR);
         act("As $n hits you, you feel your body freeze up!", FALSE, ch, 0, victim, TO_VICT);
         act("$N freezes as $n's attack lands successfully!", FALSE, ch, 0, victim, TO_NOTVICT);
       } else {
-        act("You hit $N's pressure points succesfully, $e seems to slow down!", FALSE, ch, 0, victim, TO_CHAR);
+        act("You hit $N's pressure points successfully, $e seems to slow down!", FALSE, ch, 0, victim, TO_CHAR);
         act("$n's blows seem to bring great pain and you find yourself moving slower!", FALSE, ch, 0, victim, TO_VICT);
         act("$n's attack hits $N, who seems to move slower afterwards.", FALSE, ch, 0, victim, TO_NOTVICT);
       }
@@ -4694,8 +4690,8 @@ void perform_violence(void)
           end_spirit_existance(spirit, TRUE);
           AFF_FLAGS(mage).RemoveBit(AFF_BANISH);
         } else if (GET_MAG(mage) < 1) {
-          send_to_char(mage, "Your magic spent from your battle with %s, you fall unconcious.\r\n", GET_NAME(spirit));
-          act("$n falls unconcious, drained by magical combat.", FALSE, mage, 0, 0, TO_ROOM);
+          send_to_char(mage, "Your magic spent from your battle with %s, you fall unconscious.\r\n", GET_NAME(spirit));
+          act("$n falls unconscious, drained by magical combat.", FALSE, mage, 0, 0, TO_ROOM);
           damage(mage, spirit, TYPE_DRAIN, DEADLY, MENTAL);
           stop_fighting(spirit);
           stop_fighting(mage);

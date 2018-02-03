@@ -77,7 +77,7 @@ const char *obj_objectives[] =
     "Deliver item to location",
     "Destroy an item",
     "Destroy as many items as possible",
-    "Return Paydata to johnson",
+    "Return Paydata to Johnson",
     "Upload to a host",
     "\n"
   };
@@ -1531,7 +1531,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
       qedit_parse(d, "n");
       break;
     case '1':
-      send_to_char("Enter johnson's vnum: ", CH);
+      send_to_char("Enter Johnson's vnum: ", CH);
       d->edit_mode = QEDIT_JOHNSON;
       break;
     case '2':
@@ -1586,17 +1586,17 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
       break;
     case 'd':
     case 'D':
-      send_to_char("Enter hour for johnson to start giving jobs: ", CH);
+      send_to_char("Enter hour for Johnson to start giving jobs: ", CH);
       d->edit_mode = QEDIT_SHOUR;
       break;
     case 'e':
     case 'E':
-      send_to_char("Enter the string that will be given when the johnson comes to work:\n\r", CH);
+      send_to_char("Enter the string that will be given when the Johnson comes to work:\n\r", CH);
       d->edit_mode = QEDIT_SSTRING;
       break;
     case 'f':
     case 'F':
-      send_to_char("Enter the string that will be given when the johnson leaves work:\n\r", CH);
+      send_to_char("Enter the string that will be given when the Johnson leaves work:\n\r", CH);
       d->edit_mode = QEDIT_ESTRING;
       break;
     case 'g':
@@ -1621,7 +1621,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
   case QEDIT_JOHNSON:
     number = atoi(arg);
     if (real_mobile(number) < 0) {
-      send_to_char("No such mob!  Enter johnson's vnum: ", CH);
+      send_to_char("No such mob!  Enter Johnson's vnum: ", CH);
       return;
     } else {
       QUEST->johnson = number;
@@ -1965,7 +1965,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
       case QOO_RETURN_PAY:
       case QOO_UPLOAD:
         d->edit_mode = QEDIT_O_ODATA;
-        send_to_char(CH, "Enter vnum of host paydata must be retreived/uploaded from: ");
+        send_to_char(CH, "Enter vnum of host paydata must be retrieved/uploaded from: ");
         break;
       default:
         CLS(CH);
@@ -2076,7 +2076,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     case QOO_UPLOAD:
     case QOO_RETURN_PAY:
       if (real_host(number) < 0)
-        send_to_char(CH, "Enter vnum of host paydata must be retreived/uploaded from: ");
+        send_to_char(CH, "Enter vnum of host paydata must be retrieved/uploaded from: ");
       else {
         QUEST->obj[d->edit_number2].o_data = number;
         CLS(CH);
@@ -2127,7 +2127,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
     } else {
       QUEST->s_time = number;
       d->edit_mode = QEDIT_EHOUR;
-      send_to_char("Enter hour for johnson to stop giving jobs: ", CH);
+      send_to_char("Enter hour for Johnson to stop giving jobs: ", CH);
     }
     break;
   case QEDIT_EHOUR:

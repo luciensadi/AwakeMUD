@@ -145,7 +145,7 @@ struct zone_data
   int number;              /* virtual number of this zone        */
   int num_cmds;         // number of commands in the table
   int editor_ids[5];       // array of zone editors
-  int juridiction;       // Abstract zone this zone belongs to
+  int jurisdiction;       // Abstract zone this zone belongs to
   struct reset_com *cmd;   /* command table for reset            */
 
   /*

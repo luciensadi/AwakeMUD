@@ -37,7 +37,7 @@ void vedit_disp_menu(struct descriptor_data * d)
   CLS(CH);
   send_to_char(CH, "Vehicle number: %s%d%s\r\n", CCCYN(CH, C_CMP), d->edit_number,
                CCNRM(CH, C_CMP));
-  send_to_char(CH, "1) Vechile namelist: %s%s%s\r\n", CCCYN(CH, C_CMP),
+  send_to_char(CH, "1) Vehicle namelist: %s%s%s\r\n", CCCYN(CH, C_CMP),
                d->edit_veh->name, CCNRM(CH, C_CMP));
   send_to_char(CH, "2) Vehicle shortdesc: %s%s%s\r\n", CCCYN(CH, C_CMP),
                d->edit_veh->short_description, CCNRM(CH, C_CMP));

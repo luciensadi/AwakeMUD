@@ -845,7 +845,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     else if (GET_OBJ_VAL(obj, 4) > 3 && GET_OBJ_VAL(obj, 4) < 6)
       strcat(buf, " that can carry a bit of gear");
     else if (GET_OBJ_VAL(obj, 4) >= 6)
-      strcat(buf, " that can carry alot of gear");
+      strcat(buf, " that can carry a lot of gear");
     if (GET_OBJ_VAL(obj, 7) < -2)
       strcat(buf, ". It is also very bulky.");
     else if (GET_OBJ_VAL(obj, 7) < 1)
@@ -909,7 +909,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     strcat(buf, " portion of food.");
     break;
   case ITEM_DOCWAGON:
-    strcat(buf, " a docwagon contract, it will call them out when your vital signs drop.");
+    strcat(buf, " a DocWagon contract, it will call them out when your vital signs drop.");
     break;
   case ITEM_CONTAINER:
     if (GET_OBJ_VAL(obj, 0) < 5)
@@ -1246,7 +1246,7 @@ void list_detailed_shop(struct char_data *ch, vnum_t shop_nr)
   sprintf(ENDOF(buf), "Buy at:     [%1.2f], Sell at: [%1.2f], \xC2\xB1 %%: [%d], Current %%: [%d], Hours [%d-%d]\r\n",
           shop_table[shop_nr].profit_buy, shop_table[shop_nr].profit_sell, shop_table[shop_nr].random_amount,
           shop_table[shop_nr].random_current, shop_table[shop_nr].open, shop_table[shop_nr].close);
-  sprintf(ENDOF(buf), "Type:       %s, Ettiquette: %s\r\n", shop_type[shop_table[shop_nr].type], skills[shop_table[shop_nr].ettiquete].name);
+  sprintf(ENDOF(buf), "Type:       %s, Etiquette: %s\r\n", shop_type[shop_table[shop_nr].type], skills[shop_table[shop_nr].ettiquete].name);
   shop_table[shop_nr].races.PrintBits(buf2, MAX_STRING_LENGTH, pc_race_types, NUM_RACES);
   sprintf(ENDOF(buf), "!Serves:     %s\r\n", buf2);
   shop_table[shop_nr].flags.PrintBits(buf2, MAX_STRING_LENGTH, shop_flags, SHOP_FLAGS);
@@ -1555,7 +1555,7 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
                    "3) Street Etiquette\r\n"
                    "4) Tribal Etiquette\r\n"
                    "5) Elf Etiquette\r\n"
-                   "Enter Etiquette skill required for availibility tests: ");
+                   "Enter Etiquette skill required for availability tests: ");
       d->edit_mode = SHEDIT_ETTI;
       break;
     case '8':
@@ -1789,7 +1789,7 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
       sell->stock = 0;
       SHOP->selling = sell;
       CLS(CH);
-      send_to_char("0) Always\r\n1) Availibility Code\r\n2) Limited Stock\r\nEnter Supply Type: ", CH);
+      send_to_char("0) Always\r\n1) Availability Code\r\n2) Limited Stock\r\nEnter Supply Type: ", CH);
       d->edit_mode = SHEDIT_SELL_ADD1;
     } else
       send_to_char("Invalid VNum! What Item VNum: ", CH);

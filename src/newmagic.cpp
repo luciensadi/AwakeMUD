@@ -475,7 +475,7 @@ bool conjuring_drain(struct char_data *ch, int force)
     if (FIGHTING(ch))
       stop_fighting(ch);
     send_to_char("The energy from the conjuring ritual overloads your body with energy, killing you...\r\n", ch);
-    act("$n suddenly collapases, dead!", FALSE, ch, 0, 0, TO_ROOM);
+    act("$n suddenly collapses, dead!", FALSE, ch, 0, 0, TO_ROOM);
     die(ch);
     return TRUE;
   }
@@ -553,7 +553,7 @@ bool spell_drain(struct char_data *ch, int type, int force, int damage)
     if (FIGHTING(ch))
       stop_fighting(ch);
     send_to_char("The feedback from spell casting floods your body, killing you...\r\n", ch);
-    act("$n suddenly collapases, dead!", FALSE, ch, 0, 0, TO_ROOM);
+    act("$n suddenly collapses, dead!", FALSE, ch, 0, 0, TO_ROOM);
     die(ch);
     return TRUE;
   }
@@ -785,7 +785,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
         send_to_char("Your head is filled with immense pain as your ears begin to bleed.\r\n", vict);
       } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
         act("$n grabs ahold of $s head in pain.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("A sudden flash of pain in your head causes you to reflexivly grab it.\r\n", vict);
+        send_to_char("A sudden flash of pain in your head causes you to reflexively grab it.\r\n", vict);
       } else {
         act("$n seems to flinch slightly as blood trickles from $s nose.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("Slight pain fills your mind from an unknown source.\r\n", vict);
@@ -812,16 +812,16 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
       int dam = convert_damage(stage(success, basedamage));
       if (GET_MENTAL(vict) - (dam * 100) <= 0) {
         act("$n falls to the floor unconscious.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("The world turns black around you as you suddenly fall unconcious.\r\n", vict);
+        send_to_char("The world turns black around you as you suddenly fall unconscious.\r\n", vict);
       } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
         act("$n grabs $s head and cringes.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("Your head is filled with an unbarable pressure as your vision begins to fade.\r\n", vict);
+        send_to_char("Your head is filled with an unbearable pressure as your vision begins to fade.\r\n", vict);
       } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
         act("$n shakes $s head forcibly as though trying to clear it.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("A wave of tiredness comes over you, but seems to clear slightly as you shake your head.\r\n", vict);
       } else  {
         act("$n recoils slightly as though hit by an invisible force.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("You mind goes slighlty hazy as though you had just been punched.\r\n", vict);
+        send_to_char("You mind goes slightly hazy as though you had just been punched.\r\n", vict);
       }
       damage(ch, vict, dam, TYPE_COMBAT_SPELL, MENTAL);
       if (IS_NPC(vict) && !IS_NPC(ch))
@@ -1332,8 +1332,8 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         act("$n's body recoils as though hit.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("You feel a dull thud in the back of your mind.\r\n", vict);
       } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
-        act("$n is thrown to the ground, unconcious, from an immense invisible force.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("It slams into you with the force of a freight train, knocking you to the ground, unconcious.\r\n", vict);
+        act("$n is thrown to the ground, unconscious, from an immense invisible force.", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("It slams into you with the force of a freight train, knocking you to the ground, unconscious.\r\n", vict);
       } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
         act("$n stumbles backwards, almost losing $s footing, as $e is hit by an invisible force.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("You stumble backwards, feeling groggy as the air slams into you at full force.\r\n", vict);
@@ -1380,7 +1380,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         send_to_char("You feel a slight burning sensation in the back of your mind.\r\n", vict);
       } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
         act("$n is hit full force by the intense flames causing $m to fall to the ground, gurgling.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("The flames burn intensely around you, your last memory before falling unconcious is the hideous pain.\r\n", vict);
+        send_to_char("The flames burn intensely around you, your last memory before falling unconscious is the hideous pain.\r\n", vict);
       } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
         act("Screams as the flames impact $s body, horribly burning $m.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("The flames crash into you, causing you great pain as they horribly burn you.\r\n", vict);
@@ -1433,7 +1433,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         send_to_char("You feel a slight burning sensation in the back of your mind.\r\n", vict);
       } else if (GET_MENTAL(vict) - (dam * 100) <= 0) {
         act("As the acid hits $n $e falls to the ground twitching and screaming as $s body smokes.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("The fumes from the acid burning through your body fill your lungs, burning you from the inside out as you fade into unconciousness.\r\n", vict);
+        send_to_char("The fumes from the acid burning through your body fill your lungs, burning you from the inside out as you fade into unconsciousness.\r\n", vict);
       } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
         act("The acid hits $n, $e cries out in pain as trails of smoke come from $s body.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("The acid impacts you with a great force, causing you to step back as it burns through your skin.\r\n", vict);
@@ -1485,9 +1485,9 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
         send_to_char("You feel your body begin to spasm as the huge charge of electricity fries your nervous system.\r\n", vict);
       } else if (GET_MENTAL(vict) - (dam * 100) <= 300) {
         act("$n is almost lifted in the air by the lightning, spasms filling $s body, as a thin trail of smoke rise from $m.", TRUE, vict, 0, 0, TO_ROOM);
-        send_to_char("Your body is filled with pain as the lightning hits you, your limbs going into an uncontrolable seizure.\r\n", vict);
+        send_to_char("Your body is filled with pain as the lightning hits you, your limbs going into an uncontrollable seizure.\r\n", vict);
       } else if (GET_MENTAL(vict) - (dam * 100) <= 700) {
-        act("$n spasms as the lightning hits $m, $s body wracked with spasms as the lightning disipates.", TRUE, vict, 0, 0, TO_ROOM);
+        act("$n spasms as the lightning hits $m, $s body wracked with spasms as the lightning dissipates.", TRUE, vict, 0, 0, TO_ROOM);
         send_to_char("Pain flashes through your body as the lightning hits, your body wracked with several serious spasms.\r\n", vict);
       } else if (dam > 0) {
         act("$n visibly recoils as the lightning hits, but otherwise seems fine.", TRUE, vict, 0, 0, TO_ROOM);
@@ -2736,9 +2736,9 @@ POWER(spirit_sorcery)
   if (!MOB_FLAGS(spirit).IsSet(MOB_AIDSORCERY)) {
     spiritdata->services--;
     MOB_FLAGS(spirit).SetBit(MOB_AIDSORCERY);
-    send_to_char(ch, "%s will now asist you in casting a spell next time it is able.\r\n", CAP(GET_NAME(spirit)));
+    send_to_char(ch, "%s will now assist you in casting a spell next time it is able.\r\n", CAP(GET_NAME(spirit)));
   } else
-    send_to_char(ch, "%s will already asist in spell casting next time it is able.\r\n", CAP(GET_NAME(spirit)));
+    send_to_char(ch, "%s will already assist in spell casting next time it is able.\r\n", CAP(GET_NAME(spirit)));
 
 }
 
@@ -2747,9 +2747,9 @@ POWER(spirit_study)
   if (!MOB_FLAGS(spirit).IsSet(MOB_STUDY)) {
     spiritdata->services--;
     MOB_FLAGS(spirit).SetBit(MOB_STUDY);
-    send_to_char(ch, "%s will now asist you in studying a spell next time it is able.\r\n", CAP(GET_NAME(spirit)));
+    send_to_char(ch, "%s will now assist you in studying a spell next time it is able.\r\n", CAP(GET_NAME(spirit)));
   } else
-    send_to_char(ch, "%s will already asist you the next time it is able.\r\n", CAP(GET_NAME(spirit)));
+    send_to_char(ch, "%s will already assist you the next time it is able.\r\n", CAP(GET_NAME(spirit)));
 }
 
 POWER(spirit_sustain)
@@ -3068,7 +3068,7 @@ POWER(spirit_breath)
       send_to_char("The noxious fumes fill your throat and lungs, causing your vision to swim.\r\n", tch);
       damage(spirit, tch, dam, TYPE_FUMES, MENTAL);
     } else {
-      act("$n waves $s hand infront of $s face, dispersing the fumes.", TRUE, tch, 0, 0, TO_ROOM);
+      act("$n waves $s hand in front of $s face, dispersing the fumes.", TRUE, tch, 0, 0, TO_ROOM);
       send_to_char("You easily resist the noxious fumes.\r\n", tch);
     }
     spiritdata->services--;
@@ -3399,7 +3399,7 @@ ACMD(do_deactivate)
   }
   if (!(obj = get_object_in_equip_vis(ch, argument, ch->equipment, &i)) &&
       !(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
-    send_to_char("Deactive which focus?\r\n", ch);
+    send_to_char("Deactivate which focus?\r\n", ch);
     return;
   }
   if (GET_OBJ_TYPE(obj) == ITEM_FOCUS) {
@@ -3601,7 +3601,7 @@ ACMD(do_dispell)
     spell_modify(vict, sust, FALSE);
     sust->success -= success;
     if (sust->success < 1) {
-      send_to_char("You succeed in completly dispelling that spell.\r\n", ch);
+      send_to_char("You succeed in completely dispelling that spell.\r\n", ch);
       sust->success += success;
       spell_modify(vict, sust, TRUE);
       end_sustained_spell(vict, sust);
@@ -3659,7 +3659,7 @@ ACMD(do_heal)
     GET_PHYSICAL(ch) -= success;
     WAIT_STATE(ch, 3 RL_SEC);
     act("You feel $n place $s hands on you, $s minstrations seem to cause your wounds to fade!", TRUE, ch, 0, vict, TO_VICT);
-    act("You place your hands on $N, you feel $S pain and suffering transfered to your body!", TRUE, ch, 0, vict, TO_CHAR);
+    act("You place your hands on $N, you feel $S pain and suffering transferred to your body!", TRUE, ch, 0, vict, TO_CHAR);
     act("$n places $s hands on $N seemingly transferring the wound to $mself!", TRUE, ch, 0, vict, TO_NOTVICT);
   }
 }
@@ -3727,7 +3727,7 @@ void disp_init_menu(struct descriptor_data *d)
   CLS(CH);
   send_to_char("1) Increase magic and learn metamagic technique\r\n"
                "2) Increase magic and change astral signature\r\n"
-               "3) Shed a gaes\r\n"
+               "3) Shed a geas\r\n"
                "4) Return to game\r\n"
                "Enter initiation option: ", CH);
   d->edit_mode = INIT_MAIN;
@@ -3750,15 +3750,15 @@ bool can_metamagic(struct char_data *ch, int i)
   return TRUE;
 }
 
-void disp_gaes_menu(struct descriptor_data *d)
+void disp_geas_menu(struct descriptor_data *d)
 {
   CLS(CH);
   int x = 0;
   for (int i = 0; i < NUM_WEARS; i++)
     if (GET_EQ(CH, i) && GET_OBJ_TYPE(GET_EQ(CH, i)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(CH, i), 9) == GET_IDNUM(CH))
       send_to_char(CH, "%d) %s\r\n", x++, GET_OBJ_NAME(GET_EQ(CH, i)));
-  send_to_char("q) Quit Initiation\r\nSelect gaes to shed: ", CH);
-  d->edit_mode = INIT_GAES;
+  send_to_char("q) Quit Initiation\r\nSelect geas to shed: ", CH);
+  d->edit_mode = INIT_GEAS;
 }
 
 void disp_meta_menu(struct descriptor_data *d)
@@ -3869,7 +3869,7 @@ void init_parse(struct descriptor_data *d, char *arg)
           PLR_FLAGS(CH).RemoveBit(PLR_INITIATE);
           break;
         case '3':
-          disp_gaes_menu(d);
+          disp_geas_menu(d);
           break;
         case '4':
           STATE(d) = CON_PLAYING;
@@ -3881,13 +3881,13 @@ void init_parse(struct descriptor_data *d, char *arg)
           break;
       }
       break;
-    case INIT_GAES:
+    case INIT_GEAS:
       number = atoi(arg);
       if (*arg == 'q') {
         STATE(d) = CON_PLAYING;
         send_to_char("Initiation cancelled.\r\n", CH);
       } else if (number < 0) {
-        send_to_char("Invalid Response. Select gaes to shed: ", CH);
+        send_to_char("Invalid Response. Select geas to shed: ", CH);
       } else {
         for (i = 0; i < NUM_WEARS; i++)
           if (GET_EQ(CH, i) && GET_OBJ_TYPE(GET_EQ(CH, i)) == ITEM_FOCUS && GET_OBJ_VAL(GET_EQ(CH, i), 9) == GET_IDNUM(CH) && --number < 0) {
@@ -3895,7 +3895,7 @@ void init_parse(struct descriptor_data *d, char *arg)
             break;
           }
         if (!obj) {
-          send_to_char("You don't have that many gaesa. Select gaes to shed: ", CH);
+          send_to_char("You don't have that many geasa. Select geas to shed: ", CH);
           return;
         }
         init_cost(CH, TRUE);

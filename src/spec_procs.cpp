@@ -813,7 +813,7 @@ SPECIAL(trainer)
       GET_KARMA(ch) -= (GET_REAL_WIL(ch) + 1) * 200;
     GET_REAL_WIL(ch)++;
     affect_total(ch);
-    send_to_char(ch, "Through a strict regimine of work and study, your Willpower raises "
+    send_to_char(ch, "Through a strict regimen of work and study, your Willpower raises "
                  "to %d.\r\n", GET_REAL_WIL(ch));
   } else {
     if (GET_ATT_POINTS(ch) > 0) {
@@ -1720,7 +1720,7 @@ SPECIAL(adept_guard)
             FALSE, ch, 0, vict, TO_NOTVICT);
         act("A streak of pain courses through your body!",
             FALSE, ch, 0, vict, TO_VICT);
-        act("Sensing an oppurtune moment, you come out of hiding and draw upon "
+        act("Sensing an oppertune moment, you come out of hiding and draw upon "
             "your mystic abilities to kill $N.", FALSE, ch, 0, vict, TO_CHAR);
         damage(ch, vict, 1, 0, PHYSICAL);
         return(TRUE);
@@ -1766,7 +1766,7 @@ SPECIAL(takehero_tsuyama)
                 FALSE, tsuyama, 0, vict, TO_NOTVICT);
             act("$n unsheathes his deadly katana, swiftly attacking you!",
                 FALSE, tsuyama, 0, vict, TO_VICT);
-            act("You unsheath your katana and switly attack $N!",
+            act("You unsheathe your katana and swiftly attack $N!",
                 FALSE, tsuyama, 0, vict, TO_CHAR);
             damage(tsuyama, vict, 2, TYPE_SLASH, PHYSICAL);
             return(TRUE);
@@ -1853,7 +1853,7 @@ SPECIAL(branson)
       do_say(ch, "Do you understand what I'm trying to do? Do you?", 0, 0);
       return TRUE;
     case 2:
-      do_say(ch, "Noone else has a character to rival mine.", 0, 0);
+      do_say(ch, "No-one else has a character to rival mine.", 0, 0);
       return TRUE;
     case 3:
       act("$n switches the trid to CNN and checks the latest stock updates.",
@@ -2411,7 +2411,7 @@ SPECIAL(smiths_bouncer)
         do_say(ch, "Look, no invitation, no entry. It's that simple, ya see.", 0, 0);
         return TRUE;
       case 92:
-        do_say(ch, "You're a friend of who? Nice fraggin'try.", 0, 0);
+        do_say(ch, "You're a friend of who? Nice fraggin' try.", 0, 0);
         return TRUE;
       case 147:
         act("As someone tries to sneak past, $n grabs them by the collar and "
@@ -2704,7 +2704,7 @@ SPECIAL(bank)
       GET_BANK(ch) -= amount;
       sprintf(buf, "%d nuyen transferred from your account to $p.", amount);
     } else {
-      send_to_char("Transfer from what? (Type out \"credstick\" or \"account\", please.)\r\n", ch);
+      send_to_char("Transfer to what? (Type out \"credstick\" or \"account\", please.)\r\n", ch);
       return TRUE;
     }
     act(buf, FALSE, ch, credstick, 0, TO_CHAR);
@@ -2777,7 +2777,7 @@ SPECIAL(traffic)
                      real_room(room->number));
         break;
       case 4:
-        if (zone_table[room->zone].juridiction == 0)
+        if (zone_table[room->zone].jurisdiction == 0)
           send_to_room("A Lone Star squad car drives by, sirens blaring loudly.\r\n",
                        real_room(room->number));
         break;
@@ -2932,7 +2932,7 @@ SPECIAL(waterfall)
     if (success_test(GET_STR(ch), 10)) {
       act("You push your way through the rushing water and tumble into a vast cavern.",
           FALSE, ch, 0, 0, TO_CHAR);
-      act("$n pushes $s way through the waterfall and dissapears.", TRUE, ch, 0, 0, TO_ROOM);
+      act("$n pushes $s way through the waterfall and disappears.", TRUE, ch, 0, 0, TO_ROOM);
       return FALSE;
     } else {
       act("You succumb to the heavy waves and crack your skull on the floor!", FALSE, ch, 0, 0, TO_CHAR);
@@ -2999,9 +2999,9 @@ SPECIAL(circulation_fan)
     }
   } else {
     if (room->people != NULL) {
-      act("A loud hum signals the powerup of the fan.",
+      act("A loud hum signals the power-up of the fan.",
           FALSE, room->people, 0, 0, TO_CHAR);
-      act("A loud hum signals the powerup of the fan.",
+      act("A loud hum signals the power-up of the fan.",
           FALSE, room->people, 0, 0, TO_ROOM);
     }
 
@@ -3297,8 +3297,15 @@ SPECIAL(auth_room)
       for (struct obj_data *obj = ch->bioware; obj; obj = obj->next_content)
         GET_OBJ_COST(obj) = 1;
       char_from_room(ch);
-      char_to_room(ch, real_room(60563));
+      char_to_room(ch, real_room(RM_NEWBIE_LOBBY));
       send_to_char(ch, "^YYou are now Authorized. Welcome to Awakened Worlds.^n\r\n");
+      if (real_object(OBJ_NEWBIE_RADIO)>-1)
+      {
+        struct obj_data *radio = read_object(OBJ_NEWBIE_RADIO, VIRTUAL);
+        GET_OBJ_VAL(radio, 0) = 8;
+        obj_to_char(radio, ch);
+        send_to_char(ch, "You have been given a radio.^n\r\n");
+      }
       sprintf(buf, "DELETE FROM pfiles_chargendata WHERE idnum=%ld;", GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
     }
@@ -3348,22 +3355,22 @@ SPECIAL(terell_davis)
     int toroom = NOWHERE;
     switch (number(0, 5)) {
       case 0:
-        toroom = real_room(5008);
-        break;
+        /* toroom = real_room(5008);
+        break; */
       case 1:
-        toroom = real_room(3104);
-        break;
+        /* toroom = real_room(3104);
+        break; */
       case 2:
-        toroom = real_room(35502);
-        break;
+        /* toroom = real_room(39854);
+         break; */
       case 3:
-        toroom = real_room(16227);
-        break;
+        /* toroom = real_room(16227);
+        break; */
       case 4:
-        toroom = real_room(2113);
-        break;
+        /* toroom = real_room(2113);
+        break; */
       case 5:
-        toroom = real_room(39854);
+        toroom = real_room(RM_DANTES_DESCENT);
         break;
     }
     act("$n finishes up his business and walks out of the club.", FALSE, ch, 0, 0, TO_ROOM);
@@ -3490,12 +3497,12 @@ SPECIAL(painter)
   if ((veh = world[painter->in_room+1].vehicles))
     if (veh->spare <= time(0)) {
       veh_from_room(veh);
-      veh_to_room(veh, real_room(29399));
+      veh_to_room(veh, real_room(RM_PAINTER_LOT));
       veh->spare = 0;
-      if (world[real_room(29399)].people) {
+      if (world[real_room(RM_PAINTER_LOT)].people) {
         sprintf(buf, "%s is wheeled out into the parking lot.", GET_VEH_NAME(veh));
-        act(buf, FALSE, world[real_room(29399)].people, 0, 0, TO_ROOM);
-        act(buf, FALSE, world[real_room(29399)].people, 0, 0, TO_CHAR);
+        act(buf, FALSE, world[real_room(RM_PAINTER_LOT)].people, 0, 0, TO_ROOM);
+        act(buf, FALSE, world[real_room(RM_PAINTER_LOT)].people, 0, 0, TO_CHAR);
         save_vehicles();
       }
     }
@@ -3540,11 +3547,11 @@ SPECIAL(multnomah_gate)
   if (!cmd)
     return FALSE;
   long in_room = ch->in_veh ? ch->in_veh->in_room : ch->in_room, to_room = 0;
-  if (world[in_room].number == 17598)
-    to_room = real_room(17599);
-  else to_room = real_room(17598);
+  if (world[in_room].number == RM_MULTNOMAH_GATE_NORTH)
+    to_room = real_room(RM_MULTNOMAH_GATE_SOUTH);
+  else to_room = real_room(RM_MULTNOMAH_GATE_NORTH);
 
-  if ((world[in_room].number == 17598 && CMD_IS("south")) || (world[in_room].number == 17599 && CMD_IS("north"))) {
+  if ((world[in_room].number == RM_MULTNOMAH_GATE_NORTH && CMD_IS("south")) || (world[in_room].number == RM_MULTNOMAH_GATE_SOUTH && CMD_IS("north"))) {
     if (!PLR_FLAGGED(ch, PLR_VISA)) {
       send_to_char("The gate refuses to open for you.\r\n", ch);
       return TRUE;
@@ -3582,7 +3589,7 @@ SPECIAL(multnomah_guard)
     skip_spaces(&argument);
     struct char_data *guard = (struct char_data *) me;
     struct obj_data *visa = get_obj_in_list_vis(ch, argument, ch->carrying);
-    if (visa && GET_OBJ_VNUM(visa) == 17513) {
+    if (visa && GET_OBJ_VNUM(visa) == OBJ_MULTNOMAH_VISA) {
       if (GET_OBJ_VAL(visa, 0) == GET_IDNUM(ch)) {
         PLR_FLAGS(ch).SetBit(PLR_VISA);
         sprintf(arg, "%s Everything seems to be in order, proceed.", GET_CHAR_NAME(ch));

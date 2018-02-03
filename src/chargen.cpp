@@ -136,7 +136,7 @@ void set_attributes(struct char_data *ch, int magic)
     GET_REAL_BOD(ch) += 5;
     GET_REAL_STR(ch) += 6;
     GET_ATT_POINTS(ch) -= 11;
-    send_to_char("You spend 11 attribute points to raise your attributes to their mininums.\r\n", ch);
+    send_to_char("You spend 11 attribute points to raise your attributes to their minimums.\r\n", ch);
     break;
   case RACE_KOBOROKURU:
     GET_REAL_BOD(ch)++;
@@ -937,8 +937,8 @@ void create_parse(struct descriptor_data *d, const char *arg)
       d->ccr.pr[2] = PR_RACE;
     else if (GET_RACE(d->character) == RACE_DRYAD)
       d->ccr.pr[1] = PR_RACE;
-    if (real_object(2041) > -1)
-      obj_to_char(read_object(2041, VIRTUAL), d->character);
+    if (real_object(OBJ_MAP_OF_SEATTLE) > -1)
+      obj_to_char(read_object(OBJ_MAP_OF_SEATTLE, VIRTUAL), d->character);
     GET_EQ(d->character, WEAR_BODY) = read_object(shirts[number(0, 4)], VIRTUAL);
     GET_EQ(d->character, WEAR_LEGS) = read_object(pants[number(0, 4)], VIRTUAL);
     GET_EQ(d->character, WEAR_FEET) = read_object(shoes[number(0, 4)], VIRTUAL);

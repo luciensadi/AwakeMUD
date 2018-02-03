@@ -617,31 +617,31 @@ void point_update(void)
               GET_PERM_BOD_LOSS(i)++;
             send_to_char(i, "Your health suffers at the hand of your %s addiction.\r\n", drug_types[x].name);
           }
-          if (AFF_FLAGGED(i, AFF_WITHDRAWL)) {
+          if (AFF_FLAGGED(i, AFF_WITHDRAWAL)) {
             if (tsl > GET_DRUG_LASTWITH(i, x) + 1) {
               GET_DRUG_LASTWITH(i, x) += 2;
               GET_DRUG_EDGE(i, x)--;
               if (!GET_DRUG_EDGE(i ,x)) {
-                AFF_FLAGS(i).RemoveBit(AFF_WITHDRAWL);
+                AFF_FLAGS(i).RemoveBit(AFF_WITHDRAWAL);
                 GET_DRUG_ADDICT(i, x) = 0;
                 continue;
               }
             }
             send_to_char(i, "Your body cries out for some %s.\r\n", drug_types[x].name);
-          } else if (tsl >= drug_types[x].fix + 1 && !AFF_FLAGGED(i, AFF_WITHDRAWL_FORCE)) {
-            send_to_char(i, "You begin to go into %s withdrawl.\r\n", drug_types[x].name);
-            AFF_FLAGS(i).SetBit(AFF_WITHDRAWL_FORCE);
+          } else if (tsl >= drug_types[x].fix + 1 && !AFF_FLAGGED(i, AFF_WITHDRAWAL_FORCE)) {
+            send_to_char(i, "You begin to go into %s withdrawal.\r\n", drug_types[x].name);
+            AFF_FLAGS(i).SetBit(AFF_WITHDRAWAL_FORCE);
             affect_total(i);
           } else if (tsl >= drug_types[x].fix) {
             if (drug_types[x].mental_addiction ? success_test(GET_WIL(i), drug_types[x].mental_addiction + GET_DRUG_EDGE(i, x)) : 1 < 1 ||
                 drug_types[x].physical_addiction ? success_test(GET_REAL_BOD(i), drug_types[x].physical_addiction + GET_DRUG_EDGE(i, x)) : 1 < 1) {
-              if (AFF_FLAGGED(i, AFF_WITHDRAWL_FORCE)) {
+              if (AFF_FLAGGED(i, AFF_WITHDRAWAL_FORCE)) {
                 sprintf(buf, "Your lack of %s is causing you great pain and discomfort.\r\n", drug_types[x].name);
                 if (tsl > GET_DRUG_LASTWITH(i, x)) {
                   GET_DRUG_LASTWITH(i ,x)++;
                   GET_DRUG_EDGE(i, x)--;
                   if (!GET_DRUG_EDGE(i ,x)) {
-                    AFF_FLAGS(i).RemoveBit(AFF_WITHDRAWL_FORCE);
+                    AFF_FLAGS(i).RemoveBit(AFF_WITHDRAWAL_FORCE);
                     GET_DRUG_ADDICT(i, x) = 0;
                     continue;
                   }
@@ -782,28 +782,28 @@ void save_vehicles(void)
     
     room = veh->in_room;
     if (!ROOM_FLAGGED(room, ROOM_GARAGE))
-      switch (zone_table[world[veh->in_room].zone].juridiction) {
+      switch (zone_table[world[veh->in_room].zone].jurisdiction) {
         case ZONE_PORTLAND:
           switch (number(0, 2)) {
             case 0:
-              room = real_room(2751 + number(0, 2));
+              room = real_room(RM_PORTLAND_PARKING_GARAGE);
               break;
             case 1:
-              room = real_room(2756 + number(0, 2));
+              room = real_room(RM_PORTLAND_PARKING_GARAGE);
               break;
             case 2:
-              room = real_room(2762 + number(0, 2));
+              room = real_room(RM_PORTLAND_PARKING_GARAGE);
               break;
           }
           break;
         case ZONE_SEATTLE:
-          room = real_room(22670 + number(0, 16));
+          room = real_room(RM_SEATTLE_PARKING_GARAGE);
           break;
         case ZONE_CARIB:
-          room = real_room(62334);
+          room = real_room(RM_CARIB_PARKING_GARAGE);
           break;
         case ZONE_OCEAN:
-          room = real_room(62504);
+          room = real_room(RM_OCEAN_PARKING_GARAGE);
           break;
       }
     fprintf(fl, "[VEHICLE]\n");
@@ -893,7 +893,7 @@ void save_vehicles(void)
     fclose(fl);
   }
   if (!(fl = fopen("etc/consist", "w"))) {
-    mudlog("SYSERR: Can't Open Consistentcy File For Write.", NULL, LOG_SYSLOG, FALSE);
+    mudlog("SYSERR: Can't Open Consistency File For Write.", NULL, LOG_SYSLOG, FALSE);
     return;
   }
   for (int m = 0; m < 5; m++) {

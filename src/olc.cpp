@@ -256,7 +256,7 @@ ACMD (do_redit)
       }
     }
     d->edit_room = room;
-#if CONFIRM_EXISTING
+#ifdef CONFIRM_EXISTING
 
     send_to_char ("A room already exists at that number. Do you wish to edit it?\r\n", ch);
     d->edit_mode = REDIT_CONFIRM_EDIT;
@@ -275,7 +275,7 @@ ACMD (do_redit)
     //memset((char *) d->edit_room, 0, sizeof(struct room_data));
     d->edit_room->name = str_dup("An unfinished room");
     d->edit_room->description = str_dup("You are in an unfinished room.\r\n");
-    d->edit_room->address = str_dup("An undiscolsed location");
+    d->edit_room->address = str_dup("An undisclosed location");
     int i = 0;
     while ((d->edit_number > zone_table[i].top) && (i < top_of_zone_table))
       ++i;
@@ -778,7 +778,7 @@ ACMD (do_vedit)
     if (veh_proto[veh_num].inside_description)
       veh->inside_description = str_dup(veh_proto[veh_num].inside_description);
     d->edit_veh = veh;
-#if CONFIRM_EXISTING
+#ifdef CONFIRM_EXISTING
 
     send_to_char ("An vehicle already exists at that number. Do you wish to edit it?\r\n", ch);
     d->edit_mode = VEDIT_CONFIRM_EDIT;
@@ -932,7 +932,7 @@ ACMD (do_iedit)
     }
 
     d->edit_obj = obj;
-#if CONFIRM_EXISTING
+#ifdef CONFIRM_EXISTING
 
     send_to_char ("An object already exists at that number. Do you wish to edit it?\r\n", ch);
     d->edit_mode = IEDIT_CONFIRM_EDIT;
@@ -1295,7 +1295,7 @@ ACMD(do_medit)
       mob->player_specials = &dummy_mob;
 
     d->edit_mob = mob;
-#if CONFIRM_EXISTING
+#ifdef CONFIRM_EXISTING
 
     send_to_char ("A mob already exists at that number. Do you wish to edit it?\r\n", ch);
     d->edit_mode = MEDIT_CONFIRM_EDIT;
@@ -1654,7 +1654,7 @@ ACMD(do_qedit)
       qst->done = str_dup(quest_table[rnum].done);
 
     d->edit_quest = qst;
-#if CONFIRM_EXISTING
+#ifdef CONFIRM_EXISTING
 
     d->edit_mode = QEDIT_CONFIRM_EDIT;
     send_to_char("A quest already exists at that number.  "
@@ -1792,7 +1792,7 @@ ACMD(do_shedit)
     if (shop_table[number].shopname)
       shop->shopname = str_dup(shop_table[number].shopname);
     d->edit_shop = shop;
-#if CONFIRM_EXISTING
+#ifdef CONFIRM_EXISTING
 
     send_to_char("A shop already exists in that number...edit it?\r\n", ch);
     d->edit_mode = SHEDIT_CONFIRM_EDIT;
@@ -1950,7 +1950,7 @@ ACMD(do_zedit)
       STATE(d) = CON_ZEDIT;
       // the edit number = command number in array
       d->edit_number = zone_table[zonenum].num_cmds;
-#if CONFIRM_EXISTING
+#ifdef CONFIRM_EXISTING
 
       send_to_char("Add a new command to the zone table?\r\n", ch);
       d->edit_mode = ZEDIT_CONFIRM_ADD_CMD;
@@ -2131,7 +2131,7 @@ ACMD(do_hedit)
     }
 
     d->edit_host = host;
-#if CONFIRM_EXISTING
+#ifdef CONFIRM_EXISTING
 
     send_to_char ("An matrix host already exists at that number. Do you wish to edit it?\r\n", ch);
     d->edit_mode = HEDIT_CONFIRM_EDIT;
@@ -2233,7 +2233,7 @@ ACMD(do_icedit)
       d->edit_icon->look_desc = str_dup(ic_proto[ic_num].look_desc);
     if (ic_proto[ic_num].long_desc)
       d->edit_icon->long_desc = str_dup(ic_proto[ic_num].long_desc);
-#if CONFIRM_EXISTING
+#ifdef CONFIRM_EXISTING
 
     send_to_char ("An IC already exists at that number. Do you wish to edit it?\r\n", ch);
     d->edit_mode = ICEDIT_CONFIRM_EDIT;

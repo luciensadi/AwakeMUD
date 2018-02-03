@@ -100,9 +100,9 @@ ACMD(do_quit)
       ch->in_room = save_room;
       if (!GET_LOADROOM(ch)) {
         if (PLR_FLAGGED(ch, PLR_NEWBIE))
-          GET_LOADROOM(ch) = NEWBIE_LOADROOM;
+          GET_LOADROOM(ch) = RM_NEWBIE_LOADROOM;
         else
-          GET_LOADROOM(ch) = 30700;
+          GET_LOADROOM(ch) = RM_ENTRANCE_TO_DANTES;
       }
       
       // Saving occurs in extract_char.
@@ -233,7 +233,7 @@ ACMD(do_steal)
             obj_to_char(obj, ch);
             send_to_char(ch, "You filch %s from %s!\r\n", GET_OBJ_NAME(obj), GET_NAME(vict));
             if (GET_LEVEL(ch) < LVL_BUILDER)
-              act("$n steals $p from $o's unconcious body.", TRUE, ch, obj, vict, TO_ROOM);
+              act("$n steals $p from $o's unconscious body.", TRUE, ch, obj, vict, TO_ROOM);
           }
         }
       } else
@@ -618,9 +618,9 @@ void do_drug_take(struct char_data *ch, struct obj_data *obj)
     GET_DRUG_DOSE(ch)++;
     if (GET_DRUG_DOSE(ch) > GET_DRUG_TOLERANT(ch, drugval)) {
       GET_DRUG_STAGE(ch) = 0;
-      if (AFF_FLAGS(ch).AreAnySet(AFF_WITHDRAWL, AFF_WITHDRAWL_FORCE, ENDBIT) && GET_DRUG_ADDICT(ch, drugval)) {
+      if (AFF_FLAGS(ch).AreAnySet(AFF_WITHDRAWAL, AFF_WITHDRAWAL_FORCE, ENDBIT) && GET_DRUG_ADDICT(ch, drugval)) {
         GET_DRUG_EDGE(ch, drugval)++;
-        AFF_FLAGS(ch).RemoveBits(AFF_WITHDRAWL, AFF_WITHDRAWL_FORCE, ENDBIT);
+        AFF_FLAGS(ch).RemoveBits(AFF_WITHDRAWAL, AFF_WITHDRAWAL_FORCE, ENDBIT);
       }
       switch (drugval) {
       case DRUG_PSYCHE:
@@ -669,10 +669,10 @@ ACMD(do_use)
     else if (!GET_OBJ_VAL(obj, 4) || belongs_to(ch, obj))
       send_to_char("And why would you need to do that?\r\n", ch);
     else if (!IS_OBJ_STAT(corpse, ITEM_CORPSE))
-      send_to_char("And how, praytell, would that work?\r\n", ch);
+      send_to_char("And how, pray tell, would that work?\r\n", ch);
     else if (GET_OBJ_VAL(obj, 3) || GET_OBJ_VAL(obj, 4) != GET_OBJ_VAL(corpse, 5)) {
       if (GET_OBJ_VAL(obj, 2) == 2) {
-        act("You press $p against its thumb, but the diplay flashes red.",
+        act("You press $p against its thumb, but the display flashes red.",
             FALSE, ch, obj, 0, TO_CHAR);
         act("$n holds $p against $P's thumb.", TRUE, ch, obj, corpse, TO_ROOM);
       } else {
@@ -682,7 +682,7 @@ ACMD(do_use)
       }
     } else {
       if (GET_OBJ_VAL(obj, 2) == 2) {
-        act("You press $p against its thumb, and the diplay flashes green.", FALSE,
+        act("You press $p against its thumb, and the display flashes green.", FALSE,
             ch, obj, 0, TO_CHAR);
         act("$n holds $p against $P's thumb.", TRUE, ch, obj, corpse, TO_ROOM);
       } else {
@@ -968,7 +968,7 @@ ACMD(do_gen_write)
 
 const char *tog_messages[][2] = {
                             {"You should never see this.  Use the \"bug\" command to report!\r\n",
-                             "You are afk.\r\n"},
+                             "You are AFK.\r\n"},
                             {"Autoexits disabled.\r\n",
                              "Autoexits enabled.\r\n"},
                             {"Compact mode off.\r\n",
@@ -3638,7 +3638,7 @@ ACMD(do_dice)
     sprintf(ENDOF(buf), "against a TN of %d ", tn);
   }
   if (dice <= 0) {
-    send_to_char("You have to roll atleast 1 die.\r\n", ch);
+    send_to_char("You have to roll at least 1 die.\r\n", ch);
   } else if (dice > 30) {
     send_to_char("You can't roll that many dice.\r\n", ch); 
   } else {
@@ -3693,7 +3693,7 @@ ACMD(do_survey)
     case 6:
     case 5:
     case 4:
-      strcat(buf, "There are alot of people about");
+      strcat(buf, "There are a lot of people about");
       break;
     case 3:
     case 2:
@@ -3716,7 +3716,7 @@ ACMD(do_survey)
     case 6:
     case 5:
     case 4:
-      strcat(buf, "here is alot of cover.");
+      strcat(buf, "here is a lot of cover.");
       break;
     case 3:
     case 2:
