@@ -529,4 +529,26 @@ Material:	metal
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
+#10025
+Keywords:	testing pocket secretary
+Name:	a testing pocket secretary
+RoomDesc:$
+Some imm's dropped their pocket secretary. Gross.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
 END
