@@ -547,6 +547,7 @@ void assign_objects(void)
   ASSIGNOBJ(10011, desktop);
   ASSIGNOBJ(10108, vending_machine);
   ASSIGNOBJ(42130, anticoagulant);
+  ASSIGNOBJ(10025, pocket_sec);
 /*ASSIGNOBJ(9406, hand_held_scanner);
   ASSIGNOBJ(29997, gen_board);  // Loki's Board
   ASSIGNOBJ(22445, bank);
