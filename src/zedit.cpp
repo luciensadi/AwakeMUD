@@ -525,8 +525,8 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     }
     break;
   case ZEDIT_CONFIRM_SAVEDATA:
+    int zone_num;
     switch (*arg) {
-      int zone_num;
     case 'y':
     case 'Y':
       zone_num = real_zone(ZON->number);
