@@ -1645,11 +1645,15 @@ void perform_wizload_object(struct char_data *ch, int vnum) {
     return;
   }
   
+  /* If you want to disable the ability for your imms to load credsticks, uncomment this block.
+   
   // Precondition: Object cannot be a credstick.
   if (obj_proto[real_num].obj_flags.type_flag == ITEM_MONEY) {
     send_to_char("You can't wizload credsticks.\r\n", ch);
     return;
   }
+   
+  */
   
   // Precondition: Object must belong to a zone.
   for (counter = 0; counter <= top_of_zone_table; counter++)

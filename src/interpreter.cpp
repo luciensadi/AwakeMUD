@@ -2444,6 +2444,7 @@ void nanny(struct descriptor_data * d, char *arg)
                      GET_CHAR_NAME(d->character), GET_LOADROOM(d->character), load_room);
         mudlog(buf, d->character, LOG_SYSLOG, TRUE);
         load_room = real_room(RM_ENTRANCE_TO_DANTES);
+        GET_LOADROOM(d->character) = RM_ENTRANCE_TO_DANTES;
       }
       
       if (ROOM_FLAGGED(load_room, ROOM_HOUSE) && !House_can_enter(d->character, world[load_room].number))
