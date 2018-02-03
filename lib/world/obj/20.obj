@@ -543,7 +543,7 @@ Material:	brick
 [VALUES]
 	Val0:	9
 	Val1:	2
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	10
 	Val6:	10
@@ -572,7 +572,6 @@ Material:	brick
 	LegalPermit:	0
 [VALUES]
 	Val1:	1
-	Val3:	311
 	Val4:	3
 	Val5:	-1
 BREAK
@@ -602,7 +601,7 @@ Material:	brick
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	11
 	Val6:	11
@@ -633,7 +632,7 @@ Material:	brick
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	12
 	Val6:	12
@@ -692,144 +691,6 @@ Material:	brick
 	LegalCode:	0
 	LegalPermit:	0
 [EXTRADESC 0]
-	Keywords:	nowest
-	Desc:$
-                                        A                  B  
-                         8     9    10  | 11    12    13   |  
-               6.        o-----o-----o-----o-----o-----o----->
-                         |     |     |     |     |     |     
-                   C     |     |     |     |     |     |    
-                   |     |     |     |     |     |     |   
-               5.  o-----o-----o-----o-----o-----o-----o  
-                   |     |     |     |     |     |       
-                   |     |     |     |     |     |      
-                   |     |     |     |     |     |     
-               4.  o-----o-----o-----o-----o-----o    
-                 _/      |     |     |     |         
-               _/  ^     |     |   D-|     |        
-              /    7.    |     |     |     |       
-             o       3.  o-----o-----o-----o      
-           _/                              |     
-         _/                                |    
-        /                                  |   
-   1. <-                                2. o--X-->
-                                                   
-Street Index:
-	1. Denny Way			7.  Northwest First 
-	2. Harrison Street		8.  Northwest Second
-	3. Aurora Avenue		9.  Northwest Third 
-	4. Denny Way (continued)	10. Northwest Fourth
-	5. Valley Road			11. Northwest Fifth
-	6. Highland Drive		12. Northwest Sixth
-					13. Northwest Seventh
-Locations:
-	A. La'Charne Restaurant		B. Groetza Camp
-	C. Lone Star 17th Precinct	D. Seattle Library
-~
-[EXTRADESC 1]
-	Keywords:	noeast
-	Desc:$
- //
-       //
-      //
-     // 		 <-
-    //			   \
-   //   	1     E	   3|     4
-  //       <-X--o-----o-----o-----o 7
- //             |     |     |     |
-//              |  2->|     |     |
-Intercity       |     |     |     |
-   Five         o-----o-----o-----o 8 
-                |     |     |     |
-		|     |     |     |        A
-		|     |     |     |	5  |  6
-		o-----o-----o-----o-----o--+--o 9
-		|     |     |     |     |  |  |      
-	     C--|     |     |     |     |  B  |
-		|     |     |     |     |     |
-	   <-X--o-----o-----o-----o-----o-----o 10
-		|     |     |     |     |     |
-		o     |     |     |  D  |     |
-\		 \    |     |     |  |  |     |
-\\                \   o-----o-----o-----o-----O 11
- \\                \ /      |     |     |     |
-  \\                o       |     |     |     |
-   \\              /        |     |     |     |
-    \\  	 <-         o-----o-----o-----o 12
-     \\					|
-      \\				|
-       \\			       \|/
-        \\___________________________________ Intercity
-         \___________________________________     90
-Key:  o - intersection
-      X - onramp link
-      A - Aztechnology Pyramid
-      B - Aztechnology Magic Academy
-      C - Mitsuhama Tower
-      D - UCASBank
-      E - Herbie's Herbals (Talismonger)
-Street Index:
-1. Fifth Street			7.  Harrison Boulevard
-2. Sixth Street			8.  Park Avenue
-3. Seventh Street		9.  Gray Street
-4. Eighth Street		10. Broadway
-5. Ninth Street			11. Espanoza Way
-6. Tenth Street			12. Ridgeway Street
-~
-[EXTRADESC 2]
-	Keywords:	sowest
-	Desc:$
- To Residential
-			 12
-			/
-		       /
-		      o
-		    _/|                              
-		  _/  |                             
-		 /    |                            
-	11	o-----o-----o-----o               
-		|     |     |     |\_            
-	        |  C  |     |     |  \_   A     
-		|  |  |     |     |    \ /     
- 	10	o-----o-----o-----o-----o     
-		|     |     |     |     |    
-		|     |     |     |     |   
-		|     |     |     |     |       //
-	9	o-----o-----o-----o-----o--X-> //
-		|     |     |     |           //
-		|     |     |     |          //
-		|     |     |     |         //
-	8	o-----o-----o-----o---->   ||
-		|     |     |     |        ||
-		|     |     |     |        ||
-		|     |     |     |        ||
-	7	o-----o-----o-----o--X->   ||
-		|     |     |     |        ||
-		|     |     |     |        ||
-		|     |     |     |        ||
-	6     B-o-----o-----o-----o---->   ||
-	        1     |     |     |        ||
-	              |     |     o        ||
-	              |     |    /         ||
-	5             o-----o---o--->      ||
-	              2     3   4          ||
-					Intercity
-					  Five
-Key:  o = interchange
-      X = onramp link to freeway
-      A = Seattle State Park
-      B = Seattle Docks
-      C = Biohyde
-Street Index:
-1 = Harbour Avenue	7 = Espanoza Way
-2 = Roy Street		8 = Whitman Road
-3 = Market Street	9 = Broadway
-4 = Main Street		10 = Gray Street
-5 = Spring Street	11 = Park Avenue
-6 = Ridgeway Street	12 = Denny Way
-	
-~
-[EXTRADESC 3]
 	Keywords:	soeast
 	Desc:$
      //                                 \\
@@ -886,6 +747,144 @@ Street Index:
 7. Broadway			15. Eighth Street
 8. First Street			16. Ninth Street
 ~
+[EXTRADESC 1]
+	Keywords:	sowest
+	Desc:$
+ To Residential
+			 12
+			/
+		       /
+		      o
+		    _/|                              
+		  _/  |                             
+		 /    |                            
+	11	o-----o-----o-----o               
+		|     |     |     |\_            
+	        |  C  |     |     |  \_   A     
+		|  |  |     |     |    \ /     
+ 	10	o-----o-----o-----o-----o     
+		|     |     |     |     |    
+		|     |     |     |     |   
+		|     |     |     |     |       //
+	9	o-----o-----o-----o-----o--X-> //
+		|     |     |     |           //
+		|     |     |     |          //
+		|     |     |     |         //
+	8	o-----o-----o-----o---->   ||
+		|     |     |     |        ||
+		|     |     |     |        ||
+		|     |     |     |        ||
+	7	o-----o-----o-----o--X->   ||
+		|     |     |     |        ||
+		|     |     |     |        ||
+		|     |     |     |        ||
+	6     B-o-----o-----o-----o---->   ||
+	        1     |     |     |        ||
+	              |     |     o        ||
+	              |     |    /         ||
+	5             o-----o---o--->      ||
+	              2     3   4          ||
+					Intercity
+					  Five
+Key:  o = interchange
+      X = onramp link to freeway
+      A = Seattle State Park
+      B = Seattle Docks
+      C = Biohyde
+Street Index:
+1 = Harbour Avenue	7 = Espanoza Way
+2 = Roy Street		8 = Whitman Road
+3 = Market Street	9 = Broadway
+4 = Main Street		10 = Gray Street
+5 = Spring Street	11 = Park Avenue
+6 = Ridgeway Street	12 = Denny Way
+	
+~
+[EXTRADESC 2]
+	Keywords:	noeast
+	Desc:$
+ //
+       //
+      //
+     // 		 <-
+    //			   \
+   //   	1     E	   3|     4
+  //       <-X--o-----o-----o-----o 7
+ //             |     |     |     |
+//              |  2->|     |     |
+Intercity       |     |     |     |
+   Five         o-----o-----o-----o 8 
+                |     |     |     |
+		|     |     |     |        A
+		|     |     |     |	5  |  6
+		o-----o-----o-----o-----o--+--o 9
+		|     |     |     |     |  |  |      
+	     C--|     |     |     |     |  B  |
+		|     |     |     |     |     |
+	   <-X--o-----o-----o-----o-----o-----o 10
+		|     |     |     |     |     |
+		o     |     |     |  D  |     |
+\		 \    |     |     |  |  |     |
+\\                \   o-----o-----o-----o-----O 11
+ \\                \ /      |     |     |     |
+  \\                o       |     |     |     |
+   \\              /        |     |     |     |
+    \\  	 <-         o-----o-----o-----o 12
+     \\					|
+      \\				|
+       \\			       \|/
+        \\___________________________________ Intercity
+         \___________________________________     90
+Key:  o - intersection
+      X - onramp link
+      A - Aztechnology Pyramid
+      B - Aztechnology Magic Academy
+      C - Mitsuhama Tower
+      D - UCASBank
+      E - Herbie's Herbals (Talismonger)
+Street Index:
+1. Fifth Street			7.  Harrison Boulevard
+2. Sixth Street			8.  Park Avenue
+3. Seventh Street		9.  Gray Street
+4. Eighth Street		10. Broadway
+5. Ninth Street			11. Espanoza Way
+6. Tenth Street			12. Ridgeway Street
+~
+[EXTRADESC 3]
+	Keywords:	nowest
+	Desc:$
+                                        A                  B  
+                         8     9    10  | 11    12    13   |  
+               6.        o-----o-----o-----o-----o-----o----->
+                         |     |     |     |     |     |     
+                   C     |     |     |     |     |     |    
+                   |     |     |     |     |     |     |   
+               5.  o-----o-----o-----o-----o-----o-----o  
+                   |     |     |     |     |     |       
+                   |     |     |     |     |     |      
+                   |     |     |     |     |     |     
+               4.  o-----o-----o-----o-----o-----o    
+                 _/      |     |     |     |         
+               _/  ^     |     |   D-|     |        
+              /    7.    |     |     |     |       
+             o       3.  o-----o-----o-----o      
+           _/                              |     
+         _/                                |    
+        /                                  |   
+   1. <-                                2. o--X-->
+                                                   
+Street Index:
+	1. Denny Way			7.  Northwest First 
+	2. Harrison Street		8.  Northwest Second
+	3. Aurora Avenue		9.  Northwest Third 
+	4. Denny Way (continued)	10. Northwest Fourth
+	5. Valley Road			11. Northwest Fifth
+	6. Highland Drive		12. Northwest Sixth
+					13. Northwest Seventh
+Locations:
+	A. La'Charne Restaurant		B. Groetza Camp
+	C. Lone Star 17th Precinct	D. Seattle Library
+~
 BREAK
 #2042
 Keywords:	streetlight light
@@ -911,6 +910,163 @@ Material:	metal
 	LegalPermit:	0
 [VALUES]
 	Val2:	-1
+BREAK
+#2043
+Keywords:	fairlight excalibur cyberdeck cyber deck
+Name:	a Fairlight Excalibur cyberdeck
+RoomDesc:$
+A cyberdeck is lying here.~
+LookDesc:$
+A Fairlight Excalibur - the best deck on the market. 
+~
+Type:	Cyberdeck
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	1500000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	6
+	Val2:	3000
+	Val3:	5000
+	Val4:	600
+	Val6:	3
+BREAK
+#2044
+Keywords:	program masking optical chip
+Name:	a rating 12 masking program
+RoomDesc:$
+An optical chip lies here.~
+LookDesc:$
+A small optical chip marked "masking-12". 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	12
+BREAK
+#2045
+Keywords:	bod12
+Name:	bod12
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	12
+BREAK
+#2046
+Keywords:	sens12
+Name:	sens12
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	12
+BREAK
+#2048
+Keywords:	decept12
+Name:	decept12
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	13
+	Val1:	12
+BREAK
+#2049
+Keywords:	browse-12
+Name:	browse-12
+RoomDesc:$
+A program lies here.~
+LookDesc:$
+A rating 12 browse program. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	17
+	Val1:	12
 BREAK
 #2050
 Keywords:	red disk file
@@ -1170,6 +1326,189 @@ Material:	leather
 [VALUES]
 	Val0:	2
 BREAK
+#2060
+Keywords:	analyze-12
+Name:	analyze-12
+RoomDesc:$
+An optichip lies here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	11
+	Val1:	12
+	Val2:	33
+BREAK
+#2062
+Keywords:	skillwires
+Name:	Skillwires X
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	19
+	Val1:	10
+	Val3:	3000
+BREAK
+#2063
+Keywords:	memory headware
+Name:	headware memory - 3000 mp
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	1
+	Val3:	3000
+BREAK
+#2064
+Keywords:	skillsoft skill soft cyber implants
+Name:	cyber implants 10
+RoomDesc:$
+A skillsoft chip lies here.~
+LookDesc:$
+A small skillsoft chip etched with "cyber implants - 10" in gold. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	10
+BREAK
+#2065
+Keywords:	a small ring
+Name:	a small ring
+RoomDesc:$
+A small ring is lying here.~
+LookDesc:$
+A small silver-plated iron ring, with foul runes all around it. 
+~
+Type:	Focus
+WearFlags:	11
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.02
+	Barrier:	32
+	Cost:	199
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	10
+	LegalCode:	17
+	LegalPermit:	1
+[VALUES]
+	Val0:	4
+	Val1:	10
+BREAK
+#2066
+Keywords:	cyberhead
+Name:	cyberhad
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	30
+	Val1:	10
+	Val3:	2043
+BREAK
+#2067
+Keywords:	suite program optichip chip
+Name:	suite-12
+RoomDesc:$
+An optichip lies here.~
+LookDesc:$
+A small optichip, with the label "suite-12". 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	27
+	Val1:	12
+	Val2:	2000
+BREAK
 #2075
 Keywords:	spoon dunkelzahn's spoon of death despair and destruction
 Name:	Dunkelzahn's Spoon of Death, Despair, Destruction, and Doom
@@ -1195,7 +1534,7 @@ Material:	plastic
 [VALUES]
 	Val0:	50
 	Val1:	4
-	Val3:	310
+	Val3:	1
 	Val4:	6
 	Val5:	-1
 	Val6:	-1
@@ -1307,7 +1646,7 @@ Material:	paper
 [VALUES]
 	Val1:	4
 	Val2:	4
-	Val3:	310
+	Val3:	2
 	Val4:	4
 	Val5:	-1
 	Val6:	-1
@@ -1572,7 +1911,6 @@ Material:	metal
 [VALUES]
 	Val1:	3
 	Val2:	4
-	Val3:	303
 	Val4:	3
 	Val5:	-1
 	Val6:	-1

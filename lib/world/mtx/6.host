@@ -1,0 +1,35 @@
+#666
+Name:	A Rumbling Darkness
+Keywords:	resonance
+Description:$
+A rumbling darkness, filled with glimmers of light. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	1100
+Colour:	4
+Security:	12
+Difficulty:	2
+Access:	12
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	12
+ControlTrapdoor:	0
+Index:	12
+IndexTrapdoor:	0
+Files:	12
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	12
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	1
+		Alert:	Active
+		IC:	666
+BREAK
+END
