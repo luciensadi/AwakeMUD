@@ -1411,7 +1411,8 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           /* let's go out to modify.c */
           send_to_char("Enter long desc:\r\n", d->character);
           d->edit_mode = IEDIT_LONGDESC;
-          CLEANUP_AND_INITIALIZE_D_STR(d);
+          DELETE_D_STR_IF_EXTANT(d);
+          INITIALIZE_NEW_D_STR(d);
           d->max_str = MAX_MESSAGE_LENGTH;
           d->mail_to = 0;
           break;
@@ -2481,7 +2482,8 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           d->edit_mode = IEDIT_EXTRADESC_DESCRIPTION;
           send_to_char("Enter description:\r\n", d->character);
           /* send out to modify.c */
-          CLEANUP_AND_INITIALIZE_D_STR(d);
+          DELETE_D_STR_IF_EXTANT(d);
+          INITIALIZE_NEW_D_STR(d);
           d->max_str = MAX_MESSAGE_LENGTH;
           d->mail_to = 0;
           break;

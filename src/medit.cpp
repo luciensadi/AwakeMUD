@@ -505,7 +505,8 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     case '3':
       send_to_char("Enter room description:", CH);
       d->edit_mode = MEDIT_REG_DESCR;
-      CLEANUP_AND_INITIALIZE_D_STR(d);
+      DELETE_D_STR_IF_EXTANT(d);
+      INITIALIZE_NEW_D_STR(d);
       d->max_str = MAX_REG_DESC_LENGTH;
       d->mail_to = 0;
       break;
@@ -513,7 +514,8 @@ void medit_parse(struct descriptor_data *d, const char *arg)
       // go to modify.cc
       send_to_char("Enter look description:\r\n", CH);
       d->edit_mode = MEDIT_LONG_DESCR;
-      CLEANUP_AND_INITIALIZE_D_STR(d);
+      DELETE_D_STR_IF_EXTANT(d);
+      INITIALIZE_NEW_D_STR(d);
       d->max_str = MAX_MESSAGE_LENGTH;
       d->mail_to = 0;
       break;

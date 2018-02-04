@@ -395,7 +395,8 @@ void pocketsec_parse(struct descriptor_data *d, char *arg)
         send_to_char("Write your message. Use @ on a new line to finish.\r\n", CH);
         PLR_FLAGS(CH).SetBits(PLR_MAILING, PLR_WRITING, ENDBIT);
         d->mail_to = x;
-        CLEANUP_AND_INITIALIZE_D_STR(d);
+        DELETE_D_STR_IF_EXTANT(d);
+        INITIALIZE_NEW_D_STR(d);
         d->max_str = MAX_MAIL_SIZE;
       }
       break;

@@ -606,14 +606,16 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     case '2':
       send_to_char("Enter room description:\r\n", d->character);
       d->edit_mode = REDIT_DESC;
-      CLEANUP_AND_INITIALIZE_D_STR(d);
+      DELETE_D_STR_IF_EXTANT(d);
+      INITIALIZE_NEW_D_STR(d);
       d->max_str = MAX_MESSAGE_LENGTH;
       d->mail_to = 0;
       break;
     case '3':
       send_to_char("Enter room nighttime desc description:\r\n", d->character);
       d->edit_mode = REDIT_NDESC;
-      CLEANUP_AND_INITIALIZE_D_STR(d);
+      DELETE_D_STR_IF_EXTANT(d);
+      INITIALIZE_NEW_D_STR(d);
       d->max_str = MAX_MESSAGE_LENGTH;
       d->mail_to = 0;
       break;
@@ -951,7 +953,8 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       break;
     case '2':
       d->edit_mode = REDIT_EXIT_DESCRIPTION;
-      CLEANUP_AND_INITIALIZE_D_STR(d);
+      DELETE_D_STR_IF_EXTANT(d);
+      INITIALIZE_NEW_D_STR(d);
       d->max_str = MAX_MESSAGE_LENGTH;
       d->mail_to = 0;
       send_to_char("Enter exit description:\r\n", d->character);
@@ -1130,7 +1133,8 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     case 2:
       d->edit_mode = REDIT_EXTRADESC_DESCRIPTION;
       send_to_char("Enter extra description:\r\n", d->character);
-      CLEANUP_AND_INITIALIZE_D_STR(d);
+      DELETE_D_STR_IF_EXTANT(d);
+      INITIALIZE_NEW_D_STR(d);
       d->max_str = MAX_MESSAGE_LENGTH;
       d->mail_to = 0;
       break;

@@ -629,21 +629,25 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define DELETE_IF_EXTANT(target) {if ((target)) delete (target); (target) = NULL;}
 
 // Getting tired of dealing with this special snowflake double pointer.
-#define CLEANUP_AND_INITIALIZE_D_STR(d) {                                              \
+#define DELETE_D_STR_IF_EXTANT(d) {                                                    \
   if ((d)) {                                                                           \
     if ((d)->str) {                                                                    \
       DELETE_ARRAY_IF_EXTANT(*((d)->str));                                             \
-      DELETE_AND_NULL((d)->str);                                                 \
     }                                                                                  \
+    DELETE_IF_EXTANT((d)->str)                                                         \
+  }                                                                                    \
+}
+
+#define INITIALIZE_NEW_D_STR(d) {                                                          \
+  if ((d)) {                                                                           \
     (d)->str = new (char *);                                                           \
     if (!(d)->str) {                                                                   \
-      mudlog("SYSERR: Failed to allocate memory for d->str.", NULL, LOG_SYSLOG, TRUE); \
+      mudlog("Malloc failed!", NULL, LOG_SYSLOG, TRUE);                                \
       shutdown();                                                                      \
-    } else {                                                                           \
-      *((d)->str) = NULL;                                                              \
     }                                                                                  \
+    *((d)->str) = NULL;                                                                \
   }                                                                                    \
-}                                                                                      \
+}
 
 /* OS compatibility ******************************************************/
 

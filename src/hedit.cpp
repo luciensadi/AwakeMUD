@@ -298,7 +298,8 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     case '4':
       send_to_char("Enter Host description:\r\n", d->character);
       d->edit_mode = HEDIT_DESC;
-      CLEANUP_AND_INITIALIZE_D_STR(d);
+      DELETE_D_STR_IF_EXTANT(d);
+      INITIALIZE_NEW_D_STR(d);
       d->max_str = MAX_MESSAGE_LENGTH;
       d->mail_to = 0;
       break;

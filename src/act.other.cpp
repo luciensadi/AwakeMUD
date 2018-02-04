@@ -2336,7 +2336,8 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     case '1':
       if (STATE(d) == CON_BCUSTOMIZE) {
         d->edit_mode = CEDIT_DESC;
-        CLEANUP_AND_INITIALIZE_D_STR(d);
+        DELETE_D_STR_IF_EXTANT(d);
+        INITIALIZE_NEW_D_STR(d);
         d->max_str = EXDSCR_LENGTH;
         d->mail_to = 0;
         return;
@@ -2364,7 +2365,8 @@ void cedit_parse(struct descriptor_data *d, char *arg)
         d->edit_mode = CEDIT_VOICE;
       else {
         d->edit_mode = CEDIT_DESC;
-        CLEANUP_AND_INITIALIZE_D_STR(d);
+        DELETE_D_STR_IF_EXTANT(d);
+        INITIALIZE_NEW_D_STR(d);
         d->max_str = EXDSCR_LENGTH;
         d->mail_to = 0;
       }
@@ -2373,7 +2375,8 @@ void cedit_parse(struct descriptor_data *d, char *arg)
     case '4':
       send_to_char("Enter long (active) description (@ on a blank line to end):\r\n", CH);
       d->edit_mode = CEDIT_LONG_DESC;
-      CLEANUP_AND_INITIALIZE_D_STR(d);
+      DELETE_D_STR_IF_EXTANT(d);
+      INITIALIZE_NEW_D_STR(d);
       d->max_str = EXDSCR_LENGTH;
       d->mail_to = 0;
 
@@ -3885,7 +3888,8 @@ ACMD(do_tridlog)
   } else if (is_abbrev(arg, "add")) {
     send_to_char("Enter message to be displayed. (Insert Line Breaks With \\r\\n):\r\n", ch);
     STATE(ch->desc) = CON_TRIDEO;
-    CLEANUP_AND_INITIALIZE_D_STR(ch->desc);
+    DELETE_D_STR_IF_EXTANT(ch->desc);
+    INITIALIZE_NEW_D_STR(ch->desc);
     ch->desc->max_str = MAX_MESSAGE_LENGTH;
     ch->desc->mail_to = 0;
   } else if (is_abbrev(arg, "delete")) {

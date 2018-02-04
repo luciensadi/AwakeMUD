@@ -150,7 +150,7 @@ void format_string(struct descriptor_data *d, int indent)
   i = MAX(strlen(format)-1, 3);
   if (format[i] == '\n' && format[i-1] == '\r' && format[i-2] == '\n' && format[i-3] == '\r')
     format[i-1] = '\0';
-  CLEANUP_AND_INITIALIZE_D_STR(d);
+  delete [] *d->str;
   *d->str = format;
 }
 
@@ -170,7 +170,7 @@ void string_add(struct descriptor_data *d, char *str)
   {
     SEND_TO_Q("Aborted.\r\n", d);
     d->mail_to = 0;
-    CLEANUP_AND_INITIALIZE_D_STR(d);
+    DELETE_D_STR_IF_EXTANT(d);
     if (!IS_NPC(d->character))
       PLR_FLAGS(d->character).RemoveBits(PLR_MAILING, PLR_WRITING, ENDBIT);
     return;
@@ -183,7 +183,6 @@ void string_add(struct descriptor_data *d, char *str)
       *(str + d->max_str) = '\0';
       terminator = 1;
     }
-    CLEANUP_AND_INITIALIZE_D_STR(d);
     *d->str = new char[strlen(str) + 3];
     strcpy(*d->str, str);
   } else
@@ -200,7 +199,7 @@ void string_add(struct descriptor_data *d, char *str)
       }
       strcpy(temp, *d->str);
       strcat(temp, str);
-      CLEANUP_AND_INITIALIZE_D_STR(d);
+      delete [] *d->str;
       *d->str = temp;
     }
   }
@@ -228,7 +227,7 @@ void string_add(struct descriptor_data *d, char *str)
   DELETE_ARRAY_IF_EXTANT((target)); \
   format_string(d, 0);              \
   (target) = str_dup(*d->str);      \
-  CLEANUP_AND_INITIALIZE_D_STR(d);  \
+  DELETE_D_STR_IF_EXTANT(d);  \
 }
 
     if (STATE(d) == CON_DECK_CREATE && d->edit_mode == 1) {
@@ -241,7 +240,7 @@ void string_add(struct descriptor_data *d, char *str)
       (*d->str)[strlen(*d->str)-2] = '\0';
       sprintf(buf, "INSERT INTO trideo_broadcast (author, message) VALUES (%ld, '%s')", GET_IDNUM(d->character), prepare_quotes(buf2, *d->str));
       mysql_wrapper(mysql, buf);
-      CLEANUP_AND_INITIALIZE_D_STR(d);
+      DELETE_D_STR_IF_EXTANT(d);
       STATE(d) = CON_PLAYING;
     } else if (STATE(d) == CON_DECORATE) {
       REPLACE_STRING(world[d->character->in_room].description);
@@ -256,7 +255,7 @@ void string_add(struct descriptor_data *d, char *str)
           DELETE_ARRAY_IF_EXTANT(((struct extra_descr_data *)*d->misc_data)->description);
           format_string(d, 0);
           ((struct extra_descr_data *)*d->misc_data)->description = str_dup(*d->str);
-          CLEANUP_AND_INITIALIZE_D_STR(d);
+          DELETE_D_STR_IF_EXTANT(d);
           iedit_disp_extradesc_menu(d);
           break;
         case IEDIT_LONGDESC:
@@ -317,14 +316,14 @@ void string_add(struct descriptor_data *d, char *str)
           d->edit_room->night_desc = str_dup(*d->str);
         } else
           d->edit_room->night_desc = NULL;
-        CLEANUP_AND_INITIALIZE_D_STR(d);
+        DELETE_D_STR_IF_EXTANT(d);
         redit_disp_menu(d);
         break;
       case REDIT_EXTRADESC_DESCRIPTION:
         DELETE_ARRAY_IF_EXTANT(((struct extra_descr_data *)*d->misc_data)->description);
         format_string(d, 0);
         ((struct extra_descr_data *)*d->misc_data)->description = str_dup(*d->str);
-        CLEANUP_AND_INITIALIZE_D_STR(d);
+        DELETE_D_STR_IF_EXTANT(d);
         redit_disp_extradesc_menu(d);
         break;
       case REDIT_EXIT_DESCRIPTION:
@@ -361,7 +360,7 @@ void string_add(struct descriptor_data *d, char *str)
     } else if (PLR_FLAGGED(d->character, PLR_MAILING)) {
       store_mail(d->mail_to, GET_IDNUM(d->character), *d->str);
       d->mail_to = 0;
-      CLEANUP_AND_INITIALIZE_D_STR(d);
+      DELETE_D_STR_IF_EXTANT(d);
       SEND_TO_Q("Message sent.\r\n", d);
       if (!IS_NPC(d->character))
         PLR_FLAGS(d->character).RemoveBits(PLR_MAILING, PLR_WRITING, ENDBIT);
@@ -443,13 +442,11 @@ void string_add(struct descriptor_data *d, char *str)
       }
       strcpy (ptr, *d->str);
       strcat(ptr, tmp);
-      CLEANUP_AND_INITIALIZE_D_STR(d);
+      delete [] *d->str;
       *d->str = ptr;
       Board_save_board(d->mail_to - BOARD_MAGIC);
       d->mail_to = 0;
     }
-    DELETE_ARRAY_IF_EXTANT(*d->str);
-    DELETE_IF_EXTANT(d->str);
     d->str = NULL;
 
     if (!d->connected && d->character && !IS_NPC(d->character))

@@ -684,7 +684,8 @@ ACMD(do_decorate)
     send_to_char("Enter your new room description.  Terminate with a @ on a new line.\r\n", ch);
     act("$n starts to move things around the room.", TRUE, ch, 0, 0, TO_ROOM);
     STATE(ch->desc) = CON_DECORATE;
-    CLEANUP_AND_INITIALIZE_D_STR(ch->desc);
+    DELETE_D_STR_IF_EXTANT(ch->desc);
+    INITIALIZE_NEW_D_STR(ch->desc);
     ch->desc->max_str = MAX_MESSAGE_LENGTH;
     ch->desc->mail_to = 0;
   }
