@@ -1460,6 +1460,7 @@ ACMD(do_load)
   }
   if (!*argument) {
     send_to_char(ch, "What do you want to %s?\r\n", subcmd == SCMD_UNLOAD ? "unload" : "upload");
+    return;
   }
   skip_spaces(&argument);
   if (subcmd == SCMD_UNLOAD) {
