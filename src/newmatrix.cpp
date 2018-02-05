@@ -81,9 +81,13 @@ void check_trigger(rnum_t host, struct char_data *ch)
           break;
         }
       }
-      if (real_ic(trig->ic)) {
+      if (real_ic(trig->ic) > 0) {
         struct matrix_icon *ic;
         ic = read_ic(trig->ic, VIRTUAL);
+        if (!ic) {
+          sprintf(buf, "SYSERR: Attempted to process trigger for non-existent IC. Read failure caused on host %ld, trigger step %d, IC %ld.", host, trig->step, trig->ic);
+          mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+        }
         ic->ic.target = PERSONA->idnum;
         for (struct matrix_icon *icon = HOST.icons; icon; icon = icon->next_in_host)
           if (icon->decker) {
