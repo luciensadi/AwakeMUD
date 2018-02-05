@@ -3721,6 +3721,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
             break;
           case AMMO_EX:
             att->power++;
+            // Explicit fallthrough.
           case AMMO_EXPLOSIVE:
             att->power -= GET_BALLISTIC(victim) - 1;
             break;
@@ -5184,6 +5185,7 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
          obj && !damage_total;
          obj = obj->next_content)
       switch (GET_OBJ_VAL(obj, 2)) {
+        // TODO: Figure out what these magic numbers are and comment. Until then, can't fix the implicit fallthrough at case 29.
         case 19:
           damage_total = LIGHT;
           break;

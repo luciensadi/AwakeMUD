@@ -192,10 +192,12 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
           if (!biocyber_compatibility(obj, bio, ch))
              return FALSE;
+        break;
       case ITEM_BIOWARE:
         for (struct obj_data *cyber = ch->cyberware; cyber; cyber = cyber->next_content)
           if (!biocyber_compatibility(obj, cyber, ch))
              return FALSE;
+        break;
     }
     if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE) {
       if (ch->real_abils.ess + ch->real_abils.esshole < (GET_TOTEM(ch) == TOTEM_EAGLE ?

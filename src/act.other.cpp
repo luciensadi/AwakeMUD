@@ -630,6 +630,7 @@ void do_drug_take(struct char_data *ch, struct obj_data *obj)
         break;
       case DRUG_ZEN:
         GET_DRUG_DURATION(ch) = 25 * srdice();
+        break;
       default:
         GET_DRUG_DURATION(ch) = 0;
         break;
@@ -1588,9 +1589,10 @@ ACMD(do_attach)
       case SKILL_MACHINE_GUNS:
       case SKILL_MISSILE_LAUNCHERS:
       case SKILL_ASSAULT_CANNON:
-        if (GET_OBJ_VAL(item2, 1) < 2)
+        if (GET_OBJ_VAL(item2, 1) < 2) {
           send_to_char("You need a hardpoint or larger to mount this weapon in.\r\n", ch);
           return;
+        }
     }
     veh->usedload += GET_OBJ_WEIGHT(item);
     obj_from_char(item);

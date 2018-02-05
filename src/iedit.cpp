@@ -1844,11 +1844,13 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
                 send_to_char("Invalid choice!  Upgrade type: ", CH);
                 return;
               }
+              break;
             case TYPE_PARTS:
               if (number < 0 || number > 1) {
                 send_to_char("Invalid choice!  Part type:", CH);
                 return;
               }
+              break;
           }
           break;
         case ITEM_PATCH:

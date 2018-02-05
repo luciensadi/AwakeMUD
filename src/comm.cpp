@@ -857,7 +857,7 @@ struct timeval timediff(struct timeval * a, struct timeval * b)
       rslt.tv_sec--;
     } else
       rslt.tv_usec = a->tv_usec - b->tv_usec;
-      return rslt;
+    return rslt;
   }
 }
 

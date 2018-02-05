@@ -196,6 +196,7 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
         skill += 2;
       else if (type == HEALTH)
         skill--;
+      break;
     case TOTEM_MOUSE:
       if (type == DETECTION || type == HEALTH)
         skill += 2;
@@ -215,11 +216,13 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
         skill += 2;
       else if (type == COMBAT)
         skill--;
+      break;
     case TOTEM_JAGUAR:
       if (type == DETECTION)
         skill += 2;
       else if (type == HEALTH)
         skill--;
+      break;
     case TOTEM_RAVEN:
       if (type == MANIPULATION)
         skill += 2;
@@ -247,6 +250,7 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
     case TOTEM_WHALE:
       if (type == ILLUSION)
         skill--;
+      break;
     case TOTEM_BADGER:
       if (type == COMBAT)
         skill += 2;
@@ -994,6 +998,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       send_to_char("They are beyond the help of this spell.\r\n", ch);
       return;
     }
+    // Explicit fallthrough.
   case SPELL_HEAL:
     success = MIN(force, success_test(skill, 10 - (int)(GET_ESS(vict) / 100) + target + (int)(GET_INDEX(ch) / 200)));
     if (GET_PHYSICAL(vict) <= 0)

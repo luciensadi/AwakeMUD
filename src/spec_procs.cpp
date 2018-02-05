@@ -3100,23 +3100,34 @@ int find_hotel_cost(struct char_data *ch)
     case 1939:
     case 1940:
       cost = 11.0;
+      break;
     case 2126:
     case 2127:
       cost = 6.25;
+      break;
     case 60565:
     case 60599:
     case 70760:
     case 70769:
       cost = 1.4;
+      break;
     case 9990:
     case 9991:
       cost = 5.5;
+      break;
     case 18947:
     case 18949:
       cost = 12.0;
+      break;
     case 14625:
     case 14626:
       cost = 6.0;
+      break;
+    default:
+      sprintf(buf, "SYSERR: Invalid loadroom %ld specified to find_hotel_cost. Defaulting to 6.0.", GET_LOADROOM(ch));
+      mudlog(buf, NULL, LOG_SYSLOG, FALSE);
+      cost = 6.0;
+      break;
   }
   val = (int)(cost * MAX(1, (GET_REP(ch) + number(-1, 1)) / 10));
   return val;

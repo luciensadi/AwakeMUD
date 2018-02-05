@@ -449,6 +449,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         break;
       case 4:
         power += 2;
+        // Explicit fallthrough, in that this is technically correct. IDK why this is a switch though.
       case 3:
       case 2:
         dam = SERIOUS;
@@ -467,6 +468,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
         break;
       case 4:
         power += 2;
+        // Explicit fallthrough.
       case 3:
         dam = DEADLY;
         break;
@@ -1593,7 +1595,7 @@ ACMD(do_download)
         }
       } else
         send_to_icon(PERSONA, "The file fails to download.\r\n");
-        return;
+      return;
     }
   }
   send_to_icon(PERSONA, "You can't seem to locate that file on this host.\r\n");

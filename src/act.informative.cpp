@@ -626,6 +626,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
       case CYB_CHIPJACK:
         if (GET_EQ(i, WEAR_HEAD))
           continue;
+        // Explicit fallthrough.
       case CYB_DERMALPLATING:
       case CYB_BALANCETAIL:
         sprintf(ENDOF(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
@@ -638,6 +639,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
           sprintf(ENDOF(buf2), "Optical Magnification\r\n");
         if (IS_SET(GET_OBJ_VAL(tmp_obj, 3), EYE_COSMETIC))
           sprintf(ENDOF(buf2), "%s\r\n", GET_OBJ_NAME(tmp_obj));
+        break;
       default:
         found = TRUE;
         sprintf(ENDOF(buf), "%s\r\n", GET_OBJ_NAME(tmp_obj));
