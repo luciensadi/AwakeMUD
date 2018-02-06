@@ -4,10 +4,12 @@
 
 These files are maintained by the game; you should never try to modify them
 while the game is running.  If you know what you're doing, you can safely
-alter them when the game is down.  
+alter them when the game is down.
+
+Once again, **SHUT DOWN THE GAME BEFORE EDITING THESE FILES**.
 
 
-#Adding and Editing Elevators
+## Adding and Editing Elevators
 
 The first digit at the very top of the elevator file is the total number of elevators in the game. When adding an elevator, be sure to increase this by 1.
 
@@ -40,7 +42,7 @@ This is an example elevator file with the Chargen elevator (one elevator with on
 ```
 
 
-#Adding and Editing Apartment Complexes
+## Adding and Editing Apartment Complexes
 
 As with elevators, the very topmost entry is the total number of apartment complexes in the file. Be sure to increment it if you add another apartment complex, otherwise your new complex won't be read.
 
