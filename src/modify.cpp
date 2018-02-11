@@ -700,6 +700,7 @@ ACMD(do_skillset)
   sprintf(buf2, "You change %s's %s to %d.\r\n", GET_NAME(vict), skills[skill].name, value);
   send_to_char(buf2, ch);
 
+  GET_SKILL_DIRTY_BIT(vict) = TRUE;
 }
 
 

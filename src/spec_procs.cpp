@@ -547,7 +547,7 @@ SPECIAL(teacher)
     GET_KARMA(ch) -= get_skill_price(ch, skill_num) * 100;
 
   send_to_char(teachers[ind].msg, ch);
-  GET_SKILL(ch, skill_num)++;
+  SET_SKILL(ch, skill_num, REAL_SKILL(ch, skill_num) + 1);
   if (GET_SKILL(ch, skill_num) >= max)
     send_to_char("You have learnt all you can here.\r\n", ch);
 
