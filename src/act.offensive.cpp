@@ -671,14 +671,14 @@ ACMD(do_retract)
   else {
     if (GET_OBJ_VAL(cyber, CYBER_DISABLED_BIT)) {
       GET_OBJ_VAL(cyber, CYBER_DISABLED_BIT) = 0;
-      sprintf(buf, "$n extends %s.", GET_OBJ_NAME(cyber)+2);
+      sprintf(buf, "$n extends %s.", GET_OBJ_NAME(cyber));
       act(buf, TRUE, ch, 0, 0, TO_ROOM);
-      send_to_char(ch, "You extend %s.\r\n", GET_OBJ_NAME(cyber)+2);
+      send_to_char(ch, "You extend %s.\r\n", GET_OBJ_NAME(cyber));
     } else {
       GET_OBJ_VAL(cyber, CYBER_DISABLED_BIT) = 1;
-      sprintf(buf, "$n retracts %s.", GET_OBJ_NAME(cyber)+2);
+      sprintf(buf, "$n retracts %s.", GET_OBJ_NAME(cyber));
       act(buf, TRUE, ch, 0, 0, TO_ROOM);
-      send_to_char(ch, "You retract a %s.\r\n", GET_OBJ_NAME(cyber)+2);
+      send_to_char(ch, "You retract %s.\r\n", GET_OBJ_NAME(cyber));
     }
     affect_total(ch);
   }
