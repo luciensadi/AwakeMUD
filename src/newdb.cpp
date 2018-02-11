@@ -941,7 +941,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
 
   MYSQL_RES *res;
   MYSQL_ROW row;
-  sprintf(buf, "SELECT * FROM pfiles WHERE idnum=%ld;", GET_IDNUM(player));
+  sprintf(buf, "SELECT idnum FROM pfiles WHERE idnum=%ld;", GET_IDNUM(player));
   if (!mysql_wrapper(mysql, buf)) {
     res = mysql_use_result(mysql);
     row = mysql_fetch_row(res);
@@ -1048,19 +1048,22 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                  GET_IDNUM(player));
     mysql_wrapper(mysql, buf);
   }
-  sprintf(buf, "DELETE FROM pfiles_skills WHERE idnum=%ld", GET_IDNUM(player));
-  mysql_wrapper(mysql, buf);
-  strcpy(buf, "INSERT INTO pfiles_skills (idnum, skillnum, rank) VALUES (");
-  for (i = 0; i <= MAX_SKILLS; i++)
-    if (GET_SKILL(player, i)) {
-      if (q)
-        strcat(buf, "), (");
-      sprintf(ENDOF(buf), "%ld, %d, %d", GET_IDNUM(player), i, REAL_SKILL(player, i));
-      q = 1;
-    } 
-  if (q) {
-    strcat(buf, ");");
+  if (GET_SKILL_DIRTY_BIT(player)) {
+    sprintf(buf, "DELETE FROM pfiles_skills WHERE idnum=%ld", GET_IDNUM(player));
     mysql_wrapper(mysql, buf);
+    strcpy(buf, "INSERT INTO pfiles_skills (idnum, skillnum, rank) VALUES (");
+    for (i = 0; i <= MAX_SKILLS; i++)
+      if (GET_SKILL(player, i)) {
+        if (q)
+          strcat(buf, "), (");
+        sprintf(ENDOF(buf), "%ld, %d, %d", GET_IDNUM(player), i, REAL_SKILL(player, i));
+        q = 1;
+      }
+    if (q) {
+      strcat(buf, ");");
+      mysql_wrapper(mysql, buf);
+    }
+    GET_SKILL_DIRTY_BIT(player) = FALSE;
   }
   sprintf(buf, "UPDATE pfiles_drugdata SET Affect=%d, Stage=%d, Duration=%d, Dose=%d WHERE idnum=%ld;", 
                GET_DRUG_AFFECT(player), GET_DRUG_STAGE(player), GET_DRUG_DURATION(player), GET_DRUG_DOSE(player),
@@ -1245,20 +1248,26 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
   sprintf(buf, "DELETE FROM pfiles_cyberware WHERE idnum=%ld", GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   int level = 0, posi = 0;
+  q = 0;
   if (player->cyberware) {
+    strcpy(buf, "INSERT INTO pfiles_cyberware (idnum, Vnum, Cost, Restring, Photo, Value0, Value1, Value2, Value3, Value4, Value5, Value6,"\
+           "Value7, Value8, Value9, Value10, Value11, Level, posi) VALUES ");
+    bool first_pass = TRUE;
     for (struct obj_data *obj = player->cyberware; obj;) {
-      strcpy(buf, "INSERT INTO pfiles_cyberware (idnum, Vnum, Cost, Restring, Photo, Value0, Value1, Value2, Value3, Value4, Value5, Value6,"\
-                  "Value7, Value8, Value9, Value10, Value11, Level, posi) VALUES (");
-      sprintf(ENDOF(buf), "%ld, %ld, %d, '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj), 
+      sprintf(ENDOF(buf), "%s(%ld, %ld, %d, '%s', '%s'", first_pass ? "" : ", ", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
                           obj->restring ? prepare_quotes(buf3, obj->restring) : "", obj->photo ? prepare_quotes(buf2, obj->photo) : "");
+      first_pass = FALSE;
+      q = 1;
+      
       if (GET_OBJ_VAL(obj, 2) == 4) {
         sprintf(ENDOF(buf), "0, 0, 0, %d, 0, 0, %d, %d, %d, 0, 0, 0", GET_OBJ_VAL(obj, 3), GET_OBJ_VAL(obj, 6), 
                            GET_OBJ_VAL(obj, 7), GET_OBJ_VAL(obj, 8));
       } else
         for (int x = 0; x < NUM_VALUES; x++)
           sprintf(ENDOF(buf), ", %d", GET_OBJ_VAL(obj, x));
-      sprintf(ENDOF(buf), ", %d, %d);", level, posi++);
-      mysql_wrapper(mysql, buf);
+      sprintf(ENDOF(buf), ", %d, %d)", level, posi++);
+      
+      
       if (obj->contains) {
         obj = obj->contains;
         level++;
@@ -1270,6 +1279,12 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
         }
       if (obj)
         obj = obj->next_content;
+    }
+    
+    if (q) {
+      strcat(buf, ";");
+      mysql_wrapper(mysql, buf);
+      q = 0;
     }
   }
 

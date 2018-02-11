@@ -402,6 +402,12 @@ struct char_special_data_saved
   ush_int boosted[3][2];           /* str/qui/bod timeleft/amount		*/
   ubyte masking;
   int points;
+  
+  bool dirty;
+  
+  char_special_data_saved() :
+      dirty(FALSE)
+  {}
 };
 
 struct char_special_data
