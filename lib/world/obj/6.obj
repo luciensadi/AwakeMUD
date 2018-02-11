@@ -160,7 +160,7 @@ Material:	metal
 	LegalPermit:	0
 [VALUES]
 	Val0:	15
-	Val1:	21
+	Val1:	8
 BREAK
 #604
 Keywords:	magazine 10-bullet pistol
@@ -553,7 +553,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	12
 	Val6:	12
@@ -586,7 +586,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	25
 	Val6:	25
@@ -644,7 +644,7 @@ Material:	metal
 [VALUES]
 	Val0:	9
 	Val1:	2
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	15
 	Val6:	15
@@ -678,7 +678,7 @@ Material:	metal
 [VALUES]
 	Val0:	9
 	Val1:	2
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	10
 	Val6:	10
@@ -710,7 +710,7 @@ Material:	metal
 [VALUES]
 	Val0:	10
 	Val1:	2
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	6
 	Val6:	6
@@ -744,7 +744,7 @@ Material:	metal
 [VALUES]
 	Val0:	9
 	Val1:	2
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	16
 	Val6:	16
@@ -776,7 +776,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	18
 	Val6:	18
@@ -936,7 +936,7 @@ Material:	metal
 [VALUES]
 	Val0:	8
 	Val1:	3
-	Val3:	324
+	Val3:	14
 	Val4:	13
 	Val5:	10
 	Val6:	10
@@ -970,7 +970,6 @@ Material:	metal
 [VALUES]
 	Val1:	2
 	Val2:	3
-	Val3:	303
 	Val4:	3
 	Val5:	-1
 	Val6:	1
@@ -1004,7 +1003,6 @@ Material:	metal
 [VALUES]
 	Val1:	2
 	Val2:	2
-	Val3:	303
 	Val4:	3
 	Val5:	-1
 	Val6:	1
@@ -1038,7 +1036,7 @@ Material:	wood
 [VALUES]
 	Val1:	1
 	Val2:	4
-	Val3:	311
+	Val3:	2
 	Val4:	4
 	Val5:	-1
 	Val6:	2
@@ -1071,7 +1069,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	3
-	Val3:	314
+	Val3:	1
 	Val4:	6
 	Val5:	-1
 	Val6:	1
@@ -1107,7 +1105,6 @@ Material:	metal
 [VALUES]
 	Val1:	2
 	Val2:	3
-	Val3:	303
 	Val4:	3
 	Val5:	-1
 	Val6:	1
@@ -1139,7 +1136,6 @@ Material:	metal
 	LegalPermit:	0
 [VALUES]
 	Val1:	3
-	Val3:	310
 	Val4:	3
 	Val5:	-1
 	Val6:	1
@@ -1172,7 +1168,6 @@ Material:	metal
 [VALUES]
 	Val1:	1
 	Val2:	3
-	Val3:	303
 	Val4:	3
 	Val5:	-1
 	Val7:	-1
@@ -1561,7 +1556,6 @@ Material:	metal
 	LegalPermit:	0
 [VALUES]
 	Val1:	1
-	Val3:	311
 	Val4:	3
 	Val5:	-1
 	Val7:	-1
@@ -1648,7 +1642,7 @@ Material:	metal
 [VALUES]
 	Val1:	3
 	Val2:	3
-	Val3:	309
+	Val3:	2
 	Val4:	4
 	Val5:	-1
 	Val6:	2
@@ -1681,7 +1675,7 @@ Material:	wood
 [VALUES]
 	Val1:	2
 	Val2:	3
-	Val3:	307
+	Val3:	2
 	Val4:	4
 	Val5:	-1
 	Val6:	2
@@ -1715,7 +1709,7 @@ Material:	wood
 [VALUES]
 	Val1:	2
 	Val2:	1
-	Val3:	305
+	Val3:	1
 	Val4:	6
 	Val5:	-1
 	Val7:	-1
@@ -1747,7 +1741,7 @@ Material:	metal
 	LegalPermit:	0
 [VALUES]
 	Val1:	3
-	Val3:	310
+	Val3:	2
 	Val4:	4
 	Val5:	-1
 	Val6:	2
@@ -1780,7 +1774,6 @@ Material:	metal
 	LegalPermit:	0
 [VALUES]
 	Val1:	2
-	Val3:	311
 	Val4:	3
 	Val5:	-1
 	Val7:	-1
@@ -1815,7 +1808,7 @@ Material:	adv. plastics
 [VALUES]
 	Val0:	10
 	Val1:	3
-	Val3:	302
+	Val3:	3
 	Val4:	5
 	Val5:	-1
 	Val6:	2
@@ -1850,7 +1843,6 @@ Material:	metal
 [VALUES]
 	Val1:	2
 	Val2:	1
-	Val3:	303
 	Val4:	3
 	Val5:	-1
 	Val6:	1
@@ -1884,7 +1876,7 @@ Material:	metal
 [VALUES]
 	Val1:	4
 	Val2:	1
-	Val3:	310
+	Val3:	2
 	Val4:	4
 	Val5:	-1
 	Val6:	2
@@ -1917,7 +1909,7 @@ Material:	metal
 [VALUES]
 	Val1:	3
 	Val2:	2
-	Val3:	309
+	Val3:	1
 	Val4:	6
 	Val5:	-1
 	Val6:	1
@@ -1949,7 +1941,7 @@ Material:	metal
 	LegalPermit:	0
 [VALUES]
 	Val1:	3
-	Val3:	305
+	Val3:	1
 	Val4:	6
 	Val5:	-1
 	Val7:	-1
@@ -1981,7 +1973,6 @@ Material:	metal
 [VALUES]
 	Val1:	2
 	Val2:	4
-	Val3:	303
 	Val4:	3
 	Val5:	-1
 	Val6:	1
@@ -2041,7 +2032,7 @@ Material:	metal
 [VALUES]
 	Val0:	9
 	Val1:	2
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	15
 	Val6:	15
@@ -2154,7 +2145,6 @@ Material:	metal
 [VALUES]
 	Val1:	2
 	Val2:	3
-	Val3:	303
 	Val4:	3
 	Val5:	-1
 	Val6:	1
@@ -2240,7 +2230,7 @@ Material:	metal
 [VALUES]
 	Val0:	8
 	Val1:	3
-	Val3:	324
+	Val3:	14
 	Val4:	13
 	Val5:	50
 	Val6:	50
@@ -2473,7 +2463,6 @@ Material:	metal
 [VALUES]
 	Val1:	1
 	Val2:	2
-	Val3:	311
 	Val4:	3
 	Val5:	-1
 	Val6:	1
@@ -2543,7 +2532,7 @@ Material:	metal
 [VALUES]
 	Val0:	9
 	Val1:	3
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	25
 	Val6:	25
@@ -2576,7 +2565,7 @@ Material:	orichalcum
 [VALUES]
 	Val0:	9
 	Val1:	2
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	8
 	Val6:	8
@@ -2637,7 +2626,7 @@ Material:	metal
 [VALUES]
 	Val0:	9
 	Val1:	2
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	15
 	Val6:	15
@@ -2671,7 +2660,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	6
 	Val6:	6
@@ -2760,7 +2749,7 @@ Material:	plastic
 [VALUES]
 	Val1:	2
 	Val2:	2
-	Val3:	305
+	Val3:	2
 	Val4:	4
 	Val5:	-1
 	Val6:	2
@@ -2795,7 +2784,7 @@ Material:	metal
 [VALUES]
 	Val1:	2
 	Val2:	1
-	Val3:	303
+	Val3:	3
 	Val4:	5
 	Val5:	-1
 	Val6:	2
@@ -2828,7 +2817,7 @@ Material:	metal
 [VALUES]
 	Val1:	2
 	Val2:	2
-	Val3:	309
+	Val3:	3
 	Val4:	5
 	Val5:	-1
 	Val6:	-1
@@ -2862,7 +2851,7 @@ Material:	metal
 [VALUES]
 	Val1:	2
 	Val2:	2
-	Val3:	305
+	Val3:	3
 	Val4:	5
 	Val5:	-1
 	Val6:	2

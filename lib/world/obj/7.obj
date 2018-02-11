@@ -684,7 +684,7 @@ Material:	adv. plastics
 [VALUES]
 	Val0:	5
 	Val1:	1
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	5
 	Val6:	5
@@ -718,7 +718,7 @@ Material:	metal
 [VALUES]
 	Val0:	4
 	Val1:	2
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	5
 	Val6:	5
@@ -753,7 +753,7 @@ Material:	metal
 [VALUES]
 	Val0:	4
 	Val1:	1
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	6
 	Val6:	6
@@ -788,7 +788,7 @@ Material:	metal
 [VALUES]
 	Val0:	5
 	Val1:	2
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	4
 	Val6:	4
@@ -822,7 +822,7 @@ Material:	metal
 [VALUES]
 	Val0:	4
 	Val1:	1
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	4
 	Val6:	4
@@ -857,7 +857,7 @@ Material:	metal
 [VALUES]
 	Val0:	4
 	Val1:	1
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	2
 	Val6:	2
@@ -892,7 +892,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	16
 	Val6:	16
@@ -924,7 +924,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	325
+	Val3:	8
 	Val4:	11
 	Val5:	26
 	Val6:	26
@@ -957,7 +957,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	11
 	Val6:	11
@@ -990,7 +990,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	325
+	Val3:	8
 	Val4:	11
 	Val5:	24
 	Val6:	24
@@ -1023,7 +1023,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	12
 	Val6:	22
@@ -1055,7 +1055,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	10
 	Val6:	10
@@ -1088,7 +1088,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	325
+	Val3:	8
 	Val4:	11
 	Val5:	40
 	Val6:	40
@@ -1122,7 +1122,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	325
+	Val3:	8
 	Val4:	11
 	Val5:	35
 	Val6:	25
@@ -1155,7 +1155,7 @@ Material:	metal
 [VALUES]
 	Val0:	9
 	Val1:	2
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	10
 	Val6:	10
@@ -1189,7 +1189,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	6
 	Val6:	6
@@ -1224,7 +1224,7 @@ Material:	plastic
 [VALUES]
 	Val0:	9
 	Val1:	2
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	12
 	Val6:	12
@@ -1259,7 +1259,7 @@ Material:	plastic
 [VALUES]
 	Val0:	9
 	Val1:	2
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	5
 	Val6:	5
@@ -1293,7 +1293,7 @@ Material:	metal
 [VALUES]
 	Val0:	10
 	Val1:	3
-	Val3:	324
+	Val3:	14
 	Val4:	13
 	Val5:	1
 	Val6:	8
@@ -1328,7 +1328,7 @@ Material:	metal
 [VALUES]
 	Val0:	9
 	Val1:	2
-	Val3:	325
+	Val3:	8
 	Val4:	11
 	Val5:	12
 	Val6:	12
@@ -1363,7 +1363,7 @@ Material:	metal
 [VALUES]
 	Val0:	12
 	Val1:	3
-	Val3:	325
+	Val3:	8
 	Val4:	11
 	Val5:	12
 	Val6:	12
@@ -1395,7 +1395,7 @@ Material:	metal
 [VALUES]
 	Val0:	10
 	Val1:	3
-	Val3:	314
+	Val3:	9
 	Val4:	17
 	Val5:	4
 	Val6:	4
@@ -1429,7 +1429,7 @@ Material:	metal
 [VALUES]
 	Val0:	8
 	Val1:	4
-	Val3:	314
+	Val3:	9
 	Val4:	17
 	Val5:	4
 	Val6:	4
@@ -1490,7 +1490,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	2
-	Val3:	325
+	Val3:	10
 	Val4:	15
 	Val5:	30
 	Val6:	30
@@ -1522,7 +1522,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	2
-	Val3:	325
+	Val3:	10
 	Val4:	15
 	Val5:	35
 	Val6:	35
@@ -1556,7 +1556,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	2
-	Val3:	325
+	Val3:	10
 	Val4:	15
 	Val5:	32
 	Val6:	32
@@ -1590,7 +1590,7 @@ Material:	metal
 [VALUES]
 	Val0:	7
 	Val1:	2
-	Val3:	325
+	Val3:	10
 	Val4:	15
 	Val5:	28
 	Val6:	28
@@ -1625,7 +1625,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	2
-	Val3:	325
+	Val3:	10
 	Val4:	15
 	Val5:	20
 	Val6:	20
@@ -1660,7 +1660,7 @@ Material:	metal
 [VALUES]
 	Val0:	7
 	Val1:	2
-	Val3:	325
+	Val3:	10
 	Val4:	15
 	Val5:	32
 	Val6:	32
@@ -1695,7 +1695,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	325
+	Val3:	10
 	Val4:	15
 	Val5:	40
 	Val6:	40
@@ -1729,7 +1729,7 @@ Material:	metal
 [VALUES]
 	Val0:	7
 	Val1:	2
-	Val3:	325
+	Val3:	10
 	Val4:	15
 	Val5:	30
 	Val6:	30
@@ -1762,7 +1762,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	2
-	Val3:	325
+	Val3:	10
 	Val4:	15
 	Val5:	20
 	Val6:	20
@@ -1796,7 +1796,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	2
-	Val3:	325
+	Val3:	10
 	Val4:	15
 	Val5:	24
 	Val6:	24
@@ -1830,7 +1830,7 @@ Material:	metal
 [VALUES]
 	Val0:	7
 	Val1:	2
-	Val3:	325
+	Val3:	10
 	Val4:	15
 	Val5:	30
 	Val6:	30
@@ -1864,7 +1864,7 @@ Material:	metal
 [VALUES]
 	Val0:	7
 	Val1:	2
-	Val3:	325
+	Val3:	10
 	Val4:	15
 	Val5:	25
 	Val10:	28
@@ -1899,7 +1899,7 @@ Material:	adv. plastics
 [VALUES]
 	Val0:	6
 	Val1:	2
-	Val3:	325
+	Val3:	10
 	Val4:	15
 	Val5:	27
 	Val6:	27
@@ -1933,7 +1933,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	2
-	Val3:	325
+	Val3:	10
 	Val4:	15
 	Val5:	30
 	Val6:	30
@@ -2135,7 +2135,6 @@ Material:	metal
 [VALUES]
 	Val1:	3
 	Val2:	4
-	Val3:	303
 	Val4:	3
 	Val5:	-1
 	Val6:	-1
@@ -2251,7 +2250,7 @@ Material:	metal
 [VALUES]
 	Val0:	7
 	Val1:	3
-	Val3:	323
+	Val3:	11
 	Val4:	12
 	Val5:	5
 	Val6:	5
@@ -2284,7 +2283,7 @@ Material:	metal
 [VALUES]
 	Val0:	9
 	Val1:	3
-	Val3:	323
+	Val3:	11
 	Val4:	12
 	Val5:	5
 	Val6:	5
@@ -2317,7 +2316,7 @@ Material:	metal
 [VALUES]
 	Val0:	7
 	Val1:	3
-	Val3:	323
+	Val3:	11
 	Val4:	12
 	Val5:	5
 	Val6:	5
@@ -2351,7 +2350,7 @@ Material:	metal
 [VALUES]
 	Val0:	14
 	Val1:	4
-	Val3:	323
+	Val3:	11
 	Val4:	12
 	Val5:	14
 	Val6:	14
@@ -2386,7 +2385,7 @@ Material:	metal
 [VALUES]
 	Val0:	14
 	Val1:	3
-	Val3:	323
+	Val3:	11
 	Val4:	12
 	Val5:	6
 	Val6:	6
@@ -2420,7 +2419,7 @@ Material:	metal
 [VALUES]
 	Val0:	14
 	Val1:	3
-	Val3:	323
+	Val3:	11
 	Val4:	12
 	Val5:	10
 	Val6:	10
@@ -2452,7 +2451,7 @@ Material:	metal
 [VALUES]
 	Val0:	10
 	Val1:	3
-	Val3:	324
+	Val3:	14
 	Val4:	13
 	Val5:	5
 	Val6:	5
@@ -2485,7 +2484,7 @@ Material:	metal
 [VALUES]
 	Val0:	10
 	Val1:	3
-	Val3:	324
+	Val3:	14
 	Val4:	13
 	Val5:	10
 	Val6:	10
@@ -2521,7 +2520,7 @@ Material:	metal
 [VALUES]
 	Val0:	9
 	Val1:	3
-	Val3:	324
+	Val3:	14
 	Val4:	13
 	Val5:	8
 	Val6:	8
@@ -2555,7 +2554,7 @@ Material:	metal
 [VALUES]
 	Val0:	8
 	Val1:	3
-	Val3:	324
+	Val3:	14
 	Val4:	13
 	Val5:	8
 	Val6:	3
@@ -2588,7 +2587,7 @@ Material:	metal
 [VALUES]
 	Val0:	8
 	Val1:	2
-	Val3:	325
+	Val3:	13
 	Val4:	14
 	Val5:	42
 	Val6:	42
@@ -2621,7 +2620,7 @@ Material:	metal
 [VALUES]
 	Val0:	8
 	Val1:	2
-	Val3:	325
+	Val3:	13
 	Val4:	14
 	Val5:	38
 	Val6:	38
@@ -2653,7 +2652,7 @@ Material:	metal
 [VALUES]
 	Val0:	8
 	Val1:	2
-	Val3:	325
+	Val3:	13
 	Val4:	14
 	Val5:	40
 	Val6:	40
@@ -2685,7 +2684,7 @@ Material:	metal
 [VALUES]
 	Val0:	8
 	Val1:	2
-	Val3:	325
+	Val3:	13
 	Val4:	14
 	Val5:	40
 	Val6:	40
@@ -2720,7 +2719,7 @@ Material:	metal
 [VALUES]
 	Val0:	8
 	Val1:	2
-	Val3:	325
+	Val3:	13
 	Val4:	14
 	Val5:	32
 	Val6:	32
@@ -2755,7 +2754,7 @@ Material:	metal
 [VALUES]
 	Val0:	8
 	Val1:	2
-	Val3:	325
+	Val3:	13
 	Val4:	14
 	Val5:	35
 	Val6:	35
@@ -2790,7 +2789,7 @@ Material:	metal
 [VALUES]
 	Val0:	8
 	Val1:	2
-	Val3:	325
+	Val3:	13
 	Val4:	14
 	Val5:	35
 	Val6:	35
@@ -2826,7 +2825,7 @@ Material:	metal
 [VALUES]
 	Val0:	8
 	Val1:	2
-	Val3:	325
+	Val3:	13
 	Val4:	14
 	Val5:	40
 	Val6:	40
@@ -2861,7 +2860,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	2
-	Val3:	325
+	Val3:	13
 	Val4:	14
 	Val5:	50
 	Val6:	50
@@ -2894,7 +2893,7 @@ Material:	metal
 [VALUES]
 	Val0:	9
 	Val1:	2
-	Val3:	321
+	Val3:	8
 	Val4:	11
 	Val5:	15
 	Val6:	15
@@ -2927,7 +2926,7 @@ Material:	metal
 [VALUES]
 	Val0:	10
 	Val1:	3
-	Val3:	324
+	Val3:	14
 	Val4:	13
 	Val5:	6
 	Val6:	6
@@ -2961,7 +2960,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	3
-	Val3:	325
+	Val3:	15
 	Val4:	19
 	Val5:	80
 	Val7:	653
@@ -2994,7 +2993,7 @@ Material:	metal
 [VALUES]
 	Val0:	7
 	Val1:	2
-	Val3:	325
+	Val3:	15
 	Val4:	19
 	Val5:	50
 	Val6:	50
@@ -3027,7 +3026,7 @@ Material:	metal
 [VALUES]
 	Val0:	7
 	Val1:	3
-	Val3:	325
+	Val3:	15
 	Val4:	19
 	Val5:	50
 	Val6:	50
@@ -3061,7 +3060,7 @@ Material:	metal
 [VALUES]
 	Val0:	7
 	Val1:	3
-	Val3:	325
+	Val3:	15
 	Val4:	19
 	Val5:	50
 	Val6:	50
@@ -3095,7 +3094,7 @@ Material:	metal
 [VALUES]
 	Val0:	9
 	Val1:	3
-	Val3:	325
+	Val3:	15
 	Val4:	19
 	Val5:	40
 	Val6:	40
@@ -3127,7 +3126,7 @@ Material:	metal
 [VALUES]
 	Val0:	10
 	Val1:	3
-	Val3:	325
+	Val3:	15
 	Val4:	19
 	Val5:	40
 	Val6:	40
@@ -3160,7 +3159,7 @@ Material:	metal
 [VALUES]
 	Val0:	15
 	Val1:	2
-	Val3:	322
+	Val3:	11
 	Val4:	12
 	Val5:	20
 	Val6:	20
@@ -3193,7 +3192,7 @@ Material:	metal
 [VALUES]
 	Val0:	18
 	Val1:	4
-	Val3:	326
+	Val3:	18
 	Val4:	21
 	Val5:	20
 	Val6:	20
@@ -3225,7 +3224,7 @@ Material:	metal
 [VALUES]
 	Val0:	18
 	Val1:	4
-	Val3:	326
+	Val3:	18
 	Val4:	21
 	Val5:	22
 	Val6:	22
@@ -3257,7 +3256,7 @@ Material:	metal
 [VALUES]
 	Val0:	10
 	Val1:	3
-	Val3:	319
+	Val3:	20
 	Val4:	16
 	Val5:	6
 	Val6:	6
@@ -3288,7 +3287,7 @@ Material:	metal
 [VALUES]
 	Val0:	8
 	Val1:	3
-	Val3:	319
+	Val3:	20
 	Val4:	16
 	Val5:	6
 	Val6:	6
@@ -3322,7 +3321,7 @@ Material:	metal
 [VALUES]
 	Val0:	10
 	Val1:	3
-	Val3:	319
+	Val3:	20
 	Val4:	16
 	Val5:	12
 	Val6:	12
@@ -3353,7 +3352,7 @@ Material:	metal
 [VALUES]
 	Val0:	16
 	Val1:	4
-	Val3:	320
+	Val3:	21
 	Val4:	20
 	Val5:	4
 	Val6:	4
@@ -3386,7 +3385,7 @@ Material:	metal
 [VALUES]
 	Val0:	8
 	Val1:	3
-	Val3:	324
+	Val3:	14
 	Val4:	13
 	Val5:	50
 	Val6:	50
@@ -3589,7 +3588,7 @@ Material:	metal
 [VALUES]
 	Val0:	12
 	Val1:	4
-	Val3:	325
+	Val3:	18
 	Val4:	21
 	Val5:	-1
 	Val6:	-1
@@ -3624,7 +3623,7 @@ Material:	metal
 [VALUES]
 	Val0:	18
 	Val1:	4
-	Val3:	326
+	Val3:	18
 	Val4:	21
 	Val5:	100
 	Val6:	-1
@@ -4084,7 +4083,8 @@ Material:	metal
 	LegalPermit:	0
 [VALUES]
 	Val0:	24
-	Val1:	25
+	Val1:	10
+	Val2:	1
 BREAK
 #941
 Keywords:	5-bullet rifle magazine

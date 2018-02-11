@@ -903,7 +903,7 @@ Material:	organic
 	Val0:	15
 	Val1:	2
 	Val2:	2
-	Val4:	74
+	Val4:	75
 [AFFECT 0]
 	Location:	Init Dice
 	Modifier:	1
@@ -937,7 +937,7 @@ Material:	organic
 	Val0:	15
 	Val1:	3
 	Val2:	2
-	Val4:	167
+	Val4:	168
 [AFFECT 0]
 	Location:	Reaction
 	Modifier:	2
@@ -1107,7 +1107,7 @@ Material:	organic
 	Val0:	46
 	Val1:	3
 	Val2:	2
-	Val4:	179
+	Val4:	180
 [AFFECT 0]
 	Location:	Quickness
 	Modifier:	3
@@ -1141,7 +1141,7 @@ Material:	organic
 	Val0:	46
 	Val1:	4
 	Val2:	2
-	Val4:	239
+	Val4:	240
 [AFFECT 0]
 	Location:	Quickness
 	Modifier:	4
@@ -1271,7 +1271,7 @@ Material:	electronics
 	Val0:	45
 	Val1:	1
 	Val2:	2
-	Val4:	29
+	Val4:	30
 BREAK
 #340
 Keywords:	smartlink system delta
@@ -1358,7 +1358,7 @@ Material:	adv. plastics
 	Val0:	16
 	Val1:	3
 	Val2:	2
-	Val4:	89
+	Val4:	90
 [AFFECT 0]
 	Location:	Body
 	Modifier:	3
@@ -1493,7 +1493,7 @@ Material:	metal
 	Val0:	9
 	Val2:	2
 	Val3:	2
-	Val4:	134
+	Val4:	135
 [AFFECT 0]
 	Location:	Body
 	Modifier:	2
@@ -1530,7 +1530,7 @@ Material:	electronics
 	Val0:	9
 	Val2:	2
 	Val3:	1
-	Val4:	68
+	Val4:	69
 [AFFECT 0]
 	Location:	Body
 	Modifier:	1
@@ -1692,7 +1692,7 @@ Material:	electronics
 	Val0:	21
 	Val1:	2
 	Val2:	2
-	Val4:	179
+	Val4:	180
 BREAK
 #353
 Keywords:	wired reflexes beta
@@ -1720,7 +1720,7 @@ Material:	paper
 	Val0:	21
 	Val1:	3
 	Val2:	2
-	Val4:	299
+	Val4:	300
 BREAK
 #354
 Keywords:	wired reflexes delta
@@ -1872,7 +1872,7 @@ Material:	adv. plastics
 	Val0:	40
 	Val1:	2
 	Val2:	2
-	Val4:	83
+	Val4:	84
 [AFFECT 0]
 	Location:	Body
 	Modifier:	3
@@ -1906,7 +1906,7 @@ Material:	adv. plastics
 	Val0:	40
 	Val1:	3
 	Val2:	2
-	Val4:	125
+	Val4:	126
 [AFFECT 0]
 	Location:	Body
 	Modifier:	4
@@ -2151,7 +2151,7 @@ Material:	electronics
 BREAK
 #368
 Keywords:	razors hand handrazors retractable
-Name:	a retractable hand razors
+Name:	a set of retractable hand razors
 RoomDesc:$
 Some hand razors lie on the floor.~
 LookDesc:$
@@ -2205,7 +2205,7 @@ Material:	metal
 BREAK
 #370
 Keywords:	forearm snap blades
-Name:	a forearm snap blades
+Name:	a set of forearm snap blades
 RoomDesc:$
 A strange-looking forearm guard lies here.~
 LookDesc:$
@@ -2228,7 +2228,6 @@ Material:	plastic
 	LegalPermit:	0
 [VALUES]
 	Val1:	2
-	Val3:	301
 	Val4:	3
 	Val5:	-1
 BREAK
@@ -2393,7 +2392,6 @@ Material:	metal
 [VALUES]
 	Val1:	2
 	Val2:	4
-	Val3:	303
 	Val4:	3
 	Val5:	-1
 BREAK
@@ -2954,27 +2952,123 @@ Material:	fabric
 	LegalCode:	0
 	LegalPermit:	0
 [EXTRADESC 0]
-	Keywords:	ooc
+	Keywords:	tho
 	Desc:$
-(out of character note.  This is an in-character publication from
-Shadowland Publications, an e-document that every aspiring runner
-in the shadows would keep as their bible.  It is chock full of in
-character data, on the world of Shadowrun.  If you want information
-on Shadowrun itself, the Role Playing Game by FanPro and WizKids, LLC,
-check out their official webpage at http://www.shadowrunrpg.com/ . to
-view each section of the document, read <keyword> of each section,
-the keyword appearing after the ^w(^WOK^w)^n in ^Bbright blue^n.  For
-help with the commands integral to the mud read the help files and
-feel free to ask questions on the newbie channel until you are beyond
-newbie grade (rep level 16).  This item is to function as a basic
-'mini-sourcebook' of in character information that would be readily
-available to any runner in the 'plex, as well as a few plot-tie ins
-and pieces of information that fixer/conspirator immortals can use.
-The level of reliability of the rumors and 'hot paydata' found in
-this file, is up to the RP staff.  Reality contradicts itself, why
-cant we? ;) )
+PLACE HOLDER.  NOT COMPLETE YET.
 ~
 [EXTRADESC 1]
+	Keywords:	eli
+	Desc:$
+>>>Near the Exit of the Neophyte Guild, by Eliuth
+	Good day chummer.  As an aging decker, there isn't much
+	drive to keep up with the SOTA anymore, but there is still
+	alot I can contribute to the shadows at large.  I've ran
+	for years, even learned a bit about rigging, and was very
+	much a professional in my exploits.  So if you are new to
+	the shadows, there is much I can teach you yet.
+(OOC NOTE BEGIN)
+Skills trained up to level 6 (very good) by Eliuth:
+  stealth
+  athletics
+  computers
+  electronics
+  computer theory
+  biotech
+  driving/Bike
+  driving/Car
+(OOC NOTE END)
+<<<
+(>) Eliuth, Seattle Neophytic Guild
+^WTYPE: 'read ^BTHO^W' to view the next section.^n
+~
+[EXTRADESC 2]
+	Keywords:	kyl
+	Desc:$
+>>>Training Room, by Kyle
+	Hoi.  Now some snot nosed upstart little punks in the sprawl
+	think they know a lot about guns.  Well you could go try to
+	learn how to shoot a pea shooter from one of these gangers,
+	or you can come to me to show you the real drek on guns and
+	ammo.  I've been in desert wars six times and have plenty
+	a scar to vouch for my presence there.  I'm doing time in
+	the Neophyte Guild 'cause the cred is good.  And its cred
+	I follow.  Doesn't mean I like you punks.
+(OOC NOTE BEGIN)
+Skills trained up to level 6 (very good) by Kyle:
+  pistols
+  rifles
+  shotguns
+  assault rifle3s
+  sub-machine guns
+  machine guns
+  missile launchers
+  assault cannons
+(OOC NOTE END)
+<<<
+(>) Kyle, Seattle Neophytic Guild
+~
+[EXTRADESC 3]
+	Keywords:	jac
+	Desc:$
+>>>Hall of Fighting, by Jackie C.
+	Greetings new runners to the sprawl.  I'm the specialist for
+	many forms of martial arts training.  As a black belt in
+	all the common martial arts ranging from Aikido to Tae Kwon Do
+	to the more obscure martial art forms like the Elven Carromeleg
+	martial art.  I also specialize in some weapons related skills
+	and can be quite helpful in getting a new runner started.
+(OOC NOTE BEGIN)
+Skills trained up to level 6 (very good) by Jackie:
+  edged weapons
+  pole arms
+  whips & flails
+  clubs
+  unarmed combat
+  cyber implants
+  projectiles
+  throwing weapons
+(OOC NOTE END)
+<<<
+(>) Jackie C, Seattle Neophytic Guild
+^WTYPE: 'read ^BKYL^W' to view next portion of this section.^n
+~
+[EXTRADESC 4]
+	Keywords:	ut2
+	Desc:$
+^cSprawl Crosstraining^n
+In our constant drive to better ourselves, many have asked of places
+where schools can be found, and what to do when we got there.  Well,
+new runners often find themselves at a place known as the Neophytic
+Guild, that plug ugly little building south of the Space Needle.  This
+place isn't the place to go for your novahot runners, but its a place
+to start from.  I will introduce you to each of the trainers at the
+Neophytic Guild, by their name and their specialties.
+(>) Roswell
+^WTYPE: 'read ^BJAC^W' to view next portion of this section.^n
+~
+[EXTRADESC 5]
+	Keywords:	ut1
+	Desc:$
+^cMessage Base/Mail System^n
+Shadowland's Mail System is composed of multiple mailing stations.
+Several exist within the area of the Northwest, including a mail
+station in Tacoma at the mall, and a postal station in Portland,
+Tir Tairngire.
+Any basic text message can be relayed this way, through the Matrix.
+There are also terminals for various topics, Special Interest Groups
+(or SIGs) that access portions of the Shadowland network.  One of these
+is the terminal that can be found at a bar called "Pook's Place", 
+the Club Penumbra in Seattle, or the Afterlife Club in Tacoma.
+(ooc:
+The commands for using a postal station are at the post office, you
+simply type 'mail <name>', write your letter, finish with the @ sign
+on a new line, and off its sent.  To use a terminal, you type at
+that terminal 'write <message topic>' and exit from it the same
+way you would from a mail message, with a @ on a new line.  There
+are OOC usage terminals at the Tacoma Mall, Neophyte Guild, and the
+Pook's Place bar.)
+~
+[EXTRADESC 6]
 	Keywords:	sl2
 	Desc:$
 ^R>>>^LDISPLAY_INDEX_TWO^R<<<
@@ -3011,122 +3105,26 @@ cant we? ;) )
 	^Wo^n ^cClackamas                       ^LFILE CORRUPTED^n
 	^Wo^n ^cRoyal Hill                      ^LFILE CORRUPTED^n
 ~
-[EXTRADESC 2]
-	Keywords:	ut1
-	Desc:$
-^cMessage Base/Mail System^n
-Shadowland's Mail System is composed of multiple mailing stations.
-Several exist within the area of the Northwest, including a mail
-station in Tacoma at the mall, and a postal station in Portland,
-Tir Tairngire.
-Any basic text message can be relayed this way, through the Matrix.
-There are also terminals for various topics, Special Interest Groups
-(or SIGs) that access portions of the Shadowland network.  One of these
-is the terminal that can be found at a bar called "Pook's Place", 
-the Club Penumbra in Seattle, or the Afterlife Club in Tacoma.
-(ooc:
-The commands for using a postal station are at the post office, you
-simply type 'mail <name>', write your letter, finish with the @ sign
-on a new line, and off its sent.  To use a terminal, you type at
-that terminal 'write <message topic>' and exit from it the same
-way you would from a mail message, with a @ on a new line.  There
-are OOC usage terminals at the Tacoma Mall, Neophyte Guild, and the
-Pook's Place bar.)
-~
-[EXTRADESC 3]
-	Keywords:	ut2
-	Desc:$
-^cSprawl Crosstraining^n
-In our constant drive to better ourselves, many have asked of places
-where schools can be found, and what to do when we got there.  Well,
-new runners often find themselves at a place known as the Neophytic
-Guild, that plug ugly little building south of the Space Needle.  This
-place isn't the place to go for your novahot runners, but its a place
-to start from.  I will introduce you to each of the trainers at the
-Neophytic Guild, by their name and their specialties.
-(>) Roswell
-^WTYPE: 'read ^BJAC^W' to view next portion of this section.^n
-~
-[EXTRADESC 4]
-	Keywords:	jac
-	Desc:$
->>>Hall of Fighting, by Jackie C.
-	Greetings new runners to the sprawl.  I'm the specialist for
-	many forms of martial arts training.  As a black belt in
-	all the common martial arts ranging from Aikido to Tae Kwon Do
-	to the more obscure martial art forms like the Elven Carromeleg
-	martial art.  I also specialize in some weapons related skills
-	and can be quite helpful in getting a new runner started.
-(OOC NOTE BEGIN)
-Skills trained up to level 6 (very good) by Jackie:
-  edged weapons
-  pole arms
-  whips & flails
-  clubs
-  unarmed combat
-  cyber implants
-  projectiles
-  throwing weapons
-(OOC NOTE END)
-<<<
-(>) Jackie C, Seattle Neophytic Guild
-^WTYPE: 'read ^BKYL^W' to view next portion of this section.^n
-~
-[EXTRADESC 5]
-	Keywords:	kyl
-	Desc:$
->>>Training Room, by Kyle
-	Hoi.  Now some snot nosed upstart little punks in the sprawl
-	think they know a lot about guns.  Well you could go try to
-	learn how to shoot a pea shooter from one of these gangers,
-	or you can come to me to show you the real drek on guns and
-	ammo.  I've been in desert wars six times and have plenty
-	a scar to vouch for my presence there.  I'm doing time in
-	the Neophyte Guild 'cause the cred is good.  And its cred
-	I follow.  Doesn't mean I like you punks.
-(OOC NOTE BEGIN)
-Skills trained up to level 6 (very good) by Kyle:
-  pistols
-  rifles
-  shotguns
-  assault rifle3s
-  sub-machine guns
-  machine guns
-  missile launchers
-  assault cannons
-(OOC NOTE END)
-<<<
-(>) Kyle, Seattle Neophytic Guild
-~
-[EXTRADESC 6]
-	Keywords:	eli
-	Desc:$
->>>Near the Exit of the Neophyte Guild, by Eliuth
-	Good day chummer.  As an aging decker, there isn't much
-	drive to keep up with the SOTA anymore, but there is still
-	alot I can contribute to the shadows at large.  I've ran
-	for years, even learned a bit about rigging, and was very
-	much a professional in my exploits.  So if you are new to
-	the shadows, there is much I can teach you yet.
-(OOC NOTE BEGIN)
-Skills trained up to level 6 (very good) by Eliuth:
-  stealth
-  athletics
-  computers
-  electronics
-  computer theory
-  biotech
-  driving/Bike
-  driving/Car
-(OOC NOTE END)
-<<<
-(>) Eliuth, Seattle Neophytic Guild
-^WTYPE: 'read ^BTHO^W' to view the next section.^n
-~
 [EXTRADESC 7]
-	Keywords:	tho
+	Keywords:	ooc
 	Desc:$
-PLACE HOLDER.  NOT COMPLETE YET.
+(out of character note.  This is an in-character publication from
+Shadowland Publications, an e-document that every aspiring runner
+in the shadows would keep as their bible.  It is chock full of in
+character data, on the world of Shadowrun.  If you want information
+on Shadowrun itself, the Role Playing Game by FanPro and WizKids, LLC,
+check out their official webpage at http://www.shadowrunrpg.com/ . to
+view each section of the document, read <keyword> of each section,
+the keyword appearing after the ^w(^WOK^w)^n in ^Bbright blue^n.  For
+help with the commands integral to the mud read the help files and
+feel free to ask questions on the newbie channel until you are beyond
+newbie grade (rep level 16).  This item is to function as a basic
+'mini-sourcebook' of in character information that would be readily
+available to any runner in the 'plex, as well as a few plot-tie ins
+and pieces of information that fixer/conspirator immortals can use.
+The level of reliability of the rumors and 'hot paydata' found in
+this file, is up to the RP staff.  Reality contradicts itself, why
+cant we? ;) )
 ~
 BREAK
 #400
@@ -4029,7 +4027,7 @@ Material:	metal
 BREAK
 #431
 Keywords:	razors hand handrazors retractable
-Name:	a retractable hand razors -alpha
+Name:	a set of retractable hand razors -alpha
 RoomDesc:$
 Some hand razors lie on the floor.~
 LookDesc:$
@@ -4084,7 +4082,7 @@ Material:	metal
 	Val0:	12
 	Val2:	2
 	Val3:	1
-	Val4:	5
+	Val4:	6
 BREAK
 #433
 Keywords:	spurs spur hand retractable
@@ -4144,7 +4142,7 @@ Material:	metal
 	Val0:	13
 	Val2:	2
 	Val3:	1
-	Val4:	17
+	Val4:	18
 BREAK
 #435
 Keywords:	dermal plating
@@ -4209,7 +4207,7 @@ Material:	adv. plastics
 	Val0:	16
 	Val1:	1
 	Val2:	2
-	Val4:	29
+	Val4:	30
 [AFFECT 0]
 	Location:	Body
 	Modifier:	1
@@ -4277,7 +4275,7 @@ Material:	adv. plastics
 	Val0:	16
 	Val1:	2
 	Val2:	2
-	Val4:	59
+	Val4:	60
 [AFFECT 0]
 	Location:	Body
 	Modifier:	2
@@ -4423,7 +4421,7 @@ Material:	electronics
 	Val0:	8
 	Val2:	2
 	Val3:	4136
-	Val4:	29
+	Val4:	30
 BREAK
 #444
 Keywords:	datajack
@@ -5028,7 +5026,7 @@ Material:	metal
 	Val0:	20
 	Val1:	2
 	Val2:	2
-	Val4:	179
+	Val4:	180
 BREAK
 #466
 Keywords:	vehicle control rig alpha iii 3 three
@@ -5084,7 +5082,7 @@ Material:	metal
 	Val0:	20
 	Val1:	3
 	Val2:	2
-	Val4:	299
+	Val4:	300
 BREAK
 #468
 Keywords:	reflex trigger
