@@ -46,11 +46,8 @@ SQL/mysql_config.cpp
 mysql_config.cpp
 src/github_config.cpp
 
-# Game / runtime files
-lib/house/*
-lib/storage/*
+# Game / runtime files. Note that lib/ scratch directories are excluded by their own .gitignores.
 lib/copyover.dat
-lib/veh/*
 lib/etc/consist
 lib/text/wholist
 lib/order
