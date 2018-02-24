@@ -53,7 +53,7 @@
 #define MAX_PGROUP_LOG_LENGTH               256 // If you change this, update your SQL tables too. SQL field length should be 2x+1 this (or greater).
 #define MAX_PGROUP_LOG_READBACK             7 // The maximum number of days into the past players can view group logs.
 
-// Tag maximums: Only update tag-without-color, and update your SQL tables too. SQL field length should be 2(tag length with color)+1 (or greater).
+// Tag maximums: Only update tag-without-color, and update your SQL tables too. SQL field length should be MAX_PGROUP_TAG_LENGTH + 1 (or greater).
 #define MAX_PGROUP_TAG_LENGTH_WITHOUT_COLOR 7
 #define MAX_PGROUP_TAG_LENGTH               (MAX_PGROUP_TAG_LENGTH_WITHOUT_COLOR * 3 + 2) // Accounts for color codes before each letter as well as a ^n at the end.
 
@@ -85,6 +85,7 @@ void do_pgroup_logs(struct char_data *ch, char *argument);
 void do_pgroup_note(struct char_data *ch, char *argument);
 void do_pgroup_outcast(struct char_data *ch, char *argument);
 void do_pgroup_promote(struct char_data *ch, char *argument);
+void do_pgroup_privileges(struct char_data *ch, char *argument);
 void do_pgroup_resign(struct char_data *ch, char *argument);
 void do_pgroup_revoke(struct char_data *ch, char *argument);
 void do_pgroup_roster(struct char_data *ch, char *argument);
