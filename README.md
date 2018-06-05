@@ -1,7 +1,7 @@
 # AwakeMUD Community Edition
 A fork of the [Awakened Worlds](awakenedworlds.net) MUD codebase. Issues and pull requests welcome!
 
-Feel free to join us via telnet at mudtest.mooo.com port 4000 to participate in playtesting. If you have the knack for building, we're also interested in hiring volunteer builders who are willing to open-source their contributions to the game world.
+There is currently no running test port for AwakeMUD Community Edition. Many thanks to Jan for running the previous test port for so long.
 
 ## Features
 - Significant reductions in memory leaks
