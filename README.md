@@ -1,5 +1,5 @@
 # AwakeMUD Community Edition
-A fork of the [Awakened Worlds](awakenedworlds.net) MUD codebase. Issues and pull requests welcome!
+A fork of the [Awakened Worlds](http://awakenedworlds.net) MUD codebase. Issues and pull requests welcome!
 
 There is currently no running test port for AwakeMUD Community Edition. Many thanks to Jan for running the previous test port for so long.
 
