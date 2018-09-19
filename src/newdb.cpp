@@ -1739,7 +1739,7 @@ bool does_player_exist(char *name)
 bool does_player_exist(long id)
 {
   char buf[MAX_STRING_LENGTH];
-  sprintf(buf, "SELECT idnum FROM pfiles WHERE idnum=%ld;", id);
+  sprintf(buf, "SELECT idnum FROM pfiles WHERE idnum=%ld AND name != 'deleted';", id);
   mysql_wrapper(mysql, buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
@@ -1842,6 +1842,7 @@ void idle_delete()
   MYSQL_ROW row;
   while ((row = mysql_fetch_row(res))) {
 #ifndef IDLEDELETE_DRYRUN
+		// TODO: Wipe out character's vehicles.
     DeleteChar(atol(row[0]));
     deleted++;
 #else
