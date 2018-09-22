@@ -2432,7 +2432,7 @@ ACMD(do_who)
         continue;
       if (newbie && !PLR_FLAGGED(tch, PLR_NEWBIE))
         continue;
-      if (GET_INCOG_LEV(tch) > ch->player.level)
+      if (GET_INCOG_LEV(tch) > GET_LEVEL(ch))
         continue;
       num_can_see++;
       

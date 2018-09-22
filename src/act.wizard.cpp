@@ -2641,9 +2641,9 @@ ACMD(do_wizwho)
         continue;
       if (!IS_SENATOR(tch) || !CAN_SEE(ch, tch))
         continue;
-      if (GET_INVIS_LEV(d->character) > ch->player.level) /* Added by Washu 2-4-02 fixes invis level bug*/
+      if (GET_INVIS_LEV(d->character) > GET_LEVEL(ch)) /* Added by Washu 2-4-02 fixes invis level bug*/
         continue;
-      if (GET_INCOG_LEV(d->character) > ch->player.level)
+      if (GET_INCOG_LEV(d->character) > GET_LEVEL(ch))
         continue;
       if (!PRF_FLAGGED(tch, PRF_AFK))
         sprintf(line, " [^c%6.6s^n]  ^b%-30s^n  Room: [^c%5ld^n] Idle: [^c%4d^n]",
@@ -3790,7 +3790,7 @@ ACMD(do_set)
     }
 
     RANGE(1, LVL_MAX);
-    vict->player.level = (byte) value;
+    GET_LEVEL(vict) = (byte) value;
     break;
   case 31:
     if ((i = real_room(value)) < 0) {
