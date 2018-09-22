@@ -1094,8 +1094,10 @@ void shop_rec(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
     return;
   char buf[MAX_STRING_LENGTH];
   int number = atoi(arg);
-  if (number == 0)
-    number = 1;
+	if (number == 0) {
+		send_to_char(ch, "Unrecognized selection. Syntax: RECEIVE [number].");
+		return;
+	}
   for (struct shop_order_data *order = shop_table[shop_nr].order; order; order = order->next)
     if (order->player == GET_IDNUM(ch) && order->timeavail < time(0) && !--number)
     {
