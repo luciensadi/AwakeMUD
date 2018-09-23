@@ -215,7 +215,7 @@ struct pgroup_cmd_struct {
   { "logs"       , PRIV_AUDITOR       , do_pgroup_logs        , TRUE  , TRUE  , TRUE  },
   { "note"       , PRIV_NONE          , do_pgroup_note        , TRUE  , TRUE  , FALSE },
   { "outcast"    , PRIV_MANAGER       , do_pgroup_outcast     , TRUE  , TRUE  , FALSE },
-  { "priveleges" , PRIV_NONE          , do_pgroup_privileges  , TRUE  , TRUE  , FALSE },
+  { "privileges" , PRIV_NONE          , do_pgroup_privileges  , TRUE  , TRUE  , FALSE },
   { "promote"    , PRIV_MANAGER       , do_pgroup_promote     , FALSE , TRUE  , FALSE },
   { "quit"       , PRIV_NONE          , do_pgroup_resign      , TRUE  , FALSE , FALSE },
   { "resign"     , PRIV_NONE          , do_pgroup_resign      , TRUE  , FALSE , TRUE  },
