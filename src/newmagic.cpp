@@ -1926,7 +1926,6 @@ ACMD(do_bond)
     send_to_char("You don't have that item.\r\n", ch);
     return;
   }
-	send_to_char(ch, "Object found: %s.\r\n", GET_OBJ_NAME(obj));
   if (GET_OBJ_TYPE(obj) == ITEM_DOCWAGON) {
     if (GET_OBJ_VAL(obj, 1)) {
       act("$p has already been activated.", FALSE, ch, obj, 0, TO_CHAR);
