@@ -1926,6 +1926,7 @@ ACMD(do_bond)
     send_to_char("You don't have that item.\r\n", ch);
     return;
   }
+	send_to_char(ch, "Object found: %s.\r\n", GET_OBJ_NAME(obj));
   if (GET_OBJ_TYPE(obj) == ITEM_DOCWAGON) {
     if (GET_OBJ_VAL(obj, 1)) {
       act("$p has already been activated.", FALSE, ch, obj, 0, TO_CHAR);
@@ -1936,6 +1937,40 @@ ACMD(do_bond)
         ch, obj, 0, TO_CHAR);
     return;
   }
+	// If it's an unbonded magazine, we need to search for the weapon they selected.
+	if (GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE) {
+		// Define aliases used for code readability; nobody likes juggling 'i' and 'obj'.
+		struct obj_data *magazine = obj, *weapon = NULL;
+		
+		// Fallthrough: If they selected a pre-bonded magazine, we can abort now.
+		if (GET_OBJ_VAL(obj, 0)) {
+			send_to_char("That magazine's already been bonded to something else.\r\n", ch);
+			return;
+		}
+		
+		// Iterate through character's inventory to find the selected weapon.
+		for (weapon = ch->carrying; weapon; weapon = weapon->next_content) {
+			if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && (isname(buf1, weapon->text.keywords) || isname(buf2, GET_OBJ_NAME(weapon))))
+				break;
+		}
+		
+		// If nothing was found, fail.
+		if (!weapon) {
+			send_to_char("You don't have that weapon.\r\n", ch);
+			return;
+		}
+		
+		// Assign the magazine's values to the correct values supplied by the weapon.
+		GET_OBJ_VAL(magazine, 0) = GET_OBJ_VAL(weapon, 5);
+		GET_OBJ_VAL(magazine, 1) = GET_OBJ_VAL(weapon, 3);
+		sprintf(buf, "a %d-round %s magazine", GET_OBJ_VAL(magazine, 0), weapon_type[GET_OBJ_VAL(magazine, 1)]);
+		if (magazine->restring)
+			delete [] magazine->restring;
+		magazine->restring = strdup(buf);
+		send_to_char(ch, "You bond a new magazine to %s.\r\n", GET_OBJ_NAME(weapon));
+		return;
+	}
+	
   if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
     if (IS_GUN(GET_OBJ_VAL(obj, 3))) {
       for (struct obj_data *i = ch->carrying; i; i = i->next_content) {
