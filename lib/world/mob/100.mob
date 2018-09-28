@@ -369,4 +369,37 @@ DefaultPos:	Standing
 	Impact:	10000
 [SKILLS]
 BREAK
+#10012
+Keywords:	ammunition vendor vendomatic vend-o-matic
+Name:	an Ammunition Vend-O-Matic
+RoomDesc:$
+An Ammunition Vend-O-Matic has been installed in the alcove. 
+
+~
+LookDesc:$
+Unassuming and bland, this unit consists of a speaker grille, a delivery slot,
+and a keypad to punch your order into. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	50
+	Impact:	50
+[SKILLS]
+BREAK
 END

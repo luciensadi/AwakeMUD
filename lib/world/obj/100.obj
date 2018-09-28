@@ -529,6 +529,34 @@ Material:	metal
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
+#10019
+Keywords:	ammunition workshop ammo
+Name:	an ammunition workshop
+RoomDesc:$
+A reloading workbench with a hand press and small machine-shop setup occupies this area.~
+LookDesc:$
+Constructed from dense plastics and reinforced with steel tubing, this neutral
+grey workbench is the perfect surface to hold the assortment of
+ammunition-crafting tools that have been deployed and mounted on its surface.
+~
+Type:	Workshop
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	50.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	2
+BREAK
 #10025
 Keywords:	testing pocket secretary
 Name:	a testing pocket secretary

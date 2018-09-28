@@ -2885,6 +2885,32 @@ Material:	plastic
 	Val0:	2
 	Val1:	8
 BREAK
+#698
+Keywords:	tripod
+Name:	a tripod
+RoomDesc:$
+Someone has left an attachable tripod laying here.~
+LookDesc:$
+It attaches to the bottom of a weapon and helps provide recoil compensation. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	6
+	AvailDay:	0.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	9
+BREAK
 #699
 Keywords:	sign metal
 Name:	a metal sign

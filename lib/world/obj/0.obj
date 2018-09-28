@@ -1717,8 +1717,8 @@ Material:	plastic
 	Weight:	0.00
 	Barrier:	4
 	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
+	AvailTN:	2
+	AvailDay:	1.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -1854,6 +1854,33 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+BREAK
+#127
+Keywords:	blank empty magazine clip
+Name:	a blank empty magazine
+RoomDesc:$
+A blank empty magazine has been dropped here.~
+LookDesc:$
+This is a nondescript chunk of material, made of mimetic alloy and designed to
+be ^WBOND^ned to a firearm. Once bonded, it assumes the shape and internal
+structure of a magazine that best fits the selected weapon. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.05
+	Barrier:	4
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	22
 BREAK
 #140
 Keywords:	customized cc10 ares sniper rifle

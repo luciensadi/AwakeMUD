@@ -1,0 +1,26 @@
+#10012
+Keeper:	10012
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	0
+Races:	0
+Buytypes:	1000000000000001000000000000000000000000001
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	127
+		Type:	Always
+		Stock:	0
+BREAK
+END

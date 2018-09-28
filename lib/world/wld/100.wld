@@ -46,6 +46,12 @@ Range.'
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
+[EXIT up]
+	ToVnum:	10018
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 BREAK
 #10001
 Name:	^W(^cIMMHQ^W)^C A Firing Range
@@ -71,6 +77,12 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	15
+[EXIT north]
+	ToVnum:	10019
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT east]
 	Desc:$
 A partition stands here, blocking fire. 
@@ -716,6 +728,68 @@ RoomType:	0
 	BackgroundType:	0
 [EXIT east]
 	ToVnum:	10016
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10018
+Name:	^W(^cIMMHQ^W)^C The Experimental Annex
+Desc:$
+Bright and sterile, this white-walled chamber is ringed by hermetically-sealed
+airlocks that lead to various testing chambers. Icons and emblems have been
+etched into the burnished plasteel surfaces of the various hatches to indicate
+what lies beyond. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	10000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10019
+Name:	^W(^cIMMHQ^W)^C An Alcove in the Firing Range
+Desc:$
+Tucked into the side of the firing range is an alcove, separated from the
+chaos by panels of bulletproof glass as thick as a troll's neck. Benches,
+tables, and presses here provide the necessities for deploying a full
+ammunition workshop for handloading rounds. 
+~
+Flags:	100000000000000000000000011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	10001
 	Flags:	0
 	Material:	brick
 	Barrier:	4

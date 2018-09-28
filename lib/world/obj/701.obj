@@ -1,0 +1,27 @@
+#70100
+Keywords:	ammunition box
+Name:	a box of APDS heavy machine gun ammunition
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	17
+	Val2:	1
+BREAK
+END
