@@ -1942,7 +1942,7 @@ ACMD(do_bond)
     struct obj_data *magazine = obj, *weapon = NULL;
     
     // Fallthrough: If they selected a pre-bonded magazine, we can abort now.
-    if (GET_OBJ_VAL(obj, 0)) {
+    if (GET_OBJ_VAL(magazine, 0)) {
       send_to_char("That magazine's already been bonded to something else.\r\n", ch);
       return;
     }
