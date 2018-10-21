@@ -2219,44 +2219,96 @@ ACMD(do_weather)
 // argument and will send only words that fall under that letter
 ACMD(do_index)
 {
-  return;/*
-          char *temp = argument;
-          
-          skip_spaces(&temp);
-          
-          if (!*temp) {
-          Help.ListIndex(ch, NULL);
-          return;
-          }
-          
-          char letter = *temp;
-          if (!isalpha(letter)) {
-          send_to_char("Only letters can be sent to the index command.\r\n", ch);
-          return;
-          }
-          
-          letter = tolower(letter);
-          Help.ListIndex(ch, &letter);
-          */
+  char *temp = argument;
+  char query[MAX_STRING_LENGTH];
+  MYSQL_RES *res;
+  MYSQL_ROW row;
+  
+  skip_spaces(&temp);
+  
+  if (!*temp) {
+    sprintf(query, "SELECT name FROM help_topic ORDER BY name ASC");
+  } else {
+    char letter = *temp;
+    if (!isalpha(letter)) {
+      send_to_char("Only letters can be sent to the index command.\r\n", ch);
+      return;
+    }
+    
+    letter = tolower(letter);
+    
+    // No prepare_quotes since this is guaranteed to be a single alphanumeric character.
+    sprintf(query, "SELECT name FROM help_topic WHERE name LIKE '%c%%'", letter);
+  }
+  
+  // Execute the query and check for errors.
+  if (mysql_wrapper(mysql, query)) {
+    send_to_char("Apologies, but it seems the help system is currently offline.\r\n", ch);
+    mudlog("WARNING: Failed to return all help topics with 'index' command.", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  // Build the index and send it to the character.
+  send_to_char("The following help topics are available:\r\n", ch);
+  res = mysql_store_result(mysql);
+  while ((row = mysql_fetch_row(res))) {
+    send_to_char(ch, " %s\r\n", row[0]);
+  }
+  
+  send_to_char("You can see more about these with HELP <topic>.\r\n", ch);
+  
+  // Clean up.
+  mysql_free_result(res);
 }
 
 void display_help(char *help, const char *arg) {
   char query[MAX_STRING_LENGTH];
   MYSQL_RES *res;
   MYSQL_ROW row;
-  sprintf(query, "SELECT * FROM help_topic WHERE name LIKE '%%%s%%' ORDER BY name ASC", prepare_quotes(buf, arg));
+  *help = '\0';
+  
+  // Buf now holds the quoted version of arg.
+  prepare_quotes(buf, arg);
+  
+  // First strategy: Look for an exact match.
+  sprintf(query, "SELECT * FROM help_topic WHERE name='%s'", buf);
   if (mysql_wrapper(mysql, query)) {
+    // We got a SQL error-- bail.
+    sprintf(help, "The help system is temporarily unavailable.\r\n");
+    mudlog("WARNING: Failed to return help topic. See server log for MYSQL error.", NULL, LOG_SYSLOG, TRUE);
+    return;
+  } else {
+    res = mysql_store_result(mysql);
+    if ((row = mysql_fetch_row(res))) {
+      // Found it-- send it back and have done with it.
+      sprintf(help, "^W%s^n\r\n\r\n%s\r\n", row[0], row[1]);
+      mysql_free_result(res);
+      return;
+    } else {
+      // Failed to find a match-- clean up and continue.
+      mysql_free_result(res);
+    }
+  }
+  
+  // Second strategy: Search for possible like-matches.
+  sprintf(query, "SELECT * FROM help_topic WHERE name LIKE '%%%s%%' ORDER BY name ASC", buf);
+  if (mysql_wrapper(mysql, query)) {
+    // If we don't find it here either, we know the file doesn't exist-- failure condition.
     sprintf(help, "No such help file exists.\r\n");
     return;
   }
   res = mysql_store_result(mysql);
   int x = mysql_num_rows(res);
-  *help='\0';
-  if (x < 1)
+  
+  // If we have no rows, fail.
+  if (x < 1) {
     sprintf(help, "No such help file exists.\r\n");
+  }
+  
+  // If we have too many rows, try to refine the search to just files starting with the search string.
   else if (x > 5) {
     mysql_free_result(res);
-    sprintf(query, "SELECT * FROM help_topic WHERE name LIKE '%s%%' ORDER BY name ASC", prepare_quotes(buf, arg));
+    sprintf(query, "SELECT * FROM help_topic WHERE name LIKE '%s%%' ORDER BY name ASC", buf);
     if (mysql_wrapper(mysql, query)) {
       sprintf(help, "%d articles returned, please narrow your search.aa\r\n", x);
       return;
@@ -2267,8 +2319,11 @@ void display_help(char *help, const char *arg) {
     if (y == 1)
       sprintf(ENDOF(help), "^W%s^n\r\n\r\n%s\r\n", row[0], row[1]);
     else sprintf(help, "%d articles returned, please narrow your search.\r\n", x);
-  } else while ((row = mysql_fetch_row(res))) {
-    sprintf(ENDOF(help), "^W%s^n\r\n\r\n%s\r\n", row[0], row[1]);
+  } else {
+    while ((row = mysql_fetch_row(res))) {
+      sprintf(ENDOF(help), "^W%s^n\r\n\r\n%s\r\n", row[0], row[1]);
+    }
+    return;
   }
   mysql_free_result(res);
 }
