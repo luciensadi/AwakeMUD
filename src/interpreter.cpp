@@ -2258,6 +2258,18 @@ void nanny(struct descriptor_data * d, char *arg)
         }
         return;
       }
+      
+      // Commit the password to DB on the assumption it's changed.
+      char query_buf[2048];
+#ifdef NOCRYPT
+      char prepare_quotes_buf[2048];
+      sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;",
+              prepare_quotes(prepare_quotes_buf, GET_PASSWD(d->character)), GET_IDNUM(d->character));
+#else
+      sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;", GET_PASSWD(d->character), GET_IDNUM(d->character));
+#endif
+      mysql_wrapper(mysql, query_buf);
+      
       load_result = GET_BAD_PWS(d->character);
       GET_BAD_PWS(d->character) = 0;
 
@@ -2371,7 +2383,14 @@ void nanny(struct descriptor_data * d, char *arg)
         STATE(d) = CON_MENU;
       }
       if (STATE(d) == CON_CHPWD_VRFY) {
-        sprintf(buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld", GET_PASSWD(d->character), GET_IDNUM(d->character));
+        char query_buf[2048];
+#ifdef NOCRYPT
+        char prepare_quotes_buf[2048];
+        sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;",
+                prepare_quotes(prepare_quotes_buf, GET_PASSWD(d->character)), GET_IDNUM(d->character));
+#else
+        sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;", GET_PASSWD(d->character), GET_IDNUM(d->character));
+#endif
         mysql_wrapper(mysql, buf);
         SEND_TO_Q(MENU, d);
         STATE(d) = CON_MENU;

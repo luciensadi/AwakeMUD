@@ -298,7 +298,7 @@ struct time_data
 struct char_player_data
 {
   char *char_name;
-  char passwd[crypto_pwhash_STRBYTES];     /* character's password         */
+  char passwd[crypto_pwhash_STRBYTES + 1];     /* character's password         */
 
   text_data physical_text;
   text_data astral_text;

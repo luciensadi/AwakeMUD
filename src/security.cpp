@@ -5,6 +5,7 @@
 #include "utils.h"
 #include "structs.h"
 #include "comm.h"
+#include "newdb.h"
 #include "security.h"
 
 #ifdef NOCRYPT
