@@ -272,7 +272,6 @@ void initialize_and_connect_to_mysql() {
 
 void boot_world(void)
 {
-#ifdef USE_ARGON2_FOR_HASHING
   log("Initializing libsodium for crypto functions.");
   if (sodium_init() < 0) {
     // The library could not be initialized. Fail.
@@ -282,7 +281,6 @@ void boot_world(void)
   
   log("Performing crypto tests.");
   run_crypto_tests();
-#endif
   
   log("Booting MYSQL database.");
   initialize_and_connect_to_mysql();
