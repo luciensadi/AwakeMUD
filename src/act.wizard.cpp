@@ -43,6 +43,7 @@
 #include "config.h"
 #include "newmatrix.h"
 #include "limits.h"
+#include "security.h"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -3842,8 +3843,7 @@ ACMD(do_set)
       SET_CLEANUP(false);
       return;
     }
-    strncpy(vict->player.passwd, CRYPT(val_arg, GET_NAME(vict)), MAX_PWD_LENGTH);
-    vict->player.passwd[MAX_PWD_LENGTH] = '\0';
+    hash_and_store_password(val_arg, GET_PASSWD(vict));
     sprintf(buf, "Password changed to '%s'.", val_arg);
     break;
   case 40:

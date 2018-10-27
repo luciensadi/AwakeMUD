@@ -27,6 +27,7 @@
 #else
 #include <unistd.h>
 #endif
+#include <sodium.h>
 
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
@@ -51,6 +52,7 @@
 #include "constants.h"
 #include "vtable.h"
 #include "config.h"
+#include "security.h"
 #include <new>
 
 extern void calc_weight(struct char_data *ch);
@@ -270,6 +272,17 @@ void initialize_and_connect_to_mysql() {
 
 void boot_world(void)
 {
+#ifdef USE_ARGON2_FOR_HASHING
+  log("Initializing libsodium for crypto functions.");
+  if (sodium_init() < 0) {
+    // The library could not be initialized. Fail.
+    log("ERROR: Libsodium initialization failed. Terminating program.");
+    exit(1);
+  }
+  
+  log("Performing crypto tests.");
+  run_crypto_tests();
+#endif
   
   log("Booting MYSQL database.");
   initialize_and_connect_to_mysql();

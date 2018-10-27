@@ -24,7 +24,7 @@ CVS = cvs
 # smooth, the define can be removed.
 
 # OSX? Uncomment these:
-LIBS = -L/usr/local/lib -lmysqlclient -lz -lm -lcurl
+LIBS = -L/usr/local/lib -lmysqlclient -lz -lm -lcurl -lsodium
 MYFLAGS = -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DGITHUB_INTEGRATION -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
 
 # Linux / others? Uncomment these:
