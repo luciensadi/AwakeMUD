@@ -279,8 +279,10 @@ void boot_world(void)
     exit(1);
   }
   
-  log("Performing crypto tests.");
+#ifdef DEBUG
+  log("Performing crypto performance and validation tests.");
   run_crypto_tests();
+#endif
   
   log("Booting MYSQL database.");
   initialize_and_connect_to_mysql();
