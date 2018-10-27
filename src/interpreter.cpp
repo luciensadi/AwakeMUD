@@ -2325,8 +2325,7 @@ void nanny(struct descriptor_data * d, char *arg)
   case
       CON_CHPWD_GETNEW:
   case CON_QGETNEWPW:
-    if (!*arg || strlen(arg) > MAX_PWD_LENGTH || strlen(arg) < 3 ||
-        !str_cmp(arg, GET_CHAR_NAME(d->character))) {
+    if (!*arg || strlen(arg) < 3 || !str_cmp(arg, GET_CHAR_NAME(d->character))) {
       SEND_TO_Q("\r\nIllegal password.\r\n", d);
       SEND_TO_Q("Password: ", d);
       return;
