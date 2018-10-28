@@ -1402,7 +1402,7 @@ int new_descriptor(int s)
     /* prepend to list */
     descriptor_list = newd;
     
-    SEND_TO_Q(GREETINGS, newd);
+    SEND_TO_Q(colorize(newd, GREETINGS), newd);
     return 0;
   }
   
@@ -2027,7 +2027,7 @@ char *colorize(struct descriptor_data *d, char *str)
   register char *temp = &buffer[0];
   register const char *color;
   
-  if (d->character)
+  if (TRUE or d->character) // ok but why do we care if they have a character?
   {
     while(*str) {
       if (*str == '^') {
