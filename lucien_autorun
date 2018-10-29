@@ -19,11 +19,10 @@ while true; do
   rm -f syslog.txt
   touch syslog.txt
 
-  set DATE = $(date)
-  echo "autoscript starting game $DATE" >> syslog.txt
+  echo "autoscript starting game $(date)" | tee syslog.txt
 
   # Takes advantage of the config done in ~/.gdbinit (not replicated here).
-  gdb bin/awake |& tee syslog.txt
+  gdb -batch -ex "run" -ex "bt" -ex "quit" -ex "yes" bin/awake |& tee syslog.txt
   echo "" >> syslog.txt
 
   tail -n 500 syslog.txt >> log/crashlog
@@ -62,7 +61,7 @@ while true; do
 
   if [ -e .killscript ]; then
     set DATE = $(date)
-    echo "autoscript killed $DATE" >> syslog.txt
+    echo "autoscript killed $(date)" >> syslog.txt
     rm .killscript
     exit
   fi
