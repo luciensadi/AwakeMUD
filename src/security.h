@@ -4,9 +4,9 @@
 // Change this value to determine how many seconds you're willing to have the MUD hang for each hash.
 #define ACCEPTABLE_HASH_TIME_IN_SECONDS 1.5
 
-// Warning: Changing these will not affect the hashing speed of old password hashes.
-#define CRYPTO_OPSLIMIT crypto_pwhash_OPSLIMIT_MODERATE
-#define CRYPTO_MEMLIMIT crypto_pwhash_MEMLIMIT_MODERATE
+// Warning: Changing these will not affect the hashing speed of old password hashes. It may also break old hashes, this has not been tested.
+#define CRYPTO_OPSLIMIT crypto_pwhash_OPSLIMIT_INTERACTIVE
+#define CRYPTO_MEMLIMIT crypto_pwhash_MEMLIMIT_INTERACTIVE
 
 // The prefix string used to identify whether a password is argon2 or crypt().
 #define ARGON2ID_HASH_PREFIX "$argon2id$"
