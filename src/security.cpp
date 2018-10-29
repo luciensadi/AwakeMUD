@@ -107,8 +107,12 @@ void hash_and_store_password(const char* password, char* array_to_write_to) {
 // Returns TRUE on match, FALSE otherwise.
 bool validate_password(const char* password, const char* hashed_password) {
   // If this is a new-style argon2, verify with the correct algorithm.
-  if (strstr(hashed_password, ARGON2_HASH_PREFIX) != NULL)
+  if (strstr(hashed_password, ARGON2ID_HASH_PREFIX) != NULL)
     return crypto_pwhash_str_verify(hashed_password, password, strlen(password)) == 0;
+  else if (strstr(hashed_password, ARGON2_HASH_PREFIX) != NULL) {
+    log("WARNING: You are not using the currently-recommended Argon2id() hashing algorithm. Your game will probably still function, but your passwords will not be a secure as they could be.");
+    return crypto_pwhash_str_verify(hashed_password, password, strlen(password)) == 0;
+  }
   
   // Otherwise, we're dealing with an old crypt() password.
   else

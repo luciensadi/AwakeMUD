@@ -9,7 +9,8 @@
 #define CRYPTO_MEMLIMIT crypto_pwhash_MEMLIMIT_MODERATE
 
 // The prefix string used to identify whether a password is argon2 or crypt().
-#define ARGON2_HASH_PREFIX "$argon2id$"
+#define ARGON2ID_HASH_PREFIX "$argon2id$"
+#define ARGON2_HASH_PREFIX "$argon2"
 
 bool run_crypto_tests();
 
