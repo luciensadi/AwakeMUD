@@ -1593,11 +1593,15 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       sprintf(ENDOF(buf), "Missile type: ^c%s^n", (GET_OBJ_VAL(j, 0) == 0 ? "Arrow" : "Bolt"));
       break;
     case ITEM_WORN:
-      sprintf(ENDOF(buf), "Ballistic: ^c%d^n, Impact: ^c%d^n", GET_OBJ_VAL(j, 5), GET_OBJ_VAL(j, 6));
+      sprintf(ENDOF(buf), "Pocket space: ^c%d^n magazine(s), ^c%d^n holster(s), ^c%d^n misc small item(s)\r\n",
+              GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 4));
+      sprintf(ENDOF(buf), "Ballistic: ^c%d^n, Impact: ^c%d^n  Concealability: ^c%d^n",
+              GET_OBJ_VAL(j, 5), GET_OBJ_VAL(j, 6), GET_OBJ_VAL(j, 7));
       break;
     case ITEM_DOCWAGON:
       sprintf(ENDOF(buf), "Contract type: ^c%s^n, Bonded: ^c%s^n",
-              docwagon_contract_types[GET_OBJ_VAL(j, 0)], GET_OBJ_VAL(j, 1) ? "yes" : "no");
+              docwagon_contract_types[GET_OBJ_VAL(j, 0)],
+              GET_OBJ_VAL(j, 1) ? (GET_OBJ_VAL(j, 1) == GET_IDNUM(ch) ? "yes (to you)" : "yes (to someone else)") : "no");
       break;
     case ITEM_CONTAINER:
       sprintf(ENDOF(buf), "Max-contains: ^c%d^n", GET_OBJ_VAL(j, 0));
@@ -1715,21 +1719,13 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         sprintf(ENDOF(buf), "  Engine type: ^c%s^n", engine_type[GET_OBJ_VAL(j, 2)]);
       } else if (GET_OBJ_VAL(j, 0) == MOD_RADIO) {
         // radio range 0-5
-        sprintf(ENDOF(buf), "  Range: ^c%d^n", GET_OBJ_VAL(j, 2));
+        sprintf(ENDOF(buf), "  Range: ^c%d^n  Crypt: ^c%d^n", GET_OBJ_VAL(j, 2), GET_OBJ_VAL(j, 3));
       } else {
         sprintf(ENDOF(buf), "  Rating: ^c%d^n", GET_OBJ_VAL(j, 2));
       }
       
-      // Val 3
-      if (GET_OBJ_VAL(j, 0) == MOD_RADIO) {
-        // crypt level
-        sprintf(ENDOF(buf), "  Crypt: ^c%d^n", GET_OBJ_VAL(j, 3));
-      }
-      
       // Val 4
       sprintf(ENDOF(buf), "  Designed for: ^c%s^n", GET_OBJ_VAL(j, 4) == 0 ? "Vehicles" : GET_OBJ_VAL(j, 4) == 1 ? "Drones" : "All types of vehicle");
-      
-      // Val 5: skip
       
       // Val 6
       sprintf(ENDOF(buf), "  Attachable position: ^c%s^n", mod_name[GET_OBJ_VAL(j, 6)]);

@@ -2143,6 +2143,7 @@ const char *holster_types[] = {
 };
 
 const char *docwagon_contract_types[] = {
+  "Bugged (alert an imm)", // undefined / 0
   "Basic",
   "Gold",
   "Platinum"
