@@ -1657,6 +1657,10 @@ enum {
 #define SCMD_LOOK       0
 #define SCMD_READ       1
 
+/* do_examine */
+#define SCMD_EXAMINE    0
+#define SCMD_PROBE      1
+
 /* do_qcomm */
 #define SCMD_QSAY       0
 #define SCMD_QECHO      1

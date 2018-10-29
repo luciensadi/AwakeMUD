@@ -764,6 +764,7 @@ struct command_info cmd_info[] =
     { "practice" , POS_RESTING , do_practice , 1, 0 },
     { "prance"   , POS_STANDING, do_action   , 0, 0 },
     { "pray"     , POS_SITTING , do_action   , 0, 0 },
+    { "probe"    , POS_RESTING , do_examine  , 0, SCMD_PROBE },
     { "program"  , POS_RESTING , do_program  , 0, 0 },
     { "progress" , POS_RESTING , do_progress , 0, 0 },
     { "prone"    , POS_FIGHTING, do_prone    , 0, 0 },

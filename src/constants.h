@@ -100,4 +100,12 @@ extern const char *fire_mode[];
 extern const char *weapon_type[];
 extern const char *combat_modifiers[];
 extern const char *pgroup_privileges[];
+extern const char *workshops[];
+extern const char *projectile_ammo_types[];
+extern const char *magic_tool_types[];
+extern const char *holster_types[];
+extern const char *docwagon_contract_types[];
+extern const char *gun_accessory_locations[];
+extern const char *gun_accessory_types[];
+extern const char *mount_types[];
 #endif

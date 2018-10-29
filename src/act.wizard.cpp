@@ -809,7 +809,6 @@ void do_stat_veh(struct char_data *ch, struct veh_data * k)
   virt = veh_index[k->veh_number].vnum;
   sprintf(buf, "Name: '^y%s^n', Aliases: %s\r\n",
           k->short_description, k->name);
-
   sprintf(ENDOF(buf), "Vnum: [^g%5ld^n] Rnum: [%5ld] Type: [%10s] Idnum: [%8ld] Owner: [%8ld]\r\n",
           virt, k->veh_number, veh_type[k->type], k->idnum, k->owner);
   sprintf(ENDOF(buf), "Han: [^B%d^n]  Spe: [^B%d^n]  Acc: [^B%d^n]  Bod: [^B%d^n]  Arm: [^B%d^n]\r\n",
@@ -818,17 +817,6 @@ void do_stat_veh(struct char_data *ch, struct veh_data * k)
           k->sig, k->autonav, k->pilot, k->seating[1], k->seating[0], (int)k->usedload, (int)k->load, k->cost);
   send_to_char(buf, ch);
 }
-
-const char *workshops[] = {
-                      "General",
-                      "Electronics",
-                      "Microtronics",
-                      "Cyberware",
-                      "Vehicle",
-                      "Weaponry",
-                      "Medical",
-                      "Ammunition"
-                    };
 
 void do_stat_object(struct char_data * ch, struct obj_data * j)
 {
