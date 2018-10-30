@@ -1578,11 +1578,11 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     case ITEM_WEAPON:
       if (IS_GUN(GET_OBJ_VAL((j), 3))) {
         if (GET_OBJ_VAL(j, 5) > 0) {
-          sprintf(ENDOF(buf), "It is a ^c%d-round %s^n that you use the ^c%s^n skill to fire. Its damage code is ^c%d %s^n.",
+          sprintf(ENDOF(buf), "It is a ^c%d-round %s^n that you use the ^c%s^n skill to fire. Its damage code is ^c%d%s^n.",
                   GET_OBJ_VAL(j, 5), weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name,
                   GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)]);
         } else {
-          sprintf(ENDOF(buf), "It is %s ^c%s^n that you use the ^c%s^n skill to fire. Its damage code is ^c%d %s^n.",
+          sprintf(ENDOF(buf), "It is %s ^c%s^n that you use the ^c%s^n skill to fire. Its damage code is ^c%d%s^n.",
                   AN(weapon_type[GET_OBJ_VAL(j, 3)]), weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name,
                   GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)]);
         }
