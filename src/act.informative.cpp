@@ -1531,8 +1531,6 @@ void look_at_veh(struct char_data *ch, struct veh_data *veh, int success)
 
 void do_probe_veh(struct char_data *ch, struct veh_data * k)
 {
-  long virt;
-  virt = veh_index[k->veh_number].vnum;
   sprintf(buf, "Name: '^y%s^n', Aliases: %s\r\n",
           k->short_description, k->name);
   sprintf(ENDOF(buf), "It is a ^c%s^n with handling ^c%d^n, a top speed of ^c%d^n, and raw acceleration of ^c%d^n.\r\n",
@@ -1547,11 +1545,9 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
 }
 
 void do_probe_object(struct char_data * ch, struct obj_data * j) {
-  long virt;
   int i, found;
   bool has_pockets = FALSE;
   
-  virt = GET_OBJ_VNUM(j);
   sprintf(buf, "OOC statistics for '^y%s^n':\r\n", ((j->text.name) ? j->text.name : "<None>"));
   
   sprinttype(GET_OBJ_TYPE(j), item_types, buf1);
@@ -1700,6 +1696,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     case ITEM_SPELL_FORMULA:
       sprintf(ENDOF(buf), "It is a ^cforce-%d %s^n designed for ^c%s^n mages.", GET_OBJ_VAL(j, 0),
               spells[GET_OBJ_VAL(j, 1)].name, GET_OBJ_VAL(j, 2) ? "Shamanic" : "Hermetic");
+      break;
     case ITEM_PART:
       sprintf(ENDOF(buf), "It is %s ^c%s^n designed for MPCP ^c%d^n decks.", AN(parts[GET_OBJ_VAL(j, 0)].name),
               parts[GET_OBJ_VAL(j, 0)].name, GET_OBJ_VAL(j, 2));
