@@ -1549,28 +1549,30 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
 void do_probe_object(struct char_data * ch, struct obj_data * j) {
   long virt;
   int i, found;
+  bool has_pockets = FALSE;
   
   virt = GET_OBJ_VNUM(j);
-  sprintf(buf, "Name: '^y%s^n', Aliases: %s\r\n",
-          ((j->text.name) ? j->text.name : "<None>"),
-          j->text.keywords);
+  sprintf(buf, "OOC statistics for '^y%s^n':\r\n", ((j->text.name) ? j->text.name : "<None>"));
   
   sprinttype(GET_OBJ_TYPE(j), item_types, buf1);
+  sprintf(ENDOF(buf), "It is %s ^c%s^n that weighs ^c%.2f^n kilos. It is made of ^c%s^n with a durability of ^c%d^n.\r\n",
+          AN(buf1), buf1, GET_OBJ_WEIGHT(j), material_names[(int)GET_OBJ_MATERIAL(j)], GET_OBJ_BARRIER(j));
   
-  j->obj_flags.wear_flags.PrintBits(buf2, MAX_STRING_LENGTH,
-                                    wear_bits, NUM_WEARS);
-  sprintf(ENDOF(buf), "Can be worn on: %s\r\n", buf2);
-  
-  sprintf(ENDOF(buf), "Weight: ^c%.2f^n, Material: ^c%s^n, Barrier Rating: ^c%d^n, Type: ^c%s^n\r\n",
-          GET_OBJ_WEIGHT(j), material_names[(int)GET_OBJ_MATERIAL(j)], GET_OBJ_BARRIER(j), buf1);
+  if (strcmp(j->obj_flags.wear_flags.ToString(), "0") != 0) {
+    j->obj_flags.wear_flags.PrintBits(buf2, MAX_STRING_LENGTH, wear_bits, NUM_WEARS);
+    sprintf(ENDOF(buf), "It can be worn or equipped at the following wear location(s):\r\n  ^c%s^n\r\n", buf2);
+  } else {
+    sprintf(ENDOF(buf), "This item cannot be worn or equipped.\r\n");
+  }
   
   switch (GET_OBJ_TYPE(j))
   {
     case ITEM_LIGHT:
-      if (GET_OBJ_VAL(j, 2) == -1)
-        sprintf(ENDOF(buf), "Hours of light left: ^cinfinite^n");
-      else
-        sprintf(ENDOF(buf), "Hours of light left: ^c%d^n", GET_OBJ_VAL(j, 2));
+      if (GET_OBJ_VAL(j, 2) == -1) {
+        sprintf(ENDOF(buf), "It is an ^cinfinite^n light source.");
+      } else {
+        sprintf(ENDOF(buf), "It has ^c%d^n hours of light left.", GET_OBJ_VAL(j, 2));
+      }
       break;
     case ITEM_FIREWEAPON:
       sprintf(ENDOF(buf), "Str Min: ^c%d^n, Str+: ^c%d^n, Damage Code ^c%d%s^n, Skill: ^c%s^n, Type: ^c%s^n\r\n",
@@ -1579,156 +1581,197 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       break;
     case ITEM_WEAPON:
       if (IS_GUN(GET_OBJ_VAL((j), 3))) {
-        sprintf(ENDOF(buf), "Damage Code ^c%d%s^n, WeapType: ^c%s^n, Skill: ^c%s^n, Max Ammo: ^c%d^n",
-                GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)],
-                weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name, GET_OBJ_VAL(j, 5));
+        if (GET_OBJ_VAL(j, 5) > 0) {
+          sprintf(ENDOF(buf), "It is a ^c%d-round %s^n that you use the ^c%s^n skill to fire. Its damage code is ^c%d %s^n.",
+                  GET_OBJ_VAL(j, 5), weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name,
+                  GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)]);
+        } else {
+          sprintf(ENDOF(buf), "It is %s ^c%s^n that you use the ^c%s^n skill to fire. Its damage code is ^c%d %s^n.",
+                  AN(weapon_type[GET_OBJ_VAL(j, 3)]), weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name,
+                  GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)]);
+        }
       } else {
-        sprintf(ENDOF(buf), "Damage Code ^c%d%s^n, Str+: ^c%d^n, WeapType: ^c%s^n, Skill: ^c%s^n",
-                GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)], GET_OBJ_VAL(j, 2),
-                weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name);
-        
+        if (GET_OBJ_VAL(j, 2) > 0) {
+          sprintf(ENDOF(buf), "It is a ^c%s^n that you use the ^c%s^n skill to attack with. Its damage code is ^c(STR+%d) %s^n.",
+                  weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name, GET_OBJ_VAL(j, 2), wound_arr[GET_OBJ_VAL(j, 1)]);
+        } else {
+          sprintf(ENDOF(buf), "It is a ^c%s^n that you use the ^c%s^n skill to attack with. Its damage code is ^c(STR) %s^n.",
+                  weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name, wound_arr[GET_OBJ_VAL(j, 1)]);
+        }
       }
       break;
     case ITEM_MISSILE:
-      sprintf(ENDOF(buf), "Missile type: ^c%s^n", (GET_OBJ_VAL(j, 0) == 0 ? "Arrow" : "Bolt"));
+      if (GET_OBJ_VAL(j, 0) == 0) {
+        sprintf(ENDOF(buf), "It is an ^carrow^n suitable for use in a bow.");
+      } else {
+        sprintf(ENDOF(buf), "It is a ^cbolt^n suitable for use in a crossbow.");
+      }
       break;
     case ITEM_WORN:
-      sprintf(ENDOF(buf), "Pocket space: ^c%d^n magazine(s), ^c%d^n holster(s), ^c%d^n misc small item(s)\r\n",
-              GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 4));
-      sprintf(ENDOF(buf), "Ballistic: ^c%d^n, Impact: ^c%d^n  Concealability: ^c%d^n",
+      sprintf(buf1, "It has space for ");
+      
+      if (GET_OBJ_VAL(j, 0) > 0) {
+        sprintf(ENDOF(buf1), "%s^c%d^n holster%s", (has_pockets?", ":""), GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 0) > 1 ? "s":"");
+        has_pockets = TRUE;
+      }
+      if (GET_OBJ_VAL(j, 1) > 0) {
+        sprintf(ENDOF(buf1), "%s^c%d^n magazine%s", (has_pockets?", ":""), GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 1) > 1 ? "s":"");
+        has_pockets = TRUE;
+      }
+      if (GET_OBJ_VAL(j, 4) > 0) {
+        sprintf(ENDOF(buf1), "%s^c%d^n miscellaneous small item%s", (has_pockets?", ":""), GET_OBJ_VAL(j, 4), GET_OBJ_VAL(j, 4) > 1 ? "s":"");
+        has_pockets = TRUE;
+      }
+      
+      if (has_pockets) {
+        sprintf(ENDOF(buf), "%s.\r\n", buf1);
+      } else {
+        strcat(buf, "It has no pockets.\r\n");
+      }
+      sprintf(ENDOF(buf), "It provides ^c%d^n ballistic armor and ^c%d^n impact armor. Its concealability rating is ^c%d^n.",
               GET_OBJ_VAL(j, 5), GET_OBJ_VAL(j, 6), GET_OBJ_VAL(j, 7));
       break;
     case ITEM_DOCWAGON:
-      sprintf(ENDOF(buf), "Contract type: ^c%s^n, Bonded: ^c%s^n",
-              docwagon_contract_types[GET_OBJ_VAL(j, 0)],
-              GET_OBJ_VAL(j, 1) ? (GET_OBJ_VAL(j, 1) == GET_IDNUM(ch) ? "yes (to you)" : "yes (to someone else)") : "no");
+      sprintf(ENDOF(buf), "It is a ^c%s^n contract that ^c%s bonded%s^n.",
+              docwagon_contract_types[GET_OBJ_VAL(j, 0)], GET_OBJ_VAL(j, 1) ? "is" : "has not been",
+              GET_OBJ_VAL(j, 1) ? (GET_OBJ_VAL(j, 1) == GET_IDNUM(ch) ? " to you" : " to someone else") : " to anyone yet");
       break;
     case ITEM_CONTAINER:
-      sprintf(ENDOF(buf), "Max-contains: ^c%d^n", GET_OBJ_VAL(j, 0));
+      sprintf(ENDOF(buf), "It can hold a maximum of ^c%d^n kilograms.", GET_OBJ_VAL(j, 0));
       break;
     case ITEM_DRINKCON:
     case ITEM_FOUNTAIN:
       sprinttype(GET_OBJ_VAL(j, 2), drinks, buf2);
-      sprintf(ENDOF(buf), "Max-contains: ^c%d^n, Contains: ^c%d^n, Liquid: ^c%s^n",
+      sprintf(ENDOF(buf), "It currently contains ^c%d/%d^n units of ^c%s^n.",
               GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 1), buf2);
       break;
     case ITEM_MONEY:
       if (!GET_OBJ_VAL(j, 1))
-        sprintf(ENDOF(buf), "Value: ^c%d^n, Type: ^cnuyen^n", GET_OBJ_VAL(j, 0));
+        sprintf(ENDOF(buf), "It is a stack of cash worth ^c%d^n nuyen.", GET_OBJ_VAL(j, 0));
       else
-        sprintf(ENDOF(buf), "Value: ^c%d^n, Type: ^ccredstick^n, Security: ^c%s^n", GET_OBJ_VAL(j, 0),
-                (GET_OBJ_VAL(j, 2) == 1 ? "6-digit" : (GET_OBJ_VAL(j, 2) == 2 ?
-                                                       "thumbprint" : "retina")));
+        sprintf(ENDOF(buf), "It is a ^c%s^n-secured ^ccredstick^n loaded with ^c%d^n nuyen.",
+                (GET_OBJ_VAL(j, 2) == 1 ? "6-digit PIN" : (GET_OBJ_VAL(j, 2) == 2 ? "thumbprint" : "retina")), GET_OBJ_VAL(j, 0));
       break;
     case ITEM_KEY:
       sprintf(ENDOF(buf), "No OOC information is available about this key.");
       break;
     case ITEM_FOOD:
-      sprintf(ENDOF(buf), "Fullness / nutrition value: ^c%d^n", GET_OBJ_VAL(j, 0));
+      sprintf(ENDOF(buf), "It provides ^c%d^n units of nutrition when eaten.", GET_OBJ_VAL(j, 0));
       break;
     case ITEM_QUIVER:
       if (GET_OBJ_VAL(j, 1) >= 0 && GET_OBJ_VAL(j, 1) <= 3) {
-        sprintf(ENDOF(buf), "Max-contains: ^c%d^n, Type contains: ^c%s^n", GET_OBJ_VAL(j, 0), projectile_ammo_types[GET_OBJ_VAL(j, 1)]);
+        sprintf(ENDOF(buf), "It can hold up to ^c%d^n ^c%s%s^n.", GET_OBJ_VAL(j, 0), projectile_ammo_types[GET_OBJ_VAL(j, 1)],
+                GET_OBJ_VAL(j, 0) > 1 ? "s" : "");
       } else {
-        sprintf(ENDOF(buf), "Max-contains: ^c%d^n, Type contains: ^cUndefined^n", GET_OBJ_VAL(j, 0));
+        sprintf(ENDOF(buf), "It can hold up to ^c%d^n ^cundefined projectiles^n.", GET_OBJ_VAL(j, 0));
       }
       break;
     case ITEM_PATCH:
-      sprintf(ENDOF(buf), "Type: ^c%s^n, Rating: ^c%d^n", patch_names[GET_OBJ_VAL(j, 0)],
-              GET_OBJ_VAL(j, 1));
+      sprintf(ENDOF(buf), "It is a rating-^c%d^n ^c%s^n patch.", GET_OBJ_VAL(j, 1), patch_names[GET_OBJ_VAL(j, 0)]);
       break;
     case ITEM_CYBERDECK:
-      sprintf(ENDOF(buf), "MPCP: ^c%d^n, Hardening: ^c%d^n, Active: ^c%d^n, Storage: ^c%d^n, Load: ^c%d^n",
+      sprintf(ENDOF(buf), "MPCP: ^c%d^n, Hardening: ^c%d^n, Active: ^c%d^n, Storage: ^c%d^n, Load: ^c%d^n.",
               GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 2),
               GET_OBJ_VAL(j, 3), GET_OBJ_VAL(j, 4));
       break;
     case ITEM_PROGRAM:
+      sprintf(ENDOF(buf), "It is a ^crating-%d %s^n program, ^c%d^n units in size.",
+              GET_OBJ_VAL(j, 1), programs[GET_OBJ_VAL(j, 0)].name, GET_OBJ_VAL(j, 2));
       if (GET_OBJ_VAL(j, 0) == SOFT_ATTACK)
-        sprintf(buf2, ", DamType: ^c%s^n", wound_name[GET_OBJ_VAL(j, 3)]);
-      else
-        sprintf(buf2, " ");
-      sprintf(ENDOF(buf), "Type: ^c%s^n, Rating: ^c%d^n, Size: ^c%d%s^n",
-              programs[GET_OBJ_VAL(j, 0)].name, GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 2), buf2);
+        sprintf(ENDOF(buf), " Its damage code is ^c%s^n.", wound_name[GET_OBJ_VAL(j, 3)]);
       break;
     case ITEM_BIOWARE:
-      sprintf(ENDOF(buf), "Rating: ^c%d^n, Index: ^c%d^n, Type: ^c%s^n, Cultured: ^c%s^n", GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 4),
-              bio_types[GET_OBJ_VAL(j, 0)], GET_OBJ_VAL(j, 2) || GET_OBJ_VAL(j, 0) >= BIO_CEREBRALBOOSTER ? "Yes" : "No");
+      sprintf(ENDOF(buf), "It is a ^crating-%d %s%s^n that uses ^c%2.f^n index when installed.",
+              GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 2) || GET_OBJ_VAL(j, 0) >= BIO_CEREBRALBOOSTER ? "cultured " : "",
+              bio_types[GET_OBJ_VAL(j, 0)], (float) (GET_OBJ_VAL(j, 4) / 100));
       break;
     case ITEM_CYBERWARE:
-      sprintf(ENDOF(buf), "Rating: ^c%d^n, Essence: ^c%d^n, Type: ^c%s^n, Grade: ^c%s^n", GET_OBJ_VAL(j, 1),
-              GET_OBJ_VAL(j, 4), cyber_types[GET_OBJ_VAL(j, 0)], cyber_grades[GET_OBJ_VAL(j, 2)]);
+      sprintf(ENDOF(buf), "It is a ^crating-%d %s-grade %s^n that uses ^c%2.f^n essence when installed.",
+              GET_OBJ_VAL(j, 1), cyber_grades[GET_OBJ_VAL(j, 2)], cyber_types[GET_OBJ_VAL(j, 0)],
+              (float) (GET_OBJ_VAL(j, 4) / 100));
       break;
     case ITEM_WORKSHOP:
-      sprintf(ENDOF(buf), "Type: ^c%s^n, For: ^c%s^n", GET_OBJ_VAL(j, 1) ? GET_OBJ_VAL(j, 1) == 3 ? "Facility": "Workshop" : "Kit",
-              workshops[GET_OBJ_VAL(j, 0)]);
+      sprintf(ENDOF(buf), "It is a ^c%s^n designed for ^c%s^n.",
+              GET_OBJ_VAL(j, 1) ? GET_OBJ_VAL(j, 1) == 3 ? "Facility": "Workshop" : "Kit", workshops[GET_OBJ_VAL(j, 0)]);
       break;
     case ITEM_FOCUS:
       sprintf(ENDOF(buf), "Focus information not available-- you'll have to ASSENSE it.");
       break;
     case ITEM_SPELL_FORMULA:
-      sprintf(ENDOF(buf), "Type: ^c%s^n Force: ^c%d^n Tradition: ^c%s^n", spells[GET_OBJ_VAL(j, 1)].name, GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 2) ? "Shamanic" : "Hermetic");
+      sprintf(ENDOF(buf), "It is a ^cforce-%d %s^n designed for ^c%s^n mages.", GET_OBJ_VAL(j, 0),
+              spells[GET_OBJ_VAL(j, 1)].name, GET_OBJ_VAL(j, 2) ? "Shamanic" : "Hermetic");
     case ITEM_PART:
-      sprintf(ENDOF(buf), "Part type: ^c%s^n  Target MPCP: ^c%d^n", parts[GET_OBJ_VAL(j, 0)].name, GET_OBJ_VAL(j, 2));
+      sprintf(ENDOF(buf), "It is %s ^c%s^n designed for MPCP ^c%d^n decks.", AN(parts[GET_OBJ_VAL(j, 0)].name),
+              parts[GET_OBJ_VAL(j, 0)].name, GET_OBJ_VAL(j, 2));
       break;
     case ITEM_CUSTOM_DECK:
       sprintf(ENDOF(buf), "You should EXAMINE this deck, or jack in and view its SOFTWARE.");
       break;
     case ITEM_DRUG:
-      sprintf(ENDOF(buf), "Drug Type: ^c%s^n", drug_types[GET_OBJ_VAL(j, 0)].name);
+      sprintf(ENDOF(buf), "It is a dose of ^c%s^n.", drug_types[GET_OBJ_VAL(j, 0)].name);
       break;
     case ITEM_MAGIC_TOOL:
-      sprintf(ENDOF(buf), "Type: ^c%s^n  Rating: ^c%d^n", magic_tool_types[GET_OBJ_VAL(j, 0)], GET_OBJ_VAL(j, 1));
+      sprintf(ENDOF(buf), "It is a ^crating-^c%d %s^n.", GET_OBJ_VAL(j, 1), magic_tool_types[GET_OBJ_VAL(j, 0)]);
       break;
     case ITEM_RADIO:
-      sprintf(ENDOF(buf), "Range: ^c%d^n  Encryption/decryption rating: ^c%d^n", GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 2));
+      sprintf(ENDOF(buf), "It has a ^c%d/5^n range and can encrypt and decrypt signals up to crypt level ^c%d^n.",
+              GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 2));
       break;
     case ITEM_GUN_ACCESSORY:
-      sprintf(ENDOF(buf), "Mount location: ^c%s^n  Type: ^c%s^n",
-              gun_accessory_locations[GET_OBJ_VAL(j, 0)], gun_accessory_types[GET_OBJ_VAL(j, 1)]);
       if (GET_OBJ_VAL(j, 1) == ACCESS_SMARTLINK || GET_OBJ_VAL(j, 1) == ACCESS_GASVENT) {
-        sprintf(ENDOF(buf), "  Rating: ^c%d^n", GET_OBJ_VAL(j, 2));
+        sprintf(ENDOF(buf), "It is a ^crating-%d %s^n that attaches to the ^c%s^n.",
+                GET_OBJ_VAL(j, 2), gun_accessory_types[GET_OBJ_VAL(j, 1)], gun_accessory_locations[GET_OBJ_VAL(j, 0)]);
+      } else {
+        sprintf(ENDOF(buf), "It is %s ^c%s^n that attaches to the ^c%s^n.",
+                AN(gun_accessory_types[GET_OBJ_VAL(j, 1)]), gun_accessory_types[GET_OBJ_VAL(j, 1)]
+                , gun_accessory_locations[GET_OBJ_VAL(j, 0)]);
       }
+      
       break;
     case ITEM_GYRO:
     case ITEM_CLIMBING:
     case ITEM_RCDECK:
-      sprintf(ENDOF(buf), "Rating: ^c%d^n", GET_OBJ_VAL(j, 0));
+      sprintf(ENDOF(buf), "Its rating is ^c%d^n.", GET_OBJ_VAL(j, 0));
       break;
     case ITEM_CHIP:
-      sprintf(ENDOF(buf), "Skill: ^c%s^n  Rating: ^c%d^n", skills[GET_OBJ_VAL(j, 0)].name, GET_OBJ_VAL(j, 1));
+      sprintf(ENDOF(buf), "It grants the skill ^c%s^n at rating ^c%d^n.", skills[GET_OBJ_VAL(j, 0)].name, GET_OBJ_VAL(j, 1));
       break;
     case ITEM_HOLSTER:
-      sprintf(ENDOF(buf), "Type: ^c%s^n", holster_types[GET_OBJ_VAL(j, 0)]);
+      sprintf(ENDOF(buf), "It is designed for a ^c%s^n.", holster_types[GET_OBJ_VAL(j, 0)]);
       break;
     case ITEM_DECK_ACCESSORY:
       // TODO
       break;
     case ITEM_MOD:
-      sprintf(ENDOF(buf), "Type: ^c%s^n", mod_types[GET_OBJ_VAL(j, 0)].name);
+      sprintf(ENDOF(buf), "It is %s ^c%s^n upgrade", AN(mod_types[GET_OBJ_VAL(j, 0)].name), mod_types[GET_OBJ_VAL(j, 0)].name);
       
       // Val 1
       if (GET_OBJ_VAL(j, 0) == TYPE_MOUNT) {
-        sprintf(ENDOF(buf), "  Mount Location: ^c%s^n", mount_types[GET_OBJ_VAL(j, 1)]);
+        sprintf(ENDOF(buf), " that adds %s ^c%s^n.", AN(mount_types[GET_OBJ_VAL(j, 1)]), mount_types[GET_OBJ_VAL(j, 1)]);
       } else {
-        sprintf(ENDOF(buf), "  Load space taken up: ^c%d^n", GET_OBJ_VAL(j, 1));
+        sprintf(ENDOF(buf), " that takes up ^c%d^n load space.", GET_OBJ_VAL(j, 1));
       }
       
       // Val 2
       if (GET_OBJ_VAL(j, 0) == MOD_ENGINE) {
         // engine type
-        sprintf(ENDOF(buf), "  Engine type: ^c%s^n", engine_type[GET_OBJ_VAL(j, 2)]);
+        sprintf(ENDOF(buf), "\r\nIt is %s ^c%s^n engine.", AN(engine_type[GET_OBJ_VAL(j, 2)]), engine_type[GET_OBJ_VAL(j, 2)]);
       } else if (GET_OBJ_VAL(j, 0) == MOD_RADIO) {
         // radio range 0-5
-        sprintf(ENDOF(buf), "  Range: ^c%d^n  Crypt: ^c%d^n", GET_OBJ_VAL(j, 2), GET_OBJ_VAL(j, 3));
+        sprintf(ENDOF(buf), "\r\nIt has a ^c%d/5^n range and can encrypt and decrypt signals up to crypt level ^c%d^n.",
+                GET_OBJ_VAL(j, 2), GET_OBJ_VAL(j, 3));
       } else {
-        sprintf(ENDOF(buf), "  Rating: ^c%d^n", GET_OBJ_VAL(j, 2));
+        sprintf(ENDOF(buf), "\r\nIt functions at rating ^c%d^n.", GET_OBJ_VAL(j, 2));
       }
       
-      // Val 4
-      sprintf(ENDOF(buf), "  Designed for: ^c%s^n", GET_OBJ_VAL(j, 4) == 0 ? "Vehicles" : GET_OBJ_VAL(j, 4) == 1 ? "Drones" : "All types of vehicle");
+      // Val 5
+      sprintbit(GET_OBJ_VAL(j, 5), engine_type, buf2);
+      sprintf(ENDOF(buf), "\r\nIt is compatible with the following engine types:\r\n^c  %s^n", buf2);
       
-      // Val 6
-      sprintf(ENDOF(buf), "  Attachable position: ^c%s^n", mod_name[GET_OBJ_VAL(j, 6)]);
+      // Vals 4 and 6
+      sprintf(ENDOF(buf), "\r\nIt has been designed to fit ^c%s^n, and installs to the ^c%s^n.",
+              GET_OBJ_VAL(j, 4) == 0 ? "vehicles" : GET_OBJ_VAL(j, 4) == 1 ? "drones" : "all types of vehicles",
+              mod_name[GET_OBJ_VAL(j, 6)]);
       break;
     case ITEM_DESIGN:
       // TODO
@@ -1750,9 +1793,20 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       strcat(buf, "This item type has no probe string. Contact the staff to request one.");
       break;
   }
-  strcat(buf, "^n\r\n");
+  strcat(buf, "^n\r\n\r\n");
   found = 0;
-  sprintf(buf1, "Affections:^c");
+  
+  if (strcmp(j->obj_flags.bitvector.ToString(), "0") != 0) {
+    j->obj_flags.bitvector.PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
+    sprintf(ENDOF(buf), "This object provides the following flags when used: ^c%s^n\r\n", buf2);
+  }
+  
+  if (strcmp(GET_OBJ_EXTRA(j).ToString(), "0") != 0) {
+    GET_OBJ_EXTRA(j).PrintBits(buf2, MAX_STRING_LENGTH, extra_bits, ITEM_EXTRA_MAX);
+    sprintf(ENDOF(buf), "This object has the following extra features: ^c%s^n\r\n", buf2);
+  }
+  
+  sprintf(buf1, "This object modifies your character in the following ways when used:\r\n  ^c");
   for (i = 0; i < MAX_OBJ_AFFECT; i++)
     if (j->affected[i].modifier)
     {
@@ -1797,7 +1851,7 @@ ACMD(do_examine)
         
         // Display the vehicle's info.
         do_probe_veh(ch, found_veh);
-        send_to_char(WARNING_PROBE_COMMAND_IS_OOC, ch);
+        // send_to_char(WARNING_PROBE_COMMAND_IS_OOC, ch);
         return;
       }
       
@@ -1837,7 +1891,7 @@ ACMD(do_examine)
     if (target_veh) {
       if (subcmd == SCMD_PROBE) {
         do_probe_veh(ch, target_veh);
-        send_to_char(WARNING_PROBE_COMMAND_IS_OOC, ch);
+        // send_to_char(WARNING_PROBE_COMMAND_IS_OOC, ch);
       } else {
         look_at_veh(ch, target_veh, 12);
       }
@@ -1851,7 +1905,7 @@ ACMD(do_examine)
   if (subcmd == SCMD_PROBE) {
     if (tmp_object) {
       do_probe_object(ch, tmp_object);
-      send_to_char(WARNING_PROBE_COMMAND_IS_OOC, ch);
+      // send_to_char(WARNING_PROBE_COMMAND_IS_OOC, ch);
     } else {
       send_to_char("You don't see any vehicles or objects like that here.\r\n", ch);
     }
