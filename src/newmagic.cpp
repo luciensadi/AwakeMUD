@@ -1322,7 +1322,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     if (!AWAKE(vict))
       target -= 2;
     else {
-      // Dodge test: You must be awake. TODO: Height penalties.
+      // Dodge test: You must be awake.
       success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf));
     }
     success += success_test(skill, 4 + target);
@@ -1473,8 +1473,8 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     if (!AWAKE(vict))
       target -= 2;
     else {
-      // TODO: Why do you not get to use sidestep here?
-      success -= success_test(GET_DEFENSE(vict), 4 + damage_modifier(vict, buf));
+      // NOTE: Added sidestep here. Not sure if you should be able to sidestep lightning, but if you can dodge it in the first place...
+      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf));
     }
     act("Lightning bursts forth from $n and heads directly towards $N!", TRUE, ch, 0, vict, TO_ROOM);
     if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
