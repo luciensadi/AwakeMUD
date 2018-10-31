@@ -1970,7 +1970,6 @@ ACMD(do_examine)
         
         // Display the vehicle's info.
         do_probe_veh(ch, found_veh);
-        // send_to_char(WARNING_PROBE_COMMAND_IS_OOC, ch);
         return;
       }
       
@@ -2010,7 +2009,6 @@ ACMD(do_examine)
     if (target_veh) {
       if (subcmd == SCMD_PROBE) {
         do_probe_veh(ch, target_veh);
-        // send_to_char(WARNING_PROBE_COMMAND_IS_OOC, ch);
       } else {
         look_at_veh(ch, target_veh, 12);
       }
@@ -2024,7 +2022,6 @@ ACMD(do_examine)
   if (subcmd == SCMD_PROBE) {
     if (tmp_object) {
       do_probe_object(ch, tmp_object);
-      // send_to_char(WARNING_PROBE_COMMAND_IS_OOC, ch);
     } else {
       send_to_char("You don't see any vehicles or objects like that here.\r\n", ch);
     }

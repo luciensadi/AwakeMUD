@@ -22,5 +22,4 @@ extern const char *START_MESSG;
 extern const char *YOU_NEED_OLC_FOR_THAT;
 extern const char *DEFAULT_POOFIN_STRING;
 extern const char *DEFAULT_POOFOUT_STRING;
-extern const char *WARNING_PROBE_COMMAND_IS_OOC;
 #endif
