@@ -558,7 +558,7 @@ struct command_info cmd_info[] =
     { "envy"     , POS_LYING   , do_action   , 0, 0 },
     { "equipment", POS_SLEEPING, do_equipment, 0, 0 },
     { "exits"    , POS_LYING   , do_exits    , 0, 0 },
-    { "examine"  , POS_RESTING , do_examine  , 0, 0 },
+    { "examine"  , POS_RESTING , do_examine  , 0, SCMD_EXAMINE },
     { "exclaim"  , POS_LYING   , do_exclaim  , 0, 0 },
     { "eyebrow"  , POS_LYING   , do_action   , 0, 0 },
     { "extend"  , POS_SITTING , do_retract  , 0, 0 },
