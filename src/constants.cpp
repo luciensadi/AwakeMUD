@@ -2152,7 +2152,7 @@ const char *docwagon_contract_types[] = {
 const char *gun_accessory_locations[] = {
   "top",
   "barrel",
-  "under"
+  "underside"
 };
 
 const char *gun_accessory_types[] = {

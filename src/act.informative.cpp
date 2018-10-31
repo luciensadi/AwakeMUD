@@ -1625,8 +1625,8 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 break;
               case ACCESS_SMARTLINK:
                 has_smartlink = TRUE;
-                sprintf(ENDOF(buf), "\r\nA ^crating-%d^n smartlink attached to the %s provides ^c%d^n to target numbers.",
-                        GET_OBJ_VAL(access, 2), gun_accessory_locations[mount_location],
+                sprintf(ENDOF(buf), "\r\nA Smartlink%s attached to the %s provides ^c%d^n to target numbers.",
+                        GET_OBJ_VAL(access, 2) < 2 ? "" : "-II", gun_accessory_locations[mount_location],
                         (GET_OBJ_VAL(j, 1) == 1 || GET_OBJ_VAL(access, 2) < 2) ? -2 : -4);
                 break;
               case ACCESS_SCOPE:
@@ -1673,9 +1673,6 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 log(buf1);
                 break;
             }
-          }
-          if (has_laser && has_smartlink) {
-            sprintf(ENDOF(buf), "\r\n\r\n^yWARNING:^n Your smartlink overrides your laser sight-- the laser will not function.");
           }
         }
       } else {
@@ -1910,6 +1907,11 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       strcat(buf, "This item type has no probe string. Contact the staff to request one.");
       break;
   }
+  
+  if (GET_OBJ_AFFECT(j).IsSet(AFF_LASER_SIGHT) && has_smartlink) {
+    sprintf(ENDOF(buf), "\r\n\r\n^yWARNING:^n Your smartlink overrides your laser sight-- the laser will not function.");
+  }
+  
   strcat(buf, "^n\r\n\r\n");
   found = 0;
   
