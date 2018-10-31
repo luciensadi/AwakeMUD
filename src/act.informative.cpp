@@ -1571,27 +1571,32 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       }
       break;
     case ITEM_FIREWEAPON:
-      sprintf(ENDOF(buf), "Str Min: ^c%d^n, Str+: ^c%d^n, Damage Code ^c%d%s^n, Skill: ^c%s^n, Type: ^c%s^n\r\n",
-              GET_OBJ_VAL(j, 6), GET_OBJ_VAL(j, 2), GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)],
-              skills[GET_OBJ_VAL(j, 4)].name, (GET_OBJ_VAL(j, 5) == 0 ? "Bow" : "Crossbow"));
+      sprintf(ENDOF(buf), "It is a ^c%s^n that requires ^c%d^n strength to use in combat.\r\n",
+              GET_OBJ_VAL(j, 5) == 0 ? "Bow" : "Crossbow", GET_OBJ_VAL(j, 6));
+      if (GET_OBJ_VAL(j, 2)) {
+        sprintf(ENDOF(buf), "It has a damage code of ^c(STR+%d)%s^n ", GET_OBJ_VAL(j, 2), wound_arr[GET_OBJ_VAL(j, 1)]);
+      } else {
+        sprintf(ENDOF(buf), "It has a damage code of ^c(STR)%s^n ", wound_arr[GET_OBJ_VAL(j, 1)]);
+      }
+      sprintf(ENDOF(buf), "and requires the ^c%s^n skill to use.", skills[GET_OBJ_VAL(j, 4)].name);
       break;
     case ITEM_WEAPON:
       if (IS_GUN(GET_OBJ_VAL((j), 3))) {
         if (GET_OBJ_VAL(j, 5) > 0) {
-          sprintf(ENDOF(buf), "It is a ^c%d-round %s^n that you use the ^c%s^n skill to fire. Its damage code is ^c%d%s^n.",
+          sprintf(ENDOF(buf), "It is a ^c%d-round %s^n that uses the ^c%s^n skill to fire. Its damage code is ^c%d%s^n.",
                   GET_OBJ_VAL(j, 5), weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name,
                   GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)]);
         } else {
-          sprintf(ENDOF(buf), "It is %s ^c%s^n that you use the ^c%s^n skill to fire. Its damage code is ^c%d%s^n.",
+          sprintf(ENDOF(buf), "It is %s ^c%s^n that uses the ^c%s^n skill to fire. Its damage code is ^c%d%s^n.",
                   AN(weapon_type[GET_OBJ_VAL(j, 3)]), weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name,
                   GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)]);
         }
       } else {
         if (GET_OBJ_VAL(j, 2) > 0) {
-          sprintf(ENDOF(buf), "It is a ^c%s^n that you use the ^c%s^n skill to attack with. Its damage code is ^c(STR+%d) %s^n.",
+          sprintf(ENDOF(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c(STR+%d)%s^n.",
                   weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name, GET_OBJ_VAL(j, 2), wound_arr[GET_OBJ_VAL(j, 1)]);
         } else {
-          sprintf(ENDOF(buf), "It is a ^c%s^n that you use the ^c%s^n skill to attack with. Its damage code is ^c(STR) %s^n.",
+          sprintf(ENDOF(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c(STR)%s^n.",
                   weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name, wound_arr[GET_OBJ_VAL(j, 1)]);
         }
       }
@@ -1737,7 +1742,28 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       sprintf(ENDOF(buf), "It is designed for a ^c%s^n.", holster_types[GET_OBJ_VAL(j, 0)]);
       break;
     case ITEM_DECK_ACCESSORY:
-      // TODO
+      if (GET_OBJ_VAL(j, 0) == TYPE_FILE) {
+        sprintf(ENDOF(buf), "This file requires ^c%d^n units of space.", GET_OBJ_VAL(j, 2));
+      } else if (GET_OBJ_VAL(j, 0) == TYPE_UPGRADE) {
+        if (GET_OBJ_VAL(j, 1) == 3) {
+          sprintf(ENDOF(buf), "This cyberdeck upgrade affects ^c%s^n with a rating of ^c%d^n.",
+                  deck_accessory_upgrade_types[GET_OBJ_VAL(j, 1)], GET_OBJ_VAL(j, 2));
+          if (GET_OBJ_VAL(j, 1) == 5) {
+            sprintf(ENDOF(buf), "\r\nIt is designed for MPCP rating ^c%d^n.", GET_OBJ_VAL(j, 3));
+          }
+        } else {
+          strcat(buf, "This cyberdeck upgrade adds a ^chitcher jack^n.");
+        }
+      } else if (GET_OBJ_VAL(j, 0) == TYPE_COMPUTER) {
+        sprintf(ENDOF(buf), "This computer has ^c%d^n units of active memory and ^c%d^n units of storage memory.",
+                GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 2));
+      } else if (GET_OBJ_VAL(j, 0) == TYPE_PARTS) {
+        sprintf(ENDOF(buf), "This pack of parts contains ^c%d^n units of ^c%s^n.",
+                GET_OBJ_COST(j), GET_OBJ_VAL(j, 1) == 0 ? "general parts" : "memory chips");
+      } else {
+        sprintf(buf2, "Error: Unknown ITEM_DECK_ACCESSORY type %d passed to probe command.", GET_OBJ_VAL(j, 0));
+        log(buf2);
+      }
       break;
     case ITEM_MOD:
       sprintf(ENDOF(buf), "It is %s ^c%s^n upgrade", AN(mod_types[GET_OBJ_VAL(j, 0)].name), mod_types[GET_OBJ_VAL(j, 0)].name);
@@ -1771,15 +1797,20 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               mod_name[GET_OBJ_VAL(j, 6)]);
       break;
     case ITEM_DESIGN:
-      // TODO
+      if (GET_OBJ_VAL(j, 0) == 5) {
+        sprintf(ENDOF(buf), "This design is for a ^crating-%d %s (%s)^n program. It requires ^c%d^n units of storage.\r\n",
+                GET_OBJ_VAL(j, 1), programs[GET_OBJ_VAL(j, 0)].name, wound_name[GET_OBJ_VAL(j, 2)],
+                (GET_OBJ_VAL(j, 1) * GET_OBJ_VAL(j, 1)) * attack_multiplier[GET_OBJ_VAL(j, 2)]);
+      } else {
+        sprintf(ENDOF(buf), "This design is for a ^crating-%d %s^n program. It requires ^c%d^n units of storage.\r\n",
+                GET_OBJ_VAL(j, 1), programs[GET_OBJ_VAL(j, 0)].name,
+                (GET_OBJ_VAL(j, 1) * GET_OBJ_VAL(j, 1)) * programs[GET_OBJ_VAL(j, 0)].multiplier);
+      }
       break;
-    /* TODO: What is the difference between GUN_MAG and GUN_AMMO? */
     case ITEM_GUN_MAGAZINE:
-      // TODO
-      break;
+      // All info about these is displayed when you examine them.
     case ITEM_GUN_AMMO:
-      // TODO
-      break;
+      // All info about these is displayed when you examine them.
     case ITEM_QUEST:
     case ITEM_OTHER:
     case ITEM_CAMERA:

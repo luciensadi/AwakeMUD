@@ -2176,3 +2176,12 @@ const char *mount_types[] = {
   "Turret",
   "Mini-Turret"
 };
+
+const char *deck_accessory_upgrade_types[] = {
+  "MPCP (replacement)",
+  "Active Memory",
+  "Storage Memory",
+  "Hitcher Jack",
+  "I/O Speed",
+  "Reaction Increase"
+};
