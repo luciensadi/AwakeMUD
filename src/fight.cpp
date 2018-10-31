@@ -3557,7 +3557,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
     
     // Setup: If you have a gyro mount, it negates recoil and movement penalties up to its rating.
     if (att->gyro && !(AFF_FLAGGED(ch, AFF_MANNING) || AFF_FLAGGED(ch, AFF_RIG) || AFF_FLAGGED(ch, AFF_PILOT)))
-      att->modifiers[COMBAT_MOD_GYRO] -= MIN(att->modifiers[COMBAT_MOD_MOVEMENT] + att->modifiers[COMBAT_MOD_RECOIL], GET_OBJ_VAL(att->gyro, 1));
+      att->modifiers[COMBAT_MOD_GYRO] -= MIN(att->modifiers[COMBAT_MOD_MOVEMENT] + att->modifiers[COMBAT_MOD_RECOIL], GET_OBJ_VAL(att->gyro, 0));
     
     // Calculate and display pre-success-test information.
     sprintf( rbuf, "%s", GET_CHAR_NAME( ch ) );

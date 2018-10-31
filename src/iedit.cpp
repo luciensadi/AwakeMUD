@@ -1521,17 +1521,8 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         send_to_char("That's not a valid choice!\r\n", d->character);
         iedit_disp_type_menu(d);
       } else if (number != 0) {
-        GET_OBJ_TYPE(d->edit_obj) = number;
-        GET_OBJ_VAL(d->edit_obj, 0) = 0;
-        GET_OBJ_VAL(d->edit_obj, 1) = 0;
-        GET_OBJ_VAL(d->edit_obj, 2) = 0;
-        GET_OBJ_VAL(d->edit_obj, 3) = 0;
-        GET_OBJ_VAL(d->edit_obj, 4) = 0;
-        GET_OBJ_VAL(d->edit_obj, 5) = 0;
-        GET_OBJ_VAL(d->edit_obj, 6) = 0;
-        GET_OBJ_VAL(d->edit_obj, 7) = 0;
-        GET_OBJ_VAL(d->edit_obj, 8) = 0;
-        GET_OBJ_VAL(d->edit_obj, 9) = 0;
+        for (int index = 0; index < NUM_VALUES; index++)
+          GET_OBJ_VAL(d->edit_obj, index) = 0;
       }
       iedit_disp_menu(d);
       break;

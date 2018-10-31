@@ -542,10 +542,9 @@ int Board_show_board(int board_type, struct obj_data *terminal,
           fname(terminal->text.keywords));
 
   if (!num_of_msgs[board_type])
-    sprintf(buf + strlen(buf), "%sThe %s has no files.\r\n", buf,
-            fname(terminal->text.keywords));
+    sprintf(ENDOF(buf), "The %s has no files.\r\n", fname(terminal->text.keywords));
   else
-    sprintf(buf + strlen(buf), "There are %d files on the %s.\r\n",
+    sprintf(ENDOF(buf), "There are %d files on the %s.\r\n",
             num_of_msgs[board_type], fname(terminal->text.keywords));
 
   send_to_char(buf, ch);
