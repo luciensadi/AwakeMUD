@@ -1321,11 +1321,17 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     check_killer(ch, vict);
     if (!AWAKE(vict))
       target -= 2;
+    else {
+      // Dodge test: You must be awake.
+      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf));
+    }
+    success += success_test(skill, 4 + target);
+      
     send_to_char("You feel a rush of air head towards you!\r\n", vict);
+      
     if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
       success = -1;
-    else
-      success = success_test(skill, 4 + target) - success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf));
+    
     if (success <= 0) {
       act("Your clout spell harmlessly disperses as $n dodges it.", FALSE, vict, 0, ch, TO_VICT);
       send_to_char("You easily dodge it!\r\n", vict);
@@ -1369,7 +1375,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     act("$n's hands seem to spontaneously combust as $e directs a stream of flame at $N!", TRUE, ch, 0, vict, TO_ROOM);
     if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
       success = -1;
-    else success = success_test(skill, target + 4);
+    else success += success_test(skill, target + 4);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, target + 4, success))) {
       vict = ch;
       ch = temp;      
@@ -1422,7 +1428,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     act("Dark clouds form around $n moments before it condenses into a dark sludge and flies towards $N!", TRUE, ch, 0, vict, TO_ROOM);
     if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
       success = -1;
-    else success = success_test(skill, target + 4);
+    else success += success_test(skill, target + 4);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, target + 4, success))) {
       vict = ch;
       ch = temp;      
@@ -1466,12 +1472,14 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     check_killer(ch, vict);
     if (!AWAKE(vict))
       target -= 2;
-    else
-      success -= success_test(GET_DEFENSE(vict), 4 + damage_modifier(vict, buf));
+    else {
+      // NOTE: Added sidestep here. Not sure if you should be able to sidestep lightning, but if you can dodge it in the first place...
+      success -= success_test(GET_DEFENSE(vict) + GET_DEFENSE(vict) ? GET_POWER(vict, ADEPT_SIDESTEP) : 0, 4 + damage_modifier(vict, buf));
+    }
     act("Lightning bursts forth from $n and heads directly towards $N!", TRUE, ch, 0, vict, TO_ROOM);
     if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
       success = -1;
-    else success = success_test(skill, target + 4);
+    else success += success_test(skill, target + 4);
     if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, target + 4, success))) {
       vict = ch;
       ch = temp;      
