@@ -1460,6 +1460,7 @@ enum {
 #define FOCI_SUSTAINED		5
 #define FOCI_WEAPON		6
 
+#define ACCESS_UNDEFINED  0 // usually a laser sight
 #define ACCESS_SMARTLINK	1
 #define ACCESS_SCOPE		2
 #define ACCESS_GASVENT		3
@@ -1474,6 +1475,9 @@ enum {
 #define ACCESS_LOCATION_TOP    7
 #define ACCESS_LOCATION_BARREL 8
 #define ACCESS_LOCATION_UNDER  9
+
+#define RECOIL_COMP_VALUE_BIPOD   2
+#define RECOIL_COMP_VALUE_TRIPOD  6
 
 #define MOD_NOWHERE		0
 #define MOD_INTAKE_FRONT	1

@@ -1547,8 +1547,9 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
 }
 
 void do_probe_object(struct char_data * ch, struct obj_data * j) {
-  int i, found;
-  bool has_pockets = FALSE;
+  int i, found, mount_location;
+  bool has_pockets = FALSE, added_extra_carriage_return = FALSE, has_smartlink = FALSE, has_laser = FALSE;
+  struct obj_data *access = NULL;
   
   sprintf(buf, "OOC statistics for '^y%s^n':\r\n", ((j->text.name) ? j->text.name : "<None>"));
   
@@ -1594,6 +1595,88 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
           sprintf(ENDOF(buf), "It is %s ^c%s^n that uses the ^c%s^n skill to fire. Its damage code is ^c%d%s%s^n.",
                   AN(weapon_type[GET_OBJ_VAL(j, 3)]), weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name,
                   GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)], !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
+        }
+        
+        // Info about attachments, if any.
+        for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++) {
+          if (GET_OBJ_VAL(j, i) > 0
+              && real_object(GET_OBJ_VAL(j, i)) > 0
+              && (access = &obj_proto[real_object(GET_OBJ_VAL(j, i))])) {
+            // mount_location: used for gun_accessory_locations[] lookup.
+            mount_location = i - ACCESS_LOCATION_TOP;
+            
+            // format flair
+            if (!added_extra_carriage_return) {
+              strcat(buf, "\r\n");
+              added_extra_carriage_return = TRUE;
+            }
+            
+            // parse and add the string for the accessory's special bonuses
+            switch (GET_OBJ_VAL(access, 1)) {
+              case ACCESS_UNDEFINED:
+                if (GET_OBJ_AFFECT(access).IsSet(AFF_LASER_SIGHT)) {
+                  has_laser = TRUE;
+                  sprintf(ENDOF(buf), "\r\nA laser sight attached to the %s provides ^c-1^n to target numbers.",
+                          gun_accessory_locations[mount_location]);
+                } else {
+                  sprintf(ENDOF(buf), "\r\n%s is attached to the %s, but its OOC values are unclear.",
+                          GET_OBJ_NAME(access), gun_accessory_locations[mount_location]);
+                }
+                break;
+              case ACCESS_SMARTLINK:
+                has_smartlink = TRUE;
+                sprintf(ENDOF(buf), "\r\nA ^crating-%d^n smartlink attached to the %s provides ^c%d^n to target numbers.",
+                        GET_OBJ_VAL(access, 2), gun_accessory_locations[mount_location],
+                        (GET_OBJ_VAL(j, 1) == 1 || GET_OBJ_VAL(access, 2) < 2) ? -2 : -4);
+                break;
+              case ACCESS_SCOPE:
+                sprintf(ENDOF(buf), "\r\nA scope has been attached to the %s.",
+                        gun_accessory_locations[mount_location]);
+                break;
+              case ACCESS_GASVENT:
+                sprintf(ENDOF(buf), "\r\nA gas vent installed in the %s provides ^c%d^n round%s worth of recoil compensation.",
+                        gun_accessory_locations[mount_location], -GET_OBJ_VAL(access, 2), -GET_OBJ_VAL(access, 2) > 1 ? "s'" : "'s");
+                break;
+              case ACCESS_SHOCKPAD:
+                sprintf(ENDOF(buf), "\r\nA shock pad installed on the %s provides ^c1^n round's worth of recoil compensation.",
+                        gun_accessory_locations[mount_location]);
+                break;
+              case ACCESS_SILENCER:
+                sprintf(ENDOF(buf), "\r\nThe silencer installed on the %s will muffle this weapon's report.",
+                        gun_accessory_locations[mount_location]);
+                break;
+              case ACCESS_SOUNDSUPP:
+                sprintf(ENDOF(buf), "\r\nThe suppressor installed on the %s will muffle this weapon's report.",
+                        gun_accessory_locations[mount_location]);
+                break;
+              case ACCESS_SMARTGOGGLE:
+                strcat(buf, "\r\n^RYou should never see this-- alert an imm.^n");
+                break;
+              case ACCESS_BIPOD:
+                sprintf(ENDOF(buf), "\r\nA bipod installed on the %s provides ^c%d^n round%s worth of recoil compensation when fired from prone.",
+                        gun_accessory_locations[mount_location], RECOIL_COMP_VALUE_BIPOD, RECOIL_COMP_VALUE_BIPOD > 1 ? "s'" : "'s");
+                break;
+              case ACCESS_TRIPOD:
+                sprintf(ENDOF(buf), "\r\nA tripod installed on the %s provides ^c%d^n round%s worth of recoil compensation when fired from prone.",
+                        gun_accessory_locations[mount_location], RECOIL_COMP_VALUE_TRIPOD, RECOIL_COMP_VALUE_TRIPOD > 1 ? "s'" : "'s");
+                break;
+              case ACCESS_BAYONET:
+                if (mount_location != ACCESS_LOCATION_UNDER) {
+                  strcat(buf, "\r\n^RYour bipod has been mounted in the wrong location and is nonfunctional. Alert an imm.");
+                } else {
+                  sprintf(ENDOF(buf), "\r\nA bayonet attached to the %s allows you to use the Pole Arms skill when defending from melee attacks.",
+                          gun_accessory_locations[mount_location]);
+                }
+                break;
+              default:
+                sprintf(buf1, "SYSERR: Unknown accessory type %d passed to do_probe_object()", GET_OBJ_VAL(access, 1));
+                log(buf1);
+                break;
+            }
+          }
+          if (has_laser && has_smartlink) {
+            sprintf(ENDOF(buf), "\r\n\r\n^yWARNING:^n Your smartlink overrides your laser sight-- the laser will not function.");
+          }
         }
       } else {
         if (GET_OBJ_VAL(j, 2) > 0) {
@@ -1688,14 +1771,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
         sprintf(ENDOF(buf), " Its damage code is ^c%s^n.", wound_name[GET_OBJ_VAL(j, 3)]);
       break;
     case ITEM_BIOWARE:
-      sprintf(ENDOF(buf), "It is a ^crating-%d %s%s^n that uses ^c%2.f^n index when installed.",
+      sprintf(ENDOF(buf), "It is a ^crating-%d %s%s^n that uses ^c%.2f^n index when installed.",
               GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 2) || GET_OBJ_VAL(j, 0) >= BIO_CEREBRALBOOSTER ? "cultured " : "",
-              bio_types[GET_OBJ_VAL(j, 0)], (float) (GET_OBJ_VAL(j, 4) / 100));
+              bio_types[GET_OBJ_VAL(j, 0)], ((float) GET_OBJ_VAL(j, 4) / 100));
       break;
     case ITEM_CYBERWARE:
-      sprintf(ENDOF(buf), "It is a ^crating-%d %s-grade %s^n that uses ^c%2.f^n essence when installed.",
+      sprintf(ENDOF(buf), "It is a ^crating-%d %s-grade %s^n that uses ^c%.2f^n essence when installed.",
               GET_OBJ_VAL(j, 1), cyber_grades[GET_OBJ_VAL(j, 2)], cyber_types[GET_OBJ_VAL(j, 0)],
-              (float) (GET_OBJ_VAL(j, 4) / 100));
+              ((float) GET_OBJ_VAL(j, 4) / 100));
       break;
     case ITEM_WORKSHOP:
       sprintf(ENDOF(buf), "It is a ^c%s^n designed for ^c%s^n.",

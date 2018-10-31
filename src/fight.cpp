@@ -2626,9 +2626,9 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
         comp++;
       else if (AFF_FLAGGED(ch, AFF_PRONE)) {
         if (GET_OBJ_VAL(obj, 1) == ACCESS_BIPOD)
-          comp += 2;
+          comp += RECOIL_COMP_VALUE_BIPOD;
         else if (GET_OBJ_VAL(obj, 1) == ACCESS_TRIPOD)
-          comp += 6;
+          comp += RECOIL_COMP_VALUE_TRIPOD;
         
       }
     }

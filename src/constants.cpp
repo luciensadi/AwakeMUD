@@ -2150,12 +2150,13 @@ const char *docwagon_contract_types[] = {
 };
 
 const char *gun_accessory_locations[] = {
-  "Top",
-  "Barrel",
-  "Under"
+  "top",
+  "barrel",
+  "under"
 };
 
 const char *gun_accessory_types[] = {
+  "Undefined",
   "Smartlink",
   "Scope",
   "Gas Vent",
