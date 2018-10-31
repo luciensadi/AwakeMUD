@@ -56,6 +56,8 @@ extern char *colorize(struct descriptor_data *, char *);
 extern int mysql_wrapper(MYSQL *mysql, const char *query);
 extern MYSQL *mysql;
 
+extern int get_weapon_damage_type(struct obj_data* weapon);
+
 /* blood stuff */
 
 const char* blood_messages[] = {
@@ -1574,30 +1576,34 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       sprintf(ENDOF(buf), "It is a ^c%s^n that requires ^c%d^n strength to use in combat.\r\n",
               GET_OBJ_VAL(j, 5) == 0 ? "Bow" : "Crossbow", GET_OBJ_VAL(j, 6));
       if (GET_OBJ_VAL(j, 2)) {
-        sprintf(ENDOF(buf), "It has a damage code of ^c(STR+%d)%s^n ", GET_OBJ_VAL(j, 2), wound_arr[GET_OBJ_VAL(j, 1)]);
+        sprintf(ENDOF(buf), "It has a damage code of ^c(STR+%d)%s%s^n", GET_OBJ_VAL(j, 2), wound_arr[GET_OBJ_VAL(j, 1)],
+                !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? "( stun)" : "");
       } else {
-        sprintf(ENDOF(buf), "It has a damage code of ^c(STR)%s^n ", wound_arr[GET_OBJ_VAL(j, 1)]);
+        sprintf(ENDOF(buf), "It has a damage code of ^c(STR)%s%s^n", wound_arr[GET_OBJ_VAL(j, 1)],
+                !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
       }
       sprintf(ENDOF(buf), "and requires the ^c%s^n skill to use.", skills[GET_OBJ_VAL(j, 4)].name);
       break;
     case ITEM_WEAPON:
       if (IS_GUN(GET_OBJ_VAL((j), 3))) {
         if (GET_OBJ_VAL(j, 5) > 0) {
-          sprintf(ENDOF(buf), "It is a ^c%d-round %s^n that uses the ^c%s^n skill to fire. Its damage code is ^c%d%s^n.",
+          sprintf(ENDOF(buf), "It is a ^c%d-round %s^n that uses the ^c%s^n skill to fire. Its damage code is ^c%d%s%s^n.",
                   GET_OBJ_VAL(j, 5), weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name,
-                  GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)]);
+                  GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)], !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         } else {
-          sprintf(ENDOF(buf), "It is %s ^c%s^n that uses the ^c%s^n skill to fire. Its damage code is ^c%d%s^n.",
+          sprintf(ENDOF(buf), "It is %s ^c%s^n that uses the ^c%s^n skill to fire. Its damage code is ^c%d%s%s^n.",
                   AN(weapon_type[GET_OBJ_VAL(j, 3)]), weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name,
-                  GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)]);
+                  GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)], !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         }
       } else {
         if (GET_OBJ_VAL(j, 2) > 0) {
-          sprintf(ENDOF(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c(STR+%d)%s^n.",
-                  weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name, GET_OBJ_VAL(j, 2), wound_arr[GET_OBJ_VAL(j, 1)]);
+          sprintf(ENDOF(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c(STR+%d)%s%s^n.",
+                  weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name, GET_OBJ_VAL(j, 2), wound_arr[GET_OBJ_VAL(j, 1)],
+                  !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         } else {
-          sprintf(ENDOF(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c(STR)%s^n.",
-                  weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name, wound_arr[GET_OBJ_VAL(j, 1)]);
+          sprintf(ENDOF(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c(STR)%s%s^n.",
+                  weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name, wound_arr[GET_OBJ_VAL(j, 1)],
+                  !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         }
       }
       break;
