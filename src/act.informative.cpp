@@ -1613,16 +1613,6 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
             
             // parse and add the string for the accessory's special bonuses
             switch (GET_OBJ_VAL(access, 1)) {
-              case ACCESS_UNDEFINED:
-                if (GET_OBJ_AFFECT(access).IsSet(AFF_LASER_SIGHT)) {
-                  has_laser = TRUE;
-                  sprintf(ENDOF(buf), "\r\nA laser sight attached to the %s provides ^c-1^n to target numbers.",
-                          gun_accessory_locations[mount_location]);
-                } else {
-                  sprintf(ENDOF(buf), "\r\n%s is attached to the %s, but its OOC values are unclear.",
-                          GET_OBJ_NAME(access), gun_accessory_locations[mount_location]);
-                }
-                break;
               case ACCESS_SMARTLINK:
                 has_smartlink = TRUE;
                 sprintf(ENDOF(buf), "\r\nA Smartlink%s attached to the %s provides ^c%d^n to target numbers.",
@@ -1630,8 +1620,14 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                         (GET_OBJ_VAL(j, 1) == 1 || GET_OBJ_VAL(access, 2) < 2) ? -2 : -4);
                 break;
               case ACCESS_SCOPE:
-                sprintf(ENDOF(buf), "\r\nA scope has been attached to the %s.",
-                        gun_accessory_locations[mount_location]);
+                if (GET_OBJ_AFFECT(access).IsSet(AFF_LASER_SIGHT)) {
+                  has_laser = TRUE;
+                  sprintf(ENDOF(buf), "\r\nA laser sight attached to the %s provides ^c-1^n to target numbers.",
+                          gun_accessory_locations[mount_location]);
+                } else {
+                  sprintf(ENDOF(buf), "\r\nA scope has been attached to the %s.",
+                          gun_accessory_locations[mount_location]);
+                }
                 break;
               case ACCESS_GASVENT:
                 sprintf(ENDOF(buf), "\r\nA gas vent installed in the %s provides ^c%d^n round%s worth of recoil compensation.",
@@ -1672,6 +1668,16 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 sprintf(buf1, "SYSERR: Unknown accessory type %d passed to do_probe_object()", GET_OBJ_VAL(access, 1));
                 log(buf1);
                 break;
+            }
+            // Tack on affect and extra flags to the attachment.
+            if (strcmp(GET_OBJ_AFFECT(access).ToString(), "0") != 0) {
+              GET_OBJ_AFFECT(access).PrintBits(buf2, MAX_STRING_LENGTH, affected_bits, AFF_MAX);
+              sprintf(ENDOF(buf), "\r\n ^- It provides the following flags: ^c%s^n", buf2);
+            }
+            
+            if (strcmp(GET_OBJ_EXTRA(access).ToString(), "0") != 0) {
+              GET_OBJ_EXTRA(access).PrintBits(buf2, MAX_STRING_LENGTH, extra_bits, ITEM_EXTRA_MAX);
+              sprintf(ENDOF(buf), "\r\n ^- It provides the following extra features: ^c%s^n", buf2);
             }
           }
         }
