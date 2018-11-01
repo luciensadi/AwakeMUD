@@ -201,6 +201,7 @@ void load_consist(void);
 void boot_shop_orders(void);
 void price_cyber(struct obj_data *obj);
 void price_bio(struct obj_data *obj);
+extern void verify_db_password_column_size();
 
 /* external vars */
 extern int no_specials;
@@ -286,6 +287,9 @@ void boot_world(void)
   
   log("Booting MYSQL database.");
   initialize_and_connect_to_mysql();
+  
+  log("Verifying DB compatibility with extended-length passwords.");
+  verify_db_password_column_size();
   
   log("Handling idle deletion.");
   idle_delete();

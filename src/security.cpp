@@ -35,9 +35,6 @@ bool run_crypto_tests() {
   // Hash our test password.
   hash_and_store_password(INSECURE_TEST_PASSWORD, hashed_password);
   
-  // Output for entertainment.
-  log(hashed_password);
-  
   // Check if our test password passes verification (is it reproducible).
   if (!validate_password(INSECURE_TEST_PASSWORD, hashed_password)) {
     log("FATAL ERROR: We failed to validate the initial argon2 test password after hashing.");
