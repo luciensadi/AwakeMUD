@@ -1,7 +1,7 @@
 CREATE TABLE `pfiles` ( 
   `idnum` mediumint(5) unsigned unique default '0', 
   `Name` varchar(21) default '', 
-  `Password` varchar(30), 
+  `Password` varchar(200), 
   `Race` tinyint(2) default '0', 
   `Gender` tinyint(2) default '0', 
   `Rank` tinyint(2) default '1', 

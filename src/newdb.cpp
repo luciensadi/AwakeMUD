@@ -1874,3 +1874,15 @@ void idle_delete()
 }
 
 
+void verify_db_password_column_size() {
+  // show columns in pfiles like 'password';
+  mysql_wrapper(mysql, "SHOW COLUMNS IN `pfiles` LIKE 'password';");
+  MYSQL_RES *res = mysql_use_result(mysql);
+  MYSQL_ROW row = mysql_fetch_row(res);
+  if (strncmp(row[1], "varchar(200)", sizeof("varchar(200)")) != 0) {
+    log("FATAL ERROR: Your pfiles table's password column needs to be reconfigured.");
+    log("Execute this command on your database:  ALTER TABLE `pfiles` MODIFY `Password` VARCHAR(200);");
+    exit(1);
+  }
+  mysql_free_result(res);
+}

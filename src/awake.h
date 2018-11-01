@@ -1953,9 +1953,7 @@ enum {
 #define MAX_MESSAGES              100
 #define MAX_NAME_LENGTH           20  /* Used in char_file_u *DO*NOT*CHANGE* */
 
-// MAX_PWD_LENGTH is bullshit though, crypt() truncates it to 8. Go go 90s security!
-#define MAX_PWD_LENGTH            30  /* Used in char_file_u *DO*NOT*CHANGE* */
-
+#define MAX_PWD_LENGTH            30  /* Relic of the past, do not change. Dictates max length of crypt() hashes. */
 #define MAX_TITLE_LENGTH          50  /* Used in char_file_u *DO*NOT*CHANGE* */
 #define MAX_WHOTITLE_LENGTH       10  /* Used in char_file_u *DO*NOT*CHANGE* */
 #define HOST_LENGTH               50

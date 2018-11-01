@@ -43,6 +43,7 @@
 #include "config.h"
 #include "newmatrix.h"
 #include "limits.h"
+#include "security.h"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -3822,18 +3823,32 @@ ACMD(do_set)
     GET_IDNUM(vict) = value;
     break;
   case 39:
-    if (!is_file)
+    if (!is_file) {
+      send_to_char("You can only do that to offline characters.\r\n", ch);
+      SET_CLEANUP(false);
       return;
-
+    }
+      
     if ((IS_SENATOR(vict) && !access_level(ch, LVL_ADMIN))) {
       send_to_char("You cannot change that.\r\n", ch);
 
       SET_CLEANUP(false);
       return;
     }
-    strncpy(vict->player.passwd, CRYPT(val_arg, GET_NAME(vict)), MAX_PWD_LENGTH);
-    vict->player.passwd[MAX_PWD_LENGTH] = '\0';
+    hash_and_store_password(val_arg, GET_PASSWD(vict));
     sprintf(buf, "Password changed to '%s'.", val_arg);
+      
+    // Do the actual updating.
+    char query_buf[2048];
+#ifdef NOCRYPT
+    char prepare_quotes_buf[2048];
+    sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;",
+            prepare_quotes(prepare_quotes_buf, GET_PASSWD(vict)), GET_IDNUM(vict));
+#else
+    sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;", GET_PASSWD(vict), GET_IDNUM(vict));
+#endif
+    mysql_wrapper(mysql, query_buf);
+      
     break;
   case 40:
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_NODELETE);
