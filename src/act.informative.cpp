@@ -36,7 +36,6 @@ using namespace std;
 #include "awake.h"
 #include "constants.h"
 #include "quest.h"
-#include "config.h"
 
 const char *CCHAR;
 
