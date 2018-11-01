@@ -34,6 +34,7 @@
 #include "constants.h"
 #include "config.h"
 #include "newmatrix.h"
+#include "security.h"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -2241,7 +2242,7 @@ void nanny(struct descriptor_data * d, char *arg)
     if (!*arg)
       close_socket(d);
     else {
-      if (strncmp(CRYPT(arg, GET_PASSWD(d->character)), GET_PASSWD(d->character), MAX_PWD_LENGTH)) {
+      if (!validate_and_update_password(arg, GET_PASSWD(d->character))) {
         sprintf(buf, "Bad PW: %s [%s]",
                 GET_CHAR_NAME(d->character), d->host);
         mudlog(buf, d->character, LOG_CONNLOG, TRUE);
@@ -2257,6 +2258,18 @@ void nanny(struct descriptor_data * d, char *arg)
         }
         return;
       }
+      
+      // Commit the password to DB on the assumption it's changed.
+      char query_buf[2048];
+#ifdef NOCRYPT
+      char prepare_quotes_buf[2048];
+      sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;",
+              prepare_quotes(prepare_quotes_buf, GET_PASSWD(d->character)), GET_IDNUM(d->character));
+#else
+      sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;", GET_PASSWD(d->character), GET_IDNUM(d->character));
+#endif
+      mysql_wrapper(mysql, query_buf);
+      
       load_result = GET_BAD_PWS(d->character);
       GET_BAD_PWS(d->character) = 0;
 
@@ -2324,15 +2337,12 @@ void nanny(struct descriptor_data * d, char *arg)
   case
       CON_CHPWD_GETNEW:
   case CON_QGETNEWPW:
-    if (!*arg || strlen(arg) > MAX_PWD_LENGTH || strlen(arg) < 3 ||
-        !str_cmp(arg, GET_CHAR_NAME(d->character))) {
+    if (!*arg || strlen(arg) < 3 || !str_cmp(arg, GET_CHAR_NAME(d->character))) {
       SEND_TO_Q("\r\nIllegal password.\r\n", d);
       SEND_TO_Q("Password: ", d);
       return;
     }
-    strncpy(GET_PASSWD(d->character),
-            CRYPT(arg, GET_CHAR_NAME(d->character)), MAX_PWD_LENGTH);
-    *(GET_PASSWD(d->character) + MAX_PWD_LENGTH + 1) = '\0';
+    hash_and_store_password(arg, GET_PASSWD(d->character));
 
     SEND_TO_Q("\r\nPlease retype password: ", d);
     if (STATE(d) == CON_NEWPASSWD)
@@ -2346,8 +2356,7 @@ void nanny(struct descriptor_data * d, char *arg)
   case CON_CNFPASSWD:
   case CON_CHPWD_VRFY:
   case CON_QVERIFYPW:
-    if (strncmp(CRYPT(arg, GET_PASSWD(d->character)), GET_PASSWD(d->character),
-                MAX_PWD_LENGTH)) {
+    if (!validate_password(arg, (const char*) GET_PASSWD(d->character))) {
       SEND_TO_Q("\r\nPasswords don't match... start over.\r\n", d);
       SEND_TO_Q("Password: ", d);
       if (STATE(d) == CON_CNFPASSWD)
@@ -2374,7 +2383,14 @@ void nanny(struct descriptor_data * d, char *arg)
         STATE(d) = CON_MENU;
       }
       if (STATE(d) == CON_CHPWD_VRFY) {
-        sprintf(buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld", GET_PASSWD(d->character), GET_IDNUM(d->character));
+        char query_buf[2048];
+#ifdef NOCRYPT
+        char prepare_quotes_buf[2048];
+        sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;",
+                prepare_quotes(prepare_quotes_buf, GET_PASSWD(d->character)), GET_IDNUM(d->character));
+#else
+        sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;", GET_PASSWD(d->character), GET_IDNUM(d->character));
+#endif
         mysql_wrapper(mysql, buf);
         SEND_TO_Q(MENU, d);
         STATE(d) = CON_MENU;
@@ -2519,7 +2535,7 @@ void nanny(struct descriptor_data * d, char *arg)
 
   case CON_CHPWD_GETOLD:
   case CON_QGETOLDPW:
-    if (strncmp(CRYPT(arg, GET_PASSWD(d->character)), GET_PASSWD(d->character), MAX_PWD_LENGTH)) {
+    if (!validate_password(arg, (const char*) GET_PASSWD(d->character))) {
       echo_on(d);
       SEND_TO_Q("\r\nIncorrect password.\r\n", d);
       if (STATE(d) == CON_CHPWD_GETOLD) {
@@ -2543,7 +2559,7 @@ void nanny(struct descriptor_data * d, char *arg)
   case CON_DELCNF1:
   case CON_QDELCONF1:
     echo_on(d);
-    if (strncmp(CRYPT(arg, GET_PASSWD(d->character)), GET_PASSWD(d->character), MAX_PWD_LENGTH)) {
+    if (!validate_password(arg, (const char*) GET_PASSWD(d->character))) {
       SEND_TO_Q("\r\nIncorrect password.\r\n", d);
       if (STATE(d) == CON_DELCNF1) {
         SEND_TO_Q(MENU, d);

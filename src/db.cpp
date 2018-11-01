@@ -27,6 +27,7 @@
 #else
 #include <unistd.h>
 #endif
+#include <sodium.h>
 
 /* mysql_config.h must be filled out with your own connection info. */
 /* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
@@ -51,6 +52,7 @@
 #include "constants.h"
 #include "vtable.h"
 #include "config.h"
+#include "security.h"
 #include <new>
 
 extern void calc_weight(struct char_data *ch);
@@ -199,6 +201,7 @@ void load_consist(void);
 void boot_shop_orders(void);
 void price_cyber(struct obj_data *obj);
 void price_bio(struct obj_data *obj);
+extern void verify_db_password_column_size();
 
 /* external vars */
 extern int no_specials;
@@ -270,9 +273,23 @@ void initialize_and_connect_to_mysql() {
 
 void boot_world(void)
 {
+  log("Initializing libsodium for crypto functions.");
+  if (sodium_init() < 0) {
+    // The library could not be initialized. Fail.
+    log("ERROR: Libsodium initialization failed. Terminating program.");
+    exit(1);
+  }
+  
+#ifdef DEBUG
+  log("Performing crypto performance and validation tests.");
+  run_crypto_tests();
+#endif
   
   log("Booting MYSQL database.");
   initialize_and_connect_to_mysql();
+  
+  log("Verifying DB compatibility with extended-length passwords.");
+  verify_db_password_column_size();
   
   log("Handling idle deletion.");
   idle_delete();

@@ -5,6 +5,8 @@
 #include <sys/time.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sodium.h> // for crypto_pwhash_STRBYTES
+
 #include "types.h"
 #include "awake.h"
 #include "list.h"
@@ -296,7 +298,7 @@ struct time_data
 struct char_player_data
 {
   char *char_name;
-  char passwd[MAX_PWD_LENGTH+1];     /* character's password         */
+  char passwd[crypto_pwhash_STRBYTES + 1];     /* character's password         */
 
   text_data physical_text;
   text_data astral_text;
