@@ -23,9 +23,6 @@ CVS = cvs
 # The obvious drawback is that it's time consuming, so once things go
 # smooth, the define can be removed.
 
-# Comment me when you've uncommented your OS.
-echo WARNING: You have not selected your operating system. Edit src/Makefile and uncomment your OS, then comment this echo out.
-
 # OSX? Uncomment these:
 #LIBS = -L/usr/local/lib -lmysqlclient -lz -lm -lcurl -lsodium
 #MYFLAGS = -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DGITHUB_INTEGRATION -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
