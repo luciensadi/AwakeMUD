@@ -123,7 +123,7 @@ void record_usage(void);
 void make_prompt(struct descriptor_data * point);
 void check_idle_passwords(void);
 void init_descriptor (struct descriptor_data *newd, int desc);
-char *colorize(struct descriptor_data *d, char *str);
+char *colorize(struct descriptor_data *d, char *str, bool skip_check = FALSE);
 void send_keepalives();
 
 /* extern fcnts */
@@ -1402,7 +1402,7 @@ int new_descriptor(int s)
     /* prepend to list */
     descriptor_list = newd;
     
-    SEND_TO_Q(GREETINGS, newd);
+    SEND_TO_Q(colorize(newd, GREETINGS, TRUE), newd);
     return 0;
   }
   
@@ -2018,7 +2018,7 @@ int is_color (char c)
 
 // parses the color codes and translates the properly--we assume that
 // str is not NULL
-char *colorize(struct descriptor_data *d, char *str)
+char *colorize(struct descriptor_data *d, char *str, bool skip_check)
 {
   // it is possible that this could over flow if only because the color
   // codes take up several characters--however, I certainly am not
@@ -2027,7 +2027,7 @@ char *colorize(struct descriptor_data *d, char *str)
   register char *temp = &buffer[0];
   register const char *color;
   
-  if (d->character)
+  if (skip_check or d->character) // ok but why do we care if they have a character?
   {
     while(*str) {
       if (*str == '^') {

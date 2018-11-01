@@ -672,6 +672,8 @@ void index_boot(int mode)
     }
     fscanf(index, "%s\n", buf1);
   }
+  // Always important to clean up after yourself.
+  fclose(index);
 }
 
 void discrete_load(File &fl, int mode)
