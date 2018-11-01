@@ -2055,6 +2055,7 @@ void nanny(struct descriptor_data * d, char *arg)
   extern int max_bad_pws;
   extern bool House_can_enter(struct char_data *ch, vnum_t vnum);
   long load_room;
+  bool dirty_password = FALSE;
 
   int parse_class(struct descriptor_data *d, char *arg);
   int parse_race(struct descriptor_data *d, char *arg);
@@ -2334,8 +2335,7 @@ void nanny(struct descriptor_data * d, char *arg)
     break;
 
   case CON_NEWPASSWD:
-  case
-      CON_CHPWD_GETNEW:
+  case CON_CHPWD_GETNEW:
   case CON_QGETNEWPW:
     if (!*arg || strlen(arg) < 3 || !str_cmp(arg, GET_CHAR_NAME(d->character))) {
       SEND_TO_Q("\r\nIllegal password.\r\n", d);
@@ -2368,6 +2368,7 @@ void nanny(struct descriptor_data * d, char *arg)
       return;
     }
     echo_on(d);
+    dirty_password = (STATE(d) == CON_CHPWD_VRFY);
 
     if (STATE(d) == CON_CNFPASSWD) {
       SEND_TO_Q("What is your sex (M/F)? ", d);
@@ -2377,12 +2378,12 @@ void nanny(struct descriptor_data * d, char *arg)
       if (STATE(d) != CON_CHPWD_VRFY)
         d->character = playerDB.LoadChar(GET_CHAR_NAME(d->character), TRUE);
       SEND_TO_Q("\r\nDone.\r\n", d);
-      if(PLR_FLAGGED(d->character,PLR_AUTH)) {
+      if (PLR_FLAGGED(d->character,PLR_AUTH)) {
         playerDB.SaveChar(d->character);
         SEND_TO_Q(MENU, d);
         STATE(d) = CON_MENU;
       }
-      if (STATE(d) == CON_CHPWD_VRFY) {
+      if (dirty_password) { // STATE(d) is changed directly above this after all...
         char query_buf[2048];
 #ifdef NOCRYPT
         char prepare_quotes_buf[2048];
@@ -2391,7 +2392,7 @@ void nanny(struct descriptor_data * d, char *arg)
 #else
         sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;", GET_PASSWD(d->character), GET_IDNUM(d->character));
 #endif
-        mysql_wrapper(mysql, buf);
+        mysql_wrapper(mysql, query_buf);
         SEND_TO_Q(MENU, d);
         STATE(d) = CON_MENU;
       } else {
