@@ -2022,16 +2022,18 @@ ACMD(do_examine)
     }
   }
   
-  generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_CHAR_ROOM |
-               FIND_OBJ_EQUIP, ch, &tmp_char, &tmp_object);
-  
   if (subcmd == SCMD_PROBE) {
+    generic_find(arg, FIND_OBJ_INV | FIND_OBJ_EQUIP, ch, &tmp_char, &tmp_object);
+    
     if (tmp_object) {
       do_probe_object(ch, tmp_object);
     } else {
-      send_to_char("You don't see any vehicles or objects like that here.\r\n", ch);
+      send_to_char("You're not carrying any such object, and there are no vehicles like that here.\r\n", ch);
     }
     return;
+  } else {
+    generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_CHAR_ROOM |
+                 FIND_OBJ_EQUIP, ch, &tmp_char, &tmp_object);
   }
   
   if (tmp_object) {
