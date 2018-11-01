@@ -18,7 +18,7 @@ Tested on:
 
 ## Installation
 - Install MySQL 5, including its development headers (`mysql/mysql.h`).
-- Install [libsodium](https://github.com/jedisct1/libsodium/releases) (`./configure; make; make install`).
+- Install [libsodium](https://github.com/jedisct1/libsodium/releases) (`./configure; make; (sudo) make install`).
 - Clone this repository to your machine.
 - Run `SQL/gensql.sh` (or do the steps manually if it doesn't support your OS). If you plan on running this with MariaDB, use the `--skip-checks` command-line flag.
 - Copy the mysql_config.cpp file to src.
@@ -32,6 +32,10 @@ If you get an error like `newdb.cpp:11:10: fatal error: mysql/mysql.h: No such f
 
 If you get an error like `AwakeMUD/src/act.wizard.cpp:3841: undefined reference to 'crypt'`, it means that you've probably not selected the right OS in your `src/Makefile`. Make sure you comment out the OS X lines near the top by adding a `#` at their beginnings, and uncomment the Linux lines by removing their `#`.
 
+If you get an error like `structs.h:8:10: fatal error: sodium.h: No such file or directory`, it means you need to install [libsodium](https://github.com/jedisct1/libsodium/releases) (`./configure; make; (sudo) make install`).
+
 ### Runtime Troubleshooting
 
 If you get an error like `MYSQLERROR: Data too long for column 'Password' at row X` when running the game, you need to update your database's pfile table to use the longer password-column capacity. Go into your database and execute the command in `SQL/migration-libsodium.sql`.
+
+If you get an error like `error while loading shared libraries: libsodium.so.23: cannot open shared object file: No such file or directory`, your path does not include the directory libsodium is in. You can find libsodium.so's directory with `sudo find / -name libsodium.so`, then optionally symlink it with `ln -s /the/directory/it/was/in/libsodium.so.XXX /usr/lib/libsodium.so.XXX`, where XXX is the numbers indicated in the original error. This is probably not an ideal fix, so if anyone has a better suggestion, please file an issue!
