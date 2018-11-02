@@ -1475,6 +1475,9 @@ enum {
 #define ACCESS_LOCATION_BARREL 8
 #define ACCESS_LOCATION_UNDER  9
 
+#define RECOIL_COMP_VALUE_BIPOD   2
+#define RECOIL_COMP_VALUE_TRIPOD  6
+
 #define MOD_NOWHERE		0
 #define MOD_INTAKE_FRONT	1
 #define MOD_INTAKE_MID		2
@@ -1656,6 +1659,10 @@ enum {
 /* do_look */
 #define SCMD_LOOK       0
 #define SCMD_READ       1
+
+/* do_examine */
+#define SCMD_EXAMINE    0
+#define SCMD_PROBE      1
 
 /* do_qcomm */
 #define SCMD_QSAY       0

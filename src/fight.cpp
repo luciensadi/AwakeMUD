@@ -2626,9 +2626,9 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
         comp++;
       else if (AFF_FLAGGED(ch, AFF_PRONE)) {
         if (GET_OBJ_VAL(obj, 1) == ACCESS_BIPOD)
-          comp += 2;
+          comp += RECOIL_COMP_VALUE_BIPOD;
         else if (GET_OBJ_VAL(obj, 1) == ACCESS_TRIPOD)
-          comp += 6;
+          comp += RECOIL_COMP_VALUE_TRIPOD;
         
       }
     }
@@ -3190,9 +3190,6 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
   }
   return modifier;
 }
-
-// TODO: Macro this for compiler speed.
-#define IS_DAMTYPE_PHYSICAL(type) !((type) == TYPE_HIT || (type) == TYPE_BLUDGEON || (type) == TYPE_PUNCH || (type) == TYPE_TASER || (type) == TYPE_CRUSH || (type) == TYPE_POUND)
 
 //todo: single shot weaps can only be fired once per combat phase-- what does this mean for us?
 

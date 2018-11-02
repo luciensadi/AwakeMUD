@@ -2109,3 +2109,80 @@ const char *pgroup_privileges[] =
   "Tenant",
   "Treasurer"
 };
+
+const char *workshops[] = {
+  "General",
+  "Electronics",
+  "Microtronics",
+  "Cyberware",
+  "Vehicle",
+  "Weaponry",
+  "Medical",
+  "Ammunition"
+};
+
+const char *projectile_ammo_types[] = {
+  "Arrow",
+  "Bolt",
+  "Shuriken",
+  "Throwing Knife"
+};
+
+const char *magic_tool_types[] = {
+  "Conjuring Library",
+  "Sorcery Library",
+  "Hermetic Circle",
+  "Shamanic Lodge",
+  "Summoning Materials"
+};
+
+const char *holster_types[] = {
+  "Pistol / SMG",
+  "Sword",
+  "Rifle (or larger)"
+};
+
+const char *docwagon_contract_types[] = {
+  "Bugged (alert an imm)", // undefined / 0
+  "Basic",
+  "Gold",
+  "Platinum"
+};
+
+const char *gun_accessory_locations[] = {
+  "top",
+  "barrel",
+  "underside"
+};
+
+const char *gun_accessory_types[] = {
+  "Undefined",
+  "Smartlink",
+  "Scope",
+  "Gas Vent",
+  "Shock Pad",
+  "Silencer",
+  "Sound Suppressor",
+  "Smart Goggles",
+  "Bipod",
+  "Tripod",
+  "Bayonet"
+};
+
+const char *mount_types[] = {
+  "Firmpoint Internal Fixed Mount",
+  "Firmpoint External Fixed Mount",
+  "Hardpoint Internal Fixed Mount",
+  "Hardpoint External Fixed Mount",
+  "Turret",
+  "Mini-Turret"
+};
+
+const char *deck_accessory_upgrade_types[] = {
+  "MPCP (replacement)",
+  "Active Memory",
+  "Storage Memory",
+  "Hitcher Jack",
+  "I/O Speed",
+  "Reaction Increase"
+};

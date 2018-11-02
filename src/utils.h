@@ -674,6 +674,10 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define SEEK_END        2
 #endif
 
+/* Misc utils ************************************************************/
+#define IS_DAMTYPE_PHYSICAL(type) \
+  !((type) == TYPE_HIT || (type) == TYPE_BLUDGEON || (type) == TYPE_PUNCH || (type) == TYPE_TASER || (type) == TYPE_CRUSH || (type) == TYPE_POUND)
+
 /*
  * Some systems such as Sun's don't have prototyping in their header files.
  * Thus, we try to compensate for them.

@@ -820,17 +820,6 @@ void do_stat_veh(struct char_data *ch, struct veh_data * k)
   send_to_char(buf, ch);
 }
 
-const char *workshops[] = {
-                      "General",
-                      "Electronics",
-                      "Microtronics",
-                      "Cyberware",
-                      "Vehicle",
-                      "Weaponry",
-                      "Medical",
-                      "Ammunition"
-                    };
-
 void do_stat_object(struct char_data * ch, struct obj_data * j)
 {
   long virt;
