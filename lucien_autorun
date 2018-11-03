@@ -22,7 +22,7 @@ while true; do
   echo "autoscript starting game $(date)" | tee syslog.txt
 
   # Takes advantage of the config done in ~/.gdbinit (not replicated here).
-  gdb -batch -ex "run" -ex "bt" -ex "quit" -ex "yes" bin/awake |& tee syslog.txt
+  gdb -batch -ex "run" -ex "bt" -ex "quit" -ex "yes" bin/awake < /dev/null |& tee syslog.txt
   echo "" >> syslog.txt
 
   tail -n 500 syslog.txt >> log/crashlog
