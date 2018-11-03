@@ -23,6 +23,8 @@ extern int mysql_wrapper(MYSQL *mysql, const char *buf);
 extern char *prepare_quotes(char *dest, const char *str);
 extern void display_help(char *help, const char *arg);
 
+int get_minimum_attribute_points_for_race(int race);
+
 const char *pc_race_types[] =
   {
     "Undef",
@@ -45,7 +47,6 @@ const char *pc_race_types[] =
     "Minotaur",
     "Satyr",
     "Night-One",
-    "Dryad",
     "Dragon",
     "Elemental",
     "Spirit",
@@ -91,141 +92,32 @@ const char *magic_table[4] = { "None", "Full Magician", "Aspected Magician", "Ad
 
 void set_attributes(struct char_data *ch, int magic)
 {
-  GET_REAL_BOD(ch) = 1;
-  GET_REAL_QUI(ch) = 1;
-  GET_REAL_STR(ch) = 1;
-  GET_REAL_CHA(ch) = 1;
-  GET_REAL_INT(ch) = 1;
-  GET_REAL_WIL(ch) = 1;
-  GET_REAL_REA(ch) = 1;
-
   if (magic)
     ch->real_abils.mag = 600;
   else ch->real_abils.mag = 0;
   ch->real_abils.bod_index = 0;
   ch->real_abils.ess = 600;
-
-  switch (GET_RACE(ch))
-  {
-  case RACE_DWARF:
-    GET_REAL_BOD(ch)++;
-    GET_REAL_STR(ch) += 2;
-    GET_REAL_WIL(ch)++;
-    GET_ATT_POINTS(ch) -= 6;
-    send_to_char("You spend 6 attribute points to raise your attributes to their minimums.\r\n", ch);
-    break;
-  case RACE_ELF:
-    GET_REAL_QUI(ch)++;
-    GET_REAL_CHA(ch) += 2;
-    GET_ATT_POINTS(ch) -= 6;
-    send_to_char("You spend 6 attribute points to raise your attributes to their minimums.\r\n", ch);
-    break;
-  case RACE_ORK:
-    GET_REAL_BOD(ch) += 3;
-    GET_REAL_STR(ch) += 2;
-    GET_ATT_POINTS(ch) -= 8;
-    send_to_char("You spend 8 attribute points to raise your attributes to their minimums.\r\n", ch);
-    break;
-  case RACE_TROLL:
-    GET_REAL_BOD(ch) += 5;
-    GET_REAL_STR(ch) += 4;
-    GET_ATT_POINTS(ch) -= 11;
-    send_to_char("You spend 11 attribute points to raise your attributes to their minimums.\r\n", ch);
-    break;
-  case RACE_CYCLOPS:
-    GET_REAL_BOD(ch) += 5;
-    GET_REAL_STR(ch) += 6;
-    GET_ATT_POINTS(ch) -= 11;
-    send_to_char("You spend 11 attribute points to raise your attributes to their minimums.\r\n", ch);
-    break;
-  case RACE_KOBOROKURU:
-    GET_REAL_BOD(ch)++;
-    GET_REAL_STR(ch) += 2;
-    GET_REAL_WIL(ch)++;
-    GET_ATT_POINTS(ch) -= 6;
-    send_to_char("You spend 6 attribute points to raise your attributes to their minimums.\r\n", ch);
-    break;
-  case RACE_FOMORI:
-    GET_REAL_BOD(ch) += 4;
-    GET_REAL_STR(ch) += 3;
-    GET_ATT_POINTS(ch) -= 9;
-    send_to_char("You spend 9 attribute points to raise your attributes to their minimums.\r\n", ch);
-    break;
-  case RACE_MENEHUNE:
-    GET_REAL_BOD(ch) += 2;
-    GET_REAL_STR(ch)++;
-    GET_REAL_WIL(ch)++;
-    GET_ATT_POINTS(ch) -= 6;
-    send_to_char("You spend 6 attribute points to raise your attributes to their minimums.\r\n", ch);
-    break;
-  case RACE_HOBGOBLIN:
-    GET_REAL_BOD(ch) += 2;
-    GET_REAL_STR(ch) += 2;
-    GET_ATT_POINTS(ch) -= 7;
-    send_to_char("You spend 7 attribute points to raise your attributes to their minimums.\r\n", ch);
-    break;
-  case RACE_GIANT:
-    GET_REAL_BOD(ch) += 5;
-    GET_REAL_STR(ch) += 5;
-    GET_ATT_POINTS(ch) -= 11;
-    send_to_char("You spend 11 attribute points to raise your attributes to their minimums.\r\n", ch);
-    break;
-  case RACE_GNOME:
-    GET_REAL_BOD(ch)++;
-    GET_REAL_STR(ch)++;
-    GET_REAL_WIL(ch) += 2;
-    GET_ATT_POINTS(ch) -= 6;
-    send_to_char("You spend 6 attribute points to raise your attributes to their minimums.\r\n", ch);
-    break;
-  case RACE_ONI:
-    GET_REAL_BOD(ch) += 2;
-    GET_REAL_STR(ch) += 2;
-    GET_REAL_WIL(ch)++;
-    GET_ATT_POINTS(ch) -= 8;
-    send_to_char("You spend 8 attribute points to raise your attributes to their minimums.\r\n", ch);
-    break;
-  case RACE_WAKYAMBI:
-    GET_REAL_CHA(ch) += 2;
-    GET_REAL_WIL(ch)++;
-    GET_ATT_POINTS(ch) -= 6;
-    send_to_char("You spend 6 attribute points to raise your attributes to their minimums.\r\n", ch);
-    break;
-  case RACE_OGRE:
-    GET_REAL_BOD(ch) += 3;
-    GET_REAL_STR(ch) += 2;
-    GET_ATT_POINTS(ch) -= 7;
-    send_to_char("You spend 7 attribute points to raise your attributes to their minimums.\r\n", ch);
-    break;
-  case RACE_MINOTAUR:
-    GET_REAL_BOD(ch) += 4;
-    GET_REAL_STR(ch) += 3;
-    GET_ATT_POINTS(ch) -= 9;
-    send_to_char("You spend 9 attribute points to raise your attributes to their minimums.\r\n", ch);
-    break;
-  case RACE_SATYR:
-    GET_REAL_BOD(ch) += 3;
-    GET_REAL_STR(ch) += 2;
-    GET_REAL_WIL(ch)++;
-    GET_ATT_POINTS(ch) -= 9;
-    send_to_char("You spend 9 attribute points to raise your attributes to their minimums.\r\n", ch);
-    break;
-  case RACE_NIGHTONE:
-    GET_REAL_QUI(ch) += 2;
-    GET_REAL_CHA(ch) += 2;
-    GET_ATT_POINTS(ch) -= 6;
-    send_to_char("You spend 6 attribute points to raise your attributes to their minimums.\r\n", ch);
-    break;
-  case RACE_DRYAD:
-    GET_REAL_QUI(ch)++;
-    GET_REAL_CHA(ch) += 3;
-    GET_ATT_POINTS(ch) -= 10;
-    send_to_char("You spend 10 attribute points to raise your attributes to their minimums.\r\n", ch);
-    break;
-  case RACE_HUMAN:
-    GET_ATT_POINTS(ch) -= 6;
-    send_to_char("You spend 6 attribute points to raise your attributes to their minimums.\r\n", ch);
-    break;
+  
+  // Pre-calculated attribute point cost (you must spend a minimum of 6 to make every attribute 1).
+  int attribute_point_cost = 6;
+  
+  for (int attr = BOD; attr <= WIL; attr++) {
+    // Set their attributes to the modifiers.
+    GET_REAL_ATT(ch, attr) = racial_attribute_modifiers[(int)GET_RACE(ch)][attr];
+    
+    // If the modifiers were negative, negate them and add their cost to the attribute point cost.
+    if (GET_REAL_ATT(ch, attr) < 0) {
+      attribute_point_cost += -GET_REAL_ATT(ch, attr);
+      GET_REAL_ATT(ch, attr) = 0;
+    }
+    
+    // Bump the attribute to purchased rank 1/6, which is the minimum allowed. Cost already figured in attribute_point_cost initialization.
+    GET_REAL_ATT(ch, attr) += 1;
   }
+  
+  // Subtract the cost from the character's available attribute-training points.
+  GET_ATT_POINTS(ch) -= attribute_point_cost;
+  send_to_char(ch, "You spend %d attribute points to raise your attributes to their minimums.\r\n", attribute_point_cost);
 
   ch->aff_abils = ch->real_abils;
 }
@@ -687,26 +579,63 @@ void points_menu(struct descriptor_data *d)
                resource_table[1][d->ccr.pr[PO_RESOURCES]], magic_table[d->ccr.pr[PO_MAGIC]], 
                magic_cost[d->ccr.pr[PO_MAGIC]], pc_race_types[(int)GET_RACE(d->character)], d->ccr.pr[PO_RACE], d->ccr.points);
   SEND_TO_Q(buf, d);
-}              
+}
+
+// Returns the minimum attribute points you must spend for your race.
+int get_minimum_attribute_points_for_race(int race) {
+  // Initialize the returned value to 6, which is the minimum the player must spend to raise all from 0 to 1.
+  int minimum_attribute_points = 6;
+  
+  // Cycle through all attributes.
+  for (int attr = BOD; attr <= WIL; attr++) {
+    if (racial_attribute_modifiers[race][attr] < 0) {
+      // If the attribute modifier is negative, the player must spend that many points to raise it to 0.
+      minimum_attribute_points += -racial_attribute_modifiers[race][attr];
+    }
+  }
+  
+  // Return our calculated number.
+  return minimum_attribute_points;
+}
+
+int get_maximum_attribute_points_for_race(int race) {
+  int amount = 0;
+  for (int attr = BOD; attr <= WIL; attr++) {
+    amount += racial_limits[race][0][attr] - (max(1, racial_attribute_modifiers[race][attr] + 1));
+  }
+  return amount;
+}
 
 void create_parse(struct descriptor_data *d, const char *arg)
 {
-  int i = MIN(120, atoi(arg)), ok;
+  int i = MIN(120, atoi(arg)), ok, available_attribute_points = 0;
   long shirts[5] = { 70000, 70001, 70002, 70003, 70004 };
   long pants[5] = { 70005, 70006, 70007, 70008, 70009 };
   long shoes[5] = { 70010, 70011, 70012, 70013, 70014};
+  
+  int minimum_attribute_points = get_minimum_attribute_points_for_race(GET_RACE(CH));
+  int maximum_attribute_points = get_maximum_attribute_points_for_race(GET_RACE(CH)) + minimum_attribute_points;
 
   switch (d->ccr.mode)
   {
   case CCR_PO_ATTR:
-    if (i < 6)
-      send_to_char(CH, "You need a minimum of 6 points in attributes. Enter desired number of attribute points (^c%d^n available):",d->ccr.points);
-    else if (i * 2 > d->ccr.points)
-      send_to_char(CH, "You do not have enough points for that. Enter desired number of attribute points (^c%d^n available):", d->ccr.points);
-    else {
-      d->ccr.points -= d->ccr.pr[PO_ATTR] = i * 2;
-      points_menu(d);
+    available_attribute_points = max(minimum_attribute_points, (int) (d->ccr.points / 2));
+    if (i < minimum_attribute_points) {
+      send_to_char(CH, "You need a minimum of %d points in attributes. Enter desired number of attribute points (^c%d^n available):",
+                   minimum_attribute_points, available_attribute_points);
+      break;
+    } else if (i * 2 > d->ccr.points) {
+      send_to_char(CH, "You do not have enough points for that. Enter desired number of attribute points (^c%d^n possible):", available_attribute_points);
+      break;
     }
+    
+    if (i > maximum_attribute_points) {
+      send_to_char(CH, "Good news-- you only need %d attribute points to max out your character's stats! Updated sheet.\r\n", maximum_attribute_points);
+      i = maximum_attribute_points;
+    }
+  
+    d->ccr.points -= d->ccr.pr[PO_ATTR] = i * 2;
+    points_menu(d);
     break;
   case CCR_PO_SKILL:
     if (i < 0)
@@ -746,7 +675,9 @@ void create_parse(struct descriptor_data *d, const char *arg)
     switch (*arg) {
       case '1':
         d->ccr.points += d->ccr.pr[PO_ATTR];
-        send_to_char(CH, "Enter desired number of attribute points. Cost of 2 points per attribute point (^c%d^n available, minimum 6): ", d->ccr.points);
+        available_attribute_points = max(get_minimum_attribute_points_for_race(GET_RACE(CH)), (int) (d->ccr.points / 2));
+        send_to_char(CH, "Enter desired number of attribute points (^c%d^n available, minimum %d): ",
+                     available_attribute_points, get_minimum_attribute_points_for_race(GET_RACE(CH)));
         d->ccr.mode = CCR_PO_ATTR;
         break;
       case '2':
@@ -774,6 +705,22 @@ void create_parse(struct descriptor_data *d, const char *arg)
         break;
       case 'p':
       case 'P':
+        // Safeguard: You can't continue without spending all your points.
+        if (d->ccr.points > 0) {
+          send_to_char("You still have points remaining to allocate! You should spend these before finishing creation.\r\n\r\n", CH);
+          points_menu(d);
+          break;
+        }
+        
+        // Defense: You can't continue if you have negative points.
+        if (d->ccr.points < 0) {
+          send_to_char("You cannot finish creation with a negative point balance. Please lower one of your selections first.\r\n\r\n", CH);
+          sprintf(buf, "SYSERR: Character %s attained negative point balance %d during creation.", GET_NAME(CH), d->ccr.points);
+          mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+          points_menu(d);
+          break;
+        }
+        
         GET_NUYEN(CH) = resource_table[0][d->ccr.pr[PO_RESOURCES]];
         GET_SKILL_POINTS(CH) = d->ccr.pr[PO_SKILL];
         GET_ATT_POINTS(CH) = d->ccr.pr[PO_ATTR]/2;
@@ -811,11 +758,17 @@ void create_parse(struct descriptor_data *d, const char *arg)
         d->ccr.mode = CCR_PRIORITY;
         break;
       case '2':
-        d->ccr.points = 108;
-        d->ccr.pr[PO_ATTR] = 12;
+        d->ccr.points = 120;
+        
+        // Assign racial minimums and subtract them from the point value.
+        d->ccr.pr[PO_ATTR] = get_minimum_attribute_points_for_race(GET_RACE(CH)) * 2;
+        d->ccr.points -= d->ccr.pr[PO_ATTR];
+        
         d->ccr.pr[PO_SKILL] = 0;
         d->ccr.pr[PO_RESOURCES] = 1;
         d->ccr.pr[PO_MAGIC] = 0;
+        
+        // Assign racial costs and subtract them from the point value.
         switch (GET_RACE(CH)) {
           case RACE_HUMAN:
             d->ccr.pr[PO_RACE] = 0;
@@ -840,13 +793,13 @@ void create_parse(struct descriptor_data *d, const char *arg)
           case RACE_MINOTAUR:
           case RACE_MENEHUNE:
           case RACE_NIGHTONE:
-          case RACE_DRYAD:
           case RACE_WAKYAMBI:
             d->ccr.pr[PO_RACE] = 15;
             break;
         }
         d->ccr.points -= d->ccr.pr[PO_RACE];
         d->ccr.pr[5] = -1;
+        
         points_menu(d);
         break;
       default:
@@ -935,8 +888,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
       d->ccr.pr[2] = PR_RACE;
     else if (GET_RACE(d->character) == RACE_NIGHTONE)
       d->ccr.pr[2] = PR_RACE;
-    else if (GET_RACE(d->character) == RACE_DRYAD)
-      d->ccr.pr[1] = PR_RACE;
+    
     if (real_object(OBJ_MAP_OF_SEATTLE) > -1)
       obj_to_char(read_object(OBJ_MAP_OF_SEATTLE, VIRTUAL), d->character);
     GET_EQ(d->character, WEAR_BODY) = read_object(shirts[number(0, 4)], VIRTUAL);

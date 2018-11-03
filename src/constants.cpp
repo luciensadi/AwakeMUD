@@ -1654,6 +1654,30 @@ int racial_limits[][2][6] = {
                               {{ 6, 8, 6, 8, 6, 6 },{ 9, 12, 9, 12, 9, 9 }} // night one
                             };
 
+char racial_attribute_modifiers[][6] = {
+//  BOD QUI STR CHA INT WIL
+  {  0,  0,  0,  0,  0,  0  }, // undef
+  {  0,  0,  0,  0,  0,  0  }, // undef
+  {  0,  0,  0,  0,  0,  0  }, // human
+  {  1,  0,  2,  0,  0,  1  }, // dwarf
+  {  0,  1,  0,  2,  0,  0  }, // elf
+  {  3,  0,  2, -1, -1,  0  }, // ork
+  {  5, -1,  4, -2, -2,  0  }, // troll
+  {  5, -1,  6, -2, -2,  0  }, // cyclops
+  {  1,  0,  2,  0,  0,  1  }, // koborokuru
+  {  4, -1,  3,  0, -2,  0  }, // fomori
+  {  2,  0,  1,  0,  0,  1  }, // menehune
+  {  2,  0,  2, -1,  0,  0  }, // hobgoblin
+  {  5, -1,  5, -2, -2,  0  }, // giant
+  {  1,  1,  0,  0,  0,  2  }, // gnome
+  {  2,  0,  2, -1, -1,  1  }, // oni
+  {  0,  0,  0,  2,  0,  1  }, // wakyambi
+  {  3,  0,  2,  0, -1,  0  }, // ogre
+  {  4, -1,  3, -1, -1,  0  }, // minotaur
+  {  3, -1,  2, -1, -1,  1  }, // satyr
+  {  0,  2,  0,  2,  0,  0  }  // night one
+};
+
 const char *attributes[] =
   {
     "Body",

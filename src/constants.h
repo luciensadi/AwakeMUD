@@ -74,6 +74,7 @@ extern struct program_data programs[];
 extern int attack_multiplier[];
 extern const char *positions[];
 extern int racial_limits[][2][6];
+extern char racial_attribute_modifiers[][6];
 extern const char *attributes[];
 extern const char *short_attributes[];
 extern struct drug_data drug_types[];
