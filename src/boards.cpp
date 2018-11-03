@@ -499,9 +499,14 @@ int Board_list_board(int board_type, struct obj_data *terminal,
     }
   } else
   {
-    sprintf(buf, "There are %d files on the %s in the specified range.\r\n",
-            MAX(second - first + 1, 0),
-            fname(terminal->text.keywords));
+    if (MAX(second - first + 1, 0) == 1) {
+      sprintf(buf, "There is 1 file on the %s in the specified range.\r\n",
+              fname(terminal->text.keywords));
+    } else {
+      sprintf(buf, "There are %d files on the %s in the specified range.\r\n",
+              MAX(second - first + 1, 0),
+              fname(terminal->text.keywords));
+    }
     for (i = first; i <= second; i++) {
       if (MSG_HEADING(board_type, i))
         sprintf(buf + strlen(buf), "%-3d: %s\r\n", i + 1, MSG_HEADING(board_type, i));
@@ -544,11 +549,17 @@ int Board_show_board(int board_type, struct obj_data *terminal,
           "You will need to look at the %s to save your file.\r\n",
           fname(terminal->text.keywords));
 
-  if (!num_of_msgs[board_type])
+  if (!num_of_msgs[board_type]) {
     sprintf(ENDOF(buf), "The %s has no files.\r\n", fname(terminal->text.keywords));
-  else
-    sprintf(ENDOF(buf), "There are %d files on the %s.\r\n",
-            num_of_msgs[board_type], fname(terminal->text.keywords));
+  } else {
+    if (num_of_msgs[board_type] == 1) {
+      sprintf(ENDOF(buf), "There is 1 file on the %s.\r\n",
+              fname(terminal->text.keywords));
+    } else {
+      sprintf(ENDOF(buf), "There are %d files on the %s.\r\n",
+              num_of_msgs[board_type], fname(terminal->text.keywords));
+    }
+  }
 
   send_to_char(buf, ch);
 
