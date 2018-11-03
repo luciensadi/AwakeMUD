@@ -98,28 +98,26 @@ static int find_slot(void)
   return -1;
 }
 
-/* search the room ch is standing in to find which board he's looking at */
+/* search the room ch is standing in to find which board they're looking at */
 static int find_board(struct char_data * ch, struct obj_data **terminal)
 {
   struct obj_data *obj;
   int i;
 
-  if (ch->persona)
-  {
-    for (obj = matrix[ch->persona->in_host].file; obj; obj = obj->next_content)
-      for (i = 0; i < NUM_OF_BOARDS; i++)
-        if (BOARD_VNUM(i) == GET_OBJ_VNUM(obj)) {
-          *terminal = obj;
-          return i;
-        }
-  } else
-    for (obj = world[ch->in_room].contents; obj; obj = obj->next_content)
-      for (i = 0; i < NUM_OF_BOARDS; i++)
-        if (BOARD_VNUM(i) == GET_OBJ_VNUM(obj))
-        {
-          *terminal = obj;
-          return i;
-        }
+  if (ch->persona) {
+    obj = matrix[ch->persona->in_host].file;
+  } else {
+    obj = world[ch->in_room].contents;
+  }
+    
+  for (; obj; obj = obj->next_content) {
+    for (i = 0; i < NUM_OF_BOARDS; i++) {
+      if (BOARD_VNUM(i) == GET_OBJ_VNUM(obj)) {
+        *terminal = obj;
+        return i;
+      }
+    }
+  }
 
   return -1;
 }
@@ -481,9 +479,14 @@ int Board_list_board(int board_type, struct obj_data *terminal,
   }
   if (all)
   {
-    sprintf(buf, "There are %d files on the %s.\r\n",
-            num_of_msgs[board_type],
-            fname(terminal->text.keywords));
+    if (num_of_msgs[board_type] == 1) {
+      sprintf(buf, "There is 1 file on the %s.\r\n",
+              fname(terminal->text.keywords));
+    } else {
+      sprintf(buf, "There are %d files on the %s.\r\n",
+              num_of_msgs[board_type],
+              fname(terminal->text.keywords));
+    }
     for (i = 0; i < num_of_msgs[board_type]; i++) {
       if (MSG_HEADING(board_type, i))
         sprintf(buf + strlen(buf), "%-3d: %s^n\r\n", i + 1, MSG_HEADING(board_type, i));
