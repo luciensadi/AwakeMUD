@@ -592,6 +592,7 @@ int get_minimum_attribute_points_for_race(int race) {
   return minimum_attribute_points;
 }
 
+// Returns the maximum attribute points you can spend on a given race to max them out.
 int get_maximum_attribute_points_for_race(int race) {
   int amount = 0;
   for (int attr = BOD; attr <= WIL; attr++) {
@@ -613,9 +614,9 @@ void create_parse(struct descriptor_data *d, const char *arg)
   switch (d->ccr.mode)
   {
   case CCR_PO_ATTR:
-    available_attribute_points = max(minimum_attribute_points, (int) (d->ccr.points / 2));
+    available_attribute_points = min(maximum_attribute_points, d->ccr.points / 2);
     if (i < minimum_attribute_points) {
-      send_to_char(CH, "You need a minimum of %d points in attributes. Enter desired number of attribute points (^c%d^n available):",
+      send_to_char(CH, "You need a minimum of %d points in attributes. Enter desired number of attribute points (^c%d^n possible):",
                    minimum_attribute_points, available_attribute_points);
       break;
     } else if (i * 2 > d->ccr.points) {
@@ -624,7 +625,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
     }
     
     if (i > maximum_attribute_points) {
-      send_to_char(CH, "Good news-- you only need %d attribute points to max out your character's stats! Updated sheet.\r\n", maximum_attribute_points);
+      send_to_char(CH, "You only need %d attribute points to achieve maximum stats, so your selection has been reduced to match.\r\n", maximum_attribute_points);
       i = maximum_attribute_points;
     }
   
