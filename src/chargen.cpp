@@ -614,7 +614,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
   switch (d->ccr.mode)
   {
   case CCR_PO_ATTR:
-    available_attribute_points = min(maximum_attribute_points, d->ccr.points / 2);
+    available_attribute_points = min(maximum_attribute_points, (int) (d->ccr.points / 2));
     if (i < minimum_attribute_points) {
       send_to_char(CH, "You need a minimum of %d points in attributes. Enter desired number of attribute points (^c%d^n possible):",
                    minimum_attribute_points, available_attribute_points);
