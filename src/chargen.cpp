@@ -603,29 +603,34 @@ int get_maximum_attribute_points_for_race(int race) {
 
 void create_parse(struct descriptor_data *d, const char *arg)
 {
-  int i = MIN(120, atoi(arg)), ok, available_attribute_points = 0;
+  int i = MIN(120, atoi(arg)), ok;
+  int minimum_attribute_points, maximum_attribute_points, available_attribute_points;
   long shirts[5] = { 70000, 70001, 70002, 70003, 70004 };
   long pants[5] = { 70005, 70006, 70007, 70008, 70009 };
   long shoes[5] = { 70010, 70011, 70012, 70013, 70014};
-  
-  int minimum_attribute_points = get_minimum_attribute_points_for_race(GET_RACE(CH));
-  int maximum_attribute_points = get_maximum_attribute_points_for_race(GET_RACE(CH)) + minimum_attribute_points;
 
   switch (d->ccr.mode)
   {
   case CCR_PO_ATTR:
-    available_attribute_points = min(maximum_attribute_points, (int) (d->ccr.points / 2));
+      // Calculate the working variables.
+      minimum_attribute_points = get_minimum_attribute_points_for_race(GET_RACE(CH));
+      maximum_attribute_points = get_maximum_attribute_points_for_race(GET_RACE(CH)) + minimum_attribute_points;
+      available_attribute_points = (int) (d->ccr.points / 2);
+      
     if (i < minimum_attribute_points) {
-      send_to_char(CH, "You need a minimum of %d points in attributes. Enter desired number of attribute points (^c%d^n possible):",
-                   minimum_attribute_points, available_attribute_points);
+      send_to_char(CH, "You need a minimum of %d points in attributes.\r\n"
+                   "Enter desired number of attribute points (^c%d^n available, minimum %d, maximum %d):",
+                   minimum_attribute_points, available_attribute_points, minimum_attribute_points, maximum_attribute_points);
       break;
     } else if (i * 2 > d->ccr.points) {
-      send_to_char(CH, "You do not have enough points for that. Enter desired number of attribute points (^c%d^n possible):", available_attribute_points);
+      send_to_char(CH, "You do not have enough points for that.\r\n"
+                   "Enter desired number of attribute points (^c%d^n available, minimum %d, maximum %d):",
+                   available_attribute_points, minimum_attribute_points, maximum_attribute_points);
       break;
     }
     
     if (i > maximum_attribute_points) {
-      send_to_char(CH, "You only need %d attribute points to achieve maximum stats, so your selection has been reduced to match.\r\n", maximum_attribute_points);
+      send_to_char(CH, "The maximum number of attribute points for your race is %d.\r\n", maximum_attribute_points);
       i = maximum_attribute_points;
     }
   
@@ -669,10 +674,16 @@ void create_parse(struct descriptor_data *d, const char *arg)
   case CCR_POINTS:
     switch (*arg) {
       case '1':
+        // Unset their previous attribute investment.
         d->ccr.points += d->ccr.pr[PO_ATTR];
-        available_attribute_points = max(get_minimum_attribute_points_for_race(GET_RACE(CH)), (int) (d->ccr.points / 2));
-        send_to_char(CH, "Enter desired number of attribute points (^c%d^n available, minimum %d): ",
-                     available_attribute_points, get_minimum_attribute_points_for_race(GET_RACE(CH)));
+        
+        // Calculate their available stat points and minimum/maximums.
+        minimum_attribute_points = get_minimum_attribute_points_for_race(GET_RACE(CH));
+        maximum_attribute_points = get_maximum_attribute_points_for_race(GET_RACE(CH)) + minimum_attribute_points;
+        available_attribute_points = (int) (d->ccr.points / 2);
+        
+        send_to_char(CH, "Enter desired number of attribute points (^c%d^n available, minimum %d, maximum %d): ",
+                     available_attribute_points, minimum_attribute_points, maximum_attribute_points);
         d->ccr.mode = CCR_PO_ATTR;
         break;
       case '2':
