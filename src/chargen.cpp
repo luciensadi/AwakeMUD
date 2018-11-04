@@ -92,30 +92,24 @@ const char *magic_table[4] = { "None", "Full Magician", "Aspected Magician", "Ad
 
 void set_attributes(struct char_data *ch, int magic)
 {
-  if (magic)
-    ch->real_abils.mag = 600;
-  else ch->real_abils.mag = 0;
-  ch->real_abils.bod_index = 0;
-  ch->real_abils.ess = 600;
-  
-  // Pre-calculated attribute point cost (you must spend a minimum of 6 to make every attribute 1).
-  int attribute_point_cost = 6;
-  
-  for (int attr = BOD; attr <= WIL; attr++) {
-    // Set their attributes to the modifiers.
-    GET_REAL_ATT(ch, attr) = racial_attribute_modifiers[(int)GET_RACE(ch)][attr];
-    
-    // If the modifiers were negative, negate them and add their cost to the attribute point cost.
-    if (GET_REAL_ATT(ch, attr) < 0) {
-      attribute_point_cost += -GET_REAL_ATT(ch, attr);
-      GET_REAL_ATT(ch, attr) = 0;
-    }
-    
-    // Bump the attribute to purchased rank 1/6, which is the minimum allowed. Cost already figured in attribute_point_cost initialization.
-    GET_REAL_ATT(ch, attr) += 1;
+  // If the character is a magic user, their magic is equal to their essence (this is free).
+  if (magic) {
+    GET_REAL_MAG(ch) = 600;
+  } else {
+    GET_REAL_MAG(ch) = 0;
   }
   
-  // Subtract the cost from the character's available attribute-training points.
+  // Everyone starts with 0 bioware index and 6.00 essence.
+  GET_INDEX(ch) = 0;
+  GET_REAL_ESS(ch) = 600;
+  
+  // Set all of the character's stats to 1.
+  for (int attr = BOD; attr <= WIL; attr++) {
+    GET_REAL_ATT(ch, attr) = 1;
+  }
+  
+  // Subtract the cost of making all stats 1 from the character's available attribute-training points.
+  int attribute_point_cost = get_minimum_attribute_points_for_race(GET_RACE(ch));
   GET_ATT_POINTS(ch) -= attribute_point_cost;
   send_to_char(ch, "You spend %d attribute points to raise your attributes to their minimums.\r\n", attribute_point_cost);
 
