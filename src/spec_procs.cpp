@@ -554,6 +554,24 @@ SPECIAL(teacher)
   return TRUE;
 }
 
+bool trainable_attribute_is_maximized(struct char_data *ch, int attribute) {
+  switch (attribute) {
+    case ATT_BOD:
+      return (GET_REAL_BOD(ch) + GET_PERM_BOD_LOSS(ch)) >= racial_limits[(int)GET_RACE(ch)][0][0];
+    case ATT_QUI:
+      return GET_REAL_QUI(ch) >= racial_limits[(int)GET_RACE(ch)][0][1];
+    case ATT_STR:
+      return GET_REAL_STR(ch) >= racial_limits[(int)GET_RACE(ch)][0][2];
+    case ATT_CHA:
+      return GET_REAL_CHA(ch) >= racial_limits[(int)GET_RACE(ch)][0][3];
+    case ATT_INT:
+      return GET_REAL_INT(ch) >= racial_limits[(int)GET_RACE(ch)][0][4];
+    case ATT_WIL:
+      return GET_REAL_WIL(ch) >= racial_limits[(int)GET_RACE(ch)][0][5];
+  }
+  return true;
+}
+
 SPECIAL(trainer)
 {
   struct char_data *trainer = (struct char_data *) me;
@@ -585,31 +603,59 @@ SPECIAL(trainer)
     if (GET_ATT_POINTS(ch) > 0) {
       send_to_char(ch, "You have %d points to distribute.  You can train",
                    GET_ATT_POINTS(ch));
+      bool found_something_to_train = FALSE;
       for (i = 0; (1 << i) <= TWIL; i++)
         if (IS_SET(trainers[ind].attribs, (1 << i))) {
           switch (1 << i) {
-          case TBOD:
-            send_to_char(ch, "%s bod", first ? "" : ",");
-            break;
-          case TQUI:
-            send_to_char(ch, "%s qui", first ? "" : ",");
-            break;
-          case TSTR:
-            send_to_char(ch, "%s str", first ? "" : ",");
-            break;
-          case TCHA:
-            send_to_char(ch, "%s cha", first ? "" : ",");
-            break;
-          case TINT:
-            send_to_char(ch, "%s int", first ? "" : ",");
-            break;
-          case TWIL:
-            send_to_char(ch, "%s wil", first ? "" : ",");
-            break;
+            case TBOD:
+              if (!trainable_attribute_is_maximized(ch, ATT_BOD)) {
+                send_to_char(ch, "%s bod", first ? "" : ",");
+                found_something_to_train = TRUE;
+                first = 0;
+              }
+              break;
+            case TQUI:
+              if (!trainable_attribute_is_maximized(ch, ATT_QUI)) {
+                send_to_char(ch, "%s qui", first ? "" : ",");
+                found_something_to_train = TRUE;
+                first = 0;
+              }
+              break;
+            case TSTR:
+              if (!trainable_attribute_is_maximized(ch, ATT_STR)) {
+                send_to_char(ch, "%s str", first ? "" : ",");
+                found_something_to_train = TRUE;
+                first = 0;
+              }
+              break;
+            case TCHA:
+              if (!trainable_attribute_is_maximized(ch, ATT_CHA)) {
+                send_to_char(ch, "%s cha", first ? "" : ",");
+                found_something_to_train = TRUE;
+                first = 0;
+              }
+              break;
+            case TINT:
+              if (!trainable_attribute_is_maximized(ch, ATT_INT)) {
+                send_to_char(ch, "%s int", first ? "" : ",");
+                found_something_to_train = TRUE;
+                first = 0;
+              }
+              break;
+            case TWIL:
+              if (!trainable_attribute_is_maximized(ch, ATT_WIL)) {
+                send_to_char(ch, "%s wil", first ? "" : ",");
+                found_something_to_train = TRUE;
+                first = 0;
+              }
+              break;
           }
-          first = 0;
         }
-      send_to_char(".\r\n", ch);
+      if (found_something_to_train) {
+        send_to_char(".\r\n", ch);
+      } else {
+        send_to_char(" nothing-- you're already at your maximums!\r\n", ch);
+      }
     } else {
       send_to_char(ch, "You have %0.2f karma points.  You can train",
                    (float)GET_KARMA(ch) / 100);
