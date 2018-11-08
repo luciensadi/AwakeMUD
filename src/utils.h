@@ -674,6 +674,21 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define SEEK_END        2
 #endif
 
+/* Specific value invocations for item types *****************************/
+
+// ITEM_WEAPON
+#define GET_WEAPON_POWER(weapon)               (GET_OBJ_VAL((weapon), 0))
+#define GET_WEAPON_DAMAGE_CODE(weapon)         (GET_OBJ_VAL((weapon), 1))
+#define GET_WEAPON_STR_BONUS(weapon)           (GET_OBJ_VAL((weapon), 2))
+#define GET_WEAPON_TYPE(weapon)                (GET_OBJ_VAL((weapon), 3))
+#define GET_WEAPON_SKILL(weapon)               (GET_OBJ_VAL((weapon), 4))
+#define GET_WEAPON_MAX_AMMO(weapon)            (GET_OBJ_VAL((weapon), 5))
+#define GET_WEAPON_REACH(weapon)               (GET_OBJ_VAL((weapon), 6))
+#define GET_WEAPON_ATTACH_TOP_VNUM(weapon)     (GET_OBJ_VAL((weapon), 7))
+#define GET_WEAPON_ATTACH_BARREL_VNUM(weapon)  (GET_OBJ_VAL((weapon), 8))
+#define GET_WEAPON_ATTACH_UNDER_VNUM(weapon)   (GET_OBJ_VAL((weapon), 9))
+#define GET_WEAPON_FIREMODES(weapon)           (GET_OBJ_VAL((weapon), 10))
+
 /* Misc utils ************************************************************/
 #define IS_DAMTYPE_PHYSICAL(type) \
   !((type) == TYPE_HIT || (type) == TYPE_BLUDGEON || (type) == TYPE_PUNCH || (type) == TYPE_TASER || (type) == TYPE_CRUSH || (type) == TYPE_POUND)

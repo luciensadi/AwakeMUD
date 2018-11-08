@@ -194,9 +194,9 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
           act("$n attacks the door.", TRUE, ch, 0, 0, TO_ROOM);
           act("You aim $p at the door!", FALSE, ch, wielded, 0, TO_CHAR);
         }
-        damage_door(ch, ch->in_room, dir, (int)(GET_OBJ_VAL(wielded, 0) / 2), DAMOBJ_PIERCE);
+        damage_door(ch, ch->in_room, dir, (int)(GET_WEAPON_POWER(wielded) / 2), DAMOBJ_PIERCE);
         return TRUE;
-      } else if (GET_OBJ_VAL(wielded, 3) >= TYPE_PISTOL) {
+      } else if (GET_WEAPON_TYPE(wielded) >= WEAP_HOLDOUT) {
         if (!has_ammo(ch, wielded))
           return TRUE;
         WAIT_STATE(ch, PULSE_VIOLENCE * 2);
@@ -209,30 +209,18 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
           act("$n attacks the door.", TRUE, ch, 0, 0, TO_ROOM);
           act("You aim $p at the door!", FALSE, ch, wielded, 0, TO_CHAR);
         }
-        damage_door(ch, ch->in_room, dir, (int)(GET_OBJ_VAL(wielded, 0) / 2), DAMOBJ_PROJECTILE);
+        damage_door(ch, ch->in_room, dir, (int)(GET_WEAPON_POWER(wielded) / 2), DAMOBJ_PROJECTILE);
         return TRUE;
       } else
-        switch (GET_OBJ_VAL(wielded, 3)) {
-        case TYPE_PIERCE:
-        case TYPE_STAB:
-        case TYPE_SHURIKEN:
-          type = DAMOBJ_PIERCE;
-          break;
-        case TYPE_STING:
-        case TYPE_SLASH:
-        case TYPE_CLAW:
-        case TYPE_THRASH:
-        case TYPE_ARROW:
-        case TYPE_THROWING_KNIFE:
-          type = DAMOBJ_SLASH;
-          break;
-        case TYPE_HIT:
-        case TYPE_BLUDGEON:
-        case TYPE_POUND:
-        case TYPE_MAUL:
-        case TYPE_PUNCH:
-          type = DAMOBJ_CRUSH;
-          break;
+        switch (GET_WEAPON_TYPE(wielded)) {
+          case WEAP_EDGED:
+          case WEAP_POLEARM:
+          case WEAP_WHIP:
+            type = DAMOBJ_SLASH;
+            break;
+          case WEAP_CLUB:
+            type = DAMOBJ_CRUSH;
+            break;
         default:
           if (EXIT(ch, dir)->keyword) {
             sprintf(buf, "You can't damage the %s with $p!",
@@ -253,7 +241,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
         act("$n attacks the door.", TRUE, ch, 0, 0, TO_ROOM);
         act("You aim $p at the door!", FALSE, ch, wielded, 0, TO_CHAR);
       }
-      damage_door(ch, ch->in_room, dir, (int)((GET_STR(ch) + GET_OBJ_VAL(wielded, 0)) / 2), type);
+      damage_door(ch, ch->in_room, dir, (int)((GET_STR(ch) + GET_WEAPON_POWER(wielded)) / 2), type);
     } else {
 
       WAIT_STATE(ch, PULSE_VIOLENCE * 2);
