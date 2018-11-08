@@ -1520,7 +1520,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           (number == ITEM_BIOWARE && !access_level(CH, LVL_ADMIN))) {
         send_to_char("That's not a valid choice!\r\n", d->character);
         iedit_disp_type_menu(d);
-      } else if (number != 0) {
+      } else if (number != 0 && GET_OBJ_TYPE(d->edit_obj) != number) {
         GET_OBJ_TYPE(d->edit_obj) = number;
         for (int index = 0; index < NUM_VALUES; index++)
           GET_OBJ_VAL(d->edit_obj, index) = 0;
