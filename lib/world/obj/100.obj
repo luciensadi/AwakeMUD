@@ -557,6 +557,31 @@ Material:	metal
 	Val0:	7
 	Val1:	2
 BREAK
+#10020
+Keywords:	sign
+Name:	An Immortal notification sign
+RoomDesc:$
+^gA sign on the kiosk recommends you type '^yLIST^g', or '^yGOTO 10020^g' to make changes.~
+LookDesc:$
+The sign informs you that room 10020 is the vehicle dealer's storage room for
+room 10021, and that to change the stock of this shop you can load or remove
+vehicles there. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
 #10025
 Keywords:	testing pocket secretary
 Name:	a testing pocket secretary

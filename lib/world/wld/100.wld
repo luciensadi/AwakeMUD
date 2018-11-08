@@ -40,6 +40,12 @@ Range.'
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10021
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT west]
 	ToVnum:	10013
 	Flags:	0
@@ -790,6 +796,66 @@ RoomType:	0
 	BackgroundType:	0
 [EXIT south]
 	ToVnum:	10001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10020
+Name:	^W(^CIMMHQ^W)^C The ImmHQ Vehicle Shop's Loading Area
+Desc:$
+Vehicles that are zoneloaded here will be available for purchase in room
+10021. 
+~
+Flags:	10000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	100
+Y:	100
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	10021
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10021
+Name:	^W(^CIMMHQ^W)^C A Spacious Garage
+Desc:$
+Cavernous and hangar-like, this massive vehicle storage area is enclosed by
+massive steel beams that arch gracefully overhead to support the thick slabs
+of reinforced concrete of this obdurate building. A kiosk near the entrance
+allows the purchase of vehicles.  
+~
+Flags:	100000110000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	50
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10000
 	Flags:	0
 	Material:	brick
 	Barrier:	4
