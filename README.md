@@ -6,6 +6,7 @@ A fork of the [Awakened Worlds](http://awakenedworlds.net) MUD codebase. Issues 
 Discussion of this port, as well as Awake itself, can take place at https://www.reddit.com/r/AwakenedWorlds/.
 
 ## Features
+- Enhanced security
 - Significant reductions in memory leaks
 - Significantly reduced ticklag
 - A slew of bugfixes to everything from combat code to sound propagation
@@ -13,8 +14,9 @@ Discussion of this port, as well as Awake itself, can take place at https://www.
 ## OS Support
 Tested on:
 - OSX 10.12, 10.13
-- Ubuntu 14.04.2 LTS
+- Ubuntu 14 and 16 LTS
 - Raspbian Jessie
+- Amazon Linux
 
 ## Installation
 - Install MySQL 5, including its development headers (`mysql/mysql.h`).
