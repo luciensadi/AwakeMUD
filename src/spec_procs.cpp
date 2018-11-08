@@ -977,7 +977,8 @@ SPECIAL(spell_trainer)
       }
     }
     for (i = 0; spelltrainers[i].teacher; i++) {
-      if ((GET_ASPECT(ch) == ASPECT_ELEMFIRE && spells[spelltrainers[i].type].category != COMBAT) ||
+      if ((GET_MOB_VNUM(trainer) != spelltrainers[i].teacher) ||
+          (GET_ASPECT(ch) == ASPECT_ELEMFIRE && spells[spelltrainers[i].type].category != COMBAT) ||
           (GET_ASPECT(ch) == ASPECT_ELEMEARTH && spells[spelltrainers[i].type].category != MANIPULATION) ||
           (GET_ASPECT(ch) == ASPECT_ELEMWATER && spells[spelltrainers[i].type].category != ILLUSION) ||
           (GET_ASPECT(ch) == ASPECT_ELEMAIR && spells[spelltrainers[i].type].category != DETECTION))
