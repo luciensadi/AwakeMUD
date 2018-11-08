@@ -582,6 +582,32 @@ Material:	metal
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
+#10021
+Keywords:	vehicle workshop
+Name:	a vehicular workshop
+RoomDesc:$
+An array of tools for the modification and maintenance of vehicles occupies this area.~
+LookDesc:$
+It contains everything you need to upgrade, modify, and repair vehicles. 
+~
+Type:	Workshop
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	40.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	2
+BREAK
 #10025
 Keywords:	testing pocket secretary
 Name:	a testing pocket secretary
