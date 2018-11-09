@@ -827,7 +827,54 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       if (real_object(GET_OBJ_VAL(obj, 9)) > 0)
         strcat(buf, obj_proto[real_object(GET_OBJ_VAL(obj, 9))].text.name);
       sprintf(ENDOF(buf), ". It can hold a maximum of %d rounds.", GET_OBJ_VAL(obj, 5));
-    } else {}
+    } else {
+      // Map damage value to phrase.
+      if (GET_WEAPON_DAMAGE_CODE(obj) == LIGHT) {
+        strcat(buf, " a lightly-damaging");
+      } else if (GET_WEAPON_DAMAGE_CODE(obj) == MODERATE) {
+        strcat(buf, " a moderately-damaging");
+      } else if (GET_WEAPON_DAMAGE_CODE(obj) == SERIOUS) {
+        strcat(buf, " a strong");
+      } else if (GET_WEAPON_DAMAGE_CODE(obj) == DEADLY) {
+        strcat(buf, " a deadly");
+      } else {
+        strcat(buf, " an indeterminate-strength");
+        sprintf(buf1, "SYSERR: Unable to map damage value %d for weapon '%s' (%ld) to a damage phrase.",
+                GET_WEAPON_DAMAGE_CODE(obj), GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
+        mudlog(buf1, NULL, LOG_SYSLOG, TRUE);
+      }
+      sprintf(ENDOF(buf), " %s", weapon_type[GET_OBJ_VAL(obj, 3)]);
+      
+      // Two-handed weapon?
+      if (IS_OBJ_STAT(obj, ITEM_TWOHANDS))
+        strcat(buf, " that requires two hands to wield correctly.");
+      else
+        strcat(buf, ".");
+      
+      // Reach?
+      if (GET_WEAPON_REACH(obj)) {
+        sprintf(ENDOF(buf), " As a long weapon, it gives you %d meter%s of extended reach.",
+                GET_WEAPON_REACH(obj), GET_WEAPON_REACH(obj) > 1 ? "s" : "");
+      }
+      
+      // Map strength bonus to phrase.
+      if (GET_WEAPON_STR_BONUS(obj) != 0) {
+        if (GET_WEAPON_STR_BONUS(obj) == 1) {
+          strcat(buf, " It is somewhat well-constructed and will let you hit a little harder in combat.");
+        } else if (GET_WEAPON_STR_BONUS(obj) == 2) {
+          strcat(buf, " It is well-constructed, letting you land strong hits.");
+        } else if (GET_WEAPON_STR_BONUS(obj) == 3) {
+          strcat(buf, " It is extremely well-constructed, letting you hit with great strength.");
+        } else if (GET_WEAPON_STR_BONUS(obj) == 4) {
+          strcat(buf, " It is masterfully constructed, letting you hit as hard as possible.");
+        } else {
+          strcat(buf, " It has an indeterminate strength modifier.");
+          sprintf(buf1, "SYSERR: Unable to map strength modifier %d for weapon '%s' (%ld) to a feature phrase.",
+                  GET_WEAPON_STR_BONUS(obj), GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
+          mudlog(buf1, NULL, LOG_SYSLOG, TRUE);
+        }
+      }
+    }
     break;
   case ITEM_WORN:
     num = (GET_OBJ_VAL(obj, 5) > 20 ? (int)(GET_OBJ_VAL(obj, 5) / 100) : GET_OBJ_VAL(obj, 5)) +
