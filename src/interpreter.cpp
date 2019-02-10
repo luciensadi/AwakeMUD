@@ -2240,6 +2240,9 @@ void nanny(struct descriptor_data * d, char *arg)
 
     /* turn echo back on */
     echo_on(d);
+      
+    // Clear their idle counter so they don't get dropped mysteriously.
+    d->idle_tics = 0;
 
     if (!*arg)
       close_socket(d);
