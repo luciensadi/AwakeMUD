@@ -2040,18 +2040,20 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             return;
           }
           switch (number) {
+              // Determine what attachment locations are available by default based on weapon type. 0 = available, -1 = not.
             case WEAP_LIGHT_PISTOL:
             case WEAP_HEAVY_PISTOL:
             case WEAP_MACHINE_PISTOL:
-              GET_OBJ_VAL(OBJ, 7) = 0;
-              GET_OBJ_VAL(OBJ, 8) = 0;
-              GET_OBJ_VAL(OBJ, 9) = -1;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_TOP) = 0;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_BARREL) = 0;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_UNDER) = -1;
               break;
             case WEAP_TASER:
-              GET_OBJ_VAL(OBJ, 7) = 0;
-              GET_OBJ_VAL(OBJ, 8) = -1;
-              GET_OBJ_VAL(OBJ, 9) = -1;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_TOP) = 0;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_BARREL) = -1;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_UNDER) = -1;
               break;
+            case WEAP_SMG:
             case WEAP_LMG:
             case WEAP_MMG:
             case WEAP_HMG:
@@ -2063,14 +2065,14 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             case WEAP_SHOTGUN:
             case WEAP_ASSAULT_RIFLE:
             case WEAP_CANNON:
-              GET_OBJ_VAL(OBJ, 7) = 0;
-              GET_OBJ_VAL(OBJ, 8) = 0;
-              GET_OBJ_VAL(OBJ, 9) = 0;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_TOP) = 0;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_BARREL) = 0;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_UNDER) = 0;
               break;
-            default:
-              GET_OBJ_VAL(OBJ, 7) = -1;
-              GET_OBJ_VAL(OBJ, 8) = -1;
-              GET_OBJ_VAL(OBJ, 9) = -1;
+            default: // includes holdout pistols and all melee weapons
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_TOP) = -1;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_BARREL) = -1;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_UNDER) = -1;
           }
           break;
         case ITEM_FIREWEAPON:
