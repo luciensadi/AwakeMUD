@@ -259,7 +259,7 @@ void initialize_and_connect_to_mysql() {
   mysql = mysql_init(NULL);
   
   // Configure the client to attempt auto-reconnection.
-  my_bool reconnect = 1;
+  bool reconnect = 1;
   mysql_options(mysql, MYSQL_OPT_RECONNECT, &reconnect);
   
   // Perform the actual connection.
