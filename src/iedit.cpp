@@ -182,10 +182,8 @@ void iedit_disp_skill_menu(struct descriptor_data *d)
 /* weapon type */
 void iedit_disp_weapon_menu(struct descriptor_data * d)
 {
-  int             counter;
-  
   CLS(CH);
-  for (counter = 1; counter < MAX_WEAP; counter += 2)
+  for (int counter = 0; counter < MAX_WEAP; counter += 2)
     send_to_char(CH, "%2d) %-18s %2d) %-18s\r\n",
                  counter, weapon_type[counter],
                  counter + 1, counter + 1 <= MAX_WEAP ? weapon_type[counter + 1] : "");
@@ -196,10 +194,8 @@ void iedit_disp_weapon_menu(struct descriptor_data * d)
 /* spell type */
 void iedit_disp_spells_menu(struct descriptor_data * d)
 {
-  int             counter;
-  
   CLS(CH);
-  for (counter = 1; counter <= MAX_SPELLS; counter += 3)
+  for (int counter = 1; counter <= MAX_SPELLS; counter += 3)
     send_to_char(CH, "%2d) %-18s %2d) %-18s %2d) %-18s\r\n",
                  counter, spells[counter].name,
                  counter + 1, counter + 1 <= MAX_SPELLS ? spells[counter + 1].name : "",
