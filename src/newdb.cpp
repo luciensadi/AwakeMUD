@@ -819,9 +819,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
   res = mysql_use_result(mysql);
   if (res && (row = mysql_fetch_row(res))) {
     long pgroup_idnum = atol(row[1]);
-    GET_PGROUP_DATA(ch) = new Pgroup_data();
-    GET_PGROUP_DATA(ch)->rank = atoi(row[2]);
-    GET_PGROUP_DATA(ch)->privileges.FromString(row[3]);
+    GET_PGROUP_MEMBER_DATA(ch) = new Pgroup_data();
+    GET_PGROUP_MEMBER_DATA(ch)->rank = atoi(row[2]);
+    GET_PGROUP_MEMBER_DATA(ch)->privileges.FromString(row[3]);
     mysql_free_result(res);
   
     // TODO: Find the pgroup in the list. If it's not there, load it.
@@ -843,7 +843,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
     }
     
     // Initialize character pgroup struct.
-    GET_PGROUP_DATA(ch)->pgroup = ptr;
+    GET_PGROUP_MEMBER_DATA(ch)->pgroup = ptr;
   } else {
     mysql_free_result(res);
   }
@@ -1016,7 +1016,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     inveh = player->in_veh->idnum;
   
   long pgroup_num = 0;
-  if (GET_PGROUP_DATA(player) && GET_PGROUP(player))
+  if (GET_PGROUP_MEMBER_DATA(player) && GET_PGROUP(player))
     pgroup_num = GET_PGROUP(player)->get_idnum();
   
   sprintf(buf, "UPDATE pfiles SET AffFlags='%s', PlrFlags='%s', PrfFlags='%s', Bod=%d, "\
@@ -1383,7 +1383,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
   }
   
   // Save pgroup membership data.
-  if (GET_PGROUP_DATA(player) && GET_PGROUP(player)) {
+  if (GET_PGROUP_MEMBER_DATA(player) && GET_PGROUP(player)) {
     sprintf(buf, "INSERT INTO pfiles_playergroups (`idnum`, `group`, `Rank`, `Privileges`) VALUES ('%ld', '%ld', '%d', '%s')"
                  " ON DUPLICATE KEY UPDATE"
                  "   `group` = VALUES(`group`),"
@@ -1391,8 +1391,8 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                  "   `Privileges` = VALUES(`Privileges`)",
                  GET_IDNUM(player),
                  GET_PGROUP(player)->get_idnum(),
-                 GET_PGROUP_DATA(player)->rank,
-                 GET_PGROUP_DATA(player)->privileges.ToString());
+                 GET_PGROUP_MEMBER_DATA(player)->rank,
+                 GET_PGROUP_MEMBER_DATA(player)->privileges.ToString());
     mysql_wrapper(mysql, buf);
   }
 

@@ -378,7 +378,7 @@ void Playergroup::invite(struct char_data *ch, char *argument) {
     send_to_char("They can't hear you.\r\n", ch);
   } else if (GET_TKE(target) < 100) {
     send_to_char("That person isn't experienced enough to be a valuable addition to your group yet.\r\n", ch);
-  } else if (GET_PGROUP_DATA(target) && GET_PGROUP(target) && GET_PGROUP(target) == GET_PGROUP(ch)) {
+  } else if (GET_PGROUP_MEMBER_DATA(target) && GET_PGROUP(target) && GET_PGROUP(target) == GET_PGROUP(ch)) {
     send_to_char("They're already part of your group!\r\n", ch);
     // TODO: If the group is secret, this is info disclosure.
   } else if (FALSE) {
@@ -420,21 +420,21 @@ void Playergroup::add_member(struct char_data *ch) {
   if (IS_NPC(ch))
     return;
   
-  if (GET_PGROUP_DATA(ch)) {
+  if (GET_PGROUP_MEMBER_DATA(ch)) {
     if (GET_PGROUP(ch)) {
       log_vfprintf("WARNING: add_member called on %s for group %s when they were already part of %s.",
           GET_CHAR_NAME(ch), get_name(), GET_PGROUP(ch)->get_name());
     } else {
       log("SYSERR: overriding add_member call, also %s had pgroup_data but no pgroup.");
     }
-    delete GET_PGROUP_DATA(ch);
+    delete GET_PGROUP_MEMBER_DATA(ch);
   }
-  GET_PGROUP_DATA(ch) = new Pgroup_data();
-  GET_PGROUP_DATA(ch)->pgroup = this;
-  GET_PGROUP_DATA(ch)->rank = 1;
-  if (GET_PGROUP_DATA(ch)->title)
-    delete GET_PGROUP_DATA(ch)->title;
-  GET_PGROUP_DATA(ch)->title = str_dup("Member");
+  GET_PGROUP_MEMBER_DATA(ch) = new Pgroup_data();
+  GET_PGROUP_MEMBER_DATA(ch)->pgroup = this;
+  GET_PGROUP_MEMBER_DATA(ch)->rank = 1;
+  if (GET_PGROUP_MEMBER_DATA(ch)->title)
+    delete GET_PGROUP_MEMBER_DATA(ch)->title;
+  GET_PGROUP_MEMBER_DATA(ch)->title = str_dup("Member");
   
   // Save the character.
   playerDB.SaveChar(ch);
@@ -470,15 +470,15 @@ void Playergroup::remove_member(struct char_data *ch) {
   if (IS_NPC(ch))
     return;
   
-  if (!GET_PGROUP_DATA(ch) || !GET_PGROUP(ch)) {
+  if (!GET_PGROUP_MEMBER_DATA(ch) || !GET_PGROUP(ch)) {
     log_vfprintf("SYSERR: pgroup->remove_member() called on %s, who does not have an associated group.",
                  GET_CHAR_NAME(ch));
     return;
   }
   
   // TODO: DB updates.
-  delete GET_PGROUP_DATA(ch);
-  GET_PGROUP_DATA(ch) = NULL;
+  delete GET_PGROUP_MEMBER_DATA(ch);
+  GET_PGROUP_MEMBER_DATA(ch) = NULL;
   
   // Save the character.
   playerDB.SaveChar(ch);

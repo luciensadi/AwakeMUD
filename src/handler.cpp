@@ -2061,8 +2061,8 @@ void extract_char(struct char_data * ch)
     PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
   }
   // Clean up playergroup info.
-  if (GET_PGROUP_DATA(ch))
-    delete GET_PGROUP_DATA(ch);
+  if (GET_PGROUP_MEMBER_DATA(ch))
+    delete GET_PGROUP_MEMBER_DATA(ch);
   
   /* pull the char from the list */
   REMOVE_FROM_LIST(ch, character_list, next);
