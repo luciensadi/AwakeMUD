@@ -1112,6 +1112,8 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
         ZON->editor_ids[2] = t[2];
         ZON->editor_ids[3] = t[3];
         ZON->editor_ids[4] = t[4];
+      } else {
+        send_to_char("That field requires five separate integers. Example: 9 123 4 0 0", CH);
       }
       zedit_disp_data_menu(d);
     }
