@@ -738,10 +738,6 @@ void game_loop(int mother_desc)
       perform_violence();
       matrix_violence();
     }
-    if (!(pulse % PASSES_PER_SEC)) {
-      EscalatorProcess();
-      ElevatorProcess();
-    }
     
     // Every MUD minute
     if (!(pulse % (SECS_PER_MUD_MINUTE * PASSES_PER_SEC))) {
@@ -791,6 +787,17 @@ void game_loop(int mother_desc)
     // Every MUD day
     if (!(pulse % (24 * SECS_PER_MUD_HOUR * PASSES_PER_SEC)))
       randomize_shop_prices();
+    
+    // Every IRL second
+    if (!(pulse % PASSES_PER_SEC)) {
+      EscalatorProcess();
+      ElevatorProcess();
+    }
+    
+    // Every 10 IRL seconds
+    if (!(pulse % (10 * PASSES_PER_SEC))) {
+      check_idle_passwords();
+    }
     
     // Every IRL minute
     if (!(pulse % (60 * PASSES_PER_SEC))) {
@@ -1832,11 +1839,14 @@ void check_idle_passwords(void)
     if (STATE(d) != CON_PASSWORD && STATE(d) != CON_GET_NAME)
       continue;
     
-    if (++d->idle_tics >= 12 ) /* 120 seconds RL, or 2 minutes */
+    if (++d->idle_tics >= 12 ) {
+      /* 120 seconds RL, or 2 minutes */
       if (STATE(d) == CON_PASSWORD)
         echo_on(d);
-    SEND_TO_Q("\r\nTimed out... goodbye.\r\n", d);
-    STATE(d) = CON_CLOSE;
+      
+      SEND_TO_Q("\r\nTimed out... goodbye.\r\n", d);
+      STATE(d) = CON_CLOSE;
+    }
   }
 }
 
