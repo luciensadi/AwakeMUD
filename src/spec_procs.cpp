@@ -242,6 +242,27 @@ int ability_cost(int abil, int level)
   return 0;
 }
 
+int train_ability_cost(struct char_data *ch, int abil, int level) {
+  int cost = ability_cost(abil, level);
+  
+  switch (abil) {
+    case ADEPT_IMPROVED_BOD:
+      if (GET_REAL_BOD(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_BOD) >= racial_limits[(int)GET_RACE(ch)][0][0] - GET_PERM_BOD_LOSS(ch))
+        cost *= 2;
+      break;
+    case ADEPT_IMPROVED_QUI:
+      if (GET_REAL_QUI(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_QUI) >= racial_limits[(int)GET_RACE(ch)][0][1])
+        cost *= 2;
+      break;
+    case ADEPT_IMPROVED_STR:
+      if (GET_REAL_STR(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_STR) >= racial_limits[(int)GET_RACE(ch)][0][2])
+        cost *= 2;
+      break;
+  }
+  
+  return cost;
+}
+
 void attack_random_player(struct char_data *mob, struct char_data *boss)
 {
   struct char_data *vict;
@@ -442,7 +463,7 @@ SPECIAL(teacher)
     return FALSE;
 
   if (teachers[ind].type != NEWBIE && PLR_FLAGGED(ch, PLR_NEWBIE)) {
-    do_say(master, "You're not quite ready for that yet!", 0, 0);
+    do_say(master, "You're not quite ready for that yet! Come back when you've earned more karma.", 0, 0);
     return TRUE;
   }
 
@@ -1070,20 +1091,27 @@ SPECIAL(adept_trainer)
 
   skip_spaces(&argument);
 
+  // Sanity checks: Newbie trainers only train newbies; newbies cannot train at non-newbie trainers.
   if (adepts[ind].is_newbie && !PLR_FLAGGED(ch, PLR_NEWBIE)) {
     sprintf(arg, "%s You do not belong here.", GET_CHAR_NAME(ch));
     do_say(trainer, arg, 0, SCMD_SAYTO);
+    sprintf(buf, "Error: Character %s is not a newbie but is attempting to train in Chargen.", GET_CHAR_NAME(ch));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return TRUE;
   } else if (!adepts[ind].is_newbie && PLR_FLAGGED(ch, PLR_NEWBIE)) {
-    sprintf(arg, "%s You're not quite ready yet!", GET_CHAR_NAME(ch));
+    sprintf(arg, "%s You're not quite ready yet! Come back when you've earned more karma.", GET_CHAR_NAME(ch));
     do_say(trainer, arg, 0, SCMD_SAYTO);
     return TRUE;
   }
+  
+  // Exploit prevention: You're not allowed to train before allocating attributes to avoid discounted training of improved-attribute powers.
   if (GET_ATT_POINTS(ch) > 0) {
     sprintf(arg, "%s You must go train your attributes fully before you see me.", GET_CHAR_NAME(ch));
     do_say(trainer, arg, 0, SCMD_SAYTO);
     return TRUE;
   }
+  
+  // List the powers available to train if they don't supply an argument.
   if (!*argument) {
     int num = 0;
     for (i = 1; i < ADEPT_NUMPOWER; i++)
@@ -1093,59 +1121,59 @@ SPECIAL(adept_trainer)
     for (i = 1; i < ADEPT_NUMPOWER; i++)
       if (adepts[ind].skills[i] && GET_POWER_TOTAL(ch, i) < max_ability(i))
         sprintf(buf + strlen(buf), "%30s (%0.2f points)\r\n", adept_powers[i],
-                ((float) ability_cost(i, GET_POWER_TOTAL(ch, i) + 1)/ 100));
+                ((float) train_ability_cost(ch, i, GET_POWER_TOTAL(ch, i) + 1)/ 100));
     sprintf(buf + strlen(buf), "\r\nYou have %0.2f power point%s to "
             "distribute to your abilities.\r\n", ((float)GET_PP(ch) / 100),
             ((GET_PP(ch) != 100) ? "s" : ""));
     send_to_char(buf, ch);
     return TRUE;
   }
+  
+  // Search for their selected power.
   for (power = 1; power < ADEPT_NUMPOWER; power++)
     if (is_abbrev(argument, adept_powers[power]) && adepts[ind].skills[power])
       break;
+  
+  // If they specified an invalid power, break out.
   if (power == ADEPT_NUMPOWER) {
     send_to_char(ch, "Which power do you wish to train?\r\n");
     return TRUE;
   }
+  
+  // Trainer power limits.
   if (GET_POWER_TOTAL(ch, power) >= adepts[ind].skills[power] ||
       GET_POWER_TOTAL(ch, power) >= max_ability(power)) {
     send_to_char("You have advanced beyond the teachings of your trainer.\r\n", ch);
     return 1;
   }
+  
+  // Character power limits.
   if (GET_POWER_TOTAL(ch, power) >= GET_MAG(ch) / 100) {
-    send_to_char(ch, "You have advanced to the limit of your abilities.\r\n");
+    send_to_char(ch, "Your magic isn't strong enough to allow you to advance further in that discipline.\r\n");
     return TRUE;
   }
-  int cost = ability_cost(power, GET_POWER_TOTAL(ch, power) + 1);
-  switch (power) {
-  case ADEPT_IMPROVED_BOD:
-    if (GET_REAL_BOD(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_BOD) >= racial_limits[(int)GET_RACE(ch)][0][0] - GET_PERM_BOD_LOSS(ch))
-      cost *= 2;
-    break;
-  case ADEPT_IMPROVED_QUI:
-    if (GET_REAL_QUI(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_QUI) >= racial_limits[(int)GET_RACE(ch)][0][1])
-      cost *= 2;
-    break;
-  case ADEPT_IMPROVED_STR:
-    if (GET_REAL_STR(ch) + GET_POWER_TOTAL(ch, ADEPT_IMPROVED_STR) >= racial_limits[(int)GET_RACE(ch)][0][2])
-      cost *= 2;
-    break;
-  }
+  
+  // Check to see if they can afford the cost of training the selected power.
+  int cost = train_ability_cost(ch, power, GET_POWER_TOTAL(ch, power) + 1);
   if (GET_PP(ch) < cost) {
     send_to_char("You do not have enough magic to raise that ability.\r\n", ch);
     return TRUE;
   }
 
+  // Subtract their PP and increase their power level.
   GET_PP(ch) -= cost;
-  send_to_char("After hours of focus and practice, you feel your "
-               "ability sharpen.\r\n", ch);
-
   GET_POWER_TOTAL(ch, power)++;
+  send_to_char("After hours of focus and practice, you feel your ability sharpen.\r\n", ch);
 
-  if (GET_POWER_TOTAL(ch, power) >= max_ability(power) ||
-      GET_POWER_TOTAL(ch, power) >= adepts[ind].skills[power])
+  // Post-increase messaging to let them know they've maxed out.
+  if (GET_POWER_TOTAL(ch, power) >= GET_MAG(ch) / 100)
+    send_to_char("You feel you've reached the limits of your magical ability in that area.\r\n", ch);
+  
+  // If they haven't maxed out but their teacher has, let them know that instead.
+  else if (GET_POWER_TOTAL(ch, power) >= max_ability(power) || GET_POWER_TOTAL(ch, power) >= adepts[ind].skills[power])
     send_to_char("You have learned all your teacher knows in that area.\r\n", ch);
 
+  // Update character and end routine.
   affect_total(ch);
   return TRUE;
 }
