@@ -946,7 +946,7 @@ void veh_from_room(struct veh_data * veh)
   struct veh_data *temp;
   if (veh == NULL || (veh->in_room == NOWHERE && veh->in_veh == NULL))
   {
-    log("YOU SCREWED IT UP");
+    log("SYSERR: Invalid vehicle passed to veh_from_room. Terminating.");
     shutdown();
   }
   if (veh->in_veh) {

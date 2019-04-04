@@ -1983,7 +1983,8 @@ enum {
 #define RM_NEWBIE_LOADROOM         60565 // The Neophyte Hotel.
 #define RM_NEWBIE_LOBBY            60563
 #define RM_ENTRANCE_TO_DANTES      35500
-#define RM_DANTES_GARAGE           35693 + number(0,4)
+#define RM_DANTES_GARAGE           35693
+#define RM_DANTES_GARAGE_RANDOM    35693 + number(0,4)
 #define RM_DANTES_DESCENT          35502
 #define RM_SEATTLE_DOCWAGON        RM_ENTRANCE_TO_DANTES
 #define RM_PORTLAND_DOCWAGON       RM_ENTRANCE_TO_DANTES
