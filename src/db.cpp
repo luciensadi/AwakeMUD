@@ -412,8 +412,11 @@ void DBInit()
 
   log("Loading Saved Vehicles.");
   load_saved_veh();
+  
+  log("Loading shop orders.");
   boot_shop_orders();
-  log("Boot db -- DONE.");
+  
+  log("DBInit -- DONE.");
 }
 
 /* A simple method to clean up after our DB. */
