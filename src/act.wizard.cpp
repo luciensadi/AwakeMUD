@@ -1708,11 +1708,6 @@ ACMD(do_iload)
 
 ACMD(do_wizload)
 {
-  if (GET_LEVEL(ch) < LVL_ADMIN) {
-    ACMD(do_chipload);
-    do_chipload(ch, argument, cmd, 0);
-    return;
-  }
   struct char_data *mob;
   struct veh_data *veh;
 
@@ -1721,7 +1716,7 @@ ACMD(do_wizload)
   two_arguments(argument, buf, buf2);
 
   if (!*buf || !*buf2 || !isdigit(*buf2)) {
-    send_to_char("Usage: load { obj | mob | veh } <number>\r\n", ch);
+    send_to_char("Usage: wizload { obj | mob | veh } <number>\r\n", ch);
     return;
   }
   if ((numb = atoi(buf2)) < 0) {
