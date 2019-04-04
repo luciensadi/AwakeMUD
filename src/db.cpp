@@ -405,13 +405,13 @@ void DBInit()
     extern void write_zone_to_disk(int vnum);
     write_zone_to_disk(zone_table[i].number);
   }
+  
+  log("Loading Saved Vehicles.");
+  load_saved_veh();
 
   log("Booting houses.");
   House_boot();
   boot_time = time(0);
-
-  log("Loading Saved Vehicles.");
-  load_saved_veh();
   
   log("Loading shop orders.");
   boot_shop_orders();
