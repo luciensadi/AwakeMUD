@@ -167,6 +167,7 @@ void parse_quest(File &fl, long virtual_nr);
 void parse_host(File &fl, long nr);
 void parse_ic(File &fl, long nr);
 void load_zones(File &fl);
+void purge_unowned_vehs();
 void load_saved_veh();
 void assign_mobiles(void);
 void assign_objects(void);
@@ -397,6 +398,10 @@ void DBInit()
 
   log("Initializing transportation system:");
   TransportInit();
+  
+  log("Loading Saved Vehicles.");
+  load_saved_veh();
+  purge_unowned_vehs();
 
   for (i = 0; i <= top_of_zone_table; i++) {
     log_vfprintf("Resetting %s (rooms %d-%d).", zone_table[i].name,
@@ -405,9 +410,6 @@ void DBInit()
     extern void write_zone_to_disk(int vnum);
     write_zone_to_disk(zone_table[i].number);
   }
-  
-  log("Loading Saved Vehicles.");
-  load_saved_veh();
 
   log("Booting houses.");
   House_boot();
@@ -3807,6 +3809,44 @@ void kill_ems(char *str)
   *ptr2 = '\0';
 }
 
+/* Look for all vehicles that do not have valid owners. These need to be deleted.
+ If they contain vehicles, those vehicles must be disgorged into the veh or room this one is in. */
+void purge_unowned_vehs() {
+  struct veh_data *veh = NULL, *vict_veh = NULL;
+  for (veh = veh_list; veh; veh = veh->next) {
+    if (!(does_player_exist(veh->owner))) {
+      // Owner does not exist. Disgorge any still-owned vehicles and discard this one and its remaining contents.
+      
+      while ((vict_veh = veh->carriedvehs)) {
+        veh_from_room(vict_veh);
+        
+        // If the vehicle is in a room, disgorge there.
+        if (veh->in_room) {
+          veh_to_room(vict_veh, veh->in_room);
+        }
+        
+        // If the vehicle is in another vehicle instead, disgorge there.
+        else if (veh->in_veh) {
+          veh_to_veh(vict_veh, veh->in_veh);
+        }
+        
+        // Failure case: Vehicle was in neither a room nor another vehicle.
+        else {
+          sprintf(buf, "SYSERR: Attempting to disgorge '%s' (%ld) from '%s' (%ld), but the latter has no container or location. Putting in Dante's.",
+                  vict_veh->description, vict_veh->idnum,
+                  veh->description, veh->idnum);
+          mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+          veh_to_room(vict_veh, RM_DANTES_GARAGE);
+        }
+      }
+      
+      // Purge the vehicle itself.
+      extract_veh(veh);
+    }
+  }
+  
+}
+
 void load_saved_veh()
 {
   FILE *fl;
@@ -3835,8 +3875,6 @@ void load_saved_veh()
     file.Close();
 
     owner = data.GetLong("VEHICLE/Owner", 0);
-    if (!(does_player_exist(owner)))
-      continue;
 
     if ((vnum = data.GetLong("VEHICLE/Vnum", 0)))
       veh = read_vehicle(vnum, VIRTUAL);
