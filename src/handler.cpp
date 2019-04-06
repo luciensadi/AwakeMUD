@@ -944,9 +944,12 @@ bool affected_by_power(struct char_data *ch, int type)
 void veh_from_room(struct veh_data * veh)
 {
   struct veh_data *temp;
-  if (veh == NULL || (veh->in_room == NOWHERE && veh->in_veh == NULL))
-  {
-    log("SYSERR: Invalid vehicle passed to veh_from_room. Terminating.");
+  if (veh == NULL) {
+    log("SYSERR: Null vehicle passed to veh_from_room. Terminating.");
+    shutdown();
+  }
+  if (veh->in_room == NOWHERE && veh->in_veh == NULL) {
+    log("SYSERR: Vehicle in NOWHERE and not in other vehicle passed to veh_from_room. Terminating.");
     shutdown();
   }
   if (veh->in_veh) {

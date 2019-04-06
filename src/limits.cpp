@@ -754,10 +754,12 @@ void save_vehicles(void)
   for (veh = veh_list, v = 0; veh && v < num_veh; veh = veh->next) {
     if (veh->owner < 1 || (veh->damage >= 10 && !(veh->in_veh || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE))))
       continue;
+    /* Disabling this code-- we want to save ownerless vehicles so that they can disgorge their contents when they load in next.
     if (!does_player_exist(veh->owner)) {
       veh->owner = 0;
       continue;
     }
+     */
     
     sprintf(buf, "veh/%07ld", v);
     v++;
