@@ -937,238 +937,237 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
   if (skill == -1)
     return;
   bool cyber = TRUE;
-  switch (spell)
-  {
-  case SPELL_DETOX:
-    if ((GET_DRUG_STAGE(vict) == 1 || GET_DRUG_STAGE(vict) == 2) && GET_DRUG_AFFECT(vict))
-      target = drug_types[GET_DRUG_AFFECT(vict)].power;
-    if (!target) {
-      send_to_char("They aren't affected by any drugs.\r\n", ch);
-      return;
-    }
-    success = success_test(skill, target);
-    if (success > 0 && !AFF_FLAGGED(vict, AFF_DETOX)) {
-      create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_STABILIZE].draindamage);
-      send_to_char("You notice the affects of the drugs suddenly wear off.\r\n", vict);
-      act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-    } else
-      send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0);
-    break;
-  case SPELL_STABILIZE:
-    target += 4 + ((GET_LAST_DAMAGETIME(vict) - time(0)) / SECS_PER_MUD_HOUR);
-    success = success_test(skill, target);
-    if (success > 0 && force >= (GET_PHYSICAL(vict) <= 0 ? -(GET_PHYSICAL(vict) / 100) : 50)) {
-      create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_STABILIZE].draindamage);
-      send_to_char("Your condition stabilizes, you manage to grab a thin hold on life.\r\n", vict);
-      act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-    } else
-      send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0);
-    break;
-  case SPELL_RESISTPAIN:
-    success = success_test(skill, target + 4);
-    if (GET_PHYSICAL(vict) <= 0)
-      drain = DEADLY;
-    else if (GET_PHYSICAL(vict) <= 300)
-      drain = SERIOUS;
-    else if (GET_PHYSICAL(vict) <= 700)
-      drain = MODERATE;
-    if (success > 0 && !AFF_FLAGGED(ch, AFF_RESISTPAIN)) {
-      create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_RESISTPAIN].draindamage);
-      send_to_char("Your pain begins to fade.\r\n", vict);
-      act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-      vict->points.resistpain = MIN(force, success) * 100;
-    } else
-      send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0);
-    break;
-  case SPELL_HEALTHYGLOW:
-    success = success_test(skill, 4 + target);
-    if (success > 0) {
-      create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_HEALTHYGLOW].draindamage);
-      send_to_char("You begin to feel healthier and more attractive.\r\n", vict);
-      act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-    } else
-      send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0);
-    break;
-  case SPELL_TREAT:
-    if (!AFF_FLAGGED(vict, AFF_DAMAGED)) {
-      send_to_char("They are beyond the help of this spell.\r\n", ch);
-      return;
-    }
-    // Explicit fallthrough.
-  case SPELL_HEAL:
-    success = MIN(force, success_test(skill, 10 - (int)(GET_ESS(vict) / 100) + target + (int)(GET_INDEX(ch) / 200)));
-    if (GET_PHYSICAL(vict) <= 0)
-      drain = DEADLY;
-    else if (GET_PHYSICAL(vict) <= 300)
-      drain = SERIOUS;
-    else if (GET_PHYSICAL(vict) <= 700)
-      drain = MODERATE;
-    if (success < 1 || AFF_FLAGGED(vict, AFF_HEALED) || GET_PHYSICAL(vict) == GET_MAX_PHYSICAL(vict)) {
-      send_to_char(FAILED_CAST, ch);
-    } else {
-      AFF_FLAGS(vict).SetBit(AFF_HEALED);
-      send_to_char("A warm feeling floods your body.\r\n", vict);
-      act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-      create_sustained(ch, vict, spell, force, 0, success, drain);
-      update_pos(vict);
-    }
-    spell_drain(ch, spell, force, drain);
-    break;
-  case SPELL_INCREF1:
-  case SPELL_INCREF2:
-  case SPELL_INCREF3:
-    if (GET_REAL_REA(vict) != GET_REA(vict) || GET_INIT_DICE(ch))
-      success = -1;
-    else
-      success = success_test(skill, GET_REA(vict) + target);
-    if (success > 0) {
-      create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-      send_to_char("The world slows down around you.\r\n", ch);
-      act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-    } else
-      send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0);
-    break;
-  case SPELL_INCREA:
-    sub = REA;
-  case SPELL_DECATTR:
-  case SPELL_DECCYATTR:
-  case SPELL_INCATTR:
-  case SPELL_INCCYATTR:
-    if (GET_ATT(vict, sub) != GET_REAL_ATT(vict, sub)) {
-      if (GET_TRADITION(vict) == TRAD_ADEPT && sub < CHA) {
-        switch (sub) {
-        case BOD:
-          if (BOOST(vict)[2][0] || GET_POWER(vict, ADEPT_IMPROVED_BOD))
-            cyber = false;
-          break;
-        case QUI:
-          if (BOOST(vict)[1][0] || GET_POWER(vict, ADEPT_IMPROVED_QUI))
-            cyber = false;
-          break;
-        case STR:
-          if (BOOST(vict)[0][0] || GET_POWER(vict, ADEPT_IMPROVED_STR))
-            cyber = false;
-          break;
-        }
-      } else if (GET_SUSTAINED(vict))
-        for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next)
-          if (sus->caster == FALSE && (sus->spell == SPELL_INCATTR || sus->spell == SPELL_DECATTR) && sus->subtype == sub) {
-            cyber = false;
+  switch (spell) {
+    case SPELL_DETOX:
+      if ((GET_DRUG_STAGE(vict) == 1 || GET_DRUG_STAGE(vict) == 2) && GET_DRUG_AFFECT(vict))
+        target = drug_types[GET_DRUG_AFFECT(vict)].power;
+      if (!target) {
+        send_to_char("They aren't affected by any drugs.\r\n", ch);
+        return;
+      }
+      success = success_test(skill, target);
+      if (success > 0 && !AFF_FLAGGED(vict, AFF_DETOX)) {
+        create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_STABILIZE].draindamage);
+        send_to_char("You notice the affects of the drugs suddenly wear off.\r\n", vict);
+        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+      } else
+        send_to_char(FAILED_CAST, ch);
+      spell_drain(ch, spell, force, 0);
+      break;
+    case SPELL_STABILIZE:
+      target += 4 + ((GET_LAST_DAMAGETIME(vict) - time(0)) / SECS_PER_MUD_HOUR);
+      success = success_test(skill, target);
+      if (success > 0 && force >= (GET_PHYSICAL(vict) <= 0 ? -(GET_PHYSICAL(vict) / 100) : 50)) {
+        create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_STABILIZE].draindamage);
+        send_to_char("Your condition stabilizes, you manage to grab a thin hold on life.\r\n", vict);
+        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+      } else
+        send_to_char(FAILED_CAST, ch);
+      spell_drain(ch, spell, force, 0);
+      break;
+    case SPELL_RESISTPAIN:
+      success = success_test(skill, target + 4);
+      if (GET_PHYSICAL(vict) <= 0)
+        drain = DEADLY;
+      else if (GET_PHYSICAL(vict) <= 300)
+        drain = SERIOUS;
+      else if (GET_PHYSICAL(vict) <= 700)
+        drain = MODERATE;
+      if (success > 0 && !AFF_FLAGGED(ch, AFF_RESISTPAIN)) {
+        create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_RESISTPAIN].draindamage);
+        send_to_char("Your pain begins to fade.\r\n", vict);
+        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+        vict->points.resistpain = MIN(force, success) * 100;
+      } else
+        send_to_char(FAILED_CAST, ch);
+      spell_drain(ch, spell, force, 0);
+      break;
+    case SPELL_HEALTHYGLOW:
+      success = success_test(skill, 4 + target);
+      if (success > 0) {
+        create_sustained(ch, vict, spell, force, 0, success, spells[SPELL_HEALTHYGLOW].draindamage);
+        send_to_char("You begin to feel healthier and more attractive.\r\n", vict);
+        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+      } else
+        send_to_char(FAILED_CAST, ch);
+      spell_drain(ch, spell, force, 0);
+      break;
+    case SPELL_TREAT:
+      if (!AFF_FLAGGED(vict, AFF_DAMAGED)) {
+        send_to_char("They are beyond the help of this spell.\r\n", ch);
+        return;
+      }
+      // Explicit fallthrough.
+    case SPELL_HEAL:
+      success = MIN(force, success_test(skill, 10 - (int)(GET_ESS(vict) / 100) + target + (int)(GET_INDEX(ch) / 200)));
+      if (GET_PHYSICAL(vict) <= 0)
+        drain = DEADLY;
+      else if (GET_PHYSICAL(vict) <= 300)
+        drain = SERIOUS;
+      else if (GET_PHYSICAL(vict) <= 700)
+        drain = MODERATE;
+      if (success < 1 || AFF_FLAGGED(vict, AFF_HEALED) || GET_PHYSICAL(vict) == GET_MAX_PHYSICAL(vict)) {
+        send_to_char(FAILED_CAST, ch);
+      } else {
+        AFF_FLAGS(vict).SetBit(AFF_HEALED);
+        send_to_char("A warm feeling floods your body.\r\n", vict);
+        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+        create_sustained(ch, vict, spell, force, 0, success, drain);
+        update_pos(vict);
+      }
+      spell_drain(ch, spell, force, drain);
+      break;
+    case SPELL_INCREF1:
+    case SPELL_INCREF2:
+    case SPELL_INCREF3:
+      if (GET_REAL_REA(vict) != GET_REA(vict) || GET_INIT_DICE(ch))
+        success = -1;
+      else
+        success = success_test(skill, GET_REA(vict) + target);
+      if (success > 0) {
+        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+        send_to_char("The world slows down around you.\r\n", ch);
+        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+      } else
+        send_to_char(FAILED_CAST, ch);
+      spell_drain(ch, spell, force, 0);
+      break;
+    case SPELL_INCREA:
+      sub = REA;
+    case SPELL_DECATTR:
+    case SPELL_DECCYATTR:
+    case SPELL_INCATTR:
+    case SPELL_INCCYATTR:
+      if (GET_ATT(vict, sub) != GET_REAL_ATT(vict, sub)) {
+        if (GET_TRADITION(vict) == TRAD_ADEPT && sub < CHA) {
+          switch (sub) {
+          case BOD:
+            if (BOOST(vict)[2][0] || GET_POWER(vict, ADEPT_IMPROVED_BOD))
+              cyber = false;
+            break;
+          case QUI:
+            if (BOOST(vict)[1][0] || GET_POWER(vict, ADEPT_IMPROVED_QUI))
+              cyber = false;
+            break;
+          case STR:
+            if (BOOST(vict)[0][0] || GET_POWER(vict, ADEPT_IMPROVED_STR))
+              cyber = false;
             break;
           }
-      if (cyber && (spell == SPELL_DECATTR || spell == SPELL_INCATTR || spell == SPELL_INCREA)) {
-        sprintf(buf, "$N's %s has been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
+        } else if (GET_SUSTAINED(vict))
+          for (struct sustain_data *sus = GET_SUSTAINED(vict); sus; sus = sus->next)
+            if (sus->caster == FALSE && (sus->spell == SPELL_INCATTR || sus->spell == SPELL_DECATTR) && sus->subtype == sub) {
+              cyber = false;
+              break;
+            }
+        if (cyber && (spell == SPELL_DECATTR || spell == SPELL_INCATTR || spell == SPELL_INCREA)) {
+          sprintf(buf, "$N's %s has been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
+          act(buf, TRUE, ch, 0, vict, TO_CHAR);
+          return;
+        }
+      }
+      if ((spell == SPELL_DECCYATTR || spell == SPELL_INCCYATTR) && (!cyber || GET_ATT(vict, sub) == GET_REAL_ATT(vict, sub))) {
+        sprintf(buf, "$N's %s has not been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
         act(buf, TRUE, ch, 0, vict, TO_CHAR);
         return;
       }
+      if (spell == SPELL_INCREA)
+        target += GET_REA(vict);
+      else if (spell == SPELL_INCATTR || spell == SPELL_INCCYATTR)
+        target += GET_ATT(vict, sub);
+      else
+        target += 10 - (GET_ESS(vict) / 100);
+      success = (int)(success_test(skill, target) -
+                      ((spell == SPELL_DECATTR || spell == SPELL_DECCYATTR) ? resist_spell(vict, spell, force, sub) : 0));
+      if (success > 0) {
+        create_sustained(ch, vict, spell, force, sub, success, spells[spell].draindamage);
+        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+        send_to_char("You feel your body tingle.\r\n", vict);
+      } else
+        send_to_char(FAILED_CAST, ch);
+      spell_drain(ch, spell, force, 0);
+      break;
     }
-    if ((spell == SPELL_DECCYATTR || spell == SPELL_INCCYATTR) && (!cyber || GET_ATT(vict, sub) == GET_REAL_ATT(vict, sub))) {
-      sprintf(buf, "$N's %s has not been modified by technological means and is immune to this spell.\r\n", attributes[sub]);
-      act(buf, TRUE, ch, 0, vict, TO_CHAR);
-      return;
-    }
-    if (spell == SPELL_INCREA)
-      target += GET_REA(vict);
-    else if (spell == SPELL_INCATTR || spell == SPELL_INCCYATTR)
-      target += GET_ATT(vict, sub);
-    else
-      target += 10 - (GET_ESS(vict) / 100);
-    success = (int)(success_test(skill, target) -
-                    ((spell == SPELL_DECATTR || spell == SPELL_DECCYATTR) ? resist_spell(vict, spell, force, sub) : 0));
-    if (success > 0) {
-      create_sustained(ch, vict, spell, force, sub, success, spells[spell].draindamage);
-      act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-      send_to_char("You feel your body tingle.\r\n", vict);
-    } else
-      send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0);
-    break;
   }
-}
 
-void cast_illusion_spell(struct char_data *ch, int spell, int force, char *arg, struct char_data *mob)
-{
-  struct char_data *vict = NULL;
-  bool reflected = FALSE;
-  if (mob)
-    vict = mob;
-  else if (*arg)
-    vict = get_char_room_vis(ch, arg);
-  if (find_duplicate_spell(ch, vict, spell, 0))
-    return;
-  int target = modify_target(ch), skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch)), success = 0;
-  spell_bonus(ch, spell, skill, target);
-  if (skill == -1)
-    return;
-  struct char_data *temp = vict;
-  switch (spell)
+  void cast_illusion_spell(struct char_data *ch, int spell, int force, char *arg, struct char_data *mob)
   {
-  case SPELL_CONFUSION:
-  case SPELL_CHAOS:
-    if (!check_spell_victim(ch, vict, spell))
+    struct char_data *vict = NULL;
+    bool reflected = FALSE;
+    if (mob)
+      vict = mob;
+    else if (*arg)
+      vict = get_char_room_vis(ch, arg);
+    if (find_duplicate_spell(ch, vict, spell, 0))
       return;
-    check_killer(ch, vict);
-    if (spell == SPELL_CONFUSION)
-      target += GET_WIL(vict);
-    else
-      target += GET_INT(vict);
-    if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
-      success = -1;
-    else
-      success = success_test(skill, target);
-    if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, target, success))) {
-      vict = ch;
-      ch = temp;      
-    }
-    success -= resist_spell(vict, spell, force, 0);
-    if (success > 0) {
-      send_to_char("Coherent thought is suddenly a foreign concept.\r\n", vict);
-      act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
-      create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-    } else
-      send_to_char(FAILED_CAST, ch);
-    spell_drain(reflected ? vict : ch, spell, force, 0);
-    break;
-  case SPELL_INVIS:
-  case SPELL_IMP_INVIS:
-    if (!check_spell_victim(ch, vict, spell))
+    int target = modify_target(ch), skill = GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch)), success = 0;
+    spell_bonus(ch, spell, skill, target);
+    if (skill == -1)
       return;
-    success = success_test(skill, target + 4);
-    if (success > 0) {
-      act("You blink and suddenly $n is gone!", TRUE, vict, 0, 0, TO_ROOM);
-      send_to_char("You feel your body tingle.\r\n", vict);
-      create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-    } else
-      send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0);
-    break;
-  case SPELL_STEALTH:
-    if (!check_spell_victim(ch, vict, spell))
-      return;
-    success = success_test(skill, target + 4);
-    if (success > 0) {
-      act("You successfully sustain that spell on $n.", FALSE, vict, 0, ch, TO_VICT);
-      send_to_char("Your every move becomes silent.", vict);
-      create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
-    } else
-      send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0);
-    break;
-  case SPELL_SILENCE:
-    success = success_test(skill, target + 4);
-    if (success > 0) {
-      act("The room falls silent.", FALSE, ch, 0, 0, TO_ROOM);
-      act("The room falls silent.", FALSE, ch, 0, 0, TO_CHAR);
-      create_sustained(ch, ch, spell, force, 0, success, spells[spell].draindamage);
-    } else
-      send_to_char(FAILED_CAST, ch);
-    spell_drain(ch, spell, force, 0);
-    break;
+    struct char_data *temp = vict;
+    switch (spell)
+    {
+    case SPELL_CONFUSION:
+    case SPELL_CHAOS:
+      if (!check_spell_victim(ch, vict, spell))
+        return;
+      check_killer(ch, vict);
+      if (spell == SPELL_CONFUSION)
+        target += GET_WIL(vict);
+      else
+        target += GET_INT(vict);
+      if (!IS_NPC(ch) && PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(vict))
+        success = -1;
+      else
+        success = success_test(skill, target);
+      if (success > 0 && GET_REFLECT(vict) && (reflected = reflect_spell(ch, vict, spell, force, 0, target, success))) {
+        vict = ch;
+        ch = temp;
+      }
+      success -= resist_spell(vict, spell, force, 0);
+      if (success > 0) {
+        send_to_char("Coherent thought is suddenly a foreign concept.\r\n", vict);
+        act("You successfully sustain that spell on $N.", FALSE, ch, 0, vict, TO_CHAR);
+        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+      } else
+        send_to_char(FAILED_CAST, ch);
+      spell_drain(reflected ? vict : ch, spell, force, 0);
+      break;
+    case SPELL_INVIS:
+    case SPELL_IMP_INVIS:
+      if (!check_spell_victim(ch, vict, spell))
+        return;
+      success = success_test(skill, target + 4);
+      if (success > 0) {
+        act("You blink and suddenly $n is gone!", TRUE, vict, 0, 0, TO_ROOM);
+        send_to_char("You feel your body tingle.\r\n", vict);
+        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+      } else
+        send_to_char(FAILED_CAST, ch);
+      spell_drain(ch, spell, force, 0);
+      break;
+    case SPELL_STEALTH:
+      if (!check_spell_victim(ch, vict, spell))
+        return;
+      success = success_test(skill, target + 4);
+      if (success > 0) {
+        act("You successfully sustain that spell on $n.", FALSE, vict, 0, ch, TO_VICT);
+        send_to_char("Your every move becomes silent.", vict);
+        create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
+      } else
+        send_to_char(FAILED_CAST, ch);
+      spell_drain(ch, spell, force, 0);
+      break;
+    case SPELL_SILENCE:
+      success = success_test(skill, target + 4);
+      if (success > 0) {
+        act("The room falls silent.", FALSE, ch, 0, 0, TO_ROOM);
+        act("The room falls silent.", FALSE, ch, 0, 0, TO_CHAR);
+        create_sustained(ch, ch, spell, force, 0, success, spells[spell].draindamage);
+      } else
+        send_to_char(FAILED_CAST, ch);
+      spell_drain(ch, spell, force, 0);
+      break;
   }
 }
 
