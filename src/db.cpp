@@ -167,6 +167,7 @@ void parse_quest(File &fl, long virtual_nr);
 void parse_host(File &fl, long nr);
 void parse_ic(File &fl, long nr);
 void load_zones(File &fl);
+void purge_unowned_vehs();
 void load_saved_veh();
 void assign_mobiles(void);
 void assign_objects(void);
@@ -358,7 +359,7 @@ void DBInit()
   log("Loading fight messages.");
   load_messages();
 
-  log("Booting World.");
+  log("Booting world.");
   boot_world();
 
   log("Loading social messages.");
@@ -392,7 +393,7 @@ void DBInit()
   scan_file();
   log("Reading banned site list.");
   load_banned();
-  log("Reloading Consistency Files.");
+  log("Reloading consistency files.");
   load_consist();
 
   log("Initializing transportation system:");
@@ -405,15 +406,21 @@ void DBInit()
     extern void write_zone_to_disk(int vnum);
     write_zone_to_disk(zone_table[i].number);
   }
+  
+  log("Loading saved vehicles.");
+  load_saved_veh();
+  
+  log("Purging unowned vehicles.");
+  purge_unowned_vehs();
 
   log("Booting houses.");
   House_boot();
   boot_time = time(0);
-
-  log("Loading Saved Vehicles.");
-  load_saved_veh();
+  
+  log("Loading shop orders.");
   boot_shop_orders();
-  log("Boot db -- DONE.");
+  
+  log("DBInit -- DONE.");
 }
 
 /* A simple method to clean up after our DB. */
@@ -2712,26 +2719,26 @@ void reset_zone(int zone, int reboot)
         obj = read_object(ZCMD.arg1, REAL);
         if (GET_OBJ_VAL(obj, 0) == MOD_MOUNT) {
           switch (GET_OBJ_VAL(obj, 1)) {
-          case 1:
-            sig = 1;
-            // Explicit fallthrough.
-          case 0:
-            load = 10;
-            break;
-          case 3:
-            sig = 1;
-            // Explicit fallthrough.
-          case 2:
-            load = 10;
-            break;
-          case 4:
-            sig = 1;
-            load = 100;
-            break;
-          case 5:
-            sig = 1;
-            load = 25;
-            break;
+            case 1:
+              sig = 1;
+              // Explicit fallthrough.
+            case 0:
+              load = 10;
+              break;
+            case 3:
+              sig = 1;
+              // Explicit fallthrough.
+            case 2:
+              load = 10;
+              break;
+            case 4:
+              sig = 1;
+              load = 100;
+              break;
+            case 5:
+              sig = 1;
+              load = 25;
+              break;
           }
           veh->usedload += load;
           veh->sig -= sig;
@@ -2760,7 +2767,7 @@ void reset_zone(int zone, int reboot)
       } else
         last_cmd = 0;
       break;
-    case 'V':
+    case 'V':                 /* loads a vehicle */
       if ((veh_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
           (ZCMD.arg2 == 0 && reboot)) {
         veh = read_vehicle(ZCMD.arg1, REAL);
@@ -3804,6 +3811,101 @@ void kill_ems(char *str)
   *ptr2 = '\0';
 }
 
+/* Look for all vehicles that do not have valid owners. These need to be deleted.
+ If they contain vehicles, those vehicles must be disgorged into the veh or room this one is in. */
+void purge_unowned_vehs() {
+  struct veh_data *prior_veh = NULL, *veh = NULL, *vict_veh = NULL;
+  
+  log("Player-owned vehicles currently in veh list:");
+  int counter = 0;
+  for (struct veh_data *tmp = veh_list; tmp; tmp = tmp->next) {
+    if (tmp->owner != 0) {
+      sprintf(buf, "'%s' (%ld) owned by %ld", tmp->short_description, tmp->idnum, tmp->owner);
+      log(buf);
+      counter++;
+    }
+  }
+  sprintf(buf, "End of veh list. %d player-owned vehicles counted.", counter);
+  log(buf);
+  
+  prior_veh = veh_list;
+  while (prior_veh) {    
+    // If we've hit the end of the list, evaluate for the head of the list.
+    if (!(veh = prior_veh->next)) {
+      veh = veh_list;
+      prior_veh = NULL;
+    }
+    
+    // This vehicle is owned by an NPC (zoneloaded): Do not delete.
+    if (veh->owner == 0) {
+      //sprintf(buf, "Skipping vehicle '%s' (%ld) since it's owned by nobody.", veh->description, veh->idnum);
+      //log(buf);
+      
+      if (!prior_veh) {
+        break;
+      } else {
+        prior_veh = prior_veh->next;
+        continue;
+      }
+    }
+    
+    // This vehicle is owned by a valid player: Do not delete.
+    if (does_player_exist(veh->owner)) {
+      sprintf(buf, "Skipping vehicle '%s' (%ld) since its owner is a valid player.", veh->short_description, veh->idnum);
+      log(buf);
+      
+      if (!prior_veh) {
+        break;
+      } else {
+        prior_veh = prior_veh->next;
+        continue;
+      }
+    }
+    
+    // This vehicle is owned by an invalid player. Delete.
+    
+    // Step 1: Dump its contents.
+    sprintf(buf, "Purging contents of vehicle '%s' (%ld), owner %ld (nonexistant).", veh->short_description, veh->idnum, veh->owner);
+    log(buf);
+    
+    while ((vict_veh = veh->carriedvehs)) {
+      sprintf(buf, "- Found '%s' (%ld) owned by %ld.", vict_veh->short_description, vict_veh->idnum, vict_veh->owner);
+      
+      // If the vehicle is in a room, disgorge there.
+      if (veh->in_room != NOWHERE) {
+        sprintf(ENDOF(buf), " Transferring to room %ld.", world[veh->in_room].number);
+        log(buf);
+        veh_from_room(vict_veh);
+        veh_to_room(vict_veh, veh->in_room);
+      }
+      
+      // If the vehicle is in another vehicle instead, disgorge there.
+      else if (veh->in_veh) {
+        sprintf(ENDOF(buf), " Transferring to vehicle '%s' (%ld).",
+                veh->in_veh->short_description, veh->in_veh->idnum);
+        log(buf);
+        veh_to_veh(vict_veh, veh->in_veh);
+      }
+      
+      // Failure case: Vehicle was in neither a room nor another vehicle.
+      else {
+        log(buf);
+        sprintf(buf, "SYSERR: Attempting to disgorge '%s' (%ld) from '%s' (%ld), but the latter has no containing vehicle (%ld) or location (%ld). Putting in Dante's.",
+                vict_veh->short_description, vict_veh->idnum,
+                veh->short_description, veh->idnum,
+                veh->in_veh ? veh->in_veh->idnum : -1, veh->in_room);
+        log(buf);
+        veh_to_room(vict_veh, RM_DANTES_GARAGE);
+      }
+    }
+    
+    // Step 2: Purge the vehicle itself. `veh` now points to garbage.
+    extract_veh(veh);
+    
+    // Critically, we don't iterate prior_veh if we removed veh-- that would skip the next veh in the list.
+  }
+}
+
 void load_saved_veh()
 {
   FILE *fl;
@@ -3832,8 +3934,6 @@ void load_saved_veh()
     file.Close();
 
     owner = data.GetLong("VEHICLE/Owner", 0);
-    if (!(does_player_exist(owner)))
-      continue;
 
     if ((vnum = data.GetLong("VEHICLE/Vnum", 0)))
       veh = read_vehicle(vnum, VIRTUAL);
@@ -3953,26 +4053,26 @@ void load_saved_veh()
       }
       int subbed = 0, damage = 0;
       switch (GET_OBJ_VAL(obj, 1)) {
-      case 1:
-        subbed = 1;
-        // Explicit fallthrough.
-      case 0:
-        damage = 10;
-        break;
-      case 3:
-        subbed = 1;
-        // Explicit fallthrough.
-      case 2:
-        damage = 10;
-        break;
-      case 4:
-        subbed = 1;
-        damage = 100;
-        break;
-      case 5:
-        subbed = 1;
-        damage = 25;
-        break;
+        case 1:
+          subbed = 1;
+          // Explicit fallthrough.
+        case 0:
+          damage = 10;
+          break;
+        case 3:
+          subbed = 1;
+          // Explicit fallthrough.
+        case 2:
+          damage = 10;
+          break;
+        case 4:
+          subbed = 1;
+          damage = 100;
+          break;
+        case 5:
+          subbed = 1;
+          damage = 25;
+          break;
       }
       veh->usedload += damage;
       veh->sig -= subbed;

@@ -5183,6 +5183,7 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
          obj = obj->next_content)
       switch (GET_OBJ_VAL(obj, 2)) {
         // TODO: Figure out what these magic numbers are and comment. Until then, can't fix the implicit fallthrough at case 29.
+        // FOLLOW-UP: cyberware value 2 is its grade (alpha/beta/etc). Whatever this code was, it's non-functional.
         case 19:
           damage_total = LIGHT;
           break;

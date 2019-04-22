@@ -447,35 +447,35 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
     power = iconrating;
     if (icon->ic.type >= 11) {
       switch (matrix[icon->in_host].colour) {
-      case 0:
-      case 1:
-        dam = MODERATE;
-        break;
-      case 4:
-        power += 2;
-        // Explicit fallthrough, in that this is technically correct. IDK why this is a switch though.
-      case 3:
-      case 2:
-        dam = SERIOUS;
-        break;
+        case 0:
+        case 1:
+          dam = MODERATE;
+          break;
+        case 4:
+          power += 2;
+          // Explicit fallthrough, in that this is technically correct. IDK why this is a switch though.
+        case 3:
+        case 2:
+          dam = SERIOUS;
+          break;
       }
     } else
       switch (matrix[icon->in_host].colour) {
-      case 0:
-        dam = LIGHT;
-        break;
-      case 1:
-        dam = MODERATE;
-        break;
-      case 2:
-        dam = SERIOUS;
-        break;
-      case 4:
-        power += 2;
-        // Explicit fallthrough.
-      case 3:
-        dam = DEADLY;
-        break;
+        case 0:
+          dam = LIGHT;
+          break;
+        case 1:
+          dam = MODERATE;
+          break;
+        case 2:
+          dam = SERIOUS;
+          break;
+        case 4:
+          power += 2;
+          // Explicit fallthrough.
+        case 3:
+          dam = DEADLY;
+          break;
       }
   }
   if (targ->decker)

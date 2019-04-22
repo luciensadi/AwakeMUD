@@ -564,6 +564,21 @@ void House_boot(void)
         else {
           temp->owner = 0;
           House_delete_file(temp->vnum);
+          
+          // Move all vehicles from this apartment to a public garage.
+          struct veh_data *veh = NULL;
+          while (world[real_room(temp->vnum)].vehicles) {
+            veh = world[real_room(temp->vnum)].vehicles;
+            sprintf(buf, "debug: Shifting vehicle '%s' (%ld) from '%s' (%ld) to '%s' (%ld).",
+                    veh->description, veh->idnum,
+                    world[real_room(temp->vnum)].name,
+                    world[real_room(temp->vnum)].number,
+                    world[real_room(RM_SEATTLE_PARKING_GARAGE)].name,
+                    world[real_room(RM_SEATTLE_PARKING_GARAGE)].number);
+            mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+            veh_from_room(veh);
+            veh_to_room(veh, real_room(RM_SEATTLE_PARKING_GARAGE));
+          }
         }
       }
       if (last)

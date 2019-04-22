@@ -1039,30 +1039,30 @@ ACMD(do_get)
           } else if (cont_dotmode) {
             REMOVE_FROM_LIST(cont, veh->mount, next_content)
             switch (GET_OBJ_VAL(cont, 1)) {
-            case 1:
-              sig = 1;
-              // Explicit fallthrough.
-            case 0:
-              bod++;
-              load = 10;
-              break;
-            case 3:
-              sig = 1;
-              // Explicit fallthrough.
-            case 2:
-              bod += 2;
-              load = 10;
-              break;
-            case 4:
-              sig = 1;
-              bod += 4;
-              load = 100;
-              break;
-            case 5:
-              sig = 1;
-              bod += 2;
-              load = 25;
-              break;
+              case 1:
+                sig = 1;
+                // Explicit fallthrough.
+              case 0:
+                bod++;
+                load = 10;
+                break;
+              case 3:
+                sig = 1;
+                // Explicit fallthrough.
+              case 2:
+                bod += 2;
+                load = 10;
+                break;
+              case 4:
+                sig = 1;
+                bod += 4;
+                load = 100;
+                break;
+              case 5:
+                sig = 1;
+                bod += 2;
+                load = 25;
+                break;
             }
             veh->sig += sig;
             veh->usedload -= load;

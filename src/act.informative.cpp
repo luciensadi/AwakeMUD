@@ -1547,7 +1547,7 @@ void do_probe_veh(struct char_data *ch, struct veh_data * k)
 
 void do_probe_object(struct char_data * ch, struct obj_data * j) {
   int i, found, mount_location;
-  bool has_pockets = FALSE, added_extra_carriage_return = FALSE, has_smartlink = FALSE, has_laser = FALSE;
+  bool has_pockets = FALSE, added_extra_carriage_return = FALSE, has_smartlink = FALSE;
   struct obj_data *access = NULL;
   
   sprintf(buf, "OOC statistics for '^y%s^n':\r\n", ((j->text.name) ? j->text.name : "<None>"));
@@ -1620,7 +1620,6 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 break;
               case ACCESS_SCOPE:
                 if (GET_OBJ_AFFECT(access).IsSet(AFF_LASER_SIGHT)) {
-                  has_laser = TRUE;
                   sprintf(ENDOF(buf), "\r\nA laser sight attached to the %s provides ^c-1^n to target numbers.",
                           gun_accessory_locations[mount_location]);
                 } else {

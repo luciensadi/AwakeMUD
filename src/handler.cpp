@@ -944,9 +944,12 @@ bool affected_by_power(struct char_data *ch, int type)
 void veh_from_room(struct veh_data * veh)
 {
   struct veh_data *temp;
-  if (veh == NULL || (veh->in_room == NOWHERE && veh->in_veh == NULL))
-  {
-    log("YOU SCREWED IT UP");
+  if (veh == NULL) {
+    log("SYSERR: Null vehicle passed to veh_from_room. Terminating.");
+    shutdown();
+  }
+  if (veh->in_room == NOWHERE && veh->in_veh == NULL) {
+    log("SYSERR: Vehicle in NOWHERE and not in other vehicle passed to veh_from_room. Terminating.");
     shutdown();
   }
   if (veh->in_veh) {
@@ -1782,7 +1785,46 @@ void extract_icon(struct matrix_icon * icon)
 
 void extract_veh(struct veh_data * veh)
 {
-  struct veh_data *temp;
+  if (veh->in_room == NOWHERE && veh->in_veh == NULL) {
+    if (veh->carriedvehs || veh->people) {
+      sprintf(buf, "SYSERR: extract_veh called on vehicle-with-contents without containing room or veh!");
+      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+    }
+  }
+  // If any vehicle are inside, drop them where the vehicle is.
+  struct veh_data *temp = NULL;
+  while ((temp = veh->carriedvehs)) {
+    if (veh->in_room != NOWHERE) {
+      veh_from_room(temp);
+      veh_to_room(temp, veh->in_room);
+      sprintf(buf, "As %s disintegrates, %s falls out!\r\n", veh->short_description, temp->short_description);
+      send_to_room(buf, veh->in_room);
+    } else if (veh->in_veh) {
+      veh_to_veh(temp, veh->in_veh);
+    } else {
+      veh_from_room(temp);
+      veh_to_room(temp, RM_DANTES_GARAGE);
+    }
+  }
+  
+  // If any players are inside, drop them where the vehicle is.
+  struct char_data *ch = NULL;
+  while ((ch = veh->people)) {
+    send_to_char(ch, "%s disintegrates around you!", veh->short_description);
+    if (veh->in_room != NOWHERE) {
+      char_from_room(ch);
+      char_to_room(ch, veh->in_room);
+      sprintf(buf, "As %s disintegrates, $n falls out!", veh->short_description);
+      act(buf, FALSE, ch, 0, 0, TO_ROOM);
+    } else if (veh->in_veh) {
+      char_to_veh(veh->in_veh, ch);
+    } else {
+      char_from_room(ch);
+      char_to_room(ch, RM_DANTES_GARAGE);
+    }
+  }
+  
+  // Perform actual vehicle extraction.
   REMOVE_FROM_LIST(veh, veh_list, next);
   if (veh->in_room)
     veh_from_room(veh);
