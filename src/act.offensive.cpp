@@ -707,6 +707,7 @@ ACMD(do_mode)
     else {
       send_to_char(ch, "You set %s to %s.\r\n", GET_OBJ_NAME(GET_EQ(ch, WEAR_WIELD)), fire_mode[mode]);
       GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 11) = mode;
+      act("$n flicks the fire selector switch on $p.", TRUE, ch, GET_EQ(ch, WEAR_WIELD), 0, TO_ROOM);
     }
   }
 }
