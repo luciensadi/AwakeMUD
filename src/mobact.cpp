@@ -44,339 +44,489 @@ bool attempt_reload(struct char_data *mob, int pos);
 
 #define MOB_AGGR_TO_RACE MOB_AGGR_ELF, MOB_AGGR_DWARF, MOB_AGGR_HUMAN, MOB_AGGR_ORK, MOB_AGGR_TROLL
 
+void mobact_change_firemode(struct char_data *ch) {
+  struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD);
+  
+  if (weapon && IS_GUN(GET_OBJ_VAL(weapon, 3))) {
+    if (!weapon->contains)
+      attempt_reload(ch, WEAR_WIELD);
+    
+    if (!GET_OBJ_VAL(weapon, 11)) {
+      int mode_count = 0;
+      
+      // Lowest-priority mode is single-shot.
+      if (IS_SET(GET_OBJ_VAL(weapon, 10), 1 << MODE_SS)) {
+        mode_count += 1;
+        GET_OBJ_VAL(weapon, 11) = MODE_SS;
+      }
+      
+      // Semi-automatic is superior to single shot, so set that if we can.
+      if (IS_SET(GET_OBJ_VAL(weapon, 10), 1 << MODE_SA)) {
+        mode_count += 1;
+        GET_OBJ_VAL(weapon, 11) = MODE_SA;
+      }
+      
+      // Full automatic with a 10-round spray deals more damage than the others.
+      if (IS_SET(GET_OBJ_VAL(weapon, 10), 1 << MODE_FA)) {
+        mode_count += 1;
+        GET_OBJ_VAL(weapon, 11) = MODE_FA;
+        
+        // Set the rounds-to-fire count to 10.
+        GET_OBJ_TIMER(weapon) = 10;
+      }
+      
+      // For some reason, NPCs were set to prefer burst fire above all other modes. Preserving this logic for now.
+      if (IS_SET(GET_OBJ_VAL(weapon, 10), 1 << MODE_BF)) {
+        mode_count += 1;
+        GET_OBJ_VAL(weapon, 11) = MODE_BF;
+      }
+      
+      // Send a message to the room, but only if the weapon has received a new fire selection mode and has more than one available.
+      if (GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 11) && mode_count > 1) {
+        act("$n flicks the fire selector switch on $p.", TRUE, ch, weapon, 0, TO_ROOM);
+      }
+    }
+  }
+}
+
+// Check if an NPC successfully fires a spec-proc. Returns TRUE if so, FALSE otherwise.
+bool mobact_evaluate_spec_proc(struct char_data *ch) {
+  char empty = '\0';
+  if (mob_index[GET_MOB_RNUM(ch)].func == NULL) {
+    log_vfprintf("%s (#%d): Attempting to call non-existing mob func",
+                 GET_NAME(ch), GET_MOB_VNUM(ch));
+    
+    MOB_FLAGS(ch).RemoveBit(MOB_SPEC);
+  }
+  
+  else if ((mob_index[GET_MOB_RNUM(ch)].func) (ch, ch, 0, &empty)) {
+    return true;
+  }
+  
+  else if (mob_index[GET_MOB_RNUM(ch)].sfunc != NULL) {
+    if ((mob_index[GET_MOB_RNUM(ch)].sfunc) (ch, ch, 0, &empty)) {
+      return true;
+    }
+  }
+  
+  return false;
+}
+
+// TODO: Fix alarmed NPCs attacking non-hostile vehicles.
+bool mobact_process_aggro(struct char_data *ch, vnum_t room_num) {
+  struct char_data *vict = NULL;
+  struct veh_data *veh = NULL;
+  
+  if (!ROOM_FLAGGED(room_num, ROOM_PEACEFUL) &&
+      (MOB_FLAGS(ch).AreAnySet(MOB_AGGRESSIVE, MOB_AGGR_TO_RACE, ENDBIT) || GET_MOBALERT(ch) == MALERT_ALARM)) {
+  
+    // If I am not astral, am in the same room, and am willing to attack a vehicle this round (coin flip), pick a fight with a vehicle.
+    if (ch->in_room == room_num && !IS_ASTRAL(ch) && number(0, 1)) {
+      for (veh = world[room_num].vehicles; veh; veh = veh->next_veh)
+        if (veh->damage < 10) {
+          stop_fighting(ch);
+          set_fighting(ch, veh);
+          return true;
+        }
+    }
+  
+    // If we've gotten here, character is either astral or is not willing to / failed to attack a vehicle.
+    for (vict = world[room_num].people; vict; vict = vict->next_in_room) {
+      // Skip conditions: Invisible, no-hassle, already downed, or is an NPC who is neither a player's astral body nor a player's escortee.
+      if ((IS_NPC(vict) && !IS_PROJECT(vict) && !is_escortee(vict)) || !CAN_SEE(ch, vict) || PRF_FLAGGED(vict, PRF_NOHASSLE) || GET_PHYSICAL(vict) <= 0)
+        continue;
+      
+      // Attack the escortee if we're hunting it specifically.
+      if (hunting_escortee(ch, vict)) {
+        stop_fighting(ch);
+        set_fighting(ch, vict);
+        return true;
+      }
+      
+      // If NPC is aggro or alarmed, or...
+      if (!MOB_FLAGS(ch).AreAnySet(MOB_AGGR_TO_RACE, ENDBIT) ||
+          // If NPC is aggro towards elves, and victim is an elf subrace, or...
+          (MOB_FLAGGED(ch, MOB_AGGR_ELF) &&
+           (GET_RACE(vict) == RACE_ELF || GET_RACE(vict) == RACE_WAKYAMBI || GET_RACE(vict) == RACE_NIGHTONE || GET_RACE(vict) == RACE_DRYAD)) ||
+          // If NPC is aggro towards dwarves, and victim is a dwarf subrace, or...
+          (MOB_FLAGGED(ch, MOB_AGGR_DWARF) &&
+           (GET_RACE(vict) == RACE_DWARF || GET_RACE(vict) == RACE_GNOME || GET_RACE(vict) == RACE_MENEHUNE || GET_RACE(vict) == RACE_KOBOROKURU)) ||
+          // If NPC is aggro towards humans, and victim is human, or...
+          (MOB_FLAGGED(ch, MOB_AGGR_HUMAN) &&
+           GET_RACE(vict) == RACE_HUMAN) ||
+          // If NPC is aggro towards orks, and victim is an ork subrace, or...
+          (MOB_FLAGGED(ch, MOB_AGGR_ORK) &&
+           (GET_RACE(vict) == RACE_ORK || GET_RACE(vict) == RACE_HOBGOBLIN || GET_RACE(vict) == RACE_OGRE || GET_RACE(vict) == RACE_SATYR || GET_RACE(vict) == RACE_ONI)) ||
+          // If NPC is aggro towards trolls, and victim is a troll subrace:
+          (MOB_FLAGGED(ch, MOB_AGGR_TROLL) &&
+           (GET_RACE(vict) == RACE_TROLL || GET_RACE(vict) == RACE_CYCLOPS || GET_RACE(vict) == RACE_FOMORI || GET_RACE(vict) == RACE_GIANT || GET_RACE(vict) == RACE_MINOTAUR)))
+        // Kick their ass.
+      {
+        stop_fighting(ch);
+        set_fighting(ch, vict);
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool mobact_process_memory(struct char_data *ch, vnum_t room_num) {
+  struct char_data *vict = NULL;
+  
+  /* Mob Memory */
+  if (MOB_FLAGGED(ch, MOB_MEMORY) && MEMORY(ch)) {
+    for (vict = world[room_num].people; vict; vict = vict->next_in_room) {
+      // Skip NPCs, invisibles, and nohassle targets.
+      if (IS_NPC(vict) || !CAN_SEE(ch, vict) || PRF_FLAGGED(vict, PRF_NOHASSLE))
+        continue;
+      
+      // If we remember them, fuck 'em up.
+      if (memory(ch, vict)) {
+        act("'Hey! You're the fragger that attacked me!!!', exclaims $n.", FALSE, ch, 0, 0, TO_ROOM);
+        stop_fighting(ch);
+        set_fighting(ch, vict);
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool mobact_process_helper(struct char_data *ch) {
+  struct char_data *vict = NULL;
+  
+  /* Helper Mobs */
+  if (MOB_FLAGGED(ch, MOB_HELPER)) {
+    for (vict = world[ch->in_room].people; vict; vict = vict->next_in_room) {
+      // Ensure we're neither of the fighting parties. This check should be redundant since no fighting NPC can proceed through mobile_activity().
+      if (ch == vict || !FIGHTING(vict) || ch == FIGHTING(vict))
+        continue;
+      
+      // If victim is an NPC who is fighting a player, and I can see the player, assist the NPC.
+      if (IS_NPC(vict) && !IS_NPC(FIGHTING(vict)) && CAN_SEE(ch, FIGHTING(vict))) {
+        // The player is in my room, so I can fight them up-close.
+        if (FIGHTING(vict)->in_room == ch->in_room) {
+          act("$n jumps to the aid of $N!", FALSE, ch, 0, vict, TO_ROOM);
+          stop_fighting(ch);
+          
+          // Close-ranged response.
+          set_fighting(ch, FIGHTING(vict));
+        }
+        
+        // The player is not in my room, so I have to do a ranged response.
+        else {
+          // Long-ranged response.
+          if (ranged_response(FIGHTING(vict), ch)) {
+            // TODO: This doesn't fire a message if the NPC is wielding a ranged weapon.
+            act("$n jumps to $N's aid against $S distant attacker!",
+                FALSE, ch, 0, vict, TO_ROOM);
+          }
+        }
+        
+        return true;
+      }
+      
+      // If the victim is a player who is fighting an NPC, and I can see the player, assist the NPC.
+      if (!IS_NPC(vict) && IS_NPC(FIGHTING(vict)) && CAN_SEE(ch, vict)) {
+        // A player in my area is attacking an NPC.
+        act("$n jumps to the aid of $N!", FALSE, ch, 0, FIGHTING(vict), TO_ROOM);
+        stop_fighting(ch);
+        
+        // Close-ranged response.
+        set_fighting(ch, vict);
+        
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool mobact_process_guard(struct char_data *ch, vnum_t room_num) {
+  struct char_data *vict = NULL;
+  struct veh_data *veh = NULL;
+  
+  int i = 0;
+  
+  /* Guard NPCs. */
+  if (MOB_FLAGGED(ch, MOB_GUARD)) {
+    // Check vehicles, but only if they're in the same room as the guard.
+    if (ch->in_room == room_num) {
+      for (veh = world[room_num].vehicles; veh; veh = veh->next_veh) {
+        // If the room we're in is neither a road nor a garage, attack any vehicles we see.
+        // NOTE: Previous logic required that the vehicle be damaged to be a valid attack target.
+        if (!(ROOM_FLAGGED(room_num, ROOM_ROAD) || ROOM_FLAGGED(room_num, ROOM_GARAGE))) {
+          // TODO: Only attack player-owned vehicles and vehicles that have player occupants or drivers.
+          if (veh->damage > 0) {
+            stop_fighting(ch);
+            set_fighting(ch, veh);
+            return true;
+          }
+        }
+      }
+    }
+    
+    // Check players.
+    for (vict = world[room_num].people; vict; vict = vict->next_in_room) {
+      // Skip over invalid targets (NPCs, no-hassle imms, invisibles, and downed).
+      if (IS_NPC(vict) || PRF_FLAGGED(vict, PRF_NOHASSLE) || !CAN_SEE(ch, vict) || GET_PHYSICAL(vict) <= 0)
+        continue;
+      
+      for (i = 0; i < NUM_WEARS; i++) {
+        // If victim's equipment is illegal here, blast them.
+        if (GET_EQ(vict, i) && violates_zsp(zone_table[world[room_num].zone].security, vict, i, ch)) {
+          stop_fighting(ch);
+          set_fighting(ch, vict);
+          return true;
+        }
+      }
+    }
+  } /* End Guard NPC section. */
+  return false;
+}
+
+bool mobact_process_self_buff(struct char_data *ch) {
+  if (GET_SKILL(ch, SKILL_SORCERY) && !MOB_FLAGGED(ch, MOB_SPEC)) {
+    
+    // Always self-heal if able.
+    if (GET_PHYSICAL(ch) < GET_MAX_PHYSICAL(ch) && !AFF_FLAGGED(ch, AFF_HEALED))
+      cast_health_spell(ch, SPELL_HEAL, 0, number(1, GET_MAG(ch)/100), NULL, ch);
+    
+    // Buff self, but only act one out of every 16 ticks (on average).
+    if (number(0, 15) == 0) {
+      // Apply armor to self.
+      if (!affected_by_spell(ch, SPELL_ARMOUR)) {
+        cast_manipulation_spell(ch, SPELL_ARMOUR, number(1, GET_MAG(ch)/100), NULL, ch);
+      }
+      
+      // If not invisible already, apply an invisibility spell based on my magic rating and sorcery skill.
+      else if (!affected_by_spell(ch, SPELL_INVIS) && !affected_by_spell(ch, SPELL_IMP_INVIS)) {
+        if (MIN(GET_SKILL(ch, SKILL_SORCERY), GET_MAG(ch)/100) <= 5) {
+          // Lower skill means standard invisibility. Gotta make thermographic vision useful somehow.
+          cast_illusion_spell(ch, SPELL_INVIS, number(1, GET_MAG(ch)/100), NULL, ch);
+        } else {
+          // Look out, we've got a badass over here.
+          cast_illusion_spell(ch, SPELL_IMP_INVIS, number(1, GET_MAG(ch)/100), NULL, ch);
+        }
+      }
+      
+      // Apply combat sense to self.
+      else if (!affected_by_spell(ch, SPELL_COMBATSENSE)) {
+        cast_detection_spell(ch, SPELL_COMBATSENSE, number(1, GET_MAG(ch)/100), NULL, ch);
+      }
+      
+      // We're dead-set on casting a spell, so try to boost attributes.
+      else {
+        switch (number(1, 3)) {
+          case 1:
+            cast_health_spell(ch, SPELL_INCATTR, STR, number(1, GET_MAG(ch)/100), NULL, ch);
+            break;
+          case 2:
+            cast_health_spell(ch, SPELL_INCATTR, QUI, number(1, GET_MAG(ch)/100), NULL, ch);
+            break;
+          case 3:
+            cast_health_spell(ch, SPELL_INCATTR, BOD, number(1, GET_MAG(ch)/100), NULL, ch);
+            break;
+        }
+      }
+      
+      // We've spent our action casting a spell, so time to stop acting.
+      return true;
+    }
+  } /* End spellcasting NPCs */
+  return false;
+}
+
+bool mobact_process_scavenger(struct char_data *ch) {
+  /* Scavenger (picking up objects) */
+  if (MOB_FLAGGED(ch, MOB_SCAVENGER)) {
+    if (world[ch->in_room].contents && !number(0, 10)) {
+      struct obj_data *obj, *best_obj = NULL;
+      int max = 1;
+      
+      // Find the most valuable object in the room (ignoring worthless things):
+      for (obj = world[ch->in_room].contents; obj; obj = obj->next_content) {
+        if (CAN_GET_OBJ(ch, obj) && GET_OBJ_COST(obj) > max && GET_OBJ_TYPE(obj) != ITEM_WORKSHOP) {
+          best_obj = obj;
+          max = GET_OBJ_COST(obj);
+        }
+      }
+      
+      // Get the most valuable thing we've found.
+      if (best_obj != NULL) {
+        obj_from_room(best_obj);
+        obj_to_char(best_obj, ch);
+        act("$n gets $p.", FALSE, ch, best_obj, 0, TO_ROOM);
+        return true;
+      }
+    }
+  } /* End scavenger NPC. */
+  return false;
+}
+
+bool mobact_process_movement(struct char_data *ch) {
+  vnum_t current_room = NOWHERE;
+  int door;
+  
+  /* Mob Movement */
+  if (!MOB_FLAGGED(ch, MOB_SENTINEL) && !FIGHTING(ch) && GET_POS(ch) == POS_STANDING) {
+    // Slow down movement-- this way they'll only try to move every other tick on average.
+    if (number(0, 1) == 0)
+      return false;
+    
+    // NPC in a vehicle that's not in another vehicle? Have them drive and obey the rules of the road.
+    if (ch->in_veh && !ch->in_veh->in_veh) {
+      // Passengers are passive.
+      if (!AFF_FLAGGED(ch, AFF_PILOT))
+        return false;
+      
+      // Pick a door. If it's a valid exit for this vehicle, vroom vroom away.
+      door = number(NORTH, DOWN);
+      current_room = EXIT(ch->in_veh, door)->to_room;
+      if (EXIT(ch->in_veh,door) &&
+          ROOM_FLAGS(current_room).AreAnySet(ROOM_ROAD, ROOM_GARAGE, ENDBIT) &&
+          !ROOM_FLAGS(EXIT(ch, door)->to_room).AreAnySet(ROOM_NOMOB, ROOM_DEATH, ENDBIT)) {
+        perform_move(ch, door, LEADER, NULL);
+        return true;
+      }
+    } /* End NPC movement in vehicle. */
+    
+    // NPC not in a vehicle (walking).
+    else {
+      // Skip NOWHERE-located NPCs since they'll break things.
+      if (ch->in_room == NOWHERE)
+        return false;
+      
+      // Select an exit, and bail out if they can't move that way.
+      door = number(NORTH, DOWN);
+      if (!CAN_GO(ch, door) || !ROOM_FLAGS(EXIT(ch, door)->to_room).AreAnySet(ROOM_NOMOB, ROOM_DEATH, ENDBIT))
+        return false;
+      
+      // If their exit leads to a different zone, check if they're allowed to wander.
+      if (!MOB_FLAGGED(ch, MOB_STAY_ZONE) || (world[EXIT(ch, door)->to_room].zone == world[ch->in_room].zone))
+        return false;
+      
+      // Looks like they can move. Make it happen.
+      perform_move(ch, door, CHECK_SPECIAL | LEADER, NULL);
+      return true;
+    } /* End NPC movement outside a vehicle. */
+  } /* End mob movement. */
+  return false;
+}
+
 void mobile_activity(void)
 {
-  struct char_data *ch, *next_ch, *vict;
-  struct veh_data *veh;
-  struct obj_data *obj, *best_obj;
-  int door, max, i, dir, distance, room, nextroom, has_acted;
+  struct char_data *ch, *next_ch;
+  int dir, distance, current_room;
 
   extern int no_specials;
-
+  
   ACMD(do_get);
 
+  // Iterate through all characters in the game.
   for (ch = character_list; ch; ch = next_ch) {
     next_ch = ch->next;
+    
+    // Skip them if they're a player or are sleeping.
     if (!IS_MOB(ch) || !AWAKE(ch) || ch->desc)
       continue;
-    has_acted = 0;
 
+    // Skip NPCs that are currently fighting someone in their room, or are fighting a vehicle.
     if ((FIGHTING(ch) && FIGHTING(ch)->in_room == ch->in_room) || FIGHTING_VEH(ch))
       continue;
 
+    // Cool down mob alert status.
     if (GET_MOBALERT(ch) > MALERT_CALM && --GET_MOBALERTTIME(ch) <= 0)
       GET_MOBALERT(ch) = MALERT_CALM;
+    
+    // Manipulate wielded weapon (reload, set fire mode, etc).
+    mobact_change_firemode(ch);
 
-    /* Examine call for special procedure */
-    if (MOB_FLAGGED(ch, MOB_SPEC) && !no_specials) {
-      char empty = '\0';
-      if (mob_index[GET_MOB_RNUM(ch)].func == NULL) {
-        log_vfprintf("%s (#%d): Attempting to call non-existing mob func",
-            GET_NAME(ch), GET_MOB_VNUM(ch));
-
-        MOB_FLAGS(ch).RemoveBit(MOB_SPEC);
-      } else if ((mob_index[GET_MOB_RNUM(ch)].func) (ch, ch, 0, &empty))
+    // Look for special procedures. If one fires successfully, do nothing else for this NPC.
+    if (!no_specials && MOB_FLAGGED(ch, MOB_SPEC) && mobact_evaluate_spec_proc(ch)) {
+      continue;
+    }
+    
+    // All these aggressive checks require the character to not be in a vehicle and not be in a peaceful room.
+    if (!ch->in_veh && !ROOM_FLAGGED(ch->in_room, ROOM_PEACEFUL)) {
+      // Handle aggressive mobs.
+      if (mobact_process_aggro(ch, ch->in_room)) {
         continue;
-      else if (mob_index[GET_MOB_RNUM(ch)].sfunc != NULL)
-        if ((mob_index[GET_MOB_RNUM(ch)].sfunc) (ch, ch, 0, &empty))
-          continue;
-    }
-
-    /* Scavenger (picking up objects) */
-    if (!has_acted && MOB_FLAGGED(ch, MOB_SCAVENGER))
-      if (world[ch->in_room].contents && !number(0, 10)) {
-        max = 1;
-        best_obj = NULL;
-        for (obj = world[ch->in_room].contents; obj; obj = obj->next_content)
-          if (CAN_GET_OBJ(ch, obj) && GET_OBJ_COST(obj) > max && GET_OBJ_TYPE(obj) != ITEM_WORKSHOP) {
-            best_obj = obj;
-            max = GET_OBJ_COST(obj);
-          }
-        if (best_obj != NULL) {
-          obj_from_room(best_obj);
-          obj_to_char(best_obj, ch);
-          act("$n gets $p.", FALSE, ch, best_obj, 0, TO_ROOM);
-          has_acted = TRUE;
-        }
       }
-
-    /* Mob Movement */
-    if (!has_acted && !MOB_FLAGGED(ch, MOB_SENTINEL) && !FIGHTING(ch) &&
-        GET_POS(ch) == POS_STANDING && ch->in_room != NOWHERE &&
-        (door = number(0, 18)) < NUM_OF_DIRS && CAN_GO(ch, door) &&
-        !ROOM_FLAGS(EXIT(ch, door)->to_room).AreAnySet(ROOM_NOMOB,
-            ROOM_DEATH, ENDBIT) &&
-        (!MOB_FLAGGED(ch, MOB_STAY_ZONE) ||
-         (world[EXIT(ch, door)->to_room].zone == world[ch->in_room].zone))) {
-      perform_move(ch, door, CHECK_SPECIAL | LEADER, NULL);
-      has_acted = TRUE;
-    }
-    
-    /* Mob Driving */
-    if (!has_acted && ch->in_veh && AFF_FLAGGED(ch, AFF_PILOT)
-        && (door = number(0, 18)) < NUM_OF_DIRS && EXIT(ch->in_veh, door) &&
-        (ROOM_FLAGGED(EXIT(ch->in_veh, door)->to_room, ROOM_ROAD) ||
-         ROOM_FLAGGED(EXIT(ch->in_veh, door)->to_room, ROOM_GARAGE)) && !ROOM_FLAGGED(EXIT(ch->in_veh, door)->to_room, ROOM_NOMOB)) {
-      perform_move(ch, door, LEADER, NULL);
-      has_acted = TRUE;
-    }
-    
-    /* Aggressive Mobs */
-    if (!ch->in_veh && !ROOM_FLAGGED(ch->in_room, ROOM_PEACEFUL))
-      if (!has_acted &&
-          (MOB_FLAGS(ch).AreAnySet(MOB_AGGRESSIVE, MOB_AGGR_TO_RACE, ENDBIT) || GET_MOBALERT(ch) == MALERT_ALARM)) {
-        bool vehicle = number(0, 1);
-        if (vehicle && !IS_ASTRAL(ch)) {
-          for (veh = world[ch->in_room].vehicles; veh; veh = veh->next_veh)
-            if (veh->damage < 10) {
-              stop_fighting(ch);
-              set_fighting(ch, veh);
-              has_acted = TRUE;
-              break;
-            }
-        } else if (!vehicle || !has_acted) {
-          for (vict = world[ch->in_room].people; vict; vict = vict->next_in_room) {
-            if ((IS_NPC(vict) && !IS_PROJECT(vict) && !is_escortee(vict)) ||
-                !CAN_SEE(ch, vict) || PRF_FLAGGED(vict, PRF_NOHASSLE) || GET_PHYSICAL(vict) < 0)
-              continue;
-            if (MOB_FLAGGED(ch, MOB_WIMPY) && AWAKE(vict))
-              continue;
-            if (hunting_escortee(ch, vict)) {
-              stop_fighting(ch);
-              set_fighting(ch, vict);
-              has_acted = TRUE;
-              break;
-            } else if (!MOB_FLAGS(ch).AreAnySet(MOB_AGGR_TO_RACE, ENDBIT) ||
-                       (MOB_FLAGGED(ch, MOB_AGGR_ELF) &&
-                        (GET_RACE(vict) == RACE_ELF || GET_RACE(vict) == RACE_WAKYAMBI || GET_RACE(vict) == RACE_NIGHTONE || GET_RACE(vict) == RACE_DRYAD)) ||
-                       (MOB_FLAGGED(ch, MOB_AGGR_DWARF) &&
-                        (GET_RACE(vict) == RACE_DWARF || GET_RACE(vict) == RACE_GNOME || GET_RACE(vict) == RACE_MENEHUNE || GET_RACE(vict) == RACE_KOBOROKURU)) ||
-                       (MOB_FLAGGED(ch, MOB_AGGR_HUMAN) &&
-                        GET_RACE(vict) == RACE_HUMAN) ||
-                       (MOB_FLAGGED(ch, MOB_AGGR_ORK) &&
-                        (GET_RACE(vict) == RACE_ORK || GET_RACE(vict) == RACE_HOBGOBLIN || GET_RACE(vict) == RACE_OGRE || GET_RACE(vict) == RACE_SATYR || GET_RACE(vict) == RACE_ONI)) ||
-                       (MOB_FLAGGED(ch, MOB_AGGR_TROLL) &&
-                        (GET_RACE(vict) == RACE_TROLL || GET_RACE(vict) == RACE_CYCLOPS || GET_RACE(vict) == RACE_FOMORI || GET_RACE(vict) == RACE_GIANT || GET_RACE(vict) == RACE_MINOTAUR))) {
-              stop_fighting(ch);
-              set_fighting(ch, vict);
-              has_acted = TRUE;
-              break;
-            }
-          }
-        }
+      
+      if (mobact_process_memory(ch, ch->in_room)) {
+        continue;
       }
-
-    /* Mob Memory */
-    if (!has_acted && MOB_FLAGGED(ch, MOB_MEMORY) && MEMORY(ch)) {
-      for (vict = world[ch->in_room].people; vict; vict = vict->next_in_room) {
-        if (IS_NPC(vict) ||
-            !CAN_SEE(ch, vict) ||
-            PRF_FLAGGED(vict, PRF_NOHASSLE))
-          continue;
-        if (memory(ch, vict)) {
-          act("'Hey!  You're the fiend that attacked me!!!', exclaims $n.",
-              FALSE, ch, 0, 0, TO_ROOM);
-          stop_fighting(ch);
-          set_fighting(ch, vict);
-          has_acted = TRUE;
-          break;
-        }
+      
+      if (mobact_process_helper(ch)) {
+        continue;
       }
-    }
-
-    /* Helper Mobs */
-    if (!has_acted && MOB_FLAGGED(ch, MOB_HELPER)) {
-      for (vict = world[ch->in_room].people; vict; vict = vict->next_in_room) {
-        if (ch != vict &&
-            FIGHTING(vict) &&
-            ch != FIGHTING(vict) &&
-            CAN_SEE(ch, FIGHTING(vict))) {
-          if (IS_NPC(vict) && !IS_NPC(FIGHTING(vict))) {
-            // An NPC in my area is being attacked by a player.
-            if (FIGHTING(vict)->in_room == ch->in_room) {
-              act("$n jumps to the aid of $N!",
-                  FALSE, ch, 0, vict, TO_ROOM);
-              stop_fighting(ch);
-              
-              // Close-ranged response.
-              set_fighting(ch, FIGHTING(vict));
+      
+      if (mobact_process_guard(ch, ch->in_room)) {
+        continue;
+      }
+      
+      // Sniper? Check surrounding players and re-apply above for each applicable room.
+      if (MOB_FLAGGED(ch, MOB_SNIPER) && GET_EQ(ch, WEAR_WIELD)) {
+        // When this is true, we'll stop evaluating sniper and continue to next NPC.
+        bool has_acted = FALSE;
+        
+        // Calculate their maximum firing range (lesser of vision range and weapon range).
+        int max_distance = MIN(find_sight(ch), find_weapon_range(ch, GET_EQ(ch, WEAR_WIELD)));
+        
+        for (dir = 0; !has_acted && !FIGHTING(ch) && dir < NUM_OF_DIRS; dir++) {
+          current_room = ch->in_room;
+          
+          // Check each room in a straight line until we are either out of range or cannot go further.
+          for (distance = 1; !has_acted && distance <= max_distance; distance++) {
+            // Exit must be valid, and room must belong to same zone as character's room.
+            if (CAN_GO2(current_room, dir) && world[EXIT2(current_room, dir)->to_room].zone == world[ch->in_room].zone) {
+              current_room = EXIT2(current_room, dir)->to_room;
             } else {
-              // Long-ranged response.
-              if (ranged_response(FIGHTING(vict), ch)) {
-                // TODO: This doesn't fire a message if the NPC is wielding a ranged weapon.
-                act("$n jumps to $N's aid against $S distant attacker!",
-                    FALSE, ch, 0, vict, TO_ROOM);
-              }
+              // If we can't get to a further room, stop and move to next direction in for loop.
+              break;
             }
-            has_acted = TRUE;
-            break;
-          } else if (!IS_NPC(vict) && IS_NPC(FIGHTING(vict))) {
-            // A player in my area is attacking an NPC.
-            act("$n jumps to the aid of $N!", FALSE, ch, 0, FIGHTING(vict), TO_ROOM);
-            stop_fighting(ch);
-              
-            // Close-ranged response.
-            set_fighting(ch, vict);
-              
-            has_acted = TRUE;
-            break;
+            
+            // Aggro sniper.
+            if ((has_acted = mobact_process_aggro(ch, current_room))) {
+              break;
+            }
+            
+            // Memory sniper.
+            if ((has_acted = mobact_process_memory(ch, current_room))) {
+              break;
+            }
+            
+            // No such thing as a helper sniper.
+            
+            // Guard sniper.
+            if ((has_acted = mobact_process_guard(ch, current_room))) {
+              break;
+            }
           }
         }
       }
+    } /* End NPC-is-not-in-a-vehicle section. */
+    
+    /**********************************************************************\
+      If we've gotten here, the NPC has not acted and has no valid targets.
+      Add passive things like self-buffing and idle actions here.
+    \**********************************************************************/
+    
+    // Cast spells to buff self. NPC must have sorcery skill and must not have any special procedures attached to it.
+    if (mobact_process_self_buff(ch)) {
+      continue;
     }
-
-    if (!ch->in_veh)
-      if (!has_acted && MOB_FLAGGED(ch, MOB_GUARD)) {
-        for (veh = world[ch->in_room].vehicles; veh; veh = veh->next_veh)
-          if (veh->type == VEH_DRONE || (!(ROOM_FLAGGED(ch->in_room, ROOM_ROAD) || ROOM_FLAGGED(ch->in_room, ROOM_GARAGE)) && veh->type == VEH_BIKE))
-            if (veh->damage < 10) {
-              set_fighting(ch, veh);
-              has_acted = TRUE;
-              break;
-            }
-        for (vict = world[ch->in_room].people;
-             vict && !has_acted;
-             vict = vict->next_in_room)
-          if (!IS_NPC(vict) &&
-              !PRF_FLAGGED(vict, PRF_NOHASSLE) &&
-              CAN_SEE(ch, vict) && GET_PHYSICAL(vict) > 0)
-            for (i = 0; i < NUM_WEARS; i++)
-              if (GET_EQ(vict, i) &&
-                  violates_zsp(zone_table[world[ch->in_room].zone].security,
-                               vict, i, ch)) {
-                stop_fighting(ch);
-                set_fighting(ch, vict);
-                has_acted = TRUE;
-                break;
-              }
-      }
-    if (!has_acted &&
-        MOB_FLAGGED(ch, MOB_SNIPER) &&
-        GET_EQ(ch, WEAR_WIELD) &&
-        MOB_FLAGS(ch).AreAnySet(MOB_GUARD, MOB_AGGRESSIVE,
-                                MOB_AGGR_TO_RACE, MOB_MEMORY, ENDBIT)) {
-      for (dir = 0; !FIGHTING(ch) && dir < NUM_OF_DIRS; dir++) {
-        room = ch->in_room;
-
-        if (CAN_GO2(room, dir) &&
-            world[EXIT2(room, dir)->to_room].zone == world[ch->in_room].zone)
-          nextroom = EXIT2(room, dir)->to_room;
-        else
-          nextroom = NOWHERE;
-
-        for (distance = 1;
-             nextroom != NOWHERE &&
-             distance <= find_sight(ch) &&
-             distance <= find_weapon_range(ch, GET_EQ(ch, WEAR_WIELD));
-             distance++) {
-          for (vict = world[nextroom].people;
-               vict;
-               vict = vict->next_in_room) {
-            if (!IS_NPC(vict) &&
-                !PRF_FLAGGED(vict, PRF_NOHASSLE) &&
-                CAN_SEE(ch, vict)) {
-              if (MOB_FLAGGED(ch, MOB_GUARD))
-                for (i = 0; i < NUM_WEARS; i++)
-                  if (GET_EQ(vict, i) &&
-                      violates_zsp(zone_table[world[ch->in_room].zone].security, vict, i, ch)) {
-                    stop_fighting(ch);
-                    set_fighting(ch, vict);
-                    has_acted = TRUE;
-                    break;
-                  }
-              if (!has_acted &&
-                  MOB_FLAGS(ch).AreAnySet(MOB_AGGRESSIVE,
-                                          MOB_AGGR_TO_RACE, ENDBIT))
-                if (!(MOB_FLAGGED(ch, MOB_WIMPY) && AWAKE(vict)) &&
-                    (!MOB_FLAGS(ch).AreAnySet(MOB_AGGR_TO_RACE, ENDBIT) ||
-                     (MOB_FLAGGED(ch, MOB_AGGR_ELF) &&
-                      (GET_RACE(vict) == RACE_ELF || RACE_DRYAD || RACE_WAKYAMBI || RACE_NIGHTONE)) ||
-                     (MOB_FLAGGED(ch, MOB_AGGR_DWARF) &&
-                      (GET_RACE(vict) == RACE_DWARF || RACE_MENEHUNE || RACE_KOBOROKURU || RACE_GNOME)) ||
-                     (MOB_FLAGGED(ch, MOB_AGGR_HUMAN) &&
-                      GET_RACE(vict) == RACE_HUMAN) ||
-                     (MOB_FLAGGED(ch, MOB_AGGR_ORK) &&
-                      (GET_RACE(vict) == RACE_ORK || RACE_HOBGOBLIN || RACE_SATYR || RACE_ONI || RACE_OGRE)) ||
-                     (MOB_FLAGGED(ch, MOB_AGGR_TROLL) &&
-                      (GET_RACE(vict) == RACE_TROLL || RACE_FOMORI || RACE_GIANT || RACE_MINOTAUR || RACE_CYCLOPS)))) {
-                  stop_fighting(ch);
-                  set_fighting(ch, vict);
-                  has_acted = TRUE;
-                }
-              if (!has_acted &&
-                  MOB_FLAGGED(ch, MOB_MEMORY) &&
-                  MEMORY(ch) &&
-                  memory(ch, vict)) {
-                act("'Hey!  You're the fiend that attacked me!!!', "
-                    "exclaims $n.", FALSE, ch, 0, 0, TO_ROOM);
-                act("'Hey!  You're the fiend that attacked me!!!', "
-                    "exclaims $N.", FALSE, vict, 0, ch, TO_ROOM);
-                stop_fighting(ch);
-                set_fighting(ch, vict);
-                has_acted = TRUE;
-              }
-            }
-            if (has_acted)
-              break;
-          }
-          room = nextroom;
-          if (CAN_GO2(room, dir) &&
-              world[EXIT2(room, dir)->to_room].zone == world[ch->in_room].zone)
-            nextroom = EXIT2(room, dir)->to_room;
-          else
-            nextroom = NOWHERE;
-          if (has_acted)
-            break;
-        }
-        if (has_acted)
-          break;
-      }
+    
+    if (mobact_process_scavenger(ch)) {
+      continue;
     }
-    if (GET_EQ(ch, WEAR_WIELD) && IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3))) {
-      if (!GET_EQ(ch, WEAR_WIELD)->contains)
-        attempt_reload(ch, WEAR_WIELD);
-      if (!GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 11)) {
-        if (IS_SET(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 10), 1 << MODE_SS))
-          GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 11) = MODE_SS;
-        if (IS_SET(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 10), 1 << MODE_SA))
-          GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 11) = MODE_SA;
-        if (IS_SET(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 10), 1 << MODE_FA)) {
-          GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 11) = MODE_FA;
-          GET_OBJ_TIMER(GET_EQ(ch, WEAR_WIELD)) = 10;
-        }
-        if (IS_SET(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 10), 1 << MODE_BF))
-          GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 11) = MODE_BF;
-      }
+    
+    if (mobact_process_movement(ch)) {
+      continue;
     }
-    if (!has_acted && GET_SKILL(ch, SKILL_SORCERY) && !MOB_FLAGGED(ch, MOB_SPEC)) {
-      if (GET_PHYSICAL(ch) < GET_MAX_PHYSICAL(ch) && !AFF_FLAGGED(ch, AFF_HEALED))
-        cast_health_spell(ch, SPELL_HEAL, 0, number(1, GET_MAG(ch)/100), NULL, ch);
-      else if (!(affected_by_spell(ch, SPELL_ARMOUR) || affected_by_spell(ch, SPELL_INVIS) || affected_by_spell(ch, SPELL_IMP_INVIS) 
-          || affected_by_spell(ch, SPELL_INCATTR) || affected_by_spell(ch, SPELL_COMBATSENSE)))
-        switch (number(0, 100)) {
-          case 1:
-            cast_detection_spell(ch, SPELL_COMBATSENSE, number(1, GET_MAG(ch)/100), NULL, ch);
-            break;
-          case 2:
-            cast_health_spell(ch, SPELL_INCATTR, STR, number(1, GET_MAG(ch)/100), NULL, ch);
-            break;
-          case 3:
-            cast_health_spell(ch, SPELL_INCATTR, QUI, number(1, GET_MAG(ch)/100), NULL, ch);
-            break;
-          case 4:
-            cast_health_spell(ch, SPELL_INCATTR, BOD, number(1, GET_MAG(ch)/100), NULL, ch);
-            break;
-          case 5:
-            cast_illusion_spell(ch, SPELL_INVIS, number(1, GET_MAG(ch)/100), NULL, ch);
-            break;
-          case 6:
-            cast_illusion_spell(ch, SPELL_IMP_INVIS, number(1, GET_MAG(ch)/100), NULL, ch);
-            break;
-          case 7:
-            cast_manipulation_spell(ch, SPELL_ARMOUR, number(1, GET_MAG(ch)/100), NULL, ch);
-            break;
-        }
-    }
+    
     /* Add new mobile actions here */
 
   }                             /* end for() */
