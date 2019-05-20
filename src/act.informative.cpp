@@ -843,73 +843,71 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
   struct char_data *i;
   struct veh_data *veh;
   
-  log("Entering list_char_to_char.");
+  sprintf(buf, "Entering list_char_to_char for %s (%ld).", GET_CHAR_NAME(ch), GET_IDNUM(ch));
+  log(buf);
   
   // Show vehicle's contents to character.
   if (ch->in_veh && ch->in_room == NOWHERE) {
     for (i = list; i; i = i->next_in_veh)
-      if (ch != i && ch->vfront == i->vfront)
-        if (CAN_SEE(ch, i))
-          list_one_char(i, ch);
+      if (CAN_SEE(ch, i) && ch != i && ch->vfront == i->vfront)
+        list_one_char(i, ch);
   }
   
-  // Show room's characters to character.
-  else {
-    for (i = list; i; i = i->next_in_room) {
-      sprintf(buf, "Debug message: list_char_to_char displaying character %s (%ld).", GET_CHAR_NAME(i), GET_IDNUM(i));
-      if (i->next_in_room) {
-        sprintf(ENDOF(buf), " Next up is %s (%ld).", GET_CHAR_NAME(i->next_in_room), GET_IDNUM(i->next_in_room));
-      } else {
-        sprintf(ENDOF(buf), " This is the end of the list.");
-      }
-      // Skip them if they're invisible to us, or if they're us and we're not rigging.
-      if (!CAN_SEE(ch, i) || !(ch != i || ch->char_specials.rigging)) {
-        sprintf(ENDOF(buf), " Skipping this character (precheck failed).");
-        log(buf);
-        continue;
-      }
-      
-      if ((ch->in_veh || (ch->char_specials.rigging))) {
-        sprintf(ENDOF(buf), " In-vehicle mode.");
-        RIG_VEH(ch, veh);
-        if (veh->cspeed > SPEED_IDLE) {
-          if (get_speed(veh) >= 200) {
-            if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7)) {
-              sprintf(ENDOF(buf), " Skipping this character (speed check failed).");
-              log(buf);
-              continue;
-            }
-          }
-          else if (get_speed(veh) >= 120) {
-            if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6)) {
-              sprintf(ENDOF(buf), " Skipping this character (speed check failed).");
-              log(buf);
-              continue;
-            }
-          }
-          else if (get_speed(veh) >= 60) {
-            if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5)) {
-              sprintf(ENDOF(buf), " Skipping this character (speed check failed).");
-              log(buf);
-              continue;
-            }
-          }
-          else {
-            if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4)) {
-              sprintf(ENDOF(buf), " Skipping this character (speed check failed).");
-              log(buf);
-              continue;
-            }
+  // Show room's characters to character. Done this way because list_char_to_char should have been split for vehicles but wasn't.
+  for (i = list; i; i = i->next_in_room) {
+    sprintf(buf, "Debug message: list_char_to_char displaying character %s (%ld).", GET_CHAR_NAME(i), GET_IDNUM(i));
+    if (i->next_in_room) {
+      sprintf(ENDOF(buf), " Next up is %s (%ld).", GET_CHAR_NAME(i->next_in_room), GET_IDNUM(i->next_in_room));
+    } else {
+      sprintf(ENDOF(buf), " This is the end of the list.");
+    }
+    // Skip them if they're invisible to us, or if they're us and we're not rigging.
+    if (!CAN_SEE(ch, i) || !(ch != i || ch->char_specials.rigging)) {
+      sprintf(ENDOF(buf), " Skipping this character (precheck failed).");
+      log(buf);
+      continue;
+    }
+    
+    if ((ch->in_veh || (ch->char_specials.rigging))) {
+      sprintf(ENDOF(buf), " In-vehicle mode.");
+      RIG_VEH(ch, veh);
+      if (veh->cspeed > SPEED_IDLE) {
+        if (get_speed(veh) >= 200) {
+          if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7)) {
+            sprintf(ENDOF(buf), " Skipping this character (speed check failed).");
+            log(buf);
+            continue;
           }
         }
-      } else {
-        sprintf(ENDOF(buf), " In-person mode.");
+        else if (get_speed(veh) >= 120) {
+          if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6)) {
+            sprintf(ENDOF(buf), " Skipping this character (speed check failed).");
+            log(buf);
+            continue;
+          }
+        }
+        else if (get_speed(veh) >= 60) {
+          if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5)) {
+            sprintf(ENDOF(buf), " Skipping this character (speed check failed).");
+            log(buf);
+            continue;
+          }
+        }
+        else {
+          if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4)) {
+            sprintf(ENDOF(buf), " Skipping this character (speed check failed).");
+            log(buf);
+            continue;
+          }
+        }
       }
-      
-      list_one_char(i, ch);
-      
-      log(buf);
+    } else {
+      sprintf(ENDOF(buf), " In-person mode.");
     }
+    
+    log(buf);
+    
+    list_one_char(i, ch);
   }
 }
 
