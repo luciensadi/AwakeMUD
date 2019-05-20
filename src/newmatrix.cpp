@@ -1340,7 +1340,7 @@ ACMD(do_connect)
   DECKER->phone->persona = PERSONA;
   DECKER->phone->rtg = world[ch->in_room].rtg;
   DECKER->phone->number = world[ch->in_room].jacknumber;
-  DECKER->mxp = ch->in_room * DECKER->phone->number / DECKER->phone->rtg;
+  DECKER->mxp = ch->in_room * DECKER->phone->number / MAX(DECKER->phone->rtg, 1);
   PERSONA->idnum = GET_IDNUM(ch);
   DECKER->deck = cyberdeck;
   DECKER->mpcp = GET_OBJ_VAL(cyberdeck, 0);
