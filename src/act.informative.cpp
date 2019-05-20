@@ -843,7 +843,8 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
   struct char_data *i;
   struct veh_data *veh;
   
-  sprintf(buf, "Entering list_char_to_char for %s (%ld).", GET_CHAR_NAME(ch), GET_IDNUM(ch));
+  sprintf(buf, "Entering list_char_to_char for %s (%ld).", GET_CHAR_NAME(ch),
+          IS_NPC(ch) ? GET_MOB_VNUM(ch) : GET_IDNUM(ch));
   log(buf);
   
   // Show vehicle's contents to character.
@@ -855,9 +856,11 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
   
   // Show room's characters to character. Done this way because list_char_to_char should have been split for vehicles but wasn't.
   for (i = list; i; i = i->next_in_room) {
-    sprintf(buf, "Debug message: list_char_to_char displaying character %s (%ld).", GET_CHAR_NAME(i), GET_IDNUM(i));
+    sprintf(buf, "Debug message: list_char_to_char displaying character %s (%ld).", GET_CHAR_NAME(i),
+            IS_NPC(i) ? GET_MOB_VNUM(i) : GET_IDNUM(i));
     if (i->next_in_room) {
-      sprintf(ENDOF(buf), " Next up is %s (%ld).", GET_CHAR_NAME(i->next_in_room), GET_IDNUM(i->next_in_room));
+      sprintf(ENDOF(buf), " Next up is %s (%ld).", GET_CHAR_NAME(i->next_in_room),
+            IS_NPC(i->next_in_room) ? GET_MOB_VNUM(i->next_in_room) : GET_IDNUM(i->next_in_room));
     } else {
       sprintf(ENDOF(buf), " This is the end of the list.");
     }
@@ -874,28 +877,28 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
       if (veh->cspeed > SPEED_IDLE) {
         if (get_speed(veh) >= 200) {
           if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7)) {
-            sprintf(ENDOF(buf), " Skipping this character (speed check failed).");
+            sprintf(ENDOF(buf), " Skipping this character (speed check 200 failed).");
             log(buf);
             continue;
           }
         }
         else if (get_speed(veh) >= 120) {
           if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6)) {
-            sprintf(ENDOF(buf), " Skipping this character (speed check failed).");
+            sprintf(ENDOF(buf), " Skipping this character (speed check 120 failed).");
             log(buf);
             continue;
           }
         }
         else if (get_speed(veh) >= 60) {
           if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5)) {
-            sprintf(ENDOF(buf), " Skipping this character (speed check failed).");
+            sprintf(ENDOF(buf), " Skipping this character (speed check 60 failed).");
             log(buf);
             continue;
           }
         }
         else {
           if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4)) {
-            sprintf(ENDOF(buf), " Skipping this character (speed check failed).");
+            sprintf(ENDOF(buf), " Skipping this character (speed check slow failed).");
             log(buf);
             continue;
           }
