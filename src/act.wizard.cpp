@@ -1303,10 +1303,10 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   if(mob_index[GET_MOB_RNUM(k)].func)
   {
     int index;
-    for (index = 0; index < top_of_shopt; index++)
+    for (index = 0; index <= top_of_shopt; index++)
       if (GET_MOB_VNUM(k) == shop_table[index].keeper)
         break;
-    if (index < top_of_shopt)
+    if (index <= top_of_shopt)
       sprintf(buf2, "%s : Shop %ld\r\n", "^CExists^n", shop_table[index].vnum);
     else
       sprintf(buf2, "%s\r\n", "^CExists^n");
@@ -2909,7 +2909,7 @@ void print_zone_to_buf(char *bufptr, int zone, int detailed)
     for (i = 0; i <= top_of_objt && OBJ_VNUM_RNUM(i) <= zone_table[zone].top; i++)
       if (OBJ_VNUM_RNUM(i) >= (zone_table[zone].number * 100))
         objs++;
-    for (i = 0; i < top_of_shopt && shop_table[i].vnum <= zone_table[zone].top; i++)
+    for (i = 0; i <= top_of_shopt && shop_table[i].vnum <= zone_table[zone].top; i++)
       if (shop_table[i].vnum >= (zone_table[zone].number * 100))
         shops++;
     for (i = 0; i <= top_of_veht && VEH_VNUM_RNUM(i) <= zone_table[zone].top; i++)
@@ -4634,18 +4634,16 @@ ACMD(do_slist)
 
   sprintf(buf, "Shops, %d to %d:\r\n", first, last);
 
-  for (nr = MAX(0, real_shop(first)); nr < top_of_shopt &&
-       (shop_table[nr].vnum <= last); nr++)
+  for (nr = MAX(0, real_shop(first)); nr <= top_of_shopt && (shop_table[nr].vnum <= last); nr++)
     if (shop_table[nr].vnum >= first)
       sprintf(buf + strlen(buf), "%5d. [%5ld] %s %s (%ld)\r\n", ++found,
               shop_table[nr].vnum,
               from_ip_zone(shop_table[nr].keeper) ? " " : "*",
-              real_mobile(shop_table[nr].keeper) < 0 ? "None" :
-              GET_NAME(&mob_proto[real_mobile(shop_table[nr].keeper)]),
+              real_mobile(shop_table[nr].keeper) < 0 ? "None" : GET_NAME(&mob_proto[real_mobile(shop_table[nr].keeper)]),
               shop_table[nr].keeper);
 
   if (!found)
-    send_to_char("No shops where found in those parameters.\r\n", ch);
+    send_to_char("No shops were found in those parameters.\r\n", ch);
   else
     page_string(ch->desc, buf, 1);
 }

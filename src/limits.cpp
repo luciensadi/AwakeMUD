@@ -700,7 +700,7 @@ void point_update(void)
   }
   {
     float totaltime = 0;
-    for (int shop_nr = 0; shop_nr < top_of_shopt; shop_nr++) {
+    for (int shop_nr = 0; shop_nr <= top_of_shopt; shop_nr++) {
       sprintf(buf, "order/%ld", shop_table[shop_nr].vnum);
       unlink(buf);
       if (shop_table[shop_nr].order) {

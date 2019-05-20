@@ -4167,7 +4167,7 @@ void boot_shop_orders(void)
 {
   File file;
   vnum_t vnum, player;
-  for (int i = 0; i < top_of_shopt; i++) {
+  for (int i = 0; i <= top_of_shopt; i++) {
     sprintf(buf, "order/%ld", shop_table[i].vnum);
     if (!(file.Open(buf, "r")))
       continue;
