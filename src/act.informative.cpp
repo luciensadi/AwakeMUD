@@ -843,38 +843,44 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
   struct char_data *i;
   struct veh_data *veh;
   
-  if (ch->in_veh && ch->in_room == NOWHERE)
-  {
+  // Show vehicle's contents to character.
+  if (ch->in_veh && ch->in_room == NOWHERE) {
     for (i = list; i; i = i->next_in_veh)
       if (ch != i && ch->vfront == i->vfront)
         if (CAN_SEE(ch, i))
           list_one_char(i, ch);
-  } else
-  {
+  }
+  
+  // Show room's characters to character.
+  else {
     for (i = list; i; i = i->next_in_room) {
+      // Skip them if they're invisible to us, or if they're us and we're not rigging.
+      if (!CAN_SEE(ch, i) || !(ch != i || ch->char_specials.rigging))
+        continue;
+      
       if ((ch->in_veh || (ch->char_specials.rigging))) {
         RIG_VEH(ch, veh);
         if (veh->cspeed > SPEED_IDLE) {
           if (get_speed(veh) >= 200) {
             if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7))
               continue;
-            else if (get_speed(veh) < 200 && get_speed(veh) >= 120) {
-              if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6))
-                continue;
-              else if (get_speed(veh) < 120 && get_speed(veh) >= 60) {
-                if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5))
-                  continue;
-                else
-                  if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4))
-                    continue;
-              }
-            }
+          }
+          else if (get_speed(veh) >= 120) {
+            if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6))
+              continue;
+          }
+          else if (get_speed(veh) >= 60) {
+            if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5))
+              continue;
+          }
+          else {
+            if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4))
+              continue;
           }
         }
       }
-      if (ch != i || ch->char_specials.rigging)
-        if (CAN_SEE(ch, i))
-          list_one_char(i, ch);
+      
+      list_one_char(i, ch);
     }
   }
 }
