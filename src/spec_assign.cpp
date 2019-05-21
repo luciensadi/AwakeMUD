@@ -411,6 +411,7 @@ void assign_mobiles(void)
   SPECIAL(smelly);
   SPECIAL(terell_davis);
   SPECIAL(smiths_bouncer);
+  SPECIAL(bouncer_gentle);
   SPECIAL(matchsticks);
   SPECIAL(painter);
   SPECIAL(multnomah_guard);
@@ -548,6 +549,9 @@ void assign_mobiles(void)
   ASSIGNMOB(37507, painter);
   ASSIGNMOB(17510, multnomah_guard);
 */
+  
+  /* Star Sapphire */
+  ASSIGNMOB(70302, bouncer_gentle);
 }
 
 /* assign special procedures to objects */

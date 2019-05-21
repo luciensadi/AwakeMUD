@@ -3717,6 +3717,40 @@ SPECIAL(pocket_sec)
   return FALSE;
 }
 
+SPECIAL(bouncer_gentle)
+{
+  if (!cmd)
+    return FALSE;
+  
+  struct char_data *bouncer = (struct char_data *) me;
+  if (!(PLR_FLAGGED(ch, PLR_KILLER) || PLR_FLAGGED(ch, PLR_BLACKLIST)))
+    return FALSE;
+  int toroom = -1, dir_index;
+  
+  // You must hardcode in the bouncer's room num and where he'll send you.
+  switch (world[bouncer->in_room].number) {
+    case 70301:
+      toroom = 70303;
+      dir_index = NORTH;
+      break;
+  }
+  
+  // No match means we fail out.
+  if (toroom == -1)
+    return FALSE;
+  
+  if (CMD_IS(dirs[dir_index]) || CMD_IS("nothing")) {
+    act("$n shakes $s head at you and escorts you from the premises.", FALSE, bouncer, 0, ch, TO_VICT);
+    act("$n shakes $s head at $N and escorts $M from the premises.", FALSE, bouncer, 0, ch, TO_NOTVICT);
+    char_from_room(ch);
+    char_to_room(ch, real_room(toroom));
+    act("$N is escorted in by $n, who gives $M a stern look and departs.", FALSE, bouncer, 0, ch, TO_ROOM);
+    return TRUE;
+  }
+  
+  return FALSE;
+}
+
 SPECIAL(bouncer_troll)
 {
   if (!cmd)
