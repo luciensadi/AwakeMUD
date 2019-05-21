@@ -600,13 +600,19 @@ RoomType:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
+[EXIT down]
+	ToVnum:	72014
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 BREAK
 #72013
 Name:	A narrow alley
 Desc:$
-This is a narrow alley alongside a loading dock. It looks as if a rig could
-just barely fit down the alley to unload at the dock if they were careful. A
-large warehouse is to the west, and to the east a ways is the main road. 
+This is a narrow alley near a loading dock. It looks as if a rig could just
+barely fit down the alley to unload at the dock if they were careful. A large
+warehouse is to the west, and to the east a ways is the main road.  
 ~
 Flags:	10000000000000000000000
 SecType:	City
@@ -624,5 +630,46 @@ RoomType:	0
 	Smoke:	0
 	Background:	1
 	BackgroundType:	8
+[EXIT west]
+	ToVnum:	72014
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72014
+Name:	Next to a loading dock
+Desc:$
+This is the end of the short, narrow alley, next to a warehouse. You can climb
+up onto the loading dock from here. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	10.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	72013
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	72012
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 BREAK
 END

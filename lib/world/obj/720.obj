@@ -75,4 +75,28 @@ Material:	paper
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
+#72003
+Keywords:	tables chairs
+Name:	A bunch of tables and chairs
+RoomDesc:$
+Some plastic tables and chairs are here.~
+LookDesc:$
+Pretty standard break room fare, these tables and chairs are mostly clean,
+having been wiped down somewhat recently. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
 END

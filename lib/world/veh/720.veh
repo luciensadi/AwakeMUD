@@ -1,0 +1,41 @@
+#72000
+Name:	truck old pickup lorry
+ShortDesc:	an old pickup truck
+RoomDesc:	A very beat-up old pickup truck is parked here.
+LongDesc:$
+This pickup truck looks like it used to be painted white at some point but is
+now mostly the orange and brown of rust. Several spots on the body have rusted
+through, and the passenger side mirror is duct taped to the vehicle. You'll
+definitely have to baby this thing if you plan on getting to point B from
+point A. 
+~
+Inside:$
+The cab of this truck is a callback to a bygone era. There's no gridguide or
+autonav or any sort, the gauges are all analog, and there's not even a radio.
+The cheap cloth upholstery is ripped in a lot of places, and the locks and
+windows are both manual. 
+~
+InsideRear:$
+The bed of this old truck is fairly spacious, but the liftgate is buckled and
+held together with bungee cords. You can see the ground beneath you through a
+particularly rusted-out area. 
+~
+Leaving:	makes you cough at it spews exhaust and heads
+Arriving:	arrives in a cloud of smoke
+Handling:	3
+Speed:	70
+Accel:	4
+Body:	4
+Armour:	1
+Pilot:	0
+Sig:	2
+Autonav:	0
+Seating:	2
+SeatingBack:	2
+Load:	1000
+Cost:	0
+Type:	3
+Flags:	0
+Engine:	3
+BREAK
+END
