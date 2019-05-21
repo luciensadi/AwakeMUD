@@ -1,0 +1,82 @@
+#70300
+Keywords:	blue plastic keycard sapphire tss-lc lc
+Name:	a blue plastic keycard embossed with ^W[^CTSS-LC^W]^n
+RoomDesc:$
+A blue plastic keycard has been left here.~
+LookDesc:$
+A slab of blue plastic embossed with the Star Sapphire's logo. Just above the
+magstripe is the lettering, "Clearance Level: Laborer / Contractor" 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.05
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70301
+Keywords:	pair garden shears
+Name:	a pair of garden shears
+RoomDesc:$
+A pair of garden shears glints from the floor.~
+LookDesc:$
+Sharp and well-oiled, these shears were clearly owned and maintained by
+someone who valued their tools. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#70302
+Keywords:	large fountain veined white marble impressive
+Name:	an impressive marble fountain
+RoomDesc:$
+A large fountain of veined white marble dominates the center of the roundabout.~
+LookDesc:$
+It's a fountain. TODO 
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	500000.00
+	Barrier:	12
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	100000
+	Val1:	100000
+BREAK
+END

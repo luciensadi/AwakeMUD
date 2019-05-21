@@ -1,0 +1,78 @@
+#72000
+Keywords:	desk heavy oak
+Name:	A heavy oak desk
+RoomDesc:$
+A heavy oaken desk is here, tucked in the corner by the entrance to the warehouse floor.~
+LookDesc:$
+This is a heavy-looking, stoutly-made oak desk. On it are all the tools a
+receptionist would need: a terminal, phone, and guestbook. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	13
+	Val2:	-1
+	Val3:	2
+BREAK
+#72001
+Keywords:	pallet stuff
+Name:	A pallet
+RoomDesc:$
+A pallet loaded with stuff is here.~
+LookDesc:$
+It's a wooden pallet with a bunch of stuff on it, shrink-wrapped and ready for
+delivery. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#72002
+Keywords:	crate wooden
+Name:	A large wooden crate
+RoomDesc:$
+A large wooden crate is here, nailed shut.~
+LookDesc:$
+It's a large, heavy, wooden crate. You can't move it, so it's probably full of
+goods waiting to be shipped. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

@@ -1,0 +1,628 @@
+#72000
+Name:	The lobby of a warehouse
+Desc:$
+You are in the a lobby of a large warehouse. A receptionist's desk is here,
+off to the side, and the warehouse itself is sprawled out to the north. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	1
+X:	8
+Y:	8
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	72002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	72003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	72001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72001
+Name:	On the warehouse floor
+Desc:$
+You're on the floor of the warehouse. Pallets and crates of varying sizes are
+neatly arranged here, and workers in towmotors ride by to move them
+occasionally. 
+~
+Flags:	10000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	72004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	72005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	72002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	72000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72002
+Name:	On the warehouse floor
+Desc:$
+You're on the floor of the warehouse. Pallets and crates of varying sizes are
+neatly arranged here, and workers in towmotors ride by to move them
+occasionally. 
+~
+Flags:	10000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	4
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	72005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	72006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	72003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	72000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	72001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72003
+Name:	On the warehouse floor
+Desc:$
+You're on the floor of the warehouse. Pallets and crates of varying sizes are
+neatly arranged here, and workers in towmotors ride by to move them
+occasionally. 
+~
+Flags:	10000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	4
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	72006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	72000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	72002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	72005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72004
+Name:	On the warehouse floor
+Desc:$
+You're on the floor of the warehouse. Pallets and crates of varying sizes are
+neatly arranged here, and workers in towmotors ride by to move them
+occasionally. 
+~
+Flags:	10000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	4
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	72007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	72005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	72001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72005
+Name:	On the warehouse floor
+Desc:$
+You're on the floor of the warehouse. Pallets and crates of varying sizes are
+neatly arranged here, and workers in towmotors ride by to move them
+occasionally. 
+~
+NightDesc:$
+    
+~
+Flags:	10000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	4
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	72008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	72009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	72006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	72003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	72002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	72001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	72004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	72007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72006
+Name:	On the warehouse floor
+Desc:$
+You're on the floor of the warehouse. Pallets and crates of varying sizes are
+neatly arranged here, and workers in towmotors ride by to move them
+occasionally. 
+~
+Flags:	10000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	4
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	72009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	72012
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	72003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	72002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	72005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72007
+Name:	On the warehouse floor
+Desc:$
+You're on the floor of the warehouse. Pallets and crates of varying sizes are
+neatly arranged here, and workers in towmotors ride by to move them
+occasionally. 
+~
+Flags:	10000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	4
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	72011
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	72008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	72005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	72004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72008
+Name:	On the warehouse floor
+Desc:$
+You're on the floor of the warehouse. Pallets and crates of varying sizes are
+neatly arranged here, and workers in towmotors ride by to move them
+occasionally. 
+~
+Flags:	10000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	4
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	72009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	72005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	72007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72009
+Name:	On the warehouse floor
+Desc:$
+You're on the floor of the warehouse. Pallets and crates of varying sizes are
+neatly arranged here, and workers in towmotors ride by to move them
+occasionally. 
+~
+Flags:	10000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	4
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A small office is through the doorway. 
+~
+	ToVnum:	72010
+	Flags:	1
+	Material:	wood
+	Barrier:	3
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	72006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	72005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	72008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72010
+Name:	A small office
+Desc:$
+This is a small office used by the warehouse supervisor. There's a desk and
+some filing cabinets here. A dataport in the desk catches your eye. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	1
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	0
+JackID:	2076655
+Address:	Dantonio Brothers Shipping
+Crowd:	0
+Cover:	7
+X:	4
+Y:	4
+Z:	2.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+The busy warehouse is this way. 
+~
+	ToVnum:	72009
+	Flags:	1
+	Material:	wood
+	Barrier:	3
+	KeyVnum:	0
+BREAK
+#72011
+Name:	A break room
+Desc:$
+This is the warehouse's break room. There are plastic tables and chairs set up
+here, along with a countertop with a sink built in and a microwave and coffee
+maker on top of it. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	3
+X:	8
+Y:	8
+Z:	2.50
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	72007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72012
+Name:	A loading dock
+Desc:$
+The warehouse's loading docks are here. Trucks will occasionally back in to
+load and unload goods to and from the warehouse. 
+~
+Flags:	10000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	15
+Z:	10.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	72006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72013
+Name:	A narrow alley
+Desc:$
+This is a narrow alley alongside a loading dock. It looks as if a rig could
+just barely fit down the alley to unload at the dock if they were careful. A
+large warehouse is to the west, and to the east a ways is the main road. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	2
+X:	10
+Y:	3
+Z:	10.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	1
+	BackgroundType:	8
+BREAK
+END

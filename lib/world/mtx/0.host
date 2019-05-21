@@ -28,28 +28,28 @@ BREAK
 Name:	A Small Office Host
 Keywords:	small office host
 Description:$
-A small office node, using standard matrix iconography - a flat grid and
-geometric shapes for icons. 
+A pretty accurate representation of a warehouse, except that the pallets and
+crates tend to float around slowly, seemingly at random through the void.
+Where the walls of the warehouse should be, there is nothingness, just an
+impenetrable blackness. 
 ~
 ShutdownStart:	A deep echoing voice announces a host shutdown.
-
 ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
-
-Parent:	1100
-Colour:	1
-Security:	4
-Difficulty:	1
-Access:	4
+Parent:	0
+Colour:	0
+Security:	1
+Difficulty:	0
+Access:	3
 AccessScramble:	0
 AccessTrapdoor:	2
-Control:	4
+Control:	3
 ControlTrapdoor:	0
-Index:	4
+Index:	3
 IndexTrapdoor:	0
-Files:	4
+Files:	2
 FilesScramble:	0
 FilesTrapdoor:	0
-Slave:	4
+Slave:	5
 SlaveScramble:	0
 SlaveTrapdoor:	0
 Type:	Datastore
@@ -72,9 +72,7 @@ sphere menacingly, and equidistant around it is one green, one blue and one
 yellow pyramid. 
 ~
 ShutdownStart:	A deep echoing voice announces a host shutdown.
-
 ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
-
 Parent:	0
 Colour:	2
 Security:	4

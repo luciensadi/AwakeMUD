@@ -807,7 +807,7 @@ Desc:$
 Vehicles that are zoneloaded here will be available for purchase in room
 10021. 
 ~
-Flags:	10000000000000000001000
+Flags:	110000000000000000001000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -831,7 +831,7 @@ RoomType:	0
 	KeyVnum:	0
 BREAK
 #10021
-Name:	^W(^CIMMHQ^W)^C A Spacious Garage
+Name:	^W(^cIMMHQ^W)^C A Spacious Garage
 Desc:$
 Cavernous and hangar-like, this massive vehicle storage area is enclosed by
 massive steel beams that arch gracefully overhead to support the thick slabs
@@ -857,6 +857,50 @@ RoomType:	0
 [EXIT north]
 	ToVnum:	10000
 	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door wooden office
+	Desc:$
+A wooden door leads to an office. 
+~
+	ToVnum:	10022
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10022
+Name:	^W(^cIMMHQ^W)^C A Mechanic's Office
+Desc:$
+Packed full of vehicle parts, miscellaneous upgrades, and an array of tools
+large enough to take up two walls, this office is less of a place of
+administration and more a den of controlled mechanical chaos. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	50
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door wooden
+	Desc:$
+A wooden door leads back out to the garage. 
+~
+	ToVnum:	10021
+	Flags:	1
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
