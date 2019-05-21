@@ -14,6 +14,7 @@
 #include "transport.h"
 #include "constants.h"
 #include "limits.h"
+#include "act.drive.h"
 
 void die_follower(struct char_data *ch);
 void roll_individual_initiative(struct char_data *ch);
@@ -380,7 +381,6 @@ ACMD(do_ram)
 {
   struct veh_data *veh, *tveh = NULL;
   struct char_data *vict = NULL;
-  int skill = 0, target = 0, tvehm = 0, vehm = 0;
 
   if (!(AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE))) {
     send_to_char("You need to be driving a vehicle to do that...\r\n", ch);
@@ -414,7 +414,7 @@ ACMD(do_ram)
     send_to_char("You can't seem to find the target you're looking for.\r\n", ch);
     return;
   }
-  if (vict && !IS_NPC(vict) && !(PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(vict, PRF_PKER))) {
+  if (vict && !IS_NPC(vict) && !(IS_NPC(ch) || (PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(vict, PRF_PKER)))) {
     send_to_char(ch, "You have to be flagged PK to attack another player.\r\n");
     return;
   }
@@ -422,8 +422,13 @@ ACMD(do_ram)
     send_to_char("You can't ram yourself!\r\n", ch);
     return;
   }
+  
+  do_raw_ram(ch, veh, tveh, vict);
+}
 
-  skill = veh_skill(ch, veh);
+void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tveh, struct char_data *vict) {
+  int skill = veh_skill(ch, veh), target = 0, vehm = 0, tvehm = 0;
+  
   if (tveh) {
     target = modify_veh(veh) + veh->handling + modify_target(ch);
     vehm = get_maneuver(veh);
@@ -1326,6 +1331,11 @@ ACMD(do_target)
     send_to_char("Why would you want to target yourself?", ch);
     return;
   }
+  
+  do_raw_target(ch, veh, tveh, vict, modeall, obj);
+}
+
+void do_raw_target(struct char_data *ch, struct veh_data *veh, struct veh_data *tveh, struct char_data *vict, bool modeall, struct obj_data *obj) {  
   if (FIGHTING(ch) || FIGHTING_VEH(ch))
     stop_fighting(ch);
   if (modeall) {
@@ -1352,7 +1362,7 @@ ACMD(do_target)
   }
   if (vict) {
     for (struct obj_data *obj2 = veh->mount; obj2; obj2 = obj2->next_content)
-      if (obj2->targ == vict) {
+      if (obj2 != obj && obj2->targ == vict) {
         send_to_char("Someone is already targeting that.\r\n", ch);
         return;
       }
@@ -1365,6 +1375,8 @@ ACMD(do_target)
     if (AFF_FLAGGED(ch, AFF_MANNING)) {
       sprintf(buf, "%s's %s swivels towards you.\r\n", GET_VEH_NAME(ch->in_veh), GET_OBJ_NAME(obj));
       send_to_char(buf, vict);
+      sprintf(buf, "%s's %s swivels towards $N.\r\n", GET_VEH_NAME(ch->in_veh), GET_OBJ_NAME(obj));
+      act(buf, FALSE, ch, NULL, vict, TO_VEH_ROOM);
     }
   } else {
     set_fighting(ch, tveh);
@@ -1376,6 +1388,8 @@ ACMD(do_target)
     if (AFF_FLAGGED(ch, AFF_MANNING)) {
       sprintf(buf, "%s's %s swivels towards your ride.\r\n", GET_VEH_NAME(ch->in_veh), GET_OBJ_NAME(obj));
       send_to_veh(buf, tveh, 0, TRUE);
+      sprintf(buf, "%s's %s swivels towards %s.\r\n", GET_VEH_NAME(ch->in_veh), GET_OBJ_NAME(obj), GET_VEH_NAME(tveh));
+      act(buf, FALSE, ch, NULL, NULL, TO_VEH_ROOM);
     }
   }
 }
@@ -1649,8 +1663,10 @@ ACMD(do_switch)
     send_to_char("You can't switch positions when not in a vehicle.\r\n", ch);
   else if (IS_WORKING(ch) || AFF_FLAGGED(ch, AFF_PILOT))
     send_to_char(TOOBUSY, ch);
+#ifndef DISABLE_VEHICLE_CAPACITY_CHECKS
   else if (!ch->in_veh->seating[!ch->vfront])
     send_to_char("There's no room to move to.\r\n", ch);
+#endif
   else {
     ch->in_veh->seating[ch->vfront]++;
     ch->in_veh->seating[!ch->vfront]--;

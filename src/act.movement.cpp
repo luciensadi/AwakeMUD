@@ -1074,8 +1074,11 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
       veh_to_veh(inveh, found_veh);
     }
     return;
-  } else if (!found_veh->seating[front])
+  }
+#ifndef DISABLE_VEHICLE_CAPACITY_CHECKS
+  else if (!found_veh->seating[front])
     send_to_char(ch, "There is no room in the %s of that vehicle.\r\n", front ? "front" : "rear");
+#endif
   else {
     if (inveh && ch->vfront) {
       send_to_char("You have to be in the back to get into that.\r\n", ch);

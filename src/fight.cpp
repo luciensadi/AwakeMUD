@@ -361,7 +361,11 @@ void stop_fighting(struct char_data * ch)
   FIGHTING(ch) = NULL;
   FIGHTING_VEH(ch) = NULL;
   ch->next_fighting = NULL;
-  GET_POS(ch) = POS_STANDING;
+  
+  if (ch->in_veh)
+    GET_POS(ch) = POS_SITTING;
+  else
+    GET_POS(ch) = POS_STANDING;
   update_pos(ch);
   GET_INIT_ROLL(ch) = 0;
   SHOOTING_DIR(ch) = NOWHERE;
@@ -2541,6 +2545,10 @@ bool has_ammo(struct char_data *ch, struct obj_data *wielded)
       return FALSE;
     } else {
       if (AFF_FLAGGED(ch, AFF_MANNING)) {
+        // NPCs don't care about ammo in their mounts.
+        if (IS_NPC(ch))
+          return TRUE;
+        
         for (struct obj_data *obj = wielded->in_obj->contains; obj; obj = obj->next_content) {
           if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
             if (GET_OBJ_VAL(obj, 0) > 0) {
@@ -2901,7 +2909,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   } else {
     strcpy(buf, "long burst from $p");
   }
-  if (ch->in_room == victim->in_room) {
+  if (ch->in_room == victim->in_room || (ch->in_veh && ch->in_veh->in_room == victim->in_room)) {
     // Same-room messaging.
     if (damage < 0) {
       switch (number(1, 3)) {
@@ -2962,7 +2970,12 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     }
     act(buf1, FALSE, ch, weapon, victim, TO_VICT);
     act(buf2, FALSE, ch, weapon, victim, TO_CHAR);
-    act(buf3, FALSE, ch, weapon, victim, TO_NOTVICT);
+    
+    if (ch->in_veh) {
+      sprintf(buf1, "From inside %s, %s", GET_VEH_NAME(ch->in_veh), buf3);
+      act(buf1, FALSE, ch, weapon, victim, TO_VEH_ROOM);
+    } else
+      act(buf3, FALSE, ch, weapon, victim, TO_NOTVICT);
     // End same-room messaging.
   } else {
     // Ranged messaging. TODO
@@ -5201,7 +5214,7 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
   damage_total--;
   if (power <= veh->armor || !damage_total)
   {
-    sprintf(buf, "A %s ricochets off of %s.", ammo_type, GET_VEH_NAME(veh));
+    sprintf(buf, "$n's %s ricochets off of %s.", ammo_type, GET_VEH_NAME(veh));
     sprintf(buf2, "Your attack ricochets off of %s.", GET_VEH_NAME(veh));
     act(buf, FALSE, ch, NULL, NULL, TO_ROOM);
     act(buf2, FALSE, ch, NULL, NULL, TO_CHAR);
@@ -5328,6 +5341,10 @@ void mount_fire(struct char_data *ch)
     for (mount = veh->mount; mount; mount = mount->next_content)
       if (mount->worn_by == ch)
         break;
+    
+    if (!mount)
+      return;
+    
     for (gun = mount->contains; gun; gun = gun->next_content)
       if (GET_OBJ_TYPE(gun) == ITEM_WEAPON)
         break;

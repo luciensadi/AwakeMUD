@@ -492,6 +492,20 @@ char *capitalize(const char *source)
   return dest;
 }
 
+// decapitalize a string, now allows for color strings at the beginning
+char *decapitalize(const char *source)
+{
+  static char dest[MAX_STRING_LENGTH];
+  strcpy(dest, source);
+  
+  char* first_actual_char = dest;
+  while (*first_actual_char == '^')
+    first_actual_char += 2;
+  *first_actual_char = LOWER(*first_actual_char);
+  
+  return dest;
+}
+
 // duplicate a string -- uses new!
 char *str_dup(const char *source)
 {
@@ -1619,9 +1633,12 @@ void remove_workshop_from_room(struct obj_data *obj) {
 
 // Checks if a given mount has a weapon on it.
 bool mount_has_weapon(struct obj_data *mount) {
-  struct obj_data *contains = NULL;
+  if (mount == NULL) {
+    mudlog("SYSERR: Attempting to verify mount-has-weapon status for nonexistent mount.", NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
   
-  for (contains = mount->next_content; contains; contains = contains->next_content) {
+  for (struct obj_data *contains = mount->contains; contains; contains = contains->next_content) {
     if (GET_OBJ_TYPE(contains) == ITEM_WEAPON)
       return TRUE;
   }

@@ -2697,6 +2697,8 @@ void reset_zone(int zone, int reboot)
         if (!veh->people) {
           // If the vehicle is empty, make the mob the driver.
           AFF_FLAGS(mob).SetBit(AFF_PILOT);
+          mob->vfront = TRUE;
+          
           veh->cspeed = SPEED_CRUISING;
         } else {
           // Look for hardpoints with weapons and man them.
@@ -2707,8 +2709,13 @@ void reset_zone(int zone, int reboot)
             // Man the first unmanned mount we find, as long as it has a weapon in it.
             if (!mount->worn_by && mount_has_weapon(mount)) {
               mount->worn_by = mob;
+              AFF_FLAGS(mob).ToggleBit(AFF_MANNING);
+              break;
             }
           }
+          
+          // Mount-users are all back of the bus.
+          mob->vfront = FALSE;
         }
         char_to_veh(veh, mob);
         last_cmd = 1;
@@ -2728,7 +2735,7 @@ void reset_zone(int zone, int reboot)
         obj = read_object(ZCMD.arg1, REAL);
         
         // Special case: Weapon mounts.
-        if (GET_OBJ_VAL(obj, 0) == MOD_MOUNT) {
+        if (GET_OBJ_VAL(obj, 0) == TYPE_MOUNT) {
           switch (GET_OBJ_VAL(obj, 1)) {
             case 1:
               sig = 1;
@@ -2759,9 +2766,9 @@ void reset_zone(int zone, int reboot)
           veh->mount = obj;
         }
         
-        // Special case: Weapons for mounts. Note that this ignores vehicle load, mount size, etc.
+        // Special case: Weapons for mounts. Note that this ignores current vehicle load, mount size, etc.
         else if (IS_GUN(GET_OBJ_VAL(obj, 3))) {
-          struct obj_data *mount = NULL, *contains = NULL;
+          struct obj_data *mount = NULL;
           
           // Iterate through every mount on the vehicle.
           for (mount = veh->mount; mount; mount = mount->next_content) {
@@ -2773,6 +2780,7 @@ void reset_zone(int zone, int reboot)
           if (mount) {
             // We found a valid mount; attach the weapon.
             obj_to_obj(obj, mount);
+            veh->usedload += GET_OBJ_WEIGHT(obj);
           } else {
             ZONE_ERROR("Not enough mounts in target vehicle, cannot mount item");
           }
@@ -2783,6 +2791,7 @@ void reset_zone(int zone, int reboot)
           for (int j = 0; j < MAX_OBJ_AFFECT; j++)
             affect_veh(veh, obj->affected[j].location, obj->affected[j].modifier);
         }
+        
         last_cmd = 1;
       } else
         last_cmd = 0;

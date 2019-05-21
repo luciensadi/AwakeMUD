@@ -1562,7 +1562,7 @@ ACMD(do_attach)
     veh = ch->in_veh;
   if (veh && (j = atoi(buf2)) >= 0) {
     if (!(item = get_obj_in_list_vis(ch, buf1, ch->carrying))) {
-      send_to_char("Attach What?\r\n", ch);
+      send_to_char("Attach what?\r\n", ch);
       return;
     }
     if (GET_OBJ_TYPE(item) != ITEM_WEAPON) {
@@ -1575,11 +1575,10 @@ ACMD(do_attach)
       send_to_char("There aren't that many mounts.\r\n", ch);
       return;
     }
-    for (struct obj_data *g = item2->contains; g; g = g->next_content)
-      if (GET_OBJ_TYPE(g) == ITEM_WEAPON) {
-        send_to_char("There is already a weapon mounted on it.\r\n", ch);
-        return;
-      }
+    if (mount_has_weapon(item2)) {
+      send_to_char("There is already a weapon mounted on it.\r\n", ch);
+      return;
+    }
     if (!IS_GUN(GET_OBJ_VAL(item, 3)) || veh->usedload + GET_OBJ_WEIGHT(item) > veh->load) {
       send_to_char("You can't seem to fit it on.\r\n", ch);
       return;
