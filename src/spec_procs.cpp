@@ -3782,7 +3782,7 @@ SPECIAL(locker)
   struct obj_data *locker = world[ch->in_room].contents, *next = NULL;
   int num = 0, free = 0;
   for (; locker; locker = locker->next_content)
-    if (GET_OBJ_VNUM(locker) == 9825) {
+    if (GET_OBJ_VNUM(locker) == 9826) {
       num++;
       if (!GET_OBJ_VAL(locker, 9))
         free++;
@@ -3804,7 +3804,7 @@ SPECIAL(locker)
     else {
       num = 0;
       for (locker = world[ch->in_room].contents; locker; locker = locker->next_content)
-        if (GET_OBJ_VNUM(locker) == 9825) {
+        if (GET_OBJ_VNUM(locker) == 9826) {
           num++;
           if (!GET_OBJ_VAL(locker, 9))
             break;
@@ -3820,7 +3820,7 @@ SPECIAL(locker)
     else {
       num = 0;
       for (locker = world[ch->in_room].contents; locker; locker = locker->next_content)
-        if (GET_OBJ_VNUM(locker) == 9825 && ++num && GET_OBJ_VAL(locker, 9) == free) {
+        if (GET_OBJ_VNUM(locker) == 9826 && ++num && GET_OBJ_VAL(locker, 9) == free) {
           int cost = (int)((((time(0) - GET_OBJ_VAL(locker, 8)) / SECS_PER_REAL_DAY) + 1) * 50);
           if (GET_NUYEN(ch) < cost)
             send_to_char(ch, "The system beeps loudly and the screen reads 'PLEASE INSERT %d NUYEN'.\r\n", cost);
@@ -3838,7 +3838,7 @@ SPECIAL(locker)
   } else if (CMD_IS("lock")) {
     num = atoi(argument);
     for (locker = world[ch->in_room].contents; locker; locker = locker->next_content)
-      if (GET_OBJ_VNUM(locker) == 9825 && !--num && !IS_SET(GET_OBJ_VAL(locker, 1), CONT_CLOSED)) {
+      if (GET_OBJ_VNUM(locker) == 9826 && !--num && !IS_SET(GET_OBJ_VAL(locker, 1), CONT_CLOSED)) {
         sprintf(buf, "%d%d%d%d%d%d%d", number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9));
         GET_OBJ_VAL(locker, 8) = time(0);
         GET_OBJ_VAL(locker, 9) = atoi(buf);
