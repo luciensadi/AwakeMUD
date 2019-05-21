@@ -366,7 +366,6 @@ bool mobact_process_scavenger(struct char_data *ch) {
 }
 
 bool mobact_process_movement(struct char_data *ch) {
-  vnum_t current_room = NOWHERE;
   int door;
   
   /* Mob Movement */
