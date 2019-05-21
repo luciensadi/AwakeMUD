@@ -1,0 +1,31 @@
+#10000
+Name:	immortal cheat vehicle
+ShortDesc:	Immortal's Cheat Vehicle
+RoomDesc:	An Immortal's Cheat Vehicle warps space around it
+LongDesc:$
+It looks pretty much like an unfinished object~
+Inside:$
+look at you, all front of the bus 
+~
+InsideRear:$
+nvm you're back of the bus 
+~
+Leaving:	voops
+Arriving:	shwooms
+Handling:	10
+Speed:	10
+Accel:	10
+Body:	10
+Armour:	10
+Pilot:	10
+Sig:	10
+Autonav:	10
+Seating:	2
+SeatingBack:	10
+Load:	15000
+Cost:	1500
+Type:	3
+Flags:	1000
+Engine:	3
+BREAK
+END

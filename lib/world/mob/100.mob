@@ -478,4 +478,34 @@ AttackType:	Taser
 	BR/Truck:	50
 	BR/Drone:	50
 BREAK
+#10015
+Keywords:	road raging ganger
+Name:	A road-raging ganger
+RoomDesc:$
+A road-raging ganger has planted his feet here, his eyebrow twitching. 
+
+~
+LookDesc:$
+TBD 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	120
+	Weight:	50
+[SKILLS]
+BREAK
 END
