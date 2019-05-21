@@ -3719,6 +3719,8 @@ SPECIAL(pocket_sec)
 
 SPECIAL(bouncer_gentle)
 {
+  ACMD(do_look);
+  
   if (!cmd)
     return FALSE;
   
@@ -3739,12 +3741,13 @@ SPECIAL(bouncer_gentle)
   if (toroom == -1)
     return FALSE;
   
-  if (CMD_IS(dirs[dir_index]) || CMD_IS("nothing")) {
+  if (CMD_IS(exitdirs[dir_index]) || CMD_IS(fulldirs[dir_index])) {
     act("$n shakes $s head at you and escorts you from the premises.", FALSE, bouncer, 0, ch, TO_VICT);
     act("$n shakes $s head at $N and escorts $M from the premises.", FALSE, bouncer, 0, ch, TO_NOTVICT);
     char_from_room(ch);
     char_to_room(ch, real_room(toroom));
     act("$N is escorted in by $n, who gives $M a stern look and departs.", FALSE, bouncer, 0, ch, TO_ROOM);
+    do_look(ch, (char *) "", 0, 0);
     return TRUE;
   }
   
