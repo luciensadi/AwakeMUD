@@ -1,0 +1,31 @@
+#70500
+Keywords:	firmpoint internal mount
+Name:	a firmpoint internal mount
+RoomDesc:$
+A boxed-up firmpoint internal mount has been left here.~
+LookDesc:$
+Used for mounting weaponry on a vehicle, this item must be installed before it
+can be used. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val2:	5
+	Val4:	2
+	Val5:	62
+	Val6:	27
+BREAK
+END
