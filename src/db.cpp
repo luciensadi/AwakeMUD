@@ -41,7 +41,6 @@
 #include "newdb.h"
 #include "comm.h"
 #include "handler.h"
-#include "mail.h"
 #include "interpreter.h"
 #include "house.h"
 #include "newmatrix.h"
@@ -388,9 +387,7 @@ void DBInit()
 
   log("Initializing board system:");
   BoardInit();
-
-  log("Booting mail system.");
-  scan_file();
+  
   log("Reading banned site list.");
   load_banned();
   log("Reloading consistency files.");

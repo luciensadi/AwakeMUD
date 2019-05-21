@@ -22,7 +22,7 @@
 #include "handler.h"
 #include "db.h"
 #include "comm.h"
-#include "mail.h"
+#include "newmail.h"
 #include "boards.h"
 #include "olc.h"
 #include "quest.h"
@@ -358,7 +358,7 @@ void string_add(struct descriptor_data *d, char *str)
       REPLACE_STRING(file->photo);
       pocketsec_notemenu(d);
     } else if (PLR_FLAGGED(d->character, PLR_MAILING)) {
-      store_mail(d->mail_to, GET_IDNUM(d->character), *d->str);
+      store_mail(d->mail_to, d->character, *d->str);
       d->mail_to = 0;
       DELETE_D_STR_IF_EXTANT(d);
       SEND_TO_Q("Message sent.\r\n", d);

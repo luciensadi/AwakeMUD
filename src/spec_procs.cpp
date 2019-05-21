@@ -22,7 +22,7 @@
 #include "constants.h"
 #include "newdb.h"
 #include "quest.h"
-#include "mail.h"
+#include "newmail.h"
 #include "pocketsec.h"
 #include "limits.h"
 
