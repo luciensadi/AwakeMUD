@@ -3746,7 +3746,7 @@ SPECIAL(bouncer_gentle)
     act("$n shakes $s head at $N and escorts $M from the premises.", FALSE, bouncer, 0, ch, TO_NOTVICT);
     char_from_room(ch);
     char_to_room(ch, real_room(toroom));
-    act("$N is escorted in by $n, who gives $M a stern look and departs.", FALSE, bouncer, 0, ch, TO_ROOM);
+    act("$n is escorted in by $N, who gives $m a stern look and departs.", FALSE, ch, 0, bouncer, TO_ROOM);
     do_look(ch, (char *) "", 0, 0);
     return TRUE;
   }
