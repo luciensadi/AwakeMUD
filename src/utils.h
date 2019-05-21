@@ -68,6 +68,7 @@ bool    has_kit(struct char_data *ch, int type);
 struct obj_data *find_workshop(struct char_data *ch, int type);
 void    add_workshop_to_room(struct obj_data *obj);
 void    remove_workshop_from_room(struct obj_data *obj);
+bool    mount_has_weapon(struct obj_data *mount);
 
 /* undefine MAX and MIN so that our functions are used instead */
 #ifdef MAX

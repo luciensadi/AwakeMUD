@@ -1469,14 +1469,14 @@ ACMD(do_man)
     send_to_char("Someone is already manning it.\r\n", ch);
     return;
   }
-  for (struct obj_data *obj = mount->contains; obj; obj = obj->next_content)
-    if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
-      mount->worn_by = ch;
-      act("$n mans $o.", FALSE, ch, mount, 0, TO_ROOM);
-      act("You man $o.", FALSE, ch, mount, 0, TO_CHAR);
-      AFF_FLAGS(ch).ToggleBit(AFF_MANNING);
-      return;
-    }
+  if (mount_has_weapon(mount)) {
+    mount->worn_by = ch;
+    act("$n mans $o.", FALSE, ch, mount, 0, TO_ROOM);
+    act("You man $o.", FALSE, ch, mount, 0, TO_CHAR);
+    AFF_FLAGS(ch).ToggleBit(AFF_MANNING);
+    return;
+  }
+  
   send_to_char("But there is no weapon mounted there.\r\n", ch);
 }
 

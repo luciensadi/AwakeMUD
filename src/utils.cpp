@@ -1616,3 +1616,15 @@ void remove_workshop_from_room(struct obj_data *obj) {
     }
   }
 }
+
+// Checks if a given mount has a weapon on it.
+bool mount_has_weapon(struct obj_data *mount) {
+  struct obj_data *contains = NULL;
+  
+  for (contains = mount->next_content; contains; contains = contains->next_content) {
+    if (GET_OBJ_TYPE(contains) == ITEM_WEAPON)
+      return TRUE;
+  }
+  
+  return FALSE;
+}

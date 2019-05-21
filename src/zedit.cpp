@@ -242,7 +242,7 @@ const char *get_type(char c)
   case 'V':
     return "VEHICLE";
   case 'S':
-    return "PASSENGER";
+    return "DRIVER/PASSENGER";
   case 'U':
     return "UPGRADE";
   case 'I':
