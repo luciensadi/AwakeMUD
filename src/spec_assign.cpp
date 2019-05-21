@@ -638,8 +638,8 @@ void assign_objects(void)
   ASSIGNOBJ(18825, portable_gridguide);
   ASSIGNOBJ(39864, portable_gridguide);
   ASSIGNOBJ(31542, pocket_sec);
-  ASSIGNOBJ(39865, pocket_sec);
-  ASSIGNOBJ(9826, locker); */
+  ASSIGNOBJ(39865, pocket_sec); */
+  ASSIGNOBJ(9826, locker);
   WSPEC(monowhip);
 
   ASSIGNWEAPON(660, monowhip);
