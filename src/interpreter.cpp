@@ -25,7 +25,6 @@
 #include "newdb.h"
 #include "utils.h"
 #include "handler.h"
-#include "mail.h"
 #include "screen.h"
 #include "memory.h"
 #include "newmagic.h"

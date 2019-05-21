@@ -33,7 +33,7 @@
 #include "constants.h"
 #include "newshop.h"
 #include "newmagic.h"
-#include "mail.h"
+#include "newmail.h"
 #include <sys/time.h>
 
 extern class objList ObjList;
@@ -713,7 +713,7 @@ void point_update(void)
           if (!order->sent && totaltime < 0) {
             sprintf(buf2, "%s has arrived at %s and is ready for pickup.\r\n", CAP(obj_proto[real_object(order->item)].text.name),
                     shop_table[shop_nr].shopname);
-            store_mail(order->player, 2, buf2);
+            raw_store_mail(order->player, 0, mob_proto[real_mobile(shop_table[shop_nr].keeper)].player.physical_text.name, (const char *) buf2);
             order->sent = TRUE;
           }
           fprintf(fl, "\t[ORDER %d]\n", i);

@@ -98,6 +98,11 @@ if [ -f "playergroups.sql" ]; then
   cat playergroups.sql >> gen_temp.sql
 fi
 
+if [ -f "mail_fixes.sql" ]; then
+echo "" >> gen_temp.sql
+cat playergroups.sql >> gen_temp.sql
+fi
+
 mysql -u root -p < gen_temp.sql
 
 rm gen_temp.sql
