@@ -47,48 +47,48 @@ bool attempt_reload(struct char_data *mob, int pos);
 void mobact_change_firemode(struct char_data *ch) {
   struct obj_data *weapon;
   
-  if (!(weapon = GET_EQ(ch, WEAR_WIELD)))
+  // Precheck: Weapon must exist and must be a gun.
+  if (!(weapon = GET_EQ(ch, WEAR_WIELD)) || !IS_GUN(GET_OBJ_VAL(weapon, 3)))
     return;
   
+  // Set up info.
   int prev_value = GET_OBJ_VAL(weapon, 11);
+  int mode_count = 0;
   
-  if (weapon && IS_GUN(GET_OBJ_VAL(weapon, 3))) {
-    if (!weapon->contains)
-      attempt_reload(ch, WEAR_WIELD);
+  // Reload the weapon if possible.
+  if (!weapon->contains)
+    attempt_reload(ch, WEAR_WIELD);
   
-    int mode_count = 0;
+  // Lowest-priority mode is single-shot.
+  if (IS_SET(GET_OBJ_VAL(weapon, 10), 1 << MODE_SS)) {
+    mode_count += 1;
+    GET_OBJ_VAL(weapon, 11) = MODE_SS;
+  }
+  
+  // Semi-automatic is superior to single shot, so set that if we can.
+  if (IS_SET(GET_OBJ_VAL(weapon, 10), 1 << MODE_SA)) {
+    mode_count += 1;
+    GET_OBJ_VAL(weapon, 11) = MODE_SA;
+  }
+  
+  // Full automatic with a 10-round spray deals more damage than the others.
+  if (IS_SET(GET_OBJ_VAL(weapon, 10), 1 << MODE_FA)) {
+    mode_count += 1;
+    GET_OBJ_VAL(weapon, 11) = MODE_FA;
     
-    // Lowest-priority mode is single-shot.
-    if (IS_SET(GET_OBJ_VAL(weapon, 10), 1 << MODE_SS)) {
-      mode_count += 1;
-      GET_OBJ_VAL(weapon, 11) = MODE_SS;
-    }
-    
-    // Semi-automatic is superior to single shot, so set that if we can.
-    if (IS_SET(GET_OBJ_VAL(weapon, 10), 1 << MODE_SA)) {
-      mode_count += 1;
-      GET_OBJ_VAL(weapon, 11) = MODE_SA;
-    }
-    
-    // Full automatic with a 10-round spray deals more damage than the others.
-    if (IS_SET(GET_OBJ_VAL(weapon, 10), 1 << MODE_FA)) {
-      mode_count += 1;
-      GET_OBJ_VAL(weapon, 11) = MODE_FA;
-      
-      // Set the rounds-to-fire count to 10.
-      GET_OBJ_TIMER(weapon) = 10;
-    }
-    
-    // For some reason, NPCs were set to prefer burst fire above all other modes. Preserving this logic for now.
-    if (IS_SET(GET_OBJ_VAL(weapon, 10), 1 << MODE_BF)) {
-      mode_count += 1;
-      GET_OBJ_VAL(weapon, 11) = MODE_BF;
-    }
-    
-    // Send a message to the room, but only if the weapon has received a new fire selection mode and has more than one available.
-    if (prev_value != GET_OBJ_VAL(weapon, 11) && mode_count > 1) {
-      act("$n flicks the fire selector switch on $p.", TRUE, ch, weapon, 0, TO_ROOM);
-    }
+    // Set the rounds-to-fire count to 10.
+    GET_OBJ_TIMER(weapon) = 10;
+  }
+  
+  // For some reason, NPCs were set to prefer burst fire above all other modes. Preserving this logic for now.
+  if (IS_SET(GET_OBJ_VAL(weapon, 10), 1 << MODE_BF)) {
+    mode_count += 1;
+    GET_OBJ_VAL(weapon, 11) = MODE_BF;
+  }
+  
+  // Send a message to the room, but only if the weapon has received a new fire selection mode and has more than one available.
+  if (prev_value != GET_OBJ_VAL(weapon, 11) && mode_count > 1) {
+    act("$n flicks the fire selector switch on $p.", TRUE, ch, weapon, 0, TO_ROOM);
   }
 }
 
