@@ -45,14 +45,16 @@ bool attempt_reload(struct char_data *mob, int pos);
 #define MOB_AGGR_TO_RACE MOB_AGGR_ELF, MOB_AGGR_DWARF, MOB_AGGR_HUMAN, MOB_AGGR_ORK, MOB_AGGR_TROLL
 
 void mobact_change_firemode(struct char_data *ch) {
-  struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD);
+  struct obj_data *weapon;
+  
+  if (!(weapon = GET_EQ(ch, WEAR_WIELD)))
+    return;
   
   int prev_value = GET_OBJ_VAL(weapon, 11);
   
   if (weapon && IS_GUN(GET_OBJ_VAL(weapon, 3))) {
     if (!weapon->contains)
       attempt_reload(ch, WEAR_WIELD);
-    
   
     int mode_count = 0;
     
@@ -84,7 +86,7 @@ void mobact_change_firemode(struct char_data *ch) {
     }
     
     // Send a message to the room, but only if the weapon has received a new fire selection mode and has more than one available.
-    if (prev_value != GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 11) && mode_count > 1) {
+    if (prev_value != GET_OBJ_VAL(weapon, 11) && mode_count > 1) {
       act("$n flicks the fire selector switch on $p.", TRUE, ch, weapon, 0, TO_ROOM);
     }
   }
