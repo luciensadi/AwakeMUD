@@ -383,10 +383,9 @@ bool mobact_process_movement(struct char_data *ch) {
       
       // Pick a door. If it's a valid exit for this vehicle, vroom vroom away.
       door = number(NORTH, DOWN);
-      current_room = EXIT(ch->in_veh, door)->to_room;
-      if (EXIT(ch->in_veh,door) &&
-          ROOM_FLAGS(current_room).AreAnySet(ROOM_ROAD, ROOM_GARAGE, ENDBIT) &&
-          !ROOM_FLAGS(EXIT(ch, door)->to_room).AreAnySet(ROOM_NOMOB, ROOM_DEATH, ENDBIT)) {
+      if (EXIT(ch->in_veh, door) &&
+          ROOM_FLAGS(EXIT(ch->in_veh, door)->to_room).AreAnySet(ROOM_ROAD, ROOM_GARAGE, ENDBIT) &&
+          !ROOM_FLAGS(EXIT(ch->in_veh, door)->to_room).AreAnySet(ROOM_NOMOB, ROOM_DEATH, ENDBIT)) {
         perform_move(ch, door, LEADER, NULL);
         return true;
       }
