@@ -484,24 +484,33 @@ char *capitalize(const char *source)
   static char dest[MAX_STRING_LENGTH];
   strcpy(dest, source);
   
-  char* first_actual_char = dest;
-  while (*first_actual_char == '^')
-    first_actual_char += 2;
-  *first_actual_char = UPPER(*first_actual_char);
+  int len = strlen(source);
+  int index = 0;
+  
+  while (index < len-2 && *(source + index) == '^')
+    index += 2;
+  *(dest + index) = UPPER(*(source + index));
   
   return dest;
 }
 
-// decapitalize a string, now allows for color strings at the beginning
-char *decapitalize(const char *source)
+// decapitalize a string that starts with A or An, now allows for color strings at the beginning
+char *decapitalize_a_an(const char *source)
 {
   static char dest[MAX_STRING_LENGTH];
   strcpy(dest, source);
   
-  char* first_actual_char = dest;
-  while (*first_actual_char == '^')
-    first_actual_char += 2;
-  *first_actual_char = LOWER(*first_actual_char);
+  int len = strlen(source);
+  int index = 0;
+  
+  while (*(source + index) == '^')
+    index += 2;
+  if (*(source + index) == 'A') {
+    // If it starts with 'A ' or 'An ' then decapitalize the A.
+    if (index < len-1 && (*(source + index+1) == ' ' || (*(source + index+1) == 'n' && index < len-2 && *(source + index+2) == ' '))) {
+      *(dest + index) = 'a';
+    }
+  }
   
   return dest;
 }

@@ -1373,10 +1373,10 @@ void do_raw_target(struct char_data *ch, struct veh_data *veh, struct veh_data *
     set_fighting(vict, veh);
     act("You target $o towards $N.", FALSE, ch, obj->contains, vict, TO_CHAR);
     if (AFF_FLAGGED(ch, AFF_MANNING)) {
-      sprintf(buf, "%s's %s swivels towards you.\r\n", GET_VEH_NAME(ch->in_veh), GET_OBJ_NAME(obj));
-      send_to_char(buf, vict);
-      sprintf(buf, "%s's %s swivels towards $N.\r\n", GET_VEH_NAME(ch->in_veh), GET_OBJ_NAME(obj));
-      act(buf, FALSE, ch, NULL, vict, TO_VEH_ROOM);
+      sprintf(buf, "%s's $o swivels towards you.\r\n", GET_VEH_NAME(ch->in_veh));
+      act(buf, FALSE, ch, obj, vict, TO_VICT);
+      sprintf(buf, "%s's $o swivels towards $N.\r\n", GET_VEH_NAME(ch->in_veh));
+      act(buf, FALSE, ch, obj, vict, TO_VEH_ROOM);
     }
   } else {
     set_fighting(ch, tveh);
@@ -1388,8 +1388,8 @@ void do_raw_target(struct char_data *ch, struct veh_data *veh, struct veh_data *
     if (AFF_FLAGGED(ch, AFF_MANNING)) {
       sprintf(buf, "%s's %s swivels towards your ride.\r\n", GET_VEH_NAME(ch->in_veh), GET_OBJ_NAME(obj));
       send_to_veh(buf, tveh, 0, TRUE);
-      sprintf(buf, "%s's %s swivels towards %s.\r\n", GET_VEH_NAME(ch->in_veh), GET_OBJ_NAME(obj), GET_VEH_NAME(tveh));
-      act(buf, FALSE, ch, NULL, NULL, TO_VEH_ROOM);
+      sprintf(buf, "%s's $o swivels towards %s.\r\n", GET_VEH_NAME(ch->in_veh), GET_VEH_NAME(tveh));
+      act(buf, FALSE, ch, obj, NULL, TO_VEH_ROOM);
     }
   }
 }
@@ -1659,22 +1659,31 @@ void process_autonav(void)
 
 ACMD(do_switch)
 {
-  if (!ch->in_veh)
+  if (!ch->in_veh) {
     send_to_char("You can't switch positions when not in a vehicle.\r\n", ch);
-  else if (IS_WORKING(ch) || AFF_FLAGGED(ch, AFF_PILOT))
-    send_to_char(TOOBUSY, ch);
-#ifndef DISABLE_VEHICLE_CAPACITY_CHECKS
-  else if (!ch->in_veh->seating[!ch->vfront])
-    send_to_char("There's no room to move to.\r\n", ch);
-#endif
-  else {
-    ch->in_veh->seating[ch->vfront]++;
-    ch->in_veh->seating[!ch->vfront]--;
-    ch->vfront = !ch->vfront;
-    sprintf(buf, "$n climbs into the %s.", ch->vfront ? "front" : "back");
-    act(buf, TRUE, ch, 0, 0, TO_ROOM);
-    send_to_char(ch, "You climb into the %s.\r\n", ch->vfront ? "front" : "back");
+    return;
   }
+  
+  else if (IS_WORKING(ch) || AFF_FLAGGED(ch, AFF_PILOT)) {
+    send_to_char(TOOBUSY, ch);
+    return;
+  }
+  
+  else if (!ch->in_veh->seating[!ch->vfront]) {
+    if (access_level(ch, LVL_ADMIN)) {
+      send_to_char("You use your staff powers to bypass the lack of seating.\r\n", ch);
+    } else {
+      send_to_char("There's no room to move to.\r\n", ch);
+      return;
+    }
+  }
+  
+  ch->in_veh->seating[ch->vfront]++;
+  ch->in_veh->seating[!ch->vfront]--;
+  ch->vfront = !ch->vfront;
+  sprintf(buf, "$n climbs into the %s.", ch->vfront ? "front" : "back");
+  act(buf, TRUE, ch, 0, 0, TO_ROOM);
+  send_to_char(ch, "You climb into the %s.\r\n", ch->vfront ? "front" : "back");
 }
 
 ACMD(do_pop)
@@ -1689,11 +1698,21 @@ ACMD(do_pop)
     send_to_char(NOOBJECT, ch);
     return;
   }
-  if (!ch->in_veh && !veh->hood && veh->owner != GET_IDNUM(ch)) 
-    send_to_char("That's not your vehicle.\r\n", ch);
-  else if (veh->cspeed > SPEED_OFF)
+  if (!ch->in_veh && !veh->hood && veh->owner != GET_IDNUM(ch)) {
+    if (access_level(ch, LVL_ADMIN)) {
+      send_to_char("You use your staff powers to bypass the fact that this isn't your vehicle.\r\n", ch);
+    } else {
+      send_to_char("That's not your vehicle.\r\n", ch);
+      return;
+    }
+  }
+  
+  if (veh->cspeed > SPEED_OFF) {
     send_to_char("It's moving too fast for you to do that.\r\n", ch);
-  else if (veh->hood) {
+    return;
+  }
+  
+  if (veh->hood) {
     send_to_char(ch, "You close the hood of %s.\r\n", GET_VEH_NAME(veh));
     sprintf(buf, "$n closes the hood of %s.", GET_VEH_NAME(veh));
     act(buf, 0, ch, 0, 0, TO_ROOM);

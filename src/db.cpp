@@ -2781,6 +2781,18 @@ void reset_zone(int zone, int reboot)
             // We found a valid mount; attach the weapon.
             obj_to_obj(obj, mount);
             veh->usedload += GET_OBJ_WEIGHT(obj);
+            
+            // Set the obj's firemode to the optimal one.
+            if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_BF))
+              GET_OBJ_VAL(obj, 11) = MODE_BF;
+            else if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_FA)) {
+              GET_OBJ_VAL(obj, 11) = MODE_FA;
+              GET_OBJ_TIMER(obj) = 10;
+            }
+            else if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_SA))
+              GET_OBJ_VAL(obj, 11) = MODE_SA;
+            else
+              GET_OBJ_VAL(obj, 11) = MODE_SS;
           } else {
             ZONE_ERROR("Not enough mounts in target vehicle, cannot mount item");
           }
