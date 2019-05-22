@@ -774,6 +774,12 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+[EXIT south]
+	ToVnum:	72029
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT up]
 	ToVnum:	72018
 	Flags:	0
@@ -1229,5 +1235,114 @@ RoomType:	6
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
+BREAK
+#72029
+Name:	A catwalk above the warehouse floor
+Desc:$
+You're on a catwalk above the warehouse floor. Leaning over the guardrail you
+see that the guys below seem to be having a great time driving their towmotors
+around and moving things. A small room is the the south. 
+~
+Flags:	100001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	2
+Z:	2.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	72017
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	72030
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72030
+Name:	A catwalk above the warehouse floor
+Desc:$
+You're on a catwalk above the warehouse floor. Leaning over the guardrail you
+see that the guys below seem to be having a great time driving their towmotors
+around and moving things. A door is here to the south, and the catwalk
+continues towards a stairwell to the north. 
+~
+Flags:	100001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	2
+Z:	2.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	72029
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	72031
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	72008
+	LockRating:	50
+BREAK
+#72031
+Name:	A loft above the warehouse
+Desc:$
+This is a small loft above the warehouse. There's not much in here, just a
+small kitchen area and a cot bolted to the wall, along with a desk that seems
+to double as a table. Maybe this is where the warehouse's manager crashes when
+he's not getting along with his ol' lady. A small window on the south wall
+overlooks the parking lot outside. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	6
+X:	5
+Y:	5
+Z:	2.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	72030
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	72008
+	LockRating:	8
 BREAK
 END

@@ -128,4 +128,101 @@ Material:	paper
 	Val1:	5
 	Val2:	-1
 BREAK
+#72005
+Keywords:	messy desk dirty
+Name:	A messy desk
+RoomDesc:$
+A messy desk is here.~
+LookDesc:$
+This desk is cluttered and has some old takeout containers and more than a few
+dirty dishes on it. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#72006
+Keywords:	bed cot
+Name:	A naval cot
+RoomDesc:$
+A naval-style cot is here, fixed to the wall.~
+LookDesc:$
+This cot doesn't look comfortable, but it's maybe slightly better than the
+couch at home after a long day's work and a long night's out drinking with the
+boys. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#72007
+Keywords:	kitchen kitchenette area
+Name:	A kitchenette
+RoomDesc:$
+A small kitchen area is on one side of the room.~
+LookDesc:$
+Just your basic kitchenette: a small countertop, a sink built in, and a small
+stove built-in under the counter. Above the countertop a microwave and some
+cabinets. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#72008
+Keywords:	small key brass
+Name:	A small brass key
+RoomDesc:$
+A small, shiny key glints here.~
+LookDesc:$
+Just your basic key for opening your basic door. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
 END
