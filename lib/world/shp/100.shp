@@ -43,5 +43,29 @@ Races:	0
 Buytypes:	1
 Etiquette:	46
 [SELLING]
+	[SELL 0]
+		Vnum:	70505
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	70504
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	70503
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	70502
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	70501
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	70500
+		Type:	Always
+		Stock:	0
 BREAK
 END

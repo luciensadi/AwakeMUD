@@ -32,6 +32,13 @@ RoomType:	6
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	72015
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT northwest]
 	ToVnum:	72001
 	Flags:	0
@@ -431,6 +438,12 @@ RoomType:	6
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+[EXIT north]
+	ToVnum:	72016
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT east]
 	ToVnum:	72009
 	Flags:	0
@@ -604,7 +617,7 @@ RoomType:	0
 	ToVnum:	72014
 	Flags:	0
 	Material:	brick
-	Barrier:	4
+	Barrier:	2
 	KeyVnum:	0
 BREAK
 #72013
@@ -666,6 +679,551 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
+	ToVnum:	72012
+	Flags:	0
+	Material:	brick
+	Barrier:	2
+	KeyVnum:	0
+BREAK
+#72015
+Name:	The parking lot of D'onfrio Brothers Shipping
+Desc:$
+You're standing in a large parking lot, for the warehouse close by. It's
+easily as long as a football field. There are a lot of cars and trucks parked
+in the employee spots, but few in the rest of the lot. The warehouse itself is
+to the north. 
+~
+Flags:	100000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	100
+Y:	30
+Z:	10.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	warehouse door
+	ToVnum:	72000
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72016
+Name:	A stairwell
+Desc:$
+This poorly lit stairwell leads upwards to the next level. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	6
+X:	5
+Y:	3
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	72008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	72017
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72017
+Name:	A stairwell
+Desc:$
+You're on the landing of the stairwell. A catwalk that goes out over the
+warehouse floor is to the south. There is a plastic sign on the wall that says
+"Roof Access" pointing further up the stairs. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	6
+X:	5
+Y:	3
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	72018
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	72016
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72018
+Name:	The top of the stairwell
+Desc:$
+You're at the top of a stairwell. There is a door marked "Roof Access" here,
+and the stairs lead down to a warehouse. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	1
+X:	2
+Y:	2
+Z:	2.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	72019
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	72017
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72019
+Name:	On the roof of a warehouse
+Desc:$
+You're on the roof of a fairly large warehouse. It's not so large that you can
+see your house (read: drekhole apartment) from here, but you're fairly high up
+nevertheless. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	72018
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	72020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	72023
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	72021
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72020
+Name:	On the roof of a warehouse
+Desc:$
+You're on the roof of a fairly large warehouse. It's not so large that you can
+see your house (read: drekhole apartment) from here, but you're fairly high up
+nevertheless. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	72024
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	72019
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72021
+Name:	On the roof of a warehouse
+Desc:$
+You're on the roof of a fairly large warehouse. It's not so large that you can
+see your house (read: drekhole apartment) from here, but you're fairly high up
+nevertheless. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	72019
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	72022
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72022
+Name:	On the roof of a warehouse
+Desc:$
+You're on the roof of a fairly large warehouse. It's not so large that you can
+see your house (read: drekhole apartment) from here, but you're fairly high up
+nevertheless. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	72021
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	72023
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	72025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72023
+Name:	On the roof of a warehouse
+Desc:$
+You're on the roof of a fairly large warehouse. It's not so large that you can
+see your house (read: drekhole apartment) from here, but you're fairly high up
+nevertheless. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	72019
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	72024
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	72026
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	72022
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72024
+Name:	On the roof of a warehouse
+Desc:$
+You're on the roof of a fairly large warehouse. It's not so large that you can
+see your house (read: drekhole apartment) from here, but you're fairly high up
+nevertheless. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	72020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	72028
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	72027
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	72023
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72025
+Name:	On the roof of a warehouse
+Desc:$
+You're on the roof of a fairly large warehouse. It's not so large that you can
+see your house (read: drekhole apartment) from here, but you're fairly high up
+nevertheless. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	72022
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	72026
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72026
+Name:	On the roof of a warehouse
+Desc:$
+You're on the roof of a fairly large warehouse. It's not so large that you can
+see your house (read: drekhole apartment) from here, but you're fairly high up
+nevertheless. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	72023
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	72027
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	72025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72027
+Name:	On the roof of a warehouse
+Desc:$
+You're on the roof of a fairly large warehouse. It's not so large that you can
+see your house (read: drekhole apartment) from here, but you're fairly high up
+nevertheless. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	72024
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	72026
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72028
+Name:	Jumping off the warehouse roof
+Desc:$
+Maybe this wasn't such a great idea after all... you see the loading dock from
+two stories down rushing up to meet you upon landing. Better brace yourself,
+chummer! 
+~
+Flags:	1000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	72024
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
 	ToVnum:	72012
 	Flags:	0
 	Material:	brick
