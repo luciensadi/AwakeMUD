@@ -1567,6 +1567,7 @@ ACMD(do_attach)
     }
     if (GET_OBJ_TYPE(item) != ITEM_WEAPON) {
       send_to_char("How do you expect to attach that?\r\n", ch);
+      return;
     }
     for (item2 = veh->mount; item2; item2 = item2->next_content)
       if (--j < 0)
