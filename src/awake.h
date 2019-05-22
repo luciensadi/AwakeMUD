@@ -1532,12 +1532,13 @@ enum {
 #define TYPE_AMMOBIN		22
 #define NUM_MODTYPES		23
 
-#define ENGINE_NONE		0
+#define ENGINE_NONE		    0
 #define ENGINE_ELECTRIC		1
 #define ENGINE_FUELCELL		2
 #define ENGINE_GASOLINE		3
 #define ENGINE_METHANE		4
-#define ENGINE_DIESEL		5
+#define ENGINE_DIESEL		  5
+#define NUM_ENGINE_TYPES  6
 
 /* house value defines */
 #define MAX_HOUSES      100

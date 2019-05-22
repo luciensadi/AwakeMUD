@@ -369,6 +369,7 @@ bool check_fall(struct char_data *ch, int modifier)
     return TRUE;
 
   send_to_char("You grab on to the wall and keep yourself from falling!\r\n", ch);
+  act("$n grabs onto the wall and keeps $mself from falling!", TRUE, ch, NULL, NULL, TO_ROOM);
   return FALSE;
 }
 

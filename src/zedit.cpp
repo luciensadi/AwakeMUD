@@ -334,21 +334,38 @@ void zedit_disp_direction_menu(struct descriptor_data *d)
                "^wEnter selection: ", CH);
 }
 
+const char *get_zedit_maximum_info_string(int amount) {
+  if (amount < -1)
+    return " (invalid quantity - this will never load!)";
+  
+  if (amount == -1)
+    return " (ignore limit and load infinitely)";
+  
+  if (amount == 0)
+    return " (loads exactly once at game startup, then never again)";
+  
+  if (amount > 0) {
+    return " (loads until this many are in game)";
+  }
+  
+  return " (error: report this message to administration)";
+}
+
 void zedit_disp_command_menu(struct descriptor_data *d)
 {
   CLS(CH);
   send_to_char(CH, "^WCommand: ^c%d^n\r\n", d->edit_number );
   send_to_char(CH, "^G1^Y) ^WType: ^c%s^n\r\n", get_type(COM->command) );
   send_to_char(CH, "^G2^Y) ^WConditional: ^c%s^n\r\n",
-               (!COM->if_flag ? "Always" : "If Last") );
+               (!COM->if_flag ? "Always execute this command (aka: Always)" : "Only execute this command if previous command succeeds (aka: If Last)") );
   switch (COM->command)
   {
   case 'M':
     send_to_char(CH, "^G3^Y) ^WLoad mob: ^c%s ^y(^B%d)^n\r\n",
                  GET_NAME(mob_proto+COM->arg1),
                  MOB(COM->arg1) );
-    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d^n\r\n",
-                 COM->arg2 );
+    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d%s^n\r\n",
+                 COM->arg2, get_zedit_maximum_info_string(COM->arg2));
     send_to_char(CH, "^G5^Y) ^WLoad in room: ^c%s ^y(^B%d^y)^n\r\n",
                  world[COM->arg3].name,
                  ROOM(COM->arg3) );
@@ -357,29 +374,29 @@ void zedit_disp_command_menu(struct descriptor_data *d)
     send_to_char(CH, "^G3^Y) ^WLoad mob: ^c%s ^y(^B%d)^n\r\n",
                  GET_NAME(mob_proto+COM->arg1),
                  MOB(COM->arg1) );
-    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d^n\r\n",
-                 COM->arg2 );
+    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d%s^n\r\n",
+                 COM->arg2, get_zedit_maximum_info_string(COM->arg2));
     break;
   case 'U':
     send_to_char(CH, "^G3^Y) ^WAttach obj: ^c%s ^y(^B%d^y)^n\r\n",
                  obj_proto[COM->arg1].text.name,
                  OBJ(COM->arg1) );
-    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d^n\r\n",
-                 COM->arg2 );
+    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d%s^n\r\n",
+                 COM->arg2, get_zedit_maximum_info_string(COM->arg2));
     break;
   case 'I':
     send_to_char(CH, "^G3^Y) ^WCarry obj: ^c%s ^y(^B%d^y)^n\r\n",
                  obj_proto[COM->arg1].text.name,
                  OBJ(COM->arg1) );
-    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d^n\r\n",
-                 COM->arg2 );
+    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d%s^n\r\n",
+                 COM->arg2, get_zedit_maximum_info_string(COM->arg2));
     break;
   case 'O':
     send_to_char(CH, "^G3^Y) ^WLoad obj: ^c%s ^y(^B%d^y)^n\r\n",
                  obj_proto[COM->arg1].text.name,
                  OBJ(COM->arg1) );
-    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d^n\r\n",
-                 COM->arg2 );
+    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d%s^n\r\n",
+                 COM->arg2, get_zedit_maximum_info_string(COM->arg2));
     send_to_char(CH, "^G5^Y) ^WLoad in room: ^c%s ^y(^B%d^y)^n\r\n",
                  world[COM->arg3].name, ROOM(COM->arg3) );
     break;
@@ -387,8 +404,8 @@ void zedit_disp_command_menu(struct descriptor_data *d)
     send_to_char(CH, "^G3^Y) ^WLoad obj: ^c%s ^y(^B%d^y)^n\r\n",
                  obj_proto[COM->arg1].text.name,
                  OBJ(COM->arg1) );
-    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d^n\r\n",
-                 COM->arg2 );
+    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d%s^n\r\n",
+                 COM->arg2, get_zedit_maximum_info_string(COM->arg2));
     send_to_char(CH, "^G5^Y) ^WLoad in host: ^c%s ^y(^B%d^y)^n\r\n",
                  matrix[COM->arg3].name, HOST(COM->arg3) );
     break;
@@ -396,8 +413,8 @@ void zedit_disp_command_menu(struct descriptor_data *d)
     send_to_char(CH, "^G3^Y) ^WLoad Veh: ^c%s ^y(^B%d^y)^n\r\n",
                  veh_proto[COM->arg1].short_description,
                  VEH(COM->arg1));
-    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d^n\r\n",
-                 COM->arg2 );
+    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d%s^n\r\n",
+                 COM->arg2, get_zedit_maximum_info_string(COM->arg2));
     send_to_char(CH, "^G5^Y) ^WLoad in room: ^c%s ^y(^B%d^y)^n\r\n",
                  world[COM->arg3].name, ROOM(COM->arg3) );
     break;
@@ -405,8 +422,8 @@ void zedit_disp_command_menu(struct descriptor_data *d)
     send_to_char(CH, "^G3^Y) ^WPut obj: ^c%s ^y(^B%d^y)^n\r\n",
                  obj_proto[COM->arg1].text.name,
                  OBJ(COM->arg1) );
-    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d^n\r\n",
-                 COM->arg2 );
+    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d%s^n\r\n",
+                 COM->arg2, get_zedit_maximum_info_string(COM->arg2));
     send_to_char(CH, "^G5^Y) ^WInto obj: ^c%s ^y(^B%d^y)^n\r\n",
                  obj_proto[COM->arg3].text.name,
                  OBJ(COM->arg3) );
@@ -415,15 +432,15 @@ void zedit_disp_command_menu(struct descriptor_data *d)
     send_to_char(CH, "^G3^Y) ^WGive obj: ^c%s ^y(^B%d^y)^n\r\n",
                  obj_proto[COM->arg1].text.name,
                  OBJ(COM->arg1) );
-    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d^n\r\n",
-                 COM->arg2 );
+    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d%s^n\r\n",
+                 COM->arg2, get_zedit_maximum_info_string(COM->arg2));
     break;
   case 'E':
     send_to_char(CH, "^G3^Y) ^WEquip obj: ^c%s (%d)^n\r\n",
                  obj_proto[COM->arg1].text.name,
                  OBJ(COM->arg1));
-    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d^n\r\n",
-                 COM->arg2 );
+    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d%s^n\r\n",
+                 COM->arg2, get_zedit_maximum_info_string(COM->arg2));
     send_to_char(CH, "^G5^Y) ^WAt ^c%s^W position\r\n",
                  short_where[COM->arg3] );
     break;
@@ -431,8 +448,8 @@ void zedit_disp_command_menu(struct descriptor_data *d)
     send_to_char(CH, "^G3^Y) ^WGive obj: ^c%s (%d)^n\r\n",
                  obj_proto[COM->arg1].text.name,
                  OBJ(COM->arg1));
-    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d^n\r\n",
-                 COM->arg2);
+    send_to_char(CH, "^G4^Y) ^WMaximum number in game: ^c%d%s^n\r\n",
+                 COM->arg2, get_zedit_maximum_info_string(COM->arg2));
     send_to_char(CH, "^G5^Y) ^WTotal number to give: ^c%d^n\r\n",
                  COM->arg3);
     break;
@@ -728,7 +745,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
       d->edit_mode = ZEDIT_CMD_TYPE;
       break;
     case '2':
-      send_to_char("\r\n1) Always\r\n2) If last\r\nEnter your selection: ",
+      send_to_char("\r\n1) Always\r\n2) If Last\r\nEnter your selection: ",
                    CH);
       d->edit_mode = ZEDIT_IF_FLAG_CMD;
       break;
@@ -1082,7 +1099,13 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
       send_to_char("Invalid selection.\r\n1) Always\r\n2) If last\r\n"
                    "Enter your selection: ", CH);
     } else {
-      COM->if_flag = COM->if_flag;
+      if (number == 1) {
+        COM->if_flag = FALSE;
+        send_to_char("OK, this command will execute regardless of whether the previous command succeeded or not.\r\n", CH);
+      } else {
+        COM->if_flag = TRUE;
+        send_to_char("OK, this command will only execute if the previous zone command succeeds.\r\n", CH);
+      }
       zedit_disp_command_menu(d);
     }
     break;

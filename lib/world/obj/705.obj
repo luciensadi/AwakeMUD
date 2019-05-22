@@ -15,17 +15,160 @@ Material:	metal
 [POINTS]
 	Weight:	2.50
 	Barrier:	6
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
+	Cost:	1500
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	3
+	LegalCode:	19
+	LegalPermit:	1
 [VALUES]
 	Val0:	15
 	Val2:	5
 	Val4:	2
 	Val5:	62
 	Val6:	27
+BREAK
+#70501
+Keywords:	firmpoint external mount
+Name:	a firmpoint external mount
+RoomDesc:$
+A boxed-up firmpoint external mount has been left here.~
+LookDesc:$
+It is a weapons mount made to attach to a vehicle or drone. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	32
+	Cost:	750
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	3
+	LegalCode:	19
+	LegalPermit:	1
+[VALUES]
+	Val0:	15
+	Val1:	1
+	Val2:	1
+	Val4:	2
+	Val5:	62
+BREAK
+#70502
+Keywords:	hardpoint internal mount
+Name:	a hardpoint internal mount
+RoomDesc:$
+A boxed-up hardpoint internal mount has been left here.~
+LookDesc:$
+It is a weapons mount made to attach to a vehicle or drone. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	32
+	Cost:	3000
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	3
+	LegalCode:	19
+	LegalPermit:	1
+[VALUES]
+	Val0:	15
+	Val1:	2
+	Val2:	1
+	Val4:	2
+	Val5:	62
+BREAK
+#70503
+Keywords:	hardpoint external mount
+Name:	a hardpoint external mount
+RoomDesc:$
+A boxed-up hardpoint external mount has been left here.~
+LookDesc:$
+It is a weapons mount made to attach to a vehicle or drone. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	32
+	Cost:	2000
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	3
+	LegalCode:	19
+	LegalPermit:	1
+[VALUES]
+	Val0:	15
+	Val1:	3
+	Val2:	1
+	Val4:	2
+BREAK
+#70504
+Keywords:	bulky vehicular turret vehicle-mounted
+Name:	a vehicle-mounted turret
+RoomDesc:$
+A bulky vehicular turret sits here, waiting to be installed.~
+LookDesc:$
+It is a weapons mount made to attach to a vehicle or drone. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	32
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	3
+	LegalCode:	19
+	LegalPermit:	1
+[VALUES]
+	Val0:	15
+	Val1:	4
+	Val2:	1
+	Val4:	2
+	Val5:	62
+BREAK
+#70505
+Keywords:	lightweight vehicular mini-turret turret
+Name:	a vehicular mini-turret
+RoomDesc:$
+A lightweight vehicular mini-turret sits here, waiting to be installed.~
+LookDesc:$
+It is a weapons mount made to attach to a vehicle or drone. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	8.00
+	Barrier:	32
+	Cost:	5000
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	3
+	LegalCode:	19
+	LegalPermit:	1
+[VALUES]
+	Val0:	15
+	Val1:	5
+	Val2:	1
+	Val4:	2
 BREAK
 END

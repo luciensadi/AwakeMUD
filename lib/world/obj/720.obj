@@ -99,4 +99,33 @@ Material:	paper
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
+#72004
+Keywords:	fridge refrigerator minifridge
+Name:	A minifridge
+RoomDesc:$
+A small refrigerator is here.~
+LookDesc:$
+This is a minifridge. It's like a regular refrigerator, but small. It even has
+a tiny freezer area at the top that never gets cold enough to actually freeze
+anything. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	10
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	30.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	100
+	Val1:	5
+	Val2:	-1
+BREAK
 END
