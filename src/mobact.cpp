@@ -569,12 +569,14 @@ bool mobact_process_movement(struct char_data *ch) {
         return false;
       
       // Pick a door. If it's a valid exit for this vehicle, vroom vroom away.
-      door = number(NORTH, DOWN);
-      if (EXIT(ch->in_veh, door) &&
-          ROOM_FLAGS(EXIT(ch->in_veh, door)->to_room).AreAnySet(ROOM_ROAD, ROOM_GARAGE, ENDBIT) &&
-          !ROOM_FLAGS(EXIT(ch->in_veh, door)->to_room).AreAnySet(ROOM_NOMOB, ROOM_DEATH, ENDBIT)) {
-        perform_move(ch, door, LEADER, NULL);
-        return true;
+      for (int tries = 0; tries < 5; tries++) {
+        door = number(NORTH, DOWN);
+        if (EXIT(ch->in_veh, door) &&
+            ROOM_FLAGS(EXIT(ch->in_veh, door)->to_room).AreAnySet(ROOM_ROAD, ROOM_GARAGE, ENDBIT) &&
+            !ROOM_FLAGS(EXIT(ch->in_veh, door)->to_room).AreAnySet(ROOM_NOMOB, ROOM_DEATH, ENDBIT)) {
+          perform_move(ch, door, LEADER, NULL);
+          return true;
+        }
       }
     } /* End NPC movement in vehicle. */
     
@@ -584,18 +586,20 @@ bool mobact_process_movement(struct char_data *ch) {
       if (ch->in_room == NOWHERE)
         return false;
       
-      // Select an exit, and bail out if they can't move that way.
-      door = number(NORTH, DOWN);
-      if (!CAN_GO(ch, door) || !ROOM_FLAGS(EXIT(ch, door)->to_room).AreAnySet(ROOM_NOMOB, ROOM_DEATH, ENDBIT))
-        return false;
-      
-      // If their exit leads to a different zone, check if they're allowed to wander.
-      if (!MOB_FLAGGED(ch, MOB_STAY_ZONE) || (world[EXIT(ch, door)->to_room].zone == world[ch->in_room].zone))
-        return false;
-      
-      // Looks like they can move. Make it happen.
-      perform_move(ch, door, CHECK_SPECIAL | LEADER, NULL);
-      return true;
+      for (int tries = 0; tries < 5; tries++) {
+        // Select an exit, and bail out if they can't move that way.
+        door = number(NORTH, DOWN);
+        if (!CAN_GO(ch, door) || !ROOM_FLAGS(EXIT(ch, door)->to_room).AreAnySet(ROOM_NOMOB, ROOM_DEATH, ENDBIT))
+          continue;
+        
+        // If their exit leads to a different zone, check if they're allowed to wander.
+        if (!MOB_FLAGGED(ch, MOB_STAY_ZONE) || (world[EXIT(ch, door)->to_room].zone == world[ch->in_room].zone))
+          continue;
+        
+        // Looks like they can move. Make it happen.
+        perform_move(ch, door, CHECK_SPECIAL | LEADER, NULL);
+        return true;
+      }
     } /* End NPC movement outside a vehicle. */
   } /* End mob movement. */
   return false;
