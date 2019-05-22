@@ -295,8 +295,10 @@ void iedit_disp_val1_menu(struct descriptor_data * d)
       iedit_program_types_menu(d);
       break;
     case ITEM_GUN_MAGAZINE:
-    case ITEM_GUN_AMMO:
       send_to_char("Number of bullets magazine contains (must match max load of weapon): ", CH);
+      break;
+    case ITEM_GUN_AMMO:
+      send_to_char("Number of bullets ammo box contains: ", CH);
       break;
     case ITEM_DOCWAGON:
       send_to_char("  1) Basic contract\r\n  2) Gold contract\r\n  3) Platinum contract\r\nDocWagon type: ", CH);
@@ -1548,6 +1550,11 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         for (int index = 0; index < NUM_VALUES; index++)
           GET_OBJ_VAL(d->edit_obj, index) = 0;
       }
+      
+      if (number == ITEM_GUN_MAGAZINE) {
+        send_to_char("NOTICE: Gun magazines were deprecated with the creation of the new ammo system. You probably don't need to make one.\r\n", d->character);
+      }
+      
       iedit_disp_menu(d);
       break;
     case IEDIT_EXTRAS:
@@ -1886,8 +1893,13 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             return;
           }
           break;
-        case ITEM_GUN_MAGAZINE:
         case ITEM_GUN_AMMO:
+          if (number < 1 || number > MAX_WEAP) {
+            send_to_char("Invalid option!\r\nAmmunition type: ", CH);
+            return;
+          }
+          break;
+        case ITEM_GUN_MAGAZINE:
           if (number < 1 || number > MAX_WEAP) {
             send_to_char("Invalid option!\r\nMagazine type: ", CH);
             return;

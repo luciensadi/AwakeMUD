@@ -2156,10 +2156,13 @@ ACMD(do_examine)
                    GET_OBJ_VAL(tmp_object, 0) != 1 ? "s" : "");
     } else if (GET_OBJ_TYPE(tmp_object) == ITEM_GUN_AMMO) {
       if (GET_OBJ_VAL(tmp_object, 3))
-        send_to_char(ch, "It has %d/%d %s round%s left.\r\n", GET_OBJ_VAL(tmp_object, 0), GET_OBJ_VAL(tmp_object, 0) +
-                     GET_OBJ_VAL(tmp_object, 3), ammo_type[GET_OBJ_VAL(tmp_object, 2)].name,GET_OBJ_VAL(tmp_object, 0) != 1 ? "s" : "");
-      else send_to_char(ch, "It has %d %s round%s left.\r\n", GET_OBJ_VAL(tmp_object, 0),
-                        ammo_type[GET_OBJ_VAL(tmp_object, 2)].name,GET_OBJ_VAL(tmp_object, 0) != 1 ? "s" : "");
+        send_to_char(ch, "It has %d/%d %s round%s of %s ammunition left.\r\n", GET_OBJ_VAL(tmp_object, 0), GET_OBJ_VAL(tmp_object, 0) +
+                     GET_OBJ_VAL(tmp_object, 3), ammo_type[GET_OBJ_VAL(tmp_object, 2)].name,GET_OBJ_VAL(tmp_object, 0) != 1 ? "s" : "",
+                     weapon_type[GET_OBJ_VAL(tmp_object, 1)]);
+      else
+        send_to_char(ch, "It has %d %s round%s of %s ammunition left.\r\n", GET_OBJ_VAL(tmp_object, 0),
+                     ammo_type[GET_OBJ_VAL(tmp_object, 2)].name,GET_OBJ_VAL(tmp_object, 0) != 1 ? "s" : "",
+                     weapon_type[GET_OBJ_VAL(tmp_object, 1)]);
     } else if (GET_OBJ_VNUM(tmp_object) == 119 && GET_OBJ_VAL(tmp_object, 0) == GET_IDNUM(ch))
       sprintf(buf, "The card contains %d nuyen.\r\n", GET_OBJ_VAL(tmp_object, 1));
     else if (GET_OBJ_TYPE(tmp_object) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(tmp_object, 0) == TYPE_COOKER) {
