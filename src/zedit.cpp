@@ -344,8 +344,9 @@ const char *get_zedit_maximum_info_string(int amount) {
   if (amount == 0)
     return " (loads exactly once at game startup, then never again)";
   
-  if (amount > 0)
-    return " (loads until %d are in game)";
+  if (amount > 0) {
+    return " (loads until this many are in game)";
+  }
   
   return " (error: report this message to administration)";
 }
