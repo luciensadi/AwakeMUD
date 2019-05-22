@@ -2007,7 +2007,7 @@ ACMD(do_bond)
       if (GET_OBJ_VAL(obj, 9)) {
         GET_OBJ_VAL(obj, 9) = GET_OBJ_VAL(obj, 1) * 60;
         send_to_char(ch, "You restart the ritual to bond %s.\r\n", GET_OBJ_NAME(obj));
-        act("$n begins a ritual to bond $o.", TRUE, ch, obj, 0, TO_ROOM);
+        act("$n begins a ritual to bond $p.", TRUE, ch, obj, 0, TO_ROOM);
         AFF_FLAGS(ch).SetBit(AFF_BONDING);
         ch->char_specials.programming = obj;
       } else
@@ -2093,7 +2093,7 @@ ACMD(do_bond)
       GET_OBJ_VAL(obj, 3) = spirit;
       GET_OBJ_VAL(obj, 5) = GET_TRADITION(ch) == TRAD_HERMETIC ? 1 : 0;
       send_to_char(ch, "You begin the ritual to bond %s.\r\n", GET_OBJ_NAME(obj));
-      act("$n begins a ritual to bond $o.", TRUE, ch, obj, 0, TO_ROOM);
+      act("$n begins a ritual to bond $p.", TRUE, ch, obj, 0, TO_ROOM);
       AFF_FLAGS(ch).SetBit(AFF_BONDING);
       ch->char_specials.programming = obj;
       return;
@@ -3478,10 +3478,10 @@ ACMD(do_destroy)
   if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_OBJ_VAL(obj, 0) == TYPE_LODGE || GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE)) {
     if (GET_OBJ_VAL(obj, 0) == TYPE_LODGE) {
       send_to_char(ch, "You kick at the supports and smash the talismans.\r\n");
-      act("$n roughly pulls down $o.", TRUE, ch, obj, 0, TO_ROOM);
+      act("$n roughly pulls down $p.", TRUE, ch, obj, 0, TO_ROOM);
     } else {
       send_to_char(ch, "You rub your feet along the lines making up the hermetic circle, erasing them.\r\n");
-      act("$n uses $s feet to rub out $o.", TRUE, ch, obj, 0, TO_ROOM);
+      act("$n uses $s feet to rub out $p.", TRUE, ch, obj, 0, TO_ROOM);
     }
     extract_obj(obj);
   } else

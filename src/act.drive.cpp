@@ -1322,8 +1322,9 @@ ACMD(do_target)
       modeall = TRUE;
     }
   }
+  
   if (!(vict = get_char_room(arg, veh->in_room)) &&
-      !(tveh = get_veh_list(arg, world[veh->in_room].vehicles, ch)) && (vict && !CAN_SEE(ch, vict))) {
+      !((tveh = get_veh_list(arg, world[veh->in_room].vehicles, ch)) && (vict && !CAN_SEE(ch, vict)))) {
     send_to_char(ch, "You don't see %s there.\r\n", arg);
     return;
   }
@@ -1349,13 +1350,15 @@ void do_raw_target(struct char_data *ch, struct veh_data *veh, struct veh_data *
           set_fighting(vict, veh);
           sprintf(buf, "You target %s towards %s.\r\n", GET_OBJ_NAME(obj->contains), PERS(vict, ch));
           send_to_char(buf, ch);
-        } else {
+        } else if (tveh) {
           set_fighting(ch, tveh);
           if (obj->targ)
             obj->targ = NULL;
           obj->tveh = tveh;
           sprintf(buf, "You target %s towards %s.\r\n", GET_OBJ_NAME(obj->contains), GET_VEH_NAME(tveh));
           send_to_char(buf, ch);
+        } else {
+          mudlog("SYSERR: Reached end of do_raw_target (mode all) with no valid target.", ch, LOG_SYSLOG, TRUE);
         }
       }
     return;
@@ -1371,14 +1374,14 @@ void do_raw_target(struct char_data *ch, struct veh_data *veh, struct veh_data *
       obj->tveh = NULL;
     obj->targ = vict;
     set_fighting(vict, veh);
-    act("You target $o towards $N.", FALSE, ch, obj->contains, vict, TO_CHAR);
+    act("You target $p towards $N.", FALSE, ch, obj->contains, vict, TO_CHAR);
     if (AFF_FLAGGED(ch, AFF_MANNING)) {
-      sprintf(buf, "%s's $o swivels towards you.\r\n", GET_VEH_NAME(ch->in_veh));
+      sprintf(buf, "%s's $p swivels towards you.\r\n", GET_VEH_NAME(ch->in_veh));
       act(buf, FALSE, ch, obj, vict, TO_VICT);
-      sprintf(buf, "%s's $o swivels towards $N.\r\n", GET_VEH_NAME(ch->in_veh));
+      sprintf(buf, "%s's $p swivels towards $N.\r\n", GET_VEH_NAME(ch->in_veh));
       act(buf, FALSE, ch, obj, vict, TO_VEH_ROOM);
     }
-  } else {
+  } else if (tveh) {
     set_fighting(ch, tveh);
     if (obj->targ)
       obj->targ = NULL;
@@ -1388,9 +1391,11 @@ void do_raw_target(struct char_data *ch, struct veh_data *veh, struct veh_data *
     if (AFF_FLAGGED(ch, AFF_MANNING)) {
       sprintf(buf, "%s's %s swivels towards your ride.\r\n", GET_VEH_NAME(ch->in_veh), GET_OBJ_NAME(obj));
       send_to_veh(buf, tveh, 0, TRUE);
-      sprintf(buf, "%s's $o swivels towards %s.\r\n", GET_VEH_NAME(ch->in_veh), GET_VEH_NAME(tveh));
+      sprintf(buf, "%s's $p swivels towards %s.\r\n", GET_VEH_NAME(ch->in_veh), GET_VEH_NAME(tveh));
       act(buf, FALSE, ch, obj, NULL, TO_VEH_ROOM);
     }
+  } else {
+    mudlog("SYSERR: Reached end of do_raw_target with no valid target.", ch, LOG_SYSLOG, TRUE);
   }
 }
 
@@ -1459,8 +1464,8 @@ ACMD(do_man)
         break;
     mount->worn_by = NULL;
     AFF_FLAGS(ch).ToggleBit(AFF_MANNING);
-    act("$n stops manning $o.", FALSE, ch, mount, 0, TO_ROOM);
-    act("You stop manning $o.", FALSE, ch, mount, 0, TO_CHAR);
+    act("$n stops manning $p.", FALSE, ch, mount, 0, TO_ROOM);
+    act("You stop manning $p.", FALSE, ch, mount, 0, TO_CHAR);
     if (FIGHTING(ch))
       stop_fighting(ch);
     if (!*argument)
@@ -1485,8 +1490,8 @@ ACMD(do_man)
   }
   if (mount_has_weapon(mount)) {
     mount->worn_by = ch;
-    act("$n mans $o.", FALSE, ch, mount, 0, TO_ROOM);
-    act("You man $o.", FALSE, ch, mount, 0, TO_CHAR);
+    act("$n mans $p.", FALSE, ch, mount, 0, TO_ROOM);
+    act("You man $p.", FALSE, ch, mount, 0, TO_CHAR);
     AFF_FLAGS(ch).ToggleBit(AFF_MANNING);
     return;
   }

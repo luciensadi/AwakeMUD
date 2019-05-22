@@ -1308,7 +1308,7 @@ void leave_veh(struct char_data *ch)
         break;
     mount->worn_by = NULL;
     AFF_FLAGS(ch).ToggleBit(AFF_MANNING);
-    act("$n stops manning $o and climbs out into the street.", FALSE, ch, mount, 0, TO_ROOM);
+    act("$n stops manning $p and climbs out into the street.", FALSE, ch, mount, 0, TO_ROOM);
   } else
     act("$n climbs out into the street.", FALSE, ch, 0, 0, TO_VEH);
   door = veh->in_room;

@@ -1642,15 +1642,20 @@ void remove_workshop_from_room(struct obj_data *obj) {
 
 // Checks if a given mount has a weapon on it.
 bool mount_has_weapon(struct obj_data *mount) {
+  return get_mount_weapon(mount) != NULL;
+}
+
+// Retrieve the weapon from a given mount.
+struct obj_data *get_mount_weapon(struct obj_data *mount) {
   if (mount == NULL) {
-    mudlog("SYSERR: Attempting to verify mount-has-weapon status for nonexistent mount.", NULL, LOG_SYSLOG, TRUE);
-    return FALSE;
+    mudlog("SYSERR: Attempting to retrieve weapon for nonexistent mount.", NULL, LOG_SYSLOG, TRUE);
+    return NULL;
   }
   
   for (struct obj_data *contains = mount->contains; contains; contains = contains->next_content) {
     if (GET_OBJ_TYPE(contains) == ITEM_WEAPON)
-      return TRUE;
+      return contains;
   }
   
-  return FALSE;
+  return NULL;
 }
