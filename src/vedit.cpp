@@ -190,16 +190,16 @@ void vedit_parse(struct descriptor_data * d, const char *arg)
           // this function updates pointers to the active list of vehicles
           // in the mud
           /* now safe to free old proto and write over */
-          if (veh_proto[veh_number].name)
-            delete [] veh_proto[veh_number].name;
-          if (veh_proto[veh_number].description)
-            delete [] veh_proto[veh_number].description;
-          if (veh_proto[veh_number].short_description)
-            delete [] veh_proto[veh_number].short_description;
-          if (veh_proto[veh_number].long_description)
-            delete [] veh_proto[veh_number].long_description;
-          if (veh_proto[veh_number].inside_description)
-            delete [] veh_proto[veh_number].inside_description;
+          DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].name);
+          DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].description);
+          DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].short_description);
+          DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].restring);
+          DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].long_description);
+          DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].restring_long);
+          DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].inside_description);
+          DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].rear_description);
+          DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].arrive);
+          DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].leave);
 
           veh_proto[veh_number] = *d->edit_veh;
         } else {
