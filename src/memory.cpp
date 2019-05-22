@@ -153,7 +153,6 @@ void memoryClass::DeleteVehicle(struct veh_data *veh)
   
   SAFE_VEH_ARRAY_DELETE(name);
   SAFE_VEH_ARRAY_DELETE(description);
-  SAFE_VEH_ARRAY_DELETE(description);
   SAFE_VEH_ARRAY_DELETE(short_description);
   SAFE_VEH_ARRAY_DELETE(restring);
   SAFE_VEH_ARRAY_DELETE(long_description);

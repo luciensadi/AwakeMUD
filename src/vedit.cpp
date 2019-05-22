@@ -190,18 +190,27 @@ void vedit_parse(struct descriptor_data * d, const char *arg)
           // this function updates pointers to the active list of vehicles
           // in the mud
           /* now safe to free old proto and write over */
-          DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].name);
-          DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].description);
-          DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].short_description);
-          DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].restring);
-          DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].long_description);
-          DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].restring_long);
-          DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].inside_description);
-          DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].rear_description);
-          DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].arrive);
-          DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].leave);
+          
+#define SAFE_VEH_ARRAY_DELETE(ITEM) if (&veh_proto[veh_number].ITEM != &d->edit_veh->ITEM) { DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].ITEM); }
+          
+          SAFE_VEH_ARRAY_DELETE(name);
+          SAFE_VEH_ARRAY_DELETE(description);
+          SAFE_VEH_ARRAY_DELETE(short_description);
+          SAFE_VEH_ARRAY_DELETE(restring);
+          SAFE_VEH_ARRAY_DELETE(long_description);
+          SAFE_VEH_ARRAY_DELETE(restring_long);
+          SAFE_VEH_ARRAY_DELETE(inside_description);
+          SAFE_VEH_ARRAY_DELETE(rear_description);
+          SAFE_VEH_ARRAY_DELETE(arrive);
+          SAFE_VEH_ARRAY_DELETE(leave);
+          
+#undef SAFE_VEH_ARRAY_DELETE
 
           veh_proto[veh_number] = *d->edit_veh;
+          
+          sprintf(buf, "&d->e->a: %p (norm %s) (* %i)", &d->edit_veh->arrive, d->edit_veh->arrive, *d->edit_veh->arrive);
+          sprintf(ENDOF(buf), ", &p[v].a: %p (norm %s) (* %i)\r\n", &veh_proto[veh_number].arrive, veh_proto[veh_number].arrive, *veh_proto[veh_number].arrive);
+          send_to_char(buf, d->character);
         } else {
           /* uhoh.. need to make a new place in the vehicle prototype table */
           int             found = FALSE;
