@@ -116,14 +116,93 @@ bool mobact_evaluate_spec_proc(struct char_data *ch) {
   return false;
 }
 
+bool mobact_process_in_vehicle_guard(struct char_data *ch) {
+  struct veh_data *tveh = NULL;
+  struct char_data *vict = NULL;
+  
+  // Precondition: Vehicle must exist, we must be manning or driving, and we must not be astral.
+  if (!ch->in_veh || !(AFF_FLAGGED(ch, AFF_PILOT) || AFF_FLAGGED(ch, AFF_MANNING)) || IS_ASTRAL(ch))
+    return FALSE;
+  
+  // Precondition: If our vehicle is nested, just give up.
+  if (ch->in_veh->in_veh)
+    return FALSE;
+  
+  // Peaceful room, or I'm not actually a guard? Bail out.
+  if (ROOM_FLAGGED(ch->in_veh->in_room, ROOM_PEACEFUL) || !(MOB_FLAGGED(ch, MOB_GUARD)))
+    return FALSE;
+  
+  /* Guard NPCs. */
+      
+  // If we're not in a road or garage, we expect to see no vehicles and will attack any that we see.
+  if (!(ROOM_FLAGGED(ch->in_veh->in_room, ROOM_ROAD) || ROOM_FLAGGED(ch->in_veh->in_room, ROOM_GARAGE))) {
+    for (tveh = world[ch->in_veh->in_room].vehicles; tveh; tveh = tveh->next_veh) {
+      // No attacking your own vehicle.
+      if (tveh == ch->in_veh)
+        continue;
+      
+      // TODO: Only attack player-owned vehicles and vehicles that have player occupants or drivers.
+      if (tveh->damage < 10 && tveh->owner > 0) {
+        // Found a target, stop processing vehicles.
+        break;
+      }
+    }
+  }
+  
+  if (!tveh) {
+    // No vehicular targets? Check players.
+    for (vict = world[ch->in_veh->in_room].people; vict; vict = vict->next_in_room) {
+      // Skip over invalid targets (NPCs, no-hassle imms, invisibles, and downed).
+      if (IS_NPC(vict) || PRF_FLAGGED(vict, PRF_NOHASSLE) || !CAN_SEE(ch, vict) || GET_PHYSICAL(vict) <= 0)
+        continue;
+      
+      for (int i = 0; i < NUM_WEARS; i++) {
+        // If victim's equipment is illegal here, blast them.
+        if (GET_EQ(vict, i) && violates_zsp(zone_table[world[ch->in_veh->in_room].zone].security, vict, i, ch)) {
+          // Target found, stop processing.
+          break;
+        }
+      }
+    }
+  }
+  
+  // No targets? Bail out.
+  if (!tveh && !vict)
+    return FALSE;
+  
+  sprintf(buf, "guard %s: ch = %s, tveh = %s, vict = %s", AFF_FLAGGED(ch, AFF_PILOT) ? "driver" : "gunner",
+          GET_NAME(ch), tveh ? tveh->name : "none", vict ? GET_NAME(vict) : "none");
+  mudlog(buf, ch, LOG_SYSLOG, TRUE);
+  
+  // Driver? It's rammin' time.
+  if (AFF_FLAGGED(ch, AFF_PILOT)) {
+    do_raw_ram(ch, ch->in_veh, tveh, vict);
+    
+    return TRUE;
+  }
+  
+  // Dakka o'clock.
+  else if (AFF_FLAGGED(ch, AFF_MANNING)) {
+    for (struct obj_data *mount = ch->in_veh->mount; mount; mount = mount->next_content) {
+      if (mount->worn_by == ch && mount_has_weapon(mount)) {
+        do_raw_target(ch, ch->in_veh, tveh, vict, FALSE, mount);
+        return TRUE;
+      }
+    }
+    
+    mudlog("SYSERR: Could not find mount manned by NPC for mobact_process_in_vehicle_aggro().", NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  return FALSE;
+}
+
 bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
   struct veh_data *tveh = NULL;
   struct char_data *vict = NULL;
   
-  ACMD(do_ram);
-  
   // Precondition: Vehicle must exist, we must be manning or driving, and we must not be astral.
-  if (!ch->in_veh || (!AFF_FLAGGED(ch, AFF_PILOT) && !AFF_FLAGGED(ch, AFF_MANNING)) || IS_ASTRAL(ch))
+  if (!ch->in_veh || !(AFF_FLAGGED(ch, AFF_PILOT) || AFF_FLAGGED(ch, AFF_MANNING)) || IS_ASTRAL(ch))
     return FALSE;
   
   // Precondition: If our vehicle is nested, just give up.
@@ -183,12 +262,12 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
   if (!tveh && !vict)
     return FALSE;
   
-  sprintf(buf, "ch = %s, tveh = %s, vict = %s", GET_NAME(ch), tveh ? tveh->name : "none", vict ? GET_NAME(vict) : "none");
-  mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+  sprintf(buf, "aggro %s: ch = %s, tveh = %s, vict = %s", AFF_FLAGGED(ch, AFF_PILOT) ? "driver" : "gunner",
+          GET_NAME(ch), tveh ? tveh->name : "none", vict ? GET_NAME(vict) : "none");
+  mudlog(buf, ch, LOG_SYSLOG, TRUE);
   
   // Driver? It's rammin' time.
   if (AFF_FLAGGED(ch, AFF_PILOT)) {
-    mudlog("attempting to ram", NULL, LOG_SYSLOG, TRUE);
     do_raw_ram(ch, ch->in_veh, tveh, vict);
     
     return TRUE;
@@ -196,7 +275,6 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
   
   // Dakka o'clock.
   else if (AFF_FLAGGED(ch, AFF_MANNING)) {
-    mudlog("attempting to target turret", NULL, LOG_SYSLOG, TRUE);
     for (struct obj_data *mount = ch->in_veh->mount; mount; mount = mount->next_content) {
       if (mount->worn_by == ch && mount_has_weapon(mount)) {
         do_raw_target(ch, ch->in_veh, tveh, vict, FALSE, mount);
@@ -217,7 +295,7 @@ bool mobact_process_aggro(struct char_data *ch, vnum_t room_num) {
   struct veh_data *veh = NULL;
   
   // Vehicle code is separate.
-  if (ch->in_veh)
+  if (ch->in_veh && ch->in_veh->in_room == room_num)
     return mobact_process_in_vehicle_aggro(ch);
  
   
@@ -352,6 +430,10 @@ bool mobact_process_guard(struct char_data *ch, vnum_t room_num) {
   struct char_data *vict = NULL;
   struct veh_data *veh = NULL;
   
+  // Vehicle code is separate.
+  if (ch->in_veh && ch->in_veh->in_room == room_num)
+    return mobact_process_in_vehicle_guard(ch);
+  
   int i = 0;
   
   /* Guard NPCs. */
@@ -363,7 +445,7 @@ bool mobact_process_guard(struct char_data *ch, vnum_t room_num) {
         // NOTE: Previous logic required that the vehicle be damaged to be a valid attack target.
         if (!(ROOM_FLAGGED(room_num, ROOM_ROAD) || ROOM_FLAGGED(room_num, ROOM_GARAGE))) {
           // TODO: Only attack player-owned vehicles and vehicles that have player occupants or drivers.
-          if (veh->damage > 0) {
+          if (veh->damage < 10 && veh->owner > 0) {
             stop_fighting(ch);
             set_fighting(ch, veh);
             return true;
@@ -474,7 +556,8 @@ bool mobact_process_movement(struct char_data *ch) {
   int door;
   
   /* Mob Movement */
-  if (!MOB_FLAGGED(ch, MOB_SENTINEL) && !FIGHTING(ch) && GET_POS(ch) == POS_STANDING) {
+  if (!MOB_FLAGGED(ch, MOB_SENTINEL) && !FIGHTING(ch)
+      && (GET_POS(ch) == POS_STANDING || (GET_POS(ch) == POS_SITTING && AFF_FLAGGED(ch, AFF_PILOT)))) {
     // Slow down movement-- this way they'll only try to move every other tick on average.
     if (number(0, 1) == 0)
       return false;
@@ -557,12 +640,12 @@ void mobile_activity(void)
     // All these aggressive checks require the character to not be in a peaceful room.
     if (!ROOM_FLAGGED(ch->in_room, ROOM_PEACEFUL)) {
       // Handle aggressive mobs.
-      if (mobact_process_aggro(ch, ch->in_room)) {
+      if (mobact_process_aggro(ch, ch->in_veh ? ch->in_veh->in_room : ch->in_room)) {
         continue;
       }
       
       // Guard NPCs.
-      if (mobact_process_guard(ch, ch->in_room)) {
+      if (mobact_process_guard(ch, ch->in_veh ? ch->in_veh->in_room : ch->in_room)) {
         continue;
       }
       
