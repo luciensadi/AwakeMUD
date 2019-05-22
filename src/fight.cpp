@@ -361,7 +361,21 @@ void stop_fighting(struct char_data * ch)
   FIGHTING(ch) = NULL;
   FIGHTING_VEH(ch) = NULL;
   ch->next_fighting = NULL;
-  GET_POS(ch) = POS_STANDING;
+  
+  if (ch->in_veh) {
+    // If they're manning, detarget their mount. TODO: What about rigger mounts?
+    if (IS_AFFECTED(ch, AFF_MANNING)) {
+      for (struct obj_data *mount = ch->in_veh->mount; mount; mount = mount->next_content) {
+        if (mount->worn_by == ch) {
+          mount->targ = NULL;
+          mount->tveh = NULL;
+        }
+      }
+    }
+    GET_POS(ch) = POS_SITTING;
+  }
+  else
+    GET_POS(ch) = POS_STANDING;
   update_pos(ch);
   GET_INIT_ROLL(ch) = 0;
   SHOOTING_DIR(ch) = NOWHERE;
@@ -2541,6 +2555,10 @@ bool has_ammo(struct char_data *ch, struct obj_data *wielded)
       return FALSE;
     } else {
       if (AFF_FLAGGED(ch, AFF_MANNING)) {
+        // NPCs don't care about ammo in their mounts.
+        if (IS_NPC(ch))
+          return TRUE;
+        
         for (struct obj_data *obj = wielded->in_obj->contains; obj; obj = obj->next_content) {
           if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
             if (GET_OBJ_VAL(obj, 0) > 0) {
@@ -2901,68 +2919,75 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   } else {
     strcpy(buf, "long burst from $p");
   }
-  if (ch->in_room == victim->in_room) {
+  if (ch->in_room == victim->in_room || (ch->in_veh && ch->in_veh->in_room == victim->in_room)) {
     // Same-room messaging.
+    static char vehicle_message[50];
+    
+    if (ch->in_veh)
+      sprintf(vehicle_message, "From inside %s, ", decapitalize_a_an(GET_VEH_NAME(ch->in_veh)));
+    else
+      strcpy(vehicle_message, "");
+    
     if (damage < 0) {
       switch (number(1, 3)) {
         case 1:
-          sprintf(buf1, "^r$n fires a %s^r at you but you manage to dodge.^n", buf);
+          sprintf(buf1, "^r%s$n fires a %s^r at you but you manage to dodge.^n", vehicle_message, buf);
           sprintf(buf2, "^yYou fire a %s^y at $N but $E manages to dodge.^n", buf);
-          sprintf(buf3, "$n fires a %s^n at $N but $E manages to dodge.", buf);
+          sprintf(buf3, "%s$n fires a %s^n at $N but $E manages to dodge.", vehicle_message, buf);
           break;
         case 2:
-          sprintf(buf1, "^r$n fires a %s^r at you but you easily dodge.^n", buf);
+          sprintf(buf1, "^r%s$n fires a %s^r at you but you easily dodge.^n", vehicle_message, buf);
           sprintf(buf2, "^yYou fire a %s^y at $N but $E easily dodges.^n", buf);
-          sprintf(buf3, "$n fires a %s^n at $N but $E easily dodges.", buf);
+          sprintf(buf3, "%s$n fires a %s^n at $N but $E easily dodges.", vehicle_message, buf);
           break;
         case 3:
-          sprintf(buf1, "^r$n fires a %s^r at you but you move out of the way.^n", buf);
+          sprintf(buf1, "^r%s$n fires a %s^r at you but you move out of the way.^n", vehicle_message, buf);
           sprintf(buf2, "^yYou fire a %s^y at $N but $E moves out of the way.^n", buf);
-          sprintf(buf3, "$n fires a %s^n at $N but $E moves out of the way.", buf);
+          sprintf(buf3, "%s$n fires a %s^n at $N but $E moves out of the way.", vehicle_message, buf);
           break;
       }
     } else if (damage == 0) {
       switch (number(1, 2)) {
         case 1:
-          sprintf(buf1, "^r$n fires a %s^r at you but your armour holds.^n", buf);
+          sprintf(buf1, "^r%s$n fires a %s^r at you but your armour holds.^n", vehicle_message, buf);
           sprintf(buf2, "^yYou fire a %s^y at $N but it doesn't seem to hurt $M.^n", buf);
-          sprintf(buf3, "$n fires a %s^n at $N but it doesn't seem to hurt $M.", buf);
+          sprintf(buf3, "%s$n fires a %s^n at $N but it doesn't seem to hurt $M.", vehicle_message, buf);
           break;
         case 2:
-          sprintf(buf1, "^r$n fires a %s^r at you but you roll with the impact.^n", buf);
+          sprintf(buf1, "^r%s$n fires a %s^r at you but you roll with the impact.^n", vehicle_message, buf);
           sprintf(buf2, "^yYou fire a %s^y at $N but $E rolls with the impact.^n", buf);
-          sprintf(buf3, "$n fires a %s^n at $N but $E rolls with the impact.", buf);
+          sprintf(buf3, "%s$n fires a %s^n at $N but $E rolls with the impact.", vehicle_message, buf);
           break;
       }
     } else if (damage == LIGHT) {
-      sprintf(buf1, "^r$n grazes you with a %s^r.^n", buf);
+      sprintf(buf1, "^r%s$n grazes you with a %s^r.^n", vehicle_message, buf);
       sprintf(buf2, "^yYou graze $N with a %s^y.^n", buf);
-      sprintf(buf3, "$n grazes $N with a %s^n.", buf);
+      sprintf(buf3, "%s$n grazes $N with a %s^n.", vehicle_message, buf);
     } else if (damage == MODERATE) {
-      sprintf(buf1, "^r$n hits you with a %s^r.^n", buf);
+      sprintf(buf1, "^r%s$n hits you with a %s^r.^n", vehicle_message, buf);
       sprintf(buf2, "^yYou hit $N with a %s^y.^n", buf);
-      sprintf(buf3, "$n hits $N with a %s^n.", buf);
+      sprintf(buf3, "%s$n hits $N with a %s^n.", vehicle_message, buf);
     } else if (damage == SERIOUS) {
-      sprintf(buf1, "^r$n massacres you with a %s^r.^n", buf);
+      sprintf(buf1, "^r%s$n massacres you with a %s^r.^n", vehicle_message, buf);
       sprintf(buf2, "^yYou massacre $N with a %s^y.^n", buf);
-      sprintf(buf3, "$n massacres $N with a %s^n.", buf);
+      sprintf(buf3, "%s$n massacres $N with a %s^n.", vehicle_message, buf);
     } else if (damage >= DEADLY) {
       switch (number(1, 2)) {
         case 1:
-          sprintf(buf1, "^r$n puts you down with a deadly %s^r.^n", buf);
+          sprintf(buf1, "^r%s$n puts you down with a deadly %s^r.^n", vehicle_message, buf);
           sprintf(buf2, "^yYou put $N down with a deadly %s^y.^n", buf);
-          sprintf(buf3, "$n puts $N down with a deadly %s^n.", buf);
+          sprintf(buf3, "%s$n puts $N down with a deadly %s^n.", vehicle_message, buf);
           break;
         case 2:
-          sprintf(buf1, "^r$n sublimates you with a deadly %s^r.^n", buf);
+          sprintf(buf1, "^r%s$n sublimates you with a deadly %s^r.^n", vehicle_message, buf);
           sprintf(buf2, "^yYou sublimate $N with a deadly %s^y.^n", buf);
-          sprintf(buf3, "$n sublimates $N with a deadly %s^n.", buf);
+          sprintf(buf3, "%s$n sublimates $N with a deadly %s^n.", vehicle_message, buf);
           break;
       }
     }
     act(buf1, FALSE, ch, weapon, victim, TO_VICT);
     act(buf2, FALSE, ch, weapon, victim, TO_CHAR);
-    act(buf3, FALSE, ch, weapon, victim, TO_NOTVICT);
+    act(buf3, FALSE, ch, weapon, victim, ch->in_veh ? TO_VEH_ROOM : TO_NOTVICT);
     // End same-room messaging.
   } else {
     // Ranged messaging. TODO
@@ -4762,8 +4787,19 @@ void perform_violence(void)
           }
         }
       }
-      if (AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG))
+      if (AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)) {
+        // todo asdf
+        struct veh_data *veh = NULL;
+        RIG_VEH(ch, veh);
+        if ((veh && veh->in_room == NOWHERE)
+            || (FIGHTING(ch) && veh->in_room != FIGHTING(ch)->in_room)
+            || (FIGHTING_VEH(ch) && veh->in_room != FIGHTING_VEH(ch)->in_room)) {
+          send_to_char("Your target has left your line of sight.", ch);
+          stop_fighting(ch);
+          continue;
+        }
         mount_fire(ch);
+      }
       else if (FIGHTING_VEH(ch)) {
         if (ch->in_room != FIGHTING_VEH(ch)->in_room)
           stop_fighting(ch);
@@ -5001,20 +5037,27 @@ void vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
     veh_resist = success_test(veh->body, power);
     veh_dam -= veh_resist;
     
+    bool will_damage_vehicle = FALSE;
+    
     if (IS_NPC(ch) && MOB_FLAGGED(ch, MOB_NORAM)) {
       damage_total = -1;
       sprintf(buf, "You can't seem to get close enough to %s to run them down!\r\n", thrdgenders[(int)GET_SEX(ch)]);
       sprintf(buf1, "%s can't seem to get close enough to $n to run them down!", GET_VEH_NAME(veh));
       sprintf(buf2, "%s can't even get close to you!", GET_VEH_NAME(veh));
       send_to_driver(buf, veh);
+    } else if (damage_total < LIGHT) {
+      sprintf(buf, "You ram into %s, but %s armor holds!", thrdgenders[(int)GET_SEX(ch)], thrdgenders[(int)GET_SEX(ch)]);
+      sprintf(buf1, "%s rams into $n, but $s armor holds!", GET_VEH_NAME(veh));
+      sprintf(buf2, "%s rams into you, but your armor holds!", GET_VEH_NAME(veh));
+      send_to_driver(buf, veh);
+      will_damage_vehicle = TRUE;
     } else if (veh_dam > 0) {
-      veh->damage += veh_dam;
       send_to_veh("THUMP!\r\n", veh, NULL, TRUE);
       sprintf(buf, "You run %s down!\r\n", thrdgenders[(int)GET_SEX(ch)]);
       sprintf(buf1, "%s runs $n down!", GET_VEH_NAME(veh));
       sprintf(buf2, "%s runs you down!", GET_VEH_NAME(veh));
       send_to_driver(buf, veh);
-      chkdmg(veh);
+      will_damage_vehicle = TRUE;
     } else {
       send_to_veh("THUTHUMP!\r\n", veh, NULL, TRUE);
       sprintf(buf, "You roll right over %s!\r\n", thrdgenders[(int)GET_SEX(ch)]);
@@ -5025,6 +5068,12 @@ void vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
     act(buf1, FALSE, ch, 0, 0, TO_ROOM);
     act(buf2, FALSE, ch, 0, 0, TO_CHAR);
     damage(ch, ch, damage_total, TYPE_RAM, PHYSICAL);
+    
+    // Deal damage to the rammer's vehicle if they incurred any.
+    if (will_damage_vehicle && veh_dam > 0) {
+      veh->damage += veh_dam;
+      chkdmg(veh);
+    }
   } else
   {
     power = veh->cspeed - tveh->cspeed;
@@ -5201,7 +5250,7 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
   damage_total--;
   if (power <= veh->armor || !damage_total)
   {
-    sprintf(buf, "A %s ricochets off of %s.", ammo_type, GET_VEH_NAME(veh));
+    sprintf(buf, "$n's %s ricochets off of %s.", ammo_type, GET_VEH_NAME(veh));
     sprintf(buf2, "Your attack ricochets off of %s.", GET_VEH_NAME(veh));
     act(buf, FALSE, ch, NULL, NULL, TO_ROOM);
     act(buf2, FALSE, ch, NULL, NULL, TO_CHAR);
@@ -5328,6 +5377,10 @@ void mount_fire(struct char_data *ch)
     for (mount = veh->mount; mount; mount = mount->next_content)
       if (mount->worn_by == ch)
         break;
+    
+    if (!mount)
+      return;
+    
     for (gun = mount->contains; gun; gun = gun->next_content)
       if (GET_OBJ_TYPE(gun) == ITEM_WEAPON)
         break;

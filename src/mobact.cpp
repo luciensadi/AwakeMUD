@@ -19,6 +19,7 @@
 #include "interpreter.h"
 #include "handler.h"
 #include "constants.h"
+#include "act.drive.h"
 
 /* external structs */
 extern void resist_drain(struct char_data *ch, int power, int drain_add, int wound);
@@ -115,22 +116,123 @@ bool mobact_evaluate_spec_proc(struct char_data *ch) {
   return false;
 }
 
+bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
+  struct veh_data *tveh = NULL;
+  struct char_data *vict = NULL;
+  
+  ACMD(do_ram);
+  
+  // Precondition: Vehicle must exist, we must be manning or driving, and we must not be astral.
+  if (!ch->in_veh || (!AFF_FLAGGED(ch, AFF_PILOT) && !AFF_FLAGGED(ch, AFF_MANNING)) || IS_ASTRAL(ch))
+    return FALSE;
+  
+  // Precondition: If our vehicle is nested, just give up.
+  if (ch->in_veh->in_veh)
+    return FALSE;
+  
+  // Peaceful room, or I'm not actually aggro or alarmed? Bail out.
+  if (ROOM_FLAGGED(ch->in_veh->in_room, ROOM_PEACEFUL) ||
+      !(MOB_FLAGS(ch).AreAnySet(MOB_AGGRESSIVE, MOB_AGGR_TO_RACE, ENDBIT) || GET_MOBALERT(ch) == MALERT_ALARM))
+    return FALSE;
+  
+  // Target selection. We disallow targeting of unowned vehicles so our guards don't Thunderdome each other before players even show up.
+  for (tveh = world[ch->in_veh->in_room].vehicles; tveh; tveh = tveh->next_veh) {
+    if (tveh != ch->in_veh && tveh->damage < 10 && tveh->owner > 0) {
+      // Found a valid target, stop looking.
+      break;
+    }
+  }
+  
+  // Select a non-vehicle target.
+  if (!tveh) {
+    // If we've gotten here, character is either astral or is not willing to / failed to attack a vehicle.
+    for (vict = world[ch->in_veh->in_room].people; vict; vict = vict->next_in_room) {
+      // Skip conditions: Invisible, no-hassle, already downed, or is an NPC who is neither a player's astral body nor a player's escortee.
+      if ((IS_NPC(vict) && !IS_PROJECT(vict) && !is_escortee(vict)) || !CAN_SEE(ch, vict) || PRF_FLAGGED(vict, PRF_NOHASSLE) || GET_PHYSICAL(vict) <= 0)
+        continue;
+      
+      // Attack the escortee if we're hunting it specifically.
+      if (hunting_escortee(ch, vict)) {
+        break;
+      }
+      
+      // If NPC is aggro or alarmed, or...
+      if (!MOB_FLAGS(ch).AreAnySet(MOB_AGGR_TO_RACE, ENDBIT) ||
+          // If NPC is aggro towards elves, and victim is an elf subrace, or...
+          (MOB_FLAGGED(ch, MOB_AGGR_ELF) &&
+           (GET_RACE(vict) == RACE_ELF || GET_RACE(vict) == RACE_WAKYAMBI || GET_RACE(vict) == RACE_NIGHTONE || GET_RACE(vict) == RACE_DRYAD)) ||
+          // If NPC is aggro towards dwarves, and victim is a dwarf subrace, or...
+          (MOB_FLAGGED(ch, MOB_AGGR_DWARF) &&
+           (GET_RACE(vict) == RACE_DWARF || GET_RACE(vict) == RACE_GNOME || GET_RACE(vict) == RACE_MENEHUNE || GET_RACE(vict) == RACE_KOBOROKURU)) ||
+          // If NPC is aggro towards humans, and victim is human, or...
+          (MOB_FLAGGED(ch, MOB_AGGR_HUMAN) &&
+           GET_RACE(vict) == RACE_HUMAN) ||
+          // If NPC is aggro towards orks, and victim is an ork subrace, or...
+          (MOB_FLAGGED(ch, MOB_AGGR_ORK) &&
+           (GET_RACE(vict) == RACE_ORK || GET_RACE(vict) == RACE_HOBGOBLIN || GET_RACE(vict) == RACE_OGRE || GET_RACE(vict) == RACE_SATYR || GET_RACE(vict) == RACE_ONI)) ||
+          // If NPC is aggro towards trolls, and victim is a troll subrace:
+          (MOB_FLAGGED(ch, MOB_AGGR_TROLL) &&
+           (GET_RACE(vict) == RACE_TROLL || GET_RACE(vict) == RACE_CYCLOPS || GET_RACE(vict) == RACE_FOMORI || GET_RACE(vict) == RACE_GIANT || GET_RACE(vict) == RACE_MINOTAUR)))
+        // Kick their ass.
+      {
+        break;
+      }
+    }
+  }
+  
+  if (!tveh && !vict)
+    return FALSE;
+  
+  sprintf(buf, "ch = %s, tveh = %s, vict = %s", GET_NAME(ch), tveh ? tveh->name : "none", vict ? GET_NAME(vict) : "none");
+  mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+  
+  // Driver? It's rammin' time.
+  if (AFF_FLAGGED(ch, AFF_PILOT)) {
+    mudlog("attempting to ram", NULL, LOG_SYSLOG, TRUE);
+    do_raw_ram(ch, ch->in_veh, tveh, vict);
+    
+    return TRUE;
+  }
+  
+  // Dakka o'clock.
+  else if (AFF_FLAGGED(ch, AFF_MANNING)) {
+    mudlog("attempting to target turret", NULL, LOG_SYSLOG, TRUE);
+    for (struct obj_data *mount = ch->in_veh->mount; mount; mount = mount->next_content) {
+      if (mount->worn_by == ch && mount_has_weapon(mount)) {
+        do_raw_target(ch, ch->in_veh, tveh, vict, FALSE, mount);
+        return TRUE;
+      }
+    }
+    
+    mudlog("SYSERR: Could not find mount manned by NPC for mobact_process_in_vehicle_aggro().", NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  return FALSE;
+}
+
 // TODO: Fix alarmed NPCs attacking non-hostile vehicles.
 bool mobact_process_aggro(struct char_data *ch, vnum_t room_num) {
   struct char_data *vict = NULL;
   struct veh_data *veh = NULL;
+  
+  // Vehicle code is separate.
+  if (ch->in_veh)
+    return mobact_process_in_vehicle_aggro(ch);
+ 
   
   if (!ROOM_FLAGGED(room_num, ROOM_PEACEFUL) &&
       (MOB_FLAGS(ch).AreAnySet(MOB_AGGRESSIVE, MOB_AGGR_TO_RACE, ENDBIT) || GET_MOBALERT(ch) == MALERT_ALARM)) {
   
     // If I am not astral, am in the same room, and am willing to attack a vehicle this round (coin flip), pick a fight with a vehicle.
     if (ch->in_room == room_num && !IS_ASTRAL(ch) && number(0, 1)) {
-      for (veh = world[room_num].vehicles; veh; veh = veh->next_veh)
+      for (veh = world[room_num].vehicles; veh; veh = veh->next_veh) {
         if (veh->damage < 10) {
           stop_fighting(ch);
           set_fighting(ch, veh);
           return true;
         }
+      }
     }
   
     // If we've gotten here, character is either astral or is not willing to / failed to attack a vehicle.
@@ -434,7 +536,10 @@ void mobile_activity(void)
       continue;
 
     // Skip NPCs that are currently fighting someone in their room, or are fighting a vehicle.
-    if ((FIGHTING(ch) && FIGHTING(ch)->in_room == ch->in_room) || FIGHTING_VEH(ch))
+    if ((FIGHTING(ch)
+          && (FIGHTING(ch)->in_room == ch->in_room
+            || (ch->in_veh && FIGHTING(ch)->in_room == ch->in_veh->in_room)))
+        || FIGHTING_VEH(ch))
       continue;
 
     // Cool down mob alert status.
@@ -449,61 +554,65 @@ void mobile_activity(void)
       continue;
     }
     
-    // All these aggressive checks require the character to not be in a vehicle and not be in a peaceful room.
-    if (!ch->in_veh && !ROOM_FLAGGED(ch->in_room, ROOM_PEACEFUL)) {
+    // All these aggressive checks require the character to not be in a peaceful room.
+    if (!ROOM_FLAGGED(ch->in_room, ROOM_PEACEFUL)) {
       // Handle aggressive mobs.
       if (mobact_process_aggro(ch, ch->in_room)) {
         continue;
       }
       
-      if (mobact_process_memory(ch, ch->in_room)) {
-        continue;
-      }
-      
-      if (mobact_process_helper(ch)) {
-        continue;
-      }
-      
+      // Guard NPCs.
       if (mobact_process_guard(ch, ch->in_room)) {
         continue;
       }
       
-      // Sniper? Check surrounding players and re-apply above for each applicable room.
-      if (MOB_FLAGGED(ch, MOB_SNIPER) && GET_EQ(ch, WEAR_WIELD)) {
-        // When this is true, we'll stop evaluating sniper and continue to next NPC.
-        bool has_acted = FALSE;
+      // These checks additionally require that the NPC is not in a vehicle.
+      if (!ch->in_veh) {
+        if (mobact_process_memory(ch, ch->in_room)) {
+          continue;
+        }
         
-        // Calculate their maximum firing range (lesser of vision range and weapon range).
-        int max_distance = MIN(find_sight(ch), find_weapon_range(ch, GET_EQ(ch, WEAR_WIELD)));
+        if (mobact_process_helper(ch)) {
+          continue;
+        }
         
-        for (dir = 0; !has_acted && !FIGHTING(ch) && dir < NUM_OF_DIRS; dir++) {
-          current_room = ch->in_room;
+        // Sniper? Check surrounding players and re-apply above for each applicable room.
+        if (MOB_FLAGGED(ch, MOB_SNIPER) && GET_EQ(ch, WEAR_WIELD)) {
+          // When this is true, we'll stop evaluating sniper and continue to next NPC.
+          bool has_acted = FALSE;
           
-          // Check each room in a straight line until we are either out of range or cannot go further.
-          for (distance = 1; !has_acted && distance <= max_distance; distance++) {
-            // Exit must be valid, and room must belong to same zone as character's room.
-            if (CAN_GO2(current_room, dir) && world[EXIT2(current_room, dir)->to_room].zone == world[ch->in_room].zone) {
-              current_room = EXIT2(current_room, dir)->to_room;
-            } else {
-              // If we can't get to a further room, stop and move to next direction in for loop.
-              break;
-            }
+          // Calculate their maximum firing range (lesser of vision range and weapon range).
+          int max_distance = MIN(find_sight(ch), find_weapon_range(ch, GET_EQ(ch, WEAR_WIELD)));
+          
+          for (dir = 0; !has_acted && !FIGHTING(ch) && dir < NUM_OF_DIRS; dir++) {
+            current_room = ch->in_room;
             
-            // Aggro sniper.
-            if ((has_acted = mobact_process_aggro(ch, current_room))) {
-              break;
-            }
-            
-            // Memory sniper.
-            if ((has_acted = mobact_process_memory(ch, current_room))) {
-              break;
-            }
-            
-            // No such thing as a helper sniper.
-            
-            // Guard sniper.
-            if ((has_acted = mobact_process_guard(ch, current_room))) {
-              break;
+            // Check each room in a straight line until we are either out of range or cannot go further.
+            for (distance = 1; !has_acted && distance <= max_distance; distance++) {
+              // Exit must be valid, and room must belong to same zone as character's room.
+              if (CAN_GO2(current_room, dir) && world[EXIT2(current_room, dir)->to_room].zone == world[ch->in_room].zone) {
+                current_room = EXIT2(current_room, dir)->to_room;
+              } else {
+                // If we can't get to a further room, stop and move to next direction in for loop.
+                break;
+              }
+              
+              // Aggro sniper.
+              if ((has_acted = mobact_process_aggro(ch, current_room))) {
+                break;
+              }
+              
+              // Memory sniper.
+              if ((has_acted = mobact_process_memory(ch, current_room))) {
+                break;
+              }
+              
+              // No such thing as a helper sniper.
+              
+              // Guard sniper.
+              if ((has_acted = mobact_process_guard(ch, current_room))) {
+                break;
+              }
             }
           }
         }

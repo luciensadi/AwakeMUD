@@ -794,7 +794,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     for (obj = i->in_veh->mount; obj; obj = obj->next_content)
       if (obj->worn_by == i)
         break;
-    sprintf(buf, "%s is manning a %s.", buf, GET_OBJ_NAME(obj));
+    sprintf(buf, "%s is manning %s.", buf, GET_OBJ_NAME(obj));
   } else if (GET_POS(i) != POS_FIGHTING)
   {
     strcat(buf, positions[(int) GET_POS(i)]);

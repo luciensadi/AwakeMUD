@@ -242,7 +242,7 @@ const char *get_type(char c)
   case 'V':
     return "VEHICLE";
   case 'S':
-    return "PASSENGER";
+    return "DRIVER/PASSENGER";
   case 'U':
     return "UPGRADE";
   case 'I':
@@ -310,7 +310,7 @@ void zedit_disp_type_cmd(struct descriptor_data *d)
                "^G8^Y) ^WGIVE NUMBER\r\n"
                "^G9^Y) ^WCYBER/BIOWARE\r\n"
                "^G0^Y) ^WVEHICLE\r\n"
-               "^GA^Y) ^WDRIVER\r\n"
+               "^GA^Y) ^WDRIVER/PASSENGER\r\n"
                "^GB^Y) ^WUPGRADE\r\n"
                "^GC^Y) ^WCARRIED\r\n"
                "^GD^Y) ^WHOST\r\n"

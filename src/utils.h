@@ -42,7 +42,7 @@ void    sprintbit(long vektor, const char *names[], char *result);
 void    sprinttype(int type, const char *names[], char *result);
 void    sprint_obj_mods(struct obj_data *obj, char *result);
 int     get_line(FILE *fl, char *buf);
-struct time_info_data age(struct char_data *ch);
+struct  time_info_data age(struct char_data *ch);
 int     convert_damage(int damage);
 int     srdice(void);
 int     success_test(int number, int target);
@@ -56,6 +56,7 @@ int     modify_target_rbuf(struct char_data *ch, char *rbuf);
 int     modify_target(struct char_data *ch);
 int     damage_modifier(struct char_data *ch, char *rbuf);
 char *  capitalize(const char *source);
+char *  decapitalize_a_an(const char *source);
 int     get_speed(struct veh_data *veh);
 int     negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy);
 float   gen_size(int race, bool height, int size, int sex);
@@ -65,9 +66,11 @@ int     light_level(rnum_t room);
 bool    biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct char_data *ch);
 void    magic_loss(struct char_data *ch, int magic, bool msg);
 bool    has_kit(struct char_data *ch, int type);
-struct obj_data *find_workshop(struct char_data *ch, int type);
+struct  obj_data *find_workshop(struct char_data *ch, int type);
 void    add_workshop_to_room(struct obj_data *obj);
 void    remove_workshop_from_room(struct obj_data *obj);
+bool    mount_has_weapon(struct obj_data *mount);
+struct  obj_data *get_mount_weapon(struct obj_data *mount);
 
 /* undefine MAX and MIN so that our functions are used instead */
 #ifdef MAX
