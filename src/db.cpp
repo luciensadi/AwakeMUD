@@ -2693,9 +2693,29 @@ void reset_zone(int zone, int reboot)
       if ((mob_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
           (ZCMD.arg2 == 0 && reboot)) {
         mob = read_mobile(ZCMD.arg1, REAL);
+        
         if (!veh->people) {
+          // If the vehicle is empty, make the mob the driver.
           AFF_FLAGS(mob).SetBit(AFF_PILOT);
+          mob->vfront = TRUE;
+          
           veh->cspeed = SPEED_CRUISING;
+        } else {
+          // Look for hardpoints with weapons and man them.
+          struct obj_data *mount = NULL;
+          
+          // Find an unmanned mount.
+          for (mount = veh->mount; mount; mount = mount->next_content) {
+            // Man the first unmanned mount we find, as long as it has a weapon in it.
+            if (!mount->worn_by && mount_has_weapon(mount)) {
+              mount->worn_by = mob;
+              AFF_FLAGS(mob).ToggleBit(AFF_MANNING);
+              break;
+            }
+          }
+          
+          // Mount-users are all back of the bus.
+          mob->vfront = FALSE;
         }
         char_to_veh(veh, mob);
         last_cmd = 1;
@@ -2711,10 +2731,11 @@ void reset_zone(int zone, int reboot)
     case 'U':                 /* mount/upgrades a vehicle with object */
       if (!veh)
         break;
-      if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
-          (ZCMD.arg2 == 0 && reboot)) {
+      if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)) {
         obj = read_object(ZCMD.arg1, REAL);
-        if (GET_OBJ_VAL(obj, 0) == MOD_MOUNT) {
+        
+        // Special case: Weapon mounts.
+        if (GET_OBJ_VAL(obj, 0) == TYPE_MOUNT) {
           switch (GET_OBJ_VAL(obj, 1)) {
             case 1:
               sig = 1;
@@ -2743,12 +2764,46 @@ void reset_zone(int zone, int reboot)
           if (veh->mount)
             obj->next_content = veh->mount;
           veh->mount = obj;
-        } else {
+        }
+        
+        // Special case: Weapons for mounts. Note that this ignores current vehicle load, mount size, etc.
+        else if (IS_GUN(GET_OBJ_VAL(obj, 3))) {
+          struct obj_data *mount = NULL;
+          
+          // Iterate through every mount on the vehicle.
+          for (mount = veh->mount; mount; mount = mount->next_content) {
+            // If we've found a weaponless mount, break out of loop.
+            if (!mount_has_weapon(mount))
+              break;
+          }
+          
+          if (mount) {
+            // We found a valid mount; attach the weapon.
+            obj_to_obj(obj, mount);
+            veh->usedload += GET_OBJ_WEIGHT(obj);
+            
+            // Set the obj's firemode to the optimal one.
+            if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_BF))
+              GET_OBJ_VAL(obj, 11) = MODE_BF;
+            else if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_FA)) {
+              GET_OBJ_VAL(obj, 11) = MODE_FA;
+              GET_OBJ_TIMER(obj) = 10;
+            }
+            else if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_SA))
+              GET_OBJ_VAL(obj, 11) = MODE_SA;
+            else
+              GET_OBJ_VAL(obj, 11) = MODE_SS;
+          } else {
+            ZONE_ERROR("Not enough mounts in target vehicle, cannot mount item");
+          }
+        }
+        else {
           GET_MOD(veh, GET_OBJ_VAL(obj, 0)) = obj;
           veh->usedload += GET_OBJ_VAL(obj, 1);
           for (int j = 0; j < MAX_OBJ_AFFECT; j++)
             affect_veh(veh, obj->affected[j].location, obj->affected[j].modifier);
         }
+        
         last_cmd = 1;
       } else
         last_cmd = 0;

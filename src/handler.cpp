@@ -1031,6 +1031,7 @@ void char_to_veh(struct veh_data * veh, struct char_data * ch)
     veh->people = ch;
     ch->in_veh = veh;
     veh->seating[ch->vfront]--;
+    GET_POS(ch) = POS_SITTING;
   }
 }
 
@@ -2592,6 +2593,10 @@ int veh_skill(struct char_data *ch, struct veh_data *veh)
   }
   if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE))
     skill += GET_CONTROL(ch);
+  
+  // Assume any NPC with a vehicle and no skill has a minimum skill of 4 and that the builder just forgot to set it.
+  if (IS_NPC(ch) && skill == 0)
+    skill = MAX(skill, 4);
   
   return skill;
 }

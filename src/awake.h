@@ -1851,8 +1851,9 @@ enum {
 #define TO_NOTVICT      3
 #define TO_CHAR         4
 #define TO_ROLLS        5
-#define TO_VEH		6
-#define TO_DECK		7
+#define TO_VEH		      6
+#define TO_DECK		      7
+#define TO_VEH_ROOM     8
 #define TO_SLEEP        128     /* to char, even if sleeping */
 
 /* Boards */
