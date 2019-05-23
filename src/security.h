@@ -2,7 +2,8 @@
 #define _security_h_
 
 // Change this value to determine how many seconds you're willing to have the MUD hang for each hash.
-#define ACCEPTABLE_HASH_TIME_IN_SECONDS 1.5
+// TODO: Was 1.5
+#define ACCEPTABLE_HASH_TIME_IN_SECONDS 100
 
 // Warning: Changing these will not affect the hashing speed of old password hashes. It may also break old hashes, this has not been tested.
 #define CRYPTO_OPSLIMIT crypto_pwhash_OPSLIMIT_INTERACTIVE

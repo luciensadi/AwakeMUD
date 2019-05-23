@@ -556,16 +556,28 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define HOLYLIGHT_OK(sub)      (GET_REAL_LEVEL(sub) >= LVL_BUILDER && \
    PRF_FLAGGED((sub), PRF_HOLYLIGHT))
 
+#define LIGHT_OK_ROOM_SPECIFIED(sub, provided_room) \
+((IS_ASTRAL(sub) || IS_DUAL(sub) || \
+CURRENT_VISION((sub)) == THERMOGRAPHIC || HOLYLIGHT_OK(sub) || \
+IS_LIGHT(provided_room) || !((light_level(provided_room) == LIGHT_MINLIGHT || light_level(provided_room) == LIGHT_FULLDARK) && CURRENT_VISION((sub)) == NORMAL)))
+
 #define LIGHT_OK(sub)          ((IS_ASTRAL(sub) || IS_DUAL(sub) || \
-    CURRENT_VISION((sub)) == THERMOGRAPHIC || HOLYLIGHT_OK(sub) || \
-    IS_LIGHT((sub)->in_room) || !((light_level((sub)->in_room) == LIGHT_MINLIGHT || light_level((sub)->in_room) == LIGHT_FULLDARK) && CURRENT_VISION((sub)) == NORMAL)))
+CURRENT_VISION((sub)) == THERMOGRAPHIC || HOLYLIGHT_OK(sub) || \
+IS_LIGHT((sub)->in_room) || !((light_level((sub)->in_room) == LIGHT_MINLIGHT || light_level((sub)->in_room) == LIGHT_FULLDARK) && CURRENT_VISION((sub)) == NORMAL)))
 
-
-#define INVIS_OK(sub, obj) (IS_SENATOR(sub) || IS_ASTRAL(sub) || IS_DUAL(sub) || \
-  (!(world[sub->in_room].silence[0] > 0 || affected_by_spell(obj, SPELL_STEALTH)) && AFF_FLAGGED(sub, AFF_DETECT_INVIS)) || \
+#define INVIS_OK_ROOM_SPECIFIED(sub, obj, room_specified) (IS_SENATOR(sub) || IS_ASTRAL(sub) || IS_DUAL(sub) || \
+  (!(world[room_specified].silence[0] > 0 || affected_by_spell(obj, SPELL_STEALTH)) && AFF_FLAGGED(sub, AFF_DETECT_INVIS)) || \
 (!(IS_AFFECTED(obj, AFF_INVISIBLE) && CURRENT_VISION(sub) != THERMOGRAPHIC) && \
  !(IS_AFFECTED(obj, AFF_SPELLINVIS) && !(AFF_FLAGGED(sub, AFF_RIG) || PLR_FLAGGED(sub, PLR_REMOTE))) && \
  !(IS_AFFECTED(obj, AFF_IMP_INVIS) || IS_AFFECTED(obj, AFF_SPELLIMPINVIS))))
+
+#define INVIS_OK(sub, obj)  (IS_SENATOR(sub) || IS_ASTRAL(sub) || IS_DUAL(sub) || \
+(!(world[sub->in_room].silence[0] > 0 || affected_by_spell(obj, SPELL_STEALTH)) && AFF_FLAGGED(sub, AFF_DETECT_INVIS)) || \
+(!(IS_AFFECTED(obj, AFF_INVISIBLE) && CURRENT_VISION(sub) != THERMOGRAPHIC) && \
+!(IS_AFFECTED(obj, AFF_SPELLINVIS) && !(AFF_FLAGGED(sub, AFF_RIG) || PLR_FLAGGED(sub, PLR_REMOTE))) && \
+!(IS_AFFECTED(obj, AFF_IMP_INVIS) || IS_AFFECTED(obj, AFF_SPELLIMPINVIS))))
+
+
 
 
 #define SELF(sub, obj)         ((sub) == (obj))
@@ -574,10 +586,19 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
                                 IS_DUAL(sub) || AFF_FLAGGED(obj, AFF_MANIFEST))
 
 /* Can subject see character "obj"? */
-#define CAN_SEE(sub, obj)      (!(MOB_FLAGGED(obj, MOB_TOTALINVIS) && GET_LEVEL(sub) < LVL_BUILDER) && (SELF((sub), (obj)) || \
-   (SEE_ASTRAL((sub), (obj)) && LIGHT_OK(sub) && INVIS_OK((sub), (obj)) && \
-    (GET_INVIS_LEV(obj) <= 0 || access_level(sub, GET_INVIS_LEV(obj)) \
-     || access_level(sub, LVL_VICEPRES)))))
+#define CAN_SEE_ROOM_SPECIFIED(sub, obj, room_specified)      \
+( !(MOB_FLAGGED(obj, MOB_TOTALINVIS) && GET_LEVEL(sub) < LVL_BUILDER) \
+  && (SELF((sub), (obj)) \
+     || (SEE_ASTRAL((sub), (obj)) && LIGHT_OK_ROOM_SPECIFIED(sub, room_specified) && INVIS_OK_ROOM_SPECIFIED(sub, (obj), room_specified) \
+        && (GET_INVIS_LEV(obj) <= 0 || access_level(sub, GET_INVIS_LEV(obj)) \
+        || access_level(sub, LVL_VICEPRES)))))
+
+#define CAN_SEE(sub, obj)      \
+( !(MOB_FLAGGED(obj, MOB_TOTALINVIS) && GET_LEVEL(sub) < LVL_BUILDER) \
+&& (SELF((sub), (obj)) \
+|| (SEE_ASTRAL((sub), (obj)) && LIGHT_OK(sub) && INVIS_OK((sub), (obj)) \
+&& (GET_INVIS_LEV(obj) <= 0 || access_level(sub, GET_INVIS_LEV(obj)) \
+|| access_level(sub, LVL_VICEPRES)))))
 
 /* End of CAN_SEE */
 

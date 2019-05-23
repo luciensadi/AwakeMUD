@@ -153,7 +153,7 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
     // No vehicular targets? Check players.
     for (vict = world[ch->in_veh->in_room].people; vict; vict = vict->next_in_room) {
       // Skip over invalid targets (NPCs, no-hassle imms, invisibles, and downed).
-      if (IS_NPC(vict) || PRF_FLAGGED(vict, PRF_NOHASSLE) || !CAN_SEE(ch, vict) || GET_PHYSICAL(vict) <= 0)
+      if (IS_NPC(vict) || PRF_FLAGGED(vict, PRF_NOHASSLE) || !CAN_SEE_ROOM_SPECIFIED(ch, vict, ch->in_veh->in_room) || GET_PHYSICAL(vict) <= 0)
         continue;
       
       for (int i = 0; i < NUM_WEARS; i++) {
@@ -227,7 +227,7 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
     // If we've gotten here, character is either astral or is not willing to / failed to attack a vehicle.
     for (vict = world[ch->in_veh->in_room].people; vict; vict = vict->next_in_room) {
       // Skip conditions: Invisible, no-hassle, already downed, or is an NPC who is neither a player's astral body nor a player's escortee.
-      if ((IS_NPC(vict) && !IS_PROJECT(vict) && !is_escortee(vict)) || !CAN_SEE(ch, vict) || PRF_FLAGGED(vict, PRF_NOHASSLE) || GET_PHYSICAL(vict) <= 0)
+      if ((IS_NPC(vict) && !IS_PROJECT(vict) && !is_escortee(vict)) || !CAN_SEE_ROOM_SPECIFIED(ch, vict, ch->in_veh->in_room) || PRF_FLAGGED(vict, PRF_NOHASSLE) || GET_PHYSICAL(vict) <= 0)
         continue;
       
       // Attack the escortee if we're hunting it specifically.
@@ -641,8 +641,12 @@ void mobile_activity(void)
       continue;
     }
     
+    // Character in nested vehicle? Stop processing.
+    if (ch->in_veh && ch->in_veh->in_veh)
+      continue;
+    
     // All these aggressive checks require the character to not be in a peaceful room.
-    if (!ROOM_FLAGGED(ch->in_room, ROOM_PEACEFUL)) {
+    if (!ROOM_FLAGGED(ch->in_veh ? ch->in_veh->in_room : ch->in_room, ROOM_PEACEFUL)) {
       // Handle aggressive mobs.
       if (mobact_process_aggro(ch, ch->in_veh ? ch->in_veh->in_room : ch->in_room)) {
         continue;

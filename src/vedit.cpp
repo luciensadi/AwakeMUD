@@ -161,11 +161,10 @@ void vedit_parse(struct descriptor_data * d, const char *arg)
         if (veh_number > 0) {
           /* we need to run through each and every vehicle currently in the
            * game to see which ones are pointing to this prototype */
-          struct veh_data *i;
           struct veh_data *temp;
           /* if vehicle is pointing to this prototype, then we need to replace
            * with the new one */
-          for (i = veh_list; i; i = i->next) {
+          for (struct veh_data *i = veh_list; i; i = i->next) {
             if (veh_number == i->veh_number) {
               temp = Mem->GetVehicle();
               *temp = *i;
@@ -191,7 +190,23 @@ void vedit_parse(struct descriptor_data * d, const char *arg)
           // in the mud
           /* now safe to free old proto and write over */
           
-#define SAFE_VEH_ARRAY_DELETE(ITEM) if (veh_proto[veh_number].ITEM != d->edit_veh->ITEM) { DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].ITEM); }
+#define SAFE_VEH_ARRAY_DELETE(ITEM) \
+sprintf(buf, "Attempting safe delete of " #ITEM ": "); \
+if (d->edit_veh->ITEM && veh_proto[veh_number].ITEM) {\
+  if (d->edit_veh->ITEM != veh_proto[veh_number].ITEM) { \
+    sprintf(ENDOF(buf), "Proceeding (%p (%.10s) and %p (%.10s) do not match).", \
+            d->edit_veh->ITEM, d->edit_veh->ITEM, veh_proto[veh_number].ITEM, veh_proto[veh_number].ITEM); \
+    delete [] veh_proto[veh_number].ITEM; \
+    veh_proto[veh_number].ITEM = NULL; \
+  } else { \
+    sprintf(ENDOF(buf), "Will not proceed (%p (%.10s) and %p (%.10s) match, so we would be deleting d->edit_veh's version).", \
+            d->edit_veh->ITEM, d->edit_veh->ITEM, veh_proto[veh_number].ITEM, veh_proto[veh_number].ITEM); \
+  } \
+} else { \
+  sprintf(ENDOF(buf), "Will not proceed, %s did not exist.", d->edit_veh->ITEM ? "d->edit_veh->" #ITEM : "veh_proto[veh_number]." #ITEM); \
+} \
+strcat(buf, "\r\n"); \
+send_to_char(buf, d->character);
           
           SAFE_VEH_ARRAY_DELETE(name);
           SAFE_VEH_ARRAY_DELETE(description);
