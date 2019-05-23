@@ -179,35 +179,23 @@ void vedit_parse(struct descriptor_data * d, const char *arg)
               i->cspeed = temp->cspeed;
               i->seating[0] = temp->seating[0];
               i->seating[1] = temp->seating[1];
+              i->next = temp->next;
               for (int c = 0; c < NUM_MODS; c++)
                 i->mod[c] = temp->mod[c];
               i->owner = temp->owner;
               Mem->ClearVehicle(temp);
-
             }
           }
           // this function updates pointers to the active list of vehicles
           // in the mud
           /* now safe to free old proto and write over */
           
-#define SAFE_VEH_ARRAY_DELETE(ITEM) \
-sprintf(buf, "Attempting safe delete of " #ITEM ": "); \
-if (d->edit_veh->ITEM && veh_proto[veh_number].ITEM) {\
-  if (d->edit_veh->ITEM != veh_proto[veh_number].ITEM) { \
-    sprintf(ENDOF(buf), "Proceeding (%p (%.10s) and %p (%.10s) do not match).", \
-            d->edit_veh->ITEM, d->edit_veh->ITEM, veh_proto[veh_number].ITEM, veh_proto[veh_number].ITEM); \
-    delete [] veh_proto[veh_number].ITEM; \
-    veh_proto[veh_number].ITEM = NULL; \
-  } else { \
-    sprintf(ENDOF(buf), "Will not proceed (%p (%.10s) and %p (%.10s) match, so we would be deleting d->edit_veh's version).", \
-            d->edit_veh->ITEM, d->edit_veh->ITEM, veh_proto[veh_number].ITEM, veh_proto[veh_number].ITEM); \
-  } \
-} else { \
-  sprintf(ENDOF(buf), "Will not proceed, %s did not exist.", d->edit_veh->ITEM ? "d->edit_veh->" #ITEM : "veh_proto[veh_number]." #ITEM); \
-} \
-strcat(buf, "\r\n"); \
-send_to_char(buf, d->character);
-          
+#define SAFE_VEH_ARRAY_DELETE(ITEM)                                                                        \
+if (d->edit_veh->ITEM && veh_proto[veh_number].ITEM && d->edit_veh->ITEM != veh_proto[veh_number].ITEM) {  \
+  delete [] veh_proto[veh_number].ITEM;                                                                    \
+  veh_proto[veh_number].ITEM = NULL;                                                                       \
+}
+
           SAFE_VEH_ARRAY_DELETE(name);
           SAFE_VEH_ARRAY_DELETE(description);
           SAFE_VEH_ARRAY_DELETE(short_description);
@@ -311,7 +299,7 @@ send_to_char(buf, d->character);
         STATE(d) = CON_PLAYING;
         PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
         send_to_char("Done.\r\n", d->character);
-      }
+    }
       break;
     case 'n':
     case 'N':

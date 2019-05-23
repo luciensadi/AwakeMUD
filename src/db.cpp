@@ -280,7 +280,7 @@ void boot_world(void)
     exit(1);
   }
   
-#ifdef DEBUG
+#ifdef DEBUG_CRYPTO
   log("Performing crypto performance and validation tests.");
   run_crypto_tests();
 #endif
@@ -2432,6 +2432,7 @@ struct veh_data *read_vehicle(int nr, int type)
     }
   } else
     i = nr;
+  
   veh = Mem->GetVehicle();
   *veh = veh_proto[i];
   veh->next = veh_list;
@@ -2831,8 +2832,7 @@ void reset_zone(int zone, int reboot)
         last_cmd = 0;
       break;
     case 'V':                 /* loads a vehicle */
-      if ((veh_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
-          (ZCMD.arg2 == 0 && reboot)) {
+      if ((veh_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)) {        
         veh = read_vehicle(ZCMD.arg1, REAL);
         veh_to_room(veh, ZCMD.arg3);
         last_cmd = 1;
@@ -3906,8 +3906,8 @@ void purge_unowned_vehs() {
     
     // This vehicle is owned by an NPC (zoneloaded): Do not delete.
     if (veh->owner == 0) {
-      //sprintf(buf, "Skipping vehicle '%s' (%ld) since it's owned by nobody.", veh->description, veh->idnum);
-      //log(buf);
+      sprintf(buf, "Skipping vehicle '%s' (%ld) since it's owned by nobody.", veh->description, veh->idnum);
+      log(buf);
       
       if (!prior_veh) {
         break;
