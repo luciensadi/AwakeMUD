@@ -522,6 +522,10 @@ char *str_dup(const char *source)
     return NULL;
   
   char *New = new char[strlen(source) + 1];
+  
+  // This shouldn't be needed, but just in case.
+  memset(New, 0, sizeof(char) * (strlen(source) + 1));
+  
   sprintf(New, "%s", source);
   return New;
 }

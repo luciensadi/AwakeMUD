@@ -161,11 +161,10 @@ void vedit_parse(struct descriptor_data * d, const char *arg)
         if (veh_number > 0) {
           /* we need to run through each and every vehicle currently in the
            * game to see which ones are pointing to this prototype */
-          struct veh_data *i;
           struct veh_data *temp;
           /* if vehicle is pointing to this prototype, then we need to replace
            * with the new one */
-          for (i = veh_list; i; i = i->next) {
+          for (struct veh_data *i = veh_list; i; i = i->next) {
             if (veh_number == i->veh_number) {
               temp = Mem->GetVehicle();
               *temp = *i;
@@ -180,19 +179,23 @@ void vedit_parse(struct descriptor_data * d, const char *arg)
               i->cspeed = temp->cspeed;
               i->seating[0] = temp->seating[0];
               i->seating[1] = temp->seating[1];
+              i->next = temp->next;
               for (int c = 0; c < NUM_MODS; c++)
                 i->mod[c] = temp->mod[c];
               i->owner = temp->owner;
               Mem->ClearVehicle(temp);
-
             }
           }
           // this function updates pointers to the active list of vehicles
           // in the mud
           /* now safe to free old proto and write over */
           
-#define SAFE_VEH_ARRAY_DELETE(ITEM) if (veh_proto[veh_number].ITEM != d->edit_veh->ITEM) { DELETE_ARRAY_IF_EXTANT(veh_proto[veh_number].ITEM); }
-          
+#define SAFE_VEH_ARRAY_DELETE(ITEM)                                                                        \
+if (d->edit_veh->ITEM && veh_proto[veh_number].ITEM && d->edit_veh->ITEM != veh_proto[veh_number].ITEM) {  \
+  delete [] veh_proto[veh_number].ITEM;                                                                    \
+  veh_proto[veh_number].ITEM = NULL;                                                                       \
+}
+
           SAFE_VEH_ARRAY_DELETE(name);
           SAFE_VEH_ARRAY_DELETE(description);
           SAFE_VEH_ARRAY_DELETE(short_description);
@@ -296,7 +299,7 @@ void vedit_parse(struct descriptor_data * d, const char *arg)
         STATE(d) = CON_PLAYING;
         PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
         send_to_char("Done.\r\n", d->character);
-      }
+    }
       break;
     case 'n':
     case 'N':

@@ -854,6 +854,7 @@ void parse_host(File &fl, long nr)
   for (int x = 0; x < num_fields; x++) {
     const char *name = data.GetIndexSection("EXITS", x);
     exit_data *exit = new exit_data;
+    memset(exit, 0, sizeof(exit_data));
     sprintf(field, "%s/Exit", name);
     exit->host = data.GetLong(field, 0);
     sprintf(field, "%s/Number", name);
@@ -866,6 +867,7 @@ void parse_host(File &fl, long nr)
   for (int x = 0; x < num_fields; x++) {
     const char *name = data.GetIndexSection("TRIGGERS", x);
     trigger_step *trigger = new trigger_step;
+    memset(trigger, 0, sizeof(trigger_step));
     sprintf(field, "%s/Step", name);
     trigger->step = data.GetInt(field, 0);
     sprintf(field, "%s/Alert", name);
@@ -1018,6 +1020,7 @@ void parse_room(File &fl, long nr)
 
       room->dir_option[i] = new room_direction_data;
       room_direction_data *dir = room->dir_option[i];
+      memset(dir, 0, sizeof(room_direction_data));
 
       dir->to_room = to_vnum;
       // dir->to_room_vnum will be set in renum_world
@@ -1077,6 +1080,7 @@ void parse_room(File &fl, long nr)
 
 
       extra_descr_data *desc = new extra_descr_data;
+      memset(desc, 0, sizeof(extra_descr_data));
       desc->keyword = keywords;
       sprintf(field, "%s/Desc", sect);
       desc->description = str_dup(data.GetString(field, NULL));
@@ -1099,6 +1103,7 @@ void setup_dir(FILE * fl, int room, int dir)
   sprintf(buf2, "room #%ld, direction D%d", world[room].number, dir);
 
   world[room].dir_option[dir] = new room_direction_data;
+  memset(world[room].dir_option[dir], 0, sizeof(room_direction_data));
   world[room].dir_option[dir]->general_description = fread_string(fl, buf2);
   world[room].dir_option[dir]->keyword = fread_string(fl, buf2);
 
@@ -1505,6 +1510,7 @@ void parse_object(File &fl, long nr)
       }
 
       extra_descr_data *desc = new extra_descr_data;
+      memset(desc, 0, sizeof(extra_descr_data));
       desc->keyword = keywords;
       sprintf(field, "%s/Desc", sect);
       desc->description = str_dup(data.GetString(field, NULL));
@@ -1619,6 +1625,7 @@ void parse_quest(File &fl, long virtual_nr)
 
   if (quest_table[quest_nr].num_objs > 0) {
     quest_table[quest_nr].obj = new quest_om_data[quest_table[quest_nr].num_objs];
+    memset(quest_table[quest_nr].obj, 0, sizeof(quest_om_data) * quest_table[quest_nr].num_objs);
     for (j = 0; j < quest_table[quest_nr].num_objs; j++) {
       fl.GetLine(line, 256, FALSE);
       if (sscanf(line, "%ld %ld %ld %ld %ld %ld %ld %ld", t, t + 1, t + 2, t + 3,
@@ -1640,6 +1647,7 @@ void parse_quest(File &fl, long virtual_nr)
 
   if (quest_table[quest_nr].num_mobs > 0) {
     quest_table[quest_nr].mob = new quest_om_data[quest_table[quest_nr].num_mobs];
+    memset(quest_table[quest_nr].mob, 0, sizeof(quest_om_data) * quest_table[quest_nr].num_mobs);
     for (j = 0; j < quest_table[quest_nr].num_mobs; j++) {
       fl.GetLine(line, 256, FALSE);
       if (sscanf(line, "%ld %ld %ld %ld %ld %ld %ld %ld", t, t + 1, t + 2, t + 3,
@@ -1717,6 +1725,7 @@ void parse_shop(File &fl, long virtual_nr)
     if (real_object(vnum) < 1)
       continue;
     shop_sell_data *sell = new shop_sell_data;
+    memset(sell, 0, sizeof(shop_sell_data));
     sell->vnum = vnum;
     sprintf(field, "%s/Type", name);
     sell->type = data.LookupInt(field, selling_type, SELL_ALWAYS);
@@ -1755,8 +1764,10 @@ void load_zones(File &fl)
 
   if (Z.num_cmds == 0)
     Z.cmd = NULL;
-  else
+  else {
     Z.cmd = new struct reset_com[Z.num_cmds];
+    memset(Z.cmd, 0, sizeof(reset_com) * Z.num_cmds);
+  }
 
   fl.GetLine(buf, 256, FALSE);
 
@@ -2421,6 +2432,7 @@ struct veh_data *read_vehicle(int nr, int type)
     }
   } else
     i = nr;
+  
   veh = Mem->GetVehicle();
   *veh = veh_proto[i];
   veh->next = veh_list;
@@ -2820,8 +2832,7 @@ void reset_zone(int zone, int reboot)
         last_cmd = 0;
       break;
     case 'V':                 /* loads a vehicle */
-      if ((veh_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
-          (ZCMD.arg2 == 0 && reboot)) {
+      if ((veh_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)) {        
         veh = read_vehicle(ZCMD.arg1, REAL);
         veh_to_room(veh, ZCMD.arg3);
         last_cmd = 1;
@@ -3088,6 +3099,7 @@ bool resize_world_array()
   struct room_data *new_world;
 
   new_world = new struct room_data[top_of_world_array + world_chunk_size];
+  memset(new_world, 0, sizeof(room_data) * (top_of_world_array + world_chunk_size));
 
   if (!new_world) {
     mudlog("Unable to allocate new world array.", NULL, LOG_SYSLOG, TRUE);
@@ -3116,6 +3128,7 @@ bool resize_qst_array(void)
   struct quest_data *new_qst;
 
   new_qst = new struct quest_data[top_of_quest_array + quest_chunk_size];
+  memset(new_qst, 0, sizeof(quest_data) * (top_of_quest_array + quest_chunk_size));
 
   if (!new_qst) {
     mudlog("Unable to allocate new quest array.", NULL, LOG_SYSLOG, TRUE);
@@ -3188,6 +3201,7 @@ char *fread_string(FILE * fl, char *error)
   /* allocate space for the new string and copy it */
   if (strlen(buf) > 0) {
     rslt = new char[length + 1];
+    memset(rslt, 0, sizeof(char) * (length + 1));
     strcpy(rslt, buf);
   } else
     rslt = NULL;
@@ -3527,7 +3541,9 @@ int file_to_string_alloc(const char *name, char **buf)
 int file_to_string(const char *name, char *buf)
 {
   FILE *fl;
-  char tmp[128];
+  // Expanded from 128 to 129 so a max-length string (127 + '\0') after newline drop (126 + '\0\0') does not overrun when \r\n added (128 + overrun '\0')
+  char tmp[129];
+  memset(tmp, 0, sizeof(char) * 129);
 
   *buf = '\0';
 
@@ -3890,8 +3906,8 @@ void purge_unowned_vehs() {
     
     // This vehicle is owned by an NPC (zoneloaded): Do not delete.
     if (veh->owner == 0) {
-      //sprintf(buf, "Skipping vehicle '%s' (%ld) since it's owned by nobody.", veh->description, veh->idnum);
-      //log(buf);
+      // sprintf(buf, "Skipping vehicle '%s' (%ld) since it's owned by nobody.", veh->description, veh->idnum);
+      // log(buf);
       
       if (!prior_veh) {
         break;
@@ -4073,6 +4089,7 @@ void load_saved_veh()
     num_mods = data.NumSubsections("GRIDGUIDE");
     for (int i = 0; i < num_mods; i++) {
       struct grid_data *grid = new grid_data;
+      memset(grid, 0, sizeof(grid_data));
       const char *sect_name = data.GetIndexSection("GRIDGUIDE", i);
       sprintf(buf, "%s/Name", sect_name);
       grid->name = str_dup(data.GetString(buf, NULL));
@@ -4238,6 +4255,7 @@ void boot_shop_orders(void)
       if (real_object(vnum) < 0 || !does_player_exist(player))
         continue;
       order = new shop_order_data;
+      memset(order, 0, sizeof(shop_order_data));
       order->item = vnum;
       order->player = player;
       sprintf(buf, "%s/Time", sect_name);
