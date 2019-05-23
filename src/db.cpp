@@ -83,15 +83,13 @@ struct index_data *ic_index;
 rnum_t top_of_ic = 0;
 struct matrix_icon *icon_list = NULL;
 
-struct char_data *character_list = NULL; /* global linked list of
-       * chars  */
+struct char_data *character_list = NULL; /* global linked list of chars  */
 struct index_data *mob_index; /* index table for mobile file  */
 struct char_data *mob_proto; /* prototypes for mobs   */
 rnum_t top_of_mobt = 0; /* top of mobile index table  */
 int mob_chunk_size = 100;       // default to 100
 int top_of_mob_array = 0;
 
-struct obj_data *object_list = NULL; /* global linked list of objs  */
 struct index_data *obj_index; /* index table for object file  */
 struct obj_data *obj_proto; /* prototypes for objs   */
 rnum_t top_of_objt = 0; /* top of object index table  */

@@ -106,8 +106,7 @@ void redit_disp_material_menu(struct descriptor_data *d)
 /* For extra descriptions */
 void redit_disp_extradesc_menu(struct descriptor_data * d)
 {
-  struct extra_descr_data *extra_desc =
-          (struct extra_descr_data *) * d->misc_data;
+  struct extra_descr_data *extra_desc = (struct extra_descr_data *) * d->misc_data;
 
   send_to_char(CH, "Extra descript menu\r\n"
                "0) Quit\r\n"
