@@ -335,29 +335,35 @@ ACMD(do_program)
     return;
   }
   if (!GET_OBJ_VAL(prog, 5)) {
-    send_to_char(ch, "You begin to program %s.\r\n", prog->restring);
-    int target = GET_OBJ_VAL(prog, 1);
-    if (GET_OBJ_VAL(comp, 1) >= GET_OBJ_VAL(prog, 6) * 2)
-      target -= 2;
-    if (GET_OBJ_VAL(prog, 8) != -1)
-      target += 2;
-    else
-      target -= GET_OBJ_VAL(prog, 3);
-    int skill = get_skill(ch, SKILL_COMPUTER, target);
-    int success = success_test(skill, target);
-    for (struct obj_data *suite = comp->contains; suite; suite = suite->next_content)
-      if (GET_OBJ_TYPE(suite) == ITEM_PROGRAM && GET_OBJ_VAL(suite, 0) == SOFT_SUITE) {
-        success += (int)(success_test(MIN(GET_SKILL(ch, SKILL_COMPUTER), GET_OBJ_VAL(suite, 1)), target) / 2);
-        break;
-      }
-    if (success) {
-      GET_OBJ_VAL(prog, 5) = GET_OBJ_VAL(prog, 6) / success;
-      GET_OBJ_VAL(prog, 5) *= 60;
+    if (access_level(ch, LVL_ADMIN)) {
+      send_to_char(ch, "You use your admin powers to greatly reduce the development time for %s.\r\n", prog->restring);
+      GET_OBJ_VAL(prog, 5) = 1;
       GET_OBJ_TIMER(prog) = GET_OBJ_VAL(prog, 5);
     } else {
-      GET_OBJ_VAL(prog, 5) = number(1, 6) + number(1, 6);
-      GET_OBJ_TIMER(prog) = (GET_OBJ_VAL(prog, 6) * 60) / number(1, 3);
-      GET_OBJ_VAL(prog, 7) = 1;
+      send_to_char(ch, "You begin to program %s.\r\n", prog->restring);
+      int target = GET_OBJ_VAL(prog, 1);
+      if (GET_OBJ_VAL(comp, 1) >= GET_OBJ_VAL(prog, 6) * 2)
+        target -= 2;
+      if (GET_OBJ_VAL(prog, 8) != -1)
+        target += 2;
+      else
+        target -= GET_OBJ_VAL(prog, 3);
+      int skill = get_skill(ch, SKILL_COMPUTER, target);
+      int success = success_test(skill, target);
+      for (struct obj_data *suite = comp->contains; suite; suite = suite->next_content)
+        if (GET_OBJ_TYPE(suite) == ITEM_PROGRAM && GET_OBJ_VAL(suite, 0) == SOFT_SUITE) {
+          success += (int)(success_test(MIN(GET_SKILL(ch, SKILL_COMPUTER), GET_OBJ_VAL(suite, 1)), target) / 2);
+          break;
+        }
+      if (success) {
+        GET_OBJ_VAL(prog, 5) = GET_OBJ_VAL(prog, 6) / success;
+        GET_OBJ_VAL(prog, 5) *= 60;
+        GET_OBJ_TIMER(prog) = GET_OBJ_VAL(prog, 5);
+      } else {
+        GET_OBJ_VAL(prog, 5) = number(1, 6) + number(1, 6);
+        GET_OBJ_TIMER(prog) = (GET_OBJ_VAL(prog, 6) * 60) / number(1, 3);
+        GET_OBJ_VAL(prog, 7) = 1;
+      }
     }
   } else
     send_to_char(ch, "You continue to work on %s.\r\n", prog->restring);
