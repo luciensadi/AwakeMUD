@@ -149,7 +149,7 @@ void memoryClass::DeleteIcon(struct matrix_icon *icon)
 void memoryClass::DeleteVehicle(struct veh_data *veh)
 {
   int veh_num = real_vehicle(veh->veh_number);
-#define SAFE_VEH_ARRAY_DELETE(ITEM) // if (veh_proto[veh_num].ITEM != veh->ITEM) { DELETE_ARRAY_IF_EXTANT(veh->ITEM); }
+#define SAFE_VEH_ARRAY_DELETE(ITEM) if (veh_proto[veh_num].ITEM != veh->ITEM) { DELETE_ARRAY_IF_EXTANT(veh->ITEM); }
   
   SAFE_VEH_ARRAY_DELETE(name);
   SAFE_VEH_ARRAY_DELETE(description);

@@ -280,7 +280,7 @@ void boot_world(void)
     exit(1);
   }
   
-#ifdef DEBUG_CRYPTO
+#ifdef DEBUG
   log("Performing crypto performance and validation tests.");
   run_crypto_tests();
 #endif
@@ -3906,8 +3906,8 @@ void purge_unowned_vehs() {
     
     // This vehicle is owned by an NPC (zoneloaded): Do not delete.
     if (veh->owner == 0) {
-      sprintf(buf, "Skipping vehicle '%s' (%ld) since it's owned by nobody.", veh->description, veh->idnum);
-      log(buf);
+      // sprintf(buf, "Skipping vehicle '%s' (%ld) since it's owned by nobody.", veh->description, veh->idnum);
+      // log(buf);
       
       if (!prior_veh) {
         break;
