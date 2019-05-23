@@ -310,8 +310,8 @@ void redit_disp_menu(struct descriptor_data * d)
   send_to_char(CH, "k) Background Count: ^c%d (%s)^n\r\n", d->edit_room->background[0], background_types[d->edit_room->background[1]]);
   send_to_char(CH, "l) Extra descriptions\r\n", d->character);
   if (d->edit_room->sector_type == SPIRIT_LAKE || d->edit_room->sector_type == SPIRIT_SEA ||
-      d->edit_room->sector_type == SPIRIT_RIVER)
-    send_to_char(CH, "m) Current rating: %s%d%s\r\n", CCCYN(CH, C_CMP),
+      d->edit_room->sector_type == SPIRIT_RIVER || d->edit_room->room_flags.IsSet(ROOM_FALL))
+    send_to_char(CH, "m) %s test difficulty (TN): %s%d%s\r\n", d->edit_room->room_flags.IsSet(ROOM_FALL) ? "Fall" : "Swim", CCCYN(CH, C_CMP),
                  ROOM->rating, CCNRM(CH, C_CMP));
   send_to_char("q) Quit and save\r\n", d->character);
   send_to_char("x) Exit and abort\r\n", d->character);
