@@ -602,6 +602,10 @@ static void init_elevators(void)
   char line[256];
   int i, j, t[3];
   vnum_t room[1], rnum;
+  int real_button = -1, real_panel = -1;
+  
+  struct obj_data *obj = NULL;
+  
   if (!(fl = fopen(ELEVATOR_FILE, "r"))) {
     log("Error opening elevator file.");
     shutdown();
@@ -611,7 +615,13 @@ static void init_elevators(void)
     log("Error at beginning of elevator file.");
     shutdown();
   }
-
+  
+  // E_B_V and E_P_V are defined in transport.h
+  if ((real_button = real_object(ELEVATOR_BUTTON_VNUM)) < 0)
+    log("Elevator button object does not exist; will not load elevator call buttons.");
+  if ((real_panel = real_object(ELEVATOR_PANEL_VNUM)) < 0)
+    log("Elevator panel object does not exist; will not load elevator control panels.");
+  
   elevator = new struct elevator_data[num_elevators];
 
   for (i = 0; i < num_elevators && !feof(fl); i++) {
@@ -624,6 +634,11 @@ static void init_elevators(void)
     if ((rnum = real_room(elevator[i].room)) > -1) {
       world[rnum].func = elevator_spec;
       world[rnum].rating = 0;
+      if (real_panel >= 0) {
+        // Add decorative elevator control panel to elevator car.
+        obj = read_object(real_panel, REAL);
+        obj_to_room(obj, rnum);
+      }
     } else
       log("Nonexistent elevator.");
     elevator[i].columns = t[0];
@@ -642,9 +657,14 @@ static void init_elevators(void)
           shutdown();
         }
         elevator[i].floor[j].vnum = room[0];
-        if ((rnum = real_room(elevator[i].floor[j].vnum)) > -1)
+        if ((rnum = real_room(elevator[i].floor[j].vnum)) > -1) {
           world[rnum].func = call_elevator;
-        else {
+          if (real_button >= 0) {
+            // Add decorative elevator call button to landing.
+            obj = read_object(real_button, REAL);
+            obj_to_room(obj, rnum);
+          }
+        } else {
           elevator[i].floor[j].vnum = -1;
           log("Nonexistent elevator destination -- blocking.");
         }
