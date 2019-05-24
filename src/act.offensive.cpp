@@ -674,40 +674,42 @@ ACMD(do_retract)
 
 ACMD(do_mode)
 {
-  if (!GET_EQ(ch, WEAR_WIELD) || GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) != ITEM_WEAPON || !IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3)))
+  struct obj_data *weapon = NULL;
+  if (!(weapon = GET_EQ(ch, WEAR_WIELD)) || GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !IS_GUN(GET_WEAPON_TYPE(weapon)))
     send_to_char("You aren't wielding a firearm.\r\n", ch);
   else if (!*argument) {
-    send_to_char(ch, "%s's Available fire modes: \r\n", CAP(GET_OBJ_NAME(GET_EQ(ch, WEAR_WIELD))));
-    if (IS_SET(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 10), 1 << MODE_SS))
-      send_to_char(ch, "%s%s^n\r\n", GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 11) == MODE_SS ? "^R" : "", fire_mode[MODE_SS]);
-    if (IS_SET(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 10), 1 << MODE_SA))
-      send_to_char(ch, "%s%s^n\r\n", GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 11) == MODE_SA ? "^R" : "", fire_mode[MODE_SA]);
-    if (IS_SET(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 10), 1 << MODE_BF))
-      send_to_char(ch, "%s%s^n\r\n", GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 11) == MODE_BF ? "^R" : "", fire_mode[MODE_BF]);
-    if (IS_SET(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 10), 1 << MODE_FA))
-      send_to_char(ch, "%s%s (%d rounds)^n\r\n", GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 11) == MODE_FA ? "^R" : "", fire_mode[MODE_FA], GET_OBJ_TIMER(GET_EQ(ch, WEAR_WIELD)));
+    send_to_char(ch, "%s's available fire modes: \r\n", CAP(GET_OBJ_NAME(weapon)));
+    if (WEAPON_CAN_USE_FIREMODE(weapon, MODE_SS))
+      send_to_char(ch, "%s%s^n\r\n", GET_WEAPON_FIREMODE(weapon) == MODE_SS ? "^R" : "", fire_mode[MODE_SS]);
+    if (WEAPON_CAN_USE_FIREMODE(weapon, MODE_SA))
+      send_to_char(ch, "%s%s^n\r\n", GET_WEAPON_FIREMODE(weapon) == MODE_SA ? "^R" : "", fire_mode[MODE_SA]);
+    if (WEAPON_CAN_USE_FIREMODE(weapon, MODE_BF))
+      send_to_char(ch, "%s%s^n\r\n", GET_WEAPON_FIREMODE(weapon) == MODE_BF ? "^R" : "", fire_mode[MODE_BF]);
+    if (WEAPON_CAN_USE_FIREMODE(weapon, MODE_FA))
+      send_to_char(ch, "%s%s (%d rounds)^n\r\n", GET_WEAPON_FIREMODE(weapon) == MODE_FA ? "^R" : "", fire_mode[MODE_FA], GET_WEAPON_FULL_AUTO_COUNT(weapon));
   } else {
     skip_spaces(&argument);
     two_arguments(argument, arg, buf1);
     int mode = 0;
-    if (!str_cmp(arg, "SS") && IS_SET(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 10), 1 << MODE_SS))
+    if (!str_cmp(arg, "SS") && WEAPON_CAN_USE_FIREMODE(weapon, MODE_SS))
       mode = MODE_SS;
-    else if (!str_cmp(arg, "SA") && IS_SET(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 10), 1 << MODE_SA))
+    else if (!str_cmp(arg, "SA") && WEAPON_CAN_USE_FIREMODE(weapon, MODE_SA))
       mode = MODE_SA;
-    else if (!str_cmp(arg, "BF") && IS_SET(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 10), 1 << MODE_BF))
+    else if (!str_cmp(arg, "BF") && WEAPON_CAN_USE_FIREMODE(weapon, MODE_BF))
       mode = MODE_BF;
-    else if (!str_cmp(arg, "FA") && IS_SET(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 10), 1 << MODE_FA)) {
+    else if (!str_cmp(arg, "FA") && WEAPON_CAN_USE_FIREMODE(weapon, MODE_FA)) {
       mode = MODE_FA;
       if (*buf1)
-        GET_OBJ_TIMER(GET_EQ(ch, WEAR_WIELD)) = MIN(10, MAX(3, atoi(buf1)));
-      else GET_OBJ_TIMER(GET_EQ(ch, WEAR_WIELD)) = 10;
+        GET_WEAPON_FULL_AUTO_COUNT(weapon) = MIN(10, MAX(3, atoi(buf1)));
+      else
+        GET_WEAPON_FULL_AUTO_COUNT(weapon) = 10;
     }
     if (!mode)
-      send_to_char(ch, "You can't set %s to that firing mode.\r\n", GET_OBJ_NAME(GET_EQ(ch, WEAR_WIELD)));
+      send_to_char(ch, "You can't set %s to that firing mode.\r\n", GET_OBJ_NAME(weapon));
     else {
-      send_to_char(ch, "You set %s to %s.\r\n", GET_OBJ_NAME(GET_EQ(ch, WEAR_WIELD)), fire_mode[mode]);
-      GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 11) = mode;
-      act("$n flicks the fire selector switch on $p.", TRUE, ch, GET_EQ(ch, WEAR_WIELD), 0, TO_ROOM);
+      send_to_char(ch, "You set %s to %s.\r\n", GET_OBJ_NAME(weapon), fire_mode[mode]);
+      GET_WEAPON_FIREMODE(weapon) = mode;
+      act("$n flicks the fire selector switch on $p.", TRUE, ch, weapon, 0, TO_ROOM);
     }
   }
 }

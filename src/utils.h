@@ -698,9 +698,9 @@ IS_LIGHT((sub)->in_room) || !((light_level((sub)->in_room) == LIGHT_MINLIGHT || 
 #define SEEK_END        2
 #endif
 
-/* Specific value invocations for item types *****************************/
+/* Specific value invocations and macro defines for item types *****************************/
 
-// ITEM_WEAPON
+// ITEM_WEAPON values
 #define GET_WEAPON_POWER(weapon)               (GET_OBJ_VAL((weapon), 0))
 #define GET_WEAPON_DAMAGE_CODE(weapon)         (GET_OBJ_VAL((weapon), 1))
 #define GET_WEAPON_STR_BONUS(weapon)           (GET_OBJ_VAL((weapon), 2))
@@ -711,7 +711,12 @@ IS_LIGHT((sub)->in_room) || !((light_level((sub)->in_room) == LIGHT_MINLIGHT || 
 #define GET_WEAPON_ATTACH_TOP_VNUM(weapon)     (GET_OBJ_VAL((weapon), 7))
 #define GET_WEAPON_ATTACH_BARREL_VNUM(weapon)  (GET_OBJ_VAL((weapon), 8))
 #define GET_WEAPON_ATTACH_UNDER_VNUM(weapon)   (GET_OBJ_VAL((weapon), 9))
-#define GET_WEAPON_FIREMODES(weapon)           (GET_OBJ_VAL((weapon), 10))
+#define GET_WEAPON_POSSIBLE_FIREMODES(weapon)  (GET_OBJ_VAL((weapon), 10))
+#define GET_WEAPON_FIREMODE(weapon)            (GET_OBJ_VAL((weapon), 11))
+#define GET_WEAPON_FULL_AUTO_COUNT(weapon)     (GET_OBJ_TIMER((weapon)))
+
+// ITEM_WEAPON convenience defines
+#define WEAPON_CAN_USE_FIREMODE(weapon, mode)  (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << mode))
 
 /* Misc utils ************************************************************/
 #define IS_DAMTYPE_PHYSICAL(type) \
