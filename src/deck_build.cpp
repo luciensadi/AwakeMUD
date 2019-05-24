@@ -395,6 +395,11 @@ ACMD(do_cook) {
             GET_OBJ_TIMER(chip) = -1;
         }
         GET_OBJ_VAL(cooker, 9) = (GET_OBJ_VAL(chip, 1) * 24) / success;
+      if (access_level(ch, LVL_ADMIN)) {
+        send_to_char("You use your admin powers to greatly accelerate the cooking time.\r\n", ch);
+        GET_OBJ_TIMER(chip) = 0;
+        GET_OBJ_VAL(cooker, 9) = 1;
+      }
         act("The light on $p turns orange as it starts to cook the chip.", TRUE, ch, cooker, 0, TO_ROOM);
         act("The light on $p turns orange as it starts to cook the chip.", TRUE, ch, cooker, 0, TO_CHAR);
     }
@@ -417,6 +422,11 @@ void part_design(struct char_data *ch, struct obj_data *part) {
         GET_OBJ_VAL(part, 3) = GET_OBJ_VAL(part, 2) * 2;
         GET_OBJ_VAL(part, 5) = success_test(skill, target) << 1;
         GET_OBJ_VAL(part, 7) = GET_IDNUM(ch);
+      if (access_level(ch, LVL_ADMIN)) {
+        send_to_char("You use your admin powers to greatly accelerate the design process.", ch);
+        GET_OBJ_VAL(part, 3) = 1;
+        GET_OBJ_VAL(part, 5) = 100;
+      }
         send_to_char(ch, "You begin to design %s.\r\n", GET_OBJ_NAME(part));
         AFF_FLAGS(ch).SetBit(AFF_PART_DESIGN);
         ch->char_specials.programming = part;
@@ -719,6 +729,12 @@ ACMD(do_build) {
                 GET_OBJ_TIMER(obj) = -1;
             }
             GET_OBJ_VAL(obj, 10) = GET_OBJ_VAL(obj, 4) = duration / success;
+          
+          if (access_level(ch, LVL_ADMIN)) {
+            send_to_char("You use your admin powers to greatly accelerate the build time.\r\n", ch);
+            GET_OBJ_VAL(obj, 10) = GET_OBJ_VAL(obj, 4) = 1;
+            GET_OBJ_TIMER(obj) = 0;
+          }
             send_to_char(ch, "You start building %s.\r\n", GET_OBJ_NAME(obj));
             ch->char_specials.programming = obj;
             obj->contains = deck;

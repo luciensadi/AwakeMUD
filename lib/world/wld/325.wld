@@ -11538,13 +11538,6 @@ has been mounted in the northeast corner of the ceiling.
 Flags:	1000
 SecType:	Inside
 MatrixExit:	70345
-IO:	300
-Bandwidth:	20
-Access:	-2
-Trace:	-2
-RTG:	1100
-JackID:	8206
-Address:	Allen & Associates, Boren and Eighth, Seattle
 Crowd:	0
 Cover:	0
 X:	20

@@ -106,8 +106,7 @@ void redit_disp_material_menu(struct descriptor_data *d)
 /* For extra descriptions */
 void redit_disp_extradesc_menu(struct descriptor_data * d)
 {
-  struct extra_descr_data *extra_desc =
-          (struct extra_descr_data *) * d->misc_data;
+  struct extra_descr_data *extra_desc = (struct extra_descr_data *) * d->misc_data;
 
   send_to_char(CH, "Extra descript menu\r\n"
                "0) Quit\r\n"
@@ -310,8 +309,8 @@ void redit_disp_menu(struct descriptor_data * d)
   send_to_char(CH, "k) Background Count: ^c%d (%s)^n\r\n", d->edit_room->background[0], background_types[d->edit_room->background[1]]);
   send_to_char(CH, "l) Extra descriptions\r\n", d->character);
   if (d->edit_room->sector_type == SPIRIT_LAKE || d->edit_room->sector_type == SPIRIT_SEA ||
-      d->edit_room->sector_type == SPIRIT_RIVER)
-    send_to_char(CH, "m) Current rating: %s%d%s\r\n", CCCYN(CH, C_CMP),
+      d->edit_room->sector_type == SPIRIT_RIVER || d->edit_room->room_flags.IsSet(ROOM_FALL))
+    send_to_char(CH, "m) %s test difficulty (TN): %s%d%s\r\n", d->edit_room->room_flags.IsSet(ROOM_FALL) ? "Fall" : "Swim", CCCYN(CH, C_CMP),
                  ROOM->rating, CCNRM(CH, C_CMP));
   send_to_char("q) Quit and save\r\n", d->character);
   send_to_char("x) Exit and abort\r\n", d->character);
@@ -693,8 +692,8 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       break;
       // new stuff here
     case 'm':
-      if (ROOM->sector_type == SPIRIT_LAKE || ROOM->sector_type == SPIRIT_SEA || ROOM->sector_type == SPIRIT_RIVER) {
-        send_to_char("Enter current rating (1 to 20): ", CH);
+      if (ROOM->sector_type == SPIRIT_LAKE || ROOM->sector_type == SPIRIT_SEA || ROOM->sector_type == SPIRIT_RIVER || d->edit_room->room_flags.IsSet(ROOM_FALL)) {
+        send_to_char("Enter environmental difficulty rating (1 to 20): ", CH);
         d->edit_mode = REDIT_LIBRARY_RATING;
       } else {
         redit_disp_menu(d);
@@ -1059,7 +1058,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
   case REDIT_LIBRARY_RATING:
     number = atoi(arg);
     if ((number < 0) || (number > 20)) {
-      send_to_char("Value must be between 1 and 20.\r\n", CH);
+      send_to_char("Value must be between 0 and 20.\r\n", CH);
       send_to_char("Enter current rating: ", CH);
     } else {
       ROOM->rating = number;

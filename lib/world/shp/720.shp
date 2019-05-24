@@ -1,5 +1,5 @@
-#10012
-Keeper:	10012
+#72011
+Keeper:	72002
 ProfitBuy:	1.00
 ProfitSell:	1.00
 Random:	0
@@ -12,24 +12,44 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	(null)
+Name:	das shop
 Flags:	0
 Races:	0
-Buytypes:	1000000000000001000000000000000000000000001
+Buytypes:	1
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	127
+		Vnum:	10132
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	10119
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	10118
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	10117
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	10116
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	10115
 		Type:	Always
 		Stock:	0
 BREAK
-#10014
-Keeper:	10014
+#72099
+Keeper:	-1
 ProfitBuy:	1.00
 ProfitSell:	1.00
 Random:	0
 Open:	0
-Close:	24
+Close:	0
 Type:	Grey
 NoSuchItemKeeper:	Sorry, we don't have that.
 NoSuchItemPlayer:	You don't seem to have that.
@@ -43,29 +63,5 @@ Races:	0
 Buytypes:	1
 Etiquette:	46
 [SELLING]
-	[SELL 0]
-		Vnum:	70505
-		Type:	Always
-		Stock:	0
-	[SELL 1]
-		Vnum:	70504
-		Type:	Always
-		Stock:	0
-	[SELL 2]
-		Vnum:	70503
-		Type:	Always
-		Stock:	0
-	[SELL 3]
-		Vnum:	70502
-		Type:	Always
-		Stock:	0
-	[SELL 4]
-		Vnum:	70501
-		Type:	Always
-		Stock:	0
-	[SELL 5]
-		Vnum:	70500
-		Type:	Always
-		Stock:	0
 BREAK
 END

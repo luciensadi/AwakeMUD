@@ -369,6 +369,7 @@ bool check_fall(struct char_data *ch, int modifier)
     return TRUE;
 
   send_to_char("You grab on to the wall and keep yourself from falling!\r\n", ch);
+  act("$n grabs onto the wall and keeps $mself from falling!", TRUE, ch, NULL, NULL, TO_ROOM);
   return FALSE;
 }
 
@@ -965,14 +966,19 @@ ACMD(do_gen_door)
              !(veh = get_veh_list(type, world[ch->in_room].vehicles, ch)))
       door = find_door(ch, type, dir, cmd_door[subcmd]);
     if (veh && subcmd != SCMD_OPEN && subcmd != SCMD_CLOSE) {
-      if (GET_IDNUM(ch) != veh->owner) {
-        sprintf(buf, "You don't have the key for %s.\r\n", GET_VEH_NAME(veh));
-        send_to_char(buf, ch);
+      if (veh->type == VEH_DRONE) {
+        send_to_char("Drones don't have doors, let alone door locks.\r\n", ch);
         return;
       }
-      if (veh->type == VEH_DRONE) {
-        send_to_char("You can't lock that.\r\n", ch);
-        return;
+      
+      if (GET_IDNUM(ch) != veh->owner) {
+        if (access_level(ch, LVL_ADMIN)) {
+          send_to_char("You use your staff powers to summon the key.\r\n", ch);
+        } else {
+          sprintf(buf, "You don't have the key for %s.\r\n", GET_VEH_NAME(veh));
+          send_to_char(buf, ch);
+          return;
+        }
       }
       if (subcmd == SCMD_UNLOCK) {
         if (!veh->locked) {
@@ -1042,12 +1048,37 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   struct follow_type *k, *next;
   if (*argument && is_abbrev(argument, "rear"))
     front = FALSE;
-  if (found_veh->damage >= 10)
-    send_to_char("It's too damaged to enter.\r\n", ch);
-  else if (found_veh->type != VEH_BIKE && found_veh->locked)
-    send_to_char("The door is locked.\r\n", ch);
-  else if (found_veh->cspeed > SPEED_IDLE)
-    send_to_char("It's moving too fast for you to board!\r\n", ch);
+  
+  // Too damaged? Can't (unless admin).
+  if (found_veh->damage >= 10) {
+    if (access_level(ch, LVL_ADMIN)) {
+      send_to_char("You use your staff powers to enter the destroyed vehicle.\r\n", ch);
+    } else {
+      send_to_char("It's too damaged to enter.\r\n", ch);
+      return;
+    }
+  }
+  
+  // Too fast? Can't (unless admin).
+  else if (found_veh->cspeed > SPEED_IDLE) {
+    if (access_level(ch, LVL_ADMIN)) {
+      send_to_char("You use your staff powers to match its speed as you board.\r\n", ch);
+    } else {
+      send_to_char("It's moving too fast for you to board!\r\n", ch);
+      return;
+    }
+  }
+  
+  // Locked? Can't (unless admin)
+  else if (found_veh->type != VEH_BIKE && found_veh->locked) {
+    if (access_level(ch, LVL_ADMIN)) {
+      send_to_char("You use your staff powers to bypass the locked doors.\r\n", ch);
+    } else {
+      send_to_char("The door is locked.\r\n", ch);
+      return;
+    }
+  }
+  
   else if (inveh && (AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE))) {
     int mult;
     switch (inveh->type) {
@@ -1074,39 +1105,47 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
       veh_to_veh(inveh, found_veh);
     }
     return;
-  } else if (!found_veh->seating[front])
-    send_to_char(ch, "There is no room in the %s of that vehicle.\r\n", front ? "front" : "rear");
-  else {
-    if (inveh && ch->vfront) {
-      send_to_char("You have to be in the back to get into that.\r\n", ch);
+  }
+  
+  // No space? Can't (unless admin)
+  else if (!found_veh->seating[front]) {
+    if (access_level(ch, LVL_ADMIN)) {
+      send_to_char("You use your staff powers to force your way in despite the lack of seating.\r\n", ch);
+    } else {
+      send_to_char(ch, "There is no room in the %s of that vehicle.\r\n", front ? "front" : "rear");
       return;
     }
-    door = ch->in_room;
-    if (drag)
-      sprintf(buf2, "$n is dragged into %s.\r\n", GET_VEH_NAME(found_veh));
-    else
-      sprintf(buf2, "$n climbs into %s.\r\n", GET_VEH_NAME(found_veh));
-    act(buf2, FALSE, ch, 0, 0, TO_ROOM);
-    ch->vfront = front;
-    char_to_veh(found_veh, ch);
-    if (drag)
-      act("$n is dragged in.", FALSE, ch, 0, 0, TO_VEH);
-    else {
-      act("$n climbs in.", FALSE, ch, 0, 0, TO_VEH);
-      sprintf(buf2, "You climb into %s.\r\n", GET_VEH_NAME(found_veh));
-      send_to_char(buf2, ch);
-      GET_POS(ch) = POS_SITTING;
-    }
-    DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
-    for (k = ch->followers; k; k = next)
-    {
-      next = k->next;
-      if ((door > 0 && door == k->follower->in_room) && (GET_POS(k->follower) >= POS_STANDING)) {
-        act("You follow $N.\r\n", FALSE, k->follower, 0, ch, TO_CHAR);
-        if (!found_veh->seating[front])
-          argument = "rear";
-        enter_veh(k->follower, found_veh, argument, FALSE);
-      }
+  }
+  
+  if (inveh && ch->vfront) {
+    send_to_char("You have to be in the back to get into that.\r\n", ch);
+    return;
+  }
+  door = ch->in_room;
+  if (drag)
+    sprintf(buf2, "$n is dragged into %s.\r\n", GET_VEH_NAME(found_veh));
+  else
+    sprintf(buf2, "$n climbs into %s.\r\n", GET_VEH_NAME(found_veh));
+  act(buf2, FALSE, ch, 0, 0, TO_ROOM);
+  ch->vfront = front;
+  char_to_veh(found_veh, ch);
+  if (drag)
+    act("$n is dragged in.", FALSE, ch, 0, 0, TO_VEH);
+  else {
+    act("$n climbs in.", FALSE, ch, 0, 0, TO_VEH);
+    sprintf(buf2, "You climb into %s.\r\n", GET_VEH_NAME(found_veh));
+    send_to_char(buf2, ch);
+    GET_POS(ch) = POS_SITTING;
+  }
+  DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
+  for (k = ch->followers; k; k = next)
+  {
+    next = k->next;
+    if ((door > 0 && door == k->follower->in_room) && (GET_POS(k->follower) >= POS_STANDING)) {
+      act("You follow $N.\r\n", FALSE, k->follower, 0, ch, TO_CHAR);
+      if (!found_veh->seating[front])
+        argument = "rear";
+      enter_veh(k->follower, found_veh, argument, FALSE);
     }
   }
 }
@@ -1249,8 +1288,12 @@ void leave_veh(struct char_data *ch)
   }
 
   if (veh->cspeed > SPEED_IDLE) {
-    send_to_char("That would just be crazy.\r\n", ch);
-    return;
+    if (access_level(ch, LVL_ADMIN)) {
+      send_to_char("You use your staff powers to exit the moving vehicle safely.\r\n", ch);
+    } else {
+      send_to_char("That would just be crazy.\r\n", ch);
+      return;
+    }
   }
   if (AFF_FLAGGED(ch, AFF_PILOT)) {
     act("$n climbs out of the drivers seat and into the street.", FALSE, ch, 0, 0, TO_VEH);
@@ -1265,7 +1308,7 @@ void leave_veh(struct char_data *ch)
         break;
     mount->worn_by = NULL;
     AFF_FLAGS(ch).ToggleBit(AFF_MANNING);
-    act("$n stops manning $o and climbs out into the street.", FALSE, ch, mount, 0, TO_ROOM);
+    act("$n stops manning $p and climbs out into the street.", FALSE, ch, mount, 0, TO_ROOM);
   } else
     act("$n climbs out into the street.", FALSE, ch, 0, 0, TO_VEH);
   door = veh->in_room;

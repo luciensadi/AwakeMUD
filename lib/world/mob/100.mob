@@ -411,7 +411,7 @@ A luminous figure of coalesced light hovers amongst the bookshelves.
 ~
 LookDesc:$
 Spun from light and shadow, this being's surface is covered in flickering
-sigils and formulae of advanced spells and mystical knowledge. 
+sigils and formulae of advanced spells and mystical knowledge.  
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
@@ -436,5 +436,76 @@ DefaultPos:	Standing
 	Impact:	50
 [SKILLS]
 	athletics:	50
+BREAK
+#10014
+Keywords:	greasy mechanic mike broad-shouldered shouldered man coveralls
+Name:	Mike the Mechanic
+RoomDesc:$
+A broad-shouldered man in coveralls is wiping his greasy hands on a rag. 
+
+~
+LookDesc:$
+Ruddy-skinned, brown-haired, and looking a bit like a brick house crossed with
+an ironworker, this imposing man strides through the garage with an imperious
+air. A set of heavy-duty denim coveralls enfolds his bulky frame, marred with
+oil and fluids from the innumerable vehicles that he's serviced. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Taser
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	220
+	Weight:	200
+	Level:	10
+	Ballistic:	50
+	Impact:	50
+[SKILLS]
+	BR/Car:	50
+	BR/Bike:	50
+	BR/Truck:	50
+	BR/Drone:	50
+BREAK
+#10015
+Keywords:	road raging ganger
+Name:	A road-raging ganger
+RoomDesc:$
+A road-raging ganger has planted his feet here, his eyebrow twitching. 
+
+~
+LookDesc:$
+TBD 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	120
+	Weight:	50
+[SKILLS]
 BREAK
 END

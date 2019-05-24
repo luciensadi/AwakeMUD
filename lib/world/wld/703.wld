@@ -1,0 +1,697 @@
+#70300
+Name:	TSS template room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#70301
+Name:	A Wide Roundabout Encircling a Marble Fountain
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	70302
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	70306
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	70303
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70302
+Name:	A Bright, Modern Lobby
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	70313
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	70301
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	70316
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70303
+Name:	Approaching a Sapphire-Glassed Skyscraper
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	70301
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	70304
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	70305
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70304
+Name:	The Star Sapphire's Public Parking Garage
+Desc:$
+You are in an unfinished room.
+~
+Flags:	110000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	70303
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70305
+Name:	tbd private parking with leased rooms
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	70303
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70306
+Name:	TSS Outdoor Grounds Template
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000
+SecType:	Field
+MatrixExit:	0
+Crowd:	2
+Cover:	1
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	70308
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	70307
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	70301
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70307
+Name:	TSS Outdoor Grounds Template
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	2
+Cover:	1
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	70306
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	70309
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70308
+Name:	TSS Outdoor Grounds Template
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	2
+Cover:	1
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	70310
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	70309
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	70306
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70309
+Name:	TSS Outdoor Grounds Template
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	2
+Cover:	1
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	70308
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	70307
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70310
+Name:	TSS Outdoor Grounds Template
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	2
+Cover:	1
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	15
+[EXIT north]
+	ToVnum:	70311
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door hollow metal
+	Desc:$
+A hollow metal door is inset into the wall of the shed. 
+~
+	ToVnum:	70312
+	Flags:	1
+	Material:	metal
+	Barrier:	3
+	KeyVnum:	70301
+	LockRating:	5
+[EXIT southwest]
+	ToVnum:	70308
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70311
+Name:	TSS Outdoor Grounds Template
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	2
+Cover:	1
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	70310
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door metal cerulean cheery
+	Desc:$
+A metal door with cheery cerulean paint leads indoors. 
+~
+	ToVnum:	70315
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	70300
+	LockRating:	5
+BREAK
+#70312
+Name:	Inside the Gardener's Shed
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door metal hollow
+	Desc:$
+A hollow metal door leads back out to the grounds. 
+~
+	ToVnum:	70310
+	Flags:	1
+	Material:	metal
+	Barrier:	3
+	KeyVnum:	70300
+	LockRating:	5
+BREAK
+#70313
+Name:	Hallway before the Jeweler's Loupe
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	70314
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	70302
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70314
+Name:	The Jeweler's Loupe
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	doors double
+	Desc:$
+A pair of double doors lead into the kitchen. 
+~
+	ToVnum:	70315
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	70300
+	LockRating:	5
+[EXIT south]
+	ToVnum:	70313
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70315
+Name:	A Veritable Forest of Stainless Steel Appliances
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door metal
+	Desc:$
+A metal exit door leads outside. 
+~
+	ToVnum:	70311
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	70300
+	LockRating:	5
+[EXIT south]
+	Keywords:	doors double
+	Desc:$
+A pair of double doors lead back out to the restaurant. 
+~
+	ToVnum:	70314
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	70300
+	LockRating:	5
+BREAK
+#70316
+Name:	The Mailroom
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	70302
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70317
+Name:	TSS Elevator Car
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#70318
+Name:	TSS template room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#70319
+Name:	TSS template room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#70320
+Name:	TSS template room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+END

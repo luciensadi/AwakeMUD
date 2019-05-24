@@ -794,7 +794,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     for (obj = i->in_veh->mount; obj; obj = obj->next_content)
       if (obj->worn_by == i)
         break;
-    sprintf(buf, "%s is manning a %s.", buf, GET_OBJ_NAME(obj));
+    sprintf(buf, "%s is manning %s.", buf, GET_OBJ_NAME(obj));
   } else if (GET_POS(i) != POS_FIGHTING)
   {
     strcat(buf, positions[(int) GET_POS(i)]);
@@ -843,39 +843,101 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
   struct char_data *i;
   struct veh_data *veh;
   
-  if (ch->in_veh && ch->in_room == NOWHERE)
-  {
-    for (i = list; i; i = i->next_in_veh)
-      if (ch != i && ch->vfront == i->vfront)
-        if (CAN_SEE(ch, i))
-          list_one_char(i, ch);
-  } else
-  {
-    for (i = list; i; i = i->next_in_room) {
-      if ((ch->in_veh || (ch->char_specials.rigging))) {
-        RIG_VEH(ch, veh);
-        if (veh->cspeed > SPEED_IDLE) {
-          if (get_speed(veh) >= 200) {
-            if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7))
-              continue;
-            else if (get_speed(veh) < 200 && get_speed(veh) >= 120) {
-              if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6))
-                continue;
-              else if (get_speed(veh) < 120 && get_speed(veh) >= 60) {
-                if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5))
-                  continue;
-                else
-                  if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4))
-                    continue;
-              }
-            }
+#ifdef LIST_CHAR_TO_CHAR_DEBUG
+  sprintf(buf, "Entering list_char_to_char for %s (%ld).", GET_CHAR_NAME(ch),
+          IS_NPC(ch) ? GET_MOB_VNUM(ch) : GET_IDNUM(ch));
+  log(buf);
+#endif
+  
+  // Show vehicle's contents to character.
+  if (ch->in_veh && ch->in_room == NOWHERE) {
+    for (i = list; i; i = i->next_in_veh) {
+      if (CAN_SEE(ch, i) && ch != i && ch->vfront == i->vfront) {
+#ifdef LIST_CHAR_TO_CHAR_DEBUG
+        sprintf(buf, "Debug message: list_char_to_char displaying in-vehicle character %s (%ld).", GET_CHAR_NAME(i),
+                IS_NPC(i) ? GET_MOB_VNUM(i) : GET_IDNUM(i));
+#endif
+        list_one_char(i, ch);
+      } else {
+#ifdef LIST_CHAR_TO_CHAR_DEBUG
+        sprintf(buf, "Debug message: list_char_to_char failed to display in-vehicle character %s (%ld) (pre-checks failed).", GET_CHAR_NAME(i),
+                IS_NPC(i) ? GET_MOB_VNUM(i) : GET_IDNUM(i));
+#endif
+      }
+    }
+  }
+  
+  // Show room's characters to character. Done this way because list_char_to_char should have been split for vehicles but wasn't.
+  for (i = list; i; i = i->next_in_room) {
+#ifdef LIST_CHAR_TO_CHAR_DEBUG
+    sprintf(buf, "Debug message: list_char_to_char attempting to display character %s (%ld).", GET_CHAR_NAME(i),
+            IS_NPC(i) ? GET_MOB_VNUM(i) : GET_IDNUM(i));
+    if (i->next_in_room) {
+      sprintf(ENDOF(buf), " Next up is %s (%ld).", GET_CHAR_NAME(i->next_in_room),
+            IS_NPC(i->next_in_room) ? GET_MOB_VNUM(i->next_in_room) : GET_IDNUM(i->next_in_room));
+    } else {
+      sprintf(ENDOF(buf), " This is the end of the list.");
+    }
+#endif
+    
+    // Skip them if they're invisible to us, or if they're us and we're not rigging.
+    if (!CAN_SEE(ch, i) || !(ch != i || ch->char_specials.rigging)) {
+#ifdef LIST_CHAR_TO_CHAR_DEBUG
+      sprintf(ENDOF(buf), " Skipping this character (precheck failed).");
+      log(buf);
+#endif
+      continue;
+    }
+    
+    if ((ch->in_veh || (ch->char_specials.rigging))) {
+#ifdef LIST_CHAR_TO_CHAR_DEBUG
+      sprintf(ENDOF(buf), " In-vehicle mode.");
+#endif
+      RIG_VEH(ch, veh);
+      
+      bool failed = FALSE;
+      if (veh->cspeed > SPEED_IDLE) {
+        if (get_speed(veh) >= 200) {
+          if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7)) {
+            failed = TRUE;
+          }
+        }
+        else if (get_speed(veh) >= 120) {
+          if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6)) {
+            failed = TRUE;
+          }
+        }
+        else if (get_speed(veh) >= 60) {
+          if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5)) {
+            failed = TRUE;
+          }
+        }
+        else {
+          if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4)) {
+            failed = TRUE;
           }
         }
       }
-      if (ch != i || ch->char_specials.rigging)
-        if (CAN_SEE(ch, i))
-          list_one_char(i, ch);
+      
+      if (failed) {
+#ifdef LIST_CHAR_TO_CHAR_DEBUG
+        sprintf(ENDOF(buf), " Skipping this character (speed check failed).");
+        log(buf);
+#endif
+        continue;
+      }
     }
+#ifdef LIST_CHAR_TO_CHAR_DEBUG
+    else {
+      sprintf(ENDOF(buf), " In-person mode.");
+    }
+    
+    sprintf(ENDOF(buf), " Checks passed, displaying.");
+    
+    log(buf);
+#endif
+    
+    list_one_char(i, ch);
   }
 }
 
@@ -2094,10 +2156,13 @@ ACMD(do_examine)
                    GET_OBJ_VAL(tmp_object, 0) != 1 ? "s" : "");
     } else if (GET_OBJ_TYPE(tmp_object) == ITEM_GUN_AMMO) {
       if (GET_OBJ_VAL(tmp_object, 3))
-        send_to_char(ch, "It has %d/%d %s round%s left.\r\n", GET_OBJ_VAL(tmp_object, 0), GET_OBJ_VAL(tmp_object, 0) +
-                     GET_OBJ_VAL(tmp_object, 3), ammo_type[GET_OBJ_VAL(tmp_object, 2)].name,GET_OBJ_VAL(tmp_object, 0) != 1 ? "s" : "");
-      else send_to_char(ch, "It has %d %s round%s left.\r\n", GET_OBJ_VAL(tmp_object, 0),
-                        ammo_type[GET_OBJ_VAL(tmp_object, 2)].name,GET_OBJ_VAL(tmp_object, 0) != 1 ? "s" : "");
+        send_to_char(ch, "It has %d/%d %s round%s of %s ammunition left.\r\n", GET_OBJ_VAL(tmp_object, 0), GET_OBJ_VAL(tmp_object, 0) +
+                     GET_OBJ_VAL(tmp_object, 3), ammo_type[GET_OBJ_VAL(tmp_object, 2)].name,GET_OBJ_VAL(tmp_object, 0) != 1 ? "s" : "",
+                     weapon_type[GET_OBJ_VAL(tmp_object, 1)]);
+      else
+        send_to_char(ch, "It has %d %s round%s of %s ammunition left.\r\n", GET_OBJ_VAL(tmp_object, 0),
+                     ammo_type[GET_OBJ_VAL(tmp_object, 2)].name,GET_OBJ_VAL(tmp_object, 0) != 1 ? "s" : "",
+                     weapon_type[GET_OBJ_VAL(tmp_object, 1)]);
     } else if (GET_OBJ_VNUM(tmp_object) == 119 && GET_OBJ_VAL(tmp_object, 0) == GET_IDNUM(ch))
       sprintf(buf, "The card contains %d nuyen.\r\n", GET_OBJ_VAL(tmp_object, 1));
     else if (GET_OBJ_TYPE(tmp_object) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(tmp_object, 0) == TYPE_COOKER) {

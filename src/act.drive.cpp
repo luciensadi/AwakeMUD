@@ -14,6 +14,7 @@
 #include "transport.h"
 #include "constants.h"
 #include "limits.h"
+#include "act.drive.h"
 
 void die_follower(struct char_data *ch);
 void roll_individual_initiative(struct char_data *ch);
@@ -380,7 +381,6 @@ ACMD(do_ram)
 {
   struct veh_data *veh, *tveh = NULL;
   struct char_data *vict = NULL;
-  int skill = 0, target = 0, tvehm = 0, vehm = 0;
 
   if (!(AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE))) {
     send_to_char("You need to be driving a vehicle to do that...\r\n", ch);
@@ -414,7 +414,7 @@ ACMD(do_ram)
     send_to_char("You can't seem to find the target you're looking for.\r\n", ch);
     return;
   }
-  if (vict && !IS_NPC(vict) && !(PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(vict, PRF_PKER))) {
+  if (vict && !IS_NPC(vict) && !(IS_NPC(ch) || (PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(vict, PRF_PKER)))) {
     send_to_char(ch, "You have to be flagged PK to attack another player.\r\n");
     return;
   }
@@ -422,8 +422,13 @@ ACMD(do_ram)
     send_to_char("You can't ram yourself!\r\n", ch);
     return;
   }
+  
+  do_raw_ram(ch, veh, tveh, vict);
+}
 
-  skill = veh_skill(ch, veh);
+void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tveh, struct char_data *vict) {
+  int skill = veh_skill(ch, veh), target = 0, vehm = 0, tvehm = 0;
+  
   if (tveh) {
     target = modify_veh(veh) + veh->handling + modify_target(ch);
     vehm = get_maneuver(veh);
@@ -1317,8 +1322,9 @@ ACMD(do_target)
       modeall = TRUE;
     }
   }
+  
   if (!(vict = get_char_room(arg, veh->in_room)) &&
-      !(tveh = get_veh_list(arg, world[veh->in_room].vehicles, ch)) && (vict && !CAN_SEE(ch, vict))) {
+      !((tveh = get_veh_list(arg, world[veh->in_room].vehicles, ch)) && (vict && !CAN_SEE(ch, vict)))) {
     send_to_char(ch, "You don't see %s there.\r\n", arg);
     return;
   }
@@ -1326,6 +1332,11 @@ ACMD(do_target)
     send_to_char("Why would you want to target yourself?", ch);
     return;
   }
+  
+  do_raw_target(ch, veh, tveh, vict, modeall, obj);
+}
+
+void do_raw_target(struct char_data *ch, struct veh_data *veh, struct veh_data *tveh, struct char_data *vict, bool modeall, struct obj_data *obj) {  
   if (FIGHTING(ch) || FIGHTING_VEH(ch))
     stop_fighting(ch);
   if (modeall) {
@@ -1339,20 +1350,22 @@ ACMD(do_target)
           set_fighting(vict, veh);
           sprintf(buf, "You target %s towards %s.\r\n", GET_OBJ_NAME(obj->contains), PERS(vict, ch));
           send_to_char(buf, ch);
-        } else {
+        } else if (tveh) {
           set_fighting(ch, tveh);
           if (obj->targ)
             obj->targ = NULL;
           obj->tveh = tveh;
           sprintf(buf, "You target %s towards %s.\r\n", GET_OBJ_NAME(obj->contains), GET_VEH_NAME(tveh));
           send_to_char(buf, ch);
+        } else {
+          mudlog("SYSERR: Reached end of do_raw_target (mode all) with no valid target.", ch, LOG_SYSLOG, TRUE);
         }
       }
     return;
   }
   if (vict) {
     for (struct obj_data *obj2 = veh->mount; obj2; obj2 = obj2->next_content)
-      if (obj2->targ == vict) {
+      if (obj2 != obj && obj2->targ == vict) {
         send_to_char("Someone is already targeting that.\r\n", ch);
         return;
       }
@@ -1361,12 +1374,14 @@ ACMD(do_target)
       obj->tveh = NULL;
     obj->targ = vict;
     set_fighting(vict, veh);
-    act("You target $o towards $N.", FALSE, ch, obj->contains, vict, TO_CHAR);
+    act("You target $p towards $N.", FALSE, ch, obj->contains, vict, TO_CHAR);
     if (AFF_FLAGGED(ch, AFF_MANNING)) {
-      sprintf(buf, "%s's %s swivels towards you.\r\n", GET_VEH_NAME(ch->in_veh), GET_OBJ_NAME(obj));
-      send_to_char(buf, vict);
+      sprintf(buf, "%s's $p swivels towards you.\r\n", GET_VEH_NAME(ch->in_veh));
+      act(buf, FALSE, ch, obj, vict, TO_VICT);
+      sprintf(buf, "%s's $p swivels towards $N.\r\n", GET_VEH_NAME(ch->in_veh));
+      act(buf, FALSE, ch, obj, vict, TO_VEH_ROOM);
     }
-  } else {
+  } else if (tveh) {
     set_fighting(ch, tveh);
     if (obj->targ)
       obj->targ = NULL;
@@ -1376,7 +1391,11 @@ ACMD(do_target)
     if (AFF_FLAGGED(ch, AFF_MANNING)) {
       sprintf(buf, "%s's %s swivels towards your ride.\r\n", GET_VEH_NAME(ch->in_veh), GET_OBJ_NAME(obj));
       send_to_veh(buf, tveh, 0, TRUE);
+      sprintf(buf, "%s's $p swivels towards %s.\r\n", GET_VEH_NAME(ch->in_veh), GET_VEH_NAME(tveh));
+      act(buf, FALSE, ch, obj, NULL, TO_VEH_ROOM);
     }
+  } else {
+    mudlog("SYSERR: Reached end of do_raw_target with no valid target.", ch, LOG_SYSLOG, TRUE);
   }
 }
 
@@ -1445,8 +1464,8 @@ ACMD(do_man)
         break;
     mount->worn_by = NULL;
     AFF_FLAGS(ch).ToggleBit(AFF_MANNING);
-    act("$n stops manning $o.", FALSE, ch, mount, 0, TO_ROOM);
-    act("You stop manning $o.", FALSE, ch, mount, 0, TO_CHAR);
+    act("$n stops manning $p.", FALSE, ch, mount, 0, TO_ROOM);
+    act("You stop manning $p.", FALSE, ch, mount, 0, TO_CHAR);
     if (FIGHTING(ch))
       stop_fighting(ch);
     if (!*argument)
@@ -1469,14 +1488,14 @@ ACMD(do_man)
     send_to_char("Someone is already manning it.\r\n", ch);
     return;
   }
-  for (struct obj_data *obj = mount->contains; obj; obj = obj->next_content)
-    if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
-      mount->worn_by = ch;
-      act("$n mans $o.", FALSE, ch, mount, 0, TO_ROOM);
-      act("You man $o.", FALSE, ch, mount, 0, TO_CHAR);
-      AFF_FLAGS(ch).ToggleBit(AFF_MANNING);
-      return;
-    }
+  if (mount_has_weapon(mount)) {
+    mount->worn_by = ch;
+    act("$n mans $p.", FALSE, ch, mount, 0, TO_ROOM);
+    act("You man $p.", FALSE, ch, mount, 0, TO_CHAR);
+    AFF_FLAGS(ch).ToggleBit(AFF_MANNING);
+    return;
+  }
+  
   send_to_char("But there is no weapon mounted there.\r\n", ch);
 }
 
@@ -1645,20 +1664,31 @@ void process_autonav(void)
 
 ACMD(do_switch)
 {
-  if (!ch->in_veh)
+  if (!ch->in_veh) {
     send_to_char("You can't switch positions when not in a vehicle.\r\n", ch);
-  else if (IS_WORKING(ch) || AFF_FLAGGED(ch, AFF_PILOT))
-    send_to_char(TOOBUSY, ch);
-  else if (!ch->in_veh->seating[!ch->vfront])
-    send_to_char("There's no room to move to.\r\n", ch);
-  else {
-    ch->in_veh->seating[ch->vfront]++;
-    ch->in_veh->seating[!ch->vfront]--;
-    ch->vfront = !ch->vfront;
-    sprintf(buf, "$n climbs into the %s.", ch->vfront ? "front" : "back");
-    act(buf, TRUE, ch, 0, 0, TO_ROOM);
-    send_to_char(ch, "You climb into the %s.\r\n", ch->vfront ? "front" : "back");
+    return;
   }
+  
+  else if (IS_WORKING(ch) || AFF_FLAGGED(ch, AFF_PILOT)) {
+    send_to_char(TOOBUSY, ch);
+    return;
+  }
+  
+  else if (!ch->in_veh->seating[!ch->vfront]) {
+    if (access_level(ch, LVL_ADMIN)) {
+      send_to_char("You use your staff powers to bypass the lack of seating.\r\n", ch);
+    } else {
+      send_to_char("There's no room to move to.\r\n", ch);
+      return;
+    }
+  }
+  
+  ch->in_veh->seating[ch->vfront]++;
+  ch->in_veh->seating[!ch->vfront]--;
+  ch->vfront = !ch->vfront;
+  sprintf(buf, "$n climbs into the %s.", ch->vfront ? "front" : "back");
+  act(buf, TRUE, ch, 0, 0, TO_ROOM);
+  send_to_char(ch, "You climb into the %s.\r\n", ch->vfront ? "front" : "back");
 }
 
 ACMD(do_pop)
@@ -1673,11 +1703,21 @@ ACMD(do_pop)
     send_to_char(NOOBJECT, ch);
     return;
   }
-  if (!ch->in_veh && !veh->hood && veh->owner != GET_IDNUM(ch)) 
-    send_to_char("That's not your vehicle.\r\n", ch);
-  else if (veh->cspeed > SPEED_OFF)
+  if (!ch->in_veh && !veh->hood && veh->owner != GET_IDNUM(ch)) {
+    if (access_level(ch, LVL_ADMIN)) {
+      send_to_char("You use your staff powers to bypass the fact that this isn't your vehicle.\r\n", ch);
+    } else {
+      send_to_char("That's not your vehicle.\r\n", ch);
+      return;
+    }
+  }
+  
+  if (veh->cspeed > SPEED_OFF) {
     send_to_char("It's moving too fast for you to do that.\r\n", ch);
-  else if (veh->hood) {
+    return;
+  }
+  
+  if (veh->hood) {
     send_to_char(ch, "You close the hood of %s.\r\n", GET_VEH_NAME(veh));
     sprintf(buf, "$n closes the hood of %s.", GET_VEH_NAME(veh));
     act(buf, 0, ch, 0, 0, TO_ROOM);

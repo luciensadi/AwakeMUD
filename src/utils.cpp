@@ -484,10 +484,33 @@ char *capitalize(const char *source)
   static char dest[MAX_STRING_LENGTH];
   strcpy(dest, source);
   
-  char* first_actual_char = dest;
-  while (*first_actual_char == '^')
-    first_actual_char += 2;
-  *first_actual_char = UPPER(*first_actual_char);
+  int len = strlen(source);
+  int index = 0;
+  
+  while (index < len-2 && *(source + index) == '^')
+    index += 2;
+  *(dest + index) = UPPER(*(source + index));
+  
+  return dest;
+}
+
+// decapitalize a string that starts with A or An, now allows for color strings at the beginning
+char *decapitalize_a_an(const char *source)
+{
+  static char dest[MAX_STRING_LENGTH];
+  strcpy(dest, source);
+  
+  int len = strlen(source);
+  int index = 0;
+  
+  while (*(source + index) == '^')
+    index += 2;
+  if (*(source + index) == 'A') {
+    // If it starts with 'A ' or 'An ' then decapitalize the A.
+    if (index < len-1 && (*(source + index+1) == ' ' || (*(source + index+1) == 'n' && index < len-2 && *(source + index+2) == ' '))) {
+      *(dest + index) = 'a';
+    }
+  }
   
   return dest;
 }
@@ -499,6 +522,10 @@ char *str_dup(const char *source)
     return NULL;
   
   char *New = new char[strlen(source) + 1];
+  
+  // This shouldn't be needed, but just in case.
+  memset(New, 0, sizeof(char) * (strlen(source) + 1));
+  
   sprintf(New, "%s", source);
   return New;
 }
@@ -1615,4 +1642,24 @@ void remove_workshop_from_room(struct obj_data *obj) {
       }
     }
   }
+}
+
+// Checks if a given mount has a weapon on it.
+bool mount_has_weapon(struct obj_data *mount) {
+  return get_mount_weapon(mount) != NULL;
+}
+
+// Retrieve the weapon from a given mount.
+struct obj_data *get_mount_weapon(struct obj_data *mount) {
+  if (mount == NULL) {
+    mudlog("SYSERR: Attempting to retrieve weapon for nonexistent mount.", NULL, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+  
+  for (struct obj_data *contains = mount->contains; contains; contains = contains->next_content) {
+    if (GET_OBJ_TYPE(contains) == ITEM_WEAPON)
+      return contains;
+  }
+  
+  return NULL;
 }

@@ -22,7 +22,7 @@
 #include "constants.h"
 #include "newdb.h"
 #include "quest.h"
-#include "mail.h"
+#include "newmail.h"
 #include "pocketsec.h"
 #include "limits.h"
 
@@ -3717,6 +3717,43 @@ SPECIAL(pocket_sec)
   return FALSE;
 }
 
+SPECIAL(bouncer_gentle)
+{
+  ACMD(do_look);
+  
+  if (!cmd)
+    return FALSE;
+  
+  struct char_data *bouncer = (struct char_data *) me;
+  if (!(PLR_FLAGGED(ch, PLR_KILLER) || PLR_FLAGGED(ch, PLR_BLACKLIST)))
+    return FALSE;
+  int toroom = -1, dir_index;
+  
+  // You must hardcode in the bouncer's room num and where he'll send you.
+  switch (world[bouncer->in_room].number) {
+    case 70301:
+      toroom = 70303;
+      dir_index = NORTH;
+      break;
+  }
+  
+  // No match means we fail out.
+  if (toroom == -1)
+    return FALSE;
+  
+  if (CMD_IS(exitdirs[dir_index]) || CMD_IS(fulldirs[dir_index])) {
+    act("$n shakes $s head at you and escorts you from the premises.", FALSE, bouncer, 0, ch, TO_VICT);
+    act("$n shakes $s head at $N and escorts $M from the premises.", FALSE, bouncer, 0, ch, TO_NOTVICT);
+    char_from_room(ch);
+    char_to_room(ch, real_room(toroom));
+    act("$n is escorted in by $N, who gives $m a stern look and departs.", FALSE, ch, 0, bouncer, TO_ROOM);
+    do_look(ch, (char *) "", 0, 0);
+    return TRUE;
+  }
+  
+  return FALSE;
+}
+
 SPECIAL(bouncer_troll)
 {
   if (!cmd)
@@ -3782,7 +3819,7 @@ SPECIAL(locker)
   struct obj_data *locker = world[ch->in_room].contents, *next = NULL;
   int num = 0, free = 0;
   for (; locker; locker = locker->next_content)
-    if (GET_OBJ_VNUM(locker) == 9825) {
+    if (GET_OBJ_VNUM(locker) == 9826) {
       num++;
       if (!GET_OBJ_VAL(locker, 9))
         free++;
@@ -3804,7 +3841,7 @@ SPECIAL(locker)
     else {
       num = 0;
       for (locker = world[ch->in_room].contents; locker; locker = locker->next_content)
-        if (GET_OBJ_VNUM(locker) == 9825) {
+        if (GET_OBJ_VNUM(locker) == 9826) {
           num++;
           if (!GET_OBJ_VAL(locker, 9))
             break;
@@ -3820,7 +3857,7 @@ SPECIAL(locker)
     else {
       num = 0;
       for (locker = world[ch->in_room].contents; locker; locker = locker->next_content)
-        if (GET_OBJ_VNUM(locker) == 9825 && ++num && GET_OBJ_VAL(locker, 9) == free) {
+        if (GET_OBJ_VNUM(locker) == 9826 && ++num && GET_OBJ_VAL(locker, 9) == free) {
           int cost = (int)((((time(0) - GET_OBJ_VAL(locker, 8)) / SECS_PER_REAL_DAY) + 1) * 50);
           if (GET_NUYEN(ch) < cost)
             send_to_char(ch, "The system beeps loudly and the screen reads 'PLEASE INSERT %d NUYEN'.\r\n", cost);
@@ -3838,7 +3875,7 @@ SPECIAL(locker)
   } else if (CMD_IS("lock")) {
     num = atoi(argument);
     for (locker = world[ch->in_room].contents; locker; locker = locker->next_content)
-      if (GET_OBJ_VNUM(locker) == 9825 && !--num && !IS_SET(GET_OBJ_VAL(locker, 1), CONT_CLOSED)) {
+      if (GET_OBJ_VNUM(locker) == 9826 && !--num && !IS_SET(GET_OBJ_VAL(locker, 1), CONT_CLOSED)) {
         sprintf(buf, "%d%d%d%d%d%d%d", number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9), number(1, 9));
         GET_OBJ_VAL(locker, 8) = time(0);
         GET_OBJ_VAL(locker, 9) = atoi(buf);

@@ -411,6 +411,7 @@ void assign_mobiles(void)
   SPECIAL(smelly);
   SPECIAL(terell_davis);
   SPECIAL(smiths_bouncer);
+  SPECIAL(bouncer_gentle);
   SPECIAL(matchsticks);
   SPECIAL(painter);
   SPECIAL(multnomah_guard);
@@ -548,6 +549,9 @@ void assign_mobiles(void)
   ASSIGNMOB(37507, painter);
   ASSIGNMOB(17510, multnomah_guard);
 */
+  
+  /* Star Sapphire */
+  ASSIGNMOB(70302, bouncer_gentle);
 }
 
 /* assign special procedures to objects */
@@ -638,8 +642,8 @@ void assign_objects(void)
   ASSIGNOBJ(18825, portable_gridguide);
   ASSIGNOBJ(39864, portable_gridguide);
   ASSIGNOBJ(31542, pocket_sec);
-  ASSIGNOBJ(39865, pocket_sec);
-  ASSIGNOBJ(9826, locker); */
+  ASSIGNOBJ(39865, pocket_sec); */
+  ASSIGNOBJ(9826, locker);
   WSPEC(monowhip);
 
   ASSIGNWEAPON(660, monowhip);

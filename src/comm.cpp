@@ -2564,7 +2564,9 @@ void act(const char *str, int hide_invisible, struct char_data * ch,
   /* ASSUMPTION: at this point we know type must be TO_NOTVICT
    or TO_ROOM or TO_ROLLS */
   
-  if (ch && ch->in_room != NOWHERE)
+  if (type == TO_VEH_ROOM && ch && ch->in_veh && !ch->in_veh->in_veh)
+    to = world[ch->in_veh->in_room].people;
+  else if (ch && ch->in_room != NOWHERE)
     to = world[ch->in_room].people;
   else if (obj && obj->in_room != NOWHERE)
     to = world[obj->in_room].people;
