@@ -765,18 +765,22 @@ ACMD (do_vedit)
      * copy all strings over
      */
     if (veh_proto[veh_num].name)
-
-      veh->name = str_dup (veh_proto[veh_num].name);
-    if (veh_proto[veh_num].short_description)
-      veh->short_description = str_dup (veh_proto[veh_num].short_description);
+      veh->name = str_dup(veh_proto[veh_num].name);
     if (veh_proto[veh_num].description)
       veh->description = str_dup(veh_proto[veh_num].description);
-    if (veh_proto[veh_num].description)
-      veh->description = str_dup (veh_proto[veh_num].description);
+    if (veh_proto[veh_num].short_description)
+      veh->short_description = str_dup(veh_proto[veh_num].short_description);
     if (veh_proto[veh_num].long_description)
-      veh->long_description = str_dup (veh_proto[veh_num].long_description);
+      veh->long_description = str_dup(veh_proto[veh_num].long_description);
     if (veh_proto[veh_num].inside_description)
       veh->inside_description = str_dup(veh_proto[veh_num].inside_description);
+    if (veh_proto[veh_num].rear_description)
+      veh->rear_description = str_dup(veh_proto[veh_num].rear_description);
+    if (veh_proto[veh_num].arrive)
+      veh->arrive = str_dup(veh_proto[veh_num].arrive);
+    if (veh_proto[veh_num].leave)
+      veh->leave = str_dup(veh_proto[veh_num].leave);
+    
     d->edit_veh = veh;
 #ifdef CONFIRM_EXISTING
 

@@ -68,55 +68,55 @@ void spedit_parse(struct descriptor_data *d, const char *arg)
   {
   case SPEDIT_MENU:  
     switch (*arg) { 
-    case '1':
-      send_to_char("Enter spell name: ", CH);
-      d->edit_mode = SPEDIT_NAME;
-      break;
-    case '2':
-      send_to_char(CH, "Enter spell design description:\r\n");
-      d->edit_mode = SPEDIT_DESC;
-      DELETE_D_STR_IF_EXTANT(d);
-      INITIALIZE_NEW_D_STR(d);
-      d->max_str = MAX_MESSAGE_LENGTH;
-      d->mail_to = 0;
-      break;
-    case '3':
-      CLS(CH);
-      for (i = 1; i < 6; i++)
-        send_to_char(CH, "%d) %s\r\n", i, spell_category[i]);
-      send_to_char("Enter spell category: ", CH);
-      d->edit_mode = SPEDIT_CATEGORY;
-      break;
-    case '4':
-      if (!GET_OBJ_VAL(SPELL, 9))
-        send_to_char("You must select a category first. Enter your choice: ", CH);
-      else spedit_disp_spell_type(d);
-      break;
-    case '5':
-      send_to_char("Enter spell force: ", CH);
-      d->edit_mode = SPEDIT_FORCE;
-      break;
-    case 'Q':
-    case 'q':
-      send_to_char(CH, "Design saved!\r\n");
-      obj_to_char(d->edit_obj, CH);
-      STATE(d) = CON_PLAYING;
-      d->edit_obj = NULL;
-      break;
-    case '6':
-      if (GET_OBJ_VAL(SPELL, 1) == SPELL_INCATTR || GET_OBJ_VAL(SPELL, 1) == SPELL_INCCYATTR ||
-          GET_OBJ_VAL(SPELL, 1) == SPELL_DECATTR || GET_OBJ_VAL(SPELL, 1) == SPELL_DECCYATTR) {
-        CLS(CH);
-        for (int i = 0; i < 6; i++)
-          send_to_char(CH, "%d) %s\r\n", i, attributes[i]);
-        send_to_char("Select attribute: ", CH);
-        d->edit_mode = SPEDIT_ATTR;
+      case '1':
+        send_to_char("Enter spell name: ", CH);
+        d->edit_mode = SPEDIT_NAME;
         break;
-       }
-      // Explicit fallthrough-- you can only select an attribute for attribute-linked spells.
-    default:
-      send_to_char(CH, "Invalid option!\r\n");
-      break;
+      case '2':
+        send_to_char(CH, "Enter spell design description:\r\n");
+        d->edit_mode = SPEDIT_DESC;
+        DELETE_D_STR_IF_EXTANT(d);
+        INITIALIZE_NEW_D_STR(d);
+        d->max_str = MAX_MESSAGE_LENGTH;
+        d->mail_to = 0;
+        break;
+      case '3':
+        CLS(CH);
+        for (i = 1; i < 6; i++)
+          send_to_char(CH, "%d) %s\r\n", i, spell_category[i]);
+        send_to_char("Enter spell category: ", CH);
+        d->edit_mode = SPEDIT_CATEGORY;
+        break;
+      case '4':
+        if (!GET_OBJ_VAL(SPELL, 9))
+          send_to_char("You must select a category first. Enter your choice: ", CH);
+        else spedit_disp_spell_type(d);
+        break;
+      case '5':
+        send_to_char("Enter spell force: ", CH);
+        d->edit_mode = SPEDIT_FORCE;
+        break;
+      case 'Q':
+      case 'q':
+        send_to_char(CH, "Design saved!\r\n");
+        obj_to_char(d->edit_obj, CH);
+        STATE(d) = CON_PLAYING;
+        d->edit_obj = NULL;
+        break;
+      case '6':
+        if (GET_OBJ_VAL(SPELL, 1) == SPELL_INCATTR || GET_OBJ_VAL(SPELL, 1) == SPELL_INCCYATTR ||
+            GET_OBJ_VAL(SPELL, 1) == SPELL_DECATTR || GET_OBJ_VAL(SPELL, 1) == SPELL_DECCYATTR) {
+          CLS(CH);
+          for (int i = 0; i < 6; i++)
+            send_to_char(CH, "%d) %s\r\n", i, attributes[i]);
+          send_to_char("Select attribute: ", CH);
+          d->edit_mode = SPEDIT_ATTR;
+          break;
+         }
+        // Explicit fallthrough-- you can only select an attribute for attribute-linked spells.
+      default:
+        send_to_char(CH, "Invalid option!\r\n");
+        break;
     }
     break;
     case SPEDIT_ATTR:

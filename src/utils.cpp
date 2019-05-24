@@ -484,10 +484,33 @@ char *capitalize(const char *source)
   static char dest[MAX_STRING_LENGTH];
   strcpy(dest, source);
   
-  char* first_actual_char = dest;
-  while (*first_actual_char == '^')
-    first_actual_char += 2;
-  *first_actual_char = UPPER(*first_actual_char);
+  int len = strlen(source);
+  int index = 0;
+  
+  while (index < len-2 && *(source + index) == '^')
+    index += 2;
+  *(dest + index) = UPPER(*(source + index));
+  
+  return dest;
+}
+
+// decapitalize a string that starts with A or An, now allows for color strings at the beginning
+char *decapitalize_a_an(const char *source)
+{
+  static char dest[MAX_STRING_LENGTH];
+  strcpy(dest, source);
+  
+  int len = strlen(source);
+  int index = 0;
+  
+  while (*(source + index) == '^')
+    index += 2;
+  if (*(source + index) == 'A') {
+    // If it starts with 'A ' or 'An ' then decapitalize the A.
+    if (index < len-1 && (*(source + index+1) == ' ' || (*(source + index+1) == 'n' && index < len-2 && *(source + index+2) == ' '))) {
+      *(dest + index) = 'a';
+    }
+  }
   
   return dest;
 }
@@ -499,6 +522,10 @@ char *str_dup(const char *source)
     return NULL;
   
   char *New = new char[strlen(source) + 1];
+  
+  // This shouldn't be needed, but just in case.
+  memset(New, 0, sizeof(char) * (strlen(source) + 1));
+  
   sprintf(New, "%s", source);
   return New;
 }
@@ -1104,35 +1131,40 @@ int negotiate(struct char_data *ch, struct char_data *tch, int comp, int baseval
 int get_skill(struct char_data *ch, int skill, int &target)
 {
   char gskbuf[MAX_STRING_LENGTH];
+  gskbuf[0] = '\0';
   
   // Wearing too much armor? That'll hurt.
   if (skills[skill].attribute == QUI) {
     int increase = 0;
     if (GET_TOTALIMP(ch) > GET_QUI(ch)) {
       increase = GET_TOTALIMP(ch) - GET_QUI(ch);
-      buf_mod(gskbuf, "OverImp", increase);
+      buf_mod(ENDOF(gskbuf), "OverImp", increase);
       target += increase;
     }
     if (GET_TOTALBAL(ch) > GET_QUI(ch)) {
       increase = GET_TOTALBAL(ch) - GET_QUI(ch);
-      buf_mod(gskbuf, "OverBal", increase);
+      buf_mod(ENDOF(gskbuf), "OverBal", increase);
       target += increase;
     }
   }
-  //act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
+  act(gskbuf, 1, ch, NULL, NULL, TO_ROLLS);
   
   // Core p38
   if (target < 2)
     target = 2;
   
-  // TODO: Adept power Improved Ability.
+  // TODO: Adept power Improved Ability. This ability is not currently in the game, but would be factored in here. See Core p169 for details.
   
   if (GET_SKILL(ch, skill))
   {
-    int totalskill, mbw = 0, enhan = 0, synth = 0;
-    totalskill = GET_SKILL(ch, skill);
+    int mbw = 0, enhan = 0, synth = 0;
+    int totalskill = GET_SKILL(ch, skill);
+    
+    // If their skill in this area has not been boosted, they get to add their task pool up to the skill's learned level.
     if (REAL_SKILL(ch, skill) == GET_SKILL(ch, skill))
       totalskill += MIN(REAL_SKILL(ch, skill), GET_TASK_POOL(ch, skills[skill].attribute));
+    
+    // Iterate through their cyberware, looking for anything important.
     if (ch->cyberware) {
       int expert = 0;
       bool chip = FALSE;;
@@ -1145,9 +1177,14 @@ int get_skill(struct char_data *ch, int skill, int &target)
           for (int i = 5; i < 10; i++)
             if (real_object(GET_OBJ_VAL(obj, i)) && obj_proto[real_object(GET_OBJ_VAL(obj, i))].obj_flags.value[0] == skill)
               chip = TRUE;
-      if (chip && expert)
+      
+      // If they have both a chipjack with the correct chip loaded and a Chipjack Expert, add the rating to their skill as task pool dice (up to skill max).
+      if (chip && expert) {
         totalskill += MIN(REAL_SKILL(ch, skill), expert);
+      }
     }
+    
+    // Iterate through their bioware, looking for anything important.
     if (ch->bioware) {
       for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
         if (GET_OBJ_VAL(bio, 0) == BIO_REFLEXRECORDER && GET_OBJ_VAL(bio, 3) == skill)
@@ -1158,14 +1195,110 @@ int get_skill(struct char_data *ch, int skill, int &target)
           synth = GET_OBJ_VAL(bio, 1);
       }
     }
-    if (skill == SKILL_STEALTH)
+    
+    /* Enhanced Articulation: Possessors roll an additional die when making Success Tests involving any Combat, Physical, Technical and B/R Skills.
+     Bonus also applies to physical use of Vehicle Skills. */
+    if (enhan) {
+      switch (skill) {
+          // Combat skills
+        case SKILL_ARMED_COMBAT:
+        case SKILL_EDGED_WEAPONS:
+        case SKILL_POLE_ARMS:
+        case SKILL_WHIPS_FLAILS:
+        case SKILL_CLUBS:
+        case SKILL_UNARMED_COMBAT:
+        case SKILL_CYBER_IMPLANTS:
+        case SKILL_FIREARMS:
+        case SKILL_PISTOLS:
+        case SKILL_RIFLES:
+        case SKILL_SHOTGUNS:
+        case SKILL_ASSAULT_RIFLES:
+        case SKILL_SMG:
+        case SKILL_GRENADE_LAUNCHERS:
+        case SKILL_TASERS:
+        case SKILL_GUNNERY:
+        case SKILL_MACHINE_GUNS:
+        case SKILL_MISSILE_LAUNCHERS:
+        case SKILL_ASSAULT_CANNON:
+        case SKILL_ARTILLERY:
+        case SKILL_PROJECTILES:
+        case SKILL_ORALSTRIKE:
+        case SKILL_THROWING_WEAPONS:
+        case SKILL_OFFHAND_EDGED:
+        case SKILL_OFFHAND_CLUB:
+        case SKILL_OFFHAND_CYBERIMPLANTS:
+        case SKILL_OFFHAND_WHIP:
+        case SKILL_UNDERWATER_COMBAT:
+        case SKILL_SPRAY_WEAPONS:
+        case SKILL_GUNCANE:
+        case SKILL_BRACERGUN:
+        case SKILL_BLOWGUN:
+          // Physical skills
+        case SKILL_ATHLETICS:
+        case SKILL_DIVING:
+        case SKILL_PARACHUTING:
+        case SKILL_STEALTH:
+        case SKILL_CLIMBING:
+        case SKILL_STEAL:
+        case SKILL_DANCING:
+        case SKILL_INSTRUMENT:
+        case SKILL_LOCK_PICKING:
+        case SKILL_RIDING:
+          // Technical skills
+        case SKILL_COMPUTER:
+        case SKILL_ELECTRONICS:
+        case SKILL_DEMOLITIONS:
+        case SKILL_BIOTECH:
+        case SKILL_CHEMISTRY:
+        case SKILL_DISGUISE:
+          // B/R skills
+        case SKILL_CYBERTERM_DESIGN:
+        case SKILL_BR_BIKE:
+        case SKILL_BR_CAR:
+        case SKILL_BR_DRONE:
+        case SKILL_BR_TRUCK:
+        case SKILL_BR_ELECTRONICS:
+        case SKILL_BR_COMPUTER:
+        case SKILL_BR_EDGED:
+        case SKILL_BR_POLEARM:
+        case SKILL_BR_CLUB:
+        case SKILL_BR_THROWINGWEAPONS:
+        case SKILL_BR_WHIPS:
+        case SKILL_BR_PROJECTILES:
+        case SKILL_BR_PISTOL:
+        case SKILL_BR_SHOTGUN:
+        case SKILL_BR_RIFLE:
+        case SKILL_BR_HEAVYWEAPON:
+        case SKILL_BR_SMG:
+        case SKILL_BR_ARMOUR:
+          totalskill++;
+          break;
+          // Vehicle skills
+        case SKILL_PILOT_ROTORCRAFT:
+        case SKILL_PILOT_FIXEDWING:
+        case SKILL_PILOT_VECTORTHRUST:
+        case SKILL_PILOT_BIKE:
+        case SKILL_PILOT_FIXED_WING:
+        case SKILL_PILOT_CAR:
+        case SKILL_PILOT_TRUCK:
+          // You only get the bonus for vehicle skills if you're physically driving the vehicle.
+          if (!AFF_FLAGGED(ch, AFF_RIG))
+            totalskill++;
+          break;
+          break;
+        default:
+          break;
+      }
+    }
+    
+    // Move-by-wire.
+    if (skill == SKILL_STEALTH || skill == SKILL_ATHLETICS)
       totalskill += mbw;
+    
+    // Synthacardium.
     if (skill == SKILL_ATHLETICS)
-      totalskill += synth + mbw;
-    if (enhan && (skills[skill].attribute == QUI || skill == SKILL_BR_CAR || skill == SKILL_BR_BIKE ||
-                  skill == SKILL_BR_COMPUTER || skill == SKILL_BR_ELECTRONICS || skill == SKILL_BR_TRUCK ||
-                  skill == SKILL_BR_DRONE))
-      totalskill++;
+      totalskill += synth;
+    
     return totalskill;
   }
   else {
@@ -1509,4 +1642,24 @@ void remove_workshop_from_room(struct obj_data *obj) {
       }
     }
   }
+}
+
+// Checks if a given mount has a weapon on it.
+bool mount_has_weapon(struct obj_data *mount) {
+  return get_mount_weapon(mount) != NULL;
+}
+
+// Retrieve the weapon from a given mount.
+struct obj_data *get_mount_weapon(struct obj_data *mount) {
+  if (mount == NULL) {
+    mudlog("SYSERR: Attempting to retrieve weapon for nonexistent mount.", NULL, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+  
+  for (struct obj_data *contains = mount->contains; contains; contains = contains->next_content) {
+    if (GET_OBJ_TYPE(contains) == ITEM_WEAPON)
+      return contains;
+  }
+  
+  return NULL;
 }

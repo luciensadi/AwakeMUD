@@ -194,7 +194,6 @@ extern int top_of_mob_array;
 extern int mob_chunk_size;
 
 extern struct index_data *obj_index;
-extern struct obj_data *object_list;
 extern struct obj_data *obj_proto;
 extern rnum_t top_of_objt;
 extern int top_of_obj_array;

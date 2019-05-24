@@ -3,7 +3,7 @@ A fork of the [Awakened Worlds](http://awakenedworlds.net) MUD codebase. Issues 
 
 **The current test port for AwakeMUD Community Edition can be reached at mudtest.mooo.com port 4000.** Many thanks to Jan for running the previous test port for so long.
 
-Discussion of this port, as well as Awake itself, can take place at https://www.reddit.com/r/AwakenedWorlds/.
+Join our Discord channel! https://discord.gg/q5VCMkv
 
 ## Features
 - Enhanced security
@@ -48,3 +48,5 @@ If you get an error like `structs.h:8:10: fatal error: sodium.h: No such file or
 If you get an error like `MYSQLERROR: Data too long for column 'Password' at row X` when running the game, you need to update your database's pfile table to use the longer password-column capacity. Go into your database and execute the command in `SQL/migration-libsodium.sql`.
 
 If you get an error like `error while loading shared libraries: libsodium.so.23: cannot open shared object file: No such file or directory`, your path does not include the directory libsodium is in. You can find libsodium.so's directory with `sudo find / -name libsodium.so`, then optionally symlink it with `ln -s /the/directory/it/was/in/libsodium.so.XXX /usr/lib/libsodium.so.XXX`, where XXX is the numbers indicated in the original error. This is probably not an ideal fix, so if anyone has a better suggestion, please file an issue!
+
+If you get an error like `MYSQLERROR: Table 'awakemud.pfiles_mail' doesn't exist`, you need to run the command found in `SQL/mail_fixes.sql` in your database. This will upgrade your database to be compatible with the new mail system. This command is automatically run for new databases.

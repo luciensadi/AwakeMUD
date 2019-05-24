@@ -295,8 +295,10 @@ void iedit_disp_val1_menu(struct descriptor_data * d)
       iedit_program_types_menu(d);
       break;
     case ITEM_GUN_MAGAZINE:
-    case ITEM_GUN_AMMO:
       send_to_char("Number of bullets magazine contains (must match max load of weapon): ", CH);
+      break;
+    case ITEM_GUN_AMMO:
+      send_to_char("Number of bullets ammo box contains: ", CH);
       break;
     case ITEM_DOCWAGON:
       send_to_char("  1) Basic contract\r\n  2) Gold contract\r\n  3) Platinum contract\r\nDocWagon type: ", CH);
@@ -591,7 +593,13 @@ void iedit_disp_val3_menu(struct descriptor_data * d)
         iedit_disp_menu(d);
       break;
     case ITEM_MOD:
-      if (GET_OBJ_VAL(d->edit_obj, 0) == MOD_ENGINE) {
+      if (GET_OBJ_VAL(d->edit_obj, 0) == TYPE_MOUNT) {
+        // Mounts don't have ratings. Set it to 1.
+        GET_OBJ_VAL(d->edit_obj, 2) = 1;
+        iedit_disp_val4_menu(d);
+        return;
+      }
+      else if (GET_OBJ_VAL(d->edit_obj, 0) == MOD_ENGINE) {
         CLS(CH);
         for (c = 1; c <= ENGINE_DIESEL; c++)
           send_to_char(CH, " %d) %s\r\n", c, engine_type[c]);
@@ -715,7 +723,10 @@ void iedit_disp_val4_menu(struct descriptor_data * d)
     case ITEM_MOD:
       if (GET_OBJ_VAL(d->edit_obj, 0) == MOD_RADIO)
         send_to_char("Crypt Level (0-6): ", CH);
-      else iedit_disp_val5_menu(d);
+      else {
+        iedit_disp_val5_menu(d);
+        return;
+      }
       break;
     default:
       iedit_disp_menu(d);
@@ -739,6 +750,12 @@ void iedit_disp_val5_menu(struct descriptor_data * d)
       send_to_char("Space for Misc small items: ", CH);
       break;
     case ITEM_MOD:
+      if (GET_OBJ_VAL(d->edit_obj, 0) == TYPE_MOUNT) {
+        // Mounts automatically fit both types of vehicle.
+        GET_OBJ_VAL(d->edit_obj, 4) = 2;
+        iedit_disp_val6_menu(d);
+        return;
+      }
       send_to_char("Designed For (0 - Vehicle, 1 - Drone, 2 - Both): ", CH);
       break;
     default:
@@ -762,6 +779,14 @@ void iedit_disp_val6_menu(struct descriptor_data * d)
       send_to_char("Ballistic Rating: ", CH);
       break;
     case ITEM_MOD:
+      if (GET_OBJ_VAL(d->edit_obj, 0) == TYPE_MOUNT) {
+        // Mounts automatically fit all engine classes.
+        for (int number = ENGINE_ELECTRIC; number < NUM_ENGINE_TYPES; number++) {
+          TOGGLE_BIT(GET_OBJ_VAL(OBJ, 5), 1 << number);
+        }
+        iedit_disp_menu(d);
+        return;
+      }
       iedit_disp_mod_menu(d);
       break;
     case ITEM_CYBERDECK:
@@ -793,6 +818,10 @@ void iedit_disp_val7_menu(struct descriptor_data * d)
       send_to_char("Response Increase: ", CH);
       break;
     case ITEM_MOD:
+      if (GET_OBJ_VAL(d->edit_obj, 0) == TYPE_MOUNT) {
+        // Mounts go in the mount position.
+        GET_OBJ_VAL(OBJ, 6) = MOD_MOUNT;
+      }
       for (int c = 1; c < NUM_MODS; c++)
         send_to_char(CH, "  %d) %s\r\n", c, mod_name[c]);
       send_to_char("Enter attachable position: ", CH);
@@ -1521,6 +1550,11 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         for (int index = 0; index < NUM_VALUES; index++)
           GET_OBJ_VAL(d->edit_obj, index) = 0;
       }
+      
+      if (number == ITEM_GUN_MAGAZINE) {
+        send_to_char("NOTICE: Gun magazines were deprecated with the creation of the new ammo system. You probably don't need to make one.\r\n", d->character);
+      }
+      
       iedit_disp_menu(d);
       break;
     case IEDIT_EXTRAS:
@@ -1859,8 +1893,13 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             return;
           }
           break;
-        case ITEM_GUN_MAGAZINE:
         case ITEM_GUN_AMMO:
+          if (number < 1 || number > MAX_WEAP) {
+            send_to_char("Invalid option!\r\nAmmunition type: ", CH);
+            return;
+          }
+          break;
+        case ITEM_GUN_MAGAZINE:
           if (number < 1 || number > MAX_WEAP) {
             send_to_char("Invalid option!\r\nMagazine type: ", CH);
             return;

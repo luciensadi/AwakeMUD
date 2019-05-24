@@ -310,7 +310,7 @@ ACMD(do_put)
     obj_from_char(obj);
     obj_to_obj(obj, cont);
     send_to_char(ch, "You slip %s into your fingertip compartment.\r\n", GET_OBJ_NAME(obj));
-    act("$n slips $o into $s fingertip compartment.\r\n", TRUE, ch, obj, 0, TO_ROOM);
+    act("$n slips $p into $s fingertip compartment.\r\n", TRUE, ch, obj, 0, TO_ROOM);
   } else if (!str_cmp(arg2, "body")) {
     for (cont = ch->cyberware; cont; cont = cont->next_content)
       if (GET_OBJ_VAL(cont, 0) == CYB_BODYCOMPART)
@@ -334,7 +334,7 @@ ACMD(do_put)
     obj_from_char(obj);
     obj_to_obj(obj, cont);
     send_to_char(ch, "You slip %s into your body compartment.\r\n", GET_OBJ_NAME(obj));
-    act("$n slips $o into $s body compartment.\r\n", TRUE, ch, 0, obj, TO_ROOM);
+    act("$n slips $p into $s body compartment.\r\n", TRUE, ch, 0, obj, TO_ROOM);
   } else if (!str_cmp(arg2, "tooth")) {
     for (cont = ch->cyberware; cont; cont = cont->next_content)
       if (GET_OBJ_VAL(cont, 0) == CYB_TOOTHCOMPARTMENT)
@@ -362,7 +362,7 @@ ACMD(do_put)
     obj_from_char(obj);
     obj_to_obj(obj, cont);
     send_to_char(ch, "You slip %s into your tooth compartment.\r\n", GET_OBJ_NAME(obj));
-    act("$n slips $o into a tooth compartment.\r\n", TRUE, ch, 0, obj, TO_ROOM);
+    act("$n slips $p into a tooth compartment.\r\n", TRUE, ch, 0, obj, TO_ROOM);
   } else {
     generic_find(arg2, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &tmp_char, &cont);
     if (!cont) {
@@ -889,7 +889,7 @@ ACMD(do_get)
       obj_from_obj(obj);
       obj_to_char(obj, ch);
       send_to_char(ch, "You remove %s from your tooth compartment.\r\n", GET_OBJ_NAME(obj));
-      act("$n reaches into $s mouth and removes a $o.", TRUE, ch, 0, obj, TO_ROOM);
+      act("$n reaches into $s mouth and removes $p.", TRUE, ch, 0, obj, TO_ROOM);
     }
   } else if (!str_cmp(arg1, "finger")) {
     for (cont = ch->cyberware; cont; cont = cont->next_content)
@@ -904,7 +904,7 @@ ACMD(do_get)
       obj_from_obj(obj);
       obj_to_char(obj, ch);
       send_to_char(ch, "You remove %s from your fingertip compartment.\r\n", GET_OBJ_NAME(obj));
-      act("$n removes $O from a fingertip compartment.", TRUE, ch, 0, obj, TO_ROOM);
+      act("$n removes $P from a fingertip compartment.", TRUE, ch, 0, obj, TO_ROOM);
     }
   } else if (!str_cmp(arg1, "body")) {
     for (cont = ch->cyberware; cont; cont = cont->next_content)
@@ -919,7 +919,7 @@ ACMD(do_get)
       obj_from_obj(obj);
       obj_to_char(obj, ch);
       send_to_char(ch, "You remove %s from your body compartment.\r\n", GET_OBJ_NAME(obj));
-      act("$n removes $o from a body compartment.", TRUE, ch, 0, obj, TO_ROOM);
+      act("$n removes $p from a body compartment.", TRUE, ch, 0, obj, TO_ROOM);
     }
   } else if (!*arg2 || download) {
     get_from_room(ch, arg1, download);
@@ -1039,30 +1039,30 @@ ACMD(do_get)
           } else if (cont_dotmode) {
             REMOVE_FROM_LIST(cont, veh->mount, next_content)
             switch (GET_OBJ_VAL(cont, 1)) {
-            case 1:
-              sig = 1;
-              // Explicit fallthrough.
-            case 0:
-              bod++;
-              load = 10;
-              break;
-            case 3:
-              sig = 1;
-              // Explicit fallthrough.
-            case 2:
-              bod += 2;
-              load = 10;
-              break;
-            case 4:
-              sig = 1;
-              bod += 4;
-              load = 100;
-              break;
-            case 5:
-              sig = 1;
-              bod += 2;
-              load = 25;
-              break;
+              case 1:
+                sig = 1;
+                // Explicit fallthrough.
+              case 0:
+                bod++;
+                load = 10;
+                break;
+              case 3:
+                sig = 1;
+                // Explicit fallthrough.
+              case 2:
+                bod += 2;
+                load = 10;
+                break;
+              case 4:
+                sig = 1;
+                bod += 4;
+                load = 100;
+                break;
+              case 5:
+                sig = 1;
+                bod += 2;
+                load = 25;
+                break;
             }
             veh->sig += sig;
             veh->usedload -= load;

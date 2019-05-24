@@ -41,7 +41,6 @@
 #include "newdb.h"
 #include "comm.h"
 #include "handler.h"
-#include "mail.h"
 #include "interpreter.h"
 #include "house.h"
 #include "newmatrix.h"
@@ -84,15 +83,13 @@ struct index_data *ic_index;
 rnum_t top_of_ic = 0;
 struct matrix_icon *icon_list = NULL;
 
-struct char_data *character_list = NULL; /* global linked list of
-       * chars  */
+struct char_data *character_list = NULL; /* global linked list of chars  */
 struct index_data *mob_index; /* index table for mobile file  */
 struct char_data *mob_proto; /* prototypes for mobs   */
 rnum_t top_of_mobt = 0; /* top of mobile index table  */
 int mob_chunk_size = 100;       // default to 100
 int top_of_mob_array = 0;
 
-struct obj_data *object_list = NULL; /* global linked list of objs  */
 struct index_data *obj_index; /* index table for object file  */
 struct obj_data *obj_proto; /* prototypes for objs   */
 rnum_t top_of_objt = 0; /* top of object index table  */
@@ -167,6 +164,7 @@ void parse_quest(File &fl, long virtual_nr);
 void parse_host(File &fl, long nr);
 void parse_ic(File &fl, long nr);
 void load_zones(File &fl);
+void purge_unowned_vehs();
 void load_saved_veh();
 void assign_mobiles(void);
 void assign_objects(void);
@@ -358,7 +356,7 @@ void DBInit()
   log("Loading fight messages.");
   load_messages();
 
-  log("Booting World.");
+  log("Booting world.");
   boot_world();
 
   log("Loading social messages.");
@@ -387,12 +385,10 @@ void DBInit()
 
   log("Initializing board system:");
   BoardInit();
-
-  log("Booting mail system.");
-  scan_file();
+  
   log("Reading banned site list.");
   load_banned();
-  log("Reloading Consistency Files.");
+  log("Reloading consistency files.");
   load_consist();
 
   log("Initializing transportation system:");
@@ -405,15 +401,21 @@ void DBInit()
     extern void write_zone_to_disk(int vnum);
     write_zone_to_disk(zone_table[i].number);
   }
+  
+  log("Loading saved vehicles.");
+  load_saved_veh();
+  
+  log("Purging unowned vehicles.");
+  purge_unowned_vehs();
 
   log("Booting houses.");
   House_boot();
   boot_time = time(0);
-
-  log("Loading Saved Vehicles.");
-  load_saved_veh();
+  
+  log("Loading shop orders.");
   boot_shop_orders();
-  log("Boot db -- DONE.");
+  
+  log("DBInit -- DONE.");
 }
 
 /* A simple method to clean up after our DB. */
@@ -850,6 +852,7 @@ void parse_host(File &fl, long nr)
   for (int x = 0; x < num_fields; x++) {
     const char *name = data.GetIndexSection("EXITS", x);
     exit_data *exit = new exit_data;
+    memset(exit, 0, sizeof(exit_data));
     sprintf(field, "%s/Exit", name);
     exit->host = data.GetLong(field, 0);
     sprintf(field, "%s/Number", name);
@@ -862,6 +865,7 @@ void parse_host(File &fl, long nr)
   for (int x = 0; x < num_fields; x++) {
     const char *name = data.GetIndexSection("TRIGGERS", x);
     trigger_step *trigger = new trigger_step;
+    memset(trigger, 0, sizeof(trigger_step));
     sprintf(field, "%s/Step", name);
     trigger->step = data.GetInt(field, 0);
     sprintf(field, "%s/Alert", name);
@@ -1014,6 +1018,7 @@ void parse_room(File &fl, long nr)
 
       room->dir_option[i] = new room_direction_data;
       room_direction_data *dir = room->dir_option[i];
+      memset(dir, 0, sizeof(room_direction_data));
 
       dir->to_room = to_vnum;
       // dir->to_room_vnum will be set in renum_world
@@ -1073,6 +1078,7 @@ void parse_room(File &fl, long nr)
 
 
       extra_descr_data *desc = new extra_descr_data;
+      memset(desc, 0, sizeof(extra_descr_data));
       desc->keyword = keywords;
       sprintf(field, "%s/Desc", sect);
       desc->description = str_dup(data.GetString(field, NULL));
@@ -1095,6 +1101,7 @@ void setup_dir(FILE * fl, int room, int dir)
   sprintf(buf2, "room #%ld, direction D%d", world[room].number, dir);
 
   world[room].dir_option[dir] = new room_direction_data;
+  memset(world[room].dir_option[dir], 0, sizeof(room_direction_data));
   world[room].dir_option[dir]->general_description = fread_string(fl, buf2);
   world[room].dir_option[dir]->keyword = fread_string(fl, buf2);
 
@@ -1501,6 +1508,7 @@ void parse_object(File &fl, long nr)
       }
 
       extra_descr_data *desc = new extra_descr_data;
+      memset(desc, 0, sizeof(extra_descr_data));
       desc->keyword = keywords;
       sprintf(field, "%s/Desc", sect);
       desc->description = str_dup(data.GetString(field, NULL));
@@ -1615,6 +1623,7 @@ void parse_quest(File &fl, long virtual_nr)
 
   if (quest_table[quest_nr].num_objs > 0) {
     quest_table[quest_nr].obj = new quest_om_data[quest_table[quest_nr].num_objs];
+    memset(quest_table[quest_nr].obj, 0, sizeof(quest_om_data) * quest_table[quest_nr].num_objs);
     for (j = 0; j < quest_table[quest_nr].num_objs; j++) {
       fl.GetLine(line, 256, FALSE);
       if (sscanf(line, "%ld %ld %ld %ld %ld %ld %ld %ld", t, t + 1, t + 2, t + 3,
@@ -1636,6 +1645,7 @@ void parse_quest(File &fl, long virtual_nr)
 
   if (quest_table[quest_nr].num_mobs > 0) {
     quest_table[quest_nr].mob = new quest_om_data[quest_table[quest_nr].num_mobs];
+    memset(quest_table[quest_nr].mob, 0, sizeof(quest_om_data) * quest_table[quest_nr].num_mobs);
     for (j = 0; j < quest_table[quest_nr].num_mobs; j++) {
       fl.GetLine(line, 256, FALSE);
       if (sscanf(line, "%ld %ld %ld %ld %ld %ld %ld %ld", t, t + 1, t + 2, t + 3,
@@ -1713,6 +1723,7 @@ void parse_shop(File &fl, long virtual_nr)
     if (real_object(vnum) < 1)
       continue;
     shop_sell_data *sell = new shop_sell_data;
+    memset(sell, 0, sizeof(shop_sell_data));
     sell->vnum = vnum;
     sprintf(field, "%s/Type", name);
     sell->type = data.LookupInt(field, selling_type, SELL_ALWAYS);
@@ -1751,8 +1762,10 @@ void load_zones(File &fl)
 
   if (Z.num_cmds == 0)
     Z.cmd = NULL;
-  else
+  else {
     Z.cmd = new struct reset_com[Z.num_cmds];
+    memset(Z.cmd, 0, sizeof(reset_com) * Z.num_cmds);
+  }
 
   fl.GetLine(buf, 256, FALSE);
 
@@ -2417,6 +2430,7 @@ struct veh_data *read_vehicle(int nr, int type)
     }
   } else
     i = nr;
+  
   veh = Mem->GetVehicle();
   *veh = veh_proto[i];
   veh->next = veh_list;
@@ -2689,9 +2703,29 @@ void reset_zone(int zone, int reboot)
       if ((mob_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
           (ZCMD.arg2 == 0 && reboot)) {
         mob = read_mobile(ZCMD.arg1, REAL);
+        
         if (!veh->people) {
+          // If the vehicle is empty, make the mob the driver.
           AFF_FLAGS(mob).SetBit(AFF_PILOT);
+          mob->vfront = TRUE;
+          
           veh->cspeed = SPEED_CRUISING;
+        } else {
+          // Look for hardpoints with weapons and man them.
+          struct obj_data *mount = NULL;
+          
+          // Find an unmanned mount.
+          for (mount = veh->mount; mount; mount = mount->next_content) {
+            // Man the first unmanned mount we find, as long as it has a weapon in it.
+            if (!mount->worn_by && mount_has_weapon(mount)) {
+              mount->worn_by = mob;
+              AFF_FLAGS(mob).ToggleBit(AFF_MANNING);
+              break;
+            }
+          }
+          
+          // Mount-users are all back of the bus.
+          mob->vfront = FALSE;
         }
         char_to_veh(veh, mob);
         last_cmd = 1;
@@ -2707,31 +2741,32 @@ void reset_zone(int zone, int reboot)
     case 'U':                 /* mount/upgrades a vehicle with object */
       if (!veh)
         break;
-      if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
-          (ZCMD.arg2 == 0 && reboot)) {
+      if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)) {
         obj = read_object(ZCMD.arg1, REAL);
-        if (GET_OBJ_VAL(obj, 0) == MOD_MOUNT) {
+        
+        // Special case: Weapon mounts.
+        if (GET_OBJ_VAL(obj, 0) == TYPE_MOUNT) {
           switch (GET_OBJ_VAL(obj, 1)) {
-          case 1:
-            sig = 1;
-            // Explicit fallthrough.
-          case 0:
-            load = 10;
-            break;
-          case 3:
-            sig = 1;
-            // Explicit fallthrough.
-          case 2:
-            load = 10;
-            break;
-          case 4:
-            sig = 1;
-            load = 100;
-            break;
-          case 5:
-            sig = 1;
-            load = 25;
-            break;
+            case 1:
+              sig = 1;
+              // Explicit fallthrough.
+            case 0:
+              load = 10;
+              break;
+            case 3:
+              sig = 1;
+              // Explicit fallthrough.
+            case 2:
+              load = 10;
+              break;
+            case 4:
+              sig = 1;
+              load = 100;
+              break;
+            case 5:
+              sig = 1;
+              load = 25;
+              break;
           }
           veh->usedload += load;
           veh->sig -= sig;
@@ -2739,12 +2774,46 @@ void reset_zone(int zone, int reboot)
           if (veh->mount)
             obj->next_content = veh->mount;
           veh->mount = obj;
-        } else {
+        }
+        
+        // Special case: Weapons for mounts. Note that this ignores current vehicle load, mount size, etc.
+        else if (IS_GUN(GET_OBJ_VAL(obj, 3))) {
+          struct obj_data *mount = NULL;
+          
+          // Iterate through every mount on the vehicle.
+          for (mount = veh->mount; mount; mount = mount->next_content) {
+            // If we've found a weaponless mount, break out of loop.
+            if (!mount_has_weapon(mount))
+              break;
+          }
+          
+          if (mount) {
+            // We found a valid mount; attach the weapon.
+            obj_to_obj(obj, mount);
+            veh->usedload += GET_OBJ_WEIGHT(obj);
+            
+            // Set the obj's firemode to the optimal one.
+            if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_BF))
+              GET_OBJ_VAL(obj, 11) = MODE_BF;
+            else if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_FA)) {
+              GET_OBJ_VAL(obj, 11) = MODE_FA;
+              GET_OBJ_TIMER(obj) = 10;
+            }
+            else if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_SA))
+              GET_OBJ_VAL(obj, 11) = MODE_SA;
+            else
+              GET_OBJ_VAL(obj, 11) = MODE_SS;
+          } else {
+            ZONE_ERROR("Not enough mounts in target vehicle, cannot mount item");
+          }
+        }
+        else {
           GET_MOD(veh, GET_OBJ_VAL(obj, 0)) = obj;
           veh->usedload += GET_OBJ_VAL(obj, 1);
           for (int j = 0; j < MAX_OBJ_AFFECT; j++)
             affect_veh(veh, obj->affected[j].location, obj->affected[j].modifier);
         }
+        
         last_cmd = 1;
       } else
         last_cmd = 0;
@@ -2760,9 +2829,8 @@ void reset_zone(int zone, int reboot)
       } else
         last_cmd = 0;
       break;
-    case 'V':
-      if ((veh_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
-          (ZCMD.arg2 == 0 && reboot)) {
+    case 'V':                 /* loads a vehicle */
+      if ((veh_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)) {        
         veh = read_vehicle(ZCMD.arg1, REAL);
         veh_to_room(veh, ZCMD.arg3);
         last_cmd = 1;
@@ -3029,6 +3097,7 @@ bool resize_world_array()
   struct room_data *new_world;
 
   new_world = new struct room_data[top_of_world_array + world_chunk_size];
+  memset(new_world, 0, sizeof(room_data) * (top_of_world_array + world_chunk_size));
 
   if (!new_world) {
     mudlog("Unable to allocate new world array.", NULL, LOG_SYSLOG, TRUE);
@@ -3057,6 +3126,7 @@ bool resize_qst_array(void)
   struct quest_data *new_qst;
 
   new_qst = new struct quest_data[top_of_quest_array + quest_chunk_size];
+  memset(new_qst, 0, sizeof(quest_data) * (top_of_quest_array + quest_chunk_size));
 
   if (!new_qst) {
     mudlog("Unable to allocate new quest array.", NULL, LOG_SYSLOG, TRUE);
@@ -3129,6 +3199,7 @@ char *fread_string(FILE * fl, char *error)
   /* allocate space for the new string and copy it */
   if (strlen(buf) > 0) {
     rslt = new char[length + 1];
+    memset(rslt, 0, sizeof(char) * (length + 1));
     strcpy(rslt, buf);
   } else
     rslt = NULL;
@@ -3468,7 +3539,9 @@ int file_to_string_alloc(const char *name, char **buf)
 int file_to_string(const char *name, char *buf)
 {
   FILE *fl;
-  char tmp[128];
+  // Expanded from 128 to 129 so a max-length string (127 + '\0') after newline drop (126 + '\0\0') does not overrun when \r\n added (128 + overrun '\0')
+  char tmp[129];
+  memset(tmp, 0, sizeof(char) * 129);
 
   *buf = '\0';
 
@@ -3804,6 +3877,101 @@ void kill_ems(char *str)
   *ptr2 = '\0';
 }
 
+/* Look for all vehicles that do not have valid owners. These need to be deleted.
+ If they contain vehicles, those vehicles must be disgorged into the veh or room this one is in. */
+void purge_unowned_vehs() {
+  struct veh_data *prior_veh = NULL, *veh = NULL, *vict_veh = NULL;
+  
+  log("Player-owned vehicles currently in veh list:");
+  int counter = 0;
+  for (struct veh_data *tmp = veh_list; tmp; tmp = tmp->next) {
+    if (tmp->owner != 0) {
+      sprintf(buf, "'%s' (%ld) owned by %ld", tmp->short_description, tmp->idnum, tmp->owner);
+      log(buf);
+      counter++;
+    }
+  }
+  sprintf(buf, "End of veh list. %d player-owned vehicles counted.", counter);
+  log(buf);
+  
+  prior_veh = veh_list;
+  while (prior_veh) {    
+    // If we've hit the end of the list, evaluate for the head of the list.
+    if (!(veh = prior_veh->next)) {
+      veh = veh_list;
+      prior_veh = NULL;
+    }
+    
+    // This vehicle is owned by an NPC (zoneloaded): Do not delete.
+    if (veh->owner == 0) {
+      // sprintf(buf, "Skipping vehicle '%s' (%ld) since it's owned by nobody.", veh->description, veh->idnum);
+      // log(buf);
+      
+      if (!prior_veh) {
+        break;
+      } else {
+        prior_veh = prior_veh->next;
+        continue;
+      }
+    }
+    
+    // This vehicle is owned by a valid player: Do not delete.
+    if (does_player_exist(veh->owner)) {
+      sprintf(buf, "Skipping vehicle '%s' (%ld) since its owner is a valid player.", veh->short_description, veh->idnum);
+      log(buf);
+      
+      if (!prior_veh) {
+        break;
+      } else {
+        prior_veh = prior_veh->next;
+        continue;
+      }
+    }
+    
+    // This vehicle is owned by an invalid player. Delete.
+    
+    // Step 1: Dump its contents.
+    sprintf(buf, "Purging contents of vehicle '%s' (%ld), owner %ld (nonexistant).", veh->short_description, veh->idnum, veh->owner);
+    log(buf);
+    
+    while ((vict_veh = veh->carriedvehs)) {
+      sprintf(buf, "- Found '%s' (%ld) owned by %ld.", vict_veh->short_description, vict_veh->idnum, vict_veh->owner);
+      
+      // If the vehicle is in a room, disgorge there.
+      if (veh->in_room != NOWHERE) {
+        sprintf(ENDOF(buf), " Transferring to room %ld.", world[veh->in_room].number);
+        log(buf);
+        veh_from_room(vict_veh);
+        veh_to_room(vict_veh, veh->in_room);
+      }
+      
+      // If the vehicle is in another vehicle instead, disgorge there.
+      else if (veh->in_veh) {
+        sprintf(ENDOF(buf), " Transferring to vehicle '%s' (%ld).",
+                veh->in_veh->short_description, veh->in_veh->idnum);
+        log(buf);
+        veh_to_veh(vict_veh, veh->in_veh);
+      }
+      
+      // Failure case: Vehicle was in neither a room nor another vehicle.
+      else {
+        log(buf);
+        sprintf(buf, "SYSERR: Attempting to disgorge '%s' (%ld) from '%s' (%ld), but the latter has no containing vehicle (%ld) or location (%ld). Putting in Dante's.",
+                vict_veh->short_description, vict_veh->idnum,
+                veh->short_description, veh->idnum,
+                veh->in_veh ? veh->in_veh->idnum : -1, veh->in_room);
+        log(buf);
+        veh_to_room(vict_veh, RM_DANTES_GARAGE);
+      }
+    }
+    
+    // Step 2: Purge the vehicle itself. `veh` now points to garbage.
+    extract_veh(veh);
+    
+    // Critically, we don't iterate prior_veh if we removed veh-- that would skip the next veh in the list.
+  }
+}
+
 void load_saved_veh()
 {
   FILE *fl;
@@ -3832,8 +4000,6 @@ void load_saved_veh()
     file.Close();
 
     owner = data.GetLong("VEHICLE/Owner", 0);
-    if (!(does_player_exist(owner)))
-      continue;
 
     if ((vnum = data.GetLong("VEHICLE/Vnum", 0)))
       veh = read_vehicle(vnum, VIRTUAL);
@@ -3921,6 +4087,7 @@ void load_saved_veh()
     num_mods = data.NumSubsections("GRIDGUIDE");
     for (int i = 0; i < num_mods; i++) {
       struct grid_data *grid = new grid_data;
+      memset(grid, 0, sizeof(grid_data));
       const char *sect_name = data.GetIndexSection("GRIDGUIDE", i);
       sprintf(buf, "%s/Name", sect_name);
       grid->name = str_dup(data.GetString(buf, NULL));
@@ -3953,26 +4120,26 @@ void load_saved_veh()
       }
       int subbed = 0, damage = 0;
       switch (GET_OBJ_VAL(obj, 1)) {
-      case 1:
-        subbed = 1;
-        // Explicit fallthrough.
-      case 0:
-        damage = 10;
-        break;
-      case 3:
-        subbed = 1;
-        // Explicit fallthrough.
-      case 2:
-        damage = 10;
-        break;
-      case 4:
-        subbed = 1;
-        damage = 100;
-        break;
-      case 5:
-        subbed = 1;
-        damage = 25;
-        break;
+        case 1:
+          subbed = 1;
+          // Explicit fallthrough.
+        case 0:
+          damage = 10;
+          break;
+        case 3:
+          subbed = 1;
+          // Explicit fallthrough.
+        case 2:
+          damage = 10;
+          break;
+        case 4:
+          subbed = 1;
+          damage = 100;
+          break;
+        case 5:
+          subbed = 1;
+          damage = 25;
+          break;
       }
       veh->usedload += damage;
       veh->sig -= subbed;
@@ -4067,7 +4234,7 @@ void boot_shop_orders(void)
 {
   File file;
   vnum_t vnum, player;
-  for (int i = 0; i < top_of_shopt; i++) {
+  for (int i = 0; i <= top_of_shopt; i++) {
     sprintf(buf, "order/%ld", shop_table[i].vnum);
     if (!(file.Open(buf, "r")))
       continue;
@@ -4086,6 +4253,7 @@ void boot_shop_orders(void)
       if (real_object(vnum) < 0 || !does_player_exist(player))
         continue;
       order = new shop_order_data;
+      memset(order, 0, sizeof(shop_order_data));
       order->item = vnum;
       order->player = player;
       sprintf(buf, "%s/Time", sect_name);

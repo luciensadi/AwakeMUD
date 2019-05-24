@@ -1245,8 +1245,6 @@ enum {
 #define CYB_MUSCLEREP		46
 #define NUM_CYBER		47
 
-#define CYBER_DISABLED_BIT 9
-
 #define BIO_ADRENALPUMP		0
 #define BIO_CATSEYES		1
 #define BIO_DIGESTIVEEXPANSION	2
@@ -1532,12 +1530,13 @@ enum {
 #define TYPE_AMMOBIN		22
 #define NUM_MODTYPES		23
 
-#define ENGINE_NONE		0
+#define ENGINE_NONE		    0
 #define ENGINE_ELECTRIC		1
 #define ENGINE_FUELCELL		2
 #define ENGINE_GASOLINE		3
 #define ENGINE_METHANE		4
-#define ENGINE_DIESEL		5
+#define ENGINE_DIESEL		  5
+#define NUM_ENGINE_TYPES  6
 
 /* house value defines */
 #define MAX_HOUSES      100
@@ -1850,8 +1849,9 @@ enum {
 #define TO_NOTVICT      3
 #define TO_CHAR         4
 #define TO_ROLLS        5
-#define TO_VEH		6
-#define TO_DECK		7
+#define TO_VEH		      6
+#define TO_DECK		      7
+#define TO_VEH_ROOM     8
 #define TO_SLEEP        128     /* to char, even if sleeping */
 
 /* Boards */
@@ -1983,7 +1983,8 @@ enum {
 #define RM_NEWBIE_LOADROOM         60565 // The Neophyte Hotel.
 #define RM_NEWBIE_LOBBY            60563
 #define RM_ENTRANCE_TO_DANTES      35500
-#define RM_DANTES_GARAGE           35693 + number(0,4)
+#define RM_DANTES_GARAGE           35693
+#define RM_DANTES_GARAGE_RANDOM    35693 + number(0,4)
 #define RM_DANTES_DESCENT          35502
 #define RM_SEATTLE_DOCWAGON        RM_ENTRANCE_TO_DANTES
 #define RM_PORTLAND_DOCWAGON       RM_ENTRANCE_TO_DANTES

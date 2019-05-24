@@ -25,7 +25,6 @@
 #include "newdb.h"
 #include "utils.h"
 #include "handler.h"
-#include "mail.h"
 #include "screen.h"
 #include "memory.h"
 #include "newmagic.h"
@@ -113,6 +112,7 @@ ACMD(do_break);
 ACMD(do_broadcast);
 ACMD(do_build);
 ACMD(do_cast);
+ACMD(do_chipload);
 ACMD(do_cleanse);
 ACMD(do_commands);
 ACMD(do_compact);
@@ -682,7 +682,7 @@ struct command_info cmd_info[] =
     { "listen"   , POS_LYING   , do_action   , 0, 0 },
     { "lick"     , POS_LYING   , do_action   , 0, 0 },
     { "lock"     , POS_SITTING , do_gen_door , 0, SCMD_LOCK },
-    { "load"     , POS_RESTING , do_wizload  , 0, 0 },
+    { "load"     , POS_RESTING , do_chipload , 0, 0 },
     { "lol"      , POS_LYING   , do_action   , 0, 0 },
     { "love"     , POS_LYING   , do_action   , 0, 0 },
     { "logwatch" , POS_DEAD    , do_logwatch , LVL_BUILDER, 0 },
@@ -994,6 +994,7 @@ struct command_info cmd_info[] =
     { "wink"     , POS_LYING   , do_action   , 0, 0 },
     { "withdraw" , POS_STANDING, do_not_here , 1, 0 },
     { "wire"     , POS_STANDING, do_not_here , 1, 0 },
+    { "wizload"  , POS_RESTING , do_wizload  , LVL_ADMIN, 0 },
     { "wooha"    , POS_SITTING , do_action   , 0, 0 },
     { "wtell"    , POS_DEAD    , do_wiztell  , LVL_BUILDER, 0 },
     { "wf"       , POS_DEAD    , do_wizfeel  , LVL_BUILDER, 0 },

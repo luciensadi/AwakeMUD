@@ -1230,10 +1230,10 @@ SPECIAL(shop_keeper)
   vnum_t shop_nr;
   if (!cmd)
     return FALSE;
-  for (shop_nr = 0; shop_nr < top_of_shopt; shop_nr++)
+  for (shop_nr = 0; shop_nr <= top_of_shopt; shop_nr++)
     if (shop_table[shop_nr].keeper == GET_MOB_VNUM(keeper))
       break;
-  if (shop_nr >= top_of_shopt)
+  if (shop_nr > top_of_shopt)
     return FALSE;
 
   skip_spaces(&argument);
@@ -1264,7 +1264,7 @@ void assign_shopkeepers(void)
 {
   int index, rnum;
   cmd_say = find_command("say");
-  for (index = 0; index < top_of_shopt; index++) {
+  for (index = 0; index <= top_of_shopt; index++) {
     if (shop_table[index].keeper <= 0)
       continue;
     if ((rnum = real_mobile(shop_table[index].keeper)) < 0)
@@ -1279,7 +1279,7 @@ void assign_shopkeepers(void)
 
 void randomize_shop_prices(void)
 {
-  for (int i = 0; i < top_of_shopt; i++) {
+  for (int i = 0; i <= top_of_shopt; i++) {
     if (shop_table[i].random_amount)
       shop_table[i].random_current = number(-shop_table[i].random_amount, shop_table[i].random_amount);
     for (struct shop_sell_data *sell = shop_table[i].selling; sell; sell = sell->next)
@@ -1526,15 +1526,16 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
       } else {
         vnum_t counter, counter2;
         bool found = FALSE;
-        for (counter = 0; counter < top_of_shopt + 1; counter++) {
-          if (!found)
-            if (shop_table[counter].vnum > d->edit_number) {
-              for (counter2 = top_of_shopt + 1; counter2 > counter; counter2--)
-                shop_table[counter2] = shop_table[counter2 - 1];
-              SHOP->vnum = d->edit_number;
-              shop_table[counter] = *(d->edit_shop);
-              found = TRUE;
-            }
+        for (counter = 0; counter <= top_of_shopt; counter++) {
+          if (shop_table[counter].vnum > d->edit_number) {
+            for (counter2 = top_of_shopt + 1; counter2 > counter; counter2--)
+              shop_table[counter2] = shop_table[counter2 - 1];
+            
+            SHOP->vnum = d->edit_number;
+            shop_table[counter] = *(d->edit_shop);
+            found = TRUE;
+            break;
+          }
         }
         if (!found) {
           SHOP->vnum = d->edit_number;

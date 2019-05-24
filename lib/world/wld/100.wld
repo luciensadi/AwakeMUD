@@ -747,7 +747,7 @@ airlocks that lead to various testing chambers. Icons and emblems have been
 etched into the burnished plasteel surfaces of the various hatches to indicate
 what lies beyond. 
 ~
-Flags:	11000
+Flags:	10000000000000011100
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -763,6 +763,18 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+[EXIT north]
+	Keywords:	vault door sealed
+	Desc:$
+A sealed vault door prevents NPCs from escaping. 
+~
+	ToVnum:	10023
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+	LockRating:	50
+	HiddenRating:	50
 [EXIT down]
 	ToVnum:	10000
 	Flags:	0
@@ -807,7 +819,7 @@ Desc:$
 Vehicles that are zoneloaded here will be available for purchase in room
 10021. 
 ~
-Flags:	10000000000000000001000
+Flags:	110000000000000000001000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -831,7 +843,7 @@ RoomType:	0
 	KeyVnum:	0
 BREAK
 #10021
-Name:	^W(^CIMMHQ^W)^C A Spacious Garage
+Name:	^W(^cIMMHQ^W)^C A Spacious Garage
 Desc:$
 Cavernous and hangar-like, this massive vehicle storage area is enclosed by
 massive steel beams that arch gracefully overhead to support the thick slabs
@@ -856,6 +868,231 @@ RoomType:	0
 	BackgroundType:	0
 [EXIT north]
 	ToVnum:	10000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door wooden office
+	Desc:$
+A wooden door leads to an office. 
+~
+	ToVnum:	10022
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10022
+Name:	^W(^cIMMHQ^W)^C A Mechanic's Office
+Desc:$
+Packed full of vehicle parts, miscellaneous upgrades, and an array of tools
+large enough to take up two walls, this office is less of a place of
+administration and more a den of controlled mechanical chaos. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	50
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door wooden
+	Desc:$
+A wooden door leads back out to the garage. 
+~
+	ToVnum:	10021
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10023
+Name:	^W(^cIMMHQ^W)^C NPC Behavioral Analysis Lab
+Desc:$
+Racks of data processing units hooked up to electrode helmets lend a sinister
+air to this sterile laboratory. A sign on the wall informs you that this is an
+excellent area for loading in NPCs and testing their behavior in various
+circumstances. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	4
+Cover:	4
+X:	10
+Y:	10
+Z:	2.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	10026
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	vault sealed door
+	Desc:$
+A vault door prevents NPCs from escaping. 
+~
+	ToVnum:	10018
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+	LockRating:	50
+	HiddenRating:	50
+[EXIT northwest]
+	ToVnum:	10024
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10024
+Name:	^W(^cIMMHQ^W)^C NPC Behavioral Analysis Lab - The Western Road
+Desc:$
+A flat stretch of asphalt with a small, caution-taped sidewalk stretches out
+here, looping endlessly through N-dimensional space to create an infinite test
+track for driving NPCs. 
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	4
+Cover:	4
+X:	10
+Y:	10
+Z:	2.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	10025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	10023
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10026
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10025
+Name:	^W(^cIMMHQ^W)^C NPC Behavioral Analysis Lab - The Central Road
+Desc:$
+A flat stretch of asphalt with a small, caution-taped sidewalk stretches out
+here, looping endlessly through N-dimensional space to create an infinite test
+track for driving NPCs. 
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	4
+Cover:	4
+X:	10
+Y:	10
+Z:	2.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	10026
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10023
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10024
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10026
+Name:	^W(^cIMMHQ^W)^C NPC Behavioral Analysis Lab - The Eastern Road
+Desc:$
+A flat stretch of asphalt with a small, caution-taped sidewalk stretches out
+here, looping endlessly through N-dimensional space to create an infinite test
+track for driving NPCs. 
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	4
+Cover:	4
+X:	10
+Y:	10
+Z:	2.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	10024
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	10023
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10025
 	Flags:	0
 	Material:	brick
 	Barrier:	4

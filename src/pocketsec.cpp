@@ -8,7 +8,7 @@
 #include "screen.h"
 #include "constants.h"
 #include "olc.h"
-#include "mail.h"
+#include "newmail.h"
 #include "newdb.h"
 #include "memory.h"
 #include <mysql/mysql.h>
@@ -52,7 +52,7 @@ void wire_nuyen(struct char_data *ch, struct char_data *targ, int amount, long i
   } else
     GET_BANK(targ) += amount;
   sprintf(buf, "%s has wired %d nuyen to your account.\r\n", GET_CHAR_NAME(ch), amount);
-  store_mail(targ ? GET_IDNUM(targ) : isfile, GET_IDNUM(ch), buf);
+  store_mail(targ ? GET_IDNUM(targ) : isfile, ch, buf);
   char *player_name = NULL;
   sprintf(buf, "%s wired %d nuyen to %s.", GET_CHAR_NAME(ch), amount, targ ? GET_CHAR_NAME(targ) : (player_name = get_player_name(isfile)));
   DELETE_ARRAY_IF_EXTANT(player_name);
@@ -108,7 +108,7 @@ void pocketsec_menu(struct descriptor_data *d)
                  "   [^c4^n] ^cFiles^n\r\n"
                  "   [^c5^n] ^cBanking^n\r\n"
                  "   [^c6^n] ^c%sock^n\r\n"
-                 "   [^c0^n] ^cQuit^n\r\n", has_mail(GET_IDNUM(CH)) ? " ^R" : " ", GET_OBJ_VAL(SEC, 1) ? "Unl" : "L");
+                 "   [^c0^n] ^cQuit^n\r\n", amount_of_mail_waiting(CH) > 0 ? " ^R" : " ", GET_OBJ_VAL(SEC, 1) ? "Unl" : "L");
     d->edit_mode = SEC_MENU;
   }
 }
@@ -116,23 +116,22 @@ void pocketsec_menu(struct descriptor_data *d)
 void pocketsec_mailmenu(struct descriptor_data *d)
 {
   struct obj_data *mail = NULL, *folder = SEC->contains;
-  char sender[30];
+  char sender[150];
   int i = 0;
 
   for (; folder; folder = folder->next_content)
     if (!strcmp(folder->restring, "Mail"))
       break;
-  while (has_mail(GET_IDNUM(CH))) {
+  while (amount_of_mail_waiting(CH) > 0) {
     mail = read_object(111, VIRTUAL);
-    mail->photo = read_delete(GET_IDNUM(CH), sender);
+    mail->photo = str_dup(get_and_delete_one_message(CH, sender));
     
     if (*sender)
       mail->restring = str_dup(CAP(sender));
     else mail->restring = str_dup("Alert");
 
     if (mail->photo == NULL)
-      mail->photo =
-        str_dup("Mail system error - please report.  Error #11.\r\n");
+      mail->photo = str_dup("Mail system error - please report.  Error #11.\r\n");
 
     obj_to_obj(mail, folder);
   }

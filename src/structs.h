@@ -139,7 +139,8 @@ struct room_direction_data
   vnum_t to_room_vnum;       /* the vnum of the room. Used for OLC   */
 
   room_direction_data() :
-      general_description(NULL), keyword(NULL)
+      general_description(NULL), keyword(NULL), exit_info(0), key(0), to_room(NOWHERE),
+      key_level(0), ward(0), idnum(0), hidden(0), material(0), barrier(0), condition(0), to_room_vnum(NOWHERE)
   {}
 }
 ;
