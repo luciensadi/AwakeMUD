@@ -194,40 +194,41 @@ struct pgroup_cmd_struct {
   dword privilege_required;
   void (*command_pointer) (struct char_data *ch, char *argument);
   bool valid_while_group_not_founded;
+  bool valid_while_group_is_founded;
   bool requires_pocket_secretary;
   bool valid_while_group_disabled;
   bool requires_coconspirator_if_secret;
-} pgroup_commands[] = {
-  { "abdicate"   , PRIV_LEADER        , do_pgroup_abdicate    , FALSE , FALSE , FALSE , FALSE },
-  { "balance"    , PRIV_TREASURER     , do_pgroup_balance     , FALSE , TRUE  , FALSE , FALSE },
-  { "buy"        , PRIV_PROCURER      , do_pgroup_buy         , FALSE , TRUE  , FALSE , FALSE },
-  { "contest"    , PRIV_NONE          , do_pgroup_contest     , FALSE , TRUE  , FALSE , FALSE },
-  { "create"     , PRIV_NONE          , do_pgroup_create      , TRUE  , TRUE  , FALSE , FALSE },
-  { "demote"     , PRIV_MANAGER       , do_pgroup_promote     , FALSE , TRUE  , FALSE , TRUE  },
-  { "donate"     , PRIV_NONE          , do_pgroup_donate      , FALSE , FALSE , FALSE , FALSE },
-  { "design"     , PRIV_ARCHITECT     , do_pgroup_design      , FALSE , TRUE  , FALSE , FALSE },
-  { "disband"    , PRIV_LEADER        , do_pgroup_disband     , TRUE  , TRUE  , FALSE , FALSE },
-  { "edit"       , PRIV_LEADER        , do_pgroup_edit        , TRUE  , TRUE  , FALSE , FALSE },
-  { "found"      , PRIV_LEADER        , do_pgroup_found       , TRUE  , TRUE  , FALSE , FALSE },
-  { "grant"      , PRIV_ADMINISTRATOR , do_pgroup_grant       , FALSE , TRUE  , FALSE , TRUE  },
-  { "help"       , PRIV_NONE          , do_pgroup_help        , TRUE  , FALSE , FALSE , FALSE },
-  { "invite"     , PRIV_RECRUITER     , do_pgroup_invite      , TRUE  , TRUE  , FALSE , TRUE  },
-  { "lease"      , PRIV_LANDLORD      , do_pgroup_lease       , FALSE , TRUE  , FALSE , FALSE },
-  { "logs"       , PRIV_AUDITOR       , do_pgroup_logs        , TRUE  , TRUE  , TRUE  , FALSE },
-  { "note"       , PRIV_NONE          , do_pgroup_note        , TRUE  , TRUE  , FALSE , FALSE },
-  { "outcast"    , PRIV_MANAGER       , do_pgroup_outcast     , TRUE  , TRUE  , FALSE , TRUE  },
-  { "privileges" , PRIV_NONE          , do_pgroup_privileges  , TRUE  , TRUE  , FALSE , FALSE },
-  { "promote"    , PRIV_MANAGER       , do_pgroup_promote     , FALSE , TRUE  , FALSE , TRUE  },
-  { "quit"       , PRIV_NONE          , do_pgroup_resign      , TRUE  , FALSE , FALSE , FALSE },
-  { "resign"     , PRIV_NONE          , do_pgroup_resign      , TRUE  , FALSE , TRUE  , FALSE },
-  { "revoke"     , PRIV_ADMINISTRATOR , do_pgroup_revoke      , FALSE , TRUE  , FALSE , TRUE  },
-  { "roster"     , PRIV_NONE          , do_pgroup_roster      , TRUE  , TRUE  , FALSE , TRUE  },
-  { "status"     , PRIV_NONE          , do_pgroup_status      , TRUE  , TRUE  , TRUE  , FALSE },
-  { "transfer"   , PRIV_PROCURER      , do_pgroup_transfer    , FALSE , TRUE  , FALSE , FALSE },
-  { "vote"       , PRIV_NONE          , do_pgroup_vote        , FALSE , TRUE  , FALSE , FALSE },
-  { "withdraw"   , PRIV_TREASURER     , do_pgroup_withdraw    , FALSE , FALSE , FALSE , FALSE },
-  { "\n"         , 0                  , 0                     , FALSE , FALSE , FALSE , FALSE } // This must be last.
-};
+} pgroup_commands[] = {                                     /* !founded founded pocsec disabld secret */
+  { "abdicate"   , PRIV_LEADER        , do_pgroup_abdicate    , FALSE , TRUE  , FALSE , FALSE , FALSE },
+  { "balance"    , PRIV_TREASURER     , do_pgroup_balance     , FALSE , TRUE  , TRUE  , FALSE , FALSE },
+  { "buy"        , PRIV_PROCURER      , do_pgroup_buy         , FALSE , TRUE  , TRUE  , FALSE , FALSE },
+  { "contest"    , PRIV_NONE          , do_pgroup_contest     , FALSE , TRUE  , TRUE  , FALSE , FALSE },
+  { "create"     , PRIV_NONE          , do_pgroup_create      , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
+  { "demote"     , PRIV_MANAGER       , do_pgroup_promote     , FALSE , TRUE  , TRUE  , FALSE , TRUE  },
+  { "donate"     , PRIV_NONE          , do_pgroup_donate      , FALSE , TRUE  , FALSE , FALSE , FALSE },
+  { "design"     , PRIV_ARCHITECT     , do_pgroup_design      , FALSE , TRUE  , TRUE  , FALSE , FALSE },
+  { "disband"    , PRIV_LEADER        , do_pgroup_disband     , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
+  { "edit"       , PRIV_LEADER        , do_pgroup_edit        , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
+  { "found"      , PRIV_LEADER        , do_pgroup_found       , TRUE  , FALSE , TRUE  , FALSE , FALSE },
+  { "grant"      , PRIV_ADMINISTRATOR , do_pgroup_grant       , FALSE , TRUE  , TRUE  , FALSE , TRUE  },
+  { "help"       , PRIV_NONE          , do_pgroup_help        , TRUE  , TRUE  , FALSE , FALSE , FALSE },
+  { "invite"     , PRIV_RECRUITER     , do_pgroup_invite      , TRUE  , TRUE  , TRUE  , FALSE , TRUE  },
+  { "lease"      , PRIV_LANDLORD      , do_pgroup_lease       , FALSE , TRUE  , TRUE  , FALSE , FALSE },
+  { "logs"       , PRIV_AUDITOR       , do_pgroup_logs        , TRUE  , TRUE  , TRUE  , FALSE , TRUE  },
+  { "note"       , PRIV_NONE          , do_pgroup_note        , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
+  { "outcast"    , PRIV_MANAGER       , do_pgroup_outcast     , TRUE  , TRUE  , TRUE  , FALSE , TRUE  },
+  { "privileges" , PRIV_NONE          , do_pgroup_privileges  , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
+  { "promote"    , PRIV_MANAGER       , do_pgroup_promote     , FALSE , TRUE  , TRUE  , FALSE , TRUE  },
+  { "quit"       , PRIV_NONE          , do_pgroup_resign      , TRUE  , TRUE  , FALSE , FALSE , FALSE },
+  { "resign"     , PRIV_NONE          , do_pgroup_resign      , TRUE  , TRUE  , FALSE , TRUE  , FALSE },
+  { "revoke"     , PRIV_ADMINISTRATOR , do_pgroup_revoke      , FALSE , TRUE  , TRUE  , FALSE , TRUE  },
+  { "roster"     , PRIV_NONE          , do_pgroup_roster      , TRUE  , TRUE  , TRUE  , FALSE , TRUE  },
+  { "status"     , PRIV_NONE          , do_pgroup_status      , TRUE  , TRUE  , TRUE  , TRUE  , FALSE },
+  { "transfer"   , PRIV_PROCURER      , do_pgroup_transfer    , FALSE , TRUE  , TRUE  , FALSE , FALSE },
+  { "vote"       , PRIV_NONE          , do_pgroup_vote        , FALSE , TRUE  , TRUE  , FALSE , FALSE },
+  { "withdraw"   , PRIV_TREASURER     , do_pgroup_withdraw    , FALSE , TRUE  , FALSE , FALSE , FALSE },
+  { "\n"         , 0                  , 0                     , FALSE , TRUE  , FALSE , FALSE , FALSE } // This must be last.
+};                                                          /* !founded founded pocsec disabld secret */
 
 /* Main Playergroup Command */
 ACMD(do_pgroup) {
@@ -283,6 +284,10 @@ ACMD(do_pgroup) {
     if (!GET_PGROUP(ch)->is_founded() && !pgroup_commands[cmd_index].valid_while_group_not_founded) {
       send_to_char("You need to be a member of a fully-fledged playergroup to do that.\r\n", ch);
       return;
+    }
+    
+    if (GET_PGROUP(ch)->is_founded() && !pgroup_commands[cmd_index].valid_while_group_is_founded) {
+      // Deliberately letting this fall through-- only candidate command right now is FOUND and it has its own error message.
     }
     
     // Precondition: You must have the appropriate privilege (or be leader) to perform this command.
@@ -386,6 +391,8 @@ void do_pgroup_design(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_disband(struct char_data *ch, char *argument) {
+  char query_buf[512];
+  
   if (!*argument || str_cmp(argument, "confirm") != 0) {
     send_to_char(ch, "If you're sure you want to disband '%s', type PGROUP DISBAND CONFIRM.\r\n",
                  GET_PGROUP(ch)->get_name());
@@ -394,21 +401,22 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
   
   Playergroup *pgr = GET_PGROUP(ch);
   
-  // Kick all members.
-  char query_buf[512];
-  sprintf(query_buf, "SELECT idnum, Rank, Privileges FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
-  mysql_wrapper(mysql, query_buf);
-  MYSQL_RES *res = mysql_use_result(mysql);
-  MYSQL_ROW row = mysql_fetch_row(res);
-  sprintf(buf, "The following character IDs are being kicked from '%s' (%s, %ld) due to disbanding by %s: ",
+  // Prepare our log message.
+  sprintf(buf, "The following characters are being kicked from '%s' (%s, %ld) due to disbanding by %s: \r\n",
           pgr->get_name(),
           pgr->get_alias(),
           pgr->get_idnum(),
           GET_CHAR_NAME(ch));
-  while (row) {
-    // TODO: Eventually this should give names not IDs, but that's another lookup for each name...
-    sprintf(ENDOF(buf), "%s (rank %s, privs %s)", row[0], row[1], row[2]);
-    row = mysql_fetch_row(res);
+  
+  sprintf(query_buf, "SELECT idnum, Rank, Privileges FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
+  mysql_wrapper(mysql, query_buf);
+  MYSQL_RES *res = mysql_use_result(mysql);
+  MYSQL_ROW row;
+  while ((row = mysql_fetch_row(res))) {
+    char *name = get_player_name(atoi(row[0]));
+    sprintf(ENDOF(buf), " %s (%s): rank %s, privs %s\r\n", name, row[0], row[1], row[2]);
+    if (name)
+      delete [] name;
   }
   mysql_free_result(res);
   log(buf);
@@ -417,7 +425,7 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
   sprintf(query_buf, "DELETE FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
   mysql_wrapper(mysql, query_buf);
   
-  // Delete pgroup's invitations.
+  // Delete pgroup's invitations. TODO: Notify the invitee that the invitation has expired.
   sprintf(query_buf, "DELETE FROM playergroup_invitations WHERE `Group` = %ld", pgr->get_idnum());
   mysql_wrapper(mysql, query_buf);
   
@@ -683,6 +691,11 @@ void display_pgroup_help(struct char_data *ch) {
     
     // If the group is not yet founded and the command is not valid while not founded, skip it.
     if (!(GET_PGROUP(ch)->is_founded() || pgroup_commands[cmd_index].valid_while_group_not_founded)) {
+      continue;
+    }
+    
+    // If the group has already been founded and the command is not valid while founded, skip it.
+    if (GET_PGROUP(ch)->is_founded() && !pgroup_commands[cmd_index].valid_while_group_is_founded) {
       continue;
     }
     
