@@ -3221,8 +3221,8 @@ int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
 struct combat_data *populate_cyberware(struct char_data *ch, struct combat_data *cd) {
   // Pull info on all the character's active cyberware.
   for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content) {
-    if (!GET_OBJ_VAL(obj, CYBER_DISABLED_BIT)) {
-      switch (GET_OBJ_VAL(obj, 0)) {
+    if (!GET_CYBERWARE_IS_DISABLED(obj)) {
+      switch (GET_CYBERWARE_TYPE(obj)) {
         case CYB_CLIMBINGCLAWS:
           cd->climbingclaws++;
           cd->num_cyberweapons++;
@@ -3236,7 +3236,7 @@ struct combat_data *populate_cyberware(struct char_data *ch, struct combat_data 
           cd->num_cyberweapons++;
           break;
         case CYB_HANDRAZOR:
-          if (IS_SET(GET_OBJ_VAL(obj, 3), CYBERWEAPON_IMPROVED))
+          if (IS_SET(GET_CYBERWARE_FLAGS(obj), CYBERWEAPON_IMPROVED))
             cd->improved_handrazors++;
           else
             cd->handrazors++;
@@ -3252,8 +3252,8 @@ struct combat_data *populate_cyberware(struct char_data *ch, struct combat_data 
           break;
           
       }
-    } else if (GET_OBJ_VAL(obj, 0) == CYB_BONELACING) {
-      switch (GET_OBJ_VAL(obj, 3)) {
+    } else if (GET_CYBERWARE_TYPE(obj) == CYB_BONELACING) {
+      switch (GET_CYBERWARE_LACING_TYPE(obj)) {
         case BONE_PLASTIC:
           cd->bone_lacing_power = MAX(cd->bone_lacing_power, 2);
           break;
@@ -3272,14 +3272,14 @@ struct combat_data *populate_cyberware(struct char_data *ch, struct combat_data 
 
 bool weapon_has_bayonet(struct obj_data *weapon) {
   // Precondition: Weapon must exist, must be a weapon-class item, and must be a gun.
-  if (!(weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(weapon, 3))))
+  if (!(weapon && GET_OBJ_TYPE(weapon) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))))
     return FALSE;
 
   long attach_obj;
   struct obj_data *attach_proto = NULL;
   
-  return (GET_OBJ_VAL(weapon, ACCESS_LOCATION_UNDER)
-          && (attach_obj = real_object(GET_OBJ_VAL(weapon, ACCESS_LOCATION_UNDER))) > 0
+  return (GET_WEAPON_ATTACH_UNDER_VNUM(weapon)
+          && (attach_obj = real_object(GET_WEAPON_ATTACH_UNDER_VNUM(weapon))) > 0
           && (attach_proto = &obj_proto[attach_obj])
           && GET_OBJ_VAL(attach_proto, 1) == ACCESS_BAYONET);
 }

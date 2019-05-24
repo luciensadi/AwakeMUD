@@ -196,7 +196,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
         }
         damage_door(ch, ch->in_room, dir, (int)(GET_WEAPON_POWER(wielded) / 2), DAMOBJ_PIERCE);
         return TRUE;
-      } else if (GET_WEAPON_TYPE(wielded) >= WEAP_HOLDOUT) {
+      } else if (GET_WEAPON_ATTACK_TYPE(wielded) >= WEAP_HOLDOUT) {
         if (!has_ammo(ch, wielded))
           return TRUE;
         WAIT_STATE(ch, PULSE_VIOLENCE * 2);
@@ -212,7 +212,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
         damage_door(ch, ch->in_room, dir, (int)(GET_WEAPON_POWER(wielded) / 2), DAMOBJ_PROJECTILE);
         return TRUE;
       } else
-        switch (GET_WEAPON_TYPE(wielded)) {
+        switch (GET_WEAPON_ATTACK_TYPE(wielded)) {
           case WEAP_EDGED:
           case WEAP_POLEARM:
           case WEAP_WHIP:
@@ -420,8 +420,7 @@ ACMD(do_shoot)
 
   for (i = WEAR_WIELD; i <= WEAR_HOLD; i++)
     if ((weapon = GET_EQ(ch, i)) &&
-        (GET_OBJ_TYPE(weapon) == ITEM_FIREWEAPON || (GET_OBJ_TYPE(weapon) == ITEM_WEAPON &&
-            IS_GUN(GET_OBJ_VAL(weapon, 3)))))
+        (GET_OBJ_TYPE(weapon) == ITEM_FIREWEAPON || (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)))))
       if (find_weapon_range(ch, weapon) > range)
         pos = i;
 
@@ -477,9 +476,9 @@ ACMD(do_throw)
 
   for (i = WEAR_WIELD; i <= WEAR_HOLD; i++)
     if ((weapon = GET_EQ(ch, i)) &&
-        (GET_OBJ_VAL(weapon, 3) == TYPE_SHURIKEN ||
-         GET_OBJ_VAL(weapon, 3) == TYPE_THROWING_KNIFE ||
-         GET_OBJ_VAL(weapon, 3) == TYPE_HAND_GRENADE))
+        (GET_WEAPON_ATTACK_TYPE(weapon) == TYPE_SHURIKEN ||
+         GET_WEAPON_ATTACK_TYPE(weapon) == TYPE_THROWING_KNIFE ||
+         GET_WEAPON_ATTACK_TYPE(weapon) == TYPE_HAND_GRENADE))
       break;
 
   if (i > WEAR_HOLD || !weapon) {
@@ -487,7 +486,7 @@ ACMD(do_throw)
     return;
   }
 
-  if (GET_OBJ_VAL(weapon, 3) == TYPE_HAND_GRENADE) {
+  if (GET_WEAPON_ATTACK_TYPE(weapon) == TYPE_HAND_GRENADE) {
     if (!*arg1) {
       send_to_char("Syntax: throw <direction>\r\n", ch);
       return;
@@ -519,7 +518,7 @@ ACMD(do_throw)
     send_to_char("There seems to be something in the way...\r\n", ch);
     return;
   }
-  if (GET_OBJ_VAL(weapon, 3) == TYPE_HAND_GRENADE)
+  if (GET_WEAPON_ATTACK_TYPE(weapon) == TYPE_HAND_GRENADE)
     range_combat(ch, NULL, weapon, 1, dir);
   else
     range_combat(ch, arg1, weapon, 1, dir);
@@ -634,7 +633,7 @@ ACMD(do_retract)
     cyber = get_obj_in_list_vis(ch, argument, ch->cyberware);
   else {
     for (struct obj_data *obj = ch->cyberware; obj; obj = obj->next_content)
-      switch (GET_OBJ_VAL(obj, 0)) {  
+      switch (GET_CYBERWARE_TYPE(obj)) {
         case CYB_HANDRAZOR:  
         case CYB_HANDBLADE:  
         case CYB_HANDSPUR:   
@@ -652,18 +651,18 @@ ACMD(do_retract)
     if (!*argument) 
       send_to_char("You don't have any retractable cyberware.\r\n", ch);
     else send_to_char("You don't have that cyberware.\r\n", ch);
-  } else if (!(GET_OBJ_VAL(cyber, 0) == CYB_HANDRAZOR || GET_OBJ_VAL(cyber, 0) == CYB_HANDSPUR || GET_OBJ_VAL(cyber, 0) == CYB_HANDBLADE || GET_OBJ_VAL(cyber, 0) == CYB_FOOTANCHOR || GET_OBJ_VAL(cyber, 0) == CYB_FIN))
+  } else if (!(GET_CYBERWARE_TYPE(cyber) == CYB_HANDRAZOR || GET_CYBERWARE_TYPE(cyber) == CYB_HANDSPUR || GET_CYBERWARE_TYPE(cyber) == CYB_HANDBLADE || GET_CYBERWARE_TYPE(cyber) == CYB_FOOTANCHOR || GET_CYBERWARE_TYPE(cyber) == CYB_FIN))
     send_to_char("That cyberware isn't retractable.\r\n",ch ); 
-  else if ((GET_OBJ_VAL(cyber, 0) == CYB_HANDRAZOR || GET_OBJ_VAL(cyber, 0) == CYB_HANDSPUR || GET_OBJ_VAL(cyber, 0) == CYB_HANDBLADE) && !IS_SET(GET_OBJ_VAL(cyber, 3), CYBERWEAPON_RETRACTABLE))
+  else if ((GET_CYBERWARE_TYPE(cyber) == CYB_HANDRAZOR || GET_CYBERWARE_TYPE(cyber) == CYB_HANDSPUR || GET_CYBERWARE_TYPE(cyber) == CYB_HANDBLADE) && !IS_SET(GET_CYBERWARE_FLAGS(cyber), CYBERWEAPON_RETRACTABLE))
     send_to_char("That cyberweapon isn't retractable.\r\n",ch );
   else {
-    if (GET_OBJ_VAL(cyber, CYBER_DISABLED_BIT)) {
-      GET_OBJ_VAL(cyber, CYBER_DISABLED_BIT) = 0;
+    if (GET_CYBERWARE_IS_DISABLED(cyber)) {
+      GET_CYBERWARE_IS_DISABLED(cyber) = FALSE;
       sprintf(buf, "$n extends %s.", GET_OBJ_NAME(cyber));
       act(buf, TRUE, ch, 0, 0, TO_ROOM);
       send_to_char(ch, "You extend %s.\r\n", GET_OBJ_NAME(cyber));
     } else {
-      GET_OBJ_VAL(cyber, CYBER_DISABLED_BIT) = 1;
+      GET_CYBERWARE_IS_DISABLED(cyber) = TRUE;
       sprintf(buf, "$n retracts %s.", GET_OBJ_NAME(cyber));
       act(buf, TRUE, ch, 0, 0, TO_ROOM);
       send_to_char(ch, "You retract %s.\r\n", GET_OBJ_NAME(cyber));
@@ -677,7 +676,7 @@ ACMD(do_mode)
   struct obj_data *weapon = NULL;
   int mode = 0;
   
-  if (!(weapon = GET_EQ(ch, WEAR_WIELD)) || GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !IS_GUN(GET_WEAPON_TYPE(weapon)))
+  if (!(weapon = GET_EQ(ch, WEAR_WIELD)) || GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon)))
     send_to_char("You aren't wielding a firearm.\r\n", ch);
   else if (!*argument) {
     send_to_char(ch, "%s's available fire modes: \r\n", CAP(GET_OBJ_NAME(weapon)));

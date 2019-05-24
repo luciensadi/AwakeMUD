@@ -1245,8 +1245,6 @@ enum {
 #define CYB_MUSCLEREP		46
 #define NUM_CYBER		47
 
-#define CYBER_DISABLED_BIT 9
-
 #define BIO_ADRENALPUMP		0
 #define BIO_CATSEYES		1
 #define BIO_DIGESTIVEEXPANSION	2

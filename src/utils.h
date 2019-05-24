@@ -704,7 +704,7 @@ IS_LIGHT((sub)->in_room) || !((light_level((sub)->in_room) == LIGHT_MINLIGHT || 
 #define GET_WEAPON_POWER(weapon)               (GET_OBJ_VAL((weapon), 0))
 #define GET_WEAPON_DAMAGE_CODE(weapon)         (GET_OBJ_VAL((weapon), 1))
 #define GET_WEAPON_STR_BONUS(weapon)           (GET_OBJ_VAL((weapon), 2))
-#define GET_WEAPON_TYPE(weapon)                (GET_OBJ_VAL((weapon), 3))
+#define GET_WEAPON_ATTACK_TYPE(weapon)         (GET_OBJ_VAL((weapon), 3))
 #define GET_WEAPON_SKILL(weapon)               (GET_OBJ_VAL((weapon), 4))
 #define GET_WEAPON_MAX_AMMO(weapon)            (GET_OBJ_VAL((weapon), 5))
 #define GET_WEAPON_REACH(weapon)               (GET_OBJ_VAL((weapon), 6))
@@ -717,6 +717,12 @@ IS_LIGHT((sub)->in_room) || !((light_level((sub)->in_room) == LIGHT_MINLIGHT || 
 
 // ITEM_WEAPON convenience defines
 #define WEAPON_CAN_USE_FIREMODE(weapon, mode)  (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << mode))
+
+// ITEM_CYBERWARE convenience defines
+#define GET_CYBERWARE_TYPE(cyberware)         (GET_OBJ_VAL((cyberware), 0))
+#define GET_CYBERWARE_FLAGS(cyberware)        (GET_OBJ_VAL((cyberware), 3)) // CYBERWEAPON_RETRACTABLE, CYBERWEAPON_IMPROVED
+#define GET_CYBERWARE_LACING_TYPE(cyberware)  (GET_OBJ_VAL((cyberware), 3)) // Yes, this is also value 3. Great design here.
+#define GET_CYBERWARE_IS_DISABLED(cyberware)  (GET_OBJ_VAL((cyberware), 9))
 
 /* Misc utils ************************************************************/
 #define IS_DAMTYPE_PHYSICAL(type) \
