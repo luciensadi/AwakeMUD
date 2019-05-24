@@ -1019,6 +1019,52 @@ Material:	metal
 	Val5:	7
 	Val6:	12
 BREAK
+#41
+Keywords:	call button elevator
+Name:	an elevator call button
+RoomDesc:$
+^cAn elevator call button is visible here.^n~
+LookDesc:$
+Perfect for summoning an elevator. Why don't you ^WPUSH^n it? 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#42
+Keywords:	panel
+Name:	an elevator control panel
+RoomDesc:$
+^cA panel of buttons allows you to control the lift.^n~
+LookDesc:$
+You shouldn't be able to look at this. Please alert staff. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
 #50
 Keywords:	flat panel display monitor terminal board floating
 Name:	A Floating Display Panel
