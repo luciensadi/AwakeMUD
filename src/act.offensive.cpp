@@ -675,6 +675,8 @@ ACMD(do_retract)
 ACMD(do_mode)
 {
   struct obj_data *weapon = NULL;
+  int mode = 0;
+  
   if (!(weapon = GET_EQ(ch, WEAR_WIELD)) || GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !IS_GUN(GET_WEAPON_TYPE(weapon)))
     send_to_char("You aren't wielding a firearm.\r\n", ch);
   else if (!*argument) {
@@ -690,7 +692,6 @@ ACMD(do_mode)
   } else {
     skip_spaces(&argument);
     two_arguments(argument, arg, buf1);
-    int mode = 0;
     if (!str_cmp(arg, "SS") && WEAPON_CAN_USE_FIREMODE(weapon, MODE_SS))
       mode = MODE_SS;
     else if (!str_cmp(arg, "SA") && WEAPON_CAN_USE_FIREMODE(weapon, MODE_SA))
