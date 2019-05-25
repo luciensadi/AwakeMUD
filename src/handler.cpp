@@ -1795,12 +1795,15 @@ void extract_veh(struct veh_data * veh)
   // If any vehicle are inside, drop them where the vehicle is.
   struct veh_data *temp = NULL;
   while ((temp = veh->carriedvehs)) {
+    sprintf(buf, "As %s disintegrates, %s falls out!\r\n", veh->short_description, temp->short_description);
+    sprintf(buf2, "You feel the sickening sensation of falling as %s disintegrates around your vehicle.\r\n", veh->short_description);
+    send_to_veh(buf2, temp, NULL, FALSE);
     if (veh->in_room != NOWHERE) {
+      send_to_room(buf, veh->in_room);
       veh_from_room(temp);
       veh_to_room(temp, veh->in_room);
-      sprintf(buf, "As %s disintegrates, %s falls out!\r\n", veh->short_description, temp->short_description);
-      send_to_room(buf, veh->in_room);
     } else if (veh->in_veh) {
+      send_to_veh(buf, veh, NULL, FALSE);
       veh_to_veh(temp, veh->in_veh);
     } else {
       veh_from_room(temp);
@@ -1815,6 +1818,8 @@ void extract_veh(struct veh_data * veh)
     if (veh->in_room != NOWHERE) {
       char_from_room(ch);
       char_to_room(ch, veh->in_room);
+      AFF_FLAGS(ch).RemoveBit(AFF_MANNING);
+      AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
       sprintf(buf, "As %s disintegrates, $n falls out!", veh->short_description);
       act(buf, FALSE, ch, 0, 0, TO_ROOM);
     } else if (veh->in_veh) {
