@@ -1663,3 +1663,36 @@ struct obj_data *get_mount_weapon(struct obj_data *mount) {
   
   return NULL;
 }
+
+// Cleans up after a character who was manning a mount.
+struct obj_data *stop_manning_weapon_mounts(struct char_data *ch, bool send_message) {
+  if (AFF_FLAGGED(ch, AFF_MANNING)) {
+    struct obj_data *mount;
+    
+    // Find the mount in-use, if any.
+    for (mount = ch->in_veh->mount; mount; mount = mount->next_content)
+      if (mount->worn_by == ch)
+        break;
+    
+    // Clean up the mount's data (stop it from pointing to character; remove targets)
+    mount->worn_by = NULL;
+    mount->targ = NULL;
+    mount->tveh = NULL;
+    
+    // Clean up their character flags.
+    AFF_FLAGS(ch).RemoveBit(AFF_MANNING);
+    
+    // Take them out of fight mode if they're in it.
+    if (FIGHTING(ch))
+      stop_fighting(ch);
+    
+    // Let them / the room know that they've stopped manning.
+    if (send_message) {
+      act("$n stops manning $p.", FALSE, ch, mount, 0, TO_ROOM);
+      act("You stop manning $p.", FALSE, ch, mount, 0, TO_CHAR);
+    }
+    
+    return mount;
+  }
+  return NULL;
+}

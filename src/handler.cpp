@@ -1008,6 +1008,8 @@ void char_from_room(struct char_data * ch)
     ch->in_veh->seating[ch->vfront]++;
     ch->in_veh = NULL;
     ch->next_in_veh = NULL;
+    stop_manning_weapon_mounts(ch, TRUE);
+    AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
   } else
   {
     if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_PACIFY) && world[ch->in_room].peaceful > 0)
@@ -1818,8 +1820,6 @@ void extract_veh(struct veh_data * veh)
     if (veh->in_room != NOWHERE) {
       char_from_room(ch);
       char_to_room(ch, veh->in_room);
-      AFF_FLAGS(ch).RemoveBit(AFF_MANNING);
-      AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
       sprintf(buf, "As %s disintegrates, $n falls out!", veh->short_description);
       act(buf, FALSE, ch, 0, 0, TO_ROOM);
     } else if (veh->in_veh) {
@@ -2008,14 +2008,7 @@ void extract_char(struct char_data * ch)
       send_to_veh("The vehicle suddenly comes to a stop.\r\n", ch->in_veh, ch, FALSE);
       ch->in_veh->cspeed = SPEED_OFF;
     }
-    if (AFF_FLAGGED(ch, AFF_MANNING)) {
-      struct obj_data *mount;
-      for (mount = ch->in_veh->mount; mount; mount = mount->next_content)
-        if (mount->worn_by == ch)
-          break;
-      mount->worn_by = NULL;
-      AFF_FLAGS(ch).ToggleBit(AFF_MANNING);
-    }
+    stop_manning_weapon_mounts(ch, TRUE);
   }
   
   /* remove the character from their room (use in_room to reference ch->in_room after this) */

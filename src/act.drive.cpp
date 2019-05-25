@@ -237,19 +237,12 @@ ACMD(do_drive)
   }
   if (VEH->cspeed == SPEED_OFF || VEH->dest) {
     AFF_FLAGS(ch).ToggleBit(AFF_PILOT);
-    send_to_char("The wheel is in your hands.\r\n", ch);
-    sprintf(buf1, "%s takes the wheel.\r\n", GET_NAME(ch));
     VEH->cspeed = SPEED_IDLE;
     VEH->lastin[0] = VEH->in_room;
     send_to_veh(buf1, VEH, ch, FALSE);
-    if (AFF_FLAGGED(ch, AFF_MANNING)) {
-      struct obj_data *mount;
-      for (mount = ch->in_veh->mount; mount; mount = mount->next_content)
-        if (mount->worn_by == ch)
-          break;
-      mount->worn_by = NULL;
-      AFF_FLAGS(ch).RemoveBit(AFF_MANNING);
-    }
+    stop_manning_weapon_mounts(ch, TRUE);
+    send_to_char("The wheel is in your hands.\r\n", ch);
+    sprintf(buf1, "%s takes the wheel.\r\n", GET_NAME(ch));
   } else {
     AFF_FLAGS(ch).ToggleBit(AFF_PILOT);
     send_to_char("You relinquish the driver's seat.\r\n", ch);
@@ -328,19 +321,12 @@ ACMD(do_rig)
       return;
     } 
     AFF_FLAGS(ch).ToggleBits(AFF_PILOT, AFF_RIG, ENDBIT);
-    send_to_char("As you jack in, your perception shifts.\r\n", ch);
-    sprintf(buf1, "%s jacks into the vehicle control system.\r\n", GET_NAME(ch));
     VEH->cspeed = SPEED_IDLE;
     VEH->lastin[0] = VEH->in_room;
     send_to_veh(buf1, VEH, ch, TRUE);
-    if (AFF_FLAGGED(ch, AFF_MANNING)) {
-      struct obj_data *mount;
-      for (mount = ch->in_veh->mount; mount; mount = mount->next_content)
-        if (mount->worn_by == ch)
-          break;
-      mount->worn_by = NULL;
-      AFF_FLAGS(ch).RemoveBit(AFF_MANNING);
-    }
+    stop_manning_weapon_mounts(ch, TRUE);
+    send_to_char("As you jack in, your perception shifts.\r\n", ch);
+    sprintf(buf1, "%s jacks into the vehicle control system.\r\n", GET_NAME(ch));
   } else {
     if (!AFF_FLAGGED(ch, AFF_RIG)) {
       send_to_char("But you're not rigging.\r\n", ch);
@@ -1459,15 +1445,7 @@ ACMD(do_man)
   }
 
   if (AFF_FLAGGED(ch, AFF_MANNING)) {
-    for (mount = ch->in_veh->mount; mount; mount = mount->next_content)
-      if (mount->worn_by == ch)
-        break;
-    mount->worn_by = NULL;
-    AFF_FLAGS(ch).ToggleBit(AFF_MANNING);
-    act("$n stops manning $p.", FALSE, ch, mount, 0, TO_ROOM);
-    act("You stop manning $p.", FALSE, ch, mount, 0, TO_CHAR);
-    if (FIGHTING(ch))
-      stop_fighting(ch);
+    stop_manning_weapon_mounts(ch, TRUE);
     if (!*argument)
       return;
   }
@@ -1492,7 +1470,7 @@ ACMD(do_man)
     mount->worn_by = ch;
     act("$n mans $p.", FALSE, ch, mount, 0, TO_ROOM);
     act("You man $p.", FALSE, ch, mount, 0, TO_CHAR);
-    AFF_FLAGS(ch).ToggleBit(AFF_MANNING);
+    AFF_FLAGS(ch).SetBit(AFF_MANNING);
     return;
   }
   

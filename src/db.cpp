@@ -2719,7 +2719,7 @@ void reset_zone(int zone, int reboot)
             // Man the first unmanned mount we find, as long as it has a weapon in it.
             if (!mount->worn_by && mount_has_weapon(mount)) {
               mount->worn_by = mob;
-              AFF_FLAGS(mob).ToggleBit(AFF_MANNING);
+              AFF_FLAGS(mob).SetBit(AFF_MANNING);
               break;
             }
           }

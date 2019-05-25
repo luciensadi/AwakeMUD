@@ -1260,13 +1260,16 @@ void leave_veh(struct char_data *ch)
 {
   struct follow_type *k, *next;
   struct veh_data *veh;
+  struct obj_data *mount = NULL;
   long door;
-  if (AFF_FLAGGED(ch, AFF_RIG))
-  {
+  
+  if (AFF_FLAGGED(ch, AFF_RIG)) {
     send_to_char(ch, "Try returning to your senses first.\r\n");
     return;
   }
+  
   RIG_VEH(ch, veh);
+  
   if ((AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE)) && veh->in_veh) {
     if (veh->in_veh->in_veh) {
       send_to_char("There is not enough room to drive out of here.\r\n", ch);
@@ -1300,20 +1303,12 @@ void leave_veh(struct char_data *ch)
     AFF_FLAGS(ch).ToggleBit(AFF_PILOT);
     veh->cspeed = SPEED_OFF;
     stop_chase(veh);
-  } else if (AFF_FLAGGED(ch, AFF_MANNING))
-  {
-    struct obj_data *mount;
-    for (mount = veh->mount; mount; mount = mount->next_content)
-      if (mount->worn_by == ch)
-        break;
-    mount->worn_by = NULL;
-    AFF_FLAGS(ch).ToggleBit(AFF_MANNING);
+  } else if ((mount = stop_manning_weapon_mounts(ch, FALSE))) {
     act("$n stops manning $p and climbs out into the street.", FALSE, ch, mount, 0, TO_ROOM);
   } else
     act("$n climbs out into the street.", FALSE, ch, 0, 0, TO_VEH);
   door = veh->in_room;
   char_from_room(ch);
-  AFF_FLAGS(ch).RemoveBit(AFF_MANNING);
   if (IS_WORKING(ch))
   {
     STOP_WORKING(ch);
