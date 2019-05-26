@@ -21,7 +21,7 @@ RoomType:	0
 	Background:	0
 	BackgroundType:	0
 [EXIT up]
-	ToVnum:	16295
+	ToVnum:	35500
 	Flags:	0
 	Material:	brick
 	Barrier:	4

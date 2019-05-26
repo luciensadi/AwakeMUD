@@ -8111,6 +8111,12 @@ RoomType:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
+[EXIT east]
+	ToVnum:	70303
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT south]
 	ToVnum:	32695
 	Flags:	0
