@@ -57,12 +57,14 @@ void format_string(struct descriptor_data *d, int indent)
 {
   int i, j, k, line;
 
+  /* Why was this a thing? -LS
   if (strlen(*d->str) >= 1023)
     return;
+   */
+  
   // if the editor is an implementor and begins with the sequence
   // /**/, then we know not to format this string
-  if (*(*d->str) == '/' &&
-      *(*d->str + 1) == '*' && *(*d->str + 2) == '*' && *(*d->str + 3) == '/')
+  if (*(*d->str) == '/' && *(*d->str + 1) == '*' && *(*d->str + 2) == '*' && *(*d->str + 3) == '/')
   {
     for (i = 0; i < (int)(strlen(*d->str) - 4); i++)
       (*d->str)[i] = (*d->str)[i+4];
