@@ -9,8 +9,9 @@ Terms of Use:
 2.  You must include this license in all distributed copies of AwakeMUD CE.
 3.  The login screen must credit AwakeMUD and its primary contributors,
       currently Lucien Sadi and Finster.
-4.  This License may change without notice. The most up-to-date version of
-      this license will always be available in the GitHub repository,
+4.  This License may change without notice, and you agree to abide by any 
+      updated license terms. The most up-to-date version of this license will 
+      be available in the GitHub repository, currently located at
       https://github.com/luciensadi/AwakeMUD.
 
 ===============================================================================
