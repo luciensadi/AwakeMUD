@@ -1294,9 +1294,11 @@ ACMD(do_target)
       return;
     }
     if (AFF_FLAGGED(ch, AFF_MANNING)) {
-      for (obj = veh->mount; obj; obj = obj->next_content)
-        if (obj->worn_by == ch)
-          break;
+      if (!(obj = get_mount_manned_by_ch(ch))) {
+        // Safeguard-- if they don't have a mount, drop 'em.
+        send_to_char("You don't have control over any mounts.\r\n", ch);
+        return;
+      }
     } else {
       for (j = 0, obj = veh->mount; obj; obj = obj->next_content)
         if (obj->contains && !obj->worn_by)

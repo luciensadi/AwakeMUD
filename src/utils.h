@@ -72,6 +72,7 @@ void    remove_workshop_from_room(struct obj_data *obj);
 bool    mount_has_weapon(struct obj_data *mount);
 struct  obj_data *get_mount_weapon(struct obj_data *mount);
 struct  obj_data *stop_manning_weapon_mounts(struct char_data *ch, bool send_message);
+struct  obj_data *get_mount_manned_by_ch(struct char_data *ch);
 
 /* undefine MAX and MIN so that our functions are used instead */
 #ifdef MAX

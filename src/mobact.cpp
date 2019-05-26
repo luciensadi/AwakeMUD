@@ -183,11 +183,10 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
   
   // Dakka o'clock.
   else if (AFF_FLAGGED(ch, AFF_MANNING)) {
-    for (struct obj_data *mount = ch->in_veh->mount; mount; mount = mount->next_content) {
-      if (mount->worn_by == ch && mount_has_weapon(mount)) {
-        do_raw_target(ch, ch->in_veh, tveh, vict, FALSE, mount);
-        return TRUE;
-      }
+    struct obj_data *mount = get_mount_manned_by_ch(ch);
+    if (mount && mount_has_weapon(mount)) {
+      do_raw_target(ch, ch->in_veh, tveh, vict, FALSE, mount);
+      return TRUE;
     }
     
     mudlog("SYSERR: Could not find mount manned by NPC for mobact_process_in_vehicle_aggro().", NULL, LOG_SYSLOG, TRUE);
@@ -275,11 +274,10 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
   
   // Dakka o'clock.
   else if (AFF_FLAGGED(ch, AFF_MANNING)) {
-    for (struct obj_data *mount = ch->in_veh->mount; mount; mount = mount->next_content) {
-      if (mount->worn_by == ch && mount_has_weapon(mount)) {
-        do_raw_target(ch, ch->in_veh, tveh, vict, FALSE, mount);
-        return TRUE;
-      }
+    struct obj_data *mount = get_mount_manned_by_ch(ch);
+    if (mount && mount_has_weapon(mount)) {
+      do_raw_target(ch, ch->in_veh, tveh, vict, FALSE, mount);
+      return TRUE;
     }
     
     mudlog("SYSERR: Could not find mount manned by NPC for mobact_process_in_vehicle_aggro().", NULL, LOG_SYSLOG, TRUE);
