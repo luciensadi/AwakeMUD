@@ -705,6 +705,10 @@ IS_LIGHT((sub)->in_room) || !((light_level((sub)->in_room) == LIGHT_MINLIGHT || 
 // ITEM_LIGHT convenience defines
 
 // ITEM_WORKSHOP convenience defines
+#define GET_WORKSHOP_TYPE(workshop)            (GET_OBJ_VAL(workshop, 0))
+#define GET_WORKSHOP_GRADE(workshop)           (GET_OBJ_VAL(workshop, 1))
+#define GET_WORKSHOP_IS_SETUP(workshop)        (GET_OBJ_VAL(workshop, 2))
+#define GET_WORKSHOP_UNPACK_TICKS(workshop)    (GET_OBJ_VAL(workshop, 3))
 
 // ITEM_CAMERA convenience defines
 

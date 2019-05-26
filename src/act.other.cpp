@@ -3297,8 +3297,8 @@ ACMD(do_unpack)
     }
   }
   for (shop = ch->in_veh ? ch->in_veh->contents : world[ch->in_room].contents; shop; shop = shop->next_content)
-    if (GET_OBJ_TYPE(shop) == ITEM_WORKSHOP && GET_OBJ_VAL(shop, 1) == TYPE_SHOP) {
-      if (GET_OBJ_VAL(shop, 2) || GET_OBJ_VAL(shop, 3)) {
+    if (GET_OBJ_TYPE(shop) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(shop) == TYPE_SHOP) {
+      if (GET_WORKSHOP_IS_SETUP(shop) || GET_WORKSHOP_UNPACK_TICKS(shop)) {
         send_to_char("There is already a workshop set up here.\r\n", ch);
         return;
       } else
@@ -3313,7 +3313,7 @@ ACMD(do_unpack)
     }
     send_to_char(ch, "You begin to set up %s here.\r\n", GET_OBJ_NAME(shop));
     act("$n begins to set up $P.", FALSE, ch, 0, shop, TO_ROOM);
-    GET_OBJ_VAL(shop, 3) = 3;
+    GET_WORKSHOP_UNPACK_TICKS(shop) = 3;
     AFF_FLAGS(ch).SetBit(AFF_PACKING);
   }
 }
