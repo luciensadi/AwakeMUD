@@ -1,1 +1,6 @@
 Lucien   (Apr  7) [10000] Add HELP SPERETHIEL to explain what the language actually is.
+Testmort (May 22) [10014] Given area built as A-B-C, if shooting from A at someone in C, have a chance of hitting randos in B when you miss.
+Lucien   (May 22) [10001] let the STOP command stop you from fighting
+Lucien   (May 26) [70302] limit pgroup command columns to 4 for better phone usability
+Lucien   (May 26) [70316] TOGGLE colums to 2 for phones
+Lucien   (May 26) [60502] Add feedback for zswitch command

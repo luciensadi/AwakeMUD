@@ -1,31 +1,11 @@
 [HOUSE]
 	[Object 0]
-		Vnum:	1167
+		Vnum:	10011
 		Inside:	0
 		Value 0:	2
-		Value 1:	2
-		Value 2:	1
-		Value 3:	0
-		Value 4:	0
-		Value 5:	0
-		Value 6:	0
-		Value 7:	0
-		Value 8:	0
-		Value 9:	0
-		Value 10:	0
-		Value 11:	0
-		Condition:	6
-		Timer:	2
-		Attempt:	0
-		Cost:	15000
-		ExtraFlags:	0
-	[Object 1]
-		Vnum:	10016
-		Inside:	0
-		Value 0:	3
-		Value 1:	1
-		Value 2:	0
-		Value 3:	0
+		Value 1:	100000000
+		Value 2:	100000000
+		Value 3:	1800
 		Value 4:	0
 		Value 5:	0
 		Value 6:	0
@@ -37,12 +17,33 @@
 		Condition:	32
 		Timer:	2
 		Attempt:	0
-		Cost:	99996589
+		Cost:	0
 		ExtraFlags:	0
+	[Object 1]
+		Vnum:	108
+		Inside:	1
+		Value 0:	36
+		Value 1:	15
+		Value 2:	1800
+		Value 3:	0
+		Value 4:	0
+		Value 5:	0
+		Value 6:	0
+		Value 7:	0
+		Value 8:	0
+		Value 9:	0
+		Value 10:	0
+		Value 11:	0
+		Condition:	3
+		Timer:	0
+		Attempt:	0
+		Cost:	0
+		ExtraFlags:	1000000000
+		Name:	MPCP Design
 	[Object 2]
-		Vnum:	10015
+		Vnum:	10014
 		Inside:	0
-		Value 0:	3
+		Value 0:	4
 		Value 1:	0
 		Value 2:	0
 		Value 3:	0
@@ -57,7 +58,7 @@
 		Condition:	32
 		Timer:	2
 		Attempt:	0
-		Cost:	999992124
+		Cost:	0
 		ExtraFlags:	0
 	[Object 3]
 		Vnum:	10014
@@ -140,9 +141,9 @@
 		Cost:	0
 		ExtraFlags:	0
 	[Object 7]
-		Vnum:	10014
+		Vnum:	10015
 		Inside:	0
-		Value 0:	4
+		Value 0:	3
 		Value 1:	0
 		Value 2:	0
 		Value 3:	0
@@ -157,15 +158,15 @@
 		Condition:	32
 		Timer:	2
 		Attempt:	0
-		Cost:	0
+		Cost:	999992124
 		ExtraFlags:	0
 	[Object 8]
-		Vnum:	10011
+		Vnum:	10016
 		Inside:	0
-		Value 0:	2
-		Value 1:	100000000
-		Value 2:	100000000
-		Value 3:	1800
+		Value 0:	3
+		Value 1:	1
+		Value 2:	0
+		Value 3:	0
 		Value 4:	0
 		Value 5:	0
 		Value 6:	0
@@ -177,14 +178,14 @@
 		Condition:	32
 		Timer:	2
 		Attempt:	0
-		Cost:	0
+		Cost:	99996589
 		ExtraFlags:	0
 	[Object 9]
-		Vnum:	108
-		Inside:	1
-		Value 0:	36
-		Value 1:	15
-		Value 2:	1800
+		Vnum:	1167
+		Inside:	0
+		Value 0:	2
+		Value 1:	2
+		Value 2:	1
 		Value 3:	0
 		Value 4:	0
 		Value 5:	0
@@ -194,9 +195,8 @@
 		Value 9:	0
 		Value 10:	0
 		Value 11:	0
-		Condition:	3
-		Timer:	0
+		Condition:	6
+		Timer:	2
 		Attempt:	0
-		Cost:	0
-		ExtraFlags:	1000000000
-		Name:	MPCP Design
+		Cost:	15000
+		ExtraFlags:	0
