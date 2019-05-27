@@ -1663,3 +1663,83 @@ struct obj_data *get_mount_weapon(struct obj_data *mount) {
   
   return NULL;
 }
+
+// Cleans up after a character who was manning a mount.
+struct obj_data *stop_manning_weapon_mounts(struct char_data *ch, bool send_message) {
+  if (AFF_FLAGGED(ch, AFF_MANNING)) {
+    struct obj_data *mount;
+    
+    // Find the mount in-use, if any.
+    mount = get_mount_manned_by_ch(ch);
+    
+    // Clean up the mount's data (stop it from pointing to character; remove targets)
+    mount->worn_by = NULL;
+    mount->targ = NULL;
+    mount->tveh = NULL;
+    
+    // Clean up their character flags.
+    AFF_FLAGS(ch).RemoveBit(AFF_MANNING);
+    
+    // Take them out of fight mode if they're in it.
+    if (FIGHTING(ch))
+      stop_fighting(ch);
+    
+    // Let them / the room know that they've stopped manning.
+    if (send_message) {
+      act("$n stops manning $p.", FALSE, ch, mount, 0, TO_ROOM);
+      act("You stop manning $p.", FALSE, ch, mount, 0, TO_CHAR);
+    }
+    
+    return mount;
+  }
+  return NULL;
+}
+
+// Safely retrieves the mount a character is using. Returns NULL for no mount.
+struct obj_data *get_mount_manned_by_ch(struct char_data *ch) {
+  // Catch-all to notify on bad coding or memory issues.
+  if (!ch) {
+    mudlog("SYSERR: Attempting to get mount manned by NULL character.", NULL, LOG_SYSLOG, TRUE);
+    // No mount returned.
+    return NULL;
+  }
+  
+  // Not an error, silently return null.
+  if (!AFF_FLAGGED(ch, AFF_MANNING)) {
+    return NULL;
+  }
+  
+  // Require that they be in a vehicle. Error and clear their flag if they're not.
+  if (!ch->in_veh) {
+    sprintf(buf, "SYSERR: Attempting to get mount manned by %s, but %s is not in any vehicle.", GET_CHAR_NAME(ch), HSHR(ch));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    
+    // Clean up their mount info. We don't use stop_manning..() because it calls this function itself.
+    AFF_FLAGS(ch).RemoveBit(AFF_MANNING);
+    if (FIGHTING(ch))
+      stop_fighting(ch);
+    
+    // No mount returned.
+    return NULL;
+  }
+  
+  // Find and return their mount.
+  for (struct obj_data *mount = ch->in_veh->mount; mount; mount = mount->next_content) {
+    if (mount->worn_by == ch) {
+      // Mount available, return it.
+      return mount;
+    }
+  }
+  
+  // No mount? Error and clear their flag.
+  sprintf(buf, "SYSERR: Attempting to get mount manned by %s, but the mount does not exist in %s vehicle.", GET_CHAR_NAME(ch), HSHR(ch));
+  mudlog(buf, ch, LOG_SYSLOG, TRUE);
+  
+  // Clean up their mount info.
+  AFF_FLAGS(ch).RemoveBit(AFF_MANNING);
+  if (FIGHTING(ch))
+    stop_fighting(ch);
+  
+  // No mount returned.
+  return NULL;
+}

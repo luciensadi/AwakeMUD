@@ -974,7 +974,7 @@ ACMD(do_get)
               skill = SKILL_BR_TRUCK;
               break;
             }
-            switch (GET_OBJ_VAL(cont, 0)) {
+            switch (GET_VEHICLE_MOD_TYPE(cont)) {
             case TYPE_ENGINECUST:
               target = 6;
               break;
@@ -1024,6 +1024,13 @@ ACMD(do_get)
               veh->engine = 0;
             if (success_test(skill, target) < 1) {
               send_to_char(ch, "You can't figure out how to uninstall it. \r\n");
+              return;
+            }
+          }
+          if (GET_VEHICLE_MOD_TYPE(cont) == TYPE_MOUNT) {
+            // Check to see if anyone is manning it.
+            if (cont->worn_by) {
+              send_to_char(ch, "Someone is manning it.\r\n");
               return;
             }
           }

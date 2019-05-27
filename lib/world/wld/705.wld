@@ -1,0 +1,496 @@
+#70500
+Name:	Entrance to the West Tacoma Junkyard
+Desc:$
+tbd entrance to junkyard, will need a bored guard who ostensibly stops people
+from stealing from the junkyard 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	1
+Cover:	7
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	2070
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	70501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70501
+Name:	Inside the West Tacoma Junkyard
+Desc:$
+tbd, it's a junkyard with gravel cover and piles of rusting machinery. Got a
+guard booth and an office, maybe a broken-down bus through a hidden exit or
+something that has quest-related things 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	1
+Cover:	7
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	70502
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	70500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	70503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	70504
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70502
+Name:	Inside the West Tacoma Junkyard
+Desc:$
+tbd, it's a junkyard with gravel cover and piles of rusting machinery. Got a
+guard booth and an office, maybe a broken-down bus through a hidden exit or
+something that has quest-related things 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	1
+Cover:	7
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	70501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	70505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70503
+Name:	Inside the West Tacoma Junkyard
+Desc:$
+tbd, it's a junkyard with gravel cover and piles of rusting machinery. Got a
+guard booth and an office, maybe a broken-down bus through a hidden exit or
+something that has quest-related things 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	1
+Cover:	7
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	70504
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	70501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	70512
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	70507
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70504
+Name:	Inside the West Tacoma Junkyard
+Desc:$
+tbd, it's a junkyard with gravel cover and piles of rusting machinery. Got a
+guard booth and an office, maybe a broken-down bus through a hidden exit or
+something that has quest-related things 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	1
+Cover:	7
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	70501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	70503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	70506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70505
+Name:	Inside the West Tacoma Junkyard
+Desc:$
+tbd, it's a junkyard with gravel cover and piles of rusting machinery. Got a
+guard booth and an office, maybe a broken-down bus through a hidden exit or
+something that has quest-related things 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	1
+Cover:	7
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	70509
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	70502
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	70506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70506
+Name:	Inside the West Tacoma Junkyard
+Desc:$
+tbd, it's a junkyard with gravel cover and piles of rusting machinery. Got a
+guard booth and an office, maybe a broken-down bus through a hidden exit or
+something that has quest-related things 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	1
+Cover:	7
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	70505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	70504
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	70508
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70507
+Name:	Inside the West Tacoma Junkyard
+Desc:$
+tbd, it's a junkyard with gravel cover and piles of rusting machinery. Got a
+guard booth and an office, maybe a broken-down bus through a hidden exit or
+something that has quest-related things 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	1
+Cover:	7
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	ToVnum:	70503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70508
+Name:	Inside the West Tacoma Junkyard
+Desc:$
+tbd, it's a junkyard with gravel cover and piles of rusting machinery. Got a
+guard booth and an office, maybe a broken-down bus through a hidden exit or
+something that has quest-related things 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	1
+Cover:	7
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	70506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70509
+Name:	Inside the West Tacoma Junkyard
+Desc:$
+tbd, it's a junkyard with gravel cover and piles of rusting machinery. Got a
+guard booth and an office, maybe a broken-down bus through a hidden exit or
+something that has quest-related things 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	1
+Cover:	7
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	70510
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	70505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70510
+Name:	Beneath a Rusting Bus
+Desc:$
+tbd, it's a junkyard with gravel cover and piles of rusting machinery. Got a
+guard booth and an office, maybe a broken-down bus through a hidden exit or
+something that has quest-related things 
+~
+Flags:	1000
+SecType:	City
+MatrixExit:	0
+Crowd:	1
+Cover:	7
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	70509
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Keywords:	corrugated
+	Desc:$
+A sheet of corrugated metal has been cleverly worked into the bottom of the
+bus to provide access while being largely unobtrusive. 
+~
+	ToVnum:	70511
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	6
+BREAK
+#70511
+Name:	Inside a Rusted-Out Hellhound Bus
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	4
+X:	5
+Y:	5
+Z:	2.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	Keywords:	corrugated
+	Desc:$
+A sheet of corrugated metal on a sliding hinge allows egress here. 
+~
+	ToVnum:	70510
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70512
+Name:	A Musty Junkyard Office
+Desc:$
+tbd this is the office of the junkyard's keeper, maybe a pegboard of random
+tools and some piles of vaguely-salvageable parts. Dude probably sells tools
+for working on vehicles and buys vehicle parts (at a significant profit to
+himself of course). I'm thinking a scruffy old weatherbeaten sort of
+character. 
+~
+Flags:	1000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	1
+X:	6
+Y:	8
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	70503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

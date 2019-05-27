@@ -3,12 +3,13 @@ A fork of the [Awakened Worlds](http://awakenedworlds.net) MUD codebase. Issues 
 
 **The current test port for AwakeMUD Community Edition can be reached at mudtest.mooo.com port 4000.** Many thanks to Jan for running the previous test port for so long.
 
-Join our Discord channel! https://discord.gg/q5VCMkv
+**Join our Discord channel!** https://discord.gg/q5VCMkv
 
 ## Features
-- Enhanced security
+- 50k+ lines of additions including new areas, new features, and massive quality-of-life improvements
+- Enhanced security that fixes several serious exploits
 - Significant reductions in memory leaks
-- Significantly reduced ticklag
+- Significantly reduced ticklag (game pauses every two minutes are a thing of the past!)
 - A slew of bugfixes to everything from combat code to sound propagation
 
 ## OS Support

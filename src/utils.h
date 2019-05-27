@@ -71,6 +71,8 @@ void    add_workshop_to_room(struct obj_data *obj);
 void    remove_workshop_from_room(struct obj_data *obj);
 bool    mount_has_weapon(struct obj_data *mount);
 struct  obj_data *get_mount_weapon(struct obj_data *mount);
+struct  obj_data *stop_manning_weapon_mounts(struct char_data *ch, bool send_message);
+struct  obj_data *get_mount_manned_by_ch(struct char_data *ch);
 
 /* undefine MAX and MIN so that our functions are used instead */
 #ifdef MAX
@@ -700,7 +702,17 @@ IS_LIGHT((sub)->in_room) || !((light_level((sub)->in_room) == LIGHT_MINLIGHT || 
 
 /* Specific value invocations and macro defines for item types *****************************/
 
-// ITEM_WEAPON values
+// ITEM_LIGHT convenience defines
+
+// ITEM_WORKSHOP convenience defines
+#define GET_WORKSHOP_TYPE(workshop)            (GET_OBJ_VAL(workshop, 0))
+#define GET_WORKSHOP_GRADE(workshop)           (GET_OBJ_VAL(workshop, 1))
+#define GET_WORKSHOP_IS_SETUP(workshop)        (GET_OBJ_VAL(workshop, 2))
+#define GET_WORKSHOP_UNPACK_TICKS(workshop)    (GET_OBJ_VAL(workshop, 3))
+
+// ITEM_CAMERA convenience defines
+
+// ITEM_WEAPON convenience defines
 #define GET_WEAPON_POWER(weapon)               (GET_OBJ_VAL((weapon), 0))
 #define GET_WEAPON_DAMAGE_CODE(weapon)         (GET_OBJ_VAL((weapon), 1))
 #define GET_WEAPON_STR_BONUS(weapon)           (GET_OBJ_VAL((weapon), 2))
@@ -715,14 +727,67 @@ IS_LIGHT((sub)->in_room) || !((light_level((sub)->in_room) == LIGHT_MINLIGHT || 
 #define GET_WEAPON_FIREMODE(weapon)            (GET_OBJ_VAL((weapon), 11))
 #define GET_WEAPON_FULL_AUTO_COUNT(weapon)     (GET_OBJ_TIMER((weapon)))
 
-// ITEM_WEAPON convenience defines
 #define WEAPON_CAN_USE_FIREMODE(weapon, mode)  (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << mode))
+
+// ITEM_FIREWEAPON convenience defines
+
+// ITEM_MISSILE convenience defines
+
+// ITEM_GYRO convenience defines
+
+// ITEM_DRUG convenience defines
+
+// ITEM_WORN convenience defines
+
+// ITEM_OTHER convenience defines
+
+// ITEM_DOCWAGON convenience defines
+
+// ITEM_CONTAINER convenience defines
+
+// ITEM_RADIO convenience defines
+
+// ITEM_DRINKCON convenience defines
+
+// ITEM_KEY convenience defines
+
+// ITEM_FOOD convenience defines
+
+// ITEM_MONEY convenience defines
+
+// ITEM_PHONE convenience defines
+
+// ITEM_BIOWARE convenience defines
+
+// ITEM_FOUNTAIN convenience defines
 
 // ITEM_CYBERWARE convenience defines
 #define GET_CYBERWARE_TYPE(cyberware)         (GET_OBJ_VAL((cyberware), 0))
 #define GET_CYBERWARE_FLAGS(cyberware)        (GET_OBJ_VAL((cyberware), 3)) // CYBERWEAPON_RETRACTABLE, CYBERWEAPON_IMPROVED
 #define GET_CYBERWARE_LACING_TYPE(cyberware)  (GET_OBJ_VAL((cyberware), 3)) // Yes, this is also value 3. Great design here.
 #define GET_CYBERWARE_IS_DISABLED(cyberware)  (GET_OBJ_VAL((cyberware), 9))
+
+// ITEM_CYBERDECK convenience defines
+
+// ITEM_PROGRAM convenience defines
+
+// ITEM_FOCUS convenience defines
+
+// ITEM_PATCH convenience defines
+
+// ITEM_CLIMBING convenience defines
+
+// ITEM_QUIVER convenience defines
+
+// ITEM_RCDECK convenience defines
+
+// ITEM_CHIP convenience defines
+
+// ITEM_MOD convenience defines
+#define GET_VEHICLE_MOD_TYPE(mod)            (GET_OBJ_VAL((mod), 0))
+
+// ITEM_HOLSTER convenience defines
+
 
 /* Misc utils ************************************************************/
 #define IS_DAMTYPE_PHYSICAL(type) \

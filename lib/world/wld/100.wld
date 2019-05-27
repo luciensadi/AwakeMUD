@@ -1036,7 +1036,7 @@ RoomType:	9
 	Light:	0
 	Smoke:	0
 	Background:	0
-	BackgroundType:	0
+	BackgroundType:	16
 [EXIT east]
 	ToVnum:	10026
 	Flags:	0

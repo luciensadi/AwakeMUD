@@ -1869,24 +1869,47 @@ ACMD(do_purge)
     }
 
     send_to_char(OK, ch);
-  } else {                      /* no argument. clean out the room */
-    act("$n gestures... You are surrounded by scorching flames!",
-        FALSE, ch, 0, 0, TO_ROOM);
-    send_to_room("The world seems a little cleaner.\r\n", ch->in_room);
-
-    for (vict = world[ch->in_room].people; vict; vict = next_v) {
-      next_v = vict->next_in_room;
-      if (IS_NPC(vict))
-        extract_char(vict);
+  } else {                      /* no argument. clean out the room or veh */
+    if (ch->in_veh) {
+      send_to_veh("You are surrounded by scorching flames!\r\n", ch->in_veh, NULL, FALSE);
+      
+      for (vict = ch->in_veh->people; vict; vict = next_v) {
+        next_v = vict->next_in_veh;
+        if (IS_NPC(vict))
+          extract_char(vict);
+      }
+      
+      for (obj = ch->in_veh->contents; obj; obj = next_o) {
+        next_o = obj->next_content;
+        extract_obj(obj);
+      }
+      
+      for (veh = ch->in_veh->carriedvehs; veh; veh = next_ve) {
+        next_ve = veh->next;
+        if (veh == ch->in_veh)
+          continue;
+        extract_veh(veh);
+      }
     }
+    else {
+      act("$n gestures... You are surrounded by scorching flames!", FALSE, ch, 0, 0, TO_ROOM);
+      send_to_room("The world seems a little cleaner.\r\n", ch->in_room);
 
-    for (obj = world[ch->in_room].contents; obj; obj = next_o) {
-      next_o = obj->next_content;
-      extract_obj(obj);
-    }
-    for (veh = world[ch->in_room].vehicles; veh; veh = next_ve) {
-      next_ve = veh->next_veh;
-      extract_veh(veh);
+      for (vict = world[ch->in_room].people; vict; vict = next_v) {
+        next_v = vict->next_in_room;
+        if (IS_NPC(vict))
+          extract_char(vict);
+      }
+
+      for (obj = world[ch->in_room].contents; obj; obj = next_o) {
+        next_o = obj->next_content;
+        extract_obj(obj);
+      }
+      
+      for (veh = world[ch->in_room].vehicles; veh; veh = next_ve) {
+        next_ve = veh->next_veh;
+        extract_veh(veh);
+      }
     }
   }
 }

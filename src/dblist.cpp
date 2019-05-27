@@ -190,11 +190,11 @@ void objList::UpdateCounters(void)
             ch;
            ch = OBJ->in_veh ? ch->next_in_veh : ch->next_in_room) {
         if (AFF_FLAGGED(ch, AFF_PACKING)) {
-          if (!--GET_OBJ_VAL(OBJ, 3)) {
-            if (GET_OBJ_VAL(OBJ, 2)) {
+          if (!--GET_WORKSHOP_UNPACK_TICKS(OBJ)) {
+            if (GET_WORKSHOP_IS_SETUP(OBJ)) {
               send_to_char(ch, "You finish packing up %s.\r\n", GET_OBJ_NAME(OBJ));
               act("$n finishes packing up $P", FALSE, ch, 0, OBJ, TO_ROOM); // TODO: Does this work if they're in a vehicle too?
-              GET_OBJ_VAL(OBJ, 2)--;
+              GET_WORKSHOP_IS_SETUP(OBJ) = 0;
               
               // Handle the room's workshop[] array.
               if (OBJ->in_room != NOWHERE)
@@ -202,7 +202,7 @@ void objList::UpdateCounters(void)
             } else {
               send_to_char(ch, "You finish setting up %s.\r\n", GET_OBJ_NAME(OBJ));
               act("$n finishes setting up $P", FALSE, ch, 0, OBJ, TO_ROOM);
-              GET_OBJ_VAL(OBJ, 2)++;
+              GET_WORKSHOP_IS_SETUP(OBJ) = 1;
               
               // Handle the room's workshop[] array.
               if (OBJ->in_room != NOWHERE)

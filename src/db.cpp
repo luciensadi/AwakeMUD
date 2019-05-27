@@ -2719,7 +2719,7 @@ void reset_zone(int zone, int reboot)
             // Man the first unmanned mount we find, as long as it has a weapon in it.
             if (!mount->worn_by && mount_has_weapon(mount)) {
               mount->worn_by = mob;
-              AFF_FLAGS(mob).ToggleBit(AFF_MANNING);
+              AFF_FLAGS(mob).SetBit(AFF_MANNING);
               break;
             }
           }
@@ -2848,10 +2848,23 @@ void reset_zone(int zone, int reboot)
         last_cmd = 0;
       break;
     case 'O':                 /* read an object */
-      if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
-          (ZCMD.arg2 == 0 && reboot)) {
+      if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)) {
         obj = read_object(ZCMD.arg1, REAL);
         obj_to_room(obj, ZCMD.arg3);
+        
+        if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(obj) == TYPE_SHOP) {
+          if (GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE && !ROOM_FLAGGED(obj->in_room, ROOM_GARAGE)) {
+            // Warn the builder that they're breaking the game's rules (let it continue since it doesn't harm anything though).
+            ZONE_ERROR("Zoneloading a pre-set-up vehicle workshop in a non-GARAGE room violates game rules about vehicle workshop locations. Flag the room as GARAGE.");
+          }
+          
+          // It's a workshop, set it as unpacked already.
+          GET_WORKSHOP_IS_SETUP(obj) = 1;
+          
+          // Handle the room's workshop[] array.
+          if (obj->in_room != NOWHERE)
+            add_workshop_to_room(obj);
+        }
         last_cmd = 1;
       } else
         last_cmd = 0;

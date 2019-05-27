@@ -365,12 +365,9 @@ void stop_fighting(struct char_data * ch)
   if (ch->in_veh) {
     // If they're manning, detarget their mount. TODO: What about rigger mounts?
     if (IS_AFFECTED(ch, AFF_MANNING)) {
-      for (struct obj_data *mount = ch->in_veh->mount; mount; mount = mount->next_content) {
-        if (mount->worn_by == ch) {
-          mount->targ = NULL;
-          mount->tveh = NULL;
-        }
-      }
+      struct obj_data *mount = get_mount_manned_by_ch(ch);
+      mount->targ = NULL;
+      mount->tveh = NULL;
     }
     GET_POS(ch) = POS_SITTING;
   }
@@ -4788,7 +4785,6 @@ void perform_violence(void)
         }
       }
       if (AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)) {
-        // todo asdf
         struct veh_data *veh = NULL;
         RIG_VEH(ch, veh);
         if ((veh && veh->in_room == NOWHERE)
@@ -4905,97 +4901,79 @@ void order_list(struct matrix_icon *start)
 
 void chkdmg(struct veh_data * veh)
 {
-  if (veh->damage <= 1)
-  {
+  if (veh->damage <= 1) {
     send_to_veh("A scratch appears on the paintwork.\r\n", veh, NULL, TRUE);
-  } else if (veh->damage <= 3)
-  {
+  } else if (veh->damage <= 3) {
     send_to_veh("You see some dings and scratches appear on the paintwork.\r\n", veh, NULL, TRUE);
-  } else if (veh->damage <= 6)
-  {
+  } else if (veh->damage <= 6) {
     send_to_veh("The wind screen shatters and the bumper falls off.\r\n", veh, NULL, TRUE);
-  } else if (veh->damage < 10)
-  {
+  } else if (veh->damage < 10) {
     send_to_veh("The engine starts spewing smoke and flames.\r\n", veh, NULL, TRUE);
-  } else
-  {
+  } else {
     struct char_data *i, *next;
     struct obj_data *obj, *nextobj;
-    int dam;
+    int damage_rating, damage_tn;
+    
     
     if (veh->cspeed >= SPEED_IDLE) {
-      stop_chase(veh);
       send_to_veh("You are hurled into the street as your ride is wrecked!\r\n", veh, NULL, TRUE);
       sprintf(buf, "%s careens off the road, its occupants hurled to the street!\r\n", GET_VEH_NAME(veh));
       send_to_room(buf, veh->in_room);
-      veh->cspeed = SPEED_OFF;
-      veh->dest = 0;
-      if (veh->towing) {
-        veh_to_room(veh->towing, veh->in_room);
-        veh->towing = NULL;
-      }
+      
       if (veh->rigger) {
         send_to_char("Your mind is blasted with pain as your vehicle is wrecked.\r\n", veh->rigger);
-        damage(veh->rigger, veh->rigger, convert_damage(stage(-success_test(GET_WIL(veh->rigger),
-                                                                            6), SERIOUS)), TYPE_CRASH, MENTAL);
+        damage(veh->rigger, veh->rigger, convert_damage(stage(-success_test(GET_WIL(veh->rigger), 6), SERIOUS)), TYPE_CRASH, MENTAL);
         veh->rigger->char_specials.rigging = NULL;
         PLR_FLAGS(veh->rigger).RemoveBit(PLR_REMOTE);
         veh->rigger = NULL;
       }
-      for (i = veh->people; i; i = next) {
-        next = i->next_in_veh;
-        char_from_room(i);
-        char_to_room(i, veh->in_room);
-        if (AFF_FLAGGED(i, AFF_MANNING))
-          for (struct obj_data *mount = veh->mount; mount; mount = mount->next_content)
-            if (mount->worn_by == i) {
-              mount->worn_by = NULL;
-              break;
-            }
-        AFF_FLAGS(i).RemoveBits(AFF_PILOT, AFF_RIG, AFF_MANNING, ENDBIT);
-        dam = convert_damage(stage(-success_test(GET_BOD(i), 8), SERIOUS));
-        damage(i, i, dam, TYPE_CRASH, PHYSICAL);
-      }
-      for (obj = veh->contents; obj; obj = nextobj) {
-        nextobj = obj->next_content;
-        switch(number(0, 2)) {
-          case 1:
-            obj_from_room(obj);
-            obj_to_room(obj, veh->in_room);
-            break;
-          case 2:
-            extract_obj(obj);
-            break;
-        }
-      }
+      
+      damage_rating = SERIOUS;
+      damage_tn = 8;
     } else {
       send_to_veh("You scramble into the street as your ride is wrecked!\r\n", veh, NULL, TRUE);
-      struct char_data *next;
-      for (i = veh->people; i; i = next) {
-        next = i->next_in_veh;
-        char_from_room(i);
-        char_to_room(i, veh->in_room);
-        if (AFF_FLAGGED(i, AFF_MANNING))
-          for (struct obj_data *mount = veh->mount; mount; mount = mount->next_content)
-            if (mount->worn_by == i) {
-              mount->worn_by = NULL;
-              break;
-            }
-        AFF_FLAGS(i).RemoveBits(AFF_PILOT, AFF_RIG, AFF_MANNING, ENDBIT);
-        dam = convert_damage(stage(-success_test(GET_BOD(i), 4), MODERATE));
-        damage(i, i, dam, TYPE_CRASH, PHYSICAL);
-      }
-      for (obj = veh->contents; obj; obj = nextobj) {
-        nextobj = obj->next_content;
-        switch(number(0, 2)) {
-          case 1:
-            obj_from_room(obj);
-            obj_to_room(obj, veh->in_room);
-            break;
-          case 2:
-            extract_obj(obj);
-            break;
-        }
+      sprintf(buf, "%s's occupants scramble to safety as it is wrecked!\r\n", GET_VEH_NAME(veh));
+      send_to_room(buf, veh->in_room);
+      
+      damage_rating = MODERATE;
+      damage_tn = 4;
+    }
+    
+    // Turn down various settings on the vehicle.
+    stop_chase(veh);
+    veh->cspeed = SPEED_OFF;
+    veh->dest = 0;
+    
+    if (veh->towing) {
+      veh_to_room(veh->towing, veh->in_room);
+      veh->towing = NULL;
+    }
+    
+    // Dump out the people in the vehicle and set their relevant values.
+    for (i = veh->people; i; i = next) {
+      next = i->next_in_veh;
+      stop_manning_weapon_mounts(i, FALSE);
+      char_from_room(i);
+      char_to_room(i, veh->in_room);
+      AFF_FLAGS(i).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
+      
+      // Deal damage.
+      damage_rating = convert_damage(stage(-success_test(GET_BOD(i), damage_tn), damage_rating));
+      damage(i, i, damage_rating, TYPE_CRASH, PHYSICAL);
+    }
+    
+    // Dump out and destroy objects.
+    for (obj = veh->contents; obj; obj = nextobj) {
+      nextobj = obj->next_content;
+      switch(number(0, 2)) {
+          /* case 0: the item stays in the vehicle */
+        case 1:
+          obj_from_room(obj);
+          obj_to_room(obj, veh->in_room);
+          break;
+        case 2:
+          extract_obj(obj);
+          break;
       }
     }
   }
@@ -5374,23 +5352,22 @@ void mount_fire(struct char_data *ch)
   struct obj_data *mount, *gun;
   RIG_VEH(ch, veh);
   if (AFF_FLAGGED(ch, AFF_MANNING)) {
-    for (mount = veh->mount; mount; mount = mount->next_content)
-      if (mount->worn_by == ch)
-        break;
+    mount = get_mount_manned_by_ch(ch);
     
     if (!mount)
       return;
     
-    for (gun = mount->contains; gun; gun = gun->next_content)
-      if (GET_OBJ_TYPE(gun) == ITEM_WEAPON)
-        break;
+    gun = get_mount_weapon(mount);
+    
     if (!(mount->targ || mount->tveh))
       return;
+    
     if (mount->targ)
       hit(ch, mount->targ, gun, NULL);
     else
       vcombat(ch, mount->tveh);
-  } else if (ch->char_specials.rigging || AFF_FLAGGED(ch, AFF_RIG)) {
+  }
+  else if (ch->char_specials.rigging || AFF_FLAGGED(ch, AFF_RIG)) {
     for (mount = veh->mount; mount; mount = mount->next_content) {
       for (gun = mount->contains; gun; gun = gun->next_content)
         if (GET_OBJ_TYPE(gun) == ITEM_WEAPON)

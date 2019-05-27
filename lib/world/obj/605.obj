@@ -1,3 +1,30 @@
+#60500
+Keywords:	stainless-steel steel hopper panel
+Name:	a stainless-steel hopper
+RoomDesc:$
+A stainless-steel hopper has been installed here, its front panel left invitingly open.~
+LookDesc:$
+A simple steel hopper hooked up to a biometric scanner and pneumatic delivery
+system. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5000
+	Val2:	-1
+BREAK
 #60501
 Keywords:	colt american l36 light pistol
 Name:	A Colt American L36

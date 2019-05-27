@@ -25,6 +25,9 @@
 #define ACT_REPLY_TOOBAD  4
 #define ACT_DRIVING       5
 
+#define ELEVATOR_BUTTON_VNUM 41
+#define ELEVATOR_PANEL_VNUM  42
+
 struct dest_data
 {
   const char *keyword, *str;

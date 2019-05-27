@@ -608,6 +608,88 @@ Material:	metal
 	Val0:	4
 	Val1:	2
 BREAK
+#10022
+Keywords:	cheat deck cyberdeck immortal staff
+Name:	an Immortal's cheat cyberdeck
+RoomDesc:$
+Report this deck to an imm.~
+LookDesc:$
+Great for testing. 
+~
+Type:	Cyberdeck
+WearFlags:	1
+ExtraFlags:	101000001000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	30
+	Val1:	1783793664
+	Val2:	1783793664
+	Val3:	1783793664
+	Val4:	1783793664
+	Val6:	5
+BREAK
+#10023
+Keywords:	cheat bod 20
+Name:	cheat bod 20
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	20
+	Val2:	1
+BREAK
+#10024
+Keywords:	cheat evas 20
+Name:	cheat evas 20
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	20
+	Val2:	1
+BREAK
 #10025
 Keywords:	testing pocket secretary
 Name:	a testing pocket secretary
@@ -629,5 +711,57 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+BREAK
+#10026
+Keywords:	cheat masking 20
+Name:	cheat masking 20
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	20
+	Val2:	1
+BREAK
+#10027
+Keywords:	cheat sensor 20
+Name:	cheat sensor 20
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	20
+	Val2:	1
 BREAK
 END

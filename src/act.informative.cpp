@@ -789,12 +789,8 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       strcat(buf, " is plugged into the dashboard.");
     else
       strcat(buf, " is sitting in the drivers seat.");
-  } else if (AFF_FLAGGED(i, AFF_MANNING))
-  {
-    for (obj = i->in_veh->mount; obj; obj = obj->next_content)
-      if (obj->worn_by == i)
-        break;
-    sprintf(buf, "%s is manning %s.", buf, GET_OBJ_NAME(obj));
+  } else if ((obj = get_mount_manned_by_ch(i))) {
+      sprintf(buf, "%s is manning %s.", buf, GET_OBJ_NAME(obj));
   } else if (GET_POS(i) != POS_FIGHTING)
   {
     strcat(buf, positions[(int) GET_POS(i)]);
