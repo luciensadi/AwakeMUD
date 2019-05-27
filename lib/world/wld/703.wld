@@ -717,7 +717,7 @@ Name:	TSS garage template room
 Desc:$
 You are in an unfinished room.
 ~
-Flags:	110000000000000000001000
+Flags:	100000110000000000000000001000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	2
@@ -745,7 +745,7 @@ Name:	private parking leasing office
 Desc:$
 You are in an unfinished room.
 ~
-Flags:	1000
+Flags:	10000000000000001000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	2
@@ -819,7 +819,7 @@ Name:	TSS garage template room
 Desc:$
 You are in an unfinished room.
 ~
-Flags:	110000000000000000001000
+Flags:	100000110000000000000000001000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	2
@@ -847,7 +847,7 @@ Name:	TSS garage template room
 Desc:$
 You are in an unfinished room.
 ~
-Flags:	110000000000000000001000
+Flags:	100000110000000000000000001000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	2
@@ -921,7 +921,7 @@ Name:	TSS garage template room
 Desc:$
 You are in an unfinished room.
 ~
-Flags:	110000000000000000001000
+Flags:	100000110000000000000000001000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	2
@@ -949,7 +949,7 @@ Name:	TSS garage template room
 Desc:$
 You are in an unfinished room.
 ~
-Flags:	110000000000000000001000
+Flags:	100000110000000000000000001000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	2
@@ -1017,7 +1017,7 @@ Name:	TSS garage template room
 Desc:$
 You are in an unfinished room.
 ~
-Flags:	110000000000000000001000
+Flags:	100000110000000000000000001000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	2
