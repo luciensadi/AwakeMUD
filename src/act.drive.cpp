@@ -1618,21 +1618,35 @@ ACMD(do_gridguide)
 
 void process_autonav(void)
 {
-  for (struct veh_data *veh = veh_list; veh; veh = veh->next)
+  for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
+    bool veh_moved = FALSE;
+  
     if (veh->dest && veh->cspeed > SPEED_IDLE && veh->damage < 10) {
       struct char_data *ch = NULL;
+      
       if (!(ch = veh->rigger))
-        ch = veh->people; 
+        ch = veh->people;
+      
       // Stop empty vehicles
       if (!ch) {
         veh->dest = 0;
         veh->cspeed = SPEED_OFF;
+        return;
       }
+      
       int dir = 0;
-      for (int x = (int)get_speed(veh) / 10; x && dir >= 0 && veh->dest; x--) {
+      for (int x = MAX((int)get_speed(veh) / 10, 1); x && dir >= 0 && veh->dest; x--) {
         dir = find_first_step(veh->in_room, veh->dest);
-        if (dir >= 0)
+        if (dir >= 0) {
+          veh_moved = TRUE;
           move_vehicle(ch, dir);
+        }
+      }
+      if (!veh_moved) {
+        send_to_veh("The autonav beeps and flashes a red 'ERROR' message before shutting off.\r\n", veh, 0, TRUE);
+        veh->cspeed = SPEED_OFF;
+        veh->dest = 0;
+        return;
       }
       if (veh->in_room == veh->dest) {
         send_to_veh("Having reached its destination, the autonav shuts off.\r\n", veh, 0, TRUE);
@@ -1640,6 +1654,7 @@ void process_autonav(void)
         veh->dest = 0;
       }
     }
+  }
 }
 
 ACMD(do_switch)
