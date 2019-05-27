@@ -220,12 +220,12 @@ Name:	All About Your Attributes
 Desc:$
    Attributes determine the strengths and weaknesses of your character in the
 Shadowrun Universe, and form the essential backbone to the character. If you
-type SCORE, the lefthand column will display your character's attributes:
+type ^WSCORE^n, the left-hand column will display your character's attributes.
 BODY, QUICKNESS, STRENGTH, INTELLIGENCE, CHARISMA, and WILLPOWER are the main
-attributes, and the other values are determined from these six main stats. For
-more detailed help on your statistics, type "HELP (Statistic)".
-   An Attribute Trainer is also present in this room. Type TRAIN and follow
-the directions to allocate attribute points.
+attributes; the other values are determined from these six main stats. For
+more detailed help on your statistics, type ^WHELP [Statistic]^n.
+ ^n  An Attribute Trainer is present in this room. Type ^WTRAIN^n and follow the
+directions to allocate attribute points. 
 ~
 Flags:	1000000000000011000
 SecType:	Inside
@@ -812,18 +812,18 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXTRADESC 0]
-	Keywords:	wired reflexes~~~~~~~~~~~~~~~~~~
+	Keywords:	datajack~~~~~~~~~~~~~~~~~~
 	Desc:$
-Wired Reflexes, while costly to the user's essence, enhance their REACTION and
-INITIATIVE, allowing them to attack more often than an un-augmented person.
-Wired Reflexes are known to cause some people to be extra jumpy. 
+A DATAJACK is necessary for a decker or a rigger to interface their mind with
+a machine. 
 ~
 [EXTRADESC 1]
-	Keywords:	Vehicle control rig~~~~~~~~~~~~~~~~~~
+	Keywords:	smartlink system~~~~~~~~~~~~~~~~~~
 	Desc:$
-The VEHICLE CONTROL RIG and a DATAJACK is necessary for someone who wants to
-be able to mentally control a vehicle. An explanation of RIGGING is provided
-later in the guild. 
+The SMARTLINK system allows the user to use a smartlink accessorized firearm,
+granting them greater accuracy in ranged combat. If the weapon is outfitted
+with a SMARTLINK accessory and the user has a SMARTLINK system installed, the
+feature is automatically used. 
 ~
 [EXTRADESC 2]
 	Keywords:	spurs razors retractable~~~~~~~~~~~~~~~~~~
@@ -834,18 +834,18 @@ automatically used when the character enters unarmed combat, and success is
 based on the CYBERIMPLANT COMBAT skill. 
 ~
 [EXTRADESC 3]
-	Keywords:	smartlink system~~~~~~~~~~~~~~~~~~
+	Keywords:	Vehicle control rig~~~~~~~~~~~~~~~~~~
 	Desc:$
-The SMARTLINK system allows the user to use a smartlink accessorized firearm,
-granting them greater accuracy in ranged combat. If the weapon is outfitted
-with a SMARTLINK accessory and the user has a SMARTLINK system installed, the
-feature is automatically used. 
+The VEHICLE CONTROL RIG and a DATAJACK is necessary for someone who wants to
+be able to mentally control a vehicle. An explanation of RIGGING is provided
+later in the guild. 
 ~
 [EXTRADESC 4]
-	Keywords:	datajack~~~~~~~~~~~~~~~~~~
+	Keywords:	wired reflexes~~~~~~~~~~~~~~~~~~
 	Desc:$
-A DATAJACK is necessary for a decker or a rigger to interface their mind with
-a machine. 
+Wired Reflexes, while costly to the user's essence, enhance their REACTION and
+INITIATIVE, allowing them to attack more often than an un-augmented person.
+Wired Reflexes are known to cause some people to be extra jumpy. 
 ~
 BREAK
 #60518

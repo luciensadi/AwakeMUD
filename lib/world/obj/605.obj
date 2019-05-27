@@ -56,6 +56,31 @@ Material:	metal
 	Val5:	11
 	Val6:	11
 BREAK
+#60502
+Keywords:	sign
+Name:	the projection of a welcome sign
+RoomDesc:$
+A welcome sign flickers from a tri-dimensional projector in the ceiling.~
+LookDesc:$
+Good work! Looking at things is a great way to get more information about
+htem. You can also use the 'look' command to examine other things, like people
+in your area, vehicles parked near you, etc. It's a very versatile tool. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
 #60512
 Keywords:	combat axe steel
 Name:	A steel combat axe

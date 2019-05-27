@@ -2447,7 +2447,6 @@ void nanny(struct descriptor_data * d, char *arg)
       }
       reset_char(d->character);
       PLR_FLAGS(d->character).RemoveBit(PLR_CUSTOMIZE);
-      send_to_char(WELC_MESSG, d->character);
       d->character->next = character_list;
       character_list = d->character;
       d->character->player.time.logon = time(0);
@@ -2490,6 +2489,8 @@ void nanny(struct descriptor_data * d, char *arg)
         do_start(d->character);
         playerDB.SaveChar(d->character, load_room);
         send_to_char(START_MESSG, d->character);
+      } else {
+        send_to_char(WELC_MESSG, d->character);
       }
       if (d->character->player_specials->saved.last_veh) {
         for (struct veh_data *veh = veh_list; veh; veh = veh->next)
