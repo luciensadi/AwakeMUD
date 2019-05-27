@@ -2251,7 +2251,7 @@ SPECIAL(fixer)
       return TRUE;
     }
     cost = (int)((GET_OBJ_COST(obj) / (2 * (GET_OBJ_BARRIER(obj) != 0 ? GET_OBJ_BARRIER(obj) : 1)) *
-                 (GET_OBJ_BARRIER(obj) - GET_OBJ_CONDITION(obj)));
+                 (GET_OBJ_BARRIER(obj) - GET_OBJ_CONDITION(obj))));
     if ((cash ? GET_NUYEN(ch) : GET_OBJ_VAL(credstick, 0)) < cost) {
       sprintf(arg, "%s You can't afford to repair that!", GET_CHAR_NAME(ch));
       do_say(fixer, arg, 0, SCMD_SAYTO);
