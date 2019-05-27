@@ -427,7 +427,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibil
         buf_mod(rbuf, "SConfused", GET_LEVEL(sust->target));
       }
   if (ch->in_room != NOWHERE && ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
-    float heightdif = GET_HEIGHT(ch) / (world[ch->in_room].z*100);
+    float heightdif = GET_HEIGHT(ch) / ((world[ch->in_room].z != 0 ? world[ch->in_room].z : 1)*100);
     if (heightdif > 1) {
       base_target += 2;
       buf_mod(rbuf, "TooTallRatio", (int)(heightdif*100));
@@ -1026,7 +1026,7 @@ char * buf_roll(char *rbuf, const char *name, int bonus)
 
 int get_speed(struct veh_data *veh)
 {
-  int speed = 0, maxspeed = (int)(veh->speed * ((veh->load - veh->usedload) / veh->load));
+  int speed = 0, maxspeed = (int)(veh->speed * ((veh->load - veh->usedload) / (veh->load != 0 ? veh->load : 1)));
   
   switch (veh->cspeed)
   {
