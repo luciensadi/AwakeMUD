@@ -501,7 +501,7 @@ void affect_total(struct char_data * ch)
    * and not intelligence and quickness).            -cjd                */
   GET_REAL_REA(ch) = (GET_REAL_INT(ch) + GET_REAL_QUI(ch)) >> 1;
   GET_REA(ch) = 0;
-  if (PLR_FLAGGED(ch, PLR_NEWBIE) && GET_TKE(ch) > 25)
+  if (PLR_FLAGGED(ch, PLR_NEWBIE) && GET_TKE(ch) > NEWBIE_KARMA_THRESHOLD)
     PLR_FLAGS(ch).RemoveBit(PLR_NEWBIE);
   
   /* set the dice pools before equip so that they can be affected */

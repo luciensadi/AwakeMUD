@@ -2013,4 +2013,7 @@ struct ban_list_element
   struct ban_list_element *next;
 };
 
+// Above this, you will lose the newbie flag.
+#define NEWBIE_KARMA_THRESHOLD     25
+
 #endif
