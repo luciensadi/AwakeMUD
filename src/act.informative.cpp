@@ -157,7 +157,7 @@ void get_obj_condition(struct char_data *ch, struct obj_data *obj)
     return;
   }
   
-  int condition = GET_OBJ_CONDITION(obj) * 100 / GET_OBJ_BARRIER(obj);
+  int condition = GET_OBJ_CONDITION(obj) * 100 / MAX(1, GET_OBJ_BARRIER(obj));
   sprintf(buf2, "%s is ", CAP(GET_OBJ_NAME(obj)));
   if (condition >= 100)
     strcat(buf2, "in excellent condition.");
@@ -408,12 +408,12 @@ void diag_char_to_char(struct char_data * i, struct char_data * ch)
   int ment, phys;
   
   if (GET_MAX_PHYSICAL(i) >= 100)
-    phys = (100 * GET_PHYSICAL(i)) / GET_MAX_PHYSICAL(i);
+    phys = (100 * GET_PHYSICAL(i)) / MAX(1, GET_MAX_PHYSICAL(i));
   else
     phys = -1;               /* How could MAX_PHYSICAL be < 1?? */
   
   if (GET_MAX_MENTAL(i) >= 100)
-    ment = (100 * GET_MENTAL(i)) / GET_MAX_MENTAL(i);
+    ment = (100 * GET_MENTAL(i)) / MAX(1, GET_MAX_MENTAL(i));
   else
     ment = -1;
   
@@ -1379,7 +1379,7 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
       if (GET_OBJ_VAL(obj, 1) <= 0)
         send_to_char("It is empty.\r\n", ch);
       else {
-        amt = ((GET_OBJ_VAL(obj, 1) * 3) / GET_OBJ_VAL(obj, 0));
+        amt = ((GET_OBJ_VAL(obj, 1) * 3) / MAX(1, GET_OBJ_VAL(obj, 0)));
         sprintf(buf, "It's %sfull of a %s liquid.\r\n", fullness[amt],
                 color_liquid[GET_OBJ_VAL(obj, 2)]);
         send_to_char(buf, ch);
@@ -2201,14 +2201,14 @@ ACMD(do_examine)
           send_to_char(ch, "It has been dedicated to %s.\r\n", elements[GET_OBJ_VAL(tmp_object, 2)].name);
           if (GET_OBJ_VAL(tmp_object, 9) && GET_OBJ_VAL(tmp_object, 3) == GET_IDNUM(ch))
             send_to_char(ch, "It is about %d%% completed.\r\n", (int)(((float)((GET_OBJ_VAL(tmp_object, 1) * 60) -
-                                                                               GET_OBJ_VAL(tmp_object, 9)) / (float)(GET_OBJ_VAL(tmp_object, 1) * 60)) * 100));
+                                                                               GET_OBJ_VAL(tmp_object, 9)) / (float)((GET_OBJ_VAL(tmp_object, 1) != 0 ? GET_OBJ_VAL(tmp_object, 1) : 1) * 60)) * 100));
           
           break;
         case TYPE_LODGE:
           send_to_char(ch, "It has been dedicated to %s.\r\n", totem_types[GET_OBJ_VAL(tmp_object, 2)]);
           if (GET_OBJ_VAL(tmp_object, 9) && GET_OBJ_VAL(tmp_object, 3) == GET_IDNUM(ch))
             send_to_char(ch, "It is about %d%% completed.\r\n", (int)(((float)((GET_OBJ_VAL(tmp_object, 1) * 300) -
-                                                                               GET_OBJ_VAL(tmp_object, 9)) / (float)(GET_OBJ_VAL(tmp_object, 1) * 300)) * 100));
+                                                                               GET_OBJ_VAL(tmp_object, 9)) / (float)((GET_OBJ_VAL(tmp_object, 1) != 0 ? GET_OBJ_VAL(tmp_object, 1) : 1) * 300)) * 100));
           break;
         case TYPE_SUMMONING:
           send_to_char(ch, "There seems to be about %d nuyen worth.\r\n", GET_OBJ_COST(tmp_object));

@@ -2250,7 +2250,7 @@ SPECIAL(fixer)
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;
     }
-    cost = (int)((GET_OBJ_COST(obj) / (2 * GET_OBJ_BARRIER(obj))) *
+    cost = (int)((GET_OBJ_COST(obj) / (2 * (GET_OBJ_BARRIER(obj) != 0 ? GET_OBJ_BARRIER(obj) : 1)) *
                  (GET_OBJ_BARRIER(obj) - GET_OBJ_CONDITION(obj)));
     if ((cash ? GET_NUYEN(ch) : GET_OBJ_VAL(credstick, 0)) < cost) {
       sprintf(arg, "%s You can't afford to repair that!", GET_CHAR_NAME(ch));
@@ -3480,8 +3480,8 @@ SPECIAL(desktop)
         send_to_char(ch, "%-40s %dMp (%dMp taken) %2.2f%% Complete\r\n", soft->restring, GET_OBJ_VAL(soft, 6),
                      GET_OBJ_VAL(soft, 6) + (GET_OBJ_VAL(soft, 6) / 10),
                      GET_OBJ_TIMER(soft) ? (GET_OBJ_VAL(soft, 5) ?
-                                            ((float)(GET_OBJ_TIMER(soft) - GET_OBJ_VAL(soft, 5)) / GET_OBJ_TIMER(soft)) * 100 :
-                                            ((float)(GET_OBJ_TIMER(soft) - GET_OBJ_VAL(soft, 4)) / GET_OBJ_TIMER(soft)) * 100) : 0);
+                                            ((float)(GET_OBJ_TIMER(soft) - GET_OBJ_VAL(soft, 5)) / (GET_OBJ_TIMER(soft) != 0 ? GET_OBJ_TIMER(soft) : 1)) * 100 :
+                                            ((float)(GET_OBJ_TIMER(soft) - GET_OBJ_VAL(soft, 4)) / (GET_OBJ_TIMER(soft) != 0 ? GET_OBJ_TIMER(soft) : 1)) * 100) : 0);
       else
         send_to_char(ch, "%-40s %dMp (%dMp taken) Rating %d\r\n", soft->restring ? soft->restring :
                      soft->text.name, GET_OBJ_VAL(soft, 2), GET_OBJ_VAL(soft, 2), GET_OBJ_VAL(soft, 1));

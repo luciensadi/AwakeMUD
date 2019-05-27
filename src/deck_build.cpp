@@ -751,9 +751,9 @@ ACMD(do_progress)
   if (AFF_FLAGS(ch).IsSet(AFF_CIRCLE)) {
     send_to_char(ch, "The hermetic circle you are working on is about %d%% completed.\r\n", 
                        (int)(((float)((GET_OBJ_VAL(ch->char_specials.programming, 1) * 60) -
-                       GET_OBJ_VAL(ch->char_specials.programming, 9)) / (float)(GET_OBJ_VAL(ch->char_specials.programming, 1) * 60)) * 100));
+                                      GET_OBJ_VAL(ch->char_specials.programming, 9)) / (float)((GET_OBJ_VAL(ch->char_specials.programming, 1) != 0 ? GET_OBJ_VAL(ch->char_specials.programming, 1) : 1) * 60)) * 100));
   } else if (AFF_FLAGS(ch).IsSet(AFF_LODGE)) {
-    send_to_char(ch, "The lodge you are working on is about %d%% completed.\r\n", (int)(((float)((GET_OBJ_VAL(ch->char_specials.programming, 1) * 300) -
+    send_to_char(ch, "The lodge you are working on is about %d%% completed.\r\n", (int)(((float)(((GET_OBJ_VAL(ch->char_specials.programming, 1) != 0 ? GET_OBJ_VAL(ch->char_specials.programming, 1) : 1) * 300) -
                      GET_OBJ_VAL(ch->char_specials.programming, 9)) / (float)(GET_OBJ_VAL(ch->char_specials.programming, 1) * 300)) * 100));
   } else if (AFF_FLAGS(ch).IsSet(AFF_PACKING)) {
     for (struct obj_data *obj = world[ch->in_room].contents; obj; obj = obj->next_content)
@@ -765,7 +765,7 @@ ACMD(do_progress)
       } 
   } else if (AFF_FLAGS(ch).IsSet(AFF_BONDING)) {
     send_to_char(ch, "You are about %d%% of the way through bonding %s.\r\n", 
-                 (int)(((float)(GET_OBJ_VAL(GET_BUILDING(ch), 1) - GET_OBJ_VAL(GET_BUILDING(ch), 9)) / GET_OBJ_VAL(GET_BUILDING(ch), 1) * 60)*100),
+                 (int)(((float)(GET_OBJ_VAL(GET_BUILDING(ch), 1) - GET_OBJ_VAL(GET_BUILDING(ch), 9)) / (GET_OBJ_VAL(GET_BUILDING(ch), 1) != 0 ? GET_OBJ_VAL(GET_BUILDING(ch), 1) : 1) * 60)*100),
                  GET_OBJ_NAME(GET_BUILDING(ch)));
   } else if (AFF_FLAGS(ch).IsSet(AFF_PROGRAM)) {
     send_to_char(ch, "You are about %d%% of the way through programming %s.\r\n", 
@@ -778,7 +778,7 @@ ACMD(do_progress)
   } else if (AFF_FLAGS(ch).IsSet(AFF_PART_DESIGN)) {
   } else if (AFF_FLAGS(ch).IsSet(AFF_DESIGN)) {
     send_to_char(ch, "You are about %d%% of the way through designing %s.\r\n", 
-           (int)(((float)(GET_OBJ_TIMER(GET_BUILDING(ch)) - GET_OBJ_VAL(GET_BUILDING(ch), 4)) / GET_OBJ_TIMER(GET_BUILDING(ch))) * 100),
+                 (int)(((float)(GET_OBJ_TIMER(GET_BUILDING(ch)) - GET_OBJ_VAL(GET_BUILDING(ch), 4)) / (GET_OBJ_TIMER(GET_BUILDING(ch))) != 0 ? GET_OBJ_TIMER(GET_BUILDING(ch))) : 1) * 100),
            GET_OBJ_NAME(GET_BUILDING(ch)));
   } else if (AFF_FLAGS(ch).IsSet(AFF_CONJURE)) {
   } else if (AFF_FLAGS(ch).IsSet(AFF_SPELLDESIGN)) {
