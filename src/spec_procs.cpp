@@ -3769,7 +3769,7 @@ SPECIAL(chargen_south_from_trainer)
     return FALSE;
   
   if (GET_ATT_POINTS(ch) > 0) {
-    send_to_char(ch, "You still have %d attribute points to spend! You should finish training your attributes before you proceed.\r\n", GET_ATT_POINTS(ch));
+    send_to_char(ch, "You still have %d attribute points to spend! You should finish ^WTRAIN^ning your attributes before you proceed.\r\n", GET_ATT_POINTS(ch));
     return TRUE;
   }
   
@@ -3779,11 +3779,17 @@ SPECIAL(chargen_south_from_trainer)
 // Prevent people from moving south from teachers until they've spent all their skill points.
 SPECIAL(chargen_south_from_teachers)
 {
-  if (!ch || !cmd || !(CMD_IS("s") || CMD_IS("south")))
+  if (!ch || !cmd)
     return FALSE;
   
-  if (GET_SKILL_POINTS(ch) > 0) {
-    send_to_char(ch, "You still have %d skill points to spend! You should finish practicing your skills before you proceed.\r\n", GET_SKILL_POINTS(ch));
+  if ((CMD_IS("s") || CMD_IS("south")) && GET_SKILL_POINTS(ch) > 0) {
+    send_to_char(ch, "You still have %d skill points to spend! You should finish ^WPRACTICE^n-ing your skills before you proceed.\r\n", GET_SKILL_POINTS(ch));
+    return TRUE;
+  }
+  
+  if (CMD_IS("practice")) {
+    send_to_char("You can't do that here. Try visiting one of the teachers in the surrounding areas.\r\n"
+                 "If you wanted to view your skills, you can do that by typing ^WSKILLS^n.\r\n", ch);
     return TRUE;
   }
   
