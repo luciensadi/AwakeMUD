@@ -697,6 +697,8 @@ void assign_rooms(void)
   SPECIAL(bouncy_castle);
   SPECIAL(rpe_room);
   SPECIAL(multnomah_gate);
+  SPECIAL(chargen_south_from_trainer);
+  SPECIAL(chargen_south_from_teachers);
 
   /* Limbo/God Rooms */
   ASSIGNROOM(8, oceansounds);
@@ -706,7 +708,9 @@ void assign_rooms(void)
   /* Carbanado */
 //ASSIGNROOM(4477, waterfall);
 
-  /* Neophytic guild */
+  /* CharGen / Neophytic guild */
+  ASSIGNROOM(60505, chargen_south_from_trainer);
+  ASSIGNROOM(60506, chargen_south_from_teachers);
   ASSIGNROOM(60585, neophyte_entrance);
   ASSIGNROOM(60586, newbie_car);
   ASSIGNROOM(60562, auth_room);

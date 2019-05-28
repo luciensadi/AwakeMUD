@@ -494,6 +494,19 @@ char *capitalize(const char *source)
   return dest;
 }
 
+char *string_to_uppercase(const char *source) {
+  static char dest[MAX_STRING_LENGTH];
+  
+  int x = strlen(source);
+  for (int i = 0; i < x; i++){
+    if (isalpha(source[i])){
+      dest[i] = toupper(source[i]);
+    }
+  }
+  
+  return dest;
+}
+
 // decapitalize a string that starts with A or An, now allows for color strings at the beginning
 char *decapitalize_a_an(const char *source)
 {

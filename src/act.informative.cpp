@@ -721,18 +721,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     
     // TODO: Add a toggle for this system to be disabled.
     if (mob_index[GET_MOB_RNUM(i)].func == trainer) {
-      bool can_train = FALSE;
-      for (int attr_index = ATT_BOD; attr_index <= ATT_WIL; attr_index++) {
-        if (!trainable_attribute_is_maximized(ch, attr_index)) {
-          can_train = TRUE;
-          break;
-        }
-      }
-      
-      // Don't give them the trainer message if they can no longer train anything.
-      if (can_train) {
-        sprintf(ENDOF(buf), "^y...%s looks willing to train you.^n\r\n", HSSH(i));
-      }
+      sprintf(ENDOF(buf), "^y...%s looks willing to train you.^n\r\n", HSSH(i));
     }
     else if (mob_index[GET_MOB_RNUM(i)].func == teacher) {
       sprintf(ENDOF(buf), "^y...%s looks willing to help you practice your skills.^n\r\n", HSSH(i));
