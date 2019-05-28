@@ -583,6 +583,14 @@ int calculate_training_raw_cost(struct char_data *ch, int attribute) {
   return 1 + GET_REAL_ATT(ch, attribute) + adept_mod;
 }
 
+bool attribute_below_maximums(struct char_data *ch, int attribute) {
+  // Special case: Bod can have permanent loss.
+  if (attribute == BOD)
+    return GET_REAL_BOD(ch) + GET_PERM_BOD_LOSS(ch) < racial_limits[(int)GET_RACE(ch)][0][BOD];
+  
+  return GET_REAL_ATT(ch, attribute) < racial_limits[(int)GET_RACE(ch)][0][attribute];
+}
+
 void send_training_list_to_char(struct char_data *ch, int ind) {
   int first = 1, raw_cost = 0;
   
@@ -592,31 +600,23 @@ void send_training_list_to_char(struct char_data *ch, int ind) {
     send_to_char(ch, "You have %0.2f karma points.  You can train", (float)GET_KARMA(ch) / 100);
   }
   
-  for (int i = 0; (1 << i) <= TWIL; i++) {
-    if (IS_SET(trainers[ind].attribs, (1 << i))) {
+  for (int i = 0; i < WIL; i++) {
+    if (IS_SET(trainers[ind].attribs, (1 << i)) && attribute_below_maximums(ch, i)) {
       raw_cost = calculate_training_raw_cost(ch, i);
       if (GET_ATT_POINTS(ch) > 0)
         send_to_char(ch, "%s ^W%.3s^n", first ? "" : ",", string_to_uppercase(attributes[i]));
       else
-        send_to_char(ch, "%s %.3s (%d karma %d nuyen)", first ? "" : ",", string_to_uppercase(attributes[i]), 2 * raw_cost, 1000 * raw_cost);
+        send_to_char(ch, "%s   %.3s (%d karma %d nuyen)", first ? ":\r\n" : "\r\n", string_to_uppercase(attributes[i]), 2 * raw_cost, 1000 * raw_cost);
       first = 0;
     }
   }
   if (!first) {
-    // Found something to train, so just end with a period.
-    send_to_char(".\r\n", ch);
+    // Found something to train. Only newbie training is in sentence form, so only append a period for them.
+    send_to_char(ch, "%s\r\n", GET_ATT_POINTS(ch) > 0 ? "." : "");
   } else {
     // Found nothing, let them know.
     send_to_char(" nothing-- you're already at your maximums!\r\n", ch);
   }
-}
-
-bool attribute_below_maximums(struct char_data *ch, int attribute) {
-  // Special case: Bod can have permanent loss.
-  if (attribute == BOD)
-    return GET_REAL_BOD(ch) + GET_PERM_BOD_LOSS(ch) < racial_limits[(int)GET_RACE(ch)][0][BOD];
-  
-  return GET_REAL_ATT(ch, attribute) < racial_limits[(int)GET_RACE(ch)][0][attribute];
 }
 
 void train_attribute(struct char_data *ch, struct char_data *trainer, int ind, int attr, const char *success_message) {
