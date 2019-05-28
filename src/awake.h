@@ -2016,4 +2016,11 @@ struct ban_list_element
 // Above this, you will lose the newbie flag.
 #define NEWBIE_KARMA_THRESHOLD     25
 
+// Misc defines from spec_procs.cpp
+#define LIBRARY_SKILL    3
+#define NEWBIE_SKILL    6
+#define NORMAL_MAX_SKILL  8
+#define LEARNED_LEVEL    12
+#define RENT_FACTOR 1
+
 #endif

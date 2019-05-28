@@ -82,13 +82,6 @@ struct social_type
 #define MANSION_GATE            4059
 #define YUKIYA_OFFICE           17157
 
-// misc defines
-#define LIBRARY_SKILL		3
-#define NEWBIE_SKILL		6
-#define NORMAL_MAX_SKILL	8
-#define LEARNED_LEVEL		12
-#define RENT_FACTOR 1
-
 int fixers_need_save;
 
 /* ********************************************************************
