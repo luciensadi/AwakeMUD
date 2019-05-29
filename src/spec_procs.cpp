@@ -551,6 +551,15 @@ SPECIAL(teacher)
     send_to_char(ch, "%s doesn't seem to know anything about that subject.\r\n", GET_NAME(master));
     return TRUE;
   }
+  
+  for (i = 0; i < NUM_TEACHER_SKILLS; i++)
+    if (skill_num == teachers[ind].s[i])
+      break;
+  if (i >= NUM_TEACHER_SKILLS) {
+    send_to_char(ch, "%s doesn't seem to know about that subject.\r\n", GET_NAME(master));
+    return TRUE;
+  }
+  
   if (GET_SKILL(ch, skill_num) && !REAL_SKILL(ch, skill_num)) {
     send_to_char("You can't train a skill you currently have a skillsoft for.\r\n", ch);
     return TRUE;
@@ -584,16 +593,7 @@ SPECIAL(teacher)
   }
   
   if (GET_ASPECT(ch) == ASPECT_SORCERER && skill_num == SKILL_CONJURING) {
-    send_to_char("Your magic is focused on spellcasting. You cannot learn to summon.\r\n", ch);
-    return TRUE;
-  }
-
-  i = 0;
-  for (i = 0; i < NUM_TEACHER_SKILLS; i++)
-    if (skill_num == teachers[ind].s[i])
-      break;
-  if (i >= NUM_TEACHER_SKILLS) {
-    send_to_char(ch, "%s doesn't seem to know about that subject.\r\n", GET_NAME(master));
+    send_to_char(ch, "Your magic is focused on spellwork. You cannot learn to summon %s.\r\n", GET_TRADITION(ch) == TRAD_SHAMANIC ? "spirits" : "elementals");
     return TRUE;
   }
 
