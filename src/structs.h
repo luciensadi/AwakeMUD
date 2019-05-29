@@ -889,6 +889,7 @@ struct skill_data {
   char name[50];
   sh_int attribute;
   bool type;
+  bool requires_magic;
 };
 
 struct part_data {

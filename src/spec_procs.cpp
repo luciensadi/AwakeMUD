@@ -345,25 +345,25 @@ int get_skill_price(struct char_data *ch, int i)
 {
   if (!GET_SKILL(ch, i))
     return 1;
-  if (GET_SKILL(ch, i) + 1 <= GET_REAL_ATT(ch, skills[i].attribute))
-  {
-    if (skills[i].type)
+  
+  if (GET_SKILL(ch, i) + 1 <= GET_REAL_ATT(ch, skills[i].attribute)) {
+    if (skills[i].type == SKILL_TYPE_KNOWLEDGE)
       return GET_SKILL(ch, i) + 1;
     else
       return (int)((GET_SKILL(ch, i) + 1) * 1.5);
-  } else if (GET_SKILL(ch, i) + 1 <= GET_REAL_ATT(ch, skills[i].attribute) * 2)
-  {
-    if (skills[i].type)
+  }
+  
+  if (GET_SKILL(ch, i) + 1 <= GET_REAL_ATT(ch, skills[i].attribute) * 2) {
+    if (skills[i].type == SKILL_TYPE_KNOWLEDGE)
       return (int)((GET_SKILL(ch, i) + 1) * 1.5);
     else
       return (int)((GET_SKILL(ch, i) + 1) * 2);
-  } else
-  {
-    if (skills[i].type)
-      return (GET_SKILL(ch, i) + 1) * 2;
-    else
-      return (int)((GET_SKILL(ch, i) + 1) * 2.5);
   }
+  
+  if (skills[i].type == SKILL_TYPE_KNOWLEDGE)
+    return (GET_SKILL(ch, i) + 1) * 2;
+  else
+    return (int)((GET_SKILL(ch, i) + 1) * 2.5);
 }
 
 SPECIAL(metamagic_teacher)
@@ -482,9 +482,32 @@ SPECIAL(teacher)
     return FALSE;
 
   if (!*argument) {
-    sprintf(buf, "%s can teach you the following:\r\n", GET_NAME(master));
+    bool found_a_skill_already = FALSE;
     for (int i = 0; i < NUM_TEACHER_SKILLS; i++) {
       if (teachers[ind].s[i] > 0) {
+        // Mundanes can't learn magic skills.
+        if (GET_TRADITION(ch) == TRAD_MUNDANE && skills[teachers[ind].s[i]].requires_magic)
+          continue;
+        
+        // Adepts can't learn externally-focused skills.
+        if (GET_TRADITION(ch) == TRAD_ADEPT && (teachers[ind].s[i] == SKILL_CONJURING
+                                                || teachers[ind].s[i] == SKILL_SORCERY
+                                                || teachers[ind].s[i] == SKILL_SPELLDESIGN))
+          continue;
+        
+        // Prevent aspected from learning skills they can't use.
+        if (GET_ASPECT(ch) == ASPECT_CONJURER && (teachers[ind].s[i] == SKILL_SORCERY || teachers[ind].s[i] == SKILL_SPELLDESIGN))
+          continue;
+        
+        else if (GET_ASPECT(ch) == ASPECT_SORCERER && teachers[ind].s[i] == SKILL_CONJURING)
+          continue;
+        
+        // Add conditional messaging.
+        if (!found_a_skill_already) {
+          found_a_skill_already = TRUE;
+          sprintf(buf, "%s can teach you the following:\r\n", GET_NAME(master));
+        }
+        
         if (GET_SKILL_POINTS(ch) > 0)
           sprintf(buf, "%s  %s\r\n", buf, skills[teachers[ind].s[i]].name);
         else if (GET_SKILL(ch, teachers[ind].s[i]) < max && !ch->char_specials.saved.skills[teachers[ind].s[i]][1])
@@ -492,6 +515,12 @@ SPECIAL(teacher)
                   MAX(1000, (GET_SKILL(ch, teachers[ind].s[i]) * 5000)));
       }
     }
+    // Failure case.
+    if (!found_a_skill_already) {
+      send_to_char(ch, "There's nothing %s can teach you that you don't already know.\r\n", GET_NAME(master));
+      return TRUE;
+    }
+    
     if (GET_SKILL_POINTS(ch) > 0)
       sprintf(buf, "%s\r\nYou have %d points to use for skills.\r\n", buf,
               GET_SKILL_POINTS(ch));
@@ -518,9 +547,36 @@ SPECIAL(teacher)
     send_to_char("You can't train a skill you currently have a skillsoft for.\r\n", ch);
     return TRUE;
   }
-  if ((skill_num == SKILL_CENTERING || skill_num == SKILL_ENCHANTING) &&
-      GET_TRADITION(ch) == TRAD_MUNDANE) {
+  
+  // Deny some magic skills to mundane (different flavor from next block, same effect).
+  if ((skill_num == SKILL_CENTERING || skill_num == SKILL_ENCHANTING) && GET_TRADITION(ch) == TRAD_MUNDANE) {
     send_to_char("Without access to the astral plane you can't even begin to fathom the basics of that skill.\r\n", ch);
+    return TRUE;
+  }
+  
+  // Deny all magic skills to mundane.
+  if (skills[skill_num].requires_magic && GET_TRADITION(ch) == TRAD_MUNDANE) {
+    send_to_char("Without the ability to channel magic, that skill would be useless to you.\r\n", ch);
+    return TRUE;
+  }
+  
+  // Deny some magic skills to adepts.
+  if (GET_TRADITION(ch) == TRAD_ADEPT && (skill_num == SKILL_CONJURING
+                                          || skill_num == SKILL_SORCERY
+                                          || skill_num == SKILL_SPELLDESIGN)) {
+    send_to_char("Your magic is focused inwards on improving your physical abilities. You can't learn these external magics.\r\n", ch);
+    return TRUE;
+  }
+
+  // Prevent aspected shamans from learning skills they can't use.
+  if (GET_ASPECT(ch) == ASPECT_CONJURER && (skill_num == SKILL_SORCERY
+                                            || skill_num == SKILL_SPELLDESIGN)) {
+    send_to_char(ch, "Your magic is focused on the summoning of %s. You cannot learn spellwork.\r\n", GET_TRADITION(ch) == TRAD_SHAMANIC ? "spirits" : "elementals");
+    return TRUE;
+  }
+  
+  if (GET_ASPECT(ch) == ASPECT_SORCERER && skill_num == SKILL_CONJURING) {
+    send_to_char("Your magic is focused on spellcasting. You cannot learn to summon.\r\n", ch);
     return TRUE;
   }
 
@@ -3788,8 +3844,8 @@ SPECIAL(chargen_south_from_teachers)
   }
   
   if (CMD_IS("practice")) {
-    send_to_char("You can't do that here. Try visiting one of the teachers in the surrounding areas.\r\n"
-                 "If you wanted to view your skills, you can do that by typing ^WSKILLS^n.\r\n", ch);
+    send_to_char("You can't do that here. Try visiting one of the teachers in the surrounding areas."
+                 " You can always view the skills you've learned so far by typing ^WSKILLS^n.\r\n", ch);
     return TRUE;
   }
   

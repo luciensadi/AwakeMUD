@@ -823,6 +823,10 @@ enum {
 
 #define MAX_SKILLS		  133
 
+// Skill type definitions.
+#define SKILL_TYPE_ACTIVE         0
+#define SKILL_TYPE_KNOWLEDGE      1
+
 /* TODO: Not yet implemented.
 #define SKILL_SIGN_LANGUAGE       133
 #define SKILL_IMMORTAL_LANGUAGE   134

@@ -70,18 +70,18 @@ teach_t teachers[] = {
                          "After hours of study and weapon practice, you feel like you've learned\r\nsomething.\r\n", AMATEUR }, */
   
   /* Removed nerp skills from trainers:
-   SKILL_ENCHANTING, SKILL_AURA_READING, SKILL_CENTERING, SKILL_TALISMONGERING, SKILL_PROJECTILES, SKILL_THROWING_WEAPONS SKILL_ORALSTRIKE,
+   SKILL_ENCHANTING, SKILL_AURA_READING, SKILL_CENTERING, SKILL_TALISMONGERING, SKILL_PROJECTILES, SKILL_THROWING_WEAPONS SKILL_ORALSTRIKE, SKILL_MEDITATION
    */
   
   // Imm trainer (Dumbledore)
-  { 10010, { SKILL_CONJURING, SKILL_MEDITATION, SKILL_SORCERY, SKILL_SPELLDESIGN,
+  { 10010, { SKILL_CONJURING, SKILL_SORCERY, SKILL_SPELLDESIGN,
     /*, SKILL_GETTING_THROWN_OFF_OF_A_TOWER, */
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     "After what feels like seven years of magical study, you feel like you've learned something.\r\n", GODLY },
   
   // Newbie magic teacher
-  { 60501, { SKILL_CONJURING, SKILL_MEDITATION, SKILL_SORCERY, SKILL_SPELLDESIGN,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 60501, { SKILL_CONJURING, SKILL_SORCERY, SKILL_SPELLDESIGN,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
   
   { 60502, { SKILL_COMPUTER, SKILL_BR_COMPUTER, SKILL_DATA_BROKERAGE, SKILL_CYBERTERM_DESIGN, SKILL_ELECTRONICS, SKILL_BR_ELECTRONICS,
