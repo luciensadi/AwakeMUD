@@ -3826,15 +3826,83 @@ SPECIAL(trideo)
  return FALSE;
 }
 
+void untrain_attribute(struct char_data *ch, int attr, const char *success_message) {
+  // Check for racial maximums.
+  if (GET_REAL_ATT(ch, attr) <= MAX(1, 1 + racial_attribute_modifiers[(int)GET_RACE(ch)][attr])) {
+    send_to_char(ch, "Your %s attribute is at its minimum.\r\n", attributes[attr]);
+    return;
+  }
+  
+  // Success; refund the attribute point and knock down the attribute.
+  GET_ATT_POINTS(ch)++;
+  GET_REAL_ATT(ch, attr) -= 1;
+  
+  // Update character's calculated values.
+  affect_total(ch);
+  
+  // Notify the character of success.
+  send_to_char(ch, success_message, GET_REAL_ATT(ch, attr));
+}
+
+SPECIAL(chargen_untrain_attribute)
+{
+  if (!ch || !cmd || IS_NPC(ch) || !CMD_IS("untrain"))
+    return FALSE;
+  
+  skip_spaces(&argument);
+  
+  if (!*argument) {
+    send_to_char("You must specify an attribute to untrain.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (is_abbrev(argument, "body")) {
+    untrain_attribute(ch, BOD, "You determinedly chow down on junk food for a week and decrease your Body to %d.\r\n");
+    return TRUE;
+  }
+  
+  if (is_abbrev(argument, "quickness")) {
+    untrain_attribute(ch, QUI, "You quit drinking so much caffiene and decrease your Quickness to %d.\r\n");
+    return TRUE;
+  }
+  
+  if (is_abbrev(argument, "strength")) {
+    untrain_attribute(ch, STR, "You do your best couch potato impression until your Strength decreases to %d.\r\n");
+    return TRUE;
+  }
+  
+  if (is_abbrev(argument, "charisma")) {
+    untrain_attribute(ch, CHA, "You scowl hard enough to put frown lines in your face, decreasing your Charisma to %d.\r\n");
+    return TRUE;
+  }
+  
+  if (is_abbrev(argument, "intelligence")) {
+    untrain_attribute(ch, INT, "You slam your head into the wall until your Intelligence decreases to %d.\r\n");
+    return TRUE;
+  }
+  
+  if (is_abbrev(argument, "willpower")) {
+    untrain_attribute(ch, WIL, "You declare every day to be cheat day, allowing your Willpower to slip to %d.\r\n");
+    return TRUE;
+  }
+  
+  send_to_char("Valid attributes for untraining are BOD, QUI, STR, CHA, INT, WIL.\r\n", ch);
+  return TRUE;
+}
+
 // Prevent people from moving south from trainer until they've spent all their attribute points.
 SPECIAL(chargen_south_from_trainer)
 {
-  if (!ch || !cmd || IS_NPC(ch) || !(CMD_IS("s") || CMD_IS("south")))
+  if (!ch || !cmd || IS_NPC(ch))
     return FALSE;
   
-  if (GET_ATT_POINTS(ch) > 0) {
+  if ((CMD_IS("s") || CMD_IS("south")) && GET_ATT_POINTS(ch) > 0) {
     send_to_char(ch, "You still have %d attribute points to spend! You should finish ^WTRAIN^ning your attributes before you proceed.\r\n", GET_ATT_POINTS(ch));
     return TRUE;
+  }
+  
+  if (CMD_IS("untrain")) {
+    return chargen_untrain_attribute(ch, NULL, cmd, argument);
   }
   
   return FALSE;
