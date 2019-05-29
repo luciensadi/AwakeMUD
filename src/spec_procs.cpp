@@ -502,17 +502,25 @@ SPECIAL(teacher)
         else if (GET_ASPECT(ch) == ASPECT_SORCERER && teachers[ind].s[i] == SKILL_CONJURING)
           continue;
         
-        // Add conditional messaging.
-        if (!found_a_skill_already) {
-          found_a_skill_already = TRUE;
-          sprintf(buf, "%s can teach you the following:\r\n", GET_NAME(master));
-        }
         
-        if (GET_SKILL_POINTS(ch) > 0)
+        
+        if (GET_SKILL_POINTS(ch) > 0) {
+          // Add conditional messaging.
+          if (!found_a_skill_already) {
+            found_a_skill_already = TRUE;
+            sprintf(buf, "%s can teach you the following:\r\n", GET_NAME(master));
+          }
           sprintf(buf, "%s  %s\r\n", buf, skills[teachers[ind].s[i]].name);
-        else if (GET_SKILL(ch, teachers[ind].s[i]) < max && !ch->char_specials.saved.skills[teachers[ind].s[i]][1])
+        }
+        else if (GET_SKILL(ch, teachers[ind].s[i]) < max && !ch->char_specials.saved.skills[teachers[ind].s[i]][1]) {
+          // Add conditional messaging.
+          if (!found_a_skill_already) {
+            found_a_skill_already = TRUE;
+            sprintf(buf, "%s can teach you the following:\r\n", GET_NAME(master));
+          }
           sprintf(buf, "%s  %-24s (%d karma %d nuyen)\r\n", buf, skills[teachers[ind].s[i]].name, get_skill_price(ch, teachers[ind].s[i]),
                   MAX(1000, (GET_SKILL(ch, teachers[ind].s[i]) * 5000)));
+        }
       }
     }
     // Failure case.
