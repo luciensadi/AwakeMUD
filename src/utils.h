@@ -832,6 +832,16 @@ int     unlink(const char *path);
 int     getpid(void);
 #endif
 
+#if defined(WIN32)
+extern "C" char    *crypt(const char *key, const char *salt);
+#endif
+
+#if defined(__CYGWIN__)
+extern "C" char    *crypt(const char *key, const char *salt);
+#endif
+
+
+
 /*
  * The proto for [NeXT's] getpid() is defined in the man pages are returning
  * pid_t but the compiler pukes on it (cc). Since pid_t is just

@@ -18,6 +18,7 @@ Tested on:
 - Ubuntu 14 and 16 LTS
 - Raspbian Jessie
 - Amazon Linux
+- Cygwin (beta)
 
 ## Installation
 - Install MySQL 5, including its development headers (`mysql/mysql.h`).
@@ -28,6 +29,15 @@ Tested on:
 - Edit `src/Makefile` and uncomment the OS that looks closest to yours (comment out the others). The default is Mac OS X; you'll probably want to switch it to Linux. You probably also want to remove the `-DGITHUB_INTEGRATION` flag from the Makefile at this time.
 - From the src directory, run `make clean && make`.
 - Change to the root directory and run the game (ex: `gdb bin/awake`, or `lldb bin/awake` on OS X).
+
+## Cygwin notes
+- AwakeCE can run in windows under cygwin
+- To build it, you need cygwin (64bit) and cygwin apps/libraries : make, g++, libcrypt, libsodium, mysqlclient
+- Update src/Makefile and comment out/uncomment the cygwin config
+- Build by doing `cd src;make`
+- Run by doing `./bin/awake`
+- Note: You may have to manually import the sql changes as gensql.sh may or may not work, use 127.0.0.1 as dbhost if running local db.
+- With cygwin, you can also use Eclipse CPP IDE, just create a cygwin-c++ project and point the directory to where your AwakeMUD is located, play around with build settings to ensure it is using your Makefile in src. Debugging/Running works.
 
 ### Make / Compile Troubleshooting
 

@@ -99,6 +99,12 @@ bool File::GetLine(char *buf, size_t buf_size, bool blank)
       if (ptr && ptr < (buf + buf_size))
         *ptr = '\0';
 
+      // Add a fix for \r character
+      ptr = strchr(buf, '\r');
+
+      if (ptr && ptr < (buf + buf_size))
+              *ptr = '\0';
+
       break;
     }
   }
