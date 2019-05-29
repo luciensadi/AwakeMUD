@@ -1744,6 +1744,9 @@ enum {
 #define SCMD_REFLECT	1
 #define SCMD_SDEFENSE	2
 
+/* do_practice */
+#define SCMD_UNPRACTICE 1
+
 /* do_crash_mud */
 #define SCMD_BOOM 1337
 

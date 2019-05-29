@@ -261,13 +261,15 @@ Name:	The Neophyte Skill Center
 Desc:$
    Skills are another essential aspect to a Shadowrunner, someone who performs
 illegal deeds for pay. Skills make up your character, and determine what tasks
-they are capable of performing, and how well they can perform them. 
-   If you type EXITS, you can see the various rooms that teach those essential 
-skills to new runners. To see the skills you already possess, type SKILLS. 
-When you encounter a skill trainer, type PRACTICE to see what he is capable of
-teaching. To learn a new skill, simply type PRACTICE (skill name). Type it
-again to become more proficient in the skill you just acquired.  Proceed into 
-the skill trainer rooms to learn the abilities essential to your survival. 
+they are capable of performing, and how well they can perform them.
+ ^n  To see the skills you already possess, type ^WSKILLS^n. When you encounter
+a skill trainer, type ^WPRACTICE^n to see what they are capable of teaching. To
+learn a new skill, simply type ^PRACTICE [skill name]^n. Type it again to become
+more proficient in the skill you just acquired. You may also ^WUNPRACTICE [skill
+name]^n to lower its level-- but ^ynote that you can only UNPRACTICE here in the
+skill annex!^n
+ ^n  Proceed into the skill trainer rooms to learn the abilities essential to your
+survival. 
 ~
 Flags:	1000000000000011000
 SecType:	Inside
@@ -812,18 +814,18 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXTRADESC 0]
-	Keywords:	datajack~~~~~~~~~~~~~~~~~~
+	Keywords:	wired reflexes~~~~~~~~~~~~~~~~~~
 	Desc:$
-A DATAJACK is necessary for a decker or a rigger to interface their mind with
-a machine. 
+Wired Reflexes, while costly to the user's essence, enhance their REACTION and
+INITIATIVE, allowing them to attack more often than an un-augmented person.
+Wired Reflexes are known to cause some people to be extra jumpy. 
 ~
 [EXTRADESC 1]
-	Keywords:	smartlink system~~~~~~~~~~~~~~~~~~
+	Keywords:	Vehicle control rig~~~~~~~~~~~~~~~~~~
 	Desc:$
-The SMARTLINK system allows the user to use a smartlink accessorized firearm,
-granting them greater accuracy in ranged combat. If the weapon is outfitted
-with a SMARTLINK accessory and the user has a SMARTLINK system installed, the
-feature is automatically used. 
+The VEHICLE CONTROL RIG and a DATAJACK is necessary for someone who wants to
+be able to mentally control a vehicle. An explanation of RIGGING is provided
+later in the guild. 
 ~
 [EXTRADESC 2]
 	Keywords:	spurs razors retractable~~~~~~~~~~~~~~~~~~
@@ -834,18 +836,18 @@ automatically used when the character enters unarmed combat, and success is
 based on the CYBERIMPLANT COMBAT skill. 
 ~
 [EXTRADESC 3]
-	Keywords:	Vehicle control rig~~~~~~~~~~~~~~~~~~
+	Keywords:	smartlink system~~~~~~~~~~~~~~~~~~
 	Desc:$
-The VEHICLE CONTROL RIG and a DATAJACK is necessary for someone who wants to
-be able to mentally control a vehicle. An explanation of RIGGING is provided
-later in the guild. 
+The SMARTLINK system allows the user to use a smartlink accessorized firearm,
+granting them greater accuracy in ranged combat. If the weapon is outfitted
+with a SMARTLINK accessory and the user has a SMARTLINK system installed, the
+feature is automatically used. 
 ~
 [EXTRADESC 4]
-	Keywords:	wired reflexes~~~~~~~~~~~~~~~~~~
+	Keywords:	datajack~~~~~~~~~~~~~~~~~~
 	Desc:$
-Wired Reflexes, while costly to the user's essence, enhance their REACTION and
-INITIATIVE, allowing them to attack more often than an un-augmented person.
-Wired Reflexes are known to cause some people to be extra jumpy. 
+A DATAJACK is necessary for a decker or a rigger to interface their mind with
+a machine. 
 ~
 BREAK
 #60518

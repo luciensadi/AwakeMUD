@@ -643,7 +643,7 @@ void assign_objects(void)
   ASSIGNOBJ(9329, vending_machine);*/
   ASSIGNOBJ(10011, desktop);
   ASSIGNOBJ(10108, vending_machine);
-  ASSIGNOBJ(42130, anticoagulant);
+  //ASSIGNOBJ(42130, anticoagulant);
   ASSIGNOBJ(10025, pocket_sec);
 /*ASSIGNOBJ(9406, hand_held_scanner);
   ASSIGNOBJ(29997, gen_board);  // Loki's Board
@@ -698,7 +698,8 @@ void assign_rooms(void)
   SPECIAL(rpe_room);
   SPECIAL(multnomah_gate);
   SPECIAL(chargen_south_from_trainer);
-  SPECIAL(chargen_south_from_teachers);
+  SPECIAL(chargen_skill_annex);
+  SPECIAL(chargen_unpractice_skill);
 
   /* Limbo/God Rooms */
   ASSIGNROOM(8, oceansounds);
@@ -708,12 +709,25 @@ void assign_rooms(void)
   /* Carbanado */
 //ASSIGNROOM(4477, waterfall);
 
-  /* CharGen / Neophytic guild */
+  /* CharGen */
   ASSIGNROOM(60505, chargen_south_from_trainer);
-  ASSIGNROOM(60506, chargen_south_from_teachers);
+  ASSIGNROOM(60506, chargen_skill_annex);
+  ASSIGNROOM(60562, auth_room);
+  /* CharGen - allow forgetting skills */
+  ASSIGNROOM(60507, chargen_unpractice_skill);
+  ASSIGNROOM(60508, chargen_unpractice_skill);
+  ASSIGNROOM(60509, chargen_unpractice_skill);
+  ASSIGNROOM(60513, chargen_unpractice_skill);
+  ASSIGNROOM(60512, chargen_unpractice_skill);
+  ASSIGNROOM(60511, chargen_unpractice_skill);
+  ASSIGNROOM(60510, chargen_unpractice_skill);
+  ASSIGNROOM(60591, chargen_unpractice_skill);
+  ASSIGNROOM(60592, chargen_unpractice_skill);
+  ASSIGNROOM(60593, chargen_unpractice_skill);
+  
+  /* Neophyte Guild */
   ASSIGNROOM(60585, neophyte_entrance);
   ASSIGNROOM(60586, newbie_car);
-  ASSIGNROOM(60562, auth_room);
 
   /* Ork Underground */
   ASSIGNROOM(9978, simulate_bar_fight);

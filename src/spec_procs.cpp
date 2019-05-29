@@ -560,8 +560,8 @@ SPECIAL(teacher)
     return TRUE;
   }
   
-  if (GET_SKILL(ch, skill_num) && !REAL_SKILL(ch, skill_num)) {
-    send_to_char("You can't train a skill you currently have a skillsoft for.\r\n", ch);
+  if (GET_SKILL(ch, skill_num) != REAL_SKILL(ch, skill_num)) {
+    send_to_char("You can't train a skill you currently have a skillsoft or other boost for.\r\n", ch);
     return TRUE;
   }
   
@@ -3829,7 +3829,7 @@ SPECIAL(trideo)
 // Prevent people from moving south from trainer until they've spent all their attribute points.
 SPECIAL(chargen_south_from_trainer)
 {
-  if (!ch || !cmd || !(CMD_IS("s") || CMD_IS("south")))
+  if (!ch || !cmd || IS_NPC(ch) || !(CMD_IS("s") || CMD_IS("south")))
     return FALSE;
   
   if (GET_ATT_POINTS(ch) > 0) {
@@ -3840,10 +3840,52 @@ SPECIAL(chargen_south_from_trainer)
   return FALSE;
 }
 
-// Prevent people from moving south from teachers until they've spent all their skill points.
-SPECIAL(chargen_south_from_teachers)
+SPECIAL(chargen_unpractice_skill)
 {
-  if (!ch || !cmd)
+  if (!ch || !cmd || IS_NPC(ch) || !CMD_IS("unpractice"))
+    return FALSE;
+  
+  skip_spaces(&argument);
+  
+  if (!*argument) {
+    send_to_char("Syntax: UNPRACTICE [skill name]\r\n", ch);
+    return TRUE;
+  }
+  
+  int skill_num = find_skill_num(argument);
+  
+  if (skill_num < 0) {
+    send_to_char("Please specify a valid skill.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (GET_SKILL(ch, skill_num) != REAL_SKILL(ch, skill_num)) {
+    send_to_char("You can't unpractice a skill you currently have a skillsoft or other boost for.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (GET_SKILL(ch, skill_num) <= 0) {
+    send_to_char("You don't know that skill.\r\n", ch);
+    return TRUE;
+  }
+  
+  // Success. Lower the skill by one point.
+  GET_SKILL_POINTS(ch)++;
+  SET_SKILL(ch, skill_num, REAL_SKILL(ch, skill_num) - 1);
+  
+  if (GET_SKILL(ch, skill_num) == 0) {
+    send_to_char(ch, "With the assistance of a few mind-altering chemicals and several blunt impacts, you completely forget %s.\r\n", skills[skill_num].name);
+  } else {
+    send_to_char(ch, "With the assistance of a few mind-altering chemicals and several blunt impacts, you decrease your skill in %s.\r\n", skills[skill_num].name);
+  }
+  
+  return TRUE;
+}
+
+// Prevent people from moving south from teachers until they've spent all their skill points.
+SPECIAL(chargen_skill_annex)
+{
+  if (!ch || !cmd || IS_NPC(ch))
     return FALSE;
   
   if ((CMD_IS("s") || CMD_IS("south")) && GET_SKILL_POINTS(ch) > 0) {
@@ -3855,6 +3897,11 @@ SPECIAL(chargen_south_from_teachers)
     send_to_char("You can't do that here. Try visiting one of the teachers in the surrounding areas."
                  " You can always view the skills you've learned so far by typing ^WSKILLS^n.\r\n", ch);
     return TRUE;
+  }
+  
+  // Tie in with the chargen_unpractice_skill routine above.
+  if (CMD_IS("unpractice")) {
+    return chargen_unpractice_skill(ch, NULL, cmd, argument);
   }
   
   return FALSE;
