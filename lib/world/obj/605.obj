@@ -22,7 +22,7 @@ Material:	metal
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
-	Val0:	5000
+	Val0:	-1
 	Val2:	-1
 BREAK
 #60501
