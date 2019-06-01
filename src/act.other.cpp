@@ -244,12 +244,18 @@ ACMD(do_steal)
 
 ACMD(do_practice)
 {
-  send_to_char("You can only practice skills through a teacher.  (Use the 'skills' command\r\nto see which skills you know)\r\n", ch);
+  if (subcmd == SCMD_UNPRACTICE)
+    send_to_char("Sorry, that feature is only available in the skills annex of character generation.\r\n", ch);
+  else
+    send_to_char("You can only practice skills through a teacher.  (Use the 'skills' command\r\nto see which skills you know)\r\n", ch);
 }
 
 ACMD(do_train)
 {
-  send_to_char("You can only train with a trainer.\r\n", ch);
+  if (subcmd == SCMD_UNTRAIN)
+    send_to_char("Sorry, that feature is only available when standing by Neil the Trainer during character generation.\r\n", ch);
+  else
+    send_to_char("You can only train with a trainer.\r\n", ch);
 }
 
 ACMD(do_visible)

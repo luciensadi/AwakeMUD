@@ -82,13 +82,6 @@ struct social_type
 #define MANSION_GATE            4059
 #define YUKIYA_OFFICE           17157
 
-// misc defines
-#define LIBRARY_SKILL		3
-#define NEWBIE_SKILL		6
-#define NORMAL_MAX_SKILL	8
-#define LEARNED_LEVEL		12
-#define RENT_FACTOR 1
-
 int fixers_need_save;
 
 /* ********************************************************************
@@ -352,25 +345,25 @@ int get_skill_price(struct char_data *ch, int i)
 {
   if (!GET_SKILL(ch, i))
     return 1;
-  if (GET_SKILL(ch, i) + 1 <= GET_REAL_ATT(ch, skills[i].attribute))
-  {
-    if (skills[i].type)
+  
+  if (GET_SKILL(ch, i) + 1 <= GET_REAL_ATT(ch, skills[i].attribute)) {
+    if (skills[i].type == SKILL_TYPE_KNOWLEDGE)
       return GET_SKILL(ch, i) + 1;
     else
       return (int)((GET_SKILL(ch, i) + 1) * 1.5);
-  } else if (GET_SKILL(ch, i) + 1 <= GET_REAL_ATT(ch, skills[i].attribute) * 2)
-  {
-    if (skills[i].type)
+  }
+  
+  if (GET_SKILL(ch, i) + 1 <= GET_REAL_ATT(ch, skills[i].attribute) * 2) {
+    if (skills[i].type == SKILL_TYPE_KNOWLEDGE)
       return (int)((GET_SKILL(ch, i) + 1) * 1.5);
     else
       return (int)((GET_SKILL(ch, i) + 1) * 2);
-  } else
-  {
-    if (skills[i].type)
-      return (GET_SKILL(ch, i) + 1) * 2;
-    else
-      return (int)((GET_SKILL(ch, i) + 1) * 2.5);
   }
+  
+  if (skills[i].type == SKILL_TYPE_KNOWLEDGE)
+    return (GET_SKILL(ch, i) + 1) * 2;
+  else
+    return (int)((GET_SKILL(ch, i) + 1) * 2.5);
 }
 
 SPECIAL(metamagic_teacher)
@@ -391,7 +384,7 @@ SPECIAL(metamagic_teacher)
     return FALSE;
 
   if (!*argument) {
-    send_to_char("Your teacher can teach you the following techniques: \r\n", ch);
+    send_to_char(ch, "%s can teach you the following techniques: \r\n", GET_NAME(master));
     for (; i < NUM_TEACHER_SKILLS; i++)
       if (metamagict[ind].s[i])
         send_to_char(ch, "  %s\r\n", metamagic[metamagict[ind].s[i]]);
@@ -416,7 +409,7 @@ SPECIAL(metamagic_teacher)
     return TRUE;
   }
   if (GET_GRADE(ch) >= (GET_MAG(master) / 100) - 6) {
-    send_to_char("That teacher is not powerful enough to teach you that technique.\r\n", ch);
+    send_to_char(ch, "%s is not powerful enough to teach you that technique.\r\n", GET_NAME(master));
     return TRUE;
   }
 
@@ -463,7 +456,8 @@ SPECIAL(teacher)
     return FALSE;
 
   if (teachers[ind].type != NEWBIE && PLR_FLAGGED(ch, PLR_NEWBIE)) {
-    do_say(master, "You're not quite ready for that yet! Come back when you've earned more karma.", 0, 0);
+    sprintf(buf, "You're not quite ready for that yet! Come back when you've earned at least %d karma.", NEWBIE_KARMA_THRESHOLD + 1);
+    do_say(master, buf, 0, 0);
     return TRUE;
   }
 
@@ -488,16 +482,53 @@ SPECIAL(teacher)
     return FALSE;
 
   if (!*argument) {
-    sprintf(buf, "Your teacher can teach you the following:\r\n");
+    bool found_a_skill_already = FALSE;
     for (int i = 0; i < NUM_TEACHER_SKILLS; i++) {
       if (teachers[ind].s[i] > 0) {
-        if (GET_SKILL_POINTS(ch) > 0)
+        // Mundanes can't learn magic skills.
+        if (GET_TRADITION(ch) == TRAD_MUNDANE && skills[teachers[ind].s[i]].requires_magic)
+          continue;
+        
+        // Adepts can't learn externally-focused skills.
+        if (GET_TRADITION(ch) == TRAD_ADEPT && (teachers[ind].s[i] == SKILL_CONJURING
+                                                || teachers[ind].s[i] == SKILL_SORCERY
+                                                || teachers[ind].s[i] == SKILL_SPELLDESIGN))
+          continue;
+        
+        // Prevent aspected from learning skills they can't use.
+        if (GET_ASPECT(ch) == ASPECT_CONJURER && (teachers[ind].s[i] == SKILL_SORCERY || teachers[ind].s[i] == SKILL_SPELLDESIGN))
+          continue;
+        
+        else if (GET_ASPECT(ch) == ASPECT_SORCERER && teachers[ind].s[i] == SKILL_CONJURING)
+          continue;
+        
+        
+        
+        if (GET_SKILL_POINTS(ch) > 0) {
+          // Add conditional messaging.
+          if (!found_a_skill_already) {
+            found_a_skill_already = TRUE;
+            sprintf(buf, "%s can teach you the following:\r\n", GET_NAME(master));
+          }
           sprintf(buf, "%s  %s\r\n", buf, skills[teachers[ind].s[i]].name);
-        else if (GET_SKILL(ch, teachers[ind].s[i]) < max && !ch->char_specials.saved.skills[teachers[ind].s[i]][1])
+        }
+        else if (GET_SKILL(ch, teachers[ind].s[i]) < max && !ch->char_specials.saved.skills[teachers[ind].s[i]][1]) {
+          // Add conditional messaging.
+          if (!found_a_skill_already) {
+            found_a_skill_already = TRUE;
+            sprintf(buf, "%s can teach you the following:\r\n", GET_NAME(master));
+          }
           sprintf(buf, "%s  %-24s (%d karma %d nuyen)\r\n", buf, skills[teachers[ind].s[i]].name, get_skill_price(ch, teachers[ind].s[i]),
                   MAX(1000, (GET_SKILL(ch, teachers[ind].s[i]) * 5000)));
+        }
       }
     }
+    // Failure case.
+    if (!found_a_skill_already) {
+      send_to_char(ch, "There's nothing %s can teach you that you don't already know.\r\n", GET_NAME(master));
+      return TRUE;
+    }
+    
     if (GET_SKILL_POINTS(ch) > 0)
       sprintf(buf, "%s\r\nYou have %d points to use for skills.\r\n", buf,
               GET_SKILL_POINTS(ch));
@@ -508,8 +539,8 @@ SPECIAL(teacher)
     return TRUE;
   }
 
-  if ((teachers[ind].type == NEWBIE && GET_SKILL_POINTS(ch) <= 0 &&
-       GET_KARMA(ch) <= 0) || (teachers[ind].type != NEWBIE && GET_KARMA(ch) <= 0)) {
+  if ((teachers[ind].type == NEWBIE && GET_SKILL_POINTS(ch) <= 0 && GET_KARMA(ch) <= 0)
+      || (teachers[ind].type != NEWBIE && GET_KARMA(ch) <= 0)) {
     send_to_char("You do not seem to be able to practice now.\r\n", ch);
     return TRUE;
   }
@@ -517,25 +548,52 @@ SPECIAL(teacher)
   skill_num = find_skill_num(argument);
 
   if (skill_num < 0) {
-    send_to_char("Your teacher doesn't seem to know anything about that subject.\r\n", ch);
+    send_to_char(ch, "%s doesn't seem to know anything about that subject.\r\n", GET_NAME(master));
     return TRUE;
   }
-  if (GET_SKILL(ch, skill_num) && !REAL_SKILL(ch, skill_num)) {
-    send_to_char("You can't train a skill you currently have a skillsoft for.\r\n", ch);
-    return TRUE;
-  }
-  if ((skill_num == SKILL_CENTERING || skill_num == SKILL_ENCHANTING) &&
-      GET_TRADITION(ch) == TRAD_MUNDANE) {
-    send_to_char("Without access to the astral plane you can't even begin to fathom the basics of that skill.\r\n", ch);
-    return TRUE;
-  }
-
-  i = 0;
+  
   for (i = 0; i < NUM_TEACHER_SKILLS; i++)
     if (skill_num == teachers[ind].s[i])
       break;
   if (i >= NUM_TEACHER_SKILLS) {
-    send_to_char("Your teacher doesn't seem to know about that subject.\r\n", ch);
+    send_to_char(ch, "%s doesn't seem to know about that subject.\r\n", GET_NAME(master));
+    return TRUE;
+  }
+  
+  if (GET_SKILL(ch, skill_num) != REAL_SKILL(ch, skill_num)) {
+    send_to_char("You can't train a skill you currently have a skillsoft or other boost for.\r\n", ch);
+    return TRUE;
+  }
+  
+  // Deny some magic skills to mundane (different flavor from next block, same effect).
+  if ((skill_num == SKILL_CENTERING || skill_num == SKILL_ENCHANTING) && GET_TRADITION(ch) == TRAD_MUNDANE) {
+    send_to_char("Without access to the astral plane you can't even begin to fathom the basics of that skill.\r\n", ch);
+    return TRUE;
+  }
+  
+  // Deny all magic skills to mundane.
+  if (skills[skill_num].requires_magic && GET_TRADITION(ch) == TRAD_MUNDANE) {
+    send_to_char("Without the ability to channel magic, that skill would be useless to you.\r\n", ch);
+    return TRUE;
+  }
+  
+  // Deny some magic skills to adepts.
+  if (GET_TRADITION(ch) == TRAD_ADEPT && (skill_num == SKILL_CONJURING
+                                          || skill_num == SKILL_SORCERY
+                                          || skill_num == SKILL_SPELLDESIGN)) {
+    send_to_char("Your magic is focused inwards on improving your physical abilities. You can't learn these external magics.\r\n", ch);
+    return TRUE;
+  }
+
+  // Prevent aspected shamans from learning skills they can't use.
+  if (GET_ASPECT(ch) == ASPECT_CONJURER && (skill_num == SKILL_SORCERY
+                                            || skill_num == SKILL_SPELLDESIGN)) {
+    send_to_char(ch, "Your magic is focused on the summoning of %s. You cannot learn spellwork.\r\n", GET_TRADITION(ch) == TRAD_SHAMANIC ? "spirits" : "elementals");
+    return TRUE;
+  }
+  
+  if (GET_ASPECT(ch) == ASPECT_SORCERER && skill_num == SKILL_CONJURING) {
+    send_to_char(ch, "Your magic is focused on spellwork. You cannot learn to summon %s.\r\n", GET_TRADITION(ch) == TRAD_SHAMANIC ? "spirits" : "elementals");
     return TRUE;
   }
 
@@ -575,28 +633,104 @@ SPECIAL(teacher)
   return TRUE;
 }
 
-bool trainable_attribute_is_maximized(struct char_data *ch, int attribute) {
-  switch (attribute) {
-    case ATT_BOD:
-      return (GET_REAL_BOD(ch) + GET_PERM_BOD_LOSS(ch)) >= racial_limits[(int)GET_RACE(ch)][0][0];
-    case ATT_QUI:
-      return GET_REAL_QUI(ch) >= racial_limits[(int)GET_RACE(ch)][0][1];
-    case ATT_STR:
-      return GET_REAL_STR(ch) >= racial_limits[(int)GET_RACE(ch)][0][2];
-    case ATT_CHA:
-      return GET_REAL_CHA(ch) >= racial_limits[(int)GET_RACE(ch)][0][3];
-    case ATT_INT:
-      return GET_REAL_INT(ch) >= racial_limits[(int)GET_RACE(ch)][0][4];
-    case ATT_WIL:
-      return GET_REAL_WIL(ch) >= racial_limits[(int)GET_RACE(ch)][0][5];
+int calculate_training_raw_cost(struct char_data *ch, int attribute) {
+  int adept_mod = 0;
+  
+  // Calculate increases in cost from adept powers.
+  if (attribute == BOD)
+    adept_mod = GET_POWER_TOTAL(ch, ADEPT_IMPROVED_BOD);
+  else if (attribute == QUI)
+    adept_mod = GET_POWER_TOTAL(ch, ADEPT_IMPROVED_QUI);
+  else if (attribute == STR)
+    adept_mod = GET_POWER_TOTAL(ch, ADEPT_IMPROVED_STR);
+  
+  return 1 + GET_REAL_ATT(ch, attribute) + adept_mod;
+}
+
+bool attribute_below_maximums(struct char_data *ch, int attribute) {
+  // Special case: Bod can have permanent loss.
+  if (attribute == BOD)
+    return GET_REAL_BOD(ch) + GET_PERM_BOD_LOSS(ch) < racial_limits[(int)GET_RACE(ch)][0][BOD];
+  
+  return GET_REAL_ATT(ch, attribute) < racial_limits[(int)GET_RACE(ch)][0][attribute];
+}
+
+void send_training_list_to_char(struct char_data *ch, int ind) {
+  int first = 1, raw_cost = 0;
+  
+  if (GET_ATT_POINTS(ch) > 0) {
+    send_to_char(ch, "You have %d attribute points to distribute.  You can ^WTRAIN", GET_ATT_POINTS(ch));
+  } else {
+    send_to_char(ch, "You have %0.2f karma points.  You can train", (float)GET_KARMA(ch) / 100);
   }
-  return true;
+  
+  for (int i = 0; i < WIL; i++) {
+    if (IS_SET(trainers[ind].attribs, (1 << i)) && attribute_below_maximums(ch, i)) {
+      raw_cost = calculate_training_raw_cost(ch, i);
+      if (GET_ATT_POINTS(ch) > 0)
+        send_to_char(ch, "%s ^W%.3s^n", first ? "" : ",", string_to_uppercase(attributes[i]));
+      else
+        send_to_char(ch, "%s   %.3s (%d karma %d nuyen)", first ? ":\r\n" : "\r\n", string_to_uppercase(attributes[i]), 2 * raw_cost, 1000 * raw_cost);
+      first = 0;
+    }
+  }
+  if (!first) {
+    // Found something to train. Only newbie training is in sentence form, so only append a period for them.
+    send_to_char(ch, "%s\r\n", GET_ATT_POINTS(ch) > 0 ? "." : "");
+  } else {
+    // Found nothing, let them know.
+    send_to_char(" nothing-- you're already at your maximums!\r\n", ch);
+  }
+}
+
+void train_attribute(struct char_data *ch, struct char_data *trainer, int ind, int attr, const char *success_message) {
+  int raw_cost = calculate_training_raw_cost(ch, attr);
+  int karma_cost = 2 * raw_cost;
+  int nuyen_cost = 1000 * raw_cost;
+  
+  // Check for racial maximums.
+  if (!attribute_below_maximums(ch, attr)) {
+    send_to_char(ch, "Your %s attribute is at its maximum.\r\n", attributes[attr]);
+    return;
+  }
+  
+  // Check for affordability.
+  if (GET_ATT_POINTS(ch) <= 0 && (int)(GET_KARMA(ch) / 100) < karma_cost) {
+    send_to_char(ch, "You don't have enough karma to raise your %s attribute.\r\n", attributes[attr]);
+    return;
+  }
+  
+  // Check for nuyen cost, if applicable.
+  if (!trainers[ind].is_newbie) {
+    if (GET_NUYEN(ch) < nuyen_cost) {
+      sprintf(arg, "%s The charge for that is %d nuyen, which you don't seem to be carrying.", GET_CHAR_NAME(ch), nuyen_cost);
+      do_say(trainer, arg, 0, SCMD_SAYTO);
+      return;
+    }
+    // Deduct nuyen cost.
+    GET_NUYEN(ch) -= nuyen_cost;
+  }
+  
+  // Deduct karma/attrpoint cost.
+  if (GET_ATT_POINTS(ch) > 0)
+    GET_ATT_POINTS(ch)--;
+  else
+    GET_KARMA(ch) -= karma_cost * 100;
+  
+  // Apply the change.
+  GET_REAL_ATT(ch, attr) += 1;
+  
+  // Update character's calculated values.
+  affect_total(ch);
+  
+  // Notify the character of success.
+  send_to_char(ch, success_message, GET_REAL_ATT(ch, attr));
 }
 
 SPECIAL(trainer)
 {
   struct char_data *trainer = (struct char_data *) me;
-  int i, ind, first = 1;
+  int ind;
 
   if (!CMD_IS("train") || IS_NPC(ch) || !CAN_SEE(trainer, ch) || FIGHTING(ch) ||
       GET_POS(ch) < POS_STANDING)
@@ -612,308 +746,54 @@ SPECIAL(trainer)
     return FALSE;
 
   if (!trainers[ind].is_newbie && PLR_FLAGGED(ch, PLR_NEWBIE)) {
-    sprintf(arg, "%s You are not quite ready yet!", GET_CHAR_NAME(ch));
+    sprintf(arg, "%s You are not quite ready yet! Come back when you've earned at least %d karma.", GET_CHAR_NAME(ch), NEWBIE_KARMA_THRESHOLD);
     do_say(trainer, arg, 0, SCMD_SAYTO);
     return TRUE;
   }
 
-  if (!PLR_FLAGGED(ch, PLR_NEWBIE) && GET_ATT_POINTS(ch) != 0)
+  if (!PLR_FLAGGED(ch, PLR_NEWBIE) && GET_ATT_POINTS(ch) != 0) {
+    sprintf(buf, "SYSERR: %s graduated from newbie status while still having %d attribute points left. How?", GET_CHAR_NAME(ch), GET_ATT_POINTS(ch));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
     GET_ATT_POINTS(ch) = 0;
+  }
 
   if (!*argument) {
-    if (GET_ATT_POINTS(ch) > 0) {
-      send_to_char(ch, "You have %d points to distribute.  You can train",
-                   GET_ATT_POINTS(ch));
-      bool found_something_to_train = FALSE;
-      for (i = 0; (1 << i) <= TWIL; i++)
-        if (IS_SET(trainers[ind].attribs, (1 << i))) {
-          switch (1 << i) {
-            case TBOD:
-              if (!trainable_attribute_is_maximized(ch, ATT_BOD)) {
-                send_to_char(ch, "%s bod", first ? "" : ",");
-                found_something_to_train = TRUE;
-                first = 0;
-              }
-              break;
-            case TQUI:
-              if (!trainable_attribute_is_maximized(ch, ATT_QUI)) {
-                send_to_char(ch, "%s qui", first ? "" : ",");
-                found_something_to_train = TRUE;
-                first = 0;
-              }
-              break;
-            case TSTR:
-              if (!trainable_attribute_is_maximized(ch, ATT_STR)) {
-                send_to_char(ch, "%s str", first ? "" : ",");
-                found_something_to_train = TRUE;
-                first = 0;
-              }
-              break;
-            case TCHA:
-              if (!trainable_attribute_is_maximized(ch, ATT_CHA)) {
-                send_to_char(ch, "%s cha", first ? "" : ",");
-                found_something_to_train = TRUE;
-                first = 0;
-              }
-              break;
-            case TINT:
-              if (!trainable_attribute_is_maximized(ch, ATT_INT)) {
-                send_to_char(ch, "%s int", first ? "" : ",");
-                found_something_to_train = TRUE;
-                first = 0;
-              }
-              break;
-            case TWIL:
-              if (!trainable_attribute_is_maximized(ch, ATT_WIL)) {
-                send_to_char(ch, "%s wil", first ? "" : ",");
-                found_something_to_train = TRUE;
-                first = 0;
-              }
-              break;
-          }
-        }
-      if (found_something_to_train) {
-        send_to_char(".\r\n", ch);
-      } else {
-        send_to_char(" nothing-- you're already at your maximums!\r\n", ch);
-      }
-    } else {
-      send_to_char(ch, "You have %0.2f karma points.  You can train",
-                   (float)GET_KARMA(ch) / 100);
-      for (i = 0; (1 << i) <= TWIL; i++)
-        if (IS_SET(trainers[ind].attribs, (1 << i))) {
-          switch (1 << i) {
-          case TBOD:
-            if (GET_REAL_BOD(ch) + GET_PERM_BOD_LOSS(ch) < racial_limits[(int)GET_RACE(ch)][0][0])
-              send_to_char(ch, "%s bod (%d karma %d nuyen)", first ? "" : ",", 2*(GET_REAL_BOD(ch)+1+GET_POWER_TOTAL(ch, ADEPT_IMPROVED_BOD)),
-                           (GET_REAL_BOD(ch) + 1+GET_POWER(ch, ADEPT_IMPROVED_BOD)) * 1000);
-            break;
-          case TQUI:
-            if (GET_REAL_QUI(ch) < racial_limits[(int)GET_RACE(ch)][0][1])
-              send_to_char(ch, "%s qui (%d karma %d nuyen)", first ? "" : ",", 2*(GET_REAL_QUI(ch)+1+GET_POWER_TOTAL(ch, ADEPT_IMPROVED_QUI)),
-                           (GET_REAL_QUI(ch) + 1+GET_POWER_TOTAL(ch, ADEPT_IMPROVED_QUI)) * 1000);
-            break;
-          case TSTR:
-            if (GET_REAL_STR(ch) < racial_limits[(int)GET_RACE(ch)][0][2])
-              send_to_char(ch, "%s str (%d karma %d nuyen)", first ? "" : ",", 2*(GET_REAL_STR(ch)+1+GET_POWER_TOTAL(ch, ADEPT_IMPROVED_STR)),
-                           (GET_REAL_STR(ch) + 1+GET_POWER_TOTAL(ch, ADEPT_IMPROVED_STR)) * 1000);
-            break;
-          case TCHA:
-            if (GET_REAL_CHA(ch) < racial_limits[(int)GET_RACE(ch)][0][3])
-              send_to_char(ch, "%s cha (%d karma %d nuyen)", first ? "" : ",", 2*(GET_REAL_CHA(ch)+1),
-                           (GET_REAL_CHA(ch) + 1) * 1000);
-            break;
-          case TINT:
-            if (GET_REAL_INT(ch) < racial_limits[(int)GET_RACE(ch)][0][4])
-              send_to_char(ch, "%s int (%d karma %d nuyen)", first ? "" : ",", 2*(GET_REAL_INT(ch)+1),
-                           (GET_REAL_INT(ch) + 1) * 1000);
-            break;
-          case TWIL:
-            if (GET_REAL_WIL(ch) < racial_limits[(int)GET_RACE(ch)][0][5])
-              send_to_char(ch, "%s wil (%d karma %d nuyen)", first ? "" : ",", 2*(GET_REAL_WIL(ch)+1),
-                           (GET_REAL_WIL(ch) + 1) * 1000);
-            break;
-          }
-          first = 0;
-        }
-      send_to_char(".\r\n", ch);
-    }
-    return 1;
+    send_training_list_to_char(ch, ind);
+    return TRUE;
   }
-
-  if (!str_cmp(argument, "bod") && IS_SET(trainers[ind].attribs, TBOD)) {
-    if (GET_REAL_BOD(ch) + GET_PERM_BOD_LOSS(ch) >= racial_limits[(int)GET_RACE(ch)][0][0]) {
-      send_to_char("Your body attribute is at its maximum.\r\n", ch);
-      return 1;
-    }
-    if (((2*(GET_REAL_BOD(ch) + 1+GET_POWER_TOTAL(ch, ADEPT_IMPROVED_BOD))) > (int)(GET_KARMA(ch) / 100)) &&
-        GET_ATT_POINTS(ch) <= 0) {
-      send_to_char("You don't have enough karma to raise your body attribute.\r\n", ch);
-      return 1;
-    }
-    if (!trainers[ind].is_newbie) {
-      if (GET_NUYEN(ch) < ((GET_REAL_BOD(ch) + 1+GET_POWER_TOTAL(ch, ADEPT_IMPROVED_BOD)) * 1000)) {
-        sprintf(arg, "%s The charge for that is %d nuyen, which I see you don't have.",
-                GET_CHAR_NAME(ch), ((GET_REAL_BOD(ch) + 1+GET_POWER_TOTAL(ch, ADEPT_IMPROVED_BOD)) * 1000));
-        do_say(trainer, arg, 0, SCMD_SAYTO);
-        return TRUE;
-      }
-      GET_NUYEN(ch) -= (GET_REAL_BOD(ch) + 1+GET_POWER_TOTAL(ch, ADEPT_IMPROVED_BOD)) * 1000;
-    }
-    if (GET_ATT_POINTS(ch) > 0)
-      GET_ATT_POINTS(ch)--;
-    else
-      GET_KARMA(ch) -= (GET_REAL_BOD(ch) + 1+GET_POWER_TOTAL(ch, ADEPT_IMPROVED_BOD)) * 200;
-    GET_REAL_BOD(ch)++;
-    affect_total(ch);
-    send_to_char(ch, "Your previous weeks worth of hard work increase your Bod "
-                 "to %d.\r\n", GET_REAL_BOD(ch));
-  } else if (!str_cmp(argument, "qui") && IS_SET(trainers[ind].attribs, TQUI)) {
-    if (GET_REAL_QUI(ch) >= racial_limits[(int)GET_RACE(ch)][0][1]) {
-      send_to_char("Your quickness attribute is at its maximum.\r\n", ch);
-      return 1;
-    }
-    if (((2*(GET_REAL_QUI(ch) + 1+GET_POWER_TOTAL(ch, ADEPT_IMPROVED_QUI))) > (int)(GET_KARMA(ch) / 100)) &&
-        GET_ATT_POINTS(ch) < 1) {
-      send_to_char("You don't have enough karma to raise your quickness attribute.\r\n", ch);
-      return 1;
-    }
-    if (!trainers[ind].is_newbie) {
-      if (GET_NUYEN(ch) < ((GET_REAL_QUI(ch) + 1+GET_POWER_TOTAL(ch, ADEPT_IMPROVED_QUI)) * 1000)) {
-        sprintf(arg, "%s The charge for that is %d nuyen, which I see you don't have.",
-                GET_CHAR_NAME(ch), ((GET_REAL_QUI(ch) + 1+GET_POWER_TOTAL(ch, ADEPT_IMPROVED_QUI)) * 1000));
-        do_say(trainer, arg, 0, SCMD_SAYTO);
-        return TRUE;
-      }
-      GET_NUYEN(ch) -= (GET_REAL_QUI(ch) + 1+GET_POWER_TOTAL(ch, ADEPT_IMPROVED_QUI)) * 1000;
-    }
-    if (GET_ATT_POINTS(ch) > 0)
-      GET_ATT_POINTS(ch)--;
-    else
-      GET_KARMA(ch) -= (GET_REAL_QUI(ch) + 1+GET_POWER_TOTAL(ch, ADEPT_IMPROVED_QUI)) * 200;
-    GET_REAL_QUI(ch)++;
-    affect_total(ch);
-    send_to_char(ch, "After weeks of chasing chickens, your hard work pays off and your "
-                 "quickness\r\nraises to %d.\r\n", GET_REAL_QUI(ch));
-  } else if (!str_cmp(argument, "str") && IS_SET(trainers[ind].attribs, TSTR)) {
-    if (GET_REAL_STR(ch) >= racial_limits[(int)GET_RACE(ch)][0][2]) {
-      send_to_char("Your Strength attribute is at its maximum.\r\n", ch);
-      return 1;
-    }
-    if (((2*(GET_REAL_STR(ch)+1+GET_POWER_TOTAL(ch, ADEPT_IMPROVED_STR))) > (int)(GET_KARMA(ch) / 100)) &&
-        GET_ATT_POINTS(ch) < 1) {
-      send_to_char("You don't have enough karma to raise your strength attribute.\r\n", ch);
-      return 1;
-    }
-    if (!trainers[ind].is_newbie) {
-      if (GET_NUYEN(ch) < ((GET_REAL_STR(ch)+ 1+GET_POWER_TOTAL(ch, ADEPT_IMPROVED_STR)) * 1000)) {
-        sprintf(arg, "%s The charge for that is %d nuyen, which I see you don't have.",
-                GET_CHAR_NAME(ch), ((GET_REAL_STR(ch) + 1+GET_POWER_TOTAL(ch, ADEPT_IMPROVED_STR)) * 1000));
-        do_say(trainer, arg, 0, SCMD_SAYTO);
-        return TRUE;
-      }
-      GET_NUYEN(ch) -= (GET_REAL_STR(ch) + 1+GET_POWER_TOTAL(ch, ADEPT_IMPROVED_STR)) * 1000;
-    }
-    if (GET_ATT_POINTS(ch) > 0)
-      GET_ATT_POINTS(ch)--;
-    else
-      GET_KARMA(ch) -= (GET_REAL_STR(ch) + 1+GET_POWER_TOTAL(ch, ADEPT_IMPROVED_STR)) * 200;
-    GET_REAL_STR(ch)++;
-    affect_total(ch);
-    send_to_char(ch, "With months of weight lifting, your Strength increases to %d.\r\n",
-                 GET_REAL_STR(ch));
-  } else if (!str_cmp(argument, "cha") && IS_SET(trainers[ind].attribs, TCHA)) {
-    if (GET_REAL_CHA(ch) >= racial_limits[(int)GET_RACE(ch)][0][3]) {
-      send_to_char("Your charisma attribute is at its maximum.\r\n", ch);
-      return 1;
-    }
-    if (((2*(GET_REAL_CHA(ch) + 1)) > (int)(GET_KARMA(ch) / 100)) &&
-        GET_ATT_POINTS(ch) < 1) {
-      send_to_char("You don't have enough karma to raise your charisma attribute.\r\n", ch);
-      return 1;
-    }
-    if (!trainers[ind].is_newbie) {
-      if (GET_NUYEN(ch) < ((GET_REAL_CHA(ch) + 1) * 1000)) {
-        sprintf(arg, "%s The charge for that is %d nuyen, which I see you can't afford.",
-                GET_CHAR_NAME(ch), ((GET_REAL_CHA(ch) + 1) * 1000));
-        do_say(trainer, arg, 0, SCMD_SAYTO);
-        return TRUE;
-      }
-      GET_NUYEN(ch) -= (GET_REAL_CHA(ch) + 1) * 1000;
-    }
-    if (GET_ATT_POINTS(ch) > 0)
-      GET_ATT_POINTS(ch)--;
-    else
-      GET_KARMA(ch) -= (GET_REAL_CHA(ch) + 1) * 200;
-    GET_REAL_CHA(ch)++;
-    affect_total(ch);
-    send_to_char(ch, "After weeks of reading self-help books and raising your "
-                 "confidence, your\r\nCharisma raises to %d.\r\n", GET_REAL_CHA(ch));
-  } else if (!str_cmp(argument, "int") && IS_SET(trainers[ind].attribs, TINT)) {
-    if (GET_REAL_INT(ch) >= racial_limits[(int)GET_RACE(ch)][0][4]) {
-      send_to_char("Your intelligence attribute is at its maximum.\r\n", ch);
-      return 1;
-    }
-    if (((2*(GET_REAL_INT(ch) + 1)) > (int)(GET_KARMA(ch) / 100)) && GET_ATT_POINTS(ch) < 1) {
-      send_to_char("You don't have enough karma to raise your intelligence "
-                   "attribute.\r\n", ch);
-      return 1;
-    }
-    if (!trainers[ind].is_newbie) {
-      if (GET_NUYEN(ch) < ((GET_REAL_INT(ch) + 1) * 1000)) {
-        sprintf(arg, "%s The charge for that is %d nuyen, which I see you can't afford.",
-                GET_CHAR_NAME(ch), ((GET_REAL_INT(ch) + 1) * 1000));
-        do_say(trainer, arg, 0, SCMD_SAYTO);
-        return TRUE;
-      }
-      GET_NUYEN(ch) -= (GET_REAL_INT(ch) + 1) * 1000;
-    }
-    if (GET_ATT_POINTS(ch) > 0)
-      GET_ATT_POINTS(ch)--;
-    else
-      GET_KARMA(ch) -= (GET_REAL_INT(ch) + 1) * 200;
-    GET_REAL_INT(ch)++;
-    affect_total(ch);
-    send_to_char(ch, "Through many long hours using educational simsense, your "
-                 "Intelligence raises\r\nto %d.\r\n", GET_REAL_INT(ch));
-  } else if (!str_cmp(argument, "wil") && IS_SET(trainers[ind].attribs, TWIL)) {
-    if (GET_REAL_WIL(ch) >= racial_limits[(int)GET_RACE(ch)][0][5]) {
-      send_to_char("Your willpower attribute is at its maximum.\r\n", ch);
-      return 1;
-    }
-    if (((2*(GET_REAL_WIL(ch) + 1)) > (int)(GET_KARMA(ch) / 100)) && GET_ATT_POINTS(ch) < 1) {
-      send_to_char("You don't have enough karma to raise your willpower attribute.\r\n", ch);
-      return 1;
-    }
-    if (!trainers[ind].is_newbie) {
-      if (GET_NUYEN(ch) < ((GET_REAL_WIL(ch) + 1) * 1000)) {
-        sprintf(arg, "%s The charge for that is %d nuyen, which I see you can't afford.",
-                GET_CHAR_NAME(ch), ((GET_REAL_WIL(ch) + 1) * 1000));
-        do_say(trainer, arg, 0, SCMD_SAYTO);
-        return TRUE;
-      }
-      GET_NUYEN(ch) -= (GET_REAL_WIL(ch) + 1) * 1000;
-    }
-    if (GET_ATT_POINTS(ch) > 0)
-      GET_ATT_POINTS(ch)--;
-    else
-      GET_KARMA(ch) -= (GET_REAL_WIL(ch) + 1) * 200;
-    GET_REAL_WIL(ch)++;
-    affect_total(ch);
-    send_to_char(ch, "Through a strict regimen of work and study, your Willpower raises "
-                 "to %d.\r\n", GET_REAL_WIL(ch));
-  } else {
-    if (GET_ATT_POINTS(ch) > 0) {
-      send_to_char(ch, "You have %d points to distribute.  You can train",
-                   GET_ATT_POINTS(ch));
-      for (i = 0; (1 << i) <= TWIL; i++)
-        if (IS_SET(trainers[ind].attribs, (1 << i))) {
-          switch (1 << i) {
-          case TBOD:
-            send_to_char(ch, "%s bod", first ? "" : ",");
-            break;
-          case TQUI:
-            send_to_char(ch, "%s qui", first ? "" : ",");
-            break;
-          case TSTR:
-            send_to_char(ch, "%s str", first ? "" : ",");
-            break;
-          case TCHA:
-            send_to_char(ch, "%s cha", first ? "" : ",");
-            break;
-          case TINT:
-            send_to_char(ch, "%s int", first ? "" : ",");
-            break;
-          case TWIL:
-            send_to_char(ch, "%s wil", first ? "" : ",");
-            break;
-          }
-          first = 0;
-        }
-      send_to_char(".\r\n", ch);
-    }
+  
+  if (is_abbrev(argument, "body") && IS_SET(trainers[ind].attribs, TBOD)) {
+    train_attribute(ch, trainer, ind, BOD, "Your previous weeks' worth of hard work increase your Body to %d.\r\n");
+    return TRUE;
   }
-  return 1;
+  
+  if (is_abbrev(argument, "quickness") && IS_SET(trainers[ind].attribs, TQUI)) {
+    train_attribute(ch, trainer, ind, QUI, "After weeks of chasing chickens, your hard work pays off and your Quickness raises to %d.\r\n");
+    return TRUE;
+  }
+  
+  if (is_abbrev(argument, "strength") && IS_SET(trainers[ind].attribs, TSTR)) {
+    train_attribute(ch, trainer, ind, STR, "With months of weight lifting, your Strength increases to %d.\r\n");
+    return TRUE;
+  }
+  
+  if (is_abbrev(argument, "charisma") && IS_SET(trainers[ind].attribs, TCHA)) {
+    train_attribute(ch, trainer, ind, CHA, "After weeks of reading self-help books and raising your confidence, your Charisma raises to %d.\r\n");
+    return TRUE;
+  }
+  
+  if (is_abbrev(argument, "intelligence") && IS_SET(trainers[ind].attribs, TINT)) {
+    train_attribute(ch, trainer, ind, INT, "Through many long hours using educational simsense, your Intelligence raises to %d.\r\n");
+    return TRUE;
+  }
+  
+  if (is_abbrev(argument, "willpower") && IS_SET(trainers[ind].attribs, TWIL)) {
+    train_attribute(ch, trainer, ind, WIL, "Through a strict regimen of work and study, your Willpower raises to %d.\r\n");
+    return TRUE;
+  }
+  
+  send_training_list_to_char(ch, ind);
+  return TRUE;
 }
 
 SPECIAL(spell_trainer)
@@ -1022,37 +902,43 @@ SPECIAL(spell_trainer)
     else if (force > spelltrainers[i].force)
       send_to_char(ch, "%s doesn't know the spell at that high a force to teach you.\r\n", GET_NAME(trainer));
     else {
+      // TODO: Decrease force by amount already known.
+      
       if (PLR_FLAGGED(ch, PLR_AUTH)) {
         if (force > GET_FORCE_POINTS(ch)) {
           send_to_char("You don't have enough force points to learn the spell at that high a force.\r\n", ch);
           return TRUE;
         }
-        GET_FORCE_POINTS(ch) -= force;
       } else {
         if (force > GET_KARMA(ch) / 100) {
           send_to_char("You don't have enough karma to learn the spell at that high a force.\r\n", ch);
           return TRUE;
         }
-        GET_KARMA(ch) -= force * 100;
       }
       for (struct spell_data *spell = GET_SPELLS(ch); spell; spell = spell->next)
         if (spell->type == spelltrainers[i].type && spell->subtype == spelltrainers[i].subtype) {
           if (spell->force >= force) {
             send_to_char("You already know this spell at an equal or higher force.\r\n", ch);
-            if (PLR_FLAGGED(ch, PLR_AUTH))
-              GET_FORCE_POINTS(ch) += force;
-            else
-              GET_KARMA(ch) += force * 100;
             return TRUE;
           } else {
+            // Lower the cost of the new spell by the old spell's value.
+            force -= spell->force;
+            
+            // Delete the old spell from their list.
             struct spell_data *temp;
             REMOVE_FROM_LIST(spell, GET_SPELLS(ch), next);
             delete [] spell;
             break;
           }
         }
-      send_to_char(ch, "%s sits you down and teaches you the ins and outs of casting %s at force %d.\r\n",
-                   GET_NAME(trainer), spelltrainers[i].name, force);
+      
+      // Subtract the cost.
+      GET_FORCE_POINTS(ch) -= force;
+      GET_KARMA(ch) -= force * 100;
+      
+      send_to_char(ch, "%s sits you down and teaches you the ins and outs of casting %s at force %d.\r\n", GET_NAME(trainer), spelltrainers[i].name, force);
+      
+      // Grant them the new spell.
       struct spell_data *spell = new spell_data;
       spell->name = str_dup(spelltrainers[i].name);
       spell->type = spelltrainers[i].type;
@@ -1099,7 +985,7 @@ SPECIAL(adept_trainer)
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return TRUE;
   } else if (!adepts[ind].is_newbie && PLR_FLAGGED(ch, PLR_NEWBIE)) {
-    sprintf(arg, "%s You're not quite ready yet! Come back when you've earned more karma.", GET_CHAR_NAME(ch));
+    sprintf(arg, "%s You're not quite ready yet! Come back when you've earned at least %d karma.", GET_CHAR_NAME(ch), NEWBIE_KARMA_THRESHOLD + 1);
     do_say(trainer, arg, 0, SCMD_SAYTO);
     return TRUE;
   }
@@ -3938,4 +3824,153 @@ SPECIAL(trideo)
     }
  }
  return FALSE;
+}
+
+void untrain_attribute(struct char_data *ch, int attr, const char *success_message) {
+  // Check for racial maximums.
+  if (GET_REAL_ATT(ch, attr) <= MAX(1, 1 + racial_attribute_modifiers[(int)GET_RACE(ch)][attr])) {
+    send_to_char(ch, "Your %s attribute is at its minimum.\r\n", attributes[attr]);
+    return;
+  }
+  
+  // Success; refund the attribute point and knock down the attribute.
+  GET_ATT_POINTS(ch)++;
+  GET_REAL_ATT(ch, attr) -= 1;
+  
+  // Update character's calculated values.
+  affect_total(ch);
+  
+  // Notify the character of success.
+  send_to_char(ch, success_message, GET_REAL_ATT(ch, attr));
+}
+
+SPECIAL(chargen_untrain_attribute)
+{
+  if (!ch || !cmd || IS_NPC(ch) || !CMD_IS("untrain"))
+    return FALSE;
+  
+  skip_spaces(&argument);
+  
+  if (!*argument) {
+    send_to_char("You must specify an attribute to untrain.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (is_abbrev(argument, "body")) {
+    untrain_attribute(ch, BOD, "You determinedly chow down on junk food for a week and decrease your Body to %d.\r\n");
+    return TRUE;
+  }
+  
+  if (is_abbrev(argument, "quickness")) {
+    untrain_attribute(ch, QUI, "You quit drinking so much caffiene and decrease your Quickness to %d.\r\n");
+    return TRUE;
+  }
+  
+  if (is_abbrev(argument, "strength")) {
+    untrain_attribute(ch, STR, "You do your best couch potato impression until your Strength decreases to %d.\r\n");
+    return TRUE;
+  }
+  
+  if (is_abbrev(argument, "charisma")) {
+    untrain_attribute(ch, CHA, "You scowl hard enough to put frown lines in your face, decreasing your Charisma to %d.\r\n");
+    return TRUE;
+  }
+  
+  if (is_abbrev(argument, "intelligence")) {
+    untrain_attribute(ch, INT, "You slam your head into the wall until your Intelligence decreases to %d.\r\n");
+    return TRUE;
+  }
+  
+  if (is_abbrev(argument, "willpower")) {
+    untrain_attribute(ch, WIL, "You declare every day to be cheat day, allowing your Willpower to slip to %d.\r\n");
+    return TRUE;
+  }
+  
+  send_to_char("Valid attributes for untraining are BOD, QUI, STR, CHA, INT, WIL.\r\n", ch);
+  return TRUE;
+}
+
+// Prevent people from moving south from trainer until they've spent all their attribute points.
+SPECIAL(chargen_south_from_trainer)
+{
+  if (!ch || !cmd || IS_NPC(ch))
+    return FALSE;
+  
+  if ((CMD_IS("s") || CMD_IS("south")) && GET_ATT_POINTS(ch) > 0) {
+    send_to_char(ch, "You still have %d attribute points to spend! You should finish ^WTRAIN^ning your attributes before you proceed.\r\n", GET_ATT_POINTS(ch));
+    return TRUE;
+  }
+  
+  if (CMD_IS("untrain")) {
+    return chargen_untrain_attribute(ch, NULL, cmd, argument);
+  }
+  
+  return FALSE;
+}
+
+SPECIAL(chargen_unpractice_skill)
+{
+  if (!ch || !cmd || IS_NPC(ch) || !CMD_IS("unpractice"))
+    return FALSE;
+  
+  skip_spaces(&argument);
+  
+  if (!*argument) {
+    send_to_char("Syntax: UNPRACTICE [skill name]\r\n", ch);
+    return TRUE;
+  }
+  
+  int skill_num = find_skill_num(argument);
+  
+  if (skill_num < 0) {
+    send_to_char("Please specify a valid skill.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (GET_SKILL(ch, skill_num) != REAL_SKILL(ch, skill_num)) {
+    send_to_char("You can't unpractice a skill you currently have a skillsoft or other boost for.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (GET_SKILL(ch, skill_num) <= 0) {
+    send_to_char("You don't know that skill.\r\n", ch);
+    return TRUE;
+  }
+  
+  // Success. Lower the skill by one point.
+  GET_SKILL_POINTS(ch)++;
+  SET_SKILL(ch, skill_num, REAL_SKILL(ch, skill_num) - 1);
+  
+  if (GET_SKILL(ch, skill_num) == 0) {
+    send_to_char(ch, "With the assistance of a few mind-altering chemicals and several blunt impacts, you completely forget %s.\r\n", skills[skill_num].name);
+  } else {
+    send_to_char(ch, "With the assistance of a few mind-altering chemicals and several blunt impacts, you decrease your skill in %s.\r\n", skills[skill_num].name);
+  }
+  
+  return TRUE;
+}
+
+// Prevent people from moving south from teachers until they've spent all their skill points.
+SPECIAL(chargen_skill_annex)
+{
+  if (!ch || !cmd || IS_NPC(ch))
+    return FALSE;
+  
+  if ((CMD_IS("s") || CMD_IS("south")) && GET_SKILL_POINTS(ch) > 0) {
+    send_to_char(ch, "You still have %d skill points to spend! You should finish ^WPRACTICE^n-ing your skills before you proceed.\r\n", GET_SKILL_POINTS(ch));
+    return TRUE;
+  }
+  
+  if (CMD_IS("practice")) {
+    send_to_char("You can't do that here. Try visiting one of the teachers in the surrounding areas."
+                 " You can always view the skills you've learned so far by typing ^WSKILLS^n.\r\n", ch);
+    return TRUE;
+  }
+  
+  // Tie in with the chargen_unpractice_skill routine above.
+  if (CMD_IS("unpractice")) {
+    return chargen_unpractice_skill(ch, NULL, cmd, argument);
+  }
+  
+  return FALSE;
 }

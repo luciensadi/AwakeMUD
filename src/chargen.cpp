@@ -103,9 +103,9 @@ void set_attributes(struct char_data *ch, int magic)
   GET_INDEX(ch) = 0;
   GET_REAL_ESS(ch) = 600;
   
-  // Set all of the character's stats to 1.
+  // Set all of the character's stats to their racial minimums.
   for (int attr = BOD; attr <= WIL; attr++) {
-    GET_REAL_ATT(ch, attr) = 1;
+    GET_REAL_ATT(ch, attr) = MAX(1, racial_attribute_modifiers[(int)GET_RACE(ch)][attr] + 1);
   }
   
   // Subtract the cost of making all stats 1 from the character's available attribute-training points.

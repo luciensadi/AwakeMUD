@@ -57,6 +57,7 @@ int     modify_target(struct char_data *ch);
 int     damage_modifier(struct char_data *ch, char *rbuf);
 char *  capitalize(const char *source);
 char *  decapitalize_a_an(const char *source);
+char *  string_to_uppercase(const char *source);
 int     get_speed(struct veh_data *veh);
 int     negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy);
 float   gen_size(int race, bool height, int size, int sex);

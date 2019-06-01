@@ -945,18 +945,20 @@ struct command_info cmd_info[] =
     { "type"     , POS_STANDING, do_type     , 0, 0 },
     { "typo"     , POS_DEAD    , do_gen_write, 0, SCMD_TYPO },
 
+    { "unban"    , POS_DEAD    , do_unban    , LVL_EXECUTIVE, 0 },
+    { "ungroup"  , POS_DEAD    , do_ungroup  , 0, 0 },
     { "uninstall", POS_SITTING , do_get      , 0, SCMD_UNINSTALL },
-    { "unjack"    , POS_SITTING , do_jack     , 0, 1},
+    { "unjack"   , POS_SITTING , do_jack     , 0, 1},
     { "unlock"   , POS_SITTING , do_gen_door , 0, SCMD_UNLOCK },
     { "unlink"   , POS_SLEEPING, do_link     , 0, 1 },
-    { "ungroup"  , POS_DEAD    , do_ungroup  , 0, 0 },
-    { "unban"    , POS_DEAD    , do_unban    , LVL_EXECUTIVE, 0 },
     { "unbond"   , POS_RESTING , do_unbond   , 0, 0 },
     { "unaffect" , POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_UNAFFECT },
     { "unattach" , POS_RESTING , do_unattach , 0, 0 },
     { "unpack"   , POS_SITTING , do_unpack   , 0, 0 },
+    { "unpractice", POS_RESTING , do_practice, 1, SCMD_UNPRACTICE },
     { "unsubscribe",POS_RESTING, do_subscribe, 0, SCMD_UNSUB },
-    { "upgrade"  , POS_SITTING , do_upgrade, 0 , 0 },
+    { "untrain"  , POS_RESTING , do_train    , 1, SCMD_UNTRAIN },
+    { "upgrade"  , POS_SITTING , do_upgrade  , 0 , 0 },
     { "uptime"   , POS_DEAD    , do_date     , LVL_BUILDER, SCMD_UPTIME },
     { "use"      , POS_SITTING , do_use      , 1, SCMD_USE },
     { "users"    , POS_DEAD    , do_users    , LVL_BUILDER, 0 },
@@ -2447,7 +2449,6 @@ void nanny(struct descriptor_data * d, char *arg)
       }
       reset_char(d->character);
       PLR_FLAGS(d->character).RemoveBit(PLR_CUSTOMIZE);
-      send_to_char(WELC_MESSG, d->character);
       d->character->next = character_list;
       character_list = d->character;
       d->character->player.time.logon = time(0);
@@ -2490,6 +2491,8 @@ void nanny(struct descriptor_data * d, char *arg)
         do_start(d->character);
         playerDB.SaveChar(d->character, load_room);
         send_to_char(START_MESSG, d->character);
+      } else {
+        send_to_char(WELC_MESSG, d->character);
       }
       if (d->character->player_specials->saved.last_veh) {
         for (struct veh_data *veh = veh_list; veh; veh = veh->next)

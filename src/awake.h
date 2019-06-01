@@ -823,6 +823,10 @@ enum {
 
 #define MAX_SKILLS		  133
 
+// Skill type definitions.
+#define SKILL_TYPE_ACTIVE         0
+#define SKILL_TYPE_KNOWLEDGE      1
+
 /* TODO: Not yet implemented.
 #define SKILL_SIGN_LANGUAGE       133
 #define SKILL_IMMORTAL_LANGUAGE   134
@@ -1740,6 +1744,12 @@ enum {
 #define SCMD_REFLECT	1
 #define SCMD_SDEFENSE	2
 
+/* do_practice */
+#define SCMD_UNPRACTICE 1
+
+/* do_train */
+#define SCMD_UNTRAIN 1
+
 /* do_crash_mud */
 #define SCMD_BOOM 1337
 
@@ -2012,5 +2022,15 @@ struct ban_list_element
   char name[MAX_NAME_LENGTH+1];
   struct ban_list_element *next;
 };
+
+// Above this, you will lose the newbie flag.
+#define NEWBIE_KARMA_THRESHOLD     25
+
+// Misc defines from spec_procs.cpp
+#define LIBRARY_SKILL    3
+#define NEWBIE_SKILL    6
+#define NORMAL_MAX_SKILL  8
+#define LEARNED_LEVEL    12
+#define RENT_FACTOR 1
 
 #endif

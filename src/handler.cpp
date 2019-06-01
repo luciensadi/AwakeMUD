@@ -501,7 +501,7 @@ void affect_total(struct char_data * ch)
    * and not intelligence and quickness).            -cjd                */
   GET_REAL_REA(ch) = (GET_REAL_INT(ch) + GET_REAL_QUI(ch)) >> 1;
   GET_REA(ch) = 0;
-  if (PLR_FLAGGED(ch, PLR_NEWBIE) && GET_TKE(ch) > 25)
+  if (PLR_FLAGGED(ch, PLR_NEWBIE) && GET_TKE(ch) > NEWBIE_KARMA_THRESHOLD)
     PLR_FLAGS(ch).RemoveBit(PLR_NEWBIE);
   
   /* set the dice pools before equip so that they can be affected */
@@ -1921,7 +1921,6 @@ void extract_char(struct char_data * ch)
   struct obj_data *obj, *next;
   int i;
   struct veh_data *veh;
-  int in_room;
   
   extern struct char_data *combat_list;
   
@@ -2011,14 +2010,9 @@ void extract_char(struct char_data * ch)
     stop_manning_weapon_mounts(ch, TRUE);
   }
   
-  /* remove the character from their room (use in_room to reference ch->in_room after this) */
-  in_room = ch->in_room;
-  if (in_room > NOWHERE || ch->in_veh)
-    char_from_room(ch);
-  
   /* untarget char from vehicles */
-  if (in_room > NOWHERE)
-    for (veh = world[in_room].vehicles; veh; veh = veh->next_veh)
+  if (ch->in_room > NOWHERE)
+    for (veh = world[ch->in_room].vehicles; veh; veh = veh->next_veh)
       for (obj = veh->mount; obj; obj = obj->next_content)
         if (obj->targ == ch)
           obj->targ = NULL;
@@ -2077,7 +2071,7 @@ void extract_char(struct char_data * ch)
     ch->persona = NULL;
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
   } else if (PLR_FLAGGED(ch, PLR_MATRIX))
-    for (struct char_data *temp = world[in_room].people; temp; temp = temp->next_in_room)
+    for (struct char_data *temp = world[ch->in_room].people; temp; temp = temp->next_in_room)
       if (PLR_FLAGGED(temp, PLR_MATRIX))
         temp->persona->decker->hitcher = NULL;
   
@@ -2101,6 +2095,7 @@ void extract_char(struct char_data * ch)
     ch->char_specials.rigging = NULL;
     PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
   }
+  
   // Clean up playergroup info.
   if (GET_PGROUP_DATA(ch))
     delete GET_PGROUP_DATA(ch);
@@ -2111,6 +2106,11 @@ void extract_char(struct char_data * ch)
   /* return people who were possessing or projecting */
   if (ch->desc && ch->desc->original)
     do_return(ch, "", 0, 0);
+  
+  /* remove the character from their room (use in_room to reference ch->in_room after this) */
+  int in_room = ch->in_room;
+  if (ch->in_room > NOWHERE || ch->in_veh)
+    char_from_room(ch);
   
   if (!IS_NPC(ch))
   {

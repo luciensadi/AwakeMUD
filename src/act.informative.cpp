@@ -57,6 +57,17 @@ extern MYSQL *mysql;
 
 extern int get_weapon_damage_type(struct obj_data* weapon);
 
+extern SPECIAL(trainer);
+extern SPECIAL(teacher);
+extern SPECIAL(metamagic_teacher);
+extern SPECIAL(adept_trainer);
+extern SPECIAL(spell_trainer);
+extern SPECIAL(johnson);
+
+extern bool trainable_attribute_is_maximized(struct char_data *ch, int attribute);
+
+extern teach_t teachers[];
+
 /* blood stuff */
 
 const char* blood_messages[] = {
@@ -707,6 +718,33 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     if (AFF_FLAGGED(i, AFF_MANIFEST) && !(IS_ASTRAL(ch) || IS_DUAL(ch)))
       strcat(buf, "The ghostly image of ");
     strcat(buf, i->player.physical_text.room_desc);
+    
+    // TODO: Add a toggle for this system to be disabled.
+    if (mob_index[GET_MOB_RNUM(i)].func == trainer) {
+      sprintf(ENDOF(buf), "^y...%s looks willing to train you.^n\r\n", HSSH(i));
+    }
+    else if (mob_index[GET_MOB_RNUM(i)].func == teacher) {
+      sprintf(ENDOF(buf), "^y...%s looks willing to help you practice your skills.^n\r\n", HSSH(i));
+    }
+    else if (mob_index[GET_MOB_RNUM(i)].func == metamagic_teacher) {
+      // Mundanes can't see metamagic teachers' abilities.
+      if (GET_TRADITION(ch) != TRAD_MUNDANE)
+        sprintf(ENDOF(buf), "^y...%s looks willing to help you train your metamagic.^n\r\n", HSSH(i));
+    }
+    else if (mob_index[GET_MOB_RNUM(i)].func == adept_trainer) {
+      // Mundanes can't see adept trainers' abilities.
+      if (GET_TRADITION(ch) == TRAD_ADEPT)
+        sprintf(ENDOF(buf), "^y...%s looks willing to help you train your powers.^n\r\n", HSSH(i));
+    }
+    else if (mob_index[GET_MOB_RNUM(i)].func == spell_trainer) {
+      // Mundanes can't see spell trainers' abilities.
+      if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT)
+        sprintf(ENDOF(buf), "^y...%s looks willing to help you learn new spells.^n\r\n", HSSH(i));
+    }
+    else if (mob_index[GET_MOB_RNUM(i)].func == johnson) {
+      sprintf(ENDOF(buf), "^y...%s might have a job for you.^n\r\n", HSSH(i));
+    }
+    
     send_to_char(buf, ch);
     
     return;
@@ -831,6 +869,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
   }
   
   strcat(buf, "\r\n");
+  
   send_to_char(buf, ch);
 }
 
@@ -839,56 +878,23 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
   struct char_data *i;
   struct veh_data *veh;
   
-#ifdef LIST_CHAR_TO_CHAR_DEBUG
-  sprintf(buf, "Entering list_char_to_char for %s (%ld).", GET_CHAR_NAME(ch),
-          IS_NPC(ch) ? GET_MOB_VNUM(ch) : GET_IDNUM(ch));
-  log(buf);
-#endif
-  
   // Show vehicle's contents to character.
   if (ch->in_veh && ch->in_room == NOWHERE) {
     for (i = list; i; i = i->next_in_veh) {
       if (CAN_SEE(ch, i) && ch != i && ch->vfront == i->vfront) {
-#ifdef LIST_CHAR_TO_CHAR_DEBUG
-        sprintf(buf, "Debug message: list_char_to_char displaying in-vehicle character %s (%ld).", GET_CHAR_NAME(i),
-                IS_NPC(i) ? GET_MOB_VNUM(i) : GET_IDNUM(i));
-#endif
         list_one_char(i, ch);
-      } else {
-#ifdef LIST_CHAR_TO_CHAR_DEBUG
-        sprintf(buf, "Debug message: list_char_to_char failed to display in-vehicle character %s (%ld) (pre-checks failed).", GET_CHAR_NAME(i),
-                IS_NPC(i) ? GET_MOB_VNUM(i) : GET_IDNUM(i));
-#endif
       }
     }
   }
   
   // Show room's characters to character. Done this way because list_char_to_char should have been split for vehicles but wasn't.
   for (i = list; i; i = i->next_in_room) {
-#ifdef LIST_CHAR_TO_CHAR_DEBUG
-    sprintf(buf, "Debug message: list_char_to_char attempting to display character %s (%ld).", GET_CHAR_NAME(i),
-            IS_NPC(i) ? GET_MOB_VNUM(i) : GET_IDNUM(i));
-    if (i->next_in_room) {
-      sprintf(ENDOF(buf), " Next up is %s (%ld).", GET_CHAR_NAME(i->next_in_room),
-            IS_NPC(i->next_in_room) ? GET_MOB_VNUM(i->next_in_room) : GET_IDNUM(i->next_in_room));
-    } else {
-      sprintf(ENDOF(buf), " This is the end of the list.");
-    }
-#endif
-    
     // Skip them if they're invisible to us, or if they're us and we're not rigging.
     if (!CAN_SEE(ch, i) || !(ch != i || ch->char_specials.rigging)) {
-#ifdef LIST_CHAR_TO_CHAR_DEBUG
-      sprintf(ENDOF(buf), " Skipping this character (precheck failed).");
-      log(buf);
-#endif
       continue;
     }
     
     if ((ch->in_veh || (ch->char_specials.rigging))) {
-#ifdef LIST_CHAR_TO_CHAR_DEBUG
-      sprintf(ENDOF(buf), " In-vehicle mode.");
-#endif
       RIG_VEH(ch, veh);
       
       bool failed = FALSE;
@@ -916,22 +922,9 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
       }
       
       if (failed) {
-#ifdef LIST_CHAR_TO_CHAR_DEBUG
-        sprintf(ENDOF(buf), " Skipping this character (speed check failed).");
-        log(buf);
-#endif
         continue;
       }
     }
-#ifdef LIST_CHAR_TO_CHAR_DEBUG
-    else {
-      sprintf(ENDOF(buf), " In-person mode.");
-    }
-    
-    sprintf(ENDOF(buf), " Checks passed, displaying.");
-    
-    log(buf);
-#endif
     
     list_one_char(i, ch);
   }

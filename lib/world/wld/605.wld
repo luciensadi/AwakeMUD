@@ -220,12 +220,12 @@ Name:	All About Your Attributes
 Desc:$
    Attributes determine the strengths and weaknesses of your character in the
 Shadowrun Universe, and form the essential backbone to the character. If you
-type SCORE, the lefthand column will display your character's attributes:
+type ^WSCORE^n, the left-hand column will display your character's attributes.
 BODY, QUICKNESS, STRENGTH, INTELLIGENCE, CHARISMA, and WILLPOWER are the main
-attributes, and the other values are determined from these six main stats. For
-more detailed help on your statistics, type "HELP (Statistic)".
-   An Attribute Trainer is also present in this room. Type TRAIN and follow
-the directions to allocate attribute points.
+attributes; the other values are determined from these six main stats. For
+more detailed help on your statistics, type ^WHELP [Statistic]^n.
+ ^n  An Attribute Trainer is present in this room. Type ^WTRAIN^n and follow the
+directions to allocate attribute points. 
 ~
 Flags:	1000000000000011000
 SecType:	Inside
@@ -261,13 +261,15 @@ Name:	The Neophyte Skill Center
 Desc:$
    Skills are another essential aspect to a Shadowrunner, someone who performs
 illegal deeds for pay. Skills make up your character, and determine what tasks
-they are capable of performing, and how well they can perform them. 
-   If you type EXITS, you can see the various rooms that teach those essential 
-skills to new runners. To see the skills you already possess, type SKILLS. 
-When you encounter a skill trainer, type PRACTICE to see what he is capable of
-teaching. To learn a new skill, simply type PRACTICE (skill name). Type it
-again to become more proficient in the skill you just acquired.  Proceed into 
-the skill trainer rooms to learn the abilities essential to your survival. 
+they are capable of performing, and how well they can perform them.
+ ^n  To see the skills you already possess, type ^WSKILLS^n. When you encounter
+a skill trainer, type ^WPRACTICE^n to see what they are capable of teaching. To
+learn a new skill, simply type ^PRACTICE [skill name]^n. Type it again to become
+more proficient in the skill you just acquired. You may also ^WUNPRACTICE [skill
+name]^n to lower its level-- but ^ynote that you can only UNPRACTICE here in the
+skill annex!^n
+ ^n  Proceed into the skill trainer rooms to learn the abilities essential to your
+survival. 
 ~
 Flags:	1000000000000011000
 SecType:	Inside
