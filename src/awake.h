@@ -2033,4 +2033,16 @@ struct ban_list_element
 #define LEARNED_LEVEL    12
 #define RENT_FACTOR 1
 
+// Definitions for message history.
+
+#define NUM_MESSAGES_TO_RETAIN     20
+
+#define COMM_CHANNEL_SHOUTS        0
+#define COMM_CHANNEL_NEWBIE        1
+#define COMM_CHANNEL_OOC           2
+#define COMM_CHANNEL_RPE           3
+#define COMM_CHANNEL_HIRED         4
+
+#define NUM_COMMUNICATION_CHANNELS 5
+
 #endif

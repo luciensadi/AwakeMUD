@@ -27,12 +27,12 @@ using namespace std;
 #include "newmatrix.h"
 #include "newdb.h"
 
+/* extern variables */
 extern void respond(struct char_data *ch, struct char_data *mob, char *str);
+extern bool can_send_act_to_target(struct char_data *ch, bool hide_invisible, struct obj_data * obj, void *vict_obj, struct char_data *to, int type);
 extern char *how_good(int percent);
 extern struct skill_data skills[];
 int find_skill_num(char *name);
-
-/* extern variables */
 
 ACMD_CONST(do_say) {
   char not_const[MAX_STRING_LENGTH];
@@ -745,6 +745,8 @@ ACMD(do_gen_comm)
   struct veh_data *veh;
   struct descriptor_data *i;
   struct descriptor_data *d;
+  int channel = 0;
+  char *str_to_add_return_to = NULL;
 
   static int channels[] = {
                             PRF_DEAF,
@@ -848,10 +850,34 @@ ACMD(do_gen_comm)
 
   /* make sure that there is something there to say! */
   if (!*argument) {
-    sprintf(buf1, "Yes, %s, fine, %s we must, but WHAT???\r\n",
-            com_msgs[subcmd][1], com_msgs[subcmd][1]);
-    send_to_char(buf1, ch);
-    return;
+    if (IS_NPC(ch)) {
+      sprintf(buf1, "Yes, %s, fine, %s we must, but WHAT???\r\n", com_msgs[subcmd][1], com_msgs[subcmd][1]);
+      send_to_char(buf1, ch);
+      return;
+    }
+    
+    switch (subcmd) {
+      case SCMD_SHOUT:
+        send_message_history_to_descriptor(ch->desc, COMM_CHANNEL_SHOUTS, "from nearby shouts");
+        return;
+      case SCMD_NEWBIE:
+        send_message_history_to_descriptor(ch->desc, COMM_CHANNEL_NEWBIE, "over the Newbie channel");
+        send_to_char("\r\n\r\nYou can speak on this channel by typing NEWBIE <your message here>.\r\n", ch);
+        return;
+      case SCMD_OOC:
+        send_message_history_to_descriptor(ch->desc, COMM_CHANNEL_OOC, "over the OOC channel");
+        return;
+      case SCMD_RPETALK:
+        send_message_history_to_descriptor(ch->desc, COMM_CHANNEL_RPE, "over the RPE Talk channel");
+        return;
+      case SCMD_HIREDTALK:
+        send_message_history_to_descriptor(ch->desc, COMM_CHANNEL_HIRED, "over the Hired Talk channel");
+        return;
+      default:
+        sprintf(buf, "SYSERR: Unrecognized subcommand %d provided to do_gen_comm's subcmd switch for channel history.", subcmd);
+        mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+        return;
+    }
   }
 
   if (PRF_FLAGGED(ch, PRF_NOREPEAT))
@@ -865,31 +891,45 @@ ACMD(do_gen_comm)
         if (success > 0) {
           int suc = success_test(GET_SKILL(tmp, GET_LANGUAGE(ch)), 4);
           if (suc > 0 || IS_NPC(tmp))
-            sprintf(buf, "%s$z shouts in %s, \"%s\"^N\r\n",
-                    com_msgs[subcmd][3], skills[GET_LANGUAGE(ch)].name, argument);
+            sprintf(buf, "%s$z shouts in %s, \"%s\"^N\r\n", com_msgs[subcmd][3], skills[GET_LANGUAGE(ch)].name, argument);
           else
             sprintf(buf, "%s$z shouts in a language you don't understand.\r\n", com_msgs[subcmd][3]);
         } else
           sprintf(buf, "$z shouts incoherently.\r\n");
         if (IS_NPC(ch))
           sprintf(buf, "%s$z shouts, \"%s^n\"\r\n", com_msgs[subcmd][3], argument);
-        act(buf, FALSE, ch, NULL, tmp, TO_VICT);
+        
+        // Note that this line invokes act().
+        store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, str_dup(act(buf, FALSE, ch, NULL, tmp, TO_VICT)));
       }
 
     sprintf(buf1, "%sYou shout, '%s'^N", com_msgs[subcmd][3], argument);
-    act(buf1, FALSE, ch, 0, 0, TO_CHAR);
+    // Note that this line invokes act().
+    store_message_to_history(ch->desc, COMM_CHANNEL_SHOUTS, str_dup(act(buf1, FALSE, ch, 0, 0, TO_CHAR)));
 
-    if (ch->in_veh) {
+    if (ch->in_veh && ch->in_veh->in_room != NOWHERE) {
       was_in = ch->in_veh->in_room;
       ch->in_room = was_in;
       sprintf(buf1, "%sFrom inside %s, $z %sshouts, '%s'^N", com_msgs[subcmd][3], GET_VEH_NAME(ch->in_veh),
               com_msgs[subcmd][3], argument);
-      act(buf1, FALSE, ch, 0, 0, TO_ROOM);
+      for (tmp = world[ch->in_room].people; tmp; tmp = tmp->next) {
+        // Replicate act() in a way that lets us capture the message.
+        if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
+          // They're a valid target, so send the message with a raw perform_act() call.
+          store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, str_dup(perform_act(buf1, ch, NULL, NULL, tmp)));
+        }
+      }
     } else {
       was_in = ch->in_room;
       for (veh = world[ch->in_room].vehicles; veh; veh = veh->next_veh) {
         ch->in_veh = veh;
-        act(buf, FALSE, ch, NULL, NULL, TO_ROOM);
+        for (tmp = ch->in_veh->people; tmp; tmp = tmp->next) {
+          // Replicate act() in a way that lets us capture the message.
+          if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
+            // They're a valid target, so send the message with a raw perform_act() call.
+            store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, str_dup(perform_act(buf, ch, NULL, NULL, tmp)));
+          }
+        }
         ch->in_veh = NULL;
       }
     }
@@ -902,15 +942,16 @@ ACMD(do_gen_comm)
             if (success > 0) {
               int suc = success_test(GET_SKILL(tmp, GET_LANGUAGE(ch)), 4);
               if (suc > 0 || IS_NPC(tmp))
-                sprintf(buf, "%s$z shouts in %s, \"%s\"^N\r\n",
-                        com_msgs[subcmd][3], skills[GET_LANGUAGE(ch)].name, argument);
+                sprintf(buf, "%s$z shouts in %s, \"%s\"^N\r\n", com_msgs[subcmd][3], skills[GET_LANGUAGE(ch)].name, argument);
               else
                 sprintf(buf, "%s$z shouts in a language you don't understand.\r\n", com_msgs[subcmd][3]);
             } else
               sprintf(buf, "$z shouts incoherently.\r\n");
             if (IS_NPC(ch))
               sprintf(buf, "%s$z shouts, \"%s^n\"\r\n", com_msgs[subcmd][3], argument);
-            act(buf, FALSE, ch, NULL, tmp, TO_VICT);
+            
+            // If it sent successfully, store to their history.
+            store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, str_dup(act(buf, FALSE, ch, NULL, tmp, TO_VICT)));
           }
         ch->in_room = was_in;
       }
@@ -932,8 +973,9 @@ ACMD(do_gen_comm)
       if (!access_level(d->character, GET_INCOG_LEV(ch)))
         sprintf(buf, "^m[^nSomeone^m]^n ^R(^nOOC^R)^n, \"%s^n\"\r\n", argument );
       else
-        sprintf(buf, "^m[^n%s^m]^n ^R(^nOOC^R)^n, \"%s^n\"\r\n",
-                IS_NPC(ch) ? GET_NAME(ch) : GET_CHAR_NAME(ch), argument );
+        sprintf(buf, "^m[^n%s^m]^n ^R(^nOOC^R)^n, \"%s^n\"\r\n", IS_NPC(ch) ? GET_NAME(ch) : GET_CHAR_NAME(ch), argument );
+      
+      store_message_to_history(d, COMM_CHANNEL_OOC, str_dup(buf));
       send_to_char(buf, d->character);
     }
 
@@ -941,12 +983,25 @@ ACMD(do_gen_comm)
   } else if (subcmd == SCMD_RPETALK) {
     sprintf(buf, "%s%s ^W[^rRPE^W]^r %s^n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), argument);
     send_to_char(ch, "%s\r\n", buf);
+    
+    channel = COMM_CHANNEL_RPE;
+    str_to_add_return_to = str_dup(buf);
+    strcat(str_to_add_return_to, "\r\n");
+    store_message_to_history(ch->desc, channel, str_to_add_return_to);
   } else if (subcmd == SCMD_HIREDTALK) {
     sprintf(buf, "%s%s ^y[^YHIRED^y]^Y %s^n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), argument);
     send_to_char(ch, "%s\r\n", buf);
+    channel = COMM_CHANNEL_HIRED;
+    str_to_add_return_to = str_dup(buf);
+    strcat(str_to_add_return_to, "\r\n");
+    store_message_to_history(ch->desc, channel, str_to_add_return_to);
   } else {
     sprintf(buf, "%s%s |]newbie[| %s^N", com_msgs[subcmd][3], GET_CHAR_NAME(ch), argument);
     send_to_char(ch, "%s\r\n", buf);
+    channel = COMM_CHANNEL_NEWBIE;
+    str_to_add_return_to = str_dup(buf);
+    strcat(str_to_add_return_to, "\r\n");
+    store_message_to_history(ch->desc, channel, str_to_add_return_to);
   }
 
   /* now send all the strings out */
@@ -967,8 +1022,10 @@ ACMD(do_gen_comm)
       else if (subcmd == SCMD_HIREDTALK && !(PRF_FLAGGED(i->character, PRF_QUEST) ||
                                              IS_SENATOR(i->character)))
         continue;
-      else
-        act(buf, FALSE, ch, 0, i->character, TO_VICT | TO_SLEEP);
+      else {
+        // Note that this invokes act().
+        store_message_to_history(i, channel, str_dup(act(buf, FALSE, ch, 0, i->character, TO_VICT | TO_SLEEP)));
+      }
     }
 }
 

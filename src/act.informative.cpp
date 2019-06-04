@@ -51,7 +51,6 @@ extern char *prepare_quotes(char *dest, const char *str);
 extern int same_obj(struct obj_data * obj1, struct obj_data * obj2);
 extern int find_sight(struct char_data *ch);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
-extern char *colorize(struct descriptor_data *, char *);
 extern int mysql_wrapper(MYSQL *mysql, const char *query);
 extern MYSQL *mysql;
 

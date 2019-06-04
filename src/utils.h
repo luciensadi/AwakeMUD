@@ -75,6 +75,11 @@ struct  obj_data *get_mount_weapon(struct obj_data *mount);
 struct  obj_data *stop_manning_weapon_mounts(struct char_data *ch, bool send_message);
 struct  obj_data *get_mount_manned_by_ch(struct char_data *ch);
 
+// Message history management and manipulation.
+void    store_message_to_history(struct descriptor_data *d, int channel, const char *mallocd_message);
+void    send_message_history_to_descriptor(struct descriptor_data *d, int channel, const char* channel_string);
+void    delete_message_history(struct descriptor_data *d);
+
 /* undefine MAX and MIN so that our functions are used instead */
 #ifdef MAX
 #undef MAX
