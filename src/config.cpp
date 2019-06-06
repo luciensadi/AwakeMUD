@@ -85,5 +85,9 @@ const char *START_MESSG =
   "You have joined this world as a Shadowrunner, a person who works clandestine jobs\r\n"
   "to make ends meet. You'll need to keep your wits about you if you want to survive.\r\n"
   "\r\n"
+  "If you are using a screenreader or related assistive technology, please type\r\n"
+  "TOGGLE SCREENREADER to enable our assistive features.\r\n"
+  "\r\n"
   "You are now in the tutorial area. If you ever need assistance, you can reach out\r\n"
-  "by typing NEWBIE <your question here>. Example: 'newbie Hello, how do I...'\r\n\r\n";
+  "by typing NEWBIE <your question here>. Example: 'newbie Hello, how do I...'\r\n"
+  "\r\n";
