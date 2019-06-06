@@ -981,7 +981,7 @@ ACMD(do_repair)
   shop = find_workshop(ch, TYPE_VEHICLE);
   if (!shop) {
     if (veh->damage >= 7) {
-      send_to_char("You better get it to a garage before you try and fix this much damage.\r\n", ch);
+      send_to_char("You'd better get it to a garage before you try and fix this much damage.\r\n", ch);
       return;
     }
     target += 2;

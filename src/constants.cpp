@@ -2210,3 +2210,18 @@ const char *deck_accessory_upgrade_types[] = {
   "I/O Speed",
   "Reaction Increase"
 };
+
+const char *message_history_channels[] = {
+  "Hired",
+  "Newbie",
+  "OOC",
+  "OSays",
+  "Pages",
+  "Phone",
+  "RPE",
+  "Radio",
+  "Says",
+  "Shouts",
+  "Tells",
+  "Wiztells"
+};

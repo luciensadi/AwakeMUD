@@ -1790,30 +1790,6 @@ void store_message_to_history(struct descriptor_data *d, int channel, const char
   }
 }
 
-void send_message_history_to_descriptor(struct descriptor_data *d, int channel, const char* channel_string) {
-  // Precondition: No screwy pointers. Allow for NPCs to be passed (we ignore them).
-  if (d == NULL) {
-    //mudlog("SYSERR: Null descriptor passed to send_message_history_to_descriptor.", NULL, LOG_SYSLOG, TRUE);
-    return;
-  }
-  
-  // Precondition: Channel must be a valid index (0 ≤ channel < number of channels defined in awake.h).
-  if (channel < 0 || channel >= NUM_COMMUNICATION_CHANNELS) {
-    sprintf(buf, "SYSERR: Channel %d is not within bounds 0 <= channel < %d.", channel, NUM_COMMUNICATION_CHANNELS);
-    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-    return;
-  }
-  
-  sprintf(buf, "The last %d messages you've heard %s are:\r\n", NUM_MESSAGES_TO_RETAIN, channel_string);
-  write_to_output(buf, d);
-  
-  // For every message in their history, print the list from oldest to newest.
-  for (nodeStruct<const char*> *currnode = d->message_history[channel].Tail(); currnode; currnode = currnode->prev) {
-    sprintf(buf, "  %s", currnode->data);
-    write_to_output(colorize(d, buf, TRUE), d);
-  }
-}
-
 void delete_message_history(struct descriptor_data *d) {
   // NPCs not allowed, if you pass me a null you fucked up.
   if (d == NULL) {

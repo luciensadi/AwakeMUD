@@ -1751,6 +1751,7 @@ enum {
 #define SCMD_UNTRAIN 1
 
 /* do_crash_mud */
+#define SCMD_NOOP 0 // AKA 'this invocation does nothing'.
 #define SCMD_BOOM 1337
 
 /* END SUBCOMMANDS SECTION */
@@ -2034,15 +2035,27 @@ struct ban_list_element
 #define RENT_FACTOR 1
 
 // Definitions for message history.
+/* Adding a new channel? Do the following:
+   - Add a COMM_CHANNEL_X definition for it and increment NUM_COMM_CH by 1.
+   - Add a handler for it in raw_message_history() in act.comm.cpp.
+   - Add a string for it in message_history_channels[] in constants.cpp.
+ */
 
 #define NUM_MESSAGES_TO_RETAIN     20
 
-#define COMM_CHANNEL_SHOUTS        0
+#define COMM_CHANNEL_HIRED         0
 #define COMM_CHANNEL_NEWBIE        1
 #define COMM_CHANNEL_OOC           2
-#define COMM_CHANNEL_RPE           3
-#define COMM_CHANNEL_HIRED         4
+#define COMM_CHANNEL_OSAYS         3
+#define COMM_CHANNEL_PAGES         4
+#define COMM_CHANNEL_PHONE         5
+#define COMM_CHANNEL_RPE           6
+#define COMM_CHANNEL_RADIO         7
+#define COMM_CHANNEL_SAYS          8
+#define COMM_CHANNEL_SHOUTS        9
+#define COMM_CHANNEL_TELLS         10
+#define COMM_CHANNEL_WTELLS        11
 
-#define NUM_COMMUNICATION_CHANNELS 5
+#define NUM_COMMUNICATION_CHANNELS 12
 
 #endif
