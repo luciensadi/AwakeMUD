@@ -2336,12 +2336,16 @@ const char *get_position_string(struct char_data *ch) {
 }
 
 const char *get_vision_string(struct char_data *ch, bool ascii_friendly=FALSE) {
-  if (PLR_FLAGGED(ch, PLR_PERCEIVE) || IS_PROJECT(ch))
-    return "You are astrally perceiving.\r\n";
+  if (PLR_FLAGGED(ch, PLR_PERCEIVE) || IS_PROJECT(ch)) {
+    if (ascii_friendly)
+      return "You are astrally perceiving.";
+    else
+      return "You are astrally perceiving.\r\n";
+  }
   
   if (ascii_friendly) {
     if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) && ch->in_room != NOWHERE && world[ch->in_room].silence[0] <= 0)
-        return "You have ultrasonic vision.\r\n";
+        return "You have ultrasonic vision.";
   } else {
     if (AFF_FLAGGED(ch, AFF_DETECT_INVIS)) {
       if (ch->in_room != NOWHERE && world[ch->in_room].silence[0] > 0)
@@ -2351,11 +2355,19 @@ const char *get_vision_string(struct char_data *ch, bool ascii_friendly=FALSE) {
     }
   }
   
-  if (CURRENT_VISION(ch) == THERMOGRAPHIC)
-    return "You have thermographic vision.\r\n";
+  if (CURRENT_VISION(ch) == THERMOGRAPHIC) {
+    if (ascii_friendly)
+      return "You have thermographic vision.";
+    else
+      return "You have thermographic vision.\r\n";
+  }
   
-  if (CURRENT_VISION(ch) == LOWLIGHT)
-    return "You have low-light vision.\r\n";
+  if (CURRENT_VISION(ch) == LOWLIGHT) {
+    if (ascii_friendly)
+      return "You have low-light vision.";
+    else
+      return "You have low-light vision.\r\n";
+  }
   
   return "";
 }
@@ -2479,19 +2491,19 @@ const char *get_plaintext_score_misc(struct char_data *ch) {
   strcpy(ENDOF(buf2), get_vision_string(ch));
   
   if (IS_AFFECTED(ch, AFF_INVISIBLE) || IS_AFFECTED(ch, AFF_IMP_INVIS) || IS_AFFECTED(ch, AFF_SPELLINVIS) || IS_AFFECTED(ch, AFF_SPELLIMPINVIS))
-    strcpy(ENDOF(buf2), "You are invisible.");
+    strcpy(ENDOF(buf2), "You are invisible.\r\n");
   
   if (GET_COND(ch, FULL) == 0)
-    strcpy(ENDOF(buf2), "You are hungry.");
+    strcpy(ENDOF(buf2), "You are hungry.\r\n");
   
   if (GET_COND(ch, THIRST) == 0)
-    strcpy(ENDOF(buf2), "You are thirsty.");
+    strcpy(ENDOF(buf2), "You are thirsty.\r\n");
   
   if (GET_COND(ch, DRUNK) > 10)
-    strcpy(ENDOF(buf2), "You are intoxicated.");
+    strcpy(ENDOF(buf2), "You are intoxicated.\r\n");
   
   if (AFF_FLAGGED(ch, AFF_SNEAK))
-    sprintf(ENDOF(buf2), "You are sneaking.");
+    sprintf(ENDOF(buf2), "You are sneaking.\r\n");
   
   // Physical and misc attributes.
   sprintf(ENDOF(buf2), "Height: %.2f meters\r\n", ((float)GET_HEIGHT(ch) / 100));
@@ -2778,7 +2790,7 @@ ACMD(do_score)
                           GET_REAL_STR(ch), GET_STR(ch), playing_time.day, playing_time.hours);
     sprintf(ENDOF(buf), "^b/^L/ ^nCharisma      ^w%2d (^W%2d^w)    ^wKarma ^B[^W%7.2f^B] ^wRep ^B[^W%4d^B] ^rNotor ^r[^R%4d^r]  ^L/^b/\r\n",
                           GET_REAL_CHA(ch), GET_CHA(ch), ((float)GET_KARMA(ch) / 100), GET_REP(ch), GET_NOT(ch));
-    sprintf(ENDOF(buf), "^L/^b/ ^nIntelligence  ^w%2d (^W%2d^w)    ^r%-33s        ^b/^L/\r\n",
+    sprintf(ENDOF(buf), "^L/^b/ ^nIntelligence  ^w%2d (^W%2d^w)    ^r%-41s^b/^L/\r\n",
                           GET_REAL_INT(ch), GET_INT(ch), get_vision_string(ch, TRUE));
     sprintf(ENDOF(buf), "^b/^L/ ^nWillpower     ^w%2d (^W%2d^w)    ^nYou are %-33s^L/^b/\r\n",
                           GET_REAL_WIL(ch), GET_WIL(ch), get_position_string(ch));
