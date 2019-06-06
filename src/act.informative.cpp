@@ -2292,50 +2292,69 @@ ACMD(do_score)
 {
   struct time_info_data playing_time;
   struct time_info_data real_time_passed(time_t t2, time_t t1);
+  char screenreader_buf[MAX_STRING_LENGTH];
   
   if ( IS_NPC(ch) && ch->desc == NULL )
     return;
   
-  else if (ch->desc != NULL && ch->desc->original != NULL ) {
-    if (PLR_FLAGGED(ch->desc->original, PLR_MATRIX))
-      sprintf(buf, "You are connected to the Matrix.");
-    else if (IS_PROJECT(ch))
-      sprintf(buf, "You are astrally projecting.");
-    else
-      sprintf(buf, "You are occupying the body of %s.", GET_NAME(ch));
-  }
-  
   if (AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)) {
     struct veh_data *veh;
     RIG_VEH(ch, veh);
-    sprintf(buf, "You are rigging %s.\r\n", GET_VEH_NAME(veh));
-    sprintf(buf, "%s  Damage:^R%3d/10^n      Mental:^B%3d(%2d)^n\r\n"
-            "  Reaction:%3d      Int:%3d\r\n"
-            "       Wil:%3d      Bod:%3d\r\n"
-            "     Armor:%3d  Autonav:%3d\r\n"
-            "  Handling:%3d    Speed:%3d\r\n"
-            "     Accel:%3d      Sig:%3d\r\n"
-            "   Sensors:%3d\r\n", buf,
-            veh->damage, (int)(GET_MENTAL(ch) / 100),
-            (int)(GET_MAX_MENTAL(ch) / 100), GET_REA(ch), GET_INT(ch),
-            GET_WIL(ch), veh->body, veh->armor, veh->autonav,
-            veh->handling, veh->speed, veh->accel, veh->sig,
-            veh->sensor);
-    
+    if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+      sprintf(screenreader_buf,
+              "You are rigging %s.\r\n"
+              "Damage:^R%3d/10^n\r\n"
+              "Mental:^B%3d(%2d)^n\r\n"
+              "Reaction:%3d\r\n"
+              "Int:%3d\r\n"
+              "Wil:%3d\r\n"
+              "Bod:%3d\r\n"
+              "Armor:%3d\r\n"
+              "Autonav:%3d\r\n"
+              "Handling:%3d\r\n"
+              "Speed:%3d\r\n"
+              "Accel:%3d\r\n"
+              "Sig:%3d\r\n"
+              "Sensors:%3d\r\n",
+              GET_VEH_NAME(veh), veh->damage, (int)(GET_MENTAL(ch) / 100),
+              (int)(GET_MAX_MENTAL(ch) / 100), GET_REA(ch), GET_INT(ch),
+              GET_WIL(ch), veh->body, veh->armor, veh->autonav,
+              veh->handling, veh->speed, veh->accel, veh->sig,
+              veh->sensor);
+    } else {
+      sprintf(buf, "You are rigging %s.\r\n", GET_VEH_NAME(veh));
+      sprintf(ENDOF(buf), "Damage:^R%3d/10^n      Mental:^B%3d(%2d)^n\r\n"
+              "  Reaction:%3d      Int:%3d\r\n"
+              "       Wil:%3d      Bod:%3d\r\n"
+              "     Armor:%3d  Autonav:%3d\r\n"
+              "  Handling:%3d    Speed:%3d\r\n"
+              "     Accel:%3d      Sig:%3d\r\n"
+              "   Sensors:%3d\r\n",
+              veh->damage, (int)(GET_MENTAL(ch) / 100),
+              (int)(GET_MAX_MENTAL(ch) / 100), GET_REA(ch), GET_INT(ch),
+              GET_WIL(ch), veh->body, veh->armor, veh->autonav,
+              veh->handling, veh->speed, veh->accel, veh->sig,
+              veh->sensor);
+    }
   } else {
+    
     sprintf(buf, "^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//"
             "^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//"
             "^b//^L^L//^b//^L//^b//^L//^b//^L//^b//^L/\r\n^b/^L/"
             "  ^L \\_\\                                 ^rconditi"
             "on monitor           ^L/^b/\r\n");
     
+    sprintf(screenreader_buf, "Score sheet for %s:\r\n", GET_CHAR_NAME(ch));
+    
     strcat(buf, "^L/^b/^L `//-\\\\                      ^gMent: ");
     int mental = GET_MENTAL(ch), physical = GET_PHYSICAL(ch);
+    bool pain_editor = FALSE;
     for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
       if (GET_OBJ_VAL(bio, 0) == BIO_DAMAGECOMPENSATOR) {
         mental += GET_OBJ_VAL(bio, 1) * 100;
         physical += GET_OBJ_VAL(bio, 1) * 100;
       } else if (GET_OBJ_VAL(bio, 0) == BIO_PAINEDITOR && GET_OBJ_VAL(bio, 3)) {
+        pain_editor = TRUE;
         mental = 1000;
         physical = 1000;
         break;
@@ -2380,7 +2399,12 @@ ACMD(do_score)
       strcat(buf, "^b[^R*^b]");
     else
       strcat(buf, "^b[^RD^b]");
-    strcat(buf, "  ^b/^L/\r\n");
+    sprintf(ENDOF(buf), "%s ^b/^L/\r\n", pain_editor ? "^Y*^n" : " ");
+    
+    if (pain_editor)
+      sprintf(ENDOF(screenreader_buf), "Your physical and mental status is masked by your pain editor.\r\n");
+    else
+      sprintf(ENDOF(screenreader_buf), "Mental condition: %d / %d\r\n", (int)(mental / 100), (int)(GET_MAX_MENTAL(ch) / 100));
     
     strcat(buf, "^b/^L/ ^L`\\\\-\\^wHADOWRUN 3rd Edition   ^rPhys: ");
     if (physical >= 900 && physical < 1000)
@@ -2425,159 +2449,260 @@ ACMD(do_score)
       strcat(buf, "^L[^RD^L]");
     strcat(buf, "  ^L/^b/\r\n");
     
+    if (!pain_editor)
+      sprintf(ENDOF(screenreader_buf), "Physical condition: %d / %d\r\n", MAX((int)(physical / 100), 0), (int)(GET_MAX_PHYSICAL(ch) / 100));
+    
     strcat(buf, "^L/^b/  ^L///-\\  ^wcharacter sheet           ^LPhysical Damage Overflow: ^R[");
     if (physical < 0)
       sprintf(ENDOF(buf), "%2d]  ^b/^L/\r\n", (int)(physical / 100) * -1);
     else
       strcat(buf, " 0]  ^b/^L/\r\n");
     
+    if (!pain_editor && physical < 0)
+      sprintf(ENDOF(screenreader_buf), "Physical damage overflow: %d\r\n", (int)(physical / 100) * -1);
     
-    sprintf(buf, "%s^b/^L/  ^L\\\\@//                        "
-            "                                    ^L/^b/\r\n", buf);
+    /* Calculate the various bits of data that the score sheet needs. */
     
-    sprintf(buf, "%s^L/^b/   ^L`^                            "
-            "                                  ^b/^L/\r\n", buf);
-    sprintf(buf, "%s^b/^L/                                  "
-            "                                 ^L/^b/\r\n"
-            "^L/^b/ ^nBody          ^w%2d (^W%2d^w)"
-            "    Height: ^W%0.2f^w meters   Weight: ^W%3d^w kilos  ^b/^L/\r\n",
-            buf, GET_REAL_BOD(ch), GET_BOD(ch), ((float)GET_HEIGHT(ch) / 100), GET_WEIGHT(ch));
-    sprintf(buf, "%s^b/^L/ ^nQuickness     ^w%2d (^W%2d^w)"
-            "    Encumbrance: ^W%3.2f^w kilos carried, ^W%3d^w max ^L/^b/\r\n",
-            buf, GET_REAL_QUI(ch), GET_QUI(ch), IS_CARRYING_W(ch) ,CAN_CARRY_W(ch));
     playing_time = real_time_passed(time(0) + ch->player.time.played, ch->player.time.logon);
-    sprintf(buf, "%s^L/^b/ ^nStrength      ^w%2d (^W%2d^w)"
-            "    You have played for ^W%2d^w days, ^W%2d^w hours.   ^b/^L/\r\n",
-            buf, GET_REAL_STR(ch), GET_STR(ch), playing_time.day, playing_time.hours);
-    sprintf(buf, "%s^b/^L/ ^nCharisma      ^w%2d (^W%2d^w)"
-            "    ^wKarma ^B[^W%7.2f^B] ^wRep ^B[^W%4d^B] ^rNotor ^r[^R%4d^r]  ^L/^b/\r\n",
-            buf, GET_REAL_CHA(ch), GET_CHA(ch), ((float)GET_KARMA(ch) / 100), GET_REP(ch), GET_NOT(ch));
-    if (PLR_FLAGGED(ch, PLR_PERCEIVE))
-      strcpy(buf2, "You are astrally perceiving.");
+    
+    static char out_of_body_string[200];
+    if (ch->desc != NULL && ch->desc->original != NULL ) {
+      if (PLR_FLAGGED(ch->desc->original, PLR_MATRIX))
+        sprintf(out_of_body_string, "You are connected to the Matrix.");
+      else if (IS_PROJECT(ch))
+        sprintf(out_of_body_string, "You are astrally projecting.");
+      else
+        sprintf(out_of_body_string, "You are occupying the body of %s.", GET_NAME(ch));
+    } else {
+      strcpy(out_of_body_string, "");
+    }
+    
+    static char best_vision_mod[100];
+    if (PLR_FLAGGED(ch, PLR_PERCEIVE) || IS_PROJECT(ch))
+      strcpy(best_vision_mod, "You are astrally perceiving.");
     else if (CURRENT_VISION(ch) == THERMOGRAPHIC)
-      strcpy(buf2, "You have thermographic vision.");
+      strcpy(best_vision_mod, "You have thermographic vision.");
     else if (CURRENT_VISION(ch) == LOWLIGHT)
-      strcpy(buf2, "You have low-light vision.");
+      strcpy(best_vision_mod, "You have low-light vision.");
     else
-      strcpy(buf2, "");
+      strcpy(best_vision_mod, "");
     
-    sprintf(buf, "%s^L/^b/ ^nIntelligence  ^w%2d (^W%2d^w)"
-            "    ^r%-33s        ^b/^L/\r\n", buf,
-            GET_REAL_INT(ch), GET_INT(ch), buf2);
-    
-    
+    static char position_string[200];
     if (AFF_FLAGGED(ch, AFF_PRONE))
-      strcpy(buf2, "laying prone.");
+      strcpy(position_string, "laying prone.");
     else switch (GET_POS(ch)) {
       case POS_DEAD:
-        strcpy(buf2, "DEAD!");
+        strcpy(position_string, "DEAD!");
         break;
       case POS_MORTALLYW:
-        strcpy(buf2, "mortally wounded!  You should seek help!");
+        strcpy(position_string, "mortally wounded!  You should seek help!");
         break;
       case POS_STUNNED:
-        strcpy(buf2, "stunned!  You can't move!");
+        strcpy(position_string, "stunned!  You can't move!");
         break;
       case POS_SLEEPING:
-        strcpy(buf2, "sleeping.");
+        strcpy(position_string, "sleeping.");
         break;
       case POS_RESTING:
-        strcpy(buf2, "resting.");
+        strcpy(position_string, "resting.");
         break;
       case POS_SITTING:
-        strcpy(buf2, "sitting.");
+        strcpy(position_string, "sitting.");
         break;
       case POS_FIGHTING:
         if (FIGHTING(ch))
-          sprintf(buf2, "fighting %s.",PERS(FIGHTING(ch), ch));
+          sprintf(position_string, "fighting %s.",PERS(FIGHTING(ch), ch));
         else
-          strcpy(buf2, "fighting thin air.");
+          strcpy(position_string, "fighting thin air.");
         break;
       case POS_STANDING:
         if (IS_WATER(ch->in_room))
-          strcpy(buf2, "swimming.");
+          strcpy(position_string, "swimming.");
         else
-          strcpy(buf2, "standing.");
+          strcpy(position_string, "standing.");
         break;
       case POS_LYING:
-        strcpy(buf2, "lying down.");
+        strcpy(position_string, "lying down.");
         break;
       default:
-        strcpy(buf2, "floating.");
+        strcpy(position_string, "floating.");
         break;
     }
-    sprintf(buf, "%s^b/^L/ ^nWillpower     ^w%2d (^W%2d^w)"
-            "    ^nYou are %-33s^L/^b/\r\n", buf,
-            GET_REAL_WIL(ch), GET_WIL(ch), buf2);
+    
+    static char invisibility_string[50];
     if (IS_AFFECTED(ch, AFF_INVISIBLE) || IS_AFFECTED(ch, AFF_IMP_INVIS) || IS_AFFECTED(ch, AFF_SPELLINVIS) || IS_AFFECTED(ch, AFF_SPELLIMPINVIS))
-      strcpy(buf2, "You are invisible.");
+      strcpy(invisibility_string, "You are invisible.");
     else
-      strcpy(buf2, "");
-    sprintf(buf, "%s^L/^b/ ^nEssence       ^g[^w%5.2f^g]    "
-            "^W%-18s                       ^b/^L/\r\n",
-            buf, ((float)GET_ESS(ch) / 100), buf2);
+      strcpy(invisibility_string, "");
     
+    static char hunger_string[50];
     if (GET_COND(ch, FULL) == 0)
-      strcpy(buf2, "You are hungry.");
+      strcpy(hunger_string, "You are hungry.");
     else
-      strcpy(buf2, "");
-    sprintf(buf, "%s^b/^L/ ^nBioware Index ^B[^w%5.2f^B]    "
-            "^n%-15s                          ^L/^b/\r\n",
-            buf, ((float)GET_INDEX(ch) / 100), buf2);
+      strcpy(hunger_string, "");
     
+    static char thirst_string[50];
     if (GET_COND(ch, THIRST) == 0)
-      strcpy(buf2, "You are thirsty.");
+      strcpy(thirst_string, "You are thirsty.");
     else
-      strcpy(buf2, "");
-    sprintf(buf, "%s^L/^b/ ^nEssence Index ^W[^w%5.2f^W]    "
-            "^n%-16s                         ^b/^L/\r\n",
-            buf, (((float)GET_ESS(ch) / 100) + 3), buf2);
+      strcpy(thirst_string, "");
     
+    static char drunk_string[50];
     if (GET_COND(ch, DRUNK) > 10)
-      strcpy(buf2, "You are intoxicated.");
+      strcpy(drunk_string, "You are intoxicated.");
     else
-      strcpy(buf2, "");
-    sprintf(buf, "%s^b/^L/ ^nMagic         ^w%2d (^W%2d^w)    "
-            "^g%-20s                     ^L/^b/\r\n",
-            buf, MAX(0, ((int)ch->real_abils.mag / 100)), ((int)GET_MAG(ch) / 100), buf2);
+      strcpy(drunk_string, "");
     
-    strcpy(buf2, "");
-    
-    sprintf(buf, "%s^L/^b/ ^nReaction      ^w%2d (^W%2d^w)    "
-            "^b%-17s                        ^b/^L/\r\n", buf,
-            GET_REAL_REA(ch), GET_REA(ch), buf2);
-    
+    static char shaman_string[50];
     if (GET_TRADITION(ch) == TRAD_SHAMANIC)
-      sprintf(buf2, "You follow %s.", totem_types[GET_TOTEM(ch)]);
+      sprintf(shaman_string, "You follow %s.", totem_types[GET_TOTEM(ch)]);
     else
-      strcpy(buf2, "");
-    sprintf(buf, "%s^b/^L/ ^nInitiative^w   [^W%2d^w+^W%d^rd6^n]    "
-            "^n%-32s         ^L/^b/\r\n", buf,
-            GET_REA(ch), 1 + GET_INIT_DICE(ch), buf2);
+      strcpy(shaman_string, "");
     
+    static char sneak_string[50];
     if (AFF_FLAGGED(ch, AFF_SNEAK))
-      sprintf(buf2, "You are sneaking.");
+      sprintf(sneak_string, "You are sneaking.");
     else
-      strcpy(buf2, "");
-    sprintf(buf, "%s^L/^b/ ^nArmor     ^w[ ^W%2d^rB^w/ ^W%2d^rI^w]    ^L%-17s^n"
-            "                        ^b/^L/\r\n", buf,
-            GET_BALLISTIC(ch), GET_IMPACT(ch), buf2);
+      strcpy(sneak_string, "");
     
+    static char grade_string[50];
     if (GET_TRADITION(ch) != TRAD_MUNDANE)
-      sprintf(buf2, "^nGrade: ^w[^W%2d^w]", GET_GRADE(ch));
+      sprintf(grade_string, "^nGrade: ^w[^W%2d^w]", GET_GRADE(ch));
     else
-      strcpy(buf2, "");
-    sprintf(buf, "%s^b/^L/ ^nNuyen     ^w[^W%'9ld^w]    %11s"
-            "                              ^L/^b/\r\n", buf,
-            GET_NUYEN(ch), buf2);
+      strcpy(grade_string, "");
     
-    sprintf(buf, "%s^L/^b/                                  "
-            "                                 ^b/^L/\r\n"
+    sprintf(ENDOF(buf), "^b/^L/  ^L\\\\@//                                                            ^L/^b/\r\n");
+    sprintf(ENDOF(buf), "^L/^b/   ^L`^                                                              ^b/^L/\r\n");
+    sprintf(ENDOF(buf), "^b/^L/                                                                   ^L/^b/\r\n");
+    sprintf(ENDOF(buf), "^L/^b/ ^nBody          ^w%2d (^W%2d^w)    Height: ^W%0.2f^w meters   Weight: ^W%3d^w kilos  ^b/^L/\r\n",
+                          GET_REAL_BOD(ch), GET_BOD(ch), ((float)GET_HEIGHT(ch) / 100), GET_WEIGHT(ch));
+    sprintf(ENDOF(buf), "^b/^L/ ^nQuickness     ^w%2d (^W%2d^w)    Encumbrance: ^W%3.2f^w kilos carried, ^W%3d^w max ^L/^b/\r\n",
+                          GET_REAL_QUI(ch), GET_QUI(ch), IS_CARRYING_W(ch) ,CAN_CARRY_W(ch));
+    sprintf(ENDOF(buf), "^L/^b/ ^nStrength      ^w%2d (^W%2d^w)    You have played for ^W%2d^w days, ^W%2d^w hours.   ^b/^L/\r\n",
+                          GET_REAL_STR(ch), GET_STR(ch), playing_time.day, playing_time.hours);
+    sprintf(ENDOF(buf), "^b/^L/ ^nCharisma      ^w%2d (^W%2d^w)    ^wKarma ^B[^W%7.2f^B] ^wRep ^B[^W%4d^B] ^rNotor ^r[^R%4d^r]  ^L/^b/\r\n",
+                          GET_REAL_CHA(ch), GET_CHA(ch), ((float)GET_KARMA(ch) / 100), GET_REP(ch), GET_NOT(ch));
+    sprintf(ENDOF(buf), "^L/^b/ ^nIntelligence  ^w%2d (^W%2d^w)    ^r%-33s        ^b/^L/\r\n",
+                          GET_REAL_INT(ch), GET_INT(ch), best_vision_mod);
+    sprintf(ENDOF(buf), "^b/^L/ ^nWillpower     ^w%2d (^W%2d^w)    ^nYou are %-33s^L/^b/\r\n",
+                          GET_REAL_WIL(ch), GET_WIL(ch), position_string);
+    sprintf(ENDOF(buf), "^L/^b/ ^nEssence       ^g[^w%5.2f^g]    ^W%-18s                       ^b/^L/\r\n",
+                          ((float)GET_ESS(ch) / 100), invisibility_string);
+    sprintf(ENDOF(buf), "^b/^L/ ^nBioware Index ^B[^w%5.2f^B]    ^n%-15s                          ^L/^b/\r\n",
+                          ((float)GET_INDEX(ch) / 100), hunger_string);
+    sprintf(ENDOF(buf), "^L/^b/ ^nEssence Index ^W[^w%5.2f^W]    ^n%-16s                         ^b/^L/\r\n",
+                          (((float)GET_ESS(ch) / 100) + 3), thirst_string);
+    sprintf(ENDOF(buf), "^b/^L/ ^nMagic         ^w%2d (^W%2d^w)    ^g%-20s                     ^L/^b/\r\n",
+                          MAX(0, ((int)ch->real_abils.mag / 100)), ((int)GET_MAG(ch) / 100), drunk_string);
+    sprintf(ENDOF(buf), "^L/^b/ ^nReaction      ^w%2d (^W%2d^w)    ^c%-41s^b/^L/\r\n",
+                          GET_REAL_REA(ch), GET_REA(ch), out_of_body_string);
+    sprintf(ENDOF(buf), "^b/^L/ ^nInitiative^w   [^W%2d^w+^W%d^rd6^n]    ^n%-32s         ^L/^b/\r\n",
+                          GET_REA(ch), 1 + GET_INIT_DICE(ch), shaman_string);
+    sprintf(ENDOF(buf), "^L/^b/ ^nArmor     ^w[ ^W%2d^rB^w/ ^W%2d^rI^w]    ^L%-17s^n                        ^b/^L/\r\n",
+                          GET_BALLISTIC(ch), GET_IMPACT(ch), sneak_string);
+    sprintf(ENDOF(buf), "^b/^L/ ^nNuyen     ^w[^W%'9ld^w]    %11s                              ^L/^b/\r\n",
+                          GET_NUYEN(ch), grade_string);
+    strcat(buf, "^L/^b/                                                                   ^b/^L/\r\n"
             "^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//"
             "^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//"
-            "^b//^L^L//^b//^L//^b//^L//^b//^L//^b/\r\n", buf);
+            "^b//^L^L//^b//^L//^b//^L//^b//^L//^b/\r\n");
+    
+    // Compose the remainder of the screenreader score.
+    
+    // Primary stats:
+    if (GET_BOD(ch) != GET_REAL_BOD(ch))
+      sprintf(ENDOF(screenreader_buf), "Effective body: %d (real body %d)\r\n", GET_BOD(ch), GET_REAL_BOD(ch));
+    else
+      sprintf(ENDOF(screenreader_buf), "Body: %d\r\n", GET_BOD(ch));
+    
+    if (GET_QUI(ch) != GET_REAL_QUI(ch))
+      sprintf(ENDOF(screenreader_buf), "Effective quickness: %d (real quickness %d)\r\n", GET_QUI(ch), GET_REAL_QUI(ch));
+    else
+      sprintf(ENDOF(screenreader_buf), "Quickness: %d\r\n", GET_QUI(ch));
+    
+    if (GET_STR(ch) != GET_REAL_STR(ch))
+      sprintf(ENDOF(screenreader_buf), "Effective strength: %d (real strength %d)\r\n", GET_STR(ch), GET_REAL_STR(ch));
+    else
+      sprintf(ENDOF(screenreader_buf), "Strength: %d\r\n", GET_STR(ch));
+    
+    if (GET_CHA(ch) != GET_REAL_CHA(ch))
+      sprintf(ENDOF(screenreader_buf), "Effective charisma: %d (real charisma %d)\r\n", GET_CHA(ch), GET_REAL_CHA(ch));
+    else
+      sprintf(ENDOF(screenreader_buf), "Charisma: %d\r\n", GET_CHA(ch));
+    
+    if (GET_INT(ch) != GET_REAL_INT(ch))
+      sprintf(ENDOF(screenreader_buf), "Effective intelligence: %d (real intelligence %d)\r\n", GET_INT(ch), GET_REAL_INT(ch));
+    else
+      sprintf(ENDOF(screenreader_buf), "Intelligence: %d\r\n", GET_INT(ch));
+    
+    if (GET_WIL(ch) != GET_REAL_WIL(ch))
+      sprintf(ENDOF(screenreader_buf), "Effective willpower: %d (real willpower %d)\r\n", GET_WIL(ch), GET_REAL_WIL(ch));
+    else
+      sprintf(ENDOF(screenreader_buf), "Willpower: %d\r\n", GET_WIL(ch));
+    
+    if (GET_TRADITION(ch) == TRAD_MUNDANE)
+      strcat(screenreader_buf, "As a Mundane, you have no magic.\r\n");
+    else {
+      if (GET_MAG(ch) != ch->real_abils.mag)
+        sprintf(ENDOF(screenreader_buf), "Effective magic: %d (real magic %d)\r\n", (int)(GET_MAG(ch) / 100), MAX(0, (int)(ch->real_abils.mag / 100)));
+      else
+        sprintf(ENDOF(screenreader_buf), "Magic: %d\r\n", (int)(GET_MAG(ch) / 100));
+      
+      if (strlen(shaman_string) > 0)
+        sprintf(ENDOF(screenreader_buf), "%s\r\n", shaman_string);
+      
+      sprintf(ENDOF(screenreader_buf), "Initiation grade: %d\r\n", GET_GRADE(ch));
+    }
+    
+    // Derived stats:
+    if (GET_REAL_REA(ch) != GET_REA(ch))
+      sprintf(ENDOF(screenreader_buf), "Effective reaction: %d (real reaction %d)\r\n", GET_REA(ch), GET_REAL_REA(ch));
+    else
+      sprintf(ENDOF(screenreader_buf), "Reaction: %d\r\n", GET_REA(ch));
+    
+    sprintf(ENDOF(screenreader_buf), "Initiative: %d + %dd6\r\n", GET_REA(ch), 1 + GET_INIT_DICE(ch));
+    
+    sprintf(ENDOF(screenreader_buf), "Essence: %.2f\r\n", ((float)GET_ESS(ch) / 100));
+    sprintf(ENDOF(screenreader_buf), "Bioware Index: %.2f\r\n", ((float)GET_INDEX(ch) / 100));
+    sprintf(ENDOF(screenreader_buf), "Essence Index: %.2f\r\n", ((float)GET_ESS(ch) / 100) + 3);
+    
+    // Equipment attributes:
+    sprintf(ENDOF(screenreader_buf), "Armor: %d ballistic, %d impact\r\n", GET_BALLISTIC(ch), GET_IMPACT(ch));
+    sprintf(ENDOF(screenreader_buf), "Nuyen: %ld\r\n", GET_NUYEN(ch));
+    sprintf(ENDOF(screenreader_buf), "You are carrying %.2f kilos. Your maximum carry weight is %d.\r\n", IS_CARRYING_W(ch), CAN_CARRY_W(ch));
+    
+    // Karma stats.
+    sprintf(ENDOF(screenreader_buf), "Current karma: %.2f\r\n", ((float)GET_KARMA(ch) / 100));
+    sprintf(ENDOF(screenreader_buf), "Total karma earned: %.2f\r\n", ((float)GET_TKE(ch)));
+    sprintf(ENDOF(screenreader_buf), "Reputation: %d\r\n", GET_REP(ch));
+    sprintf(ENDOF(screenreader_buf), "Notoriety: %d\r\n", GET_NOT(ch));
+    
+    // Condition and misc affects.
+#define DISPLAY_STRING_IF_IT_HAS_INFO(info_string)                \
+    if (strlen((info_string)) > 0)                                \
+      sprintf(ENDOF(screenreader_buf), "%s\r\n", (info_string));
+    
+    DISPLAY_STRING_IF_IT_HAS_INFO(hunger_string);
+    DISPLAY_STRING_IF_IT_HAS_INFO(thirst_string);
+    DISPLAY_STRING_IF_IT_HAS_INFO(drunk_string);
+    DISPLAY_STRING_IF_IT_HAS_INFO(out_of_body_string);
+    DISPLAY_STRING_IF_IT_HAS_INFO(best_vision_mod);
+    DISPLAY_STRING_IF_IT_HAS_INFO(invisibility_string);
+    DISPLAY_STRING_IF_IT_HAS_INFO(sneak_string);
+    
+#undef DISPLAY_STRING_IF_IT_HAS_INFO
+    
+    sprintf(ENDOF(screenreader_buf), "You are %s\r\n", position_string);
+    
+    // Physical and misc attributes.
+    sprintf(ENDOF(screenreader_buf), "Height: %.2f meters\r\n", ((float)GET_HEIGHT(ch) / 100));
+    sprintf(ENDOF(screenreader_buf), "Weight: %d kilos\r\n", GET_WEIGHT(ch));
+    sprintf(ENDOF(screenreader_buf), "You have played for %d days, %d hours.\r\n", playing_time.day, playing_time.hours);
   }
-  send_to_char(buf, ch);
+  if (PRF_FLAGGED(ch, PRF_SCREENREADER))
+    send_to_char(screenreader_buf, ch);
+  else
+    send_to_char(buf, ch);
 }
 
 ACMD(do_inventory)
