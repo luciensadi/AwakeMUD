@@ -3891,7 +3891,12 @@ ACMD(do_commands)
   
   one_argument(argument, arg);
   
+  // Note: Providing an argument to COMMANDS used to list the commands available to someone else.
+  // This seems rather pointless to me, so I'm changing the behavior to filter based on the prefix you provide. -LS
+  
+  /*
   if (*arg) {
+     
     if (!(vict = get_char_vis(ch, arg)) || IS_NPC(vict)) {
       send_to_char("Who is that?\r\n", ch);
       return;
@@ -3900,23 +3905,27 @@ ACMD(do_commands)
       send_to_char("You can't see the commands of people above your level.\r\n", ch);
       return;
     }
-  } else
+  } else */
     vict = ch;
   
   if (subcmd == SCMD_SOCIALS)
     socials = 1;
   
-  sprintf(buf, "The following %s are available to %s:\r\n",
+  sprintf(buf, "The following %s%s%s%s are available to %s:\r\n",
           socials ? "socials" : "commands",
+          *arg ? " beginning with '" : "", *arg ? arg : "", *arg ? "'" : "",
           vict == ch ? "you" : GET_NAME(vict));
   
   if (PLR_FLAGGED(ch, PLR_MATRIX)) {
     for (no = 1, cmd_num = 1;;cmd_num++) {
+      // Skip any commands that don't match the prefix provided.
+      if (*arg && !is_abbrev(arg, mtx_info[cmd_num].command))
+        continue;
       if (mtx_info[cmd_num].minimum_level >= 0 &&
           ((!IS_NPC(vict) && GET_REAL_LEVEL(vict) >= mtx_info[cmd_num].minimum_level) ||
            (IS_NPC(vict) && vict->desc->original && GET_REAL_LEVEL(vict->desc->original) >= mtx_info[cmd_num].minimum_level))) {
-            sprintf(buf + strlen(buf), "%-11s", mtx_info[cmd_num].command);
-            if (!(no % 7))
+            sprintf(buf + strlen(buf), "%-13s", mtx_info[cmd_num].command);
+            if (!(no % 7) || PRF_FLAGGED(ch, PRF_SCREENREADER))
               strcat(buf, "\r\n");
             no++;
             if (*mtx_info[cmd_num].command == '\n')
@@ -3925,11 +3934,15 @@ ACMD(do_commands)
     }
   } else if (PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)) {
     for (no = 1, cmd_num = 1;;cmd_num++) {
+      // Skip any commands that don't match the prefix provided.
+      if (*arg && !is_abbrev(arg, rig_info[cmd_num].command))
+        continue;
+      
       if (rig_info[cmd_num].minimum_level >= 0 &&
           ((!IS_NPC(vict) && GET_REAL_LEVEL(vict) >= rig_info[cmd_num].minimum_level) ||
            (IS_NPC(vict) && vict->desc->original && GET_REAL_LEVEL(vict->desc->original) >= rig_info[cmd_num].minimum_level))) {
-            sprintf(buf + strlen(buf), "%-11s", rig_info[cmd_num].command);
-            if (!(no % 7))
+            sprintf(buf + strlen(buf), "%-13s", rig_info[cmd_num].command);
+            if (!(no % 7) || PRF_FLAGGED(ch, PRF_SCREENREADER))
               strcat(buf, "\r\n");
             no++;
             if (*rig_info[cmd_num].command == '\n')
@@ -3939,12 +3952,17 @@ ACMD(do_commands)
   } else {
     for (no = 1, cmd_num = 1; cmd_num < num_of_cmds; cmd_num++) {
       i = cmd_sort_info[cmd_num].sort_pos;
+      
+      // Skip any commands that don't match the prefix provided.
+      if (*arg && !is_abbrev(arg, cmd_info[i].command))
+        continue;
+      
       if (cmd_info[i].minimum_level >= 0 &&
           ((!IS_NPC(vict) && GET_REAL_LEVEL(vict) >= cmd_info[i].minimum_level) ||
            (IS_NPC(vict) && vict->desc->original && GET_REAL_LEVEL(vict->desc->original) >= cmd_info[i].minimum_level)) &&
           (socials == cmd_sort_info[i].is_social)) {
-        sprintf(buf + strlen(buf), "%-11s", cmd_info[i].command);
-        if (!(no % 7))
+        sprintf(buf + strlen(buf), "%-13s", cmd_info[i].command);
+        if (!(no % 7) || PRF_FLAGGED(ch, PRF_SCREENREADER))
           strcat(buf, "\r\n");
         no++;
       }
