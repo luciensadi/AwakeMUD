@@ -3948,7 +3948,7 @@ ACMD(do_commands)
   
   if (!*arg && PRF_FLAGGED(ch, PRF_SCREENREADER)) {
     send_to_char("The full list of commands is over 400 lines long. We recommend filtering the list by typing COMMANDS <prefix>, which will return"
-                 "all commands that begin with the specified prefix. If you wish to see all commands, type COMMANDS ALL.\r\n", ch);
+                 " all commands that begin with the specified prefix. If you wish to see all commands, type COMMANDS ALL.\r\n", ch);
     return;
   }
   
