@@ -646,10 +646,61 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     return;
   struct obj_data *obj;
   int i = 1;
-  if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR))
-  {
+  
+  if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+    sprintf(buf, "%s has the following items available for sale:\r\n", GET_NAME(keeper));
+    
+    for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
+      // Read the object; however, if it's an invalid vnum or has no sale cost, skip it.
+      if (!(obj = read_object(sell->vnum, VIRTUAL)) || GET_OBJ_COST(obj) < 1) {
+        i--;
+        if (obj)
+          extract_obj(obj);
+        continue;
+      }
+      
+      // List the item to the player.
+      sprintf(ENDOF(buf), "Item #%d: %s for %d nuyen", i, GET_OBJ_NAME(obj), buy_price(obj, shop_nr));
+      
+      // Doctorshop? Tack on bioware / cyberware info.
+      if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR)) {
+        sprintf(ENDOF(buf), "; it's %s that costs %.2f %s",
+                GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? "cyberware" : "bioware",
+                ((float)GET_OBJ_VAL(obj, 4) / 100),
+                GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? "essence" : "bio index");
+        
+      }
+      
+      // Finish up with availability info.
+      if (!(sell->type == SELL_ALWAYS) && !(sell->type == SELL_AVAIL && GET_OBJ_AVAILDAY(obj) == 0)) {
+        if (sell->type == SELL_AVAIL) {
+          if (GET_OBJ_AVAILDAY(obj) < 1) {
+            int hours = 24 * GET_OBJ_AVAILDAY(obj);
+            sprintf(ENDOF(buf), ". It will take %d hour%s to obtain", hours, hours > 1 ? "s" : "");
+          } else {
+            sprintf(ENDOF(buf), ". It will take %d day%s to obtain", (int) GET_OBJ_AVAILDAY(obj), GET_OBJ_AVAILDAY(obj) > 1 ? "s" : "");
+          }
+        } else if (sell->stock <= 0) {
+          strcat(buf, ". It is currently out of stock");
+        } else {
+          sprintf(ENDOF(buf), ". Only %d %s in stock", sell->stock, sell->stock > 1 ? "are" : "is");
+        }
+      }
+      
+      strcat(buf, ".\r\n");
+      
+      // Clean up so we don't leak the object.
+      extract_obj(obj);
+    }
+    page_string(ch->desc, buf, 1);
+    return;
+  }
+  
+  
+  if (shop_table[shop_nr].flags.IsSet(SHOP_DOCTOR)) {
     strcpy(buf, " ##   Available   Item                                Rating Ess/Index    Price\r\n"
                 "-------------------------------------------------------------------------------\r\n");
+    
     for (struct shop_sell_data *sell = shop_table[shop_nr].selling; sell; sell = sell->next, i++) {
       obj = read_object(sell->vnum, VIRTUAL);
       if (!obj || GET_OBJ_COST(obj) < 1) {

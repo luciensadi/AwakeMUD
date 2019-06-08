@@ -2268,23 +2268,35 @@ ACMD(do_pool)
     sprintf(buf, "^R+%d^n", GET_POWER(ch, ADEPT_SIDESTEP));
   else
     sprintf(buf, "  ");
-  sprintf(pools, "  Combat: %d     (Dodge: %d%s      Body: %d     Offense: %d)\r\n",
-          GET_COMBAT(ch), GET_DEFENSE(ch), buf, GET_BODY(ch), GET_OFFENSE(ch));
+  
+  if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+    sprintf(pools, "  Dodge: %d%s\r\n  Body: %d\r\n  Offense: %d\r\n  Total Combat Dice: %d\r\n",
+            GET_DEFENSE(ch), buf, GET_BODY(ch), GET_OFFENSE(ch), GET_COMBAT(ch));
+  } else {
+    sprintf(pools, "  Combat: %d     (Dodge: %d%s      Body: %d     Offense: %d)\r\n",
+            GET_COMBAT(ch), GET_DEFENSE(ch), buf, GET_BODY(ch), GET_OFFENSE(ch));
+  }
   if (GET_ASTRAL(ch) > 0)
     sprintf(ENDOF(pools), "  Astral: %d\r\n", GET_ASTRAL(ch));
   if (GET_HACKING(ch) > 0)
     sprintf(ENDOF(pools), "  Hacking: %d\r\n", GET_HACKING(ch));
   if (GET_MAGIC(ch) > 0) {
-    sprintf(ENDOF(pools), "  Spell: %d      (Casting: %d    Drain: %d    Defense: %d", GET_MAGIC(ch), GET_CASTING(ch), GET_DRAIN(ch), GET_SDEFENSE(ch));
-    if (GET_METAMAGIC(ch, META_REFLECTING) == 2)
-      sprintf(ENDOF(pools), "    Reflecting: %d", GET_REFLECT(ch));
-    strcat(pools, ")\r\n");
+    if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+      sprintf(ENDOF(pools), "  Spell: %d\r\n  Casting: %d\r\n  Drain: %d\r\n  Defense: %d\r\n", GET_MAGIC(ch), GET_CASTING(ch), GET_DRAIN(ch), GET_SDEFENSE(ch));
+      if (GET_METAMAGIC(ch, META_REFLECTING) == 2)
+        sprintf(ENDOF(pools), "  Reflecting: %d\r\n", GET_REFLECT(ch));
+    } else {
+      sprintf(ENDOF(pools), "  Spell: %d      (Casting: %d    Drain: %d    Defense: %d", GET_MAGIC(ch), GET_CASTING(ch), GET_DRAIN(ch), GET_SDEFENSE(ch));
+      if (GET_METAMAGIC(ch, META_REFLECTING) == 2)
+        sprintf(ENDOF(pools), "    Reflecting: %d", GET_REFLECT(ch));
+      strcat(pools, ")\r\n");
+    }
   }
   if (GET_CONTROL(ch) > 0)
     sprintf(ENDOF(pools), "  Control: %d\r\n", GET_CONTROL(ch));
   for (int x = 0; x < 7; x++)
     if (GET_TASK_POOL(ch, x) > 0)
-      sprintf(ENDOF(pools), "  %s Pool: %d\r\n", attributes[x], GET_TASK_POOL(ch, x));
+      sprintf(ENDOF(pools), "  %s Task Pool: %d\r\n", attributes[x], GET_TASK_POOL(ch, x));
   send_to_char(pools, ch);
 }
 
@@ -2540,6 +2552,7 @@ struct score_switch_struct {
   bool hidden_in_help;
 } score_switches[] = {
   { "attributes" , get_plaintext_score_stats    , FALSE },
+  { "armor"      , get_plaintext_score_equipment, TRUE  }, // Alias for SCORE EQUIPMENT
   { "bioware"    , get_plaintext_score_essence  , TRUE  }, // Alias for SCORE ESSENCE
   { "cyberware"  , get_plaintext_score_essence  , TRUE  }, // Alias for SCORE ESSENCE
   { "combat"     , get_plaintext_score_combat   , FALSE },
@@ -2632,11 +2645,9 @@ ACMD(do_score)
       return;
     }
     
-    sprintf(buf, "^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//"
-            "^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//"
-            "^b//^L^L//^b//^L//^b//^L//^b//^L//^b//^L/\r\n^b/^L/"
-            "  ^L \\_\\                                 ^rconditi"
-            "on monitor           ^L/^b/\r\n");
+    sprintf(buf, "^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//^b//^L//"
+                 "^b//^L//^b//^L//^b//^L//^b//^L^L//^b//^L//^b//^L//^b//^L//^b//^L/\r\n"
+                 "^b/^L/  ^L \\_\\                                 ^rcondition monitor           ^L/^b/\r\n");
     
     sprintf(screenreader_buf, "Score sheet for %s:\r\n", GET_CHAR_NAME(ch));
     
@@ -2653,96 +2664,108 @@ ACMD(do_score)
         physical = 1000;
         break;
       }
-    if (mental >= 900 && mental < 1000)
-      strcat(buf, "^b[^R*^b]");
-    else
-      strcat(buf, "^b[^gL^b]");
-    if (mental >= 800 && mental < 900)
-      strcat(buf, "^b[^R*^b]");
-    else
-      strcat(buf, "^b[ ]");
-    if (mental >= 700 && mental < 800)
-      strcat(buf, "^b[^R*^b]");
-    else
-      strcat(buf, "^b[^yM^b]");
-    if (mental >= 600 && mental < 700)
-      strcat(buf, "^b[^R*^b]");
-    else
-      strcat(buf, "^b[ ]");
-    if (mental >= 500 && mental < 600)
-      strcat(buf, "^b[^R*^b]");
-    else
-      strcat(buf, "^b[ ]");
-    if (mental >= 400 && mental < 500)
-      strcat(buf, "^b[^R*^b]");
-    else
-      strcat(buf, "^b[^rS^b]");
-    if (mental >= 300 && mental < 400)
-      strcat(buf, "^b[^R*^b]");
-    else
-      strcat(buf, "^b[ ]");
-    if (mental >= 200 && mental < 300)
-      strcat(buf, "^b[^R*^b]");
-    else
-      strcat(buf, "^b[ ]");
-    if (mental >= 100 && mental < 200)
-      strcat(buf, "^b[^R*^b]");
-    else
-      strcat(buf, "^b[ ]");
-    if (mental < 100)
-      strcat(buf, "^b[^R*^b]");
-    else
-      strcat(buf, "^b[^RD^b]");
-    sprintf(ENDOF(buf), "%s ^b/^L/\r\n", pain_editor ? "^Y*^n" : " ");
-    
+    if (pain_editor) {
+      strcat(buf, " ^YMasked by pain editor.      ^b/^L/\r\n");
+    } else {
+      if (mental >= 900 && mental < 1000)
+        strcat(buf, "^b[^R*^b]");
+      else
+        strcat(buf, "^b[^gL^b]");
+      if (mental >= 800 && mental < 900)
+        strcat(buf, "^b[^R*^b]");
+      else
+        strcat(buf, "^b[ ]");
+      if (mental >= 700 && mental < 800)
+        strcat(buf, "^b[^R*^b]");
+      else
+        strcat(buf, "^b[^yM^b]");
+      if (mental >= 600 && mental < 700)
+        strcat(buf, "^b[^R*^b]");
+      else
+        strcat(buf, "^b[ ]");
+      if (mental >= 500 && mental < 600)
+        strcat(buf, "^b[^R*^b]");
+      else
+        strcat(buf, "^b[ ]");
+      if (mental >= 400 && mental < 500)
+        strcat(buf, "^b[^R*^b]");
+      else
+        strcat(buf, "^b[^rS^b]");
+      if (mental >= 300 && mental < 400)
+        strcat(buf, "^b[^R*^b]");
+      else
+        strcat(buf, "^b[ ]");
+      if (mental >= 200 && mental < 300)
+        strcat(buf, "^b[^R*^b]");
+      else
+        strcat(buf, "^b[ ]");
+      if (mental >= 100 && mental < 200)
+        strcat(buf, "^b[^R*^b]");
+      else
+        strcat(buf, "^b[ ]");
+      if (mental < 100)
+        strcat(buf, "^b[^R*^b]");
+      else
+        strcat(buf, "^b[^RD^b]");
+      strcat(buf, "  ^b/^L/\r\n");
+    }
+      
     strcat(buf, "^b/^L/ ^L`\\\\-\\^wHADOWRUN 3rd Edition   ^rPhys: ");
-    if (physical >= 900 && physical < 1000)
-      strcat(buf, "^L[^R*^L]");
-    else
-      strcat(buf, "^L[^gL^L]");
-    if (physical >= 800 && physical < 900)
-      strcat(buf, "^L[^R*^L]");
-    else
-      strcat(buf, "^L[ ]");
-    if (physical >= 700 && physical < 800)
-      strcat(buf, "^L[^R*^L]");
-    else
-      strcat(buf, "^L[^yM^L]");
-    if (physical >= 600 && physical < 700)
-      strcat(buf, "^L[^R*^L]");
-    else
-      strcat(buf, "^L[ ]");
-    if (physical >= 500 && physical < 600)
-      strcat(buf, "^L[^R*^L]");
-    else
-      strcat(buf, "^L[ ]");
-    if (physical >= 400 && physical < 500)
-      strcat(buf, "^L[^R*^L]");
-    else
-      strcat(buf, "^L[^rS^L]");
-    if (physical >= 300 && physical < 400)
-      strcat(buf, "^L[^R*^L]");
-    else
-      strcat(buf, "^L[ ]");
-    if (physical >= 200 && physical < 300)
-      strcat(buf, "^L[^R*^L]");
-    else
-      strcat(buf, "^L[ ]");
-    if (physical >= 100 && physical < 200)
-      strcat(buf, "^L[^R*^L]");
-    else
-      strcat(buf, "^L[ ]");
-    if (physical < 100)
-      strcat(buf, "^L[^R*^L]");
-    else
-      strcat(buf, "^L[^RD^L]");
-    strcat(buf, "  ^L/^b/\r\n");
+    if (pain_editor) {
+      strcat(buf, " ^YMasked by pain editor.        ^L/^b/\r\n");
+    } else {
+      if (physical >= 900 && physical < 1000)
+        strcat(buf, "^L[^R*^L]");
+      else
+        strcat(buf, "^L[^gL^L]");
+      if (physical >= 800 && physical < 900)
+        strcat(buf, "^L[^R*^L]");
+      else
+        strcat(buf, "^L[ ]");
+      if (physical >= 700 && physical < 800)
+        strcat(buf, "^L[^R*^L]");
+      else
+        strcat(buf, "^L[^yM^L]");
+      if (physical >= 600 && physical < 700)
+        strcat(buf, "^L[^R*^L]");
+      else
+        strcat(buf, "^L[ ]");
+      if (physical >= 500 && physical < 600)
+        strcat(buf, "^L[^R*^L]");
+      else
+        strcat(buf, "^L[ ]");
+      if (physical >= 400 && physical < 500)
+        strcat(buf, "^L[^R*^L]");
+      else
+        strcat(buf, "^L[^rS^L]");
+      if (physical >= 300 && physical < 400)
+        strcat(buf, "^L[^R*^L]");
+      else
+        strcat(buf, "^L[ ]");
+      if (physical >= 200 && physical < 300)
+        strcat(buf, "^L[^R*^L]");
+      else
+        strcat(buf, "^L[ ]");
+      if (physical >= 100 && physical < 200)
+        strcat(buf, "^L[^R*^L]");
+      else
+        strcat(buf, "^L[ ]");
+      if (physical < 100)
+        strcat(buf, "^L[^R*^L]");
+      else
+        strcat(buf, "^L[^RD^L]");
+      strcat(buf, "  ^L/^b/\r\n");
+    }
     
-    strcat(buf, "^L/^b/  ^L///-\\  ^wcharacter sheet           ^LPhysical Damage Overflow: ^R[");
-    if (physical < 0)
-      sprintf(ENDOF(buf), "%2d]  ^b/^L/\r\n", (int)(physical / 100) * -1);
-    else
-      strcat(buf, " 0]  ^b/^L/\r\n");
+    if (pain_editor) {
+      strcat(buf, "^L/^b/  ^L///-\\  ^wcharacter sheet                                           ^b/^L/\r\n");
+    } else {
+      strcat(buf, "^L/^b/  ^L///-\\  ^wcharacter sheet           ^LPhysical Damage Overflow: ");
+      if (physical < 0)
+        sprintf(ENDOF(buf), "^R[%2d]  ^b/^L/\r\n", (int)(physical / 100) * -1);
+      else
+        strcat(buf, "^R[ 0]  ^b/^L/\r\n");
+    }
     
     /* Calculate the various bits of data that the score sheet needs. */
     
@@ -3923,15 +3946,24 @@ ACMD(do_commands)
   if (subcmd == SCMD_SOCIALS)
     socials = 1;
   
+  if (!*arg && PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+    send_to_char("The full list of commands is over 400 lines long. We recommend filtering the list by typing COMMANDS <prefix>, which will return"
+                 "all commands that begin with the specified prefix. If you wish to see all commands, type COMMANDS ALL.\r\n", ch);
+    return;
+  }
+  
   sprintf(buf, "The following %s%s%s%s are available to %s:\r\n",
           socials ? "socials" : "commands",
           *arg ? " beginning with '" : "", *arg ? arg : "", *arg ? "'" : "",
           vict == ch ? "you" : GET_NAME(vict));
   
+  send_to_char(ch, "arg: '%s'\r\n", arg);
+  bool noskip = str_cmp(arg, "all") == 0;
+  
   if (PLR_FLAGGED(ch, PLR_MATRIX)) {
     for (no = 1, cmd_num = 1;;cmd_num++) {
       // Skip any commands that don't match the prefix provided.
-      if (*arg && !is_abbrev(arg, mtx_info[cmd_num].command))
+      if (!noskip && *arg && !is_abbrev(arg, mtx_info[cmd_num].command))
         continue;
       if (mtx_info[cmd_num].minimum_level >= 0 &&
           ((!IS_NPC(vict) && GET_REAL_LEVEL(vict) >= mtx_info[cmd_num].minimum_level) ||
@@ -4185,7 +4217,7 @@ ACMD(do_position)
     list_one_char(ch, ch);
     return;
   }
-  if (!str_cmp(argument, "clear")) {
+  if (!strncmp(argument, "clear", strlen(argument))) {
     DELETE_ARRAY_IF_EXTANT(GET_DEFPOS(ch));
     send_to_char(ch, "Position cleared.\r\n");
     return;
