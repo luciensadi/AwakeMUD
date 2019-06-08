@@ -830,7 +830,7 @@ SPECIAL(spell_trainer)
     if (PLR_FLAGGED(ch, PLR_AUTH)) {
       if (GET_TRADITION(ch) == TRAD_HERMETIC && GET_ASPECT(ch) != ASPECT_SORCERER)
         send_to_char("Conjuring  Materials          1 Force Point/Level\r\n", ch);
-      send_to_char("Extra Force Point             25000 \xC2\xA5\r\n", ch);
+      send_to_char("Extra Force Point             25000 nuyen\r\n", ch);
       send_to_char(ch, "%d Force Points Remaining.\r\n", GET_FORCE_POINTS(ch));
     } else
       send_to_char(ch, "%.2f Karma Available.\r\n", GET_KARMA(ch) / 100);
@@ -850,7 +850,7 @@ SPECIAL(spell_trainer)
         if (GET_NUYEN(ch) < 25000)
           send_to_char("You don't have enough nuyen to buy an extra force point.\r\n", ch);
         else {
-          send_to_char("You spend 25000\xC2\xA5 on an extra force point.\r\n", ch);
+          send_to_char("You spend 25000 nuyen on an extra force point.\r\n", ch);
           GET_NUYEN(ch) -= 25000;
           GET_FORCE_POINTS(ch)++;
         }

@@ -1345,7 +1345,7 @@ void list_detailed_shop(struct char_data *ch, vnum_t shop_nr)
   sprintf(ENDOF(buf), "Name: %30s Shopkeeper: %s [%5ld]\r\n", shop_table[shop_nr].shopname,
                        mob_proto[real_mobile(shop_table[shop_nr].keeper)].player.physical_text.name,
           shop_table[shop_nr].keeper);
-  sprintf(ENDOF(buf), "Buy at:     [%1.2f], Sell at: [%1.2f], \xC2\xB1 %%: [%d], Current %%: [%d], Hours [%d-%d]\r\n",
+  sprintf(ENDOF(buf), "Buy at:     [%1.2f], Sell at: [%1.2f], +/- %%: [%d], Current %%: [%d], Hours [%d-%d]\r\n",
           shop_table[shop_nr].profit_buy, shop_table[shop_nr].profit_sell, shop_table[shop_nr].random_amount,
           shop_table[shop_nr].random_current, shop_table[shop_nr].open, shop_table[shop_nr].close);
   sprintf(ENDOF(buf), "Type:       %s, Etiquette: %s\r\n", shop_type[shop_table[shop_nr].type], skills[shop_table[shop_nr].ettiquete].name);
@@ -1503,7 +1503,7 @@ void shedit_disp_menu(struct descriptor_data *d)
   send_to_char(CH, "2) Type: ^c%s^n\r\n", shop_type[SHOP->type]);
   send_to_char(CH, "3) Buying Profit: ^c%.2f^n\r\n", SHOP->profit_buy);
   send_to_char(CH, "4) Selling Profit: ^c%.2f^n\r\n", SHOP->profit_sell);
-  send_to_char(CH, "5) %% \xC2\xB1: ^c%d^n\r\n", SHOP->random_amount);
+  send_to_char(CH, "5) %% +/-: ^c%d^n\r\n", SHOP->random_amount);
   send_to_char(CH, "6) Opens: ^c%d^n Closes: ^c%d^n\r\n", SHOP->open, SHOP->close);
   send_to_char(CH, "7) Etiquette: ^c%s^n\r\n", skills[SHOP->ettiquete].name);
   SHOP->races.PrintBits(buf, MAX_STRING_LENGTH, pc_race_types, NUM_RACES);
