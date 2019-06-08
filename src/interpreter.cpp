@@ -1125,6 +1125,7 @@ struct command_info mtx_info[] =
     { "evade", 0, do_evade, 0, 0},
     { "emote", 0, do_echo, 0, SCMD_EMOTE },
     { ":", 0, do_echo, 0, SCMD_EMOTE },
+    { "exit", 0, do_logoff, 0, 0},
     { "hangup", 0, do_comcall, 0, SCMD_HANGUP},
     { "help", 0, do_help, 0, 0},
     { "ht", 0, do_gen_comm , 0, SCMD_HIREDTALK},
@@ -1134,6 +1135,7 @@ struct command_info mtx_info[] =
     { "load", 0, do_load, 0, SCMD_SWAP},
     { "locate", 0, do_locate, 0, 0},
     { "logoff", 0, do_logoff, 0, 0},
+    { "logout", 0, do_logoff, 0, 0},
     { "logon", 0, do_logon, 0, 0},
     { "max", 0, do_matrix_max, 0, 0},
     { "newbie", 0, do_gen_comm, 0, SCMD_NEWBIE},
@@ -1141,6 +1143,7 @@ struct command_info mtx_info[] =
     { "parry", 0, do_parry, 0, 0},
     { "position", 0, do_matrix_position, 0, 0},
     { "prompt", 0, do_display, 0, 0 },
+    { "quit", 0, do_logoff, 0, 0},
     { "read", 0, do_not_here, 0, 0},
     { "redirect", 0, do_redirect, 0, 0},
     { "remove", 0, do_not_here, 0, 0},
@@ -1288,6 +1291,7 @@ void nonsensical_reply(struct char_data *ch)
  * It makes sure you are the proper level and position to execute the command,
  * then calls the appropriate function.
  */
+ACMD(quit_the_matrix_first);
 void command_interpreter(struct char_data * ch, char *argument, char *tcname)
 {
   int cmd, length;
@@ -1330,8 +1334,22 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
     for (length = strlen(arg), cmd = 0; *mtx_info[cmd].command != '\n'; cmd++)
       if (!strncmp(mtx_info[cmd].command, arg, length))
         break;
-    if (*mtx_info[cmd].command == '\n')
-      nonsensical_reply(ch);
+    if (*mtx_info[cmd].command == '\n') {
+      // If the command exists outside of the Matrix, let them know that it's not an option here.
+      for (length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++)
+        if (!strncmp(cmd_info[cmd].command, arg, length))
+          if ((cmd_info[cmd].minimum_level < LVL_BUILDER) || access_level(ch, cmd_info[cmd].minimum_level))
+            break;
+      
+      // Nothing was found, give them the "wat" and bail.
+      if (*cmd_info[cmd].command == '\n') {
+        nonsensical_reply(ch);
+        return;
+      }
+      
+      // Their command was valid in external context. Inform them.
+      quit_the_matrix_first(ch, line, 0, 0);
+    }
     else {
       if (ch->persona && ch->persona->decker->hitcher) {
         sprintf(buf, "^y<OUTGOING> %s^n\r\n", argument);

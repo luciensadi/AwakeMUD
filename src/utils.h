@@ -781,6 +781,10 @@ IS_LIGHT((sub)->in_room) || !((light_level((sub)->in_room) == LIGHT_MINLIGHT || 
 #define GET_CYBERWARE_IS_DISABLED(cyberware)  (GET_OBJ_VAL((cyberware), 9))
 
 // ITEM_CYBERDECK convenience defines
+#define GET_CYBERDECK_ACTIVE_MEMORY(deck)     (GET_OBJ_VAL((deck), 2))
+#define GET_CYBERDECK_TOTAL_STORAGE(deck)     (GET_OBJ_VAL((deck), 3))
+#define GET_CYBERDECK_USED_STORAGE(deck)      (GET_OBJ_VAL((deck), 5))
+#define GET_CYBERDECK_FREE_STORAGE(deck)      (GET_CYBERDECK_TOTAL_STORAGE((deck)) -GET_CYBERDECK_USED_STORAGE((deck)))
 
 // ITEM_PROGRAM convenience defines
 

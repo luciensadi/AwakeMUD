@@ -1032,7 +1032,7 @@ const char *tog_messages[][2] = {
                              "You will now display your playergroup affiliation in the wholist.\r\n"},
                             {"You will no longer receive the keepalive pulses from the MUD.\r\n",
                              "You will now receive keepalive pulses from the MUD.\r\n"},
-                            {"Screenreader mode disabled.\r\n",
+                            {"Screenreader mode disabled. Your TOGGLE NOCOLOR settings are untouched.\r\n",
                              "Screenreader mode enabled. Extraneous text and ASCII effects will be reduced. ANSI color has also been disabled-- you may type TOGGLE NOCOLOR to re-enable it.\r\n"},
                             {"You will now receive ANSI color codes again.\r\n",
                              "You will no longer receive ANSI color codes.\r\n"},
@@ -1234,7 +1234,10 @@ ACMD(do_toggle)
       mode = 28;
     } else if (is_abbrev(argument, "screenreader")) {
       result = PRF_TOG_CHK(ch, PRF_SCREENREADER);
-      PRF_FLAGS(ch).SetBit(PRF_NOCOLOR);
+      
+      // Turning on the screenreader? Color goes off.
+      if (result)
+        PRF_FLAGS(ch).SetBit(PRF_NOCOLOR);
       mode = 29;
     } else if (is_abbrev(argument, "nocolors") || is_abbrev(argument, "colors") || is_abbrev(argument, "colours")) {
       result = PRF_TOG_CHK(ch, PRF_NOCOLOR);

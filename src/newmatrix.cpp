@@ -762,6 +762,13 @@ const char *get_plaintext_matrix_score_deck(struct char_data *ch) {
   return buf2;
 }
 
+const char *get_plaintext_matrix_score_memory(struct char_data *ch) {
+  sprintf(buf2, "Active Memory: %d\r\n", GET_CYBERDECK_ACTIVE_MEMORY(DECKER->deck));
+  sprintf(ENDOF(buf2), "Storage Memory: %d / %d total\r\n",
+          GET_CYBERDECK_FREE_STORAGE(DECKER->deck), GET_CYBERDECK_TOTAL_STORAGE(DECKER->deck));
+  return buf2;
+}
+
 ACMD(do_matrix_score)
 {
   if (!PERSONA) {
@@ -777,7 +784,7 @@ ACMD(do_matrix_score)
   detect += DECKER->masking;
   detect = detect / 2;
   
-  if (*argument) {    
+  if (*argument) {
     skip_spaces(&argument);
     
     // Find the index of the command the player wants.
@@ -799,7 +806,13 @@ ACMD(do_matrix_score)
       return;
     }
     
-    sprintf(buf, "Sorry, that's not a valid score subsheet. Your options are HEALTH, STATS, and DECK.\r\n");
+    if (!strncmp(argument, "memory", strlen(argument))) {
+      strcpy(buf, get_plaintext_matrix_score_memory(ch));
+      send_to_icon(PERSONA, buf);
+      return;
+    }
+    
+    sprintf(buf, "Sorry, that's not a valid score subsheet. Your options are HEALTH, STATS, DECK, and MEMORY.\r\n");
     send_to_icon(PERSONA, buf);
     return;
   }
@@ -1262,7 +1275,7 @@ ACMD(do_logoff)
       }
     int success = system_test(PERSONA->in_host, ch, TEST_ACCESS, SOFT_DECEPTION, 0);
     if (success <= 0) {
-      send_to_icon(PERSONA, "You fail to log off successfully.\r\n");
+      send_to_icon(PERSONA, "The matrix host's automated procedures detect and block your logoff attempt.\r\n");
       return;
     }
     send_to_icon(PERSONA, "You gracefully log off from the matrix and return to the real world.\r\n");
@@ -1821,9 +1834,28 @@ ACMD(do_decrypt)
   send_to_icon(PERSONA, "You can't seem to locate that file.\r\n");
 }
 
+void send_active_program_list(struct char_data *ch) {
+  send_to_icon(PERSONA, "Active Memory Total:(^G%d^n) Free:(^R%d^n):\r\n", GET_OBJ_VAL(DECKER->deck, 2), DECKER->active);
+  for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content)
+    send_to_icon(PERSONA, "%25s Rating: %2d\r\n", GET_OBJ_NAME(soft), GET_OBJ_VAL(soft, 1));
+}
+
+void send_storage_program_list(struct char_data *ch) {
+  send_to_icon(PERSONA, "\r\nStorage Memory Total:(^G%d^n) Free:(^R%d^n):\r\n", GET_OBJ_VAL(DECKER->deck, 3),
+               GET_OBJ_VAL(DECKER->deck, 3) - GET_OBJ_VAL(DECKER->deck, 5));
+  for (struct obj_data *soft = DECKER->deck->contains; soft; soft = soft->next_content)
+    if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM)
+      send_to_icon(PERSONA, "%-30s^n Rating: %2d\r\n", GET_OBJ_NAME(soft), GET_OBJ_VAL(soft, 1));
+    else if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(soft, 0) == TYPE_FILE)
+      send_to_icon(PERSONA, "%s^n\r\n", GET_OBJ_NAME(soft));
+}
+
+ACMD(quit_the_matrix_first) {
+  send_to_char("You'll need to exit the Matrix to do that. You can either LOGOFF gracefully or DISCONNECT abruptly.\r\n", ch);
+}
+
 ACMD(do_software)
 {
-  struct obj_data *soft;
   if (PLR_FLAGGED(ch, PLR_MATRIX)) {
     if (!PERSONA) {
       send_to_char(ch, "You can't do that while hitching.\r\n");
@@ -1832,16 +1864,19 @@ ACMD(do_software)
     if (!DECKER->deck) {
       send_to_char(ch, "You need a cyberdeck to store your software on!\r\n");
     } else {
-      send_to_icon(PERSONA, "Active Memory Total:(^G%d^n) Free:(^R%d^n):\r\n", GET_OBJ_VAL(DECKER->deck, 2), DECKER->active);
-      for (soft = DECKER->software; soft; soft = soft->next_content)
-        send_to_icon(PERSONA, "%25s Rating: %2d\r\n", GET_OBJ_NAME(soft), GET_OBJ_VAL(soft, 1));
-      send_to_icon(PERSONA, "\r\nStorage Memory Total:(^G%d^n) Free:(^R%d^n):\r\n", GET_OBJ_VAL(DECKER->deck, 3),
-                   GET_OBJ_VAL(DECKER->deck, 3) - GET_OBJ_VAL(DECKER->deck, 5));
-      for (soft = DECKER->deck->contains; soft; soft = soft->next_content)
-        if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM)
-          send_to_icon(PERSONA, "%-30s^n Rating: %2d\r\n", GET_OBJ_NAME(soft), GET_OBJ_VAL(soft, 1));
-        else if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(soft, 0) == TYPE_FILE)
-          send_to_icon(PERSONA, "%s^n\r\n", GET_OBJ_NAME(soft));
+      if (*argument) {
+        skip_spaces(&argument);
+        if (!strncmp(argument, "active", strlen(argument))) {
+          send_active_program_list(ch);
+        } else if (!strncmp(argument, "storage", strlen(argument))) {
+          send_storage_program_list(ch);
+        } else {
+          send_to_char("Invalid filter. Please specify ACTIVE or STORAGE.\r\n", ch);
+        }
+        return;
+      }
+      send_active_program_list(ch);
+      send_storage_program_list(ch);
     }
   } else {
     struct obj_data *cyberdeck = NULL, *cyber;
@@ -1865,12 +1900,21 @@ ACMD(do_software)
       send_to_char(ch, "The deck doesn't respond.\r\n");
       return;
     }
-    send_to_char(ch, "You jack into the deck and retrieve the following data:\r\n"
-                 "MPCP ^g%d^n - Active Memory ^g%d^n - Storage Memory ^R%d^n/^g%d^n\r\n"
-                 "Hardening ^g%d^n - IO ^g%d^n - Response Increase ^g%d^n\r\n",
-                 GET_OBJ_VAL(cyberdeck, 0), GET_OBJ_VAL(cyberdeck, 2),
-                 GET_OBJ_VAL(cyberdeck, 3) - GET_OBJ_VAL(cyberdeck, 5), GET_OBJ_VAL(cyberdeck, 3),
-                 GET_OBJ_VAL(cyberdeck, 1), GET_OBJ_VAL(cyberdeck, 4), GET_OBJ_VAL(cyberdeck, 6));
+    if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+      send_to_char(ch, "You jack into the deck and retrieve the following data:\r\n"
+                   "MPCP ^g%d^n\r\nActive Memory ^g%d^n\r\nStorage Memory ^R%d^n/^g%d^n\r\n"
+                   "Hardening ^g%d^n\r\nI/O ^g%d^n\r\nResponse Increase ^g%d^n\r\n",
+                   GET_OBJ_VAL(cyberdeck, 0), GET_OBJ_VAL(cyberdeck, 2),
+                   GET_OBJ_VAL(cyberdeck, 3) - GET_OBJ_VAL(cyberdeck, 5), GET_OBJ_VAL(cyberdeck, 3),
+                   GET_OBJ_VAL(cyberdeck, 1), GET_OBJ_VAL(cyberdeck, 4), GET_OBJ_VAL(cyberdeck, 6));
+    } else {
+      send_to_char(ch, "You jack into the deck and retrieve the following data:\r\n"
+                   "MPCP ^g%d^n - Active Memory ^g%d^n - Storage Memory ^R%d^n/^g%d^n\r\n"
+                   "Hardening ^g%d^n - I/O ^g%d^n - Response Increase ^g%d^n\r\n",
+                   GET_OBJ_VAL(cyberdeck, 0), GET_OBJ_VAL(cyberdeck, 2),
+                   GET_OBJ_VAL(cyberdeck, 3) - GET_OBJ_VAL(cyberdeck, 5), GET_OBJ_VAL(cyberdeck, 3),
+                   GET_OBJ_VAL(cyberdeck, 1), GET_OBJ_VAL(cyberdeck, 4), GET_OBJ_VAL(cyberdeck, 6));
+    }
     int bod = 0, sensor = 0, masking = 0, evasion = 0;
     for (struct obj_data *soft = cyberdeck->contains; soft; soft = soft->next_content)
       if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && GET_OBJ_VNUM(soft) != 108) {
@@ -1903,9 +1947,15 @@ ACMD(do_software)
           evasion = GET_OBJ_VAL(soft, 1);
           break;
         }
-    send_to_char(ch, "Persona Programs:\r\n"
-                 "Bod:     ^g%2d^n   Masking: ^g%2d^n\r\n"
-                 "Sensors: ^g%2d^n   Evasion: ^g%2d^n\r\n", bod, masking, sensor, evasion);
+    if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+      send_to_char(ch, "Persona Programs:\r\n"
+                   "Bod:     ^g%2d^n\r\nMasking: ^g%2d^n\r\n"
+                   "Sensors: ^g%2d^n\r\nEvasion: ^g%2d^n\r\n", bod, masking, sensor, evasion);
+    } else {
+      send_to_char(ch, "Persona Programs:\r\n"
+                   "Bod:     ^g%2d^n   Masking: ^g%2d^n\r\n"
+                   "Sensors: ^g%2d^n   Evasion: ^g%2d^n\r\n", bod, masking, sensor, evasion);
+    }
     strcpy(buf, "Other Software:\r\n");
     if (GET_OBJ_TYPE(cyberdeck) == ITEM_CUSTOM_DECK)
       strcpy(buf2, "Custom Components:\r\n");
