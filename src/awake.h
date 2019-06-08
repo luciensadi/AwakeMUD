@@ -362,7 +362,8 @@ enum {
 #define PRF_KEEPALIVE           42
 #define PRF_SCREENREADER        43
 #define PRF_NOCOLOR             44
-#define PRF_MAX   		          45
+#define PRF_NOPROMPT            45
+#define PRF_MAX   		          46
 
 /* log watch */
 

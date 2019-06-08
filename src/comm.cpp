@@ -951,6 +951,13 @@ void make_prompt(struct descriptor_data * d)
 {
   char *prompt;
   
+  if (D_PRF_FLAGGED(d, PRF_NOPROMPT)) {
+    // Minimal prompt-- just a contextual hint for when they're in a buffer.
+    if (d->showstr_point)
+      write_to_descriptor(d->descriptor, " Press [return] to continue, [q] to quit ");
+    return;
+  }
+  
   if (d->str)
     write_to_descriptor(d->descriptor, "] ");
   else if (d->showstr_point)

@@ -1035,7 +1035,9 @@ const char *tog_messages[][2] = {
                             {"Screenreader mode disabled.\r\n",
                              "Screenreader mode enabled. Extraneous text and ASCII effects will be reduced. ANSI color has also been disabled-- you may type TOGGLE NOCOLOR to re-enable it.\r\n"},
                             {"You will now receive ANSI color codes again.\r\n",
-                             "You will no longer receive ANSI color codes.\r\n"}
+                             "You will no longer receive ANSI color codes.\r\n"},
+                            {"You will now receive prompts.\r\n",
+                             "You will no longer receive prompts automatically.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1060,7 +1062,8 @@ ACMD(do_toggle)
               "     AutoAssist: %-3s            NoShout: %-3s               Echo: %-3s\r\n"
               "           Pker: %-3s         Long Exits: %-3s         Wimp Level: %-3s\r\n"
               "        Menugag: %-3s        Long Weapon: %-3s        Show PG Tag: %-3s\r\n"
-              "     Keep-Alive: %-3s       Screenreader: %-3s           No Color: %-3s\r\n",
+              "     Keep-Alive: %-3s       Screenreader: %-3s           No Color: %-3s\r\n"
+              "      No Prompt: %-3s",
 
               ONOFF(PRF_FLAGGED(ch, PRF_FIGHTGAG)),
               ONOFF(PRF_FLAGGED(ch, PRF_NOOOC)),
@@ -1079,7 +1082,8 @@ ACMD(do_toggle)
               YESNO(PRF_FLAGGED(ch, PRF_SHOWGROUPTAG)),
               ONOFF(PRF_FLAGGED(ch, PRF_KEEPALIVE)),
               YESNO(PRF_FLAGGED(ch, PRF_SCREENREADER)),
-              ONOFF(PRF_FLAGGED(ch, PRF_NOCOLOR)));
+              ONOFF(PRF_FLAGGED(ch, PRF_NOCOLOR)),
+              ONOFF(PRF_FLAGGED(ch, PRF_NOPROMPT)));
     else
       sprintf(buf,
               "       Fightgag: %-3s              NoOOC: %-3s              Quest: %-3s\r\n"
@@ -1090,7 +1094,7 @@ ACMD(do_toggle)
               "          Radio: %-3s         Long Exits: %-3s         Wimp Level: %-3s\r\n"
               "         Pacify: %-3s         AutoAssist: %-3s          Autoinvis: %-3s\r\n"
               "    Long Weapon: %-3s        Show PG Tag: %-3s         Keep-Alive: %-3s\r\n"
-              "   Screenreader: %-3s           No Color: %-3s",
+              "   Screenreader: %-3s           No Color: %-3s          No Prompt: %-3s\r\n",
               
               ONOFF(PRF_FLAGGED(ch, PRF_FIGHTGAG)),
               ONOFF(PRF_FLAGGED(ch, PRF_NOOOC)),
@@ -1117,7 +1121,8 @@ ACMD(do_toggle)
               YESNO(PRF_FLAGGED(ch, PRF_SHOWGROUPTAG)),
               ONOFF(PRF_FLAGGED(ch, PRF_KEEPALIVE)),
               YESNO(PRF_FLAGGED(ch, PRF_SCREENREADER)),
-              ONOFF(PRF_FLAGGED(ch, PRF_NOCOLOR)));
+              ONOFF(PRF_FLAGGED(ch, PRF_NOCOLOR)),
+              ONOFF(PRF_FLAGGED(ch, PRF_NOPROMPT)));
     send_to_char(buf, ch);
   } else {
     if (is_abbrev(argument, "afk"))
@@ -1221,19 +1226,22 @@ ACMD(do_toggle)
       }
       mode = 24;
       result = 1;
-    } else if (is_abbrev(argument, "showpgtag")) {
+    } else if (is_abbrev(argument, "showpgtags")) {
       result = PRF_TOG_CHK(ch, PRF_SHOWGROUPTAG);
       mode = 27;
-    } else if (is_abbrev(argument, "keepalive")) {
+    } else if (is_abbrev(argument, "keepalives")) {
       result = PRF_TOG_CHK(ch, PRF_KEEPALIVE);
       mode = 28;
     } else if (is_abbrev(argument, "screenreader")) {
       result = PRF_TOG_CHK(ch, PRF_SCREENREADER);
       PRF_FLAGS(ch).SetBit(PRF_NOCOLOR);
       mode = 29;
-    } else if (is_abbrev(argument, "nocolor") || is_abbrev(argument, "color") || is_abbrev(argument, "colour")) {
+    } else if (is_abbrev(argument, "nocolors") || is_abbrev(argument, "colors") || is_abbrev(argument, "colours")) {
       result = PRF_TOG_CHK(ch, PRF_NOCOLOR);
       mode = 30;
+    } else if (is_abbrev(argument, "noprompts") || is_abbrev(argument, "prompts")) {
+      result = PRF_TOG_CHK(ch, PRF_NOPROMPT);
+      mode = 31;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;
