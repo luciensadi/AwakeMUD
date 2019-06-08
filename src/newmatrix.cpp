@@ -741,32 +741,90 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
   }
 }
 
+const char *get_plaintext_matrix_score_health(struct char_data *ch) {
+  sprintf(buf2, "Persona Condition: %d\r\n", PERSONA->condition);
+  sprintf(ENDOF(buf2), "Your Physical Condition: %d / %d\r\n", (int)(GET_PHYSICAL(ch) / 100), (int)(GET_MAX_PHYSICAL(ch) / 100));
+  return buf2;
+}
+
+const char *get_plaintext_matrix_score_stats(struct char_data *ch, int detect) {
+  sprintf(buf2, "TN to detect you: %d\r\n", detect);
+  sprintf(ENDOF(buf2), "Hacking Pool: %d / %d\r\n", MAX(0, GET_REM_HACKING(ch)), GET_HACKING(ch));
+  sprintf(ENDOF(buf2), "Max %d hacking dice usable per action.\r\n", GET_MAX_HACKING(ch));
+  sprintf(ENDOF(buf2), "Persona Programs:\r\nBod: %d\r\nEvasion: %d\r\nMasking: %d\r\nSensors: %d\r\n",
+          DECKER->bod, DECKER->evasion, DECKER->masking, DECKER->sensor);
+  return buf2;
+}
+
+const char *get_plaintext_matrix_score_deck(struct char_data *ch) {
+  sprintf(buf2, "Deck Status:\r\nHardening: %d\r\nMPCP: %d\r\nI/O Speed: %d\r\nResponse Increase: %d\r\n",
+          DECKER->hardening, DECKER->mpcp, DECKER->deck ? GET_OBJ_VAL(DECKER->deck, 4) : 0, DECKER->response);
+  return buf2;
+}
+
 ACMD(do_matrix_score)
 {
   if (!PERSONA) {
     send_to_char(ch, "You can't do that while hitching.\r\n");
     return;
   }
+  
+  // Calculate detection TN (for others to notice this decker).
   int detect = 0;
   for (struct obj_data *soft = DECKER->software; soft; soft = soft->next_content)
     if (GET_OBJ_VAL(soft, 0) == SOFT_SLEAZE)
       detect = GET_OBJ_VAL(soft, 1);
   detect += DECKER->masking;
   detect = detect / 2;
-
-  sprintf(buf, "You are connected to the matrix.\r\n"
-          "  Condition:^B%3d^n       Physical:^R%3d(%2d)^n\r\n"
-          "  Detection:^r%3d^n       Hacking Pool:^g%3d/%3d (%2d)^n\r\n"
-          "Persona Programs:\r\n"
-          "       Bod:^g%3d^n       Evasion:^g%3d^n\r\n"
-          "   Masking:^g%3d^n       Sensors:^g%3d^n\r\n"
-          "Deck Status:\r\n"
-          " Hardening:^g%3d^n       MPCP:^g%3d^n\r\n"
-          "  IO Speed:^g%3d^n       Response Increase:^g%3d^n\r\n",
-          PERSONA->condition, (int)(GET_PHYSICAL(ch) / 100), (int)(GET_MAX_PHYSICAL(ch) / 100),
-          detect, MAX(0, GET_REM_HACKING(ch)), GET_HACKING(ch), GET_MAX_HACKING(ch),
-          DECKER->bod, DECKER->evasion, DECKER->masking, DECKER->sensor,
-          DECKER->hardening, DECKER->mpcp, DECKER->deck ? GET_OBJ_VAL(DECKER->deck, 4) : 0, DECKER->response);
+  
+  if (*argument) {    
+    skip_spaces(&argument);
+    
+    // Find the index of the command the player wants.
+    if (!strncmp(argument, "health", strlen(argument))) {
+      strcpy(buf, get_plaintext_matrix_score_health(ch));
+      send_to_icon(PERSONA, buf);
+      return;
+    }
+    
+    if (!strncmp(argument, "stats", strlen(argument))) {
+      strcpy(buf, get_plaintext_matrix_score_stats(ch, detect));
+      send_to_icon(PERSONA, buf);
+      return;
+    }
+    
+    if (!strncmp(argument, "deck", strlen(argument))) {
+      strcpy(buf, get_plaintext_matrix_score_deck(ch));
+      send_to_icon(PERSONA, buf);
+      return;
+    }
+    
+    sprintf(buf, "Sorry, that's not a valid score subsheet. Your options are HEALTH, STATS, and DECK.\r\n");
+    send_to_icon(PERSONA, buf);
+    return;
+  }
+  
+  sprintf(buf, "You are connected to the matrix.\r\n");
+  
+  if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+    strcat(buf, get_plaintext_matrix_score_health(ch));
+    strcat(buf, get_plaintext_matrix_score_stats(ch, detect));
+    strcat(buf, get_plaintext_matrix_score_deck(ch));
+  } else {
+    sprintf(ENDOF(buf), "  Condition:^B%3d^n       Physical:^R%3d(%2d)^n\r\n"
+            "  Detection:^r%3d^n       Hacking Pool:^g%3d/%3d (%2d)^n\r\n"
+            "Persona Programs:\r\n"
+            "       Bod:^g%3d^n       Evasion:^g%3d^n\r\n"
+            "   Masking:^g%3d^n       Sensors:^g%3d^n\r\n"
+            "Deck Status:\r\n"
+            " Hardening:^g%3d^n       MPCP:^g%3d^n\r\n"
+            "  IO Speed:^g%3d^n       Response Increase:^g%3d^n\r\n",
+            PERSONA->condition, (int)(GET_PHYSICAL(ch) / 100), (int)(GET_MAX_PHYSICAL(ch) / 100),
+            detect, MAX(0, GET_REM_HACKING(ch)), GET_HACKING(ch), GET_MAX_HACKING(ch),
+            DECKER->bod, DECKER->evasion, DECKER->masking, DECKER->sensor,
+            DECKER->hardening, DECKER->mpcp, DECKER->deck ? GET_OBJ_VAL(DECKER->deck, 4) : 0, DECKER->response);
+  }
+  
   send_to_icon(PERSONA, buf);
 }
 
