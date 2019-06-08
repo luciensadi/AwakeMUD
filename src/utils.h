@@ -235,6 +235,14 @@ void    update_pos(struct char_data *victim);
   ((ch->desc && ch->desc->original) \
    ? PRF_FLAGS(ch->desc->original).IsSet((flag)) \
    : PRF_FLAGS(ch).IsSet((flag)))
+#define D_PRF_FLAGGED(d, flag)                   \
+((d)->original                                   \
+  ? PRF_FLAGS((d)->original).IsSet((flag))       \
+  : ((d)->character                              \
+      ? PRF_FLAGS((d)->character).IsSet((flag))  \
+      : FALSE                                    \
+    )                                            \
+)
 #define ROOM_FLAGGED(loc, flag) (ROOM_FLAGS(loc).IsSet((flag)))
 
 /* IS_AFFECTED for backwards compatibility */

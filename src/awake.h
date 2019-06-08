@@ -361,7 +361,8 @@ enum {
 #define PRF_SHOWGROUPTAG        41
 #define PRF_KEEPALIVE           42
 #define PRF_SCREENREADER        43
-#define PRF_MAX   		          44
+#define PRF_NOCOLOR             44
+#define PRF_MAX   		          45
 
 /* log watch */
 
@@ -2057,5 +2058,16 @@ struct ban_list_element
 #define COMM_CHANNEL_WTELLS        11
 
 #define NUM_COMMUNICATION_CHANNELS 12
+
+
+/* Error codes. */
+#define ERROR_BITFIELD_SIZE_EXCEEDED           10
+#define ERROR_LIBSODIUM_INIT_FAILED            11
+#define ERROR_UNKNOWN_SUBCOMMAND_TO_INDEX_BOOT 12
+#define ERROR_OPENING_INDEX_FILE               13
+#define ERROR_BOOT_ZERO_RECORDS_COUNTED        14
+#define ERROR_ZONEREAD_PREMATURE_EOF           15
+#define ERROR_ZONEREAD_FORMAT_ERROR            16
+#define ERROR_MYSQL_DATABASE_NOT_FOUND         17
 
 #endif

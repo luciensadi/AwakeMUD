@@ -2029,8 +2029,7 @@ int is_color (char c)
   return i;
 }
 
-// parses the color codes and translates the properly--we assume that
-// str is not NULL
+// parses the color codes and translates the properly
 char *colorize(struct descriptor_data *d, const char *str, bool skip_check)
 {
   // Big ol' buffer so that even if the entire string is color codes, we can still store it all plus a terminal \0. -LS
@@ -2038,7 +2037,17 @@ char *colorize(struct descriptor_data *d, const char *str, bool skip_check)
   register char *temp = &buffer[0];
   register const char *color;
   
-  if (skip_check or d->character) // ok but why do we care if they have a character?
+  if (!str || !*str) {
+    // Declare our own error buf so we don't clobber anyone's strings.
+    char colorize_error_buf[200];
+    sprintf(colorize_error_buf, "SYSERR: Received empty string to colorize() for descriptor %d (orig %s, char %s).",
+            d->descriptor, d->original ? GET_NAME(d->original) : "(null)", d->character ? GET_NAME(d->character) : "(null)");
+    mudlog(colorize_error_buf, NULL, LOG_SYSLOG, TRUE);
+    strcpy(buffer, "");
+    return buffer;
+  }
+  
+  if (!D_PRF_FLAGGED(d, PRF_NOCOLOR) && (skip_check || d->character)) // ok but why do we care if they have a character?
   {
     while(*str) {
       if (*str == '^') {
