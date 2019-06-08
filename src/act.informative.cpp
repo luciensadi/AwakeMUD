@@ -3923,6 +3923,7 @@ ACMD(do_commands)
   int no, i, cmd_num;
   int socials = 0;
   struct char_data *vict;
+  bool mode_all;
   
   one_argument(argument, arg);
   
@@ -3947,23 +3948,32 @@ ACMD(do_commands)
     socials = 1;
   
   if (!*arg && PRF_FLAGGED(ch, PRF_SCREENREADER)) {
-    send_to_char("The full list of commands is over 400 lines long. We recommend filtering the list by typing COMMANDS <prefix>, which will return"
-                 " all commands that begin with the specified prefix. If you wish to see all commands, type COMMANDS ALL.\r\n", ch);
+    send_to_char(ch, "The full list of %s is several hundred lines long. We recommend filtering the list by typing %s <prefix>, which will return"
+                 " all %s that begin with the specified prefix. If you wish to see all %s, type %s ALL.\r\n",
+                 // Here we go...
+                 socials ? "socials" : "commands",
+                 socials ? "SOCIALS" : "COMMANDS",
+                 socials ? "socials" : "commands",
+                 socials ? "socials" : "commands",
+                 socials ? "SOCIALS" : "COMMANDS"
+                 );
     return;
   }
   
-  sprintf(buf, "The following %s%s%s%s are available to %s:\r\n",
-          socials ? "socials" : "commands",
-          *arg ? " beginning with '" : "", *arg ? arg : "", *arg ? "'" : "",
-          vict == ch ? "you" : GET_NAME(vict));
-  
-  send_to_char(ch, "arg: '%s'\r\n", arg);
-  bool noskip = str_cmp(arg, "all") == 0;
+  if (*arg && !str_cmp(arg, "all")) {
+    sprintf(buf, "The following %s are available to you:\r\n",
+            socials ? "socials" : "commands");
+    mode_all = TRUE;
+  } else {
+    sprintf(buf, "The following %s beginning with '%s' are available to you:\r\n",
+            socials ? "socials" : "commands", arg);
+    mode_all = FALSE;
+  }
   
   if (PLR_FLAGGED(ch, PLR_MATRIX)) {
     for (no = 1, cmd_num = 1;;cmd_num++) {
       // Skip any commands that don't match the prefix provided.
-      if (!noskip && *arg && !is_abbrev(arg, mtx_info[cmd_num].command))
+      if (!mode_all && *arg && !is_abbrev(arg, mtx_info[cmd_num].command))
         continue;
       if (mtx_info[cmd_num].minimum_level >= 0 &&
           ((!IS_NPC(vict) && GET_REAL_LEVEL(vict) >= mtx_info[cmd_num].minimum_level) ||
@@ -3979,7 +3989,7 @@ ACMD(do_commands)
   } else if (PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)) {
     for (no = 1, cmd_num = 1;;cmd_num++) {
       // Skip any commands that don't match the prefix provided.
-      if (*arg && !is_abbrev(arg, rig_info[cmd_num].command))
+      if (!mode_all && *arg && !is_abbrev(arg, rig_info[cmd_num].command))
         continue;
       
       if (rig_info[cmd_num].minimum_level >= 0 &&
@@ -3998,7 +4008,7 @@ ACMD(do_commands)
       i = cmd_sort_info[cmd_num].sort_pos;
       
       // Skip any commands that don't match the prefix provided.
-      if (*arg && !is_abbrev(arg, cmd_info[i].command))
+      if (!mode_all && *arg && !is_abbrev(arg, cmd_info[i].command))
         continue;
       
       if (cmd_info[i].minimum_level >= 0 &&
