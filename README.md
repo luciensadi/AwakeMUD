@@ -30,14 +30,14 @@ Tested on:
 - From the src directory, run `make clean && make`.
 - Change to the root directory and run the game (ex: `gdb bin/awake`, or `lldb bin/awake` on OS X).
 
-## Cygwin notes
-- AwakeCE can run in windows under cygwin
-- To build it, you need cygwin (64bit) and cygwin apps/libraries : make, g++, libcrypt, libsodium, mysqlclient
-- Update src/Makefile and comment out/uncomment the cygwin config
-- Build by doing `cd src;make`
-- Run by doing `./bin/awake`
-- Note: You may have to manually import the sql changes as gensql.sh may or may not work, use 127.0.0.1 as dbhost if running local db.
-- With cygwin, you can also use Eclipse CPP IDE, just create a cygwin-c++ project and point the directory to where your AwakeMUD is located, play around with build settings to ensure it is using your Makefile in src. Debugging/Running works.
+### Cygwin Installation Notes
+- AwakeCE can run in Windows under Cygwin.
+- To build it, you need Cygwin (64bit) and Cygwin apps/libraries: make, g++, libcrypt, libsodium, mysqlclient.
+- Update src/Makefile and comment out/uncomment the Cygwin config.
+- Build by doing `cd src;make`.
+- Run by doing `./bin/awake`.
+- Note: You may have to manually import the SQL changes as gensql.sh may or may not work, use 127.0.0.1 as dbhost if running local db.
+- With Cygwin, you can also use Eclipse CPP IDE, just create a Cygwin-C++ project and point the directory to where your AwakeMUD is located, play around with build settings to ensure it is using your Makefile in src. Debugging/Running works.
 
 ### Make / Compile Troubleshooting
 
@@ -54,7 +54,7 @@ If you get an error like `AwakeMUD/src/act.wizard.cpp:3841: undefined reference 
 
 If you get an error like `structs.h:8:10: fatal error: sodium.h: No such file or directory`, it means you need to install [libsodium](https://github.com/jedisct1/libsodium/releases) (`./configure; make; (sudo) make install`).
 
-### Runtime Troubleshooting
+## Runtime Troubleshooting
 
 If you get an error like `MYSQLERROR: Data too long for column 'Password' at row X` when running the game, you need to update your database's pfile table to use the longer password-column capacity. Go into your database and execute the command in `SQL/migration-libsodium.sql`.
 
