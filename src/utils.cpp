@@ -1368,7 +1368,7 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
             send_to_char("Boosted reflexes is not compatible with Vehicle Control Rigs.\r\n", ch);
             return FALSE;
           }
-          // Explicit fallthrough.
+          // fall through
         case CYB_MOVEBYWIRE:
         case CYB_WIREDREFLEXES:
           if (GET_OBJ_VAL(cyber2, 0) == CYB_WIREDREFLEXES || GET_OBJ_VAL(cyber2, 0) == CYB_MOVEBYWIRE ||

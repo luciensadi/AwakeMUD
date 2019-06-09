@@ -612,6 +612,7 @@ ACMD(do_upgrade)
     case 1:
       skill = 1;
       // explicit fallthrough-- internal mounts are +1 skill vs external mounts, but otherwise share attributes
+      // fall through
     case 0:
       j++;
       target = 10;
@@ -619,6 +620,7 @@ ACMD(do_upgrade)
     case 3:
       skill = 1;
       // explicit fallthrough-- internal mounts are +1 skill vs external mounts, but otherwise share attributes
+      // fall through
     case 2:
       j += 2;
       target = 10;
