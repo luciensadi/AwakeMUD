@@ -781,6 +781,12 @@ A sealed vault door prevents NPCs from escaping.
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10028
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT down]
 	ToVnum:	10000
 	Flags:	0
@@ -1132,5 +1138,210 @@ RoomType:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
+BREAK
+#10028
+Name:	^W(^cIMMHQ^W)^C Elevator Testing Annex (G)
+Desc:$
+Lift goes up, lift goes down. How does it work? You can't explain it, it's
+magic. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	10.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10018
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	10029
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	10030
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10029
+Name:	^W(^cIMMHQ^W)^C Elevator Testing Annex (1)
+Desc:$
+Lift goes up, lift goes down. How does it work? You can't explain it, it's
+magic. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	10.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	10028
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10030
+Name:	^W(^cIMMHQ^W)^C Elevator Testing Annex (B1)
+Desc:$
+Lift goes up, lift goes down. How does it work? You can't explain it, it's
+magic. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	10.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	10032
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	10028
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10031
+Name:	^W(^cIMMHQ^W)^C Elevator Car
+Desc:$
+Will it go up, though? Will it go down? Does it even work? 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	50.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#10032
+Name:	^W(^cIMMHQ^W)^C Elevator Shaft - B1
+Desc:$
+Will it go up, though? Will it go down? Does it even work? 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	50.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10030
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10033
+Name:	^W(^cIMMHQ^W)^C Elevator Shaft - G
+Desc:$
+Will it go up, though? Will it go down? Does it even work? 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	50.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#10034
+Name:	^W(^cIMMHQ^W)^C Elevator Shaft - 1
+Desc:$
+Will it go up, though? Will it go down? Does it even work? 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	50.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 BREAK
 END
