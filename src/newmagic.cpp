@@ -997,7 +997,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
         send_to_char("They are beyond the help of this spell.\r\n", ch);
         return;
       }
-      // Explicit fallthrough.
+      // fall through
     case SPELL_HEAL:
       success = MIN(force, success_test(skill, 10 - (int)(GET_ESS(vict) / 100) + target + (int)(GET_INDEX(ch) / 200)));
       if (GET_PHYSICAL(vict) <= 0)
@@ -1034,6 +1034,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       break;
     case SPELL_INCREA:
       sub = REA;
+      // fall through
     case SPELL_DECATTR:
     case SPELL_DECCYATTR:
     case SPELL_INCATTR:

@@ -3740,7 +3740,7 @@ void hit(struct char_data *ch, struct char_data *victim, struct obj_data *weap, 
             break;
           case AMMO_EX:
             att->power++;
-            // Explicit fallthrough.
+            // fall through
           case AMMO_EXPLOSIVE:
             att->power -= GET_BALLISTIC(victim) - 1;
             break;
@@ -5139,7 +5139,7 @@ void vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
 void vcombat(struct char_data * ch, struct veh_data * veh)
 {
   char ammo_type[20];
-  static struct obj_data *wielded, *obj;
+  static struct obj_data *wielded;
   static int base_target, power, damage_total;
   
   int attack_success = 0, attack_resist=0, skill_total = 1;
@@ -5205,6 +5205,7 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
   {
     power = GET_STR(ch);
     strcpy(ammo_type, "blow");
+    /*
     for (obj = ch->cyberware;
          obj && !damage_total;
          obj = obj->next_content)
@@ -5220,6 +5221,7 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
           damage_total = MODERATE;
           break;
       }
+    */
     if (!damage_total)
       damage_total = MODERATE;
   }

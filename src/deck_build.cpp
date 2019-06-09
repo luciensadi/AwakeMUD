@@ -109,7 +109,7 @@ void partbuild_main_menu(struct descriptor_data *d) {
         case PART_RESPONSE:
             if (GET_OBJ_VAL(PART, 2) < 3)
                 GET_OBJ_VAL(PART, 2) = 3;
-            // explicit fallthrough
+            // fall through
         case PART_HARDENING:
         case PART_STORAGE:
         case PART_ACTIVE:
@@ -180,6 +180,7 @@ void pbuild_parse(struct descriptor_data *d, const char *arg) {
                 break;
             }
             // Explicit fallthrough-- we only allow option 4 if the part can accept a rating in the first place.
+            // fall through
         default:
             send_to_char(CH, "Invalid Option! Enter Option: ");
             break;

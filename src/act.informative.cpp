@@ -638,7 +638,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
       case CYB_CHIPJACK:
         if (GET_EQ(i, WEAR_HEAD))
           continue;
-        // Explicit fallthrough.
+        // fall through.
       case CYB_DERMALPLATING:
       case CYB_BALANCETAIL:
         sprintf(ENDOF(buf2), "%s\r\n", cyber_types[GET_OBJ_VAL(tmp_obj, 0)]);
