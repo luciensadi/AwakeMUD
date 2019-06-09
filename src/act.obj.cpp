@@ -1048,14 +1048,14 @@ ACMD(do_get)
             switch (GET_OBJ_VAL(cont, 1)) {
               case 1:
                 sig = 1;
-                // Explicit fallthrough.
+                // fall through
               case 0:
                 bod++;
                 load = 10;
                 break;
               case 3:
                 sig = 1;
-                // Explicit fallthrough.
+                // fall through
               case 2:
                 bod += 2;
                 load = 10;

@@ -2765,13 +2765,13 @@ void reset_zone(int zone, int reboot)
           switch (GET_OBJ_VAL(obj, 1)) {
             case 1:
               sig = 1;
-              // Explicit fallthrough.
+              // fall through
             case 0:
               load = 10;
               break;
             case 3:
               sig = 1;
-              // Explicit fallthrough.
+              // fall through
             case 2:
               load = 10;
               break;
@@ -4151,13 +4151,13 @@ void load_saved_veh()
       switch (GET_OBJ_VAL(obj, 1)) {
         case 1:
           subbed = 1;
-          // Explicit fallthrough.
+          // fall through
         case 0:
           damage = 10;
           break;
         case 3:
           subbed = 1;
-          // Explicit fallthrough.
+          // fall through
         case 2:
           damage = 10;
           break;
