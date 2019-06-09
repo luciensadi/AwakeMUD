@@ -5144,6 +5144,31 @@ Material:	organic
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
+#998
+Keywords:	standardized elevator shaft key long metal rod hinged protrusion
+Name:	a standardized elevator shaft key
+RoomDesc:$
+A long metal rod with a hinged protrusion on the end has been left here.~
+LookDesc:$
+A beefy metal rod with a hinged toggle on the end, this universal elevator key
+will fit into most hoistway doors and unlock the service mechanism. A tag
+dangling from the end reads, "Use at your own risk!" 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	3
+	LegalCode:	18
+	LegalPermit:	1
+BREAK
 #999
 Keywords:	formula thick black tome volume book
 Name:	a thick black tome

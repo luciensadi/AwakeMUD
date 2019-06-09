@@ -105,7 +105,7 @@ Name:	Approaching a Sapphire-Glassed Skyscraper
 Desc:$
 You are in an unfinished room.
 ~
-Flags:	1000000010000000000000000000000
+Flags:	1000000010000000000000000000100
 SecType:	City
 MatrixExit:	0
 Crowd:	2
@@ -180,7 +180,7 @@ Desc:$
 You are in an unfinished room.
 ~
 Flags:	110000000000000000001000
-SecType:	Inside
+SecType:	City
 MatrixExit:	0
 Crowd:	2
 Cover:	4
@@ -773,8 +773,8 @@ Name:	Amongst the Private Garages
 Desc:$
 You are in an unfinished room.
 ~
-Flags:	10000000000000000001000
-SecType:	Inside
+Flags:	1000000010000000000000000001000
+SecType:	City
 MatrixExit:	0
 Crowd:	2
 Cover:	4
@@ -875,8 +875,8 @@ Name:	Amongst the Private Garages
 Desc:$
 You are in an unfinished room.
 ~
-Flags:	10000000000000000001000
-SecType:	Inside
+Flags:	1000000010000000000000000001000
+SecType:	City
 MatrixExit:	0
 Crowd:	2
 Cover:	4
@@ -977,8 +977,8 @@ Name:	The Southern End of the Private Garages
 Desc:$
 You are in an unfinished room.
 ~
-Flags:	10000000000000000001000
-SecType:	Inside
+Flags:	1000000010000000000000000001000
+SecType:	City
 MatrixExit:	0
 Crowd:	2
 Cover:	4
