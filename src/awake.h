@@ -361,7 +361,9 @@ enum {
 #define PRF_SHOWGROUPTAG        41
 #define PRF_KEEPALIVE           42
 #define PRF_SCREENREADER        43
-#define PRF_MAX   		          44
+#define PRF_NOCOLOR             44
+#define PRF_NOPROMPT            45
+#define PRF_MAX   		          46
 
 /* log watch */
 
@@ -1751,6 +1753,7 @@ enum {
 #define SCMD_UNTRAIN 1
 
 /* do_crash_mud */
+#define SCMD_NOOP 0 // AKA 'this invocation does nothing'.
 #define SCMD_BOOM 1337
 
 /* END SUBCOMMANDS SECTION */
@@ -2032,5 +2035,40 @@ struct ban_list_element
 #define NORMAL_MAX_SKILL  8
 #define LEARNED_LEVEL    12
 #define RENT_FACTOR 1
+
+// Definitions for message history.
+/* Adding a new channel? Do the following:
+   - Add a COMM_CHANNEL_X definition for it and increment NUM_COMM_CH by 1.
+   - Add a handler for it in raw_message_history() in act.comm.cpp.
+   - Add a string for it in message_history_channels[] in constants.cpp.
+ */
+
+#define NUM_MESSAGES_TO_RETAIN     20
+
+#define COMM_CHANNEL_HIRED         0
+#define COMM_CHANNEL_NEWBIE        1
+#define COMM_CHANNEL_OOC           2
+#define COMM_CHANNEL_OSAYS         3
+#define COMM_CHANNEL_PAGES         4
+#define COMM_CHANNEL_PHONE         5
+#define COMM_CHANNEL_RPE           6
+#define COMM_CHANNEL_RADIO         7
+#define COMM_CHANNEL_SAYS          8
+#define COMM_CHANNEL_SHOUTS        9
+#define COMM_CHANNEL_TELLS         10
+#define COMM_CHANNEL_WTELLS        11
+
+#define NUM_COMMUNICATION_CHANNELS 12
+
+
+/* Error codes. */
+#define ERROR_BITFIELD_SIZE_EXCEEDED           10
+#define ERROR_LIBSODIUM_INIT_FAILED            11
+#define ERROR_UNKNOWN_SUBCOMMAND_TO_INDEX_BOOT 12
+#define ERROR_OPENING_INDEX_FILE               13
+#define ERROR_BOOT_ZERO_RECORDS_COUNTED        14
+#define ERROR_ZONEREAD_PREMATURE_EOF           15
+#define ERROR_ZONEREAD_FORMAT_ERROR            16
+#define ERROR_MYSQL_DATABASE_NOT_FOUND         17
 
 #endif

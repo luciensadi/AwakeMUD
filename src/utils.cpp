@@ -41,6 +41,7 @@ using namespace std;
 #include "db.h"
 #include "constants.h"
 #include "newmagic.h"
+#include "list.h"
 
 extern class memoryClass *Mem;
 extern struct time_info_data time_info;
@@ -51,6 +52,8 @@ extern long beginning_of_time;
 extern int ability_cost(int abil, int level);
 extern MYSQL *mysql;
 extern int mysql_wrapper(MYSQL *mysql, const char *buf);
+
+extern char *colorize(struct descriptor_data *d, const char *str, bool skip_check = FALSE);
 
 /* creates a random number in interval [from;to] */
 int number(int from, int to)
@@ -1755,4 +1758,53 @@ struct obj_data *get_mount_manned_by_ch(struct char_data *ch) {
   
   // No mount returned.
   return NULL;
+}
+
+void store_message_to_history(struct descriptor_data *d, int channel, const char *mallocd_message) {
+  // We use our very own message buffer to ensure we'll never overwrite whatever buffer the caller is using.
+  static char log_message[256];
+  
+  // Precondition: No screwy pointers. Removed warning since we can be passed NPC descriptors (which we ignore).
+  if (d == NULL || mallocd_message == NULL) {
+    // mudlog("SYSERR: Null descriptor or message passed to store_message_to_history.", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  // Precondition: Channel must be a valid index (0 ≤ channel < number of channels defined in awake.h).
+  if (channel < 0 || channel >= NUM_COMMUNICATION_CHANNELS) {
+    sprintf(log_message, "SYSERR: Channel %d is not within bounds 0 <= channel < %d.", channel, NUM_COMMUNICATION_CHANNELS);
+    mudlog(log_message, NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  // Add the message to the descriptor's channel history.
+  d->message_history[channel].AddItem(NULL, mallocd_message);
+  
+  // Constrain message history to the specified amount.
+  if (d->message_history[channel].NumItems() > NUM_MESSAGES_TO_RETAIN) {
+    // We're over the amount. Remove the tail, making sure we delete the contents.
+    if (d->message_history[channel].Tail()->data)
+      delete d->message_history[channel].Tail()->data;
+    
+    d->message_history[channel].RemoveItem(d->message_history[channel].Tail());
+  }
+}
+
+void delete_message_history(struct descriptor_data *d) {
+  // NPCs not allowed, if you pass me a null you fucked up.
+  if (d == NULL) {
+    mudlog("SYSERR: Null descriptor passed to delete_message_history.", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  nodeStruct<const char*> *temp = NULL;
+  // For each channel in history, delete all messages (just keep nuking head until it's NULL).
+  for (int channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++) {
+    while ((temp = d->message_history[channel].Head())) {
+      if (temp->data)
+        delete temp->data;
+      
+      d->message_history[channel].RemoveItem(temp);
+    }
+  }
 }

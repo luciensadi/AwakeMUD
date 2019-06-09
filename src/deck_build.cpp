@@ -99,9 +99,9 @@ void partbuild_main_menu(struct descriptor_data *d) {
     CLS(CH);
     send_to_char(CH, "1) Name: ^c%-40s^n     Software Needed: ^c%s^n\r\n",
                  PART->restring, YESNO(parts[GET_OBJ_VAL(PART, 0)].software));
-    send_to_char(CH, "2) Type: ^c%-40s^n     Parts Cost: ^c%d\xC2\xA5^n\r\n",
+    send_to_char(CH, "2) Type: ^c%-40s^n     Parts Cost: ^c%d nuyen^n\r\n",
                  parts[GET_OBJ_VAL(PART, 0)].name, get_part_cost(GET_OBJ_VAL(PART, 0), GET_OBJ_VAL(PART, 1), GET_OBJ_VAL(PART, 2)));
-    send_to_char(CH, "3) MPCP Designed For: ^c%-30d^n  Chips Cost: ^c%d\xC2\xA5^n\r\n",
+    send_to_char(CH, "3) MPCP Designed For: ^c%-30d^n  Chips Cost: ^c%d nuyen^n\r\n",
                  GET_OBJ_VAL(PART, 2),
                  get_chip_cost(GET_OBJ_VAL(PART, 0), GET_OBJ_VAL(PART, 1), GET_OBJ_VAL(PART, 2)));
     if (GET_OBJ_VAL(PART, 2))
@@ -423,7 +423,7 @@ void part_design(struct char_data *ch, struct obj_data *part) {
         GET_OBJ_VAL(part, 5) = success_test(skill, target) << 1;
         GET_OBJ_VAL(part, 7) = GET_IDNUM(ch);
       if (access_level(ch, LVL_ADMIN)) {
-        send_to_char("You use your admin powers to greatly accelerate the design process.", ch);
+        send_to_char("You use your admin powers to greatly accelerate the design process.\r\n", ch);
         GET_OBJ_VAL(part, 3) = 1;
         GET_OBJ_VAL(part, 5) = 100;
       }

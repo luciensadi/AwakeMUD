@@ -1032,8 +1032,12 @@ const char *tog_messages[][2] = {
                              "You will now display your playergroup affiliation in the wholist.\r\n"},
                             {"You will no longer receive the keepalive pulses from the MUD.\r\n",
                              "You will now receive keepalive pulses from the MUD.\r\n"},
-                            {"Screenreader mode disabled.\r\n",
-                             "Screenreader mode enabled. Extraneous text and ASCII effects will be reduced.\r\n"}
+                            {"Screenreader mode disabled. Your TOGGLE NOCOLOR settings are untouched.\r\n",
+                             "Screenreader mode enabled. Extraneous text and ASCII effects will be reduced. ANSI color has also been disabled-- you may type TOGGLE NOCOLOR to re-enable it.\r\n"},
+                            {"You will now receive ANSI color codes again.\r\n",
+                             "You will no longer receive ANSI color codes.\r\n"},
+                            {"You will now receive prompts.\r\n",
+                             "You will no longer receive prompts automatically.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1058,7 +1062,8 @@ ACMD(do_toggle)
               "     AutoAssist: %-3s            NoShout: %-3s               Echo: %-3s\r\n"
               "           Pker: %-3s         Long Exits: %-3s         Wimp Level: %-3s\r\n"
               "        Menugag: %-3s        Long Weapon: %-3s        Show PG Tag: %-3s\r\n"
-              "     Keep-Alive: %-3s       Screenreader: %-3s",
+              "     Keep-Alive: %-3s       Screenreader: %-3s           No Color: %-3s\r\n"
+              "      No Prompt: %-3s",
 
               ONOFF(PRF_FLAGGED(ch, PRF_FIGHTGAG)),
               ONOFF(PRF_FLAGGED(ch, PRF_NOOOC)),
@@ -1076,7 +1081,9 @@ ACMD(do_toggle)
               YESNO(PRF_FLAGGED(ch, PRF_LONGWEAPON)),
               YESNO(PRF_FLAGGED(ch, PRF_SHOWGROUPTAG)),
               ONOFF(PRF_FLAGGED(ch, PRF_KEEPALIVE)),
-              YESNO(PRF_FLAGGED(ch, PRF_SCREENREADER)));
+              YESNO(PRF_FLAGGED(ch, PRF_SCREENREADER)),
+              ONOFF(PRF_FLAGGED(ch, PRF_NOCOLOR)),
+              ONOFF(PRF_FLAGGED(ch, PRF_NOPROMPT)));
     else
       sprintf(buf,
               "       Fightgag: %-3s              NoOOC: %-3s              Quest: %-3s\r\n"
@@ -1087,7 +1094,7 @@ ACMD(do_toggle)
               "          Radio: %-3s         Long Exits: %-3s         Wimp Level: %-3s\r\n"
               "         Pacify: %-3s         AutoAssist: %-3s          Autoinvis: %-3s\r\n"
               "    Long Weapon: %-3s        Show PG Tag: %-3s         Keep-Alive: %-3s\r\n"
-              "   Screenreader: %-3s",
+              "   Screenreader: %-3s           No Color: %-3s          No Prompt: %-3s\r\n",
               
               ONOFF(PRF_FLAGGED(ch, PRF_FIGHTGAG)),
               ONOFF(PRF_FLAGGED(ch, PRF_NOOOC)),
@@ -1113,7 +1120,9 @@ ACMD(do_toggle)
               YESNO(PRF_FLAGGED(ch, PRF_LONGWEAPON)),
               YESNO(PRF_FLAGGED(ch, PRF_SHOWGROUPTAG)),
               ONOFF(PRF_FLAGGED(ch, PRF_KEEPALIVE)),
-              YESNO(PRF_FLAGGED(ch, PRF_SCREENREADER)));
+              YESNO(PRF_FLAGGED(ch, PRF_SCREENREADER)),
+              ONOFF(PRF_FLAGGED(ch, PRF_NOCOLOR)),
+              ONOFF(PRF_FLAGGED(ch, PRF_NOPROMPT)));
     send_to_char(buf, ch);
   } else {
     if (is_abbrev(argument, "afk"))
@@ -1217,15 +1226,25 @@ ACMD(do_toggle)
       }
       mode = 24;
       result = 1;
-    } else if (is_abbrev(argument, "showpgtag")) {
+    } else if (is_abbrev(argument, "showpgtags")) {
       result = PRF_TOG_CHK(ch, PRF_SHOWGROUPTAG);
       mode = 27;
-    } else if (is_abbrev(argument, "keepalive")) {
+    } else if (is_abbrev(argument, "keepalives")) {
       result = PRF_TOG_CHK(ch, PRF_KEEPALIVE);
       mode = 28;
     } else if (is_abbrev(argument, "screenreader")) {
       result = PRF_TOG_CHK(ch, PRF_SCREENREADER);
+      
+      // Turning on the screenreader? Color goes off.
+      if (result)
+        PRF_FLAGS(ch).SetBit(PRF_NOCOLOR);
       mode = 29;
+    } else if (is_abbrev(argument, "nocolors") || is_abbrev(argument, "colors") || is_abbrev(argument, "colours")) {
+      result = PRF_TOG_CHK(ch, PRF_NOCOLOR);
+      mode = 30;
+    } else if (is_abbrev(argument, "noprompts") || is_abbrev(argument, "prompts")) {
+      result = PRF_TOG_CHK(ch, PRF_NOPROMPT);
+      mode = 31;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;
@@ -3952,4 +3971,25 @@ ACMD(do_availoffset)
   send_to_char(ch, "Your current availability offset is: %d\r\n", GET_AVAIL_OFFSET(ch));
   sprintf(buf, "UPDATE pfiles SET AvailOffset=%d WHERE idnum=%ld;", GET_AVAIL_OFFSET(ch), GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
+}
+
+ACMD(do_ammo) {
+  struct obj_data *primary = GET_EQ(ch, WEAR_WIELD);
+  struct obj_data *secondary = GET_EQ(ch, WEAR_HOLD);
+  
+  if (primary && IS_GUN(GET_OBJ_VAL(primary, 3))) {
+    send_to_char(ch, "Primary: %d / %d rounds of ammunition.\r\n",
+                 MIN(GET_OBJ_VAL(primary, 5), GET_OBJ_VAL(primary->contains, 9)),
+                 GET_OBJ_VAL(primary, 5));
+  } else if (primary) {
+    send_to_char(ch, "Your primary weapon does not take ammunition.\r\n");
+  }
+  
+  if (secondary && IS_GUN(GET_OBJ_VAL(secondary, 3))) {
+    send_to_char(ch, "Secondary: %d / %d rounds of ammunition.\r\n",
+                 MIN(GET_OBJ_VAL(secondary, 5), GET_OBJ_VAL(secondary->contains, 9)),
+                 GET_OBJ_VAL(secondary, 5));
+  } else if (secondary) {
+    send_to_char(ch, "Your secondary weapon does not take ammunition.\r\n");
+  }
 }

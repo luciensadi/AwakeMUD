@@ -265,17 +265,33 @@ void initialize_and_connect_to_mysql() {
     sprintf(buf, "FATAL ERROR: %s\r\n", mysql_error(mysql));
     log(buf);
     log("Suggestion: Make sure your DB is running and that you've specified your connection info in src/mysql_config.cpp.\r\n");
-    shutdown();
+    exit(ERROR_MYSQL_DATABASE_NOT_FOUND);
   }
 }
 
 void boot_world(void)
 {
+  // Sanity check to ensure we haven't added more bits than our bitfield can hold.
+  if (Bitfield::TotalWidth() < PRF_MAX) {
+    log("Error: You have more PRF flags defined than bitfield space. You'll need to either expand the size of bitfields or reduce your flag count.");
+    exit(ERROR_BITFIELD_SIZE_EXCEEDED);
+  }
+  
+  if (Bitfield::TotalWidth() < PLR_MAX) {
+    log("Error: You have more PLR flags defined than bitfield space. You'll need to either expand the size of bitfields or reduce your flag count.");
+    exit(ERROR_BITFIELD_SIZE_EXCEEDED);
+  }
+  
+  if (Bitfield::TotalWidth() < AFF_MAX) {
+    log("Error: You have more AFF flags defined than bitfield space. You'll need to either expand the size of bitfields or reduce your flag count.");
+    exit(ERROR_BITFIELD_SIZE_EXCEEDED);
+  }
+  
   log("Initializing libsodium for crypto functions.");
   if (sodium_init() < 0) {
     // The library could not be initialized. Fail.
     log("ERROR: Libsodium initialization failed. Terminating program.");
-    exit(1);
+    exit(ERROR_LIBSODIUM_INIT_FAILED);
   }
   
 #ifdef DEBUG
@@ -530,7 +546,7 @@ void index_boot(int mode)
     break;
   default:
     log("SYSERR: Unknown subcommand to index_boot!");
-    exit(1);
+    exit(ERROR_UNKNOWN_SUBCOMMAND_TO_INDEX_BOOT);
     break;
   }
 
@@ -544,7 +560,7 @@ void index_boot(int mode)
   if (!(index = fopen(buf2, "r"))) {
     sprintf(buf1, "Error opening index file '%s'", buf2);
     perror(buf1);
-    exit(1);
+    exit(ERROR_OPENING_INDEX_FILE);
   }
   /* first, count the number of records in the file so we can calloc */
   fscanf(index, "%s\n", buf1);
@@ -568,7 +584,7 @@ void index_boot(int mode)
   }
   if (!rec_count) {
     log("SYSERR: boot error - 0 records counted");
-    exit(1);
+    exit(ERROR_BOOT_ZERO_RECORDS_COUNTED);
   }
   rec_count++;
 
@@ -1802,7 +1818,7 @@ void load_zones(File &fl)
     if (!fl.GetLine(buf, 256, FALSE)) {
       fprintf(stderr, "Format error in %s - premature end of file\n",
               fl.Filename());
-      exit(1);
+      exit(ERROR_ZONEREAD_PREMATURE_EOF);
     }
 
     ptr = buf;
@@ -1828,7 +1844,7 @@ void load_zones(File &fl)
     if (error) {
       fprintf(stderr, "Format error in %s, line %d: '%s'\n",
               fl.Filename(), fl.LineNumber(), buf);
-      exit(1);
+      exit(ERROR_ZONEREAD_FORMAT_ERROR);
     }
     if (ZCMD.command == 'L') {
       ZCMD.command = 'E';

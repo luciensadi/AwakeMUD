@@ -2621,10 +2621,13 @@ ACMD(do_wiztell)
         && d->character
         && access_level(d->character, LVL_BUILDER) && !PLR_FLAGGED(d->character, PLR_WRITING)
         && (d != ch->desc || !(PRF_FLAGGED(d->character, PRF_NOREPEAT)))) {
-      if (CAN_SEE(d->character, ch))
+      if (CAN_SEE(d->character, ch)) {
         send_to_char(buf1, d->character);
-      else
+        store_message_to_history(ch->desc, COMM_CHANNEL_WTELLS, str_dup(buf1));
+      } else {
         send_to_char(buf2, d->character);
+        store_message_to_history(ch->desc, COMM_CHANNEL_WTELLS, str_dup(buf2));
+      }
     }
   }
 
@@ -4886,3 +4889,10 @@ ACMD(do_incognito)
   }
 }
 
+ACMD(do_zone) {
+  send_to_char(ch, "Current zone: %d\r\n", ch->player_specials->saved.zonenum);
+}
+
+ACMD(do_room) {
+  send_to_char(ch, "Current room num: %ld\r\n", world[ch->in_room].number);
+}

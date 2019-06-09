@@ -764,6 +764,8 @@ struct descriptor_data
   struct descriptor_data *snoop_by; /* And who is snooping this char    */
   struct descriptor_data *next; /* link to next descriptor              */
   struct ccreate_t ccr;
+  
+  listClass<const char *> message_history[NUM_COMMUNICATION_CHANNELS];
 
   // all this from here down is stuff for on-line creation
   int edit_mode;                /* editing sub mode */
@@ -792,7 +794,11 @@ struct descriptor_data
       snoop_by(NULL), next(NULL), misc_data(NULL), edit_obj(NULL), edit_room(NULL),
       edit_mob(NULL), edit_quest(NULL), edit_shop(NULL), edit_zon(NULL),
       edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL)
-  {}
+  {
+    // Zero out the communication history for all channels.
+    for (int channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++)
+      message_history[channel] = listClass<const char *>();
+  }
 }
 ;
 

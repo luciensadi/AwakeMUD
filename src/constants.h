@@ -110,4 +110,5 @@ extern const char *gun_accessory_locations[];
 extern const char *gun_accessory_types[];
 extern const char *mount_types[];
 extern const char *deck_accessory_upgrade_types[];
+extern const char *message_history_channels[];
 #endif

@@ -75,6 +75,10 @@ struct  obj_data *get_mount_weapon(struct obj_data *mount);
 struct  obj_data *stop_manning_weapon_mounts(struct char_data *ch, bool send_message);
 struct  obj_data *get_mount_manned_by_ch(struct char_data *ch);
 
+// Message history management and manipulation.
+void    store_message_to_history(struct descriptor_data *d, int channel, const char *mallocd_message);
+void    delete_message_history(struct descriptor_data *d);
+
 /* undefine MAX and MIN so that our functions are used instead */
 #ifdef MAX
 #undef MAX
@@ -231,6 +235,14 @@ void    update_pos(struct char_data *victim);
   ((ch->desc && ch->desc->original) \
    ? PRF_FLAGS(ch->desc->original).IsSet((flag)) \
    : PRF_FLAGS(ch).IsSet((flag)))
+#define D_PRF_FLAGGED(d, flag)                   \
+((d)->original                                   \
+  ? PRF_FLAGS((d)->original).IsSet((flag))       \
+  : ((d)->character                              \
+      ? PRF_FLAGS((d)->character).IsSet((flag))  \
+      : FALSE                                    \
+    )                                            \
+)
 #define ROOM_FLAGGED(loc, flag) (ROOM_FLAGS(loc).IsSet((flag)))
 
 /* IS_AFFECTED for backwards compatibility */
@@ -769,6 +781,15 @@ IS_LIGHT((sub)->in_room) || !((light_level((sub)->in_room) == LIGHT_MINLIGHT || 
 #define GET_CYBERWARE_IS_DISABLED(cyberware)  (GET_OBJ_VAL((cyberware), 9))
 
 // ITEM_CYBERDECK convenience defines
+#define GET_CYBERDECK_MPCP(deck)              (GET_OBJ_VAL((deck), 0))
+#define GET_CYBERDECK_HARDENING(deck)         (GET_OBJ_VAL((deck), 1))
+#define GET_CYBERDECK_ACTIVE_MEMORY(deck)     (GET_OBJ_VAL((deck), 2))
+#define GET_CYBERDECK_TOTAL_STORAGE(deck)     (GET_OBJ_VAL((deck), 3))
+#define GET_CYBERDECK_IO_RATING(deck)         (GET_OBJ_VAL((deck), 4))
+#define GET_CYBERDECK_USED_STORAGE(deck)      (GET_OBJ_VAL((deck), 5))
+#define GET_CYBERDECK_RESPONSE_INCREASE(deck) (GET_OBJ_VAL((deck), 6))
+#define GET_CYBERDECK_COMPLETE_STATUS(deck)   (GET_OBJ_VAL((deck), 9))
+#define GET_CYBERDECK_FREE_STORAGE(deck)      (GET_CYBERDECK_TOTAL_STORAGE((deck)) -GET_CYBERDECK_USED_STORAGE((deck)))
 
 // ITEM_PROGRAM convenience defines
 
