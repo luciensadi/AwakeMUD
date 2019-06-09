@@ -28,8 +28,8 @@ CVS = cvs
 #MYFLAGS = -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DGITHUB_INTEGRATION -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
 
 # Linux / others? Uncomment these:
-#LIBS = -lcrypt -L/usr/local/lib -lmysqlclient -lz -lm -lnsl -lcurl -lsodium
-#MYFLAGS = -DLIST_CHAR_TO_CHAR_DEBUG -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
+LIBS = -lcrypt -L/usr/local/lib -lmysqlclient -lz -lm -lnsl -lcurl -lsodium
+MYFLAGS = -DLIST_CHAR_TO_CHAR_DEBUG -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
 # If you want GitHub integration, add -DGITHUB_INTEGRATION to the above and fill out your basic auth credentials in github_config.cpp.
 
 # Cygwin:
