@@ -3972,3 +3972,24 @@ ACMD(do_availoffset)
   sprintf(buf, "UPDATE pfiles SET AvailOffset=%d WHERE idnum=%ld;", GET_AVAIL_OFFSET(ch), GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
 }
+
+ACMD(do_ammo) {
+  struct obj_data *primary = GET_EQ(ch, WEAR_WIELD);
+  struct obj_data *secondary = GET_EQ(ch, WEAR_HOLD);
+  
+  if (primary && IS_GUN(GET_OBJ_VAL(primary, 3))) {
+    send_to_char(ch, "Primary: %d / %d rounds of ammunition.\r\n",
+                 MIN(GET_OBJ_VAL(primary, 5), GET_OBJ_VAL(primary->contains, 9)),
+                 GET_OBJ_VAL(primary, 5));
+  } else if (primary) {
+    send_to_char(ch, "Your primary weapon does not take ammunition.\r\n");
+  }
+  
+  if (secondary && IS_GUN(GET_OBJ_VAL(secondary, 3))) {
+    send_to_char(ch, "Secondary: %d / %d rounds of ammunition.\r\n",
+                 MIN(GET_OBJ_VAL(secondary, 5), GET_OBJ_VAL(secondary->contains, 9)),
+                 GET_OBJ_VAL(secondary, 5));
+  } else if (secondary) {
+    send_to_char(ch, "Your secondary weapon does not take ammunition.\r\n");
+  }
+}

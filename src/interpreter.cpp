@@ -93,6 +93,7 @@ ACMD(do_action);
 ACMD(do_activate);
 ACMD(do_advance);
 ACMD(do_alias);
+ACMD(do_ammo);
 ACMD(do_assist);
 ACMD(do_ask);
 ACMD(do_astral);
@@ -261,6 +262,7 @@ ACMD(do_retract);
 ACMD(do_return);
 ACMD(do_rlist);
 ACMD(do_rig);
+ACMD(do_room);
 ACMD(do_say);
 ACMD(do_scan);
 ACMD(do_score);
@@ -340,6 +342,7 @@ ACMD(do_wiztitle);
 ACMD(do_wizwho);
 ACMD(do_wizutil);
 ACMD(do_zreset);
+ACMD(do_zone);
 ACMD(do_vedit);
 ACMD(do_iedit);
 ACMD(do_iclone);
@@ -410,6 +413,7 @@ struct command_info cmd_info[] =
     { "aecho"    , POS_SLEEPING, do_echo     , LVL_ARCHITECT, SCMD_AECHO },
     { "accept"   , POS_LYING   , do_accept   , 0, 0 },
     { "addpoint" , POS_DEAD    , do_initiate , 0, SCMD_POWERPOINT },
+    { "ammo"     , POS_LYING   , do_ammo     , 0, 0 },
     { "assense"  , POS_LYING   , do_assense  , 0, 0 },
     { "at"       , POS_DEAD    , do_at       , LVL_BUILDER, 0 },
     { "attach"   , POS_RESTING , do_attach   , 0, 0 },
@@ -677,6 +681,7 @@ struct command_info cmd_info[] =
     { "retract"  , POS_SITTING , do_retract  , 0, 0 },
     { "return"   , POS_DEAD    , do_return   , 0, 0 },
     { "rlist"    , POS_DEAD    , do_rlist    , LVL_BUILDER, 0 },
+    { "room"     , POS_DEAD    , do_room     , LVL_BUILDER, 0 },
     { "rpe"      , POS_DEAD    , do_wizutil  , LVL_ADMIN, SCMD_RPE },
     { "rpetalk"  , POS_DEAD    , do_gen_comm , 0, SCMD_RPETALK },
     { "redit"    , POS_DEAD    , do_redit    , LVL_BUILDER, 0 },
@@ -790,7 +795,7 @@ struct command_info cmd_info[] =
     { "wizload"  , POS_RESTING , do_wizload  , LVL_ADMIN, 0 },
     { "wtell"    , POS_DEAD    , do_wiztell  , LVL_BUILDER, 0 },
     { "wtells"   , POS_DEAD    , do_switched_message_history, LVL_BUILDER, COMM_CHANNEL_WTELLS },
-    { "wts"   , POS_DEAD    , do_switched_message_history, LVL_BUILDER, COMM_CHANNEL_WTELLS },
+    { "wts"      , POS_DEAD    , do_switched_message_history, LVL_BUILDER, COMM_CHANNEL_WTELLS },
     { "wf"       , POS_DEAD    , do_wizfeel  , LVL_BUILDER, 0 },
     { "wizhelp"  , POS_SLEEPING, do_wizhelp  , LVL_BUILDER, 0 },
     { "wizlist"  , POS_DEAD    , do_gen_ps   , 0, SCMD_IMMLIST },
@@ -798,7 +803,7 @@ struct command_info cmd_info[] =
     { "wwho"     , POS_DEAD    , do_wizwho   , LVL_BUILDER, 0 },
 
     { "vedit"    , POS_DEAD    , do_vedit    , LVL_BUILDER, 0 },
-    { "vteleport" , POS_DEAD   , do_vteleport, LVL_CONSPIRATOR, 0 },
+    { "vteleport", POS_DEAD   , do_vteleport, LVL_CONSPIRATOR, 0 },
 
     // The mysterious back door command! (protip: it does nothing)
 //  { "xyz"      , POS_STANDING, do_action   , LVL_PRESIDENT, 0 },
@@ -806,10 +811,11 @@ struct command_info cmd_info[] =
     { "yell"     , POS_LYING   , do_gen_comm , 0, SCMD_SHOUT},
 
     { "zdelete"  , POS_DEAD    , do_zdelete  , LVL_PRESIDENT, 0 },
-    { "zaecho"    , POS_SLEEPING, do_zecho    , LVL_FIXER, SCMD_AECHO },
+    { "zaecho"   , POS_SLEEPING, do_zecho    , LVL_FIXER, SCMD_AECHO },
     { "zecho"    , POS_SLEEPING, do_zecho    , LVL_FIXER, 0 },
     { "zedit"    , POS_DEAD    , do_zedit    , LVL_BUILDER, 0 },
     { "zlist"    , POS_DEAD    , do_zlist    , LVL_BUILDER, 0 },
+    { "zone"     , POS_DEAD    , do_zone     , LVL_BUILDER, 0 },
     { "zreset"   , POS_DEAD    , do_zreset   , LVL_BUILDER, 0 },
     { "zswitch"  , POS_DEAD    , do_zswitch  , LVL_BUILDER, 0},
     /* End of functional commands with game-wide implementation.*/

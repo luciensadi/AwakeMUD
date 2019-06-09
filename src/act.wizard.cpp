@@ -4889,3 +4889,10 @@ ACMD(do_incognito)
   }
 }
 
+ACMD(do_zone) {
+  send_to_char(ch, "Current zone: %d\r\n", ch->player_specials->saved.zonenum);
+}
+
+ACMD(do_room) {
+  send_to_char(ch, "Current room num: %ld\r\n", world[ch->in_room].number);
+}

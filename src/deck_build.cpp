@@ -423,7 +423,7 @@ void part_design(struct char_data *ch, struct obj_data *part) {
         GET_OBJ_VAL(part, 5) = success_test(skill, target) << 1;
         GET_OBJ_VAL(part, 7) = GET_IDNUM(ch);
       if (access_level(ch, LVL_ADMIN)) {
-        send_to_char("You use your admin powers to greatly accelerate the design process.", ch);
+        send_to_char("You use your admin powers to greatly accelerate the design process.\r\n", ch);
         GET_OBJ_VAL(part, 3) = 1;
         GET_OBJ_VAL(part, 5) = 100;
       }
