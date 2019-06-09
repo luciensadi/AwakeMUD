@@ -779,8 +779,7 @@ SPECIAL(call_elevator)
         return TRUE;
       }
       if (index < 0 || elevator[index].destination) {
-        send_to_char("You press the call button, "
-                     "but nothing seems to happen.\r\n", ch);
+        send_to_char("You press the call button, but nothing seems to happen.\r\n", ch);
         return TRUE;
       }
       rnum = real_room(elevator[index].room);
@@ -791,8 +790,7 @@ SPECIAL(call_elevator)
           elevator[index].destination = 0;
           return TRUE;
         }
-      send_to_char("You press the call button, "
-                   "and the small light turns on.\r\n", ch);
+      send_to_char("You press the call button, and the small light turns on.\r\n", ch);
       elevator[index].destination = world[ch->in_room].number;
     }
     return TRUE;
@@ -800,22 +798,19 @@ SPECIAL(call_elevator)
 
   if (CMD_IS("look") || CMD_IS("examine")) {
     one_argument(argument, arg);
-    if (!*arg || index < 0 || !(!strn_cmp("panel", arg, strlen(arg)) ||
-                                !strn_cmp("elevator", arg, strlen(arg))))
+    if (!*arg || index < 0 ||
+        !(!strn_cmp("panel", arg, strlen(arg)) || !strn_cmp("elevator", arg, strlen(arg))))
       return FALSE;
 
     rnum = real_room(elevator[index].room);
 
     i = world[rnum].rating + 1 - elevator[index].num_floors - elevator[index].start_floor;
     if (i > 0)
-      send_to_char(ch, "The floor indicator shows that the elevator is "
-                   "currently at B%d.\r\n", i);
+      send_to_char(ch, "The floor indicator shows that the elevator is currently at B%d.\r\n", i);
     else if (i == 0)
-      send_to_char(ch, "The floor indicator shows that the elevator is "
-                   "currently at the ground floor.\r\n");
+      send_to_char(ch, "The floor indicator shows that the elevator is currently at the ground floor.\r\n");
     else
-      send_to_char(ch, "The floor indicator shows that the elevator is "
-                   "current at floor %d.\r\n", 0 - i);
+      send_to_char(ch, "The floor indicator shows that the elevator is current at floor %d.\r\n", 0 - i);
     return TRUE;
   }
 
@@ -970,11 +965,11 @@ static int process_elevator(struct room_data *room,
       act(buf, FALSE, ch, 0, 0, TO_CHAR);
     }
     return TRUE;
-  } else if (CMD_IS("look"))
+  } else if (CMD_IS("look") || CMD_IS("examine"))
   {
     one_argument(argument, arg);
-    if (!*arg || !(!strcasecmp("panel", arg) || !strcasecmp("elevator", arg)
-                   || !strcasecmp("buttons", arg)))
+    if (!*arg || !(!strn_cmp("panel", arg, strlen(arg)) || !strn_cmp("elevator", arg, strlen(arg))
+                   || !strn_cmp("buttons", arg, strlen(arg)) || !strn_cmp("control", arg, strlen(arg))))
       return FALSE;
 
     strcpy(buf, "The elevator panel displays the following buttons:\r\n");
