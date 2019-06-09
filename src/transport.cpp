@@ -601,7 +601,7 @@ static void init_elevators(void)
   FILE *fl;
   char line[256];
   int i, j, t[3];
-  vnum_t room[1], rnum;
+  vnum_t room, rnum, shaft_vnum, shaft_rnum;
   int real_button = -1, real_panel = -1;
   
   struct obj_data *obj = NULL;
@@ -626,11 +626,11 @@ static void init_elevators(void)
 
   for (i = 0; i < num_elevators && !feof(fl); i++) {
     get_line(fl, line);
-    if (sscanf(line, "%ld %d %d %d", room, t, t + 1, t + 2) != 4) {
+    if (sscanf(line, "%ld %d %d %d", &room, t, t + 1, t + 2) != 4) {
       fprintf(stderr, "Format error in elevator #%d, expecting # # # #\n", i);
       shutdown();
     }
-    elevator[i].room = room[0];
+    elevator[i].room = room;
     if ((rnum = real_room(elevator[i].room)) > -1) {
       world[rnum].func = elevator_spec;
       world[rnum].rating = 0;
@@ -652,11 +652,14 @@ static void init_elevators(void)
       elevator[i].floor = new struct floor_data[elevator[i].num_floors];
       for (j = 0; j < elevator[i].num_floors; j++) {
         get_line(fl, line);
-        if (sscanf(line, "%ld %d", room, t + 1) != 2) {
+        if (sscanf(line, "%ld %ld %d", &room, &shaft_vnum, t + 1) != 2) {
           fprintf(stderr, "Format error in elevator #%d, floor #%d\n", i, j);
           shutdown();
         }
-        elevator[i].floor[j].vnum = room[0];
+        elevator[i].floor[j].vnum = room;
+        elevator[i].floor[j].shaft_vnum = shaft_vnum;
+        elevator[i].floor[j].doors = t[1];
+        
         if ((rnum = real_room(elevator[i].floor[j].vnum)) > -1) {
           world[rnum].func = call_elevator;
           if (real_button >= 0) {
@@ -664,11 +667,68 @@ static void init_elevators(void)
             obj = read_object(real_button, REAL);
             obj_to_room(obj, rnum);
           }
+          
+          // Ensure that there is an impassible elevator door leading to the shaft.
+          if ((shaft_rnum = real_room(elevator[i].floor[j].shaft_vnum)) > -1) {
+            int opposing_dir = rev_dir[elevator[i].floor[j].doors];
+#define DOOR world[rnum].dir_option[opposing_dir]
+            if (!DOOR) {
+              // Create the door from whole cloth.
+              sprintf(buf, "Note: No exit leading %s was found on landing %ld. Digging a new one and plopping in default info.",
+                      exitdirs[opposing_dir], elevator[i].floor[j].vnum);
+              DOOR = new room_direction_data;
+              memset((char *) DOOR, 0, sizeof (struct room_direction_data));
+              DOOR->general_description = str_dup("A pair of elevator doors allows access to the liftway.");
+              DOOR->keyword = str_dup("doors shaft");
+              DOOR->key = OBJ_ELEVATOR_SHAFT_KEY;
+              DOOR->material = MATERIAL_METAL;
+              DOOR->barrier = 6;
+            }
+            else if (DOOR->to_room != shaft_vnum) {
+              // Replace whatever is there with the correct exit.
+              sprintf(buf, "Note: Overwriting prior %s exit in %ld from %ld to shaft %ld.",
+                      exitdirs[opposing_dir], elevator[i].floor[j].vnum,
+                      DOOR->to_room, elevator[i].floor[j].shaft_vnum);
+              log(buf);
+              
+              if (!DOOR->general_description) {
+                log("- Adding default elevator door description.");
+                DOOR->general_description = str_dup("A pair of elevator doors allows access to the liftway.");
+              }
+              
+              if (!DOOR->keyword) {
+                log("- Adding default elevator keywords.");
+                DOOR->keyword = str_dup("doors shaft");
+              }
+              
+              DOOR->key = OBJ_ELEVATOR_SHAFT_KEY;
+              
+              if (!DOOR->material) {
+                log("- Setting default material.");
+                DOOR->material = MATERIAL_METAL;
+              }
+              
+              if (!DOOR->barrier) {
+                log("- Setting default barrier.");
+                DOOR->barrier = 6;
+              }
+            }
+            
+            // Set up the door's flags.
+            SET_BIT(DOOR->exit_info, EX_ISDOOR);
+            SET_BIT(DOOR->exit_info, EX_CLOSED);
+            SET_BIT(DOOR->exit_info, EX_LOCKED);
+#undef DOOR
+          } else {
+            sprintf(buf, "Fatal error: Nonexistent elevator shaft vnum %ld.", elevator[i].floor[j].shaft_vnum);
+            log(buf);
+            shutdown();
+          }
         } else {
+          sprintf(buf, "Nonexistent elevator destination %ld -- blocking.", elevator[i].floor[j].vnum);
+          log(buf);
           elevator[i].floor[j].vnum = -1;
-          log("Nonexistent elevator destination -- blocking.");
         }
-        elevator[i].floor[j].doors = t[1];
       }
     } else
       elevator[i].floor = NULL;

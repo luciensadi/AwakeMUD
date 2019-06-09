@@ -37,6 +37,7 @@ struct dest_data
 struct floor_data
 {
   vnum_t vnum;
+  vnum_t shaft_vnum;
   sh_int doors;
 };
 

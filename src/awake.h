@@ -2016,6 +2016,7 @@ enum {
 #define OBJ_NEWBIE_RADIO           60531
 #define OBJ_MULTNOMAH_VISA         1
 #define OBJ_MAP_OF_SEATTLE         2041
+#define OBJ_ELEVATOR_SHAFT_KEY     998
 
 /* ban struct */
 struct ban_list_element
@@ -2071,5 +2072,25 @@ struct ban_list_element
 #define ERROR_ZONEREAD_PREMATURE_EOF           15
 #define ERROR_ZONEREAD_FORMAT_ERROR            16
 #define ERROR_MYSQL_DATABASE_NOT_FOUND         17
+
+// Materials.
+#define MATERIAL_PAPER        0
+#define MATERIAL_WOOD         1
+#define MATERIAL_GLASS        2
+#define MATERIAL_FABRIC       3
+#define MATERIAL_LEATHER      4
+#define MATERIAL_BRICK        5
+#define MATERIAL_PLASTIC      6
+#define MATERIAL_ADV_PLASTICS 7
+#define MATERIAL_METAL        8
+#define MATERIAL_ORICHALCUM   9
+#define MATERIAL_ELECTRONICS  10
+#define MATERIAL_COMPUETERS   11
+#define MATERIAL_TOXIC_WASTES 12
+#define MATERIAL_ORGANIC      13
+#define MATERIAL_STONE        14
+#define MATERIAL_CERAMIC      15
+#define MATERIAL_CONCRETE     16
+#define NUM_MATERIALS         17
 
 #endif
