@@ -4,3 +4,10 @@ Lucien   (May 22) [10001] let the STOP command stop you from fighting
 Lucien   (May 26) [70302] limit pgroup command columns to 4 for better phone usability
 Lucien   (May 26) [70316] TOGGLE colums to 2 for phones
 Lucien   (May 26) [60502] Add feedback for zswitch command
+Lucien   (May 28) [60504] HELP TRAINING does not exist, make this a keyword for HELP TRAIN
+Lucien   (May 28) [60504] Have the QUEST command (nonexist) give feedback that they should be asking the NPC for a job verbally.
+Lucien   (May 28) [60504] Allow qedit to set a -1 reward
+Lucien   (May 28) [60504] Specify maximum allowable rep value in qedit
+Lucien   (May 28) [60504] Add a message to SKILLS for empty skill list ("You haven't learned any skills yet." or something)
+Lucien   (May 29) [60505] add HELP UNPRACTICE and HELP UNTRAIN; link them to their unflavored counterparts
+Lucien   (May 30) [60559] AFFECT -> STATUS mapping

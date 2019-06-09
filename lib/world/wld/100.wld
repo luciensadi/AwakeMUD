@@ -775,6 +775,12 @@ A sealed vault door prevents NPCs from escaping.
 	KeyVnum:	0
 	LockRating:	50
 	HiddenRating:	50
+[EXIT east]
+	ToVnum:	10027
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT down]
 	ToVnum:	10000
 	Flags:	0
@@ -1093,6 +1099,35 @@ RoomType:	9
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	10025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10027
+Name:	^W(^cIMMHQ^W)^C The Shop of Horrors
+Desc:$
+Great for testing all manner of shopkeeper quirks, from negative profit
+margins to so many items the MUD crashes. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	10.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	10018
 	Flags:	0
 	Material:	brick
 	Barrier:	4

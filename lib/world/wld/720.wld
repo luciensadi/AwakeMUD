@@ -1218,7 +1218,7 @@ Z:	10.00
 RoomType:	6
 [POINTS]
 	SpecIdx:	0
-	Rating:	0
+	Rating:	20
 	Light:	0
 	Smoke:	0
 	Background:	0
