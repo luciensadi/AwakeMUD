@@ -1,0 +1,32 @@
+#72100
+Name:	Outside of Genesis Consortium's Seattle Branch
+Desc:$
+You are standing in front of a plasticrete building... wait, on closer
+inspection it appears to bee actual stone. The cheerless walls are well-lit by
+bright spotlights around the perimeter, illuminating various posters with
+slogans like "Organic Food for a Better Life!" and "Eat Real, Eat Genesis!" 
+~
+NightDesc:$
+   You are standing in front of a plasticrete building... wait, on closer
+inspection it appears to bee actual stone. The cheerless walls are well-lit by
+bright spotlights around the perimeter, illuminating various posters with
+slogans like "Organic Food for a Better Life!" and "Eat Real, Eat Genesis!"  
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	1
+	BackgroundType:	11
+BREAK
+END
