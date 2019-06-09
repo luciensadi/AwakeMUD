@@ -798,10 +798,10 @@ SPECIAL(call_elevator)
     return TRUE;
   }
 
-  if (CMD_IS("look")) {
+  if (CMD_IS("look") || CMD_IS("examine")) {
     one_argument(argument, arg);
-    if (!*arg || index < 0 || !(!strcasecmp("panel", arg) ||
-                                !strcasecmp("elevator", arg)))
+    if (!*arg || index < 0 || !(!strn_cmp("panel", arg, strlen(arg)) ||
+                                !strn_cmp("elevator", arg, strlen(arg))))
       return FALSE;
 
     rnum = real_room(elevator[index].room);
