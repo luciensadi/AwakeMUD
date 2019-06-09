@@ -836,6 +836,10 @@ void redit_parse(struct descriptor_data * d, const char *arg)
         redit_disp_menu(d);
       else {
         /* toggle bits */
+        
+        if (number-1 == ROOM_NO_TRAFFIC) {
+          send_to_char("!TRAFFIC changes will only take effect on copyover.\r\n", d->character);
+        }
 
         if (ROOM->room_flags.IsSet(number-1)) {
           ROOM->room_flags.RemoveBit(number-1);

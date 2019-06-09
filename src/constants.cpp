@@ -267,6 +267,7 @@ const char *room_bits[] =
     "ASTRAL",
     "!GRID",
     "STORAGE",
+    "!TRAFFIC",
     "\n"
   };
 

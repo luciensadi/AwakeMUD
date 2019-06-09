@@ -484,7 +484,7 @@ enum {
 #define ROOM_BFS_MARK           15  /* (R) breath-first srch mrk */
 #define ROOM_LOW_LIGHT          16  /* Room viewable with ll-eyes */
 #define ROOM_NO_RADIO           18  /* Radio is sketchy and phones dont work */
-#define ROOM_NOBIKE		19
+#define ROOM_NOBIKE		          19
 #define ROOM_FREEWAY            20  /* Room is a medicin lodge   */
 #define ROOM_FALL               21  // room is a 'fall' room
 #define ROOM_ROAD               22
@@ -492,10 +492,11 @@ enum {
 #define ROOM_SENATE             24
 #define ROOM_NOQUIT             25
 #define ROOM_SENT               26
-#define ROOM_ASTRAL 		27 // Astral room
-#define ROOM_NOGRID    		28
-#define ROOM_STORAGE		29
-#define ROOM_MAX        	30
+#define ROOM_ASTRAL 	       	  27 // Astral room
+#define ROOM_NOGRID    	       	28
+#define ROOM_STORAGE	        	29
+#define ROOM_NO_TRAFFIC         30
+#define ROOM_MAX        	      31
 
 #define NORMAL		0
 #define LOWLIGHT	1

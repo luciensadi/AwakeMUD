@@ -25,8 +25,8 @@ Name:	A Wide Roundabout Circling a Marble Fountain
 Desc:$
 You are in an unfinished room.
 ~
-Flags:	10000000000000000000100
-SecType:	Inside
+Flags:	1000000010000000000000000000100
+SecType:	City
 MatrixExit:	0
 Crowd:	2
 Cover:	4
@@ -105,8 +105,8 @@ Name:	Approaching a Sapphire-Glassed Skyscraper
 Desc:$
 You are in an unfinished room.
 ~
-Flags:	10000000000000000000000
-SecType:	Inside
+Flags:	1000000010000000000000000000000
+SecType:	City
 MatrixExit:	0
 Crowd:	2
 Cover:	4
