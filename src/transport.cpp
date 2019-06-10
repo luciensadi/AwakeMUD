@@ -596,6 +596,44 @@ SPECIAL(taxi)
 // utility funcs
 // ______________________________
 
+void make_elevator_door(vnum_t rnum_to, vnum_t rnum_from, int direction_from) {
+  // If it doesn't exist, make it so.
+#define DOOR world[rnum_from].dir_option[direction_from]
+  if (!DOOR) {
+    sprintf(buf, "Building new elevator door %s from %ld to %ld.", fulldirs[direction_from], world[rnum_from].number, world[rnum_to].number);
+    log(buf);
+    DOOR = new room_direction_data;
+    memset((char *) DOOR, 0, sizeof(struct room_direction_data));
+  } else {
+    sprintf(buf, "Reusing existing elevator door %s from %ld to %ld.", fulldirs[direction_from], world[rnum_from].number, world[rnum_to].number);
+    log(buf);
+  }
+  
+  // Set the exit to point to the correct rnum.
+  DOOR->to_room = rnum_to;
+  
+  if (!DOOR->general_description)
+    DOOR->general_description = str_dup("A pair of elevator doors allows access to the liftway.\r\n");
+  
+  if (!DOOR->keyword)
+    DOOR->keyword = str_dup("doors shaft");
+  
+  if (!DOOR->key)
+    DOOR->key = OBJ_ELEVATOR_SHAFT_KEY;
+  
+  if (!DOOR->material)
+    DOOR->material = MATERIAL_METAL;
+  
+  if (!DOOR->barrier)
+    DOOR->barrier = 8;
+  
+  // Set up the door's flags.
+  SET_BIT(DOOR->exit_info, EX_ISDOOR);
+  SET_BIT(DOOR->exit_info, EX_CLOSED);
+  SET_BIT(DOOR->exit_info, EX_LOCKED);
+#undef DOOR
+}
+
 static void init_elevators(void)
 {
   FILE *fl;
@@ -639,8 +677,13 @@ static void init_elevators(void)
         obj = read_object(real_panel, REAL);
         obj_to_room(obj, rnum);
       }
-    } else
-      log("Nonexistent elevator.");
+    } else {
+      sprintf(buf, "Nonexistent elevator cab %ld in elevator %d. Skipping.", elevator[i].room, i);
+      log(buf);
+      continue;
+    }
+    
+    
     elevator[i].columns = t[0];
     elevator[i].time_left = 0;
     elevator[i].dir = -1;
@@ -652,15 +695,19 @@ static void init_elevators(void)
       elevator[i].floor = new struct floor_data[elevator[i].num_floors];
       for (j = 0; j < elevator[i].num_floors; j++) {
         get_line(fl, line);
-        if (sscanf(line, "%ld %ld %d", &room, &shaft_vnum, t + 1) != 2) {
+        if (sscanf(line, "%ld %ld %d", &room, &shaft_vnum, t + 1) != 3) {
           fprintf(stderr, "Format error in elevator #%d, floor #%d\n", i, j);
           shutdown();
         }
         elevator[i].floor[j].vnum = room;
         elevator[i].floor[j].shaft_vnum = shaft_vnum;
         elevator[i].floor[j].doors = t[1];
+        sprintf(buf, "%s: vnum %ld, shaft %ld, doors %s.", line, room, shaft_vnum, fulldirs[t[1]]);
+        log(buf);
         
-        if ((rnum = real_room(elevator[i].floor[j].vnum)) > -1) {
+        // Ensure the landing exists.
+        rnum = real_room(elevator[i].floor[j].vnum);
+        if (rnum > -1) {
           world[rnum].func = call_elevator;
           if (real_button >= 0) {
             // Add decorative elevator call button to landing.
@@ -668,57 +715,11 @@ static void init_elevators(void)
             obj_to_room(obj, rnum);
           }
           
-          // Ensure that there is an impassible elevator door leading to the shaft.
-          if ((shaft_rnum = real_room(elevator[i].floor[j].shaft_vnum)) > -1) {
-            int opposing_dir = rev_dir[elevator[i].floor[j].doors];
-#define DOOR world[rnum].dir_option[opposing_dir]
-            if (!DOOR) {
-              // Create the door from whole cloth.
-              sprintf(buf, "Note: No exit leading %s was found on landing %ld. Digging a new one and plopping in default info.",
-                      exitdirs[opposing_dir], elevator[i].floor[j].vnum);
-              DOOR = new room_direction_data;
-              memset((char *) DOOR, 0, sizeof (struct room_direction_data));
-              DOOR->general_description = str_dup("A pair of elevator doors allows access to the liftway.");
-              DOOR->keyword = str_dup("doors shaft");
-              DOOR->key = OBJ_ELEVATOR_SHAFT_KEY;
-              DOOR->material = MATERIAL_METAL;
-              DOOR->barrier = 6;
-            }
-            else if (DOOR->to_room != shaft_vnum) {
-              // Replace whatever is there with the correct exit.
-              sprintf(buf, "Note: Overwriting prior %s exit in %ld from %ld to shaft %ld.",
-                      exitdirs[opposing_dir], elevator[i].floor[j].vnum,
-                      DOOR->to_room, elevator[i].floor[j].shaft_vnum);
-              log(buf);
-              
-              if (!DOOR->general_description) {
-                log("- Adding default elevator door description.");
-                DOOR->general_description = str_dup("A pair of elevator doors allows access to the liftway.");
-              }
-              
-              if (!DOOR->keyword) {
-                log("- Adding default elevator keywords.");
-                DOOR->keyword = str_dup("doors shaft");
-              }
-              
-              DOOR->key = OBJ_ELEVATOR_SHAFT_KEY;
-              
-              if (!DOOR->material) {
-                log("- Setting default material.");
-                DOOR->material = MATERIAL_METAL;
-              }
-              
-              if (!DOOR->barrier) {
-                log("- Setting default barrier.");
-                DOOR->barrier = 6;
-              }
-            }
-            
-            // Set up the door's flags.
-            SET_BIT(DOOR->exit_info, EX_ISDOOR);
-            SET_BIT(DOOR->exit_info, EX_CLOSED);
-            SET_BIT(DOOR->exit_info, EX_LOCKED);
-#undef DOOR
+          // Ensure that there is an elevator door leading to/from the shaft.
+          shaft_rnum = real_room(elevator[i].floor[j].shaft_vnum);
+          if (shaft_rnum > -1) {
+            make_elevator_door(rnum, shaft_rnum, elevator[i].floor[j].doors);
+            make_elevator_door(shaft_rnum, rnum, rev_dir[elevator[i].floor[j].doors]);
           } else {
             sprintf(buf, "Fatal error: Nonexistent elevator shaft vnum %ld.", elevator[i].floor[j].shaft_vnum);
             log(buf);
@@ -730,83 +731,88 @@ static void init_elevators(void)
           elevator[i].floor[j].vnum = -1;
         }
       }
+      
+      
+      // Ensure an exit from car -> landing and vice/versa exists. Store the shaft's exit.
+      struct room_data *car = &world[real_room(elevator[i].room)];
+      sprintf(buf, "rating: %d", car->rating);
+      log(buf);
+      sprintf(buf, "columns: %d", elevator[i].columns);
+      log(buf);
+      sprintf(buf, "car vnum: %ld", car->number);
+      log(buf);
+      sprintf(buf, "car real room: %ld", real_room(car->number));
+      log(buf);
+      sprintf(buf, "landing vnum: %ld", elevator[i].floor[car->rating].vnum);
+      log(buf);
+      sprintf(buf, "landing real room: %ld", real_room(elevator[i].floor[car->rating].vnum));
+      log(buf);
+      sprintf(buf, "shaft vnum: %ld", elevator[i].floor[car->rating].shaft_vnum);
+      log(buf);
+      sprintf(buf, "shaft real room: %ld", real_room(elevator[i].floor[car->rating].shaft_vnum));
+      log(buf);
+      struct room_data *landing = &world[real_room(elevator[i].floor[car->rating].vnum)];
+      struct room_data *shaft = &world[real_room(elevator[i].floor[car->rating].shaft_vnum)];
+      int dir = elevator[i].floor[car->rating].doors;
+      
+      // Ensure car->landing exit.
+      make_elevator_door(real_room(landing->number), real_room(car->number), dir);
+      
+      // Ensure landing->car exit.
+      make_elevator_door(real_room(car->number), real_room(landing->number), rev_dir[dir]);
+      
+      // Store shaft->landing exit.
+      if (shaft->dir_option[dir])
+        shaft->temporary_stored_exit = shaft->dir_option[dir];
+      shaft->dir_option[dir] = NULL;
+      
     } else
       elevator[i].floor = NULL;
   }
   fclose(fl);
 }
 
-static void open_elevator_doors(struct room_data *room, int num, int floor)
+static void open_elevator_doors(struct room_data *car, int num, int floor)
 {
-  int dir;
-  long rnum;
-
-  rnum = real_room(elevator[num].floor[floor].vnum);
-  dir = elevator[num].floor[floor].doors;
-
-  room->dir_option[dir] = new room_direction_data;
-  memset((char *) room->dir_option[dir], 0, sizeof (struct room_direction_data));
-  room->dir_option[dir]->to_room = rnum;
-  room->dir_option[dir]->barrier = 8;
-  room->dir_option[dir]->condition = 8;
-  room->dir_option[dir]->material = 8;
-
+  int dir = elevator[num].floor[floor].doors;
+  vnum_t landing_rnum = real_room(elevator[num].floor[floor].vnum);
+  struct room_data *landing = &world[landing_rnum];
+  
+  REMOVE_BIT(car->dir_option[dir]->exit_info, EX_ISDOOR);
+  REMOVE_BIT(car->dir_option[dir]->exit_info, EX_CLOSED);
+  REMOVE_BIT(car->dir_option[dir]->exit_info, EX_LOCKED);
+  
   dir = rev_dir[dir];
-
-  world[rnum].dir_option[dir] = new room_direction_data;
-  memset((char *) world[rnum].dir_option[dir], 0, sizeof (struct room_direction_data));
-  world[rnum].dir_option[dir]->to_room = real_room(room->number);
-  world[rnum].dir_option[dir]->barrier = 8;
-  world[rnum].dir_option[dir]->condition = 8;
-  world[rnum].dir_option[dir]->material = 8;
-
+  
+  REMOVE_BIT(landing->dir_option[dir]->exit_info, EX_ISDOOR);
+  REMOVE_BIT(landing->dir_option[dir]->exit_info, EX_CLOSED);
+  REMOVE_BIT(landing->dir_option[dir]->exit_info, EX_LOCKED);
+  
+  // Clean up.
   elevator[num].dir = UP - 1;
-  if (world[rnum].people)
-  {
-    sprintf(buf, "The elevator doors open to the %s.", fulldirs[dir]);
-    act(buf, FALSE, world[rnum].people, 0, 0, TO_ROOM);
-    act(buf, FALSE, world[rnum].people, 0, 0, TO_CHAR);
-  }
+  
+  sprintf(buf, "The elevator doors open to the %s.", fulldirs[dir]);
+  send_to_room(buf, landing_rnum);
 }
 
 static void close_elevator_doors(struct room_data *room, int num, int floor)
 {
-  long rnum;
-  int dir;
+  int dir = elevator[num].floor[floor].doors;
+  vnum_t landing_rnum = real_room(elevator[num].floor[floor].vnum);
+  struct room_data *landing = &world[landing_rnum];
 
-  dir = elevator[num].floor[floor].doors;
-  rnum = room->dir_option[dir]->to_room;
-
-  if (room->dir_option[dir]->keyword)
-    delete [] room->dir_option[dir]->keyword;
-  if (room->dir_option[dir]->general_description)
-    delete [] room->dir_option[dir]->general_description;
-  delete room->dir_option[dir];
-  room->dir_option[dir] = NULL;
+  // Close the doors between landing and car, but do not destroy or replace anything.
+  SET_BIT(room->dir_option[dir]->exit_info, EX_ISDOOR);
+  SET_BIT(room->dir_option[dir]->exit_info, EX_CLOSED);
+  SET_BIT(room->dir_option[dir]->exit_info, EX_LOCKED);
 
   dir = rev_dir[dir];
 
-  // Recover from the rare case of an elevator having a one-way exit.
-  if (world[rnum].dir_option[dir]) {
-    if (world[rnum].dir_option[dir]->keyword)
-      delete [] world[rnum].dir_option[dir]->keyword;
-    if (world[rnum].dir_option[dir]->general_description)
-      delete [] world[rnum].dir_option[dir]->general_description;
-    delete world[rnum].dir_option[dir];
-    world[rnum].dir_option[dir] = NULL;
-  } else {
-    sprintf(buf, "SYSERR: Elevator %ld had a one-way %s exit to %ld.",
-            world[num].number, dirs[rev_dir[dir]], world[rnum].number);
-    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-  }
-
-  if (world[rnum].people)
-  {
-    act("The elevator doors close.",
-        FALSE, world[rnum].people, 0, 0, TO_ROOM);
-    act("The elevator doors close.",
-        FALSE, world[rnum].people, 0, 0, TO_CHAR);
-  }
+  SET_BIT(landing->dir_option[dir]->exit_info, EX_ISDOOR);
+  SET_BIT(landing->dir_option[dir]->exit_info, EX_CLOSED);
+  SET_BIT(landing->dir_option[dir]->exit_info, EX_LOCKED);
+  
+  send_to_room("The elevator doors close.", real_room(landing->number));
 }
 
 // ______________________________
@@ -902,7 +908,8 @@ static int process_elevator(struct room_data *room,
                             int cmd,
                             char *argument)
 {
-  int num, temp, number, floor = 0;
+  int num, temp, number, floor = 0, dir;
+  struct room_data *shaft, *landing, *car = room;
 
   for (num = 0; num < num_elevators; num++)
     if (elevator[num].room == room->number)
@@ -914,9 +921,12 @@ static int process_elevator(struct room_data *room,
   if (!cmd)
   {
     if (elevator[num].destination && elevator[num].dir == -1) {
+      // Iterate through elevator floors, looking for the destination floor.
       for (temp = 0; temp <= elevator[num].num_floors; temp++)
         if (elevator[num].floor[temp].vnum == elevator[num].destination)
           floor = temp;
+      
+      // Set ascension or descension appropriately.
       if (floor >= room->rating) {
         elevator[num].dir = DOWN;
         elevator[num].time_left = floor - room->rating;
@@ -924,39 +934,74 @@ static int process_elevator(struct room_data *room,
         elevator[num].dir = UP;
         elevator[num].time_left = room->rating - floor;
       }
+      
+      // Clear the destination.
       elevator[num].destination = 0;
     }
+    
+    // Move the elevator one floor.
     if (elevator[num].time_left > 0) {
       elevator[num].time_left--;
+      
+      // Message for moving the car out of this part of the shaft.
+      shaft = &world[real_room(elevator[num].floor[room->rating].shaft_vnum)];
+      landing = &world[real_room(elevator[num].floor[room->rating].vnum)];
+      dir = elevator[num].floor[room->rating].doors;
+      
+      sprintf(buf, "The elevator car %s swiftly away from you.", elevator[num].dir == DOWN ? "descends" : "ascends");
+      send_to_room(buf, real_room(shaft->number));
+      // TODO: Bad things to people in the shaft.
+      
+      // Restore the exit shaft->landing. EDGE CASE: Will be NULL if the car started here on boot and hasn't moved.
+      if (shaft->temporary_stored_exit) {
+        // We assume that it was stored by the elevator moving through here, so the dir_option should be NULL and safe to overwrite.
+        shaft->dir_option[dir] = shaft->temporary_stored_exit;
+        shaft->temporary_stored_exit = NULL;
+      }
+      make_elevator_door(real_room(landing->number), real_room(shaft->number), dir);
+      
+      // Restore the landing->shaft exit. Same edge case and assumptions as above.
+      make_elevator_door(real_room(shaft->number), real_room(landing->number), rev_dir[dir]);
+      
+      // Move the elevator one floor in the correct direction.
       if (elevator[num].dir == DOWN)
         room->rating++;
       else
         room->rating--;
-    } else if (elevator[num].dir == UP || elevator[num].dir == DOWN) {
+      
+      // Message for moving the car into this part of the shaft.
+      shaft = &world[real_room(elevator[num].floor[room->rating].shaft_vnum)];
+      landing = &world[real_room(elevator[num].floor[room->rating].vnum)];
+      sprintf(buf, "A rush of air precedes the arrival of an elevator car from %s.", elevator[num].dir == DOWN ? "above" : "below");
+      send_to_room(buf, real_room(shaft->number));
+      // TODO: Bad things to people in the shaft.
+      
+      landing->dir_option[rev_dir[dir]]->to_room = real_room(car->number);
+      
+      car->dir_option[dir]->to_room = real_room(landing->number);
+      
+      shaft->temporary_stored_exit = shaft->dir_option[dir];
+      shaft->dir_option[dir] = NULL;
+    }
+    
+    // Arrive at the target floor.
+    else if (elevator[num].dir == UP || elevator[num].dir == DOWN) {
       temp = room->rating + 1 - elevator[num].num_floors - elevator[num].start_floor;
       if (temp > 0)
-        sprintf(buf, "The elevator stops at B%d, "
-                "and the doors open to the %s.", temp,
+        sprintf(buf, "The elevator stops at B%d, and the doors open to the %s.", temp,
                 fulldirs[elevator[num].floor[room->rating].doors]);
       else if (temp == 0)
-        sprintf(buf, "The elevator stops at the ground floor, "
-                "and the doors open to the %s.", fulldirs[elevator[num].floor[room->rating].doors]);
-      else
-        sprintf(buf, "The elevator stops at floor %d, "
-                "and the doors open to the %s.", 0 - temp,
+        sprintf(buf, "The elevator stops at the ground floor, and the doors open to the %s.",
                 fulldirs[elevator[num].floor[room->rating].doors]);
-      if (room->people) {
-        act(buf, FALSE, room->people, 0, 0, TO_ROOM);
-        act(buf, FALSE, room->people, 0, 0, TO_CHAR);
-      }
+      else
+        sprintf(buf, "The elevator stops at floor %d, and the doors open to the %s.",
+                0 - temp, fulldirs[elevator[num].floor[room->rating].doors]);
+      send_to_room(buf, real_room(room->number));
       open_elevator_doors(room, num, room->rating);
     } else if (elevator[num].dir > 0)
       elevator[num].dir--;
     else if (!elevator[num].dir) {
-      if (room->people) {
-        act("The elevator doors close.", FALSE, room->people, 0, 0, TO_ROOM);
-        act("The elevator doors close.", FALSE, room->people, 0, 0, TO_CHAR);
-      }
+      send_to_room("The elevator doors close.", real_room(room->number));
       close_elevator_doors(room, num, room->rating);
       elevator[num].dir = -1;
     }
@@ -1013,16 +1058,19 @@ static int process_elevator(struct room_data *room,
         elevator[num].dir = UP;
         elevator[num].time_left = MAX(1, room->rating - number);
       }
+      
+      // Elevator movement away from its current floor.
       if (!room->dir_option[elevator[num].floor[room->rating].doors])
-        sprintf(buf, "The elevator begins to %s.",
-                (elevator[num].dir == UP ? "ascend" : "descend"));
+        sprintf(buf, "The elevator begins to %s.", (elevator[num].dir == UP ? "ascend" : "descend"));
       else {
-        sprintf(buf, "The elevator doors close and it begins to %s.",
-                (elevator[num].dir == UP ? "ascend" : "descend"));
+        sprintf(buf, "The elevator doors close and it begins to %s.", (elevator[num].dir == UP ? "ascend" : "descend"));
         close_elevator_doors(room, num, room->rating);
       }
       act(buf, FALSE, ch, 0, 0, TO_ROOM);
       act(buf, FALSE, ch, 0, 0, TO_CHAR);
+      
+      // TODO: Message the shaft.
+      send_to_room("The elevator car shudders and begins to move.", real_room(elevator[num].floor[room->rating].shaft_vnum));
     }
     return TRUE;
   } else if (CMD_IS("look") || CMD_IS("examine"))

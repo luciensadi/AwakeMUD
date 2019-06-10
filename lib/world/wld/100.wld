@@ -1168,11 +1168,15 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
 	ToVnum:	60500
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
-	KeyVnum:	0
+	KeyVnum:	998
 [EXIT up]
 	ToVnum:	10029
 	Flags:	0
@@ -1208,6 +1212,16 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+[EXIT south]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
+	ToVnum:	0
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	998
 [EXIT down]
 	ToVnum:	10028
 	Flags:	0
@@ -1299,6 +1313,12 @@ RoomType:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
+[EXIT up]
+	ToVnum:	10033
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 BREAK
 #10033
 Name:	^W(^cIMMHQ^W)^C Elevator Shaft - G
@@ -1321,6 +1341,28 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+[EXIT north]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
+	ToVnum:	0
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	998
+[EXIT up]
+	ToVnum:	10034
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	10032
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 BREAK
 #10034
 Name:	^W(^cIMMHQ^W)^C Elevator Shaft - 1
@@ -1343,5 +1385,21 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+[EXIT north]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
+	ToVnum:	0
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	998
+[EXIT down]
+	ToVnum:	10033
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 BREAK
 END
