@@ -1801,8 +1801,7 @@ void delete_message_history(struct descriptor_data *d) {
   // For each channel in history, delete all messages (just keep nuking head until it's NULL).
   for (int channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++) {
     while ((temp = d->message_history[channel].Head())) {
-      if (temp->data)
-        delete temp->data;
+      DELETE_ARRAY_IF_EXTANT(temp->data);
       
       d->message_history[channel].RemoveItem(temp);
     }

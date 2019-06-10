@@ -133,7 +133,7 @@ listClass<T>::listClass(const listClass<T> & L) {
 template <class T>
 listClass<T>::~listClass() {
   // to delete, we just remove and deallocate each item
-  register nodeStruct<T> *temp = head;
+  nodeStruct<T> *temp = head;
   while (temp) {
     head = head->next;
     delete temp;
@@ -199,7 +199,7 @@ bool listClass<T>::RemoveItem(nodeStruct<T> *node) {
     num_items--;  /* decrement number of items in list */
     return TRUE;  /* it's been found, so return TRUE */
   } else {
-    register nodeStruct<T> *temp = head;
+    nodeStruct<T> *temp = head;
     while (temp && (temp->next != node))
       temp = temp->next;
 
@@ -225,7 +225,7 @@ bool listClass<T>::RemoveItem(nodeStruct<T> *node) {
 // if it is found
 template <class T>
 nodeStruct<T> *listClass<T>::FindItem(T item) {
-  register nodeStruct<T> *temp;
+  nodeStruct<T> *temp;
 
   for (temp = head; temp; temp = temp->next)
     if (temp->data == item)
