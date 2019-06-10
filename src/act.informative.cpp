@@ -1264,11 +1264,11 @@ void look_in_direction(struct char_data * ch, int dir)
       send_to_char("You see nothing special.\r\n", ch);
     
     if (IS_SET(EXIT(ch, dir)->exit_info, EX_DESTROYED) && EXIT(ch, dir)->keyword)
-      send_to_char(ch, "The %s is destroyed.\r\n", fname(EXIT(ch, dir)->keyword));
+      send_to_char(ch, "The %s is destroyed.\r\n", fname(EXIT(ch, dir)->keyword), !strcmp(fname(EXIT(ch, dir)->keyword), "doors") ? "are" : "is");
     else if (IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED) && EXIT(ch, dir)->keyword)
-      send_to_char(ch, "The %s is closed.\r\n", fname(EXIT(ch, dir)->keyword));
+      send_to_char(ch, "The %s %s closed.\r\n", fname(EXIT(ch, dir)->keyword), !strcmp(fname(EXIT(ch, dir)->keyword), "doors") ? "are" : "is");
     else if (IS_SET(EXIT(ch, dir)->exit_info, EX_ISDOOR) && EXIT(ch, dir)->keyword)
-      send_to_char(ch, "The %s is open.\r\n", fname(EXIT(ch, dir)->keyword));
+      send_to_char(ch, "The %s is open.\r\n", fname(EXIT(ch, dir)->keyword), !strcmp(fname(EXIT(ch, dir)->keyword), "doors") ? "are" : "is");
     
     if(ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)){
       /* Apartments have peepholes. */

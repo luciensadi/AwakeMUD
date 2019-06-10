@@ -492,7 +492,7 @@ SPECIAL(taxi)
   skip_spaces(&argument);
 
   if (CMD_IS("say") || CMD_IS("'")) {
-    // Failure condition: If you can't speak, the cabbie can't hear you. TODO: Test this.
+    // Failure condition: If you can't speak, the cabbie can't hear you.
     if (affected_by_spell(ch, SPELL_STEALTH) || world[ch->in_veh ? ch->in_veh->in_room : ch->in_room].silence[0])
       return FALSE;
     
@@ -909,7 +909,7 @@ static int process_elevator(struct room_data *room,
                             char *argument)
 {
   int num, temp, number, floor = 0, dir;
-  struct room_data *shaft, *landing, *car = room;
+  struct room_data *shaft, *landing, *car;
 
   for (num = 0; num < num_elevators; num++)
     if (elevator[num].room == room->number)
@@ -944,6 +944,7 @@ static int process_elevator(struct room_data *room,
       elevator[num].time_left--;
       
       // Message for moving the car out of this part of the shaft.
+      car = room;
       shaft = &world[real_room(elevator[num].floor[room->rating].shaft_vnum)];
       landing = &world[real_room(elevator[num].floor[room->rating].vnum)];
       dir = elevator[num].floor[room->rating].doors;
@@ -963,6 +964,14 @@ static int process_elevator(struct room_data *room,
       // Restore the landing->shaft exit. Same edge case and assumptions as above.
       make_elevator_door(real_room(shaft->number), real_room(landing->number), rev_dir[dir]);
       
+      // Remove the elevator car's exit (entirely possible that the floor we're going to has no exit in that direction).
+      if (car->dir_option[dir]) {
+        DELETE_ARRAY_IF_EXTANT(car->dir_option[dir]->general_description);
+        DELETE_ARRAY_IF_EXTANT(car->dir_option[dir]->keyword);
+        delete car->dir_option[dir];
+        car->dir_option[dir] = NULL;
+      }
+      
       // Move the elevator one floor in the correct direction.
       if (elevator[num].dir == DOWN)
         room->rating++;
@@ -972,13 +981,14 @@ static int process_elevator(struct room_data *room,
       // Message for moving the car into this part of the shaft.
       shaft = &world[real_room(elevator[num].floor[room->rating].shaft_vnum)];
       landing = &world[real_room(elevator[num].floor[room->rating].vnum)];
+      dir = elevator[num].floor[room->rating].doors;
       sprintf(buf, "A rush of air precedes the arrival of an elevator car from %s.", elevator[num].dir == DOWN ? "above" : "below");
       send_to_room(buf, real_room(shaft->number));
       // TODO: Bad things to people in the shaft.
       
-      landing->dir_option[rev_dir[dir]]->to_room = real_room(car->number);
+      make_elevator_door(real_room(car->number), real_room(landing->number), rev_dir[dir]);
       
-      car->dir_option[dir]->to_room = real_room(landing->number);
+      make_elevator_door(real_room(landing->number), real_room(car->number), dir);
       
       shaft->temporary_stored_exit = shaft->dir_option[dir];
       shaft->dir_option[dir] = NULL;
@@ -1069,7 +1079,7 @@ static int process_elevator(struct room_data *room,
       act(buf, FALSE, ch, 0, 0, TO_ROOM);
       act(buf, FALSE, ch, 0, 0, TO_CHAR);
       
-      // TODO: Message the shaft.
+      // Message the shaft.
       send_to_room("The elevator car shudders and begins to move.", real_room(elevator[num].floor[room->rating].shaft_vnum));
     }
     return TRUE;
