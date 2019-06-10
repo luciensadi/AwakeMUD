@@ -793,7 +793,7 @@ struct descriptor_data
       large_outbuf(NULL), character(NULL), original(NULL), snooping(NULL),
       snoop_by(NULL), next(NULL), misc_data(NULL), edit_obj(NULL), edit_room(NULL),
       edit_mob(NULL), edit_quest(NULL), edit_shop(NULL), edit_zon(NULL),
-      edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL)
+      edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL), edit_pgroup(NULL)
   {
     // Zero out the communication history for all channels.
     for (int channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++)
