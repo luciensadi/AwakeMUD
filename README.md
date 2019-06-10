@@ -21,7 +21,8 @@ Tested on:
 - Cygwin (beta)
 
 ## Installation
-- Install MySQL 5, including its development headers (`mysql/mysql.h`).
+- Install clang (`apt-get install clang`)
+- Install MySQL 5, including its development headers (ensure `mysql/mysql.h` exists in your path).
 - Install [libsodium](https://github.com/jedisct1/libsodium/releases) (`./configure; make; (sudo) make install`). Version 1.0.16 is known to work.
 - Clone this repository to your machine.
 - Run `SQL/gensql.sh` (or do the steps manually if it doesn't support your OS). If you plan on running this with MariaDB, use the `--skip-checks` command-line flag.
