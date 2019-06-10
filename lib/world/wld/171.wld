@@ -764,11 +764,15 @@ RoomType:	0
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
 	ToVnum:	17187
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
-	KeyVnum:	0
+	KeyVnum:	998
 [EXIT south]
 	ToVnum:	17120
 	Flags:	0
@@ -801,6 +805,16 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+[EXIT north]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
+	ToVnum:	0
+	Flags:	1
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	998
 BREAK
 #17123
 Name:	A Steel Elevator
@@ -949,11 +963,15 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
 	ToVnum:	17181
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
-	KeyVnum:	0
+	KeyVnum:	998
 BREAK
 #17128
 Name:	A Hallway
@@ -981,11 +999,15 @@ RoomType:	0
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
 	ToVnum:	17186
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
-	KeyVnum:	0
+	KeyVnum:	998
 [EXIT east]
 	ToVnum:	17139
 	Flags:	0
@@ -1101,11 +1123,15 @@ RoomType:	0
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
 	ToVnum:	17185
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
-	KeyVnum:	0
+	KeyVnum:	998
 [EXIT east]
 	ToVnum:	17143
 	Flags:	0
@@ -1195,11 +1221,15 @@ RoomType:	0
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
 	ToVnum:	17184
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
-	KeyVnum:	0
+	KeyVnum:	998
 [EXIT east]
 	ToVnum:	17147
 	Flags:	0
@@ -1291,11 +1321,15 @@ RoomType:	0
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
 	ToVnum:	17183
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
-	KeyVnum:	0
+	KeyVnum:	998
 [EXIT east]
 	ToVnum:	17151
 	Flags:	0
@@ -1378,11 +1412,15 @@ RoomType:	0
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
 	ToVnum:	17182
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
-	KeyVnum:	0
+	KeyVnum:	998
 [EXIT east]
 	ToVnum:	17155
 	Flags:	0
@@ -2821,7 +2859,7 @@ Desc:$
 Gleaming cables, polished metal, and the quiet whooshing of powerful
 ventilation fans dominate your senses in this elevator shaft. 
 ~
-Flags:	1100
+Flags:	1000000000000000001100
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2832,17 +2870,11 @@ Z:	20.00
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
-	Rating:	0
+	Rating:	4
 	Light:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT north]
-	ToVnum:	17127
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
 [EXIT down]
 	ToVnum:	17182
 	Flags:	0
@@ -2856,7 +2888,7 @@ Desc:$
 Gleaming cables, polished metal, and the quiet whooshing of powerful
 ventilation fans dominate your senses in this elevator shaft. 
 ~
-Flags:	1100
+Flags:	1000000000000000001100
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2867,17 +2899,21 @@ Z:	20.00
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
-	Rating:	0
+	Rating:	4
 	Light:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
 [EXIT south]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
 	ToVnum:	17137
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
-	KeyVnum:	0
+	KeyVnum:	998
 [EXIT up]
 	ToVnum:	17181
 	Flags:	0
@@ -2897,7 +2933,7 @@ Desc:$
 Gleaming cables, polished metal, and the quiet whooshing of powerful
 ventilation fans dominate your senses in this elevator shaft. 
 ~
-Flags:	1100
+Flags:	1000000000000000001100
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2908,17 +2944,21 @@ Z:	20.00
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
-	Rating:	0
+	Rating:	4
 	Light:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
 [EXIT south]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
 	ToVnum:	17135
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
-	KeyVnum:	0
+	KeyVnum:	998
 [EXIT up]
 	ToVnum:	17182
 	Flags:	0
@@ -2938,7 +2978,7 @@ Desc:$
 Gleaming cables, polished metal, and the quiet whooshing of powerful
 ventilation fans dominate your senses in this elevator shaft. 
 ~
-Flags:	1100
+Flags:	1000000000000000001100
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2949,17 +2989,21 @@ Z:	20.00
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
-	Rating:	0
+	Rating:	4
 	Light:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
 [EXIT south]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
 	ToVnum:	17133
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
-	KeyVnum:	0
+	KeyVnum:	998
 [EXIT up]
 	ToVnum:	17183
 	Flags:	0
@@ -2979,7 +3023,7 @@ Desc:$
 Gleaming cables, polished metal, and the quiet whooshing of powerful
 ventilation fans dominate your senses in this elevator shaft. 
 ~
-Flags:	1100
+Flags:	1000000000000000001100
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -2990,17 +3034,21 @@ Z:	20.00
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
-	Rating:	0
+	Rating:	4
 	Light:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
 [EXIT south]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
 	ToVnum:	17131
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
-	KeyVnum:	0
+	KeyVnum:	998
 [EXIT up]
 	ToVnum:	17184
 	Flags:	0
@@ -3020,7 +3068,7 @@ Desc:$
 Gleaming cables, polished metal, and the quiet whooshing of powerful
 ventilation fans dominate your senses in this elevator shaft. 
 ~
-Flags:	1100
+Flags:	1000000000000000001100
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -3031,17 +3079,21 @@ Z:	20.00
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
-	Rating:	0
+	Rating:	4
 	Light:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
 [EXIT south]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
 	ToVnum:	17128
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
-	KeyVnum:	0
+	KeyVnum:	998
 [EXIT up]
 	ToVnum:	17185
 	Flags:	0
@@ -3061,6 +3113,55 @@ Desc:$
 Gleaming cables, polished metal, and the quiet whooshing of powerful
 ventilation fans dominate your senses in this elevator shaft. 
 ~
+Flags:	1000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	4
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
+	ToVnum:	17121
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	998
+[EXIT up]
+	ToVnum:	17186
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	17188
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#17188
+Name:	The Service Pit of A High-Tech Elevator Shaft
+Desc:$
+The service pit of the Mitsuhama elevator is much dirtier than the shaft
+above, owing no doubt to the amount of junk that filters down from passersby
+dropping their things into the crack between the car and the shaft wall. A
+pair of massive coiled shock absorbers juts up from the ground here, enormous
+technological stalagmites designed to reduce the lethality of sudden elevator
+drops. 
+~
 Flags:	1100
 SecType:	Inside
 MatrixExit:	0
@@ -3072,19 +3173,13 @@ Z:	20.00
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
-	Rating:	0
+	Rating:	4
 	Light:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT south]
-	ToVnum:	17121
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
 [EXIT up]
-	ToVnum:	17186
+	ToVnum:	17187
 	Flags:	0
 	Material:	brick
 	Barrier:	4

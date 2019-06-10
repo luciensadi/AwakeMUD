@@ -600,13 +600,17 @@ void make_elevator_door(vnum_t rnum_to, vnum_t rnum_from, int direction_from) {
   // If it doesn't exist, make it so.
 #define DOOR world[rnum_from].dir_option[direction_from]
   if (!DOOR) {
+#ifdef ELEVATOR_DEBUG
     sprintf(buf, "Building new elevator door %s from %ld to %ld.", fulldirs[direction_from], world[rnum_from].number, world[rnum_to].number);
     log(buf);
+#endif
     DOOR = new room_direction_data;
     memset((char *) DOOR, 0, sizeof(struct room_direction_data));
   } else {
+#ifdef ELEVATOR_DEBUG
     sprintf(buf, "Reusing existing elevator door %s from %ld to %ld.", fulldirs[direction_from], world[rnum_from].number, world[rnum_to].number);
     log(buf);
+#endif
   }
   
   // Set the exit to point to the correct rnum.
@@ -851,7 +855,8 @@ SPECIAL(call_elevator)
       rnum = real_room(elevator[index].room);
       for (i = 0; i < UP; i++)
         if (world[rnum].dir_option[i] &&
-            world[rnum].dir_option[i]->to_room == ch->in_room) {
+            world[rnum].dir_option[i]->to_room == ch->in_room &&
+            !IS_SET(world[rnum].dir_option[i]->exit_info, EX_CLOSED)) {
           send_to_char("The door is already open!\r\n", ch);
           elevator[index].destination = 0;
           return TRUE;
@@ -922,7 +927,7 @@ static int process_elevator(struct room_data *room,
   {
     if (elevator[num].destination && elevator[num].dir == -1) {
       // Iterate through elevator floors, looking for the destination floor.
-      for (temp = 0; temp <= elevator[num].num_floors; temp++)
+      for (temp = 0; temp < elevator[num].num_floors; temp++)
         if (elevator[num].floor[temp].vnum == elevator[num].destination)
           floor = temp;
       
@@ -951,7 +956,7 @@ static int process_elevator(struct room_data *room,
       
       sprintf(buf, "The elevator car %s swiftly away from you.", elevator[num].dir == DOWN ? "descends" : "ascends");
       send_to_room(buf, real_room(shaft->number));
-      // TODO: Bad things to people in the shaft.
+      /* TODO: If you fail an athletics test, you get dragged by the car, sustaining D impact damage and getting pulled along with the elevator. */
       
       // Restore the exit shaft->landing. EDGE CASE: Will be NULL if the car started here on boot and hasn't moved.
       if (shaft->temporary_stored_exit) {
@@ -984,7 +989,7 @@ static int process_elevator(struct room_data *room,
       dir = elevator[num].floor[room->rating].doors;
       sprintf(buf, "A rush of air precedes the arrival of an elevator car from %s.", elevator[num].dir == DOWN ? "above" : "below");
       send_to_room(buf, real_room(shaft->number));
-      // TODO: Bad things to people in the shaft.
+      /* TODO: If you fail an athletics test, the elevator knocks you off the wall, dealing D impact damage and triggering fall. */
       
       make_elevator_door(real_room(car->number), real_room(landing->number), rev_dir[dir]);
       
@@ -1070,7 +1075,7 @@ static int process_elevator(struct room_data *room,
       }
       
       // Elevator movement away from its current floor.
-      if (!room->dir_option[elevator[num].floor[room->rating].doors])
+      if (!IS_SET(room->dir_option[elevator[num].floor[room->rating].doors]->exit_info, EX_CLOSED))
         sprintf(buf, "The elevator begins to %s.", (elevator[num].dir == UP ? "ascend" : "descend"));
       else {
         sprintf(buf, "The elevator doors close and it begins to %s.", (elevator[num].dir == UP ? "ascend" : "descend"));
