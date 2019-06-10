@@ -294,7 +294,7 @@ void boot_world(void)
     exit(ERROR_LIBSODIUM_INIT_FAILED);
   }
   
-#ifdef DEBUG
+#ifdef CRYPTO_DEBUG
   log("Performing crypto performance and validation tests.");
   run_crypto_tests();
 #endif

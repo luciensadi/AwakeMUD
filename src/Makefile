@@ -12,7 +12,8 @@ SHELL = /bin/sh
 .SUFFIXES : .cpp .o
 .DELETE_ON_ERROR : 
 .PHONY : 
-CXX = g++
+#CXX = g++
+CXX = clang
 CC = gcc
 
 PROFILE = -ggdb
@@ -24,12 +25,12 @@ CVS = cvs
 # smooth, the define can be removed.
 
 # OSX? Uncomment these:
-#LIBS = -L/usr/local/lib -lmysqlclient -lz -lm -lcurl -lsodium
-#MYFLAGS = -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DGITHUB_INTEGRATION -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
+LIBS = -L/usr/local/lib -lmysqlclient -lz -lm -lcurl -lsodium -lstdc++
+MYFLAGS = -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DGITHUB_INTEGRATION -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
 
 # Linux / others? Uncomment these:
-LIBS = -lcrypt -L/usr/local/lib -lmysqlclient -lz -lm -lnsl -lcurl -lsodium
-MYFLAGS = -DLIST_CHAR_TO_CHAR_DEBUG -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
+#LIBS = -lcrypt -L/usr/local/lib -lmysqlclient -lz -lm -lnsl -lcurl -lsodium -lstdc++
+#MYFLAGS = -DDEBUG_CRYPTO -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
 # If you want GitHub integration, add -DGITHUB_INTEGRATION to the above and fill out your basic auth credentials in github_config.cpp.
 
 # Cygwin:

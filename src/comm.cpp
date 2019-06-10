@@ -2041,8 +2041,8 @@ char *colorize(struct descriptor_data *d, const char *str, bool skip_check)
 {
   // Big ol' buffer so that even if the entire string is color codes, we can still store it all plus a terminal \0. -LS
   static char buffer[MAX_STRING_LENGTH * 8 + 1];
-  register char *temp = &buffer[0];
-  register const char *color;
+  char *temp = &buffer[0];
+  const char *color;
   
   if (!str || !*str) {
     // Declare our own error buf so we don't clobber anyone's strings.
@@ -2362,8 +2362,8 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
                  void *vict_obj, struct char_data * to)
 {
   extern char *make_desc(char_data *ch, char_data *i, char *buf, int act);
-  register const char *i = NULL;
-  register char *buf;
+  const char *i = NULL;
+  char *buf;
   struct char_data *vict;
   static char lbuf[MAX_STRING_LENGTH];
   struct remem *mem = NULL;
