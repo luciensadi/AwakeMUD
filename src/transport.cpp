@@ -32,6 +32,7 @@
 SPECIAL(call_elevator);
 SPECIAL(elevator_spec);
 extern int find_first_step(vnum_t src, vnum_t target);
+extern void perform_fall(struct char_data *ch);
 // ----------------------------------------------------------------------------
 
 // ______________________________
@@ -922,6 +923,7 @@ static int process_elevator(struct room_data *room,
                             char *argument)
 {
   int num, temp, number, floor = 0, dir;
+  int base_target, dice, power, success, dam;
   struct room_data *shaft, *landing, *car;
 
   for (num = 0; num < num_elevators; num++)
@@ -962,9 +964,37 @@ static int process_elevator(struct room_data *room,
       landing = &world[real_room(elevator[num].floor[room->rating].vnum)];
       dir = elevator[num].floor[room->rating].doors;
       
-      sprintf(buf, "The elevator car %s swiftly away from you.", elevator[num].dir == DOWN ? "descends" : "ascends");
+      sprintf(buf, "The elevator car %s swiftly away from you.\r\n", elevator[num].dir == DOWN ? "descends" : "ascends");
       send_to_room(buf, real_room(shaft->number));
-      /* TODO: If you fail an athletics test, you get dragged by the car, sustaining D impact damage and getting pulled along with the elevator. */
+      /* If you fail an athletics test, you get dragged by the car, sustaining impact damage and getting pulled along with the elevator. */
+      for (struct char_data *vict = shaft->people; vict; vict = vict->next_in_room) {
+        // Nohassle imms and astral projections are immune to this bullshit.
+        if (PRF_FLAGGED(vict, PRF_NOHASSLE) || IS_ASTRAL(vict))
+          continue;
+        
+        // if you pass the test, continue
+        base_target = 6 + modify_target(vict);
+        dice = GET_REA(vict) + get_skill(vict, SKILL_ATHLETICS, base_target);
+        if (success_test(dice, base_target) > 0) {
+          // No message on success (would be spammy)
+          continue;
+        }
+        
+        // Failure case: Deal damage.
+        act("^R$n is caught up in the mechanism and dragged along!^n", FALSE, vict, 0, 0, TO_ROOM);
+        send_to_char("^RThe elevator mechanism snags you and drags you along!^n\r\n", vict);
+        
+        char_from_room(vict);
+        char_to_room(vict, real_room(elevator[num].floor[(elevator[num].dir == DOWN ? room->rating + 1 : room->rating - 1)].shaft_vnum));
+        
+        sprintf(buf, "$n ragdolls in from %s, propelled by the bulk of a moving elevator.", elevator[num].dir == DOWN ? "above" : "below");
+        act(buf, FALSE, vict, 0, 0, TO_ROOM);
+        
+        power = MIN(4, 15 - (GET_IMPACT(vict) / 2)); // Base power 15 (getting pinned and dragged by an elevator HURTS). Impact armor helps.
+        success = success_test(GET_BOD(vict), MAX(2, power) + modify_target(vict));
+        dam = convert_damage(stage(-success, power));
+        damage(vict, vict, dam, TYPE_ELEVATOR, TRUE);
+      }
       
       // Restore the exit shaft->landing. EDGE CASE: Will be NULL if the car started here on boot and hasn't moved.
       if (shaft->temporary_stored_exit) {
@@ -995,9 +1025,37 @@ static int process_elevator(struct room_data *room,
       shaft = &world[real_room(elevator[num].floor[room->rating].shaft_vnum)];
       landing = &world[real_room(elevator[num].floor[room->rating].vnum)];
       dir = elevator[num].floor[room->rating].doors;
-      sprintf(buf, "A rush of air precedes the arrival of an elevator car from %s.", elevator[num].dir == DOWN ? "above" : "below");
+      sprintf(buf, "A rush of air precedes the arrival of an elevator car from %s.\r\n", elevator[num].dir == DOWN ? "above" : "below");
       send_to_room(buf, real_room(shaft->number));
-      /* TODO: If you fail an athletics test, the elevator knocks you off the wall, dealing D impact damage and triggering fall. */
+      
+      /* If you fail an athletics test, the elevator knocks you off the wall, dealing D impact damage and triggering fall. */
+      for (struct char_data *vict = shaft->people; vict; vict = vict->next_in_room) {
+        // Nohassle imms and astral projections are immune to this bullshit.
+        if (PRF_FLAGGED(vict, PRF_NOHASSLE) || IS_ASTRAL(vict))
+          continue;
+        
+        // if you pass the test, continue
+        base_target = 6 + modify_target(vict);
+        dice = GET_REA(vict) + get_skill(vict, SKILL_ATHLETICS, base_target);
+        if (success_test(dice, base_target) > 0) {
+          // No message on success (would be spammy)
+          continue;
+        }
+        
+        // Failure case: Deal damage.
+        act("^R$n is crushed by the bulk of the elevator!^n", FALSE, vict, 0, 0, TO_ROOM);
+        send_to_char("^RThe elevator grinds you against the hoistway wall with crushing force!^n\r\n", vict);
+        
+        power = MIN(4, 15 - (GET_IMPACT(vict) / 2)); // Base power 15 (getting pinned and dragged by an elevator HURTS). Impact armor helps.
+        success = success_test(GET_BOD(vict), MAX(2, power) + modify_target(vict));
+        dam = convert_damage(stage(-success, power));
+        
+        // Damage them, and stop the pain if they died.
+        if (damage(vict, vict, dam, TYPE_ELEVATOR, TRUE))
+          continue;
+        
+        perform_fall(vict);
+      }
       
       make_elevator_door(real_room(car->number), real_room(landing->number), rev_dir[dir]);
       
