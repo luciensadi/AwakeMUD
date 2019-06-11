@@ -71,11 +71,11 @@ struct quest_data
 }
 ;
 
-#define CMD_NONE  0
-#define CMD_QUIT  1
-#define CMD_DONE  2
-#define CMD_START  3
-#define CMD_YES  4
-#define CMD_NO  5
+#define CMD_JOB_NONE  0
+#define CMD_JOB_QUIT  1
+#define CMD_JOB_DONE  2
+#define CMD_JOB_START  3
+#define CMD_JOB_YES  4
+#define CMD_JOB_NO  5
 
 #endif

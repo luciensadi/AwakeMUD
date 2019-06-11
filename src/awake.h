@@ -496,7 +496,8 @@ enum {
 #define ROOM_NOGRID    	       	28
 #define ROOM_STORAGE	        	29
 #define ROOM_NO_TRAFFIC         30
-#define ROOM_MAX        	      31
+#define ROOM_ELEVATOR_SHAFT     31 // Don't set this manually
+#define ROOM_MAX        	      32
 
 #define NORMAL		0
 #define LOWLIGHT	1

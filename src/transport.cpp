@@ -39,8 +39,10 @@ extern int find_first_step(vnum_t src, vnum_t target);
 // static vars
 // ______________________________
 
-static struct elevator_data *elevator = NULL;
-static int num_elevators = 0;
+struct elevator_data *elevator = NULL;
+int num_elevators = 0;
+
+extern int ELEVATOR_SHAFT_FALL_RATING;
 
 // static const int NUM_SEATTLE_STATIONS = 6;
 static const int NUM_SEATAC_STATIONS = 6;
@@ -390,7 +392,7 @@ SPECIAL(taxi)
   ACMD(do_action);
 
   struct char_data *temp = NULL, *driver = (struct char_data *) me;
-  int comm = CMD_NONE, i = 0, j;
+  int comm = CMD_TAXI_NONE, i = 0, j;
   char say[MAX_STRING_LENGTH];
   vnum_t dest = 0;
   bool portland = FALSE;
@@ -500,28 +502,28 @@ SPECIAL(taxi)
     if (GET_ACTIVE(driver) == ACT_AWAIT_CMD)
       for (dest = 0; (portland ? *port_destinations[dest].keyword : *destinations[dest].keyword) != '\n'; dest++)
         if ( str_str((const char *)argument, (portland ? port_destinations[dest].keyword : destinations[dest].keyword))) {
-          comm = CMD_DEST;
+          comm = CMD_TAXI_DEST;
           found = TRUE;
           break;
         }
     if (!found) {
       if (str_str(argument, "yes") || str_str(argument, "sure") ||
           str_str(argument, "yea") || str_str(argument, "okay"))
-        comm = CMD_YES;
+        comm = CMD_TAXI_YES;
       else if (strstr(argument, "no"))
-        comm = CMD_NO;
+        comm = CMD_TAXI_NO;
     }
     do_say(ch, argument, 0, 0);
   } else if (CMD_IS("nod")) {
-    comm = CMD_YES;
+    comm = CMD_TAXI_YES;
     do_action(ch, argument, cmd, 0);
   } else if (CMD_IS("shake") && !*argument) {
-    comm = CMD_NO;
+    comm = CMD_TAXI_NO;
     do_action(ch, argument, cmd, 0);
   } else
     return FALSE;
 
-  if (comm == CMD_DEST && !memory(driver, ch) &&
+  if (comm == CMD_TAXI_DEST && !memory(driver, ch) &&
       (i = real_room(GET_LASTROOM(ch))) > -1 &&
       GET_ACTIVE(driver) == ACT_AWAIT_CMD) {
     for (i = NORTH; i < UP; i++)
@@ -551,7 +553,7 @@ SPECIAL(taxi)
       GET_EXTRA(driver) = 1;
     else GET_EXTRA(driver) = 0;
     remember(driver, ch);
-  } else if (comm == CMD_YES && memory(driver, ch) &&
+  } else if (comm == CMD_TAXI_YES && memory(driver, ch) &&
              GET_ACTIVE(driver) == ACT_AWAIT_YESNO) {
     if (GET_NUYEN(ch) < GET_SPARE1(driver) && !IS_SENATOR(ch)) {
       GET_ACTIVE(driver) = ACT_REPLY_NOTOK;
@@ -579,7 +581,7 @@ SPECIAL(taxi)
         act("The door shuts as the taxi begins to accelerate.",
             FALSE, ch, 0, 0, TO_CHAR);
       }
-  } else if (comm == CMD_NO && memory(driver, ch) &&
+  } else if (comm == CMD_TAXI_NO && memory(driver, ch) &&
              GET_ACTIVE(driver) == ACT_AWAIT_YESNO)
     GET_ACTIVE(driver) = ACT_REPLY_TOOBAD;
 
@@ -724,6 +726,9 @@ static void init_elevators(void)
           if (shaft_rnum > -1) {
             make_elevator_door(rnum, shaft_rnum, elevator[i].floor[j].doors);
             make_elevator_door(shaft_rnum, rnum, rev_dir[elevator[i].floor[j].doors]);
+            // Flag the shaft appropriately.
+            ROOM_FLAGS(shaft_rnum).SetBits(ROOM_NOMOB, ROOM_NOBIKE, ROOM_ELEVATOR_SHAFT, ROOM_FALL, ENDBIT);
+            world[shaft_rnum].rating = ELEVATOR_SHAFT_FALL_RATING;
           } else {
             sprintf(buf, "Fatal error: Nonexistent elevator shaft vnum %ld.", elevator[i].floor[j].shaft_vnum);
             log(buf);

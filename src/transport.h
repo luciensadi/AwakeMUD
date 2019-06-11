@@ -13,10 +13,10 @@
 #define FIRST_PORTCAB	  650
 #define LAST_PORTCAB	  660
 
-#define CMD_NONE          0
-#define CMD_DEST          1
-#define CMD_YES           2
-#define CMD_NO            3
+#define CMD_TAXI_NONE          0
+#define CMD_TAXI_DEST          1
+#define CMD_TAXI_YES           2
+#define CMD_TAXI_NO            3
 
 #define ACT_AWAIT_CMD     0
 #define ACT_REPLY_DEST    1
