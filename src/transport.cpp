@@ -1141,7 +1141,7 @@ static int process_elevator(struct room_data *room,
       }
       
       // Elevator movement away from its current floor.
-      if (!IS_SET(room->dir_option[elevator[num].floor[room->rating].doors]->exit_info, EX_CLOSED))
+      if (IS_SET(room->dir_option[elevator[num].floor[room->rating].doors]->exit_info, EX_CLOSED))
         sprintf(buf, "The elevator begins to %s.", (elevator[num].dir == UP ? "ascend" : "descend"));
       else {
         sprintf(buf, "The elevator doors close and it begins to %s.", (elevator[num].dir == UP ? "ascend" : "descend"));
