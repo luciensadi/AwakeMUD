@@ -1004,7 +1004,7 @@ static int process_elevator(struct room_data *room,
         char_from_room(vict);
         char_to_room(vict, real_room(elevator[num].floor[(elevator[num].dir == DOWN ? room->rating + 1 : room->rating - 1)].shaft_vnum));
         
-        sprintf(buf, "$n ragdolls in from %s, propelled by the bulk of a moving elevator.", elevator[num].dir == DOWN ? "above" : "below");
+        sprintf(buf, "$n ragdolls in from %s, propelled by the bulk of the moving elevator.", elevator[num].dir == DOWN ? "above" : "below");
         act(buf, FALSE, vict, 0, 0, TO_ROOM);
         
         power = MIN(4, 15 - (GET_IMPACT(vict) / 2)); // Base power 15 (getting pinned and dragged by an elevator HURTS). Impact armor helps.
