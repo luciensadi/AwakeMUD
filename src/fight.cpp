@@ -1996,30 +1996,35 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
               world[vict->in_room].number);
       break;
     case TYPE_DUMPSHOCK:
-      sprintf(buf2, "%s couldn't quite manage a graceful logoff. { %s (%ld)}",
+      sprintf(buf2, "%s couldn't quite manage a graceful logoff. {%s (%ld)}",
               GET_CHAR_NAME(vict), world[vict->in_room].name,
               world[vict->in_room].number);
       
       break;
     case TYPE_BLACKIC:
-      sprintf(buf2, "%s couldn't haxor the gibson. { %s (%ld)}",
+      sprintf(buf2, "%s couldn't haxor the gibson. {%s (%ld)}",
               GET_CHAR_NAME(vict), world[vict->in_room].name,
               world[vict->in_room].number);
       break;
     case TYPE_POLTERGEIST:
-      sprintf(buf2, "%s is a pansy who got killed by the poltergeist spell. { %s (%ld)}",
+      sprintf(buf2, "%s is a pansy who got killed by the poltergeist spell. {%s (%ld)}",
+              GET_CHAR_NAME(vict), world[vict->in_room].name,
+              world[vict->in_room].number);
+      break;
+    case TYPE_ELEVATOR:
+      sprintf(buf, "%s got crushed by a moving elevator. Ouch. {%s (%ld)}",
               GET_CHAR_NAME(vict), world[vict->in_room].name,
               world[vict->in_room].number);
       break;
     case TYPE_CRASH:
       switch(number(0, 1)) {
         case 0:
-          sprintf(buf2, "%s forgot to wear his seatbelt. { %s (%ld)}",
+          sprintf(buf2, "%s forgot to wear his seatbelt. {%s (%ld)}",
                   GET_CHAR_NAME(vict), world[vict->in_room].name,
                   world[vict->in_room].number);
           break;
         case 1:
-          sprintf(buf2, "%s become one with the dashboard. { %s (%ld)}",
+          sprintf(buf2, "%s become one with the dashboard. {%s (%ld)}",
                   GET_CHAR_NAME(vict), world[vict->in_room].name,
                   world[vict->in_room].number);
           break;

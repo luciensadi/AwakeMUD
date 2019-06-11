@@ -632,7 +632,7 @@ void handle_info(struct char_data *johnson)
 SPECIAL(johnson)
 {
   struct char_data *johnson = (struct char_data *) me, *temp = NULL;
-  int i, obj_complete = 0, mob_complete = 0, num, comm = CMD_NONE;
+  int i, obj_complete = 0, mob_complete = 0, num, comm = CMD_JOB_NONE;
 
   if (!IS_NPC(johnson))
     return FALSE;
@@ -663,34 +663,34 @@ SPECIAL(johnson)
 
   if (CMD_IS("say") || CMD_IS("'")) {
     if (str_str(argument, "quit"))
-      comm = CMD_QUIT;
+      comm = CMD_JOB_QUIT;
     else if (str_str(argument, "collect") || str_str(argument, "complete") || str_str(argument, "done"))
-      comm = CMD_DONE;
+      comm = CMD_JOB_DONE;
     else if (str_str(argument, "work") || str_str(argument, "business") ||
              str_str(argument, "run") || str_str(argument, "shadowrun") ||
              str_str(argument, "job"))
-      comm = CMD_START;
+      comm = CMD_JOB_START;
     else if (str_str(argument, "yes") || str_str(argument, "accept") || str_str(argument, "yeah")
             || str_str(argument, "sure") || str_str(argument, "okay"))
-      comm = CMD_YES;
+      comm = CMD_JOB_YES;
     else if (strstr(argument, "no"))
-      comm = CMD_NO;
+      comm = CMD_JOB_NO;
     do_say(ch, argument, 0, 0);
   } else if (CMD_IS("nod")) {
-    comm = CMD_YES;
+    comm = CMD_JOB_YES;
     do_action(ch, argument, cmd, 0);
   } else if (CMD_IS("shake") && !*argument) {
-    comm = CMD_NO;
+    comm = CMD_JOB_NO;
     do_action(ch, argument, cmd, 0);
   } else
     return FALSE;
 
-  if (comm == CMD_QUIT && GET_SPARE1(johnson) == -1 && GET_QUEST(ch) &&
+  if (comm == CMD_JOB_QUIT && GET_SPARE1(johnson) == -1 && GET_QUEST(ch) &&
       memory(johnson, ch)) {
     do_say(johnson, quest_table[GET_QUEST(ch)].quit, 0, 0);
     end_quest(ch);
     forget(johnson, ch);
-  } else if (comm == CMD_DONE && GET_SPARE1(johnson) == -1 && GET_QUEST(ch) &&
+  } else if (comm == CMD_JOB_DONE && GET_SPARE1(johnson) == -1 && GET_QUEST(ch) &&
              memory(johnson, ch)) {
     for (i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++)
       if (ch->player_specials->obj_complete[i]) {
@@ -711,7 +711,7 @@ SPECIAL(johnson)
       forget(johnson, ch);
     } else
       do_say(johnson, "But you have not completed any objectives yet.", 0, 0);
-  } else if (comm == CMD_START && GET_SPARE1(johnson) == -1 &&
+  } else if (comm == CMD_JOB_START && GET_SPARE1(johnson) == -1 &&
              GET_SPARE2(johnson) >= 0) {
     if (GET_QUEST(ch)) {
       do_say(johnson, "Maybe when you've finished what you're doing.", 0, 0);
@@ -746,7 +746,7 @@ SPECIAL(johnson)
       if (!memory(johnson, ch))
         remember(johnson, ch);
     }
-  } else if (comm == CMD_YES && !GET_SPARE1(johnson) && !GET_QUEST(ch) &&
+  } else if (comm == CMD_JOB_YES && !GET_SPARE1(johnson) && !GET_QUEST(ch) &&
              memory(johnson, ch)) {
     GET_QUEST(ch) = GET_SPARE2(johnson);
     ch->player_specials->obj_complete =
@@ -759,7 +759,7 @@ SPECIAL(johnson)
       ch->player_specials->mob_complete[num] = 0;
     load_quest_targets(johnson, ch);
     handle_info(johnson);
-  } else if (comm == CMD_NO && !GET_SPARE1(johnson) && !GET_QUEST(ch) &&
+  } else if (comm == CMD_JOB_NO && !GET_SPARE1(johnson) && !GET_QUEST(ch) &&
              memory(johnson, ch)) {
     GET_SPARE1(johnson) = -1;
     GET_QUEST(ch) = 0;

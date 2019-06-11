@@ -1040,4 +1040,26 @@ RoomType:	6
 	Barrier:	4
 	KeyVnum:	0
 BREAK
+#70331
+Name:	TSS elevator shaft
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
 END

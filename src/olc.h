@@ -2,7 +2,6 @@
 #ifndef _olc_h_
 #define _olc_h_
 
-#define NUM_MATERIALS           17
 #define NUM_BARRIERS            9
 #define NUM_AFF_FLAGS           22
 

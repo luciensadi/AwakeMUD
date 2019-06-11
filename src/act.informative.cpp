@@ -36,6 +36,7 @@ using namespace std;
 #include "awake.h"
 #include "constants.h"
 #include "quest.h"
+#include "transport.h"
 
 const char *CCHAR;
 
@@ -66,6 +67,9 @@ extern SPECIAL(johnson);
 extern bool trainable_attribute_is_maximized(struct char_data *ch, int attribute);
 
 extern teach_t teachers[];
+
+extern struct elevator_data *elevator;
+extern int num_elevators;
 
 /* blood stuff */
 
@@ -1231,6 +1235,25 @@ void look_at_room(struct char_data * ch, int ignore_brief)
     send_to_char("^cAn invisible force is whipping small objects around the area.^n\r\n", ch);
   if (world[ch->in_room].icesheet[0])
     send_to_char("^CIce covers the floor.^n\r\n", ch);
+  
+  // Is there an elevator car here?
+  if (ROOM_FLAGGED(ch->in_room, ROOM_ELEVATOR_SHAFT)) {
+    bool match = FALSE;
+    // Iterate through elevators to find one that contains this shaft.
+    for (int index = 0; !match && index < num_elevators; index++) {
+      // Iterate through floors to see if a given floor matches the shaft's vnum.
+      for (int floor = 0; !match && floor < elevator[index].num_floors; floor++) {
+        // Check for a match.
+        if (elevator[index].floor[floor].shaft_vnum == world[ch->in_room].number) {
+          // Check for the car being at this floor.
+          if (world[real_room(elevator[index].room)].rating == floor)
+            send_to_char("^RThe massive bulk of an elevator car fills the hoistway, squeezing you aside.^n\r\n", ch);
+          match = TRUE;
+        }
+      }
+    }
+  }
+  
   /* now list characters & objects */
   // what fun just to get a colorized listing
   CCHAR = "^g";
@@ -1264,11 +1287,11 @@ void look_in_direction(struct char_data * ch, int dir)
       send_to_char("You see nothing special.\r\n", ch);
     
     if (IS_SET(EXIT(ch, dir)->exit_info, EX_DESTROYED) && EXIT(ch, dir)->keyword)
-      send_to_char(ch, "The %s is destroyed.\r\n", fname(EXIT(ch, dir)->keyword));
+      send_to_char(ch, "The %s is destroyed.\r\n", fname(EXIT(ch, dir)->keyword), !strcmp(fname(EXIT(ch, dir)->keyword), "doors") ? "are" : "is");
     else if (IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED) && EXIT(ch, dir)->keyword)
-      send_to_char(ch, "The %s is closed.\r\n", fname(EXIT(ch, dir)->keyword));
+      send_to_char(ch, "The %s %s closed.\r\n", fname(EXIT(ch, dir)->keyword), !strcmp(fname(EXIT(ch, dir)->keyword), "doors") ? "are" : "is");
     else if (IS_SET(EXIT(ch, dir)->exit_info, EX_ISDOOR) && EXIT(ch, dir)->keyword)
-      send_to_char(ch, "The %s is open.\r\n", fname(EXIT(ch, dir)->keyword));
+      send_to_char(ch, "The %s is open.\r\n", fname(EXIT(ch, dir)->keyword), !strcmp(fname(EXIT(ch, dir)->keyword), "doors") ? "are" : "is");
     
     if(ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)){
       /* Apartments have peepholes. */

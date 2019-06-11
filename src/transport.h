@@ -13,10 +13,10 @@
 #define FIRST_PORTCAB	  650
 #define LAST_PORTCAB	  660
 
-#define CMD_NONE          0
-#define CMD_DEST          1
-#define CMD_YES           2
-#define CMD_NO            3
+#define CMD_TAXI_NONE          0
+#define CMD_TAXI_DEST          1
+#define CMD_TAXI_YES           2
+#define CMD_TAXI_NO            3
 
 #define ACT_AWAIT_CMD     0
 #define ACT_REPLY_DEST    1
@@ -37,6 +37,7 @@ struct dest_data
 struct floor_data
 {
   vnum_t vnum;
+  vnum_t shaft_vnum;
   sh_int doors;
 };
 
@@ -46,8 +47,9 @@ struct elevator_data
   sh_int columns, time_left, dir, num_floors, start_floor;
   struct floor_data *floor;
   long destination;
+  bool is_moving;
   elevator_data() :
-      floor(NULL), destination(0)
+      floor(NULL), destination(0), is_moving(FALSE)
   {}
 }
 ;

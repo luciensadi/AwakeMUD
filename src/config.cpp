@@ -25,6 +25,7 @@ int MAX_PLAYERS = 300;
 int max_filesize = 50000;
 int max_bad_pws = 3;
 int nameserver_is_slow = FALSE;
+int ELEVATOR_SHAFT_FALL_RATING = 6;
 
 const char *MENU =
   "\r\n"

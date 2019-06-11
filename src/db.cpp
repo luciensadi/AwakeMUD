@@ -2934,9 +2934,15 @@ void reset_zone(int zone, int reboot)
         } else {
           obj = read_object(ZCMD.arg1, REAL);
           equip_char(mob, obj, ZCMD.arg3);
-          if (!from_ip_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
-            GET_OBJ_EXTRA(obj).SetBit(ITEM_VOLATILE);
-          last_cmd = 1;
+          if (GET_EQ(mob, ZCMD.arg3) != obj) {
+            // Equip failure; destroy the object.
+            extract_obj(obj);
+            last_cmd = 0;
+          } else {
+            if (!from_ip_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
+              GET_OBJ_EXTRA(obj).SetBit(ITEM_VOLATILE);
+            last_cmd = 1;
+          }
         }
       } else
         last_cmd = 0;

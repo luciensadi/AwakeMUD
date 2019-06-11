@@ -496,7 +496,8 @@ enum {
 #define ROOM_NOGRID    	       	28
 #define ROOM_STORAGE	        	29
 #define ROOM_NO_TRAFFIC         30
-#define ROOM_MAX        	      31
+#define ROOM_ELEVATOR_SHAFT     31 // Don't set this manually
+#define ROOM_MAX        	      32
 
 #define NORMAL		0
 #define LOWLIGHT	1
@@ -923,21 +924,22 @@ enum {
 #define TYPE_BIFURCATE        327
 #define TYPE_CRASH            328
 #define TYPE_DUMPSHOCK        329
-#define TYPE_BLACKIC	      330
-#define TYPE_SUFFERING          399
-#define TYPE_EXPLOSION          400
-#define TYPE_SCATTERING         401
-#define TYPE_FALL               402
-#define TYPE_DROWN              403
-#define TYPE_ALLERGY            404
-#define TYPE_BIOWARE            405
-#define TYPE_RECOIL             406
-#define TYPE_RAM  		407
-#define TYPE_DRAIN		408
-#define TYPE_FUMES		409
-#define TYPE_FIRE		410
-#define TYPE_ACID		411
-#define TYPE_POLTERGEIST	412
+#define TYPE_BLACKIC	        330
+#define TYPE_SUFFERING        399
+#define TYPE_EXPLOSION        400
+#define TYPE_SCATTERING       401
+#define TYPE_FALL             402
+#define TYPE_DROWN            403
+#define TYPE_ALLERGY          404
+#define TYPE_BIOWARE          405
+#define TYPE_RECOIL           406
+#define TYPE_RAM              407
+#define TYPE_DRAIN            408
+#define TYPE_FUMES            409
+#define TYPE_FIRE             410
+#define TYPE_ACID             411
+#define TYPE_POLTERGEIST      412
+#define TYPE_ELEVATOR         413
 
 #define WEAP_EDGED		0
 #define WEAP_CLUB		1
@@ -2016,6 +2018,7 @@ enum {
 #define OBJ_NEWBIE_RADIO           60531
 #define OBJ_MULTNOMAH_VISA         1
 #define OBJ_MAP_OF_SEATTLE         2041
+#define OBJ_ELEVATOR_SHAFT_KEY     998
 
 /* ban struct */
 struct ban_list_element
@@ -2071,5 +2074,25 @@ struct ban_list_element
 #define ERROR_ZONEREAD_PREMATURE_EOF           15
 #define ERROR_ZONEREAD_FORMAT_ERROR            16
 #define ERROR_MYSQL_DATABASE_NOT_FOUND         17
+
+// Materials.
+#define MATERIAL_PAPER        0
+#define MATERIAL_WOOD         1
+#define MATERIAL_GLASS        2
+#define MATERIAL_FABRIC       3
+#define MATERIAL_LEATHER      4
+#define MATERIAL_BRICK        5
+#define MATERIAL_PLASTIC      6
+#define MATERIAL_ADV_PLASTICS 7
+#define MATERIAL_METAL        8
+#define MATERIAL_ORICHALCUM   9
+#define MATERIAL_ELECTRONICS  10
+#define MATERIAL_COMPUETERS   11
+#define MATERIAL_TOXIC_WASTES 12
+#define MATERIAL_ORGANIC      13
+#define MATERIAL_STONE        14
+#define MATERIAL_CERAMIC      15
+#define MATERIAL_CONCRETE     16
+#define NUM_MATERIALS         17
 
 #endif
