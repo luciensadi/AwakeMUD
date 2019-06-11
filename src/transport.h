@@ -47,8 +47,9 @@ struct elevator_data
   sh_int columns, time_left, dir, num_floors, start_floor;
   struct floor_data *floor;
   long destination;
+  bool is_moving;
   elevator_data() :
-      floor(NULL), destination(0)
+      floor(NULL), destination(0), is_moving(FALSE)
   {}
 }
 ;

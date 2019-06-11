@@ -925,6 +925,7 @@ static int process_elevator(struct room_data *room,
   int num, temp, number, floor = 0, dir;
   int base_target, dice, power, success, dam;
   struct room_data *shaft, *landing, *car;
+  char floorstring[10];
 
   for (num = 0; num < num_elevators; num++)
     if (elevator[num].room == room->number)
@@ -956,6 +957,22 @@ static int process_elevator(struct room_data *room,
     
     // Move the elevator one floor.
     if (elevator[num].time_left > 0) {
+      if (!elevator[num].is_moving) {
+        // Someone pushed the button, but the elevator hasn't started yet. Make it move.
+        if (IS_SET(room->dir_option[elevator[num].floor[room->rating].doors]->exit_info, EX_CLOSED))
+          sprintf(buf, "The elevator begins to %s.\r\n", (elevator[num].dir == UP ? "ascend" : "descend"));
+        else {
+          sprintf(buf, "The elevator doors close and it begins to %s.\r\n", (elevator[num].dir == UP ? "ascend" : "descend"));
+          close_elevator_doors(room, num, room->rating);
+        }
+        send_to_room(buf, real_room(room->number));
+        
+        // Message the shaft.
+        send_to_room("The elevator car shudders and begins to move.\r\n", real_room(elevator[num].floor[room->rating].shaft_vnum));
+        elevator[num].is_moving = TRUE;
+        return TRUE;
+      }
+      
       elevator[num].time_left--;
       
       // Message for moving the car out of this part of the shaft.
@@ -1079,6 +1096,7 @@ static int process_elevator(struct room_data *room,
                 0 - temp, fulldirs[elevator[num].floor[room->rating].doors]);
       send_to_room(buf, real_room(room->number));
       open_elevator_doors(room, num, room->rating);
+      elevator[num].is_moving = FALSE;
     } else if (elevator[num].dir > 0)
       elevator[num].dir--;
     else if (!elevator[num].dir) {
@@ -1103,13 +1121,39 @@ static int process_elevator(struct room_data *room,
     }
 
     skip_spaces(&argument);
-    if (LOWER(*argument) == 'b' && (number = atoi(argument + 1)) > 0)
+    if (!strncmp(argument, "open", strlen(argument))) {
+      if (IS_SET(room->dir_option[elevator[num].floor[room->rating].doors]->exit_info, EX_CLOSED)) {
+        sprintf(buf, "The elevator doors open to the %s.",
+                fulldirs[elevator[num].floor[room->rating].doors]);
+        act(buf, FALSE, ch, 0, 0, TO_ROOM);
+        act(buf, FALSE, ch, 0, 0, TO_CHAR);
+        open_elevator_doors(room, num, room->rating);
+      } else {
+        send_to_char("You jab the OPEN button a few times, then realize the doors are already open.\r\n", ch);
+      }
+      return TRUE;
+    } else if (!strncmp(argument, "close", strlen(argument))) {
+      if (!IS_SET(room->dir_option[elevator[num].floor[room->rating].doors]->exit_info, EX_CLOSED)) {
+        send_to_room("The elevator doors close.", real_room(room->number));
+        close_elevator_doors(room, num, room->rating);
+        elevator[num].dir = -1;
+      } else {
+        send_to_char("You stare blankly at the closed elevator doors in front of you and wonder what you were thinking.\r\n", ch);
+      }
+      return TRUE;
+    }
+    
+    if (LOWER(*argument) == 'b' && (number = atoi(argument + 1)) > 0) {
+      sprintf(floorstring, "B%d", number);
       number = elevator[num].num_floors + elevator[num].start_floor + number - 1;
-    else if (LOWER(*argument) == 'g' && elevator[num].start_floor <= 0)
+    }
+    else if (LOWER(*argument) == 'g' && elevator[num].start_floor <= 0) {
+      strcpy(floorstring, "G");
       number = elevator[num].num_floors + elevator[num].start_floor - 1;
-    else if ((number = atoi(argument)) > 0)
+    } else if ((number = atoi(argument)) > 0) {
+      sprintf(floorstring, "%d", number);
       number = elevator[num].num_floors + elevator[num].start_floor - 1 - number;
-    else
+    } else
       number = -1;
 
     if (number < 0 || number >= elevator[num].num_floors ||
@@ -1130,6 +1174,7 @@ static int process_elevator(struct room_data *room,
         act(buf, FALSE, ch, 0, 0, TO_ROOM);
         act(buf, FALSE, ch, 0, 0, TO_CHAR);
         open_elevator_doors(room, num, room->rating);
+        elevator[num].is_moving = FALSE;
       }
     } else {
       if (number > room->rating) {
@@ -1140,18 +1185,9 @@ static int process_elevator(struct room_data *room,
         elevator[num].time_left = MAX(1, room->rating - number);
       }
       
-      // Elevator movement away from its current floor.
-      if (IS_SET(room->dir_option[elevator[num].floor[room->rating].doors]->exit_info, EX_CLOSED))
-        sprintf(buf, "The elevator begins to %s.", (elevator[num].dir == UP ? "ascend" : "descend"));
-      else {
-        sprintf(buf, "The elevator doors close and it begins to %s.", (elevator[num].dir == UP ? "ascend" : "descend"));
-        close_elevator_doors(room, num, room->rating);
-      }
+      sprintf(buf, "The button for %s lights up as $n pushes it.", floorstring);
       act(buf, FALSE, ch, 0, 0, TO_ROOM);
-      act(buf, FALSE, ch, 0, 0, TO_CHAR);
-      
-      // Message the shaft.
-      send_to_room("The elevator car shudders and begins to move.", real_room(elevator[num].floor[room->rating].shaft_vnum));
+      send_to_char(ch, "You push the button for %s, and it lights up.\r\n", floorstring);
     }
     return TRUE;
   } else if (CMD_IS("look") || CMD_IS("examine"))
@@ -1173,11 +1209,12 @@ static int process_elevator(struct room_data *room,
         else
           sprintf(buf + strlen(buf), "  %-2d", temp);
         number++;
-        if (!(number % elevator[num].columns))
+        if (!(number % elevator[num].columns) || PRF_FLAGGED(ch, PRF_SCREENREADER))
           strcat(buf, "\r\n");
       }
-    if ((number % elevator[num].columns))
+    if ((number % elevator[num].columns) && !PRF_FLAGGED(ch, PRF_SCREENREADER))
       strcat(buf, "\r\n");
+    sprintf(ENDOF(buf), "\r\n(OPEN)%s(CLOSE)\r\n\r\n", PRF_FLAGGED(ch, PRF_SCREENREADER) ? "\r\n" : "  ");
     temp = room->rating + 1 - elevator[num].num_floors - elevator[num].start_floor;
     if (temp > 0)
       sprintf(buf + strlen(buf), "The floor indicator shows that the "
