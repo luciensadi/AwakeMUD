@@ -7,9 +7,9 @@ A fork of the [Awakened Worlds](http://awakenedworlds.net) MUD codebase. Issues 
 
 ## Features
 - 50k+ lines of additions including new areas, new features, and massive quality-of-life improvements
+- Screenreader accessibility via TOGGLE SCREENREADER
 - Enhanced security that fixes several serious exploits
-- Significant reductions in memory leaks
-- Significantly reduced ticklag (game pauses every two minutes are a thing of the past!)
+- Significantly increased performance
 - A slew of bugfixes to everything from combat code to sound propagation
 
 ## OS Support
