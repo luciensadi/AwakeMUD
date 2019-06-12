@@ -4824,7 +4824,7 @@ void perform_violence(void)
 
 void order_list(bool first, ...)
 {
-  register struct char_data *one, *two = combat_list, *next, *previous = NULL, *temp;
+  struct char_data *one, *two = combat_list, *next, *previous = NULL, *temp;
   
   if (combat_list == NULL)
     return;
@@ -4861,7 +4861,7 @@ void order_list(bool first, ...)
 
 void order_list(struct char_data *start)
 {
-  register struct char_data *one, *two, *next, *previous = NULL, *temp;
+  struct char_data *one, *two, *next, *previous = NULL, *temp;
   
   for (one = start; one; previous = NULL, one = next)
   {
@@ -4883,7 +4883,7 @@ void order_list(struct char_data *start)
 
 void order_list(struct matrix_icon *start)
 {
-  register struct matrix_icon *one, *two, *next, *previous = NULL, *temp;
+  struct matrix_icon *one, *two, *next, *previous = NULL, *temp;
   
   for (one = start; one; previous = NULL, one = next)
   {

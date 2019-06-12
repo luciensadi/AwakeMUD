@@ -766,7 +766,7 @@ void page_string(struct descriptor_data *d, char *str, int keep_internal)
 void show_string(struct descriptor_data *d, char *input)
 {
   char buffer[MAX_STRING_LENGTH], buf[MAX_INPUT_LENGTH];
-  register char *scan, *chk;
+  char *scan, *chk;
   int lines = 0, toggle = 1;
 
   one_argument(input, buf);

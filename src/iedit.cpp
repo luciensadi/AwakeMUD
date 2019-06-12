@@ -947,7 +947,7 @@ void iedit_disp_material_menu(struct descriptor_data *d)
 {
   CLS(CH);
   
-  for (register int counter = 0; counter < NUM_MATERIALS; ++counter)
+  for (int counter = 0; counter < NUM_MATERIALS; ++counter)
     send_to_char(CH, "%2d) %s\r\n", counter + 1, material_names[counter]);
   send_to_char("Enter material type, 0 to return: ", CH);
 }
@@ -956,7 +956,7 @@ void iedit_disp_patch_menu(struct descriptor_data *d)
 {
   CLS(CH);
   
-  for (register int counter = 0; counter < NUM_PATCHES; ++counter)
+  for (int counter = 0; counter < NUM_PATCHES; ++counter)
     send_to_char(CH, "%2d) %s\r\n", counter + 1, patch_names[counter]);
   send_to_char("Enter patch type, 0 to return: ", CH);
 }
@@ -964,7 +964,7 @@ void iedit_disp_patch_menu(struct descriptor_data *d)
 void iedit_disp_spell_type(struct descriptor_data *d)
 {
   CLS(CH);
-  for (register int counter = 0; counter <= MAX_SPELLS; counter += 2)
+  for (int counter = 0; counter <= MAX_SPELLS; counter += 2)
   {
     send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n",
                  counter + 1, spells[counter].name,
@@ -977,7 +977,7 @@ void iedit_disp_spell_type(struct descriptor_data *d)
 void iedit_disp_cybertype_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (register int counter = 0; counter < NUM_CYBER; counter += 2)
+  for (int counter = 0; counter < NUM_CYBER; counter += 2)
   {
     send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n",
                  counter + 1, cyber_types[counter],
@@ -1020,7 +1020,7 @@ void iedit_disp_rating_menu(struct descriptor_data *d)
 {
   CLS(CH);
   
-  for (register int counter = 0; counter < NUM_BARRIERS; ++counter)
+  for (int counter = 0; counter < NUM_BARRIERS; ++counter)
     send_to_char(CH, "%2d) %s\r\n", counter + 1, barrier_names[counter]);
   send_to_char("Enter construction category, 0 to return: ", CH);
 }
@@ -1047,7 +1047,7 @@ void iedit_disp_extra_menu(struct descriptor_data * d)
 void iedit_disp_aff_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (register int counter = 0; counter < AFF_MAX; counter += 2)
+  for (int counter = 0; counter < AFF_MAX; counter += 2)
     send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", counter + 1,
                  affected_bits[counter], counter + 2, counter + 1 < AFF_MAX ?
                  affected_bits[counter + 1] : "");

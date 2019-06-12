@@ -256,7 +256,7 @@ char *prepare_quotes(char *dest, const char *str)
 {
   if (!str)
     return NULL;
-  register char *temp = &dest[0];
+  char *temp = &dest[0];
   while (*str) {
     if (*str == '\'' || *str == '`' || *str == '"' || *str == '\\' || *str == '%')
       *temp++ = '\\';

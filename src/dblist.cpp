@@ -32,8 +32,8 @@ extern void print_object_location(int, struct obj_data *, struct char_data *, in
 
 int objList::PrintList(struct char_data *ch, const char *arg)
 {
-  register nodeStruct<struct obj_data *> *temp = head;
-  register int num = 0;
+  nodeStruct<struct obj_data *> *temp = head;
+  int num = 0;
 
   for (;temp; temp = temp->next)
     if (temp->data && CAN_SEE_OBJ(ch, temp->data)
@@ -55,7 +55,7 @@ void objList::Traverse(void (*func)(struct obj_data *))
 int objList::CountObj(int num)
 {
   int counter = 0;
-  register nodeStruct<struct obj_data *> *temp;
+  nodeStruct<struct obj_data *> *temp;
   for (temp = head; temp; temp = temp->next)
     if (num == GET_OBJ_RNUM(temp->data))
       counter++;
@@ -67,7 +67,7 @@ int objList::CountObj(int num)
 // object whose object rnum matches num
 struct obj_data *objList::FindObj(int num)
 {
-  register nodeStruct<struct obj_data *> *temp;
+  nodeStruct<struct obj_data *> *temp;
   for (temp = head; temp; temp = temp->next)
     if (num == GET_OBJ_RNUM(temp->data))
       return temp->data;
@@ -80,8 +80,8 @@ struct obj_data *objList::FindObj(int num)
 // list
 struct obj_data *objList::FindObj(struct char_data *ch, char *name, int num)
 {
-  register nodeStruct<struct obj_data *> *temp = head;
-  register int i = 0;
+  nodeStruct<struct obj_data *> *temp = head;
+  int i = 0;
 
   while (temp && (i <= num))
   {
@@ -295,7 +295,7 @@ void objList::UpdateCounters(void)
 // structures come into effect
 void objList::UpdateNums(int num)
 {
-  register nodeStruct<struct obj_data *> *temp;
+  nodeStruct<struct obj_data *> *temp;
   // just loop through the list and update
   for (temp = head; temp; temp = temp->next)
     if (GET_OBJ_RNUM(temp->data) >= num)

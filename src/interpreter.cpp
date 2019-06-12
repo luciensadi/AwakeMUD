@@ -1682,7 +1682,7 @@ int perform_alias(struct descriptor_data * d, char *orig)
  */
 int search_block(char *arg, const char **list, bool exact)
 {
-  register int i, l;
+  int i, l;
   if (!strcmp(arg, "!"))
     return -1;
 
@@ -1871,7 +1871,7 @@ int find_mcommand(const char *command)
 
 int special(struct char_data * ch, int cmd, char *arg)
 {
-  register struct obj_data *i;
+  struct obj_data *i;
   if (ch->persona)
   {
     for (i = matrix[ch->persona->in_host].file; i; i = i->next_content)
@@ -1913,7 +1913,7 @@ int special(struct char_data * ch, int cmd, char *arg)
   /* special in mobile present? */
   if (!veh)
   {
-    register struct char_data *k;
+    struct char_data *k;
     for (k = world[ch->in_room].people; k; k = k->next_in_room) {
       if (GET_MOB_SPEC(k) != NULL)
         if (GET_MOB_SPEC(k) (ch, k, cmd, arg))

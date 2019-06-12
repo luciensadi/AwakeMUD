@@ -88,7 +88,7 @@ void redit_disp_barrier_menu(struct descriptor_data *d)
 {
   CLS(CH);
 
-  for (register int counter = 0; counter < NUM_BARRIERS; ++counter)
+  for (int counter = 0; counter < NUM_BARRIERS; ++counter)
     send_to_char(CH, "%2d) %s\r\n", counter + 1, barrier_names[counter]);
   send_to_char("Enter construction category, 0 to return: ", CH);
 }
@@ -97,7 +97,7 @@ void redit_disp_material_menu(struct descriptor_data *d)
 {
   CLS(CH);
 
-  for (register int counter = 0; counter < NUM_MATERIALS; ++counter)
+  for (int counter = 0; counter < NUM_MATERIALS; ++counter)
     send_to_char(CH, "%2d) %s\r\n", counter + 1, material_names[counter]);
   send_to_char("Enter material type, 0 to return: ", CH);
 }

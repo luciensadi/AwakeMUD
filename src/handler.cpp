@@ -50,7 +50,7 @@ struct obj_data *find_obj(struct char_data *ch, char *name, int num);
 char *fname(char *namelist)
 {
   static char holder[30];
-  register char *point;
+  char *point;
   
   for (point = holder; isalpha(*namelist); namelist++, point++)
     *point = *namelist;
@@ -70,7 +70,7 @@ int isname(const char *str, const char *namelist)
   if (namelist[0] == '\0')
     return 0;
   
-  register const char *curname, *curstr;
+  const char *curname, *curstr;
   
   curname = namelist;
   for (;;) {

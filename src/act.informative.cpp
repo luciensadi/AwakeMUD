@@ -3421,8 +3421,8 @@ ACMD(do_who)
   if (subcmd) {
     FILE *fl;
     static char buffer[MAX_STRING_LENGTH*4];
-    register char *temp = &buffer[0];
-    register const char *color;
+    char *temp = &buffer[0];
+    const char *color;
     char *str = str_dup(buf);
     char *ptr = str;
     while(*str) {
@@ -3624,7 +3624,7 @@ ACMD(do_users)
       sprintf(line, format, d->desc_num, "UNDEFINED",
               state, idletime, timeptr);
     
-    if (*d->host)
+    if (*d->host && GET_REAL_LEVEL(tch) <= GET_LEVEL(ch))
       sprintf(line + strlen(line), "[%s]\r\n", d->host);
     else
       strcat(line, "[Hostname unknown]\r\n");

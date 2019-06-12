@@ -100,7 +100,7 @@ int srdice(void)
 {
   static int roll;
   int sum = 0, num = 1;
-  register int i;
+  int i;
   
   for (i = 1; i <= num; i++) {
     roll = ((random() % 6) + 1);
@@ -117,7 +117,7 @@ int success_test(int number, int target)
     return -1;
   
   int total = 0, roll, one = 0;
-  register int i;
+  int i;
   
   target = MAX(target, 2);
   
@@ -554,8 +554,8 @@ char *get_token(char *str, char *token)
   if (!str)
     return NULL;
   
-  register char *temp = str;
-  register char *temp1 = token;
+  char *temp = str;
+  char *temp1 = token;
   
   // first eat up any white space
   while (isspace(*temp))
@@ -577,7 +577,7 @@ char *cleanup(char *dest, const char *src)
   if (!src) // this is because sometimes a null gets sent to src
     return NULL;
   
-  register char *temp = &dest[0];
+  char *temp = &dest[0];
   
   for (; *src; src++)
     if (*src != '\r')
@@ -834,7 +834,7 @@ void sprint_obj_mods(struct obj_data *obj, char *result)
     sprintf(result,"%s %s", result, xbuf);
   }
   
-  for (register int i = 0; i < MAX_OBJ_AFFECT; i++)
+  for (int i = 0; i < MAX_OBJ_AFFECT; i++)
     if (obj->affected[i].modifier != 0)
     {
       char xbuf[MAX_STRING_LENGTH];

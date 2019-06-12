@@ -1176,7 +1176,7 @@ void check_start_rooms(void)
 /* resolve all vnums into rnums in the world */
 void renum_world(void)
 {
-  register int room, door;
+  int room, door;
 
   /* before renumbering the exits, copy them to to_room_vnum */
   for (room = 0; room <= top_of_world; room++)
@@ -2355,7 +2355,7 @@ int vnum_object_affectloc(int type, struct char_data * ch)
       if (from_ip_zone(OBJ_VNUM_RNUM(nr)))
         continue;
 
-      for (register int i = 0; i < MAX_OBJ_AFFECT; i++)
+      for (int i = 0; i < MAX_OBJ_AFFECT; i++)
         if (obj_proto[nr].affected[i].location == type ) {
           if (obj_proto[nr].affected[i].modifier < mod && mod != -11)
             continue;
@@ -3187,7 +3187,7 @@ bool resize_qst_array(void)
 char *fread_string(FILE * fl, char *error)
 {
   char buf[MAX_STRING_LENGTH+3], tmp[512+3], *rslt;
-  register char *point;
+  char *point;
   int done = 0, length = 0, templength = 0;
 
   /* FULLY initialize the buffer array. This is important, because you

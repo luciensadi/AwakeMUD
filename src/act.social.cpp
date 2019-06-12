@@ -106,8 +106,8 @@ ACMD(do_action)
 void perform_wizsocial(char *orig, struct char_data * ch, struct char_data *vict,
                        struct char_data * to)
 {
-  register const char *i = NULL;
-  register char *buf;
+  const char *i = NULL;
+  char *buf;
   static char lbuf[MAX_STRING_LENGTH];
 
   buf = lbuf;
