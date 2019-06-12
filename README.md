@@ -53,6 +53,8 @@ If you see a wall of errors like the one above, you need to edit `src/Makefile` 
 
 If you get an error like `AwakeMUD/src/act.wizard.cpp:3841: undefined reference to 'crypt'`, it means that you've probably not selected the right OS in your `src/Makefile`. Make sure you comment out the OS X lines near the top by adding a `#` at their beginnings, and uncomment the Linux lines by removing their `#`.
 
+If you get errors like `/home/ubuntu/AwakeMUD/src/act.other.cpp:954: undefined reference to 'github_issues_url'`, you need to remove -DGITHUB_INTEGRATION from your selected OS in your Makefile, then `make clean && make` to scrub the references to the GitHub integration code.
+
 If you get an error like `structs.h:8:10: fatal error: sodium.h: No such file or directory`, it means you need to install [libsodium](https://github.com/jedisct1/libsodium/releases) (`./configure; make; (sudo) make install`).
 
 ## Runtime Troubleshooting
