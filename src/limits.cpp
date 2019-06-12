@@ -78,8 +78,10 @@ void mental_gain(struct char_data * ch)
   if (find_workshop(ch, TYPE_MEDICAL))
     gain = (int)(gain * 1.5);
   
+#ifdef ENABLE_HUNGER
   if ((GET_COND(ch, FULL) == 0) || (GET_COND(ch, THIRST) == 0))
     gain >>= 1;
+#endif
   
   if (GET_TRADITION(ch) == TRAD_ADEPT)
     gain *= GET_POWER(ch, ADEPT_HEALING) + 1;
@@ -123,8 +125,10 @@ void physical_gain(struct char_data * ch)
       break;
   }
   
+#ifdef ENABLE_HUNGER
   if ((GET_COND(ch, FULL) == 0) || (GET_COND(ch, THIRST) == 0))
     gain >>= 1;
+#endif
   
   if (find_workshop(ch, TYPE_MEDICAL))
     gain = (int)(gain * 1.8);
@@ -303,12 +307,14 @@ void gain_condition(struct char_data * ch, int condition, int value)
   
   switch (condition)
   {
+#ifdef ENABLE_HUNGER
     case FULL:
       send_to_char("Your stomach growls.\r\n", ch);
       return;
     case THIRST:
       send_to_char("Your mouth is dry.\r\n", ch);
       return;
+#endif
     case DRUNK:
       if (intoxicated)
         send_to_char("Your head seems to clear slightly...\r\n", ch);
@@ -560,6 +566,7 @@ void point_update(void)
       AFF_FLAGS(i).RemoveBit(AFF_DAMAGED);
       
       if (!GET_POWER(i, ADEPT_SUSTENANCE) || !(time_info.hours % 3)) {
+        // Leave this so that people's stomachs empty over time (can eat/drink more if they want to).
         gain_condition(i, FULL, -1);
         gain_condition(i, THIRST, -1);
       }

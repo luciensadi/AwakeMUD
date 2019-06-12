@@ -1760,10 +1760,12 @@ ACMD(do_drink)
     act("$n tries to drink but misses $s mouth!", TRUE, ch, 0, 0, TO_ROOM);
     return;
   }
+#ifdef ENABLE_HUNGER
   if ((GET_COND(ch, FULL) > 20) && (GET_COND(ch, THIRST) > 0)) {
     send_to_char("Your stomach can't contain anymore!\r\n", ch);
     return;
   }
+#endif
   if (!GET_OBJ_VAL(temp, 1)) {
     send_to_char("It's empty.\r\n", ch);
     return;
@@ -1792,20 +1794,24 @@ ACMD(do_drink)
   gain_condition(ch, DRUNK,
                  (int) ((int) drink_aff[GET_OBJ_VAL(temp, 2)][DRUNK] * amount) / 4);
 
+#ifdef ENABLE_HUNGER
   gain_condition(ch, FULL,
                  (int) ((int) drink_aff[GET_OBJ_VAL(temp, 2)][FULL] * amount) / 4);
 
   gain_condition(ch, THIRST,
                  (int) ((int) drink_aff[GET_OBJ_VAL(temp, 2)][THIRST] * amount) / 4);
+#endif
 
   if (GET_COND(ch, DRUNK) > 10)
     send_to_char("You feel drunk.\r\n", ch);
 
+#ifdef ENABLE_HUNGER
   if (GET_COND(ch, THIRST) > 20)
     send_to_char("You don't feel thirsty any more.\r\n", ch);
 
   if (GET_COND(ch, FULL) > 20)
     send_to_char("You are full.\r\n", ch);
+#endif
 
   /* empty the container, and no longer poison. */
   GET_OBJ_VAL(temp, 1) -= amount;

@@ -2528,11 +2528,13 @@ const char *get_plaintext_score_misc(struct char_data *ch) {
   if (IS_AFFECTED(ch, AFF_INVISIBLE) || IS_AFFECTED(ch, AFF_IMP_INVIS) || IS_AFFECTED(ch, AFF_SPELLINVIS) || IS_AFFECTED(ch, AFF_SPELLIMPINVIS))
     strcpy(ENDOF(buf2), "You are invisible.\r\n");
   
+#ifdef ENABLE_HUNGER
   if (GET_COND(ch, FULL) == 0)
     strcpy(ENDOF(buf2), "You are hungry.\r\n");
   
   if (GET_COND(ch, THIRST) == 0)
     strcpy(ENDOF(buf2), "You are thirsty.\r\n");
+#endif
   
   if (GET_COND(ch, DRUNK) > 10)
     strcpy(ENDOF(buf2), "You are intoxicated.\r\n");
@@ -2842,10 +2844,17 @@ ACMD(do_score)
                           GET_REAL_WIL(ch), GET_WIL(ch), get_position_string(ch));
     sprintf(ENDOF(buf), "^L/^b/ ^nEssence       ^g[^w%5.2f^g]    ^W%-18s                       ^b/^L/\r\n",
                           ((float)GET_ESS(ch) / 100), invisibility_string);
+#ifdef ENABLE_HUNGER
     sprintf(ENDOF(buf), "^b/^L/ ^nBioware Index ^B[^w%5.2f^B]    ^n%-15s                          ^L/^b/\r\n",
                           ((float)GET_INDEX(ch) / 100), GET_COND(ch, FULL) == 0 ? "You are hungry." : "");
     sprintf(ENDOF(buf), "^L/^b/ ^nEssence Index ^W[^w%5.2f^W]    ^n%-16s                         ^b/^L/\r\n",
                           (((float)GET_ESS(ch) / 100) + 3), GET_COND(ch, THIRST) == 0 ? "You are thirsty." : "");
+#else
+    sprintf(ENDOF(buf), "^b/^L/ ^nBioware Index ^B[^w%5.2f^B]    ^n%-15s                          ^L/^b/\r\n",
+                          ((float)GET_INDEX(ch) / 100), "");
+    sprintf(ENDOF(buf), "^L/^b/ ^nEssence Index ^W[^w%5.2f^W]    ^n%-16s                         ^b/^L/\r\n",
+                          (((float)GET_ESS(ch) / 100) + 3), "");
+#endif
     sprintf(ENDOF(buf), "^b/^L/ ^nMagic         ^w%2d (^W%2d^w)    ^g%-20s                     ^L/^b/\r\n",
                           MAX(0, ((int)ch->real_abils.mag / 100)), ((int)GET_MAG(ch) / 100), GET_COND(ch, DRUNK) > 10 ? "You are intoxicated." : "");
     sprintf(ENDOF(buf), "^L/^b/ ^nReaction      ^w%2d (^W%2d^w)    ^c%-41s^b/^L/\r\n",
