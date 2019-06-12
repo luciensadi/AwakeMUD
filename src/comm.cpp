@@ -1242,8 +1242,10 @@ int get_from_q(struct txt_q * queue, char *dest, int *aliased)
   *aliased = queue->head->aliased;
   queue->head = queue->head->next;
   
-  DELETE_AND_NULL_ARRAY(tmp->text);
-  DELETE_AND_NULL(tmp);
+  if (tmp) {
+    DELETE_AND_NULL_ARRAY(tmp->text);
+    DELETE_AND_NULL(tmp);
+  }
   
   return 1;
 }
