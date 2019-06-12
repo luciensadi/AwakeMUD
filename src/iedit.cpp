@@ -1129,7 +1129,7 @@ void iedit_disp_menu(struct descriptor_data * d)
                CCCYN(CH, C_CMP), d->edit_obj->text.name,
                CCNRM(CH, C_CMP));
   send_to_char(CH, "3) Room description:\r\n%s%s%s\r\n",
-               CCCYN(CH, C_CMP), d->edit_obj->text.room_desc,
+               CCGRN(CH, C_CMP), d->edit_obj->text.room_desc,
                CCNRM(CH, C_CMP));
   send_to_char(CH, "4) Look description: \r\n%s\r\n",
                d->edit_obj->text.look_desc ? d->edit_obj->text.look_desc :
