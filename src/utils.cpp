@@ -1171,6 +1171,14 @@ int get_skill(struct char_data *ch, int skill, int &target)
   
   // TODO: Adept power Improved Ability. This ability is not currently in the game, but would be factored in here. See Core p169 for details.
   
+  // Convert NPCs so that they can use Armed Combat in place of any weapon skill except unarmed combat.
+  if (IS_NPC(ch) && ((skill >= SKILL_ARMED_COMBAT && skill <= SKILL_CLUBS)
+                     || (skill >= SKILL_CYBER_IMPLANTS && skill <= SKILL_ORALSTRIKE)
+                     || (skill == SKILL_THROWING_WEAPONS))) {
+    if (GET_SKILL(ch, skill) < GET_SKILL(ch, SKILL_ARMED_COMBAT))
+      skill = SKILL_ARMED_COMBAT;
+  }
+  
   if (GET_SKILL(ch, skill))
   {
     int mbw = 0, enhan = 0, synth = 0;
