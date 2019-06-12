@@ -2723,7 +2723,10 @@ SPECIAL(traffic)
 {
   struct room_data *room = (struct room_data *) me;
 
-  if (!cmd && room->people)
+  if (!cmd && room->people) {
+    if (number(0, 3) != 1)
+      return FALSE;
+    
     switch (number(1, 50)) {
       case 1:
         send_to_room("A man on a Yamaha Rapier zips by.\r\n",
@@ -2811,6 +2814,7 @@ SPECIAL(traffic)
                      real_room(room->number));
         break;
     }
+  }
   return FALSE;
 }
 
