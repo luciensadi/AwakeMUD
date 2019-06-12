@@ -1374,12 +1374,12 @@ BREAK
 Keywords:	sign
 Name:	a self-help sign
 RoomDesc:$
-^gA sign suggests you ^YADVANCE SELF 9^g to become an immortal.^n~
+A sign suggests you ^YADVANCE SELF 9^g to gain administrative powers.^n~
 LookDesc:$
-Since this is a testing port, and since I'm not always here to check in on
-things, I've set it up so that anyone can advance themselves up to the level
-of 9 without any input required from me. If you want to later return yourself
-to mortal status, just ADVANCE SELF 0-- you can change your level at any time.
+Since this is a testing port, we've set up the system such that anyone can
+advance themselves to staff level 9 to become an administrator of the game. If
+you want to undo this later, you can always ADVANCE SELF 1 to revert the
+change. 
 ~
 Type:	Other
 WearFlags:	0

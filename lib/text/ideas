@@ -11,3 +11,7 @@ Lucien   (May 28) [60504] Specify maximum allowable rep value in qedit
 Lucien   (May 28) [60504] Add a message to SKILLS for empty skill list ("You haven't learned any skills yet." or something)
 Lucien   (May 29) [60505] add HELP UNPRACTICE and HELP UNTRAIN; link them to their unflavored counterparts
 Lucien   (May 30) [60559] AFFECT -> STATUS mapping
+Paragorn (Jun 12) [70512] wt history should just show history
+Paragorn (Jun 12) [70513] Give Hollow Scythe (70502) some things to mutter, like 'I used to think I could control ducks with my mind, but it turns out ducks and I just have very similar ideas about what stuff ducks should do'
+Paragorn (Jun 12) [70511] Add a spec proc at 70511 (inside bus) that prevents you from going west without meeting some precondition
+Paragorn (Jun 12) [70511] Add trap spec-procs and ability to detect and disarm traps.

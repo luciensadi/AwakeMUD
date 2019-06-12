@@ -554,6 +554,23 @@ The busy warehouse is this way.
 	Material:	wood
 	Barrier:	3
 	KeyVnum:	0
+[EXIT down]
+	Keywords:	trapdoor
+	Desc:$
+A trap door is concealed in the floor beneath the desk. 
+~
+	ToVnum:	72032
+	Flags:	1
+	Material:	brick
+	Barrier:	24
+	KeyVnum:	0
+	LockRating:	6
+	HiddenRating:	6
+[EXTRADESC 0]
+	Keywords:	dataport
+	Desc:$
+An RJ-45 dataport, offering matrix access. 
+~
 BREAK
 #72011
 Name:	A break room
@@ -627,7 +644,7 @@ This is a narrow alley near a loading dock. It looks as if a rig could just
 barely fit down the alley to unload at the dock if they were careful. A large
 warehouse is to the west, and to the east a ways is the main road.  
 ~
-Flags:	10000000000000000000000
+Flags:	1000000010000000000000000000000
 SecType:	City
 MatrixExit:	0
 Crowd:	0
@@ -656,7 +673,7 @@ Desc:$
 This is the end of the short, narrow alley, next to a warehouse. You can climb
 up onto the loading dock from here. 
 ~
-Flags:	10000000000000000000000
+Flags:	1000000010000000000000000000000
 SecType:	City
 MatrixExit:	0
 Crowd:	0
@@ -1344,5 +1361,36 @@ RoomType:	6
 	Barrier:	32
 	KeyVnum:	72008
 	LockRating:	8
+BREAK
+#72032
+Name:	A hidden basement room beneath the warehouse
+Desc:$
+This is apparently the other half of the D'onofrio brothers' shipping
+business. This room is filled with crates, the open ones you can see are full
+of gun parts.  
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	6
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	Keywords:	trapdoor
+	ToVnum:	72010
+	Flags:	1
+	Material:	brick
+	Barrier:	24
+	KeyVnum:	0
 BREAK
 END

@@ -254,7 +254,7 @@ DefaultPos:	Standing
 	Ballistic:	20
 	Impact:	20
 [SKILLS]
-	assault rifles:	6
+	Assault Rifles:	6
 BREAK
 #10
 Keywords:	cow
@@ -324,10 +324,10 @@ DefaultPos:	Standing
 	Weight:	70
 	Level:	9
 [SKILLS]
-	:	50
-	pistols:	50
-	edged weapons:	50
-	sorcery:	50
+	:	50
+	Pistols:	50
+	Edged Weapons:	50
+	Sorcery:	50
 BREAK
 #12
 Keywords:	crackhead crack head
@@ -1510,8 +1510,8 @@ AttackType:	Bite
 [ATTRIBUTES]
 	Bod:	1
 	Qui:	5
-	Str:	0
-	Cha:	0
+	Str:	1
+	Cha:	1
 	Int:	1
 	Wil:	1
 	Mag:	0
