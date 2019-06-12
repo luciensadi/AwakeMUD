@@ -2645,7 +2645,7 @@ ACMD(do_score)
               veh->sensor);
     }
   } else {
-    // TODO: Switches for the specific score types.
+    // Switches for the specific score types.
     if (*argument) {
       int cmd_index;
       

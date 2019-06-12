@@ -1271,9 +1271,23 @@ ACMD(do_slowns)
 ACMD(do_skills)
 {
   int i;
+  bool mode_all = FALSE;
+  
+  one_argument(argument, arg);
+  
+  if (!*arg) {
+    sprintf(buf, "You know the following %s:\r\n", subcmd == SCMD_SKILLS ? "skills" : "abilities");
+    mode_all = TRUE;
+  } else {
+    sprintf(buf, "You know the following %s that start with '%s':\r\n", subcmd == SCMD_SKILLS ? "skills" : "abilities", arg);
+    mode_all = FALSE;
+  }
+  
   if (subcmd == SCMD_SKILLS) {
-    sprintf(buf, "You know the following skills:\r\n");
     for (i = 1; i < MAX_SKILLS; i++) {
+      if (!mode_all && *arg && !is_abbrev(arg, skills[i].name))
+        continue;
+      
       if (i == SKILL_ENGLISH)
         i = SKILL_ANIMAL_HANDLING;
       if ((GET_SKILL(ch, i)) > 0) {
@@ -1287,8 +1301,10 @@ ACMD(do_skills)
       return;
     }
     extern int max_ability(int i);
-    sprintf(buf, "You know the following abilities:\r\n");
-    for (i = 1; i <= ADEPT_NUMPOWER; i++)
+    for (i = 1; i <= ADEPT_NUMPOWER; i++) {
+      if (!mode_all && *arg && !is_abbrev(arg, adept_powers[i]))
+        continue;
+      
       if (GET_POWER_TOTAL(ch, i) > 0) {
         sprintf(buf2, "%-20s", adept_powers[i]);
         if (max_ability(i) > 1)
@@ -1310,6 +1326,7 @@ ACMD(do_skills)
           strcat(buf2, "\r\n");
         strcat(buf, buf2);
       }
+    }
     sprintf(buf2, "You have %.2f powerpoints remaining and %.2f points of powers activated.\r\n", (float)GET_PP(ch) / 100, 
                   (float)GET_POWER_POINTS(ch) / 100);
     strcat(buf, buf2);
