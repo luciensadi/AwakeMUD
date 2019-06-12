@@ -2048,9 +2048,9 @@ char *colorize(struct descriptor_data *d, const char *str, bool skip_check)
     // Declare our own error buf so we don't clobber anyone's strings.
     char colorize_error_buf[200];
     sprintf(colorize_error_buf, "SYSERR: Received empty string to colorize() for descriptor %d (orig %s, char %s).",
-            d->descriptor, d->original ? GET_NAME(d->original) : "(null)", d->character ? GET_NAME(d->character) : "(null)");
+            d->descriptor, d->original ? GET_NAME(d->original) : "(null)", d->character ? GET_CHAR_NAME(d->character) : "(null)");
     mudlog(colorize_error_buf, NULL, LOG_SYSLOG, TRUE);
-    strcpy(buffer, "");
+    strcpy(buffer, "(null)");
     return buffer;
   }
   
