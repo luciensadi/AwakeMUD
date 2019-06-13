@@ -1458,8 +1458,13 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           d->edit_mode = IEDIT_WEAR;
           break;
         case '9':
-          send_to_char("Enter weight:", d->character);
-          d->edit_mode = IEDIT_WEIGHT;
+          if (GET_OBJ_TYPE(d->edit_obj) == ITEM_KEYRING) {
+            send_to_char("Keyrings are weightless by design.", d->character);
+            iedit_disp_menu(d);
+          } else {
+            send_to_char("Enter weight:", d->character);
+            d->edit_mode = IEDIT_WEIGHT;
+          }
           break;
         case 'a':
         case 'A':

@@ -820,6 +820,7 @@ const char *item_types[] =
     "Program Design",
     "Quest Item",
     "Ammo Box",
+    "Keyring",
     "\n"
   };
 
