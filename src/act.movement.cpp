@@ -777,16 +777,24 @@ int find_door(struct char_data *ch, const char *type, char *dir, const char *cmd
   }
 }
 
-int has_key(struct char_data *ch, int key)
+int has_key(struct char_data *ch, int key_vnum)
 {
-  struct obj_data *o;
+  struct obj_data *o, *key;
 
-  for (o = ch->carrying; o; o = o->next_content)
-    if (GET_OBJ_VNUM(o) == key)
+  for (o = ch->carrying; o; o = o->next_content) {
+    if (GET_OBJ_VNUM(o) == key_vnum)
       return 1;
+    
+    if (GET_OBJ_TYPE(o) == ITEM_KEYRING) {
+      for (key = o->contains; key; key = key->next_content) {
+        if (GET_OBJ_VNUM(key) == key_vnum)
+          return 1;
+      }
+    }
+  }
 
   if (GET_EQ(ch, WEAR_HOLD))
-    if (GET_OBJ_VNUM(GET_EQ(ch, WEAR_HOLD)) == key)
+    if (GET_OBJ_VNUM(GET_EQ(ch, WEAR_HOLD)) == key_vnum)
       return 1;
 
   return 0;

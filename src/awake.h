@@ -1019,7 +1019,8 @@ enum {
 #define ITEM_DESIGN	        40
 #define ITEM_QUEST	        41
 #define ITEM_GUN_AMMO	      42
-#define NUM_ITEMS	          43
+#define ITEM_KEYRING        43
+#define NUM_ITEMS	          44
 
 
 /* take/wear flags: used by obj_data.obj_flags.wear_flags */
@@ -2094,5 +2095,7 @@ struct ban_list_element
 #define MATERIAL_CERAMIC      15
 #define MATERIAL_CONCRETE     16
 #define NUM_MATERIALS         17
+
+#define MAX_KEYRING_WEIGHT    1.0
 
 #endif
