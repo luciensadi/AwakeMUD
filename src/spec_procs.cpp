@@ -3259,9 +3259,12 @@ void make_newbie(struct obj_data *obj)
 }
 SPECIAL(auth_room)
 {
-  if ((CMD_IS("say") || CMD_IS("'")) && !IS_ASTRAL(ch)) {
+  if ((CMD_IS("say") || CMD_IS("'") || CMD_IS("sayto") || CMD_IS("\"")) && !IS_ASTRAL(ch)) {
     skip_spaces(&argument);
-    if (!strcmp("I have read the rules and policies, understand them, and agree to abide by them during my stay here.", argument)) {
+    if (   !strcmp("I have read the rules and policies, understand them, and agree to abide by them during my stay here.", argument)
+        || !strcmp("have read the rules and policies, understand them, and agree to abide by them during my stay here.\"", argument) // Complete copy-paste with both quotes
+        || !strcmp("I have read the rules and policies, understand them, and agree to abide by them during my stay here.\"", argument)) // Partial copy-paste with trailing quote.
+    {
       PLR_FLAGS(ch).RemoveBit(PLR_AUTH);
       GET_NUYEN(ch) = 0;
       make_newbie(ch->carrying);
