@@ -1643,43 +1643,58 @@ ACMD(do_attach)
     send_to_char(buf, ch);
     act("$n mounts $p on $P.", FALSE, ch, item, item2, TO_ROOM);
     return;
-  }
+  } // End of vehicle weapon attachment.
 
-  if (!(item = get_obj_in_list_vis(ch, buf1, ch->carrying)) ||
-      !(item2 = get_obj_in_list_vis(ch, buf2, ch->carrying))) {
-    send_to_char("You don't seem to have that item.\r\n", ch);
+  if (!(item = get_obj_in_list_vis(ch, buf1, ch->carrying))) {
+    send_to_char(ch, "You don't seem to have any '%s'.\r\n", buf1);
+    return;
+  }
+  
+  if (!(item2 = get_obj_in_list_vis(ch, buf2, ch->carrying))) {
+    if (!(item2 = get_obj_in_list_vis(ch, buf2, GET_EQ(ch, WEAR_WIELD))) && !(item2 = get_obj_in_list_vis(ch, buf2, GET_EQ(ch, WEAR_HOLD)))) {
+      send_to_char(ch, "You don't seem to have any '%s'.\r\n", buf2);
+      return;
+    } else {
+      send_to_char(ch, "You'll have a hard time attaching anything to %s while you're wielding it.\r\n", GET_OBJ_NAME(item2));
+      return;
+    }
+  }
+  
+  if (GET_OBJ_TYPE(item) != ITEM_GUN_ACCESSORY) {
+    send_to_char(ch, "%s is not a gun accessory.\r\n", CAP(GET_OBJ_NAME(item)));
     return;
   }
 
-  if ((GET_OBJ_TYPE(item) != ITEM_GUN_ACCESSORY) || (GET_OBJ_TYPE(item2) != ITEM_WEAPON)) {
-    send_to_char("You can only attach gun accessories to a gun.\r\n", ch);
+  if (GET_OBJ_TYPE(item2) != ITEM_WEAPON || !IS_GUN(GET_WEAPON_ATTACK_TYPE(item2))) {
+    send_to_char(ch, "%s is not a gun.\r\n", CAP(GET_OBJ_NAME(item2)));
     return;
   }
 
-  if (GET_OBJ_VAL(item, 1) == 7) {
+  if (GET_OBJ_VAL(item, 1) == ACCESS_SMARTGOGGLE) { // MAGIC FUCKING NUMBERS
     send_to_char("These are for your eyes, not your gun.\r\n", ch);
     return;
   }
 
-  if (((GET_OBJ_VAL(item, 0) == 0) && (GET_OBJ_VAL(item2, 7) > 0)) ||
-      ((GET_OBJ_VAL(item, 0) == 1) && (GET_OBJ_VAL(item2, 8) > 0)) ||
-      ((GET_OBJ_VAL(item, 0) == 2) && (GET_OBJ_VAL(item2, 9) > 0))) {
-    send_to_char("You cannot mount more than one accessory to the same place.\r\n", ch);
+  if (   ((GET_OBJ_VAL(item, 0) == 0) && (GET_WEAPON_ATTACH_TOP_VNUM(item2)    > 0))
+      || ((GET_OBJ_VAL(item, 0) == 1) && (GET_WEAPON_ATTACH_BARREL_VNUM(item2) > 0))
+      || ((GET_OBJ_VAL(item, 0) == 2) && (GET_WEAPON_ATTACH_UNDER_VNUM(item2)  > 0))) {
+    send_to_char(ch, "You cannot mount more than one accessory to the %s of that.\r\n", gun_accessory_locations[GET_OBJ_VAL(item, 0)]);
     return;
   }
 
-  if (((GET_OBJ_VAL(item, 0) == 0) && (GET_OBJ_VAL(item2, 7) == -1)) ||
-      ((GET_OBJ_VAL(item, 0) == 1) && (GET_OBJ_VAL(item2, 8) == -1)) ||
-      ((GET_OBJ_VAL(item, 0) == 2) && (GET_OBJ_VAL(item2, 9) == -1))) {
-    sprintf(buf, "%s doesn't seem to fit on %s.\r\n",
-            CAP(GET_OBJ_NAME(item)), GET_OBJ_NAME(item2));
+  if (   ((GET_OBJ_VAL(item, 0) == 0) && (GET_WEAPON_ATTACH_TOP_VNUM(item2)    == -1))
+      || ((GET_OBJ_VAL(item, 0) == 1) && (GET_WEAPON_ATTACH_BARREL_VNUM(item2) == -1))
+      || ((GET_OBJ_VAL(item, 0) == 2) && (GET_WEAPON_ATTACH_UNDER_VNUM(item2)  == -1))) {
+    sprintf(buf, "%s doesn't have any good spots for %s-mounted attachments.\r\n",
+            CAP(GET_OBJ_NAME(item2)), gun_accessory_locations[GET_OBJ_VAL(item, 0)]);
     send_to_char(buf, ch);
     return;
   }
 
+  // wtf does this even do? val 0 for attachments is top/barrel/under. Looks like broken code. -LS
   if ((GET_OBJ_VAL(item, 0) == 5 && !(GET_OBJ_VAL(item2, 4) == SKILL_PISTOLS)) ||
       (GET_OBJ_VAL(item, 0) == 6 && !(GET_OBJ_VAL(item2, 4) == SKILL_RIFLES ||
-                                      GET_OBJ_VAL(item2, 4) == SKILL_SMG || GET_OBJ_VAL(item2, 4) == SKILL_ASSAULT_RIFLES))) {
+      GET_OBJ_VAL(item2, 4) == SKILL_SMG || GET_OBJ_VAL(item2, 4) == SKILL_ASSAULT_RIFLES))) {
     sprintf(buf, "%s doesn't seem to fit on %s.\r\n",
             CAP(GET_OBJ_NAME(item)), GET_OBJ_NAME(item2));
     send_to_char(buf, ch);
@@ -1698,6 +1713,16 @@ ACMD(do_attach)
     sprintf(buf, "You seem unable to connect %s to %s.\r\n",
             GET_OBJ_NAME(item), GET_OBJ_NAME(item2));
     send_to_char(buf, ch);
+    
+    sprintf(buf, "WARNING: %s (%ld) attempted to attach %s (%ld) to %s (%ld), but the gun was full up on affects. Something needs revising."
+            " Gun's current top/barrel/bottom attachment vnums are %d / %d / %d.",
+            GET_CHAR_NAME(ch), GET_IDNUM(ch),
+            GET_OBJ_NAME(item), GET_OBJ_VNUM(item),
+            GET_OBJ_NAME(item2), GET_OBJ_VNUM(item2),
+            GET_WEAPON_ATTACH_TOP_VNUM(item2),
+            GET_WEAPON_ATTACH_BARREL_VNUM(item2),
+            GET_WEAPON_ATTACH_UNDER_VNUM(item2));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return;
   }
 
