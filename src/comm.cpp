@@ -951,19 +951,22 @@ void make_prompt(struct descriptor_data * d)
 {
   char *prompt;
   
-  if (D_PRF_FLAGGED(d, PRF_NOPROMPT)) {
-    // Minimal prompt-- just a contextual hint for when they're in a buffer.
-    if (d->showstr_point)
-      write_to_descriptor(d->descriptor, " Press [return] to continue, [q] to quit ");
-    return;
+  if (d->str) {
+    if (D_PRF_FLAGGED(d, PRF_SCREENREADER)) {
+      write_to_descriptor(d->descriptor, "Compose mode, write the at symbol on new line to quit. ");
+    } else {
+      write_to_descriptor(d->descriptor, "Compose mode, write @ on new line to quit]: ");
+    }
   }
-  
-  if (d->str)
-    write_to_descriptor(d->descriptor, "] ");
   else if (d->showstr_point)
     write_to_descriptor(d->descriptor, " Press [return] to continue, [q] to quit ");
+  else if (D_PRF_FLAGGED(d, PRF_NOPROMPT)) {
+    // Anything below this line won't render for noprompters.
+    return;
+  }
   else if (STATE(d) == CON_POCKETSEC)
     write_to_descriptor(d->descriptor, " > ");
+  
   else if (!d->connected)
   {
     struct char_data *ch;
