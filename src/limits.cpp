@@ -536,7 +536,7 @@ void process_regeneration(int half_hour)
     }
   }
   /* blood stuff */
-  for (int i = 0; i < top_of_world; i++) {
+  for (int i = 0; i <= top_of_world; i++) {
     if (half_hour && world[i].blood > 0)
       world[i].blood--;
     if (world[i].icesheet[0])

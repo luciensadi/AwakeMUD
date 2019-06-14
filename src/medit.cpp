@@ -365,7 +365,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         new_mob_index = new struct index_data[top_of_mobt + 2];
         new_mob_proto = new struct char_data[top_of_mobt + 2];
         // count through the tables
-        for (counter = 0; counter < top_of_mobt + 1; counter++) {
+        for (counter = 0; counter <= top_of_mobt; counter++) {
           /* if we haven't found it */
           if (!found) {
             /* check if current virtual is bigger than our virtual */

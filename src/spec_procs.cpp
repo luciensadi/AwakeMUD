@@ -664,7 +664,7 @@ void send_training_list_to_char(struct char_data *ch, int ind) {
     send_to_char(ch, "You have %0.2f karma points.  You can train", (float)GET_KARMA(ch) / 100);
   }
   
-  for (int i = 0; i < WIL; i++) {
+  for (int i = 0; i <= WIL; i++) {
     if (IS_SET(trainers[ind].attribs, (1 << i)) && attribute_below_maximums(ch, i)) {
       raw_cost = calculate_training_raw_cost(ch, i);
       if (GET_ATT_POINTS(ch) > 0)

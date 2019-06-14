@@ -29,7 +29,7 @@ int get_maneuver(struct veh_data *veh)
 {
   int score = -2;
   struct char_data *ch = NULL;
-  int i = 0, x = 0, skill;
+  int x = 0, skill;
 
   switch (veh->type)
   {
@@ -41,7 +41,7 @@ int get_maneuver(struct veh_data *veh)
     break;
   case VEH_CAR:
     if (veh->speed >= 200)
-      score +=5;
+      score += 5;
     break;
   }
   if (veh->cspeed > SPEED_IDLE)
@@ -55,10 +55,9 @@ int get_maneuver(struct veh_data *veh)
         break;
   if (ch)
   {
-    for (skill = veh_skill(ch, veh);skill > 0; skill--) {
-      i = srdice();
-      if (i > x)
-        x = i;
+    // TODO: What is this passage for? -LS
+    for (skill = veh_skill(ch, veh); skill > 0; skill--) {
+      x = MAX(x, srdice());
     }
     score += x;
   }
@@ -975,11 +974,11 @@ ACMD(do_repair)
   target += modify_target(ch);
 
   for (obj = ch->carrying; obj && !mod; obj = obj->next_content)
-    if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_OBJ_VAL(obj, 1) == 9 && GET_OBJ_VAL(obj, 0) == 4)
-      mod = GET_OBJ_VAL(obj, 1);
-  for (int i = 0; !mod && i < (NUM_WEARS - 1); i++)
-    if ((obj = GET_EQ(ch, i)) && GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_OBJ_VAL(obj, 1) == 0 && GET_OBJ_VAL(obj, 0) == 4)
-      mod = GET_OBJ_VAL(obj, 1);
+    if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE && GET_WORKSHOP_GRADE(obj) == TYPE_KIT)
+      mod = TYPE_KIT;
+  for (int i = 0; i < NUM_WEARS && !mod; i++)
+    if ((obj = GET_EQ(ch, i)) && GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE && GET_WORKSHOP_GRADE(obj) == TYPE_KIT)
+      mod = TYPE_KIT;
   shop = find_workshop(ch, TYPE_VEHICLE);
   if (!shop) {
     if (veh->damage >= 7) {
@@ -988,17 +987,13 @@ ACMD(do_repair)
     }
     target += 2;
   }
-
-  switch (mod) {
-  case 0:
-    target += 4;
-    break;
-  case 1:
-    target += 2;
-    break;
-  case 3:
+  
+  if (shop && GET_WORKSHOP_GRADE(shop) == TYPE_FACILITY) {
     target -= 2;
-    break;
+  } else if (mod == TYPE_KIT) {
+    target += 2;
+  } else {
+    target += 4;
   }
 
   if ((success = (GET_LEVEL(ch) > LVL_MORTAL ? 20 : success_test(skill, target))) < 1) {

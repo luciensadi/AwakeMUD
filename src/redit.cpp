@@ -421,7 +421,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
 
 
           /* count thru world tables */
-          for (counter = 0; counter < top_of_world + 1; counter++) {
+          for (counter = 0; counter <= top_of_world; counter++) {
             if (!found) {
               /* check if current virtual is bigger than our virtual */
               if (world[counter].number > d->edit_number) {
@@ -521,7 +521,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
             r_newbie_start_room++;
           /* go through the world. if any of the old rooms indicated an exit
            * to our new room, we have to change it */
-          for (counter = 0; counter < top_of_world + 1; counter++) {
+          for (counter = 0; counter <= top_of_world; counter++) {
             for (counter2 = 0; counter2 < NUM_OF_DIRS; counter2++) {
               /* if exit exists */
               if (world[counter].dir_option[counter2]) {
@@ -802,7 +802,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     break;
   case REDIT_BACKGROUND2:
     number = atoi(arg);
-    if (number < 0 || number > AURA_PLAYERCOMBAT - 1) {
+    if (number < 0 || number >= AURA_PLAYERCOMBAT) {
       send_to_char(CH, "Number must be between 0 and %d. Enter Type: ", AURA_PLAYERCOMBAT - 1);
       return;
     }

@@ -1514,7 +1514,7 @@ const char *veh_aff[] =
     "Seating (Rear)",
     "Load",
     "Sensors",
-    "Pilot"
+    "Pilot",
   };
 
 const char *veh_flag[] =
@@ -2093,8 +2093,8 @@ const char *background_types[] =
   "confusion",
   "power site",
   "blood magic",
-  "death",                   // 15
-  "violence"
+  "violence",                   // 15
+  "death"
 };
 
 const char *fire_mode[] =

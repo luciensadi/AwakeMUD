@@ -559,7 +559,7 @@ void new_quest(struct char_data *mob)
 {
   int i, num = 0;
 
-  for (i = 0; i < top_of_questt; i++)
+  for (i = 0; i <= top_of_questt; i++)
     if (quest_table[i].johnson == GET_MOB_VNUM(mob))
       num++;
 
@@ -578,7 +578,7 @@ void new_quest(struct char_data *mob)
       GET_SPARE2(mob) = i;
       return;
     }
-    if ((i + 1) < top_of_questt)
+    if ((i + 1) <= top_of_questt)
       i++;
     else
       i = 0;
@@ -783,7 +783,7 @@ void johnson_update(void)
 
   *buf = 0;
 
-  for ( i = 0; i < top_of_questt;  i++ ) {
+  for ( i = 0; i <= top_of_questt;  i++ ) {
     /* Random times */
     if ( quest_table[i].s_time == -1 ) {
       if ( dice(1, 6) )
@@ -836,7 +836,7 @@ void assign_johnsons(void)
 {
   int i, rnum;
 
-  for (i = 0; i < top_of_questt; i++) {
+  for (i = 0; i <= top_of_questt; i++) {
     if ((rnum = real_mobile(quest_table[i].johnson)) < 0)
       log_vfprintf("Johnson #%d does not exist (quest #%d)",
           quest_table[i].johnson, quest_table[i].vnum);
@@ -908,7 +908,7 @@ void boot_one_quest(struct quest_data *quest)
       return;
     }
 
-  for (count = 0; count < top_of_questt; count++)
+  for (count = 0; count <= top_of_questt; count++)
     if (quest_table[count].vnum > quest->vnum)
     {
       quest_nr = count;
@@ -1103,7 +1103,7 @@ int write_quests_to_disk(int zone)
 
   for (i = 0; i <= top_of_zone_table; ++i) {
     found = 0;
-    for (j = 0; !found && j < top_of_questt; j++)
+    for (j = 0; !found && j <= top_of_questt; j++)
       if (quest_table[j].vnum >= (zone_table[i].number * 100) &&
           quest_table[j].vnum <= zone_table[i].top) {
         found = 1;

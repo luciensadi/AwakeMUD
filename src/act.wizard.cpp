@@ -1659,7 +1659,7 @@ void perform_wizload_object(struct char_data *ch, int vnum) {
   
   // Precondition: Staff member must have access to the zone the item is in.
   if (!access_level(ch, LVL_DEVELOPER)) {
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < NUM_ZONE_EDITOR_IDS; i++) {
       if (zone_table[counter].editor_ids[i] == GET_IDNUM(ch))
         break;
     }
@@ -2220,7 +2220,7 @@ ACMD(do_restore)
 
     if ((access_level(ch, LVL_DEVELOPER)) &&
         (IS_SENATOR(vict)) && !IS_NPC(vict)) {
-      for (i = 1; i < MAX_SKILLS; i++)
+      for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
         SET_SKILL(vict, i, 100);
 
       if (IS_SENATOR(vict) && !access_level(vict, LVL_EXECUTIVE)) {
@@ -2952,7 +2952,7 @@ void print_zone_to_buf(char *bufptr, int zone, int detailed)
             zone_table[zone].top, rooms, mobs, objs, shops, vehs,
             zone_table[zone].security,
             zone_table[zone].connected ? "Connected" : "In Progress", jurid[zone_table[zone].jurisdiction]);
-/* FIXCHE   for (i = 0; i < 5; i++) {
+/* FIXCHE   for (i = 0; i < NUM_ZONE_EDITOR_IDS; i++) {
       const char *name = playerDB.GetNameV(zone_table[zone].editor_ids[i]);
 
       if (name) {
@@ -3184,7 +3184,7 @@ ACMD(do_show)
     send_to_char(ch, "%s's skills:", GET_NAME(vict));
     j = 0;
     sprintf(buf, "\r\n");
-    for (i = 1; i <= MAX_SKILLS; i++)
+    for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
       if (GET_SKILL(vict, i) > 0) {
         sprintf(buf, "%s[%-20s%4d]", buf, skills[i].name, GET_SKILL(vict, i));
         j++;
@@ -3259,7 +3259,7 @@ ACMD(do_show)
     send_to_char(ch, "%s's abilities:", GET_NAME(vict));
     j = 0;
     sprintf(buf, "\r\n");
-    for (i = 1; i <= ADEPT_NUMPOWER; i++)
+    for (i = ADEPT_PERCEPTION; i < ADEPT_NUMPOWER; i++)
       if (GET_POWER_TOTAL(vict, i) > 0) {
         sprintf(buf2, "%-20s", adept_powers[i]);
         if (max_ability(i) > 1)

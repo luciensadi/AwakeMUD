@@ -195,11 +195,11 @@ void iedit_disp_weapon_menu(struct descriptor_data * d)
 void iedit_disp_spells_menu(struct descriptor_data * d)
 {
   CLS(CH);
-  for (int counter = 1; counter <= MAX_SPELLS; counter += 3)
+  for (int counter = 1; counter < MAX_SPELLS; counter += 3)
     send_to_char(CH, "%2d) %-18s %2d) %-18s %2d) %-18s\r\n",
                  counter, spells[counter].name,
-                 counter + 1, counter + 1 <= MAX_SPELLS ? spells[counter + 1].name : "",
-                 counter + 2, counter + 2 <= MAX_SPELLS ? spells[counter + 2].name : "");
+                 counter + 1, counter + 1 < MAX_SPELLS ? spells[counter + 1].name : "",
+                 counter + 2, counter + 2 < MAX_SPELLS ? spells[counter + 2].name : "");
   
   send_to_char("Enter spell:\r\n", CH);
 }
@@ -1262,7 +1262,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             new_obj_index = new struct index_data[top_of_objt + 2];
             new_obj_proto = new struct obj_data[top_of_objt + 2];
             /* start counting through both tables */
-            for (counter = 0; counter < top_of_objt + 1; counter++) {
+            for (counter = 0; counter <= top_of_objt; counter++) {
               /* if we haven't found it */
               if (!found) {
                 /* check if current virtual is bigger than our virtual */

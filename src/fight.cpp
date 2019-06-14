@@ -638,8 +638,12 @@ void die(struct char_data * ch)
     increase_blood(ch->in_room);
     act("^rBlood splatters everywhere!^n", FALSE, ch, 0, 0, TO_ROOM);
     if (!world[ch->in_room].background[0] || world[ch->in_room].background[1] == AURA_PLAYERCOMBAT) {
-      world[ch->in_room].background[0] = 1;
-      world[ch->in_room].background[1] = AURA_PLAYERDEATH;
+      if (world[ch->in_room].background[1] != AURA_PLAYERDEATH) {
+        world[ch->in_room].background[0] = 1;
+        world[ch->in_room].background[1] = AURA_PLAYERDEATH;
+      } else {
+        world[ch->in_room].background[0]++;
+      }
     }
   }
   if (!IS_NPC(ch))
@@ -694,7 +698,7 @@ int calc_karma(struct char_data *ch, struct char_data *vict)
                (GET_REAL_QUI(vict) + (int)(vict->real_abils.mag / 100) +
                 GET_REAL_STR(vict) + GET_REAL_WIL(vict) + GET_REAL_REA(vict)));
   
-  for (i = 0; i <= MAX_SKILLS; i++)
+  for (i = 0; i < MAX_SKILLS; i++)
     if (GET_SKILL(vict, i) > 0)
     {
       if (i == SKILL_SORCERY && GET_MAG(vict) > 0)

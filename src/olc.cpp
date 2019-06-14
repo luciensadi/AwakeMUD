@@ -53,6 +53,13 @@ extern void icedit_disp_menu(struct descriptor_data *d);
 // mem class
 extern class memoryClass *Mem;
 
+bool can_edit_zone(struct char_data *ch, int zone) {
+  for (int i = 0; i < NUM_ZONE_EDITOR_IDS; i++)
+    if (zone_table[zone].editor_ids[i] == GET_IDNUM(ch))
+      return true;
+  return access_level(ch, LVL_ADMIN);
+}
+
 void write_index_file(const char *suffix)
 {
   FILE *fp;
@@ -180,18 +187,9 @@ ACMD (do_redit)
     return;
   }
 
-  // this is part of the new routine that checks for the id list from the
-  // actual zone itself to determine if they can edit it or not
-  {
-    int i = 0;
-    for (; i < 5; i++)
-      if (zone_table[counter].editor_ids[i] == GET_IDNUM(ch))
-        break;
-    if ((i >= 5) && (!access_level(ch, LVL_ADMIN)))// it was not found
-    {
-      send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-      return;
-    }
+  if (!can_edit_zone(ch, counter)) {
+    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
+    return;
   }
 
   if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
@@ -317,18 +315,12 @@ ACMD(do_rclone)
     return;
   }
 
-  for (i = 0; i < 5; i++)
-    if (zone_table[zone1].editor_ids[i] == GET_IDNUM(ch))
-      break;
-  if ((i >= 5) && (!access_level(ch, LVL_ADMIN))) {
+  if (!can_edit_zone(ch, zone1)) {
     send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
     return;
   }
 
-  for (i = 0; i < 5; i++)
-    if (zone_table[zone2].editor_ids[i] == GET_IDNUM(ch))
-      break;
-  if ((i >= 5) && (!access_level(ch, LVL_ADMIN))) {
+  if (!can_edit_zone(ch, zone2)) {
     send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
     return;
   }
@@ -465,18 +457,7 @@ ACMD(do_dig)
       zone2 = counter;
   }
 
-  for (i = 0; i < 5; i++)
-    if (zone_table[zone1].editor_ids[i] == GET_IDNUM(ch))
-      break;
-  if (i >= 5 && !access_level(ch, LVL_ADMIN)) {
-    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-    return;
-  }
-
-  for (i = 0; i < 5; i++)
-    if (zone_table[zone2].editor_ids[i] == GET_IDNUM(ch))
-      break;
-  if (i >= 5 && !access_level(ch, LVL_ADMIN)) {
+  if (!can_edit_zone(ch, zone1) || !can_edit_zone(ch, zone2)) {
     send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
     return;
   }
@@ -550,10 +531,7 @@ ACMD(do_rdelete)
     return;
   }
 
-  for (i = 0; i < 5; i++)
-    if (zone_table[counter].editor_ids[i] == GET_IDNUM(ch))
-      break;
-  if ((i >= 5) && (!access_level(ch, LVL_ADMIN))) {
+  if (!can_edit_zone(ch, counter)) {
     send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
     return;
   }
@@ -615,7 +593,7 @@ ACMD(do_rdelete)
 
   int counter2;
   // go through the world and fix the exits
-  for (counter = 0; counter < top_of_world + 1; counter++)
+  for (counter = 0; counter <= top_of_world; counter++)
     for (counter2 = 0; counter2 < NUM_OF_DIRS; counter2++) {
       /* if exit exists */
       if (world[counter].dir_option[counter2]) {
@@ -719,18 +697,9 @@ ACMD (do_vedit)
     return;
   }
 
-  // this is part of the new routine that checks for the id list from the
-  // actual zone itself to determine if they can edit it or not
-  {
-    int i = 0;
-    for (; i < 5; i++)
-      if (zone_table[counter].editor_ids[i] == GET_IDNUM(ch))
-        break;
-    if ((i >= 5) && (!access_level(ch, LVL_ADMIN))) // it wasn't found
-    {
-      send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-      return;
-    }
+  if (!can_edit_zone(ch, counter)) {
+    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
+    return;
   }
 
   if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
@@ -856,18 +825,9 @@ ACMD (do_iedit)
     return;
   }
 
-  // this is part of the new routine that checks for the id list from the
-  // actual zone itself to determine if they can edit it or not
-  {
-    int i = 0;
-    for (; i < 5; i++)
-      if (zone_table[counter].editor_ids[i] == GET_IDNUM(ch))
-        break;
-    if ((i >= 5) && (!access_level(ch, LVL_ADMIN))) // it was not found
-    {
-      send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-      return;
-    }
+  if (!can_edit_zone(ch, counter)) {
+    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
+    return;
   }
 
   if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
@@ -1013,18 +973,7 @@ ACMD(do_iclone)
     return;
   }
 
-  for (i = 0; i < 5; i++)
-    if (zone_table[zone1].editor_ids[i] == GET_IDNUM(ch))
-      break;
-  if ((i >= 5) && (!access_level(ch, LVL_ADMIN))) {
-    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-    return;
-  }
-
-  for (i = 0; i < 5; i++)
-    if (zone_table[zone2].editor_ids[i] == GET_IDNUM(ch))
-      break;
-  if ((i >= 5) && (!access_level(ch, LVL_ADMIN))) {
+  if (!can_edit_zone(ch, zone1) || !can_edit_zone(ch, zone2)) {
     send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
     return;
   }
@@ -1115,14 +1064,13 @@ ACMD(do_idelete)
     send_to_char ("Sorry, that number is not part of any zone.\r\n", ch);
     return;
   }
-
-  for (i = 0; i < 5; i++)
-    if (zone_table[counter].editor_ids[i] == GET_IDNUM(ch))
-      break;
-  if ((i >= 5) && (!access_level(ch, LVL_ADMIN))) {
+  
+  if (!can_edit_zone(ch, counter)) {
     send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
     return;
   }
+
+  
 
   if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
     send_to_char("You can't delete objects from a connected zone.\r\n", ch);
@@ -1239,18 +1187,9 @@ ACMD(do_medit)
     return;
   }
   // only allow them to edit their zone
-  // this is part of the new routine that checks for the id list from the
-  // actual zone itself to determine if they can edit it or not
-  {
-    int i = 0;
-    for (; i < 5; i++)
-      if (zone_table[counter].editor_ids[i] == GET_IDNUM(ch))
-        break;
-    if ((i >= 5) && (!access_level(ch, LVL_ADMIN)))
-    {
-      send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-      return;
-    }
+  if (!can_edit_zone(ch, counter)) {
+    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
+    return;
   }
 
   if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
@@ -1376,18 +1315,7 @@ ACMD(do_mclone)
     return;
   }
 
-  for (i = 0; i < 5; i++)
-    if (zone_table[zone1].editor_ids[i] == GET_IDNUM(ch))
-      break;
-  if ((i >= 5) && (!access_level(ch, LVL_ADMIN))) {
-    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-    return;
-  }
-
-  for (i = 0; i < 5; i++)
-    if (zone_table[zone2].editor_ids[i] == GET_IDNUM(ch))
-      break;
-  if ((i >= 5) && (!access_level(ch, LVL_ADMIN))) {
+  if (!can_edit_zone(ch, zone1) || !can_edit_zone(ch, zone2)) {
     send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
     return;
   }
@@ -1477,10 +1405,7 @@ ACMD(do_mdelete)
     return;
   }
 
-  for (i = 0; i < 5; i++)
-    if (zone_table[counter].editor_ids[i] == GET_IDNUM(ch))
-      break;
-  if ((i >= 5) && (!access_level(ch, LVL_ADMIN))) {
+  if (!can_edit_zone(ch, counter)) {
     send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
     return;
   }
@@ -1609,10 +1534,7 @@ ACMD(do_qedit)
     return;
   }
 
-  for (i = 0; i < 5; i++)
-    if (zone_table[counter].editor_ids[i] == GET_IDNUM(ch))
-      break;
-  if ((i >= 5) && (!access_level(ch, LVL_ADMIN))) {
+  if (!can_edit_zone(ch, counter)) {
     send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
     return;
   }
@@ -1729,10 +1651,7 @@ ACMD(do_shedit)
     return;
   }
 
-  for (; i < 5; i++)
-    if (zone_table[counter].editor_ids[i] == GET_IDNUM(ch))
-      break;
-  if ((i >= 5) && (!access_level(ch, LVL_ADMIN))) {
+  if (!can_edit_zone(ch, counter)) {
     send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
     return;
   }
@@ -1852,16 +1771,9 @@ ACMD(do_zswitch)
   zonenum = real_zone(number);
 
   // and see if they can edit it
-  {
-    int i = 0;
-    for (; i < 5; i++)
-      if (i != -1 && zone_table[zonenum].editor_ids[i] == GET_IDNUM(ch))
-        break;
-    if ((i >= 5) && (!access_level(ch, LVL_ADMIN)))
-    {
-      send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-      return;
-    }
+  if (!can_edit_zone(ch, counter)) {
+    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
+    return;
   }
 
   if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
@@ -1902,18 +1814,9 @@ ACMD(do_zedit)
 
   zonenum = real_zone(ch->player_specials->saved.zonenum);
 
-  // this is part of the new routine that checks for the id list from the
-  // actual zone itself to determine if they can edit it or not
-  {
-    int i = 0;
-    for (; i < 5; i++)
-      if (zone_table[zonenum].editor_ids[i] == GET_IDNUM(ch))
-        break;
-    if ((i >= 5) && (!access_level(ch, LVL_ADMIN))) // it was not found
-    {
-      send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-      return;
-    }
+  if (!can_edit_zone(ch, zonenum)) {
+    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
+    return;
   }
 
   if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
@@ -2062,18 +1965,9 @@ ACMD(do_hedit)
     return;
   }
 
-  // this is part of the new routine that checks for the id list from the
-  // actual zone itself to determine if they can edit it or not
-  {
-    int i = 0;
-    for (; i < 5; i++)
-      if (zone_table[counter].editor_ids[i] == GET_IDNUM(ch))
-        break;
-    if ((i >= 5) && (!access_level(ch, LVL_ADMIN))) // it wasn't found
-    {
-      send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-      return;
-    }
+  if (!can_edit_zone(ch, counter)) {
+    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
+    return;
   }
 
   if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
@@ -2202,18 +2096,9 @@ ACMD(do_icedit)
     return;
   }
 
-  // this is part of the new routine that checks for the id list from the
-  // actual zone itself to determine if they can edit it or not
-  {
-    int i = 0;
-    for (; i < 5; i++)
-      if (zone_table[counter].editor_ids[i] == GET_IDNUM(ch))
-        break;
-    if ((i >= 5) && (!access_level(ch, LVL_ADMIN))) // it wasn't found
-    {
-      send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
-      return;
-    }
+  if (!can_edit_zone(ch, counter)) {
+    send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
+    return;
   }
 
   if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {

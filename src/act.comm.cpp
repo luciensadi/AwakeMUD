@@ -659,8 +659,8 @@ ACMD(do_broadcast)
   success = success_test(GET_SKILL(ch, GET_LANGUAGE(ch)), 4);
 
   strcpy(buf4, argument);
-  int len = strlen(buf4);
-  for (len--;len >= 0; len--)
+  // Starting at end of buf, work backwards and fuzz out the message.
+  for (int len = strlen(buf4) - 1; len >= 0; len--)
     switch (number(0, 2)) {
     case 1:
       buf4[len] = '.';

@@ -66,6 +66,13 @@ int number(int from, int to)
     to = from;
     from = temp;
   }
+  
+  if (to > RAND_MAX) {
+    char errbuf[150];
+    sprintf(errbuf, "WARNING: Attempting to generate random number between %d and %d, but RAND_MAX is %d!", from, to, RAND_MAX);
+    mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
+  }
+  
   return ((random() % (to - from + 1)) + from);
 }
 
