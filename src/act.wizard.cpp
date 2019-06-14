@@ -1659,7 +1659,7 @@ void perform_wizload_object(struct char_data *ch, int vnum) {
   
   // Precondition: Staff member must have access to the zone the item is in.
   if (!access_level(ch, LVL_DEVELOPER)) {
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < NUM_ZONE_EDITOR_IDS; i++) {
       if (zone_table[counter].editor_ids[i] == GET_IDNUM(ch))
         break;
     }
@@ -2220,7 +2220,7 @@ ACMD(do_restore)
 
     if ((access_level(ch, LVL_DEVELOPER)) &&
         (IS_SENATOR(vict)) && !IS_NPC(vict)) {
-      for (i = 1; i < MAX_SKILLS; i++)
+      for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
         SET_SKILL(vict, i, 100);
 
       if (IS_SENATOR(vict) && !access_level(vict, LVL_EXECUTIVE)) {
@@ -2952,7 +2952,7 @@ void print_zone_to_buf(char *bufptr, int zone, int detailed)
             zone_table[zone].top, rooms, mobs, objs, shops, vehs,
             zone_table[zone].security,
             zone_table[zone].connected ? "Connected" : "In Progress", jurid[zone_table[zone].jurisdiction]);
-/* FIXCHE   for (i = 0; i < 5; i++) {
+/* FIXCHE   for (i = 0; i < NUM_ZONE_EDITOR_IDS; i++) {
       const char *name = playerDB.GetNameV(zone_table[zone].editor_ids[i]);
 
       if (name) {
@@ -3184,7 +3184,7 @@ ACMD(do_show)
     send_to_char(ch, "%s's skills:", GET_NAME(vict));
     j = 0;
     sprintf(buf, "\r\n");
-    for (i = 1; i <= MAX_SKILLS; i++)
+    for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
       if (GET_SKILL(vict, i) > 0) {
         sprintf(buf, "%s[%-20s%4d]", buf, skills[i].name, GET_SKILL(vict, i));
         j++;
@@ -3259,7 +3259,7 @@ ACMD(do_show)
     send_to_char(ch, "%s's abilities:", GET_NAME(vict));
     j = 0;
     sprintf(buf, "\r\n");
-    for (i = 1; i <= ADEPT_NUMPOWER; i++)
+    for (i = ADEPT_PERCEPTION; i < ADEPT_NUMPOWER; i++)
       if (GET_POWER_TOTAL(vict, i) > 0) {
         sprintf(buf2, "%-20s", adept_powers[i]);
         if (max_ability(i) > 1)
@@ -4335,10 +4335,13 @@ ACMD(do_mlist)
   if (first >= last) {
     send_to_char("Second value must be greater than first.\r\n", ch);
     return;
-  } else if (last - first >= 500) {
-    send_to_char("The range cannot exceed 499 mobiles at a time.\r\n", ch);
+  }
+#ifdef LIMIT_LIST_COMMANDS
+  else if (last - first > LIST_COMMAND_LIMIT) {
+    send_to_char(ch, "The range cannot exceed %d mobiles at a time.\r\n", LIST_COMMAND_LIMIT);
     return;
   }
+#endif
 
   sprintf(buf, "Mobiles, %d to %d:\r\n", first, last);
 
@@ -4376,10 +4379,13 @@ ACMD(do_ilist)
   if ((first < 0) || (last < 0)) {
     send_to_char("Values must be over 0.\r\n", ch);
     return;
-  } else if (last - first >= 500) {
-    send_to_char("The range cannot exceed 499 objects at a time.\r\n", ch);
+  }
+#ifdef LIMIT_LIST_COMMANDS
+  else if (last - first > LIST_COMMAND_LIMIT) {
+    send_to_char(ch, "The range cannot exceed %d objects at a time.\r\n", LIST_COMMAND_LIMIT);
     return;
   }
+#endif
 
   if (first >= last) {
     send_to_char("Second value must be greater than first.\r\n", ch);
@@ -4491,6 +4497,15 @@ ACMD(do_qlist)
     page_string(ch->desc, buf, 1);
 }
 
+// Shitty little function that will show up in the stacktrace to help diagnose what's crashing.
+bool debug_bounds_check_rlist(int nr, int last) {
+  if (nr > top_of_world)
+    return FALSE;
+  if (world[nr].number > last)
+    return FALSE;
+  return TRUE;
+}
+
 ACMD(do_rlist)
 {
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
@@ -4518,18 +4533,21 @@ ACMD(do_rlist)
   if (first >= last) {
     send_to_char("Second value must be greater than first.\r\n", ch);
     return;
-  } else if (last - first >= 500) {
-    send_to_char("The range cannot exceed 499 rooms at a time.\r\n", ch);
+  }
+#ifdef LIMIT_LIST_COMMANDS
+  else if (last - first > LIST_COMMAND_LIMIT) {
+    send_to_char(ch, "The range cannot exceed %d rooms at a time.\r\n", LIST_COMMAND_LIMIT);
     return;
   }
+#endif
 
   sprintf(buf, "Rooms, %d to %d:\r\n", first, last);
 
-  for (nr = MAX(0, real_room(first)); nr <= top_of_world &&
-       (world[nr].number <= last); nr++)
+  for (nr = MAX(0, real_room(first)); debug_bounds_check_rlist(nr, last); nr++) {
     if (world[nr].number >= first)
       sprintf(buf + strlen(buf), "%5d. [%5ld] (%3d) %s\r\n", ++found,
               world[nr].number, world[nr].zone, world[nr].name);
+  }
 
   if (!found)
     send_to_char("No rooms where found in those parameters.\r\n", ch);
@@ -4564,10 +4582,13 @@ ACMD(do_hlist)
   if (first >= last) {
     send_to_char("Second value must be greater than first.\r\n", ch);
     return;
-  } /*else if (last - first >= 500) {
-          send_to_char("The range cannot exceed 499 hosts at a time.\r\n", ch);
-          return;
-        }*/
+  }
+#ifdef LIMIT_LIST_COMMANDS
+  else if (last - first > LIST_COMMAND_LIMIT) {
+    send_to_char(ch, "The range cannot exceed %d hosts at a time.\r\n", LIST_COMMAND_LIMIT);
+    return;
+  }
+#endif
 
   sprintf(buf, "Hosts, %d to %d:\r\n", first, last);
 
@@ -4610,10 +4631,13 @@ ACMD(do_iclist)
   if (first >= last) {
     send_to_char("Second value must be greater than first.\r\n", ch);
     return;
-  } else if (last - first >= 500) {
-    send_to_char("The range cannot exceed 499 hosts at a time.\r\n", ch);
+  }
+#ifdef LIMIT_LIST_COMMANDS
+  else if (last - first > LIST_COMMAND_LIMIT) {
+    send_to_char(ch, "The range cannot exceed %d ICs at a time.\r\n", LIST_COMMAND_LIMIT);
     return;
   }
+#endif
 
   sprintf(buf, "IC, %d to %d:\r\n", first, last);
 

@@ -765,14 +765,14 @@ void game_loop(int mother_desc)
       point_update();
       weather_change();
       if (time_info.hours == 17) {
-        for (i = 0; i < top_of_world; i++) {
+        for (i = 0; i <= top_of_world; i++) {
           if (ROOM_FLAGGED(i, ROOM_LIT)) {
             send_to_room("A streetlight hums faintly, flickers, and turns on.\r\n", i);
           }
         }
       }
       if (time_info.hours == 7) {
-        for (i = 0; i < top_of_world; i++) {
+        for (i = 0; i <= top_of_world; i++) {
           if (ROOM_FLAGGED(i, ROOM_LIT)) {
             send_to_room("A streetlight flickers and goes out.\r\n", i);
           }

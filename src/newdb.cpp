@@ -127,12 +127,12 @@ static void init_char(struct char_data * ch)
   }
 
   if (!access_level(ch, LVL_VICEPRES))
-    for (i = 1; i <= MAX_SKILLS; i++)
+    for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
     {
       SET_SKILL(ch, i, 0)
     }
   else
-    for (i = 1; i <= MAX_SKILLS; i++)
+    for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
     {
       SET_SKILL(ch, i, 100);
     }
@@ -328,7 +328,7 @@ void advance_level(struct char_data * ch)
 bool load_char(const char *name, char_data *ch, bool logon)
 {
   init_char(ch);
-  for (int i = 1; i <= MAX_SKILLS; i++)
+  for (int i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
     GET_SKILL(ch, i) = 0;
   ch->char_specials.carry_weight = 0;
   ch->char_specials.carry_items = 0;
@@ -1070,7 +1070,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     sprintf(buf, "DELETE FROM pfiles_skills WHERE idnum=%ld", GET_IDNUM(player));
     mysql_wrapper(mysql, buf);
     strcpy(buf, "INSERT INTO pfiles_skills (idnum, skillnum, rank) VALUES (");
-    for (i = 0; i <= MAX_SKILLS; i++)
+    for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
       if (GET_SKILL(player, i)) {
         if (q)
           strcat(buf, "), (");

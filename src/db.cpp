@@ -52,6 +52,7 @@
 #include "vtable.h"
 #include "config.h"
 #include "security.h"
+#include "olc.h"
 #include <new>
 
 extern void calc_weight(struct char_data *ch);
@@ -1105,6 +1106,10 @@ void parse_room(File &fl, long nr)
   }
 
   top_of_world = rnum++;
+  if (top_of_world >= top_of_world_array) {
+    sprintf(buf, "WARNING: top_of_world >= top_of_world_array at %ld / %d.", top_of_world, top_of_world_array);
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+  }
 }
 
 /* read direction data */
@@ -1690,8 +1695,7 @@ void parse_quest(File &fl, long virtual_nr)
   quest_table[quest_nr].e_string = fl.ReadString();
   quest_table[quest_nr].done = fl.ReadString();
 
-  quest_nr++;
-  top_of_questt = quest_nr;
+  top_of_questt = quest_nr++;
 }
 
 void parse_shop(File &fl, long virtual_nr)
@@ -1807,7 +1811,7 @@ void load_zones(File &fl)
   // This next section reads in the id nums of the players that can edit
   // this zone.
   if (sscanf(buf, "%d %d %d %d %d", &Z.editor_ids[0], &Z.editor_ids[1],
-             &Z.editor_ids[2], &Z.editor_ids[3], &Z.editor_ids[4]) != 5) {
+             &Z.editor_ids[2], &Z.editor_ids[3], &Z.editor_ids[4]) != NUM_ZONE_EDITOR_IDS) {
     fprintf(stderr, "Format error in editor id list of %s", fl.Filename());
     shutdown();
   }
@@ -2180,9 +2184,9 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
   int power, severity, strength;
   buf[0] = '\0';
 
-  for( severity = 4; severity >= 1; severity -- )
+  for( severity = DEADLY; severity >= LIGHT; severity -- )
     for( power = 21; power >= 0; power-- )
-      for( strength = 5; strength >= 0; strength-- )
+      for( strength = WEAPON_MAXIMUM_STRENGTH_BONUS; strength >= 0; strength-- )
       {
         for (nr = 0; nr <= top_of_objt; nr++) {
           if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WEAPON)
@@ -2197,7 +2201,7 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
             continue;
           if (GET_OBJ_VAL(&obj_proto[nr],0) > power && power != 21)
             continue;
-          if (GET_OBJ_VAL(&obj_proto[nr],1) > severity && severity != 4)
+          if (GET_OBJ_VAL(&obj_proto[nr],1) > severity && severity != DEADLY)
             continue;
           if (GET_OBJ_VAL(&obj_proto[nr],2) > strength && strength != 5)
             continue;
@@ -2626,7 +2630,7 @@ void spec_update(void)
   int i;
   char empty_argument = '\0';
 
-  for (i = 0; i < top_of_world; i++)
+  for (i = 0; i <= top_of_world; i++)
     if (world[i].func != NULL)
       world[i].func (NULL, world + i, 0, &empty_argument);
 
@@ -3193,9 +3197,8 @@ char *fread_string(FILE * fl, char *error)
   /* FULLY initialize the buffer array. This is important, because you
   can't have garbage being read in. Doing the first byte isn't really good
   enough, and using memset or bzero is something I don't like. */
-  for (int x=0; x <= MAX_STRING_LENGTH; x++) {
-    buf[x] = '\0';
-  }
+  /* Yeah, except you can go fuck yourself, memset is literally designed for this task. -LS */
+  memset(buf, 0, sizeof(char) * (MAX_STRING_LENGTH+3));
 
   do {
     if (!fgets(tmp, 512, fl)) {
@@ -4209,7 +4212,7 @@ void load_consist(void)
   market[2] = paydata.GetInt("MARKET/Orange", 5000);
   market[3] = paydata.GetInt("MARKET/Red", 5000);
   market[4] = paydata.GetInt("MARKET/Black", 5000);
-  for (int nr = 0; nr < top_of_world; nr++)
+  for (int nr = 0; nr <= top_of_world; nr++)
     if (ROOM_FLAGGED(nr, ROOM_STORAGE)) {
       sprintf(buf, "storage/%ld", world[nr].number);
       if (!(file.Open(buf, "r")))

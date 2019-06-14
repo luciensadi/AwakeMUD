@@ -451,7 +451,7 @@ void end_quest(struct char_data *ch)
 
 bool rep_too_high(struct char_data *ch, int num)
 {
-  if (num < 0 || num >= top_of_questt)
+  if (num < 0 || num > top_of_questt)
     return TRUE;
 
   if (GET_REP(ch) > quest_table[num].max_rep)
@@ -462,7 +462,7 @@ bool rep_too_high(struct char_data *ch, int num)
 
 bool rep_too_low(struct char_data *ch, int num)
 {
-  if (num < 0 || num >= top_of_questt)
+  if (num < 0 || num > top_of_questt)
     return TRUE;
 
   if (GET_REP(ch) < quest_table[num].min_rep)
@@ -559,7 +559,7 @@ void new_quest(struct char_data *mob)
 {
   int i, num = 0;
 
-  for (i = 0; i < top_of_questt; i++)
+  for (i = 0; i <= top_of_questt; i++)
     if (quest_table[i].johnson == GET_MOB_VNUM(mob))
       num++;
 
@@ -578,7 +578,7 @@ void new_quest(struct char_data *mob)
       GET_SPARE2(mob) = i;
       return;
     }
-    if ((i + 1) < top_of_questt)
+    if ((i + 1) <= top_of_questt)
       i++;
     else
       i = 0;
@@ -783,7 +783,7 @@ void johnson_update(void)
 
   *buf = 0;
 
-  for ( i = 0; i < top_of_questt;  i++ ) {
+  for ( i = 0; i <= top_of_questt;  i++ ) {
     /* Random times */
     if ( quest_table[i].s_time == -1 ) {
       if ( dice(1, 6) )
@@ -836,7 +836,7 @@ void assign_johnsons(void)
 {
   int i, rnum;
 
-  for (i = 0; i < top_of_questt; i++) {
+  for (i = 0; i <= top_of_questt; i++) {
     if ((rnum = real_mobile(quest_table[i].johnson)) < 0)
       log_vfprintf("Johnson #%d does not exist (quest #%d)",
           quest_table[i].johnson, quest_table[i].vnum);
@@ -900,7 +900,7 @@ void boot_one_quest(struct quest_data *quest)
 {
   int count, quest_nr = -1, i;
 
-  if ((top_of_questt + 1) >= top_of_quest_array)
+  if ((top_of_questt + 2) >= top_of_quest_array)
     // if it cannot resize, return...the edit_quest is freed later
     if (!resize_qst_array())
     {
@@ -908,7 +908,7 @@ void boot_one_quest(struct quest_data *quest)
       return;
     }
 
-  for (count = 0; count < top_of_questt; count++)
+  for (count = 0; count <= top_of_questt; count++)
     if (quest_table[count].vnum > quest->vnum)
     {
       quest_nr = count;
@@ -916,9 +916,9 @@ void boot_one_quest(struct quest_data *quest)
     }
 
   if (quest_nr == -1)
-    quest_nr = top_of_questt;
+    quest_nr = top_of_questt + 1;
   else
-    for (count = top_of_questt; count > quest_nr; count--)
+    for (count = top_of_questt + 1; count > quest_nr; count--)
     {
       // copy quest_table[count-1] to quest_table[count]
       quest_table[count] = quest_table[count-1];
@@ -1103,7 +1103,7 @@ int write_quests_to_disk(int zone)
 
   for (i = 0; i <= top_of_zone_table; ++i) {
     found = 0;
-    for (j = 0; !found && j < top_of_questt; j++)
+    for (j = 0; !found && j <= top_of_questt; j++)
       if (quest_table[j].vnum >= (zone_table[i].number * 100) &&
           quest_table[j].vnum <= zone_table[i].top) {
         found = 1;

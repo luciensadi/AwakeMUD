@@ -622,9 +622,23 @@ enum {
 #define MASK_DUAL		(1 << 2)
 #define MASK_COMPLETE		(1 << 3)
 
-#define AURA_POWERSITE		13
-#define AURA_PLAYERCOMBAT	15
-#define AURA_PLAYERDEATH	16
+#define AURA_VIOLENCE      0
+#define AURA_TORTURE       1
+#define AURA_HATRED        2
+#define AURA_GENOCIDE      3
+#define AURA_RITUAL_MAGIC  4
+#define AURA_SACRIFICE     5
+#define AURA_WORSHIP       6
+#define AURA_DEATH         7
+#define AURA_POLLUTION     8
+#define AURA_CONCENTRATED  9
+#define AURA_LOST_HUMANITY 10
+#define AURA_STERILITY     11
+#define AURA_CONFUSION     12
+#define AURA_POWERSITE		 13
+#define AURA_BLOOD_MAGIC   14
+#define AURA_PLAYERCOMBAT	 15
+#define AURA_PLAYERDEATH	 16
 
 #define COMBAT			1
 #define DETECTION		2
@@ -1964,7 +1978,7 @@ enum {
 #define SMALL_BUFSIZE             1024
 #define LARGE_BUFSIZE    (MAX_SOCK_BUF - GARBAGE_SPACE - MAX_PROMPT_LENGTH)
 
-#define MAX_STRING_LENGTH         8192
+#define MAX_STRING_LENGTH         32768
 #define MAX_INPUT_LENGTH          2048     /* Max length per *line* of input */
 #define MAX_RAW_INPUT_LENGTH      4096     /* Max size of *raw* input */
 #define MAX_MESSAGES              100
@@ -2097,5 +2111,10 @@ struct ban_list_element
 #define NUM_MATERIALS         17
 
 #define MAX_KEYRING_WEIGHT    1.0
+
+// Note: If you change this, you'll have to update zone file loading etc as well.
+#define NUM_ZONE_EDITOR_IDS   5
+
+#define LIST_COMMAND_LIMIT 500
 
 #endif

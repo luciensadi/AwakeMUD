@@ -222,7 +222,7 @@ if (d->edit_veh->ITEM && veh_proto[veh_number].ITEM && d->edit_veh->ITEM != veh_
           new_veh_proto = new struct veh_data[top_of_veht + 2];
           /* start counting through both tables */
           int counter = 0;
-          for (counter = 0; counter < top_of_veht + 1; counter++) {
+          for (counter = 0; counter <= top_of_veht; counter++) {
             /* if we haven't found it */
             if (!found) {
               /* check if current virtual is bigger than our virtual */

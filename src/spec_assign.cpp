@@ -768,7 +768,7 @@ void assign_rooms(void)
   ASSIGNROOM(17599, multnomah_gate); */
 
  
-  for (long x = 0; x < top_of_world; x++)
+  for (long x = 0; x <= top_of_world; x++)
     if (ROOM_FLAGGED(x, ROOM_ROAD) && !ROOM_FLAGGED(x, ROOM_NO_TRAFFIC) && !ROOM_FLAGGED(x, ROOM_GARAGE) && !world[x].func && SECT(x) == SPIRIT_CITY)
       ASSIGNROOM(world[x].number, traffic);
 }

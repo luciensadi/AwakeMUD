@@ -562,7 +562,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
         // create new table + 2
         new_z_table = new struct zone_data[top_of_zone_table + 2];
 
-        for (counter = 0; counter < top_of_zone_table + 1; counter++) {
+        for (counter = 0; counter <= top_of_zone_table; counter++) {
           if (!found) {
             if (zone_table[counter].number > CH->player_specials->saved.zonenum) {
               new_z_table[counter] = *(ZON);
