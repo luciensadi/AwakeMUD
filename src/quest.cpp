@@ -451,7 +451,7 @@ void end_quest(struct char_data *ch)
 
 bool rep_too_high(struct char_data *ch, int num)
 {
-  if (num < 0 || num >= top_of_questt)
+  if (num < 0 || num > top_of_questt)
     return TRUE;
 
   if (GET_REP(ch) > quest_table[num].max_rep)
@@ -462,7 +462,7 @@ bool rep_too_high(struct char_data *ch, int num)
 
 bool rep_too_low(struct char_data *ch, int num)
 {
-  if (num < 0 || num >= top_of_questt)
+  if (num < 0 || num > top_of_questt)
     return TRUE;
 
   if (GET_REP(ch) < quest_table[num].min_rep)
@@ -900,7 +900,7 @@ void boot_one_quest(struct quest_data *quest)
 {
   int count, quest_nr = -1, i;
 
-  if ((top_of_questt + 1) >= top_of_quest_array)
+  if ((top_of_questt + 2) >= top_of_quest_array)
     // if it cannot resize, return...the edit_quest is freed later
     if (!resize_qst_array())
     {
@@ -916,9 +916,9 @@ void boot_one_quest(struct quest_data *quest)
     }
 
   if (quest_nr == -1)
-    quest_nr = top_of_questt;
+    quest_nr = top_of_questt + 1;
   else
-    for (count = top_of_questt; count > quest_nr; count--)
+    for (count = top_of_questt + 1; count > quest_nr; count--)
     {
       // copy quest_table[count-1] to quest_table[count]
       quest_table[count] = quest_table[count-1];

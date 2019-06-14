@@ -1695,8 +1695,7 @@ void parse_quest(File &fl, long virtual_nr)
   quest_table[quest_nr].e_string = fl.ReadString();
   quest_table[quest_nr].done = fl.ReadString();
 
-  quest_nr++;
-  top_of_questt = quest_nr;
+  top_of_questt = quest_nr++;
 }
 
 void parse_shop(File &fl, long virtual_nr)
