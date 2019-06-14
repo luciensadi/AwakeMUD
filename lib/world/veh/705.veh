@@ -1,0 +1,35 @@
+#70500
+Name:	hulking battered old mct heavy industries utility forklift
+ShortDesc:	a battered old MCT Heavy Industries utility forklift
+RoomDesc:	A hulking utility forklift sits heavily on its tracks here
+LongDesc:$
+Decked out in fading yellow paint and bearing an old MCT logo on the cab, this
+beaten-up forklift has definitely seen better decades. A sign dangling from
+one of the mirrors informs you that it's for Junkyard use only. 
+~
+Inside:$
+Uncomfortably cramped and smelling of a combination of stale beer and crushed
+dreams, this forklift's cab sports exactly one pleather seat (with holes in
+it, of course) and an array of rusted control interfaces. 
+~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	drives slowly
+Arriving:	trundles in heavily from the
+Handling:	1
+Speed:	5
+Accel:	1
+Body:	10
+Armour:	5
+Pilot:	0
+Sig:	10
+Autonav:	0
+Seating:	1
+SeatingBack:	0
+Load:	0
+Cost:	0
+Type:	3
+Flags:	0
+Engine:	3
+BREAK
+END

@@ -95,6 +95,12 @@ RoomType:	9
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
+[EXIT east]
+	ToVnum:	72108
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT south]
 	ToVnum:	72100
 	Flags:	0
@@ -261,6 +267,38 @@ RoomType:	9
 	BackgroundType:	0
 [EXIT south]
 	ToVnum:	72106
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72108
+Name:	A small restaurant
+Desc:$
+You're standing in a small restaurant in Genesis Consortium's Seattle branch.
+There are a few tables and booths around, the atmosphere is cozy overall. A
+few hipsters are dining here, along with a group of suits on their meal break.
+There is a juice bar near the northern wall, and it seems that you can order
+food there as well. All of the food is organic and locally-sourced. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	3
+X:	20
+Y:	15
+Z:	5.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	72102
 	Flags:	0
 	Material:	brick
 	Barrier:	4

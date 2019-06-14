@@ -1,0 +1,112 @@
+#70500
+Keywords:	slouching hulk old man overalls baxter morgan supervisor
+Name:	Baxter Morgan, the Junkyard's supervisor
+RoomDesc:$
+A slouching hulk of an old man sits here, barely contained by his overalls. 
+
+~
+LookDesc:$
+Few words can describe such a being. "Grungy" would be too kind; "grimy", too
+evocative of a street urchin, the likes of which would be roundly offended to
+be compared with Baxter Morgan. Slobbish, boorish, and with a shock of matted
+grey-black hair, Baxter stares out at the world through jaundiced eyes that
+vie with his teeth in an eternal competition to see which of the two can be
+yellower. His overalls, tattered and oil-stained, strain at the seams as he
+slouches carelessly behind his desk. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	6
+	Cha:	1
+	Int:	5
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	178
+	Weight:	180
+[SKILLS]
+BREAK
+#70501
+Keywords:	cobbled-together makeshift security drone junkbot bot
+Name:	a cobbled-together JunkBot-3 security drone
+RoomDesc:$
+A makeshift security drone trundles around, its wheels grinding in the gravel.
+
+~
+LookDesc:$
+Expertly welded together from the parts of ten different commercial drones,
+this amalgamation of technology trundles around the entrance to the Junkyard,
+intimidating trespassers and the occasional stray dog as they approach the
+chain-link gate. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000010100000100000001010
+AffFlags:	110001000001000
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	8
+	Str:	8
+	Cha:	1
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	300
+	Ballistic:	14
+	Impact:	14
+[SKILLS]
+	Armed Combat:	8
+	Brawling:	8
+BREAK
+#70502
+Keywords:	spindly man rat's-head tattoo hollow scythe
+Name:	Hollow Scythe
+RoomDesc:$
+A spindly man with a rat's-head tattoo roots around restlessly. 
+
+~
+LookDesc:$
+Twitchy and beady-eyed, this too-thin man bears the mark of having spent far
+too many nights on the streets. His unkempt snarl of stringy blond hair falls
+limply around his bony shoulders, leaving oily marks on his ragged robe. The
+tattoo of a black rat's head ripples on the back of his left hand as he
+clenches and unclenches his fist repeatedly. 
+~
+ArriveMsg:	scrambles in from the
+LeaveMsg:	clambers on all fours to the
+MobFlags:	100100010001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	8
+	Str:	2
+	Cha:	6
+	Int:	8
+	Wil:	8
+	Mag:	10
+[POINTS]
+	Height:	184
+	Weight:	68
+	Ballistic:	5
+	Impact:	5
+[SKILLS]
+	Sorcery:	12
+BREAK
+END
