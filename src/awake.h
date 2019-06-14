@@ -1978,7 +1978,7 @@ enum {
 #define SMALL_BUFSIZE             1024
 #define LARGE_BUFSIZE    (MAX_SOCK_BUF - GARBAGE_SPACE - MAX_PROMPT_LENGTH)
 
-#define MAX_STRING_LENGTH         8192
+#define MAX_STRING_LENGTH         32768
 #define MAX_INPUT_LENGTH          2048     /* Max length per *line* of input */
 #define MAX_RAW_INPUT_LENGTH      4096     /* Max size of *raw* input */
 #define MAX_MESSAGES              100
@@ -2114,5 +2114,7 @@ struct ban_list_element
 
 // Note: If you change this, you'll have to update zone file loading etc as well.
 #define NUM_ZONE_EDITOR_IDS   5
+
+#define LIST_COMMAND_LIMIT 500
 
 #endif

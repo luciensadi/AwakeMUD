@@ -1106,6 +1106,10 @@ void parse_room(File &fl, long nr)
   }
 
   top_of_world = rnum++;
+  if (top_of_world >= top_of_world_array) {
+    sprintf(buf, "WARNING: top_of_world >= top_of_world_array at %ld / %d.", top_of_world, top_of_world_array);
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+  }
 }
 
 /* read direction data */
