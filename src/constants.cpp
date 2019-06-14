@@ -261,7 +261,7 @@ const char *room_bits[] =
     "FALL",
     "ROAD",
     "GARAGE",
-    "SENATE",
+    "STAFF-ONLY",
     "!QUIT",
     "SENT",
     "ASTRAL",

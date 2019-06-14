@@ -4060,7 +4060,7 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
     set_fighting(vict, ch);
   } else if (!(IS_NPC(vict) && MOB_FLAGGED(vict, MOB_SENTINEL))) {
     for (dir = 0; dir < NUM_OF_DIRS && !is_responding; dir++) {
-      if (CAN_GO2(vict->in_room, dir) && EXIT2(vict->in_room, dir)->to_room == ch->in_room) {
+      if (CAN_GO(vict, dir) && EXIT(vict, dir)->to_room == ch->in_room) {
         is_responding = TRUE;
         act("$n charges towards $s distant foe.", TRUE, vict, 0, 0, TO_ROOM);
         act("You charge after $N.", FALSE, vict, 0, ch, TO_CHAR);
