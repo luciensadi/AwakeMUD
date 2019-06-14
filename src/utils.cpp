@@ -1579,7 +1579,9 @@ bool has_kit(struct char_data * ch, int type)
 // Returns a pointer to the best workshop/facility of the requested type.
 struct obj_data *find_workshop(struct char_data * ch, int type)
 {
-  if (!ch->in_veh && ch->in_room < 0)
+  struct obj_data *workshop = NULL;
+  
+  if (!ch->in_veh && (ch->in_room < 0 || ch->in_room == NOWHERE))
     return NULL;
   
   // If they're in a valid room, return the room's workshop field for MAXIMUM EFFICIENCY.
@@ -1587,13 +1589,12 @@ struct obj_data *find_workshop(struct char_data * ch, int type)
     return world[ch->in_room].best_workshop[type];
   
   // If we've gotten here, they must be in a vehicle. Iterate through and find the best candidate.
-  struct obj_data *workshop = NULL;
   for (struct obj_data *o = ch->in_veh->contents; o; o = o->next_content) {
-    if (GET_OBJ_TYPE(o) == ITEM_WORKSHOP && GET_OBJ_VAL(o, 0) == type) {
-      if (GET_OBJ_VAL(o, 1) == TYPE_FACILITY) {
+    if (GET_OBJ_TYPE(o) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(o) == type) {
+      if (GET_WORKSHOP_GRADE(o) == TYPE_FACILITY) {
         // Jackpot! Facilities are the best option, so we can terminate early and return this item.
         return o;
-      } else if (GET_OBJ_VAL(o, 1) == TYPE_SHOP && GET_OBJ_VAL(o, 2))
+      } else if (GET_WORKSHOP_GRADE(o) == TYPE_SHOP && GET_WORKSHOP_IS_SETUP(o))
         workshop = o;
     }
   }
@@ -1613,7 +1614,7 @@ bool _is_workshop_valid(struct obj_data *obj) {
   }
   
   // Don't allow it to crash the MUD via out-of-bounds world table access.
-  if (!obj->in_room) {
+  if (obj->in_room < 0 || obj->in_room > top_of_world) {
     sprintf(buf, "SYSERR: Workshop '%s' (%ld) claims it's at world index %ld, which doesn't appear to be valid.",
             GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), obj->in_room);
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
@@ -1621,8 +1622,8 @@ bool _is_workshop_valid(struct obj_data *obj) {
   }
   
   // Precondition: The item must be a deployed workshop or a facility.
-  if (!(GET_OBJ_VAL(obj, 1) == TYPE_SHOP && GET_OBJ_VAL(obj, 2)) && GET_OBJ_VAL(obj, 1) != TYPE_FACILITY) {
-    // For this to be true, the item is a kit. We're not going to throw an error over that.
+  if (!(GET_WORKSHOP_GRADE(obj) == TYPE_SHOP && GET_WORKSHOP_IS_SETUP(obj)) && GET_WORKSHOP_GRADE(obj) != TYPE_FACILITY) {
+    // For this to be true, the item is a kit. We're not going to throw an error over that, but it's not a valid workshop.
     return FALSE;
   }
   
@@ -1635,10 +1636,10 @@ void add_workshop_to_room(struct obj_data *obj) {
   
   struct obj_data *current = world[obj->in_room].best_workshop[GET_OBJ_VAL(obj, 0)];
   
-  if (current && GET_OBJ_VAL(current, 1) > GET_OBJ_VAL(obj, 1))
+  if (current && GET_WORKSHOP_GRADE(current) > GET_WORKSHOP_GRADE(obj))
     return;
   
-  world[obj->in_room].best_workshop[GET_OBJ_VAL(obj, 0)] = obj;
+  world[obj->in_room].best_workshop[GET_WORKSHOP_TYPE(obj)] = obj;
 }
 
 void remove_workshop_from_room(struct obj_data *obj) {
@@ -1646,28 +1647,28 @@ void remove_workshop_from_room(struct obj_data *obj) {
     return;
   
   // If this wasn't the best workshop in the first place, who cares?
-  if (world[obj->in_room].best_workshop[GET_OBJ_VAL(obj, 0)] != obj)
+  if (world[obj->in_room].best_workshop[GET_WORKSHOP_TYPE(obj)] != obj)
     return;
   
   // Clear out our current best_workshop pointer (previously pointed to obj).
-  world[obj->in_room].best_workshop[GET_OBJ_VAL(obj, 0)] = NULL;
+  world[obj->in_room].best_workshop[GET_WORKSHOP_TYPE(obj)] = NULL;
   
   // Iterate through all items in the room, looking for other valid workshops/facilities of this type.
   for (struct obj_data *o = world[obj->in_room].contents; o; o = o->next_content) {
-    if (o != obj && GET_OBJ_TYPE(o) == ITEM_WORKSHOP && GET_OBJ_VAL(o, 0) == GET_OBJ_VAL(obj, 0)) {
-      switch (GET_OBJ_VAL(o, 1)) {
+    if (o != obj && GET_OBJ_TYPE(o) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(o) == GET_WORKSHOP_TYPE(obj)) {
+      switch (GET_WORKSHOP_GRADE(o)) {
         case TYPE_FACILITY:
           // This is the best possible outcome; set room val to this and return.
-          world[obj->in_room].best_workshop[GET_OBJ_VAL(o, 0)] = o;
+          world[obj->in_room].best_workshop[GET_WORKSHOP_TYPE(obj)] = o;
           return;
         case TYPE_SHOP:
           // The value of best_workshop is either a workshop or null, so no harm in setting it to another workshop.
-          world[obj->in_room].best_workshop[GET_OBJ_VAL(o, 0)] = o;
+          world[obj->in_room].best_workshop[GET_WORKSHOP_TYPE(obj)] = o;
           break;
         case TYPE_KIT:
           break;
         default:
-          sprintf(buf, "SYSERR: Invalid workshop type %d found for object %s (%ld).", GET_OBJ_VAL(o, 1), GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
+          sprintf(buf, "SYSERR: Invalid workshop type %d found for object %s (%ld).", GET_WORKSHOP_GRADE(o), GET_OBJ_NAME(o), GET_OBJ_VNUM(o));
           mudlog(buf, NULL, LOG_SYSLOG, TRUE);
           break;
       }
