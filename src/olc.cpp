@@ -291,7 +291,7 @@ ACMD(do_rclone)
     return;
   }
 
-  int arg1, arg2, num1, num2, counter, i, zone1 = -1, zone2 = -1;
+  int arg1, arg2, num1, num2, counter, zone1 = -1, zone2 = -1;
 
   two_arguments(argument, buf, buf1);
 
@@ -410,7 +410,7 @@ ACMD(do_rclone)
 
 ACMD(do_dig)
 {
-  int counter, i = 0, dir, room, zone1 = 0, zone2 = 0;
+  int counter, dir, room, zone1 = 0, zone2 = 0;
 
   any_one_arg(any_one_arg(argument, arg), buf);
 
@@ -493,7 +493,7 @@ ACMD(do_dig)
 
 ACMD(do_rdelete)
 {
-  int num, counter, i, found = 0;
+  int num, counter, found = 0;
 
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
@@ -938,7 +938,7 @@ ACMD(do_iclone)
     return;
   }
 
-  int arg1, arg2, obj_num1, obj_num2, i, counter, zone1 = -1, zone2 = -1;
+  int arg1, arg2, obj_num1, obj_num2, counter, zone1 = -1, zone2 = -1;
 
   two_arguments(argument, buf, buf1);
 
@@ -1033,7 +1033,7 @@ ACMD(do_iclone)
 
 ACMD(do_idelete)
 {
-  int num, counter, i, found = 0;
+  int num, counter, found = 0;
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
@@ -1292,7 +1292,7 @@ ACMD(do_mclone)
     return;
   }
 
-  int arg1, arg2, mob_num1, mob_num2, counter, i, zone1 = -1, zone2 = -2;
+  int arg1, arg2, mob_num1, mob_num2, counter, zone1 = -1, zone2 = -2;
 
   two_arguments(argument, buf, buf1);
 
@@ -1373,7 +1373,7 @@ ACMD(do_mclone)
 
 ACMD(do_mdelete)
 {
-  int num, c, counter, i, found = 0;
+  int num, c, counter, found = 0;
 
   one_argument(argument, buf);
 
@@ -1613,7 +1613,7 @@ ACMD(do_qedit)
 
 ACMD(do_shedit)
 {
-  int number = 0, counter, i = 0, found = 0;
+  int number = 0, counter, found = 0;
   struct shop_data *shop = NULL;
   struct descriptor_data *d;
 

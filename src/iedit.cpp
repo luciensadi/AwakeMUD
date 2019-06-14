@@ -1956,8 +1956,9 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           break;
         case ITEM_WEAPON:
         case ITEM_FIREWEAPON:
-          if (number < 0 || number > 4) {
-            send_to_char("Value must be between 0 and 4.\r\n", CH);
+          if (number < 0 || number > WEAPON_MAXIMUM_STRENGTH_BONUS) {
+            sprintf(buf, "Value must be between 0 and %d.\r\n", WEAPON_MAXIMUM_STRENGTH_BONUS);
+            send_to_char(buf, CH);
             iedit_disp_val3_menu(d);
             return;
           }

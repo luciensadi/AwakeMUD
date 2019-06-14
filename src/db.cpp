@@ -52,6 +52,7 @@
 #include "vtable.h"
 #include "config.h"
 #include "security.h"
+#include "olc.h"
 #include <new>
 
 extern void calc_weight(struct char_data *ch);
@@ -2180,9 +2181,9 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
   int power, severity, strength;
   buf[0] = '\0';
 
-  for( severity = 4; severity >= 1; severity -- )
+  for( severity = DEADLY; severity >= LIGHT; severity -- )
     for( power = 21; power >= 0; power-- )
-      for( strength = 5; strength >= 0; strength-- )
+      for( strength = WEAPON_MAXIMUM_STRENGTH_BONUS; strength >= 0; strength-- )
       {
         for (nr = 0; nr <= top_of_objt; nr++) {
           if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WEAPON)
@@ -2197,7 +2198,7 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
             continue;
           if (GET_OBJ_VAL(&obj_proto[nr],0) > power && power != 21)
             continue;
-          if (GET_OBJ_VAL(&obj_proto[nr],1) > severity && severity != 4)
+          if (GET_OBJ_VAL(&obj_proto[nr],1) > severity && severity != DEADLY)
             continue;
           if (GET_OBJ_VAL(&obj_proto[nr],2) > strength && strength != 5)
             continue;
