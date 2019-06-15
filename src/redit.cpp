@@ -120,6 +120,23 @@ void redit_disp_extradesc_menu(struct descriptor_data * d)
   d->edit_mode = REDIT_EXTRADESC_MENU;
 }
 
+const char *render_door_type_string(struct room_direction_data *door) {
+  if (!IS_SET(door->exit_info, EX_ISDOOR))
+    return "No door";
+  
+  if (IS_SET(door->exit_info, EX_PICKPROOF)) {
+    if (IS_SET(door->exit_info, EX_ASTRALLY_WARDED))
+      return "Pickproof, astrally-warded door";
+    else
+      return "Pickproof";
+  } else {
+    if (IS_SET(door->exit_info, EX_ASTRALLY_WARDED))
+      return "Astrally-warded regular door";
+    else
+      return "Regular door";
+  }
+}
+
 /* For exits */
 void redit_disp_exit_menu(struct descriptor_data * d)
 {
@@ -144,9 +161,9 @@ void redit_disp_exit_menu(struct descriptor_data * d)
                "5) Door flag: %s%s%s\r\n",
                CCCYN(CH, C_CMP), (DOOR->keyword ? DOOR->keyword : "(none)"),
                CCNRM(CH, C_CMP), CCCYN(CH, C_CMP), DOOR->key, CCNRM(CH, C_CMP),
-               CCCYN(CH, C_CMP), (IS_SET(DOOR->exit_info, EX_ISDOOR) ?
-                                  (IS_SET(DOOR->exit_info, EX_PICKPROOF) ? "Pickproof" : "Regular door") :
-                                      "No door"), CCNRM(CH, C_CMP));
+               CCCYN(CH, C_CMP), render_door_type_string(DOOR), CCNRM(CH, C_CMP));
+  
+  
 
   send_to_char(CH,        "6) Lock level: %s%d%s\r\n"
                "7) Material Type: %s%s%s\r\n"
@@ -169,6 +186,8 @@ void redit_disp_exit_flag_menu(struct descriptor_data * d)
   send_to_char( "0) No door\r\n"
                 "1) Closeable door\r\n"
                 "2) Pickproof\r\n"
+                "3) Astrally-warded closeable door\r\n"
+                "4) Astrally-warded pickproof door\r\n"
                 "Enter choice:", CH);
 }
 
@@ -1071,18 +1090,22 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     break;
   case REDIT_EXIT_DOORFLAGS:
     number = atoi(arg);
-    if ((number < 0) || (number > 2)) {
+    if ((number < 0) || (number > 4)) {
       send_to_char("That's not a valid choice!\r\n", d->character);
       redit_disp_exit_flag_menu(d);
     } else {
       /* doors are a bit idiotic, don't you think? :) */
+      /* yep -LS */
       if (number == 0)
         d->edit_room->dir_option[d->edit_number2]->exit_info = 0;
       else if (number == 1)
         d->edit_room->dir_option[d->edit_number2]->exit_info = EX_ISDOOR;
       else if (number == 2)
-        d->edit_room->dir_option[d->edit_number2]->exit_info =
-          EX_ISDOOR | EX_PICKPROOF;
+        d->edit_room->dir_option[d->edit_number2]->exit_info = EX_ISDOOR | EX_PICKPROOF;
+      else if (number == 3)
+        d->edit_room->dir_option[d->edit_number2]->exit_info = EX_ISDOOR | EX_ASTRALLY_WARDED;
+      else if (number == 4)
+        d->edit_room->dir_option[d->edit_number2]->exit_info = EX_ISDOOR | EX_PICKPROOF | EX_ASTRALLY_WARDED;
       /* jump out to menu */
       redit_disp_exit_menu(d);
     }
@@ -1250,10 +1273,17 @@ void write_world_to_disk(int vnum)
 
           /* door flags need special handling, unfortunately. argh! */
           if (IS_SET(ptr->exit_info, EX_ISDOOR)) {
-            if (IS_SET(ptr->exit_info, EX_PICKPROOF))
-              temp_door_flag = 2;
-            else
-              temp_door_flag = 1;
+            if (IS_SET(ptr->exit_info, EX_ASTRALLY_WARDED)) {
+              if (IS_SET(ptr->exit_info, EX_PICKPROOF))
+                temp_door_flag = 4;
+              else
+                temp_door_flag = 3;
+            } else {
+              if (IS_SET(ptr->exit_info, EX_PICKPROOF))
+                temp_door_flag = 2;
+              else
+                temp_door_flag = 1;
+            }
           } else
             temp_door_flag = 0;
 

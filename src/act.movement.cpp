@@ -674,8 +674,8 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
   }
   
   if (IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED) &&
-             !(EXIT(ch, dir)->to_room != 0 && ((IS_ASTRAL(ch) && !IS_SET(EXIT(ch, dir)->exit_info, EX_ASTRALLY_WARDED)) ||
-                                               GET_REAL_LEVEL(ch) >= LVL_BUILDER)))
+            !((IS_ASTRAL(ch) && !IS_SET(EXIT(ch, dir)->exit_info, EX_ASTRALLY_WARDED)) /* door is astrally passable and char ia astral */
+              || GET_REAL_LEVEL(ch) >= LVL_BUILDER)) /* char is staff */
   {
     if (!LIGHT_OK(ch))
       send_to_char("Something seems to be in the way...\r\n", ch);
