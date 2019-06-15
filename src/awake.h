@@ -489,7 +489,7 @@ enum {
 #define ROOM_FALL               21  // room is a 'fall' room
 #define ROOM_ROAD               22
 #define ROOM_GARAGE             23
-#define ROOM_SENATE             24
+#define ROOM_STAFF_ONLY         24
 #define ROOM_NOQUIT             25
 #define ROOM_SENT               26
 #define ROOM_ASTRAL 	       	  27 // Astral room
@@ -521,6 +521,7 @@ enum {
 #define EX_PICKPROOF            (1 << 3)   /* Lock can't be picked      */
 #define EX_DESTROYED            (1 << 4)   /* door has been destroyed   */
 #define EX_HIDDEN               (1 << 5)   /* exit is hidden            */
+#define EX_ASTRALLY_WARDED      (1 << 6)   /* Exit blocks passage of astral beings */
 
 
 /* spirit powers */

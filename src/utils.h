@@ -653,9 +653,12 @@ IS_LIGHT((sub)->in_room) || !((light_level((sub)->in_room) == LIGHT_MINLIGHT || 
 #define LOCK_LEVEL(ch, obj, door) ((obj) ? GET_OBJ_VAL(obj, 4) : \
            world[(ch)->in_room].dir_option[door]->key_level)
 
-#define CAN_GO(ch, door)      (EXIT(ch,door) && \
-                              (EXIT(ch,door)->to_room != NOWHERE) && \
-                              !IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED))
+#define CAN_GO(ch, door)     ( EXIT(ch,door) &&                                                                            \
+                               (EXIT(ch,door)->to_room != NOWHERE) &&                                                      \
+                               !(IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED)) &&                                          \
+                               !(IS_ASTRAL(ch) && IS_SET(EXIT(ch, door)->exit_info, EX_ASTRALLY_WARDED)) &&                \
+                               !(ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_STAFF_ONLY) && GET_REAL_LEVEL(ch) < LVL_BUILDER)  \
+                             )
 
 #define OUTSIDE(ch)           (!ROOM_FLAGGED(((ch)->in_veh ? (ch)->in_veh->in_room : (ch)->in_room), ROOM_INDOORS))
 

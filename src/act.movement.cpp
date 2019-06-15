@@ -502,6 +502,15 @@ void move_vehicle(struct char_data *ch, int dir)
     send_to_char("You can't use other people's garages without permission.\r\n", ch);
     return;
   }
+  
+  if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_STAFF_ONLY)) {
+    for (struct char_data *tch = veh->people; tch; tch = tch->next_in_veh) {
+      if (!access_level(tch, LVL_BUILDER)) {
+        send_to_char("Everyone in the vehicle must be a member of the game's administration to go there.", ch);
+        return;
+      }
+    }
+  }
 
   sprintf(buf2, "%s %s from %s.", GET_VEH_NAME(veh), veh->arrive, thedirs[rev_dir[dir]]);
   sprintf(buf1, "%s %s to %s.", GET_VEH_NAME(veh), veh->leave, thedirs[dir]);
@@ -631,13 +640,18 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
   }
   if (ch == NULL || dir < 0 || dir >= NUM_OF_DIRS)
     return 0;
-  else if (ch->in_veh || ch->char_specials.rigging) {
+  
+  if (ch->in_veh || ch->char_specials.rigging) {
     move_vehicle(ch, dir);
     return 0;
-  } else if (GET_POS(ch) < POS_FIGHTING || AFF_FLAGGED(ch, AFF_PRONE)) {
+  }
+  
+  if (GET_POS(ch) < POS_FIGHTING || AFF_FLAGGED(ch, AFF_PRONE)) {
     send_to_char("Maybe you should get on your feet first?\r\n", ch);
     return 0;
-  } else if (GET_POS(ch) >= POS_FIGHTING && FIGHTING(ch) && !AFF_FLAGGED(ch, AFF_PRONE)) {
+  }
+  
+  if (GET_POS(ch) >= POS_FIGHTING && FIGHTING(ch) && !AFF_FLAGGED(ch, AFF_PRONE)) {
     WAIT_STATE(ch, PULSE_VIOLENCE * 2);
     if (success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch))) && (CAN_GO(ch, dir) && (!IS_NPC(ch) ||
         !ROOM_FLAGGED(world[ch->in_room].dir_option[dir]->to_room, ROOM_NOMOB)))) {
@@ -649,73 +663,83 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
       return 0;
     }
   }
+  
   if (!EXIT(ch, dir) || EXIT(ch, dir)->to_room == NOWHERE)
   {
     if (!LIGHT_OK(ch))
       send_to_char("Something seems to be in the way...\r\n", ch);
     else
       send_to_char("You cannot go that way...\r\n", ch);
-  } else if (IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED) &&
-             !(EXIT(ch, dir)->to_room != 0 && (IS_ASTRAL(ch) ||
-                                               GET_REAL_LEVEL(ch) >= LVL_BUILDER)))
+    return 0;
+  }
+  
+  if (IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED) &&
+            !((IS_ASTRAL(ch) && !IS_SET(EXIT(ch, dir)->exit_info, EX_ASTRALLY_WARDED)) /* door is astrally passable and char ia astral */
+              || GET_REAL_LEVEL(ch) >= LVL_BUILDER)) /* char is staff */
   {
     if (!LIGHT_OK(ch))
       send_to_char("Something seems to be in the way...\r\n", ch);
     else if (IS_SET(EXIT(ch, dir)->exit_info, EX_HIDDEN))
       send_to_char("You cannot go that way...\r\n", ch);
     else {
-      if (EXIT(ch, dir)->keyword) {
-        sprintf(buf2, "The %s seems to be closed.\r\n", fname(EXIT(ch, dir)->keyword));
-        send_to_char(buf2, ch);
-      } else
-        send_to_char("It seems to be closed.\r\n", ch);
-    }
-  } else
-  {
-    int total = 0;
-    if (GET_TOTALBAL(ch) > GET_QUI(ch))
-      total += GET_TOTALBAL(ch) - GET_QUI(ch);
-    if (GET_TOTALIMP(ch) > GET_QUI(ch))
-      total += GET_TOTALIMP(ch) - GET_QUI(ch);
-    if (total >= GET_QUI(ch)) {
-      send_to_char("You are wearing too much armour to move!\r\n", ch);
-      return 0;
-    }
-    if (AFF_FLAGGED(ch, AFF_BINDING)) {
-      if (success_test(GET_STR(ch), ch->points.binding) > 0) {
-        act("$n breaks the bindings at $s feet!", TRUE, ch, 0, 0, TO_ROOM);
-        send_to_char("You break through the bindings at your feet!", ch);
-        AFF_FLAGS(ch).RemoveBit(AFF_BINDING);
+      if (IS_ASTRAL(ch)) {
+        send_to_char("As you approach, the cobalt flash of an astral barrier warns you back.\r\n", ch);
+      } else if (EXIT(ch, dir)->keyword) {
+        send_to_char(ch, "The %s seems to be closed.\r\n", fname(EXIT(ch, dir)->keyword));
       } else {
-        act("$n struggles against the bindings at $s feet, but can't seem to break them.", TRUE, ch, 0, 0, TO_ROOM);
-        send_to_char("You struggle against the bindings at your feet but get nowhere!", ch);
-        return FALSE;
+        send_to_char("It seems to be closed.\r\n", ch);
       }
     }
-    if (IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED)) {
-      if (EXIT(ch, dir)->keyword)
-        sprintf(buf2, "You pass through the closed %s.\r\n", fname(EXIT(ch, dir)->keyword));
-      else
-        sprintf(buf2, "You pass through the closed door.\r\n");
-      send_to_char(buf2, ch);
-    }
-    if (!IS_SET(extra, LEADER))
-      return (do_simple_move(ch, dir, extra, NULL));
-
-    was_in = ch->in_room;
-    if (!do_simple_move(ch, dir, extra | LEADER, vict))
-      return 0;
-
-    for (k = ch->followers; k; k = next) {
-      next = k->next;
-      if ((was_in == k->follower->in_room) && (GET_POS(k->follower) >= POS_STANDING)) {
-        act("You follow $N.\r\n", FALSE, k->follower, 0, ch, TO_CHAR);
-        perform_move(k->follower, dir, CHECK_SPECIAL, NULL);
-      }
-    }
-    return 1;
+    return 0;
   }
-  return 0;
+  
+  if (ROOM_FLAGGED(EXIT(ch, dir)->to_room, ROOM_STAFF_ONLY) && GET_REAL_LEVEL(ch) < LVL_BUILDER) {
+    send_to_char("Sorry, that area is for game administration only.\r\n", ch);
+    return 0;
+  }
+
+  int total = 0;
+  if (GET_TOTALBAL(ch) > GET_QUI(ch))
+    total += GET_TOTALBAL(ch) - GET_QUI(ch);
+  if (GET_TOTALIMP(ch) > GET_QUI(ch))
+    total += GET_TOTALIMP(ch) - GET_QUI(ch);
+  if (total >= GET_QUI(ch)) {
+    send_to_char("You are wearing too much armour to move!\r\n", ch);
+    return 0;
+  }
+  if (AFF_FLAGGED(ch, AFF_BINDING)) {
+    if (success_test(GET_STR(ch), ch->points.binding) > 0) {
+      act("$n breaks the bindings at $s feet!", TRUE, ch, 0, 0, TO_ROOM);
+      send_to_char("You break through the bindings at your feet!", ch);
+      AFF_FLAGS(ch).RemoveBit(AFF_BINDING);
+    } else {
+      act("$n struggles against the bindings at $s feet, but can't seem to break them.", TRUE, ch, 0, 0, TO_ROOM);
+      send_to_char("You struggle against the bindings at your feet but get nowhere!", ch);
+      return 0;
+    }
+  }
+  if (IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED)) {
+    if (EXIT(ch, dir)->keyword)
+      sprintf(buf2, "You pass through the closed %s.\r\n", fname(EXIT(ch, dir)->keyword));
+    else
+      sprintf(buf2, "You pass through the closed door.\r\n");
+    send_to_char(buf2, ch);
+  }
+  if (!IS_SET(extra, LEADER))
+    return (do_simple_move(ch, dir, extra, NULL));
+
+  was_in = ch->in_room;
+  if (!do_simple_move(ch, dir, extra | LEADER, vict))
+    return 0;
+
+  for (k = ch->followers; k; k = next) {
+    next = k->next;
+    if ((was_in == k->follower->in_room) && (GET_POS(k->follower) >= POS_STANDING)) {
+      act("You follow $N.\r\n", FALSE, k->follower, 0, ch, TO_CHAR);
+      perform_move(k->follower, dir, CHECK_SPECIAL, NULL);
+    }
+  }
+  return 1;
 }
 
 ACMD(do_move)

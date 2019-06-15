@@ -191,7 +191,7 @@ every secret in the world-- if only you had the time to find them. Between the
 large oaken reading tables stands a white marble pedestal, upon which sits a
 pristine copy of Richard Bartle's "Designing Virtual Worlds."   
 ~
-Flags:	10000000000000011000
+Flags:	1000010000000000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -1177,6 +1177,7 @@ A pair of elevator doors allows access to the liftway.
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	998
+	LockRating:	8
 [EXIT up]
 	ToVnum:	10029
 	Flags:	0
@@ -1222,6 +1223,7 @@ A pair of elevator doors allows access to the liftway.
 	Material:	metal
 	Barrier:	6
 	KeyVnum:	998
+	LockRating:	8
 [EXIT down]
 	ToVnum:	10028
 	Flags:	0
@@ -1252,11 +1254,16 @@ RoomType:	0
 	Background:	0
 	BackgroundType:	0
 [EXIT south]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
 	ToVnum:	10032
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
-	KeyVnum:	0
+	KeyVnum:	998
+	LockRating:	8
 [EXIT up]
 	ToVnum:	10028
 	Flags:	0
@@ -1285,13 +1292,24 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+[EXIT north]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
+	ToVnum:	0
+	Flags:	1
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	998
+	LockRating:	8
 BREAK
 #10032
 Name:	^W(^cIMMHQ^W)^C Elevator Shaft - B1
 Desc:$
 Will it go up, though? Will it go down? Does it even work? 
 ~
-Flags:	11000
+Flags:	10000000001010000000000000011100
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -1302,17 +1320,22 @@ Z:	50.00
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
-	Rating:	0
+	Rating:	6
 	Light:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
 	ToVnum:	10030
-	Flags:	0
+	Flags:	1
 	Material:	brick
 	Barrier:	4
-	KeyVnum:	0
+	KeyVnum:	998
+	LockRating:	8
 [EXIT up]
 	ToVnum:	10033
 	Flags:	0
@@ -1325,7 +1348,7 @@ Name:	^W(^cIMMHQ^W)^C Elevator Shaft - G
 Desc:$
 Will it go up, though? Will it go down? Does it even work? 
 ~
-Flags:	11000
+Flags:	10000000001010000000000000011100
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -1336,7 +1359,7 @@ Z:	50.00
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
-	Rating:	0
+	Rating:	6
 	Light:	0
 	Smoke:	0
 	Background:	0
@@ -1351,6 +1374,7 @@ A pair of elevator doors allows access to the liftway.
 	Material:	metal
 	Barrier:	6
 	KeyVnum:	998
+	LockRating:	8
 [EXIT up]
 	ToVnum:	10034
 	Flags:	0
@@ -1369,7 +1393,7 @@ Name:	^W(^cIMMHQ^W)^C Elevator Shaft - 1
 Desc:$
 Will it go up, though? Will it go down? Does it even work? 
 ~
-Flags:	11000
+Flags:	10000000001010000000000000011100
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -1380,21 +1404,11 @@ Z:	50.00
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
-	Rating:	0
+	Rating:	6
 	Light:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT north]
-	Keywords:	doors shaft
-	Desc:$
-A pair of elevator doors allows access to the liftway.
-~
-	ToVnum:	0
-	Flags:	1
-	Material:	metal
-	Barrier:	6
-	KeyVnum:	998
 [EXIT down]
 	ToVnum:	10033
 	Flags:	0
