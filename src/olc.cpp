@@ -1175,7 +1175,6 @@ ACMD(do_idelete)
   }
 
   top_of_objt--;
-  write_zone_to_disk(ch->player_specials->saved.zonenum);
   write_objs_to_disk(ch->player_specials->saved.zonenum);
   send_to_char("Done.\r\n", ch);
 }

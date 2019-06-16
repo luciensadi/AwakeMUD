@@ -259,6 +259,10 @@ template <class T>
 bool List<T>::Add(T item, const char *filename, int lineno) {
 
 #ifdef DEBUG
+  if (item == NULL) {
+    cerr << "SYSERR: Attempt to add null to list in file " << filename << ", line: " << lineno << endl;
+  }
+  
   if (this->FindItem(item)) {
     cerr << "SYSERR: Attempt to add duplicate item to list in file " << filename << ", line: " << lineno << endl;
     abort();
