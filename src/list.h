@@ -203,7 +203,7 @@ bool listClass<T>::RemoveItem(nodeStruct<T> *node) {
     while (temp && (temp->next != node))
       temp = temp->next;
 
-    if (temp->next == node) { // ie, it was found
+    if (temp && temp->next == node) { // ie, it was found
       found = temp->next;
       temp->next = found->next;
       

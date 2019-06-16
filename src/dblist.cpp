@@ -125,6 +125,37 @@ void objList::UpdateObjs(const struct obj_data *proto, int rnum)
   }
 }
 
+void objList::UpdateObjsIDelete(const struct obj_data *proto, int rnum, int new_rnum)
+{
+  static nodeStruct<struct obj_data *> *temp;
+  static struct obj_data old;
+  
+  for (temp = head; temp; temp = temp->next)
+  {
+    if (temp->data->item_number == rnum) {
+      old = *temp->data;
+      *temp->data = *proto;
+      temp->data->in_room = old.in_room;
+      temp->data->item_number = rnum;
+      temp->data->carried_by = old.carried_by;
+      temp->data->worn_by = old.worn_by;
+      temp->data->worn_on = old.worn_on;
+      temp->data->in_obj = old.in_obj;
+      temp->data->contains = old.contains;
+      temp->data->next_content = old.next_content;
+      temp->data->obj_flags.condition = old.obj_flags.condition;
+      temp->data->restring = old.restring;
+      temp->data->photo = old.photo;
+      if (temp->data->carried_by)
+        affect_total(temp->data->carried_by);
+      else if (temp->data->worn_by)
+        affect_total(temp->data->worn_by);
+      
+      temp->data->item_number = new_rnum;
+    }
+  }
+}
+
 // this function runs through the list and checks the timers of each
 // object, extracting them if their timers hit 0
 void objList::UpdateCounters(void)
@@ -333,8 +364,6 @@ void objList::RemoveObjNum(int num)
             temp->data, 0, TO_CHAR);
       }
       extract_obj(temp->data);
-      temp->data = NULL;
-      RemoveItem(temp);
     }
   }
 }
@@ -348,8 +377,6 @@ void objList::RemoveQuestObjs(int id)
 
     if (temp->data->obj_flags.quest_id == id) {
       extract_obj(temp->data);
-      temp->data = NULL;
-      RemoveItem(temp);
     }
   }
 }

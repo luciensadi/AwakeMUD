@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <mysql/mysql.h>
 
 #include "structs.h"
 #include "awake.h"
@@ -49,6 +50,9 @@ extern void zedit_disp_data_menu(struct descriptor_data *d);
 extern void vedit_disp_menu(struct descriptor_data * d);
 extern void hedit_disp_data_menu(struct descriptor_data *d);
 extern void icedit_disp_menu(struct descriptor_data *d);
+
+extern MYSQL *mysql;
+extern int mysql_wrapper(MYSQL *mysql, const char *query);
 
 // mem class
 extern class memoryClass *Mem;
@@ -1070,66 +1074,100 @@ ACMD(do_idelete)
     return;
   }
 
-  
-
   if (!(access_level(ch, LVL_EXECUTIVE) || PLR_FLAGGED(ch, PLR_EDCON)) && zone_table[counter].connected) {
     send_to_char("You can't delete objects from a connected zone.\r\n", ch);
     return;
   }
 
   num = real_object(num);
+  
+  if (num < 0) {
+    send_to_char("No object was found with that vnum.\r\n", ch);
+    return;
+  }
+  
+  // Wipe it from saved database tables.
+  sprintf(buf, "DELETE FROM pfiles_cyberware WHERE Vnum=%ld", obj_proto[num].item_number);
+  mysql_wrapper(mysql, buf);
+  sprintf(buf, "DELETE FROM pfiles_bioware WHERE Vnum=%ld", obj_proto[num].item_number);
+  mysql_wrapper(mysql, buf);
+  sprintf(buf, "DELETE FROM pfiles_inv WHERE Vnum=%ld", obj_proto[num].item_number);
+  mysql_wrapper(mysql, buf);
+  sprintf(buf, "DELETE FROM pfiles_worn WHERE Vnum=%ld", obj_proto[num].item_number);
+  mysql_wrapper(mysql, buf);
 
+  // Wipe the object from the game.
   ch->player_specials->saved.zonenum = zone_table[counter].number;
   ObjList.RemoveObjNum(num);
   Mem->DeleteObject(&obj_proto[num]);
 
+  // Renumber the object tables.
   for (counter = num; counter < top_of_objt; counter++) {
-    ObjList.UpdateObjs(&obj_proto[counter+1], counter);
     obj_index[counter] = obj_index[counter + 1];
     obj_proto[counter] = obj_proto[counter + 1];
+    ObjList.UpdateObjsIDelete(&obj_proto[counter], counter + 1, counter);
     obj_proto[counter].item_number = counter;
   }
 
-  // update the zones by decrementing numbers if >= number deleted
+  // Wipe the object from zone commands, and decrement rnums that are higher than the one we nuked.
   int zone, cmd_no;
   for (zone = 0; zone <= top_of_zone_table; zone++) {
     bool zone_dirty = FALSE;
     for (cmd_no = 0; cmd_no < zone_table[zone].num_cmds; cmd_no++) {
       switch (ZCMD.command) {
-      case 'E':
-      case 'G':
-      case 'O':
-      case 'C':
-      case 'N':
-        if (ZCMD.arg1 == num) {
-          ZCMD.command = '*';
-          ZCMD.if_flag = 0;
-          ZCMD.arg1 = 0;
-          ZCMD.arg2 = 0;
-          ZCMD.arg3 = 0;
-          zone_dirty = TRUE;
-        }
-        break;
-      case 'R':
-        if (ZCMD.arg2 == num) {
-          ZCMD.command = '*';
-          ZCMD.if_flag = 0;
-          ZCMD.arg1 = 0;
-          ZCMD.arg2 = 0;
-          ZCMD.arg3 = 0;
-          zone_dirty = TRUE;
-        }
-        break;
-      case 'P':
-        if (ZCMD.arg3 == num || ZCMD.arg1 == num) {
-          ZCMD.command = '*';
-          ZCMD.if_flag = 0;
-          ZCMD.arg1 = 0;
-          ZCMD.arg2 = 0;
-          ZCMD.arg3 = 0;
-          zone_dirty = TRUE;
-        }
-        break;
+        case 'E':
+        case 'G':
+        case 'O':
+        case 'C':
+        case 'N':
+        case 'U':
+        case 'I':
+        case 'H':
+          if (ZCMD.arg1 == num) {
+            sprintf(buf, "Wiping zcmd %d in %d (%c: %ld %ld %ld).",
+                    cmd_no, zone_table[zone].number, ZCMD.command, ZCMD.arg1, ZCMD.arg2, ZCMD.arg3);
+            mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+            ZCMD.command = '*';
+            ZCMD.if_flag = 0;
+            ZCMD.arg1 = 0;
+            ZCMD.arg2 = 0;
+            ZCMD.arg3 = 0;
+            zone_dirty = TRUE;
+          } else if (ZCMD.arg1 > num)
+            ZCMD.arg1--;
+          break;
+        case 'R':
+          if (ZCMD.arg2 == num) {
+            sprintf(buf, "Wiping zcmd %d in %d (%c: %ld %ld %ld).",
+                    cmd_no, zone_table[zone].number, ZCMD.command, ZCMD.arg1, ZCMD.arg2, ZCMD.arg3);
+            mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+            ZCMD.command = '*';
+            ZCMD.if_flag = 0;
+            ZCMD.arg1 = 0;
+            ZCMD.arg2 = 0;
+            ZCMD.arg3 = 0;
+            zone_dirty = TRUE;
+          } else if (ZCMD.arg2 > num)
+            ZCMD.arg2--;
+          break;
+        case 'P':
+          if (ZCMD.arg3 == num || ZCMD.arg1 == num) {
+            sprintf(buf, "Wiping zcmd %d in %d (%c: %ld %ld %ld).",
+                    cmd_no, zone_table[zone].number, ZCMD.command, ZCMD.arg1, ZCMD.arg2, ZCMD.arg3);
+            mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+            ZCMD.command = '*';
+            ZCMD.if_flag = 0;
+            ZCMD.arg1 = 0;
+            ZCMD.arg2 = 0;
+            ZCMD.arg3 = 0;
+            zone_dirty = TRUE;
+          } else {
+            if (ZCMD.arg3 > num)
+              ZCMD.arg3--;
+            if (ZCMD.arg1 > num)
+              ZCMD.arg1--;
+          }
+          break;
       }
       if (zone_dirty)
         write_zone_to_disk(zone_table[zone].number);
