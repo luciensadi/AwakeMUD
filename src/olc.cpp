@@ -1099,7 +1099,7 @@ ACMD(do_idelete)
   // Wipe the object from the game.
   ch->player_specials->saved.zonenum = zone_table[counter].number;
   ObjList.RemoveObjNum(num);
-  Mem->DeleteObject(&obj_proto[num]);
+  free_obj(&obj_proto[num]);
 
   // Renumber the object tables.
   for (counter = num; counter < top_of_objt; counter++) {
