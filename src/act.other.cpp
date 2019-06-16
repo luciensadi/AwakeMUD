@@ -45,7 +45,6 @@ extern bool read_extratext(struct char_data * ch);
 extern int return_general(int skill_num);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
 extern char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act);
-extern char *prepare_quotes(char *dest, const char *str);
 
 extern int ident;
 extern class memoryClass *Mem;
@@ -290,7 +289,7 @@ ACMD(do_title)
     set_title(ch, argument);
     sprintf(buf, "Okay, you're now %s %s.\r\n", GET_CHAR_NAME(ch), GET_TITLE(ch));
     send_to_char(buf, ch);
-    sprintf(buf, "UPDATE pfiles SET Title='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_TITLE(ch)), GET_IDNUM(ch));
+    sprintf(buf, "UPDATE pfiles SET Title='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_TITLE(ch), sizeof(buf2) / sizeof(buf2[0])), GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
   }
 }
@@ -719,31 +718,31 @@ ACMD(do_wimpy)
       send_to_char(buf, ch);
       return;
     } else {
-      send_to_char("At the moment, you're not a wimp.  (sure, sure...)\r\n", ch);
+      send_to_char("You aren't currently planning to wimp out of fights. You can change this by typing WIMPY [health level to flee at].\r\n", ch);
       return;
     }
   }
   if (isdigit(*arg)) {
     if ((wimp_lev = atoi(arg))) {
-      if (wimp_lev < 0)
-        send_to_char("Heh, heh, heh.. we are jolly funny today, eh?\r\n", ch);
-      else if (wimp_lev > (int)(GET_MAX_PHYSICAL(ch) / 100))
-        send_to_char("That doesn't make much sense, now does it?\r\n", ch);
-      else if (wimp_lev > ((int)(GET_MAX_PHYSICAL(ch) / 100) >> 1))
-        send_to_char("You can't set your wimp level above 5.\r\n", ch);
-      else {
-        sprintf(buf, "Okay, you'll wimp out if you drop below %d physical or mental.\r\n",
-                wimp_lev);
-        send_to_char(buf, ch);
-        GET_WIMP_LEV(ch) = wimp_lev;
-        sprintf(buf, "UPDATE pfiles SET WimpLevel=%d WHERE idnum=%ld;", GET_WIMP_LEV(ch), GET_IDNUM(ch));
-        mysql_wrapper(mysql, buf);
+      if (wimp_lev < 0) {
+        send_to_char("You're not 100% certain, but you're pretty sure you won't be able to run away when you're dead.\r\n", ch);
+        return;
       }
+      
+      if (wimp_lev > ((int)(GET_MAX_PHYSICAL(ch) / 100) >> 1)) {
+        send_to_char(ch, "You can't set your wimp level above %d.\r\n", ((int)(GET_MAX_PHYSICAL(ch) / 100) >> 1));
+        return;
+      }
+      
+      sprintf(buf, "Okay, you'll wimp out if you drop below %d physical or mental.\r\n",
+              wimp_lev);
+      send_to_char(buf, ch);
+      GET_WIMP_LEV(ch) = wimp_lev;
     } else {
       send_to_char("Okay, you'll now tough out fights to the bitter end.\r\n", ch);
       GET_WIMP_LEV(ch) = 0;
     }
-    sprintf(buf, "UPDATE pfiles SET WimpLevel=0 WHERE idnum=%ld;", GET_IDNUM(ch));
+    sprintf(buf, "UPDATE pfiles SET WimpLevel=%d WHERE idnum=%ld;", GET_WIMP_LEV(ch), GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
   } else
     send_to_char("Specify the threshold you want to wimp out at. (0 to disable)\r\n", ch);
@@ -763,7 +762,7 @@ ACMD(do_display)
 
   skip_spaces(&argument);
   delete_doubledollar(argument);
-  prepare_quotes(buf, argument);
+  prepare_quotes(buf, argument, sizeof(buf) / sizeof(buf[0]));
 
   if (!*buf) {
     send_to_char(ch, "Current prompt:\r\n%s\r\n", GET_PROMPT(tch));
@@ -2297,7 +2296,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       if (STATE(d) == CON_BCUSTOMIZE) {
         DELETE_ARRAY_IF_EXTANT(CH->player.background);
         CH->player.background = str_dup(d->edit_mob->player.background);
-        sprintf(ENDOF(buf2), "background='%s'", prepare_quotes(buf3, CH->player.background));
+        sprintf(ENDOF(buf2), "background='%s'", prepare_quotes(buf3, CH->player.background, sizeof(buf3) / sizeof(buf3[0])));
       } else if (STATE(d) == CON_FCUSTOMIZE) {
         
         DELETE_ARRAY_IF_EXTANT(CH->player.physical_text.keywords);
@@ -2306,60 +2305,60 @@ void cedit_parse(struct descriptor_data *d, char *arg)
           CH->player.physical_text.keywords = str_dup(buf);
         } else
           CH->player.physical_text.keywords = str_dup(GET_KEYWORDS(d->edit_mob));
-        sprintf(ENDOF(buf2), "Physical_Keywords='%s'", prepare_quotes(buf3, CH->player.physical_text.keywords)); 
+        sprintf(ENDOF(buf2), "Physical_Keywords='%s'", prepare_quotes(buf3, CH->player.physical_text.keywords, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.physical_text.name);
         CH->player.physical_text.name = str_dup(d->edit_mob->player.physical_text.name);
-        sprintf(ENDOF(buf2), ", Physical_Name='%s'", prepare_quotes(buf3, CH->player.physical_text.name)); 
+        sprintf(ENDOF(buf2), ", Physical_Name='%s'", prepare_quotes(buf3, CH->player.physical_text.name, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.physical_text.room_desc);
         CH->player.physical_text.room_desc = str_dup(d->edit_mob->player.physical_text.room_desc);
-        sprintf(ENDOF(buf2), ", Voice='%s'", prepare_quotes(buf3, CH->player.physical_text.room_desc)); 
+        sprintf(ENDOF(buf2), ", Voice='%s'", prepare_quotes(buf3, CH->player.physical_text.room_desc, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.physical_text.look_desc);
         CH->player.physical_text.look_desc = str_dup(d->edit_mob->player.physical_text.look_desc);
-        sprintf(ENDOF(buf2), ", Physical_LookDesc='%s'", prepare_quotes(buf3, CH->player.physical_text.look_desc));
+        sprintf(ENDOF(buf2), ", Physical_LookDesc='%s'", prepare_quotes(buf3, CH->player.physical_text.look_desc, sizeof(buf3) / sizeof(buf3[0])));
         
         DELETE_ARRAY_IF_EXTANT(CH->char_specials.arrive);
         CH->char_specials.arrive = str_dup(d->edit_mob->char_specials.arrive);
-        sprintf(ENDOF(buf2), ", EnterMsg='%s'", prepare_quotes(buf3, CH->char_specials.arrive)); 
+        sprintf(ENDOF(buf2), ", EnterMsg='%s'", prepare_quotes(buf3, CH->char_specials.arrive, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->char_specials.leave);
         CH->char_specials.leave = str_dup(d->edit_mob->char_specials.leave);
-        sprintf(ENDOF(buf2), ", LeaveMsg='%s', Height=%d, Weight=%d", prepare_quotes(buf3, CH->char_specials.leave),
+        sprintf(ENDOF(buf2), ", LeaveMsg='%s', Height=%d, Weight=%d", prepare_quotes(buf3, CH->char_specials.leave, sizeof(buf3) / sizeof(buf3[0])),
                 GET_HEIGHT(CH), GET_WEIGHT(CH));
       } else if (STATE(d) == CON_PCUSTOMIZE) {
         DELETE_ARRAY_IF_EXTANT(CH->player.matrix_text.keywords);
         CH->player.matrix_text.keywords = str_dup(GET_KEYWORDS(d->edit_mob));
-        sprintf(ENDOF(buf2), "Matrix_Keywords='%s'", prepare_quotes(buf3, CH->player.matrix_text.keywords)); 
+        sprintf(ENDOF(buf2), "Matrix_Keywords='%s'", prepare_quotes(buf3, CH->player.matrix_text.keywords, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.matrix_text.name);
         CH->player.matrix_text.name = str_dup(d->edit_mob->player.physical_text.name);
-        sprintf(ENDOF(buf2), ", Matrix_Name='%s'", prepare_quotes(buf3, CH->player.matrix_text.name));
+        sprintf(ENDOF(buf2), ", Matrix_Name='%s'", prepare_quotes(buf3, CH->player.matrix_text.name, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.matrix_text.room_desc);
         CH->player.matrix_text.room_desc = str_dup(d->edit_mob->player.physical_text.room_desc);
-        sprintf(ENDOF(buf2), ", Matrix_RoomDesc='%s'", prepare_quotes(buf3, CH->player.matrix_text.room_desc)); 
+        sprintf(ENDOF(buf2), ", Matrix_RoomDesc='%s'", prepare_quotes(buf3, CH->player.matrix_text.room_desc, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.matrix_text.look_desc);
         CH->player.matrix_text.look_desc = str_dup(d->edit_mob->player.physical_text.look_desc);
-        sprintf(ENDOF(buf2), ", Matrix_LookDesc='%s'", prepare_quotes(buf3, CH->player.matrix_text.look_desc)); 
+        sprintf(ENDOF(buf2), ", Matrix_LookDesc='%s'", prepare_quotes(buf3, CH->player.matrix_text.look_desc, sizeof(buf3) / sizeof(buf3[0])));
       } else {
         DELETE_ARRAY_IF_EXTANT(CH->player.astral_text.keywords);
         CH->player.astral_text.keywords = str_dup(GET_KEYWORDS(d->edit_mob));
-        sprintf(ENDOF(buf2), "Astral_Keywords='%s'", prepare_quotes(buf3, CH->player.astral_text.keywords));
+        sprintf(ENDOF(buf2), "Astral_Keywords='%s'", prepare_quotes(buf3, CH->player.astral_text.keywords, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.astral_text.name);
         CH->player.astral_text.name = str_dup(d->edit_mob->player.physical_text.name);
-        sprintf(ENDOF(buf2), ", Astral_Name='%s'", prepare_quotes(buf3, CH->player.astral_text.name));
+        sprintf(ENDOF(buf2), ", Astral_Name='%s'", prepare_quotes(buf3, CH->player.astral_text.name, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.astral_text.room_desc);
         CH->player.astral_text.room_desc = str_dup(d->edit_mob->player.physical_text.room_desc);
-        sprintf(ENDOF(buf2), ", Astral_RoomDesc='%s'", prepare_quotes(buf3, CH->player.astral_text.room_desc));
+        sprintf(ENDOF(buf2), ", Astral_RoomDesc='%s'", prepare_quotes(buf3, CH->player.astral_text.room_desc, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.astral_text.look_desc);
         CH->player.astral_text.look_desc = str_dup(d->edit_mob->player.physical_text.look_desc);
-        sprintf(ENDOF(buf2), ", Astral_LookDesc='%s'", prepare_quotes(buf3, CH->player.astral_text.look_desc));
+        sprintf(ENDOF(buf2), ", Astral_LookDesc='%s'", prepare_quotes(buf3, CH->player.astral_text.look_desc, sizeof(buf3) / sizeof(buf3[0])));
       }
 
       if (d->edit_mob)

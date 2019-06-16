@@ -20,7 +20,6 @@
 
 extern MYSQL *mysql;
 extern int mysql_wrapper(MYSQL *mysql, const char *buf);
-extern char *prepare_quotes(char *dest, const char *str);
 extern void display_help(char *help, const char *arg);
 
 int get_minimum_attribute_points_for_race(int race);
@@ -412,7 +411,7 @@ void init_char_sql(struct char_data *ch)
                "Tradition, Born, Background, Physical_LookDesc, Matrix_LookDesc, Astral_LookDesc, LastD) VALUES ('%ld', '%s', '%s', %d, '%d',"\
                "'%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%ld', '%s', '%s', '%s', '%s', %ld);", GET_IDNUM(ch),
                GET_CHAR_NAME(ch), GET_PASSWD(ch), GET_RACE(ch), GET_SEX(ch), MAX(1, GET_LEVEL(ch)),
-               prepare_quotes(buf2, ch->player.physical_text.room_desc), GET_KEYWORDS(ch), GET_NAME(ch), GET_WHOTITLE(ch),
+               prepare_quotes(buf2, ch->player.physical_text.room_desc, sizeof(buf2) / sizeof(buf2[0])), GET_KEYWORDS(ch), GET_NAME(ch), GET_WHOTITLE(ch),
                GET_HEIGHT(ch), GET_WEIGHT(ch), ch->player.host, GET_TRADITION(ch), ch->player.time.birth, "A blank slate.",
                "A nondescript person.\r\n", "A nondescript entity.\r\n", "A nondescript entity.\r\n", time(0));
   mysql_wrapper(mysql, buf);

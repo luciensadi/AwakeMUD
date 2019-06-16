@@ -74,6 +74,7 @@ bool    mount_has_weapon(struct obj_data *mount);
 struct  obj_data *get_mount_weapon(struct obj_data *mount);
 struct  obj_data *stop_manning_weapon_mounts(struct char_data *ch, bool send_message);
 struct  obj_data *get_mount_manned_by_ch(struct char_data *ch);
+void    terminate_mud_process_with_message(const char *message, int error_code);
 
 // Message history management and manipulation.
 void    store_message_to_history(struct descriptor_data *d, int channel, const char *mallocd_message);

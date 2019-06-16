@@ -78,7 +78,6 @@ extern void list_detailed_shop(struct char_data *ch, long shop_nr);
 extern void list_detailed_quest(struct char_data *ch, long rnum);
 extern int vnum_vehicles(char *searchname, struct char_data * ch);
 extern void disp_init_menu(struct descriptor_data *d);
-extern char *prepare_quotes(char *dest, const char *src);
 
 /* Copyover Code, ported to Awake by Harlequin *
  * (c) 1996-97 Erwin S. Andreasen <erwin@andreasen.org> */
@@ -2364,7 +2363,10 @@ ACMD(do_poofset)
   DELETE_ARRAY_IF_EXTANT(*msg);
   *msg = str_dup(argument);
 
-  sprintf(buf, "UPDATE pfiles_immortdata SET poofin='%s', poofout='%s' WHERE idnum=%ld;", prepare_quotes(buf2, POOFIN(ch)), prepare_quotes(buf3, POOFOUT(ch)), GET_IDNUM(ch));
+  sprintf(buf, "UPDATE pfiles_immortdata SET poofin='%s', poofout='%s' WHERE idnum=%ld;",
+          prepare_quotes(buf2, POOFIN(ch), sizeof(buf2) / sizeof(buf2[0])),
+          prepare_quotes(buf3, POOFOUT(ch), sizeof(buf3) / sizeof(buf3[0])),
+          GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
   send_to_char(OK, ch);
 }
@@ -2497,7 +2499,7 @@ ACMD(do_last)
 
   if (!(vict = get_player_vis(ch, arg, FALSE))) {
     from_file = TRUE;
-    sprintf(buf, "SELECT Idnum, Rank, Host, LastD, Name FROM pfiles WHERE name='%s';", prepare_quotes(buf2, arg));
+    sprintf(buf, "SELECT Idnum, Rank, Host, LastD, Name FROM pfiles WHERE name='%s';", prepare_quotes(buf2, arg, sizeof(buf2) / sizeof(buf2[0])));
     mysql_wrapper(mysql, buf);
     MYSQL_RES *res = mysql_use_result(mysql);
     MYSQL_ROW row = mysql_fetch_row(res);
@@ -2744,7 +2746,7 @@ ACMD(do_wiztitle)
       set_whotitle(ch, argument);
       sprintf(buf, "Okay, your whotitle is now %s.\r\n", GET_WHOTITLE(ch));
       send_to_char(buf, ch);
-      sprintf(buf, "UPDATE pfiles SET Whotitle='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_WHOTITLE(ch)), GET_IDNUM(ch));
+      sprintf(buf, "UPDATE pfiles SET Whotitle='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_WHOTITLE(ch), sizeof(buf2) / sizeof(buf2[0])), GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
     }
   } else if (subcmd == SCMD_PRETITLE) {
@@ -2765,7 +2767,7 @@ ACMD(do_wiztitle)
       sprintf(buf, "Okay, you're now %s %s %s.\r\n",
               GET_PRETITLE(ch), GET_CHAR_NAME(ch), GET_TITLE(ch));
       send_to_char(buf, ch);
-      sprintf(buf, "UPDATE pfiles SET Pretitle='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_PRETITLE(ch)), GET_IDNUM(ch));
+      sprintf(buf, "UPDATE pfiles SET Pretitle='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_PRETITLE(ch), sizeof(buf2) / sizeof(buf2[0])), GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
     }
   }
@@ -3864,7 +3866,7 @@ ACMD(do_set)
 #ifdef NOCRYPT
     char prepare_quotes_buf[2048];
     sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;",
-            prepare_quotes(prepare_quotes_buf, GET_PASSWD(vict)), GET_IDNUM(vict));
+            prepare_quotes(prepare_quotes_buf, GET_PASSWD(vict), sizeof(prepare_quotes_buf) / sizeof(prepare_quotes_buf[0])), GET_IDNUM(vict));
 #else
     sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;", GET_PASSWD(vict), GET_IDNUM(vict));
 #endif

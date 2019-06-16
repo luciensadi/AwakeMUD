@@ -24,7 +24,6 @@ extern class helpList Help;
 extern class helpList WizHelp;
 extern MYSQL *mysql;
 extern int mysql_wrapper(MYSQL *mysql, const char *query);
-char *prepare_quotes(char *dest, const char *str);
 
 // extern funcs
 extern void print_object_location(int, struct obj_data *, struct char_data *, int);

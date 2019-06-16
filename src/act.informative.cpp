@@ -37,6 +37,7 @@ using namespace std;
 #include "constants.h"
 #include "quest.h"
 #include "transport.h"
+#include "newdb.h"
 
 const char *CCHAR;
 
@@ -48,7 +49,6 @@ extern class helpList WizHelp;
 extern char *short_object(int virt, int where);
 extern const char *dist_name[];
 
-extern char *prepare_quotes(char *dest, const char *str);
 extern int same_obj(struct obj_data * obj1, struct obj_data * obj2);
 extern int find_sight(struct char_data *ch);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
@@ -3094,7 +3094,7 @@ void display_help(char *help, const char *arg) {
   *help = '\0';
   
   // Buf now holds the quoted version of arg.
-  prepare_quotes(buf, arg);
+  prepare_quotes(buf, arg, sizeof(buf) / sizeof(buf[0]));
   
   // First strategy: Look for an exact match.
   sprintf(query, "SELECT * FROM help_topic WHERE name='%s'", buf);

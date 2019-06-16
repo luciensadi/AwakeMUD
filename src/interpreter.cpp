@@ -2351,7 +2351,8 @@ void nanny(struct descriptor_data * d, char *arg)
 #ifdef NOCRYPT
       char prepare_quotes_buf[2048];
       sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;",
-              prepare_quotes(prepare_quotes_buf, GET_PASSWD(d->character)), GET_IDNUM(d->character));
+              prepare_quotes(prepare_quotes_buf, GET_PASSWD(d->character), sizeof(prepare_quotes_buf) / sizeof(prepare_quotes_buf[0])),
+              GET_IDNUM(d->character));
 #else
       sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;", GET_PASSWD(d->character), GET_IDNUM(d->character));
 #endif
@@ -2474,7 +2475,8 @@ void nanny(struct descriptor_data * d, char *arg)
 #ifdef NOCRYPT
         char prepare_quotes_buf[2048];
         sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;",
-                prepare_quotes(prepare_quotes_buf, GET_PASSWD(d->character)), GET_IDNUM(d->character));
+                prepare_quotes(prepare_quotes_buf, GET_PASSWD(d->character), sizeof(prepare_quotes_buf) / sizeof(prepare_quotes_buf[0])),
+                GET_IDNUM(d->character));
 #else
         sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;", GET_PASSWD(d->character), GET_IDNUM(d->character));
 #endif

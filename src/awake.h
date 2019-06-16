@@ -2090,6 +2090,7 @@ struct ban_list_element
 #define ERROR_ZONEREAD_PREMATURE_EOF           15
 #define ERROR_ZONEREAD_FORMAT_ERROR            16
 #define ERROR_MYSQL_DATABASE_NOT_FOUND         17
+#define ERROR_ARRAY_OUT_OF_BOUNDS              18
 
 // Materials.
 #define MATERIAL_PAPER        0

@@ -1823,3 +1823,12 @@ void delete_message_history(struct descriptor_data *d) {
     }
   }
 }
+
+// Call this to kill the game while notifying staff etc of what happened.
+void terminate_mud_process_with_message(const char *message, int error_code) {
+  sprintf(buf, "FATAL ERROR: The MUD has encountered a terminal error (code %d) and will now halt. The message given was as follows: %s",
+          error_code, message);
+  mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+  log(buf);
+  exit(error_code);
+}

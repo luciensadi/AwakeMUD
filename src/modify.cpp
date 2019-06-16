@@ -29,13 +29,13 @@
 #include "newmagic.h"
 #include "newmatrix.h"
 #include "constants.h"
+#include "newdb.h"
 
 void show_string(struct descriptor_data *d, char *input);
 void qedit_disp_menu(struct descriptor_data *d);
 
 extern MYSQL *mysql;
 extern int mysql_wrapper(MYSQL *mysql, const char *query);
-extern char *prepare_quotes(char *dest, const char *str);
 /* ************************************************************************
 *  modification of malloc'ed strings                                      *
 ************************************************************************ */
@@ -240,7 +240,7 @@ void string_add(struct descriptor_data *d, char *str)
       vehcust_menu(d); 
     } else if (STATE(d) == CON_TRIDEO) {
       (*d->str)[strlen(*d->str)-2] = '\0';
-      sprintf(buf, "INSERT INTO trideo_broadcast (author, message) VALUES (%ld, '%s')", GET_IDNUM(d->character), prepare_quotes(buf2, *d->str));
+      sprintf(buf, "INSERT INTO trideo_broadcast (author, message) VALUES (%ld, '%s')", GET_IDNUM(d->character), prepare_quotes(buf2, *d->str, sizeof(buf2) / sizeof(buf2[0])));
       mysql_wrapper(mysql, buf);
       DELETE_D_STR_IF_EXTANT(d);
       STATE(d) = CON_PLAYING;
