@@ -1053,6 +1053,10 @@ void parse_room(File &fl, long nr)
         dir->exit_info = EX_ISDOOR;
       else if (flags == 2)
         dir->exit_info = EX_ISDOOR | EX_PICKPROOF;
+      else if (flags == 3)
+        dir->exit_info = EX_ISDOOR | EX_ASTRALLY_WARDED;
+      else if (flags == 4)
+        dir->exit_info = EX_ISDOOR | EX_PICKPROOF | EX_ASTRALLY_WARDED;
       else
         dir->exit_info = 0;
 
