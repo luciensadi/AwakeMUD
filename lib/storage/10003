@@ -1,11 +1,11 @@
 [HOUSE]
 	[Object 0]
-		Vnum:	10000
+		Vnum:	17117
 		Inside:	0
-		Value 0:	1
-		Value 1:	15
-		Value 2:	0
-		Value 3:	0
+		Value 0:	5
+		Value 1:	7
+		Value 2:	98
+		Value 3:	2
 		Value 4:	0
 		Value 5:	0
 		Value 6:	0
@@ -17,5 +17,5 @@
 		Condition:	32
 		Timer:	0
 		Attempt:	0
-		Cost:	0
+		Cost:	49000
 		ExtraFlags:	0
