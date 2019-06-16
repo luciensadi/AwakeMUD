@@ -1105,6 +1105,7 @@ ACMD(do_idelete)
   for (counter = num; counter < top_of_objt; counter++) {
     obj_index[counter] = obj_index[counter + 1];
     obj_proto[counter] = obj_proto[counter + 1];
+    assert(GET_OBJ_COST(&obj_proto[counter]) == GET_OBJ_COST(&obj_proto[counter + 1]));
     ObjList.UpdateObjsIDelete(&obj_proto[counter], counter + 1, counter);
     obj_proto[counter].item_number = counter;
   }
