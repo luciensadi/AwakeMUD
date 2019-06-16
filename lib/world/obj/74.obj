@@ -216,7 +216,7 @@ Material:	wood
 [VALUES]
 	Val1:	2
 	Val2:	1
-	Val3:	305
+	Val3:	1
 	Val4:	6
 	Val5:	-1
 	Val6:	1
@@ -354,32 +354,6 @@ Material:	fabric
 	LegalPermit:	0
 [VALUES]
 	Val0:	50
-BREAK
-#7414
-Keywords:	5 bullet rifle magazine magazine
-Name:	a five-bullet rifle magazine
-RoomDesc:$
-A 5-bullet rifle magazine sits here.~
-LookDesc:$
-A five bullet rifle magazine.
-~
-Type:	Gun Magazine
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	0.12
-	Barrier:	1
-	Cost:	10
-	AvailTN:	2
-	AvailDay:	1.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	5
-	Val1:	23
 BREAK
 #7415
 Keywords:	response chip puma novatech
