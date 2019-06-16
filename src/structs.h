@@ -111,6 +111,11 @@ struct obj_data
   
   struct char_data *targ;	  /* Data for mounts */
   struct veh_data *tveh;
+  
+#ifdef USE_DEBUG_CANARIES
+  // No sense in initializing the value since it's memset to 0 in most invocations.
+  int canary;
+#endif
   obj_data() :
       in_veh(NULL), ex_description(NULL), restring(NULL), photo(NULL), graffiti(NULL), carried_by(NULL),
       worn_by(NULL), in_obj(NULL), contains(NULL), next_content(NULL), targ(NULL), tveh(NULL)
@@ -137,7 +142,11 @@ struct room_direction_data
   byte barrier;                /* barrier rating                       */
   byte condition;      // current barrier rating
   vnum_t to_room_vnum;       /* the vnum of the room. Used for OLC   */
-
+  
+#ifdef USE_DEBUG_CANARIES
+  // No sense in initializing the value since it's memset to 0 in most invocations.
+  int canary;
+#endif
   room_direction_data() :
       general_description(NULL), keyword(NULL), exit_info(0), key(0), to_room(NOWHERE),
       key_level(0), ward(0), idnum(0), hidden(0), material(0), barrier(0), condition(0), to_room_vnum(NOWHERE)
@@ -187,7 +196,11 @@ struct room_data
   struct char_data *watching;
   
   struct obj_data *best_workshop[NUM_WORKSHOP_TYPES];
-
+  
+#ifdef USE_DEBUG_CANARIES
+  // No sense in initializing the value since it's memset to 0 in most invocations.
+  int canary;
+#endif
   room_data() :
       name(NULL), description(NULL), night_desc(NULL), ex_description(NULL),
       temporary_stored_exit(NULL), matrix(0), access(0), io(0), trace(0),
@@ -624,6 +637,7 @@ struct veh_data
   char *leave;
   char *arrive;
   struct veh_data *next;
+  
 
   veh_data() :
       name(NULL), description(NULL), short_description(NULL), restring(NULL),

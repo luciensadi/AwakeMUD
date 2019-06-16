@@ -159,6 +159,10 @@ void process_boost(void);
 class memoryClass *Mem = new memoryClass();
 void show_string(struct descriptor_data * d, char *input);
 
+#ifdef USE_DEBUG_CANARIES
+void check_memory_canaries();
+#endif
+
 #if (defined(WIN32) && !defined(__CYGWIN__))
 void gettimeofday(struct timeval *t, struct timezone *dummy)
 {
@@ -745,6 +749,9 @@ void game_loop(int mother_desc)
       another_minute();
       misc_update();
       matrix_update();
+#ifdef USE_DEBUG_CANARIES
+      check_memory_canaries();
+#endif
     }
     
     // Every 5 MUD minutes
@@ -2648,3 +2655,23 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
   return NULL;
 }
 #undef SENDOK
+
+#ifdef USE_DEBUG_CANARIES
+void check_memory_canaries() {
+  // Check every room in the world.
+  for (int world_index = 0; world_index < top_of_world; world_index++) {
+    // Check every direction that exists for this room.
+    for (int direction_index = 0; direction_index <= DOWN; direction_index++) {
+      if (world[world_index].dir_option[direction_index])
+        assert(world[world_index].dir_option[direction_index]->canary == CANARY_VALUE);
+    }
+    // Check the room itself.
+    assert(world[world_index].canary == CANARY_VALUE);
+  }
+  
+  // Check every object in the game.
+  for (int obj_index = 0; obj_index < top_of_objt; obj_index++) {
+    assert(obj_proto[obj_index].canary == CANARY_VALUE);
+  }
+}
+#endif

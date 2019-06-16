@@ -2118,4 +2118,9 @@ struct ban_list_element
 
 #define LIST_COMMAND_LIMIT 500
 
+// Stack / memory canaries.
+#ifdef USE_DEBUG_CANARIES
+#define CANARY_VALUE 31337
+#endif
+
 #endif
