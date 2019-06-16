@@ -530,8 +530,8 @@ SPECIAL(teacher)
     }
     
     if (GET_SKILL_POINTS(ch) > 0)
-      sprintf(buf, "%s\r\nYou have %d points to use for skills.\r\n", buf,
-              GET_SKILL_POINTS(ch));
+      sprintf(buf, "%s\r\nYou have %d point%s to use for skills.\r\n", buf,
+              GET_SKILL_POINTS(ch), GET_SKILL_POINTS(ch) > 1 ? "s" : "");
     else
       sprintf(buf, "%s\r\nYou have %0.2f karma to use for skills.\r\n", buf,
               ((float)GET_KARMA(ch) / 100));
@@ -659,7 +659,8 @@ void send_training_list_to_char(struct char_data *ch, int ind) {
   int first = 1, raw_cost = 0;
   
   if (GET_ATT_POINTS(ch) > 0) {
-    send_to_char(ch, "You have %d attribute points to distribute.  You can ^WTRAIN", GET_ATT_POINTS(ch));
+    send_to_char(ch, "You have %d attribute point%s to distribute.  You can ^WTRAIN",
+                 GET_ATT_POINTS(ch), GET_ATT_POINTS(ch) > 1 ? "s" : "");
   } else {
     send_to_char(ch, "You have %0.2f karma points.  You can train", (float)GET_KARMA(ch) / 100);
   }
@@ -752,7 +753,8 @@ SPECIAL(trainer)
   }
 
   if (!PLR_FLAGGED(ch, PLR_NEWBIE) && GET_ATT_POINTS(ch) != 0) {
-    sprintf(buf, "SYSERR: %s graduated from newbie status while still having %d attribute points left. How?", GET_CHAR_NAME(ch), GET_ATT_POINTS(ch));
+    sprintf(buf, "SYSERR: %s graduated from newbie status while still having %d attribute point%s left. How?",
+            GET_CHAR_NAME(ch), GET_ATT_POINTS(ch), GET_ATT_POINTS(ch) > 1 ? "s" : "");
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     GET_ATT_POINTS(ch) = 0;
   }
@@ -831,7 +833,7 @@ SPECIAL(spell_trainer)
       if (GET_TRADITION(ch) == TRAD_HERMETIC && GET_ASPECT(ch) != ASPECT_SORCERER)
         send_to_char("Conjuring  Materials          1 Force Point/Level\r\n", ch);
       send_to_char("Extra Force Point             25000 nuyen\r\n", ch);
-      send_to_char(ch, "%d Force Points Remaining.\r\n", GET_FORCE_POINTS(ch));
+      send_to_char(ch, "%d Force Point%s Remaining.\r\n", GET_FORCE_POINTS(ch), GET_FORCE_POINTS(ch) > 1 ? "s" : "");
     } else
       send_to_char(ch, "%.2f Karma Available.\r\n", GET_KARMA(ch) / 100);
   } else {
@@ -3904,7 +3906,8 @@ SPECIAL(chargen_south_from_trainer)
     return FALSE;
   
   if ((CMD_IS("s") || CMD_IS("south")) && GET_ATT_POINTS(ch) > 0) {
-    send_to_char(ch, "You still have %d attribute points to spend! You should finish ^WTRAIN^ning your attributes before you proceed.\r\n", GET_ATT_POINTS(ch));
+    send_to_char(ch, "You still have %d attribute point%s to spend! You should finish ^WTRAIN^ning your attributes before you proceed.\r\n",
+                 GET_ATT_POINTS(ch), GET_ATT_POINTS(ch) > 1 ? "s" : "");
     return TRUE;
   }
   
@@ -3964,7 +3967,8 @@ SPECIAL(chargen_skill_annex)
     return FALSE;
   
   if ((CMD_IS("s") || CMD_IS("south")) && GET_SKILL_POINTS(ch) > 0) {
-    send_to_char(ch, "You still have %d skill points to spend! You should finish ^WPRACTICE^n-ing your skills before you proceed.\r\n", GET_SKILL_POINTS(ch));
+    send_to_char(ch, "You still have %d skill point%s to spend! You should finish ^WPRACTICE^n-ing your skills before you proceed.\r\n",
+                 GET_SKILL_POINTS(ch), GET_SKILL_POINTS(ch) > 1 ? "s" : "");
     return TRUE;
   }
   
