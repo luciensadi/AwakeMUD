@@ -451,7 +451,7 @@ void end_quest(struct char_data *ch)
 
 bool rep_too_high(struct char_data *ch, int num)
 {
-  if (num < 0 || num >= top_of_questt)
+  if (num < 0 || num > top_of_questt)
     return TRUE;
 
   if (GET_REP(ch) > quest_table[num].max_rep)
@@ -462,7 +462,7 @@ bool rep_too_high(struct char_data *ch, int num)
 
 bool rep_too_low(struct char_data *ch, int num)
 {
-  if (num < 0 || num >= top_of_questt)
+  if (num < 0 || num > top_of_questt)
     return TRUE;
 
   if (GET_REP(ch) < quest_table[num].min_rep)
@@ -559,7 +559,7 @@ void new_quest(struct char_data *mob)
 {
   int i, num = 0;
 
-  for (i = 0; i < top_of_questt; i++)
+  for (i = 0; i <= top_of_questt; i++)
     if (quest_table[i].johnson == GET_MOB_VNUM(mob))
       num++;
 
@@ -578,7 +578,7 @@ void new_quest(struct char_data *mob)
       GET_SPARE2(mob) = i;
       return;
     }
-    if ((i + 1) < top_of_questt)
+    if ((i + 1) <= top_of_questt)
       i++;
     else
       i = 0;
@@ -632,7 +632,7 @@ void handle_info(struct char_data *johnson)
 SPECIAL(johnson)
 {
   struct char_data *johnson = (struct char_data *) me, *temp = NULL;
-  int i, obj_complete = 0, mob_complete = 0, num, comm = CMD_NONE;
+  int i, obj_complete = 0, mob_complete = 0, num, comm = CMD_JOB_NONE;
 
   if (!IS_NPC(johnson))
     return FALSE;
@@ -663,34 +663,34 @@ SPECIAL(johnson)
 
   if (CMD_IS("say") || CMD_IS("'")) {
     if (str_str(argument, "quit"))
-      comm = CMD_QUIT;
+      comm = CMD_JOB_QUIT;
     else if (str_str(argument, "collect") || str_str(argument, "complete") || str_str(argument, "done"))
-      comm = CMD_DONE;
+      comm = CMD_JOB_DONE;
     else if (str_str(argument, "work") || str_str(argument, "business") ||
              str_str(argument, "run") || str_str(argument, "shadowrun") ||
              str_str(argument, "job"))
-      comm = CMD_START;
+      comm = CMD_JOB_START;
     else if (str_str(argument, "yes") || str_str(argument, "accept") || str_str(argument, "yeah")
             || str_str(argument, "sure") || str_str(argument, "okay"))
-      comm = CMD_YES;
+      comm = CMD_JOB_YES;
     else if (strstr(argument, "no"))
-      comm = CMD_NO;
+      comm = CMD_JOB_NO;
     do_say(ch, argument, 0, 0);
   } else if (CMD_IS("nod")) {
-    comm = CMD_YES;
+    comm = CMD_JOB_YES;
     do_action(ch, argument, cmd, 0);
   } else if (CMD_IS("shake") && !*argument) {
-    comm = CMD_NO;
+    comm = CMD_JOB_NO;
     do_action(ch, argument, cmd, 0);
   } else
     return FALSE;
 
-  if (comm == CMD_QUIT && GET_SPARE1(johnson) == -1 && GET_QUEST(ch) &&
+  if (comm == CMD_JOB_QUIT && GET_SPARE1(johnson) == -1 && GET_QUEST(ch) &&
       memory(johnson, ch)) {
     do_say(johnson, quest_table[GET_QUEST(ch)].quit, 0, 0);
     end_quest(ch);
     forget(johnson, ch);
-  } else if (comm == CMD_DONE && GET_SPARE1(johnson) == -1 && GET_QUEST(ch) &&
+  } else if (comm == CMD_JOB_DONE && GET_SPARE1(johnson) == -1 && GET_QUEST(ch) &&
              memory(johnson, ch)) {
     for (i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++)
       if (ch->player_specials->obj_complete[i]) {
@@ -711,7 +711,7 @@ SPECIAL(johnson)
       forget(johnson, ch);
     } else
       do_say(johnson, "But you have not completed any objectives yet.", 0, 0);
-  } else if (comm == CMD_START && GET_SPARE1(johnson) == -1 &&
+  } else if (comm == CMD_JOB_START && GET_SPARE1(johnson) == -1 &&
              GET_SPARE2(johnson) >= 0) {
     if (GET_QUEST(ch)) {
       do_say(johnson, "Maybe when you've finished what you're doing.", 0, 0);
@@ -746,7 +746,7 @@ SPECIAL(johnson)
       if (!memory(johnson, ch))
         remember(johnson, ch);
     }
-  } else if (comm == CMD_YES && !GET_SPARE1(johnson) && !GET_QUEST(ch) &&
+  } else if (comm == CMD_JOB_YES && !GET_SPARE1(johnson) && !GET_QUEST(ch) &&
              memory(johnson, ch)) {
     GET_QUEST(ch) = GET_SPARE2(johnson);
     ch->player_specials->obj_complete =
@@ -759,7 +759,7 @@ SPECIAL(johnson)
       ch->player_specials->mob_complete[num] = 0;
     load_quest_targets(johnson, ch);
     handle_info(johnson);
-  } else if (comm == CMD_NO && !GET_SPARE1(johnson) && !GET_QUEST(ch) &&
+  } else if (comm == CMD_JOB_NO && !GET_SPARE1(johnson) && !GET_QUEST(ch) &&
              memory(johnson, ch)) {
     GET_SPARE1(johnson) = -1;
     GET_QUEST(ch) = 0;
@@ -783,7 +783,7 @@ void johnson_update(void)
 
   *buf = 0;
 
-  for ( i = 0; i < top_of_questt;  i++ ) {
+  for ( i = 0; i <= top_of_questt;  i++ ) {
     /* Random times */
     if ( quest_table[i].s_time == -1 ) {
       if ( dice(1, 6) )
@@ -836,7 +836,7 @@ void assign_johnsons(void)
 {
   int i, rnum;
 
-  for (i = 0; i < top_of_questt; i++) {
+  for (i = 0; i <= top_of_questt; i++) {
     if ((rnum = real_mobile(quest_table[i].johnson)) < 0)
       log_vfprintf("Johnson #%d does not exist (quest #%d)",
           quest_table[i].johnson, quest_table[i].vnum);
@@ -875,7 +875,7 @@ void list_detailed_quest(struct char_data *ch, long rnum)
           ((float)quest_table[rnum].karma / 100), quest_table[rnum].reward);
 
   for (i = 0; i < quest_table[rnum].num_mobs; i++)
-    sprintf(buf + strlen(buf), "M%2d) %d\xC2\xA5/%0.2f: V%ld; %s (%d); %s (%d)\r\n",
+    sprintf(buf + strlen(buf), "M%2d) %d nuyen/%0.2f: V%ld; %s (%d); %s (%d)\r\n",
             i, quest_table[rnum].mob[i].nuyen,
             ((float)quest_table[rnum].mob[i].karma / 100),
             quest_table[rnum].mob[i].vnum, sml[(int)quest_table[rnum].mob[i].load],
@@ -885,7 +885,7 @@ void list_detailed_quest(struct char_data *ch, long rnum)
 
 
   for (i = 0; i < quest_table[rnum].num_objs; i++)
-    sprintf(buf + strlen(buf), "O%2d) %d\xC2\xA5/%0.2f: V%ld; %s (%d/%d); %s (%d)\r\n",
+    sprintf(buf + strlen(buf), "O%2d) %d nuyen/%0.2f: V%ld; %s (%d/%d); %s (%d)\r\n",
             i, quest_table[rnum].obj[i].nuyen,
             ((float)quest_table[rnum].obj[i].karma / 100),
             quest_table[rnum].obj[i].vnum, sol[(int)quest_table[rnum].obj[i].load],
@@ -900,7 +900,7 @@ void boot_one_quest(struct quest_data *quest)
 {
   int count, quest_nr = -1, i;
 
-  if ((top_of_questt + 1) >= top_of_quest_array)
+  if ((top_of_questt + 2) >= top_of_quest_array)
     // if it cannot resize, return...the edit_quest is freed later
     if (!resize_qst_array())
     {
@@ -908,7 +908,7 @@ void boot_one_quest(struct quest_data *quest)
       return;
     }
 
-  for (count = 0; count < top_of_questt; count++)
+  for (count = 0; count <= top_of_questt; count++)
     if (quest_table[count].vnum > quest->vnum)
     {
       quest_nr = count;
@@ -916,9 +916,9 @@ void boot_one_quest(struct quest_data *quest)
     }
 
   if (quest_nr == -1)
-    quest_nr = top_of_questt;
+    quest_nr = top_of_questt + 1;
   else
-    for (count = top_of_questt; count > quest_nr; count--)
+    for (count = top_of_questt + 1; count > quest_nr; count--)
     {
       // copy quest_table[count-1] to quest_table[count]
       quest_table[count] = quest_table[count-1];
@@ -1103,7 +1103,7 @@ int write_quests_to_disk(int zone)
 
   for (i = 0; i <= top_of_zone_table; ++i) {
     found = 0;
-    for (j = 0; !found && j < top_of_questt; j++)
+    for (j = 0; !found && j <= top_of_questt; j++)
       if (quest_table[j].vnum >= (zone_table[i].number * 100) &&
           quest_table[j].vnum <= zone_table[i].top) {
         found = 1;
@@ -1181,7 +1181,7 @@ void qedit_list_obj_objectives(struct descriptor_data *d)
               QUEST->obj[i].l_data);
       break;
     }
-    sprintf(buf + strlen(buf), "\r\n    Award %d \xC2\xA5 & %0.2f karma for ",
+    sprintf(buf + strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for ",
             QUEST->obj[i].nuyen, ((float)QUEST->obj[i].karma / 100));
     switch (QUEST->obj[i].objective) {
     case QUEST_NONE:
@@ -1252,22 +1252,22 @@ void qedit_list_mob_objectives(struct descriptor_data *d)
     }
     switch (QUEST->mob[i].objective) {
     case QUEST_NONE:
-      sprintf(buf + strlen(buf), "\r\n    Award %d \xC2\xA5 & %0.2f karma for "
+      sprintf(buf + strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for "
               "nothing\r\n", QUEST->mob[i].nuyen,
               ((float)QUEST->mob[i].karma / 100));
       break;
     case QMO_LOCATION:
-      sprintf(buf + strlen(buf), "\r\n    Award %d \xC2\xA5 & %0.2f karma for "
+      sprintf(buf + strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for "
               "escorting target to room %d\r\n", QUEST->mob[i].nuyen,
               ((float)QUEST->mob[i].karma / 100), QUEST->mob[i].o_data);
       break;
     case QMO_KILL_ONE:
-      sprintf(buf + strlen(buf), "\r\n    Award %d \xC2\xA5 & %0.2f karma for "
+      sprintf(buf + strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for "
               "killing target\r\n", QUEST->mob[i].nuyen,
               ((float)QUEST->mob[i].karma / 100));
       break;
     case QMO_KILL_MANY:
-      sprintf(buf + strlen(buf), "\r\n    Award %d \xC2\xA5 & %0.2f karma for "
+      sprintf(buf + strlen(buf), "\r\n    Award %d nuyen & %0.2f karma for "
               "each target killed\r\n", QUEST->mob[i].nuyen,
               ((float)QUEST->mob[i].karma / 100));
       break;

@@ -3,12 +3,13 @@ A fork of the [Awakened Worlds](http://awakenedworlds.net) MUD codebase. Issues 
 
 **The current test port for AwakeMUD Community Edition can be reached at mudtest.mooo.com port 4000.** Many thanks to Jan for running the previous test port for so long.
 
-Join our Discord channel! https://discord.gg/q5VCMkv
+**Join our Discord channel!** https://discord.gg/q5VCMkv
 
 ## Features
-- Enhanced security
-- Significant reductions in memory leaks
-- Significantly reduced ticklag
+- 50k+ lines of additions including new areas, new features, and massive quality-of-life improvements
+- Screenreader accessibility via TOGGLE SCREENREADER
+- Enhanced security that fixes several serious exploits
+- Significantly increased performance
 - A slew of bugfixes to everything from combat code to sound propagation
 
 ## OS Support
@@ -17,9 +18,11 @@ Tested on:
 - Ubuntu 14 and 16 LTS
 - Raspbian Jessie
 - Amazon Linux
+- Cygwin (beta)
 
 ## Installation
-- Install MySQL 5, including its development headers (`mysql/mysql.h`).
+- Install clang (`apt-get install clang`)
+- Install MySQL 5, including its development headers (ensure `mysql/mysql.h` exists in your path).
 - Install [libsodium](https://github.com/jedisct1/libsodium/releases) (`./configure; make; (sudo) make install`). Version 1.0.16 is known to work.
 - Clone this repository to your machine.
 - Run `SQL/gensql.sh` (or do the steps manually if it doesn't support your OS). If you plan on running this with MariaDB, use the `--skip-checks` command-line flag.
@@ -27,6 +30,15 @@ Tested on:
 - Edit `src/Makefile` and uncomment the OS that looks closest to yours (comment out the others). The default is Mac OS X; you'll probably want to switch it to Linux. You probably also want to remove the `-DGITHUB_INTEGRATION` flag from the Makefile at this time.
 - From the src directory, run `make clean && make`.
 - Change to the root directory and run the game (ex: `gdb bin/awake`, or `lldb bin/awake` on OS X).
+
+### Cygwin Installation Notes
+- AwakeCE can run in Windows under Cygwin.
+- To build it, you need Cygwin (64bit) and Cygwin apps/libraries: make, g++, libcrypt, libsodium, mysqlclient.
+- Update src/Makefile and comment out/uncomment the Cygwin config.
+- Build by doing `cd src;make`.
+- Run by doing `./bin/awake`.
+- Note: You may have to manually import the SQL changes as gensql.sh may or may not work, use 127.0.0.1 as dbhost if running local db.
+- With Cygwin, you can also use Eclipse CPP IDE, just create a Cygwin-C++ project and point the directory to where your AwakeMUD is located, play around with build settings to ensure it is using your Makefile in src. Debugging/Running works.
 
 ### Make / Compile Troubleshooting
 
@@ -41,9 +53,11 @@ If you see a wall of errors like the one above, you need to edit `src/Makefile` 
 
 If you get an error like `AwakeMUD/src/act.wizard.cpp:3841: undefined reference to 'crypt'`, it means that you've probably not selected the right OS in your `src/Makefile`. Make sure you comment out the OS X lines near the top by adding a `#` at their beginnings, and uncomment the Linux lines by removing their `#`.
 
+If you get errors like `/home/ubuntu/AwakeMUD/src/act.other.cpp:954: undefined reference to 'github_issues_url'`, you need to remove -DGITHUB_INTEGRATION from your selected OS in your Makefile, then `make clean && make` to scrub the references to the GitHub integration code.
+
 If you get an error like `structs.h:8:10: fatal error: sodium.h: No such file or directory`, it means you need to install [libsodium](https://github.com/jedisct1/libsodium/releases) (`./configure; make; (sudo) make install`).
 
-### Runtime Troubleshooting
+## Runtime Troubleshooting
 
 If you get an error like `MYSQLERROR: Data too long for column 'Password' at row X` when running the game, you need to update your database's pfile table to use the longer password-column capacity. Go into your database and execute the command in `SQL/migration-libsodium.sql`.
 

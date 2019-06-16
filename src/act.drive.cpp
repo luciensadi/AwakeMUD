@@ -29,7 +29,7 @@ int get_maneuver(struct veh_data *veh)
 {
   int score = -2;
   struct char_data *ch = NULL;
-  int i = 0, x = 0, skill;
+  int x = 0, skill;
 
   switch (veh->type)
   {
@@ -41,7 +41,7 @@ int get_maneuver(struct veh_data *veh)
     break;
   case VEH_CAR:
     if (veh->speed >= 200)
-      score +=5;
+      score += 5;
     break;
   }
   if (veh->cspeed > SPEED_IDLE)
@@ -55,10 +55,9 @@ int get_maneuver(struct veh_data *veh)
         break;
   if (ch)
   {
-    for (skill = veh_skill(ch, veh);skill > 0; skill--) {
-      i = srdice();
-      if (i > x)
-        x = i;
+    // TODO: What is this passage for? -LS
+    for (skill = veh_skill(ch, veh); skill > 0; skill--) {
+      x = MAX(x, srdice());
     }
     score += x;
   }
@@ -237,19 +236,12 @@ ACMD(do_drive)
   }
   if (VEH->cspeed == SPEED_OFF || VEH->dest) {
     AFF_FLAGS(ch).ToggleBit(AFF_PILOT);
-    send_to_char("The wheel is in your hands.\r\n", ch);
-    sprintf(buf1, "%s takes the wheel.\r\n", GET_NAME(ch));
     VEH->cspeed = SPEED_IDLE;
     VEH->lastin[0] = VEH->in_room;
     send_to_veh(buf1, VEH, ch, FALSE);
-    if (AFF_FLAGGED(ch, AFF_MANNING)) {
-      struct obj_data *mount;
-      for (mount = ch->in_veh->mount; mount; mount = mount->next_content)
-        if (mount->worn_by == ch)
-          break;
-      mount->worn_by = NULL;
-      AFF_FLAGS(ch).RemoveBit(AFF_MANNING);
-    }
+    stop_manning_weapon_mounts(ch, TRUE);
+    send_to_char("The wheel is in your hands.\r\n", ch);
+    sprintf(buf1, "%s takes the wheel.\r\n", GET_NAME(ch));
   } else {
     AFF_FLAGS(ch).ToggleBit(AFF_PILOT);
     send_to_char("You relinquish the driver's seat.\r\n", ch);
@@ -328,19 +320,12 @@ ACMD(do_rig)
       return;
     } 
     AFF_FLAGS(ch).ToggleBits(AFF_PILOT, AFF_RIG, ENDBIT);
-    send_to_char("As you jack in, your perception shifts.\r\n", ch);
-    sprintf(buf1, "%s jacks into the vehicle control system.\r\n", GET_NAME(ch));
     VEH->cspeed = SPEED_IDLE;
     VEH->lastin[0] = VEH->in_room;
     send_to_veh(buf1, VEH, ch, TRUE);
-    if (AFF_FLAGGED(ch, AFF_MANNING)) {
-      struct obj_data *mount;
-      for (mount = ch->in_veh->mount; mount; mount = mount->next_content)
-        if (mount->worn_by == ch)
-          break;
-      mount->worn_by = NULL;
-      AFF_FLAGS(ch).RemoveBit(AFF_MANNING);
-    }
+    stop_manning_weapon_mounts(ch, TRUE);
+    send_to_char("As you jack in, your perception shifts.\r\n", ch);
+    sprintf(buf1, "%s jacks into the vehicle control system.\r\n", GET_NAME(ch));
   } else {
     if (!AFF_FLAGGED(ch, AFF_RIG)) {
       send_to_char("But you're not rigging.\r\n", ch);
@@ -626,6 +611,7 @@ ACMD(do_upgrade)
     case 1:
       skill = 1;
       // explicit fallthrough-- internal mounts are +1 skill vs external mounts, but otherwise share attributes
+      // fall through
     case 0:
       j++;
       target = 10;
@@ -633,6 +619,7 @@ ACMD(do_upgrade)
     case 3:
       skill = 1;
       // explicit fallthrough-- internal mounts are +1 skill vs external mounts, but otherwise share attributes
+      // fall through
     case 2:
       j += 2;
       target = 10;
@@ -987,30 +974,26 @@ ACMD(do_repair)
   target += modify_target(ch);
 
   for (obj = ch->carrying; obj && !mod; obj = obj->next_content)
-    if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_OBJ_VAL(obj, 1) == 9 && GET_OBJ_VAL(obj, 0) == 4)
-      mod = GET_OBJ_VAL(obj, 1);
-  for (int i = 0; !mod && i < (NUM_WEARS - 1); i++)
-    if ((obj = GET_EQ(ch, i)) && GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_OBJ_VAL(obj, 1) == 0 && GET_OBJ_VAL(obj, 0) == 4)
-      mod = GET_OBJ_VAL(obj, 1);
+    if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE && GET_WORKSHOP_GRADE(obj) == TYPE_KIT)
+      mod = TYPE_KIT;
+  for (int i = 0; i < NUM_WEARS && !mod; i++)
+    if ((obj = GET_EQ(ch, i)) && GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE && GET_WORKSHOP_GRADE(obj) == TYPE_KIT)
+      mod = TYPE_KIT;
   shop = find_workshop(ch, TYPE_VEHICLE);
   if (!shop) {
     if (veh->damage >= 7) {
-      send_to_char("You better get it to a garage before you try and fix this much damage.\r\n", ch);
+      send_to_char("You'd better get it to a garage before you try and fix this much damage.\r\n", ch);
       return;
     }
     target += 2;
   }
-
-  switch (mod) {
-  case 0:
-    target += 4;
-    break;
-  case 1:
-    target += 2;
-    break;
-  case 3:
+  
+  if (shop && GET_WORKSHOP_GRADE(shop) == TYPE_FACILITY) {
     target -= 2;
-    break;
+  } else if (mod == TYPE_KIT) {
+    target += 2;
+  } else {
+    target += 4;
   }
 
   if ((success = (GET_LEVEL(ch) > LVL_MORTAL ? 20 : success_test(skill, target))) < 1) {
@@ -1308,9 +1291,11 @@ ACMD(do_target)
       return;
     }
     if (AFF_FLAGGED(ch, AFF_MANNING)) {
-      for (obj = veh->mount; obj; obj = obj->next_content)
-        if (obj->worn_by == ch)
-          break;
+      if (!(obj = get_mount_manned_by_ch(ch))) {
+        // Safeguard-- if they don't have a mount, drop 'em.
+        send_to_char("You don't have control over any mounts.\r\n", ch);
+        return;
+      }
     } else {
       for (j = 0, obj = veh->mount; obj; obj = obj->next_content)
         if (obj->contains && !obj->worn_by)
@@ -1459,15 +1444,7 @@ ACMD(do_man)
   }
 
   if (AFF_FLAGGED(ch, AFF_MANNING)) {
-    for (mount = ch->in_veh->mount; mount; mount = mount->next_content)
-      if (mount->worn_by == ch)
-        break;
-    mount->worn_by = NULL;
-    AFF_FLAGS(ch).ToggleBit(AFF_MANNING);
-    act("$n stops manning $p.", FALSE, ch, mount, 0, TO_ROOM);
-    act("You stop manning $p.", FALSE, ch, mount, 0, TO_CHAR);
-    if (FIGHTING(ch))
-      stop_fighting(ch);
+    stop_manning_weapon_mounts(ch, TRUE);
     if (!*argument)
       return;
   }
@@ -1492,7 +1469,7 @@ ACMD(do_man)
     mount->worn_by = ch;
     act("$n mans $p.", FALSE, ch, mount, 0, TO_ROOM);
     act("You man $p.", FALSE, ch, mount, 0, TO_CHAR);
-    AFF_FLAGS(ch).ToggleBit(AFF_MANNING);
+    AFF_FLAGS(ch).SetBit(AFF_MANNING);
     return;
   }
   
@@ -1638,21 +1615,35 @@ ACMD(do_gridguide)
 
 void process_autonav(void)
 {
-  for (struct veh_data *veh = veh_list; veh; veh = veh->next)
+  for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
+    bool veh_moved = FALSE;
+  
     if (veh->dest && veh->cspeed > SPEED_IDLE && veh->damage < 10) {
       struct char_data *ch = NULL;
+      
       if (!(ch = veh->rigger))
-        ch = veh->people; 
+        ch = veh->people;
+      
       // Stop empty vehicles
       if (!ch) {
         veh->dest = 0;
         veh->cspeed = SPEED_OFF;
+        return;
       }
+      
       int dir = 0;
-      for (int x = (int)get_speed(veh) / 10; x && dir >= 0 && veh->dest; x--) {
+      for (int x = MAX((int)get_speed(veh) / 10, 1); x && dir >= 0 && veh->dest; x--) {
         dir = find_first_step(veh->in_room, veh->dest);
-        if (dir >= 0)
+        if (dir >= 0) {
+          veh_moved = TRUE;
           move_vehicle(ch, dir);
+        }
+      }
+      if (!veh_moved) {
+        send_to_veh("The autonav beeps and flashes a red 'ERROR' message before shutting off.\r\n", veh, 0, TRUE);
+        veh->cspeed = SPEED_OFF;
+        veh->dest = 0;
+        return;
       }
       if (veh->in_room == veh->dest) {
         send_to_veh("Having reached its destination, the autonav shuts off.\r\n", veh, 0, TRUE);
@@ -1660,6 +1651,7 @@ void process_autonav(void)
         veh->dest = 0;
       }
     }
+  }
 }
 
 ACMD(do_switch)

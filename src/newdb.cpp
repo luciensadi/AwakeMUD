@@ -127,12 +127,12 @@ static void init_char(struct char_data * ch)
   }
 
   if (!access_level(ch, LVL_VICEPRES))
-    for (i = 1; i <= MAX_SKILLS; i++)
+    for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
     {
       SET_SKILL(ch, i, 0)
     }
   else
-    for (i = 1; i <= MAX_SKILLS; i++)
+    for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
     {
       SET_SKILL(ch, i, 100);
     }
@@ -252,14 +252,19 @@ static void init_char_strings(char_data *ch)
 }
 
 // Eventual TODO: https://dev.mysql.com/doc/refman/5.7/en/mysql-real-escape-string-quote.html
-char *prepare_quotes(char *dest, const char *str)
+char *prepare_quotes(char *dest, const char *str, size_t size_of_dest)
 {
   if (!str)
     return NULL;
-  register char *temp = &dest[0];
+  char *temp = &dest[0];
   while (*str) {
-    if (*str == '\'' || *str == '`' || *str == '"' || *str == '\\' || *str == '%')
+    if ((unsigned long) (temp - dest) >= size_of_dest - 2) {
+      // Die to protect memory / database.
+      terminate_mud_process_with_message("prepare_quotes would overflow dest buf", ERROR_ARRAY_OUT_OF_BOUNDS);
+    }
+    if (*str == '\'' || *str == '`' || *str == '"' || *str == '\\' || *str == '%') {
       *temp++ = '\\';
+    }
     *temp++ = *str++;
   }
   *temp = '\0';
@@ -328,7 +333,7 @@ void advance_level(struct char_data * ch)
 bool load_char(const char *name, char_data *ch, bool logon)
 {
   init_char(ch);
-  for (int i = 1; i <= MAX_SKILLS; i++)
+  for (int i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
     GET_SKILL(ch, i) = 0;
   ch->char_specials.carry_weight = 0;
   ch->char_specials.carry_items = 0;
@@ -1070,7 +1075,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     sprintf(buf, "DELETE FROM pfiles_skills WHERE idnum=%ld", GET_IDNUM(player));
     mysql_wrapper(mysql, buf);
     strcpy(buf, "INSERT INTO pfiles_skills (idnum, skillnum, rank) VALUES (");
-    for (i = 0; i <= MAX_SKILLS; i++)
+    for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
       if (GET_SKILL(player, i)) {
         if (q)
           strcat(buf, "), (");
@@ -1202,7 +1207,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
   for (struct remem *b = GET_MEMORY(player); b; b = b->next) {
     if (q)
       strcat(buf, "), (");
-    sprintf(ENDOF(buf), "%ld, %ld, '%s'", GET_IDNUM(player), b->idnum, prepare_quotes(buf3, b->mem));
+    sprintf(ENDOF(buf), "%ld, %ld, '%s'", GET_IDNUM(player), b->idnum, prepare_quotes(buf3, b->mem, sizeof(buf3) / sizeof(buf3[0])));
     q = 1;
   }
   if (q) {
@@ -1232,7 +1237,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
   for (struct alias *a = GET_ALIASES(player); a; a = a->next) {
     if (q)
       strcat(buf, "), (");
-    sprintf(ENDOF(buf), "%ld, '%s', '%s'", GET_IDNUM(player), a->command, prepare_quotes(buf3, a->replacement));
+    sprintf(ENDOF(buf), "%ld, '%s', '%s'", GET_IDNUM(player), a->command, prepare_quotes(buf3, a->replacement, sizeof(buf3) / sizeof(buf3[0])));
     q = 1;
   }
   if (q) {
@@ -1273,7 +1278,8 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     bool first_pass = TRUE;
     for (struct obj_data *obj = player->cyberware; obj;) {
       sprintf(ENDOF(buf), "%s(%ld, %ld, %d, '%s', '%s'", first_pass ? "" : ", ", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
-                          obj->restring ? prepare_quotes(buf3, obj->restring) : "", obj->photo ? prepare_quotes(buf2, obj->photo) : "");
+                          obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "",
+                          obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "");
       first_pass = FALSE;
       q = 1;
       
@@ -1318,7 +1324,8 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
       strcpy(buf, "INSERT INTO pfiles_worn (idnum, Vnum, Cost, Restring, Photo, Value0, Value1, Value2, Value3, Value4, Value5, Value6,"\
               "Value7, Value8, Value9, Value10, Value11, Inside, Position, Timer, ExtraFlags, Attempt, Cond, posi) VALUES (");
       sprintf(ENDOF(buf), "%ld, %ld, %d, '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
-                          obj->restring ? prepare_quotes(buf3, obj->restring) : "", obj->photo ? prepare_quotes(buf2, obj->photo) : "");
+                          obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "",
+                          obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "");
       for (int x = 0; x < NUM_VALUES; x++)
         sprintf(ENDOF(buf), ", %d", GET_OBJ_VAL(obj, x));
       sprintf(ENDOF(buf), ", %d, %d, %d, '%s', %d, %d, %d);", level, i, GET_OBJ_TIMER(obj), GET_OBJ_EXTRA(obj).ToString(), 
@@ -1355,7 +1362,8 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
       strcpy(buf, "INSERT INTO pfiles_inv (idnum, Vnum, Cost, Restring, Photo, Value0, Value1, Value2, Value3, Value4, Value5, Value6,"\
               "Value7, Value8, Value9, Value10, Value11, Inside, Timer, ExtraFlags, Attempt, Cond, posi) VALUES (");
       sprintf(ENDOF(buf), "%ld, %ld, %d, '%s', '%s'", GET_IDNUM(player), GET_OBJ_VNUM(obj), GET_OBJ_COST(obj),
-                          obj->restring ? prepare_quotes(buf3, obj->restring) : "", obj->photo ? prepare_quotes(buf2, obj->photo) : "");
+                          obj->restring ? prepare_quotes(buf3, obj->restring, sizeof(buf3) / sizeof(buf3[0])) : "",
+                          obj->photo ? prepare_quotes(buf2, obj->photo, sizeof(buf2) / sizeof(buf2[0])) : "");
       for (int x = 0; x < NUM_VALUES; x++)
         sprintf(ENDOF(buf), ", %d", GET_OBJ_VAL(obj, x));
       sprintf(ENDOF(buf), ", %d, %d, '%s', %d, %d, %d);", level, GET_OBJ_TIMER(obj), GET_OBJ_EXTRA(obj).ToString(), 

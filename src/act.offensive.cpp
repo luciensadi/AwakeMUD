@@ -639,7 +639,7 @@ ACMD(do_retract)
         case CYB_HANDSPUR:   
           if (!IS_SET(GET_OBJ_VAL(obj, 3), CYBERWEAPON_RETRACTABLE))  
             continue;
-          // Explicit fallthrough.
+          // fall through
         case CYB_CLIMBINGCLAWS:
         case CYB_FOOTANCHOR:  
         case CYB_FIN:  

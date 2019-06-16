@@ -29,13 +29,13 @@
 #include "newmagic.h"
 #include "newmatrix.h"
 #include "constants.h"
+#include "newdb.h"
 
 void show_string(struct descriptor_data *d, char *input);
 void qedit_disp_menu(struct descriptor_data *d);
 
 extern MYSQL *mysql;
 extern int mysql_wrapper(MYSQL *mysql, const char *query);
-extern char *prepare_quotes(char *dest, const char *str);
 /* ************************************************************************
 *  modification of malloc'ed strings                                      *
 ************************************************************************ */
@@ -57,12 +57,14 @@ void format_string(struct descriptor_data *d, int indent)
 {
   int i, j, k, line;
 
+  /* Why was this a thing? -LS
   if (strlen(*d->str) >= 1023)
     return;
+   */
+  
   // if the editor is an implementor and begins with the sequence
   // /**/, then we know not to format this string
-  if (*(*d->str) == '/' &&
-      *(*d->str + 1) == '*' && *(*d->str + 2) == '*' && *(*d->str + 3) == '/')
+  if (*(*d->str) == '/' && *(*d->str + 1) == '*' && *(*d->str + 2) == '*' && *(*d->str + 3) == '/')
   {
     for (i = 0; i < (int)(strlen(*d->str) - 4); i++)
       (*d->str)[i] = (*d->str)[i+4];
@@ -238,7 +240,7 @@ void string_add(struct descriptor_data *d, char *str)
       vehcust_menu(d); 
     } else if (STATE(d) == CON_TRIDEO) {
       (*d->str)[strlen(*d->str)-2] = '\0';
-      sprintf(buf, "INSERT INTO trideo_broadcast (author, message) VALUES (%ld, '%s')", GET_IDNUM(d->character), prepare_quotes(buf2, *d->str));
+      sprintf(buf, "INSERT INTO trideo_broadcast (author, message) VALUES (%ld, '%s')", GET_IDNUM(d->character), prepare_quotes(buf2, *d->str, sizeof(buf2) / sizeof(buf2[0])));
       mysql_wrapper(mysql, buf);
       DELETE_D_STR_IF_EXTANT(d);
       STATE(d) = CON_PLAYING;
@@ -764,7 +766,7 @@ void page_string(struct descriptor_data *d, char *str, int keep_internal)
 void show_string(struct descriptor_data *d, char *input)
 {
   char buffer[MAX_STRING_LENGTH], buf[MAX_INPUT_LENGTH];
-  register char *scan, *chk;
+  char *scan, *chk;
   int lines = 0, toggle = 1;
 
   one_argument(input, buf);

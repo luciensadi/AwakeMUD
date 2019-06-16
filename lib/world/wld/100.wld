@@ -191,7 +191,7 @@ every secret in the world-- if only you had the time to find them. Between the
 large oaken reading tables stands a white marble pedestal, upon which sits a
 pristine copy of Richard Bartle's "Designing Virtual Worlds."   
 ~
-Flags:	10000000000000011000
+Flags:	1000010000000000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -775,6 +775,18 @@ A sealed vault door prevents NPCs from escaping.
 	KeyVnum:	0
 	LockRating:	50
 	HiddenRating:	50
+[EXIT east]
+	ToVnum:	10027
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10028
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT down]
 	ToVnum:	10000
 	Flags:	0
@@ -1036,7 +1048,7 @@ RoomType:	9
 	Light:	0
 	Smoke:	0
 	Background:	0
-	BackgroundType:	0
+	BackgroundType:	16
 [EXIT east]
 	ToVnum:	10026
 	Flags:	0
@@ -1093,6 +1105,279 @@ RoomType:	9
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	10025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10027
+Name:	^W(^cIMMHQ^W)^C The Shop of Horrors
+Desc:$
+Great for testing all manner of shopkeeper quirks, from negative profit
+margins to so many items the MUD crashes. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	10.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	10018
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10028
+Name:	^W(^cIMMHQ^W)^C Elevator Testing Annex (G)
+Desc:$
+Lift goes up, lift goes down. How does it work? You can't explain it, it's
+magic. 
+~
+Flags:	1000000000000000000011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	10.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10018
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	10029
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	10030
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10029
+Name:	^W(^cIMMHQ^W)^C Elevator Testing Annex (1)
+Desc:$
+Lift goes up, lift goes down. How does it work? You can't explain it, it's
+magic. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	10.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	10028
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10030
+Name:	^W(^cIMMHQ^W)^C Elevator Testing Annex (B1)
+Desc:$
+Lift goes up, lift goes down. How does it work? You can't explain it, it's
+magic. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	10.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	10028
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10031
+Name:	^W(^cIMMHQ^W)^C Elevator Car
+Desc:$
+Will it go up, though? Will it go down? Does it even work? 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	50.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
+	ToVnum:	0
+	Flags:	1
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	998
+	LockRating:	8
+BREAK
+#10032
+Name:	^W(^cIMMHQ^W)^C Elevator Shaft - B1
+Desc:$
+Will it go up, though? Will it go down? Does it even work? 
+~
+Flags:	10000000001010000000000000011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	50.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	6
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
+	ToVnum:	10030
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	998
+	LockRating:	8
+[EXIT up]
+	ToVnum:	10033
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10033
+Name:	^W(^cIMMHQ^W)^C Elevator Shaft - G
+Desc:$
+Will it go up, though? Will it go down? Does it even work? 
+~
+Flags:	10000000001010000000000000011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	50.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	6
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
+	ToVnum:	0
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	998
+	LockRating:	8
+[EXIT up]
+	ToVnum:	10034
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	10032
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10034
+Name:	^W(^cIMMHQ^W)^C Elevator Shaft - 1
+Desc:$
+Will it go up, though? Will it go down? Does it even work? 
+~
+Flags:	10000000001010000000000000011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	50.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	6
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	10033
 	Flags:	0
 	Material:	brick
 	Barrier:	4

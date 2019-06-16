@@ -123,7 +123,7 @@ void record_usage(void);
 void make_prompt(struct descriptor_data * point);
 void check_idle_passwords(void);
 void init_descriptor (struct descriptor_data *newd, int desc);
-char *colorize(struct descriptor_data *d, char *str, bool skip_check = FALSE);
+char *colorize(struct descriptor_data *d, const char *str, bool skip_check = FALSE);
 void send_keepalives();
 
 /* extern fcnts */
@@ -158,6 +158,10 @@ void update_buildrepair(void);
 void process_boost(void);
 class memoryClass *Mem = new memoryClass();
 void show_string(struct descriptor_data * d, char *input);
+
+#ifdef USE_DEBUG_CANARIES
+void check_memory_canaries();
+#endif
 
 #if (defined(WIN32) && !defined(__CYGWIN__))
 void gettimeofday(struct timeval *t, struct timezone *dummy)
@@ -745,6 +749,9 @@ void game_loop(int mother_desc)
       another_minute();
       misc_update();
       matrix_update();
+#ifdef USE_DEBUG_CANARIES
+      check_memory_canaries();
+#endif
     }
     
     // Every 5 MUD minutes
@@ -765,14 +772,14 @@ void game_loop(int mother_desc)
       point_update();
       weather_change();
       if (time_info.hours == 17) {
-        for (i = 0; i < top_of_world; i++) {
+        for (i = 0; i <= top_of_world; i++) {
           if (ROOM_FLAGGED(i, ROOM_LIT)) {
             send_to_room("A streetlight hums faintly, flickers, and turns on.\r\n", i);
           }
         }
       }
       if (time_info.hours == 7) {
-        for (i = 0; i < top_of_world; i++) {
+        for (i = 0; i <= top_of_world; i++) {
           if (ROOM_FLAGGED(i, ROOM_LIT)) {
             send_to_room("A streetlight flickers and goes out.\r\n", i);
           }
@@ -951,12 +958,22 @@ void make_prompt(struct descriptor_data * d)
 {
   char *prompt;
   
-  if (d->str)
-    write_to_descriptor(d->descriptor, "] ");
+  if (d->str) {
+    if (D_PRF_FLAGGED(d, PRF_SCREENREADER)) {
+      write_to_descriptor(d->descriptor, "Compose mode, write the at symbol on new line to quit. ");
+    } else {
+      write_to_descriptor(d->descriptor, "Compose mode, write @ on new line to quit]: ");
+    }
+  }
   else if (d->showstr_point)
     write_to_descriptor(d->descriptor, " Press [return] to continue, [q] to quit ");
+  else if (D_PRF_FLAGGED(d, PRF_NOPROMPT)) {
+    // Anything below this line won't render for noprompters.
+    return;
+  }
   else if (STATE(d) == CON_POCKETSEC)
     write_to_descriptor(d->descriptor, " > ");
+  
   else if (!d->connected)
   {
     struct char_data *ch;
@@ -1235,8 +1252,10 @@ int get_from_q(struct txt_q * queue, char *dest, int *aliased)
   *aliased = queue->head->aliased;
   queue->head = queue->head->next;
   
-  DELETE_AND_NULL_ARRAY(tmp->text);
-  DELETE_AND_NULL(tmp);
+  if (tmp) {
+    DELETE_AND_NULL_ARRAY(tmp->text);
+    DELETE_AND_NULL(tmp);
+  }
   
   return 1;
 }
@@ -1828,6 +1847,9 @@ void close_socket(struct descriptor_data *d)
   
   DELETE_ARRAY_IF_EXTANT(d->showstr_head);
   
+  // Clean up message history lists.
+  delete_message_history(d);
+  
   delete d;
 }
 
@@ -2026,18 +2048,25 @@ int is_color (char c)
   return i;
 }
 
-// parses the color codes and translates the properly--we assume that
-// str is not NULL
-char *colorize(struct descriptor_data *d, char *str, bool skip_check)
+// parses the color codes and translates the properly
+char *colorize(struct descriptor_data *d, const char *str, bool skip_check)
 {
-  // it is possible that this could over flow if only because the color
-  // codes take up several characters--however, I certainly am not
-  // gonna allocate a new one every time (=
-  static char buffer[MAX_STRING_LENGTH]; // TODO: Multiply this by the size of the color codes.
-  register char *temp = &buffer[0];
-  register const char *color;
+  // Big ol' buffer so that even if the entire string is color codes, we can still store it all plus a terminal \0. -LS
+  static char buffer[MAX_STRING_LENGTH * 8 + 1];
+  char *temp = &buffer[0];
+  const char *color;
   
-  if (skip_check or d->character) // ok but why do we care if they have a character?
+  if (!str || !*str) {
+    // Declare our own error buf so we don't clobber anyone's strings.
+    char colorize_error_buf[200];
+    sprintf(colorize_error_buf, "SYSERR: Received empty string to colorize() for descriptor %d (orig %s, char %s).",
+            d->descriptor, d->original ? GET_NAME(d->original) : "(null)", d->character ? GET_CHAR_NAME(d->character) : "(null)");
+    mudlog(colorize_error_buf, NULL, LOG_SYSLOG, TRUE);
+    strcpy(buffer, "(null)");
+    return buffer;
+  }
+  
+  if (!D_PRF_FLAGGED(d, PRF_NOCOLOR) && (skip_check || d->character)) // ok but why do we care if they have a character?
   {
     while(*str) {
       if (*str == '^') {
@@ -2340,12 +2369,13 @@ char* strip_ending_punctuation_new(const char* orig) {
 }
 
 /* higher-level communication: the act() function */
-void perform_act(const char *orig, struct char_data * ch, struct obj_data * obj,
+// now returns the composed line, in case you need to capture it for some reason
+const char *perform_act(const char *orig, struct char_data * ch, struct obj_data * obj,
                  void *vict_obj, struct char_data * to)
 {
   extern char *make_desc(char_data *ch, char_data *i, char *buf, int act);
-  register const char *i = NULL;
-  register char *buf;
+  const char *i = NULL;
+  char *buf;
   struct char_data *vict;
   static char lbuf[MAX_STRING_LENGTH];
   struct remem *mem = NULL;
@@ -2511,19 +2541,33 @@ void perform_act(const char *orig, struct char_data * ch, struct obj_data * obj,
   *(++buf) = '\0';
   
   SEND_TO_Q(CAP(lbuf), to->desc);
+  return lbuf;
 }
 
-/* modified to include spell creation menu */
-#define SENDOK(ch) ((ch)->desc && (AWAKE(ch) || sleep) && !(PLR_FLAGGED((ch), PLR_WRITING) || PLR_FLAGGED((ch), PLR_EDITING) || PLR_FLAGGED((ch), PLR_MAILING) || PLR_FLAGGED((ch), PLR_CUSTOMIZE)) && (STATE(ch->desc) != CON_SPELL_CREATE))
+// TODO: stopped partway through editing this func, it is nonfunctional.
+bool can_send_act_to_target(struct char_data *ch, bool hide_invisible, struct obj_data * obj, void *vict_obj, struct char_data *to, int type) {
+#define SENDOK(ch) ((ch)->desc && AWAKE(ch) && !(PLR_FLAGGED((ch), PLR_WRITING) || PLR_FLAGGED((ch), PLR_EDITING) || PLR_FLAGGED((ch), PLR_MAILING) || PLR_FLAGGED((ch), PLR_CUSTOMIZE)) && (STATE(ch->desc) != CON_SPELL_CREATE))
+  
+  return SENDOK(to)
+          && !(hide_invisible && ch && !CAN_SEE(to, ch))
+          && (to != ch) && !(PLR_FLAGGED(to, PLR_REMOTE) || PLR_FLAGGED(to, PLR_MATRIX))
+          && (type == TO_ROOM || type == TO_ROLLS || (to != vict_obj));
+  
+#undef SENDOK
+}
 
-void act(const char *str, int hide_invisible, struct char_data * ch,
+/* Condition checking for perform_act(). Returns the string generated by p_a() provided that
+    the type is TO_CHAR, TO_VICT, or TO_DECK. If no string is generated or type is other, returns NULL. */
+const char *act(const char *str, int hide_invisible, struct char_data * ch,
          struct obj_data * obj, void *vict_obj, int type)
 {
   struct char_data *to, *next;
   int sleep;
   
+#define SENDOK(ch) ((ch)->desc && (AWAKE(ch) || sleep) && !(PLR_FLAGGED((ch), PLR_WRITING) || PLR_FLAGGED((ch), PLR_EDITING) || PLR_FLAGGED((ch), PLR_MAILING) || PLR_FLAGGED((ch), PLR_CUSTOMIZE)) && (STATE(ch->desc) != CON_SPELL_CREATE))
+  
   if (!str || !*str)
-    return;
+    return NULL;
   
   /*
    * Warning: the following TO_SLEEP code is a hack.
@@ -2544,22 +2588,22 @@ void act(const char *str, int hide_invisible, struct char_data * ch,
   if (type == TO_CHAR)
   {
     if (ch && SENDOK(ch) && !(PLR_FLAGGED(ch, PLR_REMOTE) || PLR_FLAGGED(ch, PLR_MATRIX)))
-      perform_act(str, ch, obj, vict_obj, ch);
-    return;
+      return perform_act(str, ch, obj, vict_obj, ch);
+    return NULL;
   }
   if (type == TO_VICT)
   {
     if ((to = (struct char_data *) vict_obj) && SENDOK(to) &&
         !((PLR_FLAGGED(to, PLR_REMOTE) || PLR_FLAGGED(to, PLR_MATRIX)) && !sleep) &&
         !(hide_invisible && ch && !CAN_SEE(to, ch)))
-      perform_act(str, ch, obj, vict_obj, to);
-    return;
+      return perform_act(str, ch, obj, vict_obj, to);
+    return NULL;
   }
   if (type == TO_DECK)
   {
     if ((to = (struct char_data *) vict_obj) && SENDOK(to) && PLR_FLAGGED(to, PLR_MATRIX))
-      perform_act(str, ch, obj, vict_obj, to);
-    return;
+      return perform_act(str, ch, obj, vict_obj, to);
+    return NULL;
   }
   /* ASSUMPTION: at this point we know type must be TO_NOTVICT
    or TO_ROOM or TO_ROLLS */
@@ -2579,7 +2623,7 @@ void act(const char *str, int hide_invisible, struct char_data * ch,
     mudlog("SYSERR: no valid target to act()!", NULL, LOG_SYSLOG, TRUE);
     sprintf(buf, "Invocation: act('%s', '%d', char_data, obj_data, vict_obj, '%d').", str, hide_invisible, type);
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-    return;
+    return NULL;
   }
   
   if (ch && IS_ASTRAL(ch) && !hide_invisible)
@@ -2596,7 +2640,7 @@ void act(const char *str, int hide_invisible, struct char_data * ch,
                && !CAN_SEE(to, ch)))
         perform_act(str, ch, obj, vict_obj, to);
     }
-    return;
+    return NULL;
   }
   
   for (; to; to = next)
@@ -2605,11 +2649,29 @@ void act(const char *str, int hide_invisible, struct char_data * ch,
       next = to->next_in_veh;
     else
       next = to->next_in_room;
-    if (SENDOK(to)
-        && !(hide_invisible && ch && !CAN_SEE(to, ch))
-        && (to != ch) && !(PLR_FLAGGED(to, PLR_REMOTE) || PLR_FLAGGED(to, PLR_MATRIX))
-        && (type == TO_ROOM || type == TO_ROLLS || (to != vict_obj)))
+    if (can_send_act_to_target(ch, hide_invisible, obj, vict_obj, to, type))
       perform_act(str, ch, obj, vict_obj, to);
   }
+  return NULL;
 }
 #undef SENDOK
+
+#ifdef USE_DEBUG_CANARIES
+void check_memory_canaries() {
+  // Check every room in the world.
+  for (int world_index = 0; world_index < top_of_world; world_index++) {
+    // Check every direction that exists for this room.
+    for (int direction_index = 0; direction_index <= DOWN; direction_index++) {
+      if (world[world_index].dir_option[direction_index])
+        assert(world[world_index].dir_option[direction_index]->canary == CANARY_VALUE);
+    }
+    // Check the room itself.
+    assert(world[world_index].canary == CANARY_VALUE);
+  }
+  
+  // Check every object in the game.
+  for (int obj_index = 0; obj_index < top_of_objt; obj_index++) {
+    assert(obj_proto[obj_index].canary == CANARY_VALUE);
+  }
+}
+#endif

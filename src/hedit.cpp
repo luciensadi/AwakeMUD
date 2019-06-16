@@ -219,11 +219,12 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
           int             counter;
           int             counter2;
           int             found = 0;
-          for (counter = 0; counter < top_of_matrix + 1; counter++) {
+          for (counter = 0; counter <= top_of_matrix; counter++) {
             if (!found) {
               /* check if current virtual is bigger than our virtual */
               if (matrix[counter].vnum > d->edit_number) {
                 // now, zoom backwards through the list copying over
+                // TODO: Okay, but what if top_of_matrix == top_of_matrix_array - 1? SIGSEGV right? -LS
                 for (counter2 = top_of_matrix + 1; counter2 > counter; counter2--) {
                   matrix[counter2] = matrix[counter2 - 1];
                 }

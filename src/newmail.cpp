@@ -17,7 +17,6 @@
 
 extern MYSQL *mysql;
 extern int mysql_wrapper(MYSQL *mysql, const char *buf);
-extern char *prepare_quotes(char *dest, const char *str);
 
 // Ensure we have enough space for the query cruft plus a fully-quoted mail.
 char mail_query_buf[300 + (MAX_MAIL_SIZE * 2 + 1)];
@@ -41,7 +40,7 @@ void raw_store_mail(long to, long from_id, const char *from_name, const char *me
   // Note: We trust that whoever is calling this has already validated that the message fits in the query buffer.
   
   char prepared_quote_buf[2 * strlen(message_pointer) + 1];
-  prepare_quotes(prepared_quote_buf, message_pointer);
+  prepare_quotes(prepared_quote_buf, message_pointer, sizeof(prepared_quote_buf) / sizeof(prepared_quote_buf[0]));
   
   sprintf(mail_query_buf, "INSERT INTO pfiles_mail (sender_id, sender_name, recipient, text) VALUES (%ld, '%s', %ld, '%s');",
           from_id,

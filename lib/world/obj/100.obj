@@ -55,31 +55,6 @@ Material:	metal
 	Val9:	-1
 	Val10:	30
 BREAK
-#10002
-Keywords:	magazine 1000 peas
-Name:	a magazine of 1000 peas
-RoomDesc:$
-An unfinished object is lying here.~
-LookDesc:$
-It looks pretty much like an unfinished object~
-Type:	Gun Magazine
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	0.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	1000
-	Val1:	5
-BREAK
 #10003
 Keywords:	ring invisibility test
 Name:	A tester's ring of invisibility
@@ -184,35 +159,6 @@ Material:	metal
 [AFFECT 5]
 	Location:	Target Numbers
 	Modifier:	-50
-BREAK
-#10006
-Keywords:	lsa ammunition cell chunk black alloy strangely port
-Name:	an LSA ammunition cell
-RoomDesc:$
-A chunk of black alloy with a strangely-shaped port has been left here.~
-LookDesc:$
-A simple block of black alloy with an intricate port in the top. Etched along
-the side are the words, "Any sufficiently-advanced technology is
-indistinguishable from magic." 
-~
-Type:	Gun Magazine
-WearFlags:	1
-ExtraFlags:	101000001000
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	1.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	1000000
-	Val1:	12
-	Val2:	1
 BREAK
 #10007
 Keywords:	sleek rifle suppressor
@@ -608,6 +554,88 @@ Material:	metal
 	Val0:	4
 	Val1:	2
 BREAK
+#10022
+Keywords:	cheat deck cyberdeck immortal staff
+Name:	an Immortal's cheat cyberdeck
+RoomDesc:$
+Report this deck to an imm.~
+LookDesc:$
+Great for testing. 
+~
+Type:	Cyberdeck
+WearFlags:	1
+ExtraFlags:	101000001000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	30
+	Val1:	1783793664
+	Val2:	1783793664
+	Val3:	1783793664
+	Val4:	1783793664
+	Val6:	5
+BREAK
+#10023
+Keywords:	cheat bod 20
+Name:	cheat bod 20
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	1200000
+	AvailTN:	16
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	20
+	Val2:	1200
+BREAK
+#10024
+Keywords:	cheat evas 20
+Name:	cheat evas 20
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	1200000
+	AvailTN:	16
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	20
+	Val2:	1200
+BREAK
 #10025
 Keywords:	testing pocket secretary
 Name:	a testing pocket secretary
@@ -629,5 +657,57 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+BREAK
+#10026
+Keywords:	cheat masking 20
+Name:	cheat masking 20
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	800000
+	AvailTN:	16
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	20
+	Val2:	800
+BREAK
+#10027
+Keywords:	cheat sensor 20
+Name:	cheat sensor 20
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	800000
+	AvailTN:	16
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	20
+	Val2:	800
 BREAK
 END

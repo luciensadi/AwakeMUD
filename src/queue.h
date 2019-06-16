@@ -101,7 +101,7 @@ bool queueClass<T>::DeQueue()
   RemoveItem(tail);
   // then we zoom through the list and find out where the tail should really
   // be
-  register nodeStruct<T> *temp = head;
+  nodeStruct<T> *temp = head;
   while (temp)
     temp = temp->next;
 

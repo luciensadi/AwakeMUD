@@ -24,7 +24,6 @@ extern class helpList Help;
 extern class helpList WizHelp;
 extern MYSQL *mysql;
 extern int mysql_wrapper(MYSQL *mysql, const char *query);
-char *prepare_quotes(char *dest, const char *str);
 
 // extern funcs
 extern void print_object_location(int, struct obj_data *, struct char_data *, int);
@@ -32,8 +31,8 @@ extern void print_object_location(int, struct obj_data *, struct char_data *, in
 
 int objList::PrintList(struct char_data *ch, const char *arg)
 {
-  register nodeStruct<struct obj_data *> *temp = head;
-  register int num = 0;
+  nodeStruct<struct obj_data *> *temp = head;
+  int num = 0;
 
   for (;temp; temp = temp->next)
     if (temp->data && CAN_SEE_OBJ(ch, temp->data)
@@ -55,7 +54,7 @@ void objList::Traverse(void (*func)(struct obj_data *))
 int objList::CountObj(int num)
 {
   int counter = 0;
-  register nodeStruct<struct obj_data *> *temp;
+  nodeStruct<struct obj_data *> *temp;
   for (temp = head; temp; temp = temp->next)
     if (num == GET_OBJ_RNUM(temp->data))
       counter++;
@@ -67,7 +66,7 @@ int objList::CountObj(int num)
 // object whose object rnum matches num
 struct obj_data *objList::FindObj(int num)
 {
-  register nodeStruct<struct obj_data *> *temp;
+  nodeStruct<struct obj_data *> *temp;
   for (temp = head; temp; temp = temp->next)
     if (num == GET_OBJ_RNUM(temp->data))
       return temp->data;
@@ -80,8 +79,8 @@ struct obj_data *objList::FindObj(int num)
 // list
 struct obj_data *objList::FindObj(struct char_data *ch, char *name, int num)
 {
-  register nodeStruct<struct obj_data *> *temp = head;
-  register int i = 0;
+  nodeStruct<struct obj_data *> *temp = head;
+  int i = 0;
 
   while (temp && (i <= num))
   {
@@ -122,6 +121,37 @@ void objList::UpdateObjs(const struct obj_data *proto, int rnum)
         affect_total(temp->data->carried_by);
       else if (temp->data->worn_by)
         affect_total(temp->data->worn_by);
+    }
+  }
+}
+
+void objList::UpdateObjsIDelete(const struct obj_data *proto, int rnum, int new_rnum)
+{
+  static nodeStruct<struct obj_data *> *temp;
+  static struct obj_data old;
+  
+  for (temp = head; temp; temp = temp->next)
+  {
+    if (temp->data->item_number == rnum) {
+      old = *temp->data;
+      *temp->data = *proto;
+      temp->data->in_room = old.in_room;
+      temp->data->item_number = rnum;
+      temp->data->carried_by = old.carried_by;
+      temp->data->worn_by = old.worn_by;
+      temp->data->worn_on = old.worn_on;
+      temp->data->in_obj = old.in_obj;
+      temp->data->contains = old.contains;
+      temp->data->next_content = old.next_content;
+      temp->data->obj_flags.condition = old.obj_flags.condition;
+      temp->data->restring = old.restring;
+      temp->data->photo = old.photo;
+      if (temp->data->carried_by)
+        affect_total(temp->data->carried_by);
+      else if (temp->data->worn_by)
+        affect_total(temp->data->worn_by);
+      
+      temp->data->item_number = new_rnum;
     }
   }
 }
@@ -190,11 +220,11 @@ void objList::UpdateCounters(void)
             ch;
            ch = OBJ->in_veh ? ch->next_in_veh : ch->next_in_room) {
         if (AFF_FLAGGED(ch, AFF_PACKING)) {
-          if (!--GET_OBJ_VAL(OBJ, 3)) {
-            if (GET_OBJ_VAL(OBJ, 2)) {
+          if (!--GET_WORKSHOP_UNPACK_TICKS(OBJ)) {
+            if (GET_WORKSHOP_IS_SETUP(OBJ)) {
               send_to_char(ch, "You finish packing up %s.\r\n", GET_OBJ_NAME(OBJ));
               act("$n finishes packing up $P", FALSE, ch, 0, OBJ, TO_ROOM); // TODO: Does this work if they're in a vehicle too?
-              GET_OBJ_VAL(OBJ, 2)--;
+              GET_WORKSHOP_IS_SETUP(OBJ) = 0;
               
               // Handle the room's workshop[] array.
               if (OBJ->in_room != NOWHERE)
@@ -202,7 +232,7 @@ void objList::UpdateCounters(void)
             } else {
               send_to_char(ch, "You finish setting up %s.\r\n", GET_OBJ_NAME(OBJ));
               act("$n finishes setting up $P", FALSE, ch, 0, OBJ, TO_ROOM);
-              GET_OBJ_VAL(OBJ, 2)++;
+              GET_WORKSHOP_IS_SETUP(OBJ) = 1;
               
               // Handle the room's workshop[] array.
               if (OBJ->in_room != NOWHERE)
@@ -295,7 +325,7 @@ void objList::UpdateCounters(void)
 // structures come into effect
 void objList::UpdateNums(int num)
 {
-  register nodeStruct<struct obj_data *> *temp;
+  nodeStruct<struct obj_data *> *temp;
   // just loop through the list and update
   for (temp = head; temp; temp = temp->next)
     if (GET_OBJ_RNUM(temp->data) >= num)
@@ -345,8 +375,9 @@ void objList::RemoveQuestObjs(int id)
   for (temp = head; temp; temp = next) {
     next = temp->next;
 
-    if (temp->data->obj_flags.quest_id == id)
+    if (temp->data->obj_flags.quest_id == id) {
       extract_obj(temp->data);
+    }
   }
 }
 

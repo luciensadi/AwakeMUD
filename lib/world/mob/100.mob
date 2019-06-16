@@ -32,7 +32,7 @@ AttackType:	Blast
 	Ballistic:	50
 	Impact:	50
 [SKILLS]
-	rifles:	50
+	Rifles:	50
 BREAK
 #10001
 Keywords:	responsive target dummy
@@ -67,7 +67,7 @@ AttackType:	Rifle
 	Ballistic:	500
 	Impact:	500
 [SKILLS]
-	rifles:	50
+	Rifles:	50
 BREAK
 #10002
 Keywords:	armed guard
@@ -101,7 +101,7 @@ AttackType:	Rifle
 	Ballistic:	10000
 	Impact:	10000
 [SKILLS]
-	rifles:	50
+	Rifles:	50
 BREAK
 #10004
 Keywords:	receptionist
@@ -331,9 +331,9 @@ DefaultPos:	Standing
 	Ballistic:	10000
 	Impact:	10000
 [SKILLS]
-	sorcery:	50
-	conjuring:	50
-	Arcane language:	50
+	Sorcery:	50
+	Conjuring:	50
+	Arcane Language:	50
 BREAK
 #10011
 Keywords:	banzen retired monk
@@ -435,7 +435,7 @@ DefaultPos:	Standing
 	Ballistic:	50
 	Impact:	50
 [SKILLS]
-	athletics:	50
+	Athletics:	50
 BREAK
 #10014
 Keywords:	greasy mechanic mike broad-shouldered shouldered man coveralls
@@ -506,6 +506,38 @@ DefaultPos:	Standing
 [POINTS]
 	Height:	120
 	Weight:	50
+[SKILLS]
+BREAK
+#10016
+Keywords:	amorphous blob shifting code george long-suffering suffering shopkeeper
+Name:	George, the long-suffering shopkeeper
+RoomDesc:$
+An amorphous blob of shifting code stands here tolerantly. 
+
+~
+LookDesc:$
+He's apparently used to all the abuse builders hand out to him, possibly owing
+to the fact that his gelatinous skin is so thick that no trouble can truly
+perturb him. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
 [SKILLS]
 BREAK
 END

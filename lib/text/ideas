@@ -1,1 +1,17 @@
 Lucien   (Apr  7) [10000] Add HELP SPERETHIEL to explain what the language actually is.
+Testmort (May 22) [10014] Given area built as A-B-C, if shooting from A at someone in C, have a chance of hitting randos in B when you miss.
+Lucien   (May 22) [10001] let the STOP command stop you from fighting
+Lucien   (May 26) [70302] limit pgroup command columns to 4 for better phone usability
+Lucien   (May 26) [70316] TOGGLE colums to 2 for phones
+Lucien   (May 26) [60502] Add feedback for zswitch command
+Lucien   (May 28) [60504] HELP TRAINING does not exist, make this a keyword for HELP TRAIN
+Lucien   (May 28) [60504] Have the QUEST command (nonexist) give feedback that they should be asking the NPC for a job verbally.
+Lucien   (May 28) [60504] Allow qedit to set a -1 reward
+Lucien   (May 28) [60504] Specify maximum allowable rep value in qedit
+Lucien   (May 28) [60504] Add a message to SKILLS for empty skill list ("You haven't learned any skills yet." or something)
+Lucien   (May 29) [60505] add HELP UNPRACTICE and HELP UNTRAIN; link them to their unflavored counterparts
+Lucien   (May 30) [60559] AFFECT -> STATUS mapping
+Paragorn (Jun 12) [70512] wt history should just show history
+Paragorn (Jun 12) [70513] Give Hollow Scythe (70502) some things to mutter, like 'I used to think I could control ducks with my mind, but it turns out ducks and I just have very similar ideas about what stuff ducks should do'
+Paragorn (Jun 12) [70511] Add a spec proc at 70511 (inside bus) that prevents you from going west without meeting some precondition
+Paragorn (Jun 12) [70511] Add trap spec-procs and ability to detect and disarm traps.

@@ -1,0 +1,42 @@
+#72103
+Keeper:	72100
+ProfitBuy:	1.00
+ProfitSell:	0.80
+Random:	20
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough 'yen. Maybe try the Stuffer Shack down the road?
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen. Genesis, healthy food for a healthy life!
+Sell:	Here's your %d nuyen.
+Name:	A Genesis vendor
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	72104
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	72103
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	72102
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	72101
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	72100
+		Type:	Always
+		Stock:	0
+BREAK
+END

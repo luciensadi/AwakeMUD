@@ -1,0 +1,557 @@
+#70500
+Name:	Entrance to the West Tacoma Junkyard
+Desc:$
+The smooth asphalt of East Anselm dead-ends here in front of a battered old
+chain-link fence, giving way to a flat stretch of gravel and grime. Wired to
+the fence is a sign that explains in cordial terms that you have arrived at
+the West Tacoma Junkyard, and that trespassers will be shot. Heavy wheel
+tracks in the gravel indicate that some sort of machinery moves through here
+often. 
+~
+Flags:	1000000010000000000010000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	1
+Cover:	7
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	1
+	BackgroundType:	8
+[EXIT east]
+	ToVnum:	2070
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	gate chain-link link
+	Desc:$
+A chain-link gate hangs from rusty hinges. 
+~
+	ToVnum:	70501
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70501
+Name:	Just Inside the Gates
+Desc:$
+Claustrophobic towers of crushed cars and metal debris choke the pathway here,
+leaving barely enough room to squeeze a vehicle through. A ^rdeep crimson^n sedan
+has slid partially off one of the piles and hangs precariously overhead. 
+~
+NightDesc:$
+   The darkness is pervasive here, the few lights that filter in from the
+street casting deep pools of shadow throughout the Junkyard. The vague bulk of
+a car that's slid from its pile hangs overhead, an ominous dark patch in the
+night sky above. 
+~
+Flags:	1000000010000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	1
+Cover:	7
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	1
+	BackgroundType:	8
+[EXIT north]
+	ToVnum:	70502
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	gate chain-link link
+	Desc:$
+A chain-link gate stands between the Junkyard and East Anselm. 
+~
+	ToVnum:	70500
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	70503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	70504
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70502
+Name:	Inside the West Tacoma Junkyard
+Desc:$
+tbd, it's a junkyard with gravel cover and piles of rusting machinery. Got a
+guard booth and an office, maybe a broken-down bus through a hidden exit or
+something that has quest-related things 
+~
+Flags:	1000000010000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	1
+Cover:	7
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	1
+	BackgroundType:	8
+[EXIT south]
+	ToVnum:	70501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	70505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70503
+Name:	A Clearing Amongst the Piles
+Desc:$
+A sweeping expanse of gravel marks this surprisingly-open area, kept free of
+the large piles of crushed cars and mechanical debris that mar the other areas
+of the Junkyard. The few weeds that sprout up here and there are liberally
+coated with oil and other questionable fluids, suggesting that this might be a
+prime place to work on vehicles. 
+~
+Flags:	1100000110000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	1
+Cover:	7
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	1
+	BackgroundType:	8
+[EXIT north]
+	ToVnum:	70504
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	70501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	70512
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	70507
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70504
+Name:	Inside the West Tacoma Junkyard
+Desc:$
+tbd, it's a junkyard with gravel cover and piles of rusting machinery. Got a
+guard booth and an office, maybe a broken-down bus through a hidden exit or
+something that has quest-related things 
+~
+Flags:	1000000010000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	1
+Cover:	7
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	1
+	BackgroundType:	8
+[EXIT east]
+	ToVnum:	70501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	70503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	70506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70505
+Name:	Inside the West Tacoma Junkyard
+Desc:$
+tbd, it's a junkyard with gravel cover and piles of rusting machinery. Got a
+guard booth and an office, maybe a broken-down bus through a hidden exit or
+something that has quest-related things 
+~
+Flags:	1000000010000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	1
+Cover:	7
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	1
+	BackgroundType:	8
+[EXIT northeast]
+	ToVnum:	70509
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	70502
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	70506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70506
+Name:	Inside the West Tacoma Junkyard
+Desc:$
+tbd, it's a junkyard with gravel cover and piles of rusting machinery. Got a
+guard booth and an office, maybe a broken-down bus through a hidden exit or
+something that has quest-related things 
+~
+Flags:	1000000010000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	1
+Cover:	7
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	1
+	BackgroundType:	8
+[EXIT northeast]
+	ToVnum:	70505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	70504
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	70508
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70507
+Name:	Amidst a Cluster of Forklifts
+Desc:$
+A moldering circle of forklifts has been set up here, most of the once-proud
+vehicles being in states of visible disrepair. An abandoned toolbox in a pile
+of greasy rags attests to someone having done at least a little maintenance
+here recently. 
+~
+Flags:	1000000010000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	1
+Cover:	7
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	1
+	BackgroundType:	8
+[EXIT northwest]
+	ToVnum:	70503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70508
+Name:	Inside the West Tacoma Junkyard
+Desc:$
+tbd, it's a junkyard with gravel cover and piles of rusting machinery. Got a
+guard booth and an office, maybe a broken-down bus through a hidden exit or
+something that has quest-related things 
+~
+Flags:	1000000010000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	1
+Cover:	7
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	1
+	BackgroundType:	8
+[EXIT northeast]
+	ToVnum:	70506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70509
+Name:	Inside the West Tacoma Junkyard
+Desc:$
+tbd, it's a junkyard with gravel cover and piles of rusting machinery. Got a
+guard booth and an office, maybe a broken-down bus through a hidden exit or
+something that has quest-related things 
+~
+Flags:	1000000010000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	1
+Cover:	7
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	1
+	BackgroundType:	8
+[EXIT south]
+	ToVnum:	70510
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	70505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70510
+Name:	Beneath a Rusting Bus
+Desc:$
+The massive bulk of an old Hellhound bus blots out the sky here, keeping this
+area of the Junkyard surprisingly dry. The cars here have been well-stripped
+of salvageable parts, leaving only rusted skeletons behind. 
+~
+Flags:	10000000000000001000
+SecType:	City
+MatrixExit:	0
+Crowd:	1
+Cover:	7
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	8
+[EXIT north]
+	ToVnum:	70509
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Keywords:	corrugated
+	Desc:$
+A sheet of corrugated metal has been cleverly worked into the bottom of the
+bus to provide access while being largely unobtrusive. 
+~
+	ToVnum:	70511
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	8
+BREAK
+#70511
+Name:	Inside a Rusted-Out Hellhound Bus
+Desc:$
+You are in an unfinished room.
+~
+Flags:	11000000000000001000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	4
+X:	5
+Y:	5
+Z:	2.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	8
+[EXIT west]
+	ToVnum:	70513
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	corrugated
+	Desc:$
+A sheet of corrugated metal on a sliding hinge allows egress here. 
+~
+	ToVnum:	70510
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70512
+Name:	A Musty Junkyard Office
+Desc:$
+A buzzing fluorescent bar lamp hanging from the ceiling illuminates one of the
+grungiest offices this side of the Cascades. Though a pegboard of tools hangs
+from the eastern wall, it doesn't appear to have been touched within the last
+decade-- or, if it has, its owner has been sure to apply a liberal coating of
+dust to hide the fact. Chunky wooden bins filled with potentially-useful parts
+take up what little free space there is here, leaving barely enough room to
+open the door and stand in front of the massive hunk of debris being used as a
+desk. 
+~
+Flags:	1000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	1
+X:	6
+Y:	8
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	70503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70513
+Name:	The Rear of a Rusted-Out Hellhound Bus
+Desc:$
+A pile of junk and soiled mattresses has been gathered here into some kind of
+horrid nest. Take-out containers and discarded beer cans litter the floor, and
+the windows here have been completely obscured with smears of some dark
+material. 
+~
+Flags:	1000000000000001000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	4
+X:	5
+Y:	5
+Z:	2.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	3
+	BackgroundType:	8
+[EXIT east]
+	ToVnum:	70511
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

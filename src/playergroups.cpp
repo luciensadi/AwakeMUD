@@ -25,7 +25,6 @@
 extern MYSQL *mysql;
 
 // Prototypes from other files.
-char *prepare_quotes(char *dest, const char *str);
 int mysql_wrapper(MYSQL *mysql, const char *query);
 
 // Prototypes from this file.

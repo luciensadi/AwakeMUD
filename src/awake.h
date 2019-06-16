@@ -361,7 +361,9 @@ enum {
 #define PRF_SHOWGROUPTAG        41
 #define PRF_KEEPALIVE           42
 #define PRF_SCREENREADER        43
-#define PRF_MAX   		          44
+#define PRF_NOCOLOR             44
+#define PRF_NOPROMPT            45
+#define PRF_MAX   		          46
 
 /* log watch */
 
@@ -482,18 +484,20 @@ enum {
 #define ROOM_BFS_MARK           15  /* (R) breath-first srch mrk */
 #define ROOM_LOW_LIGHT          16  /* Room viewable with ll-eyes */
 #define ROOM_NO_RADIO           18  /* Radio is sketchy and phones dont work */
-#define ROOM_NOBIKE		19
+#define ROOM_NOBIKE		          19
 #define ROOM_FREEWAY            20  /* Room is a medicin lodge   */
 #define ROOM_FALL               21  // room is a 'fall' room
 #define ROOM_ROAD               22
 #define ROOM_GARAGE             23
-#define ROOM_SENATE             24
+#define ROOM_STAFF_ONLY         24
 #define ROOM_NOQUIT             25
 #define ROOM_SENT               26
-#define ROOM_ASTRAL 		27 // Astral room
-#define ROOM_NOGRID    		28
-#define ROOM_STORAGE		29
-#define ROOM_MAX        	30
+#define ROOM_ASTRAL 	       	  27 // Astral room
+#define ROOM_NOGRID    	       	28
+#define ROOM_STORAGE	        	29
+#define ROOM_NO_TRAFFIC         30
+#define ROOM_ELEVATOR_SHAFT     31 // Don't set this manually
+#define ROOM_MAX        	      32
 
 #define NORMAL		0
 #define LOWLIGHT	1
@@ -517,6 +521,7 @@ enum {
 #define EX_PICKPROOF            (1 << 3)   /* Lock can't be picked      */
 #define EX_DESTROYED            (1 << 4)   /* door has been destroyed   */
 #define EX_HIDDEN               (1 << 5)   /* exit is hidden            */
+#define EX_ASTRALLY_WARDED      (1 << 6)   /* Exit blocks passage of astral beings */
 
 
 /* spirit powers */
@@ -618,9 +623,23 @@ enum {
 #define MASK_DUAL		(1 << 2)
 #define MASK_COMPLETE		(1 << 3)
 
-#define AURA_POWERSITE		13
-#define AURA_PLAYERCOMBAT	15
-#define AURA_PLAYERDEATH	16
+#define AURA_VIOLENCE      0
+#define AURA_TORTURE       1
+#define AURA_HATRED        2
+#define AURA_GENOCIDE      3
+#define AURA_RITUAL_MAGIC  4
+#define AURA_SACRIFICE     5
+#define AURA_WORSHIP       6
+#define AURA_DEATH         7
+#define AURA_POLLUTION     8
+#define AURA_CONCENTRATED  9
+#define AURA_LOST_HUMANITY 10
+#define AURA_STERILITY     11
+#define AURA_CONFUSION     12
+#define AURA_POWERSITE		 13
+#define AURA_BLOOD_MAGIC   14
+#define AURA_PLAYERCOMBAT	 15
+#define AURA_PLAYERDEATH	 16
 
 #define COMBAT			1
 #define DETECTION		2
@@ -823,6 +842,10 @@ enum {
 
 #define MAX_SKILLS		  133
 
+// Skill type definitions.
+#define SKILL_TYPE_ACTIVE         0
+#define SKILL_TYPE_KNOWLEDGE      1
+
 /* TODO: Not yet implemented.
 #define SKILL_SIGN_LANGUAGE       133
 #define SKILL_IMMORTAL_LANGUAGE   134
@@ -916,21 +939,22 @@ enum {
 #define TYPE_BIFURCATE        327
 #define TYPE_CRASH            328
 #define TYPE_DUMPSHOCK        329
-#define TYPE_BLACKIC	      330
-#define TYPE_SUFFERING          399
-#define TYPE_EXPLOSION          400
-#define TYPE_SCATTERING         401
-#define TYPE_FALL               402
-#define TYPE_DROWN              403
-#define TYPE_ALLERGY            404
-#define TYPE_BIOWARE            405
-#define TYPE_RECOIL             406
-#define TYPE_RAM  		407
-#define TYPE_DRAIN		408
-#define TYPE_FUMES		409
-#define TYPE_FIRE		410
-#define TYPE_ACID		411
-#define TYPE_POLTERGEIST	412
+#define TYPE_BLACKIC	        330
+#define TYPE_SUFFERING        399
+#define TYPE_EXPLOSION        400
+#define TYPE_SCATTERING       401
+#define TYPE_FALL             402
+#define TYPE_DROWN            403
+#define TYPE_ALLERGY          404
+#define TYPE_BIOWARE          405
+#define TYPE_RECOIL           406
+#define TYPE_RAM              407
+#define TYPE_DRAIN            408
+#define TYPE_FUMES            409
+#define TYPE_FIRE             410
+#define TYPE_ACID             411
+#define TYPE_POLTERGEIST      412
+#define TYPE_ELEVATOR         413
 
 #define WEAP_EDGED		0
 #define WEAP_CLUB		1
@@ -1010,7 +1034,8 @@ enum {
 #define ITEM_DESIGN	        40
 #define ITEM_QUEST	        41
 #define ITEM_GUN_AMMO	      42
-#define NUM_ITEMS	          43
+#define ITEM_KEYRING        43
+#define NUM_ITEMS	          44
 
 
 /* take/wear flags: used by obj_data.obj_flags.wear_flags */
@@ -1740,7 +1765,14 @@ enum {
 #define SCMD_REFLECT	1
 #define SCMD_SDEFENSE	2
 
+/* do_practice */
+#define SCMD_UNPRACTICE 1
+
+/* do_train */
+#define SCMD_UNTRAIN 1
+
 /* do_crash_mud */
+#define SCMD_NOOP 0 // AKA 'this invocation does nothing'.
 #define SCMD_BOOM 1337
 
 /* END SUBCOMMANDS SECTION */
@@ -1947,7 +1979,7 @@ enum {
 #define SMALL_BUFSIZE             1024
 #define LARGE_BUFSIZE    (MAX_SOCK_BUF - GARBAGE_SPACE - MAX_PROMPT_LENGTH)
 
-#define MAX_STRING_LENGTH         8192
+#define MAX_STRING_LENGTH         32768
 #define MAX_INPUT_LENGTH          2048     /* Max length per *line* of input */
 #define MAX_RAW_INPUT_LENGTH      4096     /* Max size of *raw* input */
 #define MAX_MESSAGES              100
@@ -2002,6 +2034,7 @@ enum {
 #define OBJ_NEWBIE_RADIO           60531
 #define OBJ_MULTNOMAH_VISA         1
 #define OBJ_MAP_OF_SEATTLE         2041
+#define OBJ_ELEVATOR_SHAFT_KEY     998
 
 /* ban struct */
 struct ban_list_element
@@ -2012,5 +2045,83 @@ struct ban_list_element
   char name[MAX_NAME_LENGTH+1];
   struct ban_list_element *next;
 };
+
+// Above this, you will lose the newbie flag.
+#define NEWBIE_KARMA_THRESHOLD     25
+
+// Misc defines from spec_procs.cpp
+#define LIBRARY_SKILL    3
+#define NEWBIE_SKILL    6
+#define NORMAL_MAX_SKILL  8
+#define LEARNED_LEVEL    12
+#define RENT_FACTOR 1
+
+// Definitions for message history.
+/* Adding a new channel? Do the following:
+   - Add a COMM_CHANNEL_X definition for it and increment NUM_COMM_CH by 1.
+   - Add a handler for it in raw_message_history() in act.comm.cpp.
+   - Add a string for it in message_history_channels[] in constants.cpp.
+ */
+
+#define NUM_MESSAGES_TO_RETAIN     20
+
+#define COMM_CHANNEL_HIRED         0
+#define COMM_CHANNEL_NEWBIE        1
+#define COMM_CHANNEL_OOC           2
+#define COMM_CHANNEL_OSAYS         3
+#define COMM_CHANNEL_PAGES         4
+#define COMM_CHANNEL_PHONE         5
+#define COMM_CHANNEL_RPE           6
+#define COMM_CHANNEL_RADIO         7
+#define COMM_CHANNEL_SAYS          8
+#define COMM_CHANNEL_SHOUTS        9
+#define COMM_CHANNEL_TELLS         10
+#define COMM_CHANNEL_WTELLS        11
+
+#define NUM_COMMUNICATION_CHANNELS 12
+
+
+/* Error codes. */
+#define ERROR_BITFIELD_SIZE_EXCEEDED           10
+#define ERROR_LIBSODIUM_INIT_FAILED            11
+#define ERROR_UNKNOWN_SUBCOMMAND_TO_INDEX_BOOT 12
+#define ERROR_OPENING_INDEX_FILE               13
+#define ERROR_BOOT_ZERO_RECORDS_COUNTED        14
+#define ERROR_ZONEREAD_PREMATURE_EOF           15
+#define ERROR_ZONEREAD_FORMAT_ERROR            16
+#define ERROR_MYSQL_DATABASE_NOT_FOUND         17
+#define ERROR_ARRAY_OUT_OF_BOUNDS              18
+
+// Materials.
+#define MATERIAL_PAPER        0
+#define MATERIAL_WOOD         1
+#define MATERIAL_GLASS        2
+#define MATERIAL_FABRIC       3
+#define MATERIAL_LEATHER      4
+#define MATERIAL_BRICK        5
+#define MATERIAL_PLASTIC      6
+#define MATERIAL_ADV_PLASTICS 7
+#define MATERIAL_METAL        8
+#define MATERIAL_ORICHALCUM   9
+#define MATERIAL_ELECTRONICS  10
+#define MATERIAL_COMPUETERS   11
+#define MATERIAL_TOXIC_WASTES 12
+#define MATERIAL_ORGANIC      13
+#define MATERIAL_STONE        14
+#define MATERIAL_CERAMIC      15
+#define MATERIAL_CONCRETE     16
+#define NUM_MATERIALS         17
+
+#define MAX_KEYRING_WEIGHT    1.0
+
+// Note: If you change this, you'll have to update zone file loading etc as well.
+#define NUM_ZONE_EDITOR_IDS   5
+
+#define LIST_COMMAND_LIMIT 500
+
+// Stack / memory canaries.
+#ifdef USE_DEBUG_CANARIES
+#define CANARY_VALUE 31337
+#endif
 
 #endif

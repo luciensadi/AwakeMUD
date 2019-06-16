@@ -25,6 +25,7 @@ int MAX_PLAYERS = 300;
 int max_filesize = 50000;
 int max_bad_pws = 3;
 int nameserver_is_slow = FALSE;
+int ELEVATOR_SHAFT_FALL_RATING = 6;
 
 const char *MENU =
   "\r\n"
@@ -48,11 +49,10 @@ const char *QMENU =
 const char *GREETINGS =
   "\r\n"
   "Administration Email: luciensadi@gmail.com\r\n"
-  "The following mud is based on CircleMUD 3.0 by Jeremy Elson.  It is a\r\n"
-  "derivative of DikuMUD (GAMMA 0.0) by Hans Henrik Staerfeldt, Katja Nyboe,\r\n"
-  "Tom Madsen, Michael Seifert, and Sebastian Hammer.\r\n"
-  "AwakeMUD Code Level 0.8.20 BETA, by Flynn, Fastjack, Rift, Washu, and Che.\r\n"
-  "AwakeMUD Community Edition 0.9.1, by Lucien, Finster, and the community.\r\n"
+  "Credit to Jeremy Elson, Hans Henrik Staerfeldt, Katja Nyboe, Tom Madsen,\r\n"
+  "Michael Seifert, and Sebastian Hammer for their work on predecessor games.\r\n"
+  "Forked from AwakeMUD 0.8.20 BETA, by Flynn, Fastjack, Rift, Washu, and Che.\r\n"
+  "This is AwakeMUD Community Edition 0.9.0, by Lucien, Finster, and the community.\r\n"
   "\r\n"
   "_____   .                    A            .              .   .       .\r\n"
   "o o o\\            .        _/_\\_                                  |\\\r\n"
@@ -80,7 +80,15 @@ const char *WELC_MESSG =
   "\r\n\r\n";
 
 const char *START_MESSG =
-  "Welcome to the future, 2064, where mankind has entered what the Mayans would\r\n"
-  "call the Sixth World.  New races, magic, and technology all clash in what we\r\n"
-  "call Awakened Worlds.  If you have never experienced this world before, typing\r\n"
-  "HELP NEWBIE will help you understand what exactly is going on here.\r\n\r\n";
+  "Welcome to the future, 2064, where humankind has entered what the Mayans would\r\n"
+  "call the Sixth World. You are entering a world of rampant corruption and twisted\r\n"
+  "mechanisms of power, a place where corporations overrule nations and life is cheap.\r\n"
+  "You have joined this world as a Shadowrunner, a person who works clandestine jobs\r\n"
+  "to make ends meet. You'll need to keep your wits about you if you want to survive.\r\n"
+  "\r\n"
+  "If you are using a screenreader or related assistive technology, please type\r\n"
+  "TOGGLE SCREENREADER to enable our assistive features.\r\n"
+  "\r\n"
+  "You are now in the tutorial area. If you ever need assistance, you can reach out\r\n"
+  "by typing NEWBIE <your question here>. Example: 'newbie Hello, how do I...'\r\n"
+  "\r\n";

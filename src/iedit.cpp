@@ -195,11 +195,11 @@ void iedit_disp_weapon_menu(struct descriptor_data * d)
 void iedit_disp_spells_menu(struct descriptor_data * d)
 {
   CLS(CH);
-  for (int counter = 1; counter <= MAX_SPELLS; counter += 3)
+  for (int counter = 1; counter < MAX_SPELLS; counter += 3)
     send_to_char(CH, "%2d) %-18s %2d) %-18s %2d) %-18s\r\n",
                  counter, spells[counter].name,
-                 counter + 1, counter + 1 <= MAX_SPELLS ? spells[counter + 1].name : "",
-                 counter + 2, counter + 2 <= MAX_SPELLS ? spells[counter + 2].name : "");
+                 counter + 1, counter + 1 < MAX_SPELLS ? spells[counter + 1].name : "",
+                 counter + 2, counter + 2 < MAX_SPELLS ? spells[counter + 2].name : "");
   
   send_to_char("Enter spell:\r\n", CH);
 }
@@ -207,7 +207,7 @@ void iedit_disp_spells_menu(struct descriptor_data * d)
 void iedit_disp_cybereyes_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int y = 0; y < NUM_EYEMODS+1; y += 2)
+  for (int y = 0; y <= NUM_EYEMODS; y += 2)
     send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", y+1, eyemods[y], y+2, y+1 < NUM_EYEMODS+1 ? eyemods[y+1] : "");
   sprintbit(GET_OBJ_VAL(OBJ, 3), eyemods, buf1);
   send_to_char(CH, "Set Options: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
@@ -216,7 +216,7 @@ void iedit_disp_cybereyes_menu(struct descriptor_data *d)
 void iedit_disp_firemodes_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int y = 1; y < 5; y++)
+  for (int y = MODE_SS; y <= MODE_FA; y++)
     send_to_char(CH, "  %d) %s\r\n", y, fire_mode[y]);
   sprintbit(GET_OBJ_VAL(OBJ, 10), fire_mode, buf1);
   send_to_char(CH, "Set Options: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
@@ -225,7 +225,7 @@ void iedit_disp_firemodes_menu(struct descriptor_data *d)
 void iedit_disp_mod_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int y = 1; y <= ENGINE_DIESEL; y++)
+  for (int y = ENGINE_ELECTRIC; y <= ENGINE_DIESEL; y++)
     send_to_char(CH, "  %d) %s\r\n", y, engine_type[y]);
   sprintbit(GET_OBJ_VAL(OBJ, 5), engine_type, buf1);
   send_to_char(CH, "Set Options: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
@@ -947,7 +947,7 @@ void iedit_disp_material_menu(struct descriptor_data *d)
 {
   CLS(CH);
   
-  for (register int counter = 0; counter < NUM_MATERIALS; ++counter)
+  for (int counter = 0; counter < NUM_MATERIALS; ++counter)
     send_to_char(CH, "%2d) %s\r\n", counter + 1, material_names[counter]);
   send_to_char("Enter material type, 0 to return: ", CH);
 }
@@ -956,7 +956,7 @@ void iedit_disp_patch_menu(struct descriptor_data *d)
 {
   CLS(CH);
   
-  for (register int counter = 0; counter < NUM_PATCHES; ++counter)
+  for (int counter = 0; counter < NUM_PATCHES; ++counter)
     send_to_char(CH, "%2d) %s\r\n", counter + 1, patch_names[counter]);
   send_to_char("Enter patch type, 0 to return: ", CH);
 }
@@ -964,7 +964,7 @@ void iedit_disp_patch_menu(struct descriptor_data *d)
 void iedit_disp_spell_type(struct descriptor_data *d)
 {
   CLS(CH);
-  for (register int counter = 0; counter <= MAX_SPELLS; counter += 2)
+  for (int counter = 0; counter <= MAX_SPELLS; counter += 2)
   {
     send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n",
                  counter + 1, spells[counter].name,
@@ -977,7 +977,7 @@ void iedit_disp_spell_type(struct descriptor_data *d)
 void iedit_disp_cybertype_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (register int counter = 0; counter < NUM_CYBER; counter += 2)
+  for (int counter = 0; counter < NUM_CYBER; counter += 2)
   {
     send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n",
                  counter + 1, cyber_types[counter],
@@ -1020,7 +1020,7 @@ void iedit_disp_rating_menu(struct descriptor_data *d)
 {
   CLS(CH);
   
-  for (register int counter = 0; counter < NUM_BARRIERS; ++counter)
+  for (int counter = 0; counter < NUM_BARRIERS; ++counter)
     send_to_char(CH, "%2d) %s\r\n", counter + 1, barrier_names[counter]);
   send_to_char("Enter construction category, 0 to return: ", CH);
 }
@@ -1047,7 +1047,7 @@ void iedit_disp_extra_menu(struct descriptor_data * d)
 void iedit_disp_aff_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (register int counter = 0; counter < AFF_MAX; counter += 2)
+  for (int counter = 0; counter < AFF_MAX; counter += 2)
     send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", counter + 1,
                  affected_bits[counter], counter + 2, counter + 1 < AFF_MAX ?
                  affected_bits[counter + 1] : "");
@@ -1129,7 +1129,7 @@ void iedit_disp_menu(struct descriptor_data * d)
                CCCYN(CH, C_CMP), d->edit_obj->text.name,
                CCNRM(CH, C_CMP));
   send_to_char(CH, "3) Room description:\r\n%s%s%s\r\n",
-               CCCYN(CH, C_CMP), d->edit_obj->text.room_desc,
+               CCGRN(CH, C_CMP), d->edit_obj->text.room_desc,
                CCNRM(CH, C_CMP));
   send_to_char(CH, "4) Look description: \r\n%s\r\n",
                d->edit_obj->text.look_desc ? d->edit_obj->text.look_desc :
@@ -1262,7 +1262,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             new_obj_index = new struct index_data[top_of_objt + 2];
             new_obj_proto = new struct obj_data[top_of_objt + 2];
             /* start counting through both tables */
-            for (counter = 0; counter < top_of_objt + 1; counter++) {
+            for (counter = 0; counter <= top_of_objt; counter++) {
               /* if we haven't found it */
               if (!found) {
                 /* check if current virtual is bigger than our virtual */
@@ -1458,8 +1458,13 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           d->edit_mode = IEDIT_WEAR;
           break;
         case '9':
-          send_to_char("Enter weight:", d->character);
-          d->edit_mode = IEDIT_WEIGHT;
+          if (GET_OBJ_TYPE(d->edit_obj) == ITEM_KEYRING) {
+            send_to_char("Keyrings are weightless by design.", d->character);
+            iedit_disp_menu(d);
+          } else {
+            send_to_char("Enter weight:", d->character);
+            d->edit_mode = IEDIT_WEIGHT;
+          }
           break;
         case 'a':
         case 'A':
@@ -1951,8 +1956,9 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           break;
         case ITEM_WEAPON:
         case ITEM_FIREWEAPON:
-          if (number < 0 || number > 4) {
-            send_to_char("Value must be between 0 and 4.\r\n", CH);
+          if (number < 0 || number > WEAPON_MAXIMUM_STRENGTH_BONUS) {
+            sprintf(buf, "Value must be between 0 and %d.\r\n", WEAPON_MAXIMUM_STRENGTH_BONUS);
+            send_to_char(buf, CH);
             iedit_disp_val3_menu(d);
             return;
           }

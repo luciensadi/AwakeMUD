@@ -1019,6 +1019,52 @@ Material:	metal
 	Val5:	7
 	Val6:	12
 BREAK
+#41
+Keywords:	call button elevator
+Name:	an elevator call button
+RoomDesc:$
+^cAn elevator call button is visible here.^n~
+LookDesc:$
+Perfect for summoning an elevator. Why don't you ^WPUSH^n it? 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#42
+Keywords:	panel
+Name:	an elevator control panel
+RoomDesc:$
+^cA panel of buttons allows you to control the lift.^n~
+LookDesc:$
+You shouldn't be able to look at this. Please alert staff. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
 #50
 Keywords:	flat panel display monitor terminal board floating
 Name:	A Floating Display Panel
@@ -1118,32 +1164,6 @@ Material:	paper
 	LegalPermit:	0
 [VALUES]
 	Val0:	25000
-BREAK
-#83
-Keywords:	can sprite drink
-Name:	A Can of Sprite
-RoomDesc:$
-This is a can of sprite with bubbles and everything~
-LookDesc:$
-It looks pretty much like an unfinished object~
-Type:	Gun Magazine
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	paper
-[POINTS]
-	Weight:	0.45
-	Barrier:	1
-	Cost:	60
-	AvailTN:	6
-	AvailDay:	3.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val0:	6
-	Val1:	24
-	Val2:	3
 BREAK
 #99
 Keywords:	a sign

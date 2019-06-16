@@ -57,6 +57,7 @@ int     modify_target(struct char_data *ch);
 int     damage_modifier(struct char_data *ch, char *rbuf);
 char *  capitalize(const char *source);
 char *  decapitalize_a_an(const char *source);
+char *  string_to_uppercase(const char *source);
 int     get_speed(struct veh_data *veh);
 int     negotiate(struct char_data *ch, struct char_data *tch, int comp, int basevalue, int mod, bool buy);
 float   gen_size(int race, bool height, int size, int sex);
@@ -71,6 +72,13 @@ void    add_workshop_to_room(struct obj_data *obj);
 void    remove_workshop_from_room(struct obj_data *obj);
 bool    mount_has_weapon(struct obj_data *mount);
 struct  obj_data *get_mount_weapon(struct obj_data *mount);
+struct  obj_data *stop_manning_weapon_mounts(struct char_data *ch, bool send_message);
+struct  obj_data *get_mount_manned_by_ch(struct char_data *ch);
+void    terminate_mud_process_with_message(const char *message, int error_code);
+
+// Message history management and manipulation.
+void    store_message_to_history(struct descriptor_data *d, int channel, const char *mallocd_message);
+void    delete_message_history(struct descriptor_data *d);
 
 /* undefine MAX and MIN so that our functions are used instead */
 #ifdef MAX
@@ -228,6 +236,14 @@ void    update_pos(struct char_data *victim);
   ((ch->desc && ch->desc->original) \
    ? PRF_FLAGS(ch->desc->original).IsSet((flag)) \
    : PRF_FLAGS(ch).IsSet((flag)))
+#define D_PRF_FLAGGED(d, flag)                   \
+((d)->original                                   \
+  ? PRF_FLAGS((d)->original).IsSet((flag))       \
+  : ((d)->character                              \
+      ? PRF_FLAGS((d)->character).IsSet((flag))  \
+      : FALSE                                    \
+    )                                            \
+)
 #define ROOM_FLAGGED(loc, flag) (ROOM_FLAGS(loc).IsSet((flag)))
 
 /* IS_AFFECTED for backwards compatibility */
@@ -638,9 +654,12 @@ IS_LIGHT((sub)->in_room) || !((light_level((sub)->in_room) == LIGHT_MINLIGHT || 
 #define LOCK_LEVEL(ch, obj, door) ((obj) ? GET_OBJ_VAL(obj, 4) : \
            world[(ch)->in_room].dir_option[door]->key_level)
 
-#define CAN_GO(ch, door)      (EXIT(ch,door) && \
-                              (EXIT(ch,door)->to_room != NOWHERE) && \
-                              !IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED))
+#define CAN_GO(ch, door)     ( EXIT(ch,door) &&                                                                            \
+                               (EXIT(ch,door)->to_room != NOWHERE) &&                                                      \
+                               !(IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED)) &&                                          \
+                               !(IS_ASTRAL(ch) && IS_SET(EXIT(ch, door)->exit_info, EX_ASTRALLY_WARDED)) &&                \
+                               !(ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_STAFF_ONLY) && GET_REAL_LEVEL(ch) < LVL_BUILDER)  \
+                             )
 
 #define OUTSIDE(ch)           (!ROOM_FLAGGED(((ch)->in_veh ? (ch)->in_veh->in_room : (ch)->in_room), ROOM_INDOORS))
 
@@ -700,7 +719,17 @@ IS_LIGHT((sub)->in_room) || !((light_level((sub)->in_room) == LIGHT_MINLIGHT || 
 
 /* Specific value invocations and macro defines for item types *****************************/
 
-// ITEM_WEAPON values
+// ITEM_LIGHT convenience defines
+
+// ITEM_WORKSHOP convenience defines
+#define GET_WORKSHOP_TYPE(workshop)            (GET_OBJ_VAL(workshop, 0))
+#define GET_WORKSHOP_GRADE(workshop)           (GET_OBJ_VAL(workshop, 1))
+#define GET_WORKSHOP_IS_SETUP(workshop)        (GET_OBJ_VAL(workshop, 2))
+#define GET_WORKSHOP_UNPACK_TICKS(workshop)    (GET_OBJ_VAL(workshop, 3))
+
+// ITEM_CAMERA convenience defines
+
+// ITEM_WEAPON convenience defines
 #define GET_WEAPON_POWER(weapon)               (GET_OBJ_VAL((weapon), 0))
 #define GET_WEAPON_DAMAGE_CODE(weapon)         (GET_OBJ_VAL((weapon), 1))
 #define GET_WEAPON_STR_BONUS(weapon)           (GET_OBJ_VAL((weapon), 2))
@@ -715,14 +744,76 @@ IS_LIGHT((sub)->in_room) || !((light_level((sub)->in_room) == LIGHT_MINLIGHT || 
 #define GET_WEAPON_FIREMODE(weapon)            (GET_OBJ_VAL((weapon), 11))
 #define GET_WEAPON_FULL_AUTO_COUNT(weapon)     (GET_OBJ_TIMER((weapon)))
 
-// ITEM_WEAPON convenience defines
 #define WEAPON_CAN_USE_FIREMODE(weapon, mode)  (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << mode))
+
+// ITEM_FIREWEAPON convenience defines
+
+// ITEM_MISSILE convenience defines
+
+// ITEM_GYRO convenience defines
+
+// ITEM_DRUG convenience defines
+
+// ITEM_WORN convenience defines
+
+// ITEM_OTHER convenience defines
+
+// ITEM_DOCWAGON convenience defines
+
+// ITEM_CONTAINER convenience defines
+
+// ITEM_RADIO convenience defines
+
+// ITEM_DRINKCON convenience defines
+
+// ITEM_KEY convenience defines
+
+// ITEM_FOOD convenience defines
+
+// ITEM_MONEY convenience defines
+
+// ITEM_PHONE convenience defines
+
+// ITEM_BIOWARE convenience defines
+
+// ITEM_FOUNTAIN convenience defines
 
 // ITEM_CYBERWARE convenience defines
 #define GET_CYBERWARE_TYPE(cyberware)         (GET_OBJ_VAL((cyberware), 0))
 #define GET_CYBERWARE_FLAGS(cyberware)        (GET_OBJ_VAL((cyberware), 3)) // CYBERWEAPON_RETRACTABLE, CYBERWEAPON_IMPROVED
 #define GET_CYBERWARE_LACING_TYPE(cyberware)  (GET_OBJ_VAL((cyberware), 3)) // Yes, this is also value 3. Great design here.
 #define GET_CYBERWARE_IS_DISABLED(cyberware)  (GET_OBJ_VAL((cyberware), 9))
+
+// ITEM_CYBERDECK convenience defines
+#define GET_CYBERDECK_MPCP(deck)              (GET_OBJ_VAL((deck), 0))
+#define GET_CYBERDECK_HARDENING(deck)         (GET_OBJ_VAL((deck), 1))
+#define GET_CYBERDECK_ACTIVE_MEMORY(deck)     (GET_OBJ_VAL((deck), 2))
+#define GET_CYBERDECK_TOTAL_STORAGE(deck)     (GET_OBJ_VAL((deck), 3))
+#define GET_CYBERDECK_IO_RATING(deck)         (GET_OBJ_VAL((deck), 4))
+#define GET_CYBERDECK_USED_STORAGE(deck)      (GET_OBJ_VAL((deck), 5))
+#define GET_CYBERDECK_RESPONSE_INCREASE(deck) (GET_OBJ_VAL((deck), 6))
+#define GET_CYBERDECK_COMPLETE_STATUS(deck)   (GET_OBJ_VAL((deck), 9))
+#define GET_CYBERDECK_FREE_STORAGE(deck)      (GET_CYBERDECK_TOTAL_STORAGE((deck)) -GET_CYBERDECK_USED_STORAGE((deck)))
+
+// ITEM_PROGRAM convenience defines
+
+// ITEM_FOCUS convenience defines
+
+// ITEM_PATCH convenience defines
+
+// ITEM_CLIMBING convenience defines
+
+// ITEM_QUIVER convenience defines
+
+// ITEM_RCDECK convenience defines
+
+// ITEM_CHIP convenience defines
+
+// ITEM_MOD convenience defines
+#define GET_VEHICLE_MOD_TYPE(mod)            (GET_OBJ_VAL((mod), 0))
+
+// ITEM_HOLSTER convenience defines
+
 
 /* Misc utils ************************************************************/
 #define IS_DAMTYPE_PHYSICAL(type) \
@@ -766,6 +857,16 @@ char    *crypt(const char *key, const char *salt);
 int     unlink(const char *path);
 int     getpid(void);
 #endif
+
+#if defined(WIN32)
+extern "C" char    *crypt(const char *key, const char *salt);
+#endif
+
+#if defined(__CYGWIN__)
+extern "C" char    *crypt(const char *key, const char *salt);
+#endif
+
+
 
 /*
  * The proto for [NeXT's] getpid() is defined in the man pages are returning

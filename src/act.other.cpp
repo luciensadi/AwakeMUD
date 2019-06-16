@@ -45,7 +45,6 @@ extern bool read_extratext(struct char_data * ch);
 extern int return_general(int skill_num);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
 extern char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act);
-extern char *prepare_quotes(char *dest, const char *str);
 
 extern int ident;
 extern class memoryClass *Mem;
@@ -244,12 +243,18 @@ ACMD(do_steal)
 
 ACMD(do_practice)
 {
-  send_to_char("You can only practice skills through a teacher.  (Use the 'skills' command\r\nto see which skills you know)\r\n", ch);
+  if (subcmd == SCMD_UNPRACTICE)
+    send_to_char("Sorry, that feature is only available in the skills annex of character generation.\r\n", ch);
+  else
+    send_to_char("You can only practice skills through a teacher.  (Use the 'skills' command\r\nto see which skills you know)\r\n", ch);
 }
 
 ACMD(do_train)
 {
-  send_to_char("You can only train with a trainer.\r\n", ch);
+  if (subcmd == SCMD_UNTRAIN)
+    send_to_char("Sorry, that feature is only available when standing by Neil the Trainer during character generation.\r\n", ch);
+  else
+    send_to_char("You can only train with a trainer.\r\n", ch);
 }
 
 ACMD(do_visible)
@@ -284,7 +289,7 @@ ACMD(do_title)
     set_title(ch, argument);
     sprintf(buf, "Okay, you're now %s %s.\r\n", GET_CHAR_NAME(ch), GET_TITLE(ch));
     send_to_char(buf, ch);
-    sprintf(buf, "UPDATE pfiles SET Title='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_TITLE(ch)), GET_IDNUM(ch));
+    sprintf(buf, "UPDATE pfiles SET Title='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_TITLE(ch), sizeof(buf2) / sizeof(buf2[0])), GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
   }
 }
@@ -713,31 +718,31 @@ ACMD(do_wimpy)
       send_to_char(buf, ch);
       return;
     } else {
-      send_to_char("At the moment, you're not a wimp.  (sure, sure...)\r\n", ch);
+      send_to_char("You aren't currently planning to wimp out of fights. You can change this by typing WIMPY [health level to flee at].\r\n", ch);
       return;
     }
   }
   if (isdigit(*arg)) {
     if ((wimp_lev = atoi(arg))) {
-      if (wimp_lev < 0)
-        send_to_char("Heh, heh, heh.. we are jolly funny today, eh?\r\n", ch);
-      else if (wimp_lev > (int)(GET_MAX_PHYSICAL(ch) / 100))
-        send_to_char("That doesn't make much sense, now does it?\r\n", ch);
-      else if (wimp_lev > ((int)(GET_MAX_PHYSICAL(ch) / 100) >> 1))
-        send_to_char("You can't set your wimp level above 5.\r\n", ch);
-      else {
-        sprintf(buf, "Okay, you'll wimp out if you drop below %d physical or mental.\r\n",
-                wimp_lev);
-        send_to_char(buf, ch);
-        GET_WIMP_LEV(ch) = wimp_lev;
-        sprintf(buf, "UPDATE pfiles SET WimpLevel=%d WHERE idnum=%ld;", GET_WIMP_LEV(ch), GET_IDNUM(ch));
-        mysql_wrapper(mysql, buf);
+      if (wimp_lev < 0) {
+        send_to_char("You're not 100% certain, but you're pretty sure you won't be able to run away when you're dead.\r\n", ch);
+        return;
       }
+      
+      if (wimp_lev > ((int)(GET_MAX_PHYSICAL(ch) / 100) >> 1)) {
+        send_to_char(ch, "You can't set your wimp level above %d.\r\n", ((int)(GET_MAX_PHYSICAL(ch) / 100) >> 1));
+        return;
+      }
+      
+      sprintf(buf, "Okay, you'll wimp out if you drop below %d physical or mental.\r\n",
+              wimp_lev);
+      send_to_char(buf, ch);
+      GET_WIMP_LEV(ch) = wimp_lev;
     } else {
       send_to_char("Okay, you'll now tough out fights to the bitter end.\r\n", ch);
       GET_WIMP_LEV(ch) = 0;
     }
-    sprintf(buf, "UPDATE pfiles SET WimpLevel=0 WHERE idnum=%ld;", GET_IDNUM(ch));
+    sprintf(buf, "UPDATE pfiles SET WimpLevel=%d WHERE idnum=%ld;", GET_WIMP_LEV(ch), GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
   } else
     send_to_char("Specify the threshold you want to wimp out at. (0 to disable)\r\n", ch);
@@ -757,7 +762,7 @@ ACMD(do_display)
 
   skip_spaces(&argument);
   delete_doubledollar(argument);
-  prepare_quotes(buf, argument);
+  prepare_quotes(buf, argument, sizeof(buf) / sizeof(buf[0]));
 
   if (!*buf) {
     send_to_char(ch, "Current prompt:\r\n%s\r\n", GET_PROMPT(tch));
@@ -1026,8 +1031,12 @@ const char *tog_messages[][2] = {
                              "You will now display your playergroup affiliation in the wholist.\r\n"},
                             {"You will no longer receive the keepalive pulses from the MUD.\r\n",
                              "You will now receive keepalive pulses from the MUD.\r\n"},
-                            {"Screenreader mode disabled.\r\n",
-                             "Screenreader mode enabled. Extraneous text and ASCII effects will be reduced.\r\n"}
+                            {"Screenreader mode disabled. Your TOGGLE NOCOLOR settings are untouched.\r\n",
+                             "Screenreader mode enabled. Extraneous text and ASCII effects will be reduced. ANSI color has also been disabled-- you may type TOGGLE NOCOLOR to re-enable it.\r\n"},
+                            {"You will now receive ANSI color codes again.\r\n",
+                             "You will no longer receive ANSI color codes.\r\n"},
+                            {"You will now receive prompts.\r\n",
+                             "You will no longer receive prompts automatically.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1052,7 +1061,8 @@ ACMD(do_toggle)
               "     AutoAssist: %-3s            NoShout: %-3s               Echo: %-3s\r\n"
               "           Pker: %-3s         Long Exits: %-3s         Wimp Level: %-3s\r\n"
               "        Menugag: %-3s        Long Weapon: %-3s        Show PG Tag: %-3s\r\n"
-              "     Keep-Alive: %-3s       Screenreader: %-3s",
+              "     Keep-Alive: %-3s       Screenreader: %-3s           No Color: %-3s\r\n"
+              "      No Prompt: %-3s",
 
               ONOFF(PRF_FLAGGED(ch, PRF_FIGHTGAG)),
               ONOFF(PRF_FLAGGED(ch, PRF_NOOOC)),
@@ -1070,7 +1080,9 @@ ACMD(do_toggle)
               YESNO(PRF_FLAGGED(ch, PRF_LONGWEAPON)),
               YESNO(PRF_FLAGGED(ch, PRF_SHOWGROUPTAG)),
               ONOFF(PRF_FLAGGED(ch, PRF_KEEPALIVE)),
-              YESNO(PRF_FLAGGED(ch, PRF_SCREENREADER)));
+              YESNO(PRF_FLAGGED(ch, PRF_SCREENREADER)),
+              ONOFF(PRF_FLAGGED(ch, PRF_NOCOLOR)),
+              ONOFF(PRF_FLAGGED(ch, PRF_NOPROMPT)));
     else
       sprintf(buf,
               "       Fightgag: %-3s              NoOOC: %-3s              Quest: %-3s\r\n"
@@ -1081,7 +1093,7 @@ ACMD(do_toggle)
               "          Radio: %-3s         Long Exits: %-3s         Wimp Level: %-3s\r\n"
               "         Pacify: %-3s         AutoAssist: %-3s          Autoinvis: %-3s\r\n"
               "    Long Weapon: %-3s        Show PG Tag: %-3s         Keep-Alive: %-3s\r\n"
-              "   Screenreader: %-3s",
+              "   Screenreader: %-3s           No Color: %-3s          No Prompt: %-3s\r\n",
               
               ONOFF(PRF_FLAGGED(ch, PRF_FIGHTGAG)),
               ONOFF(PRF_FLAGGED(ch, PRF_NOOOC)),
@@ -1107,7 +1119,9 @@ ACMD(do_toggle)
               YESNO(PRF_FLAGGED(ch, PRF_LONGWEAPON)),
               YESNO(PRF_FLAGGED(ch, PRF_SHOWGROUPTAG)),
               ONOFF(PRF_FLAGGED(ch, PRF_KEEPALIVE)),
-              YESNO(PRF_FLAGGED(ch, PRF_SCREENREADER)));
+              YESNO(PRF_FLAGGED(ch, PRF_SCREENREADER)),
+              ONOFF(PRF_FLAGGED(ch, PRF_NOCOLOR)),
+              ONOFF(PRF_FLAGGED(ch, PRF_NOPROMPT)));
     send_to_char(buf, ch);
   } else {
     if (is_abbrev(argument, "afk"))
@@ -1211,15 +1225,25 @@ ACMD(do_toggle)
       }
       mode = 24;
       result = 1;
-    } else if (is_abbrev(argument, "showpgtag")) {
+    } else if (is_abbrev(argument, "showpgtags")) {
       result = PRF_TOG_CHK(ch, PRF_SHOWGROUPTAG);
       mode = 27;
-    } else if (is_abbrev(argument, "keepalive")) {
+    } else if (is_abbrev(argument, "keepalives")) {
       result = PRF_TOG_CHK(ch, PRF_KEEPALIVE);
       mode = 28;
     } else if (is_abbrev(argument, "screenreader")) {
       result = PRF_TOG_CHK(ch, PRF_SCREENREADER);
+      
+      // Turning on the screenreader? Color goes off.
+      if (result)
+        PRF_FLAGS(ch).SetBit(PRF_NOCOLOR);
       mode = 29;
+    } else if (is_abbrev(argument, "nocolors") || is_abbrev(argument, "colors") || is_abbrev(argument, "colours")) {
+      result = PRF_TOG_CHK(ch, PRF_NOCOLOR);
+      mode = 30;
+    } else if (is_abbrev(argument, "noprompts") || is_abbrev(argument, "prompts")) {
+      result = PRF_TOG_CHK(ch, PRF_NOPROMPT);
+      mode = 31;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;
@@ -1246,9 +1270,23 @@ ACMD(do_slowns)
 ACMD(do_skills)
 {
   int i;
+  bool mode_all = FALSE;
+  
+  one_argument(argument, arg);
+  
+  if (!*arg) {
+    sprintf(buf, "You know the following %s:\r\n", subcmd == SCMD_SKILLS ? "skills" : "abilities");
+    mode_all = TRUE;
+  } else {
+    sprintf(buf, "You know the following %s that start with '%s':\r\n", subcmd == SCMD_SKILLS ? "skills" : "abilities", arg);
+    mode_all = FALSE;
+  }
+  
   if (subcmd == SCMD_SKILLS) {
-    sprintf(buf, "You know the following skills:\r\n");
     for (i = 1; i < MAX_SKILLS; i++) {
+      if (!mode_all && *arg && !is_abbrev(arg, skills[i].name))
+        continue;
+      
       if (i == SKILL_ENGLISH)
         i = SKILL_ANIMAL_HANDLING;
       if ((GET_SKILL(ch, i)) > 0) {
@@ -1262,8 +1300,10 @@ ACMD(do_skills)
       return;
     }
     extern int max_ability(int i);
-    sprintf(buf, "You know the following abilities:\r\n");
-    for (i = 1; i <= ADEPT_NUMPOWER; i++)
+    for (i = 1; i <= ADEPT_NUMPOWER; i++) {
+      if (!mode_all && *arg && !is_abbrev(arg, adept_powers[i]))
+        continue;
+      
       if (GET_POWER_TOTAL(ch, i) > 0) {
         sprintf(buf2, "%-20s", adept_powers[i]);
         if (max_ability(i) > 1)
@@ -1285,6 +1325,7 @@ ACMD(do_skills)
           strcat(buf2, "\r\n");
         strcat(buf, buf2);
       }
+    }
     sprintf(buf2, "You have %.2f powerpoints remaining and %.2f points of powers activated.\r\n", (float)GET_PP(ch) / 100, 
                   (float)GET_POWER_POINTS(ch) / 100);
     strcat(buf, buf2);
@@ -1601,43 +1642,58 @@ ACMD(do_attach)
     send_to_char(buf, ch);
     act("$n mounts $p on $P.", FALSE, ch, item, item2, TO_ROOM);
     return;
-  }
+  } // End of vehicle weapon attachment.
 
-  if (!(item = get_obj_in_list_vis(ch, buf1, ch->carrying)) ||
-      !(item2 = get_obj_in_list_vis(ch, buf2, ch->carrying))) {
-    send_to_char("You don't seem to have that item.\r\n", ch);
+  if (!(item = get_obj_in_list_vis(ch, buf1, ch->carrying))) {
+    send_to_char(ch, "You don't seem to have any '%s'.\r\n", buf1);
+    return;
+  }
+  
+  if (!(item2 = get_obj_in_list_vis(ch, buf2, ch->carrying))) {
+    if (!(item2 = get_obj_in_list_vis(ch, buf2, GET_EQ(ch, WEAR_WIELD))) && !(item2 = get_obj_in_list_vis(ch, buf2, GET_EQ(ch, WEAR_HOLD)))) {
+      send_to_char(ch, "You don't seem to have any '%s'.\r\n", buf2);
+      return;
+    } else {
+      send_to_char(ch, "You'll have a hard time attaching anything to %s while you're wielding it.\r\n", GET_OBJ_NAME(item2));
+      return;
+    }
+  }
+  
+  if (GET_OBJ_TYPE(item) != ITEM_GUN_ACCESSORY) {
+    send_to_char(ch, "%s is not a gun accessory.\r\n", CAP(GET_OBJ_NAME(item)));
     return;
   }
 
-  if ((GET_OBJ_TYPE(item) != ITEM_GUN_ACCESSORY) || (GET_OBJ_TYPE(item2) != ITEM_WEAPON)) {
-    send_to_char("You can only attach gun accessories to a gun.\r\n", ch);
+  if (GET_OBJ_TYPE(item2) != ITEM_WEAPON || !IS_GUN(GET_WEAPON_ATTACK_TYPE(item2))) {
+    send_to_char(ch, "%s is not a gun.\r\n", CAP(GET_OBJ_NAME(item2)));
     return;
   }
 
-  if (GET_OBJ_VAL(item, 1) == 7) {
+  if (GET_OBJ_VAL(item, 1) == ACCESS_SMARTGOGGLE) { // MAGIC FUCKING NUMBERS
     send_to_char("These are for your eyes, not your gun.\r\n", ch);
     return;
   }
 
-  if (((GET_OBJ_VAL(item, 0) == 0) && (GET_OBJ_VAL(item2, 7) > 0)) ||
-      ((GET_OBJ_VAL(item, 0) == 1) && (GET_OBJ_VAL(item2, 8) > 0)) ||
-      ((GET_OBJ_VAL(item, 0) == 2) && (GET_OBJ_VAL(item2, 9) > 0))) {
-    send_to_char("You cannot mount more than one accessory to the same place.\r\n", ch);
+  if (   ((GET_OBJ_VAL(item, 0) == 0) && (GET_WEAPON_ATTACH_TOP_VNUM(item2)    > 0))
+      || ((GET_OBJ_VAL(item, 0) == 1) && (GET_WEAPON_ATTACH_BARREL_VNUM(item2) > 0))
+      || ((GET_OBJ_VAL(item, 0) == 2) && (GET_WEAPON_ATTACH_UNDER_VNUM(item2)  > 0))) {
+    send_to_char(ch, "You cannot mount more than one accessory to the %s of that.\r\n", gun_accessory_locations[GET_OBJ_VAL(item, 0)]);
     return;
   }
 
-  if (((GET_OBJ_VAL(item, 0) == 0) && (GET_OBJ_VAL(item2, 7) == -1)) ||
-      ((GET_OBJ_VAL(item, 0) == 1) && (GET_OBJ_VAL(item2, 8) == -1)) ||
-      ((GET_OBJ_VAL(item, 0) == 2) && (GET_OBJ_VAL(item2, 9) == -1))) {
-    sprintf(buf, "%s doesn't seem to fit on %s.\r\n",
-            CAP(GET_OBJ_NAME(item)), GET_OBJ_NAME(item2));
+  if (   ((GET_OBJ_VAL(item, 0) == 0) && (GET_WEAPON_ATTACH_TOP_VNUM(item2)    == -1))
+      || ((GET_OBJ_VAL(item, 0) == 1) && (GET_WEAPON_ATTACH_BARREL_VNUM(item2) == -1))
+      || ((GET_OBJ_VAL(item, 0) == 2) && (GET_WEAPON_ATTACH_UNDER_VNUM(item2)  == -1))) {
+    sprintf(buf, "%s doesn't have any good spots for %s-mounted attachments.\r\n",
+            CAP(GET_OBJ_NAME(item2)), gun_accessory_locations[GET_OBJ_VAL(item, 0)]);
     send_to_char(buf, ch);
     return;
   }
 
+  // wtf does this even do? val 0 for attachments is top/barrel/under. Looks like broken code. -LS
   if ((GET_OBJ_VAL(item, 0) == 5 && !(GET_OBJ_VAL(item2, 4) == SKILL_PISTOLS)) ||
       (GET_OBJ_VAL(item, 0) == 6 && !(GET_OBJ_VAL(item2, 4) == SKILL_RIFLES ||
-                                      GET_OBJ_VAL(item2, 4) == SKILL_SMG || GET_OBJ_VAL(item2, 4) == SKILL_ASSAULT_RIFLES))) {
+      GET_OBJ_VAL(item2, 4) == SKILL_SMG || GET_OBJ_VAL(item2, 4) == SKILL_ASSAULT_RIFLES))) {
     sprintf(buf, "%s doesn't seem to fit on %s.\r\n",
             CAP(GET_OBJ_NAME(item)), GET_OBJ_NAME(item2));
     send_to_char(buf, ch);
@@ -1656,6 +1712,16 @@ ACMD(do_attach)
     sprintf(buf, "You seem unable to connect %s to %s.\r\n",
             GET_OBJ_NAME(item), GET_OBJ_NAME(item2));
     send_to_char(buf, ch);
+    
+    sprintf(buf, "WARNING: %s (%ld) attempted to attach %s (%ld) to %s (%ld), but the gun was full up on affects. Something needs revising."
+            " Gun's current top/barrel/bottom attachment vnums are %d / %d / %d.",
+            GET_CHAR_NAME(ch), GET_IDNUM(ch),
+            GET_OBJ_NAME(item), GET_OBJ_VNUM(item),
+            GET_OBJ_NAME(item2), GET_OBJ_VNUM(item2),
+            GET_WEAPON_ATTACH_TOP_VNUM(item2),
+            GET_WEAPON_ATTACH_BARREL_VNUM(item2),
+            GET_WEAPON_ATTACH_UNDER_VNUM(item2));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return;
   }
 
@@ -2230,7 +2296,7 @@ void cedit_parse(struct descriptor_data *d, char *arg)
       if (STATE(d) == CON_BCUSTOMIZE) {
         DELETE_ARRAY_IF_EXTANT(CH->player.background);
         CH->player.background = str_dup(d->edit_mob->player.background);
-        sprintf(ENDOF(buf2), "background='%s'", prepare_quotes(buf3, CH->player.background));
+        sprintf(ENDOF(buf2), "background='%s'", prepare_quotes(buf3, CH->player.background, sizeof(buf3) / sizeof(buf3[0])));
       } else if (STATE(d) == CON_FCUSTOMIZE) {
         
         DELETE_ARRAY_IF_EXTANT(CH->player.physical_text.keywords);
@@ -2239,60 +2305,60 @@ void cedit_parse(struct descriptor_data *d, char *arg)
           CH->player.physical_text.keywords = str_dup(buf);
         } else
           CH->player.physical_text.keywords = str_dup(GET_KEYWORDS(d->edit_mob));
-        sprintf(ENDOF(buf2), "Physical_Keywords='%s'", prepare_quotes(buf3, CH->player.physical_text.keywords)); 
+        sprintf(ENDOF(buf2), "Physical_Keywords='%s'", prepare_quotes(buf3, CH->player.physical_text.keywords, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.physical_text.name);
         CH->player.physical_text.name = str_dup(d->edit_mob->player.physical_text.name);
-        sprintf(ENDOF(buf2), ", Physical_Name='%s'", prepare_quotes(buf3, CH->player.physical_text.name)); 
+        sprintf(ENDOF(buf2), ", Physical_Name='%s'", prepare_quotes(buf3, CH->player.physical_text.name, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.physical_text.room_desc);
         CH->player.physical_text.room_desc = str_dup(d->edit_mob->player.physical_text.room_desc);
-        sprintf(ENDOF(buf2), ", Voice='%s'", prepare_quotes(buf3, CH->player.physical_text.room_desc)); 
+        sprintf(ENDOF(buf2), ", Voice='%s'", prepare_quotes(buf3, CH->player.physical_text.room_desc, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.physical_text.look_desc);
         CH->player.physical_text.look_desc = str_dup(d->edit_mob->player.physical_text.look_desc);
-        sprintf(ENDOF(buf2), ", Physical_LookDesc='%s'", prepare_quotes(buf3, CH->player.physical_text.look_desc));
+        sprintf(ENDOF(buf2), ", Physical_LookDesc='%s'", prepare_quotes(buf3, CH->player.physical_text.look_desc, sizeof(buf3) / sizeof(buf3[0])));
         
         DELETE_ARRAY_IF_EXTANT(CH->char_specials.arrive);
         CH->char_specials.arrive = str_dup(d->edit_mob->char_specials.arrive);
-        sprintf(ENDOF(buf2), ", EnterMsg='%s'", prepare_quotes(buf3, CH->char_specials.arrive)); 
+        sprintf(ENDOF(buf2), ", EnterMsg='%s'", prepare_quotes(buf3, CH->char_specials.arrive, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->char_specials.leave);
         CH->char_specials.leave = str_dup(d->edit_mob->char_specials.leave);
-        sprintf(ENDOF(buf2), ", LeaveMsg='%s', Height=%d, Weight=%d", prepare_quotes(buf3, CH->char_specials.leave),
+        sprintf(ENDOF(buf2), ", LeaveMsg='%s', Height=%d, Weight=%d", prepare_quotes(buf3, CH->char_specials.leave, sizeof(buf3) / sizeof(buf3[0])),
                 GET_HEIGHT(CH), GET_WEIGHT(CH));
       } else if (STATE(d) == CON_PCUSTOMIZE) {
         DELETE_ARRAY_IF_EXTANT(CH->player.matrix_text.keywords);
         CH->player.matrix_text.keywords = str_dup(GET_KEYWORDS(d->edit_mob));
-        sprintf(ENDOF(buf2), "Matrix_Keywords='%s'", prepare_quotes(buf3, CH->player.matrix_text.keywords)); 
+        sprintf(ENDOF(buf2), "Matrix_Keywords='%s'", prepare_quotes(buf3, CH->player.matrix_text.keywords, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.matrix_text.name);
         CH->player.matrix_text.name = str_dup(d->edit_mob->player.physical_text.name);
-        sprintf(ENDOF(buf2), ", Matrix_Name='%s'", prepare_quotes(buf3, CH->player.matrix_text.name));
+        sprintf(ENDOF(buf2), ", Matrix_Name='%s'", prepare_quotes(buf3, CH->player.matrix_text.name, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.matrix_text.room_desc);
         CH->player.matrix_text.room_desc = str_dup(d->edit_mob->player.physical_text.room_desc);
-        sprintf(ENDOF(buf2), ", Matrix_RoomDesc='%s'", prepare_quotes(buf3, CH->player.matrix_text.room_desc)); 
+        sprintf(ENDOF(buf2), ", Matrix_RoomDesc='%s'", prepare_quotes(buf3, CH->player.matrix_text.room_desc, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.matrix_text.look_desc);
         CH->player.matrix_text.look_desc = str_dup(d->edit_mob->player.physical_text.look_desc);
-        sprintf(ENDOF(buf2), ", Matrix_LookDesc='%s'", prepare_quotes(buf3, CH->player.matrix_text.look_desc)); 
+        sprintf(ENDOF(buf2), ", Matrix_LookDesc='%s'", prepare_quotes(buf3, CH->player.matrix_text.look_desc, sizeof(buf3) / sizeof(buf3[0])));
       } else {
         DELETE_ARRAY_IF_EXTANT(CH->player.astral_text.keywords);
         CH->player.astral_text.keywords = str_dup(GET_KEYWORDS(d->edit_mob));
-        sprintf(ENDOF(buf2), "Astral_Keywords='%s'", prepare_quotes(buf3, CH->player.astral_text.keywords));
+        sprintf(ENDOF(buf2), "Astral_Keywords='%s'", prepare_quotes(buf3, CH->player.astral_text.keywords, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.astral_text.name);
         CH->player.astral_text.name = str_dup(d->edit_mob->player.physical_text.name);
-        sprintf(ENDOF(buf2), ", Astral_Name='%s'", prepare_quotes(buf3, CH->player.astral_text.name));
+        sprintf(ENDOF(buf2), ", Astral_Name='%s'", prepare_quotes(buf3, CH->player.astral_text.name, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.astral_text.room_desc);
         CH->player.astral_text.room_desc = str_dup(d->edit_mob->player.physical_text.room_desc);
-        sprintf(ENDOF(buf2), ", Astral_RoomDesc='%s'", prepare_quotes(buf3, CH->player.astral_text.room_desc));
+        sprintf(ENDOF(buf2), ", Astral_RoomDesc='%s'", prepare_quotes(buf3, CH->player.astral_text.room_desc, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.astral_text.look_desc);
         CH->player.astral_text.look_desc = str_dup(d->edit_mob->player.physical_text.look_desc);
-        sprintf(ENDOF(buf2), ", Astral_LookDesc='%s'", prepare_quotes(buf3, CH->player.astral_text.look_desc));
+        sprintf(ENDOF(buf2), ", Astral_LookDesc='%s'", prepare_quotes(buf3, CH->player.astral_text.look_desc, sizeof(buf3) / sizeof(buf3[0])));
       }
 
       if (d->edit_mob)
@@ -3297,8 +3363,8 @@ ACMD(do_unpack)
     }
   }
   for (shop = ch->in_veh ? ch->in_veh->contents : world[ch->in_room].contents; shop; shop = shop->next_content)
-    if (GET_OBJ_TYPE(shop) == ITEM_WORKSHOP && GET_OBJ_VAL(shop, 1) == TYPE_SHOP) {
-      if (GET_OBJ_VAL(shop, 2) || GET_OBJ_VAL(shop, 3)) {
+    if (GET_OBJ_TYPE(shop) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(shop) == TYPE_SHOP) {
+      if (GET_WORKSHOP_IS_SETUP(shop) || GET_WORKSHOP_UNPACK_TICKS(shop)) {
         send_to_char("There is already a workshop set up here.\r\n", ch);
         return;
       } else
@@ -3313,7 +3379,7 @@ ACMD(do_unpack)
     }
     send_to_char(ch, "You begin to set up %s here.\r\n", GET_OBJ_NAME(shop));
     act("$n begins to set up $P.", FALSE, ch, 0, shop, TO_ROOM);
-    GET_OBJ_VAL(shop, 3) = 3;
+    GET_WORKSHOP_UNPACK_TICKS(shop) = 3;
     AFF_FLAGS(ch).SetBit(AFF_PACKING);
   }
 }
@@ -3946,4 +4012,25 @@ ACMD(do_availoffset)
   send_to_char(ch, "Your current availability offset is: %d\r\n", GET_AVAIL_OFFSET(ch));
   sprintf(buf, "UPDATE pfiles SET AvailOffset=%d WHERE idnum=%ld;", GET_AVAIL_OFFSET(ch), GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
+}
+
+ACMD(do_ammo) {
+  struct obj_data *primary = GET_EQ(ch, WEAR_WIELD);
+  struct obj_data *secondary = GET_EQ(ch, WEAR_HOLD);
+  
+  if (primary && IS_GUN(GET_OBJ_VAL(primary, 3))) {
+    send_to_char(ch, "Primary: %d / %d rounds of ammunition.\r\n",
+                 MIN(GET_OBJ_VAL(primary, 5), GET_OBJ_VAL(primary->contains, 9)),
+                 GET_OBJ_VAL(primary, 5));
+  } else if (primary) {
+    send_to_char(ch, "Your primary weapon does not take ammunition.\r\n");
+  }
+  
+  if (secondary && IS_GUN(GET_OBJ_VAL(secondary, 3))) {
+    send_to_char(ch, "Secondary: %d / %d rounds of ammunition.\r\n",
+                 MIN(GET_OBJ_VAL(secondary, 5), GET_OBJ_VAL(secondary->contains, 9)),
+                 GET_OBJ_VAL(secondary, 5));
+  } else if (secondary) {
+    send_to_char(ch, "Your secondary weapon does not take ammunition.\r\n");
+  }
 }

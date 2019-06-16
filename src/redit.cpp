@@ -88,7 +88,7 @@ void redit_disp_barrier_menu(struct descriptor_data *d)
 {
   CLS(CH);
 
-  for (register int counter = 0; counter < NUM_BARRIERS; ++counter)
+  for (int counter = 0; counter < NUM_BARRIERS; ++counter)
     send_to_char(CH, "%2d) %s\r\n", counter + 1, barrier_names[counter]);
   send_to_char("Enter construction category, 0 to return: ", CH);
 }
@@ -97,7 +97,7 @@ void redit_disp_material_menu(struct descriptor_data *d)
 {
   CLS(CH);
 
-  for (register int counter = 0; counter < NUM_MATERIALS; ++counter)
+  for (int counter = 0; counter < NUM_MATERIALS; ++counter)
     send_to_char(CH, "%2d) %s\r\n", counter + 1, material_names[counter]);
   send_to_char("Enter material type, 0 to return: ", CH);
 }
@@ -118,6 +118,23 @@ void redit_disp_extradesc_menu(struct descriptor_data * d)
                "Enter Choice:\r\n",
                (extra_desc->next ? "Another description set. (not viewed)" : "Another description"));
   d->edit_mode = REDIT_EXTRADESC_MENU;
+}
+
+const char *render_door_type_string(struct room_direction_data *door) {
+  if (!IS_SET(door->exit_info, EX_ISDOOR))
+    return "No door";
+  
+  if (IS_SET(door->exit_info, EX_PICKPROOF)) {
+    if (IS_SET(door->exit_info, EX_ASTRALLY_WARDED))
+      return "Pickproof, astrally-warded door";
+    else
+      return "Pickproof";
+  } else {
+    if (IS_SET(door->exit_info, EX_ASTRALLY_WARDED))
+      return "Astrally-warded regular door";
+    else
+      return "Regular door";
+  }
 }
 
 /* For exits */
@@ -144,9 +161,9 @@ void redit_disp_exit_menu(struct descriptor_data * d)
                "5) Door flag: %s%s%s\r\n",
                CCCYN(CH, C_CMP), (DOOR->keyword ? DOOR->keyword : "(none)"),
                CCNRM(CH, C_CMP), CCCYN(CH, C_CMP), DOOR->key, CCNRM(CH, C_CMP),
-               CCCYN(CH, C_CMP), (IS_SET(DOOR->exit_info, EX_ISDOOR) ?
-                                  (IS_SET(DOOR->exit_info, EX_PICKPROOF) ? "Pickproof" : "Regular door") :
-                                      "No door"), CCNRM(CH, C_CMP));
+               CCCYN(CH, C_CMP), render_door_type_string(DOOR), CCNRM(CH, C_CMP));
+  
+  
 
   send_to_char(CH,        "6) Lock level: %s%d%s\r\n"
                "7) Material Type: %s%s%s\r\n"
@@ -169,6 +186,8 @@ void redit_disp_exit_flag_menu(struct descriptor_data * d)
   send_to_char( "0) No door\r\n"
                 "1) Closeable door\r\n"
                 "2) Pickproof\r\n"
+                "3) Astrally-warded closeable door\r\n"
+                "4) Astrally-warded pickproof door\r\n"
                 "Enter choice:", CH);
 }
 
@@ -421,7 +440,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
 
 
           /* count thru world tables */
-          for (counter = 0; counter < top_of_world + 1; counter++) {
+          for (counter = 0; counter <= top_of_world; counter++) {
             if (!found) {
               /* check if current virtual is bigger than our virtual */
               if (world[counter].number > d->edit_number) {
@@ -521,7 +540,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
             r_newbie_start_room++;
           /* go through the world. if any of the old rooms indicated an exit
            * to our new room, we have to change it */
-          for (counter = 0; counter < top_of_world + 1; counter++) {
+          for (counter = 0; counter <= top_of_world; counter++) {
             for (counter2 = 0; counter2 < NUM_OF_DIRS; counter2++) {
               /* if exit exists */
               if (world[counter].dir_option[counter2]) {
@@ -802,7 +821,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     break;
   case REDIT_BACKGROUND2:
     number = atoi(arg);
-    if (number < 0 || number > AURA_PLAYERCOMBAT - 1) {
+    if (number < 0 || number >= AURA_PLAYERCOMBAT) {
       send_to_char(CH, "Number must be between 0 and %d. Enter Type: ", AURA_PLAYERCOMBAT - 1);
       return;
     }
@@ -836,6 +855,10 @@ void redit_parse(struct descriptor_data * d, const char *arg)
         redit_disp_menu(d);
       else {
         /* toggle bits */
+        
+        if (number-1 == ROOM_NO_TRAFFIC) {
+          send_to_char("!TRAFFIC changes will only take effect on copyover.\r\n", d->character);
+        }
 
         if (ROOM->room_flags.IsSet(number-1)) {
           ROOM->room_flags.RemoveBit(number-1);
@@ -1067,18 +1090,22 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     break;
   case REDIT_EXIT_DOORFLAGS:
     number = atoi(arg);
-    if ((number < 0) || (number > 2)) {
+    if ((number < 0) || (number > 4)) {
       send_to_char("That's not a valid choice!\r\n", d->character);
       redit_disp_exit_flag_menu(d);
     } else {
       /* doors are a bit idiotic, don't you think? :) */
+      /* yep -LS */
       if (number == 0)
         d->edit_room->dir_option[d->edit_number2]->exit_info = 0;
       else if (number == 1)
         d->edit_room->dir_option[d->edit_number2]->exit_info = EX_ISDOOR;
       else if (number == 2)
-        d->edit_room->dir_option[d->edit_number2]->exit_info =
-          EX_ISDOOR | EX_PICKPROOF;
+        d->edit_room->dir_option[d->edit_number2]->exit_info = EX_ISDOOR | EX_PICKPROOF;
+      else if (number == 3)
+        d->edit_room->dir_option[d->edit_number2]->exit_info = EX_ISDOOR | EX_ASTRALLY_WARDED;
+      else if (number == 4)
+        d->edit_room->dir_option[d->edit_number2]->exit_info = EX_ISDOOR | EX_PICKPROOF | EX_ASTRALLY_WARDED;
       /* jump out to menu */
       redit_disp_exit_menu(d);
     }
@@ -1246,10 +1273,17 @@ void write_world_to_disk(int vnum)
 
           /* door flags need special handling, unfortunately. argh! */
           if (IS_SET(ptr->exit_info, EX_ISDOOR)) {
-            if (IS_SET(ptr->exit_info, EX_PICKPROOF))
-              temp_door_flag = 2;
-            else
-              temp_door_flag = 1;
+            if (IS_SET(ptr->exit_info, EX_ASTRALLY_WARDED)) {
+              if (IS_SET(ptr->exit_info, EX_PICKPROOF))
+                temp_door_flag = 4;
+              else
+                temp_door_flag = 3;
+            } else {
+              if (IS_SET(ptr->exit_info, EX_PICKPROOF))
+                temp_door_flag = 2;
+              else
+                temp_door_flag = 1;
+            }
           } else
             temp_door_flag = 0;
 

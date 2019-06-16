@@ -114,6 +114,7 @@ void spedit_parse(struct descriptor_data *d, const char *arg)
           break;
          }
         // Explicit fallthrough-- you can only select an attribute for attribute-linked spells.
+        // fall through
       default:
         send_to_char(CH, "Invalid option!\r\n");
         break;

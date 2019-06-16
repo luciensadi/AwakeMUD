@@ -25,7 +25,6 @@
 extern MYSQL *mysql;
 
 // Prototypes from other files.
-char *prepare_quotes(char *dest, const char *str);
 int mysql_wrapper(MYSQL *mysql, const char *query);
 
 // The linked list of loaded playergroups.
@@ -177,7 +176,7 @@ bool Playergroup::set_alias(const char *newalias, struct char_data *ch) {
   
   // Check for duplicates.
   char querybuf[MAX_STRING_LENGTH];
-  sprintf(querybuf, "SELECT idnum FROM playergroups WHERE alias = '%s'", prepare_quotes(buf, newalias));
+  sprintf(querybuf, "SELECT idnum FROM playergroups WHERE alias = '%s'", prepare_quotes(buf, newalias, sizeof(buf) / sizeof(buf[0])));
   mysql_wrapper(mysql, querybuf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row;
@@ -246,7 +245,7 @@ void Playergroup::audit_log(const char *original_msg) {
   
   // Quote the message for some pretense of DB safety.
   char quoted_msg[strlen(msg) * 2 + 1];
-  prepare_quotes(quoted_msg, msg);
+  prepare_quotes(quoted_msg, msg, sizeof(quoted_msg) / sizeof(quoted_msg[0]));
   
   // Format the query and execute it.
   const char *query_fmt = "INSERT INTO pgroup_logs (`idnum`, `message`, `date`) VALUES ('%ld', '%s', NOW())";
@@ -294,10 +293,10 @@ bool Playergroup::save_pgroup_to_db() {
   
   sprintf(querybuf, pgroup_save_query_format,
           idnum,
-          prepare_quotes(quotedname, name),
-          prepare_quotes(quotedalias, alias),
-          prepare_quotes(quotedtag, tag),
-          prepare_quotes(quotedsettings, settings.ToString()),
+          prepare_quotes(quotedname, name, sizeof(quotedname) / sizeof(quotedname[0])),
+          prepare_quotes(quotedalias, alias, sizeof(quotedalias) / sizeof(quotedalias[0])),
+          prepare_quotes(quotedtag, tag, sizeof(quotedtag) / sizeof(quotedtag[0])),
+          prepare_quotes(quotedsettings, settings.ToString(), sizeof(quotedsettings) / sizeof(quotedsettings[0])),
           bank);
   mysql_wrapper(mysql, querybuf);
   

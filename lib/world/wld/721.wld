@@ -1,0 +1,307 @@
+#72100
+Name:	Outside of Genesis Consortium's Seattle Branch
+Desc:$
+You are standing in front of a fairly large concrete structure, a few storeys
+tall. There are various advertisements and posters around the doorway to your
+north with slogans like, "Organic Food for a Better Life!" and "Eat Real, Eat
+Genesis!" 
+~
+NightDesc:$
+   The outside of this large concerete building is lit by various halogen
+lamps, illuminating various posters with slogans like "Organic Food for a
+Better Life!" and "Eat Real, Eat Genesis!" 
+~
+Flags:	1000000000010000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	2
+Cover:	1
+X:	10
+Y:	10
+Z:	25.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	1
+	BackgroundType:	11
+[EXIT north]
+	ToVnum:	72102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	72101
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72101
+Name:	A decently-sized parking lot
+Desc:$
+This is a medium-sized parking lot. Most of the employee spaces are taken, and
+there is a plethora of visitor parking on the other end of the lot.  
+~
+Flags:	1000000100000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	5
+X:	100
+Y:	100
+Z:	25.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	72100
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72102
+Name:	The lobby of Genesis Consortium's Seattle branch
+Desc:$
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	1
+	BackgroundType:	11
+[EXIT north]
+	ToVnum:	72104
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	72108
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	72100
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	72103
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72103
+Name:	The Genesis Consortium outlet store
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	3
+X:	15
+Y:	15
+Z:	10.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	72102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72104
+Name:	A corridor
+Desc:$
+corridor in GC 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	3
+Z:	5.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	72105
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	72102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72105
+Name:	A corridor
+Desc:$
+corridor in GC 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	3
+Z:	5.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	72106
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	72104
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72106
+Name:	A corridor
+Desc:$
+corridor in GC 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	3
+Z:	5.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	72107
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	72105
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72107
+Name:	A corridor
+Desc:$
+corridor in GC 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	3
+Z:	5.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	72106
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#72108
+Name:	A small restaurant
+Desc:$
+You're standing in a small restaurant in Genesis Consortium's Seattle branch.
+There are a few tables and booths around, the atmosphere is cozy overall. A
+few hipsters are dining here, along with a group of suits on their meal break.
+There is a juice bar near the northern wall, and it seems that you can order
+food there as well. All of the food is organic and locally-sourced. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	3
+X:	20
+Y:	15
+Z:	5.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	72102
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

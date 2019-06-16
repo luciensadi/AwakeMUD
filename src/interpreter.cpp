@@ -93,6 +93,7 @@ ACMD(do_action);
 ACMD(do_activate);
 ACMD(do_advance);
 ACMD(do_alias);
+ACMD(do_ammo);
 ACMD(do_assist);
 ACMD(do_ask);
 ACMD(do_astral);
@@ -208,6 +209,7 @@ ACMD(do_logwatch);
 ACMD(do_manifest);
 ACMD(do_masking);
 ACMD(do_memory);
+ACMD(do_message_history);
 ACMD(do_metamagic);
 ACMD(do_mode);
 ACMD(do_move);
@@ -260,6 +262,7 @@ ACMD(do_retract);
 ACMD(do_return);
 ACMD(do_rlist);
 ACMD(do_rig);
+ACMD(do_room);
 ACMD(do_say);
 ACMD(do_scan);
 ACMD(do_score);
@@ -290,6 +293,7 @@ ACMD(do_status);
 ACMD(do_steal);
 ACMD(do_survey);
 ACMD(do_switch);
+ACMD(do_switched_message_history);
 ACMD(do_tail);
 ACMD(do_teleport);
 ACMD(do_tell);
@@ -338,6 +342,7 @@ ACMD(do_wiztitle);
 ACMD(do_wizwho);
 ACMD(do_wizutil);
 ACMD(do_zreset);
+ACMD(do_zone);
 ACMD(do_vedit);
 ACMD(do_iedit);
 ACMD(do_iclone);
@@ -402,15 +407,13 @@ struct command_info cmd_info[] =
     { "southwest", POS_SITTING, do_move     , 0, SCMD_SOUTHWEST },
     { "northwest", POS_SITTING, do_move     , 0, SCMD_NORTHWEST },
 
-
-    /* now, the main list */
+    /* now, the main list -- note that spec-proc commands and socials come after this list. */
     { "abilities", POS_SLEEPING, do_skills   , 0, SCMD_ABILITIES },
-    { "activate" , POS_LYING , do_activate , 0, 0 },
-    { "agree"    , POS_LYING   , do_action   , 0, 0 },
-    { "aecho"     , POS_SLEEPING, do_echo     , LVL_ARCHITECT, SCMD_AECHO },
+    { "activate" , POS_LYING   , do_activate , 0, 0 },
+    { "aecho"    , POS_SLEEPING, do_echo     , LVL_ARCHITECT, SCMD_AECHO },
     { "accept"   , POS_LYING   , do_accept   , 0, 0 },
-    { "addpoint" , POS_DEAD    , do_initiate  , 0, SCMD_POWERPOINT },
-    { "agree"    , POS_LYING   , do_action   , 0, 0 },
+    { "addpoint" , POS_DEAD    , do_initiate , 0, SCMD_POWERPOINT },
+    { "ammo"     , POS_LYING   , do_ammo     , 0, 0 },
     { "assense"  , POS_LYING   , do_assense  , 0, 0 },
     { "at"       , POS_DEAD    , do_at       , LVL_BUILDER, 0 },
     { "attach"   , POS_RESTING , do_attach   , 0, 0 },
@@ -421,72 +424,35 @@ struct command_info cmd_info[] =
     { "advance"  , POS_DEAD    , do_advance  , LVL_PRESIDENT, 0 },
 #endif
     { "alias"    , POS_DEAD    , do_alias    , 0, 0 },
-    { "accuse"   , POS_SITTING , do_action   , 0, 0 },
     { "answer"   , POS_LYING   , do_phone    , 0, SCMD_ANSWER },
-    { "apologize", POS_LYING   , do_action   , 0, 0 },
-    { "applaud"  , POS_LYING   , do_action   , 0, 0 },
     { "assist"   , POS_FIGHTING, do_assist   , 1, 0 },
-    { "ask"      , POS_LYING   , do_spec_comm, 0, 0 },
+    { "ask"      , POS_LYING   , do_spec_comm, 0, SCMD_ASK },
     { "award"    , POS_DEAD    , do_award    , LVL_FIXER, 0 },
     { "availoffset", POS_DEAD  , do_availoffset, 0, 0 },
 
-    { "bounce"   , POS_STANDING, do_action   , 0, 0 },
     { "bond"     , POS_RESTING , do_bond     , 0, 0 },
     { "ban"      , POS_DEAD    , do_ban      , LVL_EXECUTIVE, 0 },
     { "banish"   , POS_STANDING, do_banish   , 0, 0 },
     { "balance"  , POS_LYING   , do_gold     , 0, 0 },
-    { "bat"      , POS_RESTING , do_action   , 0, 0 },
-    { "beam"     , POS_LYING   , do_action   , 0, 0 },
-    { "bearhug"  , POS_STANDING, do_action   , 0, 0 },
-    { "beg"      , POS_RESTING , do_action   , 0, 0 },
     { "bioware"  , POS_DEAD    , do_bioware  , 0, 0 },
-    { "bite"     , POS_RESTING , do_action   , 0, 0 },
-//  { "blastoff" , POS_RESTING , do_not_here , 0, 0 },
-    { "blink"    , POS_LYING   , do_action   , 0, 0 },
-    { "bleed"    , POS_LYING   , do_action   , 0, 0 },
-    { "blush"    , POS_LYING   , do_action   , 0, 0 },
-    { "boggle"   , POS_LYING   , do_action   , 0, 0 },
-    { "bonk"     , POS_STANDING, do_action   , 0, 0 },
     { "boost"    , POS_LYING   , do_boost    , 0, 0 },
-    { "bow"      , POS_STANDING, do_action   , 0, 0 },
-    { "brb"      , POS_LYING   , do_action   , 0, 0 },
     { "break"    , POS_LYING   , do_break    , 0, 0 },
     { "broadcast", POS_LYING   , do_broadcast, 0, 0 },
-    { ","  , POS_LYING, do_broadcast, 0, 0 },
-    { "brick"    , POS_STANDING, do_action   , 0, 0 },
+    { ","        , POS_LYING   , do_broadcast, 0, 0 },
     { "build"    , POS_RESTING , do_build    , 0, 0 },
-    { "burn"     , POS_STANDING, do_not_here , 0, 0 },
-    { "burp"     , POS_LYING   , do_action   , 0, 0 },
-    { "buy"      , POS_SITTING , do_not_here , 0, 0 },
     { "bug"      , POS_DEAD    , do_gen_write, 0, SCMD_BUG },
     { "bypass"   , POS_STANDING, do_gen_door , 0, SCMD_PICK },
 
     { "cast"     , POS_SITTING , do_cast     , 1, 0 },
     { "call"     , POS_LYING   , do_phone    , 0, SCMD_RING },
-    { "cancel"   , POS_RESTING , do_not_here , 0, 0 },
-    { "cackle"   , POS_LYING   , do_action   , 0, 0 },
-    { "chase"  , POS_SITTING , do_chase    , 0, 0 },
-    { "chuckle"  , POS_LYING   , do_action   , 0, 0 },
-    { "chillout" , POS_RESTING , do_action   , 0, 0 },
-    { "check"    , POS_RESTING , do_not_here , 0, 0 },
-    { "cheer"    , POS_LYING   , do_action   , 0, 0 },
-    { "clap"     , POS_LYING   , do_action   , 0, 0 },
+    { "chase"    , POS_SITTING , do_chase    , 0, 0 },
     { "cleanse"  , POS_LYING   , do_cleanse  , 0, 0 },
     { "clear"    , POS_DEAD    , do_gen_ps   , 0, SCMD_CLEAR },
-    { "climb"    , POS_STANDING, do_not_here , 0, 0 },
     { "close"    , POS_SITTING , do_gen_door , 0, SCMD_CLOSE },
     { "cls"      , POS_DEAD    , do_gen_ps   , 0, SCMD_CLEAR },
-    { "cockeye"  , POS_RESTING , do_action   , 0, 0 },
-    { "collapse" , POS_STANDING, do_action   , 0, 0 },
-    { "collect"  , POS_RESTING , do_not_here , 0, 0 },
-    { "comb"     , POS_RESTING , do_action   , 0, 0 },
-    { "comfort"  , POS_RESTING , do_action   , 0, 0 },
     { "consider" , POS_LYING   , do_consider , 0, 0 },
-    { "confused" , POS_LYING   , do_action   , 0, 0 },
-    { "congrat"  , POS_LYING   , do_action   , 0, 0 },
     { "conjure"  , POS_RESTING , do_conjure  , 0, 0 },
     { "connect"  , POS_RESTING , do_connect  , 0, 0 },
-    { "convince" , POS_LYING   , do_action   , 0, 0 },
     { "contest"  , POS_SITTING , do_contest  , 0, 0 },
     { "control"  , POS_SITTING , do_control  , 0, 0 },
     { "copy"     , POS_SITTING , do_copy     , 0, 0 },
@@ -495,33 +461,24 @@ struct command_info cmd_info[] =
     { "compress" , POS_LYING   , do_compact  , 0, 0 },
     { "cook"     , POS_SITTING , do_cook     , 0, 0 },
     { "costtime" , POS_DEAD    , do_costtime , 0, 0 },
-    { "cough"    , POS_LYING   , do_action   , 0, 0 },
     { "cpool"    , POS_DEAD    , do_cpool    , 0, 0 },
     { "crack"    , POS_RESTING , do_crack    , 0, 0 },
-    { "crashmu"  , POS_STANDING, do_crash_mud, LVL_PRESIDENT, 0 },
+    { "crashmu"  , POS_STANDING, do_crash_mud, LVL_PRESIDENT, SCMD_NOOP },
     { "crashmud" , POS_STANDING, do_crash_mud, LVL_PRESIDENT, SCMD_BOOM },
     { "create"   , POS_LYING   , do_create   , 0, 0 },
     { "credits"  , POS_DEAD    , do_gen_ps   , 0, SCMD_CREDITS },
-    { "cringe"   , POS_LYING   , do_action   , 0, 0 },
-    { "cry"      , POS_LYING   , do_action   , 0, 0 },
-    { "cuddle"   , POS_LYING   , do_action   , 0, 0 },
-    { "curse"    , POS_LYING   , do_action   , 0, 0 },
-    { "curtsey"  , POS_STANDING, do_action   , 0, 0 },
     { "customize", POS_SLEEPING, do_customize, 0, 0 },
     { "cyberware", POS_DEAD    , do_cyberware, 0, 0 },
 
-    { "dance"    , POS_STANDING, do_action   , 0, 0 },
     { "date"     , POS_DEAD    , do_date     , 0, SCMD_DATE },
-    { "daydream" , POS_SLEEPING, do_action   , 0, 0 },
     { "dc"       , POS_DEAD    , do_dc       , LVL_EXECUTIVE, 0 },
     { "deactivate", POS_RESTING, do_deactivate, 0, 0 },
     { "decline"  , POS_LYING   , do_decline  , 0, 0 },
     { "decompress", POS_LYING  , do_compact  , 0, 1 },
     { "decorate" , POS_DEAD    , do_decorate , 0, 0 },
     { "delete"   , POS_SLEEPING, do_delete   , 0, 0 },
-    { "deposit"  , POS_STANDING, do_not_here , 1, 0 },
     { "default"  , POS_RESTING , do_default  , 0, 0 },
-    { "dennis"     , POS_SITTING, do_move     , 0, SCMD_DOWN },
+//  { "dennis"     , POS_SITTING, do_move     , 0, SCMD_DOWN },
     { "design"   , POS_RESTING , do_design   , 0, 0 },
     { "destroy"  , POS_STANDING, do_destroy  , 0, 0 },
     { "destring" , POS_DEAD    , do_destring , 0, 0 },
@@ -529,24 +486,16 @@ struct command_info cmd_info[] =
     { "dice"     , POS_DEAD    , do_dice     , 0, 0 },
     { "die"      , POS_DEAD    , do_die      , 0, 0 },
     { "dig"      , POS_RESTING , do_dig      , LVL_BUILDER, 0 },
-    { "dis"      , POS_LYING   , do_action   , 0, 0 },
-    { "disagree" , POS_LYING   , do_action   , 0, 0 },
-    { "disco"    , POS_RESTING , do_action   , 0, 0 },
     { "dispell"  , POS_SITTING , do_dispell  , 0, 0 },
     { "display"  , POS_DEAD    , do_display  , 0, 0 },
-    { "disregard", POS_LYING   , do_action   , 0, 0 },
-    { "doh"      , POS_LYING   , do_action   , 0, 0 },
     { "domain"   , POS_LYING   , do_domain   , 0, 0 },
     { "donate"   , POS_RESTING , do_drop     , 0, SCMD_DONATE },
     { "drag"     , POS_STANDING, do_drag     , 0, 0 },
-    { "dribble"  , POS_LYING   , do_action   , 0, 0 },
     { "drink"    , POS_RESTING , do_drink    , 0, SCMD_DRINK },
     { "drive"    , POS_SITTING , do_drive    , 0, 0 },
     { "drop"     , POS_LYING   , do_drop     , 0, SCMD_DROP },
     { "draw"     , POS_RESTING , do_draw     , 0, 0 },
     { "driveby"  , POS_SITTING , do_driveby  , 0, 0 },
-    { "drool"    , POS_LYING   , do_action   , 0, 0 },
-    { "dunce"    , POS_LYING   , do_action   , 0, 0 },
 
     { "eat"      , POS_RESTING , do_eat      , 0, SCMD_EAT },
     { "echo"     , POS_SLEEPING, do_echo     , 0, SCMD_ECHO },
@@ -554,83 +503,48 @@ struct command_info cmd_info[] =
     { "elemental", POS_DEAD    , do_elemental, 0, 0 },
     { "emote"    , POS_LYING   , do_echo     , 0, SCMD_EMOTE },
     { ":"        , POS_LYING   , do_echo     , 0, SCMD_EMOTE },
-    { "embrace"  , POS_LYING   , do_action   , 0, 0 },
     { "enter"    , POS_SITTING, do_enter    , 0, 0 },
-    { "envy"     , POS_LYING   , do_action   , 0, 0 },
     { "equipment", POS_SLEEPING, do_equipment, 0, 0 },
     { "exits"    , POS_LYING   , do_exits    , 0, 0 },
     { "examine"  , POS_RESTING , do_examine  , 0, SCMD_EXAMINE },
     { "exclaim"  , POS_LYING   , do_exclaim  , 0, 0 },
-    { "eyebrow"  , POS_LYING   , do_action   , 0, 0 },
-    { "extend"  , POS_SITTING , do_retract  , 0, 0 },
+    { "extend"   , POS_SITTING , do_retract  , 0, 0 },
 
-    { "facepalm" , POS_SITTING , do_action   , 0, 0 },
     { "force"    , POS_SLEEPING, do_force    , LVL_CONSPIRATOR, 0 },
     { "forget"   , POS_DEAD    , do_forget   , 0, 0 },
-    { "forgive"  , POS_LYING   , do_action   , 0, 0 },
-    { "fart"     , POS_LYING   , do_action   , 0, 0 },
     { "fill"     , POS_SITTING , do_pour     , 0, SCMD_FILL },
     { "finger"   , POS_DEAD    , do_last     , 0, SCMD_FINGER },
     { "fix"      , POS_SITTING , do_repair   , 0, 0 },
     { "flee"     , POS_FIGHTING, do_flee     , 0, 0 },
-    { "flex"     , POS_STANDING, do_action   , 0, 0 },
     { "flip"     , POS_SITTING , do_flip     , 0, 0 },
-    { "flirt"    , POS_LYING   , do_action   , 0, 0 },
     { "focus"    , POS_RESTING , do_focus    , 0, 0 },
     { "follow"   , POS_RESTING , do_follow   , 0, 0 },
-    { "fondle"   , POS_LYING   , do_action   , 0, 0 },
     { "freeze"   , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_FREEZE },
-    { "french"   , POS_LYING   , do_action   , 0, 0 },
-    { "frown"    , POS_LYING   , do_action   , 0, 0 },
-    { "fume"     , POS_LYING   , do_action   , 0, 0 },
 
     { "get"      , POS_RESTING , do_get      , 0, 0 },
-    { "gasp"     , POS_LYING   , do_action   , 0, 0 },
-    { "gaecho"    , POS_DEAD    , do_gecho    , LVL_CONSPIRATOR, SCMD_AECHO },
+    { "gaecho"   , POS_DEAD    , do_gecho    , LVL_CONSPIRATOR, SCMD_AECHO },
     { "gecho"    , POS_DEAD    , do_gecho    , LVL_CONSPIRATOR, 0 },
-    { "giggle"   , POS_LYING   , do_action   , 0, 0 },
     { "give"     , POS_RESTING , do_give     , 0, 0 },
-    { "glare"    , POS_RESTING , do_action   , 0, 0 },
     { "goto"     , POS_SLEEPING, do_goto     , LVL_BUILDER, 0 },
     { "group"    , POS_RESTING , do_group    , 1, 0 },
     { "grab"     , POS_RESTING , do_grab     , 0, 0 },
-    { "greet"    , POS_LYING   , do_action   , 0, 0 },
     { "gridguide", POS_RESTING , do_gridguide, 0, 0 },
-    { "grin"     , POS_LYING   , do_action   , 0, 0 },
-    { "grimace"  , POS_LYING   , do_action   , 0, 0 },
-    { "groan"    , POS_LYING   , do_action   , 0, 0 },
-    { "grope"    , POS_LYING   , do_action   , 0, 0 },
-    { "grovel"   , POS_LYING   , do_action   , 0, 0 },
-    { "growl"    , POS_LYING   , do_action   , 0, 0 },
-    { "grumble"  , POS_LYING   , do_action   , 0, 0 },
-    { "grunt"    , POS_LYING   , do_action   , 0, 0 },
 
     { "help"     , POS_DEAD    , do_help     , 0, 0 },
-    { "hair"     , POS_RESTING , do_action   , 0, 0 },
     { "hail"     , POS_STANDING, do_hail     , 0, 0 },
-    { "happy"    , POS_LYING   , do_action   , 0, 0 },
-    { "hand"     , POS_LYING   , do_action   , 0, 0 },
     { "hangup"   , POS_LYING   , do_phone    , 0, SCMD_HANGUP },
-    { "hate"     , POS_LYING   , do_action   , 0, 0 },
     { "handbook" , POS_DEAD    , do_gen_ps   , LVL_BUILDER, SCMD_HANDBOOK },
     { "hcontrol" , POS_DEAD    , do_hcontrol , LVL_EXECUTIVE, 0 },
     { "heal"     , POS_STANDING, do_heal     , 0, 0 },
     { "hedit"    , POS_DEAD    , do_hedit    , LVL_BUILDER, 0 },
-    { "hhold"    , POS_LYING   , do_action   , 0, 0 },
-    { "hiccup"   , POS_LYING   , do_action   , 0, 0 },
     { "hit"      , POS_FIGHTING, do_hit      , 0, SCMD_HIT },
-    { "hifive"   , POS_STANDING, do_action   , 0, 0 },
+    { "history"  , POS_DEAD    , do_message_history, 0, 0 },
     { "hlist"    , POS_DEAD    , do_hlist    , LVL_BUILDER, 0 },
-    { "hoi"      , POS_LYING   , do_action   , 0, 0 },
     { "hold"     , POS_RESTING , do_grab     , 1, 0 },
     { "holster"  , POS_RESTING , do_holster  , 0, 0 },
-    { "hop"      , POS_LYING   , do_action   , 0, 0 },
-    { "hours"    , POS_LYING   , do_not_here , 0, 0 },
-    { "howl"     , POS_LYING   , do_action   , 0, 0 },
     { "house"    , POS_LYING   , do_house    , 0, 0 },
     { "ht"       , POS_DEAD    , do_gen_comm , 0, SCMD_HIREDTALK },
-    { "hkiss"    , POS_STANDING, do_action   , 0, 0 },
-    { "hug"      , POS_RESTING , do_action   , 0, 0 },
+    { "hts"      , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_HIRED },
 
     { "inventory", POS_DEAD    , do_inventory, 0, 0 },
     { "install"  , POS_RESTING , do_put      , 0, SCMD_INSTALL },
@@ -649,47 +563,31 @@ struct command_info cmd_info[] =
     { "index"    , POS_SLEEPING, do_index    , 0, 0 },
     { "info"     , POS_SLEEPING, do_gen_ps   , 0, SCMD_INFO },
     { "initiate" , POS_DEAD    , do_initiate , 0, SCMD_INITIATE },
-    { "innocent" , POS_LYING   , do_action   , 0, 0 },
     { "insult"   , POS_LYING   , do_insult   , 0, 0 },
     { "invis"    , POS_DEAD    , do_invis    , LVL_BUILDER, 0 },
     { "invitations", POS_LYING , do_invitations, 0, 0 },
 
     { "jack"     , POS_SITTING , do_jack     , 0, 0 },
-    { "jig"      , POS_STANDING, do_action   , 0, 0 },
-    { "jeer"     , POS_LYING   , do_action   , 0, 0 },
-    { "jump"     , POS_RESTING , do_action   , 0, 0 },
     { "junk"     , POS_RESTING , do_drop     , 0, SCMD_JUNK },
 
     { "kil"      , POS_FIGHTING, do_kil      , 0, 0 },
     { "kill"     , POS_FIGHTING, do_kill     , 0, SCMD_KILL },
-    { "kiss"     , POS_LYING  , do_action   , 0, 0 },
     { "kick"     , POS_STANDING, do_kick     , 0, 0 },
     { "knock"    , POS_STANDING, do_gen_door , 0, SCMD_KNOCK },
 
     { "look"     , POS_LYING   , do_look     , 0, SCMD_LOOK },
-    { "land"     , POS_RESTING , do_not_here , 0, 0 },
     { "lay"      , POS_RESTING , do_lay      , 0, 0 },
     { "language" , POS_DEAD    , do_language , 0, 0 },
-    { "lap"      , POS_STANDING, do_action   , 0, 0 },
-    { "laugh"    , POS_LYING   , do_action   , 0, 0 },
     { "last"     , POS_DEAD    , do_last     , LVL_BUILDER, 0 },
     { "learn"    , POS_RESTING , do_learn    , 0, 0 },
-    { "lease"    , POS_RESTING , do_not_here , 1, 0 },
-    { "leave"    , POS_SITTING, do_leave    , 0, 0 },
-    { "light"    , POS_STANDING, do_not_here , 0, 0 },
-    { "link"     , POS_SLEEPING, do_link    , 0, 0 },
-    { "list"     , POS_RESTING, do_not_here , 0, 0 },
-    { "listen"   , POS_LYING   , do_action   , 0, 0 },
-    { "lick"     , POS_LYING   , do_action   , 0, 0 },
+    { "leave"    , POS_SITTING , do_leave    , 0, 0 },
+    { "link"     , POS_SLEEPING, do_link     , 0, 0 },
     { "lock"     , POS_SITTING , do_gen_door , 0, SCMD_LOCK },
     { "load"     , POS_RESTING , do_chipload , 0, 0 },
-    { "lol"      , POS_LYING   , do_action   , 0, 0 },
-    { "love"     , POS_LYING   , do_action   , 0, 0 },
     { "logwatch" , POS_DEAD    , do_logwatch , LVL_BUILDER, 0 },
 
     { "man"      , POS_SITTING , do_man      , 0, 0 },
     { "manifest" , POS_RESTING , do_manifest , 0, 0 },
-    { "mellow"   , POS_RESTING , do_action   , 0, 0 },
     { "memory"   , POS_SLEEPING, do_memory   , 0, 0 },
     { "metamagic", POS_DEAD    , do_metamagic, 0, 0 },
     { "mclone"   , POS_DEAD    , do_mclone   , LVL_BUILDER, 0 },
@@ -697,87 +595,59 @@ struct command_info cmd_info[] =
     { "medit"    , POS_DEAD    , do_medit    , LVL_BUILDER, 0 },
     { "mlist"    , POS_DEAD    , do_mlist    , LVL_BUILDER, 0 },
     { "mode"     , POS_LYING   , do_mode     , 0, 0 },
-    { "moan"     , POS_LYING   , do_action   , 0, 0 },
-    { "mosh"     , POS_STANDING, do_action   , 0, 0 },
-    { "moon"     , POS_STANDING, do_action   , 0, 0 },
     { "motd"     , POS_DEAD    , do_gen_ps   , 0, SCMD_MOTD },
     { "mount"    , POS_RESTING , do_mount    , 0, 0 },
-    { "mail"     , POS_STANDING, do_not_here , 0, 0},
     { "mask"     , POS_RESTING , do_masking  , 0, 0 },
-    { "massage"  , POS_RESTING , do_action   , 0, 0 },
-    { "muthafucka",POS_RESTING , do_action   , 0, 0 },
     { "mute"     , POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_SQUELCH },
     { "muteooc"  , POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_SQUELCHOOC },
     { "murder"   , POS_FIGHTING, do_hit      , 0, SCMD_MURDER },
 
     { "news"     , POS_SLEEPING, do_gen_ps   , 0, SCMD_NEWS },
     { "newbie"   , POS_DEAD    , do_gen_comm , 0, SCMD_NEWBIE },
+    { "newbies"  , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_NEWBIE },
     { "nervestrike", POS_DEAD  , do_nervestrike, 0, 0 },
-    { "nibble"   , POS_RESTING , do_action   , 0, 0 },
-    { "nod"      , POS_LYING   , do_action   , 0, 0 },
-    { "noogie"   , POS_STANDING, do_action   , 0, 0 },
     { "notitle"  , POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_NOTITLE },
-    { "nudge"    , POS_LYING   , do_action   , 0, 0 },
-    { "nuzzle"   , POS_LYING   , do_action   , 0, 0 },
 
     { "order"    , POS_LYING   , do_order    , 1, 0 },
-    { "offer"    , POS_RESTING , do_not_here , 0, 0 },
     { "olc"      , POS_DEAD    , do_olcon    , LVL_DEVELOPER, 0 },
     { "ooc"      , POS_DEAD , do_gen_comm , 0, SCMD_OOC},
+    { "oocs"     , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_OOC },
     { "oocdisable", POS_DEAD   , do_oocdisable, LVL_DEVELOPER, 0 },
     { "open"     , POS_SITTING , do_gen_door , 0, SCMD_OPEN },
     { "osay"     , POS_LYING   , do_say      , 0, SCMD_OSAY },
+    { "osays"    , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_OSAYS },
     { "."        , POS_LYING   , do_say      , 0, SCMD_OSAY },
 
     { "put"      , POS_RESTING , do_put      , 0, 0 },
     { "packup"   , POS_SITTING , do_packup   , 0, 0 },
-    { "paint"    , POS_RESTING , do_not_here , 0, 0 },
-    { "pant"     , POS_LYING   , do_action   , 0, 0 },
-    { "pat"      , POS_LYING   , do_action   , 0, 0 },
     { "patch"    , POS_LYING   , do_patch    , 0, 0 },
     { "page"     , POS_DEAD    , do_page     , LVL_ARCHITECT, 0 },
-    { "pay"      , POS_RESTING , do_not_here , 0, 0 },
+    { "pages"    , POS_DEAD    , do_switched_message_history, LVL_ARCHITECT, COMM_CHANNEL_PAGES },
     { "pardon"   , POS_DEAD    , do_wizutil  , LVL_CONSPIRATOR, SCMD_PARDON },
-    { "peck"     , POS_LYING   , do_action   , 0, 0 },
-    { "peer"     , POS_LYING   , do_action   , 0, 0 },
     { "penalize" , POS_DEAD    , do_penalize , LVL_FIXER, 0 },
     { "perceive" , POS_LYING   , do_astral   , 0, SCMD_PERCEIVE },
     { "pgroup"   , POS_LYING   , do_pgroup   , 0, 0 },
     { "phone"    , POS_LYING   , do_phone    , 0, 0 },
     { "phonelist", POS_DEAD    , do_phonelist, LVL_BUILDER, 0 },
     { "photo"    , POS_RESTING , do_photo    , 0, 0 },
-    { "point"    , POS_RESTING , do_action   , 0, 0 },
-    { "poke"     , POS_RESTING , do_action   , 0, 0 },
     { "pop"      , POS_SITTING , do_pop      , 0, 0 },
     { "policy"   , POS_DEAD    , do_gen_ps   , 0, SCMD_POLICIES },
-    { "ponder"   , POS_LYING   , do_action   , 0, 0 },
     { "poofin"   , POS_DEAD    , do_poofset  , LVL_BUILDER, SCMD_POOFIN },
     { "poofout"  , POS_DEAD    , do_poofset  , LVL_BUILDER, SCMD_POOFOUT },
     { "pools"    , POS_DEAD    , do_pool     , 0, 0 },
     { "pour"     , POS_SITTING , do_pour     , 0, SCMD_POUR },
-    { "pout"     , POS_RESTING , do_action   , 0, 0 },
     { "position" , POS_DEAD    , do_position , 0, 0 },
-    { "possess"   , POS_DEAD    , do_wizpossess , LVL_FIXER, 0 },
+    { "possess"  , POS_DEAD    , do_wizpossess, LVL_FIXER, 0 },
     { "powerdown", POS_DEAD    , do_powerdown, 0, 0 },
     { "prompt"   , POS_DEAD    , do_display  , 0, 0 },
     { "project"  , POS_LYING   , do_astral   , 0, SCMD_PROJECT },
     { "pretitle" , POS_DEAD    , do_wiztitle , 0, SCMD_PRETITLE },
     { "practice" , POS_RESTING , do_practice , 1, 0 },
-    { "prance"   , POS_STANDING, do_action   , 0, 0 },
-    { "pray"     , POS_SITTING , do_action   , 0, 0 },
     { "probe"    , POS_RESTING , do_examine  , 0, SCMD_PROBE },
     { "program"  , POS_RESTING , do_program  , 0, 0 },
     { "progress" , POS_RESTING , do_progress , 0, 0 },
     { "prone"    , POS_FIGHTING, do_prone    , 0, 0 },
-    { "propose"  , POS_STANDING, do_action   , 0, 0 },
-    { "psychoanalyze", POS_RESTING, do_action, 0, 0 },
     { "push"     , POS_SITTING , do_push     , 0, 0 },
-    { "pucker"   , POS_RESTING , do_action   , 0, 0 },
-    { "puke"     , POS_LYING   , do_action   , 0, 0 },
-    { "pull"     , POS_STANDING, do_not_here , 0, 0 },
-    { "punch"    , POS_RESTING , do_action   , 0, 0 },
-    { "puppy"    , POS_LYING   , do_action   , 0, 0 },
-    { "purr"     , POS_LYING   , do_action   , 0, 0 },
     { "purge"    , POS_DEAD    , do_purge    , LVL_ARCHITECT, 0 },
 
     { "qui"      , POS_DEAD    , do_quit     , 0, 0 },
@@ -786,12 +656,11 @@ struct command_info cmd_info[] =
     { "qedit"    , POS_DEAD    , do_qedit    , LVL_FIXER, 0 },
 
     { "reply"    , POS_LYING   , do_reply    , 0, 0 },
-    { "raspberry", POS_SITTING , do_action   , 0, 0 },
     { "ram"      , POS_SITTING , do_ram      , 0, 0 },
     { "radio"    , POS_LYING   , do_radio    , 0, 0 },
     { "rig"      , POS_SITTING , do_rig      , 0, 0 },
     { "rt"       , POS_DEAD    , do_gen_comm , 0, SCMD_RPETALK },
-    { "rtfm"     , POS_STANDING, do_action   , 0, 0 },
+    { "rts"      , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_RPE },
     { "rclone"   , POS_DEAD    , do_rclone   , LVL_BUILDER, 0},
     { "rdelete"  , POS_DEAD    , do_rdelete  , LVL_PRESIDENT, 0},
     { "reflex"   , POS_RESTING , do_reflex   , 0, 0 },
@@ -799,181 +668,120 @@ struct command_info cmd_info[] =
     { "read"     , POS_LYING   , do_look     , 0, SCMD_READ },
     { "ready"    , POS_LYING   , do_ready    , 0, 0 },
     { "reboot"   , POS_DEAD    , do_reboot   , LVL_DEVELOPER, 0 },
-    { "receive"  , POS_STANDING, do_not_here , 1, 0 },
     { "recap"    , POS_DEAD    , do_recap    , 0, 0 },
-    { "recharge" , POS_DEAD    , do_not_here , 0, 0 },
     { "reload"   , POS_RESTING , do_reload   , 0, 0 },
     { "release"  , POS_LYING   , do_release  , 0, 0 },
     { "relieve"  , POS_STANDING, do_relieve  , 0, 0 },
     { "remove"   , POS_RESTING , do_remove   , 0, 0 },
-    { "rent"     , POS_STANDING, do_not_here , 1, 0 },
     { "remember" , POS_LYING   , do_remember , 0, 0 },
     { "report"   , POS_LYING   , do_report   , 0, 0 },
-    { "repair"   , POS_SITTING , do_repair , 0, 0 },
+    { "repair"   , POS_SITTING , do_repair   , 0, 0 },
     { "restore"  , POS_DEAD    , do_restore  , LVL_CONSPIRATOR, 0 },
     { "restring" , POS_DEAD    , do_restring , 0, 0 },
     { "retract"  , POS_SITTING , do_retract  , 0, 0 },
-    { "retrieve" , POS_RESTING , do_not_here , 1, 0 },
     { "return"   , POS_DEAD    , do_return   , 0, 0 },
     { "rlist"    , POS_DEAD    , do_rlist    , LVL_BUILDER, 0 },
-    { "roar"     , POS_RESTING , do_action   , 0, 0 },
-    { "rofl"     , POS_RESTING , do_action   , 0, 0 },
-    { "roll"     , POS_LYING   , do_action   , 0, 0 },
-    { "rose"     , POS_STANDING, do_action   , 0, 0 },
+    { "room"     , POS_DEAD    , do_room     , LVL_BUILDER, 0 },
     { "rpe"      , POS_DEAD    , do_wizutil  , LVL_ADMIN, SCMD_RPE },
     { "rpetalk"  , POS_DEAD    , do_gen_comm , 0, SCMD_RPETALK },
-    { "rub"      , POS_RESTING , do_action   , 0, 0 },
-    { "ruffle"   , POS_STANDING, do_action   , 0, 0 },
     { "redit"    , POS_DEAD    , do_redit    , LVL_BUILDER, 0 },
 
-    { "sage"     , POS_LYING   , do_action   , 0, 0 },
     { "say"      , POS_LYING   , do_say      , 0, SCMD_SAY },
+    { "says"     , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_SAYS },
     { "'"        , POS_LYING   , do_say      , 0, SCMD_SAY },
     { "sayto"    , POS_LYING   , do_say      , 0, SCMD_SAYTO },
     { "\""  , POS_LYING   , do_say      , 0, SCMD_SAYTO },
     { "score"    , POS_DEAD    , do_score    , 0, 0 },
     { "scan"     , POS_RESTING , do_scan     , 0, 0 },
-    { "scratch"  , POS_LYING   , do_action   , 0, 0 },
-    { "scream"   , POS_LYING   , do_action   , 0, 0 },
-    { "sell"     , POS_STANDING, do_not_here , 0, 0 },
     { "send"     , POS_SLEEPING, do_send     , LVL_FIXER, 0 },
     { "sedit"    , POS_DEAD    , do_shedit   , LVL_BUILDER, 0 },
     { "set"      , POS_DEAD    , do_set      , LVL_DEVELOPER, 0 },
     { "settime"  , POS_DEAD    , do_settime  , LVL_DEVELOPER, 0 },
     { "sheath"   , POS_RESTING , do_holster  , 0, 0 },
     { "shout"    , POS_LYING   , do_gen_comm , 0, SCMD_SHOUT },
+    { "shouts"   , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_SHOUTS },
     { "shoot"    , POS_FIGHTING, do_shoot    , 0, 0 },
-    { "shake"    , POS_LYING   , do_action   , 0, 0 },
-    { "shiver"   , POS_LYING   , do_action   , 0, 0 },
     { "show"     , POS_DEAD    , do_show     , 0, 0 },
-    { "shrug"    , POS_LYING   , do_action   , 0, 0 },
     { "shutdown" , POS_RESTING , do_shutdown , 0, SCMD_SHUTDOWN },
-    { "sigh"     , POS_LYING   , do_action   , 0, 0 },
-    { "signal"   , POS_LYING   , do_action   , 0, 0 },
-    { "sing"     , POS_LYING   , do_action   , 0, 0 },
     { "sip"      , POS_RESTING , do_drink    , 0, SCMD_SIP },
     { "sit"      , POS_LYING   , do_sit      , 0, 0 },
     { "skills"   , POS_SLEEPING, do_skills   , 0, 0 },
     { "skillset" , POS_SLEEPING, do_skillset , LVL_DEVELOPER, 0 },
     { "slist"    , POS_DEAD    , do_slist    , LVL_BUILDER, 0 },
     { "sleep"    , POS_SLEEPING, do_sleep    , 0, 0 },
-    { "slap"     , POS_RESTING , do_action   , 0, 0 },
-    { "slobber"  , POS_RESTING , do_action   , 0, 0 },
     { "slowns"   , POS_DEAD    , do_slowns   , LVL_DEVELOPER, 0 },
-    { "slurp"    , POS_STANDING, do_action   , 0, 0 },
-    { "smile"    , POS_LYING   , do_action   , 0, 0 },
-    { "smirk"    , POS_LYING   , do_action   , 0, 0 },
-    { "snicker"  , POS_LYING   , do_action   , 0, 0 },
-    { "snap"     , POS_LYING   , do_action   , 0, 0 },
-    { "snarl"    , POS_LYING   , do_action   , 0, 0 },
-    { "sneeze"   , POS_LYING   , do_action   , 0, 0 },
     { "sneak"    , POS_STANDING, do_sneak    , 1, 0 },
-    { "sniff"    , POS_LYING   , do_action   , 0, 0 },
-    { "snort"    , POS_LYING   , do_action   , 0, 0 },
-    { "snore"    , POS_SLEEPING, do_action   , 0, 0 },
-    { "snowball" , POS_STANDING, do_action   , LVL_BUILDER, 0 },
     { "snoop"    , POS_DEAD    , do_snoop    , LVL_EXECUTIVE, 0 },
-    { "snuggle"  , POS_LYING   , do_action   , 0, 0 },
     { "socials"  , POS_DEAD    , do_commands , 0, SCMD_SOCIALS },
-    { "sob"      , POS_LYING   , do_action   , 0, 0 },
     { "software" , POS_LYING   , do_software , 0, 0 },
     { "spool"    , POS_DEAD    , do_spool    , 0, 0 }, 
     { "speed"    , POS_RESTING , do_speed    , 0, 0 },
     { "spells"   , POS_SLEEPING, do_spells   , 0, 0 },
     { "spellset" , POS_SLEEPING, do_spellset , LVL_DEVELOPER, 0 },
-    { "spank"    , POS_LYING   , do_action   , 0, 0 },
     { "spirits"  , POS_LYING   , do_elemental, 0, 0 },
-    { "spit"     , POS_STANDING, do_action   , 0, 0 },
 //    { "spray"    , POS_STANDING, do_spray    , 0, 0 },
-    { "squeeze"  , POS_LYING   , do_action   , 0, 0 },
     { "stand"    , POS_LYING   , do_stand    , 0, 0 },
-    { "stare"    , POS_LYING   , do_action   , 0, 0 },
-    { "stamp"    , POS_RESTING , do_action   , 0, 0 },
     { "stat"     , POS_DEAD    , do_stat     , LVL_BUILDER, 0 },
     { "status"   , POS_LYING   , do_status   , 0, 0 },
     { "steal"    , POS_STANDING, do_steal    , 0, 0 },
-    { "steam"    , POS_RESTING , do_action   , 0, 0 },
-    { "striptease", POS_STANDING , do_action  , 0, 0 },
-    { "stroke"   , POS_RESTING , do_action   , 0, 0 },
-    { "strut"    , POS_STANDING, do_action   , 0, 0 },
-    { "strangle" , POS_STANDING, do_action   , 0, 0 },
     { "subscribe", POS_SITTING , do_subscribe, 0, 0 },
     { "subpoint" , POS_DEAD    , do_subpoint , LVL_ARCHITECT, 0 },
-    { "sulk"     , POS_LYING   , do_action   , 0, 0 },
     { "survey"   , POS_LYING   , do_survey   , 0, 0 },
-    { "swat"     , POS_RESTING , do_action   , 0, 0 },
-    { "swear"    , POS_LYING   , do_action   , 0, 0 },
-    { "switch"   , POS_SITTING    , do_switch   , 0, 0 },
+    { "switch"   , POS_SITTING , do_switch   , 0, 0 },
 
     { "talk"     , POS_LYING   , do_phone    , 0, SCMD_TALK },
     { "tell"     , POS_DEAD    , do_tell     , 0, 0 },
-    { "tackle"   , POS_RESTING , do_action   , 0, 0 },
+    { "tells"      , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_TELLS },
     { "take"     , POS_RESTING , do_get      , 0, 0 },
     { "target"   , POS_SITTING , do_target   , 0, 0 },
-    { "tango"    , POS_STANDING, do_action   , 0, 0 },
-    { "tap"      , POS_LYING   , do_action   , 0, 0 },
-    { "taunt"    , POS_LYING   , do_action   , 0, 0 },
     { "taste"    , POS_RESTING , do_eat      , 0, SCMD_TASTE },
     { "tail"     , POS_DEAD    , do_tail     , LVL_DEVELOPER, 0 },
     { "teleport" , POS_DEAD    , do_teleport , LVL_CONSPIRATOR, 0 },
-    { "thank"    , POS_LYING   , do_action   , 0, 0 },
     { "think"    , POS_LYING   , do_think    , 0, 0 },
     { "throw"    , POS_FIGHTING, do_throw    , 0, 0 },
-    { "thwap"    , POS_SITTING , do_action   , 0, 0 },
     { "thaw"     , POS_DEAD    , do_wizutil  , LVL_FREEZE, SCMD_THAW },
     { "title"    , POS_DEAD    , do_title    , 0, 0 },
-    { "tickle"   , POS_RESTING , do_action   , 0, 0 },
     { "time"     , POS_DEAD    , do_time     , 0, SCMD_NORMAL },
-    { "tiptoe"   , POS_RESTING , do_action   , 0, 0 },
     { "tke"      , POS_DEAD    , do_tke      , 0, 0 },
     { "toggle"   , POS_DEAD    , do_toggle   , 0, 0 },
-    { "tongue"   , POS_LYING   , do_action   , 0, 0 },
-    { "torture"  , POS_RESTING , do_action   , 0, 0 },
-    { "touch"    , POS_STANDING, do_action   , 0, 0 },
-    { "toss"     , POS_STANDING, do_action   , 0, 0 },
     { "tow"      , POS_SITTING , do_tow      , 0, 0 },
     { "track"    , POS_STANDING, do_track    , 0, 0 },
     { "treat"    , POS_SITTING , do_treat    , 0, 0 },
     { "trade"    , POS_DEAD    , do_trade    , 0, 0 },
     { "train"    , POS_STANDING, do_train    , 0, 0 },
     { "transfer" , POS_SLEEPING, do_trans    , 0, 0 },
-    { "trip"     , POS_STANDING, do_action   , 0, 0 },
     { "tridlog"  , POS_DEAD    , do_tridlog  , LVL_FIXER, 0 },
-    { "twitch"   , POS_LYING   , do_action   , 0, 0 },
-    { "twiddle"  , POS_LYING   , do_action   , 0, 0 },
-    { "twirl"    , POS_STANDING, do_action   , 0, 0 },
     { "type"     , POS_STANDING, do_type     , 0, 0 },
     { "typo"     , POS_DEAD    , do_gen_write, 0, SCMD_TYPO },
 
+    { "unban"    , POS_DEAD    , do_unban    , LVL_EXECUTIVE, 0 },
+    { "ungroup"  , POS_DEAD    , do_ungroup  , 0, 0 },
     { "uninstall", POS_SITTING , do_get      , 0, SCMD_UNINSTALL },
-    { "unjack"    , POS_SITTING , do_jack     , 0, 1},
+    { "unjack"   , POS_SITTING , do_jack     , 0, 1},
     { "unlock"   , POS_SITTING , do_gen_door , 0, SCMD_UNLOCK },
     { "unlink"   , POS_SLEEPING, do_link     , 0, 1 },
-    { "ungroup"  , POS_DEAD    , do_ungroup  , 0, 0 },
-    { "unban"    , POS_DEAD    , do_unban    , LVL_EXECUTIVE, 0 },
     { "unbond"   , POS_RESTING , do_unbond   , 0, 0 },
     { "unaffect" , POS_DEAD    , do_wizutil  , LVL_EXECUTIVE, SCMD_UNAFFECT },
     { "unattach" , POS_RESTING , do_unattach , 0, 0 },
     { "unpack"   , POS_SITTING , do_unpack   , 0, 0 },
+    { "unpractice", POS_RESTING , do_practice, 1, SCMD_UNPRACTICE },
     { "unsubscribe",POS_RESTING, do_subscribe, 0, SCMD_UNSUB },
-    { "upgrade"  , POS_SITTING , do_upgrade, 0 , 0 },
+    { "untrain"  , POS_RESTING , do_train    , 1, SCMD_UNTRAIN },
+    { "upgrade"  , POS_SITTING , do_upgrade  , 0 , 0 },
     { "uptime"   , POS_DEAD    , do_date     , LVL_BUILDER, SCMD_UPTIME },
     { "use"      , POS_SITTING , do_use      , 1, SCMD_USE },
     { "users"    , POS_DEAD    , do_users    , LVL_BUILDER, 0 },
 
-    { "value"    , POS_STANDING, do_not_here , 0, 0 },
     { "version"  , POS_DEAD    , do_gen_ps   , 0, SCMD_VERSION },
     { "vemote"   , POS_SLEEPING, do_vemote   , 0 , 0 },
     //    { "visible"  , POS_RESTING , do_visible  , 1, 0 },
     { "view"     , POS_LYING   , do_imagelink, 0, 0 },
     { "vlist"    , POS_DEAD    , do_vlist    , LVL_BUILDER, 0 },
     { "vnum"     , POS_DEAD    , do_vnum     , LVL_BUILDER, 0 },
-    { "volunteer", POS_RESTING , do_action   , 0, 0 },
     { "vset"     , POS_DEAD    , do_vset     , LVL_DEVELOPER, 0 },
     { "vstat"    , POS_DEAD    , do_vstat    , LVL_BUILDER, 0 },
 
     { "wake"     , POS_SLEEPING, do_wake     , 0, 0 },
-    { "wave"     , POS_LYING   , do_action   , 0, 0 },
     { "watch"    , POS_SITTING , do_watch    , 0, 0 },
     { "wear"     , POS_RESTING , do_wear     , 0, 0 },
     { "weather"  , POS_LYING   , do_weather  , 0, 0 },
@@ -981,52 +789,300 @@ struct command_info cmd_info[] =
     { "whoami"   , POS_DEAD    , do_gen_ps   , 0, SCMD_WHOAMI },
     { "whotitle" , POS_DEAD    , do_wiztitle , LVL_BUILDER, SCMD_WHOTITLE },
     { "where"    , POS_RESTING , do_where    , 1, LVL_PRESIDENT },
-    { "whimper"  , POS_LYING   , do_action   , 0, 0 },
     { "whisper"  , POS_LYING   , do_spec_comm, 0, SCMD_WHISPER },
-    { "whine"    , POS_LYING   , do_action   , 0, 0 },
-    { "whistle"  , POS_LYING   , do_action   , 0, 0 },
-    { "whiz"     , POS_SITTING , do_action   , 0, 0 },
-    { "wibble"   , POS_STANDING, do_action   , 0, 0 },
     { "wield"    , POS_RESTING , do_wield    , 0, 0 },
-    { "wiggle"   , POS_STANDING, do_action   , 0, 0 },
     { "wimpy"    , POS_DEAD    , do_wimpy    , 0, 0 },
-    { "wince"    , POS_LYING   , do_action   , 0, 0 },
-    { "wink"     , POS_LYING   , do_action   , 0, 0 },
-    { "withdraw" , POS_STANDING, do_not_here , 1, 0 },
-    { "wire"     , POS_STANDING, do_not_here , 1, 0 },
     { "wizload"  , POS_RESTING , do_wizload  , LVL_ADMIN, 0 },
-    { "wooha"    , POS_SITTING , do_action   , 0, 0 },
     { "wtell"    , POS_DEAD    , do_wiztell  , LVL_BUILDER, 0 },
+    { "wtells"   , POS_DEAD    , do_switched_message_history, LVL_BUILDER, COMM_CHANNEL_WTELLS },
+    { "wts"      , POS_DEAD    , do_switched_message_history, LVL_BUILDER, COMM_CHANNEL_WTELLS },
     { "wf"       , POS_DEAD    , do_wizfeel  , LVL_BUILDER, 0 },
     { "wizhelp"  , POS_SLEEPING, do_wizhelp  , LVL_BUILDER, 0 },
     { "wizlist"  , POS_DEAD    , do_gen_ps   , 0, SCMD_IMMLIST },
     { "wizlock"  , POS_DEAD    , do_wizlock  , LVL_DEVELOPER, 0 },
-    { "worship"  , POS_RESTING , do_action   , 0, 0 },
-    { "write"    , POS_RESTING , do_not_here , 0, 0 },
-    { "wrestle"  , POS_STANDING, do_action   , 0, 0 },
     { "wwho"     , POS_DEAD    , do_wizwho   , LVL_BUILDER, 0 },
 
     { "vedit"    , POS_DEAD    , do_vedit    , LVL_BUILDER, 0 },
-    { "vteleport" , POS_DEAD   , do_vteleport, LVL_CONSPIRATOR, 0 },
+    { "vteleport", POS_DEAD   , do_vteleport, LVL_CONSPIRATOR, 0 },
 
-    // The mysterious back door command!
-    { "xyz"      , POS_STANDING, do_action   , LVL_PRESIDENT, 0 },
+    // The mysterious back door command! (protip: it does nothing)
+//  { "xyz"      , POS_STANDING, do_action   , LVL_PRESIDENT, 0 },
 
-    { "yawn"     , POS_LYING   , do_action   , 0, 0 },
     { "yell"     , POS_LYING   , do_gen_comm , 0, SCMD_SHOUT},
-    { "yodel"    , POS_LYING   , do_action   , 0, 0 },
 
     { "zdelete"  , POS_DEAD    , do_zdelete  , LVL_PRESIDENT, 0 },
-    { "zaecho"    , POS_SLEEPING, do_zecho    , LVL_FIXER, SCMD_AECHO },
+    { "zaecho"   , POS_SLEEPING, do_zecho    , LVL_FIXER, SCMD_AECHO },
     { "zecho"    , POS_SLEEPING, do_zecho    , LVL_FIXER, 0 },
     { "zedit"    , POS_DEAD    , do_zedit    , LVL_BUILDER, 0 },
     { "zlist"    , POS_DEAD    , do_zlist    , LVL_BUILDER, 0 },
+    { "zone"     , POS_DEAD    , do_zone     , LVL_BUILDER, 0 },
     { "zreset"   , POS_DEAD    , do_zreset   , LVL_BUILDER, 0 },
     { "zswitch"  , POS_DEAD    , do_zswitch  , LVL_BUILDER, 0},
-    { "zyx"      , POS_STANDING , do_action  , LVL_PRESIDENT, 0 },
+    /* End of functional commands with game-wide implementation.*/
+    
+    /* Commands that will only function in the presence of a spec_proc. */
+    { "burn"     , POS_STANDING, do_not_here , 0, 0 },
+    { "buy"      , POS_SITTING , do_not_here , 0, 0 },
+    { "check"    , POS_RESTING , do_not_here , 0, 0 },
+    { "collect"  , POS_RESTING , do_not_here , 0, 0 },
+    //  { "blastoff" , POS_RESTING , do_not_here , 0, 0 },
+    { "cancel"   , POS_RESTING , do_not_here , 0, 0 },
+    { "climb"    , POS_STANDING, do_not_here , 0, 0 },
+    { "deposit"  , POS_STANDING, do_not_here , 1, 0 },
+    { "hours"    , POS_LYING   , do_not_here , 0, 0 },
+    //  { "land"     , POS_RESTING , do_not_here , 0, 0 },
+    { "lease"    , POS_RESTING , do_not_here , 1, 0 },
+    { "light"    , POS_STANDING, do_not_here , 0, 0 },
+    { "list"     , POS_RESTING, do_not_here , 0, 0 },
+    { "mail"     , POS_STANDING, do_not_here , 0, 0},
+    { "offer"    , POS_RESTING , do_not_here , 0, 0 },
+    { "paint"    , POS_RESTING , do_not_here , 0, 0 },
+    { "pay"      , POS_RESTING , do_not_here , 0, 0 },
+    { "pull"     , POS_STANDING, do_not_here , 0, 0 },
+    { "receive"  , POS_STANDING, do_not_here , 1, 0 },
+    { "recharge" , POS_DEAD    , do_not_here , 0, 0 },
+    { "rent"     , POS_STANDING, do_not_here , 1, 0 },
+    { "retrieve" , POS_RESTING , do_not_here , 1, 0 },
+    { "sell"     , POS_STANDING, do_not_here , 0, 0 },
+    { "withdraw" , POS_STANDING, do_not_here , 1, 0 },
+    { "wire"     , POS_STANDING, do_not_here , 1, 0 },
+    { "write"    , POS_RESTING , do_not_here , 0, 0 },
+    { "value"    , POS_STANDING, do_not_here , 0, 0 },
+    /* End of spec-proc commands. */
+    
+    /* Socials and other fluff commands. */
+    { "agree"    , POS_LYING   , do_action   , 0, 0 },
+    { "agree"    , POS_LYING   , do_action   , 0, 0 },
+    { "accuse"   , POS_SITTING , do_action   , 0, 0 },
+    { "apologize", POS_LYING   , do_action   , 0, 0 },
+    { "applaud"  , POS_LYING   , do_action   , 0, 0 },
+    // Socials B
+    { "bounce"   , POS_STANDING, do_action   , 0, 0 },
+    { "bat"      , POS_RESTING , do_action   , 0, 0 },
+    { "beam"     , POS_LYING   , do_action   , 0, 0 },
+    { "bearhug"  , POS_STANDING, do_action   , 0, 0 },
+    { "beg"      , POS_RESTING , do_action   , 0, 0 },
+    { "bite"     , POS_RESTING , do_action   , 0, 0 },
+    { "blink"    , POS_LYING   , do_action   , 0, 0 },
+    { "bleed"    , POS_LYING   , do_action   , 0, 0 },
+    { "blush"    , POS_LYING   , do_action   , 0, 0 },
+    { "boggle"   , POS_LYING   , do_action   , 0, 0 },
+    { "bonk"     , POS_STANDING, do_action   , 0, 0 },
+    { "bow"      , POS_STANDING, do_action   , 0, 0 },
+    { "brb"      , POS_LYING   , do_action   , 0, 0 },
+    { "brick"    , POS_STANDING, do_action   , 0, 0 },
+    { "burp"     , POS_LYING   , do_action   , 0, 0 },
+    // Socials C
+    { "cackle"   , POS_LYING   , do_action   , 0, 0 },
+    { "chuckle"  , POS_LYING   , do_action   , 0, 0 },
+    { "chillout" , POS_RESTING , do_action   , 0, 0 },
+    { "cheer"    , POS_LYING   , do_action   , 0, 0 },
+    { "clap"     , POS_LYING   , do_action   , 0, 0 },
+    { "cockeye"  , POS_RESTING , do_action   , 0, 0 },
+    { "collapse" , POS_STANDING, do_action   , 0, 0 },
+    { "comb"     , POS_RESTING , do_action   , 0, 0 },
+    { "comfort"  , POS_RESTING , do_action   , 0, 0 },
+    { "confused" , POS_LYING   , do_action   , 0, 0 },
+    { "congrat"  , POS_LYING   , do_action   , 0, 0 },
+    { "convince" , POS_LYING   , do_action   , 0, 0 },
+    { "cough"    , POS_LYING   , do_action   , 0, 0 },
+    { "cringe"   , POS_LYING   , do_action   , 0, 0 },
+    { "cry"      , POS_LYING   , do_action   , 0, 0 },
+    { "cuddle"   , POS_LYING   , do_action   , 0, 0 },
+    { "curse"    , POS_LYING   , do_action   , 0, 0 },
+    { "curtsey"  , POS_STANDING, do_action   , 0, 0 },
+    // Socials D
+    { "dance"    , POS_STANDING, do_action   , 0, 0 },
+    { "daydream" , POS_SLEEPING, do_action   , 0, 0 },
+    { "dis"      , POS_LYING   , do_action   , 0, 0 },
+    { "disagree" , POS_LYING   , do_action   , 0, 0 },
+    { "disco"    , POS_RESTING , do_action   , 0, 0 },
+    { "disregard", POS_LYING   , do_action   , 0, 0 },
+    { "doh"      , POS_LYING   , do_action   , 0, 0 },
+    { "dribble"  , POS_LYING   , do_action   , 0, 0 },
+    { "drool"    , POS_LYING   , do_action   , 0, 0 },
+    { "dunce"    , POS_LYING   , do_action   , 0, 0 },
+    // Socials E
+    { "embrace"  , POS_LYING   , do_action   , 0, 0 },
+    { "envy"     , POS_LYING   , do_action   , 0, 0 },
+    { "eyebrow"  , POS_LYING   , do_action   , 0, 0 },
+    // Socials F
+    { "facepalm" , POS_SITTING , do_action   , 0, 0 },
+    { "forgive"  , POS_LYING   , do_action   , 0, 0 },
+    { "fart"     , POS_LYING   , do_action   , 0, 0 },
+    { "flex"     , POS_STANDING, do_action   , 0, 0 },
+    { "flirt"    , POS_LYING   , do_action   , 0, 0 },
+    { "fondle"   , POS_LYING   , do_action   , 0, 0 },
+    { "french"   , POS_LYING   , do_action   , 0, 0 },
+    { "frown"    , POS_LYING   , do_action   , 0, 0 },
+    { "fume"     , POS_LYING   , do_action   , 0, 0 },
+    // Socials G
+    { "gasp"     , POS_LYING   , do_action   , 0, 0 },
+    { "giggle"   , POS_LYING   , do_action   , 0, 0 },
+    { "glare"    , POS_RESTING , do_action   , 0, 0 },
+    { "greet"    , POS_LYING   , do_action   , 0, 0 },
+    { "grin"     , POS_LYING   , do_action   , 0, 0 },
+    { "grimace"  , POS_LYING   , do_action   , 0, 0 },
+    { "groan"    , POS_LYING   , do_action   , 0, 0 },
+    { "grope"    , POS_LYING   , do_action   , 0, 0 },
+    { "grovel"   , POS_LYING   , do_action   , 0, 0 },
+    { "growl"    , POS_LYING   , do_action   , 0, 0 },
+    { "grumble"  , POS_LYING   , do_action   , 0, 0 },
+    { "grunt"    , POS_LYING   , do_action   , 0, 0 },
+    // Socials H
+    { "hair"     , POS_RESTING , do_action   , 0, 0 },
+    { "happy"    , POS_LYING   , do_action   , 0, 0 },
+    { "hand"     , POS_LYING   , do_action   , 0, 0 },
+    { "hate"     , POS_LYING   , do_action   , 0, 0 },
+    { "hhold"    , POS_LYING   , do_action   , 0, 0 },
+    { "hiccup"   , POS_LYING   , do_action   , 0, 0 },
+    { "hifive"   , POS_STANDING, do_action   , 0, 0 },
+    { "hoi"      , POS_LYING   , do_action   , 0, 0 },
+    { "hop"      , POS_LYING   , do_action   , 0, 0 },
+    { "howl"     , POS_LYING   , do_action   , 0, 0 },
+    { "hkiss"    , POS_STANDING, do_action   , 0, 0 },
+    { "hug"      , POS_RESTING , do_action   , 0, 0 },
+    // Socials I
+    { "innocent" , POS_LYING   , do_action   , 0, 0 },
+    // Socials J
+    { "jig"      , POS_STANDING, do_action   , 0, 0 },
+    { "jeer"     , POS_LYING   , do_action   , 0, 0 },
+    { "jump"     , POS_RESTING , do_action   , 0, 0 },
+    // Socials K
+    { "kiss"     , POS_LYING   , do_action   , 0, 0 },
+    // Socials L
+    { "lap"      , POS_STANDING, do_action   , 0, 0 },
+    { "laugh"    , POS_LYING   , do_action   , 0, 0 },
+    { "listen"   , POS_LYING   , do_action   , 0, 0 },
+    { "lick"     , POS_LYING   , do_action   , 0, 0 },
+    { "lol"      , POS_LYING   , do_action   , 0, 0 },
+    { "love"     , POS_LYING   , do_action   , 0, 0 },
+    // Socials M
+    { "mellow"   , POS_RESTING , do_action   , 0, 0 },
+    { "moan"     , POS_LYING   , do_action   , 0, 0 },
+    { "mosh"     , POS_STANDING, do_action   , 0, 0 },
+    { "moon"     , POS_STANDING, do_action   , 0, 0 },
+    { "massage"  , POS_RESTING , do_action   , 0, 0 },
+    { "muthafucka",POS_RESTING , do_action   , 0, 0 },
+    // Socials N
+    { "nibble"   , POS_RESTING , do_action   , 0, 0 },
+    { "nod"      , POS_LYING   , do_action   , 0, 0 },
+    { "noogie"   , POS_STANDING, do_action   , 0, 0 },
+    { "nudge"    , POS_LYING   , do_action   , 0, 0 },
+    { "nuzzle"   , POS_LYING   , do_action   , 0, 0 },
+    // Socials O
+    // Socials P
+    { "pant"     , POS_LYING   , do_action   , 0, 0 },
+    { "pat"      , POS_LYING   , do_action   , 0, 0 },
+    { "peck"     , POS_LYING   , do_action   , 0, 0 },
+    { "peer"     , POS_LYING   , do_action   , 0, 0 },
+    { "point"    , POS_RESTING , do_action   , 0, 0 },
+    { "poke"     , POS_RESTING , do_action   , 0, 0 },
+    { "ponder"   , POS_LYING   , do_action   , 0, 0 },
+    { "pout"     , POS_RESTING , do_action   , 0, 0 },
+    { "prance"   , POS_STANDING, do_action   , 0, 0 },
+    { "pray"     , POS_SITTING , do_action   , 0, 0 },
+    { "propose"  , POS_STANDING, do_action   , 0, 0 },
+    { "psychoanalyze", POS_RESTING, do_action, 0, 0 },
+    { "pucker"   , POS_RESTING , do_action   , 0, 0 },
+    { "puke"     , POS_LYING   , do_action   , 0, 0 },
+    { "punch"    , POS_RESTING , do_action   , 0, 0 },
+    { "puppy"    , POS_LYING   , do_action   , 0, 0 },
+    { "purr"     , POS_LYING   , do_action   , 0, 0 },
+    // Socials Q
+    // Socials R
+    { "raspberry", POS_SITTING , do_action   , 0, 0 },
+    { "rtfm"     , POS_STANDING, do_action   , 0, 0 },
+    { "roar"     , POS_RESTING , do_action   , 0, 0 },
+    { "rofl"     , POS_RESTING , do_action   , 0, 0 },
+    { "roll"     , POS_LYING   , do_action   , 0, 0 },
+    { "rose"     , POS_STANDING, do_action   , 0, 0 },
+    { "rub"      , POS_RESTING , do_action   , 0, 0 },
+    { "ruffle"   , POS_STANDING, do_action   , 0, 0 },
+    // Socials S
+    { "sage"     , POS_LYING   , do_action   , 0, 0 },
+    { "scratch"  , POS_LYING   , do_action   , 0, 0 },
+    { "scream"   , POS_LYING   , do_action   , 0, 0 },
+    { "shake"    , POS_LYING   , do_action   , 0, 0 },
+    { "shiver"   , POS_LYING   , do_action   , 0, 0 },
+    { "shrug"    , POS_LYING   , do_action   , 0, 0 },
+    { "sigh"     , POS_LYING   , do_action   , 0, 0 },
+    { "signal"   , POS_LYING   , do_action   , 0, 0 },
+    { "sing"     , POS_LYING   , do_action   , 0, 0 },
+    { "slap"     , POS_RESTING , do_action   , 0, 0 },
+    { "slobber"  , POS_RESTING , do_action   , 0, 0 },
+    { "slurp"    , POS_STANDING, do_action   , 0, 0 },
+    { "smile"    , POS_LYING   , do_action   , 0, 0 },
+    { "smirk"    , POS_LYING   , do_action   , 0, 0 },
+    { "snicker"  , POS_LYING   , do_action   , 0, 0 },
+    { "snap"     , POS_LYING   , do_action   , 0, 0 },
+    { "snarl"    , POS_LYING   , do_action   , 0, 0 },
+    { "sneeze"   , POS_LYING   , do_action   , 0, 0 },
+    { "sniff"    , POS_LYING   , do_action   , 0, 0 },
+    { "snort"    , POS_LYING   , do_action   , 0, 0 },
+    { "snore"    , POS_SLEEPING, do_action   , 0, 0 },
+    { "snowball" , POS_STANDING, do_action   , LVL_BUILDER, 0 },
+    { "snuggle"  , POS_LYING   , do_action   , 0, 0 },
+    { "sob"      , POS_LYING   , do_action   , 0, 0 },
+    { "spank"    , POS_LYING   , do_action   , 0, 0 },
+    { "spit"     , POS_STANDING, do_action   , 0, 0 },
+    { "squeeze"  , POS_LYING   , do_action   , 0, 0 },
+    { "stare"    , POS_LYING   , do_action   , 0, 0 },
+    { "stamp"    , POS_RESTING , do_action   , 0, 0 },
+    { "steam"    , POS_RESTING , do_action   , 0, 0 },
+    { "striptease", POS_STANDING , do_action  , 0, 0 },
+    { "stroke"   , POS_RESTING , do_action   , 0, 0 },
+    { "strut"    , POS_STANDING, do_action   , 0, 0 },
+    { "strangle" , POS_STANDING, do_action   , 0, 0 },
+    { "sulk"     , POS_LYING   , do_action   , 0, 0 },
+    { "swat"     , POS_RESTING , do_action   , 0, 0 },
+    { "swear"    , POS_LYING   , do_action   , 0, 0 },
+    // Socials T
+    { "tackle"   , POS_RESTING , do_action   , 0, 0 },
+    { "tango"    , POS_STANDING, do_action   , 0, 0 },
+    { "tap"      , POS_LYING   , do_action   , 0, 0 },
+    { "taunt"    , POS_LYING   , do_action   , 0, 0 },
+    { "thank"    , POS_LYING   , do_action   , 0, 0 },
+    { "thwap"    , POS_SITTING , do_action   , 0, 0 },
+    { "tickle"   , POS_RESTING , do_action   , 0, 0 },
+    { "tiptoe"   , POS_RESTING , do_action   , 0, 0 },
+    { "tongue"   , POS_LYING   , do_action   , 0, 0 },
+    { "torture"  , POS_RESTING , do_action   , 0, 0 },
+    { "touch"    , POS_STANDING, do_action   , 0, 0 },
+    { "toss"     , POS_STANDING, do_action   , 0, 0 },
+    { "trip"     , POS_STANDING, do_action   , 0, 0 },
+    { "twitch"   , POS_LYING   , do_action   , 0, 0 },
+    { "twiddle"  , POS_LYING   , do_action   , 0, 0 },
+    { "twirl"    , POS_STANDING, do_action   , 0, 0 },
+    // Socials U
+    // Socials V
+    { "volunteer", POS_RESTING , do_action   , 0, 0 },
+    // Socials W
+    { "wave"     , POS_LYING   , do_action   , 0, 0 },
+    { "whimper"  , POS_LYING   , do_action   , 0, 0 },
+    { "whine"    , POS_LYING   , do_action   , 0, 0 },
+    { "whistle"  , POS_LYING   , do_action   , 0, 0 },
+    { "whiz"     , POS_SITTING , do_action   , 0, 0 },
+    { "wibble"   , POS_STANDING, do_action   , 0, 0 },
+    { "wiggle"   , POS_STANDING, do_action   , 0, 0 },
+    { "wince"    , POS_LYING   , do_action   , 0, 0 },
+    { "wink"     , POS_LYING   , do_action   , 0, 0 },
+    { "wooha"    , POS_SITTING , do_action   , 0, 0 },
+    { "worship"  , POS_RESTING , do_action   , 0, 0 },
+    { "wrestle"  , POS_STANDING, do_action   , 0, 0 },
+    // Socials X
+    // Socials Y
+    { "yawn"     , POS_LYING   , do_action   , 0, 0 },
+    { "yodel"    , POS_LYING   , do_action   , 0, 0 },
+    // Socials Z
+
+ // { "zyx"      , POS_STANDING , do_action  , LVL_PRESIDENT, 0 },
+    /* End of socials. */
+    
+  /* this must be last; do not touch anything below this line unless you know what you're doing */
     { "\n", 0, 0, 0, 0 }
-  }
-  ;       /* this must be last */
+  };
+  /* this must be last; do not touch anything above this line unless you know what you're doing */
 
 ACMD(do_abort);
 ACMD(do_analyze);
@@ -1075,6 +1131,7 @@ struct command_info mtx_info[] =
     { "evade", 0, do_evade, 0, 0},
     { "emote", 0, do_echo, 0, SCMD_EMOTE },
     { ":", 0, do_echo, 0, SCMD_EMOTE },
+    { "exit", 0, do_logoff, 0, 0},
     { "hangup", 0, do_comcall, 0, SCMD_HANGUP},
     { "help", 0, do_help, 0, 0},
     { "ht", 0, do_gen_comm , 0, SCMD_HIREDTALK},
@@ -1084,6 +1141,7 @@ struct command_info mtx_info[] =
     { "load", 0, do_load, 0, SCMD_SWAP},
     { "locate", 0, do_locate, 0, 0},
     { "logoff", 0, do_logoff, 0, 0},
+    { "logout", 0, do_logoff, 0, 0},
     { "logon", 0, do_logon, 0, 0},
     { "max", 0, do_matrix_max, 0, 0},
     { "newbie", 0, do_gen_comm, 0, SCMD_NEWBIE},
@@ -1091,6 +1149,7 @@ struct command_info mtx_info[] =
     { "parry", 0, do_parry, 0, 0},
     { "position", 0, do_matrix_position, 0, 0},
     { "prompt", 0, do_display, 0, 0 },
+    { "quit", 0, do_logoff, 0, 0},
     { "read", 0, do_not_here, 0, 0},
     { "redirect", 0, do_redirect, 0, 0},
     { "remove", 0, do_not_here, 0, 0},
@@ -1238,6 +1297,7 @@ void nonsensical_reply(struct char_data *ch)
  * It makes sure you are the proper level and position to execute the command,
  * then calls the appropriate function.
  */
+ACMD(quit_the_matrix_first);
 void command_interpreter(struct char_data * ch, char *argument, char *tcname)
 {
   int cmd, length;
@@ -1280,8 +1340,22 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
     for (length = strlen(arg), cmd = 0; *mtx_info[cmd].command != '\n'; cmd++)
       if (!strncmp(mtx_info[cmd].command, arg, length))
         break;
-    if (*mtx_info[cmd].command == '\n')
-      nonsensical_reply(ch);
+    if (*mtx_info[cmd].command == '\n') {
+      // If the command exists outside of the Matrix, let them know that it's not an option here.
+      for (length = strlen(arg), cmd = 0; *cmd_info[cmd].command != '\n'; cmd++)
+        if (!strncmp(cmd_info[cmd].command, arg, length))
+          if ((cmd_info[cmd].minimum_level < LVL_BUILDER) || access_level(ch, cmd_info[cmd].minimum_level))
+            break;
+      
+      // Nothing was found, give them the "wat" and bail.
+      if (*cmd_info[cmd].command == '\n') {
+        nonsensical_reply(ch);
+        return;
+      }
+      
+      // Their command was valid in external context. Inform them.
+      quit_the_matrix_first(ch, line, 0, 0);
+    }
     else {
       if (ch->persona && ch->persona->decker->hitcher) {
         sprintf(buf, "^y<OUTGOING> %s^n\r\n", argument);
@@ -1608,7 +1682,7 @@ int perform_alias(struct descriptor_data * d, char *orig)
  */
 int search_block(char *arg, const char **list, bool exact)
 {
-  register int i, l;
+  int i, l;
   if (!strcmp(arg, "!"))
     return -1;
 
@@ -1743,6 +1817,13 @@ char *two_arguments(char *argument, char *first_arg, char *second_arg)
  */
 int is_abbrev(const char *arg1, const char *arg2)
 {
+  if (!arg1 || !arg2) {
+    char temp_buf[500];
+    sprintf(temp_buf, "SYSERR: Received null arg in is_abbrev (arg1 = %s, arg2 = %s)", arg1, arg2);
+    mudlog(temp_buf, NULL, LOG_SYSLOG, TRUE);
+    return 0;
+  }
+  
   if (!*arg1)
     return 0;
 
@@ -1790,7 +1871,7 @@ int find_mcommand(const char *command)
 
 int special(struct char_data * ch, int cmd, char *arg)
 {
-  register struct obj_data *i;
+  struct obj_data *i;
   if (ch->persona)
   {
     for (i = matrix[ch->persona->in_host].file; i; i = i->next_content)
@@ -1832,7 +1913,7 @@ int special(struct char_data * ch, int cmd, char *arg)
   /* special in mobile present? */
   if (!veh)
   {
-    register struct char_data *k;
+    struct char_data *k;
     for (k = world[ch->in_room].people; k; k = k->next_in_room) {
       if (GET_MOB_SPEC(k) != NULL)
         if (GET_MOB_SPEC(k) (ch, k, cmd, arg))
@@ -2270,7 +2351,8 @@ void nanny(struct descriptor_data * d, char *arg)
 #ifdef NOCRYPT
       char prepare_quotes_buf[2048];
       sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;",
-              prepare_quotes(prepare_quotes_buf, GET_PASSWD(d->character)), GET_IDNUM(d->character));
+              prepare_quotes(prepare_quotes_buf, GET_PASSWD(d->character), sizeof(prepare_quotes_buf) / sizeof(prepare_quotes_buf[0])),
+              GET_IDNUM(d->character));
 #else
       sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;", GET_PASSWD(d->character), GET_IDNUM(d->character));
 #endif
@@ -2323,7 +2405,7 @@ void nanny(struct descriptor_data * d, char *arg)
         sprintf(buf, "%s [%s] has connected.",
                 GET_CHAR_NAME(d->character), d->host);
       DELETE_ARRAY_IF_EXTANT(d->character->player.host);
-      d->character->player.host = strdup(d->host);
+      d->character->player.host = str_dup(d->host);
       playerDB.SaveChar(d->character);
       mudlog(buf, d->character, LOG_CONNLOG, TRUE);
       if (load_result) {
@@ -2393,7 +2475,8 @@ void nanny(struct descriptor_data * d, char *arg)
 #ifdef NOCRYPT
         char prepare_quotes_buf[2048];
         sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;",
-                prepare_quotes(prepare_quotes_buf, GET_PASSWD(d->character)), GET_IDNUM(d->character));
+                prepare_quotes(prepare_quotes_buf, GET_PASSWD(d->character), sizeof(prepare_quotes_buf) / sizeof(prepare_quotes_buf[0])),
+                GET_IDNUM(d->character));
 #else
         sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;", GET_PASSWD(d->character), GET_IDNUM(d->character));
 #endif
@@ -2447,7 +2530,6 @@ void nanny(struct descriptor_data * d, char *arg)
       }
       reset_char(d->character);
       PLR_FLAGS(d->character).RemoveBit(PLR_CUSTOMIZE);
-      send_to_char(WELC_MESSG, d->character);
       d->character->next = character_list;
       character_list = d->character;
       d->character->player.time.logon = time(0);
@@ -2490,6 +2572,8 @@ void nanny(struct descriptor_data * d, char *arg)
         do_start(d->character);
         playerDB.SaveChar(d->character, load_room);
         send_to_char(START_MESSG, d->character);
+      } else {
+        send_to_char(WELC_MESSG, d->character);
       }
       if (d->character->player_specials->saved.last_veh) {
         for (struct veh_data *veh = veh_list; veh; veh = veh->next)

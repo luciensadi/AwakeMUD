@@ -50,7 +50,7 @@ struct obj_data *find_obj(struct char_data *ch, char *name, int num);
 char *fname(char *namelist)
 {
   static char holder[30];
-  register char *point;
+  char *point;
   
   for (point = holder; isalpha(*namelist); namelist++, point++)
     *point = *namelist;
@@ -70,7 +70,7 @@ int isname(const char *str, const char *namelist)
   if (namelist[0] == '\0')
     return 0;
   
-  register const char *curname, *curstr;
+  const char *curname, *curstr;
   
   curname = namelist;
   for (;;) {
@@ -501,7 +501,7 @@ void affect_total(struct char_data * ch)
    * and not intelligence and quickness).            -cjd                */
   GET_REAL_REA(ch) = (GET_REAL_INT(ch) + GET_REAL_QUI(ch)) >> 1;
   GET_REA(ch) = 0;
-  if (PLR_FLAGGED(ch, PLR_NEWBIE) && GET_TKE(ch) > 25)
+  if (PLR_FLAGGED(ch, PLR_NEWBIE) && GET_TKE(ch) > NEWBIE_KARMA_THRESHOLD)
     PLR_FLAGS(ch).RemoveBit(PLR_NEWBIE);
   
   /* set the dice pools before equip so that they can be affected */
@@ -1008,6 +1008,8 @@ void char_from_room(struct char_data * ch)
     ch->in_veh->seating[ch->vfront]++;
     ch->in_veh = NULL;
     ch->next_in_veh = NULL;
+    stop_manning_weapon_mounts(ch, TRUE);
+    AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
   } else
   {
     if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_PACIFY) && world[ch->in_room].peaceful > 0)
@@ -1795,12 +1797,15 @@ void extract_veh(struct veh_data * veh)
   // If any vehicle are inside, drop them where the vehicle is.
   struct veh_data *temp = NULL;
   while ((temp = veh->carriedvehs)) {
+    sprintf(buf, "As %s disintegrates, %s falls out!\r\n", veh->short_description, temp->short_description);
+    sprintf(buf2, "You feel the sickening sensation of falling as %s disintegrates around your vehicle.\r\n", veh->short_description);
+    send_to_veh(buf2, temp, NULL, FALSE);
     if (veh->in_room != NOWHERE) {
+      send_to_room(buf, veh->in_room);
       veh_from_room(temp);
       veh_to_room(temp, veh->in_room);
-      sprintf(buf, "As %s disintegrates, %s falls out!\r\n", veh->short_description, temp->short_description);
-      send_to_room(buf, veh->in_room);
     } else if (veh->in_veh) {
+      send_to_veh(buf, veh, NULL, FALSE);
       veh_to_veh(temp, veh->in_veh);
     } else {
       veh_from_room(temp);
@@ -1916,7 +1921,6 @@ void extract_char(struct char_data * ch)
   struct obj_data *obj, *next;
   int i;
   struct veh_data *veh;
-  int in_room;
   
   extern struct char_data *combat_list;
   
@@ -2003,24 +2007,12 @@ void extract_char(struct char_data * ch)
       send_to_veh("The vehicle suddenly comes to a stop.\r\n", ch->in_veh, ch, FALSE);
       ch->in_veh->cspeed = SPEED_OFF;
     }
-    if (AFF_FLAGGED(ch, AFF_MANNING)) {
-      struct obj_data *mount;
-      for (mount = ch->in_veh->mount; mount; mount = mount->next_content)
-        if (mount->worn_by == ch)
-          break;
-      mount->worn_by = NULL;
-      AFF_FLAGS(ch).ToggleBit(AFF_MANNING);
-    }
+    stop_manning_weapon_mounts(ch, TRUE);
   }
   
-  /* remove the character from their room (use in_room to reference ch->in_room after this) */
-  in_room = ch->in_room;
-  if (in_room > NOWHERE || ch->in_veh)
-    char_from_room(ch);
-  
   /* untarget char from vehicles */
-  if (in_room > NOWHERE)
-    for (veh = world[in_room].vehicles; veh; veh = veh->next_veh)
+  if (ch->in_room > NOWHERE)
+    for (veh = world[ch->in_room].vehicles; veh; veh = veh->next_veh)
       for (obj = veh->mount; obj; obj = obj->next_content)
         if (obj->targ == ch)
           obj->targ = NULL;
@@ -2079,7 +2071,7 @@ void extract_char(struct char_data * ch)
     ch->persona = NULL;
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
   } else if (PLR_FLAGGED(ch, PLR_MATRIX))
-    for (struct char_data *temp = world[in_room].people; temp; temp = temp->next_in_room)
+    for (struct char_data *temp = world[ch->in_room].people; temp; temp = temp->next_in_room)
       if (PLR_FLAGGED(temp, PLR_MATRIX))
         temp->persona->decker->hitcher = NULL;
   
@@ -2103,6 +2095,7 @@ void extract_char(struct char_data * ch)
     ch->char_specials.rigging = NULL;
     PLR_FLAGS(ch).RemoveBit(PLR_REMOTE);
   }
+  
   // Clean up playergroup info.
   if (GET_PGROUP_MEMBER_DATA(ch))
     delete GET_PGROUP_MEMBER_DATA(ch);
@@ -2113,6 +2106,11 @@ void extract_char(struct char_data * ch)
   /* return people who were possessing or projecting */
   if (ch->desc && ch->desc->original)
     do_return(ch, "", 0, 0);
+  
+  /* remove the character from their room (use in_room to reference ch->in_room after this) */
+  int in_room = ch->in_room;
+  if (ch->in_room > NOWHERE || ch->in_veh)
+    char_from_room(ch);
   
   if (!IS_NPC(ch))
   {

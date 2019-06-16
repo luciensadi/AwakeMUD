@@ -52,6 +52,7 @@
 #include "vtable.h"
 #include "config.h"
 #include "security.h"
+#include "olc.h"
 #include <new>
 
 extern void calc_weight(struct char_data *ch);
@@ -265,20 +266,36 @@ void initialize_and_connect_to_mysql() {
     sprintf(buf, "FATAL ERROR: %s\r\n", mysql_error(mysql));
     log(buf);
     log("Suggestion: Make sure your DB is running and that you've specified your connection info in src/mysql_config.cpp.\r\n");
-    shutdown();
+    exit(ERROR_MYSQL_DATABASE_NOT_FOUND);
   }
 }
 
 void boot_world(void)
 {
+  // Sanity check to ensure we haven't added more bits than our bitfield can hold.
+  if (Bitfield::TotalWidth() < PRF_MAX) {
+    log("Error: You have more PRF flags defined than bitfield space. You'll need to either expand the size of bitfields or reduce your flag count.");
+    exit(ERROR_BITFIELD_SIZE_EXCEEDED);
+  }
+  
+  if (Bitfield::TotalWidth() < PLR_MAX) {
+    log("Error: You have more PLR flags defined than bitfield space. You'll need to either expand the size of bitfields or reduce your flag count.");
+    exit(ERROR_BITFIELD_SIZE_EXCEEDED);
+  }
+  
+  if (Bitfield::TotalWidth() < AFF_MAX) {
+    log("Error: You have more AFF flags defined than bitfield space. You'll need to either expand the size of bitfields or reduce your flag count.");
+    exit(ERROR_BITFIELD_SIZE_EXCEEDED);
+  }
+  
   log("Initializing libsodium for crypto functions.");
   if (sodium_init() < 0) {
     // The library could not be initialized. Fail.
     log("ERROR: Libsodium initialization failed. Terminating program.");
-    exit(1);
+    exit(ERROR_LIBSODIUM_INIT_FAILED);
   }
   
-#ifdef DEBUG
+#ifdef CRYPTO_DEBUG
   log("Performing crypto performance and validation tests.");
   run_crypto_tests();
 #endif
@@ -530,7 +547,7 @@ void index_boot(int mode)
     break;
   default:
     log("SYSERR: Unknown subcommand to index_boot!");
-    exit(1);
+    exit(ERROR_UNKNOWN_SUBCOMMAND_TO_INDEX_BOOT);
     break;
   }
 
@@ -544,7 +561,7 @@ void index_boot(int mode)
   if (!(index = fopen(buf2, "r"))) {
     sprintf(buf1, "Error opening index file '%s'", buf2);
     perror(buf1);
-    exit(1);
+    exit(ERROR_OPENING_INDEX_FILE);
   }
   /* first, count the number of records in the file so we can calloc */
   fscanf(index, "%s\n", buf1);
@@ -568,7 +585,7 @@ void index_boot(int mode)
   }
   if (!rec_count) {
     log("SYSERR: boot error - 0 records counted");
-    exit(1);
+    exit(ERROR_BOOT_ZERO_RECORDS_COUNTED);
   }
   rec_count++;
 
@@ -953,6 +970,10 @@ void parse_room(File &fl, long nr)
     }
 
   room_data *room = world+rnum;
+  
+#ifdef USE_DEBUG_CANARIES
+  room->canary = CANARY_VALUE;
+#endif
 
   VTable data;
   data.Parse(&fl);
@@ -1036,6 +1057,10 @@ void parse_room(File &fl, long nr)
         dir->exit_info = EX_ISDOOR;
       else if (flags == 2)
         dir->exit_info = EX_ISDOOR | EX_PICKPROOF;
+      else if (flags == 3)
+        dir->exit_info = EX_ISDOOR | EX_ASTRALLY_WARDED;
+      else if (flags == 4)
+        dir->exit_info = EX_ISDOOR | EX_PICKPROOF | EX_ASTRALLY_WARDED;
       else
         dir->exit_info = 0;
 
@@ -1054,6 +1079,10 @@ void parse_room(File &fl, long nr)
 
       sprintf(field, "%s/HiddenRating", sect);
       dir->hidden = data.GetInt(field, 0);
+      
+#ifdef USE_DEBUG_CANARIES
+      dir->canary = CANARY_VALUE;
+#endif
     }
   }
 
@@ -1089,6 +1118,10 @@ void parse_room(File &fl, long nr)
   }
 
   top_of_world = rnum++;
+  if (top_of_world >= top_of_world_array) {
+    sprintf(buf, "WARNING: top_of_world >= top_of_world_array at %ld / %d.", top_of_world, top_of_world_array);
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+  }
 }
 
 /* read direction data */
@@ -1160,7 +1193,7 @@ void check_start_rooms(void)
 /* resolve all vnums into rnums in the world */
 void renum_world(void)
 {
-  register int room, door;
+  int room, door;
 
   /* before renumbering the exits, copy them to to_room_vnum */
   for (room = 0; room <= top_of_world; room++)
@@ -1377,6 +1410,10 @@ void parse_object(File &fl, long nr)
 
   obj->in_room = NOWHERE;
   obj->item_number = rnum;
+  
+#ifdef USE_DEBUG_CANARIES
+  obj->canary = CANARY_VALUE;
+#endif
 
   VTable data;
   data.Parse(&fl);
@@ -1674,8 +1711,7 @@ void parse_quest(File &fl, long virtual_nr)
   quest_table[quest_nr].e_string = fl.ReadString();
   quest_table[quest_nr].done = fl.ReadString();
 
-  quest_nr++;
-  top_of_questt = quest_nr;
+  top_of_questt = quest_nr++;
 }
 
 void parse_shop(File &fl, long virtual_nr)
@@ -1791,7 +1827,7 @@ void load_zones(File &fl)
   // This next section reads in the id nums of the players that can edit
   // this zone.
   if (sscanf(buf, "%d %d %d %d %d", &Z.editor_ids[0], &Z.editor_ids[1],
-             &Z.editor_ids[2], &Z.editor_ids[3], &Z.editor_ids[4]) != 5) {
+             &Z.editor_ids[2], &Z.editor_ids[3], &Z.editor_ids[4]) != NUM_ZONE_EDITOR_IDS) {
     fprintf(stderr, "Format error in editor id list of %s", fl.Filename());
     shutdown();
   }
@@ -1802,7 +1838,7 @@ void load_zones(File &fl)
     if (!fl.GetLine(buf, 256, FALSE)) {
       fprintf(stderr, "Format error in %s - premature end of file\n",
               fl.Filename());
-      exit(1);
+      exit(ERROR_ZONEREAD_PREMATURE_EOF);
     }
 
     ptr = buf;
@@ -1828,7 +1864,7 @@ void load_zones(File &fl)
     if (error) {
       fprintf(stderr, "Format error in %s, line %d: '%s'\n",
               fl.Filename(), fl.LineNumber(), buf);
-      exit(1);
+      exit(ERROR_ZONEREAD_FORMAT_ERROR);
     }
     if (ZCMD.command == 'L') {
       ZCMD.command = 'E';
@@ -2164,9 +2200,9 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
   int power, severity, strength;
   buf[0] = '\0';
 
-  for( severity = 4; severity >= 1; severity -- )
+  for( severity = DEADLY; severity >= LIGHT; severity -- )
     for( power = 21; power >= 0; power-- )
-      for( strength = 5; strength >= 0; strength-- )
+      for( strength = WEAPON_MAXIMUM_STRENGTH_BONUS; strength >= 0; strength-- )
       {
         for (nr = 0; nr <= top_of_objt; nr++) {
           if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WEAPON)
@@ -2181,7 +2217,7 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
             continue;
           if (GET_OBJ_VAL(&obj_proto[nr],0) > power && power != 21)
             continue;
-          if (GET_OBJ_VAL(&obj_proto[nr],1) > severity && severity != 4)
+          if (GET_OBJ_VAL(&obj_proto[nr],1) > severity && severity != DEADLY)
             continue;
           if (GET_OBJ_VAL(&obj_proto[nr],2) > strength && strength != 5)
             continue;
@@ -2339,7 +2375,7 @@ int vnum_object_affectloc(int type, struct char_data * ch)
       if (from_ip_zone(OBJ_VNUM_RNUM(nr)))
         continue;
 
-      for (register int i = 0; i < MAX_OBJ_AFFECT; i++)
+      for (int i = 0; i < MAX_OBJ_AFFECT; i++)
         if (obj_proto[nr].affected[i].location == type ) {
           if (obj_proto[nr].affected[i].modifier < mod && mod != -11)
             continue;
@@ -2401,6 +2437,13 @@ int vnum_object(char *searchname, struct char_data * ch)
     return vnum_object_affectloc(atoi(arg2),ch);
   if (!strcmp(arg1,"affflag"))
     return vnum_object_affflag(atoi(arg2),ch);
+  
+  // Make it easier for people to find specific types of things.
+  for (int index = ITEM_LIGHT; index < NUM_ITEMS; index++) {
+    if (!str_cmp(searchname, item_types[index]))
+      return vnum_object_type(index, ch);
+  }
+  
   for (nr = 0; nr <= top_of_objt; nr++)
   {
     if (isname(searchname, obj_proto[nr].text.keywords) ||
@@ -2610,7 +2653,7 @@ void spec_update(void)
   int i;
   char empty_argument = '\0';
 
-  for (i = 0; i < top_of_world; i++)
+  for (i = 0; i <= top_of_world; i++)
     if (world[i].func != NULL)
       world[i].func (NULL, world + i, 0, &empty_argument);
 
@@ -2672,6 +2715,11 @@ void reset_zone(int zone, int reboot)
   struct veh_data *veh = NULL;
 
   for (cmd_no = 0; cmd_no < zone_table[zone].num_cmds; cmd_no++) {
+    /*
+     sprintf(buf, "Processing ZCMD %d (zone %d): %c %s %ld %ld %ld",
+            cmd_no, zone_table[zone].number, ZCMD.command, ZCMD.if_flag ? "(if last)" : "(always)", ZCMD.arg1, ZCMD.arg2, ZCMD.arg3);
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+     */
     if (ZCMD.if_flag && !last_cmd)
       continue;
     found = 0;
@@ -2719,7 +2767,7 @@ void reset_zone(int zone, int reboot)
             // Man the first unmanned mount we find, as long as it has a weapon in it.
             if (!mount->worn_by && mount_has_weapon(mount)) {
               mount->worn_by = mob;
-              AFF_FLAGS(mob).ToggleBit(AFF_MANNING);
+              AFF_FLAGS(mob).SetBit(AFF_MANNING);
               break;
             }
           }
@@ -2749,13 +2797,13 @@ void reset_zone(int zone, int reboot)
           switch (GET_OBJ_VAL(obj, 1)) {
             case 1:
               sig = 1;
-              // Explicit fallthrough.
+              // fall through
             case 0:
               load = 10;
               break;
             case 3:
               sig = 1;
-              // Explicit fallthrough.
+              // fall through
             case 2:
               load = 10;
               break;
@@ -2848,10 +2896,23 @@ void reset_zone(int zone, int reboot)
         last_cmd = 0;
       break;
     case 'O':                 /* read an object */
-      if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
-          (ZCMD.arg2 == 0 && reboot)) {
+      if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)) {
         obj = read_object(ZCMD.arg1, REAL);
         obj_to_room(obj, ZCMD.arg3);
+        
+        if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(obj) == TYPE_SHOP) {
+          if (GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE && !ROOM_FLAGGED(obj->in_room, ROOM_GARAGE)) {
+            // Warn the builder that they're breaking the game's rules (let it continue since it doesn't harm anything though).
+            ZONE_ERROR("Zoneloading a pre-set-up vehicle workshop in a non-GARAGE room violates game rules about vehicle workshop locations. Flag the room as GARAGE.");
+          }
+          
+          // It's a workshop, set it as unpacked already.
+          GET_WORKSHOP_IS_SETUP(obj) = 1;
+          
+          // Handle the room's workshop[] array.
+          if (obj->in_room != NOWHERE)
+            add_workshop_to_room(obj);
+        }
         last_cmd = 1;
       } else
         last_cmd = 0;
@@ -2905,9 +2966,15 @@ void reset_zone(int zone, int reboot)
         } else {
           obj = read_object(ZCMD.arg1, REAL);
           equip_char(mob, obj, ZCMD.arg3);
-          if (!from_ip_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
-            GET_OBJ_EXTRA(obj).SetBit(ITEM_VOLATILE);
-          last_cmd = 1;
+          if (GET_EQ(mob, ZCMD.arg3) != obj) {
+            // Equip failure; destroy the object.
+            extract_obj(obj);
+            last_cmd = 0;
+          } else {
+            if (!from_ip_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
+              GET_OBJ_EXTRA(obj).SetBit(ITEM_VOLATILE);
+            last_cmd = 1;
+          }
         }
       } else
         last_cmd = 0;
@@ -3152,15 +3219,14 @@ bool resize_qst_array(void)
 char *fread_string(FILE * fl, char *error)
 {
   char buf[MAX_STRING_LENGTH+3], tmp[512+3], *rslt;
-  register char *point;
+  char *point;
   int done = 0, length = 0, templength = 0;
 
   /* FULLY initialize the buffer array. This is important, because you
   can't have garbage being read in. Doing the first byte isn't really good
   enough, and using memset or bzero is something I don't like. */
-  for (int x=0; x <= MAX_STRING_LENGTH; x++) {
-    buf[x] = '\0';
-  }
+  /* Yeah, except you can go fuck yourself, memset is literally designed for this task. -LS */
+  memset(buf, 0, sizeof(char) * (MAX_STRING_LENGTH+3));
 
   do {
     if (!fgets(tmp, 512, fl)) {
@@ -4122,13 +4188,13 @@ void load_saved_veh()
       switch (GET_OBJ_VAL(obj, 1)) {
         case 1:
           subbed = 1;
-          // Explicit fallthrough.
+          // fall through
         case 0:
           damage = 10;
           break;
         case 3:
           subbed = 1;
-          // Explicit fallthrough.
+          // fall through
         case 2:
           damage = 10;
           break;
@@ -4174,7 +4240,7 @@ void load_consist(void)
   market[2] = paydata.GetInt("MARKET/Orange", 5000);
   market[3] = paydata.GetInt("MARKET/Red", 5000);
   market[4] = paydata.GetInt("MARKET/Black", 5000);
-  for (int nr = 0; nr < top_of_world; nr++)
+  for (int nr = 0; nr <= top_of_world; nr++)
     if (ROOM_FLAGGED(nr, ROOM_STORAGE)) {
       sprintf(buf, "storage/%ld", world[nr].number);
       if (!(file.Open(buf, "r")))

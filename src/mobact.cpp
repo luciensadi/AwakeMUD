@@ -183,11 +183,10 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
   
   // Dakka o'clock.
   else if (AFF_FLAGGED(ch, AFF_MANNING)) {
-    for (struct obj_data *mount = ch->in_veh->mount; mount; mount = mount->next_content) {
-      if (mount->worn_by == ch && mount_has_weapon(mount)) {
-        do_raw_target(ch, ch->in_veh, tveh, vict, FALSE, mount);
-        return TRUE;
-      }
+    struct obj_data *mount = get_mount_manned_by_ch(ch);
+    if (mount && mount_has_weapon(mount)) {
+      do_raw_target(ch, ch->in_veh, tveh, vict, FALSE, mount);
+      return TRUE;
     }
     
     mudlog("SYSERR: Could not find mount manned by NPC for mobact_process_in_vehicle_aggro().", NULL, LOG_SYSLOG, TRUE);
@@ -275,11 +274,10 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
   
   // Dakka o'clock.
   else if (AFF_FLAGGED(ch, AFF_MANNING)) {
-    for (struct obj_data *mount = ch->in_veh->mount; mount; mount = mount->next_content) {
-      if (mount->worn_by == ch && mount_has_weapon(mount)) {
-        do_raw_target(ch, ch->in_veh, tveh, vict, FALSE, mount);
-        return TRUE;
-      }
+    struct obj_data *mount = get_mount_manned_by_ch(ch);
+    if (mount && mount_has_weapon(mount)) {
+      do_raw_target(ch, ch->in_veh, tveh, vict, FALSE, mount);
+      return TRUE;
     }
     
     mudlog("SYSERR: Could not find mount manned by NPC for mobact_process_in_vehicle_aggro().", NULL, LOG_SYSLOG, TRUE);
@@ -555,53 +553,59 @@ bool mobact_process_scavenger(struct char_data *ch) {
 bool mobact_process_movement(struct char_data *ch) {
   int door;
   
-  /* Mob Movement */
-  if (!MOB_FLAGGED(ch, MOB_SENTINEL) && !FIGHTING(ch)
-      && (GET_POS(ch) == POS_STANDING || (GET_POS(ch) == POS_SITTING && AFF_FLAGGED(ch, AFF_PILOT)))) {
-    // Slow down movement-- this way they'll only try to move every other tick on average.
-    if (number(0, 1) == 0)
-      return false;
+  if (MOB_FLAGGED(ch, MOB_SENTINEL) || FIGHTING(ch))
+    return FALSE;
+  
+  if (GET_POS(ch) != POS_STANDING && !(GET_POS(ch) == POS_SITTING && AFF_FLAGGED(ch, AFF_PILOT)))
+    return FALSE;
+  
+  // Slow down movement-- this way they'll only try to move every other tick on average.
+  if (number(0, 1) == 0)
+    return FALSE;
     
-    // NPC in a vehicle that's not in another vehicle? Have them drive and obey the rules of the road.
-    if (ch->in_veh && !ch->in_veh->in_veh) {
-      // Passengers are passive.
-      if (!AFF_FLAGGED(ch, AFF_PILOT))
-        return false;
-      
-      // Pick a door. If it's a valid exit for this vehicle, vroom vroom away.
-      for (int tries = 0; tries < 5; tries++) {
-        door = number(NORTH, DOWN);
-        if (EXIT(ch->in_veh, door) &&
-            ROOM_FLAGS(EXIT(ch->in_veh, door)->to_room).AreAnySet(ROOM_ROAD, ROOM_GARAGE, ENDBIT) &&
-            !ROOM_FLAGS(EXIT(ch->in_veh, door)->to_room).AreAnySet(ROOM_NOMOB, ROOM_DEATH, ENDBIT)) {
-          perform_move(ch, door, LEADER, NULL);
-          return true;
-        }
-      }
-    } /* End NPC movement in vehicle. */
+  // NPC in a vehicle that's not in another vehicle? Have them drive and obey the rules of the road.
+  if (ch->in_veh) {
+    // Give up if our vehicle is nested.
+    if (ch->in_veh->in_veh)
+      return FALSE;
     
-    // NPC not in a vehicle (walking).
-    else {
-      // Skip NOWHERE-located NPCs since they'll break things.
-      if (ch->in_room == NOWHERE)
-        return false;
-      
-      for (int tries = 0; tries < 5; tries++) {
-        // Select an exit, and bail out if they can't move that way.
-        door = number(NORTH, DOWN);
-        if (!CAN_GO(ch, door) || !ROOM_FLAGS(EXIT(ch, door)->to_room).AreAnySet(ROOM_NOMOB, ROOM_DEATH, ENDBIT))
-          continue;
-        
-        // If their exit leads to a different zone, check if they're allowed to wander.
-        if (!MOB_FLAGGED(ch, MOB_STAY_ZONE) || (world[EXIT(ch, door)->to_room].zone == world[ch->in_room].zone))
-          continue;
-        
-        // Looks like they can move. Make it happen.
-        perform_move(ch, door, CHECK_SPECIAL | LEADER, NULL);
-        return true;
+    // Passengers are passive.
+    if (!AFF_FLAGGED(ch, AFF_PILOT))
+      return FALSE;
+    
+    // Pick a door. If it's a valid exit for this vehicle, vroom vroom away.
+    for (int tries = 0; tries < 5; tries++) {
+      door = number(NORTH, DOWN);
+      if (EXIT(ch->in_veh, door) &&
+          ROOM_FLAGS(EXIT(ch->in_veh, door)->to_room).AreAnySet(ROOM_ROAD, ROOM_GARAGE, ENDBIT) &&
+          !ROOM_FLAGS(EXIT(ch->in_veh, door)->to_room).AreAnySet(ROOM_NOMOB, ROOM_DEATH, ENDBIT)) {
+        perform_move(ch, door, LEADER, NULL);
+        return TRUE;
       }
-    } /* End NPC movement outside a vehicle. */
-  } /* End mob movement. */
+    }
+  } /* End NPC movement in vehicle. */
+  
+  // NPC not in a vehicle (walking).
+  else {
+    // Skip NOWHERE-located NPCs since they'll break things.
+    if (ch->in_room == NOWHERE)
+      return FALSE;
+    
+    for (int tries = 0; tries < 5; tries++) {
+      // Select an exit, and bail out if they can't move that way.
+      door = number(NORTH, DOWN);
+      if (!CAN_GO(ch, door) || ROOM_FLAGS(EXIT(ch, door)->to_room).AreAnySet(ROOM_NOMOB, ROOM_DEATH, ENDBIT))
+        continue;
+      
+      // If their exit leads to a different zone, check if they're allowed to wander.
+      if (MOB_FLAGGED(ch, MOB_STAY_ZONE) && (world[EXIT(ch, door)->to_room].zone != world[ch->in_room].zone))
+        continue;
+      
+      // Looks like they can move. Make it happen.
+      perform_move(ch, door, CHECK_SPECIAL | LEADER, NULL);
+      return TRUE;
+    }
+  } /* End NPC movement outside a vehicle. */
   return false;
 }
 

@@ -72,7 +72,7 @@ stackClass<T>::stackClass(const stackClass<T>& O)
   max_size = O.max_size;
   top = O.top;
 
-  for (register int Index = 0; Index <= O.top; ++Index)
+  for (int Index = 0; Index <= O.top; ++Index)
     Items[Index] = O.Items[Index];
 }
 
@@ -128,7 +128,7 @@ bool stackClass<T>::ResizeStack()
   NewItems = new T*[max_size + STACK_SIZE_INCREASE];
 
   // now copy the old stack array into the new one
-  for (register int Index = 0; Index <= top; ++Index)
+  for (int Index = 0; Index <= top; ++Index)
     NewItems[Index] = Items[Index];
 
   // delete the elements of the old stack

@@ -1,7 +1,7 @@
 #60500
 Name:	Welcome to Awakened Worlds!
 Desc:$
-    Welcome to Awakened Worlds. This room stands on the event horizon of a great
+    Welcome to Awake CE. This room stands on the event horizon of a great
 rift, the rift connecting our world to that which lies beyond. You stand now
 at the sole entrance to this realm. As you explore these hallowed halls, you
 will discover everything you need to know to survive in the cruel, cold world
@@ -9,7 +9,7 @@ the Earth has become in what is our present - midway through the 21st century.
 Mind you, here you will only be taught the theory of what you must do. Living
 long enough to learn how to apply it is completely up to you. Welcome, and
 good luck.
-    Type NORTH or N to continue on your journey.
+ ^n   Type ^WNORTH^n or ^WN^n to continue on your journey. 
 ~
 Flags:	1000000000000011000
 SecType:	Inside
@@ -37,18 +37,18 @@ BREAK
 #60501
 Name:	All About Your Surroundings
 Desc:$
-   A MUD is a virtual world. To look around this world, just type 'look' or
-'l' for short. This will give you the description of the area you are in and
-show any objects, people, and/or monsters in the same area.  If you use the
-look command right now you will see this room description again.  You can look
-at objects, people, monsters, and even in directions (such as 'look south' or
-'l s' for short).  In order to move around the world, you type in the name of
-the direction you wish to travel, such as north, south, east, west, up, or
-down.  If there is not a path in that direction, the mud will let you know.
-To continue, go north (by typing 'north' or 'n').  To see who or what else is
-in the rooms adjacent to your own room, type 'scan'. Sometimes doors or
-objects can obstruct your view or path. In that case, try to 'open' a door by
-typing 'open door (direction)'. 
+   First things first: You'll want to know how to interact with your new
+world. To look around at your surroundings, just type ^WLOOK^n (or ^WL^n for short).
+This will give you the description of the area you are in and show any
+objects, people, and/or monsters in the same area. You can also look more
+closely at things-- try ^WLOOK SIGN^n for more information!
+ ^n  When you look at a room, you'll see a list of exits at the bottom of the
+description. In order to move around, just type in the name of the direction
+you wish to travel, such as north, south, east, west, up, or down. If there is
+not a path in that direction, the MUD will let you know. Sometimes, there
+might be a door in the way; if there is, you can try '^WOPEN DOOR (direction)'^n
+to clear your path. Feel free to try this with the door to the east!
+ ^n  To continue, go north (by typing ^WNORTH^n or ^WN^n).
 ~
 Flags:	1000000000000011000
 SecType:	Inside
@@ -72,6 +72,17 @@ RoomType:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A door stands to the east, with a sign on it that reads "You can ^WOPEN DOOR
+EAST^n to enter here." 
+~
+	ToVnum:	60620
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60500
 	Flags:	0
@@ -83,14 +94,17 @@ BREAK
 Name:	Getting To Know Yourself
 Desc:$
    The next thing you need to know is how to find out information about
-yourself.  There are several commands which give you information needed to
-play here.  These commands are 'score', 'inventory', 'equipment', 'skills',
-and 'spells'.  All commands on the mud may be abbreviated, therefore you can
-type 'sc' for score, 'i' for inventory, 'eq' for equipment, and so on. The
-first thing you should do is try out these commands.  To pick up an item you
-see on the floor, type 'get (item)'. If the item is in a container, you can
-type 'get (item) (container)' to retrieve it. If you'd like to equip the item,
-simply type 'wear (item)'. 
+yourself. First, take a moment to look at your character's scorecard with
+^WSCORE^n. This tells you vital information about your character. If you need help
+interpreting it, ^WHELP SCORE^n is a great resource. Other useful commands are
+^WINVENTORY^n (or ^WI^n), ^WEQUIPMENT^n (or ^WEQ^n), and ^WSKILLS^n (or ^WSK^n). These will tell you
+about what you're carrying, what you're wearing, and what you're good at.
+ ^n  It's also handy to know how to interact with the things you find in the
+world. You can pick up items you see on the ground with ^WGET (item)^n, or get
+them from containers with ^WGET (item) (container)^n. Take a look at the hopper on
+the wall (^WLOOK HOPPER^n)-- there's something in there for you.
+ ^n  Go ahead and give those commands a try. Once you're ready, you can continue on
+to the north. 
 ~
 Flags:	1000000000000011000
 SecType:	Inside
@@ -126,8 +140,8 @@ Name:	A Steel Staircase Leading Down
 Desc:$
    You've arrived at a metal staircase leading to the floor below. The
 Neophyte Guild is designed to assist you in becoming a capable member of the
-Awakened Worlds player base. The levels of the building will guide you through
-character generation, roleplaying, and rules and policy. Proceed DOWN to
+Awake CE player base. The levels of the building will guide you through
+character generation, roleplaying, and rules and policy. Proceed ^WDOWN^n to
 continue. 
 ~
 Flags:	1000000000000011000
@@ -162,15 +176,15 @@ BREAK
 #60504
 Name:	Interacting in the Shadowrun Universe
 Desc:$
-   The Shadowrun universe is set in the year 2060, when international
-corporations have a strong grasp on the power in the world, surpassing the
-authority of whole nations. The long lost practices of magic have also
-emerged, creating a large variety of metahuman races in addition to returning
-the forces of magic to the world. Awake allows you to interact with this
-fantasy world through your CHARACTER- your avatar in the Shadowrun Universe.
-You control this character, and act as if you were actually in this world.
-This section of the tutorial will allow you to customize your character by
-assigning him skills, attributes, and careers. Proceed SOUTH to begin. 
+   The Shadowrun universe is set in the year 2064. International
+mega-corporations have gained control of the systems of power, surpassing the
+authority of entire nations. The newly-rediscovered practices of magic,
+combined with wide-spread corruption and graft, have allowed them to cement
+their hold over the world. Life is cheap, and as someone who runs in the
+shadows of this world, you'll need to keep yourself in peak condition to stay
+alive. This floor of the tutorial will allow you to customize your character,
+working with everything from attributes to skills, and even the
+newly-rediscovered practice of magic. 
 ~
 Flags:	1000000000000011000
 SecType:	Inside
@@ -206,12 +220,12 @@ Name:	All About Your Attributes
 Desc:$
    Attributes determine the strengths and weaknesses of your character in the
 Shadowrun Universe, and form the essential backbone to the character. If you
-type SCORE, the lefthand column will display your character's attributes:
+type ^WSCORE^n, the left-hand column will display your character's attributes.
 BODY, QUICKNESS, STRENGTH, INTELLIGENCE, CHARISMA, and WILLPOWER are the main
-attributes, and the other values are determined from these six main stats. For
-more detailed help on your statistics, type "HELP (Statistic)".
-   An Attribute Trainer is also present in this room. Type TRAIN and follow
-the directions to allocate attribute points.
+attributes; the other values are determined from these six main stats. For
+more detailed help on your statistics, type ^WHELP [Statistic]^n.
+ ^n  An Attribute Trainer is present in this room. Type ^WTRAIN^n and follow the
+directions to allocate attribute points. 
 ~
 Flags:	1000000000000011000
 SecType:	Inside
@@ -247,13 +261,15 @@ Name:	The Neophyte Skill Center
 Desc:$
    Skills are another essential aspect to a Shadowrunner, someone who performs
 illegal deeds for pay. Skills make up your character, and determine what tasks
-they are capable of performing, and how well they can perform them. 
-   If you type EXITS, you can see the various rooms that teach those essential 
-skills to new runners. To see the skills you already possess, type SKILLS. 
-When you encounter a skill trainer, type PRACTICE to see what he is capable of
-teaching. To learn a new skill, simply type PRACTICE (skill name). Type it
-again to become more proficient in the skill you just acquired.  Proceed into 
-the skill trainer rooms to learn the abilities essential to your survival. 
+they are capable of performing, and how well they can perform them.
+ ^n  To see the skills you already possess, type ^WSKILLS^n. When you encounter
+a skill trainer, type ^WPRACTICE^n to see what they are capable of teaching. To
+learn a new skill, simply type ^PRACTICE [skill name]^n. Type it again to become
+more proficient in the skill you just acquired. You may also ^WUNPRACTICE [skill
+name]^n to lower its level-- but ^ynote that you can only UNPRACTICE here in the
+skill annex!^n
+ ^n  Proceed into the skill trainer rooms to learn the abilities essential to your
+survival. 
 ~
 Flags:	1000000000000011000
 SecType:	Inside
@@ -798,18 +814,18 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXTRADESC 0]
-	Keywords:	wired reflexes~~~~~~~~~~~~~~~~~~
+	Keywords:	datajack~~~~~~~~~~~~~~~~~~
 	Desc:$
-Wired Reflexes, while costly to the user's essence, enhance their REACTION and
-INITIATIVE, allowing them to attack more often than an un-augmented person.
-Wired Reflexes are known to cause some people to be extra jumpy. 
+A DATAJACK is necessary for a decker or a rigger to interface their mind with
+a machine. 
 ~
 [EXTRADESC 1]
-	Keywords:	Vehicle control rig~~~~~~~~~~~~~~~~~~
+	Keywords:	smartlink system~~~~~~~~~~~~~~~~~~
 	Desc:$
-The VEHICLE CONTROL RIG and a DATAJACK is necessary for someone who wants to
-be able to mentally control a vehicle. An explanation of RIGGING is provided
-later in the guild. 
+The SMARTLINK system allows the user to use a smartlink accessorized firearm,
+granting them greater accuracy in ranged combat. If the weapon is outfitted
+with a SMARTLINK accessory and the user has a SMARTLINK system installed, the
+feature is automatically used. 
 ~
 [EXTRADESC 2]
 	Keywords:	spurs razors retractable~~~~~~~~~~~~~~~~~~
@@ -820,18 +836,18 @@ automatically used when the character enters unarmed combat, and success is
 based on the CYBERIMPLANT COMBAT skill. 
 ~
 [EXTRADESC 3]
-	Keywords:	smartlink system~~~~~~~~~~~~~~~~~~
+	Keywords:	Vehicle control rig~~~~~~~~~~~~~~~~~~
 	Desc:$
-The SMARTLINK system allows the user to use a smartlink accessorized firearm,
-granting them greater accuracy in ranged combat. If the weapon is outfitted
-with a SMARTLINK accessory and the user has a SMARTLINK system installed, the
-feature is automatically used. 
+The VEHICLE CONTROL RIG and a DATAJACK is necessary for someone who wants to
+be able to mentally control a vehicle. An explanation of RIGGING is provided
+later in the guild. 
 ~
 [EXTRADESC 4]
-	Keywords:	datajack~~~~~~~~~~~~~~~~~~
+	Keywords:	wired reflexes~~~~~~~~~~~~~~~~~~
 	Desc:$
-A DATAJACK is necessary for a decker or a rigger to interface their mind with
-a machine. 
+Wired Reflexes, while costly to the user's essence, enhance their REACTION and
+INITIATIVE, allowing them to attack more often than an un-augmented person.
+Wired Reflexes are known to cause some people to be extra jumpy. 
 ~
 BREAK
 #60518
@@ -1380,6 +1396,12 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60621
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60608
 	Flags:	0
@@ -1407,7 +1429,7 @@ Z:	2.50
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
-	Rating:	1
+	Rating:	0
 	Light:	0
 	Smoke:	0
 	Background:	0
@@ -1447,6 +1469,12 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60622
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT south]
 	ToVnum:	60533
 	Flags:	0
@@ -4852,6 +4880,111 @@ RoomType:	0
 	BackgroundType:	0
 [EXIT north]
 	ToVnum:	60615
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60620
+Name:	The Room to the East
+Desc:$
+   TBD / Well done. 
+~
+Flags:	1000000000000011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A door stands to the west, with a sign on it that reads "^WOPEN DOOR WEST^n will
+open me." 
+~
+	ToVnum:	60501
+	Flags:	1
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+BREAK
+#60621
+Name:	Chargen Elevator Shaft
+Desc:$
+You found it, you tricky person. The elevator shaft in Chargen. Good work! You
+should probably RETURN to your body and use the elevator normally.
+Alternatively, if you're here in person: hop out before the car hits you! 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	60530
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	60622
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60622
+Name:	Chargen Elevator Shaft
+Desc:$
+You found it, you tricky person. The elevator shaft in Chargen. Good work! You
+should probably RETURN to your body and use the elevator normally.
+Alternatively, if you're here in person: hop out before the car hits you! 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	60532
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60621
 	Flags:	0
 	Material:	brick
 	Barrier:	4

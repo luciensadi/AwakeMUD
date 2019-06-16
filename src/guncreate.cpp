@@ -158,7 +158,7 @@ bool ammo_test(struct char_data *ch, struct obj_data *obj)
   sprintf(buf, "AmmoTest: Skill %d, Target %d, Success %d(c%d/t%d)", skill, target, success, csuccess, success - csuccess);
   act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
   if (success > 0)
-    GET_OBJ_VAL(obj, 4) = (int)((ammo_type[GET_OBJ_VAL(obj, 2)].time / (success - csuccess)) * 60);
+    GET_OBJ_VAL(obj, 4) = (int)((ammo_type[GET_OBJ_VAL(obj, 2)].time / ((success - csuccess) != 0 ? (success - csuccess): 1)) * 60);
   else GET_OBJ_VAL(obj, 4) = -1;
   GET_NUYEN(ch) -= (int)((ammo_type[GET_OBJ_VAL(obj, 2)].cost * 10) * (1 - (csuccess * .05)));
   GET_OBJ_VAL(obj, 10) = GET_OBJ_VAL(obj, 4);

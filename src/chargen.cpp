@@ -20,7 +20,6 @@
 
 extern MYSQL *mysql;
 extern int mysql_wrapper(MYSQL *mysql, const char *buf);
-extern char *prepare_quotes(char *dest, const char *str);
 extern void display_help(char *help, const char *arg);
 
 int get_minimum_attribute_points_for_race(int race);
@@ -103,9 +102,9 @@ void set_attributes(struct char_data *ch, int magic)
   GET_INDEX(ch) = 0;
   GET_REAL_ESS(ch) = 600;
   
-  // Set all of the character's stats to 1.
+  // Set all of the character's stats to their racial minimums.
   for (int attr = BOD; attr <= WIL; attr++) {
-    GET_REAL_ATT(ch, attr) = 1;
+    GET_REAL_ATT(ch, attr) = MAX(1, racial_attribute_modifiers[(int)GET_RACE(ch)][attr] + 1);
   }
   
   // Subtract the cost of making all stats 1 from the character's available attribute-training points.
@@ -335,7 +334,7 @@ void priority_menu(struct descriptor_data *d)
     sprintf(buf2, "%-10c", 'A' + i);
     switch (d->ccr.pr[i]) {
     case PR_NONE:
-      sprintf(buf2, "%s?           %-2d           %-2d        %d \xC2\xA5 / %d\r\n",
+      sprintf(buf2, "%s?           %-2d           %-2d        %d nuyen / %d\r\n",
               buf2, attrib_vals[i], skill_vals[i], nuyen_vals[i], force_vals[i]);
       break;
     case PR_RACE:
@@ -395,7 +394,7 @@ void priority_menu(struct descriptor_data *d)
               skill_vals[i]);
       break;
     case PR_RESOURCE:
-      sprintf(buf2, "%sResources   -            -         %d \xC2\xA5 / %d\r\n",
+      sprintf(buf2, "%sResources   -            -         %d nuyen / %d\r\n",
               buf2, nuyen_vals[i], force_vals[i]);
       break;
     }
@@ -412,7 +411,7 @@ void init_char_sql(struct char_data *ch)
                "Tradition, Born, Background, Physical_LookDesc, Matrix_LookDesc, Astral_LookDesc, LastD) VALUES ('%ld', '%s', '%s', %d, '%d',"\
                "'%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%ld', '%s', '%s', '%s', '%s', %ld);", GET_IDNUM(ch),
                GET_CHAR_NAME(ch), GET_PASSWD(ch), GET_RACE(ch), GET_SEX(ch), MAX(1, GET_LEVEL(ch)),
-               prepare_quotes(buf2, ch->player.physical_text.room_desc), GET_KEYWORDS(ch), GET_NAME(ch), GET_WHOTITLE(ch),
+               prepare_quotes(buf2, ch->player.physical_text.room_desc, sizeof(buf2) / sizeof(buf2[0])), GET_KEYWORDS(ch), GET_NAME(ch), GET_WHOTITLE(ch),
                GET_HEIGHT(ch), GET_WEIGHT(ch), ch->player.host, GET_TRADITION(ch), ch->player.time.birth, "A blank slate.",
                "A nondescript person.\r\n", "A nondescript entity.\r\n", "A nondescript entity.\r\n", time(0));
   mysql_wrapper(mysql, buf);
@@ -695,7 +694,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
         d->ccr.points += resource_table[1][d->ccr.pr[PO_RESOURCES]];
         sprintf(buf, " ");
         for (int x = 0; x < 8; x++)
-          sprintf(ENDOF(buf), " %d) %8d\xC2\xA5   (%2d points)\r\n ", x+1, resource_table[0][x], resource_table[1][x]);
+          sprintf(ENDOF(buf), " %d) %8d nuyen   (%2d points)\r\n ", x+1, resource_table[0][x], resource_table[1][x]);
         SEND_TO_Q(buf, d);
         send_to_char(CH, "Enter desired amount of nuyen points (^c%d^n available): ", d->ccr.points);
         d->ccr.mode = CCR_PO_RESOURCES;

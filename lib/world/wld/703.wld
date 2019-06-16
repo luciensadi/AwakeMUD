@@ -21,12 +21,12 @@ RoomType:	10
 	BackgroundType:	0
 BREAK
 #70301
-Name:	A Wide Roundabout Encircling a Marble Fountain
+Name:	A Wide Roundabout Circling a Marble Fountain
 Desc:$
 You are in an unfinished room.
 ~
-Flags:	10000000000000000000100
-SecType:	Inside
+Flags:	1000000010000000000000000000100
+SecType:	City
 MatrixExit:	0
 Crowd:	2
 Cover:	4
@@ -105,8 +105,8 @@ Name:	Approaching a Sapphire-Glassed Skyscraper
 Desc:$
 You are in an unfinished room.
 ~
-Flags:	10000000000000000000000
-SecType:	Inside
+Flags:	1000000010000000000000000000100
+SecType:	City
 MatrixExit:	0
 Crowd:	2
 Cover:	4
@@ -135,6 +135,12 @@ RoomType:	10
 	KeyVnum:	0
 [EXIT south]
 	ToVnum:	70305
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	32694
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -169,12 +175,12 @@ RoomType:	10
 	KeyVnum:	0
 BREAK
 #70305
-Name:	tbd private parking with leased rooms
+Name:	Public Parking for the Star Sapphire
 Desc:$
 You are in an unfinished room.
 ~
-Flags:	10000000000000000001000
-SecType:	Inside
+Flags:	110000000000000000001000
+SecType:	City
 MatrixExit:	0
 Crowd:	2
 Cover:	4
@@ -191,6 +197,18 @@ RoomType:	10
 	BackgroundType:	0
 [EXIT north]
 	ToVnum:	70303
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	70322
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	70323
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -674,6 +692,356 @@ RoomType:	10
 BREAK
 #70320
 Name:	TSS template room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#70321
+Name:	TSS garage template room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	100000110000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	70329
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70322
+Name:	private parking leasing office
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	70305
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70323
+Name:	Amongst the Private Garages
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000000010000000000000000001000
+SecType:	City
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	70305
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	70324
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	70326
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	70325
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70324
+Name:	TSS garage template room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	100000110000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	70323
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70325
+Name:	TSS garage template room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	100000110000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	70323
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70326
+Name:	Amongst the Private Garages
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000000010000000000000000001000
+SecType:	City
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	70323
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	70327
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	70329
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	70328
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70327
+Name:	TSS garage template room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	100000110000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	70326
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70328
+Name:	TSS garage template room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	100000110000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	70326
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70329
+Name:	The Southern End of the Private Garages
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000000010000000000000000001000
+SecType:	City
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	70326
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	70330
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	70321
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70330
+Name:	TSS garage template room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	100000110000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	70329
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70331
+Name:	TSS elevator shaft
 Desc:$
 You are in an unfinished room.
 ~

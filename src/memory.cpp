@@ -147,23 +147,7 @@ void memoryClass::DeleteIcon(struct matrix_icon *icon)
 
 
 void memoryClass::DeleteVehicle(struct veh_data *veh)
-{
-  int veh_num = real_vehicle(veh->veh_number);
-#define SAFE_VEH_ARRAY_DELETE(ITEM) if (veh_proto[veh_num].ITEM != veh->ITEM) { DELETE_ARRAY_IF_EXTANT(veh->ITEM); }
-  
-  SAFE_VEH_ARRAY_DELETE(name);
-  SAFE_VEH_ARRAY_DELETE(description);
-  SAFE_VEH_ARRAY_DELETE(short_description);
-  SAFE_VEH_ARRAY_DELETE(restring);
-  SAFE_VEH_ARRAY_DELETE(long_description);
-  SAFE_VEH_ARRAY_DELETE(restring_long);
-  SAFE_VEH_ARRAY_DELETE(inside_description);
-  SAFE_VEH_ARRAY_DELETE(rear_description);
-  SAFE_VEH_ARRAY_DELETE(arrive);
-  SAFE_VEH_ARRAY_DELETE(leave);
-  
-#undef SAFE_VEH_ARRAY_DELETE
-  
+{  
   free_veh(veh);
   Veh->Push(veh);
 }

@@ -41,6 +41,7 @@ using namespace std;
 #include "db.h"
 #include "constants.h"
 #include "newmagic.h"
+#include "list.h"
 
 extern class memoryClass *Mem;
 extern struct time_info_data time_info;
@@ -51,6 +52,8 @@ extern long beginning_of_time;
 extern int ability_cost(int abil, int level);
 extern MYSQL *mysql;
 extern int mysql_wrapper(MYSQL *mysql, const char *buf);
+
+extern char *colorize(struct descriptor_data *d, const char *str, bool skip_check = FALSE);
 
 /* creates a random number in interval [from;to] */
 int number(int from, int to)
@@ -63,6 +66,13 @@ int number(int from, int to)
     to = from;
     from = temp;
   }
+  
+  if (to > RAND_MAX) {
+    char errbuf[150];
+    sprintf(errbuf, "WARNING: Attempting to generate random number between %d and %d, but RAND_MAX is %d!", from, to, RAND_MAX);
+    mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
+  }
+  
   return ((random() % (to - from + 1)) + from);
 }
 
@@ -97,7 +107,7 @@ int srdice(void)
 {
   static int roll;
   int sum = 0, num = 1;
-  register int i;
+  int i;
   
   for (i = 1; i <= num; i++) {
     roll = ((random() % 6) + 1);
@@ -114,7 +124,7 @@ int success_test(int number, int target)
     return -1;
   
   int total = 0, roll, one = 0;
-  register int i;
+  int i;
   
   target = MAX(target, 2);
   
@@ -427,7 +437,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibil
         buf_mod(rbuf, "SConfused", GET_LEVEL(sust->target));
       }
   if (ch->in_room != NOWHERE && ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
-    float heightdif = GET_HEIGHT(ch) / (world[ch->in_room].z*100);
+    float heightdif = GET_HEIGHT(ch) / ((world[ch->in_room].z != 0 ? world[ch->in_room].z : 1)*100);
     if (heightdif > 1) {
       base_target += 2;
       buf_mod(rbuf, "TooTallRatio", (int)(heightdif*100));
@@ -494,6 +504,19 @@ char *capitalize(const char *source)
   return dest;
 }
 
+char *string_to_uppercase(const char *source) {
+  static char dest[MAX_STRING_LENGTH];
+  
+  int x = strlen(source);
+  for (int i = 0; i < x; i++){
+    if (isalpha(source[i])){
+      dest[i] = toupper(source[i]);
+    }
+  }
+  
+  return dest;
+}
+
 // decapitalize a string that starts with A or An, now allows for color strings at the beginning
 char *decapitalize_a_an(const char *source)
 {
@@ -538,8 +561,8 @@ char *get_token(char *str, char *token)
   if (!str)
     return NULL;
   
-  register char *temp = str;
-  register char *temp1 = token;
+  char *temp = str;
+  char *temp1 = token;
   
   // first eat up any white space
   while (isspace(*temp))
@@ -561,7 +584,7 @@ char *cleanup(char *dest, const char *src)
   if (!src) // this is because sometimes a null gets sent to src
     return NULL;
   
-  register char *temp = &dest[0];
+  char *temp = &dest[0];
   
   for (; *src; src++)
     if (*src != '\r')
@@ -818,7 +841,7 @@ void sprint_obj_mods(struct obj_data *obj, char *result)
     sprintf(result,"%s %s", result, xbuf);
   }
   
-  for (register int i = 0; i < MAX_OBJ_AFFECT; i++)
+  for (int i = 0; i < MAX_OBJ_AFFECT; i++)
     if (obj->affected[i].modifier != 0)
     {
       char xbuf[MAX_STRING_LENGTH];
@@ -1026,7 +1049,7 @@ char * buf_roll(char *rbuf, const char *name, int bonus)
 
 int get_speed(struct veh_data *veh)
 {
-  int speed = 0, maxspeed = (int)(veh->speed * ((veh->load - veh->usedload) / veh->load));
+  int speed = 0, maxspeed = (int)(veh->speed * ((veh->load - veh->usedload) / (veh->load != 0 ? veh->load : 1)));
   
   switch (veh->cspeed)
   {
@@ -1154,6 +1177,14 @@ int get_skill(struct char_data *ch, int skill, int &target)
     target = 2;
   
   // TODO: Adept power Improved Ability. This ability is not currently in the game, but would be factored in here. See Core p169 for details.
+  
+  // Convert NPCs so that they can use Armed Combat in place of any weapon skill except unarmed combat.
+  if (IS_NPC(ch) && ((skill >= SKILL_ARMED_COMBAT && skill <= SKILL_CLUBS)
+                     || (skill >= SKILL_CYBER_IMPLANTS && skill <= SKILL_ORALSTRIKE)
+                     || (skill == SKILL_THROWING_WEAPONS))) {
+    if (GET_SKILL(ch, skill) < GET_SKILL(ch, SKILL_ARMED_COMBAT))
+      skill = SKILL_ARMED_COMBAT;
+  }
   
   if (GET_SKILL(ch, skill))
   {
@@ -1352,7 +1383,7 @@ bool biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct
             send_to_char("Boosted reflexes is not compatible with Vehicle Control Rigs.\r\n", ch);
             return FALSE;
           }
-          // Explicit fallthrough.
+          // fall through
         case CYB_MOVEBYWIRE:
         case CYB_WIREDREFLEXES:
           if (GET_OBJ_VAL(cyber2, 0) == CYB_WIREDREFLEXES || GET_OBJ_VAL(cyber2, 0) == CYB_MOVEBYWIRE ||
@@ -1548,7 +1579,9 @@ bool has_kit(struct char_data * ch, int type)
 // Returns a pointer to the best workshop/facility of the requested type.
 struct obj_data *find_workshop(struct char_data * ch, int type)
 {
-  if (!ch->in_veh && ch->in_room < 0)
+  struct obj_data *workshop = NULL;
+  
+  if (!ch->in_veh && (ch->in_room < 0 || ch->in_room == NOWHERE))
     return NULL;
   
   // If they're in a valid room, return the room's workshop field for MAXIMUM EFFICIENCY.
@@ -1556,13 +1589,12 @@ struct obj_data *find_workshop(struct char_data * ch, int type)
     return world[ch->in_room].best_workshop[type];
   
   // If we've gotten here, they must be in a vehicle. Iterate through and find the best candidate.
-  struct obj_data *workshop = NULL;
   for (struct obj_data *o = ch->in_veh->contents; o; o = o->next_content) {
-    if (GET_OBJ_TYPE(o) == ITEM_WORKSHOP && GET_OBJ_VAL(o, 0) == type) {
-      if (GET_OBJ_VAL(o, 1) == TYPE_FACILITY) {
+    if (GET_OBJ_TYPE(o) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(o) == type) {
+      if (GET_WORKSHOP_GRADE(o) == TYPE_FACILITY) {
         // Jackpot! Facilities are the best option, so we can terminate early and return this item.
         return o;
-      } else if (GET_OBJ_VAL(o, 1) == TYPE_SHOP && GET_OBJ_VAL(o, 2))
+      } else if (GET_WORKSHOP_GRADE(o) == TYPE_SHOP && GET_WORKSHOP_IS_SETUP(o))
         workshop = o;
     }
   }
@@ -1582,7 +1614,7 @@ bool _is_workshop_valid(struct obj_data *obj) {
   }
   
   // Don't allow it to crash the MUD via out-of-bounds world table access.
-  if (!obj->in_room) {
+  if (obj->in_room < 0 || obj->in_room > top_of_world) {
     sprintf(buf, "SYSERR: Workshop '%s' (%ld) claims it's at world index %ld, which doesn't appear to be valid.",
             GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), obj->in_room);
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
@@ -1590,8 +1622,8 @@ bool _is_workshop_valid(struct obj_data *obj) {
   }
   
   // Precondition: The item must be a deployed workshop or a facility.
-  if (!(GET_OBJ_VAL(obj, 1) == TYPE_SHOP && GET_OBJ_VAL(obj, 2)) && GET_OBJ_VAL(obj, 1) != TYPE_FACILITY) {
-    // For this to be true, the item is a kit. We're not going to throw an error over that.
+  if (!(GET_WORKSHOP_GRADE(obj) == TYPE_SHOP && GET_WORKSHOP_IS_SETUP(obj)) && GET_WORKSHOP_GRADE(obj) != TYPE_FACILITY) {
+    // For this to be true, the item is a kit. We're not going to throw an error over that, but it's not a valid workshop.
     return FALSE;
   }
   
@@ -1604,10 +1636,10 @@ void add_workshop_to_room(struct obj_data *obj) {
   
   struct obj_data *current = world[obj->in_room].best_workshop[GET_OBJ_VAL(obj, 0)];
   
-  if (current && GET_OBJ_VAL(current, 1) > GET_OBJ_VAL(obj, 1))
+  if (current && GET_WORKSHOP_GRADE(current) > GET_WORKSHOP_GRADE(obj))
     return;
   
-  world[obj->in_room].best_workshop[GET_OBJ_VAL(obj, 0)] = obj;
+  world[obj->in_room].best_workshop[GET_WORKSHOP_TYPE(obj)] = obj;
 }
 
 void remove_workshop_from_room(struct obj_data *obj) {
@@ -1615,28 +1647,28 @@ void remove_workshop_from_room(struct obj_data *obj) {
     return;
   
   // If this wasn't the best workshop in the first place, who cares?
-  if (world[obj->in_room].best_workshop[GET_OBJ_VAL(obj, 0)] != obj)
+  if (world[obj->in_room].best_workshop[GET_WORKSHOP_TYPE(obj)] != obj)
     return;
   
   // Clear out our current best_workshop pointer (previously pointed to obj).
-  world[obj->in_room].best_workshop[GET_OBJ_VAL(obj, 0)] = NULL;
+  world[obj->in_room].best_workshop[GET_WORKSHOP_TYPE(obj)] = NULL;
   
   // Iterate through all items in the room, looking for other valid workshops/facilities of this type.
   for (struct obj_data *o = world[obj->in_room].contents; o; o = o->next_content) {
-    if (o != obj && GET_OBJ_TYPE(o) == ITEM_WORKSHOP && GET_OBJ_VAL(o, 0) == GET_OBJ_VAL(obj, 0)) {
-      switch (GET_OBJ_VAL(o, 1)) {
+    if (o != obj && GET_OBJ_TYPE(o) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(o) == GET_WORKSHOP_TYPE(obj)) {
+      switch (GET_WORKSHOP_GRADE(o)) {
         case TYPE_FACILITY:
           // This is the best possible outcome; set room val to this and return.
-          world[obj->in_room].best_workshop[GET_OBJ_VAL(o, 0)] = o;
+          world[obj->in_room].best_workshop[GET_WORKSHOP_TYPE(obj)] = o;
           return;
         case TYPE_SHOP:
           // The value of best_workshop is either a workshop or null, so no harm in setting it to another workshop.
-          world[obj->in_room].best_workshop[GET_OBJ_VAL(o, 0)] = o;
+          world[obj->in_room].best_workshop[GET_WORKSHOP_TYPE(obj)] = o;
           break;
         case TYPE_KIT:
           break;
         default:
-          sprintf(buf, "SYSERR: Invalid workshop type %d found for object %s (%ld).", GET_OBJ_VAL(o, 1), GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
+          sprintf(buf, "SYSERR: Invalid workshop type %d found for object %s (%ld).", GET_WORKSHOP_GRADE(o), GET_OBJ_NAME(o), GET_OBJ_VNUM(o));
           mudlog(buf, NULL, LOG_SYSLOG, TRUE);
           break;
       }
@@ -1662,4 +1694,141 @@ struct obj_data *get_mount_weapon(struct obj_data *mount) {
   }
   
   return NULL;
+}
+
+// Cleans up after a character who was manning a mount.
+struct obj_data *stop_manning_weapon_mounts(struct char_data *ch, bool send_message) {
+  if (AFF_FLAGGED(ch, AFF_MANNING)) {
+    struct obj_data *mount;
+    
+    // Find the mount in-use, if any.
+    mount = get_mount_manned_by_ch(ch);
+    
+    // Clean up the mount's data (stop it from pointing to character; remove targets)
+    mount->worn_by = NULL;
+    mount->targ = NULL;
+    mount->tveh = NULL;
+    
+    // Clean up their character flags.
+    AFF_FLAGS(ch).RemoveBit(AFF_MANNING);
+    
+    // Take them out of fight mode if they're in it.
+    if (FIGHTING(ch))
+      stop_fighting(ch);
+    
+    // Let them / the room know that they've stopped manning.
+    if (send_message) {
+      act("$n stops manning $p.", FALSE, ch, mount, 0, TO_ROOM);
+      act("You stop manning $p.", FALSE, ch, mount, 0, TO_CHAR);
+    }
+    
+    return mount;
+  }
+  return NULL;
+}
+
+// Safely retrieves the mount a character is using. Returns NULL for no mount.
+struct obj_data *get_mount_manned_by_ch(struct char_data *ch) {
+  // Catch-all to notify on bad coding or memory issues.
+  if (!ch) {
+    mudlog("SYSERR: Attempting to get mount manned by NULL character.", NULL, LOG_SYSLOG, TRUE);
+    // No mount returned.
+    return NULL;
+  }
+  
+  // Not an error, silently return null.
+  if (!AFF_FLAGGED(ch, AFF_MANNING)) {
+    return NULL;
+  }
+  
+  // Require that they be in a vehicle. Error and clear their flag if they're not.
+  if (!ch->in_veh) {
+    sprintf(buf, "SYSERR: Attempting to get mount manned by %s, but %s is not in any vehicle.", GET_CHAR_NAME(ch), HSHR(ch));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    
+    // Clean up their mount info. We don't use stop_manning..() because it calls this function itself.
+    AFF_FLAGS(ch).RemoveBit(AFF_MANNING);
+    if (FIGHTING(ch))
+      stop_fighting(ch);
+    
+    // No mount returned.
+    return NULL;
+  }
+  
+  // Find and return their mount.
+  for (struct obj_data *mount = ch->in_veh->mount; mount; mount = mount->next_content) {
+    if (mount->worn_by == ch) {
+      // Mount available, return it.
+      return mount;
+    }
+  }
+  
+  // No mount? Error and clear their flag.
+  sprintf(buf, "SYSERR: Attempting to get mount manned by %s, but the mount does not exist in %s vehicle.", GET_CHAR_NAME(ch), HSHR(ch));
+  mudlog(buf, ch, LOG_SYSLOG, TRUE);
+  
+  // Clean up their mount info.
+  AFF_FLAGS(ch).RemoveBit(AFF_MANNING);
+  if (FIGHTING(ch))
+    stop_fighting(ch);
+  
+  // No mount returned.
+  return NULL;
+}
+
+void store_message_to_history(struct descriptor_data *d, int channel, const char *mallocd_message) {
+  // We use our very own message buffer to ensure we'll never overwrite whatever buffer the caller is using.
+  static char log_message[256];
+  
+  // Precondition: No screwy pointers. Removed warning since we can be passed NPC descriptors (which we ignore).
+  if (d == NULL || mallocd_message == NULL) {
+    // mudlog("SYSERR: Null descriptor or message passed to store_message_to_history.", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  // Precondition: Channel must be a valid index (0 ≤ channel < number of channels defined in awake.h).
+  if (channel < 0 || channel >= NUM_COMMUNICATION_CHANNELS) {
+    sprintf(log_message, "SYSERR: Channel %d is not within bounds 0 <= channel < %d.", channel, NUM_COMMUNICATION_CHANNELS);
+    mudlog(log_message, NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  // Add the message to the descriptor's channel history.
+  d->message_history[channel].AddItem(NULL, mallocd_message);
+  
+  // Constrain message history to the specified amount.
+  if (d->message_history[channel].NumItems() > NUM_MESSAGES_TO_RETAIN) {
+    // We're over the amount. Remove the tail, making sure we delete the contents.
+    if (d->message_history[channel].Tail()->data)
+      delete d->message_history[channel].Tail()->data;
+    
+    d->message_history[channel].RemoveItem(d->message_history[channel].Tail());
+  }
+}
+
+void delete_message_history(struct descriptor_data *d) {
+  // NPCs not allowed, if you pass me a null you fucked up.
+  if (d == NULL) {
+    mudlog("SYSERR: Null descriptor passed to delete_message_history.", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  nodeStruct<const char*> *temp = NULL;
+  // For each channel in history, delete all messages (just keep nuking head until it's NULL).
+  for (int channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++) {
+    while ((temp = d->message_history[channel].Head())) {
+      DELETE_ARRAY_IF_EXTANT(temp->data);
+      
+      d->message_history[channel].RemoveItem(temp);
+    }
+  }
+}
+
+// Call this to kill the game while notifying staff etc of what happened.
+void terminate_mud_process_with_message(const char *message, int error_code) {
+  sprintf(buf, "FATAL ERROR: The MUD has encountered a terminal error (code %d) and will now halt. The message given was as follows: %s",
+          error_code, message);
+  mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+  log(buf);
+  exit(error_code);
 }

@@ -167,7 +167,7 @@ void icedit_parse(struct descriptor_data *d, const char *arg)
 
           sprintf(buf,"%s wrote new IC #%ld", GET_CHAR_NAME(CH), d->edit_number);
           mudlog(buf, CH, LOG_WIZLOG, TRUE);
-          for (counter = 0; counter < top_of_ic + 1; counter++) {
+          for (counter = 0; counter <= top_of_ic; counter++) {
             if (!found) {
               if (ic_index[counter].vnum > d->edit_number) {
                 new_ic_index[counter].vnum = d->edit_number;

@@ -2,9 +2,10 @@
 #ifndef _olc_h_
 #define _olc_h_
 
-#define NUM_MATERIALS           17
 #define NUM_BARRIERS            9
 #define NUM_AFF_FLAGS           22
+
+#define WEAPON_MAXIMUM_STRENGTH_BONUS 4
 
 // extern functions
 extern void write_index_file(const char *suffix);

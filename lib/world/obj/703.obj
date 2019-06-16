@@ -79,4 +79,30 @@ Material:	stone
 	Val0:	100000
 	Val1:	100000
 BREAK
+#70303
+Keywords:	impressive array tooling tools vehicle workshop built-in
+Name:	a built-in vehicle workshop
+RoomDesc:$
+An impressive array of tooling for vehicle work has been installed in this garage.~
+LookDesc:$
+tbd 
+~
+Type:	Workshop
+WearFlags:	0
+ExtraFlags:	100
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	485.00
+	Barrier:	32
+	Cost:	50000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	2
+BREAK
 END

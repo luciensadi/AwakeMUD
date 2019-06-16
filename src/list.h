@@ -33,54 +33,62 @@ using namespace std;
 
 
 template <class T>
-struct nodeStruct
-{
+struct nodeStruct {
   T data;
   nodeStruct<T> *next;
+  nodeStruct<T> *prev;
+  
+  nodeStruct() :
+    next(NULL), prev(NULL)
+  {}
 };
 
 //==========================listClass class===============================//
 
 template <class T>
-class listClass
-{
+class listClass {
+private:
+  int num_items;
+  
+protected:
+  nodeStruct<T> *head;
+  nodeStruct<T> *tail;
+  
 public:
-  // constructors and destructors
-  listClass() : num_items(0), head(NULL)
+  // Constructor: Make an empty list.
+  listClass() :
+    num_items(0), head(NULL), tail(NULL)
   {}
+  
+  // Constructor: Clone an existing list.
   listClass(const listClass<T>& L);
+  
+  // Destructor.
   virtual ~listClass();
 
-  int NumItems()
-  {
-    return num_items;
-  }
-  // AddItem adds an item after the node
+  // AddItem adds an item after the specified node (if none, add at head).
   bool AddItem(nodeStruct<T> *node, T item);
+  
   // RemoveItem the item in the list and removes it, however, a
   // function to find the item should be defined in a child class
   bool RemoveItem(nodeStruct<T> *node);
+  
+  // What it says on the tin.
   nodeStruct<T> *FindItem(T item);
-  nodeStruct<T> *Head()
-  {
-    return head;
-  }
-
-
-private:
-  int num_items;
-
-protected:
-  nodeStruct<T> *head;
+  
+  // Simple item retrieval.
+  int NumItems() { return num_items; }
+  nodeStruct<T> *Head() { return head; }
+  nodeStruct<T> *Tail() { return tail; }
 };
 
 //-------------------------------------------------------------------------//
 // member functions for the classes follow                                 //
 //-------------------------------------------------------------------------//
 
+// Clone an existing list.
 template <class T>
-listClass<T>::listClass(const listClass<T> & L)
-{
+listClass<T>::listClass(const listClass<T> & L) {
   num_items = L.num_items;
 
   /* if the head of the old list is empty (NULL), then just set the
@@ -94,28 +102,38 @@ listClass<T>::listClass(const listClass<T> & L)
     if we need to manage our own memory */
     assert((head = new nodeStruct<T>) != NULL);
 
-    // copy the data over
+    // shallow copy head's data over (don't clone pointers etc-- just use the same ones as the original)
     head->data = L.head->data;
+    
+    // Set up head->prev to be null.
+    head->prev = NULL;
 
     // now we loop through the list and allocate and create the new one
-    nodeStruct<T> *temp, *newlist;
-    for (temp = L.head->next, newlist = head; temp;
-         temp = temp->next) {
-      assert((newlist->next = new nodeStruct<T>) != NULL);
-      newlist = newlist->next;
-      newlist->data = temp->data;
+    nodeStruct<T> *currnode = head;
+    for (nodeStruct<T> *temp = L.head->next; temp; temp = temp->next) {
+      // Create the new next node.
+      assert((currnode->next = new nodeStruct<T>) != NULL);
+      
+      // Link it to our current node.
+      currnode->prev = currnode;
+      
+      // Switch operations to the newly-created next node.
+      currnode = currnode->next;
+      
+      // shallow copy this node's data over
+      currnode->data = temp->data;
     }
 
     // finally, make the last 'next' point to NULL to indicate end of list
-    newlist->next = NULL;
+    currnode->next = NULL;
+    tail = currnode;
   } // end else
 }
 
 template <class T>
-listClass<T>::~listClass()
-{
+listClass<T>::~listClass() {
   // to delete, we just remove and deallocate each item
-  register nodeStruct<T> *temp = head;
+  nodeStruct<T> *temp = head;
   while (temp) {
     head = head->next;
     delete temp;
@@ -126,26 +144,35 @@ listClass<T>::~listClass()
 /* this assumes that even if item is a pointer to some type, it's been
  allocated already */
 template <class T>
-bool listClass<T>::AddItem(nodeStruct<T> *node, T item)
-{
+bool listClass<T>::AddItem(nodeStruct<T> *node, T item) {
   assert(item != NULL);
   
   /* AddItem adds the item AFTER the node, if it's NULL it goes at the head */
   nodeStruct<T> *NewNode = new nodeStruct<T>;
   assert(NewNode != NULL);
+  
+  // Shallow copy the item into our new node.
+  NewNode->data = item;
 
   if (node == NULL) {
-    /* set the data to the parameter, then set the pointers straight and
-     pop it onto the head of the list */
-    node = NewNode;
-    node->data = item;
-    node->next = head;
-    head = node;
+    // No position specified means we add to the head of our list.
+    NewNode->next = head;
+    NewNode->prev = NULL;
+    head = NewNode;
   } else {
+    // Position specified means we add our new node immediately after the specified one.
     NewNode->next = node->next;
-    NewNode->data = item;
+    NewNode->prev = node;
     node->next = NewNode;
   }
+  
+  // Tie in the reverse link of the next item in the list, provided it exists.
+  if (NewNode->next)
+    NewNode->next->prev = NewNode;
+  
+  // Tail check-- if we're adding after last item (or last item is null), update tail pointer.
+  if (tail == node || tail == NULL)
+    tail = NewNode;
 
   num_items++;  // increment num_items since we added
 
@@ -153,8 +180,7 @@ bool listClass<T>::AddItem(nodeStruct<T> *node, T item)
 }
 
 template <class T>
-bool listClass<T>::RemoveItem(nodeStruct<T> *node)
-{
+bool listClass<T>::RemoveItem(nodeStruct<T> *node) {
   assert(node != NULL);
   // Remove item assumes you have alread found the node, so child classes
   // will have to define their own rules to find items based on data type
@@ -164,17 +190,27 @@ bool listClass<T>::RemoveItem(nodeStruct<T> *node)
     // deallocate any memory
     found = head;
     head = found->next;
+    
+    // If it's a one-item list, clean up the tail.
+    if (tail == node)
+      tail = NULL;
+    
     delete found;
     num_items--;  /* decrement number of items in list */
     return TRUE;  /* it's been found, so return TRUE */
   } else {
-    register nodeStruct<T> *temp = head;
+    nodeStruct<T> *temp = head;
     while (temp && (temp->next != node))
       temp = temp->next;
 
-    if (temp->next == node) { // ie, it was found
+    if (temp && temp->next == node) { // ie, it was found
       found = temp->next;
       temp->next = found->next;
+      
+      // Tail check-- if it's the last item, clean up the tail.
+      if (tail == found)
+        tail = temp;
+      
       if (found)
         delete found;
       num_items--;  // decrement number of items in list
@@ -188,9 +224,8 @@ bool listClass<T>::RemoveItem(nodeStruct<T> *node)
 // this function runs through the list and compares data, returning the node
 // if it is found
 template <class T>
-nodeStruct<T> *listClass<T>::FindItem(T item)
-{
-  register nodeStruct<T> *temp;
+nodeStruct<T> *listClass<T>::FindItem(T item) {
+  nodeStruct<T> *temp;
 
   for (temp = head; temp; temp = temp->next)
     if (temp->data == item)
@@ -206,15 +241,11 @@ nodeStruct<T> *listClass<T>::FindItem(T item)
 // if DEBUG is defined
 
 template <class T>
-class List : public listClass<T>
-{
+class List : public listClass<T> {
 public:
-  List()
-  {}
-  List(const List<T>& L)
-  {}
-  virtual ~List()
-  {}
+  List() {}
+  List(const List<T>& L) {}
+  virtual ~List() {}
 
   bool Add(T item, const char *filename, int lineno);
   bool Remove(T item);
@@ -225,13 +256,15 @@ public:
 
 //============================List member functions=====================//
 template <class T>
-bool List<T>::Add(T item, const char *filename, int lineno)
-{
+bool List<T>::Add(T item, const char *filename, int lineno) {
 
 #ifdef DEBUG
+  if (item == NULL) {
+    cerr << "SYSERR: Attempt to add null to list in file " << filename << ", line: " << lineno << endl;
+  }
+  
   if (this->FindItem(item)) {
-    cerr << "SYSERR: Attempt to add duplicate item to list in file " << filename
-    << ", line: " << lineno << endl;
+    cerr << "SYSERR: Attempt to add duplicate item to list in file " << filename << ", line: " << lineno << endl;
     abort();
   }
 #endif
@@ -240,8 +273,7 @@ bool List<T>::Add(T item, const char *filename, int lineno)
 }
 
 template <class T>
-bool List<T>::Remove(T item)
-{
+bool List<T>::Remove(T item) {
   return this->RemoveItem(this->FindItem(item));
 }
 

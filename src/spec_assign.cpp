@@ -68,38 +68,55 @@ teach_t teachers[] = {
                          "After hours of study and magical practice, you feel like you've learned\r\nsomething.\r\n", AMATEUR },
                        { 4257, { SKILL_ASSAULT_RIFLES, SKILL_TASERS, 0, 0, 0, 0, 0, 0 },
                          "After hours of study and weapon practice, you feel like you've learned\r\nsomething.\r\n", AMATEUR }, */
-		       { 4250, { SKILL_SORCERY, SKILL_CONJURING, SKILL_AURA_READING, SKILL_SPELLDESIGN, SKILL_ENCHANTING, SKILL_CENTERING,
-			 SKILL_TALISMONGERING, SKILL_MEDITATION, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 /*, SKILL_GETTING_THROWN_OFF_OF_A_TOWER */ },
-			 "After what feels like seven years of magical study, you feel like you've learned something.\r\n", GODLY },
-                       { 60501, { SKILL_SORCERY, SKILL_CONJURING, SKILL_AURA_READING, SKILL_SPELLDESIGN, SKILL_ENCHANTING, SKILL_CENTERING,
-			 SKILL_TALISMONGERING, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                         "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
-                       { 60502, { SKILL_COMPUTER, SKILL_BR_COMPUTER, SKILL_ELECTRONICS, SKILL_BR_ELECTRONICS, SKILL_CYBERTERM_DESIGN,
-                         SKILL_DATA_BROKERAGE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			 "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
-                       { 60503, { SKILL_ARABIC, SKILL_CHINESE, SKILL_CROW, SKILL_ENGLISH, SKILL_FRENCH, SKILL_GAELIC, SKILL_GERMAN,
-			 SKILL_ITALIAN, SKILL_JAPANESE, SKILL_KOREAN, SKILL_LATIN, SKILL_MAKAW, SKILL_NAVAJO, SKILL_ORZET,
-			 SKILL_RUSSIAN, SKILL_SALISH, SKILL_SIOUX, SKILL_SPANISH, SKILL_SPERETHIEL, SKILL_UTE }, 
-                         "Von Richter runs through basic conjugation and sentence structure with you.\r\n", NEWBIE },
-                       { 60504, { SKILL_PILOT_CAR, SKILL_PILOT_BIKE, SKILL_PILOT_TRUCK, SKILL_BR_BIKE,
-                         SKILL_BR_DRONE, SKILL_BR_CAR, SKILL_BR_TRUCK, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			 "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
-                       { 60505, { SKILL_EDGED_WEAPONS, SKILL_WHIPS_FLAILS, SKILL_POLE_ARMS, SKILL_CLUBS,
-                         SKILL_PROJECTILES, SKILL_THROWING_WEAPONS, SKILL_UNARMED_COMBAT, SKILL_CYBER_IMPLANTS, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                         "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
-                       { 60506, { SKILL_PISTOLS, SKILL_RIFLES, SKILL_SHOTGUNS, SKILL_SMG, SKILL_ASSAULT_RIFLES,
-                         SKILL_GUNNERY, SKILL_MACHINE_GUNS, SKILL_PROJECTILES, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			 "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
-                       { 60532, { SKILL_PROGRAM_COMBAT, SKILL_PROGRAM_DEFENSIVE, SKILL_PROGRAM_OPERATIONAL, SKILL_PROGRAM_SPECIAL,
-                         SKILL_PROGRAM_CYBERTERM, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			 "Deadlock picks up some design plans from his desk and runs through "
-                         "the basic process of setting one up, you feel like you've learned something.\r\n", NEWBIE},
-                       { 60533, { SKILL_NEGOTIATION, SKILL_CORPORATE_ETIQUETTE, SKILL_MEDIA_ETIQUETTE, SKILL_STREET_ETIQUETTE,
-                         SKILL_ELF_ETIQUETTE, SKILL_TRIBAL_ETIQUETTE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			 "Lucy runs through the proper decorum to use in certain situations, you feel like you've learned something.\r\n", NEWBIE},
-                       { 60534, { SKILL_ATHLETICS, SKILL_STEALTH, SKILL_BIOTECH, SKILL_ORALSTRIKE, SKILL_POLICE_PROCEDURES,
-			 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                         "Steve roughly throws you a text book and tells you to read it, you feel like you've learned something.\r\n", NEWBIE},
+  
+  /* Removed nerp skills from trainers:
+   SKILL_ENCHANTING, SKILL_AURA_READING, SKILL_CENTERING, SKILL_TALISMONGERING, SKILL_PROJECTILES, SKILL_THROWING_WEAPONS SKILL_ORALSTRIKE, SKILL_MEDITATION
+   */
+  
+  // Imm trainer (Dumbledore)
+  { 10010, { SKILL_CONJURING, SKILL_SORCERY, SKILL_SPELLDESIGN,
+    /*, SKILL_GETTING_THROWN_OFF_OF_A_TOWER, */
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    "After what feels like seven years of magical study, you feel like you've learned something.\r\n", GODLY },
+  
+  // Newbie magic teacher
+  { 60501, { SKILL_CONJURING, SKILL_SORCERY, SKILL_SPELLDESIGN,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
+  
+  { 60502, { SKILL_COMPUTER, SKILL_BR_COMPUTER, SKILL_DATA_BROKERAGE, SKILL_CYBERTERM_DESIGN, SKILL_ELECTRONICS, SKILL_BR_ELECTRONICS,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
+  
+  { 60503, { SKILL_ARABIC, SKILL_CHINESE, SKILL_CROW, SKILL_ENGLISH, SKILL_FRENCH, SKILL_GAELIC, SKILL_GERMAN,
+    SKILL_ITALIAN, SKILL_JAPANESE, SKILL_KOREAN, SKILL_LATIN, SKILL_MAKAW, SKILL_NAVAJO, SKILL_ORZET,
+    SKILL_RUSSIAN, SKILL_SALISH, SKILL_SIOUX, SKILL_SPANISH, SKILL_SPERETHIEL, SKILL_UTE },
+    "Von Richter runs through basic conjugation and sentence structure with you.\r\n", NEWBIE },
+  
+  { 60504, { SKILL_PILOT_BIKE, SKILL_PILOT_CAR, SKILL_PILOT_TRUCK, SKILL_BR_BIKE,
+    SKILL_BR_DRONE, SKILL_BR_CAR, SKILL_BR_TRUCK, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
+  
+  { 60505, { SKILL_CLUBS, SKILL_CYBER_IMPLANTS, SKILL_EDGED_WEAPONS, SKILL_POLE_ARMS, SKILL_UNARMED_COMBAT, SKILL_WHIPS_FLAILS,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
+  
+  { 60506, { SKILL_ASSAULT_RIFLES, SKILL_GUNNERY, SKILL_MACHINE_GUNS, SKILL_PISTOLS, SKILL_RIFLES, SKILL_SHOTGUNS, SKILL_SMG,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
+  
+  { 60532, { SKILL_PROGRAM_COMBAT, SKILL_PROGRAM_CYBERTERM, SKILL_PROGRAM_DEFENSIVE, SKILL_PROGRAM_OPERATIONAL, SKILL_PROGRAM_SPECIAL,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    "Deadlock picks up some design plans from his desk and runs through the basic process of setting one up, you feel like you've learned something.\r\n", NEWBIE},
+  
+  { 60533, { SKILL_CORPORATE_ETIQUETTE, SKILL_ELF_ETIQUETTE, SKILL_MEDIA_ETIQUETTE, SKILL_NEGOTIATION, SKILL_STREET_ETIQUETTE, SKILL_TRIBAL_ETIQUETTE,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    "Lucy runs through the proper decorum to use in certain situations, you feel like you've learned something.\r\n", NEWBIE},
+  
+  { 60534, { SKILL_ATHLETICS, SKILL_BIOTECH, SKILL_POLICE_PROCEDURES, SKILL_STEALTH,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    "Steve roughly throws you a text book and tells you to read it, you feel like you've learned something.\r\n", NEWBIE},
+  
 /*                     { 30700, { SKILL_ENGLISH, SKILL_JAPANESE, SKILL_CHINESE, SKILL_KOREAN,
                          SKILL_SPERETHIEL, SKILL_SALISH, SKILL_ITALIAN, SKILL_NEGOTIATION }, "Socrates shows you the intricities "
                          "of the language and you emerge with a greater understanding.\r\n", AMATEUR },
@@ -116,10 +133,15 @@ teach_t teachers[] = {
                          SKILL_AURA_READING, SKILL_SPELLDESIGN, SKILL_TALISMONGERING }, "Hermes imparts his wisdom upon you.\r\n", AMATEUR },
                        { 37500, { SKILL_BR_CAR, SKILL_BR_BIKE, SKILL_BR_DRONE, SKILL_BR_TRUCK, 0, 0, 0, 0 }, "Marty shows you a few tricks of the "
                          "trade and you emerge more skilled than before.\r\n", AMATEUR }, */
-                       { 35502, { SKILL_STREET_ETIQUETTE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			 "You spend some time talking to the people in line.\r\n", AMATEUR },
-                       { 17111, { SKILL_CORPORATE_ETIQUETTE, SKILL_NEGOTIATION, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			 "You spend some time making small talk with the secretary.\r\n", AMATEUR },
+  
+  { 35502, { SKILL_STREET_ETIQUETTE,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    "You spend some time talking to the people in line.\r\n", AMATEUR },
+  
+  { 17111, { SKILL_CORPORATE_ETIQUETTE, SKILL_NEGOTIATION,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    "You spend some time making small talk with the secretary.\r\n", AMATEUR },
+  
 /*                     { 65106, { SKILL_MEDIA_ETIQUETTE, SKILL_STEALTH, 0, 0, 0, 0, 0, 0 }, "You talk to the reporter about current events for"
                          " a while.\r\n", AMATEUR },
                        { 18311, { SKILL_STREET_ETIQUETTE, SKILL_MEDIA_ETIQUETTE, SKILL_ELF_ETIQUETTE, SKILL_CORPORATE_ETIQUETTE, 
@@ -128,8 +150,9 @@ teach_t teachers[] = {
                        { 18312, { SKILL_COMPUTER, SKILL_ELECTRONICS, SKILL_BR_COMPUTER, SKILL_CYBERTERM_DESIGN,
                                   SKILL_BR_ELECTRONICS, SKILL_DATA_BROKERAGE, SKILL_PROGRAM_CYBERTERM, SKILL_PROGRAM_SPECIAL },
                          "You read through various technological journals.\r\n", LIBRARY }, */
-                       { 0, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Report this bug!\r\n", 0 } // this MUST be last
-                     };
+  
+  { 0, { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, "Report this bug!\r\n", 0 } // this MUST be last
+};
 
 adept_t adepts[] = {
                      { 10011,{ 0, 1, 50, 1, 1, 50, 1, 1, 1, 50, 50, 50, 50, 50, 50, 50, 50, 1, 1, 1, 50, 50, 50, 50, 50, 1, 1, 50, 50, 50, 50, 50, 1, 50, 1, 1, 1, 1, 50, 50, 50, 50}, 0 },
@@ -142,99 +165,101 @@ adept_t adepts[] = {
                    };
 
 spell_t spelltrainers[] = {
-                            { 60508, SPELL_MANABOLT, "Manabolt", 0, 6 },
-                            { 60508, SPELL_POWERBOLT, "Powerbolt", 0, 6 },
-                            { 60508, SPELL_STUNBOLT, "Stunbolt", 0, 6 },
-                            { 60508, SPELL_COMBATSENSE, "Combat Sense", 0, 6},
-                            { 60508, SPELL_DETECTLIFE, "Detect Life", 0, 6},
-                            { 60508, SPELL_HEAL, "Heal", 0, 6},
-                            { 60508, SPELL_TREAT, "Treat", 0, 6},
-                            { 60508, SPELL_INCATTR, "Increase Strength", STR, 6},
-                            { 60508, SPELL_INCCYATTR, "Increase Cybered Strength", STR, 6},
-                            { 60508, SPELL_INCREF1, "Increased Reflexes", 0, 6},
-                            { 60508, SPELL_LIGHTNINGBOLT, "Lightning Bolt", 0, 6},
-                            { 60508, SPELL_ARMOUR, "Armour", 0, 6},
-                            { 60508, SPELL_INVIS, "Invisibility", 0, 6},
-                            { 60509, SPELL_MANABOLT, "Manabolt", 0, 6 },
-                            { 60509, SPELL_POWERBOLT, "Powerbolt", 0, 6 },
-                            { 60509, SPELL_STUNBOLT, "Stunbolt", 0, 6 },
-                            { 60509, SPELL_COMBATSENSE, "Combat Sense", 0, 6},
-                            { 60509, SPELL_DETECTLIFE, "Detect Life", 0, 6},
-                            { 60509, SPELL_HEAL, "Heal", 0, 6},
-                            { 60509, SPELL_TREAT, "Treat", 0, 6},
-                            { 60509, SPELL_INCATTR, "Increase Strength", ATT_STR, 6},
-                            { 60509, SPELL_INCCYATTR, "Increase Cybered Strength", ATT_STR, 6},
-                            { 60509, SPELL_INCREF1, "Increased Reflexes", 0, 6},
-                            { 60509, SPELL_LIGHTNINGBOLT, "Lightning Bolt", 0, 6},
-                            { 60509, SPELL_ARMOUR, "Armour", 0, 6},
-                            { 60509, SPELL_INVIS, "Invisibility", 0, 6},
-
-                            {60600, SPELL_DEATHTOUCH, "Death Touch", 0, 6},
-                            {60600, SPELL_MANABOLT, "Manabolt", 0, 6},
-                            {60600, SPELL_MANABALL, "Manaball", 0, 6},
-                            {60600, SPELL_POWERBOLT, "Powerbolt", 0, 6},
-                            {60600, SPELL_POWERBALL, "Powerball", 0, 6},
-                            {60600, SPELL_STUNBOLT, "Stunbolt", 0, 6},
-                            {60600, SPELL_STUNBALL, "Stunball", 0, 6},
-                            {60601, SPELL_DECATTR, "Decrease Body", BOD, 6},
-                            {60601, SPELL_DECATTR, "Decrease Strength", STR, 6},
-                            {60601, SPELL_DECATTR, "Decrease Quickness", QUI, 6},
-                            {60601, SPELL_DECCYATTR, "Decrease (Cybered) Body", BOD, 6},
-                            {60601, SPELL_DECCYATTR, "Decrease (Cybered) Strength", STR, 6},
-                            {60601, SPELL_DECCYATTR, "Decrease (Cybered) Quickness", QUI, 6},
-                            {60601, SPELL_DETOX, "Detox", 0, 6},
-                            {60601, SPELL_HEAL, "Heal", 0, 6},
-                            {60601, SPELL_TREAT, "Treat", 0, 6},
-                            {60601, SPELL_HEALTHYGLOW, "Healthy Glow", 0, 6},
-                            {60601, SPELL_INCATTR, "Increase Body", BOD, 6},
-                            {60601, SPELL_INCATTR, "Increase Strength", STR, 6},
-                            {60601, SPELL_INCATTR, "Increase Quickness", QUI, 6},
-                            {60601, SPELL_INCCYATTR, "Increase (Cybered) Body", BOD, 6},
-                            {60601, SPELL_INCCYATTR, "Increase (Cybered) Strength", STR, 6},
-                            {60601, SPELL_INCCYATTR, "Increase (Cybered) Quickness", QUI, 6},
-                            {60601, SPELL_INCREA, "Increase Reaction", 0, 6},
-                            {60601, SPELL_INCREF1, "Increase Reflexes +1", 0, 6},
-                            {60601, SPELL_INCREF2, "Increase Reflexes +2", 0, 6},
-                            {60601, SPELL_INCREF3, "Increase Reflexes +3", 0, 6},
-                            {60601, SPELL_PROPHYLAXIS, "Prophylaxis", 0, 6},
-                            {60601, SPELL_STABILIZE, "Stabilize", 0, 6},
-                            {60602, SPELL_ANALYZEDEVICE, "Analyze Device", 0, 6},
-                            {60602, SPELL_CLAIRAUDIENCE, "Clairaudience", 0, 6},
-                            {60602, SPELL_CLAIRVOYANCE, "Clairvoyance", 0, 6},
-                            {60602, SPELL_COMBATSENSE, "Combat Sense", 0, 6},
-                            {60602, SPELL_DETECTENEMIES, "Detect Enemies", 0, 6},
-                            {60602, SPELL_DETECTINDIV, "Detect Individual", 0, 6},
-                            {60602, SPELL_DETECTLIFE, "Detect Life", 0, 6},
-                            {60602, SPELL_DETECTMAGIC, "Detect Magic", 0, 6},
-                            {60602, SPELL_DETECTOBJECT, "Detect Object", 0, 6},
-                            {60602, SPELL_MINDLINK, "Mindlink", 0, 6},
-                            {60603, SPELL_CONFUSION, "Confusion", 0, 6},
-                            {60603, SPELL_MASSCONFUSION, "Mass Confusion", 0, 6},
-                            {60603, SPELL_CHAOS, "Chaos", 0, 6},
-                            {60603, SPELL_CHAOTICWORLD, "Chaotic World", 0, 6},
-                            {60603, SPELL_INVIS, "Invisibility", 0, 6},
-                            {60603, SPELL_IMP_INVIS, "Improved Invisibility", 0, 6},
-                            {60603, SPELL_MASK, "Mask", 0, 6},
-                            {60603, SPELL_PHYSMASK, "Physical Mask", 0, 6},
-                            {60603, SPELL_SILENCE, "Silence", 0, 6},
-                            {60603, SPELL_STEALTH, "Stealth", 0, 6},
-                            {60604, SPELL_LIGHT, "Light", 0, 6},
-                            {60604, SPELL_ACIDSTREAM, "Acid Stream", 0, 6},
-                            {60604, SPELL_TOXICWAVE, "Toxic Wave", 0, 6},
-                            {60604, SPELL_FLAMETHROWER, "Flamethrower", 0, 6},
-                            {60604, SPELL_FIREBALL, "Fireball", 0, 6},
-                            {60604, SPELL_LIGHTNINGBOLT, "Lightning Bolt", 0, 6},
-                            {60604, SPELL_BALLLIGHTNING, "Ball Lightning", 0, 6},
-                            {60604, SPELL_CLOUT, "Clout", 0, 6},
-                            {60604, SPELL_POLTERGEIST, "Poltergeist", 0, 6},
-                            {60604, SPELL_ARMOUR, "Armour", 0, 6},
-                            {60604, SPELL_PHYSICALBARRIER, "Physical Barrier", 0, 6},
-                            {60604, SPELL_ASTRALBARRIER, "Astral Barrier", 0, 6},
-                            {60604, SPELL_ICESHEET, "Icesheet", 0, 6},
-                            {60604, SPELL_IGNITE, "Ignite", 0, 6},
-                            {60604, SPELL_SHADOW, "Shadow", 0, 6},
+//  { 60508, SPELL_DETECTLIFE, "Detect Life", 0, 6},
+  { 60508, SPELL_ARMOUR, "Armour", 0, 6},
+  { 60508, SPELL_COMBATSENSE, "Combat Sense", 0, 6},
+  { 60508, SPELL_HEAL, "Heal", 0, 6},
+  { 60508, SPELL_INCATTR, "Increase Strength", STR, 6},
+  { 60508, SPELL_INCCYATTR, "Increase (Cybered) Strength", STR, 6},
+  { 60508, SPELL_INCREF1, "Increased Reflexes", 0, 6},
+  { 60508, SPELL_INVIS, "Invisibility", 0, 6},
+  { 60508, SPELL_LIGHTNINGBOLT, "Lightning Bolt", 0, 6},
+  { 60508, SPELL_MANABOLT, "Manabolt", 0, 6 },
+  { 60508, SPELL_POWERBOLT, "Powerbolt", 0, 6 },
+  { 60508, SPELL_STUNBOLT, "Stunbolt", 0, 6 },
+  { 60508, SPELL_TREAT, "Treat", 0, 6},
   
-                            // Immortal HQ Trainer
+//{ 60509, SPELL_DETECTLIFE, "Detect Life", 0, 6},
+  { 60509, SPELL_ARMOUR, "Armour", 0, 6},
+  { 60509, SPELL_COMBATSENSE, "Combat Sense", 0, 6},
+  { 60509, SPELL_HEAL, "Heal", 0, 6},
+  { 60509, SPELL_INCATTR, "Increase Strength", ATT_STR, 6},
+  { 60509, SPELL_INCCYATTR, "Increase (Cybered) Strength", ATT_STR, 6},
+  { 60509, SPELL_INCREF1, "Increased Reflexes", 0, 6},
+  { 60509, SPELL_INVIS, "Invisibility", 0, 6},
+  { 60509, SPELL_LIGHTNINGBOLT, "Lightning Bolt", 0, 6},
+  { 60509, SPELL_MANABOLT, "Manabolt", 0, 6 },
+  { 60509, SPELL_POWERBOLT, "Powerbolt", 0, 6 },
+  { 60509, SPELL_STUNBOLT, "Stunbolt", 0, 6 },
+  { 60509, SPELL_TREAT, "Treat", 0, 6},
+
+//{60600, SPELL_DEATHTOUCH, "Death Touch", 0, 6},
+//{60600, SPELL_MANABALL, "Manaball", 0, 6},
+//{60600, SPELL_POWERBALL, "Powerball", 0, 6},
+//{60600, SPELL_STUNBALL, "Stunball", 0, 6},
+  {60600, SPELL_MANABOLT, "Manabolt", 0, 6},
+  {60600, SPELL_POWERBOLT, "Powerbolt", 0, 6},
+  {60600, SPELL_STUNBOLT, "Stunbolt", 0, 6},
+  
+//{60601, SPELL_HEALTHYGLOW, "Healthy Glow", 0, 6},
+//{60601, SPELL_PROPHYLAXIS, "Prophylaxis", 0, 6},
+  {60601, SPELL_DECCYATTR, "Decrease (Cybered) Body", BOD, 6},
+  {60601, SPELL_DECCYATTR, "Decrease (Cybered) Strength", STR, 6},
+  {60601, SPELL_DECCYATTR, "Decrease (Cybered) Quickness", QUI, 6},
+  {60601, SPELL_DETOX, "Detox", 0, 6},
+  {60601, SPELL_HEAL, "Heal", 0, 6},
+  {60601, SPELL_INCATTR, "Increase Body", BOD, 6},
+  {60601, SPELL_INCATTR, "Increase Strength", STR, 6},
+  {60601, SPELL_INCATTR, "Increase Quickness", QUI, 6},
+  {60601, SPELL_INCCYATTR, "Increase (Cybered) Body", BOD, 6},
+  {60601, SPELL_INCCYATTR, "Increase (Cybered) Strength", STR, 6},
+  {60601, SPELL_INCCYATTR, "Increase (Cybered) Quickness", QUI, 6},
+  {60601, SPELL_INCREA, "Increase Reaction", 0, 6},
+  {60601, SPELL_INCREF1, "Increase Reflexes +1", 0, 6},
+  {60601, SPELL_INCREF2, "Increase Reflexes +2", 0, 6},
+  {60601, SPELL_INCREF3, "Increase Reflexes +3", 0, 6},
+  {60601, SPELL_STABILIZE, "Stabilize", 0, 6},
+  {60601, SPELL_TREAT, "Treat", 0, 6},
+  
+//{60602, SPELL_ANALYZEDEVICE, "Analyze Device", 0, 6},
+//{60602, SPELL_CLAIRAUDIENCE, "Clairaudience", 0, 6},
+//{60602, SPELL_CLAIRVOYANCE, "Clairvoyance", 0, 6},
+//{60602, SPELL_DETECTENEMIES, "Detect Enemies", 0, 6},
+//{60602, SPELL_DETECTINDIV, "Detect Individual", 0, 6},
+//{60602, SPELL_DETECTLIFE, "Detect Life", 0, 6},
+//{60602, SPELL_DETECTMAGIC, "Detect Magic", 0, 6},
+//{60602, SPELL_DETECTOBJECT, "Detect Object", 0, 6},
+  {60602, SPELL_COMBATSENSE, "Combat Sense", 0, 6},
+  {60602, SPELL_MINDLINK, "Mindlink", 0, 6},
+  
+//{60603, SPELL_MASSCONFUSION, "Mass Confusion", 0, 6},
+//{60603, SPELL_CHAOTICWORLD, "Chaotic World", 0, 6},
+//{60603, SPELL_MASK, "Mask", 0, 6},
+//{60603, SPELL_PHYSMASK, "Physical Mask", 0, 6},
+  {60603, SPELL_CHAOS, "Chaos", 0, 6},
+  {60603, SPELL_CONFUSION, "Confusion", 0, 6},
+  {60603, SPELL_INVIS, "Invisibility", 0, 6},
+  {60603, SPELL_IMP_INVIS, "Improved Invisibility", 0, 6},
+  {60603, SPELL_SILENCE, "Silence", 0, 6},
+  {60603, SPELL_STEALTH, "Stealth", 0, 6},
+  
+//{60604, SPELL_TOXICWAVE, "Toxic Wave", 0, 6},
+//{60604, SPELL_FIREBALL, "Fireball", 0, 6},
+//{60604, SPELL_BALLLIGHTNING, "Ball Lightning", 0, 6},
+//{60604, SPELL_PHYSICALBARRIER, "Physical Barrier", 0, 6},
+//{60604, SPELL_ASTRALBARRIER, "Astral Barrier", 0, 6},
+  {60604, SPELL_ACIDSTREAM, "Acid Stream", 0, 6},
+  {60604, SPELL_ARMOUR, "Armour", 0, 6},
+  {60604, SPELL_CLOUT, "Clout", 0, 6},
+  {60604, SPELL_FLAMETHROWER, "Flamethrower", 0, 6},
+  {60604, SPELL_ICESHEET, "Icesheet", 0, 6},
+  {60604, SPELL_IGNITE, "Ignite", 0, 6},
+  {60604, SPELL_LIGHT, "Light", 0, 6},
+  {60604, SPELL_LIGHTNINGBOLT, "Lightning Bolt", 0, 6},
+  {60604, SPELL_POLTERGEIST, "Poltergeist", 0, 6},
+  {60604, SPELL_SHADOW, "Shadow", 0, 6},
+  
+                            // Immortal HQ Trainer, not alphabetized because who has the time for that
                             {10013, SPELL_DEATHTOUCH, "Death Touch", 0, 50},
                             {10013, SPELL_MANABOLT, "Manabolt", 0, 50},
                             {10013, SPELL_MANABALL, "Manaball", 0, 50},
@@ -618,7 +643,7 @@ void assign_objects(void)
   ASSIGNOBJ(9329, vending_machine);*/
   ASSIGNOBJ(10011, desktop);
   ASSIGNOBJ(10108, vending_machine);
-  ASSIGNOBJ(42130, anticoagulant);
+  //ASSIGNOBJ(42130, anticoagulant);
   ASSIGNOBJ(10025, pocket_sec);
 /*ASSIGNOBJ(9406, hand_held_scanner);
   ASSIGNOBJ(29997, gen_board);  // Loki's Board
@@ -672,6 +697,9 @@ void assign_rooms(void)
   SPECIAL(bouncy_castle);
   SPECIAL(rpe_room);
   SPECIAL(multnomah_gate);
+  SPECIAL(chargen_south_from_trainer);
+  SPECIAL(chargen_skill_annex);
+  SPECIAL(chargen_unpractice_skill);
 
   /* Limbo/God Rooms */
   ASSIGNROOM(8, oceansounds);
@@ -681,10 +709,25 @@ void assign_rooms(void)
   /* Carbanado */
 //ASSIGNROOM(4477, waterfall);
 
-  /* Neophytic guild */
+  /* CharGen */
+  ASSIGNROOM(60505, chargen_south_from_trainer);
+  ASSIGNROOM(60506, chargen_skill_annex);
+  ASSIGNROOM(60562, auth_room);
+  /* CharGen - allow forgetting skills */
+  ASSIGNROOM(60507, chargen_unpractice_skill);
+  ASSIGNROOM(60508, chargen_unpractice_skill);
+  ASSIGNROOM(60509, chargen_unpractice_skill);
+  ASSIGNROOM(60513, chargen_unpractice_skill);
+  ASSIGNROOM(60512, chargen_unpractice_skill);
+  ASSIGNROOM(60511, chargen_unpractice_skill);
+  ASSIGNROOM(60510, chargen_unpractice_skill);
+  ASSIGNROOM(60591, chargen_unpractice_skill);
+  ASSIGNROOM(60592, chargen_unpractice_skill);
+  ASSIGNROOM(60593, chargen_unpractice_skill);
+  
+  /* Neophyte Guild */
   ASSIGNROOM(60585, neophyte_entrance);
   ASSIGNROOM(60586, newbie_car);
-  ASSIGNROOM(60562, auth_room);
 
   /* Ork Underground */
   ASSIGNROOM(9978, simulate_bar_fight);
@@ -725,7 +768,7 @@ void assign_rooms(void)
   ASSIGNROOM(17599, multnomah_gate); */
 
  
-  for (long x = 0; x < top_of_world; x++)
-    if (ROOM_FLAGGED(x, ROOM_ROAD) && !ROOM_FLAGGED(x, ROOM_GARAGE) && !world[x].func && SECT(x) == SPIRIT_CITY)
+  for (long x = 0; x <= top_of_world; x++)
+    if (ROOM_FLAGGED(x, ROOM_ROAD) && !ROOM_FLAGGED(x, ROOM_NO_TRAFFIC) && !ROOM_FLAGGED(x, ROOM_GARAGE) && !world[x].func && SECT(x) == SPIRIT_CITY)
       ASSIGNROOM(world[x].number, traffic);
 }

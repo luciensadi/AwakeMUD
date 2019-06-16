@@ -78,7 +78,6 @@ extern void list_detailed_shop(struct char_data *ch, long shop_nr);
 extern void list_detailed_quest(struct char_data *ch, long rnum);
 extern int vnum_vehicles(char *searchname, struct char_data * ch);
 extern void disp_init_menu(struct descriptor_data *d);
-extern char *prepare_quotes(char *dest, const char *src);
 
 /* Copyover Code, ported to Awake by Harlequin *
  * (c) 1996-97 Erwin S. Andreasen <erwin@andreasen.org> */
@@ -1659,7 +1658,7 @@ void perform_wizload_object(struct char_data *ch, int vnum) {
   
   // Precondition: Staff member must have access to the zone the item is in.
   if (!access_level(ch, LVL_DEVELOPER)) {
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < NUM_ZONE_EDITOR_IDS; i++) {
       if (zone_table[counter].editor_ids[i] == GET_IDNUM(ch))
         break;
     }
@@ -1869,24 +1868,47 @@ ACMD(do_purge)
     }
 
     send_to_char(OK, ch);
-  } else {                      /* no argument. clean out the room */
-    act("$n gestures... You are surrounded by scorching flames!",
-        FALSE, ch, 0, 0, TO_ROOM);
-    send_to_room("The world seems a little cleaner.\r\n", ch->in_room);
-
-    for (vict = world[ch->in_room].people; vict; vict = next_v) {
-      next_v = vict->next_in_room;
-      if (IS_NPC(vict))
-        extract_char(vict);
+  } else {                      /* no argument. clean out the room or veh */
+    if (ch->in_veh) {
+      send_to_veh("You are surrounded by scorching flames!\r\n", ch->in_veh, NULL, FALSE);
+      
+      for (vict = ch->in_veh->people; vict; vict = next_v) {
+        next_v = vict->next_in_veh;
+        if (IS_NPC(vict))
+          extract_char(vict);
+      }
+      
+      for (obj = ch->in_veh->contents; obj; obj = next_o) {
+        next_o = obj->next_content;
+        extract_obj(obj);
+      }
+      
+      for (veh = ch->in_veh->carriedvehs; veh; veh = next_ve) {
+        next_ve = veh->next;
+        if (veh == ch->in_veh)
+          continue;
+        extract_veh(veh);
+      }
     }
+    else {
+      act("$n gestures... You are surrounded by scorching flames!", FALSE, ch, 0, 0, TO_ROOM);
+      send_to_room("The world seems a little cleaner.\r\n", ch->in_room);
 
-    for (obj = world[ch->in_room].contents; obj; obj = next_o) {
-      next_o = obj->next_content;
-      extract_obj(obj);
-    }
-    for (veh = world[ch->in_room].vehicles; veh; veh = next_ve) {
-      next_ve = veh->next_veh;
-      extract_veh(veh);
+      for (vict = world[ch->in_room].people; vict; vict = next_v) {
+        next_v = vict->next_in_room;
+        if (IS_NPC(vict))
+          extract_char(vict);
+      }
+
+      for (obj = world[ch->in_room].contents; obj; obj = next_o) {
+        next_o = obj->next_content;
+        extract_obj(obj);
+      }
+      
+      for (veh = world[ch->in_room].vehicles; veh; veh = next_ve) {
+        next_ve = veh->next_veh;
+        extract_veh(veh);
+      }
     }
   }
 }
@@ -2197,7 +2219,7 @@ ACMD(do_restore)
 
     if ((access_level(ch, LVL_DEVELOPER)) &&
         (IS_SENATOR(vict)) && !IS_NPC(vict)) {
-      for (i = 1; i < MAX_SKILLS; i++)
+      for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
         SET_SKILL(vict, i, 100);
 
       if (IS_SENATOR(vict) && !access_level(vict, LVL_EXECUTIVE)) {
@@ -2341,7 +2363,10 @@ ACMD(do_poofset)
   DELETE_ARRAY_IF_EXTANT(*msg);
   *msg = str_dup(argument);
 
-  sprintf(buf, "UPDATE pfiles_immortdata SET poofin='%s', poofout='%s' WHERE idnum=%ld;", prepare_quotes(buf2, POOFIN(ch)), prepare_quotes(buf3, POOFOUT(ch)), GET_IDNUM(ch));
+  sprintf(buf, "UPDATE pfiles_immortdata SET poofin='%s', poofout='%s' WHERE idnum=%ld;",
+          prepare_quotes(buf2, POOFIN(ch), sizeof(buf2) / sizeof(buf2[0])),
+          prepare_quotes(buf3, POOFOUT(ch), sizeof(buf3) / sizeof(buf3[0])),
+          GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
   send_to_char(OK, ch);
 }
@@ -2474,7 +2499,7 @@ ACMD(do_last)
 
   if (!(vict = get_player_vis(ch, arg, FALSE))) {
     from_file = TRUE;
-    sprintf(buf, "SELECT Idnum, Rank, Host, LastD, Name FROM pfiles WHERE name='%s';", prepare_quotes(buf2, arg));
+    sprintf(buf, "SELECT Idnum, Rank, Host, LastD, Name FROM pfiles WHERE name='%s';", prepare_quotes(buf2, arg, sizeof(buf2) / sizeof(buf2[0])));
     mysql_wrapper(mysql, buf);
     MYSQL_RES *res = mysql_use_result(mysql);
     MYSQL_ROW row = mysql_fetch_row(res);
@@ -2598,10 +2623,13 @@ ACMD(do_wiztell)
         && d->character
         && access_level(d->character, LVL_BUILDER) && !PLR_FLAGGED(d->character, PLR_WRITING)
         && (d != ch->desc || !(PRF_FLAGGED(d->character, PRF_NOREPEAT)))) {
-      if (CAN_SEE(d->character, ch))
+      if (CAN_SEE(d->character, ch)) {
         send_to_char(buf1, d->character);
-      else
+        store_message_to_history(d, COMM_CHANNEL_WTELLS, str_dup(buf1));
+      } else {
         send_to_char(buf2, d->character);
+        store_message_to_history(d, COMM_CHANNEL_WTELLS, str_dup(buf2));
+      }
     }
   }
 
@@ -2718,7 +2746,7 @@ ACMD(do_wiztitle)
       set_whotitle(ch, argument);
       sprintf(buf, "Okay, your whotitle is now %s.\r\n", GET_WHOTITLE(ch));
       send_to_char(buf, ch);
-      sprintf(buf, "UPDATE pfiles SET Whotitle='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_WHOTITLE(ch)), GET_IDNUM(ch));
+      sprintf(buf, "UPDATE pfiles SET Whotitle='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_WHOTITLE(ch), sizeof(buf2) / sizeof(buf2[0])), GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
     }
   } else if (subcmd == SCMD_PRETITLE) {
@@ -2739,7 +2767,7 @@ ACMD(do_wiztitle)
       sprintf(buf, "Okay, you're now %s %s %s.\r\n",
               GET_PRETITLE(ch), GET_CHAR_NAME(ch), GET_TITLE(ch));
       send_to_char(buf, ch);
-      sprintf(buf, "UPDATE pfiles SET Pretitle='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_PRETITLE(ch)), GET_IDNUM(ch));
+      sprintf(buf, "UPDATE pfiles SET Pretitle='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_PRETITLE(ch), sizeof(buf2) / sizeof(buf2[0])), GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
     }
   }
@@ -2926,7 +2954,7 @@ void print_zone_to_buf(char *bufptr, int zone, int detailed)
             zone_table[zone].top, rooms, mobs, objs, shops, vehs,
             zone_table[zone].security,
             zone_table[zone].connected ? "Connected" : "In Progress", jurid[zone_table[zone].jurisdiction]);
-/* FIXCHE   for (i = 0; i < 5; i++) {
+/* FIXCHE   for (i = 0; i < NUM_ZONE_EDITOR_IDS; i++) {
       const char *name = playerDB.GetNameV(zone_table[zone].editor_ids[i]);
 
       if (name) {
@@ -3158,7 +3186,7 @@ ACMD(do_show)
     send_to_char(ch, "%s's skills:", GET_NAME(vict));
     j = 0;
     sprintf(buf, "\r\n");
-    for (i = 1; i <= MAX_SKILLS; i++)
+    for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
       if (GET_SKILL(vict, i) > 0) {
         sprintf(buf, "%s[%-20s%4d]", buf, skills[i].name, GET_SKILL(vict, i));
         j++;
@@ -3233,7 +3261,7 @@ ACMD(do_show)
     send_to_char(ch, "%s's abilities:", GET_NAME(vict));
     j = 0;
     sprintf(buf, "\r\n");
-    for (i = 1; i <= ADEPT_NUMPOWER; i++)
+    for (i = ADEPT_PERCEPTION; i < ADEPT_NUMPOWER; i++)
       if (GET_POWER_TOTAL(vict, i) > 0) {
         sprintf(buf2, "%-20s", adept_powers[i]);
         if (max_ability(i) > 1)
@@ -3838,7 +3866,7 @@ ACMD(do_set)
 #ifdef NOCRYPT
     char prepare_quotes_buf[2048];
     sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;",
-            prepare_quotes(prepare_quotes_buf, GET_PASSWD(vict)), GET_IDNUM(vict));
+            prepare_quotes(prepare_quotes_buf, GET_PASSWD(vict), sizeof(prepare_quotes_buf) / sizeof(prepare_quotes_buf[0])), GET_IDNUM(vict));
 #else
     sprintf(query_buf, "UPDATE pfiles SET password='%s' WHERE idnum=%ld;", GET_PASSWD(vict), GET_IDNUM(vict));
 #endif
@@ -4309,10 +4337,13 @@ ACMD(do_mlist)
   if (first >= last) {
     send_to_char("Second value must be greater than first.\r\n", ch);
     return;
-  } else if (last - first >= 500) {
-    send_to_char("The range cannot exceed 499 mobiles at a time.\r\n", ch);
+  }
+#ifdef LIMIT_LIST_COMMANDS
+  else if (last - first > LIST_COMMAND_LIMIT) {
+    send_to_char(ch, "The range cannot exceed %d mobiles at a time.\r\n", LIST_COMMAND_LIMIT);
     return;
   }
+#endif
 
   sprintf(buf, "Mobiles, %d to %d:\r\n", first, last);
 
@@ -4350,10 +4381,13 @@ ACMD(do_ilist)
   if ((first < 0) || (last < 0)) {
     send_to_char("Values must be over 0.\r\n", ch);
     return;
-  } else if (last - first >= 500) {
-    send_to_char("The range cannot exceed 499 objects at a time.\r\n", ch);
+  }
+#ifdef LIMIT_LIST_COMMANDS
+  else if (last - first > LIST_COMMAND_LIMIT) {
+    send_to_char(ch, "The range cannot exceed %d objects at a time.\r\n", LIST_COMMAND_LIMIT);
     return;
   }
+#endif
 
   if (first >= last) {
     send_to_char("Second value must be greater than first.\r\n", ch);
@@ -4465,6 +4499,15 @@ ACMD(do_qlist)
     page_string(ch->desc, buf, 1);
 }
 
+// Shitty little function that will show up in the stacktrace to help diagnose what's crashing.
+bool debug_bounds_check_rlist(int nr, int last) {
+  if (nr > top_of_world)
+    return FALSE;
+  if (world[nr].number > last)
+    return FALSE;
+  return TRUE;
+}
+
 ACMD(do_rlist)
 {
   if (!PLR_FLAGGED(ch, PLR_OLC)) {
@@ -4492,18 +4535,21 @@ ACMD(do_rlist)
   if (first >= last) {
     send_to_char("Second value must be greater than first.\r\n", ch);
     return;
-  } else if (last - first >= 500) {
-    send_to_char("The range cannot exceed 499 rooms at a time.\r\n", ch);
+  }
+#ifdef LIMIT_LIST_COMMANDS
+  else if (last - first > LIST_COMMAND_LIMIT) {
+    send_to_char(ch, "The range cannot exceed %d rooms at a time.\r\n", LIST_COMMAND_LIMIT);
     return;
   }
+#endif
 
   sprintf(buf, "Rooms, %d to %d:\r\n", first, last);
 
-  for (nr = MAX(0, real_room(first)); nr <= top_of_world &&
-       (world[nr].number <= last); nr++)
+  for (nr = MAX(0, real_room(first)); debug_bounds_check_rlist(nr, last); nr++) {
     if (world[nr].number >= first)
       sprintf(buf + strlen(buf), "%5d. [%5ld] (%3d) %s\r\n", ++found,
               world[nr].number, world[nr].zone, world[nr].name);
+  }
 
   if (!found)
     send_to_char("No rooms where found in those parameters.\r\n", ch);
@@ -4538,10 +4584,13 @@ ACMD(do_hlist)
   if (first >= last) {
     send_to_char("Second value must be greater than first.\r\n", ch);
     return;
-  } /*else if (last - first >= 500) {
-          send_to_char("The range cannot exceed 499 hosts at a time.\r\n", ch);
-          return;
-        }*/
+  }
+#ifdef LIMIT_LIST_COMMANDS
+  else if (last - first > LIST_COMMAND_LIMIT) {
+    send_to_char(ch, "The range cannot exceed %d hosts at a time.\r\n", LIST_COMMAND_LIMIT);
+    return;
+  }
+#endif
 
   sprintf(buf, "Hosts, %d to %d:\r\n", first, last);
 
@@ -4584,10 +4633,13 @@ ACMD(do_iclist)
   if (first >= last) {
     send_to_char("Second value must be greater than first.\r\n", ch);
     return;
-  } else if (last - first >= 500) {
-    send_to_char("The range cannot exceed 499 hosts at a time.\r\n", ch);
+  }
+#ifdef LIMIT_LIST_COMMANDS
+  else if (last - first > LIST_COMMAND_LIMIT) {
+    send_to_char(ch, "The range cannot exceed %d ICs at a time.\r\n", LIST_COMMAND_LIMIT);
     return;
   }
+#endif
 
   sprintf(buf, "IC, %d to %d:\r\n", first, last);
 
@@ -4863,3 +4915,10 @@ ACMD(do_incognito)
   }
 }
 
+ACMD(do_zone) {
+  send_to_char(ch, "Current zone: %d\r\n", ch->player_specials->saved.zonenum);
+}
+
+ACMD(do_room) {
+  send_to_char(ch, "Current room num: %ld\r\n", world[ch->in_room].number);
+}

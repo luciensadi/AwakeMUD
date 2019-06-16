@@ -99,9 +99,9 @@ void partbuild_main_menu(struct descriptor_data *d) {
     CLS(CH);
     send_to_char(CH, "1) Name: ^c%-40s^n     Software Needed: ^c%s^n\r\n",
                  PART->restring, YESNO(parts[GET_OBJ_VAL(PART, 0)].software));
-    send_to_char(CH, "2) Type: ^c%-40s^n     Parts Cost: ^c%d\xC2\xA5^n\r\n",
+    send_to_char(CH, "2) Type: ^c%-40s^n     Parts Cost: ^c%d nuyen^n\r\n",
                  parts[GET_OBJ_VAL(PART, 0)].name, get_part_cost(GET_OBJ_VAL(PART, 0), GET_OBJ_VAL(PART, 1), GET_OBJ_VAL(PART, 2)));
-    send_to_char(CH, "3) MPCP Designed For: ^c%-30d^n  Chips Cost: ^c%d\xC2\xA5^n\r\n",
+    send_to_char(CH, "3) MPCP Designed For: ^c%-30d^n  Chips Cost: ^c%d nuyen^n\r\n",
                  GET_OBJ_VAL(PART, 2),
                  get_chip_cost(GET_OBJ_VAL(PART, 0), GET_OBJ_VAL(PART, 1), GET_OBJ_VAL(PART, 2)));
     if (GET_OBJ_VAL(PART, 2))
@@ -109,7 +109,7 @@ void partbuild_main_menu(struct descriptor_data *d) {
         case PART_RESPONSE:
             if (GET_OBJ_VAL(PART, 2) < 3)
                 GET_OBJ_VAL(PART, 2) = 3;
-            // explicit fallthrough
+            // fall through
         case PART_HARDENING:
         case PART_STORAGE:
         case PART_ACTIVE:
@@ -180,6 +180,7 @@ void pbuild_parse(struct descriptor_data *d, const char *arg) {
                 break;
             }
             // Explicit fallthrough-- we only allow option 4 if the part can accept a rating in the first place.
+            // fall through
         default:
             send_to_char(CH, "Invalid Option! Enter Option: ");
             break;
@@ -423,7 +424,7 @@ void part_design(struct char_data *ch, struct obj_data *part) {
         GET_OBJ_VAL(part, 5) = success_test(skill, target) << 1;
         GET_OBJ_VAL(part, 7) = GET_IDNUM(ch);
       if (access_level(ch, LVL_ADMIN)) {
-        send_to_char("You use your admin powers to greatly accelerate the design process.", ch);
+        send_to_char("You use your admin powers to greatly accelerate the design process.\r\n", ch);
         GET_OBJ_VAL(part, 3) = 1;
         GET_OBJ_VAL(part, 5) = 100;
       }
@@ -751,9 +752,9 @@ ACMD(do_progress)
   if (AFF_FLAGS(ch).IsSet(AFF_CIRCLE)) {
     send_to_char(ch, "The hermetic circle you are working on is about %d%% completed.\r\n", 
                        (int)(((float)((GET_OBJ_VAL(ch->char_specials.programming, 1) * 60) -
-                       GET_OBJ_VAL(ch->char_specials.programming, 9)) / (float)(GET_OBJ_VAL(ch->char_specials.programming, 1) * 60)) * 100));
+                                      GET_OBJ_VAL(ch->char_specials.programming, 9)) / (float)((GET_OBJ_VAL(ch->char_specials.programming, 1) != 0 ? GET_OBJ_VAL(ch->char_specials.programming, 1) : 1) * 60)) * 100));
   } else if (AFF_FLAGS(ch).IsSet(AFF_LODGE)) {
-    send_to_char(ch, "The lodge you are working on is about %d%% completed.\r\n", (int)(((float)((GET_OBJ_VAL(ch->char_specials.programming, 1) * 300) -
+    send_to_char(ch, "The lodge you are working on is about %d%% completed.\r\n", (int)(((float)(((GET_OBJ_VAL(ch->char_specials.programming, 1) != 0 ? GET_OBJ_VAL(ch->char_specials.programming, 1) : 1) * 300) -
                      GET_OBJ_VAL(ch->char_specials.programming, 9)) / (float)(GET_OBJ_VAL(ch->char_specials.programming, 1) * 300)) * 100));
   } else if (AFF_FLAGS(ch).IsSet(AFF_PACKING)) {
     for (struct obj_data *obj = world[ch->in_room].contents; obj; obj = obj->next_content)
@@ -765,7 +766,7 @@ ACMD(do_progress)
       } 
   } else if (AFF_FLAGS(ch).IsSet(AFF_BONDING)) {
     send_to_char(ch, "You are about %d%% of the way through bonding %s.\r\n", 
-                 (int)(((float)(GET_OBJ_VAL(GET_BUILDING(ch), 1) - GET_OBJ_VAL(GET_BUILDING(ch), 9)) / GET_OBJ_VAL(GET_BUILDING(ch), 1) * 60)*100),
+                 (int)(((float)(GET_OBJ_VAL(GET_BUILDING(ch), 1) - GET_OBJ_VAL(GET_BUILDING(ch), 9)) / (GET_OBJ_VAL(GET_BUILDING(ch), 1) != 0 ? GET_OBJ_VAL(GET_BUILDING(ch), 1) : 1) * 60)*100),
                  GET_OBJ_NAME(GET_BUILDING(ch)));
   } else if (AFF_FLAGS(ch).IsSet(AFF_PROGRAM)) {
     send_to_char(ch, "You are about %d%% of the way through programming %s.\r\n", 
@@ -778,8 +779,7 @@ ACMD(do_progress)
   } else if (AFF_FLAGS(ch).IsSet(AFF_PART_DESIGN)) {
   } else if (AFF_FLAGS(ch).IsSet(AFF_DESIGN)) {
     send_to_char(ch, "You are about %d%% of the way through designing %s.\r\n", 
-           (int)(((float)(GET_OBJ_TIMER(GET_BUILDING(ch)) - GET_OBJ_VAL(GET_BUILDING(ch), 4)) / GET_OBJ_TIMER(GET_BUILDING(ch))) * 100),
-           GET_OBJ_NAME(GET_BUILDING(ch)));
+                 (int)(((float)(GET_OBJ_TIMER(GET_BUILDING(ch)) - GET_OBJ_VAL(GET_BUILDING(ch), 4)) / (GET_OBJ_TIMER(GET_BUILDING(ch)) != 0 ? GET_OBJ_TIMER(GET_BUILDING(ch)) : 1) * 100)), GET_OBJ_NAME(GET_BUILDING(ch)));
   } else if (AFF_FLAGS(ch).IsSet(AFF_CONJURE)) {
   } else if (AFF_FLAGS(ch).IsSet(AFF_SPELLDESIGN)) {
     int timeleft = GET_OBJ_VAL(ch->char_specials.programming, 6);

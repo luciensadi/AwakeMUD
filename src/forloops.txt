@@ -1,0 +1,165 @@
+act.drive.cpp:  for (int i = 2; i > 0; i--) {
+act.informative.cpp:      for (i = 7; i < 10; ++i)
+act.informative.cpp:  for (int x = 0; x < 7; x++)
+act.informative.cpp:  for (; sort != 0; sort > 0 ? sort-- : sort++) {
+act.informative.cpp:  for (a = 1; a < num_of_cmds - 1; a++)
+act.informative.cpp:      for (j = 0;!done && (j < dist); ++j) 
+act.movement.cpp:  // for (int r = 1; r >= 0; r--)        <-- Why.
+act.movement.cpp:    for (; r <= 2; r++)
+act.movement.cpp:      for (int x = 0; r >= 0 && x < 2; r-- && x++) {
+act.obj.cpp:      for (int i = 0; i < (NUM_WEARS - 1); i++)
+act.offensive.cpp:  for (int tries = 0; tries < 6; tries++) {
+act.other.cpp:      for (int i = 0; i < 3; i++)
+act.other.cpp:      for (n = 0; n < (NUM_WEARS - 1) && !gun; n++)
+act.other.cpp:  for (i = 7;i < 10 && !found;++i)
+act.other.cpp:  for (i = 0; !found && i < (NUM_WEARS - 1); i++)
+act.other.cpp:          for (int i = 0; i < 7; i++)
+act.other.cpp:    for (;dice > 0; dice--) {
+act.social.cpp:  for (int x = 0; x < list_top; x++)
+act.wizard.cpp:    for (i = 0; i < 5; i++) {
+act.wizard.cpp:    for (i = 0; i < 3; i++)
+act.wizard.cpp:    for (i = 0; i < 3; i++)
+act.wizard.cpp:    for (i = 0; i < color; i++)
+act.wizard.cpp:  for (nr = first; nr < last; nr++) {
+comm.cpp:    for (ptr = read_point; (space_left > 0) && (ptr < nl_pos); ptr++) {
+db.cpp:  for (j = 0; j < 10; j++)
+db.cpp:  for (j = 0; j < num_skills; j++) {
+db.cpp:  for (j = 0; j < 3; j++)
+db.cpp:  for (int x = 0; x < num_fields; x++) {
+db.cpp:  for (i = 10000; i > 0; i = highest_karma)
+db.cpp:  for (i = 10000; i > 0; i = highest_karma )
+db.cpp:  for (i = 10000; i > 0; i = highest_karma)
+db.cpp:  for( severity = 4; severity >= 1; severity -- )
+db.cpp:    for( power = 21; power >= 0; power-- )
+db.cpp:      for( strength = 5; strength >= 0; strength-- )
+db.cpp:  for( ballistic = 11; ballistic >= -1; ballistic-- )
+db.cpp:    for( impact = 11; impact >= -1;  impact-- )
+db.cpp:  for( type = 13; type <= 38; type++ )
+db.cpp:    for( capacity = 101; capacity >= 0; capacity-- )
+db.cpp:  for( mod = 11; mod >= -11; mod -- )
+db.cpp:    for (int i = 7; i < 10; i++)
+db.cpp:      for (int y=0; y <= templength; y++) {
+db.cpp:      for (int i = 0; i < 3; i++) {
+db.cpp:    for (int i = 0; i < 3; i++) {
+db.cpp:  for (int counter = 0; counter < NUM_OF_DIRS; counter++)
+db.cpp:  for (int i = 0; i < num_veh; i++) {
+db.cpp:    for (int i = 0; i < num_objs; i++) {
+db.cpp:          for (int q = 7; q < 10; q++)
+db.cpp:    for (int i = 0; i < num_mods; i++) {
+db.cpp:    for (int i = 0; i < num_mods; i++) {
+db.cpp:    for (int i = 0; i < num_mods; i++) {
+db.cpp:      for (int i = 0; i < num_objs; i++) {
+db.cpp:    for (int x = 0; x < num_ord; x++) {
+fight.cpp:  for (o = ch->carrying; o; o = obj)
+fight.cpp:    for (obj = ch->carrying; obj; obj = o) {
+fight.cpp:      for (j = 1, msg = fight_messages[i].msg; (j < nr) && msg; j++)
+fight.cpp:  for (i = 0; i < 3; i++)
+fight.cpp:    for (i = 0; i < 3; i++)
+fight.cpp:  for (int i = 7; !mod && i < 10; i++)
+fight.cpp:  for (i = 7; i < 10; i++)
+fight.cpp:  for (int i = 7; i < 10; i++) {
+fight.cpp:      for (temp = 0, temp2 = 0; temp2 < 4; temp2++)
+fight.cpp:      for (temp2 = 0; temp2 < 4; temp2++)
+fight.cpp:  for (distance = 1; ((nextroom != NOWHERE) && (distance <= sight)); distance++)
+fight.cpp:        for (temp = 0, temp2 = 0; temp2 < 4; temp2++)
+fight.cpp:        for (temp2 = 0; temp2 < 4; temp2++)
+fight.cpp:              for (temp = 0; temp < NUM_OF_DIRS; temp++)
+fight.cpp:        for (temp = 0; temp < NUM_OF_DIRS; temp++)
+fight.cpp:  for (distance = 1; nextroom != NOWHERE && distance <= sight; distance++)
+fight.cpp:        for (temp = 0; temp < NUM_OF_DIRS; temp++)
+fight.cpp:        for (int i = 0; i < NUM_WEARS; i++)
+fight.cpp:    for (obj = ch->cyberware;
+graph.cpp:  for (curr_dir = 0; curr_dir < NUM_OF_DIRS; curr_dir++)
+guncreate.cpp:  for (int counter = 0; counter < WEAP_CANNON - WEAP_HOLDOUT; counter += 2)
+handler.cpp:  for (i = 0; i < (NUM_MODS - 1); i++)
+handler.cpp:  for (i = 0; i < (NUM_WEARS - 1); i++)
+handler.cpp:    for (i = 0; i < (NUM_WEARS - 1); i++)
+handler.cpp:            for (j = 0; j < (NUM_WEARS - 1); j++)
+handler.cpp:  for (i = 0; i < (NUM_WEARS -1); i++)
+handler.cpp:  for (i = 0; i < NUM_WEARS - 1; i++)
+hedit.cpp:                for (counter2 = top_of_matrix + 1; counter2 > counter; counter2--) 
+house.cpp:  for (int i = 0; i < num_objs; i++)
+house.cpp:        for (int q = 7; q < 10; q++)
+house.cpp:        for (int x = 0; x < 4; x++)
+house.cpp:  for (int i = 0; i < num_land; i++) {
+house.cpp:    for (int x = 0; x < templ->num_room; x++) {
+icedit.cpp:        for (i = 0; i < 4; i++)
+iedit.cpp:  for (int y = 1; y < 5; y++)
+iedit.cpp:      for (int x = 0; x < 4; x++)
+iedit.cpp:          for (int x = 0; x < 5; x++)
+limits.cpp:          for (int x = 0; x < 4; x++)
+limits.cpp:  for (int m = 0; m < 5; m++) {
+magcreate.cpp:        for (i = 1; i < 6; i++)
+magcreate.cpp:          for (int i = 0; i < 6; i++)
+medit.cpp:  for (c = 0; c < (NUM_ATTACK_TYPES - 1); c+= 2)
+medit.cpp:  for (c = 0; c < MOB_MAX; c += 2)
+medit.cpp:  for (c = 0; c < AFF_MAX; c += 2)
+medit.cpp:  for (c = 1; c < 9; c++)
+medit.cpp:      for (i = 0; i <= 8; i = i +2)
+mobact.cpp:    for (int tries = 0; tries < 5; tries++) {
+mobact.cpp:    for (int tries = 0; tries < 5; tries++) {
+modify.cpp:  for (i = strlen(str) + spaces; i > from + spaces - 1; i--)
+modify.cpp:  for (k = 0; strlen(format) > (u_int) k && q < 1023; q++)
+modify.cpp:    for (i = k, j = 0; format[i] && j < 79; i++)
+modify.cpp:    for (i = MIN((unsigned)strlen(format) - 1, (unsigned)k + line); i > k && i > 0; i--)
+modify.cpp:    for (i = MIN((unsigned)strlen(format) - 1, (unsigned)k + line); i > k && i > 0; i--)
+modify.cpp:      for (i = 0; i < 3; i++)
+modify.cpp:      for (i = 0; i < 2; i++)
+modify.cpp:      for (i = 0; i < 8; i++)
+modify.cpp:      for (i = 0; i < 2; i++)
+modify.cpp:    for (subtype = 0; subtype < 6; subtype++) {
+modify.cpp:  for (scan = buffer;; scan++, d->showstr_point++)
+newdb.cpp:    for (i = 0; i < 3; i++)
+newdb.cpp:          for (int q = 7; q < 10; q++) 
+newdb.cpp:          for (int q = 7; q < 10; q++) 
+newdb.cpp:  for (i = 0, q = 0; i <= QUEST_TIMER - 1; i++) {
+newdb.cpp:        for (int x = 0; x < NUM_VALUES; x++)
+newdb.cpp:        for (int x = 0; x < NUM_VALUES; x++)
+newdb.cpp:  for (i = 0; i < NUM_WEARS; i++)
+newdb.cpp:      for (int x = 0; x < NUM_VALUES; x++)
+newdb.cpp:  for (obj = player->carrying; obj;) {
+newdb.cpp:      for (int x = 0; x < NUM_VALUES; x++)
+newdb.cpp:  for (int i = 0; i < entry_cnt; i++) {
+newdb.cpp:    for (int i = 0; i < 3; i++)
+newdb.cpp:    for (int i = 0; i < 3; i++)
+newdb.cpp:    for (int i = 0; i < entry_cnt; i++)
+newdb.cpp:  for (i = 0; i < entry_cnt; i++)
+newdb.cpp:  for (int j = entry_cnt; j > i; j--)
+newdb.cpp:  for (int i = 1; i < entry_cnt; i++)
+newmatrix.cpp:      for (int r = DECKER->sensor;r > 0; r--) {
+newmatrix.cpp:        for (int x = 0; x < 10; x++)
+newmatrix.cpp:    for (int x = 0; x < DECKER->redirect; x++)
+newmatrix.cpp:    for (int x = 0; x < DECKER->redirect - 1; x++)
+newmatrix.cpp:              for (int i = 0; i < quest_table[GET_QUEST(persona->decker->ch)].num_objs; i++)
+newmatrix.cpp:            for (int x = 0; x < 10; x++)
+newmatrix.cpp:        for (int x = 0; x < 5; x++)
+newmatrix.cpp:  for (int i = 0; !cyberdeck && i < NUM_WEARS; i++)
+newshop.cpp:    for (int q = 0; q <= 4; q++)
+newshop.cpp:      for (int q = 4; q >= 1; q--)
+newshop.cpp:      for (int q = 0; q <= 4; q++)
+newshop.cpp:  for (int i = 1; i < SHOP_FLAGS; i += 2)
+quest.cpp:    for (i = pos + allowed; i > pos; i--)
+quest.cpp:  for (j = 0; pos < i; pos++)
+quest.cpp:      for (int i = QUEST_TIMER - 1; i > 0; i--)
+quest.cpp:    for (int i = QUEST_TIMER - 1; i >= 0; i--)
+quest.cpp:  for (i = 0; i < (NUM_WEARS - 1); i += 2)
+redit.cpp:  for (int x = 1; i < max; i++)
+redit.cpp:                for (counter2 = top_of_world + 1; counter2 > counter; counter2--) {
+redit.cpp:        for (int i = 0; i < 11; i++)
+spec_procs.cpp:  for (i = 0; i < number; i++)
+transport.cpp:          for (dir = NORTH; dir <= DOWN; dir++)
+utils.cpp:  for (i = 1; i <= num; i++) {
+utils.cpp:  for (i = 1; i <= number; i++) {
+utils.cpp:  for (int i = 0; i < x; i++){
+utils.cpp:  for (i = 0; (arg1[i] || arg2[i]) && (n > 0); i++, n--)
+utils.cpp:  for (obj = ch->cyberware;
+utils.cpp:  for (nr = 0; vektor; vektor >>= 1) {
+utils.cpp:  for (k = victim; k; k = k->master)
+utils.cpp:  for (k = ch->followers; k; k = j)
+utils.cpp:          for (int i = 5; i < 10; i++)
+zedit.cpp:  for (counter = 0; counter < (NUM_WEARS - 1); counter += 2)
+zedit.cpp:            for (counter = 0; counter < d->edit_number; counter++)
+zedit.cpp:            for (counter = top_of_cmds; counter > d->edit_number;
+zedit.cpp:          for (i = 0; i < 5; i++)
+zedit.cpp:            for (i = 0; i < 5; i++)
+zedit.cpp:            for (i = 0; i < 5; i++)

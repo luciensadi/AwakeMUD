@@ -111,6 +111,11 @@ struct obj_data
   
   struct char_data *targ;	  /* Data for mounts */
   struct veh_data *tveh;
+  
+#ifdef USE_DEBUG_CANARIES
+  // No sense in initializing the value since it's memset to 0 in most invocations.
+  int canary;
+#endif
   obj_data() :
       in_veh(NULL), ex_description(NULL), restring(NULL), photo(NULL), graffiti(NULL), carried_by(NULL),
       worn_by(NULL), in_obj(NULL), contains(NULL), next_content(NULL), targ(NULL), tveh(NULL)
@@ -137,7 +142,11 @@ struct room_direction_data
   byte barrier;                /* barrier rating                       */
   byte condition;      // current barrier rating
   vnum_t to_room_vnum;       /* the vnum of the room. Used for OLC   */
-
+  
+#ifdef USE_DEBUG_CANARIES
+  // No sense in initializing the value since it's memset to 0 in most invocations.
+  int canary;
+#endif
   room_direction_data() :
       general_description(NULL), keyword(NULL), exit_info(0), key(0), to_room(NOWHERE),
       key_level(0), ward(0), idnum(0), hidden(0), material(0), barrier(0), condition(0), to_room_vnum(NOWHERE)
@@ -156,6 +165,7 @@ struct room_data
   char *night_desc;
   struct extra_descr_data *ex_description; /* for examine/look       */
   struct room_direction_data *dir_option[NUM_OF_DIRS]; /* Directions */
+  struct room_direction_data *temporary_stored_exit; // Stores exits that elevators overwrote
   vnum_t matrix;		/* Matrix exit */
   int access;
   int io;
@@ -186,10 +196,14 @@ struct room_data
   struct char_data *watching;
   
   struct obj_data *best_workshop[NUM_WORKSHOP_TYPES];
-
+  
+#ifdef USE_DEBUG_CANARIES
+  // No sense in initializing the value since it's memset to 0 in most invocations.
+  int canary;
+#endif
   room_data() :
       name(NULL), description(NULL), night_desc(NULL), ex_description(NULL),
-      matrix(0), access(0), io(0), trace(0),
+      temporary_stored_exit(NULL), matrix(0), access(0), io(0), trace(0),
       bandwidth(0), jacknumber(0), address(NULL), peaceful(0), func(NULL), contents(NULL),
       people(NULL), vehicles(NULL), watching(NULL)
   {
@@ -623,6 +637,7 @@ struct veh_data
   char *leave;
   char *arrive;
   struct veh_data *next;
+  
 
   veh_data() :
       name(NULL), description(NULL), short_description(NULL), restring(NULL),
@@ -764,6 +779,8 @@ struct descriptor_data
   struct descriptor_data *snoop_by; /* And who is snooping this char    */
   struct descriptor_data *next; /* link to next descriptor              */
   struct ccreate_t ccr;
+  
+  listClass<const char *> message_history[NUM_COMMUNICATION_CHANNELS];
 
   // all this from here down is stuff for on-line creation
   int edit_mode;                /* editing sub mode */
@@ -791,8 +808,12 @@ struct descriptor_data
       large_outbuf(NULL), character(NULL), original(NULL), snooping(NULL),
       snoop_by(NULL), next(NULL), misc_data(NULL), edit_obj(NULL), edit_room(NULL),
       edit_mob(NULL), edit_quest(NULL), edit_shop(NULL), edit_zon(NULL),
-      edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL)
-  {}
+      edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL), edit_pgroup(NULL)
+  {
+    // Zero out the communication history for all channels.
+    for (int channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++)
+      message_history[channel] = listClass<const char *>();
+  }
 }
 ;
 
@@ -889,6 +910,7 @@ struct skill_data {
   char name[50];
   sh_int attribute;
   bool type;
+  bool requires_magic;
 };
 
 struct part_data {
