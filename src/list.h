@@ -203,7 +203,7 @@ bool listClass<T>::RemoveItem(nodeStruct<T> *node) {
     while (temp && (temp->next != node))
       temp = temp->next;
 
-    if (temp->next == node) { // ie, it was found
+    if (temp && temp->next == node) { // ie, it was found
       found = temp->next;
       temp->next = found->next;
       
@@ -259,6 +259,10 @@ template <class T>
 bool List<T>::Add(T item, const char *filename, int lineno) {
 
 #ifdef DEBUG
+  if (item == NULL) {
+    cerr << "SYSERR: Attempt to add null to list in file " << filename << ", line: " << lineno << endl;
+  }
+  
   if (this->FindItem(item)) {
     cerr << "SYSERR: Attempt to add duplicate item to list in file " << filename << ", line: " << lineno << endl;
     abort();

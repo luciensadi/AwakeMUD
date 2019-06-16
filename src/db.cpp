@@ -2715,6 +2715,9 @@ void reset_zone(int zone, int reboot)
   struct veh_data *veh = NULL;
 
   for (cmd_no = 0; cmd_no < zone_table[zone].num_cmds; cmd_no++) {
+    sprintf(buf, "Processing ZCMD %d (zone %d): %c %s %ld %ld %ld",
+            cmd_no, zone_table[zone].number, ZCMD.command, ZCMD.if_flag ? "(if last)" : "(always)", ZCMD.arg1, ZCMD.arg2, ZCMD.arg3);
+    mudlog(buf, NULL, LOG_SYSLOG, TRUE);
     if (ZCMD.if_flag && !last_cmd)
       continue;
     found = 0;

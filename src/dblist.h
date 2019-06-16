@@ -14,6 +14,7 @@ public:
   struct obj_data *FindObj(int num);
   struct obj_data *FindObj(struct char_data *ch, char *name, int num);
   void UpdateObjs(const struct obj_data *proto, int rnum);
+  void UpdateObjsIDelete(const struct obj_data *proto, int rnum, int new_rnum);
   void UpdateCounters(void);
   void UpdateNums(int num);
   void Traverse(void (*func)(struct obj_data *));
