@@ -3669,6 +3669,1029 @@ Material:	metal
 	Val9:	-1
 	Val10:	18
 BREAK
+#925
+Keywords:	2-bullet speedloader
+Name:	a 2-shot speedloader
+RoomDesc:$
+Two bullets are linked together in a tiny speedloader here.~
+LookDesc:$
+It looks like a tiny magazine for a holdout pistol. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.05
+	Barrier:	4
+	Cost:	4
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	21
+BREAK
+#926
+Keywords:	5-bullet magazine
+Name:	a 5-bullet pistol magazine
+RoomDesc:$
+A small magazine has been dropped here.~
+LookDesc:$
+It's a small magazine intended for use in a pistol. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.12
+	Barrier:	4
+	Cost:	10
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	21
+BREAK
+#927
+Keywords:	4-bullet magazine
+Name:	a 4-bullet pistol magazine
+RoomDesc:$
+A small magazine is lying here.~
+LookDesc:$
+It's a small pistol magazine. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	8
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	21
+BREAK
+#928
+Keywords:	26-bullet machine magazine
+Name:	a 26-bullet machine pistol magazine
+RoomDesc:$
+A long pistol magazine is lying here.~
+LookDesc:$
+It looks like a long magazine for use in a machine pistol. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.65
+	Barrier:	4
+	Cost:	52
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	26
+	Val1:	25
+BREAK
+#929
+Keywords:	24-bullet machine magazine
+Name:	a 24-bullet machine pistol magazine
+RoomDesc:$
+A long magazine is lying here.~
+LookDesc:$
+It's a long magazine for use with a machine pistol. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.60
+	Barrier:	4
+	Cost:	48
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+	Val1:	25
+BREAK
+#930
+Keywords:	22-bullet magazine
+Name:	a 22-bullet pistol magazine
+RoomDesc:$
+A pistol magazine is lying here.~
+LookDesc:$
+It's a pistol magazine.  What else do you need to know? 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.55
+	Barrier:	4
+	Cost:	44
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	22
+	Val1:	21
+BREAK
+#931
+Keywords:	40-bullet machine magazine
+Name:	a 40-bullet machine pistol magazine
+RoomDesc:$
+A long pistol magazine lies here.~
+LookDesc:$
+It's a long magazine for use in a machine pistol. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	80
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	40
+	Val1:	25
+BREAK
+#932
+Keywords:	35-bullet machine magazine
+Name:	a 35-bullet machine pistol magazine
+RoomDesc:$
+A long pistol magazine is lying here.~
+LookDesc:$
+It looks like a long magazine intended for use in a machine pistol. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.88
+	Barrier:	4
+	Cost:	70
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	35
+	Val1:	25
+BREAK
+#933
+Keywords:	12-bullet machine magazine
+Name:	a 12-bullet machine pistol magazine
+RoomDesc:$
+A heavy pistol magazine lies here.~
+LookDesc:$
+It's a magazine for a heavy caliber machine pistol. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.30
+	Barrier:	4
+	Cost:	24
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	25
+BREAK
+#934
+Keywords:	4-dart dart magazine taser
+Name:	a 4-dart taser magazine
+RoomDesc:$
+A small taser magazine lies here.~
+LookDesc:$
+It looks like a magazine of 4 heavy taser darts. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	8
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	21
+BREAK
+#935
+Keywords:	magazine 30-bullet SMG
+Name:	a 30-bullet SMG magazine
+RoomDesc:$
+A SMG magazine lies here.~
+LookDesc:$
+Just your standard 30-bullet submachine Gun Magazine. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.75
+	Barrier:	4
+	Cost:	60
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	30
+	Val1:	25
+BREAK
+#936
+Keywords:	magazine 32-bullet SMG
+Name:	a 32-bullet SMG magazine
+RoomDesc:$
+A long SMG magazine lies here.~
+LookDesc:$
+It's a long magazine destined for use in a submachine gun. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.80
+	Barrier:	4
+	Cost:	64
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	32
+	Val1:	25
+BREAK
+#937
+Keywords:	28-bullet smg magazine
+Name:	a 28-bullet SMG magazine
+RoomDesc:$
+A long smg magazine lies here.~
+LookDesc:$
+It looks like a magazine for a smg. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.70
+	Barrier:	4
+	Cost:	56
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	28
+	Val1:	25
+BREAK
+#938
+Keywords:	20-bullet smg magazine
+Name:	a 20-bullet SMG magazine
+RoomDesc:$
+A smg magazine is lying here.~
+LookDesc:$
+It's a magazine for your smg. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	40
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	25
+BREAK
+#939
+Keywords:	40-bullet smg magazine
+Name:	a 40-bullet smg magazine
+RoomDesc:$
+A long smg magazine lies here.~
+LookDesc:$
+It's a long magazine for a submachine gun. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	80
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	40
+	Val1:	25
+BREAK
+#940
+Keywords:	24-bullet smg magazine
+Name:	a 24-bullet SMG magazine
+RoomDesc:$
+A smg magazine lies on the ground.~
+LookDesc:$
+It's a short magazine for your submachine gun. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.60
+	Barrier:	4
+	Cost:	48
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+	Val1:	10
+	Val2:	1
+BREAK
+#941
+Keywords:	5-bullet rifle magazine
+Name:	a 5-bullet rifle magazine
+RoomDesc:$
+A short rifle magazine lies here.~
+LookDesc:$
+It's a small magazine for use in a rifle. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.12
+	Barrier:	4
+	Cost:	10
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	23
+BREAK
+#942
+Keywords:	a barret 121 14 bullet magazine
+Name:	a 14-bullet Barret 121 magazine
+RoomDesc:$
+A rifle magazine is on the ground.~
+LookDesc:$
+This is a magazine of ammunition holding the customized rounds that a Barret 121
+rifle would take. This ammo is very similar in design to APDS rounds, and
+function much the same.  
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.35
+	Barrier:	4
+	Cost:	98
+	AvailTN:	14
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	23
+	Val2:	1
+BREAK
+#943
+Keywords:	6-bullet rifle magazine
+Name:	a 6-bullet rifle magazine
+RoomDesc:$
+A small rifle magazine lies here.~
+LookDesc:$
+It's a small magazine for your damn rifle.  You think writing these descriptions
+are fun? 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.15
+	Barrier:	4
+	Cost:	12
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	23
+BREAK
+#944
+Keywords:	10-bullet rifle magazine
+Name:	a 10-bullet rifle magazine
+RoomDesc:$
+A rifle magazine lies in the dust.~
+LookDesc:$
+It's a short magazine intended for a semi-automatic rifle. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	4
+	Cost:	20
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	23
+BREAK
+#945
+Keywords:	10-shell autoshotGun Magazine
+Name:	a 10-shell autoshotGun Magazine
+RoomDesc:$
+A shotGun Magazine is lying here.~
+LookDesc:$
+It looks like a magazine for use in an autoshotgun. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	4
+	Cost:	20
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	24
+BREAK
+#946
+Keywords:	handful 5 shotgun shells
+Name:	a handful of 5 shotgun shells
+RoomDesc:$
+A handful of shotgun shells is lying here.~
+LookDesc:$
+It looks like 5 shells; perfect for reloading that Defiance T-250. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.12
+	Barrier:	4
+	Cost:	10
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	24
+BREAK
+#947
+Keywords:	42-bullet assault rifle magazine
+Name:	a 42-bullet assault rifle magazine
+RoomDesc:$
+An assault rifle magazine is lying here.~
+LookDesc:$
+It looks like a long magazine for an assault rifle. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.05
+	Barrier:	4
+	Cost:	84
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	42
+	Val1:	25
+BREAK
+#948
+Keywords:	38-bullet assault rifle magazine
+Name:	a 38-bullet assault rifle magazine
+RoomDesc:$
+An assault rifle magazine is lying here.~
+LookDesc:$
+It's a long magazine for use in an assault rifle. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.95
+	Barrier:	4
+	Cost:	76
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	38
+	Val1:	25
+BREAK
+#949
+Keywords:	40-bullet assault rifle magazine
+Name:	a 40-bullet assault rifle magazine
+RoomDesc:$
+An assault rifle magazine is lying here.~
+LookDesc:$
+It's a damn magazine for your rifle. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	80
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	40
+	Val1:	25
+BREAK
+#950
+Keywords:	35-bullet assault rifle magazine
+Name:	a 35-bullet assault rifle magazine
+RoomDesc:$
+An assault rifle magazine is lying here.~
+LookDesc:$
+It's a long magazine for use in an assault rifle. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.88
+	Barrier:	4
+	Cost:	70
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	35
+	Val1:	25
+BREAK
+#951
+Keywords:	50-bullet assault rifle magazine
+Name:	a 50-bullet assault rifle magazine
+RoomDesc:$
+An assault rifle magazine is lying here.~
+LookDesc:$
+It's a very long magazine for an assault rifle. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.25
+	Barrier:	4
+	Cost:	100
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	25
+BREAK
+#952
+Keywords:	80-bullet lmg magazine 
+Name:	an 80-bullet lmg magazine
+RoomDesc:$
+A light machine Gun Magazine is lying here.~
+LookDesc:$
+It's a very long magazine for use in a light machine gun. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	160
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	80
+	Val1:	25
+BREAK
+#953
+Keywords:	50-bullet machine Gun Magazine 
+Name:	a 50-bullet machine Gun Magazine
+RoomDesc:$
+A machine Gun Magazine is lying here.~
+LookDesc:$
+It's a big magazine for a machine gun. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.25
+	Barrier:	4
+	Cost:	100
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	25
+BREAK
+#954
+Keywords:	40-bullet machine Gun Magazine
+Name:	a 40-bullet machine Gun Magazine
+RoomDesc:$
+A machine Gun Magazine is lying here.~
+LookDesc:$
+You see a long magazine for use in a machine gun. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	80
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	40
+	Val1:	25
+BREAK
+#955
+Keywords:	20-shot battery pack
+Name:	a 20-shot battery pack
+RoomDesc:$
+A battery pack is lying here.~
+LookDesc:$
+It's a belt pack of batteries for use in a laser weapon. 
+~
+Type:	Gun Magazine
+WearFlags:	100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	40
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	22
+BREAK
+#956
+Keywords:	20-round cannon magazine assault
+Name:	a 20-round cannon magazine
+RoomDesc:$
+An assault cannon magazine is lying here.~
+LookDesc:$
+It's a magazine of massive cannon shells. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	4
+	Cost:	1800
+	AvailTN:	5
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	26
+BREAK
+#957
+Keywords:	22-round cannon magazine assault
+Name:	a 22-round cannon magazine
+RoomDesc:$
+An assault cannon magazine is lying here.~
+LookDesc:$
+You see a magazine of huge shells for use in an assault cannon. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.75
+	Barrier:	4
+	Cost:	1980
+	AvailTN:	5
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	22
+	Val1:	26
+BREAK
+#958
+Keywords:	magazine six-minigrenade 6-minigrenade minigrenade grenade
+Name:	a six-minigrenade magazine
+RoomDesc:$
+A magazine of grenades is lying here.~
+LookDesc:$
+It's a magazine of minigrenades for use in a launcher of some sort. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.60
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	19
+BREAK
+#959
+Keywords:	magazine 12-minigrenade grenade minigrenades
+Name:	a 12-minigrenade magazine
+RoomDesc:$
+A long magazine of grenades lies here.~
+LookDesc:$
+It looks like a magazine of 12 minigrenades for a launcher. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.20
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	19
+BREAK
+#960
+Keywords:	pack 4 rockets
+Name:	a pack of 4 rockets
+RoomDesc:$
+A pack of rockets is lying here.~
+LookDesc:$
+It looks like a pack of 4 rockets for use in a rocket launcher.  Did you
+really need me to tell you that? 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	8.00
+	Barrier:	4
+	Cost:	8000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	20
+BREAK
+#961
+Keywords:	magazine 32-bullet smg
+Name:	a 32-bullet SMG gel magazine
+RoomDesc:$
+A long SMG magazine sits here.~
+LookDesc:$
+This long ammunition magazine is intended for use in a submachine gun. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.80
+	Barrier:	4
+	Cost:	96
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	32
+	Val1:	25
+	Val2:	5
+BREAK
+#962
+Keywords:	magazine 28-bullet smg
+Name:	a 28-bullet SMG gel magazine
+RoomDesc:$
+A long SMG magazine lies here.~
+LookDesc:$
+This ammunition magazine is intended to hold up to 28 gel bullets. 
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.70
+	Barrier:	4
+	Cost:	84
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	28
+	Val1:	25
+	Val2:	5
+BREAK
+#963
+Keywords:	magazine 10 pistol
+Name:	a 10-bullet pistol AP magazine
+RoomDesc:$
+A 10-bullet pistol magazine lays here.~
+LookDesc:$
+A pistol magazine, capable of holding 10 bullets.
+~
+Type:	Gun Magazine
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	70
+	AvailTN:	14
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	21
+	Val2:	1
+BREAK
 #970
 Keywords:	skillwires V
 Name:	a skillwires V

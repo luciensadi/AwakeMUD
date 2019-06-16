@@ -1078,15 +1078,6 @@ ACMD(do_idelete)
   }
 
   num = real_object(num);
-  
-  if (num == -1) {
-    send_to_char("No object with that vnum exists.\r\n", ch);
-    return;
-  }
-  
-  // TODO: Wipe it out of pfiles.
-  // TODO: Wipe it out of shops.
-  // TODO: Wipe it out of quests.
 
   ch->player_specials->saved.zonenum = zone_table[counter].number;
   ObjList.RemoveObjNum(num);
