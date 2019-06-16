@@ -970,6 +970,10 @@ void parse_room(File &fl, long nr)
     }
 
   room_data *room = world+rnum;
+  
+#ifdef USE_DEBUG_CANARIES
+  room->canary = CANARY_VALUE;
+#endif
 
   VTable data;
   data.Parse(&fl);
@@ -1075,6 +1079,10 @@ void parse_room(File &fl, long nr)
 
       sprintf(field, "%s/HiddenRating", sect);
       dir->hidden = data.GetInt(field, 0);
+      
+#ifdef USE_DEBUG_CANARIES
+      dir->canary = CANARY_VALUE;
+#endif
     }
   }
 
@@ -1402,6 +1410,10 @@ void parse_object(File &fl, long nr)
 
   obj->in_room = NOWHERE;
   obj->item_number = rnum;
+  
+#ifdef USE_DEBUG_CANARIES
+  obj->canary = CANARY_VALUE;
+#endif
 
   VTable data;
   data.Parse(&fl);

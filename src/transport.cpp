@@ -609,6 +609,9 @@ void make_elevator_door(vnum_t rnum_to, vnum_t rnum_from, int direction_from) {
 #endif
     DOOR = new room_direction_data;
     memset((char *) DOOR, 0, sizeof(struct room_direction_data));
+#ifdef USE_DEBUG_CANARIES
+    DOOR->canary = CANARY_VALUE;
+#endif
   } else {
 #ifdef ELEVATOR_DEBUG
     sprintf(buf, "Reusing existing elevator door %s from %ld to %ld.", fulldirs[direction_from], world[rnum_from].number, world[rnum_to].number);
