@@ -2437,6 +2437,13 @@ int vnum_object(char *searchname, struct char_data * ch)
     return vnum_object_affectloc(atoi(arg2),ch);
   if (!strcmp(arg1,"affflag"))
     return vnum_object_affflag(atoi(arg2),ch);
+  
+  // Make it easier for people to find specific types of things.
+  for (int index = ITEM_LIGHT; index < NUM_ITEMS; index++) {
+    if (!str_cmp(searchname, item_types[index]))
+      return vnum_object_type(index, ch);
+  }
+  
   for (nr = 0; nr <= top_of_objt; nr++)
   {
     if (isname(searchname, obj_proto[nr].text.keywords) ||
