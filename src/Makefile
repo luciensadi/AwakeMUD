@@ -26,7 +26,7 @@ CVS = cvs
 
 # OSX? Uncomment these:
 LIBS = -L/usr/local/lib -lmysqlclient -lz -lm -lcurl -lsodium -lstdc++
-MYFLAGS = -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DGITHUB_INTEGRATION -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
+MYFLAGS = -DUSE_MEMORY_CANARIES -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DGITHUB_INTEGRATION -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
 
 # Linux / others? Uncomment these:
 #LIBS = -lcrypt -L/usr/local/lib -lmysqlclient -lz -lm -lnsl -lcurl -lsodium -lstdc++

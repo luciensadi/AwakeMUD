@@ -1944,6 +1944,14 @@ const char *eyemods[] = {
   "\n"
 };
 
+const char *decap_cyber_grades[4] =
+{
+  "standard",
+  "alpha",
+  "beta",
+  "delta"
+};
+
 const char *bone_lacing[5] =
 {
    "Plastic",
@@ -1992,7 +2000,7 @@ const char *cyber_types[] = {
   "Cranial Cyberdeck",
   "Data Compactor",
   "Encephalon",
-  "Maths SPU",
+  "Math SPU",
   "Auto Injector",
   "Balance Tail",
   "Body Compartment",
@@ -2008,6 +2016,56 @@ const char *cyber_types[] = {
   "Muscle Replacement"
 };
 
+const char *decap_cyber_types[] = {
+  "chipjack",
+  "datajack",
+  "datalock",
+  "knowsoft link",
+  "memory chip",
+  "tooth compartment",
+  "headware phone",
+  "headware radio",
+  "eye modification",
+  "bone lacing",
+  "fingertip compartment",
+  "hand blade",
+  "hand razor",
+  "hand spur",
+  "voice modulator",
+  "boosted reflexes",
+  "dermal plating",
+  "filtration",
+  "simrig",
+  "skillwires",
+  "vehicle control rig",
+  "wired reflexes",
+  "reaction enhancer",
+  "reflex trigger",
+  "balance augmenter",
+  "oral dart",
+  "oral gun",
+  "oral slasher",
+  "ASIST interface",
+  "chipjack expert driver",
+  "cranial cyberdeck",
+  "data compactor",
+  "encephalon",
+  "math SPU",
+  "auto injector",
+  "balance tail",
+  "body compartment",
+  "cyber fin",
+  "cyber skull",
+  "cyber torso",
+  "dermal sheathing",
+  "foot anchor",
+  "hydraulic jack",
+  "move by wire",
+  "climbing claws",
+  "smartlink",
+  "muscle replacement"
+};
+
 const char *bio_types[] = {
   "Adrenal Pump",
   "Cat's Eyes",
@@ -2018,7 +2076,7 @@ const char *bio_types[] = {
   "Muscle Augmentation",
   "Muscle Toner",
   "Nephritic Screen",
-  "Nictating Gland",
+  "Nictitating Gland",
   "Orthoskin",
   "Pathogenic Defense",
   "Platelet Factory",
@@ -2035,6 +2093,35 @@ const char *bio_types[] = {
   "Synaptic Accelerator",
   "Thermosense Organs",
   "Trauma Dampener"
+};
+
+const char *decap_bio_types[] = {
+  "adrenal pump",
+  "pair of cat's eyes",
+  "digestive expansion",
+  "enhanced articulation",
+  "extended volume",
+  "metabolic arrestor",
+  "muscle augmentation",
+  "muscle toner",
+  "nephritic screen",
+  "nictitating gland",
+  "orthoskin",
+  "pathogenic defense",
+  "platelet factory",
+  "suprathyroid gland",
+  "symbiotes",
+  "synthacardium",
+  "infusion of tailored pheremones",
+  "toxin extractor",
+  "tracheal filter",
+  "cerebral booster",
+  "damage compensator",
+  "pain editor",
+  "reflex recorder",
+  "synaptic accelerator",
+  "thermosense organs",
+  "trauma dampener"
 };
 
 const char *metamagic[] = {

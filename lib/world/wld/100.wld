@@ -1145,7 +1145,7 @@ Desc:$
 Lift goes up, lift goes down. How does it work? You can't explain it, it's
 magic. 
 ~
-Flags:	11000
+Flags:	1000000000000000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -1167,17 +1167,6 @@ RoomType:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[EXIT south]
-	Keywords:	doors shaft
-	Desc:$
-A pair of elevator doors allows access to the liftway.
-~
-	ToVnum:	60500
-	Flags:	1
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	998
-	LockRating:	8
 [EXIT up]
 	ToVnum:	10029
 	Flags:	0
@@ -1213,17 +1202,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT south]
-	Keywords:	doors shaft
-	Desc:$
-A pair of elevator doors allows access to the liftway.
-~
-	ToVnum:	0
-	Flags:	1
-	Material:	metal
-	Barrier:	6
-	KeyVnum:	998
-	LockRating:	8
 [EXIT down]
 	ToVnum:	10028
 	Flags:	0
@@ -1253,17 +1231,6 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT south]
-	Keywords:	doors shaft
-	Desc:$
-A pair of elevator doors allows access to the liftway.
-~
-	ToVnum:	10032
-	Flags:	1
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	998
-	LockRating:	8
 [EXIT up]
 	ToVnum:	10028
 	Flags:	0

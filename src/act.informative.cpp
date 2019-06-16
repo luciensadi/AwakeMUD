@@ -1623,7 +1623,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
   bool has_pockets = FALSE, added_extra_carriage_return = FALSE, has_smartlink = FALSE;
   struct obj_data *access = NULL;
   
-  sprintf(buf, "OOC statistics for '^y%s^n':\r\n", ((j->text.name) ? j->text.name : "<None>"));
+  sprintf(buf, "^MOOC^n statistics for '^y%s^n':\r\n", ((j->text.name) ? j->text.name : "<None>"));
   
   sprinttype(GET_OBJ_TYPE(j), item_types, buf1);
   sprintf(ENDOF(buf), "It is %s ^c%s^n that weighs ^c%.2f^n kilos. It is made of ^c%s^n with a durability of ^c%d^n.\r\n",
@@ -1831,7 +1831,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       }
       break;
     case ITEM_PATCH:
-      sprintf(ENDOF(buf), "It is a rating-^c%d^n ^c%s^n patch.", GET_OBJ_VAL(j, 1), patch_names[GET_OBJ_VAL(j, 0)]);
+      sprintf(ENDOF(buf), "It is a ^crating-%d %s^n patch.", GET_OBJ_VAL(j, 1), patch_names[GET_OBJ_VAL(j, 0)]);
       break;
     case ITEM_CYBERDECK:
       sprintf(ENDOF(buf), "MPCP: ^c%d^n, Hardening: ^c%d^n, Active: ^c%d^n, Storage: ^c%d^n, Load: ^c%d^n.",
@@ -1847,11 +1847,11 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     case ITEM_BIOWARE:
       sprintf(ENDOF(buf), "It is a ^crating-%d %s%s^n that uses ^c%.2f^n index when installed.",
               GET_OBJ_VAL(j, 1), GET_OBJ_VAL(j, 2) || GET_OBJ_VAL(j, 0) >= BIO_CEREBRALBOOSTER ? "cultured " : "",
-              bio_types[GET_OBJ_VAL(j, 0)], ((float) GET_OBJ_VAL(j, 4) / 100));
+              decap_bio_types[GET_OBJ_VAL(j, 0)], ((float) GET_OBJ_VAL(j, 4) / 100));
       break;
     case ITEM_CYBERWARE:
       sprintf(ENDOF(buf), "It is a ^crating-%d %s-grade %s^n that uses ^c%.2f^n essence when installed.",
-              GET_OBJ_VAL(j, 1), cyber_grades[GET_OBJ_VAL(j, 2)], cyber_types[GET_OBJ_VAL(j, 0)],
+              GET_OBJ_VAL(j, 1), decap_cyber_grades[GET_OBJ_VAL(j, 2)], decap_cyber_types[GET_OBJ_VAL(j, 0)],
               ((float) GET_OBJ_VAL(j, 4) / 100));
       break;
     case ITEM_WORKSHOP:
@@ -1859,7 +1859,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
               GET_OBJ_VAL(j, 1) ? GET_OBJ_VAL(j, 1) == 3 ? "Facility": "Workshop" : "Kit", workshops[GET_OBJ_VAL(j, 0)]);
       break;
     case ITEM_FOCUS:
-      sprintf(ENDOF(buf), "Focus information not available-- you'll have to ASSENSE it.");
+      sprintf(ENDOF(buf), "It is a ^c%s^n focus of force ^c%d^n.", foci_type[GET_OBJ_VAL(j, 0)], GET_OBJ_VAL(j, 1));
       break;
     case ITEM_SPELL_FORMULA:
       sprintf(ENDOF(buf), "It is a ^cforce-%d %s^n designed for ^c%s^n mages.", GET_OBJ_VAL(j, 0),
@@ -1970,9 +1970,17 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 (GET_OBJ_VAL(j, 1) * GET_OBJ_VAL(j, 1)) * programs[GET_OBJ_VAL(j, 0)].multiplier);
       }
       break;
-    case ITEM_GUN_MAGAZINE:
-      // All info about these is displayed when you examine them.
     case ITEM_GUN_AMMO:
+      if (GET_OBJ_VAL(j, 3))
+        send_to_char(ch, "It has %d/%d %s round%s of %s ammunition left.\r\n", GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 0) +
+                     GET_OBJ_VAL(j, 3), ammo_type[GET_OBJ_VAL(j, 2)].name,GET_OBJ_VAL(j, 0) != 1 ? "s" : "",
+                     weapon_type[GET_OBJ_VAL(j, 1)]);
+      else
+        send_to_char(ch, "It has %d %s round%s of %s ammunition left.\r\n", GET_OBJ_VAL(j, 0),
+                     ammo_type[GET_OBJ_VAL(j, 2)].name,GET_OBJ_VAL(j, 0) != 1 ? "s" : "",
+                     weapon_type[GET_OBJ_VAL(j, 1)]);
+      break;
+    case ITEM_GUN_MAGAZINE:
       // All info about these is displayed when you examine them.
     case ITEM_QUEST:
     case ITEM_OTHER:

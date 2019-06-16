@@ -17,10 +17,13 @@
 #include "constants.h"
 
 extern struct time_info_data time_info;
-extern struct obj_data *get_first_credstick(struct char_data *ch, const char *arg);
 extern const char *pc_race_types[];
+
+extern struct obj_data *get_first_credstick(struct char_data *ch, const char *arg);
 extern void reduce_abilities(struct char_data *vict);
+extern void do_probe_object(struct char_data * ch, struct obj_data * j);
 ACMD_CONST(do_say);
+
 int cmd_say;
 
 const char *shop_flags[] =
@@ -803,6 +806,38 @@ void shop_value(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
   do_say(keeper, buf, cmd_say, SCMD_SAYTO);
 }
 
+bool shop_probe(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr) {
+  if (!is_open(keeper, shop_nr))
+    return FALSE;
+  if (!is_ok_char(keeper, ch, shop_nr))
+    return FALSE;
+  
+  struct obj_data *obj = NULL;
+  skip_spaces(&arg);
+
+  if (!*arg) {
+    // No error message, let do_probe() handle it.
+    return FALSE;
+  }
+  
+  struct shop_sell_data *sell = find_obj_shop(arg, shop_nr, &obj);
+  if (!sell && atoi(arg) > 0) {
+    // Adapt for the player probably meaning an item number instead of an item with a numeric keyword.
+    char oopsbuf[strlen(arg) + 2];
+    sprintf(oopsbuf, "#%s", arg);
+    sell = find_obj_shop(oopsbuf, shop_nr, &obj);
+  }
+  
+  if (!sell || !obj) {
+    return FALSE;
+  }
+  
+  do_probe_object(ch, obj);
+  return TRUE;
+  
+  return FALSE;
+}
+
 void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr)
 {
   char buf[MAX_STRING_LENGTH];
@@ -1151,6 +1186,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   } else sprintf(ENDOF(buf), "%.0f kilogram%s", GET_OBJ_WEIGHT(obj), (GET_OBJ_WEIGHT(obj) >= 2 ? "s" : ""));
   sprintf(ENDOF(buf), " and I couldn't let it go for less than %d nuyen.", buy_price(obj, shop_nr));
   do_say(keeper, buf, cmd_say, SCMD_SAYTO);
+  send_to_char(ch, "\r\n%s\r\n\r\n", obj->text.look_desc);
 }
 
 void shop_check(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t shop_nr)
@@ -1306,6 +1342,8 @@ SPECIAL(shop_keeper)
     shop_hours(ch, shop_nr);
   else if (CMD_IS("cancel"))
     shop_cancel(argument, ch, keeper, shop_nr);
+  else if (CMD_IS("probe"))
+    return shop_probe(argument, ch, keeper, shop_nr);
   else
     return FALSE;
   return TRUE;
