@@ -1093,7 +1093,8 @@ ACMD(do_idelete)
   // update the zones by decrementing numbers if >= number deleted
   int zone, cmd_no;
   for (zone = 0; zone <= top_of_zone_table; zone++) {
-    for (cmd_no = 0; cmd_no < zone_table[zone].num_cmds; cmd_no++)
+    bool zone_dirty = FALSE;
+    for (cmd_no = 0; cmd_no < zone_table[zone].num_cmds; cmd_no++) {
       switch (ZCMD.command) {
       case 'E':
       case 'G':
@@ -1106,6 +1107,7 @@ ACMD(do_idelete)
           ZCMD.arg1 = 0;
           ZCMD.arg2 = 0;
           ZCMD.arg3 = 0;
+          zone_dirty = TRUE;
         }
         break;
       case 'R':
@@ -1115,6 +1117,7 @@ ACMD(do_idelete)
           ZCMD.arg1 = 0;
           ZCMD.arg2 = 0;
           ZCMD.arg3 = 0;
+          zone_dirty = TRUE;
         }
         break;
       case 'P':
@@ -1124,9 +1127,13 @@ ACMD(do_idelete)
           ZCMD.arg1 = 0;
           ZCMD.arg2 = 0;
           ZCMD.arg3 = 0;
+          zone_dirty = TRUE;
         }
         break;
       }
+      if (zone_dirty)
+        write_zone_to_disk(zone_table[zone].number);
+    }
   }
 
   top_of_objt--;

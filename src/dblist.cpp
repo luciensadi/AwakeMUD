@@ -333,6 +333,8 @@ void objList::RemoveObjNum(int num)
             temp->data, 0, TO_CHAR);
       }
       extract_obj(temp->data);
+      temp->data = NULL;
+      RemoveItem(temp);
     }
   }
 }
@@ -344,8 +346,11 @@ void objList::RemoveQuestObjs(int id)
   for (temp = head; temp; temp = next) {
     next = temp->next;
 
-    if (temp->data->obj_flags.quest_id == id)
+    if (temp->data->obj_flags.quest_id == id) {
       extract_obj(temp->data);
+      temp->data = NULL;
+      RemoveItem(temp);
+    }
   }
 }
 
