@@ -23,6 +23,7 @@
 
 // Externs from other files.
 extern MYSQL *mysql;
+extern void store_mail(long to, struct char_data *from, const char *message_pointer);
 
 // Prototypes from other files.
 int mysql_wrapper(MYSQL *mysql, const char *query);
@@ -585,10 +586,76 @@ void do_pgroup_note(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_outcast(struct char_data *ch, char *argument) {
-  // TODO: Log.
-  send_to_char("outcast", ch);
+  char name[strlen(argument)];
+  struct char_data *vict = NULL;
+  bool vict_is_logged_in = TRUE;
   
-  // TODO: Make this work for offline characters as well.
+  // Parse argument into name and rank string.
+  any_one_arg(argument, name);
+  
+  // Require name.
+  if (!*name) {
+    send_to_char(ch, "Syntax: PGROUP OUTCAST <character> <rank>\r\n");
+    return;
+  }
+  
+  // Search the online characters for someone matching the specified name.
+  for (vict = character_list; vict; vict = vict->next) {
+    if (!IS_NPC(vict) && (isname(name, GET_KEYWORDS(vict)) || isname(name, GET_CHAR_NAME(vict)) || recog(ch, vict, name)))
+      break;
+  }
+  
+  // If they weren't online, attempt to load them from the DB.
+  if (!vict) {
+    vict_is_logged_in = FALSE;
+    if (!(vict = playerDB.LoadChar(name, false))) {
+      // We were unable to find them online or load them from DB-- fail out.
+      send_to_char("There is no such player.\r\n", ch);
+      return;
+    }
+  }
+  
+  // Ensure targeted character is part of the same group as the invoking character.
+  if (!(GET_PGROUP_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
+    send_to_char(ch, "%s's not part of your group.\r\n", HSSH(vict));
+    return;
+  }
+  
+  // Prevent modification of someone higher than you.
+  if (GET_PGROUP_DATA(vict)->rank >= GET_PGROUP_DATA(ch)->rank) {
+    send_to_char(ch, "You can't do that to your %s!\r\n", GET_PGROUP_DATA(vict)->rank > GET_PGROUP_DATA(ch)->rank ? "superiors" : "peers");
+    return;
+  }
+  
+  // Remove their data.
+  delete GET_PGROUP_DATA(vict);
+  GET_PGROUP_DATA(vict) = NULL;
+  
+  // Delete pfile pgroup associations.
+  sprintf(buf2, "DELETE FROM pfiles_playergroups WHERE `idnum` = %ld", GET_IDNUM(vict));
+  mysql_wrapper(mysql, buf2);
+  
+  // Delete any old invitations that could let them come right back.
+  sprintf(buf2, "DELETE FROM playergroup_invitations WHERE `idnum` = %ld", GET_IDNUM(vict));
+  mysql_wrapper(mysql, buf2);
+  
+  // Log the action.
+  GET_PGROUP(ch)->audit_log_vfprintf("%s has outcasted %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
+  
+  // Notify the character.
+  send_to_char(ch, "You outcast %s from '%s'.\r\n", GET_CHAR_NAME(vict), GET_PGROUP(ch)->get_name());
+  sprintf(buf, "You have been cast out of '%s'.\r\n", GET_PGROUP(ch)->get_name());
+  
+  // Save the character.
+  if (vict_is_logged_in) {
+    // Online characters are saved to the DB without unloading.
+    send_to_char(buf, vict);
+    playerDB.SaveChar(vict, GET_LOADROOM(vict));
+  } else {
+    // Loaded characters are unloaded (saving happens during extract_char).
+    store_mail(GET_IDNUM(vict), ch, buf);
+    extract_char(vict);
+  }
 }
 
 void do_pgroup_promote(struct char_data *ch, char *argument) {
@@ -596,8 +663,8 @@ void do_pgroup_promote(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_privileges(struct char_data *ch, char *argument) {
-  // TODO: Displays a list of your current privileges.
-  send_to_char("privileges", ch);
+  send_to_char(ch, "You have the following privileges in '%s': %s\r\n",
+               GET_PGROUP(ch)->get_name(), pgroup_print_privileges(GET_PGROUP_DATA(ch)->privileges));
 }
 
 void do_pgroup_resign(struct char_data *ch, char *argument) {
@@ -989,7 +1056,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   // Ensure targeted character is part of the same group as the invoking character.
   // No issues with secretive group-- if you're an administrator, you've got permission to see the roster.
   if (!(GET_PGROUP_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
-    send_to_char("They're not part of your group.\r\n", ch);
+    send_to_char(ch, "%s's not part of your group.\r\n", HSSH(vict));
     return;
   }
   
@@ -1003,7 +1070,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   if (revoke) {
     // Ensure targeted character has this priv.
     if (!(GET_PGROUP_DATA(vict)->privileges.IsSet(priv))) {
-      send_to_char("They don't have that privilege.\r\n", ch);
+      send_to_char(ch, "%s doesn't have that privilege.\r\n", HSSH(vict));
       return;
     }
     
@@ -1011,18 +1078,18 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
     GET_PGROUP_DATA(vict)->privileges.RemoveBit(priv);
     
     // Write to the log.
-    GET_PGROUP(ch)->audit_log_vfprintf("%s revoked the %s privilege from%s.", GET_CHAR_NAME(ch), pgroup_privileges[priv], GET_CHAR_NAME(vict));
+    GET_PGROUP(ch)->audit_log_vfprintf("%s revoked the %s privilege from %s.", GET_CHAR_NAME(ch), pgroup_privileges[priv], GET_CHAR_NAME(vict));
     
     // Write to the relevant characters' screens.
     send_to_char(ch, "You revoke from %s the %s privilege in '%s'.\r\n", GET_CHAR_NAME(vict), pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
-    send_to_char(vict, "The %s privilege in '%s' has been revoked from you.\r\n", pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
+    sprintf(buf, "Your %s privilege in '%s' has been revoked.\r\n", pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
   }
   
   // Grant mode.
   else {
     // Ensure targeted character does not already have this priv.
     if (GET_PGROUP_DATA(vict)->privileges.IsSet(priv)) {
-      send_to_char("They already have that privilege.\r\n", ch);
+      send_to_char(ch, "%s already has that privilege.\r\n", HSSH(vict));
       return;
     }
     
@@ -1034,15 +1101,17 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
     
     // Write to the relevant characters' screens.
     send_to_char(ch, "You grant %s the %s privilege in '%s'.\r\n", GET_CHAR_NAME(vict), pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
-    send_to_char(vict, "You have been granted the %s privilege in '%s'.\r\n", pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
+    sprintf(buf, "You have been granted the %s privilege in '%s'.\r\n", pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
   }
   
   // Save the character.
   if (vict_is_logged_in) {
     // Online characters are saved to the DB without unloading.
+    send_to_char(vict, buf);
     playerDB.SaveChar(vict, GET_LOADROOM(vict));
   } else {
     // Loaded characters are unloaded (saving happens during extract_char).
+    store_mail(GET_IDNUM(vict), ch, buf);
     extract_char(vict);
   }
 }
@@ -1071,13 +1140,14 @@ void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote
   
   // Better messaging for promotion failure if you're rank 1.
   if (GET_PGROUP_DATA(ch)->rank == 1) {
-    send_to_char("You're unable to promote anyone due to your own low rank.\r\n", ch);
+    send_to_char(ch, "You're unable to %s anyone due to your own low rank.\r\n", promote ? "promote" : "demote");
     return;
   }
   
   // Precondition: Promotion can't equal or exceed your own rank.
   if (rank >= GET_PGROUP_DATA(ch)->rank) {
-    send_to_char(ch, "The highest rank you can promote someone to is %d.\r\n", GET_PGROUP_DATA(ch)->rank - 1);
+    send_to_char(ch, "The highest rank you can %s someone to is %d.\r\n",
+                 promote ? "promote" : "demote", GET_PGROUP_DATA(ch)->rank - 1);
     return;
   }
   
@@ -1099,7 +1169,7 @@ void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote
   
   // Ensure targeted character is part of the same group as the invoking character.
   if (!(GET_PGROUP_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
-    send_to_char("They're not part of your group.\r\n", ch);
+    send_to_char(ch, "%s's not part of your group.\r\n", HSSH(vict));
     return;
   }
   
@@ -1111,7 +1181,17 @@ void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote
   
   // Prevent modification of someone higher than you.
   if (GET_PGROUP_DATA(vict)->rank == rank) {
-    send_to_char(ch, "But they're already that rank.\r\n");
+    send_to_char(ch, "But %s's already that rank.\r\n", HSSH(vict));
+    return;
+  }
+  
+  if (promote && GET_PGROUP_DATA(vict)->rank > rank) {
+    send_to_char(ch, "That would be a demotion for %s.\r\n", HMHR(vict));
+    return;
+  }
+  
+  if (!promote && GET_PGROUP_DATA(vict)->rank < rank) {
+    send_to_char(ch, "That would be a promotion for %s.\r\n", HMHR(vict));
     return;
   }
   
@@ -1124,14 +1204,16 @@ void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote
   
   // Notify the character.
   send_to_char(ch, "You %s %s to rank %d.\r\n", promote ? "promote" : "demote", GET_CHAR_NAME(vict), rank);
-  send_to_char(vict, "You have been %s to rank %d in '%s'.\r\n", promote ? "promoted" : "demoted", GET_PGROUP(ch)->get_name());
+  sprintf(buf, "You have been %s to rank %d in '%s'.\r\n", promote ? "promoted" : "demoted", rank, GET_PGROUP(ch)->get_name());
   
   // Save the character.
   if (vict_is_logged_in) {
     // Online characters are saved to the DB without unloading.
+    send_to_char(buf, vict);
     playerDB.SaveChar(vict, GET_LOADROOM(vict));
   } else {
     // Loaded characters are unloaded (saving happens during extract_char).
+    store_mail(GET_IDNUM(vict), ch, buf);
     extract_char(vict);
   }
 }
@@ -1144,8 +1226,12 @@ const char *pgroup_print_privileges(Bitfield privileges) {
   for (int priv = PRIV_ADMINISTRATOR; priv < PRIV_MAX; priv++) {
     if (privileges.IsSet(priv)) {
       sprintf(ENDOF(output), "%s%s", is_first ? "" : ", ", pgroup_privileges[priv]);
+      if (priv == PRIV_LEADER)
+        strcat(output, " (grants all other privileges)");
       is_first = FALSE;
     }
   }
+  if (is_first)
+    strcpy(output, "(none)");
   return output;
 }
