@@ -311,8 +311,8 @@ ACMD(do_pgroup) {
       }
     }
     
-    if (GET_PGROUP(ch)->is_secret() && pgroup_commands[cmd_index].requires_coconspirator) {
-      if (!(GET_PGROUP_DATA(ch)->privileges.AreAnySet(PRIV_COCONSPIRATOR, PRIV_LEADER, ENDBIT))) {
+    if (GET_PGROUP(ch)->is_secret() && pgroup_commands[cmd_index].requires_coconspirator_if_secret) {
+      if (!(GET_PGROUP_MEMBER_DATA(ch)->privileges.AreAnySet(PRIV_COCONSPIRATOR, PRIV_LEADER, ENDBIT))) {
         send_to_char("You must be a co-conspirator within your group to do that.\r\n", ch);
         return;
       }
@@ -351,8 +351,8 @@ void do_pgroup_abdicate(struct char_data *ch, char *argument) {
   Playergroup *pgr = GET_PGROUP(ch);
   
   // TODO: notify the entire group that the head has abdicated
-  GET_PGROUP_DATA(ch)->rank = 9;
-  GET_PGROUP_DATA(ch)->privileges.RemoveBit(PRIV_LEADER);
+  GET_PGROUP_MEMBER_DATA(ch)->rank = 9;
+  GET_PGROUP_MEMBER_DATA(ch)->privileges.RemoveBit(PRIV_LEADER);
   
   send_to_char(ch, "You abdicate your leadership position in '%s'.\r\n", GET_PGROUP(ch)->get_name());
   
@@ -363,7 +363,7 @@ void do_pgroup_abdicate(struct char_data *ch, char *argument) {
   
   // Notify all online members.
   for (struct char_data* i = character_list; i; i = i->next) {
-    if (!IS_NPC(i) && GET_PGROUP_DATA(i) && GET_PGROUP(i)->get_idnum() == pgr->get_idnum()) {
+    if (!IS_NPC(i) && GET_PGROUP_MEMBER_DATA(i) && GET_PGROUP(i)->get_idnum() == pgr->get_idnum()) {
       // Notify the character, unless they're the person doing the disbanding.
       if (i != ch) {
         send_to_char(i, buf);
@@ -458,7 +458,6 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
   Playergroup *pgr = GET_PGROUP(ch);
   
   // Read out the people who are getting kicked (in case we want to manually restore later).
-  char query_buf[512];
   sprintf(query_buf, "SELECT idnum, Rank, Privileges FROM pfiles_playergroups WHERE `group` = %ld ORDER BY Rank ASC", pgr->get_idnum());
   mysql_wrapper(mysql, query_buf);
   MYSQL_RES *res = mysql_use_result(mysql);
@@ -687,20 +686,21 @@ void do_pgroup_outcast(struct char_data *ch, char *argument) {
   }
   
   // Ensure targeted character is part of the same group as the invoking character.
-  if (!(GET_PGROUP_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
+  if (!(GET_PGROUP_MEMBER_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
     send_to_char(ch, "%s's not part of your group.\r\n", HSSH(vict));
     return;
   }
   
   // Prevent modification of someone higher than you.
-  if (GET_PGROUP_DATA(vict)->rank >= GET_PGROUP_DATA(ch)->rank) {
-    send_to_char(ch, "You can't do that to your %s!\r\n", GET_PGROUP_DATA(vict)->rank > GET_PGROUP_DATA(ch)->rank ? "superiors" : "peers");
+  if (GET_PGROUP_MEMBER_DATA(vict)->rank >= GET_PGROUP_MEMBER_DATA(ch)->rank) {
+    send_to_char(ch, "You can't do that to your %s!\r\n",
+                 GET_PGROUP_MEMBER_DATA(vict)->rank > GET_PGROUP_MEMBER_DATA(ch)->rank ? "superiors" : "peers");
     return;
   }
   
   // Remove their data.
-  delete GET_PGROUP_DATA(vict);
-  GET_PGROUP_DATA(vict) = NULL;
+  delete GET_PGROUP_MEMBER_DATA(vict);
+  GET_PGROUP_MEMBER_DATA(vict) = NULL;
   
   // Delete pfile pgroup associations.
   sprintf(buf2, "DELETE FROM pfiles_playergroups WHERE `idnum` = %ld", GET_IDNUM(vict));
@@ -735,7 +735,7 @@ void do_pgroup_promote(struct char_data *ch, char *argument) {
 
 void do_pgroup_privileges(struct char_data *ch, char *argument) {
   send_to_char(ch, "You have the following privileges in '%s': %s\r\n",
-               GET_PGROUP(ch)->get_name(), pgroup_print_privileges(GET_PGROUP_DATA(ch)->privileges));
+               GET_PGROUP(ch)->get_name(), pgroup_print_privileges(GET_PGROUP_MEMBER_DATA(ch)->privileges));
 }
 
 void do_pgroup_resign(struct char_data *ch, char *argument) {
@@ -1081,7 +1081,7 @@ bool has_valid_pocket_secretary(struct char_data *ch) {
 }
 
 const char *list_privs_char_can_affect(struct char_data *ch) {
-  bool is_leader = GET_PGROUP_DATA(ch)->privileges.IsSet(PRIV_LEADER);
+  bool is_leader = GET_PGROUP_MEMBER_DATA(ch)->privileges.IsSet(PRIV_LEADER);
   bool is_first = TRUE;
   
   static char privstring_buf[500];
@@ -1093,7 +1093,7 @@ const char *list_privs_char_can_affect(struct char_data *ch) {
       continue;
     
     // Leaders can hand out anything; otherwise, only return things the char has (except admin, which is leader-assigned-only).
-    if (is_leader || (GET_PGROUP_DATA(ch)->privileges.IsSet(priv) && priv != PRIV_ADMINISTRATOR)) {
+    if (is_leader || (GET_PGROUP_MEMBER_DATA(ch)->privileges.IsSet(priv) && priv != PRIV_ADMINISTRATOR)) {
       sprintf(ENDOF(privstring_buf), "%s%s", is_first ? "" : ", ", pgroup_privileges[priv]);
       is_first = FALSE;
     }
@@ -1169,13 +1169,13 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   }
   
   // Ensure targeted character is part of the same group as the invoking character.
-  if (!(GET_PGROUP_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
+  if (!(GET_PGROUP_MEMBER_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
     send_to_char(ch, "%s's not part of your group.\r\n", HSSH(vict));
     return;
   }
   
   // Ensure targeted character is below the invoker's rank.
-  if (GET_PGROUP_DATA(vict)->rank >= GET_PGROUP_DATA(ch)->rank) {
+  if (GET_PGROUP_MEMBER_DATA(vict)->rank >= GET_PGROUP_MEMBER_DATA(ch)->rank) {
     send_to_char(ch, "You can only %s people who are lower-ranked than you.\r\n", revoke ? "revoke privileges from" : "grant privileges to");
     return;
   }
@@ -1183,7 +1183,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   // Revoke mode.
   if (revoke) {
     // Ensure targeted character has this priv.
-    if (!(GET_PGROUP_DATA(vict)->privileges.IsSet(priv))) {
+    if (!(GET_PGROUP_MEMBER_DATA(vict)->privileges.IsSet(priv))) {
       send_to_char(ch, "%s doesn't have that privilege.\r\n", HSSH(vict));
       return;
     }
@@ -1202,7 +1202,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   // Grant mode.
   else {
     // Ensure targeted character does not already have this priv.
-    if (GET_PGROUP_DATA(vict)->privileges.IsSet(priv)) {
+    if (GET_PGROUP_MEMBER_DATA(vict)->privileges.IsSet(priv)) {
       send_to_char(ch, "%s already has that privilege.\r\n", HSSH(vict));
       return;
     }
@@ -1253,15 +1253,15 @@ void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote
   }
   
   // Better messaging for promotion failure if you're rank 1.
-  if (GET_PGROUP_DATA(ch)->rank == 1) {
+  if (GET_PGROUP_MEMBER_DATA(ch)->rank == 1) {
     send_to_char(ch, "You're unable to %s anyone due to your own low rank.\r\n", promote ? "promote" : "demote");
     return;
   }
   
   // Precondition: Promotion can't equal or exceed your own rank.
-  if (rank >= GET_PGROUP_DATA(ch)->rank) {
+  if (rank >= GET_PGROUP_MEMBER_DATA(ch)->rank) {
     send_to_char(ch, "The highest rank you can %s someone to is %d.\r\n",
-                 promote ? "promote" : "demote", GET_PGROUP_DATA(ch)->rank - 1);
+                 promote ? "promote" : "demote", GET_PGROUP_MEMBER_DATA(ch)->rank - 1);
     return;
   }
   
@@ -1282,35 +1282,36 @@ void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote
   }
   
   // Ensure targeted character is part of the same group as the invoking character.
-  if (!(GET_PGROUP_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
+  if (!(GET_PGROUP_MEMBER_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
     send_to_char(ch, "%s's not part of your group.\r\n", HSSH(vict));
     return;
   }
   
   // Prevent modification of someone higher than you.
-  if (GET_PGROUP_DATA(vict)->rank >= GET_PGROUP_DATA(ch)->rank) {
-    send_to_char(ch, "You can't do that to your %s!\r\n", GET_PGROUP_DATA(vict)->rank > GET_PGROUP_DATA(ch)->rank ? "superiors" : "peers");
+  if (GET_PGROUP_MEMBER_DATA(vict)->rank >= GET_PGROUP_MEMBER_DATA(ch)->rank) {
+    send_to_char(ch, "You can't do that to your %s!\r\n",
+                 GET_PGROUP_MEMBER_DATA(vict)->rank > GET_PGROUP_MEMBER_DATA(ch)->rank ? "superiors" : "peers");
     return;
   }
   
   // Prevent modification of someone higher than you.
-  if (GET_PGROUP_DATA(vict)->rank == rank) {
+  if (GET_PGROUP_MEMBER_DATA(vict)->rank == rank) {
     send_to_char(ch, "But %s's already that rank.\r\n", HSSH(vict));
     return;
   }
   
-  if (promote && GET_PGROUP_DATA(vict)->rank > rank) {
+  if (promote && GET_PGROUP_MEMBER_DATA(vict)->rank > rank) {
     send_to_char(ch, "That would be a demotion for %s.\r\n", HMHR(vict));
     return;
   }
   
-  if (!promote && GET_PGROUP_DATA(vict)->rank < rank) {
+  if (!promote && GET_PGROUP_MEMBER_DATA(vict)->rank < rank) {
     send_to_char(ch, "That would be a promotion for %s.\r\n", HMHR(vict));
     return;
   }
   
   // Set their rank.
-  GET_PGROUP_DATA(vict)->rank = rank;
+  GET_PGROUP_MEMBER_DATA(vict)->rank = rank;
   
   // Log the action.
   GET_PGROUP(ch)->audit_log_vfprintf("%s %s %s to rank %d.", GET_CHAR_NAME(ch), promote ? "promoted" : "demoted",
