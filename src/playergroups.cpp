@@ -29,6 +29,7 @@ int mysql_wrapper(MYSQL *mysql, const char *query);
 
 // Prototypes from this file.
 void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revoke);
+const char *pgroup_print_privileges(Bitfield privileges);
 
 // The linked list of loaded playergroups.
 Playergroup *loaded_playergroups = NULL;
@@ -384,23 +385,40 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
   
   Playergroup *pgr = GET_PGROUP(ch);
   
-  // Kick all members.
+  // Read out the people who are getting kicked (in case we want to manually restore later).
   char query_buf[512];
-  sprintf(query_buf, "SELECT idnum, Rank, Privileges FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
+  sprintf(query_buf, "SELECT idnum, Rank, Privileges FROM pfiles_playergroups WHERE `group` = %ld ORDER BY Rank ASC", pgr->get_idnum());
   mysql_wrapper(mysql, query_buf);
   MYSQL_RES *res = mysql_use_result(mysql);
-  MYSQL_ROW row = mysql_fetch_row(res);
-  sprintf(buf, "The following characters are being kicked from '%s' (%s, %ld) due to disbanding by %s: ",
+  MYSQL_ROW row;
+  listClass<struct pgroup_roster_data *> results;
+  nodeStruct<struct pgroup_roster_data *> *ns = NULL;
+  pgroup_roster_data *roster_data = NULL;
+  while ((row = mysql_fetch_row(res))) {
+    roster_data = new struct pgroup_roster_data;
+    roster_data->idnum = atoi(row[0]);
+    roster_data->rank = atoi(row[1]);
+    roster_data->privileges.FromString(row[2]);
+    results.AddItem(NULL, roster_data);
+  }
+  mysql_free_result(res);
+  
+  // Log the results of the above.
+  sprintf(buf, "The following characters are being kicked from '%s' (%s, %ld) due to disbanding by %s: \r\n",
           pgr->get_name(),
           pgr->get_alias(),
           pgr->get_idnum(),
           GET_CHAR_NAME(ch));
-  while (row) {
-    // TODO: Eventually this should give names not IDs, but that's another lookup for each name...
-    sprintf(ENDOF(buf), "%s (rank %s, privs %s)", row[0], row[1], row[2]);
-    row = mysql_fetch_row(res);
+  while ((ns = results.Head())) {
+    if (!strcmp(ns->data->privileges.ToString(), "0"))
+      sprintf(ENDOF(buf), "%s, rank %d (no privileges).\r\n", get_player_name(ns->data->idnum), ns->data->rank);
+    else {
+      sprintf(ENDOF(buf), "%s, rank %d, privs: %s.\r\n",
+              get_player_name(ns->data->idnum), ns->data->rank, pgroup_print_privileges(ns->data->privileges));
+    }
+    delete ns->data;
+    results.RemoveItem(ns);
   }
-  mysql_free_result(res);
   log(buf);
   
   // Delete pfile pgroup associations.
@@ -587,26 +605,6 @@ void do_pgroup_resign(struct char_data *ch, char *argument) {
 
 void do_pgroup_revoke(struct char_data *ch, char *argument) {
   perform_pgroup_grant_revoke(ch, argument, TRUE);
-}
-
-struct pgroup_roster_data {
-  vnum_t idnum;
-  Bitfield privileges;
-  byte rank;
-};
-
-const char *pgroup_print_privileges(Bitfield privileges) {
-  static char output[500];
-  strcpy(output, "");
-  
-  bool is_first = TRUE;
-  for (int priv = PRIV_ADMINISTRATOR; priv < PRIV_MAX; priv++) {
-    if (privileges.IsSet(priv)) {
-      sprintf(ENDOF(output), "%s%s", is_first ? "" : ", ", pgroup_privileges[priv]);
-      is_first = FALSE;
-    }
-  }
-  return output;
 }
 
 void do_pgroup_roster(struct char_data *ch, char *argument) {
@@ -982,7 +980,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
     GET_PGROUP_DATA(vict)->privileges.RemoveBit(priv);
     
     // Write to the log.
-    GET_PGROUP(ch)->audit_log_vfprintf("%s revoked from %s the %s privilege.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), pgroup_privileges[priv]);
+    GET_PGROUP(ch)->audit_log_vfprintf("%s revoked the %s privilege from%s.", GET_CHAR_NAME(ch), pgroup_privileges[priv], GET_CHAR_NAME(vict));
     
     // Write to the relevant characters' screens.
     // TODO: Should this be act() to allow for name hiding?
@@ -1019,4 +1017,18 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
     // Loaded characters are unloaded (saving happens during extract_char).
     extract_char(vict);
   }
+}
+
+const char *pgroup_print_privileges(Bitfield privileges) {
+  static char output[500];
+  strcpy(output, "");
+  
+  bool is_first = TRUE;
+  for (int priv = PRIV_ADMINISTRATOR; priv < PRIV_MAX; priv++) {
+    if (privileges.IsSet(priv)) {
+      sprintf(ENDOF(output), "%s%s", is_first ? "" : ", ", pgroup_privileges[priv]);
+      is_first = FALSE;
+    }
+  }
+  return output;
 }

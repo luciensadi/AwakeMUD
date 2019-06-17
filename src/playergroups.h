@@ -57,6 +57,11 @@
 #define MAX_PGROUP_TAG_LENGTH_WITHOUT_COLOR 7
 #define MAX_PGROUP_TAG_LENGTH               (MAX_PGROUP_TAG_LENGTH_WITHOUT_COLOR * 3 + 2) // Accounts for color codes before each letter as well as a ^n at the end.
 
+struct pgroup_roster_data {
+  vnum_t idnum;
+  Bitfield privileges;
+  byte rank;
+};
 
 // Function prototypes.
 long get_new_pgroup_idnum();

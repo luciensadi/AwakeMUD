@@ -1862,6 +1862,8 @@ void DeleteChar(long idx)
   } else {
     mysql_free_result(res);
   }
+  sprintf(buf, "DELETE FROM playergroup_invitations WHERE idnum=%ld", idx);
+  mysql_wrapper(mysql, buf);
   
   sprintf(buf, "UPDATE pfiles SET Name='deleted', Password='', NoDelete=TRUE WHERE idnum=%ld", idx); 
 //  sprintf(buf, "DELETE FROM pfiles WHERE idnum=%ld", idx);
