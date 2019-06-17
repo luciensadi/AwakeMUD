@@ -77,6 +77,7 @@ void do_pgroup_buy(struct char_data *ch, char *argument);
 void do_pgroup_contest(struct char_data *ch, char *argument);
 void do_pgroup_create(struct char_data *ch, char *argument);
 void do_pgroup_donate(struct char_data *ch, char *argument);
+void do_pgroup_demote(struct char_data *ch, char *argument);
 void do_pgroup_design(struct char_data *ch, char *argument);
 void do_pgroup_disband(struct char_data *ch, char *argument);
 void do_pgroup_edit(struct char_data *ch, char *argument);

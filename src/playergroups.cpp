@@ -30,6 +30,7 @@ int mysql_wrapper(MYSQL *mysql, const char *query);
 // Prototypes from this file.
 void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revoke);
 const char *pgroup_print_privileges(Bitfield privileges);
+void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote);
 
 // The linked list of loaded playergroups.
 Playergroup *loaded_playergroups = NULL;
@@ -196,36 +197,37 @@ struct pgroup_cmd_struct {
   bool valid_while_group_not_founded;
   bool requires_pocket_secretary;
   bool valid_while_group_disabled;
+  bool requires_coconspirator;
 } pgroup_commands[] = {
-  { "abdicate"   , PRIV_LEADER        , do_pgroup_abdicate    , FALSE , FALSE , FALSE },
-  { "balance"    , PRIV_TREASURER     , do_pgroup_balance     , FALSE , TRUE  , FALSE },
-  { "buy"        , PRIV_PROCURER      , do_pgroup_buy         , FALSE , TRUE  , FALSE },
-  { "contest"    , PRIV_NONE          , do_pgroup_contest     , FALSE , TRUE  , FALSE },
-  { "create"     , PRIV_NONE          , do_pgroup_create      , TRUE  , TRUE  , FALSE },
-  { "demote"     , PRIV_MANAGER       , do_pgroup_promote     , FALSE , TRUE  , FALSE },
-  { "donate"     , PRIV_NONE          , do_pgroup_donate      , FALSE , FALSE , FALSE },
-  { "design"     , PRIV_ARCHITECT     , do_pgroup_design      , FALSE , TRUE  , FALSE },
-  { "disband"    , PRIV_LEADER        , do_pgroup_disband     , TRUE  , TRUE  , FALSE },
-  { "edit"       , PRIV_LEADER        , do_pgroup_edit        , TRUE  , TRUE  , FALSE },
-  { "found"      , PRIV_LEADER        , do_pgroup_found       , TRUE  , TRUE  , FALSE },
-  { "grant"      , PRIV_ADMINISTRATOR , do_pgroup_grant       , FALSE , TRUE  , FALSE },
-  { "help"       , PRIV_NONE          , do_pgroup_help        , TRUE  , FALSE , FALSE },
-  { "invite"     , PRIV_RECRUITER     , do_pgroup_invite      , TRUE  , TRUE  , FALSE },
-  { "lease"      , PRIV_LANDLORD      , do_pgroup_lease       , FALSE , TRUE  , FALSE },
-  { "logs"       , PRIV_AUDITOR       , do_pgroup_logs        , TRUE  , TRUE  , TRUE  },
-  { "note"       , PRIV_NONE          , do_pgroup_note        , TRUE  , TRUE  , FALSE },
-  { "outcast"    , PRIV_MANAGER       , do_pgroup_outcast     , TRUE  , TRUE  , FALSE },
-  { "privileges" , PRIV_NONE          , do_pgroup_privileges  , TRUE  , TRUE  , FALSE },
-  { "promote"    , PRIV_MANAGER       , do_pgroup_promote     , FALSE , TRUE  , FALSE },
-  { "quit"       , PRIV_NONE          , do_pgroup_resign      , TRUE  , FALSE , FALSE },
-  { "resign"     , PRIV_NONE          , do_pgroup_resign      , TRUE  , FALSE , TRUE  },
-  { "revoke"     , PRIV_ADMINISTRATOR , do_pgroup_revoke      , FALSE , TRUE  , FALSE },
-  { "roster"     , PRIV_NONE          , do_pgroup_roster      , TRUE  , TRUE  , FALSE },
-  { "status"     , PRIV_NONE          , do_pgroup_status      , TRUE  , TRUE  , TRUE  },
-  { "transfer"   , PRIV_PROCURER      , do_pgroup_transfer    , FALSE , TRUE  , FALSE },
-  { "vote"       , PRIV_NONE          , do_pgroup_vote        , FALSE , TRUE  , FALSE },
-  { "withdraw"   , PRIV_TREASURER     , do_pgroup_withdraw    , FALSE , FALSE , FALSE },
-  { "\n"         , 0                  , 0                     , FALSE , FALSE , FALSE } // This must be last.
+  { "abdicate"   , PRIV_LEADER        , do_pgroup_abdicate    , FALSE , FALSE , FALSE , FALSE },
+  { "balance"    , PRIV_TREASURER     , do_pgroup_balance     , FALSE , TRUE  , FALSE , FALSE },
+  { "buy"        , PRIV_PROCURER      , do_pgroup_buy         , FALSE , TRUE  , FALSE , FALSE },
+  { "contest"    , PRIV_NONE          , do_pgroup_contest     , FALSE , TRUE  , FALSE , FALSE },
+  { "create"     , PRIV_NONE          , do_pgroup_create      , TRUE  , TRUE  , FALSE , FALSE },
+  { "demote"     , PRIV_MANAGER       , do_pgroup_demote     , FALSE , TRUE  , FALSE , TRUE  },
+  { "donate"     , PRIV_NONE          , do_pgroup_donate      , FALSE , FALSE , FALSE , FALSE },
+  { "design"     , PRIV_ARCHITECT     , do_pgroup_design      , FALSE , TRUE  , FALSE , FALSE },
+  { "disband"    , PRIV_LEADER        , do_pgroup_disband     , TRUE  , TRUE  , FALSE , FALSE },
+  { "edit"       , PRIV_LEADER        , do_pgroup_edit        , TRUE  , TRUE  , FALSE , FALSE },
+  { "found"      , PRIV_LEADER        , do_pgroup_found       , TRUE  , TRUE  , FALSE , FALSE },
+  { "grant"      , PRIV_ADMINISTRATOR , do_pgroup_grant       , FALSE , TRUE  , FALSE , TRUE  },
+  { "help"       , PRIV_NONE          , do_pgroup_help        , TRUE  , FALSE , FALSE , FALSE },
+  { "invite"     , PRIV_RECRUITER     , do_pgroup_invite      , TRUE  , TRUE  , FALSE , TRUE  },
+  { "lease"      , PRIV_LANDLORD      , do_pgroup_lease       , FALSE , TRUE  , FALSE , FALSE },
+  { "logs"       , PRIV_AUDITOR       , do_pgroup_logs        , TRUE  , TRUE  , TRUE  , TRUE  },
+  { "note"       , PRIV_NONE          , do_pgroup_note        , TRUE  , TRUE  , FALSE , FALSE },
+  { "outcast"    , PRIV_MANAGER       , do_pgroup_outcast     , TRUE  , TRUE  , FALSE , TRUE  },
+  { "privileges" , PRIV_NONE          , do_pgroup_privileges  , TRUE  , TRUE  , FALSE , FALSE },
+  { "promote"    , PRIV_MANAGER       , do_pgroup_promote     , FALSE , TRUE  , FALSE , TRUE  },
+  { "quit"       , PRIV_NONE          , do_pgroup_resign      , TRUE  , FALSE , FALSE , FALSE },
+  { "resign"     , PRIV_NONE          , do_pgroup_resign      , TRUE  , FALSE , TRUE  , FALSE },
+  { "revoke"     , PRIV_ADMINISTRATOR , do_pgroup_revoke      , FALSE , TRUE  , FALSE , TRUE  },
+  { "roster"     , PRIV_NONE          , do_pgroup_roster      , TRUE  , TRUE  , FALSE , TRUE  },
+  { "status"     , PRIV_NONE          , do_pgroup_status      , TRUE  , TRUE  , TRUE  , FALSE },
+  { "transfer"   , PRIV_PROCURER      , do_pgroup_transfer    , FALSE , TRUE  , FALSE , FALSE },
+  { "vote"       , PRIV_NONE          , do_pgroup_vote        , FALSE , TRUE  , FALSE , FALSE },
+  { "withdraw"   , PRIV_TREASURER     , do_pgroup_withdraw    , FALSE , FALSE , FALSE , FALSE },
+  { "\n"         , 0                  , 0                     , FALSE , FALSE , FALSE , FALSE } // This must be last.
 };
 
 /* Main Playergroup Command */
@@ -290,6 +292,13 @@ ACMD(do_pgroup) {
         send_to_char(ch, "You must be %s %s within your group to do that.\r\n",
                      strchr((const char *)"aeiouyAEIOUY", *pgroup_privileges[pgroup_commands[cmd_index].privilege_required]) ? "an" : "a",
                      pgroup_privileges[pgroup_commands[cmd_index].privilege_required]);
+        return;
+      }
+    }
+    
+    if (GET_PGROUP(ch)->is_secret() && pgroup_commands[cmd_index].requires_coconspirator) {
+      if (!(GET_PGROUP_DATA(ch)->privileges.AreAnySet(PRIV_COCONSPIRATOR, PRIV_LEADER, ENDBIT))) {
+        send_to_char("You must be a co-conspirator within your group to do that.\r\n", ch);
         return;
       }
     }
@@ -359,16 +368,8 @@ void do_pgroup_create(struct char_data *ch, char *argument) {
   pgedit_disp_menu(ch->desc);
 }
 
-void do_pgroup_donate(struct char_data *ch, char *argument) {
-  // TODO: Log.
-  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_CHAR_NAME(ch));
-  
-  /* General rules:
-      1) You can only donate cash nuyen (no paper/electronic trail for the Star).
-      2) Cash nuyen can only be donated at the PGHQ or a mail station (put in envelope and mail).
-      3) All donations are logged, and may have a reason for the donation supplied.
-   */
-  send_to_char("donate", ch);
+void do_pgroup_demote(struct char_data *ch, char *argument) {
+  do_pgroup_promote_demote(ch, argument, FALSE);
 }
 
 void do_pgroup_design(struct char_data *ch, char *argument) {
@@ -454,6 +455,18 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
   
   // Save the changes to the DB.
   pgr->save_pgroup_to_db();
+}
+
+void do_pgroup_donate(struct char_data *ch, char *argument) {
+  // TODO: Log.
+  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_CHAR_NAME(ch));
+  
+  /* General rules:
+   1) You can only donate cash nuyen (no paper/electronic trail for the Star).
+   2) Cash nuyen can only be donated at the PGHQ or a mail station (put in envelope and mail).
+   3) All donations are logged, and may have a reason for the donation supplied.
+   */
+  send_to_char("donate", ch);
 }
 
 void do_pgroup_edit(struct char_data *ch, char *argument) {
@@ -579,10 +592,7 @@ void do_pgroup_outcast(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_promote(struct char_data *ch, char *argument) {
-  // TODO: Log.
-  send_to_char("promote", ch);
-  
-  // TODO: Make this work for offline characters as well.
+  do_pgroup_promote_demote(ch, argument, TRUE);
 }
 
 void do_pgroup_privileges(struct char_data *ch, char *argument) {
@@ -977,14 +987,13 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   }
   
   // Ensure targeted character is part of the same group as the invoking character.
-  // TODO: secret squirrel info disclosure fix
+  // No issues with secretive group-- if you're an administrator, you've got permission to see the roster.
   if (!(GET_PGROUP_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
     send_to_char("They're not part of your group.\r\n", ch);
     return;
   }
   
   // Ensure targeted character is below the invoker's rank.
-  // TODO: secret squirrel info disclosure fix
   if (GET_PGROUP_DATA(vict)->rank >= GET_PGROUP_DATA(ch)->rank) {
     send_to_char(ch, "You can only %s people who are lower-ranked than you.\r\n", revoke ? "revoke privileges from" : "grant privileges to");
     return;
@@ -993,7 +1002,6 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   // Revoke mode.
   if (revoke) {
     // Ensure targeted character has this priv.
-    // TODO: secret squirrel info disclosure fix
     if (!(GET_PGROUP_DATA(vict)->privileges.IsSet(priv))) {
       send_to_char("They don't have that privilege.\r\n", ch);
       return;
@@ -1006,7 +1014,6 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
     GET_PGROUP(ch)->audit_log_vfprintf("%s revoked the %s privilege from%s.", GET_CHAR_NAME(ch), pgroup_privileges[priv], GET_CHAR_NAME(vict));
     
     // Write to the relevant characters' screens.
-    // TODO: Should this be act() to allow for name hiding?
     send_to_char(ch, "You revoke from %s the %s privilege in '%s'.\r\n", GET_CHAR_NAME(vict), pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
     send_to_char(vict, "The %s privilege in '%s' has been revoked from you.\r\n", pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
   }
@@ -1014,7 +1021,6 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   // Grant mode.
   else {
     // Ensure targeted character does not already have this priv.
-    // TODO: secret squirrel info disclosure fix
     if (GET_PGROUP_DATA(vict)->privileges.IsSet(priv)) {
       send_to_char("They already have that privilege.\r\n", ch);
       return;
@@ -1027,10 +1033,98 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
     GET_PGROUP(ch)->audit_log_vfprintf("%s granted %s the %s privilege.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), pgroup_privileges[priv]);
     
     // Write to the relevant characters' screens.
-    // TODO: Should this be act() to allow for name hiding?
     send_to_char(ch, "You grant %s the %s privilege in '%s'.\r\n", GET_CHAR_NAME(vict), pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
     send_to_char(vict, "You have been granted the %s privilege in '%s'.\r\n", pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
   }
+  
+  // Save the character.
+  if (vict_is_logged_in) {
+    // Online characters are saved to the DB without unloading.
+    playerDB.SaveChar(vict, GET_LOADROOM(vict));
+  } else {
+    // Loaded characters are unloaded (saving happens during extract_char).
+    extract_char(vict);
+  }
+}
+
+void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote) {
+  char name[strlen(argument)];
+  char rank_string[strlen(argument)];
+  int rank;
+  struct char_data *vict = NULL;
+  bool vict_is_logged_in = TRUE;
+  
+  // Parse argument into name and rank string.
+  half_chop(argument, name, rank_string);
+  
+  // Require name.
+  if (!*name) {
+    send_to_char(ch, "Syntax: PGROUP %s <character> <rank>\r\n", promote ? "PROMOTE" : "DEMOTE");
+    return;
+  }
+  
+  // Bounds check rank.
+  if (!(rank = atoi(rank_string)) || rank < 0 || rank > MAX_PGROUP_RANK) {
+    send_to_char(ch, "You must specify a rank between 1 and %d.\r\n", MAX_PGROUP_RANK);
+    return;
+  }
+  
+  // Better messaging for promotion failure if you're rank 1.
+  if (GET_PGROUP_DATA(ch)->rank == 1) {
+    send_to_char("You're unable to promote anyone due to your own low rank.\r\n", ch);
+    return;
+  }
+  
+  // Precondition: Promotion can't equal or exceed your own rank.
+  if (rank >= GET_PGROUP_DATA(ch)->rank) {
+    send_to_char(ch, "The highest rank you can promote someone to is %d.\r\n", GET_PGROUP_DATA(ch)->rank - 1);
+    return;
+  }
+  
+  // Search the online characters for someone matching the specified name.
+  for (vict = character_list; vict; vict = vict->next) {
+    if (!IS_NPC(vict) && (isname(name, GET_KEYWORDS(vict)) || isname(name, GET_CHAR_NAME(vict)) || recog(ch, vict, name)))
+      break;
+  }
+  
+  // If they weren't online, attempt to load them from the DB.
+  if (!vict) {
+    vict_is_logged_in = FALSE;
+    if (!(vict = playerDB.LoadChar(name, false))) {
+      // We were unable to find them online or load them from DB-- fail out.
+      send_to_char("There is no such player.\r\n", ch);
+      return;
+    }
+  }
+  
+  // Ensure targeted character is part of the same group as the invoking character.
+  if (!(GET_PGROUP_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
+    send_to_char("They're not part of your group.\r\n", ch);
+    return;
+  }
+  
+  // Prevent modification of someone higher than you.
+  if (GET_PGROUP_DATA(vict)->rank >= GET_PGROUP_DATA(ch)->rank) {
+    send_to_char(ch, "You can't do that to your %s!\r\n", GET_PGROUP_DATA(vict)->rank > GET_PGROUP_DATA(ch)->rank ? "superiors" : "peers");
+    return;
+  }
+  
+  // Prevent modification of someone higher than you.
+  if (GET_PGROUP_DATA(vict)->rank == rank) {
+    send_to_char(ch, "But they're already that rank.\r\n");
+    return;
+  }
+  
+  // Set their rank.
+  GET_PGROUP_DATA(vict)->rank = rank;
+  
+  // Log the action.
+  GET_PGROUP(ch)->audit_log_vfprintf("%s %s %s to rank %d.", GET_CHAR_NAME(ch), promote ? "promoted" : "demoted",
+                                     GET_CHAR_NAME(vict), rank);
+  
+  // Notify the character.
+  send_to_char(ch, "You %s %s to rank %d.\r\n", promote ? "promote" : "demote", GET_CHAR_NAME(vict), rank);
+  send_to_char(vict, "You have been %s to rank %d in '%s'.\r\n", promote ? "promoted" : "demoted", GET_PGROUP(ch)->get_name());
   
   // Save the character.
   if (vict_is_logged_in) {
