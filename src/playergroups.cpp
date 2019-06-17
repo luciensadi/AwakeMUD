@@ -249,6 +249,7 @@ struct pgroup_cmd_struct {
 /* Main Playergroup Command */
 ACMD(do_pgroup) {
   char command[MAX_STRING_LENGTH];
+  char parameters[MAX_STRING_LENGTH];
   int cmd_index = 0;
   
   if (IS_NPC(ch)) {
@@ -257,7 +258,7 @@ ACMD(do_pgroup) {
   }
   
   skip_spaces(&argument);
-  half_chop(argument, command, buf);
+  half_chop(argument, command, parameters);
   
   // In the absence of a command, show help and exit.
   if (!*command) {
@@ -341,7 +342,7 @@ ACMD(do_pgroup) {
   }
   
   // Execute the subcommand.
-  ((*pgroup_commands[cmd_index].command_pointer) (ch, buf));
+  ((*pgroup_commands[cmd_index].command_pointer) (ch, parameters));
 }
 
 void do_pgroup_abdicate(struct char_data *ch, char *argument) {
@@ -539,8 +540,54 @@ void do_pgroup_donate(struct char_data *ch, char *argument) {
   // TODO: Log.
   // Wires the specified amount from your bank account to the pgroup's shell accounts.
   // pgroup  donate  <amount>  [reason]   Deposits <amount> of nuyen. Reason is listed in logs.
+  long amount;
   
-  send_to_char("donate", ch);
+  char *remainder = any_one_arg(argument, buf); // Amount, remainder = reason
+  skip_spaces(&remainder);
+  
+  if ((amount = atoi(buf)) <= 0) {
+    send_to_char(ch, "How much nuyen do you wish to donate to '%s'?\r\n", GET_PGROUP(ch)->get_name());
+    return;
+  }
+  
+  if (amount > GET_BANK(ch)) {
+    send_to_char("Your bank account doesn't have that much nuyen.\r\n", ch);
+    return;
+  }
+  
+  if (!*remainder) {
+    send_to_char("You must specify a reason for transferring these funds.\r\n", ch);
+    return;
+  }
+  
+  if (strlen(remainder) > MAX_PGROUP_LOG_LENGTH - 2) {
+    send_to_char(ch, "That reason is too long; you're limited to %d characters.", MAX_PGROUP_LOG_LENGTH - 2);
+    return;
+  }
+  
+  // Execute the change.
+  GET_BANK(ch) -= amount;
+  GET_PGROUP(ch)->set_bank(GET_PGROUP(ch)->get_bank() + amount);
+  GET_PGROUP(ch)->save_pgroup_to_db();
+  
+  // Log it.
+  GET_PGROUP(ch)->audit_log_vfprintf("%s donated %ld nuyen. Reason: %s",
+                                     GET_CHAR_NAME(ch),
+                                     amount,
+                                     remainder);
+  GET_PGROUP(ch)->secret_log_vfprintf("A shadowy figure donated %ld nuyen. Reason: %s",
+                                      amount,
+                                      remainder);
+  sprintf(buf, "%s donated %ld nuyen to '%s'. Reason: %s",
+          GET_CHAR_NAME(ch),
+          amount,
+          GET_PGROUP(ch)->get_name(),
+          remainder);
+  mudlog(buf, ch, LOG_GRIDLOG, TRUE);
+  
+  send_to_char(ch, "You donate %ld nuyen to '%s'.\r\n",
+               amount,
+               GET_PGROUP(ch)->get_name());
 }
 
 void do_pgroup_edit(struct char_data *ch, char *argument) {
@@ -868,7 +915,84 @@ void do_pgroup_vote(struct char_data *ch, char *argument) {
 void do_pgroup_wire(struct char_data *ch, char *argument) {
   // TODO: Log.
   // wire <amount> <target> <reason>  Sends a given amount of nuyen to the target, identifed by PC unique name. Reason must be given.
-  send_to_char("wire", ch);
+  unsigned long amount;
+  
+  char *remainder = any_one_arg(argument, buf); // Amount
+  remainder = any_one_arg(remainder, buf1); // Target, remainder is reason
+  skip_spaces(&remainder);
+  
+  if ((amount = atoi(buf)) <= 0) {
+    send_to_char("How much do you wish to wire?\r\n", ch);
+    return;
+  }
+  
+  if (amount > GET_PGROUP(ch)->get_bank()) {
+    send_to_char("The group doesn't have that much nuyen.\r\n", ch);
+    return;
+  }
+  
+  if (!*buf1) {
+    send_to_char("Whom do you want to wire funds to?\r\n", ch);
+    return;
+  }
+  
+  if (!*remainder) {
+    send_to_char("You must specify a reason for transferring these funds.\r\n", ch);
+    return;
+  }
+  
+  if (strlen(remainder) > MAX_PGROUP_LOG_LENGTH - 2) {
+    send_to_char(ch, "That reason is too long; you're limited to %d characters.", MAX_PGROUP_LOG_LENGTH - 2);
+    return;
+  }
+  
+  struct char_data *vict = NULL;
+  long isfile = FALSE;
+  if (!(vict = get_player_vis(ch, buf1, FALSE))) {
+    if ((isfile = get_player_id(buf1)) == -1) {
+      send_to_char("It won't let you transfer to that account\r\n", ch);
+      return;
+    }
+  }
+  
+  // Execute the change.
+  GET_PGROUP(ch)->set_bank(GET_PGROUP(ch)->get_bank() - amount);
+  GET_PGROUP(ch)->save_pgroup_to_db();
+  if (isfile) {
+    sprintf(buf, "UPDATE pfiles SET Bank=Bank+%lu WHERE idnum=%ld;", amount, isfile);
+    mysql_wrapper(mysql, buf);
+  } else
+    GET_BANK(vict) += amount;
+  
+  // Mail the recipient.
+  sprintf(buf, "'%s' has wired %lu nuyen to your account.\r\n", GET_PGROUP(ch)->get_name(), amount);
+  store_mail(vict ? GET_IDNUM(vict) : isfile, ch, buf);
+  
+  // Log it.
+  char *player_name = NULL;
+  GET_PGROUP(ch)->audit_log_vfprintf("%s wired %lu nuyen to %s. Reason: %s",
+                                      GET_CHAR_NAME(ch),
+                                      amount,
+                                      vict ? GET_CHAR_NAME(vict) : (player_name = get_player_name(isfile)),
+                                      remainder);
+  GET_PGROUP(ch)->secret_log_vfprintf("A shadowy figure wired %lu nuyen to someone's account. Reason: %s",
+                                      amount,
+                                      remainder);
+  sprintf(buf, "%s wired %lu nuyen to %s on behalf of '%s'. Reason: %s",
+                GET_CHAR_NAME(ch),
+                amount,
+                vict ? GET_CHAR_NAME(vict) : player_name,
+                GET_PGROUP(ch)->get_name(),
+                remainder);
+  mudlog(buf, ch, LOG_GRIDLOG, TRUE);
+  
+  // Clean up.
+  DELETE_ARRAY_IF_EXTANT(player_name);
+  
+  send_to_char(ch, "You wire %lu nuyen to %s's account on behalf of '%s'.\r\n",
+               amount,
+               vict ? GET_CHAR_NAME(vict) : get_player_name(isfile),
+               GET_PGROUP(ch)->get_name());
 }
 
 
