@@ -29,6 +29,7 @@
 #define PGROUP_DISABLED                     1 // Set by PGROUP DISBAND.
 #define PGROUP_SECRETSQUIRREL               2 // TODO: Membership is secret and requires PRIV_COCONSPIRATOR to view.
 #define PGROUP_CLONE                        3 // This group is a clone used for pgedit.
+#define NUM_PGROUP_SETTINGS                 4
 
 // Edit modes.
 #define PGEDIT_CONFIRM_EDIT                 0
@@ -41,6 +42,8 @@
 // Configurables.
 #define NUM_MEMBERS_NEEDED_TO_FOUND         2 // TODO: Should be 3, but decreased for testing purposes.
 #define COST_TO_FOUND_GROUP                 100000 // Nuyen that must be paid by the founding player in order to make a group official.
+#define PGROUP_INVITATION_LIFETIME_IN_DAYS  7 // Number of IRL days an invitation will be valid for.
+#define DEFAULT_PGROUP_LOG_LOOKUP_LENGTH    1 // Number of IRL days to look back when PGROUP LOGS is passed no argument.
 
 // Helper functions.
 //  GET_PGROUP_MEMBER_DATA pulls up the character's membership struct, which has rank, privileges, etc.

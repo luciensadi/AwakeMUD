@@ -2315,3 +2315,10 @@ const char *message_history_channels[] = {
   "Tells",
   "Wiztells"
 };
+
+const char *pgroup_settings[] = {
+  "Founded",
+  "Disabled",
+  "Clandestine",
+  "Cloned / temporary"
+};

@@ -107,10 +107,22 @@ ACMD(do_accept) {
     if (str_cmp(argument, pgr->get_name()) != 0) {
       send_to_char(ch, "You accept the invitation and declare yourself a member of '%s'.\r\n", pgr->get_name());
       
+      // Notify all online members.
+      for (struct char_data* i = character_list; i; i = i->next) {
+        if (!IS_NPC(i) && GET_PGROUP_MEMBER_DATA(i) && GET_PGROUP(i)->get_idnum() == pgr->get_idnum()) {
+          // Notify the character.
+          if (pgr->is_secret() && !GET_PGROUP_MEMBER_DATA(i)->privileges.IsSet(PRIV_COCONSPIRATOR)) {
+            send_to_char(i, "You notice that the membership numbers for '%s' have gone up.\r\n", pgr->get_name());
+          } else {
+            send_to_char(i, "%s has joined '%s'.\r\n", pgr->get_name());
+          }
+        }
+      }
+      
+      // TODO: Should we send mail (but account for secret status), or require people to view the roster/logs?
+      
       // Add the player to the group. This function also removes the invitation and logs the character's joining (if applicable).
       pgr->add_member(ch);
-      
-      // TODO: Notify group members that a new person has joined, unless the group is secret.
       
       return;
     }
@@ -216,7 +228,7 @@ struct pgroup_cmd_struct {
   { "help"       , PRIV_NONE          , do_pgroup_help        , TRUE  , TRUE  , FALSE , FALSE , FALSE },
   { "invite"     , PRIV_RECRUITER     , do_pgroup_invite      , TRUE  , TRUE  , TRUE  , FALSE , TRUE  },
   { "lease"      , PRIV_LANDLORD      , do_pgroup_lease       , FALSE , TRUE  , TRUE  , FALSE , FALSE },
-  { "logs"       , PRIV_AUDITOR       , do_pgroup_logs        , TRUE  , TRUE  , TRUE  , FALSE , TRUE  },
+  { "logs"       , PRIV_AUDITOR       , do_pgroup_logs        , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
   { "note"       , PRIV_NONE          , do_pgroup_note        , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
   { "outcast"    , PRIV_MANAGER       , do_pgroup_outcast     , TRUE  , TRUE  , TRUE  , FALSE , TRUE  },
   { "privileges" , PRIV_NONE          , do_pgroup_privileges  , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
@@ -296,13 +308,6 @@ ACMD(do_pgroup) {
     // Precondition: You must have the appropriate privilege (or be leader) to perform this command.
     if (pgroup_commands[cmd_index].privilege_required != PRIV_NONE && !GET_PGROUP_MEMBER_DATA(ch)->privileges.IsSet(PRIV_LEADER)) {
       // If the group is secret, and you're not the leader, you must have the COCONSPIRATOR priv to perform sensitive actions.
-      if (GET_PGROUP(ch)->is_secret() && pgroup_commands[cmd_index].requires_coconspirator_if_secret) {
-        if (!(GET_PGROUP_MEMBER_DATA(ch)->privileges.IsSet(PRIV_COCONSPIRATOR))) {
-          send_to_char("Your group is secret, so you must be a co-conspirator within your group to do that.\r\n", ch);
-          return;
-        }
-      }
-      
       if (!(GET_PGROUP_MEMBER_DATA(ch)->privileges.IsSet(pgroup_commands[cmd_index].privilege_required))) {
         send_to_char(ch, "You must be %s %s within your group to do that.\r\n",
                      strchr((const char *)"aeiouyAEIOUY", *pgroup_privileges[pgroup_commands[cmd_index].privilege_required]) ? "an" : "a",
@@ -313,7 +318,7 @@ ACMD(do_pgroup) {
     
     if (GET_PGROUP(ch)->is_secret() && pgroup_commands[cmd_index].requires_coconspirator_if_secret) {
       if (!(GET_PGROUP_MEMBER_DATA(ch)->privileges.AreAnySet(PRIV_COCONSPIRATOR, PRIV_LEADER, ENDBIT))) {
-        send_to_char("You must be a co-conspirator within your group to do that.\r\n", ch);
+        send_to_char("This group is clandestine, limiting your ability to dive deeper into this information.\r\n", ch);
         return;
       }
     }
@@ -340,7 +345,6 @@ ACMD(do_pgroup) {
 
 void do_pgroup_abdicate(struct char_data *ch, char *argument) {
   // TODO: Log.
-  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_CHAR_NAME(ch));
   
   if (!*argument || str_cmp(argument, "confirm") != 0) {
     send_to_char(ch, "If you're sure you want to abdicate from leadership of '%s', type PGROUP ABCIDATE CONFIRM.\r\n",
@@ -404,13 +408,11 @@ void do_pgroup_balance(struct char_data *ch, char *argument) {
 
 void do_pgroup_buy(struct char_data *ch, char *argument) {
   // TODO: Log.
-  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_CHAR_NAME(ch));
   send_to_char("buy", ch);
 }
 
 void do_pgroup_contest(struct char_data *ch, char *argument) {
   // TODO: Log.
-  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_CHAR_NAME(ch));
   send_to_char("contest", ch);
 }
 
@@ -442,7 +444,7 @@ void do_pgroup_demote(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_design(struct char_data *ch, char *argument) {
-  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_CHAR_NAME(ch));
+  // TODO: Log
   send_to_char("design", ch);
 }
 
@@ -520,6 +522,7 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
   // Notify the ex-leader that the job is (nearly) complete.
   send_to_char(ch, "You disband the group '%s'.\r\n", pgr->get_name());
   pgr->audit_log_vfprintf("%s disbanded the group.", GET_CHAR_NAME(ch));
+  pgr->secret_log("A shadowy figure disbanded the group.");
   
   // Disable the group.
   pgr->set_disabled(TRUE);
@@ -530,7 +533,6 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
 
 void do_pgroup_donate(struct char_data *ch, char *argument) {
   // TODO: Log.
-  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_CHAR_NAME(ch));
   
   /* General rules:
    1) You can only donate cash nuyen (no paper/electronic trail for the Star).
@@ -558,17 +560,17 @@ void do_pgroup_found(struct char_data *ch, char *argument) {
     return;
   }
   
-  // Precondition: The player must have enough nuyen to found the group.
-  if (GET_NUYEN(ch) < COST_TO_FOUND_GROUP) {
-    send_to_char(ch, "You need to have %d nuyen on hand to found your group.\r\n", COST_TO_FOUND_GROUP);
-    return;
-  }
-  
   // Precondition: The group must meet the minimum membership requirements.
   int member_count = GET_PGROUP(ch)->sql_count_members();
   if (member_count < NUM_MEMBERS_NEEDED_TO_FOUND) {
     send_to_char(ch, "You need %d members to found your group, but you only have %d.\r\n",
                  NUM_MEMBERS_NEEDED_TO_FOUND, member_count);
+    return;
+  }
+  
+  // Precondition: The player must have enough nuyen to found the group.
+  if (GET_NUYEN(ch) < COST_TO_FOUND_GROUP) {
+    send_to_char(ch, "You need to have %d nuyen on hand to found your group.\r\n", COST_TO_FOUND_GROUP);
     return;
   }
   
@@ -582,6 +584,7 @@ void do_pgroup_found(struct char_data *ch, char *argument) {
   
   // Make a note in the group's audit log.
   GET_PGROUP(ch)->audit_log_vfprintf("%s has officially founded the group.", GET_CHAR_NAME(ch));
+  GET_PGROUP(ch)->secret_log_vfprintf("A shadowy figure has officially founded the group.");
 }
 
 void do_pgroup_grant(struct char_data *ch, char *argument) {
@@ -608,7 +611,7 @@ void do_pgroup_logs(struct char_data *ch, char *argument) {
   int days;
   
   if (!*argument) {
-    days = 7;
+    days = DEFAULT_PGROUP_LOG_LOOKUP_LENGTH;
   } else {
     days = atoi(argument);
     if (days < 1) {
@@ -621,18 +624,24 @@ void do_pgroup_logs(struct char_data *ch, char *argument) {
     }
   }
   
+  bool redacted_mode = GET_PGROUP(ch)->is_secret() && !GET_PGROUP_MEMBER_DATA(ch)->privileges.AreAnySet(PRIV_COCONSPIRATOR, PRIV_LEADER, ENDBIT);
+  
   // Select the logs between this moment and X days in the past, then display in descending order.
   char querybuf[MAX_STRING_LENGTH];
   const char *query_fmt = "SELECT message FROM pgroup_logs"
-                          " WHERE DATE_SUB(CURDATE(), INTERVAL %d DAY) <= DATE(date)"
+                          " WHERE "
+                          "  idnum = %ld"
+                          "  AND DATE_SUB(CURDATE(), INTERVAL %d DAY) <= DATE(date)"
+                          "  AND `redacted` = %s"
                           " ORDER BY date ASC";
-  sprintf(querybuf, query_fmt, days);
+  
+  sprintf(querybuf, query_fmt, GET_PGROUP(ch)->get_idnum(), days, redacted_mode ? "TRUE" : "FALSE");
   mysql_wrapper(mysql, querybuf);
   
   // Process and display the results.
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row;
-  send_to_char(ch, "Log entries in the last %d days:\r\n", days);
+  send_to_char(ch, "%s entries in the last %d days:\r\n", redacted_mode ? "Redacted log" : "Log", days);
   while ((row = mysql_fetch_row(res))) {
     send_to_char(ch, " %s\r\n", row[0]);
   }
@@ -651,6 +660,7 @@ void do_pgroup_note(struct char_data *ch, char *argument) {
   }
   
   GET_PGROUP(ch)->audit_log_vfprintf("Note from %s: %s", GET_CHAR_NAME(ch), argument);
+  GET_PGROUP(ch)->secret_log_vfprintf("Note from someone: %s", argument);
   send_to_char("You take a moment and type your note into your pocket secretary.\r\n", ch);
   WAIT_STATE(ch, 1 RL_SEC); // Lessens spam.
 }
@@ -712,6 +722,7 @@ void do_pgroup_outcast(struct char_data *ch, char *argument) {
   
   // Log the action.
   GET_PGROUP(ch)->audit_log_vfprintf("%s has outcasted %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
+  GET_PGROUP(ch)->secret_log_vfprintf("A shadowy figure has outcasted %s.", GET_CHAR_NAME(vict));
   
   // Notify the character.
   send_to_char(ch, "You outcast %s from '%s'.\r\n", GET_CHAR_NAME(vict), GET_PGROUP(ch)->get_name());
@@ -936,9 +947,75 @@ void pgedit_parse(struct descriptor_data * d, const char *arg) {
           send_to_char("Enter new tag: ", CH);
           d->edit_mode = PGEDIT_CHANGE_TAG;
           break;
+        case '4':
+          d->edit_pgroup->set_secret(!d->edit_pgroup->is_secret());
+          send_to_char(CH, "OK, the group is %s clandestine.\r\n", d->edit_pgroup->is_secret() ? "now" : "no longer");
+          pgedit_disp_menu(d);
+          break;
         case 'q':
-          send_to_char("Would you like to save your changes?\r\n", CH);
-          d->edit_mode = PGEDIT_CONFIRM_SAVE;
+          if (d->edit_pgroup->is_clone()) {
+            // Log the information about who edited it and what the values are.
+            GET_PGROUP(CH)->audit_log_vfprintf("%s modified the group's information (name %s, alias %s, tag %s, %s).",
+                                               GET_CHAR_NAME(CH),
+                                               d->edit_pgroup->get_name(),
+                                               d->edit_pgroup->get_alias(),
+                                               d->edit_pgroup->get_tag(),
+                                               d->edit_pgroup->is_secret() ? "clandestine" : "not clandestine");
+            
+            GET_PGROUP(CH)->secret_log_vfprintf("A shadowy figure modified the group's information (name %s, alias %s, tag %s, %s).",
+                                               d->edit_pgroup->get_name(),
+                                               d->edit_pgroup->get_alias(),
+                                               d->edit_pgroup->get_tag(),
+                                               d->edit_pgroup->is_secret() ? "clandestine" : "not clandestine");
+            
+            // Group is a clone of an existing group. Update the cloned group.
+            GET_PGROUP(CH)->raw_set_name(d->edit_pgroup->get_name());
+            GET_PGROUP(CH)->raw_set_alias(d->edit_pgroup->get_alias());
+            GET_PGROUP(CH)->raw_set_tag(d->edit_pgroup->get_tag());
+            GET_PGROUP(CH)->set_secret(d->edit_pgroup->is_secret());
+            GET_PGROUP(CH)->save_pgroup_to_db();
+            
+            delete d->edit_pgroup;
+            d->edit_pgroup = NULL;
+            
+            send_to_char(CH, "Successfully updated '%s'.\r\n", GET_PGROUP(CH)->get_name());
+          } else {
+            // Group did not exist previously. Save the group.
+            d->edit_pgroup->save_pgroup_to_db();
+            
+            // Make the character a member of this temporary group.
+            if (GET_PGROUP_MEMBER_DATA(CH))
+              delete GET_PGROUP_MEMBER_DATA(CH);
+            GET_PGROUP_MEMBER_DATA(CH) = new Pgroup_data();
+            GET_PGROUP_MEMBER_DATA(CH)->pgroup = d->edit_pgroup;
+            GET_PGROUP_MEMBER_DATA(CH)->rank = MAX_PGROUP_RANK;
+            GET_PGROUP_MEMBER_DATA(CH)->privileges.SetBit(PRIV_LEADER);
+            if (GET_PGROUP_MEMBER_DATA(CH)->title)
+              delete GET_PGROUP_MEMBER_DATA(CH)->title;
+            GET_PGROUP_MEMBER_DATA(CH)->title = str_dup("Leader");
+            
+            // Log the information about who created it and what the values are.
+            GET_PGROUP(CH)->audit_log_vfprintf("%s created the group (name %s, alias %s, tag %s).",
+                                               GET_CHAR_NAME(CH),
+                                               d->edit_pgroup->get_name(),
+                                               d->edit_pgroup->get_alias(),
+                                               d->edit_pgroup->get_tag());
+            
+            GET_PGROUP(CH)->secret_log_vfprintf("A shadowy figure created the group (name %s, alias %s, tag %s).",
+                                               d->edit_pgroup->get_name(),
+                                               d->edit_pgroup->get_alias(),
+                                               d->edit_pgroup->get_tag());
+            
+            send_to_char(CH, "Created new group '%s'.\r\n", GET_PGROUP(CH)->get_name());
+            
+            // Save the character to ensure the DB reflects their new membership.
+            playerDB.SaveChar(CH, GET_LOADROOM(CH));
+          }
+          
+          // Return character to game.
+          STATE(d) = CON_PLAYING;
+          d->edit_pgroup = NULL;
+          PLR_FLAGS(CH).RemoveBit(PLR_EDITING);
           break;
         case 'x':
           send_to_char("OK.\r\n", CH);
@@ -973,54 +1050,6 @@ void pgedit_parse(struct descriptor_data * d, const char *arg) {
       d->edit_pgroup->set_tag(arg, CH);
       pgedit_disp_menu(d);
       break;
-    case PGEDIT_CONFIRM_SAVE:
-      if (d->edit_pgroup->is_clone()) {
-        // Log the information about who edited it and what the values are.
-        GET_PGROUP(CH)->audit_log_vfprintf("%s modified the group's information (name %s, alias %s, tag %s).",
-                                           GET_CHAR_NAME(CH),
-                                           d->edit_pgroup->get_name(),
-                                           d->edit_pgroup->get_alias(),
-                                           d->edit_pgroup->get_tag());
-        
-        // Group is a clone of an existing group. Update the cloned group.
-        GET_PGROUP(CH)->raw_set_name(d->edit_pgroup->get_name());
-        GET_PGROUP(CH)->raw_set_alias(d->edit_pgroup->get_alias());
-        GET_PGROUP(CH)->raw_set_tag(d->edit_pgroup->get_tag());
-        GET_PGROUP(CH)->save_pgroup_to_db();
-        
-        delete d->edit_pgroup;
-      } else {
-        // Group did not exist previously. Save the group.
-        d->edit_pgroup->save_pgroup_to_db();
-        
-        // Make the character a member of this temporary group.
-        if (GET_PGROUP_MEMBER_DATA(CH))
-          delete GET_PGROUP_MEMBER_DATA(CH);
-        GET_PGROUP_MEMBER_DATA(CH) = new Pgroup_data();
-        GET_PGROUP_MEMBER_DATA(CH)->pgroup = d->edit_pgroup;
-        GET_PGROUP_MEMBER_DATA(CH)->rank = MAX_PGROUP_RANK;
-        GET_PGROUP_MEMBER_DATA(CH)->privileges.SetBit(PRIV_LEADER);
-        if (GET_PGROUP_MEMBER_DATA(CH)->title)
-          delete GET_PGROUP_MEMBER_DATA(CH)->title;
-        GET_PGROUP_MEMBER_DATA(CH)->title = str_dup("Leader");
-        
-        // Log the information about who created it and what the values are.
-        GET_PGROUP(CH)->audit_log_vfprintf("%s created the group (name %s, alias %s, tag %s).",
-                                           GET_CHAR_NAME(CH),
-                                           d->edit_pgroup->get_name(),
-                                           d->edit_pgroup->get_alias(),
-                                           d->edit_pgroup->get_tag());
-      }
-      send_to_char("OK.\r\n", CH);
-      
-      // Return character to game.
-      STATE(d) = CON_PLAYING;
-      d->edit_pgroup = NULL;
-      PLR_FLAGS(CH).RemoveBit(PLR_EDITING);
-      
-      // Save the character to ensure the DB reflects their new membership.
-      playerDB.SaveChar(CH, GET_LOADROOM(CH));
-      break;
     default:
       sprintf(buf, "SYSERR: Unknown edit mode %d referenced from pgedit_parse.", d->edit_mode);
       mudlog(buf, CH, LOG_MISCLOG, TRUE);
@@ -1036,7 +1065,8 @@ void pgedit_disp_menu(struct descriptor_data *d) {
   send_to_char(CH, "^G1^Y) ^WName: ^c%s^n\r\n", d->edit_pgroup->get_name());
   send_to_char(CH, "^G2^Y) ^WAlias: ^c%s^n\r\n", d->edit_pgroup->get_alias());
   send_to_char(CH, "^G3^Y) ^WWho Tag: ^c%s^n\r\n", d->edit_pgroup->get_tag());
-  send_to_char("^Gq^Y) ^WQuit\r\n^Gx^Y) ^WQuit without saving\r\n^wEnter selection: ", CH);
+  send_to_char(CH, "^G4^Y) ^WClandestine: ^c%s^n\r\n", d->edit_pgroup->is_secret() ? "Yes" : "No");
+  send_to_char("^Gq^Y) ^WQuit\r\n^Gx^Y) ^WQuit without saving\r\n\r\n^wEnter selection: ", CH);
   d->edit_mode = PGEDIT_MAIN_MENU;
 }
 
@@ -1193,6 +1223,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
     
     // Write to the log.
     GET_PGROUP(ch)->audit_log_vfprintf("%s revoked the %s privilege from %s.", GET_CHAR_NAME(ch), pgroup_privileges[priv], GET_CHAR_NAME(vict));
+    // No secret log for this one ("Someone has revoked X from someone else." is pointless)
     
     // Write to the relevant characters' screens.
     send_to_char(ch, "You revoke from %s the %s privilege in '%s'.\r\n", GET_CHAR_NAME(vict), pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
@@ -1212,6 +1243,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
     
     // Write to the log.
     GET_PGROUP(ch)->audit_log_vfprintf("%s granted %s the %s privilege.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), pgroup_privileges[priv]);
+    // No secret log for this one.
     
     // Write to the relevant characters' screens.
     send_to_char(ch, "You grant %s the %s privilege in '%s'.\r\n", GET_CHAR_NAME(vict), pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
@@ -1316,6 +1348,8 @@ void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote
   // Log the action.
   GET_PGROUP(ch)->audit_log_vfprintf("%s %s %s to rank %d.", GET_CHAR_NAME(ch), promote ? "promoted" : "demoted",
                                      GET_CHAR_NAME(vict), rank);
+  
+  GET_PGROUP(ch)->secret_log_vfprintf("Someone has been %s to rank %d.", promote ? "promoted" : "demoted", rank);
   
   // Notify the character.
   send_to_char(ch, "You %s %s to rank %d.\r\n", promote ? "promote" : "demote", GET_CHAR_NAME(vict), rank);

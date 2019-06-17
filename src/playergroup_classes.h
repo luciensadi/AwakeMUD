@@ -56,10 +56,13 @@ public:
   bool is_secret() { return settings.IsSet(PGROUP_SECRETSQUIRREL); }
   
   // Misc methods.
+  void audit_log(const char *msg, bool is_redacted); // Logs an unredacted message exactly as written.
+  void audit_log_vfprintf(const char *format, ...); // Logs an unredacted message with format/args like printf.
+  void secret_log(const char *msg); // Logs a pre-redacted message exactly as written.
+  void secret_log_vfprintf(const char *format, ...); // Logs a pre-redacted message with format/args like printf.
   static Playergroup *find_pgroup(long idnum);
-  void audit_log(const char *msg); // Stub for audit logging.
-  void audit_log_vfprintf(const char *format, ...);
   int sql_count_members();
+  const char *render_settings();
   
   // DB management.
   bool save_pgroup_to_db();
