@@ -23,12 +23,15 @@
 
 // Externs from other files.
 extern MYSQL *mysql;
+extern void store_mail(long to, struct char_data *from, const char *message_pointer);
 
 // Prototypes from other files.
 int mysql_wrapper(MYSQL *mysql, const char *query);
 
 // Prototypes from this file.
 void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revoke);
+const char *pgroup_print_privileges(Bitfield privileges);
+void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote);
 
 // The linked list of loaded playergroups.
 Playergroup *loaded_playergroups = NULL;
@@ -203,7 +206,7 @@ struct pgroup_cmd_struct {
   { "buy"        , PRIV_PROCURER      , do_pgroup_buy         , FALSE , TRUE  , TRUE  , FALSE , FALSE },
   { "contest"    , PRIV_NONE          , do_pgroup_contest     , FALSE , TRUE  , TRUE  , FALSE , FALSE },
   { "create"     , PRIV_NONE          , do_pgroup_create      , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
-  { "demote"     , PRIV_MANAGER       , do_pgroup_promote     , FALSE , TRUE  , TRUE  , FALSE , TRUE  },
+  { "demote"     , PRIV_MANAGER       , do_pgroup_demote      , FALSE , TRUE  , TRUE  , FALSE , TRUE  },
   { "donate"     , PRIV_NONE          , do_pgroup_donate      , FALSE , TRUE  , FALSE , FALSE , FALSE },
   { "design"     , PRIV_ARCHITECT     , do_pgroup_design      , FALSE , TRUE  , TRUE  , FALSE , FALSE },
   { "disband"    , PRIV_LEADER        , do_pgroup_disband     , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
@@ -228,6 +231,7 @@ struct pgroup_cmd_struct {
   { "withdraw"   , PRIV_TREASURER     , do_pgroup_withdraw    , FALSE , TRUE  , FALSE , FALSE , FALSE },
   { "\n"         , 0                  , 0                     , FALSE , TRUE  , FALSE , FALSE , FALSE } // This must be last.
 };                                                          /* !founded founded pocsec disabld secret */
+
 
 /* Main Playergroup Command */
 ACMD(do_pgroup) {
@@ -306,6 +310,13 @@ ACMD(do_pgroup) {
         return;
       }
     }
+    
+    if (GET_PGROUP(ch)->is_secret() && pgroup_commands[cmd_index].requires_coconspirator) {
+      if (!(GET_PGROUP_DATA(ch)->privileges.AreAnySet(PRIV_COCONSPIRATOR, PRIV_LEADER, ENDBIT))) {
+        send_to_char("You must be a co-conspirator within your group to do that.\r\n", ch);
+        return;
+      }
+    }
   }
   
   // Not a member of a group.
@@ -330,7 +341,61 @@ ACMD(do_pgroup) {
 void do_pgroup_abdicate(struct char_data *ch, char *argument) {
   // TODO: Log.
   // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_CHAR_NAME(ch));
-  send_to_char("abdicate", ch);
+  
+  if (!*argument || str_cmp(argument, "confirm") != 0) {
+    send_to_char(ch, "If you're sure you want to abdicate from leadership of '%s', type PGROUP ABCIDATE CONFIRM.\r\n",
+                 GET_PGROUP(ch)->get_name());
+    return;
+  }
+  
+  Playergroup *pgr = GET_PGROUP(ch);
+  
+  // TODO: notify the entire group that the head has abdicated
+  GET_PGROUP_DATA(ch)->rank = 9;
+  GET_PGROUP_DATA(ch)->privileges.RemoveBit(PRIV_LEADER);
+  
+  send_to_char(ch, "You abdicate your leadership position in '%s'.\r\n", GET_PGROUP(ch)->get_name());
+  
+  if (GET_PGROUP(ch)->is_secret())
+    sprintf(buf, "A shadowy figure has abdicated from the leadership of '%s'.", pgr->get_name());
+  else
+    sprintf(buf, "%s has abdicated from the leadership of '%s'.", GET_CHAR_NAME(ch), pgr->get_name());
+  
+  // Notify all online members.
+  for (struct char_data* i = character_list; i; i = i->next) {
+    if (!IS_NPC(i) && GET_PGROUP_DATA(i) && GET_PGROUP(i)->get_idnum() == pgr->get_idnum()) {
+      // Notify the character, unless they're the person doing the disbanding.
+      if (i != ch) {
+        send_to_char(i, buf);
+      }
+    }
+  }
+  
+  // Mail all members, online or not.
+  sprintf(buf2, "SELECT idnum FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
+  mysql_wrapper(mysql, buf2);
+  MYSQL_RES *res = mysql_use_result(mysql);
+  MYSQL_ROW row;
+  int idnum;
+  listClass<struct pgroup_roster_data *> results;
+  nodeStruct<struct pgroup_roster_data *> *ns = NULL;
+  pgroup_roster_data *roster_data = NULL;
+  while ((row = mysql_fetch_row(res))) {
+    idnum = atoi(row[0]);
+    if (idnum == GET_IDNUM(ch))
+      continue;
+    
+    roster_data = new struct pgroup_roster_data;
+    roster_data->idnum = idnum;
+    results.AddItem(NULL, roster_data);
+  }
+  mysql_free_result(res);
+  
+  while ((ns = results.Head())) {
+    store_mail(ns->data->idnum, ch, buf);
+    delete ns->data;
+    results.RemoveItem(ns);
+  }
 }
 
 void do_pgroup_balance(struct char_data *ch, char *argument) {
@@ -372,16 +437,8 @@ void do_pgroup_create(struct char_data *ch, char *argument) {
   pgedit_disp_menu(ch->desc);
 }
 
-void do_pgroup_donate(struct char_data *ch, char *argument) {
-  // TODO: Log.
-  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_CHAR_NAME(ch));
-  
-  /* General rules:
-      1) You can only donate cash nuyen (no paper/electronic trail for the Star).
-      2) Cash nuyen can only be donated at the PGHQ or a mail station (put in envelope and mail).
-      3) All donations are logged, and may have a reason for the donation supplied.
-   */
-  send_to_char("donate", ch);
+void do_pgroup_demote(struct char_data *ch, char *argument) {
+  do_pgroup_promote_demote(ch, argument, FALSE);
 }
 
 void do_pgroup_design(struct char_data *ch, char *argument) {
@@ -400,24 +457,41 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
   
   Playergroup *pgr = GET_PGROUP(ch);
   
-  // Prepare our log message.
+  // Read out the people who are getting kicked (in case we want to manually restore later).
+  char query_buf[512];
+  sprintf(query_buf, "SELECT idnum, Rank, Privileges FROM pfiles_playergroups WHERE `group` = %ld ORDER BY Rank ASC", pgr->get_idnum());
+  mysql_wrapper(mysql, query_buf);
+  MYSQL_RES *res = mysql_use_result(mysql);
+  MYSQL_ROW row;
+  listClass<struct pgroup_roster_data *> results;
+  nodeStruct<struct pgroup_roster_data *> *ns = NULL;
+  pgroup_roster_data *roster_data = NULL;
+  while ((row = mysql_fetch_row(res))) {
+    roster_data = new struct pgroup_roster_data;
+    roster_data->idnum = atoi(row[0]);
+    roster_data->rank = atoi(row[1]);
+    roster_data->privileges.FromString(row[2]);
+    results.AddItem(NULL, roster_data);
+  }
+  mysql_free_result(res);
+  
+  // Log the results of the above.
   sprintf(buf, "The following characters are being kicked from '%s' (%s, %ld) due to disbanding by %s: \r\n",
           pgr->get_name(),
           pgr->get_alias(),
           pgr->get_idnum(),
           GET_CHAR_NAME(ch));
-  
-  sprintf(query_buf, "SELECT idnum, Rank, Privileges FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
-  mysql_wrapper(mysql, query_buf);
-  MYSQL_RES *res = mysql_use_result(mysql);
-  MYSQL_ROW row;
-  while ((row = mysql_fetch_row(res))) {
-    char *name = get_player_name(atoi(row[0]));
-    sprintf(ENDOF(buf), " %s (%s): rank %s, privs %s\r\n", name, row[0], row[1], row[2]);
-    if (name)
-      delete [] name;
+
+  while ((ns = results.Head())) {
+    if (!strcmp(ns->data->privileges.ToString(), "0"))
+      sprintf(ENDOF(buf), "%s, rank %d (no privileges).\r\n", get_player_name(ns->data->idnum), ns->data->rank);
+    else {
+      sprintf(ENDOF(buf), "%s, rank %d, privs: %s.\r\n",
+              get_player_name(ns->data->idnum), ns->data->rank, pgroup_print_privileges(ns->data->privileges));
+    }
+    delete ns->data;
+    results.RemoveItem(ns);
   }
-  mysql_free_result(res);
   log(buf);
   
   // Delete pfile pgroup associations.
@@ -453,6 +527,18 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
   
   // Save the changes to the DB.
   pgr->save_pgroup_to_db();
+}
+
+void do_pgroup_donate(struct char_data *ch, char *argument) {
+  // TODO: Log.
+  // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_CHAR_NAME(ch));
+  
+  /* General rules:
+   1) You can only donate cash nuyen (no paper/electronic trail for the Star).
+   2) Cash nuyen can only be donated at the PGHQ or a mail station (put in envelope and mail).
+   3) All donations are logged, and may have a reason for the donation supplied.
+   */
+  send_to_char("donate", ch);
 }
 
 void do_pgroup_edit(struct char_data *ch, char *argument) {
@@ -571,22 +657,85 @@ void do_pgroup_note(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_outcast(struct char_data *ch, char *argument) {
-  // TODO: Log.
-  send_to_char("outcast", ch);
+  char name[strlen(argument)];
+  struct char_data *vict = NULL;
+  bool vict_is_logged_in = TRUE;
   
-  // TODO: Make this work for offline characters as well.
+  // Parse argument into name and rank string.
+  any_one_arg(argument, name);
+  
+  // Require name.
+  if (!*name) {
+    send_to_char(ch, "Syntax: PGROUP OUTCAST <character> <rank>\r\n");
+    return;
+  }
+  
+  // Search the online characters for someone matching the specified name.
+  for (vict = character_list; vict; vict = vict->next) {
+    if (!IS_NPC(vict) && (isname(name, GET_KEYWORDS(vict)) || isname(name, GET_CHAR_NAME(vict)) || recog(ch, vict, name)))
+      break;
+  }
+  
+  // If they weren't online, attempt to load them from the DB.
+  if (!vict) {
+    vict_is_logged_in = FALSE;
+    if (!(vict = playerDB.LoadChar(name, false))) {
+      // We were unable to find them online or load them from DB-- fail out.
+      send_to_char("There is no such player.\r\n", ch);
+      return;
+    }
+  }
+  
+  // Ensure targeted character is part of the same group as the invoking character.
+  if (!(GET_PGROUP_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
+    send_to_char(ch, "%s's not part of your group.\r\n", HSSH(vict));
+    return;
+  }
+  
+  // Prevent modification of someone higher than you.
+  if (GET_PGROUP_DATA(vict)->rank >= GET_PGROUP_DATA(ch)->rank) {
+    send_to_char(ch, "You can't do that to your %s!\r\n", GET_PGROUP_DATA(vict)->rank > GET_PGROUP_DATA(ch)->rank ? "superiors" : "peers");
+    return;
+  }
+  
+  // Remove their data.
+  delete GET_PGROUP_DATA(vict);
+  GET_PGROUP_DATA(vict) = NULL;
+  
+  // Delete pfile pgroup associations.
+  sprintf(buf2, "DELETE FROM pfiles_playergroups WHERE `idnum` = %ld", GET_IDNUM(vict));
+  mysql_wrapper(mysql, buf2);
+  
+  // Delete any old invitations that could let them come right back.
+  sprintf(buf2, "DELETE FROM playergroup_invitations WHERE `idnum` = %ld", GET_IDNUM(vict));
+  mysql_wrapper(mysql, buf2);
+  
+  // Log the action.
+  GET_PGROUP(ch)->audit_log_vfprintf("%s has outcasted %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
+  
+  // Notify the character.
+  send_to_char(ch, "You outcast %s from '%s'.\r\n", GET_CHAR_NAME(vict), GET_PGROUP(ch)->get_name());
+  sprintf(buf, "You have been cast out of '%s'.\r\n", GET_PGROUP(ch)->get_name());
+  
+  // Save the character.
+  if (vict_is_logged_in) {
+    // Online characters are saved to the DB without unloading.
+    send_to_char(buf, vict);
+    playerDB.SaveChar(vict, GET_LOADROOM(vict));
+  } else {
+    // Loaded characters are unloaded (saving happens during extract_char).
+    store_mail(GET_IDNUM(vict), ch, buf);
+    extract_char(vict);
+  }
 }
 
 void do_pgroup_promote(struct char_data *ch, char *argument) {
-  // TODO: Log.
-  send_to_char("promote", ch);
-  
-  // TODO: Make this work for offline characters as well.
+  do_pgroup_promote_demote(ch, argument, TRUE);
 }
 
 void do_pgroup_privileges(struct char_data *ch, char *argument) {
-  // TODO: Displays a list of your current privileges.
-  send_to_char("privileges", ch);
+  send_to_char(ch, "You have the following privileges in '%s': %s\r\n",
+               GET_PGROUP(ch)->get_name(), pgroup_print_privileges(GET_PGROUP_DATA(ch)->privileges));
 }
 
 void do_pgroup_resign(struct char_data *ch, char *argument) {
@@ -608,8 +757,39 @@ void do_pgroup_revoke(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_roster(struct char_data *ch, char *argument) {
-  // Lists members. If group is secret, requires PRIV_COCONSPIRATOR.
-  send_to_char("roster", ch);
+  Playergroup *pgr = GET_PGROUP(ch);
+  
+  char query_buf[512];
+  sprintf(query_buf, "SELECT idnum, Rank, Privileges FROM pfiles_playergroups WHERE `group` = %ld ORDER BY Rank ASC", pgr->get_idnum());
+  mysql_wrapper(mysql, query_buf);
+  MYSQL_RES *res = mysql_use_result(mysql);
+  MYSQL_ROW row;
+  
+  listClass<struct pgroup_roster_data *> results;
+  nodeStruct<struct pgroup_roster_data *> *ns = NULL;
+  pgroup_roster_data *roster_data = NULL;
+  while ((row = mysql_fetch_row(res))) {
+    roster_data = new struct pgroup_roster_data;
+    roster_data->idnum = atoi(row[0]);
+    roster_data->rank = atoi(row[1]);
+    roster_data->privileges.FromString(row[2]);
+    results.AddItem(NULL, roster_data);
+  }
+  mysql_free_result(res);
+  
+  sprintf(buf, "%s has the following members:\r\n", pgr->get_name());
+  while ((ns = results.Head())) {
+    if (!strcmp(ns->data->privileges.ToString(), "0"))
+      sprintf(ENDOF(buf), "%s, rank %d (no privileges).\r\n", get_player_name(ns->data->idnum), ns->data->rank);
+    else {
+      sprintf(ENDOF(buf), "%s, rank %d, with the following privileges: %s.\r\n",
+              get_player_name(ns->data->idnum), ns->data->rank, pgroup_print_privileges(ns->data->privileges));
+    }
+    delete ns->data;
+    results.RemoveItem(ns);
+  }
+  
+  send_to_char(buf, ch);
 }
 
 void do_pgroup_status(struct char_data *ch, char *argument) {
@@ -900,6 +1080,28 @@ bool has_valid_pocket_secretary(struct char_data *ch) {
   return FALSE;
 }
 
+const char *list_privs_char_can_affect(struct char_data *ch) {
+  bool is_leader = GET_PGROUP_DATA(ch)->privileges.IsSet(PRIV_LEADER);
+  bool is_first = TRUE;
+  
+  static char privstring_buf[500];
+  strcpy(privstring_buf, "");
+  
+  for (int priv = 0; priv < PRIV_MAX; priv++) {
+    // Nobody can hand out the leadership privilege.
+    if (priv == PRIV_LEADER)
+      continue;
+    
+    // Leaders can hand out anything; otherwise, only return things the char has (except admin, which is leader-assigned-only).
+    if (is_leader || (GET_PGROUP_DATA(ch)->privileges.IsSet(priv) && priv != PRIV_ADMINISTRATOR)) {
+      sprintf(ENDOF(privstring_buf), "%s%s", is_first ? "" : ", ", pgroup_privileges[priv]);
+      is_first = FALSE;
+    }
+  }
+  
+  return privstring_buf;
+}
+
 void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revoke) {
   // Since a lot of logic is the same, combined grant and revoke methods.
   
@@ -915,7 +1117,8 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   
   if (!*name || !*privilege) {
     send_to_char(ch, "Syntax: PGROUP %s <character> <privilege>\r\n", revoke ? "REVOKE" : "GRANT");
-    // TODO: List valid privileges they can assign here.
+    send_to_char(ch, "You may %s any of the following privileges: %s\r\n",
+                 revoke ? "revoke" : "grant", list_privs_char_can_affect(ch));
     return;
   }
   
@@ -927,8 +1130,8 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   // If the privilege requested doesn't match a privilege, fail.
   switch (priv) {
     case PRIV_MAX: // No privilege was found matching the string. Fail.
-      send_to_char(ch, "'%s' is not a valid privilege.\r\n", privilege);
-      // TODO: List valid privileges they can assign here.
+      send_to_char(ch, "'%s' is not a valid privilege. Privileges you can %s are: %s\r\n",
+                   privilege, revoke ? "revoke" : "grant", list_privs_char_can_affect(ch));
       return;
     case PRIV_LEADER: // LEADER cannot be handed out. Fail.
       send_to_char(ch, "Sorry, leadership cannot be %s in this way.\r\n", revoke ? "revoked" : "assigned");
@@ -966,15 +1169,13 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   }
   
   // Ensure targeted character is part of the same group as the invoking character.
-  // TODO: secret squirrel info disclosure fix
-  if (!(GET_PGROUP_MEMBER_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
-    send_to_char("They're not part of your group.\r\n", ch);
+  if (!(GET_PGROUP_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
+    send_to_char(ch, "%s's not part of your group.\r\n", HSSH(vict));
     return;
   }
   
   // Ensure targeted character is below the invoker's rank.
-  // TODO: secret squirrel info disclosure fix
-  if (GET_PGROUP_MEMBER_DATA(vict)->rank >= GET_PGROUP_MEMBER_DATA(ch)->rank) {
+  if (GET_PGROUP_DATA(vict)->rank >= GET_PGROUP_DATA(ch)->rank) {
     send_to_char(ch, "You can only %s people who are lower-ranked than you.\r\n", revoke ? "revoke privileges from" : "grant privileges to");
     return;
   }
@@ -982,9 +1183,8 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   // Revoke mode.
   if (revoke) {
     // Ensure targeted character has this priv.
-    // TODO: secret squirrel info disclosure fix
-    if (!(GET_PGROUP_MEMBER_DATA(vict)->privileges.IsSet(priv))) {
-      send_to_char("They don't have that privilege.\r\n", ch);
+    if (!(GET_PGROUP_DATA(vict)->privileges.IsSet(priv))) {
+      send_to_char(ch, "%s doesn't have that privilege.\r\n", HSSH(vict));
       return;
     }
     
@@ -992,20 +1192,18 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
     GET_PGROUP_MEMBER_DATA(vict)->privileges.RemoveBit(priv);
     
     // Write to the log.
-    GET_PGROUP(ch)->audit_log_vfprintf("%s revoked from %s the %s privilege.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), pgroup_privileges[priv]);
+    GET_PGROUP(ch)->audit_log_vfprintf("%s revoked the %s privilege from %s.", GET_CHAR_NAME(ch), pgroup_privileges[priv], GET_CHAR_NAME(vict));
     
     // Write to the relevant characters' screens.
-    // TODO: Should this be act() to allow for name hiding?
     send_to_char(ch, "You revoke from %s the %s privilege in '%s'.\r\n", GET_CHAR_NAME(vict), pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
-    send_to_char(vict, "%s has revoked from you the %s privilege in '%s'.\r\n", GET_CHAR_NAME(ch), pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
+    sprintf(buf, "Your %s privilege in '%s' has been revoked.\r\n", pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
   }
   
   // Grant mode.
   else {
     // Ensure targeted character does not already have this priv.
-    // TODO: secret squirrel info disclosure fix
-    if (GET_PGROUP_MEMBER_DATA(vict)->privileges.IsSet(priv)) {
-      send_to_char("They already have that privilege.\r\n", ch);
+    if (GET_PGROUP_DATA(vict)->privileges.IsSet(priv)) {
+      send_to_char(ch, "%s already has that privilege.\r\n", HSSH(vict));
       return;
     }
     
@@ -1016,17 +1214,138 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
     GET_PGROUP(ch)->audit_log_vfprintf("%s granted %s the %s privilege.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), pgroup_privileges[priv]);
     
     // Write to the relevant characters' screens.
-    // TODO: Should this be act() to allow for name hiding?
     send_to_char(ch, "You grant %s the %s privilege in '%s'.\r\n", GET_CHAR_NAME(vict), pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
-    send_to_char(vict, "%s has granted you the %s privilege in '%s'.\r\n", GET_CHAR_NAME(ch), pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
+    sprintf(buf, "You have been granted the %s privilege in '%s'.\r\n", pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
   }
   
   // Save the character.
   if (vict_is_logged_in) {
     // Online characters are saved to the DB without unloading.
+    send_to_char(vict, buf);
     playerDB.SaveChar(vict, GET_LOADROOM(vict));
   } else {
     // Loaded characters are unloaded (saving happens during extract_char).
+    store_mail(GET_IDNUM(vict), ch, buf);
     extract_char(vict);
   }
+}
+
+void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote) {
+  char name[strlen(argument)];
+  char rank_string[strlen(argument)];
+  int rank;
+  struct char_data *vict = NULL;
+  bool vict_is_logged_in = TRUE;
+  
+  // Parse argument into name and rank string.
+  half_chop(argument, name, rank_string);
+  
+  // Require name.
+  if (!*name) {
+    send_to_char(ch, "Syntax: PGROUP %s <character> <rank>\r\n", promote ? "PROMOTE" : "DEMOTE");
+    return;
+  }
+  
+  // Bounds check rank.
+  if (!(rank = atoi(rank_string)) || rank < 0 || rank > MAX_PGROUP_RANK) {
+    send_to_char(ch, "You must specify a rank between 1 and %d.\r\n", MAX_PGROUP_RANK);
+    return;
+  }
+  
+  // Better messaging for promotion failure if you're rank 1.
+  if (GET_PGROUP_DATA(ch)->rank == 1) {
+    send_to_char(ch, "You're unable to %s anyone due to your own low rank.\r\n", promote ? "promote" : "demote");
+    return;
+  }
+  
+  // Precondition: Promotion can't equal or exceed your own rank.
+  if (rank >= GET_PGROUP_DATA(ch)->rank) {
+    send_to_char(ch, "The highest rank you can %s someone to is %d.\r\n",
+                 promote ? "promote" : "demote", GET_PGROUP_DATA(ch)->rank - 1);
+    return;
+  }
+  
+  // Search the online characters for someone matching the specified name.
+  for (vict = character_list; vict; vict = vict->next) {
+    if (!IS_NPC(vict) && (isname(name, GET_KEYWORDS(vict)) || isname(name, GET_CHAR_NAME(vict)) || recog(ch, vict, name)))
+      break;
+  }
+  
+  // If they weren't online, attempt to load them from the DB.
+  if (!vict) {
+    vict_is_logged_in = FALSE;
+    if (!(vict = playerDB.LoadChar(name, false))) {
+      // We were unable to find them online or load them from DB-- fail out.
+      send_to_char("There is no such player.\r\n", ch);
+      return;
+    }
+  }
+  
+  // Ensure targeted character is part of the same group as the invoking character.
+  if (!(GET_PGROUP_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
+    send_to_char(ch, "%s's not part of your group.\r\n", HSSH(vict));
+    return;
+  }
+  
+  // Prevent modification of someone higher than you.
+  if (GET_PGROUP_DATA(vict)->rank >= GET_PGROUP_DATA(ch)->rank) {
+    send_to_char(ch, "You can't do that to your %s!\r\n", GET_PGROUP_DATA(vict)->rank > GET_PGROUP_DATA(ch)->rank ? "superiors" : "peers");
+    return;
+  }
+  
+  // Prevent modification of someone higher than you.
+  if (GET_PGROUP_DATA(vict)->rank == rank) {
+    send_to_char(ch, "But %s's already that rank.\r\n", HSSH(vict));
+    return;
+  }
+  
+  if (promote && GET_PGROUP_DATA(vict)->rank > rank) {
+    send_to_char(ch, "That would be a demotion for %s.\r\n", HMHR(vict));
+    return;
+  }
+  
+  if (!promote && GET_PGROUP_DATA(vict)->rank < rank) {
+    send_to_char(ch, "That would be a promotion for %s.\r\n", HMHR(vict));
+    return;
+  }
+  
+  // Set their rank.
+  GET_PGROUP_DATA(vict)->rank = rank;
+  
+  // Log the action.
+  GET_PGROUP(ch)->audit_log_vfprintf("%s %s %s to rank %d.", GET_CHAR_NAME(ch), promote ? "promoted" : "demoted",
+                                     GET_CHAR_NAME(vict), rank);
+  
+  // Notify the character.
+  send_to_char(ch, "You %s %s to rank %d.\r\n", promote ? "promote" : "demote", GET_CHAR_NAME(vict), rank);
+  sprintf(buf, "You have been %s to rank %d in '%s'.\r\n", promote ? "promoted" : "demoted", rank, GET_PGROUP(ch)->get_name());
+  
+  // Save the character.
+  if (vict_is_logged_in) {
+    // Online characters are saved to the DB without unloading.
+    send_to_char(buf, vict);
+    playerDB.SaveChar(vict, GET_LOADROOM(vict));
+  } else {
+    // Loaded characters are unloaded (saving happens during extract_char).
+    store_mail(GET_IDNUM(vict), ch, buf);
+    extract_char(vict);
+  }
+}
+
+const char *pgroup_print_privileges(Bitfield privileges) {
+  static char output[500];
+  strcpy(output, "");
+  
+  bool is_first = TRUE;
+  for (int priv = PRIV_ADMINISTRATOR; priv < PRIV_MAX; priv++) {
+    if (privileges.IsSet(priv)) {
+      sprintf(ENDOF(output), "%s%s", is_first ? "" : ", ", pgroup_privileges[priv]);
+      if (priv == PRIV_LEADER)
+        strcat(output, " (grants all other privileges)");
+      is_first = FALSE;
+    }
+  }
+  if (is_first)
+    strcpy(output, "(none)");
+  return output;
 }

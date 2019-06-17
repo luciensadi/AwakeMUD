@@ -1847,6 +1847,24 @@ void DeleteChar(long idx)
   mysql_wrapper(mysql, buf);
   sprintf(buf, "DELETE FROM pfiles_memory WHERE remembered=%ld", idx);
   mysql_wrapper(mysql, buf);
+  
+  // Update playergroup info.
+  sprintf(buf, "SELECT group FROM pfiles_playergroups WHERE idnum=%ld", idx);
+  mysql_wrapper(mysql, buf);
+  MYSQL_RES *res = mysql_use_result(mysql);
+  MYSQL_ROW row;
+  if ((row = mysql_fetch_row(res))) {
+    mysql_free_result(res);
+    sprintf(buf, "INSERT INTO pgroup_logs (idnum, message) VALUES (%ld, \"%s has left the group. (Reason: deletion)\")", atol(row[0]), get_player_name(idx));
+    mysql_wrapper(mysql, buf);
+    sprintf(buf, "DELETE FROM pfiles_playergroups WHERE idnum=%ld", idx);
+    mysql_wrapper(mysql, buf);
+  } else {
+    mysql_free_result(res);
+  }
+  sprintf(buf, "DELETE FROM playergroup_invitations WHERE idnum=%ld", idx);
+  mysql_wrapper(mysql, buf);
+  
   sprintf(buf, "UPDATE pfiles SET Name='deleted', Password='', NoDelete=TRUE WHERE idnum=%ld", idx); 
 //  sprintf(buf, "DELETE FROM pfiles WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);

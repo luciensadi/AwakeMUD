@@ -60,6 +60,11 @@
 #define MAX_PGROUP_TAG_LENGTH_WITHOUT_COLOR 7
 #define MAX_PGROUP_TAG_LENGTH               (MAX_PGROUP_TAG_LENGTH_WITHOUT_COLOR * 3 + 2) // Accounts for color codes before each letter as well as a ^n at the end.
 
+struct pgroup_roster_data {
+  vnum_t idnum;
+  Bitfield privileges;
+  byte rank;
+};
 
 // Function prototypes.
 long get_new_pgroup_idnum();
@@ -75,6 +80,7 @@ void do_pgroup_buy(struct char_data *ch, char *argument);
 void do_pgroup_contest(struct char_data *ch, char *argument);
 void do_pgroup_create(struct char_data *ch, char *argument);
 void do_pgroup_donate(struct char_data *ch, char *argument);
+void do_pgroup_demote(struct char_data *ch, char *argument);
 void do_pgroup_design(struct char_data *ch, char *argument);
 void do_pgroup_disband(struct char_data *ch, char *argument);
 void do_pgroup_edit(struct char_data *ch, char *argument);
