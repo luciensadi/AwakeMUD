@@ -1,2 +1,4 @@
 veh/*
 !veh/.gitkeep
+storage/*
+!storage/.gitkeep

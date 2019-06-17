@@ -226,7 +226,8 @@ struct pgroup_cmd_struct {
   { "found"      , PRIV_LEADER        , do_pgroup_found       , TRUE  , FALSE , TRUE  , FALSE , FALSE },
   { "grant"      , PRIV_ADMINISTRATOR , do_pgroup_grant       , FALSE , TRUE  , TRUE  , FALSE , TRUE  },
   { "help"       , PRIV_NONE          , do_pgroup_help        , TRUE  , TRUE  , FALSE , FALSE , FALSE },
-  { "invite"     , PRIV_RECRUITER     , do_pgroup_invite      , TRUE  , TRUE  , TRUE  , FALSE , TRUE  },
+  { "invite"     , PRIV_RECRUITER     , do_pgroup_invite      , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
+  { "invitations", PRIV_RECRUITER     , do_pgroup_invitations , TRUE  , TRUE  , TRUE  , FALSE , TRUE  },
   { "lease"      , PRIV_LANDLORD      , do_pgroup_lease       , FALSE , TRUE  , TRUE  , FALSE , FALSE },
   { "logs"       , PRIV_AUDITOR       , do_pgroup_logs        , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
   { "note"       , PRIV_NONE          , do_pgroup_note        , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
@@ -240,7 +241,7 @@ struct pgroup_cmd_struct {
   { "status"     , PRIV_NONE          , do_pgroup_status      , TRUE  , TRUE  , TRUE  , TRUE  , FALSE },
   { "transfer"   , PRIV_PROCURER      , do_pgroup_transfer    , FALSE , TRUE  , TRUE  , FALSE , FALSE },
   { "vote"       , PRIV_NONE          , do_pgroup_vote        , FALSE , TRUE  , TRUE  , FALSE , FALSE },
-  { "withdraw"   , PRIV_TREASURER     , do_pgroup_withdraw    , FALSE , TRUE  , FALSE , FALSE , FALSE },
+  { "wire"       , PRIV_TREASURER     , do_pgroup_wire        , FALSE , TRUE  , FALSE , FALSE , FALSE },
   { "\n"         , 0                  , 0                     , FALSE , TRUE  , FALSE , FALSE , FALSE } // This must be last.
 };                                                          /* !founded founded pocsec disabld secret */
 
@@ -345,6 +346,7 @@ ACMD(do_pgroup) {
 
 void do_pgroup_abdicate(struct char_data *ch, char *argument) {
   // TODO: Log.
+  // TODO: Successor mode, where you can specify who becomes the next leader.
   
   if (!*argument || str_cmp(argument, "confirm") != 0) {
     send_to_char(ch, "If you're sure you want to abdicate from leadership of '%s', type PGROUP ABCIDATE CONFIRM.\r\n",
@@ -408,11 +410,13 @@ void do_pgroup_balance(struct char_data *ch, char *argument) {
 
 void do_pgroup_buy(struct char_data *ch, char *argument) {
   // TODO: Log.
+  // pgroup  buy  <vehicle>  Purchase a vehicle, drawing funds from bank and assigning ownership to pgroup.
   send_to_char("buy", ch);
 }
 
 void do_pgroup_contest(struct char_data *ch, char *argument) {
   // TODO: Log.
+  // pgroup  contest  [confirm]      On confirm, kicks off election cycle. If cycle open, joins cycle as nominee.
   send_to_char("contest", ch);
 }
 
@@ -533,12 +537,9 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
 
 void do_pgroup_donate(struct char_data *ch, char *argument) {
   // TODO: Log.
+  // Wires the specified amount from your bank account to the pgroup's shell accounts.
+  // pgroup  donate  <amount>  [reason]   Deposits <amount> of nuyen. Reason is listed in logs.
   
-  /* General rules:
-   1) You can only donate cash nuyen (no paper/electronic trail for the Star).
-   2) Cash nuyen can only be donated at the PGHQ or a mail station (put in envelope and mail).
-   3) All donations are logged, and may have a reason for the donation supplied.
-   */
   send_to_char("donate", ch);
 }
 
@@ -593,6 +594,12 @@ void do_pgroup_grant(struct char_data *ch, char *argument) {
 
 void do_pgroup_help(struct char_data *ch, char *argument) {
   send_to_char("help", ch);
+  
+  // pgroup  help  [command]     Displays info on pgroup or its subcommands.
+}
+
+void do_pgroup_invitations(struct char_data *ch, char *argument) {
+  // pgroup  invitations  [revoke]  [name]  No args: Displays group's open invitations. With revoke: Deletes the specified invitation.
 }
 
 void do_pgroup_invite(struct char_data *ch, char *argument) {
@@ -602,6 +609,7 @@ void do_pgroup_invite(struct char_data *ch, char *argument) {
 
 void do_pgroup_lease(struct char_data *ch, char *argument) {
   // TODO: Log.
+  // pgroup  lease  <apartment>      Lease an apartment in your pgroup's name using pgroup bank funds.
   send_to_char("lease", ch);
 }
 
@@ -666,6 +674,7 @@ void do_pgroup_note(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_outcast(struct char_data *ch, char *argument) {
+  // TODO: Require a reason to be given for outcasting.
   char name[strlen(argument)];
   struct char_data *vict = NULL;
   bool vict_is_logged_in = TRUE;
@@ -847,16 +856,19 @@ void do_pgroup_status(struct char_data *ch, char *argument) {
 
 void do_pgroup_transfer(struct char_data *ch, char *argument) {
   // TODO: Log.
+  // pgroup  transfer  <vehicle>  <target>   Transfer a vehicle like do_transfer.
   send_to_char("transfer", ch);
 }
 
 void do_pgroup_vote(struct char_data *ch, char *argument) {
+  // PGROUP VOTE to list candidates (assuming a contest is open). PGROUP VOTE FOR <name> to cast/change vote.
   send_to_char("vote", ch);
 }
 
-void do_pgroup_withdraw(struct char_data *ch, char *argument) {
+void do_pgroup_wire(struct char_data *ch, char *argument) {
   // TODO: Log.
-  send_to_char("withdraw", ch);
+  // wire <amount> <target> <reason>  Sends a given amount of nuyen to the target, identifed by PC unique name. Reason must be given.
+  send_to_char("wire", ch);
 }
 
 

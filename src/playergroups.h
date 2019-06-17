@@ -19,7 +19,7 @@
 #define PRIV_PROCURER                       9      // Can purchase/sell PG vehicles.
 #define PRIV_RECRUITER                      10     // Can invite members.
 #define PRIV_TENANT                         11     // Can enter PG apartments.
-#define PRIV_TREASURER                      12     // Can withdraw from the PG bank account.
+#define PRIV_TREASURER                      12     // Can wire money from the PG bank account.
 #define PRIV_MAX                            13     /* Not an actual priv-- used for iteration over pgroup_privileges[].
                                                       Must always be equal to total number of privileges, not including priv_none of course. */
 #define PRIV_NONE                           10000  // No privilege required.
@@ -104,6 +104,6 @@ void do_pgroup_roster(struct char_data *ch, char *argument);
 void do_pgroup_status(struct char_data *ch, char *argument);
 void do_pgroup_transfer(struct char_data *ch, char *argument);
 void do_pgroup_vote(struct char_data *ch, char *argument);
-void do_pgroup_withdraw(struct char_data *ch, char *argument);
+void do_pgroup_wire(struct char_data *ch, char *argument);
 
 #endif
