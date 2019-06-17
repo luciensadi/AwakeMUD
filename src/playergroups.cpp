@@ -390,7 +390,7 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
   mysql_wrapper(mysql, query_buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
-  sprintf(buf, "The following character IDs are being kicked from '%s' (%s, %ld) due to disbanding by %s: ",
+  sprintf(buf, "The following characters are being kicked from '%s' (%s, %ld) due to disbanding by %s: ",
           pgr->get_name(),
           pgr->get_alias(),
           pgr->get_idnum(),
@@ -589,8 +589,60 @@ void do_pgroup_revoke(struct char_data *ch, char *argument) {
   perform_pgroup_grant_revoke(ch, argument, TRUE);
 }
 
+struct pgroup_roster_data {
+  vnum_t idnum;
+  Bitfield privileges;
+  byte rank;
+};
+
+const char *pgroup_print_privileges(Bitfield privileges) {
+  static char output[500];
+  strcpy(output, "");
+  
+  bool is_first = TRUE;
+  for (int priv = PRIV_ADMINISTRATOR; priv < PRIV_MAX; priv++) {
+    if (privileges.IsSet(priv)) {
+      sprintf(ENDOF(output), "%s%s", is_first ? "" : ", ", pgroup_privileges[priv]);
+      is_first = FALSE;
+    }
+  }
+  return output;
+}
+
 void do_pgroup_roster(struct char_data *ch, char *argument) {
-  send_to_char("roster", ch);
+  Playergroup *pgr = GET_PGROUP(ch);
+  
+  char query_buf[512];
+  sprintf(query_buf, "SELECT idnum, Rank, Privileges FROM pfiles_playergroups WHERE `group` = %ld ORDER BY Rank ASC", pgr->get_idnum());
+  mysql_wrapper(mysql, query_buf);
+  MYSQL_RES *res = mysql_use_result(mysql);
+  MYSQL_ROW row;
+  
+  listClass<struct pgroup_roster_data *> results;
+  nodeStruct<struct pgroup_roster_data *> *ns = NULL;
+  pgroup_roster_data *roster_data = NULL;
+  while ((row = mysql_fetch_row(res))) {
+    roster_data = new struct pgroup_roster_data;
+    roster_data->idnum = atoi(row[0]);
+    roster_data->rank = atoi(row[1]);
+    roster_data->privileges.FromString(row[2]);
+    results.AddItem(NULL, roster_data);
+  }
+  mysql_free_result(res);
+  
+  sprintf(buf, "%s has the following members:\r\n", pgr->get_name());
+  while ((ns = results.Head())) {
+    if (!strcmp(ns->data->privileges.ToString(), "0"))
+      sprintf(ENDOF(buf), "%s, rank %d (no privileges).\r\n", get_player_name(ns->data->idnum), ns->data->rank);
+    else {
+      sprintf(ENDOF(buf), "%s, rank %d, with the following privileges: %s.\r\n",
+              get_player_name(ns->data->idnum), ns->data->rank, pgroup_print_privileges(ns->data->privileges));
+    }
+    delete ns->data;
+    results.RemoveItem(ns);
+  }
+  
+  send_to_char(buf, ch);
 }
 
 void do_pgroup_status(struct char_data *ch, char *argument) {
