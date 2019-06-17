@@ -888,6 +888,28 @@ bool has_valid_pocket_secretary(struct char_data *ch) {
   return FALSE;
 }
 
+const char *list_privs_char_can_affect(struct char_data *ch) {
+  bool is_leader = GET_PGROUP_DATA(ch)->privileges.IsSet(PRIV_LEADER);
+  bool is_first = TRUE;
+  
+  static char privstring_buf[500];
+  strcpy(privstring_buf, "");
+  
+  for (int priv = 0; priv < PRIV_MAX; priv++) {
+    // Nobody can hand out the leadership privilege.
+    if (priv == PRIV_LEADER)
+      continue;
+    
+    // Leaders can hand out anything; otherwise, only return things the char has (except admin, which is leader-assigned-only).
+    if (is_leader || (GET_PGROUP_DATA(ch)->privileges.IsSet(priv) && priv != PRIV_ADMINISTRATOR)) {
+      sprintf(ENDOF(privstring_buf), "%s%s", is_first ? "" : ", ", pgroup_privileges[priv]);
+      is_first = FALSE;
+    }
+  }
+  
+  return privstring_buf;
+}
+
 void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revoke) {
   // Since a lot of logic is the same, combined grant and revoke methods.
   
@@ -903,7 +925,8 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   
   if (!*name || !*privilege) {
     send_to_char(ch, "Syntax: PGROUP %s <character> <privilege>\r\n", revoke ? "REVOKE" : "GRANT");
-    // TODO: List valid privileges they can assign here.
+    send_to_char(ch, "You may %s any of the following privileges: %s\r\n",
+                 revoke ? "revoke" : "grant", list_privs_char_can_affect(ch));
     return;
   }
   
@@ -915,8 +938,8 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   // If the privilege requested doesn't match a privilege, fail.
   switch (priv) {
     case PRIV_MAX: // No privilege was found matching the string. Fail.
-      send_to_char(ch, "'%s' is not a valid privilege.\r\n", privilege);
-      // TODO: List valid privileges they can assign here.
+      send_to_char(ch, "'%s' is not a valid privilege. Privileges you can %s are: %s\r\n",
+                   privilege, revoke ? "revoke" : "grant", list_privs_char_can_affect(ch));
       return;
     case PRIV_LEADER: // LEADER cannot be handed out. Fail.
       send_to_char(ch, "Sorry, leadership cannot be %s in this way.\r\n", revoke ? "revoked" : "assigned");
@@ -985,7 +1008,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
     // Write to the relevant characters' screens.
     // TODO: Should this be act() to allow for name hiding?
     send_to_char(ch, "You revoke from %s the %s privilege in '%s'.\r\n", GET_CHAR_NAME(vict), pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
-    send_to_char(vict, "%s has revoked from you the %s privilege in '%s'.\r\n", GET_CHAR_NAME(ch), pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
+    send_to_char(vict, "The %s privilege in '%s' has been revoked from you.\r\n", pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
   }
   
   // Grant mode.
@@ -1006,7 +1029,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
     // Write to the relevant characters' screens.
     // TODO: Should this be act() to allow for name hiding?
     send_to_char(ch, "You grant %s the %s privilege in '%s'.\r\n", GET_CHAR_NAME(vict), pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
-    send_to_char(vict, "%s has granted you the %s privilege in '%s'.\r\n", GET_CHAR_NAME(ch), pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
+    send_to_char(vict, "You have been granted the %s privilege in '%s'.\r\n", pgroup_privileges[priv], GET_PGROUP(ch)->get_name());
   }
   
   // Save the character.
