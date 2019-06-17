@@ -327,7 +327,61 @@ ACMD(do_pgroup) {
 void do_pgroup_abdicate(struct char_data *ch, char *argument) {
   // TODO: Log.
   // GET_PGROUP(ch)->audit_log_vfprintf("%s disbanded the group.", GET_CHAR_NAME(ch));
-  send_to_char("abdicate", ch);
+  
+  if (!*argument || str_cmp(argument, "confirm") != 0) {
+    send_to_char(ch, "If you're sure you want to abdicate from leadership of '%s', type PGROUP ABCIDATE CONFIRM.\r\n",
+                 GET_PGROUP(ch)->get_name());
+    return;
+  }
+  
+  Playergroup *pgr = GET_PGROUP(ch);
+  
+  // TODO: notify the entire group that the head has abdicated
+  GET_PGROUP_DATA(ch)->rank = 9;
+  GET_PGROUP_DATA(ch)->privileges.RemoveBit(PRIV_LEADER);
+  
+  send_to_char(ch, "You abdicate your leadership position in '%s'.\r\n", GET_PGROUP(ch)->get_name());
+  
+  if (GET_PGROUP(ch)->is_secret())
+    sprintf(buf, "A shadowy figure has abdicated from the leadership of '%s'.", pgr->get_name());
+  else
+    sprintf(buf, "%s has abdicated from the leadership of '%s'.", GET_CHAR_NAME(ch), pgr->get_name());
+  
+  // Notify all online members.
+  for (struct char_data* i = character_list; i; i = i->next) {
+    if (!IS_NPC(i) && GET_PGROUP_DATA(i) && GET_PGROUP(i)->get_idnum() == pgr->get_idnum()) {
+      // Notify the character, unless they're the person doing the disbanding.
+      if (i != ch) {
+        send_to_char(i, buf);
+      }
+    }
+  }
+  
+  // Mail all members, online or not.
+  sprintf(buf2, "SELECT idnum FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
+  mysql_wrapper(mysql, buf2);
+  MYSQL_RES *res = mysql_use_result(mysql);
+  MYSQL_ROW row;
+  int idnum;
+  listClass<struct pgroup_roster_data *> results;
+  nodeStruct<struct pgroup_roster_data *> *ns = NULL;
+  pgroup_roster_data *roster_data = NULL;
+  while ((row = mysql_fetch_row(res))) {
+    idnum = atoi(row[0]);
+    if (idnum == GET_IDNUM(ch))
+      continue;
+    
+    roster_data = new struct pgroup_roster_data;
+    roster_data->idnum = idnum;
+    results.AddItem(NULL, roster_data);
+  }
+  mysql_free_result(res);
+  
+  while ((ns = results.Head())) {
+    store_mail(ns->data->idnum, ch, buf);
+    delete ns->data;
+    results.RemoveItem(ns);
+  }
 }
 
 void do_pgroup_balance(struct char_data *ch, char *argument) {
