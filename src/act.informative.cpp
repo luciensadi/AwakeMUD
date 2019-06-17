@@ -3351,7 +3351,7 @@ ACMD(do_who)
           sprintf(buf1, "^L");
           break;
       }
-      if (PRF_FLAGGED(tch, PRF_SHOWGROUPTAG) && GET_PGROUP_DATA(tch) && GET_PGROUP(tch)) {
+      if (PRF_FLAGGED(tch, PRF_SHOWGROUPTAG) && GET_PGROUP_MEMBER_DATA(tch) && GET_PGROUP(tch)) {
         sprintf(buf2, "%10s :^N %s%s^N%s%s%s %s^n",
                 (GET_WHOTITLE(tch) ? GET_WHOTITLE(tch) : ""),
                 (GET_PGROUP(tch)->get_tag()),
@@ -3370,8 +3370,8 @@ ACMD(do_who)
       }
       strcat(buf1, buf2);
       
-      if ((GET_PGROUP_DATA(tch) && GET_PGROUP(tch) && !(GET_PGROUP(tch)->is_secret()))
-          && (GET_PGROUP_DATA(ch) && GET_PGROUP(ch))
+      if (GET_PGROUP_MEMBER_DATA(tch) && GET_PGROUP(tch) && !(GET_PGROUP(tch)->is_secret())
+          && GET_PGROUP_MEMBER_DATA(ch)
           && GET_PGROUP(ch) == GET_PGROUP(tch)) {
         sprintf(buf2, " ^G(^g%s^G)^n", GET_PGROUP(tch)->get_alias());
         strcat(buf1, buf2);

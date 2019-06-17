@@ -43,15 +43,18 @@
 #define COST_TO_FOUND_GROUP                 100000 // Nuyen that must be paid by the founding player in order to make a group official.
 
 // Helper functions.
-#define GET_PGROUP_DATA(ch)                 (ch)->pgroup
-#define GET_PGROUP(ch)                      (ch)->pgroup->pgroup
+//  GET_PGROUP_MEMBER_DATA pulls up the character's membership struct, which has rank, privileges, etc.
+#define GET_PGROUP_MEMBER_DATA(ch)          (ch)->pgroup
+//  GET_PGROUP pulls the actual instantiated class of the pgroup that the character is a member of.
+//  Unless you're using this to set values, make sure you check for the presence of GET_PGROUP_MEMBER_DATA(ch) first to ensure the pgroup exists.
+#define GET_PGROUP(ch)                      GET_PGROUP_MEMBER_DATA(ch)->pgroup
 
 // Maximums.
 #define MAX_PGROUP_RANK                     10
 #define MAX_PGROUP_NAME_LENGTH              80  // If you change this, update your SQL tables too. SQL field length should be 2x+1 this (or greater).
 #define MAX_PGROUP_ALIAS_LENGTH             20  // If you change this, update your SQL tables too. SQL field length should be 2x+1 this (or greater).
 #define MAX_PGROUP_LOG_LENGTH               256 // If you change this, update your SQL tables too. SQL field length should be 2x+1 this (or greater).
-#define MAX_PGROUP_LOG_READBACK             7 // The maximum number of days into the past players can view group logs.
+#define MAX_PGROUP_LOG_READBACK             30 // The maximum number of days into the past players can view group logs.
 
 // Tag maximums: Only update tag-without-color, and update your SQL tables too. SQL field length should be MAX_PGROUP_TAG_LENGTH + 1 (or greater).
 #define MAX_PGROUP_TAG_LENGTH_WITHOUT_COLOR 7

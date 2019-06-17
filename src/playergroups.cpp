@@ -196,40 +196,42 @@ struct pgroup_cmd_struct {
   dword privilege_required;
   void (*command_pointer) (struct char_data *ch, char *argument);
   bool valid_while_group_not_founded;
+  bool valid_while_group_is_founded;
   bool requires_pocket_secretary;
   bool valid_while_group_disabled;
-  bool requires_coconspirator;
-} pgroup_commands[] = {
-  { "abdicate"   , PRIV_LEADER        , do_pgroup_abdicate    , FALSE , FALSE , FALSE , FALSE },
-  { "balance"    , PRIV_TREASURER     , do_pgroup_balance     , FALSE , TRUE  , FALSE , FALSE },
-  { "buy"        , PRIV_PROCURER      , do_pgroup_buy         , FALSE , TRUE  , FALSE , FALSE },
-  { "contest"    , PRIV_NONE          , do_pgroup_contest     , FALSE , TRUE  , FALSE , FALSE },
-  { "create"     , PRIV_NONE          , do_pgroup_create      , TRUE  , TRUE  , FALSE , FALSE },
-  { "demote"     , PRIV_MANAGER       , do_pgroup_demote     , FALSE , TRUE  , FALSE , TRUE  },
-  { "donate"     , PRIV_NONE          , do_pgroup_donate      , FALSE , FALSE , FALSE , FALSE },
-  { "design"     , PRIV_ARCHITECT     , do_pgroup_design      , FALSE , TRUE  , FALSE , FALSE },
-  { "disband"    , PRIV_LEADER        , do_pgroup_disband     , TRUE  , TRUE  , FALSE , FALSE },
-  { "edit"       , PRIV_LEADER        , do_pgroup_edit        , TRUE  , TRUE  , FALSE , FALSE },
-  { "found"      , PRIV_LEADER        , do_pgroup_found       , TRUE  , TRUE  , FALSE , FALSE },
-  { "grant"      , PRIV_ADMINISTRATOR , do_pgroup_grant       , FALSE , TRUE  , FALSE , TRUE  },
-  { "help"       , PRIV_NONE          , do_pgroup_help        , TRUE  , FALSE , FALSE , FALSE },
-  { "invite"     , PRIV_RECRUITER     , do_pgroup_invite      , TRUE  , TRUE  , FALSE , TRUE  },
-  { "lease"      , PRIV_LANDLORD      , do_pgroup_lease       , FALSE , TRUE  , FALSE , FALSE },
-  { "logs"       , PRIV_AUDITOR       , do_pgroup_logs        , TRUE  , TRUE  , TRUE  , TRUE  },
-  { "note"       , PRIV_NONE          , do_pgroup_note        , TRUE  , TRUE  , FALSE , FALSE },
-  { "outcast"    , PRIV_MANAGER       , do_pgroup_outcast     , TRUE  , TRUE  , FALSE , TRUE  },
-  { "privileges" , PRIV_NONE          , do_pgroup_privileges  , TRUE  , TRUE  , FALSE , FALSE },
-  { "promote"    , PRIV_MANAGER       , do_pgroup_promote     , FALSE , TRUE  , FALSE , TRUE  },
-  { "quit"       , PRIV_NONE          , do_pgroup_resign      , TRUE  , FALSE , FALSE , FALSE },
-  { "resign"     , PRIV_NONE          , do_pgroup_resign      , TRUE  , FALSE , TRUE  , FALSE },
-  { "revoke"     , PRIV_ADMINISTRATOR , do_pgroup_revoke      , FALSE , TRUE  , FALSE , TRUE  },
-  { "roster"     , PRIV_NONE          , do_pgroup_roster      , TRUE  , TRUE  , FALSE , TRUE  },
-  { "status"     , PRIV_NONE          , do_pgroup_status      , TRUE  , TRUE  , TRUE  , FALSE },
-  { "transfer"   , PRIV_PROCURER      , do_pgroup_transfer    , FALSE , TRUE  , FALSE , FALSE },
-  { "vote"       , PRIV_NONE          , do_pgroup_vote        , FALSE , TRUE  , FALSE , FALSE },
-  { "withdraw"   , PRIV_TREASURER     , do_pgroup_withdraw    , FALSE , FALSE , FALSE , FALSE },
-  { "\n"         , 0                  , 0                     , FALSE , FALSE , FALSE , FALSE } // This must be last.
-};
+  bool requires_coconspirator_if_secret;
+} pgroup_commands[] = {                                     /* !founded founded pocsec disabld secret */
+  { "abdicate"   , PRIV_LEADER        , do_pgroup_abdicate    , FALSE , TRUE  , FALSE , FALSE , FALSE },
+  { "balance"    , PRIV_TREASURER     , do_pgroup_balance     , FALSE , TRUE  , TRUE  , FALSE , FALSE },
+  { "buy"        , PRIV_PROCURER      , do_pgroup_buy         , FALSE , TRUE  , TRUE  , FALSE , FALSE },
+  { "contest"    , PRIV_NONE          , do_pgroup_contest     , FALSE , TRUE  , TRUE  , FALSE , FALSE },
+  { "create"     , PRIV_NONE          , do_pgroup_create      , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
+  { "demote"     , PRIV_MANAGER       , do_pgroup_demote      , FALSE , TRUE  , TRUE  , FALSE , TRUE  },
+  { "donate"     , PRIV_NONE          , do_pgroup_donate      , FALSE , TRUE  , FALSE , FALSE , FALSE },
+  { "design"     , PRIV_ARCHITECT     , do_pgroup_design      , FALSE , TRUE  , TRUE  , FALSE , FALSE },
+  { "disband"    , PRIV_LEADER        , do_pgroup_disband     , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
+  { "edit"       , PRIV_LEADER        , do_pgroup_edit        , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
+  { "found"      , PRIV_LEADER        , do_pgroup_found       , TRUE  , FALSE , TRUE  , FALSE , FALSE },
+  { "grant"      , PRIV_ADMINISTRATOR , do_pgroup_grant       , FALSE , TRUE  , TRUE  , FALSE , TRUE  },
+  { "help"       , PRIV_NONE          , do_pgroup_help        , TRUE  , TRUE  , FALSE , FALSE , FALSE },
+  { "invite"     , PRIV_RECRUITER     , do_pgroup_invite      , TRUE  , TRUE  , TRUE  , FALSE , TRUE  },
+  { "lease"      , PRIV_LANDLORD      , do_pgroup_lease       , FALSE , TRUE  , TRUE  , FALSE , FALSE },
+  { "logs"       , PRIV_AUDITOR       , do_pgroup_logs        , TRUE  , TRUE  , TRUE  , FALSE , TRUE  },
+  { "note"       , PRIV_NONE          , do_pgroup_note        , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
+  { "outcast"    , PRIV_MANAGER       , do_pgroup_outcast     , TRUE  , TRUE  , TRUE  , FALSE , TRUE  },
+  { "privileges" , PRIV_NONE          , do_pgroup_privileges  , TRUE  , TRUE  , TRUE  , FALSE , FALSE },
+  { "promote"    , PRIV_MANAGER       , do_pgroup_promote     , FALSE , TRUE  , TRUE  , FALSE , TRUE  },
+  { "quit"       , PRIV_NONE          , do_pgroup_resign      , TRUE  , TRUE  , FALSE , FALSE , FALSE },
+  { "resign"     , PRIV_NONE          , do_pgroup_resign      , TRUE  , TRUE  , FALSE , TRUE  , FALSE },
+  { "revoke"     , PRIV_ADMINISTRATOR , do_pgroup_revoke      , FALSE , TRUE  , TRUE  , FALSE , TRUE  },
+  { "roster"     , PRIV_NONE          , do_pgroup_roster      , TRUE  , TRUE  , TRUE  , FALSE , TRUE  },
+  { "status"     , PRIV_NONE          , do_pgroup_status      , TRUE  , TRUE  , TRUE  , TRUE  , FALSE },
+  { "transfer"   , PRIV_PROCURER      , do_pgroup_transfer    , FALSE , TRUE  , TRUE  , FALSE , FALSE },
+  { "vote"       , PRIV_NONE          , do_pgroup_vote        , FALSE , TRUE  , TRUE  , FALSE , FALSE },
+  { "withdraw"   , PRIV_TREASURER     , do_pgroup_withdraw    , FALSE , TRUE  , FALSE , FALSE , FALSE },
+  { "\n"         , 0                  , 0                     , FALSE , TRUE  , FALSE , FALSE , FALSE } // This must be last.
+};                                                          /* !founded founded pocsec disabld secret */
+
 
 /* Main Playergroup Command */
 ACMD(do_pgroup) {
@@ -262,7 +264,7 @@ ACMD(do_pgroup) {
   }
   
   // Is a member of a group.
-  if (GET_PGROUP_DATA(ch)) {
+  if (GET_PGROUP_MEMBER_DATA(ch)) {
     // Precondition: Your data structures must be correctly initialized.
     if (!GET_PGROUP(ch)) {
       sprintf(buf, "SYSERR: Somehow, %s (%ld) is part of an invalid group.",
@@ -287,9 +289,21 @@ ACMD(do_pgroup) {
       return;
     }
     
-    // Precondition: You must have the appropriate privilege to perform this command.
-    if (pgroup_commands[cmd_index].privilege_required != PRIV_NONE) {
-      if (!(GET_PGROUP_DATA(ch)->privileges.AreAnySet(pgroup_commands[cmd_index].privilege_required, PRIV_LEADER, ENDBIT))) {
+    if (GET_PGROUP(ch)->is_founded() && !pgroup_commands[cmd_index].valid_while_group_is_founded) {
+      // Deliberately letting this fall through-- only candidate command right now is FOUND and it has its own error message.
+    }
+    
+    // Precondition: You must have the appropriate privilege (or be leader) to perform this command.
+    if (pgroup_commands[cmd_index].privilege_required != PRIV_NONE && !GET_PGROUP_MEMBER_DATA(ch)->privileges.IsSet(PRIV_LEADER)) {
+      // If the group is secret, and you're not the leader, you must have the COCONSPIRATOR priv to perform sensitive actions.
+      if (GET_PGROUP(ch)->is_secret() && pgroup_commands[cmd_index].requires_coconspirator_if_secret) {
+        if (!(GET_PGROUP_MEMBER_DATA(ch)->privileges.IsSet(PRIV_COCONSPIRATOR))) {
+          send_to_char("Your group is secret, so you must be a co-conspirator within your group to do that.\r\n", ch);
+          return;
+        }
+      }
+      
+      if (!(GET_PGROUP_MEMBER_DATA(ch)->privileges.IsSet(pgroup_commands[cmd_index].privilege_required))) {
         send_to_char(ch, "You must be %s %s within your group to do that.\r\n",
                      strchr((const char *)"aeiouyAEIOUY", *pgroup_privileges[pgroup_commands[cmd_index].privilege_required]) ? "an" : "a",
                      pgroup_privileges[pgroup_commands[cmd_index].privilege_required]);
@@ -297,8 +311,8 @@ ACMD(do_pgroup) {
       }
     }
     
-    if (GET_PGROUP(ch)->is_secret() && pgroup_commands[cmd_index].requires_coconspirator) {
-      if (!(GET_PGROUP_DATA(ch)->privileges.AreAnySet(PRIV_COCONSPIRATOR, PRIV_LEADER, ENDBIT))) {
+    if (GET_PGROUP(ch)->is_secret() && pgroup_commands[cmd_index].requires_coconspirator_if_secret) {
+      if (!(GET_PGROUP_MEMBER_DATA(ch)->privileges.AreAnySet(PRIV_COCONSPIRATOR, PRIV_LEADER, ENDBIT))) {
         send_to_char("You must be a co-conspirator within your group to do that.\r\n", ch);
         return;
       }
@@ -337,8 +351,8 @@ void do_pgroup_abdicate(struct char_data *ch, char *argument) {
   Playergroup *pgr = GET_PGROUP(ch);
   
   // TODO: notify the entire group that the head has abdicated
-  GET_PGROUP_DATA(ch)->rank = 9;
-  GET_PGROUP_DATA(ch)->privileges.RemoveBit(PRIV_LEADER);
+  GET_PGROUP_MEMBER_DATA(ch)->rank = 9;
+  GET_PGROUP_MEMBER_DATA(ch)->privileges.RemoveBit(PRIV_LEADER);
   
   send_to_char(ch, "You abdicate your leadership position in '%s'.\r\n", GET_PGROUP(ch)->get_name());
   
@@ -349,7 +363,7 @@ void do_pgroup_abdicate(struct char_data *ch, char *argument) {
   
   // Notify all online members.
   for (struct char_data* i = character_list; i; i = i->next) {
-    if (!IS_NPC(i) && GET_PGROUP_DATA(i) && GET_PGROUP(i)->get_idnum() == pgr->get_idnum()) {
+    if (!IS_NPC(i) && GET_PGROUP_MEMBER_DATA(i) && GET_PGROUP(i)->get_idnum() == pgr->get_idnum()) {
       // Notify the character, unless they're the person doing the disbanding.
       if (i != ch) {
         send_to_char(i, buf);
@@ -402,7 +416,7 @@ void do_pgroup_contest(struct char_data *ch, char *argument) {
 
 void do_pgroup_create(struct char_data *ch, char *argument) {
   // If the player is already in a group, they can't create a new one.
-  if (GET_PGROUP_DATA(ch)) {
+  if (GET_PGROUP_MEMBER_DATA(ch)) {
     send_to_char("You are already part of a playergroup. You'll need to leave it first.\r\n", ch);
     return;
   }
@@ -433,6 +447,8 @@ void do_pgroup_design(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_disband(struct char_data *ch, char *argument) {
+  char query_buf[512];
+  
   if (!*argument || str_cmp(argument, "confirm") != 0) {
     send_to_char(ch, "If you're sure you want to disband '%s', type PGROUP DISBAND CONFIRM.\r\n",
                  GET_PGROUP(ch)->get_name());
@@ -442,7 +458,6 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
   Playergroup *pgr = GET_PGROUP(ch);
   
   // Read out the people who are getting kicked (in case we want to manually restore later).
-  char query_buf[512];
   sprintf(query_buf, "SELECT idnum, Rank, Privileges FROM pfiles_playergroups WHERE `group` = %ld ORDER BY Rank ASC", pgr->get_idnum());
   mysql_wrapper(mysql, query_buf);
   MYSQL_RES *res = mysql_use_result(mysql);
@@ -465,6 +480,7 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
           pgr->get_alias(),
           pgr->get_idnum(),
           GET_CHAR_NAME(ch));
+
   while ((ns = results.Head())) {
     if (!strcmp(ns->data->privileges.ToString(), "0"))
       sprintf(ENDOF(buf), "%s, rank %d (no privileges).\r\n", get_player_name(ns->data->idnum), ns->data->rank);
@@ -481,7 +497,7 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
   sprintf(query_buf, "DELETE FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
   mysql_wrapper(mysql, query_buf);
   
-  // Delete pgroup's invitations.
+  // Delete pgroup's invitations. TODO: Notify the invitee that the invitation has expired.
   sprintf(query_buf, "DELETE FROM playergroup_invitations WHERE `Group` = %ld", pgr->get_idnum());
   mysql_wrapper(mysql, query_buf);
   
@@ -489,15 +505,15 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
   
   // Remove this group from all active players' char_data structs. Delete members' pgroup_data pointers.
   for (struct char_data* i = character_list; i; i = i->next) {
-    if (!IS_NPC(i) && GET_PGROUP_DATA(i) && GET_PGROUP(i)->get_idnum() == pgr->get_idnum()) {
+    if (!IS_NPC(i) && GET_PGROUP_MEMBER_DATA(i) && GET_PGROUP(i)->get_idnum() == pgr->get_idnum()) {
       // Notify the character, unless they're the person doing the disbanding.
       if (i != ch) {
         send_to_char(i, "The playergroup %s has been disbanded.", pgr->get_name());
       }
       
       // Wipe out the data and null the pointer.
-      delete GET_PGROUP_DATA(i);
-      GET_PGROUP_DATA(i) = NULL;
+      delete GET_PGROUP_MEMBER_DATA(i);
+      GET_PGROUP_MEMBER_DATA(i) = NULL;
     }
   }
   
@@ -596,7 +612,7 @@ void do_pgroup_logs(struct char_data *ch, char *argument) {
   } else {
     days = atoi(argument);
     if (days < 1) {
-      send_to_char("Syntax: PGROUP LOGS [number of days prior to read]", ch);
+      send_to_char("Syntax: PGROUP LOGS [number of days of history to include]", ch);
       return;
     }
     if (days > MAX_PGROUP_LOG_READBACK) {
@@ -607,9 +623,9 @@ void do_pgroup_logs(struct char_data *ch, char *argument) {
   
   // Select the logs between this moment and X days in the past, then display in descending order.
   char querybuf[MAX_STRING_LENGTH];
-  const char *query_fmt = "SELECT message FROM pgroup_logs                            "
-                          "  WHERE DATE_SUB(CURDATE(), INTERVAL %d DAY) <= DATE(date) "
-                          "  ORDER BY date ASC";
+  const char *query_fmt = "SELECT message FROM pgroup_logs"
+                          " WHERE DATE_SUB(CURDATE(), INTERVAL %d DAY) <= DATE(date)"
+                          " ORDER BY date ASC";
   sprintf(querybuf, query_fmt, days);
   mysql_wrapper(mysql, querybuf);
   
@@ -670,20 +686,21 @@ void do_pgroup_outcast(struct char_data *ch, char *argument) {
   }
   
   // Ensure targeted character is part of the same group as the invoking character.
-  if (!(GET_PGROUP_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
+  if (!(GET_PGROUP_MEMBER_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
     send_to_char(ch, "%s's not part of your group.\r\n", HSSH(vict));
     return;
   }
   
   // Prevent modification of someone higher than you.
-  if (GET_PGROUP_DATA(vict)->rank >= GET_PGROUP_DATA(ch)->rank) {
-    send_to_char(ch, "You can't do that to your %s!\r\n", GET_PGROUP_DATA(vict)->rank > GET_PGROUP_DATA(ch)->rank ? "superiors" : "peers");
+  if (GET_PGROUP_MEMBER_DATA(vict)->rank >= GET_PGROUP_MEMBER_DATA(ch)->rank) {
+    send_to_char(ch, "You can't do that to your %s!\r\n",
+                 GET_PGROUP_MEMBER_DATA(vict)->rank > GET_PGROUP_MEMBER_DATA(ch)->rank ? "superiors" : "peers");
     return;
   }
   
   // Remove their data.
-  delete GET_PGROUP_DATA(vict);
-  GET_PGROUP_DATA(vict) = NULL;
+  delete GET_PGROUP_MEMBER_DATA(vict);
+  GET_PGROUP_MEMBER_DATA(vict) = NULL;
   
   // Delete pfile pgroup associations.
   sprintf(buf2, "DELETE FROM pfiles_playergroups WHERE `idnum` = %ld", GET_IDNUM(vict));
@@ -718,11 +735,11 @@ void do_pgroup_promote(struct char_data *ch, char *argument) {
 
 void do_pgroup_privileges(struct char_data *ch, char *argument) {
   send_to_char(ch, "You have the following privileges in '%s': %s\r\n",
-               GET_PGROUP(ch)->get_name(), pgroup_print_privileges(GET_PGROUP_DATA(ch)->privileges));
+               GET_PGROUP(ch)->get_name(), pgroup_print_privileges(GET_PGROUP_MEMBER_DATA(ch)->privileges));
 }
 
 void do_pgroup_resign(struct char_data *ch, char *argument) {
-  // TODO: Log.
+  // TODO: Log, but only if group is not secret.
   skip_spaces(&argument);
   
   if (!*argument || str_cmp(argument, "confirm") != 0) {
@@ -735,6 +752,7 @@ void do_pgroup_resign(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_revoke(struct char_data *ch, char *argument) {
+  // Revoke priv from player.
   perform_pgroup_grant_revoke(ch, argument, TRUE);
 }
 
@@ -775,7 +793,45 @@ void do_pgroup_roster(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_status(struct char_data *ch, char *argument) {
-  send_to_char("status", ch);
+  char query_buf[512];
+  Playergroup *pgr = GET_PGROUP(ch);
+  
+  send_to_char(ch, "Playergroup information for %s (tag %s, alias %s):\r\n", pgr->get_name(), pgr->get_tag(), pgr->get_alias());
+  
+  send_to_char("\r\n", ch);
+  
+  // If group is disabled, display this and end status readout.
+  if (pgr->is_disabled()) {
+    send_to_char("^RThis group has been disbanded by its leader and is no longer operational.^n\r\n", ch);
+    return;
+  }
+  
+  // Display founding information.
+  if (!pgr->is_founded()) {
+    send_to_char("^YThis group is provisional, and needs to be founded with PGROUP FOUND before it is fully operational.^n\r\n", ch);
+  } else {
+    send_to_char("This group is fully-founded.\r\n", ch);
+  }
+  
+  send_to_char("\r\n", ch);
+  
+  // If group is secret and member is not, they stop here.
+  if (pgr->is_secret() && !GET_PGROUP_MEMBER_DATA(ch)->privileges.AreAnySet(PRIV_COCONSPIRATOR, PRIV_LEADER, ENDBIT)) {
+    send_to_char("This group is clandestine, limiting your ability to delve deeper into its information.\r\n", ch);
+    return;
+  }
+  
+  // Group is not secret, or member is privileged. Display sensitive information.
+  
+  // Get membership info.
+  sprintf(query_buf, "SELECT COUNT(*) FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
+  mysql_wrapper(mysql, query_buf);
+  MYSQL_RES *res = mysql_use_result(mysql);
+  MYSQL_ROW row = mysql_fetch_row(res);
+  send_to_char(ch, "This group has %s members.\r\n", row[0]);
+  mysql_free_result(res);
+  
+  // TODO: Information about property (vehicles, apartments, etc)
 }
 
 void do_pgroup_transfer(struct char_data *ch, char *argument) {
@@ -799,7 +855,7 @@ void display_pgroup_help(struct char_data *ch) {
   sprintf(buf, "Valid PGROUP commands for you are: \r\n");
   
   // If they're not part of a group, the only command they can do is 'create'.
-  if (!GET_PGROUP_DATA(ch)) {
+  if (!GET_PGROUP_MEMBER_DATA(ch)) {
     sprintf(ENDOF(buf), " %-11s\r\n", "create");
     send_to_char(buf, ch);
     return;
@@ -808,12 +864,17 @@ void display_pgroup_help(struct char_data *ch) {
   for (int cmd_index = 0; *(pgroup_commands[cmd_index].cmd) != '\n'; cmd_index++) {
     // If they don't have the privileges to use the current command, skip it.
     if (!(pgroup_commands[cmd_index].privilege_required == PRIV_NONE
-          || (GET_PGROUP_DATA(ch)->privileges.AreAnySet(pgroup_commands[cmd_index].privilege_required, PRIV_LEADER, ENDBIT)))) {
+          || (GET_PGROUP_MEMBER_DATA(ch)->privileges.AreAnySet(pgroup_commands[cmd_index].privilege_required, PRIV_LEADER, ENDBIT)))) {
       continue;
     }
     
     // If the group is not yet founded and the command is not valid while not founded, skip it.
     if (!(GET_PGROUP(ch)->is_founded() || pgroup_commands[cmd_index].valid_while_group_not_founded)) {
+      continue;
+    }
+    
+    // If the group has already been founded and the command is not valid while founded, skip it.
+    if (GET_PGROUP(ch)->is_founded() && !pgroup_commands[cmd_index].valid_while_group_is_founded) {
       continue;
     }
     
@@ -933,15 +994,15 @@ void pgedit_parse(struct descriptor_data * d, const char *arg) {
         d->edit_pgroup->save_pgroup_to_db();
         
         // Make the character a member of this temporary group.
-        if (GET_PGROUP_DATA(CH))
-          delete GET_PGROUP_DATA(CH);
-        GET_PGROUP_DATA(CH) = new Pgroup_data();
-        GET_PGROUP_DATA(CH)->pgroup = d->edit_pgroup;
-        GET_PGROUP_DATA(CH)->rank = MAX_PGROUP_RANK;
-        GET_PGROUP_DATA(CH)->privileges.SetBit(PRIV_LEADER);
-        if (GET_PGROUP_DATA(CH)->title)
-          delete GET_PGROUP_DATA(CH)->title;
-        GET_PGROUP_DATA(CH)->title = str_dup("Leader");
+        if (GET_PGROUP_MEMBER_DATA(CH))
+          delete GET_PGROUP_MEMBER_DATA(CH);
+        GET_PGROUP_MEMBER_DATA(CH) = new Pgroup_data();
+        GET_PGROUP_MEMBER_DATA(CH)->pgroup = d->edit_pgroup;
+        GET_PGROUP_MEMBER_DATA(CH)->rank = MAX_PGROUP_RANK;
+        GET_PGROUP_MEMBER_DATA(CH)->privileges.SetBit(PRIV_LEADER);
+        if (GET_PGROUP_MEMBER_DATA(CH)->title)
+          delete GET_PGROUP_MEMBER_DATA(CH)->title;
+        GET_PGROUP_MEMBER_DATA(CH)->title = str_dup("Leader");
         
         // Log the information about who created it and what the values are.
         GET_PGROUP(CH)->audit_log_vfprintf("%s created the group (name %s, alias %s, tag %s).",
@@ -1020,7 +1081,7 @@ bool has_valid_pocket_secretary(struct char_data *ch) {
 }
 
 const char *list_privs_char_can_affect(struct char_data *ch) {
-  bool is_leader = GET_PGROUP_DATA(ch)->privileges.IsSet(PRIV_LEADER);
+  bool is_leader = GET_PGROUP_MEMBER_DATA(ch)->privileges.IsSet(PRIV_LEADER);
   bool is_first = TRUE;
   
   static char privstring_buf[500];
@@ -1032,7 +1093,7 @@ const char *list_privs_char_can_affect(struct char_data *ch) {
       continue;
     
     // Leaders can hand out anything; otherwise, only return things the char has (except admin, which is leader-assigned-only).
-    if (is_leader || (GET_PGROUP_DATA(ch)->privileges.IsSet(priv) && priv != PRIV_ADMINISTRATOR)) {
+    if (is_leader || (GET_PGROUP_MEMBER_DATA(ch)->privileges.IsSet(priv) && priv != PRIV_ADMINISTRATOR)) {
       sprintf(ENDOF(privstring_buf), "%s%s", is_first ? "" : ", ", pgroup_privileges[priv]);
       is_first = FALSE;
     }
@@ -1076,7 +1137,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
       send_to_char(ch, "Sorry, leadership cannot be %s in this way.\r\n", revoke ? "revoked" : "assigned");
       return;
     case PRIV_ADMINISTRATOR: // ADMINISTRATOR cannot be handed out. Fail.
-      if (!(GET_PGROUP_DATA(ch)->privileges.IsSet(PRIV_LEADER))) {
+      if (!(GET_PGROUP_MEMBER_DATA(ch)->privileges.IsSet(PRIV_LEADER))) {
         send_to_char(ch, "Only the leader of the group may %s that privilege.\r\n", revoke ? "revoke" : "grant");
         return;
       }
@@ -1084,7 +1145,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   }
   
   // If the invoker does not have the privilege requested, fail.
-  if (!(GET_PGROUP_DATA(ch)->privileges.AreAnySet(priv, PRIV_LEADER, ENDBIT))) {
+  if (!(GET_PGROUP_MEMBER_DATA(ch)->privileges.AreAnySet(priv, PRIV_LEADER, ENDBIT))) {
     send_to_char(ch, "You must first be assigned that privilege before you can %s others.\r\n", revoke ? "revoke it from" : "grant it to");
     return;
   }
@@ -1108,14 +1169,13 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   }
   
   // Ensure targeted character is part of the same group as the invoking character.
-  // No issues with secretive group-- if you're an administrator, you've got permission to see the roster.
-  if (!(GET_PGROUP_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
+  if (!(GET_PGROUP_MEMBER_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
     send_to_char(ch, "%s's not part of your group.\r\n", HSSH(vict));
     return;
   }
   
   // Ensure targeted character is below the invoker's rank.
-  if (GET_PGROUP_DATA(vict)->rank >= GET_PGROUP_DATA(ch)->rank) {
+  if (GET_PGROUP_MEMBER_DATA(vict)->rank >= GET_PGROUP_MEMBER_DATA(ch)->rank) {
     send_to_char(ch, "You can only %s people who are lower-ranked than you.\r\n", revoke ? "revoke privileges from" : "grant privileges to");
     return;
   }
@@ -1123,13 +1183,13 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   // Revoke mode.
   if (revoke) {
     // Ensure targeted character has this priv.
-    if (!(GET_PGROUP_DATA(vict)->privileges.IsSet(priv))) {
+    if (!(GET_PGROUP_MEMBER_DATA(vict)->privileges.IsSet(priv))) {
       send_to_char(ch, "%s doesn't have that privilege.\r\n", HSSH(vict));
       return;
     }
     
     // Update the character with the removal of privilege requested.
-    GET_PGROUP_DATA(vict)->privileges.RemoveBit(priv);
+    GET_PGROUP_MEMBER_DATA(vict)->privileges.RemoveBit(priv);
     
     // Write to the log.
     GET_PGROUP(ch)->audit_log_vfprintf("%s revoked the %s privilege from %s.", GET_CHAR_NAME(ch), pgroup_privileges[priv], GET_CHAR_NAME(vict));
@@ -1142,13 +1202,13 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   // Grant mode.
   else {
     // Ensure targeted character does not already have this priv.
-    if (GET_PGROUP_DATA(vict)->privileges.IsSet(priv)) {
+    if (GET_PGROUP_MEMBER_DATA(vict)->privileges.IsSet(priv)) {
       send_to_char(ch, "%s already has that privilege.\r\n", HSSH(vict));
       return;
     }
     
     // Update the character with the privilege requested.
-    GET_PGROUP_DATA(vict)->privileges.SetBit(priv);
+    GET_PGROUP_MEMBER_DATA(vict)->privileges.SetBit(priv);
     
     // Write to the log.
     GET_PGROUP(ch)->audit_log_vfprintf("%s granted %s the %s privilege.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), pgroup_privileges[priv]);
@@ -1193,15 +1253,15 @@ void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote
   }
   
   // Better messaging for promotion failure if you're rank 1.
-  if (GET_PGROUP_DATA(ch)->rank == 1) {
+  if (GET_PGROUP_MEMBER_DATA(ch)->rank == 1) {
     send_to_char(ch, "You're unable to %s anyone due to your own low rank.\r\n", promote ? "promote" : "demote");
     return;
   }
   
   // Precondition: Promotion can't equal or exceed your own rank.
-  if (rank >= GET_PGROUP_DATA(ch)->rank) {
+  if (rank >= GET_PGROUP_MEMBER_DATA(ch)->rank) {
     send_to_char(ch, "The highest rank you can %s someone to is %d.\r\n",
-                 promote ? "promote" : "demote", GET_PGROUP_DATA(ch)->rank - 1);
+                 promote ? "promote" : "demote", GET_PGROUP_MEMBER_DATA(ch)->rank - 1);
     return;
   }
   
@@ -1222,35 +1282,36 @@ void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote
   }
   
   // Ensure targeted character is part of the same group as the invoking character.
-  if (!(GET_PGROUP_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
+  if (!(GET_PGROUP_MEMBER_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
     send_to_char(ch, "%s's not part of your group.\r\n", HSSH(vict));
     return;
   }
   
   // Prevent modification of someone higher than you.
-  if (GET_PGROUP_DATA(vict)->rank >= GET_PGROUP_DATA(ch)->rank) {
-    send_to_char(ch, "You can't do that to your %s!\r\n", GET_PGROUP_DATA(vict)->rank > GET_PGROUP_DATA(ch)->rank ? "superiors" : "peers");
+  if (GET_PGROUP_MEMBER_DATA(vict)->rank >= GET_PGROUP_MEMBER_DATA(ch)->rank) {
+    send_to_char(ch, "You can't do that to your %s!\r\n",
+                 GET_PGROUP_MEMBER_DATA(vict)->rank > GET_PGROUP_MEMBER_DATA(ch)->rank ? "superiors" : "peers");
     return;
   }
   
   // Prevent modification of someone higher than you.
-  if (GET_PGROUP_DATA(vict)->rank == rank) {
+  if (GET_PGROUP_MEMBER_DATA(vict)->rank == rank) {
     send_to_char(ch, "But %s's already that rank.\r\n", HSSH(vict));
     return;
   }
   
-  if (promote && GET_PGROUP_DATA(vict)->rank > rank) {
+  if (promote && GET_PGROUP_MEMBER_DATA(vict)->rank > rank) {
     send_to_char(ch, "That would be a demotion for %s.\r\n", HMHR(vict));
     return;
   }
   
-  if (!promote && GET_PGROUP_DATA(vict)->rank < rank) {
+  if (!promote && GET_PGROUP_MEMBER_DATA(vict)->rank < rank) {
     send_to_char(ch, "That would be a promotion for %s.\r\n", HMHR(vict));
     return;
   }
   
   // Set their rank.
-  GET_PGROUP_DATA(vict)->rank = rank;
+  GET_PGROUP_MEMBER_DATA(vict)->rank = rank;
   
   // Log the action.
   GET_PGROUP(ch)->audit_log_vfprintf("%s %s %s to rank %d.", GET_CHAR_NAME(ch), promote ? "promoted" : "demoted",
