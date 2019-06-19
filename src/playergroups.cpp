@@ -111,7 +111,7 @@ ACMD(do_accept) {
       for (struct char_data* i = character_list; i; i = i->next) {
         if (!IS_NPC(i) && GET_PGROUP_MEMBER_DATA(i) && GET_PGROUP(i)->get_idnum() == pgr->get_idnum()) {
           // Notify the character.
-          if (pgr->is_secret() && !GET_PGROUP_MEMBER_DATA(i)->privileges.IsSet(PRIV_COCONSPIRATOR)) {
+          if (pgr->is_secret() && !GET_PGROUP_MEMBER_DATA(i)->privileges.AreAnySet(PRIV_COCONSPIRATOR, PRIV_LEADER, ENDBIT)) {
             send_to_char(i, "You notice that the membership numbers for '%s' have gone up.\r\n", pgr->get_name());
           } else {
             send_to_char(i, "%s has joined '%s'.\r\n", pgr->get_name());
@@ -451,6 +451,22 @@ void do_pgroup_demote(struct char_data *ch, char *argument) {
 void do_pgroup_design(struct char_data *ch, char *argument) {
   // TODO: Log
   send_to_char("design", ch);
+  
+  /* Requirements for design:
+   - You must obtain an architect's drafting board (to be built)
+   - You must deploy this drafting board (like a workshop)
+   - You must sit at the drafting board (like a computer)
+   - PGROUP DESIGN puts you into a mode where you're essentially projecting (body vulnerable to attack, etc)
+   
+   Creates a new zone (or uses one that already exists if you've done this before) and puts you in a new empty room.
+   Allows use of BLUEPRINT commands. Changes save automatically (there's no undo, just like normal building).
+   Allows RETURN to return to your body.
+   
+   You can also PGROUP DESIGN TALLY|TOTAL|COST to see how much your drafted HQ will cost to actualize.
+   You can then PGROUP DESIGN FINALIZE to lock it, pay the deposit, and send it to staff for approval.
+   
+   Staff can approve it (clones into a real zone for connection to world) or deny it (refunds nuyen to group, unlocks blueprint).
+   */
 }
 
 void do_pgroup_disband(struct char_data *ch, char *argument) {
@@ -487,7 +503,7 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
           pgr->get_alias(),
           pgr->get_idnum(),
           GET_CHAR_NAME(ch));
-
+  
   while ((ns = results.Head())) {
     if (!strcmp(ns->data->privileges.ToString(), "0"))
       sprintf(ENDOF(buf), "%s, rank %d (no privileges).\r\n", get_player_name(ns->data->idnum), ns->data->rank);
@@ -684,11 +700,11 @@ void do_pgroup_logs(struct char_data *ch, char *argument) {
   // Select the logs between this moment and X days in the past, then display in descending order.
   char querybuf[MAX_STRING_LENGTH];
   const char *query_fmt = "SELECT message FROM pgroup_logs"
-                          " WHERE "
-                          "  idnum = %ld"
-                          "  AND DATE_SUB(CURDATE(), INTERVAL %d DAY) <= DATE(date)"
-                          "  AND `redacted` = %s"
-                          " ORDER BY date ASC";
+  " WHERE "
+  "  idnum = %ld"
+  "  AND DATE_SUB(CURDATE(), INTERVAL %d DAY) <= DATE(date)"
+  "  AND `redacted` = %s"
+  " ORDER BY date ASC";
   
   sprintf(querybuf, query_fmt, GET_PGROUP(ch)->get_idnum(), days, redacted_mode ? "TRUE" : "FALSE");
   mysql_wrapper(mysql, querybuf);
@@ -971,19 +987,19 @@ void do_pgroup_wire(struct char_data *ch, char *argument) {
   // Log it.
   char *player_name = NULL;
   GET_PGROUP(ch)->audit_log_vfprintf("%s wired %lu nuyen to %s. Reason: %s",
-                                      GET_CHAR_NAME(ch),
-                                      amount,
-                                      vict ? GET_CHAR_NAME(vict) : (player_name = get_player_name(isfile)),
-                                      remainder);
+                                     GET_CHAR_NAME(ch),
+                                     amount,
+                                     vict ? GET_CHAR_NAME(vict) : (player_name = get_player_name(isfile)),
+                                     remainder);
   GET_PGROUP(ch)->secret_log_vfprintf("A shadowy figure wired %lu nuyen to someone's account. Reason: %s",
                                       amount,
                                       remainder);
   sprintf(buf, "%s wired %lu nuyen to %s on behalf of '%s'. Reason: %s",
-                GET_CHAR_NAME(ch),
-                amount,
-                vict ? GET_CHAR_NAME(vict) : player_name,
-                GET_PGROUP(ch)->get_name(),
-                remainder);
+          GET_CHAR_NAME(ch),
+          amount,
+          vict ? GET_CHAR_NAME(vict) : player_name,
+          GET_PGROUP(ch)->get_name(),
+          remainder);
   mudlog(buf, ch, LOG_GRIDLOG, TRUE);
   
   // Clean up.
@@ -1009,6 +1025,10 @@ void display_pgroup_help(struct char_data *ch) {
   }
   
   for (int cmd_index = 0; *(pgroup_commands[cmd_index].cmd) != '\n'; cmd_index++) {
+    // If the command is "quit", skip it (it's a hidden alias).
+    if (!strcmp(pgroup_commands[cmd_index].cmd, "quit"))
+      continue;
+    
     // If they don't have the privileges to use the current command, skip it.
     if (!(pgroup_commands[cmd_index].privilege_required == PRIV_NONE
           || (GET_PGROUP_MEMBER_DATA(ch)->privileges.AreAnySet(pgroup_commands[cmd_index].privilege_required, PRIV_LEADER, ENDBIT)))) {
@@ -1038,7 +1058,7 @@ void display_pgroup_help(struct char_data *ch) {
     // If we've gotten here, the command is assumed kosher for this character and group combo-- print it in our list.
     sprintf(ENDOF(buf), " %-11s%s", pgroup_commands[cmd_index].cmd, cmds_written++ % 5 == 4 ? "\r\n" : "");
   }
-
+  
   sprintf(ENDOF(buf), "\r\n");
   send_to_char(buf, ch);
 }
@@ -1099,10 +1119,10 @@ void pgedit_parse(struct descriptor_data * d, const char *arg) {
                                                d->edit_pgroup->is_secret() ? "clandestine" : "not clandestine");
             
             GET_PGROUP(CH)->secret_log_vfprintf("A shadowy figure modified the group's information (name %s, alias %s, tag %s, %s).",
-                                               d->edit_pgroup->get_name(),
-                                               d->edit_pgroup->get_alias(),
-                                               d->edit_pgroup->get_tag(),
-                                               d->edit_pgroup->is_secret() ? "clandestine" : "not clandestine");
+                                                d->edit_pgroup->get_name(),
+                                                d->edit_pgroup->get_alias(),
+                                                d->edit_pgroup->get_tag(),
+                                                d->edit_pgroup->is_secret() ? "clandestine" : "not clandestine");
             
             // Group is a clone of an existing group. Update the cloned group.
             GET_PGROUP(CH)->raw_set_name(d->edit_pgroup->get_name());
@@ -1138,9 +1158,9 @@ void pgedit_parse(struct descriptor_data * d, const char *arg) {
                                                d->edit_pgroup->get_tag());
             
             GET_PGROUP(CH)->secret_log_vfprintf("A shadowy figure created the group (name %s, alias %s, tag %s).",
-                                               d->edit_pgroup->get_name(),
-                                               d->edit_pgroup->get_alias(),
-                                               d->edit_pgroup->get_tag());
+                                                d->edit_pgroup->get_name(),
+                                                d->edit_pgroup->get_alias(),
+                                                d->edit_pgroup->get_tag());
             
             send_to_char(CH, "Created new group '%s'.\r\n", GET_PGROUP(CH)->get_name());
             
