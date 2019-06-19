@@ -19,7 +19,7 @@
 #define PRIV_PROCURER                       9      // Can purchase/sell PG vehicles.
 #define PRIV_RECRUITER                      10     // Can invite members.
 #define PRIV_TENANT                         11     // Can enter PG apartments.
-#define PRIV_TREASURER                      12     // Can withdraw from the PG bank account.
+#define PRIV_TREASURER                      12     // Can wire money from the PG bank account.
 #define PRIV_MAX                            13     /* Not an actual priv-- used for iteration over pgroup_privileges[].
                                                       Must always be equal to total number of privileges, not including priv_none of course. */
 #define PRIV_NONE                           10000  // No privilege required.
@@ -29,6 +29,7 @@
 #define PGROUP_DISABLED                     1 // Set by PGROUP DISBAND.
 #define PGROUP_SECRETSQUIRREL               2 // TODO: Membership is secret and requires PRIV_COCONSPIRATOR to view.
 #define PGROUP_CLONE                        3 // This group is a clone used for pgedit.
+#define NUM_PGROUP_SETTINGS                 4
 
 // Edit modes.
 #define PGEDIT_CONFIRM_EDIT                 0
@@ -41,6 +42,8 @@
 // Configurables.
 #define NUM_MEMBERS_NEEDED_TO_FOUND         2 // TODO: Should be 3, but decreased for testing purposes.
 #define COST_TO_FOUND_GROUP                 100000 // Nuyen that must be paid by the founding player in order to make a group official.
+#define PGROUP_INVITATION_LIFETIME_IN_DAYS  7 // Number of IRL days an invitation will be valid for.
+#define DEFAULT_PGROUP_LOG_LOOKUP_LENGTH    1 // Number of IRL days to look back when PGROUP LOGS is passed no argument.
 
 // Helper functions.
 //  GET_PGROUP_MEMBER_DATA pulls up the character's membership struct, which has rank, privileges, etc.
@@ -101,6 +104,6 @@ void do_pgroup_roster(struct char_data *ch, char *argument);
 void do_pgroup_status(struct char_data *ch, char *argument);
 void do_pgroup_transfer(struct char_data *ch, char *argument);
 void do_pgroup_vote(struct char_data *ch, char *argument);
-void do_pgroup_withdraw(struct char_data *ch, char *argument);
+void do_pgroup_wire(struct char_data *ch, char *argument);
 
 #endif

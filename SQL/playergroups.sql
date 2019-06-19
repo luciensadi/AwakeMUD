@@ -36,6 +36,7 @@ CREATE TABLE `pgroup_logs` (
   `idnum` mediumint(5) unsigned default '0' NOT NULL,
   `message` varchar(513) NOT NULL,
   `date` timestamp,
+  `redacted` BOOL NOT NULL,
   KEY (`idnum`)
 );
 
