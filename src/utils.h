@@ -80,6 +80,11 @@ void    terminate_mud_process_with_message(const char *message, int error_code);
 void    store_message_to_history(struct descriptor_data *d, int channel, const char *mallocd_message);
 void    delete_message_history(struct descriptor_data *d);
 
+// Room finders.
+struct room_data *get_veh_en_room(struct veh_data *veh);
+struct room_data *get_ch_en_room(struct char_data *ch);
+struct room_data *get_obj_en_room(struct obj_data *obj);
+
 /* undefine MAX and MIN so that our functions are used instead */
 #ifdef MAX
 #undef MAX

@@ -1832,3 +1832,75 @@ void terminate_mud_process_with_message(const char *message, int error_code) {
   log(buf);
   exit(error_code);
 }
+
+struct room_data *get_veh_en_room(struct veh_data *veh) {
+  char errbuf[500];
+  if (!veh) {
+    sprintf(errbuf, "SYSERR: get_veh_en_room was passed a NULL vehicle!");
+    mudlog(errbuf, veh, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+  
+  while (veh->in_veh)
+    veh = veh->in-veh;
+  
+  // Error messaging.
+  if (!veh->en_room) {
+    sprintf(errbuf, "SYSERR: get_veh_en_room called on veh %s, but it's not in a room or vehicle!", GET_VEH_NAME(ch));
+    mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
+  }
+  
+  return veh->en_room;
+}
+
+struct room_data *get_ch_en_room(struct char_data *ch) {
+  char errbuf[500];
+  if (!ch) {
+    sprintf(errbuf, "SYSERR: get_ch_en_room was passed a NULL character!");
+    mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+  
+  if (ch->en_room)
+    return ch->en_room;
+  
+  if (ch->in_veh) {
+    return get_veh_en_room(ch->in_veh);
+  }
+  
+  sprintf(errbuf, "SYSERR: get_ch_en_room called on char %s, but they're not in a room or vehicle!", GET_NAME(ch));
+  mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
+  
+  return NULL;
+}
+
+struct room_data *get_obj_en_room(struct obj_data *obj) {
+  char errbuf[500];
+  if (!obj) {
+    sprintf(errbuf, "SYSERR: get_obj_en_room was passed a NULL object!");
+    mudlog(errbuf, obj, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+  
+  if (obj->en_room)
+    return obj->en_room;
+  
+  if (obj->in_veh)
+    return get_veh_en_room(obj->in_veh);
+  
+  // Below this line is frantic flailing to avoid passing back NULL (which tends to crash the game).
+  if (obj->in_obj)
+    return get_obj_en_room(obj->in_obj);
+  
+  if (obj->carried_by)
+    return get_ch_en_room(obj->carried_by);
+  
+  if (obj->worn_by)
+    return get_ch_en_room(obj->carried_by);
+  
+  // All is lost. The object floats in an endless void.
+  sprintf(errbuf, "SYSERR: get_obj_en_room called on obj %s, but it's not in a room or vehicle!", GET_OBJ_NAME(obj));
+  mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
+  
+  return NULL;
+}
