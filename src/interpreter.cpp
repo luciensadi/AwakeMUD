@@ -1256,6 +1256,7 @@ const char *reserved[] =
     "something",
     "new",
     "guest",
+    "deleted",
     "\n"
   };
 
