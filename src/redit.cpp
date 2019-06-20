@@ -849,6 +849,12 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     if ((number < 0) || (number > ROOM_MAX)) {
       send_to_char("That's not a valid choice!\r\n", d->character);
       redit_disp_flag_menu(d);
+#ifndef DEATH_FLAGS
+    } else if (number == ROOM_DEATH) {
+      send_to_char("Sorry, death flags have been disabled in this game.\r\n", d->character);
+      ROOM->room_flags.RemoveBit(number-1);
+      redit_disp_flag_menu(d);
+#endif
     } else {
       if (number == 0)
         /* back out */

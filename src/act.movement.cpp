@@ -147,8 +147,7 @@ int can_move(struct char_data *ch, int dir, int extra)
  */
 int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *vict)
 {
-  int saw_sneaker, was_in, skill, target, i;
-  struct obj_data *bio;
+  int saw_sneaker, was_in, skill, target;
   struct char_data *tch;
   struct veh_data *tveh;
   if (!can_move(ch, dir, extra))
@@ -301,19 +300,18 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     }
   }
 
-  if (ROOM_FLAGGED(ch->in_room, ROOM_DEATH) && !IS_NPC(ch) &&
-      !IS_SENATOR(ch))
-  {
+#ifdef DEATH_FLAGS
+  if (ROOM_FLAGGED(ch->in_room, ROOM_DEATH) && !IS_NPC(ch) && !IS_SENATOR(ch)) {
     send_to_char("You feel the world slip into darkness, you better hope a wandering DocWagon finds you.\r\n", ch);
     death_cry(ch);
     act("$n vanishes into thin air.", FALSE, ch, 0, 0, TO_ROOM);
     death_penalty(ch);
-    for (bio = ch->bioware; bio; bio = bio->next_content)
+    for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
       if (GET_OBJ_VAL(bio, 0) == BIO_PLATELETFACTORY)
         GET_OBJ_VAL(bio, 5) = 24;
       else if (GET_OBJ_VAL(bio, 0) == BIO_ADRENALPUMP) {
         if (GET_OBJ_VAL(bio, 5) > 0)
-          for (i = 0; i < MAX_OBJ_AFFECT; i++)
+          for (int i = 0; i < MAX_OBJ_AFFECT; i++)
             affect_modify(ch,
                           bio->affected[i].location,
                           bio->affected[i].modifier,
@@ -327,13 +325,19 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     char_from_room(ch);
     char_to_room(ch, real_room(RM_SEATTLE_DOCWAGON));
     extract_char(ch);
-  } else if (ROOM_FLAGGED(ch->in_room, ROOM_FALL) && !IS_ASTRAL(ch) &&
-             !IS_SENATOR(ch))
-  {
+   return 1;
+  }
+#endif
+    
+  if (ROOM_FLAGGED(ch->in_room, ROOM_FALL) && !IS_ASTRAL(ch) && !IS_SENATOR(ch)) {
     perform_fall(ch);
-  } else if (IS_NPC(ch) && ch->master && !IS_NPC(ch->master) &&
-             GET_QUEST(ch->master) && ch->in_room == ch->master->in_room)
+    return 1;
+  }
+  
+  if (IS_NPC(ch) && ch->master && !IS_NPC(ch->master) && GET_QUEST(ch->master) && ch->in_room == ch->master->in_room) {
     check_quest_destination(ch->master, ch);
+    return 1;
+  }
 
   return 1;
 }
@@ -375,9 +379,8 @@ bool check_fall(struct char_data *ch, int modifier)
 
 void perform_fall(struct char_data *ch)
 {
-  int i, levels = 0, was_in;
+  int levels = 0, was_in;
   float meters = 0;
-  struct obj_data *bio;
 
   // run a loop and drop them through each room
   while (EXIT(ch, DOWN) && ROOM_FLAGGED(ch->in_room, ROOM_FALL) &&
@@ -394,18 +397,19 @@ void perform_fall(struct char_data *ch)
     char_to_room(ch, world[was_in].dir_option[DOWN]->to_room);
     look_at_room(ch, 0);
     act("^R$n falls in from above!^n", TRUE, ch, 0, 0, TO_ROOM);
+#ifdef DEATH_FLAGS
     if (ROOM_FLAGGED(ch->in_room, ROOM_DEATH) && !IS_NPC(ch) &&
         !IS_SENATOR(ch)) {
       send_to_char("You feel the world slip into darkness, you better hope a wandering DocWagon finds you.\r\n", ch);
       death_cry(ch);
       act("$n vanishes into thin air.", FALSE, ch, 0, 0, TO_ROOM);
       death_penalty(ch);
-      for (bio = ch->bioware; bio; bio = bio->next_content)
+      for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
         if (GET_OBJ_VAL(bio, 0) == BIO_PLATELETFACTORY)
           GET_OBJ_VAL(bio, 5) = 24;
         else if (GET_OBJ_VAL(bio, 0) == BIO_ADRENALPUMP) {
           if (GET_OBJ_VAL(bio, 5) > 0)
-            for (i = 0; i < MAX_OBJ_AFFECT; i++)
+            for (int i = 0; i < MAX_OBJ_AFFECT; i++)
               affect_modify(ch,
                             bio->affected[i].location,
                             bio->affected[i].modifier,
@@ -424,6 +428,7 @@ void perform_fall(struct char_data *ch)
       extract_char(ch);
       return;
     }
+#endif
   }
 
   if (levels)
@@ -488,7 +493,9 @@ void move_vehicle(struct char_data *ch, int dir)
           && (veh->type != VEH_DRONE && veh->type != VEH_BIKE))
       || IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED)
       || (veh->type == VEH_BIKE && ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_NOBIKE))
+#ifdef DEATH_FLAGS
       || ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_DEATH)
+#endif
       || ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_FALL))
   {
     send_to_char("You cannot go that way...\r\n", ch);
