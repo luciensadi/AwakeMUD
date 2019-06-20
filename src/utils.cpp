@@ -170,14 +170,14 @@ int convert_damage(int damage)
   return damage;
 }
 
-int light_level(rnum_t room)
+int light_level(struct room_data *room)
 {
-  if (world[room].sector_type == SPIRIT_HEARTH)
-    return world[room].vision[0];
-  if (world[room].sector_type == SPIRIT_CITY) {
+  if (room->sector_type == SPIRIT_HEARTH)
+    return room->vision[0];
+  if (room->sector_type == SPIRIT_CITY) {
     if ((time_info.hours > 6 && time_info.hours < 19))
-      return world[room].vision[0];
-    else if (world[room].vision[0] == LIGHT_NORMALNOLIT)
+      return room->vision[0];
+    else if (room->vision[0] == LIGHT_NORMALNOLIT)
       return LIGHT_MINLIGHT;
     else
       return LIGHT_PARTLIGHT;
@@ -185,7 +185,7 @@ int light_level(rnum_t room)
   if ((time_info.hours < 6 && time_info.hours > 19) && (world[room].vision[0] > LIGHT_MINLIGHT || world[room].vision[0] <= LIGHT_NORMALNOLIT))
     return LIGHT_MINLIGHT;
   else
-    return world[room].vision[0];
+    return room->vision[0];
 }
 
 int damage_modifier(struct char_data *ch, char *rbuf)
@@ -1903,4 +1903,39 @@ struct room_data *get_obj_en_room(struct obj_data *obj) {
   mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
   
   return NULL;
+}
+
+bool invis_ok(struct char_data *ch, struct char_data *vict) {
+  // Staff member or astrally aware? You can see everything.
+  if (IS_SENATOR(ch) || IS_ASTRAL(ch) || IS_DUAL(ch))
+    return TRUE;
+  
+  // Ultrasound pierces all invis as long as it's not blocked by silence or stealth.
+  if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) && (get_ch_en_room(ch)->silence[0] <= 0 && !affected_by_spell(vict, SPELL_STEALTH)))
+    return TRUE;
+  
+  // Improved invis defeats all other detection measures.
+  if (IS_AFFECTED(vict, AFF_IMP_INVIS) || IS_AFFECTED(vict, AFF_SPELLIMPINVIS))
+    return FALSE;
+  
+  // Standard invis is pierced by thermographic vision, which is default on vehicles.
+  if (IS_AFFECTED(vict, AFF_INVISIBLE)) {
+    return CURRENT_VISION(ch) == THERMOGRAPHIC || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)
+  }
+  
+  // If we've gotten here, they're not invisible.
+  return TRUE;
+}
+
+// Returns TRUE if the character is able to make noise, FALSE otherwise.
+bool char_can_make_noise(struct char_data *ch, const char *message = NULL) {
+  if (affected_by_spell(ch, SPELL_STEALTH) || get_ch_en_room(ch)->silence[0]) {
+    // Can't make noise.
+    if (message)
+      send_to_char(message, ch);
+    
+    return FALSE;
+  }
+  
+  return TRUE;
 }

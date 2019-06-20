@@ -578,7 +578,7 @@ struct grid_data
 struct veh_data
 {
   vnum_t veh_number;         /* Where in data-base                   */
-  struct room_data *en_room            /* In what room */
+  struct room_data *en_room;            /* In what room */
 
   char *name;
   char *description;              /* When in room (without driver)    */
@@ -610,7 +610,7 @@ struct veh_data
   struct veh_follow *followers;
   struct veh_data *following;
   struct char_data *followch;
-  long lastin[3];
+  struct room_data *lastin[3];
 
   struct obj_data *mount;
   struct obj_data *mod[NUM_MODS];
