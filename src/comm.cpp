@@ -2465,7 +2465,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
             if (IS_SENATOR(to) && !IS_NPC(vict))
               i = GET_CHAR_NAME(vict);
             else
-              i = make_desc(to, ch, buf, TRUE);
+              i = make_desc(to, vict, buf, TRUE);
           } else {
             if (IS_SENATOR(vict))
               i = "an invisible staff member";
