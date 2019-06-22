@@ -308,6 +308,7 @@ void affect_veh(struct veh_data *veh, byte loc, sbyte mod)
 void spell_modify(struct char_data *ch, struct sustain_data *sust, bool add)
 {
   int mod = add ? 1 : -1;
+  int tmp;
   switch (sust->spell)
   {
     case SPELL_INCATTR:
@@ -322,8 +323,16 @@ void spell_modify(struct char_data *ch, struct sustain_data *sust, bool add)
       break;
     case SPELL_HEAL:
     case SPELL_TREAT:
-      mod *= MIN(sust->force, sust->success) * 100;
-      GET_PHYSICAL(ch) = MIN(GET_MAX_PHYSICAL(ch), GET_PHYSICAL(ch) + mod);
+        // Restrict max HP change to the lesser of the force or successes.
+        tmp = MIN(sust->force, sust->success) * 100;
+        // Further restrict max HP change to the character's max_physical value.
+        tmp = MIN(tmp, GET_MAX_PHYSICAL(ch));
+      
+        // Now that we meet 0 ≤ hp change ≤ max_phys, apply the add/subtract multiplier.
+        mod *= tmp;
+      
+        // Finally, apply it to character, capping at their max physical. No negative cap is applied.
+        GET_PHYSICAL(ch) = MIN(GET_MAX_PHYSICAL(ch), GET_PHYSICAL(ch) + mod);
       break;
     case SPELL_STABILIZE:
       if (mod == 1)
