@@ -2266,7 +2266,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
       check_killer(ch, victim);
     }
   }
-  if (PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(victim))
+  if (PLR_FLAGGED(ch, PLR_KILLER) && ch != victim && !IS_NPC(victim))
   {
     dam = -1;
     buf_mod(rbuf,"No-PK",dam);
@@ -2394,6 +2394,17 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
           dam_message(dam, ch, victim, attacktype);
       } else
         dam_message(dam, ch, victim, attacktype);
+    }
+  } else if (dam > 0 && attacktype == TYPE_FALL) {
+    if (dam > 5) {
+      send_to_char(victim, "^RYou slam into the %s at speed, the impact reshaping your body in ways you do not appreciate.^n\r\n",
+                   ROOM_FLAGGED(victim->in_room, ROOM_INDOORS) ? "floor" : "ground");
+      sprintf(buf3, "^R$n slams into the %s at speed, the impact reshaping $s body in horrific ways.^n\r\n", ROOM_FLAGGED(victim->in_room, ROOM_INDOORS) ? "floor" : "ground");
+      act(buf3, FALSE, victim, 0, 0, TO_ROOM);
+    } else {
+      send_to_char(victim, "^rYou hit the %s with brusing force.^n\r\n", ROOM_FLAGGED(victim->in_room, ROOM_INDOORS) ? "floor" : "ground");
+      sprintf(buf3, "^r$n hits the %s with bruising force.^n\r\n", ROOM_FLAGGED(victim->in_room, ROOM_INDOORS) ? "floor" : "ground");
+      act(buf3, FALSE, victim, 0, 0, TO_ROOM);
     }
   }
   
