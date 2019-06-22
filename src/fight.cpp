@@ -2253,9 +2253,18 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
   }
   /* Figure out how to do WANTED flag*/
   
-  if (ch != victim)
-  {
-    check_killer(ch, victim);
+  if (ch != victim) {
+    if (attacktype == TYPE_SCATTERING && !IS_NPC(ch) && !IS_NPC(victim)) {
+      // Unless both chars are PK, or victim is KILLER, deal no damage and abort without flagging anyone as KILLER.
+      if (!(PLR_FLAGGED(victim, PLR_KILLER) || (PRF_FLAGGED(ch, PRF_PKER) && PRF_FLAGGED(victim, PRF_PKER)))) {
+        dam = -1;
+        buf_mod(rbuf, "accidental", dam);
+      } else {
+        check_killer(ch, victim);
+      }
+    } else {
+      check_killer(ch, victim);
+    }
   }
   if (PLR_FLAGGED(ch, PLR_KILLER) && !IS_NPC(victim))
   {
@@ -2268,7 +2277,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
     buf_mod(rbuf,"ImmExplode",dam);
   }
   if (dam == 0)
-    sprintf(rbuf + strlen(rbuf), " 0");
+    strcat(rbuf, " 0");
   else if (dam > 0)
     buf_mod(rbuf, "", dam);
   
