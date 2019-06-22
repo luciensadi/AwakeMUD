@@ -2181,7 +2181,7 @@ struct char_data *get_char_room_vis(struct char_data * ch, char *name)
   char *tmp = tmpname;
   
   /* JE 7/18/94 :-) :-) */
-  if (!str_cmp(name, "self") || !str_cmp(name, "me"))
+  if (!str_cmp(name, "self") || !str_cmp(name, "me") || !str_cmp(name, "myself"))
     return ch;
   
   /* 0.<name> means PC with name */
@@ -2209,7 +2209,7 @@ struct char_data *get_char_in_list_vis(struct char_data * ch, char *name, struct
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
   
-  if (!str_cmp(name, "self") || !str_cmp(name, "me"))
+  if (!str_cmp(name, "self") || !str_cmp(name, "me") || !str_cmp(name, "myself"))
     return ch;
   
   /* 0.<name> means PC with name */
@@ -2233,6 +2233,10 @@ struct char_data *get_char_vis(struct char_data * ch, char *name)
   int j = 0, number;
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
+  
+  // Short circuit: If you're looking for yourself, we don't have to search very hard.
+  if (!str_cmp(name, "self") || !str_cmp(name, "me") || !str_cmp(name, "myself"))
+    return ch;
   
   /* check the room first */
   if (ch->in_veh)

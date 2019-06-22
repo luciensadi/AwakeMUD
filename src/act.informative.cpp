@@ -1440,7 +1440,7 @@ void look_at_target(struct char_data * ch, char *arg)
   bits = generic_find(arg, FIND_OBJ_INV | FIND_OBJ_ROOM | FIND_OBJ_EQUIP |
                       FIND_CHAR_ROOM, ch, &found_char, &found_obj);
   
-  if ((!str_cmp(arg, "self") || !str_cmp(arg, "me"))) {
+  if ((!str_cmp(arg, "self") || !str_cmp(arg, "me") || !str_cmp(arg, "myself"))) {
     if (AFF_FLAGGED(ch, AFF_RIG))
     {
       send_to_char(GET_VEH_DESC(ch->in_veh), ch);
@@ -2084,7 +2084,7 @@ ACMD(do_examine)
     }
   }
   
-  if ((!str_cmp(arg, "self") || !str_cmp(arg, "me"))) {
+  if ((!str_cmp(arg, "self") || !str_cmp(arg, "me") || !str_cmp(arg, "myself"))) {
     struct veh_data *target_veh = NULL;
     if (AFF_FLAGGED(ch, AFF_RIG))
       target_veh = ch->in_veh;
