@@ -30,6 +30,7 @@ Tested on:
 - Edit `src/Makefile` and uncomment the OS that looks closest to yours (comment out the others). The default is Mac OS X; you'll probably want to switch it to Linux. You probably also want to remove the `-DGITHUB_INTEGRATION` flag from the Makefile at this time.
 - From the src directory, run `make clean && make`.
 - Change to the root directory and run the game (ex: `gdb bin/awake`, or `lldb bin/awake` on OS X).
+- Connect to the game with telnet at `127.0.0.1:4000` and enjoy!
 
 ### Cygwin Installation Notes
 - AwakeCE can run in Windows under Cygwin.
