@@ -65,7 +65,7 @@ It looks pretty much like an unfinished object~
 Type:	Worn
 WearFlags:	11
 ExtraFlags:	100000000000
-AffFlags:	10000000000000000000000000000000000000000000
+AffFlags:	1000000000000000000000000000000000000000000
 Material:	paper
 [POINTS]
 	Weight:	0.00

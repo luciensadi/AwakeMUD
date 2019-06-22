@@ -5,7 +5,7 @@ Desc:$
 of this well-outfitted laboratory. The floor, a freshly-waxed tile, gives off
 the faintest scent of lemon, offsetting the otherwise-sterile atmosphere. 
 ~
-Flags:	10000000000000011000
+Flags:	1000010000000000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -67,7 +67,7 @@ various distances along them to challenge even the most skilled shooter. To
 the east, a target is surrounded by helper automatons that will return fire if
 the target is attacked. 
 ~
-Flags:	1000
+Flags:	1000000000000000000001000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -124,7 +124,7 @@ Desc:$
    A target dominates the center of this firing lane, flanked by two armed
 guards whose sole purpose is to return fire. 
 ~
-Flags:	1000
+Flags:	1000000000000000000001000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -160,7 +160,7 @@ here, glimmering in the warm light of the incandescent bulbs above. The great
 mahogany shelves that line these aisles seem to deal exclusively with the
 Hermetic tradition. 
 ~
-Flags:	100000000010000000000000011000
+Flags:	100001000010000000000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -234,7 +234,7 @@ to the north, this rotunda is instead devoted to paintings and sculptures of
 the aspects of various Shamanic totems. Nestled amongst the iconography are
 doors, each leading to a reserveable room to build your Shamanic lodge in. 
 ~
-Flags:	10000010000000011000
+Flags:	1000010000010000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -344,7 +344,7 @@ Name:	^W(^cIMMHQ^W)^C A Quiet Room
 Desc:$
    Sparsely-decorated, this room awaits its owner's personalizing touch. 
 ~
-Flags:	10000000000000011000
+Flags:	1000010000000000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -377,7 +377,7 @@ Name:	^W(^cIMMHQ^W)^C A Quiet Room
 Desc:$
    Sparsely-decorated, this room awaits its owner's personalizing touch. 
 ~
-Flags:	10000000000000011000
+Flags:	1000010000000000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -410,7 +410,7 @@ Name:	^W(^cIMMHQ^W)^C A Quiet Room
 Desc:$
    Sparsely-decorated, this room awaits its owner's personalizing touch. 
 ~
-Flags:	10000000000000011000
+Flags:	1000010000000000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -443,7 +443,7 @@ Name:	^W(^cIMMHQ^W)^C A Quiet Room
 Desc:$
    Sparsely-decorated, this room awaits its owner's personalizing touch. 
 ~
-Flags:	10000000000000011000
+Flags:	1000010000000000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -476,7 +476,7 @@ Name:	^W(^cIMMHQ^W)^C A Quiet Room
 Desc:$
    Sparsely-decoraed, this room awaits its owner's personalizing touch. 
 ~
-Flags:	10000000100000011000
+Flags:	1000010000000100000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -509,7 +509,7 @@ Name:	^W(^cIMMHQ^W)^C A Quiet Room
 Desc:$
    Sparsely-decorated, this room awaits its owner's personalizing touch. 
 ~
-Flags:	10000000000000011000
+Flags:	1000010000000000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -542,7 +542,7 @@ Name:	^W(^cIMMHQ^W)^C A Quiet Room
 Desc:$
    Sparsely-decorated, this room awaits its owner's personalizing touch. 
 ~
-Flags:	10000000000000011000
+Flags:	1000010000000000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -579,7 +579,7 @@ enormous. Neat rows of network cabling split and weave amongst the racks. The
 outlets of an industrial-grade halon fire suppression system suggest that this
 may not be the healthiest room to spend your time in. 
 ~
-Flags:	100000000010000000000010011000
+Flags:	100001000010000000000010011000
 SecType:	Inside
 MatrixExit:	10013
 IO:	0
@@ -614,7 +614,7 @@ Name:	^W(^cIMMHQ^W)^C A Close-Range Target
 Desc:$
    The firing range stretches westward, with the shooting stands to the east.
 ~
-Flags:	1000
+Flags:	1000000000000000000001000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -648,7 +648,7 @@ Name:	^W(^cIMMHQ^W)^C A Mid-Range Target
 Desc:$
    The firing range stretches westward, with the shooting stands to the east.
 ~
-Flags:	1000
+Flags:	1000000000000000000001000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -682,7 +682,7 @@ Name:	^W(^cIMMHQ^W)^C A Long-Range Target
 Desc:$
    The firing range stretches westward, with the shooting stands to the east.
 ~
-Flags:	1000
+Flags:	1000000000000000000001000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -716,7 +716,7 @@ Name:	^W(^cIMMHQ^W)^C An Extreme-Range Target
 Desc:$
    The firing range stretches westward, with the shooting stands to the east.
 ~
-Flags:	1000
+Flags:	1000000000000000000001000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -747,7 +747,7 @@ airlocks that lead to various testing chambers. Icons and emblems have been
 etched into the burnished plasteel surfaces of the various hatches to indicate
 what lies beyond. 
 ~
-Flags:	10000000000000011100
+Flags:	1000010000000000000011100
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -802,7 +802,7 @@ chaos by panels of bulletproof glass as thick as a troll's neck. Benches,
 tables, and presses here provide the necessities for deploying a full
 ammunition workshop for handloading rounds. 
 ~
-Flags:	100000000000000000000000011000
+Flags:	100001000000000000000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -831,7 +831,7 @@ Desc:$
 Vehicles that are zoneloaded here will be available for purchase in room
 10021. 
 ~
-Flags:	110000000000000000001000
+Flags:	1110000000000000000001000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -862,7 +862,7 @@ massive steel beams that arch gracefully overhead to support the thick slabs
 of reinforced concrete of this obdurate building. A kiosk near the entrance
 allows the purchase of vehicles.  
 ~
-Flags:	100000110000000000000000001000
+Flags:	100001110000000000000000001000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -902,7 +902,7 @@ Packed full of vehicle parts, miscellaneous upgrades, and an array of tools
 large enough to take up two walls, this office is less of a place of
 administration and more a den of controlled mechanical chaos. 
 ~
-Flags:	1000
+Flags:	1000000000000000000001000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -937,7 +937,7 @@ air to this sterile laboratory. A sign on the wall informs you that this is an
 excellent area for loading in NPCs and testing their behavior in various
 circumstances. 
 ~
-Flags:	1000
+Flags:	1000000000000000000001000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	4
@@ -991,7 +991,7 @@ A flat stretch of asphalt with a small, caution-taped sidewalk stretches out
 here, looping endlessly through N-dimensional space to create an infinite test
 track for driving NPCs. 
 ~
-Flags:	10000000000000000000000
+Flags:	1010000000000000000000000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	4
@@ -1033,7 +1033,7 @@ A flat stretch of asphalt with a small, caution-taped sidewalk stretches out
 here, looping endlessly through N-dimensional space to create an infinite test
 track for driving NPCs. 
 ~
-Flags:	10000000000000000000000
+Flags:	1010000000000000000000000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	4
@@ -1075,7 +1075,7 @@ A flat stretch of asphalt with a small, caution-taped sidewalk stretches out
 here, looping endlessly through N-dimensional space to create an infinite test
 track for driving NPCs. 
 ~
-Flags:	10000000000000000000000
+Flags:	1010000000000000000000000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	4
@@ -1116,7 +1116,7 @@ Desc:$
 Great for testing all manner of shopkeeper quirks, from negative profit
 margins to so many items the MUD crashes. 
 ~
-Flags:	11000
+Flags:	1000000000000000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -1186,7 +1186,7 @@ Desc:$
 Lift goes up, lift goes down. How does it work? You can't explain it, it's
 magic. 
 ~
-Flags:	11000
+Flags:	1000000000000000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
@@ -1215,7 +1215,7 @@ Desc:$
 Lift goes up, lift goes down. How does it work? You can't explain it, it's
 magic. 
 ~
-Flags:	11000
+Flags:	1000000000000000000011000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
