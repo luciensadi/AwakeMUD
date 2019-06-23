@@ -79,6 +79,8 @@ extern void list_detailed_quest(struct char_data *ch, long rnum);
 extern int vnum_vehicles(char *searchname, struct char_data * ch);
 extern void disp_init_menu(struct descriptor_data *d);
 
+extern const char *pgroup_print_privileges(Bitfield privileges);
+
 /* Copyover Code, ported to Awake by Harlequin *
  * (c) 1996-97 Erwin S. Andreasen <erwin@andreasen.org> */
 
@@ -1085,6 +1087,13 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
 
   sprintf(ENDOF(buf), " PC '%s'  IDNum: [%5ld], In room [%5ld]\r\n",
           GET_CHAR_NAME(k), GET_IDNUM(k), world[k->in_room].number);
+  
+  if (GET_PGROUP_MEMBER_DATA(k)) {
+    sprintf(ENDOF(buf), "Rank ^c%d/%d^n member of group '^c%s^n' (^c%s^n), with privileges:\r\n  ^c%s^n\r\n",
+            GET_PGROUP_MEMBER_DATA(k)->rank, MAX_PGROUP_RANK,
+            GET_PGROUP(k)->get_name(), GET_PGROUP(k)->get_alias(),
+            pgroup_print_privileges(GET_PGROUP_MEMBER_DATA(k)->privileges));
+  }
 
   sprintf(ENDOF(buf), "Title: %s\r\n", (k->player.title ? k->player.title : "<None>"));
 

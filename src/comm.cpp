@@ -2368,6 +2368,25 @@ char* strip_ending_punctuation_new(const char* orig) {
   return stripped;
 }
 
+const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *listener) {
+  static char voice_buf[150];
+  struct remem *mem = NULL;
+  
+  if (IS_NPC(speaker))
+    return GET_NAME(speaker);
+  else {
+    if (IS_SENATOR(listener)) {
+      sprintf(voice_buf, "%s(%s)", speaker->player.physical_text.room_desc, GET_CHAR_NAME(speaker));
+      return voice_buf;
+    } else if ((mem = found_mem(GET_MEMORY(listener), speaker))) {
+      sprintf(voice_buf, "%s(%s)", speaker->player.physical_text.room_desc, CAP(mem->mem));
+      return voice_buf;
+    } else {
+      return speaker->player.physical_text.room_desc;
+    }
+  }
+}
+
 /* higher-level communication: the act() function */
 // now returns the composed line, in case you need to capture it for some reason
 const char *perform_act(const char *orig, struct char_data * ch, struct obj_data * obj,
@@ -2394,43 +2413,65 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           CHECK_NULL(vict_obj, SANA((struct obj_data *) vict_obj));
           break;
         case 'e':
-          i = HSSH(ch);
+          if (CAN_SEE(to, ch))
+            i = HSSH(ch);
+          else
+            i = "it";
           break;
         case 'E':
-          CHECK_NULL(vict_obj, HSSH(vict));
+          if (vict_obj) {
+            if (CAN_SEE(to, vict))
+              i = HSSH(vict);
+            else
+              i = "it";
+          }
           break;
         case 'F':
           CHECK_NULL(vict_obj, fname((char *) vict_obj));
           break;
         case 'm':
-          i = HMHR(ch);
+          if (CAN_SEE(to, ch))
+            i = HMHR(ch);
+          else
+            i = "them";
           break;
         case 'M':
-          CHECK_NULL(vict_obj, HMHR(vict));
+          if (vict_obj) {
+            if (CAN_SEE(to, vict))
+              i = HMHR(vict);
+            else
+              i = "them";
+          }
           break;
         case 'n':
           if (to == ch)
             i = "you";
-          else if (CAN_SEE(to, ch))
+          else if (CAN_SEE(to, ch)) {
             if (IS_SENATOR(to) && !IS_NPC(ch))
               i = GET_CHAR_NAME(ch);
             else
               i = make_desc(to, ch, buf, TRUE);
+          } else {
+            if (IS_SENATOR(ch))
+              i = "an invisible staff member";
             else
               i = "someone";
+          }
           break;
         case 'N':
           if (to == vict)
             i = "you";
-          else if (CAN_SEE(to, vict))
+          else if (CAN_SEE(to, vict)) {
             if (IS_SENATOR(to) && !IS_NPC(vict))
               i = GET_CHAR_NAME(vict);
-            else if ((mem = found_mem(GET_MEMORY(to), vict)))
-              i = CAP(mem->mem);
             else
-              i = GET_NAME(vict);
+              i = make_desc(to, vict, buf, TRUE);
+          } else {
+            if (IS_SENATOR(vict))
+              i = "an invisible staff member";
             else
               i = "someone";
+          }
           break;
         case 'o':
           CHECK_NULL(obj, OBJN(obj, to));
@@ -2445,26 +2486,24 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
           CHECK_NULL(vict_obj, OBJS((struct obj_data *) vict_obj, to));
           break;
         case 's':
-          i = HSHR(ch);
+          if (CAN_SEE(to, ch))
+            i = HSHR(ch);
+          else
+            i = "their";
           break;
         case 'S':
-          CHECK_NULL(vict_obj, HSHR(vict));
+          if (vict_obj) {
+            if (CAN_SEE(to, vict))
+              i = HSHR(vict);
+            else
+              i = "their";
+          }
           break;
         case 'T':
           CHECK_NULL(vict_obj, (char *) vict_obj);
           break;
         case 'v':
-          if (IS_NPC(ch))
-            i = GET_NAME(ch);
-          else
-            if (IS_SENATOR(to)) {
-              sprintf(temp, "%s(%s)", ch->player.physical_text.room_desc, GET_CHAR_NAME(ch));
-              i = temp;
-            } else if ((mem = found_mem(GET_MEMORY(to), ch))) {
-              sprintf(temp, "%s(%s)", ch->player.physical_text.room_desc, CAP(mem->mem));
-              i = temp;
-            } else
-              i = ch->player.physical_text.room_desc;
+          i = get_voice_perceived_by(ch, to);
           break;
         case 'z':
           // You always know if it's you.

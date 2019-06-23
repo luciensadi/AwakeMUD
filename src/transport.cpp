@@ -978,7 +978,7 @@ static int process_elevator(struct room_data *room,
         
         // if you pass the test, continue
         base_target = 6 + modify_target(vict);
-        dice = GET_REA(vict) + get_skill(vict, SKILL_ATHLETICS, base_target);
+        dice = get_skill(vict, SKILL_ATHLETICS, base_target);
         if (success_test(dice, base_target) > 0) {
           // No message on success (would be spammy)
           continue;
@@ -1040,7 +1040,7 @@ static int process_elevator(struct room_data *room,
         
         // if you pass the test, continue
         base_target = 6 + modify_target(vict);
-        dice = GET_REA(vict) + get_skill(vict, SKILL_ATHLETICS, base_target);
+        dice = get_skill(vict, SKILL_ATHLETICS, base_target);
         if (success_test(dice, base_target) > 0) {
           // No message on success (would be spammy)
           continue;

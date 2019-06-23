@@ -109,4 +109,43 @@ DefaultPos:	Standing
 [SKILLS]
 	Sorcery:	12
 BREAK
+#70503
+Keywords:	furtive night-one scavenger
+Name:	a furtive Night-One scavenger
+RoomDesc:$
+A Night-One scavenger furtively works to loosen a chunk of scrap. 
+
+~
+LookDesc:$
+Scruffed-up and scraggly, this pale female Night-One has rubbed oil and dirt
+into her fur in an attempt to be less noticeable. Her outfit is serviceable
+enough for junkyard scavenging, consisting of heavy denim and canvas with a
+belt of padded homemade tools for silent disassembly. A wicked-looking bat
+with nails sticking out of it seems to be her primary mode of defense. 
+~
+ArriveMsg:	slinks in from
+LeaveMsg:	scurries
+MobFlags:	10001100
+AffFlags:	1010000000000000
+Race:	Night-One
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	7
+	Str:	5
+	Cha:	5
+	Int:	6
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	172
+	Weight:	54
+	Ballistic:	4
+	Impact:	6
+[SKILLS]
+	Stealth:	7
+	Armed Combat:	5
+	Brawling:	4
+BREAK
 END

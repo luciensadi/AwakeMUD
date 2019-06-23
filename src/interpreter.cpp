@@ -1250,12 +1250,14 @@ const char *reserved[] =
   {
     "self",
     "me",
+    "myself",
     "all",
     "room",
     "someone",
     "something",
     "new",
     "guest",
+    "deleted",
     "\n"
   };
 

@@ -308,6 +308,7 @@ void affect_veh(struct veh_data *veh, byte loc, sbyte mod)
 void spell_modify(struct char_data *ch, struct sustain_data *sust, bool add)
 {
   int mod = add ? 1 : -1;
+  int tmp;
   switch (sust->spell)
   {
     case SPELL_INCATTR:
@@ -322,8 +323,16 @@ void spell_modify(struct char_data *ch, struct sustain_data *sust, bool add)
       break;
     case SPELL_HEAL:
     case SPELL_TREAT:
-      mod *= MIN(sust->force, sust->success) * 100;
-      GET_PHYSICAL(ch) = MIN(GET_MAX_PHYSICAL(ch), GET_PHYSICAL(ch) + mod);
+        // Restrict max HP change to the lesser of the force or successes.
+        tmp = MIN(sust->force, sust->success) * 100;
+        // Further restrict max HP change to the character's max_physical value.
+        tmp = MIN(tmp, GET_MAX_PHYSICAL(ch));
+      
+        // Now that we meet 0 ≤ hp change ≤ max_phys, apply the add/subtract multiplier.
+        mod *= tmp;
+      
+        // Finally, apply it to character, capping at their max physical. No negative cap is applied.
+        GET_PHYSICAL(ch) = MIN(GET_MAX_PHYSICAL(ch), GET_PHYSICAL(ch) + mod);
       break;
     case SPELL_STABILIZE:
       if (mod == 1)
@@ -2181,7 +2190,7 @@ struct char_data *get_char_room_vis(struct char_data * ch, char *name)
   char *tmp = tmpname;
   
   /* JE 7/18/94 :-) :-) */
-  if (!str_cmp(name, "self") || !str_cmp(name, "me"))
+  if (!str_cmp(name, "self") || !str_cmp(name, "me") || !str_cmp(name, "myself"))
     return ch;
   
   /* 0.<name> means PC with name */
@@ -2209,7 +2218,7 @@ struct char_data *get_char_in_list_vis(struct char_data * ch, char *name, struct
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
   
-  if (!str_cmp(name, "self") || !str_cmp(name, "me"))
+  if (!str_cmp(name, "self") || !str_cmp(name, "me") || !str_cmp(name, "myself"))
     return ch;
   
   /* 0.<name> means PC with name */
@@ -2233,6 +2242,10 @@ struct char_data *get_char_vis(struct char_data * ch, char *name)
   int j = 0, number;
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
+  
+  // Short circuit: If you're looking for yourself, we don't have to search very hard.
+  if (!str_cmp(name, "self") || !str_cmp(name, "me") || !str_cmp(name, "myself"))
+    return ch;
   
   /* check the room first */
   if (ch->in_veh)

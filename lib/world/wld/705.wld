@@ -444,7 +444,7 @@ A sheet of corrugated metal has been cleverly worked into the bottom of the
 bus to provide access while being largely unobtrusive. 
 ~
 	ToVnum:	70511
-	Flags:	1
+	Flags:	3
 	Material:	metal
 	Barrier:	4
 	KeyVnum:	0
