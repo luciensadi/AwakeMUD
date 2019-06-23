@@ -1625,7 +1625,7 @@ void mob_magic(struct char_data *ch)
 }
 
 
-bool check_spirit_sector(rnum_t room, int spirit)
+bool check_spirit_sector(struct room_data *room, int spirit)
 {
   if ((spirit == SPIRIT_WIND || spirit == SPIRIT_MIST || spirit == SPIRIT_STORM)) {
     if (SECT(room) == SPIRIT_HEARTH || SECT(room) == SPIRIT_FOREST || ROOM_FLAGGED(room, ROOM_INDOORS))
