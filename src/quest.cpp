@@ -148,7 +148,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
         (room = real_room(quest_table[num].mob[i].l_data)) > -1) {
       mob = read_mobile(rnum, REAL);
       mob->mob_specials.quest_id = GET_IDNUM(ch);
-      char_to_room(mob, room);
+      char_to_room(mob, &world[room]);
       if(quest_table[num].mob[i].objective == QMO_LOCATION)
         add_follower(mob, ch);
       for (j = 0; j < quest_table[num].num_objs; j++)
@@ -189,7 +189,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
                (rnum = real_mobile(quest_table[num].mob[i].vnum)) > -1) {
       mob = read_mobile(rnum, REAL);
       mob->mob_specials.quest_id = GET_IDNUM(ch);
-      char_to_room(mob, ch->in_room);
+      char_to_room(mob, ch->en_room);
       for (j = 0; j < quest_table[num].num_objs; j++)
         if (quest_table[num].obj[j].l_data == i &&
             (rnum = real_object(quest_table[num].obj[j].vnum)) > -1) {
@@ -236,7 +236,7 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
         if ((room = real_room(quest_table[num].obj[i].l_data)) > -1) {
           obj = read_object(rnum, REAL);
           obj->obj_flags.quest_id = GET_IDNUM(ch);
-          obj_to_room(obj, room);
+          obj_to_room(obj, &world[room]);
         }
         obj = NULL;
         break;
@@ -366,7 +366,7 @@ void check_quest_delivery(struct char_data *ch, struct obj_data *obj)
   for (i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++)
     if (quest_table[GET_QUEST(ch)].obj[i].objective == QOO_LOCATION &&
         GET_OBJ_VNUM(obj) == quest_table[GET_QUEST(ch)].obj[i].vnum &&
-        world[ch->in_room].number == quest_table[GET_QUEST(ch)].obj[i].o_data)
+        ch->en_room->number == quest_table[GET_QUEST(ch)].obj[i].o_data)
     {
       ch->player_specials->obj_complete[i] = 1;
       return;
@@ -389,7 +389,7 @@ void check_quest_destination(struct char_data *ch, struct char_data *mob)
 
   for (i = 0; i < quest_table[GET_QUEST(ch)].num_mobs; i++)
     if (quest_table[GET_QUEST(ch)].mob[i].objective == QMO_LOCATION &&
-        world[mob->in_room].number == quest_table[GET_QUEST(ch)].mob[i].o_data)
+        mob->en_room->number == quest_table[GET_QUEST(ch)].mob[i].o_data)
     {
       ch->player_specials->mob_complete[i] = 1;
       stop_follower(mob);
@@ -642,7 +642,7 @@ SPECIAL(johnson)
       GET_SPARE1(johnson) = -1;
     }
     if (GET_SPARE1(johnson) >= 0) {
-      for (temp = world[johnson->in_room].people; temp; temp = temp->next_in_room)
+      for (temp = johnson->en_room->people; temp; temp = temp->next_en_room)
         if (memory(johnson, temp))
           break;
       if (!temp) {
@@ -801,7 +801,7 @@ void johnson_update(void)
         strcpy( buf, quest_table[i].s_string );
       johnson = read_mobile( quest_table[i].johnson, REAL );
       MOB_FLAGS(johnson).SetBit(MOB_ISNPC);
-      char_to_room( johnson, quest_table[i].s_room );
+      char_to_room( johnson, &world[quest_table[i].s_room] );
     }
     /* Needs to head off */
     else if ( rend || quest_table[i].e_time < time_info.hours ) {
@@ -811,13 +811,13 @@ void johnson_update(void)
         if ( johnson->nr == (tmp = read_mobile( quest_table[i].johnson, REAL))->nr )
           break;
       }
-      if ( johnson != NULL && johnson->in_room != NOWHERE ) {
+      if ( johnson != NULL && johnson->en_room) {
         MOB_FLAGS(johnson).SetBit(MOB_ISNPC);
         char_from_room( johnson );
         char_to_room( johnson, 0 );
         extract_char(johnson);
       }
-      if ( tmp != NULL && tmp->in_room != NOWHERE ) {
+      if ( tmp != NULL && tmp->en_room) {
         MOB_FLAGS(tmp).SetBit(MOB_ISNPC);
         extract_char( tmp );
       }
