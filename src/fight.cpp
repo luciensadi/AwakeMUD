@@ -30,7 +30,7 @@ extern struct message_list fight_messages[MAX_MESSAGES];
 
 
 int find_sight(struct char_data *ch);
-void damage_door(struct char_data *ch, int room, int dir, int power, int type);
+void damage_door(struct char_data *ch, struct room_data *room, int dir, int power, int type);
 void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type);
 void mount_fire(struct char_data *ch);
 /* External procedures */
@@ -1386,83 +1386,73 @@ float power_multiplier(int type, int material)
   return 1.0;
 }
 
-void damage_door(struct char_data *ch, int room, int dir, int power, int type)
+void damage_door(struct char_data *ch, struct room_data *room, int dir, int power, int type)
 {
-  if (room < 0 || room > top_of_world || dir < NORTH || dir > DOWN ||
-      !world[room].dir_option[dir] || !world[room].dir_option[dir]->keyword ||
-      !IS_SET(world[room].dir_option[dir]->exit_info, EX_CLOSED))
+  if (!room || dir < NORTH || dir > DOWN || !room->dir_option[dir] || !room->dir_option[dir]->keyword || !IS_SET(room->dir_option[dir]->exit_info, EX_CLOSED))
     return;
   
   int rating, half, opposite, rev, ok = 0;
   
-  opposite = world[room].dir_option[dir]->to_room;
+  opposite = room->dir_option[dir]->to_room;
   rev = rev_dir[dir];
-  if (opposite > -1 && world[opposite].dir_option[rev] &&
-      world[opposite].dir_option[rev]->to_room == room)
+  if (opposite > -1 && world[opposite].dir_option[rev] && &world[world[opposite].dir_option[rev]->to_room] == room)
     ok = TRUE;
   
   if (IS_SET(type, DAMOBJ_MANIPULATION))
   {
-    rating = world[room].dir_option[dir]->barrier;
+    rating = room->dir_option[dir]->barrier;
     REMOVE_BIT(type, DAMOBJ_MANIPULATION);
   } else
-    rating = world[room].dir_option[dir]->barrier * 2;
+    rating = room->dir_option[dir]->barrier * 2;
   
   half = MAX(1, rating >> 1);
   
   if (ch && IS_SET(type, DAMOBJ_CRUSH) && GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_SMASHING_BLOW))
     power += MAX(0, success_test(GET_SKILL(ch, SKILL_UNARMED_COMBAT), 4));
   if (IS_GUN(type))
-    sprintf(buf, "You hear gunshots and the sound of bullets impacting the %s.\r\n", fname(world[room].dir_option[dir]->keyword));
+    sprintf(buf, "You hear gunshots and the sound of bullets impacting the %s.\r\n", fname(room->dir_option[dir]->keyword));
   else
-    sprintf(buf, "Someone bashes on the %s from the other side.\r\n", fname(world[room].dir_option[dir]->keyword));
+    sprintf(buf, "Someone bashes on the %s from the other side.\r\n", fname(room->dir_option[dir]->keyword));
   send_to_room(buf, opposite);
   
   if (power < half)
   {
-    sprintf(buf, "The %s remains undamaged.\r\n", fname(world[room].dir_option[dir]->keyword));
+    sprintf(buf, "The %s remains undamaged.\r\n", fname(room->dir_option[dir]->keyword));
     send_to_room(buf, room);
-    if (ch && ch->in_room != room)
+    if (ch && ch->en_room != room)
       send_to_char(buf, ch);
     return;
-  } else if (power < rating)
-  {
-    sprintf(buf, "The %s has been slightly damaged.\r\n",
-            fname(world[room].dir_option[dir]->keyword));
-    send_to_room(buf, room);
-    if (ch && ch->in_room != room)
-      send_to_char(buf, ch);
-    world[room].dir_option[dir]->condition--;
-  } else
-  {
-    sprintf(buf, "The %s has been damaged!\r\n", fname(world[room].dir_option[dir]->keyword));
-    send_to_room(buf, room);
-    if (ch && ch->in_room != room)
-      send_to_char(buf, ch);
-    world[room].dir_option[dir]->condition -= 1 + (power - rating) / half;
+  }
+  
+  // Compose the damage message, but don't send it-- it can be overwritten by the destruction message if necessary.
+  if (power < rating) {
+    sprintf(buf, "The %s has been slightly damaged.\r\n", fname(room->dir_option[dir]->keyword));
+    room->dir_option[dir]->condition--;
+  } else {
+    sprintf(buf, "The %s has been damaged!\r\n", fname(room->dir_option[dir]->keyword));
+    room->dir_option[dir]->condition -= 1 + (power - rating) / half;
   }
   
   if (ok)
-    world[opposite].dir_option[rev]->condition = world[room].dir_option[dir]->condition;
+    world[opposite].dir_option[rev]->condition = room->dir_option[dir]->condition;
   
-  if (world[room].dir_option[dir]->condition <= 0)
-  {
-    sprintf(buf, "The %s has been destroyed!\r\n", fname(world[room].dir_option[dir]->keyword));
-    send_to_room(buf, room);
-    if (ch && ch->in_room != room)
-      send_to_char(buf, ch);
-    REMOVE_BIT(world[room].dir_option[dir]->exit_info, EX_CLOSED);
-    REMOVE_BIT(world[room].dir_option[dir]->exit_info, EX_LOCKED);
-    SET_BIT(world[room].dir_option[dir]->exit_info, EX_DESTROYED);
+  if (room->dir_option[dir]->condition <= 0) {
+    sprintf(buf, "The %s has been destroyed!\r\n", fname(room->dir_option[dir]->keyword));
+    REMOVE_BIT(room->dir_option[dir]->exit_info, EX_CLOSED);
+    REMOVE_BIT(room->dir_option[dir]->exit_info, EX_LOCKED);
+    SET_BIT(room->dir_option[dir]->exit_info, EX_DESTROYED);
     if (ok) {
-      sprintf(buf, "The %s is destroyed from the other side!\r\n",
-              fname(world[room].dir_option[dir]->keyword));
-      send_to_room(buf, opposite);
+      sprintf(buf2, "The %s is destroyed from the other side!\r\n", fname(room->dir_option[dir]->keyword));
+      send_to_room(buf2, opposite);
       REMOVE_BIT(world[opposite].dir_option[rev]->exit_info, EX_CLOSED);
       REMOVE_BIT(world[opposite].dir_option[rev]->exit_info, EX_LOCKED);
       SET_BIT(world[opposite].dir_option[rev]->exit_info, EX_DESTROYED);
     }
   }
+  
+  send_to_room(buf, room);
+  if (ch && ch->en_room != room)
+    send_to_char(buf, ch);
 }
 
 // damage_obj does what its name says, it figures out effects of successes
