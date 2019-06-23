@@ -343,7 +343,7 @@ ACMD(do_cook) {
         return;
       }
     }
-    for (struct obj_data *comp = ch->in_veh ? ch->in_veh->contents : world[ch->in_room].contents; comp; comp = comp->next_content)
+    for (struct obj_data *comp = ch->in_veh ? ch->in_veh->contents : ch->en_room->contents; comp; comp = comp->next_content)
         if (GET_OBJ_TYPE(comp) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(comp, 0) == TYPE_COMPUTER && comp->contains)
             if ((chip = get_obj_in_list_vis(ch, argument, comp->contains)))
                 break;
@@ -356,7 +356,7 @@ ACMD(do_cook) {
     else if (GET_OBJ_VAL(chip, 0) == SOFT_SUITE)
       send_to_char("You don't need to encode this to an optical chip.\r\n", ch);
     else {
-        for (cooker = ch->in_veh ? ch->in_veh->contents : world[ch->in_room].contents; cooker; cooker = cooker->next_content)
+        for (cooker = ch->in_veh ? ch->in_veh->contents : ch->en_room->contents; cooker; cooker = cooker->next_content)
             if (GET_OBJ_TYPE(cooker) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(cooker, 0) == TYPE_COOKER && !cooker->contains)
                 break;
         if (!cooker) {
@@ -364,7 +364,7 @@ ACMD(do_cook) {
             return;
         }
         int cost = GET_OBJ_VAL(chip, 2) / 2, paid = 0;
-        for (struct obj_data *obj = ch->in_veh ? ch->in_veh->contents : world[ch->in_room].contents; obj; obj = obj->next_content)
+        for (struct obj_data *obj = ch->in_veh ? ch->in_veh->contents : ch->en_room->contents; obj; obj = obj->next_content)
             if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_PARTS && GET_OBJ_VAL(obj, 1) && GET_OBJ_COST(obj) >= cost) {
                 GET_OBJ_COST(obj) -= cost;
                 if (!GET_OBJ_COST(obj))
@@ -456,9 +456,9 @@ ACMD(do_build) {
     half_chop(argument, arg1, buf);
     half_chop(buf, arg2, arg3);
     if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
-        if (!(obj = get_obj_in_list_vis(ch, arg1, world[ch->in_room].contents))) {
+        if (!(obj = get_obj_in_list_vis(ch, arg1, ch->en_room->contents))) {
             if (!str_cmp(arg1, "circle")) {
-                for (obj = world[ch->in_room].contents; obj; obj = obj->next_content)
+                for (obj = ch->en_room->contents; obj; obj = obj->next_content)
                     if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE || GET_OBJ_VAL(obj, 0) == TYPE_LODGE)) {
                         send_to_char("There is already a lodge or a hermetic circle here.\r\n", ch);
                         return;
@@ -469,7 +469,7 @@ ACMD(do_build) {
                     circle_build(ch, arg3, atoi(arg2));
                 return;
             } else if (!str_cmp(arg1, "lodge")) {
-                for (obj = world[ch->in_room].contents; obj; obj = obj->next_content)
+                for (obj = ch->en_room->contents; obj; obj = obj->next_content)
                     if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && (GET_OBJ_VAL(obj, 0) == TYPE_CIRCLE || GET_OBJ_VAL(obj, 0) == TYPE_LODGE)) {
                         send_to_char("There is already a lodge or a hermetic circle here.\r\n", ch);
                         return;
@@ -587,7 +587,7 @@ ACMD(do_build) {
                     }
                 }
                 struct obj_data *chips = NULL, *part = NULL;
-                for (struct obj_data *find = world[ch->in_room].contents; find; find = find->next_content)
+                for (struct obj_data *find = ch->en_room->contents; find; find = find->next_content)
                     if (GET_OBJ_TYPE(find) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(find, 0) == TYPE_PARTS) {
                         if (GET_OBJ_VAL(find, 1) && GET_OBJ_COST(find) >= GET_OBJ_VAL(obj, 9))
                             chips = find;
@@ -757,7 +757,7 @@ ACMD(do_progress)
     send_to_char(ch, "The lodge you are working on is about %d%% completed.\r\n", (int)(((float)(((GET_OBJ_VAL(ch->char_specials.programming, 1) != 0 ? GET_OBJ_VAL(ch->char_specials.programming, 1) : 1) * 300) -
                      GET_OBJ_VAL(ch->char_specials.programming, 9)) / (float)(GET_OBJ_VAL(ch->char_specials.programming, 1) * 300)) * 100));
   } else if (AFF_FLAGS(ch).IsSet(AFF_PACKING)) {
-    for (struct obj_data *obj = world[ch->in_room].contents; obj; obj = obj->next_content)
+    for (struct obj_data *obj = ch->en_room->contents; obj; obj = obj->next_content)
       if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_OBJ_VAL(obj, 3)) {
         send_to_char(ch, "You are about %d%% of the way through%spacking %s.\r\n",
                           (int)((float)((3.0-GET_OBJ_VAL(obj, 3)) / 3)*100), GET_OBJ_VAL(obj, 2) ? " " : " un", 
