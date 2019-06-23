@@ -1939,3 +1939,13 @@ bool char_can_make_noise(struct char_data *ch, const char *message = NULL) {
   
   return TRUE;
 }
+
+struct char_data *get_driver(struct veh_data *veh) {
+  struct char_data *i;
+    
+  for (i = veh->people; i; i = i->next_in_veh)
+    if (AFF_FLAGGED(i, AFF_PILOT))
+      return i;
+  
+  return NULL;
+}

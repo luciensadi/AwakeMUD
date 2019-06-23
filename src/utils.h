@@ -76,6 +76,7 @@ struct  obj_data *stop_manning_weapon_mounts(struct char_data *ch, bool send_mes
 struct  obj_data *get_mount_manned_by_ch(struct char_data *ch);
 void    terminate_mud_process_with_message(const char *message, int error_code);
 bool    char_can_make_noise(struct char_data *ch, const char *message = NULL);
+struct  char_data *get_driver(struct veh_data *veh);
 
 // Message history management and manipulation.
 void    store_message_to_history(struct descriptor_data *d, int channel, const char *mallocd_message);
@@ -280,6 +281,14 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 #define GET_ROOM_VNUM(room) \
  ((vnum_t)((room) ? (room)->number : NOWHERE))
+
+#define GET_BACKGROUND_COUNT(room) ((room)->background[0])
+#define GET_BACKGROUND_AURA(room)  ((room)->background[1])
+
+/* zone utils ************************************************************/
+
+#define GET_JURISDICTION(room) (zone_table[(room)->zone].jurisdiction)
+#define GET_SECURITY_LEVEL(room) (zone_table[(room)->zone].security)
 
 /* char utils ************************************************************/
 
