@@ -107,7 +107,7 @@ int MAX(int a, int b);
 int MIN(int a, int b);
 #endif
 
-#define RM_BLOOD(rm) (rm.blood)
+#define RM_BLOOD(rm) ((rm).blood)
 /* Ok im done here -- root */
 
 /* in magic.c */
@@ -265,7 +265,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 /* room utils ************************************************************/
 
 
-#define SECT(room) (room ? room->sector_type : SPIRIT_HEARTH)
+#define SECT(room) ((room) ? (room)->sector_type : SPIRIT_HEARTH)
 #define IS_WATER(room) (SECT((room)) == SPIRIT_LAKE || SECT((room)) == SPIRIT_RIVER || SECT((room)) == SPIRIT_SEA)
 
 #define IS_DARK(room)  (light_level((room)) == ITEM_FULLDARK)
