@@ -328,7 +328,7 @@ void copyover_recover()
         load_room = real_room(GET_LAST_IN(d->character));
       else
         load_room = real_room(GET_LOADROOM(d->character));
-      char_to_room(d->character, load_room);
+      char_to_room(d->character, &world[load_room]);
       //look_at_room(d->character, 0);
     }
   }
@@ -658,11 +658,11 @@ void game_loop(int mother_desc)
           d->character->char_specials.timer = 0;
           if (d->original)
             d->original->char_specials.timer = 0;
-          if (!d->connected && GET_WAS_IN(d->character) != NOWHERE) {
-            if (d->character->in_room != NOWHERE)
+          if (!d->connected && GET_WAS_EN(d->character)) {
+            if (d->character->en_room)
               char_from_room(d->character);
-            char_to_room(d->character, GET_WAS_IN(d->character));
-            GET_WAS_IN(d->character) = NOWHERE;
+            char_to_room(d->character, GET_WAS_EN(d->character));
+            GET_WAS_EN(d->character) = NULL;
             act("$n has returned.", TRUE, d->character, 0, 0, TO_ROOM);
           }
         }
@@ -773,15 +773,15 @@ void game_loop(int mother_desc)
       weather_change();
       if (time_info.hours == 17) {
         for (i = 0; i <= top_of_world; i++) {
-          if (ROOM_FLAGGED(i, ROOM_LIT)) {
-            send_to_room("A streetlight hums faintly, flickers, and turns on.\r\n", i);
+          if (ROOM_FLAGGED(&world[i], ROOM_STREETLIGHTS)) {
+            send_to_room("A streetlight hums faintly, flickers, and turns on.\r\n", &world[i]);
           }
         }
       }
       if (time_info.hours == 7) {
         for (i = 0; i <= top_of_world; i++) {
-          if (ROOM_FLAGGED(i, ROOM_LIT)) {
-            send_to_room("A streetlight flickers and goes out.\r\n", i);
+          if (ROOM_FLAGGED(&world[i], ROOM_STREETLIGHTS)) {
+            send_to_room("A streetlight flickers and goes out.\r\n", &world[i]);
           }
         }
       }
@@ -1191,7 +1191,7 @@ void make_prompt(struct descriptor_data * d)
               break;
             case 'v':
               if (GET_REAL_LEVEL(d->character) >= LVL_BUILDER)
-                sprintf(str, "%ld", world[d->character->in_room].number);
+                sprintf(str, "%ld", d->character->en_room->number);
               else
                 strcpy(str, "@v");
               break;
@@ -2338,7 +2338,7 @@ void send_to_room(const char *messg, struct room_data *room)
   struct char_data *i;
   struct veh_data *v;
   if (messg && room) {
-    for (i = room->people; i; i = i->next_in_room)
+    for (i = room->people; i; i = i->next_en_room)
       if (i->desc)
         if (!(PLR_FLAGGED(i, PLR_REMOTE) || PLR_FLAGGED(i, PLR_MATRIX)) && AWAKE(i))
           SEND_TO_Q(messg, i->desc);
@@ -2648,11 +2648,11 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
    or TO_ROOM or TO_ROLLS */
   
   if (type == TO_VEH_ROOM && ch && ch->in_veh && !ch->in_veh->in_veh)
-    to = world[ch->in_veh->in_room].people;
-  else if (ch && ch->in_room != NOWHERE)
-    to = world[ch->in_room].people;
-  else if (obj && obj->in_room != NOWHERE)
-    to = world[obj->in_room].people;
+    to = ch->in_veh->en_room->people;
+  else if (ch && ch->en_room)
+    to = ch->en_room->people;
+  else if (obj && obj->en_room)
+    to = obj->en_room->people;
   else if (obj && obj->in_veh)
     to = obj->in_veh->people;
   else if (ch && ch->in_veh)
@@ -2670,7 +2670,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
   
   if ( type == TO_ROLLS )
   {
-    for (; to; to = to->next_in_room) {
+    for (; to; to = to->next_en_room) {
       if (!PRF_FLAGGED(to, PRF_ROLLS))
         continue;
       if (SENDOK(to)
@@ -2687,7 +2687,7 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
     if (to->in_veh)
       next = to->next_in_veh;
     else
-      next = to->next_in_room;
+      next = to->next_en_room;
     if (can_send_act_to_target(ch, hide_invisible, obj, vict_obj, to, type))
       perform_act(str, ch, obj, vict_obj, to);
   }
