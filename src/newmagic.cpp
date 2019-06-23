@@ -107,14 +107,14 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
       skill += 2;
   } else if (GET_TOTEM(ch) == TOTEM_RAVEN)
   {
-    if (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) || SECT(ch->in_room) == SPIRIT_HEARTH)
+    if (ROOM_FLAGGED(ch->en_room, ROOM_INDOORS) || SECT(ch->en_room) == SPIRIT_HEARTH)
       target += 1;
   } else if (GET_TOTEM(ch) == TOTEM_SNAKE && FIGHTING(ch))
     skill--;
   else if ((GET_TOTEM(ch) == TOTEM_BAT || GET_TOTEM(ch) == TOTEM_PUMA)
            && (time_info.hours > 6 && time_info.hours < 19) && OUTSIDE(ch))
     target += 2;
-  else if (GET_TOTEM(ch) == TOTEM_PUMA && world[ch->in_room].crowd > 4)
+  else if (GET_TOTEM(ch) == TOTEM_PUMA && ch->en_room->crowd > 4)
     target += 2;
   else if (GET_TOTEM(ch) == TOTEM_SCORPION && (time_info.hours > 6 && time_info.hours < 19))
     target += 2;
@@ -439,8 +439,8 @@ void elemental_fulfilled_services(struct char_data *ch, struct char_data *mob, s
 
 bool conjuring_drain(struct char_data *ch, int force)
 {
-  if (world[ch->in_room].background[1] != 13)
-    force += world[ch->in_room].background[0] / 2;
+  if (GET_BACKGROUND_AURA(ch->en_room) != AURA_POWERSITE)
+    force += GET_BACKGROUND_COUNT(ch->en_room) / 2;
   int drain = 0;
   if (force <= GET_CHA(ch) / 2)
     drain = LIGHT;
@@ -492,7 +492,7 @@ void magic_perception(struct char_data *ch, int force, int spell)
   totem_bonus(ch, SPELLCASTING, spell, starg, skill);
   if (skill > 0)
     base--;
-  for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : world[ch->in_room].people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room) {
+  for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->en_room->people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_en_room) {
     if (ch == vict)
       continue;
     target = base;
@@ -513,8 +513,8 @@ bool spell_drain(struct char_data *ch, int type, int force, int damage)
   char buf[MAX_STRING_LENGTH];
   int target = (int)(force / 2), success = 0;
   target += spells[type].drainpower;
-  if (world[ch->in_room].background[1] != 13)
-    target += (world[ch->in_room].background[0] / 2);
+  if (GET_BACKGROUND_AURA(ch->en_room) != AURA_POWERSITE)
+    target += (GET_BACKGROUND_COUNT(ch->en_room) / 2);
   if (!damage)
     damage = spells[type].draindamage;
   else if (type)
@@ -608,9 +608,10 @@ void create_sustained(struct char_data *ch, struct char_data *vict, int spell, i
 
 void spell_bonus(struct char_data *ch, int spell, int &skill, int &target)
 {
-  if (world[ch->in_room].background[1] == AURA_POWERSITE)
-    skill += world[ch->in_room].background[0];
-  else target += world[ch->in_room].background[0];
+  if (GET_BACKGROUND_AURA(ch->en_room) == AURA_POWERSITE)
+    skill += GET_BACKGROUND_COUNT(ch->en_room);
+  else
+    target += GET_BACKGROUND_COUNT(ch->en_room);
   if (GET_TRADITION(ch) == TRAD_SHAMANIC)
     totem_bonus(ch, SPELLCASTING, spell, target, skill);
   else if (GET_TRADITION(ch) == TRAD_HERMETIC && GET_SPIRIT(ch) && spells[spell].category != HEALTH)
@@ -756,7 +757,7 @@ void cast_combat_spell(struct char_data *ch, int spell, int force, char *arg)
     send_to_char("You can't target yourself with a combat spell!\r\n", ch);
     return;
   }
-  if (world[ch->in_room].peaceful) {
+  if (ch->en_room->peaceful) {
     send_to_char("This room just has a peaceful, easy feeling...\r\n", ch);
     return;
   }
@@ -1187,7 +1188,7 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
   case SPELL_BALLLIGHTNING:
   case SPELL_CLOUT:
     two_arguments(arg, buf, buf1);
-    if (world[ch->in_room].peaceful) {
+    if (ch->en_room->peaceful) {
       send_to_char("This room just has a peaceful, easy feeling...\r\n", ch);
       return;
     }
@@ -1259,14 +1260,14 @@ void cast_manipulation_spell(struct char_data *ch, int spell, int force, char *a
     spell_drain(ch, spell, force, 0);
     break;
   case SPELL_ICESHEET:
-    if (!ch->in_room) {
+    if (!ch->en_room) {
       send_to_char("You can't create ice in here!\r\n", ch);
       return;
     }
     success = success_test(skill, target + 4);
     if (success > 0) {
-      world[ch->in_room].icesheet[0] = (int)(3.14 * ((GET_MAG(ch) * GET_MAG(ch)) / 10000));
-      world[ch->in_room].icesheet[1] = force + MIN(force, success / 2);
+      ch->en_room->icesheet[0] = (int)(3.14 * ((GET_MAG(ch) * GET_MAG(ch)) / 10000));
+      ch->en_room->icesheet[1] = force + MIN(force, success / 2);
       act("The floor is suddenly covered in ice!", FALSE, ch, 0, 0, TO_ROOM);
       act("The floor is suddenly covered in ice!", FALSE, ch, 0, 0, TO_CHAR);
     } else
@@ -1599,7 +1600,7 @@ void mob_magic(struct char_data *ch)
         spell = SPELL_POLTERGEIST;
         break;
 */      case 11:
-        if (!world[ch->in_room].icesheet[1])
+        if (!ch->en_room->icesheet[1])
           spell = SPELL_ICESHEET;
         break;
       case 12:
@@ -1673,7 +1674,7 @@ void circle_build(struct char_data *ch, char *type, int force)
   GET_OBJ_VAL(obj, 9) = force * 60;
   AFF_FLAGS(ch).SetBit(AFF_CIRCLE);
   GET_BUILDING(ch) = obj;
-  obj_to_room(obj, ch->in_room);
+  obj_to_room(obj, ch->en_room);
   send_to_char("You begin to draw a hermetic circle.\r\n", ch);
   act("$n begins to draw a hermetic circle.\r\n", FALSE, ch, 0, 0, TO_ROOM);
 }
@@ -1708,7 +1709,7 @@ void lodge_build(struct char_data *ch, int force)
   GET_OBJ_VAL(obj, 9) = force * 60 * 5;
   AFF_FLAGS(ch).SetBit(AFF_LODGE);
   GET_BUILDING(ch) = obj;
-  obj_to_room(obj, ch->in_room);
+  obj_to_room(obj, ch->en_room);
   send_to_char(ch, "You begin to build a lodge to %s.\r\n", totem_types[GET_TOTEM(ch)]);
   act("$n begins to build a lodge.\r\n", FALSE, ch, 0, 0, TO_ROOM);
 }
@@ -1787,9 +1788,9 @@ struct char_data *create_elemental(struct char_data *ch, int type, int force, in
       break;
     }
   if (ch->in_veh)
-    char_to_room(mob, ch->in_veh->in_room);
+    char_to_room(mob, ch->in_veh->en_room);
   else
-    char_to_room(mob, ch->in_room);
+    char_to_room(mob, ch->en_room);
   add_follower(mob, ch);
   affect_total(mob);
   return mob;
@@ -2284,7 +2285,7 @@ ACMD(do_conjure)
     }
     bool library = FALSE, circle = FALSE;
     struct obj_data *obj;
-    for (struct obj_data *obj = world[ch->in_room].contents; obj; obj = obj->next_content)
+    for (struct obj_data *obj = ch->en_room->contents; obj; obj = obj->next_content)
       if (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL) {
         if (GET_OBJ_VAL(obj, 0) == TYPE_LIBRARY_CONJURE) {
           if (GET_OBJ_VAL(obj, 1) < force) {
@@ -2342,9 +2343,10 @@ ACMD(do_conjure)
       return;
     }
     int skill = GET_SKILL(ch, SKILL_CONJURING), target = force;
-    if (world[ch->in_room].background[1] == AURA_POWERSITE)
-      skill += world[ch->in_room].background[0];
-    else target += world[ch->in_room].background[0];
+    if (ch->en_room->background[1] == AURA_POWERSITE)
+      skill += GET_BACKGROUND_COUNT(ch->en_room);
+    else
+      target += GET_BACKGROUND_COUNT(ch->en_room);
     totem_bonus(ch, CONJURING, spirit, target, skill);
     if (GET_ASPECT(ch) == ASPECT_SHAMANIST && skill == GET_SKILL(ch, SKILL_CONJURING)) {
       send_to_char("Your totem will not let you conjure that spirit!\r\n", ch);
@@ -2472,7 +2474,7 @@ ACMD(do_learn)
       send_to_char(ch, "%s forbids you from learning this spell.\r\n", totem_types[GET_TOTEM(ch)]);
     }
   }
-  struct obj_data *library = world[ch->in_room].contents;
+  struct obj_data *library = ch->en_room->contents;
   for (;library; library = library->next_content)
     if (GET_OBJ_TYPE(library) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(library, 1) >= force &&
         ((GET_TRADITION(ch) == TRAD_SHAMANIC
@@ -2843,7 +2845,7 @@ POWER(spirit_accident)
     send_to_char("The spirit refuses to perform that service.\r\n", ch);
   else {
     int success = success_test(MAX(GET_INT(tch), GET_QUI(tch)), GET_SPARE2(spirit));
-    for (struct char_data *mob = world[spirit->in_room].people; mob; mob = mob->next)
+    for (struct char_data *mob = spirit->en_room->people; mob; mob = mob->next)
       if (IS_NPC(mob) && (GET_RACE(mob) == RACE_SPIRIT || GET_RACE(mob) == RACE_ELEMENTAL) &&
           MOB_FLAGGED(mob, MOB_SPIRITGUARD)) {
         success = -1;
@@ -3283,16 +3285,16 @@ ACMD(do_domain)
   }
   if (!*argument) {
     send_to_char(ch, "You are currently in the %s domain.\r\n", spirits[GET_DOMAIN(ch)].name);
-    if (SECT(ch->in_room) != SPIRIT_FOREST && SECT(ch->in_room) != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
-      send_to_char(ch, "You can switch to the following domains:\r\n  %s\r\n  Sky Spirit\r\n", spirits[SECT(ch->in_room)].name);
+    if (SECT(ch->en_room) != SPIRIT_FOREST && SECT(ch->en_room) != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->en_room, ROOM_INDOORS)) {
+      send_to_char(ch, "You can switch to the following domains:\r\n  %s\r\n  Sky Spirit\r\n", spirits[SECT(ch->en_room)].name);
     }
   } else {
     struct spirit_data *next;
     skip_spaces(&argument);
     int newdomain = -1;
-    if (SECT(ch->in_room) != SPIRIT_FOREST && SECT(ch->in_room) != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
-      if (is_abbrev(argument, spirits[SECT(ch->in_room)].name))
-        newdomain = SECT(ch->in_room);
+    if (SECT(ch->en_room) != SPIRIT_FOREST && SECT(ch->en_room) != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->en_room, ROOM_INDOORS)) {
+      if (is_abbrev(argument, spirits[SECT(ch->en_room)].name))
+        newdomain = SECT(ch->en_room);
       else if (is_abbrev(argument, "sky spirit"))
         newdomain = SPIRIT_SKY;
     }
@@ -3472,7 +3474,7 @@ ACMD(do_destroy)
   }
   skip_spaces(&argument);
   struct obj_data *obj;
-  if (!(obj = get_obj_in_list_vis(ch, argument, world[ch->in_room].contents))) {
+  if (!(obj = get_obj_in_list_vis(ch, argument, ch->en_room->contents))) {
     send_to_char("That object isn't here.\r\n", ch);
     return;
   }
@@ -3580,7 +3582,7 @@ ACMD(do_track)
   }
   success = success_test(GET_INT(ch), 4);
   if (vict && success > 0) {
-    if (vict->in_room == ch->in_room) {
+    if (vict->en_room == ch->en_room) {
       send_to_char("They're right here!\r\n", ch);
       return;
     }
@@ -4083,27 +4085,27 @@ ACMD(do_cleanse)
     send_to_char("You have no sense of the astral plane.\r\n", ch);
   else if (!GET_SKILL(ch, SKILL_SORCERY))
     send_to_char("You need practical knowledge of sorcery to cleanse the astral plane.\r\n", ch);
-  else if (!world[ch->in_room].background[0])
+  else if (!GET_BACKGROUND_COUNT(ch->en_room))
     send_to_char("The astral plane in this area is calm.\r\n", ch);
-  else if (world[ch->in_room].background[0] > GET_GRADE(ch) || world[ch->in_room].background[0] > 5)
+  else if (GET_BACKGROUND_COUNT(ch->en_room) > GET_GRADE(ch) || GET_BACKGROUND_COUNT(ch->en_room) > 5)
     send_to_char("Cleansing a disturbance of this magnitude is beyond your abilities.\r\n", ch);
-  else if (world[ch->in_room].background[1] == AURA_POWERSITE)
+  else if (ch->en_room->background[1] == AURA_POWERSITE)
     send_to_char("You cannot cleanse a power site.\r\n", ch);
   else {
-    int success = success_test(GET_SKILL(ch, SKILL_SORCERY), world[ch->in_room].background[0] * 2), background = world[ch->in_room].background[0];
+    int success = success_test(GET_SKILL(ch, SKILL_SORCERY), GET_BACKGROUND_COUNT(ch->en_room) * 2), background = GET_BACKGROUND_COUNT(ch->en_room);
     success /= 2;
     if (success <= 0)
       send_to_char("You fail to reduce the astral disturbances in this area.\r\n", ch);
     else {
-      world[ch->in_room].background[0] = MAX(0, world[ch->in_room].background[0] - success);
-      if (!world[ch->in_room].background[0]) {
+      GET_BACKGROUND_COUNT(ch->en_room) = MAX(0, GET_BACKGROUND_COUNT(ch->en_room) - success);
+      if (!GET_BACKGROUND_COUNT(ch->en_room)) {
         send_to_char("You successfully remove all astral disturbances from the area.\r\n", ch);
         sprintf(buf, "The astral disturbances in this area completely vanish.\r\n");
       } else {
         send_to_char("You succeed in lowering the astral disturbances in the area.\r\n", ch);
         sprintf(buf, "The astral disturbances in the are seem to diminish slightly.\r\n");
       }
-      for (struct char_data *targ = world[ch->in_room].people; targ; targ = targ->next_in_room)
+      for (struct char_data *targ = ch->en_room->people; targ; targ = targ->next_en_room)
         if (ch != targ && (IS_ASTRAL(targ) || IS_DUAL(targ)))
           send_to_char(buf, targ);
     }
