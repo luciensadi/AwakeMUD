@@ -1408,7 +1408,7 @@ void parse_object(File &fl, long nr)
 
   obj_data *obj = obj_proto+rnum;
 
-  obj->in_room = NOWHERE;
+  obj->en_room = NULL;
   obj->item_number = rnum;
   
 #ifdef USE_DEBUG_CANARIES
@@ -2734,7 +2734,7 @@ void reset_zone(int zone, int reboot)
       if ((mob_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
           (ZCMD.arg2 == 0 && reboot)) {
         mob = read_mobile(ZCMD.arg1, REAL);
-        char_to_room(mob, ZCMD.arg3);
+        char_to_room(mob, &world[ZCMD.arg3]);
         last_cmd = 1;
       } else {
         if (ZCMD.arg2 == 0 && !reboot)
@@ -2880,7 +2880,7 @@ void reset_zone(int zone, int reboot)
     case 'V':                 /* loads a vehicle */
       if ((veh_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)) {        
         veh = read_vehicle(ZCMD.arg1, REAL);
-        veh_to_room(veh, ZCMD.arg3);
+        veh_to_room(veh, &world[ZCMD.arg3]);
         last_cmd = 1;
       } else
         last_cmd = 0;
@@ -2898,10 +2898,10 @@ void reset_zone(int zone, int reboot)
     case 'O':                 /* read an object */
       if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)) {
         obj = read_object(ZCMD.arg1, REAL);
-        obj_to_room(obj, ZCMD.arg3);
+        obj_to_room(obj, &world[ZCMD.arg3]);
         
         if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(obj) == TYPE_SHOP) {
-          if (GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE && !ROOM_FLAGGED(obj->in_room, ROOM_GARAGE)) {
+          if (GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE && !ROOM_FLAGGED(obj->en_room, ROOM_GARAGE)) {
             // Warn the builder that they're breaking the game's rules (let it continue since it doesn't harm anything though).
             ZONE_ERROR("Zoneloading a pre-set-up vehicle workshop in a non-GARAGE room violates game rules about vehicle workshop locations. Flag the room as GARAGE.");
           }
@@ -2910,7 +2910,7 @@ void reset_zone(int zone, int reboot)
           GET_WORKSHOP_IS_SETUP(obj) = 1;
           
           // Handle the room's workshop[] array.
-          if (obj->in_room != NOWHERE)
+          if (obj->en_room)
             add_workshop_to_room(obj);
         }
         last_cmd = 1;
@@ -3140,8 +3140,8 @@ int zone_is_empty(int zone_nr)
   struct descriptor_data *i;
 
   for (i = descriptor_list; i; i = i->next)
-    if (!i->connected && i->character->in_room != NOWHERE)
-      if (world[i->character->in_room].zone == zone_nr)
+    if (!i->connected && i->character->en_room)
+      if (i->character->en_room->zone == zone_nr)
         return 0;
 
   return 1;
@@ -3642,10 +3642,10 @@ void reset_char(struct char_data * ch)
   ch->in_veh = NULL;
   ch->followers = NULL;
   ch->master = NULL;
-  ch->in_room = NOWHERE;
+  ch->en_room = NULL;
   ch->next = NULL;
   ch->next_fighting = NULL;
-  ch->next_in_room = NULL;
+  ch->next_en_room = NULL;
   FIGHTING(ch) = NULL;
   ch->char_specials.position = POS_STANDING;
   ch->mob_specials.default_pos = POS_STANDING;
@@ -3664,8 +3664,8 @@ void clear_char(struct char_data * ch)
   memset((char *) ch, 0, sizeof(struct char_data));
 
   ch->in_veh = NULL;
-  ch->in_room = NOWHERE;
-  GET_WAS_IN(ch) = NOWHERE;
+  ch->en_room = NULL;
+  GET_WAS_EN(ch) = NULL;
   GET_POS(ch) = POS_STANDING;
   ch->mob_specials.default_pos = POS_STANDING;
   if (ch->points.max_mental < 1000)
@@ -3680,7 +3680,7 @@ void clear_object(struct obj_data * obj)
 {
   memset((char *) obj, 0, sizeof(struct obj_data));
   obj->item_number = NOTHING;
-  obj->in_room = NOWHERE;
+  obj->en_room = NULL;
 }
 
 void clear_room(struct room_data *room)
@@ -3691,7 +3691,7 @@ void clear_room(struct room_data *room)
 void clear_vehicle(struct veh_data *veh)
 {
   memset((char *) veh, 0, sizeof(struct veh_data));
-  veh->in_room = NOWHERE;
+  veh->en_room = NULL;
 }
 
 void clear_host(struct host_data *host)
@@ -4004,11 +4004,11 @@ void purge_unowned_vehs() {
       sprintf(buf, "- Found '%s' (%ld) owned by %ld.", vict_veh->short_description, vict_veh->idnum, vict_veh->owner);
       
       // If the vehicle is in a room, disgorge there.
-      if (veh->in_room != NOWHERE) {
-        sprintf(ENDOF(buf), " Transferring to room %ld.", world[veh->in_room].number);
+      if (veh->en_room) {
+        sprintf(ENDOF(buf), " Transferring to room %ld.", veh->en_room->number);
         log(buf);
         veh_from_room(vict_veh);
-        veh_to_room(vict_veh, veh->in_room);
+        veh_to_room(vict_veh, veh->en_room);
       }
       
       // If the vehicle is in another vehicle instead, disgorge there.
@@ -4025,9 +4025,10 @@ void purge_unowned_vehs() {
         sprintf(buf, "SYSERR: Attempting to disgorge '%s' (%ld) from '%s' (%ld), but the latter has no containing vehicle (%ld) or location (%ld). Putting in Dante's.",
                 vict_veh->short_description, vict_veh->idnum,
                 veh->short_description, veh->idnum,
-                veh->in_veh ? veh->in_veh->idnum : -1, veh->in_room);
+                veh->in_veh ? veh->in_veh->idnum : -1,
+                veh->en_room ? veh->en_room->number : -1);
         log(buf);
-        veh_to_room(vict_veh, RM_DANTES_GARAGE);
+        veh_to_room(vict_veh, &world[RM_DANTES_GARAGE]);
       }
     }
     
@@ -4079,7 +4080,7 @@ void load_saved_veh()
     veh->locked = TRUE;
     veh->sub = data.GetLong("VEHICLE/Subscribed", 0);
     if (!veh->spare2)
-      veh_to_room(veh, real_room(data.GetLong("VEHICLE/InRoom", 0)));
+      veh_to_room(veh, &world[real_room(data.GetLong("VEHICLE/InRoom", 0))]);
     veh->restring = str_dup(data.GetString("VEHICLE/VRestring", NULL));
     veh->restring_long = str_dup(data.GetString("VEHICLE/VRestringLong", NULL));
     int inside = 0, last_in = 0;
@@ -4241,7 +4242,7 @@ void load_consist(void)
   market[3] = paydata.GetInt("MARKET/Red", 5000);
   market[4] = paydata.GetInt("MARKET/Black", 5000);
   for (int nr = 0; nr <= top_of_world; nr++)
-    if (ROOM_FLAGGED(nr, ROOM_STORAGE)) {
+    if (ROOM_FLAGGED(&world[nr], ROOM_STORAGE)) {
       sprintf(buf, "storage/%ld", world[nr].number);
       if (!(file.Open(buf, "r")))
         continue;
@@ -4287,7 +4288,7 @@ void load_consist(void)
             if (last_obj)
               obj_to_obj(obj, last_obj);
           } else
-            obj_to_room(obj, nr);
+            obj_to_room(obj, &world[nr]);
 
           last_in = inside;
           last_obj = obj;
