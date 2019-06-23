@@ -4028,7 +4028,7 @@ void purge_unowned_vehs() {
                 veh->in_veh ? veh->in_veh->idnum : -1,
                 veh->en_room ? veh->en_room->number : -1);
         log(buf);
-        veh_to_room(vict_veh, &world[RM_DANTES_GARAGE]);
+        veh_to_room(vict_veh, &world[real_room(RM_DANTES_GARAGE)]);
       }
     }
     

@@ -1822,7 +1822,7 @@ void extract_veh(struct veh_data * veh)
       veh_to_veh(temp, veh->in_veh);
     } else {
       veh_from_room(temp);
-      veh_to_room(temp, &world[RM_DANTES_GARAGE]);
+      veh_to_room(temp, &world[real_room(RM_DANTES_GARAGE)]);
     }
   }
   
@@ -1839,7 +1839,7 @@ void extract_veh(struct veh_data * veh)
       char_to_veh(veh->in_veh, ch);
     } else {
       char_from_room(ch);
-      char_to_room(ch, &world[RM_DANTES_GARAGE]);
+      char_to_room(ch, &world[real_room(RM_DANTES_GARAGE)]);
     }
   }
   

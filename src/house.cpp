@@ -140,7 +140,7 @@ bool House_load(struct house_control_rec *house)
         if (last_obj)
           obj_to_obj(obj, last_obj);
       } else
-        obj_to_room(obj, rnum);
+        obj_to_room(obj, &world[rnum]);
 
       last_in = inside;
       last_obj = obj;
@@ -301,7 +301,7 @@ SPECIAL(landlord_spec)
   struct char_data *recep = (struct char_data *) me;
   struct obj_data *obj = NULL;
   struct landlord *lord;
-  struct house_control_rec *room;
+  struct house_control_rec *room_record;
   char buf3[MAX_STRING_LENGTH];
 
   int i = 0;
@@ -324,15 +324,19 @@ SPECIAL(landlord_spec)
     send_to_char(ch, "The following rooms are free: \r\n");
     send_to_char(ch, "Name     Class     Price      Name     Class     Price\r\n");
     send_to_char(ch, "-----    ------    ------     -----    ------    -----\r\n");
-    for (room = lord->rooms; room; room = room->next)
-      if (!room->owner) {
+    for (room_record = lord->rooms; room_record; room_record = room_record->next)
+      if (!room_record->owner) {
         if (!i) {
-          sprintf(buf, "%-5s    %-6s    %-8d", room->name, lifestyle[room->mode].name,
-                  lord->basecost * lifestyle[room->mode].cost);
+          sprintf(buf, "%-5s    %-6s    %-8d",
+                  room_record->name,
+                  lifestyle[room_record->mode].name,
+                  lord->basecost * lifestyle[room_record->mode].cost);
           i++;
         } else {
-          sprintf(buf2, "   %-5s    %-6s    %-8d\r\n", room->name, lifestyle[room->mode].name,
-                  lord->basecost * lifestyle[room->mode].cost);
+          sprintf(buf2, "   %-5s    %-6s    %-8d\r\n",
+                  room_record->name,
+                  lifestyle[room_record->mode].name,
+                  lord->basecost * lifestyle[room_record->mode].cost);
           strcat(buf, buf2);
           send_to_char(buf, ch);
           i = 0;
@@ -349,14 +353,14 @@ SPECIAL(landlord_spec)
       do_say(recep, "Which room would you like the key to?", 0, 0);
       return TRUE;
     }
-    room = find_room(arg, lord->rooms, recep);
-    if (!room)
+    room_record = find_room(arg, lord->rooms, recep);
+    if (!room_record)
       do_say(recep, "Which room is that?", 0, 0);
-    else if (room->owner != GET_IDNUM(ch))
+    else if (room_record->owner != GET_IDNUM(ch))
       do_say(recep, "I would get fired if I did that.", 0, 0);
     else {
       do_say(recep, "Here you go...", 0, 0);
-      struct obj_data *key = read_object(room->key, VIRTUAL);
+      struct obj_data *key = read_object(room_record->key, VIRTUAL);
       obj_to_char(key, ch);
     }
     return TRUE;
@@ -365,15 +369,15 @@ SPECIAL(landlord_spec)
       do_say(recep, "Which room would you like to lease?", 0, 0);
       return TRUE;
     }
-    room = find_room(arg, lord->rooms, recep);
-    if (!room) {
+    room_record = find_room(arg, lord->rooms, recep);
+    if (!room_record) {
       do_say(recep, "Which room is that?", 0, 0);
       return TRUE;
-    } else if (room->owner) {
+    } else if (room_record->owner) {
       do_say(recep, "Sorry, I'm afraid that room is already taken.", 0, 0);
       return TRUE;
     }
-    int cost = lord->basecost * lifestyle[room->mode].cost, origcost = cost;
+    int cost = lord->basecost * lifestyle[room_record->mode].cost, origcost = cost;
 
     sprintf(buf3, "That will be %d nuyen.", cost);
     do_say(recep, buf3, 0, 0);
@@ -407,13 +411,13 @@ SPECIAL(landlord_spec)
       }
     }
     do_say(recep, "Thank you, here is your key.", 0, 0);
-    struct obj_data *key = read_object(room->key, VIRTUAL);
+    struct obj_data *key = read_object(room_record->key, VIRTUAL);
     obj_to_char(key, ch);
-    room->owner = GET_IDNUM(ch);
-    room->date = time(0) + (SECS_PER_REAL_DAY*30);
-    ROOM_FLAGS(real_room(room->vnum)).SetBit(ROOM_HOUSE);
-    ROOM_FLAGS(room->atrium).SetBit(ROOM_ATRIUM);
-    House_crashsave(room->vnum);
+    room_record->owner = GET_IDNUM(ch);
+    room_record->date = time(0) + (SECS_PER_REAL_DAY*30);
+    ROOM_FLAGS(&world[real_room(room_record->vnum)]).SetBit(ROOM_HOUSE);
+    ROOM_FLAGS(&world[real_room(room_record->atrium)]).SetBit(ROOM_ATRIUM);
+    House_crashsave(room_record->vnum);
     House_save_control();
     return TRUE;
   } else if (CMD_IS("leave")) {
@@ -421,17 +425,17 @@ SPECIAL(landlord_spec)
       do_say(recep, "Which room would you like to leave?", 0, 0);
       return TRUE;
     }
-    room = find_room(arg, lord->rooms, recep);
-    if (!room)
+    room_record = find_room(arg, lord->rooms, recep);
+    if (!room_record)
       do_say(recep, "Which room is that?", 0, 0);
-    else if (room->owner != GET_IDNUM(ch))
+    else if (room_record->owner != GET_IDNUM(ch))
       do_say(recep, "I would get fired if I did that.", 0, 0);
     else {
-      room->owner = 0;
-      ROOM_FLAGS(real_room(room->vnum)).RemoveBit(ROOM_HOUSE);
-      ROOM_FLAGS(room->atrium).RemoveBit(ROOM_ATRIUM);
+      room_record->owner = 0;
+      ROOM_FLAGS(&world[real_room(room_record->vnum)]).RemoveBit(ROOM_HOUSE);
+      ROOM_FLAGS(&world[real_room(room_record->atrium)]).RemoveBit(ROOM_ATRIUM);
       House_save_control();
-      House_delete_file(room->vnum);
+      House_delete_file(room_record->vnum);
       do_say(recep, "I hope you enjoyed your time here.", 0, 0);
     }
     return TRUE;
@@ -440,13 +444,13 @@ SPECIAL(landlord_spec)
       do_say(recep, "Which room would you like to pay the rent to?", 0, 0);
       return TRUE;
     }
-    room = find_room(arg, lord->rooms, recep);
-    if (!room)
+    room_record = find_room(arg, lord->rooms, recep);
+    if (!room_record)
       do_say(recep, "Which room is that?", 0, 0);
-    else if (room->owner != GET_IDNUM(ch))
+    else if (room_record->owner != GET_IDNUM(ch))
       do_say(recep, "But that isn't your room.", 0, 0);
     else {
-      int cost = lord->basecost * lifestyle[room->mode].cost, origcost = cost;
+      int cost = lord->basecost * lifestyle[room_record->mode].cost, origcost = cost;
       sprintf(buf3, "That will be %d nuyen.", cost);
       do_say(recep, buf3, 0, 0);
       for (obj = ch->carrying; obj; obj = obj->next_content)
@@ -479,7 +483,7 @@ SPECIAL(landlord_spec)
         }
       }
       do_say(recep, "You are paid up for the next period.", 0, 0);
-      room->date += SECS_PER_REAL_DAY*30;
+      room_record->date += SECS_PER_REAL_DAY*30;
       House_save_control();
     }
     return TRUE;
@@ -488,15 +492,15 @@ SPECIAL(landlord_spec)
       do_say(recep, "Which room would you like to check the rent on?", 0, 0);
       return TRUE;
     }
-    room = find_room(arg, lord->rooms, recep);
-    if (!room)
+    room_record = find_room(arg, lord->rooms, recep);
+    if (!room_record)
       do_say(recep, "Which room is that?", 0, 0);
-    else if (room->owner != GET_IDNUM(ch))
+    else if (room_record->owner != GET_IDNUM(ch))
       do_say(recep, "I'm afraid I can't release that information.", 0, 0);
     else {
-      if (room->date - time(0) < 0)
+      if (room_record->date - time(0) < 0)
         strcpy(buf2, "Your rent has expired on that apartment.");
-      else sprintf(buf2, "You are paid for another %d days.", (int)((room->date - time(0)) / 86400));
+      else sprintf(buf2, "You are paid for another %d days.", (int)((room_record->date - time(0)) / 86400));
       do_say(recep, buf2, 0, 0);
     }
     return TRUE;
@@ -577,7 +581,7 @@ void House_boot(void)
                     world[real_room(RM_SEATTLE_PARKING_GARAGE)].number);
             mudlog(buf, NULL, LOG_SYSLOG, TRUE);
             veh_from_room(veh);
-            veh_to_room(veh, real_room(RM_SEATTLE_PARKING_GARAGE));
+            veh_to_room(veh, &world[real_room(RM_SEATTLE_PARKING_GARAGE)]);
           }
         }
       }
@@ -586,8 +590,8 @@ void House_boot(void)
       if (!first)
         first = temp;
       if (temp->owner) {
-        ROOM_FLAGS(real_room(temp->vnum)).SetBit(ROOM_HOUSE);
-        ROOM_FLAGS(temp->atrium).SetBit(ROOM_ATRIUM);
+        ROOM_FLAGS(&world[real_room(temp->vnum)]).SetBit(ROOM_HOUSE);
+        ROOM_FLAGS(&world[real_room(temp->atrium)]).SetBit(ROOM_ATRIUM);
       }
       last = temp;
     }
@@ -646,13 +650,13 @@ void hcontrol_destroy_house(struct char_data * ch, char *arg)
   if ((real_atrium = real_room(i->atrium)) < 0)
     log("SYSERR: House had invalid atrium!");
   else
-    ROOM_FLAGS(real_atrium).RemoveBit(ROOM_ATRIUM);
+    ROOM_FLAGS(&world[real_atrium]).RemoveBit(ROOM_ATRIUM);
 
   if ((real_house = real_room(i->vnum)) < 0)
     log("SYSERR: House had invalid vnum!");
   else
   {
-    ROOM_FLAGS(real_house).RemoveBit(ROOM_HOUSE);
+    ROOM_FLAGS(&world[real_house]).RemoveBit(ROOM_HOUSE);
 
     House_delete_file(i->vnum);
     i->owner = 0;
@@ -662,7 +666,7 @@ void hcontrol_destroy_house(struct char_data * ch, char *arg)
     for (struct landlord *llord = landlords; llord; llord = llord->next)
       for (i = llord->rooms; i; i = i->next)
         if ((real_atrium = real_room(i->atrium)) >= 0) {
-          ROOM_FLAGS(real_atrium).SetBit(ROOM_ATRIUM);
+          ROOM_FLAGS(&world[real_atrium]).SetBit(ROOM_ATRIUM);
         }
   }
 }
@@ -688,9 +692,9 @@ ACMD(do_decorate)
 {
   extern void write_world_to_disk(int vnum);
   struct house_control_rec *i;
-  if (!ROOM_FLAGGED(ch->in_room, ROOM_HOUSE))
+  if (!ROOM_FLAGGED(ch->en_room, ROOM_HOUSE))
     send_to_char("You must be in your house to set the description.\r\n", ch);
-  else if ((i = find_house(GET_ROOM_VNUM(IN_ROOM(ch)))) == NULL)
+  else if ((i = find_house(GET_ROOM_VNUM(ch->en_room))) == NULL)
     send_to_char("Um.. this house seems to be screwed up.\r\n", ch);
   else if (GET_IDNUM(ch) != i->owner)
     send_to_char("Only the primary owner can set the room description.\r\n", ch);
@@ -714,9 +718,9 @@ ACMD(do_house)
 
   one_argument(argument, arg);
 
-  if (!ROOM_FLAGGED(IN_ROOM(ch), ROOM_HOUSE))
+  if (!ROOM_FLAGGED(ch->en_room, ROOM_HOUSE))
     send_to_char("You must be in your house to set guests.\r\n", ch);
-  else if ((i = find_house(GET_ROOM_VNUM(IN_ROOM(ch)))) == NULL)
+  else if ((i = find_house(GET_ROOM_VNUM(ch->en_room))) == NULL)
     send_to_char("Um.. this house seems to be screwed up.\r\n", ch);
   else if (GET_IDNUM(ch) != i->owner)
     send_to_char("Only the primary owner can set guests.\r\n", ch);
@@ -767,7 +771,7 @@ void House_save_all(void)
   FILE *fl;
 
   for (int x = 0; x <= top_of_world; x++)
-    if (ROOM_FLAGGED(x, ROOM_STORAGE)) {
+    if (ROOM_FLAGGED(&world[x], ROOM_STORAGE)) {
       sprintf(buf, "storage/%ld", world[x].number);
       if (!(fl = fopen(buf, "wb"))) {
         sprintf(buf2, "Cannot open %s. Aborting Storage Saving.", buf);

@@ -218,7 +218,7 @@ void    update_pos(struct char_data *victim);
 #define PLR_FLAGS(ch) ((ch)->char_specials.saved.act)
 #define PRF_FLAGS(ch) ((ch)->player_specials->saved.pref)
 #define AFF_FLAGS(ch) ((ch)->char_specials.saved.affected_by)
-#define ROOM_FLAGS(loc) (loc->room_flags)
+#define ROOM_FLAGS(loc) ((loc)->room_flags)
 
 #define IS_NPC(ch)  (MOB_FLAGS(ch).IsSet(MOB_ISNPC))
 #define IS_MOB(ch)  (IS_NPC(ch) && ((ch)->nr >-1))
