@@ -207,7 +207,7 @@ void    update_pos(struct char_data *victim);
 
 /* basic bitvector utils *************************************************/
 
-#define EXIT2(room, door) ((roomnum)->dir_option[(door)])
+#define EXIT2(room, door) ((room)->dir_option[(door)])
 #define CAN_GO2(room, door) (EXIT2(room, door) && \
         (EXIT2(room, door)->to_room != NOWHERE) && \
         !IS_SET(EXIT2(room,door)->exit_info, EX_CLOSED))
