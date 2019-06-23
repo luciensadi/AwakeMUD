@@ -318,7 +318,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
             *temp = *i;
             *i = *d->edit_mob;
             /* copy game-time dependent vars over */
-            i->in_room = temp->in_room;
+            i->en_room = temp->en_room;
             i->nr = mob_number;
             i->carrying = temp->carrying;
             i->cyberware = temp->cyberware;
@@ -326,7 +326,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
             // any eq worn
             for (c = 0; c < NUM_WEARS; ++c)
               i->equipment[c] = temp->equipment[c];
-            i->next_in_room = temp->next_in_room;
+            i->next_en_room = temp->next_en_room;
             i->next = temp->next;
             i->next_fighting = temp->next_fighting;
             i->followers = temp->followers;
@@ -377,7 +377,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
               new_mob_index[counter].func = NULL;
               /*---------*/
               new_mob_proto[counter] = *(d->edit_mob);
-              new_mob_proto[counter].in_room = NOWHERE;
+              new_mob_proto[counter].en_room = NULL;
               /* it is now safe (and necessary!) to assign real number to
                * the edit_mob, which has been -1 all this time */
               d->edit_mob->nr = counter;
@@ -412,7 +412,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
 
           clear_char(new_mob_proto + top_of_mobt + 1);
           new_mob_proto[top_of_mobt + 1] = *(d->edit_mob);
-          new_mob_proto[top_of_mobt + 1].in_room = NOWHERE;
+          new_mob_proto[top_of_mobt + 1].en_room = NULL;
           new_mob_proto[top_of_mobt + 1].nr = top_of_mobt + 1;
           /* it is now safe (and necessary!) to assign real number to
            * the edit_mob, which has been -1 all this time */
