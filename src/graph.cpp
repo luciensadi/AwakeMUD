@@ -25,9 +25,13 @@
 
 struct bfs_queue_struct
 {
-  vnum_t room;
+  struct room_data *room;
   char dir;
   struct bfs_queue_struct *next;
+  
+  bfs_queue_struct() :
+    room(NULL), dir(0), next(NULL)
+  {}
 };
 
 static struct bfs_queue_struct *queue_head = 0, *queue_tail = 0;
@@ -36,17 +40,17 @@ static struct bfs_queue_struct *queue_head = 0, *queue_tail = 0;
 #define MARK(room) (ROOM_FLAGS(room).SetBit(ROOM_BFS_MARK))
 #define UNMARK(room) (ROOM_FLAGS(room).RemoveBit(ROOM_BFS_MARK))
 #define IS_MARKED(room) (ROOM_FLAGGED(room, ROOM_BFS_MARK))
-#define TOROOM(x, y) (world[(x)].dir_option[(y)]->to_room)
-#define IS_CLOSED(x, y) (IS_SET(world[(x)].dir_option[(y)]->exit_info, EX_CLOSED))
+#define TOROOM(x, y) ((x)->dir_option[(y)]->to_room)
+#define IS_CLOSED(x, y) (IS_SET((x)->dir_option[(y)]->exit_info, EX_CLOSED))
 
-#define VALID_EDGE(x, y) (world[(x)].dir_option[(y)] && \
+#define VALID_EDGE(x, y) ((x)->dir_option[(y)] && \
                           (TOROOM(x, y) != NOWHERE) &&  \
                           (!IS_CLOSED(x, y)) &&         \
                           (ROOM_FLAGGED(x, ROOM_ROAD) || ROOM_FLAGGED(x, ROOM_GARAGE)) && \
                           (!ROOM_FLAGGED(x, ROOM_NOGRID)) && \
                           (!IS_MARKED(TOROOM(x, y))))
 
-void bfs_enqueue(vnum_t room, char dir)
+void bfs_enqueue(struct room_data *room, char dir)
 {
   struct bfs_queue_struct *curr;
 
@@ -94,7 +98,7 @@ int find_first_step(vnum_t src, vnum_t target)
   int curr_dir;
   vnum_t curr_room;
 
-  if (src < 0 || src > top_of_world || target < 0 || target > top_of_world) {
+  if (!src || !target) {
     log("Illegal value passed to find_first_step (graph.c)");
     return BFS_ERROR;
   }

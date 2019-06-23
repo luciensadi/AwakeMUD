@@ -2333,16 +2333,16 @@ void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, 
   }
 }
 
-void send_to_room(const char *messg, int room)
+void send_to_room(const char *messg, struct room_data *room)
 {
   struct char_data *i;
   struct veh_data *v;
-  if (messg && room > 0) {
-    for (i = world[room].people; i; i = i->next_in_room)
+  if (messg && room) {
+    for (i = room->people; i; i = i->next_in_room)
       if (i->desc)
         if (!(PLR_FLAGGED(i, PLR_REMOTE) || PLR_FLAGGED(i, PLR_MATRIX)) && AWAKE(i))
           SEND_TO_Q(messg, i->desc);
-    for (v = world[room].vehicles; v; v = v->next_veh)
+    for (v = room->vehicles; v; v = v->next_veh)
       if (v->people)
         send_to_veh(messg, v, NULL, TRUE);
     

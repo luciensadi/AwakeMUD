@@ -63,16 +63,16 @@ void    extract_veh(struct veh_data *veh);
 void    extract_icon(struct matrix_icon *icon);
 /* ******* characters ********* */
 
-struct char_data *get_char_room(char *name, long room);
+struct char_data *get_char_room(const char *name, struct room_data *room);
 struct char_data *get_char_in_list_vis(struct char_data *ch, char *name, struct char_data *list);
 struct char_data *get_char(char *name);
 
 void    char_from_room(struct char_data *ch);
-void    char_to_room(struct char_data *ch, long room);
+void    char_to_room(struct char_data *ch, struct room_data *room);
 void    extract_char(struct char_data *ch);
 void    char_to_veh(struct veh_data *veh, struct char_data *ch);
 void veh_from_room(struct veh_data *veh);
-void veh_to_room(struct veh_data *veh, long room);
+void veh_to_room(struct veh_data *veh, struct room_data *room);
 void veh_to_veh(struct veh_data *veh, struct veh_data *dest);
 int veh_skill(struct char_data *ch, struct veh_data *veh);
 void	icon_from_host(struct matrix_icon *icon);

@@ -1046,16 +1046,16 @@ void char_to_veh(struct veh_data * veh, struct char_data * ch)
   }
 }
 
-void veh_to_room(struct veh_data * veh, long room)
+void veh_to_room(struct veh_data * veh, struct room_data *room)
 {
-  if (!veh || room < 0 || room > top_of_world)
+  if (!veh || !room)
     log("SYSLOG: Illegal value(s) passed to veh_to_room");
   else
   {
-    veh->next_veh = world[room].vehicles;
-    world[room].vehicles = veh;
-    veh->in_room = room;
-    world[room].light[0]++;
+    veh->next_veh = room->vehicles;
+    room->vehicles = veh;
+    veh->en_room = room;
+    room->light[0]++; // headlights
   }
 }
 
@@ -1131,58 +1131,58 @@ void icon_from_host(struct matrix_icon *icon)
   icon->fighting = NULL;
 }
 /* place a character in a room */
-void char_to_room(struct char_data * ch, long room)
+void char_to_room(struct char_data * ch, struct room_data *room)
 {
-  if (!ch || room < 0 || room > top_of_world)
+  if (!ch || !room)
   {
     log("SYSLOG: Illegal value(s) passed to char_to_room");
-    room = 0;
+    room = &world[0];
   }
-  ch->next_in_room = world[room].people;
-  world[room].people = ch;
-  ch->in_room = room;
+  ch->next_en_room = room->people;
+  room->people = ch;
+  ch->en_room = room;
   if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_PACIFY))
-    world[ch->in_room].peaceful++;
+    room->peaceful++;
   
   if (GET_EQ(ch, WEAR_LIGHT))
     if (GET_OBJ_TYPE(GET_EQ(ch, WEAR_LIGHT)) == ITEM_LIGHT)
       if (GET_OBJ_VAL(GET_EQ(ch, WEAR_LIGHT), 2))     /* Light ON */
-        world[room].light[0]++;
+        room->light[0]++;
   if (GET_TRADITION(ch) == TRAD_SHAMANIC)
-    GET_DOMAIN(ch) = SECT(ch->in_room);
+    GET_DOMAIN(ch) = SECT(ch->en_room);
   if (affected_by_spell(ch, SPELL_SILENCE))
   {
-    world[room].silence[0]++;
+    room->silence[0]++;
     for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next)
-      if (sust->spell == SPELL_SILENCE && sust->force > world[room].silence[1]) {
-        world[room].silence[1] = MIN(sust->force, sust->success);
+      if (sust->spell == SPELL_SILENCE && MIN(sust->force, sust->success) > room->silence[1]) {
+        room->silence[1] = MIN(sust->force, sust->success);
         break;
       }
   }
   if (affected_by_spell(ch, SPELL_SHADOW))
   {
-    world[room].shadow[0]++;
+    room->shadow[0]++;
     for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next)
-      if (sust->spell == SPELL_SHADOW && sust->force > world[room].shadow[1]) {
-        world[room].shadow[1] = MIN(sust->force, sust->success);
+      if (sust->spell == SPELL_SHADOW && MIN(sust->force, sust->success) > room->shadow[1]) {
+        room->shadow[1] = MIN(sust->force, sust->success);
         break;
       }
   }
   if (affected_by_spell(ch, SPELL_LIGHT))
   {
-    world[room].light[0]++;
+    room->light[0]++;
     for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next)
-      if (sust->spell == SPELL_LIGHT && sust->force > world[room].light[1]) {
-        world[room].light[1] = MIN(sust->force, sust->success);
+      if (sust->spell == SPELL_LIGHT && MIN(sust->force, sust->success) > room->light[1]) {
+        room->light[1] = MIN(sust->force, sust->success);
         break;
       }
   }
   if (affected_by_spell(ch, SPELL_POLTERGEIST))
   {
-    world[room].poltergeist[0]++;
+    room->poltergeist[0]++;
     for (struct sustain_data *sust = GET_SUSTAINED(ch); sust; sust = sust->next)
       if (sust->spell == SPELL_POLTERGEIST)
-        if (sust->force > world[room].poltergeist[1]) {
+        if (sust->force > room->poltergeist[1]) {
           world[room].poltergeist[1] = sust->force;
           break;
         }
@@ -1533,18 +1533,23 @@ int from_ip_zone(int vnum)
 }
 
 /* search a room for a char, and return a pointer if found..  */
-struct char_data *get_char_room(char *name, long room)
+struct char_data *get_char_room(const char *name, struct room_data *room)
 {
   struct char_data *i;
   int j = 0, number;
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
   
+  if (!room || !name) {
+    log("SYSLOG: Illegal value(s) passed get_char_room");
+    return NULL;
+  }
+  
   strcpy(tmp, name);
   if (!(number = get_number(&tmp)))
     return NULL;
   
-  for (i = world[room].people; i && (j <= number); i = i->next_in_room)
+  for (i = room->people; i && (j <= number); i = i->next_in_room)
     if (isname(tmp, GET_KEYWORDS(i)) ||
         isname(tmp, GET_NAME(i)) || isname(tmp, GET_CHAR_NAME(i)))
       if (++j == number)
@@ -1557,7 +1562,7 @@ void obj_to_veh(struct obj_data * object, struct veh_data * veh)
 {
   struct obj_data *i = NULL, *op = NULL;
   if (!object || !veh)
-    log("SYSLOG: Illegal value(s) passed to veh_to_room");
+    log("SYSLOG: Illegal value(s) passed to obj_to_veh");
   else
   {
     for (i = veh->contents; i; i = i->next_content) {

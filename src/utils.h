@@ -264,8 +264,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 /* room utils ************************************************************/
 
 
-#define SECT(room) (VALID_ROOM_RNUM(room) ? \
-    world[(room)].sector_type : SPIRIT_HEARTH)
+#define SECT(room) (room ? room->sector_type : SPIRIT_HEARTH)
 #define IS_WATER(room) (SECT((room)) == SPIRIT_LAKE || SECT((room)) == SPIRIT_RIVER || SECT((room)) == SPIRIT_SEA)
 
 #define IS_DARK(room)  (light_level((room)) == ITEM_FULLDARK)
@@ -641,7 +640,8 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define OBJN(obj, vict) (CAN_SEE_OBJ((vict), (obj)) ? \
         fname((obj)->text.keywords) : "something")
 
-#define EXIT(ch, door)  (get_ch_en_room(ch)->dir_option[door])
+// Accepts characters or vehicles.
+#define EXIT(thing, door)  (thing->en_room ? thing->en_room->dir_option[door] : NULL)
 
 #define LOCK_LEVEL(ch, obj, door) ((obj) ? GET_OBJ_VAL(obj, 4) : \
            get_ch_en_room(ch)->dir_option[door]->key_level)
