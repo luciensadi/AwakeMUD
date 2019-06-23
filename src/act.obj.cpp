@@ -599,7 +599,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
         GET_OBJ_VAL(cont, 2) = MAX(0, GET_OBJ_VAL(cont, 2) - 1);
       sprintf(buf, "You %s $p from $P.", (cyberdeck || computer ? "uninstall" : "get"));
       if (computer) {
-        for (struct char_data *vict = world[ch->in_room].people; vict; vict = vict->next_in_room)
+        for (struct char_data *vict = ch->en_room->people; vict; vict = vict->next_en_room)
           if ((AFF_FLAGGED(vict, AFF_PROGRAM) || AFF_FLAGGED(vict, AFF_DESIGN)) && vict != ch) {
             send_to_char(ch, "You can't uninstall that while someone is working on it.\r\n");
             return;
@@ -781,7 +781,7 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
     switch (GET_OBJ_VAL(obj, 0))
     {
     case TYPE_COMPUTER:
-      for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : world[ch->in_room].people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room)
+      for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->en_room->people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_en_room)
         if (vict->char_specials.programming && vict->char_specials.programming->in_obj == obj) {
           if (vict == ch)
             send_to_char(ch, "You are using that already.\r\n");
@@ -802,7 +802,7 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
   else if (can_take_obj(ch, obj))
   {
     if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP)
-      for (struct char_data *tmp = ch->in_veh ? ch->in_veh->people : world[ch->in_room].people; tmp; tmp = ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)
+      for (struct char_data *tmp = ch->in_veh ? ch->in_veh->people : ch->en_room->people; tmp; tmp = ch->in_veh ? tmp->next_in_veh : tmp->next_en_room)
          if (AFF_FLAGGED(tmp, AFF_PACKING)) {
            send_to_char("Someone is working on that workshop.\r\n", ch);
            return FALSE;
@@ -840,7 +840,7 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
     if (ch->in_veh)
       obj = get_obj_in_list_vis(ch, arg, ch->in_veh->contents);
     else
-      obj = get_obj_in_list_vis(ch, arg, world[ch->in_room].contents);
+      obj = get_obj_in_list_vis(ch, arg, ch->en_room->contents);
     if (!obj) {
       sprintf(buf, "You don't see %s %s here.\r\n", AN(arg), arg);
       send_to_char(buf, ch);
@@ -865,7 +865,7 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
     if (ch->in_veh)
       obj = ch->in_veh->contents;
     else
-      obj = world[ch->in_room].contents;
+      obj = ch->en_room->contents;
 
     for (;obj; obj = next_obj) {
       next_obj = obj->next_content;
@@ -973,7 +973,7 @@ ACMD(do_get)
     if (cont_dotmode == FIND_INDIV) {
       mode = generic_find(arg2, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &tmp_char, &cont);
       if (!ch->in_veh || (ch->in_veh->flags.IsSet(VFLAG_WORKSHOP) && !ch->vfront))
-        veh = get_veh_list(arg2, ch->in_veh ? ch->in_veh->carriedvehs : world[ch->in_room].vehicles, ch);
+        veh = get_veh_list(arg2, ch->in_veh ? ch->in_veh->carriedvehs : ch->en_room->vehicles, ch);
       if (cyberdeck && veh) {
         cont = NULL;
         if (veh->owner != GET_IDNUM(ch) && veh->locked) {
@@ -1162,7 +1162,7 @@ ACMD(do_get)
             act(buf, FALSE, ch, cont, 0, TO_CHAR);
           }
         }
-      for (cont = world[ch->in_room].contents; cont; cont = cont->next_content)
+      for (cont = ch->en_room->contents; cont; cont = cont->next_content)
         if (CAN_SEE_OBJ(ch, cont) &&
             (cont_dotmode == FIND_ALL || isname(arg2, cont->text.keywords))) {
           if (GET_OBJ_TYPE(cont) == ITEM_CONTAINER) {
@@ -1187,7 +1187,7 @@ ACMD(do_get)
   }
 }
 
-void perform_drop_gold(struct char_data * ch, int amount, byte mode, vnum_t RDR)
+void perform_drop_gold(struct char_data * ch, int amount, byte mode, struct room_data *random_donation_room)
 {
   struct obj_data *obj;
 
@@ -1222,7 +1222,7 @@ void perform_drop_gold(struct char_data * ch, int amount, byte mode, vnum_t RDR)
     obj_to_veh(obj, ch->in_veh);
     obj->vfront = ch->vfront;
   } else
-    obj_to_room(obj, ch->in_room);
+    obj_to_room(obj, ch->en_room);
 
   if (IS_NPC(ch)
       || (!IS_NPC(ch) && access_level(ch, LVL_BUILDER)))
@@ -1239,7 +1239,7 @@ void perform_drop_gold(struct char_data * ch, int amount, byte mode, vnum_t RDR)
 #define VANISH(mode) ((mode == SCMD_DONATE || mode == SCMD_JUNK) ? "  It vanishes into a recycling bin!" : "")
 
 int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
-                 const char *sname, vnum_t RDR)
+                 const char *sname, struct room_data *random_donation_room)
 {
   int value;
 
@@ -1300,7 +1300,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
       obj_to_veh(obj, ch->in_veh);
       obj->vfront = ch->vfront;
     } else
-      obj_to_room(obj, ch->in_room);
+      obj_to_room(obj, ch->en_room);
     if (!IS_NPC(ch) && GET_QUEST(ch))
       check_quest_delivery(ch, obj);
     else if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master &&
@@ -1308,9 +1308,9 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
       check_quest_delivery(ch->master, obj);
     return 0;
   case SCMD_DONATE:
-    obj_to_room(obj, RDR);
-    if (world[RDR].people)
-      act("You notice $p exposed beneath the junk.", FALSE, world[RDR].people, obj, 0, TO_ROOM);
+    obj_to_room(obj, random_donation_room);
+    if (random_donation_room->people)
+      act("You notice $p exposed beneath the junk.", FALSE, random_donation_room->people, obj, 0, TO_ROOM);
     return 0;
   case SCMD_JUNK:
     value = MAX(1, MIN(200, GET_OBJ_COST(obj) >> 4));
@@ -1349,7 +1349,7 @@ ACMD(do_drop)
   }
 
   struct obj_data *obj, *next_obj;
-  rnum_t RDR = 0;
+  struct room_data *random_donation_room = NULL;
   byte mode = SCMD_DROP;
   int dotmode, amount = 0;
   const char *sname;
@@ -1368,18 +1368,18 @@ ACMD(do_drop)
       break;
     case 6:
     case 1:
-      RDR = real_room(donation_room_1);
+      random_donation_room = &world[real_room(donation_room_1)];
       break;
     case 5:
     case 2:
-      RDR = real_room(donation_room_2);
+      random_donation_room = &world[real_room(donation_room_2)];
       break;
     case 4:
     case 3:
-      RDR = real_room(donation_room_3);
+      random_donation_room = &world[real_room(donation_room_3)];
       break;
     }
-    if (RDR == NOWHERE) {
+    if (!random_donation_room) {
       send_to_char("Sorry, you can't donate anything right now.\r\n", ch);
       return;
     }
@@ -1399,7 +1399,7 @@ ACMD(do_drop)
     amount = atoi(arg);
     argument = one_argument(argument, arg);
     if (!str_cmp("nuyen", arg))
-      perform_drop_gold(ch, amount, mode, RDR);
+      perform_drop_gold(ch, amount, mode, random_donation_room);
     else {
       /* code to drop multiple items.  anyone want to write it? -je */
       send_to_char("Sorry, you can't do that to more than one item at a time.\r\n", ch);
@@ -1422,7 +1422,7 @@ ACMD(do_drop)
       else
         for (obj = ch->carrying; obj; obj = next_obj) {
           next_obj = obj->next_content;
-          amount += perform_drop(ch, obj, mode, sname, RDR);
+          amount += perform_drop(ch, obj, mode, sname, random_donation_room);
         }
     } else if (dotmode == FIND_ALLDOT) {
       if (!*arg) {
@@ -1436,7 +1436,7 @@ ACMD(do_drop)
       }
       while (obj) {
         next_obj = get_obj_in_list_vis(ch, arg, obj->next_content);
-        amount += perform_drop(ch, obj, mode, sname, RDR);
+        amount += perform_drop(ch, obj, mode, sname, random_donation_room);
         obj = next_obj;
       }
     } else {
@@ -1444,7 +1444,7 @@ ACMD(do_drop)
         sprintf(buf, "You don't seem to have %s %s.\r\n", AN(arg), arg);
         send_to_char(buf, ch);
       } else
-        amount += perform_drop(ch, obj, mode, sname, RDR);
+        amount += perform_drop(ch, obj, mode, sname, random_donation_room);
     }
   }
   if (amount && (subcmd == SCMD_JUNK)) {
@@ -1694,7 +1694,7 @@ void weight_change_object(struct obj_data * obj, float weight)
   struct obj_data *tmp_obj;
   struct char_data *tmp_ch;
 
-  if (obj->in_room != NOWHERE)
+  if (obj->en_room)
   {
     GET_OBJ_WEIGHT(obj) = MAX(0, GET_OBJ_WEIGHT(obj) - weight);
   } else if ((tmp_ch = obj->carried_by))
@@ -1784,7 +1784,7 @@ ACMD(do_drink)
     return;
   }
   if (!(temp = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    if (!(temp = get_obj_in_list_vis(ch, arg, world[ch->in_room].contents))) {
+    if (!(temp = get_obj_in_list_vis(ch, arg, ch->en_room->contents))) {
       send_to_char(NOOBJECT, ch);
       return;
     } else
@@ -1974,7 +1974,7 @@ ACMD(do_pour)
       act("What do you want to fill $p from?", FALSE, ch, to_obj, 0, TO_CHAR);
       return;
     }
-    if (!(from_obj = get_obj_in_list_vis(ch, arg2, world[ch->in_room].contents))) {
+    if (!(from_obj = get_obj_in_list_vis(ch, arg2, ch->en_room->contents))) {
       sprintf(buf, "There doesn't seem to be %s %s here.\r\n", AN(arg2), arg2);
       send_to_char(buf, ch);
       return;

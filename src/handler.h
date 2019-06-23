@@ -48,7 +48,7 @@ struct obj_data *get_obj(char *name);
 struct obj_data *get_obj_num(int nr);
 
 void    obj_to_veh(struct obj_data *object, struct veh_data *veh);
-void    obj_to_room(struct obj_data *object, long room);
+void    obj_to_room(struct obj_data *object, struct room_data *room);
 void    obj_from_room(struct obj_data *object);
 void    obj_to_obj(struct obj_data *obj, struct obj_data *obj_to);
 void    obj_from_obj(struct obj_data *obj);

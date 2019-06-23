@@ -1586,20 +1586,20 @@ void obj_to_veh(struct obj_data * object, struct veh_data * veh)
     }
     veh->usedload += GET_OBJ_WEIGHT(object);
     object->in_veh = veh;
-    object->in_room = NOWHERE;
+    object->en_room = NULL;
     object->carried_by = NULL;
   }
 }
 /* put an object in a room */
-void obj_to_room(struct obj_data * object, long room)
+void obj_to_room(struct obj_data * object, struct room_data *room)
 {
   struct obj_data *i = NULL, *op = NULL;
   
-  if (!object || room < 0 || room > top_of_world)
+  if (!object || !room)
     log("SYSLOG: Illegal value(s) passed to obj_to_room");
   else
   {
-    for (i = world[room].contents; i; i = i->next_content) {
+    for (i = room->contents; i; i = i->next_content) {
       if (i->item_number == object->item_number &&
           !strcmp(i->text.room_desc, object->text.room_desc) &&
           IS_INVIS(i) == IS_INVIS(object))
@@ -1617,13 +1617,13 @@ void obj_to_room(struct obj_data * object, long room)
       if (op)
         op->next_content = object;
       else
-        world[room].contents = object;
+        room->contents = object;
     } else {
       object->next_content = world[room].contents;
-      world[room].contents = object;
+      room->contents = object;
     }
     
-    object->in_room = room;
+    object->en_room = room;
     object->carried_by = NULL;
     
     // If it's a workshop, make sure the room's workshops[] table reflects this.
