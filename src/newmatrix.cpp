@@ -580,7 +580,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
             icon->ic.subtype += GET_OBJ_VAL(soft, 1);
             break;
           }
-        icon->ic.subtype += world[targ->decker->ch->in_room].trace;
+        icon->ic.subtype += targ->decker->ch->en_room->trace;
         icon->ic.subtype /= success;
         send_to_icon(targ, "%s locks onto your datatrail and vanishes from sight.\r\n", CAP(icon->name));
         {
@@ -1231,7 +1231,7 @@ ACMD(do_logoff)
   if (!PERSONA) {
     send_to_char(ch, "You yank the plug out and return to the real world.\r\n");
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
-    for (struct char_data *temp = world[ch->in_room].people; temp; temp = temp->next_in_room)
+    for (struct char_data *temp = ch->en_room->people; temp; temp = temp->next_en_room)
       if (PLR_FLAGGED(temp, PLR_MATRIX)) {
         send_to_char("Your hitcher has disconnected.\r\n", ch);
         temp->persona->decker->hitcher = NULL;
@@ -1275,7 +1275,7 @@ ACMD(do_connect)
   struct obj_data *cyber, *cyberdeck = NULL, *jack = NULL;
   rnum_t host;
 
-  if ((!world[ch->in_room].matrix || (host = real_host(world[ch->in_room].matrix)) < 1)) {
+  if ((!ch->en_room->matrix || (host = real_host(ch->en_room->matrix)) < 1)) {
     send_to_char("You cannot connect to the matrix from here.\r\n", ch);
     return;
   }
@@ -1302,13 +1302,13 @@ ACMD(do_connect)
     return;
   }
 
-  for (temp = world[ch->in_room].people; temp; temp = temp->next_in_room)
+  for (temp = ch->en_room->people; temp; temp = temp->next_en_room)
     if (PLR_FLAGGED(temp, PLR_MATRIX)) {
       if (temp->persona && temp->persona->decker->deck)
         for (struct obj_data *hitch = temp->persona->decker->deck->contains; hitch; hitch = hitch->next_content)
           if (GET_OBJ_TYPE(hitch) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(hitch, 0) == 1 &&
               GET_OBJ_VAL(hitch, 1) == 3) {
-            for (struct char_data *temp2 = world[ch->in_room].people; temp2; temp2 = temp2->next_in_room)
+            for (struct char_data *temp2 = ch->en_room->people; temp2; temp2 = temp2->next_en_room)
               if (temp2 != temp && PLR_FLAGGED(temp2, PLR_MATRIX)) {
                 send_to_char(ch, "The hitcher jack on that deck is already in use.\r\n");
                 return;
@@ -1390,9 +1390,9 @@ ACMD(do_connect)
   DECKER->phone->next = phone_list;
   phone_list = DECKER->phone;
   DECKER->phone->persona = PERSONA;
-  DECKER->phone->rtg = world[ch->in_room].rtg;
-  DECKER->phone->number = world[ch->in_room].jacknumber;
-  DECKER->mxp = ch->in_room * DECKER->phone->number / MAX(DECKER->phone->rtg, 1);
+  DECKER->phone->rtg = ch->en_room->rtg;
+  DECKER->phone->number = ch->en_room->jacknumber;
+  DECKER->mxp = real_room(ch->en_room->number) * DECKER->phone->number / MAX(DECKER->phone->rtg, 1);
   PERSONA->idnum = GET_IDNUM(ch);
   DECKER->deck = cyberdeck;
   DECKER->mpcp = GET_OBJ_VAL(cyberdeck, 0);
@@ -1402,12 +1402,12 @@ ACMD(do_connect)
   affect_total(ch);
   GET_REM_HACKING(ch) = GET_HACKING(ch);
   GET_MAX_HACKING(ch) = (int)(GET_HACKING(ch) / 3);
-  if (world[ch->in_room].io == 0)
+  if (ch->en_room->io == 0)
     DECKER->io = GET_OBJ_VAL(cyberdeck, 4);
-  else if (world[ch->in_room].io == -1)
+  else if (ch->en_room->io == -1)
     DECKER->io = MIN(DECKER->mpcp * 50, GET_OBJ_VAL(cyberdeck, 4));
   else
-    DECKER->io = MIN(world[ch->in_room].io, GET_OBJ_VAL(cyberdeck, 4));
+    DECKER->io = MIN(ch->en_room->io, GET_OBJ_VAL(cyberdeck, 4));
   DECKER->io = (int)(DECKER->io / 10);
   if (GET_OBJ_VNUM(cyberdeck) != 113) {
     DECKER->asist[1] = 0;
@@ -2473,7 +2473,7 @@ ACMD(do_comcall)
             }
           } else {
             sprintf(buf, "%s rings.", GET_OBJ_NAME(k->phone));
-            send_to_room(buf, k->phone->in_room);
+            send_to_room(buf, k->phone->en_room);
           }
         }
         send_to_icon(PERSONA, "It begins to ring.\r\n");
@@ -2544,7 +2544,7 @@ ACMD(do_trace)
             sprintf(buf, "Your search returns:\r\nOriginating Grid: %s\r\nSerial number: %ld\r\n",
                     matrix[real_host(icon->decker->phone->rtg)].name, icon->decker->phone->rtg * icon->decker->phone->number);
           else
-            sprintf(buf, "Your search returns:\r\nJackpoint Location: %s\r\n", world[icon->decker->ch->in_room].address);
+            sprintf(buf, "Your search returns:\r\nJackpoint Location: %s\r\n", icon->decker->ch->en_room->address);
           send_to_icon(PERSONA, buf);
           return;
         }
@@ -2644,7 +2644,7 @@ ACMD(do_create)
   else if (is_abbrev(buf1, "ammo") || is_abbrev(buf1, "ammunition"))
     create_ammo(ch);
   else if (is_abbrev(buf1, "spell")) {
-    struct obj_data *library = world[ch->in_room].contents;
+    struct obj_data *library = ch->en_room->contents;
     for (;library; library = library->next_content)
       if (GET_OBJ_TYPE(library) == ITEM_MAGIC_TOOL &&
           ((GET_TRADITION(ch) == TRAD_SHAMANIC
