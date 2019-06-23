@@ -182,7 +182,7 @@ int light_level(struct room_data *room)
     else
       return LIGHT_PARTLIGHT;
   }
-  if ((time_info.hours < 6 && time_info.hours > 19) && (world[room].vision[0] > LIGHT_MINLIGHT || world[room].vision[0] <= LIGHT_NORMALNOLIT))
+  if ((time_info.hours < 6 && time_info.hours > 19) && (room->vision[0] > LIGHT_MINLIGHT || room->vision[0] <= LIGHT_NORMALNOLIT))
     return LIGHT_MINLIGHT;
   else
     return room->vision[0];
@@ -275,7 +275,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibil
     base_target += 2;
     buf_mod(rbuf, "AstralPercep", 2);
   } else if (current_visibility_penalty < 8) {
-    switch (light_level(ch->in_room)) {
+    switch (light_level(ch->en_room)) {
       case LIGHT_FULLDARK:
         if (CURRENT_VISION(ch) == THERMOGRAPHIC) {
           if (NATURAL_VISION(ch) == THERMOGRAPHIC) {
@@ -338,26 +338,26 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibil
         }
         break;
     }
-    if (light_target > 0 && world[ch->in_room].light[1]) {
-      if (world[ch->in_room].light[2]) {
-        light_target = MAX(0, light_target - world[ch->in_room].light[2]);
-        buf_mod(rbuf, "LightSpell", - world[ch->in_room].light[2]);
+    if (light_target > 0 && ch->en_room->light[1]) {
+      if (ch->en_room->light[2]) {
+        light_target = MAX(0, light_target - ch->en_room->light[2]);
+        buf_mod(rbuf, "LightSpell", - ch->en_room->light[2]);
       } else
         light_target /= 2;
     }
-    if (world[ch->in_room].shadow[0]) {
-      light_target += world[ch->in_room].shadow[1];
-      buf_mod(rbuf, "ShadowSpell", world[ch->in_room].shadow[1]);
+    if (ch->en_room->shadow[0]) {
+      light_target += ch->en_room->shadow[1];
+      buf_mod(rbuf, "ShadowSpell", ch->en_room->shadow[1]);
     }
     int smoke_target = 0;
     
-    if (world[ch->in_room].vision[1] == LIGHT_MIST)
+    if (ch->en_room->vision[1] == LIGHT_MIST)
       if (CURRENT_VISION(ch) == NORMAL || (CURRENT_VISION(ch) == LOWLIGHT && NATURAL_VISION(ch) == LOWLIGHT)) {
         smoke_target += 2;
         buf_mod(rbuf, "Mist", 2);
       }
-    if (world[ch->in_room].vision[1] == LIGHT_LIGHTSMOKE || (weather_info.sky == SKY_RAINING &&
-                                                             world[ch->in_room].sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))) {
+    if (ch->en_room->vision[1] == LIGHT_LIGHTSMOKE || (weather_info.sky == SKY_RAINING &&
+                                                             ch->en_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->en_room, ROOM_INDOORS))) {
       if (CURRENT_VISION(ch) == NORMAL || (CURRENT_VISION(ch) == LOWLIGHT && NATURAL_VISION(ch) != LOWLIGHT)) {
         smoke_target += 4;
         buf_mod(rbuf, "LSmoke", 4);
@@ -366,8 +366,8 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibil
         buf_mod(rbuf, "LSmoke", 2);
       }
     }
-    if (world[ch->in_room].vision[1] == LIGHT_HEAVYSMOKE || (weather_info.sky == SKY_LIGHTNING &&
-                                                             world[ch->in_room].sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))) {
+    if (ch->en_room->vision[1] == LIGHT_HEAVYSMOKE || (weather_info.sky == SKY_LIGHTNING &&
+                                                             ch->en_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->en_room, ROOM_INDOORS))) {
       if (CURRENT_VISION(ch) == NORMAL || (CURRENT_VISION(ch) == LOWLIGHT && NATURAL_VISION(ch) == NORMAL)) {
         smoke_target += 6;
         buf_mod(rbuf, "HSmoke", 6);
@@ -379,7 +379,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibil
         buf_mod(rbuf, "HSmoke", 1);
       }
     }
-    if (world[ch->in_room].vision[1] == LIGHT_THERMALSMOKE) {
+    if (ch->en_room->vision[1] == LIGHT_THERMALSMOKE) {
       if (CURRENT_VISION(ch) == NORMAL || CURRENT_VISION(ch) == LOWLIGHT) {
         smoke_target += 4;
         buf_mod(rbuf, "TSmoke", 4);
@@ -407,7 +407,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibil
     base_target += 1;
     buf_mod( rbuf, "Sunlight", 1);
   }
-  if (world[ch->in_room].poltergeist[0] && !IS_ASTRAL(ch) && !IS_DUAL(ch))
+  if (ch->en_room->poltergeist[0] && !IS_ASTRAL(ch) && !IS_DUAL(ch))
   {
     base_target += 2;
     buf_mod(rbuf, "Polter", 2);
@@ -436,8 +436,8 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibil
         base_target += GET_LEVEL(sust->target);
         buf_mod(rbuf, "SConfused", GET_LEVEL(sust->target));
       }
-  if (ch->in_room != NOWHERE && ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
-    float heightdif = GET_HEIGHT(ch) / ((world[ch->in_room].z != 0 ? world[ch->in_room].z : 1)*100);
+  if (ch->en_room && ROOM_FLAGGED(ch->en_room, ROOM_INDOORS)) {
+    float heightdif = GET_HEIGHT(ch) / ((ch->en_room->z != 0 ? ch->en_room->z : 1)*100);
     if (heightdif > 1) {
       base_target += 2;
       buf_mod(rbuf, "TooTallRatio", (int)(heightdif*100));
@@ -676,7 +676,7 @@ void log_death_trap(struct char_data * ch)
   extern struct room_data *world;
   
   sprintf(buf, "%s hit DeathTrap #%ld (%s)", GET_CHAR_NAME(ch),
-          world[ch->in_room].number, world[ch->in_room].name);
+          ch->en_room->number, ch->en_room->name);
   mudlog(buf, ch, LOG_DEATHLOG, TRUE);
 }
 
@@ -725,10 +725,10 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
   
   if ( ch && ch->desc && ch->desc->original )
     sprintf(buf2, "[%5ld] (%s) ",
-            world[ch->in_room].number,
+            ch->en_room->number,
             GET_CHAR_NAME(ch));
-  else if (ch && ch->in_room != NOWHERE)
-    sprintf(buf2, "[%5ld] ", world[ch->in_room].number);
+  else if (ch && ch->en_room)
+    sprintf(buf2, "[%5ld] ", ch->en_room->number);
   else
     strcpy(buf2, "");
   
@@ -1058,19 +1058,19 @@ int get_speed(struct veh_data *veh)
       speed = 0;
       break;
     case SPEED_CRUISING:
-      if (ROOM_FLAGGED(veh->in_room, ROOM_INDOORS))
+      if (ROOM_FLAGGED(veh->en_room, ROOM_INDOORS))
         speed = MIN(maxspeed, 3);
       else
         speed = MIN(maxspeed, 55);
       break;
     case SPEED_SPEEDING:
-      if (ROOM_FLAGGED(veh->in_room, ROOM_INDOORS))
+      if (ROOM_FLAGGED(veh->en_room, ROOM_INDOORS))
         speed = MIN(maxspeed, MAX(5, (int)(maxspeed * .7)));
       else
         speed = MIN(maxspeed, MAX(55, (int)(maxspeed * .7)));
       break;
     case SPEED_MAX:
-      if (ROOM_FLAGGED(veh->in_room, ROOM_INDOORS))
+      if (ROOM_FLAGGED(veh->en_room, ROOM_INDOORS))
         speed = MIN(maxspeed, 8);
       else
         speed = maxspeed;
@@ -1581,12 +1581,12 @@ struct obj_data *find_workshop(struct char_data * ch, int type)
 {
   struct obj_data *workshop = NULL;
   
-  if (!ch->in_veh && (ch->in_room < 0 || ch->in_room == NOWHERE))
+  if (!ch->in_veh && !ch->en_room)
     return NULL;
   
   // If they're in a valid room, return the room's workshop field for MAXIMUM EFFICIENCY.
-  if (ch->in_room != NOWHERE)
-    return world[ch->in_room].best_workshop[type];
+  if (ch->en_room)
+    return ch->en_room->best_workshop[type];
   
   // If we've gotten here, they must be in a vehicle. Iterate through and find the best candidate.
   for (struct obj_data *o = ch->in_veh->contents; o; o = o->next_content) {
@@ -1614,9 +1614,9 @@ bool _is_workshop_valid(struct obj_data *obj) {
   }
   
   // Don't allow it to crash the MUD via out-of-bounds world table access.
-  if (obj->in_room < 0 || obj->in_room > top_of_world) {
-    sprintf(buf, "SYSERR: Workshop '%s' (%ld) claims it's at world index %ld, which doesn't appear to be valid.",
-            GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj), obj->in_room);
+  if (!obj->en_room) {
+    sprintf(buf, "SYSERR: Workshop '%s' (%ld) has NULL room.",
+            GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
     return FALSE;
   }
@@ -1634,12 +1634,12 @@ void add_workshop_to_room(struct obj_data *obj) {
   if (!_is_workshop_valid(obj))
     return;
   
-  struct obj_data *current = world[obj->in_room].best_workshop[GET_OBJ_VAL(obj, 0)];
+  struct obj_data *current = obj->en_room->best_workshop[GET_OBJ_VAL(obj, 0)];
   
   if (current && GET_WORKSHOP_GRADE(current) > GET_WORKSHOP_GRADE(obj))
     return;
   
-  world[obj->in_room].best_workshop[GET_WORKSHOP_TYPE(obj)] = obj;
+  obj->en_room->best_workshop[GET_WORKSHOP_TYPE(obj)] = obj;
 }
 
 void remove_workshop_from_room(struct obj_data *obj) {
@@ -1647,23 +1647,23 @@ void remove_workshop_from_room(struct obj_data *obj) {
     return;
   
   // If this wasn't the best workshop in the first place, who cares?
-  if (world[obj->in_room].best_workshop[GET_WORKSHOP_TYPE(obj)] != obj)
+  if (obj->en_room->best_workshop[GET_WORKSHOP_TYPE(obj)] != obj)
     return;
   
   // Clear out our current best_workshop pointer (previously pointed to obj).
-  world[obj->in_room].best_workshop[GET_WORKSHOP_TYPE(obj)] = NULL;
+  obj->en_room->best_workshop[GET_WORKSHOP_TYPE(obj)] = NULL;
   
   // Iterate through all items in the room, looking for other valid workshops/facilities of this type.
-  for (struct obj_data *o = world[obj->in_room].contents; o; o = o->next_content) {
+  for (struct obj_data *o = obj->en_room->contents; o; o = o->next_content) {
     if (o != obj && GET_OBJ_TYPE(o) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(o) == GET_WORKSHOP_TYPE(obj)) {
       switch (GET_WORKSHOP_GRADE(o)) {
         case TYPE_FACILITY:
           // This is the best possible outcome; set room val to this and return.
-          world[obj->in_room].best_workshop[GET_WORKSHOP_TYPE(obj)] = o;
+          obj->en_room->best_workshop[GET_WORKSHOP_TYPE(obj)] = o;
           return;
         case TYPE_SHOP:
           // The value of best_workshop is either a workshop or null, so no harm in setting it to another workshop.
-          world[obj->in_room].best_workshop[GET_WORKSHOP_TYPE(obj)] = o;
+          obj->en_room->best_workshop[GET_WORKSHOP_TYPE(obj)] = o;
           break;
         case TYPE_KIT:
           break;
@@ -1837,17 +1837,17 @@ struct room_data *get_veh_en_room(struct veh_data *veh) {
   char errbuf[500];
   if (!veh) {
     sprintf(errbuf, "SYSERR: get_veh_en_room was passed a NULL vehicle!");
-    mudlog(errbuf, veh, LOG_SYSLOG, TRUE);
+    mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
     return NULL;
   }
   
   while (veh->in_veh)
-    veh = veh->in-veh;
+    veh = veh->in_veh;
   
   // Error messaging.
   if (!veh->en_room) {
-    sprintf(errbuf, "SYSERR: get_veh_en_room called on veh %s, but it's not in a room or vehicle!", GET_VEH_NAME(ch));
-    mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
+    sprintf(errbuf, "SYSERR: get_veh_en_room called on veh %s, but it's not in a room or vehicle!", GET_VEH_NAME(veh));
+    mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
   }
   
   return veh->en_room;
@@ -1878,7 +1878,7 @@ struct room_data *get_obj_en_room(struct obj_data *obj) {
   char errbuf[500];
   if (!obj) {
     sprintf(errbuf, "SYSERR: get_obj_en_room was passed a NULL object!");
-    mudlog(errbuf, obj, LOG_SYSLOG, TRUE);
+    mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
     return NULL;
   }
   
@@ -1900,7 +1900,7 @@ struct room_data *get_obj_en_room(struct obj_data *obj) {
   
   // All is lost. The object floats in an endless void.
   sprintf(errbuf, "SYSERR: get_obj_en_room called on obj %s, but it's not in a room or vehicle!", GET_OBJ_NAME(obj));
-  mudlog(errbuf, ch, LOG_SYSLOG, TRUE);
+  mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
   
   return NULL;
 }
@@ -1920,7 +1920,7 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
   
   // Standard invis is pierced by thermographic vision, which is default on vehicles.
   if (IS_AFFECTED(vict, AFF_INVISIBLE)) {
-    return CURRENT_VISION(ch) == THERMOGRAPHIC || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE)
+    return CURRENT_VISION(ch) == THERMOGRAPHIC || AFF_FLAGGED(ch, AFF_RIG) || PLR_FLAGGED(ch, PLR_REMOTE);
   }
   
   // If we've gotten here, they're not invisible.
@@ -1928,7 +1928,7 @@ bool invis_ok(struct char_data *ch, struct char_data *vict) {
 }
 
 // Returns TRUE if the character is able to make noise, FALSE otherwise.
-bool char_can_make_noise(struct char_data *ch, const char *message = NULL) {
+bool char_can_make_noise(struct char_data *ch, const char *message) {
   if (affected_by_spell(ch, SPELL_STEALTH) || get_ch_en_room(ch)->silence[0]) {
     // Can't make noise.
     if (message)
