@@ -107,7 +107,7 @@ static int find_board(struct char_data * ch, struct obj_data **terminal)
   if (ch->persona) {
     obj = matrix[ch->persona->in_host].file;
   } else {
-    obj = world[ch->in_room].contents;
+    obj = ch->en_room->contents;
   }
     
   for (; obj; obj = obj->next_content) {
