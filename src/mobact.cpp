@@ -129,14 +129,14 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
     return FALSE;
   
   // Peaceful room, or I'm not actually a guard? Bail out.
-  if (ROOM_FLAGGED(ch->in_veh->in_room, ROOM_PEACEFUL) || !(MOB_FLAGGED(ch, MOB_GUARD)))
+  if (ROOM_FLAGGED(ch->in_veh->en_room, ROOM_PEACEFUL) || !(MOB_FLAGGED(ch, MOB_GUARD)))
     return FALSE;
   
   /* Guard NPCs. */
       
   // If we're not in a road or garage, we expect to see no vehicles and will attack any that we see.
-  if (!(ROOM_FLAGGED(ch->in_veh->in_room, ROOM_ROAD) || ROOM_FLAGGED(ch->in_veh->in_room, ROOM_GARAGE))) {
-    for (tveh = world[ch->in_veh->in_room].vehicles; tveh; tveh = tveh->next_veh) {
+  if (!(ROOM_FLAGGED(ch->in_veh->en_room, ROOM_ROAD) || ROOM_FLAGGED(ch->in_veh->en_room, ROOM_GARAGE))) {
+    for (tveh = ch->in_veh->en_room->vehicles; tveh; tveh = tveh->next_veh) {
       // No attacking your own vehicle.
       if (tveh == ch->in_veh)
         continue;
@@ -151,14 +151,14 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
   
   if (!tveh) {
     // No vehicular targets? Check players.
-    for (vict = world[ch->in_veh->in_room].people; vict; vict = vict->next_in_room) {
+    for (vict = ch->in_veh->en_room->people; vict; vict = vict->next_en_room) {
       // Skip over invalid targets (NPCs, no-hassle imms, invisibles, and downed).
-      if (IS_NPC(vict) || PRF_FLAGGED(vict, PRF_NOHASSLE) || !CAN_SEE_ROOM_SPECIFIED(ch, vict, ch->in_veh->in_room) || GET_PHYSICAL(vict) <= 0)
+      if (IS_NPC(vict) || PRF_FLAGGED(vict, PRF_NOHASSLE) || !CAN_SEE_ROOM_SPECIFIED(ch, vict, ch->in_veh->en_room) || GET_PHYSICAL(vict) <= 0)
         continue;
       
       for (int i = 0; i < NUM_WEARS; i++) {
         // If victim's equipment is illegal here, blast them.
-        if (GET_EQ(vict, i) && violates_zsp(zone_table[world[ch->in_veh->in_room].zone].security, vict, i, ch)) {
+        if (GET_EQ(vict, i) && violates_zsp(GET_SECURITY_LEVEL(ch->in_veh->en_room), vict, i, ch)) {
           // Target found, stop processing.
           break;
         }
@@ -209,12 +209,12 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
     return FALSE;
   
   // Peaceful room, or I'm not actually aggro or alarmed? Bail out.
-  if (ROOM_FLAGGED(ch->in_veh->in_room, ROOM_PEACEFUL) ||
+  if (ROOM_FLAGGED(ch->in_veh->en_room, ROOM_PEACEFUL) ||
       !(MOB_FLAGS(ch).AreAnySet(MOB_AGGRESSIVE, MOB_AGGR_TO_RACE, ENDBIT) || GET_MOBALERT(ch) == MALERT_ALARM))
     return FALSE;
   
   // Target selection. We disallow targeting of unowned vehicles so our guards don't Thunderdome each other before players even show up.
-  for (tveh = world[ch->in_veh->in_room].vehicles; tveh; tveh = tveh->next_veh) {
+  for (tveh = ch->in_veh->en_room->vehicles; tveh; tveh = tveh->next_veh) {
     if (tveh != ch->in_veh && tveh->damage < 10 && tveh->owner > 0) {
       // Found a valid target, stop looking.
       break;
@@ -224,9 +224,9 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
   // Select a non-vehicle target.
   if (!tveh) {
     // If we've gotten here, character is either astral or is not willing to / failed to attack a vehicle.
-    for (vict = world[ch->in_veh->in_room].people; vict; vict = vict->next_in_room) {
+    for (vict = ch->in_veh->en_room->people; vict; vict = vict->next_en_room) {
       // Skip conditions: Invisible, no-hassle, already downed, or is an NPC who is neither a player's astral body nor a player's escortee.
-      if ((IS_NPC(vict) && !IS_PROJECT(vict) && !is_escortee(vict)) || !CAN_SEE_ROOM_SPECIFIED(ch, vict, ch->in_veh->in_room) || PRF_FLAGGED(vict, PRF_NOHASSLE) || GET_PHYSICAL(vict) <= 0)
+      if ((IS_NPC(vict) && !IS_PROJECT(vict) && !is_escortee(vict)) || !CAN_SEE_ROOM_SPECIFIED(ch, vict, ch->in_veh->en_room) || PRF_FLAGGED(vict, PRF_NOHASSLE) || GET_PHYSICAL(vict) <= 0)
         continue;
       
       // Attack the escortee if we're hunting it specifically.
@@ -288,21 +288,21 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
 }
 
 // TODO: Fix alarmed NPCs attacking non-hostile vehicles.
-bool mobact_process_aggro(struct char_data *ch, vnum_t room_num) {
+bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
   struct char_data *vict = NULL;
   struct veh_data *veh = NULL;
   
   // Vehicle code is separate.
-  if (ch->in_veh && ch->in_veh->in_room == room_num)
+  if (ch->in_veh && ch->in_veh->en_room->number == room->number)
     return mobact_process_in_vehicle_aggro(ch);
  
   
-  if (!ROOM_FLAGGED(room_num, ROOM_PEACEFUL) &&
+  if (!ROOM_FLAGGED(room, ROOM_PEACEFUL) &&
       (MOB_FLAGS(ch).AreAnySet(MOB_AGGRESSIVE, MOB_AGGR_TO_RACE, ENDBIT) || GET_MOBALERT(ch) == MALERT_ALARM)) {
   
     // If I am not astral, am in the same room, and am willing to attack a vehicle this round (coin flip), pick a fight with a vehicle.
-    if (ch->in_room == room_num && !IS_ASTRAL(ch) && number(0, 1)) {
-      for (veh = world[room_num].vehicles; veh; veh = veh->next_veh) {
+    if (ch->en_room->number == room->number && !IS_ASTRAL(ch) && number(0, 1)) {
+      for (veh = room->vehicles; veh; veh = veh->next_veh) {
         if (veh->damage < 10) {
           stop_fighting(ch);
           set_fighting(ch, veh);
@@ -312,7 +312,7 @@ bool mobact_process_aggro(struct char_data *ch, vnum_t room_num) {
     }
   
     // If we've gotten here, character is either astral or is not willing to / failed to attack a vehicle.
-    for (vict = world[room_num].people; vict; vict = vict->next_in_room) {
+    for (vict = room->people; vict; vict = vict->next_en_room) {
       // Skip conditions: Invisible, no-hassle, already downed, or is an NPC who is neither a player's astral body nor a player's escortee.
       if ((IS_NPC(vict) && !IS_PROJECT(vict) && !is_escortee(vict)) || !CAN_SEE(ch, vict) || PRF_FLAGGED(vict, PRF_NOHASSLE) || GET_PHYSICAL(vict) <= 0)
         continue;
@@ -352,12 +352,12 @@ bool mobact_process_aggro(struct char_data *ch, vnum_t room_num) {
   return false;
 }
 
-bool mobact_process_memory(struct char_data *ch, vnum_t room_num) {
+bool mobact_process_memory(struct char_data *ch, struct room_data *room) {
   struct char_data *vict = NULL;
   
   /* Mob Memory */
   if (MOB_FLAGGED(ch, MOB_MEMORY) && MEMORY(ch)) {
-    for (vict = world[room_num].people; vict; vict = vict->next_in_room) {
+    for (vict = room->people; vict; vict = vict->next_en_room) {
       // Skip NPCs, invisibles, and nohassle targets.
       if (IS_NPC(vict) || !CAN_SEE(ch, vict) || PRF_FLAGGED(vict, PRF_NOHASSLE))
         continue;
@@ -379,7 +379,7 @@ bool mobact_process_helper(struct char_data *ch) {
   
   /* Helper Mobs */
   if (MOB_FLAGGED(ch, MOB_HELPER)) {
-    for (vict = world[ch->in_room].people; vict; vict = vict->next_in_room) {
+    for (vict = ch->en_room->people; vict; vict = vict->next_en_room) {
       // Ensure we're neither of the fighting parties. This check should be redundant since no fighting NPC can proceed through mobile_activity().
       if (ch == vict || !FIGHTING(vict) || ch == FIGHTING(vict))
         continue;
@@ -387,7 +387,7 @@ bool mobact_process_helper(struct char_data *ch) {
       // If victim is an NPC who is fighting a player, and I can see the player, assist the NPC.
       if (IS_NPC(vict) && !IS_NPC(FIGHTING(vict)) && CAN_SEE(ch, FIGHTING(vict))) {
         // The player is in my room, so I can fight them up-close.
-        if (FIGHTING(vict)->in_room == ch->in_room) {
+        if (FIGHTING(vict)->en_room == ch->en_room) {
           act("$n jumps to the aid of $N!", FALSE, ch, 0, vict, TO_ROOM);
           stop_fighting(ch);
           
@@ -424,12 +424,12 @@ bool mobact_process_helper(struct char_data *ch) {
   return false;
 }
 
-bool mobact_process_guard(struct char_data *ch, vnum_t room_num) {
+bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
   struct char_data *vict = NULL;
   struct veh_data *veh = NULL;
   
   // Vehicle code is separate.
-  if (ch->in_veh && ch->in_veh->in_room == room_num)
+  if (ch->in_veh && ch->in_veh->en_room == room)
     return mobact_process_in_vehicle_guard(ch);
   
   int i = 0;
@@ -437,11 +437,11 @@ bool mobact_process_guard(struct char_data *ch, vnum_t room_num) {
   /* Guard NPCs. */
   if (MOB_FLAGGED(ch, MOB_GUARD)) {
     // Check vehicles, but only if they're in the same room as the guard.
-    if (ch->in_room == room_num) {
-      for (veh = world[room_num].vehicles; veh; veh = veh->next_veh) {
+    if (ch->en_room == room) {
+      for (veh = room->vehicles; veh; veh = veh->next_veh) {
         // If the room we're in is neither a road nor a garage, attack any vehicles we see.
         // NOTE: Previous logic required that the vehicle be damaged to be a valid attack target.
-        if (!(ROOM_FLAGGED(room_num, ROOM_ROAD) || ROOM_FLAGGED(room_num, ROOM_GARAGE))) {
+        if (!(ROOM_FLAGGED(room, ROOM_ROAD) || ROOM_FLAGGED(room, ROOM_GARAGE))) {
           // TODO: Only attack player-owned vehicles and vehicles that have player occupants or drivers.
           if (veh->damage < 10 && veh->owner > 0) {
             stop_fighting(ch);
@@ -453,14 +453,14 @@ bool mobact_process_guard(struct char_data *ch, vnum_t room_num) {
     }
     
     // Check players.
-    for (vict = world[room_num].people; vict; vict = vict->next_in_room) {
+    for (vict = room->people; vict; vict = vict->next_en_room) {
       // Skip over invalid targets (NPCs, no-hassle imms, invisibles, and downed).
       if (IS_NPC(vict) || PRF_FLAGGED(vict, PRF_NOHASSLE) || !CAN_SEE(ch, vict) || GET_PHYSICAL(vict) <= 0)
         continue;
       
       for (i = 0; i < NUM_WEARS; i++) {
         // If victim's equipment is illegal here, blast them.
-        if (GET_EQ(vict, i) && violates_zsp(zone_table[world[room_num].zone].security, vict, i, ch)) {
+        if (GET_EQ(vict, i) && violates_zsp(GET_SECURITY_LEVEL(room), vict, i, ch)) {
           stop_fighting(ch);
           set_fighting(ch, vict);
           return true;
@@ -526,12 +526,12 @@ bool mobact_process_self_buff(struct char_data *ch) {
 bool mobact_process_scavenger(struct char_data *ch) {
   /* Scavenger (picking up objects) */
   if (MOB_FLAGGED(ch, MOB_SCAVENGER)) {
-    if (world[ch->in_room].contents && !number(0, 10)) {
+    if (ch->en_room->contents && !number(0, 10)) {
       struct obj_data *obj, *best_obj = NULL;
       int max = 1;
       
       // Find the most valuable object in the room (ignoring worthless things):
-      for (obj = world[ch->in_room].contents; obj; obj = obj->next_content) {
+      for (obj = ch->en_room->contents; obj; obj = obj->next_content) {
         if (CAN_GET_OBJ(ch, obj) && GET_OBJ_COST(obj) > max && GET_OBJ_TYPE(obj) != ITEM_WORKSHOP) {
           best_obj = obj;
           max = GET_OBJ_COST(obj);
@@ -577,8 +577,8 @@ bool mobact_process_movement(struct char_data *ch) {
     for (int tries = 0; tries < 5; tries++) {
       door = number(NORTH, DOWN);
       if (EXIT(ch->in_veh, door) &&
-          ROOM_FLAGS(EXIT(ch->in_veh, door)->to_room).AreAnySet(ROOM_ROAD, ROOM_GARAGE, ENDBIT) &&
-          !ROOM_FLAGS(EXIT(ch->in_veh, door)->to_room).AreAnySet(ROOM_NOMOB, ROOM_DEATH, ENDBIT)) {
+          ROOM_FLAGS(&world[EXIT(ch->in_veh, door)->to_room]).AreAnySet(ROOM_ROAD, ROOM_GARAGE, ENDBIT) &&
+          !ROOM_FLAGS(&world[EXIT(ch->in_veh, door)->to_room]).AreAnySet(ROOM_NOMOB, ROOM_DEATH, ENDBIT)) {
         perform_move(ch, door, LEADER, NULL);
         return TRUE;
       }
@@ -588,17 +588,17 @@ bool mobact_process_movement(struct char_data *ch) {
   // NPC not in a vehicle (walking).
   else {
     // Skip NOWHERE-located NPCs since they'll break things.
-    if (ch->in_room == NOWHERE)
+    if (!ch->en_room)
       return FALSE;
     
     for (int tries = 0; tries < 5; tries++) {
       // Select an exit, and bail out if they can't move that way.
       door = number(NORTH, DOWN);
-      if (!CAN_GO(ch, door) || ROOM_FLAGS(EXIT(ch, door)->to_room).AreAnySet(ROOM_NOMOB, ROOM_DEATH, ENDBIT))
+      if (!CAN_GO(ch, door) || ROOM_FLAGS(&world[EXIT(ch, door)->to_room]).AreAnySet(ROOM_NOMOB, ROOM_DEATH, ENDBIT))
         continue;
       
       // If their exit leads to a different zone, check if they're allowed to wander.
-      if (MOB_FLAGGED(ch, MOB_STAY_ZONE) && (world[EXIT(ch, door)->to_room].zone != world[ch->in_room].zone))
+      if (MOB_FLAGGED(ch, MOB_STAY_ZONE) && (world[EXIT(ch, door)->to_room].zone != ch->en_room->zone))
         continue;
       
       // Looks like they can move. Make it happen.
@@ -612,7 +612,8 @@ bool mobact_process_movement(struct char_data *ch) {
 void mobile_activity(void)
 {
   struct char_data *ch, *next_ch;
-  int dir, distance, current_room;
+  int dir, distance;
+  struct room_data *current_room = NULL;
 
   extern int no_specials;
   
@@ -628,8 +629,8 @@ void mobile_activity(void)
 
     // Skip NPCs that are currently fighting someone in their room, or are fighting a vehicle.
     if ((FIGHTING(ch)
-          && (FIGHTING(ch)->in_room == ch->in_room
-            || (ch->in_veh && FIGHTING(ch)->in_room == ch->in_veh->in_room)))
+          && (FIGHTING(ch)->en_room == ch->en_room
+            || (ch->in_veh && FIGHTING(ch)->en_room == ch->in_veh->en_room)))
         || FIGHTING_VEH(ch))
       continue;
 
@@ -650,20 +651,20 @@ void mobile_activity(void)
       continue;
     
     // All these aggressive checks require the character to not be in a peaceful room.
-    if (!ROOM_FLAGGED(ch->in_veh ? ch->in_veh->in_room : ch->in_room, ROOM_PEACEFUL)) {
+    if (!ROOM_FLAGGED(get_ch_en_room(ch), ROOM_PEACEFUL)) {
       // Handle aggressive mobs.
-      if (mobact_process_aggro(ch, ch->in_veh ? ch->in_veh->in_room : ch->in_room)) {
+      if (mobact_process_aggro(ch, get_ch_en_room(ch))) {
         continue;
       }
       
       // Guard NPCs.
-      if (mobact_process_guard(ch, ch->in_veh ? ch->in_veh->in_room : ch->in_room)) {
+      if (mobact_process_guard(ch, get_ch_en_room(ch))) {
         continue;
       }
       
       // These checks additionally require that the NPC is not in a vehicle.
       if (!ch->in_veh) {
-        if (mobact_process_memory(ch, ch->in_room)) {
+        if (mobact_process_memory(ch, ch->en_room)) {
           continue;
         }
         
@@ -680,13 +681,13 @@ void mobile_activity(void)
           int max_distance = MIN(find_sight(ch), find_weapon_range(ch, GET_EQ(ch, WEAR_WIELD)));
           
           for (dir = 0; !has_acted && !FIGHTING(ch) && dir < NUM_OF_DIRS; dir++) {
-            current_room = ch->in_room;
+            current_room = ch->en_room;
             
             // Check each room in a straight line until we are either out of range or cannot go further.
             for (distance = 1; !has_acted && distance <= max_distance; distance++) {
               // Exit must be valid, and room must belong to same zone as character's room.
-              if (CAN_GO2(current_room, dir) && world[EXIT2(current_room, dir)->to_room].zone == world[ch->in_room].zone) {
-                current_room = EXIT2(current_room, dir)->to_room;
+              if (CAN_GO2(current_room, dir) && world[EXIT2(current_room, dir)->to_room].zone == ch->en_room->zone) {
+                current_room = &world[EXIT2(current_room, dir)->to_room];
               } else {
                 // If we can't get to a further room, stop and move to next direction in for loop.
                 break;
@@ -904,7 +905,7 @@ bool attempt_reload(struct char_data *mob, int pos)
   {
     struct obj_data *tempobj = gun->contains;
     obj_from_obj(tempobj);
-    obj_to_room(tempobj, mob->in_room);
+    obj_to_room(tempobj, mob->en_room);
   }
   obj_from_char(magazine);
   obj_to_obj(magazine, gun);
