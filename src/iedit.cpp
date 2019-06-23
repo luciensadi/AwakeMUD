@@ -1274,7 +1274,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
                   new_obj_index[counter].func = NULL;
                   /*---------*/
                   new_obj_proto[counter] = *(d->edit_obj);
-                  new_obj_proto[counter].in_room = NOWHERE;
+                  new_obj_proto[counter].en_room = NULL;
                   /* it is now safe (and necessary!) to assign real number to
                    * the edit_obj, which has been -1 all this time */
                   d->edit_obj->item_number = counter;
@@ -1306,7 +1306,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               
               clear_object(new_obj_proto + top_of_objt + 1);
               new_obj_proto[top_of_objt + 1] = *(d->edit_obj);
-              new_obj_proto[top_of_objt + 1].in_room = NOWHERE;
+              new_obj_proto[top_of_objt + 1].en_room = NULL;
               new_obj_proto[top_of_objt + 1].item_number = top_of_objt + 1;
               /* it is now safe (and necessary!) to assign real number to
                * the edit_obj, which has been -1 all this time */
