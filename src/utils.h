@@ -106,7 +106,7 @@ int MAX(int a, int b);
 int MIN(int a, int b);
 #endif
 
-#define RM_BLOOD(rm) (world[rm].blood)
+#define RM_BLOOD(rm) (rm.blood)
 /* Ok im done here -- root */
 
 /* in magic.c */
@@ -207,10 +207,10 @@ void    update_pos(struct char_data *victim);
 
 /* basic bitvector utils *************************************************/
 
-#define EXIT2(roomnum, door) (world[(roomnum)].dir_option[(door)])
-#define CAN_GO2(roomnum, door) (EXIT2(roomnum, door) && \
-        (EXIT2(roomnum, door)->to_room != NOWHERE) && \
-        !IS_SET(EXIT2(roomnum,door)->exit_info, EX_CLOSED))
+#define EXIT2(room, door) ((roomnum)->dir_option[(door)])
+#define CAN_GO2(room, door) (EXIT2(room, door) && \
+        (EXIT2(room, door)->to_room != NOWHERE) && \
+        !IS_SET(EXIT2(room,door)->exit_info, EX_CLOSED))
 
 #define VEH_FLAGS(ch) ((ch).flags)
 #define MOB_FLAGS(ch) ((ch)->char_specials.saved.act)
@@ -275,10 +275,10 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define VALID_ROOM_RNUM(rnum) ((rnum) != NOWHERE && (rnum) <= top_of_world)
 
 #define GET_ROOM_SPEC(room) \
- (VALID_ROOM_RNUM(room) ? world[(room)].func : NULL)
+ (room ? room->func : NULL)
 
 #define GET_ROOM_VNUM(rnum) \
- ((vnum_t)(VALID_ROOM_RNUM(rnum) ? world[(rnum)].number : NOWHERE))
+ ((vnum_t)(room ? room->number : NOWHERE))
 
 /* char utils ************************************************************/
 
