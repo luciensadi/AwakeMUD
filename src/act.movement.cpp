@@ -1178,7 +1178,10 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   else if (found_veh->cspeed > SPEED_IDLE) {
     if (access_level(ch, LVL_ADMIN)) {
       send_to_char("You use your staff powers to match its speed as you board.\r\n", ch);
-    } else {
+    } else if (IS_ASTRAL(ch)) {
+      send_to_char("You mentally latch on to the speeding vehicle and draw yourself towards it.\r\n", ch);
+    }
+    else {
       send_to_char("It's moving too fast for you to board!\r\n", ch);
       return;
     }
@@ -1188,8 +1191,10 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   else if (found_veh->type != VEH_BIKE && found_veh->locked) {
     if (access_level(ch, LVL_ADMIN)) {
       send_to_char("You use your staff powers to bypass the locked doors.\r\n", ch);
+    } else if (IS_ASTRAL(ch)) {
+      // No message-- it just works. Astrals don't care about locks.
     } else {
-      send_to_char("The door is locked.\r\n", ch);
+      send_to_char("It's locked.\r\n", ch);
       return;
     }
   }
