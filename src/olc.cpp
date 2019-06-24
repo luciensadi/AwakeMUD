@@ -570,6 +570,7 @@ ACMD(do_rdelete)
         delete [] world[num].dir_option[counter]->general_description;
       if (world[num].dir_option[counter]->keyword)
         delete [] world[num].dir_option[counter]->keyword;
+      delete world[num].dir_option[counter];
     }
   }
 
@@ -582,6 +583,22 @@ ACMD(do_rdelete)
       if (This->description)
         delete [] This->description;
       delete This;
+    }
+  
+  int dir;
+  // go through the world and fix the exits; do this before copying everything down to preserve nums
+  for (counter = 0; counter <= top_of_world; counter++)
+    for (dir = 0; dir < NUM_OF_DIRS; dir++) {
+      /* if exit exists */
+      if (world[counter].dir_option[dir]) {
+        /* increment r_nums for rooms bigger than or equal to new one
+         * because we deleted a room */
+        vnum_t rnum = real_room(world[counter].dir_option[dir]->to_room->number);
+        if (rnum > num)
+          world[counter].dir_option[dir]->to_room = &world[rnum];
+        else if (rnum == num)
+          world[counter].dir_option[dir]->to_room = &world[0];
+      }
     }
 
   // now copy everything down one and decrement the rnum of any
@@ -598,20 +615,6 @@ ACMD(do_rdelete)
       if (temp_obj->in_room)
         temp_obj->in_room = &world[counter];
   }
-
-  int counter2;
-  // go through the world and fix the exits
-  for (counter = 0; counter <= top_of_world; counter++)
-    for (counter2 = 0; counter2 < NUM_OF_DIRS; counter2++) {
-      /* if exit exists */
-      if (world[counter].dir_option[counter2]) {
-        /* increment r_nums for rooms bigger than or equal to new one
-         * because we inserted room */
-        vnum_t rnum = real_room(world[counter].dir_option[counter2]->to_room->number);
-        if (rnum >= num)
-          world[counter].dir_option[counter2]->to_room = &world[rnum - 1];
-      }
-    }
 
   // update the zones by decrementing numbers if >= number deleted
   int zone, cmd_no;
