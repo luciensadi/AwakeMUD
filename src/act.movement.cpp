@@ -1175,7 +1175,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   }
   
   // Too fast? Can't (unless admin).
-  else if (found_veh->cspeed > SPEED_IDLE) {
+  if (found_veh->cspeed > SPEED_IDLE) {
     if (access_level(ch, LVL_ADMIN)) {
       send_to_char("You use your staff powers to match its speed as you board.\r\n", ch);
     } else if (IS_ASTRAL(ch)) {
@@ -1188,7 +1188,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   }
   
   // Locked? Can't (unless admin)
-  else if (found_veh->type != VEH_BIKE && found_veh->locked) {
+  if (found_veh->type != VEH_BIKE && found_veh->locked) {
     if (access_level(ch, LVL_ADMIN)) {
       send_to_char("You use your staff powers to bypass the locked doors.\r\n", ch);
     } else if (IS_ASTRAL(ch)) {
@@ -1199,7 +1199,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
     }
   }
   
-  else if (inveh && (AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE))) {
+  if (inveh && (AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE))) {
     int mult;
     switch (inveh->type) {
       case VEH_DRONE:
@@ -1230,7 +1230,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   }
   
   // No space? Can't (unless admin)
-  else if (!found_veh->seating[front]) {
+  if (!found_veh->seating[front]) {
     if (access_level(ch, LVL_ADMIN)) {
       send_to_char("You use your staff powers to force your way in despite the lack of seating.\r\n", ch);
     } else {

@@ -1145,12 +1145,19 @@ void look_at_room(struct char_data * ch, int ignore_brief)
     return;
   }
   
+  if (!ch->in_room) {
+    send_to_char("Your mind is blasted by the eldritch horrors of the unknown void you're drifting in.\r\n", ch);
+    sprintf(buf, "SYSERR: %s tried to look at their room but is nowhere!", GET_CHAR_NAME(ch));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
   if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
     ROOM_FLAGS(ch->in_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
-    sprintf(buf2, "^C[%5ld] %s [ %s ]^n\r\n", ch->in_room->number, ch->in_room->name, buf);
+    sprintf(buf2, "^C[%5ld] %s [ %s ]^n\r\n", GET_ROOM_VNUM(ch->in_room), GET_ROOM_NAME(ch->in_room), buf);
     send_to_char(buf2, ch);
   } else
-    send_to_char(ch, "^C%s^n\r\n", ch->in_room->name, ch);
+    send_to_char(ch, "^C%s^n\r\n", GET_ROOM_NAME(ch->in_room), ch);
   
   // TODO: Why is this code here? If you're in a vehicle, you do look_in_veh() above right?
   if (!(ch->in_veh && get_speed(ch->in_veh) > 200)) {
@@ -2419,11 +2426,11 @@ const char *get_vision_string(struct char_data *ch, bool ascii_friendly=FALSE) {
   }
   
   if (ascii_friendly) {
-    if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) && ch->in_room && ch->in_room->silence[0] <= 0)
+    if (AFF_FLAGGED(ch, AFF_DETECT_INVIS) && get_ch_in_room(ch)->silence[0] <= 0)
         return "You have ultrasonic vision.";
   } else {
     if (AFF_FLAGGED(ch, AFF_DETECT_INVIS)) {
-      if (ch->in_room && ch->in_room->silence[0] > 0)
+      if (get_ch_in_room(ch)->silence[0] > 0)
         return "Your ultrasonic vision is being suppressed by a field of silence here.\r\n";
       else
         return "You have ultrasonic vision.\r\n";
@@ -3756,8 +3763,7 @@ void print_object_location(int num, struct obj_data *obj, struct char_data *ch,
     sprintf(buf + strlen(buf), "%33s", " - ");
   
   if (obj->in_room)
-    sprintf(buf + strlen(buf), "[%5ld] %s\r\n", obj->in_room->number,
-            obj->in_room->name);
+    sprintf(buf + strlen(buf), "[%5ld] %s\r\n", GET_ROOM_VNUM(obj->in_room), GET_ROOM_NAME(obj->in_room));
   else if (obj->carried_by)
     sprintf(buf + strlen(buf), "carried by %s\r\n", PERS(obj->carried_by, ch));
   else if (obj->worn_by)
@@ -3788,24 +3794,31 @@ void perform_immort_where(struct char_data * ch, char *arg)
         if (i && CAN_SEE(ch, i) && (i->in_room || i->in_veh)) {
           if (d->original)
             if (d->character->in_veh)
-              sprintf(buf + strlen(buf), "%-20s - [%5ld] %s (in %s) (in %s)\r\n",
-                      GET_CHAR_NAME(i), d->character->in_room->number,
-                      d->character->in_veh->in_room->name, GET_NAME(d->character),
+              sprintf(buf + strlen(buf), "%-20s - [%5ld] %s (switched as %s) (in %s)\r\n",
+                      GET_CHAR_NAME(i),
+                      GET_ROOM_VNUM(get_ch_in_room(d->character)),
+                      GET_ROOM_NAME(get_ch_in_room(d->character)),
+                      GET_NAME(d->character),
                       GET_VEH_NAME(d->character->in_veh));
             else
               sprintf(buf + strlen(buf), "%-20s - [%5ld] %s (in %s)\r\n",
-                      GET_CHAR_NAME(i), d->character->in_room->number,
-                      d->character->in_room->name, GET_NAME(d->character));
+                      GET_CHAR_NAME(i),
+                      GET_ROOM_VNUM(get_ch_in_room(d->character)),
+                      GET_ROOM_NAME(get_ch_in_room(d->character)),
+                      GET_NAME(d->character));
           
             else
               if (i->in_veh)
                 sprintf(buf + strlen(buf), "%-20s - [%5ld] %s (in %s)\r\n",
                         GET_CHAR_NAME(i),
-                        i->in_veh->in_room->number, i->in_veh->in_room->name, GET_VEH_NAME(i->in_veh));
+                        GET_ROOM_VNUM(get_ch_in_room(i)),
+                        GET_ROOM_NAME(get_ch_in_room(i)),
+                        GET_VEH_NAME(i->in_veh));
               else
                 sprintf(buf + strlen(buf), "%-20s - [%5ld] %s\r\n",
                         GET_CHAR_NAME(i),
-                        i->in_room->number, i->in_room->name);
+                        GET_ROOM_VNUM(get_ch_in_room(i)),
+                        GET_ROOM_NAME(get_ch_in_room(i)));
         }
       }
     page_string(ch->desc, buf, 1);
@@ -3816,10 +3829,15 @@ void perform_immort_where(struct char_data * ch, char *arg)
       if (CAN_SEE(ch, i) && (i->in_room || i->in_veh) &&
           isname(arg, GET_KEYWORDS(i))) {
         found = 1;
-        sprintf(buf + strlen(buf), "M%3d. %-25s - [%5ld] %s\r\n", ++num,
+        sprintf(buf + strlen(buf), "M%3d. %-25s - [%5ld] %s", ++num,
                 GET_NAME(i),
-                (i->in_veh ? i->in_veh->in_room->number : i->in_room->number),
-                (i->in_veh ? GET_VEH_NAME(i->in_veh) : i->in_room->name));
+                GET_ROOM_VNUM(get_ch_in_room(i)),
+                GET_ROOM_NAME(get_ch_in_room(i)));
+        if (i->in_veh) {
+          sprintf(ENDOF(buf), " (in %s)\r\n", GET_VEH_NAME(i->in_veh));
+        } else {
+          strcat(buf, "\r\n");
+        }
       }
     found2 = ObjList.PrintList(ch, arg);
     

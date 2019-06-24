@@ -453,7 +453,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define CURRENT_VISION(ch)	((ch)->points.vision[1])
 #define SHOTS_FIRED(ch)		((ch)->points.extras[0])
 #define SHOTS_TRIGGERED(ch)	((ch)->points.extras[1])
-#define RIG_VEH(ch, veh)	(veh) = (ch)->char_specials.rigging ? (ch)->char_specials.rigging : (ch)->in_veh;
+#define RIG_VEH(ch, veh)	((veh) = ((ch)->char_specials.rigging ? (ch)->char_specials.rigging : (ch)->in_veh));
 
 
 /* the skills structure was moved to char_specials so that mobs could

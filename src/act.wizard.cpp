@@ -343,7 +343,7 @@ ACMD(do_echo)
 
     if ( subcmd == SCMD_ECHO || subcmd == SCMD_AECHO) {
       sprintf(buf2, "%s echoed %s at #%ld",
-              GET_CHAR_NAME(ch), buf, ch->in_room->number);
+              GET_CHAR_NAME(ch), buf, GET_ROOM_VNUM(ch->in_room));
       mudlog(buf2, ch, LOG_WIZLOG, TRUE);
     }
   }
@@ -1096,7 +1096,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   }
 
   sprintf(ENDOF(buf), " PC '%s'  IDNum: [%5ld], In room [%5ld]\r\n",
-          GET_CHAR_NAME(k), GET_IDNUM(k), k->in_room->number);
+          GET_CHAR_NAME(k), GET_IDNUM(k), k->in_room ? k->in_room->number : 0);
   
   if (GET_PGROUP_MEMBER_DATA(k)) {
     sprintf(ENDOF(buf), "Rank ^c%d/%d^n member of group '^c%s^n' (^c%s^n), with privileges:\r\n  ^c%s^n\r\n",
@@ -1849,8 +1849,7 @@ ACMD(do_purge)
   extern void die_follower(struct char_data * ch);
 
   if (!access_level(ch, LVL_EXECUTIVE) &&
-      (ch->player_specials->saved.zonenum !=
-       zone_table[ch->in_room->zone].number)) {
+      (ch->in_room && (ch->player_specials->saved.zonenum != zone_table[ch->in_room->zone].number))) {
     send_to_char("You can only purge in your zone.\r\n", ch);
     return;
   }

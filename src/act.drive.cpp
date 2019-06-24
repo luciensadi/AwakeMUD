@@ -1537,7 +1537,7 @@ ACMD(do_gridguide)
     send_to_char("The following destinations are available:\r\n", ch);
     for (grid = veh->grid; grid; grid = grid->next) {
       i++;
-      if (find_first_step(real_room(veh->in_room->number), real_room(grid->room)) < 0)
+      if (!veh->in_room || find_first_step(real_room(veh->in_room->number), real_room(grid->room)) < 0)
         sprintf(buf, "^r%-20s [%-6ld, %-6ld](Unavailable)\r\n", CAP(grid->name),
                 grid->room - (grid->room * 3), grid->room + 100);
       else
@@ -1561,7 +1561,7 @@ ACMD(do_gridguide)
         break;
     if (!grid)
       send_to_char("That destination doesn't seem to be in the system.\r\n", ch);
-    else if (find_first_step(real_room(veh->in_room->number), real_room(grid->room)) < 0)
+    else if (!veh->in_room || find_first_step(real_room(veh->in_room->number), real_room(grid->room)) < 0)
       send_to_char("That destination is currently unavailable.\r\n", ch);
     else {
       veh->dest = &world[real_room(grid->room)];
@@ -1645,7 +1645,7 @@ void process_autonav(void)
   for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
     bool veh_moved = FALSE;
   
-    if (veh->dest && veh->cspeed > SPEED_IDLE && veh->damage < 10) {
+    if (veh->in_room && veh->dest && veh->cspeed > SPEED_IDLE && veh->damage < 10) {
       struct char_data *ch = NULL;
       
       if (!(ch = veh->rigger))
