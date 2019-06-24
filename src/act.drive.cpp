@@ -151,7 +151,7 @@ void crash_test(struct char_data *ch)
   power = (int)(ceilf(get_speed(veh) / 10));
 
   sprintf(buf, "%s begins to lose control!\r\n", GET_VEH_NAME(veh));
-  send_to_room(buf, get_veh_in_room(veh));
+  send_to_room(buf, veh->in_room);
 
   send_to_char("You begin to lose control!\r\n", ch);
   skill = veh_skill(ch, veh) + veh->autonav;
@@ -163,7 +163,7 @@ void crash_test(struct char_data *ch)
   }
   send_to_veh("You careen off the road!\r\n", veh, NULL, TRUE);
   sprintf(buf, "A %s careens off the road!\r\n", GET_VEH_NAME(veh));
-  send_to_room(buf, get_veh_in_room(veh));
+  send_to_room(buf, veh->in_room);
 
   attack_resist = success_test(veh->body, power) * -1;
 
@@ -178,7 +178,7 @@ void crash_test(struct char_data *ch)
     for (tch = veh->people; tch; tch = next) {
       next = tch->next_in_veh;
       char_from_room(tch);
-      char_to_room(tch, get_veh_in_room(veh));
+      char_to_room(tch, veh->in_room);
       damage_total = convert_damage(stage(0 - success_test(GET_BOD(tch), power), MODERATE));
       damage(tch, tch, damage_total, TYPE_CRASH, PHYSICAL);
       AFF_FLAGS(tch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
@@ -237,7 +237,7 @@ ACMD(do_drive)
   if (VEH->cspeed == SPEED_OFF || VEH->dest) {
     AFF_FLAGS(ch).ToggleBit(AFF_PILOT);
     VEH->cspeed = SPEED_IDLE;
-    VEH->lastin[0] = get_veh_in_room(VEH);
+    VEH->lastin[0] = VEH->in_room;
     send_to_veh(buf1, VEH, ch, FALSE);
     stop_manning_weapon_mounts(ch, TRUE);
     send_to_char("The wheel is in your hands.\r\n", ch);
@@ -321,7 +321,7 @@ ACMD(do_rig)
     } 
     AFF_FLAGS(ch).ToggleBits(AFF_PILOT, AFF_RIG, ENDBIT);
     VEH->cspeed = SPEED_IDLE;
-    VEH->lastin[0] = get_veh_in_room(VEH);
+    VEH->lastin[0] = VEH->in_room;
     send_to_veh(buf1, VEH, ch, TRUE);
     stop_manning_weapon_mounts(ch, TRUE);
     send_to_char("As you jack in, your perception shifts.\r\n", ch);
@@ -356,7 +356,10 @@ ACMD(do_vemote)
   }
   RIG_VEH(ch, veh)
   sprintf(buf, "%s%s.\r\n", GET_VEH_NAME(veh), argument);
-  send_to_room(buf, get_veh_in_room(veh));
+  if (veh->in_room)
+    send_to_room(buf, veh->in_room);
+  else
+    send_to_veh(buf, veh->in_veh, ch, TRUE);
   sprintf(buf, "Your vehicle%s.\r\n", argument);
   send_to_veh(buf, veh, NULL, TRUE);
   return;
@@ -384,14 +387,19 @@ ACMD(do_ram)
     send_to_char("This room just has a peaceful, easy feeling...\r\n", ch);
     return;
   }
+  if (veh->in_veh) {
+    send_to_char("There's not enough room in here to even think about trying something like that.", ch);
+    return;
+  }
   two_arguments(argument, arg, buf2);
 
   if (!*arg) {
     send_to_char("Ram what?", ch);
     return;
   }
-  if (!(vict = get_char_room(arg, get_veh_in_room(veh))) &&
-      !(tveh = get_veh_list(arg, get_veh_in_room(veh)->vehicles, ch))) {
+  
+  if (!(vict = get_char_room(arg, veh->in_room)) &&
+      !(tveh = get_veh_list(arg, veh->in_room->vehicles, ch))) {
     send_to_char("You can't seem to find the target you're looking for.\r\n", ch);
     return;
   }
@@ -430,7 +438,7 @@ void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tve
     sprintf(buf1, "%s heads straight towards %s.\r\n", GET_VEH_NAME(veh), GET_VEH_NAME(tveh));
     sprintf(buf2, "You attempt to ram %s.\r\n", GET_VEH_NAME(tveh));
     send_to_veh(buf, tveh, 0, TRUE);
-    send_to_room(buf1, get_veh_in_room(veh));
+    send_to_room(buf1, veh->in_room);
     send_to_char(buf2, ch);
   } else {
     target = modify_veh(veh) + veh->handling + modify_target(ch);
@@ -482,7 +490,7 @@ ACMD(do_upgrade)
     send_to_char("You don't have any more music to play on the radio.\r\n", ch);
     return;
   }
-  if (!(veh = get_veh_list(buf1, ch->in_veh ? ch->in_veh->carriedvehs : get_ch_in_room(ch)->vehicles, ch))) {
+  if (!(veh = get_veh_list(buf1, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
     send_to_char(NOOBJECT, ch);
     return;
   }
