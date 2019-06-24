@@ -818,7 +818,7 @@ ACMD(do_control)
     send_to_char("Your subscriber list isn't that big.\r\n", ch);
     return;
   }
-  if (!get_veh_in_room(veh)) {
+  if (!veh->in_room && !veh->in_veh) {
     send_to_char("You can't seem to make contact with it.\r\n", ch);
     return;
   }
@@ -852,7 +852,7 @@ ACMD(do_control)
 
 ACMD(do_subscribe)
 {
-  struct veh_data *veh, *temp;
+  struct veh_data *veh = NULL, *temp;
   struct obj_data *obj;
   bool has_deck = FALSE;
   int i = 0, num;
@@ -909,9 +909,12 @@ ACMD(do_subscribe)
 
   one_argument(argument, buf);
   if (ch->in_veh) {
-    if (ch->in_veh->in_veh)
-      veh = get_veh_list(buf, ch->in_veh->in_veh->carriedvehs, ch);
-    else veh = get_veh_list(buf, get_veh_in_room(ch->in_veh)->vehicles, ch);
+    struct veh_data *un_nest = ch->in_veh;
+    while (un_nest && !veh) {
+      // Starting from the vehicle you're in, search carried vehicles of this veh, then expand out to carrier's carried vehs, etc until a match is found.
+      veh = get_veh_list(buf, un_nest->carriedvehs, ch);
+      un_nest = un_nest->in_veh;
+    }
   } else
     veh = get_veh_list(buf, get_ch_in_room(ch)->vehicles, ch);
   if (!veh) {
@@ -1221,6 +1224,12 @@ ACMD(do_chase)
     send_to_char(buf, ch);
     return;
   }
+  
+  if (veh->in_veh) {
+    send_to_char("You're going to have a hard time chasing anything from in here.", ch);
+    return;
+  }
+  
   two_arguments(argument, arg, buf2);
 
   if (!*arg) {
@@ -1228,7 +1237,7 @@ ACMD(do_chase)
     return;
   }
 
-  if (!(tveh = get_veh_list(arg, get_veh_in_room(veh)->vehicles, ch)) &&
+  if (!(tveh = get_veh_list(arg, veh->in_room->vehicles, ch)) &&
       !(vict = get_char_room(arg, veh->in_room))) {
     send_to_char(NOOBJECT, ch);
     return;
@@ -1319,6 +1328,11 @@ ACMD(do_target)
       }
       modeall = TRUE;
     }
+  }
+  
+  if (veh->in_veh) {
+    send_to_char("It'd be a bad idea to start firing in such an enclosed space.", ch);
+    return;
   }
   
   if (!(vict = get_char_room(arg, veh->in_room)) &&
