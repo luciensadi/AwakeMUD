@@ -1140,7 +1140,7 @@ void look_at_room(struct char_data * ch, int ignore_brief)
   }
   
   // Streetlight code
-  if (ch->in_veh || PLR_FLAGGED(ch, PLR_REMOTE)) {
+  if (ch->in_veh && (!ch->in_room || PLR_FLAGGED(ch, PLR_REMOTE))) {
     look_in_veh(ch);
     return;
   }
@@ -1166,9 +1166,9 @@ void look_at_room(struct char_data * ch, int ignore_brief)
   
   if (ch->in_room->blood > 0)
     send_to_char(blood_messages[(int) ch->in_room->blood], ch);
-  if (ch->in_room->background[0] && (IS_ASTRAL(ch) || IS_DUAL(ch))) {
-    if (ch->in_room->background[1] == AURA_POWERSITE) {
-      switch (ch->in_room->background[0]) {
+  if (GET_BACKGROUND_COUNT(ch->in_room) && (IS_ASTRAL(ch) || IS_DUAL(ch))) {
+    if (GET_BACKGROUND_AURA(ch->in_room) == AURA_POWERSITE) {
+      switch (GET_BACKGROUND_COUNT(ch->in_room)) {
         case 1:
           send_to_char("^CAstral energy seems to be slightly concentrated here.^n\r\n", ch);
           break;
@@ -1186,13 +1186,14 @@ void look_at_room(struct char_data * ch, int ignore_brief)
           break;
         default:
           send_to_char("^RA horrific quantity of astral energy tears at your senses.^n\r\n", ch);
-          sprintf(buf, "SYSERR: '%s' (%ld) has powersite background count %d, which is greater than displayable max of 5.", ch->in_room->name, ch->in_room->number, ch->in_room->background[0]);
+          sprintf(buf, "SYSERR: '%s' (%ld) has powersite background count %d, which is greater than displayable max of 5.",
+                  ch->in_room->name, ch->in_room->number, GET_BACKGROUND_COUNT(ch->in_room));
           mudlog(buf, ch, LOG_SYSLOG, TRUE);
           break;
       }
-    } else if (ch->in_room->background[0] < 6) {
+    } else if (GET_BACKGROUND_COUNT(ch->in_room) < 6) {
       sprintf(buf, "^cA");
-      switch (ch->in_room->background[0]) {
+      switch (GET_BACKGROUND_COUNT(ch->in_room)) {
         case 1:
           strcat(buf, " distracting");
           break;
@@ -1209,7 +1210,7 @@ void look_at_room(struct char_data * ch, int ignore_brief)
           strcat(buf, "n overwhelming");
           break;
       }
-      sprintf(ENDOF(buf), " aura of %s pervades the area.^n\r\n", background_types[ch->in_room->background[1]]);
+      sprintf(ENDOF(buf), " aura of %s pervades the area.^n\r\n", background_types[GET_BACKGROUND_AURA(ch->in_room)]);
       send_to_char(buf, ch);
     } else {
       send_to_char("^RThe mana is warping here!^n\r\n", ch);
