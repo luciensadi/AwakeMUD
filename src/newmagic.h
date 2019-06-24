@@ -3,7 +3,7 @@ extern void circle_build(struct char_data *ch, char *type, int force);
 extern void lodge_build(struct char_data *ch, int force);
 extern bool conjuring_drain(struct char_data *ch, int force);
 extern void end_spirit_existance(struct char_data *ch, bool message);
-extern bool check_spirit_sector(rnum_t room, int type);
+extern bool check_spirit_sector(struct room_data *room, int type);
 extern bool spell_drain(struct char_data *ch, int type, int force, int damage);
 extern void totem_bonus(struct char_data *ch, int action, int type, int &target, int &skill);
 extern void mob_cast(struct char_data *ch, struct char_data *tch, struct obj_data *tobj, int spellnum, int level);

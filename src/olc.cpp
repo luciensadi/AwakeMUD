@@ -169,8 +169,8 @@ ACMD (do_redit)
 
   one_argument (argument, arg1);
   if (!*argument) {
-    number = world[ch->in_room].number;
-    room_num = ch->in_room;
+    number = ch->in_room->number;
+    room_num = real_room(ch->in_room->number);
   } else {
     if (!isdigit (*arg1)) {
       send_to_char ("Please supply a valid number.\r\n", ch);
@@ -453,8 +453,8 @@ ACMD(do_dig)
   }
 
   for (counter = 0; counter <= top_of_zone_table; counter++) {
-    if (world[ch->in_room].number >= (zone_table[counter].number * 100) &&
-        world[ch->in_room].number <= zone_table[counter].top)
+    if (ch->in_room->number >= (zone_table[counter].number * 100) &&
+        ch->in_room->number <= zone_table[counter].top)
       zone1 = counter;
     if (world[room].number >= (zone_table[counter].number * 100) &&
         world[room].number <= zone_table[counter].top)
@@ -466,18 +466,18 @@ ACMD(do_dig)
     return;
   }
 
-  if (world[ch->in_room].dir_option[dir] || world[room].dir_option[rev_dir[dir]]) {
+  if (ch->in_room->dir_option[dir] || world[room].dir_option[rev_dir[dir]]) {
     send_to_char("You can't dig over an existing exit.\r\n", ch);
     return;
   }
 
-  world[ch->in_room].dir_option[dir] = new room_direction_data;
-  memset((char *) world[ch->in_room].dir_option[dir], 0, sizeof (struct room_direction_data));
-  world[ch->in_room].dir_option[dir]->to_room = room;
-  world[ch->in_room].dir_option[dir]->barrier = 4;
-  world[ch->in_room].dir_option[dir]->material = 5;
-  world[ch->in_room].dir_option[dir]->exit_info = 0;
-  world[ch->in_room].dir_option[dir]->to_room_vnum = world[room].number;
+  ch->in_room->dir_option[dir] = new room_direction_data;
+  memset((char *) ch->in_room->dir_option[dir], 0, sizeof (struct room_direction_data));
+  ch->in_room->dir_option[dir]->to_room = &world[room];
+  ch->in_room->dir_option[dir]->barrier = 4;
+  ch->in_room->dir_option[dir]->material = 5;
+  ch->in_room->dir_option[dir]->exit_info = 0;
+  ch->in_room->dir_option[dir]->to_room_vnum = world[room].number;
   dir = rev_dir[dir];
   world[room].dir_option[dir] = new room_direction_data;
   memset((char *) world[room].dir_option[dir], 0, sizeof (struct room_direction_data));
@@ -485,7 +485,7 @@ ACMD(do_dig)
   world[room].dir_option[dir]->barrier = 4;
   world[room].dir_option[dir]->material = 5;
   world[room].dir_option[dir]->exit_info = 0;
-  world[room].dir_option[dir]->to_room_vnum = world[ch->in_room].number;
+  world[room].dir_option[dir]->to_room_vnum = ch->in_room->number;
   if (zone1 == zone2)
     write_world_to_disk(zone_table[zone1].number);
   else {
@@ -587,12 +587,12 @@ ACMD(do_rdelete)
   for (counter = num; counter <= top_of_world; counter++) {
     world[counter] = world[counter + 1];
     for (temp_ch = world[counter].people; temp_ch; temp_ch = temp_ch->next_in_room)
-      if (temp_ch->in_room != -1)
-        temp_ch->in_room = counter;
+      if (temp_ch->in_room)
+        temp_ch->in_room = &world[counter];
     /* move objects */
     for (temp_obj = world[counter].contents; temp_obj; temp_obj = temp_obj->next_content)
-      if (temp_obj->in_room != -1)
-        temp_obj->in_room = counter;
+      if (temp_obj->in_room)
+        temp_obj->in_room = &world[counter];
   }
 
   int counter2;
@@ -603,8 +603,9 @@ ACMD(do_rdelete)
       if (world[counter].dir_option[counter2]) {
         /* increment r_nums for rooms bigger than or equal to new one
          * because we inserted room */
-        if (world[counter].dir_option[counter2]->to_room >= num)
-          world[counter].dir_option[counter2]->to_room -= 1;
+        vnum_t rnum = real_room(world[counter].dir_option[counter2]->to_room->number);
+        if (rnum >= num)
+          world[counter].dir_option[counter2]->to_room = &world[rnum - 1];
       }
     }
 

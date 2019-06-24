@@ -35,7 +35,7 @@ extern void range_combat(struct char_data *ch, char target[MAX_INPUT_LENGTH],
 extern int find_weapon_range(struct char_data *ch, struct obj_data *weapon);
 extern void roll_individual_initiative(struct char_data *ch);
 extern bool has_ammo(struct char_data *ch, struct obj_data *wielded);
-extern void damage_door(struct char_data *ch, int room, int dir, int power, int type);
+extern void damage_door(struct char_data *ch, struct room_data *room, int dir, int power, int type);
 extern void perform_wear(struct char_data *, struct obj_data *, int);
 extern void perform_get_from_container(struct char_data *, struct obj_data *, struct obj_data *, int);
 extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data *);
@@ -58,7 +58,7 @@ ACMD(do_assist)
   else if (helpee == ch)
     send_to_char("You can't help yourself any more than this!\r\n", ch);
   else {
-    for (opponent = world[ch->in_room].people; opponent && (FIGHTING(opponent) != helpee);
+    for (opponent = ch->in_room->people; opponent && (FIGHTING(opponent) != helpee);
          opponent = opponent->next_in_room)
       ;
 
@@ -125,7 +125,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
   struct veh_data *veh = NULL;
   int dir, type = DAMOBJ_CRUSH;
 
-  if (world[ch->char_specials.rigging ? ch->char_specials.rigging->in_room : ch->in_room].peaceful)
+  if ((ch->char_specials.rigging ? ch->char_specials.rigging->in_room : ch->in_room)->peaceful)
   {
     send_to_char("This room just has a peaceful, easy feeling...\r\n", ch);
     return TRUE;
@@ -142,7 +142,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
     sprintf(buf, "%s what?\r\n", cmdname);
     send_to_char(ch, CAP(buf));
     return TRUE;
-  } else if (!(vict = get_char_room_vis(ch, arg)) && !(veh = get_veh_list(arg, world[ch->in_room].vehicles, ch)))
+  } else if (!(vict = get_char_room_vis(ch, arg)) && !(veh = get_veh_list(arg, ch->in_room->vehicles, ch)))
   {
     if ((dir = messageless_find_door(ch, arg, buf2, cmdname)) < 0)
       return FALSE;
@@ -387,8 +387,8 @@ ACMD(do_kill)
       act("$n brutally slays $N!", FALSE, ch, 0, vict, TO_NOTVICT);
       if (!IS_NPC(vict)) {
         sprintf(buf2, "%s raw killed by %s. {%s (%ld)}", GET_CHAR_NAME(vict),
-                GET_NAME(ch), world[vict->in_room].name,
-                world[vict->in_room].number);
+                GET_NAME(ch), vict->in_room->name,
+                vict->in_room->number);
 
         mudlog(buf2, vict, LOG_DEATHLOG, TRUE);
       }
@@ -534,7 +534,7 @@ ACMD(do_flee)
   // You get six tries to escape per flee command.
   for (int tries = 0; tries < 6; tries++) {
     int attempt = number(0, NUM_OF_DIRS - 2);       /* Select a random direction */
-    if (CAN_GO(ch, attempt) && (!IS_NPC(ch) || !ROOM_FLAGGED(world[ch->in_room].dir_option[attempt]->to_room, ROOM_NOMOB))) {
+    if (CAN_GO(ch, attempt) && (!IS_NPC(ch) || !ROOM_FLAGGED(ch->in_room->dir_option[attempt]->to_room, ROOM_NOMOB))) {
       // Supply messaging and put the character into a wait state to match wait state in perform_move.
       act("$n panics, and attempts to flee!", TRUE, ch, 0, 0, TO_ROOM);
       WAIT_STATE(ch, PULSE_VIOLENCE * 2);
@@ -605,7 +605,7 @@ ACMD(do_kick)
     send_to_char("You can only damage closed doors!\r\n", ch);
   else if (!LIGHT_OK(ch))
     send_to_char("How do you expect to do that when you can't see anything?\r\n", ch);
-  else if (world[ch->in_room].peaceful)
+  else if (ch->in_room->peaceful)
     send_to_char("Nah - leave it in peace.\r\n", ch);
   else {
     WAIT_STATE(ch, PULSE_VIOLENCE * 2);

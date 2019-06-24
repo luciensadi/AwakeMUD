@@ -157,13 +157,8 @@ ACMD(do_copyover)
 
     } else {
       fprintf (fp, "%d %s %s\n", d->descriptor, GET_CHAR_NAME(och), d->host);
-      if (och->in_room != NOWHERE)
-        GET_LAST_IN(och) = world[och->in_room].number;
-      else if (och->in_veh && och->in_veh->in_room != NOWHERE)
-        GET_LAST_IN(och) = world[och->in_veh->in_room].number;
-      else if (och->in_veh && och->in_veh->in_veh && och->in_veh->in_veh->in_room != NOWHERE)
-        GET_LAST_IN(och) = world[och->in_veh->in_veh->in_room].number;
-      else {
+      GET_LAST_IN(och) = get_ch_in_room(och)->number;
+      if (!GET_LAST_IN(och) || GET_LAST_IN(och) == NOWHERE) {
         // Fuck it, send them to Grog's.
         sprintf(buf, "%s's location could not be determined by the current copyover logic. %s will load at Grog's (35500).",
                 GET_CHAR_NAME(och), HSSH(och));
@@ -245,12 +240,12 @@ ACMD(do_zecho)
     act(argument, FALSE, ch, 0, 0, TO_CHAR);
     for (d = descriptor_list; d; d = d->next)
       if (!d->connected && d->character && d->character != ch)
-        if (zone_table[world[d->character->in_room].zone].number == zone_table[world[ch->in_room].zone].number &&
+        if (zone_table[d->character->in_room->zone].number == zone_table[ch->in_room->zone].number &&
             !(subcmd == SCMD_AECHO && !(IS_ASTRAL(d->character) || IS_DUAL(d->character))))
           act(argument, FALSE, d->character, 0, 0, TO_CHAR);
     sprintf(buf, "%s zechoed %s in zone #%d",
             GET_CHAR_NAME(ch), argument,
-            zone_table[world[ch->in_room].zone].number);
+            zone_table[ch->in_room->zone].number);
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
   }
 }
@@ -296,14 +291,14 @@ ACMD(do_echo)
     }
 
     if (subcmd == SCMD_AECHO) {
-      for (vict = world[ch->in_room].people; vict; vict = vict->next_in_room)
+      for (vict = ch->in_room->people; vict; vict = vict->next_in_room)
         if (ch != vict && (IS_ASTRAL(vict) || IS_DUAL(vict)))
           act(buf, FALSE, ch, 0, vict, TO_VICT);
     } else {
       if (PLR_FLAGGED(ch, PLR_MATRIX))
         send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
       else {
-        for (struct char_data *targ = ch->in_veh ? ch->in_veh->people : world[ch->in_room].people; targ; targ = ch->in_veh ? targ->next_in_veh : targ->next_in_room)
+        for (struct char_data *targ = ch->in_veh ? ch->in_veh->people : ch->in_room->people; targ; targ = ch->in_veh ? targ->next_in_veh : targ->next_in_room)
           if (targ != ch) {
             if ((IS_ASTRAL(ch) || IS_PROJECT(ch)) && !(IS_ASTRAL(targ) || IS_PROJECT(targ) || IS_DUAL(targ)))
               continue;
@@ -334,7 +329,7 @@ ACMD(do_echo)
             act(buf2, FALSE, ch, 0, targ, TO_VICT);
           }
         if (!ch->in_veh)
-          for (veh = world[ch->in_room].vehicles; veh; veh = veh->next_veh)
+          for (veh = ch->in_room->vehicles; veh; veh = veh->next_veh)
             if (veh->type == VEH_DRONE && veh->rigger)
               act(buf, FALSE, ch, 0, veh->rigger, TO_VICT);
       }
@@ -348,7 +343,7 @@ ACMD(do_echo)
 
     if ( subcmd == SCMD_ECHO || subcmd == SCMD_AECHO) {
       sprintf(buf2, "%s echoed %s at #%ld",
-              GET_CHAR_NAME(ch), buf, world[ch->in_room].number);
+              GET_CHAR_NAME(ch), buf, ch->in_room->number);
       mudlog(buf2, ch, LOG_WIZLOG, TRUE);
     }
   }
@@ -418,42 +413,39 @@ ACMD(do_gecho)
 }
 
 /* take a string, and return an rnum.. used for goto, at, etc.  -je 4/6/93 */
-sh_int find_target_room(struct char_data * ch, char *rawroomstr)
+struct room_data *find_target_room(struct char_data * ch, char *roomstr)
 {
   int tmp;
-  sh_int location;
-  struct char_data *target_mob;
-  struct obj_data *target_obj;
-  char roomstr[MAX_INPUT_LENGTH];
-
-  one_argument(rawroomstr, roomstr);
+  struct room_data *location = NULL;
+  struct char_data *target_mob = NULL;
+  struct obj_data *target_obj = NULL;
 
   if (!*roomstr)
   {
     send_to_char("You must supply a room number or name.\r\n", ch);
-    return NOWHERE;
+    return NULL;
   }
   if (isdigit(*roomstr) && !strchr(roomstr, '.'))
   {
     tmp = atoi(roomstr);
-    if ((location = real_room(tmp)) < 0) {
+    if (!(location = &world[real_room(tmp)])) {
       send_to_char("No room exists with that number.\r\n", ch);
-      return NOWHERE;
+      return NULL;
     }
   } else if ((target_mob = get_char_vis(ch, roomstr)))
     location = target_mob->in_room;
   else if ((target_obj = get_obj_vis(ch, roomstr)))
   {
-    if (target_obj->in_room != NOWHERE)
+    if (target_obj->in_room)
       location = target_obj->in_room;
     else {
       send_to_char("That object is not available.\r\n", ch);
-      return NOWHERE;
+      return NULL;
     }
   } else
   {
     send_to_char("No such creature or object around.\r\n", ch);
-    return NOWHERE;
+    return NULL;
   }
   return location;
 }
@@ -461,7 +453,7 @@ sh_int find_target_room(struct char_data * ch, char *rawroomstr)
 ACMD(do_at)
 {
   char command[MAX_INPUT_LENGTH];
-  int location, original_loc = NOWHERE;
+  struct room_data *location = NULL, *original_loc = NULL;
   struct veh_data *veh = NULL, *oveh = NULL;
   struct char_data *vict = NULL;
 
@@ -476,7 +468,7 @@ ACMD(do_at)
     return;
   }
 
-  if ((location = find_target_room(ch, buf)) < 0) {
+  if (!(location = find_target_room(ch, buf))) {
     if (!(vict = get_char_vis(ch, buf)))
       return;
     veh = vict->in_veh;
@@ -505,11 +497,19 @@ ACMD(do_at)
 
 ACMD(do_goto)
 {
-  sh_int location;
+  char command[MAX_INPUT_LENGTH];
+  struct room_data *location = NULL;
+  struct char_data *vict = NULL;
+  
+  half_chop(argument, buf, command);
 
-  if ((location = find_target_room(ch, argument)) <= 1) {
-    if (location == 1)
+  if ((location = find_target_room(ch, buf))) {
+    if (location->number == 0 || location->number == 1) {
       send_to_char("You're not able to GOTO that room. If you need to do something there, use AT.", ch);
+      return;
+    }
+  } else if (!(vict = get_char_vis(ch, buf)) || !vict->in_veh) {
+    send_to_char("You can't find anything like that to go to.\r\n", ch);
     return;
   }
 
@@ -519,7 +519,16 @@ ACMD(do_goto)
     act("$n disappears in a puff of smoke.", TRUE, ch, 0, 0, TO_ROOM);
 
   char_from_room(ch);
-  char_to_room(ch, location);
+  
+  if (vict) {
+    char_to_veh(vict->in_veh, ch);
+    vict->in_veh->seating[ch->vfront]++;
+    ch->vfront = vict->vfront;
+    vict->in_veh->seating[ch->vfront]--;
+  } else {
+    char_to_room(ch, location);
+    GET_POS(ch) = POS_STANDING;
+  }
 
   if (POOFIN(ch))
     act(POOFIN(ch), TRUE, ch, 0, 0, TO_ROOM);
@@ -527,6 +536,29 @@ ACMD(do_goto)
     act("$n appears with an ear-splitting bang.", TRUE, ch, 0, 0, TO_ROOM);
 
   look_at_room(ch, 0);
+}
+
+void transfer_ch_to_ch(struct char_data *victim, struct char_data *ch) {
+  if (!ch || !victim)
+    return;
+  
+  act("$n is whisked away by the game's administration.", FALSE, victim, 0, 0, TO_ROOM);
+  if (AFF_FLAGGED(victim, AFF_PILOT))
+    AFF_FLAGS(victim).ToggleBit(AFF_PILOT);
+  char_from_room(victim);
+  
+  if (ch->in_veh) {
+    char_to_veh(ch->in_veh, victim);
+    sprintf(buf2, "%s transferred %s to %s in %s^g.", GET_CHAR_NAME(ch), IS_NPC(victim) ? GET_NAME(victim) : GET_CHAR_NAME(victim),
+            GET_VEH_NAME(victim->in_veh), GET_ROOM_NAME(get_ch_in_room(victim)));
+  } else {
+    char_to_room(victim, ch->in_room);
+    sprintf(buf2, "%s transferred %s to %s^g.", GET_CHAR_NAME(ch), IS_NPC(victim) ? GET_NAME(victim) : GET_CHAR_NAME(victim), GET_ROOM_NAME(victim->in_room));
+  }
+  act("$n arrives from a puff of smoke.", FALSE, victim, 0, 0, TO_ROOM);
+  act("$n has transferred you!", FALSE, ch, 0, victim, TO_VICT);
+  mudlog(buf2, ch, LOG_WIZLOG, TRUE);
+  look_at_room(victim, 0);
 }
 
 ACMD(do_trans)
@@ -561,18 +593,7 @@ ACMD(do_trans)
         act("Not while $E's switched!", FALSE, ch, 0, victim, TO_CHAR);
         return;
       }
-      act("$n disappears in a mushroom cloud.", FALSE, victim, 0, 0, TO_ROOM);
-      if (AFF_FLAGGED(victim, AFF_PILOT))
-        AFF_FLAGS(victim).ToggleBit(AFF_PILOT);
-      char_from_room(victim);
-      char_to_room(victim, ch->in_room);
-      act("$n arrives from a puff of smoke.", FALSE, victim, 0, 0, TO_ROOM);
-      act("$n has transferred you!", FALSE, ch, 0, victim, TO_VICT);
-      look_at_room(victim, 0);
-      sprintf(buf2, "%s transferred %s to %s",
-              GET_CHAR_NAME(ch), IS_NPC(victim) ? GET_NAME(victim) : GET_CHAR_NAME(victim),
-              world[ch->in_room].name);
-      mudlog(buf2, ch, LOG_WIZLOG, TRUE);
+      transfer_ch_to_ch(victim, ch);
     }
   } else {                      /* Trans All */
     if (!access_level(ch, LVL_DEVELOPER)) {
@@ -583,34 +604,27 @@ ACMD(do_trans)
     for (i = descriptor_list; i; i = i->next)
       if (!i->connected && i->character && i->character != ch) {
         victim = i->character;
-        if (GET_LEVEL(victim) >= GET_LEVEL(ch))
+        if ((GET_LEVEL(ch) < GET_LEVEL(victim) && !IS_NPC(victim)) || PLR_FLAGGED(victim, PLR_EDITING) || PLR_FLAGGED(victim, PLR_SWITCHED))
           continue;
-        act("$n disappears in a mushroom cloud.", FALSE, victim, 0, 0, TO_ROOM);
-        char_from_room(victim);
-        char_from_room(victim);
-        char_to_room(victim, ch->in_room);
-        act("$n arrives from a puff of smoke.", FALSE, victim, 0, 0, TO_ROOM);
-        act("$n has transferred you!", FALSE, ch, 0, victim, TO_VICT);
-        look_at_room(victim, 0);
+        transfer_ch_to_ch(victim, ch);
       }
     send_to_char(OK, ch);
   }
 }
 ACMD(do_vteleport)
 {
-  struct veh_data *veh;
-  vnum_t target;
+  struct veh_data *veh = NULL;
+  struct room_data *target = NULL;
 
   two_arguments(argument, buf, buf2);
 
   if (!*buf)
     send_to_char("What vehicle do you wish to teleport?\r\n", ch);
-  else if (!(veh = get_veh_list(buf, (ch->in_veh ? world[ch->in_veh->in_room].vehicles :
-                                      world[ch->in_room].vehicles), ch)))
+  else if (!(veh = get_veh_list(buf, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch)))
     send_to_char(NOOBJECT, ch);
   else if (!*buf2)
     send_to_char("Where do you wish to send this vehicle?\r\n", ch);
-  else if ((target = find_target_room(ch, buf2)) >= 0) {
+  else if ((target = find_target_room(ch, buf2))) {
     sprintf(buf, "%s drives off into the sunset.\r\n", GET_VEH_NAME(veh));
     send_to_room(buf, veh->in_room);
     veh_from_room(veh);
@@ -618,15 +632,14 @@ ACMD(do_vteleport)
     sprintf(buf, "%s screeches suddenly into the area.\r\n", GET_VEH_NAME(veh));
     send_to_room(buf, veh->in_room);
     send_to_veh("You lose track of your surroundings.\r\n", veh, NULL, TRUE);
-    sprintf(buf2, "%s teleported %s to %s", GET_CHAR_NAME(ch), GET_VEH_NAME(veh), world[target].name);
+    sprintf(buf2, "%s teleported %s to %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh), target->name);
     mudlog(buf2, ch, LOG_WIZLOG, TRUE);
-
   }
 }
 ACMD(do_teleport)
 {
-  struct char_data *victim;
-  vnum_t target;
+  struct char_data *victim = NULL;
+  struct room_data *target = NULL;
 
   two_arguments(argument, buf, buf2);
 
@@ -645,7 +658,7 @@ ACMD(do_teleport)
     act("Not while $E's switched!", FALSE, ch, 0, victim, TO_CHAR);
   else if (!*buf2)
     send_to_char("Where do you wish to send this person?\r\n", ch);
-  else if ((target = find_target_room(ch, buf2)) >= 0) {
+  else if ((target = find_target_room(ch, buf2))) {
     send_to_char(OK, ch);
     act("$n disappears in a puff of smoke.", FALSE, victim, 0, 0, TO_ROOM);
     if (AFF_FLAGGED(victim, AFF_PILOT))
@@ -656,8 +669,7 @@ ACMD(do_teleport)
     act("$n has teleported you!", FALSE, ch, 0, (char *) victim, TO_VICT);
     look_at_room(victim, 0);
     sprintf(buf2, "%s teleported %s to %s",
-            GET_CHAR_NAME(ch), IS_NPC(victim) ? GET_NAME(victim) : GET_CHAR_NAME(victim),
-            world[target].name);
+            GET_CHAR_NAME(ch), IS_NPC(victim) ? GET_NAME(victim) : GET_CHAR_NAME(victim), target->name);
     mudlog(buf2, ch, LOG_WIZLOG, TRUE);
   }
 }
@@ -687,7 +699,7 @@ ACMD(do_vnum)
 void do_stat_room(struct char_data * ch)
 {
   struct extra_descr_data *desc;
-  struct room_data *rm = &world[ch->in_room];
+  struct room_data *rm = ch->in_room;
   int i, found = 0;
   struct obj_data *j = 0;
   struct char_data *k = 0;
@@ -697,12 +709,12 @@ void do_stat_room(struct char_data * ch)
 
   sprinttype(rm->sector_type, spirit_name, buf2);
   sprintf(buf, "Zone: [%3d], VNum: [^g%5ld^n], RNum: [%5ld], Rating: [%2d], Type: %s\r\n",
-          rm->zone, rm->number, ch->in_room, rm->rating, buf2);
+          rm->zone, rm->number, real_room(rm->number), rm->rating, buf2);
   send_to_char(buf, ch);
 
   rm->room_flags.PrintBits(buf2, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
   sprintf(buf, "Extra: [%4d], SpecProc: %s, Flags: %s Light: %s Smoke: %s\r\n", rm->spec,
-          (rm->func == NULL) ? "None" : "^CExists^n", buf2, light_levels[light_level(ch->in_room)], light_levels[rm->vision[1]]);
+          (rm->func == NULL) ? "None" : "^CExists^n", buf2, light_levels[light_level(rm)], light_levels[rm->vision[1]]);
   send_to_char(buf, ch);
 
   send_to_char("Description:\r\n", ch);
@@ -764,10 +776,10 @@ void do_stat_room(struct char_data * ch)
   for (i = 0; i < NUM_OF_DIRS; i++)
   {
     if (rm->dir_option[i]) {
-      if (rm->dir_option[i]->to_room == NOWHERE)
+      if (!rm->dir_option[i]->to_room)
         strcpy(buf1, " ^cNONE^n");
       else
-        sprintf(buf1, "^c%5ld^n", world[rm->dir_option[i]->to_room].number);
+        sprintf(buf1, "^c%5ld^n", rm->dir_option[i]->to_room->number);
       sprintbit(rm->dir_option[i]->exit_info, exit_bits, buf2);
       sprintf(buf, "Exit ^c%-5s^n:  To: [^c%s^n], Key: [^c%5ld^n], Keyword: "
               "^c%s^n, Type: ^c%s^n\r\n ", dirs[i], buf1, rm->dir_option[i]->key,
@@ -874,12 +886,10 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
           GET_OBJ_WEIGHT(j), GET_OBJ_COST(j), GET_OBJ_TIMER(j), GET_OBJ_AVAILTN(j), GET_OBJ_AVAILDAY(j));
 
   strcat(buf, "In room: ");
-  if (j->in_room == NOWHERE)
+  if (!j->in_room)
     strcat(buf, "Nowhere");
   else
-  {
-    sprintf(ENDOF(buf), "%ld (IR %ld)", world[j->in_room].number, j->in_room);
-  }
+    sprintf(ENDOF(buf), "%ld (IR %ld)", j->in_room->number, real_room(j->in_room->number));
   strcat(buf, ", In object: ");
   strcat(buf, j->in_obj ? j->in_obj->text.name : "None");
   strcat(buf, ", Carried by: ");
@@ -1086,7 +1096,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   }
 
   sprintf(ENDOF(buf), " PC '%s'  IDNum: [%5ld], In room [%5ld]\r\n",
-          GET_CHAR_NAME(k), GET_IDNUM(k), world[k->in_room].number);
+          GET_CHAR_NAME(k), GET_IDNUM(k), k->in_room->number);
   
   if (GET_PGROUP_MEMBER_DATA(k)) {
     sprintf(ENDOF(buf), "Rank ^c%d/%d^n member of group '^c%s^n' (^c%s^n), with privileges:\r\n  ^c%s^n\r\n",
@@ -1261,7 +1271,7 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   }
   send_to_char(ch, "%s ", pc_race_types[(int)GET_RACE(k)]);
   sprintf(buf2, " %s '%s', In room [%5ld]\r\n", (!IS_MOB(k) ? "NPC" : "MOB"),
-          GET_NAME(k), world[k->in_room].number);
+          GET_NAME(k), k->in_room->number);
   strcat(buf, buf2);
 
   sprintf(ENDOF(buf), "Alias: %s, VNum: [%5ld], RNum: [%5ld]\r\n", GET_KEYWORDS(k),
@@ -1385,29 +1395,29 @@ ACMD(do_stat)
       }
     }
   } else {
-    if ((object = get_object_in_equip_vis(ch, buf1, ch->equipment, &tmp)))
+    if ((object = get_object_in_equip_vis(ch, buf1, ch->equipment, &tmp))) {
       do_stat_object(ch, object);
-    else if ((object = get_obj_in_list_vis(ch, buf1, ch->carrying)))
+    } else if ((object = get_obj_in_list_vis(ch, buf1, ch->carrying))) {
       do_stat_object(ch, object);
-    else if ((veh = get_veh_list(buf1, ch->in_veh ? world[ch->in_veh->in_room].vehicles :
-                                 world[ch->in_room].vehicles, ch)))
+    } else if ((veh = get_veh_list(buf1, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
       do_stat_veh(ch, veh);
-    else if ((victim = get_char_room_vis(ch, buf1)))
+    } else if ((victim = get_char_room_vis(ch, buf1))) {
       if (IS_NPC(victim))
         do_stat_mobile(ch, victim);
       else
         do_stat_character(ch, victim);
-    else if ((object = get_obj_in_list_vis(ch, buf1, world[ch->in_room].contents)))
+    } else if ((object = get_obj_in_list_vis(ch, buf1, ch->in_veh ? ch->in_veh->contents : ch->in_room->contents))) {
       do_stat_object(ch, object);
-    else if ((victim = get_char_vis(ch, buf1)))
+    } else if ((victim = get_char_vis(ch, buf1))) {
       if (IS_NPC(victim))
         do_stat_mobile(ch, victim);
       else
         do_stat_character(ch, victim);
-    else if ((object = get_obj_vis(ch, buf1)))
+    } else if ((object = get_obj_vis(ch, buf1))) {
       do_stat_object(ch, object);
-    else
+    } else {
       send_to_char("Nothing around by that name.\r\n", ch);
+    }
   }
 }
 
@@ -1583,43 +1593,47 @@ ACMD(do_return)
     stop_fighting(ch);
     return;
   }
-  if (ch->desc && ch->desc->original) {
-    send_to_char("You return to your original body.\r\n", ch);
-    if (PLR_FLAGGED(ch->desc->original, PLR_PROJECT)) {
-      GET_TEMP_ESSLOSS(ch->desc->original) = GET_ESS(ch->desc->original) - GET_ESS(ch);
-      affect_total(ch->desc->original);
-    }
-    if (PLR_FLAGGED(ch->desc->original, PLR_PROJECT))
-      PLR_FLAGS(ch->desc->original).RemoveBit(PLR_PROJECT);
-    if (PLR_FLAGGED(ch->desc->original, PLR_SWITCHED))
-      PLR_FLAGS(ch->desc->original).RemoveBit(PLR_SWITCHED);
+  if (ch->desc) {
+    if (ch->desc->original) {
+      send_to_char("You return to your original body.\r\n", ch);
+      if (PLR_FLAGGED(ch->desc->original, PLR_PROJECT)) {
+        GET_TEMP_ESSLOSS(ch->desc->original) = GET_ESS(ch->desc->original) - GET_ESS(ch);
+        affect_total(ch->desc->original);
+      }
+      if (PLR_FLAGGED(ch->desc->original, PLR_PROJECT))
+        PLR_FLAGS(ch->desc->original).RemoveBit(PLR_PROJECT);
+      if (PLR_FLAGGED(ch->desc->original, PLR_SWITCHED))
+        PLR_FLAGS(ch->desc->original).RemoveBit(PLR_SWITCHED);
 
-    /* JE 2/22/95 */
-    /* if someone switched into your original body, disconnect them */
-    if (ch->desc->original->desc)
-      close_socket(ch->desc->original->desc);
+      /* JE 2/22/95 */
+      /* if someone switched into your original body, disconnect them */
+      if (ch->desc->original->desc)
+        close_socket(ch->desc->original->desc);
 
-    vict = ch;
-    ch->desc->character = ch->desc->original;
-    ch->desc->original = NULL;
+      vict = ch;
+      ch->desc->character = ch->desc->original;
+      ch->desc->original = NULL;
 
-    /* Needs to be changed when the level needed for switch goes up or down */
-    if ( GET_REAL_LEVEL(ch) >= LVL_BUILDER ) {
-      sprintf(buf,"%s discontinues the role of %s.",
-              GET_CHAR_NAME(ch->desc->character),GET_NAME(vict));
-      mudlog(buf, ch, LOG_WIZLOG, TRUE);
-    }
+      /* Needs to be changed when the level needed for switch goes up or down */
+      if ( GET_REAL_LEVEL(ch) >= LVL_BUILDER ) {
+        sprintf(buf,"%s discontinues the role of %s.",
+                GET_CHAR_NAME(ch->desc->character),GET_NAME(vict));
+        mudlog(buf, ch, LOG_WIZLOG, TRUE);
+      }
 
-    ch->desc->character->desc = ch->desc;
-    update_pos(ch->desc->character);
-    ch->desc = NULL;
-    if (IS_NPC(vict) && GET_MOB_VNUM(vict) >= 50 && GET_MOB_VNUM(vict) < 70 &&
-        PLR_FLAGGED(ch, PLR_PROJECT)) {
-      GET_MEMORY(vict) = NULL;
-      extract_char(vict);
-      char_from_room(ch);
-      char_to_room(ch, GET_WAS_IN(ch));
-      GET_WAS_IN(ch) = NOWHERE;
+      ch->desc->character->desc = ch->desc;
+      update_pos(ch->desc->character);
+      ch->desc = NULL;
+      if (IS_NPC(vict) && GET_MOB_VNUM(vict) >= 50 && GET_MOB_VNUM(vict) < 70 &&
+          PLR_FLAGGED(ch, PLR_PROJECT)) {
+        GET_MEMORY(vict) = NULL;
+        extract_char(vict);
+        char_from_room(ch);
+        char_to_room(ch, GET_WAS_IN(ch));
+        GET_WAS_IN(ch) = NULL;
+      }
+    } else {
+      send_to_char("But there's nothing for you to return from...", ch);
     }
   }
 }
@@ -1836,7 +1850,7 @@ ACMD(do_purge)
 
   if (!access_level(ch, LVL_EXECUTIVE) &&
       (ch->player_specials->saved.zonenum !=
-       zone_table[world[ch->in_room].zone].number)) {
+       zone_table[ch->in_room->zone].number)) {
     send_to_char("You can only purge in your zone.\r\n", ch);
     return;
   }
@@ -1862,10 +1876,10 @@ ACMD(do_purge)
         }
       }
       extract_char(vict);
-    } else if ((obj = get_obj_in_list_vis(ch, buf, world[ch->in_room].contents))) {
+    } else if ((obj = get_obj_in_list_vis(ch, buf, ch->in_veh ? ch->in_veh->contents : ch->in_room->contents))) {
       act("$n destroys $p.", FALSE, ch, obj, 0, TO_ROOM);
       extract_obj(obj);
-    } else if ((veh = get_veh_list(buf, world[ch->in_room].vehicles, ch))) {
+    } else if ((veh = get_veh_list(buf, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
       sprintf(buf1, "$n purges %s.", GET_VEH_NAME(veh));
       act(buf1, FALSE, ch, NULL, 0, TO_ROOM);
       sprintf(buf1, "%s purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
@@ -1903,18 +1917,18 @@ ACMD(do_purge)
       act("$n gestures... You are surrounded by scorching flames!", FALSE, ch, 0, 0, TO_ROOM);
       send_to_room("The world seems a little cleaner.\r\n", ch->in_room);
 
-      for (vict = world[ch->in_room].people; vict; vict = next_v) {
+      for (vict = ch->in_room->people; vict; vict = next_v) {
         next_v = vict->next_in_room;
         if (IS_NPC(vict))
           extract_char(vict);
       }
 
-      for (obj = world[ch->in_room].contents; obj; obj = next_o) {
+      for (obj = ch->in_room->contents; obj; obj = next_o) {
         next_o = obj->next_content;
         extract_obj(obj);
       }
       
-      for (veh = world[ch->in_room].vehicles; veh; veh = next_ve) {
+      for (veh = ch->in_room->vehicles; veh; veh = next_ve) {
         next_ve = veh->next_veh;
         extract_veh(veh);
       }
@@ -2282,7 +2296,7 @@ void perform_immort_invis(struct char_data *ch, int level)
 
   if (STATE(ch->desc) == CON_PLAYING)
   {
-    for (tch = world[ch->in_room].people; tch; tch = tch->next_in_room) {
+    for (tch = ch->in_room->people; tch; tch = tch->next_in_room) {
       if (tch == ch)
         continue;
       if (access_level(tch, GET_INVIS_LEV(ch)) && !access_level(tch, level))
@@ -2586,10 +2600,10 @@ ACMD(do_force)
   } else if (!str_cmp("room", arg)) {
     send_to_char(OK, ch);
     sprintf(buf, "%s forced room %ld to %s",
-            GET_CHAR_NAME(ch), world[ch->in_room].number, to_force);
+            GET_CHAR_NAME(ch), ch->in_room->number, to_force);
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
 
-    for (vict = world[ch->in_room].people; vict; vict = next_force) {
+    for (vict = ch->in_room->people; vict; vict = next_force) {
       next_force = vict->next_in_room;
       if (GET_LEVEL(vict) >= GET_LEVEL(ch))
         continue;
@@ -2671,11 +2685,11 @@ ACMD(do_wizwho)
         sprintf(line, " [^c%6.6s^n]  ^b%-30s^n  Room: [^c%5ld^n] Idle: [^c%4d^n]",
                 GET_WHOTITLE(tch),
                 GET_CHAR_NAME(tch),
-                world[tch->in_room].number, tch->char_specials.timer);
+                tch->in_room->number, tch->char_specials.timer);
       else
         sprintf(line, " [^c%6.6s^n]  ^b%-30s^n  Room: [^c%5ld^n] Idle: [^c-AFK^n]",
                 GET_WHOTITLE(tch),
-                GET_CHAR_NAME(tch), world[tch->in_room].number);
+                GET_CHAR_NAME(tch), tch->in_room->number);
       if (d->connected)
         sprintf(buf, " ^r(Editing)^n\r\n");
       else if (tch == d->original)
@@ -2716,7 +2730,7 @@ ACMD(do_zreset)
     send_to_char("Reset world.\r\n", ch);
     return;
   } else if (*arg == '.')
-    i = world[ch->in_room].zone;
+    i = ch->in_room->zone;
   else
     i = real_zone(atoi(arg));
   if (i >= 0 && i <= top_of_zone_table) {
@@ -3055,9 +3069,9 @@ ACMD(do_show)
     /* tightened up by JE 4/6/93 */
     if (self) {
       if (access_level(ch, LVL_ADMIN))
-        print_zone_to_buf(buf, world[ch->in_room].zone, 1);
+        print_zone_to_buf(buf, ch->in_room->zone, 1);
       else
-        print_zone_to_buf(buf, world[ch->in_room].zone, 0);
+        print_zone_to_buf(buf, ch->in_room->zone, 0);
     } else if (*value && is_number(value)) {
       for (j = atoi(value), i = 0; zone_table[i].number != j && i <= top_of_zone_table; i++)
         ;
@@ -3153,8 +3167,7 @@ ACMD(do_show)
     strcpy(buf, "Errant Rooms\r\n------------\r\n");
     for (i = 0, k = 0; i <= top_of_world; i++)
       for (j = 0; j < NUM_OF_DIRS; j++)
-        if (world[i].dir_option[j] && (world[i].dir_option[j]->to_room == 0 ||
-                                       world[i].dir_option[j]->to_room == NOWHERE) && i != last) {
+        if (world[i].dir_option[j] && !world[i].dir_option[j]->to_room && i != last) {
           sprintf(buf, "%s%2d: [%5ld] %s\r\n", buf, ++k, world[i].number, world[i].name);
           last = i;
         }
@@ -3163,7 +3176,7 @@ ACMD(do_show)
   case 6:
     strcpy(buf, "Death Traps\r\n-----------\r\n");
     for (i = 0, j = 0; i <= top_of_world; i++)
-      if (ROOM_FLAGGED(i, ROOM_DEATH))
+      if (ROOM_FLAGGED(&world[i], ROOM_DEATH))
         sprintf(buf, "%s%2d: [%5ld] %s %s\r\n", buf, ++j,
                 world[i].number,
                 from_ip_zone(world[i].number) ? " " : "*",
@@ -3367,8 +3380,7 @@ ACMD(do_vset)
     send_to_char("Usage: vset <victim> <field> <value>\r\n", ch);
     return;
   }
-  if (!(veh = get_veh_list(name, ch->in_veh ? world[ch->in_veh->in_room].vehicles :
-                           world[ch->in_room].vehicles, ch))) {
+  if (!(veh = get_veh_list(name, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
     send_to_char("There is no such vehicle.\r\n", ch);
     return;
   }
@@ -3822,7 +3834,7 @@ ACMD(do_set)
       return;
     }
     char_from_room(vict);
-    char_to_room(vict, i);
+    char_to_room(vict, &world[i]);
     break;
   case 32:
     SET_OR_REMOVE(PRF_FLAGS(vict), PRF_ROOMFLAGS);
@@ -4929,5 +4941,5 @@ ACMD(do_zone) {
 }
 
 ACMD(do_room) {
-  send_to_char(ch, "Current room num: %ld\r\n", world[ch->in_room].number);
+  send_to_char(ch, "Current room num: %ld\r\n", ch->in_room->number);
 }

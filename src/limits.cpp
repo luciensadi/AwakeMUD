@@ -381,7 +381,7 @@ void check_idling(void)
     } else if (!IS_NPC(ch)) {
       ch->char_specials.timer++;
       if (!(IS_SENATOR(ch) || IS_WORKING(ch)) || !ch->desc) {
-        if (GET_WAS_IN(ch) == NOWHERE && ch->in_room != NOWHERE && ch->char_specials.timer > 15) {
+        if (!GET_WAS_IN(ch) && ch->in_room && ch->char_specials.timer > 15) {
           GET_WAS_IN(ch) = ch->in_room;
           if (FIGHTING(ch)) {
             stop_fighting(FIGHTING(ch));
@@ -390,11 +390,11 @@ void check_idling(void)
           act("$n disappears into the void.", TRUE, ch, 0, 0, TO_ROOM);
           send_to_char("You have been idle, and are pulled into a void.\r\n", ch);
           char_from_room(ch);
-          char_to_room(ch, 1);
+          char_to_room(ch, &world[1]);
         } else if (ch->char_specials.timer > 30) {
-          if (ch->in_room != NOWHERE)
+          if (ch->in_room)
             char_from_room(ch);
-          char_to_room(ch, 1);
+          char_to_room(ch, &world[1]);
           if (GET_QUEST(ch))
             end_quest(ch);
           if (ch->desc)
@@ -448,7 +448,7 @@ void check_swimming(struct char_data *ch)
   if (IS_NPC(ch) || IS_SENATOR(ch))
     return;
   
-  target = MAX(2, world[ch->in_room].rating);
+  target = MAX(2, ch->in_room->rating);
   if (GET_POS(ch) < POS_RESTING)
   {
     target -= success_test(MAX(1, (int)(GET_REAL_BOD(ch) / 3)), target);
@@ -743,7 +743,8 @@ void save_vehicles(void)
   struct veh_data *veh;
   FILE *fl;
   struct char_data *i;
-  long room, v;
+  long v;
+  struct room_data *temp_room = NULL;
   struct obj_data *obj;
   int num_veh = 0;
   bool found;
@@ -789,36 +790,36 @@ void save_vehicles(void)
           break;
         }
     
-    room = veh->in_room;
-    if (!ROOM_FLAGGED(room, ROOM_GARAGE))
-      switch (zone_table[world[veh->in_room].zone].jurisdiction) {
+    temp_room = get_veh_in_room(veh);
+    if (!ROOM_FLAGGED(temp_room, ROOM_GARAGE))
+      switch (GET_JURISDICTION(veh->in_room)) {
         case ZONE_PORTLAND:
           switch (number(0, 2)) {
             case 0:
-              room = real_room(RM_PORTLAND_PARKING_GARAGE);
+              temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE)];
               break;
             case 1:
-              room = real_room(RM_PORTLAND_PARKING_GARAGE);
+              temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE)];
               break;
             case 2:
-              room = real_room(RM_PORTLAND_PARKING_GARAGE);
+              temp_room = &world[real_room(RM_PORTLAND_PARKING_GARAGE)];
               break;
           }
           break;
         case ZONE_SEATTLE:
-          room = real_room(RM_SEATTLE_PARKING_GARAGE);
+          temp_room = &world[real_room(RM_SEATTLE_PARKING_GARAGE)];
           break;
         case ZONE_CARIB:
-          room = real_room(RM_CARIB_PARKING_GARAGE);
+          temp_room = &world[real_room(RM_CARIB_PARKING_GARAGE)];
           break;
         case ZONE_OCEAN:
-          room = real_room(RM_OCEAN_PARKING_GARAGE);
+          temp_room = &world[real_room(RM_OCEAN_PARKING_GARAGE)];
           break;
       }
     fprintf(fl, "[VEHICLE]\n");
     fprintf(fl, "\tVnum:\t%ld\n", veh_index[veh->veh_number].vnum);
     fprintf(fl, "\tOwner:\t%ld\n", veh->owner);
-    fprintf(fl, "\tInRoom:\t%ld\n", GET_ROOM_VNUM(room));
+    fprintf(fl, "\tInRoom:\t%ld\n", temp_room->number);
     fprintf(fl, "\tSubscribed:\t%d\n", veh->sub);
     fprintf(fl, "\tDamage:\t%d\n", veh->damage);
     fprintf(fl, "\tSpare:\t%ld\n", veh->spare);
@@ -1160,7 +1161,7 @@ void misc_update(void)
     }
     
     if (ch->points.fire[0] > 0) {
-      if (world[ch->in_room].sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && weather_info.sky >= SKY_RAINING)
+      if (ch->in_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && weather_info.sky >= SKY_RAINING)
         ch->points.fire[0] -= 3;
       else
         ch->points.fire[0]--;

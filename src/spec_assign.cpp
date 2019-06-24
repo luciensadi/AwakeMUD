@@ -769,6 +769,6 @@ void assign_rooms(void)
 
  
   for (long x = 0; x <= top_of_world; x++)
-    if (ROOM_FLAGGED(x, ROOM_ROAD) && !ROOM_FLAGGED(x, ROOM_NO_TRAFFIC) && !ROOM_FLAGGED(x, ROOM_GARAGE) && !world[x].func && SECT(x) == SPIRIT_CITY)
+    if (ROOM_FLAGGED(&world[x], ROOM_ROAD) && !ROOM_FLAGGED(&world[x], ROOM_NO_TRAFFIC) && !ROOM_FLAGGED(&world[x], ROOM_GARAGE) && !world[x].func && SECT(&world[x]) == SPIRIT_CITY)
       ASSIGNROOM(world[x].number, traffic);
 }

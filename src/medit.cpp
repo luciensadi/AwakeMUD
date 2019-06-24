@@ -377,7 +377,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
               new_mob_index[counter].func = NULL;
               /*---------*/
               new_mob_proto[counter] = *(d->edit_mob);
-              new_mob_proto[counter].in_room = NOWHERE;
+              new_mob_proto[counter].in_room = NULL;
               /* it is now safe (and necessary!) to assign real number to
                * the edit_mob, which has been -1 all this time */
               d->edit_mob->nr = counter;
@@ -412,7 +412,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
 
           clear_char(new_mob_proto + top_of_mobt + 1);
           new_mob_proto[top_of_mobt + 1] = *(d->edit_mob);
-          new_mob_proto[top_of_mobt + 1].in_room = NOWHERE;
+          new_mob_proto[top_of_mobt + 1].in_room = NULL;
           new_mob_proto[top_of_mobt + 1].nr = top_of_mobt + 1;
           /* it is now safe (and necessary!) to assign real number to
            * the edit_mob, which has been -1 all this time */

@@ -30,7 +30,7 @@ extern struct message_list fight_messages[MAX_MESSAGES];
 
 
 int find_sight(struct char_data *ch);
-void damage_door(struct char_data *ch, int room, int dir, int power, int type);
+void damage_door(struct char_data *ch, struct room_data *room, int dir, int power, int type);
 void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type);
 void mount_fire(struct char_data *ch);
 /* External procedures */
@@ -46,9 +46,9 @@ bool ranged_response(struct char_data *ch, struct char_data *vict);
 int find_weapon_range(struct char_data *ch, struct obj_data *weapon);
 void weapon_scatter(struct char_data *ch, struct char_data *victim,
                     struct obj_data *weapon);
-void explode(struct char_data *ch, struct obj_data *weapon, int room);
+void explode(struct char_data *ch, struct obj_data *weapon, struct room_data *room);
 void target_explode(struct char_data *ch, struct obj_data *weapon,
-                    int room, int mode);
+                    struct room_data *room, int mode);
 void forget(struct char_data * ch, struct char_data * victim);
 void remember(struct char_data * ch, struct char_data * victim);
 void order_list(bool first,...);
@@ -210,9 +210,9 @@ void update_pos(struct char_data * victim)
 }
 
 /* blood blood blood, root */
-void increase_blood(int rm)
+void increase_blood(struct room_data *rm)
 {
-  RM_BLOOD(rm) = MIN(RM_BLOOD(rm) + 1, 10);
+  rm->blood = MIN(rm->blood + 1, 10);
 }
 
 
@@ -239,10 +239,10 @@ void check_killer(struct char_data * ch, struct char_data * vict)
     
     sprintf(buf, "PC Killer bit set on %s for initiating attack on %s at %s.",
             GET_CHAR_NAME(attacker),
-            GET_CHAR_NAME(vict), world[vict->in_room].name);
+            GET_CHAR_NAME(vict), vict->in_room->name);
     mudlog(buf, ch, LOG_MISCLOG, TRUE);
     
-    send_to_char("If you want to be a PLAYER KILLER, so be it...\r\n", ch);
+    send_to_char("Your actions have earned you the KILLER flag, which makes you fair game to all player characters.\r\n", ch);
   }
 }
 
@@ -391,7 +391,7 @@ void make_corpse(struct char_data * ch)
   corpse = create_obj();
   
   corpse->item_number = NOTHING;
-  corpse->in_room = NOWHERE;
+  corpse->in_room = NULL;
   
   if (IS_NPC(ch))
   {
@@ -505,7 +505,8 @@ void make_corpse(struct char_data * ch)
 
 void death_cry(struct char_data * ch)
 {
-  int door, was_in;
+  int door;
+  struct room_data *was_in = NULL;
   
   act("$n cries out $s last breath as $e dies!", FALSE, ch, 0, 0, TO_ROOM);
   was_in = ch->in_room;
@@ -513,7 +514,7 @@ void death_cry(struct char_data * ch)
   for (door = 0; door < NUM_OF_DIRS; door++)
   {
     if (CAN_GO(ch, door)) {
-      ch->in_room = world[was_in].dir_option[door]->to_room;
+      ch->in_room = was_in->dir_option[door]->to_room;
       act("Somewhere close, you hear someone's death cry!", FALSE, ch, 0, 0, TO_ROOM);
       ch->in_room = was_in;
     }
@@ -577,7 +578,7 @@ void raw_kill(struct char_data * ch)
       GET_DRUG_AFFECT(ch) = GET_DRUG_DURATION(ch) = GET_DRUG_STAGE(ch) = 0;
       if (PLR_FLAGGED(ch, PLR_AUTH))
         i = real_room(RM_CHARGEN_START_ROOM);
-      else switch (zone_table[world[ch->in_room].zone].jurisdiction) {
+      else switch (GET_JURISDICTION(ch->in_room)) {
         case ZONE_SEATTLE:
           i = real_room(RM_SEATTLE_DOCWAGON);
           break;
@@ -592,15 +593,15 @@ void raw_kill(struct char_data * ch)
           break;
         default:
           sprintf(buf, "SYSERR: Bad jurisdiction type %d in room %ld encountered in raw_kill() while transferring %s (%ld).",
-                  zone_table[world[ch->in_room].zone].jurisdiction,
-                  world[ch->in_room].number,
+                  GET_JURISDICTION(ch->in_room),
+                  ch->in_room->number,
                   GET_CHAR_NAME(ch), GET_IDNUM(ch));
           mudlog(buf, ch, LOG_SYSLOG, TRUE);
           i = real_room(RM_ENTRANCE_TO_DANTES);
           break;
       }
       char_from_room(ch);
-      char_to_room(ch, i);
+      char_to_room(ch, &world[i]);
       PLR_FLAGS(ch).SetBit(PLR_JUST_DIED);
     }
   }
@@ -637,12 +638,12 @@ void die(struct char_data * ch)
   if (!((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) || IS_PROJECT(ch) || IS_SPIRIT(ch) || IS_ELEMENTAL(ch))) {
     increase_blood(ch->in_room);
     act("^rBlood splatters everywhere!^n", FALSE, ch, 0, 0, TO_ROOM);
-    if (!world[ch->in_room].background[0] || world[ch->in_room].background[1] == AURA_PLAYERCOMBAT) {
-      if (world[ch->in_room].background[1] != AURA_PLAYERDEATH) {
-        world[ch->in_room].background[0] = 1;
-        world[ch->in_room].background[1] = AURA_PLAYERDEATH;
+    if (!GET_BACKGROUND_COUNT(ch->in_room) || GET_BACKGROUND_AURA(ch->in_room) == AURA_PLAYERCOMBAT) {
+      if (GET_BACKGROUND_AURA(ch->in_room) != AURA_PLAYERDEATH) {
+        GET_BACKGROUND_COUNT(ch->in_room) = 1;
+        GET_BACKGROUND_AURA(ch->in_room) = AURA_PLAYERDEATH;
       } else {
-        world[ch->in_room].background[0]++;
+        GET_BACKGROUND_COUNT(ch->in_room)++;
       }
     }
   }
@@ -674,7 +675,7 @@ ACMD(do_die)
   /* log it */
   sprintf(buf,"%s gave up the will to live. {%s (%ld)}",
           GET_CHAR_NAME(ch),
-          world[ch->in_room].name, world[ch->in_room].number );
+          ch->in_room->name, ch->in_room->number );
   mudlog(buf, ch, LOG_DEATHLOG, TRUE);
   
   /* Now we just kill them, MuHahAhAhahhaAHhaAHaA!!...or something */
@@ -963,11 +964,11 @@ void dam_message(int dam, struct char_data * ch, struct char_data * victim, int 
   buf = replace_string(dam_weapons[msgnum].to_room,
                        attack_hit_text[w_type].singular, attack_hit_text[w_type].plural,
                        attack_hit_text[w_type].different);
-  for (witness = world[victim->in_room].people; witness; witness = witness->next_in_room)
+  for (witness = victim->in_room->people; witness; witness = witness->next_in_room)
     if (witness != ch && witness != victim && !PRF_FLAGGED(witness, PRF_FIGHTGAG) && SENDOK(witness))
       perform_act(buf, ch, NULL, victim, witness);
   if (ch->in_room != victim->in_room && !PLR_FLAGGED(ch, PLR_REMOTE))
-    for (witness = world[ch->in_room].people; witness; witness = witness->next_in_room)
+    for (witness = ch->in_room->people; witness; witness = witness->next_in_room)
       if (witness != ch && witness != victim && !PRF_FLAGGED(witness, PRF_FIGHTGAG) && SENDOK(witness))
         perform_act(buf, ch, NULL, victim, witness);
   
@@ -1055,7 +1056,8 @@ bool skill_message(int dam, struct char_data * ch, struct char_data * vict, int 
 int find_orig_dir(struct char_data *ch, struct char_data *victim)
 {
   struct char_data *vict;
-  int nextroom, dir, dist, room;
+  int dir, dist;
+  struct room_data *nextroom = NULL, *room = NULL;
   
   for (dir = 0; dir < NUM_OF_DIRS; dir++)
   {
@@ -1064,10 +1066,10 @@ int find_orig_dir(struct char_data *ch, struct char_data *victim)
     if (CAN_GO2(room, dir))
       nextroom = EXIT2(room, dir)->to_room;
     else
-      nextroom = NOWHERE;
+      nextroom = NULL;
     
-    for (dist = 1; nextroom != NOWHERE && dist <= 4; dist++) {
-      for (vict = world[nextroom].people; vict; vict = vict->next_in_room)
+    for (dist = 1; nextroom && dist <= 4; dist++) {
+      for (vict = nextroom->people; vict; vict = vict->next_in_room)
         if (vict == ch)
           return (rev_dir[dir]);
       
@@ -1075,7 +1077,7 @@ int find_orig_dir(struct char_data *ch, struct char_data *victim)
       if (CAN_GO2(room, dir))
         nextroom = EXIT2(room, dir)->to_room;
       else
-        nextroom = NOWHERE;
+        nextroom = NULL;
     }
   }
   return -1;
@@ -1104,7 +1106,7 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
   } else
     dir[0] = dir[2] = -1;
   
-  for (vict = world[victim->in_room].people; vict; vict = vict->next_in_room)
+  for (vict = victim->in_room->people; vict; vict = vict->next_in_room)
     if (vict != victim && !IS_ASTRAL(vict) && GET_POS(vict) > POS_SLEEPING)
       total++;
   
@@ -1140,7 +1142,7 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
   i = number(1, MAX(20, total + door + 2));
   if (i <= total)
   { // hits a victim
-    for (vict = world[victim->in_room].people; vict; vict = vict->next_in_room)
+    for (vict = victim->in_room->people; vict; vict = vict->next_in_room)
       if (vict != victim && !IS_ASTRAL(vict) && GET_POS(vict) > POS_SLEEPING &&
           !number(0, total - 1))
         break;
@@ -1386,83 +1388,73 @@ float power_multiplier(int type, int material)
   return 1.0;
 }
 
-void damage_door(struct char_data *ch, int room, int dir, int power, int type)
+void damage_door(struct char_data *ch, struct room_data *room, int dir, int power, int type)
 {
-  if (room < 0 || room > top_of_world || dir < NORTH || dir > DOWN ||
-      !world[room].dir_option[dir] || !world[room].dir_option[dir]->keyword ||
-      !IS_SET(world[room].dir_option[dir]->exit_info, EX_CLOSED))
+  if (!room || dir < NORTH || dir > DOWN || !room->dir_option[dir] || !room->dir_option[dir]->keyword || !IS_SET(room->dir_option[dir]->exit_info, EX_CLOSED))
     return;
   
-  int rating, half, opposite, rev, ok = 0;
+  int rating, half, rev, ok = 0;
+  struct room_data *opposite = room->dir_option[dir]->to_room;
   
-  opposite = world[room].dir_option[dir]->to_room;
   rev = rev_dir[dir];
-  if (opposite > -1 && world[opposite].dir_option[rev] &&
-      world[opposite].dir_option[rev]->to_room == room)
+  if (opposite && opposite->dir_option[rev] && opposite->dir_option[rev]->to_room == room)
     ok = TRUE;
   
   if (IS_SET(type, DAMOBJ_MANIPULATION))
   {
-    rating = world[room].dir_option[dir]->barrier;
+    rating = room->dir_option[dir]->barrier;
     REMOVE_BIT(type, DAMOBJ_MANIPULATION);
   } else
-    rating = world[room].dir_option[dir]->barrier * 2;
+    rating = room->dir_option[dir]->barrier * 2;
   
   half = MAX(1, rating >> 1);
   
   if (ch && IS_SET(type, DAMOBJ_CRUSH) && GET_TRADITION(ch) == TRAD_ADEPT && GET_POWER(ch, ADEPT_SMASHING_BLOW))
     power += MAX(0, success_test(GET_SKILL(ch, SKILL_UNARMED_COMBAT), 4));
   if (IS_GUN(type))
-    sprintf(buf, "You hear gunshots and the sound of bullets impacting the %s.\r\n", fname(world[room].dir_option[dir]->keyword));
+    sprintf(buf, "You hear gunshots and the sound of bullets impacting the %s.\r\n", fname(room->dir_option[dir]->keyword));
   else
-    sprintf(buf, "Someone bashes on the %s from the other side.\r\n", fname(world[room].dir_option[dir]->keyword));
+    sprintf(buf, "Someone bashes on the %s from the other side.\r\n", fname(room->dir_option[dir]->keyword));
   send_to_room(buf, opposite);
   
   if (power < half)
   {
-    sprintf(buf, "The %s remains undamaged.\r\n", fname(world[room].dir_option[dir]->keyword));
+    sprintf(buf, "The %s remains undamaged.\r\n", fname(room->dir_option[dir]->keyword));
     send_to_room(buf, room);
     if (ch && ch->in_room != room)
       send_to_char(buf, ch);
     return;
-  } else if (power < rating)
-  {
-    sprintf(buf, "The %s has been slightly damaged.\r\n",
-            fname(world[room].dir_option[dir]->keyword));
-    send_to_room(buf, room);
-    if (ch && ch->in_room != room)
-      send_to_char(buf, ch);
-    world[room].dir_option[dir]->condition--;
-  } else
-  {
-    sprintf(buf, "The %s has been damaged!\r\n", fname(world[room].dir_option[dir]->keyword));
-    send_to_room(buf, room);
-    if (ch && ch->in_room != room)
-      send_to_char(buf, ch);
-    world[room].dir_option[dir]->condition -= 1 + (power - rating) / half;
+  }
+  
+  // Compose the damage message, but don't send it-- it can be overwritten by the destruction message if necessary.
+  if (power < rating) {
+    sprintf(buf, "The %s has been slightly damaged.\r\n", fname(room->dir_option[dir]->keyword));
+    room->dir_option[dir]->condition--;
+  } else {
+    sprintf(buf, "The %s has been damaged!\r\n", fname(room->dir_option[dir]->keyword));
+    room->dir_option[dir]->condition -= 1 + (power - rating) / half;
   }
   
   if (ok)
-    world[opposite].dir_option[rev]->condition = world[room].dir_option[dir]->condition;
+    opposite->dir_option[rev]->condition = room->dir_option[dir]->condition;
   
-  if (world[room].dir_option[dir]->condition <= 0)
-  {
-    sprintf(buf, "The %s has been destroyed!\r\n", fname(world[room].dir_option[dir]->keyword));
-    send_to_room(buf, room);
-    if (ch && ch->in_room != room)
-      send_to_char(buf, ch);
-    REMOVE_BIT(world[room].dir_option[dir]->exit_info, EX_CLOSED);
-    REMOVE_BIT(world[room].dir_option[dir]->exit_info, EX_LOCKED);
-    SET_BIT(world[room].dir_option[dir]->exit_info, EX_DESTROYED);
+  if (room->dir_option[dir]->condition <= 0) {
+    sprintf(buf, "The %s has been destroyed!\r\n", fname(room->dir_option[dir]->keyword));
+    REMOVE_BIT(room->dir_option[dir]->exit_info, EX_CLOSED);
+    REMOVE_BIT(room->dir_option[dir]->exit_info, EX_LOCKED);
+    SET_BIT(room->dir_option[dir]->exit_info, EX_DESTROYED);
     if (ok) {
-      sprintf(buf, "The %s is destroyed from the other side!\r\n",
-              fname(world[room].dir_option[dir]->keyword));
-      send_to_room(buf, opposite);
-      REMOVE_BIT(world[opposite].dir_option[rev]->exit_info, EX_CLOSED);
-      REMOVE_BIT(world[opposite].dir_option[rev]->exit_info, EX_LOCKED);
-      SET_BIT(world[opposite].dir_option[rev]->exit_info, EX_DESTROYED);
+      sprintf(buf2, "The %s is destroyed from the other side!\r\n", fname(room->dir_option[dir]->keyword));
+      send_to_room(buf2, opposite);
+      REMOVE_BIT(opposite->dir_option[rev]->exit_info, EX_CLOSED);
+      REMOVE_BIT(opposite->dir_option[rev]->exit_info, EX_LOCKED);
+      SET_BIT(opposite->dir_option[rev]->exit_info, EX_DESTROYED);
     }
   }
+  
+  send_to_room(buf, room);
+  if (ch && ch->in_room != room)
+    send_to_char(buf, ch);
 }
 
 // damage_obj does what its name says, it figures out effects of successes
@@ -1557,7 +1549,7 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
           act("$p is set off by the fire!", FALSE, vict, obj, 0, TO_CHAR);
           act("A $p carried by $n is set off by the fire!", FALSE, vict, obj, 0, TO_ROOM);
           explode(NULL, obj, obj->in_room);
-        } else if (obj->in_room != NOWHERE) {
+        } else if (obj->in_room) {
           sprintf(buf, "%s is set off by the flames!",
                   CAP(obj->text.name));
           send_to_room(buf, obj->in_room);
@@ -1608,7 +1600,7 @@ void damage_obj(struct char_data *ch, struct obj_data *obj, int power, int type)
         extract_obj(temp);
       else if (vict)
         obj_to_char(temp, vict);
-      else if (obj->in_room != NOWHERE)
+      else if (obj->in_room)
         obj_to_room(temp, obj->in_room);
       else
         extract_obj(temp);
@@ -1621,7 +1613,7 @@ void docwagon_message(struct char_data *ch)
 {
   char buf[MAX_STRING_LENGTH];
   
-  switch (SECT(ch->in_room))
+  switch (SECT(get_ch_in_room(ch)))
   {
     case SPIRIT_HEARTH:
       sprintf(buf,"A DocWagon employee suddenly appears, transports %s's body to\r\nsafety, and rushes away.", GET_NAME(ch));
@@ -1661,7 +1653,7 @@ void docwagon(struct char_data *ch)
     return;
   
   if (success_test(GET_OBJ_VAL(docwagon, 0),
-                   MAX(zone_table[world[ch->in_room].zone].security, 4)) > 0)
+                   MAX(GET_SECURITY_LEVEL(ch->in_room), 4)) > 0)
   {
     if (FIGHTING(ch) && FIGHTING(FIGHTING(ch)) == ch)
       stop_fighting(FIGHTING(ch));
@@ -1684,7 +1676,7 @@ void docwagon(struct char_data *ch)
       ch->persona = NULL;
       PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
     } else if (PLR_FLAGGED(ch, PLR_MATRIX))
-      for (struct char_data *temp = world[ch->in_room].people; temp; temp = temp->next_in_room)
+      for (struct char_data *temp = ch->in_room->people; temp; temp = temp->next_in_room)
         if (PLR_FLAGGED(temp, PLR_MATRIX))
           temp->persona->decker->hitcher = NULL;
     docwagon_message(ch);
@@ -1710,7 +1702,7 @@ void docwagon(struct char_data *ch)
       }
     ch->points.fire[0] = 0;
     send_to_char("\r\n\r\nYour last conscious memory is the arrival of a DocWagon.\r\n", ch);
-    switch (zone_table[world[ch->in_room].zone].jurisdiction) {
+    switch (GET_JURISDICTION(ch->in_room)) {
       case ZONE_SEATTLE:
         i = real_room(RM_SEATTLE_DOCWAGON);
         break;
@@ -1725,7 +1717,7 @@ void docwagon(struct char_data *ch)
         break;
     }
     char_from_room(ch);
-    char_to_room(ch, i);
+    char_to_room(ch, &world[i]);
     creds = MAX((number(8, 12) * 500 / GET_OBJ_VAL(docwagon, 0)), (int)(GET_NUYEN(ch) / 10));
     send_to_char(ch, "DocWagon demands %d nuyen for your rescue.\r\n", creds);
     if ((GET_NUYEN(ch) + GET_BANK(ch)) < creds) {
@@ -1781,6 +1773,10 @@ void check_adrenaline(struct char_data *ch, int mode)
     GET_OBJ_VAL(pump, 5)++;
 }
 
+#define WRITE_DEATH_MESSAGE(format_string) \
+  sprintf(buf2, format_string, GET_CHAR_NAME(vict), GET_ROOM_NAME(vict->in_room), GET_ROOM_VNUM(vict->in_room))
+#define WRITE_DEATH_MESSAGE_WITH_AGGRESSOR(format_string) \
+  sprintf(buf2, format_string, GET_CHAR_NAME(vict), ch == vict ? "Misadventure(?)" : GET_NAME(ch), GET_ROOM_NAME(vict->in_room), GET_ROOM_VNUM(vict->in_room))
 void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
 {
   switch (attacktype)
@@ -1788,147 +1784,104 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
     case TYPE_SUFFERING:
       switch (number(0, 4)) {
         case 0:
-          sprintf(buf2, "%s died (no blood, it seems). {%s (%ld)}",
-                  GET_CHAR_NAME(vict), world[vict->in_room].name,
-                  world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("%s died (no blood, it seems). {%s (%ld)}");
           break;
         case 1:
-          sprintf(buf2, "%s's brain ran out of oxygen {%s (%ld)}",
-                  GET_CHAR_NAME(vict), world[vict->in_room].name,
-                  world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("%s's brain ran out of oxygen {%s (%ld)}");
           break;
         case 2:
-          sprintf(buf2, "%s simply ran out of blood. {%s (%ld)}",
-                  GET_CHAR_NAME(vict), world[vict->in_room].name,
-                  world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("%s simply ran out of blood. {%s (%ld)}");
           break;
         case 3:
-          sprintf(buf2, "%s unwittingly committed suicide. {%s (%ld)}",
-                  GET_CHAR_NAME(vict), world[vict->in_room].name,
-                  world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("%s unwittingly committed suicide. {%s (%ld)}");
           break;
         case 4:
-          sprintf(buf2, "Bloodlack stole %s's life. {%s (%ld)}",
-                  GET_CHAR_NAME(vict), world[vict->in_room].name,
-                  world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("Bloodlack stole %s's life. {%s (%ld)}");
           break;
       }
       break;
     case TYPE_EXPLOSION:
       switch (number(0, 4)) {
         case 0:
-          sprintf(buf2, "%s blew %s to pieces. {%s (%ld)}", ch == vict ? "???"
-                  : GET_NAME(ch), GET_CHAR_NAME(vict),
-                  world[vict->in_room].name,
-                  world[vict->in_room].number);
+          sprintf(buf2, "%s blew %s to pieces. {%s (%ld)}",
+                  ch == vict ? "???" : GET_NAME(ch), GET_CHAR_NAME(vict),
+                  vict->in_room->name,
+                  vict->in_room->number);
           break;
         case 1:
-          sprintf(buf2, "%s was blown to bits. [%s] {%s (%ld)}",
-                  GET_CHAR_NAME(vict), ch == vict ? "???" : GET_NAME(ch),
-                  world[vict->in_room].name, world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE_WITH_AGGRESSOR("%s was blown to bits. [%s] {%s (%ld)}");
           break;
         case 2:
-          sprintf(buf2, "%s got vaporized by %s. {%s (%ld)}",
-                  GET_CHAR_NAME(vict), ch == vict ? "???" : GET_NAME(ch),
-                  world[vict->in_room].name, world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE_WITH_AGGRESSOR("%s got vaporized by %s. {%s (%ld)}");
           break;
         case 3:
-          sprintf(buf2, "%s was incinerated by an explosion. [%s] {%s (%ld)}",
-                  GET_CHAR_NAME(vict), ch == vict ? "???" : GET_NAME(ch),
-                  world[vict->in_room].name, world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE_WITH_AGGRESSOR("%s was incinerated by an explosion. [%s] {%s (%ld)}");
           break;
         case 4:
-          sprintf(buf2, "%s got blown to hell by %s. {%s (%ld)}",
-                  GET_CHAR_NAME(vict), ch == vict ? "???" : GET_NAME(ch),
-                  world[vict->in_room].name, world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE_WITH_AGGRESSOR("%s got blown to hell by %s. {%s (%ld)}");
           break;
       }
       break;
     case TYPE_SCATTERING:
       switch (number(0, 4)) {
         case 0:
-          sprintf(buf2, "%s accidentally (?) killed by %s. {%s (%ld)}",
-                  GET_CHAR_NAME(vict), GET_NAME(ch),
-                  world[vict->in_room].name,
-                  world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE_WITH_AGGRESSOR("%s accidentally (?) killed by %s. {%s (%ld)}");
           break;
         case 1:
-          sprintf(buf2, "Shouldn't have been standing there, should you %s? "
-                  "[%s] {%s (%ld)}", GET_CHAR_NAME(vict), GET_NAME(ch),
-                  world[vict->in_room].name, world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE_WITH_AGGRESSOR("Shouldn't have been standing there, should you %s? [%s] {%s (%ld)}");
           break;
         case 2:
           sprintf(buf2, "Oops....%s just blew %s's head off. {%s (%ld)}",
-                  GET_NAME(ch), GET_CHAR_NAME(vict),
-                  world[vict->in_room].name,
-                  world[vict->in_room].number);
+                  ch == vict ? "???" : GET_NAME(ch), GET_CHAR_NAME(vict),
+                  vict->in_room->name,
+                  vict->in_room->number);
           break;
         case 3:
-          sprintf(buf2, "%s's stray bullet caught %s in the heart.  "
-                  "What a shame. {%s (%ld)}",
-                  GET_NAME(ch), GET_CHAR_NAME(vict),
-                  world[vict->in_room].name, world[vict->in_room].number);
+          sprintf(buf2, "%s's stray bullet caught %s in the heart. What a shame. {%s (%ld)}",
+                  ch == vict ? "???" : GET_NAME(ch), GET_CHAR_NAME(vict),
+                  vict->in_room->name,
+                  vict->in_room->number);
           break;
         case 4:
-          sprintf(buf2, "A random bullet killed a random person -- poor %s. "
-                  "[%s] {%s (%ld)}", GET_CHAR_NAME(vict), GET_NAME(ch),
-                  world[vict->in_room].name, world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE_WITH_AGGRESSOR("A random bullet killed a random person -- poor %s. [%s] {%s (%ld)}");
           break;
       }
       break;
     case TYPE_FALL:
       switch (number(0, 4)) {
         case 0:
-          sprintf(buf2, "%s died on impact. {%s (%ld)}", GET_CHAR_NAME(vict),
-                  world[vict->in_room].name, world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("%s died on impact. {%s (%ld)}");
           break;
         case 1:
-          sprintf(buf2, "%s failed to miss the ground. {%s (%ld)}",
-                  GET_CHAR_NAME(vict), world[vict->in_room].name,
-                  world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("%s failed to miss the ground. {%s (%ld)}");
           break;
         case 2:
-          sprintf(buf2, "Life's a bitch, %s.  So's concrete. {%s (%ld)}",
-                  GET_CHAR_NAME(vict), world[vict->in_room].name,
-                  world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("Life's a bitch, %s.  So's concrete. {%s (%ld)}");
           break;
         case 3:
-          sprintf(buf2, "What %s wouldn't have given for a safety net... "
-                  "{%s (%ld)}", GET_CHAR_NAME(vict), world[vict->in_room].name,
-                  world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("What %s would have given for a safety net... {%s (%ld)}");
           break;
         case 4:
-          sprintf(buf2, "The ground can be such an unforgiving thing.  "
-                  "Right, %s? {%s (%ld)}", GET_CHAR_NAME(vict),
-                  world[vict->in_room].name, world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("The ground can be such an unforgiving thing. Right, %s? {%s (%ld)}");
           break;
       }
       break;
     case TYPE_DROWN:
       switch (number(0, 4)) {
         case 0:
-          sprintf(buf2, "%s drank way, way, WAY too much. {%s (%ld)}",
-                  GET_CHAR_NAME(vict), world[vict->in_room].name,
-                  world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("%s drank way, way, WAY too much. {%s (%ld)}");
           break;
         case 1:
-          sprintf(buf2, "%s sleeps with the fishes.  Involuntarily. {%s (%ld)}",
-                  GET_CHAR_NAME(vict), world[vict->in_room].name,
-                  world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("%s sleeps with the fishes. Involuntarily. {%s (%ld)}");
           break;
         case 2:
-          sprintf(buf2, "The water had a fight with %s's lungs.  "
-                  "The water won. {%s (%ld)}", GET_CHAR_NAME(vict),
-                  world[vict->in_room].name, world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("The water had a fight with %s's lungs. The water won. {%s (%ld)}");
           break;
         case 3:
-          sprintf(buf2, "Water doesn't seem so harmless now, does it %s? "
-                  "{%s (%ld)}", GET_CHAR_NAME(vict), world[vict->in_room].name,
-                  world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("Water doesn't seem so harmless now, does it %s? {%s (%ld)}");
           break;
         case 4:
-          sprintf(buf2, "%s didn't float. {%s (%ld)}", GET_CHAR_NAME(vict),
-                  world[vict->in_room].name, world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("%s didn't float. {%s (%ld)}");
           break;
       }
       break;
@@ -1938,138 +1891,96 @@ void gen_death_msg(struct char_data *ch, struct char_data *vict, int attacktype)
           sprintf(buf2, "%s just hasn't been taking %s medication.  Oops. "
                   "{%s (%ld)}", GET_CHAR_NAME(vict), GET_SEX(vict) == SEX_MALE ?
                   "his" : (GET_SEX(vict) == SEX_FEMALE ? "her" : "its"),
-                  world[vict->in_room].name, world[vict->in_room].number);
+                  vict->in_room->name, vict->in_room->number);
           break;
         case 1:
-          sprintf(buf2, "%s was killed in a bioware rebellion. {%s (%ld)}",
-                  GET_CHAR_NAME(vict), world[vict->in_room].name,
-                  world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("%s was killed in a bioware rebellion. {%s (%ld)}");
           break;
         case 2:
-          sprintf(buf2, "%s had a fatal heart attack.  Wuss. {%s (%ld)}",
-                  GET_CHAR_NAME(vict), world[vict->in_room].name,
-                  world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("%s had a fatal heart attack.  Wuss. {%s (%ld)}");
           break;
         case 3:
-          sprintf(buf2, "Still think the bioware was worth it, %s?. {%s (%ld)}",
-                  GET_CHAR_NAME(vict), world[vict->in_room].name,
-                  world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("Still think the bioware was worth it, %s? {%s (%ld)}");
           break;
         case 4:
-          sprintf(buf2, "Maybe %s got a defective piece of bioware... {%s (%ld)}",
-                  GET_CHAR_NAME(vict), world[vict->in_room].name,
-                  world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("Maybe %s got a defective piece of bioware... {%s (%ld)}");
           break;
       }
       break;
     case TYPE_RECOIL:
       switch (number(0, 4)) {
         case 0:
-          sprintf(buf2, "You're meant to hit *other* people with that whip, "
-                  "%s. {%s (%ld)}", GET_CHAR_NAME(vict),
-                  world[vict->in_room].name,
-                  world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("You're meant to hit *other* people with that whip, %s. {%s (%ld)}");
           break;
         case 1:
           sprintf(buf2, "%s lopped off %s own head.  Oops. {%s (%ld)}",
-                  GET_CHAR_NAME(vict), GET_SEX(vict) == SEX_MALE ? "his" :
-                  (GET_SEX(vict) == SEX_FEMALE ? "her" : "its"),
-                  world[vict->in_room].name, world[vict->in_room].number);
+                  GET_CHAR_NAME(vict), HSHR(vict),
+                  vict->in_room->name, vict->in_room->number);
           break;
         case 2:
-          sprintf(buf2, "%s, watch out for your whi....nevermind. {%s (%ld)}",
-                  GET_CHAR_NAME(vict), world[vict->in_room].name,
-                  world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("%s, watch out for your whi....nevermind. {%s (%ld)}");
           break;
         case 3:
-          sprintf(buf2, "THWAP!  Wait.....was that *your* whip, %s?!? "
-                  "{%s (%ld)}", GET_CHAR_NAME(vict), world[vict->in_room].name,
-                  world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("THWAP!  Wait.....was that *your* whip, %s?!? {%s (%ld)}");
           break;
         case 4:
           sprintf(buf2, "%s's whip didn't agree with %s. {%s (%ld)}",
-                  GET_CHAR_NAME(vict), GET_SEX(vict) == SEX_MALE ? "his" :
-                  (GET_SEX(vict) == SEX_FEMALE ? "her" : "its"),
-                  world[vict->in_room].name, world[vict->in_room].number);
+                  GET_CHAR_NAME(vict), HMHR(vict),
+                  vict->in_room->name, vict->in_room->number);
           break;
       }
       break;
     case TYPE_RAM:
-      sprintf(buf2, "%s was made a hood ornament. {%s (%ld)}",
-              GET_CHAR_NAME(vict), world[vict->in_room].name,
-              world[vict->in_room].number);
+      WRITE_DEATH_MESSAGE_WITH_AGGRESSOR("%s was made into a hood ornament by %s. {%s (%ld)}");
       break;
     case TYPE_DUMPSHOCK:
-      sprintf(buf2, "%s couldn't quite manage a graceful logoff. {%s (%ld)}",
-              GET_CHAR_NAME(vict), world[vict->in_room].name,
-              world[vict->in_room].number);
-      
+      WRITE_DEATH_MESSAGE("%s couldn't quite manage a graceful logoff. {%s (%ld)}");
       break;
     case TYPE_BLACKIC:
-      sprintf(buf2, "%s couldn't haxor the gibson. {%s (%ld)}",
-              GET_CHAR_NAME(vict), world[vict->in_room].name,
-              world[vict->in_room].number);
+      WRITE_DEATH_MESSAGE("%s couldn't haxor the gibson. {%s (%ld)}");
       break;
     case TYPE_POLTERGEIST:
-      sprintf(buf2, "%s is a pansy who got killed by the poltergeist spell. {%s (%ld)}",
-              GET_CHAR_NAME(vict), world[vict->in_room].name,
-              world[vict->in_room].number);
+      WRITE_DEATH_MESSAGE("%s is a pansy who got killed by the poltergeist spell. {%s (%ld)}");
       break;
     case TYPE_ELEVATOR:
-      sprintf(buf, "%s got crushed by a moving elevator. Ouch. {%s (%ld)}",
-              GET_CHAR_NAME(vict), world[vict->in_room].name,
-              world[vict->in_room].number);
+      WRITE_DEATH_MESSAGE("%s got crushed by a moving elevator. Ouch. {%s (%ld)}");
       break;
     case TYPE_CRASH:
       switch(number(0, 1)) {
         case 0:
-          sprintf(buf2, "%s forgot to wear his seatbelt. {%s (%ld)}",
-                  GET_CHAR_NAME(vict), world[vict->in_room].name,
-                  world[vict->in_room].number);
+          sprintf(buf2, "%s forgot to wear %s seatbelt. {%s (%ld)}",
+                  GET_CHAR_NAME(vict), HSHR(vict),
+                  vict->in_room->name, vict->in_room->number);
           break;
         case 1:
-          sprintf(buf2, "%s become one with the dashboard. {%s (%ld)}",
-                  GET_CHAR_NAME(vict), world[vict->in_room].name,
-                  world[vict->in_room].number);
+          WRITE_DEATH_MESSAGE("%s become one with the dashboard. {%s (%ld)}");
           break;
       }
       break;
     default:
       if (ch == vict)
-        sprintf(buf2, "%s died (cause uncertain). {%s (%ld)}",
-                GET_CHAR_NAME(vict), world[vict->in_room].name,
-                world[vict->in_room].number);
+        sprintf(buf2, "%s died (cause uncertain-- damage type %d). {%s (%ld)}",
+                GET_CHAR_NAME(vict), attacktype,
+                vict->in_room->name, vict->in_room->number);
       else
         switch (number(0, 5)) {
           case 0:
-            sprintf(buf2, "%s killed by %s. {%s (%ld)}", GET_CHAR_NAME(vict),
-                    GET_CHAR_NAME(ch), world[vict->in_room].name,
-                    world[vict->in_room].number);
+            WRITE_DEATH_MESSAGE_WITH_AGGRESSOR("%s killed by %s. {%s (%ld)}");
             break;
           case 1:
-            sprintf(buf2, "%s wiped %s out of existence. {%s (%ld)}",
-                    GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), world[vict->in_room].name,
-                    world[vict->in_room].number);
+            WRITE_DEATH_MESSAGE_WITH_AGGRESSOR("%s wiped out of existence by %s. {%s (%ld)}");
             break;
           case 2:
-            sprintf(buf2, "%s's life terminated by %s. {%s (%ld)}",
-                    GET_CHAR_NAME(vict), GET_CHAR_NAME(ch), world[vict->in_room].name,
-                    world[vict->in_room].number);
+            WRITE_DEATH_MESSAGE_WITH_AGGRESSOR("%s's life terminated by %s. {%s (%ld)}");
             break;
           case 3:
-            sprintf(buf2, "%s flatlined %s. {%s (%ld)}",
-                    GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), world[vict->in_room].name,
-                    world[vict->in_room].number);
+            WRITE_DEATH_MESSAGE_WITH_AGGRESSOR("%s flatlined by %s. {%s (%ld)}");
             break;
           case 4:
-            sprintf(buf2, "%s transformed %s into a corpse. {%s (%ld)}",
-                    GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), world[vict->in_room].name,
-                    world[vict->in_room].number);
+            WRITE_DEATH_MESSAGE_WITH_AGGRESSOR("%s transformed into a corpse by %s. {%s (%ld)}");
             break;
           case 5:
-            sprintf(buf2, "%s got geeked by %s. {%s (%ld)}",
-                    GET_CHAR_NAME(vict), GET_CHAR_NAME(ch), world[vict->in_room].name,
-                    world[vict->in_room].number);
+            WRITE_DEATH_MESSAGE_WITH_AGGRESSOR("%s got geeked by %s. {%s (%ld)}");
             break;
         }
       break;
@@ -2691,8 +2602,7 @@ void astral_fight(struct char_data *ch, struct char_data *vict)
   
   struct obj_data *wielded = ch->equipment[WEAR_WIELD];
   
-  if (ch->in_room != vict->in_room)
-  {
+  if (ch->in_room != vict->in_room) {
     stop_fighting(ch);
     if (FIGHTING(vict) == ch)
       stop_fighting(vict);
@@ -2720,7 +2630,7 @@ void astral_fight(struct char_data *ch, struct char_data *vict)
   {
     PLR_FLAGS(ch->desc->original).SetBit(PLR_KILLER);
     sprintf(buf, "PC Killer bit set on %s (astral) for initiating attack on %s at %s.",
-            GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), world[vict->in_room].name);
+            GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), vict->in_room->name);
     mudlog(buf, ch, LOG_MISCLOG, TRUE);
     send_to_char("If you want to be a PLAYER KILLER, so be it...\r\n", ch);
   }
@@ -2912,7 +2822,7 @@ void combat_message_process_ranged_response(struct char_data *ch, rnum_t rnum) {
           && !(IS_NPC(FIGHTING(ch)) && MOB_FLAGGED(FIGHTING(ch), MOB_INANIMATE))) {
         if (number(0, 6) >= 2) {
           GET_MOBALERT(tch) = MALERT_ALARM;
-          rnum_t was_in = tch->in_room;
+          struct room_data *was_in = tch->in_room;
           if (ranged_response(ch, tch) && tch->in_room == was_in) {
             act("$n aims $s weapon at a distant threat!",
                 FALSE, tch, 0, ch, TO_ROOM);
@@ -3081,7 +2991,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   }
   
   // If the player's in a silent room, don't propagate the gunshot.
-  if (world[ch->in_room].silence[0])
+  if (ch->in_room->silence[0])
     return;
   
   // If the player has a silencer or suppressor, restrict the propagation of the gunshot.
@@ -3096,7 +3006,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
       }
   }
   
-  sprintf( been_heard, ".%ld.", ch->in_room );
+  sprintf(been_heard, ".%ld.", real_room(ch->in_room->number));
   
   // Initialize gunshot queue.
   std::queue<rnum_t> room_queue;
@@ -3105,7 +3015,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   // Scan the shooter's room's exits and add notifications to any valid adjacent rooms.
   // 'Valid' is defined as 'exists and is not flagged as silent'.
   for (int door1 = 0; door1 < NUM_OF_DIRS; door1++) {
-    if (world[ch->in_room].dir_option[door1] && (room1 = world[ch->in_room].dir_option[door1]->to_room) != NOWHERE && !(world[room1].silence[0])) {
+    if (ch->in_room->dir_option[door1] && (room1 = real_room(ch->in_room->dir_option[door1]->to_room->number)) != NOWHERE && !(world[room1].silence[0])) {
       // If the room is in the heard-it-already list, skip to the next one.
       sprintf(temp, ".%ld.", room1);
       if (strstr(been_heard, temp) != 0)
@@ -3113,18 +3023,18 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
       
       if (has_suppressor) {
         // Special case: If they're using a suppressed weapon, print a muffled-gunfire message and terminate.
-        send_to_room("You hear muffled gunshots nearby.\r\n", room1);
+        send_to_room("You hear muffled gunshots nearby.\r\n", &world[room1]);
         combat_message_process_ranged_response(ch, room1);
         strcat(been_heard, temp);
       } else {
         // Send gunshot notifications to the selected room. Process guard/helper responses.
-        send_to_room("You hear gunshots nearby!\r\n", room1);
+        send_to_room("You hear gunshots nearby!\r\n", &world[room1]);
         combat_message_process_ranged_response(ch, room1);
         strcat(been_heard, temp);
         
         // Add the room's exits to the list.
         for (int door2 = 0; door2 < NUM_OF_DIRS; door2++)
-          if (world[room1].dir_option[door2] && (room2 = world[room1].dir_option[door2]->to_room) != NOWHERE && !(world[room2].silence[0]))
+          if (world[room1].dir_option[door2] && (room2 = real_room(world[room1].dir_option[door2]->to_room->number)) != NOWHERE && !(world[room2].silence[0]))
             room_queue.push(room2);
       }
     }
@@ -3142,13 +3052,13 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     if (strstr(been_heard, temp) != 0)
       continue;
     
-    send_to_room("You hear gunshots not far off.\r\n", room1);
+    send_to_room("You hear gunshots not far off.\r\n", &world[room1]);
     combat_message_process_ranged_response(ch, room1);
     strcat(been_heard, temp);
     
     // Add the room's exits to the list.
     for (int door = 0; door < NUM_OF_DIRS; door++)
-      if (world[room1].dir_option[door] && (room2 = world[room1].dir_option[door]->to_room) != NOWHERE && !(world[room2].silence[0]))
+      if (world[room1].dir_option[door] && (room2 = real_room(world[room1].dir_option[door]->to_room->number)) != NOWHERE && !(world[room2].silence[0]))
         secondary_room_queue.push(room2);
   }
   
@@ -3162,7 +3072,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     if (strstr(been_heard, temp) != 0)
       continue;
     
-    send_to_room("You hear gunshots in the distance.\r\n", room1);
+    send_to_room("You hear gunshots in the distance.\r\n", &world[room1]);
     combat_message_process_ranged_response(ch, room1);
     strcat(been_heard, temp);
   }
@@ -3227,7 +3137,7 @@ int get_weapon_damage_type(struct obj_data* weapon) {
 bool is_char_too_tall(struct char_data *ch) {
   assert(ch != NULL);
   
-  return ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) >= world[ch->in_room].z*100;
+  return ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) >= ch->in_room->z*100;
 }
 
 int calculate_vision_penalty(struct char_data *ch, struct char_data *victim) {
@@ -3565,7 +3475,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     if (att->ch->in_room != def->ch->in_room && !att->veh) {
       struct char_data *vict;
       bool vict_found = FALSE;
-      long room, nextroom;
+      struct room_data *room = NULL, *nextroom = NULL;
       
       int weapon_range;
       if (att->weapon && IS_RANGED(att->weapon)) {
@@ -3575,9 +3485,9 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
           if (CAN_GO2(room, dir))
             nextroom = EXIT2(room, dir)->to_room;
           else
-            nextroom = NOWHERE;
-          for (int distance = 1; (nextroom != NOWHERE) && (distance <= weapon_range) && !vict_found; distance++) {
-            for (vict = world[nextroom].people; vict; vict = vict->next_in_room) {
+            nextroom = NULL;
+          for (int distance = 1; nextroom && (distance <= weapon_range) && !vict_found; distance++) {
+            for (vict = nextroom->people; vict; vict = vict->next_in_room) {
               if (vict == def->ch) {
                 att->modifiers[COMBAT_MOD_DISTANCE] += 2 * distance;
                 vict_found = TRUE;
@@ -3588,7 +3498,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
             if (CAN_GO2(room, dir))
               nextroom = EXIT2(room, dir)->to_room;
             else
-              nextroom = NOWHERE;
+              nextroom = NULL;
           }
         }
       }
@@ -3947,9 +3857,9 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   }
   
   // Set the violence background count.
-  if (att->ch->in_room && !world[att->ch->in_room].background[0]) {
-    world[att->ch->in_room].background[0] = 1;
-    world[att->ch->in_room].background[1] = AURA_PLAYERCOMBAT;
+  if (att->ch->in_room && !GET_BACKGROUND_COUNT(att->ch->in_room)) {
+    GET_BACKGROUND_COUNT(att->ch->in_room) = 1;
+    GET_BACKGROUND_AURA(att->ch->in_room) = AURA_PLAYERCOMBAT;
   }
   
 }
@@ -3968,7 +3878,7 @@ int find_sight(struct char_data *ch)
     sight = 1;
   
   /* add more weather conditions here to affect scan */
-  if (SECT(ch->in_room) != SPIRIT_HEARTH && (IS_NPC(ch) || !access_level(ch, LVL_VICEPRES)))
+  if (SECT(get_ch_in_room(ch)) != SPIRIT_HEARTH && (IS_NPC(ch) || !access_level(ch, LVL_VICEPRES)))
     switch (weather_info.sky)
   {
     case SKY_RAINING:
@@ -4027,7 +3937,7 @@ int find_weapon_range(struct char_data *ch, struct obj_data *weapon)
 bool ranged_response(struct char_data *ch, struct char_data *vict)
 {
   int range, sight, distance, dir;
-  long room, nextroom = NOWHERE;
+  struct room_data *room = NULL, *nextroom = NULL;
   struct char_data *temp;
   bool is_responding = FALSE;
   
@@ -4035,7 +3945,7 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
   if (!vict
       || ch->in_room == vict->in_room
       || GET_POS(vict) <= POS_STUNNED
-      || vict->in_room == NOWHERE
+      || !vict->in_room
       || (IS_NPC(vict) && (MOB_FLAGGED(vict, MOB_INANIMATE)))
       || FIGHTING(vict)) {
     return FALSE;
@@ -4053,10 +3963,10 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
       if (CAN_GO2(room, dir)) {
         nextroom = EXIT2(room, dir)->to_room;
       } else {
-        nextroom = NOWHERE;
+        nextroom = NULL;
       }
-      for (distance = 1; !is_responding && ((nextroom != NOWHERE) && (distance <= 4)); distance++) {
-        for (temp = world[nextroom].people; !is_responding && temp; temp = temp->next_in_room) {
+      for (distance = 1; !is_responding && (nextroom && (distance <= 4)); distance++) {
+        for (temp = nextroom->people; !is_responding && temp; temp = temp->next_in_room) {
           if (temp == ch && (distance > range || distance > sight) && !(IS_NPC(vict) && MOB_FLAGGED(vict, MOB_SENTINEL))) {
             is_responding = TRUE;
             act("$n charges towards $s distant foe.", TRUE, vict, 0, 0, TO_ROOM);
@@ -4073,14 +3983,14 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
         if (CAN_GO2(room, dir))
           nextroom = EXIT2(room, dir)->to_room;
         else
-          nextroom = NOWHERE;
+          nextroom = NULL;
       }
     }
     is_responding = TRUE;
     set_fighting(vict, ch);
   } else if (!(IS_NPC(vict) && MOB_FLAGGED(vict, MOB_SENTINEL))) {
     for (dir = 0; dir < NUM_OF_DIRS && !is_responding; dir++) {
-      if (CAN_GO(vict, dir) && EXIT(vict, dir)->to_room == ch->in_room) {
+      if (CAN_GO(vict, dir) && EXIT2(room, dir)->to_room == ch->in_room) {
         is_responding = TRUE;
         act("$n charges towards $s distant foe.", TRUE, vict, 0, 0, TO_ROOM);
         act("You charge after $N.", FALSE, vict, 0, ch, TO_CHAR);
@@ -4095,7 +4005,7 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
   return is_responding;
 }
 
-void explode(struct char_data *ch, struct obj_data *weapon, int room)
+void explode(struct char_data *ch, struct obj_data *weapon, struct room_data *room)
 {
   int damage_total, i, power, level;
   struct char_data *victim, *next_vict;
@@ -4106,19 +4016,19 @@ void explode(struct char_data *ch, struct obj_data *weapon, int room)
   
   extract_obj(weapon);
   
-  if (world[room].people)
+  if (room->people)
   {
-    act("The room is lit by an explosion!", FALSE, world[room].people, 0, 0, TO_ROOM);
-    act("The room is lit by an explosion!", FALSE, world[room].people, 0, 0, TO_CHAR);
+    act("The room is lit by an explosion!", FALSE, room->people, 0, 0, TO_ROOM);
+    act("The room is lit by an explosion!", FALSE, room->people, 0, 0, TO_CHAR);
   }
   
-  for (obj = world[room].contents; obj; obj = next)
+  for (obj = room->contents; obj; obj = next)
   {
     next = obj->next_content;
     damage_obj(NULL, obj, level * 2 + (int)(power / 6), DAMOBJ_EXPLODE);
   }
   
-  for (victim = world[room].people; victim; victim = next_vict)
+  for (victim = room->people; victim; victim = next_vict)
   {
     next_vict = victim->next_in_room;
     if (IS_ASTRAL(victim))
@@ -4153,11 +4063,11 @@ void explode(struct char_data *ch, struct obj_data *weapon, int room)
   }
   
   for (i = 0; i < NUM_OF_DIRS; i++)
-    if (world[room].dir_option[i] && IS_SET(world[room].dir_option[i]->exit_info, EX_CLOSED))
+    if (room->dir_option[i] && IS_SET(room->dir_option[i]->exit_info, EX_CLOSED))
       damage_door(NULL, room, i, level * 2 + (int)(power / 6), DAMOBJ_EXPLODE);
 }
 
-void target_explode(struct char_data *ch, struct obj_data *weapon, int room, int mode)
+void target_explode(struct char_data *ch, struct obj_data *weapon, struct room_data *room, int mode)
 {
   int damage_total, i;
   struct char_data *victim, *next_vict;
@@ -4166,20 +4076,20 @@ void target_explode(struct char_data *ch, struct obj_data *weapon, int room, int
   sprintf(buf, "The room is lit by a%s explosion!",
           (GET_OBJ_VAL(weapon, 3) == TYPE_ROCKET ? " massive" : "n"));
   
-  if (world[room].people)
+  if (room->people)
   {
-    act(buf, FALSE, world[room].people, 0, 0, TO_ROOM);
-    act(buf, FALSE, world[room].people, 0, 0, TO_CHAR);
+    act(buf, FALSE, room->people, 0, 0, TO_ROOM);
+    act(buf, FALSE, room->people, 0, 0, TO_CHAR);
   }
   
-  for (obj = world[room].contents; obj; obj = next)
+  for (obj = room->contents; obj; obj = next)
   {
     next = obj->next_content;
     damage_obj(NULL, obj, GET_OBJ_VAL(weapon, 1) * 2 +
                (int)(GET_OBJ_VAL(weapon, 0) / 6), DAMOBJ_EXPLODE);
   }
   
-  for (victim = world[room].people; victim; victim = next_vict)
+  for (victim = room->people; victim; victim = next_vict)
   {
     next_vict = victim->next_in_room;
     if (IS_ASTRAL(victim))
@@ -4221,8 +4131,8 @@ void target_explode(struct char_data *ch, struct obj_data *weapon, int room, int
   
   if (!mode)
     for (i = 0; i < NUM_OF_DIRS; i++)
-      if (world[room].dir_option[i] &&
-          IS_SET(world[room].dir_option[i]->exit_info, EX_CLOSED))
+      if (room->dir_option[i] &&
+          IS_SET(room->dir_option[i]->exit_info, EX_CLOSED))
         damage_door(NULL, room, i, GET_OBJ_VAL(weapon, 1) * 2 +
                     (int)(GET_OBJ_VAL(weapon, 0) / 6), DAMOBJ_EXPLODE);
 }
@@ -4230,10 +4140,15 @@ void target_explode(struct char_data *ch, struct obj_data *weapon, int room, int
 void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
                   int range, int dir)
 {
-  int room, nextroom, distance, sight, temp, temp2, left, right, scatter[4];
+  int distance, sight, temp, temp2, left, right;
+  struct room_data *scatter[4];
+  struct room_data *room = NULL, *nextroom = NULL;
   struct char_data *vict = NULL;
   
-  if (world[ch->char_specials.rigging ? ch->char_specials.rigging->in_room : ch->in_room].peaceful)
+  for (int i = 0; i < 4; i++)
+    scatter[i] = NULL;
+  
+  if ((ch->char_specials.rigging ? ch->char_specials.rigging->in_room : ch->in_room)->peaceful)
   {
     send_to_char("This room just has a peaceful, easy feeling...\r\n", ch);
     return;
@@ -4244,15 +4159,15 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
   if (CAN_GO2(ch->in_room, dir))
     nextroom = EXIT2(ch->in_room, dir)->to_room;
   else
-    nextroom = NOWHERE;
+    nextroom = NULL;
   
   if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && GET_OBJ_VAL(weapon, 3) == TYPE_HAND_GRENADE)
   {
-    if (nextroom == NOWHERE) {
+    if (!nextroom) {
       send_to_char("There seems to be something in the way...\r\n", ch);
       return;
     }
-    if (world[nextroom].peaceful) {
+    if (nextroom->peaceful) {
       send_to_char("Nah - leave them in peace.\r\n", ch);
       return;
     }
@@ -4267,9 +4182,9 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     
     if (!number(0, 2)) {
       sprintf(buf, "A defective grenade lands on the floor.\r\n");
-      if (world[nextroom].people) {
-        act(buf, FALSE, world[nextroom].people, 0, 0, TO_ROOM);
-        act(buf, FALSE, world[nextroom].people, 0, 0, TO_CHAR);
+      if (nextroom->people) {
+        act(buf, FALSE, nextroom->people, 0, 0, TO_ROOM);
+        act(buf, FALSE, nextroom->people, 0, 0, TO_CHAR);
       }
       return;
     } else if (!(success_test(temp+GET_OFFENSE(ch), 5) < 2)) {
@@ -4285,24 +4200,28 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         else
           right = dir + 1;
       }
+      
       scatter[0] = ch->in_room;
       if (left > 0 && CAN_GO(ch, left))
         scatter[1] = EXIT(ch, left)->to_room;
       else
-        scatter[1] = NOWHERE;
+        scatter[1] = NULL;
+      
       if (right > 0 && CAN_GO(ch, right))
         scatter[2] = EXIT(ch, right)->to_room;
       else
-        scatter[2] = NOWHERE;
+        scatter[2] = NULL;
+      
       if (CAN_GO2(nextroom, dir))
         scatter[3] = EXIT2(nextroom, dir)->to_room;
       else
-        scatter[3] = NOWHERE;
+        scatter[3] = NULL;
+      
       for (temp = 0, temp2 = 0; temp2 < 4; temp2++)
-        if (scatter[temp2] != NOWHERE)
+        if (scatter[temp2])
           temp++;
       for (temp2 = 0; temp2 < 4; temp2++)
-        if (scatter[temp2] != NOWHERE && !number(0, temp-1)) {
+        if (scatter[temp2] && !number(0, temp-1)) {
           if (temp2 == 0) {
             act("$p deflects due to $n's poor accuracy, landing at $s feet.",
                 FALSE, ch, weapon, 0, TO_ROOM);
@@ -4322,7 +4241,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     return;
   }
   
-  for (distance = 1; ((nextroom != NOWHERE) && (distance <= sight)); distance++)
+  for (distance = 1; (nextroom && (distance <= sight)); distance++)
   {
     if ((vict = get_char_room(target, nextroom)) && vict != ch &&
         CAN_SEE(ch, vict))
@@ -4332,7 +4251,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     if (CAN_GO2(room, dir))
       nextroom = EXIT2(room, dir)->to_room;
     else
-      nextroom = NOWHERE;
+      nextroom = NULL;
   }
   
   if (vict)
@@ -4340,7 +4259,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     if (vict == FIGHTING(ch)) {
       send_to_char("You're doing the best you can!\r\n", ch);
       return;
-    } else if (world[vict->in_room].peaceful) {
+    } else if (vict->in_room->peaceful) {
       send_to_char("Nah - leave them in peace.\r\n", ch);
       return;
     } else if (distance > range) {
@@ -4425,20 +4344,23 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         if (left > 0 && CAN_GO(ch, left))
           scatter[1] = EXIT(ch, left)->to_room;
         else
-          scatter[1] = NOWHERE;
+          scatter[1] = NULL;
+        
         if (right > 0 && CAN_GO(ch, right))
           scatter[2] = EXIT(ch, right)->to_room;
         else
-          scatter[2] = NOWHERE;
+          scatter[2] = NULL;
+        
         if (CAN_GO2(nextroom, dir))
           scatter[3] = EXIT2(nextroom, dir)->to_room;
         else
-          scatter[3] = NOWHERE;
+          scatter[3] = NULL;
+        
         for (temp = 0, temp2 = 0; temp2 < 4; temp2++)
-          if (scatter[temp2] != NOWHERE)
+          if (scatter[temp2])
             temp++;
         for (temp2 = 0; temp2 < 4; temp2++)
-          if (scatter[temp2] != NOWHERE && !number(0, temp-1)) {
+          if (scatter[temp2] && !number(0, temp-1)) {
             if (temp2 == 0) {
               act("$p's trajectory is slightly off...", FALSE, ch, weapon, 0, TO_ROOM);
               sprintf(buf, "Your arm jerks just before you fire...");
@@ -4457,12 +4379,11 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
             return;
           }
       }
-      temp2 = vict->in_room;
       target_explode(ch, weapon, vict->in_room, 0);
       if (GET_OBJ_VAL(weapon, 3) == TYPE_ROCKET)
         for (temp = 0; temp < NUM_OF_DIRS; temp++)
-          if (CAN_GO2(temp2, temp))
-            target_explode(ch, weapon, EXIT2(temp2, temp)->to_room, 1);
+          if (CAN_GO2(vict->in_room, temp))
+            target_explode(ch, weapon, EXIT2(vict->in_room, temp)->to_room, 1);
     }
     return;
   }
@@ -4471,10 +4392,10 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
   if (CAN_GO2(ch->in_room, dir))
     nextroom = EXIT2(ch->in_room, dir)->to_room;
   else
-    nextroom = NOWHERE;
+    nextroom = NULL;
   
   // now we search for a door by the given name
-  for (distance = 1; nextroom != NOWHERE && distance <= sight; distance++)
+  for (distance = 1; nextroom && distance <= sight; distance++)
   {
     if (EXIT2(nextroom, dir) && EXIT2(nextroom, dir)->keyword &&
         isname(target, EXIT2(nextroom, dir)->keyword) &&
@@ -4490,7 +4411,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     if (CAN_GO2(room, dir))
       nextroom = EXIT2(room, dir)->to_room;
     else
-      nextroom = NOWHERE;
+      nextroom = NULL;
   }
   
   if (found)
@@ -4501,7 +4422,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     } else if (!IS_SET(EXIT2(nextroom, dir)->exit_info, EX_CLOSED) && isname(target, EXIT2(nextroom, dir)->keyword) ) {
       send_to_char("You can only damage closed doors!\r\n", ch);
       return;
-    } else if (world[nextroom].peaceful) {
+    } else if (nextroom->peaceful) {
       send_to_char("Nah - leave it in peace.\r\n", ch);
       return;
     } else if (distance > range) {
@@ -4618,8 +4539,8 @@ void roll_initiative(void)
   for (ch = combat_list; ch; ch = next_combat_list) {
     next_combat_list = ch->next_fighting;
     roll_individual_initiative(ch);
-    if (ch->in_room && world[ch->in_room].poltergeist[0]) {
-      int dam = convert_damage(stage(-success_test(GET_QUI(ch), world[ch->in_room].poltergeist[1] - GET_IMPACT(ch)), LIGHT));
+    if (ch->in_room && ch->in_room->poltergeist[0]) {
+      int dam = convert_damage(stage(-success_test(GET_QUI(ch), ch->in_room->poltergeist[1] - GET_IMPACT(ch)), LIGHT));
       if (dam > 0) {
         act("You are hit by flying objects!\r\n", FALSE, ch, 0, 0, TO_CHAR);
         damage(ch, ch, dam, TYPE_POLTERGEIST, MENTAL);
@@ -4796,8 +4717,8 @@ void perform_violence(void)
             quickness = 0;
           if (footanchor)
             quickness /= 2;
-          if (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) > world[ch->in_room].z*100) {
-            if (GET_HEIGHT(ch) > world[ch->in_room].z * 200)
+          if (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) > ch->in_room->z*100) {
+            if (GET_HEIGHT(ch) > ch->in_room->z * 200)
               quickness = 0;
             else quickness /= 2;
           }
@@ -4816,7 +4737,7 @@ void perform_violence(void)
       if (AFF_FLAGGED(ch, AFF_MANNING) || PLR_FLAGGED(ch, PLR_REMOTE) || AFF_FLAGGED(ch, AFF_RIG)) {
         struct veh_data *veh = NULL;
         RIG_VEH(ch, veh);
-        if ((veh && veh->in_room == NOWHERE)
+        if ((veh && veh->in_room)
             || (FIGHTING(ch) && veh->in_room != FIGHTING(ch)->in_room)
             || (FIGHTING_VEH(ch) && veh->in_room != FIGHTING_VEH(ch)->in_room)) {
           send_to_char("Your target has left your line of sight.", ch);
@@ -4961,8 +4882,11 @@ void chkdmg(struct veh_data * veh)
       damage_tn = 8;
     } else {
       send_to_veh("You scramble into the street as your ride is wrecked!\r\n", veh, NULL, TRUE);
-      sprintf(buf, "%s's occupants scramble to safety as it is wrecked!\r\n", GET_VEH_NAME(veh));
-      send_to_room(buf, veh->in_room);
+      
+      if (veh->people) {
+        sprintf(buf, "%s's occupants scramble to safety as it is wrecked!\r\n", GET_VEH_NAME(veh));
+        send_to_room(buf, veh->in_room);
+      }
       
       damage_rating = MODERATE;
       damage_tn = 4;
@@ -5074,7 +4998,7 @@ void vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
     }
     act(buf1, FALSE, ch, 0, 0, TO_ROOM);
     act(buf2, FALSE, ch, 0, 0, TO_CHAR);
-    damage(ch, ch, damage_total, TYPE_RAM, PHYSICAL);
+    damage(get_driver(veh), ch, damage_total, TYPE_RAM, PHYSICAL);
     
     // Deal damage to the rammer's vehicle if they incurred any.
     if (will_damage_vehicle && veh_dam > 0) {

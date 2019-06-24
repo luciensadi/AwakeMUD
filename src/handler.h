@@ -48,7 +48,7 @@ struct obj_data *get_obj(char *name);
 struct obj_data *get_obj_num(int nr);
 
 void    obj_to_veh(struct obj_data *object, struct veh_data *veh);
-void    obj_to_room(struct obj_data *object, long room);
+void    obj_to_room(struct obj_data *object, struct room_data *room);
 void    obj_from_room(struct obj_data *object);
 void    obj_to_obj(struct obj_data *obj, struct obj_data *obj_to);
 void    obj_from_obj(struct obj_data *obj);
@@ -63,16 +63,16 @@ void    extract_veh(struct veh_data *veh);
 void    extract_icon(struct matrix_icon *icon);
 /* ******* characters ********* */
 
-struct char_data *get_char_room(char *name, long room);
+struct char_data *get_char_room(const char *name, struct room_data *room);
 struct char_data *get_char_in_list_vis(struct char_data *ch, char *name, struct char_data *list);
 struct char_data *get_char(char *name);
 
 void    char_from_room(struct char_data *ch);
-void    char_to_room(struct char_data *ch, long room);
+void    char_to_room(struct char_data *ch, struct room_data *room);
 void    extract_char(struct char_data *ch);
 void    char_to_veh(struct veh_data *veh, struct char_data *ch);
 void veh_from_room(struct veh_data *veh);
-void veh_to_room(struct veh_data *veh, long room);
+void veh_to_room(struct veh_data *veh, struct room_data *room);
 void veh_to_veh(struct veh_data *veh, struct veh_data *dest);
 int veh_skill(struct char_data *ch, struct veh_data *veh);
 void	icon_from_host(struct matrix_icon *icon);
@@ -104,12 +104,12 @@ int     find_all_dots(char *arg);
 int     generic_find(char *arg, int bitvector, struct char_data *ch,
                      struct char_data **tar_ch, struct obj_data **tar_obj);
 
-#define FIND_CHAR_ROOM     1
-#define FIND_CHAR_WORLD    2
-#define FIND_OBJ_INV       4
-#define FIND_OBJ_ROOM      8
-#define FIND_OBJ_WORLD    16
-#define FIND_OBJ_EQUIP    32
+#define FIND_CHAR_ROOM    (1 << 0)
+#define FIND_CHAR_WORLD   (1 << 1)
+#define FIND_OBJ_INV      (1 << 2)
+#define FIND_OBJ_ROOM     (1 << 3)
+#define FIND_OBJ_WORLD    (1 << 4)
+#define FIND_OBJ_EQUIP    (1 << 5)
 
 /* prototypes from fight.c */
 void    set_fighting(struct char_data *ch, struct char_data *victim, ...);

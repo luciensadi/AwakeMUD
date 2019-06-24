@@ -369,8 +369,8 @@ void redit_parse(struct descriptor_data * d, const char *arg)
         Mem->DeleteRoom(d->edit_room);
       d->edit_room = NULL;
       PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
-      char_to_room(CH, GET_WAS_IN(CH));
-      GET_WAS_IN(CH) = NOWHERE;
+        char_to_room(CH, GET_WAS_IN(CH));
+        GET_WAS_IN(CH) = NULL;
       break;
     default:
       send_to_char("That's not a valid choice!\r\n", d->character);
@@ -434,7 +434,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
               PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
               STATE(d) = CON_PLAYING;
               char_to_room(CH, GET_WAS_IN(CH));
-              GET_WAS_IN(CH) = NOWHERE;
+              GET_WAS_IN(CH) = NULL;
               return;
             }
 
@@ -463,21 +463,21 @@ void redit_parse(struct descriptor_data * d, const char *arg)
               struct veh_data *temp_veh;
               for (temp_ch = world[counter].people; temp_ch;
                    temp_ch = temp_ch->next_in_room)  {
-                if (temp_ch->in_room != NOWHERE)
-                  temp_ch->in_room++;
+                if (temp_ch->in_room)
+                  temp_ch->in_room = &world[real_room(temp_ch->in_room->number) + 1];
               }
 
               for (temp_veh = world[counter].vehicles; temp_veh;
                    temp_veh = temp_veh->next_veh)  {
-                if (temp_veh->in_room != NOWHERE)
-                  temp_veh->in_room++;
+                if (temp_veh->in_room)
+                  temp_veh->in_room = &world[real_room(temp_veh->in_room->number) + 1];
               }
 
               /* move objects */
               for (temp_obj = world[counter].contents; temp_obj;
                    temp_obj = temp_obj->next_content)
-                if (temp_obj->in_room != -1)
-                  temp_obj->in_room++;
+                if (temp_obj->in_room)
+                  temp_obj->in_room = &world[real_room(temp_obj->in_room->number) + 1];
             } // end else
           } // end 'insert' for-loop
 
@@ -494,8 +494,8 @@ void redit_parse(struct descriptor_data * d, const char *arg)
           /* now zoom through the character list and update anyone in limbo */
           struct char_data * temp_ch;
           for (temp_ch = character_list; temp_ch; temp_ch = temp_ch->next) {
-            if (GET_WAS_IN(temp_ch) >= room_num)
-              GET_WAS_IN(temp_ch)++;
+            if (real_room(GET_WAS_IN(temp_ch)->number) >= room_num)
+              GET_WAS_IN(temp_ch) = &world[real_room(GET_WAS_IN(temp_ch)->number) + 1];
           }
           /* update zone tables */
           {
@@ -546,31 +546,27 @@ void redit_parse(struct descriptor_data * d, const char *arg)
               if (world[counter].dir_option[counter2]) {
                 /* increment r_nums for rooms bigger than or equal to new one
                  * because we inserted room */
-                if (world[counter].dir_option[counter2]->to_room >= room_num)
-                  world[counter].dir_option[counter2]->to_room += 1;
+                vnum_t rnum = real_room(world[counter].dir_option[counter2]->to_room->number);
+                if (rnum >= room_num)
+                  world[counter].dir_option[counter2]->to_room = &world[rnum + 1];
                 /* if an exit to the new room is indicated, change to_room */
                 if (world[counter].dir_option[counter2]->to_room_vnum == d->edit_number)
-                  world[counter].dir_option[counter2]->to_room = room_num;
+                  world[counter].dir_option[counter2]->to_room = &world[room_num];
               }
             }
           }
         } // end 'insert' else
         /* resolve all vnum doors to rnum doors in the newly edited room */
-        int opposite;
+        struct room_data *opposite = NULL;
         for (counter2 = 0; counter2 < NUM_OF_DIRS; counter2++) {
           if (world[room_num].dir_option[counter2]) {
-            world[room_num].dir_option[counter2]->to_room =
-              real_room(world[room_num].dir_option[counter2]->to_room_vnum);
+            world[room_num].dir_option[counter2]->to_room = &world[real_room(world[room_num].dir_option[counter2]->to_room_vnum)];
             if (counter2 < NUM_OF_DIRS) {
               opposite = world[room_num].dir_option[counter2]->to_room;
-              if (opposite != NOWHERE && world[opposite].dir_option[rev_dir[counter2]] &&
-                  world[opposite].dir_option[rev_dir[counter2]]->to_room == room_num) {
-                world[opposite].dir_option[rev_dir[counter2]]->material =
-                  world[room_num].dir_option[counter2]->material;
-                world[opposite].dir_option[rev_dir[counter2]]->barrier =
-                  world[room_num].dir_option[counter2]->barrier;
-                world[opposite].dir_option[rev_dir[counter2]]->condition =
-                  world[room_num].dir_option[counter2]->condition;
+              if (opposite && opposite->dir_option[rev_dir[counter2]] && opposite->dir_option[rev_dir[counter2]]->to_room == &world[room_num]) {
+                opposite->dir_option[rev_dir[counter2]]->material = world[room_num].dir_option[counter2]->material;
+                opposite->dir_option[rev_dir[counter2]]->barrier = world[room_num].dir_option[counter2]->barrier;
+                opposite->dir_option[rev_dir[counter2]]->condition = world[room_num].dir_option[counter2]->condition;
               }
             }
           }
@@ -584,7 +580,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
         PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
         STATE(d) = CON_PLAYING;
         char_to_room(CH, GET_WAS_IN(CH));
-        GET_WAS_IN(CH) = NOWHERE;
+        GET_WAS_IN(CH) = NULL;
         send_to_char("Done.\r\n", d->character);
         break;
       }
@@ -598,8 +594,8 @@ void redit_parse(struct descriptor_data * d, const char *arg)
         Mem->DeleteRoom(d->edit_room);
       d->edit_room = NULL;
       d->edit_number = 0;
-      char_to_room(CH, GET_WAS_IN(CH));
-      GET_WAS_IN(CH) = NOWHERE;
+        char_to_room(CH, GET_WAS_IN(CH));
+        GET_WAS_IN(CH) = NULL;
       break;
     default:
       send_to_char("Invalid choice!\r\n", d->character);

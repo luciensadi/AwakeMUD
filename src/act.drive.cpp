@@ -19,7 +19,7 @@
 void die_follower(struct char_data *ch);
 void roll_individual_initiative(struct char_data *ch);
 void order_list(struct char_data *start);
-int find_first_step(vnum_t src, vnum_t target);
+extern int find_first_step(vnum_t src, vnum_t target);
 int move_vehicle(struct char_data *ch, int dir);
 ACMD_CONST(do_return);
 
@@ -356,7 +356,10 @@ ACMD(do_vemote)
   }
   RIG_VEH(ch, veh)
   sprintf(buf, "%s%s.\r\n", GET_VEH_NAME(veh), argument);
-  send_to_room(buf, veh->in_room);
+  if (veh->in_room)
+    send_to_room(buf, veh->in_room);
+  else
+    send_to_veh(buf, veh->in_veh, ch, TRUE);
   sprintf(buf, "Your vehicle%s.\r\n", argument);
   send_to_veh(buf, veh, NULL, TRUE);
   return;
@@ -380,8 +383,12 @@ ACMD(do_ram)
     send_to_char("You're moving far too slowly.\r\n", ch);
     return;
   }
-  if (world[veh->in_room].peaceful) {
+  if (get_veh_in_room(veh)->peaceful) {
     send_to_char("This room just has a peaceful, easy feeling...\r\n", ch);
+    return;
+  }
+  if (veh->in_veh) {
+    send_to_char("There's not enough room in here to even think about trying something like that.", ch);
     return;
   }
   two_arguments(argument, arg, buf2);
@@ -390,12 +397,13 @@ ACMD(do_ram)
     send_to_char("Ram what?", ch);
     return;
   }
+  
   if (!(vict = get_char_room(arg, veh->in_room)) &&
-      !(tveh = get_veh_list(arg, world[veh->in_room].vehicles, ch))) {
+      !(tveh = get_veh_list(arg, veh->in_room->vehicles, ch))) {
     send_to_char("You can't seem to find the target you're looking for.\r\n", ch);
     return;
   }
-  if (vict && !INVIS_OK(ch, vict)) {
+  if (vict && !invis_ok(ch, vict)) {
     send_to_char("You can't seem to find the target you're looking for.\r\n", ch);
     return;
   }
@@ -482,7 +490,7 @@ ACMD(do_upgrade)
     send_to_char("You don't have any more music to play on the radio.\r\n", ch);
     return;
   }
-  if (!(veh = get_veh_list(buf1, ch->in_veh ? ch->in_veh->carriedvehs : world[ch->in_room].vehicles, ch))) {
+  if (!(veh = get_veh_list(buf1, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
     send_to_char(NOOBJECT, ch);
     return;
   }
@@ -810,7 +818,7 @@ ACMD(do_control)
     send_to_char("Your subscriber list isn't that big.\r\n", ch);
     return;
   }
-  if (!veh->in_room) {
+  if (!veh->in_room && !veh->in_veh) {
     send_to_char("You can't seem to make contact with it.\r\n", ch);
     return;
   }
@@ -844,7 +852,7 @@ ACMD(do_control)
 
 ACMD(do_subscribe)
 {
-  struct veh_data *veh, *temp;
+  struct veh_data *veh = NULL, *temp;
   struct obj_data *obj;
   bool has_deck = FALSE;
   int i = 0, num;
@@ -889,7 +897,7 @@ ACMD(do_subscribe)
       send_to_char("Your subscriber list contains:\r\n", ch);
       for (veh = ch->char_specials.subscribe; veh; veh = veh->next_sub) {
         sprintf(buf, "%2d) %-30s (At %s) [%2d/10] Damage\r\n", i, GET_VEH_NAME(veh),
-                veh->in_veh ? world[veh->in_veh->in_room].name : world[veh->in_room].name, veh->damage);
+                get_veh_in_room(veh)->name, veh->damage);
         send_to_char(buf, ch);
         i++;
       }
@@ -901,11 +909,14 @@ ACMD(do_subscribe)
 
   one_argument(argument, buf);
   if (ch->in_veh) {
-    if (ch->in_veh->in_veh)
-      veh = get_veh_list(buf, ch->in_veh->in_veh->carriedvehs, ch);
-    else veh = get_veh_list(buf, world[ch->in_veh->in_room].vehicles, ch);
+    struct veh_data *un_nest = ch->in_veh;
+    while (un_nest && !veh) {
+      // Starting from the vehicle you're in, search carried vehicles of this veh, then expand out to carrier's carried vehs, etc until a match is found.
+      veh = get_veh_list(buf, un_nest->carriedvehs, ch);
+      un_nest = un_nest->in_veh;
+    }
   } else
-    veh = get_veh_list(buf, world[ch->in_room].vehicles, ch);
+    veh = get_veh_list(buf, get_ch_in_room(ch)->vehicles, ch);
   if (!veh) {
     send_to_char(NOOBJECT, ch);
     return;
@@ -945,7 +956,7 @@ ACMD(do_repair)
     return;
   }
 
-  if (!(veh = get_veh_list(argument, ch->in_veh ? ch->in_veh->carriedvehs : world[ch->in_room].vehicles, ch))) {
+  if (!(veh = get_veh_list(argument, ch->in_veh ? ch->in_veh->carriedvehs : get_ch_in_room(ch)->vehicles, ch))) {
     send_to_char(NOOBJECT, ch);
     return;
   }
@@ -1033,7 +1044,12 @@ ACMD(do_driveby)
     send_to_char(ch, "Syntax is driveby <character> <direction to leave>.\r\n");
     return;
   }
-  if (!(vict = get_char_in_list_vis(ch, arg, world[ch->in_veh->in_room].people))) {
+  if (!ch->in_veh->in_room) {
+    // We're inside a vehicle or otherwise don't have a containing room.
+    send_to_char("You're going to have a hard time maneuvering in here.", ch);
+    return;
+  }
+  if (!(vict = get_char_in_list_vis(ch, arg, ch->in_veh->in_room->people))) {
     send_to_char(NOPERSON, ch);
     return;
   }
@@ -1208,6 +1224,12 @@ ACMD(do_chase)
     send_to_char(buf, ch);
     return;
   }
+  
+  if (veh->in_veh) {
+    send_to_char("You're going to have a hard time chasing anything from in here.", ch);
+    return;
+  }
+  
   two_arguments(argument, arg, buf2);
 
   if (!*arg) {
@@ -1215,7 +1237,7 @@ ACMD(do_chase)
     return;
   }
 
-  if (!(tveh = get_veh_list(arg, world[veh->in_room].vehicles, ch)) &&
+  if (!(tveh = get_veh_list(arg, veh->in_room->vehicles, ch)) &&
       !(vict = get_char_room(arg, veh->in_room))) {
     send_to_char(NOOBJECT, ch);
     return;
@@ -1229,7 +1251,7 @@ ACMD(do_chase)
     sprintf(buf, "You start chasing %s.\r\n", GET_VEH_NAME(tveh));
     send_to_char(buf, ch);
     veh->following = tveh;
-    veh->dest = NOWHERE;
+    veh->dest = NULL;
     k = new veh_follow;
     k->follower = veh;
     if (tveh->followers)
@@ -1308,8 +1330,13 @@ ACMD(do_target)
     }
   }
   
+  if (veh->in_veh) {
+    send_to_char("It'd be a bad idea to start firing in such an enclosed space.", ch);
+    return;
+  }
+  
   if (!(vict = get_char_room(arg, veh->in_room)) &&
-      !((tveh = get_veh_list(arg, world[veh->in_room].vehicles, ch)) && (vict && !CAN_SEE(ch, vict)))) {
+      !((tveh = get_veh_list(arg, veh->in_room->vehicles, ch)) && (vict && !CAN_SEE(ch, vict)))) {
     send_to_char(ch, "You don't see %s there.\r\n", arg);
     return;
   }
@@ -1510,7 +1537,7 @@ ACMD(do_gridguide)
     send_to_char("The following destinations are available:\r\n", ch);
     for (grid = veh->grid; grid; grid = grid->next) {
       i++;
-      if (find_first_step(veh->in_room, real_room(grid->room)) < 0)
+      if (find_first_step(real_room(veh->in_room->number), real_room(grid->room)) < 0)
         sprintf(buf, "^r%-20s [%-6ld, %-6ld](Unavailable)\r\n", CAP(grid->name),
                 grid->room - (grid->room * 3), grid->room + 100);
       else
@@ -1534,10 +1561,10 @@ ACMD(do_gridguide)
         break;
     if (!grid)
       send_to_char("That destination doesn't seem to be in the system.\r\n", ch);
-    else if (find_first_step(veh->in_room, real_room(grid->room)) < 0)
+    else if (find_first_step(real_room(veh->in_room->number), real_room(grid->room)) < 0)
       send_to_char("That destination is currently unavailable.\r\n", ch);
     else {
-      veh->dest = real_room(grid->room);
+      veh->dest = &world[real_room(grid->room)];
       veh->cspeed = SPEED_CRUISING;
       if (AFF_FLAGGED(ch, AFF_PILOT))
         AFF_FLAGS(ch).RemoveBits(AFF_PILOT, AFF_RIG, ENDBIT);
@@ -1578,12 +1605,12 @@ ACMD(do_gridguide)
       return;
     }
     if (!*argument) {
-      if (!(ROOM_FLAGGED(veh->in_room, ROOM_ROAD) || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)) ||
+      if (!veh->in_room || !(ROOM_FLAGGED(veh->in_room, ROOM_ROAD) || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)) ||
           ROOM_FLAGGED(veh->in_room, ROOM_NOGRID)) {
         send_to_char("You currently aren't on the grid.\r\n", ch);
         return;
       }
-      x = veh->in_room;
+      x = real_room(veh->in_room->number);
     } else {
       two_arguments(argument, arg, buf);
       if (!*buf) {
@@ -1595,8 +1622,8 @@ ACMD(do_gridguide)
         return;
       }
       x = (x + ((y - 100) * 3));
-      if (!(x = real_room(x)) || !(ROOM_FLAGGED(x, ROOM_ROAD) || ROOM_FLAGGED(x, ROOM_GARAGE)) ||
-          ROOM_FLAGGED(x, ROOM_NOGRID)) {
+      if (!(x = real_room(x)) || !(ROOM_FLAGGED(&world[x], ROOM_ROAD) || ROOM_FLAGGED(&world[x], ROOM_GARAGE)) ||
+          ROOM_FLAGGED(&world[x], ROOM_NOGRID)) {
         send_to_char("Those co-ordinates seem invalid.\r\n", ch);
         return;
       }
@@ -1626,14 +1653,14 @@ void process_autonav(void)
       
       // Stop empty vehicles
       if (!ch) {
-        veh->dest = 0;
+        veh->dest = NULL;
         veh->cspeed = SPEED_OFF;
         return;
       }
       
       int dir = 0;
       for (int x = MAX((int)get_speed(veh) / 10, 1); x && dir >= 0 && veh->dest; x--) {
-        dir = find_first_step(veh->in_room, veh->dest);
+        dir = find_first_step(real_room(veh->in_room->number), real_room(veh->dest->number));
         if (dir >= 0) {
           veh_moved = TRUE;
           move_vehicle(ch, dir);
@@ -1642,13 +1669,13 @@ void process_autonav(void)
       if (!veh_moved) {
         send_to_veh("The autonav beeps and flashes a red 'ERROR' message before shutting off.\r\n", veh, 0, TRUE);
         veh->cspeed = SPEED_OFF;
-        veh->dest = 0;
+        veh->dest = NULL;
         return;
       }
       if (veh->in_room == veh->dest) {
         send_to_veh("Having reached its destination, the autonav shuts off.\r\n", veh, 0, TRUE);
         veh->cspeed = SPEED_OFF;
-        veh->dest = 0;
+        veh->dest = NULL;
       }
     }
   }
@@ -1691,7 +1718,7 @@ ACMD(do_pop)
     send_to_char("You cannot close the hood from in here.\r\n", ch);
     return;
   }
-  if (!veh && (!(veh = get_veh_list(argument, world[ch->in_room].vehicles, ch)))) {
+  if (!veh && (!(veh = get_veh_list(argument, ch->in_room->vehicles, ch)))) {
     send_to_char(NOOBJECT, ch);
     return;
   }
@@ -1717,10 +1744,17 @@ ACMD(do_pop)
   } else {
     sprintf(buf, "$n pops the hood of %s.", GET_VEH_NAME(veh));
     act(buf, FALSE, ch, 0, 0, TO_ROOM);
-    if (ch->in_veh && world[ch->in_veh->in_room].people) {
+    if (ch->in_veh) {
       sprintf(buf, "Someone pops the hood of %s.", GET_VEH_NAME(veh));
-      act(buf, FALSE, world[ch->in_veh->in_room].people, 0, 0, TO_ROOM);
-      act(buf, FALSE, world[ch->in_veh->in_room].people, 0, 0, TO_CHAR);
+      if (ch->in_veh->in_room) {
+        act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_ROOM);
+        act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_CHAR);
+      } else if (ch->in_veh->in_veh){
+        send_to_veh(buf, ch->in_veh->in_veh, ch, TRUE);
+      } else {
+        sprintf(buf, "SYSERR: Veh %s (%ld) has neither in_room nor in_veh!", GET_VEH_NAME(ch->in_veh), ch->in_veh->idnum);
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      }
     }
     send_to_char(ch, "You pop the hood of %s.\r\n", GET_VEH_NAME(veh));
     veh->hood = TRUE;
@@ -1744,18 +1778,23 @@ ACMD(do_tow)
     return;
   }
   if (veh->towing) {
-    send_to_char(ch, "You release %s from your towing equipment.\r\n", GET_VEH_NAME(veh->towing));
-    if (world[veh->in_room].people) {
-      sprintf(buf, "%s releases %s from its towing equipment.\r\n", GET_VEH_NAME(veh), GET_VEH_NAME(veh->towing));
-      act(buf, FALSE, world[veh->in_room].people, 0, 0, TO_ROOM);
-      act(buf, FALSE, world[veh->in_room].people, 0, 0, TO_CHAR);
+    sprintf(buf, "%s releases %s from its towing equipment.\r\n", GET_VEH_NAME(veh), GET_VEH_NAME(veh->towing));
+    if (ch->in_veh->in_room) {
+      act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_ROOM);
+      act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_CHAR);
+    } else if (ch->in_veh->in_veh){
+      send_to_veh(buf, ch->in_veh->in_veh, ch, TRUE);
+    } else {
+      sprintf(buf, "SYSERR: Veh %s (%ld) has neither in_room nor in_veh!", GET_VEH_NAME(ch->in_veh), ch->in_veh->idnum);
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
     }
+    send_to_char(ch, "You release %s from your towing equipment.\r\n", GET_VEH_NAME(veh->towing));
     veh_to_room(veh->towing, veh->in_room);
     veh->towing = NULL;
     return;
   }
   skip_spaces(&argument);
-  if (!(tveh = get_veh_list(argument, world[veh->in_room].vehicles, ch))) {
+  if (!(tveh = get_veh_list(argument, veh->in_room->vehicles, ch))) {
     send_to_char(NOOBJECT, ch);
     return;
   }
@@ -1775,11 +1814,16 @@ ACMD(do_tow)
     send_to_char("Drones can only tow drones that are lighter than them.\r\n", ch);
   else {
     send_to_char(ch, "You pick up %s with your towing equipment.\r\n", GET_VEH_NAME(tveh));
-    if (world[veh->in_room].people) {
-      sprintf(buf, "%s picks up %s with its towing equipment.\r\n", GET_VEH_NAME(veh), GET_VEH_NAME(tveh));
-      act(buf, FALSE, world[veh->in_room].people, 0, 0, TO_ROOM);
-      act(buf, FALSE, world[veh->in_room].people, 0, 0, TO_CHAR);
-    }    
+    sprintf(buf, "%s picks up %s with its towing equipment.\r\n", GET_VEH_NAME(veh), GET_VEH_NAME(tveh));
+    if (ch->in_veh->in_room) {
+      act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_ROOM);
+      act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_CHAR);
+    } else if (ch->in_veh->in_veh){
+      send_to_veh(buf, ch->in_veh->in_veh, ch, TRUE);
+    } else {
+      sprintf(buf, "SYSERR: Veh %s (%ld) has neither in_room nor in_veh!", GET_VEH_NAME(ch->in_veh), ch->in_veh->idnum);
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    }
     veh->towing = tveh;
     veh_from_room(tveh);
   }
@@ -1856,11 +1900,19 @@ ACMD(do_push)
       send_to_char(ch, "You push %s out of the back.\r\n", GET_VEH_NAME(veh));
       sprintf(buf, "$n pushes %s out of the back.", GET_VEH_NAME(veh));
       sprintf(buf2, "$N pushes %s out of the back of %s.", GET_VEH_NAME(veh), GET_VEH_NAME(ch->in_veh));
-      act(buf, 0, ch, 0, 0, TO_ROOM);
-      if (world[ch->in_veh->in_room].people)
-        act(buf2, 0, world[ch->in_veh->in_room].people, 0, ch, TO_NOTVICT);
-      veh_from_room(veh);
-      veh_to_room(veh, ch->in_veh->in_room);
+      act(buf, FALSE, ch, NULL, NULL, TO_ROOM);
+      if (ch->in_veh->in_room) {
+        act(buf2, FALSE, ch->in_veh->in_room->people, 0, 0, TO_NOTVICT);
+      } else if (ch->in_veh->in_veh){
+        send_to_veh(buf, ch->in_veh->in_veh, ch, TRUE);
+      } else {
+        sprintf(buf, "SYSERR: Veh %s (%ld) has neither in_room nor in_veh!", GET_VEH_NAME(ch->in_veh), ch->in_veh->idnum);
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      }
+      if (ch->in_veh->in_room)
+        veh_to_room(veh, ch->in_veh->in_room);
+      else
+        veh_to_veh(veh, ch->in_veh->in_veh);
     }
   } else {  
     two_arguments(argument, buf, buf1);
@@ -1868,7 +1920,7 @@ ACMD(do_push)
       send_to_char("Push what?\r\n", ch);
       return;
     }
-    if (!(veh = get_veh_list(buf, world[ch->in_room].vehicles, ch)) || !(found_veh = get_veh_list(buf1, world[ch->in_room].vehicles, ch))) {
+    if (!(veh = get_veh_list(buf, ch->in_room->vehicles, ch)) || !(found_veh = get_veh_list(buf1, ch->in_room->vehicles, ch))) {
       send_to_char("You don't see that vehicle here.\r\n", ch);
       return;
     }
@@ -1913,7 +1965,7 @@ ACMD(do_transfer)
     send_to_char("Transfer what to who?\r\n", ch);
   else if (ch->in_veh)
     send_to_char("You can't transfer ownership while you're inside a vehicle.\r\n", ch);
-  else if (!(veh = get_veh_list(buf, world[ch->in_room].vehicles, ch)))
+  else if (!(veh = get_veh_list(buf, ch->in_room->vehicles, ch)))
     send_to_char("You don't see that vehicle here.\r\n", ch);
   else if (veh->owner != GET_IDNUM(ch))
     send_to_char("You can't transfer ownership of a vehicle you don't own.\r\n", ch);

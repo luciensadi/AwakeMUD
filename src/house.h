@@ -45,8 +45,8 @@ struct landlord
 #define NOHUMAN	4
 #define NODWARF	5
 
-#define TOROOM(room, dir) (world[room].dir_option[dir] ? \
-                            world[room].dir_option[dir]->to_room : NOWHERE)
+#define TOROOM(room, dir) ((world[room].dir_option[dir] && world[room].dir_option[dir]->to_room) ? \
+                            real_room(world[room].dir_option[dir]->to_room->number) : NOWHERE)
 
 bool House_can_enter(struct char_data *ch, vnum_t house);
 void House_listrent(struct char_data *ch, vnum_t vnum);

@@ -63,7 +63,7 @@ int     negotiate(struct char_data *ch, struct char_data *tch, int comp, int bas
 float   gen_size(int race, bool height, int size, int sex);
 int     get_skill(struct char_data *ch, int skill, int &target);
 void    add_follower(struct char_data *ch, struct char_data *leader);
-int     light_level(rnum_t room);
+int     light_level(struct room_data *room);
 bool    biocyber_compatibility(struct obj_data *obj1, struct obj_data *obj2, struct char_data *ch);
 void    magic_loss(struct char_data *ch, int magic, bool msg);
 bool    has_kit(struct char_data *ch, int type);
@@ -75,10 +75,20 @@ struct  obj_data *get_mount_weapon(struct obj_data *mount);
 struct  obj_data *stop_manning_weapon_mounts(struct char_data *ch, bool send_message);
 struct  obj_data *get_mount_manned_by_ch(struct char_data *ch);
 void    terminate_mud_process_with_message(const char *message, int error_code);
+bool    char_can_make_noise(struct char_data *ch, const char *message = NULL);
+struct  char_data *get_driver(struct veh_data *veh);
 
 // Message history management and manipulation.
 void    store_message_to_history(struct descriptor_data *d, int channel, const char *mallocd_message);
 void    delete_message_history(struct descriptor_data *d);
+
+// Room finders.
+struct room_data *get_veh_in_room(struct veh_data *veh);
+struct room_data *get_ch_in_room(struct char_data *ch);
+struct room_data *get_obj_in_room(struct obj_data *obj);
+
+// Visibility functions.
+bool invis_ok(struct char_data *ch, struct char_data *vict);
 
 /* undefine MAX and MIN so that our functions are used instead */
 #ifdef MAX
@@ -97,7 +107,7 @@ int MAX(int a, int b);
 int MIN(int a, int b);
 #endif
 
-#define RM_BLOOD(rm) (world[rm].blood)
+#define RM_BLOOD(rm) ((rm).blood)
 /* Ok im done here -- root */
 
 /* in magic.c */
@@ -198,17 +208,17 @@ void    update_pos(struct char_data *victim);
 
 /* basic bitvector utils *************************************************/
 
-#define EXIT2(roomnum, door) (world[(roomnum)].dir_option[(door)])
-#define CAN_GO2(roomnum, door) (EXIT2(roomnum, door) && \
-        (EXIT2(roomnum, door)->to_room != NOWHERE) && \
-        !IS_SET(EXIT2(roomnum,door)->exit_info, EX_CLOSED))
+#define EXIT2(room, door) ((room)->dir_option[(door)])
+#define CAN_GO2(room, door) (EXIT2(room, door) && \
+        (EXIT2(room, door)->to_room) && \
+        !IS_SET(EXIT2(room,door)->exit_info, EX_CLOSED))
 
 #define VEH_FLAGS(ch) ((ch).flags)
 #define MOB_FLAGS(ch) ((ch)->char_specials.saved.act)
 #define PLR_FLAGS(ch) ((ch)->char_specials.saved.act)
 #define PRF_FLAGS(ch) ((ch)->player_specials->saved.pref)
 #define AFF_FLAGS(ch) ((ch)->char_specials.saved.affected_by)
-#define ROOM_FLAGS(loc) (world[(loc)].room_flags)
+#define ROOM_FLAGS(loc) ((loc)->room_flags)
 
 #define IS_NPC(ch)  (MOB_FLAGS(ch).IsSet(MOB_ISNPC))
 #define IS_MOB(ch)  (IS_NPC(ch) && ((ch)->nr >-1))
@@ -244,7 +254,7 @@ void    update_pos(struct char_data *victim);
       : FALSE                                    \
     )                                            \
 )
-#define ROOM_FLAGGED(loc, flag) (ROOM_FLAGS(loc).IsSet((flag)))
+#define ROOM_FLAGGED(loc, flag) ((loc)->room_flags.IsSet((flag)))
 
 /* IS_AFFECTED for backwards compatibility */
 #define IS_AFFECTED(ch, skill) (AFF_FLAGGED((ch), (skill)))
@@ -255,27 +265,33 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 /* room utils ************************************************************/
 
 
-#define SECT(room) (VALID_ROOM_RNUM(room) ? \
-    world[(room)].sector_type : SPIRIT_HEARTH)
+#define SECT(room) ((room) ? (room)->sector_type : SPIRIT_HEARTH)
 #define IS_WATER(room) (SECT((room)) == SPIRIT_LAKE || SECT((room)) == SPIRIT_RIVER || SECT((room)) == SPIRIT_SEA)
 
 #define IS_DARK(room)  (light_level((room)) == ITEM_FULLDARK)
 #define IS_LIGHT(room)  (light_level((room)) <= LIGHT_NORMALNOLIT || light_level((room)) == LIGHT_PARTLIGHT)
 #define IS_LOW(room)	(light_level((room)) == LIGHT_MINLIGHT || light_level((room)) == LIGHT_PARTLIGHT)
 
+#define GET_ROOM_NAME(room) ((room) ? (room)->name : "(null room name)")
 
 #define VALID_ROOM_RNUM(rnum) ((rnum) != NOWHERE && (rnum) <= top_of_world)
 
 #define GET_ROOM_SPEC(room) \
- (VALID_ROOM_RNUM(room) ? world[(room)].func : NULL)
+ ((room) ? (room)->func : NULL)
 
-#define GET_ROOM_VNUM(rnum) \
- ((vnum_t)(VALID_ROOM_RNUM(rnum) ? world[(rnum)].number : NOWHERE))
+#define GET_ROOM_VNUM(room) \
+ ((vnum_t)((room) ? (room)->number : NOWHERE))
+
+#define GET_BACKGROUND_COUNT(room) ((room)->background[0])
+#define GET_BACKGROUND_AURA(room)  ((room)->background[1])
+
+/* zone utils ************************************************************/
+
+#define GET_JURISDICTION(room) (zone_table[(room)->zone].jurisdiction)
+#define GET_SECURITY_LEVEL(room) (zone_table[(room)->zone].security)
 
 /* char utils ************************************************************/
 
-
-#define IN_ROOM(ch)     ((ch)->in_room)
 #define GET_WAS_IN(ch)  ((ch)->was_in_room)
 
 #define GET_VEH_NAME(veh) ((veh)->restring ? (veh)->restring : (veh)->short_description)
@@ -573,28 +589,11 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
    PRF_FLAGGED((sub), PRF_HOLYLIGHT))
 
 #define LIGHT_OK_ROOM_SPECIFIED(sub, provided_room) \
-((IS_ASTRAL(sub) || IS_DUAL(sub) || \
-CURRENT_VISION((sub)) == THERMOGRAPHIC || HOLYLIGHT_OK(sub) || \
-IS_LIGHT(provided_room) || !((light_level(provided_room) == LIGHT_MINLIGHT || light_level(provided_room) == LIGHT_FULLDARK) && CURRENT_VISION((sub)) == NORMAL)))
+(IS_ASTRAL(sub) || IS_DUAL(sub) || CURRENT_VISION((sub)) == THERMOGRAPHIC || HOLYLIGHT_OK(sub) || IS_LIGHT(provided_room) || \
+!((light_level(provided_room) == LIGHT_MINLIGHT || light_level(provided_room) == LIGHT_FULLDARK) && CURRENT_VISION((sub)) == NORMAL))
 
-#define LIGHT_OK(sub)          ((IS_ASTRAL(sub) || IS_DUAL(sub) || \
-CURRENT_VISION((sub)) == THERMOGRAPHIC || HOLYLIGHT_OK(sub) || \
-IS_LIGHT((sub)->in_room) || !((light_level((sub)->in_room) == LIGHT_MINLIGHT || light_level((sub)->in_room) == LIGHT_FULLDARK) && CURRENT_VISION((sub)) == NORMAL)))
-
-#define INVIS_OK_ROOM_SPECIFIED(sub, obj, room_specified) (IS_SENATOR(sub) || IS_ASTRAL(sub) || IS_DUAL(sub) || \
-  (!(world[room_specified].silence[0] > 0 || affected_by_spell(obj, SPELL_STEALTH)) && AFF_FLAGGED(sub, AFF_DETECT_INVIS)) || \
-(!(IS_AFFECTED(obj, AFF_INVISIBLE) && CURRENT_VISION(sub) != THERMOGRAPHIC) && \
- !(IS_AFFECTED(obj, AFF_SPELLINVIS) && !(AFF_FLAGGED(sub, AFF_RIG) || PLR_FLAGGED(sub, PLR_REMOTE))) && \
- !(IS_AFFECTED(obj, AFF_IMP_INVIS) || IS_AFFECTED(obj, AFF_SPELLIMPINVIS))))
-
-#define INVIS_OK(sub, obj)  (IS_SENATOR(sub) || IS_ASTRAL(sub) || IS_DUAL(sub) || \
-(!(world[sub->in_room].silence[0] > 0 || affected_by_spell(obj, SPELL_STEALTH)) && AFF_FLAGGED(sub, AFF_DETECT_INVIS)) || \
-(!(IS_AFFECTED(obj, AFF_INVISIBLE) && CURRENT_VISION(sub) != THERMOGRAPHIC) && \
-!(IS_AFFECTED(obj, AFF_SPELLINVIS) && !(AFF_FLAGGED(sub, AFF_RIG) || PLR_FLAGGED(sub, PLR_REMOTE))) && \
-!(IS_AFFECTED(obj, AFF_IMP_INVIS) || IS_AFFECTED(obj, AFF_SPELLIMPINVIS))))
-
-
-
+#define LIGHT_OK(sub)          ((IS_ASTRAL(sub) || IS_DUAL(sub) || CURRENT_VISION(sub) == THERMOGRAPHIC || HOLYLIGHT_OK(sub) || IS_LIGHT(get_ch_in_room(sub))) || \
+                    !((light_level(get_ch_in_room(sub)) == LIGHT_MINLIGHT || light_level(get_ch_in_room(sub)) == LIGHT_FULLDARK) && CURRENT_VISION(sub) == NORMAL))
 
 #define SELF(sub, obj)         ((sub) == (obj))
 
@@ -605,14 +604,14 @@ IS_LIGHT((sub)->in_room) || !((light_level((sub)->in_room) == LIGHT_MINLIGHT || 
 #define CAN_SEE_ROOM_SPECIFIED(sub, obj, room_specified)      \
 ( !(MOB_FLAGGED(obj, MOB_TOTALINVIS) && GET_LEVEL(sub) < LVL_BUILDER) \
   && (SELF((sub), (obj)) \
-     || (SEE_ASTRAL((sub), (obj)) && LIGHT_OK_ROOM_SPECIFIED(sub, room_specified) && INVIS_OK_ROOM_SPECIFIED(sub, (obj), room_specified) \
+     || (SEE_ASTRAL((sub), (obj)) && LIGHT_OK_ROOM_SPECIFIED(sub, room_specified) && invis_ok(sub, obj) \
         && (GET_INVIS_LEV(obj) <= 0 || access_level(sub, GET_INVIS_LEV(obj)) \
         || access_level(sub, LVL_VICEPRES)))))
 
 #define CAN_SEE(sub, obj)      \
 ( !(MOB_FLAGGED(obj, MOB_TOTALINVIS) && GET_LEVEL(sub) < LVL_BUILDER) \
 && (SELF((sub), (obj)) \
-|| (SEE_ASTRAL((sub), (obj)) && LIGHT_OK(sub) && INVIS_OK((sub), (obj)) \
+|| (SEE_ASTRAL((sub), (obj)) && LIGHT_OK(sub) && invis_ok((sub), (obj)) \
 && (GET_INVIS_LEV(obj) <= 0 || access_level(sub, GET_INVIS_LEV(obj)) \
 || access_level(sub, LVL_VICEPRES)))))
 
@@ -649,19 +648,20 @@ IS_LIGHT((sub)->in_room) || !((light_level((sub)->in_room) == LIGHT_MINLIGHT || 
 #define OBJN(obj, vict) (CAN_SEE_OBJ((vict), (obj)) ? \
         fname((obj)->text.keywords) : "something")
 
-#define EXIT(ch, door)  (world[(ch)->in_room].dir_option[door])
+// Accepts characters or vehicles.
+#define EXIT(thing, door)  (thing->in_room ? thing->in_room->dir_option[door] : NULL)
 
 #define LOCK_LEVEL(ch, obj, door) ((obj) ? GET_OBJ_VAL(obj, 4) : \
-           world[(ch)->in_room].dir_option[door]->key_level)
+           get_ch_in_room(ch)->dir_option[door]->key_level)
 
 #define CAN_GO(ch, door)     ( EXIT(ch,door) &&                                                                            \
-                               (EXIT(ch,door)->to_room != NOWHERE) &&                                                      \
+                               (EXIT(ch,door)->to_room) &&                                                      \
                                !(IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED)) &&                                          \
                                !(IS_ASTRAL(ch) && IS_SET(EXIT(ch, door)->exit_info, EX_ASTRALLY_WARDED)) &&                \
                                !(ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_STAFF_ONLY) && GET_REAL_LEVEL(ch) < LVL_BUILDER)  \
                              )
 
-#define OUTSIDE(ch)           (!ROOM_FLAGGED(((ch)->in_veh ? (ch)->in_veh->in_room : (ch)->in_room), ROOM_INDOORS))
+#define OUTSIDE(ch)           (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS))
 
 /* Memory management *****************************************************/
 

@@ -476,7 +476,7 @@ enum {
 #define ROOM_NOMAGIC            7   /* Magic not allowed         */
 #define ROOM_TUNNEL             8   /* room for only 1 pers      */
 #define ROOM_ARENA              9   /* Can't teleport in         */
-#define ROOM_LIT                10  /* Room has a streetlight    */
+#define ROOM_STREETLIGHTS       10  /* Room has a streetlight    */
 #define ROOM_HOUSE              11  /* (R) Room is a house       */
 #define ROOM_HOUSE_CRASH        12  /* (R) House needs saving    */
 #define ROOM_ATRIUM             13  /* (R) The door to a house   */

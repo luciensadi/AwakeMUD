@@ -234,7 +234,7 @@ if (d->edit_veh->ITEM && veh_proto[veh_number].ITEM && d->edit_veh->ITEM != veh_
                 new_veh_index[counter].func = NULL;
                 /*---------*/
                 new_veh_proto[counter] = *(d->edit_veh);
-                new_veh_proto[counter].in_room = NOWHERE;
+                new_veh_proto[counter].in_room = NULL;
                 /* it is now safe (and necessary!) to assign real number to
                  * the edit_veh, which has been -1 all this time */
                 d->edit_veh->veh_number = counter;
@@ -266,7 +266,7 @@ if (d->edit_veh->ITEM && veh_proto[veh_number].ITEM && d->edit_veh->ITEM != veh_
 
             clear_vehicle(new_veh_proto + top_of_veht + 1);
             new_veh_proto[top_of_veht + 1] = *(d->edit_veh);
-            new_veh_proto[top_of_veht + 1].in_room = NOWHERE;
+            new_veh_proto[top_of_veht + 1].in_room = NULL;
             new_veh_proto[top_of_veht + 1].veh_number = top_of_veht + 1;
             /* it is now safe (and necessary!) to assign real number to
              * the edit_veh, which has been -1 all this time */

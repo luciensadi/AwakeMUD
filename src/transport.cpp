@@ -194,49 +194,50 @@ static int process_elevator(struct room_data *room,
 // utility funcs
 // ______________________________
 
-void open_taxi_door(vnum_t room, int dir, int taxi)
+void open_taxi_door(struct room_data *room, int dir, struct room_data *taxi)
 {
-  world[room].dir_option[dir] = new room_direction_data;
-  memset((char *) world[room].dir_option[dir], 0,
+  room->dir_option[dir] = new room_direction_data;
+  memset((char *) room->dir_option[dir], 0,
          sizeof (struct room_direction_data));
-  world[room].dir_option[dir]->to_room = taxi;
-  world[room].dir_option[dir]->barrier = 8;
-  world[room].dir_option[dir]->condition = 8;
-  world[room].dir_option[dir]->material = 8;
+  room->dir_option[dir]->to_room = &world[real_room(taxi->number)];
+  room->dir_option[dir]->barrier = 8;
+  room->dir_option[dir]->condition = 8;
+  room->dir_option[dir]->material = 8;
 
   dir = rev_dir[dir];
 
-  world[taxi].dir_option[dir] = new room_direction_data;
-  memset((char *) world[taxi].dir_option[dir], 0,
+  taxi->dir_option[dir] = new room_direction_data;
+  memset((char *) taxi->dir_option[dir], 0,
          sizeof (struct room_direction_data));
-  world[taxi].dir_option[dir]->to_room = room;
-  world[taxi].dir_option[dir]->barrier = 8;
-  world[taxi].dir_option[dir]->condition = 8;
-  world[taxi].dir_option[dir]->material = 8;
+  taxi->dir_option[dir]->to_room = &world[real_room(room->number)];
+  taxi->dir_option[dir]->barrier = 8;
+  taxi->dir_option[dir]->condition = 8;
+  taxi->dir_option[dir]->material = 8;
 }
 
-void close_taxi_door(vnum_t room, int dir, int taxi)
+void close_taxi_door(struct room_data *room, int dir, struct room_data *taxi)
 {
-  if (world[room].dir_option[dir]->keyword)
-    delete [] world[room].dir_option[dir]->keyword;
-  if (world[room].dir_option[dir]->general_description)
-    delete [] world[room].dir_option[dir]->general_description;
-  delete world[room].dir_option[dir];
-  world[room].dir_option[dir] = NULL;
+  if (room->dir_option[dir]->keyword)
+    delete [] room->dir_option[dir]->keyword;
+  if (room->dir_option[dir]->general_description)
+    delete [] room->dir_option[dir]->general_description;
+  delete room->dir_option[dir];
+  room->dir_option[dir] = NULL;
 
   dir = rev_dir[dir];
 
-  if (world[taxi].dir_option[dir]->keyword)
-    delete [] world[taxi].dir_option[dir]->keyword;
-  if (world[taxi].dir_option[dir]->general_description)
-    delete [] world[taxi].dir_option[dir]->general_description;
-  delete world[taxi].dir_option[dir];
-  world[taxi].dir_option[dir] = NULL;
+  if (taxi->dir_option[dir]->keyword)
+    delete [] taxi->dir_option[dir]->keyword;
+  if (taxi->dir_option[dir]->general_description)
+    delete [] taxi->dir_option[dir]->general_description;
+  delete taxi->dir_option[dir];
+  taxi->dir_option[dir] = NULL;
 }
 
 void taxi_leaves(void)
 {
-  int i, j, found = 0, to;
+  int i, j, found = 0;
+  struct room_data *to = NULL;
   struct char_data *temp;
   for (j = real_room(FIRST_CAB); j <= real_room(LAST_PORTCAB); j++) {
     found = 0;
@@ -250,13 +251,13 @@ void taxi_leaves(void)
     for (i = NORTH; i < UP; i++)
       if (world[j].dir_option[i]) {
         to = world[j].dir_option[i]->to_room;
-        close_taxi_door(to, rev_dir[i], j);
-        if (world[to].people) {
+        close_taxi_door(to, rev_dir[i], &world[j]);
+        if (to->people) {
           if (j >= real_room(FIRST_PORTCAB))
             sprintf(buf, "The taxi doors slide shut and it pulls off from the curb.");
           else sprintf(buf, "The taxi door slams shut as its wheels churn up a cloud of smoke.");
-          act(buf, FALSE, world[to].people, 0, 0, TO_ROOM);
-          act(buf, FALSE, world[to].people, 0, 0, TO_CHAR);
+          act(buf, FALSE, to->people, 0, 0, TO_ROOM);
+          act(buf, FALSE, to->people, 0, 0, TO_CHAR);
         }
         if (world[j].people)
           act("The door automatically closes.",
@@ -275,12 +276,12 @@ void taxi_leaves(void)
 ACMD(do_hail)
 {
   struct char_data *temp;
-  int cab, dir, first, last, i = -1;
+  int cab, dir, first, last;
   bool found = FALSE, empty = FALSE, portland = FALSE;
   SPECIAL(taxi);
 
   for (dir = NORTH; dir < UP; dir++)
-    if (!world[ch->in_room].dir_option[dir])
+    if (!ch->in_room->dir_option[dir])
       empty = TRUE;
 
   if (IS_ASTRAL(ch)) {
@@ -288,14 +289,14 @@ ACMD(do_hail)
     return;
   }
 
-  if (world[ch->in_room].sector_type != SPIRIT_CITY || !empty ||
+  if (ch->in_room->sector_type != SPIRIT_CITY || !empty ||
       ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
     send_to_char("There doesn't seem to be any cabs in the area.\r\n", ch);
     return;
   }
 
-  if ( (i = IN_ROOM(ch)) > -1 ) {
-    switch (zone_table[world[i].zone].number) {
+  if (ch->in_room) {
+    switch (zone_table[ch->in_room->zone].number) {
     case 13:
     case 15:
     case 20:
@@ -368,8 +369,8 @@ ACMD(do_hail)
   }
 
   for (dir = number(NORTH, UP - 1);; dir = number(NORTH, UP - 1))
-    if (!world[ch->in_room].dir_option[dir]) {
-      open_taxi_door(ch->in_room, dir, cab);
+    if (!ch->in_room->dir_option[dir]) {
+      open_taxi_door(ch->in_room, dir, &world[cab]);
       if (portland)
       sprintf(buf, "A nice looking red and white cab pulls up smoothly to the curb, "
               "and its door opens to the %s.", fulldirs[dir]);
@@ -393,14 +394,16 @@ SPECIAL(taxi)
   ACMD(do_action);
 
   struct char_data *temp = NULL, *driver = (struct char_data *) me;
+  struct room_data *temp_room = NULL;
   int comm = CMD_TAXI_NONE, i = 0, j;
   char say[MAX_STRING_LENGTH];
   vnum_t dest = 0;
   bool portland = FALSE;
+  
   if (GET_MOB_VNUM(driver) == 650)
     portland = TRUE;
   if (!cmd) {
-    for (temp = world[driver->in_room].people; temp; temp = temp->next_in_room)
+    for (temp = driver->in_room->people; temp; temp = temp->next_in_room)
       if (temp != driver && memory(driver, temp))
         break;
     if (!temp) {
@@ -455,7 +458,7 @@ SPECIAL(taxi)
               return FALSE;
             dest = real_room(GET_SPARE2(driver));
             if (!world[dest].dir_option[j]) {
-              open_taxi_door(dest, j, driver->in_room);
+              open_taxi_door(&world[dest], j, driver->in_room);
               do_say(driver, "Ok, here we are.", 0, 0);
               forget(driver, temp);
               GET_SPARE2(driver) = 0;
@@ -496,7 +499,7 @@ SPECIAL(taxi)
 
   if (CMD_IS("say") || CMD_IS("'")) {
     // Failure condition: If you can't speak, the cabbie can't hear you.
-    if (affected_by_spell(ch, SPELL_STEALTH) || world[ch->in_veh ? ch->in_veh->in_room : ch->in_room].silence[0])
+    if (!char_can_make_noise(ch))
       return FALSE;
     
     bool found = FALSE;
@@ -524,27 +527,28 @@ SPECIAL(taxi)
   } else
     return FALSE;
 
+  /* I would like to extend a personal and heartfelt 'fuck you' to whomever thought that using the anonymously-named 'i' as both an rnum and a direction was a good idea. - LS */
   if (comm == CMD_TAXI_DEST && !memory(driver, ch) &&
-      (i = real_room(GET_LASTROOM(ch))) > -1 &&
+      real_room(GET_LASTROOM(ch)) > -1 &&
       GET_ACTIVE(driver) == ACT_AWAIT_CMD) {
-    for (i = NORTH; i < UP; i++)
-      if (world[ch->in_room].dir_option[i]) {
-        i = world[ch->in_room].dir_option[i]->to_room;
+    for (int dir = NORTH; dir < UP; dir++)
+      if (ch->in_room->dir_option[dir]) {
+        temp_room = ch->in_room->dir_option[dir]->to_room;
         break;
       }
     int dist = 0;
-    while (i != -1) {
-      int x = find_first_step(i, real_room((portland ? port_destinations[dest].vnum : destinations[dest].vnum)));
+    while (temp_room) {
+      int x = find_first_step(real_room(temp_room->number), real_room((portland ? port_destinations[dest].vnum : destinations[dest].vnum)));
       if (x == -2)
         break;
       else if (x < 0) {
-        i = -1;
+        temp_room = NULL;
         break;
       }
-      i = world[i].dir_option[x]->to_room;
+      temp_room = world[i].dir_option[x]->to_room;
       dist++;
     }
-    if (i == -1)
+    if (!temp_room)
       GET_SPARE1(driver) = 250;
     else
       GET_SPARE1(driver) = MIN(250, 5 + dist);
@@ -566,16 +570,16 @@ SPECIAL(taxi)
     GET_SPARE2(driver) = portland ? port_destinations[GET_SPARE2(driver)].vnum : destinations[GET_SPARE2(driver)].vnum;
     GET_ACTIVE(driver) = ACT_DRIVING;
 
-    for (i = NORTH; i < UP; i++)
-      if (world[ch->in_room].dir_option[i]) {
-        dest = world[ch->in_room].dir_option[i]->to_room;
-        close_taxi_door(dest, rev_dir[i], ch->in_room);
-        if (world[dest].people) {
+    for (int dir = NORTH; dir < UP; dir++)
+      if (ch->in_room->dir_option[dir]) {
+        temp_room = ch->in_room->dir_option[dir]->to_room;
+        close_taxi_door(temp_room, rev_dir[dir], ch->in_room);
+        if (temp_room->people) {
           if (portland)
             sprintf(buf, "The taxi doors slide shut and it pulls off from the curb.");
           else sprintf(buf, "The taxi door slams shut as its wheels churn up a cloud of smoke.");
-          act(buf, FALSE, world[dest].people, 0, 0, TO_ROOM);
-          act(buf, FALSE, world[dest].people, 0, 0, TO_CHAR);
+          act(buf, FALSE, temp_room->people, 0, 0, TO_ROOM);
+          act(buf, FALSE, temp_room->people, 0, 0, TO_CHAR);
         }
         act("The door shuts as the taxi begins to accelerate.",
             FALSE, ch, 0, 0, TO_ROOM);
@@ -620,7 +624,7 @@ void make_elevator_door(vnum_t rnum_to, vnum_t rnum_from, int direction_from) {
   }
   
   // Set the exit to point to the correct rnum.
-  DOOR->to_room = rnum_to;
+  DOOR->to_room = &world[rnum_to];
   
   if (!DOOR->general_description)
     DOOR->general_description = str_dup("A pair of elevator doors allows access to the liftway.\r\n");
@@ -688,7 +692,7 @@ static void init_elevators(void)
       if (real_panel >= 0) {
         // Add decorative elevator control panel to elevator car.
         obj = read_object(real_panel, REAL);
-        obj_to_room(obj, rnum);
+        obj_to_room(obj, &world[rnum]);
       }
     } else {
       sprintf(buf, "Nonexistent elevator cab %ld in elevator %d. Skipping.", elevator[i].room, i);
@@ -725,7 +729,7 @@ static void init_elevators(void)
           if (real_button >= 0) {
             // Add decorative elevator call button to landing.
             obj = read_object(real_button, REAL);
-            obj_to_room(obj, rnum);
+            obj_to_room(obj, &world[rnum]);
           }
           
           // Ensure that there is an elevator door leading to/from the shaft.
@@ -734,7 +738,7 @@ static void init_elevators(void)
             make_elevator_door(rnum, shaft_rnum, elevator[i].floor[j].doors);
             make_elevator_door(shaft_rnum, rnum, rev_dir[elevator[i].floor[j].doors]);
             // Flag the shaft appropriately.
-            ROOM_FLAGS(shaft_rnum).SetBits(ROOM_NOMOB, ROOM_NOBIKE, ROOM_ELEVATOR_SHAFT, ROOM_FALL, ENDBIT);
+            ROOM_FLAGS(&world[shaft_rnum]).SetBits(ROOM_NOMOB, ROOM_NOBIKE, ROOM_ELEVATOR_SHAFT, ROOM_FALL, ENDBIT);
             world[shaft_rnum].rating = ELEVATOR_SHAFT_FALL_RATING;
           } else {
             sprintf(buf, "Fatal error: Nonexistent elevator shaft vnum %ld.", elevator[i].floor[j].shaft_vnum);
@@ -792,7 +796,7 @@ static void open_elevator_doors(struct room_data *car, int num, int floor)
   elevator[num].dir = UP - 1;
   
   sprintf(buf, "The elevator doors open to the %s.", fulldirs[dir]);
-  send_to_room(buf, landing_rnum);
+  send_to_room(buf, &world[landing_rnum]);
 }
 
 static void close_elevator_doors(struct room_data *room, int num, int floor)
@@ -812,7 +816,7 @@ static void close_elevator_doors(struct room_data *room, int num, int floor)
   SET_BIT(landing->dir_option[dir]->exit_info, EX_CLOSED);
   SET_BIT(landing->dir_option[dir]->exit_info, EX_LOCKED);
   
-  send_to_room("The elevator doors close.", real_room(landing->number));
+  send_to_room("The elevator doors close.", &world[real_room(landing->number)]);
 }
 
 // ______________________________
@@ -829,7 +833,7 @@ SPECIAL(call_elevator)
 
   for (i = 0; i < num_elevators && index < 0; i++)
     for (j = 0; j < elevator[i].num_floors && index < 0; j++)
-      if (elevator[i].floor[j].vnum == world[ch->in_room].number)
+      if (elevator[i].floor[j].vnum == ch->in_room->number)
         index = i;
 
   if (CMD_IS("push")) {
@@ -858,7 +862,7 @@ SPECIAL(call_elevator)
           return TRUE;
         }
       send_to_char("You press the call button, and the small light turns on.\r\n", ch);
-      elevator[index].destination = world[ch->in_room].number;
+      elevator[index].destination = ch->in_room->number;
     }
     return TRUE;
   }
@@ -952,10 +956,10 @@ static int process_elevator(struct room_data *room,
           sprintf(buf, "The elevator doors close and it begins to %s.\r\n", (elevator[num].dir == UP ? "ascend" : "descend"));
           close_elevator_doors(room, num, room->rating);
         }
-        send_to_room(buf, real_room(room->number));
+        send_to_room(buf, &world[real_room(room->number)]);
         
         // Message the shaft.
-        send_to_room("The elevator car shudders and begins to move.\r\n", real_room(elevator[num].floor[room->rating].shaft_vnum));
+        send_to_room("The elevator car shudders and begins to move.\r\n", &world[real_room(elevator[num].floor[room->rating].shaft_vnum)]);
         elevator[num].is_moving = TRUE;
         return TRUE;
       }
@@ -969,7 +973,7 @@ static int process_elevator(struct room_data *room,
       dir = elevator[num].floor[room->rating].doors;
       
       sprintf(buf, "The elevator car %s swiftly away from you.\r\n", elevator[num].dir == DOWN ? "descends" : "ascends");
-      send_to_room(buf, real_room(shaft->number));
+      send_to_room(buf, &world[real_room(shaft->number)]);
       /* If you fail an athletics test, you get dragged by the car, sustaining impact damage and getting pulled along with the elevator. */
       for (struct char_data *vict = shaft->people; vict; vict = vict->next_in_room) {
         // Nohassle imms and astral projections are immune to this bullshit.
@@ -989,7 +993,7 @@ static int process_elevator(struct room_data *room,
         send_to_char("^RThe elevator mechanism snags you and drags you along!^n\r\n", vict);
         
         char_from_room(vict);
-        char_to_room(vict, real_room(elevator[num].floor[(elevator[num].dir == DOWN ? room->rating + 1 : room->rating - 1)].shaft_vnum));
+        char_to_room(vict, &world[real_room(elevator[num].floor[(elevator[num].dir == DOWN ? room->rating + 1 : room->rating - 1)].shaft_vnum)]);
         
         sprintf(buf, "$n ragdolls in from %s, propelled by the bulk of the moving elevator.", elevator[num].dir == DOWN ? "above" : "below");
         act(buf, FALSE, vict, 0, 0, TO_ROOM);
@@ -1030,7 +1034,7 @@ static int process_elevator(struct room_data *room,
       landing = &world[real_room(elevator[num].floor[room->rating].vnum)];
       dir = elevator[num].floor[room->rating].doors;
       sprintf(buf, "A rush of air precedes the arrival of an elevator car from %s.\r\n", elevator[num].dir == DOWN ? "above" : "below");
-      send_to_room(buf, real_room(shaft->number));
+      send_to_room(buf, &world[real_room(shaft->number)]);
       
       /* If you fail an athletics test, the elevator knocks you off the wall, dealing D impact damage and triggering fall. */
       for (struct char_data *vict = shaft->people; vict; vict = vict->next_in_room) {
@@ -1081,13 +1085,13 @@ static int process_elevator(struct room_data *room,
       else
         sprintf(buf, "The elevator stops at floor %d, and the doors open to the %s.",
                 0 - temp, fulldirs[elevator[num].floor[room->rating].doors]);
-      send_to_room(buf, real_room(room->number));
+      send_to_room(buf, &world[real_room(room->number)]);
       open_elevator_doors(room, num, room->rating);
       elevator[num].is_moving = FALSE;
     } else if (elevator[num].dir > 0)
       elevator[num].dir--;
     else if (!elevator[num].dir) {
-      send_to_room("The elevator doors close.", real_room(room->number));
+      send_to_room("The elevator doors close.", &world[real_room(room->number)]);
       close_elevator_doors(room, num, room->rating);
       elevator[num].dir = -1;
     }
@@ -1121,7 +1125,7 @@ static int process_elevator(struct room_data *room,
       return TRUE;
     } else if (!strncmp(argument, "close", strlen(argument))) {
       if (!IS_SET(room->dir_option[elevator[num].floor[room->rating].doors]->exit_info, EX_CLOSED)) {
-        send_to_room("The elevator doors close.", real_room(room->number));
+        send_to_room("The elevator doors close.", &world[real_room(room->number)]);
         close_elevator_doors(room, num, room->rating);
         elevator[num].dir = -1;
       } else {
@@ -1265,7 +1269,7 @@ void EscalatorProcess(void)
         else
           for (dir = NORTH; dir <= DOWN; dir++)
             if (world[i].dir_option[dir] &&
-                world[i].dir_option[dir]->to_room > 0) {
+                world[i].dir_option[dir]->to_room) {
               act("As you reach the end, you step off the escalator.",
                   FALSE, temp, 0, 0, TO_CHAR);
               act("$n steps off of the escalator.", TRUE, temp, 0, 0, TO_ROOM);
@@ -1295,7 +1299,7 @@ static void open_doors(int car, int to, int room, int from)
     world[car].dir_option[to] = new room_direction_data;
     memset((char *) world[car].dir_option[to], 0,
            sizeof(struct room_direction_data));
-    world[car].dir_option[to]->to_room = room;
+    world[car].dir_option[to]->to_room = &world[room];
     world[car].dir_option[to]->to_room_vnum = world[room].number;
     world[car].dir_option[to]->barrier = 8;
     world[car].dir_option[to]->condition = 8;
@@ -1305,16 +1309,16 @@ static void open_doors(int car, int to, int room, int from)
     world[room].dir_option[from] = new room_direction_data;
     memset((char *) world[room].dir_option[from], 0,
            sizeof(struct room_direction_data));
-    world[room].dir_option[from]->to_room = car;
+    world[room].dir_option[from]->to_room = &world[car];
     world[room].dir_option[from]->to_room_vnum = world[car].number;
     world[room].dir_option[from]->barrier = 8;
     world[room].dir_option[from]->condition = 8;
     world[room].dir_option[from]->material = 8;
   }
   sprintf(buf, "The monorail stops and the doors open to %s.\r\n", thedirs[to]);
-  send_to_room(buf, car);
+  send_to_room(buf, &world[car]);
   sprintf(buf, "The monorail stops and the doors open to %s.\r\n", thedirs[from]);
-  send_to_room(buf, room);
+  send_to_room(buf, &world[room]);
 }
 
 static void close_doors(int car, int to, int room, int from)
@@ -1333,8 +1337,8 @@ static void close_doors(int car, int to, int room, int from)
   delete world[room].dir_option[from];
   world[room].dir_option[from] = NULL;
 
-  send_to_room("The monorail doors close and it begins accelerating.\r\n", car);
-  send_to_room("The monorail doors close and it begins accelerating.\r\n", room);
+  send_to_room("The monorail doors close and it begins accelerating.\r\n", &world[car]);
+  send_to_room("The monorail doors close and it begins accelerating.\r\n", &world[room]);
 }
 
 // ______________________________
@@ -1363,7 +1367,7 @@ void process_seatac_monorail(void)
   case 16:
   case 20:
     send_to_room("Lights flash along the runway as the monorail approaches.\r\n",
-                 roomnum);
+                 &world[roomnum]);
     break;
   case 1:
   case 5:
@@ -1382,22 +1386,22 @@ void process_seatac_monorail(void)
     close_doors(carnum, seatac[ind].to, roomnum, seatac[ind].from);
     break;
   case 3:
-    send_to_room("A voice announces, \"Next stop: Knight Center\"\r\n", carnum);
+    send_to_room("A voice announces, \"Next stop: Knight Center\"\r\n", &world[carnum]);
     break;
   case 7:
-    send_to_room("A voice announces, \"Next stop: Auburn\"\r\n", carnum);
+    send_to_room("A voice announces, \"Next stop: Auburn\"\r\n", &world[carnum]);
     break;
   case 11:
-    send_to_room("A voice announces, \"Next stop: Seattle. Change here for Downtown Shuttle\"\r\n", carnum);
+    send_to_room("A voice announces, \"Next stop: Seattle. Change here for Downtown Shuttle\"\r\n", &world[carnum]);
     break;
   case 15:
-    send_to_room("A voice announces, \"Next stop: Auburn\"\r\n", carnum);
+    send_to_room("A voice announces, \"Next stop: Auburn\"\r\n", &world[carnum]);
     break;
   case 19:
-    send_to_room("A voice announces, \"Next stop: Knight Center\"\r\n", carnum);
+    send_to_room("A voice announces, \"Next stop: Knight Center\"\r\n", &world[carnum]);
     break;
   case 23:
-    send_to_room("A voice announces, \"Next stop: West Tacoma.\"\r\n", carnum);
+    send_to_room("A voice announces, \"Next stop: West Tacoma.\"\r\n", &world[carnum]);
     break;
   }
 
@@ -1430,7 +1434,7 @@ void extend_walkway_st(int ferry, int to, int room, int from)
     world[ferry].dir_option[to] = new room_direction_data;
     memset((char *) world[ferry].dir_option[to], 0,
            sizeof(struct room_direction_data));
-    world[ferry].dir_option[to]->to_room = room;
+    world[ferry].dir_option[to]->to_room = &world[room];
     world[ferry].dir_option[to]->to_room_vnum = world[room].number;
     world[ferry].dir_option[to]->barrier = 8;
     world[ferry].dir_option[to]->condition = 8;
@@ -1440,14 +1444,14 @@ void extend_walkway_st(int ferry, int to, int room, int from)
     world[room].dir_option[from] = new room_direction_data;
     memset((char *) world[room].dir_option[from], 0,
            sizeof(struct room_direction_data));
-    world[room].dir_option[from]->to_room = ferry;
+    world[room].dir_option[from]->to_room = &world[ferry];
     world[room].dir_option[from]->to_room_vnum = world[ferry].number;
     world[room].dir_option[from]->barrier = 8;
     world[room].dir_option[from]->condition = 8;
     world[room].dir_option[from]->material = 8;
   }
-  send_to_room("The ferry docks at the pier, and extends its walkway.\r\n", room);
-  send_to_room("The ferry docks at the pier, and extends its walkway.\r\n", ferry);
+  send_to_room("The ferry docks at the pier, and extends its walkway.\r\n", &world[room]);
+  send_to_room("The ferry docks at the pier, and extends its walkway.\r\n", &world[ferry]);
 }
 void contract_walkway_st(int ferry, int to, int room, int from)
 {
@@ -1466,8 +1470,8 @@ void contract_walkway_st(int ferry, int to, int room, int from)
     delete [] world[room].dir_option[from]->general_description;
   delete world[room].dir_option[from];
   world[room].dir_option[from] = NULL;
-  send_to_room("The walkway recedes, and the ferry departs.\r\n", room);
-  send_to_room("The walkway recedes, and the ferry departs.\r\n", ferry);
+  send_to_room("The walkway recedes, and the ferry departs.\r\n", &world[room]);
+  send_to_room("The walkway recedes, and the ferry departs.\r\n", &world[ferry]);
 }
 
 void process_seattle_ferry(void)
@@ -1486,7 +1490,7 @@ void process_seattle_ferry(void)
   switch (where) {
   case 0:
     send_to_room("The ferry approaches, gliding across the bay towards "
-                 "the dock.\r\n", dock);
+                 "the dock.\r\n", &world[dock]);
     break;
   case 1:
   case 14:
@@ -1498,15 +1502,15 @@ void process_seattle_ferry(void)
     break;
   case 5:
     send_to_room("A voice announces through a rusting speaker, "
-                 "\"Next stop: Tacoma.\"\r\n", ferry);
+                 "\"Next stop: Tacoma.\"\r\n", &world[ferry]);
     break;
   case 13:
     send_to_room("The ferry approaches, gliding across the bay towards "
-                 "the dock.\r\n", dock);
+                 "the dock.\r\n", &world[dock]);
     break;
   case 18:
     send_to_room("A voice announces through a rusting speaker, "
-                 "\"Next stop: Seattle.\"\r\n", ferry);
+                 "\"Next stop: Seattle.\"\r\n", &world[ferry]);
     break;
   }
 
@@ -1534,7 +1538,7 @@ void open_busdoor(int bus, int to, int room, int from)
     world[bus].dir_option[to] = new room_direction_data;
     memset((char *) world[bus].dir_option[to], 0,
            sizeof(struct room_direction_data));
-    world[bus].dir_option[to]->to_room = room;
+    world[bus].dir_option[to]->to_room = &world[room];
     world[bus].dir_option[to]->to_room_vnum = world[room].number;
     world[bus].dir_option[to]->barrier = 8;
     world[bus].dir_option[to]->condition = 8;
@@ -1544,14 +1548,14 @@ void open_busdoor(int bus, int to, int room, int from)
     world[room].dir_option[from] = new room_direction_data;
     memset((char *) world[room].dir_option[from], 0,
            sizeof(struct room_direction_data));
-    world[room].dir_option[from]->to_room = bus;
+    world[room].dir_option[from]->to_room = &world[bus];
     world[room].dir_option[from]->to_room_vnum = world[bus].number;
     world[room].dir_option[from]->barrier = 8;
     world[room].dir_option[from]->condition = 8;
     world[room].dir_option[from]->material = 8;
   }
-  send_to_room("The bus rolls up to the platform, and the door opens.\r\n", room);
-  send_to_room("The bus rolls up to the platform, and the door opens.\r\n", bus);
+  send_to_room("The bus rolls up to the platform, and the door opens.\r\n", &world[room]);
+  send_to_room("The bus rolls up to the platform, and the door opens.\r\n", &world[bus]);
 }
 
 void close_busdoor(int bus, int to, int room, int from)
@@ -1568,8 +1572,8 @@ void close_busdoor(int bus, int to, int room, int from)
     delete [] world[room].dir_option[from]->general_description;
   delete world[room].dir_option[from];
   world[room].dir_option[from] = NULL;
-  send_to_room("The bus door shuts, the driver yells \"^Wall aboard!^n\", and begins driving.\r\n", room);
-  send_to_room("The bus door shuts, the driver yells \"^Wall aboard!^n\", and begins driving.\r\n", bus);
+  send_to_room("The bus door shuts, the driver yells \"^Wall aboard!^n\", and begins driving.\r\n", &world[room]);
+  send_to_room("The bus door shuts, the driver yells \"^Wall aboard!^n\", and begins driving.\r\n", &world[bus]);
 }
 
 void process_hellhound_bus(void)
@@ -1587,7 +1591,7 @@ void process_hellhound_bus(void)
 
   switch (where) {
   case 0:
-    send_to_room("The bus pulls into the garage, and slowly moves to the platform.\r\n", stop);
+    send_to_room("The bus pulls into the garage, and slowly moves to the platform.\r\n", &world[stop]);
     break;
   case 1:
   case 28:
@@ -1598,13 +1602,13 @@ void process_hellhound_bus(void)
     close_busdoor(bus, hellhound[ind].to, stop, hellhound[ind].from);
     break;
   case 23:
-    send_to_room("The driver shouts from the front, \"Next stop: Portland\"\r\n", bus);
+    send_to_room("The driver shouts from the front, \"Next stop: Portland\"\r\n", &world[bus]);
     break;
   case 26:
-    send_to_room("The bus pulls into the garage, and slowly moves to the platform.\r\n", stop);
+    send_to_room("The bus pulls into the garage, and slowly moves to the platform.\r\n", &world[stop]);
     break;
   case 49:
-    send_to_room("The driver shouts from the front, \"Next stop: Seattle\".\r\n", bus);
+    send_to_room("The driver shouts from the front, \"Next stop: Seattle\".\r\n", &world[bus]);
     break;
   }
   where++;
@@ -1625,7 +1629,7 @@ void camas_extend(int bus, int to, int room, int from)
     world[bus].dir_option[to] = new room_direction_data;
     memset((char *) world[bus].dir_option[to], 0,
            sizeof(struct room_direction_data));
-    world[bus].dir_option[to]->to_room = room;
+    world[bus].dir_option[to]->to_room = &world[room];
     world[bus].dir_option[to]->to_room_vnum = world[room].number;
     world[bus].dir_option[to]->barrier = 8;
     world[bus].dir_option[to]->condition = 8;
@@ -1635,14 +1639,14 @@ void camas_extend(int bus, int to, int room, int from)
     world[room].dir_option[from] = new room_direction_data;
     memset((char *) world[room].dir_option[from], 0,
            sizeof(struct room_direction_data));
-    world[room].dir_option[from]->to_room = bus;
+    world[room].dir_option[from]->to_room = &world[bus];
     world[room].dir_option[from]->to_room_vnum = world[bus].number;
     world[room].dir_option[from]->barrier = 8;
     world[room].dir_option[from]->condition = 8;
     world[room].dir_option[from]->material = 8;
   }
-  send_to_room("The Lear-Cessna Platinum II smoothly lands and lays out a small stairway entrance.\r\n", room);
-  send_to_room("The Lear-Cessna Platinum II smoothly lands and lays out a small stairway entrance.\r\n", bus);
+  send_to_room("The Lear-Cessna Platinum II smoothly lands and lays out a small stairway entrance.\r\n", &world[room]);
+  send_to_room("The Lear-Cessna Platinum II smoothly lands and lays out a small stairway entrance.\r\n", &world[bus]);
 }
 
 void camas_retract(int bus, int to, int room, int from)
@@ -1659,8 +1663,8 @@ void camas_retract(int bus, int to, int room, int from)
     delete [] world[room].dir_option[from]->general_description;
   delete world[room].dir_option[from];
   world[room].dir_option[from] = NULL;
-  send_to_room("The stairs retract and the Lear-Cessna Platinum II taxis along the runway before taking flight.\r\n", room);
-  send_to_room("The stairs retract and the Lear-Cessna Platinum II taxis along the runway before taking flight.\r\n", bus);
+  send_to_room("The stairs retract and the Lear-Cessna Platinum II taxis along the runway before taking flight.\r\n", &world[room]);
+  send_to_room("The stairs retract and the Lear-Cessna Platinum II taxis along the runway before taking flight.\r\n", &world[bus]);
 }
 
 void process_camas_ferry(void)
@@ -1679,7 +1683,7 @@ void process_camas_ferry(void)
   switch (where) {
   case 0:
   case 84:
-    send_to_room("A Lear-Cessna Platinum II appears overhead and circles as it moves in for a landing.\r\n", stop);
+    send_to_room("A Lear-Cessna Platinum II appears overhead and circles as it moves in for a landing.\r\n", &world[stop]);
     break;
   case 4:
   case 92:
@@ -1690,10 +1694,10 @@ void process_camas_ferry(void)
     camas_retract(bus, camas[ind].to, stop, camas[ind].from);
     break;
   case 72:
-    send_to_room("The Lear-Cessna Platinum II approaches a private Caribbean island.\r\n", bus);
+    send_to_room("The Lear-Cessna Platinum II approaches a private Caribbean island.\r\n", &world[bus]);
     break;
   case 152:
-    send_to_room("The Lear-Cessna Platinum II approaches the Salish-Sidhe lands.\r\n", bus);
+    send_to_room("The Lear-Cessna Platinum II approaches the Salish-Sidhe lands.\r\n", &world[bus]);
     break;
   }
   where++;
@@ -1720,7 +1724,7 @@ void open_lightraildoor(int lightrail, int to, int room, int from)
     world[lightrail].dir_option[to] = new room_direction_data;
     memset((char *) world[lightrail].dir_option[to], 0,
            sizeof(struct room_direction_data));
-    world[lightrail].dir_option[to]->to_room = room;
+    world[lightrail].dir_option[to]->to_room = &world[room];
     world[lightrail].dir_option[to]->to_room_vnum = world[room].number;
     world[lightrail].dir_option[to]->barrier = 8;
     world[lightrail].dir_option[to]->condition = 8;
@@ -1730,14 +1734,14 @@ void open_lightraildoor(int lightrail, int to, int room, int from)
     world[room].dir_option[from] = new room_direction_data;
     memset((char *) world[room].dir_option[from], 0,
            sizeof(struct room_direction_data));
-    world[room].dir_option[from]->to_room = lightrail;
+    world[room].dir_option[from]->to_room = &world[lightrail];
     world[room].dir_option[from]->to_room_vnum = world[lightrail].number;
     world[room].dir_option[from]->barrier = 8;
     world[room].dir_option[from]->condition = 8;
     world[room].dir_option[from]->material = 8;
   }
-  send_to_room("The incoming lightrail grinds to a halt and its doors slide open with a hiss.\r\n", room);
-  send_to_room("The lightrail grinds to a halt and the doors hiss open.\r\n", lightrail);
+  send_to_room("The incoming lightrail grinds to a halt and its doors slide open with a hiss.\r\n", &world[room]);
+  send_to_room("The lightrail grinds to a halt and the doors hiss open.\r\n", &world[lightrail]);
 }
 
 void close_lightraildoor(int lightrail, int to, int room, int from)
@@ -1754,8 +1758,8 @@ void close_lightraildoor(int lightrail, int to, int room, int from)
     delete [] world[room].dir_option[from]->general_description;
   delete world[room].dir_option[from];
   world[room].dir_option[from] = NULL;
-  send_to_room("The lightrail's doors slide shut and a tone emanates around the platform, signaling its departure.\r\n", room);
-  send_to_room("The lightrail's doors slide shut and a tone signals as it begins moving.\r\n", lightrail);
+  send_to_room("The lightrail's doors slide shut and a tone emanates around the platform, signaling its departure.\r\n", &world[room]);
+  send_to_room("The lightrail's doors slide shut and a tone signals as it begins moving.\r\n", &world[lightrail]);
 }
 
 void process_lightrail_train(void)
@@ -1772,10 +1776,10 @@ void process_lightrail_train(void)
   switch (where) {
     //Downtown Stop Stuff
   case 39:
-    send_to_room("An LCD Panel Flashes: \"Next Stop: Downtown Portland\".\r\n", train);
+    send_to_room("An LCD Panel Flashes: \"Next Stop: Downtown Portland\".\r\n", &world[train]);
     break;
   case 0:
-    send_to_room("The lightrail emits a loud grind as it brakes into the station.\r\n", stop);
+    send_to_room("The lightrail emits a loud grind as it brakes into the station.\r\n", &world[stop]);
     break;
   case 1:
     open_lightraildoor(train, lightrail[ind].to, stop, lightrail[ind].from);
@@ -1786,10 +1790,10 @@ void process_lightrail_train(void)
     break;
     //60th Stop Stuff (1)
   case 9:
-    send_to_room("An LCD Panel Flashes: \"Next Stop: 60th Street\".\r\n", train);
+    send_to_room("An LCD Panel Flashes: \"Next Stop: 60th Street\".\r\n", &world[train]);
     break;
   case 10:
-    send_to_room("The lightrail emits a loud grind as it brakes into the station.\r\n", stop);
+    send_to_room("The lightrail emits a loud grind as it brakes into the station.\r\n", &world[stop]);
     break;
   case 11:
     open_lightraildoor(train, lightrail[ind].to, stop, lightrail[ind].from);
@@ -1800,10 +1804,10 @@ void process_lightrail_train(void)
     break;
     //Gresham Stop Stuff
   case 19:
-    send_to_room("An LCD Panel Flashes: \"Next Stop: Gresham\".\r\n", train);
+    send_to_room("An LCD Panel Flashes: \"Next Stop: Gresham\".\r\n", &world[train]);
     break;
   case 20:
-    send_to_room("The lightrail emits a loud grind as it brakes into the station.\r\n", stop);
+    send_to_room("The lightrail emits a loud grind as it brakes into the station.\r\n", &world[stop]);
     break;
   case 21:
     open_lightraildoor(train, lightrail[ind].to, stop, lightrail[ind].from);
@@ -1814,10 +1818,10 @@ void process_lightrail_train(void)
     break;
     //To60th
   case 29:
-    send_to_room("An LCD Panel Flashes: \"Next Stop: 60th Street\".\r\n", train);
+    send_to_room("An LCD Panel Flashes: \"Next Stop: 60th Street\".\r\n", &world[train]);
     break;
   case 30:
-    send_to_room("The lightrail emits a loud grind as it brakes into the station.\r\n", stop);
+    send_to_room("The lightrail emits a loud grind as it brakes into the station.\r\n", &world[stop]);
     break;
   case 31:
     open_lightraildoor(train, lightrail[ind].to, stop, lightrail[ind].from);
@@ -1848,7 +1852,7 @@ void extend_walkway(int ferry, int to, int room, int from)
     world[ferry].dir_option[to] = new room_direction_data;
     memset((char *) world[ferry].dir_option[to], 0,
            sizeof(struct room_direction_data));
-    world[ferry].dir_option[to]->to_room = room;
+    world[ferry].dir_option[to]->to_room = &world[room];
     world[ferry].dir_option[to]->to_room_vnum = world[room].number;
     world[ferry].dir_option[to]->barrier = 8;
     world[ferry].dir_option[to]->condition = 8;
@@ -1858,14 +1862,14 @@ void extend_walkway(int ferry, int to, int room, int from)
     world[room].dir_option[from] = new room_direction_data;
     memset((char *) world[room].dir_option[from], 0,
            sizeof(struct room_direction_data));
-    world[room].dir_option[from]->to_room = ferry;
+    world[room].dir_option[from]->to_room = &world[ferry];
     world[room].dir_option[from]->to_room_vnum = world[ferry].number;
     world[room].dir_option[from]->barrier = 8;
     world[room].dir_option[from]->condition = 8;
     world[room].dir_option[from]->material = 8;
   }
-  send_to_room("The ferry docks, and the walkway extends.\r\n", room);
-  send_to_room("The ferry docks, and the walkway extends.\r\n", ferry);
+  send_to_room("The ferry docks, and the walkway extends.\r\n", &world[room]);
+  send_to_room("The ferry docks, and the walkway extends.\r\n", &world[ferry]);
 }
 
 void contract_walkway(int ferry, int to, int room, int from)
@@ -1885,8 +1889,8 @@ void contract_walkway(int ferry, int to, int room, int from)
     delete [] world[room].dir_option[from]->general_description;
   delete world[room].dir_option[from];
   world[room].dir_option[from] = NULL;
-  send_to_room("The walkway recedes, and the ferry departs.\r\n", room);
-  send_to_room("The walkway recedes, and the ferry departs.\r\n", ferry);
+  send_to_room("The walkway recedes, and the ferry departs.\r\n", &world[room]);
+  send_to_room("The walkway recedes, and the ferry departs.\r\n", &world[ferry]);
 }
 
 void process_seatac_ferry(void)
@@ -1905,7 +1909,7 @@ void process_seatac_ferry(void)
   switch (where) {
   case 0:
     send_to_room("The ferry approaches, gliding across the bay towards "
-                 "the dock.\r\n", dock);
+                 "the dock.\r\n", &world[dock]);
     break;
   case 1:
   case 14:
@@ -1917,15 +1921,15 @@ void process_seatac_ferry(void)
     break;
   case 5:
     send_to_room("A voice announces through a rusting speaker, "
-                 "\"Next stop: Bradenton.\"\r\n", ferry);
+                 "\"Next stop: Bradenton.\"\r\n", &world[ferry]);
     break;
   case 13:
     send_to_room("The ferry approaches, gliding across the bay towards "
-                 "the dock.\r\n", dock);
+                 "the dock.\r\n", &world[dock]);
     break;
   case 18:
     send_to_room("A voice announces through a rusting speaker, "
-                 "\"Next stop: Tacoma.\"\r\n", ferry);
+                 "\"Next stop: Tacoma.\"\r\n", &world[ferry]);
     break;
   }
 
@@ -1955,7 +1959,7 @@ void process_victoria_ferry(void)
   case 0:
   case 26:
     send_to_room("The ferry approaches, gliding across the sea towards "
-                 "the dock.\r\n", dock);
+                 "the dock.\r\n", &world[dock]);
     break;
   case 1:
   case 28:
@@ -1967,11 +1971,11 @@ void process_victoria_ferry(void)
     break;
   case 23:
     send_to_room("The ferryman calls out, "
-                 "\"Next stop Victoria.\"\r\n", ferry);
+                 "\"Next stop Victoria.\"\r\n", &world[ferry]);
     break;
   case 49:
     send_to_room("The ferryman calls out, "
-                 "\"Next stop Sauteurs.\"\r\n", ferry);
+                 "\"Next stop Sauteurs.\"\r\n", &world[ferry]);
     break;
   }
 
@@ -2004,7 +2008,7 @@ void process_sugarloaf_ferry(void)
   case 26:
   case 52:
     send_to_room("The ferry approaches, gliding across the sea towards "
-                 "the dock.\r\n", dock);
+                 "the dock.\r\n", &world[dock]);
     break;
   case 1:
   case 28:
@@ -2018,15 +2022,15 @@ void process_sugarloaf_ferry(void)
     break;
   case 23:
     send_to_room("The ferryman calls out, "
-                 "\"Next stop Sugar Loaf Island.\"\r\n", ferry);
+                 "\"Next stop Sugar Loaf Island.\"\r\n", &world[ferry]);
     break;
   case 49:
     send_to_room("The ferryman calls out,, "
-                 "\"Next stop Green Island.\"\r\n", ferry);
+                 "\"Next stop Green Island.\"\r\n", &world[ferry]);
     break;
   case 75:
     send_to_room("The ferryman calls out,, "
-                 "\"Next stop Sauteurs.\"\r\n", ferry);
+                 "\"Next stop Sauteurs.\"\r\n", &world[ferry]);
     break;
     
   }
@@ -2047,7 +2051,7 @@ void grenada_extend(int bus, int to, int room, int from)
     world[bus].dir_option[to] = new room_direction_data;
     memset((char *) world[bus].dir_option[to], 0,
            sizeof(struct room_direction_data));
-    world[bus].dir_option[to]->to_room = room;
+    world[bus].dir_option[to]->to_room = &world[room];
     world[bus].dir_option[to]->to_room_vnum = world[room].number;
     world[bus].dir_option[to]->barrier = 8;
     world[bus].dir_option[to]->condition = 8;
@@ -2057,14 +2061,14 @@ void grenada_extend(int bus, int to, int room, int from)
     world[room].dir_option[from] = new room_direction_data;
     memset((char *) world[room].dir_option[from], 0,
            sizeof(struct room_direction_data));
-    world[room].dir_option[from]->to_room = bus;
+    world[room].dir_option[from]->to_room = &world[bus];
     world[room].dir_option[from]->to_room_vnum = world[bus].number;
     world[room].dir_option[from]->barrier = 8;
     world[room].dir_option[from]->condition = 8;
     world[room].dir_option[from]->material = 8;
   }
-  send_to_room("The Hawker-Ridley HS-895 Skytruck docks with the platform and begins loading passengers.\r\n", room);
-  send_to_room("The Hawker-Ridley HS-895 Skytruck docks with the platform and begins loading passengers.\r\n", bus);
+  send_to_room("The Hawker-Ridley HS-895 Skytruck docks with the platform and begins loading passengers.\r\n", &world[room]);
+  send_to_room("The Hawker-Ridley HS-895 Skytruck docks with the platform and begins loading passengers.\r\n", &world[bus]);
 }
 
 void grenada_retract(int bus, int to, int room, int from)
@@ -2081,8 +2085,8 @@ void grenada_retract(int bus, int to, int room, int from)
     delete [] world[room].dir_option[from]->general_description;
   delete world[room].dir_option[from];
   world[room].dir_option[from] = NULL;
-  send_to_room("The airplane taxis into position on the runway before throttling up and taking off.\r\n", room);
-  send_to_room("The airplane taxis into position on the runway before throttling up and taking off.\r\n", bus);
+  send_to_room("The airplane taxis into position on the runway before throttling up and taking off.\r\n", &world[room]);
+  send_to_room("The airplane taxis into position on the runway before throttling up and taking off.\r\n", &world[bus]);
 }
 
 void process_grenada_plane(void)
@@ -2101,7 +2105,7 @@ void process_grenada_plane(void)
   switch (where) {
   case 0:
   case 84:
-    send_to_room("A Hawker-Ridley HS-895 Skytruck lands on the main runway and moves towards the departure gate.\r\n", stop);
+    send_to_room("A Hawker-Ridley HS-895 Skytruck lands on the main runway and moves towards the departure gate.\r\n", &world[stop]);
     break;
   case 4:
   case 92:
@@ -2113,11 +2117,11 @@ void process_grenada_plane(void)
     break;
   case 72:
     send_to_room("The voice of the pilot speaks over the intercom, "
-                 "\"We'll be landing in Grenada shortly ladies and gentlemen.\"\r\n", bus);
+                 "\"We'll be landing in Grenada shortly ladies and gentlemen.\"\r\n", &world[bus]);
     break;
   case 152:
     send_to_room("The voice of the pilot speaks over the intercom, "
-                 "\"We'll be landing in Everett shortly ladies and gentlemen.\"\r\n", bus);
+                 "\"We'll be landing in Everett shortly ladies and gentlemen.\"\r\n", &world[bus]);
     break;
   }
   where++;

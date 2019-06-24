@@ -171,6 +171,8 @@ void spedit_parse(struct descriptor_data *d, const char *arg)
 
 void spell_design(struct char_data *ch, struct obj_data *formula)
 {
+  struct obj_data *lib = NULL;
+  
   if (GET_OBJ_VAL(formula, 8) != GET_IDNUM(ch)) {
     send_to_char("You don't understand where the creator of this spell is coming from.\r\n", ch);
     return;
@@ -183,13 +185,21 @@ void spell_design(struct char_data *ch, struct obj_data *formula)
     send_to_char("Take a seat before beginning to design a spell.\r\n", ch);
     return;
   }
-  struct obj_data *lib = world[ch->in_room].contents;
-  for (; lib; lib = lib->next_content)
-    if (GET_OBJ_TYPE(lib) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(lib, 1) >= GET_OBJ_VAL(formula, 0) &&
-        ((GET_TRADITION(ch) == TRAD_SHAMANIC
-          && GET_OBJ_VAL(lib, 0) == TYPE_LODGE && GET_OBJ_VAL(lib, 3) == GET_IDNUM(ch)) ||
-         (GET_TRADITION(ch) != TRAD_SHAMANIC && GET_OBJ_VAL(lib, 0) == TYPE_LIBRARY_SPELL)))
-      break;
+  if (ch->in_veh) {
+    for (lib = ch->in_veh->contents; lib; lib = lib->next_content)
+      if (GET_OBJ_TYPE(lib) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(lib, 1) >= GET_OBJ_VAL(formula, 0) &&
+          ((GET_TRADITION(ch) == TRAD_SHAMANIC
+            && GET_OBJ_VAL(lib, 0) == TYPE_LODGE && GET_OBJ_VAL(lib, 3) == GET_IDNUM(ch)) ||
+           (GET_TRADITION(ch) != TRAD_SHAMANIC && GET_OBJ_VAL(lib, 0) == TYPE_LIBRARY_SPELL)))
+        break;
+  } else {
+    for (lib = ch->in_room->contents; lib; lib = lib->next_content)
+      if (GET_OBJ_TYPE(lib) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(lib, 1) >= GET_OBJ_VAL(formula, 0) &&
+          ((GET_TRADITION(ch) == TRAD_SHAMANIC
+            && GET_OBJ_VAL(lib, 0) == TYPE_LODGE && GET_OBJ_VAL(lib, 3) == GET_IDNUM(ch)) ||
+           (GET_TRADITION(ch) != TRAD_SHAMANIC && GET_OBJ_VAL(lib, 0) == TYPE_LIBRARY_SPELL)))
+        break;
+  }
   if (!lib) {
     send_to_char("You don't have the right tools here to design that spell.\r\n", ch);
     return;

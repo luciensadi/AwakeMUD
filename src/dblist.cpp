@@ -211,12 +211,12 @@ void objList::UpdateCounters(void)
     // Packing / unpacking of workshops.
     if (GET_OBJ_TYPE(OBJ) == ITEM_WORKSHOP && GET_OBJ_VAL(OBJ, 3)) {
       struct char_data *ch;
-      if (!OBJ->in_veh && OBJ->in_room == NOWHERE) {
+      if (!OBJ->in_veh && !OBJ->in_room) {
         // It's being carried by a character (or is in a container, etc).
         continue;
       }
       
-      for (ch = OBJ->in_veh ? OBJ->in_veh->people : world[OBJ->in_room].people;
+      for (ch = OBJ->in_veh ? OBJ->in_veh->people : OBJ->in_room->people;
             ch;
            ch = OBJ->in_veh ? ch->next_in_veh : ch->next_in_room) {
         if (AFF_FLAGGED(ch, AFF_PACKING)) {
@@ -227,7 +227,7 @@ void objList::UpdateCounters(void)
               GET_WORKSHOP_IS_SETUP(OBJ) = 0;
               
               // Handle the room's workshop[] array.
-              if (OBJ->in_room != NOWHERE)
+              if (OBJ->in_room)
                 remove_workshop_from_room(OBJ);
             } else {
               send_to_char(ch, "You finish setting up %s.\r\n", GET_OBJ_NAME(OBJ));
@@ -235,7 +235,7 @@ void objList::UpdateCounters(void)
               GET_WORKSHOP_IS_SETUP(OBJ) = 1;
               
               // Handle the room's workshop[] array.
-              if (OBJ->in_room != NOWHERE)
+              if (OBJ->in_room)
                 add_workshop_to_room(OBJ);
             }
             AFF_FLAGS(ch).RemoveBit(AFF_PACKING);
@@ -274,10 +274,10 @@ void objList::UpdateCounters(void)
     }
 
     // Time out objects that end up on the floor a lot (magazines, cash, etc).
-    if (OBJ->in_room != NOWHERE && !OBJ->in_obj && !OBJ->carried_by &&
+    if (OBJ->in_room && !OBJ->in_obj && !OBJ->carried_by &&
        ((GET_OBJ_TYPE(OBJ) == ITEM_GUN_MAGAZINE && !GET_OBJ_VAL(OBJ, 9)) || (GET_OBJ_TYPE(OBJ) == ITEM_MONEY && !GET_OBJ_VAL(OBJ, 0))) 
         && ++GET_OBJ_TIMER(OBJ) == 3) {
-        act("$p is lost on the ground.", TRUE, world[temp->data->in_room].people,
+        act("$p is lost on the ground.", TRUE, temp->data->in_room->people,
                 OBJ, 0, TO_CHAR);
       next = temp->next;
       extract_obj(OBJ);
@@ -294,17 +294,12 @@ void objList::UpdateCounters(void)
         GET_OBJ_TIMER(OBJ)--;
       } else {
         if (OBJ->carried_by)
-          act("$p decays in your hands.", FALSE, temp->data->carried_by,
-              temp->data, 0, TO_CHAR);
+          act("$p decays in your hands.", FALSE, temp->data->carried_by, temp->data, 0, TO_CHAR);
         else if (temp->data->worn_by)
-          act("$p decays in your hands.", FALSE, temp->data->worn_by,
-              temp->data, 0, TO_CHAR);
-        else if ((temp->data->in_room != NOWHERE) &&
-                 (world[temp->data->in_room].people)) {
-          act("$p is taken away by the coroner.", TRUE, world[temp->data->in_room].people,
-              temp->data, 0, TO_ROOM);
-          act("$p is taken away by the coroner.", TRUE, world[temp->data->in_room].people,
-              temp->data, 0, TO_CHAR);
+          act("$p decays in your hands.", FALSE, temp->data->worn_by, temp->data, 0, TO_CHAR);
+        else if (temp->data->in_room && temp->data->in_room->people) {
+          act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
+          act("$p is taken away by the coroner.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
         }
         // here we make sure to remove all items from the object
         struct obj_data *next_thing, *temp2;
@@ -352,16 +347,12 @@ void objList::RemoveObjNum(int num)
 
     if (GET_OBJ_RNUM(temp->data) == num) {
       if (temp->data->carried_by)
-        act("$p disintegrates.", FALSE, temp->data->carried_by,
-            temp->data, 0, TO_CHAR);
+        act("$p disintegrates.", FALSE, temp->data->carried_by, temp->data, 0, TO_CHAR);
       else if (temp->data->worn_by)
-        act("$p disintegrates.", FALSE, temp->data->carried_by,
-            temp->data, 0, TO_CHAR);
-      else if (temp->data->in_room != NOWHERE && world[temp->data->in_room].people) {
-        act("$p disintegrates.", TRUE, world[temp->data->in_room].people,
-            temp->data, 0, TO_ROOM);
-        act("$p disintegrates.", TRUE, world[temp->data->in_room].people,
-            temp->data, 0, TO_CHAR);
+        act("$p disintegrates.", FALSE, temp->data->carried_by, temp->data, 0, TO_CHAR);
+      else if (temp->data->in_room && temp->data->in_room->people) {
+        act("$p disintegrates.", TRUE, temp->data->in_room->people, temp->data, 0, TO_ROOM);
+        act("$p disintegrates.", TRUE, temp->data->in_room->people, temp->data, 0, TO_CHAR);
       }
       extract_obj(temp->data);
     }
