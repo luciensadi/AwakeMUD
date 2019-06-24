@@ -402,7 +402,7 @@ ACMD(do_spec_comm)
     }
     ch->in_room = NULL;
   } else if (!(vict = get_char_room_vis(ch, buf)) &&
-             !((veh = get_veh_list(buf, get_ch_in_room(ch)->vehicles, ch)) && subcmd == SCMD_WHISPER))
+             !((veh = get_veh_list(buf, ch->in_room->vehicles, ch)) && subcmd == SCMD_WHISPER))
     send_to_char(NOPERSON, ch);
   else if (vict == ch)
     send_to_char("You can't get your mouth close enough to your ear...\r\n", ch);
@@ -1328,7 +1328,7 @@ ACMD(do_phone)
         store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, str_dup(act("^Y$v speaks in a language you don't understand.", FALSE, ch, 0, tch, TO_VICT)));
     }
     if (!cyber) {
-      for (tch = ch->in_veh ? ch->in_veh->people : get_ch_in_room(ch)->people; tch; tch = ch->in_veh ? tch->next_in_veh : tch->next_in_room)
+      for (tch = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tch; tch = ch->in_veh ? tch->next_in_veh : tch->next_in_room)
         if (tch != ch) {
           if (success_test(GET_SKILL(tch, GET_LANGUAGE(ch)), 4) > 0)
             store_message_to_history(tch->desc, COMM_CHANNEL_SAYS, str_dup(act(buf2, FALSE, ch, 0, tch, TO_VICT)));
