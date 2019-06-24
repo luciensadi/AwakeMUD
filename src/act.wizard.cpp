@@ -1574,43 +1574,47 @@ ACMD(do_return)
     stop_fighting(ch);
     return;
   }
-  if (ch->desc && ch->desc->original) {
-    send_to_char("You return to your original body.\r\n", ch);
-    if (PLR_FLAGGED(ch->desc->original, PLR_PROJECT)) {
-      GET_TEMP_ESSLOSS(ch->desc->original) = GET_ESS(ch->desc->original) - GET_ESS(ch);
-      affect_total(ch->desc->original);
-    }
-    if (PLR_FLAGGED(ch->desc->original, PLR_PROJECT))
-      PLR_FLAGS(ch->desc->original).RemoveBit(PLR_PROJECT);
-    if (PLR_FLAGGED(ch->desc->original, PLR_SWITCHED))
-      PLR_FLAGS(ch->desc->original).RemoveBit(PLR_SWITCHED);
+  if (ch->desc) {
+    if (ch->desc->original) {
+      send_to_char("You return to your original body.\r\n", ch);
+      if (PLR_FLAGGED(ch->desc->original, PLR_PROJECT)) {
+        GET_TEMP_ESSLOSS(ch->desc->original) = GET_ESS(ch->desc->original) - GET_ESS(ch);
+        affect_total(ch->desc->original);
+      }
+      if (PLR_FLAGGED(ch->desc->original, PLR_PROJECT))
+        PLR_FLAGS(ch->desc->original).RemoveBit(PLR_PROJECT);
+      if (PLR_FLAGGED(ch->desc->original, PLR_SWITCHED))
+        PLR_FLAGS(ch->desc->original).RemoveBit(PLR_SWITCHED);
 
-    /* JE 2/22/95 */
-    /* if someone switched into your original body, disconnect them */
-    if (ch->desc->original->desc)
-      close_socket(ch->desc->original->desc);
+      /* JE 2/22/95 */
+      /* if someone switched into your original body, disconnect them */
+      if (ch->desc->original->desc)
+        close_socket(ch->desc->original->desc);
 
-    vict = ch;
-    ch->desc->character = ch->desc->original;
-    ch->desc->original = NULL;
+      vict = ch;
+      ch->desc->character = ch->desc->original;
+      ch->desc->original = NULL;
 
-    /* Needs to be changed when the level needed for switch goes up or down */
-    if ( GET_REAL_LEVEL(ch) >= LVL_BUILDER ) {
-      sprintf(buf,"%s discontinues the role of %s.",
-              GET_CHAR_NAME(ch->desc->character),GET_NAME(vict));
-      mudlog(buf, ch, LOG_WIZLOG, TRUE);
-    }
+      /* Needs to be changed when the level needed for switch goes up or down */
+      if ( GET_REAL_LEVEL(ch) >= LVL_BUILDER ) {
+        sprintf(buf,"%s discontinues the role of %s.",
+                GET_CHAR_NAME(ch->desc->character),GET_NAME(vict));
+        mudlog(buf, ch, LOG_WIZLOG, TRUE);
+      }
 
-    ch->desc->character->desc = ch->desc;
-    update_pos(ch->desc->character);
-    ch->desc = NULL;
-    if (IS_NPC(vict) && GET_MOB_VNUM(vict) >= 50 && GET_MOB_VNUM(vict) < 70 &&
-        PLR_FLAGGED(ch, PLR_PROJECT)) {
-      GET_MEMORY(vict) = NULL;
-      extract_char(vict);
-      char_from_room(ch);
-      char_to_room(ch, GET_WAS_IN(ch));
-      GET_WAS_IN(ch) = NULL;
+      ch->desc->character->desc = ch->desc;
+      update_pos(ch->desc->character);
+      ch->desc = NULL;
+      if (IS_NPC(vict) && GET_MOB_VNUM(vict) >= 50 && GET_MOB_VNUM(vict) < 70 &&
+          PLR_FLAGGED(ch, PLR_PROJECT)) {
+        GET_MEMORY(vict) = NULL;
+        extract_char(vict);
+        char_from_room(ch);
+        char_to_room(ch, GET_WAS_IN(ch));
+        GET_WAS_IN(ch) = NULL;
+      }
+    } else {
+      send_to_char("But there's nothing for you to return from...", ch);
     }
   }
 }
