@@ -571,6 +571,7 @@ ACMD(do_rdelete)
       if (world[num].dir_option[counter]->keyword)
         delete [] world[num].dir_option[counter]->keyword;
       delete world[num].dir_option[counter];
+      world[num].dir_option[counter] = NULL;
     }
   }
 
@@ -595,7 +596,7 @@ ACMD(do_rdelete)
          * because we deleted a room */
         vnum_t rnum = real_room(world[counter].dir_option[dir]->to_room->number);
         if (rnum > num)
-          world[counter].dir_option[dir]->to_room = &world[rnum];
+          world[counter].dir_option[dir]->to_room = &world[rnum - 1];
         else if (rnum == num)
           world[counter].dir_option[dir]->to_room = &world[0];
       }
@@ -605,8 +606,10 @@ ACMD(do_rdelete)
   // objects or people in it
   struct char_data *temp_ch;
   struct obj_data *temp_obj;
+  struct veh_data *temp_veh;
   for (counter = num; counter <= top_of_world; counter++) {
     world[counter] = world[counter + 1];
+    /* move characters */
     for (temp_ch = world[counter].people; temp_ch; temp_ch = temp_ch->next_in_room)
       if (temp_ch->in_room)
         temp_ch->in_room = &world[counter];
@@ -614,6 +617,10 @@ ACMD(do_rdelete)
     for (temp_obj = world[counter].contents; temp_obj; temp_obj = temp_obj->next_content)
       if (temp_obj->in_room)
         temp_obj->in_room = &world[counter];
+    /* move vehicles */
+    for (temp_veh = world[counter].vehicles; temp_veh; temp_veh = temp_veh->next_veh)
+      if (temp_veh->in_room)
+        temp_veh->in_room = &world[counter];
   }
 
   // update the zones by decrementing numbers if >= number deleted

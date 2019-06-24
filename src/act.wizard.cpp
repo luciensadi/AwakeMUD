@@ -427,8 +427,8 @@ struct room_data *find_target_room(struct char_data * ch, char *roomstr)
   }
   if (isdigit(*roomstr) && !strchr(roomstr, '.'))
   {
-    tmp = atoi(roomstr);
-    if (!(location = &world[real_room(tmp)])) {
+    tmp = real_room(atoi(roomstr));
+    if (tmp == NOWHERE || !(location = &world[tmp])) {
       send_to_char("No room exists with that number.\r\n", ch);
       return NULL;
     }

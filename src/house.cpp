@@ -296,6 +296,14 @@ struct house_control_rec *find_room(char *arg, struct house_control_rec *room, s
   return NULL;
 }
 
+bool ch_already_rents_here(struct house_control_rec *room, struct char_data *ch) {
+  for (; room; room = room->next)
+    if (room->owner == GET_IDNUM(ch))
+      return TRUE;
+  
+  return FALSE;
+}
+
 SPECIAL(landlord_spec)
 {
   struct char_data *recep = (struct char_data *) me;
@@ -376,6 +384,9 @@ SPECIAL(landlord_spec)
     } else if (room_record->owner) {
       do_say(recep, "Sorry, I'm afraid that room is already taken.", 0, 0);
       return TRUE;
+    } else if (ch_already_rents_here(lord->rooms, ch)) {
+      do_say(recep, "Sorry, we only allow people to lease one room at a time here.", 0, 0);
+      return TRUE;
     }
     int cost = lord->basecost * lifestyle[room_record->mode].cost, origcost = cost;
 
@@ -391,7 +402,7 @@ SPECIAL(landlord_spec)
       }
     if (GET_NUYEN(ch) < cost) {
       if (GET_BANK(ch) >= cost) {
-        do_say(recep, "You don't have the money on you so I'll transfer it from your bank account.", 0, 0);
+        do_say(recep, "You don't have the money on you, so I'll transfer it from your bank account.", 0, 0);
         GET_BANK(ch) -= cost;
       } else {
         do_say(recep, "Sorry, you don't have the required funds.", 0, 0);
