@@ -453,6 +453,22 @@ struct room_data *find_target_room(struct char_data * ch, char *rawroomstr)
   return location;
 }
 
+struct veh_data *find_target_in_veh(struct char_data *ch, char *rawroomstr) {
+  char roomstr[MAX_INPUT_LENGTH];
+  
+  one_argument(rawroomstr, roomstr);
+  
+  // No error message-- we already yelled at them in find_target_room.
+  if (!*roomstr)
+    return NULL;
+  
+  struct char_data *vict = get_char_vis(ch, roomstr);
+  if (vict)
+    return vict->in_veh;
+  
+  return NULL;
+}
+
 ACMD(do_at)
 {
   char command[MAX_INPUT_LENGTH];
@@ -501,13 +517,15 @@ ACMD(do_at)
 ACMD(do_goto)
 {
   struct room_data *location = NULL;
+  struct veh_data *veh = NULL;
 
   if ((location = find_target_room(ch, argument))) {
     if (location->number == 0 || location->number == 1) {
       send_to_char("You're not able to GOTO that room. If you need to do something there, use AT.", ch);
       return;
     }
-  } else {
+  } else if (!(veh = find_target_in_veh(ch, argument))) {
+    send_to_char("You can't figure out how to get there.\r\n", ch);
     return;
   }
 
@@ -517,7 +535,11 @@ ACMD(do_goto)
     act("$n disappears in a puff of smoke.", TRUE, ch, 0, 0, TO_ROOM);
 
   char_from_room(ch);
-  char_to_room(ch, location);
+  
+  if (veh)
+    char_to_veh(veh, ch);
+  else
+    char_to_room(ch, location);
 
   if (POOFIN(ch))
     act(POOFIN(ch), TRUE, ch, 0, 0, TO_ROOM);

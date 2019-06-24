@@ -1352,22 +1352,27 @@ void look_in_obj(struct char_data * ch, char *arg, bool exa)
   }
   
   if (veh) {
+    struct veh_data *curr_in_veh = ch->in_veh;
+    bool curr_vfront = ch->vfront;
+    
     if (veh->cspeed > SPEED_IDLE) {
       if (success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 8)) {
         ch->in_veh = veh;
         ch->vfront = TRUE;
         look_in_veh(ch);
-        ch->in_veh = NULL;
-      } else
+      } else {
         send_to_char(ch, "It's moving too fast for you to get a good look inside.\r\n");
+        return;
+      }
     } else {
       for (struct char_data *vict = veh->people; vict; vict = vict->next_in_veh)
         act("$n peers inside.", FALSE, ch, 0, vict, TO_VICT);
       ch->in_veh = veh;
       ch->vfront = TRUE;
       look_in_veh(ch);
-      ch->in_veh = NULL;
     }
+    ch->in_veh = curr_in_veh;
+    curr_vfront = ch->vfront;
     return;
   } else if ((GET_OBJ_TYPE(obj) != ITEM_DRINKCON) &&
              (GET_OBJ_TYPE(obj) != ITEM_FOUNTAIN) &&
