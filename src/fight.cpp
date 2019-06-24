@@ -1614,7 +1614,7 @@ void docwagon_message(struct char_data *ch)
 {
   char buf[MAX_STRING_LENGTH];
   
-  switch (SECT(ch->in_room))
+  switch (SECT(get_ch_in_room(ch)))
   {
     case SPIRIT_HEARTH:
       sprintf(buf,"A DocWagon employee suddenly appears, transports %s's body to\r\nsafety, and rushes away.", GET_NAME(ch));
@@ -3879,7 +3879,7 @@ int find_sight(struct char_data *ch)
     sight = 1;
   
   /* add more weather conditions here to affect scan */
-  if (SECT(ch->in_room) != SPIRIT_HEARTH && (IS_NPC(ch) || !access_level(ch, LVL_VICEPRES)))
+  if (SECT(get_ch_in_room(ch)) != SPIRIT_HEARTH && (IS_NPC(ch) || !access_level(ch, LVL_VICEPRES)))
     switch (weather_info.sky)
   {
     case SKY_RAINING:
