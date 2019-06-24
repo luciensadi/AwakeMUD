@@ -1636,7 +1636,7 @@ void obj_to_room(struct obj_data * object, struct room_data *room)
 void obj_from_room(struct obj_data * object)
 {
   struct obj_data *temp;
-  if (!object || (object->en_room && !object->in_veh))
+  if (!object || (!object->en_room && !object->in_veh))
   {
     log("SYSLOG: NULL object or obj not in a room passed to obj_from_room");
     return;

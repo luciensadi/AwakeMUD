@@ -1226,7 +1226,7 @@ SPECIAL(car_dealer)
 {
   struct veh_data *veh, *newveh;
 
-  if (!cmd)
+  if (!cmd || ch->in_veh || !ch->en_room)
     return FALSE;
 
   int car_room = real_room(ch->en_room->number) - 1;
@@ -3297,7 +3297,7 @@ SPECIAL(terell_davis)
 SPECIAL(desktop)
 {
   struct obj_data *obj = (struct obj_data *) me;
-  if (!CMD_IS("list") || (!obj->in_veh && obj->en_room))
+  if (!CMD_IS("list") || (!obj->in_veh && !obj->en_room))
     return FALSE;
   send_to_char(ch, "%s (%d/%d)", obj->text.name, GET_OBJ_VAL(obj, 2) - GET_OBJ_VAL(obj, 3), GET_OBJ_VAL(obj, 2));
   if (obj->contains) {

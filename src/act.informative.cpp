@@ -1134,26 +1134,23 @@ void look_in_veh(struct char_data * ch)
 
 void look_at_room(struct char_data * ch, int ignore_brief)
 {
-  if (!LIGHT_OK(ch))
-  {
+  if (!LIGHT_OK(ch)) {
     send_to_char("It is pitch black...\r\n", ch);
     return;
   }
   
   // Streetlight code
-  if ((ch->in_veh && ch->en_room) || PLR_FLAGGED(ch, PLR_REMOTE))
-  {
+  if (ch->in_veh || PLR_FLAGGED(ch, PLR_REMOTE)) {
     look_in_veh(ch);
     return;
-  } else {
-    if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
-      ROOM_FLAGS(ch->en_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
-      sprintf(buf2, "^C[%5ld] %s [ %s ]^n", ch->en_room->number, ch->en_room->name, buf);
-      send_to_char(buf2, ch);
-    } else
-      send_to_char(ch, "^C%s^n", ch->en_room->name, ch);
   }
-  send_to_char("\r\n", ch);
+  
+  if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
+    ROOM_FLAGS(ch->en_room).PrintBits(buf, MAX_STRING_LENGTH, room_bits, ROOM_MAX);
+    sprintf(buf2, "^C[%5ld] %s [ %s ]^n\r\n", ch->en_room->number, ch->en_room->name, buf);
+    send_to_char(buf2, ch);
+  } else
+    send_to_char(ch, "^C%s^n\r\n", ch->en_room->name, ch);
   
   // TODO: Why is this code here? If you're in a vehicle, you do look_in_veh() above right?
   if (!(ch->in_veh && get_speed(ch->in_veh) > 200)) {

@@ -503,9 +503,10 @@ ACMD(do_goto)
   struct room_data *location = NULL;
 
   if ((location = find_target_room(ch, argument))) {
-    if (location->number == 0 || location->number == 1)
+    if (location->number == 0 || location->number == 1) {
       send_to_char("You're not able to GOTO that room. If you need to do something there, use AT.", ch);
-    return;
+      return;
+    }
   } else {
     return;
   }
