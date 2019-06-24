@@ -245,8 +245,8 @@ void string_add(struct descriptor_data *d, char *str)
       DELETE_D_STR_IF_EXTANT(d);
       STATE(d) = CON_PLAYING;
     } else if (STATE(d) == CON_DECORATE) {
-      REPLACE_STRING(d->character->en_room->description);
-      write_world_to_disk(zone_table[d->character->en_room->zone].number);
+      REPLACE_STRING(d->character->in_room->description);
+      write_world_to_disk(zone_table[d->character->in_room->zone].number);
       STATE(d) = CON_PLAYING;
     } else if (STATE(d) == CON_SPELL_CREATE && d->edit_mode == 3) {
       REPLACE_STRING(d->edit_obj->photo);

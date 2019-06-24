@@ -88,7 +88,7 @@ struct obj_affected_type
 struct obj_data
 {
   rnum_t item_number;         /* Where in data-base                   */
-  struct room_data *en_room;      /* Pointer to the room the object is in. */
+  struct room_data *in_room;      /* Pointer to the room the object is in. */
   struct veh_data *in_veh;
   bool vfront;
 
@@ -117,7 +117,7 @@ struct obj_data
   int canary;
 #endif
   obj_data() :
-      en_room(NULL), in_veh(NULL), ex_description(NULL), restring(NULL), photo(NULL), graffiti(NULL), carried_by(NULL),
+      in_room(NULL), in_veh(NULL), ex_description(NULL), restring(NULL), photo(NULL), graffiti(NULL), carried_by(NULL),
       worn_by(NULL), in_obj(NULL), contains(NULL), next_content(NULL), targ(NULL), tveh(NULL)
   {}
 };
@@ -578,7 +578,7 @@ struct grid_data
 struct veh_data
 {
   vnum_t veh_number;         /* Where in data-base                   */
-  struct room_data *en_room;            /* In what room */
+  struct room_data *in_room;            /* In what room */
 
   char *name;
   char *description;              /* When in room (without driver)    */
@@ -640,7 +640,7 @@ struct veh_data
   
 
   veh_data() :
-      en_room(NULL), name(NULL), description(NULL), short_description(NULL), restring(NULL),
+      in_room(NULL), name(NULL), description(NULL), short_description(NULL), restring(NULL),
       long_description(NULL), restring_long(NULL), inside_description(NULL), rear_description(NULL),
       followers(NULL), following(NULL), followch(NULL), mount(NULL),
       idnum(0), owner(0), spare(0), spare2(0), dest(NULL),
@@ -659,8 +659,8 @@ struct char_data
 {
   long nr;                            /* Mob's rnum                    */
   // the previous will be DEFUNCT once MobIndex is written
-  struct room_data *en_room;                     /* Location */
-  struct room_data *was_en_room;                 /* location for linkdead people  */
+  struct room_data *in_room;                     /* Location */
+  struct room_data *was_in_room;                 /* location for linkdead people  */
 
   struct char_player_data player;       /* Normal data                   */
   struct char_ability_data real_abils;  /* Abilities without modifiers   */
@@ -684,7 +684,7 @@ struct char_data
   struct obj_data *cyberware;           /* Head of list of cyberware     */
   struct obj_data *bioware;             /* Head of list of bioware       */
 
-  struct char_data *next_en_room;     /* For room->people - list         */
+  struct char_data *next_in_room;     /* For room->people - list         */
   struct char_data *next;             /* For either monster or ppl-list  */
   struct char_data *next_fighting;    /* For fighting list               */
   struct char_data *next_in_zone;     /* for zone->people - list         */
@@ -700,8 +700,8 @@ struct char_data
 
 
   char_data() :
-      en_room(NULL), was_en_room(NULL), player_specials(NULL), in_veh(NULL), persona(NULL), squeue(NULL), sustained(NULL),
-      ssust(NULL), carrying(NULL), desc(NULL), cyberware(NULL), bioware(NULL), next_en_room(NULL), next(NULL),
+      in_room(NULL), was_in_room(NULL), player_specials(NULL), in_veh(NULL), persona(NULL), squeue(NULL), sustained(NULL),
+      ssust(NULL), carrying(NULL), desc(NULL), cyberware(NULL), bioware(NULL), next_in_room(NULL), next(NULL),
       next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL), next_watching(NULL), followers(NULL),
       master(NULL), spells(NULL), pgroup(NULL), pgroup_invitations(NULL)
   {

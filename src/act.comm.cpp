@@ -78,7 +78,7 @@ ACMD(do_say)
           }
         }
       } else {
-        for (struct char_data *targ = get_ch_en_room(ch)->people; targ; targ = targ->next_en_room)
+        for (struct char_data *targ = get_ch_in_room(ch)->people; targ; targ = targ->next_in_room)
           if (targ != ch && PLR_FLAGGED(targ, PLR_MATRIX)) {
             // Send and store.
             sprintf(buf, "Your hitcher says, \"%s^n\"\r\n", argument);
@@ -140,7 +140,7 @@ ACMD(do_say)
       /** new code by WASHU **/
       if(subcmd == SCMD_OSAY) {
         sprintf(buf,"$z ^nsays ^mOOCly^n, \"%s^n\"",argument);
-        for (tmp = get_ch_en_room(ch)->people; tmp; tmp = tmp->next) {
+        for (tmp = get_ch_in_room(ch)->people; tmp; tmp = tmp->next) {
           // Replicate act() in a way that lets us capture the message.
           if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
             // They're a valid target, so send the message with a raw perform_act() call.
@@ -149,7 +149,7 @@ ACMD(do_say)
         }
       } else {
         success = success_test(GET_SKILL(ch, GET_LANGUAGE(ch)), 4);
-        for (tmp = get_ch_en_room(ch)->people; tmp; tmp = tmp->next_en_room)
+        for (tmp = get_ch_in_room(ch)->people; tmp; tmp = tmp->next_in_room)
           if (tmp != ch && !(IS_ASTRAL(ch) && !CAN_SEE(tmp, ch))) {
             if (to) {
               if (to == tmp)
@@ -217,7 +217,7 @@ ACMD(do_exclaim)
       }
     }
   } else {
-    for (struct char_data *tmp = get_ch_en_room(ch)->people; tmp; tmp = tmp->next) {
+    for (struct char_data *tmp = get_ch_in_room(ch)->people; tmp; tmp = tmp->next) {
       // Replicate act() in a way that lets us capture the message.
       if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
         // They're a valid target, so send the message with a raw perform_act() call.
@@ -337,7 +337,7 @@ ACMD(do_ask)
       }
     }
   } else {
-    for (struct char_data *tmp = get_ch_en_room(ch)->people; tmp; tmp = tmp->next) {
+    for (struct char_data *tmp = get_ch_in_room(ch)->people; tmp; tmp = tmp->next) {
       // Replicate act() in a way that lets us capture the message.
       if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
         // They're a valid target, so send the message with a raw perform_act() call.
@@ -385,7 +385,7 @@ ACMD(do_spec_comm)
       send_to_char("You're going to hit your head on a lamppost if you try that.\r\n", ch);
       return;
     }
-    ch->en_room = ch->in_veh->en_room;
+    ch->in_room = ch->in_veh->in_room;
     if ((vict = get_char_room_vis(ch, buf))) {
       if (success > 0) {
         sprintf(buf, "You lean out towards $N and say, \"%s\"", buf2);
@@ -400,9 +400,9 @@ ACMD(do_spec_comm)
         sprintf(buf, "$z mumbles incoherently from %s.\r\n", GET_VEH_NAME(ch->in_veh));
       store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, str_dup(act(buf, FALSE, ch, NULL, vict, TO_VICT)));
     }
-    ch->en_room = NULL;
+    ch->in_room = NULL;
   } else if (!(vict = get_char_room_vis(ch, buf)) &&
-             !((veh = get_veh_list(buf, get_ch_en_room(ch)->vehicles, ch)) && subcmd == SCMD_WHISPER))
+             !((veh = get_veh_list(buf, get_ch_in_room(ch)->vehicles, ch)) && subcmd == SCMD_WHISPER))
     send_to_char(NOPERSON, ch);
   else if (vict == ch)
     send_to_char("You can't get your mouth close enough to your ear...\r\n", ch);
@@ -671,7 +671,7 @@ ACMD(do_broadcast)
       break;
     }
   sprintf(buf3, "*static* %s", buf4);
-  if (ROOM_FLAGGED(ch->en_room, ROOM_NO_RADIO))
+  if (ROOM_FLAGGED(ch->in_room, ROOM_NO_RADIO))
     strcpy(argument, buf3);
 
   
@@ -707,15 +707,15 @@ ACMD(do_broadcast)
     send_to_char(OK, ch);
   else
     store_message_to_history(ch->desc, COMM_CHANNEL_RADIO, str_dup(act(buf, FALSE, ch, 0, 0, TO_CHAR)));
-  if (!ROOM_FLAGGED(ch->en_room, ROOM_SOUNDPROOF))
+  if (!ROOM_FLAGGED(ch->in_room, ROOM_SOUNDPROOF))
     for (d = descriptor_list; d; d = d->next) {
       if (!d->connected && d != ch->desc && d->character &&
           !PLR_FLAGS(d->character).AreAnySet(PLR_WRITING,
                                              PLR_MAILING,
                                              PLR_EDITING, PLR_MATRIX, ENDBIT)
           && !IS_PROJECT(d->character) &&
-          !ROOM_FLAGGED(d->character->en_room, ROOM_SOUNDPROOF) &&
-          !ROOM_FLAGGED(d->character->en_room, ROOM_SENT)) {
+          !ROOM_FLAGGED(d->character->in_room, ROOM_SOUNDPROOF) &&
+          !ROOM_FLAGGED(d->character->in_room, ROOM_SENT)) {
         if (!IS_NPC(d->character) && !IS_SENATOR(d->character)) {
           radio = NULL;
           cyberware = FALSE;
@@ -745,8 +745,7 @@ ACMD(do_broadcast)
                   if (GET_OBJ_TYPE(obj2) == ITEM_RADIO)
                     radio = obj2;
             }
-          for (obj = get_ch_en_room(ch)->contents; obj && !radio;
-               obj = obj->next_content)
+          for (obj = ch->in_veh ? ch->in_veh->contents : ch->in_room->contents; obj && !radio; obj = obj->next_content)
             if (GET_OBJ_TYPE(obj) == ITEM_RADIO && !CAN_WEAR(obj, ITEM_WEAR_TAKE))
               radio = obj;
 
@@ -766,7 +765,7 @@ ACMD(do_broadcast)
               if (to_room) {
                 if (success > 0 || IS_NPC(ch))
                   if (suc > 0 || IS_NPC(ch))
-                    if (ROOM_FLAGGED(d->character->en_room, ROOM_NO_RADIO))
+                    if (ROOM_FLAGGED(d->character->in_room, ROOM_NO_RADIO))
                       store_message_to_history(d, COMM_CHANNEL_RADIO, str_dup(act(buf4, FALSE, ch, 0, d->character, TO_VICT)));
                     else
                       store_message_to_history(d, COMM_CHANNEL_RADIO, str_dup(act(buf, FALSE, ch, 0, d->character, TO_VICT)));
@@ -777,7 +776,7 @@ ACMD(do_broadcast)
               } else {
                 if (success > 0 || IS_NPC(ch))
                   if (suc > 0 || IS_NPC(ch))
-                    if (ROOM_FLAGGED(d->character->en_room, ROOM_NO_RADIO))
+                    if (ROOM_FLAGGED(d->character->in_room, ROOM_NO_RADIO))
                       store_message_to_history(d, COMM_CHANNEL_RADIO, str_dup(act(buf4, FALSE, ch, 0, d->character, TO_VICT)));
                     else 
                       store_message_to_history(d, COMM_CHANNEL_RADIO, str_dup(act(buf, FALSE, ch, 0, d->character, TO_VICT)));
@@ -797,8 +796,8 @@ ACMD(do_broadcast)
   for (d = descriptor_list; d; d = d->next)
     if (!d->connected &&
         d->character &&
-        ROOM_FLAGGED(d->character->en_room, ROOM_SENT))
-      ROOM_FLAGS(d->character->en_room).RemoveBit(ROOM_SENT);
+        ROOM_FLAGGED(d->character->in_room, ROOM_SENT))
+      ROOM_FLAGS(d->character->in_room).RemoveBit(ROOM_SENT);
 }
 
 /**********************************************************************
@@ -890,7 +889,7 @@ ACMD(do_gen_comm)
     return;
   }
 
-  if (ROOM_FLAGGED(ch->en_room, ROOM_SOUNDPROOF) && subcmd == SCMD_SHOUT) {
+  if (ROOM_FLAGGED(ch->in_room, ROOM_SOUNDPROOF) && subcmd == SCMD_SHOUT) {
     send_to_char("The walls seem to absorb your words.\r\n", ch);
     return;
   }
@@ -926,7 +925,7 @@ ACMD(do_gen_comm)
     struct room_data *was_in;
     struct char_data *tmp;
     int success = success_test(GET_SKILL(ch, GET_LANGUAGE(ch)), 4);
-    for (tmp = get_ch_en_room(ch)->people; tmp; tmp = tmp->next_en_room)
+    for (tmp = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tmp; tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room))
       if (tmp != ch) {
         if (success > 0) {
           int suc = success_test(GET_SKILL(tmp, GET_LANGUAGE(ch)), 4);
@@ -947,12 +946,12 @@ ACMD(do_gen_comm)
     // Note that this line invokes act().
     store_message_to_history(ch->desc, COMM_CHANNEL_SHOUTS, str_dup(act(buf1, FALSE, ch, 0, 0, TO_CHAR)));
 
-    if (ch->in_veh && ch->in_veh->en_room != NULL) {
-      was_in = ch->in_veh->en_room;
-      ch->en_room = was_in;
+    was_in = ch->in_room;
+    if (ch->in_veh) {
+      ch->in_room = get_ch_in_room(ch);
       sprintf(buf1, "%sFrom inside %s, $z %sshouts, '%s'^N", com_msgs[subcmd][3], GET_VEH_NAME(ch->in_veh),
               com_msgs[subcmd][3], argument);
-      for (tmp = get_ch_en_room(ch)->people; tmp; tmp = tmp->next) {
+      for (tmp = ch->in_room->people; tmp; tmp = tmp->next_in_room) {
         // Replicate act() in a way that lets us capture the message.
         if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
           // They're a valid target, so send the message with a raw perform_act() call.
@@ -960,8 +959,7 @@ ACMD(do_gen_comm)
         }
       }
     } else {
-      was_in = ch->en_room;
-      for (veh = get_ch_en_room(ch)->vehicles; veh; veh = veh->next_veh) {
+      for (veh = ch->in_room->vehicles; veh; veh = veh->next_veh) {
         ch->in_veh = veh;
         for (tmp = ch->in_veh->people; tmp; tmp = tmp->next_in_veh) {
           // Replicate act() in a way that lets us capture the message.
@@ -976,8 +974,8 @@ ACMD(do_gen_comm)
 
     for (int door = 0; door < NUM_OF_DIRS; door++)
       if (CAN_GO(ch, door)) {
-        ch->en_room = &world[was_in->dir_option[door]->to_room];
-        for (tmp = get_ch_en_room(ch)->people; tmp; tmp = tmp->next_en_room)
+        ch->in_room = &world[was_in->dir_option[door]->to_room];
+        for (tmp = get_ch_in_room(ch)->people; tmp; tmp = tmp->next_in_room)
           if (tmp != ch) {
             if (success > 0) {
               int suc = success_test(GET_SKILL(tmp, GET_LANGUAGE(ch)), 4);
@@ -993,10 +991,10 @@ ACMD(do_gen_comm)
             // If it sent successfully, store to their history.
             store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, str_dup(act(buf, FALSE, ch, NULL, tmp, TO_VICT)));
           }
-        ch->en_room = was_in;
+        ch->in_room = was_in;
       }
     if (ch->in_veh)
-      ch->en_room = NULL;
+      ch->in_room = NULL;
 
     return;
   } else if(subcmd == SCMD_OOC) {
@@ -1052,7 +1050,7 @@ ACMD(do_gen_comm)
                                            PLR_MAILING,
                                            PLR_EDITING, ENDBIT) &&
         !IS_PROJECT(i->character) &&
-        !(ROOM_FLAGGED(i->character->en_room, ROOM_SOUNDPROOF) && subcmd == SCMD_SHOUT)) {
+        !(ROOM_FLAGGED(i->character->in_room, ROOM_SOUNDPROOF) && subcmd == SCMD_SHOUT)) {
       if (subcmd == SCMD_NEWBIE && !(PLR_FLAGGED(i->character, PLR_NEWBIE) ||
                                      IS_SENATOR(i->character) || PRF_FLAGGED(i->character, PRF_NEWBIEHELPER)))
         continue;
@@ -1243,7 +1241,7 @@ ACMD(do_phone)
         }
       } else {
         sprintf(buf, "%s rings.", GET_OBJ_NAME(k->phone));
-        if (k->phone->en_room || k->phone->in_veh)
+        if (k->phone->in_room || k->phone->in_veh)
           act(buf, FALSE, NULL, k->phone, 0, TO_ROOM);
         // Edge case: A phone inside a container inside a container won't ring. But do we even want it to?
       }
@@ -1330,7 +1328,7 @@ ACMD(do_phone)
         store_message_to_history(tch->desc, COMM_CHANNEL_PHONE, str_dup(act("^Y$v speaks in a language you don't understand.", FALSE, ch, 0, tch, TO_VICT)));
     }
     if (!cyber) {
-      for (tch = ch->in_veh ? ch->in_veh->people : get_ch_en_room(ch)->people; tch; tch = ch->in_veh ? tch->next_in_veh : tch->next_en_room)
+      for (tch = ch->in_veh ? ch->in_veh->people : get_ch_in_room(ch)->people; tch; tch = ch->in_veh ? tch->next_in_veh : tch->next_in_room)
         if (tch != ch) {
           if (success_test(GET_SKILL(tch, GET_LANGUAGE(ch)), 4) > 0)
             store_message_to_history(tch->desc, COMM_CHANNEL_SAYS, str_dup(act(buf2, FALSE, ch, 0, tch, TO_VICT)));
@@ -1472,7 +1470,7 @@ void phone_check()
         }
       } else {
         sprintf(buf, "%s rings.", GET_OBJ_NAME(k->phone));
-        if (k->phone->en_room || k->phone->in_veh)
+        if (k->phone->in_room || k->phone->in_veh)
           act(buf, FALSE, NULL, k->phone, 0, TO_ROOM);
       }
     }

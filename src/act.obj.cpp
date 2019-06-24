@@ -599,7 +599,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
         GET_OBJ_VAL(cont, 2) = MAX(0, GET_OBJ_VAL(cont, 2) - 1);
       sprintf(buf, "You %s $p from $P.", (cyberdeck || computer ? "uninstall" : "get"));
       if (computer) {
-        for (struct char_data *vict = ch->en_room->people; vict; vict = vict->next_en_room)
+        for (struct char_data *vict = ch->in_room->people; vict; vict = vict->next_in_room)
           if ((AFF_FLAGGED(vict, AFF_PROGRAM) || AFF_FLAGGED(vict, AFF_DESIGN)) && vict != ch) {
             send_to_char(ch, "You can't uninstall that while someone is working on it.\r\n");
             return;
@@ -781,7 +781,7 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
     switch (GET_OBJ_VAL(obj, 0))
     {
     case TYPE_COMPUTER:
-      for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->en_room->people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_en_room)
+      for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->in_room->people; vict; vict = ch->in_veh ? vict->next_in_veh : vict->next_in_room)
         if (vict->char_specials.programming && vict->char_specials.programming->in_obj == obj) {
           if (vict == ch)
             send_to_char(ch, "You are using that already.\r\n");
@@ -802,7 +802,7 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
   else if (can_take_obj(ch, obj))
   {
     if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP)
-      for (struct char_data *tmp = ch->in_veh ? ch->in_veh->people : ch->en_room->people; tmp; tmp = ch->in_veh ? tmp->next_in_veh : tmp->next_en_room)
+      for (struct char_data *tmp = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tmp; tmp = ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)
          if (AFF_FLAGGED(tmp, AFF_PACKING)) {
            send_to_char("Someone is working on that workshop.\r\n", ch);
            return FALSE;
@@ -840,7 +840,7 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
     if (ch->in_veh)
       obj = get_obj_in_list_vis(ch, arg, ch->in_veh->contents);
     else
-      obj = get_obj_in_list_vis(ch, arg, ch->en_room->contents);
+      obj = get_obj_in_list_vis(ch, arg, ch->in_room->contents);
     if (!obj) {
       sprintf(buf, "You don't see %s %s here.\r\n", AN(arg), arg);
       send_to_char(buf, ch);
@@ -865,7 +865,7 @@ void get_from_room(struct char_data * ch, char *arg, bool download)
     if (ch->in_veh)
       obj = ch->in_veh->contents;
     else
-      obj = ch->en_room->contents;
+      obj = ch->in_room->contents;
 
     for (;obj; obj = next_obj) {
       next_obj = obj->next_content;
@@ -973,7 +973,7 @@ ACMD(do_get)
     if (cont_dotmode == FIND_INDIV) {
       mode = generic_find(arg2, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &tmp_char, &cont);
       if (!ch->in_veh || (ch->in_veh->flags.IsSet(VFLAG_WORKSHOP) && !ch->vfront))
-        veh = get_veh_list(arg2, ch->in_veh ? ch->in_veh->carriedvehs : ch->en_room->vehicles, ch);
+        veh = get_veh_list(arg2, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch);
       if (cyberdeck && veh) {
         cont = NULL;
         if (veh->owner != GET_IDNUM(ch) && veh->locked) {
@@ -1162,7 +1162,7 @@ ACMD(do_get)
             act(buf, FALSE, ch, cont, 0, TO_CHAR);
           }
         }
-      for (cont = ch->en_room->contents; cont; cont = cont->next_content)
+      for (cont = ch->in_room->contents; cont; cont = cont->next_content)
         if (CAN_SEE_OBJ(ch, cont) &&
             (cont_dotmode == FIND_ALL || isname(arg2, cont->text.keywords))) {
           if (GET_OBJ_TYPE(cont) == ITEM_CONTAINER) {
@@ -1222,7 +1222,7 @@ void perform_drop_gold(struct char_data * ch, int amount, byte mode, struct room
     obj_to_veh(obj, ch->in_veh);
     obj->vfront = ch->vfront;
   } else
-    obj_to_room(obj, ch->en_room);
+    obj_to_room(obj, ch->in_room);
 
   if (IS_NPC(ch)
       || (!IS_NPC(ch) && access_level(ch, LVL_BUILDER)))
@@ -1300,7 +1300,7 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
       obj_to_veh(obj, ch->in_veh);
       obj->vfront = ch->vfront;
     } else
-      obj_to_room(obj, ch->en_room);
+      obj_to_room(obj, ch->in_room);
     if (!IS_NPC(ch) && GET_QUEST(ch))
       check_quest_delivery(ch, obj);
     else if (AFF_FLAGGED(ch, AFF_GROUP) && ch->master &&
@@ -1694,7 +1694,7 @@ void weight_change_object(struct obj_data * obj, float weight)
   struct obj_data *tmp_obj;
   struct char_data *tmp_ch;
 
-  if (obj->en_room)
+  if (obj->in_room)
   {
     GET_OBJ_WEIGHT(obj) = MAX(0, GET_OBJ_WEIGHT(obj) - weight);
   } else if ((tmp_ch = obj->carried_by))
@@ -1784,7 +1784,7 @@ ACMD(do_drink)
     return;
   }
   if (!(temp = get_obj_in_list_vis(ch, arg, ch->carrying))) {
-    if (!(temp = get_obj_in_list_vis(ch, arg, ch->en_room->contents))) {
+    if (!(temp = get_obj_in_list_vis(ch, arg, ch->in_room->contents))) {
       send_to_char(NOOBJECT, ch);
       return;
     } else
@@ -1974,7 +1974,7 @@ ACMD(do_pour)
       act("What do you want to fill $p from?", FALSE, ch, to_obj, 0, TO_CHAR);
       return;
     }
-    if (!(from_obj = get_obj_in_list_vis(ch, arg2, ch->en_room->contents))) {
+    if (!(from_obj = get_obj_in_list_vis(ch, arg2, ch->in_room->contents))) {
       sprintf(buf, "There doesn't seem to be %s %s here.\r\n", AN(arg2), arg2);
       send_to_char(buf, ch);
       return;

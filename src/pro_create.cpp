@@ -169,12 +169,12 @@ struct obj_data *can_program(struct char_data *ch)
   else if (ch->in_veh && (ch->vfront || !ch->in_veh->flags.IsSet(VFLAG_WORKSHOP)))
     send_to_char("You can't do that in here.\r\n", ch);
   else {
-    for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->en_room->people; vict; vict = vict->next_en_room)
+    for (struct char_data *vict = ch->in_veh ? ch->in_veh->people : ch->in_room->people; vict; vict = vict->next_in_room)
       if (AFF_FLAGS(vict).AreAnySet(AFF_PROGRAM, AFF_DESIGN, ENDBIT)) {
         send_to_char(ch, "Someone is already using the computer.\r\n");
         return NULL;
       }
-    for (comp = ch->in_veh ? ch->in_veh->contents : ch->en_room->contents; comp; comp = comp->next_content)
+    for (comp = ch->in_veh ? ch->in_veh->contents : ch->in_room->contents; comp; comp = comp->next_content)
       if (GET_OBJ_TYPE(comp) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(comp, 0) == 2)
         break;
     if (ch->in_veh && comp && comp->vfront)
@@ -532,10 +532,10 @@ void update_buildrepair(void)
             skill += GET_OBJ_VAL(GET_EQ(CH, i), 1);
             break;
           }
-        if (GET_BACKGROUND_AURA(CH->en_room) == AURA_POWERSITE)
-          skill += GET_BACKGROUND_COUNT(CH->en_room);
+        if (GET_BACKGROUND_AURA(CH->in_room) == AURA_POWERSITE)
+          skill += GET_BACKGROUND_COUNT(CH->in_room);
         else
-          target += GET_BACKGROUND_COUNT(CH->en_room);
+          target += GET_BACKGROUND_COUNT(CH->in_room);
         int success = success_test(skill, target);
         if (success < 1) {
           send_to_char(CH, "You fail to conjure the %s elemental.\r\n", elements[CH->char_specials.conjure[0]].name);

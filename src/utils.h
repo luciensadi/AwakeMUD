@@ -83,9 +83,9 @@ void    store_message_to_history(struct descriptor_data *d, int channel, const c
 void    delete_message_history(struct descriptor_data *d);
 
 // Room finders.
-struct room_data *get_veh_en_room(struct veh_data *veh);
-struct room_data *get_ch_en_room(struct char_data *ch);
-struct room_data *get_obj_en_room(struct obj_data *obj);
+struct room_data *get_veh_in_room(struct veh_data *veh);
+struct room_data *get_ch_in_room(struct char_data *ch);
+struct room_data *get_obj_in_room(struct obj_data *obj);
 
 // Visibility functions.
 bool invis_ok(struct char_data *ch, struct char_data *vict);
@@ -292,9 +292,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 /* char utils ************************************************************/
 
-
-#define EN_ROOM(ch)     ((ch)->en_room)
-#define GET_WAS_EN(ch)  ((ch)->was_en_room)
+#define GET_WAS_IN(ch)  ((ch)->was_in_room)
 
 #define GET_VEH_NAME(veh) ((veh)->restring ? (veh)->restring : (veh)->short_description)
 #define GET_VEH_DESC(veh) ((veh)->restring_long ? (veh)->restring_long : (veh)->long_description)
@@ -594,8 +592,8 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 (IS_ASTRAL(sub) || IS_DUAL(sub) || CURRENT_VISION((sub)) == THERMOGRAPHIC || HOLYLIGHT_OK(sub) || IS_LIGHT(provided_room) || \
 !((light_level(provided_room) == LIGHT_MINLIGHT || light_level(provided_room) == LIGHT_FULLDARK) && CURRENT_VISION((sub)) == NORMAL))
 
-#define LIGHT_OK(sub)          ((IS_ASTRAL(sub) || IS_DUAL(sub) || CURRENT_VISION(sub) == THERMOGRAPHIC || HOLYLIGHT_OK(sub) || IS_LIGHT(get_ch_en_room(sub))) || \
-                    !((light_level(get_ch_en_room(sub)) == LIGHT_MINLIGHT || light_level(get_ch_en_room(sub)) == LIGHT_FULLDARK) && CURRENT_VISION(sub) == NORMAL))
+#define LIGHT_OK(sub)          ((IS_ASTRAL(sub) || IS_DUAL(sub) || CURRENT_VISION(sub) == THERMOGRAPHIC || HOLYLIGHT_OK(sub) || IS_LIGHT(get_ch_in_room(sub))) || \
+                    !((light_level(get_ch_in_room(sub)) == LIGHT_MINLIGHT || light_level(get_ch_in_room(sub)) == LIGHT_FULLDARK) && CURRENT_VISION(sub) == NORMAL))
 
 #define SELF(sub, obj)         ((sub) == (obj))
 
@@ -651,10 +649,10 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
         fname((obj)->text.keywords) : "something")
 
 // Accepts characters or vehicles.
-#define EXIT(thing, door)  (thing->en_room ? thing->en_room->dir_option[door] : NULL)
+#define EXIT(thing, door)  (thing->in_room ? thing->in_room->dir_option[door] : NULL)
 
 #define LOCK_LEVEL(ch, obj, door) ((obj) ? GET_OBJ_VAL(obj, 4) : \
-           get_ch_en_room(ch)->dir_option[door]->key_level)
+           get_ch_in_room(ch)->dir_option[door]->key_level)
 
 #define CAN_GO(ch, door)     ( EXIT(ch,door) &&                                                                            \
                                (EXIT(ch,door)->to_room != NOWHERE) &&                                                      \
@@ -663,7 +661,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
                                !(ROOM_FLAGGED(&world[EXIT(ch, door)->to_room], ROOM_STAFF_ONLY) && GET_REAL_LEVEL(ch) < LVL_BUILDER)  \
                              )
 
-#define OUTSIDE(ch)           (!ROOM_FLAGGED(get_ch_en_room(ch), ROOM_INDOORS))
+#define OUTSIDE(ch)           (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS))
 
 /* Memory management *****************************************************/
 

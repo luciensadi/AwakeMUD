@@ -240,7 +240,7 @@ void taxi_leaves(void)
   struct char_data *temp;
   for (j = real_room(FIRST_CAB); j <= real_room(LAST_PORTCAB); j++) {
     found = 0;
-    for (temp = world[j].people; temp; temp = temp->next_en_room)
+    for (temp = world[j].people; temp; temp = temp->next_in_room)
       if (!(GET_MOB_SPEC(temp) && GET_MOB_SPEC(temp) == taxi)) {
         found = 1;
         break;
@@ -280,7 +280,7 @@ ACMD(do_hail)
   SPECIAL(taxi);
 
   for (dir = NORTH; dir < UP; dir++)
-    if (!ch->en_room->dir_option[dir])
+    if (!ch->in_room->dir_option[dir])
       empty = TRUE;
 
   if (IS_ASTRAL(ch)) {
@@ -288,14 +288,14 @@ ACMD(do_hail)
     return;
   }
 
-  if (ch->en_room->sector_type != SPIRIT_CITY || !empty ||
-      ROOM_FLAGGED(ch->en_room, ROOM_INDOORS)) {
+  if (ch->in_room->sector_type != SPIRIT_CITY || !empty ||
+      ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
     send_to_char("There doesn't seem to be any cabs in the area.\r\n", ch);
     return;
   }
 
-  if (ch->en_room) {
-    switch (zone_table[ch->en_room->zone].number) {
+  if (ch->in_room) {
+    switch (zone_table[ch->in_room->zone].number) {
     case 13:
     case 15:
     case 20:
@@ -349,7 +349,7 @@ ACMD(do_hail)
 
   for (int tries = 0; tries < 10; tries++) {
     cab = number(first, last);
-    for (temp = world[cab].people; temp; temp = temp->next_en_room)
+    for (temp = world[cab].people; temp; temp = temp->next_in_room)
       if (!(GET_MOB_SPEC(temp) && GET_MOB_SPEC(temp) == taxi))
         break;
     if (!temp) {
@@ -368,8 +368,8 @@ ACMD(do_hail)
   }
 
   for (dir = number(NORTH, UP - 1);; dir = number(NORTH, UP - 1))
-    if (!ch->en_room->dir_option[dir]) {
-      open_taxi_door(ch->en_room, dir, &world[cab]);
+    if (!ch->in_room->dir_option[dir]) {
+      open_taxi_door(ch->in_room, dir, &world[cab]);
       if (portland)
       sprintf(buf, "A nice looking red and white cab pulls up smoothly to the curb, "
               "and its door opens to the %s.", fulldirs[dir]);
@@ -400,7 +400,7 @@ SPECIAL(taxi)
   if (GET_MOB_VNUM(driver) == 650)
     portland = TRUE;
   if (!cmd) {
-    for (temp = driver->en_room->people; temp; temp = temp->next_en_room)
+    for (temp = driver->in_room->people; temp; temp = temp->next_in_room)
       if (temp != driver && memory(driver, temp))
         break;
     if (!temp) {
@@ -455,7 +455,7 @@ SPECIAL(taxi)
               return FALSE;
             dest = real_room(GET_SPARE2(driver));
             if (!world[dest].dir_option[j]) {
-              open_taxi_door(&world[dest], j, driver->en_room);
+              open_taxi_door(&world[dest], j, driver->in_room);
               do_say(driver, "Ok, here we are.", 0, 0);
               forget(driver, temp);
               GET_SPARE2(driver) = 0;
@@ -528,8 +528,8 @@ SPECIAL(taxi)
       (i = real_room(GET_LASTROOM(ch))) > -1 &&
       GET_ACTIVE(driver) == ACT_AWAIT_CMD) {
     for (i = NORTH; i < UP; i++)
-      if (ch->en_room->dir_option[i]) {
-        i = ch->en_room->dir_option[i]->to_room;
+      if (ch->in_room->dir_option[i]) {
+        i = ch->in_room->dir_option[i]->to_room;
         break;
       }
     int dist = 0;
@@ -567,9 +567,9 @@ SPECIAL(taxi)
     GET_ACTIVE(driver) = ACT_DRIVING;
 
     for (i = NORTH; i < UP; i++)
-      if (ch->en_room->dir_option[i]) {
-        dest = ch->en_room->dir_option[i]->to_room;
-        close_taxi_door(&world[dest], rev_dir[i], ch->en_room);
+      if (ch->in_room->dir_option[i]) {
+        dest = ch->in_room->dir_option[i]->to_room;
+        close_taxi_door(&world[dest], rev_dir[i], ch->in_room);
         if (world[dest].people) {
           if (portland)
             sprintf(buf, "The taxi doors slide shut and it pulls off from the curb.");
@@ -829,7 +829,7 @@ SPECIAL(call_elevator)
 
   for (i = 0; i < num_elevators && index < 0; i++)
     for (j = 0; j < elevator[i].num_floors && index < 0; j++)
-      if (elevator[i].floor[j].vnum == ch->en_room->number)
+      if (elevator[i].floor[j].vnum == ch->in_room->number)
         index = i;
 
   if (CMD_IS("push")) {
@@ -851,14 +851,14 @@ SPECIAL(call_elevator)
       rnum = real_room(elevator[index].room);
       for (i = 0; i < UP; i++)
         if (world[rnum].dir_option[i] &&
-            &world[world[rnum].dir_option[i]->to_room] == ch->en_room &&
+            &world[world[rnum].dir_option[i]->to_room] == ch->in_room &&
             !IS_SET(world[rnum].dir_option[i]->exit_info, EX_CLOSED)) {
           send_to_char("The door is already open!\r\n", ch);
           elevator[index].destination = 0;
           return TRUE;
         }
       send_to_char("You press the call button, and the small light turns on.\r\n", ch);
-      elevator[index].destination = ch->en_room->number;
+      elevator[index].destination = ch->in_room->number;
     }
     return TRUE;
   }
@@ -971,7 +971,7 @@ static int process_elevator(struct room_data *room,
       sprintf(buf, "The elevator car %s swiftly away from you.\r\n", elevator[num].dir == DOWN ? "descends" : "ascends");
       send_to_room(buf, &world[real_room(shaft->number)]);
       /* If you fail an athletics test, you get dragged by the car, sustaining impact damage and getting pulled along with the elevator. */
-      for (struct char_data *vict = shaft->people; vict; vict = vict->next_en_room) {
+      for (struct char_data *vict = shaft->people; vict; vict = vict->next_in_room) {
         // Nohassle imms and astral projections are immune to this bullshit.
         if (PRF_FLAGGED(vict, PRF_NOHASSLE) || IS_ASTRAL(vict))
           continue;
@@ -1033,7 +1033,7 @@ static int process_elevator(struct room_data *room,
       send_to_room(buf, &world[real_room(shaft->number)]);
       
       /* If you fail an athletics test, the elevator knocks you off the wall, dealing D impact damage and triggering fall. */
-      for (struct char_data *vict = shaft->people; vict; vict = vict->next_en_room) {
+      for (struct char_data *vict = shaft->people; vict; vict = vict->next_in_room) {
         // Nohassle imms and astral projections are immune to this bullshit.
         if (PRF_FLAGGED(vict, PRF_NOHASSLE) || IS_ASTRAL(vict))
           continue;
@@ -1257,7 +1257,7 @@ void EscalatorProcess(void)
   for (i = 0; i <= top_of_world; i++)
     if (world[i].func && world[i].func == escalator)
       for (temp = world[i].people; temp; temp = next) {
-        next = temp->next_en_room;
+        next = temp->next_in_room;
         if (GET_LASTROOM(temp) > 0 || GET_LASTROOM(temp) < -3)
           GET_LASTROOM(temp) = -3;
         else if (GET_LASTROOM(temp) < 0)

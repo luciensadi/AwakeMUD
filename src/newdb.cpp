@@ -96,7 +96,7 @@ static void init_char(struct char_data * ch)
   ch->player_specials->saved.bad_pws      = 0;
 
   GET_LOADROOM(ch) = NOWHERE;
-  GET_WAS_EN(ch) = NULL;
+  GET_WAS_IN(ch) = NULL;
 
   ch->player.time.birth = time(0);
   ch->player.time.played = 0;
@@ -1002,18 +1002,18 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
   if (loadroom == NOWHERE)
     loadroom = GET_LOADROOM(player);
 
-  if (player->en_room) {
+  if (player->in_room) {
     /* This code means that any imm who does GOTO 1 is going to have weird behavior. Beats crashing, though. */
-    if (player->en_room->number <= 1) {
-      if (player->was_en_room) {
-        sprintf(buf, "SYSERR: save_char(): %s is at %ld and has was_en_room (world array index) %ld.",
-                GET_CHAR_NAME(player), player->en_room->number, player->was_en_room->number);
+    if (player->in_room->number <= 1) {
+      if (player->was_in_room) {
+        sprintf(buf, "SYSERR: save_char(): %s is at %ld and has was_in_room (world array index) %ld.",
+                GET_CHAR_NAME(player), player->in_room->number, player->was_in_room->number);
         mudlog(buf, NULL, LOG_SYSLOG, TRUE);
         GET_LAST_IN(player) = 35500;
       } else
-        GET_LAST_IN(player) = player->was_en_room->number;
+        GET_LAST_IN(player) = player->was_in_room->number;
     } else {
-      GET_LAST_IN(player) = player->en_room->number;
+      GET_LAST_IN(player) = player->in_room->number;
     }
   }
 

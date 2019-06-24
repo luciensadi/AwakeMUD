@@ -157,7 +157,7 @@ ACMD(do_copyover)
 
     } else {
       fprintf (fp, "%d %s %s\n", d->descriptor, GET_CHAR_NAME(och), d->host);
-      GET_LAST_IN(och) = get_ch_en_room(och)->number;
+      GET_LAST_IN(och) = get_ch_in_room(och)->number;
       if (!GET_LAST_IN(och) || GET_LAST_IN(och) == NOWHERE) {
         // Fuck it, send them to Grog's.
         sprintf(buf, "%s's location could not be determined by the current copyover logic. %s will load at Grog's (35500).",
@@ -240,12 +240,12 @@ ACMD(do_zecho)
     act(argument, FALSE, ch, 0, 0, TO_CHAR);
     for (d = descriptor_list; d; d = d->next)
       if (!d->connected && d->character && d->character != ch)
-        if (zone_table[d->character->en_room->zone].number == zone_table[ch->en_room->zone].number &&
+        if (zone_table[d->character->in_room->zone].number == zone_table[ch->in_room->zone].number &&
             !(subcmd == SCMD_AECHO && !(IS_ASTRAL(d->character) || IS_DUAL(d->character))))
           act(argument, FALSE, d->character, 0, 0, TO_CHAR);
     sprintf(buf, "%s zechoed %s in zone #%d",
             GET_CHAR_NAME(ch), argument,
-            zone_table[ch->en_room->zone].number);
+            zone_table[ch->in_room->zone].number);
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
   }
 }
@@ -291,14 +291,14 @@ ACMD(do_echo)
     }
 
     if (subcmd == SCMD_AECHO) {
-      for (vict = ch->en_room->people; vict; vict = vict->next_en_room)
+      for (vict = ch->in_room->people; vict; vict = vict->next_in_room)
         if (ch != vict && (IS_ASTRAL(vict) || IS_DUAL(vict)))
           act(buf, FALSE, ch, 0, vict, TO_VICT);
     } else {
       if (PLR_FLAGGED(ch, PLR_MATRIX))
         send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
       else {
-        for (struct char_data *targ = ch->in_veh ? ch->in_veh->people : ch->en_room->people; targ; targ = ch->in_veh ? targ->next_in_veh : targ->next_en_room)
+        for (struct char_data *targ = ch->in_veh ? ch->in_veh->people : ch->in_room->people; targ; targ = ch->in_veh ? targ->next_in_veh : targ->next_in_room)
           if (targ != ch) {
             if ((IS_ASTRAL(ch) || IS_PROJECT(ch)) && !(IS_ASTRAL(targ) || IS_PROJECT(targ) || IS_DUAL(targ)))
               continue;
@@ -329,7 +329,7 @@ ACMD(do_echo)
             act(buf2, FALSE, ch, 0, targ, TO_VICT);
           }
         if (!ch->in_veh)
-          for (veh = ch->en_room->vehicles; veh; veh = veh->next_veh)
+          for (veh = ch->in_room->vehicles; veh; veh = veh->next_veh)
             if (veh->type == VEH_DRONE && veh->rigger)
               act(buf, FALSE, ch, 0, veh->rigger, TO_VICT);
       }
@@ -343,7 +343,7 @@ ACMD(do_echo)
 
     if ( subcmd == SCMD_ECHO || subcmd == SCMD_AECHO) {
       sprintf(buf2, "%s echoed %s at #%ld",
-              GET_CHAR_NAME(ch), buf, ch->en_room->number);
+              GET_CHAR_NAME(ch), buf, ch->in_room->number);
       mudlog(buf2, ch, LOG_WIZLOG, TRUE);
     }
   }
@@ -436,11 +436,11 @@ struct room_data *find_target_room(struct char_data * ch, char *rawroomstr)
       return NULL;
     }
   } else if ((target_mob = get_char_vis(ch, roomstr)))
-    location = target_mob->en_room;
+    location = target_mob->in_room;
   else if ((target_obj = get_obj_vis(ch, roomstr)))
   {
-    if (target_obj->en_room)
-      location = target_obj->en_room;
+    if (target_obj->in_room)
+      location = target_obj->in_room;
     else {
       send_to_char("That object is not available.\r\n", ch);
       return NULL;
@@ -483,12 +483,12 @@ ACMD(do_at)
   if (ch->in_veh)
     oveh = ch->in_veh;
   else
-    original_loc = ch->en_room;
+    original_loc = ch->in_room;
   if (veh)
     char_to_veh(veh, ch);
   else {
     char_from_room(ch);
-    ch->en_room = location;
+    ch->in_room = location;
   }
   command_interpreter(ch, command, GET_CHAR_NAME(ch));
   char_from_room(ch);
@@ -535,11 +535,11 @@ void transfer_ch_to_ch(struct char_data *victim, struct char_data *ch) {
   if (AFF_FLAGGED(victim, AFF_PILOT))
     AFF_FLAGS(victim).ToggleBit(AFF_PILOT);
   char_from_room(victim);
-  char_to_room(victim, ch->en_room);
+  char_to_room(victim, ch->in_room);
   act("$n arrives from a puff of smoke.", FALSE, victim, 0, 0, TO_ROOM);
   act("$n has transferred you!", FALSE, ch, 0, victim, TO_VICT);
   look_at_room(victim, 0);
-  sprintf(buf2, "%s transferred %s to %s.", GET_CHAR_NAME(ch), IS_NPC(victim) ? GET_NAME(victim) : GET_CHAR_NAME(victim), ch->en_room->name);
+  sprintf(buf2, "%s transferred %s to %s.", GET_CHAR_NAME(ch), IS_NPC(victim) ? GET_NAME(victim) : GET_CHAR_NAME(victim), ch->in_room->name);
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
 }
 
@@ -602,17 +602,17 @@ ACMD(do_vteleport)
 
   if (!*buf)
     send_to_char("What vehicle do you wish to teleport?\r\n", ch);
-  else if (!(veh = get_veh_list(buf, get_ch_en_room(ch)->vehicles, ch)))
+  else if (!(veh = get_veh_list(buf, get_ch_in_room(ch)->vehicles, ch)))
     send_to_char(NOOBJECT, ch);
   else if (!*buf2)
     send_to_char("Where do you wish to send this vehicle?\r\n", ch);
   else if ((target = find_target_room(ch, buf2))) {
     sprintf(buf, "%s drives off into the sunset.\r\n", GET_VEH_NAME(veh));
-    send_to_room(buf, veh->en_room);
+    send_to_room(buf, veh->in_room);
     veh_from_room(veh);
     veh_to_room(veh, target);
     sprintf(buf, "%s screeches suddenly into the area.\r\n", GET_VEH_NAME(veh));
-    send_to_room(buf, veh->en_room);
+    send_to_room(buf, veh->in_room);
     send_to_veh("You lose track of your surroundings.\r\n", veh, NULL, TRUE);
     sprintf(buf2, "%s teleported %s to %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh), target->name);
     mudlog(buf2, ch, LOG_WIZLOG, TRUE);
@@ -681,7 +681,7 @@ ACMD(do_vnum)
 void do_stat_room(struct char_data * ch)
 {
   struct extra_descr_data *desc;
-  struct room_data *rm = ch->en_room;
+  struct room_data *rm = ch->in_room;
   int i, found = 0;
   struct obj_data *j = 0;
   struct char_data *k = 0;
@@ -715,7 +715,7 @@ void do_stat_room(struct char_data * ch)
     send_to_char(strcat(buf, "\r\n"), ch);
   }
   strcpy(buf, "Chars present:^y");
-  for (found = 0, k = rm->people; k; k = k->next_en_room)
+  for (found = 0, k = rm->people; k; k = k->next_in_room)
   {
     if (!CAN_SEE(ch, k))
       continue;
@@ -723,7 +723,7 @@ void do_stat_room(struct char_data * ch)
             (!IS_NPC(k) ? "PC" : (!IS_MOB(k) ? "NPC" : "MOB")));
     strcat(buf, buf2);
     if (strlen(buf) >= 62) {
-      if (k->next_en_room)
+      if (k->next_in_room)
         send_to_char(strcat(buf, ",\r\n"), ch);
       else
         send_to_char(strcat(buf, "\r\n"), ch);
@@ -868,10 +868,10 @@ void do_stat_object(struct char_data * ch, struct obj_data * j)
           GET_OBJ_WEIGHT(j), GET_OBJ_COST(j), GET_OBJ_TIMER(j), GET_OBJ_AVAILTN(j), GET_OBJ_AVAILDAY(j));
 
   strcat(buf, "In room: ");
-  if (!j->en_room)
+  if (!j->in_room)
     strcat(buf, "Nowhere");
   else
-    sprintf(ENDOF(buf), "%ld (IR %ld)", j->en_room->number, real_room(j->en_room->number));
+    sprintf(ENDOF(buf), "%ld (IR %ld)", j->in_room->number, real_room(j->in_room->number));
   strcat(buf, ", In object: ");
   strcat(buf, j->in_obj ? j->in_obj->text.name : "None");
   strcat(buf, ", Carried by: ");
@@ -1078,7 +1078,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   }
 
   sprintf(ENDOF(buf), " PC '%s'  IDNum: [%5ld], In room [%5ld]\r\n",
-          GET_CHAR_NAME(k), GET_IDNUM(k), k->en_room->number);
+          GET_CHAR_NAME(k), GET_IDNUM(k), k->in_room->number);
   
   if (GET_PGROUP_MEMBER_DATA(k)) {
     sprintf(ENDOF(buf), "Rank ^c%d/%d^n member of group '^c%s^n' (^c%s^n), with privileges:\r\n  ^c%s^n\r\n",
@@ -1253,7 +1253,7 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
   }
   send_to_char(ch, "%s ", pc_race_types[(int)GET_RACE(k)]);
   sprintf(buf2, " %s '%s', In room [%5ld]\r\n", (!IS_MOB(k) ? "NPC" : "MOB"),
-          GET_NAME(k), k->en_room->number);
+          GET_NAME(k), k->in_room->number);
   strcat(buf, buf2);
 
   sprintf(ENDOF(buf), "Alias: %s, VNum: [%5ld], RNum: [%5ld]\r\n", GET_KEYWORDS(k),
@@ -1381,14 +1381,14 @@ ACMD(do_stat)
       do_stat_object(ch, object);
     else if ((object = get_obj_in_list_vis(ch, buf1, ch->carrying)))
       do_stat_object(ch, object);
-    else if ((veh = get_veh_list(buf1, get_ch_en_room(ch)->vehicles, ch)))
+    else if ((veh = get_veh_list(buf1, get_ch_in_room(ch)->vehicles, ch)))
       do_stat_veh(ch, veh);
     else if ((victim = get_char_room_vis(ch, buf1)))
       if (IS_NPC(victim))
         do_stat_mobile(ch, victim);
       else
         do_stat_character(ch, victim);
-    else if ((object = get_obj_in_list_vis(ch, buf1, ch->en_room->contents)))
+    else if ((object = get_obj_in_list_vis(ch, buf1, ch->in_room->contents)))
       do_stat_object(ch, object);
     else if ((victim = get_char_vis(ch, buf1)))
       if (IS_NPC(victim))
@@ -1609,8 +1609,8 @@ ACMD(do_return)
       GET_MEMORY(vict) = NULL;
       extract_char(vict);
       char_from_room(ch);
-      char_to_room(ch, GET_WAS_EN(ch));
-      GET_WAS_EN(ch) = NULL;
+      char_to_room(ch, GET_WAS_IN(ch));
+      GET_WAS_IN(ch) = NULL;
     }
   }
 }
@@ -1728,7 +1728,7 @@ ACMD(do_wizload)
       return;
     }
     veh = read_vehicle(r_num, REAL);
-    veh_to_room(veh, ch->en_room);
+    veh_to_room(veh, ch->in_room);
     act("$n makes a quaint, magical gesture with one hand.", TRUE, ch,
         0, 0, TO_ROOM);
     sprintf(buf, "%s wizloaded vehicle #%d (%s).",
@@ -1741,7 +1741,7 @@ ACMD(do_wizload)
       return;
     }
     mob = read_mobile(r_num, REAL);
-    char_to_room(mob, ch->en_room);
+    char_to_room(mob, ch->in_room);
 
     act("$n makes a quaint, magical gesture with one hand.", TRUE, ch,
         0, 0, TO_ROOM);
@@ -1827,7 +1827,7 @@ ACMD(do_purge)
 
   if (!access_level(ch, LVL_EXECUTIVE) &&
       (ch->player_specials->saved.zonenum !=
-       zone_table[ch->en_room->zone].number)) {
+       zone_table[ch->in_room->zone].number)) {
     send_to_char("You can only purge in your zone.\r\n", ch);
     return;
   }
@@ -1853,10 +1853,10 @@ ACMD(do_purge)
         }
       }
       extract_char(vict);
-    } else if ((obj = get_obj_in_list_vis(ch, buf, ch->en_room->contents))) {
+    } else if ((obj = get_obj_in_list_vis(ch, buf, ch->in_room->contents))) {
       act("$n destroys $p.", FALSE, ch, obj, 0, TO_ROOM);
       extract_obj(obj);
-    } else if ((veh = get_veh_list(buf, ch->en_room->vehicles, ch))) {
+    } else if ((veh = get_veh_list(buf, ch->in_room->vehicles, ch))) {
       sprintf(buf1, "$n purges %s.", GET_VEH_NAME(veh));
       act(buf1, FALSE, ch, NULL, 0, TO_ROOM);
       sprintf(buf1, "%s purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
@@ -1892,20 +1892,20 @@ ACMD(do_purge)
     }
     else {
       act("$n gestures... You are surrounded by scorching flames!", FALSE, ch, 0, 0, TO_ROOM);
-      send_to_room("The world seems a little cleaner.\r\n", ch->en_room);
+      send_to_room("The world seems a little cleaner.\r\n", ch->in_room);
 
-      for (vict = ch->en_room->people; vict; vict = next_v) {
-        next_v = vict->next_en_room;
+      for (vict = ch->in_room->people; vict; vict = next_v) {
+        next_v = vict->next_in_room;
         if (IS_NPC(vict))
           extract_char(vict);
       }
 
-      for (obj = ch->en_room->contents; obj; obj = next_o) {
+      for (obj = ch->in_room->contents; obj; obj = next_o) {
         next_o = obj->next_content;
         extract_obj(obj);
       }
       
-      for (veh = ch->en_room->vehicles; veh; veh = next_ve) {
+      for (veh = ch->in_room->vehicles; veh; veh = next_ve) {
         next_ve = veh->next_veh;
         extract_veh(veh);
       }
@@ -2273,7 +2273,7 @@ void perform_immort_invis(struct char_data *ch, int level)
 
   if (STATE(ch->desc) == CON_PLAYING)
   {
-    for (tch = ch->en_room->people; tch; tch = tch->next_en_room) {
+    for (tch = ch->in_room->people; tch; tch = tch->next_in_room) {
       if (tch == ch)
         continue;
       if (access_level(tch, GET_INVIS_LEV(ch)) && !access_level(tch, level))
@@ -2577,11 +2577,11 @@ ACMD(do_force)
   } else if (!str_cmp("room", arg)) {
     send_to_char(OK, ch);
     sprintf(buf, "%s forced room %ld to %s",
-            GET_CHAR_NAME(ch), ch->en_room->number, to_force);
+            GET_CHAR_NAME(ch), ch->in_room->number, to_force);
     mudlog(buf, ch, LOG_WIZLOG, TRUE);
 
-    for (vict = ch->en_room->people; vict; vict = next_force) {
-      next_force = vict->next_en_room;
+    for (vict = ch->in_room->people; vict; vict = next_force) {
+      next_force = vict->next_in_room;
       if (GET_LEVEL(vict) >= GET_LEVEL(ch))
         continue;
       act(buf1, TRUE, ch, NULL, vict, TO_VICT);
@@ -2662,11 +2662,11 @@ ACMD(do_wizwho)
         sprintf(line, " [^c%6.6s^n]  ^b%-30s^n  Room: [^c%5ld^n] Idle: [^c%4d^n]",
                 GET_WHOTITLE(tch),
                 GET_CHAR_NAME(tch),
-                tch->en_room->number, tch->char_specials.timer);
+                tch->in_room->number, tch->char_specials.timer);
       else
         sprintf(line, " [^c%6.6s^n]  ^b%-30s^n  Room: [^c%5ld^n] Idle: [^c-AFK^n]",
                 GET_WHOTITLE(tch),
-                GET_CHAR_NAME(tch), tch->en_room->number);
+                GET_CHAR_NAME(tch), tch->in_room->number);
       if (d->connected)
         sprintf(buf, " ^r(Editing)^n\r\n");
       else if (tch == d->original)
@@ -2707,7 +2707,7 @@ ACMD(do_zreset)
     send_to_char("Reset world.\r\n", ch);
     return;
   } else if (*arg == '.')
-    i = ch->en_room->zone;
+    i = ch->in_room->zone;
   else
     i = real_zone(atoi(arg));
   if (i >= 0 && i <= top_of_zone_table) {
@@ -3046,9 +3046,9 @@ ACMD(do_show)
     /* tightened up by JE 4/6/93 */
     if (self) {
       if (access_level(ch, LVL_ADMIN))
-        print_zone_to_buf(buf, ch->en_room->zone, 1);
+        print_zone_to_buf(buf, ch->in_room->zone, 1);
       else
-        print_zone_to_buf(buf, ch->en_room->zone, 0);
+        print_zone_to_buf(buf, ch->in_room->zone, 0);
     } else if (*value && is_number(value)) {
       for (j = atoi(value), i = 0; zone_table[i].number != j && i <= top_of_zone_table; i++)
         ;
@@ -3358,7 +3358,7 @@ ACMD(do_vset)
     send_to_char("Usage: vset <victim> <field> <value>\r\n", ch);
     return;
   }
-  if (!(veh = get_veh_list(name, get_ch_en_room(ch)->vehicles, ch))) {
+  if (!(veh = get_veh_list(name, get_ch_in_room(ch)->vehicles, ch))) {
     send_to_char("There is no such vehicle.\r\n", ch);
     return;
   }
@@ -4919,5 +4919,5 @@ ACMD(do_zone) {
 }
 
 ACMD(do_room) {
-  send_to_char(ch, "Current room num: %ld\r\n", ch->en_room->number);
+  send_to_char(ch, "Current room num: %ld\r\n", ch->in_room->number);
 }

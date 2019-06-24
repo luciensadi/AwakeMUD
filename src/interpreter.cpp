@@ -1887,11 +1887,11 @@ int special(struct char_data * ch, int cmd, char *arg)
 
   struct veh_data *veh;
   RIG_VEH(ch, veh);
-  if (veh && GET_ROOM_SPEC(veh->en_room) != NULL)
-      if (GET_ROOM_SPEC(veh->en_room) (ch, &world[real_room(veh->en_room->number)], cmd, arg))
+  if (veh && GET_ROOM_SPEC(veh->in_room) != NULL)
+      if (GET_ROOM_SPEC(veh->in_room) (ch, &world[real_room(veh->in_room->number)], cmd, arg))
         return 1;
-  if (GET_ROOM_SPEC(ch->en_room) != NULL)
-    if (GET_ROOM_SPEC(ch->en_room) (ch, &world[real_room(ch->en_room->number)], cmd, arg))
+  if (GET_ROOM_SPEC(ch->in_room) != NULL)
+    if (GET_ROOM_SPEC(ch->in_room) (ch, &world[real_room(ch->in_room->number)], cmd, arg))
       return 1;
 
   /* special in equipment list? */
@@ -1908,7 +1908,7 @@ int special(struct char_data * ch, int cmd, char *arg)
         return 1;
 
   /* special in object present? */
-  for (i = ch->in_veh ? ch->in_veh->contents : ch->en_room->contents; i; i = i->next_content)
+  for (i = ch->in_veh ? ch->in_veh->contents : ch->in_room->contents; i; i = i->next_content)
     if (GET_OBJ_SPEC(i) != NULL && !(ch->in_veh && ch->vfront != i->vfront))
       if (GET_OBJ_SPEC(i) (ch, i, cmd, arg))
         return 1;
@@ -1916,7 +1916,7 @@ int special(struct char_data * ch, int cmd, char *arg)
   if (!veh)
   {
     struct char_data *k;
-    for (k = ch->en_room->people; k; k = k->next_en_room) {
+    for (k = ch->in_room->people; k; k = k->next_in_room) {
       if (GET_MOB_SPEC(k) != NULL)
         if (GET_MOB_SPEC(k) (ch, k, cmd, arg))
           return 1;
@@ -2032,7 +2032,7 @@ int perform_dupe_check(struct descriptor_data *d)
     }
 
     /* we've found a duplicate - blow him away, dumping his eq in limbo. */
-    if (ch->en_room)
+    if (ch->in_room)
       char_from_room(ch);
     char_to_room(ch, &world[1]);
     extract_char(ch);
@@ -2080,7 +2080,7 @@ int perform_dupe_check(struct descriptor_data *d)
       d->character->persona = NULL;
       PLR_FLAGS(d->character).RemoveBit(PLR_MATRIX);
     } else if (PLR_FLAGGED(d->character, PLR_MATRIX)) {
-      for (struct char_data *temp = d->character->en_room->people; temp; temp = temp->next_en_room)
+      for (struct char_data *temp = d->character->in_room->people; temp; temp = temp->next_in_room)
         if (PLR_FLAGGED(temp, PLR_MATRIX))
           temp->persona->decker->hitcher = NULL;
       PLR_FLAGS(d->character).RemoveBit(PLR_MATRIX);
@@ -2336,7 +2336,7 @@ void nanny(struct descriptor_data * d, char *arg)
                 GET_CHAR_NAME(d->character), d->host);
         mudlog(buf, d->character, LOG_CONNLOG, TRUE);
         GET_BAD_PWS(d->character)++;
-        d->character->en_room = &world[real_room(GET_LAST_IN(d->character))];
+        d->character->in_room = &world[real_room(GET_LAST_IN(d->character))];
         playerDB.SaveChar(d->character, GET_LOADROOM(d->character));
         if (++(d->bad_pws) >= max_bad_pws) {    /* 3 strikes and you're out. */
           SEND_TO_Q("Wrong password... disconnecting.\r\n", d);
@@ -2363,7 +2363,7 @@ void nanny(struct descriptor_data * d, char *arg)
       load_result = GET_BAD_PWS(d->character);
       GET_BAD_PWS(d->character) = 0;
 
-      d->character->en_room = &world[real_room(GET_LAST_IN(d->character))];
+      d->character->in_room = &world[real_room(GET_LAST_IN(d->character))];
       playerDB.SaveChar(d->character, GET_LOADROOM(d->character));
       if (isbanned(d->host) == BAN_SELECT &&
           !PLR_FLAGGED(d->character, PLR_SITEOK)) {

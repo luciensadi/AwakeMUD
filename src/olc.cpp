@@ -169,8 +169,8 @@ ACMD (do_redit)
 
   one_argument (argument, arg1);
   if (!*argument) {
-    number = ch->en_room->number;
-    room_num = real_room(ch->en_room->number);
+    number = ch->in_room->number;
+    room_num = real_room(ch->in_room->number);
   } else {
     if (!isdigit (*arg1)) {
       send_to_char ("Please supply a valid number.\r\n", ch);
@@ -206,7 +206,7 @@ ACMD (do_redit)
   PLR_FLAGS(ch).SetBit(PLR_EDITING);
   d = ch->desc;
   STATE(d) = CON_REDIT;
-  GET_WAS_EN(ch) = ch->en_room;
+  GET_WAS_IN(ch) = ch->in_room;
   char_from_room(ch);
   d->edit_number = number;
   if (room_num >= 0) {
@@ -403,7 +403,7 @@ ACMD(do_rclone)
   room->people = NULL;
   // put them in the editing state
   PLR_FLAGS (ch).SetBit(PLR_EDITING);
-  GET_WAS_EN(ch) = ch->en_room;
+  GET_WAS_IN(ch) = ch->in_room;
   char_from_room(ch);
   STATE (ch->desc) = CON_REDIT;
   ch->desc->edit_room = room;
@@ -453,8 +453,8 @@ ACMD(do_dig)
   }
 
   for (counter = 0; counter <= top_of_zone_table; counter++) {
-    if (ch->en_room->number >= (zone_table[counter].number * 100) &&
-        ch->en_room->number <= zone_table[counter].top)
+    if (ch->in_room->number >= (zone_table[counter].number * 100) &&
+        ch->in_room->number <= zone_table[counter].top)
       zone1 = counter;
     if (world[room].number >= (zone_table[counter].number * 100) &&
         world[room].number <= zone_table[counter].top)
@@ -466,26 +466,26 @@ ACMD(do_dig)
     return;
   }
 
-  if (ch->en_room->dir_option[dir] || world[room].dir_option[rev_dir[dir]]) {
+  if (ch->in_room->dir_option[dir] || world[room].dir_option[rev_dir[dir]]) {
     send_to_char("You can't dig over an existing exit.\r\n", ch);
     return;
   }
 
-  ch->en_room->dir_option[dir] = new room_direction_data;
-  memset((char *) ch->en_room->dir_option[dir], 0, sizeof (struct room_direction_data));
-  ch->en_room->dir_option[dir]->to_room = room;
-  ch->en_room->dir_option[dir]->barrier = 4;
-  ch->en_room->dir_option[dir]->material = 5;
-  ch->en_room->dir_option[dir]->exit_info = 0;
-  ch->en_room->dir_option[dir]->to_room_vnum = world[room].number;
+  ch->in_room->dir_option[dir] = new room_direction_data;
+  memset((char *) ch->in_room->dir_option[dir], 0, sizeof (struct room_direction_data));
+  ch->in_room->dir_option[dir]->to_room = room;
+  ch->in_room->dir_option[dir]->barrier = 4;
+  ch->in_room->dir_option[dir]->material = 5;
+  ch->in_room->dir_option[dir]->exit_info = 0;
+  ch->in_room->dir_option[dir]->to_room_vnum = world[room].number;
   dir = rev_dir[dir];
   world[room].dir_option[dir] = new room_direction_data;
   memset((char *) world[room].dir_option[dir], 0, sizeof (struct room_direction_data));
-  world[room].dir_option[dir]->to_room = real_room(ch->en_room->number);
+  world[room].dir_option[dir]->to_room = real_room(ch->in_room->number);
   world[room].dir_option[dir]->barrier = 4;
   world[room].dir_option[dir]->material = 5;
   world[room].dir_option[dir]->exit_info = 0;
-  world[room].dir_option[dir]->to_room_vnum = ch->en_room->number;
+  world[room].dir_option[dir]->to_room_vnum = ch->in_room->number;
   if (zone1 == zone2)
     write_world_to_disk(zone_table[zone1].number);
   else {
@@ -586,13 +586,13 @@ ACMD(do_rdelete)
   struct obj_data *temp_obj;
   for (counter = num; counter <= top_of_world; counter++) {
     world[counter] = world[counter + 1];
-    for (temp_ch = world[counter].people; temp_ch; temp_ch = temp_ch->next_en_room)
-      if (temp_ch->en_room)
-        temp_ch->en_room = &world[counter];
+    for (temp_ch = world[counter].people; temp_ch; temp_ch = temp_ch->next_in_room)
+      if (temp_ch->in_room)
+        temp_ch->in_room = &world[counter];
     /* move objects */
     for (temp_obj = world[counter].contents; temp_obj; temp_obj = temp_obj->next_content)
-      if (temp_obj->en_room)
-        temp_obj->en_room = &world[counter];
+      if (temp_obj->in_room)
+        temp_obj->in_room = &world[counter];
   }
 
   int counter2;
@@ -1480,12 +1480,12 @@ ACMD(do_mdelete)
         temp = new char_data;
         *temp = *j;
         *j = mob_proto[counter + 1];
-        j->en_room = temp->en_room;
+        j->in_room = temp->in_room;
         j->nr = counter;
         j->carrying = temp->carrying;
         for (c = 0; c < NUM_WEARS; c++)
           j->equipment[c] = temp->equipment[c];
-        j->next_en_room = temp->next_en_room;
+        j->next_in_room = temp->next_in_room;
         j->next = temp->next;
         Mem->ClearCh(temp);
       }

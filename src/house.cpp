@@ -692,9 +692,9 @@ ACMD(do_decorate)
 {
   extern void write_world_to_disk(int vnum);
   struct house_control_rec *i;
-  if (!ROOM_FLAGGED(ch->en_room, ROOM_HOUSE))
+  if (!ROOM_FLAGGED(ch->in_room, ROOM_HOUSE))
     send_to_char("You must be in your house to set the description.\r\n", ch);
-  else if ((i = find_house(GET_ROOM_VNUM(ch->en_room))) == NULL)
+  else if ((i = find_house(GET_ROOM_VNUM(ch->in_room))) == NULL)
     send_to_char("Um.. this house seems to be screwed up.\r\n", ch);
   else if (GET_IDNUM(ch) != i->owner)
     send_to_char("Only the primary owner can set the room description.\r\n", ch);
@@ -718,9 +718,9 @@ ACMD(do_house)
 
   one_argument(argument, arg);
 
-  if (!ROOM_FLAGGED(ch->en_room, ROOM_HOUSE))
+  if (!ROOM_FLAGGED(ch->in_room, ROOM_HOUSE))
     send_to_char("You must be in your house to set guests.\r\n", ch);
-  else if ((i = find_house(GET_ROOM_VNUM(ch->en_room))) == NULL)
+  else if ((i = find_house(GET_ROOM_VNUM(ch->in_room))) == NULL)
     send_to_char("Um.. this house seems to be screwed up.\r\n", ch);
   else if (GET_IDNUM(ch) != i->owner)
     send_to_char("Only the primary owner can set guests.\r\n", ch);

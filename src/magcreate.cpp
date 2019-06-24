@@ -193,7 +193,7 @@ void spell_design(struct char_data *ch, struct obj_data *formula)
            (GET_TRADITION(ch) != TRAD_SHAMANIC && GET_OBJ_VAL(lib, 0) == TYPE_LIBRARY_SPELL)))
         break;
   } else {
-    for (lib = ch->en_room->contents; lib; lib = lib->next_content)
+    for (lib = ch->in_room->contents; lib; lib = lib->next_content)
       if (GET_OBJ_TYPE(lib) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(lib, 1) >= GET_OBJ_VAL(formula, 0) &&
           ((GET_TRADITION(ch) == TRAD_SHAMANIC
             && GET_OBJ_VAL(lib, 0) == TYPE_LODGE && GET_OBJ_VAL(lib, 3) == GET_IDNUM(ch)) ||

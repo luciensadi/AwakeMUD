@@ -373,33 +373,33 @@ void spell_modify(struct char_data *ch, struct sustain_data *sust, bool add)
       GET_BALLISTIC(ch) += mod;
       break;
     case SPELL_POLTERGEIST:
-      if (ch->en_room) {
+      if (ch->in_room) {
         if (mod == 1) {
-          ch->en_room->poltergeist[0]++;
-          if (sust->force > ch->en_room->poltergeist[1])
-            ch->en_room->poltergeist[1] = sust->force;
-        } else if (!--ch->en_room->poltergeist[0])
-          ch->en_room->poltergeist[1] = 0;
+          ch->in_room->poltergeist[0]++;
+          if (sust->force > ch->in_room->poltergeist[1])
+            ch->in_room->poltergeist[1] = sust->force;
+        } else if (!--ch->in_room->poltergeist[0])
+          ch->in_room->poltergeist[1] = 0;
       }
       break;
     case SPELL_LIGHT:
-      if (ch->en_room) {
+      if (ch->in_room) {
         if (mod == 1) {
-          ch->en_room->light[0]++;
-          if (sust->force > ch->en_room->light[1])
-            ch->en_room->light[1] = MIN(sust->force, sust->success);
-        } else if (!--ch->en_room->light[0])
-          ch->en_room->light[1] = 0;
+          ch->in_room->light[0]++;
+          if (sust->force > ch->in_room->light[1])
+            ch->in_room->light[1] = MIN(sust->force, sust->success);
+        } else if (!--ch->in_room->light[0])
+          ch->in_room->light[1] = 0;
       }
       break;
     case SPELL_SHADOW:
-      if (ch->en_room) {
+      if (ch->in_room) {
         if (mod == 1) {
-          ch->en_room->shadow[0]++;
-          if (sust->force > ch->en_room->shadow[1])
-            ch->en_room->shadow[1] = MIN(sust->force, sust->success);
-        } else if (!--ch->en_room->shadow[0])
-          ch->en_room->shadow[1] = 0;
+          ch->in_room->shadow[0]++;
+          if (sust->force > ch->in_room->shadow[1])
+            ch->in_room->shadow[1] = MIN(sust->force, sust->success);
+        } else if (!--ch->in_room->shadow[0])
+          ch->in_room->shadow[1] = 0;
       }
       break;
     case SPELL_INVIS:
@@ -415,13 +415,13 @@ void spell_modify(struct char_data *ch, struct sustain_data *sust, bool add)
         AFF_FLAGS(ch).RemoveBit(AFF_SPELLIMPINVIS);
       break;
     case SPELL_SILENCE:
-      if (ch->en_room) {
+      if (ch->in_room) {
         if (mod == 1) {
-          ch->en_room->silence[0]++;
-          if (sust->force > ch->en_room->silence[1])
-            ch->en_room->silence[1] = MIN(sust->force, sust->success);
-        } else if (!--ch->en_room->silence[0])
-          ch->en_room->silence[1] = 0;
+          ch->in_room->silence[0]++;
+          if (sust->force > ch->in_room->silence[1])
+            ch->in_room->silence[1] = MIN(sust->force, sust->success);
+        } else if (!--ch->in_room->silence[0])
+          ch->in_room->silence[1] = 0;
       }
       break;
     case SPELL_COMBATSENSE:
@@ -957,7 +957,7 @@ void veh_from_room(struct veh_data * veh)
     log("SYSERR: Null vehicle passed to veh_from_room. Terminating.");
     shutdown();
   }
-  if (!veh->en_room && veh->in_veh == NULL) {
+  if (!veh->in_room && veh->in_veh == NULL) {
     log("SYSERR: Vehicle in NOWHERE and not in other vehicle passed to veh_from_room. Terminating.");
     shutdown();
   }
@@ -977,10 +977,10 @@ void veh_from_room(struct veh_data * veh)
     }
     veh->in_veh->usedload -= veh->body * mult;
   } else {
-    REMOVE_FROM_LIST(veh, veh->en_room->vehicles, next_veh);
-    veh->en_room->light[0]--;
+    REMOVE_FROM_LIST(veh, veh->in_room->vehicles, next_veh);
+    veh->in_room->light[0]--;
   }
-  veh->en_room = NULL;
+  veh->in_room = NULL;
   veh->next_veh = NULL;
   veh->in_veh = NULL;
 }
@@ -990,7 +990,7 @@ void char_from_room(struct char_data * ch)
 {
   struct char_data *temp;
   
-  if (ch == NULL || (!ch->en_room && !ch->in_veh)) {
+  if (ch == NULL || (!ch->in_room && !ch->in_veh)) {
     log("SYSERR: NULL in handler.c, char_from_room");
     shutdown();
   }
@@ -1001,15 +1001,15 @@ void char_from_room(struct char_data * ch)
   if (GET_EQ(ch, WEAR_LIGHT) != NULL)
     if (GET_OBJ_TYPE(GET_EQ(ch, WEAR_LIGHT)) == ITEM_LIGHT)
       if (GET_OBJ_VAL(GET_EQ(ch, WEAR_LIGHT), 2))       /* Light is ON */
-        ch->en_room->light[0]--;
-  if (affected_by_spell(ch, SPELL_LIGHT) && !--ch->en_room->light[0])
-    ch->en_room->light[1] = 0;
-  if (affected_by_spell(ch, SPELL_SHADOW) && !--ch->en_room->shadow[0])
-    ch->en_room->shadow[1] = 0;
-  if (affected_by_spell(ch, SPELL_POLTERGEIST) && !--ch->en_room->poltergeist[0])
-    ch->en_room->poltergeist[1] = 0;
-  if (affected_by_spell(ch, SPELL_SILENCE) && !--ch->en_room->silence[0])
-    ch->en_room->silence[1] = 0;
+        ch->in_room->light[0]--;
+  if (affected_by_spell(ch, SPELL_LIGHT) && !--ch->in_room->light[0])
+    ch->in_room->light[1] = 0;
+  if (affected_by_spell(ch, SPELL_SHADOW) && !--ch->in_room->shadow[0])
+    ch->in_room->shadow[1] = 0;
+  if (affected_by_spell(ch, SPELL_POLTERGEIST) && !--ch->in_room->poltergeist[0])
+    ch->in_room->poltergeist[1] = 0;
+  if (affected_by_spell(ch, SPELL_SILENCE) && !--ch->in_room->silence[0])
+    ch->in_room->silence[1] = 0;
   if (ch->in_veh)
   {
     REMOVE_FROM_LIST(ch, ch->in_veh->people, next_in_veh);
@@ -1020,11 +1020,11 @@ void char_from_room(struct char_data * ch)
     AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
   } else
   {
-    if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_PACIFY) && ch->en_room->peaceful > 0)
-      ch->en_room->peaceful--;
-    REMOVE_FROM_LIST(ch, ch->en_room->people, next_en_room);
-    ch->en_room = NULL;
-    ch->next_en_room = NULL;
+    if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_PACIFY) && ch->in_room->peaceful > 0)
+      ch->in_room->peaceful--;
+    REMOVE_FROM_LIST(ch, ch->in_room->people, next_in_room);
+    ch->in_room = NULL;
+    ch->next_in_room = NULL;
     CHAR_X(ch) = CHAR_Y(ch) = 0;
   }
 }
@@ -1035,7 +1035,7 @@ void char_to_veh(struct veh_data * veh, struct char_data * ch)
     log("SYSLOG: Illegal value(s) passed to char_to_veh");
   else
   {
-    if (ch->en_room || ch->in_veh)
+    if (ch->in_room || ch->in_veh)
       char_from_room(ch);
     ch->next_in_veh = veh->people;
     veh->people = ch;
@@ -1053,7 +1053,7 @@ void veh_to_room(struct veh_data * veh, struct room_data *room)
   {
     veh->next_veh = room->vehicles;
     room->vehicles = veh;
-    veh->en_room = room;
+    veh->in_room = room;
     room->light[0]++; // headlights
   }
 }
@@ -1137,9 +1137,9 @@ void char_to_room(struct char_data * ch, struct room_data *room)
     log("SYSLOG: Illegal value(s) passed to char_to_room");
     room = &world[0];
   }
-  ch->next_en_room = room->people;
+  ch->next_in_room = room->people;
   room->people = ch;
-  ch->en_room = room;
+  ch->in_room = room;
   if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_PACIFY))
     room->peaceful++;
   
@@ -1148,7 +1148,7 @@ void char_to_room(struct char_data * ch, struct room_data *room)
       if (GET_OBJ_VAL(GET_EQ(ch, WEAR_LIGHT), 2))     /* Light ON */
         room->light[0]++;
   if (GET_TRADITION(ch) == TRAD_SHAMANIC)
-    GET_DOMAIN(ch) = SECT(ch->en_room);
+    GET_DOMAIN(ch) = SECT(ch->in_room);
   if (affected_by_spell(ch, SPELL_SILENCE))
   {
     room->silence[0]++;
@@ -1204,9 +1204,9 @@ void obj_to_char(struct obj_data * object, struct char_data * ch)
       mudlog(buf, ch, LOG_WIZLOG, TRUE);
       
       return;
-    } else if (object->en_room) {
+    } else if (object->in_room) {
       sprintf(buf, "Obj_to_char error on %s giving to %s. Already in %ld.", object->text.name,
-              GET_CHAR_NAME(ch) ? GET_CHAR_NAME(ch) : GET_NAME(ch), object->en_room->number);
+              GET_CHAR_NAME(ch) ? GET_CHAR_NAME(ch) : GET_NAME(ch), object->in_room->number);
       mudlog(buf, ch, LOG_WIZLOG, TRUE);
       return;
     }
@@ -1229,7 +1229,7 @@ void obj_to_char(struct obj_data * object, struct char_data * ch)
     }
     
     object->carried_by = ch;
-    object->en_room = NULL;
+    object->in_room = NULL;
     IS_CARRYING_W(ch) += GET_OBJ_WEIGHT(object);
     IS_CARRYING_N(ch)++;
     
@@ -1252,7 +1252,7 @@ void obj_to_cyberware(struct obj_data * object, struct char_data * ch)
     object->next_content = ch->cyberware;
     ch->cyberware = object;
     object->carried_by = ch;
-    object->en_room = NULL;
+    object->in_room = NULL;
     affect_total(ch);
   } else
     log("SYSLOG: NULL obj or char passed to obj_to_cyberware");
@@ -1272,7 +1272,7 @@ void obj_to_bioware(struct obj_data * object, struct char_data * ch)
     object->next_content = ch->bioware;
     ch->bioware = object;
     object->carried_by = ch;
-    object->en_room = NULL;
+    object->in_room = NULL;
     
     if (GET_OBJ_VAL(object, 0) != BIO_ADRENALPUMP || GET_OBJ_VAL(object, 5) > 0)
       for (temp = 0; temp < MAX_OBJ_AFFECT; temp++)
@@ -1365,9 +1365,9 @@ void equip_char(struct char_data * ch, struct obj_data * obj, int pos)
     log("SYSLOG: EQUIP: Obj is carried_by when equip.");
     return;
   }
-  if (obj->en_room)
+  if (obj->in_room)
   {
-    log("SYSLOG: EQUIP: Obj is en_room when equip.");
+    log("SYSLOG: EQUIP: Obj is in_room when equip.");
     return;
   }
   if (IS_OBJ_STAT(obj, ITEM_GODONLY) && !IS_NPC(ch) && !IS_SENATOR(ch))
@@ -1383,11 +1383,11 @@ void equip_char(struct char_data * ch, struct obj_data * obj, int pos)
   obj->worn_by = ch;
   obj->worn_on = pos;
   
-  if (ch->en_room)
+  if (ch->in_room)
   {
     if (pos == WEAR_LIGHT && GET_OBJ_TYPE(obj) == ITEM_LIGHT)
       if (GET_OBJ_VAL(obj, 2))  /* if light is ON */
-        ch->en_room->light[0]++;
+        ch->in_room->light[0]++;
   }
   
   for (j = 0; j < MAX_OBJ_AFFECT; j++)
@@ -1415,11 +1415,11 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus)
   obj->worn_by = NULL;
   obj->worn_on = -1;
   
-  if (ch->en_room)
+  if (ch->in_room)
   {
     if (pos == WEAR_LIGHT && GET_OBJ_TYPE(obj) == ITEM_LIGHT)
       if (GET_OBJ_VAL(obj, 2))  /* if light is ON */
-        ch->en_room->light[0]--;
+        ch->in_room->light[0]--;
   }
   
   if (pos == WEAR_HOLD || pos == WEAR_WIELD)
@@ -1548,7 +1548,7 @@ struct char_data *get_char_room(const char *name, struct room_data *room)
   if (!(number = get_number(&tmp)))
     return NULL;
   
-  for (i = room->people; i && (j <= number); i = i->next_en_room)
+  for (i = room->people; i && (j <= number); i = i->next_in_room)
     if (isname(tmp, GET_KEYWORDS(i)) ||
         isname(tmp, GET_NAME(i)) || isname(tmp, GET_CHAR_NAME(i)))
       if (++j == number)
@@ -1585,7 +1585,7 @@ void obj_to_veh(struct obj_data * object, struct veh_data * veh)
     }
     veh->usedload += GET_OBJ_WEIGHT(object);
     object->in_veh = veh;
-    object->en_room = NULL;
+    object->in_room = NULL;
     object->carried_by = NULL;
   }
 }
@@ -1622,7 +1622,7 @@ void obj_to_room(struct obj_data * object, struct room_data *room)
       room->contents = object;
     }
     
-    object->en_room = room;
+    object->in_room = room;
     object->carried_by = NULL;
     
     // If it's a workshop, make sure the room's workshops[] table reflects this.
@@ -1636,7 +1636,7 @@ void obj_to_room(struct obj_data * object, struct room_data *room)
 void obj_from_room(struct obj_data * object)
 {
   struct obj_data *temp;
-  if (!object || (!object->en_room && !object->in_veh))
+  if (!object || (!object->in_room && !object->in_veh))
   {
     log("SYSLOG: NULL object or obj not in a room passed to obj_from_room");
     return;
@@ -1649,11 +1649,11 @@ void obj_from_room(struct obj_data * object)
     // Handle workshop removal.
     if (GET_OBJ_TYPE(object) == ITEM_WORKSHOP)
       remove_workshop_from_room(object);
-    REMOVE_FROM_LIST(object, object->en_room->contents, next_content);
+    REMOVE_FROM_LIST(object, object->in_room->contents, next_content);
   }
   
   object->in_veh = NULL;
-  object->en_room = NULL;
+  object->in_room = NULL;
   object->next_content = NULL;
 }
 
@@ -1801,7 +1801,7 @@ void extract_icon(struct matrix_icon * icon)
 
 void extract_veh(struct veh_data * veh)
 {
-  if (veh->en_room == NULL && veh->in_veh == NULL) {
+  if (veh->in_room == NULL && veh->in_veh == NULL) {
     if (veh->carriedvehs || veh->people) {
       sprintf(buf, "SYSERR: extract_veh called on vehicle-with-contents without containing room or veh!");
       mudlog(buf, NULL, LOG_SYSLOG, TRUE);
@@ -1813,10 +1813,10 @@ void extract_veh(struct veh_data * veh)
     sprintf(buf, "As %s disintegrates, %s falls out!\r\n", veh->short_description, temp->short_description);
     sprintf(buf2, "You feel the sickening sensation of falling as %s disintegrates around your vehicle.\r\n", veh->short_description);
     send_to_veh(buf2, temp, NULL, FALSE);
-    if (veh->en_room) {
-      send_to_room(buf, veh->en_room);
+    if (veh->in_room) {
+      send_to_room(buf, veh->in_room);
       veh_from_room(temp);
-      veh_to_room(temp, veh->en_room);
+      veh_to_room(temp, veh->in_room);
     } else if (veh->in_veh) {
       send_to_veh(buf, veh, NULL, FALSE);
       veh_to_veh(temp, veh->in_veh);
@@ -1830,9 +1830,9 @@ void extract_veh(struct veh_data * veh)
   struct char_data *ch = NULL;
   while ((ch = veh->people)) {
     send_to_char(ch, "%s disintegrates around you!", veh->short_description);
-    if (veh->en_room) {
+    if (veh->in_room) {
       char_from_room(ch);
-      char_to_room(ch, veh->en_room);
+      char_to_room(ch, veh->in_room);
       sprintf(buf, "As %s disintegrates, $n falls out!", veh->short_description);
       act(buf, FALSE, ch, 0, 0, TO_ROOM);
     } else if (veh->in_veh) {
@@ -1845,7 +1845,7 @@ void extract_veh(struct veh_data * veh)
   
   // Perform actual vehicle extraction.
   REMOVE_FROM_LIST(veh, veh_list, next);
-  if (veh->en_room)
+  if (veh->in_room)
     veh_from_room(veh);
   veh_index[veh->veh_number].number--;
   Mem->DeleteVehicle(veh);
@@ -1894,7 +1894,7 @@ void extract_obj(struct obj_data * obj)
     }
   }
   
-  if (obj->en_room || obj->in_veh != NULL) {
+  if (obj->in_room || obj->in_veh != NULL) {
     obj_from_room(obj);
     set = TRUE;
   }
@@ -2024,8 +2024,8 @@ void extract_char(struct char_data * ch)
   }
   
   /* untarget char from vehicles */
-  if (ch->en_room)
-    for (veh = ch->en_room->vehicles; veh; veh = veh->next_veh)
+  if (ch->in_room)
+    for (veh = ch->in_room->vehicles; veh; veh = veh->next_veh)
       for (obj = veh->mount; obj; obj = obj->next_content)
         if (obj->targ == ch)
           obj->targ = NULL;
@@ -2084,7 +2084,7 @@ void extract_char(struct char_data * ch)
     ch->persona = NULL;
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
   } else if (PLR_FLAGGED(ch, PLR_MATRIX))
-    for (struct char_data *temp = ch->en_room->people; temp; temp = temp->next_en_room)
+    for (struct char_data *temp = ch->in_room->people; temp; temp = temp->next_in_room)
       if (PLR_FLAGGED(temp, PLR_MATRIX))
         temp->persona->decker->hitcher = NULL;
   
@@ -2120,9 +2120,9 @@ void extract_char(struct char_data * ch)
   if (ch->desc && ch->desc->original)
     do_return(ch, "", 0, 0);
   
-  /* remove the character from their room (use en_room to reference ch->en_room after this) */
-  struct room_data *en_room = ch->en_room;
-  if (ch->en_room || ch->in_veh)
+  /* remove the character from their room (use in_room to reference ch->in_room after this) */
+  struct room_data *in_room = ch->in_room;
+  if (ch->in_room || ch->in_veh)
     char_from_room(ch);
   
   if (!IS_NPC(ch))
@@ -2134,7 +2134,7 @@ void extract_char(struct char_data * ch)
                              PLR_REMOTE, ENDBIT);
     
     /* restore them to their room, because corpses love rooms */
-    ch->en_room = en_room;
+    ch->in_room = in_room;
     
     /* throw them back in the menus */
     if (ch->desc) {
@@ -2166,7 +2166,7 @@ struct char_data *get_player_vis(struct char_data * ch, char *name, int inroom)
   struct char_data *i;
   
   for (i = character_list; i; i = i->next)
-    if (!IS_NPC(i) && (!inroom || i->en_room == ch->en_room) &&
+    if (!IS_NPC(i) && (!inroom || i->in_room == ch->in_room) &&
         (isname(name, GET_KEYWORDS(i)) || isname(name, GET_CHAR_NAME(i)) || recog(ch, i, name))
         && GET_LEVEL(ch) >= GET_INCOG_LEV(i))
       return i;
@@ -2206,7 +2206,7 @@ struct char_data *get_char_room_vis(struct char_data * ch, char *name)
     if ((i = get_char_veh(ch, name, ch->in_veh)))
       return i;
   
-  for (i = ch->en_room->people; i && j <= number; i = i->next_en_room)
+  for (i = ch->in_room->people; i && j <= number; i = i->next_in_room)
     if ((isname(tmp, GET_KEYWORDS(i)) ||
          isname(tmp, GET_NAME(i)) || recog(ch, i, name)) &&
         CAN_SEE(ch, i))
@@ -2230,7 +2230,7 @@ struct char_data *get_char_in_list_vis(struct char_data * ch, char *name, struct
   if (!(number = get_number(&tmp)))
     return get_player_vis(ch, tmp, 1);
   
-  for (; list && j <= number; list = list->next_en_room)
+  for (; list && j <= number; list = list->next_in_room)
     if ((isname(tmp, GET_KEYWORDS(list)) ||
          isname(tmp, GET_NAME(list)) || recog(ch, list, name)) &&
         CAN_SEE(ch, list))
@@ -2305,7 +2305,7 @@ struct obj_data *get_obj_vis(struct char_data * ch, char *name)
     return i;
   
   /* scan room */
-  if ((i = get_obj_in_list_vis(ch, name, ch->en_room->contents)))
+  if ((i = get_obj_in_list_vis(ch, name, ch->in_room->contents)))
     return i;
   
   strcpy(tmp, name);
@@ -2518,13 +2518,13 @@ int generic_find(char *arg, int bitvector, struct char_data * ch,
       if ((*tar_ch = get_char_veh(ch, name, ch->in_veh)))
         return (FIND_CHAR_ROOM);
       else {
-        struct room_data *was_in = ch->en_room;
-        ch->en_room = ch->in_veh->en_room;
+        struct room_data *was_in = ch->in_room;
+        ch->in_room = ch->in_veh->in_room;
         if ((*tar_ch = get_char_room_vis(ch, name))) {
-          ch->en_room = was_in;
+          ch->in_room = was_in;
           return (FIND_CHAR_ROOM);
         }
-        ch->en_room = was_in;
+        ch->in_room = was_in;
       }
     } else {
       if ((*tar_ch = get_char_room_vis(ch, name)))
@@ -2553,7 +2553,7 @@ int generic_find(char *arg, int bitvector, struct char_data * ch,
     if (ch->in_veh) {
       if ((*tar_obj = get_obj_in_list_vis(ch, name, ch->in_veh->contents)))
         return (FIND_OBJ_ROOM);
-    } else if ((*tar_obj = get_obj_in_list_vis(ch, name, ch->en_room->contents)))
+    } else if ((*tar_obj = get_obj_in_list_vis(ch, name, ch->in_room->contents)))
       return (FIND_OBJ_ROOM);
   }
   if (IS_SET(bitvector, FIND_OBJ_WORLD))

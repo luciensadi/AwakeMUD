@@ -57,13 +57,13 @@ int can_move(struct char_data *ch, int dir, int extra)
   if (IS_SET(extra, CHECK_SPECIAL) && special(ch, convert_dir[dir], &empty_argument))
     return 0;
 
-  if (ch->en_room->icesheet[0] && !IS_ASTRAL(ch))
-    if (success_test(GET_QUI(ch), ch->en_room->icesheet[0] + modify_target(ch)) < 1)
+  if (ch->in_room->icesheet[0] && !IS_ASTRAL(ch))
+    if (success_test(GET_QUI(ch), ch->in_room->icesheet[0] + modify_target(ch)) < 1)
     {
       send_to_char("The ice at your feet causes you to trip and fall!\r\n", ch);
       return 0;
     }
-  if (IS_AFFECTED(ch, AFF_CHARM) && ch->master && ch->en_room == ch->master->en_room)
+  if (IS_AFFECTED(ch, AFF_CHARM) && ch->master && ch->in_room == ch->master->in_room)
   {
     send_to_char("The thought of leaving your master makes you weep.\r\n", ch);
     act("$n bursts into tears.", FALSE, ch, 0, 0, TO_ROOM);
@@ -81,22 +81,22 @@ int can_move(struct char_data *ch, int dir, int extra)
     }
   if (ROOM_FLAGGED(&world[EXIT(ch, dir)->to_room], ROOM_TUNNEL) && !IS_ASTRAL(ch))
     if (world[EXIT(ch, dir)->to_room].people &&
-        world[EXIT(ch, dir)->to_room].people->next_en_room)
+        world[EXIT(ch, dir)->to_room].people->next_in_room)
     {
       send_to_char("There isn't enough room there for another person!\r\n", ch);
       return 0;
     }
 
-  if (ch->en_room->func && ch->en_room->func == escalator)
+  if (ch->in_room->func && ch->in_room->func == escalator)
   {
     send_to_char("You can't get off a moving escalator!\r\n", ch);
     return 0;
   }
 
-  if (IS_WATER(ch->en_room) && !IS_NPC(ch) &&
+  if (IS_WATER(ch->in_room) && !IS_NPC(ch) &&
       !IS_SENATOR(ch))
   {
-    target = MAX(2, ch->en_room->rating);
+    target = MAX(2, ch->in_room->rating);
     skill = SKILL_ATHLETICS;
         
     i = get_skill(ch, skill, target);
@@ -154,10 +154,10 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   if (!can_move(ch, dir, extra))
     return 0;
 
-  GET_LASTROOM(ch) = ch->en_room->number;
+  GET_LASTROOM(ch) = ch->in_room->number;
 
-  if (ch->en_room->dir_option[dir]->to_room >= real_room(FIRST_CAB) &&
-      ch->en_room->dir_option[dir]->to_room <= real_room(LAST_CAB))
+  if (ch->in_room->dir_option[dir]->to_room >= real_room(FIRST_CAB) &&
+      ch->in_room->dir_option[dir]->to_room <= real_room(LAST_CAB))
     sprintf(buf2, "$n gets into the taxi.");
   else if (vict)
   {
@@ -166,12 +166,12 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     act(buf1, FALSE, ch, 0, vict, TO_CHAR);
   } else if (ch->char_specials.leave)
     sprintf(buf2, "$n %s %s.", ch->char_specials.leave, fulldirs[dir]);
-  else if (IS_WATER(ch->en_room) && !IS_WATER(&world[EXIT(ch, dir)->to_room]))
+  else if (IS_WATER(ch->in_room) && !IS_WATER(&world[EXIT(ch, dir)->to_room]))
     sprintf(buf2, "$n climbs out of the water to the %s.", fulldirs[dir]);
-  else if (!IS_WATER(ch->en_room) && IS_WATER(&world[EXIT(ch, dir)->to_room]))
+  else if (!IS_WATER(ch->in_room) && IS_WATER(&world[EXIT(ch, dir)->to_room]))
     sprintf(buf2, "$n jumps into the water to the %s.", fulldirs[dir]);
   else
-    sprintf(buf2, "$n %s %s.", (IS_WATER(ch->en_room) ? "swims" : "leaves"), fulldirs[dir]);
+    sprintf(buf2, "$n %s %s.", (IS_WATER(ch->in_room) ? "swims" : "leaves"), fulldirs[dir]);
 
   if (IS_AFFECTED(ch, AFF_SNEAK))
   {
@@ -180,9 +180,9 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     int tchtarg = skill;
     if (affected_by_spell(ch, SPELL_STEALTH))
       tchtarg += 4;
-    if (ch->en_room->silence[0])
-      tchtarg += ch->en_room->silence[1];
-    for (tch = ch->en_room->people; tch; tch = tch->next_en_room) {
+    if (ch->in_room->silence[0])
+      tchtarg += ch->in_room->silence[1];
+    for (tch = ch->in_room->people; tch; tch = tch->next_in_room) {
       if (AWAKE(tch) && CAN_SEE(tch, ch) && (tch != ch) && !PRF_FLAGGED(tch, PRF_MOVEGAG)) {
         saw_sneaker = resisted_test(GET_INT(tch), tchtarg, skill, (GET_INT(tch) + target));
         if (saw_sneaker >= 0)
@@ -191,23 +191,23 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     }
   } else
   {
-    for (tch = ch->en_room->people; tch; tch = tch->next_en_room)
+    for (tch = ch->in_room->people; tch; tch = tch->next_in_room)
       if (tch != ch && !PRF_FLAGGED(tch, PRF_MOVEGAG))
         act(buf2, TRUE, ch, 0, tch, TO_VICT);
-    for (tveh = ch->en_room->vehicles; tveh; tveh = tveh->next_veh)
+    for (tveh = ch->in_room->vehicles; tveh; tveh = tveh->next_veh)
       for (tch = tveh->people; tch; tch = tch->next_in_veh)
         if (tveh->cspeed <= SPEED_IDLE || success_test(GET_INT(tch), 4))
           act(buf2, TRUE, ch, 0, tch, TO_VICT);
-    if (ch->en_room->watching)
-      for (struct char_data *tch = ch->en_room->watching; tch; tch = tch->next_watching)
+    if (ch->in_room->watching)
+      for (struct char_data *tch = ch->in_room->watching; tch; tch = tch->next_watching)
           act(buf2, TRUE, ch, 0, tch, TO_VICT);
   }
-  was_in = ch->en_room;
+  was_in = ch->in_room;
   STOP_WORKING(ch);
   char_from_room(ch);
   char_to_room(ch, &world[was_in->dir_option[dir]->to_room]);
 
-  if (ROOM_FLAGGED(was_in, ROOM_INDOORS) && !ROOM_FLAGGED(ch->en_room, ROOM_INDOORS))
+  if (ROOM_FLAGGED(was_in, ROOM_INDOORS) && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))
   {
     extern const char *moon[];
     const char *time_of_day[] = {
@@ -229,7 +229,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
       strcat(buf, weather_line[weather_info.sky]);
     send_to_char(buf, ch);
   }
-  if (ROOM_FLAGGED(ch->en_room, ROOM_INDOORS) && GET_HEIGHT(ch) >= ch->en_room->z * 100)
+  if (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) && GET_HEIGHT(ch) >= ch->in_room->z * 100)
     send_to_char("You have to slouch to fit in here.\r\n", ch);
   if (ch->desc != NULL)
     look_at_room(ch, 0);
@@ -239,12 +239,12 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     sprintf(buf2, "$n drags %s in from %s.", GET_NAME(vict), thedirs[rev_dir[dir]]);
   else if (ch->char_specials.arrive)
     sprintf(buf2, "$n %s %s.", ch->char_specials.arrive, thedirs[rev_dir[dir]]);
-  else if (IS_WATER(was_in) && !IS_WATER(ch->en_room))
+  else if (IS_WATER(was_in) && !IS_WATER(ch->in_room))
     sprintf(buf2, "$n climbs out of the water from %s.", thedirs[rev_dir[dir]]);
-  else if (!IS_WATER(was_in) && IS_WATER(ch->en_room))
+  else if (!IS_WATER(was_in) && IS_WATER(ch->in_room))
     sprintf(buf2, "$n jumps into the water from %s.", thedirs[rev_dir[dir]]);
   else
-    sprintf(buf2, "$n %s %s.", (IS_WATER(ch->en_room) ?
+    sprintf(buf2, "$n %s %s.", (IS_WATER(ch->in_room) ?
                                 "swims in from" : "arrives from"), thedirs[rev_dir[dir]]);
 
   if (IS_AFFECTED(ch, AFF_SNEAK))
@@ -254,9 +254,9 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     int tchtarg = skill;
     if (affected_by_spell(ch, SPELL_STEALTH))
       tchtarg += 4;
-    if (ch->en_room->silence[0])
-      tchtarg += ch->en_room->silence[1];
-    for (tch = ch->en_room->people; tch; tch = tch->next_en_room) {
+    if (ch->in_room->silence[0])
+      tchtarg += ch->in_room->silence[1];
+    for (tch = ch->in_room->people; tch; tch = tch->next_in_room) {
       if (AWAKE(tch) && CAN_SEE(tch, ch) && (tch != ch)) {
         saw_sneaker = resisted_test(GET_INT(tch), tchtarg, skill, (GET_INT(tch) + target));
         if (saw_sneaker >= 0) {
@@ -276,17 +276,17 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     }
   } else
   {
-    for (tch = ch->en_room->people; tch; tch = tch->next_en_room)
+    for (tch = ch->in_room->people; tch; tch = tch->next_in_room)
       if (tch != ch && !PRF_FLAGGED(tch, PRF_MOVEGAG))
         act(buf2, TRUE, ch, 0, tch, TO_VICT);
-    for (tveh = ch->en_room->vehicles; tveh; tveh = tveh->next_veh)
+    for (tveh = ch->in_room->vehicles; tveh; tveh = tveh->next_veh)
       for (tch = tveh->people; tch; tch = tch->next_in_veh)
         if (tveh->cspeed <= SPEED_IDLE || success_test(GET_INT(tch), 4))
           act(buf2, TRUE, ch, 0, tch, TO_VICT);
-    if (ch->en_room->watching)
-      for (struct char_data *tch = ch->en_room->watching; tch; tch = tch->next_watching)
+    if (ch->in_room->watching)
+      for (struct char_data *tch = ch->in_room->watching; tch; tch = tch->next_watching)
         act(buf2, TRUE, ch, 0, tch, TO_VICT);
-    for (tch = ch->en_room->people; tch; tch = tch->next_en_room) {
+    for (tch = ch->in_room->people; tch; tch = tch->next_in_room) {
       if (!FIGHTING(tch) && CAN_SEE(tch, ch) && hunting_escortee(tch, ch))
         set_fighting(tch, ch);
       else if (IS_NPC(tch)) {
@@ -302,7 +302,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   }
 
 #ifdef DEATH_FLAGS
-  if (ROOM_FLAGGED(ch->en_room, ROOM_DEATH) && !IS_NPC(ch) && !IS_SENATOR(ch)) {
+  if (ROOM_FLAGGED(ch->in_room, ROOM_DEATH) && !IS_NPC(ch) && !IS_SENATOR(ch)) {
     send_to_char("You feel the world slip into darkness, you better hope a wandering DocWagon finds you.\r\n", ch);
     death_cry(ch);
     act("$n vanishes into thin air.", FALSE, ch, 0, 0, TO_ROOM);
@@ -330,12 +330,12 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   }
 #endif
     
-  if (ROOM_FLAGGED(ch->en_room, ROOM_FALL) && !IS_ASTRAL(ch) && !(IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_NOHASSLE))) {
+  if (ROOM_FLAGGED(ch->in_room, ROOM_FALL) && !IS_ASTRAL(ch) && !(IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_NOHASSLE))) {
     perform_fall(ch);
     return 1;
   }
   
-  if (IS_NPC(ch) && ch->master && !IS_NPC(ch->master) && GET_QUEST(ch->master) && ch->en_room == ch->master->en_room) {
+  if (IS_NPC(ch) && ch->master && !IS_NPC(ch->master) && GET_QUEST(ch->master) && ch->in_room == ch->master->in_room) {
     check_quest_destination(ch->master, ch);
     return 1;
   }
@@ -346,7 +346,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
 // check fall returns TRUE if the player FELL, FALSE if (s)he did not
 bool check_fall(struct char_data *ch, int modifier, const char *fall_message)
 {
-  int base_target = ch->en_room->rating + modify_target(ch);
+  int base_target = ch->in_room->rating + modify_target(ch);
   int i, autosucc = 0, dice, success;
 
   for (i = WEAR_LIGHT; i < NUM_WEARS; i++)
@@ -403,10 +403,10 @@ void perform_fall(struct char_data *ch)
   char long_fall_message[150];
   
   sprintf(long_fall_message, "\r\n^RYour fingers slip, sending your stomach rising into your throat as you plummet towards the %s!^n\r\n\r\n",
-          ROOM_FLAGGED(ch->en_room, ROOM_ELEVATOR_SHAFT) ? "bottom of the shaft" : (ROOM_FLAGGED(ch->en_room, ROOM_INDOORS) ? "floor" : "ground"));
+          ROOM_FLAGGED(ch->in_room, ROOM_ELEVATOR_SHAFT) ? "bottom of the shaft" : (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS) ? "floor" : "ground"));
 
   // run a loop and drop them through each room
-  while (EXIT(ch, DOWN) && ROOM_FLAGGED(ch->en_room, ROOM_FALL) && levels < 20)
+  while (EXIT(ch, DOWN) && ROOM_FLAGGED(ch->in_room, ROOM_FALL) && levels < 20)
   {
     // Compose the message that check_fall will send if they succeed.
     if (levels == 0) {
@@ -423,8 +423,8 @@ void perform_fall(struct char_data *ch)
       return;
     
     levels++;
-    meters += ch->en_room->z;
-    was_in = ch->en_room;
+    meters += ch->in_room->z;
+    was_in = ch->in_room;
     sprintf(buf, "^R$n %s away from you%s!^n", levels > 1 ? "plummets" : "falls", levels > 1 ? " with a horrified scream" : "");
     act(buf, TRUE, ch, 0, 0, TO_ROOM);
     char_from_room(ch);
@@ -432,7 +432,7 @@ void perform_fall(struct char_data *ch)
     sprintf(buf, "^R$n %s in from above!^n", levels > 1 ? "plummets" : "falls");
     act(buf, TRUE, ch, 0, 0, TO_ROOM);
 #ifdef DEATH_FLAGS
-    if (ROOM_FLAGGED(ch->en_room, ROOM_DEATH) && !IS_NPC(ch) &&
+    if (ROOM_FLAGGED(ch->in_room, ROOM_DEATH) && !IS_NPC(ch) &&
         !IS_SENATOR(ch)) {
       send_to_char("You feel the world slip into darkness, you better hope a wandering DocWagon finds you.\r\n", ch);
       death_cry(ch);
@@ -454,7 +454,7 @@ void perform_fall(struct char_data *ch)
       if (FIGHTING(ch))
         stop_fighting(ch);
       sprintf(buf, "%s ran into DeathTrap at %ld",
-              GET_CHAR_NAME(ch), ch->en_room->number);
+              GET_CHAR_NAME(ch), ch->in_room->number);
       mudlog(buf, ch, LOG_DEATHLOG, TRUE);
       char_from_room(ch);
       char_to_room(ch, real_room(RM_SEATTLE_DOCWAGON));
@@ -468,8 +468,8 @@ void perform_fall(struct char_data *ch)
   if (levels)
   {
     // Make a note of their current room, for use if they hit hard enough to make noise.
-    struct room_data *en_room = ch->en_room;
-    tmp_room = ch->en_room;
+    struct room_data *in_room = ch->in_room;
+    tmp_room = ch->in_room;
     
     // Send the fall message if we haven't already.
     if (!sent_fall_message) {
@@ -529,12 +529,12 @@ void perform_fall(struct char_data *ch)
       }
       sprintf(splat_msg, "^rA %sthud %s from below.^n\r\n", impact_noise, tmp_room->room_flags.IsSet(ROOM_ELEVATOR_SHAFT) ? "echoes" : "emanates");
       
-      while (en_room) {
-        if (en_room != ch->en_room)
-          send_to_room(splat_msg, en_room);
+      while (in_room) {
+        if (in_room != ch->in_room)
+          send_to_room(splat_msg, in_room);
         
-        if (EXIT2(en_room, UP)) {
-          en_room = &world[EXIT2(en_room, UP)->to_room];
+        if (EXIT2(in_room, UP)) {
+          in_room = &world[EXIT2(in_room, UP)->to_room];
         } else
           break;
       }
@@ -601,13 +601,13 @@ void move_vehicle(struct char_data *ch, int dir)
   sprintf(buf2, "%s %s from %s.", GET_VEH_NAME(veh), veh->arrive, thedirs[rev_dir[dir]]);
   sprintf(buf1, "%s %s to %s.", GET_VEH_NAME(veh), veh->leave, thedirs[dir]);
   
-  if (veh->en_room->people)
+  if (veh->in_room->people)
   {
-    act(buf1, FALSE, veh->en_room->people, 0, 0, TO_ROOM);
-    act(buf1, FALSE, veh->en_room->people, 0, 0, TO_CHAR);
+    act(buf1, FALSE, veh->in_room->people, 0, 0, TO_ROOM);
+    act(buf1, FALSE, veh->in_room->people, 0, 0, TO_CHAR);
   }
   
-  for (struct char_data *tch = veh->en_room->watching; tch; tch = tch->next_watching)
+  for (struct char_data *tch = veh->in_room->watching; tch; tch = tch->next_watching)
     act(buf2, FALSE, ch, 0, 0, TO_CHAR);
   // for (int r = 1; r >= 0; r--)        <-- Why.
   //  veh->lastin[r+1] = veh->lastin[r];
@@ -617,12 +617,12 @@ void move_vehicle(struct char_data *ch, int dir)
   was_in = &world[EXIT(veh, dir)->to_room];
   veh_from_room(veh);
   veh_to_room(veh, was_in);
-  veh->lastin[0] = veh->en_room;
-  if (veh->en_room->people) {
-    act(buf2, FALSE, veh->en_room->people, 0, 0, TO_ROOM);
-    act(buf2, FALSE, veh->en_room->people, 0, 0, TO_CHAR);
+  veh->lastin[0] = veh->in_room;
+  if (veh->in_room->people) {
+    act(buf2, FALSE, veh->in_room->people, 0, 0, TO_ROOM);
+    act(buf2, FALSE, veh->in_room->people, 0, 0, TO_CHAR);
   }
-  for (struct char_data *tch = veh->en_room->watching; tch; tch = tch->next_watching)
+  for (struct char_data *tch = veh->in_room->watching; tch; tch = tch->next_watching)
     act(buf2, FALSE, ch, 0, 0, TO_CHAR);
   stop_fighting(ch);
   for (v = veh->followers; v; v = nextv)
@@ -641,7 +641,7 @@ void move_vehicle(struct char_data *ch, int dir)
     if (!pilot)
       return;
     for (r = 0; r <= 2; r++)
-      if (v->follower->en_room == veh->lastin[r]) {
+      if (v->follower->in_room == veh->lastin[r]) {
         found = TRUE;
         break;
       }
@@ -683,7 +683,7 @@ void move_vehicle(struct char_data *ch, int dir)
       sprintf(buf, "A %s falls behind.\r\n", GET_VEH_NAME(v->follower));
       send_to_char(buf, ch);
     }
-    if ((get_speed(v->follower) > 80 && SECT(v->follower->en_room) == SPIRIT_CITY) || v->follower->en_room->icesheet[0] || SECT(v->follower->en_room) == SPIRIT_HEARTH)
+    if ((get_speed(v->follower) > 80 && SECT(v->follower->in_room) == SPIRIT_CITY) || v->follower->in_room->icesheet[0] || SECT(v->follower->in_room) == SPIRIT_HEARTH)
     {
       crash_test(pilot);
       chkdmg(v->follower);
@@ -691,20 +691,20 @@ void move_vehicle(struct char_data *ch, int dir)
   }
 
   if (PLR_FLAGGED(ch, PLR_REMOTE))
-    was_in = ch->en_room;
-  ch->en_room = veh->en_room;
+    was_in = ch->in_room;
+  ch->in_room = veh->in_room;
   if (!veh->dest)
     look_at_room(ch, 0);
-  for (tch = veh->en_room->people; tch; tch = tch->next_en_room)
+  for (tch = veh->in_room->people; tch; tch = tch->next_in_room)
     if (IS_NPC(tch) && AWAKE(tch) && MOB_FLAGGED(tch, MOB_AGGRESSIVE) &&
         !FIGHTING(tch) && !FIGHTING_VEH(tch) && !IS_ASTRAL(tch))
       set_fighting(tch, veh);
   if (PLR_FLAGGED(ch, PLR_REMOTE))
-    ch->en_room = was_in;
+    ch->in_room = was_in;
   else
-    ch->en_room = NULL;
+    ch->in_room = NULL;
 
-  if ((get_speed(veh) > 80 && SECT(veh->en_room) == SPIRIT_CITY) || veh->en_room->icesheet[0])
+  if ((get_speed(veh) > 80 && SECT(veh->in_room) == SPIRIT_CITY) || veh->in_room->icesheet[0])
   {
     crash_test(ch);
     chkdmg(veh);
@@ -737,7 +737,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
   if (GET_POS(ch) >= POS_FIGHTING && FIGHTING(ch) && !AFF_FLAGGED(ch, AFF_PRONE)) {
     WAIT_STATE(ch, PULSE_VIOLENCE * 2);
     if (success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch))) && (CAN_GO(ch, dir) && (!IS_NPC(ch) ||
-        !ROOM_FLAGGED(&world[ch->en_room->dir_option[dir]->to_room], ROOM_NOMOB)))) {
+        !ROOM_FLAGGED(&world[ch->in_room->dir_option[dir]->to_room], ROOM_NOMOB)))) {
       act("$n searches for a quick escape!", TRUE, ch, 0, 0, TO_ROOM);
       send_to_char("You start moving away for a clever escape.\r\n", ch);
     } else {
@@ -811,13 +811,13 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
   if (!IS_SET(extra, LEADER))
     return (do_simple_move(ch, dir, extra, NULL));
 
-  was_in = ch->en_room;
+  was_in = ch->in_room;
   if (!do_simple_move(ch, dir, extra | LEADER, vict))
     return 0;
 
   for (k = ch->followers; k; k = next) {
     next = k->next;
-    if ((was_in == k->follower->en_room) && (GET_POS(k->follower) >= POS_STANDING)) {
+    if ((was_in == k->follower->in_room) && (GET_POS(k->follower) >= POS_STANDING)) {
       act("You follow $N.\r\n", FALSE, k->follower, 0, ch, TO_CHAR);
       perform_move(k->follower, dir, CHECK_SPECIAL, NULL);
     }
@@ -953,27 +953,27 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd)
   sprintf(buf, "$n %ss ", cmd_door[scmd]);
   if (!obj && ((other_room = &world[EXIT(ch, door)->to_room])))
     if ((back = other_room->dir_option[rev_dir[door]]))
-      if (back->to_room != real_room(ch->en_room->number))
+      if (back->to_room != real_room(ch->in_room->number))
         back = 0;
 
   switch (scmd)
   {
   case SCMD_OPEN:
   case SCMD_CLOSE:
-    OPEN_DOOR(ch->en_room, obj, door);
+    OPEN_DOOR(ch->in_room, obj, door);
     if (back)
       OPEN_DOOR(other_room, obj, rev_dir[door]);
     send_to_char(OK, ch);
     break;
   case SCMD_UNLOCK:
   case SCMD_LOCK:
-    LOCK_DOOR(ch->en_room, obj, door);
+    LOCK_DOOR(ch->in_room, obj, door);
     if (back)
       LOCK_DOOR(other_room, obj, rev_dir[door]);
     send_to_char("*Click*\r\n", ch);
     break;
   case SCMD_PICK:
-    LOCK_DOOR(ch->en_room, obj, door);
+    LOCK_DOOR(ch->in_room, obj, door);
     if (back)
       LOCK_DOOR(other_room, obj, rev_dir[door]);
     if (DOOR_IS_UNLOCKED(ch, obj, door)) {
@@ -992,7 +992,7 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd)
   /* Notify the room */
   sprintf(buf + strlen(buf), "%s%s.", ((obj) ? "" : "the "), (obj) ? "$p" :
           (EXIT(ch, door)->keyword ? "$F" : "door"));
-  if (!(obj) || (obj->en_room))
+  if (!(obj) || (obj->in_room))
     act(buf, FALSE, ch, obj, obj ? 0 : EXIT(ch, door)->keyword, TO_ROOM);
 
   /* Notify the other room */
@@ -1078,7 +1078,7 @@ ACMD(do_gen_door)
       }
     }
     if (!generic_find(type, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &victim, &obj) && !veh &&
-             !(veh = get_veh_list(type, ch->en_room->vehicles, ch)))
+             !(veh = get_veh_list(type, ch->in_room->vehicles, ch)))
       door = find_door(ch, type, dir, cmd_door[subcmd]);
     if (veh && subcmd != SCMD_OPEN && subcmd != SCMD_CLOSE) {
       if (veh->type == VEH_DRONE) {
@@ -1221,8 +1221,8 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
     else {
       sprintf(buf, "%s drives into the back of %s.", GET_VEH_NAME(inveh), GET_VEH_NAME(found_veh));
       sprintf(buf2, "You drive into the back of %s.\r\n", GET_VEH_NAME(found_veh));
-      if (inveh->en_room->people)
-        act(buf, 0, inveh->en_room->people, 0, 0, TO_ROOM);
+      if (inveh->in_room->people)
+        act(buf, 0, inveh->in_room->people, 0, 0, TO_ROOM);
       send_to_veh(buf2, inveh, NULL, TRUE);
       veh_to_veh(inveh, found_veh);
     }
@@ -1243,7 +1243,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
     send_to_char("You have to be in the back to get into that.\r\n", ch);
     return;
   }
-  door = ch->en_room;
+  door = ch->in_room;
   if (drag)
     sprintf(buf2, "$n is dragged into %s.\r\n", GET_VEH_NAME(found_veh));
   else
@@ -1263,7 +1263,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
   for (k = ch->followers; k; k = next)
   {
     next = k->next;
-    if ((door && door == k->follower->en_room) && (GET_POS(k->follower) >= POS_STANDING)) {
+    if ((door && door == k->follower->in_room) && (GET_POS(k->follower) >= POS_STANDING)) {
       act("You follow $N.\r\n", FALSE, k->follower, 0, ch, TO_CHAR);
       if (!found_veh->seating[front])
         argument = "rear";
@@ -1308,7 +1308,7 @@ ACMD(do_drag)
     veh = get_veh_list(buf2, ch->in_veh->carriedvehs, ch);
   } else {
     dir = search_block(buf2, lookdirs, FALSE);
-    veh = get_veh_list(buf2, ch->en_room->vehicles, ch);
+    veh = get_veh_list(buf2, ch->in_room->vehicles, ch);
   }
   if (dir == -1 && !veh) {
     send_to_char("What direction?\r\n", ch);
@@ -1334,7 +1334,7 @@ ACMD(do_drag)
   } else {
     perform_move(ch, dir, LEADER, vict);
     char_from_room(vict);
-    char_to_room(vict, ch->en_room);
+    char_to_room(vict, ch->in_room);
   }
 }
 
@@ -1358,7 +1358,7 @@ ACMD(do_enter)
       found_veh = get_veh_list(buf, ch->in_veh->carriedvehs, ch);
     } else {
       // We are either in a vehicle-in-a-room and are driving it, or are not in a vehicle. Either way, look in the room.
-      found_veh = get_veh_list(buf, get_ch_en_room(ch)->vehicles, ch);
+      found_veh = get_veh_list(buf, get_ch_in_room(ch)->vehicles, ch);
     }
 
     if (found_veh) {
@@ -1377,7 +1377,7 @@ ACMD(do_enter)
 
     sprintf(buf2, "There is no %s here.\r\n", buf);
     send_to_char(buf2, ch);
-  } else if (ROOM_FLAGGED(ch->en_room, ROOM_INDOORS))
+  } else if (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))
     send_to_char("You are already indoors.\r\n", ch);
   else {
     /* try to locate an entrance */
@@ -1417,12 +1417,12 @@ void leave_veh(struct char_data *ch)
     send_to_veh(buf, veh, NULL, TRUE);
     send_to_veh(buf2, veh->in_veh, NULL, FALSE);
     sprintf(buf, "%s drives out of the back of %s.", GET_VEH_NAME(veh), GET_VEH_NAME(veh->in_veh));
-    struct room_data *room = veh->in_veh->en_room;
+    struct room_data *room = veh->in_veh->in_room;
     veh_from_room(veh);
     veh_to_room(veh, room);
-    if (veh->en_room->people) {
-      act(buf, 0, veh->en_room->people, 0, 0, TO_ROOM);
-      act(buf, 0, veh->en_room->people, 0, 0, TO_CHAR);
+    if (veh->in_room->people) {
+      act(buf, 0, veh->in_room->people, 0, 0, TO_ROOM);
+      act(buf, 0, veh->in_room->people, 0, 0, TO_CHAR);
     }
     return;
   }
@@ -1444,7 +1444,7 @@ void leave_veh(struct char_data *ch)
     act("$n stops manning $p and climbs out into the street.", FALSE, ch, mount, 0, TO_ROOM);
   } else
     act("$n climbs out into the street.", FALSE, ch, 0, 0, TO_VEH);
-  door = veh->en_room;
+  door = veh->in_room;
   char_from_room(ch);
   if (IS_WORKING(ch))
   {
@@ -1482,7 +1482,7 @@ ACMD(do_leave)
     send_to_char("Maybe you should get on your feet first?\r\n", ch);
     return;
   }
-  if (!ROOM_FLAGGED(ch->en_room, ROOM_INDOORS))
+  if (!ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))
     send_to_char("You are outside.. where do you want to go?\r\n", ch);
   else {
     for (door = 0; door < NUM_OF_DIRS; door++)
@@ -1541,7 +1541,7 @@ ACMD(do_stand)
 
 ACMD(do_sit)
 {
-  if (IS_WATER(ch->en_room)) {
+  if (IS_WATER(ch->in_room)) {
     send_to_char("Sit down while swimming?\r\n", ch);
     return;
   }
@@ -1583,7 +1583,7 @@ ACMD(do_sit)
 
 ACMD(do_rest)
 {
-  if (IS_WATER(ch->en_room)) {
+  if (IS_WATER(ch->in_room)) {
     send_to_char("Dry land would be helpful to do that.\r\n", ch);
     return;
   }
@@ -1628,7 +1628,7 @@ ACMD(do_rest)
 
 ACMD(do_lay)
 {
-  if (IS_WATER(ch->en_room)) {
+  if (IS_WATER(ch->in_room)) {
     send_to_char("Dry land would be helpful to do that.\r\n", ch);
     return;
   }
@@ -1678,7 +1678,7 @@ ACMD(do_sleep)
     send_to_char("ARE YOU CRAZY!?\r\n", ch);
     return;
   }
-  if (IS_WATER(ch->en_room)) {
+  if (IS_WATER(ch->in_room)) {
     send_to_char("Sleeping while swimming can be hazardous to your health.\r\n", ch);
     return;
   }
