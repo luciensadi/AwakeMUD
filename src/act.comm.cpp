@@ -140,7 +140,7 @@ ACMD(do_say)
       /** new code by WASHU **/
       if(subcmd == SCMD_OSAY) {
         sprintf(buf,"$z ^nsays ^mOOCly^n, \"%s^n\"",argument);
-        for (tmp = get_ch_in_room(ch)->people; tmp; tmp = tmp->next) {
+        for (tmp = (ch->in_veh ? ch->in_veh->people : ch->in_room->people); tmp; tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)) {
           // Replicate act() in a way that lets us capture the message.
           if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
             // They're a valid target, so send the message with a raw perform_act() call.
@@ -217,7 +217,7 @@ ACMD(do_exclaim)
       }
     }
   } else {
-    for (struct char_data *tmp = get_ch_in_room(ch)->people; tmp; tmp = tmp->next) {
+    for (struct char_data *tmp = (ch->in_veh ? ch->in_veh->people : ch->in_room->people); tmp; tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)) {
       // Replicate act() in a way that lets us capture the message.
       if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
         // They're a valid target, so send the message with a raw perform_act() call.
@@ -337,7 +337,7 @@ ACMD(do_ask)
       }
     }
   } else {
-    for (struct char_data *tmp = get_ch_in_room(ch)->people; tmp; tmp = tmp->next) {
+    for (struct char_data *tmp = (ch->in_veh ? ch->in_veh->people : ch->in_room->people); tmp; tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)) {
       // Replicate act() in a way that lets us capture the message.
       if (can_send_act_to_target(ch, FALSE, NULL, NULL, tmp, TO_ROOM)) {
         // They're a valid target, so send the message with a raw perform_act() call.
