@@ -149,7 +149,7 @@ ACMD(do_say)
         }
       } else {
         success = success_test(GET_SKILL(ch, GET_LANGUAGE(ch)), 4);
-        for (tmp = get_ch_in_room(ch)->people; tmp; tmp = tmp->next_in_room)
+        for (tmp = (ch->in_veh ? ch->in_veh->people : ch->in_room->people); tmp; tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room))
           if (tmp != ch && !(IS_ASTRAL(ch) && !CAN_SEE(tmp, ch))) {
             if (to) {
               if (to == tmp)
