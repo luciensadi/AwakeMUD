@@ -3891,8 +3891,8 @@ ACMD(do_watch)
   if (GET_WATCH(ch)) {
     send_to_char("You stop scanning into the distance.\r\n", ch);
     struct char_data *temp;
-    REMOVE_FROM_LIST(ch, world[GET_WATCH(ch)].watching, next_watching);
-    GET_WATCH(ch) = 0;
+    REMOVE_FROM_LIST(ch, GET_WATCH(ch)->watching, next_watching);
+    GET_WATCH(ch) = NULL;
   } else {
     int dir;
     skip_spaces(&argument);
@@ -3911,9 +3911,9 @@ ACMD(do_watch)
       send_to_char("There seems to be something in the way...\r\n", ch);
       return;
     }
-    GET_WATCH(ch) = EXIT2(ch->in_room, dir)->to_room;
-    ch->next_watching = world[GET_WATCH(ch)].watching;
-    world[GET_WATCH(ch)].watching = ch;
+    GET_WATCH(ch) = EXIT2(ch->in_room, dir)->ter_room;
+    ch->next_watching = GET_WATCH(ch)->watching;
+    GET_WATCH(ch)->watching = ch;
     send_to_char(ch, "You focus your attention to %s.\r\n", thedirs[dir]);
   }
 }

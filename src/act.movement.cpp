@@ -69,19 +69,19 @@ int can_move(struct char_data *ch, int dir, int extra)
     act("$n bursts into tears.", FALSE, ch, 0, 0, TO_ROOM);
     return 0;
   }
-  if (ROOM_FLAGGED(&world[EXIT(ch, dir)->to_room], ROOM_FREEWAY) && GET_LEVEL(ch) == 1) {
+  if (ROOM_FLAGGED(EXIT(ch, dir)->ter_room, ROOM_FREEWAY) && GET_LEVEL(ch) == 1) {
     send_to_char("Walking across the freeway would spell instant death.\r\n", ch);
     return 0;
   }
-  if (ROOM_FLAGGED(&world[EXIT(ch, dir)->to_room], ROOM_HOUSE))
-    if (!House_can_enter(ch, world[EXIT(ch, dir)->to_room].number))
+  if (ROOM_FLAGGED(EXIT(ch, dir)->ter_room, ROOM_HOUSE))
+    if (!House_can_enter(ch, EXIT(ch, dir)->ter_room->number))
     {
       send_to_char("That's private property -- no trespassing!\r\n", ch);
       return 0;
     }
-  if (ROOM_FLAGGED(&world[EXIT(ch, dir)->to_room], ROOM_TUNNEL) && !IS_ASTRAL(ch))
-    if (world[EXIT(ch, dir)->to_room].people &&
-        world[EXIT(ch, dir)->to_room].people->next_in_room)
+  if (ROOM_FLAGGED(EXIT(ch, dir)->ter_room, ROOM_TUNNEL) && !IS_ASTRAL(ch))
+    if (EXIT(ch, dir)->ter_room->people &&
+        EXIT(ch, dir)->ter_room->people->next_in_room)
     {
       send_to_char("There isn't enough room there for another person!\r\n", ch);
       return 0;
@@ -156,8 +156,8 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
 
   GET_LASTROOM(ch) = ch->in_room->number;
 
-  if (ch->in_room->dir_option[dir]->to_room >= real_room(FIRST_CAB) &&
-      ch->in_room->dir_option[dir]->to_room <= real_room(LAST_CAB))
+  if (real_room(ch->in_room->dir_option[dir]->ter_room->number) >= real_room(FIRST_CAB) &&
+      real_room(ch->in_room->dir_option[dir]->ter_room->number) <= real_room(LAST_CAB))
     sprintf(buf2, "$n gets into the taxi.");
   else if (vict)
   {
@@ -166,9 +166,9 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     act(buf1, FALSE, ch, 0, vict, TO_CHAR);
   } else if (ch->char_specials.leave)
     sprintf(buf2, "$n %s %s.", ch->char_specials.leave, fulldirs[dir]);
-  else if (IS_WATER(ch->in_room) && !IS_WATER(&world[EXIT(ch, dir)->to_room]))
+  else if (IS_WATER(ch->in_room) && !IS_WATER(EXIT(ch, dir)->ter_room))
     sprintf(buf2, "$n climbs out of the water to the %s.", fulldirs[dir]);
-  else if (!IS_WATER(ch->in_room) && IS_WATER(&world[EXIT(ch, dir)->to_room]))
+  else if (!IS_WATER(ch->in_room) && IS_WATER(EXIT(ch, dir)->ter_room))
     sprintf(buf2, "$n jumps into the water to the %s.", fulldirs[dir]);
   else
     sprintf(buf2, "$n %s %s.", (IS_WATER(ch->in_room) ? "swims" : "leaves"), fulldirs[dir]);
@@ -205,7 +205,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
   was_in = ch->in_room;
   STOP_WORKING(ch);
   char_from_room(ch);
-  char_to_room(ch, &world[was_in->dir_option[dir]->to_room]);
+  char_to_room(ch, was_in->dir_option[dir]->ter_room);
 
   if (ROOM_FLAGGED(was_in, ROOM_INDOORS) && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))
   {
@@ -428,7 +428,7 @@ void perform_fall(struct char_data *ch)
     sprintf(buf, "^R$n %s away from you%s!^n", levels > 1 ? "plummets" : "falls", levels > 1 ? " with a horrified scream" : "");
     act(buf, TRUE, ch, 0, 0, TO_ROOM);
     char_from_room(ch);
-    char_to_room(ch, &world[was_in->dir_option[DOWN]->to_room]);
+    char_to_room(ch, was_in->dir_option[DOWN]->ter_room);
     sprintf(buf, "^R$n %s in from above!^n", levels > 1 ? "plummets" : "falls");
     act(buf, TRUE, ch, 0, 0, TO_ROOM);
 #ifdef DEATH_FLAGS
@@ -534,7 +534,7 @@ void perform_fall(struct char_data *ch)
           send_to_room(splat_msg, in_room);
         
         if (EXIT2(in_room, UP)) {
-          in_room = &world[EXIT2(in_room, UP)->to_room];
+          in_room = EXIT2(in_room, UP)->ter_room;
         } else
           break;
       }
@@ -566,16 +566,16 @@ void move_vehicle(struct char_data *ch, int dir)
     return;
   }
   if (!EXIT(veh, dir)
-      || EXIT(veh, dir)->to_room == NOWHERE
-      || (!ROOM_FLAGGED(&world[EXIT(veh, dir)->to_room], ROOM_ROAD)
-          && !ROOM_FLAGGED(&world[EXIT(veh, dir)->to_room], ROOM_GARAGE)
+      || !EXIT(veh, dir)->ter_room
+      || (!ROOM_FLAGGED(EXIT(veh, dir)->ter_room, ROOM_ROAD)
+          && !ROOM_FLAGGED(EXIT(veh, dir)->ter_room, ROOM_GARAGE)
           && (veh->type != VEH_DRONE && veh->type != VEH_BIKE))
       || IS_SET(EXIT(veh, dir)->exit_info, EX_CLOSED)
-      || (veh->type == VEH_BIKE && ROOM_FLAGGED(&world[EXIT(veh, dir)->to_room], ROOM_NOBIKE))
+      || (veh->type == VEH_BIKE && ROOM_FLAGGED(EXIT(veh, dir)->ter_room, ROOM_NOBIKE))
 #ifdef DEATH_FLAGS
-      || ROOM_FLAGGED(&world[EXIT(veh, dir)->to_room], ROOM_DEATH)
+      || ROOM_FLAGGED(EXIT(veh, dir)->ter_room, ROOM_DEATH)
 #endif
-      || ROOM_FLAGGED(&world[EXIT(veh, dir)->to_room], ROOM_FALL))
+      || ROOM_FLAGGED(EXIT(veh, dir)->ter_room, ROOM_FALL))
   {
     send_to_char("You cannot go that way...\r\n", ch);
     return;
@@ -584,12 +584,12 @@ void move_vehicle(struct char_data *ch, int dir)
   if (special(ch, convert_dir[dir], &empty_argument))
     return;
   
-  if (ROOM_FLAGGED(&world[EXIT(veh, dir)->to_room], ROOM_HOUSE) && !House_can_enter(ch, world[EXIT(veh, dir)->to_room].number)) {
+  if (ROOM_FLAGGED(EXIT(veh, dir)->ter_room, ROOM_HOUSE) && !House_can_enter(ch, EXIT(veh, dir)->ter_room->number)) {
     send_to_char("You can't use other people's garages without permission.\r\n", ch);
     return;
   }
   
-  if (ROOM_FLAGGED(&world[EXIT(veh, dir)->to_room], ROOM_STAFF_ONLY)) {
+  if (ROOM_FLAGGED(EXIT(veh, dir)->ter_room, ROOM_STAFF_ONLY)) {
     for (struct char_data *tch = veh->people; tch; tch = tch->next_in_veh) {
       if (!access_level(tch, LVL_BUILDER)) {
         send_to_char("Everyone in the vehicle must be a member of the game's administration to go there.", ch);
@@ -614,7 +614,7 @@ void move_vehicle(struct char_data *ch, int dir)
   veh->lastin[2] = veh->lastin[1];
   veh->lastin[1] = veh->lastin[0];
   
-  was_in = &world[EXIT(veh, dir)->to_room];
+  was_in = EXIT(veh, dir)->ter_room;
   veh_from_room(veh);
   veh_to_room(veh, was_in);
   veh->lastin[0] = veh->in_room;
@@ -664,7 +664,7 @@ void move_vehicle(struct char_data *ch, int dir)
       for (int x = 0; r >= 0 && x < 2; r-- && x++) {
         for (door = 0; door < NUM_OF_DIRS; door++)
           if (EXIT(v->follower, door))
-            if (&world[EXIT(v->follower, door)->to_room] == veh->lastin[r])
+            if (EXIT(v->follower, door)->ter_room == veh->lastin[r])
               break;
         perform_move(pilot, door, LEADER, NULL);
       }
@@ -675,7 +675,7 @@ void move_vehicle(struct char_data *ch, int dir)
       send_to_char(buf, ch);
       for (door = 0; door < NUM_OF_DIRS; door++)
         if (EXIT(v->follower, door))
-          if (&world[EXIT(v->follower, door)->to_room] == veh->lastin[r])
+          if (EXIT(v->follower, door)->ter_room == veh->lastin[r])
             break;
       perform_move(pilot, door, LEADER, NULL);
     } else {
@@ -718,8 +718,8 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
 
   if (GET_WATCH(ch)) {
     struct char_data *temp;
-    REMOVE_FROM_LIST(ch, world[GET_WATCH(ch)].watching, next_watching);
-    GET_WATCH(ch) = 0;
+    REMOVE_FROM_LIST(ch, GET_WATCH(ch)->watching, next_watching);
+    GET_WATCH(ch) = NULL;
   }
   if (ch == NULL || dir < 0 || dir >= NUM_OF_DIRS)
     return 0;
@@ -737,7 +737,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
   if (GET_POS(ch) >= POS_FIGHTING && FIGHTING(ch) && !AFF_FLAGGED(ch, AFF_PRONE)) {
     WAIT_STATE(ch, PULSE_VIOLENCE * 2);
     if (success_test(GET_QUI(ch), GET_QUI(FIGHTING(ch))) && (CAN_GO(ch, dir) && (!IS_NPC(ch) ||
-        !ROOM_FLAGGED(&world[ch->in_room->dir_option[dir]->to_room], ROOM_NOMOB)))) {
+        !ROOM_FLAGGED(ch->in_room->dir_option[dir]->ter_room, ROOM_NOMOB)))) {
       act("$n searches for a quick escape!", TRUE, ch, 0, 0, TO_ROOM);
       send_to_char("You start moving away for a clever escape.\r\n", ch);
     } else {
@@ -747,7 +747,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     }
   }
   
-  if (!EXIT(ch, dir) || EXIT(ch, dir)->to_room == NOWHERE)
+  if (!EXIT(ch, dir) || !EXIT(ch, dir)->ter_room)
   {
     if (!LIGHT_OK(ch))
       send_to_char("Something seems to be in the way...\r\n", ch);
@@ -776,7 +776,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     return 0;
   }
   
-  if (ROOM_FLAGGED(&world[EXIT(ch, dir)->to_room], ROOM_STAFF_ONLY) && GET_REAL_LEVEL(ch) < LVL_BUILDER) {
+  if (ROOM_FLAGGED(EXIT(ch, dir)->ter_room, ROOM_STAFF_ONLY) && GET_REAL_LEVEL(ch) < LVL_BUILDER) {
     send_to_char("Sorry, that area is for game administration only.\r\n", ch);
     return 0;
   }
@@ -951,9 +951,9 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd)
   struct room_direction_data *back = NULL;
 
   sprintf(buf, "$n %ss ", cmd_door[scmd]);
-  if (!obj && ((other_room = &world[EXIT(ch, door)->to_room])))
+  if (!obj && ((other_room = EXIT(ch, door)->ter_room)))
     if ((back = other_room->dir_option[rev_dir[door]]))
-      if (back->to_room != real_room(ch->in_room->number))
+      if (back->ter_room != ch->in_room)
         back = 0;
 
   switch (scmd)
@@ -1001,7 +1001,7 @@ void do_doorcmd(struct char_data *ch, struct obj_data *obj, int door, int scmd)
     sprintf(buf, "The %s is %s%s from the other side.\r\n",
             (back->keyword ? fname(back->keyword) : "door"), cmd_door[scmd],
             (scmd == SCMD_CLOSE) ? "d" : "ed");
-    send_to_room(buf, &world[EXIT(ch, door)->to_room]);
+    send_to_room(buf, EXIT(ch, door)->ter_room);
   }
 }
 
@@ -1383,9 +1383,9 @@ ACMD(do_enter)
     /* try to locate an entrance */
     for (door = 0; door < NUM_OF_DIRS; door++)
       if (EXIT(ch, door))
-        if (EXIT(ch, door)->to_room != NOWHERE)
+        if (EXIT(ch, door)->ter_room)
           if (!IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED) &&
-              ROOM_FLAGGED(&world[EXIT(ch, door)->to_room], ROOM_INDOORS)) {
+              ROOM_FLAGGED(EXIT(ch, door)->ter_room, ROOM_INDOORS)) {
             perform_move(ch, door, CHECK_SPECIAL | LEADER, NULL);
             return;
           }
@@ -1488,9 +1488,9 @@ ACMD(do_leave)
   else {
     for (door = 0; door < NUM_OF_DIRS; door++)
       if (EXIT(ch, door))
-        if (EXIT(ch, door)->to_room != NOWHERE)
+        if (EXIT(ch, door)->ter_room)
           if (!IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED) &&
-              !ROOM_FLAGGED(&world[EXIT(ch, door)->to_room], ROOM_INDOORS)) {
+              !ROOM_FLAGGED(EXIT(ch, door)->ter_room, ROOM_INDOORS)) {
             perform_move(ch, door, CHECK_SPECIAL | LEADER, NULL);
             return;
           }

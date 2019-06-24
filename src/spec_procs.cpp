@@ -1777,7 +1777,7 @@ SPECIAL(aegnor)
   for (dir = 0; dir < NUM_OF_DIRS; dir++) {
     room = ch->in_room;
     if (CAN_GO2(room, dir))
-      nextroom = &world[EXIT2(room, dir)->to_room];
+      nextroom = EXIT2(room, dir)->ter_room;
     else
       nextroom = NULL;
 
@@ -1796,7 +1796,7 @@ SPECIAL(aegnor)
 
       room = nextroom;
       if (CAN_GO2(room, dir))
-        nextroom = &world[EXIT2(room, dir)->to_room];
+        nextroom = EXIT2(room, dir)->ter_room;
       else
         nextroom = NULL;
     }
@@ -2500,11 +2500,11 @@ SPECIAL(hand_held_scanner)
     return FALSE;
 
   if (ch->in_room->dir_option[dir] &&
-      ch->in_room->dir_option[dir]->to_room != NOWHERE) {
+      ch->in_room->dir_option[dir]->ter_room) {
     for (i = NORTH; i < NUM_OF_DIRS; i++)
       if (ch->in_room->dir_option[i] &&
-          ch->in_room->dir_option[i]->to_room != NOWHERE)
-        for (temp = world[ch->in_room->dir_option[i]->to_room].people;
+          ch->in_room->dir_option[i]->ter_room)
+        for (temp = ch->in_room->dir_option[i]->ter_room->people;
              temp; temp = temp->next_in_room)
           if (temp != ch) {
             act("You feel $p vibrate momentarily.", FALSE, ch, scanner, 0, TO_CHAR);

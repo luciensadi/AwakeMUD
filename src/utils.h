@@ -210,7 +210,7 @@ void    update_pos(struct char_data *victim);
 
 #define EXIT2(room, door) ((room)->dir_option[(door)])
 #define CAN_GO2(room, door) (EXIT2(room, door) && \
-        (EXIT2(room, door)->to_room != NOWHERE) && \
+        (EXIT2(room, door)->ter_room) && \
         !IS_SET(EXIT2(room,door)->exit_info, EX_CLOSED))
 
 #define VEH_FLAGS(ch) ((ch).flags)
@@ -655,10 +655,10 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
            get_ch_in_room(ch)->dir_option[door]->key_level)
 
 #define CAN_GO(ch, door)     ( EXIT(ch,door) &&                                                                            \
-                               (EXIT(ch,door)->to_room != NOWHERE) &&                                                      \
+                               (EXIT(ch,door)->ter_room) &&                                                      \
                                !(IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED)) &&                                          \
                                !(IS_ASTRAL(ch) && IS_SET(EXIT(ch, door)->exit_info, EX_ASTRALLY_WARDED)) &&                \
-                               !(ROOM_FLAGGED(&world[EXIT(ch, door)->to_room], ROOM_STAFF_ONLY) && GET_REAL_LEVEL(ch) < LVL_BUILDER)  \
+                               !(ROOM_FLAGGED(EXIT(ch, door)->ter_room, ROOM_STAFF_ONLY) && GET_REAL_LEVEL(ch) < LVL_BUILDER)  \
                              )
 
 #define OUTSIDE(ch)           (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS))

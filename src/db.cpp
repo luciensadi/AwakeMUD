@@ -1041,8 +1041,8 @@ void parse_room(File &fl, long nr)
       room_direction_data *dir = room->dir_option[i];
       memset(dir, 0, sizeof(room_direction_data));
 
-      dir->to_room = to_vnum;
-      // dir->to_room_vnum will be set in renum_world
+      dir->ter_room = NULL;
+      dir->ter_room_vnum = to_vnum;
 
       sprintf(field, "%s/Keywords", sect);
       dir->keyword = str_dup(data.GetString(field, NULL));
@@ -1155,7 +1155,8 @@ void setup_dir(FILE * fl, int room, int dir)
     world[room].dir_option[dir]->exit_info = 0;
 
   world[room].dir_option[dir]->key = t[1];
-  world[room].dir_option[dir]->to_room = MAX(0, t[2]);
+  world[room].dir_option[dir]->ter_room = NULL; // Will be set properly during world renumbering.
+  world[room].dir_option[dir]->ter_room_vnum = MAX(0, t[2]);
   world[room].dir_option[dir]->key_level = t[3];
 
   world[room].dir_option[dir]->material = (retval > 4) ? t[4] : 5;
@@ -1200,8 +1201,11 @@ void renum_world(void)
     for (door = 0; door < NUM_OF_DIRS; door++)
       if (world[room].dir_option[door]) {
         room_direction_data *dir = world[room].dir_option[door];
-        dir->to_room_vnum = dir->to_room;
-        dir->to_room = real_room(dir->to_room_vnum);
+        vnum_t rnum = real_room(dir->ter_room_vnum);
+        if (rnum != NOWHERE)
+          dir->ter_room = &world[rnum];
+        else
+          dir->ter_room = NULL;
       }
 }
 
@@ -3057,11 +3061,11 @@ void reset_zone(int zone, int reboot)
         ZONE_ERROR("door does not exist");
       } else {
         bool ok = FALSE;
-        int opposite = MAX(0, world[ZCMD.arg1].dir_option[ZCMD.arg2]->to_room);
-        if (!world[opposite].dir_option[rev_dir[ZCMD.arg2]] || (ZCMD.arg1 !=
-            world[opposite].dir_option[rev_dir[ZCMD.arg2]]->to_room)) {
+        struct room_data *opposite_room = world[ZCMD.arg1].dir_option[ZCMD.arg2]->ter_room;
+        if (!opposite_room->dir_option[rev_dir[ZCMD.arg2]]
+            || (&world[ZCMD.arg1] != opposite_room->dir_option[rev_dir[ZCMD.arg2]]->ter_room)) {
           sprintf(buf, "Note: Exits from %ld to %ld do not coincide (zone %d, line %d, cmd %d)",
-                  world[opposite].number, world[ZCMD.arg1].number, zone_table[zone].number,
+                  opposite_room->number, world[ZCMD.arg1].number, zone_table[zone].number,
                   ZCMD.line, cmd_no);
           ZCMD.command = '*';
           mudlog(buf, NULL, LOG_ZONELOG, FALSE);
@@ -3070,20 +3074,17 @@ void reset_zone(int zone, int reboot)
         // here I set the hidden flag for the door if hidden > 0
         if (world[ZCMD.arg1].dir_option[ZCMD.arg2]->hidden)
           SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_HIDDEN);
-        if (ok && world[opposite].dir_option[rev_dir[ZCMD.arg2]]->hidden)
-          SET_BIT(world[opposite].dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_HIDDEN);
+        if (ok && opposite_room->dir_option[rev_dir[ZCMD.arg2]]->hidden)
+          SET_BIT(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_HIDDEN);
         // repair all damage
         REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_DESTROYED);
         world[ZCMD.arg1].dir_option[ZCMD.arg2]->condition =
           world[ZCMD.arg1].dir_option[ZCMD.arg2]->barrier;
         if (ok) {
-          world[opposite].dir_option[rev_dir[ZCMD.arg2]]->material =
-            world[ZCMD.arg1].dir_option[ZCMD.arg2]->material;
-          world[opposite].dir_option[rev_dir[ZCMD.arg2]]->barrier =
-            world[ZCMD.arg1].dir_option[ZCMD.arg2]->barrier;
-          world[opposite].dir_option[rev_dir[ZCMD.arg2]]->condition =
-            world[ZCMD.arg1].dir_option[ZCMD.arg2]->condition;
-          REMOVE_BIT(world[opposite].dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_DESTROYED);
+          opposite_room->dir_option[rev_dir[ZCMD.arg2]]->material = world[ZCMD.arg1].dir_option[ZCMD.arg2]->material;
+          opposite_room->dir_option[rev_dir[ZCMD.arg2]]->barrier = world[ZCMD.arg1].dir_option[ZCMD.arg2]->barrier;
+          opposite_room->dir_option[rev_dir[ZCMD.arg2]]->condition = world[ZCMD.arg1].dir_option[ZCMD.arg2]->condition;
+          REMOVE_BIT(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_DESTROYED);
         }
         switch (ZCMD.arg3) {
           // you now only have to set one side of a door
@@ -3091,24 +3092,24 @@ void reset_zone(int zone, int reboot)
           REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_LOCKED);
           REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_CLOSED);
           if (ok) {
-            REMOVE_BIT(world[opposite].dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_LOCKED);
-            REMOVE_BIT(world[opposite].dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED);
+            REMOVE_BIT(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_LOCKED);
+            REMOVE_BIT(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED);
           }
           break;
         case 1:
           SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_CLOSED);
           REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_LOCKED);
           if (ok) {
-            SET_BIT(world[opposite].dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED);
-            REMOVE_BIT(world[opposite].dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_LOCKED);
+            SET_BIT(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED);
+            REMOVE_BIT(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_LOCKED);
           }
           break;
         case 2:
           SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_LOCKED);
           SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_CLOSED);
           if (ok) {
-            SET_BIT(world[opposite].dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_LOCKED);
-            SET_BIT(world[opposite].dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED);
+            SET_BIT(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_LOCKED);
+            SET_BIT(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED);
           }
           break;
         }

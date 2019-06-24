@@ -949,11 +949,11 @@ void disp_long_exits(struct char_data *ch, bool autom)
   }
   for (door = 0; door < NUM_OF_DIRS; door++)
   {
-    if (EXIT(ch, door) && EXIT(ch, door)->to_room != NOWHERE) {
+    if (EXIT(ch, door) && EXIT(ch, door)->ter_room) {
       if (GET_REAL_LEVEL(ch) >= LVL_BUILDER) {
         sprintf(buf2, "%-5s - [%5ld] %s%s\r\n", dirs[door],
-                world[EXIT(ch, door)->to_room].number,
-                world[EXIT(ch, door)->to_room].name,
+                EXIT(ch, door)->ter_room->number,
+                EXIT(ch, door)->ter_room->name,
                 (IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED) ? " (closed)" : ""));
         if (autom)
           strcat(buf, "^c");
@@ -967,7 +967,7 @@ void disp_long_exits(struct char_data *ch, bool autom)
           if (IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED))
             strcat(buf2, "A closed door");
           else
-            strcat(buf2, world[EXIT(ch, door)->to_room].name);
+            strcat(buf2, EXIT(ch, door)->ter_room->name);
           strcat(buf2, "\r\n");
         }
         if (autom)
@@ -1002,11 +1002,11 @@ void do_auto_exits(struct char_data * ch)
   } else
   {
     for (door = 0; door < NUM_OF_DIRS; door++)
-      if (EXIT(ch, door) && EXIT(ch, door)->to_room != NOWHERE) {
+      if (EXIT(ch, door) && EXIT(ch, door)->ter_room) {
         if (ch->in_veh || ch->char_specials.rigging) {
           RIG_VEH(ch, veh);
-          if (!ROOM_FLAGGED(&world[EXIT(veh, door)->to_room], ROOM_ROAD) &&
-              !ROOM_FLAGGED(&world[EXIT(veh, door)->to_room], ROOM_GARAGE) &&
+          if (!ROOM_FLAGGED(EXIT(veh, door)->ter_room, ROOM_ROAD) &&
+              !ROOM_FLAGGED(EXIT(veh, door)->ter_room, ROOM_GARAGE) &&
               !IS_SET(EXIT(ch, door)->exit_info, EX_HIDDEN))
             sprintf(ENDOF(buf), "(%s) ", exitdirs[door]);
           else if (!IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED | EX_HIDDEN))
@@ -1311,11 +1311,11 @@ void look_in_direction(struct char_data * ch, int dir)
     if (ROOM_FLAGGED(ch->in_room, ROOM_HOUSE)){
       /* Apartments have peepholes. */
       struct room_data *original_loc = ch->in_room;
-      vnum_t targ_loc = EXIT(ch, dir)->to_room;
+      struct room_data *targ_loc = EXIT(ch, dir)->ter_room;
       send_to_char("Through the peephole, you see:\r\n", ch);
       
       char_from_room(ch);
-      char_to_room(ch, &world[targ_loc]);
+      char_to_room(ch, targ_loc);
       look_at_room(ch, 0);
       char_from_room(ch);
       char_to_room(ch, original_loc);
@@ -4140,10 +4140,10 @@ ACMD(do_scan)
     for (i = 0; i < NUM_OF_DIRS; ++i) {
       if (CAN_GO(ch, i)) {
         onethere = FALSE;
-        if (!((!infra && light_level(&world[EXIT(ch, i)->to_room]) == LIGHT_FULLDARK) ||
-              ((!infra || !lowlight) && (light_level(&world[EXIT(ch, i)->to_room]) == LIGHT_MINLIGHT || light_level(&world[EXIT(ch, i)->to_room]) == LIGHT_PARTLIGHT)))) {
+        if (!((!infra && light_level(EXIT(ch, i)->ter_room) == LIGHT_FULLDARK) ||
+              ((!infra || !lowlight) && (light_level(EXIT(ch, i)->ter_room) == LIGHT_MINLIGHT || light_level(EXIT(ch, i)->ter_room) == LIGHT_PARTLIGHT)))) {
           strcpy(buf1, "");
-          for (list = world[EXIT(ch, i)->to_room].people; list; list = list->next_in_room)
+          for (list = EXIT(ch, i)->ter_room->people; list; list = list->next_in_room)
             if (CAN_SEE(ch, list)) {
               if (in_veh) {
                 if (in_veh->cspeed > SPEED_IDLE) {
@@ -4169,7 +4169,7 @@ ACMD(do_scan)
               onethere = TRUE;
               anythere = TRUE;
             }
-          for (veh = world[EXIT(ch, i)->to_room].vehicles; veh; veh = veh->next_veh) {
+          for (veh = EXIT(ch, i)->ter_room->vehicles; veh; veh = veh->next_veh) {
             if (in_veh) {
               if (in_veh->cspeed > SPEED_IDLE) {
                 if (get_speed(in_veh) >= 200) {
@@ -4220,7 +4220,7 @@ ACMD(do_scan)
         onethere = FALSE;
         if (CAN_GO(ch, i)) {
           strcpy(buf1, "");
-          for (list = world[EXIT(ch, i)->to_room].people; list; list = list->next_in_room)
+          for (list = EXIT(ch, i)->ter_room->people; list; list = list->next_in_room)
             if (CAN_SEE(ch, list)) {
               if (in_veh) {
                 if (in_veh->cspeed > SPEED_IDLE) {
@@ -4246,7 +4246,7 @@ ACMD(do_scan)
               anythere = TRUE;
             }
           
-          ch->in_room = &world[EXIT(ch, i)->to_room];
+          ch->in_room = EXIT(ch, i)->ter_room;
           
           if (onethere) {
             sprintf(buf2, "%s %s:\r\n%s\r\n", dirs[i], dist_name[j], buf1);

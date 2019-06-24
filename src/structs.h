@@ -133,7 +133,7 @@ struct room_direction_data
 
   sh_int exit_info;            /* Exit info                            */
   vnum_t key;                 /* Key's number (-1 for no key)         */
-  rnum_t to_room;            /* Where direction leads (NOWHERE)      */
+  struct room_data *ter_room;            /* Where direction leads (NOWHERE)      */
   sh_int key_level;            /* Level of electronic lock             */
   int ward;
   long idnum;
@@ -141,15 +141,15 @@ struct room_direction_data
   byte material;               /* material                             */
   byte barrier;                /* barrier rating                       */
   byte condition;      // current barrier rating
-  vnum_t to_room_vnum;       /* the vnum of the room. Used for OLC   */
+  vnum_t ter_room_vnum;       /* the vnum of the room. Used for OLC   */
   
 #ifdef USE_DEBUG_CANARIES
   // No sense in initializing the value since it's memset to 0 in most invocations.
   int canary;
 #endif
   room_direction_data() :
-      general_description(NULL), keyword(NULL), exit_info(0), key(0), to_room(NOWHERE),
-      key_level(0), ward(0), idnum(0), hidden(0), material(0), barrier(0), condition(0), to_room_vnum(NOWHERE)
+      general_description(NULL), keyword(NULL), exit_info(0), key(0), ter_room(NULL),
+      key_level(0), ward(0), idnum(0), hidden(0), material(0), barrier(0), condition(0), ter_room_vnum(NOWHERE)
   {}
 }
 ;
@@ -508,12 +508,12 @@ struct player_special_data
   ubyte mental_loss;
   ubyte physical_loss;
   ubyte perm_bod;
-  rnum_t watching;
+  struct room_data *watching;
   struct remem *ignored;
 
   player_special_data() :
       aliases(NULL), remem(NULL), last_tell(0),
-      questnum(0), obj_complete(NULL), mob_complete(NULL), ignored(NULL)
+      questnum(0), obj_complete(NULL), mob_complete(NULL), watching(NULL), ignored(NULL)
   {}
 }
 ;

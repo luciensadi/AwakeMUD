@@ -776,10 +776,10 @@ void do_stat_room(struct char_data * ch)
   for (i = 0; i < NUM_OF_DIRS; i++)
   {
     if (rm->dir_option[i]) {
-      if (rm->dir_option[i]->to_room == NOWHERE)
+      if (!rm->dir_option[i]->ter_room)
         strcpy(buf1, " ^cNONE^n");
       else
-        sprintf(buf1, "^c%5ld^n", world[rm->dir_option[i]->to_room].number);
+        sprintf(buf1, "^c%5ld^n", rm->dir_option[i]->ter_room->number);
       sprintbit(rm->dir_option[i]->exit_info, exit_bits, buf2);
       sprintf(buf, "Exit ^c%-5s^n:  To: [^c%s^n], Key: [^c%5ld^n], Keyword: "
               "^c%s^n, Type: ^c%s^n\r\n ", dirs[i], buf1, rm->dir_option[i]->key,
@@ -3167,8 +3167,7 @@ ACMD(do_show)
     strcpy(buf, "Errant Rooms\r\n------------\r\n");
     for (i = 0, k = 0; i <= top_of_world; i++)
       for (j = 0; j < NUM_OF_DIRS; j++)
-        if (world[i].dir_option[j] && (world[i].dir_option[j]->to_room == 0 ||
-                                       world[i].dir_option[j]->to_room == NOWHERE) && i != last) {
+        if (world[i].dir_option[j] && !world[i].dir_option[j]->ter_room && i != last) {
           sprintf(buf, "%s%2d: [%5ld] %s\r\n", buf, ++k, world[i].number, world[i].name);
           last = i;
         }

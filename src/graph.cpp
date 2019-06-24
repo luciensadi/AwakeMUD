@@ -36,7 +36,7 @@ static struct bfs_queue_struct *queue_head = 0, *queue_tail = 0;
 #define MARK(room) (world[room].room_flags.SetBit(ROOM_BFS_MARK))
 #define UNMARK(room) (world[room].room_flags.RemoveBit(ROOM_BFS_MARK))
 #define IS_MARKED(room) (world[room].room_flags.IsSet(ROOM_BFS_MARK))
-#define TOROOM(x, y) (world[(x)].dir_option[(y)]->to_room)
+#define TOROOM(x, y) (real_room(world[(x)].dir_option[(y)]->ter_room->number))
 #define IS_CLOSED(x, y) (IS_SET(world[(x)].dir_option[(y)]->exit_info, EX_CLOSED))
 
 #define VALID_EDGE(x, y) (world[(x)].dir_option[(y)] && \
