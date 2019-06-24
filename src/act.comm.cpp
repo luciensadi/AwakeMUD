@@ -387,6 +387,10 @@ ACMD(do_spec_comm)
     }
     ch->in_room = ch->in_veh->in_room;
     if ((vict = get_char_room_vis(ch, buf))) {
+      if (vict == ch) {
+        send_to_char(ch, "Why would you want to %s yourself?\r\n", action_sing);
+        return;
+      }
       if (success > 0) {
         sprintf(buf, "You lean out towards $N and say, \"%s\"", buf2);
         store_message_to_history(ch->desc, COMM_CHANNEL_SAYS, str_dup(act(buf, FALSE, ch, NULL, vict, TO_CHAR)));
@@ -399,6 +403,8 @@ ACMD(do_spec_comm)
       } else
         sprintf(buf, "$z mumbles incoherently from %s.\r\n", GET_VEH_NAME(ch->in_veh));
       store_message_to_history(vict->desc, COMM_CHANNEL_SAYS, str_dup(act(buf, FALSE, ch, NULL, vict, TO_VICT)));
+    } else {
+      send_to_char("You don't see them here.\r\n", ch);
     }
     ch->in_room = NULL;
   } else if (!(vict = get_char_room_vis(ch, buf)) &&

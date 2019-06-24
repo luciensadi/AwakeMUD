@@ -955,11 +955,11 @@ void veh_from_room(struct veh_data * veh)
   struct veh_data *temp;
   if (veh == NULL) {
     log("SYSERR: Null vehicle passed to veh_from_room. Terminating.");
-    shutdown();
+    exit(1);
   }
-  if (!veh->in_room && veh->in_veh == NULL) {
-    log("SYSERR: Vehicle in NOWHERE and not in other vehicle passed to veh_from_room. Terminating.");
-    shutdown();
+  if (!veh->in_room && !veh->in_veh) {
+    log("SYSERR: veh->in_room and veh->in_veh are both null; did you call veh_from_room twice?");
+    return;
   }
   if (veh->in_veh) {
     REMOVE_FROM_LIST(veh, veh->in_veh->carriedvehs, next_veh);
@@ -1033,10 +1033,10 @@ void char_to_veh(struct veh_data * veh, struct char_data * ch)
 {
   if (!veh || !ch)
     log("SYSLOG: Illegal value(s) passed to char_to_veh");
-  else
-  {
+  else {
     if (ch->in_room || ch->in_veh)
       char_from_room(ch);
+    
     ch->next_in_veh = veh->people;
     veh->people = ch;
     ch->in_veh = veh;
@@ -1051,6 +1051,9 @@ void veh_to_room(struct veh_data * veh, struct room_data *room)
     log("SYSLOG: Illegal value(s) passed to veh_to_room");
   else
   {
+    if (veh->in_veh || veh->in_room)
+      veh_from_room(veh);
+    
     veh->next_veh = room->vehicles;
     room->vehicles = veh;
     veh->in_room = room;
@@ -1063,7 +1066,9 @@ void veh_to_veh(struct veh_data *veh, struct veh_data *dest)
   if (!veh || !dest)
     log("SYSLOG: Illegal value(s) passed to veh_to_veh");
   else {
-    veh_from_room(veh);
+    if (veh->in_veh || veh->in_room)
+      veh_from_room(veh);
+    
     veh->next_veh = dest->carriedvehs;
     veh->in_veh = dest;
     dest->carriedvehs = veh;
@@ -1815,13 +1820,11 @@ void extract_veh(struct veh_data * veh)
     send_to_veh(buf2, temp, NULL, FALSE);
     if (veh->in_room) {
       send_to_room(buf, veh->in_room);
-      veh_from_room(temp);
       veh_to_room(temp, veh->in_room);
     } else if (veh->in_veh) {
       send_to_veh(buf, veh, NULL, FALSE);
       veh_to_veh(temp, veh->in_veh);
     } else {
-      veh_from_room(temp);
       veh_to_room(temp, &world[real_room(RM_DANTES_GARAGE)]);
     }
   }

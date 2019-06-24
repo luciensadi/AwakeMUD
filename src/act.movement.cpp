@@ -1418,7 +1418,6 @@ void leave_veh(struct char_data *ch)
     send_to_veh(buf2, veh->in_veh, NULL, FALSE);
     sprintf(buf, "%s drives out of the back of %s.", GET_VEH_NAME(veh), GET_VEH_NAME(veh->in_veh));
     struct room_data *room = veh->in_veh->in_room;
-    veh_from_room(veh);
     veh_to_room(veh, room);
     if (veh->in_room->people) {
       act(buf, 0, veh->in_room->people, 0, 0, TO_ROOM);
@@ -1435,6 +1434,7 @@ void leave_veh(struct char_data *ch)
       return;
     }
   }
+  
   if (AFF_FLAGGED(ch, AFF_PILOT)) {
     act("$n climbs out of the drivers seat and into the street.", FALSE, ch, 0, 0, TO_VEH);
     AFF_FLAGS(ch).ToggleBit(AFF_PILOT);
@@ -1444,6 +1444,7 @@ void leave_veh(struct char_data *ch)
     act("$n stops manning $p and climbs out into the street.", FALSE, ch, mount, 0, TO_ROOM);
   } else
     act("$n climbs out into the street.", FALSE, ch, 0, 0, TO_VEH);
+  
   door = veh->in_room;
   char_from_room(ch);
   if (IS_WORKING(ch))

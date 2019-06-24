@@ -4883,8 +4883,11 @@ void chkdmg(struct veh_data * veh)
       damage_tn = 8;
     } else {
       send_to_veh("You scramble into the street as your ride is wrecked!\r\n", veh, NULL, TRUE);
-      sprintf(buf, "%s's occupants scramble to safety as it is wrecked!\r\n", GET_VEH_NAME(veh));
-      send_to_room(buf, veh->in_room);
+      
+      if (veh->people) {
+        sprintf(buf, "%s's occupants scramble to safety as it is wrecked!\r\n", GET_VEH_NAME(veh));
+        send_to_room(buf, veh->in_room);
+      }
       
       damage_rating = MODERATE;
       damage_tn = 4;

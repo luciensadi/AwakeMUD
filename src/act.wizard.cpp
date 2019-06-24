@@ -620,7 +620,7 @@ ACMD(do_vteleport)
 
   if (!*buf)
     send_to_char("What vehicle do you wish to teleport?\r\n", ch);
-  else if (!(veh = get_veh_list(buf, get_ch_in_room(ch)->vehicles, ch)))
+  else if (!(veh = get_veh_list(buf, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch)))
     send_to_char(NOOBJECT, ch);
   else if (!*buf2)
     send_to_char("Where do you wish to send this vehicle?\r\n", ch);
@@ -1395,28 +1395,29 @@ ACMD(do_stat)
       }
     }
   } else {
-    if ((object = get_object_in_equip_vis(ch, buf1, ch->equipment, &tmp)))
+    if ((object = get_object_in_equip_vis(ch, buf1, ch->equipment, &tmp))) {
       do_stat_object(ch, object);
-    else if ((object = get_obj_in_list_vis(ch, buf1, ch->carrying)))
+    } else if ((object = get_obj_in_list_vis(ch, buf1, ch->carrying))) {
       do_stat_object(ch, object);
-    else if ((veh = get_veh_list(buf1, get_ch_in_room(ch)->vehicles, ch)))
+    } else if ((veh = get_veh_list(buf1, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
       do_stat_veh(ch, veh);
-    else if ((victim = get_char_room_vis(ch, buf1)))
+    } else if ((victim = get_char_room_vis(ch, buf1))) {
       if (IS_NPC(victim))
         do_stat_mobile(ch, victim);
       else
         do_stat_character(ch, victim);
-    else if ((object = get_obj_in_list_vis(ch, buf1, ch->in_room->contents)))
+    } else if ((object = get_obj_in_list_vis(ch, buf1, ch->in_veh ? ch->in_veh->contents : ch->in_room->contents))) {
       do_stat_object(ch, object);
-    else if ((victim = get_char_vis(ch, buf1)))
+    } else if ((victim = get_char_vis(ch, buf1))) {
       if (IS_NPC(victim))
         do_stat_mobile(ch, victim);
       else
         do_stat_character(ch, victim);
-    else if ((object = get_obj_vis(ch, buf1)))
+    } else if ((object = get_obj_vis(ch, buf1))) {
       do_stat_object(ch, object);
-    else
+    } else {
       send_to_char("Nothing around by that name.\r\n", ch);
+    }
   }
 }
 
@@ -1875,10 +1876,10 @@ ACMD(do_purge)
         }
       }
       extract_char(vict);
-    } else if ((obj = get_obj_in_list_vis(ch, buf, ch->in_room->contents))) {
+    } else if ((obj = get_obj_in_list_vis(ch, buf, ch->in_veh ? ch->in_veh->contents : ch->in_room->contents))) {
       act("$n destroys $p.", FALSE, ch, obj, 0, TO_ROOM);
       extract_obj(obj);
-    } else if ((veh = get_veh_list(buf, ch->in_room->vehicles, ch))) {
+    } else if ((veh = get_veh_list(buf, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
       sprintf(buf1, "$n purges %s.", GET_VEH_NAME(veh));
       act(buf1, FALSE, ch, NULL, 0, TO_ROOM);
       sprintf(buf1, "%s purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
@@ -3380,7 +3381,7 @@ ACMD(do_vset)
     send_to_char("Usage: vset <victim> <field> <value>\r\n", ch);
     return;
   }
-  if (!(veh = get_veh_list(name, get_ch_in_room(ch)->vehicles, ch))) {
+  if (!(veh = get_veh_list(name, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
     send_to_char("There is no such vehicle.\r\n", ch);
     return;
   }

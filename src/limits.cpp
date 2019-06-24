@@ -790,7 +790,7 @@ void save_vehicles(void)
           break;
         }
     
-    temp_room = veh->in_room;
+    temp_room = get_veh_in_room(veh);
     if (!ROOM_FLAGGED(temp_room, ROOM_GARAGE))
       switch (GET_JURISDICTION(veh->in_room)) {
         case ZONE_PORTLAND:

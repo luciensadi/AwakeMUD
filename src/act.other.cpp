@@ -3380,7 +3380,11 @@ ACMD(do_unpack)
     }
     send_to_char(ch, "You begin to set up %s here.\r\n", GET_OBJ_NAME(shop));
     act("$n begins to set up $P.", FALSE, ch, 0, shop, TO_ROOM);
-    GET_WORKSHOP_UNPACK_TICKS(shop) = 3;
+    if (access_level(ch, LVL_BUILDER)) {
+      send_to_char("You use your staff powers to greatly accelerate the process.\r\n", ch);
+      GET_WORKSHOP_UNPACK_TICKS(shop) = 1;
+    } else
+      GET_WORKSHOP_UNPACK_TICKS(shop) = 3;
     AFF_FLAGS(ch).SetBit(AFF_PACKING);
   }
 }
@@ -3401,7 +3405,11 @@ ACMD(do_packup)
   else {
     send_to_char(ch, "You begin to pack up %s here.\r\n", GET_OBJ_NAME(shop));
     act("$n begins to pack up $P.", FALSE, ch, 0, shop, TO_ROOM);
-    GET_OBJ_VAL(shop, 3) = 3;
+    if (access_level(ch, LVL_BUILDER)) {
+      send_to_char("You use your staff powers to greatly accelerate the process.\r\n", ch);
+      GET_OBJ_VAL(shop, 3) = 1;
+    } else
+      GET_OBJ_VAL(shop, 3) = 3;
     AFF_FLAGS(ch).SetBit(AFF_PACKING);
   }
 }

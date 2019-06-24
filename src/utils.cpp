@@ -172,6 +172,10 @@ int convert_damage(int damage)
 
 int light_level(struct room_data *room)
 {
+  if (!room) {
+    mudlog("SYSERR: light_level() called on null room.", NULL, LOG_SYSLOG, TRUE);
+    return LIGHT_NORMAL;
+  }
   if (room->sector_type == SPIRIT_HEARTH)
     return room->vision[0];
   if (room->sector_type == SPIRIT_CITY) {
@@ -270,12 +274,14 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibil
     buf_mod( rbuf, "Sustain", (GET_SUSTAINED_NUM(ch) - GET_SUSTAINED_FOCI(ch)) * 2);
   }
   
+  struct room_data *temp_room = get_ch_in_room(ch);
+  
   if (PLR_FLAGGED(ch, PLR_PERCEIVE))
   {
     base_target += 2;
     buf_mod(rbuf, "AstralPercep", 2);
   } else if (current_visibility_penalty < 8) {
-    switch (light_level(ch->in_room)) {
+    switch (light_level(temp_room)) {
       case LIGHT_FULLDARK:
         if (CURRENT_VISION(ch) == THERMOGRAPHIC) {
           if (NATURAL_VISION(ch) == THERMOGRAPHIC) {
@@ -338,26 +344,26 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibil
         }
         break;
     }
-    if (light_target > 0 && ch->in_room->light[1]) {
-      if (ch->in_room->light[2]) {
-        light_target = MAX(0, light_target - ch->in_room->light[2]);
-        buf_mod(rbuf, "LightSpell", - ch->in_room->light[2]);
+    if (light_target > 0 && temp_room->light[1]) {
+      if (temp_room->light[2]) {
+        light_target = MAX(0, light_target - temp_room->light[2]);
+        buf_mod(rbuf, "LightSpell", - temp_room->light[2]);
       } else
         light_target /= 2;
     }
-    if (ch->in_room->shadow[0]) {
-      light_target += ch->in_room->shadow[1];
-      buf_mod(rbuf, "ShadowSpell", ch->in_room->shadow[1]);
+    if (temp_room->shadow[0]) {
+      light_target += temp_room->shadow[1];
+      buf_mod(rbuf, "ShadowSpell", temp_room->shadow[1]);
     }
     int smoke_target = 0;
     
-    if (ch->in_room->vision[1] == LIGHT_MIST)
+    if (temp_room->vision[1] == LIGHT_MIST)
       if (CURRENT_VISION(ch) == NORMAL || (CURRENT_VISION(ch) == LOWLIGHT && NATURAL_VISION(ch) == LOWLIGHT)) {
         smoke_target += 2;
         buf_mod(rbuf, "Mist", 2);
       }
-    if (ch->in_room->vision[1] == LIGHT_LIGHTSMOKE || (weather_info.sky == SKY_RAINING &&
-                                                             ch->in_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))) {
+    if (temp_room->vision[1] == LIGHT_LIGHTSMOKE || (weather_info.sky == SKY_RAINING &&
+                                                             temp_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(temp_room, ROOM_INDOORS))) {
       if (CURRENT_VISION(ch) == NORMAL || (CURRENT_VISION(ch) == LOWLIGHT && NATURAL_VISION(ch) != LOWLIGHT)) {
         smoke_target += 4;
         buf_mod(rbuf, "LSmoke", 4);
@@ -366,8 +372,8 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibil
         buf_mod(rbuf, "LSmoke", 2);
       }
     }
-    if (ch->in_room->vision[1] == LIGHT_HEAVYSMOKE || (weather_info.sky == SKY_LIGHTNING &&
-                                                             ch->in_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))) {
+    if (temp_room->vision[1] == LIGHT_HEAVYSMOKE || (weather_info.sky == SKY_LIGHTNING &&
+                                                             temp_room->sector_type != SPIRIT_HEARTH && !ROOM_FLAGGED(temp_room, ROOM_INDOORS))) {
       if (CURRENT_VISION(ch) == NORMAL || (CURRENT_VISION(ch) == LOWLIGHT && NATURAL_VISION(ch) == NORMAL)) {
         smoke_target += 6;
         buf_mod(rbuf, "HSmoke", 6);
@@ -379,7 +385,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibil
         buf_mod(rbuf, "HSmoke", 1);
       }
     }
-    if (ch->in_room->vision[1] == LIGHT_THERMALSMOKE) {
+    if (temp_room->vision[1] == LIGHT_THERMALSMOKE) {
       if (CURRENT_VISION(ch) == NORMAL || CURRENT_VISION(ch) == LOWLIGHT) {
         smoke_target += 4;
         buf_mod(rbuf, "TSmoke", 4);
@@ -407,7 +413,7 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibil
     base_target += 1;
     buf_mod( rbuf, "Sunlight", 1);
   }
-  if (ch->in_room->poltergeist[0] && !IS_ASTRAL(ch) && !IS_DUAL(ch))
+  if (temp_room->poltergeist[0] && !IS_ASTRAL(ch) && !IS_DUAL(ch))
   {
     base_target += 2;
     buf_mod(rbuf, "Polter", 2);
@@ -436,8 +442,8 @@ int modify_target_rbuf_raw(struct char_data *ch, char *rbuf, int current_visibil
         base_target += GET_LEVEL(sust->target);
         buf_mod(rbuf, "SConfused", GET_LEVEL(sust->target));
       }
-  if (ch->in_room && ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
-    float heightdif = GET_HEIGHT(ch) / ((ch->in_room->z != 0 ? ch->in_room->z : 1)*100);
+  if (temp_room && ROOM_FLAGGED(temp_room, ROOM_INDOORS)) {
+    float heightdif = GET_HEIGHT(ch) / ((temp_room->z != 0 ? temp_room->z : 1)*100);
     if (heightdif > 1) {
       base_target += 2;
       buf_mod(rbuf, "TooTallRatio", (int)(heightdif*100));

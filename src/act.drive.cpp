@@ -1900,7 +1900,7 @@ ACMD(do_push)
       send_to_char(ch, "You push %s out of the back.\r\n", GET_VEH_NAME(veh));
       sprintf(buf, "$n pushes %s out of the back.", GET_VEH_NAME(veh));
       sprintf(buf2, "$N pushes %s out of the back of %s.", GET_VEH_NAME(veh), GET_VEH_NAME(ch->in_veh));
-      act(buf, 0, ch, 0, 0, TO_ROOM);
+      act(buf, FALSE, ch, NULL, NULL, TO_ROOM);
       if (ch->in_veh->in_room) {
         act(buf2, FALSE, ch->in_veh->in_room->people, 0, 0, TO_NOTVICT);
       } else if (ch->in_veh->in_veh){
@@ -1909,7 +1909,6 @@ ACMD(do_push)
         sprintf(buf, "SYSERR: Veh %s (%ld) has neither in_room nor in_veh!", GET_VEH_NAME(ch->in_veh), ch->in_veh->idnum);
         mudlog(buf, ch, LOG_SYSLOG, TRUE);
       }
-      veh_from_room(veh);
       if (ch->in_veh->in_room)
         veh_to_room(veh, ch->in_veh->in_room);
       else
