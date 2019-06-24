@@ -535,12 +535,19 @@ void transfer_ch_to_ch(struct char_data *victim, struct char_data *ch) {
   if (AFF_FLAGGED(victim, AFF_PILOT))
     AFF_FLAGS(victim).ToggleBit(AFF_PILOT);
   char_from_room(victim);
-  char_to_room(victim, ch->in_room);
+  
+  if (ch->in_veh) {
+    char_to_veh(ch->in_veh, victim);
+    sprintf(buf2, "%s transferred %s to %s in %s^g.", GET_CHAR_NAME(ch), IS_NPC(victim) ? GET_NAME(victim) : GET_CHAR_NAME(victim),
+            GET_VEH_NAME(victim->in_veh), GET_ROOM_NAME(get_ch_in_room(victim)));
+  } else {
+    char_to_room(victim, ch->in_room);
+    sprintf(buf2, "%s transferred %s to %s^g.", GET_CHAR_NAME(ch), IS_NPC(victim) ? GET_NAME(victim) : GET_CHAR_NAME(victim), GET_ROOM_NAME(victim->in_room));
+  }
   act("$n arrives from a puff of smoke.", FALSE, victim, 0, 0, TO_ROOM);
   act("$n has transferred you!", FALSE, ch, 0, victim, TO_VICT);
-  look_at_room(victim, 0);
-  sprintf(buf2, "%s transferred %s to %s.", GET_CHAR_NAME(ch), IS_NPC(victim) ? GET_NAME(victim) : GET_CHAR_NAME(victim), ch->in_room->name);
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
+  look_at_room(victim, 0);
 }
 
 ACMD(do_trans)

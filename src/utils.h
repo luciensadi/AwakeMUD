@@ -272,7 +272,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define IS_LIGHT(room)  (light_level((room)) <= LIGHT_NORMALNOLIT || light_level((room)) == LIGHT_PARTLIGHT)
 #define IS_LOW(room)	(light_level((room)) == LIGHT_MINLIGHT || light_level((room)) == LIGHT_PARTLIGHT)
 
-#define GET_ROOM_NAME(room) ((room)->name)
+#define GET_ROOM_NAME(room) ((room) ? (room)->name : "(null room name)")
 
 #define VALID_ROOM_RNUM(rnum) ((rnum) != NOWHERE && (rnum) <= top_of_world)
 

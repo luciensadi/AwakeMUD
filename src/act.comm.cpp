@@ -671,7 +671,7 @@ ACMD(do_broadcast)
       break;
     }
   sprintf(buf3, "*static* %s", buf4);
-  if (ROOM_FLAGGED(ch->in_room, ROOM_NO_RADIO))
+  if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_NO_RADIO))
     strcpy(argument, buf3);
 
   
@@ -707,15 +707,15 @@ ACMD(do_broadcast)
     send_to_char(OK, ch);
   else
     store_message_to_history(ch->desc, COMM_CHANNEL_RADIO, str_dup(act(buf, FALSE, ch, 0, 0, TO_CHAR)));
-  if (!ROOM_FLAGGED(ch->in_room, ROOM_SOUNDPROOF))
+  if (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_SOUNDPROOF))
     for (d = descriptor_list; d; d = d->next) {
       if (!d->connected && d != ch->desc && d->character &&
           !PLR_FLAGS(d->character).AreAnySet(PLR_WRITING,
                                              PLR_MAILING,
                                              PLR_EDITING, PLR_MATRIX, ENDBIT)
           && !IS_PROJECT(d->character) &&
-          !ROOM_FLAGGED(d->character->in_room, ROOM_SOUNDPROOF) &&
-          !ROOM_FLAGGED(d->character->in_room, ROOM_SENT)) {
+          !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SOUNDPROOF) &&
+          !ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SENT)) {
         if (!IS_NPC(d->character) && !IS_SENATOR(d->character)) {
           radio = NULL;
           cyberware = FALSE;
@@ -765,7 +765,7 @@ ACMD(do_broadcast)
               if (to_room) {
                 if (success > 0 || IS_NPC(ch))
                   if (suc > 0 || IS_NPC(ch))
-                    if (ROOM_FLAGGED(d->character->in_room, ROOM_NO_RADIO))
+                    if (ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_NO_RADIO))
                       store_message_to_history(d, COMM_CHANNEL_RADIO, str_dup(act(buf4, FALSE, ch, 0, d->character, TO_VICT)));
                     else
                       store_message_to_history(d, COMM_CHANNEL_RADIO, str_dup(act(buf, FALSE, ch, 0, d->character, TO_VICT)));
@@ -776,7 +776,7 @@ ACMD(do_broadcast)
               } else {
                 if (success > 0 || IS_NPC(ch))
                   if (suc > 0 || IS_NPC(ch))
-                    if (ROOM_FLAGGED(d->character->in_room, ROOM_NO_RADIO))
+                    if (ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_NO_RADIO))
                       store_message_to_history(d, COMM_CHANNEL_RADIO, str_dup(act(buf4, FALSE, ch, 0, d->character, TO_VICT)));
                     else 
                       store_message_to_history(d, COMM_CHANNEL_RADIO, str_dup(act(buf, FALSE, ch, 0, d->character, TO_VICT)));
@@ -796,8 +796,8 @@ ACMD(do_broadcast)
   for (d = descriptor_list; d; d = d->next)
     if (!d->connected &&
         d->character &&
-        ROOM_FLAGGED(d->character->in_room, ROOM_SENT))
-      ROOM_FLAGS(d->character->in_room).RemoveBit(ROOM_SENT);
+        ROOM_FLAGGED(get_ch_in_room(d->character), ROOM_SENT))
+      ROOM_FLAGS(get_ch_in_room(d->character)).RemoveBit(ROOM_SENT);
 }
 
 /**********************************************************************
@@ -889,7 +889,7 @@ ACMD(do_gen_comm)
     return;
   }
 
-  if (ROOM_FLAGGED(ch->in_room, ROOM_SOUNDPROOF) && subcmd == SCMD_SHOUT) {
+  if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_SOUNDPROOF) && subcmd == SCMD_SHOUT) {
     send_to_char("The walls seem to absorb your words.\r\n", ch);
     return;
   }
@@ -922,7 +922,7 @@ ACMD(do_gen_comm)
   if (PRF_FLAGGED(ch, PRF_NOREPEAT))
     send_to_char(OK, ch);
   else if (subcmd == SCMD_SHOUT) {
-    struct room_data *was_in;
+    struct room_data *was_in = NULL;
     struct char_data *tmp;
     int success = success_test(GET_SKILL(ch, GET_LANGUAGE(ch)), 4);
     for (tmp = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tmp; tmp = (ch->in_veh ? tmp->next_in_veh : tmp->next_in_room))
@@ -974,7 +974,7 @@ ACMD(do_gen_comm)
 
     for (int door = 0; door < NUM_OF_DIRS; door++)
       if (CAN_GO(ch, door)) {
-        ch->in_room = &world[was_in->dir_option[door]->to_room];
+        ch->in_room = &world[ch->in_room->dir_option[door]->to_room];
         for (tmp = get_ch_in_room(ch)->people; tmp; tmp = tmp->next_in_room)
           if (tmp != ch) {
             if (success > 0) {
@@ -1050,7 +1050,7 @@ ACMD(do_gen_comm)
                                            PLR_MAILING,
                                            PLR_EDITING, ENDBIT) &&
         !IS_PROJECT(i->character) &&
-        !(ROOM_FLAGGED(i->character->in_room, ROOM_SOUNDPROOF) && subcmd == SCMD_SHOUT)) {
+        !(ROOM_FLAGGED(get_ch_in_room(i->character), ROOM_SOUNDPROOF) && subcmd == SCMD_SHOUT)) {
       if (subcmd == SCMD_NEWBIE && !(PLR_FLAGGED(i->character, PLR_NEWBIE) ||
                                      IS_SENATOR(i->character) || PRF_FLAGGED(i->character, PRF_NEWBIEHELPER)))
         continue;
