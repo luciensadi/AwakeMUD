@@ -731,7 +731,7 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
   
   if ( ch && ch->desc && ch->desc->original )
     sprintf(buf2, "[%5ld] (%s) ",
-            ch->in_room->number,
+            get_ch_in_room(ch)->number,
             GET_CHAR_NAME(ch));
   else if (ch && ch->in_room)
     sprintf(buf2, "[%5ld] ", ch->in_room->number);
@@ -1056,7 +1056,7 @@ char * buf_roll(char *rbuf, const char *name, int bonus)
 int get_speed(struct veh_data *veh)
 {
   int speed = 0, maxspeed = (int)(veh->speed * ((veh->load - veh->usedload) / (veh->load != 0 ? veh->load : 1)));
-  
+  struct room_data *in_room = get_veh_in_room(veh);
   switch (veh->cspeed)
   {
     case SPEED_OFF:
@@ -1064,19 +1064,19 @@ int get_speed(struct veh_data *veh)
       speed = 0;
       break;
     case SPEED_CRUISING:
-      if (ROOM_FLAGGED(veh->in_room, ROOM_INDOORS))
+      if (ROOM_FLAGGED(in_room, ROOM_INDOORS))
         speed = MIN(maxspeed, 3);
       else
         speed = MIN(maxspeed, 55);
       break;
     case SPEED_SPEEDING:
-      if (ROOM_FLAGGED(veh->in_room, ROOM_INDOORS))
+      if (ROOM_FLAGGED(in_room, ROOM_INDOORS))
         speed = MIN(maxspeed, MAX(5, (int)(maxspeed * .7)));
       else
         speed = MIN(maxspeed, MAX(55, (int)(maxspeed * .7)));
       break;
     case SPEED_MAX:
-      if (ROOM_FLAGGED(veh->in_room, ROOM_INDOORS))
+      if (ROOM_FLAGGED(in_room, ROOM_INDOORS))
         speed = MIN(maxspeed, 8);
       else
         speed = maxspeed;
@@ -1640,6 +1640,9 @@ void add_workshop_to_room(struct obj_data *obj) {
   if (!_is_workshop_valid(obj))
     return;
   
+  if (!obj->in_room)
+    return;
+  
   struct obj_data *current = obj->in_room->best_workshop[GET_OBJ_VAL(obj, 0)];
   
   if (current && GET_WORKSHOP_GRADE(current) > GET_WORKSHOP_GRADE(obj))
@@ -1650,6 +1653,9 @@ void add_workshop_to_room(struct obj_data *obj) {
 
 void remove_workshop_from_room(struct obj_data *obj) {
   if (!_is_workshop_valid(obj))
+    return;
+  
+  if (!obj->in_room)
     return;
   
   // If this wasn't the best workshop in the first place, who cares?
