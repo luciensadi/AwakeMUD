@@ -169,6 +169,10 @@ ACMD (do_redit)
 
   one_argument (argument, arg1);
   if (!*argument) {
+    if (!ch->in_room) {
+      send_to_char("You'd better leave your vehicle before trying that.\r\n", ch);
+      return;
+    }
     number = ch->in_room->number;
     room_num = real_room(ch->in_room->number);
   } else {

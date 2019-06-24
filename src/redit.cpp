@@ -494,7 +494,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
           /* now zoom through the character list and update anyone in limbo */
           struct char_data * temp_ch;
           for (temp_ch = character_list; temp_ch; temp_ch = temp_ch->next) {
-            if (real_room(GET_WAS_IN(temp_ch)->number) >= room_num)
+            if (GET_WAS_IN(temp_ch) && real_room(GET_WAS_IN(temp_ch)->number) >= room_num)
               GET_WAS_IN(temp_ch) = &world[real_room(GET_WAS_IN(temp_ch)->number) + 1];
           }
           /* update zone tables */
@@ -543,7 +543,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
           for (counter = 0; counter <= top_of_world; counter++) {
             for (counter2 = 0; counter2 < NUM_OF_DIRS; counter2++) {
               /* if exit exists */
-              if (world[counter].dir_option[counter2]) {
+              if (world[counter].dir_option[counter2] && world[counter].dir_option[counter2]->to_room) {
                 /* increment r_nums for rooms bigger than or equal to new one
                  * because we inserted room */
                 vnum_t rnum = real_room(world[counter].dir_option[counter2]->to_room->number);
@@ -560,7 +560,12 @@ void redit_parse(struct descriptor_data * d, const char *arg)
         struct room_data *opposite = NULL;
         for (counter2 = 0; counter2 < NUM_OF_DIRS; counter2++) {
           if (world[room_num].dir_option[counter2]) {
-            world[room_num].dir_option[counter2]->to_room = &world[real_room(world[room_num].dir_option[counter2]->to_room_vnum)];
+            vnum_t rnum = real_room(world[room_num].dir_option[counter2]->to_room_vnum);
+            if (rnum != NOWHERE)
+              world[room_num].dir_option[counter2]->to_room = &world[rnum];
+            else {
+              world[room_num].dir_option[counter2]->to_room = &world[0];
+            }
             if (counter2 < NUM_OF_DIRS) {
               opposite = world[room_num].dir_option[counter2]->to_room;
               if (opposite && opposite->dir_option[rev_dir[counter2]] && opposite->dir_option[rev_dir[counter2]]->to_room == &world[room_num]) {

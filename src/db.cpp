@@ -1041,7 +1041,7 @@ void parse_room(File &fl, long nr)
       room_direction_data *dir = room->dir_option[i];
       memset(dir, 0, sizeof(room_direction_data));
 
-      dir->to_room = NULL;
+      dir->to_room = &world[0];
       dir->to_room_vnum = to_vnum;
 
       sprintf(field, "%s/Keywords", sect);
@@ -1155,7 +1155,7 @@ void setup_dir(FILE * fl, int room, int dir)
     world[room].dir_option[dir]->exit_info = 0;
 
   world[room].dir_option[dir]->key = t[1];
-  world[room].dir_option[dir]->to_room = NULL; // Will be set properly during world renumbering.
+  world[room].dir_option[dir]->to_room = &world[0]; // Will be set properly during world renumbering.
   world[room].dir_option[dir]->to_room_vnum = MAX(0, t[2]);
   world[room].dir_option[dir]->key_level = t[3];
 
@@ -1205,7 +1205,7 @@ void renum_world(void)
         if (rnum != NOWHERE)
           dir->to_room = &world[rnum];
         else
-          dir->to_room = NULL;
+          dir->to_room = &world[0];
       }
 }
 
