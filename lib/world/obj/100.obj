@@ -710,4 +710,36 @@ Material:	paper
 	Val1:	20
 	Val2:	800
 BREAK
+#10028
+Keywords:	BFG-9000 9000 rocket launcher report staff
+Name:	a BFG-9000 rocket launcher
+RoomDesc:$
+^rReport this to the staff!^n~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1100000000100
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	4
+	Val3:	21
+	Val4:	20
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+	Val10:	2
+BREAK
 END
