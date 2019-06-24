@@ -413,15 +413,12 @@ ACMD(do_gecho)
 }
 
 /* take a string, and return an rnum.. used for goto, at, etc.  -je 4/6/93 */
-struct room_data *find_target_room(struct char_data * ch, char *rawroomstr)
+struct room_data *find_target_room(struct char_data * ch, char *roomstr)
 {
   int tmp;
   struct room_data *location = NULL;
   struct char_data *target_mob = NULL;
   struct obj_data *target_obj = NULL;
-  char roomstr[MAX_INPUT_LENGTH];
-
-  one_argument(rawroomstr, roomstr);
 
   if (!*roomstr)
   {
@@ -451,22 +448,6 @@ struct room_data *find_target_room(struct char_data * ch, char *rawroomstr)
     return NULL;
   }
   return location;
-}
-
-struct veh_data *find_target_in_veh(struct char_data *ch, char *rawroomstr) {
-  char roomstr[MAX_INPUT_LENGTH];
-  
-  one_argument(rawroomstr, roomstr);
-  
-  // No error message-- we already yelled at them in find_target_room.
-  if (!*roomstr)
-    return NULL;
-  
-  struct char_data *vict = get_char_vis(ch, roomstr);
-  if (vict)
-    return vict->in_veh;
-  
-  return NULL;
 }
 
 ACMD(do_at)
@@ -516,16 +497,19 @@ ACMD(do_at)
 
 ACMD(do_goto)
 {
+  char command[MAX_INPUT_LENGTH];
   struct room_data *location = NULL;
-  struct veh_data *veh = NULL;
+  struct char_data *vict = NULL;
+  
+  half_chop(argument, buf, command);
 
-  if ((location = find_target_room(ch, argument))) {
+  if ((location = find_target_room(ch, buf))) {
     if (location->number == 0 || location->number == 1) {
       send_to_char("You're not able to GOTO that room. If you need to do something there, use AT.", ch);
       return;
     }
-  } else if (!(veh = find_target_in_veh(ch, argument))) {
-    send_to_char("You can't figure out how to get there.\r\n", ch);
+  } else if (!(vict = get_char_vis(ch, buf)) || !vict->in_veh) {
+    send_to_char("You can't find anything like that to go to.\r\n", ch);
     return;
   }
 
@@ -536,10 +520,15 @@ ACMD(do_goto)
 
   char_from_room(ch);
   
-  if (veh)
-    char_to_veh(veh, ch);
-  else
+  if (vict) {
+    char_to_veh(vict->in_veh, ch);
+    vict->in_veh->seating[ch->vfront]++;
+    ch->vfront = vict->vfront;
+    vict->in_veh->seating[ch->vfront]--;
+  } else {
     char_to_room(ch, location);
+    GET_POS(ch) = POS_STANDING;
+  }
 
   if (POOFIN(ch))
     act(POOFIN(ch), TRUE, ch, 0, 0, TO_ROOM);

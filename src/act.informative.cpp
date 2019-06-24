@@ -893,7 +893,7 @@ void list_char_to_char(struct char_data * list, struct char_data * ch)
   // Show room's characters to character. Done this way because list_char_to_char should have been split for vehicles but wasn't.
   for (i = list; i; i = i->next_in_room) {
     // Skip them if they're invisible to us, or if they're us and we're not rigging.
-    if (!CAN_SEE(ch, i) || !(ch != i || ch->char_specials.rigging) || i->in_veh == ch->in_veh) {
+    if (!CAN_SEE(ch, i) || !(ch != i || ch->char_specials.rigging) || (ch->in_veh && i->in_veh == ch->in_veh)) {
       continue;
     }
     

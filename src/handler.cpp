@@ -1013,10 +1013,10 @@ void char_from_room(struct char_data * ch)
   if (ch->in_veh)
   {
     REMOVE_FROM_LIST(ch, ch->in_veh->people, next_in_veh);
+    stop_manning_weapon_mounts(ch, TRUE);
     ch->in_veh->seating[ch->vfront]++;
     ch->in_veh = NULL;
     ch->next_in_veh = NULL;
-    stop_manning_weapon_mounts(ch, TRUE);
     AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
   } else
   {
