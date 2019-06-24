@@ -534,7 +534,7 @@ ACMD(do_flee)
   // You get six tries to escape per flee command.
   for (int tries = 0; tries < 6; tries++) {
     int attempt = number(0, NUM_OF_DIRS - 2);       /* Select a random direction */
-    if (CAN_GO(ch, attempt) && (!IS_NPC(ch) || !ROOM_FLAGGED(ch->in_room->dir_option[attempt]->ter_room, ROOM_NOMOB))) {
+    if (CAN_GO(ch, attempt) && (!IS_NPC(ch) || !ROOM_FLAGGED(ch->in_room->dir_option[attempt]->to_room, ROOM_NOMOB))) {
       // Supply messaging and put the character into a wait state to match wait state in perform_move.
       act("$n panics, and attempts to flee!", TRUE, ch, 0, 0, TO_ROOM);
       WAIT_STATE(ch, PULSE_VIOLENCE * 2);

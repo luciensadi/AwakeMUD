@@ -473,19 +473,19 @@ ACMD(do_dig)
 
   ch->in_room->dir_option[dir] = new room_direction_data;
   memset((char *) ch->in_room->dir_option[dir], 0, sizeof (struct room_direction_data));
-  ch->in_room->dir_option[dir]->ter_room = &world[room];
+  ch->in_room->dir_option[dir]->to_room = &world[room];
   ch->in_room->dir_option[dir]->barrier = 4;
   ch->in_room->dir_option[dir]->material = 5;
   ch->in_room->dir_option[dir]->exit_info = 0;
-  ch->in_room->dir_option[dir]->ter_room_vnum = world[room].number;
+  ch->in_room->dir_option[dir]->to_room_vnum = world[room].number;
   dir = rev_dir[dir];
   world[room].dir_option[dir] = new room_direction_data;
   memset((char *) world[room].dir_option[dir], 0, sizeof (struct room_direction_data));
-  world[room].dir_option[dir]->ter_room = ch->in_room;
+  world[room].dir_option[dir]->to_room = ch->in_room;
   world[room].dir_option[dir]->barrier = 4;
   world[room].dir_option[dir]->material = 5;
   world[room].dir_option[dir]->exit_info = 0;
-  world[room].dir_option[dir]->ter_room_vnum = ch->in_room->number;
+  world[room].dir_option[dir]->to_room_vnum = ch->in_room->number;
   if (zone1 == zone2)
     write_world_to_disk(zone_table[zone1].number);
   else {
@@ -603,9 +603,9 @@ ACMD(do_rdelete)
       if (world[counter].dir_option[counter2]) {
         /* increment r_nums for rooms bigger than or equal to new one
          * because we inserted room */
-        vnum_t rnum = real_room(world[counter].dir_option[counter2]->ter_room->number);
+        vnum_t rnum = real_room(world[counter].dir_option[counter2]->to_room->number);
         if (rnum >= num)
-          world[counter].dir_option[counter2]->ter_room = &world[rnum - 1];
+          world[counter].dir_option[counter2]->to_room = &world[rnum - 1];
       }
     }
 

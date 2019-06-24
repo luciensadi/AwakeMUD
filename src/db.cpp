@@ -1041,8 +1041,8 @@ void parse_room(File &fl, long nr)
       room_direction_data *dir = room->dir_option[i];
       memset(dir, 0, sizeof(room_direction_data));
 
-      dir->ter_room = NULL;
-      dir->ter_room_vnum = to_vnum;
+      dir->to_room = NULL;
+      dir->to_room_vnum = to_vnum;
 
       sprintf(field, "%s/Keywords", sect);
       dir->keyword = str_dup(data.GetString(field, NULL));
@@ -1155,8 +1155,8 @@ void setup_dir(FILE * fl, int room, int dir)
     world[room].dir_option[dir]->exit_info = 0;
 
   world[room].dir_option[dir]->key = t[1];
-  world[room].dir_option[dir]->ter_room = NULL; // Will be set properly during world renumbering.
-  world[room].dir_option[dir]->ter_room_vnum = MAX(0, t[2]);
+  world[room].dir_option[dir]->to_room = NULL; // Will be set properly during world renumbering.
+  world[room].dir_option[dir]->to_room_vnum = MAX(0, t[2]);
   world[room].dir_option[dir]->key_level = t[3];
 
   world[room].dir_option[dir]->material = (retval > 4) ? t[4] : 5;
@@ -1201,11 +1201,11 @@ void renum_world(void)
     for (door = 0; door < NUM_OF_DIRS; door++)
       if (world[room].dir_option[door]) {
         room_direction_data *dir = world[room].dir_option[door];
-        vnum_t rnum = real_room(dir->ter_room_vnum);
+        vnum_t rnum = real_room(dir->to_room_vnum);
         if (rnum != NOWHERE)
-          dir->ter_room = &world[rnum];
+          dir->to_room = &world[rnum];
         else
-          dir->ter_room = NULL;
+          dir->to_room = NULL;
       }
 }
 
@@ -3061,9 +3061,9 @@ void reset_zone(int zone, int reboot)
         ZONE_ERROR("door does not exist");
       } else {
         bool ok = FALSE;
-        struct room_data *opposite_room = world[ZCMD.arg1].dir_option[ZCMD.arg2]->ter_room;
+        struct room_data *opposite_room = world[ZCMD.arg1].dir_option[ZCMD.arg2]->to_room;
         if (!opposite_room->dir_option[rev_dir[ZCMD.arg2]]
-            || (&world[ZCMD.arg1] != opposite_room->dir_option[rev_dir[ZCMD.arg2]]->ter_room)) {
+            || (&world[ZCMD.arg1] != opposite_room->dir_option[rev_dir[ZCMD.arg2]]->to_room)) {
           sprintf(buf, "Note: Exits from %ld to %ld do not coincide (zone %d, line %d, cmd %d)",
                   opposite_room->number, world[ZCMD.arg1].number, zone_table[zone].number,
                   ZCMD.line, cmd_no);

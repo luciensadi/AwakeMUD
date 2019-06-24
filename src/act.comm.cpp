@@ -980,7 +980,7 @@ ACMD(do_gen_comm)
 
     for (int door = 0; door < NUM_OF_DIRS; door++)
       if (CAN_GO(ch, door)) {
-        ch->in_room = ch->in_room->dir_option[door]->ter_room;
+        ch->in_room = ch->in_room->dir_option[door]->to_room;
         for (tmp = get_ch_in_room(ch)->people; tmp; tmp = tmp->next_in_room)
           if (tmp != ch) {
             if (success > 0) {

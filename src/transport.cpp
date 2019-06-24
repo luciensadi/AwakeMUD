@@ -199,7 +199,7 @@ void open_taxi_door(struct room_data *room, int dir, struct room_data *taxi)
   room->dir_option[dir] = new room_direction_data;
   memset((char *) room->dir_option[dir], 0,
          sizeof (struct room_direction_data));
-  room->dir_option[dir]->ter_room = &world[real_room(taxi->number)];
+  room->dir_option[dir]->to_room = &world[real_room(taxi->number)];
   room->dir_option[dir]->barrier = 8;
   room->dir_option[dir]->condition = 8;
   room->dir_option[dir]->material = 8;
@@ -209,7 +209,7 @@ void open_taxi_door(struct room_data *room, int dir, struct room_data *taxi)
   taxi->dir_option[dir] = new room_direction_data;
   memset((char *) taxi->dir_option[dir], 0,
          sizeof (struct room_direction_data));
-  taxi->dir_option[dir]->ter_room = &world[real_room(room->number)];
+  taxi->dir_option[dir]->to_room = &world[real_room(room->number)];
   taxi->dir_option[dir]->barrier = 8;
   taxi->dir_option[dir]->condition = 8;
   taxi->dir_option[dir]->material = 8;
@@ -250,7 +250,7 @@ void taxi_leaves(void)
       continue;
     for (i = NORTH; i < UP; i++)
       if (world[j].dir_option[i]) {
-        to = world[j].dir_option[i]->ter_room;
+        to = world[j].dir_option[i]->to_room;
         close_taxi_door(to, rev_dir[i], &world[j]);
         if (to->people) {
           if (j >= real_room(FIRST_PORTCAB))
@@ -533,7 +533,7 @@ SPECIAL(taxi)
       GET_ACTIVE(driver) == ACT_AWAIT_CMD) {
     for (int dir = NORTH; dir < UP; dir++)
       if (ch->in_room->dir_option[dir]) {
-        temp_room = ch->in_room->dir_option[dir]->ter_room;
+        temp_room = ch->in_room->dir_option[dir]->to_room;
         break;
       }
     int dist = 0;
@@ -545,7 +545,7 @@ SPECIAL(taxi)
         temp_room = NULL;
         break;
       }
-      temp_room = world[i].dir_option[x]->ter_room;
+      temp_room = world[i].dir_option[x]->to_room;
       dist++;
     }
     if (!temp_room)
@@ -572,7 +572,7 @@ SPECIAL(taxi)
 
     for (int dir = NORTH; dir < UP; dir++)
       if (ch->in_room->dir_option[dir]) {
-        temp_room = ch->in_room->dir_option[dir]->ter_room;
+        temp_room = ch->in_room->dir_option[dir]->to_room;
         close_taxi_door(temp_room, rev_dir[dir], ch->in_room);
         if (temp_room->people) {
           if (portland)
@@ -624,7 +624,7 @@ void make_elevator_door(vnum_t rnum_to, vnum_t rnum_from, int direction_from) {
   }
   
   // Set the exit to point to the correct rnum.
-  DOOR->ter_room = &world[rnum_to];
+  DOOR->to_room = &world[rnum_to];
   
   if (!DOOR->general_description)
     DOOR->general_description = str_dup("A pair of elevator doors allows access to the liftway.\r\n");
@@ -855,7 +855,7 @@ SPECIAL(call_elevator)
       rnum = real_room(elevator[index].room);
       for (i = 0; i < UP; i++)
         if (world[rnum].dir_option[i] &&
-            world[rnum].dir_option[i]->ter_room == ch->in_room &&
+            world[rnum].dir_option[i]->to_room == ch->in_room &&
             !IS_SET(world[rnum].dir_option[i]->exit_info, EX_CLOSED)) {
           send_to_char("The door is already open!\r\n", ch);
           elevator[index].destination = 0;
@@ -1269,13 +1269,13 @@ void EscalatorProcess(void)
         else
           for (dir = NORTH; dir <= DOWN; dir++)
             if (world[i].dir_option[dir] &&
-                world[i].dir_option[dir]->ter_room) {
+                world[i].dir_option[dir]->to_room) {
               act("As you reach the end, you step off the escalator.",
                   FALSE, temp, 0, 0, TO_CHAR);
               act("$n steps off of the escalator.", TRUE, temp, 0, 0, TO_ROOM);
               char_from_room(temp);
               GET_LASTROOM(temp) = world[i].number;
-              char_to_room(temp, world[i].dir_option[dir]->ter_room);
+              char_to_room(temp, world[i].dir_option[dir]->to_room);
               if (temp->desc)
                 look_at_room(temp, 0);
               break;
@@ -1299,8 +1299,8 @@ static void open_doors(int car, int to, int room, int from)
     world[car].dir_option[to] = new room_direction_data;
     memset((char *) world[car].dir_option[to], 0,
            sizeof(struct room_direction_data));
-    world[car].dir_option[to]->ter_room = &world[room];
-    world[car].dir_option[to]->ter_room_vnum = world[room].number;
+    world[car].dir_option[to]->to_room = &world[room];
+    world[car].dir_option[to]->to_room_vnum = world[room].number;
     world[car].dir_option[to]->barrier = 8;
     world[car].dir_option[to]->condition = 8;
     world[car].dir_option[to]->material = 8;
@@ -1309,8 +1309,8 @@ static void open_doors(int car, int to, int room, int from)
     world[room].dir_option[from] = new room_direction_data;
     memset((char *) world[room].dir_option[from], 0,
            sizeof(struct room_direction_data));
-    world[room].dir_option[from]->ter_room = &world[car];
-    world[room].dir_option[from]->ter_room_vnum = world[car].number;
+    world[room].dir_option[from]->to_room = &world[car];
+    world[room].dir_option[from]->to_room_vnum = world[car].number;
     world[room].dir_option[from]->barrier = 8;
     world[room].dir_option[from]->condition = 8;
     world[room].dir_option[from]->material = 8;
@@ -1434,8 +1434,8 @@ void extend_walkway_st(int ferry, int to, int room, int from)
     world[ferry].dir_option[to] = new room_direction_data;
     memset((char *) world[ferry].dir_option[to], 0,
            sizeof(struct room_direction_data));
-    world[ferry].dir_option[to]->ter_room = &world[room];
-    world[ferry].dir_option[to]->ter_room_vnum = world[room].number;
+    world[ferry].dir_option[to]->to_room = &world[room];
+    world[ferry].dir_option[to]->to_room_vnum = world[room].number;
     world[ferry].dir_option[to]->barrier = 8;
     world[ferry].dir_option[to]->condition = 8;
     world[ferry].dir_option[to]->material = 8;
@@ -1444,8 +1444,8 @@ void extend_walkway_st(int ferry, int to, int room, int from)
     world[room].dir_option[from] = new room_direction_data;
     memset((char *) world[room].dir_option[from], 0,
            sizeof(struct room_direction_data));
-    world[room].dir_option[from]->ter_room = &world[ferry];
-    world[room].dir_option[from]->ter_room_vnum = world[ferry].number;
+    world[room].dir_option[from]->to_room = &world[ferry];
+    world[room].dir_option[from]->to_room_vnum = world[ferry].number;
     world[room].dir_option[from]->barrier = 8;
     world[room].dir_option[from]->condition = 8;
     world[room].dir_option[from]->material = 8;
@@ -1538,8 +1538,8 @@ void open_busdoor(int bus, int to, int room, int from)
     world[bus].dir_option[to] = new room_direction_data;
     memset((char *) world[bus].dir_option[to], 0,
            sizeof(struct room_direction_data));
-    world[bus].dir_option[to]->ter_room = &world[room];
-    world[bus].dir_option[to]->ter_room_vnum = world[room].number;
+    world[bus].dir_option[to]->to_room = &world[room];
+    world[bus].dir_option[to]->to_room_vnum = world[room].number;
     world[bus].dir_option[to]->barrier = 8;
     world[bus].dir_option[to]->condition = 8;
     world[bus].dir_option[to]->material = 8;
@@ -1548,8 +1548,8 @@ void open_busdoor(int bus, int to, int room, int from)
     world[room].dir_option[from] = new room_direction_data;
     memset((char *) world[room].dir_option[from], 0,
            sizeof(struct room_direction_data));
-    world[room].dir_option[from]->ter_room = &world[bus];
-    world[room].dir_option[from]->ter_room_vnum = world[bus].number;
+    world[room].dir_option[from]->to_room = &world[bus];
+    world[room].dir_option[from]->to_room_vnum = world[bus].number;
     world[room].dir_option[from]->barrier = 8;
     world[room].dir_option[from]->condition = 8;
     world[room].dir_option[from]->material = 8;
@@ -1629,8 +1629,8 @@ void camas_extend(int bus, int to, int room, int from)
     world[bus].dir_option[to] = new room_direction_data;
     memset((char *) world[bus].dir_option[to], 0,
            sizeof(struct room_direction_data));
-    world[bus].dir_option[to]->ter_room = &world[room];
-    world[bus].dir_option[to]->ter_room_vnum = world[room].number;
+    world[bus].dir_option[to]->to_room = &world[room];
+    world[bus].dir_option[to]->to_room_vnum = world[room].number;
     world[bus].dir_option[to]->barrier = 8;
     world[bus].dir_option[to]->condition = 8;
     world[bus].dir_option[to]->material = 8;
@@ -1639,8 +1639,8 @@ void camas_extend(int bus, int to, int room, int from)
     world[room].dir_option[from] = new room_direction_data;
     memset((char *) world[room].dir_option[from], 0,
            sizeof(struct room_direction_data));
-    world[room].dir_option[from]->ter_room = &world[bus];
-    world[room].dir_option[from]->ter_room_vnum = world[bus].number;
+    world[room].dir_option[from]->to_room = &world[bus];
+    world[room].dir_option[from]->to_room_vnum = world[bus].number;
     world[room].dir_option[from]->barrier = 8;
     world[room].dir_option[from]->condition = 8;
     world[room].dir_option[from]->material = 8;
@@ -1724,8 +1724,8 @@ void open_lightraildoor(int lightrail, int to, int room, int from)
     world[lightrail].dir_option[to] = new room_direction_data;
     memset((char *) world[lightrail].dir_option[to], 0,
            sizeof(struct room_direction_data));
-    world[lightrail].dir_option[to]->ter_room = &world[room];
-    world[lightrail].dir_option[to]->ter_room_vnum = world[room].number;
+    world[lightrail].dir_option[to]->to_room = &world[room];
+    world[lightrail].dir_option[to]->to_room_vnum = world[room].number;
     world[lightrail].dir_option[to]->barrier = 8;
     world[lightrail].dir_option[to]->condition = 8;
     world[lightrail].dir_option[to]->material = 8;
@@ -1734,8 +1734,8 @@ void open_lightraildoor(int lightrail, int to, int room, int from)
     world[room].dir_option[from] = new room_direction_data;
     memset((char *) world[room].dir_option[from], 0,
            sizeof(struct room_direction_data));
-    world[room].dir_option[from]->ter_room = &world[lightrail];
-    world[room].dir_option[from]->ter_room_vnum = world[lightrail].number;
+    world[room].dir_option[from]->to_room = &world[lightrail];
+    world[room].dir_option[from]->to_room_vnum = world[lightrail].number;
     world[room].dir_option[from]->barrier = 8;
     world[room].dir_option[from]->condition = 8;
     world[room].dir_option[from]->material = 8;
@@ -1852,8 +1852,8 @@ void extend_walkway(int ferry, int to, int room, int from)
     world[ferry].dir_option[to] = new room_direction_data;
     memset((char *) world[ferry].dir_option[to], 0,
            sizeof(struct room_direction_data));
-    world[ferry].dir_option[to]->ter_room = &world[room];
-    world[ferry].dir_option[to]->ter_room_vnum = world[room].number;
+    world[ferry].dir_option[to]->to_room = &world[room];
+    world[ferry].dir_option[to]->to_room_vnum = world[room].number;
     world[ferry].dir_option[to]->barrier = 8;
     world[ferry].dir_option[to]->condition = 8;
     world[ferry].dir_option[to]->material = 8;
@@ -1862,8 +1862,8 @@ void extend_walkway(int ferry, int to, int room, int from)
     world[room].dir_option[from] = new room_direction_data;
     memset((char *) world[room].dir_option[from], 0,
            sizeof(struct room_direction_data));
-    world[room].dir_option[from]->ter_room = &world[ferry];
-    world[room].dir_option[from]->ter_room_vnum = world[ferry].number;
+    world[room].dir_option[from]->to_room = &world[ferry];
+    world[room].dir_option[from]->to_room_vnum = world[ferry].number;
     world[room].dir_option[from]->barrier = 8;
     world[room].dir_option[from]->condition = 8;
     world[room].dir_option[from]->material = 8;
@@ -2051,8 +2051,8 @@ void grenada_extend(int bus, int to, int room, int from)
     world[bus].dir_option[to] = new room_direction_data;
     memset((char *) world[bus].dir_option[to], 0,
            sizeof(struct room_direction_data));
-    world[bus].dir_option[to]->ter_room = &world[room];
-    world[bus].dir_option[to]->ter_room_vnum = world[room].number;
+    world[bus].dir_option[to]->to_room = &world[room];
+    world[bus].dir_option[to]->to_room_vnum = world[room].number;
     world[bus].dir_option[to]->barrier = 8;
     world[bus].dir_option[to]->condition = 8;
     world[bus].dir_option[to]->material = 8;
@@ -2061,8 +2061,8 @@ void grenada_extend(int bus, int to, int room, int from)
     world[room].dir_option[from] = new room_direction_data;
     memset((char *) world[room].dir_option[from], 0,
            sizeof(struct room_direction_data));
-    world[room].dir_option[from]->ter_room = &world[bus];
-    world[room].dir_option[from]->ter_room_vnum = world[bus].number;
+    world[room].dir_option[from]->to_room = &world[bus];
+    world[room].dir_option[from]->to_room_vnum = world[bus].number;
     world[room].dir_option[from]->barrier = 8;
     world[room].dir_option[from]->condition = 8;
     world[room].dir_option[from]->material = 8;

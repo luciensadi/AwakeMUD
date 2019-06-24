@@ -577,8 +577,8 @@ bool mobact_process_movement(struct char_data *ch) {
     for (int tries = 0; tries < 5; tries++) {
       door = number(NORTH, DOWN);
       if (EXIT(ch->in_veh, door) &&
-          ROOM_FLAGS(EXIT(ch->in_veh, door)->ter_room).AreAnySet(ROOM_ROAD, ROOM_GARAGE, ENDBIT) &&
-          !ROOM_FLAGS(EXIT(ch->in_veh, door)->ter_room).AreAnySet(ROOM_NOMOB, ROOM_DEATH, ENDBIT)) {
+          ROOM_FLAGS(EXIT(ch->in_veh, door)->to_room).AreAnySet(ROOM_ROAD, ROOM_GARAGE, ENDBIT) &&
+          !ROOM_FLAGS(EXIT(ch->in_veh, door)->to_room).AreAnySet(ROOM_NOMOB, ROOM_DEATH, ENDBIT)) {
         perform_move(ch, door, LEADER, NULL);
         return TRUE;
       }
@@ -594,11 +594,11 @@ bool mobact_process_movement(struct char_data *ch) {
     for (int tries = 0; tries < 5; tries++) {
       // Select an exit, and bail out if they can't move that way.
       door = number(NORTH, DOWN);
-      if (!CAN_GO(ch, door) || ROOM_FLAGS(EXIT(ch, door)->ter_room).AreAnySet(ROOM_NOMOB, ROOM_DEATH, ENDBIT))
+      if (!CAN_GO(ch, door) || ROOM_FLAGS(EXIT(ch, door)->to_room).AreAnySet(ROOM_NOMOB, ROOM_DEATH, ENDBIT))
         continue;
       
       // If their exit leads to a different zone, check if they're allowed to wander.
-      if (MOB_FLAGGED(ch, MOB_STAY_ZONE) && (EXIT(ch, door)->ter_room->zone != ch->in_room->zone))
+      if (MOB_FLAGGED(ch, MOB_STAY_ZONE) && (EXIT(ch, door)->to_room->zone != ch->in_room->zone))
         continue;
       
       // Looks like they can move. Make it happen.
@@ -686,8 +686,8 @@ void mobile_activity(void)
             // Check each room in a straight line until we are either out of range or cannot go further.
             for (distance = 1; !has_acted && distance <= max_distance; distance++) {
               // Exit must be valid, and room must belong to same zone as character's room.
-              if (CAN_GO2(current_room, dir) && EXIT2(current_room, dir)->ter_room->zone == ch->in_room->zone) {
-                current_room = EXIT2(current_room, dir)->ter_room;
+              if (CAN_GO2(current_room, dir) && EXIT2(current_room, dir)->to_room->zone == ch->in_room->zone) {
+                current_room = EXIT2(current_room, dir)->to_room;
               } else {
                 // If we can't get to a further room, stop and move to next direction in for loop.
                 break;

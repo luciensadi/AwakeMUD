@@ -514,7 +514,7 @@ void death_cry(struct char_data * ch)
   for (door = 0; door < NUM_OF_DIRS; door++)
   {
     if (CAN_GO(ch, door)) {
-      ch->in_room = was_in->dir_option[door]->ter_room;
+      ch->in_room = was_in->dir_option[door]->to_room;
       act("Somewhere close, you hear someone's death cry!", FALSE, ch, 0, 0, TO_ROOM);
       ch->in_room = was_in;
     }
@@ -1064,7 +1064,7 @@ int find_orig_dir(struct char_data *ch, struct char_data *victim)
     room = victim->in_room;
     
     if (CAN_GO2(room, dir))
-      nextroom = EXIT2(room, dir)->ter_room;
+      nextroom = EXIT2(room, dir)->to_room;
     else
       nextroom = NULL;
     
@@ -1075,7 +1075,7 @@ int find_orig_dir(struct char_data *ch, struct char_data *victim)
       
       room = nextroom;
       if (CAN_GO2(room, dir))
-        nextroom = EXIT2(room, dir)->ter_room;
+        nextroom = EXIT2(room, dir)->to_room;
       else
         nextroom = NULL;
     }
@@ -1394,10 +1394,10 @@ void damage_door(struct char_data *ch, struct room_data *room, int dir, int powe
     return;
   
   int rating, half, rev, ok = 0;
-  struct room_data *opposite = room->dir_option[dir]->ter_room;
+  struct room_data *opposite = room->dir_option[dir]->to_room;
   
   rev = rev_dir[dir];
-  if (opposite && opposite->dir_option[rev] && opposite->dir_option[rev]->ter_room == room)
+  if (opposite && opposite->dir_option[rev] && opposite->dir_option[rev]->to_room == room)
     ok = TRUE;
   
   if (IS_SET(type, DAMOBJ_MANIPULATION))
@@ -3015,7 +3015,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
   // Scan the shooter's room's exits and add notifications to any valid adjacent rooms.
   // 'Valid' is defined as 'exists and is not flagged as silent'.
   for (int door1 = 0; door1 < NUM_OF_DIRS; door1++) {
-    if (ch->in_room->dir_option[door1] && (room1 = real_room(ch->in_room->dir_option[door1]->ter_room->number)) != NOWHERE && !(world[room1].silence[0])) {
+    if (ch->in_room->dir_option[door1] && (room1 = real_room(ch->in_room->dir_option[door1]->to_room->number)) != NOWHERE && !(world[room1].silence[0])) {
       // If the room is in the heard-it-already list, skip to the next one.
       sprintf(temp, ".%ld.", room1);
       if (strstr(been_heard, temp) != 0)
@@ -3034,7 +3034,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
         
         // Add the room's exits to the list.
         for (int door2 = 0; door2 < NUM_OF_DIRS; door2++)
-          if (world[room1].dir_option[door2] && (room2 = real_room(world[room1].dir_option[door2]->ter_room->number)) != NOWHERE && !(world[room2].silence[0]))
+          if (world[room1].dir_option[door2] && (room2 = real_room(world[room1].dir_option[door2]->to_room->number)) != NOWHERE && !(world[room2].silence[0]))
             room_queue.push(room2);
       }
     }
@@ -3058,7 +3058,7 @@ void combat_message(struct char_data *ch, struct char_data *victim, struct obj_d
     
     // Add the room's exits to the list.
     for (int door = 0; door < NUM_OF_DIRS; door++)
-      if (world[room1].dir_option[door] && (room2 = real_room(world[room1].dir_option[door]->ter_room->number)) != NOWHERE && !(world[room2].silence[0]))
+      if (world[room1].dir_option[door] && (room2 = real_room(world[room1].dir_option[door]->to_room->number)) != NOWHERE && !(world[room2].silence[0]))
         secondary_room_queue.push(room2);
   }
   
@@ -3483,7 +3483,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
         for (int dir = 0; dir < NUM_OF_DIRS && !vict_found; dir++) {
           room = att->ch->in_room;
           if (CAN_GO2(room, dir))
-            nextroom = EXIT2(room, dir)->ter_room;
+            nextroom = EXIT2(room, dir)->to_room;
           else
             nextroom = NULL;
           for (int distance = 1; nextroom && (distance <= weapon_range) && !vict_found; distance++) {
@@ -3496,7 +3496,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
             }
             room = nextroom;
             if (CAN_GO2(room, dir))
-              nextroom = EXIT2(room, dir)->ter_room;
+              nextroom = EXIT2(room, dir)->to_room;
             else
               nextroom = NULL;
           }
@@ -3961,7 +3961,7 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
     for (dir = 0; dir < NUM_OF_DIRS  && !is_responding; dir++) {
       room = vict->in_room;
       if (CAN_GO2(room, dir)) {
-        nextroom = EXIT2(room, dir)->ter_room;
+        nextroom = EXIT2(room, dir)->to_room;
       } else {
         nextroom = NULL;
       }
@@ -3972,7 +3972,7 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
             act("$n charges towards $s distant foe.", TRUE, vict, 0, 0, TO_ROOM);
             act("You charge after $N.", FALSE, vict, 0, ch, TO_CHAR);
             char_from_room(vict);
-            char_to_room(vict, EXIT2(room, dir)->ter_room);
+            char_to_room(vict, EXIT2(room, dir)->to_room);
             if (vict->in_room == ch->in_room) {
               act("$n arrives in a rush of fury, immediately attacking $N!", TRUE, vict, 0, ch, TO_NOTVICT);
               act("$n arrives in a rush of fury, rushing straight towards you!", TRUE, vict, 0, ch, TO_VICT);
@@ -3981,7 +3981,7 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
         }
         room = nextroom;
         if (CAN_GO2(room, dir))
-          nextroom = EXIT2(room, dir)->ter_room;
+          nextroom = EXIT2(room, dir)->to_room;
         else
           nextroom = NULL;
       }
@@ -3990,7 +3990,7 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
     set_fighting(vict, ch);
   } else if (!(IS_NPC(vict) && MOB_FLAGGED(vict, MOB_SENTINEL))) {
     for (dir = 0; dir < NUM_OF_DIRS && !is_responding; dir++) {
-      if (CAN_GO(vict, dir) && EXIT2(room, dir)->ter_room == ch->in_room) {
+      if (CAN_GO(vict, dir) && EXIT2(room, dir)->to_room == ch->in_room) {
         is_responding = TRUE;
         act("$n charges towards $s distant foe.", TRUE, vict, 0, 0, TO_ROOM);
         act("You charge after $N.", FALSE, vict, 0, ch, TO_CHAR);
@@ -4157,7 +4157,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
   sight = find_sight(ch);
   
   if (CAN_GO2(ch->in_room, dir))
-    nextroom = EXIT2(ch->in_room, dir)->ter_room;
+    nextroom = EXIT2(ch->in_room, dir)->to_room;
   else
     nextroom = NULL;
   
@@ -4203,17 +4203,17 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       
       scatter[0] = ch->in_room;
       if (left > 0 && CAN_GO(ch, left))
-        scatter[1] = EXIT(ch, left)->ter_room;
+        scatter[1] = EXIT(ch, left)->to_room;
       else
         scatter[1] = NULL;
       
       if (right > 0 && CAN_GO(ch, right))
-        scatter[2] = EXIT(ch, right)->ter_room;
+        scatter[2] = EXIT(ch, right)->to_room;
       else
         scatter[2] = NULL;
       
       if (CAN_GO2(nextroom, dir))
-        scatter[3] = EXIT2(nextroom, dir)->ter_room;
+        scatter[3] = EXIT2(nextroom, dir)->to_room;
       else
         scatter[3] = NULL;
       
@@ -4249,7 +4249,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     vict = NULL;
     room = nextroom;
     if (CAN_GO2(room, dir))
-      nextroom = EXIT2(room, dir)->ter_room;
+      nextroom = EXIT2(room, dir)->to_room;
     else
       nextroom = NULL;
   }
@@ -4342,17 +4342,17 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         }
         scatter[0] = ch->in_room;
         if (left > 0 && CAN_GO(ch, left))
-          scatter[1] = EXIT(ch, left)->ter_room;
+          scatter[1] = EXIT(ch, left)->to_room;
         else
           scatter[1] = NULL;
         
         if (right > 0 && CAN_GO(ch, right))
-          scatter[2] = EXIT(ch, right)->ter_room;
+          scatter[2] = EXIT(ch, right)->to_room;
         else
           scatter[2] = NULL;
         
         if (CAN_GO2(nextroom, dir))
-          scatter[3] = EXIT2(nextroom, dir)->ter_room;
+          scatter[3] = EXIT2(nextroom, dir)->to_room;
         else
           scatter[3] = NULL;
         
@@ -4375,7 +4375,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
             if (GET_OBJ_VAL(weapon, 3) == TYPE_ROCKET)
               for (temp = 0; temp < NUM_OF_DIRS; temp++)
                 if (CAN_GO2(scatter[temp2], temp))
-                  target_explode(ch, weapon, EXIT2(scatter[temp2], temp)->ter_room, 1);
+                  target_explode(ch, weapon, EXIT2(scatter[temp2], temp)->to_room, 1);
             return;
           }
       }
@@ -4383,14 +4383,14 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       if (GET_OBJ_VAL(weapon, 3) == TYPE_ROCKET)
         for (temp = 0; temp < NUM_OF_DIRS; temp++)
           if (CAN_GO2(vict->in_room, temp))
-            target_explode(ch, weapon, EXIT2(vict->in_room, temp)->ter_room, 1);
+            target_explode(ch, weapon, EXIT2(vict->in_room, temp)->to_room, 1);
     }
     return;
   }
   bool found = FALSE;
   
   if (CAN_GO2(ch->in_room, dir))
-    nextroom = EXIT2(ch->in_room, dir)->ter_room;
+    nextroom = EXIT2(ch->in_room, dir)->to_room;
   else
     nextroom = NULL;
   
@@ -4409,7 +4409,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
          }
     room = nextroom;
     if (CAN_GO2(room, dir))
-      nextroom = EXIT2(room, dir)->ter_room;
+      nextroom = EXIT2(room, dir)->to_room;
     else
       nextroom = NULL;
   }
@@ -4454,7 +4454,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         target_explode(ch, weapon, nextroom, 0);
         for (temp = 0; temp < NUM_OF_DIRS; temp++)
           if (CAN_GO2(nextroom, temp))
-            target_explode(ch, weapon, EXIT2(nextroom, temp)->ter_room, 1);
+            target_explode(ch, weapon, EXIT2(nextroom, temp)->to_room, 1);
         break;
       default:
         damage_door(ch, nextroom, dir, GET_OBJ_VAL(weapon, 0), DAMOBJ_PROJECTILE);

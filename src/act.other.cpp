@@ -3911,7 +3911,7 @@ ACMD(do_watch)
       send_to_char("There seems to be something in the way...\r\n", ch);
       return;
     }
-    GET_WATCH(ch) = EXIT2(ch->in_room, dir)->ter_room;
+    GET_WATCH(ch) = EXIT2(ch->in_room, dir)->to_room;
     ch->next_watching = GET_WATCH(ch)->watching;
     GET_WATCH(ch)->watching = ch;
     send_to_char(ch, "You focus your attention to %s.\r\n", thedirs[dir]);
