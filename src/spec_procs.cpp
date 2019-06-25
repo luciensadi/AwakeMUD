@@ -3556,6 +3556,28 @@ SPECIAL(pocket_sec)
   return FALSE;
 }
 
+SPECIAL(floor_has_glass_shards) {
+  if (!cmd)
+    return FALSE;
+  
+  // If they're safe from shards, we don't care what they do.
+  if (ch->in_veh || IS_NPC(ch) || IS_ASTRAL(ch) || PRF_FLAGGED(ch, PRF_NOHASSLE) || GET_EQ(ch, WEAR_FEET) || AFF_FLAGGED(ch, AFF_SNEAK))
+    return FALSE;
+  
+  // If they attempt to leave the room and are not in a vehicle, wearing shoes, or sneaking, they get cut up.
+  for (int dir_index = NORTH; dir_index <= DOWN; dir_index++) {
+    if (CMD_IS(exitdirs[dir_index]) || CMD_IS(fulldirs[dir_index])) {
+      send_to_char("^rAs you walk away, the glass shards tear at your bare feet!^n\r\n\r\n", ch);
+      act("The glass shards tear at $n's bare feet as $e leaves!", TRUE, ch, NULL, NULL, TO_ROOM);
+      damage(ch, ch, LIGHT, 0, TRUE);
+      break;
+    }
+  }
+  
+  // Always return false-- we don't stop them from doing anything, we just hurt them for walking uncautiously.
+  return FALSE;
+}
+
 SPECIAL(bouncer_gentle)
 {
   ACMD(do_look);

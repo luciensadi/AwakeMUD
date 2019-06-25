@@ -700,6 +700,7 @@ void assign_rooms(void)
   SPECIAL(chargen_south_from_trainer);
   SPECIAL(chargen_skill_annex);
   SPECIAL(chargen_unpractice_skill);
+  SPECIAL(floor_has_glass_shards);
 
   /* Limbo/God Rooms */
   ASSIGNROOM(8, oceansounds);
@@ -766,6 +767,9 @@ void assign_rooms(void)
 
 /*ASSIGNROOM(17598, multnomah_gate);
   ASSIGNROOM(17599, multnomah_gate); */
+  
+  // Junkyard
+  ASSIGNROOM(70504, floor_has_glass_shards);
 
  
   for (long x = 0; x <= top_of_world; x++)
