@@ -498,9 +498,13 @@ BREAK
 #70511
 Name:	Inside a Rusted-Out Hellhound Bus
 Desc:$
-You are in an unfinished room.
+The interior of this bus is cramped and filthy, with sheets of scrap metal
+covering the majority of the windows. The seats have been torn up, their
+insulation and stuffing missing, and the driver's console is a shattered mess
+of tangled wires and bent metal. A heavy stench wafts over from the rear of
+the bus. 
 ~
-Flags:	11000000000000001000
+Flags:	11000000000000001100
 SecType:	City
 MatrixExit:	0
 Crowd:	0
@@ -512,7 +516,7 @@ RoomType:	10
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
-	Light:	0
+	Light:	3
 	Smoke:	0
 	Background:	2
 	BackgroundType:	8
@@ -576,7 +580,7 @@ horrid nest. Take-out containers and discarded beer cans litter the floor, and
 the windows here have been completely obscured with smears of some dark
 material. 
 ~
-Flags:	1000000000000001000
+Flags:	1000000000000001001
 SecType:	City
 MatrixExit:	0
 Crowd:	0
@@ -588,7 +592,7 @@ RoomType:	10
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
-	Light:	0
+	Light:	2
 	Smoke:	0
 	Background:	3
 	BackgroundType:	8

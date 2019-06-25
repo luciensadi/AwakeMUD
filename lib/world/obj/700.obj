@@ -312,7 +312,7 @@ Definitely not something for the boardroom. In fact, nobody should be wearing
 these. Ever. 
 ~
 Type:	Worn
-WearFlags:	1
+WearFlags:	1000001
 ExtraFlags:	0
 AffFlags:	0
 Material:	plastic

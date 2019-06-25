@@ -186,4 +186,38 @@ DefaultPos:	Standing
 	Armed Combat:	5
 	Brawling:	4
 BREAK
+#70505
+Keywords:	malformed city spirit decaying mass amorphous materials
+Name:	a malformed city spirit
+RoomDesc:$
+An amorphous mass of decaying materials wobbles through the area. 
+
+~
+LookDesc:$
+Exhibiting poor mimicry of its surroundings, this amorphous mass of magic
+appears to be a city spirit that has taken in too much of the decay of the
+Junkyard. It bobs and weaves drunkenly, trails of ectoplasmic garbage juice
+dripping from its form. 
+~
+ArriveMsg:	trails ectoplasmic garbage liquid as it wobbles in from
+LeaveMsg:	bobs drunkenly
+MobFlags:	1000000000000001000
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	6
+	Mag:	5
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	Sorcery:	6
+BREAK
 END
