@@ -1003,16 +1003,25 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     loadroom = GET_LOADROOM(player);
 
   if (player->in_room) {
-    /* This code means that any imm who does GOTO 1 is going to have weird behavior. Beats crashing, though. */
     if (player->in_room->number <= 1) {
+      // If their current room is invalid for save/load:
       if (player->was_in_room) {
-        sprintf(buf, "SYSERR: save_char(): %s is at %ld and has was_in_room (world array index) %ld.",
-                GET_CHAR_NAME(player), player->in_room->number, player->was_in_room->number);
-        mudlog(buf, NULL, LOG_SYSLOG, TRUE);
-        GET_LAST_IN(player) = 35500;
-      } else
-        GET_LAST_IN(player) = player->was_in_room->number;
+        if (player->was_in_room->number <= 1) {
+          // Their was_in_room is invalid; put them at Dante's.
+          sprintf(buf, "SYSERR: save_char(): %s is at %ld and has was_in_room (world array index) %ld.",
+                  GET_CHAR_NAME(player), player->in_room->number, player->was_in_room->number);
+          mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+          GET_LAST_IN(player) = RM_ENTRANCE_TO_DANTES;
+        } else {
+          // Their was_in_room is valid, so put them there.
+          GET_LAST_IN(player) = player->was_in_room->number;
+        }
+      } else {
+        // They have no was_in_room, so put them at Dante's.
+        GET_LAST_IN(player) = RM_ENTRANCE_TO_DANTES;
+      }
     } else {
+      // Their in_room is valid, so put them there.
       GET_LAST_IN(player) = player->in_room->number;
     }
   }
