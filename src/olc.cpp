@@ -1406,17 +1406,17 @@ ACMD(do_mclone)
 
   // copy all strings over
   if (mob_proto[mob_num1].player.physical_text.keywords)
-    mob->player.physical_text.keywords =
-      str_dup(mob_proto[mob_num1].player.physical_text.keywords);
+    mob->player.physical_text.keywords = str_dup(mob_proto[mob_num1].player.physical_text.keywords);
   if (mob_proto[mob_num1].player.physical_text.name)
-    mob->player.physical_text.name =
-      str_dup(mob_proto[mob_num1].player.physical_text.name);
+    mob->player.physical_text.name = str_dup(mob_proto[mob_num1].player.physical_text.name);
   if (mob_proto[mob_num1].player.physical_text.room_desc)
-    mob->player.physical_text.room_desc =
-      str_dup(mob_proto[mob_num1].player.physical_text.room_desc);
+    mob->player.physical_text.room_desc = str_dup(mob_proto[mob_num1].player.physical_text.room_desc);
   if (mob_proto[mob_num1].player.physical_text.look_desc)
-    mob->player.physical_text.look_desc =
-      str_dup(mob_proto[mob_num1].player.physical_text.look_desc);
+    mob->player.physical_text.look_desc = str_dup(mob_proto[mob_num1].player.physical_text.look_desc);
+  if (mob_proto[mob_num1].char_specials.arrive)
+    mob->char_specials.arrive = str_dup(mob_proto[mob_num1].char_specials.arrive);
+  if (mob_proto[mob_num1].char_specials.leave)
+    mob->char_specials.arrive = str_dup(mob_proto[mob_num1].char_specials.leave);
 
   if (mob_proto[mob_num1].player_specials)
     mob->player_specials = &dummy_mob;

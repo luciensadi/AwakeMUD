@@ -655,7 +655,7 @@ SPECIAL(johnson)
     return FALSE;
   }
 
-  if (!CAN_SEE(johnson, ch) || IS_NPC(ch) || IS_SENATOR(ch) || PRF_FLAGGED(ch, PRF_QUEST) ||
+  if (!CAN_SEE(johnson, ch) || IS_NPC(ch) || PRF_FLAGGED(ch, PRF_NOHASSLE) || PRF_FLAGGED(ch, PRF_QUEST) ||
       (AFF_FLAGGED(ch, AFF_GROUP) && ch->master))
     return FALSE;
 
