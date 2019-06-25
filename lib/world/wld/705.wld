@@ -100,11 +100,17 @@ A chain-link gate stands between the Junkyard and East Anselm.
 	KeyVnum:	0
 BREAK
 #70502
-Name:	Inside the West Tacoma Junkyard
+Name:	Rounding a Tottering Pile of Drone Parts
 Desc:$
-tbd, it's a junkyard with gravel cover and piles of rusting machinery. Got a
-guard booth and an office, maybe a broken-down bus through a hidden exit or
-something that has quest-related things 
+The rough gravel is interrupted here by a precarious pile of rusting drone
+parts and shattered plastic housings. Everything from GM-Nissan Doberman units
+to what appears to be a deflated blimp have been cast aside here for reasons
+unknown. The access path through the piles curves south and west here. 
+~
+NightDesc:$
+   Lumps and misshapen chunks of what might be drone components totter
+precariously from the dimly-lit piles here, protruding at angles perfect for
+snagging an unwary trespasser and dropping tons of machinery on their heads. 
 ~
 Flags:	1000000010000000000000000000000
 SecType:	City
@@ -142,9 +148,19 @@ A sweeping expanse of gravel marks this surprisingly-open area, kept free of
 the large piles of crushed cars and mechanical debris that mar the other areas
 of the Junkyard. The few weeds that sprout up here and there are liberally
 coated with oil and other questionable fluids, suggesting that this might be a
-prime place to work on vehicles. 
+prime place to work on vehicles. A skeletal streetlight has been wired up
+here, its bulb unlit. 
 ~
-Flags:	1100000110000000000000000000000
+NightDesc:$
+   A sweeping expanse of gravel marks this surprisingly-open area, kept free
+of the large piles of crushed cars and mechanical debris that mar the other
+areas of the Junkyard. The few weeds that sprout up here and there are
+liberally coated with oil and other questionable fluids, suggesting that this
+might be a prime place to work on vehicles. A skeletal streetlight has been
+wired up here, the yellow glow of its sodium-vapor lamp driving back the
+darkness. 
+~
+Flags:	1100000110000000000010000000000
 SecType:	City
 MatrixExit:	0
 Crowd:	1
@@ -186,11 +202,18 @@ RoomType:	0
 	KeyVnum:	0
 BREAK
 #70504
-Name:	Inside the West Tacoma Junkyard
+Name:	Beside a Mound of Glass
 Desc:$
-tbd, it's a junkyard with gravel cover and piles of rusting machinery. Got a
-guard booth and an office, maybe a broken-down bus through a hidden exit or
-something that has quest-related things 
+The vast majority of the automotive glass in the Junkyard ends up here, tossed
+into dumpsters with some vague semblance of sorting by type. Chunks of safety
+glass have mixed in with the gravel, and here and there a few spikes of
+sharper material protrude threateningly from the ground. 
+~
+NightDesc:$
+   The dim light glitters off of the glass piled in dumpsters here, casting a
+coruscating shimmer across the Junkyard that's actually rather pleasing to the
+eye. Less attractive are the faint outlines of bits of glass sticking up out
+of the gravel in the dark. 
 ~
 Flags:	1000000010000000000000000000000
 SecType:	City
@@ -228,11 +251,17 @@ RoomType:	0
 	KeyVnum:	0
 BREAK
 #70505
-Name:	Inside the West Tacoma Junkyard
+Name:	Amidst Aging Appliances
 Desc:$
-tbd, it's a junkyard with gravel cover and piles of rusting machinery. Got a
-guard booth and an office, maybe a broken-down bus through a hidden exit or
-something that has quest-related things 
+Stacked into surprisingly neat piles are the carcasses of old appliances, with
+stoves, refrigerators, and even a soykaf steamer peeking out from the mounds.
+The sounds of the I-5 to the south echo abnormally clearly here, amplified by
+all the sheet metal around you. 
+~
+NightDesc:$
+   Hulks of old machinery and the silhouettes of appliances are barely visible
+in the dim light. The periodic howl of a souped-up car streaking down the I-5
+does little to make this shadowed place feel welcoming. 
 ~
 Flags:	1000000010000000000000000000000
 SecType:	City
@@ -270,13 +299,15 @@ RoomType:	0
 	KeyVnum:	0
 BREAK
 #70506
-Name:	Inside the West Tacoma Junkyard
+Name:	Passing Through a Wrecked 4201
 Desc:$
-tbd, it's a junkyard with gravel cover and piles of rusting machinery. Got a
-guard booth and an office, maybe a broken-down bus through a hidden exit or
-something that has quest-related things 
+The bulk of a wrecked GMC 4201 has been deposited in this section of the
+Junkyard, riddled with large holes from high-caliber weaponry and leaking
+fluids that one can only hope are automotive-related. Viewed from the inside,
+this truck has clearly seen better days, although at least the roof above you
+helps keep things dry. 
 ~
-Flags:	1000000010000000000000000000000
+Flags:	1000000000000000000000000001000
 SecType:	City
 MatrixExit:	0
 Crowd:	1
@@ -343,13 +374,19 @@ RoomType:	0
 	KeyVnum:	0
 BREAK
 #70508
-Name:	Inside the West Tacoma Junkyard
+Name:	A Graveyard of Motorcycles
 Desc:$
-tbd, it's a junkyard with gravel cover and piles of rusting machinery. Got a
-guard booth and an office, maybe a broken-down bus through a hidden exit or
-something that has quest-related things 
+The piles of debris give way here to an orderly array of motorcycles, each
+resting properly on its kickstand where available and cinderblocks where not.
+None of the bikes appear to be in working order, but even those that have been
+scavenged for parts have been treated well. 
 ~
-Flags:	1000000010000000000000000000000
+NightDesc:$
+   The misshapen lumps of motorcycles sprawl out in ordered ranks here, with
+what little you can see in the dimness revealing that someone has put a lot of
+effort into making these bikes presentable. 
+~
+Flags:	1000000000000000000000000000000
 SecType:	City
 MatrixExit:	0
 Crowd:	1
@@ -373,11 +410,19 @@ RoomType:	0
 	KeyVnum:	0
 BREAK
 #70509
-Name:	Inside the West Tacoma Junkyard
+Name:	The Electronics Scrapheap
 Desc:$
-tbd, it's a junkyard with gravel cover and piles of rusting machinery. Got a
-guard booth and an office, maybe a broken-down bus through a hidden exit or
-something that has quest-related things 
+From the looks of things, this is where old electronics go to die. Piles of
+computer parts have been dumped in bins, covered haphazardly with sheets of
+ragged plastic in a pretense of keeping out the rain. A few older-model
+cyberdecks with burn marks around the I/O jacks sit on a rickety wire shelf,
+weighted down by the husks of stripped-down rackmount servers. 
+~
+NightDesc:$
+   The hunkered-down bins of material around you are enshrouded by ragged
+sheets of plastic, the dim light catching and refracting through the material
+to create an altogether unnatural landscape. A slight tang of burnt
+electronics wafts on the air here. 
 ~
 Flags:	1000000010000000000000000000000
 SecType:	City
@@ -500,7 +545,7 @@ take up what little free space there is here, leaving barely enough room to
 open the door and stand in front of the massive hunk of debris being used as a
 desk. 
 ~
-Flags:	1000
+Flags:	1100
 SecType:	City
 MatrixExit:	0
 Crowd:	0

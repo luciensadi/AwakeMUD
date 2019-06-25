@@ -260,4 +260,33 @@ You peer closer at the logo and make out the mark of Mitsuhama's paramilitary
 branch. This run just got a lot hotter. 
 ~
 BREAK
+#70509
+Keywords:	battered toolbox vehicle repair kit
+Name:	a vehicle repair kit
+RoomDesc:$
+Someone has left a battered toolbox behind.~
+LookDesc:$
+Although it's seen better days, this battered-looking toolbox contains a
+useful selection of tools for working on vehicles-- everything from spudgers
+to 10mm sockets, and even a few heavier wrenches for the really stubborn bits.
+It won't fix everything, but it's a start. 
+~
+Type:	Workshop
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	6
+	Cost:	500
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	1
+BREAK
 END

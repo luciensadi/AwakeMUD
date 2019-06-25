@@ -18,5 +18,9 @@ Races:	0
 Buytypes:	100000000000000000000000000000000000101
 Etiquette:	46
 [SELLING]
+	[SELL 0]
+		Vnum:	70509
+		Type:	Avail
+		Stock:	0
 BREAK
 END

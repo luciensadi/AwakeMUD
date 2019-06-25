@@ -148,4 +148,42 @@ DefaultPos:	Standing
 	Armed Combat:	5
 	Brawling:	4
 BREAK
+#70504
+Keywords:	tired junkyard scavenger
+Name:	a tired employee of the Junkyard
+RoomDesc:$
+A tired-looking Junkyard employee is detaching usable parts from a wreck. 
+
+~
+LookDesc:$
+Looking like he's badly missing a cup or two of soykaf, this dwarven male's
+baggy eyes and sallow complexion are barely concealed by the wiry chestnut
+beard exploding from his chin. He's burly and stoutly-built, and despite his
+exhaustion manipulates the scrap with apparent expertise. 
+~
+ArriveMsg:	drags himself grumpily in from
+LeaveMsg:	heaves a sigh and walks
+MobFlags:	1100
+AffFlags:	10000000000000
+Race:	Dwarf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	6
+	Str:	8
+	Cha:	5
+	Int:	6
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	98
+	Weight:	63
+	Ballistic:	5
+	Impact:	7
+[SKILLS]
+	BR/Car:	5
+	Armed Combat:	5
+	Brawling:	4
+BREAK
 END
