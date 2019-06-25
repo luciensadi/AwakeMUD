@@ -2723,35 +2723,46 @@ SPECIAL(toggled_invis)
 }
 
 const char *traffic_messages[] = {
-  "A man on a Yamaha Rapier zips by.\r\n",
+  "A man on a Yamaha Rapier zips by.\r\n", // 0
   "A Mitsuhama Nightsky limousine slowly drives by.\r\n",
   "A Ford Bison drives through here, splashing mud on you.\r\n",
   "A Lone Star squad car drives by, sirens blaring loudly.\r\n",
   "An orkish woman drives through here on her Harley Scorpion.\r\n",
-  "An elf drives through here on his decked-out Yamaha Rapier.\r\n",
+  "An elf drives through here on his decked-out Yamaha Rapier.\r\n", // 5
   "A ^rred^n Chrysler-Nissan Jackrabbit cruises by.\r\n",
   "A ^yyellow^n Chrysler-Nissan Jackrabbit cruises by.\r\n",
   "A ^Wwhite^n Chrysler-Nissan Jackrabbit cruises by.\r\n",
   "A ^rred^n Ford Americar cruises by.\r\n",
-  "A ^yyellow^n Ford Americar cruises by.\r\n",
+  "A ^yyellow^n Ford Americar cruises by.\r\n", // 10
   "A ^Wwhite^n Ford Americar cruises by.\r\n",
   "A ^Bblue^n Ford Americar cruises by.\r\n",
   "A ^Bblue^n Chrysler-Nissan Jackrabbit cruises by.\r\n",
   "A ^Rcherry red^n Eurocar Westwind 2000 flies past you.\r\n",
-  "A ^Wwhite^n Mitsubishi Runabout drives by slowly.\r\n",
+  "A ^Wwhite^n Mitsubishi Runabout drives by slowly.\r\n", // 15
   "A ^bblue^n Mitsuhama Runabout drives by slowly.\r\n",
   "An elven woman on a Dodge Scoot passes through here.\r\n",
   "A ^Ybright yellow^n Volkswagen Electra passes by silently.\r\n",
   "A huge troll rides by on a modified BMW Blitzen 2050.\r\n",
-  "A large, ^Wwhite^n GMC Bulldog van drives through here.\r\n",
+  "A large, ^Wwhite^n GMC Bulldog van drives through here.\r\n", // 20
+  "A DocWagon ambulance speeds past, its lights flashing brightly.\r\n",
+  "The deep thrum of a helicopter passes swiftly overhead.\r\n",
+  "A rugged-looking dwarf on a Rhiati Razor howls past.\r\n",
+  "A MTC-Nissan roto-drone floats quietly on by.\r\n",
+  "A souped-up Saab Dynamit 778 TI purrs past you.\r\n", // 25
+  "A bleary-eyed wage slave putters past on an underpowered moped.\r\n",
+  "An overloaded GMC Bulldog Security with open gun ports rumbles past.\r\n",
+  "The sound of squealing tires echoes from somewhere in the distance.\r\n",
+  "A troll on a rusted bicycle pedals squeakily by.\r\n",
+  "A badly doppler-shifted track from The Elementals follows a truck speeding by.\r\n", // 30
+  "A ^Lmatte-black^n LAV-93 roars through, narrowly missing you.\r\n"
 };
-#define NUM_TRAFFIC_MESSAGES 21
+#define NUM_TRAFFIC_MESSAGES 32
 
 SPECIAL(traffic)
 {
   struct room_data *room = (struct room_data *) me;
 
-  if (!cmd && room->people && number(0, 5) == 1)
+  if (!cmd && room->people && number(0, 4) == 1)
     send_to_room(traffic_messages[number(0, NUM_TRAFFIC_MESSAGES - 1)], room);
   
   return FALSE;
