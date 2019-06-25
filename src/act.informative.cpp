@@ -949,7 +949,7 @@ void disp_long_exits(struct char_data *ch, bool autom)
   }
   for (door = 0; door < NUM_OF_DIRS; door++)
   {
-    if (EXIT(ch, door) && EXIT(ch, door)->to_room) {
+    if (EXIT(ch, door) && EXIT(ch, door)->to_room && EXIT(ch, door)->to_room != &world[0]) {
       if (GET_REAL_LEVEL(ch) >= LVL_BUILDER) {
         sprintf(buf2, "%-5s - [%5ld] %s%s\r\n", dirs[door],
                 EXIT(ch, door)->to_room->number,
@@ -1002,7 +1002,7 @@ void do_auto_exits(struct char_data * ch)
   } else
   {
     for (door = 0; door < NUM_OF_DIRS; door++)
-      if (EXIT(ch, door) && EXIT(ch, door)->to_room) {
+      if (EXIT(ch, door) && EXIT(ch, door)->to_room && EXIT(ch, door)->to_room != &world[0]) {
         if (ch->in_veh || ch->char_specials.rigging) {
           RIG_VEH(ch, veh);
           if (!ROOM_FLAGGED(EXIT(veh, door)->to_room, ROOM_ROAD) &&

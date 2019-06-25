@@ -747,7 +747,7 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     }
   }
   
-  if (!EXIT(ch, dir) || !EXIT(ch, dir)->to_room)
+  if (!EXIT(ch, dir) || !EXIT(ch, dir)->to_room || EXIT(ch, dir)->to_room == &world[0])
   {
     if (!LIGHT_OK(ch))
       send_to_char("Something seems to be in the way...\r\n", ch);
