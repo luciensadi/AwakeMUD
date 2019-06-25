@@ -3984,8 +3984,8 @@ void purge_unowned_vehs() {
     
     // This vehicle is owned by a valid player: Do not delete.
     if (does_player_exist(veh->owner)) {
-      sprintf(buf, "Skipping vehicle '%s' (%ld) since its owner is a valid player.", veh->short_description, veh->idnum);
-      log(buf);
+      //sprintf(buf, "Skipping vehicle '%s' (%ld) since its owner is a valid player.", veh->short_description, veh->idnum);
+      //log(buf);
       
       if (!prior_veh) {
         break;

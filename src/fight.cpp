@@ -75,6 +75,7 @@ extern int modify_veh(struct veh_data *veh);
 extern SPECIAL(shop_keeper);
 extern void mob_magic(struct char_data *ch);
 extern void cast_spell(struct char_data *ch, int spell, int sub, int force, char *arg);
+extern char *get_player_name(vnum_t id);
 /* Weapon attack texts */
 struct attack_hit_type attack_hit_text[] =
 {
@@ -5295,7 +5296,7 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
   veh->damage += damage_total;
   if (veh->owner && !IS_NPC(ch))
   {
-    sprintf(buf, "%s attacked vehicle (%s) owned by player.", GET_CHAR_NAME(ch), veh->name);
+    sprintf(buf, "%s attacked vehicle (%s) owned by player %s (%ld).", GET_CHAR_NAME(ch), GET_VEH_NAME(veh), get_player_name(veh->owner), veh->owner);
     mudlog(buf, ch, LOG_WRECKLOG, TRUE);
   }
   chkdmg(veh);
