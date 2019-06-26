@@ -3949,6 +3949,7 @@ void kill_ems(char *str)
 void purge_unowned_vehs() {
   struct veh_data *prior_veh = NULL, *veh = NULL, *vict_veh = NULL;
   
+  /*
   log("Player-owned vehicles currently in veh list:");
   int counter = 0;
   for (struct veh_data *tmp = veh_list; tmp; tmp = tmp->next) {
@@ -3960,6 +3961,7 @@ void purge_unowned_vehs() {
   }
   sprintf(buf, "End of veh list. %d player-owned vehicles counted.", counter);
   log(buf);
+  */
   
   prior_veh = veh_list;
   while (prior_veh) {    

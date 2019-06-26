@@ -719,8 +719,8 @@ static void init_elevators(void)
         elevator[i].floor[j].vnum = room;
         elevator[i].floor[j].shaft_vnum = shaft_vnum;
         elevator[i].floor[j].doors = t[1];
-        sprintf(buf, "%s: vnum %ld, shaft %ld, doors %s.", line, room, shaft_vnum, fulldirs[t[1]]);
-        log(buf);
+        //sprintf(buf, "%s: vnum %ld, shaft %ld, doors %s.", line, room, shaft_vnum, fulldirs[t[1]]);
+        //log(buf);
         
         // Ensure the landing exists.
         rnum = real_room(elevator[i].floor[j].vnum);
