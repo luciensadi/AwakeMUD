@@ -638,20 +638,21 @@ void death_penalty(struct char_data *ch)
 
 void die(struct char_data * ch)
 {
+  struct room_data *temp_room = get_ch_in_room(ch);
+  
   if (!((IS_NPC(ch) && MOB_FLAGGED(ch, MOB_INANIMATE)) || IS_PROJECT(ch) || IS_SPIRIT(ch) || IS_ELEMENTAL(ch))) {
-    increase_blood(ch->in_room);
+    increase_blood(temp_room);
     act("^rBlood splatters everywhere!^n", FALSE, ch, 0, 0, TO_ROOM);
-    if (!GET_BACKGROUND_COUNT(ch->in_room) || GET_BACKGROUND_AURA(ch->in_room) == AURA_PLAYERCOMBAT) {
-      if (GET_BACKGROUND_AURA(ch->in_room) != AURA_PLAYERDEATH) {
-        GET_BACKGROUND_COUNT(ch->in_room) = 1;
-        GET_BACKGROUND_AURA(ch->in_room) = AURA_PLAYERDEATH;
+    if (!GET_BACKGROUND_COUNT(temp_room) || GET_BACKGROUND_AURA(temp_room) == AURA_PLAYERCOMBAT) {
+      if (GET_BACKGROUND_AURA(temp_room) != AURA_PLAYERDEATH) {
+        GET_SETTABLE_BACKGROUND_COUNT(temp_room) = 1;
+        GET_SETTABLE_BACKGROUND_AURA(temp_room) = AURA_PLAYERDEATH;
       } else {
-        GET_BACKGROUND_COUNT(ch->in_room)++;
+        GET_SETTABLE_BACKGROUND_COUNT(temp_room)++;
       }
     }
   }
-  if (!IS_NPC(ch))
-  {
+  if (!IS_NPC(ch)) {
     death_penalty(ch);
     PLR_FLAGS(ch).RemoveBit(PLR_WANTED);
   }
@@ -3861,8 +3862,8 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   
   // Set the violence background count.
   if (att->ch->in_room && !GET_BACKGROUND_COUNT(att->ch->in_room)) {
-    GET_BACKGROUND_COUNT(att->ch->in_room) = 1;
-    GET_BACKGROUND_AURA(att->ch->in_room) = AURA_PLAYERCOMBAT;
+    GET_SETTABLE_BACKGROUND_COUNT(att->ch->in_room) = 1;
+    GET_SETTABLE_BACKGROUND_AURA(att->ch->in_room) = AURA_PLAYERCOMBAT;
   }
   
 }

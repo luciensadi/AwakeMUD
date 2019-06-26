@@ -273,6 +273,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define IS_LOW(room)	(light_level((room)) == LIGHT_MINLIGHT || light_level((room)) == LIGHT_PARTLIGHT)
 
 #define GET_ROOM_NAME(room) ((room) ? (room)->name : "(null room name)")
+#define GET_ROOM_DESC(room) ((room) ? ((room)->night_desc && weather_info.sunlight == SUN_DARK ? (room)->night_desc : (room)->description) : "(null room desc)")
 
 #define VALID_ROOM_RNUM(rnum) ((rnum) != NOWHERE && (rnum) <= top_of_world)
 
@@ -282,8 +283,10 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_ROOM_VNUM(room) \
  ((vnum_t)((room) ? (room)->number : NOWHERE))
 
-#define GET_BACKGROUND_COUNT(room) ((room)->background[0])
-#define GET_BACKGROUND_AURA(room)  ((room)->background[1])
+#define GET_BACKGROUND_COUNT(room) ((room) ? (room)->background[0] : 0)
+#define GET_BACKGROUND_AURA(room)  ((room) ? (room)->background[1] : 0)
+#define GET_SETTABLE_BACKGROUND_COUNT(room) ((room)->background[0])
+#define GET_SETTABLE_BACKGROUND_AURA(room)  ((room)->background[1])
 
 /* zone utils ************************************************************/
 

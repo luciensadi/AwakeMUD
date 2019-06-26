@@ -4097,7 +4097,7 @@ ACMD(do_cleanse)
     if (success <= 0)
       send_to_char("You fail to reduce the astral disturbances in this area.\r\n", ch);
     else {
-      GET_BACKGROUND_COUNT(ch->in_room) = MAX(0, GET_BACKGROUND_COUNT(ch->in_room) - success);
+      GET_SETTABLE_BACKGROUND_COUNT(ch->in_room) = MAX(0, GET_BACKGROUND_COUNT(ch->in_room) - success);
       if (!GET_BACKGROUND_COUNT(ch->in_room)) {
         send_to_char("You successfully remove all astral disturbances from the area.\r\n", ch);
         sprintf(buf, "The astral disturbances in this area completely vanish.\r\n");

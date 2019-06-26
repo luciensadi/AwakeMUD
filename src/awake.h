@@ -2045,6 +2045,7 @@ enum {
 #define OBJ_MULTNOMAH_VISA         1
 #define OBJ_MAP_OF_SEATTLE         2041
 #define OBJ_ELEVATOR_SHAFT_KEY     998
+#define OBJ_BLANK_PHOTO            109
 
 /* ban struct */
 struct ban_list_element

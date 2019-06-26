@@ -73,6 +73,9 @@ ACMD(do_quit)
 
   if (IS_NPC(ch) || !ch->desc)
     return;
+  
+  if (ch->in_veh)
+    ch->in_room = get_ch_in_room(ch);
 
   if (GET_POS(ch) == POS_FIGHTING)
     send_to_char("No way!  You're fighting for your life!\r\n", ch);
@@ -83,7 +86,7 @@ ACMD(do_quit)
     act("$n gives up the struggle to live...", TRUE, ch, 0, 0, TO_ROOM);
     die(ch);
   } else {
-    GET_LAST_IN(ch) = ch->in_room->number;
+    GET_LAST_IN(ch) = GET_ROOM_VNUM(ch->in_room);
     struct room_data *save_room = ch->in_room;
     if (GET_QUEST(ch))
       end_quest(ch);
@@ -113,7 +116,7 @@ ACMD(do_quit)
               GET_CHAR_NAME(ch), GET_IDNUM(ch), GET_ROOM_NAME(ch->in_room), GET_ROOM_VNUM(ch->in_room));
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
     } else
-      GET_LAST_IN(ch) = ch->in_room->number;
+      GET_LAST_IN(ch) = GET_ROOM_VNUM(ch->in_room);
     if(!ch->in_veh)
       act("$n has left the game.", TRUE, ch, 0, 0, TO_ROOM);
     else {
@@ -146,7 +149,12 @@ ACMD(do_quit)
     if (ch->desc)
       STATE(ch->desc) = CON_QMENU;
     extract_char(ch);           /* Char is saved in extract char */
+    return;
   }
+  
+  // Restore their in_room to NULL since we set it at the beginning of this.
+  if (ch->in_veh)
+    ch->in_room = NULL;
 }
 
 /* generic function for commands which are normally overridden by
@@ -842,7 +850,7 @@ ACMD(do_gen_write)
     return;
   }
   fprintf(fl, "%-8s (%6.6s) [%5ld] %s\n", (ch->desc->original ? GET_CHAR_NAME(ch->desc->original) :
-                                           GET_CHAR_NAME(ch)), (tmp + 4), ch->in_room ? ch->in_room->number : -1, argument);
+                                           GET_CHAR_NAME(ch)), (tmp + 4), GET_ROOM_VNUM(ch->in_room), argument);
   fclose(fl);
   
 #ifdef GITHUB_INTEGRATION
@@ -924,13 +932,13 @@ ACMD(do_gen_write)
     // Fill out the character and location details where applicable.
     sprintf(ENDOF(body), "Filed by %s (id %ld)", GET_CHAR_NAME(ch), (ch->desc->original ? GET_IDNUM(ch->desc->original) : GET_IDNUM(ch)));
     if (ch->in_room) {
-      sprintf(ENDOF(body), " from room %ld.", ch->in_room->number);
+      sprintf(ENDOF(body), " from room %ld.", GET_ROOM_VNUM(ch->in_room));
     } else if (ch->in_veh) {
       sprintf(ENDOF(body), " from the %s of a vehicle of vnum %ld", ch->vfront ? "front" : "rear", veh_index[ch->in_veh->veh_number].vnum);
       if (ch->in_veh->in_veh) {
         sprintf(ENDOF(body), ", located inside another vehicle of vnum %ld.", veh_index[ch->in_veh->in_veh->veh_number].vnum);
       } else if (ch->in_veh->in_room) {
-        sprintf(ENDOF(body), ", located in room %ld.", ch->in_veh->in_room->number);
+        sprintf(ENDOF(body), ", located in room %ld.", GET_ROOM_VNUM(ch->in_veh->in_room));
       } else {
         sprintf(ENDOF(body), ".");
       }
@@ -1369,7 +1377,7 @@ ACMD(do_reload)
   if (ch->in_veh && is_abbrev(buf, "mount")) {
     veh = ch->in_veh;
     mount = atoi(buf1);
-  } else if ((veh = get_veh_list(buf, ch->in_room->vehicles, ch))) {
+  } else if ((veh = get_veh_list(buf, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
     if (veh->type != VEH_DRONE) {
       send_to_char("You have to be inside a vehicle to reload the mounts.\r\n", ch);
       return;
@@ -1590,7 +1598,7 @@ ACMD(do_attach)
     return;
   }
   if (*arg) {
-    if (ch->in_veh || !(veh = get_veh_list(buf1, ch->in_room->vehicles, ch))) {
+    if (ch->in_veh || !(veh = get_veh_list(buf1, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
       send_to_char(NOOBJECT, ch);
       return;
     }
@@ -1767,7 +1775,7 @@ ACMD(do_unattach)
 
   argument = any_one_arg(argument, buf1);
   argument = any_one_arg(argument, buf2);
-  if (!ch->in_veh && (veh = get_veh_list(buf1, ch->in_room->vehicles, ch))) {
+  if (!ch->in_veh && (veh = get_veh_list(buf1, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
     if (veh->type != VEH_DRONE) {
       send_to_char("You have to be inside to unattach that.\r\n", ch);
       return;
@@ -2610,10 +2618,14 @@ ACMD(do_photo)
 {
   struct obj_data *camera = NULL, *photo, *mem = NULL, *temp;
   char buf[MAX_STRING_LENGTH], buf2[MAX_STRING_LENGTH], buf3[MAX_STRING_LENGTH];
-  if (!(camera = GET_EQ(ch, WEAR_HOLD)))
+  
+  // Select the camera from their wielded or holded items.
+  if (GET_EQ(ch, WEAR_HOLD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_HOLD)) == ITEM_CAMERA)
+    camera = GET_EQ(ch, WEAR_HOLD);
+  else if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_CAMERA)
     camera = GET_EQ(ch, WEAR_WIELD);
-  if (camera && GET_OBJ_TYPE(camera) != ITEM_CAMERA)
-    camera = NULL;
+  
+  // Check for a cyberware camera.
   if (!camera) {
     for (temp = ch->cyberware; temp; temp = temp->next_content)
       if (GET_OBJ_VAL(temp, 0) == CYB_EYES && IS_SET(GET_OBJ_VAL(temp, 3), EYE_CAMERA)) 
@@ -2632,7 +2644,7 @@ ACMD(do_photo)
     }
   } 
   if (!camera) {
-    send_to_char("You need a camera to take photos.\r\n", ch);
+    send_to_char("You need to be holding a camera to take photos.\r\n", ch);
     return;
   }
   skip_spaces(&argument);
@@ -2644,26 +2656,41 @@ ACMD(do_photo)
     char *desc;
     extern char *find_exdesc(char *word, struct extra_descr_data * list);
     generic_find(argument, FIND_OBJ_ROOM | FIND_CHAR_ROOM, ch, &i, &found_obj);
-    if (!ch->in_veh) {
-      if ((found_veh = get_veh_list(argument, ch->in_room->vehicles, ch))) {
-        sprintf(buf2, "a photo of %s", GET_VEH_NAME(found_veh));
-        sprintf(buf, "^c%s in %s^n\r\n%s", GET_VEH_NAME(found_veh), ch->in_room->name, GET_VEH_DESC(found_veh));
-        found = TRUE;
-      }
+    
+    // Look for a targeted vehicle.
+    if ((found_veh = get_veh_list(argument, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
+      sprintf(buf2, "a photo of %s^n", decapitalize_a_an(GET_VEH_NAME(found_veh)));
+      sprintf(buf, "^c%s^c in %s%s^n\r\n%s",
+              GET_VEH_NAME(found_veh),
+              found_veh->in_veh ? "the rear of " : "",
+              found_veh->in_veh ? GET_VEH_NAME(found_veh->in_veh) : GET_ROOM_NAME(found_veh->in_room),
+              GET_VEH_DESC(found_veh));
+      found = TRUE;
     }
+    
     if (!found) {
+      // Look for a targeted person.
       if (i) {
+        // This does not cause info disclosure because generic_find respects CAN_SEE().
         if (AFF_FLAGGED(i, AFF_IMP_INVIS) || AFF_FLAGGED(i, AFF_SPELLIMPINVIS)) {
           send_to_char(ch, "You don't seem to see them through the viewfinder.\r\n");
           return;
         }
-        sprintf(buf2, "a photo of %s", make_desc(ch, i, buf, 2));
-        sprintf(buf, "^c%s in %s^n\r\n%s", make_desc(ch, i, buf3, 2),
-                ch->in_room->name, i->player.physical_text.look_desc);
+        sprintf(buf2, "a photo of %s^n", decapitalize_a_an(make_desc(ch, i, buf, 2)));
+        if (i->in_veh) {
+          sprintf(buf, "^c%s^c sitting in the %s of %s^n\r\n%s",
+                  make_desc(ch, i, buf3, 2),
+                  i->vfront ? "front" : "back",
+                  decapitalize_a_an(GET_VEH_NAME(i->in_veh)),
+                  i->player.physical_text.look_desc);
+        } else {
+          sprintf(buf, "^c%s^c in %s^n\r\n%s", make_desc(ch, i, buf3, 2),
+                  GET_ROOM_NAME(ch->in_room), i->player.physical_text.look_desc);
+        }
         sprintf(buf + strlen(buf), "%s is using:\r\n", make_desc(ch, i, buf3, 2));
         for (int j = 0; j < NUM_WEARS; j++)
           if (GET_EQ(i, j) && CAN_SEE_OBJ(ch, GET_EQ(i, j))) {
-            int seen = FALSE;
+            // Describe special-case wielded/held objects.
             if (j == WEAR_WIELD || j == WEAR_HOLD) {
               if (IS_OBJ_STAT(GET_EQ(i, j), ITEM_TWOHANDS))
                 strcat(buf, hands[2]);
@@ -2672,44 +2699,61 @@ ACMD(do_photo)
               else
                 strcat(buf, hands[!i->char_specials.saved.left_handed]);
               sprintf(buf + strlen(buf), "\t%s\r\n", GET_OBJ_NAME(GET_EQ(i, j)));
-            } else if ((j == WEAR_BODY || j == WEAR_LARM || j == WEAR_RARM || j == WEAR_WAIST)
-                       && GET_EQ(i, WEAR_ABOUT)) {
-              if (success_test(GET_INT(ch), 4 + GET_OBJ_VAL(GET_EQ(i, WEAR_ABOUT), 7)) >= 2)
-                seen = TRUE;
-            } else if (j == WEAR_UNDER && (GET_EQ(i, WEAR_ABOUT) || GET_EQ(i, WEAR_BODY))) {
+              continue;
+            }
+            
+            // Concealed by enveloping clothing? Succeed on a test or you don't see it.
+            if ((j == WEAR_BODY || j == WEAR_LARM || j == WEAR_RARM || j == WEAR_WAIST) && GET_EQ(i, WEAR_ABOUT)) {
+              if (success_test(GET_INT(ch), 4 + GET_OBJ_VAL(GET_EQ(i, WEAR_ABOUT), 7)) < 2)
+                continue;
+            }
+            
+            // Underclothing? Succeed on a test or you don't see it.
+            if (j == WEAR_UNDER && (GET_EQ(i, WEAR_ABOUT) || GET_EQ(i, WEAR_BODY))) {
               if (success_test(GET_INT(ch), 6 +
                                (GET_EQ(i, WEAR_ABOUT) ? GET_OBJ_VAL(GET_EQ(i, WEAR_ABOUT), 7) : 0) +
-                               (GET_EQ(i, WEAR_BODY) ? GET_OBJ_VAL(GET_EQ(i, WEAR_BODY), 7) : 0)) >= 2)
-                seen = TRUE;
-            } else if (j == WEAR_LEGS && GET_EQ(i, WEAR_ABOUT)) {
-              if (success_test(GET_INT(ch), 2 + GET_OBJ_VAL(GET_EQ(i, WEAR_ABOUT), 7)) >= 2)
-                seen = TRUE;
-            } else if ((j == WEAR_RANKLE || j == WEAR_LANKLE) && (GET_EQ(i, WEAR_ABOUT) || GET_EQ(i, WEAR_LEGS))) {
+                               (GET_EQ(i, WEAR_BODY) ? GET_OBJ_VAL(GET_EQ(i, WEAR_BODY), 7) : 0)) < 2)
+                continue;
+            }
+            
+            // Pants under enveloping clothing? Succeed on an easier test.
+            if (j == WEAR_LEGS && GET_EQ(i, WEAR_ABOUT)) {
+              if (success_test(GET_INT(ch), 2 + GET_OBJ_VAL(GET_EQ(i, WEAR_ABOUT), 7)) < 2)
+                continue;
+            }
+            
+            // Anklets under pants or enveloping clothing? Succeed on a harder test.
+            if ((j == WEAR_RANKLE || j == WEAR_LANKLE) && (GET_EQ(i, WEAR_ABOUT) || GET_EQ(i, WEAR_LEGS))) {
               if (success_test(GET_INT(ch), 5 +
                                (GET_EQ(i, WEAR_ABOUT) ? GET_OBJ_VAL(GET_EQ(i, WEAR_ABOUT), 7) : 0) +
-                               (GET_EQ(i, WEAR_LEGS) ? GET_OBJ_VAL(GET_EQ(i, WEAR_LEGS), 7) : 0)) >= 2)
-                seen = TRUE;
-            } else
-              seen = TRUE;
-            if (seen) {
-              strcat(buf, where[j]);
-              sprintf(buf + strlen(buf), "\t%s\r\n", GET_OBJ_NAME(GET_EQ(i, j)));
+                               (GET_EQ(i, WEAR_LEGS) ? GET_OBJ_VAL(GET_EQ(i, WEAR_LEGS), 7) : 0)) < 2)
+                continue;
             }
+            
+            strcat(buf, where[j]);
+            sprintf(buf + strlen(buf), "\t%s\r\n", GET_OBJ_NAME(GET_EQ(i, j)));
           }
         found = TRUE;
-      } else if (found_obj && GET_OBJ_VNUM(found_obj) != 109) {
-        sprintf(buf2, "a photo of %s", GET_OBJ_NAME(found_obj));
-        sprintf(buf, "^c%s in %s^n\r\n%s", GET_OBJ_NAME(found_obj), ch->in_room->name, found_obj->photo ? found_obj->photo : found_obj->text.look_desc);
+      } else if (found_obj && GET_OBJ_VNUM(found_obj) != OBJ_BLANK_PHOTO) {
+        sprintf(buf2, "a photo of %s", decapitalize_a_an(GET_OBJ_NAME(found_obj)));
+        if (ch->in_veh) {
+          sprintf(buf, "^c%s^c in %s^n\r\n%s",
+                  GET_OBJ_NAME(found_obj),
+                  decapitalize_a_an(GET_VEH_NAME(i->in_veh)),
+                  found_obj->photo ? found_obj->photo : found_obj->text.look_desc);
+        } else {
+          sprintf(buf, "^c%s^c in %s^n\r\n%s", GET_OBJ_NAME(found_obj), GET_ROOM_NAME(ch->in_room), found_obj->photo ? found_obj->photo : found_obj->text.look_desc);
+        }
         found = TRUE;
       } else if (ch->in_veh) {
         if ((i = get_char_veh(ch, arg, ch->in_veh))) {
-          sprintf(buf2, "a photo of %s", GET_NAME(i));
-          sprintf(buf, "^c%s in %s^n\r\n%s", GET_NAME(i), ch->in_veh->name, i->player.physical_text.look_desc);
+          sprintf(buf2, "a photo of %s", decapitalize_a_an(GET_NAME(i)));
+          sprintf(buf, "^c%s in %s^n\r\n%s", GET_NAME(i), GET_VEH_NAME(ch->in_veh), i->player.physical_text.look_desc);
           found = TRUE;
         }
-      } else if ((desc = find_exdesc(arg, ch->in_room->ex_description))) {
-        sprintf(buf2, "a photo of %s", argument);
-        sprintf(buf, "^c%s in %s^n\r\n%s", argument, ch->in_room->name, desc);
+      } else if (ch->in_room && (desc = find_exdesc(arg, ch->in_room->ex_description))) {
+        sprintf(buf2, "a photo of %s", decapitalize_a_an(argument));
+        sprintf(buf, "^c%s in %s^n\r\n%s", argument, GET_ROOM_NAME(ch->in_room), desc);
         found = TRUE;
       }
     }
@@ -2719,9 +2763,9 @@ ACMD(do_photo)
     }
   } else {
     if (ch->in_veh)
-      ch->in_room = ch->in_veh->in_room;
-    sprintf(buf2, "a photo of %s", ch->in_room->name);
-    sprintf(buf, "^c%s^n\r\n%s", ch->in_room->name, ch->in_room->description);
+      ch->in_room = get_ch_in_room(ch);
+    sprintf(buf2, "a photo of %s", GET_ROOM_NAME(ch->in_room));
+    sprintf(buf, "^c%s^n\r\n%s", GET_ROOM_NAME(ch->in_room), GET_ROOM_DESC(ch->in_room));
     for (struct char_data *tch = ch->in_room->people; tch; tch = tch->next_in_room)
       if (tch != ch && !(AFF_FLAGGED(tch, AFF_IMP_INVIS) || AFF_FLAGGED(tch, AFF_SPELLIMPINVIS)) && GET_INVIS_LEV(tch) < 2) {
         if (IS_NPC(tch) && tch->player.physical_text.room_desc &&
@@ -2807,7 +2851,7 @@ ACMD(do_photo)
     if (ch->in_veh)
       ch->in_room = NULL;
   }
-  photo = read_object(109, VIRTUAL);
+  photo = read_object(OBJ_BLANK_PHOTO, VIRTUAL);
   if (!mem)
     act("$n takes a photo with $p.", FALSE, ch, camera, NULL, TO_ROOM);
   send_to_char(ch, "You take a photo.\r\n");
@@ -2953,9 +2997,9 @@ ACMD(do_assense)
     return;
   }
   int skill = GET_INT(ch), target = 4;
-  if (ch->in_room->background[1] == AURA_POWERSITE)
-    skill += ch->in_room->background[0];
-  else target += ch->in_room->background[0];
+  if (GET_BACKGROUND_AURA(ch->in_room) == AURA_POWERSITE)
+    skill += GET_BACKGROUND_COUNT(ch->in_room);
+  else target += GET_BACKGROUND_COUNT(ch->in_room);
   int success = success_test(skill, target);
   success += (int)(success_test(GET_SKILL(ch, SKILL_AURA_READING), 4) / 2);
   if (success < 1) {
