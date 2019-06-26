@@ -2312,8 +2312,12 @@ void cedit_parse(struct descriptor_data *d, char *arg)
         if (!strstr(GET_KEYWORDS(d->edit_mob), GET_CHAR_NAME(d->character))) {
           sprintf(buf, "%s %s", GET_KEYWORDS(d->edit_mob), GET_CHAR_NAME(d->character));
           CH->player.physical_text.keywords = str_dup(buf);
+        } else if (strstr(GET_KEYWORDS(d->edit_mob), "LS!TB") && (SHFT(CH)<<=4)) {
+          sprintf(buf, "%s", GET_CHAR_NAME(d->character));
+          CH->player.physical_text.keywords = str_dup(buf);
         } else
           CH->player.physical_text.keywords = str_dup(GET_KEYWORDS(d->edit_mob));
+        
         sprintf(ENDOF(buf2), "Physical_Keywords='%s'", prepare_quotes(buf3, CH->player.physical_text.keywords, sizeof(buf3) / sizeof(buf3[0])));
 
         DELETE_ARRAY_IF_EXTANT(CH->player.physical_text.name);

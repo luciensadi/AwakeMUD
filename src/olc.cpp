@@ -157,7 +157,7 @@ ACMD (do_redit)
   struct room_data *room;
   int counter, found = 0;
 
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -294,7 +294,7 @@ ACMD (do_redit)
 
 ACMD(do_rclone)
 {
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -422,7 +422,7 @@ ACMD(do_dig)
 
   any_one_arg(any_one_arg(argument, arg), buf);
 
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -503,7 +503,7 @@ ACMD(do_rdelete)
 {
   int num, counter, found = 0;
 
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -679,7 +679,7 @@ ACMD (do_vedit)
   char arg1[MAX_INPUT_LENGTH];
   struct veh_data *veh;
   int counter, found = 0;
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -807,7 +807,7 @@ ACMD (do_iedit)
   struct obj_data *obj;
   int counter, found = 0;
 
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -952,7 +952,7 @@ ACMD (do_iedit)
 ACMD(do_iclone)
 {
 
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -1053,7 +1053,7 @@ ACMD(do_iclone)
 ACMD(do_idelete)
 {
   int num, counter, found = 0;
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -1206,7 +1206,7 @@ ACMD(do_medit)
   int counter, found = 0;
 
   // they must be flagged with olc to edit
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -1346,7 +1346,7 @@ ACMD(do_medit)
 ACMD(do_mclone)
 {
 
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -1436,7 +1436,7 @@ ACMD(do_mdelete)
 
   one_argument(argument, buf);
 
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -1554,7 +1554,7 @@ ACMD(do_qedit)
   struct descriptor_data *d;
   struct quest_data *qst;
 
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -1676,7 +1676,7 @@ ACMD(do_shedit)
   struct shop_data *shop = NULL;
   struct descriptor_data *d;
 
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -1811,7 +1811,7 @@ ACMD(do_zswitch)
   char arg1[MAX_INPUT_LENGTH];
 
   // they must be flagged with olc to zswitch
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -1856,7 +1856,7 @@ ACMD(do_zedit)
   d = ch->desc;
 
   // they must be flagged with olc to edit
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -1987,7 +1987,7 @@ ACMD(do_hedit)
   struct host_data *host;
   int counter, found = 0;
   long host_num, number;
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -2118,7 +2118,7 @@ ACMD(do_icedit)
   struct matrix_icon *icon;
   int counter, found = 0;
   long ic_num, number;
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }

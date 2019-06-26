@@ -509,7 +509,7 @@ ACMD(do_goto)
       return;
     }
   } else if (!(vict = get_char_vis(ch, buf)) || !vict->in_veh) {
-    send_to_char("You can't find anything like that to go to.\r\n", ch);
+    // Error message happens in get_char_vis.
     return;
   }
 
@@ -1219,7 +1219,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   sprintf(ENDOF(buf), "eq: %d\r\n", i2);
 
   sprintf(ENDOF(buf), "Hunger: %d, Thirst: %d, Drunk: %d\r\n",
-          GET_COND(k, FULL), GET_COND(k, THIRST), GET_COND(k, DRUNK));
+          GET_COND(k, COND_FULL), GET_COND(k, COND_THIRST), GET_COND(k, COND_DRUNK));
 
   sprintf(ENDOF(buf), "Master is: %s, Followers are:",
           ((k->master) ? GET_CHAR_NAME(k->master) : "<none>"));
@@ -1711,7 +1711,7 @@ ACMD(do_iload)
 
   one_argument(argument, buf2);
 
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -1935,111 +1935,7 @@ ACMD(do_purge)
   }
 }
 
-ACMD(do_self_advance)
-{
-  struct char_data *victim;
-  char *name = arg, *level = buf2;
-  int newlevel, i;
-  void do_start(struct char_data *ch);
-  extern void check_autowiz(struct char_data * ch);
-  
-  two_arguments(argument, name, level);
-  
-  if (*name) {
-    if (!(victim = get_char_vis(ch, name))) {
-      send_to_char("That player is not here.\r\n", ch);
-      return;
-    }
-  } else {
-    send_to_char("Advance who?\r\n", ch);
-    return;
-  }
-  
-  if (GET_LEVEL(ch) <= GET_LEVEL(victim)
-      && ch != victim) {
-    send_to_char("Maybe that's not such a great idea.\r\n", ch);
-    return;
-  }
-  if (IS_NPC(victim)) {
-    send_to_char("NO!  Not on NPC's.\r\n", ch);
-    return;
-  }
-  if (!*level || (newlevel = atoi(level)) <= 0) {
-    send_to_char("That's not a level!\r\n", ch);
-    return;
-  }
-  // You can only advance to level 9 unless you're the President.
-  int max_ch_can_advance_to = GET_LEVEL(ch) < LVL_MAX ? LVL_MAX - 1 : LVL_MAX;
-  if (newlevel > max_ch_can_advance_to) {
-    sprintf(buf, "%d is the highest possible level you can advance someone to.\r\n", max_ch_can_advance_to);
-    send_to_char(buf, ch);
-    return;
-  }
-  /*
-  if (!access_level(ch, newlevel) ) {
-    send_to_char("Yeah, right.\r\n", ch);
-    return;
-  }
-  */
-  if (newlevel < GET_LEVEL(victim)) {
-    do_start(victim);
-    GET_LEVEL(victim) = newlevel;
-  } else {
-    act("$n makes some strange gestures.\r\n"
-        "A strange feeling comes upon you,\r\n"
-        "Like a giant hand, light comes down\r\n"
-        "from above, grabbing your body, that\r\n"
-        "begins to pulse with colored lights\r\n"
-        "from inside.\r\n\r\n"
-        "Your head seems to be filled with demons\r\n"
-        "from another plane as your body dissolves\r\n"
-        "to the elements of time and space itself.\r\n"
-        "Suddenly a silent explosion of light\r\n"
-        "snaps you back to reality.\r\n\r\n"
-        "You feel slightly different.", FALSE, ch, 0, victim, TO_VICT);
-  }
-  
-  send_to_char(OK, ch);
-  
-  sprintf(buf, "%s has advanced %s to %s (from %s)",
-          GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), status_ratings[newlevel],
-          status_ratings[(int)GET_LEVEL(victim)]);
-  GET_LEVEL(victim) = newlevel;
-  if (IS_SENATOR(victim)) {
-    for (i = 0; i < 3; i++)
-      GET_COND(victim, i) = (char) -1;
-    if (PLR_FLAGS(victim).IsSet(PLR_NEWBIE)) {
-      PLR_FLAGS(victim).RemoveBit(PLR_NEWBIE);
-      PLR_FLAGS(victim).RemoveBit(PLR_AUTH);
-    }
-    PRF_FLAGS(victim).SetBit(PRF_HOLYLIGHT);
-    PRF_FLAGS(victim).SetBit(PRF_CONNLOG);
-    PRF_FLAGS(victim).SetBit(PRF_ROOMFLAGS);
-    PRF_FLAGS(victim).SetBit(PRF_NOHASSLE);
-    PRF_FLAGS(victim).SetBit(PRF_AUTOINVIS);
-  }
-  
-  mudlog(buf, ch, LOG_WIZLOG, TRUE);
-  sprintf(buf, "SELECT * FROM pfiles_immortdata WHERE idnum=%ld;", GET_IDNUM(victim));
-  MYSQL_RES *res;
-  MYSQL_ROW row;
-  if (!mysql_wrapper(mysql, buf)) {
-    res = mysql_use_result(mysql);
-    row = mysql_fetch_row(res);
-    if (!row && mysql_field_count(mysql)) {
-      mysql_free_result(res);
-      sprintf(buf, "INSERT INTO pfiles_immortdata (idnum) VALUES (%ld);", GET_IDNUM(victim));
-      mysql_wrapper(mysql, buf);
-    } else {
-      mysql_free_result(res);
-    }
-    sprintf(buf, "UPDATE pfiles SET rank=%d WHERE idnum=%ld;", GET_LEVEL(victim), GET_IDNUM(victim));
-    mysql_wrapper(mysql, buf);
-  }
-}
-
-ACMD(do_advance)
-{
+void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int subcmd, bool can_self_advance) {
   struct char_data *victim;
   char *name = arg, *level = buf2;
   int newlevel, i;
@@ -2076,14 +1972,31 @@ ACMD(do_advance)
     send_to_char(buf, ch);
     return;
   }
-  if (!access_level(ch, newlevel) ) {
-    send_to_char("Yeah, right.\r\n", ch);
-    return;
+  if (can_self_advance) {
+    // You can only advance to level 9 unless you're the President.
+    int max_ch_can_advance_to = GET_LEVEL(ch) < LVL_MAX ? LVL_MAX - 1 : LVL_MAX;
+    if (newlevel > max_ch_can_advance_to) {
+      sprintf(buf, "%d is the highest possible level you can advance someone to.\r\n", max_ch_can_advance_to);
+      send_to_char(buf, ch);
+      return;
+    }
+  } else {
+    if (!access_level(ch, newlevel) ) {
+      send_to_char("Yeah, right.\r\n", ch);
+      return;
+    }
   }
+  
+  send_to_char(OK, ch);
+  
   if (newlevel < GET_LEVEL(victim)) {
+    send_to_char(victim, "%s has demoted you from %s to %s.\r\n", GET_CHAR_NAME(ch), status_ratings[(int) GET_LEVEL(victim)], status_ratings[newlevel]);
+    sprintf(buf3, "%s has demoted %s from %s to %s.",
+            GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), status_ratings[(int)GET_LEVEL(victim)], status_ratings[newlevel]);
     do_start(victim);
     GET_LEVEL(victim) = newlevel;
   } else {
+    /* Preserved for history's sake. -LS
     act("$n makes some strange gestures.\r\n"
         "A strange feeling comes upon you,\r\n"
         "Like a giant hand, light comes down\r\n"
@@ -2096,16 +2009,15 @@ ACMD(do_advance)
         "Suddenly a silent explosion of light\r\n"
         "snaps you back to reality.\r\n\r\n"
         "You feel slightly different.", FALSE, ch, 0, victim, TO_VICT);
+     */
+    send_to_char(victim, "%s has promoted you from %s to %s.\r\n", GET_CHAR_NAME(ch), status_ratings[(int) GET_LEVEL(victim)], status_ratings[newlevel]);
+    sprintf(buf3, "%s has advanced %s from %s to %s.",
+            GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), status_ratings[(int)GET_LEVEL(victim)], status_ratings[newlevel]);
+    GET_LEVEL(victim) = newlevel;
   }
-
-  send_to_char(OK, ch);
-
-  sprintf(buf, "%s has advanced %s to %s (from %s)",
-          GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), status_ratings[newlevel],
-          status_ratings[(int)GET_LEVEL(victim)]);
-  GET_LEVEL(victim) = newlevel;
+  
   if (IS_SENATOR(victim)) {
-    for (i = 0; i < 3; i++)
+    for (i = COND_DRUNK; i <= COND_THIRST; i++)
       GET_COND(victim, i) = (char) -1;
     if (PLR_FLAGS(victim).IsSet(PLR_NEWBIE)) {
       PLR_FLAGS(victim).RemoveBit(PLR_NEWBIE);
@@ -2118,23 +2030,19 @@ ACMD(do_advance)
     PRF_FLAGS(victim).SetBit(PRF_AUTOINVIS);
   }
 
-  mudlog(buf, ch, LOG_WIZLOG, TRUE);
-  sprintf(buf, "SELECT * FROM pfiles_immortdata WHERE idnum=%ld;", GET_IDNUM(victim));
-  MYSQL_RES *res;
-  MYSQL_ROW row;
-  if (!mysql_wrapper(mysql, buf)) {
-    res = mysql_use_result(mysql);
-    row = mysql_fetch_row(res);
-    if (!row && mysql_field_count(mysql)) {
-      mysql_free_result(res);
-      sprintf(buf, "INSERT INTO pfiles_immortdata (idnum) VALUES (%ld);", GET_IDNUM(victim));
-      mysql_wrapper(mysql, buf);
-    } else {
-      mysql_free_result(res);
-    }
-    sprintf(buf, "UPDATE pfiles SET rank=%d WHERE idnum=%ld;", GET_LEVEL(victim), GET_IDNUM(victim));
-    mysql_wrapper(mysql, buf);
-  }
+  mudlog(buf3, ch, LOG_WIZLOG, TRUE);
+  // We use INSERT IGNORE to cause it to not error out when updating someone who already had immort data.
+  sprintf(buf, "INSERT IGNORE INTO pfiles_immortdata (idnum) VALUES (%ld);", GET_IDNUM(victim));
+  mysql_wrapper(mysql, buf);
+}
+
+ACMD(do_self_advance) {
+  do_advance_with_mode(ch, argument, cmd, subcmd, TRUE);
+}
+
+ACMD(do_advance) {
+  // Wrapper for do_advance with no self-advancement enabled.
+  do_advance_with_mode(ch, argument, cmd, subcmd, FALSE);
 }
 
 ACMD(do_award)
@@ -4200,7 +4108,7 @@ ACMD(do_zlist)
   char buf[MAX_STRING_LENGTH*10];
   two_arguments(argument, buf, buf1);
   
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -4333,7 +4241,7 @@ ACMD(do_zlist)
 
 ACMD(do_mlist)
 {
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -4381,7 +4289,7 @@ ACMD(do_mlist)
 
 ACMD(do_ilist)
 {
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -4432,7 +4340,7 @@ ACMD(do_ilist)
 
 ACMD(do_vlist)
 {
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -4475,7 +4383,7 @@ ACMD(do_vlist)
 
 ACMD(do_qlist)
 {
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -4530,7 +4438,7 @@ bool debug_bounds_check_rlist(int nr, int last) {
 
 ACMD(do_rlist)
 {
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -4579,7 +4487,7 @@ ACMD(do_rlist)
 
 ACMD(do_hlist)
 {
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -4628,7 +4536,7 @@ ACMD(do_hlist)
 
 ACMD(do_iclist)
 {
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }
@@ -4677,7 +4585,7 @@ ACMD(do_iclist)
 
 ACMD(do_slist)
 {
-  if (!PLR_FLAGGED(ch, PLR_OLC)) {
+  if (!access_level(ch, LVL_PRESIDENT) && !PLR_FLAGGED(ch, PLR_OLC)) {
     send_to_char(YOU_NEED_OLC_FOR_THAT, ch);
     return;
   }

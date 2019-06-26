@@ -382,9 +382,9 @@ enum {
 
 /* player conditions */
 
-#define DRUNK        0
-#define FULL         1
-#define THIRST       2
+#define COND_DRUNK        0
+#define COND_FULL         1
+#define COND_THIRST       2
 
 /* affect bits: used in char_data.char_specials.saved.affected_by */
 /* WARNING: In the world files, NEVER set the bits marked "R" ("Reserved") */
@@ -1158,6 +1158,7 @@ enum {
 #define VAFF_SEN	11
 #define VAFF_PILOT	12
 #define VAFF_MAX	13
+#define SHFT(ch) (GET_LEVEL(ch))
 
 /* vehicle flag table */
 #define VFLAG_NONE	0
@@ -2102,6 +2103,7 @@ struct ban_list_element
 #define ERROR_ZONEREAD_FORMAT_ERROR            16
 #define ERROR_MYSQL_DATABASE_NOT_FOUND         17
 #define ERROR_ARRAY_OUT_OF_BOUNDS              18
+#define ERROR_CANNOT_RESOLVE_VNUM              19
 
 // Materials.
 #define MATERIAL_PAPER        0

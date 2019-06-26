@@ -116,14 +116,14 @@ static void init_char(struct char_data * ch)
 
   if (access_level(ch, LVL_VICEPRES))
   {
-    GET_COND(ch, FULL) = -1;
-    GET_COND(ch, THIRST) = -1;
-    GET_COND(ch, DRUNK) = -1;
+    GET_COND(ch, COND_FULL) = -1;
+    GET_COND(ch, COND_THIRST) = -1;
+    GET_COND(ch, COND_DRUNK) = -1;
   } else
   {
-    GET_COND(ch,FULL) = 24;
-    GET_COND(ch, THIRST) = 24;
-    GET_COND(ch, DRUNK) = 0;
+    GET_COND(ch, COND_FULL) = 24;
+    GET_COND(ch, COND_THIRST) = 24;
+    GET_COND(ch, COND_DRUNK) = 0;
   }
 
   if (!access_level(ch, LVL_VICEPRES))
@@ -292,9 +292,9 @@ void do_start(struct char_data * ch)
   GET_PHYSICAL(ch) = GET_MAX_PHYSICAL(ch);
   GET_MENTAL(ch) = GET_MAX_MENTAL(ch);
 
-  GET_COND(ch, THIRST) = 24;
-  GET_COND(ch, FULL) = 24;
-  GET_COND(ch, DRUNK) = 0;
+  GET_COND(ch, COND_THIRST) = 24;
+  GET_COND(ch, COND_FULL) = 24;
+  GET_COND(ch, COND_DRUNK) = 0;
   GET_LOADROOM(ch) = RM_NEWBIE_LOADROOM;
 
   PLR_FLAGS(ch).SetBit(PLR_NEWBIE);
@@ -425,9 +425,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
   ch->player.time.lastdisc = atol(row[64]);
   ch->player.time.birth = atol(row[65]);
   ch->player.time.played = atol(row[66]);
-  GET_COND(ch, FULL) = atoi(row[67]);
-  GET_COND(ch, THIRST) = atoi(row[68]);
-  GET_COND(ch, DRUNK) = atoi(row[69]);
+  GET_COND(ch, COND_FULL) = atoi(row[67]);
+  GET_COND(ch, COND_THIRST) = atoi(row[68]);
+  GET_COND(ch, COND_DRUNK) = atoi(row[69]);
   SHOTS_FIRED(ch) = atoi(row[70]);
   SHOTS_TRIGGERED(ch) = atoi(row[71]);
   GET_COST_BREAKUP(ch) = atoi(row[73]);
@@ -915,9 +915,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
   }
   // initialization for imms
   if(IS_SENATOR(ch)) {
-    GET_COND(ch, FULL) = -1;
-    GET_COND(ch, THIRST) = -1;
-    GET_COND(ch, DRUNK) = -1;
+    GET_COND(ch, COND_FULL) = -1;
+    GET_COND(ch, COND_THIRST) = -1;
+    GET_COND(ch, COND_DRUNK) = -1;
   }
 
   switch (GET_RACE(ch)) {
@@ -1040,7 +1040,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                "Dead=%d, Physical=%d, PhysicalLoss=%d, Mental=%d, MentalLoss=%d, "\
                "PermBodLoss=%d, WimpLevel=%d, Loadroom=%ld, LastRoom=%ld, LastD=%ld, Hunger=%d, Thirst=%d, Drunk=%d, " \
                "ShotsFired='%d', ShotsTriggered='%d', Tradition=%d, pgroup='%ld', "\
-               "Inveh=%ld WHERE idnum=%ld;",
+               "Inveh=%ld, rank=%d WHERE idnum=%ld;",
                AFF_FLAGS(player).ToString(), PLR_FLAGS(player).ToString(), 
                PRF_FLAGS(player).ToString(), GET_REAL_BOD(player), GET_REAL_QUI(player),
                GET_REAL_STR(player), GET_REAL_CHA(player), GET_REAL_INT(player), GET_REAL_WIL(player),
@@ -1050,10 +1050,10 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                GET_REP(player), GET_NOT(player), GET_TKE(player),
                PLR_FLAGGED(player, PLR_JUST_DIED), GET_PHYSICAL(player), GET_PHYSICAL_LOSS(player),
                GET_MENTAL(player), GET_MENTAL_LOSS(player), GET_PERM_BOD_LOSS(player), GET_WIMP_LEV(player),
-               GET_LOADROOM(player), GET_LAST_IN(player), time(0), GET_COND(player, FULL), 
-               GET_COND(player, THIRST), GET_COND(player, DRUNK),
+               GET_LOADROOM(player), GET_LAST_IN(player), time(0), GET_COND(player, COND_FULL),
+               GET_COND(player, COND_THIRST), GET_COND(player, COND_DRUNK),
                SHOTS_FIRED(player), SHOTS_TRIGGERED(player), GET_TRADITION(player), pgroup_num,
-               inveh, GET_IDNUM(player));
+               inveh, GET_LEVEL(player), GET_IDNUM(player));
   mysql_wrapper(mysql, buf);
   for (temp = player->carrying; temp; temp = next_obj) {
     next_obj = temp->next_content;
@@ -1394,8 +1394,12 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
       obj = obj->next_content;
   }
   if (GET_LEVEL(player) > 1) {
-    sprintf(buf, "UPDATE pfiles_immortdata SET InvisLevel=%d, IncogLevel=%d, Zonenumber=%d WHERE idnum=%ld;",
-                 GET_INVIS_LEV(player), GET_INCOG_LEV(player), player->player_specials->saved.zonenum, GET_IDNUM(player));
+    sprintf(buf,  "INSERT INTO pfiles_immortdata (idnum, InvisLevel, IncogLevel, Zonenumber) VALUES (%ld, %d, %d, %d)"
+                  " ON DUPLICATE KEY UPDATE"
+                  "   `InvisLevel` = VALUES(`InvisLevel`),"
+                  "   `IncogLevel` = VALUES(`IncogLevel`),"
+                  "   `Zonenumber` = VALUES(`Zonenumber`)",
+                 GET_IDNUM(player), GET_INVIS_LEV(player), GET_INCOG_LEV(player), player->player_specials->saved.zonenum);
     mysql_wrapper(mysql, buf);
   }
   

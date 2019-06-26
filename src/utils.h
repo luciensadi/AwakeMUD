@@ -609,15 +609,13 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 ( !(MOB_FLAGGED(obj, MOB_TOTALINVIS) && GET_LEVEL(sub) < LVL_BUILDER) \
   && (SELF((sub), (obj)) \
      || (SEE_ASTRAL((sub), (obj)) && LIGHT_OK_ROOM_SPECIFIED(sub, room_specified) && invis_ok(sub, obj) \
-        && (GET_INVIS_LEV(obj) <= 0 || access_level(sub, GET_INVIS_LEV(obj)) \
-        || access_level(sub, LVL_VICEPRES)))))
+        && (GET_INVIS_LEV(obj) <= 0 || access_level(sub, GET_INVIS_LEV(obj))))))
 
 #define CAN_SEE(sub, obj)      \
 ( !(MOB_FLAGGED(obj, MOB_TOTALINVIS) && GET_LEVEL(sub) < LVL_BUILDER) \
 && (SELF((sub), (obj)) \
 || (SEE_ASTRAL((sub), (obj)) && LIGHT_OK(sub) && invis_ok((sub), (obj)) \
-&& (GET_INVIS_LEV(obj) <= 0 || access_level(sub, GET_INVIS_LEV(obj)) \
-|| access_level(sub, LVL_VICEPRES)))))
+&& (GET_INVIS_LEV(obj) <= 0 || access_level(sub, GET_INVIS_LEV(obj))))))
 
 /* End of CAN_SEE */
 
