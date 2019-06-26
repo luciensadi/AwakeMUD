@@ -537,8 +537,6 @@ void House_boot(void)
     log("Error at beginning of house control file.");
     return;
   }
-  
-  log_vfprintf("Processing line: '%s'", line);
 
   for (int i = 0; i < num_land; i++) {
     get_line(fl, line);
@@ -546,7 +544,6 @@ void House_boot(void)
       fprintf(stderr, "Format error in landlord #%d.\r\n", i);
       return;
     }
-    log_vfprintf("Processing line: '%s'", line);
     if (real_mobile(landlord_vnum) < 0) {
       log_vfprintf("SYSERR: Landlord vnum %ld does not match up with a real NPC. Terminating.\r\n", landlord_vnum);
       exit(ERROR_CANNOT_RESOLVE_VNUM);
@@ -565,7 +562,6 @@ void House_boot(void)
         fprintf(stderr, "Format error in landlord #%d room #%d.\r\n", i, x);
         return;
       }
-      log_vfprintf("Processing line: '%s'", line);
       if (real_room(house_vnum) < 0) {
         log_vfprintf("SYSERR: House vnum %ld does not match up with a real room. Terminating.\r\n", landlord_vnum);
         exit(ERROR_CANNOT_RESOLVE_VNUM);
@@ -615,7 +611,7 @@ void House_boot(void)
         first = temp;
       if (temp->owner) {
         ROOM_FLAGS(&world[real_room(temp->vnum)]).SetBit(ROOM_HOUSE);
-        ROOM_FLAGS(&world[real_room(temp->atrium)]).SetBit(ROOM_ATRIUM);
+        ROOM_FLAGS(&world[temp->atrium]).SetBit(ROOM_ATRIUM);
       }
       last = temp;
     }
