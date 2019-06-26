@@ -209,7 +209,7 @@ void objList::UpdateCounters(void)
     }
     
     // Packing / unpacking of workshops.
-    if (GET_OBJ_TYPE(OBJ) == ITEM_WORKSHOP && GET_OBJ_VAL(OBJ, 3)) {
+    if (GET_OBJ_TYPE(OBJ) == ITEM_WORKSHOP && GET_WORKSHOP_UNPACK_TICKS(OBJ)) {
       struct char_data *ch;
       if (!OBJ->in_veh && !OBJ->in_room) {
         // It's being carried by a character (or is in a container, etc).
@@ -223,7 +223,7 @@ void objList::UpdateCounters(void)
           if (!--GET_WORKSHOP_UNPACK_TICKS(OBJ)) {
             if (GET_WORKSHOP_IS_SETUP(OBJ)) {
               send_to_char(ch, "You finish packing up %s.\r\n", GET_OBJ_NAME(OBJ));
-              act("$n finishes packing up $P", FALSE, ch, 0, OBJ, TO_ROOM); // TODO: Does this work if they're in a vehicle too?
+              act("$n finishes packing up $P.", FALSE, ch, 0, OBJ, TO_ROOM);
               GET_WORKSHOP_IS_SETUP(OBJ) = 0;
               
               // Handle the room's workshop[] array.
@@ -231,7 +231,7 @@ void objList::UpdateCounters(void)
                 remove_workshop_from_room(OBJ);
             } else {
               send_to_char(ch, "You finish setting up %s.\r\n", GET_OBJ_NAME(OBJ));
-              act("$n finishes setting up $P", FALSE, ch, 0, OBJ, TO_ROOM);
+              act("$n finishes setting up $P.", FALSE, ch, 0, OBJ, TO_ROOM);
               GET_WORKSHOP_IS_SETUP(OBJ) = 1;
               
               // Handle the room's workshop[] array.
@@ -244,12 +244,14 @@ void objList::UpdateCounters(void)
         }
       }
       
-      // If we already handled it, continue to the next thing to be handled.
-      if (ch)
-        continue;
-      
       // If there were no characters in the room working on it, clear its pack/unpack counter.
-      GET_OBJ_VAL(OBJ, 3) = 0;
+      if (!ch) {
+        sprintf(buf, "A passerby rolls %s eyes and quickly re-%spacks the half-packed $P.",
+                number(0, 1) == 0 ? "his" : "her",
+                GET_WORKSHOP_IS_SETUP(OBJ) ? "un" : "");
+        act(buf, FALSE, NULL, NULL, OBJ, TO_ROOM);
+        GET_WORKSHOP_UNPACK_TICKS(OBJ) = 0;
+      }
     }
     
     // Cook chips.

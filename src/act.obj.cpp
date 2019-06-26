@@ -804,7 +804,10 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
     if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP)
       for (struct char_data *tmp = ch->in_veh ? ch->in_veh->people : ch->in_room->people; tmp; tmp = ch->in_veh ? tmp->next_in_veh : tmp->next_in_room)
          if (AFF_FLAGGED(tmp, AFF_PACKING)) {
-           send_to_char("Someone is working on that workshop.\r\n", ch);
+           if (tmp == ch)
+             send_to_char("You're already working on that workshop.\r\n", ch);
+           else
+             send_to_char("Someone is working on that workshop.\r\n", ch);
            return FALSE;
          }
     if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
