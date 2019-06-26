@@ -11,6 +11,7 @@ const char *NOOBJECT = "You don't see that here.\r\n";
 const char *YOU_NEED_OLC_FOR_THAT = "Please SET SELF OLC ON (or ask a higher-level staff member to do it).\r\n";
 const char *DEFAULT_POOFIN_STRING = "$n appears out of nowhere.";
 const char *DEFAULT_POOFOUT_STRING = "$n disappears in a flash of light.";
+const char *KILLER_FLAG_MESSAGE = "Your actions have earned you the KILLER flag, which makes you fair game to all player characters.\r\n";
 long newbie_start_room = 60500;
 //long mortal_start_room = 30700;
 long mortal_start_room = 35500;

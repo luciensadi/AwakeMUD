@@ -1436,7 +1436,7 @@ ACMD(do_reload)
   }
   for (gun = ch->carrying; gun; gun = gun->next_content)
    if (GET_OBJ_TYPE(gun) == ITEM_GUN_AMMO && GET_OBJ_VAL(gun, 0) > 0) {
-     if (FIGHTING(ch)) {
+     if (CH_IN_COMBAT(ch)) {
        send_to_char("You are too busy fighting!\r\n", ch);
        return;    
      }
@@ -1882,7 +1882,7 @@ ACMD(do_treat)
     send_to_char("You can't physically treat someone while projecting.\r\n", ch);
     return;
   }
-  if (FIGHTING(ch)) {
+  if (CH_IN_COMBAT(ch)) {
     send_to_char("Administer first aid while fighting?!?\r\n", ch);
     return;
   }
@@ -1901,7 +1901,7 @@ ACMD(do_treat)
   if (vict == ch) {
     send_to_char("You can't treat yourself!\r\n", ch);
     return;
-  } else if (FIGHTING(vict)) {
+  } else if (CH_IN_COMBAT(vict)) {
     act("Not while $E's fighting!", FALSE, ch, 0, vict, TO_CHAR);
     return;
   } else if (GET_POS(vict) > POS_LYING && !subcmd) {
@@ -2031,7 +2031,7 @@ ACMD(do_astral)
   if (ch->desc->original) {
     send_to_char("You can't project now.\r\n", ch);
     return;
-  } else if (FIGHTING(ch)) {
+  } else if (CH_IN_COMBAT(ch)) {
     send_to_char("You can't project while fighting!\r\n", ch);
     return;
   } else if (!ch->player_specials || ch->player_specials == &dummy_mob) {
@@ -2137,7 +2137,7 @@ ACMD(do_customize)
   struct obj_data *cyber;
   int found = 0;
 
-  if (FIGHTING(ch)) {
+  if (CH_IN_COMBAT(ch)) {
     send_to_char("You can't customize your descriptions while fighting!\r\n", ch);
     return;
   }
@@ -2730,11 +2730,13 @@ ACMD(do_photo)
           continue;
         }
         sprintf(buf + strlen(buf), "%s", make_desc(ch, tch, buf3, 2));
-        if (FIGHTING(tch)) {
+        if (CH_IN_COMBAT(tch)) {
           strcat(buf, " is here, fighting ");
           if (FIGHTING(tch) == ch)
             strcat(buf, "the photographer!");
-          else {
+          else if (FIGHTING_VEH(tch)) {
+            strcat(buf, GET_VEH_NAME(FIGHTING_VEH(tch)));
+          } else {
             if (tch->in_room == FIGHTING(tch)->in_room)
               if (AFF_FLAGGED(FIGHTING(tch), AFF_IMP_INVIS)) {
                 strcat(buf, "someone");

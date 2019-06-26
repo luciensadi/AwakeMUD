@@ -383,10 +383,10 @@ void check_idling(void)
       if (!(IS_SENATOR(ch) || IS_WORKING(ch)) || !ch->desc) {
         if (!GET_WAS_IN(ch) && ch->in_room && ch->char_specials.timer > 15) {
           GET_WAS_IN(ch) = ch->in_room;
-          if (FIGHTING(ch)) {
+          if (FIGHTING(ch))
             stop_fighting(FIGHTING(ch));
+          if (CH_IN_COMBAT(ch))
             stop_fighting(ch);
-          }
           act("$n disappears into the void.", TRUE, ch, 0, 0, TO_ROOM);
           send_to_char("You have been idle, and are pulled into a void.\r\n", ch);
           char_from_room(ch);
@@ -1004,7 +1004,7 @@ void misc_update(void)
       }
     }
     
-    if (!FIGHTING(ch) && AFF_FLAGGED(ch, AFF_ACID))
+    if (!CH_IN_COMBAT(ch) && AFF_FLAGGED(ch, AFF_ACID))
       AFF_FLAGS(ch).RemoveBit(AFF_ACID);
     
     if (GET_SUSTAINED_NUM(ch) && !IS_ELEMENTAL(ch)) {
@@ -1083,7 +1083,7 @@ void misc_update(void)
     }
     
     if (!IS_NPC(ch)) {
-      if (!FIGHTING(ch))
+      if (!CH_IN_COMBAT(ch))
         check_adrenaline(ch, 0);
       if (GET_DRUG_DOSE(ch) && --GET_DRUG_DURATION(ch) < 0 && !GET_DRUG_STAGE(ch)) {
         bool physical = TRUE;

@@ -27,6 +27,7 @@ extern struct index_data *mob_index;
 extern struct descriptor_data *descriptor_list;
 extern const char *spirit_powers[];
 extern int convert_look[];
+extern const char *KILLER_FLAG_MESSAGE;
 
 /* extern functions */
 void raw_kill(struct char_data * ch);
@@ -45,7 +46,7 @@ ACMD(do_assist)
 {
   struct char_data *helpee, *opponent;
 
-  if (FIGHTING(ch)) {
+  if (CH_IN_COMBAT(ch)) {
     send_to_char("You're already fighting!  How can you assist someone else?\r\n", ch);
     return;
   }
@@ -150,7 +151,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
       send_to_char(ch, "How would you go about %sing an object?\r\n",
                    cmdname);
       return TRUE;
-    } else if (FIGHTING(ch)) {
+    } else if (CH_IN_COMBAT(ch)) {
       send_to_char("Maybe you'd better wait...\r\n", ch);
       return TRUE;
     } else if (!LIGHT_OK(ch)) {
@@ -261,10 +262,16 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
 
   if (veh)
   {
+    if (FIGHTING_VEH(ch) == veh) {
+      send_to_char(ch, "But you're already attacking it.\r\n");
+      return TRUE;
+    }
+    
     if (!PRF_FLAGGED(ch, PRF_PKER) && veh->owner && GET_IDNUM(ch) != veh->owner) {
       PLR_FLAGS(ch).SetBit(PLR_KILLER);
-      send_to_char("If you want to be a PLAYER KILLER, so be it...\r\n", ch);
+      send_to_char(KILLER_FLAG_MESSAGE, ch);
     }
+    
     if (!FIGHTING(ch)) {
       if (!(GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)))
         draw_weapon(ch);
@@ -285,10 +292,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
           sprintf(buf, "%s takes a swing at your ride!\r\n", GET_NAME(ch));
         send_to_veh(buf, veh, NULL, TRUE);
       }
-      if (FIGHTING_VEH(ch) == veh) {
-        send_to_char(ch, "But you're already attacking it.\r\n");
-        return TRUE;
-      }
+      
       set_fighting(ch, veh);
       return TRUE;
     }
@@ -316,7 +320,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
 
     if (IS_AFFECTED(ch, AFF_CHARM) && IS_SPIRIT(ch) && ch->master && !IS_NPC(ch->master))
       GET_ACTIVE(ch)--;
-    if (!FIGHTING(ch)) {
+    if (!CH_IN_COMBAT(ch)) {
       set_fighting(ch, vict);
       if (!FIGHTING(vict) && AWAKE(vict))
         set_fighting(vict, ch);
@@ -332,12 +336,12 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
         act("You take a swing at $N!", FALSE, ch, 0, vict, TO_CHAR);
         act("$n prepares to take a swing at you!", FALSE, ch, 0, vict, TO_VICT);
       }
-    } else if (vict != FIGHTING(ch)) {
+    } else if (FIGHTING(ch) && vict != FIGHTING(ch)) {
       char name[80];
       strcpy(name, GET_NAME(FIGHTING(ch)));
       stop_fighting(ch);
       set_fighting(ch, vict);
-      if (!FIGHTING(vict) && AWAKE(vict))
+      if (!CH_IN_COMBAT(vict) && AWAKE(vict))
         set_fighting(vict, ch);
       WAIT_STATE(ch, PULSE_VIOLENCE + 2);
       sprintf(buf, "$n stops fighting %s and attacks $N!", name);
@@ -602,7 +606,7 @@ ACMD(do_kick)
     return;
   }
 
-  if (FIGHTING(ch))
+  if (CH_IN_COMBAT(ch))
     send_to_char("Maybe you'd better wait...\r\n", ch);
   else if (!IS_SET(EXIT(ch, dir)->exit_info, EX_CLOSED))
     send_to_char("You can only damage closed doors!\r\n", ch);

@@ -109,7 +109,7 @@ void totem_bonus(struct char_data *ch, int action, int type, int &target, int &s
   {
     if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS) || SECT(get_ch_in_room(ch)) == SPIRIT_HEARTH)
       target += 1;
-  } else if (GET_TOTEM(ch) == TOTEM_SNAKE && FIGHTING(ch))
+  } else if (GET_TOTEM(ch) == TOTEM_SNAKE && CH_IN_COMBAT(ch))
     skill--;
   else if ((GET_TOTEM(ch) == TOTEM_BAT || GET_TOTEM(ch) == TOTEM_PUMA)
            && (time_info.hours > 6 && time_info.hours < 19) && OUTSIDE(ch))
@@ -430,7 +430,7 @@ void end_spirit_existance(struct char_data *ch, bool message)
 
 void elemental_fulfilled_services(struct char_data *ch, struct char_data *mob, struct spirit_data *spirit)
 {
-  if (spirit->services < 1 && !(MOB_FLAGGED(mob, MOB_SPIRITGUARD) || MOB_FLAGGED(mob, MOB_STUDY) || GET_SUSTAINED(mob) || GET_SUSTAINED_NUM(mob) || FIGHTING(mob)))
+  if (spirit->services < 1 && !(MOB_FLAGGED(mob, MOB_SPIRITGUARD) || MOB_FLAGGED(mob, MOB_STUDY) || GET_SUSTAINED(mob) || GET_SUSTAINED_NUM(mob) || CH_IN_COMBAT(mob)))
   {
     send_to_char(ch, "Its services fulfilled, %s departs to the metaplanes.\r\n", CAP(GET_NAME(mob)));
     end_spirit_existance(mob, FALSE);
@@ -464,7 +464,7 @@ bool conjuring_drain(struct char_data *ch, int force)
   update_pos(ch);
   if ((GET_POS(ch) <= POS_STUNNED) && (GET_POS(ch) > POS_DEAD))
   {
-    if (FIGHTING(ch))
+    if (CH_IN_COMBAT(ch))
       stop_fighting(ch);
     send_to_char("You are unable to resist the drain from conjuring and fall unconscious!\r\n", ch);
     act("$n collapses unconscious!", FALSE, ch, 0, 0, TO_ROOM);
@@ -476,7 +476,7 @@ bool conjuring_drain(struct char_data *ch, int force)
     }
   } else if (GET_POS(ch) == POS_DEAD)
   {
-    if (FIGHTING(ch))
+    if (CH_IN_COMBAT(ch))
       stop_fighting(ch);
     send_to_char("The energy from the conjuring ritual overloads your body with energy, killing you...\r\n", ch);
     act("$n suddenly collapses, dead!", FALSE, ch, 0, 0, TO_ROOM);
@@ -542,7 +542,7 @@ bool spell_drain(struct char_data *ch, int type, int force, int damage)
   update_pos(ch);
   if ((GET_POS(ch) <= POS_STUNNED) && (GET_POS(ch) > POS_DEAD))
   {
-    if (FIGHTING(ch))
+    if (CH_IN_COMBAT(ch))
       stop_fighting(ch);
     send_to_char("You are unable to resist the drain from spell casting and fall unconscious!\r\n", ch);
     act("$n collapses unconscious!", FALSE, ch, 0, 0, TO_ROOM);
@@ -554,7 +554,7 @@ bool spell_drain(struct char_data *ch, int type, int force, int damage)
     }
   } else if (GET_POS(ch) == POS_DEAD)
   {
-    if (FIGHTING(ch))
+    if (CH_IN_COMBAT(ch))
       stop_fighting(ch);
     send_to_char("The feedback from spell casting floods your body, killing you...\r\n", ch);
     act("$n suddenly collapses, dead!", FALSE, ch, 0, 0, TO_ROOM);
@@ -2217,7 +2217,7 @@ ACMD(do_cast)
     send_to_char("You can only cast mana spells on the astral plane.\r\n", ch);
     return;
   }
-  if (FIGHTING(ch)) {
+  if (CH_IN_COMBAT(ch)) {
     if (ch->squeue) {
       if (ch->squeue->arg)
         delete [] ch->squeue->arg;

@@ -553,7 +553,7 @@ bool mobact_process_scavenger(struct char_data *ch) {
 bool mobact_process_movement(struct char_data *ch) {
   int door;
   
-  if (MOB_FLAGGED(ch, MOB_SENTINEL) || FIGHTING(ch))
+  if (MOB_FLAGGED(ch, MOB_SENTINEL) || CH_IN_COMBAT(ch))
     return FALSE;
   
   if (GET_POS(ch) != POS_STANDING && !(GET_POS(ch) == POS_SITTING && AFF_FLAGGED(ch, AFF_PILOT)))

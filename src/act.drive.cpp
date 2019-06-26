@@ -374,7 +374,7 @@ ACMD(do_ram)
     send_to_char("You need to be driving a vehicle to do that...\r\n", ch);
     return;
   }
-  if (FIGHTING(ch) || FIGHTING_VEH(ch)) {
+  if (CH_IN_COMBAT(ch)) {
     send_to_char(ch, "You're in the middle of combat!\r\n");
     return;
   }
@@ -1349,7 +1349,7 @@ ACMD(do_target)
 }
 
 void do_raw_target(struct char_data *ch, struct veh_data *veh, struct veh_data *tveh, struct char_data *vict, bool modeall, struct obj_data *obj) {  
-  if (FIGHTING(ch) || FIGHTING_VEH(ch))
+  if (CH_IN_COMBAT(ch))
     stop_fighting(ch);
   if (modeall) {
     for (obj = veh->mount; obj; obj = obj->next_content)

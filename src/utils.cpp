@@ -1725,7 +1725,7 @@ struct obj_data *stop_manning_weapon_mounts(struct char_data *ch, bool send_mess
     AFF_FLAGS(ch).RemoveBit(AFF_MANNING);
     
     // Take them out of fight mode if they're in it.
-    if (FIGHTING(ch))
+    if (CH_IN_COMBAT(ch))
       stop_fighting(ch);
     
     // Let them / the room know that they've stopped manning.
@@ -1760,7 +1760,7 @@ struct obj_data *get_mount_manned_by_ch(struct char_data *ch) {
     
     // Clean up their mount info. We don't use stop_manning..() because it calls this function itself.
     AFF_FLAGS(ch).RemoveBit(AFF_MANNING);
-    if (FIGHTING(ch))
+    if (CH_IN_COMBAT(ch))
       stop_fighting(ch);
     
     // No mount returned.
@@ -1781,7 +1781,7 @@ struct obj_data *get_mount_manned_by_ch(struct char_data *ch) {
   
   // Clean up their mount info.
   AFF_FLAGS(ch).RemoveBit(AFF_MANNING);
-  if (FIGHTING(ch))
+  if (CH_IN_COMBAT(ch))
     stop_fighting(ch);
   
   // No mount returned.

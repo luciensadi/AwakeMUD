@@ -2613,7 +2613,7 @@ ACMD(do_reveal)
 
 ACMD(do_create)
 {
-  if (FIGHTING(ch)) {
+  if (CH_IN_COMBAT(ch)) {
     send_to_char("You can't create things while fighting!\r\n", ch);
     return;
   }

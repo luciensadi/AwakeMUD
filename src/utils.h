@@ -386,6 +386,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define IS_CARRYING_N(ch)       ((ch)->char_specials.carry_items)
 #define FIGHTING(ch)            ((ch)->char_specials.fighting)
 #define FIGHTING_VEH(ch)        ((ch)->char_specials.fight_veh)
+#define CH_IN_COMBAT(ch)        (FIGHTING(ch) || FIGHTING_VEH(ch))
 #define HUNTING(ch)             ((ch)->char_specials.hunting)
 #define IS_NERVE(ch)		((ch)->char_specials.nervestrike)
 #define GET_TEMP_QUI_LOSS(ch)	((ch)->char_specials.tempquiloss)

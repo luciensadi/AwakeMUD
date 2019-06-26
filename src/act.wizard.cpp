@@ -1181,7 +1181,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   sprinttype(GET_POS(k), position_types, buf2);
   sprintf(ENDOF(buf), "Current Zone: %d, Pos: %s, Fighting: %s",
           k->player_specials->saved.zonenum, buf2,
-          (FIGHTING(k) ? GET_CHAR_NAME(FIGHTING(k)) : "Nobody"));
+          (FIGHTING(k) ? GET_CHAR_NAME(FIGHTING(k)) : (FIGHTING_VEH(k) ? GET_VEH_NAME(FIGHTING_VEH(k)) : "Nobody")));
 
   if (k->desc)
   {
@@ -1306,7 +1306,7 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
 
   sprinttype(GET_POS(k), position_types, buf2);
   sprintf(ENDOF(buf), "Position: %s, Fighting: %s", buf2,
-          (FIGHTING(k) ? GET_NAME(FIGHTING(k)) : "Nobody"));
+          (FIGHTING(k) ? GET_NAME(FIGHTING(k)) : (FIGHTING_VEH(k) ? GET_VEH_NAME(FIGHTING_VEH(k)) : "Nobody")));
 
   strcat(ENDOF(buf), ", Attack type: ");
   // gotta subtract TYPE_HIT for the array to work properly

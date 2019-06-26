@@ -2397,6 +2397,8 @@ const char *get_position_string(struct char_data *ch) {
     case POS_FIGHTING:
       if (FIGHTING(ch))
         sprintf(position_string, "fighting %s.",PERS(FIGHTING(ch), ch));
+      else if (FIGHTING_VEH(ch))
+        sprintf(position_string, "fighting %s.", GET_VEH_NAME(FIGHTING_VEH(ch)));
       else
         strcpy(position_string, "fighting thin air.");
       break;

@@ -995,7 +995,7 @@ void char_from_room(struct char_data * ch)
     shutdown();
   }
   
-  if (FIGHTING(ch) != NULL)
+  if (CH_IN_COMBAT(ch))
     stop_fighting(ch);
   
   if (GET_EQ(ch, WEAR_LIGHT) != NULL)
@@ -2006,7 +2006,7 @@ void extract_char(struct char_data * ch)
       extract_obj(unequip_char(ch, i, TRUE));
   
   /* stop this char from fighting anyone else */
-  if (FIGHTING(ch))
+  if (CH_IN_COMBAT(ch))
     stop_fighting(ch);
   
   /* stop everyone else from fighting this char */

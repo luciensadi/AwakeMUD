@@ -320,7 +320,7 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
         GET_OBJ_VAL(bio, 5) = 0;
       }
     PLR_FLAGS(ch).SetBit(PLR_JUST_DIED);
-    if (FIGHTING(ch))
+    if (CH_IN_COMBAT(ch))
       stop_fighting(ch);
     log_death_trap(ch);
     char_from_room(ch);
@@ -451,7 +451,7 @@ void perform_fall(struct char_data *ch)
           GET_OBJ_VAL(bio, 5) = 0;
         }
       PLR_FLAGS(ch).SetBit(PLR_JUST_DIED);
-      if (FIGHTING(ch))
+      if (CH_IN_COMBAT(ch))
         stop_fighting(ch);
       sprintf(buf, "%s ran into DeathTrap at %ld",
               GET_CHAR_NAME(ch), ch->in_room->number);
@@ -697,7 +697,7 @@ void move_vehicle(struct char_data *ch, int dir)
     look_at_room(ch, 0);
   for (tch = veh->in_room->people; tch; tch = tch->next_in_room)
     if (IS_NPC(tch) && AWAKE(tch) && MOB_FLAGGED(tch, MOB_AGGRESSIVE) &&
-        !FIGHTING(tch) && !FIGHTING_VEH(tch) && !IS_ASTRAL(tch))
+        !CH_IN_COMBAT(tch) && !IS_ASTRAL(tch))
       set_fighting(tch, veh);
   if (PLR_FLAGGED(ch, PLR_REMOTE))
     ch->in_room = was_in;

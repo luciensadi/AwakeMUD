@@ -28,6 +28,8 @@ struct char_data *next_combat_list = NULL;
 /* External structures */
 extern struct message_list fight_messages[MAX_MESSAGES];
 
+extern const char *KILLER_FLAG_MESSAGE;
+
 
 int find_sight(struct char_data *ch);
 void damage_door(struct char_data *ch, struct room_data *room, int dir, int power, int type);
@@ -243,7 +245,7 @@ void check_killer(struct char_data * ch, struct char_data * vict)
             GET_CHAR_NAME(vict), vict->in_room->name);
     mudlog(buf, ch, LOG_MISCLOG, TRUE);
     
-    send_to_char("Your actions have earned you the KILLER flag, which makes you fair game to all player characters.\r\n", ch);
+    send_to_char(KILLER_FLAG_MESSAGE, ch);
   }
 }
 
@@ -254,7 +256,7 @@ void set_fighting(struct char_data * ch, struct char_data * vict, ...)
   if (ch == vict)
     return;
   
-  if (FIGHTING(ch) || FIGHTING_VEH(ch))
+  if (CH_IN_COMBAT(ch))
     return;
   
   if (IS_NPC(ch)) {
@@ -314,7 +316,7 @@ void set_fighting(struct char_data * ch, struct veh_data * vict)
 {
   struct follow_type *k;
   
-  if (FIGHTING(ch) || FIGHTING_VEH(ch))
+  if (CH_IN_COMBAT(ch))
     return;
   
   ch->next_fighting = combat_list;
@@ -527,7 +529,7 @@ void raw_kill(struct char_data * ch)
   struct obj_data *bio, *obj, *o;
   long i;
   
-  if (FIGHTING(ch))
+  if (CH_IN_COMBAT(ch))
     stop_fighting(ch);
   
   if (IS_ELEMENTAL(ch) && GET_ACTIVE(ch))
@@ -1658,7 +1660,7 @@ void docwagon(struct char_data *ch)
   {
     if (FIGHTING(ch) && FIGHTING(FIGHTING(ch)) == ch)
       stop_fighting(FIGHTING(ch));
-    if (FIGHTING(ch))
+    if (CH_IN_COMBAT(ch))
       stop_fighting(ch);
     if (GET_SUSTAINED(ch)) {
       struct sustain_data *next;
@@ -2132,7 +2134,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
       if (!IS_NPC(ch) && IS_NPC(victim) && victim->master && !number(0, 10) &&
           IS_AFFECTED(victim, AFF_CHARM) && (victim->master->in_room == ch->in_room) &&
           !(ch->master && ch->master == victim->master)) {
-        if (FIGHTING(ch))
+        if (CH_IN_COMBAT(ch))
           stop_fighting(ch);
         set_fighting(ch, victim->master);
         if (!FIGHTING(victim->master))
@@ -2202,7 +2204,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
   
   if (ch != victim && !IS_NPC(victim) && !(victim->desc))
   {
-    if (!FIGHTING(victim)) {
+    if (!CH_IN_COMBAT(victim)) {
       act("$n is rescued by divine forces.", FALSE, victim, 0, 0, TO_ROOM);
       GET_WAS_IN(victim) = victim->in_room;
       GET_PHYSICAL(victim) = MAX(100, GET_PHYSICAL(victim) -
@@ -2384,7 +2386,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
       stop_fighting(ch);
   
   if (!AWAKE(victim))
-    if (FIGHTING(victim))
+    if (CH_IN_COMBAT(victim))
       stop_fighting(victim);
   
   if (GET_POS(victim) == POS_DEAD)
@@ -2817,10 +2819,10 @@ void combat_message_process_ranged_response(struct char_data *ch, rnum_t rnum) {
       GET_MOBALERT(tch) = MALERT_ALERT;
       
       // Guards and helpers will actively try to fire on a player using a gun.
-      if (!IS_NPC(ch) && FIGHTING(ch)
+      if (!IS_NPC(ch) && CH_IN_COMBAT(ch)
           && (MOB_FLAGGED(tch, MOB_GUARD) || MOB_FLAGGED(tch, MOB_HELPER))
-          && !(FIGHTING(tch) || FIGHTING_VEH(tch))
-          && !(IS_NPC(FIGHTING(ch)) && MOB_FLAGGED(FIGHTING(ch), MOB_INANIMATE))) {
+          && !CH_IN_COMBAT(tch)
+          && !(FIGHTING(ch) ? (IS_NPC(FIGHTING(ch)) && MOB_FLAGGED(FIGHTING(ch), MOB_INANIMATE)) : TRUE)) {
         if (number(0, 6) >= 2) {
           GET_MOBALERT(tch) = MALERT_ALARM;
           struct room_data *was_in = tch->in_room;
@@ -3948,7 +3950,7 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
       || GET_POS(vict) <= POS_STUNNED
       || !vict->in_room
       || (IS_NPC(vict) && (MOB_FLAGGED(vict, MOB_INANIMATE)))
-      || FIGHTING(vict)) {
+      || CH_IN_COMBAT(vict)) {
     return FALSE;
   }
   
@@ -4048,7 +4050,7 @@ void explode(struct char_data *ch, struct obj_data *weapon, struct room_data *ro
         damage_obj(NULL, GET_EQ(victim, i), level * 2 + (int)(power / 6),
                    DAMOBJ_EXPLODE);
     
-    if (IS_NPC(victim) && !FIGHTING(victim)) {
+    if (IS_NPC(victim) && !CH_IN_COMBAT(victim)) {
       GET_DEFENSE(victim) = GET_COMBAT(victim);
       GET_OFFENSE(victim) = 0;
     }
@@ -4110,7 +4112,7 @@ void target_explode(struct char_data *ch, struct obj_data *weapon, struct room_d
         damage_obj(NULL, GET_EQ(victim, i), GET_OBJ_VAL(weapon, 1) * 2 +
                    (int)(GET_OBJ_VAL(weapon, 0) / 6), DAMOBJ_EXPLODE);
     
-    if (IS_NPC(victim) && !FIGHTING(victim)) {
+    if (IS_NPC(victim) && !CH_IN_COMBAT(victim)) {
       GET_DEFENSE(victim) = GET_COMBAT(victim);
       GET_OFFENSE(victim) = 0;
     }
@@ -4172,7 +4174,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       send_to_char("Nah - leave them in peace.\r\n", ch);
       return;
     }
-    if (FIGHTING(ch))
+    if (CH_IN_COMBAT(ch))
       stop_fighting(ch);
     act("You pull the pin and throw $p!", FALSE, ch, weapon, 0, TO_CHAR);
     act("$n pulls the pin and throws $p!", FALSE, ch, weapon, 0, TO_ROOM);
@@ -4183,60 +4185,39 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     
     if (!number(0, 2)) {
       sprintf(buf, "A defective grenade lands on the floor.\r\n");
-      if (nextroom->people) {
-        act(buf, FALSE, nextroom->people, 0, 0, TO_ROOM);
-        act(buf, FALSE, nextroom->people, 0, 0, TO_CHAR);
-      }
+      send_to_room(buf, nextroom);
       return;
     } else if (!(success_test(temp+GET_OFFENSE(ch), 5) < 2)) {
       left = -1;
       right = -1;
       if (dir < UP) {
-        if ((dir - 1) < NORTH)
-          left = NORTHWEST;
-        else
-          left = dir - 1;
-        if ((dir + 1) > NORTHWEST)
-          right = NORTH;
-        else
-          right = dir + 1;
+        left = (dir - 1) < NORTH ? NORTHWEST : (dir - 1);
+        right = (dir + 1) > NORTHWEST ? NORTH : (dir + 1);
       }
       
+      // Initialize scatter array.
       scatter[0] = ch->in_room;
-      if (left > 0 && CAN_GO(ch, left))
-        scatter[1] = EXIT(ch, left)->to_room;
-      else
-        scatter[1] = NULL;
-      
-      if (right > 0 && CAN_GO(ch, right))
-        scatter[2] = EXIT(ch, right)->to_room;
-      else
-        scatter[2] = NULL;
-      
-      if (CAN_GO2(nextroom, dir))
-        scatter[3] = EXIT2(nextroom, dir)->to_room;
-      else
-        scatter[3] = NULL;
+      scatter[1] = left >= 0 && CAN_GO(ch, left) ? EXIT(ch, left)->to_room : NULL;
+      scatter[2] = right >= 0 && CAN_GO(ch, right) ? EXIT(ch, right)->to_room : NULL;
+      scatter[3] = CAN_GO2(nextroom, dir) ? EXIT2(nextroom, dir)->to_room : NULL;
       
       for (temp = 0, temp2 = 0; temp2 < 4; temp2++)
         if (scatter[temp2])
           temp++;
-      for (temp2 = 0; temp2 < 4; temp2++)
+      for (temp2 = 0; temp2 < 4; temp2++) {
         if (scatter[temp2] && !number(0, temp-1)) {
           if (temp2 == 0) {
-            act("$p deflects due to $n's poor accuracy, landing at $s feet.",
-                FALSE, ch, weapon, 0, TO_ROOM);
-            sprintf(buf, "Your realize your aim must've been off-target as "
-                    "$p lands at your feet.");
+            act("$p deflects due to $n's poor accuracy, landing at $s feet.", FALSE, ch, weapon, 0, TO_ROOM);
+            sprintf(buf, "Your realize your aim must've been off-target as $p lands at your feet.");
           } else if (temp2 == 3)
             sprintf(buf, "Your aim is slightly off, going past its target.");
           else
-            sprintf(buf, "Your aim is slightly off, and $p veers to the %s.",
-                    dirs[temp2 == 1 ? left : right]);
+            sprintf(buf, "Your aim is slightly off, and $p veers to the %s.", dirs[temp2 == 1 ? left : right]);
           act(buf, FALSE, ch, weapon, 0, TO_CHAR);
           explode(ch, weapon, scatter[temp2]);
           return;
         }
+      }
     }
     explode(ch, weapon, nextroom);
     return;
@@ -4277,27 +4258,28 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
       act("$n draws $p and fires into the distance!", TRUE, ch, weapon, 0, TO_ROOM);
       act("You draw $p, aim it at $N and fire!", FALSE, ch, weapon, vict, TO_CHAR);
       check_killer(ch, vict);
-      if (IS_NPC(vict) && !IS_PROJECT(vict) && !FIGHTING(vict)) {
+      if (IS_NPC(vict) && !IS_PROJECT(vict) && !CH_IN_COMBAT(vict)) {
         GET_DEFENSE(vict) = GET_COMBAT(vict);
         GET_OFFENSE(vict) = 0;
       }
-      if (FIGHTING(ch))
+      if (CH_IN_COMBAT(ch))
         stop_fighting(ch);
       hit(ch, vict, (GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD)), (GET_EQ(vict, WEAR_WIELD) ? GET_EQ(vict, WEAR_WIELD) : GET_EQ(vict, WEAR_HOLD)));
       WAIT_STATE(ch, 2 * PULSE_VIOLENCE);
       return;
     }
+    
     act("$n aims $p and fires into the distance!", TRUE, ch, weapon, 0, TO_ROOM);
     act("You aim $p at $N and fire!", FALSE, ch, weapon, vict, TO_CHAR);
     if (IS_GUN(GET_OBJ_VAL(weapon, 3))) {
       check_killer(ch, vict);
       if (GET_OBJ_VAL(weapon, 3) < TYPE_PISTOL
           || GET_OBJ_VAL(weapon, 6) > 0) {
-        if (IS_NPC(vict) && !IS_PROJECT(vict) && !FIGHTING(vict)) {
+        if (IS_NPC(vict) && !IS_PROJECT(vict) && !CH_IN_COMBAT(vict)) {
           GET_DEFENSE(vict) = GET_COMBAT(vict);
           GET_OFFENSE(vict) = 0;
         }
-        if (FIGHTING(ch))
+        if (CH_IN_COMBAT(ch))
           stop_fighting(ch);
         hit(ch, vict, (GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD)), (GET_EQ(vict, WEAR_WIELD) ? GET_EQ(vict, WEAR_WIELD) : GET_EQ(vict, WEAR_HOLD)));
         ranged_response(ch, vict);
@@ -4332,30 +4314,15 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
         left = -1;
         right = -1;
         if (dir < UP) {
-          if ((dir - 1) < NORTH)
-            left = NORTHWEST;
-          else
-            left = dir - 1;
-          if ((dir + 1) > NORTHWEST)
-            right = NORTH;
-          else
-            right = dir + 1;
+          left = (dir - 1) < NORTH ? NORTHWEST : (dir - 1);
+          right = (dir + 1) > NORTHWEST ? NORTH : (dir + 1);
         }
+        
+        // Initialize scatter array.
         scatter[0] = ch->in_room;
-        if (left > 0 && CAN_GO(ch, left))
-          scatter[1] = EXIT(ch, left)->to_room;
-        else
-          scatter[1] = NULL;
-        
-        if (right > 0 && CAN_GO(ch, right))
-          scatter[2] = EXIT(ch, right)->to_room;
-        else
-          scatter[2] = NULL;
-        
-        if (CAN_GO2(nextroom, dir))
-          scatter[3] = EXIT2(nextroom, dir)->to_room;
-        else
-          scatter[3] = NULL;
+        scatter[1] = left >= 0 && CAN_GO(ch, left) ? EXIT(ch, left)->to_room : NULL;
+        scatter[2] = right >= 0 && CAN_GO(ch, right) ? EXIT(ch, right)->to_room : NULL;
+        scatter[3] = CAN_GO2(nextroom, dir) ? EXIT2(nextroom, dir)->to_room : NULL;
         
         for (temp = 0, temp2 = 0; temp2 < 4; temp2++)
           if (scatter[temp2])
@@ -4417,7 +4384,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
   
   if (found)
   {
-    if (FIGHTING(ch)) {
+    if (CH_IN_COMBAT(ch)) {
       send_to_char("Maybe you'd better wait...\r\n", ch);
       return;
     } else if (!IS_SET(EXIT2(nextroom, dir)->exit_info, EX_CLOSED) && isname(target, EXIT2(nextroom, dir)->keyword) ) {
@@ -4565,7 +4532,7 @@ void perform_violence(void)
   for (ch = combat_list; ch; ch = next_combat_list) {
     bool engulfed = FALSE;
     next_combat_list = ch->next_fighting;
-    if (!(FIGHTING(ch) || FIGHTING_VEH(ch)) || !AWAKE(ch))
+    if (!CH_IN_COMBAT(ch) || !AWAKE(ch))
       stop_fighting(ch);
     else if (GET_INIT_ROLL(ch) > 0) {
       GET_INIT_ROLL(ch) -= 10;
