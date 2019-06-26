@@ -2245,7 +2245,8 @@ void nanny(struct descriptor_data * d, char *arg)
           return;
         }
 
-        SEND_TO_Q("Password: ", d);
+        sprintf(buf, "Welcome back. Enter your password. Not %s? Enter 'abort' to try a different name. ", CAP(tmp_name));
+        SEND_TO_Q(buf, d);
         echo_off(d);
 
         STATE(d) = CON_PASSWORD;
@@ -2330,7 +2331,10 @@ void nanny(struct descriptor_data * d, char *arg)
 
     if (!*arg)
       close_socket(d);
-    else {
+    else if (str_cmp(arg, "abort") == 0) {
+      SEND_TO_Q("OK, let's try a different name.\r\n\r\nWhat's your handle, chummer? ", d);
+      STATE(d) = CON_GET_NAME;
+    } else {
       if (!validate_and_update_password(arg, GET_PASSWD(d->character))) {
         sprintf(buf, "Bad PW: %s [%s]",
                 GET_CHAR_NAME(d->character), d->host);
