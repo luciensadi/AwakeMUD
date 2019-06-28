@@ -1358,7 +1358,7 @@ ACMD(do_connect)
   else
     icon->long_desc = str_dup("A nondescript persona stands idly here.\r\n");
 
-  if (GET_OBJ_TYPE(cyberdeck) == ITEM_CUSTOM_DECK && GET_OBJ_VAL(cyberdeck, 9)) {
+  if (GET_OBJ_TYPE(cyberdeck) == ITEM_CUSTOM_DECK && GET_CYBERDECK_IS_INCOMPLETE(cyberdeck)) {
     send_to_char(ch, "That deck is missing some components.\r\n");
     return;
   }
@@ -1872,30 +1872,88 @@ ACMD(do_software)
       if (GET_OBJ_TYPE(cyber) == ITEM_CYBERDECK || GET_OBJ_TYPE(cyber) == ITEM_CUSTOM_DECK)
         cyberdeck = cyber;
     for (int i = 0; !cyberdeck && i < NUM_WEARS; i++)
-      if (GET_EQ(ch, i) && (GET_OBJ_TYPE(GET_EQ(ch,i )) == ITEM_CYBERDECK || GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_CUSTOM_DECK))
+      if (GET_EQ(ch, i) && (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_CYBERDECK || GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_CUSTOM_DECK))
         cyberdeck = GET_EQ(ch, i);
+    
     if (!cyberdeck) {
       send_to_char(ch, "You have no cyberdeck to check the software on!\r\n");
       return;
-    } else if (GET_OBJ_VAL(cyberdeck, 0) == 0 || GET_OBJ_VAL(cyberdeck, 9)) {
-      send_to_char(ch, "The deck doesn't respond.\r\n");
+    }
+    
+    if (GET_OBJ_TYPE(cyberdeck) == ITEM_CUSTOM_DECK && GET_CYBERDECK_IS_INCOMPLETE(cyberdeck)) {
+      bool has_mpcp = FALSE, has_active = FALSE, has_bod = FALSE, has_sensor = FALSE, has_io = FALSE, has_interface = FALSE;
+      for (struct obj_data *part = cyberdeck->contains; part; part = part->next_content) {
+        has_mpcp |= (GET_PART_TYPE(part) == PART_MPCP);
+        has_active |= (GET_PART_TYPE(part) == PART_ACTIVE);
+        has_bod |= (GET_PART_TYPE(part) == PART_BOD);
+        has_sensor |= (GET_PART_TYPE(part) == PART_SENSOR);
+        has_io |= (GET_PART_TYPE(part) == PART_IO);
+        has_interface |= (GET_PART_TYPE(part) == PART_MATRIX_INTERFACE);
+      }
+      bool first = TRUE;
+      sprintf(buf, "%s isn't a completed cyberdeck, so it won't power on. It still needs ", capitalize(GET_OBJ_NAME(cyberdeck)));
+      if (!has_mpcp) {
+        sprintf(ENDOF(buf), "%san MPCP chip", first ? "" : ", ");
+        first = FALSE;
+      }
+      if (!has_active) {
+        sprintf(ENDOF(buf), "%s%san active memory module", first ? "" : ", ", (!first && has_bod && has_sensor && has_io && has_interface) ? "and " : "");
+        first = FALSE;
+      }
+      if (!has_bod) {
+        sprintf(ENDOF(buf), "%s%sa bod chip", first ? "" : ", ", (!first && has_sensor && has_io && has_interface) ? "and " : "");
+        first = FALSE;
+      }
+      if (!has_sensor) {
+        sprintf(ENDOF(buf), "%s%sa sensor chip", first ? "" : ", ", (!first && has_io && has_interface) ? "and " : "");
+        first = FALSE;
+      }
+      if (!has_io) {
+        sprintf(ENDOF(buf), "%s%san I/O module", first ? "" : ", ", (!first && has_interface) ? "and " : "");
+        first = FALSE;
+      }
+      if (!has_interface) {
+        sprintf(ENDOF(buf), "%s%sa Matrix interface", first ? "" : ", ", !first ? "and " : "");
+        first = FALSE;
+      }
+      
+      // If we get here and haven't sent anything, something is wrong.
+      if (first) {
+        sprintf(buf2, "SYSERR: Cyberdeck '%s' held by '%s' identifies itself as being incomplete, but has all necessary parts.",
+                GET_OBJ_NAME(cyberdeck), GET_CHAR_NAME(ch));
+        mudlog(buf2, ch, LOG_SYSLOG, TRUE);
+        sprintf(ENDOF(buf), "bugfixing -- please ask a member of the staff for assistance");
+      }
+      
+      strcat(buf, ".\r\n");
+      send_to_char(buf, ch);
       return;
     }
-    if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
-      send_to_char(ch, "You jack into the deck and retrieve the following data:\r\n"
-                   "MPCP ^g%d^n\r\nActive Memory ^g%d^n\r\nStorage Memory ^R%d^n/^g%d^n\r\n"
-                   "Hardening ^g%d^n\r\nI/O ^g%d^n\r\nResponse Increase ^g%d^n\r\n",
-                   GET_OBJ_VAL(cyberdeck, 0), GET_OBJ_VAL(cyberdeck, 2),
-                   GET_OBJ_VAL(cyberdeck, 3) - GET_OBJ_VAL(cyberdeck, 5), GET_OBJ_VAL(cyberdeck, 3),
-                   GET_OBJ_VAL(cyberdeck, 1), GET_OBJ_VAL(cyberdeck, 4), GET_OBJ_VAL(cyberdeck, 6));
-    } else {
-      send_to_char(ch, "You jack into the deck and retrieve the following data:\r\n"
-                   "MPCP ^g%d^n - Active Memory ^g%d^n - Storage Memory ^R%d^n/^g%d^n\r\n"
-                   "Hardening ^g%d^n - I/O ^g%d^n - Response Increase ^g%d^n\r\n",
-                   GET_OBJ_VAL(cyberdeck, 0), GET_OBJ_VAL(cyberdeck, 2),
-                   GET_OBJ_VAL(cyberdeck, 3) - GET_OBJ_VAL(cyberdeck, 5), GET_OBJ_VAL(cyberdeck, 3),
-                   GET_OBJ_VAL(cyberdeck, 1), GET_OBJ_VAL(cyberdeck, 4), GET_OBJ_VAL(cyberdeck, 6));
+    
+    if (GET_CYBERDECK_MPCP(cyberdeck) == 0) {
+      send_to_char(ch, "The faint smell of burned MPCP tells you that %s is going to need some repairs first.\r\n", GET_OBJ_NAME(cyberdeck));
+      return;
     }
+    
+    const char *format_string;
+    if (PRF_FLAGGED(ch, PRF_SCREENREADER)) {
+      format_string = "You jack into the deck and retrieve the following data:\r\n"
+      "MPCP ^g%d^n\r\nActive Memory ^g%d^n\r\nStorage Memory ^R%d^n/^g%d^n\r\n"
+      "Hardening ^g%d^n\r\nI/O ^g%d^n\r\nResponse Increase ^g%d^n\r\n";
+    } else {
+      format_string = "You jack into the deck and retrieve the following data:\r\n"
+      "MPCP ^g%d^n - Active Memory ^g%d^n - Storage Memory ^R%d^n/^g%d^n\r\n"
+      "Hardening ^g%d^n - I/O ^g%d^n - Response Increase ^g%d^n\r\n";
+    }
+    send_to_char(ch, format_string,
+                 GET_CYBERDECK_MPCP(cyberdeck),
+                 GET_CYBERDECK_ACTIVE_MEMORY(cyberdeck),
+                 GET_CYBERDECK_TOTAL_STORAGE(cyberdeck) - GET_CYBERDECK_USED_STORAGE(cyberdeck),
+                 GET_CYBERDECK_TOTAL_STORAGE(cyberdeck),
+                 GET_CYBERDECK_HARDENING(cyberdeck),
+                 GET_CYBERDECK_IO_RATING(cyberdeck),
+                 GET_CYBERDECK_RESPONSE_INCREASE(cyberdeck));
+    
     int bod = 0, sensor = 0, masking = 0, evasion = 0;
     for (struct obj_data *soft = cyberdeck->contains; soft; soft = soft->next_content)
       if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && GET_OBJ_VNUM(soft) != 108) {

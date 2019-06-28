@@ -731,6 +731,9 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 // ITEM_CAMERA convenience defines
 
+// ITEM_PART convenience defines
+#define GET_PART_TYPE(part)                    (GET_OBJ_VAL((part), 0))
+
 // ITEM_WEAPON convenience defines
 #define GET_WEAPON_POWER(weapon)               (GET_OBJ_VAL((weapon), 0))
 #define GET_WEAPON_DAMAGE_CODE(weapon)         (GET_OBJ_VAL((weapon), 1))
@@ -794,7 +797,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_CYBERDECK_IO_RATING(deck)         (GET_OBJ_VAL((deck), 4))
 #define GET_CYBERDECK_USED_STORAGE(deck)      (GET_OBJ_VAL((deck), 5))
 #define GET_CYBERDECK_RESPONSE_INCREASE(deck) (GET_OBJ_VAL((deck), 6))
-#define GET_CYBERDECK_COMPLETE_STATUS(deck)   (GET_OBJ_VAL((deck), 9))
+#define GET_CYBERDECK_IS_INCOMPLETE(deck)     (GET_OBJ_VAL((deck), 9))
 #define GET_CYBERDECK_FREE_STORAGE(deck)      (GET_CYBERDECK_TOTAL_STORAGE((deck)) -GET_CYBERDECK_USED_STORAGE((deck)))
 
 // ITEM_PROGRAM convenience defines
