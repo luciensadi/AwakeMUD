@@ -297,7 +297,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 #define GET_WAS_IN(ch)  ((ch)->was_in_room)
 
-#define GET_VEH_NAME(veh) ((veh)->restring ? (veh)->restring : (veh)->short_description)
+#define GET_VEH_NAME(veh) (decapitalize_a_an((veh)->restring ? (veh)->restring : (veh)->short_description))
 #define GET_VEH_DESC(veh) ((veh)->restring_long ? (veh)->restring_long : (veh)->long_description)
 #define GET_OBJ_NAME(obj) ((obj)->restring ? (obj)->restring : (obj)->text.name)
 #define GET_OBJ_DESC(obj) ((obj)->photo ? (obj)->photo : (obj)->text.look_desc)

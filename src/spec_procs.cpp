@@ -1234,7 +1234,7 @@ SPECIAL(car_dealer)
   if (CMD_IS("list")) {
     send_to_char("Available vehicles are:\r\n", ch);
     for (veh = world[car_room].vehicles; veh; veh = veh->next_veh) {
-      sprintf(buf, "%8d - %s\r\n", veh->cost, veh->short_description);
+      sprintf(buf, "%8d - %s\r\n", veh->cost, capitalize(GET_VEH_NAME(veh)));
       send_to_char(buf, ch);
     }
     return TRUE;
@@ -1254,9 +1254,9 @@ SPECIAL(car_dealer)
     newveh->owner = GET_IDNUM(ch);
     newveh->idnum = number(0, 1000000);
     if (veh->type == VEH_DRONE)
-      sprintf(buf, "You buy a %s. It is brought out into the room.\r\n", newveh->short_description);
+      sprintf(buf, "You buy %s. It is brought out into the room.\r\n", GET_VEH_NAME(newveh));
     else
-      sprintf(buf, "You buy a %s. It is wheeled out into the yard.\r\n", newveh->short_description);
+      sprintf(buf, "You buy %s. It is wheeled out into the yard.\r\n", GET_VEH_NAME(newveh));
     send_to_char(buf, ch);
     save_vehicles();
     return TRUE;
