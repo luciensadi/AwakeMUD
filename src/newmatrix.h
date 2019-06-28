@@ -1,10 +1,15 @@
- #include "bitfield.h"
+#ifndef __newmatrix_h__
+#define __newmatrix_h__
+
+#include "bitfield.h"
 
 #define ACCESS	0
 #define CONTROL	1
 #define INDEX	2
 #define FILES	3
 #define SLAVE	4
+
+#define MAX_CUSTOM_MPCP_RATING 15
 
 struct host_data {
   vnum_t vnum;
@@ -157,3 +162,7 @@ struct matrix_icon {
 };
 
 extern bool has_spotted(struct matrix_icon *icons, struct matrix_icon *targ);
+
+void display_cyberdeck_issues(struct char_data *ch, struct obj_data *cyberdeck);
+
+#endif

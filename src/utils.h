@@ -724,15 +724,20 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 // ITEM_LIGHT convenience defines
 
 // ITEM_WORKSHOP convenience defines
-#define GET_WORKSHOP_TYPE(workshop)            (GET_OBJ_VAL(workshop, 0))
-#define GET_WORKSHOP_GRADE(workshop)           (GET_OBJ_VAL(workshop, 1))
-#define GET_WORKSHOP_IS_SETUP(workshop)        (GET_OBJ_VAL(workshop, 2))
-#define GET_WORKSHOP_UNPACK_TICKS(workshop)    (GET_OBJ_VAL(workshop, 3))
+#define GET_WORKSHOP_TYPE(workshop)            (GET_OBJ_VAL((workshop), 0))
+#define GET_WORKSHOP_GRADE(workshop)           (GET_OBJ_VAL((workshop), 1))
+#define GET_WORKSHOP_IS_SETUP(workshop)        (GET_OBJ_VAL((workshop), 2))
+#define GET_WORKSHOP_UNPACK_TICKS(workshop)    (GET_OBJ_VAL((workshop), 3))
 
 // ITEM_CAMERA convenience defines
 
 // ITEM_PART convenience defines
 #define GET_PART_TYPE(part)                    (GET_OBJ_VAL((part), 0))
+#define GET_PART_RATING(part)                  (GET_OBJ_VAL((part), 1))
+#define GET_PART_TARGET_MPCP(part)             (GET_OBJ_VAL((part), 2))
+#define GET_PART_DESIGN_COMPLETION(part)       (GET_OBJ_VAL((part), 3))
+#define GET_PART_PART_COST(part)               (GET_OBJ_VAL((part), 8))
+#define GET_PART_CHIP_COST(part)               (GET_OBJ_VAL((part), 9))
 
 // ITEM_WEAPON convenience defines
 #define GET_WEAPON_POWER(weapon)               (GET_OBJ_VAL((weapon), 0))
@@ -749,7 +754,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_WEAPON_FIREMODE(weapon)            (GET_OBJ_VAL((weapon), 11))
 #define GET_WEAPON_FULL_AUTO_COUNT(weapon)     (GET_OBJ_TIMER((weapon)))
 
-#define WEAPON_CAN_USE_FIREMODE(weapon, mode)  (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << mode))
+#define WEAPON_CAN_USE_FIREMODE(weapon, mode)  (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << (mode)))
 
 // ITEM_FIREWEAPON convenience defines
 

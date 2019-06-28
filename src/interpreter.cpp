@@ -1110,6 +1110,7 @@ ACMD(do_run);
 ACMD(do_tap);
 ACMD(do_talk);
 ACMD(do_trace);
+ACMD(do_fry_self);
 
 struct command_info mtx_info[] =
   {
@@ -1161,6 +1162,7 @@ struct command_info mtx_info[] =
     { "'", 0, do_say, 0, 0},
     { "score", 0, do_matrix_score, 0, 0},
     { "scan", 0, do_matrix_scan, 0, 0},
+    { "selffry", 0, do_fry_self, LVL_BUILDER, 0},
     { "talk", 0, do_talk, 0, 0},
     { "tap", 0, do_tap, 0, 0},
     { "tell", 0, do_tell, 0, 0 },

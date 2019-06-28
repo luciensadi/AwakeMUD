@@ -237,13 +237,26 @@ void fry_mpcp(struct matrix_icon *icon, struct matrix_icon *targ, int success)
 {
   if (success >= 2 && targ->decker->deck)
   {
-    sprintf(buf, "%s uses the opportunity to fry your MPCP!", CAP(icon->name));
+    sprintf(buf, "%s uses the opportunity to fry your MPCP!\r\n", CAP(icon->name));
+    send_to_icon(targ, buf);
     while (success >= 2 && targ->decker->mpcp > 0) {
       success -= 2;
       targ->decker->mpcp--;
-      GET_OBJ_VAL(targ->decker->deck, 0)--;
+      GET_CYBERDECK_MPCP(targ->decker->deck)--;
+    }
+    // Damage the MPCP chip, if any.
+    for (struct obj_data *part = targ->decker->deck->contains; part; part = part->next_content) {
+      if (GET_OBJ_TYPE(part) == ITEM_PART && GET_PART_TYPE(part) == PART_MPCP) {
+        GET_PART_RATING(part) = GET_CYBERDECK_MPCP(targ->decker->deck);
+        GET_PART_TARGET_MPCP(part) = GET_CYBERDECK_MPCP(targ->decker->deck);
+        break;
+      }
     }
   }
+}
+
+ACMD(do_fry_self) {
+  fry_mpcp(PERSONA, PERSONA, 2);
 }
 
 void cascade(struct matrix_icon *icon)
@@ -1334,7 +1347,7 @@ ACMD(do_connect)
     return;
   }
 
-  if (GET_OBJ_VAL(cyberdeck, 0) == 0) {
+  if (GET_CYBERDECK_MPCP(cyberdeck) == 0) {
     send_to_char("You cannot connect to the matrix with fried MPCP chips!\r\n", ch);
     return;
   }
@@ -1881,57 +1894,7 @@ ACMD(do_software)
     }
     
     if (GET_OBJ_TYPE(cyberdeck) == ITEM_CUSTOM_DECK && GET_CYBERDECK_IS_INCOMPLETE(cyberdeck)) {
-      bool has_mpcp = FALSE, has_active = FALSE, has_bod = FALSE, has_sensor = FALSE, has_io = FALSE, has_interface = FALSE;
-      for (struct obj_data *part = cyberdeck->contains; part; part = part->next_content) {
-        has_mpcp |= (GET_PART_TYPE(part) == PART_MPCP);
-        has_active |= (GET_PART_TYPE(part) == PART_ACTIVE);
-        has_bod |= (GET_PART_TYPE(part) == PART_BOD);
-        has_sensor |= (GET_PART_TYPE(part) == PART_SENSOR);
-        has_io |= (GET_PART_TYPE(part) == PART_IO);
-        has_interface |= (GET_PART_TYPE(part) == PART_MATRIX_INTERFACE);
-      }
-      bool first = TRUE;
-      sprintf(buf, "%s isn't a completed cyberdeck, so it won't power on. It still needs ", capitalize(GET_OBJ_NAME(cyberdeck)));
-      if (!has_mpcp) {
-        sprintf(ENDOF(buf), "%san MPCP chip", first ? "" : ", ");
-        first = FALSE;
-      }
-      if (!has_active) {
-        sprintf(ENDOF(buf), "%s%san active memory module", first ? "" : ", ", (!first && has_bod && has_sensor && has_io && has_interface) ? "and " : "");
-        first = FALSE;
-      }
-      if (!has_bod) {
-        sprintf(ENDOF(buf), "%s%sa bod chip", first ? "" : ", ", (!first && has_sensor && has_io && has_interface) ? "and " : "");
-        first = FALSE;
-      }
-      if (!has_sensor) {
-        sprintf(ENDOF(buf), "%s%sa sensor chip", first ? "" : ", ", (!first && has_io && has_interface) ? "and " : "");
-        first = FALSE;
-      }
-      if (!has_io) {
-        sprintf(ENDOF(buf), "%s%san I/O module", first ? "" : ", ", (!first && has_interface) ? "and " : "");
-        first = FALSE;
-      }
-      if (!has_interface) {
-        sprintf(ENDOF(buf), "%s%sa Matrix interface", first ? "" : ", ", !first ? "and " : "");
-        first = FALSE;
-      }
-      
-      // If we get here and haven't sent anything, something is wrong.
-      if (first) {
-        sprintf(buf2, "SYSERR: Cyberdeck '%s' held by '%s' identifies itself as being incomplete, but has all necessary parts.",
-                GET_OBJ_NAME(cyberdeck), GET_CHAR_NAME(ch));
-        mudlog(buf2, ch, LOG_SYSLOG, TRUE);
-        sprintf(ENDOF(buf), "bugfixing -- please ask a member of the staff for assistance");
-      }
-      
-      strcat(buf, ".\r\n");
-      send_to_char(buf, ch);
-      return;
-    }
-    
-    if (GET_CYBERDECK_MPCP(cyberdeck) == 0) {
-      send_to_char(ch, "The faint smell of burned MPCP tells you that %s is going to need some repairs first.\r\n", GET_OBJ_NAME(cyberdeck));
+      display_cyberdeck_issues(ch, cyberdeck);
       return;
     }
     
@@ -2005,7 +1968,8 @@ ACMD(do_software)
       } else if (GET_OBJ_TYPE(soft) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(soft, 0) == TYPE_FILE)
         sprintf(buf + strlen(buf), "%s^n\r\n", GET_OBJ_NAME(soft));
       else if (GET_OBJ_TYPE(soft) == ITEM_PART)
-        sprintf(buf2 + strlen(buf2), "%-30s^n Type: %-15s\r\n", GET_OBJ_NAME(soft), parts[GET_OBJ_VAL(soft, 0)].name);
+        sprintf(buf2 + strlen(buf2), "%-30s^n Type: %-15s Rating: %d\r\n",
+                GET_OBJ_NAME(soft), parts[GET_OBJ_VAL(soft, 0)].name, GET_PART_RATING(soft));
     send_to_char(buf, ch);
     if (GET_OBJ_TYPE(cyberdeck) == ITEM_CUSTOM_DECK)
       send_to_char(buf2, ch);
@@ -2633,8 +2597,8 @@ ACMD(do_default)
       cyberdeck = GET_EQ(ch, i);
   if (!cyberdeck)
     send_to_char(ch, "You have no cyberdeck to check the software on!\r\n");
-  else if (GET_OBJ_VAL(cyberdeck, 0) == 0)
-    send_to_char(ch, "The deck doesn't respond.\r\n");
+  else if (GET_CYBERDECK_MPCP(cyberdeck) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cyberdeck))
+    display_cyberdeck_issues(ch, cyberdeck);
   else {
     for (soft = cyberdeck->contains; soft; soft = soft->next_content)
       if (GET_OBJ_TYPE(soft) == ITEM_PROGRAM && GET_OBJ_VAL(soft, 0) > SOFT_SENSOR && (isname(argument, soft->text.keywords)
@@ -2809,3 +2773,60 @@ ACMD(do_compact)
   }
 }
 
+// Formats and prints a message to the user about why their custom deck won't work.
+void display_cyberdeck_issues(struct char_data *ch, struct obj_data *cyberdeck) {
+  if (GET_OBJ_TYPE(cyberdeck) == ITEM_CUSTOM_DECK && GET_CYBERDECK_IS_INCOMPLETE(cyberdeck)) {
+    bool has_mpcp = FALSE, has_active = FALSE, has_bod = FALSE, has_sensor = FALSE, has_io = FALSE, has_interface = FALSE;
+    for (struct obj_data *part = cyberdeck->contains; part; part = part->next_content) {
+      has_mpcp |= (GET_PART_TYPE(part) == PART_MPCP);
+      has_active |= (GET_PART_TYPE(part) == PART_ACTIVE);
+      has_bod |= (GET_PART_TYPE(part) == PART_BOD);
+      has_sensor |= (GET_PART_TYPE(part) == PART_SENSOR);
+      has_io |= (GET_PART_TYPE(part) == PART_IO);
+      has_interface |= (GET_PART_TYPE(part) == PART_MATRIX_INTERFACE);
+    }
+    bool first = TRUE;
+    sprintf(buf, "%s isn't in working condition, so it won't power on. It needs ", capitalize(GET_OBJ_NAME(cyberdeck)));
+    if (!has_mpcp) {
+      strcat(buf, "an MPCP chip");
+      first = FALSE;
+    }
+    if (!has_active) {
+      sprintf(ENDOF(buf), "%san active memory module", first ? "" : (has_bod && has_sensor && has_io && has_interface) ? " and " : ", ");
+      first = FALSE;
+    }
+    if (!has_bod) {
+      sprintf(ENDOF(buf), "%sa bod chip", first ? "" : (has_sensor && has_io && has_interface) ? " and " : ", ");
+      first = FALSE;
+    }
+    if (!has_sensor) {
+      sprintf(ENDOF(buf), "%sa sensor chip", first ? "" : (has_io && has_interface) ? " and " : ", ");
+      first = FALSE;
+    }
+    if (!has_io) {
+      sprintf(ENDOF(buf), "%san I/O module", first ? "" : (has_interface) ? " and " : ", ");
+      first = FALSE;
+    }
+    if (!has_interface) {
+      sprintf(ENDOF(buf), "%sa Matrix interface", first ? "" : " and ");
+      first = FALSE;
+    }
+    
+    // If we get here and haven't sent anything, something is wrong.
+    if (first) {
+      sprintf(buf2, "SYSERR: Cyberdeck '%s' held by '%s' identifies itself as being incomplete, but has all necessary parts.",
+              GET_OBJ_NAME(cyberdeck), GET_CHAR_NAME(ch));
+      mudlog(buf2, ch, LOG_SYSLOG, TRUE);
+      sprintf(ENDOF(buf), "bugfixing -- please ask a member of the staff for assistance");
+    }
+    
+    strcat(buf, ".\r\n");
+    send_to_char(buf, ch);
+    return;
+  }
+  
+  if (GET_CYBERDECK_MPCP(cyberdeck) == 0) {
+    send_to_char(ch, "The faint smell of burned MPCP tells you that %s is going to need some repairs first.\r\n", GET_OBJ_NAME(cyberdeck));
+    return;
+  }
+}

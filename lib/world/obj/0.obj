@@ -1513,7 +1513,7 @@ AffFlags:	0
 Material:	paper
 [POINTS]
 	Weight:	0.00
-	Barrier:	1
+	Barrier:	4
 	Cost:	0
 	AvailTN:	0
 	AvailDay:	0.00

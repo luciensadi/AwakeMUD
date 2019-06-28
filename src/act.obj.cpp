@@ -21,6 +21,7 @@
 #include "db.h"
 #include "awake.h"
 #include "constants.h"
+#include "newmatrix.h"
 
 /* extern variables */
 extern int drink_aff[][3];
@@ -238,10 +239,10 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
       return;
     }
   }
-  if (GET_OBJ_VAL(cont, 0) == 0 || GET_OBJ_VAL(cont, 9))
-    send_to_char("The cyberdeck doesn't respond.\r\n", ch);
-  else if (!GET_OBJ_TIMER(obj) && GET_OBJ_VNUM(obj) == 108) 
+  if (!GET_OBJ_TIMER(obj) && GET_OBJ_VNUM(obj) == 108)
     send_to_char("You can't install unburnt programs.\r\n", ch);
+  else if (GET_CYBERDECK_MPCP(cont) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cont))
+    display_cyberdeck_issues(ch, cont);
   else if (GET_OBJ_VAL(cont, 5) + GET_OBJ_VAL(obj, 2) > GET_OBJ_VAL(cont, 3))
     act("$p takes up too much memory to be installed into $P.", FALSE,
         ch, obj, cont, TO_CHAR);
@@ -421,13 +422,13 @@ ACMD(do_put)
     return;
   }
   
-  if (cyberdeck && !(GET_OBJ_TYPE(cont) == ITEM_CYBERDECK || GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK || GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY)) {
-    sprintf(buf, "$p is not a cyberdeck.");
-    act(buf, FALSE, ch, cont, 0, TO_CHAR);
-    return;
-  }
-  
-  if (GET_OBJ_TYPE(cont) != ITEM_CONTAINER && GET_OBJ_TYPE(cont) != ITEM_QUIVER && GET_OBJ_TYPE(cont) != ITEM_WORN && GET_OBJ_TYPE(cont) != ITEM_KEYRING) {
+  if (cyberdeck) {
+    if (!(GET_OBJ_TYPE(cont) == ITEM_CYBERDECK || GET_OBJ_TYPE(cont) == ITEM_CUSTOM_DECK || GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY)) {
+      sprintf(buf, "$p is not a cyberdeck.");
+      act(buf, FALSE, ch, cont, 0, TO_CHAR);
+      return;
+    }
+  } else if (GET_OBJ_TYPE(cont) != ITEM_CONTAINER && GET_OBJ_TYPE(cont) != ITEM_QUIVER && GET_OBJ_TYPE(cont) != ITEM_WORN && GET_OBJ_TYPE(cont) != ITEM_KEYRING) {
     sprintf(buf, "$p is not a container.");
     act(buf, FALSE, ch, cont, 0, TO_CHAR);
     return;
@@ -442,11 +443,38 @@ ACMD(do_put)
     if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
       sprintf(buf, "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
       send_to_char(buf, ch);
-    } else if ((obj == cont) && !cyberdeck)
+      return;
+    }
+    
+    if ((obj == cont) && !cyberdeck) {
       send_to_char("You attempt to fold it into itself, but fail.\r\n", ch);
-    else if (cyberdeck && !((GET_OBJ_TYPE(obj) == ITEM_PROGRAM || GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY) || (GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(obj) == ITEM_DESIGN)))
-      send_to_char("You can't install that in a cyberdeck!\r\n", ch);
-    else if (GET_OBJ_TYPE(cont) == ITEM_QUIVER) {
+      return;
+    }
+    
+    if (cyberdeck) {
+      // Better messaging for parts.
+      if (GET_OBJ_TYPE(obj) == ITEM_PART) {
+        send_to_char("Parts aren't plug-and-play; you'll have to BUILD that into your deck instead.\r\n", ch);
+        return;
+      }
+      
+      // You can only install programs, parts, and designs.
+      if (GET_OBJ_TYPE(obj) != ITEM_PROGRAM && GET_OBJ_TYPE(obj) != ITEM_DECK_ACCESSORY && GET_OBJ_TYPE(obj) != ITEM_DESIGN) {
+        send_to_char("You can't install that in a cyberdeck!\r\n", ch);
+        return;
+      }
+      
+      // You can only install program designs into computers.
+      if (GET_OBJ_TYPE(obj) == ITEM_DESIGN && GET_OBJ_TYPE(cont) != ITEM_DECK_ACCESSORY) {
+        send_to_char("Program designs are just conceptual outlines and can't be installed into cyberdecks.\r\n", ch);
+        return;
+      }
+      
+      perform_put_cyberdeck(ch, obj, cont);
+      return;
+    }
+    
+    if (GET_OBJ_TYPE(cont) == ITEM_QUIVER) {
       if (GET_OBJ_VAL(cont, 1) == 0 && !(GET_OBJ_TYPE(obj) == ITEM_MISSILE && GET_OBJ_VAL(obj, 0) == 0))
         send_to_char("Only arrows may be placed in that.\r\n", ch);
       else if (GET_OBJ_VAL(cont, 1) == 1 && !(GET_OBJ_TYPE(obj) == ITEM_MISSILE && GET_OBJ_VAL(obj, 0) == 1))
@@ -458,10 +486,10 @@ ACMD(do_put)
       else {
         perform_put(ch, obj, cont);
       }
-    } else if (!cyberdeck) {
-      perform_put(ch, obj, cont);
-    } else
-      perform_put_cyberdeck(ch, obj, cont);
+      return;
+    }
+    
+    perform_put(ch, obj, cont);
   } else {
     for (obj = ch->carrying; obj; obj = next_obj) {
       next_obj = obj->next_content;
@@ -588,16 +616,18 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
     else {
       if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
            || IS_OBJ_STAT( obj, ITEM_WIZLOAD) ) {
-        sprintf(buf, "%s gets from (%ld) %s: (obj %ld) %s%s", GET_CHAR_NAME(ch),
-                GET_OBJ_VNUM( cont ), cont->text.name,
-                GET_OBJ_VNUM( obj ), obj->text.name,
-                IS_OBJ_STAT(obj,ITEM_WIZLOAD) ? " *" : "");
+        sprintf(buf, "%s gets from (%ld) %s%s: (obj %ld) %s%s%s",
+                GET_CHAR_NAME(ch),
+                GET_OBJ_VNUM( cont ), GET_OBJ_NAME(cont), cont->restring ? " (restrung)" : "",
+                GET_OBJ_VNUM( obj ), GET_OBJ_NAME(obj), cont->restring ? " (restrung)" : "",
+                IS_OBJ_STAT(obj,ITEM_WIZLOAD) ? " (wizloaded)" : "");
         mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
       }
 
       if (GET_OBJ_TYPE(cont) == ITEM_QUIVER)
         GET_OBJ_VAL(cont, 2) = MAX(0, GET_OBJ_VAL(cont, 2) - 1);
       sprintf(buf, "You %s $p from $P.", (cyberdeck || computer ? "uninstall" : "get"));
+      
       if (computer) {
         for (struct char_data *vict = ch->in_room->people; vict; vict = vict->next_in_room)
           if ((AFF_FLAGGED(vict, AFF_PROGRAM) || AFF_FLAGGED(vict, AFF_DESIGN)) && vict != ch) {
@@ -609,17 +639,20 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
             break;
           }
         if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM)
-          GET_OBJ_VAL(cont, 3) -= GET_OBJ_VAL(obj, 2);
+          GET_CYBERDECK_TOTAL_STORAGE(cont) -= GET_OBJ_VAL(obj, 2);
         else
-          GET_OBJ_VAL(cont, 3) -= GET_OBJ_VAL(obj, 6) + (GET_OBJ_VAL(obj, 6) / 10);
-      } else if (cyberdeck) {
-        if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM && (GET_OBJ_VAL(cont, 0) == 0 || GET_OBJ_VAL(cont, 9))) {
-          send_to_char("The cyberdeck is unresponsive.\r\n", ch);
+          GET_CYBERDECK_TOTAL_STORAGE(cont) -= GET_OBJ_VAL(obj, 6) + (GET_OBJ_VAL(obj, 6) / 10);
+      }
+      else if (cyberdeck) {
+        if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM && (GET_CYBERDECK_MPCP(cont) == 0 || GET_CYBERDECK_IS_INCOMPLETE(cont))) {
+          display_cyberdeck_issues(ch, cont);
           return;
         }
+        
         if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM ||
             (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_FILE))
           GET_OBJ_VAL(cont, 5) -= GET_OBJ_VAL(obj, 2);
+        
         if (GET_OBJ_TYPE(obj) == ITEM_PART) {
           if (GET_OBJ_VAL(obj, 0) == PART_STORAGE) {
             for (struct obj_data *k = cont->contains; k; k = k->next_content)
@@ -628,19 +661,20 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
                 send_to_char("You cannot uninstall that while you have files installed.\r\n", ch);
                 return;
               }
-            GET_OBJ_VAL(cont, 5) = GET_OBJ_VAL(cont, 3) = 0;
+            GET_CYBERDECK_USED_STORAGE(cont) = GET_CYBERDECK_TOTAL_STORAGE(cont) = 0;
           }
           switch(GET_OBJ_VAL(obj, 0)) {
           case PART_MPCP:
+              GET_PART_RATING(obj) = GET_CYBERDECK_MPCP(cont);
+              // fall through
           case PART_ACTIVE:
           case PART_BOD:
           case PART_SENSOR:
           case PART_IO:
           case PART_MATRIX_INTERFACE:
-            GET_OBJ_VAL(cont, 9) = 1;
+            GET_CYBERDECK_IS_INCOMPLETE(cont) = 1;
           }
         }
-       
       }
 
       act(buf, FALSE, ch, obj, cont, TO_CHAR);

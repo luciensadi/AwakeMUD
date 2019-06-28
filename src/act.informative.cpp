@@ -2253,7 +2253,10 @@ ACMD(do_examine)
           strcpy(buf, "Custom Components:\r\n");
           for (struct obj_data *soft = tmp_object->contains; soft; soft = soft->next_content)
             if (GET_OBJ_TYPE(soft) == ITEM_PART)
-              sprintf(ENDOF(buf), "%-30s Type: %-15s\r\n", GET_OBJ_NAME(soft), parts[GET_OBJ_VAL(soft, 0)].name);
+              sprintf(ENDOF(buf), "%-30s Type: %-15s Rating: %d\r\n",
+                      GET_OBJ_NAME(soft),
+                      parts[GET_OBJ_VAL(soft, 0)].name,
+                      GET_PART_RATING(soft));
           send_to_char(buf, ch);
         }
       }

@@ -1776,7 +1776,8 @@ void extract_icon(struct matrix_icon * icon)
         }
       REMOVE_FROM_LIST(icon, matrix[icon->in_host].fighting, next_fighting);
     }
-    icon_from_host(icon);
+    if (icon->in_host != NOWHERE)
+      icon_from_host(icon);
   }
   if (icon->decker)
   {
