@@ -84,6 +84,82 @@ Material:	metal
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
+#601
+Keywords:	biomonitor docwagon basic service contract compact modulator
+Name:	a biomonitor with a DocWagon Basic service contract
+RoomDesc:$
+A compact biomonitor bearing the DocWagon logo flashes on the ground.~
+LookDesc:$
+A small, compact device worn over the wrist or ankle, this combination
+biomonitor and homing beacon comes complete with a DocWagon Basic service
+contract, which will prompt the renowned rescue company to retrieve and
+resuscitate you if needed-- for a price. 
+~
+Type:	DocWagon
+WearFlags:	10000001000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	6000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#602
+Keywords:	biomonitor docwagon service contract compact modulator gold
+Name:	a biomonitor with a DocWagon Gold service contract
+RoomDesc:$
+A compact biomonitor bearing the DocWagon logo flashes on the ground.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	DocWagon
+WearFlags:	10000001000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	6000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+BREAK
+#603
+Keywords:	biomonitor docwagon service contract compact modulator platinum
+Name:	a biomonitor with a DocWagon Platinum service contract
+RoomDesc:$
+A compact biomonitor bearing the DocWagon logo flashes on the ground.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	DocWagon
+WearFlags:	10000001000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	6000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+BREAK
 #618
 Keywords:	beretta 101t pistol
 Name:	a Beretta 101T
