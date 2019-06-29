@@ -2301,7 +2301,7 @@ ACMD(do_examine)
     } else if (GET_OBJ_TYPE(tmp_object) == ITEM_DOCWAGON) {
       if (GET_DOCWAGON_BONDED_IDNUM(tmp_object)) {
         if (GET_DOCWAGON_BONDED_IDNUM(tmp_object) == GET_IDNUM(ch))
-          send_to_char(ch, "It has been bonded to your biometric signature%s.\r\n", tmp_object->worn_by != ch ? ", but it won't function until you wear it." : "");
+          send_to_char(ch, "It has been bonded to your biometric signature%s.\r\n\r\n", tmp_object->worn_by != ch ? ", but ^yit won't function until you wear it^n" : "");
         else
           send_to_char("It has been activated by someone else.\r\n", ch);
       } else {
