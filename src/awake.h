@@ -2047,6 +2047,8 @@ enum {
 #define OBJ_MAP_OF_SEATTLE         2041
 #define OBJ_ELEVATOR_SHAFT_KEY     998
 #define OBJ_BLANK_PHOTO            109
+#define OBJ_BLANK_PART_DESIGN      112
+#define OBJ_CUSTOM_CYBERDECK_SHELL 113
 
 /* ban struct */
 struct ban_list_element

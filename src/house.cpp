@@ -427,7 +427,7 @@ SPECIAL(landlord_spec)
     room_record->owner = GET_IDNUM(ch);
     room_record->date = time(0) + (SECS_PER_REAL_DAY*30);
     ROOM_FLAGS(&world[real_room(room_record->vnum)]).SetBit(ROOM_HOUSE);
-    ROOM_FLAGS(&world[real_room(room_record->atrium)]).SetBit(ROOM_ATRIUM);
+    ROOM_FLAGS(&world[room_record->atrium]).SetBit(ROOM_ATRIUM);
     House_crashsave(room_record->vnum);
     House_save_control();
     return TRUE;
@@ -444,7 +444,7 @@ SPECIAL(landlord_spec)
     else {
       room_record->owner = 0;
       ROOM_FLAGS(&world[real_room(room_record->vnum)]).RemoveBit(ROOM_HOUSE);
-      ROOM_FLAGS(&world[real_room(room_record->atrium)]).RemoveBit(ROOM_ATRIUM);
+      ROOM_FLAGS(&world[room_record->atrium]).RemoveBit(ROOM_ATRIUM);
       House_save_control();
       House_delete_file(room_record->vnum);
       do_say(recep, "I hope you enjoyed your time here.", 0, 0);
@@ -685,7 +685,7 @@ void hcontrol_destroy_house(struct char_data * ch, char *arg)
 
     for (struct landlord *llord = landlords; llord; llord = llord->next)
       for (i = llord->rooms; i; i = i->next)
-        if ((real_atrium = real_room(i->atrium)) >= 0) {
+        if (i->atrium >= 0) {
           ROOM_FLAGS(&world[real_atrium]).SetBit(ROOM_ATRIUM);
         }
   }
@@ -801,6 +801,22 @@ void House_save_all(void)
       House_save(NULL, fl, x);
       fclose(fl);
     }
+}
+
+bool House_can_enter_by_idnum(long idnum, vnum_t house) {
+  struct house_control_rec *room = find_house(house);
+  
+  if (idnum <= 0 || !room)
+    return FALSE;
+  
+  if (idnum == room->owner)
+    return TRUE;
+  
+  for (int guest = 0; guest < MAX_GUESTS; guest++)
+    if (idnum == room->guests[guest])
+      return TRUE;
+  
+  return FALSE;
 }
 
 

@@ -735,7 +735,8 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_PART_TYPE(part)                    (GET_OBJ_VAL((part), 0))
 #define GET_PART_RATING(part)                  (GET_OBJ_VAL((part), 1))
 #define GET_PART_TARGET_MPCP(part)             (GET_OBJ_VAL((part), 2))
-#define GET_PART_DESIGN_COMPLETION(part)       (GET_OBJ_VAL((part), 3))
+#define GET_PART_DESIGN_COMPLETION(part)       (GET_OBJ_VAL((part), 3)) //0 = done, -1 = required ?
+#define GET_PART_BUILDER_IDNUM(part)           (GET_OBJ_VAL((part), 7))
 #define GET_PART_PART_COST(part)               (GET_OBJ_VAL((part), 8))
 #define GET_PART_CHIP_COST(part)               (GET_OBJ_VAL((part), 9))
 

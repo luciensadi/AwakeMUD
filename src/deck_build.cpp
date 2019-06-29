@@ -264,7 +264,7 @@ void pbuild_parse(struct descriptor_data *d, const char *arg) {
         }
         break;
     case DEDIT_TYPE:
-        if (number < 1 || number > 25)
+        if (number < PART_ACTIVE || number >= NUM_PARTS)
             send_to_char(CH, "Invalid Selection! Enter Part Number: ");
         else {
             GET_PART_TYPE(PART) = number;
@@ -329,7 +329,7 @@ void dbuild_parse(struct descriptor_data *d, const char *arg) {
     }
 }
 void create_part(struct char_data *ch) {
-    struct obj_data *part = read_object(112, VIRTUAL);
+    struct obj_data *part = read_object(OBJ_BLANK_PART_DESIGN, VIRTUAL);
     STATE(ch->desc) = CON_PART_CREATE;
     part->restring = str_dup("An empty part design");
     ch->desc->edit_obj = part;
@@ -337,7 +337,7 @@ void create_part(struct char_data *ch) {
 }
 
 void create_deck(struct char_data *ch) {
-    struct obj_data *deck = read_object(113, VIRTUAL);
+    struct obj_data *deck = read_object(OBJ_CUSTOM_CYBERDECK_SHELL, VIRTUAL);
     STATE(ch->desc) = CON_DECK_CREATE;
     ch->desc->edit_obj = deck;
     deckbuild_main_menu(ch->desc);
@@ -526,57 +526,65 @@ ACMD(do_build) {
         send_to_char(ch, "You don't have that deck.\r\n");
         return;
     }
-    if (GET_OBJ_VAL(obj, 0) == PART_MPCP && GET_OBJ_VAL(deck, 0)) {
+    if (GET_PART_TYPE(obj) == PART_MPCP && GET_CYBERDECK_MPCP(deck)) {
         struct obj_data *temp = deck->contains;
-        if (GET_OBJ_VAL(obj, 2) != GET_OBJ_VAL(deck, 0))
+        if (GET_PART_TARGET_MPCP(obj) != GET_CYBERDECK_MPCP(deck))
             for (; temp; temp = temp->next_content)
-                if (GET_OBJ_TYPE(temp) == ITEM_PART && GET_OBJ_VAL(obj, 2) == GET_OBJ_VAL(temp, 2))
+                if (GET_OBJ_TYPE(temp) == ITEM_PART && GET_PART_TARGET_MPCP(obj) == GET_PART_TARGET_MPCP(temp))
                     break;
         if (!temp) {
             send_to_char(ch, "%s is not designed for the same MPCP as %s.\r\n", capitalize(GET_OBJ_NAME(obj)), decapitalize_a_an(GET_OBJ_NAME(deck)));
             return;
         }
     }
-    if (GET_OBJ_TYPE(obj) != ITEM_PART || GET_OBJ_TYPE(deck) != ITEM_CUSTOM_DECK)
+    if (GET_OBJ_TYPE(obj) != ITEM_PART)
         send_to_char(ch, "You can't build a part out of %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
+  else if (GET_OBJ_TYPE(deck) != ITEM_CUSTOM_DECK)
+    send_to_char(ch, "%s isn't a custom deck; how exactly did you plan to build %s into it?\r\n", capitalize(GET_OBJ_NAME(deck)), decapitalize_a_an(GET_OBJ_NAME(obj)));
     else if (GET_PART_DESIGN_COMPLETION(obj))
         send_to_char(ch, "You must make a design for %s first.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
-    else if (GET_OBJ_VAL(obj, 0) != PART_MPCP && (GET_OBJ_VAL(obj, 2) != GET_OBJ_VAL(deck, 0) && GET_OBJ_VAL(deck, 0)) &&
-             (parts[GET_OBJ_VAL(obj, 0)].design >= 0 || GET_OBJ_VAL(obj, 0) == PART_ACTIVE ||
-              GET_OBJ_VAL(obj, 0) == PART_STORAGE || GET_OBJ_VAL(obj, 0) == PART_MATRIX_INTERFACE))
+    else if (GET_PART_TYPE(obj) != PART_MPCP
+             && (GET_CYBERDECK_MPCP(deck) && GET_PART_TARGET_MPCP(obj) != GET_CYBERDECK_MPCP(deck))
+             && (parts[GET_PART_TYPE(obj)].design >= 0
+                 || GET_PART_TYPE(obj) == PART_ACTIVE
+                 || GET_PART_TYPE(obj) == PART_STORAGE
+                 || GET_PART_TYPE(obj) == PART_MATRIX_INTERFACE))
         send_to_char(ch, "%s is not designed for the same MPCP as %s.\r\n", capitalize(GET_OBJ_NAME(obj)), decapitalize_a_an(GET_OBJ_NAME(deck)));
-    else if (GET_OBJ_VAL(obj, 7) != GET_IDNUM(ch) && GET_OBJ_VAL(obj, 7) > 0)
+    else if (GET_PART_BUILDER_IDNUM(obj) != GET_IDNUM(ch) && GET_PART_BUILDER_IDNUM(obj) > 0)
         send_to_char(ch, "Someone else has already started on %s.\r\n", decapitalize_a_an(GET_OBJ_NAME(obj)));
     else {
         struct obj_data *workshop = NULL;
-        int kit = 0, target = -GET_OBJ_VAL(obj, 5), duration = 0, skill = 0;
+        int kit_rating = 0, target = -GET_OBJ_VAL(obj, 5), duration = 0, skill = 0;
         if (has_kit(ch, TYPE_MICROTRONIC))
-            kit = TYPE_KIT;
-        if ((workshop = find_workshop(ch, TYPE_MICROTRONIC)) && GET_OBJ_VAL(workshop, 0) > kit)
-            kit = GET_OBJ_VAL(workshop, 0);
-        if (kit < parts[GET_OBJ_VAL(obj, 0)].tools) {
+            kit_rating = TYPE_KIT;
+        if ((workshop = find_workshop(ch, TYPE_MICROTRONIC)) && GET_OBJ_VAL(workshop, 0) > kit_rating)
+            kit_rating = GET_WORKSHOP_TYPE(workshop);
+        if (kit_rating < parts[GET_PART_TYPE(obj)].tools) {
             send_to_char(ch, "You don't have the right tools for that job.\r\n");
             return;
         } else if (parts[GET_OBJ_VAL(obj, 0)].tools == TYPE_KIT) {
-            if (kit == TYPE_SHOP)
+            if (kit_rating == TYPE_SHOP)
                 target--;
-            else if (kit == TYPE_FACILITY)
+            else if (kit_rating == TYPE_FACILITY)
                 target -= 3;
-        } else if (parts[GET_OBJ_VAL(obj, 0)].tools == TYPE_SHOP && kit == TYPE_FACILITY)
+        } else if (parts[GET_OBJ_VAL(obj, 0)].tools == TYPE_SHOP && kit_rating == TYPE_FACILITY)
             target--;
-        if (GET_OBJ_VAL(obj, 0) == PART_BOD || GET_OBJ_VAL(obj, 0) == PART_SENSOR || GET_OBJ_VAL(obj, 0) == PART_MASKING || GET_OBJ_VAL(obj, 0) == PART_EVASION) {
-            int total = GET_OBJ_VAL(obj, 1);
+        if (GET_PART_TYPE(obj) == PART_BOD || GET_PART_TYPE(obj) == PART_SENSOR || GET_PART_TYPE(obj) == PART_MASKING || GET_PART_TYPE(obj) == PART_EVASION) {
+            int total = GET_PART_RATING(obj);
             for (struct obj_data *part = deck->contains; part; part = part->next_content)
-                if (GET_OBJ_TYPE(part) == ITEM_PART && (GET_OBJ_VAL(part, 0) == PART_BOD || GET_OBJ_VAL(part, 0) == PART_SENSOR || GET_OBJ_VAL(part, 0) == PART_MASKING || GET_OBJ_VAL(part, 0) == PART_EVASION))
+                if (GET_OBJ_TYPE(part) == ITEM_PART && (GET_PART_TYPE(part) == PART_BOD || GET_PART_TYPE(part) == PART_SENSOR || GET_PART_TYPE(part) == PART_MASKING || GET_PART_TYPE(part) == PART_EVASION))
                     total += GET_OBJ_VAL(part, 1);
-            if (total > GET_OBJ_VAL(deck, 0) * 3) {
-                send_to_char("Persona programs are limited to three times the MPCP rating of the deck.\r\n", ch);
+            if (total > GET_CYBERDECK_MPCP(deck) * 3) {
+                send_to_char(ch, "The total persona program rating for MPCP %d decks is limited to %d; that would make it %d.\r\n",
+                             GET_CYBERDECK_MPCP(deck),
+                             GET_CYBERDECK_MPCP(deck) * 3,
+                             total);
                 return;
             }
         }
         for (struct obj_data *part = deck->contains; part; part = part->next_content)
-            if (GET_OBJ_TYPE(part) == TYPE_PARTS && (GET_OBJ_VAL(part, 0) == GET_OBJ_VAL(obj, 0) || (GET_OBJ_VAL(part, 0) ==
-                    PART_ASIST_HOT && GET_OBJ_VAL(obj, 0) == PART_ASIST_COLD) || (GET_OBJ_VAL(part, 0) == PART_ASIST_COLD && GET_OBJ_VAL(obj, 0) == PART_ASIST_HOT))) {
+            if (GET_OBJ_TYPE(part) == TYPE_PARTS && (GET_PART_TYPE(part) == GET_PART_TYPE(obj) || (GET_PART_TYPE(part) ==
+                    PART_ASIST_HOT && GET_PART_TYPE(obj) == PART_ASIST_COLD) || (GET_PART_TYPE(part) == PART_ASIST_COLD && GET_PART_TYPE(obj) == PART_ASIST_HOT))) {
                 send_to_char(ch, "You have already installed a part of that type in there.\r\n");
                 return;
             }
