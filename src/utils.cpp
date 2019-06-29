@@ -1961,3 +1961,24 @@ struct char_data *get_driver(struct veh_data *veh) {
   
   return NULL;
 }
+
+// Given a vnum, searches all objects and nested containers in the given container for the first match and returns it.
+struct obj_data *find_matching_obj_in_container(struct obj_data *container, vnum_t vnum) {
+  struct obj_data *result = NULL;
+  
+  // Nothing given to us? Nothing to find.
+  if (container == NULL)
+    return NULL;
+  
+  // Check each item in this container. If it's a match, return it; otherwise, check its contents.
+  for (struct obj_data *contents = container->contains; contents; contents = contents->next_content) {
+    if (GET_OBJ_VNUM(contents) == vnum)
+      return contents;
+    
+    if ((result = find_matching_obj_in_container(contents, vnum)))
+      return result;
+  }
+  
+  // If we got here, the item wasn't found anywhere.
+  return NULL;
+}

@@ -1484,7 +1484,7 @@ ACMD(do_drop)
         amount += perform_drop(ch, obj, mode, sname, random_donation_room);
     }
   }
-  if (amount && (subcmd == SCMD_JUNK)) {
+  if (amount && (subcmd == SCMD_JUNK) && !PLR_FLAGGED(ch, PLR_AUTH)) {
     send_to_char(ch, "You receive %d nuyen for recycling.\r\n", amount >> 4);
     GET_NUYEN(ch) += amount >> 4;
   }

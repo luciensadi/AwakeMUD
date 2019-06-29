@@ -3951,3 +3951,85 @@ SPECIAL(chargen_skill_annex)
   
   return FALSE;
 }
+
+SPECIAL(chargen_hopper)
+{
+  struct obj_data *hopper = (struct obj_data *) me;
+  struct obj_data *modulator = hopper->contains;
+  static char arg1[MAX_INPUT_LENGTH], arg2[MAX_INPUT_LENGTH];
+  char *arg1_ptr = arg1, *arg2_ptr = arg2;
+  
+  if (!ch || !cmd || IS_NPC(ch))
+    return FALSE;
+  
+  // Regardless of how or why we were called, this is a great chance to ensure the hopper has a mod in it.
+  if (!modulator) {
+    rnum_t modulator_rnum = real_object(OBJ_DOCWAGON_BASIC_MOD);
+    
+    // Cutout: If the modulator doesn't exist, fail.
+    if (modulator_rnum == NOWHERE) {
+      sprintf(buf, "SYSERR: Attempting to reference docwagon modulator at item %d, but that item does not exist.", OBJ_DOCWAGON_BASIC_MOD);
+      mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+      return FALSE;
+    }
+    
+    modulator = read_object(modulator_rnum, REAL);
+    make_newbie(modulator);
+    obj_to_obj(modulator, hopper);
+    mudlog("DEBUG: Loaded hopper with modulator.", NULL, LOG_SYSLOG, TRUE);
+  }
+  
+  if (CMD_IS("get")) {
+    // Clear our static argbufs.
+    memset(arg1, 0, sizeof(arg1));
+    memset(arg2, 0, sizeof(arg2));
+    
+    // Extract arguments from provided argument.
+    two_arguments(argument, arg1, arg2);
+    if (!*arg1 || !*arg2)
+      return FALSE;
+    
+    // Strip out the numbers for fewer shenanigans.
+    get_number(&arg1_ptr);
+    get_number(&arg2_ptr);
+    
+    // If the keyword they're using is valid for the hopper:
+    if ((isname(arg2, hopper->text.keywords) || isname(arg2, hopper->text.name) || strcmp(arg2, "all") == 0)
+        && (isname(arg1, modulator->text.keywords) || isname(arg1, modulator->text.name) || strcmp(arg1, "all") == 0)) {
+      struct obj_data *inv = NULL;
+      bool ch_already_has_one = FALSE;
+      
+      // Check their inventory to see if they have one already.
+      for (inv = ch->carrying; inv && !ch_already_has_one; inv = inv->next_content) {
+        if (GET_OBJ_VNUM(inv) == OBJ_DOCWAGON_BASIC_MOD)
+          ch_already_has_one = TRUE;
+        
+        // Recursively search into the object, just in case it's a container.
+        if (find_matching_obj_in_container(inv, OBJ_DOCWAGON_BASIC_MOD))
+          ch_already_has_one = TRUE;
+      }
+      
+      // Check their equipment to see if they have one already.
+      for (int i = 0; i < NUM_WEARS && !ch_already_has_one; i++) {
+        if ((inv = GET_EQ(ch, i)) && GET_OBJ_VNUM(inv) == OBJ_DOCWAGON_BASIC_MOD)
+          ch_already_has_one = TRUE;
+        
+        // Recursively search into the object, just in case it's a container.
+        if (find_matching_obj_in_container(inv, OBJ_DOCWAGON_BASIC_MOD))
+          ch_already_has_one = TRUE;
+      }
+      
+      if (ch_already_has_one) {
+        send_to_char("A shutter on the hopper closes as you reach for it, and a sign flashes, \"One per person.\"\r\n", ch);
+      } else {
+        send_to_char(ch, "You reach into the hopper and retrieve %s.\r\n", GET_OBJ_NAME(modulator));
+        obj_from_obj(modulator);
+        obj_to_char(modulator, ch);
+      }
+      
+      return TRUE;
+    }
+  }
+  
+  return FALSE;
+}

@@ -2049,6 +2049,7 @@ enum {
 #define OBJ_BLANK_PHOTO            109
 #define OBJ_BLANK_PART_DESIGN      112
 #define OBJ_CUSTOM_CYBERDECK_SHELL 113
+#define OBJ_DOCWAGON_BASIC_MOD     601
 
 /* ban struct */
 struct ban_list_element

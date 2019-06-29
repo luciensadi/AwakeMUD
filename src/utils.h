@@ -77,6 +77,7 @@ struct  obj_data *get_mount_manned_by_ch(struct char_data *ch);
 void    terminate_mud_process_with_message(const char *message, int error_code);
 bool    char_can_make_noise(struct char_data *ch, const char *message = NULL);
 struct  char_data *get_driver(struct veh_data *veh);
+struct  obj_data *find_matching_obj_in_container(struct obj_data *container, vnum_t vnum);
 
 // Message history management and manipulation.
 void    store_message_to_history(struct descriptor_data *d, int channel, const char *mallocd_message);
