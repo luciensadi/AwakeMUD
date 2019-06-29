@@ -1439,7 +1439,7 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
         send_to_char("Lie still; you are DEAD!!! :-(\r\n", ch);
         break;
       case POS_MORTALLYW:
-        send_to_char("You are in a pretty bad shape, unable to do anything!\r\n", ch);
+        send_to_char("You are in a pretty bad shape! You can either wait for help, or give up by typing DIE.\r\n", ch);
         break;
       case POS_STUNNED:
         send_to_char("All you can do right now is think about the stars!\r\n", ch);

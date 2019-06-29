@@ -114,7 +114,7 @@ ACMD(do_accept) {
           if (pgr->is_secret() && !GET_PGROUP_MEMBER_DATA(i)->privileges.AreAnySet(PRIV_COCONSPIRATOR, PRIV_LEADER, ENDBIT)) {
             send_to_char(i, "You notice that the membership numbers for '%s' have gone up.\r\n", pgr->get_name());
           } else {
-            send_to_char(i, "%s has joined '%s'.\r\n", pgr->get_name());
+            send_to_char(i, "%s has joined '%s'.\r\n", GET_CHAR_NAME(ch), pgr->get_name());
           }
         }
       }
