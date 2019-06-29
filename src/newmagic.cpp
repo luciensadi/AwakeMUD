@@ -1933,11 +1933,14 @@ ACMD(do_bond)
     return;
   }
   if (GET_OBJ_TYPE(obj) == ITEM_DOCWAGON) {
-    if (GET_OBJ_VAL(obj, 1)) {
-      act("$p has already been activated.", FALSE, ch, obj, 0, TO_CHAR);
+    if (GET_DOCWAGON_BONDED_IDNUM(obj)) {
+      if (GET_DOCWAGON_BONDED_IDNUM(obj) == GET_IDNUM(ch))
+        act("You have already activated $p.", FALSE, ch, obj, 0, TO_CHAR);
+      else
+        act("$p has already been activated by someone else.", FALSE, ch, obj, 0, TO_CHAR);
       return;
     }
-    GET_OBJ_VAL(obj, 1) = GET_IDNUM(ch);
+    GET_DOCWAGON_BONDED_IDNUM(obj) = GET_IDNUM(ch);
     act("$p's lights begin to subtly flash in a rhythmic sequence.", FALSE,
         ch, obj, 0, TO_CHAR);
     return;

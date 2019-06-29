@@ -770,6 +770,8 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 // ITEM_OTHER convenience defines
 
 // ITEM_DOCWAGON convenience defines
+#define GET_DOCWAGON_CONTRACT_GRADE(modulator) (GET_OBJ_VAL((modulator), 0))
+#define GET_DOCWAGON_BONDED_IDNUM(modulator)   (GET_OBJ_VAL((modulator), 1))
 
 // ITEM_CONTAINER convenience defines
 
