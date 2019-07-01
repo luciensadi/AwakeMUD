@@ -1437,8 +1437,8 @@ void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote
   }
   
   // Bounds check rank.
-  if (!(rank = atoi(rank_string)) || rank < 0 || rank > MAX_PGROUP_RANK) {
-    send_to_char(ch, "You must specify a rank between 1 and %d.\r\n", MAX_PGROUP_RANK);
+  if (!(rank = atoi(rank_string)) || rank < (promote ? 2 : 1) || rank > MAX_PGROUP_RANK) {
+    send_to_char(ch, "You must specify a rank between %d and %d.\r\n", promote ? 2 : 1, MAX_PGROUP_RANK);
     return;
   }
   

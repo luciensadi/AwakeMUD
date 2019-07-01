@@ -1415,6 +1415,10 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                  GET_PGROUP_MEMBER_DATA(player)->rank,
                  GET_PGROUP_MEMBER_DATA(player)->privileges.ToString());
     mysql_wrapper(mysql, buf);
+  } else {
+    // Wipe any existing pgroup membership data.
+    sprintf(buf, "DELETE FROM pfiles_playergroups WHERE idnum=%ld", GET_IDNUM(player));
+    mysql_wrapper(mysql, buf);
   }
 
   return TRUE;
