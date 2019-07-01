@@ -385,6 +385,7 @@ ACMD(do_hlist);
 ACMD(do_software);
 ACMD(do_design);
 ACMD(do_invitations);
+ACMD(do_debug);
 
 struct command_info cmd_info[] =
   {
@@ -473,6 +474,7 @@ struct command_info cmd_info[] =
     { "date"     , POS_DEAD    , do_date     , 0, SCMD_DATE },
     { "dc"       , POS_DEAD    , do_dc       , LVL_EXECUTIVE, 0 },
     { "deactivate", POS_RESTING, do_deactivate, 0, 0 },
+    { "debug"    , POS_DEAD    , do_debug    , LVL_PRESIDENT, 0 },
     { "decline"  , POS_LYING   , do_decline  , 0, 0 },
     { "decompress", POS_LYING  , do_compact  , 0, 1 },
     { "decorate" , POS_DEAD    , do_decorate , 0, 0 },

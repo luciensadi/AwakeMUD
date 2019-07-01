@@ -89,6 +89,8 @@ ACMD(do_accept) {
     return;
   }
   
+  skip_spaces(&argument);
+  
   // Remove any expired invitations.
   Pgroup_invitation::prune_expired(ch);
   
@@ -104,7 +106,7 @@ ACMD(do_accept) {
     }
     
     // if argument matches case-insensitively with invitation's group's alias
-    if (str_cmp(argument, pgr->get_name()) != 0) {
+    if (str_cmp(argument, pgr->get_name()) == 0 || str_cmp(argument, pgr->get_alias()) == 0) {
       send_to_char(ch, "You accept the invitation and declare yourself a member of '%s'.\r\n", pgr->get_name());
       
       // Notify all online members.
@@ -769,7 +771,7 @@ void do_pgroup_outcast(struct char_data *ch, char *argument) {
   
   // Ensure targeted character is part of the same group as the invoking character.
   if (!(GET_PGROUP_MEMBER_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
-    send_to_char(ch, "%s's not part of your group.\r\n", HSSH(vict));
+    send_to_char(ch, "%s's not part of your group.\r\n", capitalize(HSSH(vict)));
     return;
   }
   
@@ -1356,7 +1358,7 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   
   // Ensure targeted character is part of the same group as the invoking character.
   if (!(GET_PGROUP_MEMBER_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
-    send_to_char(ch, "%s's not part of your group.\r\n", HSSH(vict));
+    send_to_char(ch, "%s's not part of your group.\r\n", capitalize(HSSH(vict)));
     return;
   }
   
@@ -1471,7 +1473,7 @@ void do_pgroup_promote_demote(struct char_data *ch, char *argument, bool promote
   
   // Ensure targeted character is part of the same group as the invoking character.
   if (!(GET_PGROUP_MEMBER_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
-    send_to_char(ch, "%s's not part of your group.\r\n", HSSH(vict));
+    send_to_char(ch, "%s's not part of your group.\r\n", capitalize(HSSH(vict)));
     return;
   }
   

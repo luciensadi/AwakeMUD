@@ -2303,9 +2303,9 @@ ACMD(do_examine)
         if (GET_DOCWAGON_BONDED_IDNUM(tmp_object) == GET_IDNUM(ch))
           send_to_char(ch, "It has been bonded to your biometric signature%s.\r\n\r\n", tmp_object->worn_by != ch ? ", but ^yit won't function until you wear it^n" : "");
         else
-          send_to_char("It has been activated by someone else.\r\n", ch);
+          send_to_char("It has been activated by someone else and ^ywill not function for you^n.\r\n\r\n", ch);
       } else {
-        send_to_char("It has not been BONDed yet, and will not function until it is.\r\n", ch);
+        send_to_char("It has not been BONDed yet, and ^ywill not function until it is^n.\r\n\r\n", ch);
       }
     }
     if (GET_OBJ_VNUM(tmp_object) > 1) {
