@@ -106,7 +106,7 @@ ACMD(do_accept) {
     }
     
     // if argument matches case-insensitively with invitation's group's alias
-    if (str_cmp(argument, pgr->get_name()) == 0 || str_cmp(argument, pgr->get_alias()) == 0) {
+    if (strn_cmp(argument, pgr->get_name(), strlen(argument)) == 0 || strn_cmp(argument, pgr->get_alias(), strlen(argument)) == 0) {
       send_to_char(ch, "You accept the invitation and declare yourself a member of '%s'.\r\n", pgr->get_name());
       
       // Notify all online members.
@@ -152,6 +152,8 @@ ACMD(do_decline) {
     return;
   }
   
+  skip_spaces(&argument);
+  
   // Remove any expired invitations.
   Pgroup_invitation::prune_expired(ch);
   
@@ -167,7 +169,7 @@ ACMD(do_decline) {
     }
     
     // If argument matches case-insensitively with invitation's group's alias:
-    if (str_cmp(argument, pgr->get_name()) != 0) {
+    if (strn_cmp(argument, pgr->get_name(), strlen(argument)) == 0 || strn_cmp(argument, pgr->get_alias(), strlen(argument)) == 0) {
       send_to_char(ch, "You decline the invitation from '%s'.\r\n", pgr->get_name());
       
       // Drop the invitation.
