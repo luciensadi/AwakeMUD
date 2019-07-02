@@ -732,7 +732,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     else if (mob_index[GET_MOB_RNUM(i)].func == metamagic_teacher) {
       // Mundanes can't see metamagic teachers' abilities.
       if (GET_TRADITION(ch) != TRAD_MUNDANE)
-        sprintf(ENDOF(buf), "^y...%s looks willing to help you train your metamagic.^n\r\n", HSSH(i));
+        sprintf(ENDOF(buf), "^y...%s looks willing to help you train in metamagic techniques.^n\r\n", HSSH(i));
     }
     else if (mob_index[GET_MOB_RNUM(i)].func == adept_trainer) {
       // Mundanes can't see adept trainers' abilities.
