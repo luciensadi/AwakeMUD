@@ -2739,6 +2739,7 @@ void reset_zone(int zone, int reboot)
           (ZCMD.arg2 == 0 && reboot)) {
         mob = read_mobile(ZCMD.arg1, REAL);
         char_to_room(mob, &world[ZCMD.arg3]);
+        act("$n has arrived.", TRUE, mob, 0, 0, TO_ROOM);
         last_cmd = 1;
       } else {
         if (ZCMD.arg2 == 0 && !reboot)
@@ -2749,7 +2750,7 @@ void reset_zone(int zone, int reboot)
         mob = NULL;
       }
       break;
-    case 'S':                 /* read a mobile */
+    case 'S':                 /* read a mobile into a vehicle */
       if (!veh)
         break;
       if ((mob_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
@@ -2885,11 +2886,13 @@ void reset_zone(int zone, int reboot)
       if ((veh_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)) {        
         veh = read_vehicle(ZCMD.arg1, REAL);
         veh_to_room(veh, &world[ZCMD.arg3]);
+        sprintf(buf, "%s has arrived.", capitalize(GET_VEH_NAME(veh)));
+        send_to_room(buf, veh->in_room);
         last_cmd = 1;
       } else
         last_cmd = 0;
       break;
-    case 'H':
+    case 'H':                 /* loads a Matrix file into a host */
       if ((obj_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) ||
           (ZCMD.arg2 == 0 && reboot)) {
         obj = read_object(ZCMD.arg1, REAL);
@@ -2904,10 +2907,12 @@ void reset_zone(int zone, int reboot)
         obj = read_object(ZCMD.arg1, REAL);
         obj_to_room(obj, &world[ZCMD.arg3]);
         
+        act("You blink and realize that $o must have been here the whole time.", TRUE, 0, obj, 0, TO_ROOM);
+        
         if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(obj) == TYPE_SHOP) {
           if (GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE && !ROOM_FLAGGED(obj->in_room, ROOM_GARAGE)) {
             // Warn the builder that they're breaking the game's rules (let it continue since it doesn't harm anything though).
-            ZONE_ERROR("Zoneloading a pre-set-up vehicle workshop in a non-GARAGE room violates game rules about vehicle workshop locations. Flag the room as GARAGE.");
+            ZONE_ERROR("Zoneloading a pre-set-up vehicle workshop in a non-GARAGE room violates game convention about vehicle workshop locations. Flag the room as GARAGE.");
           }
           
           // It's a workshop, set it as unpacked already.
@@ -3050,6 +3055,7 @@ void reset_zone(int zone, int reboot)
       break;
     case 'R': /* rem obj from room */
       if ((obj = get_obj_in_list_num(ZCMD.arg2, world[ZCMD.arg1].contents)) != NULL) {
+        act("$o is whisked away.", TRUE, 0, obj, 0, TO_ROOM);
         obj_from_room(obj);
         extract_obj(obj);
       }
@@ -3089,25 +3095,67 @@ void reset_zone(int zone, int reboot)
         switch (ZCMD.arg3) {
           // you now only have to set one side of a door
         case 0:
+            if (!IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_HIDDEN)
+                && IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_CLOSED)) {
+              sprintf(buf, "The %s to the %s swings open.\r\n",
+                      fname(world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword),
+                      fulldirs[ZCMD.arg2]);
+              send_to_room(buf, &world[ZCMD.arg1]);
+            }
           REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_LOCKED);
           REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_CLOSED);
           if (ok) {
+            if (!IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_HIDDEN)
+                && IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED)) {
+              sprintf(buf, "The %s to the %s swings open.\r\n",
+                      fname(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword),
+                      fulldirs[rev_dir[ZCMD.arg2]]);
+              send_to_room(buf, opposite_room);
+            }
             REMOVE_BIT(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_LOCKED);
             REMOVE_BIT(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED);
           }
           break;
         case 1:
+            if (!IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_HIDDEN)
+                && !IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_CLOSED)) {
+              sprintf(buf, "The %s to the %s swings closed.\r\n",
+                      fname(world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword),
+                      fulldirs[ZCMD.arg2]);
+              send_to_room(buf, &world[ZCMD.arg1]);
+            }
           SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_CLOSED);
           REMOVE_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_LOCKED);
           if (ok) {
+            if (!IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_HIDDEN)
+                && !IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED)) {
+              sprintf(buf, "The %s to the %s swings closed.\r\n",
+                      fname(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword),
+              fulldirs[rev_dir[ZCMD.arg2]]);
+              send_to_room(buf, opposite_room);
+            }
             SET_BIT(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED);
             REMOVE_BIT(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_LOCKED);
           }
           break;
         case 2:
+            if (!IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_HIDDEN)
+                && !IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_CLOSED)) {
+              sprintf(buf, "The %s to the %s swings closed.\r\n",
+                      fname(world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword),
+                      fulldirs[ZCMD.arg2]);
+              send_to_room(buf, &world[ZCMD.arg1]);
+            }
           SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_LOCKED);
           SET_BIT(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_CLOSED);
           if (ok) {
+            if (!IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_HIDDEN)
+                && !IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED)) {
+              sprintf(buf, "The %s to the %s swings closed.\r\n",
+                      fname(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword),
+                      fulldirs[rev_dir[ZCMD.arg2]]);
+              send_to_room(buf, opposite_room);
+            }
             SET_BIT(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_LOCKED);
             SET_BIT(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED);
           }

@@ -2647,8 +2647,11 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
   /* ASSUMPTION: at this point we know type must be TO_NOTVICT
    or TO_ROOM or TO_ROLLS */
   
-  if (type == TO_VEH_ROOM && ch && ch->in_veh && !ch->in_veh->in_veh)
-    to = ch->in_veh->in_room->people;
+  if (type == TO_VEH_ROOM)
+    if (ch && ch->in_veh && !ch->in_veh->in_veh)
+      to = ch->in_veh->in_room->people;
+    else
+      return NULL;
   else if (ch && ch->in_room)
     to = ch->in_room->people;
   else if (obj && obj->in_room)
