@@ -2037,7 +2037,7 @@ ACMD(do_bond)
         break;
       case FOCI_SPIRIT:
         if (!*buf2) {
-          send_to_char("Bond which spirit type?\r\n", ch);
+          send_to_char(ch, "Bond which %s type?\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
           return;
         }
         if (GET_TRADITION(ch) == TRAD_HERMETIC) {
@@ -2118,12 +2118,12 @@ ACMD(do_release)
       send_to_char("You don't have the ability to do that.\r\n", ch);
     }
     if (!GET_SPIRIT(ch)) {
-      send_to_char("You don't have any elementals bound to you.\r\n", ch);
+      send_to_char(ch, "You don't have any %s bound to you.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elementals" : "spirits");
       return;
     }
     int i;
     if (!(i = atoi(buf1)) || i > GET_NUM_SPIRITS(ch)) {
-      send_to_char("Which spirit do you wish to release from your services?\r\n", ch);
+      send_to_char(ch, "Which %s do you wish to release from your services?\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
       return;
     }
     for (struct spirit_data *spirit = GET_SPIRIT(ch); spirit; spirit = spirit->next)
@@ -2261,12 +2261,12 @@ ACMD(do_conjure)
     return;
   }
   if (force > (GET_MAG(ch) / 100) * 2) {
-    send_to_char("You can't conjure a spirit of force more than twice your magic rating.\r\n", ch);
+    send_to_char(ch, "You can't conjure %s of force more than twice your magic rating.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "an elemental" : "a spirit");
     return;
   }
   if (GET_TRADITION(ch) == TRAD_HERMETIC) {
     if (GET_NUM_SPIRITS(ch) >= GET_CHA(ch)) {
-      send_to_char("You have too many spirit summoned.\r\n", ch);
+      send_to_char(ch, "You have too many elementals summoned.\r\n");
       return;
     }
     for (; spirit < NUM_ELEMENTS; spirit++)
@@ -2564,11 +2564,11 @@ ACMD(do_elemental)
     return;
   }
   if (!GET_NUM_SPIRITS(ch)) {
-    send_to_char("You don't have any elementals bound to you.\r\n", ch);
+    send_to_char(ch, "You don't have any %s bound to you.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elementals" : "spirits");
     return;
   }
   int i = 1;
-  strcpy(buf, "You currently have the following elementals bound:\r\n");
+  sprintf(buf, "You currently have the following %s bound:\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elementals" : "spirits");
   for (struct spirit_data *elem = GET_SPIRIT(ch); elem; elem = elem->next, i++) {
     if (GET_TRADITION(ch) == TRAD_SHAMANIC)
       sprintf(ENDOF(buf), "%d) %-30s (Force %d) Services %d\r\n", i, GET_NAME(&mob_proto[real_mobile(spirits[elem->type].vnum)]), elem->force, elem->services);
@@ -2604,7 +2604,7 @@ ACMD(do_banish)
   struct char_data *mob;
   skip_spaces(&argument);
   if (!(mob = get_char_room_vis(ch, argument))) {
-    send_to_char("Attempt to banish which spirit?\r\n", ch);
+    send_to_char(ch, "Attempt to banish which %s?\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
     return;
   }
   if (GET_RACE(mob) != RACE_SPIRIT && GET_RACE(mob) != RACE_ELEMENTAL) {
@@ -2805,7 +2805,7 @@ POWER(spirit_sustain)
 {
   struct sustain_data *sust;
   if (GET_SUSTAINED_NUM(spirit))
-    send_to_char("That spirit is already sustaining a spell.\r\n", ch);
+    send_to_char(ch, "That %s is already sustaining a spell.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else {
     int i = atoi(arg);
     if (i <= 0 || i > GET_SUSTAINED_NUM(ch)) {
@@ -2830,7 +2830,7 @@ POWER(spirit_sustain)
       GET_SUSTAINED(spirit) = sust;
       send_to_char(ch, "%s sustains %s for you.\r\n", CAP(GET_NAME(spirit)), spells[sust->spell].name);
     } else
-      send_to_char("That spirit can't sustain that type of spell.\r\n", ch);
+      send_to_char(ch, "That %s can't sustain that type of spell.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   }
 }
 
@@ -2842,7 +2842,7 @@ POWER(spirit_accident)
   else if (tch == ch)
     send_to_char("You cannot target yourself with that power.\r\n", ch);
   else if (tch == spirit)
-    send_to_char("The spirit refuses to perform that service.\r\n", ch);
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else {
     int success = success_test(MAX(GET_INT(tch), GET_QUI(tch)), GET_SPARE2(spirit));
     for (struct char_data *mob = spirit->in_room->people; mob; mob = mob->next)
@@ -2869,7 +2869,7 @@ POWER(spirit_binding)
   if (!tch)
     send_to_char("Use binding against which target?\r\n", ch);
   else if (tch == spirit || tch == ch)
-    send_to_char("The spirit refuses to perform that service.\r\n", ch);
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else {
     act("$N suddenly becomes incapable of movement!", FALSE, spirit, 0, ch, TO_VICT);
     send_to_char("You suddenly notice you are stuck fast to the ground!", tch);
@@ -2890,7 +2890,7 @@ POWER(spirit_conceal)
   if (!tch)
     send_to_char("Use conceal against which target?\r\n", ch);
   else if (tch == spirit || affected_by_power(tch, CONCEAL))
-    send_to_char("The spirit refuses to perform that service.\r\n", ch);
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else {
     act("$n vanishes from sight.", FALSE, spirit, 0, ch, TO_VICT);
     send_to_char("The terrain seems to cover your tracks.", tch);
@@ -2910,7 +2910,7 @@ POWER(spirit_confusion)
   if (!tch)
     send_to_char("Use confusion against which target?\r\n", ch);
   else if (tch == spirit || tch == ch || affected_by_power(tch, CONFUSION))
-    send_to_char("The spirit refuses to perform that service.\r\n", ch);
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else {
     act("$n vanishes from sight.", FALSE, spirit, 0, ch, TO_VICT);
     send_to_char("The terrain seems to cover your tracks.", tch);
@@ -2930,7 +2930,7 @@ POWER(spirit_engulf)
   if (!tch)
     send_to_char("Use movement against which target?\r\n", ch);
   else if (tch == spirit || tch == ch || affected_by_power(tch, ENGULF))
-    send_to_char("The spirit refuses to perform that service.\r\n", ch);
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else {
     act("$n rushes towards $N and attempts to engulf them!", FALSE, spirit, 0, tch, TO_ROOM);
     int target = GET_QUI(spirit), targskill = get_skill(tch, SKILL_UNARMED_COMBAT, target);
@@ -2975,7 +2975,7 @@ POWER(spirit_fear)
   else if (tch == ch)
     send_to_char("You cannot target yourself with that power.\r\n", ch);
   else if (tch == spirit)
-    send_to_char("The spirit refuses to perform that service.\r\n", ch);
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else {
     int success = success_test(GET_SPARE2(spirit), GET_WIL(tch)) - success_test(GET_WIL(tch), GET_SPARE2(spirit));
     if (success < 1) {
@@ -3012,7 +3012,7 @@ POWER(spirit_flamethrower)
   else if (tch == ch)
     send_to_char("You cannot target yourself with that power.\r\n", ch);
   else if (tch == spirit)
-    send_to_char("The spirit refuses to perform that service.\r\n", ch);
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else {
     sprintf(buf, "moderate %s", arg);
     cast_spell(spirit, SPELL_FLAMETHROWER, 0, GET_LEVEL(spirit), buf);
@@ -3061,12 +3061,12 @@ POWER(spirit_movement)
 {
   int increase = 0;
   if (affected_by_power(spirit, MOVEMENTUP)) {
-    act("$N stops providing that services.", FALSE, ch, 0, spirit, TO_CHAR);
+    act("$N stops providing that service.", FALSE, ch, 0, spirit, TO_CHAR);
     stop_spirit_power(spirit, MOVEMENTUP);
     return;
   }
   if (affected_by_power(spirit, MOVEMENTDOWN)) {
-    act("$N stops providing that services.", FALSE, ch, 0, spirit, TO_CHAR);
+    act("$N stops providing that service.", FALSE, ch, 0, spirit, TO_CHAR);
     stop_spirit_power(spirit, MOVEMENTDOWN);
     return;
   }
@@ -3087,7 +3087,7 @@ POWER(spirit_movement)
   if (!tch)
     send_to_char("Use movement against which target?\r\n", ch);
   else if (tch == spirit || affected_by_power(tch, increase > 0 ? MOVEMENTUP : MOVEMENTDOWN))
-    send_to_char("The spirit refuses to perform that service.\r\n", ch);
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else {
     act("$n performs that service for you.", FALSE, spirit, 0, ch, TO_VICT);
     if (increase > 0)
@@ -3107,7 +3107,7 @@ POWER(spirit_breath)
   else if (tch == ch)
     send_to_char("You cannot target yourself with that power.\r\n", ch);
   else if (tch == spirit)
-    send_to_char("The spirit refuses to perform that service.\r\n", ch);
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else {
     act("$n turns towards $N as a cloud of noxious fumes forms around $S.", TRUE, spirit, 0, tch, TO_NOTVICT);
     act("$n lets forth a stream of noxious fumes in your direction.", FALSE, spirit, 0, tch, TO_VICT);
@@ -3130,9 +3130,9 @@ POWER(spirit_attack)
   if (!tch)
     send_to_char("Use attack which target?\r\n", ch);
   else if (tch == ch)
-    send_to_char("Ordering your own spirit to attack you is not a good idea.\r\n", ch);
+    send_to_char(ch, "Ordering your own %s to attack you is not a good idea.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else if (tch == spirit)
-    send_to_char("The spirit refuses to perform that service.\r\n", ch);
+    send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else {
     check_killer(ch, tch);
     set_fighting(spirit, tch);
@@ -3182,7 +3182,7 @@ ACMD(do_order)
   struct spirit_data *spirit;
   int i, order = 0;
   if (!(i = atoi(buf)) || i > GET_NUM_SPIRITS(ch)) {
-    send_to_char("Which spirit do you wish to give an order to?\r\n", ch);
+    send_to_char(ch, "Which %s do you wish to give an order to?\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
     return;
   }
   for (spirit = GET_SPIRIT(ch); spirit; spirit = spirit->next)
@@ -3250,25 +3250,34 @@ ACMD(do_order)
       if (is_abbrev(buf, services[order].name) && spirit_can_perform(spirit->type, order, GET_TRADITION(ch)))
         break;
     if (order == NUM_SERVICES) {
-      send_to_char("Which service do you wish to order the elemental to perform?\r\n", ch);
+      send_to_char(ch, "Which service do you wish to order the %s to perform?\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
       return;
     }
     if (GET_TRADITION(ch) == TRAD_HERMETIC) {
       if (order == SERV_APPEAR && spirit->called) {
-        send_to_char("That elemental is already here!\r\n", ch);
+        send_to_char(ch, "That %s is already here!\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
         return;
       } else if (!spirit->called && order != SERV_APPEAR) {
-        send_to_char("That elemental is waiting on the metaplanes.\r\n", ch);
+        send_to_char(ch, "That %s is waiting on the metaplanes.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
         return;
       }
     }
     struct char_data *mob = find_spirit_by_id(spirit->id, GET_IDNUM(ch));
+    
+    if (!mob) {
+      send_to_char(ch, "That %s has been ensnared by forces you cannot control.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
+      sprintf(buf, "SYSERR: %s belonging to %s (%ld) has disappeared unexpectedly-- did someone purge it?", GET_TRADITION(ch) == TRAD_HERMETIC ? "Elemental" : "Spirit",
+              GET_CHAR_NAME(ch), GET_IDNUM(ch));
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      return;
+    }
+    
     if (services[order].type == 1 && MOB_FLAGGED(mob, MOB_ASTRAL)) {
-      send_to_char("That elemental must materialize before it can use that power.\r\n", ch);
+      send_to_char(ch, "That %s must materialize before it can use that power.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
       return;
     }
     if (spirit->services < 1 && order != SERV_LEAVE) {
-      send_to_char("The spirit no longer listens to you.\r\n", ch);
+      send_to_char(ch, "The %s no longer listens to you.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
       return;
     }
     ((*services[order].func) (ch, mob, spirit, buf2));

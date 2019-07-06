@@ -22,6 +22,7 @@
 #include "transport.h"
 #include "constants.h"
 #include "newmagic.h"
+#include "config.h"
 
 /* external functs */
 int special(struct char_data * ch, int cmd, char *arg);
@@ -577,7 +578,7 @@ void move_vehicle(struct char_data *ch, int dir)
 #endif
       || ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_FALL))
   {
-    send_to_char("You cannot go that way...\r\n", ch);
+    send_to_char(CANNOT_GO_THAT_WAY, ch);
     return;
   }
   
@@ -1282,6 +1283,11 @@ ACMD(do_drag)
 
   if (!*buf1 || !*buf2) {
     send_to_char("Who do you want to drag where?\r\n", ch);
+    return;
+  }
+  
+  if (IS_ASTRAL(ch)) {
+    send_to_char("Astral projections aren't really known for their ability to drag things.\r\n", ch);
     return;
   }
 

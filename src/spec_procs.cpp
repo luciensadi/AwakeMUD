@@ -25,6 +25,7 @@
 #include "newmail.h"
 #include "pocketsec.h"
 #include "limits.h"
+#include "config.h"
 
 /*   external vars  */
 extern struct time_info_data time_info;
@@ -52,6 +53,8 @@ extern void wire_nuyen(struct char_data *ch, struct char_data *target, int amoun
 bool memory(struct char_data *ch, struct char_data *vict);
 extern MYSQL *mysql;
 extern int mysql_wrapper(MYSQL *mysql, const char *query);
+
+extern struct command_info cmd_info[];
 
 ACMD_CONST(do_say);
 ACMD(do_echo);
@@ -88,41 +91,43 @@ int fixers_need_save;
 *  Special procedures for mobiles                                     *
 ******************************************************************** */
 
-char *how_good(int percent)
+char *how_good(int rank)
 {
   static char buf[256];
 
-  if (percent < 0)
+  if (rank < 0)
     strcpy(buf, " (uh oh! you have a negative skill, please report!)");
-  else if (percent == 0)
+  else if (rank == 0)
     strcpy(buf, " (not learned)");
-  else if (percent == 1)
+  else if (rank == 1)
     strcpy(buf, " (awful)");
-  else if (percent == 2)
+  else if (rank == 2)
     strcpy(buf, " (sloppy)");
-  else if (percent == 3)
+  else if (rank == 3)
     strcpy(buf, " (average)");
-  else if (percent == 4)
+  else if (rank == 4)
     strcpy(buf, " (above average)");
-  else if (percent == 5)
+  else if (rank == 5)
     strcpy(buf, " (good)");
-  else if (percent == 6)
+  else if (rank == 6)
     strcpy(buf, " (very good)");
-  else if (percent == 7)
+  else if (rank == 7)
     strcpy(buf, " (distinguished)");
-  else if (percent == 8)
+  else if (rank == 8)
     strcpy(buf, " (excellent)");
-  else if (percent == 9)
+  else if (rank == 9)
     strcpy(buf, " (superb)");
-  else if (percent == 10)
+  else if (rank == 10)
     strcpy(buf, " (learned)");
-  else if (percent <= 20)
+  else if (rank == 11)
+    strcpy(buf, " (professional)");
+  else if (rank <= 20)
     strcpy(buf, " (amazing)");
-  else if (percent <= 30)
+  else if (rank <= 30)
     strcpy(buf, " (incredible)");
-  else if (percent <= 40)
+  else if (rank <= 40)
     strcpy(buf, " (unbelievable)");
-  else if (percent <= 50)
+  else if (rank <= 50)
     strcpy(buf, " (ludicrous)");
   else
     strcpy(buf, " (godly)");
@@ -4032,4 +4037,44 @@ SPECIAL(chargen_hopper)
   }
   
   return FALSE;
+}
+
+// Build the exits of the room based on character's traditions.
+SPECIAL(chargen_career_archetype_paths)
+{
+  struct room_data *room = (struct room_data *) me;
+  struct room_data *temp_to_room = NULL;
+  
+  if (!ch || !cmd || IS_NPC(ch))
+    return FALSE;
+  
+  // Block non-mages from going east.
+  if ((CMD_IS("east") || CMD_IS("e")) && (GET_TRADITION(ch) != TRAD_HERMETIC && GET_TRADITION(ch) != TRAD_SHAMANIC)) {
+    send_to_char("You don't have the aptitude to choose the Path of the Magician.\r\n", ch);
+    return TRUE;
+  }
+  
+  // Block non-adepts from going south.
+  if ((CMD_IS("s") || CMD_IS("south")) && GET_TRADITION(ch) != TRAD_ADEPT) {
+    send_to_char("You don't have the aptitude to choose the Path of the Adept.\r\n", ch);
+    return TRUE;
+  }
+  
+  // Map the east exit to the correct branch of magic's path, then proceed.
+  
+  // Store the current exit, then overwrite with our custom one.
+  temp_to_room = room->dir_option[EAST]->to_room;
+  room->temporary_stored_exit[EAST] = room->dir_option[EAST];
+  if (GET_TRADITION(ch) == TRAD_HERMETIC)
+    room->dir_option[EAST]->to_room = &world[real_room(RM_CHARGEN_PATH_OF_THE_MAGICIAN_HERMETIC)];
+  else
+    room->dir_option[EAST]->to_room = &world[real_room(RM_CHARGEN_PATH_OF_THE_MAGICIAN_SHAMANIC)];
+  
+  // Execute the actual command as normal. We know it'll always be cmd_info since you can't rig or mtx in chargen.
+  ((*cmd_info[cmd].command_pointer) (ch, argument, cmd, cmd_info[cmd].subcmd));
+  
+  // Restore the east exit for the room to the normal one.
+  room->dir_option[EAST]->to_room = temp_to_room;
+    
+  return TRUE;
 }

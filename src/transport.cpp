@@ -767,7 +767,7 @@ static void init_elevators(void)
       
       // Store shaft->landing exit.
       if (shaft->dir_option[dir])
-        shaft->temporary_stored_exit = shaft->dir_option[dir];
+        shaft->temporary_stored_exit[dir] = shaft->dir_option[dir];
       shaft->dir_option[dir] = NULL;
       
     } else
@@ -1005,10 +1005,10 @@ static int process_elevator(struct room_data *room,
       }
       
       // Restore the exit shaft->landing. EDGE CASE: Will be NULL if the car started here on boot and hasn't moved.
-      if (shaft->temporary_stored_exit) {
+      if (shaft->temporary_stored_exit[dir]) {
         // We assume that it was stored by the elevator moving through here, so the dir_option should be NULL and safe to overwrite.
-        shaft->dir_option[dir] = shaft->temporary_stored_exit;
-        shaft->temporary_stored_exit = NULL;
+        shaft->dir_option[dir] = shaft->temporary_stored_exit[dir];
+        shaft->temporary_stored_exit[dir] = NULL;
       }
       make_elevator_door(real_room(landing->number), real_room(shaft->number), dir);
       
@@ -1069,7 +1069,7 @@ static int process_elevator(struct room_data *room,
       
       make_elevator_door(real_room(landing->number), real_room(car->number), dir);
       
-      shaft->temporary_stored_exit = shaft->dir_option[dir];
+      shaft->temporary_stored_exit[dir] = shaft->dir_option[dir];
       shaft->dir_option[dir] = NULL;
     }
     

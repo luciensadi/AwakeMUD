@@ -165,7 +165,7 @@ struct room_data
   char *night_desc;
   struct extra_descr_data *ex_description; /* for examine/look       */
   struct room_direction_data *dir_option[NUM_OF_DIRS]; /* Directions */
-  struct room_direction_data *temporary_stored_exit; // Stores exits that elevators overwrote
+  struct room_direction_data *temporary_stored_exit[NUM_OF_DIRS]; // Stores exits that elevators or spec procs overwrote
   vnum_t matrix;		/* Matrix exit */
   int access;
   int io;
@@ -203,12 +203,14 @@ struct room_data
 #endif
   room_data() :
       name(NULL), description(NULL), night_desc(NULL), ex_description(NULL),
-      temporary_stored_exit(NULL), matrix(0), access(0), io(0), trace(0),
+      matrix(0), access(0), io(0), trace(0),
       bandwidth(0), jacknumber(0), address(NULL), peaceful(0), func(NULL), contents(NULL),
       people(NULL), vehicles(NULL), watching(NULL)
   {
-    for (int i = 0; i < NUM_OF_DIRS; i++)
+    for (int i = 0; i < NUM_OF_DIRS; i++) {
       dir_option[i] = NULL;
+      temporary_stored_exit[i] = NULL;
+    }
     
     for (int i = 0; i < NUM_WORKSHOP_TYPES; i++)
       best_workshop[i] = NULL;

@@ -703,6 +703,7 @@ void assign_rooms(void)
   SPECIAL(chargen_skill_annex);
   SPECIAL(chargen_unpractice_skill);
   SPECIAL(floor_has_glass_shards);
+  SPECIAL(chargen_career_archetype_paths);
 
   /* Limbo/God Rooms */
   ASSIGNROOM(8, oceansounds);
@@ -716,6 +717,7 @@ void assign_rooms(void)
   ASSIGNROOM(60505, chargen_south_from_trainer);
   ASSIGNROOM(60506, chargen_skill_annex);
   ASSIGNROOM(60562, auth_room);
+  ASSIGNROOM(60514, chargen_career_archetype_paths);
   /* CharGen - allow forgetting skills */
   ASSIGNROOM(60507, chargen_unpractice_skill);
   ASSIGNROOM(60508, chargen_unpractice_skill);
