@@ -1733,7 +1733,7 @@ void weight_change_object(struct obj_data * obj, float weight)
 
   if (obj->in_room)
   {
-    GET_OBJ_WEIGHT(obj) = MAX(0, GET_OBJ_WEIGHT(obj) - weight);
+    GET_OBJ_WEIGHT(obj) = MAX(0, GET_OBJ_WEIGHT(obj) + weight);
   } else if ((tmp_ch = obj->carried_by))
   {
     obj_from_char(obj);

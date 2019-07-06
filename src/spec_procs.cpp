@@ -4064,7 +4064,6 @@ SPECIAL(chargen_career_archetype_paths)
   
   // Store the current exit, then overwrite with our custom one.
   temp_to_room = room->dir_option[EAST]->to_room;
-  room->temporary_stored_exit[EAST] = room->dir_option[EAST];
   if (GET_TRADITION(ch) == TRAD_HERMETIC)
     room->dir_option[EAST]->to_room = &world[real_room(RM_CHARGEN_PATH_OF_THE_MAGICIAN_HERMETIC)];
   else
@@ -4076,5 +4075,32 @@ SPECIAL(chargen_career_archetype_paths)
   // Restore the east exit for the room to the normal one.
   room->dir_option[EAST]->to_room = temp_to_room;
     
+  return TRUE;
+}
+
+// Build the exits of the room based on character's traditions.
+SPECIAL(chargen_spirit_combat_west)
+{
+  struct room_data *room = (struct room_data *) me;
+  struct room_data *temp_to_room = NULL;
+  
+  if (!ch || !cmd || IS_NPC(ch))
+    return FALSE;
+  
+  // Map the west exit to the correct branch of magic's path, then proceed.
+  
+  // Store the current exit, then overwrite with our custom one.
+  temp_to_room = room->dir_option[WEST]->to_room;
+  if (GET_TRADITION(ch) == TRAD_HERMETIC)
+    room->dir_option[WEST]->to_room = &world[real_room(RM_CHARGEN_CONJURING_HERMETIC)];
+  else
+    room->dir_option[WEST]->to_room = &world[real_room(RM_CHARGEN_CONJURING_SHAMANIC)];
+  
+  // Execute the actual command as normal. We know it'll always be cmd_info since you can't rig or mtx in chargen.
+  ((*cmd_info[cmd].command_pointer) (ch, argument, cmd, cmd_info[cmd].subcmd));
+  
+  // Restore the east exit for the room to the normal one.
+  room->dir_option[WEST]->to_room = temp_to_room;
+  
   return TRUE;
 }
