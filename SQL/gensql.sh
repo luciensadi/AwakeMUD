@@ -67,10 +67,6 @@ if [ ! -f awakemud.sql ]; then
   exit 2
 fi
 
-echo "WARNING: IF YOUR DATABASE ALREADY EXISTS, THIS WILL PURGE IT."
-echo "If you have a DB and want to save it, use CTRL-C to abort this script."
-echo "Otherwise, enter your MySQL root user's password when prompted."
-
 echo "DROP DATABASE IF EXISTS $DBNAME;" > gen_temp.sql
 
 if [ "$MYSQLCANDROPUSERIFEXISTS" == "1" ]; then
@@ -99,9 +95,15 @@ if [ -f "playergroups.sql" ]; then
 fi
 
 if [ -f "mail_fixes.sql" ]; then
-echo "" >> gen_temp.sql
-cat playergroups.sql >> gen_temp.sql
+  echo "" >> gen_temp.sql
+  cat mail_fixes.sql >> gen_temp.sql
 fi
+
+echo "You may preview the actions that are about to be taken by viewing gen_temp.sql now."
+echo ""
+echo "WARNING: IF YOUR DATABASE ALREADY EXISTS, THIS WILL PURGE IT."
+echo "If you have a DB and want to save it, use CTRL-C to abort this script."
+echo "Otherwise, enter your MySQL root user's password when prompted."
 
 mysql -u root -p < gen_temp.sql
 
