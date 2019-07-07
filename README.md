@@ -20,11 +20,11 @@ Tested on:
 - Amazon Linux
 - Cygwin (beta)
 
-## Installation
-- Install make and clang if they're not already present (`sudo apt-get install make clang`)
+## Installation (Ubuntu commands in parentheses)
 - Install [MySQL 5](https://dev.mysql.com/doc/refman/5.7/en/installing.html), including its development headers (ensure `mysql/mysql.h` exists in your path).
-- Install [libsodium](https://github.com/jedisct1/libsodium/releases) (`./configure; make; sudo make install`). Version 1.0.16 is known to work.
-- Clone this repository to your machine.
+- Install automake, clang, libtool, autoconf, zlib1g-dev, libcurl4-openssl-dev, and libmysqlclient-dev if they're not already present (`sudo apt-get install make clang libtool autoconf zlib1g-dev libcurl4-openssl-dev libmysqlclient-dev`)
+- Install [libsodium](https://github.com/jedisct1/libsodium/releases) per their [installation instructions](https://download.libsodium.org/doc/installation). Version 1.0.16 is known to work, but higher versions should work as well.
+- Clone this repository to your machine. (`git clone https://github.com/luciensadi/AwakeMUD.git`)
 - Change to the repository's SQL directory (`cd AwakeMUD/SQL`)
 - Run `./gensql.sh` (or do the steps manually if it doesn't support your OS). If you plan on running this with MariaDB, use the `--skip-checks` command-line flag.
 - Change to the repository's SRC directory (`cd ../src`).
