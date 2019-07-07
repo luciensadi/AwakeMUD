@@ -102,7 +102,8 @@ fi
 echo "You may preview the actions that are about to be taken by viewing gen_temp.sql now."
 echo ""
 echo "WARNING: IF YOUR DATABASE ALREADY EXISTS, THIS WILL PURGE IT."
-echo "If you have a DB and want to save it, use CTRL-C to abort this script."
+echo ""
+echo "If you have a DB and want to save it, enter anything except your MySQL root user's password."
 echo "Otherwise, enter your MySQL root user's password when prompted."
 
 mysql -u root -p < gen_temp.sql
