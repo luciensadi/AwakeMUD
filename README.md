@@ -6,7 +6,7 @@ A fork of the [Awakened Worlds](http://awakenedworlds.net) MUD codebase. Issues 
 **Join our Discord channel!** https://discord.gg/q5VCMkv
 
 ## Features
-- 50k+ lines of additions including new areas, new features, and massive quality-of-life improvements
+- 62k+ lines of additions including new areas, new features, and massive quality-of-life improvements
 - Screenreader accessibility via TOGGLE SCREENREADER
 - Enhanced security that fixes several serious exploits
 - Significantly increased performance
