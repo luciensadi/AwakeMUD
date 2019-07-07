@@ -80,6 +80,7 @@ struct  char_data *get_driver(struct veh_data *veh);
 struct  obj_data *find_matching_obj_in_container(struct obj_data *container, vnum_t vnum);
 bool    attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *weapon, struct char_data *ch);
 struct  obj_data *unattach_attachment_from_weapon(int location, struct obj_data *weapon, struct char_data *ch);
+void    copy_over_necessary_info(struct char_data *original, struct char_data *clone);
 
 // Message history management and manipulation.
 void    store_message_to_history(struct descriptor_data *d, int channel, const char *mallocd_message);

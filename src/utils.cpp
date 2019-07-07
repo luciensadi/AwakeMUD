@@ -2266,3 +2266,68 @@ struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *
   return attachment;
 }
 
+void copy_over_necessary_info(struct char_data *original, struct char_data *clone) {
+#define REPLICATE(field) ((clone)->field = (original)->field)
+  // Location data.
+  REPLICATE(in_room);
+  REPLICATE(was_in_room);
+  REPLICATE(in_veh);
+  
+  // PC specials (null for NPCs)
+  REPLICATE(player_specials);
+  
+  // Matrix info (null for NPCs)
+  REPLICATE(persona);
+  
+  // Spell info.
+  REPLICATE(squeue);
+  REPLICATE(sustained);
+  REPLICATE(ssust);
+  REPLICATE(spells);
+  
+  // Equipment info.
+  for (int pos = 0; pos < NUM_WEARS; pos++)
+    REPLICATE(equipment[pos]);
+  REPLICATE(carrying);
+  REPLICATE(cyberware);
+  REPLICATE(bioware);
+  
+  // Linked lists.
+  REPLICATE(next_in_room);
+  REPLICATE(next);
+  REPLICATE(next_fighting);
+  REPLICATE(next_in_zone);
+  REPLICATE(next_in_veh);
+  REPLICATE(next_watching);
+  
+  // Follower / master data.
+  REPLICATE(followers);
+  REPLICATE(master);
+  
+  // Pgroup data (null for NPCs)
+  REPLICATE(pgroup);
+  REPLICATE(pgroup_invitations);
+  
+  // Nested data (pointers from included structs)
+  REPLICATE(char_specials.fighting);
+  REPLICATE(char_specials.fight_veh);
+  REPLICATE(char_specials.hunting);
+  REPLICATE(mob_specials.last_direction);
+  REPLICATE(mob_specials.memory);
+  REPLICATE(mob_specials.wait_state);
+  REPLICATE(points.mental);
+  REPLICATE(points.max_mental);
+  REPLICATE(points.physical);
+  REPLICATE(points.max_physical);
+  REPLICATE(points.init_dice);
+  REPLICATE(points.init_roll);
+  REPLICATE(points.sustained[0]);
+  REPLICATE(points.sustained[1]);
+  REPLICATE(points.vision[0]);
+  REPLICATE(points.vision[1]);
+  REPLICATE(points.fire[0]);
+  REPLICATE(points.fire[1]);
+  REPLICATE(points.reach[0]);
+  REPLICATE(points.reach[1]);
+#undef REPLICATE
+}

@@ -623,8 +623,8 @@ void mobile_activity(void)
   for (ch = character_list; ch; ch = next_ch) {
     next_ch = ch->next;
     
-    // Skip them if they're a player or are sleeping.
-    if (!IS_MOB(ch) || !AWAKE(ch) || ch->desc)
+    // Skip them if they're a player character, are being possessed, are sleeping, or have no current room.
+    if (!IS_MOB(ch) || !AWAKE(ch) || ch->desc || !get_ch_in_room(ch))
       continue;
 
     // Skip NPCs that are currently fighting someone in their room, or are fighting a vehicle.

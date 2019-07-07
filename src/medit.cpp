@@ -310,32 +310,16 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         // which are pointing to this prototype; if it is, it gets
         // replaced
         struct char_data *i, *temp;
-        int c;
         for (i = character_list; i; i = i->next) {
           if (mob_number == i->nr) {
             // alloc a temp mobile
             temp = Mem->GetCh();
             *temp = *i;
             *i = *d->edit_mob;
-            /* copy game-time dependent vars over */
-            i->in_room = temp->in_room;
             i->nr = mob_number;
-            i->carrying = temp->carrying;
-            i->cyberware = temp->cyberware;
-            i->bioware = temp->bioware;
-            // any eq worn
-            for (c = 0; c < NUM_WEARS; ++c)
-              i->equipment[c] = temp->equipment[c];
-            i->next_in_room = temp->next_in_room;
-            i->next = temp->next;
-            i->next_fighting = temp->next_fighting;
-            i->followers = temp->followers;
-            i->master = temp->master;
-            i->char_specials.fighting = temp->char_specials.fighting;
-            i->char_specials.hunting = temp->char_specials.hunting;
-            i->mob_specials.last_direction = temp->mob_specials.last_direction;
-            i->mob_specials.memory = temp->mob_specials.memory;
-            i->mob_specials.wait_state = temp->mob_specials.wait_state;
+            /* copy game-time dependent vars over */
+            copy_over_necessary_info(temp, i);
+            // Clean up.
             Mem->ClearCh(temp);
           } // end if statement
 
@@ -441,11 +425,11 @@ void medit_parse(struct descriptor_data *d, const char *arg)
         for (zone = 0; zone <= top_of_zone_table; zone++)
           for (cmd_no = 0; cmd_no < zone_table[zone].num_cmds; cmd_no++) {
             switch (ZCMD.command) {
-            case 'M':
-              ZCMD.arg1 = (ZCMD.arg1 >= d->edit_mob->nr ? ZCMD.arg1 + 1 : ZCMD.arg1);
-              break;
+              case 'S':
+              case 'M':
+                ZCMD.arg1 = (ZCMD.arg1 >= d->edit_mob->nr ? ZCMD.arg1 + 1 : ZCMD.arg1);
+                break;
             }
-
           }
 
       } // finally done putting the mobile into memory

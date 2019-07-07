@@ -715,7 +715,8 @@ struct char_data
   
   Pgroup_data *pgroup;                   /* Data concerning the player group this char is part of. */
   Pgroup_invitation *pgroup_invitations; /* The list of open group invitations associated with this player. */
-
+  
+  /* Adding a field here? If it's a pointer, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
 
   char_data() :
       in_room(NULL), was_in_room(NULL), player_specials(NULL), in_veh(NULL), persona(NULL), squeue(NULL), sustained(NULL),
