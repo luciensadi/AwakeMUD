@@ -22,7 +22,7 @@ Tested on:
 
 ## Installation (Ubuntu commands in parentheses)
 - Install [MySQL 5](https://dev.mysql.com/doc/refman/5.7/en/installing.html), including its development headers (ensure `mysql/mysql.h` exists in your path).
-- Install automake, make, gcc, clang, libtool, autoconf, zlib1g-dev, libcurl4-openssl-dev, and libmysqlclient-dev if they're not already present (`sudo apt-get install automake make gcc clang libtool autoconf zlib1g-dev libcurl4-openssl-dev libmysqlclient-dev`)
+- Install automake, make, gcc, g++, clang, libtool, autoconf, zlib1g-dev, libcurl4-openssl-dev, and libmysqlclient-dev if they're not already present (`sudo apt-get install automake make gcc g++ clang libtool autoconf zlib1g-dev libcurl4-openssl-dev libmysqlclient-dev`)
 - Install [libsodium](https://github.com/jedisct1/libsodium/releases) per their [installation instructions](https://download.libsodium.org/doc/installation). Version 1.0.16 is known to work, but higher versions should work as well.
 - Clone this repository to your machine. (`git clone https://github.com/luciensadi/AwakeMUD.git`)
 - Change to the repository's SQL directory (`cd AwakeMUD/SQL`)
