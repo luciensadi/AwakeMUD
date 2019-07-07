@@ -1854,7 +1854,7 @@ void DeleteChar(long idx)
   mysql_wrapper(mysql, buf);
   
   // Update playergroup info.
-  sprintf(buf, "SELECT group FROM pfiles_playergroups WHERE idnum=%ld", idx);
+  sprintf(buf, "SELECT `group` FROM pfiles_playergroups WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row;
