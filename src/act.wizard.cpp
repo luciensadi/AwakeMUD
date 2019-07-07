@@ -2723,94 +2723,105 @@ ACMD(do_wizutil)
     send_to_char("Hmmm...you'd better not.\r\n", ch);
   else {
     switch (subcmd) {
-    case SCMD_PARDON:
-      if (!PLR_FLAGS(vict).AreAnySet(PLR_KILLER, PLR_WANTED, ENDBIT)) {
-        send_to_char("Your victim is not flagged.\r\n", ch);
-        return;
-      }
-      PLR_FLAGS(vict).RemoveBits(PLR_KILLER, PLR_WANTED, ENDBIT);
-      send_to_char("Pardoned.\r\n", ch);
-      send_to_char("You have been pardoned by the Gods!\r\n", vict);
-      sprintf(buf, "%s pardoned by %s", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
-      mudlog(buf, ch, LOG_WIZLOG, TRUE);
-      break;
-    case SCMD_NOTITLE:
-      result = PLR_TOG_CHK(vict, PLR_NOTITLE);
-      sprintf(buf, "Notitle %s for %s by %s.", ONOFF(result),
-              GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
-      mudlog(buf, ch, LOG_WIZLOG, TRUE);
-      strcat(buf, "\r\n");
-      send_to_char(buf, ch);
-      break;
-    case SCMD_SQUELCH:
-      result = PLR_TOG_CHK(vict, PLR_NOSHOUT);
-      sprintf(buf, "Squelch %s for %s by %s.", ONOFF(result),
-              GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
-      mudlog(buf, ch, LOG_WIZLOG, TRUE);
-      strcat(buf, "\r\n");
-      send_to_char(buf, ch);
-      break;
-    case SCMD_SQUELCHOOC:
-      result = PLR_TOG_CHK(vict, PLR_NOOOC);
-      sprintf(buf, "Squelch(OOC) %s for %s by %s.", ONOFF(result),
-              GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
-      mudlog(buf, ch, LOG_WIZLOG, TRUE);
-      strcat(buf, "\r\n");
-      send_to_char(buf, ch);
-      break;
-    case SCMD_RPE:
-      result = PLR_TOG_CHK(vict, PLR_RPE);
-      sprintf(buf, "RPE toggled %s for %s by %s.", ONOFF(result),
-              GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
-      if (PLR_FLAGGED(vict, PLR_RPE)) {
-        send_to_char(vict, "Congratulations, you are now an RPE. You have access to the RPE channel.\r\n");
-        send_to_char(ch, "Your target is an RPE.\r\n");
-      } else {
-        send_to_char(vict, "You are no longer considered an RPE.\r\n");
-        send_to_char(ch, "Your target is no longer an RPE.\r\n");
-      }
-      mudlog(buf, ch, LOG_WIZLOG, TRUE);
-      break;
-
-    case SCMD_FREEZE:
-      if (ch == vict) {
-        send_to_char("Oh, yeah, THAT'S real smart...\r\n", ch);
-        return;
-      }
-      if (PLR_FLAGGED(vict, PLR_FROZEN)) {
-        send_to_char("Your victim is already pretty cold.\r\n", ch);
-        return;
-      }
-      PLR_FLAGS(vict).SetBit(PLR_FROZEN);
-      GET_FREEZE_LEV(vict) = GET_LEVEL(ch);
-      send_to_char("A bitter wind suddenly rises and drains every erg of heat from your body!\r\nYou feel frozen!\r\n", vict);
-      send_to_char("Frozen.\r\n", ch);
-      act("A sudden cold wind conjured from nowhere freezes $n!", FALSE, vict, 0, 0, TO_ROOM);
-      sprintf(buf, "%s frozen by %s.", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
-      mudlog(buf, ch, LOG_WIZLOG, TRUE);
-      break;
-    case SCMD_THAW:
-      if (!PLR_FLAGGED(vict, PLR_FROZEN)) {
-        send_to_char("Sorry, your victim is not morbidly encased in ice at the moment.\r\n", ch);
-        return;
-      }
-      if (!access_level(ch, GET_FREEZE_LEV(vict))) {
-        sprintf(buf, "Sorry, a level %d God froze %s... you can't unfreeze %s.\r\n",
-                GET_FREEZE_LEV(vict), GET_CHAR_NAME(vict), HMHR(vict));
+      case SCMD_PARDON:
+        if (!PLR_FLAGS(vict).AreAnySet(PLR_KILLER, PLR_WANTED, ENDBIT)) {
+          send_to_char("Your victim is not flagged.\r\n", ch);
+          return;
+        }
+        PLR_FLAGS(vict).RemoveBits(PLR_KILLER, PLR_WANTED, ENDBIT);
+        send_to_char("Pardoned.\r\n", ch);
+        send_to_char("You have been pardoned by the Gods!\r\n", vict);
+        sprintf(buf, "%s pardoned by %s", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
+        mudlog(buf, ch, LOG_WIZLOG, TRUE);
+        break;
+      case SCMD_AUTHORIZE:
+        if (!PLR_FLAGS(vict).IsSet(PLR_AUTH)) {
+          send_to_char("Your victim is already authorized.\r\n", ch);
+          return;
+        }
+        PLR_FLAGS(vict).RemoveBit(PLR_AUTH);
+        send_to_char("Authorized.\r\n", ch);
+        send_to_char("Your character has been authorized!\r\n", vict);
+        sprintf(buf, "%s authorized by %s", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
+        mudlog(buf, ch, LOG_WIZLOG, TRUE);
+        break;
+      case SCMD_NOTITLE:
+        result = PLR_TOG_CHK(vict, PLR_NOTITLE);
+        sprintf(buf, "Notitle %s for %s by %s.", ONOFF(result),
+                GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
+        mudlog(buf, ch, LOG_WIZLOG, TRUE);
+        strcat(buf, "\r\n");
         send_to_char(buf, ch);
-        return;
-      }
-      sprintf(buf, "%s un-frozen by %s.", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
-      mudlog(buf, ch, LOG_WIZLOG, TRUE);
-      PLR_FLAGS(vict).RemoveBit(PLR_FROZEN);
-      send_to_char("A fireball suddenly explodes in front of you, melting the ice!\r\nYou feel thawed.\r\n", vict);
-      send_to_char("Thawed.\r\n", ch);
-      GET_FREEZE_LEV(vict) = 0;
-      act("A sudden fireball conjured from nowhere thaws $n!", FALSE, vict, 0, 0, TO_ROOM);
-      break;
-    default:
-      log("SYSERR: Unknown subcmd passed to do_wizutil (act.wizard.c)");
-      break;
+        break;
+      case SCMD_SQUELCH:
+        result = PLR_TOG_CHK(vict, PLR_NOSHOUT);
+        sprintf(buf, "Squelch %s for %s by %s.", ONOFF(result),
+                GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
+        mudlog(buf, ch, LOG_WIZLOG, TRUE);
+        strcat(buf, "\r\n");
+        send_to_char(buf, ch);
+        break;
+      case SCMD_SQUELCHOOC:
+        result = PLR_TOG_CHK(vict, PLR_NOOOC);
+        sprintf(buf, "Squelch(OOC) %s for %s by %s.", ONOFF(result),
+                GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
+        mudlog(buf, ch, LOG_WIZLOG, TRUE);
+        strcat(buf, "\r\n");
+        send_to_char(buf, ch);
+        break;
+      case SCMD_RPE:
+        result = PLR_TOG_CHK(vict, PLR_RPE);
+        sprintf(buf, "RPE toggled %s for %s by %s.", ONOFF(result),
+                GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
+        if (PLR_FLAGGED(vict, PLR_RPE)) {
+          send_to_char(vict, "Congratulations, you are now an RPE. You have access to the RPE channel.\r\n");
+          send_to_char(ch, "Your target is an RPE.\r\n");
+        } else {
+          send_to_char(vict, "You are no longer considered an RPE.\r\n");
+          send_to_char(ch, "Your target is no longer an RPE.\r\n");
+        }
+        mudlog(buf, ch, LOG_WIZLOG, TRUE);
+        break;
+
+      case SCMD_FREEZE:
+        if (ch == vict) {
+          send_to_char("Oh, yeah, THAT'S real smart...\r\n", ch);
+          return;
+        }
+        if (PLR_FLAGGED(vict, PLR_FROZEN)) {
+          send_to_char("Your victim is already pretty cold.\r\n", ch);
+          return;
+        }
+        PLR_FLAGS(vict).SetBit(PLR_FROZEN);
+        GET_FREEZE_LEV(vict) = GET_LEVEL(ch);
+        send_to_char("A bitter wind suddenly rises and drains every erg of heat from your body!\r\nYou feel frozen!\r\n", vict);
+        send_to_char("Frozen.\r\n", ch);
+        act("A sudden cold wind conjured from nowhere freezes $n!", FALSE, vict, 0, 0, TO_ROOM);
+        sprintf(buf, "%s frozen by %s.", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
+        mudlog(buf, ch, LOG_WIZLOG, TRUE);
+        break;
+      case SCMD_THAW:
+        if (!PLR_FLAGGED(vict, PLR_FROZEN)) {
+          send_to_char("Sorry, your victim is not morbidly encased in ice at the moment.\r\n", ch);
+          return;
+        }
+        if (!access_level(ch, GET_FREEZE_LEV(vict))) {
+          sprintf(buf, "Sorry, a level %d God froze %s... you can't unfreeze %s.\r\n",
+                  GET_FREEZE_LEV(vict), GET_CHAR_NAME(vict), HMHR(vict));
+          send_to_char(buf, ch);
+          return;
+        }
+        sprintf(buf, "%s un-frozen by %s.", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
+        mudlog(buf, ch, LOG_WIZLOG, TRUE);
+        PLR_FLAGS(vict).RemoveBit(PLR_FROZEN);
+        send_to_char("A fireball suddenly explodes in front of you, melting the ice!\r\nYou feel thawed.\r\n", vict);
+        send_to_char("Thawed.\r\n", ch);
+        GET_FREEZE_LEV(vict) = 0;
+        act("A sudden fireball conjured from nowhere thaws $n!", FALSE, vict, 0, 0, TO_ROOM);
+        break;
+      default:
+        log("SYSERR: Unknown subcmd passed to do_wizutil (act.wizard.c)");
+        break;
     }
     playerDB.SaveChar(vict);
   }
@@ -3896,6 +3907,7 @@ ACMD(do_set)
     break;
   case 59:
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_AUTH);
+    send_to_char(ch, "%s is now %sauthorized.\r\n", GET_CHAR_NAME(vict), PLR_FLAGS(vict).IsSet(PLR_AUTH) ? "un-" : "");
     break;
   case 60:
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_EDCON);

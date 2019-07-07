@@ -429,6 +429,7 @@ struct command_info cmd_info[] =
     { "assist"   , POS_FIGHTING, do_assist   , 1, 0 },
     { "ask"      , POS_LYING   , do_spec_comm, 0, SCMD_ASK },
     { "award"    , POS_DEAD    , do_award    , LVL_FIXER, 0 },
+    { "authorize", POS_DEAD    , do_wizutil  , LVL_CONSPIRATOR, SCMD_AUTHORIZE },
     { "availoffset", POS_DEAD  , do_availoffset, 0, 0 },
 
     { "bond"     , POS_RESTING , do_bond     , 0, 0 },

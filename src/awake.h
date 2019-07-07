@@ -1631,6 +1631,7 @@ enum {
 #define SCMD_INITIATE   7
 #define SCMD_RPE 	8
 #define SCMD_POWERPOINT 9
+#define SCMD_AUTHORIZE  10
 
 /* do_say */
 #define SCMD_SAY        0
