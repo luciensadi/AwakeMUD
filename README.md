@@ -21,15 +21,16 @@ Tested on:
 - Cygwin (beta)
 
 ## Installation
-- Install clang (`apt-get install clang`)
-- Install MySQL 5, including its development headers (ensure `mysql/mysql.h` exists in your path).
-- Install [libsodium](https://github.com/jedisct1/libsodium/releases) (`./configure; make; (sudo) make install`). Version 1.0.16 is known to work.
+- Install make and clang if they're not already present (`sudo apt-get install make clang`)
+- Install [MySQL 5](https://dev.mysql.com/doc/refman/5.7/en/installing.html), including its development headers (ensure `mysql/mysql.h` exists in your path).
+- Install [libsodium](https://github.com/jedisct1/libsodium/releases) (`./configure; make; sudo make install`). Version 1.0.16 is known to work.
 - Clone this repository to your machine.
-- Run `SQL/gensql.sh` (or do the steps manually if it doesn't support your OS). If you plan on running this with MariaDB, use the `--skip-checks` command-line flag.
-- Copy the mysql_config.cpp file to src.
-- Edit `src/Makefile` and uncomment the OS that looks closest to yours (comment out the others). The default is Mac OS X; you'll probably want to switch it to Linux. You probably also want to remove the `-DGITHUB_INTEGRATION` flag from the Makefile at this time.
-- From the src directory, run `make clean && make`.
-- Change to the root directory and run the game (ex: `gdb bin/awake`, or `lldb bin/awake` on OS X).
+- Change to the repository's SQL directory (`cd AwakeMUD/SQL`)
+- Run `./gensql.sh` (or do the steps manually if it doesn't support your OS). If you plan on running this with MariaDB, use the `--skip-checks` command-line flag.
+- Change to the repository's SRC directory (`cd ../src`).
+- Edit `Makefile` and uncomment the OS that looks closest to yours by removing the # marks in front of it. Comment out the others by ensuring they have a # in front of their lines. The default is Mac OS X; you'll probably want to switch it to Linux. You probably also want to remove the `-DGITHUB_INTEGRATION` flag from the Makefile at this time.
+- From that same src directory, run `make clean && make`.
+- Change to the root directory (`cd ..`) and run the game (raw invocation `bin/awake`, or use a debugger like `gdb bin/awake`, or `lldb bin/awake` on OS X to help troubleshoot issues).
 - Connect to the game with telnet at `127.0.0.1:4000` and enjoy!
 
 ### Cygwin Installation Notes
