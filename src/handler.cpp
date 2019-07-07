@@ -44,6 +44,7 @@ extern int skill_web(struct char_data *, int);
 extern int return_general(int skill_num);
 extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data *);
 extern int max_ability(int i);
+extern void weight_change_object(struct obj_data * obj, float weight);
 
 struct obj_data *find_obj(struct char_data *ch, char *name, int num);
 
@@ -1694,9 +1695,9 @@ void obj_to_obj(struct obj_data * obj, struct obj_data * obj_to)
   obj->in_obj = obj_to;
   
   for (tmp_obj = obj->in_obj; tmp_obj->in_obj; tmp_obj = tmp_obj->in_obj)
-    GET_OBJ_WEIGHT(tmp_obj) += GET_OBJ_WEIGHT(obj);
+    weight_change_object(tmp_obj, GET_OBJ_WEIGHT(obj));
   if (GET_OBJ_TYPE(tmp_obj) != ITEM_CYBERDECK || GET_OBJ_TYPE(tmp_obj) != ITEM_CUSTOM_DECK || GET_OBJ_TYPE(tmp_obj) != ITEM_DECK_ACCESSORY)
-    GET_OBJ_WEIGHT(tmp_obj) += GET_OBJ_WEIGHT(obj);
+    weight_change_object(tmp_obj, GET_OBJ_WEIGHT(obj));
   if (tmp_obj->carried_by)
     IS_CARRYING_W(tmp_obj->carried_by) += GET_OBJ_WEIGHT(obj);
   if (tmp_obj->worn_by)
@@ -1721,9 +1722,9 @@ void obj_from_obj(struct obj_data * obj)
   /* Subtract weight from containers container */
   
   for (temp = obj->in_obj; temp->in_obj; temp = temp->in_obj)
-    GET_OBJ_WEIGHT(temp) -= GET_OBJ_WEIGHT(obj);
+    weight_change_object(temp, -GET_OBJ_WEIGHT(obj));
   if (GET_OBJ_TYPE(temp) != ITEM_CYBERDECK || GET_OBJ_TYPE(temp) != ITEM_DECK_ACCESSORY || GET_OBJ_TYPE(temp) != ITEM_CUSTOM_DECK)
-    GET_OBJ_WEIGHT(temp) -= GET_OBJ_WEIGHT(obj);
+    weight_change_object(temp, -GET_OBJ_WEIGHT(obj));
   if (temp->carried_by)
     IS_CARRYING_W(temp->carried_by) -= GET_OBJ_WEIGHT(obj);
   if (temp->worn_by)

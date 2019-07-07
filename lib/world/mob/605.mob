@@ -174,7 +174,7 @@ Jet shows incredible agility in practicing his martial arts, even for a
 physical adept. His nametag says, "Jet L." 
 ~
 ArriveMsg:	
-LeaveMsg:	
+LeaveMsg:	¼ÈF˜û
 MobFlags:	10000000001011
 AffFlags:	0
 Race:	Human
@@ -196,11 +196,11 @@ DefaultPos:	Standing
 	Cash:	1000
 	Bank:	5000
 [SKILLS]
-	unarmed combat:	10
-	armed combat:	10
-	stealth:	10
-	leadership:	10
-	athletics:	10
+	:	10
+	Armed Combat:	10
+	Stealth:	10
+	Leadership:	10
+	Athletics:	10
 BREAK
 #60506
 Keywords:	mick teacher firearm
@@ -236,10 +236,10 @@ DefaultPos:	Standing
 	Cash:	1000
 	Bank:	5000
 [SKILLS]
-	unarmed combat:	10
-	firearms:	10
-	leadership:	10
-	armed combat:	10
+	:	10
+	Firearms:	10
+	Leadership:	10
+	Armed Combat:	10
 BREAK
 #60507
 Keywords:	bruce trainer adept
@@ -274,11 +274,11 @@ DefaultPos:	Standing
 	Ballistic:	15
 	Impact:	15
 [SKILLS]
-	unarmed combat:	10
-	leadership:	10
-	stealth:	10
-	athletics:	10
-	armed combat:	10
+	:	10
+	Leadership:	10
+	Stealth:	10
+	Athletics:	10
+	Armed Combat:	10
 BREAK
 #60508
 Keywords:	zahn master man mage
@@ -316,11 +316,11 @@ DefaultPos:	Standing
 	Cash:	2000
 	Bank:	6000
 [SKILLS]
-	sorcery:	10
-	:	10
-	unarmed combat:	10
-	conjuring:	10
-	stealth:	10
+	Sorcery:	10
+	:	10
+	:	10
+	Conjuring:	10
+	Stealth:	10
 BREAK
 #60509
 Keywords:	serphon master shaman man
@@ -357,11 +357,11 @@ DefaultPos:	Standing
 	Cash:	2000
 	Bank:	6000
 [SKILLS]
-	:	10
-	sorcery:	10
-	conjuring:	10
-	unarmed combat:	10
-	throwing weapons:	10
+	:	10
+	Sorcery:	10
+	Conjuring:	10
+	:	10
+	Throwing Weapons:	10
 BREAK
 #60510
 Keywords:	doc holiday cybertechnician doctor
@@ -1284,6 +1284,87 @@ DefaultPos:	Standing
 	Height:	143
 	Weight:	95
 [SKILLS]
+BREAK
+#60539
+Keywords:	kyle mall ninja mall-ninja fellow trainer man
+Name:	Kyle
+RoomDesc:$
+A mall-ninja-looking fellow is methodically flinging shuriken at a target. 
+
+~
+LookDesc:$
+In sharp contrast to Jet, Kyle looks more like your typical wage slave who has
+developed an interest in throwing weapons and archery. Still, he looks skilled
+with his craft, even if he's throwing stars that say "MADE IN CHINA". 
+~
+ArriveMsg:	
+LeaveMsg:	
+MobFlags:	10000000001011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	40
+	Qui:	40
+	Str:	40
+	Cha:	40
+	Int:	40
+	Wil:	40
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	15
+	Cash:	1000
+	Bank:	5000
+[SKILLS]
+	:	10
+	Armed Combat:	10
+	Stealth:	10
+	Leadership:	10
+	Athletics:	10
+BREAK
+#60540
+Keywords:	jet adept trainer agile oriental man
+Name:	Jet
+RoomDesc:$
+An agile oriental man practices his combat forms. 
+
+~
+LookDesc:$
+Jet shows incredible agility in practicing his martial arts, even for a
+physical adept. His nametag says, "Jet L." 
+~
+ArriveMsg:	¼ÈF˜û
+LeaveMsg:	¼ÈF˜û
+MobFlags:	10000000001011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	40
+	Qui:	40
+	Str:	40
+	Cha:	40
+	Int:	40
+	Wil:	40
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	15
+	Cash:	1000
+	Bank:	5000
+[SKILLS]
+	:	10
+	Armed Combat:	10
+	Stealth:	10
+	Leadership:	10
+	Athletics:	10
 BREAK
 #60600
 Keywords:	zahn tall aztlan

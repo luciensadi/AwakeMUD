@@ -28,6 +28,7 @@
 extern char *cleanup(char *dest, const char *src);
 extern void ASSIGNMOB(long mob, SPECIAL(fname));
 extern void add_phone_to_list(struct obj_data *obj);
+extern void weight_change_object(struct obj_data * obj, float weight);
 struct landlord *landlords = NULL;
 ACMD_CONST(do_say);
 
@@ -95,6 +96,9 @@ bool House_load(struct house_control_rec *house)
     sprintf(buf, "%s/Vnum", sect_name);
     vnum = data.GetLong(buf, 0);
     if ((obj = read_object(vnum, VIRTUAL))) {
+      // Wipe its cost-- we're restoring from the saved value.
+      GET_OBJ_COST(obj) = 0;
+      
       sprintf(buf, "%s/Name", sect_name);
       obj->restring = str_dup(data.GetString(buf, NULL));
       sprintf(buf, "%s/Photo", sect_name);
@@ -106,18 +110,12 @@ bool House_load(struct house_control_rec *house)
       if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_OBJ_VAL(obj, 2))
         add_phone_to_list(obj);
       if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3)))
-        for (int q = 7; q < 10; q++)
+        for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
           if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 && 
              (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
-            GET_OBJ_WEIGHT(obj) += GET_OBJ_WEIGHT(attach);
-            if (attach->obj_flags.bitvector.IsSet(AFF_LASER_SIGHT))
-              obj->obj_flags.bitvector.SetBit(AFF_LASER_SIGHT);
-            if (attach->obj_flags.bitvector.IsSet(AFF_VISION_MAG_1))
-              obj->obj_flags.bitvector.SetBit(AFF_VISION_MAG_1);
-            if (attach->obj_flags.bitvector.IsSet(AFF_VISION_MAG_2))
-              obj->obj_flags.bitvector.SetBit(AFF_VISION_MAG_2);
-            if (attach->obj_flags.bitvector.IsSet(AFF_VISION_MAG_3))
-              obj->obj_flags.bitvector.SetBit(AFF_VISION_MAG_3);
+            attach_attachment_to_weapon(attach, obj, NULL);
+            // At the end of accessory loading, the cost will be negative.
+            GET_OBJ_COST(obj) -= GET_OBJ_COST(attach);
           }
       sprintf(buf, "%s/Condition", sect_name);
       GET_OBJ_CONDITION(obj) = data.GetInt(buf, GET_OBJ_CONDITION(obj));
@@ -126,7 +124,8 @@ bool House_load(struct house_control_rec *house)
       sprintf(buf, "%s/Attempt", sect_name);
       GET_OBJ_ATTEMPT(obj) = data.GetInt(buf, 0);
       sprintf(buf, "%s/Cost", sect_name);
-      GET_OBJ_COST(obj) = data.GetInt(buf, GET_OBJ_COST(obj));
+      // At this point, the cost is restored to a positive value. MAX() guards against edge case of attachment being edited after it was attached.
+      GET_OBJ_COST(obj) += MAX(0, data.GetInt(buf, GET_OBJ_COST(obj)));
       sprintf(buf, "%s/Inside", sect_name);
       inside = data.GetInt(buf, 0);
       if (inside > 0) {
@@ -421,15 +420,23 @@ SPECIAL(landlord_spec)
         send_to_char(ch, "Your housing card has %d nuyen left on it.\r\n", GET_OBJ_VAL(obj, 1));
       }
     }
-    do_say(recep, "Thank you, here is your key.", 0, 0);
     struct obj_data *key = read_object(room_record->key, VIRTUAL);
-    obj_to_char(key, ch);
-    room_record->owner = GET_IDNUM(ch);
-    room_record->date = time(0) + (SECS_PER_REAL_DAY*30);
-    ROOM_FLAGS(&world[real_room(room_record->vnum)]).SetBit(ROOM_HOUSE);
-    ROOM_FLAGS(&world[room_record->atrium]).SetBit(ROOM_ATRIUM);
-    House_crashsave(room_record->vnum);
-    House_save_control();
+    if (!key) {
+      sprintf(buf, "SYSERR: Room record for %ld specifies key vnum %ld, but it does not exist! '%s' (%ld) can't access %s apartment.",
+              room_record->vnum, room_record->key, GET_CHAR_NAME(ch), GET_IDNUM(ch), HSHR(ch));
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      do_say(recep, "I seem to have misplaced your key. I've refunded you the nuyen in cash.", 0, 0);
+      GET_NUYEN(ch) += cost;
+    } else {
+      do_say(recep, "Thank you, here is your key.", 0, 0);
+      obj_to_char(key, ch);
+      room_record->owner = GET_IDNUM(ch);
+      room_record->date = time(0) + (SECS_PER_REAL_DAY*30);
+      ROOM_FLAGS(&world[real_room(room_record->vnum)]).SetBit(ROOM_HOUSE);
+      ROOM_FLAGS(&world[room_record->atrium]).SetBit(ROOM_ATRIUM);
+      House_crashsave(room_record->vnum);
+      House_save_control();
+    }
     return TRUE;
   } else if (CMD_IS("leave")) {
     if (!*arg) {
@@ -474,7 +481,7 @@ SPECIAL(landlord_spec)
         }
       if (GET_NUYEN(ch) < cost) {
         if (GET_BANK(ch) >= cost) {
-          do_say(recep, "You don't have the money on you so I'll transfer it from your bank account.", 0, 0);
+          do_say(recep, "You don't have the money on you, so I'll transfer it from your bank account.", 0, 0);
           GET_BANK(ch) -= cost;
         } else {
           do_say(recep, "Sorry, you don't have the required funds.", 0, 0);
@@ -593,6 +600,7 @@ void House_boot(void)
           struct veh_data *veh = NULL;
           while (world[real_room(temp->vnum)].vehicles) {
             veh = world[real_room(temp->vnum)].vehicles;
+#ifdef DEBUG
             sprintf(buf, "debug: Shifting vehicle '%s' (%ld) from '%s' (%ld) to '%s' (%ld).",
                     veh->description, veh->idnum,
                     world[real_room(temp->vnum)].name,
@@ -600,6 +608,7 @@ void House_boot(void)
                     world[real_room(RM_SEATTLE_PARKING_GARAGE)].name,
                     world[real_room(RM_SEATTLE_PARKING_GARAGE)].number);
             mudlog(buf, NULL, LOG_SYSLOG, TRUE);
+#endif
             veh_from_room(veh);
             veh_to_room(veh, &world[real_room(RM_SEATTLE_PARKING_GARAGE)]);
           }

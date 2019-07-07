@@ -78,6 +78,8 @@ void    terminate_mud_process_with_message(const char *message, int error_code);
 bool    char_can_make_noise(struct char_data *ch, const char *message = NULL);
 struct  char_data *get_driver(struct veh_data *veh);
 struct  obj_data *find_matching_obj_in_container(struct obj_data *container, vnum_t vnum);
+bool    attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *weapon, struct char_data *ch);
+struct  obj_data *unattach_attachment_from_weapon(int location, struct obj_data *weapon, struct char_data *ch);
 
 // Message history management and manipulation.
 void    store_message_to_history(struct descriptor_data *d, int channel, const char *mallocd_message);
@@ -320,6 +322,8 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_REAL_LEVEL(ch) \
    (ch->desc && ch->desc->original ? GET_LEVEL(ch->desc->original) : \
     GET_LEVEL(ch))
+
+#define GET_DESC_LEVEL(d)  ((d)->original ? GET_LEVEL((d)->original) : ((d)->character ? GET_LEVEL((d)->character) : 0))
 
 #define GET_RACE(ch)          ((ch)->player.race)
 #define GET_TRADITION(ch)       ((ch)->player.tradition)
@@ -755,12 +759,16 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_WEAPON_POSSIBLE_FIREMODES(weapon)  (GET_OBJ_VAL((weapon), 10))
 #define GET_WEAPON_FIREMODE(weapon)            (GET_OBJ_VAL((weapon), 11))
 #define GET_WEAPON_FULL_AUTO_COUNT(weapon)     (GET_OBJ_TIMER((weapon)))
+#define GET_WEAPON_ATTACH_LOC(weapon, loc)     (((loc) >= ACCESS_LOCATION_TOP && (loc) <= ACCESS_LOCATION_UNDER) ? \
+                                                    GET_OBJ_VAL((weapon), (loc)) : 0)
 
 #define WEAPON_CAN_USE_FIREMODE(weapon, mode)  (IS_SET(GET_WEAPON_POSSIBLE_FIREMODES(weapon), 1 << (mode)))
 
 // ITEM_FIREWEAPON convenience defines
 
 // ITEM_MISSILE convenience defines
+
+// ITEM_CUSTOM_DECK convenience defines
 
 // ITEM_GYRO convenience defines
 
@@ -769,6 +777,8 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 // ITEM_WORN convenience defines
 
 // ITEM_OTHER convenience defines
+
+// ITEM_MAGIC_TOOL convenience defines
 
 // ITEM_DOCWAGON convenience defines
 #define GET_DOCWAGON_CONTRACT_GRADE(modulator) (GET_OBJ_VAL((modulator), 0))
@@ -811,6 +821,14 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 // ITEM_PROGRAM convenience defines
 
+// ITEM_GUN_MAGAZINE convenience defines
+
+// ITEM_GUN_ACCESSORY convenience defines
+#define GET_ACCESSORY_ATTACH_LOCATION(accessory) (GET_OBJ_VAL((accessory), 0))
+#define GET_ACCESSORY_TYPE(accessory)            (GET_OBJ_VAL((accessory), 1))
+
+// ITEM_SPELL_FORMULA convenience defines
+
 // ITEM_FOCUS convenience defines
 
 // ITEM_PATCH convenience defines
@@ -818,6 +836,8 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 // ITEM_CLIMBING convenience defines
 
 // ITEM_QUIVER convenience defines
+
+// ITEM_DECK_ACCESSORY convenience defines
 
 // ITEM_RCDECK convenience defines
 
@@ -827,6 +847,14 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_VEHICLE_MOD_TYPE(mod)            (GET_OBJ_VAL((mod), 0))
 
 // ITEM_HOLSTER convenience defines
+
+// ITEM_DESIGN convenience defines
+
+// ITEM_QUEST convenience defines
+
+// ITEM_GUN_AMMO convenience defines
+
+// ITEM_KEYRING convenience defines
 
 
 /* Misc utils ************************************************************/

@@ -52,6 +52,7 @@ extern long beginning_of_time;
 extern int ability_cost(int abil, int level);
 extern MYSQL *mysql;
 extern int mysql_wrapper(MYSQL *mysql, const char *buf);
+extern void weight_change_object(struct obj_data * obj, float weight);
 
 extern char *colorize(struct descriptor_data *d, const char *str, bool skip_check = FALSE);
 
@@ -1680,7 +1681,7 @@ void remove_workshop_from_room(struct obj_data *obj) {
         case TYPE_KIT:
           break;
         default:
-          sprintf(buf, "SYSERR: Invalid workshop type %d found for object %s (%ld).", GET_WORKSHOP_GRADE(o), GET_OBJ_NAME(o), GET_OBJ_VNUM(o));
+          sprintf(buf, "SYSERR: Invalid workshop type %d found for object '%s' (%ld).", GET_WORKSHOP_GRADE(o), GET_OBJ_NAME(o), GET_OBJ_VNUM(o));
           mudlog(buf, NULL, LOG_SYSLOG, TRUE);
           break;
       }
@@ -1982,3 +1983,286 @@ struct obj_data *find_matching_obj_in_container(struct obj_data *container, vnum
   // If we got here, the item wasn't found anywhere.
   return NULL;
 }
+
+bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *weapon, struct char_data *ch) {
+  if (!attachment || !weapon) {
+    if (ch)
+      send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n");
+    mudlog("SYSERR: NULL weapon or attachment passed to attach_attachment_to_weapon().", NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  if (GET_OBJ_TYPE(attachment) != ITEM_GUN_ACCESSORY) {
+    if (ch)
+      send_to_char(ch, "%s is not a gun accessory.\r\n", CAP(GET_OBJ_NAME(attachment)));
+    else {
+      sprintf(buf, "SYSERR: Attempting to attach non-attachment '%s' (%ld) to '%s' (%ld).",
+              GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment), GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    }
+    return FALSE;
+  }
+  
+  if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON || !IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
+    if (ch)
+      send_to_char(ch, "%s is not a gun.\r\n", CAP(GET_OBJ_NAME(weapon)));
+    else {
+      sprintf(buf, "SYSERR: Attempting to attach '%s' (%ld) to non-gun '%s' (%ld).",
+              GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment), GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    }
+    return FALSE;
+  }
+  
+  if (GET_OBJ_VAL(attachment, 1) == ACCESS_SMARTGOGGLE) {
+    if (ch)
+      send_to_char("These are for your eyes, not your gun.\r\n", ch);
+    else {
+      sprintf(buf, "SYSERR: Attempting to attach smartgoggle '%s' (%ld) to '%s' (%ld).",
+              GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment), GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    }
+    return FALSE;
+  }
+  
+  if (   ((GET_OBJ_VAL(attachment, 0) == 0) && (GET_WEAPON_ATTACH_TOP_VNUM(weapon)    > 0))
+      || ((GET_OBJ_VAL(attachment, 0) == 1) && (GET_WEAPON_ATTACH_BARREL_VNUM(weapon) > 0))
+      || ((GET_OBJ_VAL(attachment, 0) == 2) && (GET_WEAPON_ATTACH_UNDER_VNUM(weapon)  > 0))) {
+    if (ch) {
+      send_to_char(ch, "You cannot mount more than one attachment to the %s of that.\r\n", gun_accessory_locations[GET_OBJ_VAL(attachment, 0)]);
+      return FALSE;
+    }
+    // We assume the coder knows what they're doing (maybe it's a zload where the builder wants to replace a premade attachment with a better one?)
+  }
+  
+  if (   ((GET_OBJ_VAL(attachment, 0) == 0) && (GET_WEAPON_ATTACH_TOP_VNUM(weapon)    == -1))
+      || ((GET_OBJ_VAL(attachment, 0) == 1) && (GET_WEAPON_ATTACH_BARREL_VNUM(weapon) == -1))
+      || ((GET_OBJ_VAL(attachment, 0) == 2) && (GET_WEAPON_ATTACH_UNDER_VNUM(weapon)  == -1))) {
+    sprintf(buf, "%s isn't compatible with %s-mounted attachments.\r\n",
+            CAP(GET_OBJ_NAME(weapon)), gun_accessory_locations[GET_OBJ_VAL(attachment, 0)]);
+    if (ch) {
+      send_to_char(buf, ch);
+      return FALSE;
+    }
+    // We assume the coder knows what they're doing (maybe it's a zload where the builder wants to replace a premade attachment with a better one?)
+  }
+  
+  if (GET_ACCESSORY_ATTACH_LOCATION(attachment) < ACCESS_ACCESSORY_LOCATION_TOP
+      || GET_ACCESSORY_ATTACH_LOCATION(attachment) > ACCESS_ACCESSORY_LOCATION_UNDER) {
+    if (ch)
+      send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n");
+    sprintf(buf, "SYSERR: Accessory attachment location %d out of range for '%s' (%ld).",
+            GET_ACCESSORY_ATTACH_LOCATION(attachment), GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  if (GET_ACCESSORY_TYPE(attachment) == ACCESS_SILENCER && GET_WEAPON_SKILL(weapon) != SKILL_PISTOLS) {
+    if (ch) {
+      send_to_char(ch, "%s looks to be threaded for a pistol barrel only.\r\n", capitalize(GET_OBJ_NAME(attachment)));
+      return FALSE;
+    } else {
+      sprintf(buf, "WARNING: Attaching pistol silencer '%s' (%ld) to non-pistol '%s' (%ld).",
+              GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment), GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    }
+  }
+  
+  if (GET_ACCESSORY_TYPE(attachment) == ACCESS_SILENCER && !(GET_WEAPON_SKILL(weapon) == SKILL_PISTOLS
+                                                       || GET_WEAPON_SKILL(weapon) == SKILL_RIFLES
+                                                       || GET_WEAPON_SKILL(weapon) == SKILL_ASSAULT_RIFLES)) {
+    if (ch) {
+      send_to_char("Sound suppressors can only be attached to rifles, assault rifles, and SMGs.\r\n", ch);
+      return FALSE;
+    } else {
+      sprintf(buf, "WARNING; Attaching rifle/AR/SMG silencer '%s' (%ld) to non-qualifying weapon '%s' (%ld).",
+              GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment), GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    }
+  }
+  
+  // Transfer the first (and only the first) affect from the attachment to the weapon.
+  if (attachment->affected[0].modifier != 0) {
+    bool successfully_modified = FALSE;
+    for (int index = 0; index < MAX_OBJ_AFFECT; index++) {
+      if (!(weapon->affected[index].modifier)) {
+        weapon->affected[index].location = attachment->affected[0].location;
+        weapon->affected[index].modifier = attachment->affected[0].modifier;
+        successfully_modified = TRUE;
+        break;
+      }
+    }
+    
+    if (!successfully_modified) {
+      if (ch) {
+        sprintf(buf, "You seem unable to attach %s to %s.\r\n",
+                GET_OBJ_NAME(attachment), GET_OBJ_NAME(weapon));
+        send_to_char(buf, ch);
+      }
+      
+      sprintf(buf, "WARNING: '%s' (%ld) attempted to attach '%s' (%ld) to '%s' (%ld), but the gun was full up on affects. Something needs revising."
+              " Gun's current top/barrel/bottom attachment vnums are %d / %d / %d.",
+              ch ? GET_CHAR_NAME(ch) : "An automated process", ch ? GET_IDNUM(ch) : -1,
+              GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment),
+              GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon),
+              GET_WEAPON_ATTACH_TOP_VNUM(weapon),
+              GET_WEAPON_ATTACH_BARREL_VNUM(weapon),
+              GET_WEAPON_ATTACH_UNDER_VNUM(weapon));
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      return FALSE;
+    }
+  }
+  
+  // Add the attachment's weight to the weapon's weight.
+  weight_change_object(weapon, GET_OBJ_WEIGHT(attachment));
+  
+  // Add the attachment's cost to the weapon's cost.
+  GET_OBJ_COST(weapon) = MAX(0, GET_OBJ_COST(weapon) + GET_OBJ_COST(attachment));
+  
+  // Update the weapon's aff flags.
+  if (attachment->obj_flags.bitvector.IsSet(AFF_LASER_SIGHT))
+    weapon->obj_flags.bitvector.SetBit(AFF_LASER_SIGHT);
+  if (attachment->obj_flags.bitvector.IsSet(AFF_VISION_MAG_1))
+    weapon->obj_flags.bitvector.SetBit(AFF_VISION_MAG_1);
+  if (attachment->obj_flags.bitvector.IsSet(AFF_VISION_MAG_2))
+    weapon->obj_flags.bitvector.SetBit(AFF_VISION_MAG_2);
+  if (attachment->obj_flags.bitvector.IsSet(AFF_VISION_MAG_3))
+    weapon->obj_flags.bitvector.SetBit(AFF_VISION_MAG_3);
+  
+  // Update the weapon's attach location to reflect this item.
+  GET_OBJ_VAL(weapon, GET_ACCESSORY_ATTACH_LOCATION(attachment) + 7) = GET_OBJ_VNUM(attachment);
+  
+  // Send the success message, assuming there's a character.
+  if (ch) {
+    int where = GET_ACCESSORY_ATTACH_LOCATION(attachment);
+    
+    sprintf(buf, "You attach $p to the %s of $P.",
+            (where == 0 ? "top" : (where == 1 ? "barrel" : "underside")));
+    act(buf, TRUE, ch, attachment, weapon, TO_CHAR);
+    
+    sprintf(buf, "$n attaches $p to the %s of $P.",
+            (where == 0 ? "top" : (where == 1 ? "barrel" : "underside")));
+    act(buf, TRUE, ch, attachment, weapon, TO_ROOM);
+  } else {
+#ifdef DEBUG_ATTACHMENTS
+    sprintf(buf, "Successfully attached '%s' (%ld) to the %s of '%s' (%ld).",
+            GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment),
+            gun_accessory_locations[GET_OBJ_VAL(attachment, 0)],
+            GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+#endif
+  }
+  
+  // Let the caller handle trashing the object (assuming they didn't just pass us a proto reference).
+
+  return TRUE;
+}
+
+struct obj_data *unattach_attachment_from_weapon(int location, struct obj_data *weapon, struct char_data *ch) {
+  if (!weapon) {
+    if (ch)
+      send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n");
+    mudlog("SYSERR: NULL weapon passed to unattach_attachment_from_weapon().", NULL, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+  
+  if (location < ACCESS_LOCATION_TOP || location > ACCESS_LOCATION_UNDER) {
+    if (ch)
+      send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n");
+    sprintf(buf, "SYSERR: Attempt to unattach item from invalid location %d on '%s' (%ld).",
+            location, GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
+  }
+  
+  if (GET_OBJ_TYPE(weapon) != ITEM_WEAPON) {
+    if (ch)
+      send_to_char("You can only unattach accessories from weapons.\r\n", ch);
+    else {
+      sprintf(buf, "SYSERR: Attempting to unattach something from non-weapon '%s' (%ld).",
+              GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    }
+    return NULL;
+  }
+  
+  // Get a pointer to the attachment so that we can reference it.
+  struct obj_data *attachment = read_object(GET_WEAPON_ATTACH_LOC(weapon, location), VIRTUAL);
+  
+  // If the attachment was un-loadable, bail out.
+  if (!attachment) {
+    if (ch)
+      send_to_char("You accidentally break it as you remove it!\r\n", ch);
+    sprintf(buf, "SYSERR: Attempting to unattach invalid vnum %d from weapon '%s' (%ld).",
+            GET_WEAPON_ATTACH_LOC(weapon, location), GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    
+    // We use a raw get_obj_val here so we can set it.
+    GET_OBJ_VAL(weapon, location) = 0;
+    return NULL;
+  }
+  
+  if (GET_ACCESSORY_ATTACH_LOCATION(attachment) < ACCESS_ACCESSORY_LOCATION_TOP
+      || GET_ACCESSORY_ATTACH_LOCATION(attachment) > ACCESS_ACCESSORY_LOCATION_UNDER) {
+    if (ch)
+      send_to_char(ch, "Sorry, something went wrong. Staff have been notified.\r\n");
+    sprintf(buf, "SYSERR: Accessory attachment location %d out of range for '%s' (%ld).",
+            GET_ACCESSORY_ATTACH_LOCATION(attachment), GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+  
+  if (GET_ACCESSORY_TYPE(attachment) == ACCESS_GASVENT) {
+    if (ch) {
+      send_to_char(ch, "%s is permanently attached to %s and can't be removed.\r\n",
+                   GET_OBJ_NAME(attachment), GET_OBJ_NAME(weapon));
+      return NULL;
+    }
+   // We assume the coder knows what they're doing when unattaching a gasvent. They may proceed.
+  }
+  
+  // Remove the first (and only the first) affect of the attachment from the weapon.
+  if (attachment->affected[0].modifier != 0) {
+    bool successfully_modified = FALSE;
+    for (int index = 0; index < MAX_OBJ_AFFECT; index++) {
+      if (weapon->affected[index].location == attachment->affected[0].location
+          && weapon->affected[index].modifier == attachment->affected[0].modifier) {
+        weapon->affected[index].location = 0;
+        weapon->affected[index].modifier = 0;
+        successfully_modified = TRUE;
+        break;
+      }
+    }
+    
+    if (!successfully_modified) {
+      sprintf(buf, "WARNING: '%s' (%ld) unattached '%s' (%ld) from '%s' (%ld), but the gun was missing the attachment's affect. Something needs revising.",
+              ch ? GET_CHAR_NAME(ch) : "An automated process", ch ? GET_IDNUM(ch) : -1,
+              GET_OBJ_NAME(attachment), GET_OBJ_VNUM(attachment),
+              GET_OBJ_NAME(weapon), GET_OBJ_VNUM(weapon));
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    }
+  }
+  
+  // Subtract the attachment's weight from the weapon's weight.
+  weight_change_object(weapon, -GET_OBJ_WEIGHT(attachment));
+  
+  // Subtract the attachment's cost from the weapon's cost.
+  GET_OBJ_COST(weapon) = MAX(0, GET_OBJ_COST(weapon) - GET_OBJ_COST(attachment));
+  
+  // Update the weapon's aff flags.
+  weapon->obj_flags.bitvector.RemoveBit(AFF_LASER_SIGHT);
+  weapon->obj_flags.bitvector.RemoveBit(AFF_VISION_MAG_1);
+  weapon->obj_flags.bitvector.RemoveBit(AFF_VISION_MAG_2);
+  weapon->obj_flags.bitvector.RemoveBit(AFF_VISION_MAG_3);
+  
+  // Update the weapon's attach location to reflect this item.
+  GET_OBJ_VAL(weapon, GET_ACCESSORY_ATTACH_LOCATION(attachment) + 7) = 0;
+  
+  // Send the success message, assuming there's a character.
+  if (ch) {
+    act("You unattach $p from $P.", TRUE, ch, attachment, weapon, TO_CHAR);
+    act("$n unattaches $p from $P.", TRUE, ch, attachment, weapon, TO_ROOM);
+  }
+  
+  // Hand back our attachment object.
+  return attachment;
+}
+

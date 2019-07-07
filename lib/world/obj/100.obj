@@ -183,7 +183,7 @@ Material:	metal
 	LegalPermit:	0
 [VALUES]
 	Val0:	1
-	Val1:	5
+	Val1:	6
 BREAK
 #10008
 Keywords:	pile dusty conjuring books
@@ -763,5 +763,32 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+BREAK
+#10030
+Keywords:	heavy testing attachment
+Name:	a heavy testing attachment
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	101000001000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	50.00
+	Barrier:	32
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	10
 BREAK
 END

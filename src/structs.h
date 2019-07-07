@@ -469,7 +469,13 @@ struct char_special_data
       fight_veh(NULL), fighting(NULL), hunting(NULL), programming(NULL),
       position(POS_STANDING), defined_position(NULL), leave(NULL), arrive(NULL), subscribe(NULL), rigging(NULL),
       mindlink(NULL), spirits(NULL)
-  {}
+  {
+    for (int i = 0; i < 3; i++)
+      conjure[i] = 0;
+    
+    for (int i = 0; i < 3; i++)
+      coord[i] = 0;
+  }
 };
 
 struct player_special_data_saved
@@ -516,7 +522,14 @@ struct player_special_data
   player_special_data() :
       aliases(NULL), remem(NULL), last_tell(0),
       questnum(0), obj_complete(NULL), mob_complete(NULL), watching(NULL), ignored(NULL)
-  {}
+  {
+    for (int i = 0; i < NUM_DRUGS+1; i++)
+      for (int j = 0; j < 7; j++)
+        drugs[i][j] = 0;
+    
+    for (int i = 0; i < 5; i++)
+      drug_affect[i] = 0;
+  }
 }
 ;
 
@@ -542,7 +555,10 @@ struct mob_special_data
 
   mob_special_data() :
       memory(NULL), alert(0), alerttime(0), lasthit(0)
-  {}
+  {
+    for (int i = 0; i < 10; i++)
+      mob_skills[i] = 0;
+  }
 }
 ;
 

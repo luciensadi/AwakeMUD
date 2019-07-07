@@ -345,17 +345,14 @@ BREAK
 #60507
 Name:	Melee Skill Training
 Desc:$
-   The skills offered in this room are all derived from your STRENGTH
-attribute. Type PRACTICE to see the list of available melee and strength-based
-skills. EDGED WEAPONS, WHIPS AND FLAILS, POLE ARMS, and CLUBS determines your
-abilities with various hand held melee weapons. PROJECTILES is the skill
-related to bow and crossbow-type weapons, exotic in the world of 2060.
-THROWING WEAPONS is the skill that is required for those that wish to be able
-to use grenades, throwing knives, or shuriken. UNARMED COMBAT is the skill
-essential for those who wish to be able to fight effectively with their fists.
-CYBER IMPLANTS, while similar to UNARMED COMBAT, is necessary for those who
-wish to fight with cybernetically installed weapons such as hand razors, bone
-lacing, and spurs. 
+   The skills offered in this room are all derived from your ^gSTRENGTH
+attribute^n. Type ^WPRACTICE^n to see the list of available melee skills.
+ ^g  EDGED WEAPONS^n, ^gWHIPS AND FLAILS^n, ^gPOLE ARMS^n, and ^gCLUBS^n determine
+your abilities with various hand-held melee weapons.
+ ^g  BRAWLING^n is the skill essential for those who wish to be able to fight
+effectively with their fists. 
+ ^g  CYBER IMPLANTS^n, while similar to Brawling, is necessary for those who wish
+to fight with cybernetically-installed weapons such as hand razors and spurs.
 ~
 Flags:	1000000000000011000
 SecType:	Inside
@@ -375,6 +372,12 @@ RoomType:	0
 	BackgroundType:	0
 [EXIT southwest]
 	ToVnum:	60506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60626
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -409,6 +412,12 @@ RoomType:	0
 	BackgroundType:	0
 [EXIT west]
 	ToVnum:	60506
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60627
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -814,18 +823,18 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXTRADESC 0]
-	Keywords:	wired reflexes~~~~~~~~~~~~~~~~~~
+	Keywords:	datajack~~~~~~~~~~~~~~~~~~
 	Desc:$
-Wired Reflexes, while costly to the user's essence, enhance their REACTION and
-INITIATIVE, allowing them to attack more often than an un-augmented person.
-Wired Reflexes are known to cause some people to be extra jumpy. 
+A DATAJACK is necessary for a decker or a rigger to interface their mind with
+a machine. 
 ~
 [EXTRADESC 1]
-	Keywords:	Vehicle control rig~~~~~~~~~~~~~~~~~~
+	Keywords:	smartlink system~~~~~~~~~~~~~~~~~~
 	Desc:$
-The VEHICLE CONTROL RIG and a DATAJACK is necessary for someone who wants to
-be able to mentally control a vehicle. An explanation of RIGGING is provided
-later in the guild. 
+The SMARTLINK system allows the user to use a smartlink accessorized firearm,
+granting them greater accuracy in ranged combat. If the weapon is outfitted
+with a SMARTLINK accessory and the user has a SMARTLINK system installed, the
+feature is automatically used. 
 ~
 [EXTRADESC 2]
 	Keywords:	spurs razors retractable~~~~~~~~~~~~~~~~~~
@@ -836,18 +845,18 @@ automatically used when the character enters unarmed combat, and success is
 based on the CYBERIMPLANT COMBAT skill. 
 ~
 [EXTRADESC 3]
-	Keywords:	smartlink system~~~~~~~~~~~~~~~~~~
+	Keywords:	Vehicle control rig~~~~~~~~~~~~~~~~~~
 	Desc:$
-The SMARTLINK system allows the user to use a smartlink accessorized firearm,
-granting them greater accuracy in ranged combat. If the weapon is outfitted
-with a SMARTLINK accessory and the user has a SMARTLINK system installed, the
-feature is automatically used. 
+The VEHICLE CONTROL RIG and a DATAJACK is necessary for someone who wants to
+be able to mentally control a vehicle. An explanation of RIGGING is provided
+later in the guild. 
 ~
 [EXTRADESC 4]
-	Keywords:	datajack~~~~~~~~~~~~~~~~~~
+	Keywords:	wired reflexes~~~~~~~~~~~~~~~~~~
 	Desc:$
-A DATAJACK is necessary for a decker or a rigger to interface their mind with
-a machine. 
+Wired Reflexes, while costly to the user's essence, enhance their REACTION and
+INITIATIVE, allowing them to attack more often than an un-augmented person.
+Wired Reflexes are known to cause some people to be extra jumpy. 
 ~
 BREAK
 #60518
@@ -5140,6 +5149,73 @@ RoomType:	0
 	KeyVnum:	0
 [EXIT west]
 	ToVnum:	60624
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60626
+Name:	Exotic Melee Skill Training
+Desc:$
+   The skills offered in this room are of an exotic and niche nature, and are
+^yless likely to be useful to you^n than the skills offered below. Please be sure
+that you want them before learning them.
+ ^n  ^gPROJECTILES^n is the skill related to bow and crossbow-type weapons, exotic
+in the world of 2060.
+ ^g  THROWING WEAPONS^n is the skill that is required for those that wish to be
+able to use throwing knives or shuriken. 
+~
+Flags:	1000000000000011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	5.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	60507
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60627
+Name:	Ammo Creation Training
+Desc:$
+   Gunsmithing in Awake CE is the art of creating ammunition from raw
+materials. It's a very useful skill to have when trying to obtain rare types
+of ammunition that may be hard to find in the Sprawl. However, it can also be
+an expensive hobby, as you don't have the benefits of bulk discounts or
+specialized factory equipment backing you up. ^WHELP AMMO^n describes the various
+types of ammunition and the process for creating it. 
+~
+Flags:	1000000000000011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	60508
 	Flags:	0
 	Material:	brick
 	Barrier:	4

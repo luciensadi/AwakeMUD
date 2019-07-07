@@ -3694,7 +3694,7 @@ ACMD(do_users)
       sprintf(line, format, d->desc_num, "UNDEFINED",
               state, idletime, timeptr);
     
-    if (*d->host && GET_REAL_LEVEL(tch) <= GET_LEVEL(ch))
+    if (*d->host && GET_DESC_LEVEL(d) <= GET_LEVEL(ch))
       sprintf(line + strlen(line), "[%s]\r\n", d->host);
     else
       strcat(line, "[Hostname unknown]\r\n");

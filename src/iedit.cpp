@@ -445,7 +445,7 @@ void iedit_disp_val2_menu(struct descriptor_data * d)
       break;
     case ITEM_GUN_ACCESSORY:
       send_to_char("  1) Smartlink\r\n  2) Scope\r\n  3) Gas vent\r\n  4) Shock pad\r\n"
-                   "  5) Silencer\r\n  6) Sound Suppressor\r\n  7) Smart Goggles\r\n  8) Bipod\r\n  9) Tripod"
+                   "  5) Pistol Silencer\r\n  6) Rifle/AR/SMG Sound Suppressor\r\n  7) Smart Goggles\r\n  8) Bipod\r\n  9) Tripod"
                    " 10) Bayonet\r\nAccessory type: ", CH);
       break;
     case  ITEM_FOCUS:
@@ -2305,11 +2305,15 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
         case ITEM_WEAPON:
-          if (!access_level(CH, LVL_ADMIN))
-            if (!read_object(number, VIRTUAL)) {
+          if (!access_level(CH, LVL_ADMIN)) {
+            struct obj_data *you_know_this_would_leak_memory_right = NULL;
+            if (!(you_know_this_would_leak_memory_right = read_object(number, VIRTUAL))) {
               send_to_char("Invalid vnum.\r\n", CH);
               iedit_disp_val8_menu(d);
+            } else {
+              extract_obj(you_know_this_would_leak_memory_right);
             }
+          }
           if (number > 0) {
             modified = FALSE;
             for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++)
@@ -2331,12 +2335,15 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
         case ITEM_WEAPON:
-          if (!access_level(CH, LVL_ADMIN))
-            if (!read_object(number, VIRTUAL)) {
+          if (!access_level(CH, LVL_ADMIN)) {
+            struct obj_data *you_know_this_would_leak_memory_right = NULL;
+            if (!(you_know_this_would_leak_memory_right = read_object(number, VIRTUAL))) {
               send_to_char("Invalid vnum.\r\n", CH);
               iedit_disp_val9_menu(d);
-              return;
+            } else {
+              extract_obj(you_know_this_would_leak_memory_right);
             }
+          }
           if (number > 0) {
             modified = FALSE;
             for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++)
@@ -2358,12 +2365,15 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
         case ITEM_WEAPON:
-          if (!access_level(CH, LVL_ADMIN))
-            if (!read_object(number, VIRTUAL)) {
+          if (!access_level(CH, LVL_ADMIN)) {
+            struct obj_data *you_know_this_would_leak_memory_right = NULL;
+            if (!(you_know_this_would_leak_memory_right = read_object(number, VIRTUAL))) {
               send_to_char("Invalid vnum.\r\n", CH);
               iedit_disp_val10_menu(d);
-              return;
+            } else {
+              extract_obj(you_know_this_would_leak_memory_right);
             }
+          }
           if (number > 0) {
             modified = FALSE;
             for (j = 0; (j < MAX_OBJ_AFFECT && !modified); j++)

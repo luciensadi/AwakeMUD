@@ -66,6 +66,7 @@ extern char *cleanup(char *dest, const char *src);
 extern void add_phone_to_list(struct obj_data *);
 extern void idle_delete();
 extern void clearMemory(struct char_data * ch);
+extern void weight_change_object(struct obj_data * obj, float weight);
 
 /**************************************************************************
 *  declarations of most of the 'global' variables                         *
@@ -1440,7 +1441,8 @@ void parse_object(File &fl, long nr)
   GET_LEGAL_PERMIT(obj) = data.GetInt("POINTS/LegalPermit", 0);
   obj->obj_flags.material = data.LookupInt("Material", material_names, 5);
 
-  GET_OBJ_WEIGHT(obj) = data.GetFloat("POINTS/Weight", 5);
+  // No such thing as a negative-weight object.
+  GET_OBJ_WEIGHT(obj) = MAX(0, data.GetFloat("POINTS/Weight", 5));
   GET_OBJ_BARRIER(obj) = data.GetInt("POINTS/Barrier", 3);
   GET_OBJ_CONDITION(obj) = GET_OBJ_BARRIER(obj);
 
@@ -2401,6 +2403,34 @@ int vnum_object_affectloc(int type, struct char_data * ch)
   return (found);
 }
 
+int vnum_object_affects(struct char_data *ch) {
+  char xbuf[MAX_STRING_LENGTH];
+  int nr, found = 0;
+  
+  for (nr = 0; nr <= top_of_objt; nr++) {
+    if (IS_OBJ_STAT(&obj_proto[nr], ITEM_GODONLY))
+      continue;
+    if (from_ip_zone(OBJ_VNUM_RNUM(nr)))
+      continue;
+    
+    for (int i = 0; i < MAX_OBJ_AFFECT; i++) {
+      if (obj_proto[nr].affected[i].modifier != 0 ) {
+        sprint_obj_mods( &obj_proto[nr], xbuf );
+        
+        ++found;
+        sprintf(buf, "[%5ld -%2d] %s%s\r\n",
+                OBJ_VNUM_RNUM(nr),
+                ObjList.CountObj(nr),
+                obj_proto[nr].text.name,
+                xbuf);
+        send_to_char(buf, ch);
+        break;
+      }
+    }
+  }
+  return (found);
+}
+
 int vnum_object_affflag(int type, struct char_data * ch)
 {
   int nr, found = 0;
@@ -2439,6 +2469,8 @@ int vnum_object(char *searchname, struct char_data * ch)
     return vnum_object_type(atoi(arg2),ch);
   if (!strcmp(arg1,"affectloc"))
     return vnum_object_affectloc(atoi(arg2),ch);
+  if (!strcmp(arg1, "affects"))
+    return vnum_object_affects(ch);
   if (!strcmp(arg1,"affflag"))
     return vnum_object_affflag(atoi(arg2),ch);
   
@@ -2624,17 +2656,10 @@ struct obj_data *read_object(int nr, int type)
   } else if (GET_OBJ_TYPE(obj) == ITEM_GUN_MAGAZINE)
     GET_OBJ_VAL(obj, 9) = GET_OBJ_VAL(obj, 0);
   else if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
-    for (int i = 7; i < 10; i++)
+    for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++)
       if (GET_OBJ_VAL(obj, i) > 0 && real_object(GET_OBJ_VAL(obj, i)) > 0) {
         struct obj_data *mod = &obj_proto[real_object(GET_OBJ_VAL(obj, i))];
-        if (mod->obj_flags.bitvector.IsSet(AFF_LASER_SIGHT))
-          obj->obj_flags.bitvector.SetBit(AFF_LASER_SIGHT);
-        if (mod->obj_flags.bitvector.IsSet(AFF_VISION_MAG_1))
-          obj->obj_flags.bitvector.SetBit(AFF_VISION_MAG_1);
-        if (mod->obj_flags.bitvector.IsSet(AFF_VISION_MAG_2))
-          obj->obj_flags.bitvector.SetBit(AFF_VISION_MAG_2);
-        if (mod->obj_flags.bitvector.IsSet(AFF_VISION_MAG_3))
-          obj->obj_flags.bitvector.SetBit(AFF_VISION_MAG_3);
+        attach_attachment_to_weapon(mod, obj, NULL);
       }
     if (IS_GUN(GET_OBJ_VAL(obj, 3))) {
       if (IS_SET(GET_OBJ_VAL(obj, 10), 1 << MODE_SS))
@@ -4154,18 +4179,12 @@ void load_saved_veh()
         if (GET_OBJ_TYPE(obj) == ITEM_PHONE && GET_OBJ_VAL(obj, 2))
           add_phone_to_list(obj);
         if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3)))
-          for (int q = 7; q < 10; q++)
+          for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
             if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 && 
                (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
-              GET_OBJ_WEIGHT(obj) += GET_OBJ_WEIGHT(attach);
-              if (attach->obj_flags.bitvector.IsSet(AFF_LASER_SIGHT))
-                obj->obj_flags.bitvector.SetBit(AFF_LASER_SIGHT);
-              if (attach->obj_flags.bitvector.IsSet(AFF_VISION_MAG_1))
-                obj->obj_flags.bitvector.SetBit(AFF_VISION_MAG_1);
-              if (attach->obj_flags.bitvector.IsSet(AFF_VISION_MAG_2))
-                obj->obj_flags.bitvector.SetBit(AFF_VISION_MAG_2);
-              if (attach->obj_flags.bitvector.IsSet(AFF_VISION_MAG_3))
-                obj->obj_flags.bitvector.SetBit(AFF_VISION_MAG_3);
+              // The cost of the item was preserved, but nothing else was. Re-attach the item, then subtract its cost.
+              attach_attachment_to_weapon(attach, obj, NULL);
+              GET_OBJ_COST(obj) -= GET_OBJ_COST(attach);
             }
         sprintf(buf, "%s/Condition", sect_name);
         GET_OBJ_CONDITION(obj) = data.GetInt(buf, GET_OBJ_CONDITION(obj));
@@ -4278,6 +4297,7 @@ void load_saved_veh()
 
 void load_consist(void)
 {
+  struct obj_data *attach;
   File file;
   if (!(file.Open("etc/consist", "r"))) {
     log("CONSISTENCY FILE NOT FOUND");
@@ -4327,6 +4347,17 @@ void load_consist(void)
           sprintf(buf, "%s/Cost", sect_name);
           GET_OBJ_COST(obj) = data.GetInt(buf, GET_OBJ_COST(obj));
           sprintf(buf, "%s/Inside", sect_name);
+          
+          // Handle weapon attachments.
+          if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3)))
+            for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
+              if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 &&
+                  (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
+                attach_attachment_to_weapon(attach, obj, NULL);
+                // At the end of accessory loading, the cost will be negative.
+                GET_OBJ_COST(obj) -= GET_OBJ_COST(attach);
+              }
+          
           inside = data.GetInt(buf, 0);
           if (inside > 0) {
             if (inside == last_in)

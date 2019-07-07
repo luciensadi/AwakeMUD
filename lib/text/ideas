@@ -15,3 +15,6 @@ Paragorn (Jun 12) [70512] wt history should just show history
 Paragorn (Jun 12) [70513] Give Hollow Scythe (70502) some things to mutter, like 'I used to think I could control ducks with my mind, but it turns out ducks and I just have very similar ideas about what stuff ducks should do'
 Paragorn (Jun 12) [70511] Add a spec proc at 70511 (inside bus) that prevents you from going west without meeting some precondition
 Paragorn (Jun 12) [70511] Add trap spec-procs and ability to detect and disarm traps.
+Lucien   (Jul  6) [60507] Update HELP POLE ARMS to indicate that it's used when using a bayonet. Update HELP CLUBS to indicate that it's used when defending against melee attacks with a gun. Add HELP BAYONET to explain that it turns a gun into a pole arm for melee purposes when attached.
+Lucien   (Jul  6) [60627] Add info to HELP AMMO about gunsmithing / making more ammo.
+Lucien   (Jul  6) [60627] prevent restringing of weapon attachments and vehicle upgrades

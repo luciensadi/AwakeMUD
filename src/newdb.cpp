@@ -702,18 +702,12 @@ bool load_char(const char *name, char_data *ch, bool logon)
         if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_OBJ_VAL(obj, 4))
           GET_FOCI(ch)++;
         if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3)))
-          for (int q = 7; q < 10; q++) 
+          for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
             if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 && 
                (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
-              GET_OBJ_WEIGHT(obj) += GET_OBJ_WEIGHT(attach);
-              if (attach->obj_flags.bitvector.IsSet(AFF_LASER_SIGHT))
-                obj->obj_flags.bitvector.SetBit(AFF_LASER_SIGHT);
-              if (attach->obj_flags.bitvector.IsSet(AFF_VISION_MAG_1))
-                obj->obj_flags.bitvector.SetBit(AFF_VISION_MAG_1);
-              if (attach->obj_flags.bitvector.IsSet(AFF_VISION_MAG_2))
-                obj->obj_flags.bitvector.SetBit(AFF_VISION_MAG_2);
-              if (attach->obj_flags.bitvector.IsSet(AFF_VISION_MAG_3))  
-                obj->obj_flags.bitvector.SetBit(AFF_VISION_MAG_3);
+              attach_attachment_to_weapon(attach, obj, NULL);
+              // Cost was already added to the object when it was attached in the first place, then saved, so we need to not re-add the cost.
+              GET_OBJ_COST(obj) -= GET_OBJ_COST(attach);
             }
         inside = atoi(row[17]);
         GET_OBJ_TIMER(obj) = atoi(row[19]);
@@ -773,18 +767,12 @@ bool load_char(const char *name, char_data *ch, bool logon)
         if (GET_OBJ_TYPE(obj) == ITEM_FOCUS && GET_OBJ_VAL(obj, 4))
           GET_FOCI(ch)++;
         if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3)))
-          for (int q = 7; q < 10; q++) 
-            if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 && 
-               (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
-              GET_OBJ_WEIGHT(obj) += GET_OBJ_WEIGHT(attach);
-              if (attach->obj_flags.bitvector.IsSet(AFF_LASER_SIGHT))
-                obj->obj_flags.bitvector.SetBit(AFF_LASER_SIGHT);
-              if (attach->obj_flags.bitvector.IsSet(AFF_VISION_MAG_1))
-                obj->obj_flags.bitvector.SetBit(AFF_VISION_MAG_1);
-              if (attach->obj_flags.bitvector.IsSet(AFF_VISION_MAG_2))
-                obj->obj_flags.bitvector.SetBit(AFF_VISION_MAG_2);
-              if (attach->obj_flags.bitvector.IsSet(AFF_VISION_MAG_3))
-                obj->obj_flags.bitvector.SetBit(AFF_VISION_MAG_3);
+          for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
+            if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 &&
+                (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
+              attach_attachment_to_weapon(attach, obj, NULL);
+              // Fix for ever-increasing cost.
+              GET_OBJ_COST(obj) -= GET_OBJ_COST(attach);
             }
         inside = atoi(row[17]);
         GET_OBJ_TIMER(obj) = atoi(row[18]);

@@ -1416,7 +1416,7 @@ ACMD(do_mclone)
   if (mob_proto[mob_num1].char_specials.arrive)
     mob->char_specials.arrive = str_dup(mob_proto[mob_num1].char_specials.arrive);
   if (mob_proto[mob_num1].char_specials.leave)
-    mob->char_specials.arrive = str_dup(mob_proto[mob_num1].char_specials.leave);
+    mob->char_specials.leave = str_dup(mob_proto[mob_num1].char_specials.leave);
 
   if (mob_proto[mob_num1].player_specials)
     mob->player_specials = &dummy_mob;

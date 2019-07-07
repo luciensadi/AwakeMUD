@@ -1728,26 +1728,30 @@ ACMD(do_give)
 
 void weight_change_object(struct obj_data * obj, float weight)
 {
-  struct obj_data *tmp_obj;
-  struct char_data *tmp_ch;
+  struct obj_data *tmp_obj = NULL;
+  struct char_data *tmp_ch = NULL;
+  struct veh_data *tmp_veh = NULL;
 
-  if (obj->in_room)
-  {
-    GET_OBJ_WEIGHT(obj) = MAX(0, GET_OBJ_WEIGHT(obj) + weight);
-  } else if ((tmp_ch = obj->carried_by))
-  {
+  // Remove it from its container (subtracting its current weight from the container's values).
+  if ((tmp_ch = obj->carried_by))
     obj_from_char(obj);
-    GET_OBJ_WEIGHT(obj) += weight;
-    obj_to_char(obj, tmp_ch);
-  } else if ((tmp_obj = obj->in_obj))
-  {
+  else if ((tmp_obj = obj->in_obj))
     obj_from_obj(obj);
-    GET_OBJ_WEIGHT(obj) += weight;
+  else if ((tmp_veh = obj->in_veh))
+    obj_from_room(obj);
+  
+  // If none of the above are true, then this object is either in a room or is being juggled by the code somewhere (ex: zoneloading). Either way, no parent containers need updating.
+  
+  // Rectify weights so that the object's weight can never be negative.
+  GET_OBJ_WEIGHT(obj) = MAX(0, GET_OBJ_WEIGHT(obj) + weight);
+  
+  // Return it to its container, re-adding its weight.
+  if (tmp_ch)
+    obj_to_char(obj, tmp_ch);
+  else if (tmp_obj)
     obj_to_obj(obj, tmp_obj);
-  } else
-  {
-    log("SYSERR: Unknown attempt to subtract weight from an object.");
-  }
+  else if (tmp_veh)
+    obj_to_veh(obj, tmp_veh);
 }
 
 void name_from_drinkcon(struct obj_data *obj)
