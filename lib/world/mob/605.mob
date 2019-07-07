@@ -173,8 +173,8 @@ LookDesc:$
 Jet shows incredible agility in practicing his martial arts, even for a
 physical adept. His nametag says, "Jet L." 
 ~
-ArriveMsg:	
-LeaveMsg:	¼ÈF˜û
+ArriveMsg:	arrives
+LeaveMsg:	leaves
 MobFlags:	10000000001011
 AffFlags:	0
 Race:	Human
@@ -196,7 +196,7 @@ DefaultPos:	Standing
 	Cash:	1000
 	Bank:	5000
 [SKILLS]
-	:	10
+	Brawling:	10
 	Armed Combat:	10
 	Stealth:	10
 	Leadership:	10
@@ -236,7 +236,7 @@ DefaultPos:	Standing
 	Cash:	1000
 	Bank:	5000
 [SKILLS]
-	:	10
+	Brawling:	10
 	Firearms:	10
 	Leadership:	10
 	Armed Combat:	10
@@ -274,7 +274,7 @@ DefaultPos:	Standing
 	Ballistic:	15
 	Impact:	15
 [SKILLS]
-	:	10
+	Brawling:	10
 	Leadership:	10
 	Stealth:	10
 	Athletics:	10
@@ -317,8 +317,8 @@ DefaultPos:	Standing
 	Bank:	6000
 [SKILLS]
 	Sorcery:	10
-	:	10
-	:	10
+	Brawling:	10
+	Brawling:	10
 	Conjuring:	10
 	Stealth:	10
 BREAK
@@ -357,10 +357,10 @@ DefaultPos:	Standing
 	Cash:	2000
 	Bank:	6000
 [SKILLS]
-	:	10
+	Brawling:	10
 	Sorcery:	10
 	Conjuring:	10
-	:	10
+	Brawling:	10
 	Throwing Weapons:	10
 BREAK
 #60510
@@ -1320,47 +1320,7 @@ DefaultPos:	Standing
 	Cash:	1000
 	Bank:	5000
 [SKILLS]
-	:	10
-	Armed Combat:	10
-	Stealth:	10
-	Leadership:	10
-	Athletics:	10
-BREAK
-#60540
-Keywords:	jet adept trainer agile oriental man
-Name:	Jet
-RoomDesc:$
-An agile oriental man practices his combat forms. 
-
-~
-LookDesc:$
-Jet shows incredible agility in practicing his martial arts, even for a
-physical adept. His nametag says, "Jet L." 
-~
-ArriveMsg:	¼ÈF˜û
-LeaveMsg:	¼ÈF˜û
-MobFlags:	10000000001011
-AffFlags:	0
-Race:	Human
-Gender:	Male
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	40
-	Qui:	40
-	Str:	40
-	Cha:	40
-	Int:	40
-	Wil:	40
-	Mag:	6
-[POINTS]
-	Height:	0
-	Weight:	0
-	Ballistic:	15
-	Impact:	15
-	Cash:	1000
-	Bank:	5000
-[SKILLS]
-	:	10
+	Brawling:	10
 	Armed Combat:	10
 	Stealth:	10
 	Leadership:	10

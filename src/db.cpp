@@ -1368,7 +1368,7 @@ void parse_mobile(File &in, long nr)
     int idx;
 
     for (idx = 0; idx <= MAX_SKILLS; idx++)
-      if (!str_cmp(skills[idx].name, skill_name))
+      if ((idx == SKILL_UNARMED_COMBAT && !str_cmp("unarmed combat", skill_name)) || !str_cmp(skills[idx].name, skill_name))
         break;
     if (idx > 0 || idx <= MAX_SKILLS) {
       GET_SKILL(mob, idx) = data.GetIndexInt("SKILLS", j, 0);
