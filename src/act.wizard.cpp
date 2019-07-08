@@ -2789,7 +2789,7 @@ ACMD(do_wizutil)
           return;
         }
         if (PLR_FLAGGED(vict, PLR_FROZEN)) {
-          send_to_char("Your victim is already pretty cold.\r\n", ch);
+          send_to_char("Your victim is already pretty cold. Did you mean to THAW them?\r\n", ch);
           return;
         }
         PLR_FLAGS(vict).SetBit(PLR_FROZEN);
