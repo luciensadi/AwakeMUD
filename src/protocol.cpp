@@ -560,6 +560,9 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
             case 'n':
                pCopyFrom = s_Clean;
                break;
+            case 'N':
+               pCopyFrom = s_Clean;
+               break;
             case 'r': /* dark red */
                pCopyFrom = ColourRGB(apDescriptor, "F300");
                break;
@@ -843,6 +846,9 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
                pCopyFrom = ColourChar;
                break;
             case 'n':
+               pCopyFrom = s_Clean;
+               break;
+            case 'N':
                pCopyFrom = s_Clean;
                break;
             case 'r': /* dark red */
