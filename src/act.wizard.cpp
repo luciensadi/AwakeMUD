@@ -156,7 +156,7 @@ ACMD(do_copyover)
       close_socket (d); // yer outta here!
 
     } else {
-      fprintf (fp, "%d %s %s\n", d->descriptor, GET_CHAR_NAME(och), d->host);
+      fprintf (fp, "%d %s %s %s\n", d->descriptor, GET_CHAR_NAME(och), d->host, CopyoverGet(d));
       GET_LAST_IN(och) = get_ch_in_room(och)->number;
       if (!GET_LAST_IN(och) || GET_LAST_IN(och) == NOWHERE) {
         // Fuck it, send them to Grog's.

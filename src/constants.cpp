@@ -3,7 +3,7 @@
 
 const char *awakemud_version[] =
     {
-      "AwakeMUD Community Edition, version 0.9.1 BETA\r\n"
+      "AwakeMUD Community Edition, version 0.9.0 BETA\r\n"
     };
 
 

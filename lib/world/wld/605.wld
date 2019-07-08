@@ -264,7 +264,7 @@ illegal deeds for pay. Skills make up your character, and determine what tasks
 they are capable of performing, and how well they can perform them.
  ^n  To see the skills you already possess, type ^WSKILLS^n. When you encounter
 a skill trainer, type ^WPRACTICE^n to see what they are capable of teaching. To
-learn a new skill, simply type ^PRACTICE [skill name]^n. Type it again to become
+learn a new skill, simply type ^WPRACTICE [skill name]^n. Type it again to become
 more proficient in the skill you just acquired. You may also ^WUNPRACTICE [skill
 name]^n to lower its level-- but ^ynote that you can only UNPRACTICE here in the
 skill annex!^n

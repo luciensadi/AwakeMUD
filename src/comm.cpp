@@ -65,6 +65,7 @@ typedef SOCKET  socket_t;
 #include "quest.h"
 #include "newmatrix.h"
 #include "limits.h"
+#include "protocol.h"
 
 /* externs */
 extern int restrict;
@@ -125,6 +126,7 @@ void check_idle_passwords(void);
 void init_descriptor (struct descriptor_data *newd, int desc);
 char *colorize(struct descriptor_data *d, const char *str, bool skip_check = FALSE);
 void send_keepalives();
+void msdp_update();
 
 /* extern fcnts */
 extern void DBInit();
@@ -253,6 +255,7 @@ void copyover_recover()
   struct descriptor_data *d;
   FILE *fp;
   char host[1024];
+  char copyover_get[1024];
   bool fOld;
   char name[MAX_INPUT_LENGTH];
   int desc;
@@ -273,7 +276,7 @@ void copyover_recover()
   
   for (;;) {
     fOld = TRUE;
-    fscanf (fp, "%d %s %s\n", &desc, name, host);
+    fscanf (fp, "%d %s %s %s\n", &desc, name, host, copyover_get);
     if (desc == -1)
       break;
     
@@ -291,6 +294,9 @@ void copyover_recover()
     strcpy(d->host, host);
     d->next = descriptor_list;
     descriptor_list = d;
+    
+    // Restore KaVir protocol data.
+    CopyoverSet(d, copyover_get);
     
     
     d->connected = CON_CLOSE;
@@ -707,6 +713,10 @@ void game_loop(int mother_desc)
     
     /* give each descriptor an appropriate prompt */
     for (d = descriptor_list; d; d = d->next) {
+      /* KaVir's protocol snippet. The last sent data was OOB, so do NOT draw the prompt */
+      if (d->pProtocol->WriteOOB)
+        continue;
+      
       if (d->prompt_mode) {
         make_prompt(d);
         d->prompt_mode = 0;
@@ -799,6 +809,7 @@ void game_loop(int mother_desc)
     if (!(pulse % PASSES_PER_SEC)) {
       EscalatorProcess();
       ElevatorProcess();
+      msdp_update();
     }
     
     // Every 10 IRL seconds
@@ -907,6 +918,9 @@ void record_usage(void)
  */
 void echo_off(struct descriptor_data *d)
 {
+  ProtocolNoEcho( d, true );
+  
+  /*
   char off_string[] =
   {
     (char) IAC,
@@ -916,6 +930,7 @@ void echo_off(struct descriptor_data *d)
   };
   
   SEND_TO_Q(off_string, d);
+   */
 }
 
 /*
@@ -923,6 +938,9 @@ void echo_off(struct descriptor_data *d)
  */
 void echo_on(struct descriptor_data *d)
 {
+  ProtocolNoEcho( d, false );
+  
+  /*
   char on_string[] =
   {
     (char) IAC,
@@ -934,6 +952,7 @@ void echo_on(struct descriptor_data *d)
   };
   
   SEND_TO_Q(on_string, d);
+   */
 }
 
 // Sends a keepalive pulse to the given descriptor.
@@ -991,7 +1010,7 @@ void make_prompt(struct descriptor_data * d)
       prompt = colorize(d, prompt);
       write_to_descriptor(d->descriptor, prompt);
     } else {
-      char temp[MAX_INPUT_LENGTH], str[11], *final;
+      char temp[MAX_INPUT_LENGTH], str[11], *final_str;
       int i = 0, j, physical;
       
       for (; *prompt; prompt++) {
@@ -1213,8 +1232,8 @@ void make_prompt(struct descriptor_data * d)
         }
       }
       temp[i] = '\0';
-      final = colorize(d, temp);
-      write_to_descriptor(d->descriptor, final);
+      final_str = colorize(d, temp);
+      write_to_descriptor(d->descriptor, final_str);
     }
   }
 }
@@ -1275,13 +1294,16 @@ void flush_queues(struct descriptor_data * d)
 }
 
 /* Add a new string to a player's output queue */
-void write_to_output(const char *txt, struct descriptor_data *t)
+void write_to_output(const char *unmodified_txt, struct descriptor_data *t)
 {
-  int size;
+  int size = strlen(unmodified_txt);
   
-  txt = colorize(t, (char *)txt);
+  // Process text per KaVir's protocol snippet.
+  const char *txt = ProtocolOutput(t, unmodified_txt, &size);
+  if (t->pProtocol->WriteOOB > 0)
+    --t->pProtocol->WriteOOB;
   
-  size = strlen(txt);
+  // txt = colorize(t, (char *)txt);
   
   /* if we're in the overflow state already, ignore this new output */
   if (t->bufptr < 0)
@@ -1349,6 +1371,9 @@ void init_descriptor (struct descriptor_data *newd, int desc)
   newd->next = descriptor_list;
   newd->login_time = time (0);
   
+  // Initialize the protocol data when a new descriptor structure is allocated.
+  newd->pProtocol = ProtocolCreate();
+  
   if (++last_desc == 10000)
     last_desc = 1;
   newd->desc_num = last_desc;
@@ -1371,233 +1396,256 @@ int new_descriptor(int s)
   if ((desc = accept(s, (struct sockaddr *) &peer, &i)) < 0) {
     perror("accept");
     return -1;
+  }
 #else
     
-    if ((desc = accept(s, (struct sockaddr *) &peer, (unsigned *) &i)) < 0)
-    {
-      perror("accept");
-      return -1;
+  if ((desc = accept(s, (struct sockaddr *) &peer, (unsigned *) &i)) < 0)
+  {
+    perror("accept");
+    return -1;
+  }
 #endif
-      
-    }
-    /* keep it from blocking */
-    nonblock(desc);
-    
-    /* make sure we have room for it */
-    for (newd = descriptor_list; newd; newd = newd->next)
-      sockets_connected++;
-    
-    if (sockets_connected >= max_players)
-    {
-      write_to_descriptor(desc, "Sorry, Awakened Worlds is full right now... try again later!  :-)\r\n");
-      close(desc);
-      return 0;
-    }
-    /* create a new descriptor */
-    newd = new descriptor_data;
-    memset((char *) newd, 0, sizeof(struct descriptor_data));
-    
-    /* find the sitename */
-    if (nameserver_is_slow || !(from = gethostbyaddr((char *) &peer.sin_addr,
-                                                     sizeof(peer.sin_addr), AF_INET)))
-    {
-      if (!nameserver_is_slow)
-        perror("gethostbyaddr");
-      addr = ntohl(peer.sin_addr.s_addr);
-      sprintf(newd->host, "%03u.%03u.%03u.%03u", (int) ((addr & 0xFF000000) >> 24),
-              (int) ((addr & 0x00FF0000) >> 16), (int) ((addr & 0x0000FF00) >> 8),
-              (int) ((addr & 0x000000FF)));
-    } else
-    {
-      strncpy(newd->host, from->h_name, HOST_LENGTH);
-      *(newd->host + HOST_LENGTH) = '\0';
-    }
-    
-    /* determine if the site is banned */
-    if (isbanned(newd->host) == BAN_ALL)
-    {
-      close(desc);
-      sprintf(buf2, "Connection attempt denied from [%s]", newd->host);
-      mudlog(buf2, NULL, LOG_BANLOG, TRUE);
-      DELETE_AND_NULL(newd);
-      return 0;
-    }
-    
-    init_descriptor(newd, desc);
-    
-    /* prepend to list */
-    descriptor_list = newd;
-    
-    SEND_TO_Q(colorize(newd, GREETINGS, TRUE), newd);
+  
+  /* keep it from blocking */
+  nonblock(desc);
+  
+  /* make sure we have room for it */
+  for (newd = descriptor_list; newd; newd = newd->next)
+    sockets_connected++;
+  
+  if (sockets_connected >= max_players)
+  {
+    write_to_descriptor(desc, "Sorry, Awakened Worlds is full right now... try again later!  :-)\r\n");
+    close(desc);
+    return 0;
+  }
+  /* create a new descriptor */
+  newd = new descriptor_data;
+  memset((char *) newd, 0, sizeof(struct descriptor_data));
+  
+  /* find the sitename */
+  if (nameserver_is_slow || !(from = gethostbyaddr((char *) &peer.sin_addr,
+                                                   sizeof(peer.sin_addr), AF_INET)))
+  {
+    if (!nameserver_is_slow)
+      perror("gethostbyaddr");
+    addr = ntohl(peer.sin_addr.s_addr);
+    sprintf(newd->host, "%03u.%03u.%03u.%03u", (int) ((addr & 0xFF000000) >> 24),
+            (int) ((addr & 0x00FF0000) >> 16), (int) ((addr & 0x0000FF00) >> 8),
+            (int) ((addr & 0x000000FF)));
+  } else
+  {
+    strncpy(newd->host, from->h_name, HOST_LENGTH);
+    *(newd->host + HOST_LENGTH) = '\0';
+  }
+  
+  /* determine if the site is banned */
+  if (isbanned(newd->host) == BAN_ALL)
+  {
+    close(desc);
+    sprintf(buf2, "Connection attempt denied from [%s]", newd->host);
+    mudlog(buf2, NULL, LOG_BANLOG, TRUE);
+    DELETE_AND_NULL(newd);
     return 0;
   }
   
-  int process_output(struct descriptor_data *t) {
-    static char i[LARGE_BUFSIZE + GARBAGE_SPACE];
-    static int result;
-    
-    /* If the descriptor is NULL, just return */
-    if ( !t )
-      return 0;
-    
-    /* we may need this \r\n for later -- see below */
-    strcpy(i, "\r\n");
-    
-    /* now, append the 'real' output */
-    strcpy(i + 2, t->output);
-    
-    /* if we're in the overflow state, notify the user */
-    if (t->bufptr < 0)
-      strcat(i, "**OVERFLOW**");
-    
-    /* add the extra CRLF if the person isn't in compact mode */
-    if (!t->connected && t->character)
-      strcat(i + 2, "\r\n");
-    
-    /*
-     * now, send the output.  If this is an 'interruption', use the prepended
-     * CRLF, otherwise send the straight output sans CRLF.
-     */
-    if (!t->prompt_mode)          /* && !t->connected) */
-      result = write_to_descriptor(t->descriptor, i);
-    else
-      result = write_to_descriptor(t->descriptor, i + 2);
-    
-    /* handle snooping: prepend "% " and send to snooper */
-    if (t->snoop_by)
-    {
-      SEND_TO_Q("% ", t->snoop_by);
-      SEND_TO_Q(t->output, t->snoop_by);
-      SEND_TO_Q("%%", t->snoop_by);
-    }
-    /*
-     * if we were using a large buffer, put the large buffer on the buffer pool
-     * and switch back to the small one
-     */
-    if (t->large_outbuf)
-    {
-      t->large_outbuf->next = bufpool;
-      bufpool = t->large_outbuf;
-      t->large_outbuf = NULL;
-      t->output = t->small_outbuf;
-    }
-    /* reset total bufspace back to that of a small buffer */
-    t->bufspace = SMALL_BUFSIZE - 1;
-    t->bufptr = 0;
-    *(t->output) = '\0';
-    
-    return result;
-  }
+  init_descriptor(newd, desc);
   
-  int write_to_descriptor(int desc, const char *txt) {
-    int total, bytes_written;
-    
-    total = strlen(txt);
-    
-    do {
-      if ((bytes_written = write(desc, txt, total)) < 0) {
-#ifdef EWOULDBLOCK
-        if (errno == EWOULDBLOCK)
-          errno = EAGAIN;
-#endif
-        
-        if (errno == EAGAIN)
-          log("process_output: socket write would block, about to close");
-        else
-          perror("Write to socket");
-        return -1;
-      } else {
-        txt += bytes_written;
-        total -= bytes_written;
-      }
-    } while (total > 0);
-    
+  /* prepend to list */
+  descriptor_list = newd;
+  
+  // Once the descriptor has been fully created and added to any lists, it's time to negotiate:
+  ProtocolNegotiate(newd);
+  
+  SEND_TO_Q(colorize(newd, GREETINGS, TRUE), newd);
+  return 0;
+}
+  
+int process_output(struct descriptor_data *t) {
+  static char i[LARGE_BUFSIZE + GARBAGE_SPACE];
+  static int result;
+  
+  /* If the descriptor is NULL, just return */
+  if ( !t )
     return 0;
-  }
+  
+  /* we may need this \r\n for later -- see below */
+  strcpy(i, "\r\n");
+  
+  /* now, append the 'real' output */
+  strcpy(i + 2, t->output);
+  
+  /* if we're in the overflow state, notify the user */
+  if (t->bufptr < 0)
+    strcat(i, "**OVERFLOW**");
+  
+  /* add the extra CRLF if the person isn't in compact mode */
+  if (!t->connected && t->character)
+    strcat(i + 2, "\r\n");
   
   /*
-   * ASSUMPTION: There will be no newlines in the raw input buffer when this
-   * function is called.  We must maintain that before returning.
+   * now, send the output.  If this is an 'interruption', use the prepended
+   * CRLF, otherwise send the straight output sans CRLF.
    */
-  int process_input(struct descriptor_data *t) {
-    int buf_length, bytes_read, space_left, failed_subst;
-    char *ptr, *read_point, *write_point, *nl_pos = NULL;
-    char tmp[MAX_INPUT_LENGTH + 8];
-    
-    /* first, find the point where we left off reading data */
-    buf_length = strlen(t->inbuf);
-    read_point = t->inbuf + buf_length;
-    space_left = MAX_RAW_INPUT_LENGTH - buf_length - 1;
-    
-    do
-    {
-      if (space_left <= 0) {
-        if (t->character)
-          extract_char(t->character);
-        log("process_input: about to close connection: input overflow");
-        return -1;
-      }
-      
-      if ((bytes_read = read(t->descriptor, read_point, space_left)) < 0) {
-        
-#ifdef EWOULDBLOCK
-        if (errno == EWOULDBLOCK)
-          errno = EAGAIN;
-#endif
-        
-        if (errno != EAGAIN) {
-          perror("process_input: about to lose connection");
-          return -1;              /* some error condition was encountered on
-                                   * read */
-        } else
-          return 0;               /* the read would have blocked: just means no
-                                   * data there */
-      } else if (bytes_read == 0) {
-        // log("EOF on socket read (connection broken by peer)");
-        return -1;
-      }
-      /* at this point, we know we got some data from the read */
-      
-      *(read_point + bytes_read) = '\0';  /* terminate the string */
-      
-      /* search for a newline in the data we just read */
-      for (ptr = read_point; *ptr && !nl_pos; ptr++)
-        if (ISNEWL(*ptr))
-          nl_pos = ptr;
-      
-      read_point += bytes_read;
-      space_left -= bytes_read;
-      
-      /*
-       * on some systems such as AIX, POSIX-standard nonblocking I/O is broken,
-       * causing the MUD to hang when it encounters input not terminated by a
-       * newline.  This was causing hangs at the Password: prompt, for example.
-       * I attempt to compensate by always returning after the _first_ read, instead
-       * of looping forever until a read returns -1.  This simulates non-blocking
-       * I/O because the result is we never call read unless we know from select()
-       * that data is ready (process_input is only called if select indicates that
-       * this descriptor is in the read set).  JE 2/23/95.
-       */
-#if !defined(POSIX_NONBLOCK_BROKEN)
-      
-    } while (nl_pos == NULL);
-#else
-    
-  }
-  while (0)
-    ;
+  if (!t->prompt_mode)          /* && !t->connected) */
+    result = write_to_descriptor(t->descriptor, i);
+  else
+    result = write_to_descriptor(t->descriptor, i + 2);
   
+  /* handle snooping: prepend "% " and send to snooper */
+  if (t->snoop_by)
+  {
+    SEND_TO_Q("% ", t->snoop_by);
+    SEND_TO_Q(t->output, t->snoop_by);
+    SEND_TO_Q("%%", t->snoop_by);
+  }
+  /*
+   * if we were using a large buffer, put the large buffer on the buffer pool
+   * and switch back to the small one
+   */
+  if (t->large_outbuf)
+  {
+    t->large_outbuf->next = bufpool;
+    bufpool = t->large_outbuf;
+    t->large_outbuf = NULL;
+    t->output = t->small_outbuf;
+  }
+  /* reset total bufspace back to that of a small buffer */
+  t->bufspace = SMALL_BUFSIZE - 1;
+  t->bufptr = 0;
+  *(t->output) = '\0';
+  
+  return result;
+}
+
+int write_to_descriptor(int desc, const char *txt) {
+  int total, bytes_written;
+  
+  total = strlen(txt);
+  
+  do {
+    if ((bytes_written = write(desc, txt, total)) < 0) {
+#ifdef EWOULDBLOCK
+      if (errno == EWOULDBLOCK)
+        errno = EAGAIN;
+#endif
+      
+      if (errno == EAGAIN)
+        log("process_output: socket write would block, about to close");
+      else
+        perror("Write to socket");
+      return -1;
+    } else {
+      txt += bytes_written;
+      total -= bytes_written;
+    }
+  } while (total > 0);
+  
+  return 0;
+}
+
+/*
+ * ASSUMPTION: There will be no newlines in the raw input buffer when this
+ * function is called.  We must maintain that before returning.
+ */
+int process_input(struct descriptor_data *t) {
+  int buf_length, bytes_read, space_left, failed_subst;
+  char *ptr, *read_point, *write_point, *nl_pos = NULL;
+  char tmp[MAX_INPUT_LENGTH + 8];
+  
+  // Initialize our temporary buffer, which is used by KaVir protocol code for reading out their crap.
+  static char temporary_buffer[MAX_PROTOCOL_BUFFER];
+  temporary_buffer[0] = '\0';
+    
+  /* End of KaVir protocol kludge. */
+  
+  /* first, find the point where we left off reading data */
+  buf_length = strlen(t->inbuf);
+  read_point = t->inbuf + buf_length;
+  space_left = MAX_RAW_INPUT_LENGTH - buf_length - 1;
+    
+  do {
+    if (space_left <= 0) {
+      if (t->character)
+        extract_char(t->character);
+      log("process_input: about to close connection: input overflow");
+      return -1;
+    }
+    
+    if ((bytes_read = read(t->descriptor, &temporary_buffer, MAX_PROTOCOL_BUFFER - 1)) < 0) {
+      
+#ifdef EWOULDBLOCK
+      if (errno == EWOULDBLOCK)
+        errno = EAGAIN;
+#endif
+      
+      if (errno != EAGAIN) {
+        perror("process_input: about to lose connection");
+        return -1;              /* some error condition was encountered on
+                                 * read */
+      } else
+        return 0;               /* the read would have blocked: just means no
+                                 * data there */
+    } else if (bytes_read == 0) {
+      // log("EOF on socket read (connection broken by peer)");
+      return -1;
+    }
+    /* at this point, we know we got some data from the read */
+    
+    temporary_buffer[bytes_read] = '\0';  /* terminate the string */
+    
+    // Push the data for processing through KaVir's protocol code. Resize bytes_read to account for the stripped control chars.
+    ProtocolInput(t, temporary_buffer, bytes_read, t->inbuf);
+    sprintf(buf3, "Parsed '%s' to '%s', changing length from %d to %lu.",
+            temporary_buffer, t->inbuf + buf_length, bytes_read, strlen(t->inbuf + buf_length));
+    log(buf3);
+    bytes_read = strlen(t->inbuf + buf_length);
+    
+    // We parsed out all the data-- must have been pure control codes. Break out.
+    if (bytes_read == 0)
+      return 0;
+    
+    /* search for a newline in the data we just read */
+    for (ptr = read_point; *ptr && !nl_pos; ptr++)
+      if (ISNEWL(*ptr))
+        nl_pos = ptr;
+    
+    read_point += bytes_read;
+    space_left -= bytes_read;
+    
+    /*
+     * on some systems such as AIX, POSIX-standard nonblocking I/O is broken,
+     * causing the MUD to hang when it encounters input not terminated by a
+     * newline.  This was causing hangs at the Password: prompt, for example.
+     * I attempt to compensate by always returning after the _first_ read, instead
+     * of looping forever until a read returns -1.  This simulates non-blocking
+     * I/O because the result is we never call read unless we know from select()
+     * that data is ready (process_input is only called if select indicates that
+     * this descriptor is in the read set).  JE 2/23/95.
+     */
+#ifdef SOMETHING_THAT_DOESNT_EXIST_JUST_SO_XCODE_WONT_CHOKE_ON_SEEING_TWO_END_BRACKETS_WHILE_NOT_UNDERSTANDING_THE_IFDEFS_THAT_SHIELD_THEM
+    {
+#endif
+      
+#if !defined(POSIX_NONBLOCK_BROKEN)
+  // note: if you define the above, you'll have to figure out protocol handling yourself-- see below.
+    
+  } while (nl_pos == NULL);
+#else
+  
+  } while (0);
+
   if (nl_pos == NULL)
     return 0;
 #endif
-  
+
   /*
    * okay, at this point we have at least one newline in the string; now we
    * can copy the formatted data to a new array for further processing.
    */
-  
+
   read_point = t->inbuf;
-  
+
   while (nl_pos != NULL) {
     write_point = tmp;
     space_left = MAX_INPUT_LENGTH - 1;
@@ -1656,13 +1704,13 @@ int new_descriptor(int s)
       if (ISNEWL(*ptr))
         nl_pos = ptr;
   }
-  
+
   /* now move the rest of the buffer up to the beginning for the next pass */
   write_point = t->inbuf;
   while (*read_point)
     *(write_point++) = *(read_point++);
   *write_point = '\0';
-  
+
   return 1;
 }
 
@@ -1783,6 +1831,9 @@ void close_socket(struct descriptor_data *d)
   struct descriptor_data *temp;
   spell_data *one, *next;
   char buf[128];
+  
+  // Free the protocol data when a socket is closed.
+  ProtocolDestroy( d->pProtocol );
   
   close(d->descriptor);
   flush_queues(d);
@@ -2053,8 +2104,13 @@ char *colorize(struct descriptor_data *d, const char *str, bool skip_check)
 {
   // Big ol' buffer so that even if the entire string is color codes, we can still store it all plus a terminal \0. -LS
   static char buffer[MAX_STRING_LENGTH * 8 + 1];
-  char *temp = &buffer[0];
-  const char *color;
+  //char *temp = &buffer[0];
+  //const char *color;
+  
+  // KaVir's protocol snippet handles this, so...
+  strcpy(buffer, str);
+  return &buffer[0];
+  /*
   
   if (!str || !*str) {
     // Declare our own error buf so we don't clobber anyone's strings.
@@ -2211,6 +2267,7 @@ char *colorize(struct descriptor_data *d, const char *str, bool skip_check)
   *temp = '\0';
   
   return &buffer[0];
+  */
 }
 
 void send_to_char(struct char_data * ch, const char * const messg, ...)
@@ -2717,3 +2774,36 @@ void check_memory_canaries() {
   }
 }
 #endif
+
+void msdp_update() {
+  struct descriptor_data *d = NULL;
+  struct char_data *ch = NULL;
+  int PlayerCount = 0;
+  
+  for (d = descriptor_list; d; d = d->next) {
+    if (!(ch = d->character))
+      continue;
+    
+    ++PlayerCount;
+    // General info
+    MSDPSetString(d, eMSDP_CHARACTER_NAME, GET_CHAR_NAME(ch));
+    MSDPSetString(d, eMSDP_SERVER_ID, "AwakeMUD CE");
+    
+    // Character info
+    MSDPSetNumber(d, eMSDP_HEALTH, GET_PHYSICAL(ch));
+    MSDPSetNumber(d, eMSDP_HEALTH_MAX, GET_MAX_PHYSICAL(ch));
+    MSDPSetNumber(d, eMSDP_MANA, GET_MENTAL(ch));
+    MSDPSetNumber(d, eMSDP_MANA_MAX, GET_MAX_MENTAL(ch));
+    MSDPSetNumber(d, eMSDP_MONEY, GET_NUYEN(ch));
+    
+    // TODO: Many more things can be added here.
+    
+    MSDPUpdate(d); /* Flush all the dirty variables */
+  }
+  
+  /* Ideally this should be called once at startup, and again whenever
+   * someone leaves or joins the mud.  But this works, and it keeps the
+   * snippet simple.  Optimise as you see fit.
+   */
+  MSSPSetPlayers( PlayerCount );
+}
