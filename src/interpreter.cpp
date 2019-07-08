@@ -34,6 +34,7 @@
 #include "config.h"
 #include "newmatrix.h"
 #include "security.h"
+#include "protocol.h"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -1318,6 +1319,10 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
   skip_spaces(&argument);
   if (!*argument)
     return;
+  
+  // They entered something? KaVir's protocol snippet says to clear their WriteOOB.
+  if (ch->desc)
+    ch->desc->pProtocol->WriteOOB = 0;
 
   /*
    * special case to handle one-character, non-alphanumeric commands;
@@ -2129,6 +2134,9 @@ int perform_dupe_check(struct descriptor_data *d)
     mudlog(buf, d->character, LOG_CONNLOG, TRUE);
     break;
   }
+  
+  // KaVir's protocol snippet.
+  MXPSendTag( d, "<VERSION>" );
 
   return 1;
 }
@@ -2602,6 +2610,9 @@ void nanny(struct descriptor_data * d, char *arg)
       mudlog(buf, d->character, LOG_CONNLOG, TRUE);
 
       STATE(d) = CON_PLAYING;
+      
+      // KaVir's protocol snippet.
+      MXPSendTag( d, "<VERSION>" );
 
       look_at_room(d->character, 0);
       d->prompt_mode = 1;
