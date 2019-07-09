@@ -1657,7 +1657,7 @@ int racial_limits[][2][6] = {
                               {{ 6, 8, 6, 8, 6, 6 },{ 9, 12, 9, 12, 9, 9 }} // night one
                             };
 
-char racial_attribute_modifiers[][6] = {
+int racial_attribute_modifiers[][6] = {
 //  BOD QUI STR CHA INT WIL
   {  0,  0,  0,  0,  0,  0  }, // undef
   {  0,  0,  0,  0,  0,  0  }, // undef
