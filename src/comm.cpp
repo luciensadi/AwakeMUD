@@ -1596,9 +1596,11 @@ int process_input(struct descriptor_data *t) {
     
     // Push the data for processing through KaVir's protocol code. Resize bytes_read to account for the stripped control chars.
     ProtocolInput(t, temporary_buffer, bytes_read, t->inbuf);
+#ifdef DEBUG_PROTOCOL
     sprintf(buf3, "Parsed '%s' to '%s', changing length from %d to %lu.",
             temporary_buffer, t->inbuf + buf_length, bytes_read, strlen(t->inbuf + buf_length));
     log(buf3);
+#endif
     bytes_read = strlen(t->inbuf + buf_length);
     
     // We parsed out all the data-- must have been pure control codes. Break out.
