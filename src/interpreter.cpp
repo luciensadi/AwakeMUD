@@ -1271,7 +1271,7 @@ void nonsensical_reply(struct char_data *ch)
 {
   send_to_char(ch, "That is not a valid command.\r\n");
   if (ch->desc && ++ch->desc->invalid_command_counter >= 5) {
-    send_to_char(ch, "^GStuck? Need help? Feel free to ask on the %s channel (%s%s <message>)^n\r\n",
+    send_to_char(ch, "^GStuck? Need help? Feel free to ask on the %s channel! (%s%s <message>)^n\r\n",
                  PLR_FLAGGED(ch, PLR_NEWBIE) ? "newbie" : "OOC",
                  PRF_FLAGGED(ch, PRF_SCREENREADER) ? "type " : "",
                  PLR_FLAGGED(ch, PLR_NEWBIE) ? "NEWBIE" : "OOC");
