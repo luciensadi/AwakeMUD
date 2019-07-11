@@ -28,6 +28,8 @@
 #include "constants.h"
 #include "newmatrix.h"
 #include "config.h"
+#include "helpedit.h"
+#include "newdb.h"
 
 extern class objList ObjList;
 extern sh_int mortal_start_room;
@@ -50,9 +52,6 @@ extern void zedit_disp_data_menu(struct descriptor_data *d);
 extern void vedit_disp_menu(struct descriptor_data * d);
 extern void hedit_disp_data_menu(struct descriptor_data *d);
 extern void icedit_disp_menu(struct descriptor_data *d);
-
-extern MYSQL *mysql;
-extern int mysql_wrapper(MYSQL *mysql, const char *query);
 
 // mem class
 extern class memoryClass *Mem;
@@ -2205,6 +2204,62 @@ ACMD(do_icedit)
     d->edit_icon->look_desc = str_dup("An unfinished IC guards the node.");
     d->edit_icon->long_desc = str_dup("It looks like an unfinished IC.\r\n");
     d->edit_mode = ICEDIT_CONFIRM_EDIT;
+    return;
+  }
+}
+
+// helpedit todo
+ACMD(do_helpedit) {
+  if (!ch->desc) {
+    send_to_char("You don't even have a descriptor, how are you going to edit a helpfile?\r\n", ch);
+    mudlog("Character without descriptor tried to edit a helpfile, wut?", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  if (IS_NPC(ch)) {
+    send_to_char("NPCs can't edit helpfiles.\r\n", ch);
+    return;
+  }
+  
+  if (!*argument) {
+    send_to_char("Syntax: HELPEDIT NEW or HELPEDIT <exact and full title of the help file to edit>\r\n", ch);
+    return;
+  }
+  
+  if (strchr(argument, '%')) {
+    send_to_char("Helpfile names may not contain the '%' character.", ch);
+    return;
+  }
+  
+  skip_spaces(&argument);
+  
+  if (str_cmp(argument, "new") == 0) {
+    // Create a new helpfile and display menu (which puts them into edit mode), then bail out of this function.
+    ch->desc->edit_helpfile = new struct help_data(NULL);
+    helpedit_disp_menu(ch->desc);
+    return;
+  }
+  
+  // Looks like we gotta do a SQL lookup to see if their target file exists.
+  sprintf(buf, "SELECT name, body FROM help_topic WHERE name='%s'", prepare_quotes(buf2, argument, sizeof(buf2)));
+  if (mysql_wrapper(mysql, buf)) {
+    send_to_char("Sorry, an error occurred. Try again later.\r\n", ch);
+    mudlog("SYSERR: A MySQL error occurred while attempting to edit a helpfile. See log for details.", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  MYSQL_RES *res = mysql_use_result(mysql);
+  MYSQL_ROW row = mysql_fetch_row(res);
+  if (row) {
+    // Prepare their edit file.
+    ch->desc->edit_helpfile = new struct help_data(str_dup(row[0]));
+    ch->desc->edit_helpfile->body = str_dup(row[1]);
+    mysql_free_result(res);
+    helpedit_disp_menu(ch->desc);
+    return;
+  } else {
+    mysql_free_result(res);
+    send_to_char("No helpfile by that name currently exists. Please use the *exact and full* name, or HELPEDIT NEW to make a new file.\r\n", ch);
     return;
   }
 }

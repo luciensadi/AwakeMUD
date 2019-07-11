@@ -1839,6 +1839,7 @@ enum {
 #define CON_AMMO_CREATE  44
 #define CON_ASKNAME      45            /* Ask user for name            */
 #define CON_PGEDIT       46
+#define CON_HELPEDIT     47
 
 /* chargen connected modes */
 #define CCR_AWAIT_CR    -1

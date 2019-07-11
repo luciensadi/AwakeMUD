@@ -1,4 +1,3 @@
-#include <mysql/mysql.h>
 #include <time.h>
 
 #include "structs.h"
@@ -14,9 +13,6 @@
 #include "memory.h"
 #include "newdb.h"
 #include "newmail.h"
-
-extern MYSQL *mysql;
-extern int mysql_wrapper(MYSQL *mysql, const char *buf);
 
 // Ensure we have enough space for the query cruft plus a fully-quoted mail.
 char mail_query_buf[300 + (MAX_MAIL_SIZE * 2 + 1)];

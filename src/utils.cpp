@@ -17,7 +17,6 @@
 #include <sys/types.h>
 #include <stdarg.h>
 #include <iostream>
-#include <mysql/mysql.h>
 
 using namespace std;
 
@@ -42,6 +41,7 @@ using namespace std;
 #include "constants.h"
 #include "newmagic.h"
 #include "list.h"
+#include "newdb.h"
 
 extern class memoryClass *Mem;
 extern struct time_info_data time_info;
@@ -50,8 +50,6 @@ extern void die(struct char_data * ch);
 extern const char *log_types[];
 extern long beginning_of_time;
 extern int ability_cost(int abil, int level);
-extern MYSQL *mysql;
-extern int mysql_wrapper(MYSQL *mysql, const char *buf);
 extern void weight_change_object(struct obj_data * obj, float weight);
 
 extern char *colorize(struct descriptor_data *d, const char *str, bool skip_check = FALSE);

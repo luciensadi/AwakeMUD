@@ -6,8 +6,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <mysql/mysql.h>
 #include <stdarg.h>
+#include <time.h>
 
 #include "awake.h"
 #include "structs.h"
@@ -20,12 +20,6 @@
 #include "olc.h"
 #include "handler.h"
 #include "comm.h"
-
-// Externs from other files.
-extern MYSQL *mysql;
-
-// Prototypes from other files.
-int mysql_wrapper(MYSQL *mysql, const char *query);
 
 // The linked list of loaded playergroups.
 extern Playergroup *loaded_playergroups;

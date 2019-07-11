@@ -31,7 +31,6 @@ extern void kill_ems(char *);
 extern void init_char_sql(struct char_data *ch);
 static const char *const INDEX_FILENAME = "etc/pfiles/index";
 extern char *cleanup(char *dest, const char *src);
-extern MYSQL *mysql;
 extern void add_phone_to_list(struct obj_data *);
 extern Playergroup *loaded_playergroups;
 
@@ -1752,9 +1751,10 @@ DBIndex::vnum_t PCIndex::find_open_id()
 bool does_player_exist(char *name)
 {
   char buf[MAX_STRING_LENGTH];
+  char prepare_quotes_buf[250];
   if (!name || !*name)
     return FALSE;
-  sprintf(buf, "SELECT idnum FROM pfiles WHERE Name='%s';", name);
+  sprintf(buf, "SELECT idnum FROM pfiles WHERE Name='%s';", prepare_quotes(prepare_quotes_buf, name, 250));
   if (mysql_wrapper(mysql, buf))
     return FALSE;
   MYSQL_RES *res = mysql_use_result(mysql);

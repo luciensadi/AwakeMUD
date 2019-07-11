@@ -13,7 +13,6 @@
 #include <ctype.h>
 #include <string.h>
 #include <time.h>
-#include <mysql/mysql.h>
 
 #include "structs.h"
 #include "awake.h"
@@ -30,6 +29,7 @@
 #include "newmatrix.h"
 #include "constants.h"
 #include "newdb.h"
+#include "helpedit.h"
 
 #define DO_FORMAT_INDENT   1
 #define DONT_FORMAT_INDENT 0
@@ -37,8 +37,6 @@
 void show_string(struct descriptor_data *d, char *input);
 void qedit_disp_menu(struct descriptor_data *d);
 
-extern MYSQL *mysql;
-extern int mysql_wrapper(MYSQL *mysql, const char *query);
 /* ************************************************************************
 *  modification of malloc'ed strings                                      *
 ************************************************************************ */
@@ -110,25 +108,14 @@ void format_string(struct descriptor_data *d, int indent)
     line = 78;
     for (i = k, j = 0; format[i] && j < 79; i++)
       if (format[i] == '^' && (i < 1 || format[i-1] != '^') && format[i+1]) {
-        switch (LOWER(format[i+1])) {
-        case 'b':
-        case 'c':
-        case 'g':
-        case 'l':
-        case 'm':
-        case 'n':
-        case 'r':
-        case 'w':
-        case 'y':
+        // Look for color code initializers; if they exist, bump the line count longer.
+        if (!strchr((const char *)"nrgybmcwajeloptv", LOWER(format[i+1]))) {
           line += 2;
-          break;
-        case '^':
+        } else if (format[i+1] == '^') {
           line++;
           j++;
-          break;
-        default:
+        } else {
           j += 2;
-          break;
         }
       } else
         j++;
@@ -260,6 +247,9 @@ void string_add(struct descriptor_data *d, char *str)
     } else if (STATE(d) == CON_SPELL_CREATE && d->edit_mode == 3) {
       REPLACE_STRING(d->edit_obj->photo);
       spedit_disp_menu(d);
+    } else if (STATE(d) == CON_HELPEDIT) {
+      REPLACE_STRING(d->edit_helpfile->body);
+      helpedit_disp_menu(d);
     } else if (STATE(d) == CON_IEDIT) {
       switch(d->edit_mode) {
         case IEDIT_EXTRADESC_DESCRIPTION:

@@ -11,10 +11,6 @@
 #include "newmail.h"
 #include "newdb.h"
 #include "memory.h"
-#include <mysql/mysql.h>
-
-extern MYSQL *mysql;
-extern int mysql_wrapper(MYSQL *mysql, const char *buf);
 
 #define CH d->character
 #define SEC d->edit_obj

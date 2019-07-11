@@ -7,6 +7,8 @@
 #ifndef __newdb_h__
 #define __newdb_h__
 
+#include <mysql/mysql.h>
+
 class File;
 
 class DBIndex
@@ -123,4 +125,9 @@ extern bool load_char(const char *name, struct char_data *ch, bool logon);
 extern vnum_t get_player_id(char *name);
 extern char *get_player_name(vnum_t id);
 extern char *prepare_quotes(char *dest, const char *str, size_t size_of_dest);
+
+extern MYSQL *mysql;
+
+int mysql_wrapper(MYSQL *mysql, const char *query);
+char *prepare_quotes(char *dest, const char *str, size_t size_of_dest);
 #endif // ifndef __newdb_h__
