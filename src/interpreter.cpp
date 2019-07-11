@@ -1269,6 +1269,15 @@ const char *reserved[] =
 
 void nonsensical_reply(struct char_data *ch)
 {
+  send_to_char(ch, "That is not a valid command.\r\n");
+  if (ch->desc && ++ch->desc->invalid_command_counter >= 5) {
+    send_to_char(ch, "^GStuck? Need help? Feel free to ask on the %s channel (%s%s <message>)^n\r\n",
+                 PLR_FLAGGED(ch, PLR_NEWBIE) ? "newbie" : "OOC",
+                 PRF_FLAGGED(ch, PRF_SCREENREADER) ? "type " : "",
+                 PLR_FLAGGED(ch, PLR_NEWBIE) ? "NEWBIE" : "OOC");
+    ch->desc->invalid_command_counter = 0;
+  }
+  /*  Removing the prior 'funny' messages and replacing them with something understandable by MUD newbies.
   switch (number(1, 9))
   {
   case 1:
@@ -1298,6 +1307,7 @@ void nonsensical_reply(struct char_data *ch)
   case 9:
     send_to_char(ch, "You can't get ye flask!\r\n");
   }
+   */
 }
 
 /*
@@ -1363,6 +1373,8 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
       if (*cmd_info[cmd].command == '\n') {
         nonsensical_reply(ch);
         return;
+      } else {
+        ch->desc->invalid_command_counter = 0;
       }
       
       // Their command was valid in external context. Inform them.
@@ -1381,9 +1393,13 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
     for (length = strlen(arg), cmd = 0; *rig_info[cmd].command != '\n'; cmd++)
       if (!strncmp(rig_info[cmd].command, arg, length))
         break;
-    if (*rig_info[cmd].command == '\n')
+    if (*rig_info[cmd].command == '\n') {
       nonsensical_reply(ch);
-    else if (!special(ch, cmd, line))
+      return;
+    } else {
+      ch->desc->invalid_command_counter = 0;
+    }
+    if (!special(ch, cmd, line))
       ((*rig_info[cmd].command_pointer) (ch, line, cmd, rig_info[cmd].subcmd));
   } else
   {
@@ -1397,6 +1413,8 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
     if (*cmd_info[cmd].command == '\n') {
       nonsensical_reply(ch);
       return;
+    } else {
+      ch->desc->invalid_command_counter = 0;
     }
     
     if (IS_PROJECT(ch) && AFF_FLAGGED(ch->desc->original, AFF_TRACKING) && cmd != find_command("track")) {
