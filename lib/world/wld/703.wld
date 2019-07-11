@@ -23,7 +23,8 @@ BREAK
 #70301
 Name:	A Wide Roundabout Circling a Marble Fountain
 Desc:$
-You are in an unfinished room.
+   You are in an unfinished room.
+   It is very unfinished. 
 ~
 Flags:	1000000010000000000000000000100
 SecType:	City
@@ -81,6 +82,17 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+[EXIT north]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
+	ToVnum:	0
+	Flags:	1
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	998
+	LockRating:	8
 [EXIT east]
 	ToVnum:	70313
 	Flags:	0
@@ -645,6 +657,17 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+[EXIT south]
+	Keywords:	doors shaft
+	Desc:$
+A pair of elevator doors allows access to the liftway.
+~
+	ToVnum:	0
+	Flags:	1
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	998
+	LockRating:	8
 BREAK
 #70318
 Name:	TSS template room
@@ -1045,7 +1068,7 @@ Name:	TSS elevator shaft
 Desc:$
 You are in an unfinished room.
 ~
-Flags:	1000
+Flags:	10000000001010000000000000001100
 SecType:	Inside
 MatrixExit:	0
 Crowd:	2
@@ -1056,7 +1079,7 @@ Z:	3.00
 RoomType:	10
 [POINTS]
 	SpecIdx:	0
-	Rating:	0
+	Rating:	6
 	Light:	0
 	Smoke:	0
 	Background:	0

@@ -31,6 +31,9 @@
 #include "constants.h"
 #include "newdb.h"
 
+#define DO_FORMAT_INDENT   1
+#define DONT_FORMAT_INDENT 0
+
 void show_string(struct descriptor_data *d, char *input);
 void qedit_disp_menu(struct descriptor_data *d);
 
@@ -225,12 +228,18 @@ void string_add(struct descriptor_data *d, char *str)
     extern void pocketsec_mailmenu(struct descriptor_data *d);
     extern void pocketsec_notemenu(struct descriptor_data *d);
     
-#define REPLACE_STRING(target) {    \
-  DELETE_ARRAY_IF_EXTANT((target)); \
-  format_string(d, 0);              \
-  (target) = str_dup(*d->str);      \
-  DELETE_D_STR_IF_EXTANT(d);  \
+// REPLACE_STRING swaps target with d->str if d->str exists (otherwise leaves target alone).
+#define REPLACE_STRING_FORMAT_SPECIFIED(target, format_bit) { \
+  if ((d->str)) {                                             \
+    DELETE_ARRAY_IF_EXTANT((target));                         \
+    format_string(d, (format_bit));                           \
+    (target) = str_dup(*d->str);                              \
+    DELETE_D_STR_IF_EXTANT(d);                                \
+  }                                                           \
 }
+    
+#define REPLACE_STRING(target) (REPLACE_STRING_FORMAT_SPECIFIED(target, DONT_FORMAT_INDENT))
+#define REPLACE_STRING_WITH_INDENTED_FORMATTING(target) (REPLACE_STRING_FORMAT_SPECIFIED(target, DO_FORMAT_INDENT))
 
     if (STATE(d) == CON_DECK_CREATE && d->edit_mode == 1) {
       REPLACE_STRING(d->edit_obj->photo);
@@ -254,10 +263,7 @@ void string_add(struct descriptor_data *d, char *str)
     } else if (STATE(d) == CON_IEDIT) {
       switch(d->edit_mode) {
         case IEDIT_EXTRADESC_DESCRIPTION:
-          DELETE_ARRAY_IF_EXTANT(((struct extra_descr_data *)*d->misc_data)->description);
-          format_string(d, 0);
-          ((struct extra_descr_data *)*d->misc_data)->description = str_dup(*d->str);
-          DELETE_D_STR_IF_EXTANT(d);
+          REPLACE_STRING(((struct extra_descr_data *)*d->misc_data)->description);
           iedit_disp_extradesc_menu(d);
           break;
         case IEDIT_LONGDESC:
@@ -308,12 +314,17 @@ void string_add(struct descriptor_data *d, char *str)
     } else if (STATE(d) == CON_REDIT) {
       switch(d->edit_mode) {
       case REDIT_DESC:
-        REPLACE_STRING(d->edit_room->description);
+        REPLACE_STRING_WITH_INDENTED_FORMATTING(d->edit_room->description);
         redit_disp_menu(d);
         break;
       case REDIT_NDESC:
+          if (d->str && *d->str) {
+            if (strlen(*d->str) > 5)
+              REPLACE_STRING_WITH_INDENTED_FORMATTING(d->edit_room->night_desc);
+            else
+              d->edit_room->night_desc = NULL;
+          }
         DELETE_ARRAY_IF_EXTANT(d->edit_room->night_desc);
-        format_string(d, 1);
         if (strlen(*d->str) > 5) {
           d->edit_room->night_desc = str_dup(*d->str);
         } else
@@ -322,10 +333,7 @@ void string_add(struct descriptor_data *d, char *str)
         redit_disp_menu(d);
         break;
       case REDIT_EXTRADESC_DESCRIPTION:
-        DELETE_ARRAY_IF_EXTANT(((struct extra_descr_data *)*d->misc_data)->description);
-        format_string(d, 0);
-        ((struct extra_descr_data *)*d->misc_data)->description = str_dup(*d->str);
-        DELETE_D_STR_IF_EXTANT(d);
+        REPLACE_STRING(((struct extra_descr_data *)*d->misc_data)->description);
         redit_disp_extradesc_menu(d);
         break;
       case REDIT_EXIT_DESCRIPTION:
