@@ -340,8 +340,4 @@ extern void write_index_file(const char *suffix);
 #define SHEDIT_ETTI		25
 #define SHEDIT_SHOPNAME		26
 
-#define HELPEDIT_MAIN_MENU 1
-#define HELPEDIT_TITLE     2
-#define HELPEDIT_BODY      3
-
 #endif
