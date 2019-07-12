@@ -196,7 +196,7 @@ DefaultPos:	Standing
 	Cash:	1000
 	Bank:	5000
 [SKILLS]
-	Brawling:	10
+	:	10
 	Armed Combat:	10
 	Stealth:	10
 	Leadership:	10
@@ -236,7 +236,7 @@ DefaultPos:	Standing
 	Cash:	1000
 	Bank:	5000
 [SKILLS]
-	Brawling:	10
+	:	10
 	Firearms:	10
 	Leadership:	10
 	Armed Combat:	10
@@ -274,7 +274,7 @@ DefaultPos:	Standing
 	Ballistic:	15
 	Impact:	15
 [SKILLS]
-	Brawling:	10
+	:	10
 	Leadership:	10
 	Stealth:	10
 	Athletics:	10
@@ -317,8 +317,8 @@ DefaultPos:	Standing
 	Bank:	6000
 [SKILLS]
 	Sorcery:	10
-	Brawling:	10
-	Brawling:	10
+	:	10
+	:	10
 	Conjuring:	10
 	Stealth:	10
 BREAK
@@ -357,10 +357,10 @@ DefaultPos:	Standing
 	Cash:	2000
 	Bank:	6000
 [SKILLS]
-	Brawling:	10
+	:	10
 	Sorcery:	10
 	Conjuring:	10
-	Brawling:	10
+	:	10
 	Throwing Weapons:	10
 BREAK
 #60510
@@ -1320,7 +1320,88 @@ DefaultPos:	Standing
 	Cash:	1000
 	Bank:	5000
 [SKILLS]
-	Brawling:	10
+	:	10
+	Armed Combat:	10
+	Stealth:	10
+	Leadership:	10
+	Athletics:	10
+BREAK
+#60540
+Keywords:	jean samuel pauly
+Name:	Jean Samuel Pauly
+RoomDesc:$
+A spry Swede sits at a workbench here, pressing primers into cartridges. 
+
+~
+LookDesc:$
+Wearing clothes that could have come straight from the 1800s, this clean-cut
+Swede is pressing cartridges together with such speed and dexterity, it's like
+he invented the technology. 
+~
+ArriveMsg:	
+LeaveMsg:	
+MobFlags:	10000000001011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	40
+	Qui:	40
+	Str:	40
+	Cha:	40
+	Int:	40
+	Wil:	40
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	15
+	Cash:	1000
+	Bank:	5000
+[SKILLS]
+	:	10
+	Armed Combat:	10
+	Stealth:	10
+	Leadership:	10
+	Athletics:	10
+BREAK
+#60541
+Keywords:	swarm spiraling mass incoherent ideas
+Name:	a spiraling mass of incoherent ideas
+RoomDesc:$
+A swarm of incoherent ideas swirls through here, lacking any ability to affect
+its world. 
+
+~
+LookDesc:$
+It's comprised of all the things that showed up in the source books and looked
+~
+ArriveMsg:	
+LeaveMsg:	
+MobFlags:	10000000001011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	40
+	Qui:	40
+	Str:	40
+	Cha:	40
+	Int:	40
+	Wil:	40
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	15
+	Impact:	15
+	Cash:	1000
+	Bank:	5000
+[SKILLS]
+	:	10
 	Armed Combat:	10
 	Stealth:	10
 	Leadership:	10

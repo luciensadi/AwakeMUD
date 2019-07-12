@@ -764,7 +764,7 @@ enum {
 #define SKILL_TRACK                 58
 #define SKILL_CLIMBING            59 
 #define SKILL_PILOT_BIKE    60
-#define SKILL_PILOT_FIXED_WING   61
+#define SKILL_UNUSED_WAS_PILOT_FIXED_WING   61
 #define SKILL_PILOT_CAR     62
 #define SKILL_PILOT_TRUCK   63
 #define SKILL_BR_BIKE     64

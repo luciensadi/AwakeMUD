@@ -439,6 +439,133 @@ SPECIAL(metamagic_teacher)
   return TRUE;
 }
 
+// Teaches every skill that isn't in the other teachers' train lists. The assumption is that if it exists in code but isn't taught anywhere, it's not implemented.
+SPECIAL(nerp_skills_teacher) {
+  struct char_data *master = (struct char_data *) me;
+  int max = NORMAL_MAX_SKILL, skill_num;
+  
+  bool can_teach_skill[MAX_SKILLS];
+  for (int skill = 1; skill < MAX_SKILLS; skill++)
+    can_teach_skill[skill] = TRUE;
+  can_teach_skill[0] = FALSE; // OMGWTFBBQ is not a valid skill
+  can_teach_skill[SKILL_ARMED_COMBAT] = FALSE; // NPC-only skill
+  can_teach_skill[SKILL_UNUSED_WAS_PILOT_FIXED_WING] = FALSE; // what it says on the tin
+  
+  if (IS_NPC(ch) || !CMD_IS("practice") || !CAN_SEE(master, ch) || FIGHTING(ch) || GET_POS(ch) < POS_STANDING)
+    return FALSE;
+  
+  // Negate any skill in our array that is taught elsewhere in the game.
+  for (int ind = 0; teachers[ind].vnum != 0; ind++)
+    for (int skill_index = 0; skill_index < NUM_TEACHER_SKILLS; skill_index++)
+      if (teachers[ind].s[skill_index] > 0)
+        can_teach_skill[teachers[ind].s[skill_index]] = FALSE;
+  
+  skip_spaces(&argument);
+  
+  if (!*argument) {
+    // Send them a list of skills they can learn here.
+    bool found_a_skill_already = FALSE;
+    for (int skill = SKILL_ATHLETICS; skill < MAX_SKILLS; skill++) {
+      if (can_teach_skill[skill]) {
+        // Mundanes can't learn magic skills.
+        if (GET_TRADITION(ch) == TRAD_MUNDANE && skills[skill].requires_magic)
+          continue;
+        
+        if (GET_SKILL_POINTS(ch) > 0) {
+          // Add conditional messaging.
+          if (!found_a_skill_already) {
+            found_a_skill_already = TRUE;
+            sprintf(buf, "%s can teach you the following:\r\n", GET_NAME(master));
+          }
+          sprintf(buf, "%s  %s\r\n", buf, skills[skill].name);
+        }
+        else if (GET_SKILL(ch, skill) < max && !ch->char_specials.saved.skills[skill][1]) {
+          // Add conditional messaging.
+          if (!found_a_skill_already) {
+            found_a_skill_already = TRUE;
+            sprintf(buf, "%s can teach you the following:\r\n", GET_NAME(master));
+          }
+          sprintf(buf, "%s  %-24s (%d karma %d nuyen)\r\n", buf, skills[skill].name, get_skill_price(ch, skill),
+                  MAX(1000, (GET_SKILL(ch, skill) * 5000)));
+        }
+      }
+    }
+    // Failure case.
+    if (!found_a_skill_already) {
+      send_to_char(ch, "There's nothing %s can teach you that you don't already know.\r\n", GET_NAME(master));
+      return TRUE;
+    }
+    
+    if (GET_SKILL_POINTS(ch) > 0)
+      sprintf(buf, "%s\r\nYou have %d point%s to use for skills.\r\n", buf,
+              GET_SKILL_POINTS(ch), GET_SKILL_POINTS(ch) > 1 ? "s" : "");
+    else
+      sprintf(buf, "%s\r\nYou have %0.2f karma to use for skills.\r\n", buf,
+              ((float)GET_KARMA(ch) / 100));
+    send_to_char(buf, ch);
+    return TRUE;
+  }
+  
+  skill_num = find_skill_num(argument);
+  
+  if (skill_num < 0) {
+    send_to_char(ch, "%s doesn't seem to know anything about that subject.\r\n", GET_NAME(master));
+    return TRUE;
+  }
+  
+  if (!can_teach_skill[skill_num]) {
+    send_to_char(ch, "%s doesn't seem to know about that subject.\r\n", GET_NAME(master));
+    return TRUE;
+  }
+  
+  if (GET_SKILL(ch, skill_num) != REAL_SKILL(ch, skill_num)) {
+    send_to_char("You can't train a skill you currently have a skillsoft or other boost for.\r\n", ch);
+    return TRUE;
+  }
+  
+  // Deny some magic skills to mundane (different flavor from next block, same effect).
+  if ((skill_num == SKILL_CENTERING || skill_num == SKILL_ENCHANTING) && GET_TRADITION(ch) == TRAD_MUNDANE) {
+    send_to_char("Without access to the astral plane you can't even begin to fathom the basics of that skill.\r\n", ch);
+    return TRUE;
+  }
+  
+  // Deny all magic skills to mundane.
+  if (skills[skill_num].requires_magic && GET_TRADITION(ch) == TRAD_MUNDANE) {
+    send_to_char("Without the ability to channel magic, that skill would be useless to you.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (GET_SKILL(ch, skill_num) >= max) {
+    sprintf(arg, "%s You already know more than I can teach you in that area.", GET_CHAR_NAME(ch));
+    do_say(master, arg, 0, SCMD_SAYTO);
+    return TRUE;
+  }
+  
+  if (GET_KARMA(ch) < get_skill_price(ch, skill_num) * 100 &&
+      GET_SKILL_POINTS(ch) <= 0) {
+    send_to_char("You don't have enough karma to improve that skill.\r\n", ch);
+    return TRUE;
+  }
+  if (!PLR_FLAGGED(ch, PLR_AUTH) && GET_NUYEN(ch) < MAX(1000, (GET_SKILL(ch, skill_num) * 5000))) {
+    send_to_char(ch, "You can't afford the %d nuyen practice fee!\r\n",
+                 MAX(1000, (GET_SKILL(ch, skill_num) * 5000)));
+    return TRUE;
+  }
+  if (!PLR_FLAGGED(ch, PLR_AUTH))
+    GET_NUYEN(ch) -= MAX(1000, (GET_SKILL(ch, skill_num) * 5000));
+  if (GET_SKILL_POINTS(ch) > 0)
+    GET_SKILL_POINTS(ch)--;
+  else
+    GET_KARMA(ch) -= get_skill_price(ch, skill_num) * 100;
+  
+  send_to_char("You increase your abilities in this UNIMPLEMENTED SKILL.", ch);
+  SET_SKILL(ch, skill_num, REAL_SKILL(ch, skill_num) + 1);
+  if (GET_SKILL(ch, skill_num) >= max)
+    send_to_char("You have learnt all you can here.\r\n", ch);
+  
+  return TRUE;
+}
+
 SPECIAL(teacher)
 {
   struct char_data *master = (struct char_data *) me;

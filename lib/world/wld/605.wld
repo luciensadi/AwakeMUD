@@ -99,11 +99,11 @@ yourself. First, take a moment to look at your character's scorecard with
 interpreting it, ^WHELP SCORE^n is a great resource. Other useful commands are
 ^WINVENTORY^n (or ^WI^n), ^WEQUIPMENT^n (or ^WEQ^n), and ^WSKILLS^n (or ^WSK^n). These will tell you
 about what you're carrying, what you're wearing, and what you're good at.
- ^n  It's also handy to know how to interact with the things you find in the
+   It's also handy to know how to interact with the things you find in the
 world. You can pick up items you see on the ground with ^WGET (item)^n, or get
-them from containers with ^WGET (item) (container)^n. Take a look at the hopper on
-the wall (^WLOOK HOPPER^n)-- there's something in there for you.
- ^n  Go ahead and give those commands a try. Once you're ready, you can continue on
+them from containers with ^WGET (item) (container)^n. Take a look in the hopper on
+the wall (^WLOOK IN HOPPER^n)-- there's something in there for you.
+   Go ahead and give those commands a try. Once you're ready, you can continue on
 to the north. 
 ~
 Flags:	1000000000000011000
@@ -331,6 +331,12 @@ RoomType:	0
 	KeyVnum:	0
 [EXIT northwest]
 	ToVnum:	60510
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60628
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -5157,12 +5163,13 @@ BREAK
 #60626
 Name:	Exotic Melee Skill Training
 Desc:$
-   The skills offered in this room are of an exotic and niche nature, and are
-^yless likely to be useful to you^n than the skills offered below. Please be sure
-that you want them before learning them.
- ^n  ^gPROJECTILES^n is the skill related to bow and crossbow-type weapons, exotic
+   The skills offered in this room are of an exotic and niche nature, and ^Yare
+less likely to be useful to you than the skills offered below^n. They deal less
+damage than normal weapons and are harder to find ammunition for. Please be
+sure that you want them before learning them.
+   ^gPROJECTILES^n is the skill related to bow and crossbow-type weapons, exotic
 in the world of 2060.
- ^g  THROWING WEAPONS^n is the skill that is required for those that wish to be
+   ^gTHROWING WEAPONS^n is the skill that is required for those that wish to be
 able to use throwing knives or shuriken. 
 ~
 Flags:	1000000000000011000
@@ -5216,6 +5223,37 @@ RoomType:	0
 	BackgroundType:	0
 [EXIT down]
 	ToVnum:	60508
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60628
+Name:	Non-Essential Role Playing (NERP) Skills
+Desc:$
+   Non-Essential Role Playing (NERP) is a blanket term used to describe
+everything that exists in the game but does not have any coded effects. You
+are free to learn these skills if you wish to, but ^Rthese skills are only
+useful in roleplay scenarios and have no in-game coded effects.^n 
+~
+Flags:	1000000000000011000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	60506
 	Flags:	0
 	Material:	brick
 	Barrier:	4

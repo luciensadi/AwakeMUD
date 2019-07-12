@@ -448,6 +448,7 @@ void assign_mobiles(void)
   SPECIAL(matchsticks);
   SPECIAL(painter);
   SPECIAL(multnomah_guard);
+  SPECIAL(nerp_skills_teacher);
 
   /* trainers */
   for (i = 0; trainers[i].vnum != 0; i++)
@@ -456,6 +457,8 @@ void assign_mobiles(void)
   /* teachers */
   for (i = 0; teachers[i].vnum != 0; i++)
     ASSIGNMOB(teachers[i].vnum, teacher);
+  
+  ASSIGNMOB(60541, nerp_skills_teacher);
 
   /* metamagic trainers */
   for (i = 0; metamagict[i].vnum != 0; i++)
@@ -739,6 +742,9 @@ void assign_rooms(void)
   ASSIGNROOM(60591, chargen_unpractice_skill);
   ASSIGNROOM(60592, chargen_unpractice_skill);
   ASSIGNROOM(60593, chargen_unpractice_skill);
+  ASSIGNROOM(60626, chargen_unpractice_skill);
+  ASSIGNROOM(60627, chargen_unpractice_skill);
+  ASSIGNROOM(60628, chargen_unpractice_skill);
   
   /* Neophyte Guild */
   ASSIGNROOM(60585, neophyte_entrance);

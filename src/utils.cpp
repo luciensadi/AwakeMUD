@@ -1314,7 +1314,6 @@ int get_skill(struct char_data *ch, int skill, int &target)
         case SKILL_PILOT_FIXEDWING:
         case SKILL_PILOT_VECTORTHRUST:
         case SKILL_PILOT_BIKE:
-        case SKILL_PILOT_FIXED_WING:
         case SKILL_PILOT_CAR:
         case SKILL_PILOT_TRUCK:
           // You only get the bonus for vehicle skills if you're physically driving the vehicle.
