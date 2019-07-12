@@ -76,13 +76,16 @@ void format_string(struct descriptor_data *d, int indent)
   for (i = 0; (*d->str)[i]; i++)
     while ((*d->str)[i] == '\r' || (*d->str)[i] == '\n')
     {
+      // convert '\n[^\r]' to ' [^\r]'
       if ((*d->str)[i] == '\n' && (*d->str)[i+1] != '\r')
         (*d->str)[i] = ' ';
+      // delete the first character of patterns '\n\r' '\r.*'
       else
         for (j = i; (*d->str)[j]; j++)
           (*d->str)[j] = (*d->str)[j+1];
+      // if pattern was '\n\r' or '\r\r' then
       if ((*d->str)[i] == '\r') {
-        i += 2;
+        i += 2; // leave it in place-- it's an official newline character
         if (indent && add_spaces(*d->str, d->max_str, i, 3)) {
           (*d->str)[i] = (*d->str)[i+1] = (*d->str)[i+2] = ' ';
           while ((*d->str)[i+3] == ' ')
@@ -109,7 +112,7 @@ void format_string(struct descriptor_data *d, int indent)
     for (i = k, j = 0; format[i] && j < 79; i++)
       if (format[i] == '^' && (i < 1 || format[i-1] != '^') && format[i+1]) {
         // Look for color code initializers; if they exist, bump the line count longer.
-        if (!strchr((const char *)"nrgybmcwajeloptv", LOWER(format[i+1]))) {
+        if (strchr((const char *)"nrgybmcwajeloptv", LOWER(format[i+1]))) {
           line += 2;
         } else if (format[i+1] == '^') {
           line++;
