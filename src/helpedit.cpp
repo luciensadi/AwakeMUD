@@ -119,6 +119,7 @@ ACMD(do_helpexport) {
   
   // Change all ^ to ^^. We will use body_edit_buf in the output.
   char edited_output[strlen(output_ptr) * 2 + 1];
+  memset(edited_output, 0, sizeof(edited_output));
   const char *read_ptr = output_ptr;
   char *write_ptr = edited_output;
   while (*read_ptr) {
