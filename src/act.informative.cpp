@@ -16,7 +16,6 @@
 #include <errno.h>
 #include <iostream>
 #include <fstream>
-#include <mysql/mysql.h>
 
 using namespace std;
 
@@ -52,8 +51,6 @@ extern const char *dist_name[];
 extern int same_obj(struct obj_data * obj1, struct obj_data * obj2);
 extern int find_sight(struct char_data *ch);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
-extern int mysql_wrapper(MYSQL *mysql, const char *query);
-extern MYSQL *mysql;
 
 extern int get_weapon_damage_type(struct obj_data* weapon);
 

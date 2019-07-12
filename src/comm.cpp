@@ -22,7 +22,6 @@
 #include <new>
 #include <time.h>
 #include <iostream>
-#include <mysql/mysql.h>
 using namespace std;
 
 #if defined(WIN32) && !defined(__CYGWIN__)
@@ -77,8 +76,6 @@ extern int MAX_DESCRIPTORS_AVAILABLE;
 
 extern struct time_info_data time_info; /* In db.c */
 extern char help[];
-
-extern MYSQL *mysql;
 
 /* local globals */
 struct descriptor_data *descriptor_list = NULL; /* master desc list */

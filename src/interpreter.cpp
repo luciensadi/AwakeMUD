@@ -15,7 +15,6 @@
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
-#include <mysql/mysql.h>
 
 #include "structs.h"
 #include "awake.h"
@@ -35,6 +34,8 @@
 #include "newmatrix.h"
 #include "security.h"
 #include "protocol.h"
+#include "newdb.h"
+#include "helpedit.h"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -49,8 +50,6 @@ extern const char *QMENU;
 extern const char *WELC_MESSG;
 extern const char *START_MESSG;
 extern int restrict;
-extern MYSQL *mysql;
-extern int mysql_wrapper(MYSQL *mysql, const char *query);
 
 /* external functions */
 void echo_on(struct descriptor_data * d);
@@ -387,6 +386,7 @@ ACMD(do_software);
 ACMD(do_design);
 ACMD(do_invitations);
 ACMD(do_debug);
+ACMD(do_helpedit);
 
 struct command_info cmd_info[] =
   {
@@ -541,6 +541,8 @@ struct command_info cmd_info[] =
     { "hcontrol" , POS_DEAD    , do_hcontrol , LVL_EXECUTIVE, 0 },
     { "heal"     , POS_STANDING, do_heal     , 0, 0 },
     { "hedit"    , POS_DEAD    , do_hedit    , LVL_BUILDER, 0 },
+    { "helpedit" , POS_DEAD    , do_helpedit , LVL_DEVELOPER, 0 },
+    { "helpexport",POS_DEAD    , do_helpexport, LVL_DEVELOPER, 0 },
     { "hit"      , POS_FIGHTING, do_hit      , 0, SCMD_HIT },
     { "history"  , POS_DEAD    , do_message_history, 0, 0 },
     { "hlist"    , POS_DEAD    , do_hlist    , LVL_BUILDER, 0 },
@@ -2244,6 +2246,9 @@ void nanny(struct descriptor_data * d, char *arg)
     break;
   case CON_PGEDIT:
     pgedit_parse(d, arg);
+    break;
+  case CON_HELPEDIT:
+    helpedit_parse(d, arg);
     break;
   case CON_GET_NAME:            /* wait for input of name */
     d->idle_tics = 0;

@@ -16,7 +16,6 @@
 #include <time.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <mysql/mysql.h>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #define popen(x,y) _popen(x,y)
@@ -50,8 +49,6 @@
 #endif
 extern class memoryClass *Mem;
 extern class objList ObjList;
-extern MYSQL *mysql;
-extern int mysql_wrapper(MYSQL *mysql, const char *buf);
 
 /*   external vars  */
 extern FILE *player_fl;

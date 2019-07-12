@@ -15,7 +15,6 @@
 #include <time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <mysql/mysql.h>
 
 #include "structs.h"
 #include "utils.h"
@@ -49,8 +48,6 @@ extern void weight_change_object(struct obj_data * obj, float weight);
 
 extern int ident;
 extern class memoryClass *Mem;
-extern MYSQL *mysql;
-extern int mysql_wrapper(MYSQL *mysql, const char *buf);
 
 /* extern procedures */
 ACMD_CONST(do_say);

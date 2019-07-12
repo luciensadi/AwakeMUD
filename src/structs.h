@@ -819,6 +819,7 @@ struct descriptor_data
   struct veh_data *edit_veh;    /* vedit */
   struct host_data *edit_host;  /* hedit */
   struct matrix_icon *edit_icon; /* icedit */
+  struct help_data *edit_helpfile;
   
   Playergroup *edit_pgroup; /* playergroups */
   
@@ -832,7 +833,7 @@ struct descriptor_data
       snoop_by(NULL), next(NULL), invalid_command_counter(0), misc_data(NULL),
       edit_obj(NULL), edit_room(NULL), edit_mob(NULL), edit_quest(NULL), edit_shop(NULL),
       edit_zon(NULL), edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL),
-      edit_pgroup(NULL), pProtocol(NULL)
+      edit_helpfile(NULL), edit_pgroup(NULL), pProtocol(NULL)
   {
     // Zero out the communication history for all channels.
     for (int channel = 0; channel < NUM_COMMUNICATION_CHANNELS; channel++)
@@ -1103,6 +1104,24 @@ struct combat_data
     weapon_is_gun = (weapon && IS_GUN(GET_OBJ_VAL((weapon), 3)));
     if (weapon_is_gun)
       magazine = weapon->contains;
+  }
+};
+
+struct help_data {
+  // title: varchar 128
+  const char *original_title;
+  char *title;
+  // body: text
+  char *body;
+  int category; // currently unused
+  // links: varchar 200
+  char *links; // currently unused
+  
+  // Set title_to_keep to NULL for a new helpfile.
+  help_data(const char *title_to_keep_for_sql) :
+    original_title(NULL), title(NULL), body(NULL), category(0), links(NULL)
+  {
+    original_title = title_to_keep_for_sql;
   }
 };
 #endif

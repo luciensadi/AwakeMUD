@@ -28,6 +28,8 @@
 #include "constants.h"
 #include "newmatrix.h"
 #include "config.h"
+#include "helpedit.h"
+#include "newdb.h"
 
 extern class objList ObjList;
 extern sh_int mortal_start_room;
@@ -50,9 +52,6 @@ extern void zedit_disp_data_menu(struct descriptor_data *d);
 extern void vedit_disp_menu(struct descriptor_data * d);
 extern void hedit_disp_data_menu(struct descriptor_data *d);
 extern void icedit_disp_menu(struct descriptor_data *d);
-
-extern MYSQL *mysql;
-extern int mysql_wrapper(MYSQL *mysql, const char *query);
 
 // mem class
 extern class memoryClass *Mem;

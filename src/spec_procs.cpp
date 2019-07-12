@@ -3,7 +3,6 @@
 #include <string.h>
 #include <ctype.h>
 #include <sys/types.h>
-#include <mysql/mysql.h>
 
 #if defined(WIN32) && !defined(__CYGWIN__)
 #define strcasecmp(x, y) _stricmp(x,y)
@@ -51,8 +50,6 @@ extern int find_sight(struct char_data *ch);
 extern void check_quest_kill(struct char_data *ch, struct char_data *victim);
 extern void wire_nuyen(struct char_data *ch, struct char_data *target, int amount, bool isfile);
 bool memory(struct char_data *ch, struct char_data *vict);
-extern MYSQL *mysql;
-extern int mysql_wrapper(MYSQL *mysql, const char *query);
 
 extern struct command_info cmd_info[];
 

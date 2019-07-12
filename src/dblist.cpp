@@ -8,7 +8,6 @@
 #include <string.h>
 #include <dirent.h>
 #include <sys/time.h>
-#include <mysql/mysql.h>
 
 #include "structs.h"
 #include "awake.h"
@@ -18,12 +17,11 @@
 #include "dblist.h"
 #include "handler.h"
 #include "file.h"
+#include "newdb.h"
 
 // extern vars
 extern class helpList Help;
 extern class helpList WizHelp;
-extern MYSQL *mysql;
-extern int mysql_wrapper(MYSQL *mysql, const char *query);
 
 // extern funcs
 extern void print_object_location(int, struct obj_data *, struct char_data *, int);

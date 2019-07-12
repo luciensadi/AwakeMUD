@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <mysql/mysql.h>
+#include <time.h>
 
 #include "awake.h"
 #include "structs.h"
@@ -20,13 +20,10 @@
 #include "olc.h"
 #include "handler.h"
 #include "comm.h"
+#include "newdb.h"
 
 // Externs from other files.
-extern MYSQL *mysql;
 extern void store_mail(long to, struct char_data *from, const char *message_pointer);
-
-// Prototypes from other files.
-int mysql_wrapper(MYSQL *mysql, const char *query);
 
 // Prototypes from this file.
 void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revoke);
