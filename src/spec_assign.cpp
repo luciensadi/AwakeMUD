@@ -103,7 +103,11 @@ teach_t teachers[] = {
   
   { 60539, { SKILL_PROJECTILES, SKILL_THROWING_WEAPONS, // Kyle the Mall Ninja
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
+    "Kyle teaches you things you're pretty sure were more effective in the late 1800s.\r\n", NEWBIE },
+  
+  { 60540, { SKILL_BR_PISTOL, SKILL_BR_SHOTGUN, SKILL_BR_RIFLE, SKILL_BR_HEAVYWEAPON, SKILL_BR_SMG, // Jean Samuel Pauly
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+    "Jean walks you through the intricacies of handloading.\r\n", NEWBIE },
   
   { 60506, { SKILL_ASSAULT_RIFLES, SKILL_GUNNERY, SKILL_MACHINE_GUNS, SKILL_PISTOLS, SKILL_RIFLES, SKILL_SHOTGUNS, SKILL_SMG, // Mick
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
