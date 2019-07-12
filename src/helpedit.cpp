@@ -129,7 +129,7 @@ ACMD(do_helpexport) {
   }
   *write_ptr = '\0';
   
-  send_to_char(ch, "Output:\r\n%s\r\n", edited_output);
+  send_to_char(ch, "Output:\r\n\r\n^c%s^n\r\n\r\n^RWARNING:^n Make sure your client's line wrap is turned off!", edited_output);
 }
 
 
