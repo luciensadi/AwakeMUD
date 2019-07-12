@@ -81,6 +81,8 @@ struct  obj_data *find_matching_obj_in_container(struct obj_data *container, vnu
 bool    attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *weapon, struct char_data *ch);
 struct  obj_data *unattach_attachment_from_weapon(int location, struct obj_data *weapon, struct char_data *ch);
 void    copy_over_necessary_info(struct char_data *original, struct char_data *clone);
+void    clear_editing_data(struct descriptor_data *d);
+char    *double_up_color_codes(const char *string);
 
 // Message history management and manipulation.
 void    store_message_to_history(struct descriptor_data *d, int channel, const char *mallocd_message);

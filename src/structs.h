@@ -805,6 +805,7 @@ struct descriptor_data
 
   // all this from here down is stuff for on-line creation
   int edit_mode;                /* editing sub mode */
+  bool edit_convert_color_codes; /* if this is true, display color codes in descs as ^^ for copy-paste */
   long edit_number;              /* virtual num of thing being edited */
   long edit_number2;             /* misc number for editing */
   int edit_zone;                /* which zone object is part of      */

@@ -117,19 +117,7 @@ ACMD(do_helpexport) {
     return;
   }
   
-  // Change all ^ to ^^. We will use body_edit_buf in the output.
-  char edited_output[strlen(output_ptr) * 2 + 1];
-  const char *read_ptr = output_ptr;
-  char *write_ptr = edited_output;
-  while (*read_ptr) {
-    // If the current character is '^', double it in the output.
-    if (*read_ptr == '^')
-      *(write_ptr++) = '^';
-    *(write_ptr++) = *(read_ptr++);
-  }
-  *write_ptr = '\0';
-  
-  send_to_char(ch, "Output:\r\n\r\n^c%s^n\r\n\r\n^RWARNING:^n Make sure your client's line wrap is turned off!", edited_output);
+  send_to_char(ch, "Output:\r\n\r\n^c%s^n\r\n\r\n^RWARNING:^n Make sure your client's line wrap is turned off!", double_up_color_codes(output_ptr));
 }
 
 

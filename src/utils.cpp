@@ -2329,3 +2329,40 @@ void copy_over_necessary_info(struct char_data *original, struct char_data *clon
   REPLICATE(points.reach[1]);
 #undef REPLICATE
 }
+
+// Uses static, so don't use it more than once per call (to sprintf, etc)
+char *double_up_color_codes(const char *string) {
+  static char doubledbuf[MAX_STRING_LENGTH];
+  
+  // This will happen for night descs that haven't been set, etc.
+  if (!string)
+    return NULL;
+  
+  if (strlen(string) * 2 + 1 > sizeof(doubledbuf)) {
+    mudlog("SYSERR: Size of string passed to double_up_color_codes exceeds max size; aborting process.", NULL, LOG_SYSLOG, TRUE);
+    return NULL;
+  }
+  
+  
+  const char *read_ptr = string;
+  char *write_ptr = doubledbuf;
+  
+  while (*read_ptr) {
+    if (*read_ptr == '^')
+      *(write_ptr++) = '^';
+    *(write_ptr++) = *(read_ptr++);
+  }
+  *(write_ptr++) = '\0';
+  return doubledbuf;
+}
+
+// Wipes out all the various fiddly bits so we don't have to remember to do it every time.
+void clear_editing_data(struct descriptor_data *d) {
+  // This is distinct from free_editing_structs()! That one purges out memory, this just unsets flags.
+  d->edit_number = 0;
+  PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
+  d->edit_convert_color_codes = FALSE;
+  
+  // We're setting things to NULL here. If you don't want to leak memory, clean it up beforehand.
+  d->edit_room = NULL;
+}

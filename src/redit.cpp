@@ -113,7 +113,8 @@ void redit_disp_extradesc_menu(struct descriptor_data * d)
                "1) Keyword: %s%s%s\r\n"
                "2) Description:\r\n%s\r\n", CCCYN(CH, C_CMP),
                extra_desc->keyword, CCNRM(CH, C_CMP),
-               (extra_desc->description ? extra_desc->description : "(none)"));
+               (extra_desc->description ?
+                (d->edit_convert_color_codes ? double_up_color_codes(extra_desc->description) : extra_desc->description) : "(none)"));
   send_to_char(CH, "3) %s\r\n"
                "Enter Choice:\r\n",
                (extra_desc->next ? "Another description set. (not viewed)" : "Another description"));
@@ -155,8 +156,9 @@ void redit_disp_exit_menu(struct descriptor_data * d)
   send_to_char(CH,      "1) Exit to: %s%d%s\r\n"
                "2) Description: %s\r\n",
                CCCYN(CH, C_CMP), DOOR->to_room_vnum, CCNRM(CH, C_CMP),
-               (DOOR->general_description ? DOOR->general_description : "(None)"));
-  send_to_char(CH,      "3) Door names: %s%s%s\r\n"
+               (DOOR->general_description ?
+                (d->edit_convert_color_codes ? double_up_color_codes(DOOR->general_description) : DOOR->general_description) : "(None)"));
+  send_to_char(CH,      "3) Door keywords (first one is its name too): %s%s%s\r\n"
                "4) Key vnum: %s%d%s\r\n"
                "5) Door flag: %s%s%s\r\n",
                CCCYN(CH, C_CMP), (DOOR->keyword ? DOOR->keyword : "(none)"),
@@ -253,11 +255,12 @@ void redit_disp_menu(struct descriptor_data * d)
   d->edit_mode = REDIT_MAIN_MENU;
   send_to_char(CH, "Room number: %s%d%s\r\n"
                "1) Room name: %s%s%s\r\n",
+               CCCYN(CH, C_CMP), d->edit_number, CCNRM(CH, C_CMP),
                CCCYN(CH, C_CMP),
-               d->edit_number, CCNRM(CH, C_CMP),
-               CCCYN(CH, C_CMP), d->edit_room->name, CCNRM(CH, C_CMP));
-  send_to_char(CH, "2) Room Desc:\r\n%s\r\n", d->edit_room->description);
-  send_to_char(CH, "3) Night Desc: \r\n%s\r\n", d->edit_room->night_desc);
+               d->edit_convert_color_codes ? double_up_color_codes(d->edit_room->name) : d->edit_room->name,
+               CCNRM(CH, C_CMP));
+  send_to_char(CH, "2) Room Desc:\r\n%s\r\n", d->edit_convert_color_codes ? double_up_color_codes(d->edit_room->description) : d->edit_room->description);
+  send_to_char(CH, "3) Night Desc: \r\n%s\r\n", d->edit_convert_color_codes ? double_up_color_codes(d->edit_room->night_desc) : d->edit_room->night_desc);
   send_to_char(CH, "Room zone: %s%d%s\r\n",
                CCCYN(CH, C_CMP),
                zone_table[d->edit_room->zone].number,
@@ -331,6 +334,10 @@ void redit_disp_menu(struct descriptor_data * d)
       d->edit_room->sector_type == SPIRIT_RIVER || d->edit_room->room_flags.IsSet(ROOM_FALL))
     send_to_char(CH, "m) %s test difficulty (TN): %s%d%s\r\n", d->edit_room->room_flags.IsSet(ROOM_FALL) ? "Fall" : "Swim", CCCYN(CH, C_CMP),
                  ROOM->rating, CCNRM(CH, C_CMP));
+  if (d->edit_convert_color_codes)
+    send_to_char("t) Restore color codes\r\n", d->character);
+  else
+    send_to_char("t) Toggle color codes\r\n", d->character);
   send_to_char("q) Quit and save\r\n", d->character);
   send_to_char("x) Exit and abort\r\n", d->character);
   send_to_char("Enter your choice:\r\n", d->character);
@@ -581,26 +588,23 @@ void redit_parse(struct descriptor_data * d, const char *arg)
         send_to_char("Saved.\r\n", CH);
         /* do NOT free strings! just the room structure */
         Mem->ClearRoom(d->edit_room);
-        d->edit_room = NULL;
-        PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
-        STATE(d) = CON_PLAYING;
         char_to_room(CH, GET_WAS_IN(CH));
         GET_WAS_IN(CH) = NULL;
+        STATE(d) = CON_PLAYING;
+        clear_editing_data(d);
         send_to_char("Done.\r\n", d->character);
         break;
       }
     case 'n':
     case 'N':
       send_to_char("Room not saved, aborting.\r\n", d->character);
-      STATE(d) = CON_PLAYING;
-      PLR_FLAGS(d->character).RemoveBit(PLR_EDITING);
       /* free everything up, including strings etc */
       if (d->edit_room)
-        Mem->DeleteRoom(d->edit_room);
-      d->edit_room = NULL;
-      d->edit_number = 0;
-        char_to_room(CH, GET_WAS_IN(CH));
-        GET_WAS_IN(CH) = NULL;
+        Mem->DeleteRoom(d->edit_room); // this is set to NULL in clear_editing_data().
+      char_to_room(CH, GET_WAS_IN(CH));
+      GET_WAS_IN(CH) = NULL;
+      STATE(d) = CON_PLAYING;
+      clear_editing_data(d);
       break;
     default:
       send_to_char("Invalid choice!\r\n", d->character);
@@ -617,6 +621,13 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     case 'x':
       d->edit_mode = REDIT_CONFIRM_SAVESTRING;
       redit_parse(d, "n");
+      break;
+      case 't':
+        if ((d->edit_convert_color_codes = !d->edit_convert_color_codes))
+          send_to_char("OK, color codes for title/desc will be displayed as tags for easier copy-paste.\r\n", CH);
+        else
+          send_to_char("OK, color codes will be re-enabled.\r\n", CH);
+        redit_disp_menu(d);
       break;
     case '1':
       send_to_char("Enter room name:", d->character);
