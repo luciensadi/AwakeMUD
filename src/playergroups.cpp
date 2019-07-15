@@ -687,7 +687,7 @@ void do_pgroup_logs(struct char_data *ch, char *argument) {
   } else {
     days = atoi(argument);
     if (days < 1) {
-      send_to_char("Syntax: PGROUP LOGS [number of days of history to include]", ch);
+      send_to_char("Syntax: PGROUP LOGS [number of days of history to include]\r\n", ch);
       return;
     }
     if (days > MAX_PGROUP_LOG_READBACK) {

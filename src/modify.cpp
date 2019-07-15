@@ -631,7 +631,7 @@ ACMD(do_skillset)
       if (*skills[i].name == '!')
         continue;
       sprintf(help + strlen(help), "%18s", skills[i].name);
-      if (i % 4 == 3) {
+      if (i % 4 == 3 || PRF_FLAGGED(ch, PRF_SCREENREADER)) {
         strcat(help, "\r\n");
         send_to_char(help, ch);
         *help = '\0';
@@ -684,8 +684,8 @@ ACMD(do_skillset)
     send_to_char("Minimum value for learned is 0.\r\n", ch);
     return;
   }
-  if (value > 100) {
-    send_to_char("Max value for learned is 100.\r\n", ch);
+  if (value > MAX_SKILL_LEVEL_FOR_IMMS) {
+    send_to_char(ch, "Max value for learned is %d.\r\n", MAX_SKILL_LEVEL_FOR_IMMS);
     return;
   }
   if (IS_NPC(vict)) {
@@ -697,13 +697,13 @@ ACMD(do_skillset)
           skills[skill].name,
           GET_SKILL(vict, skill), value);
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
-
-  SET_SKILL(vict, skill, value);
+  
+  send_to_char(vict, "Your skill in %s has been altered by the game's administration.\r\n", skills[skill].name);
+  
+  set_character_skill(vict, skill, value, TRUE);
 
   sprintf(buf2, "You change %s's %s to %d.\r\n", GET_NAME(vict), skills[skill].name, value);
   send_to_char(buf2, ch);
-
-  GET_SKILL_DIRTY_BIT(vict) = TRUE;
 }
 
 

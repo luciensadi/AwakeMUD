@@ -1429,7 +1429,7 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
         send_to_char("You try, but the mind-numbing cold prevents you...\r\n", ch);
         return;
       } else
-        send_to_char("The ice covering you crackles alarmingly as you slam your sovereign will through it.", ch);
+        send_to_char("The ice covering you crackles alarmingly as you slam your sovereign will through it.\r\n", ch);
     }
     
     if (AFF_FLAGGED(ch, AFF_PETRIFY) && cmd_info[cmd].minimum_position > POS_DEAD) {

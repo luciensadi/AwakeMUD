@@ -88,50 +88,6 @@ int fixers_need_save;
 *  Special procedures for mobiles                                     *
 ******************************************************************** */
 
-char *how_good(int rank)
-{
-  static char buf[256];
-
-  if (rank < 0)
-    strcpy(buf, " (uh oh! you have a negative skill, please report!)");
-  else if (rank == 0)
-    strcpy(buf, " (not learned)");
-  else if (rank == 1)
-    strcpy(buf, " (awful)");
-  else if (rank == 2)
-    strcpy(buf, " (sloppy)");
-  else if (rank == 3)
-    strcpy(buf, " (average)");
-  else if (rank == 4)
-    strcpy(buf, " (above average)");
-  else if (rank == 5)
-    strcpy(buf, " (good)");
-  else if (rank == 6)
-    strcpy(buf, " (very good)");
-  else if (rank == 7)
-    strcpy(buf, " (distinguished)");
-  else if (rank == 8)
-    strcpy(buf, " (excellent)");
-  else if (rank == 9)
-    strcpy(buf, " (superb)");
-  else if (rank == 10)
-    strcpy(buf, " (learned)");
-  else if (rank == 11)
-    strcpy(buf, " (professional)");
-  else if (rank <= 20)
-    strcpy(buf, " (amazing)");
-  else if (rank <= 30)
-    strcpy(buf, " (incredible)");
-  else if (rank <= 40)
-    strcpy(buf, " (unbelievable)");
-  else if (rank <= 50)
-    strcpy(buf, " (ludicrous)");
-  else
-    strcpy(buf, " (godly)");
-
-  return (buf);
-}
-
 int max_ability(int i)
 {
   switch (i) {
@@ -372,9 +328,28 @@ SPECIAL(metamagic_teacher)
 {
   struct char_data *master = (struct char_data *) me;
   int i = 0, x = 0, suc, ind;
-  if (IS_NPC(ch) || !CMD_IS("train") || !CAN_SEE(master, ch) || FIGHTING(ch) ||
-      GET_POS(ch) < POS_SITTING || GET_TRADITION(ch) == TRAD_MUNDANE)
+  if (IS_NPC(ch) || !CMD_IS("train"))
     return FALSE;
+  
+  if (GET_TRADITION(ch) == TRAD_MUNDANE) {
+    send_to_char("You don't have the talent to train here.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (!CAN_SEE(master, ch)) {
+    send_to_char("You'd better become visible first; it's hard to teach someone you can't see.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (FIGHTING(ch)) {
+    send_to_char("Learning a new skill while fighting? Now that would be a neat trick.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (GET_POS(ch) < POS_SITTING) {
+    send_to_char("You'd better sit up first.\r\n", ch);
+    return TRUE;
+  }
 
   skip_spaces(&argument);
 
@@ -451,8 +426,23 @@ SPECIAL(nerp_skills_teacher) {
   can_teach_skill[SKILL_ARMED_COMBAT] = FALSE; // NPC-only skill
   can_teach_skill[SKILL_UNUSED_WAS_PILOT_FIXED_WING] = FALSE; // what it says on the tin
   
-  if (IS_NPC(ch) || !CMD_IS("practice") || !CAN_SEE(master, ch) || FIGHTING(ch) || GET_POS(ch) < POS_STANDING)
+  if (IS_NPC(ch) || !CMD_IS("practice"))
     return FALSE;
+  
+  if (!CAN_SEE(master, ch)) {
+    send_to_char("You'd better become visible first; it's hard to teach someone you can't see.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (FIGHTING(ch)) {
+    send_to_char("Learning a new skill while fighting? Now that would be a neat trick.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (GET_POS(ch) < POS_STANDING) {
+    send_to_char("You'd better stand up first.\r\n", ch);
+    return TRUE;
+  }
   
   // Negate any skill in our array that is taught elsewhere in the game.
   for (int ind = 0; teachers[ind].vnum != 0; ind++)
@@ -558,8 +548,8 @@ SPECIAL(nerp_skills_teacher) {
   else
     GET_KARMA(ch) -= get_skill_price(ch, skill_num) * 100;
   
-  send_to_char("You increase your abilities in this UNIMPLEMENTED SKILL.", ch);
-  SET_SKILL(ch, skill_num, REAL_SKILL(ch, skill_num) + 1);
+  send_to_char("You increase your abilities in this UNIMPLEMENTED SKILL.\r\n", ch);
+  set_character_skill(ch, skill_num, REAL_SKILL(ch, skill_num) + 1, TRUE);
   if (GET_SKILL(ch, skill_num) >= max)
     send_to_char("You have learnt all you can here.\r\n", ch);
   
@@ -571,9 +561,23 @@ SPECIAL(teacher)
   struct char_data *master = (struct char_data *) me;
   int i, ind, max, skill_num;
 
-  if (IS_NPC(ch) || !CMD_IS("practice") || !CAN_SEE(master, ch) || FIGHTING(ch) ||
-      GET_POS(ch) < POS_STANDING)
+  if (IS_NPC(ch) || !CMD_IS("practice"))
     return FALSE;
+  
+  if (!CAN_SEE(master, ch)) {
+    send_to_char("You'd better become visible first; it's hard to teach someone you can't see.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (FIGHTING(ch)) {
+    send_to_char("Learning a new skill while fighting? Now that would be a neat trick.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (GET_POS(ch) < POS_STANDING) {
+    send_to_char("You'd better stand up first.\r\n", ch);
+    return TRUE;
+  }
 
   skip_spaces(&argument);
 
@@ -590,7 +594,7 @@ SPECIAL(teacher)
     return TRUE;
   }
 
-  if (!PLR_FLAGGED(ch, PLR_NEWBIE) && GET_SKILL_POINTS(ch) != 0)
+  if (!PLR_FLAGGED(ch, PLR_NEWBIE))
     GET_SKILL_POINTS(ch) = 0;
 
   if (!AWAKE(ch)) {
@@ -755,7 +759,7 @@ SPECIAL(teacher)
     GET_KARMA(ch) -= get_skill_price(ch, skill_num) * 100;
 
   send_to_char(teachers[ind].msg, ch);
-  SET_SKILL(ch, skill_num, REAL_SKILL(ch, skill_num) + 1);
+  set_character_skill(ch, skill_num, REAL_SKILL(ch, skill_num) + 1, TRUE);
   if (GET_SKILL(ch, skill_num) >= max)
     send_to_char("You have learnt all you can here.\r\n", ch);
 
@@ -2933,8 +2937,8 @@ SPECIAL(neophyte_entrance)
   }
   if ((CMD_IS("south") || CMD_IS("enter")) && !PLR_FLAGGED(ch, PLR_NEWBIE)
       && !(IS_SENATOR(ch))) {
-    send_to_char("The barrier prevents you from entering the guild.", ch);
-    send_to_char("NOTE: You may only visit the training grounds until you have received 26 karma.", ch);
+    send_to_char("The barrier prevents you from entering the guild.\r\n", ch);
+    send_to_char("NOTE: You may only visit the training grounds until you have received 26 karma.\r\n", ch);
     act("$n stumbles into the barrier covering the entrance.", FALSE, ch, 0, 0, TO_ROOM);
     return TRUE;
   }
@@ -3981,7 +3985,7 @@ SPECIAL(chargen_untrain_attribute)
   }
   
   if (is_abbrev(argument, "intelligence")) {
-    untrain_attribute(ch, INT, "You slam your head into the wall until your Intelligence decreases to %d.\r\n");
+    untrain_attribute(ch, INT, "You slam your head into a wall until your Intelligence decreases to %d.\r\n");
     return TRUE;
   }
   
@@ -4044,12 +4048,12 @@ SPECIAL(chargen_unpractice_skill)
   
   // Success. Lower the skill by one point.
   GET_SKILL_POINTS(ch)++;
-  SET_SKILL(ch, skill_num, REAL_SKILL(ch, skill_num) - 1);
+  set_character_skill(ch, skill_num, REAL_SKILL(ch, skill_num) - 1, FALSE);
   
   if (GET_SKILL(ch, skill_num) == 0) {
-    send_to_char(ch, "With the assistance of a few mind-altering chemicals and several blunt impacts, you completely forget %s.\r\n", skills[skill_num].name);
+    send_to_char(ch, "With the assistance of several blunt impacts, you completely forget %s.\r\n", skills[skill_num].name);
   } else {
-    send_to_char(ch, "With the assistance of a few mind-altering chemicals and several blunt impacts, you decrease your skill in %s.\r\n", skills[skill_num].name);
+    send_to_char(ch, "With the assistance of several blunt impacts, you decrease your skill in %s.\r\n", skills[skill_num].name);
   }
   
   return TRUE;

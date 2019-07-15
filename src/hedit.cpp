@@ -270,7 +270,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
       break;
     default:
       send_to_char("Invalid choice!\r\n", d->character);
-      send_to_char("Do you wish to save this host internally?", d->character);
+      send_to_char("Do you wish to save this host internally?\r\n", d->character);
       break;
     }
     break;
@@ -342,7 +342,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
       d->edit_mode = HEDIT_SSTOP;
       break;
     default:
-      send_to_char("Invalid choice!", d->character);
+      send_to_char("Invalid choice!\r\n", d->character);
       hedit_disp_data_menu(d);
       break;
     }
@@ -374,7 +374,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
       d->edit_mode = HEDIT_RATINGS_SLAVE;
       break;
     default:
-      send_to_char("Invalid choice!", d->character);
+      send_to_char("Invalid choice!\r\n", d->character);
       hedit_disp_rating_menu(d);
       break;
     }
@@ -406,7 +406,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
       hedit_disp_data_menu(d);
       break;
     default:
-      send_to_char("Invalid choice!", d->character);
+      send_to_char("Invalid choice!\r\n", d->character);
       hedit_disp_subsystem_extras(d);
       break;
     }

@@ -375,7 +375,7 @@ ACMD(do_copy)
 {
   struct obj_data *comp, *prog;
   if (!*argument) {
-    send_to_char("What program do you want to copy?", ch);
+    send_to_char("What program do you want to copy?\r\n", ch);
     return;
   }
   if (!(comp = can_program(ch)))

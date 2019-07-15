@@ -723,7 +723,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
         send_to_char("That's not a valid choice.\r\n", CH);
         return;
       }
-      send_to_char("Zone is connected (1 - yes, 0 - no)? ", CH);
+      send_to_char("Zone is connected (1 - yes, 0 - no): ", CH);
       d->edit_mode = ZEDIT_CONNECTED;
       break;
     default:
@@ -1136,7 +1136,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
         ZON->editor_ids[3] = t[3];
         ZON->editor_ids[4] = t[4];
       } else {
-        send_to_char("That field requires five separate integers. Example: 9 123 4 0 0", CH);
+        send_to_char("That field requires five separate integers. Example: 9 123 4 0 0\r\n", CH);
       }
       zedit_disp_data_menu(d);
     }
@@ -1144,7 +1144,7 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
   case ZEDIT_CONNECTED:
     number = atoi(arg);
     if (number != 0 && number != 1) {
-      send_to_char("Value must be 0 or 1!  Zone is connected? ", CH);
+      send_to_char("Value must be 0 or 1!  Zone is connected: ", CH);
       return;
     }
 

@@ -2084,6 +2084,8 @@ struct ban_list_element
 #define NEWBIE_SKILL    6
 #define NORMAL_MAX_SKILL  8
 #define LEARNED_LEVEL    12
+#define MAX_SKILL_LEVEL_FOR_MORTS  LEARNED_LEVEL
+#define MAX_SKILL_LEVEL_FOR_IMMS   100
 #define RENT_FACTOR 1
 
 // Definitions for message history.

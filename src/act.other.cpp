@@ -53,7 +53,7 @@ extern class memoryClass *Mem;
 ACMD_CONST(do_say);
 SPECIAL(shop_keeper);
 SPECIAL(spraypaint);
-extern char *how_good(int percent);
+extern char *how_good(int skill, int percent);
 extern void perform_tell(struct char_data *, struct char_data *, char *);
 extern void obj_magic(struct char_data * ch, struct obj_data * obj, char *argument);
 extern void end_quest(struct char_data *ch);
@@ -1297,7 +1297,7 @@ ACMD(do_skills)
       if (i == SKILL_ENGLISH)
         i = SKILL_ANIMAL_HANDLING;
       if ((GET_SKILL(ch, i)) > 0) {
-        sprintf(buf2, "%-30s %s\r\n", skills[i].name, how_good(GET_SKILL(ch, i)));
+        sprintf(buf2, "%-30s %s\r\n", skills[i].name, how_good(i, GET_SKILL(ch, i)));
         strcat(buf, buf2);
       }
     }
@@ -3886,7 +3886,7 @@ ACMD(do_tridlog)
   } else if (is_abbrev(arg, "delete")) {
     sprintf(buf, "DELETE FROM trideo_broadcast WHERE idnum=%d", atoi(buf2));
     mysql_wrapper(mysql, buf);
-    send_to_char("Deleted.", ch);
+    send_to_char("Deleted.\r\n", ch);
   }
 }
 

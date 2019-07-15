@@ -98,7 +98,7 @@ ACMD(do_crash_mud) {
   
   assert(1 == 0);
 #else
-  send_to_char("Sorry, but you can only deliberately crash the MUD when it's running with the DEBUG flag enabled.", ch);
+  send_to_char("Sorry, but you can only deliberately crash the MUD when it's running with the DEBUG flag enabled.\r\n", ch);
 #endif
 }
 
@@ -502,7 +502,7 @@ ACMD(do_goto)
 
   if ((location = find_target_room(ch, buf))) {
     if (location->number == 0 || location->number == 1) {
-      send_to_char("You're not able to GOTO that room. If you need to do something there, use AT.", ch);
+      send_to_char("You're not able to GOTO that room. If you need to do something there, use AT.\r\n", ch);
       return;
     }
   } else if (!(vict = get_char_vis(ch, buf)) || !vict->in_veh) {
@@ -1630,7 +1630,7 @@ ACMD(do_return)
         GET_WAS_IN(ch) = NULL;
       }
     } else {
-      send_to_char("But there's nothing for you to return from...", ch);
+      send_to_char("But there's nothing for you to return from...\r\n", ch);
     }
   }
 }
@@ -2147,7 +2147,7 @@ ACMD(do_restore)
     if ((access_level(ch, LVL_DEVELOPER)) &&
         (IS_SENATOR(vict)) && !IS_NPC(vict)) {
       for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
-        SET_SKILL(vict, i, 100);
+        set_character_skill(ch, i, 100, FALSE);
 
       if (IS_SENATOR(vict) && !access_level(vict, LVL_EXECUTIVE)) {
         GET_REAL_INT(vict) = 15;

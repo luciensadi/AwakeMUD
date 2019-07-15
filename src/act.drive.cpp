@@ -388,13 +388,13 @@ ACMD(do_ram)
     return;
   }
   if (veh->in_veh) {
-    send_to_char("There's not enough room in here to even think about trying something like that.", ch);
+    send_to_char("There's not enough room in here to even think about trying something like that.\r\n", ch);
     return;
   }
   two_arguments(argument, arg, buf2);
 
   if (!*arg) {
-    send_to_char("Ram what?", ch);
+    send_to_char("Ram what?\r\n", ch);
     return;
   }
   
@@ -1046,7 +1046,7 @@ ACMD(do_driveby)
   }
   if (!ch->in_veh->in_room) {
     // We're inside a vehicle or otherwise don't have a containing room.
-    send_to_char("You're going to have a hard time maneuvering in here.", ch);
+    send_to_char("You're going to have a hard time maneuvering in here.\r\n", ch);
     return;
   }
   if (!(vict = get_char_in_list_vis(ch, arg, ch->in_veh->in_room->people))) {
@@ -1226,7 +1226,7 @@ ACMD(do_chase)
   }
   
   if (veh->in_veh) {
-    send_to_char("You're going to have a hard time chasing anything from in here.", ch);
+    send_to_char("You're going to have a hard time chasing anything from in here.\r\n", ch);
     return;
   }
   
@@ -1331,7 +1331,7 @@ ACMD(do_target)
   }
   
   if (veh->in_veh) {
-    send_to_char("It'd be a bad idea to start firing in such an enclosed space.", ch);
+    send_to_char("It'd be a bad idea to start firing in such an enclosed space.\r\n", ch);
     return;
   }
   
@@ -1341,7 +1341,7 @@ ACMD(do_target)
     return;
   }
   if (tveh == veh) {
-    send_to_char("Why would you want to target yourself?", ch);
+    send_to_char("Why would you want to target yourself?\r\n", ch);
     return;
   }
   
@@ -1477,7 +1477,7 @@ ACMD(do_man)
   }
 
   if ((j = atoi(argument)) < 0) {
-    send_to_char("Which mount?", ch);
+    send_to_char("Which mount?\r\n", ch);
     return;
   }
   for (mount = ch->in_veh->mount; mount; mount = mount->next_content)

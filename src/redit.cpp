@@ -732,7 +732,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       }
       break;
     default:
-      send_to_char("Invalid choice!", d->character);
+      send_to_char("Invalid choice!\r\n", d->character);
       redit_disp_menu(d);
       break;
     }
@@ -975,7 +975,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
   case REDIT_SECTOR:
     number = atoi(arg);
     if (number < 0 || number >= NUM_SPIRITS) {
-      send_to_char("Invalid choice!", d->character);
+      send_to_char("Invalid choice!\r\n", d->character);
       redit_disp_sector_menu(d);
     } else {
       d->edit_room->sector_type = number;

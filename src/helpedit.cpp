@@ -33,7 +33,7 @@ ACMD(do_helpedit) {
   }
   
   if (strchr(argument, '%')) {
-    send_to_char("Helpfile names may not contain the '%' character.", ch);
+    send_to_char("Helpfile names may not contain the '%' character.\r\n", ch);
     return;
   }
   
@@ -87,7 +87,7 @@ ACMD(do_helpexport) {
   }
   
   if (strchr(argument, '%')) {
-    send_to_char("Helpfile names may not contain the '%' character.", ch);
+    send_to_char("Helpfile names may not contain the '%' character.\r\n", ch);
     return;
   }
   
@@ -221,7 +221,7 @@ void helpedit_parse(struct descriptor_data *d, const char *arg) {
       
       // Check for %s.
       if (strchr(arg, '%')) {
-        send_to_char("Titles cannot contain the '%' character.", CH);
+        send_to_char("Titles cannot contain the '%' character.\r\n", CH);
         return;
       }
       

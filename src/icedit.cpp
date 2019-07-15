@@ -232,7 +232,7 @@ void icedit_parse(struct descriptor_data *d, const char *arg)
       break;
     default:
       send_to_char("Invalid choice!\r\n", CH);
-      send_to_char("Do you wish to save this icon internally?", CH);
+      send_to_char("Do you wish to save this icon internally?\r\n", CH);
       break;
     }
     break;
@@ -273,7 +273,7 @@ void icedit_parse(struct descriptor_data *d, const char *arg)
       CLS(CH);
       if (d->edit_icon->ic.type != 0 && d->edit_icon->ic.type != 4 && d->edit_icon->ic.type != 8
           && d->edit_icon->ic.type != 10) {
-        send_to_char("Invalid choice!", CH);
+        send_to_char("Invalid choice!\r\n", CH);
         icedit_disp_menu(d);
       } else {
         for (i = 0; i < 4; i++)
@@ -298,7 +298,7 @@ void icedit_parse(struct descriptor_data *d, const char *arg)
       d->edit_mode = ICEDIT_EXPERT;
       break;
     default:
-      send_to_char("Invalid choice!", CH);
+      send_to_char("Invalid choice!\r\n", CH);
       icedit_disp_menu(d);
       break;
     }

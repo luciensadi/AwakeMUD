@@ -84,6 +84,11 @@ void    copy_over_necessary_info(struct char_data *original, struct char_data *c
 void    clear_editing_data(struct descriptor_data *d);
 char    *double_up_color_codes(const char *string);
 
+// Skill-related.
+char *how_good(int skill, int rank);
+const char *skill_rank_name(int rank, bool knowledge);
+void set_character_skill(struct char_data *ch, int skill_num, int new_value, bool send_message);
+
 // Message history management and manipulation.
 void    store_message_to_history(struct descriptor_data *d, int channel, const char *mallocd_message);
 void    delete_message_history(struct descriptor_data *d);
@@ -473,6 +478,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
  * the skills.  Sure love corrupting the p-file! -Flynn */
 #define GET_SKILL(ch, i)        ((ch)->char_specials.saved.skills[i][1] > 0 ? (ch)->char_specials.saved.skills[i][1] : (ch)->char_specials.saved.skills[i][0])
 #define REAL_SKILL(ch, i)       ((ch)->char_specials.saved.skills[i][1] > 0 ? 0 : (ch)->char_specials.saved.skills[i][0])
+// SET_SKILL is used only in medit.cpp for NPCs. Set char skills with utils.cpp's set_character_skill().
 #define SET_SKILL(ch, i, pct)   {(ch)->char_specials.saved.skills[i][0] = pct; GET_SKILL_DIRTY_BIT((ch)) = TRUE;}
 #define GET_POWER(ch, i)	((ch)->char_specials.saved.powers[i][1] ? \
                                  MIN((ch)->char_specials.saved.powers[i][1], (ch)->char_specials.saved.powers[i][0]) : 0)

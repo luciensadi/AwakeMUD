@@ -1459,7 +1459,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           break;
         case '9':
           if (GET_OBJ_TYPE(d->edit_obj) == ITEM_KEYRING) {
-            send_to_char("Keyrings are weightless by design.", d->character);
+            send_to_char("Keyrings are weightless by design.\r\n", d->character);
             iedit_disp_menu(d);
           } else {
             send_to_char("Enter weight:", d->character);
@@ -1948,7 +1948,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         case ITEM_DRINKCON:
         case ITEM_FOUNTAIN:
           if (number < 1 || number > NUM_DRINK_TYPES) {
-            send_to_char("Invalid choice.", CH);
+            send_to_char("Invalid choice.\r\n", CH);
             iedit_disp_val4_menu(d);
             return;
           }
@@ -2080,7 +2080,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       switch (GET_OBJ_TYPE(d->edit_obj)) {
         case ITEM_WEAPON:
           if (number < 0 || number > MAX_WEAP) {
-            send_to_char("Invalid choice!", d->character);
+            send_to_char("Invalid choice!\r\n", d->character);
             iedit_disp_weapon_menu(d);
             return;
           }
@@ -2122,7 +2122,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           break;
         case ITEM_FIREWEAPON:
           if (number < 1 || (!access_level(CH, LVL_ADMIN) && number == TYPE_BIFURCATE) || number > NUM_WEAPON_TYPES) {
-            send_to_char("Invalid choice!", d->character);
+            send_to_char("Invalid choice!\r\n", d->character);
             iedit_disp_weapon_menu(d);
             return;
           }
@@ -2222,7 +2222,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         case ITEM_WEAPON:
         case ITEM_FIREWEAPON:
           if (number < 1 || number > NUM_SKILL_TYPES) {
-            send_to_char("Invalid choice!", d->character);
+            send_to_char("Invalid choice!\r\n", d->character);
             iedit_disp_skill_menu(d);
           } else {
             // this is to skip these general skills which are not in the list

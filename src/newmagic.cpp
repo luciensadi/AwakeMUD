@@ -1154,7 +1154,7 @@ void cast_health_spell(struct char_data *ch, int spell, int sub, int force, char
       success = success_test(skill, target + 4);
       if (success > 0) {
         act("You successfully sustain that spell on $n.", FALSE, vict, 0, ch, TO_VICT);
-        send_to_char("Your every move becomes silent.", vict);
+        send_to_char("Your every move becomes silent.\r\n", vict);
         create_sustained(ch, vict, spell, force, 0, success, spells[spell].draindamage);
       } else
         send_to_char(FAILED_CAST, ch);
@@ -2739,20 +2739,20 @@ void stop_spirit_power(struct char_data *spirit, int type)
           if (type == ENGULF) {
             if (IS_SPIRIT(spirit) || (IS_ELEMENTAL(spirit) && GET_SPARE1(spirit) == ELEM_WATER)) {
               act("The water surrounding $n falls away and soaks into the ground almost instantly.", TRUE, ssust->target, 0, 0, TO_ROOM);
-              send_to_char("The water surrounding you suddenly vanishes allowing you to gasp for breath!", ssust->target);
+              send_to_char("The water surrounding you suddenly vanishes allowing you to gasp for breath!\r\n", ssust->target);
             } else {
               switch (GET_SPARE1(spirit)) {
               case ELEM_FIRE:
                 act("The fire engulfing $n suddenly goes out.", TRUE, ssust->target, 0, 0, TO_ROOM);
-                send_to_char("The water fire surrounding you suddenly vanishes!", ssust->target);
+                send_to_char("The water fire surrounding you suddenly vanishes!\r\n", ssust->target);
                 break;
               case ELEM_EARTH:
                 act("The dirt and rock engulfing $n suddenly bursts apart, covering everyone close by.", TRUE, ssust->target, 0, 0, TO_ROOM);
-                send_to_char("The earth surrounding you suddenly bursts open, allowing you to gasp for air!", ssust->target);
+                send_to_char("The earth surrounding you suddenly bursts open, allowing you to gasp for air!\r\n", ssust->target);
                 break;
               case ELEM_AIR:
-                act("$n begins to gasp for breath as though $s was just chocked.", TRUE, ssust->target, 0, 0, TO_ROOM);
-                send_to_char("The mysterious force oppressing your lungs is suddenly gone!", ssust->target);
+                act("$n begins to gasp for breath as though $s was just choked.", TRUE, ssust->target, 0, 0, TO_ROOM);
+                send_to_char("The mysterious force oppressing your lungs is suddenly gone!\r\n", ssust->target);
                 break;
               }
             }
@@ -2872,7 +2872,7 @@ POWER(spirit_binding)
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else {
     act("$N suddenly becomes incapable of movement!", FALSE, spirit, 0, ch, TO_VICT);
-    send_to_char("You suddenly notice you are stuck fast to the ground!", tch);
+    send_to_char("You suddenly notice you are stuck fast to the ground!\r\n", tch);
     AFF_FLAGS(tch).SetBit(AFF_BINDING);
     tch->points.binding = GET_LEVEL(spirit) * 2;
     spiritdata->services--;
@@ -2893,7 +2893,7 @@ POWER(spirit_conceal)
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else {
     act("$n vanishes from sight.", FALSE, spirit, 0, ch, TO_VICT);
-    send_to_char("The terrain seems to cover your tracks.", tch);
+    send_to_char("The terrain seems to cover your tracks.\r\n", tch);
     make_spirit_power(spirit, tch, CONCEAL);
     spiritdata->services--;
   }
@@ -2913,7 +2913,7 @@ POWER(spirit_confusion)
     send_to_char(ch, "The %s refuses to perform that service.\r\n", GET_TRADITION(ch) == TRAD_HERMETIC ? "elemental" : "spirit");
   else {
     act("$n vanishes from sight.", FALSE, spirit, 0, ch, TO_VICT);
-    send_to_char("The terrain seems to cover your tracks.", tch);
+    send_to_char("The terrain seems to cover your tracks.\r\n", tch);
     make_spirit_power(spirit, tch, CONFUSION);
     spiritdata->services--;
   }
@@ -2942,20 +2942,20 @@ POWER(spirit_engulf)
     }
     if (IS_SPIRIT(spirit) || (IS_ELEMENTAL(spirit) && GET_SPARE1(spirit) == ELEM_WATER)) {
       act("The water in the air surrounding $n seems to quickly condense and engulf $s!", TRUE, tch, 0, 0, TO_ROOM);
-      send_to_char("The water in the air around you seems to condense and swallow you up!", tch);
+      send_to_char("The water in the air around you seems to condense and swallow you up!\r\n", tch);
     } else {
       switch (GET_SPARE1(spirit)) {
       case ELEM_FIRE:
         act("A strange, unnatural fire suddenly engulfs $n!", TRUE, tch, 0, 0, TO_ROOM);
-        send_to_char("Fire suddenly engulfs your entire body!", tch);
+        send_to_char("Fire suddenly engulfs your entire body!\r\n", tch);
         break;
       case ELEM_EARTH:
         act("The ground seems to rise up from below and encase $n!", TRUE, tch, 0, 0, TO_ROOM);
-        send_to_char("The earth surrounding you suddenly bursts open, allowing you to gasp for air!", tch);
+        send_to_char("Clods of mud and earth slam into you, forming a suffocating coccoon!\r\n", tch);
         break;
       case ELEM_AIR:
-        act("$n suddenly falls to $s knees and begins to wretch!", TRUE, tch, 0, 0, TO_ROOM);
-        send_to_char("A huge pressure falls on your lungs and you find it impossible to breath!", tch);
+        act("$n suddenly falls to $s knees and begins to retch!", TRUE, tch, 0, 0, TO_ROOM);
+        send_to_char("A huge pressure falls on your lungs and you find it impossible to breathe!\r\n", tch);
         break;
       }
     }

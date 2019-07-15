@@ -33,7 +33,7 @@ extern struct skill_data skills[];
 
 extern void respond(struct char_data *ch, struct char_data *mob, char *str);
 extern bool can_send_act_to_target(struct char_data *ch, bool hide_invisible, struct obj_data * obj, void *vict_obj, struct char_data *to, int type);
-extern char *how_good(int percent);
+extern char *how_good(int skill, int percent);
 extern char *colorize(struct descriptor_data *d, const char *str, bool skip_check = FALSE);
 int find_skill_num(char *name);
 
@@ -936,7 +936,7 @@ ACMD(do_gen_comm)
         if (success > 0) {
           int suc = success_test(GET_SKILL(tmp, GET_LANGUAGE(ch)), 4);
           if (suc > 0 || IS_NPC(tmp))
-            sprintf(buf, "%s$z shouts in %s, \"%s\"^N", com_msgs[subcmd][3], skills[GET_LANGUAGE(ch)].name, argument);
+            sprintf(buf, "%s$z shouts in %s, \"%s^n\"", com_msgs[subcmd][3], skills[GET_LANGUAGE(ch)].name, argument);
           else
             sprintf(buf, "%s$z shouts in a language you don't understand.", com_msgs[subcmd][3]);
         } else
@@ -948,14 +948,14 @@ ACMD(do_gen_comm)
         store_message_to_history(tmp->desc, COMM_CHANNEL_SHOUTS, str_dup(act(buf, FALSE, ch, NULL, tmp, TO_VICT)));
       }
 
-    sprintf(buf1, "%sYou shout, '%s'^N", com_msgs[subcmd][3], argument);
+    sprintf(buf1, "%sYou shout, \"%s^n\"", com_msgs[subcmd][3], argument);
     // Note that this line invokes act().
     store_message_to_history(ch->desc, COMM_CHANNEL_SHOUTS, str_dup(act(buf1, FALSE, ch, 0, 0, TO_CHAR)));
 
     was_in = ch->in_room;
     if (ch->in_veh) {
       ch->in_room = get_ch_in_room(ch);
-      sprintf(buf1, "%sFrom inside %s, $z %sshouts, '%s'^N", com_msgs[subcmd][3], GET_VEH_NAME(ch->in_veh),
+      sprintf(buf1, "%sFrom inside %s, $z %sshouts, '%s^n'", com_msgs[subcmd][3], GET_VEH_NAME(ch->in_veh),
               com_msgs[subcmd][3], argument);
       for (tmp = ch->in_room->people; tmp; tmp = tmp->next_in_room) {
         // Replicate act() in a way that lets us capture the message.
@@ -986,7 +986,7 @@ ACMD(do_gen_comm)
             if (success > 0) {
               int suc = success_test(GET_SKILL(tmp, GET_LANGUAGE(ch)), 4);
               if (suc > 0 || IS_NPC(tmp))
-                sprintf(buf, "%s$z shouts in %s, \"%s\"^N", com_msgs[subcmd][3], skills[GET_LANGUAGE(ch)].name, argument);
+                sprintf(buf, "%s$z shouts in %s, \"%s^n\"", com_msgs[subcmd][3], skills[GET_LANGUAGE(ch)].name, argument);
               else
                 sprintf(buf, "%s$z shouts in a language you don't understand.", com_msgs[subcmd][3]);
             } else
@@ -1040,7 +1040,7 @@ ACMD(do_gen_comm)
     strcat(str_to_add_return_to, "\r\n");
     store_message_to_history(ch->desc, channel, str_to_add_return_to);
   } else {
-    sprintf(buf, "%s%s |]newbie[| %s^N", com_msgs[subcmd][3], GET_CHAR_NAME(ch), argument);
+    sprintf(buf, "%s%s |]newbie[| %s^n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), argument);
     send_to_char(ch, "%s\r\n", buf);
     channel = COMM_CHANNEL_NEWBIE;
     str_to_add_return_to = str_dup(buf);
@@ -1082,7 +1082,7 @@ ACMD(do_language)
     send_to_char("You know the following languages:\r\n", ch);
     for (i = SKILL_ENGLISH; i <= SKILL_FRENCH; i++)
       if ((GET_SKILL(ch, i)) > 0) {
-        sprintf(buf, "%-20s %-17s", skills[i].name, how_good(GET_SKILL(ch, i)));
+        sprintf(buf, "%-20s %-17s", skills[i].name, how_good(i, GET_SKILL(ch, i)));
         if (GET_LANGUAGE(ch) == i)
           strcat(buf, " ^Y(Speaking)^n");
         strcat(buf, "\r\n");
@@ -1194,7 +1194,7 @@ ACMD(do_phone)
     }
     any_one_arg(argument, arg);
     if (!*arg) {
-      send_to_char("Ring what number?", ch);
+      send_to_char("Ring what number?\r\n", ch);
       return;
     }
     if (!(ring = atoi(arg))) {

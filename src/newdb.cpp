@@ -126,14 +126,12 @@ static void init_char(struct char_data * ch)
   }
 
   if (!access_level(ch, LVL_VICEPRES))
-    for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
-    {
-      SET_SKILL(ch, i, 0)
+    for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++) {
+      set_character_skill(ch, i, 0, FALSE);
     }
   else
-    for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
-    {
-      SET_SKILL(ch, i, 100);
+    for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++) {
+      set_character_skill(ch, i, MAX_SKILL_LEVEL_FOR_IMMS, FALSE);
     }
 
   ch->char_specials.saved.affected_by.Clear();

@@ -2365,3 +2365,126 @@ void clear_editing_data(struct descriptor_data *d) {
   // We're setting things to NULL here. If you don't want to leak memory, clean it up beforehand.
   d->edit_room = NULL;
 }
+
+// Sets a character's skill, with bounds. Assumes that you've already deducted the appropriate cost.
+void set_character_skill(struct char_data *ch, int skill_num, int new_value, bool send_message) {
+  char msgbuf[500];
+  
+  if (!ch) {
+    mudlog("SYSERR: NULL character passed to set_character_skill.", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  if (IS_NPC(ch)) {
+    mudlog("SYSERR: NPC passed to set_character_skill.", ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  if (skill_num < SKILL_ATHLETICS || skill_num >= MAX_SKILLS) {
+    sprintf(msgbuf, "SYSERR: Invalid skill number %d passed to set_character_skill.", skill_num);
+    mudlog(msgbuf, ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  if (new_value < 0 || (!access_level(ch, LVL_BUILDER) && new_value > MAX_SKILL_LEVEL_FOR_MORTS)) {
+    sprintf(msgbuf, "SYSERR: Attempting to assign skill level %d to %s, which exceeds range 0 <= x <= %d.",
+            new_value, GET_CHAR_NAME(ch), access_level(ch, LVL_BUILDER) ? MAX_SKILL_LEVEL_FOR_IMMS : MAX_SKILL_LEVEL_FOR_MORTS);
+    mudlog(msgbuf, ch, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  if (new_value == REAL_SKILL(ch, skill_num)) {
+    // This is not an error condition (think restoring an imm and skillsetting everything); just silently fail.
+    return;
+  }
+  
+  if (send_message) {    
+    // Active skill messaging.
+    if (skills[skill_num].type == SKILL_TYPE_ACTIVE) {
+      if (new_value == 1) {
+        send_to_char(ch, "^cYou have been introduced to the basics.^n\r\n");
+      } else if (new_value == 2) {
+        send_to_char(ch, "^cYou have gotten in some practice.^n\r\n");
+      } else if (new_value == 3) {
+        send_to_char(ch, "^cYou have attained average proficiency.^n\r\n");
+      } else if (new_value == 4) {
+        send_to_char(ch, "^CYour skills are now above average.^n\r\n");
+      } else if (new_value == 5) {
+        send_to_char(ch, "^CYou are considered a professional at %s.^n\r\n", skills[skill_num].name);
+      } else if (new_value == 6) {
+        send_to_char(ch, "^gYou've practiced so much that you can act without thinking about it.^n\r\n");
+      } else if (new_value == 7) {
+        send_to_char(ch, "^gYou are considered an expert in your field.^n\r\n");
+      } else if (new_value == 8) {
+        send_to_char(ch, "^GYour talents at %s are considered world-class.^n\r\n", skills[skill_num].name);
+      } else {
+        send_to_char(ch, "^GYou further hone your talents towards perfection.^n\r\n");
+      }
+    }
+    // Knowledge skill messaging.
+    else {
+      if (new_value == 1) {
+        send_to_char(ch, "^cYou've picked up a few things.^n\r\n");
+      } else if (new_value == 2) {
+        send_to_char(ch, "^cYou've developed an interest in %s.^n\r\n", skills[skill_num].name);
+      } else if (new_value == 3) {
+        send_to_char(ch, "^cYou have a dedicated knowledge of that area.^n\r\n");
+      } else if (new_value == 4) {
+        send_to_char(ch, "^CYou are well-rounded in the field of %s.^n\r\n", skills[skill_num].name);
+      } else if (new_value == 5) {
+        send_to_char(ch, "^CYou could earn a degree in %s.^n\r\n", skills[skill_num].name);
+      } else if (new_value == 6) {
+        send_to_char(ch, "^gYou have mastered the field of %s.^n\r\n", skills[skill_num].name);
+      } else if (new_value == 7) {
+        send_to_char(ch, "^gYou are considered an expert in your field.^n\r\n");
+      } else if (new_value == 8) {
+        send_to_char(ch, "^GYour knowledge of %s is genius-level.^n\r\n", skills[skill_num].name);
+      } else {
+        send_to_char(ch, "^GYou further hone your knowledge towards perfection.^n\r\n");
+      }
+     }
+  }
+  
+  // Update their skill.
+  (ch)->char_specials.saved.skills[skill_num][0] = new_value;
+  
+  // Set the dirty bit so we know we need to save their skills.
+  GET_SKILL_DIRTY_BIT((ch)) = TRUE;
+}
+
+// Per SR3 core p98-99.
+const char *skill_rank_name(int rank, bool knowledge) {
+#define RANK_MESSAGE(value, active_name, knowledge_name) { \
+    if (rank == value) { \
+      if (knowledge) return knowledge_name; \
+      else return active_name; \
+   } \
+}
+  
+  if (rank < 0)
+    return "uh oh! you have a negative skill, please report!";
+  
+  RANK_MESSAGE(0, "not learned", "not learned");
+  RANK_MESSAGE(1, "introduced", "scream-sheet level");
+  RANK_MESSAGE(2, "practiced", "interested");
+  RANK_MESSAGE(3, "proficient", "dedicated");
+  RANK_MESSAGE(4, "skilled", "well-rounded");
+  RANK_MESSAGE(5, "professional", "educated");
+  RANK_MESSAGE(6, "innate", "mastered");
+  RANK_MESSAGE(7, "expert", "expert");
+  
+  if (rank < MAX_SKILL_LEVEL_FOR_IMMS) {
+    if (knowledge) return "genius";
+    else return "world-class";
+  }
+  
+  return "godly";
+#undef RANK_MESSAGE
+}
+
+char *how_good(int skill, int rank)
+{
+  static char buf[256];
+  sprintf(buf, " (%s)", skill_rank_name(rank, skills[skill].type == SKILL_TYPE_KNOWLEDGE));
+  return buf;
+}
