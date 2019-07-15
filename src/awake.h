@@ -272,10 +272,11 @@ enum {
 #define PLR_AUTH                32 /* Player needs Auth */
 #define PLR_EDCON               33
 #define PLR_REMOTE              34
-#define PLR_INITIATE		35
-#define PLR_DRIVEBY  36
-#define PLR_RPE   37
-#define PLR_MAX                 38
+#define PLR_INITIATE		        35
+#define PLR_DRIVEBY             36
+#define PLR_RPE                 37
+#define PLR_NO_IDLE_OUT         38 /* Player will not idle out (morts- for test chars) */
+#define PLR_MAX                 39
 
 
 

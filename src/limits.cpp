@@ -381,7 +381,7 @@ void check_idling(void)
         do_return(ch, "", 0, 0);
     } else if (!IS_NPC(ch)) {
       ch->char_specials.timer++;
-      if (!(IS_SENATOR(ch) || IS_WORKING(ch)) || !ch->desc) {
+      if (!(IS_SENATOR(ch) || IS_WORKING(ch) || PLR_FLAGGED(ch, PLR_NO_IDLE_OUT)) || !ch->desc) {
         if (!GET_WAS_IN(ch) && ch->in_room && ch->char_specials.timer > 15) {
           GET_WAS_IN(ch) = ch->in_room;
           if (FIGHTING(ch))

@@ -3389,37 +3389,38 @@ ACMD(do_set)
                { "loadroom",        LVL_ADMIN, PC,     MISC },
                { "color",           LVL_ADMIN, PC,     BINARY },
                { "idnum",           LVL_VICEPRES,      PC,     NUMBER },
-               { "passwd",  LVL_VICEPRES,      PC,     MISC },//40
-               { "nodelete",        LVL_VICEPRES,      PC,     BINARY },
+               { "passwd",  LVL_VICEPRES,      PC,     MISC },
+               { "nodelete",        LVL_VICEPRES,      PC,     BINARY }, // 40
                { "cha",             LVL_ADMIN, BOTH,   NUMBER },
                { "mag",  LVL_ADMIN, BOTH, NUMBER },
                { "rea",  LVL_VICEPRES, BOTH, NUMBER },
-               { "impact",  LVL_VICEPRES, BOTH, NUMBER },//45
-               { "newbie",  LVL_ADMIN, PC, BINARY },
+               { "impact",  LVL_VICEPRES, BOTH, NUMBER },
+               { "newbie",  LVL_ADMIN, PC, BINARY }, // 45
                { "skillpoints", LVL_ADMIN, PC, NUMBER },
                { "totem",  LVL_ADMIN, PC, NUMBER },
                { "zone",            LVL_ADMIN, PC, NUMBER },
-               { "olc",             LVL_ADMIN, PC, BINARY },//50
-               { "nostat",  LVL_VICEPRES, PC, BINARY },
+               { "olc",             LVL_ADMIN, PC, BINARY },
+               { "nostat",  LVL_VICEPRES, PC, BINARY }, // 50
                { "pretitle", LVL_ADMIN, PC, MISC },
                { "whotitle", LVL_ADMIN, PC, MISC },
                { "pker",  LVL_ADMIN, PC, BINARY },
-               { "index",  LVL_ADMIN, BOTH, NUMBER },//55
-               { "tradition",       LVL_ADMIN, PC,     NUMBER },
+               { "index",  LVL_ADMIN, BOTH, NUMBER },
+               { "tradition",       LVL_ADMIN, PC,     NUMBER }, // 55
                { "nosnoop",  LVL_VICEPRES, PC, BINARY },
                { "holylight", LVL_ADMIN, PC, BINARY },
                { "wanted",       LVL_ADMIN, PC, BINARY },
-               { "authorize", LVL_ADMIN, PC, BINARY },//60
-               { "edcon",           LVL_ADMIN, PC, BINARY }, // 'edit rooms in a connected zone' (for low-level builders)
+               { "authorize", LVL_ADMIN, PC, BINARY },
+               { "edcon",           LVL_ADMIN, PC, BINARY }, // 60; 'edit rooms in a connected zone' (for low-level builders)
                { "notoriety",       LVL_ADMIN, PC, NUMBER },
                { "pg",              LVL_ADMIN,      PC,     BINARY },
                { "rpe",      LVL_ADMIN, PC, BINARY },
                { "quest",    LVL_VICEPRES, PC , BINARY },
-               { "questor",      LVL_PRESIDENT, PC, BINARY },
+               { "questor",      LVL_PRESIDENT, PC, BINARY }, // 65
                { "aspect",       LVL_ADMIN, PC, NUMBER},
                { "helper",       LVL_ADMIN, PC, BINARY },
                { "blacklist",       LVL_VICEPRES, PC, BINARY },
-               { "\n", 0, BOTH, MISC }//65
+               { "noidle", LVL_VICEPRES, PC, BINARY },
+               { "\n", 0, BOTH, MISC } // 70
              };
 
   half_chop(argument, name, buf);
@@ -3932,6 +3933,9 @@ ACMD(do_set)
   case 68:
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_BLACKLIST);
     break;
+    case 69:
+      SET_OR_REMOVE(PLR_FLAGS(vict), PLR_NO_IDLE_OUT);
+      break;
   default:
     sprintf(buf, "Can't set that!");
     break;
