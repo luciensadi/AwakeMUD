@@ -80,8 +80,8 @@ teach_t teachers[] = {
     "After what feels like seven years of magical study, you feel like you've learned something.\r\n", GODLY },
   
   // Newbie magic teacher
-  { 60501, { SKILL_CONJURING, SKILL_SORCERY, SKILL_SPELLDESIGN,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 60501, { SKILL_CONJURING, SKILL_SORCERY, SKILL_SPELLDESIGN, SKILL_AURA_READING,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
   
   { 60502, { SKILL_COMPUTER, SKILL_BR_COMPUTER, SKILL_DATA_BROKERAGE, SKILL_CYBERTERM_DESIGN, SKILL_ELECTRONICS, SKILL_BR_ELECTRONICS,

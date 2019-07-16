@@ -1259,7 +1259,7 @@ struct skill_data skills[] =
     {"Sub-Machine Guns", QUI, SKILL_TYPE_ACTIVE, FALSE},
     {"Grenade Launchers", INT, SKILL_TYPE_ACTIVE, FALSE},
     {"Tasers", QUI, SKILL_TYPE_ACTIVE, FALSE},
-    {"Gunnery", INT, SKILL_TYPE_ACTIVE, FALSE},
+    {"Mounted Gunnery", INT, SKILL_TYPE_ACTIVE, FALSE},
     {"Machine Guns", STR, SKILL_TYPE_ACTIVE, FALSE},
     {"Missile Launchers", INT, SKILL_TYPE_ACTIVE, FALSE},
     {"Assault Cannons", STR, SKILL_TYPE_ACTIVE, FALSE},
