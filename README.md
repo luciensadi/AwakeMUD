@@ -14,10 +14,10 @@ A fork of the [Awakened Worlds](http://awakenedworlds.net) MUD codebase. Issues 
 
 ## OS Support
 Tested on:
-- OSX 10.12, 10.13
-- Ubuntu 14 and 16 LTS
-- Raspbian Jessie
+- OSX 10.14 (actively); 10.13 and 10.12 believed to work but not actively tested
+- Ubuntu 18 LTS (actively); 16 and 14 same as above
 - Amazon Linux
+- Raspbian Jessie (no longer actively tested)
 - Cygwin (beta)
 
 ## Installation (Ubuntu commands in parentheses)
