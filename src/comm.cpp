@@ -1831,12 +1831,6 @@ void close_socket(struct descriptor_data *d)
   spell_data *one, *next;
   char buf[128];
   
-  // Free the protocol data when a socket is closed.
-  ProtocolDestroy( d->pProtocol );
-  
-  close(d->descriptor);
-  flush_queues(d);
-  
   /* Forget snooping */
   if (d->snooping)
     d->snooping->snoop_by = NULL;
@@ -1888,6 +1882,12 @@ void close_socket(struct descriptor_data *d)
       Mem->DeleteCh(d->character);
     }
   }
+  
+  // Free the protocol data when a socket is closed.
+  ProtocolDestroy( d->pProtocol );
+  
+  close(d->descriptor);
+  flush_queues(d);
   
   /* JE 2/22/95 -- part of my enending quest to make switch stable */
   if (d->original && d->original->desc)

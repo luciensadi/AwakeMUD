@@ -885,11 +885,16 @@ SPECIAL(trainer)
     return TRUE;
   }
 
-  if (!PLR_FLAGGED(ch, PLR_NEWBIE) && GET_ATT_POINTS(ch) != 0) {
+  if (!access_level(ch, LVL_BUILDER) && !PLR_FLAGGED(ch, PLR_NEWBIE) && GET_ATT_POINTS(ch) != 0) {
     sprintf(buf, "SYSERR: %s graduated from newbie status while still having %d attribute point%s left. How?",
             GET_CHAR_NAME(ch), GET_ATT_POINTS(ch), GET_ATT_POINTS(ch) > 1 ? "s" : "");
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     GET_ATT_POINTS(ch) = 0;
+  }
+  
+  else if (PLR_FLAGGED(ch, PLR_AUTH) && GET_ATT_POINTS(ch) <= 0) {
+    send_to_char(ch, "You don't have any more attribute points to spend.\r\n");
+    return TRUE;
   }
 
   if (!*argument) {

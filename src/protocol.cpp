@@ -351,7 +351,7 @@ void ProtocolDestroy( protocol_t *apProtocol )
    for ( i = eMSDP_NONE+1; i < eMSDP_MAX; ++i )
    {
       delete [] apProtocol->pVariables[i]->pValueString;
-      delete [] apProtocol->pVariables[i];
+      delete apProtocol->pVariables[i];
    }
 
    delete [] apProtocol->pVariables;
