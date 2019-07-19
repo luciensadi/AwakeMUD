@@ -168,10 +168,6 @@ void helpedit_parse_main_menu(struct descriptor_data *d, const char *arg) {
         // Log the action.
         sprintf(buf, "%s wrote new helpfile '%s' (renamed from '%s').", GET_CHAR_NAME(CH), HELPFILE->title, HELPFILE->original_title);
         mudlog(buf, CH, LOG_SYSLOG, TRUE);
-        
-        // Delete the original help article.
-        sprintf(query_buf, "DELETE FROM help_topic WHERE `name`='%s'", prepare_quotes(buf3, HELPFILE->original_title, sizeof(buf)));
-        mysql_wrapper(mysql, query_buf);
       } else {
         // Log the action.
         sprintf(buf, "%s wrote new helpfile '%s'.", GET_CHAR_NAME(CH), HELPFILE->title);
@@ -182,6 +178,10 @@ void helpedit_parse_main_menu(struct descriptor_data *d, const char *arg) {
         sprintf(buf, "Query to restore original helpfile: \r\n%s\r\n", generate_sql_for_helpfile_by_name(HELPFILE->original_title));
         log(buf);
       }
+      
+      // Delete the original help article (if any).
+      sprintf(query_buf, "DELETE FROM help_topic WHERE `name`='%s'", prepare_quotes(buf3, HELPFILE->original_title, sizeof(buf)));
+      mysql_wrapper(mysql, query_buf);
       
       // Compose and execute the insert-on-duplicate-key-update query.
       if (mysql_wrapper(mysql, generate_sql_for_helpfile(HELPFILE->title ? HELPFILE->title : HELPFILE->original_title, HELPFILE->body)))
