@@ -961,9 +961,21 @@ void disp_long_exits(struct char_data *ch, bool autom)
             !LIGHT_OK(ch))
           strcat(buf2, "Too dark to tell.\r\n");
         else {
-          if (IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED))
-            strcat(buf2, "A closed door");
-          else
+          if (IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED)) {
+            SPECIAL(call_elevator);
+            SPECIAL(elevator_spec);
+            // If it leads into an elevator shaft or car from a landing, it's an elevator door.
+            // If it leads into a landing from an elevator shaft or car, it's an elevator door.
+            if (EXIT(ch, door)->to_room && (((ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_ELEVATOR_SHAFT) || EXIT(ch, door)->to_room->func == elevator_spec)
+                                              && get_ch_in_room(ch)->func == call_elevator)
+                                            || ((ROOM_FLAGGED(get_ch_in_room(ch), ROOM_ELEVATOR_SHAFT) || get_ch_in_room(ch)->func == elevator_spec)
+                                              && EXIT(ch, door)->to_room->func == call_elevator)
+                                           )) {
+                strcat(buf2, "A pair of closed elevator doors");
+            }
+            else
+              sprintf(ENDOF(buf2), "A closed %s", *(fname(EXIT(ch, door)->keyword)) ? fname(EXIT(ch, door)->keyword) : "door");
+          } else
             strcat(buf2, EXIT(ch, door)->to_room->name);
           strcat(buf2, "\r\n");
         }

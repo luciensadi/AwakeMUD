@@ -2477,7 +2477,7 @@ SPECIAL(yukiya_dahoto)
 {
   char_data *yukiya = (char_data *) me;
 
-  if (yukiya != NULL && CMD_IS("open") && CAN_SEE(yukiya, ch) &&
+  if (yukiya != NULL && (CMD_IS("open") || CMD_IS("hit") || CMD_IS("shoot")) && CAN_SEE(yukiya, ch) &&
       yukiya->in_room->number == YUKIYA_OFFICE) {
     skip_spaces(&argument);
 
