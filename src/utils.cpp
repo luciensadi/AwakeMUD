@@ -1810,7 +1810,7 @@ void store_message_to_history(struct descriptor_data *d, int channel, const char
   if (d->message_history[channel].NumItems() > NUM_MESSAGES_TO_RETAIN) {
     // We're over the amount. Remove the tail, making sure we delete the contents.
     if (d->message_history[channel].Tail()->data)
-      delete d->message_history[channel].Tail()->data;
+      delete [] d->message_history[channel].Tail()->data;
     
     d->message_history[channel].RemoveItem(d->message_history[channel].Tail());
   }

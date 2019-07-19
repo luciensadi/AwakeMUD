@@ -311,18 +311,14 @@ void string_add(struct descriptor_data *d, char *str)
         redit_disp_menu(d);
         break;
       case REDIT_NDESC:
+          DELETE_ARRAY_IF_EXTANT(d->edit_room->night_desc);
           if (d->str && *d->str) {
             if (strlen(*d->str) > 5)
               REPLACE_STRING_WITH_INDENTED_FORMATTING(d->edit_room->night_desc);
             else
               d->edit_room->night_desc = NULL;
           }
-        DELETE_ARRAY_IF_EXTANT(d->edit_room->night_desc);
-        if (strlen(*d->str) > 5) {
-          d->edit_room->night_desc = str_dup(*d->str);
-        } else
-          d->edit_room->night_desc = NULL;
-        DELETE_D_STR_IF_EXTANT(d);
+          DELETE_D_STR_IF_EXTANT(d);
         redit_disp_menu(d);
         break;
       case REDIT_EXTRADESC_DESCRIPTION:

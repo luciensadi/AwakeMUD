@@ -190,7 +190,7 @@ bool Playergroup::set_alias(const char *newalias, struct char_data *ch) {
 // Does not perform validity checks before setting.
 void Playergroup::raw_set_tag(const char *newtag) {
   if (tag)
-    delete tag;
+    delete [] tag;
   
   // If you used raw_set and didn't follow the rules, enjoy your halt.
   assert(strlen(newtag) <= MAX_PGROUP_TAG_LENGTH);
@@ -201,7 +201,7 @@ void Playergroup::raw_set_tag(const char *newtag) {
 // Does not perform validity checks before setting.
 void Playergroup::raw_set_name(const char *newname) {
   if (name)
-    delete name;
+    delete [] name;
   
   // If you used raw_set and didn't follow the rules, enjoy your halt.
   assert(strlen(newname) <= MAX_PGROUP_NAME_LENGTH);
@@ -212,7 +212,7 @@ void Playergroup::raw_set_name(const char *newname) {
 // Does not perform validity checks before setting.
 void Playergroup::raw_set_alias(const char *newalias) {
   if (alias)
-    delete alias;
+    delete [] alias;
   
   // If you used raw_set and didn't follow the rules, enjoy your halt.
   assert(strlen(newalias) <= MAX_PGROUP_ALIAS_LENGTH);
