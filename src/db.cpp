@@ -2252,40 +2252,49 @@ int vnum_object_armors(char *searchname, struct char_data * ch)
 {
   char xbuf[MAX_STRING_LENGTH];
   int nr, found = 0;
-  int ballistic, impact;
-
-  for( ballistic = 11; ballistic >= -1; ballistic-- )
-    for( impact = 11; impact >= -1;  impact-- )
-    {
-      for (nr = 0; nr <= top_of_objt; nr++) {
-        if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WORN)
-          continue;
-        if (GET_OBJ_VAL(&obj_proto[nr],0) < ballistic && ballistic != -1)
-          continue;
-        if (GET_OBJ_VAL(&obj_proto[nr],1) < impact && impact != 1)
-          continue;
-        if (GET_OBJ_VAL(&obj_proto[nr],0) > ballistic && ballistic != 11)
-          continue;
-        if (GET_OBJ_VAL(&obj_proto[nr],1) > impact && impact != 11)
-          continue;
-        if (IS_OBJ_STAT(&obj_proto[nr], ITEM_GODONLY))
-          continue;
-        if (from_ip_zone(OBJ_VNUM_RNUM(nr)))
-          continue;
-
-        sprint_obj_mods( &obj_proto[nr], xbuf );
-
-        ++found;
-        sprintf(buf, "[%5ld -%2d] %2d %d %s%s\r\n",
-                OBJ_VNUM_RNUM(nr),
-                ObjList.CountObj(nr),
-                GET_OBJ_VAL(&obj_proto[nr], 0),
-                GET_OBJ_VAL(&obj_proto[nr], 1),
-                obj_proto[nr].text.name,
-                xbuf);
-        send_to_char(buf, ch);
-      }
+  
+  // List everything above 20 combined ballistic and impact.
+  for (nr = 0; nr <= top_of_objt; nr++) {
+    if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WORN)
+      continue;
+    if (GET_OBJ_VAL(&obj_proto[nr],0) + GET_OBJ_VAL(&obj_proto[nr],1) <= 20)
+      continue;
+    
+    sprint_obj_mods( &obj_proto[nr], xbuf );
+    
+    ++found;
+    sprintf(buf, "[%5ld -%2d] %2d %d %s%s\r\n",
+            OBJ_VNUM_RNUM(nr),
+            ObjList.CountObj(nr),
+            GET_OBJ_VAL(&obj_proto[nr], 0),
+            GET_OBJ_VAL(&obj_proto[nr], 1),
+            obj_proto[nr].text.name,
+            xbuf);
+    send_to_char(buf, ch);
+  }
+  
+  // List everything with 20 or less combined ballistic and impact, descending.
+  for (int total = 20; total >= 0; total--) {
+    for (nr = 0; nr <= top_of_objt; nr++) {
+      if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WORN)
+        continue;
+      if (GET_OBJ_VAL(&obj_proto[nr],0) + GET_OBJ_VAL(&obj_proto[nr],1) != total)
+        continue;
+      
+      sprint_obj_mods( &obj_proto[nr], xbuf );
+      
+      ++found;
+      sprintf(buf, "[%5ld -%2d] %2d %d %s%s\r\n",
+              OBJ_VNUM_RNUM(nr),
+              ObjList.CountObj(nr),
+              GET_OBJ_VAL(&obj_proto[nr], 0),
+              GET_OBJ_VAL(&obj_proto[nr], 1),
+              obj_proto[nr].text.name,
+              xbuf);
+      send_to_char(buf, ch);
     }
+  }
+  
   return (found);
 }
 

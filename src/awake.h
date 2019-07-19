@@ -1982,7 +1982,7 @@ enum {
 #define PULSE_VIOLENCE            (3 RL_SEC)
 #define PULSE_MONORAIL            (5 RL_SEC)
 
-#define MAX_SOCK_BUF              (12 * 1024) /* Size of kernel's sock buf   */
+#define MAX_SOCK_BUF              (22 * 1024) /* Size of kernel's sock buf   */ // was 12 * 1024, increased arbitrarily
 #define MAX_PROMPT_LENGTH         96          /* Max length of prompt        */
 #define GARBAGE_SPACE             32
 #define SMALL_BUFSIZE             1024

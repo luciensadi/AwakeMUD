@@ -88,7 +88,7 @@ const char* blood_messages[] = {
 
 /* end blood stuff */
 
-char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act)
+char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, bool dont_capitalize_a_an)
 {
   char buf2[MAX_STRING_LENGTH];
   if (!IS_NPC(i) && ((GET_EQ(i, WEAR_HEAD) && GET_OBJ_VAL(GET_EQ(i, WEAR_HEAD), 7) > 1) ||
@@ -101,14 +101,14 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act)
     (GET_EQ(i, WEAR_BODY) ? GET_OBJ_VAL(GET_EQ(i, WEAR_BODY), 7) : 0) +
     (GET_EQ(i, WEAR_UNDER) ? GET_OBJ_VAL(GET_EQ(i, WEAR_UNDER), 7) : 0);
     conceal = act == 2 ? 4 : success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), conceal);
-    sprintf(buf, "A");
+    sprintf(buf, "%s", dont_capitalize_a_an ? "a" : "A");
     if (conceal > 0) {
       if (GET_HEIGHT(i) < 130)
         strcat(buf, " tiny");
       else if (GET_HEIGHT(i) < 160)
         strcat(buf, " small");
       else if (GET_HEIGHT(i) < 190)
-        strcat(buf, " average");
+        strcat(buf, "n average");
       else if (GET_HEIGHT(i) < 220)
         strcat(buf, " large");
       else
@@ -121,16 +121,16 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act)
     else
       strcat(buf, " person");
     if (GET_EQ(i, WEAR_ABOUT))
-      sprintf(buf + strlen(buf), " wearing %s", GET_OBJ_NAME(GET_EQ(i, WEAR_ABOUT)));
+      sprintf(buf + strlen(buf), " wearing %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_ABOUT))));
     else if (GET_EQ(i, WEAR_BODY))
-      sprintf(buf + strlen(buf), " wearing %s", GET_OBJ_NAME(GET_EQ(i, WEAR_BODY)));
+      sprintf(buf + strlen(buf), " wearing %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_BODY))));
     else if (GET_EQ(i, WEAR_UNDER))
-      sprintf(buf + strlen(buf), " wearing %s", GET_OBJ_NAME(GET_EQ(i, WEAR_UNDER)));
+      sprintf(buf + strlen(buf), " wearing %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_UNDER))));
   } else
   {
     struct remem *mem;
     if (!act) {
-      strcpy(buf, CAP(GET_NAME(i)));
+      strcpy(buf, dont_capitalize_a_an ? decapitalize_a_an(CAP(GET_NAME(i))) : CAP(GET_NAME(i)));
       if (IS_SENATOR(ch) && !IS_NPC(i))
         sprintf(ENDOF(buf), " (%s)", CAP(GET_CHAR_NAME(i)));
       else if ((mem = found_mem(GET_MEMORY(ch), i)))
@@ -138,7 +138,7 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act)
     } else if ((mem = found_mem(GET_MEMORY(ch), i)) && act != 2)
       strcpy(buf, CAP(mem->mem));
     else
-      strcpy(buf, CAP(GET_NAME(i)));
+      strcpy(buf, dont_capitalize_a_an ? decapitalize_a_an(CAP(GET_NAME(i))) : CAP(GET_NAME(i)));
   }
   if (GET_SUSTAINED(i) && (IS_ASTRAL(ch) || IS_DUAL(ch)))
   {
@@ -150,7 +150,7 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act)
   }
   
   if (!IS_NPC(i) && PRF_FLAGGED(ch, PRF_LONGWEAPON) && GET_EQ(i, WEAR_WIELD))
-    sprintf(ENDOF(buf), ", wielding %s", GET_OBJ_NAME(GET_EQ(i, WEAR_WIELD)));
+    sprintf(ENDOF(buf), ", wielding %s", decapitalize_a_an(GET_OBJ_NAME(GET_EQ(i, WEAR_WIELD))));
   
   if (AFF_FLAGGED(i, AFF_MANIFEST) && !(IS_ASTRAL(ch) || IS_DUAL(ch)))
   {
@@ -428,7 +428,7 @@ void diag_char_to_char(struct char_data * i, struct char_data * ch)
   else
     ment = -1;
   
-  make_desc(ch, i, buf, TRUE);
+  make_desc(ch, i, buf, TRUE, FALSE);
   CAP(buf);
   
   if (phys >= 100 || (GET_TRADITION(i) == TRAD_ADEPT && phys >= 0 &&
@@ -749,7 +749,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
     
     return;
   }
-  make_desc(ch, i, buf, FALSE);
+  make_desc(ch, i, buf, FALSE, FALSE);
   if (PRF_FLAGGED(i, PRF_AFK))
     strcat(buf, " (AFK)");
   if (PLR_FLAGGED(i, PLR_SWITCHED))

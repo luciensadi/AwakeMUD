@@ -38,7 +38,6 @@ extern bool is_escortee(struct char_data *mob);
 extern bool hunting_escortee(struct char_data *ch, struct char_data *vict);
 extern void death_penalty(struct char_data *ch);
 extern int modify_veh(struct veh_data *veh);
-extern void make_desc(struct char_data *ch, struct char_data *i);
 
 extern sh_int mortal_start_room;
 extern sh_int frozen_start_room;

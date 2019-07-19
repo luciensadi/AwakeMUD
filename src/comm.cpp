@@ -2448,7 +2448,7 @@ const char *get_voice_perceived_by(struct char_data *speaker, struct char_data *
 const char *perform_act(const char *orig, struct char_data * ch, struct obj_data * obj,
                  void *vict_obj, struct char_data * to)
 {
-  extern char *make_desc(char_data *ch, char_data *i, char *buf, int act);
+  extern char *make_desc(char_data *ch, char_data *i, char *buf, int act, bool dont_capitalize_a_an);
   const char *i = NULL;
   char *buf;
   struct char_data *vict;
@@ -2506,7 +2506,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
             if (IS_SENATOR(to) && !IS_NPC(ch))
               i = GET_CHAR_NAME(ch);
             else
-              i = make_desc(to, ch, buf, TRUE);
+              i = make_desc(to, ch, buf, TRUE, TRUE);
           } else {
             if (IS_SENATOR(ch))
               i = "an invisible staff member";
@@ -2521,7 +2521,7 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
             if (IS_SENATOR(to) && !IS_NPC(vict))
               i = GET_CHAR_NAME(vict);
             else
-              i = make_desc(to, vict, buf, TRUE);
+              i = make_desc(to, vict, buf, TRUE, TRUE);
           } else {
             if (IS_SENATOR(vict))
               i = "an invisible staff member";
@@ -2572,13 +2572,13 @@ const char *perform_act(const char *orig, struct char_data * ch, struct obj_data
             if (!IS_NPC(ch)) {
               i = GET_CHAR_NAME(ch);
             } else {
-              i = make_desc(to, ch, buf, TRUE);
+              i = make_desc(to, ch, buf, TRUE, TRUE);
             }
           }
           
           // If they're visible, it's simple.
           else if (CAN_SEE(to, ch)) {
-            i = make_desc(to, ch, buf, TRUE);
+            i = make_desc(to, ch, buf, TRUE, TRUE);
           }
           
           // If we've gotten here, the speaker is an invisible player or staff member.

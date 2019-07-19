@@ -43,7 +43,7 @@ extern char *short_object(int virt, int where);
 extern bool read_extratext(struct char_data * ch);
 extern int return_general(int skill_num);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
-extern char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act);
+extern char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act, bool dont_capitalize_a_an);
 extern void weight_change_object(struct obj_data * obj, float weight);
 
 extern int ident;
@@ -2543,18 +2543,18 @@ ACMD(do_photo)
           send_to_char(ch, "You don't seem to see them through the viewfinder.\r\n");
           return;
         }
-        sprintf(buf2, "a photo of %s^n", decapitalize_a_an(make_desc(ch, i, buf, 2)));
+        sprintf(buf2, "a photo of %s^n", make_desc(ch, i, buf, 2, TRUE));
         if (i->in_veh) {
           sprintf(buf, "^c%s^c sitting in the %s of %s^n\r\n%s",
-                  make_desc(ch, i, buf3, 2),
+                  make_desc(ch, i, buf3, 2, FALSE),
                   i->vfront ? "front" : "back",
                   decapitalize_a_an(GET_VEH_NAME(i->in_veh)),
                   i->player.physical_text.look_desc);
         } else {
-          sprintf(buf, "^c%s^c in %s^n\r\n%s", make_desc(ch, i, buf3, 2),
+          sprintf(buf, "^c%s^c in %s^n\r\n%s", make_desc(ch, i, buf3, 2, FALSE),
                   GET_ROOM_NAME(ch->in_room), i->player.physical_text.look_desc);
         }
-        sprintf(buf + strlen(buf), "%s is using:\r\n", make_desc(ch, i, buf3, 2));
+        sprintf(buf + strlen(buf), "%s is using:\r\n", make_desc(ch, i, buf3, 2, FALSE));
         for (int j = 0; j < NUM_WEARS; j++)
           if (GET_EQ(i, j) && CAN_SEE_OBJ(ch, GET_EQ(i, j))) {
             // Describe special-case wielded/held objects.
@@ -2640,11 +2640,11 @@ ACMD(do_photo)
           strcat(buf, tch->player.physical_text.room_desc);
           continue;
         }
-        sprintf(buf + strlen(buf), "%s", make_desc(ch, tch, buf3, 2));
+        sprintf(buf + strlen(buf), "%s", make_desc(ch, tch, buf3, 2, FALSE));
         if (CH_IN_COMBAT(tch)) {
           strcat(buf, " is here, fighting ");
           if (FIGHTING(tch) == ch)
-            strcat(buf, "the photographer!");
+            strcat(buf, "the photographer");
           else if (FIGHTING_VEH(tch)) {
             strcat(buf, GET_VEH_NAME(FIGHTING_VEH(tch)));
           } else {
@@ -2655,14 +2655,13 @@ ACMD(do_photo)
                 strcat(buf, GET_NAME(FIGHTING(tch)));
             else
               strcat(buf, "someone in the distance");
-            strcat(buf, "!");
           }
-          strcat(buf, "\r\n");
+          strcat(buf, "!\r\n");
         } else {
           sprintf(ENDOF(buf), "%s", positions[(int)GET_POS(tch)]);
           if (GET_DEFPOS(tch))
             sprintf(ENDOF(buf), ", %s", GET_DEFPOS(tch));
-          strcat(buf, "\r\n");
+          strcat(buf, ".\r\n");
         }
       }
     for (struct obj_data *obj = ch->in_room->contents; obj; obj = obj->next_content) {
@@ -2940,7 +2939,7 @@ ACMD(do_assense)
         mag = 0;
       else if (init)
         mag -= GET_GRADE(vict) * 100;
-      strcpy(buf, make_desc(ch, vict, buf2, 2));
+      strcpy(buf, make_desc(ch, vict, buf2, 2, FALSE));
       if (success < 3) {
         if (vict->cyberware)
           strcat(buf, " has cyberware present and");
