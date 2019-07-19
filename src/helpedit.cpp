@@ -280,11 +280,17 @@ const char *generate_sql_for_helpfile(const char *name, const char *body) {
 
 // Given a helpfile's name, generate the SQL to restore it.
 const char *generate_sql_for_helpfile_by_name(const char *name) {
-  if (!name || !*name)
+  if (!name || !*name) {
+    sprintf(buf3, "SYSERR: generate_sql_for_helpfile_by_name received name '%s'.", name);
+    mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
     return NULL;
+  }
   
-  if (strchr(name, '%'))
+  if (strchr(name, '%')) {
+    sprintf(buf3, "SYSERR: generate_sql_for_helpfile_by_name received name that contained %% '%s'.", name);
+    mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
     return NULL;
+  }
   
   char quotebuf[500];
   sprintf(buf, "SELECT * FROM help_topic WHERE name='%s'", prepare_quotes(quotebuf, name, sizeof(quotebuf)));
@@ -300,5 +306,7 @@ const char *generate_sql_for_helpfile_by_name(const char *name) {
   }
   mysql_free_result(res);
   
+  sprintf(buf3, "SYSERR: Received invalid name '%s' to generate_sql_for_helpfile_by_name, returning no query.", name);
+  mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
   return NULL;
 }
