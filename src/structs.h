@@ -1120,7 +1120,7 @@ struct help_data {
   
   // Set title_to_keep to NULL for a new helpfile.
   help_data(const char *title_to_keep_for_sql) :
-    original_title(NULL), title("an unoriginal helpfile"), body(NULL), category(0), links(NULL)
+    original_title(NULL), title(NULL), body(NULL), category(0), links(NULL)
   {
     original_title = title_to_keep_for_sql;
   }

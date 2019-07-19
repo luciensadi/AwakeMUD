@@ -225,18 +225,20 @@ void helpedit_parse(struct descriptor_data *d, const char *arg) {
         return;
       }
       
-      // Check for clobber.
-      sprintf(buf, "SELECT name FROM help_topic WHERE `name`='%s'",
-              prepare_quotes(buf2, arg, sizeof(buf2)));
-      mysql_wrapper(mysql, buf);
-      res = mysql_use_result(mysql);
-      row = mysql_fetch_row(res);
-      if (row) {
+      // Check for clobber. Ignore clobber if it's this file's own title.
+      if (HELPFILE->original_title && str_cmp(arg, HELPFILE->original_title) != 0) {
+        sprintf(buf, "SELECT name FROM help_topic WHERE `name`='%s'",
+                prepare_quotes(buf2, arg, sizeof(buf2)));
+        mysql_wrapper(mysql, buf);
+        res = mysql_use_result(mysql);
+        row = mysql_fetch_row(res);
+        if (row) {
+          mysql_free_result(res);
+          send_to_char("A helpfile by that name already exists. Select something else: \r\n", CH);
+          return;
+        }
         mysql_free_result(res);
-        send_to_char("A helpfile by that name already exists. Select something else: \r\n", CH);
-        return;
       }
-      mysql_free_result(res);
       
       // Accept the new string and store it in our temporary edit struct.
       DELETE_ARRAY_IF_EXTANT(HELPFILE->title);
