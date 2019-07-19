@@ -14,10 +14,10 @@ A fork of the [Awakened Worlds](http://awakenedworlds.net) MUD codebase. Issues 
 
 ## OS Support
 Tested on:
-- OSX 10.12, 10.13
-- Ubuntu 14 and 16 LTS
-- Raspbian Jessie
+- OSX 10.14 (actively); 10.13 and 10.12 believed to work but not actively tested
+- Ubuntu 18 LTS (actively); 16 and 14 same as above
 - Amazon Linux
+- Raspbian Jessie (no longer actively tested)
 - Cygwin (beta)
 
 ## Installation (Ubuntu commands in parentheses)
@@ -66,3 +66,5 @@ If you get an error like `MYSQLERROR: Data too long for column 'Password' at row
 If you get an error like `error while loading shared libraries: libsodium.so.23: cannot open shared object file: No such file or directory`, your path does not include the directory libsodium is in. You can find libsodium.so's directory with `sudo find / -name libsodium.so`, then optionally symlink it with `ln -s /the/directory/it/was/in/libsodium.so.XXX /usr/lib/libsodium.so.XXX`, where XXX is the numbers indicated in the original error. This is probably not an ideal fix, so if anyone has a better suggestion, please file an issue!
 
 If you get an error like `MYSQLERROR: Table 'awakemud.pfiles_mail' doesn't exist`, you need to run the command found in `SQL/mail_fixes.sql` in your database. This will upgrade your database to be compatible with the new mail system. This command is automatically run for new databases.
+
+If it takes an exceedingly long time between you entering your password and the MUD responding, but the MUD is responsive for all other input, the machine that's hosting the MUD is not powerful enough for the password storage algorithm used by default. You may opt to either endure the delay (more secure, less convenient) or add `-DNOCRYPT` to your Makefile (not at all secure, convenient, will break all current passwords and require you to either fix them by hand or purge and re-create your database and all characters in it).
