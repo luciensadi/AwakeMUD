@@ -344,7 +344,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
   MYSQL_ROW row;
   sprintf(buf, "SELECT * FROM pfiles WHERE Name='%s';", name);
   mysql_wrapper(mysql, buf);
-  res = mysql_use_result(mysql);
+  if (!(res = mysql_use_result(mysql))) {
+    return FALSE;
+  }
   row = mysql_fetch_row(res);
   if (!row && mysql_field_count(mysql)) {
     mysql_free_result(res);

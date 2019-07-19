@@ -1029,22 +1029,22 @@ ACMD(do_gen_comm)
     send_to_char(ch, "%s\r\n", buf);
     
     channel = COMM_CHANNEL_RPE;
-    str_to_add_return_to = str_dup(buf);
-    strcat(str_to_add_return_to, "\r\n");
+    str_to_add_return_to = new char[strlen(buf) + 4];
+    sprintf(str_to_add_return_to, "%s\r\n", buf);
     store_message_to_history(ch->desc, channel, str_to_add_return_to);
   } else if (subcmd == SCMD_HIREDTALK) {
     sprintf(buf, "%s%s ^y[^YHIRED^y]^Y %s^n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), argument);
     send_to_char(ch, "%s\r\n", buf);
     channel = COMM_CHANNEL_HIRED;
-    str_to_add_return_to = str_dup(buf);
-    strcat(str_to_add_return_to, "\r\n");
+    str_to_add_return_to = new char[strlen(buf) + 4];
+    sprintf(str_to_add_return_to, "%s\r\n", buf);
     store_message_to_history(ch->desc, channel, str_to_add_return_to);
   } else {
     sprintf(buf, "%s%s |]newbie[| %s^n", com_msgs[subcmd][3], GET_CHAR_NAME(ch), argument);
     send_to_char(ch, "%s\r\n", buf);
     channel = COMM_CHANNEL_NEWBIE;
-    str_to_add_return_to = str_dup(buf);
-    strcat(str_to_add_return_to, "\r\n");
+    str_to_add_return_to = new char[strlen(buf) + 4];
+    sprintf(str_to_add_return_to, "%s\r\n", buf);
     store_message_to_history(ch->desc, channel, str_to_add_return_to);
   }
 

@@ -2417,6 +2417,8 @@ ACMD(do_last)
   int level = 0;
   long idnum = 0, lastdisc = 0;
   char *name = NULL, *host = NULL;
+  MYSQL_RES *res;
+  MYSQL_ROW row;
 
   one_argument(argument, arg);
   if (!*arg) {
@@ -2427,9 +2429,11 @@ ACMD(do_last)
   if (!(vict = get_player_vis(ch, arg, FALSE))) {
     from_file = TRUE;
     sprintf(buf, "SELECT Idnum, Rank, Host, LastD, Name FROM pfiles WHERE name='%s';", prepare_quotes(buf2, arg, sizeof(buf2) / sizeof(buf2[0])));
-    mysql_wrapper(mysql, buf);
-    MYSQL_RES *res = mysql_use_result(mysql);
-    MYSQL_ROW row = mysql_fetch_row(res);
+    if (mysql_wrapper(mysql, buf))
+      return;
+    if (!(res = mysql_use_result(mysql)))
+      return;
+    row = mysql_fetch_row(res);
     if (!row && mysql_field_count(mysql)) {
       mysql_free_result(res);
       send_to_char("There is no such player.\r\n", ch);

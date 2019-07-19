@@ -847,8 +847,7 @@ ACMD(do_gen_write)
     send_to_char("Could not open the file.  Sorry.\r\n", ch);
     return;
   }
-  fprintf(fl, "%-8s (%6.6s) [%5ld] %s\n", (ch->desc->original ? GET_CHAR_NAME(ch->desc->original) :
-                                           GET_CHAR_NAME(ch)), (tmp + 4), GET_ROOM_VNUM(ch->in_room), argument);
+  fprintf(fl, "%-8s (%6.6s) [%5ld] %s\n", GET_CHAR_NAME(ch), (tmp + 4), GET_ROOM_VNUM(get_ch_in_room(ch)), argument);
   fclose(fl);
   
 #ifdef GITHUB_INTEGRATION
@@ -1928,8 +1927,7 @@ ACMD(do_astral)
   if (!ch->player.astral_text.name)
     ch->player.astral_text.name = str_dup("a reflection");
   if (!ch->player.astral_text.room_desc)
-    ch->player.astral_text.room_desc =
-      str_dup("The reflection of some physical being stands here.\r\n");
+    ch->player.astral_text.room_desc = str_dup("The reflection of some physical being stands here.\r\n");
 
   GET_POS(ch) = POS_SITTING;
   astral = read_mobile(r_num, REAL);
@@ -3871,8 +3869,10 @@ ACMD(do_tridlog)
   if (is_abbrev(arg, "display")) {
     send_to_char("Idnum	Author		Message\r\n"
                  "--------------------------------------------------------------------------------------\r\n", ch);
-    mysql_wrapper(mysql, "SELECT * FROM trideo_broadcast ORDER BY idnum");
-    res = mysql_use_result(mysql);
+    if (mysql_wrapper(mysql, "SELECT * FROM trideo_broadcast ORDER BY idnum"))
+      return;
+    if (!(res = mysql_use_result(mysql)))
+      return;
     while ((row = mysql_fetch_row(res)))
       send_to_char(ch, "%ld	%ld		%s\r\n", atol(row[0]), atol(row[1]), row[2]);
     mysql_free_result(res);
