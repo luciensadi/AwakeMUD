@@ -184,7 +184,7 @@ void helpedit_parse_main_menu(struct descriptor_data *d, const char *arg) {
       }
       
       // Compose and execute the insert-on-duplicate-key-update query.
-      if (mysql_wrapper(mysql, generate_sql_for_helpfile(HELPFILE->title, HELPFILE->body)))
+      if (mysql_wrapper(mysql, generate_sql_for_helpfile(HELPFILE->title ? HELPFILE->title : HELPFILE->original_title, HELPFILE->body)))
         send_to_char("Sorry, something went wrong with saving your edit!\r\n", CH);
       // fallthrough
     case 'x': // Discard the player's editing struct.
@@ -256,6 +256,11 @@ void helpedit_parse(struct descriptor_data *d, const char *arg) {
 }
 
 const char *generate_sql_for_helpfile(const char *name, const char *body) {
+  if (name == NULL) {
+    mudlog("SYSERR: NULL name or body pointer passed to generate_sql_for_helpfile!", NULL, LOG_SYSLOG, TRUE);
+    return "";
+  }
+  
   char name_buf[strlen(name) * 2 + 1];
   char body_buf[strlen(body) * 2 + 1];
   
