@@ -4114,7 +4114,7 @@ SPECIAL(chargen_hopper)
     modulator = read_object(modulator_rnum, REAL);
     make_newbie(modulator);
     obj_to_obj(modulator, hopper);
-    mudlog("DEBUG: Loaded hopper with modulator.", NULL, LOG_SYSLOG, TRUE);
+    //mudlog("DEBUG: Loaded hopper with modulator.", NULL, LOG_SYSLOG, TRUE);
   }
   
   if (CMD_IS("get")) {
