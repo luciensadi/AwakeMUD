@@ -130,8 +130,12 @@ void helpedit_disp_menu(struct descriptor_data *d) {
   else // Old file, new title.
     send_to_char(CH, "1) Helpfile title: ^c%s^n  (was: ^c%s^n)\r\n", HELPFILE->title, HELPFILE->original_title);
   
-  send_to_char(CH, "2) Helpfile body:\r\n%s\r\n", HELPFILE->body);
+  send_to_char(CH, "2) Helpfile body:\r\n%s\r\n", DOUBLE_UP_COLOR_CODES_IF_NEEDED(HELPFILE->body));
   send_to_char("\r\n", CH);
+  if (d->edit_convert_color_codes)
+    send_to_char("t) Restore color codes\r\n", CH);
+  else
+    send_to_char("t) Toggle color codes\r\n", CH);
   send_to_char("q) Save and quit\r\n", CH);
   send_to_char("x) Quit without saving\r\n", CH);
   send_to_char("Enter selection: ", CH);
@@ -161,6 +165,13 @@ void helpedit_parse_main_menu(struct descriptor_data *d, const char *arg) {
       char str_buf[50];
       sprintf(str_buf, "/**/");
       string_add(d, str_buf);
+      break;
+    case 't':
+      if ((d->edit_convert_color_codes = !d->edit_convert_color_codes))
+        send_to_char("OK, color codes for the body will be displayed as tags for easier copy-paste.\r\n", CH);
+      else
+        send_to_char("OK, color codes will be re-enabled.\r\n", CH);
+      helpedit_disp_menu(d);
       break;
     case 'q': // Save the edit.
       char query_buf[MAX_STRING_LENGTH];

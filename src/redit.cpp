@@ -113,8 +113,7 @@ void redit_disp_extradesc_menu(struct descriptor_data * d)
                "1) Keyword: %s%s%s\r\n"
                "2) Description:\r\n%s\r\n", CCCYN(CH, C_CMP),
                extra_desc->keyword, CCNRM(CH, C_CMP),
-               (extra_desc->description ?
-                (d->edit_convert_color_codes ? double_up_color_codes(extra_desc->description) : extra_desc->description) : "(none)"));
+               extra_desc->description ? DOUBLE_UP_COLOR_CODES_IF_NEEDED(extra_desc->description) : "(none)");
   send_to_char(CH, "3) %s\r\n"
                "Enter Choice:\r\n",
                (extra_desc->next ? "Another description set. (not viewed)" : "Another description"));
@@ -156,8 +155,7 @@ void redit_disp_exit_menu(struct descriptor_data * d)
   send_to_char(CH,      "1) Exit to: %s%d%s\r\n"
                "2) Description: %s\r\n",
                CCCYN(CH, C_CMP), DOOR->to_room_vnum, CCNRM(CH, C_CMP),
-               (DOOR->general_description ?
-                (d->edit_convert_color_codes ? double_up_color_codes(DOOR->general_description) : DOOR->general_description) : "(None)"));
+               (DOOR->general_description ? DOUBLE_UP_COLOR_CODES_IF_NEEDED(DOOR->general_description) : "(None)"));
   send_to_char(CH,      "3) Door keywords (first one is its name too): %s%s%s\r\n"
                "4) Key vnum: %s%d%s\r\n"
                "5) Door flag: %s%s%s\r\n",
@@ -256,11 +254,10 @@ void redit_disp_menu(struct descriptor_data * d)
   send_to_char(CH, "Room number: %s%d%s\r\n"
                "1) Room name: %s%s%s\r\n",
                CCCYN(CH, C_CMP), d->edit_number, CCNRM(CH, C_CMP),
-               CCCYN(CH, C_CMP),
-               d->edit_convert_color_codes ? double_up_color_codes(d->edit_room->name) : d->edit_room->name,
+               CCCYN(CH, C_CMP), DOUBLE_UP_COLOR_CODES_IF_NEEDED(d->edit_room->name),
                CCNRM(CH, C_CMP));
-  send_to_char(CH, "2) Room Desc:\r\n%s\r\n", d->edit_convert_color_codes ? double_up_color_codes(d->edit_room->description) : d->edit_room->description);
-  send_to_char(CH, "3) Night Desc: \r\n%s\r\n", d->edit_convert_color_codes ? double_up_color_codes(d->edit_room->night_desc) : d->edit_room->night_desc);
+  send_to_char(CH, "2) Room Desc:\r\n%s\r\n", DOUBLE_UP_COLOR_CODES_IF_NEEDED(d->edit_room->description));
+  send_to_char(CH, "3) Night Desc: \r\n%s\r\n", DOUBLE_UP_COLOR_CODES_IF_NEEDED(d->edit_room->night_desc));
   send_to_char(CH, "Room zone: %s%d%s\r\n",
                CCCYN(CH, C_CMP),
                zone_table[d->edit_room->zone].number,
