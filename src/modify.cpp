@@ -450,8 +450,11 @@ void string_add(struct descriptor_data *d, char *str)
 
     if (!d->connected && d->character && !IS_NPC(d->character))
       PLR_FLAGS(d->character).RemoveBit(PLR_WRITING);
-  } else
-    strcat(*d->str, "\r\n");
+  } else {
+    // Only add a newline if it's not just /**/ with nothing else in it.
+    if (strcmp(*d->str, "/**/") != 0)
+      strcat(*d->str, "\r\n");
+  }
 }
 
 

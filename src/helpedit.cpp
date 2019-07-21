@@ -165,12 +165,16 @@ void helpedit_parse_main_menu(struct descriptor_data *d, const char *arg) {
     case 'q': // Save the edit.
       char query_buf[MAX_STRING_LENGTH];
       if (HELPFILE->title && HELPFILE->original_title && strcmp(HELPFILE->title, HELPFILE->original_title) != 0) {
-        // Log the action.
+        // Updated existing and changed name.
         sprintf(buf, "%s wrote new helpfile '%s' (renamed from '%s').", GET_CHAR_NAME(CH), HELPFILE->title, HELPFILE->original_title);
         mudlog(buf, CH, LOG_SYSLOG, TRUE);
+      } else if (HELPFILE->original_title && !HELPFILE->title) {
+        // Updated existing.
+        sprintf(buf, "%s wrote new helpfile '%s'.", GET_CHAR_NAME(CH), HELPFILE->original_title);
+        mudlog(buf, CH, LOG_SYSLOG, TRUE);
       } else {
-        // Log the action.
-        sprintf(buf, "%s wrote new helpfile '%s'.", GET_CHAR_NAME(CH), HELPFILE->title);
+        // Created new.
+        sprintf(buf, "%s wrote new helpfile '%s'.", GET_CHAR_NAME(CH), HELPFILE->title ? HELPFILE->title : HELPFILE->original_title);
         mudlog(buf, CH, LOG_SYSLOG, TRUE);
       }
       
