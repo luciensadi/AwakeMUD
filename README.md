@@ -1,7 +1,7 @@
 # AwakeMUD Community Edition
 A fork of the [Awakened Worlds](http://awakenedworlds.net) MUD codebase. Issues and pull requests welcome!
 
-**The current test port for AwakeMUD Community Edition can be reached at mudtest.mooo.com port 4000.** Many thanks to Jan for running the previous test port for so long.
+**The current test port for AwakeMUD Community Edition can be reached at mudtest.mooo.com port 4000.** Many thanks to Finster for running the previous test port for so long.
 
 **Join our Discord channel!** https://discord.gg/q5VCMkv
 
