@@ -2075,7 +2075,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
   }
   
   if (j->source_info) {
-    sprintf(ENDOF(buf), "\r\nIt references data from the following source book(s): %s^n\r\n");
+    sprintf(ENDOF(buf), "\r\nIt references data from the following source book(s): %s^n\r\n", j->source_info);
   }
   
   send_to_char(buf, ch);
