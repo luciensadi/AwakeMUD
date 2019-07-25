@@ -1532,6 +1532,11 @@ void parse_object(File &fl, long nr)
       obj->affected[i].modifier = data.GetInt(field, 0);
     }
   }
+  
+  // Read in source book data, if any.
+  if (data.DoesFieldExist("SourceBook")) {
+    obj->source_info = str_dup(data.GetString("SourceBook", "(none)"));
+  }
 
   // finally, read in extra descriptions
   for (i = 0; true; i++) {

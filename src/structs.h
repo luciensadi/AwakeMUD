@@ -101,7 +101,9 @@ struct obj_data
   char *restring;
   char *photo;
   char *graffiti;
-
+  
+  char *source_info; // Where in the source books did this come from?
+  
   struct char_data *carried_by;   /* Carried by :NULL in room/conta   */
   struct char_data *worn_by;      /* Worn by?                         */
   sh_int worn_on;                 /* Worn where?                      */
@@ -118,8 +120,8 @@ struct obj_data
   int canary;
 #endif
   obj_data() :
-      in_room(NULL), in_veh(NULL), ex_description(NULL), restring(NULL), photo(NULL), graffiti(NULL), carried_by(NULL),
-      worn_by(NULL), in_obj(NULL), contains(NULL), next_content(NULL), targ(NULL), tveh(NULL)
+      in_room(NULL), in_veh(NULL), ex_description(NULL), restring(NULL), photo(NULL), graffiti(NULL), source_info(NULL),
+      carried_by(NULL), worn_by(NULL), in_obj(NULL), contains(NULL), next_content(NULL), targ(NULL), tveh(NULL)
   {}
 };
 /* ======================================================================= */

@@ -2073,6 +2073,11 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     strcat(buf, buf1);
     strcat(buf, "^n\r\n");
   }
+  
+  if (j->source_info) {
+    sprintf(ENDOF(buf), "\r\nIt references data from the following source book(s): %s^n\r\n");
+  }
+  
   send_to_char(buf, ch);
 }
 
