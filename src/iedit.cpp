@@ -1165,11 +1165,12 @@ void iedit_disp_menu(struct descriptor_data * d)
                GET_OBJ_VAL(d->edit_obj, 6), GET_OBJ_VAL(d->edit_obj, 7),
                GET_OBJ_VAL(d->edit_obj, 8), GET_OBJ_VAL(d->edit_obj, 9),
                GET_OBJ_VAL(d->edit_obj, 10), GET_OBJ_VAL(d->edit_obj, 11));
-  send_to_char("h) Item applies:\r\n"
+  send_to_char(CH, "h) Item applies:\r\n"
                "i) Item extra descriptions:\r\n"
+               "j) Source book: ^c%s^n\r\n"
                "q) Quit and save\r\n"
                "x) Exit and abort\r\n"
-               "Enter your choice:\r\n", CH);
+               "Enter your choice:\r\n", d->edit_obj->source_info ? d->edit_obj->source_info : "<none>");
   d->edit_mode = IEDIT_MAIN_MENU;
 }
 
@@ -1517,6 +1518,11 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           d->misc_data = (void **) &(d->edit_obj->ex_description);
           iedit_disp_extradesc_menu(d);
           break;
+        case 'j':
+        case 'J':
+          send_to_char("Enter sourcebook info (abbreviation and pages, ex: MitS p34, 37-48):", d->character);
+          d->edit_mode = IEDIT_SOURCEINFO;
+          break;
         default:
           /* hm, i just realized you probably can't see this.. maybe prompt for
            * an extra RETURN. well, maybe later */
@@ -1543,6 +1549,11 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       break;
     case IEDIT_LONGDESC:
       // we should not get here
+      break;
+    case IEDIT_SOURCEINFO:
+      DELETE_ARRAY_IF_EXTANT(d->edit_obj->source_info);
+      d->edit_obj->source_info = str_dup(arg);
+      iedit_disp_menu(d);
       break;
     case IEDIT_TYPE:
       number = atoi(arg);
@@ -2685,6 +2696,11 @@ void write_objs_to_disk(int zone)
                   "\tModifier:\t%d\n", counter2,
                   apply_types[(int)af->location], af->modifier);
         }
+      }
+      
+      /* do we have source book info? */
+      if (obj->source_info) {
+        fprintf(fp, "SourceBook:\t%s\n", obj->source_info);
       }
       
       fprintf(fp, "BREAK\n");
