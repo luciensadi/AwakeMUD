@@ -3272,7 +3272,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   bool melee = FALSE;
   
   // Precondition: If you're wielding a non-weapon, back out.
-  if (att->weapon && GET_OBJ_TYPE(att->weapon) != ITEM_WEAPON) {
+  if (att->weapon && (GET_OBJ_TYPE(att->weapon) != ITEM_WEAPON && GET_OBJ_TYPE(att->weapon) != ITEM_FIREWEAPON)) {
     send_to_char(att->ch, "You struggle to figure out how to attack while using %s as a weapon!\r\n", decapitalize_a_an(GET_OBJ_NAME(att->weapon)));
     return;
   }
@@ -3650,7 +3650,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       net_successes = att->successes;
     }
     
-    if (def->weapon ? GET_OBJ_TYPE(def->weapon) != ITEM_WEAPON : FALSE) {
+    if (def->weapon ? (GET_OBJ_TYPE(def->weapon) != ITEM_WEAPON || GET_OBJ_TYPE(att->weapon) != ITEM_FIREWEAPON) : FALSE) {
       // Defender's wielding a non-weapon? Whoops, net successes will never be less than 0.
       net_successes = MAX(0, net_successes);
     }

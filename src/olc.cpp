@@ -418,6 +418,7 @@ ACMD(do_rclone)
 ACMD(do_dig)
 {
   int counter, dir, room, zone1 = 0, zone2 = 0;
+  struct room_data *in_room = get_ch_in_room(ch);
 
   any_one_arg(any_one_arg(argument, arg), buf);
 
@@ -426,8 +427,12 @@ ACMD(do_dig)
     return;
   }
 
-  if (!*arg || !*buf) {
+  if (subcmd == SCMD_DIG && (!*arg || !*buf)) {
     send_to_char("Usage: dig <direction> <vnum>\r\n", ch);
+    return;
+  }
+  else if (subcmd == SCMD_UNDIG && !*arg) {
+    send_to_char("Usage: undig <direction>\r\n", ch);
     return;
   }
 
@@ -443,12 +448,16 @@ ACMD(do_dig)
     return;
   }
 
-  if (!atoi(buf)) {
-    send_to_char("Please enter a valid room.\r\n", ch);
-    return;
-  }
+  if (subcmd == SCMD_DIG) {
+    if (!atoi(buf)) {
+      send_to_char("Please enter a valid room.\r\n", ch);
+      return;
+    }
 
-  room = real_room(atoi(buf));
+    room = real_room(atoi(buf));
+  } else {
+    room = real_room(in_room->number);
+  }
 
   if (room == -1) {
     send_to_char("No such room.\r\n", ch);
@@ -456,8 +465,8 @@ ACMD(do_dig)
   }
 
   for (counter = 0; counter <= top_of_zone_table; counter++) {
-    if (ch->in_room->number >= (zone_table[counter].number * 100) &&
-        ch->in_room->number <= zone_table[counter].top)
+    if (in_room->number >= (zone_table[counter].number * 100) &&
+        in_room->number <= zone_table[counter].top)
       zone1 = counter;
     if (world[room].number >= (zone_table[counter].number * 100) &&
         world[room].number <= zone_table[counter].top)
@@ -469,31 +478,52 @@ ACMD(do_dig)
     return;
   }
 
-  if (ch->in_room->dir_option[dir] || world[room].dir_option[rev_dir[dir]]) {
+  if (subcmd == SCMD_DIG && (in_room->dir_option[dir] || world[room].dir_option[rev_dir[dir]])) {
     send_to_char("You can't dig over an existing exit.\r\n", ch);
     return;
   }
+  
+  if (subcmd == SCMD_UNDIG && !in_room->dir_option[dir]){
+    send_to_char("There's no exit in that direction to undig.\r\n", ch);
+    return;
+  }
 
-  ch->in_room->dir_option[dir] = new room_direction_data;
-  memset((char *) ch->in_room->dir_option[dir], 0, sizeof (struct room_direction_data));
-  ch->in_room->dir_option[dir]->to_room = &world[room];
-  ch->in_room->dir_option[dir]->barrier = 4;
-  ch->in_room->dir_option[dir]->material = 5;
-  ch->in_room->dir_option[dir]->exit_info = 0;
-  ch->in_room->dir_option[dir]->to_room_vnum = world[room].number;
-  dir = rev_dir[dir];
-  world[room].dir_option[dir] = new room_direction_data;
-  memset((char *) world[room].dir_option[dir], 0, sizeof (struct room_direction_data));
-  world[room].dir_option[dir]->to_room = ch->in_room;
-  world[room].dir_option[dir]->barrier = 4;
-  world[room].dir_option[dir]->material = 5;
-  world[room].dir_option[dir]->exit_info = 0;
-  world[room].dir_option[dir]->to_room_vnum = ch->in_room->number;
-  if (zone1 == zone2)
-    write_world_to_disk(zone_table[zone1].number);
-  else {
-    write_world_to_disk(zone_table[zone1].number);
-    write_world_to_disk(zone_table[zone2].number);
+  if (subcmd == SCMD_DIG) {
+    in_room->dir_option[dir] = new room_direction_data;
+    memset((char *) in_room->dir_option[dir], 0, sizeof (struct room_direction_data));
+    in_room->dir_option[dir]->to_room = &world[room];
+    in_room->dir_option[dir]->barrier = 4;
+    in_room->dir_option[dir]->material = 5;
+    in_room->dir_option[dir]->exit_info = 0;
+    in_room->dir_option[dir]->to_room_vnum = world[room].number;
+    dir = rev_dir[dir];
+    world[room].dir_option[dir] = new room_direction_data;
+    memset((char *) world[room].dir_option[dir], 0, sizeof (struct room_direction_data));
+    world[room].dir_option[dir]->to_room = in_room;
+    world[room].dir_option[dir]->barrier = 4;
+    world[room].dir_option[dir]->material = 5;
+    world[room].dir_option[dir]->exit_info = 0;
+    world[room].dir_option[dir]->to_room_vnum = in_room->number;
+    if (zone1 == zone2)
+      write_world_to_disk(zone_table[zone1].number);
+    else {
+      write_world_to_disk(zone_table[zone1].number);
+      write_world_to_disk(zone_table[zone2].number);
+    }
+  } else {
+    // Delete the reverse exit, if it exists.
+    if (in_room->dir_option[dir]->to_room && in_room->dir_option[dir]->to_room->dir_option[rev_dir[dir]]) {
+      DELETE_IF_EXTANT(in_room->dir_option[dir]->to_room->dir_option[rev_dir[dir]]->keyword);
+      DELETE_IF_EXTANT(in_room->dir_option[dir]->to_room->dir_option[rev_dir[dir]]->general_description);
+      delete in_room->dir_option[dir]->to_room->dir_option[rev_dir[dir]];
+      in_room->dir_option[dir]->to_room->dir_option[rev_dir[dir]] = NULL;
+    }
+    
+    // Delete this room's exit.
+    DELETE_IF_EXTANT(in_room->dir_option[dir]->keyword);
+    DELETE_IF_EXTANT(in_room->dir_option[dir]->general_description);
+    delete in_room->dir_option[dir];
+    in_room->dir_option[dir] = NULL;
   }
   send_to_char("Done.\r\n", ch);
 }

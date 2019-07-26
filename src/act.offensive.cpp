@@ -141,7 +141,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
   
   // If you're wielding a non-weapon, give an error message and bail.
   struct obj_data *weapon = GET_EQ(ch, WEAR_WIELD) ? GET_EQ(ch, WEAR_WIELD) : GET_EQ(ch, WEAR_HOLD);
-  if (weapon && GET_OBJ_TYPE(weapon) != ITEM_WEAPON) {
+  if (weapon && (GET_OBJ_TYPE(weapon) != ITEM_WEAPON && GET_OBJ_TYPE(weapon) != ITEM_FIREWEAPON)) {
     send_to_char(ch, "You can't figure out how to attack while using %s as a weapon.\r\n", decapitalize_a_an(GET_OBJ_NAME(weapon)));
     return TRUE;
   }
