@@ -3718,7 +3718,7 @@ SPECIAL(floor_has_glass_shards) {
 
 SPECIAL(bouncer_gentle)
 {
-  ACMD(do_look);
+  ACMD_CONST(do_look);
   
   if (!cmd)
     return FALSE;
@@ -3746,7 +3746,7 @@ SPECIAL(bouncer_gentle)
     char_from_room(ch);
     char_to_room(ch, &world[real_room(toroom)]);
     act("$n is escorted in by $N, who gives $m a stern look and departs.", FALSE, ch, 0, bouncer, TO_ROOM);
-    do_look(ch, (char *) "", 0, 0);
+    do_look(ch, "", 0, 0);
     return TRUE;
   }
   

@@ -1595,6 +1595,13 @@ void look_at_target(struct char_data * ch, char *arg)
   
 }
 
+ACMD_CONST(do_look) {
+  char not_const[MAX_STRING_LENGTH];
+  strcpy(not_const, argument);
+  ACMD(do_look);
+  do_look(ch, not_const, cmd, subcmd);
+}
+
 ACMD(do_look)
 {
   static char arg2[MAX_INPUT_LENGTH];
