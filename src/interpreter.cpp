@@ -490,7 +490,7 @@ struct command_info cmd_info[] =
     { "diagnose" , POS_RESTING , do_diagnose , 0, 0 },
     { "dice"     , POS_DEAD    , do_dice     , 0, 0 },
     { "die"      , POS_DEAD    , do_die      , 0, 0 },
-    { "dig"      , POS_RESTING , do_dig      , LVL_BUILDER, 0 },
+    { "dig"      , POS_RESTING , do_dig      , LVL_BUILDER, SCMD_DIG },
     { "dispell"  , POS_SITTING , do_dispell  , 0, 0 },
     { "display"  , POS_DEAD    , do_display  , 0, 0 },
     { "domain"   , POS_LYING   , do_domain   , 0, 0 },
@@ -647,6 +647,7 @@ struct command_info cmd_info[] =
     { "position" , POS_DEAD    , do_position , 0, 0 },
     { "possess"  , POS_DEAD    , do_wizpossess, LVL_FIXER, 0 },
     { "powerdown", POS_DEAD    , do_powerdown, 0, 0 },
+    { "press"    , POS_SITTING , do_push     , 0, 0 },
     { "prompt"   , POS_DEAD    , do_display  , 0, 0 },
     { "project"  , POS_LYING   , do_astral   , 0, SCMD_PROJECT },
     { "pretitle" , POS_DEAD    , do_wiztitle , 0, SCMD_PRETITLE },
@@ -763,6 +764,7 @@ struct command_info cmd_info[] =
     { "typo"     , POS_DEAD    , do_gen_write, 0, SCMD_TYPO },
 
     { "unban"    , POS_DEAD    , do_unban    , LVL_EXECUTIVE, 0 },
+    { "undig"    , POS_RESTING , do_dig      , LVL_BUILDER, SCMD_UNDIG },
     { "ungroup"  , POS_DEAD    , do_ungroup  , 0, 0 },
     { "uninstall", POS_SITTING , do_get      , 0, SCMD_UNINSTALL },
     { "unjack"   , POS_SITTING , do_jack     , 0, 1},
@@ -1830,6 +1832,21 @@ char *any_one_arg(char *argument, char *first_arg)
   return argument;
 }
 
+// Same as above, but without skip_spaces.
+const char *any_one_arg_const(const char *argument, char *first_arg)
+{
+  if (!argument)
+    return NULL;
+  
+  while (*argument && !isspace(*argument)) {
+    *(first_arg++) = LOWER(*argument);
+    argument++;
+  }
+  
+  *first_arg = '\0';
+  
+  return argument;
+}
 
 /*
  * Same as one_argument except that it takes two args and returns the rest;

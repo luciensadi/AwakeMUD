@@ -34,7 +34,7 @@ int objList::PrintList(struct char_data *ch, const char *arg)
 
   for (;temp; temp = temp->next)
     if (temp->data && CAN_SEE_OBJ(ch, temp->data)
-        && isname((char *)arg, temp->data->text.keywords))
+        && isname(arg, temp->data->text.keywords))
       print_object_location(++num, temp->data, ch, TRUE);
 
   return num;

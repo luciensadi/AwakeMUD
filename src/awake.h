@@ -1596,6 +1596,10 @@ enum {
 
 /* Subcommands section: Originally from interpreter.h */
 
+/* do_dig */
+#define SCMD_DIG        0
+#define SCMD_UNDIG      1
+
 /* directions */
 #define SCMD_NORTH      1
 #define SCMD_NORTHEAST  2

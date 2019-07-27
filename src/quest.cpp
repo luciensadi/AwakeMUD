@@ -1642,7 +1642,7 @@ void qedit_parse(struct descriptor_data *d, const char *arg)
   case QEDIT_MIN_REP:
     number = atoi(arg);
     if (number < 0 || number > 500)
-      send_to_char("Invalid value.  Enter minimum reputation: ", CH);
+      send_to_char("Invalid value.  Enter minimum reputation between 0-500: ", CH);
     else {
       QUEST->min_rep = number;
       send_to_char("Enter maximum reputation: ", CH);

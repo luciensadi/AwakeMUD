@@ -664,7 +664,7 @@ ACMD(do_teleport)
     char_from_room(victim);
     char_to_room(victim, target);
     act("$n arrives from a puff of smoke.", FALSE, victim, 0, 0, TO_ROOM);
-    act("$n has teleported you!", FALSE, ch, 0, (char *) victim, TO_VICT);
+    act("$n has teleported you!", FALSE, ch, 0, victim, TO_VICT);
     look_at_room(victim, 0);
     sprintf(buf2, "%s teleported %s to %s",
             GET_CHAR_NAME(ch), IS_NPC(victim) ? GET_NAME(victim) : GET_CHAR_NAME(victim), target->name);
@@ -1136,8 +1136,8 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
     sprintf(ENDOF(buf), ", Status: Mortal \r\nRep: [^y%3d^n] Not: [^y%3d^n] TKE: [^y%3d^n]\r\n",
             GET_REP(k), GET_NOT(k), GET_TKE(k));
 
-  strcpy(buf1, (char *) asctime(localtime(&(k->player.time.birth))));
-  strcpy(buf2, (char *) asctime(localtime(&(k->player.time.lastdisc))));
+  strcpy(buf1, (const char *) asctime(localtime(&(k->player.time.birth))));
+  strcpy(buf2, (const char *) asctime(localtime(&(k->player.time.lastdisc))));
   buf1[10] = buf2[10] = '\0';
 
   sprintf(ENDOF(buf), "Created: [%s], Last Online: [%s], Played [%dh %dm]\r\n",
@@ -2394,7 +2394,7 @@ ACMD(do_date)
   else
     mytime = boot_time;
 
-  tmstr = (char *) asctime(localtime(&mytime));
+  tmstr = (char *) asctime(localtime(&mytime)); // technically kosher; "The returned value points to an internal array whose validity or value may be altered by any subsequent call to asctime or ctime."
   *(tmstr + strlen(tmstr) - 1) = '\0';
 
   if (subcmd == SCMD_DATE)

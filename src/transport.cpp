@@ -836,7 +836,7 @@ SPECIAL(call_elevator)
       if (elevator[i].floor[j].vnum == ch->in_room->number)
         index = i;
 
-  if (CMD_IS("push")) {
+  if (CMD_IS("push") || CMD_IS("press")) {
     skip_spaces(&argument);
     if (!*argument || !(!strcasecmp("elevator", argument) ||
                         !strcasecmp("button", argument)))
@@ -1095,7 +1095,7 @@ static int process_elevator(struct room_data *room,
       close_elevator_doors(room, num, room->rating);
       elevator[num].dir = -1;
     }
-  } else if (CMD_IS("push"))
+  } else if (CMD_IS("push") || CMD_IS("press"))
   {
     if (IS_ASTRAL(ch)) {
       send_to_char("You can't do that in your current state.\r\n", ch);

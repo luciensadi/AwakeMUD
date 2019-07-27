@@ -2445,7 +2445,7 @@ int find_skill_num(char *name)
       return index;
     
     ok = 1;
-    temp = any_one_arg((char *)skills[index].name, first);
+    temp = any_one_arg(skills[index].name, first);
     temp2 = any_one_arg(name, first2);
     while (*first && *first2 && ok) {
       if (!is_abbrev(first2, first))
@@ -2464,7 +2464,7 @@ int find_skill_num(char *name)
 int find_spell_num(char *name)
 {
   int index = 0, ok;
-  char *temp, *temp2;
+  const char *temp, *temp2;
   char first[256], first2[256];
   
   while (++index < MAX_SPELLS) {
@@ -2472,13 +2472,13 @@ int find_spell_num(char *name)
       return index;
     
     ok = 1;
-    temp = any_one_arg((char *)spells[index].name, first);
+    temp = any_one_arg_const(spells[index].name, first);
     temp2 = any_one_arg(name, first2);
     while (*first && *first2 && ok) {
       if (!is_abbrev(first2, first))
         ok = 0;
-      temp = any_one_arg(temp, first);
-      temp2 = any_one_arg(temp2, first2);
+      temp = any_one_arg_const(temp, first);
+      temp2 = any_one_arg_const(temp2, first2);
     }
     
     if (ok && !*first2)
