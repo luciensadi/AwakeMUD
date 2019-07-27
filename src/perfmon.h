@@ -16,12 +16,29 @@ size_t PERF_prof_repr_pulse( char *out_buf, size_t n );
 size_t PERF_prof_repr_total( char *out_buf, size_t n );
 size_t PERF_prof_repr_sect( char *out_buf, size_t n, const char *id );
 
-#define PERF_PROF_ENTER( sect, sect_descr ) \
-    static PERF_prof_sect * sect = NULL; \
-    PERF_prof_sect_init( & sect, sect_descr ); \
-    PERF_prof_sect_enter( sect )
 
-#define PERF_PROF_EXIT( sect ) \
-    PERF_prof_sect_exit( sect )
+class PerfProfScope
+{
+public:
+    explicit PerfProfScope(PERF_prof_sect **ptr, const char *id)
+        : ptr_(ptr)
+    {
+        PERF_prof_sect_init(ptr, id);
+        PERF_prof_sect_enter(*ptr);
+    }
+
+    ~PerfProfScope()
+    {
+        PERF_prof_sect_exit(*ptr_);
+    }
+
+private:
+    PERF_prof_sect **ptr_;
+};
+
+#define PERF_PROF_SCOPE( sect, sect_descr ) \
+    static PERF_prof_sect * sect = NULL; \
+    PerfProfScope sect ## scp(&sect, sect_descr);
+
 
 #endif // perfmon_h_

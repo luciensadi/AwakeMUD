@@ -15,11 +15,8 @@ static double const INFINITY = DBL_MAX;
 
 #define PULSE_PER_SECOND 10
 #define SEC_PER_MIN 60
-#define PULSE_PER_MIN (PULSE_PER_SECOND * SEC_PER_MIN)
 #define MIN_PER_HOUR 60
-#define PULSE_PER_HOUR (PULSE_PER_MIN * MIN_PER_HOUR)
 #define HOUR_PER_DAY 24
-#define PULSE_PER_DAY (PULSE_PER_HOUR * HOUR_PER_DAY)
 
 #define USEC_PER_PULSE (1000000 / PULSE_PER_SECOND)
 
@@ -518,7 +515,6 @@ PerfProfMgr::NewSection(const char *id)
 {
     PERF_prof_sect *ptr = new PERF_prof_sect( id );
     mSections[id] = ptr;
-    // mSections.push_back( ptr );
     return ptr;
 }
 

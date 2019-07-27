@@ -4893,7 +4893,7 @@ ACMD(do_perfmon) {
 
     if (!str_cmp( arg1, "all"))
     {
-        char buf[MAX_STRING_LENGTH * 12];
+        char buf[MAX_STRING_LENGTH];
 
         size_t written = PERF_repr( buf, sizeof(buf) );
         written = PERF_prof_repr_total( buf + written, sizeof(buf) - written);
@@ -4903,7 +4903,7 @@ ACMD(do_perfmon) {
     }
     else if (!str_cmp( arg1, "summ"))
     {
-        char buf[MAX_STRING_LENGTH * 12];
+        char buf[MAX_STRING_LENGTH];
 
         PERF_repr( buf, sizeof(buf) );
         page_string(ch->desc, buf, 1);
@@ -4911,7 +4911,7 @@ ACMD(do_perfmon) {
     }
     else if (!str_cmp( arg1, "prof"))
     {
-        char buf[MAX_STRING_LENGTH * 12];
+        char buf[MAX_STRING_LENGTH];
 
         PERF_prof_repr_total( buf, sizeof(buf) );
         page_string(ch->desc, buf, 1);
@@ -4920,7 +4920,7 @@ ACMD(do_perfmon) {
     }
     else if (!str_cmp( arg1, "sect"))
     {
-        char buf[MAX_STRING_LENGTH * 12];
+        char buf[MAX_STRING_LENGTH];
 
         PERF_prof_repr_sect( buf, sizeof(buf), argument );
         page_string(ch->desc, buf, 1);
