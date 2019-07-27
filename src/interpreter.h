@@ -10,13 +10,24 @@
 
 #ifndef _interpreter_h_
 #define _interpreter_h_
+
+#include "perfmon.h"
 /*
 #define ACMD(name)  \
    void (name)(struct char_data *ch, __attribute__ ((unused)) char *argument, __attribute__ ((unused)) int cmd, __attribute__ ((unused)) int subcmd)
 */
 
-#define ACMD(name)   \
+#define ACMD_DECLARE(name)   \
     void (name)(struct char_data *ch, char *argument, int cmd, int subcmd)
+#define ACMD(name)  \
+    static void impl_ ## name ## _ (struct char_data *ch, char *argument, int cmd, int subcmd); \
+    void (name)(struct char_data *ch, char *argument, int cmd, int subcmd) \
+    { \
+      PERF_PROF_ENTER( pr_, #name ); \
+      impl_ ## name ## _(ch, argument, cmd, subcmd); \
+      PERF_PROF_EXIT( pr_ ); \
+    } \
+    static void impl_ ## name ## _ (struct char_data *ch, char *argument, int cmd, int subcmd)
 #define ACMD_CONST(name)   \
     void (name)(struct char_data *ch, const char *argument, int cmd, int subcmd)
 

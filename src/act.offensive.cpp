@@ -545,7 +545,7 @@ ACMD(do_throw)
 }
 
 ACMD_CONST(do_flee) {
-  ACMD(do_flee);
+  ACMD_DECLARE(do_flee);
   do_flee(ch, NULL, cmd, subcmd);
 }
 

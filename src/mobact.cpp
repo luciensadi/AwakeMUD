@@ -617,7 +617,7 @@ void mobile_activity(void)
 
   extern int no_specials;
   
-  ACMD(do_get);
+  ACMD_DECLARE(do_get);
 
   // Iterate through all characters in the game.
   for (ch = character_list; ch; ch = next_ch) {

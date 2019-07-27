@@ -38,7 +38,7 @@ extern char *colorize(struct descriptor_data *d, const char *str, bool skip_chec
 int find_skill_num(char *name);
 
 
-ACMD(do_say);
+ACMD_DECLARE(do_say);
 
 ACMD_CONST(do_say) {
   static char not_const[MAX_STRING_LENGTH];

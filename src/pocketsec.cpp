@@ -36,7 +36,7 @@
 #define SEC_NOTEADD2		19
 #define SEC_NOTEDEL		20
 
-ACMD(do_phone);
+ACMD_DECLARE(do_phone);
 
 void wire_nuyen(struct char_data *ch, struct char_data *targ, int amount, long isfile)
 {

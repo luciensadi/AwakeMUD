@@ -54,7 +54,7 @@ bool memory(struct char_data *ch, struct char_data *vict);
 extern struct command_info cmd_info[];
 
 ACMD_CONST(do_say);
-ACMD(do_echo);
+ACMD_DECLARE(do_echo);
 ACMD_CONST(do_time);
 ACMD_CONST(do_gen_door);
 
@@ -1267,7 +1267,7 @@ SPECIAL(janitor)
   struct char_data *jan = (struct char_data *) me;
   struct obj_data *i;
   bool extract = FALSE;
-  ACMD(do_gen_comm);
+  ACMD_DECLARE(do_gen_comm);
 
   if (cmd || FIGHTING(ch) || !AWAKE(ch))
     return 0;
@@ -3235,7 +3235,7 @@ int gen_receptionist(struct char_data * ch, struct char_data * recep,
   vnum_t save_room;
   const char *action_table[] = {"smile", "dance", "sigh", "blush", "burp", "cough",
     "fart", "twiddle", "yawn"};
-  ACMD(do_action);
+  ACMD_DECLARE(do_action);
 
   if (!ch->desc || IS_NPC(ch))
     return FALSE;
@@ -3718,7 +3718,7 @@ SPECIAL(floor_has_glass_shards) {
 
 SPECIAL(bouncer_gentle)
 {
-  ACMD(do_look);
+  ACMD_DECLARE(do_look);
   
   if (!cmd)
     return FALSE;

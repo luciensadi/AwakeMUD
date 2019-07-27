@@ -391,7 +391,7 @@ SPECIAL(taxi)
 {
   extern bool memory(struct char_data *ch, struct char_data *vict);
   ACMD_CONST(do_say);
-  ACMD(do_action);
+  ACMD_DECLARE(do_action);
 
   struct char_data *temp = NULL, *driver = (struct char_data *) me;
   struct room_data *temp_room = NULL;

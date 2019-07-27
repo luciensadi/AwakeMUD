@@ -1035,7 +1035,7 @@ int ok_pick(struct char_data *ch, int keynum, int pickproof, int scmd, int lock_
 ACMD_CONST(do_gen_door) {
   char not_const[MAX_STRING_LENGTH];
   strcpy(not_const, argument);
-  ACMD(do_gen_door);
+  ACMD_DECLARE(do_gen_door);
   do_gen_door(ch, not_const, cmd, subcmd);
 }
 

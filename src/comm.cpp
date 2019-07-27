@@ -65,6 +65,7 @@ typedef SOCKET  socket_t;
 #include "newmatrix.h"
 #include "limits.h"
 #include "protocol.h"
+#include "perfmon.h"
 
 /* externs */
 extern int restrict;
@@ -560,6 +561,7 @@ void game_loop(int mother_desc)
   opt_time.tv_usec = OPT_USEC;
   opt_time.tv_sec = 0;
   gettimeofday(&last_time, (struct timezone *) 0);
+  PERF_prof_reset();
   
   /* The Main Loop.  The Big Cheese.  The Top Dog.  The Head Honcho.  The.. */
   while (!circle_shutdown) {
@@ -576,6 +578,7 @@ void game_loop(int mother_desc)
       } // else log("New connection.  Waking up.");
       gettimeofday(&last_time, (struct timezone *) 0);
     }
+
     /* Set up the input, output, and exception sets for select(). */
     FD_ZERO(&input_set);
     FD_ZERO(&output_set);
@@ -605,6 +608,24 @@ void game_loop(int mother_desc)
       /* figure out for how long we have to sleep */
       gettimeofday(&now, (struct timezone *) 0);
       timespent = timediff(&now, &last_time);
+
+      {
+        long int total_usec = 1000000 * timespent.tv_sec + timespent.tv_usec;
+        double usage_pcnt = 100 * ((double)total_usec / OPT_USEC);
+        PERF_log_pulse(usage_pcnt);
+
+        if (usage_pcnt >= 100)
+        {
+          log("Pulse usage >= 100%%. Trace info: ");
+          char buf[MAX_STRING_LENGTH * 12];
+          PERF_prof_repr_pulse(buf, sizeof(buf));
+          log(buf);
+        }
+      }
+
+      /* just in case, re-calculate after PERF logging to figure out for how long we have to sleep */
+      gettimeofday(&now, (struct timezone *) 0);
+      timespent = timediff(&now, &last_time);
       timeout = timediff(&opt_time, &timespent);
       
       /* sleep until the next 0.1 second mark */
@@ -618,6 +639,7 @@ void game_loop(int mother_desc)
     
     /* record the time for the next pass */
     gettimeofday(&last_time, (struct timezone *) 0);
+    PERF_prof_reset();
     
     // I added this for Linux, because &zero_time gets modified to become
     // time not slept.  This could possibly change the amount of time the
