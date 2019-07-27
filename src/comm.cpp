@@ -2281,12 +2281,6 @@ void send_to_char(struct char_data * ch, const char * const messg, ...)
   SEND_TO_Q(buf3, ch->desc);
 }
 
-void send_to_char(char *messg, struct char_data * ch)
-{
-  if (ch->desc && messg)
-    SEND_TO_Q(messg, ch->desc);
-}
-
 void send_to_char(const char *messg, struct char_data *ch)
 {
   if (ch->desc && messg)

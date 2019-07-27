@@ -23,7 +23,6 @@ void shutdown(int code = FAILURE);
 
 /* comm.c */
 void    send_to_all(const char *messg);
-void    send_to_char(char *messg, struct char_data *ch);
 void    send_to_char(const char *messg, struct char_data *ch);
 void    send_to_char(struct char_data *ch, const char * const messg, ...);
 void    send_to_room(const char *messg, struct room_data *room);

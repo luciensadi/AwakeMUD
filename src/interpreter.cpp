@@ -1830,6 +1830,21 @@ char *any_one_arg(char *argument, char *first_arg)
   return argument;
 }
 
+// Same as above, but without skip_spaces.
+const char *any_one_arg_const(const char *argument, char *first_arg)
+{
+  if (!argument)
+    return NULL;
+  
+  while (*argument && !isspace(*argument)) {
+    *(first_arg++) = LOWER(*argument);
+    argument++;
+  }
+  
+  *first_arg = '\0';
+  
+  return argument;
+}
 
 /*
  * Same as one_argument except that it takes two args and returns the rest;

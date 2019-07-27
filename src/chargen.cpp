@@ -256,7 +256,7 @@ int parse_totem(struct descriptor_data *d, const char *arg)
   if (*temp == '?')
   {
     i = atoi(++temp);
-    display_help(buf2, (char *)totem_types[i]);
+    display_help(buf2, totem_types[i]);
     strcat(buf2, "\r\n Press [return] to continue ");
     SEND_TO_Q(buf2, d);
     d->ccr.temp = CCR_TOTEM;

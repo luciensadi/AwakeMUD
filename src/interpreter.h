@@ -32,6 +32,7 @@ int     search_block(char *arg, const char **list, bool exact);
 char    lower( char c );
 char    *one_argument(char *argument, char *first_arg);
 char    *any_one_arg(char *argument, char *first_arg);
+const char *any_one_arg_const(const char *argument, char *first_arg);
 char    *two_arguments(char *argument, char *first_arg, char *second_arg);
 int     fill_word(char *argument);
 void    half_chop(char *string, char *arg1, char *arg2);

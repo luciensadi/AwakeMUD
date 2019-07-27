@@ -370,8 +370,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
 
 ACMD(do_hit)
 {
-  if (!perform_hit(ch, argument, (char *)(subcmd == SCMD_HIT ? "hit" :
-                                          (subcmd == SCMD_KILL ? "kill" : "murder"))))
+  if (!perform_hit(ch, argument, (subcmd == SCMD_HIT ? "hit" : (subcmd == SCMD_KILL ? "kill" : "murder"))))
     send_to_char("You can't seem to find the target you're looking for.\r\n", ch);
 }
 
