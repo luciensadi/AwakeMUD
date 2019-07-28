@@ -328,7 +328,7 @@ SPECIAL(metamagic_teacher)
 {
   struct char_data *master = (struct char_data *) me;
   int i = 0, x = 0, suc, ind;
-  if (IS_NPC(ch) || !CMD_IS("train"))
+  if (IS_NPC(ch) || !(CMD_IS("learn") || CMD_IS("practice") || CMD_IS("train")))
     return FALSE;
   
   if (GET_TRADITION(ch) == TRAD_MUNDANE) {
@@ -426,7 +426,7 @@ SPECIAL(nerp_skills_teacher) {
   can_teach_skill[SKILL_ARMED_COMBAT] = FALSE; // NPC-only skill
   can_teach_skill[SKILL_UNUSED_WAS_PILOT_FIXED_WING] = FALSE; // what it says on the tin
   
-  if (IS_NPC(ch) || !CMD_IS("practice"))
+  if (IS_NPC(ch) || !(CMD_IS("learn") || CMD_IS("practice") || CMD_IS("train")))
     return FALSE;
   
   if (!CAN_SEE(master, ch)) {
@@ -561,7 +561,7 @@ SPECIAL(teacher)
   struct char_data *master = (struct char_data *) me;
   int i, ind, max, skill_num;
 
-  if (IS_NPC(ch) || !CMD_IS("practice"))
+  if (IS_NPC(ch) || !(CMD_IS("learn") || CMD_IS("practice") || CMD_IS("train")))
     return FALSE;
   
   if (!CAN_SEE(master, ch)) {
@@ -866,7 +866,7 @@ SPECIAL(trainer)
   struct char_data *trainer = (struct char_data *) me;
   int ind;
 
-  if (!CMD_IS("train") || IS_NPC(ch) || !CAN_SEE(trainer, ch) || FIGHTING(ch) ||
+  if (!(CMD_IS("learn") || CMD_IS("practice") || CMD_IS("train")) || IS_NPC(ch) || !CAN_SEE(trainer, ch) || FIGHTING(ch) ||
       GET_POS(ch) < POS_STANDING)
     return FALSE;
 
@@ -940,7 +940,7 @@ SPECIAL(spell_trainer)
 {
   struct char_data *trainer = (struct char_data *) me;
   int i, force;
-  if (!CMD_IS("learn") || IS_NPC(ch) || !CAN_SEE(trainer, ch) || FIGHTING(ch) ||
+  if (!(CMD_IS("learn") || CMD_IS("practice") || CMD_IS("train")) || IS_NPC(ch) || !CAN_SEE(trainer, ch) || FIGHTING(ch) ||
       GET_POS(ch) < POS_STANDING)
     return FALSE;
   if (GET_TRADITION(ch) != TRAD_SHAMANIC && GET_TRADITION(ch) != TRAD_HERMETIC) {
@@ -1096,7 +1096,7 @@ SPECIAL(adept_trainer)
   struct char_data *trainer = (struct char_data *) me;
   int ind, power, i;
 
-  if (!CMD_IS("train") || IS_NPC(ch) || !CAN_SEE(trainer, ch) || FIGHTING(ch) ||
+  if (!(CMD_IS("learn") || CMD_IS("practice") || CMD_IS("train")) || IS_NPC(ch) || !CAN_SEE(trainer, ch) || FIGHTING(ch) ||
       GET_POS(ch) < POS_STANDING)
     return FALSE;
 
