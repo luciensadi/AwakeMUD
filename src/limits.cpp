@@ -370,7 +370,7 @@ void check_idling(void)
 {
   void perform_immort_invis(struct char_data *ch, int level);
   ACMD_CONST(do_return);
-  ACMD(do_disconnect);
+  ACMD_DECLARE(do_disconnect);
   struct char_data *ch, *next;
   
   for (ch = character_list; ch; ch = next) {
@@ -496,6 +496,7 @@ void check_swimming(struct char_data *ch)
 
 void process_regeneration(int half_hour)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   struct char_data *ch, *next_char;
   
   for (ch = character_list; ch; ch = next_char) {
@@ -551,7 +552,8 @@ void process_regeneration(int half_hour)
 /* Update PCs, NPCs, and objects */
 void point_update(void)
 {
-  ACMD(do_use);
+  PERF_PROF_SCOPE(pr_, __func__);
+  ACMD_DECLARE(do_use);
   struct char_data *i, *next_char;
   FILE *fl;
   extern struct time_info_data time_info;
@@ -761,6 +763,7 @@ bool veh_is_in_junkyard(struct veh_data *veh) {
 
 void save_vehicles(void)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   struct veh_data *veh;
   FILE *fl;
   struct char_data *i;
@@ -985,6 +988,7 @@ void save_vehicles(void)
 
 void misc_update(void)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   struct char_data *ch, *next_ch;
   struct obj_data *obj, *o = NULL;
   int i, dam = 0, power = 0;

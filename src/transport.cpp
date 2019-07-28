@@ -391,7 +391,7 @@ SPECIAL(taxi)
 {
   extern bool memory(struct char_data *ch, struct char_data *vict);
   ACMD_CONST(do_say);
-  ACMD(do_action);
+  ACMD_DECLARE(do_action);
 
   struct char_data *temp = NULL, *driver = (struct char_data *) me;
   struct room_data *temp_room = NULL;
@@ -1224,6 +1224,7 @@ static int process_elevator(struct room_data *room,
 
 void ElevatorProcess(void)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   int i, rnum;
 
   char empty_argument = '\0';
@@ -1255,6 +1256,7 @@ SPECIAL(escalator)
 
 void EscalatorProcess(void)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   int i, dir;
   struct char_data *temp, *next;
 

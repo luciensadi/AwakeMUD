@@ -39,9 +39,9 @@ void mount_fire(struct char_data *ch);
 char *fread_action(FILE * fl, int nr);
 char *fread_string(FILE * fl, char *error);
 void stop_follower(struct char_data * ch);
-ACMD(do_assist);
+ACMD_DECLARE(do_assist);
 ACMD_CONST(do_flee);
-ACMD(do_action);
+ACMD_DECLARE(do_action);
 void docwagon(struct char_data *ch);
 void roll_individual_initiative(struct char_data *ch);
 bool ranged_response(struct char_data *ch, struct char_data *vict);
@@ -2086,7 +2086,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
   int exp;
   bool total_miss = FALSE, awake = TRUE;
   struct obj_data *bio;
-  ACMD(do_disconnect);
+  ACMD_DECLARE(do_disconnect);
   ACMD_CONST(do_return);
   
   if (GET_POS(victim) <= POS_DEAD)
@@ -4497,6 +4497,7 @@ void roll_individual_initiative(struct char_data *ch)
 
 void decide_combat_pool(void)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   struct char_data *ch;
   
   for (ch = combat_list; ch; ch = ch->next_fighting) {
@@ -4540,6 +4541,7 @@ void roll_initiative(void)
 /* control the fights going on.  Called every 2 seconds from comm.c. */
 void perform_violence(void)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   struct char_data *ch;
   extern struct index_data *mob_index;
   if (combat_list) {

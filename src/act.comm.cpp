@@ -38,7 +38,7 @@ extern char *colorize(struct descriptor_data *d, const char *str, bool skip_chec
 int find_skill_num(char *name);
 
 
-ACMD(do_say);
+ACMD_DECLARE(do_say);
 
 ACMD_CONST(do_say) {
   static char not_const[MAX_STRING_LENGTH];
@@ -1436,6 +1436,7 @@ ACMD(do_phonelist)
 
 void phone_check()
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   struct char_data *tch;
   struct phone_data *k;
   for (k = phone_list; k; k = k->next) {

@@ -39,7 +39,7 @@ extern bool resize_qst_array(void);
 extern char *cleanup(char *, const char *);
 
 ACMD_CONST(do_say);
-ACMD(do_action);
+ACMD_DECLARE(do_action);
 SPECIAL(johnson);
 
 #define QUEST          d->edit_quest

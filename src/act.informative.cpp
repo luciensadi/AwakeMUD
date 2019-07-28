@@ -1598,7 +1598,7 @@ void look_at_target(struct char_data * ch, char *arg)
 ACMD_CONST(do_look) {
   char not_const[MAX_STRING_LENGTH];
   strcpy(not_const, argument);
-  ACMD(do_look);
+  ACMD_DECLARE(do_look);
   do_look(ch, not_const, cmd, subcmd);
 }
 
@@ -3057,7 +3057,7 @@ ACMD(do_equipment)
 ACMD_CONST(do_time) {
   char not_const[MAX_STRING_LENGTH];
   strcpy(not_const, argument);
-  ACMD(do_time);
+  ACMD_DECLARE(do_time);
   do_time(ch, not_const, cmd, subcmd);
 }
 
@@ -3315,7 +3315,7 @@ ACMD(do_wizhelp)
 ACMD_CONST(do_who) {
   char not_const[MAX_STRING_LENGTH];
   strcpy(not_const, argument);
-  ACMD(do_who);
+  ACMD_DECLARE(do_who);
   do_who(ch, not_const, cmd, subcmd);
 }
 
@@ -4009,7 +4009,7 @@ void sort_commands(void)
 {
   int a, b, tmp;
   
-  ACMD(do_action);
+  ACMD_DECLARE(do_action);
   
   num_of_cmds = 0;
   

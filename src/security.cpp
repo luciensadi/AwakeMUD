@@ -7,6 +7,7 @@
 #include "comm.h"
 #include "newdb.h"
 #include "security.h"
+#include "perfmon.h"
 
 #ifdef NOCRYPT
 bool run_crypto_tests() {return TRUE;}
@@ -103,6 +104,7 @@ void hash_and_store_password(const char* password, char* array_to_write_to) {
 // validate_password(): Check if a password matches the given hash.
 // Returns TRUE on match, FALSE otherwise.
 bool validate_password(const char* password, const char* hashed_password) {
+  PERF_PROF_SCOPE(pr_, __func__);
   // If this is a new-style argon2, verify with the correct algorithm.
   if (strstr(hashed_password, ARGON2ID_HASH_PREFIX) != NULL)
     return crypto_pwhash_str_verify(hashed_password, password, strlen(password)) == 0;

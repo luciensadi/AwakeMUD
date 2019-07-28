@@ -7,8 +7,8 @@
 #define HELPEDIT_TITLE     2
 #define HELPEDIT_BODY      3
 
-ACMD(do_helpedit);
-ACMD(do_helpexport);
+ACMD_DECLARE(do_helpedit);
+ACMD_DECLARE(do_helpexport);
 
 void helpedit_parse(struct descriptor_data *d, const char *arg);
 void helpedit_disp_menu(struct descriptor_data *d);

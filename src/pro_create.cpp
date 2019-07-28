@@ -426,6 +426,7 @@ ACMD(do_copy)
 #define PROG GET_BUILDING(CH)
 void update_buildrepair(void)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   struct descriptor_data *next;
   for (struct descriptor_data *desc = descriptor_list; desc; desc = next) {
     next = desc->next;

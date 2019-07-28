@@ -65,6 +65,10 @@ typedef SOCKET  socket_t;
 #include "newmatrix.h"
 #include "limits.h"
 #include "protocol.h"
+#include "perfmon.h"
+
+
+const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
 
 /* externs */
 extern int restrict;
@@ -560,6 +564,7 @@ void game_loop(int mother_desc)
   opt_time.tv_usec = OPT_USEC;
   opt_time.tv_sec = 0;
   gettimeofday(&last_time, (struct timezone *) 0);
+  PERF_prof_reset();
   
   /* The Main Loop.  The Big Cheese.  The Top Dog.  The Head Honcho.  The.. */
   while (!circle_shutdown) {
@@ -576,6 +581,7 @@ void game_loop(int mother_desc)
       } // else log("New connection.  Waking up.");
       gettimeofday(&last_time, (struct timezone *) 0);
     }
+
     /* Set up the input, output, and exception sets for select(). */
     FD_ZERO(&input_set);
     FD_ZERO(&output_set);
@@ -605,6 +611,25 @@ void game_loop(int mother_desc)
       /* figure out for how long we have to sleep */
       gettimeofday(&now, (struct timezone *) 0);
       timespent = timediff(&now, &last_time);
+
+      {
+        long int total_usec = 1000000 * timespent.tv_sec + timespent.tv_usec;
+        double usage_pcnt = 100 * ((double)total_usec / OPT_USEC);
+        PERF_log_pulse(usage_pcnt);
+
+        if (usage_pcnt >= 100)
+        {
+          char buf[MAX_STRING_LENGTH];
+          snprintf(buf, sizeof(buf), "Pulse usage %f >= 100%%. Trace info:", usage_pcnt);
+          log(buf);
+          PERF_prof_repr_pulse(buf, sizeof(buf));
+          log(buf);
+        }
+      }
+
+      /* just in case, re-calculate after PERF logging to figure out for how long we have to sleep */
+      gettimeofday(&now, (struct timezone *) 0);
+      timespent = timediff(&now, &last_time);
       timeout = timediff(&opt_time, &timespent);
       
       /* sleep until the next 0.1 second mark */
@@ -618,6 +643,8 @@ void game_loop(int mother_desc)
     
     /* record the time for the next pass */
     gettimeofday(&last_time, (struct timezone *) 0);
+    PERF_prof_reset();
+    PERF_PROF_SCOPE( pr_main_loop_, "main loop");
     
     // I added this for Linux, because &zero_time gets modified to become
     // time not slept.  This could possibly change the amount of time the
@@ -630,93 +657,115 @@ void game_loop(int mother_desc)
       perror("Select poll");
       return;
     }
-    /* New connection waiting for us? */
-    if (FD_ISSET(mother_desc, &input_set))
-      new_descriptor(mother_desc);
+
+    {
+      PERF_PROF_SCOPE( pr_new_conn_, "new conns");
+      /* New connection waiting for us? */
+      if (FD_ISSET(mother_desc, &input_set))
+        new_descriptor(mother_desc);
+    }
     
     /* kick out the freaky folks in the exception set */
-    for (d = descriptor_list; d; d = next_d) {
-      next_d = d->next;
-      if (FD_ISSET(d->descriptor, &exc_set)) {
-        FD_CLR(d->descriptor, &input_set);
-        FD_CLR(d->descriptor, &output_set);
-        close_socket(d);
+    {
+      PERF_PROF_SCOPE( pr_exc_conn, "exc conns")
+      for (d = descriptor_list; d; d = next_d) {
+        next_d = d->next;
+        if (FD_ISSET(d->descriptor, &exc_set)) {
+          FD_CLR(d->descriptor, &input_set);
+          FD_CLR(d->descriptor, &output_set);
+          close_socket(d);
+        }
       }
     }
     
     /* process descriptors with input pending */
-    for (d = descriptor_list; d; d = next_d) {
-      next_d = d->next;
-      if (FD_ISSET(d->descriptor, &input_set))
-        if (process_input(d) < 0)
-          close_socket(d);
+    {
+      PERF_PROF_SCOPE( pr_inp_conn_, "input conns")
+      for (d = descriptor_list; d; d = next_d) {
+        next_d = d->next;
+        if (FD_ISSET(d->descriptor, &input_set))
+          if (process_input(d) < 0)
+            close_socket(d);
+      }
     }
     
     /* process commands we just read from process_input */
-    for (d = descriptor_list; d; d = next_d) {
-      next_d = d->next;
-      
-      if ((--(d->wait) <= 0) && get_from_q(&d->input, comm, &aliased)) {
-        if (d->character) {
-          d->character->char_specials.timer = 0;
-          if (d->original)
-            d->original->char_specials.timer = 0;
-          if (!d->connected && GET_WAS_IN(d->character)) {
-            if (d->character->in_room)
-              char_from_room(d->character);
-            char_to_room(d->character, GET_WAS_IN(d->character));
-            GET_WAS_IN(d->character) = NULL;
-            act("$n has returned.", TRUE, d->character, 0, 0, TO_ROOM);
-          }
-        }
-        d->wait = 1;
-        d->prompt_mode = 1;
+    {
+      PERF_PROF_SCOPE( pr_commands_, "process commands");
+      for (d = descriptor_list; d; d = next_d) {
+        next_d = d->next;
         
-        if (d->str)                     /* writing boards, mail, etc.   */
-          string_add(d, comm);
-        else if (d->showstr_point)      /* reading something w/ pager   */
-          show_string(d, comm);
-        else if (d->connected != CON_PLAYING)   /* in menus, etc.       */
-          nanny(d, comm);
-        else {                          /* else: we're playing normally */
-          if (aliased) /* to prevent recursive aliases */
-            d->prompt_mode = 0;
-          else {
-            if (perform_alias(d, comm)) /* run it through aliasing system */
-              get_from_q(&d->input, comm, &aliased);
+        if ((--(d->wait) <= 0) && get_from_q(&d->input, comm, &aliased)) {
+          if (d->character) {
+            d->character->char_specials.timer = 0;
+            if (d->original)
+              d->original->char_specials.timer = 0;
+            if (!d->connected && GET_WAS_IN(d->character)) {
+              if (d->character->in_room)
+                char_from_room(d->character);
+              char_to_room(d->character, GET_WAS_IN(d->character));
+              GET_WAS_IN(d->character) = NULL;
+              act("$n has returned.", TRUE, d->character, 0, 0, TO_ROOM);
+            }
           }
-          command_interpreter(d->character, comm, GET_CHAR_NAME(d->character)); /* send it to interpreter */
+          d->wait = 1;
+          d->prompt_mode = 1;
+          
+          if (d->str)                     /* writing boards, mail, etc.   */
+            string_add(d, comm);
+          else if (d->showstr_point)      /* reading something w/ pager   */
+            show_string(d, comm);
+          else if (d->connected != CON_PLAYING)   /* in menus, etc.       */
+            nanny(d, comm);
+          else {                          /* else: we're playing normally */
+            if (aliased) /* to prevent recursive aliases */
+              d->prompt_mode = 0;
+            else {
+              if (perform_alias(d, comm)) /* run it through aliasing system */
+                get_from_q(&d->input, comm, &aliased);
+            }
+            command_interpreter(d->character, comm, GET_CHAR_NAME(d->character)); /* send it to interpreter */
+          }
         }
       }
     }
     
     /* send queued output out to the operating system (ultimately to user) */
-    for (d = descriptor_list; d; d = next_d) {
-      next_d = d->next;
-      if (FD_ISSET(d->descriptor, &output_set) && *(d->output)) {
-        if (process_output(d) < 0)
-          close_socket(d);
-        else
-          d->prompt_mode = 1;
+    {
+      PERF_PROF_SCOPE(pr_send_output, "send output");
+      for (d = descriptor_list; d; d = next_d) {
+        next_d = d->next;
+        if (FD_ISSET(d->descriptor, &output_set) && *(d->output)) {
+          if (process_output(d) < 0)
+            close_socket(d);
+          else
+            d->prompt_mode = 1;
+        }
       }
     }
     
     /* kick out folks in the CON_CLOSE state */
-    for (d = descriptor_list; d; d = next_d) {
-      next_d = d->next;
-      if (STATE(d) == CON_CLOSE)
-        close_socket(d);
+    {
+      PERF_PROF_SCOPE(pr_con_close, "handle CON_CLOSE");
+      for (d = descriptor_list; d; d = next_d) {
+        next_d = d->next;
+        if (STATE(d) == CON_CLOSE)
+          close_socket(d);
+      }
     }
     
     /* give each descriptor an appropriate prompt */
-    for (d = descriptor_list; d; d = d->next) {
-      /* KaVir's protocol snippet. The last sent data was OOB, so do NOT draw the prompt */
-      if (d->pProtocol->WriteOOB)
-        continue;
-      
-      if (d->prompt_mode) {
-        make_prompt(d);
-        d->prompt_mode = 0;
+    {
+      PERF_PROF_SCOPE(pr_send_prompt_, "send prompts");
+      for (d = descriptor_list; d; d = d->next) {
+        /* KaVir's protocol snippet. The last sent data was OOB, so do NOT draw the prompt */
+        if (d->pProtocol->WriteOOB)
+          continue;
+        
+        if (d->prompt_mode) {
+          make_prompt(d);
+          d->prompt_mode = 0;
+        }
       }
     }
     
@@ -827,7 +876,10 @@ void game_loop(int mother_desc)
 #ifdef DEBUG
       unsigned long oldthread = mysql_thread_id(mysql);
 #endif
-      mysql_ping(mysql);
+      {
+        PERF_PROF_SCOPE( pr_mysql_ping_, "mysql_ping");
+        mysql_ping(mysql);
+      }
 #ifdef DEBUG
       unsigned long newthread = mysql_thread_id(mysql);
       if (oldthread != newthread) {
@@ -965,6 +1017,7 @@ void keepalive(struct descriptor_data *d) {
 
 // Sends keepalives to everyone who's enabled them.
 void send_keepalives() {
+  PERF_PROF_SCOPE(pr_, __func__);
   for (struct descriptor_data *d = descriptor_list; d; d = d->next)
     if (d->character && PRF_FLAGGED(d->character, PRF_KEEPALIVE))
       keepalive(d);
@@ -1905,6 +1958,7 @@ void close_socket(struct descriptor_data *d)
 
 void check_idle_passwords(void)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   struct descriptor_data *d;
   
   for (d = descriptor_list; d; d = d->next) {
@@ -2769,6 +2823,7 @@ void check_memory_canaries() {
 #endif
 
 void msdp_update() {
+  PERF_PROF_SCOPE(pr_, __func__);
   struct descriptor_data *d = NULL;
   struct char_data *ch = NULL;
   int PlayerCount = 0;

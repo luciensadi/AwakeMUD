@@ -43,6 +43,7 @@
 #include "newmatrix.h"
 #include "limits.h"
 #include "security.h"
+#include "perfmon.h"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
@@ -560,7 +561,7 @@ void transfer_ch_to_ch(struct char_data *victim, struct char_data *ch) {
 
 ACMD(do_trans)
 {
-  ACMD(do_transfer);
+  ACMD_DECLARE(do_transfer);
 
   if (!access_level(ch, LVL_CONSPIRATOR)) {
     do_transfer(ch, argument, 0, 0);
@@ -1560,7 +1561,7 @@ ACMD(do_wizpossess)
 }
 
 ACMD_CONST(do_return) {
-  ACMD(do_return);
+  ACMD_DECLARE(do_return);
   do_return(ch, NULL, cmd, subcmd);
 }
 
@@ -2920,7 +2921,7 @@ void print_zone_to_buf(char *bufptr, int zone, int detailed)
 ACMD(do_show)
 {
   if (GET_LEVEL(ch) < LVL_BUILDER) {
-    ACMD(do_mort_show);
+    ACMD_DECLARE(do_mort_show);
     do_mort_show(ch, argument, 0, 0);
     return;
   }
@@ -4867,4 +4868,69 @@ ACMD(do_zone) {
 
 ACMD(do_room) {
   send_to_char(ch, "Current room num: %ld\r\n", ch->in_room->number);
+}
+
+ACMD(do_perfmon) {
+    char arg1[MAX_INPUT_LENGTH];
+
+    if (!ch->desc) {
+      log("No descriptor in do_perfmon");
+      return;
+    }
+
+    argument = one_argument(argument, arg1);
+
+    if (arg1[0] == '\0')
+    {
+        send_to_char( 
+            "perfmon all             - Print all perfmon info.\r\n"
+            "perfmon summ            - Print summary,\r\n"
+            "perfmon prof            - Print profiling info.\r\n"
+            "perfmon sect <section>  - Print profiling info for section.\r\n",
+            ch );
+        return;
+    }
+
+    if (!str_cmp( arg1, "all"))
+    {
+        char buf[MAX_STRING_LENGTH];
+
+        size_t written = PERF_repr( buf, sizeof(buf) );
+        written = PERF_prof_repr_total( buf + written, sizeof(buf) - written);
+        page_string(ch->desc, buf, 1);
+
+        return;
+    }
+    else if (!str_cmp( arg1, "summ"))
+    {
+        char buf[MAX_STRING_LENGTH];
+
+        PERF_repr( buf, sizeof(buf) );
+        page_string(ch->desc, buf, 1);
+        return;
+    }
+    else if (!str_cmp( arg1, "prof"))
+    {
+        char buf[MAX_STRING_LENGTH];
+
+        PERF_prof_repr_total( buf, sizeof(buf) );
+        page_string(ch->desc, buf, 1);
+
+        return;
+    }
+    else if (!str_cmp( arg1, "sect"))
+    {
+        char buf[MAX_STRING_LENGTH];
+
+        PERF_prof_repr_sect( buf, sizeof(buf), argument );
+        page_string(ch->desc, buf, 1);
+
+        return;
+    }
+    else
+    {
+        char empty_arg[] = {0};
+        do_perfmon( ch, empty_arg, cmd, subcmd );
+        return;
+    }
 }

@@ -158,7 +158,7 @@ ACMD(do_quit)
 /* generic function for commands which are normally overridden by
    special procedures - i.e., shop commands, mail commands, etc. */
 ACMD_CONST(do_not_here) {
-  ACMD(do_not_here);
+  ACMD_DECLARE(do_not_here);
   do_not_here(ch, NULL, 0, 0);
 }
 
@@ -192,7 +192,7 @@ ACMD(do_steal)
     return;
   }
 
-  ACMD(do_gen_comm);
+  ACMD_DECLARE(do_gen_comm);
 
   argument = one_argument(argument, obj_name);
   one_argument(argument, vict_name);
@@ -2792,6 +2792,7 @@ ACMD(do_boost)
 
 void process_boost()
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   int power, damage;
   struct char_data *next;
   for (struct char_data *i = character_list; i; i = next) {
@@ -3722,7 +3723,7 @@ ACMD(do_survey)
   send_to_char(buf, ch);
 }
 
-extern ACMD(do_pool);
+extern ACMD_DECLARE(do_pool);
 
 ACMD(do_cpool)
 {
