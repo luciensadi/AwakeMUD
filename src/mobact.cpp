@@ -611,6 +611,7 @@ bool mobact_process_movement(struct char_data *ch) {
 
 void mobile_activity(void)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   struct char_data *ch, *next_ch;
   int dir, distance;
   struct room_data *current_room = NULL;

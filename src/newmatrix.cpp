@@ -2029,6 +2029,7 @@ struct matrix_icon *find_icon_by_id(vnum_t idnum)
 #define host matrix[rnum]
 void matrix_update()
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   rnum_t rnum = 1;
   struct matrix_icon *icon;
   extern struct time_info_data time_info;
@@ -2152,6 +2153,7 @@ void matrix_update()
 
 void matrix_violence()
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   struct matrix_icon *temp, *icon;
   rnum_t rnum = 1;
   for (;rnum <= top_of_matrix; rnum++)

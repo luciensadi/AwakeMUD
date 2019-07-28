@@ -2693,6 +2693,7 @@ struct obj_data *read_object(int nr, int type)
 
 void spec_update(void)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   int i;
   char empty_argument = '\0';
 
@@ -2708,6 +2709,7 @@ void spec_update(void)
 /* update zone ages, queue for reset if necessary, and dequeue when possible */
 void zone_update(void)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   int i;
   static int timer = 0;
   /* Alot of good things came from 1992, like my next door neighbour's little sister for example.

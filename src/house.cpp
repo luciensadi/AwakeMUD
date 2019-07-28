@@ -788,6 +788,7 @@ ACMD(do_house)
 /* crash-save all the houses */
 void House_save_all(void)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   struct landlord *llord;
   struct house_control_rec *room;
   rnum_t real_house;

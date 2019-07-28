@@ -4497,6 +4497,7 @@ void roll_individual_initiative(struct char_data *ch)
 
 void decide_combat_pool(void)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   struct char_data *ch;
   
   for (ch = combat_list; ch; ch = ch->next_fighting) {
@@ -4540,6 +4541,7 @@ void roll_initiative(void)
 /* control the fights going on.  Called every 2 seconds from comm.c. */
 void perform_violence(void)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   struct char_data *ch;
   extern struct index_data *mob_index;
   if (combat_list) {

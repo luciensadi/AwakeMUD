@@ -2792,6 +2792,7 @@ ACMD(do_boost)
 
 void process_boost()
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   int power, damage;
   struct char_data *next;
   for (struct char_data *i = character_list; i; i = next) {

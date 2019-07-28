@@ -13,12 +13,12 @@
 
 static double const INFINITY = DBL_MAX;
 
-#define PULSE_PER_SECOND 10
+using perfmon::kPulsePerSecond;
 #define SEC_PER_MIN 60
 #define MIN_PER_HOUR 60
 #define HOUR_PER_DAY 24
 
-#define USEC_PER_PULSE (1000000 / PULSE_PER_SECOND)
+#define USEC_PER_PULSE (1000000 / kPulsePerSecond)
 
 
 #define USEC_TOTAL( val ) ( ( (val)->tv_sec * 1000000) + (val)->tv_usec )
@@ -90,7 +90,7 @@ private:
 static PerfIntvlData sHourData( HOUR_PER_DAY, NULL );
 static PerfIntvlData sMinuteData( MIN_PER_HOUR, &sHourData );
 static PerfIntvlData sSecData( SEC_PER_MIN, &sMinuteData );
-static PerfIntvlData sPulseData( PULSE_PER_SECOND, &sSecData );
+static PerfIntvlData sPulseData( kPulsePerSecond, &sSecData );
 
 
 void 
@@ -228,7 +228,7 @@ size_t PERF_repr( char *out_buf, size_t n )
     const unsigned int thresh_count = sizeof(threshold_info) / sizeof(threshold_info[0]);
     unsigned int i;
     time_t total_secs = time(NULL) - init_time;
-    double total_pulses = total_secs * PULSE_PER_SECOND;
+    double total_pulses = total_secs * kPulsePerSecond;
 
     double pulse_min = sPulseData.GetMinMin();
     pulse_min = (pulse_min == INFINITY) ? 0 : pulse_min;

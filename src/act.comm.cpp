@@ -1436,6 +1436,7 @@ ACMD(do_phonelist)
 
 void phone_check()
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   struct char_data *tch;
   struct phone_data *k;
   for (k = phone_list; k; k = k->next) {

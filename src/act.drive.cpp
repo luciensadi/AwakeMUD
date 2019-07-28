@@ -1642,6 +1642,7 @@ ACMD(do_gridguide)
 
 void process_autonav(void)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
     bool veh_moved = FALSE;
   

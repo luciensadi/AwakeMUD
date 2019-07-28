@@ -166,6 +166,7 @@ void another_minute(void)
 
 void weather_change(void)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   int diff, change;
 
   if ((time_info.month >= 8) && (time_info.month <= 12))

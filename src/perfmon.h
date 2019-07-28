@@ -3,6 +3,12 @@
 
 #include <cstddef>
 
+namespace perfmon
+{
+    // Dependency. Must be defined in external code.
+    extern const unsigned kPulsePerSecond;
+}
+
 void PERF_log_pulse(double val);
 size_t PERF_repr( char *out_buf, size_t n );
 

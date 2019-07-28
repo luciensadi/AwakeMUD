@@ -1368,6 +1368,7 @@ void assign_shopkeepers(void)
 
 void randomize_shop_prices(void)
 {
+  PERF_PROF_SCOPE(pr_, __func__);
   for (int i = 0; i <= top_of_shopt; i++) {
     if (shop_table[i].random_amount)
       shop_table[i].random_current = number(-shop_table[i].random_amount, shop_table[i].random_amount);
