@@ -14,7 +14,7 @@ SHELL = /bin/sh
 .PHONY : 
 #CXX = g++
 CXX = clang
-CC = gcc
+CC = g++
 
 PROFILE = -ggdb
 CVS = cvs
@@ -34,7 +34,7 @@ MYFLAGS = -DUSE_MEMORY_CANARIES -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DGITH
 # If you want GitHub integration, add -DGITHUB_INTEGRATION to the above and fill out your basic auth credentials in github_config.cpp.
 
 # Cygwin:
-#LIBS = -L/usr/local/lib -lmysqlclient -lz -lm -lsodium -lcrypt
+#LIBS = -L/usr/local/lib -lmysqlclient -lz -lm -lsodium -lcrypt -lstdc++
 #MYFLAGS = -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DWIN32 -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
 
 CPPFLAGS = $(MYFLAGS) $(PROFILE)
