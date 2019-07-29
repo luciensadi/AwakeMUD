@@ -2149,7 +2149,7 @@ ACMD(do_restore)
     if ((access_level(ch, LVL_DEVELOPER)) &&
         (IS_SENATOR(vict)) && !IS_NPC(vict)) {
       for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
-        set_character_skill(ch, i, 100, FALSE);
+        set_character_skill(vict, i, 100, FALSE);
 
       if (IS_SENATOR(vict) && !access_level(vict, LVL_EXECUTIVE)) {
         GET_REAL_INT(vict) = 15;

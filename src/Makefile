@@ -24,17 +24,19 @@ CVS = cvs
 # The obvious drawback is that it's time consuming, so once things go
 # smooth, the define can be removed.
 
+COMMON_FLAGS = -lmysqlclient -lz -lm -lsodium -lstdc++
+
 # OSX? Uncomment these:
-LIBS = -L/usr/local/lib -lmysqlclient -lz -lm -lcurl -lsodium -lstdc++
+LIBS = -L/usr/local/lib $(COMMON_FLAGS) -lcurl
 MYFLAGS = -DUSE_MEMORY_CANARIES -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DGITHUB_INTEGRATION -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
 
 # Linux / others? Uncomment these:
-#LIBS = -lcrypt -L/usr/local/lib -lmysqlclient -lz -lm -lnsl -lcurl -lsodium -lstdc++
+#LIBS = -lcrypt -L/usr/local/lib $(COMMON_FLAGS) -lnsl -lcurl
 #MYFLAGS = -DDEBUG_CRYPTO -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
 # If you want GitHub integration, add -DGITHUB_INTEGRATION to the above and fill out your basic auth credentials in github_config.cpp.
 
 # Cygwin:
-#LIBS = -L/usr/local/lib -lmysqlclient -lz -lm -lsodium -lcrypt -lstdc++
+#LIBS = -L/usr/local/lib $(COMMON_FLAGS) -lcrypt
 #MYFLAGS = -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DWIN32 -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
 
 CPPFLAGS = $(MYFLAGS) $(PROFILE)
