@@ -179,8 +179,11 @@ void gettimeofday(struct timeval *t, struct timezone *dummy)
 /* *********************************************************************
  *  main game loop and related stuff                                    *
  ********************************************************************* */
-
+#if defined(UNITTEST)
+int game_main(int argc, char **argv)
+#else
 int main(int argc, char **argv)
+#endif
 {  
   int pos = 1;
   char *dir;

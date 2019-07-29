@@ -11,7 +11,7 @@ SHELL = /bin/sh
 .SUFFIXES :
 .SUFFIXES : .cpp .o
 .DELETE_ON_ERROR : 
-.PHONY : 
+.PHONY : unittest
 #CXX = g++
 CXX = clang
 CC = gcc
@@ -112,7 +112,7 @@ convwld:
 	$(CXX) $(CPPFLAGS) -o ../bin/convwld util/convwld.cpp constants.cpp bitfield.cpp assert.cpp
 
 clean:
-	rm -f *.o *.d ../bin/awake.new
+	rm -f *.o ../test/*.o *.d ../bin/awake.new
 
 %.d: %.cpp
 	set -e; $(CC) -MM $(CPPFLAGS) $< \
@@ -137,6 +137,20 @@ update:
 
 all:
 	$(MAKE) ../bin/awake.new
+
+unittest_srcs = $(wildcard ../test/*.cpp)
+unittest_objs = $(unittest_srcs:.cpp=.o) $(objfiles)
+
+unittest: ../bin/unittest
+	../bin/unittest
+
+../bin/unittest: CPPFLAGS+=-DUNITTEST
+../bin/unittest: $(unittest_objs)
+	$(CXX) -o $@ $(PROFILE) $(unittest_objs) $(LIBS)
+
+../test/%.o: ../test/%.cpp
+	$(CXX) -c $(CPPFLAGS) -I../3rdparty/catch2 -o $@ $<
+
 
 include $(sourcefiles:.cpp=.d)
 
