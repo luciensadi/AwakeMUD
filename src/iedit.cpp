@@ -2300,8 +2300,8 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           }
           break;
         case ITEM_CYBERDECK:
-          if (number <= 0 || (number > 1 && number > (int)(GET_OBJ_VAL(d->edit_obj, 0) / 3))) {
-            send_to_char(CH, "Reaction upgrade must be between 1 and %d. Reaction Upgrade: ", (int)(GET_OBJ_VAL(d->edit_obj, 0) / 3));
+          if (number < 0 || (number > 1 && number > (int)(GET_OBJ_VAL(d->edit_obj, 0) / 3))) {
+            send_to_char(CH, "Reaction upgrade must be between 0 and %d. Reaction Upgrade: ", (int)(GET_OBJ_VAL(d->edit_obj, 0) / 3));
             return;
           }
           break;
