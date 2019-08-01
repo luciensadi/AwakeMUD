@@ -1420,10 +1420,11 @@ void command_interpreter(struct char_data * ch, char *argument, char *tcname)
       nonsensical_reply(ch);
       return;
     } else {
-      ch->desc->invalid_command_counter = 0;
+      if (ch->desc)
+        ch->desc->invalid_command_counter = 0;
     }
     
-    if (IS_PROJECT(ch) && AFF_FLAGGED(ch->desc->original, AFF_TRACKING) && cmd != find_command("track")) {
+    if (IS_PROJECT(ch) && ch->desc && ch->desc->original && AFF_FLAGGED(ch->desc->original, AFF_TRACKING) && cmd != find_command("track")) {
       send_to_char("You are too busy astrally tracking someone...\r\n", ch);
       return;
     }
