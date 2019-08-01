@@ -2520,7 +2520,7 @@ void nanny(struct descriptor_data * d, char *arg)
     dirty_password = (STATE(d) == CON_CHPWD_VRFY);
 
     if (STATE(d) == CON_CNFPASSWD) {
-      SEND_TO_Q("What is your sex (M/F)? ", d);
+      SEND_TO_Q("What is your sex (M/F/O)? ", d);
       STATE(d) = CON_CCREATE;
       init_create_vars(d);
     } else {

@@ -840,6 +840,10 @@ void create_parse(struct descriptor_data *d, const char *arg)
     case 'F':
       d->character->player.sex = SEX_FEMALE;
       break;
+    case 'o':
+    case 'O':
+      d->character->player.sex = SEX_NEUTRAL;
+      break;
     default:
       SEND_TO_Q("That is not a sex..\r\nWhat IS your sex? ", d);
       return;
