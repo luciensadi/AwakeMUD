@@ -1321,6 +1321,12 @@ ACMD(do_drag)
   }
   if (!veh)
     dir = convert_look[dir];
+  
+  if (IS_NPC(vict) && vict->master != ch) {
+    // You may only drag friendly NPCs. This prevents a whole lot of abuse options.
+    send_to_char("You may only drag NPCs who are following you already.\r\n", ch);
+    return;
+  }
 
   if (GET_POS(vict) > POS_LYING) {
     act("You can't drag $M off in $S condition!", FALSE, ch, 0, vict, TO_CHAR);
