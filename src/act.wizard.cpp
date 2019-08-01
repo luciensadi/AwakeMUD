@@ -4806,6 +4806,10 @@ ACMD(do_restring)
     send_to_char("You don't have that item.\r\n", ch);
     return;
   }
+  if (GET_OBJ_TYPE(obj) == ITEM_GUN_ACCESSORY || GET_OBJ_TYPE(obj) == ITEM_MOD) {
+    send_to_char("Sorry, gun attachments and vehicle mods can't be restrung.\r\n", ch);
+    return;
+  }
   if (strlen(buf) >= LINE_LENGTH) {
     send_to_char("That restring is too long, please shorten it.\r\n", ch);
     return;
