@@ -19,20 +19,25 @@ CC = g++
 PROFILE = -ggdb
 CVS = cvs
 
+LUA_SRC_DIR := ../3rdparty/lua-5.3.5/src
+LUA_INC_DIR := $(LUA_SRC_DIR)
+LUA_LIB_DIR := $(LUA_SRC_DIR)
+LUA_LIB := $(LUA_LIB_DIR)/liblua.a"
+
 # I added the DEBUG flag to make extensive checks on lists and such
 # in order to find any problems such as not freeing up pointers properly.
 # The obvious drawback is that it's time consuming, so once things go
 # smooth, the define can be removed.
 
-COMMON_FLAGS = -lmysqlclient -lz -lm -lsodium -lstdc++
+COMMON_FLAGS = -L$(LUA_LIB_DIR) -lmysqlclient -llua -lz -lm -lsodium -lstdc++
 
 # OSX? Uncomment these:
-LIBS = -L/usr/local/lib $(COMMON_FLAGS) -lcurl
-MYFLAGS = -DUSE_MEMORY_CANARIES -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DGITHUB_INTEGRATION -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
+# LIBS = -L/usr/local/lib $(COMMON_FLAGS) -lcurl
+# MYFLAGS = -DUSE_MEMORY_CANARIES -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -DGITHUB_INTEGRATION -Dosx -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
 
 # Linux / others? Uncomment these:
-#LIBS = -lcrypt -L/usr/local/lib $(COMMON_FLAGS) -lnsl -lcurl
-#MYFLAGS = -DDEBUG_CRYPTO -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -Dlinux -I /usr/local/include/ -Wall -Wextra -Wno-unused-parameter
+LIBS = -lcrypt -L/usr/local/lib $(COMMON_FLAGS) -lnsl -lcurl
+MYFLAGS = -DDEBUG_CRYPTO -DDEBUG -DSELFADVANCE -DIDLEDELETE_DRYRUN -Dlinux -I /usr/local/include/ -I$(LUA_INC_DIR) -Wall -Wextra -Wno-unused-parameter
 # If you want GitHub integration, add -DGITHUB_INTEGRATION to the above and fill out your basic auth credentials in github_config.cpp.
 
 # Cygwin:
@@ -46,6 +51,9 @@ objfiles = $(sourcefiles:.cpp=.o)
 dependfiles = $(wildcard *.d)
 
 ../bin/awake.new : $(objfiles)
+
+$(LUA_LIB):
+	$(MAKE) -C $(LUA_SRC_DIR) CC=$(CXX) MYCFLAGS="-x c++" liblua.a
 
 utils:
 	$(MAKE) ../bin/autowiz
@@ -147,7 +155,7 @@ unittest: ../bin/unittest
 	../bin/unittest
 
 ../bin/unittest: CPPFLAGS+=-DUNITTEST
-../bin/unittest: $(unittest_objs)
+../bin/unittest: $(unittest_objs) $(LUA_LIB)
 	$(CXX) -o $@ $(PROFILE) $(unittest_objs) $(LIBS)
 
 ../test/%.o: ../test/%.cpp
