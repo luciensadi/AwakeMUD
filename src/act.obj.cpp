@@ -609,7 +609,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
   else if (GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(cont, 0) == TYPE_COMPUTER)
     computer = TRUE;
 
-  if (mode == FIND_OBJ_INV || ch == get_obj_possessor(cont) || can_take_obj(ch, obj))
+  if (mode == FIND_OBJ_INV || ch == get_obj_possessor(obj) || can_take_obj(ch, obj))
   {
     if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
       act("$p: you can't hold any more items.", FALSE, ch, obj, 0, TO_CHAR);
