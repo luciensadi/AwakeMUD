@@ -36,6 +36,7 @@
 
 void show_string(struct descriptor_data *d, char *input);
 void qedit_disp_menu(struct descriptor_data *d);
+void format_tabs(struct descriptor_data *d);
 
 /* ************************************************************************
 *  modification of malloc'ed strings                                      *
@@ -307,10 +308,12 @@ void string_add(struct descriptor_data *d, char *str)
     } else if (STATE(d) == CON_REDIT) {
       switch(d->edit_mode) {
       case REDIT_DESC:
+        format_tabs(d);
         REPLACE_STRING_WITH_INDENTED_FORMATTING(d->edit_room->description);
         redit_disp_menu(d);
         break;
       case REDIT_NDESC:
+          format_tabs(d);
           DELETE_ARRAY_IF_EXTANT(d->edit_room->night_desc);
           if (d->str && *d->str) {
             if (strlen(*d->str) > 5)
@@ -799,3 +802,26 @@ void show_string(struct descriptor_data *d, char *input)
   }
 }
 
+void format_tabs(struct descriptor_data *d) {
+  if (!d || !d->str || !*d->str)
+    return;
+  
+  int tabcount = 0;
+  
+  // Replace all instances of "\t" with '\t' (backslash-t to tab)
+  for (unsigned long i = 0; i < strlen(*d->str) - 1; i++)
+    if (*(*d->str + i) == '\\' && *(*d->str + i + 1) == 't')
+      tabcount++;
+  
+  // If there were an even number of tabs, we assume they didn't fuck up and go ahead and do a replacement.
+  if (tabcount % 2 == 0) {
+    for (unsigned long i = 0; i < strlen(*d->str) - 1; i++) {
+      if (*(*d->str + i) == '\\' && *(*d->str + i + 1) == 't') {
+        *(*d->str + i) = '\t';
+        tabcount++;
+        for (unsigned long j = i+1; j < strlen(*d->str) - 1; j++)
+          *(*d->str + j) = *(*d->str + j + 1);
+      }
+    }
+  }
+}
