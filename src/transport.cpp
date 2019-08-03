@@ -291,7 +291,7 @@ ACMD(do_hail)
 
   if (ch->in_room->sector_type != SPIRIT_CITY || !empty ||
       ROOM_FLAGGED(ch->in_room, ROOM_INDOORS)) {
-    send_to_char("There doesn't seem to be any cabs in the area.\r\n", ch);
+    send_to_char("There don't seem to be any cabs in the area.\r\n", ch);
     return;
   }
 

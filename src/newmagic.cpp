@@ -3656,6 +3656,14 @@ ACMD(do_dispell)
   }
   int success = success_test(GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch)), sust->force);
   int type = sust->spell, force = sust->force;
+  sprintf(buf, "Dispell $N's %s (force %d) using skill %d vs TN %d: %d successes. Remaining successes on spell = %d.",
+          spells[sust->spell].name,
+          sust->force,
+          GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch)),
+          sust->force,
+          success,
+          sust->success = success);
+  act(buf, 0, ch, 0, vict, TO_ROLLS);
   if (success > 0) {
     spell_modify(vict, sust, FALSE);
     sust->success -= success;
