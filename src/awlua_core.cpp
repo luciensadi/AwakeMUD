@@ -7,6 +7,16 @@
 
 static lua_State *awLS = nullptr;
 
+void awlua::Init()
+{
+    lua_State *LS = luaL_newstate();
+    AWLUA_ASSERT(LS);
+    luaL_openlibs(LS);    
+    awLS = LS;
+
+    AWLUA_ASSERT(0 == lua_gettop(LS));
+}
+
 lua_State *awlua::GetLS()
 {
     return awLS;

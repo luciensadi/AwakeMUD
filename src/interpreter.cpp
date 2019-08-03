@@ -205,6 +205,7 @@ ACMD_DECLARE(do_leave);
 ACMD_DECLARE(do_lay);
 ACMD_DECLARE(do_link);
 ACMD_DECLARE(do_look);
+ACMD_DECLARE(do_luai);
 ACMD_DECLARE(do_logwatch);
 ACMD_DECLARE(do_manifest);
 ACMD_DECLARE(do_masking);
@@ -592,6 +593,7 @@ struct command_info cmd_info[] =
     { "lock"     , POS_SITTING , do_gen_door , 0, SCMD_LOCK },
     { "load"     , POS_RESTING , do_chipload , 0, 0 },
     { "logwatch" , POS_DEAD    , do_logwatch , LVL_BUILDER, 0 },
+    { "luai"     , POS_DEAD    , do_luai     , LVL_ADMIN, 0 },
 
     { "man"      , POS_SITTING , do_man      , 0, 0 },
     { "manifest" , POS_RESTING , do_manifest , 0, 0 },

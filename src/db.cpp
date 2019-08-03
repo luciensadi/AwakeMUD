@@ -3514,6 +3514,7 @@ void free_char(struct char_data * ch)
   if (IS_NPC(ch))
     clearMemory(ch);
   
+  ch->ref_env.~LuaRef();
   clear_char(ch);
 }
 
@@ -3752,6 +3753,7 @@ void reset_char(struct char_data * ch)
 void clear_char(struct char_data * ch)
 {
   memset((char *) ch, 0, sizeof(struct char_data));
+  new (&ch->ref_env) awlua::LuaRef();
 
   ch->in_veh = NULL;
   ch->in_room = NULL;

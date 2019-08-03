@@ -14,6 +14,7 @@
 #include "utils.h"
 #include "playergroup_classes.h"
 #include "protocol.h"
+#include "awlua_core.h"
 
 #define SPECIAL(name) \
    int (name)(struct char_data *ch, void *me, int cmd, char *argument)
@@ -718,6 +719,8 @@ struct char_data
   
   Pgroup_data *pgroup;                   /* Data concerning the player group this char is part of. */
   Pgroup_invitation *pgroup_invitations; /* The list of open group invitations associated with this player. */
+
+  awlua::LuaRef ref_env;
   
   /* Adding a field here? If it's a pointer, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
 
@@ -828,6 +831,7 @@ struct descriptor_data
   
   protocol_t *pProtocol;
   
+  awlua::LuaRef ref_luai;
   // this is for spell creation
 
   descriptor_data() :

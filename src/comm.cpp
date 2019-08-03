@@ -22,6 +22,7 @@
 #include <new>
 #include <time.h>
 #include <iostream>
+#include <sstream>
 using namespace std;
 
 #if defined(WIN32) && !defined(__CYGWIN__)
@@ -66,9 +67,18 @@ typedef SOCKET  socket_t;
 #include "limits.h"
 #include "protocol.h"
 #include "perfmon.h"
+#include "awlua_core.h"
+#include "awlua_luai.h"
 
 
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
+
+void handle_awlua_assert(const char *cond, const char *func, const char *file, int line)
+{
+  std::stringstream ss;
+  ss << "awlua assert failed [" << cond << "] " << file << "::" << func << "@" << line;
+  log(ss.str().c_str());
+}
 
 /* externs */
 extern int restrict;
@@ -367,6 +377,7 @@ void init_game(int port)
   }
   
   DBInit();
+  awlua::Init();
   
   log("Signal trapping.");
   signal_setup();
@@ -718,6 +729,8 @@ void game_loop(int mother_desc)
             string_add(d, comm);
           else if (d->showstr_point)      /* reading something w/ pager   */
             show_string(d, comm);
+          else if (d->ref_luai.IsSet())
+            awlua::luai_handle(d, comm);
           else if (d->connected != CON_PLAYING)   /* in menus, etc.       */
             nanny(d, comm);
           else {                          /* else: we're playing normally */
@@ -1039,6 +1052,8 @@ void make_prompt(struct descriptor_data * d)
   }
   else if (d->showstr_point)
     write_to_descriptor(d->descriptor, " Press [return] to continue, [q] to quit ");
+  else if (d->ref_luai.IsSet())
+    write_to_descriptor(d->descriptor, awlua::luai_get_prompt(d));
   else if (D_PRF_FLAGGED(d, PRF_NOPROMPT)) {
     // Anything below this line won't render for noprompters.
     return;
@@ -1427,6 +1442,8 @@ void init_descriptor (struct descriptor_data *newd, int desc)
   // Initialize the protocol data when a new descriptor structure is allocated.
   newd->pProtocol = ProtocolCreate();
   
+  new (&newd->ref_luai) awlua::LuaRef();
+
   if (++last_desc == 10000)
     last_desc = 1;
   newd->desc_num = last_desc;
