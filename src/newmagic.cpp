@@ -3656,17 +3656,18 @@ ACMD(do_dispell)
   }
   int success = success_test(GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch)), sust->force);
   int type = sust->spell, force = sust->force;
-  sprintf(buf, "Dispell $N's %s (force %d) using skill %d vs TN %d: %d successes. Remaining successes on spell = %d.",
+  sprintf(buf, "Dispell $N's %s (force %d) using skill %d vs TN %d: %d successes.",
           spells[sust->spell].name,
           sust->force,
           GET_SKILL(ch, SKILL_SORCERY) + MIN(GET_SKILL(ch, SKILL_SORCERY), GET_CASTING(ch)),
           sust->force,
-          success,
-          sust->success - success);
+          success);
   act(buf, 0, ch, 0, vict, TO_ROLLS);
   if (success > 0) {
     spell_modify(vict, sust, FALSE);
-    sust->success -= success;
+    sust->success = MAX(sust->success - success, 0); // Since it's unsigned, we have to do shit like this.
+    sprintf(buf, "Remaining successes on spell: %d.", sust->success);
+    act(buf, 0, ch, 0, vict, TO_ROLLS);
     if (sust->success < 1) {
       send_to_char("You succeed in completely dispelling that spell.\r\n", ch);
       sust->success += success;
