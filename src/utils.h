@@ -85,6 +85,10 @@ struct  obj_data *unattach_attachment_from_weapon(int location, struct obj_data 
 void    copy_over_necessary_info(struct char_data *original, struct char_data *clone);
 void    clear_editing_data(struct descriptor_data *d);
 char    *double_up_color_codes(const char *string);
+struct  char_data *get_obj_carried_by_recursive(struct obj_data *obj);
+struct  char_data *get_obj_worn_by_recursive(struct obj_data *obj);
+struct  char_data *get_obj_possessor(struct obj_data *obj);
+
 
 // Skill-related.
 char *how_good(int skill, int rank);

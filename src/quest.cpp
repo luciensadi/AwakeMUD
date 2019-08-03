@@ -37,6 +37,8 @@ extern void add_follower(struct char_data *ch, struct char_data *leader);
 extern void free_quest(struct quest_data *quest);
 extern bool resize_qst_array(void);
 extern char *cleanup(char *, const char *);
+extern int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
+                        const char *sname, struct room_data *random_donation_room);
 
 ACMD_CONST(do_say);
 ACMD_DECLARE(do_action);
@@ -256,10 +258,10 @@ void load_quest_targets(struct char_data *johnson, struct char_data *ch)
         obj->obj_flags.quest_id = GET_IDNUM(ch);
         obj_to_char(obj, johnson);
         if (!perform_give(johnson, ch, obj)) {
-          char buf[256];
-          sprintf(buf, "You cannot hold %s.", obj->text.name);
+          char buf[512];
+          sprintf(buf, "Looks like your hands are full. You'll need %s for the run.", decapitalize_a_an(obj->text.name));
           do_say(johnson, buf, 0, 0);
-          extract_obj(obj);
+          perform_drop(johnson, obj, SCMD_DROP, "drop", NULL);
         }
         obj = NULL;
         break;

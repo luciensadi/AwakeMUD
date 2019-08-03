@@ -265,27 +265,27 @@ ACMD(do_echo)
     }
     memset(buf, '\0', sizeof(buf));
     switch (subcmd) {
-    case SCMD_EMOTE:
-      if (argument[0] == '\'' && argument[1] == 's' ) {
-        if (PLR_FLAGGED(ch, PLR_MATRIX))
-          sprintf(buf, "%s%s", ch->persona->name, argument);
-        else
-          sprintf(buf, "$n%s", argument);
-      } else {
-        if (PLR_FLAGGED(ch, PLR_MATRIX))
-          sprintf(buf, "%s %s", ch->persona->name, argument);
-        else
-          sprintf(buf, "$n %s", argument);
-      }
-      break;
-    case SCMD_ECHO:
-    case SCMD_AECHO:
-      if (!PRF_FLAGGED(ch, PRF_QUESTOR) && (ch->desc && ch->desc->original ? GET_LEVEL(ch->desc->original) : GET_LEVEL(ch)) < LVL_ARCHITECT) {
-        nonsensical_reply(ch);
-        return;
-      }
-      sprintf(buf, "%s", argument);
-      break;
+      case SCMD_EMOTE:
+        if (argument[0] == '\'' && argument[1] == 's' ) {
+          if (PLR_FLAGGED(ch, PLR_MATRIX))
+            sprintf(buf, "%s%s", ch->persona->name, argument);
+          else
+            sprintf(buf, "$n%s", argument);
+        } else {
+          if (PLR_FLAGGED(ch, PLR_MATRIX))
+            sprintf(buf, "%s %s", ch->persona->name, argument);
+          else
+            sprintf(buf, "$n %s", argument);
+        }
+        break;
+      case SCMD_ECHO:
+      case SCMD_AECHO:
+        if (!PRF_FLAGGED(ch, PRF_QUESTOR) && (ch->desc && ch->desc->original ? GET_LEVEL(ch->desc->original) : GET_LEVEL(ch)) < LVL_ARCHITECT) {
+          nonsensical_reply(ch);
+          return;
+        }
+        sprintf(buf, "%s", argument);
+        break;
     }
 
     if (subcmd == SCMD_AECHO) {
@@ -296,6 +296,70 @@ ACMD(do_echo)
       if (PLR_FLAGGED(ch, PLR_MATRIX))
         send_to_host(ch->persona->in_host, buf, ch->persona, TRUE);
       else {
+        /*
+        const char *parse_emote_by_x_for_y(const char *emote, struct char_data *ch, struct char_data *targ) {
+          char tmp_name[strlen(emote) + 1];
+          int tmp_index, buf2_index;
+          struct char_data *tmp_vict;
+          
+          // Actor is recipient? Skip (they're handled elsewhere in logic).
+          if (targ == ch)
+            return NULL;
+          
+          // Actor is intangible and invisible to recipient? Skip.
+          if ((IS_ASTRAL(ch) || IS_PROJECT(ch)) && !(IS_ASTRAL(targ) || IS_PROJECT(targ) || IS_DUAL(targ)))
+            return NULL;
+          
+          // Scan the emote for @ character, which indicates targeting.
+          for (int i = 0; emote[i]; i++) {
+            if (emote[i] == '@') {
+              // Found an @. Set up for evaluation, and store current 'i' as marker.
+              tmp_index = 0;
+              marker = i;
+              
+              // Copy out the target's name, null-terminating it.
+              while (isalpha(emote[++i]))
+                tmp_name[tmp_index++] = i;
+              tmp_name[tmp_index] = '\0';
+              
+              // Move 'i' back one character so it is pointing at the last character of the @-name.
+              i--;
+              
+              // Search the room for the target.
+              tmp_vict = get_char_room_vis(ch, tmp_name);
+              if (tmp_vict == targ) {
+                // Check for "@'s" -> "your"
+                if (i <= strlen(emote) - 3 && emote[i+1] == '\'' && emote[i+2] == 's') {
+                  i += 1; // Advance to the "s".
+                  sprintf(tmp_name, "your");
+                } else {
+                  sprintf(tmp_name, "you");
+                }
+              } // End of targ == vict
+              else if (tmp_vict) {
+                // Check for visibility.
+                if (CAN_SEE(targ, vict)) {
+                  if (found_mem(GET_MEMORY(targ), vict)) {
+                    strcpy(tmp_name, CAP(found_mem(GET_MEMORY(targ), vict)->mem));
+                  } else {
+                    strcpy(tmp_name, GET_NAME(vict));
+                  }
+                } else {
+                  strcpy(tmp_name, "someone");
+                }
+              } // End of targ != vict
+              else {
+                // todo
+                broken compile here
+              }
+            } // End of char == '@'
+            else {
+              // No special character, copy it 1:1.
+              buf2[buf2_index++] = emote[i];
+            }
+          }
+        }
+         */
         for (struct char_data *targ = ch->in_veh ? ch->in_veh->people : ch->in_room->people; targ; targ = ch->in_veh ? targ->next_in_veh : targ->next_in_room)
           if (targ != ch) {
             if ((IS_ASTRAL(ch) || IS_PROJECT(ch)) && !(IS_ASTRAL(targ) || IS_PROJECT(targ) || IS_DUAL(targ)))

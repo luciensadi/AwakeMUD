@@ -2531,3 +2531,42 @@ size_t strlcat(char *buf, const char *src, size_t bufsz)
 
     return rtn;
 }
+
+// Un-nests contained objects until it figures out who's actually carrying the object (if anyone).
+struct char_data *get_obj_carried_by_recursive(struct obj_data *obj) {
+  if (!obj)
+    return NULL;
+  
+  if (obj->carried_by)
+    return obj->carried_by;
+  
+  if (obj->in_obj)
+    return get_obj_carried_by_recursive(obj->in_obj);
+  
+  return NULL;
+}
+
+// Un-nests contained objects until it figures out who's actually wearing the object (if anyone).
+struct char_data *get_obj_worn_by_recursive(struct obj_data *obj) {
+  if (!obj)
+    return NULL;
+  
+  if (obj->worn_by)
+    return obj->carried_by;
+  
+  if (obj->in_obj)
+    return get_obj_worn_by_recursive(obj->in_obj);
+  
+  return NULL;
+}
+
+// Finds the object's holder (either carrying or wearing it or its parent object recursively).
+struct char_data *get_obj_possessor(struct obj_data *obj) {
+  struct char_data *owner;
+  
+  if ((owner = get_obj_carried_by_recursive(obj)))
+    return owner;
+  
+  else
+    return get_obj_worn_by_recursive(obj);
+}
