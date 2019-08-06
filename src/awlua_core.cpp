@@ -14,6 +14,30 @@ void awlua::Init()
     luaL_openlibs(LS);    
     awLS = LS;
 
+    // TODO: check return val
+    luaL_dostring(LS, 
+        "local traceback = debug.traceback \n"
+        "debug.traceback = function(message, level) \n"
+          "level = level or 1 \n"
+          "local rtn = traceback(message, level + 1) \n"
+          "if not rtn then return rtn end \n"
+          "rtn = rtn:gsub(\"\\t\", \"    \") \n"
+          "rtn = rtn:gsub(\"\\n\", \"\\n\\r\") \n"
+          "return rtn \n"
+        "end \n"
+        "return debug.traceback \n");
+
+    luaL_loadstring(LS, "package.path = '../src/lua/?.lua'");
+    lua_call(LS, 0, 0);
+
+    lua_getglobal(LS, "require");
+    lua_pushliteral(LS, "awlua");
+    lua_call(LS, 1, 1);
+
+    // TODO: save awlua ref somewhere
+    lua_pop(LS, 1);
+
+
     AWLUA_ASSERT(0 == lua_gettop(LS));
 }
 
