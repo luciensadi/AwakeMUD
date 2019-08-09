@@ -1,6 +1,7 @@
 #ifndef awlua_core_h_
 #define awlua_core_h_
 
+
 struct lua_State;
 
 namespace awlua
@@ -27,6 +28,7 @@ public:
 private:
     int val_;
 };
+
 
 } // namespace awlua
 

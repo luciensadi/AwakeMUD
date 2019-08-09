@@ -36,7 +36,6 @@ static int GetRefCount(lua_State *LS, int index)
     return cnt;
 }
 
-
 TEST_CASE("LuaRef")
 {
     lua_State *LS = luaL_newstate();

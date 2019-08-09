@@ -73,12 +73,14 @@ typedef SOCKET  socket_t;
 
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
 
+#if !defined(UNITTEST)
 void handle_awlua_assert(const char *cond, const char *func, const char *file, int line)
 {
   std::stringstream ss;
   ss << "awlua assert failed [" << cond << "] " << file << "::" << func << "@" << line;
   log(ss.str().c_str());
 }
+#endif
 
 /* externs */
 extern int restrict;

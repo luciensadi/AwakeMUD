@@ -211,7 +211,6 @@ local function luai_result_tostring(...)
 end
 
 function M.luai_handle(luai, env, comm)
-    local f, err
     local first_line
     local all_input
     
@@ -220,7 +219,10 @@ function M.luai_handle(luai, env, comm)
         all_input = comm
     else
         all_input = luai.input.."\n"..comm
+        luai.input = nil
     end
+
+    local f, err
 
     if first_line then
         local ret_line = "return "..all_input..";"

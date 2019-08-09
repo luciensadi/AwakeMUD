@@ -3515,6 +3515,7 @@ void free_char(struct char_data * ch)
     clearMemory(ch);
   
   ch->ref_env.~LuaRef();
+  ch->ref_ud.~LuaUdRef<char_data*>();
   clear_char(ch);
 }
 
@@ -3754,6 +3755,7 @@ void clear_char(struct char_data * ch)
 {
   memset((char *) ch, 0, sizeof(struct char_data));
   new (&ch->ref_env) awlua::LuaRef();
+  new (&ch->ref_ud) awlua::LuaUdRef<char_data*>(ch);
 
   ch->in_veh = NULL;
   ch->in_room = NULL;

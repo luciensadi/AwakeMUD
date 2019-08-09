@@ -14,7 +14,7 @@
 #include "utils.h"
 #include "playergroup_classes.h"
 #include "protocol.h"
-#include "awlua_core.h"
+#include "awlua_ud.h"
 
 #define SPECIAL(name) \
    int (name)(struct char_data *ch, void *me, int cmd, char *argument)
@@ -721,6 +721,7 @@ struct char_data
   Pgroup_invitation *pgroup_invitations; /* The list of open group invitations associated with this player. */
 
   awlua::LuaRef ref_env;
+  awlua::LuaUdRef<char_data *> ref_ud;
   
   /* Adding a field here? If it's a pointer, add it to utils.cpp's copy_over_necessary_info() to avoid breaking mdelete etc. */
 
@@ -728,7 +729,7 @@ struct char_data
       in_room(NULL), was_in_room(NULL), player_specials(NULL), in_veh(NULL), persona(NULL), squeue(NULL), sustained(NULL),
       ssust(NULL), carrying(NULL), desc(NULL), cyberware(NULL), bioware(NULL), next_in_room(NULL), next(NULL),
       next_fighting(NULL), next_in_zone(NULL), next_in_veh(NULL), next_watching(NULL), followers(NULL),
-      master(NULL), spells(NULL), pgroup(NULL), pgroup_invitations(NULL)
+      master(NULL), spells(NULL), pgroup(NULL), pgroup_invitations(NULL), ref_ud(this)
   {
     for (int i = 0; i < NUM_WEARS; i++)
       equipment[i] = NULL;
