@@ -43,7 +43,12 @@ public:
 
     static Tptr CheckUd(lua_State *LS, int index)
     {
-        return *(static_cast<Tptr*>(luaL_checkudata(LS, index, mt_name.c_str())));
+        Tptr rtn = *(static_cast<Tptr*>(luaL_checkudata(LS, index, mt_name.c_str())));
+        if (rtn == nullptr)
+        {
+            luaL_error(LS, "Invalid %s", mt_name.c_str());
+        }
+        return rtn;
     }
 
     static void InitType(lua_State *LS)

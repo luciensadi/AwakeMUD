@@ -1,4 +1,6 @@
 #include "awlua_luai.h"
+
+#include "awlua_char.h"
 #include "awlua_core.h"
 
 #include "structs.h"
@@ -84,7 +86,7 @@ void awlua::luai_handle(descriptor_data *d, const char *comm)
         lua_call(LS, 1, 1);
         lua_getfield(LS, -1, "new_script_env");
         lua_remove(LS, -2);
-        lua_newtable(LS); // TODO: push CH
+        d->character->ref_ud.Push();
         lua_call(LS, 1, 1);
         d->character->ref_env.Save(-1);
     }

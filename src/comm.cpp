@@ -69,6 +69,7 @@ typedef SOCKET  socket_t;
 #include "perfmon.h"
 #include "awlua_core.h"
 #include "awlua_luai.h"
+#include "awlua_char.h"
 
 
 const unsigned perfmon::kPulsePerSecond = PASSES_PER_SEC;
@@ -380,6 +381,7 @@ void init_game(int port)
   
   DBInit();
   awlua::Init();
+  awlua::UdChar::InitType(awlua::GetLS());
   
   log("Signal trapping.");
   signal_setup();

@@ -120,6 +120,45 @@ TEST_CASE("UdType")
 
     REQUIRE(0 == lua_gettop(LS));
 
+    SECTION("is_valid")
+    {
+        {
+            UdTypeTest rt;
+
+            rt.ref.Push();
+            lua_getfield(LS, -1, "is_valid");
+
+            REQUIRE(LUA_TBOOLEAN == lua_type(LS, -1));
+            REQUIRE(true == lua_toboolean(LS, -1));
+            lua_pop(LS, 1);
+        }
+
+        lua_getfield(LS, -1, "is_valid");
+        REQUIRE(LUA_TBOOLEAN == lua_type(LS, -1));
+        REQUIRE(false == lua_toboolean(LS, -1));
+        lua_pop(LS, 1);
+    }
+
+    SECTION("type_name")
+    {
+        // type_name should work whether ud is valid or not
+        {
+            UdTypeTest rt;
+
+            rt.ref.Push();
+            lua_getfield(LS, -1, "type_name");
+
+            const std::string name1(luaL_checkstring(LS, -1));
+            REQUIRE(name1 == "UdTypeTest");
+            lua_pop(LS, 1);
+        }
+
+        lua_getfield(LS, -1, "type_name");
+        const std::string name2(luaL_checkstring(LS, -1));
+        REQUIRE(name2 == "UdTypeTest");
+        lua_pop(LS, 1);
+    }
+
     SECTION("get")
     {
         UdTypeTest rt;
@@ -181,5 +220,31 @@ TEST_CASE("UdType")
         lua_call(LS, 1, 0);
         REQUIRE(true == rt.meth_a_called);
 
+    }
+
+    SECTION("CheckUd")
+    {
+        {
+            UdTypeTest rt;
+            luaL_loadstring(LS,
+                "myobj = ...\n");
+            rt.ref.Push();
+            lua_call(LS, 1, 0);
+
+            // Call before destruction, should be no error
+            luaL_loadstring(LS,
+                "myobj:meth_a()\n");
+            lua_call(LS, 0, 0);
+        }
+
+        // Call after destruction, should be an error
+        luaL_loadstring(LS,
+            "myobj:meth_a()\n");
+        int rc = lua_pcall(LS, 0, 0, 0);
+        REQUIRE(LUA_ERRRUN == rc);
+        const std::string errMsg(lua_tostring(LS, -1));
+        INFO("errMsg: " << errMsg);
+        REQUIRE(errMsg.find("Invalid UdTypeTest") != std::string::npos);
+        lua_pop(LS, 1);
     }
 }

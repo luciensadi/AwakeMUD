@@ -4,6 +4,26 @@
 #include <lualib.h>
 #include <lauxlib.h>
 
+
+static int L_get_is_valid(lua_State *LS)
+{
+    void *ud_mem = lua_touserdata(LS, 1);
+    if (NULL == lua_touserdata(LS, 1))
+    {
+        return luaL_error(LS, "arg 1 is not userdata");
+    }
+
+    void *ptr = *static_cast<void**>(ud_mem);
+    lua_pushboolean(LS, ptr != nullptr);
+    return 1;
+}
+
+static int L_get_type_name(lua_State *LS)
+{
+    lua_pushvalue(LS, lua_upvalueindex(1));
+    return 1;
+}
+
 void awlua::UdTypeBase::NewUd(lua_State *LS, const char *mt_name)
 {
     void *ud_mem = lua_newuserdata(LS, sizeof(void*));
@@ -24,6 +44,12 @@ void awlua::UdTypeBase::InitType(lua_State *LS, const char *mt_name, const ud_fi
         lua_pushcfunction(LS, get_fields[i].func);
         lua_setfield(LS, -2, get_fields[i].field);
     }
+    lua_pushcfunction(LS, L_get_is_valid);
+    lua_setfield(LS, -2, "is_valid");
+    lua_pushstring(LS, mt_name);
+    lua_pushcclosure(LS, L_get_type_name, 1);
+    lua_setfield(LS, -2, "type_name");
+    
     lua_newtable(LS);
     for (int i = 0; meth_fields[i].field; ++i)
     {

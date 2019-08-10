@@ -24,8 +24,8 @@ void awlua::Init()
           "rtn = rtn:gsub(\"\\t\", \"    \") \n"
           "rtn = rtn:gsub(\"\\n\", \"\\n\\r\") \n"
           "return rtn \n"
-        "end \n"
-        "return debug.traceback \n");
+        "end \n");
+        // "return debug.traceback \n");
 
     luaL_loadstring(LS, "package.path = '../src/lua/?.lua'");
     lua_call(LS, 0, 0);
