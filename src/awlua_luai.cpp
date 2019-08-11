@@ -38,21 +38,6 @@ ACMD(do_luai)
     lua_settop(LS, top);
 }
 
-static int tbcall(lua_State *LS, int nargs, int nresults)
-{
-    int ind_base = lua_gettop(LS) - nargs; // ind_base is the index of the chunk right now
-    
-    lua_getglobal(LS, "debug");
-    lua_getfield(LS, -1, "traceback");
-    lua_remove(LS, -2); // remove debug table
-    lua_insert(LS, ind_base); // traceback func below chunk which is shifted up
-
-    int rtn = lua_pcall(LS, nargs, nresults, ind_base);
-    lua_remove(LS, ind_base); // remove traceback func
-
-    return rtn;
-}
-
 void awlua::luai_handle(descriptor_data *d, const char *comm)
 {
     if (!strcmp(comm, "@"))
@@ -93,11 +78,37 @@ void awlua::luai_handle(descriptor_data *d, const char *comm)
 
     lua_pushstring(LS, comm);
 
-    if (tbcall(LS, 3, 1))
+    if (CallWithTraceback(LS, 3, 1))
     {
         SEND_TO_Q("Error in luai_handle: ", d);
         SEND_TO_Q(lua_tostring(LS, -1), d);
         lua_pop(LS, 1);
+    }
+    else if (lua_isfunction(LS, -1))
+    {
+        int ref_top = lua_gettop(LS);
+        int rc = ScriptCall(LS, 0, LUA_MULTRET);
+
+        if (LUA_OK != rc)
+        {
+            SEND_TO_Q(lua_tostring(LS, -1), d);
+        }
+        else
+        {
+            lua_getglobal(LS, "require");
+            lua_pushliteral(LS, "awlua");
+            lua_call(LS, 1, 1);
+            lua_getfield(LS, -1, "luai_result_tostring");
+            lua_remove(LS, -2);
+            lua_insert(LS, ref_top);
+            int nargs = lua_gettop(LS) - ref_top;
+            lua_call(LS, nargs, 1);
+
+            if (lua_isstring(LS, -1))
+            {
+                SEND_TO_Q(lua_tostring(LS, -1), d);    
+            }
+        }
     }
     else if (lua_isstring(LS, -1))
     {

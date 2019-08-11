@@ -36,6 +36,116 @@ static int GetRefCount(lua_State *LS, int index)
     return cnt;
 }
 
+TEST_CASE("ScriptCall")
+{
+    lua_State *LS = luaL_newstate();
+    luaL_openlibs(LS);
+    awlua::SetLS(LS);
+
+    SECTION("timeout")
+    {
+        int rc;
+
+        lua_settop(LS, 0);
+        luaL_loadstring(LS,
+            "while true do end");
+        rc = awlua::ScriptCall(LS, 0, 0);
+        REQUIRE(LUA_OK != rc);
+        REQUIRE(1 == lua_gettop(LS));
+
+        const std::string errMsg(lua_tostring(LS, -1));
+        INFO(errMsg);
+        REQUIRE(errMsg.find("Script timeout") != std::string::npos);
+    }
+
+    SECTION("No error")
+    {
+        int rc;
+
+        lua_settop(LS, 0);
+        luaL_loadstring(LS,
+            "local a, b, c = ...\n"
+            "return a, b, c, 1234\n");
+        lua_pushinteger(LS, 1);
+        lua_pushinteger(LS, 2);
+        lua_pushinteger(LS, 3);
+        rc = awlua::ScriptCall(LS, 3, LUA_MULTRET);
+        REQUIRE(LUA_OK == rc);
+        REQUIRE(4 == lua_gettop(LS));
+        REQUIRE(1 == luaL_checkinteger(LS, -4));
+        REQUIRE(2 == luaL_checkinteger(LS, -3));
+        REQUIRE(3 == luaL_checkinteger(LS, -2));
+        REQUIRE(1234 == luaL_checkinteger(LS, -1));
+    }
+
+    SECTION("Error")
+    {
+        int rc;
+        lua_settop(LS, 0);
+        luaL_loadstring(LS,
+            "local function func()\n"
+            "  -- some comment\n"
+            "  error('Some error')\n"
+            "end\n"
+            "func()\n");
+
+        rc = awlua::ScriptCall(LS, 0, LUA_MULTRET);
+        REQUIRE(LUA_OK != rc);
+        REQUIRE(1 == lua_gettop(LS));
+
+        const std::string errMsg(lua_tostring(LS, -1));
+        INFO(errMsg);
+        REQUIRE(errMsg.find("3: Some error") != std::string::npos);
+    }
+}
+
+TEST_CASE("CallWithTraceback")
+{
+    lua_State *LS = luaL_newstate();
+    luaL_openlibs(LS);
+    awlua::SetLS(LS);
+
+    SECTION("No error")
+    {
+        int rc;
+
+        lua_settop(LS, 0);
+        luaL_loadstring(LS,
+            "local a, b, c = ...\n"
+            "return a, b, c, 1234\n");
+        lua_pushinteger(LS, 1);
+        lua_pushinteger(LS, 2);
+        lua_pushinteger(LS, 3);
+        rc = awlua::CallWithTraceback(LS, 3, LUA_MULTRET);
+        REQUIRE(LUA_OK == rc);
+        REQUIRE(4 == lua_gettop(LS));
+        REQUIRE(1 == luaL_checkinteger(LS, -4));
+        REQUIRE(2 == luaL_checkinteger(LS, -3));
+        REQUIRE(3 == luaL_checkinteger(LS, -2));
+        REQUIRE(1234 == luaL_checkinteger(LS, -1));
+    }
+
+    SECTION("Error")
+    {
+        int rc;
+        lua_settop(LS, 0);
+        luaL_loadstring(LS,
+            "local function func()\n"
+            "  -- some comment\n"
+            "  error('Some error')\n"
+            "end\n"
+            "func()\n");
+
+        rc = awlua::CallWithTraceback(LS, 0, LUA_MULTRET);
+        REQUIRE(LUA_OK != rc);
+        REQUIRE(1 == lua_gettop(LS));
+
+        const std::string errMsg(lua_tostring(LS, -1));
+        INFO(errMsg);
+        REQUIRE(errMsg.find("3: Some error") != std::string::npos);
+    }
+}
+
 TEST_CASE("LuaRef")
 {
     lua_State *LS = luaL_newstate();

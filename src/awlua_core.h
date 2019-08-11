@@ -1,6 +1,8 @@
 #ifndef awlua_core_h_
 #define awlua_core_h_
 
+#include <string>
+
 
 struct lua_State;
 
@@ -13,6 +15,8 @@ lua_State *GetLS();
 #if defined(UNITTEST)
 void SetLS(lua_State *LS);
 #endif
+
+std::string StackDump (lua_State *LS);
 
 class LuaRef
 {
@@ -29,6 +33,8 @@ private:
     int val_;
 };
 
+int CallWithTraceback(lua_State *LS, int nargs, int nresults);
+int ScriptCall(lua_State *LS, int nargs, int nresults);
 
 } // namespace awlua
 

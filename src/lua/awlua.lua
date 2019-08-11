@@ -197,7 +197,7 @@ function M.new_script_env(self_obj)
     return env
 end
 
-local function luai_result_tostring(...)
+function M.luai_result_tostring(...)
     local n = select("#", ...)
     if n < 1 then return nil end
 
@@ -236,7 +236,7 @@ function M.luai_handle(luai, env, comm)
     if f then
         -- Runnable, let's run it
         luai.input = nil
-        return luai_result_tostring(f())
+        return f
     end
 
     if err:len() >= 5 and err:sub(-5) == "<eof>" then
@@ -244,7 +244,7 @@ function M.luai_handle(luai, env, comm)
         luai.input = all_input
         return nil
     else
-        error(err)
+        return err
     end
 end
 
