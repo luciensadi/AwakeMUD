@@ -10,6 +10,13 @@
 
 static lua_State *awLS = nullptr;
 
+awlua::LuaRef awlua::ref::debug::traceback;
+
+awlua::LuaRef awlua::ref::awlua::new_script_env;
+awlua::LuaRef awlua::ref::awlua::luai_result_tostring;
+awlua::LuaRef awlua::ref::awlua::luai_handle;
+
+
 void awlua::Init()
 {
     lua_State *LS = luaL_newstate();
@@ -17,28 +24,48 @@ void awlua::Init()
     luaL_openlibs(LS);    
     awLS = LS;
 
-    // TODO: check return val
-    luaL_dostring(LS, 
+    // For tracebacks, replace tabs with 4 spaces and newlines with \r\n
+    AWLUA_ASSERT(LUA_OK == luaL_loadstring(LS, 
         "local traceback = debug.traceback \n"
         "debug.traceback = function(message, level) \n"
           "level = level or 1 \n"
           "local rtn = traceback(message, level + 1) \n"
           "if not rtn then return rtn end \n"
           "rtn = rtn:gsub(\"\\t\", \"    \") \n"
-          "rtn = rtn:gsub(\"\\n\", \"\\n\\r\") \n"
+          "rtn = rtn:gsub(\"\\n\", \"\\r\\n\") \n"
           "return rtn \n"
-        "end \n");
+        "end\n"
+        "return traceback\n")
+    );
+    lua_call(LS, 0, 1);
+    ref::debug::traceback.Save(-1);
+    lua_pop(LS, 1);
+    AWLUA_ASSERT(0 == lua_gettop(LS));
 
-    luaL_loadstring(LS, "package.path = '../src/lua/?.lua'");
-    lua_call(LS, 0, 0);
+    AWLUA_ASSERT(LUA_OK == luaL_dostring(LS, "package.path = '../src/lua/?.lua'"));
 
+    // load awlua.lua
     lua_getglobal(LS, "require");
+    AWLUA_ASSERT(!lua_isnil(LS, -1));
     lua_pushliteral(LS, "awlua");
     lua_call(LS, 1, 1);
-
-    // TODO: save awlua ref somewhere
+    
+    lua_getfield(LS, -1, "new_script_env");
+    AWLUA_ASSERT(!lua_isnil(LS, -1));
+    ref::awlua::new_script_env.Save(-1);
     lua_pop(LS, 1);
 
+    lua_getfield(LS, -1, "luai_result_tostring");
+    AWLUA_ASSERT(!lua_isnil(LS, -1));
+    ref::awlua::luai_result_tostring.Save(-1);
+    lua_pop(LS, 1);
+
+    lua_getfield(LS, -1, "luai_handle");
+    AWLUA_ASSERT(!lua_isnil(LS, -1));
+    ref::awlua::luai_handle.Save(-1);
+    lua_pop(LS, 1);
+
+    lua_pop(LS, 1); // pop awlua module
 
     AWLUA_ASSERT(0 == lua_gettop(LS));
 }
@@ -140,10 +167,7 @@ static void infinite_loop_check_hook(lua_State *LS, lua_Debug *ar)
 int awlua::CallWithTraceback(lua_State *LS, int nargs, int nresults)
 {
     int ind_base = lua_gettop(LS) - nargs; // ind_base is the index of the chunk right now
-    
-    lua_getglobal(LS, "debug");
-    lua_getfield(LS, -1, "traceback");
-    lua_remove(LS, -2); // remove debug table
+    ref::debug::traceback.Push();
     lua_insert(LS, ind_base); // traceback func below chunk which is shifted up
 
     int rtn = lua_pcall(LS, nargs, nresults, ind_base);

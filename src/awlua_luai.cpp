@@ -51,12 +51,7 @@ void awlua::luai_handle(descriptor_data *d, const char *comm)
     int top = lua_gettop(LS);
     AWLUA_ASSERT(d->ref_luai.IsSet());
 
-    lua_getglobal(LS, "require");
-    lua_pushliteral(LS, "awlua");
-    lua_call(LS, 1, 1);
-    lua_getfield(LS, -1, "luai_handle");
-    lua_remove(LS, -2); // remove awlua table
-
+    ref::awlua::luai_handle.Push();
     d->ref_luai.Push();
 
     // TODO: clean up env creation
@@ -66,11 +61,7 @@ void awlua::luai_handle(descriptor_data *d, const char *comm)
     }
     else
     {
-        lua_getglobal(LS, "require");
-        lua_pushliteral(LS, "awlua");
-        lua_call(LS, 1, 1);
-        lua_getfield(LS, -1, "new_script_env");
-        lua_remove(LS, -2);
+        ref::awlua::new_script_env.Push();
         d->character->ref_ud.Push();
         lua_call(LS, 1, 1);
         d->character->ref_env.Save(-1);
@@ -95,11 +86,7 @@ void awlua::luai_handle(descriptor_data *d, const char *comm)
         }
         else
         {
-            lua_getglobal(LS, "require");
-            lua_pushliteral(LS, "awlua");
-            lua_call(LS, 1, 1);
-            lua_getfield(LS, -1, "luai_result_tostring");
-            lua_remove(LS, -2);
+            ref::awlua::luai_result_tostring.Push();
             lua_insert(LS, ref_top);
             int nargs = lua_gettop(LS) - ref_top;
             lua_call(LS, nargs, 1);

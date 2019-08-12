@@ -36,11 +36,15 @@ static int GetRefCount(lua_State *LS, int index)
     return cnt;
 }
 
+TEST_CASE("Init")
+{
+    awlua::Init();
+}
+
 TEST_CASE("ScriptCall")
 {
-    lua_State *LS = luaL_newstate();
-    luaL_openlibs(LS);
-    awlua::SetLS(LS);
+    awlua::Init();
+    lua_State *LS = awlua::GetLS();
 
     SECTION("timeout")
     {
@@ -54,7 +58,7 @@ TEST_CASE("ScriptCall")
         REQUIRE(1 == lua_gettop(LS));
 
         const std::string errMsg(lua_tostring(LS, -1));
-        INFO(errMsg);
+        INFO("errMsg: " << errMsg);
         REQUIRE(errMsg.find("Script timeout") != std::string::npos);
     }
 
@@ -94,16 +98,15 @@ TEST_CASE("ScriptCall")
         REQUIRE(1 == lua_gettop(LS));
 
         const std::string errMsg(lua_tostring(LS, -1));
-        INFO(errMsg);
+        INFO("errMsg: " << errMsg);
         REQUIRE(errMsg.find("3: Some error") != std::string::npos);
     }
 }
 
 TEST_CASE("CallWithTraceback")
 {
-    lua_State *LS = luaL_newstate();
-    luaL_openlibs(LS);
-    awlua::SetLS(LS);
+   awlua::Init();
+   lua_State *LS = awlua::GetLS();
 
     SECTION("No error")
     {
@@ -141,7 +144,7 @@ TEST_CASE("CallWithTraceback")
         REQUIRE(1 == lua_gettop(LS));
 
         const std::string errMsg(lua_tostring(LS, -1));
-        INFO(errMsg);
+        INFO("errMsg: " << errMsg);
         REQUIRE(errMsg.find("3: Some error") != std::string::npos);
     }
 }
@@ -272,6 +275,4 @@ TEST_CASE("LuaRef")
 
         REQUIRE(0 == GetRefCount(LS, -1));
     }
-    
-    lua_close(LS);
 }

@@ -36,6 +36,20 @@ private:
 int CallWithTraceback(lua_State *LS, int nargs, int nresults);
 int ScriptCall(lua_State *LS, int nargs, int nresults);
 
+namespace ref
+{
+    namespace debug
+    {
+        extern LuaRef traceback;
+    } // namespace debug
+
+    namespace awlua
+    {
+        extern LuaRef new_script_env;
+        extern LuaRef luai_result_tostring;
+        extern LuaRef luai_handle;
+    } // namespace awlua
+} // namespace ref
 } // namespace awlua
 
 
