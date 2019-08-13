@@ -13,8 +13,10 @@ static lua_State *awLS = nullptr;
 awlua::LuaRef awlua::ref::debug::traceback;
 
 awlua::LuaRef awlua::ref::awlua::new_script_env;
-awlua::LuaRef awlua::ref::awlua::luai_result_tostring;
 awlua::LuaRef awlua::ref::awlua::luai_handle;
+
+
+static int L_ScriptCall(lua_State *LS);
 
 
 void awlua::Init()
@@ -55,15 +57,15 @@ void awlua::Init()
     ref::awlua::new_script_env.Save(-1);
     lua_pop(LS, 1);
 
-    lua_getfield(LS, -1, "luai_result_tostring");
-    AWLUA_ASSERT(!lua_isnil(LS, -1));
-    ref::awlua::luai_result_tostring.Save(-1);
-    lua_pop(LS, 1);
-
     lua_getfield(LS, -1, "luai_handle");
     AWLUA_ASSERT(!lua_isnil(LS, -1));
     ref::awlua::luai_handle.Save(-1);
     lua_pop(LS, 1);
+
+    lua_getfield(LS, -1, "init");
+    AWLUA_ASSERT(lua_isfunction(LS, -1));
+    lua_pushcfunction(LS, L_ScriptCall);
+    lua_call(LS, 1, 0);
 
     lua_pop(LS, 1); // pop awlua module
 
@@ -195,4 +197,19 @@ int awlua::ScriptCall(lua_State *LS, int nargs, int nresults)
     is_script_running = false;
 
     return rtn;
+}
+
+static int L_ScriptCall(lua_State *LS)
+{
+    // func at 1, any additional args above that
+    int nargs = lua_gettop(LS) - 1;
+    int rc = awlua::ScriptCall(LS, nargs, LUA_MULTRET);
+
+    if (LUA_OK == rc)
+    {
+        lua_pushnil(LS);
+        lua_insert(LS, 1);
+    }
+
+    return lua_gettop(LS);
 }

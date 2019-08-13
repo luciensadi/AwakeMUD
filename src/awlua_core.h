@@ -16,7 +16,7 @@ lua_State *GetLS();
 void SetLS(lua_State *LS);
 #endif
 
-std::string StackDump (lua_State *LS);
+std::string StackDump(lua_State *LS);
 
 class LuaRef
 {
@@ -46,7 +46,6 @@ namespace ref
     namespace awlua
     {
         extern LuaRef new_script_env;
-        extern LuaRef luai_result_tostring;
         extern LuaRef luai_handle;
     } // namespace awlua
 } // namespace ref

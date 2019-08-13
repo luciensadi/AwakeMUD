@@ -73,33 +73,18 @@ void awlua::luai_handle(descriptor_data *d, const char *comm)
     {
         SEND_TO_Q("Error in luai_handle: ", d);
         SEND_TO_Q(lua_tostring(LS, -1), d);
-        lua_pop(LS, 1);
-    }
-    else if (lua_isfunction(LS, -1))
-    {
-        int ref_top = lua_gettop(LS);
-        int rc = ScriptCall(LS, 0, LUA_MULTRET);
-
-        if (LUA_OK != rc)
-        {
-            SEND_TO_Q(lua_tostring(LS, -1), d);
-        }
-        else
-        {
-            ref::awlua::luai_result_tostring.Push();
-            lua_insert(LS, ref_top);
-            int nargs = lua_gettop(LS) - ref_top;
-            lua_call(LS, nargs, 1);
-
-            if (lua_isstring(LS, -1))
-            {
-                SEND_TO_Q(lua_tostring(LS, -1), d);    
-            }
-        }
     }
     else if (lua_isstring(LS, -1))
     {
         SEND_TO_Q(lua_tostring(LS, -1), d);
+    }
+    else if (lua_isnil(LS, -1))
+    {
+        // do nothing
+    }
+    else
+    {
+        SEND_TO_Q("Unexpected return type in luai_handle\r\n", d);
     }
 
     lua_settop(LS, top);

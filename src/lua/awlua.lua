@@ -1,5 +1,11 @@
 local M = {}
 
+local script_call
+
+function M.init(script_call_func)
+    script_call = script_call_func
+end
+
 
 local function make_lib_proxy(t)
     local mt = {
@@ -197,7 +203,7 @@ function M.new_script_env(self_obj)
     return env
 end
 
-function M.luai_result_tostring(...)
+local function luai_result_tostring(...)
     local n = select("#", ...)
     if n < 1 then return nil end
 
@@ -210,6 +216,7 @@ function M.luai_result_tostring(...)
     return table.concat(vals, ", ").."\r\n"
 end
 
+-- Return any output as a string, or nil if no output
 function M.luai_handle(luai, env, comm)
     local first_line
     local all_input
@@ -236,7 +243,13 @@ function M.luai_handle(luai, env, comm)
     if f then
         -- Runnable, let's run it
         luai.input = nil
-        return f
+        local vals = table.pack(script_call(f))
+        if vals[1] ~= nil then
+            -- error
+            return tostring(vals[1])
+        else
+            return luai_result_tostring(table.unpack(vals, 2, vals.n))
+        end
     end
 
     if err:len() >= 5 and err:sub(-5) == "<eof>" then
@@ -244,7 +257,7 @@ function M.luai_handle(luai, env, comm)
         luai.input = all_input
         return nil
     else
-        return err
+        return tostring(err)
     end
 end
 
