@@ -82,6 +82,8 @@ public:
             lua_pop(GetLS(), 1);
         }
     }
+    LuaUdRef(const LuaUdRef&) = delete;
+    LuaUdRef& operator=(const LuaUdRef&) = delete;
     void Push()
     {
         if (ref_.IsSet())

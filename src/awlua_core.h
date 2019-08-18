@@ -23,6 +23,8 @@ class LuaRef
 public:
     LuaRef();
     ~LuaRef();
+    LuaRef(const LuaRef&) = delete;
+    LuaRef& operator=(const LuaRef&) = delete;
 
     void Save(int index);
     void Release();
