@@ -4871,6 +4871,37 @@ ACMD(do_room) {
 }
 
 ACMD(do_perfmon) {
+  {
+    int bad = 0;
+    int good = 0;
+    for (char_data *tgt = character_list; tgt; tgt = tgt->next)
+    {
+       if (tgt->in_room)
+        ++good;
+       else
+       {
+        ++bad;
+        send_to_char(ch, "Bad: %s\r\n", GET_CHAR_NAME(tgt));
+      }
+    }
+    send_to_char(ch, "Good: %d, bad: %d\r\n", good, bad);
+  }
+  {
+    int bad = 0;
+    int good = 0;
+    for (char_data *tgt = ch->in_room->people; tgt; tgt = tgt->next_in_room)
+    {
+       if (tgt->in_room)
+        ++good;
+       else
+       {
+        ++bad;
+        send_to_char(ch, "Bad: %s\r\n", GET_CHAR_NAME(tgt));
+      }
+    }
+    send_to_char(ch, "Good: %d, bad: %d\r\n", good, bad);
+  }
+
     char arg1[MAX_INPUT_LENGTH];
 
     if (!ch->desc) {
