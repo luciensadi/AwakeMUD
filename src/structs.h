@@ -734,6 +734,14 @@ struct char_data
     for (int i = 0; i < NUM_WEARS; i++)
       equipment[i] = NULL;
   }
+
+  char_data& operator=(const char_data& rhs)
+  {
+    this->ref_ud.~LuaUdRef<char_data *>();
+    memcpy(this, &rhs, sizeof(*this));
+    new (&this->ref_ud) awlua::LuaUdRef<char_data*>(this);
+    return *this;
+  }
 };
 /* ====================================================================== */
 

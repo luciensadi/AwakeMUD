@@ -216,8 +216,19 @@ local function luai_result_tostring(...)
     return table.concat(vals, ", ").."\r\n"
 end
 
--- Return any output as a string, or nil if no output
-function M.luai_handle(luai, env, comm)
+-- Returns bool[, string]
+-- First return is whether interpeter should exit
+-- Second return is output message, if any
+function M.luai_handle(luai, comm)
+    if comm == "@" then
+        return true
+    end
+
+    local env = luai.env
+    if true ~= env.self.is_valid then
+        return true, "Target is no longer valid.\r\n"..tostring(env.self.is_valid)
+    end
+
     local first_line
     local all_input
     
@@ -246,18 +257,18 @@ function M.luai_handle(luai, env, comm)
         local vals = table.pack(script_call(f))
         if vals[1] ~= nil then
             -- error
-            return tostring(vals[1])
+            return false, tostring(vals[1])
         else
-            return luai_result_tostring(table.unpack(vals, 2, vals.n))
+            return false, luai_result_tostring(table.unpack(vals, 2, vals.n))
         end
     end
 
     if err:len() >= 5 and err:sub(-5) == "<eof>" then
         -- incomplete
         luai.input = all_input
-        return nil
+        return false
     else
-        return tostring(err)
+        return false, tostring(err)
     end
 end
 
