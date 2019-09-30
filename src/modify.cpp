@@ -803,23 +803,23 @@ void show_string(struct descriptor_data *d, char *input)
 }
 
 void format_tabs(struct descriptor_data *d) {
-  if (!d || !d->str || !*d->str)
+  if (!d || !d->str || !*d->str || !*(*d->str))
     return;
   
   int tabcount = 0;
   
   // Replace all instances of "\t" with '\t' (backslash-t to tab)
-  for (unsigned long i = 0; i < strlen(*d->str) - 1; i++)
+  for (unsigned long i = 0; i < strlen(*d->str) - 2; i++)
     if (*(*d->str + i) == '\\' && *(*d->str + i + 1) == 't')
       tabcount++;
   
   // If there were an even number of tabs, we assume they didn't fuck up and go ahead and do a replacement.
   if (tabcount % 2 == 0) {
-    for (unsigned long i = 0; i < strlen(*d->str) - 1; i++) {
+    for (unsigned long i = 0; i < strlen(*d->str) - 2; i++) {
       if (*(*d->str + i) == '\\' && *(*d->str + i + 1) == 't') {
         *(*d->str + i) = '\t';
         tabcount++;
-        for (unsigned long j = i+1; j < strlen(*d->str) - 1; j++)
+        for (unsigned long j = i+1; j < strlen(*d->str) - 2; j++)
           *(*d->str + j) = *(*d->str + j + 1);
       }
     }
