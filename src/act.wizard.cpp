@@ -1981,7 +1981,7 @@ ACMD(do_purge)
 
       for (vict = ch->in_room->people; vict; vict = next_v) {
         next_v = vict->next_in_room;
-        if (IS_NPC(vict))
+        if (IS_NPC(vict) && vict != ch)
           extract_char(vict);
       }
 
