@@ -3848,11 +3848,11 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   sprintf(rbuf, "Bod %d+%d, Pow %d, BodSuc %d, ResSuc %d: Dam %s->%s. %d%c.",
           GET_BOD(def->ch), bod, att->power, bod_success, att->successes,
           wound_name[MIN(DEADLY, MAX(0, att->damage_level))],
-          wound_name[MIN(DEADLY, MAX(0, staged_damage))],
+          wound_name[MIN(DEADLY, MAX(0, damage_total))],
           damage_total, att->is_physical ? 'P' : 'M');
   act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
   if (!melee)
-    combat_message(att->ch, def->ch, att->weapon, MAX(0, staged_damage), att->burst_count);
+    combat_message(att->ch, def->ch, att->weapon, MAX(0, damage_total), att->burst_count);
   damage(att->ch, def->ch, damage_total, att->dam_type, att->is_physical);
   
   if (!IS_NPC(att->ch) && IS_NPC(def->ch)) {
