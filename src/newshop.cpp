@@ -453,7 +453,7 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
     price += bprice * GET_AVAIL_OFFSET(ch);
   if (sell->type == SELL_AVAIL && GET_OBJ_AVAILTN(obj) > 0)
   {
-    for (int q = 0; q <= 4; q++)
+    for (int q = 0; q <= SHOP_LAST_IDNUM_LIST_SIZE; q++)
       if (sell->lastidnum[q] == GET_IDNUM(ch)) {
         sprintf(buf, "%s Sorry, I couldn't get that in for you.", GET_CHAR_NAME(ch));
         do_say(keeper, buf, cmd_say, SCMD_SAYTO);
@@ -484,7 +484,7 @@ void shop_buy(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t 
     if (success < 1 || buynum > 50) {
       sprintf(buf, "%s I can't get ahold of that one for a while.", GET_CHAR_NAME(ch));
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-      for (int q = 4; q >= 1; q--)
+      for (int q = SHOP_LAST_IDNUM_LIST_SIZE; q >= 1; q--)
         sell->lastidnum[q] = sell->lastidnum[q-1];
       sell->lastidnum[0] = GET_IDNUM(ch);
     } else {
@@ -1373,7 +1373,7 @@ void randomize_shop_prices(void)
     if (shop_table[i].random_amount)
       shop_table[i].random_current = number(-shop_table[i].random_amount, shop_table[i].random_amount);
     for (struct shop_sell_data *sell = shop_table[i].selling; sell; sell = sell->next)
-      for (int q = 0; q <= 4; q++)
+      for (int q = 0; q <= SHOP_LAST_IDNUM_LIST_SIZE; q++)
         sell->lastidnum[q] = 0;
   }
 }

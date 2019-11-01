@@ -1,5 +1,21 @@
 #include "bitfield.h"
 
+#define SELL_ALWAYS  0
+#define SELL_AVAIL  1
+#define SELL_STOCK   2
+#define SELL_BOUGHT  3
+
+#define SHOP_GREY  0
+#define SHOP_LEGAL  1
+#define SHOP_BLACK  2
+
+#define SHOP_DOCTOR  1
+#define SHOP_WONT_NEGO  2
+#define SHOP_NORESELL  3
+#define SHOP_FLAGS  4
+
+#define SHOP_LAST_IDNUM_LIST_SIZE 20
+
 struct shop_data
 {
   vnum_t vnum;
@@ -21,7 +37,7 @@ struct shop_sell_data {
   vnum_t vnum;
   int type;
   int stock;
-  int lastidnum[5];
+  int lastidnum[SHOP_LAST_IDNUM_LIST_SIZE];
   struct shop_sell_data *next;
   
   shop_sell_data() :
@@ -46,18 +62,3 @@ struct shop_order_data {
 extern const char *shop_flags[];
 extern const char *shop_type[3];
 extern const char *selling_type[];
-
-#define SELL_ALWAYS	0
-#define SELL_AVAIL	1
-#define SELL_STOCK 	2
-#define SELL_BOUGHT	3
-
-#define SHOP_GREY	0
-#define SHOP_LEGAL	1
-#define SHOP_BLACK	2
-
-
-#define SHOP_DOCTOR	1
-#define SHOP_WONT_NEGO	2
-#define SHOP_NORESELL	3
-#define SHOP_FLAGS	4
