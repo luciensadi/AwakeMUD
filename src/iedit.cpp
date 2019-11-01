@@ -207,8 +207,8 @@ void iedit_disp_spells_menu(struct descriptor_data * d)
 void iedit_disp_cybereyes_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int y = 0; y <= NUM_EYEMODS; y += 2)
-    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", y+1, eyemods[y], y+2, y+1 < NUM_EYEMODS+1 ? eyemods[y+1] : "");
+  for (int y = 0; y < NUM_EYEMODS; y += 2)
+    send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n", y+1, eyemods[y], y+2, y+1 < NUM_EYEMODS ? eyemods[y+1] : "");
   sprintbit(GET_OBJ_VAL(OBJ, 3), eyemods, buf1);
   send_to_char(CH, "Set Options: ^c%s^n\r\nEnter options (0 to quit): ", buf1);
 }
