@@ -658,7 +658,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       if (!(obj = read_object(sell->vnum, VIRTUAL)) || GET_OBJ_COST(obj) < 1) {
         i--;
         if (obj) {
-          sprintf(buf2, "Shop %ld ('%s'): Removing %s from sale due to cost of %d.", shop_nr, GET_NAME(keeper), GET_OBJ_NAME(obj));
+          sprintf(buf2, "Shop %ld ('%s'): Removing %s from sale due to cost of %d.", shop_nr, GET_NAME(keeper), GET_OBJ_NAME(obj), GET_OBJ_COST(obj));
           mudlog(buf2, ch, LOG_SYSLOG, TRUE);
           extract_obj(obj);
         } else {
@@ -715,7 +715,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       if (!obj || GET_OBJ_COST(obj) < 1) {
         i--;
         if (obj) {
-          sprintf(buf2, "Shop %ld ('%s'): Removing %s from sale due to cost of %d.", shop_nr, GET_NAME(keeper), GET_OBJ_NAME(obj));
+          sprintf(buf2, "Shop %ld ('%s'): Removing %s from sale due to cost of %d.", shop_nr, GET_NAME(keeper), GET_OBJ_NAME(obj), GET_OBJ_COST(obj));
           mudlog(buf2, ch, LOG_SYSLOG, TRUE);
           extract_obj(obj);
         } else {
