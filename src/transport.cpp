@@ -960,6 +960,12 @@ static int process_elevator(struct room_data *room,
         
         // Message the shaft.
         send_to_room("The elevator car shudders and begins to move.\r\n", &world[real_room(elevator[num].floor[room->rating].shaft_vnum)]);
+        
+        // Notify the next shaft room that they're about to get a car in the face.
+        sprintf(buf, "The shaft rumbles ominously as the elevator car %s you begins to accelerate towards you.\r\n",
+                elevator[num].dir == DOWN ? "above" : "below");
+        send_to_room(buf, &world[real_room(elevator[num].floor[room->rating + (elevator[num].dir == UP ? 1 : -1)].shaft_vnum)]);
+        
         elevator[num].is_moving = TRUE;
         return TRUE;
       }
@@ -1071,6 +1077,13 @@ static int process_elevator(struct room_data *room,
       
       shaft->temporary_stored_exit[dir] = shaft->dir_option[dir];
       shaft->dir_option[dir] = NULL;
+      
+      if (elevator[num].time_left > 0) {
+        // Notify the next shaft room that they're about to get a car in the face.
+        sprintf(buf, "The shaft rumbles ominously as the elevator car %s you begins to accelerate towards you.\r\n",
+                elevator[num].dir == DOWN ? "above" : "below");
+        send_to_room(buf, &world[real_room(elevator[num].floor[room->rating + (elevator[num].dir == UP ? 1 : -1)].shaft_vnum)]);
+      }
     }
     
     // Arrive at the target floor.
