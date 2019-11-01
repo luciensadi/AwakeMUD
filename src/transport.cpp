@@ -967,7 +967,7 @@ static int process_elevator(struct room_data *room,
         send_to_room(buf, &world[real_room(elevator[num].floor[room->rating + (elevator[num].dir == DOWN ? 1 : -1)].shaft_vnum)]);
         
         // Notify all other shaft rooms about the elevator starting to move.
-        for (int i = 0; i < elevator[num].floors; i++) {
+        for (int i = 0; i < elevator[num].num_floors; i++) {
           if (i == room->rating || i == room->rating + (elevator[num].dir == DOWN ? 1 : -1))
             continue;
           
@@ -1111,7 +1111,7 @@ static int process_elevator(struct room_data *room,
       elevator[num].is_moving = FALSE;
       
       // Notify all other shaft rooms that the elevator has stopped.
-      for (int i = 0; i < elevator[num].floors; i++) {
+      for (int i = 0; i < elevator[num].num_floors; i++) {
         if (i == room->rating)
           continue;
         
