@@ -1110,6 +1110,10 @@ static int process_elevator(struct room_data *room,
       open_elevator_doors(room, num, room->rating);
       elevator[num].is_moving = FALSE;
       
+      // Notify this shaft room that the elevator has stopped.
+      send_to_room("The cable thrums with tension as the elevator comes to a graceful halt.\r\n",
+                   &world[real_room(elevator[num].floor[room->rating].shaft_vnum)]);
+      
       // Notify all other shaft rooms that the elevator has stopped.
       for (int i = 0; i < elevator[num].num_floors; i++) {
         if (i == room->rating)
