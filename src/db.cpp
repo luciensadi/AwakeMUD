@@ -1763,14 +1763,14 @@ void parse_shop(File &fl, long virtual_nr)
   shop->ettiquete = data.GetInt("Etiquette", SKILL_STREET_ETIQUETTE);
   int num_fields = data.NumSubsections("SELLING"), vnum;
   struct shop_sell_data *templist = NULL;
-  sprintf(buf, "Parsing shop items (%d found).", num_fields);
+  sprintf(buf3, "Parsing shop items for shop %ld (%d found).", virtual_nr, num_fields);
   for (int x = 0; x < num_fields; x++) {
     const char *name = data.GetIndexSection("SELLING", x);
     sprintf(field, "%s/Vnum", name);
     vnum = data.GetLong(field, 0);
-    sprintf(ENDOF(buf), "\r\n - %s (%d)", name, vnum);
+    sprintf(ENDOF(buf3), "\r\n - %s (%d)", name, vnum);
     if (real_object(vnum) < 1) {
-      sprintf(ENDOF(buf), " - nonexistant! Skipping.");
+      sprintf(ENDOF(buf3), " - nonexistant! Skipping.");
       continue;
     }
     shop_sell_data *sell = new shop_sell_data;
@@ -1788,8 +1788,9 @@ void parse_shop(File &fl, long virtual_nr)
           temp->next = sell;
           break;
         }
-    sprintf(ENDOF(buf), ": type %d, stock %d.", sell->type, sell->stock);
+    sprintf(ENDOF(buf3), ": type %d, stock %d.", sell->type, sell->stock);
   }
+  mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
   shop->selling = templist;
   top_of_shopt = rnum++;
 }

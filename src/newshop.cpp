@@ -1385,7 +1385,7 @@ void randomize_shop_prices(void)
     if (shop_table[i].random_amount)
       shop_table[i].random_current = number(-shop_table[i].random_amount, shop_table[i].random_amount);
     for (struct shop_sell_data *sell = shop_table[i].selling; sell; sell = sell->next)
-      for (int q = 0; q <= SHOP_LAST_IDNUM_LIST_SIZE; q++)
+      for (int q = 0; q < SHOP_LAST_IDNUM_LIST_SIZE; q++)
         sell->lastidnum[q] = 0;
   }
 }
