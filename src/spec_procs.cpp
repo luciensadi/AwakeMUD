@@ -2900,7 +2900,7 @@ SPECIAL(traffic)
 {
   struct room_data *room = (struct room_data *) me;
 
-  if (!cmd && room->people && number(0, 4) == 1)
+  if (!cmd && room->people && number(0, 6) == 1)
     send_to_room(traffic_messages[number(0, NUM_TRAFFIC_MESSAGES - 1)], room);
   
   return FALSE;
