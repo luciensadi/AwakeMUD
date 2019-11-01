@@ -966,6 +966,14 @@ static int process_elevator(struct room_data *room,
                 elevator[num].dir == DOWN ? "above" : "below");
         send_to_room(buf, &world[real_room(elevator[num].floor[room->rating + (elevator[num].dir == DOWN ? 1 : -1)].shaft_vnum)]);
         
+        // Notify all other shaft rooms about the elevator starting to move.
+        for (int i = 0; i < elevator[num].floors; i++) {
+          if (i == room->rating || i == room->rating + (elevator[num].dir == DOWN ? 1 : -1))
+            continue;
+          
+          send_to_room("The shaft rumbles ominously as an elevator car begins to move.\r\n", &world[real_room(elevator[num].floor[i].shaft_vnum)]);
+        }
+        
         elevator[num].is_moving = TRUE;
         return TRUE;
       }
@@ -1080,7 +1088,7 @@ static int process_elevator(struct room_data *room,
       
       if (elevator[num].time_left > 0) {
         // Notify the next shaft room that they're about to get a car in the face.
-        sprintf(buf, "The shaft rumbles ominously as the elevator car %s you begins to accelerate towards you.\r\n",
+        sprintf(buf, "A light breeze brushes by as the elevator car %s you speeds towards you.\r\n",
                 elevator[num].dir == DOWN ? "above" : "below");
         send_to_room(buf, &world[real_room(elevator[num].floor[room->rating + (elevator[num].dir == DOWN ? 1 : -1)].shaft_vnum)]);
       }
@@ -1101,6 +1109,14 @@ static int process_elevator(struct room_data *room,
       send_to_room(buf, &world[real_room(room->number)]);
       open_elevator_doors(room, num, room->rating);
       elevator[num].is_moving = FALSE;
+      
+      // Notify all other shaft rooms that the elevator has stopped.
+      for (int i = 0; i < elevator[num].floors; i++) {
+        if (i == room->rating)
+          continue;
+        
+        send_to_room("The ominous rumblings from the shaft's guiderails fade.\r\n", &world[real_room(elevator[num].floor[i].shaft_vnum)]);
+      }
     } else if (elevator[num].dir > 0)
       elevator[num].dir--;
     else if (!elevator[num].dir) {
