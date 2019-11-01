@@ -1367,10 +1367,10 @@ void parse_mobile(File &in, long nr)
     const char *skill_name = data.GetIndexField("SKILLS", j);
     int idx;
 
-    for (idx = 0; idx <= MAX_SKILLS; idx++)
+    for (idx = 0; idx < MAX_SKILLS; idx++)
       if ((idx == SKILL_UNARMED_COMBAT && !str_cmp("unarmed combat", skill_name)) || !str_cmp(skills[idx].name, skill_name))
         break;
-    if (idx > 0 || idx <= MAX_SKILLS) {
+    if (idx > 0 || idx < MAX_SKILLS) {
       GET_SKILL(mob, idx) = data.GetIndexInt("SKILLS", j, 0);
       mob->mob_specials.mob_skills[j * 2] = idx;
       mob->mob_specials.mob_skills[j * 2 + 1] = data.GetIndexInt("SKILLS", j, 0);

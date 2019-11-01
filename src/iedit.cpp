@@ -186,7 +186,7 @@ void iedit_disp_weapon_menu(struct descriptor_data * d)
   for (int counter = 0; counter < MAX_WEAP; counter += 2)
     send_to_char(CH, "%2d) %-18s %2d) %-18s\r\n",
                  counter, weapon_type[counter],
-                 counter + 1, counter + 1 <= MAX_WEAP ? weapon_type[counter + 1] : "");
+                 counter + 1, counter + 1 < MAX_WEAP ? weapon_type[counter + 1] : "");
   
   send_to_char("Enter weapon type:\r\n", CH);
 }
@@ -964,11 +964,11 @@ void iedit_disp_patch_menu(struct descriptor_data *d)
 void iedit_disp_spell_type(struct descriptor_data *d)
 {
   CLS(CH);
-  for (int counter = 0; counter <= MAX_SPELLS; counter += 2)
+  for (int counter = 0; counter < MAX_SPELLS; counter += 2)
   {
     send_to_char(CH, "%2d) %-20s %2d) %-20s\r\n",
                  counter + 1, spells[counter].name,
-                 counter + 2, counter + 1 <= MAX_SPELLS ?
+                 counter + 2, counter + 1 < MAX_SPELLS ?
                  spells[counter + 1].name : "");
   }
   send_to_char("Enter spell, 0 to return: ", CH);
