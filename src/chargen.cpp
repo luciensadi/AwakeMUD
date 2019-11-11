@@ -15,6 +15,7 @@
 #include "awake.h"
 #include "constants.h"
 #include "config.h"
+#include "chargen.h"
 
 #define CH d->character
 
@@ -442,9 +443,9 @@ static void start_game(descriptor_data *d)
   CreateChar(d->character);
   d->character->player.host = str_dup(d->host);
 
-  GET_SKILL(d->character, SKILL_ENGLISH) = 10;
+  set_character_skill(d->character, SKILL_ENGLISH, STARTING_LANGUAGE_SKILL_LEVEL, FALSE);
   GET_LANGUAGE(d->character) = SKILL_ENGLISH;
-  GET_RESTRING_POINTS(d->character) = 5;
+  GET_RESTRING_POINTS(d->character) = STARTING_RESTRING_POINTS;
   GET_LOADROOM(d->character) = RM_CHARGEN_START_ROOM;
 
   init_char_sql(d->character);

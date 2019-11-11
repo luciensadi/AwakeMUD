@@ -331,7 +331,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
 {
   init_char(ch);
   for (int i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
-    GET_SKILL(ch, i) = 0;
+    ch->char_specials.saved.skills[i][0] = 0;
   ch->char_specials.carry_weight = 0;
   ch->char_specials.carry_items = 0;
   GET_BALLISTIC(ch) = GET_TOTALBAL(ch) = GET_IMPACT(ch) = GET_TOTALIMP(ch) = 0;
