@@ -1291,12 +1291,29 @@ ACMD(do_skills)
   }
   
   if (subcmd == SCMD_SKILLS) {
-    for (i = 1; i < MAX_SKILLS; i++) {
+    // Append skills.
+    for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++) {
       if (!mode_all && *arg && !is_abbrev(arg, skills[i].name))
         continue;
       
       if (i == SKILL_ENGLISH)
         i = SKILL_ANIMAL_HANDLING;
+      if ((GET_SKILL(ch, i)) > 0) {
+        sprintf(buf2, "%-30s %s\r\n", skills[i].name, how_good(i, GET_SKILL(ch, i)));
+        strcat(buf, buf2);
+      }
+    }
+    
+    // Append languages.
+    if (!*arg)
+      sprintf(ENDOF(buf), "\r\n\r\nYou know the following languages:\r\n");
+    else
+      sprintf(ENDOF(buf), "\r\n\r\nYou know the following languages that start with '%s':\r\n", arg);
+    
+    for (i = SKILL_ENGLISH; i < SKILL_FRENCH; i++) {
+      if (!mode_all && *arg && !is_abbrev(arg, skills[i].name))
+        continue;
+      
       if ((GET_SKILL(ch, i)) > 0) {
         sprintf(buf2, "%-30s %s\r\n", skills[i].name, how_good(i, GET_SKILL(ch, i)));
         strcat(buf, buf2);
