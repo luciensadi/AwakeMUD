@@ -1948,8 +1948,9 @@ ACMD(do_push)
     else if (veh->locked && veh->damage < 10 && veh->type != VEH_DRONE)
       send_to_char("The wheels seem to be locked.\r\n", ch);
     else {
-      sprintf(buf, "$n pushes %s into the back of %s.", GET_VEH_NAME(veh), GET_VEH_NAME(found_veh));
-      send_to_char(ch, "You push %s into the back of %s.\r\n", GET_VEH_NAME(veh), GET_VEH_NAME(found_veh));
+      strcpy(buf2, GET_VEH_NAME(veh));
+      sprintf(buf, "$n pushes %s into the back of %s.", buf2, GET_VEH_NAME(found_veh));
+      send_to_char(ch, "You push %s into the back of %s.\r\n", buf2, GET_VEH_NAME(found_veh));
       act(buf, 0, ch, 0, 0, TO_ROOM);
       sprintf(buf2, "You are pushed into %s.\r\n", GET_VEH_NAME(found_veh));
       send_to_veh(buf2, veh, NULL, TRUE);

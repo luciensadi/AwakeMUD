@@ -1109,7 +1109,7 @@ ACMD(do_gen_door)
       if (veh->type == VEH_BIKE)
         send_to_veh("The ignition clicks.\r\n", veh, NULL, FALSE);
       else if (veh->type == VEH_DRONE)
-        send_to_veh("The wheels unlock.\r\n", veh, NULL, FALSE);
+        send_to_veh("The drone chirps, acknowledging that it is now unlocked.\r\n", veh, NULL, FALSE);
       else
         send_to_veh("The doors click open.\r\n", veh, NULL, FALSE);
       send_to_char(buf, ch);
@@ -1124,6 +1124,8 @@ ACMD(do_gen_door)
       sprintf(buf, "You lock %s.\r\n", GET_VEH_NAME(veh));
       if (veh->type == VEH_BIKE)
         send_to_veh("The ignition clicks.\r\n", veh , NULL, FALSE);
+      else if (veh->type == VEH_DRONE)
+        send_to_veh("The drone chirps, acknowledging that it is now locked.\r\n", veh, NULL, FALSE);
       else
         send_to_veh("The doors click locked.\r\n", veh, NULL, FALSE);
       send_to_char(buf, ch);
