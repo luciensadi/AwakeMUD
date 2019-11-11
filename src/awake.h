@@ -1095,7 +1095,6 @@ enum {
 #define ITEM_SNIPER        21
 #define ITEM_IMMLOAD       22 
 #define ITEM_EXTRA_MAX     23
-/* always keep immload the last */
 
 /* Ammo types */ 
 #define AMMO_NORMAL     0

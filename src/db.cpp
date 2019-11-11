@@ -274,10 +274,9 @@ void initialize_and_connect_to_mysql() {
 
 void check_for_common_fuckups() {
   extern struct dest_data taxi_destinations[];
+  extern struct dest_data port_destinations[];
   
-  bool fuckup_detected = FALSE;
-  
-  // Check for invalid taxi destinations.
+  // Check for invalid taxi destinations. Meaningless maximum 10k chosen here.
   for (int i = 0; i < 10000; i++) {
     if (taxi_destinations[i].vnum == 0)
       break;
@@ -285,12 +284,20 @@ void check_for_common_fuckups() {
     if (real_room(taxi_destinations[i].vnum) == NOWHERE) {
       sprintf(buf, "ERROR: Taxi destination '%s' (%ld) does not exist.", taxi_destinations[i].keyword, taxi_destinations[i].vnum);
       log(buf);
-      fuckup_detected = TRUE;
+      taxi_destinations[i].enabled = FALSE;
     }
   }
   
-  if (fuckup_detected)
-    shutdown();
+  for (int i = 0; i < 10000; i++) {
+    if (port_destinations[i].vnum == 0)
+      break;
+    
+    if (real_room(port_destinations[i].vnum) == NOWHERE) {
+      sprintf(buf, "ERROR: Portland taxi destination '%s' (%ld) does not exist.", port_destinations[i].keyword, port_destinations[i].vnum);
+      log(buf);
+      port_destinations[i].enabled = FALSE;
+    }
+  }
 }
 
 void boot_world(void)
