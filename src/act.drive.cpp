@@ -820,6 +820,8 @@ ACMD(do_control)
   }
   if (!veh->in_room && !veh->in_veh) {
     send_to_char("You can't seem to make contact with it.\r\n", ch);
+    sprintf(buf, "SYSERR: Vehicle %s is not located in a valid room or vehicle!\r\n", GET_VEH_NAME(veh));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return;
   }
   if (PLR_FLAGGED(ch, PLR_REMOTE))

@@ -545,57 +545,60 @@ void affect_total(struct char_data * ch)
       apply_focus_effect(ch, obj);
   /* effects of equipment */
   {
+    struct obj_data *worn_item = NULL;
     int suitbal = 0, suitimp = 0, suittype = 0,  highestbal = 0, highestimp = 0;
-    for (i = 0; i < (NUM_WEARS - 1); i++)
-      if (GET_EQ(ch, i))
-      {
+    for (i = 0; i < (NUM_WEARS - 1); i++) {
+      if ((worn_item = GET_EQ(ch, i))) {
         wearing = TRUE;
-        if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_FOCUS)
-          apply_focus_effect(ch, GET_EQ(ch,i));
+        if (GET_OBJ_TYPE(worn_item) == ITEM_FOCUS)
+          apply_focus_effect(ch, worn_item);
         else
           for (j = 0; j < MAX_OBJ_AFFECT; j++)
             affect_modify(ch,
-                          GET_EQ(ch, i)->affected[j].location,
-                          GET_EQ(ch, i)->affected[j].modifier,
-                          GET_EQ(ch, i)->obj_flags.bitvector, TRUE);
-        if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_WORN) {
-          if (GET_OBJ_VAL(GET_EQ(ch, i), 8) && (!suittype || suittype == GET_OBJ_VAL(GET_EQ(ch, i), 8))) {
-            suitbal += GET_OBJ_VAL(GET_EQ(ch, i), 5);
-            suitimp += GET_OBJ_VAL(GET_EQ(ch, i), 6);
-            suittype = GET_OBJ_VAL(GET_EQ(ch, i), 8);
-          } else if (GET_OBJ_VAL(GET_EQ(ch, i), 5) || GET_OBJ_VAL(GET_EQ(ch, i), 6)) {
+                          worn_item->affected[j].location,
+                          worn_item->affected[j].modifier,
+                          worn_item->obj_flags.bitvector, TRUE);
+        if (GET_OBJ_TYPE(worn_item) == ITEM_WORN) {
+          if (GET_WORN_MATCHED_SET(worn_item) && (!suittype || suittype == GET_WORN_MATCHED_SET(worn_item))) {
+            suitbal += GET_WORN_BALLISTIC(worn_item);
+            suitimp += GET_WORN_IMPACT(worn_item);
+            suittype = GET_WORN_MATCHED_SET(worn_item);
+          } else if (GET_WORN_BALLISTIC(worn_item) || GET_WORN_IMPACT(worn_item)) {
             int bal = 0, imp = 0;
-            if (GET_OBJ_VAL(GET_EQ(ch, i), 8)) {
-              bal = (int)(GET_OBJ_VAL(GET_EQ(ch, i), 5) / 100);
-              imp = (int)(GET_OBJ_VAL(GET_EQ(ch, i), 6) / 100);
+            if (GET_WORN_MATCHED_SET(worn_item)) {
+              bal = (int)(GET_WORN_BALLISTIC(worn_item) / 100);
+              imp = (int)(GET_WORN_IMPACT(worn_item) / 100);
             } else {
-              bal = GET_OBJ_VAL(GET_EQ(ch, i), 5);
-              imp = GET_OBJ_VAL(GET_EQ(ch, i), 6);
+              bal = GET_WORN_BALLISTIC(worn_item);
+              imp = GET_WORN_IMPACT(worn_item);
             }
-            for (j = 0; j < (NUM_WEARS - 1); j++)
-              if (GET_EQ(ch, j) && j != i && GET_OBJ_TYPE(GET_EQ(ch, j)) == ITEM_WORN) {
-                if ((highestbal || GET_OBJ_VAL(GET_EQ(ch, i), 5) <
-                     (GET_OBJ_VAL(GET_EQ(ch, j), 8) ? GET_OBJ_VAL(GET_EQ(ch, j), 5) / 100 : GET_OBJ_VAL(GET_EQ(ch, j), 5))) &&
-                    bal == GET_OBJ_VAL(GET_EQ(ch, i), 5))
+            struct obj_data *temp_item = NULL;
+            for (j = 0; j < (NUM_WEARS - 1); j++) {
+              if ((temp_item = GET_EQ(ch, j)) && j != i && GET_OBJ_TYPE(temp_item) == ITEM_WORN) {
+                if ((highestbal || GET_WORN_BALLISTIC(worn_item) <
+                     (GET_WORN_MATCHED_SET(temp_item) ? GET_WORN_BALLISTIC(temp_item) / 100 : GET_WORN_BALLISTIC(temp_item))) &&
+                    bal == GET_WORN_BALLISTIC(worn_item))
                   bal /= 2;
-                if ((highestimp || GET_OBJ_VAL(GET_EQ(ch, i), 6) <
-                     (GET_OBJ_VAL(GET_EQ(ch, j), 8) ? GET_OBJ_VAL(GET_EQ(ch, j), 6) / 100 : GET_OBJ_VAL(GET_EQ(ch, j), 6))) &&
-                    imp == GET_OBJ_VAL(GET_EQ(ch, i), 6))
+                if ((highestimp || GET_WORN_IMPACT(worn_item) <
+                     (GET_WORN_MATCHED_SET(temp_item) ? GET_WORN_IMPACT(temp_item) / 100 : GET_WORN_IMPACT(temp_item))) &&
+                    imp == GET_WORN_IMPACT(worn_item))
                   imp /= 2;
               }
-            if (bal == GET_OBJ_VAL(GET_EQ(ch, i), 5))
+            }
+            if (bal == GET_WORN_BALLISTIC(worn_item))
               highestbal = bal;
-            if (imp == GET_OBJ_VAL(GET_EQ(ch, i), 6))
+            if (imp == GET_WORN_IMPACT(worn_item))
               highestimp = imp;
             GET_IMPACT(ch) += imp;
             GET_BALLISTIC(ch) += bal;
-            if (!IS_OBJ_STAT(GET_EQ(ch, i), ITEM_FORMFIT)) {
-              GET_TOTALIMP(ch) += GET_OBJ_VAL(GET_EQ(ch, i), 6) / (GET_OBJ_VAL(GET_EQ(ch, i), 8) ? 100 : 1);
-              GET_TOTALBAL(ch) += GET_OBJ_VAL(GET_EQ(ch, i), 5) / (GET_OBJ_VAL(GET_EQ(ch, i), 8) ? 100 : 1);
+            if (!IS_OBJ_STAT(worn_item, ITEM_FORMFIT)) {
+              GET_TOTALIMP(ch) += GET_WORN_BALLISTIC(worn_item) / (GET_WORN_MATCHED_SET(worn_item) ? 100 : 1);
+              GET_TOTALBAL(ch) += GET_WORN_IMPACT(worn_item) / (GET_WORN_MATCHED_SET(worn_item) ? 100 : 1);
             }
           }
         }
       }
+    }
     if (suitbal || suitimp) {
       suitimp /= 100;
       suitbal /= 100;

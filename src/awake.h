@@ -1069,6 +1069,7 @@ enum {
 #define ITEM_WEAR_MAX    25
 
 /* extra object flags: used by obj_data.obj_flags.extra_flags */
+/* see: https://github.com/luciensadi/AwakeMUD/wiki/Item-Extra-Flags */
 
 #define ITEM_GLOW          0     /* Item is glowing              */
 #define ITEM_HUM           1     /* Item is humming              */
@@ -1086,14 +1087,14 @@ enum {
 #define ITEM_COMPBURST     13    /* Weapon requires complex action to use burst fire */
 #define ITEM_VOLATILE      14    /* connected item loaded in ip zone */
 #define ITEM_WIZLOAD       15    /* item was loaded by an immortal */
-#define ITEM_NOTROLL    16
-#define ITEM_NOELF    17
-#define ITEM_NODWARF    18
-#define ITEM_NOORK    19
-#define ITEM_NOHUMAN    20
-#define ITEM_SNIPER      21
+#define ITEM_NOTROLL       16
+#define ITEM_NOELF         17
+#define ITEM_NODWARF       18
+#define ITEM_NOORK         19
+#define ITEM_NOHUMAN       20
+#define ITEM_SNIPER        21
 #define ITEM_IMMLOAD       22 
-#define ITEM_EXTRA_MAX    23
+#define ITEM_EXTRA_MAX     23
 /* always keep immload the last */
 
 /* Ammo types */ 
