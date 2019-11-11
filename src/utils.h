@@ -271,7 +271,7 @@ void    update_pos(struct char_data *victim);
       : FALSE                                    \
     )                                            \
 )
-#define ROOM_FLAGGED(loc, flag) (((loc) && (loc)->room_flags) ? (loc)->room_flags.IsSet((flag)) : FALSE)
+#define ROOM_FLAGGED(loc, flag) ((loc) ? (loc)->room_flags.IsSet((flag)) : FALSE)
 
 /* IS_AFFECTED for backwards compatibility */
 #define IS_AFFECTED(ch, skill) (AFF_FLAGGED((ch), (skill)))

@@ -1086,14 +1086,9 @@ ACMD(do_gen_door)
     }
   }
   if (!generic_find(type, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &victim, &obj) && !veh &&
-           !(veh = get_veh_list(type, ch->in_room->vehicles, ch)))
+           !(veh = get_veh_list(type, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch)))
     door = find_door(ch, type, dir, cmd_door[subcmd]);
   if (veh && subcmd != SCMD_OPEN && subcmd != SCMD_CLOSE) {
-    if (veh->type == VEH_DRONE) {
-      send_to_char("Drones don't have doors, let alone door locks.\r\n", ch);
-      return;
-    }
-    
     if (GET_IDNUM(ch) != veh->owner) {
       if (access_level(ch, LVL_ADMIN)) {
         send_to_char("You use your staff powers to summon the key.\r\n", ch);
@@ -1112,7 +1107,9 @@ ACMD(do_gen_door)
       veh->locked = FALSE;
       sprintf(buf, "You unlock %s.\r\n", GET_VEH_NAME(veh));
       if (veh->type == VEH_BIKE)
-        send_to_veh("The ignition clicks.\r\n", veh , NULL, FALSE);
+        send_to_veh("The ignition clicks.\r\n", veh, NULL, FALSE);
+      else if (veh->type == VEH_DRONE)
+        send_to_veh("The wheels unlock.\r\n", veh, NULL, FALSE);
       else
         send_to_veh("The doors click open.\r\n", veh, NULL, FALSE);
       send_to_char(buf, ch);
