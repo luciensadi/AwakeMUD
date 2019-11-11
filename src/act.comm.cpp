@@ -386,6 +386,8 @@ ACMD(do_spec_comm)
       return;
     }
     ch->in_room = ch->in_veh->in_room;
+    struct veh_data *last_veh = ch->in_veh;
+    ch->in_veh = ch->in_veh->in_veh;
     if ((vict = get_char_room_vis(ch, buf))) {
       if (vict == ch) {
         send_to_char(ch, "Why would you want to %s yourself?\r\n", action_sing);
@@ -407,6 +409,7 @@ ACMD(do_spec_comm)
       send_to_char("You don't see them here.\r\n", ch);
     }
     ch->in_room = NULL;
+    ch->in_veh = last_veh;
   } else if (!(vict = get_char_room_vis(ch, buf)) &&
              !((veh = get_veh_list(buf, ch->in_room->vehicles, ch)) && subcmd == SCMD_WHISPER))
     send_to_char(NOPERSON, ch);

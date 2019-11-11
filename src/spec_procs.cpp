@@ -2260,7 +2260,7 @@ SPECIAL(fixer)
       send_to_char(buf, ch);
       return TRUE;
     }
-    if (IS_OBJ_STAT(obj, ITEM_CORPSE) || IS_OBJ_STAT(obj, ITEM_IMMLOAD)) {
+    if (IS_OBJ_STAT(obj, ITEM_CORPSE) || IS_OBJ_STAT(obj, ITEM_IMMLOAD) || IS_OBJ_STAT(obj, ITEM_WIZLOAD)) {
       sprintf(arg, "%s I can't repair that.", GET_CHAR_NAME(ch));
       do_say(fixer, arg, 0, SCMD_SAYTO);
       return TRUE;

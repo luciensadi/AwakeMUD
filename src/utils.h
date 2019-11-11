@@ -271,7 +271,7 @@ void    update_pos(struct char_data *victim);
       : FALSE                                    \
     )                                            \
 )
-#define ROOM_FLAGGED(loc, flag) ((loc)->room_flags.IsSet((flag)))
+#define ROOM_FLAGGED(loc, flag) ((loc) ? (loc)->room_flags.IsSet((flag)) : FALSE)
 
 /* IS_AFFECTED for backwards compatibility */
 #define IS_AFFECTED(ch, skill) (AFF_FLAGGED((ch), (skill)))
@@ -790,6 +790,9 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 // ITEM_DRUG convenience defines
 
 // ITEM_WORN convenience defines
+#define GET_WORN_BALLISTIC(worn)               (GET_OBJ_VAL((worn), 5))
+#define GET_WORN_IMPACT(worn)                  (GET_OBJ_VAL((worn), 6))
+#define GET_WORN_MATCHED_SET(worn)             (GET_OBJ_VAL((worn), 8))
 
 // ITEM_OTHER convenience defines
 

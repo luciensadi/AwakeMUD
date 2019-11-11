@@ -57,13 +57,13 @@ int can_move(struct char_data *ch, int dir, int extra)
   if (IS_SET(extra, CHECK_SPECIAL) && special(ch, convert_dir[dir], &empty_argument))
     return 0;
 
-  if (ch->in_room->icesheet[0] && !IS_ASTRAL(ch))
+  if (ch->in_room && ch->in_room->icesheet[0] && !IS_ASTRAL(ch))
     if (success_test(GET_QUI(ch), ch->in_room->icesheet[0] + modify_target(ch)) < 1)
     {
       send_to_char("The ice at your feet causes you to trip and fall!\r\n", ch);
       return 0;
     }
-  if (IS_AFFECTED(ch, AFF_CHARM) && ch->master && ch->in_room == ch->master->in_room)
+  if (IS_AFFECTED(ch, AFF_CHARM) && ch->master && ((ch->in_room && (ch->in_room == ch->master->in_room)) || ((ch->in_veh && ch->in_veh == ch->master->in_veh))))
   {
     send_to_char("The thought of leaving your master makes you weep.\r\n", ch);
     act("$n bursts into tears.", FALSE, ch, 0, 0, TO_ROOM);
@@ -87,14 +87,13 @@ int can_move(struct char_data *ch, int dir, int extra)
       return 0;
     }
 
-  if (ch->in_room->func && ch->in_room->func == escalator)
+  if (ch->in_room && ch->in_room->func && ch->in_room->func == escalator)
   {
     send_to_char("You can't get off a moving escalator!\r\n", ch);
     return 0;
   }
 
-  if (IS_WATER(ch->in_room) && !IS_NPC(ch) &&
-      !IS_SENATOR(ch))
+  if (ch->in_room && IS_WATER(ch->in_room) && !IS_NPC(ch) && !IS_SENATOR(ch))
   {
     target = MAX(2, ch->in_room->rating);
     skill = SKILL_ATHLETICS;
@@ -147,6 +146,7 @@ int can_move(struct char_data *ch, int dir, int extra)
  */
 int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *vict)
 {
+  // This function is exempt from get_ch_in_room() requirements since it is only ever invoked by a character standing in a room.
   int saw_sneaker, skill, target;
   struct char_data *tch;
   struct veh_data *tveh;
@@ -563,6 +563,10 @@ void move_vehicle(struct char_data *ch, int dir)
   if (veh->cspeed <= SPEED_IDLE)
   {
     send_to_char("You might want to speed up a little.\r\n", ch);
+    return;
+  }
+  if (veh->in_veh || !veh->in_room) {
+    send_to_char("You aren't the Kool-Aid Man, so you decide against ramming your way out of here.\r\n", ch);
     return;
   }
   if (!EXIT(veh, dir)
@@ -1052,106 +1056,103 @@ ACMD(do_gen_door)
     return;
   }
 
-  if (*arg) {
-    if (!LIGHT_OK(ch)) {
-      send_to_char("How do you expect to do that when you can't see anything?\r\n", ch);
-      return;
-    }
-    two_arguments(argument, type, dir);
-    RIG_VEH(ch, veh);
-    if (is_number(type)) {
-      num = atoi(type);
-      bool has_deck = FALSE;
-      for (obj = ch->carrying; obj; obj = obj->next_content)
-        if (GET_OBJ_TYPE(obj) == ITEM_RCDECK)
-          has_deck = TRUE;
-  
-      if (!has_deck)
-        for (int x = 0; x < NUM_WEARS; x++)
-          if (GET_EQ(ch, x))
-            if (GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_RCDECK)
-              has_deck = TRUE;
-      if (has_deck) {
-        for (veh = ch->char_specials.subscribe; veh; veh = veh->next_sub)
-          if (--num < 0)
-            break;
-      }
-    }
-    if (!generic_find(type, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &victim, &obj) && !veh &&
-             !(veh = get_veh_list(type, ch->in_room->vehicles, ch)))
-      door = find_door(ch, type, dir, cmd_door[subcmd]);
-    if (veh && subcmd != SCMD_OPEN && subcmd != SCMD_CLOSE) {
-      if (veh->type == VEH_DRONE) {
-        send_to_char("Drones don't have doors, let alone door locks.\r\n", ch);
-        return;
-      }
-      
-      if (GET_IDNUM(ch) != veh->owner) {
-        if (access_level(ch, LVL_ADMIN)) {
-          send_to_char("You use your staff powers to summon the key.\r\n", ch);
-        } else {
-          sprintf(buf, "You don't have the key for %s.\r\n", GET_VEH_NAME(veh));
-          send_to_char(buf, ch);
-          return;
-        }
-      }
-      if (subcmd == SCMD_UNLOCK) {
-        if (!veh->locked) {
-          sprintf(buf, "%s is already unlocked.\r\n", GET_VEH_NAME(veh));
-          send_to_char(buf, ch);
-          return;
-        }
-        veh->locked = FALSE;
-        sprintf(buf, "You unlock %s.\r\n", GET_VEH_NAME(veh));
-        if (veh->type == VEH_BIKE)
-          send_to_veh("The ignition clicks.\r\n", veh , NULL, FALSE);
-        else
-          send_to_veh("The doors click open.\r\n", veh, NULL, FALSE);
-        send_to_char(buf, ch);
-        return;
-      } else if (subcmd == SCMD_LOCK) {
-        if (veh->locked) {
-          sprintf(buf, "%s is already locked.\r\n", GET_VEH_NAME(veh));
-          send_to_char(buf, ch);
-          return;
-        }
-        veh->locked = TRUE;
-        sprintf(buf, "You lock %s.\r\n", GET_VEH_NAME(veh));
-        if (veh->type == VEH_BIKE)
-          send_to_veh("The ignition clicks.\r\n", veh , NULL, FALSE);
-        else
-          send_to_veh("The doors click locked.\r\n", veh, NULL, FALSE);
-        send_to_char(buf, ch);
-        return;
-      }
-    }
-
-    if ((obj) || (door >= 0)) {
-      keynum = DOOR_KEY(ch, obj, door);
-      if (!(DOOR_IS_OPENABLE(ch, obj, door))) {
-        char temp[50];
-        sprintf(temp, "You can't %s that!", cmd_door[subcmd]);
-        act(temp, FALSE, ch, 0, 0, TO_CHAR);
-      }
-      else if (!DOOR_IS_OPEN(ch, obj, door) && IS_SET(flags_door[subcmd], NEED_OPEN))
-        send_to_char("But it's already closed!\r\n", ch);
-      else if (!DOOR_IS_CLOSED(ch, obj, door) && IS_SET(flags_door[subcmd], NEED_CLOSED))
-        send_to_char("But it's currently open!\r\n", ch);
-      else if (!(DOOR_IS_LOCKED(ch, obj, door)) && IS_SET(flags_door[subcmd], NEED_LOCKED))
-        send_to_char("Oh.. it wasn't locked, after all..\r\n", ch);
-      else if (!(DOOR_IS_UNLOCKED(ch, obj, door)) && IS_SET(flags_door[subcmd], NEED_UNLOCKED))
-        send_to_char("It seems to be locked.\r\n", ch);
-      else if (!has_key(ch, keynum) && !access_level(ch, LVL_ADMIN)
-               && ((subcmd == SCMD_LOCK) || (subcmd == SCMD_UNLOCK)))
-        send_to_char("You don't seem to have the proper key.\r\n", ch);
-      else if (ok_pick(ch, keynum, DOOR_IS_PICKPROOF(ch, obj, door), subcmd, LOCK_LEVEL(ch, obj, door)))
-        do_doorcmd(ch, obj, door, subcmd);
-    }
+  if (!*arg) {
+    sprintf(buf, "%s what?\r\n", cmd_door[subcmd]);
+    send_to_char(CAP(buf), ch);
     return;
   }
-  sprintf(buf, "%s what?\r\n", cmd_door[subcmd]);
-  send_to_char(CAP(buf), ch);
+  if (!LIGHT_OK(ch)) {
+    send_to_char("How do you expect to do that when you can't see anything?\r\n", ch);
+    return;
+  }
+  two_arguments(argument, type, dir);
+  RIG_VEH(ch, veh);
+  if (is_number(type)) {
+    num = atoi(type);
+    bool has_deck = FALSE;
+    for (obj = ch->carrying; obj; obj = obj->next_content)
+      if (GET_OBJ_TYPE(obj) == ITEM_RCDECK)
+        has_deck = TRUE;
 
+    if (!has_deck)
+      for (int x = 0; x < NUM_WEARS; x++)
+        if (GET_EQ(ch, x))
+          if (GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_RCDECK)
+            has_deck = TRUE;
+    if (has_deck) {
+      for (veh = ch->char_specials.subscribe; veh; veh = veh->next_sub)
+        if (--num < 0)
+          break;
+    }
+  }
+  if (!generic_find(type, FIND_OBJ_EQUIP | FIND_OBJ_INV | FIND_OBJ_ROOM, ch, &victim, &obj) && !veh &&
+           !(veh = get_veh_list(type, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch)))
+    door = find_door(ch, type, dir, cmd_door[subcmd]);
+  if (veh && subcmd != SCMD_OPEN && subcmd != SCMD_CLOSE) {
+    if (GET_IDNUM(ch) != veh->owner) {
+      if (access_level(ch, LVL_ADMIN)) {
+        send_to_char("You use your staff powers to summon the key.\r\n", ch);
+      } else {
+        sprintf(buf, "You don't have the key for %s.\r\n", GET_VEH_NAME(veh));
+        send_to_char(buf, ch);
+        return;
+      }
+    }
+    if (subcmd == SCMD_UNLOCK) {
+      if (!veh->locked) {
+        sprintf(buf, "%s is already unlocked.\r\n", GET_VEH_NAME(veh));
+        send_to_char(buf, ch);
+        return;
+      }
+      veh->locked = FALSE;
+      sprintf(buf, "You unlock %s.\r\n", GET_VEH_NAME(veh));
+      if (veh->type == VEH_BIKE)
+        send_to_veh("The ignition clicks.\r\n", veh, NULL, FALSE);
+      else if (veh->type == VEH_DRONE)
+        send_to_veh("The wheels unlock.\r\n", veh, NULL, FALSE);
+      else
+        send_to_veh("The doors click open.\r\n", veh, NULL, FALSE);
+      send_to_char(buf, ch);
+      return;
+    } else if (subcmd == SCMD_LOCK) {
+      if (veh->locked) {
+        sprintf(buf, "%s is already locked.\r\n", GET_VEH_NAME(veh));
+        send_to_char(buf, ch);
+        return;
+      }
+      veh->locked = TRUE;
+      sprintf(buf, "You lock %s.\r\n", GET_VEH_NAME(veh));
+      if (veh->type == VEH_BIKE)
+        send_to_veh("The ignition clicks.\r\n", veh , NULL, FALSE);
+      else
+        send_to_veh("The doors click locked.\r\n", veh, NULL, FALSE);
+      send_to_char(buf, ch);
+      return;
+    }
+  }
+
+  if ((obj) || (door >= 0)) {
+    keynum = DOOR_KEY(ch, obj, door);
+    if (!(DOOR_IS_OPENABLE(ch, obj, door))) {
+      char temp[50];
+      sprintf(temp, "You can't %s that!", cmd_door[subcmd]);
+      act(temp, FALSE, ch, 0, 0, TO_CHAR);
+    }
+    else if (!DOOR_IS_OPEN(ch, obj, door) && IS_SET(flags_door[subcmd], NEED_OPEN))
+      send_to_char("But it's already closed!\r\n", ch);
+    else if (!DOOR_IS_CLOSED(ch, obj, door) && IS_SET(flags_door[subcmd], NEED_CLOSED))
+      send_to_char("But it's currently open!\r\n", ch);
+    else if (!(DOOR_IS_LOCKED(ch, obj, door)) && IS_SET(flags_door[subcmd], NEED_LOCKED))
+      send_to_char("Oh.. it wasn't locked, after all..\r\n", ch);
+    else if (!(DOOR_IS_UNLOCKED(ch, obj, door)) && IS_SET(flags_door[subcmd], NEED_UNLOCKED))
+      send_to_char("It seems to be locked.\r\n", ch);
+    else if (!has_key(ch, keynum) && !access_level(ch, LVL_ADMIN)
+             && ((subcmd == SCMD_LOCK) || (subcmd == SCMD_UNLOCK)))
+      send_to_char("You don't seem to have the proper key.\r\n", ch);
+    else if (ok_pick(ch, keynum, DOOR_IS_PICKPROOF(ch, obj, door), subcmd, LOCK_LEVEL(ch, obj, door)))
+      do_doorcmd(ch, obj, door, subcmd);
+  }
+  return;
 }
 
 void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *argument, bool drag)
@@ -1388,7 +1389,7 @@ ACMD(do_enter)
 
     sprintf(buf2, "There is no %s here.\r\n", buf);
     send_to_char(buf2, ch);
-  } else if (ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))
+  } else if (ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS))
     send_to_char("You are already indoors.\r\n", ch);
   else {
     /* try to locate an entrance */
@@ -1428,6 +1429,7 @@ void leave_veh(struct char_data *ch)
     send_to_veh(buf, veh, NULL, TRUE);
     send_to_veh(buf2, veh->in_veh, NULL, FALSE);
     sprintf(buf, "%s drives out of the back of %s.", GET_VEH_NAME(veh), GET_VEH_NAME(veh->in_veh));
+    // get_veh_in_room not needed here since the if-check guarantees that veh->in_veh->in_room is valid.
     struct room_data *room = veh->in_veh->in_room;
     veh_to_room(veh, room);
     if (veh->in_room->people) {
@@ -1456,7 +1458,7 @@ void leave_veh(struct char_data *ch)
   } else
     act("$n climbs out into the street.", FALSE, ch, 0, 0, TO_VEH);
   
-  door = veh->in_room;
+  door = get_veh_in_room(veh);
   char_from_room(ch);
   if (IS_WORKING(ch))
   {
@@ -1494,7 +1496,7 @@ ACMD(do_leave)
     send_to_char("Maybe you should get on your feet first?\r\n", ch);
     return;
   }
-  if (!ROOM_FLAGGED(ch->in_room, ROOM_INDOORS))
+  if (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS))
     send_to_char("You are outside.. where do you want to go?\r\n", ch);
   else {
     for (door = 0; door < NUM_OF_DIRS; door++)
@@ -1553,7 +1555,7 @@ ACMD(do_stand)
 
 ACMD(do_sit)
 {
-  if (IS_WATER(ch->in_room)) {
+  if (ch->in_room && IS_WATER(ch->in_room)) {
     send_to_char("Sit down while swimming?\r\n", ch);
     return;
   }
@@ -1595,7 +1597,7 @@ ACMD(do_sit)
 
 ACMD(do_rest)
 {
-  if (IS_WATER(ch->in_room)) {
+  if (ch->in_room && IS_WATER(ch->in_room)) {
     send_to_char("Dry land would be helpful to do that.\r\n", ch);
     return;
   }
@@ -1640,7 +1642,7 @@ ACMD(do_rest)
 
 ACMD(do_lay)
 {
-  if (IS_WATER(ch->in_room)) {
+  if (ch->in_room && IS_WATER(ch->in_room)) {
     send_to_char("Dry land would be helpful to do that.\r\n", ch);
     return;
   }
@@ -1690,7 +1692,7 @@ ACMD(do_sleep)
     send_to_char("ARE YOU CRAZY!?\r\n", ch);
     return;
   }
-  if (IS_WATER(ch->in_room)) {
+  if (ch->in_room && IS_WATER(ch->in_room)) {
     send_to_char("Sleeping while swimming can be hazardous to your health.\r\n", ch);
     return;
   }
