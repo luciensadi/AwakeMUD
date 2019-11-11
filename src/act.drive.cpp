@@ -1900,9 +1900,10 @@ ACMD(do_push)
     else if (!(veh = get_veh_list(argument, ch->in_veh->carriedvehs, ch)))
       send_to_char("That vehicle isn't in here.\r\n", ch);
     else {
-      send_to_char(ch, "You push %s out of the back.\r\n", GET_VEH_NAME(veh));
-      sprintf(buf, "$n pushes %s out of the back.", GET_VEH_NAME(veh));
-      sprintf(buf2, "$N pushes %s out of the back of %s.", GET_VEH_NAME(veh), GET_VEH_NAME(ch->in_veh));
+      strcpy(buf3, GET_VEH_NAME(veh));
+      send_to_char(ch, "You push %s out of the back.\r\n", buf3);
+      sprintf(buf, "$n pushes %s out of the back.", buf3);
+      sprintf(buf2, "$N pushes %s out of the back of %s.", buf3, GET_VEH_NAME(ch->in_veh));
       act(buf, FALSE, ch, NULL, NULL, TO_ROOM);
       if (ch->in_veh->in_room) {
         act(buf2, FALSE, ch->in_veh->in_room->people, 0, 0, TO_NOTVICT);

@@ -95,7 +95,9 @@ int find_first_step(vnum_t src, vnum_t target)
   vnum_t curr_room;
   
   if (src < 0 || src > top_of_world || target < 0 || target > top_of_world) {
-    log("Illegal value passed to find_first_step (graph.c)");
+    sprintf(buf3, "Illegal value passed to find_first_step (graph.c). Expected constraints: 0 <= src %ld <= %ld; 0 <= target %ld <= %ld.",
+            src, top_of_world, target, top_of_world);
+    log(buf3);
     return BFS_ERROR;
   }
   if (src == target)

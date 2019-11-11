@@ -54,6 +54,7 @@
 #include "security.h"
 #include "olc.h"
 #include <new>
+#include "transport.h"
 
 extern void calc_weight(struct char_data *ch);
 extern void read_spells(struct char_data *ch);
@@ -271,6 +272,27 @@ void initialize_and_connect_to_mysql() {
   }
 }
 
+void check_for_common_fuckups() {
+  extern struct dest_data taxi_destinations[];
+  
+  bool fuckup_detected = FALSE;
+  
+  // Check for invalid taxi destinations.
+  for (int i = 0; i < 10000; i++) {
+    if (taxi_destinations[i].vnum == 0)
+      break;
+    
+    if (!real_room(taxi_destinations[i].vnum)) {
+      sprintf(buf, "ERROR: Taxi destination '%s' (%ld) does not exist.", taxi_destinations[i].keyword, taxi_destinations[i].vnum);
+      log(buf);
+      fuckup_detected = TRUE;
+    }
+  }
+  
+  if (fuckup_detected)
+    shutdown();
+}
+
 void boot_world(void)
 {
   // Sanity check to ensure we haven't added more bits than our bitfield can hold.
@@ -345,8 +367,12 @@ void boot_world(void)
 
   log("Renumbering zone table.");
   renum_zone_table();
+  
   log("Creating Help Indexes.");
-
+  // TODO: Is this supposed to actually do anything?
+  
+  log("Perfomring final validation checks.");
+  check_for_common_fuckups();
 }
 
 /* body of the booting system */

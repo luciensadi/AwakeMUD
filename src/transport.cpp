@@ -48,7 +48,7 @@ extern int ELEVATOR_SHAFT_FALL_RATING;
 // static const int NUM_SEATTLE_STATIONS = 6;
 static const int NUM_SEATAC_STATIONS = 6;
 
-static struct dest_data destinations[] =
+struct dest_data taxi_destinations[] =
   {
     { "tacoma", "Tacoma", 2000 },
     { "knight", "Knight Center", 1519 },
@@ -417,7 +417,7 @@ SPECIAL(taxi)
           sprintf(say, "%s?  Sure, that will be %d nuyen.",
                   port_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
         else sprintf(say, "%s?  Yeah, sure...it'll cost ya %d nuyen, whaddya say?",
-                  destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
+                  taxi_destinations[GET_SPARE2(driver)].str, (int)GET_SPARE1(driver));
         do_say(driver, say, 0, 0);
         if (GET_EXTRA(driver) == 1) {
           do_say(driver, "But seeing as you're new around here, I'll waive my usual fee, okay?", 0, 0);
@@ -504,8 +504,8 @@ SPECIAL(taxi)
     
     bool found = FALSE;
     if (GET_ACTIVE(driver) == ACT_AWAIT_CMD)
-      for (dest = 0; (portland ? *port_destinations[dest].keyword : *destinations[dest].keyword) != '\n'; dest++)
-        if ( str_str((const char *)argument, (portland ? port_destinations[dest].keyword : destinations[dest].keyword))) {
+      for (dest = 0; (portland ? *port_destinations[dest].keyword : *taxi_destinations[dest].keyword) != '\n'; dest++)
+        if ( str_str((const char *)argument, (portland ? port_destinations[dest].keyword : taxi_destinations[dest].keyword))) {
           comm = CMD_TAXI_DEST;
           found = TRUE;
           break;
@@ -538,7 +538,7 @@ SPECIAL(taxi)
       }
     int dist = 0;
     while (temp_room) {
-      int x = find_first_step(real_room(temp_room->number), real_room((portland ? port_destinations[dest].vnum : destinations[dest].vnum)));
+      int x = find_first_step(real_room(temp_room->number), real_room((portland ? port_destinations[dest].vnum : taxi_destinations[dest].vnum)));
       if (x == -2)
         break;
       else if (x < 0) {
@@ -567,7 +567,7 @@ SPECIAL(taxi)
     if (!IS_SENATOR(ch))
       GET_NUYEN(ch) -= GET_SPARE1(driver);
     GET_SPARE1(driver) = (int)(GET_SPARE1(driver) / 50);
-    GET_SPARE2(driver) = portland ? port_destinations[GET_SPARE2(driver)].vnum : destinations[GET_SPARE2(driver)].vnum;
+    GET_SPARE2(driver) = portland ? port_destinations[GET_SPARE2(driver)].vnum : taxi_destinations[GET_SPARE2(driver)].vnum;
     GET_ACTIVE(driver) = ACT_DRIVING;
 
     for (int dir = NORTH; dir < UP; dir++)
