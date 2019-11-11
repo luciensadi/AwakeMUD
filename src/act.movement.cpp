@@ -1067,6 +1067,7 @@ ACMD(do_gen_door)
   }
   two_arguments(argument, type, dir);
   RIG_VEH(ch, veh);
+  send_to_char(ch, "RIG_VEH's result: %s\r\n", veh ? GET_VEH_NAME(veh) : "Nothing!");
   if (is_number(type)) {
     num = atoi(type);
     bool has_deck = FALSE;
