@@ -1603,6 +1603,10 @@ ACMD(do_rest)
     send_to_char("Dry land would be helpful to do that.\r\n", ch);
     return;
   }
+  if (AFF_FLAGGED(ch, AFF_PILOT)) {
+    send_to_char("Trying to rest while driving? You ARE mad!\r\n", ch);
+    return;
+  }
   if (IS_WORKING(ch)) {
     send_to_char(ch, "You stop working.\r\n");
     STOP_WORKING(ch);
@@ -1646,6 +1650,10 @@ ACMD(do_lay)
 {
   if (ch->in_room && IS_WATER(ch->in_room)) {
     send_to_char("Dry land would be helpful to do that.\r\n", ch);
+    return;
+  }
+  if (AFF_FLAGGED(ch, AFF_PILOT)) {
+    send_to_char("Trying to lay down while driving? You ARE mad!\r\n", ch);
     return;
   }
   if (IS_WORKING(ch)) {
