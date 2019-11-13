@@ -1673,6 +1673,10 @@ ACMD(do_qedit)
       qst->info = str_dup(quest_table[rnum].info);
     if (quest_table[rnum].done)
       qst->done = str_dup(quest_table[rnum].done);
+    if (quest_table[rnum].s_string)
+      qst->s_string = str_dup(quest_table[rnum].s_string);
+    if (quest_table[rnum].e_string)
+      qst->e_string = str_dup(quest_table[rnum].e_string);
 
     d->edit_quest = qst;
 #ifdef CONFIRM_EXISTING

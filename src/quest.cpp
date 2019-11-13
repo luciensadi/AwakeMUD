@@ -962,6 +962,8 @@ void boot_one_quest(struct quest_data *quest)
   quest_table[quest_nr].finish = str_dup(quest->finish);
   quest_table[quest_nr].info = str_dup(quest->info);
   quest_table[quest_nr].done = str_dup(quest->done);
+  quest_table[quest_nr].s_string = str_dup(quest->s_string);
+  quest_table[quest_nr].e_string = str_dup(quest->e_string);
 
   if ((i = real_mobile(quest_table[quest_nr].johnson)) > 0 &&
       mob_index[i].func != johnson)
@@ -1045,6 +1047,14 @@ void reboot_quest(int rnum, struct quest_data *quest)
   if (quest_table[rnum].done)
     delete [] quest_table[rnum].done;
   quest_table[rnum].done = str_dup(quest->done);
+  
+  if (quest_table[rnum].s_string)
+    delete [] quest_table[rnum].s_string;
+  quest_table[rnum].s_string = str_dup(quest->s_string);
+  
+  if (quest_table[rnum].e_string)
+    delete [] quest_table[rnum].e_string;
+  quest_table[rnum].e_string = str_dup(quest->e_string);
 }
 
 int write_quests_to_disk(int zone)
