@@ -1002,34 +1002,36 @@ void char_from_room(struct char_data * ch)
   if (CH_IN_COMBAT(ch))
     stop_fighting(ch);
   
-  if (GET_EQ(ch, WEAR_LIGHT) != NULL)
-    if (GET_OBJ_TYPE(GET_EQ(ch, WEAR_LIGHT)) == ITEM_LIGHT)
-      if (GET_OBJ_VAL(GET_EQ(ch, WEAR_LIGHT), 2))       /* Light is ON */
-        ch->in_room->light[0]--;
-  if (affected_by_spell(ch, SPELL_LIGHT) && !--ch->in_room->light[0])
-    ch->in_room->light[1] = 0;
-  if (affected_by_spell(ch, SPELL_SHADOW) && !--ch->in_room->shadow[0])
-    ch->in_room->shadow[1] = 0;
-  if (affected_by_spell(ch, SPELL_POLTERGEIST) && !--ch->in_room->poltergeist[0])
-    ch->in_room->poltergeist[1] = 0;
-  if (affected_by_spell(ch, SPELL_SILENCE) && !--ch->in_room->silence[0])
-    ch->in_room->silence[1] = 0;
-  if (ch->in_veh)
-  {
+  if (ch->in_room) {
+    // Character is in a room. Clean up room effects sourced by character.
+    if (GET_EQ(ch, WEAR_LIGHT) != NULL)
+      if (GET_OBJ_TYPE(GET_EQ(ch, WEAR_LIGHT)) == ITEM_LIGHT)
+        if (GET_OBJ_VAL(GET_EQ(ch, WEAR_LIGHT), 2))       /* Light is ON */
+          ch->in_room->light[0]--;
+    if (affected_by_spell(ch, SPELL_LIGHT) && !--ch->in_room->light[0])
+      ch->in_room->light[1] = 0;
+    if (affected_by_spell(ch, SPELL_SHADOW) && !--ch->in_room->shadow[0])
+      ch->in_room->shadow[1] = 0;
+    if (affected_by_spell(ch, SPELL_POLTERGEIST) && !--ch->in_room->poltergeist[0])
+      ch->in_room->poltergeist[1] = 0;
+    if (affected_by_spell(ch, SPELL_SILENCE) && !--ch->in_room->silence[0])
+      ch->in_room->silence[1] = 0;
+    if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_PACIFY) && ch->in_room->peaceful > 0)
+      ch->in_room->peaceful--;
+    
+    // Remove them from the room.
+    REMOVE_FROM_LIST(ch, ch->in_room->people, next_in_room);
+    ch->in_room = NULL;
+    ch->next_in_room = NULL;
+    CHAR_X(ch) = CHAR_Y(ch) = 0;
+  } else  {
+    // Character is in a vehicle. Remove them from it.
     REMOVE_FROM_LIST(ch, ch->in_veh->people, next_in_veh);
     stop_manning_weapon_mounts(ch, TRUE);
     ch->in_veh->seating[ch->vfront]++;
     ch->in_veh = NULL;
     ch->next_in_veh = NULL;
     AFF_FLAGS(ch).RemoveBit(AFF_PILOT);
-  } else
-  {
-    if (IS_SENATOR(ch) && PRF_FLAGGED(ch, PRF_PACIFY) && ch->in_room->peaceful > 0)
-      ch->in_room->peaceful--;
-    REMOVE_FROM_LIST(ch, ch->in_room->people, next_in_room);
-    ch->in_room = NULL;
-    ch->next_in_room = NULL;
-    CHAR_X(ch) = CHAR_Y(ch) = 0;
   }
 }
 
@@ -2091,10 +2093,11 @@ void extract_char(struct char_data * ch)
     extract_icon(ch->persona);
     ch->persona = NULL;
     PLR_FLAGS(ch).RemoveBit(PLR_MATRIX);
-  } else if (PLR_FLAGGED(ch, PLR_MATRIX))
+  } else if (PLR_FLAGGED(ch, PLR_MATRIX) && ch->in_room) {
     for (struct char_data *temp = ch->in_room->people; temp; temp = temp->next_in_room)
       if (PLR_FLAGGED(temp, PLR_MATRIX))
         temp->persona->decker->hitcher = NULL;
+  }
   
   /* end astral tracking */
   if (AFF_FLAGGED(ch, AFF_TRACKED))
@@ -2313,7 +2316,7 @@ struct obj_data *get_obj_vis(struct char_data * ch, char *name)
     return i;
   
   /* scan room */
-  if ((i = get_obj_in_list_vis(ch, name, ch->in_room->contents)))
+  if (ch->in_room && (i = get_obj_in_list_vis(ch, name, ch->in_room->contents)))
     return i;
   
   strcpy(tmp, name);

@@ -333,9 +333,14 @@ void objList::CallSpec()
   nodeStruct<struct obj_data *> *temp;
 
   char empty_argument = '\0';
-  for (temp = head; temp; temp = temp->next)
+  for (temp = head; temp; temp = temp->next) {
+    if (!temp->data) {
+      log("Warning-- found an object in the CallSpec list with null data.");
+      continue;
+    }
     if (GET_OBJ_SPEC(temp->data) != NULL)
       GET_OBJ_SPEC(temp->data) (NULL, temp->data, 0, &empty_argument);
+  }
 }
 
 void objList::RemoveObjNum(int num)
