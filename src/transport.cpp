@@ -395,7 +395,7 @@ SPECIAL(taxi)
 
   struct char_data *temp = NULL, *driver = (struct char_data *) me;
   struct room_data *temp_room = NULL;
-  int comm = CMD_TAXI_NONE, i = 0, j;
+  int comm = CMD_TAXI_NONE;
   char say[MAX_STRING_LENGTH];
   vnum_t dest = 0;
   bool portland = FALSE;
@@ -449,7 +449,7 @@ SPECIAL(taxi)
           GET_SPARE1(driver)--;
         else {
           int x[] = { 0, 0, 0, 0, 0, 0, 0, 0 }, y = 0;
-          for (j = number(NORTH, NORTHWEST);; j = number(NORTH, NORTHWEST)) {
+          for (int j = number(NORTH, NORTHWEST);; j = number(NORTH, NORTHWEST)) {
             if (!x[j]) {
               x[j] = 1;
               y++;
@@ -545,7 +545,7 @@ SPECIAL(taxi)
         temp_room = NULL;
         break;
       }
-      temp_room = world[i].dir_option[x]->to_room;
+      temp_room = temp_room->dir_option[x]->to_room;
       dist++;
     }
     if (!temp_room)
