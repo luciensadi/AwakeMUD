@@ -236,10 +236,10 @@ void close_taxi_door(struct room_data *room, int dir, struct room_data *taxi)
 
 void taxi_leaves(void)
 {
-  int i, j, found = 0;
+  int found = 0;
   struct room_data *to = NULL;
   struct char_data *temp;
-  for (j = real_room(FIRST_CAB); j <= real_room(LAST_PORTCAB); j++) {
+  for (int j = real_room(FIRST_CAB); j <= real_room(LAST_PORTCAB); j++) {
     found = 0;
     for (temp = world[j].people; temp; temp = temp->next_in_room)
       if (!(GET_MOB_SPEC(temp) && GET_MOB_SPEC(temp) == taxi)) {
@@ -248,7 +248,7 @@ void taxi_leaves(void)
       }
     if (found)
       continue;
-    for (i = NORTH; i < UP; i++)
+    for (int i = NORTH; i < UP; i++)
       if (world[j].dir_option[i]) {
         to = world[j].dir_option[i]->to_room;
         close_taxi_door(to, rev_dir[i], &world[j]);
@@ -276,11 +276,11 @@ void taxi_leaves(void)
 ACMD(do_hail)
 {
   struct char_data *temp;
-  int cab, dir, first, last;
+  int cab, first, last;
   bool found = FALSE, empty = FALSE, portland = FALSE;
   SPECIAL(taxi);
 
-  for (dir = NORTH; dir < UP; dir++)
+  for (int dir = NORTH; dir < UP; dir++)
     if (!ch->in_room->dir_option[dir])
       empty = TRUE;
 
@@ -355,7 +355,7 @@ ACMD(do_hail)
         break;
     if (!temp) {
       found = TRUE;
-      for (dir = NORTH; dir < UP; dir++)
+      for (int dir = NORTH; dir < UP; dir++)
         if (world[cab].dir_option[dir])
           found = FALSE;
       if (found)
@@ -368,7 +368,7 @@ ACMD(do_hail)
     return;
   }
 
-  for (dir = number(NORTH, UP - 1);; dir = number(NORTH, UP - 1))
+  for (int dir = number(NORTH, UP - 1);; dir = number(NORTH, UP - 1))
     if (!ch->in_room->dir_option[dir]) {
       open_taxi_door(ch->in_room, dir, &world[cab]);
       if (portland)
