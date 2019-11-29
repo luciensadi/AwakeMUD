@@ -2401,7 +2401,9 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
   if (send_message) {    
     // Active skill messaging.
     if (skills[skill_num].type == SKILL_TYPE_ACTIVE) {
-      if (new_value == 1) {
+      if (new_value == 0) {
+        send_to_char(ch, "You completely forget your skills in %s.\r\n", skills[skill_num].name);
+      } else if (new_value == 1) {
         send_to_char(ch, "^cYou have been introduced to the basics.^n\r\n");
       } else if (new_value == 2) {
         send_to_char(ch, "^cYou have gotten in some practice.^n\r\n");
@@ -2423,7 +2425,9 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
     }
     // Knowledge skill messaging.
     else {
-      if (new_value == 1) {
+      if (new_value == 0) {
+        send_to_char(ch, "You completely forget your knowledge of %s.\r\n", skills[skill_num].name);
+      } else if (new_value == 1) {
         send_to_char(ch, "^cYou've picked up a few things.^n\r\n");
       } else if (new_value == 2) {
         send_to_char(ch, "^cYou've developed an interest in %s.^n\r\n", skills[skill_num].name);
