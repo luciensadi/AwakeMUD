@@ -1680,7 +1680,11 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
   bool has_pockets = FALSE, added_extra_carriage_return = FALSE, has_smartlink = FALSE;
   struct obj_data *access = NULL;
   
-  sprintf(buf, "^MOOC^n statistics for '^y%s^n':\r\n", ((j->text.name) ? j->text.name : "<None>"));
+  if (j->restring) {
+    sprintf(buf, "^MOOC^n statistics for '^y%s^n' (restrung from %s):\r\n", GET_OBJ_NAME(j), j->text.name);
+  } else {
+    sprintf(buf, "^MOOC^n statistics for '^y%s^n':\r\n", (GET_OBJ_NAME(j) ? GET_OBJ_NAME(j) : "<None>"));
+  }
   
   sprinttype(GET_OBJ_TYPE(j), item_types, buf1);
   sprintf(ENDOF(buf), "It is %s ^c%s^n that weighs ^c%.2f^n kilos. It is made of ^c%s^n with a durability of ^c%d^n.\r\n",
@@ -3831,14 +3835,14 @@ void perform_immort_where(struct char_data * ch, char *arg)
         if (i && CAN_SEE(ch, i) && (i->in_room || i->in_veh)) {
           if (d->original)
             if (d->character->in_veh)
-              sprintf(buf + strlen(buf), "%-20s - [%5ld] %s (switched as %s) (in %s)\r\n",
+              sprintf(buf + strlen(buf), "%-20s - [%5ld] %s^n (switched as %s) (in %s)\r\n",
                       GET_CHAR_NAME(i),
                       GET_ROOM_VNUM(get_ch_in_room(d->character)),
                       GET_ROOM_NAME(get_ch_in_room(d->character)),
                       GET_NAME(d->character),
                       GET_VEH_NAME(d->character->in_veh));
             else
-              sprintf(buf + strlen(buf), "%-20s - [%5ld] %s (in %s)\r\n",
+              sprintf(buf + strlen(buf), "%-20s - [%5ld] %s^n (in %s)\r\n",
                       GET_CHAR_NAME(i),
                       GET_ROOM_VNUM(get_ch_in_room(d->character)),
                       GET_ROOM_NAME(get_ch_in_room(d->character)),
@@ -3846,13 +3850,13 @@ void perform_immort_where(struct char_data * ch, char *arg)
           
             else
               if (i->in_veh)
-                sprintf(buf + strlen(buf), "%-20s - [%5ld] %s (in %s)\r\n",
+                sprintf(buf + strlen(buf), "%-20s - [%5ld] %s^n (in %s)\r\n",
                         GET_CHAR_NAME(i),
                         GET_ROOM_VNUM(get_ch_in_room(i)),
                         GET_ROOM_NAME(get_ch_in_room(i)),
                         GET_VEH_NAME(i->in_veh));
               else
-                sprintf(buf + strlen(buf), "%-20s - [%5ld] %s\r\n",
+                sprintf(buf + strlen(buf), "%-20s - [%5ld] %s^n\r\n",
                         GET_CHAR_NAME(i),
                         GET_ROOM_VNUM(get_ch_in_room(i)),
                         GET_ROOM_NAME(get_ch_in_room(i)));
@@ -3866,12 +3870,12 @@ void perform_immort_where(struct char_data * ch, char *arg)
       if (CAN_SEE(ch, i) && (i->in_room || i->in_veh) &&
           isname(arg, GET_KEYWORDS(i))) {
         found = 1;
-        sprintf(buf + strlen(buf), "M%3d. %-25s - [%5ld] %s", ++num,
+        sprintf(buf + strlen(buf), "M%3d. %-25s - [%5ld] %s^n", ++num,
                 GET_NAME(i),
                 GET_ROOM_VNUM(get_ch_in_room(i)),
                 GET_ROOM_NAME(get_ch_in_room(i)));
         if (i->in_veh) {
-          sprintf(ENDOF(buf), " (in %s)\r\n", GET_VEH_NAME(i->in_veh));
+          sprintf(ENDOF(buf), " (in %s^n)\r\n", GET_VEH_NAME(i->in_veh));
         } else {
           strcat(buf, "\r\n");
         }

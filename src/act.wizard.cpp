@@ -3254,7 +3254,7 @@ ACMD(do_show)
     strcpy(buf, "Jackpoints\r\n---------\r\n");
     for (i = 0, j = 0; i <= top_of_world; i++)
       if (world[i].matrix > 0)
-        sprintf(buf + strlen(buf), "%2d: [%5ld] %s (%ld/%ld)\r\n", ++j,
+        sprintf(buf + strlen(buf), "%2d: [%5ld] %s^n (%ld/%ld)\r\n", ++j,
                 world[i].number, world[i].name, world[i].matrix, world[i].rtg);
     send_to_char(buf, ch);
     break;
