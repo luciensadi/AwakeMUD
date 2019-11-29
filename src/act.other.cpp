@@ -3967,6 +3967,8 @@ ACMD(do_ammo) {
   struct obj_data *primary = GET_EQ(ch, WEAR_WIELD);
   struct obj_data *secondary = GET_EQ(ch, WEAR_HOLD);
   
+  bool sent_a_message = FALSE;
+  
   if (primary && IS_GUN(GET_WEAPON_ATTACK_TYPE(primary))) {
     if (primary->contains) {
       send_to_char(ch, "Primary: %d / %d rounds of ammunition.\r\n",
@@ -3975,8 +3977,10 @@ ACMD(do_ammo) {
     } else {
       send_to_char(ch, "Primary: 0 / %d rounds of ammunition.\r\n", GET_WEAPON_MAX_AMMO(primary));
     }
+    sent_a_message = TRUE;
   } else if (primary) {
     send_to_char(ch, "Your primary weapon does not take ammunition.\r\n");
+    sent_a_message = TRUE;
   }
   
   if (secondary && IS_GUN(GET_WEAPON_ATTACK_TYPE(secondary))) {
@@ -3987,7 +3991,13 @@ ACMD(do_ammo) {
     } else {
       send_to_char(ch, "Secondary: 0 / %d rounds of ammunition.\r\n", GET_WEAPON_MAX_AMMO(primary));
     }
+    sent_a_message = TRUE;
   } else if (secondary) {
     send_to_char(ch, "Your secondary weapon does not take ammunition.\r\n");
+    sent_a_message = TRUE;
+  }
+  
+  if (!sent_a_message) {
+    send_to_char(ch, "You're not wielding anything.\r\n");
   }
 }
