@@ -784,7 +784,7 @@ struct command_info cmd_info[] =
 
     { "version"  , POS_DEAD    , do_gen_ps   , 0, SCMD_VERSION },
     { "vemote"   , POS_SLEEPING, do_vemote   , 0 , 0 },
-    //    { "visible"  , POS_RESTING , do_visible  , 1, 0 },
+    { "visible"  , POS_RESTING , do_visible  , LVL_BUILDER, 0 },
     { "view"     , POS_LYING   , do_imagelink, 0, 0 },
     { "vlist"    , POS_DEAD    , do_vlist    , LVL_BUILDER, 0 },
     { "vnum"     , POS_DEAD    , do_vnum     , LVL_BUILDER, 0 },

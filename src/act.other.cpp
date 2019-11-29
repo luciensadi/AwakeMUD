@@ -267,11 +267,22 @@ ACMD(do_train)
 ACMD(do_visible)
 {
   void appear(struct char_data * ch);
+  
+  bool has_become_visible = FALSE;
 
   if (IS_AFFECTED(ch, AFF_INVISIBLE) || IS_AFFECTED(ch, AFF_IMP_INVIS)) {
     appear(ch);
     send_to_char("You break the spell of invisibility.\r\n", ch);
-  } else
+    has_become_visible = TRUE;
+  }
+  
+  if (GET_INVIS_LEV(ch) > 0) {
+    GET_INVIS_LEV(ch) = 0;
+    send_to_char("You release your staff invisibility.\r\n", ch);
+    has_become_visible = TRUE;
+  }
+  
+  if (!has_become_visible)
     send_to_char("You are already visible.\r\n", ch);
 }
 

@@ -121,6 +121,8 @@ void appear(struct char_data * ch)
                            AFF_INVISIBLE,
                            AFF_HIDE, ENDBIT);
   
+  // TODO: Go through all sustained spells in the game and remove those that are causing this character to be invisible.
+  
   if (!IS_SENATOR(ch))
     act("$n slowly fades into existence.", FALSE, ch, 0, 0, TO_ROOM);
   else
