@@ -1491,6 +1491,10 @@ ACMD(do_reload)
       for (i = ch->in_veh->mount; i; i = i->next_content)
         if (i->worn_by == ch)
           break;
+      if (!i) {
+        mudlog("Uh-oh-- tried to access a mount that didn't exist!", ch, LOG_SYSLOG, TRUE);
+        return;
+      }
       gun = i->contains;
     } else if ((i = GET_EQ(ch, WEAR_WIELD)) && GET_OBJ_TYPE(i) == ITEM_WEAPON &&
                GET_OBJ_VAL(i, 5) > 0 && (!i->contains || (i->contains && !GET_OBJ_VAL(i->contains, 9))))
@@ -1595,6 +1599,8 @@ ACMD(do_eject)
       obj_to_room(magazine, ch->in_room);
     act("$n ejects a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_ROOM);
     act("You eject a magazine from $p.", FALSE, ch, GET_EQ(ch, WEAR_WIELD), NULL, TO_CHAR);
+  } else {
+    send_to_char(ch, "But it's already empty.\r\n");
   }
 }
 
@@ -3961,18 +3967,26 @@ ACMD(do_ammo) {
   struct obj_data *primary = GET_EQ(ch, WEAR_WIELD);
   struct obj_data *secondary = GET_EQ(ch, WEAR_HOLD);
   
-  if (primary && IS_GUN(GET_OBJ_VAL(primary, 3))) {
-    send_to_char(ch, "Primary: %d / %d rounds of ammunition.\r\n",
-                 MIN(GET_OBJ_VAL(primary, 5), GET_OBJ_VAL(primary->contains, 9)),
-                 GET_OBJ_VAL(primary, 5));
+  if (primary && IS_GUN(GET_WEAPON_ATTACK_TYPE(primary))) {
+    if (primary->contains) {
+      send_to_char(ch, "Primary: %d / %d rounds of ammunition.\r\n",
+                   MIN(GET_WEAPON_MAX_AMMO(primary), GET_OBJ_VAL(primary->contains, 9)),
+                   GET_OBJ_VAL(primary, 5));
+    } else {
+      send_to_char(ch, "Primary: 0 / %d rounds of ammunition.\r\n", GET_WEAPON_MAX_AMMO(primary));
+    }
   } else if (primary) {
     send_to_char(ch, "Your primary weapon does not take ammunition.\r\n");
   }
   
-  if (secondary && IS_GUN(GET_OBJ_VAL(secondary, 3))) {
-    send_to_char(ch, "Secondary: %d / %d rounds of ammunition.\r\n",
-                 MIN(GET_OBJ_VAL(secondary, 5), GET_OBJ_VAL(secondary->contains, 9)),
-                 GET_OBJ_VAL(secondary, 5));
+  if (secondary && IS_GUN(GET_WEAPON_ATTACK_TYPE(secondary))) {
+    if (secondary->contains) {
+      send_to_char(ch, "Secondary: %d / %d rounds of ammunition.\r\n",
+                   MIN(GET_WEAPON_MAX_AMMO(secondary), GET_OBJ_VAL(secondary->contains, 9)),
+                   GET_WEAPON_MAX_AMMO(secondary));
+    } else {
+      send_to_char(ch, "Secondary: 0 / %d rounds of ammunition.\r\n", GET_WEAPON_MAX_AMMO(primary));
+    }
   } else if (secondary) {
     send_to_char(ch, "Your secondary weapon does not take ammunition.\r\n");
   }
