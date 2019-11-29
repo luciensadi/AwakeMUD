@@ -560,7 +560,7 @@ void look_at_char(struct char_data * i, struct char_data * ch)
   if (found)
   {
     if (ch == i)
-      send_to_char("\r\nYou are using:", ch);
+      send_to_char("\r\nYou are using:\r\n", ch);
     else
       act("\r\n$n is using:", FALSE, i, 0, ch, TO_VICT);
     for (j = 0; j < NUM_WEARS; j++)

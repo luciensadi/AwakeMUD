@@ -407,15 +407,21 @@ SPECIAL(taxi)
   
   // Evaluate the taxi driver's reactions.
   if (!cmd) {
+    // Iterate through the cab's contents, looking for anyone that the driver recognizes.
     for (temp = driver->in_room->people; temp; temp = temp->next_in_room)
       if (temp != driver && memory(driver, temp))
         break;
+    
+    // If nobody was found, clear out the driver's memory structure and wait for a command.
     if (!temp) {
       GET_SPARE1(driver) = 0;
       GET_SPARE2(driver) = 0;
       GET_ACTIVE(driver) = ACT_AWAIT_CMD;
-    } else // TODO: finish commenting this shit
-      switch (GET_ACTIVE(driver)) {
+      return FALSE;
+    }
+    
+    // Otherwise, process the incoming command.
+    switch (GET_ACTIVE(driver)) {
       case ACT_REPLY_DEST:
         if (portland)
           sprintf(say, "%s?  Sure, that will be %d nuyen.",
@@ -482,10 +488,13 @@ SPECIAL(taxi)
           }
         }
         break;
-      }
+    }
+    
+    // Bail out after processing the command.
     return FALSE;
   }
 
+  // If someone's bailing out of the cab, forget them.
   if (!IS_NPC(ch) && memory(driver, ch) && (CMD_IS("north") ||
       CMD_IS("east") || CMD_IS("west") || CMD_IS("south") || CMD_IS("ne") ||
       CMD_IS("se") || CMD_IS("sw") || CMD_IS("nw") || CMD_IS("northeast") ||
@@ -494,7 +503,8 @@ SPECIAL(taxi)
     return FALSE;
   }
 
-  if (!CAN_SEE(driver, ch) || IS_NPC(ch) ||
+  // If you're an NPC, or if the driver's not listening in the first place-- bail.
+  if (IS_NPC(ch) ||
       (GET_ACTIVE(driver) != ACT_AWAIT_CMD &&
        GET_ACTIVE(driver) != ACT_AWAIT_YESNO))
     return FALSE;
@@ -515,17 +525,18 @@ SPECIAL(taxi)
           break;
         }
     if (!found) {
-      if (str_str(argument, "yes") || str_str(argument, "sure") ||
-          str_str(argument, "yea") || str_str(argument, "okay"))
+      if (str_str(argument, "yes") || str_str(argument, "sure") || str_str(argument, "alright") ||
+          str_str(argument, "yeah") || str_str(argument, "okay") || str_str(argument, "yup")) {
         comm = CMD_TAXI_YES;
-      else if (strstr(argument, "no"))
+      } else if (strstr(argument, "no") || str_str(argument, "nah")) {
         comm = CMD_TAXI_NO;
+      }
     }
     do_say(ch, argument, 0, 0);
-  } else if (CMD_IS("nod")) {
+  } else if (CMD_IS("nod") || CMD_IS("agree")) {
     comm = CMD_TAXI_YES;
     do_action(ch, argument, cmd, 0);
-  } else if (CMD_IS("shake") && !*argument) {
+  } else if ((CMD_IS("shake") || CMD_IS("disagree")) && !*argument) {
     comm = CMD_TAXI_NO;
     do_action(ch, argument, cmd, 0);
   } else
