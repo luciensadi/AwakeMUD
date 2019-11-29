@@ -559,7 +559,10 @@ void look_at_char(struct char_data * i, struct char_data * ch)
   
   if (found)
   {
-    act("\r\n$n is using:", FALSE, i, 0, ch, TO_VICT);
+    if (ch == i)
+      send_to_char("\r\nYou are using:", ch);
+    else
+      act("\r\n$n is using:", FALSE, i, 0, ch, TO_VICT);
     for (j = 0; j < NUM_WEARS; j++)
       if (GET_EQ(i, j) && CAN_SEE_OBJ(ch, GET_EQ(i, j))) {
         if (GET_OBJ_TYPE(GET_EQ(i, j)) == ITEM_HOLSTER && GET_OBJ_VAL(GET_EQ(i, j), 0) == 2) {
