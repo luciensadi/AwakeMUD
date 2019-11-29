@@ -340,7 +340,8 @@ ACMD(do_hail)
     }
   }
 
-  if (AFF_FLAGS(ch).AreAnySet(AFF_SPELLINVIS, AFF_INVISIBLE, AFF_SPELLIMPINVIS, AFF_IMP_INVIS, ENDBIT))  {
+  if (AFF_FLAGS(ch).AreAnySet(AFF_SPELLINVIS, AFF_INVISIBLE, AFF_SPELLIMPINVIS, AFF_IMP_INVIS, ENDBIT)
+      || GET_INVIS_LEV(ch) > 0)  {
     send_to_char("A cab almost stops, but guns it at the last second, splashing you...\n\r",ch);
     return;
   }
@@ -400,8 +401,11 @@ SPECIAL(taxi)
   vnum_t dest = 0;
   bool portland = FALSE;
   
+  // Portland taxi has a special set of messages, directions, etc.
   if (GET_MOB_VNUM(driver) == 650)
     portland = TRUE;
+  
+  // Evaluate the taxi driver's reactions.
   if (!cmd) {
     for (temp = driver->in_room->people; temp; temp = temp->next_in_room)
       if (temp != driver && memory(driver, temp))
@@ -410,7 +414,7 @@ SPECIAL(taxi)
       GET_SPARE1(driver) = 0;
       GET_SPARE2(driver) = 0;
       GET_ACTIVE(driver) = ACT_AWAIT_CMD;
-    } else
+    } else // TODO: finish commenting this shit
       switch (GET_ACTIVE(driver)) {
       case ACT_REPLY_DEST:
         if (portland)

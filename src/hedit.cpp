@@ -655,7 +655,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     break;
   case HEDIT_TRIGGER_ADD3:
     number = atoi(arg);
-    if (real_ic(number) < 0)
+    if (number != 0 && real_ic(number) < 0)
       send_to_char(CH, "Invalid choice!\r\nLoad IC (0 for none): ");
     else {
       HOST->trigger->ic = number;
