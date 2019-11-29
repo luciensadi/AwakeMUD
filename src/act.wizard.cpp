@@ -205,9 +205,10 @@ ACMD(do_olcon)
   else
     olc_state = 0;
 
-  sprintf(buf, "OLC turned %s by %s.", ONOFF(olc_state),
-          GET_CHAR_NAME(ch));
+  sprintf(buf, "OLC turned %s by %s.", ONOFF(olc_state), GET_CHAR_NAME(ch));
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
+  
+  send_to_char(ch, "You turn the global OLC system %s.\r\n", ONOFF(olc_state));
 }
 
 
@@ -3010,14 +3011,14 @@ ACMD(do_show)
                { "rent",           LVL_BUILDER },
                { "stats",          LVL_ADMIN },
                { "errors",         LVL_ADMIN },
-               { "death",          LVL_ADMIN },
+               { "deathrooms",     LVL_ADMIN },
                { "godrooms",       LVL_BUILDER },
                { "skills",         LVL_BUILDER },
                { "spells",         LVL_BUILDER },
                { "prompt",         LVL_ADMIN },
-               { "lodge",          LVL_ADMIN },
+               { "lodges",         LVL_ADMIN },
                { "library",        LVL_ADMIN },
-               { "jackpoint",      LVL_BUILDER },
+               { "jackpoints",     LVL_BUILDER },
                { "abilities",      LVL_BUILDER },
                { "aliases",        LVL_ADMIN },
                { "metamagic",      LVL_BUILDER },
@@ -3050,6 +3051,7 @@ ACMD(do_show)
     self = 1;
   buf[0] = '\0';
   switch (l) {
+      // Did someone seriously write a list with magic-number indexes and use that as a key for which command we're using? WTF -LS
   case 1:                     /* zone */
     /* tightened up by JE 4/6/93 */
     if (self) {

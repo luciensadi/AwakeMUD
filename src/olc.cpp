@@ -56,6 +56,19 @@ extern void icedit_disp_menu(struct descriptor_data *d);
 // mem class
 extern class memoryClass *Mem;
 
+// Checks for OLC availability and advises you on how to fix it, assuming you're capable.
+bool is_olc_available(struct char_data *ch) {
+  if (!olc_state) {
+    if (GET_LEVEL(ch) >= LVL_DEVELOPER) {
+      send_to_char("OLC has been disabled. You have the power to use the OLC command to re-enable it.\r\n", ch);
+    } else {
+      send_to_char("OLC has been disabled. Ask a higher-level staff member to re-enable it with their OLC command.\r\n", ch);
+    }
+  }
+  
+  return olc_state;
+}
+
 bool can_edit_zone(struct char_data *ch, int zone) {
   for (int i = 0; i < NUM_ZONE_EDITOR_IDS; i++)
     if (zone_table[zone].editor_ids[i] == GET_IDNUM(ch))
@@ -161,8 +174,7 @@ ACMD (do_redit)
     return;
   }
 
-  if (!olc_state) {
-    send_to_char("OLC temporarily unavailable.\r\n", ch);
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -713,8 +725,7 @@ ACMD (do_vedit)
     return;
   }
 
-  if (!olc_state) {
-    send_to_char("OLC temporarily unavailable.\r\n", ch);
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -841,8 +852,7 @@ ACMD (do_iedit)
     return;
   }
 
-  if (!olc_state) {
-    send_to_char("OLC temporarily unavailable.\r\n", ch);
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -1240,8 +1250,7 @@ ACMD(do_medit)
     return;
   }
 
-  if (!olc_state) {
-    send_to_char("OLC temporarily unavailable.\r\n", ch);
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -1595,8 +1604,7 @@ ACMD(do_qedit)
     return;
   }
 
-  if (!olc_state) {
-    send_to_char("OLC temporarily unavailable.\r\n", ch);
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -1721,8 +1729,7 @@ ACMD(do_shedit)
     return;
   }
 
-  if (!olc_state) {
-    send_to_char("OLC temporarily unavailable.\r\n", ch);
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -1856,8 +1863,7 @@ ACMD(do_zswitch)
     return;
   }
 
-  if (!olc_state) {
-    send_to_char("OLC temporarily unavailable.\r\n", ch);
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -1901,8 +1907,7 @@ ACMD(do_zedit)
     return;
   }
 
-  if (!olc_state) {
-    send_to_char("OLC temporarily unavailable.\r\n", ch);
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -2032,8 +2037,7 @@ ACMD(do_hedit)
     return;
   }
 
-  if (!olc_state) {
-    send_to_char("OLC temporarily unavailable.\r\n", ch);
+  if (!is_olc_available(ch)) {
     return;
   }
 
@@ -2163,8 +2167,7 @@ ACMD(do_icedit)
     return;
   }
 
-  if (!olc_state) {
-    send_to_char("OLC temporarily unavailable.\r\n", ch);
+  if (!is_olc_available(ch)) {
     return;
   }
 
