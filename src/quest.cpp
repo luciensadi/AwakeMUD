@@ -557,7 +557,8 @@ void reward(struct char_data *ch, struct char_data *johnson)
   end_quest(ch);
 }
 
-void new_quest(struct char_data *mob)
+// Specify force_assignation to ensure that the NPC has a quest to hand out.
+void new_quest(struct char_data *mob, bool force_assignation=FALSE)
 {
   int i, num = 0;
 
@@ -570,13 +571,16 @@ void new_quest(struct char_data *mob)
     if (mob_index[mob->nr].func == johnson)
       mob_index[mob->nr].func = mob_index[mob->nr].sfunc;
     mob_index[mob->nr].sfunc = NULL;
+    sprintf(buf, "Stripping Johnson status from %s (%ld) due to mob not having any quests to assign.",
+            GET_NAME(mob), GET_MOB_VNUM(mob));
+    mudlog(buf, NULL, LOG_SYSLOG, true);
     return;
   }
 
   for (i = 0;;)
   {
     if (quest_table[i].johnson == GET_MOB_VNUM(mob) &&
-        !number(0, num - 1) && !(num > 1 && GET_SPARE2(mob) == i)) {
+        (force_assignation || (!number(0, num - 1) && !(num > 1 && GET_SPARE2(mob) == i)))) {
       GET_SPARE2(mob) = i;
       return;
     }
@@ -638,6 +642,7 @@ SPECIAL(johnson)
 
   if (!IS_NPC(johnson))
     return FALSE;
+  
   if (!cmd) {
     if (!GET_SPARE2(johnson)) {
       new_quest(johnson);
@@ -710,6 +715,10 @@ SPECIAL(johnson)
     do_say(ch, argument, 0, 0);
   if (need_to_act)
     do_action(ch, argument, cmd, 0);
+  
+  sprintf(buf3, "Debug: Command = %d, spare1 = %ld, spare2 = %ld. Spare2 is my current quest vnum to assign.",
+          comm, GET_SPARE1(johnson), GET_SPARE2(johnson));
+  do_say(johnson, buf3, 0, 0);
 
   if (comm == CMD_JOB_QUIT && GET_SPARE1(johnson) == -1 && GET_QUEST(ch) &&
       memory(johnson, ch)) {
@@ -737,40 +746,43 @@ SPECIAL(johnson)
       forget(johnson, ch);
     } else
       do_say(johnson, "But you have not completed any objectives yet.", 0, 0);
-  } else if (comm == CMD_JOB_START && GET_SPARE1(johnson) == -1 &&
-             GET_SPARE2(johnson) >= 0) {
-    if (GET_QUEST(ch)) {
-      do_say(johnson, "Maybe when you've finished what you're doing.", 0, 0);
-      return TRUE;
-    }
-    for (int i = QUEST_TIMER - 1; i >= 0; i--)
-      if (GET_LQUEST(ch, i) == quest_table[GET_SPARE2(johnson)].vnum) {
-        do_say(johnson, quest_table[GET_SPARE2(johnson)].done, 0, 0);
-        if (memory(johnson, ch))
-          forget(johnson, ch);
+  } else if (comm == CMD_JOB_START) {
+    if (GET_SPARE1(johnson) == -1 && GET_SPARE2(johnson) >= 0) {
+      if (GET_QUEST(ch)) {
+        do_say(johnson, "Maybe when you've finished what you're doing.", 0, 0);
         return TRUE;
       }
-    if (PLR_FLAGGED(ch, PLR_KILLER) || PLR_FLAGGED(ch, PLR_BLACKLIST)) {
-      do_say(johnson, "Word on the street is you can't be trusted.", 0, 0);
-      GET_SPARE1(johnson) = -1;
-      if (memory(johnson, ch))
-        forget(johnson, ch);      
-    } else if (rep_too_high(ch, GET_SPARE2(johnson))) {
-      do_say(johnson, "I've got nothing you'd be interested in right now.", 0, 0);
-      GET_SPARE1(johnson) = -1;
-      if (memory(johnson, ch))
-        forget(johnson, ch);
-    } else if (rep_too_low(ch, GET_SPARE2(johnson))) {
-      do_say(johnson, "And just who are you?", 0, 0);
-      GET_SPARE1(johnson) = -1;
-      if (memory(johnson, ch))
-        forget(johnson, ch);
+      for (int i = QUEST_TIMER - 1; i >= 0; i--)
+        if (GET_LQUEST(ch, i) == quest_table[GET_SPARE2(johnson)].vnum) {
+          do_say(johnson, quest_table[GET_SPARE2(johnson)].done, 0, 0);
+          if (memory(johnson, ch))
+            forget(johnson, ch);
+          return TRUE;
+        }
+      if (PLR_FLAGGED(ch, PLR_KILLER) || PLR_FLAGGED(ch, PLR_BLACKLIST)) {
+        do_say(johnson, "Word on the street is you can't be trusted.", 0, 0);
+        GET_SPARE1(johnson) = -1;
+        if (memory(johnson, ch))
+          forget(johnson, ch);
+      } else if (rep_too_high(ch, GET_SPARE2(johnson))) {
+        do_say(johnson, "I've got nothing you'd be interested in right now.", 0, 0);
+        GET_SPARE1(johnson) = -1;
+        if (memory(johnson, ch))
+          forget(johnson, ch);
+      } else if (rep_too_low(ch, GET_SPARE2(johnson))) {
+        do_say(johnson, "And just who are you?", 0, 0);
+        GET_SPARE1(johnson) = -1;
+        if (memory(johnson, ch))
+          forget(johnson, ch);
+      } else {
+        GET_SPARE1(johnson) = 0;
+        do_say(johnson, quest_table[GET_SPARE2(johnson)].intro, 0, 0);
+        do_say(johnson, "Are you interested?", 0, 0);
+        if (!memory(johnson, ch))
+          remember(johnson, ch);
+      }
     } else {
-      GET_SPARE1(johnson) = 0;
-      do_say(johnson, quest_table[GET_SPARE2(johnson)].intro, 0, 0);
-      do_say(johnson, "Are you interested?", 0, 0);
-      if (!memory(johnson, ch))
-        remember(johnson, ch);
+      do_say(johnson, "debug: failing due to not meeting preconditions", 0, 0);
     }
   } else if (comm == CMD_JOB_YES && !GET_SPARE1(johnson) && !GET_QUEST(ch) &&
              memory(johnson, ch)) {
