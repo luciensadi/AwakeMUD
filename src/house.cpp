@@ -303,6 +303,38 @@ bool ch_already_rents_here(struct house_control_rec *room, struct char_data *ch)
   return FALSE;
 }
 
+void display_room_list_to_character(struct char_data *ch, struct landlord *lord) {
+  send_to_char(ch, "The following rooms are free: \r\n");
+  send_to_char(ch, "Name     Class     Price      Name     Class     Price\r\n");
+  send_to_char(ch, "-----    ------    ------     -----    ------    -----\r\n");
+  
+  bool on_first_entry_in_column = TRUE;
+  for (struct house_control_rec *room_record = lord->rooms; room_record; room_record = room_record->next) {
+    if (!room_record->owner) {
+      if (on_first_entry_in_column) {
+        sprintf(buf, "%-5s    %-6s    %-8d",
+                room_record->name,
+                lifestyle[room_record->mode].name,
+                lord->basecost * lifestyle[room_record->mode].cost);
+        on_first_entry_in_column = FALSE;
+      } else {
+        sprintf(buf2, "   %-5s    %-6s    %-8d\r\n",
+                room_record->name,
+                lifestyle[room_record->mode].name,
+                lord->basecost * lifestyle[room_record->mode].cost);
+        strcat(buf, buf2);
+        send_to_char(buf, ch);
+        on_first_entry_in_column = TRUE;
+      }
+    }
+  }
+  if (on_first_entry_in_column)
+    strcat(buf, "\r\n\n");
+  else
+    sprintf(buf, "\r\n");
+  send_to_char(buf, ch);
+}
+
 SPECIAL(landlord_spec)
 {
   struct char_data *recep = (struct char_data *) me;
@@ -311,7 +343,6 @@ SPECIAL(landlord_spec)
   struct house_control_rec *room_record;
   char buf3[MAX_STRING_LENGTH];
 
-  int i = 0;
   if (!(CMD_IS("list") || CMD_IS("retrieve") || CMD_IS("lease")
         || CMD_IS("leave") || CMD_IS("pay") || CMD_IS("status")))
     return FALSE;
@@ -328,32 +359,7 @@ SPECIAL(landlord_spec)
   one_argument(argument, arg);
 
   if (CMD_IS("list")) {
-    send_to_char(ch, "The following rooms are free: \r\n");
-    send_to_char(ch, "Name     Class     Price      Name     Class     Price\r\n");
-    send_to_char(ch, "-----    ------    ------     -----    ------    -----\r\n");
-    for (room_record = lord->rooms; room_record; room_record = room_record->next)
-      if (!room_record->owner) {
-        if (!i) {
-          sprintf(buf, "%-5s    %-6s    %-8d",
-                  room_record->name,
-                  lifestyle[room_record->mode].name,
-                  lord->basecost * lifestyle[room_record->mode].cost);
-          i++;
-        } else {
-          sprintf(buf2, "   %-5s    %-6s    %-8d\r\n",
-                  room_record->name,
-                  lifestyle[room_record->mode].name,
-                  lord->basecost * lifestyle[room_record->mode].cost);
-          strcat(buf, buf2);
-          send_to_char(buf, ch);
-          i = 0;
-        }
-      }
-    if (i)
-      strcat(buf, "\r\n\n");
-    else
-      sprintf(buf, "\r\n");
-    send_to_char(buf, ch);
+    display_room_list_to_character(ch, lord);
     return TRUE;
   } else if (CMD_IS("retrieve")) {
     if (!*arg) {
@@ -374,6 +380,9 @@ SPECIAL(landlord_spec)
   } else if (CMD_IS("lease")) {
     if (!*arg) {
       do_say(recep, "Which room would you like to lease?", 0, 0);
+      
+      display_room_list_to_character(ch, lord);
+      
       return TRUE;
     }
     room_record = find_room(arg, lord->rooms, recep);

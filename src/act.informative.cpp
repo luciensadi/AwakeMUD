@@ -756,7 +756,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
           sprintf(ENDOF(buf), "^y...%s has a few things for sale.^n\r\n", HSSH(i));
         }
         if (mob_index[GET_MOB_RNUM(i)].func == landlord_spec) {
-          sprintf(ENDOF(buf), "^y...%s might have some rooms for rent.^n\r\n", HSSH(i));
+          sprintf(ENDOF(buf), "^y...%s might have some rooms for lease.^n\r\n", HSSH(i));
         }
       }
       
@@ -789,7 +789,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
           sprintf(ENDOF(buf), "^y...%s%s has a few things for sale.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
         }
         if (mob_index[GET_MOB_RNUM(i)].sfunc == landlord_spec) {
-          sprintf(ENDOF(buf), "^y...%s might have some rooms for rent.^n\r\n", HSSH(i));
+          sprintf(ENDOF(buf), "^y...%s might have some rooms for lease.^n\r\n", HSSH(i));
         }
       }
     }
