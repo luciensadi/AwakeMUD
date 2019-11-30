@@ -1334,8 +1334,12 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
     break;
   }
   send_to_char(ch, "%s ", pc_race_types[(int)GET_RACE(k)]);
-  sprintf(buf2, " %s '%s', In room [%5ld]\r\n", (!IS_MOB(k) ? "NPC" : "MOB"),
-          GET_NAME(k), k->in_room->number);
+  if (k->in_room)
+    sprintf(buf2, " %s '%s', In room [%5ld]\r\n", (!IS_MOB(k) ? "NPC" : "MOB"), GET_NAME(k), k->in_room->number);
+  else if (k->in_veh)
+    sprintf(buf2, " %s '%s', In veh [%s]\r\n", (!IS_MOB(k) ? "NPC" : "MOB"), GET_NAME(k), GET_VEH_NAME(k->in_veh));
+  else
+    sprintf(buf2, " %s '%s'\r\n", (!IS_MOB(k) ? "NPC" : "MOB"), GET_NAME(k));
   strcat(buf, buf2);
 
   sprintf(ENDOF(buf), "Alias: %s, VNum: [%5ld], RNum: [%5ld]\r\n", GET_KEYWORDS(k),
