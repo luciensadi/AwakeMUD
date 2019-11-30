@@ -43,6 +43,7 @@ extern int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
 ACMD_CONST(do_say);
 ACMD_DECLARE(do_action);
 SPECIAL(johnson);
+ACMD_DECLARE(do_echo);
 
 #define QUEST          d->edit_quest
 
@@ -716,91 +717,189 @@ SPECIAL(johnson)
     do_say(ch, argument, 0, 0);
   if (need_to_act)
     do_action(ch, argument, cmd, 0);
-
-  if (comm == CMD_JOB_QUIT && GET_SPARE1(johnson) == -1 && GET_QUEST(ch) &&
-      memory(johnson, ch)) {
-    do_say(johnson, quest_table[GET_QUEST(ch)].quit, 0, 0);
-    end_quest(ch);
-    forget(johnson, ch);
-  } else if (comm == CMD_JOB_DONE && GET_SPARE1(johnson) == -1 && GET_QUEST(ch) &&
-             memory(johnson, ch)) {
-    for (i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++)
-      if (ch->player_specials->obj_complete[i]) {
-        obj_complete = 1;
-        break;
+  
+  switch (comm) {
+    case CMD_JOB_QUIT:
+      // Precondition: I cannot be talking right now.
+      if (GET_SPARE1(johnson) == 0) {
+        sprintf(buf, "waves @%s off impatiently as %s continues to speak.", GET_CHAR_NAME(ch), HSSH(johnson));
+        do_echo(johnson, buf, 0, SCMD_EMOTE);
+        return TRUE;
       }
-    for (i = 0; i < quest_table[GET_QUEST(ch)].num_mobs; i++)
-      if (ch->player_specials->mob_complete[i]) {
-        mob_complete = 1;
-        break;
+      
+      // Precondition: You must be on a quest.
+      if (!GET_QUEST(ch)) {
+        do_say(johnson, "You're not even on a run right now.", 0, 0);
+        return TRUE;
       }
-    if (obj_complete || mob_complete) {
-      for (int i = QUEST_TIMER - 1; i > 0; i--)
-        GET_LQUEST(ch, i) = GET_LQUEST(ch, i - 1);
-      GET_LQUEST(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
-      reward(ch, johnson);
-      do_say(johnson, quest_table[GET_QUEST(ch)].finish, 0, 0);
+      
+      // Precondition: You must have gotten the quest from me.
+      if (!memory(johnson, ch)) {
+        do_say(johnson, "Whoever you got your job from, it wasn't me. What, do we all look alike to you?", 0 , 0);
+        return TRUE;
+      }
+      
+      // Drop the quest.
+      do_say(johnson, quest_table[GET_QUEST(ch)].quit, 0, 0);
+      end_quest(ch);
       forget(johnson, ch);
-    } else
-      do_say(johnson, "But you have not completed any objectives yet.", 0, 0);
-  } else if (comm == CMD_JOB_START && GET_SPARE1(johnson) == -1 && GET_SPARE2(johnson) >= 0) {
-    if (GET_QUEST(ch)) {
-      do_say(johnson, "Maybe when you've finished what you're doing.", 0, 0);
       return TRUE;
-    }
-    for (int i = QUEST_TIMER - 1; i >= 0; i--)
-      if (GET_LQUEST(ch, i) == quest_table[GET_SPARE2(johnson)].vnum) {
-        do_say(johnson, quest_table[GET_SPARE2(johnson)].done, 0, 0);
+    case CMD_JOB_DONE:
+      // Precondition: I cannot be talking right now.
+      if (GET_SPARE1(johnson) == 0) {
+        sprintf(buf, "waves @%s off impatiently as %s continues to speak.", GET_CHAR_NAME(ch), HSSH(johnson));
+        do_echo(johnson, buf, 0, SCMD_EMOTE);
+        return TRUE;
+      }
+      
+      // Precondition: You must be on a quest.
+      if (!GET_QUEST(ch)) {
+        do_say(johnson, "You're not even on a run right now.", 0, 0);
+        return TRUE;
+      }
+      
+      // Precondition: You must have gotten the quest from me.
+      if (!memory(johnson, ch)) {
+        do_say(johnson, "Whoever you got your job from, it wasn't me. What, do we all look alike to you?", 0 , 0);
+        return TRUE;
+      }
+      
+      // Check for some form of completion-- even if one thing is done, we'll allow them to turn in the quest.
+      for (i = 0; i < quest_table[GET_QUEST(ch)].num_objs; i++)
+        if (ch->player_specials->obj_complete[i]) {
+          obj_complete = 1;
+          break;
+        }
+      for (i = 0; i < quest_table[GET_QUEST(ch)].num_mobs; i++)
+        if (ch->player_specials->mob_complete[i]) {
+          mob_complete = 1;
+          break;
+        }
+      
+      // Process turnin of the quest. The reward() function handles the work here.
+      if (obj_complete || mob_complete) {
+        for (int i = QUEST_TIMER - 1; i > 0; i--)
+          GET_LQUEST(ch, i) = GET_LQUEST(ch, i - 1);
+        GET_LQUEST(ch, 0) = quest_table[GET_QUEST(ch)].vnum;
+        reward(ch, johnson);
+        do_say(johnson, quest_table[GET_QUEST(ch)].finish, 0, 0);
+        forget(johnson, ch);
+      } else
+        do_say(johnson, "You haven't completed any of your objectives yet.", 0, 0);
+      
+      return TRUE;
+    case CMD_JOB_START:
+      // Precondition: I cannot be talking right now.
+      if (GET_SPARE1(johnson) == 0) {
+        sprintf(buf, "waves @%s off impatiently as %s continues to speak.", GET_CHAR_NAME(ch), HSSH(johnson));
+        do_echo(johnson, buf, 0, SCMD_EMOTE);
+        return TRUE;
+      }
+      
+      // Precondition: You may not have an active quest.
+      if (GET_QUEST(ch)) {
+        do_say(johnson, "Maybe when you've finished what you're doing.", 0, 0);
+        return TRUE;
+      }
+      
+      // Precondition: You cannot be a flagged killer or a blacklisted character.
+      if (PLR_FLAGGED(ch, PLR_KILLER) || PLR_FLAGGED(ch, PLR_BLACKLIST)) {
+        do_say(johnson, "Word on the street is you can't be trusted.", 0, 0);
+        GET_SPARE1(johnson) = -1;
+        if (memory(johnson, ch))
+          forget(johnson, ch);
+      }
+      
+      // If you've done this quest recently, you can't do it again until you do more.
+      for (int i = QUEST_TIMER - 1; i >= 0; i--)
+        if (GET_LQUEST(ch, i) == quest_table[GET_SPARE2(johnson)].vnum) {
+          do_say(johnson, quest_table[GET_SPARE2(johnson)].done, 0, 0);
+          if (memory(johnson, ch))
+            forget(johnson, ch);
+          return TRUE;
+        }
+      
+      // Reject high-rep characters.
+      if (rep_too_high(ch, GET_SPARE2(johnson))) {
+        do_say(johnson, "With rep as high as yours? I can't afford your rates for this one!", 0, 0);
+        GET_SPARE1(johnson) = -1;
         if (memory(johnson, ch))
           forget(johnson, ch);
         return TRUE;
       }
-    if (PLR_FLAGGED(ch, PLR_KILLER) || PLR_FLAGGED(ch, PLR_BLACKLIST)) {
-      do_say(johnson, "Word on the street is you can't be trusted.", 0, 0);
-      GET_SPARE1(johnson) = -1;
-      if (memory(johnson, ch))
-        forget(johnson, ch);
-    } else if (rep_too_high(ch, GET_SPARE2(johnson))) {
-      do_say(johnson, "I've got nothing you'd be interested in right now.", 0, 0);
-      GET_SPARE1(johnson) = -1;
-      if (memory(johnson, ch))
-        forget(johnson, ch);
-    } else if (rep_too_low(ch, GET_SPARE2(johnson))) {
-      do_say(johnson, "And just who are you?", 0, 0);
-      GET_SPARE1(johnson) = -1;
-      if (memory(johnson, ch))
-        forget(johnson, ch);
-    } else {
+      
+      // Reject low-rep characters.
+      if (rep_too_low(ch, GET_SPARE2(johnson))) {
+        do_say(johnson, "And just who are you?", 0, 0);
+        GET_SPARE1(johnson) = -1;
+        if (memory(johnson, ch))
+          forget(johnson, ch);
+        return TRUE;
+      }
+      
+      // Assign the quest.
       GET_SPARE1(johnson) = 0;
       do_say(johnson, quest_table[GET_SPARE2(johnson)].intro, 0, 0);
       do_say(johnson, "Are you interested?", 0, 0);
       if (!memory(johnson, ch))
         remember(johnson, ch);
-    }
-  } else if (comm == CMD_JOB_YES && !GET_SPARE1(johnson) && !GET_QUEST(ch) &&
-             memory(johnson, ch)) {
-    GET_QUEST(ch) = GET_SPARE2(johnson);
-    ch->player_specials->obj_complete =
-      new sh_int[quest_table[GET_QUEST(ch)].num_objs];
-    ch->player_specials->mob_complete =
-      new sh_int[quest_table[GET_QUEST(ch)].num_mobs];
-    for (num = 0; num < quest_table[GET_QUEST(ch)].num_objs; num++)
-      ch->player_specials->obj_complete[num] = 0;
-    for (num = 0; num < quest_table[GET_QUEST(ch)].num_mobs; num++)
-      ch->player_specials->mob_complete[num] = 0;
-    load_quest_targets(johnson, ch);
-    handle_info(johnson);
-  } else if (comm == CMD_JOB_NO && !GET_SPARE1(johnson) && !GET_QUEST(ch) &&
-             memory(johnson, ch)) {
-    GET_SPARE1(johnson) = -1;
-    GET_QUEST(ch) = 0;
-    forget(johnson, ch);
-    do_say(johnson, quest_table[GET_SPARE2(johnson)].decline, 0, 0);
-  } else {
-    do_say(johnson, "Ugh, drank too much last night. Talk to me later when I've sobered up.", 0, 0);
-    sprintf(buf, "WARNING: Failed to evaluate Johnson tree and return successful message for Johnson '%s' (%ld). Values: comm = %d, spare1 = %ld, spare2 = %ld (maps to %ld)",
-            GET_NAME(johnson), GET_MOB_VNUM(johnson), comm, GET_SPARE1(johnson), GET_SPARE2(johnson), quest_table[GET_SPARE2(johnson)].vnum);
-    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      
+      return TRUE;
+    case CMD_JOB_YES:
+      // Precondition: If I'm not talking right now, or if I haven't spoken to you recently, don't react.
+      if (GET_SPARE1(johnson) == -1 || !memory(johnson, ch)) {
+        return TRUE;
+      }
+      
+      // Precondition: You may not have an active quest.
+      if (GET_QUEST(ch)) {
+        do_say(johnson, "Maybe when you've finished what you're doing.", 0, 0);
+        return TRUE;
+      }
+      
+      // Assign them the quest since they've accepted it.
+      GET_QUEST(ch) = GET_SPARE2(johnson);
+      ch->player_specials->obj_complete =
+        new sh_int[quest_table[GET_QUEST(ch)].num_objs];
+      ch->player_specials->mob_complete =
+        new sh_int[quest_table[GET_QUEST(ch)].num_mobs];
+      for (num = 0; num < quest_table[GET_QUEST(ch)].num_objs; num++)
+        ch->player_specials->obj_complete[num] = 0;
+      for (num = 0; num < quest_table[GET_QUEST(ch)].num_mobs; num++)
+        ch->player_specials->mob_complete[num] = 0;
+      
+      // Load up the quest's targets.
+      load_quest_targets(johnson, ch);
+      
+      // Go into my spiel.
+      handle_info(johnson);
+      
+      return TRUE;
+      
+    case CMD_JOB_NO:
+      // Precondition: If I'm not talking right now, or if I haven't spoken to you recently, don't react.
+      if (GET_SPARE1(johnson) == -1 || !memory(johnson, ch)) {
+        return TRUE;
+      }
+      
+      // Precondition: You may not have an active quest.
+      if (GET_QUEST(ch)) {
+        do_say(johnson, "Maybe when you've finished what you're doing.", 0, 0);
+        return TRUE;
+      }
+      
+      // Decline the quest.
+      GET_SPARE1(johnson) = -1;
+      GET_QUEST(ch) = 0;
+      forget(johnson, ch);
+      do_say(johnson, quest_table[GET_SPARE2(johnson)].decline, 0, 0);
+      return TRUE;
+    default:
+      do_say(johnson, "Ugh, drank too much last night. Talk to me later when I've sobered up.", 0, 0);
+      sprintf(buf, "WARNING: Failed to evaluate Johnson tree and return successful message for Johnson '%s' (%ld). Values: comm = %d, spare1 = %ld, spare2 = %ld (maps to %ld)",
+              GET_NAME(johnson), GET_MOB_VNUM(johnson), comm, GET_SPARE1(johnson), GET_SPARE2(johnson), quest_table[GET_SPARE2(johnson)].vnum);
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      break;
   }
 
   return TRUE;
