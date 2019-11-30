@@ -3171,7 +3171,7 @@ void reset_zone(int zone, int reboot)
             if (!IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_HIDDEN)
                 && IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_CLOSED)) {
               sprintf(buf, "The %s to the %s swings open.\r\n",
-                      fname(world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword),
+                      world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword ? fname(world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword) : "door",
                       fulldirs[ZCMD.arg2]);
               send_to_room(buf, &world[ZCMD.arg1]);
             }
@@ -3181,7 +3181,7 @@ void reset_zone(int zone, int reboot)
             if (!IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_HIDDEN)
                 && IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED)) {
               sprintf(buf, "The %s to the %s swings open.\r\n",
-                      fname(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword),
+                      opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword ? fname(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword) : "door",
                       fulldirs[rev_dir[ZCMD.arg2]]);
               send_to_room(buf, opposite_room);
             }
@@ -3193,7 +3193,7 @@ void reset_zone(int zone, int reboot)
             if (!IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_HIDDEN)
                 && !IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_CLOSED)) {
               sprintf(buf, "The %s to the %s swings closed.\r\n",
-                      fname(world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword),
+                      world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword ? fname(world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword) : "door",
                       fulldirs[ZCMD.arg2]);
               send_to_room(buf, &world[ZCMD.arg1]);
             }
@@ -3203,7 +3203,7 @@ void reset_zone(int zone, int reboot)
             if (!IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_HIDDEN)
                 && !IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED)) {
               sprintf(buf, "The %s to the %s swings closed.\r\n",
-                      fname(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword),
+                      opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword ? fname(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword) : "door",
               fulldirs[rev_dir[ZCMD.arg2]]);
               send_to_room(buf, opposite_room);
             }
@@ -3225,7 +3225,7 @@ void reset_zone(int zone, int reboot)
             if (!IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_HIDDEN)
                 && !IS_SET(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->exit_info, EX_CLOSED)) {
               sprintf(buf, "The %s to the %s swings closed.\r\n",
-                      fname(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword),
+                      opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword ? fname(opposite_room->dir_option[rev_dir[ZCMD.arg2]]->keyword) : "door",
                       fulldirs[rev_dir[ZCMD.arg2]]);
               send_to_room(buf, opposite_room);
             }
