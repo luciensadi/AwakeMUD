@@ -328,7 +328,7 @@ void display_room_list_to_character(struct char_data *ch, struct landlord *lord)
       }
     }
   }
-  if (on_first_entry_in_column)
+  if (!on_first_entry_in_column)
     strcat(buf, "\r\n\n");
   else
     sprintf(buf, "\r\n");
