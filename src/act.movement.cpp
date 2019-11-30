@@ -595,7 +595,7 @@ void move_vehicle(struct char_data *ch, int dir)
   
   if (ROOM_FLAGGED(EXIT(veh, dir)->to_room, ROOM_STAFF_ONLY)) {
     for (struct char_data *tch = veh->people; tch; tch = tch->next_in_veh) {
-      if (!access_level(tch, LVL_BUILDER)) {
+      if (!IS_NPC(tch) && !access_level(tch, LVL_BUILDER)) {
         send_to_char("Everyone in the vehicle must be a member of the game's administration to go there.\r\n", ch);
         return;
       }

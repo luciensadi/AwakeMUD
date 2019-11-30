@@ -579,10 +579,10 @@ bool mobact_process_movement(struct char_data *ch) {
       if (EXIT(ch->in_veh, door) &&
           ROOM_FLAGS(EXIT(ch->in_veh, door)->to_room).AreAnySet(ROOM_ROAD, ROOM_GARAGE, ENDBIT) &&
           !ROOM_FLAGS(EXIT(ch->in_veh, door)->to_room).AreAnySet(ROOM_NOMOB, ROOM_DEATH, ENDBIT)) {
-        sprintf(buf3, "Driver %s attempted to move %s from %s [%ld].", GET_NAME(ch), fulldirs[door], GET_ROOM_NAME(ch->in_veh->in_room), GET_ROOM_VNUM(ch->in_veh->in_room));
+        // sprintf(buf3, "Driver %s attempted to move %s from %s [%ld].", GET_NAME(ch), fulldirs[door], GET_ROOM_NAME(ch->in_veh->in_room), GET_ROOM_VNUM(ch->in_veh->in_room));
         perform_move(ch, door, LEADER, NULL);
-        sprintf(ENDOF(buf3), "  After move, driver now in %s [%ld].", GET_ROOM_NAME(ch->in_veh->in_room), GET_ROOM_VNUM(ch->in_veh->in_room));
-        mudlog(buf3, ch, LOG_SYSLOG, TRUE);
+        // sprintf(ENDOF(buf3), "  After move, driver now in %s [%ld].", GET_ROOM_NAME(ch->in_veh->in_room), GET_ROOM_VNUM(ch->in_veh->in_room));
+        // mudlog(buf3, ch, LOG_SYSLOG, TRUE);
         return TRUE;
       }
     }
