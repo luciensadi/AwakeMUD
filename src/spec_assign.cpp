@@ -677,8 +677,9 @@ void assign_objects(void)
   ASSIGNOBJ(35026, clock);
   ASSIGNOBJ(42118, clock);
   ASSIGNOBJ(18825, portable_gridguide);
-  ASSIGNOBJ(39864, portable_gridguide);
-  ASSIGNOBJ(31542, pocket_sec);
+  ASSIGNOBJ(39864, portable_gridguide); */
+  ASSIGNOBJ(671, portable_gridguide);
+  /* ASSIGNOBJ(31542, pocket_sec);
   ASSIGNOBJ(39865, pocket_sec); */
   ASSIGNOBJ(9826, locker);
   ASSIGNOBJ(60500, chargen_hopper);
