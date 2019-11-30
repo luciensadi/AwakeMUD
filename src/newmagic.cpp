@@ -2325,7 +2325,7 @@ ACMD(do_conjure)
           break;
       }
     if (!obj) {
-      send_to_char("You need conjuring materials to conjure an elemental.\r\n", ch);
+      send_to_char("You need to be carrying conjuring materials to conjure an elemental.\r\n", ch);
       return;
     }
     AFF_FLAGS(ch).SetBit(AFF_CONJURE);
