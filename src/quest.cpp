@@ -644,7 +644,6 @@ SPECIAL(johnson)
     return FALSE;
   
   if (!GET_SPARE2(johnson)) {
-    do_say(johnson, "Force-assigning new quest.", 0, 0);
     new_quest(johnson, TRUE);
     GET_SPARE1(johnson) = -1;
   }
@@ -717,10 +716,6 @@ SPECIAL(johnson)
     do_say(ch, argument, 0, 0);
   if (need_to_act)
     do_action(ch, argument, cmd, 0);
-  
-  sprintf(buf3, "Debug: Command = %d, spare1 = %ld, spare2 = %ld. Spare2 is my current quest rnum to assign, it translates to vnum %ld.",
-          comm, GET_SPARE1(johnson), GET_SPARE2(johnson), quest_table[GET_SPARE2(johnson)].vnum);
-  do_say(johnson, buf3, 0, 0);
 
   if (comm == CMD_JOB_QUIT && GET_SPARE1(johnson) == -1 && GET_QUEST(ch) &&
       memory(johnson, ch)) {
@@ -748,43 +743,39 @@ SPECIAL(johnson)
       forget(johnson, ch);
     } else
       do_say(johnson, "But you have not completed any objectives yet.", 0, 0);
-  } else if (comm == CMD_JOB_START) {
-    if (GET_SPARE1(johnson) == -1 && GET_SPARE2(johnson) >= 0) {
-      if (GET_QUEST(ch)) {
-        do_say(johnson, "Maybe when you've finished what you're doing.", 0, 0);
+  } else if (comm == CMD_JOB_START && GET_SPARE1(johnson) == -1 && GET_SPARE2(johnson) >= 0) {
+    if (GET_QUEST(ch)) {
+      do_say(johnson, "Maybe when you've finished what you're doing.", 0, 0);
+      return TRUE;
+    }
+    for (int i = QUEST_TIMER - 1; i >= 0; i--)
+      if (GET_LQUEST(ch, i) == quest_table[GET_SPARE2(johnson)].vnum) {
+        do_say(johnson, quest_table[GET_SPARE2(johnson)].done, 0, 0);
+        if (memory(johnson, ch))
+          forget(johnson, ch);
         return TRUE;
       }
-      for (int i = QUEST_TIMER - 1; i >= 0; i--)
-        if (GET_LQUEST(ch, i) == quest_table[GET_SPARE2(johnson)].vnum) {
-          do_say(johnson, quest_table[GET_SPARE2(johnson)].done, 0, 0);
-          if (memory(johnson, ch))
-            forget(johnson, ch);
-          return TRUE;
-        }
-      if (PLR_FLAGGED(ch, PLR_KILLER) || PLR_FLAGGED(ch, PLR_BLACKLIST)) {
-        do_say(johnson, "Word on the street is you can't be trusted.", 0, 0);
-        GET_SPARE1(johnson) = -1;
-        if (memory(johnson, ch))
-          forget(johnson, ch);
-      } else if (rep_too_high(ch, GET_SPARE2(johnson))) {
-        do_say(johnson, "I've got nothing you'd be interested in right now.", 0, 0);
-        GET_SPARE1(johnson) = -1;
-        if (memory(johnson, ch))
-          forget(johnson, ch);
-      } else if (rep_too_low(ch, GET_SPARE2(johnson))) {
-        do_say(johnson, "And just who are you?", 0, 0);
-        GET_SPARE1(johnson) = -1;
-        if (memory(johnson, ch))
-          forget(johnson, ch);
-      } else {
-        GET_SPARE1(johnson) = 0;
-        do_say(johnson, quest_table[GET_SPARE2(johnson)].intro, 0, 0);
-        do_say(johnson, "Are you interested?", 0, 0);
-        if (!memory(johnson, ch))
-          remember(johnson, ch);
-      }
+    if (PLR_FLAGGED(ch, PLR_KILLER) || PLR_FLAGGED(ch, PLR_BLACKLIST)) {
+      do_say(johnson, "Word on the street is you can't be trusted.", 0, 0);
+      GET_SPARE1(johnson) = -1;
+      if (memory(johnson, ch))
+        forget(johnson, ch);
+    } else if (rep_too_high(ch, GET_SPARE2(johnson))) {
+      do_say(johnson, "I've got nothing you'd be interested in right now.", 0, 0);
+      GET_SPARE1(johnson) = -1;
+      if (memory(johnson, ch))
+        forget(johnson, ch);
+    } else if (rep_too_low(ch, GET_SPARE2(johnson))) {
+      do_say(johnson, "And just who are you?", 0, 0);
+      GET_SPARE1(johnson) = -1;
+      if (memory(johnson, ch))
+        forget(johnson, ch);
     } else {
-      do_say(johnson, "debug: failing due to not meeting preconditions", 0, 0);
+      GET_SPARE1(johnson) = 0;
+      do_say(johnson, quest_table[GET_SPARE2(johnson)].intro, 0, 0);
+      do_say(johnson, "Are you interested?", 0, 0);
+      if (!memory(johnson, ch))
+        remember(johnson, ch);
     }
   } else if (comm == CMD_JOB_YES && !GET_SPARE1(johnson) && !GET_QUEST(ch) &&
              memory(johnson, ch)) {
@@ -805,6 +796,11 @@ SPECIAL(johnson)
     GET_QUEST(ch) = 0;
     forget(johnson, ch);
     do_say(johnson, quest_table[GET_SPARE2(johnson)].decline, 0, 0);
+  } else {
+    do_say(johnson, "Ugh, drank too much last night. Talk to me later when I've sobered up.", 0, 0);
+    sprintf(buf, "WARNING: Failed to evaluate Johnson tree and return successful message for Johnson '%s' (%ld). Values: comm = %d, spare1 = %ld, spare2 = %ld (maps to %ld)",
+            GET_NAME(johnson), GET_MOB_VNUM(johnson), comm, GET_SPARE1(johnson), GET_SPARE2(johnson), quest_table[GET_SPARE2(johnson)].vnum);
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
   }
 
   return TRUE;
