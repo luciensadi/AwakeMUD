@@ -3215,7 +3215,7 @@ void reset_zone(int zone, int reboot)
             if (!IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_HIDDEN)
                 && !IS_SET(world[ZCMD.arg1].dir_option[ZCMD.arg2]->exit_info, EX_CLOSED)) {
               sprintf(buf, "The %s to the %s swings closed.\r\n",
-                      fname(world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword),
+                      world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword ? fname(world[ZCMD.arg1].dir_option[ZCMD.arg2]->keyword) : "door",
                       fulldirs[ZCMD.arg2]);
               send_to_room(buf, &world[ZCMD.arg1]);
             }
