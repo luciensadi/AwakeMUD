@@ -2336,6 +2336,8 @@ ACMD(do_conjure)
       ch->char_specials.conjure[2] = 1;
     } else
       ch->char_specials.conjure[2] = force * 30;
+    // Max tracking for PROGRESS command.
+    ch->char_specials.conjure[3] = ch->char_specials.conjure[2];
     ch->char_specials.programming = obj;
     send_to_char(ch, "You begin to conjure a %s elemental.\r\n", elements[spirit].name);
   } else {

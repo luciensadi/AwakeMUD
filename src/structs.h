@@ -438,7 +438,7 @@ struct char_special_data
   struct char_data *fighting;  /* Opponent                             */
   struct char_data *hunting;   /* Char hunted by this char             */
   struct obj_data *programming; /* Program char is currently designing/programming */
-  int conjure[3];
+  int conjure[4];
   int num_spirits;
   long idnum;
   bool nervestrike;
