@@ -716,6 +716,11 @@ SPECIAL(johnson)
   if (need_to_act)
     do_action(ch, argument, cmd, 0);
   
+  if (GET_SPARE2(johnson) == 0) {
+    do_say(johnson, "Force-assigning new quest.", 0, 0);
+    new_quest(johnson, TRUE);
+  }
+  
   sprintf(buf3, "Debug: Command = %d, spare1 = %ld, spare2 = %ld. Spare2 is my current quest vnum to assign.",
           comm, GET_SPARE1(johnson), GET_SPARE2(johnson));
   do_say(johnson, buf3, 0, 0);
