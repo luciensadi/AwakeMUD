@@ -294,6 +294,7 @@ void do_start(struct char_data * ch)
 
   PLR_FLAGS(ch).SetBit(PLR_NEWBIE);
   PRF_FLAGS(ch).SetBits(PRF_AUTOEXIT, PRF_LONGEXITS, ENDBIT);
+  PRF_FLAGS(ch).RemoveBit(PRF_NOHASSLE);
   PLR_FLAGS(ch).SetBit(PLR_AUTH);
   ch->player.time.played = 0;
   ch->player.time.lastdisc = time(0);

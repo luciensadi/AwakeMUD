@@ -657,10 +657,6 @@ SPECIAL(johnson)
     return FALSE;
   }
 
-  if (!CAN_SEE(johnson, ch) || IS_NPC(ch) || PRF_FLAGGED(ch, PRF_NOHASSLE) || PRF_FLAGGED(ch, PRF_QUEST) ||
-      (AFF_FLAGGED(ch, AFF_GROUP) && ch->master))
-    return FALSE;
-
   skip_spaces(&argument);
 
   if (CMD_IS("say") || CMD_IS("'")) {
@@ -686,6 +682,26 @@ SPECIAL(johnson)
     do_action(ch, argument, cmd, 0);
   } else
     return FALSE;
+  
+  if (IS_NPC(ch)) {
+    send_to_char("NPCs don't get autoruns, go away.\r\n", ch);
+    return FALSE;
+  }
+  
+  if (PRF_FLAGGED(ch, PRF_NOHASSLE)) {
+    send_to_char("You can't take runs with NOHASSLE turned on-- TOGGLE NOHASSLE to turn it off.\r\n", ch);
+    return FALSE;
+  }
+  
+  if (PRF_FLAGGED(ch, PRF_QUEST)) {
+    send_to_char("You can't take autoruns while questing-- TOGGLE QUEST to disable your questing flag, then try again.\r\n", ch);
+    return FALSE;
+  }
+  
+  if (AFF_FLAGGED(johnson, AFF_GROUP) && ch->master) {
+    send_to_char("I don't know how you ended up leading this Johnson around, but you can't take quests from your charmies.\r\n", ch);
+    return FALSE;
+  }
 
   if (comm == CMD_JOB_QUIT && GET_SPARE1(johnson) == -1 && GET_QUEST(ch) &&
       memory(johnson, ch)) {
