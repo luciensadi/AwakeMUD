@@ -659,6 +659,8 @@ SPECIAL(johnson)
 
   skip_spaces(&argument);
 
+  bool need_to_speak = FALSE;
+  bool need_to_act = FALSE;
   if (CMD_IS("say") || CMD_IS("'")) {
     if (str_str(argument, "quit"))
       comm = CMD_JOB_QUIT;
@@ -673,13 +675,13 @@ SPECIAL(johnson)
       comm = CMD_JOB_YES;
     else if (strstr(argument, "no"))
       comm = CMD_JOB_NO;
-    do_say(ch, argument, 0, 0);
+    need_to_speak = TRUE;
   } else if (CMD_IS("nod")) {
     comm = CMD_JOB_YES;
-    do_action(ch, argument, cmd, 0);
+    need_to_act = TRUE;
   } else if (CMD_IS("shake") && !*argument) {
     comm = CMD_JOB_NO;
-    do_action(ch, argument, cmd, 0);
+    need_to_act = TRUE;
   } else
     return FALSE;
   
@@ -702,6 +704,12 @@ SPECIAL(johnson)
     send_to_char("I don't know how you ended up leading this Johnson around, but you can't take quests from your charmies.\r\n", ch);
     return FALSE;
   }
+  
+  // Hack to get around the fact that moving the failure check after the interact check would make you double-speak and double-act.
+  if (need_to_speak)
+    do_say(ch, argument, 0, 0);
+  if (need_to_act)
+    do_action(ch, argument, cmd, 0);
 
   if (comm == CMD_JOB_QUIT && GET_SPARE1(johnson) == -1 && GET_QUEST(ch) &&
       memory(johnson, ch)) {
