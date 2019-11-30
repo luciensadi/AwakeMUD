@@ -40,6 +40,8 @@ using namespace std;
 
 const char *CCHAR;
 
+extern bool DISPLAY_HELPFUL_STRINGS_FOR_MOB_FUNCS;
+
 /* extern variables */
 extern class objList ObjList;
 extern class helpList Help;
@@ -60,6 +62,7 @@ extern SPECIAL(metamagic_teacher);
 extern SPECIAL(adept_trainer);
 extern SPECIAL(spell_trainer);
 extern SPECIAL(johnson);
+extern SPECIAL(shop_keeper);
 
 extern bool trainable_attribute_is_maximized(struct char_data *ch, int attribute);
 
@@ -722,30 +725,66 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       strcat(buf, "The ghostly image of ");
     strcat(buf, i->player.physical_text.room_desc);
     
-    // TODO: Add a toggle for this system to be disabled.
-    if (mob_index[GET_MOB_RNUM(i)].func == trainer) {
-      sprintf(ENDOF(buf), "^y...%s looks willing to train you.^n\r\n", HSSH(i));
-    }
-    else if (mob_index[GET_MOB_RNUM(i)].func == teacher) {
-      sprintf(ENDOF(buf), "^y...%s looks willing to help you practice your skills.^n\r\n", HSSH(i));
-    }
-    else if (mob_index[GET_MOB_RNUM(i)].func == metamagic_teacher) {
-      // Mundanes can't see metamagic teachers' abilities.
-      if (GET_TRADITION(ch) != TRAD_MUNDANE)
-        sprintf(ENDOF(buf), "^y...%s looks willing to help you train in metamagic techniques.^n\r\n", HSSH(i));
-    }
-    else if (mob_index[GET_MOB_RNUM(i)].func == adept_trainer) {
-      // Mundanes can't see adept trainers' abilities.
-      if (GET_TRADITION(ch) == TRAD_ADEPT)
-        sprintf(ENDOF(buf), "^y...%s looks willing to help you train your powers.^n\r\n", HSSH(i));
-    }
-    else if (mob_index[GET_MOB_RNUM(i)].func == spell_trainer) {
-      // Mundanes can't see spell trainers' abilities.
-      if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT)
-        sprintf(ENDOF(buf), "^y...%s looks willing to help you learn new spells.^n\r\n", HSSH(i));
-    }
-    else if (mob_index[GET_MOB_RNUM(i)].func == johnson) {
-      sprintf(ENDOF(buf), "^y...%s might have a job for you.^n\r\n", HSSH(i));
+    if (DISPLAY_HELPFUL_STRINGS_FOR_MOB_FUNCS) {
+      if (mob_index[GET_MOB_RNUM(i)].func) {
+        if (mob_index[GET_MOB_RNUM(i)].func == trainer) {
+          sprintf(ENDOF(buf), "^y...%s looks willing to train you.^n\r\n", HSSH(i));
+        }
+        if (mob_index[GET_MOB_RNUM(i)].func == teacher) {
+          sprintf(ENDOF(buf), "^y...%s looks willing to help you practice your skills.^n\r\n", HSSH(i));
+        }
+        if (mob_index[GET_MOB_RNUM(i)].func == metamagic_teacher) {
+          // Mundanes can't see metamagic teachers' abilities.
+          if (GET_TRADITION(ch) != TRAD_MUNDANE)
+            sprintf(ENDOF(buf), "^y...%s looks willing to help you train in metamagic techniques.^n\r\n", HSSH(i));
+        }
+        if (mob_index[GET_MOB_RNUM(i)].func == adept_trainer) {
+          // Adepts can't see adept trainers' abilities.
+          if (GET_TRADITION(ch) == TRAD_ADEPT)
+            sprintf(ENDOF(buf), "^y...%s looks willing to help you train your powers.^n\r\n", HSSH(i));
+        }
+        if (mob_index[GET_MOB_RNUM(i)].func == spell_trainer) {
+          // Mundanes and adepts can't see spell trainers' abilities.
+          if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT)
+            sprintf(ENDOF(buf), "^y...%s looks willing to help you learn new spells.^n\r\n", HSSH(i));
+        }
+        if (mob_index[GET_MOB_RNUM(i)].func == johnson) {
+          sprintf(ENDOF(buf), "^y...%s might have a job for you.^n\r\n", HSSH(i));
+        }
+        if (mob_index[GET_MOB_RNUM(i)].func == shop_keeper) {
+          sprintf(ENDOF(buf), "^y...%s has a few things for sale.^n\r\n", HSSH(i));
+        }
+      }
+      
+      if (mob_index[GET_MOB_RNUM(i)].sfunc) {
+        if (mob_index[GET_MOB_RNUM(i)].sfunc == trainer) {
+          sprintf(ENDOF(buf), "^y...%s%s looks willing to train you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        }
+        if (mob_index[GET_MOB_RNUM(i)].sfunc == teacher) {
+          sprintf(ENDOF(buf), "^y...%s%s looks willing to help you practice your skills.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        }
+        if (mob_index[GET_MOB_RNUM(i)].sfunc == metamagic_teacher) {
+          // Mundanes can't see metamagic teachers' abilities.
+          if (GET_TRADITION(ch) != TRAD_MUNDANE)
+            sprintf(ENDOF(buf), "^y...%s%s looks willing to help you train in metamagic techniques.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        }
+        if (mob_index[GET_MOB_RNUM(i)].sfunc == adept_trainer) {
+          // Adepts can't see adept trainers' abilities.
+          if (GET_TRADITION(ch) == TRAD_ADEPT)
+            sprintf(ENDOF(buf), "^y...%s%s looks willing to help you train your powers.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        }
+        if (mob_index[GET_MOB_RNUM(i)].sfunc == spell_trainer) {
+          // Mundanes and adepts can't see spell trainers' abilities.
+          if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT)
+            sprintf(ENDOF(buf), "^y...%s%s looks willing to help you learn new spells.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        }
+        if (mob_index[GET_MOB_RNUM(i)].sfunc == johnson) {
+          sprintf(ENDOF(buf), "^y...%s%s might have a job for you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        }
+        if (mob_index[GET_MOB_RNUM(i)].sfunc == shop_keeper) {
+          sprintf(ENDOF(buf), "^y...%s%s has a few things for sale.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        }
+      }
     }
     
     send_to_char(buf, ch);
