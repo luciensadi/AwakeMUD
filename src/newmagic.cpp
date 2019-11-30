@@ -2331,7 +2331,11 @@ ACMD(do_conjure)
     AFF_FLAGS(ch).SetBit(AFF_CONJURE);
     ch->char_specials.conjure[0] = spirit;
     ch->char_specials.conjure[1] = force;
-    ch->char_specials.conjure[2] = force * 30;
+    if (GET_LEVEL(ch) > 1) {
+      send_to_char(ch, "You use your staff powers to greatly accelerate the conjuring process.\r\n");
+      ch->char_specials.conjure[2] = 1;
+    } else
+      ch->char_specials.conjure[2] = force * 30;
     ch->char_specials.programming = obj;
     send_to_char(ch, "You begin to conjure a %s elemental.\r\n", elements[spirit].name);
   } else {
