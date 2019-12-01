@@ -1095,7 +1095,6 @@ enum {
 #define ITEM_SNIPER        21
 #define ITEM_IMMLOAD       22 
 #define ITEM_EXTRA_MAX     23
-/* always keep immload the last */
 
 /* Ammo types */ 
 #define AMMO_NORMAL     0
@@ -2070,6 +2069,8 @@ enum {
 #define OBJ_BLANK_PART_DESIGN      112
 #define OBJ_CUSTOM_CYBERDECK_SHELL 113
 #define OBJ_DOCWAGON_BASIC_MOD     601
+#define OBJ_SEATTLE_TAXI_SIGN      600
+#define OBJ_PORTLAND_TAXI_SIGN     699
 
 /* ban struct */
 struct ban_list_element

@@ -28,10 +28,28 @@
 #define ELEVATOR_BUTTON_VNUM 41
 #define ELEVATOR_PANEL_VNUM  42
 
+#define TAXI_DEST_TYPE_AREA_OF_TOWN               0
+#define TAXI_DEST_TYPE_CORPORATE_PARK             1
+#define TAXI_DEST_TYPE_TOURIST_ATTRACTION         2
+#define TAXI_DEST_TYPE_TRANSPORTATION             3
+#define TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS 4
+#define TAXI_DEST_TYPE_SHOPPING                   5
+#define TAXI_DEST_TYPE_ACCOMMODATIONS             6
+#define TAXI_DEST_TYPE_HOSPITALS                  7
+#define NUM_TAXI_DEST_TYPES                       8
+
+struct taxi_dest_type
+{
+  const char *title_string;
+  const char *entry_color_string;
+};
+
 struct dest_data
 {
   const char *keyword, *str;
   vnum_t vnum;
+  unsigned int type;
+  bool enabled;
 };
 
 struct floor_data

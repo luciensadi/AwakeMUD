@@ -50,38 +50,38 @@ static const int NUM_SEATAC_STATIONS = 6;
 
 struct dest_data taxi_destinations[] =
   {
-    { "tacoma", "Tacoma", 2000 },
+    { "tacoma", "Tacoma", 2000, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE },
     // { "knight", "Knight Center", 1519 },
-    { "afterlife", "The Afterlife", 2072 },
+    // { "afterlife", "The Afterlife", 2072 },
     // { "chinatown", "ChinaTown", 2527 },
     // { "evergreen", "Evergreen Complex", 2201 },
     // { "twe", "Tacoma Weapons Emporium", 2514 },
-    { "nybbles", "Nybbles and Bytes", 2057 },
+    { "nybbles", "Nybbles and Bytes", 2057, TAXI_DEST_TYPE_SHOPPING, TRUE },
     // { "biohyde", "Biohyde Complex", 4201 },
     // { "puyallup", "Central Puyallup", 2457 },
     // { "park", "Seattle State Park", 4000 },
-    { "seattle", "Seattle", 32679 },
-    { "cinema", "Le Cinema Vieux", 32588 },
-    { "vieux", "Le Cinema Vieux", 32588 },
+    { "seattle", "Seattle", 32679, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE },
+    // { "cinema", "Le Cinema Vieux", 32588 },
+    // { "vieux", "Le Cinema Vieux", 32588 },
     // { "charne", "La Charne", 30548 },
     // { "tarislar", "Tarislar", 4965 },
     // { "wyvern", "The Blue Wyvern", 4909 },
     // { "redmond", "Redmond", 14310 },
-    { "reaper", "The Reaper", 32517 },
-    { "platinum", "Platinum Club", 32685 },
-    { "penumbra", "Club Penumbra", 32587 },
-    { "big", "The Big Rhino", 32635 },
+    // { "reaper", "The Reaper", 32517 },
+    // { "platinum", "Platinum Club", 32685 },
+    // { "penumbra", "Club Penumbra", 32587 },
+    // { "big", "The Big Rhino", 32635 },
     // { "epicenter", "The Epicenter", 2418 },
-    { "yoshi", "Yoshi's Sushi Bar", 32751 },
+    // { "yoshi", "Yoshi's Sushi Bar", 32751 },
     // { "airport", "Seattle-Tacoma Airport", 19410 },
     // { "aztech",  "Aztechnology Pyramid", 30539 },
-    { "garage", "Seattle Parking Garage", 32720 },
-    { "formal", "Seattle Formal Wear", 32746 },
+    // { "garage", "Seattle Parking Garage", 32720 },
+    // { "formal", "Seattle Formal Wear", 32746 },
     // { "sda", "The SDA Plaza", 30610 },
-    { "dante", "Dante's Inferno", 32661 },
-    { "quinns", "Quinn's", 32521 },
-    { "shintaru", "Shintaru", 32513 },
-    { "docks", "Seattle Dockyards", 32500 },
+    { "dante", "Dante's Inferno", 32661, TAXI_DEST_TYPE_RESTAURANTS_AND_NIGHTCLUBS, TRUE },
+    // { "quinns", "Quinn's", 32521 },
+    // { "shintaru", "Shintaru", 32513 },
+    // { "docks", "Seattle Dockyards", 32500 },
     // { "modern", "Modern Magik", 30514 },
     // { "methodist", "Seattle First Methodist", 30565 },
     // { "sculleys", "Sculleys", 30591 },
@@ -89,20 +89,20 @@ struct dest_data taxi_destinations[] =
     // { "moonlight", "Moonlight Mall", 14373 },
     // { "library", "Seattle Public Library", 30600 },
     // { "kristins", "Kristin's", 30578 },
-    { "mitsuhama", "Mitsuhama Towers", 32722 },
-    { "chiba", "Little Chiba", 32686 },
-    { "stop", "The Stop Gap", 32708 },
+    { "mitsuhama", "Mitsuhama Towers", 32722, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE },
+    { "chiba", "Little Chiba", 32686, TAXI_DEST_TYPE_SHOPPING, TRUE },
+    // { "stop", "The Stop Gap", 32708 },
     // { "apartment", "Redmond Apartment Block", 14337 },
     // { "humana", "Humana Hospital", 2536 },
     // { "hospital", "Council Island Hospital", 9161 },
-    { "coffin", "Tacoma Coffin Hotel", 2045 },
-    { "diver", "Easy Diver Coffin Hotel", 32644 },
-    { "action", "Action Computers", 32650 },
+    // { "coffin", "Tacoma Coffin Hotel", 2045 },
+    // { "diver", "Easy Diver Coffin Hotel", 32644 },
+    { "action", "Action Computers", 32650, TAXI_DEST_TYPE_SHOPPING, TRUE },
     // { "auburn", "Auburn", 29011 },
-    { "hellhound", "Hellhound Bus Stop",  32501 },
+    { "hellhound", "Hellhound Bus Stop",  32501, TAXI_DEST_TYPE_TRANSPORTATION, TRUE },
     // { "lysleul", "Lysleul Plaza", 30551 },
     // { "microdeck", "Auburn Microdeck Outlet", 29010 },
-    { "novatech", "Novatech Seattle", 32541 },
+    { "novatech", "Novatech Seattle", 32541, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE },
     // { "syberspace", "SyberSpace", 30612 },
     // { "pooks", "Pook's Place", 1530 },
     // { "errant", "KE Training Facility", 30127 },
@@ -110,45 +110,56 @@ struct dest_data taxi_destinations[] =
     // { "bank", "UCASBank", 30524 },
     // { "matchsticks", "Matchsticks", 30579 },
     // { "homewood", "Homewood Suites", 30512 },
-    { "mall", "Tacoma Mall", 2093 },
+    { "mall", "Tacoma Mall", 2093, TAXI_DEST_TYPE_SHOPPING, TRUE },
     // { "racespec", "Racespec Performance", 30573 },
-    { "smiths", "Smith's Pub", 32566 },
-    { "marksman", "Marksman Indoor Firing Range", 32682 },
-    { "sapphire", "The Star Sapphire", 70301 }, 
+    // { "smiths", "Smith's Pub", 32566 },
+    // { "marksman", "Marksman Indoor Firing Range", 32682 },
+    { "sapphire", "The Star Sapphire", 70301, TAXI_DEST_TYPE_ACCOMMODATIONS, TRUE },
     // { "everett", "Everett", 39263 },
     // { "beacon", "Beacon Mall Everett", 39253 },
     // { "touristville", "Touristville", 25313 },
     // { "skeleton", "The Skeleton", 25308 },
-    { "\n", "", 0 } // this MUST be last
+    { "\n", "", 0, 0, 0 } // this MUST be last
   };
 
-static struct dest_data port_destinations[] =
+struct dest_data port_destinations[] =
   {
-    { "hellhound", "Hellhound Bus Station", 14624 },
-    { "postal", "Royal Postal Station", 14629 },
-    { "trans-oregon", "Trans-Oregon Trucking", 14604 },
-    { "thompson", "Thompson Autogroup",  14602},
-    { "hard", "Hard Times", 14608 },
-    { "bank", "TT-Bank", 14610 },
-    { "sixth", "Sixth Street Parking", 14680 },
-    { "satyricon", "The Satyricon", 14611 },
-    { "rocco", "Rocco's Pizza", 14730 },
-    { "annabel", "Annabel's Antiquities", 2710 },
-    { "square", "O'Bryant Square", 2708 },
-    { "parking", "Portland City Parking", 2703 },
-    { "mary", "Mary's Bar", 14712 },
-    { "tower", "TTBank Tower", 14743 },
-    { "city", "City Center Parking", 14751 },
-    { "habitat", "Telestrian Habitat", 18800 },
-    { "hospital", "Royal Hospital", 14707 },
-    { "toadstool", "The Toadstool", 14671 },
-    { "powells", "Powell's Technical Books", 14724 },
-    { "powell's", "Powell's Technical Books", 14724 },
-    { "davis", "Davis Street Offices", 14667 },
-    { "max", "Downtown MAX Station", 20800 },
-    { "\n", "", 0 } // this MUST be last
+    // { "hellhound", "Hellhound Bus Station", 14624 },
+    // { "postal", "Royal Postal Station", 14629 },
+    // { "trans-oregon", "Trans-Oregon Trucking", 14604 },
+    // { "thompson", "Thompson Autogroup",  14602},
+    // { "hard", "Hard Times", 14608 },
+    // { "bank", "TT-Bank", 14610 },
+    // { "sixth", "Sixth Street Parking", 14680 },
+    // { "satyricon", "The Satyricon", 14611 },
+    // { "rocco", "Rocco's Pizza", 14730 },
+    // { "annabel", "Annabel's Antiquities", 2710 },
+    // { "square", "O'Bryant Square", 2708 },
+    // { "parking", "Portland City Parking", 2703 },
+    // { "mary", "Mary's Bar", 14712 },
+    // { "tower", "TTBank Tower", 14743 },
+    // { "city", "City Center Parking", 14751 },
+    // { "habitat", "Telestrian Habitat", 18800 },
+    // { "hospital", "Royal Hospital", 14707 },
+    // { "toadstool", "The Toadstool", 14671 },
+    // { "powells", "Powell's Technical Books", 14724 },
+    // { "powell's", "Powell's Technical Books", 14724 },
+    // { "davis", "Davis Street Offices", 14667 },
+    // { "max", "Downtown MAX Station", 20800 },
+    { "\n", "", 0, 0, 0 } // this MUST be last
  
   };
+
+struct taxi_dest_type taxi_dest_type_info[] = {
+  { "^yAreas of Town", "^Y" },
+  { "^cCorporate Parks", "^C" },
+  { "^gTourist Attractions", "^G" },
+  { "^rTransportation", "^R" },
+  { "^mRestaurants and Nightclubs", "^M" },
+  { "^bShopping", "^B" },
+  { "^gAccommodation", "^G" },
+  { "^rHospitals", "^R" }
+};
 
 struct transport_type
 {
@@ -188,6 +199,91 @@ static int process_elevator(struct room_data *room,
 //
 // Taxi
 // ____________________________________________________________________________
+
+// Taxi sign: If you look at it, it prints a dynamic description instead of the hardcoded one.
+SPECIAL(taxi_sign) {
+  struct obj_data *obj = (struct obj_data *) me;
+  
+  struct obj_data *tmp_object = NULL;
+  struct char_data *tmp_char = NULL;
+  
+  struct dest_data *dest_data_list = NULL;
+  
+  // No argument given, no character available, no problem. Skip it.
+  if (!*argument || !ch)
+    return FALSE;
+  
+  // You in a vehicle? I don't know how you got this sign, but skip it.
+  if (ch->in_veh)
+    return FALSE;
+  
+  // If it's not a command that would reveal this sign's data, skip it.
+  if (!(CMD_IS("look") || CMD_IS("examine") || CMD_IS("read")))
+    return FALSE;
+  
+  // Search the room and find something that matches me.
+  generic_find(argument, FIND_OBJ_ROOM, ch, &tmp_char, &tmp_object);
+  
+  // Senpai didn't notice me? Skip it, he's not worth it.
+  if (!tmp_object || tmp_object != obj)
+    return FALSE;
+  
+  // Select our destination list based on our vnum.
+  switch (GET_OBJ_VNUM(obj)) {
+    case OBJ_SEATTLE_TAXI_SIGN:
+      dest_data_list = taxi_destinations;
+      break;
+    case OBJ_PORTLAND_TAXI_SIGN:
+      dest_data_list = port_destinations;
+      break;
+    default:
+      sprintf(buf, "Warning: taxi_sign spec given to object %s (%ld) that had no matching definition in transport.cpp!",
+              GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      return FALSE;
+  }
+  
+  // Set up our default string.
+  strcpy(buf, "The keyword for each location is listed after the location name.  Say the keyword to the driver, and for a small fee, he will drive you to your destination.\r\n--------------------------------------------\r\n");
+  
+  bool is_first_printed_dest_title = TRUE;
+  
+  // Print that sweet, sweet destination-flavored goodness.
+  for (unsigned int taxi_dest_type = 0; taxi_dest_type < NUM_TAXI_DEST_TYPES; taxi_dest_type++) {
+    // Scan the list once to see if we have any of this dest type in the system.
+    bool has_this_dest_type = FALSE;
+    for (int dest_index = 0; *dest_data_list[dest_index].keyword != '\n'; dest_index++) {
+      if (dest_data_list[dest_index].type == taxi_dest_type) {
+        has_this_dest_type = TRUE;
+        break;
+      }
+    }
+    
+    // If we don't have anything from this dest type, continue.
+    if (!has_this_dest_type)
+      continue;
+    
+    // We have something! Print the dest type's title to make the list ~~fancy~~. Extra carriage return before if we're not the first.
+    sprintf(ENDOF(buf), "%s%s^n\r\n", is_first_printed_dest_title ? "" : "\r\n", taxi_dest_type_info[taxi_dest_type].title_string);
+    is_first_printed_dest_title = FALSE;
+    
+    // Iterate through and populate the dest list with what we've got available.
+    for (unsigned int dest_index = 0; *dest_data_list[dest_index].keyword != '\n'; dest_index++) {
+      if (dest_data_list[dest_index].type == taxi_dest_type) {
+        sprintf(ENDOF(buf), "%-30s - %s%s^n\r\n",
+                dest_data_list[dest_index].str,
+                taxi_dest_type_info[taxi_dest_type].entry_color_string,
+                capitalize(dest_data_list[dest_index].keyword));
+      }
+    }
+  }
+  
+  // Finally, tack on a newline and send it all to the character!
+  strcat(buf, "\r\n");
+  send_to_char(buf, ch);
+  
+  return TRUE;
+}
 
 // ______________________________
 //

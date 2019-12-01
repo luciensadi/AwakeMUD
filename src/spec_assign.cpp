@@ -608,6 +608,7 @@ void assign_objects(void)
   SPECIAL(locker);
   SPECIAL(chargen_hopper);
   SPECIAL(quest_debug_scanner);
+  SPECIAL(taxi_sign);
 
   ASSIGNOBJ(3, gen_board);  /* Rift's Board */
   ASSIGNOBJ(4, gen_board);  /* Pook's Board */
@@ -685,6 +686,9 @@ void assign_objects(void)
   ASSIGNOBJ(9826, locker);
   ASSIGNOBJ(60500, chargen_hopper);
   ASSIGNOBJ(10033, quest_debug_scanner);
+  
+  ASSIGNOBJ(OBJ_SEATTLE_TAXI_SIGN, taxi_sign);
+  ASSIGNOBJ(OBJ_PORTLAND_TAXI_SIGN, taxi_sign);
   
   
   WSPEC(monowhip);
