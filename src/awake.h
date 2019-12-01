@@ -2069,6 +2069,8 @@ enum {
 #define OBJ_BLANK_PART_DESIGN      112
 #define OBJ_CUSTOM_CYBERDECK_SHELL 113
 #define OBJ_DOCWAGON_BASIC_MOD     601
+#define OBJ_SEATTLE_TAXI_SIGN      600
+#define OBJ_PORTLAND_TAXI_SIGN     699
 
 /* ban struct */
 struct ban_list_element

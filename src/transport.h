@@ -38,6 +38,12 @@
 #define TAXI_DEST_TYPE_HOSPITALS                  7
 #define NUM_TAXI_DEST_TYPES                       8
 
+struct taxi_dest_type
+{
+  const char *title_string;
+  const char *entry_color_string;
+};
+
 struct dest_data
 {
   const char *keyword, *str;

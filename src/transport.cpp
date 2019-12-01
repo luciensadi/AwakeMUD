@@ -150,6 +150,17 @@ struct dest_data port_destinations[] =
  
   };
 
+struct taxi_dest_type taxi_dest_type_info[] = {
+  { "^yAreas of Town", "^Y" },
+  { "^cCorporate Parks", "^C" },
+  { "^gTourist Attractions", "^G" },
+  { "^rTransportation", "^R" },
+  { "^mRestaurants and Nightclubs", "^M" },
+  { "^bShopping", "^B" },
+  { "^gAccommodation", "^G" },
+  { "^rHospitals", "^R" }
+};
+
 struct transport_type
 {
   vnum_t transport;
@@ -188,6 +199,91 @@ static int process_elevator(struct room_data *room,
 //
 // Taxi
 // ____________________________________________________________________________
+
+// Taxi sign: If you look at it, it prints a dynamic description instead of the hardcoded one.
+SPECIAL(taxi_sign) {
+  struct obj_data *obj = (struct obj_data *) me;
+  
+  struct obj_data *tmp_object = NULL;
+  struct char_data *tmp_char = NULL;
+  
+  struct dest_data *dest_data_list = NULL;
+  
+  // No argument given, no character available, no problem. Skip it.
+  if (!*argument || !ch)
+    return FALSE;
+  
+  // You in a vehicle? I don't know how you got this sign, but skip it.
+  if (ch->in_veh)
+    return FALSE;
+  
+  // If it's not a command that would reveal this sign's data, skip it.
+  if (!(CMD_IS("look") || CMD_IS("examine") || CMD_IS("read")))
+    return FALSE;
+  
+  // Search the room and find something that matches me.
+  generic_find(argument, FIND_OBJ_ROOM, ch, &tmp_char, &tmp_object);
+  
+  // Senpai didn't notice me? Skip it, he's not worth it.
+  if (!tmp_object || tmp_object != obj)
+    return FALSE;
+  
+  // Select our destination list based on our vnum.
+  switch (GET_OBJ_VNUM(obj)) {
+    case OBJ_SEATTLE_TAXI_SIGN:
+      dest_data_list = taxi_destinations;
+      break;
+    case OBJ_PORTLAND_TAXI_SIGN:
+      dest_data_list = port_destinations;
+      break;
+    default:
+      sprintf(buf, "Warning: taxi_sign spec given to object %s (%ld) that had no matching definition in transport.cpp!",
+              GET_OBJ_NAME(obj), GET_OBJ_VNUM(obj));
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      return FALSE;
+  }
+  
+  // Set up our default string.
+  strcpy(buf, "The keyword for each location is listed after the location name.  Say the keyword to the driver, and for a small fee, he will drive you to your destination.\r\n--------------------------------------------\r\n");
+  
+  bool is_first_printed_dest_title = TRUE;
+  
+  // Print that sweet, sweet destination-flavored goodness.
+  for (unsigned int taxi_dest_type = 0; taxi_dest_type < NUM_TAXI_DEST_TYPES; taxi_dest_type++) {
+    // Scan the list once to see if we have any of this dest type in the system.
+    bool has_this_dest_type = FALSE;
+    for (int dest_index = 0; *dest_data_list[dest_index].keyword != '\n'; dest_index++) {
+      if (dest_data_list[dest_index].type == taxi_dest_type) {
+        has_this_dest_type = TRUE;
+        break;
+      }
+    }
+    
+    // If we don't have anything from this dest type, continue.
+    if (!has_this_dest_type)
+      continue;
+    
+    // We have something! Print the dest type's title to make the list ~~fancy~~. Extra carriage return before if we're not the first.
+    sprintf(ENDOF(buf), "%s%s^n\r\n", is_first_printed_dest_title ? "" : "\r\n", taxi_dest_type_info[taxi_dest_type].title_string);
+    is_first_printed_dest_title = FALSE;
+    
+    // Iterate through and populate the dest list with what we've got available.
+    for (unsigned int dest_index = 0; *dest_data_list[dest_index].keyword != '\n'; dest_index++) {
+      if (dest_data_list[dest_index].type == taxi_dest_type) {
+        sprintf(ENDOF(buf), "%-30s - %s%s^n\r\n",
+                dest_data_list[dest_index].str,
+                taxi_dest_type_info[taxi_dest_type].entry_color_string,
+                capitalize(dest_data_list[dest_index].keyword));
+      }
+    }
+  }
+  
+  // Finally, tack on a newline and send it all to the character!
+  strcat(buf, "\r\n");
+  send_to_char(buf, ch);
+  
+  return TRUE;
+}
 
 // ______________________________
 //
