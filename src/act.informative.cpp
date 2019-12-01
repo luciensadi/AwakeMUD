@@ -40,6 +40,8 @@ using namespace std;
 
 const char *CCHAR;
 
+extern bool DISPLAY_HELPFUL_STRINGS_FOR_MOB_FUNCS;
+
 /* extern variables */
 extern class objList ObjList;
 extern class helpList Help;
@@ -60,6 +62,8 @@ extern SPECIAL(metamagic_teacher);
 extern SPECIAL(adept_trainer);
 extern SPECIAL(spell_trainer);
 extern SPECIAL(johnson);
+extern SPECIAL(shop_keeper);
+extern SPECIAL(landlord_spec);
 
 extern bool trainable_attribute_is_maximized(struct char_data *ch, int attribute);
 
@@ -559,7 +563,10 @@ void look_at_char(struct char_data * i, struct char_data * ch)
   
   if (found)
   {
-    act("\r\n$n is using:", FALSE, i, 0, ch, TO_VICT);
+    if (ch == i)
+      send_to_char("\r\nYou are using:\r\n", ch);
+    else
+      act("\r\n$n is using:", FALSE, i, 0, ch, TO_VICT);
     for (j = 0; j < NUM_WEARS; j++)
       if (GET_EQ(i, j) && CAN_SEE_OBJ(ch, GET_EQ(i, j))) {
         if (GET_OBJ_TYPE(GET_EQ(i, j)) == ITEM_HOLSTER && GET_OBJ_VAL(GET_EQ(i, j), 0) == 2) {
@@ -719,30 +726,72 @@ void list_one_char(struct char_data * i, struct char_data * ch)
       strcat(buf, "The ghostly image of ");
     strcat(buf, i->player.physical_text.room_desc);
     
-    // TODO: Add a toggle for this system to be disabled.
-    if (mob_index[GET_MOB_RNUM(i)].func == trainer) {
-      sprintf(ENDOF(buf), "^y...%s looks willing to train you.^n\r\n", HSSH(i));
-    }
-    else if (mob_index[GET_MOB_RNUM(i)].func == teacher) {
-      sprintf(ENDOF(buf), "^y...%s looks willing to help you practice your skills.^n\r\n", HSSH(i));
-    }
-    else if (mob_index[GET_MOB_RNUM(i)].func == metamagic_teacher) {
-      // Mundanes can't see metamagic teachers' abilities.
-      if (GET_TRADITION(ch) != TRAD_MUNDANE)
-        sprintf(ENDOF(buf), "^y...%s looks willing to help you train in metamagic techniques.^n\r\n", HSSH(i));
-    }
-    else if (mob_index[GET_MOB_RNUM(i)].func == adept_trainer) {
-      // Mundanes can't see adept trainers' abilities.
-      if (GET_TRADITION(ch) == TRAD_ADEPT)
-        sprintf(ENDOF(buf), "^y...%s looks willing to help you train your powers.^n\r\n", HSSH(i));
-    }
-    else if (mob_index[GET_MOB_RNUM(i)].func == spell_trainer) {
-      // Mundanes can't see spell trainers' abilities.
-      if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT)
-        sprintf(ENDOF(buf), "^y...%s looks willing to help you learn new spells.^n\r\n", HSSH(i));
-    }
-    else if (mob_index[GET_MOB_RNUM(i)].func == johnson) {
-      sprintf(ENDOF(buf), "^y...%s might have a job for you.^n\r\n", HSSH(i));
+    if (DISPLAY_HELPFUL_STRINGS_FOR_MOB_FUNCS) {
+      if (mob_index[GET_MOB_RNUM(i)].func) {
+        if (mob_index[GET_MOB_RNUM(i)].func == trainer) {
+          sprintf(ENDOF(buf), "^y...%s looks willing to train you.^n\r\n", HSSH(i));
+        }
+        if (mob_index[GET_MOB_RNUM(i)].func == teacher) {
+          sprintf(ENDOF(buf), "^y...%s looks willing to help you practice your skills.^n\r\n", HSSH(i));
+        }
+        if (mob_index[GET_MOB_RNUM(i)].func == metamagic_teacher) {
+          // Mundanes can't see metamagic teachers' abilities.
+          if (GET_TRADITION(ch) != TRAD_MUNDANE)
+            sprintf(ENDOF(buf), "^y...%s looks willing to help you train in metamagic techniques.^n\r\n", HSSH(i));
+        }
+        if (mob_index[GET_MOB_RNUM(i)].func == adept_trainer) {
+          // Adepts can't see adept trainers' abilities.
+          if (GET_TRADITION(ch) == TRAD_ADEPT)
+            sprintf(ENDOF(buf), "^y...%s looks willing to help you train your powers.^n\r\n", HSSH(i));
+        }
+        if (mob_index[GET_MOB_RNUM(i)].func == spell_trainer) {
+          // Mundanes and adepts can't see spell trainers' abilities.
+          if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT)
+            sprintf(ENDOF(buf), "^y...%s looks willing to help you learn new spells.^n\r\n", HSSH(i));
+        }
+        if (mob_index[GET_MOB_RNUM(i)].func == johnson) {
+          sprintf(ENDOF(buf), "^y...%s might have a job for you.^n\r\n", HSSH(i));
+        }
+        if (mob_index[GET_MOB_RNUM(i)].func == shop_keeper) {
+          sprintf(ENDOF(buf), "^y...%s has a few things for sale.^n\r\n", HSSH(i));
+        }
+        if (mob_index[GET_MOB_RNUM(i)].func == landlord_spec) {
+          sprintf(ENDOF(buf), "^y...%s might have some rooms for lease.^n\r\n", HSSH(i));
+        }
+      }
+      
+      if (mob_index[GET_MOB_RNUM(i)].sfunc && mob_index[GET_MOB_RNUM(i)].sfunc != mob_index[GET_MOB_RNUM(i)].func) {
+        if (mob_index[GET_MOB_RNUM(i)].sfunc == trainer) {
+          sprintf(ENDOF(buf), "^y...%s%s looks willing to train you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        }
+        if (mob_index[GET_MOB_RNUM(i)].sfunc == teacher) {
+          sprintf(ENDOF(buf), "^y...%s%s looks willing to help you practice your skills.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        }
+        if (mob_index[GET_MOB_RNUM(i)].sfunc == metamagic_teacher) {
+          // Mundanes can't see metamagic teachers' abilities.
+          if (GET_TRADITION(ch) != TRAD_MUNDANE)
+            sprintf(ENDOF(buf), "^y...%s%s looks willing to help you train in metamagic techniques.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        }
+        if (mob_index[GET_MOB_RNUM(i)].sfunc == adept_trainer) {
+          // Adepts can't see adept trainers' abilities.
+          if (GET_TRADITION(ch) == TRAD_ADEPT)
+            sprintf(ENDOF(buf), "^y...%s%s looks willing to help you train your powers.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        }
+        if (mob_index[GET_MOB_RNUM(i)].sfunc == spell_trainer) {
+          // Mundanes and adepts can't see spell trainers' abilities.
+          if (GET_TRADITION(ch) != TRAD_MUNDANE && GET_TRADITION(ch) != TRAD_ADEPT)
+            sprintf(ENDOF(buf), "^y...%s%s looks willing to help you learn new spells.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        }
+        if (mob_index[GET_MOB_RNUM(i)].sfunc == johnson) {
+          sprintf(ENDOF(buf), "^y...%s%s might have a job for you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        }
+        if (mob_index[GET_MOB_RNUM(i)].sfunc == shop_keeper) {
+          sprintf(ENDOF(buf), "^y...%s%s has a few things for sale.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
+        }
+        if (mob_index[GET_MOB_RNUM(i)].sfunc == landlord_spec) {
+          sprintf(ENDOF(buf), "^y...%s might have some rooms for lease.^n\r\n", HSSH(i));
+        }
+      }
     }
     
     send_to_char(buf, ch);
@@ -1677,7 +1726,11 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
   bool has_pockets = FALSE, added_extra_carriage_return = FALSE, has_smartlink = FALSE;
   struct obj_data *access = NULL;
   
-  sprintf(buf, "^MOOC^n statistics for '^y%s^n':\r\n", ((j->text.name) ? j->text.name : "<None>"));
+  if (j->restring) {
+    sprintf(buf, "^MOOC^n statistics for '^y%s^n' (restrung from %s):\r\n", GET_OBJ_NAME(j), j->text.name);
+  } else {
+    sprintf(buf, "^MOOC^n statistics for '^y%s^n':\r\n", (GET_OBJ_NAME(j) ? GET_OBJ_NAME(j) : "<None>"));
+  }
   
   sprinttype(GET_OBJ_TYPE(j), item_types, buf1);
   sprintf(ENDOF(buf), "It is %s ^c%s^n that weighs ^c%.2f^n kilos. It is made of ^c%s^n with a durability of ^c%d^n.\r\n",
@@ -3828,14 +3881,14 @@ void perform_immort_where(struct char_data * ch, char *arg)
         if (i && CAN_SEE(ch, i) && (i->in_room || i->in_veh)) {
           if (d->original)
             if (d->character->in_veh)
-              sprintf(buf + strlen(buf), "%-20s - [%5ld] %s (switched as %s) (in %s)\r\n",
+              sprintf(buf + strlen(buf), "%-20s - [%5ld] %s^n (switched as %s) (in %s)\r\n",
                       GET_CHAR_NAME(i),
                       GET_ROOM_VNUM(get_ch_in_room(d->character)),
                       GET_ROOM_NAME(get_ch_in_room(d->character)),
                       GET_NAME(d->character),
                       GET_VEH_NAME(d->character->in_veh));
             else
-              sprintf(buf + strlen(buf), "%-20s - [%5ld] %s (in %s)\r\n",
+              sprintf(buf + strlen(buf), "%-20s - [%5ld] %s^n (in %s)\r\n",
                       GET_CHAR_NAME(i),
                       GET_ROOM_VNUM(get_ch_in_room(d->character)),
                       GET_ROOM_NAME(get_ch_in_room(d->character)),
@@ -3843,13 +3896,13 @@ void perform_immort_where(struct char_data * ch, char *arg)
           
             else
               if (i->in_veh)
-                sprintf(buf + strlen(buf), "%-20s - [%5ld] %s (in %s)\r\n",
+                sprintf(buf + strlen(buf), "%-20s - [%5ld] %s^n (in %s)\r\n",
                         GET_CHAR_NAME(i),
                         GET_ROOM_VNUM(get_ch_in_room(i)),
                         GET_ROOM_NAME(get_ch_in_room(i)),
                         GET_VEH_NAME(i->in_veh));
               else
-                sprintf(buf + strlen(buf), "%-20s - [%5ld] %s\r\n",
+                sprintf(buf + strlen(buf), "%-20s - [%5ld] %s^n\r\n",
                         GET_CHAR_NAME(i),
                         GET_ROOM_VNUM(get_ch_in_room(i)),
                         GET_ROOM_NAME(get_ch_in_room(i)));
@@ -3863,12 +3916,12 @@ void perform_immort_where(struct char_data * ch, char *arg)
       if (CAN_SEE(ch, i) && (i->in_room || i->in_veh) &&
           isname(arg, GET_KEYWORDS(i))) {
         found = 1;
-        sprintf(buf + strlen(buf), "M%3d. %-25s - [%5ld] %s", ++num,
+        sprintf(buf + strlen(buf), "M%3d. %-25s - [%5ld] %s^n", ++num,
                 GET_NAME(i),
                 GET_ROOM_VNUM(get_ch_in_room(i)),
                 GET_ROOM_NAME(get_ch_in_room(i)));
         if (i->in_veh) {
-          sprintf(ENDOF(buf), " (in %s)\r\n", GET_VEH_NAME(i->in_veh));
+          sprintf(ENDOF(buf), " (in %s^n)\r\n", GET_VEH_NAME(i->in_veh));
         } else {
           strcat(buf, "\r\n");
         }

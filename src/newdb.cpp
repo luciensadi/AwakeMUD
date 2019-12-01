@@ -284,8 +284,6 @@ void do_start(struct char_data * ch)
 
   ch->char_specials.saved.left_handed = (!number(0, 9) ? 1 : 0);
 
-  advance_level(ch);
-
   GET_PHYSICAL(ch) = GET_MAX_PHYSICAL(ch);
   GET_MENTAL(ch) = GET_MAX_MENTAL(ch);
 
@@ -296,9 +294,21 @@ void do_start(struct char_data * ch)
 
   PLR_FLAGS(ch).SetBit(PLR_NEWBIE);
   PRF_FLAGS(ch).SetBits(PRF_AUTOEXIT, PRF_LONGEXITS, ENDBIT);
+  PRF_FLAGS(ch).RemoveBit(PRF_NOHASSLE);
   PLR_FLAGS(ch).SetBit(PLR_AUTH);
   ch->player.time.played = 0;
   ch->player.time.lastdisc = time(0);
+
+  // Clear all their skills except for English.
+  for (int i = SKILL_ATHLETICS; i < MAX_SKILLS; i++) {
+    if (i == SKILL_ENGLISH)
+      set_character_skill(ch, i, 8, FALSE);
+    else
+      set_character_skill(ch, i, 0, FALSE);
+  }
+  
+  // For morts, this just saves them and prints a message about their new level.
+  advance_level(ch);
 }
 
 /* Gain maximum in various points */
@@ -1860,7 +1870,9 @@ void DeleteChar(long idx)
   MYSQL_ROW row;
   if ((row = mysql_fetch_row(res))) {
     mysql_free_result(res);
-    sprintf(buf, "INSERT INTO pgroup_logs (idnum, message) VALUES (%ld, \"%s has left the group. (Reason: deletion)\")", atol(row[0]), get_player_name(idx));
+    char *cname = get_player_name(idx);
+    sprintf(buf, "INSERT INTO pgroup_logs (idnum, message) VALUES (%ld, \"%s has left the group. (Reason: deletion)\")", atol(row[0]), cname);
+    delete [] cname;
     mysql_wrapper(mysql, buf);
     sprintf(buf, "DELETE FROM pfiles_playergroups WHERE idnum=%ld", idx);
     mysql_wrapper(mysql, buf);

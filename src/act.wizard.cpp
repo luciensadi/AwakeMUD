@@ -205,9 +205,10 @@ ACMD(do_olcon)
   else
     olc_state = 0;
 
-  sprintf(buf, "OLC turned %s by %s.", ONOFF(olc_state),
-          GET_CHAR_NAME(ch));
+  sprintf(buf, "OLC turned %s by %s.", ONOFF(olc_state), GET_CHAR_NAME(ch));
   mudlog(buf, ch, LOG_WIZLOG, TRUE);
+  
+  send_to_char(ch, "You turn the global OLC system %s.\r\n", ONOFF(olc_state));
 }
 
 
@@ -1333,8 +1334,12 @@ void do_stat_mobile(struct char_data * ch, struct char_data * k)
     break;
   }
   send_to_char(ch, "%s ", pc_race_types[(int)GET_RACE(k)]);
-  sprintf(buf2, " %s '%s', In room [%5ld]\r\n", (!IS_MOB(k) ? "NPC" : "MOB"),
-          GET_NAME(k), k->in_room->number);
+  if (k->in_room)
+    sprintf(buf2, " %s '%s', In room [%5ld]\r\n", (!IS_MOB(k) ? "NPC" : "MOB"), GET_NAME(k), k->in_room->number);
+  else if (k->in_veh)
+    sprintf(buf2, " %s '%s', In veh [%s]\r\n", (!IS_MOB(k) ? "NPC" : "MOB"), GET_NAME(k), GET_VEH_NAME(k->in_veh));
+  else
+    sprintf(buf2, " %s '%s'\r\n", (!IS_MOB(k) ? "NPC" : "MOB"), GET_NAME(k));
   strcat(buf, buf2);
 
   sprintf(ENDOF(buf), "Alias: %s, VNum: [%5ld], RNum: [%5ld]\r\n", GET_KEYWORDS(k),
@@ -2126,6 +2131,12 @@ ACMD(do_award)
   }
   if (!(vict = get_char_vis(ch, arg))) {
     send_to_char(NOPERSON, ch);
+    return;
+  }
+  
+  if (GET_KARMA(vict) + k > MYSQL_UNSIGNED_MEDIUMINT_MAX) {
+    send_to_char(ch, "That would put %s over the karma maximum. You may award up to %d points of karma. Otherwise, tell %s to spend what %s has, or compensate %s some other way.\r\n",
+                 GET_CHAR_NAME(vict), MYSQL_UNSIGNED_MEDIUMINT_MAX - GET_KARMA(vict), HMHR(vict), HSSH(vict), HMHR(vict));
     return;
   }
 
@@ -3010,14 +3021,14 @@ ACMD(do_show)
                { "rent",           LVL_BUILDER },
                { "stats",          LVL_ADMIN },
                { "errors",         LVL_ADMIN },
-               { "death",          LVL_ADMIN },
+               { "deathrooms",     LVL_ADMIN },
                { "godrooms",       LVL_BUILDER },
                { "skills",         LVL_BUILDER },
                { "spells",         LVL_BUILDER },
                { "prompt",         LVL_ADMIN },
-               { "lodge",          LVL_ADMIN },
+               { "lodges",         LVL_ADMIN },
                { "library",        LVL_ADMIN },
-               { "jackpoint",      LVL_BUILDER },
+               { "jackpoints",     LVL_BUILDER },
                { "abilities",      LVL_BUILDER },
                { "aliases",        LVL_ADMIN },
                { "metamagic",      LVL_BUILDER },
@@ -3050,6 +3061,7 @@ ACMD(do_show)
     self = 1;
   buf[0] = '\0';
   switch (l) {
+      // Did someone seriously write a list with magic-number indexes and use that as a key for which command we're using? WTF -LS
   case 1:                     /* zone */
     /* tightened up by JE 4/6/93 */
     if (self) {
@@ -3252,7 +3264,7 @@ ACMD(do_show)
     strcpy(buf, "Jackpoints\r\n---------\r\n");
     for (i = 0, j = 0; i <= top_of_world; i++)
       if (world[i].matrix > 0)
-        sprintf(buf + strlen(buf), "%2d: [%5ld] %s (%ld/%ld)\r\n", ++j,
+        sprintf(buf + strlen(buf), "%2d: [%5ld] %s^n (%ld/%ld)\r\n", ++j,
                 world[i].number, world[i].name, world[i].matrix, world[i].rtg);
     send_to_char(buf, ch);
     break;
@@ -3765,7 +3777,7 @@ ACMD(do_set)
 
     break;
   case 25:
-    RANGE(0, 1000000);
+    RANGE(0, MYSQL_UNSIGNED_MEDIUMINT_MAX);
     //GET_KARMA(vict) = value;
     vict->points.karma = value;
     break;

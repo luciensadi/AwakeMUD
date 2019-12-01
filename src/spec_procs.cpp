@@ -328,7 +328,7 @@ SPECIAL(metamagic_teacher)
 {
   struct char_data *master = (struct char_data *) me;
   int i = 0, x = 0, suc, ind;
-  if (IS_NPC(ch) || !(CMD_IS("learn") || CMD_IS("practice") || CMD_IS("train")))
+  if (IS_NPC(ch) || !(CMD_IS("train")))
     return FALSE;
   
   if (GET_TRADITION(ch) == TRAD_MUNDANE) {
@@ -426,7 +426,7 @@ SPECIAL(nerp_skills_teacher) {
   can_teach_skill[SKILL_ARMED_COMBAT] = FALSE; // NPC-only skill
   can_teach_skill[SKILL_UNUSED_WAS_PILOT_FIXED_WING] = FALSE; // what it says on the tin
   
-  if (IS_NPC(ch) || !(CMD_IS("learn") || CMD_IS("practice") || CMD_IS("train")))
+  if (IS_NPC(ch) || !CMD_IS("practice"))
     return FALSE;
   
   if (!CAN_SEE(master, ch)) {
@@ -561,7 +561,7 @@ SPECIAL(teacher)
   struct char_data *master = (struct char_data *) me;
   int i, ind, max, skill_num;
 
-  if (IS_NPC(ch) || !(CMD_IS("learn") || CMD_IS("practice") || CMD_IS("train")))
+  if (IS_NPC(ch) || !(CMD_IS("practice")))
     return FALSE;
   
   if (!CAN_SEE(master, ch)) {
@@ -866,7 +866,7 @@ SPECIAL(trainer)
   struct char_data *trainer = (struct char_data *) me;
   int ind;
 
-  if (!(CMD_IS("learn") || CMD_IS("practice") || CMD_IS("train")) || IS_NPC(ch) || !CAN_SEE(trainer, ch) || FIGHTING(ch) ||
+  if (!(CMD_IS("train")) || IS_NPC(ch) || !CAN_SEE(trainer, ch) || FIGHTING(ch) ||
       GET_POS(ch) < POS_STANDING)
     return FALSE;
 
@@ -940,7 +940,7 @@ SPECIAL(spell_trainer)
 {
   struct char_data *trainer = (struct char_data *) me;
   int i, force;
-  if (!(CMD_IS("learn") || CMD_IS("practice") || CMD_IS("train")) || IS_NPC(ch) || !CAN_SEE(trainer, ch) || FIGHTING(ch) ||
+  if (!CMD_IS("learn") || IS_NPC(ch) || !CAN_SEE(trainer, ch) || FIGHTING(ch) ||
       GET_POS(ch) < POS_STANDING)
     return FALSE;
   if (GET_TRADITION(ch) != TRAD_SHAMANIC && GET_TRADITION(ch) != TRAD_HERMETIC) {
@@ -1096,7 +1096,7 @@ SPECIAL(adept_trainer)
   struct char_data *trainer = (struct char_data *) me;
   int ind, power, i;
 
-  if (!(CMD_IS("learn") || CMD_IS("practice") || CMD_IS("train")) || IS_NPC(ch) || !CAN_SEE(trainer, ch) || FIGHTING(ch) ||
+  if (!(CMD_IS("train")) || IS_NPC(ch) || !CAN_SEE(trainer, ch) || FIGHTING(ch) ||
       GET_POS(ch) < POS_STANDING)
     return FALSE;
 
@@ -2829,7 +2829,9 @@ SPECIAL(bank)
           return TRUE;
         }
       wire_nuyen(ch, vict, amount, isfile);
-      send_to_char(ch, "You wire %d nuyen to %s's account.\r\n", amount, vict ? GET_CHAR_NAME(vict) : get_player_name(isfile));
+      char *cname = get_player_name(isfile);
+      send_to_char(ch, "You wire %d nuyen to %s's account.\r\n", amount, vict ? GET_CHAR_NAME(vict) : cname);
+      delete [] cname;
     }
     return TRUE;
   }
@@ -3535,9 +3537,80 @@ SPECIAL(matchsticks)
   return FALSE;
 }
 
+SPECIAL(johnson);
+
+SPECIAL(quest_debug_scanner)
+{
+  struct obj_data *obj = (struct obj_data *) me;
+  struct char_data *to = NULL;
+
+  // Check to make sure I'm being carried by my user.
+  if (obj->carried_by != ch)
+    return FALSE;
+  
+  // Reject mortals, violently.
+  if (GET_LEVEL(ch) <= 1) {
+    send_to_char(ch, "%s arcs violently in your hands!\r\n");
+    damage(ch, ch, 100, TYPE_TASER, TRUE);
+    return TRUE;
+  }
+  
+  // Diagnostic command.
+  if (CMD_IS("diagnose")) {
+    skip_spaces(&argument);
+    if (!*argument) {
+      send_to_char(ch, "Quest-debug who?\r\n");
+      return TRUE;
+    }
+    
+    if (ch->in_veh)
+      to = get_char_veh(ch, argument, ch->in_veh);
+    else
+      to = get_char_room_vis(ch, argument);
+    
+    if (!to) {
+      send_to_char(ch, "You don't see any '%s' that you can quest-debug here.\r\n", argument);
+      return TRUE;
+    }
+    
+    if (IS_NPC(to)) {
+      if (!(mob_index[GET_MOB_RNUM(to)].func == johnson || mob_index[GET_MOB_RNUM(to)].sfunc == johnson)) {
+        send_to_char(ch, "That NPC doesn't have any quest-related information available.\r\n");
+        return TRUE;
+      }
+      
+      sprintf(buf, "NPC %s's quest-related information:\r\n", GET_CHAR_NAME(to));
+      sprintf(ENDOF(buf), "SPARE1: %ld, SPARE2: %ld (corresponds to quest vnum %ld)\r\n",
+              GET_SPARE1(to), GET_SPARE2(to), GET_SPARE2(to) ? quest_table[GET_SPARE2(to)].vnum : -1);
+      strcat(buf, "NPC's memory records hold the following character IDs: \r\n");
+      for (memory_rec *tmp = MEMORY(to); tmp; tmp = tmp->next)
+        sprintf(ENDOF(buf), " %ld\r\n", tmp->id);
+      send_to_char(buf, ch);
+      return TRUE;
+    }
+    
+    sprintf(buf, "Player %s's quest-related information:\r\n", GET_CHAR_NAME(to));
+    if (GET_QUEST(to)) {
+      sprintf(ENDOF(buf), "Current quest: %ld (given by %s [%ld])\r\n",
+              quest_table[GET_QUEST(to)].vnum, mob_proto[real_mobile(quest_table[GET_QUEST(to)].johnson)].player.physical_text.name, quest_table[GET_QUEST(to)].johnson);
+    } else {
+      strcat(buf, "Not currently on a quest.\r\n");
+    }
+    
+    send_to_char(buf, ch);
+    return TRUE;
+  }
+  return FALSE;
+}
+
 SPECIAL(portable_gridguide)
 {
   struct obj_data *obj = (struct obj_data *) me;
+  
+  // Check to make sure I'm being carried by my user.
+  if (obj->carried_by != ch)
+    return FALSE;
+  
   if (CMD_IS("gridguide") && !ch->in_veh) {
     if (!(ROOM_FLAGGED(ch->in_room, ROOM_ROAD) || ROOM_FLAGGED(ch->in_room, ROOM_GARAGE)) ||
         ROOM_FLAGGED(ch->in_room, ROOM_NOGRID))
@@ -4079,6 +4152,11 @@ SPECIAL(chargen_skill_annex)
   if (CMD_IS("practice")) {
     send_to_char("You can't do that here. Try visiting one of the teachers in the surrounding areas."
                  " You can always view the skills you've learned so far by typing ^WSKILLS^n.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (CMD_IS("train") || CMD_IS("untrain")) {
+    send_to_char("You can't do that here. You can visit Neil to the north to train your abilities.\r\n", ch);
     return TRUE;
   }
   

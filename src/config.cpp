@@ -29,6 +29,8 @@ int max_bad_pws = 3;
 int nameserver_is_slow = FALSE;
 int ELEVATOR_SHAFT_FALL_RATING = 6;
 
+bool DISPLAY_HELPFUL_STRINGS_FOR_MOB_FUNCS = TRUE;
+
 const char *MENU =
   "\r\n"
   "^YWelcome ^Cto ^BAwakened Worlds^n!\r\n"

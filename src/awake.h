@@ -2029,7 +2029,7 @@ enum {
 #define RM_NEWBIE_LOBBY             60563
 #define RM_ENTRANCE_TO_DANTES       35500
 #define RM_DANTES_GARAGE            35693
-#define RM_DANTES_GARAGE_RANDOM     35693 + number(0,4)
+#define RM_DANTES_GARAGE_RANDOM     (35693 + number(0,4))
 #define RM_DANTES_DESCENT           35502
 #define RM_SEATTLE_DOCWAGON         RM_ENTRANCE_TO_DANTES
 #define RM_PORTLAND_DOCWAGON        RM_ENTRANCE_TO_DANTES
@@ -2160,5 +2160,16 @@ struct ban_list_element
 #ifdef USE_DEBUG_CANARIES
 #define CANARY_VALUE 31337
 #endif
+
+// MySQL constraints.
+#define MYSQL_SIGNED_TINYINT_MAX     127
+#define MYSQL_UNSIGNED_TINYINT_MAX   255
+#define MYSQL_SIGNED_SMALLINT_MAX    32767
+#define MYSQL_UNSIGNED_SMALLINT_MAX  65535
+#define MYSQL_SIGNED_MEDIUMINT_MAX   8388607
+#define MYSQL_UNSIGNED_MEDIUMINT_MAX 16777215
+#define MYSQL_SIGNED_INT_MAX         2147483647
+#define MYSQL_UNSIGNED_INT_MAX       4294967295
+// Bigint takes 2^63-1 signed, 2^64-1 unsigned. You probably don't need to care about it.
 
 #endif

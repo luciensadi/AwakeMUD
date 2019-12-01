@@ -806,6 +806,7 @@ ACMD(do_progress)
     send_to_char(ch, "You are about %d%% of the way through designing %s.\r\n", 
                  (int)(((float)(GET_OBJ_TIMER(GET_BUILDING(ch)) - GET_OBJ_VAL(GET_BUILDING(ch), 4)) / (GET_OBJ_TIMER(GET_BUILDING(ch)) != 0 ? GET_OBJ_TIMER(GET_BUILDING(ch)) : 1) * 100)), GET_OBJ_NAME(GET_BUILDING(ch)));
   } else if (AFF_FLAGS(ch).IsSet(AFF_CONJURE)) {
+    send_to_char(ch, "You are about %d%% of the way through the conjuring process.\r\n", (int) ((float) (ch->char_specials.conjure[2] / ch->char_specials.conjure[3]) * 100));
   } else if (AFF_FLAGS(ch).IsSet(AFF_SPELLDESIGN)) {
     int timeleft = GET_OBJ_VAL(ch->char_specials.programming, 6);
     if (GET_OBJ_TIMER(ch->char_specials.programming) == -3)

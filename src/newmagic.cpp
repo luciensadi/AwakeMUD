@@ -1671,7 +1671,11 @@ void circle_build(struct char_data *ch, char *type, int force)
   GET_OBJ_VAL(obj, 1) = force;
   GET_OBJ_VAL(obj, 2) = element;
   GET_OBJ_VAL(obj, 3) = GET_IDNUM(ch);
-  GET_OBJ_VAL(obj, 9) = force * 60;
+  if (GET_LEVEL(ch) > 1) {
+    send_to_char("You use your staff powers to greatly accelerate the artistic process.\r\n", ch);
+    GET_OBJ_VAL(obj, 9) = 1;
+  } else
+    GET_OBJ_VAL(obj, 9) = force * 60;
   AFF_FLAGS(ch).SetBit(AFF_CIRCLE);
   GET_BUILDING(ch) = obj;
   obj_to_room(obj, ch->in_room);
@@ -1706,7 +1710,11 @@ void lodge_build(struct char_data *ch, int force)
   GET_OBJ_VAL(obj, 1) = force;
   GET_OBJ_VAL(obj, 2) = GET_TOTEM(ch);
   GET_OBJ_VAL(obj, 3) = GET_IDNUM(ch);
-  GET_OBJ_VAL(obj, 9) = force * 60 * 5;
+  if (GET_LEVEL(ch) > 1) {
+    send_to_char("You use your staff powers to greatly accelerate the construction process.\r\n", ch);
+    GET_OBJ_VAL(obj, 9) = 1;
+  } else
+    GET_OBJ_VAL(obj, 9) = force * 60 * 5;
   AFF_FLAGS(ch).SetBit(AFF_LODGE);
   GET_BUILDING(ch) = obj;
   obj_to_room(obj, ch->in_room);
@@ -2317,13 +2325,19 @@ ACMD(do_conjure)
           break;
       }
     if (!obj) {
-      send_to_char("You need conjuring materials to conjure an elemental.\r\n", ch);
+      send_to_char("You need to be carrying conjuring materials to conjure an elemental.\r\n", ch);
       return;
     }
     AFF_FLAGS(ch).SetBit(AFF_CONJURE);
     ch->char_specials.conjure[0] = spirit;
     ch->char_specials.conjure[1] = force;
-    ch->char_specials.conjure[2] = force * 30;
+    if (GET_LEVEL(ch) > 1) {
+      send_to_char(ch, "You use your staff powers to greatly accelerate the conjuring process.\r\n");
+      ch->char_specials.conjure[2] = 1;
+    } else
+      ch->char_specials.conjure[2] = force * 30;
+    // Max tracking for PROGRESS command.
+    ch->char_specials.conjure[3] = ch->char_specials.conjure[2];
     ch->char_specials.programming = obj;
     send_to_char(ch, "You begin to conjure a %s elemental.\r\n", elements[spirit].name);
   } else {

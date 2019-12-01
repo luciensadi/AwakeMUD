@@ -93,7 +93,7 @@ void write_host_to_disk(int vnum)
 void hedit_disp_data_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  send_to_char(CH, "^WHost: ^c%d^n\r\n", HOST->vnum);
+  send_to_char(CH, "^WHost: ^c%d^n\r\n", d->edit_number);
   send_to_char(CH, "^G1^Y) ^WHost: ^c%s^n\r\n", HOST->name);
   if (real_host(HOST->parent) > 0)
     send_to_char(CH, "^G2^Y) ^WParent Host: ^c%s(%ld)^n\r\n", matrix[real_host(HOST->parent)].name, HOST->parent);
@@ -655,7 +655,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     break;
   case HEDIT_TRIGGER_ADD3:
     number = atoi(arg);
-    if (real_ic(number) < 0)
+    if (number != 0 && real_ic(number) < 0)
       send_to_char(CH, "Invalid choice!\r\nLoad IC (0 for none): ");
     else {
       HOST->trigger->ic = number;

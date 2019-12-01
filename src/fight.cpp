@@ -121,6 +121,8 @@ void appear(struct char_data * ch)
                            AFF_INVISIBLE,
                            AFF_HIDE, ENDBIT);
   
+  // TODO: Go through all sustained spells in the game and remove those that are causing this character to be invisible.
+  
   if (!IS_SENATOR(ch))
     act("$n slowly fades into existence.", FALSE, ch, 0, 0, TO_ROOM);
   else
@@ -5291,7 +5293,9 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
   veh->damage += damage_total;
   if (veh->owner && !IS_NPC(ch))
   {
-    sprintf(buf, "%s attacked vehicle (%s) owned by player %s (%ld).", GET_CHAR_NAME(ch), GET_VEH_NAME(veh), get_player_name(veh->owner), veh->owner);
+    char *cname = get_player_name(veh->owner);
+    sprintf(buf, "%s attacked vehicle (%s) owned by player %s (%ld).", GET_CHAR_NAME(ch), GET_VEH_NAME(veh), cname, veh->owner);
+    delete [] cname;
     mudlog(buf, ch, LOG_WRECKLOG, TRUE);
   }
   chkdmg(veh);

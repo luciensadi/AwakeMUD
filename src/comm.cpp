@@ -541,6 +541,11 @@ int get_max_players(void)
   return max_descs;
 }
 
+void alarm_handler(int signal) {
+  log("alarm_handler: Alarm signal has been triggered. Killing the MUD to break out of a suspected infinite loop.\r\n");
+  raise(SIGSEGV);
+}
+
 /*
  * game_loop contains the main loop which drives the entire MUD.  It
  * cycles once every 0.10 seconds and is responsible for accepting new
@@ -569,20 +574,33 @@ void game_loop(int mother_desc)
   gettimeofday(&last_time, (struct timezone *) 0);
   PERF_prof_reset();
   
+  // Register our alarm handler.
+  signal(SIGALRM, alarm_handler);
+  
   /* The Main Loop.  The Big Cheese.  The Top Dog.  The Head Honcho.  The.. */
   while (!circle_shutdown) {
     
+    /* Reset the timer on our alarm. If this amount of time in seconds elapses without this being called again, invoke alarm_handler() and die. */
+    alarm(10);
+    
     /* Sleep if we don't have any connections */
     if (descriptor_list == NULL) {
+      // Clear our alarm handler.
+      signal(SIGALRM, SIG_IGN);
+      
       FD_ZERO(&input_set);
       FD_SET(mother_desc, &input_set);
       if ((select(mother_desc + 1, &input_set, (fd_set *) 0, (fd_set *) 0, NULL) < 0)) {
-        if (errno == EINTR)
-          log("Waking up to process signal.");
-        else
+        if (errno == EINTR) {
+          // Suppressed this log since we get woken up regularly by alarm while idle.
+          // log("Waking up to process signal.");
+        } else
           perror("Select coma");
       } // else log("New connection.  Waking up.");
       gettimeofday(&last_time, (struct timezone *) 0);
+      
+      // Re-register our alarm handler.
+      signal(SIGALRM, alarm_handler);
     }
 
     /* Set up the input, output, and exception sets for select(). */
@@ -641,6 +659,9 @@ void game_loop(int mother_desc)
           perror("Select sleep");
           exit(1);
         }
+      
+      // Reset our alarm timer.
+      alarm(10);
     } while (errno);
 #endif
     

@@ -791,4 +791,28 @@ Material:	metal
 	Location:	Target Numbers
 	Modifier:	10
 BREAK
+#10033
+Keywords:	quest diagnostic scanner
+Name:	a quest diagnostic scanner
+RoomDesc:$
+A staff member's Quest Diagnostic Scanner has been left here. Don't touch it if you're not a staff member.~
+LookDesc:$
+You must HOLD this device for it to work. While holding it, you may DIAGNOSE
+<player> to examine their quest-related information. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
 END

@@ -236,10 +236,10 @@ void close_taxi_door(struct room_data *room, int dir, struct room_data *taxi)
 
 void taxi_leaves(void)
 {
-  int i, j, found = 0;
+  int found = 0;
   struct room_data *to = NULL;
   struct char_data *temp;
-  for (j = real_room(FIRST_CAB); j <= real_room(LAST_PORTCAB); j++) {
+  for (int j = real_room(FIRST_CAB); j <= real_room(LAST_PORTCAB); j++) {
     found = 0;
     for (temp = world[j].people; temp; temp = temp->next_in_room)
       if (!(GET_MOB_SPEC(temp) && GET_MOB_SPEC(temp) == taxi)) {
@@ -248,7 +248,7 @@ void taxi_leaves(void)
       }
     if (found)
       continue;
-    for (i = NORTH; i < UP; i++)
+    for (int i = NORTH; i < UP; i++)
       if (world[j].dir_option[i]) {
         to = world[j].dir_option[i]->to_room;
         close_taxi_door(to, rev_dir[i], &world[j]);
@@ -276,11 +276,11 @@ void taxi_leaves(void)
 ACMD(do_hail)
 {
   struct char_data *temp;
-  int cab, dir, first, last;
+  int cab, first, last;
   bool found = FALSE, empty = FALSE, portland = FALSE;
   SPECIAL(taxi);
 
-  for (dir = NORTH; dir < UP; dir++)
+  for (int dir = NORTH; dir < UP; dir++)
     if (!ch->in_room->dir_option[dir])
       empty = TRUE;
 
@@ -340,7 +340,8 @@ ACMD(do_hail)
     }
   }
 
-  if (AFF_FLAGS(ch).AreAnySet(AFF_SPELLINVIS, AFF_INVISIBLE, AFF_SPELLIMPINVIS, AFF_IMP_INVIS, ENDBIT))  {
+  if (AFF_FLAGS(ch).AreAnySet(AFF_SPELLINVIS, AFF_INVISIBLE, AFF_SPELLIMPINVIS, AFF_IMP_INVIS, ENDBIT)
+      || GET_INVIS_LEV(ch) > 0)  {
     send_to_char("A cab almost stops, but guns it at the last second, splashing you...\n\r",ch);
     return;
   }
@@ -355,7 +356,7 @@ ACMD(do_hail)
         break;
     if (!temp) {
       found = TRUE;
-      for (dir = NORTH; dir < UP; dir++)
+      for (int dir = NORTH; dir < UP; dir++)
         if (world[cab].dir_option[dir])
           found = FALSE;
       if (found)
@@ -368,7 +369,7 @@ ACMD(do_hail)
     return;
   }
 
-  for (dir = number(NORTH, UP - 1);; dir = number(NORTH, UP - 1))
+  for (int dir = number(NORTH, UP - 1);; dir = number(NORTH, UP - 1))
     if (!ch->in_room->dir_option[dir]) {
       open_taxi_door(ch->in_room, dir, &world[cab]);
       if (portland)
@@ -395,23 +396,32 @@ SPECIAL(taxi)
 
   struct char_data *temp = NULL, *driver = (struct char_data *) me;
   struct room_data *temp_room = NULL;
-  int comm = CMD_TAXI_NONE, i = 0, j;
+  int comm = CMD_TAXI_NONE;
   char say[MAX_STRING_LENGTH];
   vnum_t dest = 0;
   bool portland = FALSE;
   
+  // Portland taxi has a special set of messages, directions, etc.
   if (GET_MOB_VNUM(driver) == 650)
     portland = TRUE;
+  
+  // Evaluate the taxi driver's reactions.
   if (!cmd) {
+    // Iterate through the cab's contents, looking for anyone that the driver recognizes.
     for (temp = driver->in_room->people; temp; temp = temp->next_in_room)
       if (temp != driver && memory(driver, temp))
         break;
+    
+    // If nobody was found, clear out the driver's memory structure and wait for a command.
     if (!temp) {
       GET_SPARE1(driver) = 0;
       GET_SPARE2(driver) = 0;
       GET_ACTIVE(driver) = ACT_AWAIT_CMD;
-    } else
-      switch (GET_ACTIVE(driver)) {
+      return FALSE;
+    }
+    
+    // Otherwise, process the incoming command.
+    switch (GET_ACTIVE(driver)) {
       case ACT_REPLY_DEST:
         if (portland)
           sprintf(say, "%s?  Sure, that will be %d nuyen.",
@@ -449,7 +459,7 @@ SPECIAL(taxi)
           GET_SPARE1(driver)--;
         else {
           int x[] = { 0, 0, 0, 0, 0, 0, 0, 0 }, y = 0;
-          for (j = number(NORTH, NORTHWEST);; j = number(NORTH, NORTHWEST)) {
+          for (int j = number(NORTH, NORTHWEST);; j = number(NORTH, NORTHWEST)) {
             if (!x[j]) {
               x[j] = 1;
               y++;
@@ -478,10 +488,13 @@ SPECIAL(taxi)
           }
         }
         break;
-      }
+    }
+    
+    // Bail out after processing the command.
     return FALSE;
   }
 
+  // If someone's bailing out of the cab, forget them.
   if (!IS_NPC(ch) && memory(driver, ch) && (CMD_IS("north") ||
       CMD_IS("east") || CMD_IS("west") || CMD_IS("south") || CMD_IS("ne") ||
       CMD_IS("se") || CMD_IS("sw") || CMD_IS("nw") || CMD_IS("northeast") ||
@@ -490,7 +503,8 @@ SPECIAL(taxi)
     return FALSE;
   }
 
-  if (!CAN_SEE(driver, ch) || IS_NPC(ch) ||
+  // If you're an NPC, or if the driver's not listening in the first place-- bail.
+  if (IS_NPC(ch) ||
       (GET_ACTIVE(driver) != ACT_AWAIT_CMD &&
        GET_ACTIVE(driver) != ACT_AWAIT_YESNO))
     return FALSE;
@@ -511,17 +525,18 @@ SPECIAL(taxi)
           break;
         }
     if (!found) {
-      if (str_str(argument, "yes") || str_str(argument, "sure") ||
-          str_str(argument, "yea") || str_str(argument, "okay"))
+      if (str_str(argument, "yes") || str_str(argument, "sure") || str_str(argument, "alright") ||
+          str_str(argument, "yeah") || str_str(argument, "okay") || str_str(argument, "yup")) {
         comm = CMD_TAXI_YES;
-      else if (strstr(argument, "no"))
+      } else if (strstr(argument, "no") || str_str(argument, "nah")) {
         comm = CMD_TAXI_NO;
+      }
     }
     do_say(ch, argument, 0, 0);
-  } else if (CMD_IS("nod")) {
+  } else if (CMD_IS("nod") || CMD_IS("agree")) {
     comm = CMD_TAXI_YES;
     do_action(ch, argument, cmd, 0);
-  } else if (CMD_IS("shake") && !*argument) {
+  } else if ((CMD_IS("shake") || CMD_IS("disagree")) && !*argument) {
     comm = CMD_TAXI_NO;
     do_action(ch, argument, cmd, 0);
   } else
@@ -545,7 +560,7 @@ SPECIAL(taxi)
         temp_room = NULL;
         break;
       }
-      temp_room = world[i].dir_option[x]->to_room;
+      temp_room = temp_room->dir_option[x]->to_room;
       dist++;
     }
     if (!temp_room)
