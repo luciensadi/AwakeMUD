@@ -600,7 +600,7 @@ void handle_info(struct char_data *johnson)
   int allowed, pos, num, i, j;
   char speech[210];
 
-  allowed = 210 - strlen(GET_NAME(johnson));
+  allowed = (210 - strlen(GET_NAME(johnson))) - 3; // for ellipses
   pos = GET_SPARE1(johnson);
   num = GET_SPARE2(johnson);
   i = strlen(quest_table[num].info);
@@ -608,6 +608,7 @@ void handle_info(struct char_data *johnson)
   if (allowed < 10)
     allowed += 79;
 
+  bool will_add_ellipses = TRUE;
   if ((pos + allowed) < i)
   {
     for (i = pos + allowed; i > pos; i--)
@@ -621,6 +622,7 @@ void handle_info(struct char_data *johnson)
     if (!number(0, 9))
       new_quest(johnson);
     GET_SPARE1(johnson) = -1;
+    will_add_ellipses = FALSE;
   }
 
   for (j = 0; pos < i; pos++)
@@ -633,6 +635,10 @@ void handle_info(struct char_data *johnson)
       speech[j] = *(quest_table[num].info + pos);
     j++;
   }
+  
+  if (will_add_ellipses)
+    for (int ellipses = 0; ellipses < 3; ellipses++)
+      speech[j++] = '.';
 
   speech[j] = '\0';
 
