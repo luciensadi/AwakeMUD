@@ -18,3 +18,4 @@ Paragorn (Jun 12) [70511] Add trap spec-procs and ability to detect and disarm t
 Lucien   (Jul  6) [60507] Update HELP POLE ARMS to indicate that it's used when using a bayonet. Update HELP CLUBS to indicate that it's used when defending against melee attacks with a gun. Add HELP BAYONET to explain that it turns a gun into a pole arm for melee purposes when attached.
 Lucien   (Jul  6) [60627] Add info to HELP AMMO about gunsmithing / making more ammo.
 Lucien   (Jul  6) [60627] prevent restringing of weapon attachments and vehicle upgrades
+Lucien   (Nov 30) [10000] instead of punishing people with KILLER flag for hitting player vehicle, just don't let them hit it
