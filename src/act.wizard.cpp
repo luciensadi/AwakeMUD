@@ -2133,6 +2133,12 @@ ACMD(do_award)
     send_to_char(NOPERSON, ch);
     return;
   }
+  
+  if (GET_KARMA(vict) + k > MYSQL_UNSIGNED_MEDIUMINT_MAX) {
+    send_to_char(ch, "That would put %s over the karma maximum. You may award up to %d points of karma. Otherwise, tell %s to spend what %s has, or compensate %s some other way.\r\n",
+                 GET_CHAR_NAME(vict), MYSQL_UNSIGNED_MEDIUMINT_MAX - GET_KARMA(vict), HMHR(vict), HSSH(vict), HMHR(vict));
+    return;
+  }
 
   if (vict->desc && vict->desc->original)
     gain_exp_regardless(vict->desc->original, k);
@@ -3771,7 +3777,7 @@ ACMD(do_set)
 
     break;
   case 25:
-    RANGE(0, 1000000);
+    RANGE(0, MYSQL_UNSIGNED_MEDIUMINT_MAX);
     //GET_KARMA(vict) = value;
     vict->points.karma = value;
     break;

@@ -476,8 +476,10 @@ bool rep_too_low(struct char_data *ch, int num)
 
 void reward(struct char_data *ch, struct char_data *johnson)
 {
-  if (from_ip_zone(quest_table[GET_QUEST(ch)].vnum))
+  if (from_ip_zone(quest_table[GET_QUEST(ch)].vnum)) {
+    send_to_char(ch, "Quest reward suppressed due to this zone not being marked as connected to the game world.\r\n");
     return;
+  }
 
   struct follow_type *f;
   struct obj_data *obj;

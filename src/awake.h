@@ -2162,4 +2162,15 @@ struct ban_list_element
 #define CANARY_VALUE 31337
 #endif
 
+// MySQL constraints.
+#define MYSQL_SIGNED_TINYINT_MAX     127
+#define MYSQL_UNSIGNED_TINYINT_MAX   255
+#define MYSQL_SIGNED_SMALLINT_MAX    32767
+#define MYSQL_UNSIGNED_SMALLINT_MAX  65535
+#define MYSQL_SIGNED_MEDIUMINT_MAX   8388607
+#define MYSQL_UNSIGNED_MEDIUMINT_MAX 16777215
+#define MYSQL_SIGNED_INT_MAX         2147483647
+#define MYSQL_UNSIGNED_INT_MAX       4294967295
+// Bigint takes 2^63-1 signed, 2^64-1 unsigned. You probably don't need to care about it.
+
 #endif
