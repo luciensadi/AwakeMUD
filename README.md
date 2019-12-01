@@ -8,13 +8,13 @@ A fork of the [Awakened Worlds](http://awakenedworlds.net) MUD codebase. Issues 
 ## Features
 - 62k+ lines of additions including new areas, new features, and massive quality-of-life improvements
 - Screenreader accessibility via TOGGLE SCREENREADER
-- Enhanced security that fixes several serious exploits
+- Enhanced security that fixes many serious exploits
 - Significantly increased performance
 - A slew of bugfixes to everything from combat code to sound propagation
 
 ## OS Support
 Tested on:
-- OSX 10.14 (actively); 10.13 and 10.12 believed to work but not actively tested
+- OSX 10.15 (actively); 10.12 through 10.14 believed to work but not actively tested
 - Ubuntu 18 LTS (actively); 16 and 14 same as above
 - Amazon Linux
 - Raspbian Jessie (no longer actively tested)
