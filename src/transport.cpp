@@ -119,6 +119,9 @@ struct dest_data taxi_destinations[] =
     // { "beacon", "Beacon Mall Everett", 39253 },
     // { "touristville", "Touristville", 25313 },
     // { "skeleton", "The Skeleton", 25308 },
+#ifdef USE_PRIVATE_CE_WORLD
+    { "planetary", "Planetary Corporation", 72503, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE },
+#endif
     { "\n", "", 0, 0, 0 } // this MUST be last
   };
 
@@ -253,7 +256,7 @@ SPECIAL(taxi_sign) {
     // Scan the list once to see if we have any of this dest type in the system.
     bool has_this_dest_type = FALSE;
     for (int dest_index = 0; *dest_data_list[dest_index].keyword != '\n'; dest_index++) {
-      if (dest_data_list[dest_index].type == taxi_dest_type) {
+      if (dest_data_list[dest_index].enabled && dest_data_list[dest_index].type == taxi_dest_type) {
         has_this_dest_type = TRUE;
         break;
       }
@@ -269,7 +272,7 @@ SPECIAL(taxi_sign) {
     
     // Iterate through and populate the dest list with what we've got available.
     for (unsigned int dest_index = 0; *dest_data_list[dest_index].keyword != '\n'; dest_index++) {
-      if (dest_data_list[dest_index].type == taxi_dest_type) {
+      if (dest_data_list[dest_index].enabled && dest_data_list[dest_index].type == taxi_dest_type) {
         sprintf(ENDOF(buf), "%-30s - %s%s^n\r\n",
                 dest_data_list[dest_index].str,
                 taxi_dest_type_info[taxi_dest_type].entry_color_string,
