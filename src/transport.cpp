@@ -290,7 +290,7 @@ SPECIAL(taxi_sign) {
 // utility funcs
 // ______________________________
 
-void open_taxi_door(struct room_data *room, int dir, struct room_data *taxi)
+void open_taxi_door(struct room_data *room, int dir, struct room_data *taxi, sbyte rating=0)
 {
   room->dir_option[dir] = new room_direction_data;
   memset((char *) room->dir_option[dir], 0,
@@ -309,6 +309,9 @@ void open_taxi_door(struct room_data *room, int dir, struct room_data *taxi)
   taxi->dir_option[dir]->barrier = 8;
   taxi->dir_option[dir]->condition = 8;
   taxi->dir_option[dir]->material = 8;
+  
+  // Optionally set the taxi's room rating so it waits a few ticks before trying to drive off again.
+  taxi->rating = rating;
 }
 
 void close_taxi_door(struct room_data *room, int dir, struct room_data *taxi)
@@ -332,18 +335,25 @@ void close_taxi_door(struct room_data *room, int dir, struct room_data *taxi)
 
 void taxi_leaves(void)
 {
-  int found = 0;
+  bool taxi_cant_leave = FALSE;
   struct room_data *to = NULL;
   struct char_data *temp;
   for (int j = real_room(FIRST_CAB); j <= real_room(LAST_PORTCAB); j++) {
-    found = 0;
+    // Skip taxis that are occupied or still have a rating cooldown.
+    taxi_cant_leave = FALSE;
     for (temp = world[j].people; temp; temp = temp->next_in_room)
       if (!(GET_MOB_SPEC(temp) && GET_MOB_SPEC(temp) == taxi)) {
-        found = 1;
+        taxi_cant_leave = TRUE;
         break;
       }
-    if (found)
+    // Decrement taxis with a wait-rating, then skip them.
+    if (world[j].rating > 0) {
+      world[j].rating--;
       continue;
+    }
+    if (taxi_cant_leave)
+      continue;
+    
     for (int i = NORTH; i < UP; i++)
       if (world[j].dir_option[i]) {
         to = world[j].dir_option[i]->to_room;
@@ -445,13 +455,14 @@ ACMD(do_hail)
   first = real_room(portland ? FIRST_PORTCAB : FIRST_CAB);
   last = real_room(portland ? LAST_PORTCAB : LAST_CAB);
 
-  for (int tries = 0; tries < 10; tries++) {
-    cab = number(first, last);
+  for (cab = first; cab <= last; cab++) {
+    // Skip in-use cabs.
     for (temp = world[cab].people; temp; temp = temp->next_in_room)
       if (!(GET_MOB_SPEC(temp) && GET_MOB_SPEC(temp) == taxi))
         break;
     if (!temp) {
       found = TRUE;
+      // Skip cabs that are already open and waiting at the curb.
       for (int dir = NORTH; dir < UP; dir++)
         if (world[cab].dir_option[dir])
           found = FALSE;
@@ -467,7 +478,7 @@ ACMD(do_hail)
 
   for (int dir = number(NORTH, UP - 1);; dir = number(NORTH, UP - 1))
     if (!ch->in_room->dir_option[dir]) {
-      open_taxi_door(ch->in_room, dir, &world[cab]);
+      open_taxi_door(ch->in_room, dir, &world[cab], 1);
       if (portland)
       sprintf(buf, "A nice looking red and white cab pulls up smoothly to the curb, "
               "and its door opens to the %s.", fulldirs[dir]);
