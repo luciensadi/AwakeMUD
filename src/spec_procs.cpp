@@ -2829,7 +2829,9 @@ SPECIAL(bank)
           return TRUE;
         }
       wire_nuyen(ch, vict, amount, isfile);
-      send_to_char(ch, "You wire %d nuyen to %s's account.\r\n", amount, vict ? GET_CHAR_NAME(vict) : get_player_name(isfile));
+      char *cname = get_player_name(isfile);
+      send_to_char(ch, "You wire %d nuyen to %s's account.\r\n", amount, vict ? GET_CHAR_NAME(vict) : cname);
+      delete [] cname;
     }
     return TRUE;
   }

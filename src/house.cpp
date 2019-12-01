@@ -660,7 +660,7 @@ void hcontrol_list_houses(struct char_data *ch)
     for (struct house_control_rec *house = llord->rooms; house; house = house->next)
       if (house->owner)
       {
-        own_name = str_dup(get_player_name(house->owner));
+        own_name = get_player_name(house->owner);
         if (!own_name)
           own_name = str_dup("<UNDEF>");
         sprintf(buf, "%7ld %7ld    0     %-12s\r\n",
@@ -865,9 +865,12 @@ void House_list_guests(struct char_data *ch, struct house_control_rec *i, int qu
   int x = 0;
   for (j = 0; j < MAX_GUESTS; j++)
   {
+    if (i->guests[j] == 0)
+      continue;
+    
     const char *temp = get_player_name(i->guests[j]);
 
-    if (!temp || i->guests[j] == 0)
+    if (!temp)
       continue;
 
     sprintf(buf2, "%s, ", temp);

@@ -1870,7 +1870,9 @@ void DeleteChar(long idx)
   MYSQL_ROW row;
   if ((row = mysql_fetch_row(res))) {
     mysql_free_result(res);
-    sprintf(buf, "INSERT INTO pgroup_logs (idnum, message) VALUES (%ld, \"%s has left the group. (Reason: deletion)\")", atol(row[0]), get_player_name(idx));
+    char *cname = get_player_name(idx);
+    sprintf(buf, "INSERT INTO pgroup_logs (idnum, message) VALUES (%ld, \"%s has left the group. (Reason: deletion)\")", atol(row[0]), cname);
+    delete [] cname;
     mysql_wrapper(mysql, buf);
     sprintf(buf, "DELETE FROM pfiles_playergroups WHERE idnum=%ld", idx);
     mysql_wrapper(mysql, buf);
