@@ -119,6 +119,7 @@ struct dest_data taxi_destinations[] =
     // { "beacon", "Beacon Mall Everett", 39253 },
     // { "touristville", "Touristville", 25313 },
     // { "skeleton", "The Skeleton", 25308 },
+    { "junkyard",  "The Tacoma Junkyard", 70500, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE },
 #ifdef USE_PRIVATE_CE_WORLD
     { "planetary", "Planetary Corporation", 72503, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE },
 #endif
