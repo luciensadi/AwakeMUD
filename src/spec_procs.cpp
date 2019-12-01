@@ -3544,8 +3544,8 @@ SPECIAL(quest_debug_scanner)
   struct obj_data *obj = (struct obj_data *) me;
   struct char_data *to = NULL;
 
-  // Check to make sure I'm being carried by my user.
-  if (!ch || obj->carried_by != ch)
+  // Check to make sure I'm being held by my user.
+  if (!ch || obj->worn_by != ch)
     return FALSE;
   
   // Reject mortals, violently.
@@ -3607,8 +3607,8 @@ SPECIAL(portable_gridguide)
 {
   struct obj_data *obj = (struct obj_data *) me;
   
-  // Check to make sure I'm being carried by my user.
-  if (!ch || obj->carried_by != ch)
+  // Check to make sure I'm being carried or worn by my user.
+  if (!ch || (obj->carried_by != ch && obj->worn_by != ch))
     return FALSE;
   
   if (CMD_IS("gridguide") && !ch->in_veh) {
