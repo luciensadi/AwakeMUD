@@ -3535,9 +3535,80 @@ SPECIAL(matchsticks)
   return FALSE;
 }
 
+SPECIAL(johnson);
+
+SPECIAL(quest_debug_scanner)
+{
+  struct obj_data *obj = (struct obj_data *) me;
+  struct char_data *to = NULL;
+
+  // Check to make sure I'm being carried by my user.
+  if (obj->carried_by != ch)
+    return FALSE;
+  
+  // Reject mortals, violently.
+  if (GET_LEVEL(ch) <= 1) {
+    send_to_char(ch, "%s arcs violently in your hands!\r\n");
+    damage(ch, ch, 100, TYPE_TASER, TRUE);
+    return TRUE;
+  }
+  
+  // Diagnostic command.
+  if (CMD_IS("diagnose")) {
+    skip_spaces(&argument);
+    if (!*argument) {
+      send_to_char(ch, "Quest-debug who?\r\n");
+      return TRUE;
+    }
+    
+    if (ch->in_veh)
+      to = get_char_veh(ch, argument, ch->in_veh);
+    else
+      to = get_char_room_vis(ch, argument);
+    
+    if (!to) {
+      send_to_char(ch, "You don't see any '%s' that you can quest-debug here.\r\n", argument);
+      return TRUE;
+    }
+    
+    if (IS_NPC(to)) {
+      if (!(mob_index[GET_MOB_RNUM(to)].func == johnson || mob_index[GET_MOB_RNUM(to)].sfunc == johnson)) {
+        send_to_char(ch, "That NPC doesn't have any quest-related information available.\r\n");
+        return TRUE;
+      }
+      
+      sprintf(buf, "NPC %s's quest-related information:\r\n", GET_CHAR_NAME(to));
+      sprintf(ENDOF(buf), "SPARE1: %ld, SPARE2: %ld (corresponds to quest vnum %ld)\r\n",
+              GET_SPARE1(to), GET_SPARE2(to), GET_SPARE2(to) ? quest_table[GET_SPARE2(to)].vnum : -1);
+      strcat(buf, "NPC's memory records hold the following character IDs: \r\n");
+      for (memory_rec *tmp = MEMORY(to); tmp; tmp = tmp->next)
+        sprintf(ENDOF(buf), " %ld\r\n", tmp->id);
+      send_to_char(buf, ch);
+      return TRUE;
+    }
+    
+    sprintf(buf, "Player %s's quest-related information:\r\n", GET_CHAR_NAME(to));
+    if (GET_QUEST(to)) {
+      sprintf(ENDOF(buf), "Current quest: %ld (given by %s [%ld])\r\n",
+              quest_table[GET_QUEST(to)].vnum, mob_proto[real_mobile(quest_table[GET_QUEST(to)].johnson)].player.physical_text.name, quest_table[GET_QUEST(to)].johnson);
+    } else {
+      strcat(buf, "Not currently on a quest.\r\n");
+    }
+    
+    send_to_char(buf, ch);
+    return TRUE;
+  }
+  return FALSE;
+}
+
 SPECIAL(portable_gridguide)
 {
   struct obj_data *obj = (struct obj_data *) me;
+  
+  // Check to make sure I'm being carried by my user.
+  if (obj->carried_by != ch)
+    return FALSE;
+  
   if (CMD_IS("gridguide") && !ch->in_veh) {
     if (!(ROOM_FLAGGED(ch->in_room, ROOM_ROAD) || ROOM_FLAGGED(ch->in_room, ROOM_GARAGE)) ||
         ROOM_FLAGGED(ch->in_room, ROOM_NOGRID))

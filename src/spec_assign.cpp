@@ -607,6 +607,7 @@ void assign_objects(void)
   SPECIAL(pocket_sec);
   SPECIAL(locker);
   SPECIAL(chargen_hopper);
+  SPECIAL(quest_debug_scanner);
 
   ASSIGNOBJ(3, gen_board);  /* Rift's Board */
   ASSIGNOBJ(4, gen_board);  /* Pook's Board */
@@ -683,6 +684,9 @@ void assign_objects(void)
   ASSIGNOBJ(39865, pocket_sec); */
   ASSIGNOBJ(9826, locker);
   ASSIGNOBJ(60500, chargen_hopper);
+  ASSIGNOBJ(10033, quest_debug_scanner);
+  
+  
   WSPEC(monowhip);
 
   ASSIGNWEAPON(660, monowhip);

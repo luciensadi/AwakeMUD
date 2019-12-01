@@ -585,15 +585,22 @@ void game_loop(int mother_desc)
     
     /* Sleep if we don't have any connections */
     if (descriptor_list == NULL) {
+      // Clear our alarm handler.
+      signal(SIGALRM, SIG_IGN);
+      
       FD_ZERO(&input_set);
       FD_SET(mother_desc, &input_set);
       if ((select(mother_desc + 1, &input_set, (fd_set *) 0, (fd_set *) 0, NULL) < 0)) {
-        if (errno == EINTR)
-          log("Waking up to process signal.");
-        else
+        if (errno == EINTR) {
+          // Suppressed this log since we get woken up regularly by alarm while idle.
+          // log("Waking up to process signal.");
+        } else
           perror("Select coma");
       } // else log("New connection.  Waking up.");
       gettimeofday(&last_time, (struct timezone *) 0);
+      
+      // Re-register our alarm handler.
+      signal(SIGALRM, alarm_handler);
     }
 
     /* Set up the input, output, and exception sets for select(). */
@@ -652,6 +659,9 @@ void game_loop(int mother_desc)
           perror("Select sleep");
           exit(1);
         }
+      
+      // Reset our alarm timer.
+      alarm(10);
     } while (errno);
 #endif
     

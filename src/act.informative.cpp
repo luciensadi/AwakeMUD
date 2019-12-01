@@ -760,7 +760,7 @@ void list_one_char(struct char_data * i, struct char_data * ch)
         }
       }
       
-      if (mob_index[GET_MOB_RNUM(i)].sfunc) {
+      if (mob_index[GET_MOB_RNUM(i)].sfunc && mob_index[GET_MOB_RNUM(i)].sfunc != mob_index[GET_MOB_RNUM(i)].func) {
         if (mob_index[GET_MOB_RNUM(i)].sfunc == trainer) {
           sprintf(ENDOF(buf), "^y...%s%s looks willing to train you.^n\r\n", HSSH(i), mob_index[GET_MOB_RNUM(i)].func ? " also" : "");
         }

@@ -725,9 +725,13 @@ SPECIAL(johnson)
     case CMD_JOB_QUIT:
       // Precondition: I cannot be talking right now.
       if (GET_SPARE1(johnson) == 0) {
-        sprintf(buf, "waves @%s off impatiently as %s continues to speak.", GET_CHAR_NAME(ch), HSSH(johnson));
-        do_echo(johnson, buf, 0, SCMD_EMOTE);
-        return TRUE;
+        if (!memory(johnson, ch)) {
+          do_say(johnson, "Hold on, I'm talking to someone else right now.", 0, 0);
+          return TRUE;
+        } else {
+          do_say(johnson, "I'm lookin' for a yes-or-no answer, chummer.", 0, 0);
+          return TRUE;
+        }
       }
       
       // Precondition: You must be on a quest.
@@ -750,9 +754,13 @@ SPECIAL(johnson)
     case CMD_JOB_DONE:
       // Precondition: I cannot be talking right now.
       if (GET_SPARE1(johnson) == 0) {
-        sprintf(buf, "waves @%s off impatiently as %s continues to speak.", GET_CHAR_NAME(ch), HSSH(johnson));
-        do_echo(johnson, buf, 0, SCMD_EMOTE);
-        return TRUE;
+        if (!memory(johnson, ch)) {
+          do_say(johnson, "Hold on, I'm talking to someone else right now.", 0, 0);
+          return TRUE;
+        } else {
+          do_say(johnson, "I'm lookin' for a yes-or-no answer, chummer.", 0, 0);
+          return TRUE;
+        }
       }
       
       // Precondition: You must be on a quest.
@@ -794,9 +802,13 @@ SPECIAL(johnson)
     case CMD_JOB_START:
       // Precondition: I cannot be talking right now.
       if (GET_SPARE1(johnson) == 0) {
-        sprintf(buf, "waves @%s off impatiently as %s continues to speak.", GET_CHAR_NAME(ch), HSSH(johnson));
-        do_echo(johnson, buf, 0, SCMD_EMOTE);
-        return TRUE;
+        if (!memory(johnson, ch)) {
+          do_say(johnson, "Hold on, I'm talking to someone else right now.", 0, 0);
+          return TRUE;
+        } else {
+          do_say(johnson, "I'm lookin' for a yes-or-no answer, chummer.", 0, 0);
+          return TRUE;
+        }
       }
       
       // Precondition: You may not have an active quest.
@@ -849,8 +861,14 @@ SPECIAL(johnson)
       
       return TRUE;
     case CMD_JOB_YES:
-      // Precondition: If I'm not talking right now, or if I haven't spoken to you recently, don't react.
-      if (GET_SPARE1(johnson) == -1 || !memory(johnson, ch)) {
+      // Precondition: If I'm not talking right now, don't react.
+      if (GET_SPARE1(johnson) == -1) {
+        return TRUE;
+      }
+      
+      // Precondition: If I have no memory of you, dismiss you.
+      if (!memory(johnson, ch)) {
+        do_say(johnson, "Hold on, I'm talking to someone else right now.", 0, 0);
         return TRUE;
       }
       
@@ -880,14 +898,14 @@ SPECIAL(johnson)
       return TRUE;
       
     case CMD_JOB_NO:
-      // Precondition: If I'm not talking right now, or if I haven't spoken to you recently, don't react.
-      if (GET_SPARE1(johnson) == -1 || !memory(johnson, ch)) {
+      // Precondition: If I'm not talking right now, don't react.
+      if (GET_SPARE1(johnson) == -1) {
         return TRUE;
       }
-      
-      // Precondition: You may not have an active quest.
-      if (GET_QUEST(ch)) {
-        do_say(johnson, "Maybe when you've finished what you're doing.", 0, 0);
+
+      // Precondition: If I have no memory of you, dismiss you.
+      if (!memory(johnson, ch)) {
+        do_say(johnson, "Hold on, I'm talking to someone else right now.", 0, 0);
         return TRUE;
       }
       
