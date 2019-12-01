@@ -701,6 +701,11 @@ SPECIAL(johnson)
   } else
     return FALSE;
   
+  if (IS_ASTRAL(ch)) {
+    send_to_char("Astral projections aren't really employable.\r\n", ch);
+    return FALSE;
+  }
+  
   if (IS_NPC(ch)) {
     send_to_char("NPCs don't get autoruns, go away.\r\n", ch);
     return FALSE;
