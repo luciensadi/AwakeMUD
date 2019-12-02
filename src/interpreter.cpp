@@ -2378,9 +2378,6 @@ void nanny(struct descriptor_data * d, char *arg)
      * (1) add a 15 or 20-second time limit for entering a password, and (2)
      * re-add the code to cut off duplicates when a player quits.  JE 6 Feb 96
      */
-
-    /* turn echo back on */
-    echo_on(d);
       
     // Clear their idle counter so they don't get dropped mysteriously.
     d->idle_tics = 0;
@@ -2388,6 +2385,9 @@ void nanny(struct descriptor_data * d, char *arg)
     if (!*arg)
       close_socket(d);
     else if (str_cmp(arg, "abort") == 0) {
+      /* turn echo back on */
+      echo_on(d);
+      
       SEND_TO_Q("OK, let's try a different name.\r\n\r\nWhat's your handle, chummer? ", d);
       STATE(d) = CON_GET_NAME;
     } else {
@@ -2403,10 +2403,12 @@ void nanny(struct descriptor_data * d, char *arg)
           STATE(d) = CON_CLOSE;
         } else {
           SEND_TO_Q("Wrong password.\r\nPassword: ", d);
-          echo_off(d);
         }
         return;
       }
+      
+      /* turn echo back on */
+      echo_on(d);
       
       // Commit the password to DB on the assumption it's changed.
       char query_buf[2048];

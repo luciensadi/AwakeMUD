@@ -119,7 +119,7 @@ struct dest_data taxi_destinations[] =
     // { "beacon", "Beacon Mall Everett", 39253 },
     // { "touristville", "Touristville", 25313 },
     // { "skeleton", "The Skeleton", 25308 },
-    { "junkyard",  "The Tacoma Junkyard", 70500, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE },
+    { "junkyard",  "The Tacoma Junkyard", 2070, TAXI_DEST_TYPE_AREA_OF_TOWN, TRUE },
 #ifdef USE_PRIVATE_CE_WORLD
     { "planetary", "Planetary Corporation", 72503, TAXI_DEST_TYPE_CORPORATE_PARK, TRUE },
 #endif
@@ -435,6 +435,7 @@ ACMD(do_hail)
     case 392:
     case 707:
     case 253:
+    case 725:
       break;
     case 27:
     case 146:
