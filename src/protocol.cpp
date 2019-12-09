@@ -552,10 +552,12 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
       {
          const char *pCopyFrom = NULL;
 
+         bool p_is_color = TRUE;
          switch ( apData[++j] )
          {
             case '\t': /* Two tabs in a row will display an actual tab */
                pCopyFrom = Tab;
+               p_is_color = FALSE;
                break;
             case 'n':
                pCopyFrom = s_Clean;
@@ -654,12 +656,16 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
                pCopyFrom = ColourRGB(apDescriptor, "F205");
                break;
             case '(': /* MXP link */
-               if ( !pProtocol->bBlockMXP && pProtocol->pVariables[eMSDP_MXP]->ValueInt )
-                  pCopyFrom = LinkStart;
+               if ( !pProtocol->bBlockMXP && pProtocol->pVariables[eMSDP_MXP]->ValueInt ) {
+                    pCopyFrom = LinkStart;
+                    p_is_color = FALSE;
+               }
                break;
             case ')': /* MXP link */
-               if ( !pProtocol->bBlockMXP && pProtocol->pVariables[eMSDP_MXP]->ValueInt )
-                  pCopyFrom = LinkStop;
+               if ( !pProtocol->bBlockMXP && pProtocol->pVariables[eMSDP_MXP]->ValueInt ) {
+                    pCopyFrom = LinkStop;
+                    p_is_color = FALSE;
+               }
                pProtocol->bBlockMXP = FALSE;
                break;
             case '<':
@@ -667,6 +673,7 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
                {
                   pCopyFrom = MXPStart;
                   bUseMXP = TRUE;
+                  p_is_color = FALSE;
                }
                else /* No MXP support, so just strip it out */
                {
@@ -718,10 +725,12 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
                   else if ( pProtocol->pVariables[eMSDP_UTF_8]->ValueInt )
                   {
                      pCopyFrom = UnicodeGet(Number);
+                     p_is_color = FALSE;
                   }
                   else /* Display the substitute string */
                   {
                      pCopyFrom = Buffer;
+                     p_is_color = FALSE;
                   }
 
                   /* Terminate if we've reached the end of the string */
@@ -811,6 +820,7 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
                break;
             case '!': /* Used for in-band MSP sound triggers */
                pCopyFrom = MSP;
+               p_is_color = FALSE;
                break;
 #ifdef COLOUR_CHAR
             case '+':
@@ -828,7 +838,7 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
          }
 
          /* Copy the colour code, if any. */
-         if ( pCopyFrom != NULL )
+         if ( pCopyFrom != NULL && (!p_is_color || !D_PRF_FLAGGED(apDescriptor, PRF_NOCOLOR)))
          {
             while ( *pCopyFrom != '\0' && i < MAX_OUTPUT_BUFFER )
                Result[i++] = *pCopyFrom++;
@@ -840,10 +850,12 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
          const char ColourChar[] = { COLOUR_CHAR, '\0' };
          const char *pCopyFrom = NULL;
 
+         bool p_is_color = TRUE;
          switch ( apData[++j] )
          {
             case COLOUR_CHAR: /* Two in a row display the actual character */
                pCopyFrom = ColourChar;
+               p_is_color = FALSE;
                break;
             case 'n':
                pCopyFrom = s_Clean;
@@ -979,7 +991,7 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
          }
 
          /* Copy the colour code, if any. */
-         if ( pCopyFrom != NULL )
+         if ( pCopyFrom != NULL && (!p_is_color || !D_PRF_FLAGGED(apDescriptor, PRF_NOCOLOR)))
          {
             while ( *pCopyFrom != '\0' && i < MAX_OUTPUT_BUFFER )
                Result[i++] = *pCopyFrom++;
@@ -1006,9 +1018,11 @@ const char *ProtocolOutput( descriptor_t *apDescriptor, const char *apData, int 
    }
   
   // Terminate the color. Yes, all the colors.
-  const char *pCopyFrom = s_Clean;
-  while ( *pCopyFrom != '\0' && i < MAX_OUTPUT_BUFFER )
-    Result[i++] = *pCopyFrom++;
+   if (!D_PRF_FLAGGED(apDescriptor, PRF_NOCOLOR)) {
+     const char *pCopyFrom = s_Clean;
+     while ( *pCopyFrom != '\0' && i < MAX_OUTPUT_BUFFER )
+       Result[i++] = *pCopyFrom++;
+   }
 
    /* If we'd overflow the buffer, we don't send any output */
    if ( i >= MAX_OUTPUT_BUFFER )

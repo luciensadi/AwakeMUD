@@ -1212,22 +1212,34 @@ void obj_to_char(struct obj_data * object, struct char_data * ch)
       sprintf(buf, "Obj_to_char error on %s giving to %s. Already belongs to %s.", object->text.name,
               GET_CHAR_NAME(ch) ? GET_CHAR_NAME(ch) : GET_NAME(ch),
               GET_CHAR_NAME(object->carried_by) ? GET_CHAR_NAME(object->carried_by) : GET_NAME(object->carried_by));
-      mudlog(buf, ch, LOG_WIZLOG, TRUE);
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
       
       return;
     } else if (object->in_room) {
-      sprintf(buf, "Obj_to_char error on %s giving to %s. Already in %ld.", object->text.name,
+      sprintf(buf, "Obj_to_char error on %s giving to %s. Already in room %ld.", object->text.name,
               GET_CHAR_NAME(ch) ? GET_CHAR_NAME(ch) : GET_NAME(ch), object->in_room->number);
-      mudlog(buf, ch, LOG_WIZLOG, TRUE);
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      return;
+    } else if (object->in_veh) {
+      sprintf(buf, "Obj_to_char error on %s giving to %s. Already in vehicle %s.", object->text.name,
+              GET_CHAR_NAME(ch) ? GET_CHAR_NAME(ch) : GET_NAME(ch), GET_VEH_NAME(object->in_veh));
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
       return;
     }
     for (i = ch->carrying; i; i = i->next_content) {
+      if (i->next_content == i) {
+        sprintf(buf, "ERROR: Infinite loop detected in obj_to_char. Bailing out, %s is not getting %s %s (%ld).",
+                GET_CHAR_NAME(ch) ? GET_CHAR_NAME(ch) : GET_NAME(ch), HSHR(ch), GET_OBJ_NAME(object), GET_OBJ_VNUM(object));
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        return;
+      }
       if (i->item_number == object->item_number &&
           !strcmp(i->text.room_desc, object->text.room_desc))
         break;
       op = i;
     }
     
+    // todo: if op = 1, and obj->next_content = i, and op->next_content = object, doesn't that mean i->next_content->next_content == i?
     if (i) {
       object->next_content = i;
       if (op)
