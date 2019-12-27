@@ -352,6 +352,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   GET_LAST_TELL(ch) = NOBODY;
   MYSQL_RES *res;
   MYSQL_ROW row;
+  // TODO: Sanitize this. It shouldn't be exploitable to begin with, but better safe than sorry.
   sprintf(buf, "SELECT * FROM pfiles WHERE Name='%s';", name);
   mysql_wrapper(mysql, buf);
   if (!(res = mysql_use_result(mysql))) {
@@ -642,8 +643,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
           obj->restring = str_dup(row[3]);
         if (*row[4])
           obj->photo = str_dup(row[4]);
-        for (int x = 0, y = 5; x < NUM_VALUES; x++, y++)
-          GET_OBJ_VAL(obj, x) = atoi(row[y]);
+        for (int x = 0; x < NUM_VALUES; x++)
+          GET_OBJ_VAL(obj, x) = atoi(row[x + 5]);
         if (GET_OBJ_VAL(obj, 0) == CYB_PHONE && GET_OBJ_VAL(obj, 7))
           add_phone_to_list(obj);
         else if (GET_OBJ_VAL(obj, 2) == 4 && GET_OBJ_VAL(obj, 7))
