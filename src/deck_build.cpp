@@ -353,7 +353,7 @@ ACMD(do_cook) {
     }
     if (ch->in_veh) {
       if (ch->vfront) {
-        send_to_char("You must be in the rear of a vehicle to do that.\r\n", ch);
+        send_to_char("There's not enough space up here-- try switching to the rear of the vehicle.\r\n", ch);
         return;
       } else if (!ch->in_veh->flags.IsSet(VFLAG_WORKSHOP)) {
         send_to_char("This vehicle doesn't have any power outlets for you to use.\r\n", ch);
