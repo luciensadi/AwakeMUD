@@ -1270,6 +1270,7 @@ const char *reserved[] =
     "new",
     "guest",
     "deleted",
+    "admin", // Added here since this is the one random bots like to try.
     "\n"
   };
 
