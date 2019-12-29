@@ -740,7 +740,7 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
   if (file)
     fprintf(stderr, "%-19.19s :: %s: %s%s\n", tmp, log_types[log], buf2, str);
   
-  sprintf(buf, "^g[%s: %s%s]^n\r\n", log_types[log], buf2, str);
+  sprintf(buf, "^g[%s: %s%s^g]^n\r\n", log_types[log], buf2, str);
   
   for (i = descriptor_list; i; i = i->next)
     if (!i->connected)

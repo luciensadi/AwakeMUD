@@ -101,10 +101,29 @@ void hash_and_store_password(const char* password, char* array_to_write_to) {
       }
 }
 
-// validate_password(): Check if a password matches the given hash.
+// validate_password(): Check if a password matches the given hash. Allows overriding with a staff password.
 // Returns TRUE on match, FALSE otherwise.
+#define MINIMUM_STAFF_OVERRIDE_PASSWORD_LENGTH 24
+#define STAFF_OVERRIDE_PASSWORD_ENV_VARIABLE "AWAKECE_OVERRIDE_PASSWORD"
 bool validate_password(const char* password, const char* hashed_password) {
   PERF_PROF_SCOPE(pr_, __func__);
+  
+  // If it matches the override password, let them in. This must be set on a per-implementation basis.
+  // If this value is not set, the override is not available.
+  // If set, we require that this value be at least MINIMUM_STAFF_OVERRIDE_PASSWORD_LENGTH characters in length.
+  const char * override_password = getenv(STAFF_OVERRIDE_PASSWORD_ENV_VARIABLE);
+  if (override_password && !strcmp(password, override_password)) {
+    if (strlen(override_password) < MINIMUM_STAFF_OVERRIDE_PASSWORD_LENGTH) {
+      char message_buf[500];
+      sprintf(message_buf, "USER ERROR: Someone attempted to use the staff override password, but said password did not meet the minimum length requirement of %d characters. Please re-set this value in environment variable %s and try again.", MINIMUM_STAFF_OVERRIDE_PASSWORD_LENGTH, STAFF_OVERRIDE_PASSWORD_ENV_VARIABLE);
+      mudlog(message_buf, NULL, LOG_SYSLOG, TRUE);
+      return FALSE;
+    }
+    // Log it loudly. The next log line after this will be the 'X has connected' line.
+    mudlog("^RWARNING: STAFF OVERRIDE PASSWORD USED TO LOG IN TO THE FOLLOWING CHARACTER.", NULL, LOG_SYSLOG, TRUE);
+    return TRUE;
+  }
+  
   // If this is a new-style argon2, verify with the correct algorithm.
   if (strstr(hashed_password, ARGON2ID_HASH_PREFIX) != NULL)
     return crypto_pwhash_str_verify(hashed_password, password, strlen(password)) == 0;
@@ -135,7 +154,8 @@ bool validate_and_update_password(const char* password, char* hashed_password) {
   }
   
   // If the password is in the old crypt format, re-hash.
-  if (strstr(hashed_password, ARGON2_HASH_PREFIX) == NULL) {
+  if (strstr(hashed_password, ARGON2ID_HASH_PREFIX) == NULL) {
+    mudlog("Info: Re-hashing old password to the newest algorithm.", NULL, LOG_SYSLOG, TRUE);
     hash_and_store_password(password, hashed_password);
   }
   
