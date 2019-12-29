@@ -122,7 +122,7 @@ CREATE TABLE `pfiles_drugdata` (
   `idnum` mediumint(5) unsigned unique default '0', 
   `Affect` tinyint(2) unsigned default '0', 
   `Stage` tinyint(2) unsigned default '0', 
-  `Duration` tinyint(2) unsigned default '0', 
+  `Duration` smallint(2) unsigned default '0', 
   `Dose` tinyint(2) unsigned default '0', 
   PRIMARY KEY(`idnum`) 
 ); 
