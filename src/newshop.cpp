@@ -1552,12 +1552,12 @@ void shedit_disp_menu(struct descriptor_data *d)
   send_to_char(CH, "Shop Number: %ld\r\n", SHOP->vnum);
   send_to_char(CH, "1) Keeper: ^c%ld^n (^c%s^n)\r\n", SHOP->keeper,
                real_mobile(SHOP->keeper) > 0 ? GET_NAME(&mob_proto[real_mobile(SHOP->keeper)]) : "NULL");
-  send_to_char(CH, "2) Type: ^c%s^n\r\n", shop_type[SHOP->type]);
-  send_to_char(CH, "3) Buying Profit: ^c%.2f^n\r\n", SHOP->profit_buy);
-  send_to_char(CH, "4) Selling Profit: ^c%.2f^n\r\n", SHOP->profit_sell);
+  send_to_char(CH, "2) Shop Type (not implemented): ^c%s^n\r\n", shop_type[SHOP->type]);
+  send_to_char(CH, "3) Cost Multiplier when Player Buying: ^c%.2f^n\r\n", SHOP->profit_buy);
+  send_to_char(CH, "4) Cost Multiplier when Player Selling: ^c%.2f^n\r\n", SHOP->profit_sell);
   send_to_char(CH, "5) %% +/-: ^c%d^n\r\n", SHOP->random_amount);
   send_to_char(CH, "6) Opens: ^c%d^n Closes: ^c%d^n\r\n", SHOP->open, SHOP->close);
-  send_to_char(CH, "7) Etiquette: ^c%s^n\r\n", skills[SHOP->ettiquete].name);
+  send_to_char(CH, "7) Etiquette Used for Availability Rolls: ^c%s^n\r\n", skills[SHOP->ettiquete].name);
   SHOP->races.PrintBits(buf, MAX_STRING_LENGTH, pc_race_types, NUM_RACES);
   send_to_char(CH, "8) Doesn't Trade With: ^c%s^n\r\n", buf);
   SHOP->flags.PrintBits(buf, MAX_STRING_LENGTH, shop_flags, SHOP_FLAGS);
@@ -1765,8 +1765,8 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
     break;
   case SHEDIT_PROFIT_BUY:
     profit = atof(arg);
-    if (profit < 0) {
-      send_to_char("Profit must be greater than 0! Enter profit for sell command: ", CH);
+    if (profit < 1) {
+      send_to_char("Buy price multiplier must be at least 1! Enter multiplier: ", CH);
       return;
     }
     SHOP->profit_buy = profit;
@@ -1774,8 +1774,8 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
     break;
   case SHEDIT_PROFIT_SELL:
     profit = atof(arg);
-    if (profit < 0) {
-      send_to_char("Profit must be greater than 0! Enter profit for sell command: ", CH);
+    if (profit > 1 || profit <= 0) {
+      send_to_char("Sell price multiplier must be greater than 0 and no more than 1! Enter multiplier: ", CH);
       return;
     }
     SHOP->profit_sell = profit;
