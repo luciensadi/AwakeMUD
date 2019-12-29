@@ -794,6 +794,10 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
           break;
         case LOG_PGROUPLOG:
           check_log = PRF_PGROUPLOG;
+          break;
+        case LOG_HELPLOG:
+          check_log = PRF_HELPLOG;
+          break;
       }
       if (PRF_FLAGGED(tch, check_log))
         SEND_TO_Q(buf, i);

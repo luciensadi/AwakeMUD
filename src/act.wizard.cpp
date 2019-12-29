@@ -4054,7 +4054,8 @@ ACMD(do_logwatch)
             (PRF_FLAGGED(ch, PRF_BANLOG) ? "  BanLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_GRIDLOG) ? "  GridLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_WRECKLOG) ? "  WreckLog\r\n" : ""),
-            (PRF_FLAGGED(ch, PRF_PGROUPLOG) ? "  PGroupLog\r\n" : ""));
+            (PRF_FLAGGED(ch, PRF_PGROUPLOG) ? "  PGroupLog\r\n" : ""),
+            (PRF_FLAGGED(ch, PRF_HELPLOG) ? "  HelpLog\r\n" : ""));
 
     send_to_char(buf, ch);
     return;
@@ -4162,6 +4163,16 @@ ACMD(do_logwatch)
     } else {
       send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
     }
+  } else if (is_abbrev(buf, "helplog")) {
+    if (PRF_FLAGGED(ch, PRF_HELPLOG)) {
+      send_to_char("You no longer watch the HelpLog.\r\n", ch);
+      PRF_FLAGS(ch).RemoveBit(PRF_HELPLOG);
+    } else if (access_level(ch, LVL_DEVELOPER)) {
+      send_to_char("You will now see the HelpLog.\r\n", ch);
+      PRF_FLAGS(ch).SetBit(PRF_HELPLOG);
+    } else {
+      send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
+    }
   } else if (is_abbrev(buf, "all")) {
     if (!PRF_FLAGGED(ch, PRF_CONNLOG))
       PRF_FLAGS(ch).SetBit(PRF_CONNLOG);
@@ -4185,11 +4196,13 @@ ACMD(do_logwatch)
       PRF_FLAGS(ch).SetBit(PRF_CHEATLOG);
     if (!PRF_FLAGGED(ch, PRF_PGROUPLOG) && access_level(ch, LVL_VICEPRES))
       PRF_FLAGS(ch).SetBit(PRF_PGROUPLOG);
+    if (!PRF_FLAGGED(ch, PRF_HELPLOG) && access_level(ch, LVL_DEVELOPER))
+      PRF_FLAGS(ch).SetBit(PRF_HELPLOG);
     send_to_char("All available logs have been activated.\r\n", ch);
   } else if (is_abbrev(buf, "none")) {
     PRF_FLAGS(ch).RemoveBits(PRF_CONNLOG, PRF_DEATHLOG, PRF_MISCLOG, PRF_WIZLOG,
                              PRF_SYSLOG, PRF_ZONELOG, PRF_CHEATLOG, PRF_BANLOG, PRF_GRIDLOG,
-                             PRF_WRECKLOG, PRF_PGROUPLOG, ENDBIT);
+                             PRF_WRECKLOG, PRF_PGROUPLOG, PRF_HELPLOG, ENDBIT);
     send_to_char("All logs have been disabled.\r\n", ch);
   } else
     send_to_char("Watch what log?\r\n", ch);

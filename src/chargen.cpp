@@ -21,7 +21,7 @@
 
 extern MYSQL *mysql;
 extern int mysql_wrapper(MYSQL *mysql, const char *buf);
-extern void display_help(char *help, const char *arg);
+extern void display_help(char *help, const char *arg, struct char_data *ch);
 
 int get_minimum_attribute_points_for_race(int race);
 
@@ -170,58 +170,58 @@ int parse_race(struct descriptor_data *d, const char *arg)
   case '?':
     switch (LOWER(*(arg+1))) {
     case '1':
-      display_help(buf2, "human");
+      display_help(buf2, "human", d->character);
       break;
     case '2':
-      display_help(buf2, "dwarf");
+      display_help(buf2, "dwarf", d->character);
       break;
     case '3':
-      display_help(buf2, "elf");
+      display_help(buf2, "elf", d->character);
       break;
     case '4':
-      display_help(buf2, "ork");
+      display_help(buf2, "ork", d->character);
       break;
     case '5':
-      display_help(buf2, "troll");
+      display_help(buf2, "troll", d->character);
       break;
     case '6':
-      display_help(buf2, "cyclops");
+      display_help(buf2, "cyclops", d->character);
       break;
     case '7':
-      display_help(buf2, "koborokuru");
+      display_help(buf2, "koborokuru", d->character);
       break;
     case '8':
-      display_help(buf2, "fomori");
+      display_help(buf2, "fomori", d->character);
       break;
     case '9':
-      display_help(buf2, "menehune");
+      display_help(buf2, "menehune", d->character);
       break;
     case 'a':
-      display_help(buf2, "hobgoblin");
+      display_help(buf2, "hobgoblin", d->character);
       break;
     case 'b':
-      display_help(buf2, "giant");
+      display_help(buf2, "giant", d->character);
       break;
     case 'c':
-      display_help(buf2, "gnome");
+      display_help(buf2, "gnome", d->character);
       break;
     case 'd':
-      display_help(buf2, "oni");
+      display_help(buf2, "oni", d->character);
       break;
     case 'e':
-      display_help(buf2, "wakyambi");
+      display_help(buf2, "wakyambi", d->character);
       break;
     case 'f':
-      display_help(buf2, "ogre");
+      display_help(buf2, "ogre", d->character);
       break;
     case 'g':
-      display_help(buf2, "minotaur");
+      display_help(buf2, "minotaur", d->character);
       break;
     case 'h':
-      display_help(buf2, "satyr");
+      display_help(buf2, "satyr", d->character);
       break;
     case 'i':
-      display_help(buf2, "night one");
+      display_help(buf2, "night one", d->character);
       break;
     default:
       return RACE_UNDEFINED;
@@ -257,7 +257,7 @@ int parse_totem(struct descriptor_data *d, const char *arg)
   if (*temp == '?')
   {
     i = atoi(++temp);
-    display_help(buf2, totem_types[i]);
+    display_help(buf2, totem_types[i], d->character);
     strcat(buf2, "\r\n Press [return] to continue ");
     SEND_TO_Q(buf2, d);
     d->ccr.temp = CCR_TOTEM;
@@ -1194,7 +1194,7 @@ void create_parse(struct descriptor_data *d, const char *arg)
         priority_menu(d);
       break;
     case '?':
-      display_help(buf2, "priorities");
+      display_help(buf2, "priorities", d->character);
       strcat(buf2, "\r\n Press [return] to continue ");
       SEND_TO_Q(buf2, d);
       d->ccr.temp = CCR_PRIORITY;

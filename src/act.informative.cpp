@@ -3213,7 +3213,7 @@ ACMD(do_index)
   mysql_free_result(res);
 }
 
-void display_help(char *help, const char *arg) {
+void display_help(char *help, const char *arg, struct char_data *ch) {
   char query[MAX_STRING_LENGTH];
   MYSQL_RES *res;
   MYSQL_ROW row;
@@ -3227,7 +3227,8 @@ void display_help(char *help, const char *arg) {
   if (mysql_wrapper(mysql, query)) {
     // We got a SQL error-- bail.
     sprintf(help, "The help system is temporarily unavailable.\r\n");
-    mudlog("WARNING: Failed to return help topic. See server log for MYSQL error.", NULL, LOG_SYSLOG, TRUE);
+    sprintf(buf3, "WARNING: Failed to return help topic about %s. See server log for MYSQL error.", arg);
+    mudlog(buf3, ch, LOG_SYSLOG, TRUE);
     return;
   } else {
     res = mysql_store_result(mysql);
@@ -3255,29 +3256,51 @@ void display_help(char *help, const char *arg) {
   // If we have no rows, fail.
   if (x < 1) {
     sprintf(help, "No such help file exists.\r\n");
+    sprintf(buf3, "Failed helpfile search: %s.", arg);
+    mudlog(buf3, ch, LOG_HELPLOG, TRUE);
+    mysql_free_result(res);
+    return;
   }
   
   // If we have too many rows, try to refine the search to just files starting with the search string.
   else if (x > 5) {
+    // Prepare a just-in-case response with the topics that were found in the overbroad search.
+    sprintf(help, "%d articles returned, please narrow your search. The topics found were:\r\n", x);
+    while ((row = mysql_fetch_row(res))) {
+      sprintf(ENDOF(help), "^W%s^n\r\n", row[0]);
+    }
     mysql_free_result(res);
+    
+    // Try a lookup with just files that have the search string at the start of their title.
     sprintf(query, "SELECT * FROM help_topic WHERE name LIKE '%s%%' ORDER BY name ASC", buf);
     if (mysql_wrapper(mysql, query)) {
-      sprintf(help, "%d articles returned, please narrow your search.aa\r\n", x);
+      // We hit an error with this followup search, so we just return our pre-prepared string with the search that succeeded.
+      sprintf(buf3, "Overbroad helpfile search combined with follow-up lookup failure (%d articles): %s.", x, arg);
+      mudlog(buf3, ch, LOG_HELPLOG, TRUE);
       return;
     }
     res = mysql_store_result(mysql);
     row = mysql_fetch_row(res);
-    int y = mysql_num_rows(res);
-    if (y == 1)
+    if (mysql_num_rows(res) == 1) {
+      // We found a single candidate row-- send that back.
       sprintf(ENDOF(help), "^W%s^n\r\n\r\n%s\r\n", row[0], row[1]);
-    else sprintf(help, "%d articles returned, please narrow your search.\r\n", x);
-  } else {
+    } else {
+      // We didn't find any candidate rows, or we found too many. They'll get the pre-prepared string, and we'll log this one.
+      sprintf(buf3, "Overbroad helpfile search (%d articles): %s.", x, arg);
+      mudlog(buf3, ch, LOG_HELPLOG, TRUE);
+    }
+    mysql_free_result(res);
+    return;
+  }
+  
+  // We found 1-5 results. Chunk 'em together and return them.
+  else {
     while ((row = mysql_fetch_row(res))) {
       sprintf(ENDOF(help), "^W%s^n\r\n\r\n%s\r\n", row[0], row[1]);
     }
+    mysql_free_result(res);
     return;
   }
-  mysql_free_result(res);
 }
 
 ACMD(do_help)
@@ -3291,7 +3314,7 @@ ACMD(do_help)
     return;
   }
   
-  display_help(buf, argument);
+  display_help(buf, argument, ch);
   send_to_char(buf, ch);
 }
 
