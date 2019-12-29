@@ -1201,112 +1201,171 @@ void char_to_room(struct char_data * ch, struct room_data *room)
 
 #define IS_INVIS(o) IS_OBJ_STAT(o, ITEM_INVISIBLE)
 
+// Checks obj_to_x preconditions for common errors. Overwrites buf3.
+bool check_obj_to_x_preconditions(struct obj_data * object) {
+  if (!object) {
+    mudlog("ERROR: Null object passed to check_obj_to_x_preconditions().", NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  // Pre-compose our message header.
+  sprintf(buf3, "ERROR: check_obj_to_x_preconditions() failure for %s (%ld): ", GET_OBJ_NAME(object), GET_OBJ_VNUM(object));
+  
+  // Fail if the object already has next_content. This implies that it's part of someone else's linked list-- never merge them!
+  if (object->next_content) {
+    strcat(buf3, "It's already part of a next_content linked list.");
+    mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+
+  // We can't give an object away that's already someone else's possession.
+  if (object->carried_by) {
+    sprintf(ENDOF(buf3), "Object already belongs to %s.", GET_CHAR_NAME(object->carried_by));
+    mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  // We can't give an object away if it's sitting in a room.
+  if (object->in_room) {
+    sprintf(ENDOF(buf3), "Object is already in room %ld.", object->in_room->number);
+    mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  // We can't give an object away if it's in a vehicle.
+  if (object->in_veh) {
+    sprintf(ENDOF(buf3), "Object is already in vehicle %s.", GET_VEH_NAME(object->in_veh));
+    mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  strcpy(buf3, "");
+  return TRUE;
+}
+
 /* give an object to a char   */
 void obj_to_char(struct obj_data * object, struct char_data * ch)
 {
   struct obj_data *i = NULL, *op = NULL;
   
-  if (object && ch)
-  {
-    if (object->carried_by) {
-      sprintf(buf, "Obj_to_char error on %s giving to %s. Already belongs to %s.", object->text.name,
-              GET_CHAR_NAME(ch) ? GET_CHAR_NAME(ch) : GET_NAME(ch),
-              GET_CHAR_NAME(object->carried_by) ? GET_CHAR_NAME(object->carried_by) : GET_NAME(object->carried_by));
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
-      
+  // Check our object-related preconditions. All error logging is done there.
+  if (!check_obj_to_x_preconditions(object))
+    return;
+  
+  // Precondition: The character in question must exist.
+  if (!ch) {
+    mudlog("SYSLOG: NULL char passed to obj_to_char", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  // Iterate over the objects that the character already has.
+  for (i = ch->carrying; i; i = i->next_content) {
+    // Attempt at additional error detection.
+    if (object == i) {
+      mudlog("ERROR: i == object in obj_to_char(). How we even got here, I don't know.", ch, LOG_SYSLOG, TRUE);
       return;
-    } else if (object->in_room) {
-      sprintf(buf, "Obj_to_char error on %s giving to %s. Already in room %ld.", object->text.name,
-              GET_CHAR_NAME(ch) ? GET_CHAR_NAME(ch) : GET_NAME(ch), object->in_room->number);
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
-      return;
-    } else if (object->in_veh) {
-      sprintf(buf, "Obj_to_char error on %s giving to %s. Already in vehicle %s.", object->text.name,
-              GET_CHAR_NAME(ch) ? GET_CHAR_NAME(ch) : GET_NAME(ch), GET_VEH_NAME(object->in_veh));
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
-      return;
-    }
-    for (i = ch->carrying; i; i = i->next_content) {
-      if (i->next_content == i) {
-        sprintf(buf, "ERROR: Infinite loop detected in obj_to_char. Bailing out, %s is not getting %s %s (%ld).",
-                GET_CHAR_NAME(ch) ? GET_CHAR_NAME(ch) : GET_NAME(ch), HSHR(ch), GET_OBJ_NAME(object), GET_OBJ_VNUM(object));
-        mudlog(buf, ch, LOG_SYSLOG, TRUE);
-        return;
-      }
-      if (i->item_number == object->item_number &&
-          !strcmp(i->text.room_desc, object->text.room_desc))
-        break;
-      op = i;
     }
     
-    // todo: if op = 1, and obj->next_content = i, and op->next_content = object, doesn't that mean i->next_content->next_content == i?
-    if (i) {
-      object->next_content = i;
-      if (op)
-        op->next_content = object;
-      else
-        ch->carrying = object;
-    } else {
-      object->next_content = ch->carrying;
+    // If their inventory list has turned into an infinite loop due to a bug, warn about it and bail out here instead of hanging the MUD.
+    if (i == i->next_content) {
+      sprintf(buf, "ERROR: Infinite loop detected in obj_to_char. Looping object is %s (%ld). Bailing out, %s is not getting %s %s (%ld).",
+              GET_OBJ_NAME(i), GET_OBJ_VNUM(i),
+              GET_CHAR_NAME(ch) ? GET_CHAR_NAME(ch) : GET_NAME(ch), HSHR(ch),
+              GET_OBJ_NAME(object), GET_OBJ_VNUM(object));
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      return;
+    }
+    // If they already have a copy of this object, break out of the loop while preserving i as pointing to that copy and op as pointing to the last thing we processed (if anything).
+    if (i->item_number == object->item_number && !strcmp(i->text.room_desc, object->text.room_desc))
+      break;
+    op = i;
+  }
+  
+  // If i exists (e.g. we broke out of the loop early by finding a match to this item we're trying to give the character)...
+  if (i) {
+    // Set our to-give object's next_content to the matching item i.
+    object->next_content = i;
+    // If op exists (which points to the object we evaluated immediately before i), point its next_content to object. Essentially this is a linked list insert.
+    if (op)
+      op->next_content = object;
+    // Otherwise, we know our object that we're giving them is the head of their carrying list-- set it as such.
+    else
       ch->carrying = object;
-    }
-    
-    object->carried_by = ch;
-    object->in_room = NULL;
-    IS_CARRYING_W(ch) += GET_OBJ_WEIGHT(object);
-    IS_CARRYING_N(ch)++;
-    
-    if (GET_OBJ_TYPE(object) == ITEM_FOCUS)
-      apply_focus_effect(ch, object);
-    
-  } else
-    log("SYSLOG: NULL obj or char passed to obj_to_char");
+  }
+  // Otherwise, stick the new object at the head of their inventory list.
+  else {
+    object->next_content = ch->carrying;
+    ch->carrying = object;
+  }
+  
+  // Set the object as being carried by this character, and increase their carry weight and carry number accordingly.
+  object->carried_by = ch;
+  IS_CARRYING_W(ch) += GET_OBJ_WEIGHT(object);
+  IS_CARRYING_N(ch)++;
+  
+  // Apply focus effects as needed.
+  if (GET_OBJ_TYPE(object) == ITEM_FOCUS)
+    apply_focus_effect(ch, object);
 }
 
 void obj_to_cyberware(struct obj_data * object, struct char_data * ch)
 {
-  if (object && ch)
-  {
-    if (GET_OBJ_TYPE(object) != ITEM_CYBERWARE) {
-      log("Non-cyberware object type passed to obj_to_cyberware.");
-      return;
-    }
-    
-    object->next_content = ch->cyberware;
-    ch->cyberware = object;
-    object->carried_by = ch;
-    object->in_room = NULL;
-    affect_total(ch);
-  } else
-    log("SYSLOG: NULL obj or char passed to obj_to_cyberware");
+  // Check our object-related preconditions. All error logging is done there.
+  if (!check_obj_to_x_preconditions(object))
+    return;
+  
+  // Precondition: The character in question must exist.
+  if (!ch) {
+    mudlog("SYSLOG: NULL char passed to obj_to_cyberware", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  // It's gotta be cyberware in order to be a valid obj_to_cyberware target.
+  if (GET_OBJ_TYPE(object) != ITEM_CYBERWARE) {
+    log("Non-cyberware object type passed to obj_to_cyberware.");
+    return;
+  }
+  
+  object->next_content = ch->cyberware;
+  ch->cyberware = object;
+  object->carried_by = ch;
+  object->in_room = NULL;
+  affect_total(ch);
 }
 
 void obj_to_bioware(struct obj_data * object, struct char_data * ch)
 {
   int temp;
   
-  if (object && ch)
-  {
-    if (GET_OBJ_TYPE(object) != ITEM_BIOWARE) {
-      log("Non-bioware object type passed to obj_to_bioware.");
-      return;
-    }
-    
-    object->next_content = ch->bioware;
-    ch->bioware = object;
-    object->carried_by = ch;
-    object->in_room = NULL;
-    
-    if (GET_OBJ_VAL(object, 0) != BIO_ADRENALPUMP || GET_OBJ_VAL(object, 5) > 0)
-      for (temp = 0; temp < MAX_OBJ_AFFECT; temp++)
-        affect_modify(ch,
-                      object->affected[temp].location,
-                      object->affected[temp].modifier,
-                      object->obj_flags.bitvector, TRUE);
-    
-    affect_total(ch);
-  } else
-    log("SYSLOG: NULL obj or char passed to obj_to_bioware");
+  // Check our object-related preconditions. All error logging is done there.
+  if (!check_obj_to_x_preconditions(object))
+    return;
+  
+  // Precondition: The character in question must exist.
+  if (!ch) {
+    mudlog("SYSLOG: NULL char passed to obj_to_bioware", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  // It's gotta be bioware to be a valid obj_to_bioware target.
+  if (GET_OBJ_TYPE(object) != ITEM_BIOWARE) {
+    log("Non-bioware object type passed to obj_to_bioware.");
+    return;
+  }
+  
+  object->next_content = ch->bioware;
+  ch->bioware = object;
+  object->carried_by = ch;
+  object->in_room = NULL;
+  
+  if (GET_OBJ_VAL(object, 0) != BIO_ADRENALPUMP || GET_OBJ_VAL(object, 5) > 0)
+    for (temp = 0; temp < MAX_OBJ_AFFECT; temp++)
+      affect_modify(ch,
+                    object->affected[temp].location,
+                    object->affected[temp].modifier,
+                    object->obj_flags.bitvector, TRUE);
+  
+  affect_total(ch);
 }
 
 void obj_from_bioware(struct obj_data *bio)
@@ -1583,75 +1642,87 @@ struct char_data *get_char_room(const char *name, struct room_data *room)
 void obj_to_veh(struct obj_data * object, struct veh_data * veh)
 {
   struct obj_data *i = NULL, *op = NULL;
-  if (!object || !veh)
-    log("SYSLOG: Illegal value(s) passed to obj_to_veh");
-  else
-  {
-    for (i = veh->contents; i; i = i->next_content) {
-      if (i->item_number == object->item_number &&
-          !strcmp(i->text.room_desc, object->text.room_desc) &&
-          IS_INVIS(i) == IS_INVIS(object))
-        break;
-      
-      op = i;
-    }
-    
-    if (i) {
-      object->next_content = i;
-      if (op)
-        op->next_content = object;
-      else
-        veh->contents = object;
-    } else {
-      object->next_content = veh->contents;
-      veh->contents = object;
-    }
-    veh->usedload += GET_OBJ_WEIGHT(object);
-    object->in_veh = veh;
-    object->in_room = NULL;
-    object->carried_by = NULL;
+  
+  // Check our object-related preconditions. All error logging is done there.
+  if (!check_obj_to_x_preconditions(object))
+    return;
+  
+  // Precondition: The vehicle in question must exist.
+  if (!veh) {
+    mudlog("SYSLOG: NULL vehicle passed to obj_to_veh.", NULL, LOG_SYSLOG, TRUE);
+    return;
   }
+  
+  for (i = veh->contents; i; i = i->next_content) {
+    if (i->item_number == object->item_number &&
+        !strcmp(i->text.room_desc, object->text.room_desc) &&
+        IS_INVIS(i) == IS_INVIS(object))
+      break;
+    
+    op = i;
+  }
+  
+  if (i) {
+    object->next_content = i;
+    if (op)
+      op->next_content = object;
+    else
+      veh->contents = object;
+  } else {
+    object->next_content = veh->contents;
+    veh->contents = object;
+  }
+  
+  veh->usedload += GET_OBJ_WEIGHT(object);
+  object->in_veh = veh;
+  object->in_room = NULL;
+  object->carried_by = NULL;
 }
 /* put an object in a room */
 void obj_to_room(struct obj_data * object, struct room_data *room)
 {
   struct obj_data *i = NULL, *op = NULL;
   
-  if (!object || !room)
-    log("SYSLOG: Illegal value(s) passed to obj_to_room");
-  else
-  {
-    for (i = room->contents; i; i = i->next_content) {
-      if (i->item_number == object->item_number &&
-          !strcmp(i->text.room_desc, object->text.room_desc) &&
-          IS_INVIS(i) == IS_INVIS(object))
-        break;
-      
-      op = i;
-    }
-    
-    if (op == object) {
-      log("SYSLOG: WTF? ^.^");
-      return;
-    }
-    if (i) {
-      object->next_content = i;
-      if (op)
-        op->next_content = object;
-      else
-        room->contents = object;
-    } else {
-      object->next_content = room->contents;
-      room->contents = object;
-    }
-    
-    object->in_room = room;
-    object->carried_by = NULL;
-    
-    // If it's a workshop, make sure the room's workshops[] table reflects this.
-    if (GET_OBJ_TYPE(object) == ITEM_WORKSHOP)
-      add_workshop_to_room(object);
+  // Check our object-related preconditions. All error logging is done there.
+  if (!check_obj_to_x_preconditions(object))
+    return;
+  
+  // Precondition: The room in question must exist.
+  if (!room) {
+    mudlog("SYSLOG: NULL room passed to obj_to_room.", NULL, LOG_SYSLOG, TRUE);
+    return;
   }
+  
+  for (i = room->contents; i; i = i->next_content) {
+    if (i->item_number == object->item_number &&
+        !strcmp(i->text.room_desc, object->text.room_desc) &&
+        IS_INVIS(i) == IS_INVIS(object))
+      break;
+    
+    op = i;
+  }
+  
+  if (op == object) {
+    log("SYSLOG: WTF? ^.^");
+    return;
+  }
+  if (i) {
+    object->next_content = i;
+    if (op)
+      op->next_content = object;
+    else
+      room->contents = object;
+  } else {
+    object->next_content = room->contents;
+    room->contents = object;
+  }
+  
+  object->in_room = room;
+  object->carried_by = NULL;
+  
+  // If it's a workshop, make sure the room's workshops[] table reflects this.
+  if (GET_OBJ_TYPE(object) == ITEM_WORKSHOP)
+    add_workshop_to_room(object);
 }
 
 
@@ -1686,6 +1757,22 @@ void obj_to_obj(struct obj_data * obj, struct obj_data * obj_to)
 {
   struct obj_data *tmp_obj;
   struct obj_data *i = NULL, *op = NULL;
+  
+  // Check our object-related preconditions. All error logging is done there.
+  if (!check_obj_to_x_preconditions(obj))
+    return;
+  
+  // Precondition: The object we're putting it in must exist.
+  if (!obj_to) {
+    mudlog("SYSLOG: NULL obj_to passed to obj_to_obj", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  // Precondition: We can't fold it in on itself.
+  if (obj == obj_to) {
+    mudlog("ERROR: Attempting to put an object inside of itself in obj_to_obj().", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
   
   for (i = obj_to->contains; i; i = i->next_content)
   {

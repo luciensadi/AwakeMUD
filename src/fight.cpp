@@ -2091,6 +2091,15 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
   ACMD_DECLARE(do_disconnect);
   ACMD_CONST(do_return);
   
+  if (!ch) {
+    mudlog("SYSERR: NULL ch passed to damage()! Aborting call, nobody takes damage this time.", victim, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  if (!victim) {
+    mudlog("SYSERR: NULL victim passed to damage()! Aborting call, nobody takes damage this time.", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
   if (GET_POS(victim) <= POS_DEAD)
   {
     log("SYSERR: Attempt to damage a corpse.");
