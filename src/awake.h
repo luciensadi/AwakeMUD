@@ -320,6 +320,7 @@ enum {
 
 /* preference flags: used by char_data.player_specials.pref */
 
+// If you add to this list, also add to constant.cpp's preference_bits[].
 #define PRF_PACIFY              0
 #define PRF_COMPACT             1 
 #define PRF_AUTOEXIT            2  /* Display exits in a room       */
@@ -369,6 +370,7 @@ enum {
 
 /* log watch */
 
+// If you add to this list, also add the name of your new log type to constants.cpp's log_types[].
 #define LOG_CONNLOG        0
 #define LOG_DEATHLOG       1
 #define LOG_MISCLOG        2

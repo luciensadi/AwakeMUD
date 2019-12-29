@@ -562,6 +562,7 @@ const char *preference_bits[] =
     "PGROUPLOG",
     "SHOWGROUPTAG",
     "KEEPALIVE",
+    "HELPLOG",
     "\n"
   };
 
@@ -1014,6 +1015,7 @@ const char *log_types[] =
     "GRIDLOG",
     "WRECKLOG",
     "PGROUPLOG",
+    "HELPLOG",
     "\n"
   };
 

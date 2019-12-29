@@ -728,12 +728,12 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
   ct = time(0);
   tmp = asctime(localtime(&ct));
   
-  if ( ch && ch->desc && ch->desc->original )
+  if (ch && ch->desc)
     sprintf(buf2, "[%5ld] (%s) ",
             get_ch_in_room(ch)->number,
             GET_CHAR_NAME(ch));
-  else if (ch && ch->in_room)
-    sprintf(buf2, "[%5ld] ", ch->in_room->number);
+  else if (ch)
+    sprintf(buf2, "[%5ld] ", get_ch_in_room(ch)->number);
   else
     strcpy(buf2, "");
   
@@ -754,9 +754,10 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
                                    PLR_EDITING, ENDBIT))
         continue;
       
+      // We don't show log messages from imms who are invis at a level higher than you, unless you're a high enough level that that doesn't matter.
       if (ch
           && !access_level(tch, GET_INVIS_LEV(ch))
-          && !access_level(tch, LVL_BUILDER)) // Decreased from VICEPRES-- we already have priv checks to toggle logs in the first place.
+          && !access_level(tch, LVL_VICEPRES))
         continue;
       switch (log) {
         case LOG_CONNLOG:

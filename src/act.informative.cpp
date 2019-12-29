@@ -3283,7 +3283,7 @@ void display_help(char *help, const char *arg, struct char_data *ch) {
     row = mysql_fetch_row(res);
     if (mysql_num_rows(res) == 1) {
       // We found a single candidate row-- send that back.
-      sprintf(ENDOF(help), "^W%s^n\r\n\r\n%s\r\n", row[0], row[1]);
+      sprintf(help, "^W%s^n\r\n\r\n%s\r\n", row[0], row[1]);
     } else {
       // We didn't find any candidate rows, or we found too many. They'll get the pre-prepared string, and we'll log this one.
       sprintf(buf3, "Overbroad helpfile search (%d articles): %s.", x, arg);
