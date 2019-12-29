@@ -28,8 +28,8 @@ struct obj_data;
 
 /* public functions in utils.c */
 bool    has_cyberweapon(struct char_data *ch);
-char    *str_dup(const char *source);
-char    *str_str( const char *str1, const char *str2 );
+char *  str_dup(const char *source);
+char *  str_str( const char *str1, const char *str2 );
 int     str_cmp(const char *arg1, const char *arg2);
 int     strn_cmp(const char *arg1, const char *arg2, int n);
 size_t  strlcpy(char *buf, const char *src, size_t bufsz);
@@ -84,10 +84,11 @@ bool    attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data
 struct  obj_data *unattach_attachment_from_weapon(int location, struct obj_data *weapon, struct char_data *ch);
 void    copy_over_necessary_info(struct char_data *original, struct char_data *clone);
 void    clear_editing_data(struct descriptor_data *d);
-char    *double_up_color_codes(const char *string);
+char *  double_up_color_codes(const char *string);
 struct  char_data *get_obj_carried_by_recursive(struct obj_data *obj);
 struct  char_data *get_obj_worn_by_recursive(struct obj_data *obj);
 struct  char_data *get_obj_possessor(struct obj_data *obj);
+char *  generate_new_loggable_representation(struct obj_data *obj);
 
 
 // Skill-related.

@@ -2573,3 +2573,69 @@ struct char_data *get_obj_possessor(struct obj_data *obj) {
   
   return get_obj_worn_by_recursive(obj);
 }
+
+// Creates a NEW loggable string from an object. YOU MUST DELETE [] THE OUTPUT OF THIS.
+char *generate_new_loggable_representation(struct obj_data *obj) {
+  char log_string[MAX_STRING_LENGTH];
+  memset(log_string, 0, sizeof(char) * MAX_STRING_LENGTH);
+  
+  if (!obj) {
+    strcpy(log_string, "SYSERR: Null object passed to generate_loggable_representation().");
+    mudlog(log_string, NULL, LOG_SYSLOG, TRUE);
+    return str_dup(log_string);
+  }
+  
+  sprintf(log_string, "(obj %ld) %s%s",
+          GET_OBJ_VNUM(obj),
+          obj->text.name,
+          IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? " [wizloaded]" : "");
+    
+  if (obj->restring)
+    sprintf(ENDOF(log_string), " [restring: %s]", obj->restring);
+  
+  switch(GET_OBJ_TYPE(obj)) {
+    case ITEM_MONEY:
+      // The only time we'll ever hit perform_give with money is if it's a credstick.
+      sprintf(ENDOF(log_string), ", containing %d nuyen", GET_OBJ_VAL(obj, 0));
+      break;
+    case ITEM_DECK_ACCESSORY:
+      // Computer parts and optical chips.
+      if (GET_OBJ_VAL(obj, 0) == TYPE_PARTS) {
+        sprintf(ENDOF(log_string), ", containing %d nuyen worth of %s", GET_OBJ_COST(obj), GET_OBJ_VAL(obj, 1) ? "optical chips" : "parts");
+      }
+      break;
+    case ITEM_MAGIC_TOOL:
+      // Summoning materials.
+      if (GET_OBJ_VAL(obj, 0) == TYPE_SUMMONING) {
+        sprintf(ENDOF(log_string), ", containing %d nuyen worth of summoning materials", GET_OBJ_COST(obj));
+      }
+      break;
+    case ITEM_GUN_AMMO:
+      // A box of ammunition.
+      sprintf(ENDOF(log_string), ", containing %d units of %s %s ammo", GET_OBJ_VAL(obj, 0),
+              ammo_type[GET_OBJ_VAL(obj, 2)].name, weapon_type[GET_OBJ_VAL(obj, 1)]);
+      break;
+    case ITEM_CONTAINER:
+      // A container-- u tryna b sneeky, brah?
+      if (!obj->contains) {
+        sprintf(ENDOF(log_string), ", which is empty");
+      } else {
+        sprintf(ENDOF(log_string), ", containing: [");
+        for (struct obj_data *temp = obj->contains; temp; temp = temp->next_content) {
+          char *representation = generate_new_loggable_representation(temp);
+          sprintf(buf3, " %s%s%s",
+                  (!temp->next_content && temp != obj->contains) ? "and " : "",
+                  representation,
+                  temp->next_content ? ";" : "");
+          strlcat(log_string, buf3, MAX_STRING_LENGTH);
+          delete [] representation;
+        }
+        strlcat(log_string, " ]", MAX_STRING_LENGTH);
+        break;
+      }
+    default:
+      break;
+  }
+  
+  return str_dup(log_string);
+}

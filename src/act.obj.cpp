@@ -146,11 +146,12 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
       act("$n puts $p in $P.", TRUE, ch, obj, cont, TO_ROOM);
       if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
            || IS_OBJ_STAT( obj, ITEM_WIZLOAD) ) {
-        sprintf(buf, "%s puts in (%ld) %s: (obj %ld) %s%s", GET_CHAR_NAME(ch),
-                GET_OBJ_VNUM( cont ), cont->text.name,
-                GET_OBJ_VNUM( obj ), obj->text.name,
-                IS_OBJ_STAT(obj,ITEM_WIZLOAD) ? " *" : "");
+        char *representation = generate_new_loggable_representation(obj);
+        sprintf(buf, "%s puts in (%ld) %s [restring: %s]: %s", GET_CHAR_NAME(ch),
+                GET_OBJ_VNUM( cont ), cont->text.name, cont->restring ? cont->restring : "none",
+                representation);
         mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+        delete [] representation;
       }
     }
     return;
@@ -180,11 +181,12 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
   act("$n puts $p in $P.", TRUE, ch, obj, cont, TO_ROOM);
   if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
        || IS_OBJ_STAT( obj, ITEM_WIZLOAD) ) {
-    sprintf(buf, "%s puts in (%ld) %s: (obj %ld) %s%s", GET_CHAR_NAME(ch),
-            GET_OBJ_VNUM( cont ), cont->text.name,
-            GET_OBJ_VNUM( obj ), obj->text.name,
-            IS_OBJ_STAT(obj,ITEM_WIZLOAD) ? " *" : "");
+    char *representation = generate_new_loggable_representation(obj);
+    sprintf(buf, "%s puts in (%ld) %s [restring: %s]: %s", GET_CHAR_NAME(ch),
+            GET_OBJ_VNUM( cont ), cont->text.name, cont->restring ? cont->restring : "none",
+            representation);
     mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+    delete [] representation;
   }
 }
 
@@ -616,12 +618,13 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
     else {
       if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
            || IS_OBJ_STAT( obj, ITEM_WIZLOAD) ) {
-        sprintf(buf, "%s gets from (%ld) %s%s: (obj %ld) %s%s%s",
+        char *representation = generate_new_loggable_representation(obj);
+        sprintf(buf, "%s gets from (%ld) %s [restring: %s]: %s",
                 GET_CHAR_NAME(ch),
-                GET_OBJ_VNUM( cont ), GET_OBJ_NAME(cont), cont->restring ? " (restrung)" : "",
-                GET_OBJ_VNUM( obj ), GET_OBJ_NAME(obj), cont->restring ? " (restrung)" : "",
-                IS_OBJ_STAT(obj,ITEM_WIZLOAD) ? " (wizloaded)" : "");
+                GET_OBJ_VNUM( cont ), cont->text.name, cont->restring ? cont->restring : "none",
+                representation);
         mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+        delete [] representation;
       }
 
       if (GET_OBJ_TYPE(cont) == ITEM_QUIVER)
@@ -846,10 +849,10 @@ int perform_get_from_room(struct char_data * ch, struct obj_data * obj, bool dow
          }
     if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
          || IS_OBJ_STAT( obj, ITEM_WIZLOAD) ) {
-      sprintf(buf, "%s gets from room: (obj %ld) %s%s", GET_CHAR_NAME(ch),
-              GET_OBJ_VNUM( obj ), obj->text.name,
-              IS_OBJ_STAT(obj,ITEM_WIZLOAD) ? " *" : "");
+      char *representation = generate_new_loggable_representation(obj);
+      sprintf(buf, "%s gets from room: %s", GET_CHAR_NAME(ch), representation);
       mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+      delete [] representation;
     }
     obj_from_room(obj);
     obj_to_char(obj, ch);
@@ -1323,11 +1326,12 @@ int perform_drop(struct char_data * ch, struct obj_data * obj, byte mode,
   if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
        || IS_OBJ_STAT( obj, ITEM_WIZLOAD) )
   {
-    sprintf(buf, "%s %ss: (obj %ld) %s%s", GET_CHAR_NAME(ch),
+    char *representation = generate_new_loggable_representation(obj);
+    sprintf(buf, "%s %ss: %s", GET_CHAR_NAME(ch),
             sname,
-            GET_OBJ_VNUM( obj ), obj->text.name,
-            IS_OBJ_STAT(obj,ITEM_WIZLOAD) ? " *" : "");
+            representation);
     mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+    delete [] representation;
   }
 
   switch (mode)
@@ -1533,39 +1537,10 @@ bool perform_give(struct char_data * ch, struct char_data * vict, struct obj_dat
        || IS_OBJ_STAT( obj, ITEM_WIZLOAD) )
   {
     // Default/preliminary logging message; this is appended to where necessary.
-    sprintf(buf, "%s gives %s: (obj %ld) %s%s",
-            GET_CHAR_NAME(ch), GET_CHAR_NAME(vict),
-            GET_OBJ_VNUM( obj ), obj->text.name,
-            IS_OBJ_STAT(obj,ITEM_WIZLOAD) ? " [wizloaded]" : "");
-    
-    // TODO: Special logging for credsticks, parts, and anything else with an inherent value.
-    switch(GET_OBJ_TYPE(obj)) {
-      case ITEM_MONEY:
-        // The only time we'll ever hit perform_give with money is if it's a credstick.
-        sprintf(ENDOF(buf), ", containing %d nuyen", GET_OBJ_VAL(obj, 0));
-        break;
-      case ITEM_DECK_ACCESSORY:
-        // Computer parts and optical chips.
-        if (GET_OBJ_VAL(obj, 0) == TYPE_PARTS) {
-          sprintf(ENDOF(buf), ", containing %d nuyen worth of %s", GET_OBJ_COST(obj), GET_OBJ_VAL(obj, 1) ? "chips" : "parts");
-        }
-        break;
-      case ITEM_MAGIC_TOOL:
-        // Summoning materials.
-        if (GET_OBJ_VAL(obj, 0) == TYPE_SUMMONING) {
-          sprintf(ENDOF(buf), ", containing %d nuyen worth of summoning materials", GET_OBJ_COST(obj));
-        }
-        break;
-      case ITEM_GUN_AMMO:
-        // A box of ammunition.
-        sprintf(ENDOF(buf), ", containing %d units of %s %s ammo", GET_OBJ_VAL(obj, 0),
-                ammo_type[GET_OBJ_VAL(obj, 2)].name, weapon_type[GET_OBJ_VAL(obj, 1)]);
-        break;
-      default:
-        break;
-    }
-    
+    char *representation = generate_new_loggable_representation(obj);
+    sprintf(buf, "%s gives %s: %s", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), representation);
     mudlog(buf, ch, IS_OBJ_STAT(obj, ITEM_WIZLOAD) ? LOG_WIZITEMLOG : LOG_CHEATLOG, TRUE);
+    delete [] representation;
   }
 
   if (!IS_NPC(ch) && IS_NPC(vict) && GET_QUEST(ch)) {
