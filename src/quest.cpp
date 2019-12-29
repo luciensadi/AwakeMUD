@@ -691,6 +691,8 @@ SPECIAL(johnson)
       comm = CMD_JOB_YES;
     else if (strstr(argument, "no"))
       comm = CMD_JOB_NO;
+    else
+      return FALSE;
     need_to_speak = TRUE;
   } else if (CMD_IS("nod")) {
     comm = CMD_JOB_YES;
