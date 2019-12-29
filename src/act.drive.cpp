@@ -447,8 +447,8 @@ void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tve
     act(buf, FALSE, vict, 0, 0, TO_CHAR);
     act(buf1, FALSE, vict, 0, 0, TO_ROOM);
     act("You head straight towards $N.", FALSE, ch, 0, vict, TO_CHAR);
-    if (success_test(GET_REA(vict), 4)) {
-      send_to_char(ch, "You quickly let out an attack at it!\r\n");
+    if (GET_POS(vict) > POS_RESTING && success_test(GET_REA(vict), 4)) {
+      send_to_char(vict, "You quickly let out an attack at it!\r\n");
       act("$n quickly lets an attack fly.", FALSE, vict, 0, 0, TO_ROOM);
       act("$N suddenly attacks!", FALSE, ch, 0, vict, TO_CHAR);
       AFF_FLAGS(vict).SetBit(AFF_COUNTER_ATT);
