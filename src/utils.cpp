@@ -728,14 +728,19 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
   ct = time(0);
   tmp = asctime(localtime(&ct));
   
-  if (ch && ch->desc)
-    sprintf(buf2, "[%5ld] (%s) ",
-            get_ch_in_room(ch)->number,
-            GET_CHAR_NAME(ch));
-  else if (ch)
-    sprintf(buf2, "[%5ld] ", get_ch_in_room(ch)->number);
-  else
-    strcpy(buf2, "");
+  // Fallback-- it's blank if we find no useful conditions.
+  strcpy(buf2, "");
+  
+  if (ch) {
+    if (ch->in_room || ch->in_veh) {
+      if (ch->desc)
+        sprintf(buf2, "[%5ld] (%s) ",
+                get_ch_in_room(ch)->number,
+                GET_CHAR_NAME(ch));
+      else
+        sprintf(buf2, "[%5ld] ", get_ch_in_room(ch)->number);
+    }
+  }
   
   if (file)
     fprintf(stderr, "%-19.19s :: %s: %s%s\n", tmp, log_types[log], buf2, str);

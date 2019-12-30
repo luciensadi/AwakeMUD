@@ -1201,8 +1201,8 @@ void char_to_room(struct char_data * ch, struct room_data *room)
 
 #define IS_INVIS(o) IS_OBJ_STAT(o, ITEM_INVISIBLE)
 
-// Checks obj_to_x preconditions for common errors. Overwrites buf3.
-bool check_obj_to_x_preconditions(struct obj_data * object) {
+// Checks obj_to_x preconditions for common errors. Overwrites buf3. Returns TRUE for kosher, FALSE otherwise.
+bool check_obj_to_x_preconditions(struct obj_data * object, struct char_data *ch) {
   if (!object) {
     mudlog("ERROR: Null object passed to check_obj_to_x_preconditions().", NULL, LOG_SYSLOG, TRUE);
     return FALSE;
@@ -1213,29 +1213,29 @@ bool check_obj_to_x_preconditions(struct obj_data * object) {
   
   // Fail if the object already has next_content. This implies that it's part of someone else's linked list-- never merge them!
   if (object->next_content) {
-    strcat(buf3, "It's already part of a next_content linked list.");
-    mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
+    strcat(ENDOF(buf3), "It's already part of a next_content linked list.");
+    mudlog(buf3, ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
 
   // We can't give an object away that's already someone else's possession.
   if (object->carried_by) {
     sprintf(ENDOF(buf3), "Object already belongs to %s.", GET_CHAR_NAME(object->carried_by));
-    mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
+    mudlog(buf3, ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
   
   // We can't give an object away if it's sitting in a room.
   if (object->in_room) {
     sprintf(ENDOF(buf3), "Object is already in room %ld.", object->in_room->number);
-    mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
+    mudlog(buf3, ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
   
   // We can't give an object away if it's in a vehicle.
   if (object->in_veh) {
     sprintf(ENDOF(buf3), "Object is already in vehicle %s.", GET_VEH_NAME(object->in_veh));
-    mudlog(buf3, NULL, LOG_SYSLOG, TRUE);
+    mudlog(buf3, ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
   
@@ -1249,8 +1249,9 @@ void obj_to_char(struct obj_data * object, struct char_data * ch)
   struct obj_data *i = NULL, *op = NULL;
   
   // Check our object-related preconditions. All error logging is done there.
-  if (!check_obj_to_x_preconditions(object))
+  if (!check_obj_to_x_preconditions(object, ch)) {
     return;
+  }
   
   // Precondition: The character in question must exist.
   if (!ch) {
@@ -1268,16 +1269,17 @@ void obj_to_char(struct obj_data * object, struct char_data * ch)
     
     // If their inventory list has turned into an infinite loop due to a bug, warn about it and bail out here instead of hanging the MUD.
     if (i == i->next_content) {
-      sprintf(buf, "ERROR: Infinite loop detected in obj_to_char. Looping object is %s (%ld). Bailing out, %s is not getting %s %s (%ld).",
+      sprintf(buf3, "ERROR: Infinite loop detected in obj_to_char. Looping object is %s (%ld). Bailing out, %s is not getting %s %s (%ld).",
               GET_OBJ_NAME(i), GET_OBJ_VNUM(i),
               GET_CHAR_NAME(ch) ? GET_CHAR_NAME(ch) : GET_NAME(ch), HSHR(ch),
               GET_OBJ_NAME(object), GET_OBJ_VNUM(object));
-      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      mudlog(buf3, ch, LOG_SYSLOG, TRUE);
       return;
     }
     // If they already have a copy of this object, break out of the loop while preserving i as pointing to that copy and op as pointing to the last thing we processed (if anything).
-    if (i->item_number == object->item_number && !strcmp(i->text.room_desc, object->text.room_desc))
+    if (i->item_number == object->item_number && !strcmp(i->text.room_desc, object->text.room_desc)) {
       break;
+    }
     op = i;
   }
   
@@ -1286,11 +1288,13 @@ void obj_to_char(struct obj_data * object, struct char_data * ch)
     // Set our to-give object's next_content to the matching item i.
     object->next_content = i;
     // If op exists (which points to the object we evaluated immediately before i), point its next_content to object. Essentially this is a linked list insert.
-    if (op)
+    if (op) {
       op->next_content = object;
+    }
     // Otherwise, we know our object that we're giving them is the head of their carrying list-- set it as such.
-    else
+    else {
       ch->carrying = object;
+    }
   }
   // Otherwise, stick the new object at the head of their inventory list.
   else {
@@ -1304,14 +1308,15 @@ void obj_to_char(struct obj_data * object, struct char_data * ch)
   IS_CARRYING_N(ch)++;
   
   // Apply focus effects as needed.
-  if (GET_OBJ_TYPE(object) == ITEM_FOCUS)
+  if (GET_OBJ_TYPE(object) == ITEM_FOCUS) {
     apply_focus_effect(ch, object);
+  }
 }
 
 void obj_to_cyberware(struct obj_data * object, struct char_data * ch)
 {
   // Check our object-related preconditions. All error logging is done there.
-  if (!check_obj_to_x_preconditions(object))
+  if (!check_obj_to_x_preconditions(object, ch))
     return;
   
   // Precondition: The character in question must exist.
@@ -1338,7 +1343,7 @@ void obj_to_bioware(struct obj_data * object, struct char_data * ch)
   int temp;
   
   // Check our object-related preconditions. All error logging is done there.
-  if (!check_obj_to_x_preconditions(object))
+  if (!check_obj_to_x_preconditions(object, ch))
     return;
   
   // Precondition: The character in question must exist.
@@ -1644,7 +1649,7 @@ void obj_to_veh(struct obj_data * object, struct veh_data * veh)
   struct obj_data *i = NULL, *op = NULL;
   
   // Check our object-related preconditions. All error logging is done there.
-  if (!check_obj_to_x_preconditions(object))
+  if (!check_obj_to_x_preconditions(object, NULL))
     return;
   
   // Precondition: The vehicle in question must exist.
@@ -1684,7 +1689,7 @@ void obj_to_room(struct obj_data * object, struct room_data *room)
   struct obj_data *i = NULL, *op = NULL;
   
   // Check our object-related preconditions. All error logging is done there.
-  if (!check_obj_to_x_preconditions(object))
+  if (!check_obj_to_x_preconditions(object, NULL))
     return;
   
   // Precondition: The room in question must exist.
@@ -1759,7 +1764,7 @@ void obj_to_obj(struct obj_data * obj, struct obj_data * obj_to)
   struct obj_data *i = NULL, *op = NULL;
   
   // Check our object-related preconditions. All error logging is done there.
-  if (!check_obj_to_x_preconditions(obj))
+  if (!check_obj_to_x_preconditions(obj, NULL))
     return;
   
   // Precondition: The object we're putting it in must exist.
