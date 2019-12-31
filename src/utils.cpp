@@ -731,15 +731,13 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
   // Fallback-- it's blank if we find no useful conditions.
   strcpy(buf2, "");
   
-  if (ch) {
-    if (ch->in_room || ch->in_veh) {
-      if (ch->desc)
-        sprintf(buf2, "[%5ld] (%s) ",
-                get_ch_in_room(ch)->number,
-                GET_CHAR_NAME(ch));
-      else
-        sprintf(buf2, "[%5ld] ", get_ch_in_room(ch)->number);
-    }
+  if (ch && (ch->in_room || ch->in_veh)) {
+    if (ch->desc)
+      sprintf(buf2, "[%5ld] (%s) ",
+              get_ch_in_room(ch)->number,
+              GET_CHAR_NAME(ch));
+    else
+      sprintf(buf2, "[%5ld] ", get_ch_in_room(ch)->number);
   }
   
   if (file)
@@ -803,6 +801,15 @@ void mudlog(const char *str, struct char_data *ch, int log, bool file)
           break;
         case LOG_HELPLOG:
           check_log = PRF_HELPLOG;
+          break;
+        case LOG_PURGELOG:
+          check_log = PRF_PURGELOG;
+          break;
+        default:
+          char errbuf[500];
+          sprintf(errbuf, "SYSERR: Attempting to display a message to log type %d, but that log type is not handled in utils.cpp's mudlog() function! Dumping to SYSLOG.", log);
+          mudlog(errbuf, NULL, LOG_SYSLOG, TRUE);
+          check_log = PRF_SYSLOG;
           break;
       }
       if (PRF_FLAGGED(tch, check_log))
@@ -2603,6 +2610,20 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
   if (obj->restring)
     sprintf(ENDOF(log_string), " [restring: %s]", obj->restring);
   
+  if (obj->contains) {
+    sprintf(ENDOF(log_string), ", containing: [");
+    for (struct obj_data *temp = obj->contains; temp; temp = temp->next_content) {
+      char *representation = generate_new_loggable_representation(temp);
+      sprintf(buf3, " %s%s%s",
+              (!temp->next_content && temp != obj->contains) ? "and " : "",
+              representation,
+              temp->next_content ? ";" : "");
+      strlcat(log_string, buf3, MAX_STRING_LENGTH);
+      delete [] representation;
+    }
+    strlcat(log_string, " ]", MAX_STRING_LENGTH);
+  }
+  
   switch(GET_OBJ_TYPE(obj)) {
     case ITEM_MONEY:
       // The only time we'll ever hit perform_give with money is if it's a credstick.
@@ -2625,27 +2646,50 @@ char *generate_new_loggable_representation(struct obj_data *obj) {
       sprintf(ENDOF(log_string), ", containing %d units of %s %s ammo", GET_OBJ_VAL(obj, 0),
               ammo_type[GET_OBJ_VAL(obj, 2)].name, weapon_type[GET_OBJ_VAL(obj, 1)]);
       break;
-    case ITEM_CONTAINER:
-      // A container-- u tryna b sneeky, brah?
-      if (!obj->contains) {
-        sprintf(ENDOF(log_string), ", which is empty");
-      } else {
-        sprintf(ENDOF(log_string), ", containing: [");
-        for (struct obj_data *temp = obj->contains; temp; temp = temp->next_content) {
-          char *representation = generate_new_loggable_representation(temp);
-          sprintf(buf3, " %s%s%s",
-                  (!temp->next_content && temp != obj->contains) ? "and " : "",
-                  representation,
-                  temp->next_content ? ";" : "");
-          strlcat(log_string, buf3, MAX_STRING_LENGTH);
-          delete [] representation;
-        }
-        strlcat(log_string, " ]", MAX_STRING_LENGTH);
-        break;
-      }
     default:
       break;
   }
   
   return str_dup(log_string);
+}
+
+// Purging a vehicle? Call this function to log it.
+void purgelog(struct veh_data *veh) {
+  char internal_buffer[MAX_STRING_LENGTH];
+  const char *representation = NULL;
+  
+  // Begin the purgelog entry.
+  sprintf(internal_buffer, "- Writing purgelog for vehicle %s (%ld)", GET_VEH_NAME(veh), GET_VEH_VNUM(veh));
+  mudlog(internal_buffer, NULL, LOG_PURGELOG, TRUE);
+  
+  // Log its mounts.
+  for (struct obj_data *mount = veh->mount; mount; mount = mount->next_content) {
+    representation = generate_new_loggable_representation(mount);
+    sprintf(internal_buffer, "- Mount: %s", representation);
+    mudlog(internal_buffer, NULL, LOG_PURGELOG, TRUE);
+    delete [] representation;
+  }
+  
+  // Log its mods.
+  for (int x = 0; x < NUM_MODS; x++) {
+    if (!GET_MOD(veh, x))
+      continue;
+    
+    representation = generate_new_loggable_representation(GET_MOD(veh, x));
+    sprintf(internal_buffer, "- Mod attached to the %s: %s", mod_name[x], representation);
+    mudlog(internal_buffer, NULL, LOG_PURGELOG, TRUE);
+    delete [] representation;
+  }
+  
+  // Log its contained objects.
+  for (struct obj_data *obj = veh->contents; obj; obj = obj->next_content) {
+    representation = generate_new_loggable_representation(obj);
+    sprintf(internal_buffer, "- Contained object: %s", representation);
+    mudlog(internal_buffer, NULL, LOG_PURGELOG, TRUE);
+    delete [] representation;
+  }
+  
+  // End the purgelog entry.
+  sprintf(internal_buffer, "- End purgelog for vehicle %s (%ld)", GET_VEH_NAME(veh), GET_VEH_VNUM(veh));
+  mudlog(internal_buffer, NULL, LOG_PURGELOG, TRUE);
 }

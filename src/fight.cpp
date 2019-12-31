@@ -5070,7 +5070,8 @@ void vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
     
     sprintf(buf, "You ram a %s!\r\n", GET_VEH_NAME(tveh));
     sprintf(buf1, "%s rams straight into your ride!\r\n", GET_VEH_NAME(veh));
-    sprintf(buf2, "%s rams straight into %s!\r\n", GET_VEH_NAME(veh), GET_VEH_NAME(tveh));
+    strcpy(buf3, GET_VEH_NAME(veh));
+    sprintf(buf2, "%s rams straight into %s!\r\n", buf3, GET_VEH_NAME(tveh));
     send_to_veh(buf, veh, NULL, TRUE);
     send_to_veh(buf1, tveh, NULL, TRUE);
     send_to_room(buf2, veh->in_room);

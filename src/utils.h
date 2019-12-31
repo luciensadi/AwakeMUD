@@ -89,6 +89,7 @@ struct  char_data *get_obj_carried_by_recursive(struct obj_data *obj);
 struct  char_data *get_obj_worn_by_recursive(struct obj_data *obj);
 struct  char_data *get_obj_possessor(struct obj_data *obj);
 char *  generate_new_loggable_representation(struct obj_data *obj);
+void    purgelog(struct veh_data *veh);
 
 
 // Skill-related.
@@ -317,6 +318,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 
 #define GET_VEH_NAME(veh) (decapitalize_a_an((veh)->restring ? (veh)->restring : (veh)->short_description))
 #define GET_VEH_DESC(veh) ((veh)->restring_long ? (veh)->restring_long : (veh)->long_description)
+#define GET_VEH_VNUM(veh) ((veh)->veh_number)
 #define GET_OBJ_NAME(obj) ((obj)->restring ? (obj)->restring : (obj)->text.name)
 #define GET_OBJ_DESC(obj) ((obj)->photo ? (obj)->photo : (obj)->text.look_desc)
 #define GET_KEYWORDS(ch)  ((ch)->player.physical_text.keywords)

@@ -366,7 +366,8 @@ enum {
 #define PRF_NOCOLOR             44
 #define PRF_NOPROMPT            45
 #define PRF_HELPLOG             46
-#define PRF_MAX   		          47
+#define PRF_PURGELOG            47
+#define PRF_MAX   		          48
 
 /* log watch */
 
@@ -384,6 +385,7 @@ enum {
 #define LOG_WRECKLOG	     10
 #define LOG_PGROUPLOG      11
 #define LOG_HELPLOG        12
+#define LOG_PURGELOG       13
 
 /* player conditions */
 

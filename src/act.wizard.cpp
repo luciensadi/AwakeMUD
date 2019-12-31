@@ -1819,7 +1819,7 @@ ACMD(do_wizload)
       return;
     }
     veh = read_vehicle(r_num, REAL);
-    veh_to_room(veh, ch->in_room);
+    veh_to_room(veh, get_ch_in_room(ch));
     act("$n makes a quaint, magical gesture with one hand.", TRUE, ch,
         0, 0, TO_ROOM);
     sprintf(buf, "%s wizloaded vehicle #%d (%s).",
@@ -1832,7 +1832,7 @@ ACMD(do_wizload)
       return;
     }
     mob = read_mobile(r_num, REAL);
-    char_to_room(mob, ch->in_room);
+    char_to_room(mob, get_ch_in_room(ch));
 
     act("$n makes a quaint, magical gesture with one hand.", TRUE, ch,
         0, 0, TO_ROOM);
@@ -1936,21 +1936,34 @@ ACMD(do_purge)
 
       if (!IS_NPC(vict)) {
         sprintf(buf, "%s has purged %s.", GET_CHAR_NAME(ch), GET_NAME(vict));
-        mudlog(buf, ch, LOG_WIZLOG, TRUE);
+        mudlog(buf, ch, LOG_PURGELOG, TRUE);
         if (vict->desc) {
           close_socket(vict->desc);
           vict->desc = NULL;
         }
       }
       extract_char(vict);
-    } else if ((obj = get_obj_in_list_vis(ch, buf, ch->in_veh ? ch->in_veh->contents : ch->in_room->contents))) {
+      send_to_char(OK, ch);
+      return;
+    }
+    
+    if ((obj = get_obj_in_list_vis(ch, buf, ch->in_veh ? ch->in_veh->contents : ch->in_room->contents))) {
       act("$n destroys $p.", FALSE, ch, obj, 0, TO_ROOM);
+      const char *representation = generate_new_loggable_representation(obj);
+      sprintf(buf, "%s has purged %s.", GET_CHAR_NAME(ch), representation);
+      delete [] representation;
+      mudlog(buf, ch, LOG_PURGELOG, TRUE);
       extract_obj(obj);
-    } else if ((veh = get_veh_list(buf, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
+      send_to_char(OK, ch);
+      return;
+    }
+    
+    if ((veh = get_veh_list(buf, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
       sprintf(buf1, "$n purges %s.", GET_VEH_NAME(veh));
       act(buf1, FALSE, ch, NULL, 0, TO_ROOM);
       sprintf(buf1, "%s purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
       mudlog(buf1, ch, LOG_WIZLOG, TRUE);
+      purgelog(veh);
       extract_veh(veh);
     } else {
       send_to_char("Nothing here by that name.\r\n", ch);
@@ -1964,12 +1977,18 @@ ACMD(do_purge)
       
       for (vict = ch->in_veh->people; vict; vict = next_v) {
         next_v = vict->next_in_veh;
-        if (IS_NPC(vict))
+        if (IS_NPC(vict) && vict != ch) {
+          sprintf(buf, "%s has purged %s.", GET_CHAR_NAME(ch), GET_NAME(vict));
+          mudlog(buf, ch, LOG_PURGELOG, TRUE);
           extract_char(vict);
+        }
       }
       
       for (obj = ch->in_veh->contents; obj; obj = next_o) {
         next_o = obj->next_content;
+        const char *representation = generate_new_loggable_representation(obj);
+        sprintf(buf, "%s has purged %s.", GET_CHAR_NAME(ch), representation);
+        delete [] representation;
         extract_obj(obj);
       }
       
@@ -1977,28 +1996,39 @@ ACMD(do_purge)
         next_ve = veh->next;
         if (veh == ch->in_veh)
           continue;
+        purgelog(veh);
         extract_veh(veh);
       }
+      
+      send_to_veh("The world seems a little cleaner.\r\n", ch->in_veh, NULL, FALSE);
     }
     else {
       act("$n gestures... You are surrounded by scorching flames!", FALSE, ch, 0, 0, TO_ROOM);
-      send_to_room("The world seems a little cleaner.\r\n", ch->in_room);
 
       for (vict = ch->in_room->people; vict; vict = next_v) {
         next_v = vict->next_in_room;
-        if (IS_NPC(vict) && vict != ch)
+        if (IS_NPC(vict) && vict != ch) {
+          sprintf(buf, "%s has purged %s.", GET_CHAR_NAME(ch), GET_NAME(vict));
+          mudlog(buf, ch, LOG_PURGELOG, TRUE);
           extract_char(vict);
+        }
       }
 
       for (obj = ch->in_room->contents; obj; obj = next_o) {
         next_o = obj->next_content;
+        const char *representation = generate_new_loggable_representation(obj);
+        sprintf(buf, "%s has purged %s.", GET_CHAR_NAME(ch), representation);
+        delete [] representation;
         extract_obj(obj);
       }
       
       for (veh = ch->in_room->vehicles; veh; veh = next_ve) {
         next_ve = veh->next_veh;
+        purgelog(veh);
         extract_veh(veh);
       }
+      
+      send_to_room("The world seems a little cleaner.\r\n", ch->in_room);
     }
   }
 }
@@ -4043,7 +4073,7 @@ ACMD(do_logwatch)
   one_argument(argument, buf);
 
   if (!*buf) {
-    sprintf(buf, "You are currently watching the following:\r\n%s%s%s%s%s%s%s%s%s%s%s%s",
+    sprintf(buf, "You are currently watching the following:\r\n%s%s%s%s%s%s%s%s%s%s%s%s%s",
             (PRF_FLAGGED(ch, PRF_CONNLOG) ? "  ConnLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_DEATHLOG) ? "  DeathLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_MISCLOG) ? "  MiscLog\r\n" : ""),
@@ -4055,7 +4085,8 @@ ACMD(do_logwatch)
             (PRF_FLAGGED(ch, PRF_GRIDLOG) ? "  GridLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_WRECKLOG) ? "  WreckLog\r\n" : ""),
             (PRF_FLAGGED(ch, PRF_PGROUPLOG) ? "  PGroupLog\r\n" : ""),
-            (PRF_FLAGGED(ch, PRF_HELPLOG) ? "  HelpLog\r\n" : ""));
+            (PRF_FLAGGED(ch, PRF_HELPLOG) ? "  HelpLog\r\n" : ""),
+            (PRF_FLAGGED(ch, PRF_PURGELOG) ? "  PurgeLog\r\n" : ""));
 
     send_to_char(buf, ch);
     return;
@@ -4173,6 +4204,16 @@ ACMD(do_logwatch)
     } else {
       send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
     }
+  } else if (is_abbrev(buf, "purgelog")) {
+    if (PRF_FLAGGED(ch, PRF_PURGELOG)) {
+      send_to_char("You no longer watch the PurgeLog.\r\n", ch);
+      PRF_FLAGS(ch).RemoveBit(PRF_PURGELOG);
+    } else if (access_level(ch, LVL_ARCHITECT)) {
+      send_to_char("You will now see the PurgeLog.\r\n", ch);
+      PRF_FLAGS(ch).SetBit(PRF_PURGELOG);
+    } else {
+      send_to_char("You aren't permitted to view that log at your level.\r\n", ch);
+    }
   } else if (is_abbrev(buf, "all")) {
     if (!PRF_FLAGGED(ch, PRF_CONNLOG))
       PRF_FLAGS(ch).SetBit(PRF_CONNLOG);
@@ -4198,11 +4239,13 @@ ACMD(do_logwatch)
       PRF_FLAGS(ch).SetBit(PRF_PGROUPLOG);
     if (!PRF_FLAGGED(ch, PRF_HELPLOG) && access_level(ch, LVL_DEVELOPER))
       PRF_FLAGS(ch).SetBit(PRF_HELPLOG);
+    if (!PRF_FLAGGED(ch, PRF_PURGELOG) && access_level(ch, LVL_ARCHITECT))
+      PRF_FLAGS(ch).SetBit(PRF_PURGELOG);
     send_to_char("All available logs have been activated.\r\n", ch);
   } else if (is_abbrev(buf, "none")) {
     PRF_FLAGS(ch).RemoveBits(PRF_CONNLOG, PRF_DEATHLOG, PRF_MISCLOG, PRF_WIZLOG,
                              PRF_SYSLOG, PRF_ZONELOG, PRF_CHEATLOG, PRF_BANLOG, PRF_GRIDLOG,
-                             PRF_WRECKLOG, PRF_PGROUPLOG, PRF_HELPLOG, ENDBIT);
+                             PRF_WRECKLOG, PRF_PGROUPLOG, PRF_HELPLOG, PRF_PURGELOG, ENDBIT);
     send_to_char("All logs have been disabled.\r\n", ch);
   } else
     send_to_char("Watch what log?\r\n", ch);

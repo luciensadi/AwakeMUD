@@ -1222,7 +1222,8 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
     else if (found_veh->load - found_veh->usedload < inveh->body * mult)
       send_to_char("There is not enough room in there for that.\r\n", ch);
     else {
-      sprintf(buf, "%s drives into the back of %s.", GET_VEH_NAME(inveh), GET_VEH_NAME(found_veh));
+      strcpy(buf3, GET_VEH_NAME(inveh));
+      sprintf(buf, "%s drives into the back of %s.", buf3, GET_VEH_NAME(found_veh));
       sprintf(buf2, "You drive into the back of %s.\r\n", GET_VEH_NAME(found_veh));
       if (inveh->in_room->people)
         act(buf, 0, inveh->in_room->people, 0, 0, TO_ROOM);
@@ -1430,7 +1431,8 @@ void leave_veh(struct char_data *ch)
     sprintf(buf2, "%s drives out of the back.", GET_VEH_NAME(veh));
     send_to_veh(buf, veh, NULL, TRUE);
     send_to_veh(buf2, veh->in_veh, NULL, FALSE);
-    sprintf(buf, "%s drives out of the back of %s.", GET_VEH_NAME(veh), GET_VEH_NAME(veh->in_veh));
+    strcpy(buf3, GET_VEH_NAME(veh));
+    sprintf(buf, "%s drives out of the back of %s.", buf3, GET_VEH_NAME(veh->in_veh));
     // get_veh_in_room not needed here since the if-check guarantees that veh->in_veh->in_room is valid.
     struct room_data *room = veh->in_veh->in_room;
     veh_to_room(veh, room);

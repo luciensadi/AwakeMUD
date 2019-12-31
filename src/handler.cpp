@@ -1038,7 +1038,7 @@ void char_from_room(struct char_data * ch)
 void char_to_veh(struct veh_data * veh, struct char_data * ch)
 {
   if (!veh || !ch)
-    log("SYSLOG: Illegal value(s) passed to char_to_veh");
+    mudlog("SYSLOG: Illegal value(s) passed to char_to_veh", NULL, LOG_SYSLOG, TRUE);
   else {
     if (ch->in_room || ch->in_veh)
       char_from_room(ch);
@@ -1054,7 +1054,7 @@ void char_to_veh(struct veh_data * veh, struct char_data * ch)
 void veh_to_room(struct veh_data * veh, struct room_data *room)
 {
   if (!veh || !room)
-    log("SYSLOG: Illegal value(s) passed to veh_to_room");
+    mudlog("SYSLOG: Illegal value(s) passed to veh_to_room", NULL, LOG_SYSLOG, TRUE);
   else
   {
     if (veh->in_veh || veh->in_room)
@@ -1070,7 +1070,7 @@ void veh_to_room(struct veh_data * veh, struct room_data *room)
 void veh_to_veh(struct veh_data *veh, struct veh_data *dest)
 {
   if (!veh || !dest)
-    log("SYSLOG: Illegal value(s) passed to veh_to_veh");
+    mudlog("SYSLOG: Illegal value(s) passed to veh_to_veh", NULL, LOG_SYSLOG, TRUE);
   else {
     if (veh->in_veh || veh->in_room)
       veh_from_room(veh);
@@ -1097,7 +1097,7 @@ void icon_to_host(struct matrix_icon *icon, vnum_t to_host)
 {
   extern void make_seen(struct matrix_icon *icon, int idnum);
   if (!icon || to_host < 0 || to_host > top_of_matrix)
-    log("SYSLOG: Illegal value(s) passed to icon_to_host");
+    mudlog("SYSLOG: Illegal value(s) passed to icon_to_host", NULL, LOG_SYSLOG, TRUE);
   else
   {
     if (icon->decker)
@@ -1919,11 +1919,11 @@ void extract_veh(struct veh_data * veh)
 {
   if (veh->in_room == NULL && veh->in_veh == NULL) {
     if (veh->carriedvehs || veh->people) {
-      sprintf(buf, "SYSERR: extract_veh called on vehicle-with-contents without containing room or veh!");
+      sprintf(buf, "SYSERR: extract_veh called on vehicle-with-contents without containing room or veh! The game will likely now shit itself and die; GLHF.");
       mudlog(buf, NULL, LOG_SYSLOG, TRUE);
     }
   }
-  // If any vehicle are inside, drop them where the vehicle is.
+  // If any vehicles are inside, drop them where the vehicle is.
   struct veh_data *temp = NULL;
   while ((temp = veh->carriedvehs)) {
     sprintf(buf, "As %s disintegrates, %s falls out!\r\n", veh->short_description, temp->short_description);
@@ -1955,6 +1955,26 @@ void extract_veh(struct veh_data * veh)
       char_from_room(ch);
       char_to_room(ch, &world[real_room(RM_DANTES_GARAGE)]);
     }
+  }
+  
+  // Unhitch its tows.
+  if (veh->towing) {
+    strcpy(buf3, GET_VEH_NAME(veh));
+    sprintf(buf, "%s falls from %s's towing equipment.\r\n", GET_VEH_NAME(veh->towing), buf3);
+    if (ch->in_veh->in_room) {
+      act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_ROOM);
+      act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_CHAR);
+      veh_to_room(veh->towing, veh->in_room);
+    } else if (ch->in_veh->in_veh){
+      send_to_veh(buf, ch->in_veh->in_veh, ch, TRUE);
+      veh_to_veh(veh->towing, veh->in_veh);
+    } else {
+      sprintf(buf, "SYSERR: Veh %s (%ld) has neither in_room nor in_veh! Dropping towed veh in Dante's Garage.", GET_VEH_NAME(ch->in_veh), ch->in_veh->idnum);
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      // Can't stop, we're already blowing up the vehicle. Drop it in Dante's garage.
+      veh_to_room(veh->towing, &world[real_room(RM_DANTES_GARAGE)]);
+    }
+    veh->towing = NULL;
   }
   
   // Perform actual vehicle extraction.

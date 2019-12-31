@@ -434,8 +434,9 @@ void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tve
       target += 4;
     else if (vehm < tvehm)
       target += 2;
-    sprintf(buf, "%s heads straight towards your ride.\r\n", GET_VEH_NAME(veh));
-    sprintf(buf1, "%s heads straight towards %s.\r\n", GET_VEH_NAME(veh), GET_VEH_NAME(tveh));
+    strcpy(buf3, GET_VEH_NAME(veh));
+    sprintf(buf, "%s heads straight towards your ride.\r\n", buf3);
+    sprintf(buf1, "%s heads straight towards %s.\r\n", buf3, GET_VEH_NAME(tveh));
     sprintf(buf2, "You attempt to ram %s.\r\n", GET_VEH_NAME(tveh));
     send_to_veh(buf, tveh, 0, TRUE);
     send_to_room(buf1, veh->in_room);
@@ -1405,7 +1406,8 @@ void do_raw_target(struct char_data *ch, struct veh_data *veh, struct veh_data *
     if (AFF_FLAGGED(ch, AFF_MANNING)) {
       sprintf(buf, "%s's %s swivels towards your ride.\r\n", GET_VEH_NAME(ch->in_veh), GET_OBJ_NAME(obj));
       send_to_veh(buf, tveh, 0, TRUE);
-      sprintf(buf, "%s's $p swivels towards %s.\r\n", GET_VEH_NAME(ch->in_veh), GET_VEH_NAME(tveh));
+      strcpy(buf3, GET_VEH_NAME(ch->in_veh));
+      sprintf(buf, "%s's $p swivels towards %s.\r\n", buf3, GET_VEH_NAME(tveh));
       act(buf, FALSE, ch, obj, NULL, TO_VEH_ROOM);
     }
   } else {
@@ -1781,18 +1783,26 @@ ACMD(do_tow)
     return;
   }
   if (veh->towing) {
-    sprintf(buf, "%s releases %s from its towing equipment.\r\n", GET_VEH_NAME(veh), GET_VEH_NAME(veh->towing));
+    // Compose our release message, which is emitted if the release processes successfully.
+    strcpy(buf3, GET_VEH_NAME(veh));
+    sprintf(buf, "%s releases %s from its towing equipment.\r\n", buf3, GET_VEH_NAME(veh->towing));
+    
     if (ch->in_veh->in_room) {
       act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_ROOM);
       act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_CHAR);
+      veh_to_room(veh->towing, veh->in_room);
+      veh->towing = NULL;
     } else if (ch->in_veh->in_veh){
       send_to_veh(buf, ch->in_veh->in_veh, ch, TRUE);
+      veh_to_veh(veh->towing, veh->in_veh);
     } else {
       sprintf(buf, "SYSERR: Veh %s (%ld) has neither in_room nor in_veh!", GET_VEH_NAME(ch->in_veh), ch->in_veh->idnum);
+      send_to_char("The game system encountered an error. Tow not released.\r\n", ch);
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      return;
     }
+
     send_to_char(ch, "You release %s from your towing equipment.\r\n", GET_VEH_NAME(veh->towing));
-    veh_to_room(veh->towing, veh->in_room);
     veh->towing = NULL;
     return;
   }
@@ -1817,7 +1827,8 @@ ACMD(do_tow)
     send_to_char("Drones can only tow drones that are lighter than them.\r\n", ch);
   else {
     send_to_char(ch, "You pick up %s with your towing equipment.\r\n", GET_VEH_NAME(tveh));
-    sprintf(buf, "%s picks up %s with its towing equipment.\r\n", GET_VEH_NAME(veh), GET_VEH_NAME(tveh));
+    strcpy(buf3, GET_VEH_NAME(veh));
+    sprintf(buf, "%s picks up %s with its towing equipment.\r\n", buf3, GET_VEH_NAME(tveh));
     if (ch->in_veh->in_room) {
       act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_ROOM);
       act(buf, FALSE, ch->in_veh->in_room->people, 0, 0, TO_CHAR);
