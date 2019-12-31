@@ -2659,7 +2659,7 @@ void purgelog(struct veh_data *veh) {
   const char *representation = NULL;
   
   // Begin the purgelog entry.
-  sprintf(internal_buffer, "- Writing purgelog for vehicle %s (%ld)", GET_VEH_NAME(veh), GET_VEH_VNUM(veh));
+  sprintf(internal_buffer, "- Writing purgelog for vehicle %s (vnum %ld, idnum %ld, owned by %ld).", GET_VEH_NAME(veh), GET_VEH_VNUM(veh), veh->idnum, veh->owner);
   mudlog(internal_buffer, NULL, LOG_PURGELOG, TRUE);
   
   // Log its mounts.
@@ -2690,6 +2690,6 @@ void purgelog(struct veh_data *veh) {
   }
   
   // End the purgelog entry.
-  sprintf(internal_buffer, "- End purgelog for vehicle %s (%ld)", GET_VEH_NAME(veh), GET_VEH_VNUM(veh));
+  sprintf(internal_buffer, "- End purgelog for %s.", GET_VEH_NAME(veh));
   mudlog(internal_buffer, NULL, LOG_PURGELOG, TRUE);
 }
