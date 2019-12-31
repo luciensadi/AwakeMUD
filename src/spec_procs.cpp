@@ -328,7 +328,7 @@ SPECIAL(metamagic_teacher)
 {
   struct char_data *master = (struct char_data *) me;
   int i = 0, x = 0, suc, ind;
-  if (IS_NPC(ch) || !(CMD_IS("train")))
+  if (!(CMD_IS("train")))
     return FALSE;
   
   if (GET_TRADITION(ch) == TRAD_MUNDANE) {
@@ -348,6 +348,11 @@ SPECIAL(metamagic_teacher)
   
   if (GET_POS(ch) < POS_SITTING) {
     send_to_char("You'd better sit up first.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (IS_NPC(ch)) {
+    send_to_char("NPCs can't learn metamagic techniques, go away.\r\n", ch);
     return TRUE;
   }
 
@@ -426,7 +431,7 @@ SPECIAL(nerp_skills_teacher) {
   can_teach_skill[SKILL_ARMED_COMBAT] = FALSE; // NPC-only skill
   can_teach_skill[SKILL_UNUSED_WAS_PILOT_FIXED_WING] = FALSE; // what it says on the tin
   
-  if (IS_NPC(ch) || !CMD_IS("practice"))
+  if (!CMD_IS("practice"))
     return FALSE;
   
   if (!CAN_SEE(master, ch)) {
@@ -441,6 +446,11 @@ SPECIAL(nerp_skills_teacher) {
   
   if (GET_POS(ch) < POS_STANDING) {
     send_to_char("You'd better stand up first.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (IS_NPC(ch)) {
+    send_to_char("NPCs can't train, go away.\r\n", ch);
     return TRUE;
   }
   
@@ -561,7 +571,7 @@ SPECIAL(teacher)
   struct char_data *master = (struct char_data *) me;
   int i, ind, max, skill_num;
 
-  if (IS_NPC(ch) || !(CMD_IS("practice")))
+  if (!(CMD_IS("practice")))
     return FALSE;
   
   if (!CAN_SEE(master, ch)) {
@@ -576,6 +586,11 @@ SPECIAL(teacher)
   
   if (GET_POS(ch) < POS_STANDING) {
     send_to_char("You'd better stand up first.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (IS_NPC(ch)) {
+    send_to_char("NPCs can't train, go away.\r\n", ch);
     return TRUE;
   }
 
@@ -866,9 +881,28 @@ SPECIAL(trainer)
   struct char_data *trainer = (struct char_data *) me;
   int ind;
 
-  if (!(CMD_IS("train")) || IS_NPC(ch) || !CAN_SEE(trainer, ch) || FIGHTING(ch) ||
-      GET_POS(ch) < POS_STANDING)
+  if (!CMD_IS("train"))
     return FALSE;
+  
+  if (GET_POS(ch) < POS_STANDING) {
+    send_to_char("You have to be standing to do that.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (!CAN_SEE(trainer, ch)) {
+    send_to_char("You try to get their attention for some personalized training, but they can't see you.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (FIGHTING(ch)) {
+    send_to_char("While you're fighting? That'd be a neat trick.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (IS_NPC(ch)) {
+    send_to_char("NPCs can't train, go away.\r\n", ch);
+    return TRUE;
+  }
 
   skip_spaces(&argument);
 
@@ -940,9 +974,29 @@ SPECIAL(spell_trainer)
 {
   struct char_data *trainer = (struct char_data *) me;
   int i, force;
-  if (!CMD_IS("learn") || IS_NPC(ch) || !CAN_SEE(trainer, ch) || FIGHTING(ch) ||
-      GET_POS(ch) < POS_STANDING)
+  if (!CMD_IS("learn"))
     return FALSE;
+  
+  if (GET_POS(ch) < POS_STANDING) {
+    send_to_char("You have to be standing to do that.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (!CAN_SEE(trainer, ch)) {
+    send_to_char("You try to get their attention for some personalized training, but they can't see you.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (FIGHTING(ch)) {
+    send_to_char("While you're fighting? That'd be a neat trick.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (IS_NPC(ch)) {
+    send_to_char("NPCs can't train, go away.\r\n", ch);
+    return TRUE;
+  }
+  
   if (GET_TRADITION(ch) != TRAD_SHAMANIC && GET_TRADITION(ch) != TRAD_HERMETIC) {
     sprintf(arg, "%s You don't have the talent.", GET_CHAR_NAME(ch));
     do_say(trainer, arg, 0, SCMD_SAYTO);
@@ -1096,9 +1150,28 @@ SPECIAL(adept_trainer)
   struct char_data *trainer = (struct char_data *) me;
   int ind, power, i;
 
-  if (!(CMD_IS("train")) || IS_NPC(ch) || !CAN_SEE(trainer, ch) || FIGHTING(ch) ||
-      GET_POS(ch) < POS_STANDING)
+  if (!CMD_IS("train"))
     return FALSE;
+  
+  if (GET_POS(ch) < POS_STANDING) {
+    send_to_char("You have to be standing to do that.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (!CAN_SEE(trainer, ch)) {
+    send_to_char("You try to get their attention for some personalized training, but they can't see you.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (FIGHTING(ch)) {
+    send_to_char("While you're fighting? That'd be a neat trick.\r\n", ch);
+    return TRUE;
+  }
+  
+  if (IS_NPC(ch)) {
+    send_to_char("NPCs can't train, go away.\r\n", ch);
+    return TRUE;
+  }
 
   if (GET_TRADITION(ch) != TRAD_ADEPT) {
     sprintf(arg, "%s You do not have the talent.", GET_CHAR_NAME(ch));
@@ -4083,7 +4156,7 @@ SPECIAL(chargen_south_from_trainer)
     return FALSE;
   
   if ((CMD_IS("s") || CMD_IS("south")) && GET_ATT_POINTS(ch) > 0) {
-    send_to_char(ch, "You still have %d attribute point%s to spend! You should finish ^WTRAIN^ning your attributes before you proceed.\r\n",
+    send_to_char(ch, "You still have %d attribute point%s to spend! You must finish ^WTRAIN^ning your attributes before you proceed.\r\n",
                  GET_ATT_POINTS(ch), GET_ATT_POINTS(ch) > 1 ? "s" : "");
     return TRUE;
   }
