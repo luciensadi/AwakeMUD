@@ -1988,6 +1988,7 @@ ACMD(do_purge)
         next_o = obj->next_content;
         const char *representation = generate_new_loggable_representation(obj);
         sprintf(buf, "%s has purged %s.", GET_CHAR_NAME(ch), representation);
+        mudlog(buf, ch, LOG_PURGELOG, TRUE);
         delete [] representation;
         extract_obj(obj);
       }
@@ -1996,6 +1997,8 @@ ACMD(do_purge)
         next_ve = veh->next;
         if (veh == ch->in_veh)
           continue;
+        sprintf(buf1, "%s has purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
+        mudlog(buf1, ch, LOG_WIZLOG, TRUE);
         purgelog(veh);
         extract_veh(veh);
       }
@@ -2018,12 +2021,15 @@ ACMD(do_purge)
         next_o = obj->next_content;
         const char *representation = generate_new_loggable_representation(obj);
         sprintf(buf, "%s has purged %s.", GET_CHAR_NAME(ch), representation);
+        mudlog(buf, ch, LOG_PURGELOG, TRUE);
         delete [] representation;
         extract_obj(obj);
       }
       
       for (veh = ch->in_room->vehicles; veh; veh = next_ve) {
         next_ve = veh->next_veh;
+        sprintf(buf1, "%s has purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
+        mudlog(buf1, ch, LOG_WIZLOG, TRUE);
         purgelog(veh);
         extract_veh(veh);
       }
