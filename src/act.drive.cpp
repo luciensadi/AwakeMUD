@@ -1906,8 +1906,9 @@ ACMD(do_push)
       sprintf(buf2, "$N pushes %s out of the back of %s.", buf3, GET_VEH_NAME(ch->in_veh));
       act(buf, FALSE, ch, NULL, NULL, TO_ROOM);
       if (ch->in_veh->in_room) {
-        act(buf2, FALSE, ch->in_veh->in_room->people, 0, 0, TO_NOTVICT);
+        act(buf2, FALSE, ch, 0, 0, TO_VEH_ROOM);
       } else if (ch->in_veh->in_veh){
+        // TODO: test this, doesn't it send '$n pushes...'?
         send_to_veh(buf, ch->in_veh->in_veh, ch, TRUE);
       } else {
         sprintf(buf, "SYSERR: Veh %s (%ld) has neither in_room nor in_veh!", GET_VEH_NAME(ch->in_veh), ch->in_veh->idnum);
@@ -1946,7 +1947,7 @@ ACMD(do_push)
       send_to_char("There is not enough room in there for that.\r\n", ch);
     else if (found_veh->locked)
       send_to_char("You can't push it into a locked vehicle.\r\n", ch);
-    else if (veh->locked && veh->damage < 10 && veh->type != VEH_DRONE)
+    else if (veh->locked && veh->damage < 10)
       send_to_char("The wheels seem to be locked.\r\n", ch);
     else {
       strcpy(buf2, GET_VEH_NAME(veh));

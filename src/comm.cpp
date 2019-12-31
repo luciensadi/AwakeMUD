@@ -1671,9 +1671,8 @@ int process_input(struct descriptor_data *t) {
     // Push the data for processing through KaVir's protocol code. Resize bytes_read to account for the stripped control chars.
     ProtocolInput(t, temporary_buffer, bytes_read, t->inbuf);
 #ifdef DEBUG_PROTOCOL
-    sprintf(buf3, "Parsed '%s' to '%s', changing length from %d to %lu.",
-            temporary_buffer, t->inbuf + buf_length, bytes_read, strlen(t->inbuf + buf_length));
-    log(buf3);
+    log_vfprintf("Parsed '%s' to '%s', changing length from %d to %lu.",
+                 temporary_buffer, t->inbuf + buf_length, bytes_read, strlen(t->inbuf + buf_length));
 #endif
     bytes_read = strlen(t->inbuf + buf_length);
     
@@ -2352,11 +2351,13 @@ void send_to_char(struct char_data * ch, const char * const messg, ...)
   if (!ch->desc || !messg)
     return;
   
+  char internal_buffer[MAX_STRING_LENGTH];
+  
   va_list argptr;
   va_start(argptr, messg);
-  vsprintf(buf3, messg, argptr);
+  vsprintf(internal_buffer, messg, argptr);
   va_end(argptr);
-  SEND_TO_Q(buf3, ch->desc);
+  SEND_TO_Q(internal_buffer, ch->desc);
 }
 
 void send_to_char(const char *messg, struct char_data *ch)
@@ -2370,13 +2371,15 @@ void send_to_icon(struct matrix_icon * icon, const char * const messg, ...)
   if (!icon || !icon->decker || !icon->decker->ch || !icon->decker->ch->desc || !messg)
     return;
   
+  char internal_buffer[MAX_STRING_LENGTH];
+  
   va_list argptr;
   va_start(argptr, messg);
-  vsprintf(buf3, messg, argptr);
+  vsprintf(internal_buffer, messg, argptr);
   va_end(argptr);
-  SEND_TO_Q(buf3, icon->decker->ch->desc);
+  SEND_TO_Q(internal_buffer, icon->decker->ch->desc);
   if (icon->decker->hitcher && icon->decker->hitcher->desc)
-    SEND_TO_Q(buf3, icon->decker->hitcher->desc);
+    SEND_TO_Q(internal_buffer, icon->decker->hitcher->desc);
 }
 
 
@@ -2792,6 +2795,20 @@ const char *act(const char *str, int hide_invisible, struct char_data * ch,
   {
     mudlog("SYSERR: no valid target to act()!", NULL, LOG_SYSLOG, TRUE);
     sprintf(buf, "Invocation: act('%s', '%d', char_data, obj_data, vict_obj, '%d').", str, hide_invisible, type);
+    if (ch) {
+      sprintf(ENDOF(buf), "\r\nch: %s, in_room %s, in_veh %s",
+              GET_CHAR_NAME(ch), ch->in_room ? GET_ROOM_NAME(ch->in_room) : "n/a",
+              ch->in_veh ? GET_VEH_NAME(ch->in_veh) : "n/a");
+    } else {
+      strcat(buf, " ...No character.");
+    }
+    if (obj) {
+      sprintf(ENDOF(buf), "\r\nobj: %s, in_room %s, in_veh %s",
+              GET_OBJ_NAME(obj), obj->in_room ? GET_ROOM_NAME(obj->in_room) : "n/a",
+              obj->in_veh ? GET_VEH_NAME(obj->in_veh) : "n/a");
+    } else {
+      strcat(buf, " ...No obj.");
+    }
     mudlog(buf, NULL, LOG_SYSLOG, TRUE);
     return NULL;
   }
