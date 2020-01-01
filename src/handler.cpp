@@ -919,8 +919,8 @@ void affect_total(struct char_data * ch)
       AFF_FLAGS(ch).RemoveBits(AFF_INVISIBLE, AFF_IMP_INVIS, ENDBIT);
   }
   if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON) {
-    if (!IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3)) && GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 6) > 0)
-      GET_REACH(ch) += GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 6);
+    if (!IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3)) && GET_WEAPON_REACH(GET_EQ(ch, WEAR_WIELD)) > 0)
+      GET_REACH(ch) += GET_WEAPON_REACH(GET_EQ(ch, WEAR_WIELD));
     else if (IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3))) {
       if (GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 4) != SKILL_PISTOLS)
         GET_REACH(ch)++;

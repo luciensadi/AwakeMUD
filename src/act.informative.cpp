@@ -1774,6 +1774,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       sprintf(ENDOF(buf), "and requires the ^c%s^n skill to use.", skills[GET_OBJ_VAL(j, 4)].name);
       break;
     case ITEM_WEAPON:
+      // Ranged weapons first.
       if (IS_GUN(GET_OBJ_VAL((j), 3))) {
         if (GET_OBJ_VAL(j, 5) > 0) {
           sprintf(ENDOF(buf), "It is a ^c%d-round %s^n that uses the ^c%s^n skill to fire. Its damage code is ^c%d%s%s^n.",
@@ -1868,15 +1869,24 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
             }
           }
         }
-      } else {
-        if (GET_OBJ_VAL(j, 2) > 0) {
-          sprintf(ENDOF(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c(STR+%d)%s%s^n.",
-                  weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name, GET_OBJ_VAL(j, 2), wound_arr[GET_OBJ_VAL(j, 1)],
+      }
+      // Melee weapons.
+      else {
+        if (GET_OBJ_VAL(j, 2) != 0) {
+          sprintf(ENDOF(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c(STR%s%d)%s%s^n.",
+                  weapon_type[GET_OBJ_VAL(j, 3)],
+                  skills[GET_OBJ_VAL(j, 4)].name,
+                  GET_OBJ_VAL(j, 2) < 0 ? "" : "+",
+                  GET_OBJ_VAL(j, 2),
+                  wound_arr[GET_OBJ_VAL(j, 1)],
                   !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         } else {
           sprintf(ENDOF(buf), "It is a ^c%s^n that uses the ^c%s^n skill to attack with. Its damage code is ^c(STR)%s%s^n.",
                   weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name, wound_arr[GET_OBJ_VAL(j, 1)],
                   !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
+        }
+        if (GET_WEAPON_REACH(j)) {
+          sprintf(ENDOF(buf), "\r\nIt grants %d meters of reach when wielded.", GET_WEAPON_REACH(j));
         }
       }
       break;
