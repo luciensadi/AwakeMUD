@@ -4487,7 +4487,7 @@ ACMD(do_ilist)
       OBJ_VNUM_RNUM(nr),
       ObjList.CountObj(nr),
       obj_proto[nr].text.name,
-      obj_proto[nr].source_info ? "^g(Canon)^n" : "");
+      obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
     }
   }
 
