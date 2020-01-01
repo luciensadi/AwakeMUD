@@ -4481,13 +4481,15 @@ ACMD(do_ilist)
 
   sprintf(buf, "Objects, %d to %d:\r\n", first, last);
 
-  for (nr = MAX(0, real_object(first)); nr <= top_of_objt &&
-       (OBJ_VNUM_RNUM(nr) <= last); nr++)
-    if (OBJ_VNUM_RNUM(nr) >= first)
-      sprintf(buf + strlen(buf), "%5d. [%5ld -%2d] %s\r\n", ++found,
-              OBJ_VNUM_RNUM(nr),
-              ObjList.CountObj(nr),
-              obj_proto[nr].text.name);
+  for (nr = MAX(0, real_object(first)); nr <= top_of_objt && (OBJ_VNUM_RNUM(nr) <= last); nr++) {
+    if (OBJ_VNUM_RNUM(nr) >= first) {
+      sprintf(buf + strlen(buf), "%5d. [%5ld -%2d] %s%s\r\n", ++found,
+      OBJ_VNUM_RNUM(nr),
+      ObjList.CountObj(nr),
+      obj_proto[nr].text.name,
+      obj_proto[nr].source_info ? "^g(Canon)^n" : "");
+    }
+  }
 
   if (!found)
     send_to_char("No objects where found in those parameters.\r\n", ch);
