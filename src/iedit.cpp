@@ -1153,11 +1153,13 @@ void iedit_disp_menu(struct descriptor_data * d)
   send_to_char(CH, "a) Item cost: %s%d%s\r\n", CCCYN(CH, C_CMP),
                GET_OBJ_COST(d->edit_obj), CCNRM(CH, C_CMP));
   int availhrs = GET_OBJ_AVAILDAY(d->edit_obj) * 24;
-  send_to_char(CH, "b) Item availability: ^c%d^n/^c%.2f %s%s^n\r\n",
-               GET_OBJ_AVAILTN(d->edit_obj),
-               availhrs <= 48 ? availhrs : GET_OBJ_AVAILDAY(d->edit_obj),
-               availhrs <= 48 ? "hour" : "day",
-               availhrs <= 48 ? (availhrs > 1 ? "s" : "") : (GET_OBJ_AVAILDAY(d->edit_obj) > 1 ? "s" : "s"));
+  if (availhrs <= 48) {
+  send_to_char(CH, "b) Item availability: ^c%d^n/^c%d hour%s^n\r\n",
+               GET_OBJ_AVAILTN(d->edit_obj), availhrs, availhrs > 1 ? "s" : "");
+  } else {
+    send_to_char(CH, "b) Item availability: ^c%d^n/^c%.2f day%s^n\r\n",
+                 GET_OBJ_AVAILTN(d->edit_obj), GET_OBJ_AVAILDAY(d->edit_obj), GET_OBJ_AVAILDAY(d->edit_obj) > 1 ? "s" : "s");
+  }
   send_to_char(CH, "c) Item timer: ^c%d^n\r\n", GET_OBJ_TIMER(d->edit_obj));
   send_to_char(CH, "d) Item Material: ^c%s^n\r\n", material_names[(int)GET_OBJ_MATERIAL(d->edit_obj)]);
   send_to_char(CH, "e) Item Barrier Rating: ^c%d^n\r\n", GET_OBJ_BARRIER(d->edit_obj));
