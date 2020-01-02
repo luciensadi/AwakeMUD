@@ -1559,7 +1559,10 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       break;
     case IEDIT_SOURCEINFO:
       DELETE_ARRAY_IF_EXTANT(d->edit_obj->source_info);
-      d->edit_obj->source_info = str_dup(arg);
+      if (*arg)
+        d->edit_obj->source_info = str_dup(arg);
+      else
+        d->edit_obj->source_info = NULL;
       iedit_disp_menu(d);
       break;
     case IEDIT_TYPE:
@@ -1974,8 +1977,8 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           break;
         case ITEM_WEAPON:
         case ITEM_FIREWEAPON:
-          if (number < 0 || number > WEAPON_MAXIMUM_STRENGTH_BONUS) {
-            sprintf(buf, "Value must be between 0 and %d.\r\n", WEAPON_MAXIMUM_STRENGTH_BONUS);
+          if (number < -WEAPON_MAXIMUM_STRENGTH_BONUS || number > WEAPON_MAXIMUM_STRENGTH_BONUS) {
+            sprintf(buf, "Value must be between %d and %d.\r\n", -WEAPON_MAXIMUM_STRENGTH_BONUS, WEAPON_MAXIMUM_STRENGTH_BONUS);
             send_to_char(buf, CH);
             iedit_disp_val3_menu(d);
             return;

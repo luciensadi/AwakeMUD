@@ -3620,6 +3620,10 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     // Adepts get bonus dice when counterattacking. Ip Man approves.
     def->dice += GET_POWER(def->ch, ADEPT_COUNTERSTRIKE);
     
+    // Bugfix: If you're unconscious or mortally wounded, you don't get to counterattack.
+    if (GET_PHYSICAL(def->ch) <= 0 || GET_MENTAL(def->ch) <= 0)
+      def->dice = 0;
+    
     // Calculate the net reach.
     int net_reach = GET_REACH(att->ch) - GET_REACH(def->ch);
     
@@ -3629,24 +3633,26 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     
     // -------------------------------------------------------------------------------------------------------
     // Calculate and display pre-success-test information.
-    sprintf( rbuf, "%s", GET_CHAR_NAME( att->ch ) );
-    rbuf[3] = 0;
-    sprintf( rbuf+strlen(rbuf), "|%s", GET_CHAR_NAME( def->ch ) );
-    rbuf[7] = 0;
-    sprintf( rbuf+strlen(rbuf), ">Targ: (Base 4) ");
     
+    sprintf( rbuf, "Attacker dice %s", GET_CHAR_NAME( att->ch ) );
+    rbuf[3] = 0;
     att->tn += modify_target_rbuf_raw(att->ch, rbuf, att->modifiers[COMBAT_MOD_VISIBILITY]) - MAX(net_reach, 0);
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
       buf_mod(rbuf, combat_modifiers[mod_index], att->modifiers[mod_index]);
       att->tn += att->modifiers[mod_index];
     }
     
+    sprintf( rbuf+strlen(rbuf), "\r\nDefender dice %s%s", GET_CHAR_NAME( def->ch ),
+            (GET_PHYSICAL(def->ch) <= 0 || GET_MENTAL(def->ch) <= 0) ? " (incap)" : "" );
+    rbuf[7] = 0;
     def->tn += modify_target_rbuf_raw(att->ch, NULL, def->modifiers[COMBAT_MOD_VISIBILITY]);
     for (int mod_index = 0; mod_index < NUM_COMBAT_MODIFIERS; mod_index++) {
+      buf_mod(rbuf, combat_modifiers[mod_index], att->modifiers[mod_index]);
       def->tn += def->modifiers[mod_index];
     }
     
-    buf_roll( rbuf, "Total", att->tn);
+    buf_roll(rbuf, "Attacker TN", att->tn);
+    buf_roll(rbuf, "Defender TN", def->tn);
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
 
     // ----------------------
