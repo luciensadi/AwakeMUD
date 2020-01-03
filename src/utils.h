@@ -776,6 +776,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_WEAPON_ATTACH_UNDER_VNUM(weapon)   (GET_OBJ_VAL((weapon), 9))
 #define GET_WEAPON_POSSIBLE_FIREMODES(weapon)  (GET_OBJ_VAL((weapon), 10))
 #define GET_WEAPON_FIREMODE(weapon)            (GET_OBJ_VAL((weapon), 11))
+#define GET_WEAPON_INTEGRAL_RECOIL_COMP(weap)  (GET_OBJ_ATTEMPT((weap)))
 #define GET_WEAPON_FULL_AUTO_COUNT(weapon)     (GET_OBJ_TIMER((weapon)))
 #define GET_WEAPON_ATTACH_LOC(weapon, loc)     (((loc) >= ACCESS_LOCATION_TOP && (loc) <= ACCESS_LOCATION_UNDER) ? \
                                                     GET_OBJ_VAL((weapon), (loc)) : 0)

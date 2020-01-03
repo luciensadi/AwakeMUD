@@ -2599,8 +2599,11 @@ int check_recoil(struct char_data *ch, struct obj_data *gun)
           comp += RECOIL_COMP_VALUE_BIPOD;
         else if (GET_OBJ_VAL(obj, 1) == ACCESS_TRIPOD)
           comp += RECOIL_COMP_VALUE_TRIPOD;
-        
       }
+      
+      // Add in integral recoil compensation.
+      if (GET_WEAPON_INTEGRAL_RECOIL_COMP(obj))
+        comp += GET_WEAPON_INTEGRAL_RECOIL_COMP(obj);
     }
   }
   for (obj = ch->cyberware; obj; obj = obj->next_content)

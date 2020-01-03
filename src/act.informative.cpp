@@ -1785,6 +1785,11 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                   AN(weapon_type[GET_OBJ_VAL(j, 3)]), weapon_type[GET_OBJ_VAL(j, 3)], skills[GET_OBJ_VAL(j, 4)].name,
                   GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)], !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         }
+        if (GET_WEAPON_INTEGRAL_RECOIL_COMP(j)) {
+          sprintf(ENDOF(buf), "\r\nIt has %d point%s of integral recoil compensation.",
+                  GET_WEAPON_INTEGRAL_RECOIL_COMP(j),
+                  GET_WEAPON_INTEGRAL_RECOIL_COMP(j) > 1 ? "s" : "");
+        }
         
         // Info about attachments, if any.
         for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++) {
@@ -1846,7 +1851,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                 break;
               case ACCESS_BAYONET:
                 if (mount_location != ACCESS_LOCATION_UNDER) {
-                  strcat(buf, "\r\n^RYour bipod has been mounted in the wrong location and is nonfunctional. Alert an imm.");
+                  strcat(buf, "\r\n^RYour bayonet has been mounted in the wrong location and is nonfunctional. Alert an imm.");
                 } else {
                   sprintf(ENDOF(buf), "\r\nA bayonet attached to the %s allows you to use the Pole Arms skill when defending from melee attacks.",
                           gun_accessory_locations[mount_location]);

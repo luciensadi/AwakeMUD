@@ -75,7 +75,7 @@ struct obj_flag_data
   float availdays;
   int legality[3];
   long quest_id;
-  int attempt;
+  int attempt;  // ITEM_MONEY: Number of failed cracks. ITEM_WEAPON: Built-in recoil comp.
 };
 
 /* Used in obj_file_elem *DO*NOT*CHANGE* */

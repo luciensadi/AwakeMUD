@@ -912,6 +912,9 @@ void iedit_disp_val12_menu(struct descriptor_data * d)
   d->edit_mode = IEDIT_VALUE_12;
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
+    case ITEM_WEAPON:
+      send_to_char("Enter the amount of built-in recoil compensation this weapon has: ", CH);
+      break;
     default:
       iedit_disp_menu(d);
   }
@@ -2416,12 +2419,13 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
         case ITEM_WEAPON:
-          if (number < 0 || number > 4) {
-            send_to_char("Invalid Input! Enter options (0 to quit): ", CH);
+          if (number < 0 || number > MODE_FA) {
+            send_to_char("Invalid input! Enter options (0 to quit): ", CH);
             return;
           }
           if (number == 0) {
-            iedit_disp_menu(d);
+            // Move on to recoil comp.
+            iedit_disp_val12_menu(d);
             return;
           }
           TOGGLE_BIT(GET_OBJ_VAL(OBJ, 10), 1 << number);
@@ -2437,6 +2441,20 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
     case IEDIT_VALUE_12:
       number = atoi(arg);
       switch (GET_OBJ_TYPE(d->edit_obj)) {
+          // TODO: implement item_weapon here.
+        case ITEM_WEAPON:
+          // NOTE: This does NOT actually modify value '12' (GET_OBJ_VAL(obj, 11)). It changes the attempts field instead.
+          // For weapons, value '12' is currently the selected firemode of the weapon.
+          if (number < 0 || number > 4) {
+            send_to_char("Integral recoil compensation must be between 0 and 4 (inclusive). Enter recoil comp: ", CH);
+            return;
+          }
+          
+          // Set the recoil comp here.
+          GET_WEAPON_INTEGRAL_RECOIL_COMP(d->edit_obj) = number;
+          
+          iedit_disp_menu(d);
+          return;
         default:
           break;
       }

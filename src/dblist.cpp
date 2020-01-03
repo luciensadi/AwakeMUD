@@ -195,8 +195,8 @@ void objList::UpdateCounters(void)
       continue;
     }
     
-    // Decrement the attempt counter (mostly used by credstick cracking).
-    if (GET_OBJ_ATTEMPT(OBJ) >  0)
+    // Decrement the attempt counter for credsticks.
+    if (GET_OBJ_TYPE(OBJ) == ITEM_MONEY && GET_OBJ_ATTEMPT(OBJ) > 0)
       GET_OBJ_ATTEMPT(OBJ)--;
 
     // Send out the trideo messages. We assume anything that is a trideo box is not anything else.

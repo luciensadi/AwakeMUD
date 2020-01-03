@@ -909,6 +909,10 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       sprintf(ENDOF(buf), " %s", weapon_type[GET_OBJ_VAL(obj, 3)]);
       if (IS_OBJ_STAT(obj, ITEM_TWOHANDS))
         strcat(buf, " and requires two hands to wield correctly");
+      if (GET_WEAPON_INTEGRAL_RECOIL_COMP(obj))
+        sprintf(ENDOF(buf), ". It has %d round%s of built-in recoil compensation",
+                GET_WEAPON_INTEGRAL_RECOIL_COMP(obj),
+                GET_WEAPON_INTEGRAL_RECOIL_COMP(obj) > 1 ? "s" : "");
       if (GET_OBJ_VAL(obj, 7) > 0 || GET_OBJ_VAL(obj, 8) > 0 || GET_OBJ_VAL(obj, 9) > 0)
         strcat(buf, ". It comes standard with ");
       if (real_object(GET_OBJ_VAL(obj, 7)) > 0) {
