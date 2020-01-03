@@ -234,6 +234,13 @@ void iedit_disp_mod_menu(struct descriptor_data *d)
 /* object value 1 */
 void iedit_disp_val1_menu(struct descriptor_data * d)
 {
+  if (d->iedit_limit_edits > 0) {
+    // Cut out when the decremented counter hits zero.
+    if (--d->iedit_limit_edits == 0) {
+      iedit_disp_menu(d);
+      return;
+    }
+  }
   d->edit_mode = IEDIT_VALUE_1;
   int c, line = 0;
   switch (GET_OBJ_TYPE(d->edit_obj))
@@ -324,6 +331,9 @@ void iedit_disp_val1_menu(struct descriptor_data * d)
       send_to_char("Enter rating (1-3): ", CH);
       break;
     case ITEM_RADIO:
+      // Skipping this field while doing nothing? Re-increment our counter.
+      if (d->iedit_limit_edits)
+        d->iedit_limit_edits++;
       iedit_disp_val2_menu(d);
       break;
     case ITEM_MOD:
@@ -372,6 +382,13 @@ void iedit_disp_val1_menu(struct descriptor_data * d)
 /* object value 2 */
 void iedit_disp_val2_menu(struct descriptor_data * d)
 {
+  if (d->iedit_limit_edits > 0) {
+    // Cut out when the decremented counter hits zero.
+    if (--d->iedit_limit_edits == 0) {
+      iedit_disp_menu(d);
+      return;
+    }
+  }
   d->edit_mode = IEDIT_VALUE_2;
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
@@ -391,6 +408,9 @@ void iedit_disp_val2_menu(struct descriptor_data * d)
       break;
     case ITEM_FOOD:
       /* values 2 and 3 are unused, jump to 4. how odd */
+      // Skipping this field while doing nothing? Re-increment our counter.
+      if (d->iedit_limit_edits)
+        d->iedit_limit_edits++;
       iedit_disp_val4_menu(d);
       break;
     case ITEM_SPELL_FORMULA:
@@ -425,6 +445,9 @@ void iedit_disp_val2_menu(struct descriptor_data * d)
     case ITEM_DECK_ACCESSORY:
       switch (GET_OBJ_VAL(OBJ, 0)) {
         case TYPE_FILE:
+          // Skipping this field while doing nothing? Re-increment our counter.
+          if (d->iedit_limit_edits)
+            d->iedit_limit_edits++;
           iedit_disp_val3_menu(d);
           break;
         case TYPE_UPGRADE:
@@ -487,6 +510,13 @@ void iedit_disp_val2_menu(struct descriptor_data * d)
 /* object value 3 */
 void iedit_disp_val3_menu(struct descriptor_data * d)
 {
+  if (d->iedit_limit_edits > 0) {
+    // Cut out when the decremented counter hits zero.
+    if (--d->iedit_limit_edits == 0) {
+      iedit_disp_menu(d);
+      return;
+    }
+  }
   d->edit_mode = IEDIT_VALUE_3;
   int c;
   switch (GET_OBJ_TYPE(d->edit_obj))
@@ -596,6 +626,9 @@ void iedit_disp_val3_menu(struct descriptor_data * d)
       if (GET_OBJ_VAL(d->edit_obj, 0) == TYPE_MOUNT) {
         // Mounts don't have ratings. Set it to 1.
         GET_OBJ_VAL(d->edit_obj, 2) = 1;
+        // Skipping this field? Re-increment our counter.
+        if (d->iedit_limit_edits)
+          d->iedit_limit_edits++;
         iedit_disp_val4_menu(d);
         return;
       }
@@ -620,6 +653,13 @@ void iedit_disp_val3_menu(struct descriptor_data * d)
 /* object value 4 */
 void iedit_disp_val4_menu(struct descriptor_data * d)
 {
+  if (d->iedit_limit_edits > 0) {
+    // Cut out when the decremented counter hits zero.
+    if (--d->iedit_limit_edits == 0) {
+      iedit_disp_menu(d);
+      return;
+    }
+  }
   d->edit_mode = IEDIT_VALUE_4;
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
@@ -724,6 +764,9 @@ void iedit_disp_val4_menu(struct descriptor_data * d)
       if (GET_OBJ_VAL(d->edit_obj, 0) == MOD_RADIO)
         send_to_char("Crypt Level (0-6): ", CH);
       else {
+        // Skipping this field while doing nothing? Re-increment our counter.
+        if (d->iedit_limit_edits)
+          d->iedit_limit_edits++;
         iedit_disp_val5_menu(d);
         return;
       }
@@ -736,6 +779,13 @@ void iedit_disp_val4_menu(struct descriptor_data * d)
 /* object value 5 */
 void iedit_disp_val5_menu(struct descriptor_data * d)
 {
+  if (d->iedit_limit_edits > 0) {
+    // Cut out when the decremented counter hits zero.
+    if (--d->iedit_limit_edits == 0) {
+      iedit_disp_menu(d);
+      return;
+    }
+  }
   d->edit_mode = IEDIT_VALUE_5;
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
@@ -753,6 +803,9 @@ void iedit_disp_val5_menu(struct descriptor_data * d)
       if (GET_OBJ_VAL(d->edit_obj, 0) == TYPE_MOUNT) {
         // Mounts automatically fit both types of vehicle.
         GET_OBJ_VAL(d->edit_obj, 4) = 2;
+        // Skipping this field while doing nothing? Re-increment our counter.
+        if (d->iedit_limit_edits)
+          d->iedit_limit_edits++;
         iedit_disp_val6_menu(d);
         return;
       }
@@ -766,6 +819,13 @@ void iedit_disp_val5_menu(struct descriptor_data * d)
 /* object value 6 */
 void iedit_disp_val6_menu(struct descriptor_data * d)
 {
+  if (d->iedit_limit_edits > 0) {
+    // Cut out when the decremented counter hits zero.
+    if (--d->iedit_limit_edits == 0) {
+      iedit_disp_menu(d);
+      return;
+    }
+  }
   d->edit_mode = IEDIT_VALUE_6;
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
@@ -790,6 +850,9 @@ void iedit_disp_val6_menu(struct descriptor_data * d)
       iedit_disp_mod_menu(d);
       break;
     case ITEM_CYBERDECK:
+      // Skipping this field while doing nothing? Re-increment our counter.
+      if (d->iedit_limit_edits)
+        d->iedit_limit_edits++;
       iedit_disp_val7_menu(d);
       break;
     default:
@@ -800,13 +863,25 @@ void iedit_disp_val6_menu(struct descriptor_data * d)
 /* object value 7 */
 void iedit_disp_val7_menu(struct descriptor_data * d)
 {
+  if (d->iedit_limit_edits > 0) {
+    // Cut out when the decremented counter hits zero.
+    if (--d->iedit_limit_edits == 0) {
+      iedit_disp_menu(d);
+      return;
+    }
+  }
   d->edit_mode = IEDIT_VALUE_7;
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
     case ITEM_WEAPON:
       if (!IS_GUN(GET_OBJ_VAL(d->edit_obj, 3)))
         send_to_char("Reach: ", CH);
-      else iedit_disp_val8_menu(d);
+      else {
+        // Skipping this field while doing nothing? Re-increment our counter.
+        if (d->iedit_limit_edits)
+          d->iedit_limit_edits++;
+        iedit_disp_val8_menu(d);
+      }
       break;
     case ITEM_FIREWEAPON:
       send_to_char("Enter strength minimum: ", CH);
@@ -834,6 +909,13 @@ void iedit_disp_val7_menu(struct descriptor_data * d)
 /* object value 8 */
 void iedit_disp_val8_menu(struct descriptor_data * d)
 {
+  if (d->iedit_limit_edits > 0) {
+    // Cut out when the decremented counter hits zero.
+    if (--d->iedit_limit_edits == 0) {
+      iedit_disp_menu(d);
+      return;
+    }
+  }
   d->edit_mode = IEDIT_VALUE_8;
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
@@ -841,8 +923,12 @@ void iedit_disp_val8_menu(struct descriptor_data * d)
       if (access_level(CH, LVL_ADMIN) && IS_GUN(GET_OBJ_VAL(OBJ, 3))) {
         if (GET_OBJ_VAL(OBJ, 7) >= -1)
           send_to_char("Enter vnum of object to attach on top: ", CH);
-        else
+        else {
+          // Skipping this field while doing nothing? Re-increment our counter.
+          if (d->iedit_limit_edits)
+            d->iedit_limit_edits++;
           iedit_disp_val9_menu(d);
+        }
       } else
         iedit_disp_menu(d);
       break;
@@ -857,6 +943,13 @@ void iedit_disp_val8_menu(struct descriptor_data * d)
 /* object value 9 */
 void iedit_disp_val9_menu(struct descriptor_data * d)
 {
+  if (d->iedit_limit_edits > 0) {
+    // Cut out when the decremented counter hits zero.
+    if (--d->iedit_limit_edits == 0) {
+      iedit_disp_menu(d);
+      return;
+    }
+  }
   d->edit_mode = IEDIT_VALUE_9;
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
@@ -867,8 +960,12 @@ void iedit_disp_val9_menu(struct descriptor_data * d)
       if (access_level(CH, LVL_ADMIN)) {
         if (GET_OBJ_VAL(OBJ, 8) >= -1)
           send_to_char("Enter vnum of object to attach on barrel: ", CH);
-        else
+        else {
+          // Skipping this field while doing nothing? Re-increment our counter.
+          if (d->iedit_limit_edits)
+            d->iedit_limit_edits++;
           iedit_disp_val10_menu(d);
+        }
       } else
         iedit_disp_menu(d);
       break;
@@ -880,14 +977,25 @@ void iedit_disp_val9_menu(struct descriptor_data * d)
 /* object value 10 */
 void iedit_disp_val10_menu(struct descriptor_data * d)
 {
+  if (d->iedit_limit_edits > 0) {
+    // Cut out when the decremented counter hits zero.
+    if (--d->iedit_limit_edits == 0) {
+      iedit_disp_menu(d);
+      return;
+    }
+  }
   d->edit_mode = IEDIT_VALUE_10;
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
     case ITEM_WEAPON:
       if (GET_OBJ_VAL(OBJ, 9) >= -1)
         send_to_char("Enter vnum of object to attach under: ", CH);
-      else
+      else {
+        // Skipping this field while doing nothing? Re-increment our counter.
+        if (d->iedit_limit_edits)
+          d->iedit_limit_edits++;
         iedit_disp_val11_menu(d);
+      }
       break;
     default:
       iedit_disp_menu(d);
@@ -896,6 +1004,13 @@ void iedit_disp_val10_menu(struct descriptor_data * d)
 
 void iedit_disp_val11_menu(struct descriptor_data * d)
 {
+  if (d->iedit_limit_edits > 0) {
+    // Cut out when the decremented counter hits zero.
+    if (--d->iedit_limit_edits == 0) {
+      iedit_disp_menu(d);
+      return;
+    }
+  }
   d->edit_mode = IEDIT_VALUE_11;
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
@@ -909,6 +1024,13 @@ void iedit_disp_val11_menu(struct descriptor_data * d)
 
 void iedit_disp_val12_menu(struct descriptor_data * d)
 {
+  if (d->iedit_limit_edits > 0) {
+    // Cut out when the decremented counter hits zero.
+    if (--d->iedit_limit_edits == 0) {
+      iedit_disp_menu(d);
+      return;
+    }
+  }
   d->edit_mode = IEDIT_VALUE_12;
   switch (GET_OBJ_TYPE(d->edit_obj))
   {
@@ -1508,6 +1630,35 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           break;
         case 'g':
         case 'G':
+          // Check for a specific-number bypass.
+          if (*(arg+1) && isdigit(*(arg+1))) {
+            // Single-digit
+            int bypass_num = (int)(*(arg+1) - int('0'));
+            if (*(arg+2) && isdigit(*(arg+2))) {
+              // Double-digit
+              bypass_num = bypass_num * 10 + (int)(*(arg+2) - int('0'));
+            }
+            d->iedit_limit_edits = 2;
+            switch (bypass_num) {
+              case 0: iedit_disp_val1_menu(d); break;
+              case 1: iedit_disp_val2_menu(d); break;
+              case 2: iedit_disp_val3_menu(d); break;
+              case 3: iedit_disp_val4_menu(d); break;
+              case 4: iedit_disp_val5_menu(d); break;
+              case 5: iedit_disp_val6_menu(d); break;
+              case 6: iedit_disp_val7_menu(d); break;
+              case 7: iedit_disp_val8_menu(d); break;
+              case 8: iedit_disp_val9_menu(d); break;
+              case 9: iedit_disp_val10_menu(d); break;
+              case 10: iedit_disp_val11_menu(d); break;
+              case 11: iedit_disp_val12_menu(d); break;
+              default:
+                send_to_char(d->character, "Invalid G-menu bypass specified. Must be in range G0-G11, but got G%d instead.\r\n", bypass_num);
+                d->iedit_limit_edits = 0;
+                break;
+            }
+            return;
+          }
           iedit_disp_val1_menu(d);
           break;
         case 'h':

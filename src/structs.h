@@ -811,6 +811,7 @@ struct descriptor_data
   long edit_number;              /* virtual num of thing being edited */
   long edit_number2;             /* misc number for editing */
   int edit_zone;                /* which zone object is part of      */
+  int iedit_limit_edits;        /* Used in iedit to let you cut out of g-menus early. */
   void **misc_data;             /* misc data, usually for extra data crap */
   struct obj_data *edit_obj;    /* iedit */
   struct room_data *edit_room;  /* redit */
@@ -833,7 +834,7 @@ struct descriptor_data
   descriptor_data() :
       showstr_head(NULL), showstr_point(NULL), str(NULL), output(NULL),
       large_outbuf(NULL), character(NULL), original(NULL), snooping(NULL),
-      snoop_by(NULL), next(NULL), invalid_command_counter(0), misc_data(NULL),
+      snoop_by(NULL), next(NULL), invalid_command_counter(0), iedit_limit_edits(0), misc_data(NULL),
       edit_obj(NULL), edit_room(NULL), edit_mob(NULL), edit_quest(NULL), edit_shop(NULL),
       edit_zon(NULL), edit_cmd(NULL), edit_veh(NULL), edit_host(NULL), edit_icon(NULL),
       edit_helpfile(NULL), edit_pgroup(NULL), pProtocol(NULL)
