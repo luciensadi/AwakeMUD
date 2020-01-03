@@ -1786,7 +1786,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
                   GET_OBJ_VAL(j, 0), wound_arr[GET_OBJ_VAL(j, 1)], !IS_DAMTYPE_PHYSICAL(get_weapon_damage_type(j)) ? " (stun)" : "");
         }
         if (GET_WEAPON_INTEGRAL_RECOIL_COMP(j)) {
-          sprintf(ENDOF(buf), "\r\nIt has %d point%s of integral recoil compensation.",
+          sprintf(ENDOF(buf), "\r\nIt has ^c%d^n point%s of integral recoil compensation.",
                   GET_WEAPON_INTEGRAL_RECOIL_COMP(j),
                   GET_WEAPON_INTEGRAL_RECOIL_COMP(j) > 1 ? "s" : "");
         }
