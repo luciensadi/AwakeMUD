@@ -624,9 +624,6 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   
   // Compose the sayto string for the keeper.
   sprintf(buf, "%s %s", GET_CHAR_NAME(ch), buf3);
-  
-  sprintf(arg, shop_table[shop_nr].sell, sellprice);
-  sprintf(ENDOF(buf), " %s", arg);
   do_say(keeper, buf, cmd_say, SCMD_SAYTO);
   for (;sell; sell = sell->next)
     if (sell->vnum == GET_OBJ_VNUM(obj))
