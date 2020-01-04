@@ -90,6 +90,7 @@ struct  char_data *get_obj_worn_by_recursive(struct obj_data *obj);
 struct  char_data *get_obj_possessor(struct obj_data *obj);
 char *  generate_new_loggable_representation(struct obj_data *obj);
 void    purgelog(struct veh_data *veh);
+char *  replace_substring(char *source, char *dest, const char *replace_target, const char *replacement);
 
 
 // Skill-related.

@@ -2693,3 +2693,42 @@ void purgelog(struct veh_data *veh) {
   sprintf(internal_buffer, "- End purgelog for %s.", GET_VEH_NAME(veh));
   mudlog(internal_buffer, NULL, LOG_PURGELOG, TRUE);
 }
+
+// Copy Source into Dest, replacing the target substring in Source with the specified replacement.
+// Requirement: dest's max size must be greater than source's current size plus all the replacements being done in it.
+char *replace_substring(char *source, char *dest, const char *replace_target, const char *replacement) {
+  const char *replace_target_ptr = replace_target;
+  char *dest_ptr = dest;
+  
+  *dest = '\0';
+  
+  for (unsigned long i = 0; i < strlen(source); i++) {
+    // Compare the source to our replacement target pointer and increment RTP.
+    if (source[i] == *(replace_target_ptr)) {
+      // If they are equal, check to see if we've reached the end of RTP.
+      if (!*(++replace_target_ptr)) {
+        // If we have, we've matched the full thing. Plop the replacement into dest and reset.
+        for (unsigned long j = 0; j < strlen(replacement); j++)
+          *(dest_ptr++) = *(replacement + j);
+        replace_target_ptr = replace_target;
+      } else {
+        // If we haven't, do nothing-- just continue.
+      }
+    } else {
+      // They're not equal. If we've incremented RTP, we know we've skipped characters, so it's time to unwind that.
+      for (unsigned long diff = replace_target_ptr - replace_target; diff > 0; diff--) {
+        *(dest_ptr++) = source[i-diff];
+      }
+        
+      // Now, reset RTP and copy the most recent character directly.
+      replace_target_ptr = replace_target;
+      *(dest_ptr++) = source[i];
+    }
+  }
+  
+  // Finally, null-termanate dest.
+  *dest_ptr = '\0';
+  
+  // Return the dest they gave us.
+  return dest;
+}

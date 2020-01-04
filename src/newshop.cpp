@@ -378,8 +378,16 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       do_say(keeper, buf, cmd_say, SCMD_SAYTO);
     }
   }
-  sprintf(arg, shop_table[shop_nr].buy, bought * price);
-  sprintf(buf, "%s %s", GET_CHAR_NAME(ch), arg);
+  // Write the nuyen cost to buf3 and the current buy-string to arg.
+  char price_buf[100];
+  sprintf(price_buf, "%d", bought * price);
+  strcpy(arg, shop_table[shop_nr].buy);
+  
+  // Use our new replace_substring() function to swap out all %d's in arg with the nuyen string.
+  replace_substring(arg, buf3, "%d", price_buf);
+  
+  // Compose the sayto string for the keeper.
+  sprintf(buf, "%s %s", GET_CHAR_NAME(ch), buf3);
   do_say(keeper, buf, cmd_say, SCMD_SAYTO);
   if (bought > 1)
     sprintf(ENDOF(buf2), " (x%d)\r\n", bought);
@@ -605,6 +613,18 @@ void shop_sell(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     GET_OBJ_VAL(cred, 0) += sellprice;
   sprintf(buf3, "%s sold %s at %s (%ld) for %d.", GET_CHAR_NAME(ch), GET_OBJ_NAME(obj), GET_CHAR_NAME(keeper), shop_table[shop_nr].vnum, sellprice);
   mudlog(buf3, ch, LOG_GRIDLOG, TRUE);
+  
+  // Write the nuyen cost to buf3 and the current buy-string to arg.
+  char price_buf[100];
+  sprintf(price_buf, "%d", sellprice);
+  strcpy(arg, shop_table[shop_nr].sell);
+  
+  // Use our new replace_substring() function to swap out all %d's in arg with the nuyen string.
+  replace_substring(arg, buf3, "%d", price_buf);
+  
+  // Compose the sayto string for the keeper.
+  sprintf(buf, "%s %s", GET_CHAR_NAME(ch), buf3);
+  
   sprintf(arg, shop_table[shop_nr].sell, sellprice);
   sprintf(ENDOF(buf), " %s", arg);
   do_say(keeper, buf, cmd_say, SCMD_SAYTO);
