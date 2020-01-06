@@ -1345,7 +1345,6 @@ Material:	paper
 	Val2:	1
 	Val3:	65536
 	Val4:	32
-SourceBook:	M&M p16-17
 BREAK
 #60622
 Keywords:	eyelight alpha
@@ -1373,7 +1372,6 @@ Material:	paper
 	Val2:	1
 	Val3:	1048576
 	Val4:	16
-SourceBook:	M&M p15
 BREAK
 #60623
 Keywords:	eye datajack alpha
@@ -1401,7 +1399,6 @@ Material:	paper
 	Val2:	1
 	Val3:	131072
 	Val4:	20
-SourceBook:	M&M p13-14
 BREAK
 #60624
 Keywords:	retinal clock alpha
@@ -1429,7 +1426,6 @@ Material:	paper
 	Val2:	1
 	Val3:	128
 	Val4:	8
-SourceBook:	SR3 p300
 BREAK
 #60625
 Keywords:	image link
@@ -1457,7 +1453,6 @@ Material:	paper
 	Val2:	1
 	Val3:	16
 	Val4:	16
-SourceBook:	SR3 p299-300
 BREAK
 #60626
 Keywords:	display link alpha
@@ -1485,7 +1480,6 @@ Material:	paper
 	Val2:	1
 	Val3:	4
 	Val4:	8
-SourceBook:	SR3 p299-300
 BREAK
 #60627
 Keywords:	eye camera alpha
@@ -1513,7 +1507,6 @@ Material:	paper
 	Val2:	1
 	Val3:	1
 	Val4:	32
-SourceBook:	SR3 p299-300
 BREAK
 #60628
 Keywords:	flare compensation cybereyes alpha
@@ -1543,7 +1536,6 @@ Material:	paper
 	Val2:	1
 	Val3:	8
 	Val4:	8
-SourceBook:	SR3 p299-300
 BREAK
 #60629
 Keywords:	electronic magnification aplha
@@ -1573,7 +1565,6 @@ Material:	electronics
 	Val2:	1
 	Val3:	8192
 	Val4:	8
-SourceBook:	SR3 p300
 BREAK
 #60630
 Keywords:	electronic magnification alpha
@@ -1603,7 +1594,6 @@ Material:	electronics
 	Val2:	1
 	Val3:	16384
 	Val4:	8
-SourceBook:	SR3 p300
 BREAK
 #60631
 Keywords:	electronic magnification alpha
@@ -1633,7 +1623,6 @@ Material:	electronics
 	Val2:	1
 	Val3:	32768
 	Val4:	8
-SourceBook:	SR3 p300
 BREAK
 #60632
 Keywords:	optical magnification alpha
@@ -1662,7 +1651,6 @@ Material:	electronics
 	Val2:	1
 	Val3:	1024
 	Val4:	16
-SourceBook:	SR3 p300
 BREAK
 #60633
 Keywords:	optical magnification alpha
@@ -1692,7 +1680,6 @@ Material:	electronics
 	Val2:	1
 	Val3:	2048
 	Val4:	16
-SourceBook:	SR3 p300
 BREAK
 #60634
 Keywords:	optical magnification alpha
@@ -1722,7 +1709,6 @@ Material:	electronics
 	Val2:	1
 	Val3:	4096
 	Val4:	16
-SourceBook:	SR3 p300
 BREAK
 #60635
 Keywords:	low-light low light vision alpha
@@ -1752,7 +1738,6 @@ Material:	electronics
 	Val2:	1
 	Val3:	32
 	Val4:	16
-SourceBook:	SR3 p300
 BREAK
 #60636
 Keywords:	cybereye package alpha
@@ -1782,7 +1767,6 @@ Material:	electronics
 	Val2:	1
 	Val3:	554
 	Val4:	16
-SourceBook:	SR3 p299-300
 BREAK
 #60637
 Keywords:	cybereye package alpha
@@ -1813,7 +1797,6 @@ Material:	electronics
 	Val2:	1
 	Val3:	8714
 	Val4:	16
-SourceBook:	SR3 p299-300
 BREAK
 #60638
 Keywords:	cybereye package alpha
@@ -1844,7 +1827,6 @@ Material:	electronics
 	Val2:	1
 	Val3:	16426
 	Val4:	16
-SourceBook:	SR3 p299-300
 BREAK
 #60639
 Keywords:	climbing claws alpha nerp?
@@ -1871,7 +1853,6 @@ Material:	paper
 	Val0:	44
 	Val2:	1
 	Val4:	24
-SourceBook:	M&M p31
 BREAK
 #60640
 Keywords:	razors hand handrazors retractable improved
@@ -1899,7 +1880,6 @@ Material:	metal
 	Val0:	12
 	Val3:	3
 	Val4:	10
-SourceBook:	SR3 p303
 BREAK
 #60641
 Keywords:	razors hand handrazors retractable improved alpha
@@ -1928,7 +1908,6 @@ Material:	metal
 	Val2:	1
 	Val3:	3
 	Val4:	10
-SourceBook:	SR3 p303
 BREAK
 #60642
 Keywords:	hand blade handblade alpha
@@ -1955,7 +1934,6 @@ Material:	paper
 	Val0:	11
 	Val2:	1
 	Val4:	10
-SourceBook:	SR3 p303
 BREAK
 #60643
 Keywords:	retractable hand blade handblade alpha
@@ -1983,7 +1961,6 @@ Material:	paper
 	Val2:	1
 	Val3:	1
 	Val4:	25
-SourceBook:	SR3 p303
 BREAK
 #60644
 Keywords:	fingertip compartment alpha
@@ -2010,7 +1987,6 @@ Material:	paper
 	Val0:	10
 	Val2:	1
 	Val4:	10
-SourceBook:	SR3 p303
 BREAK
 #60645
 Keywords:	reaction enhancer alpha
