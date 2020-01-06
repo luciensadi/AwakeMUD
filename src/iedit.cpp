@@ -550,8 +550,11 @@ void iedit_disp_val3_menu(struct descriptor_data * d)
       break;
     case ITEM_BIOWARE:
       if (GET_OBJ_VAL(OBJ, 0) < BIO_CEREBRALBOOSTER)
-        send_to_char("Cultured (1 - Yes, 0 - No): ", CH);
-      else iedit_disp_menu(d);
+        send_to_char(CH, "Cultured (%d - Yes, %d - No): ", BIOWARE_CULTURED, BIOWARE_STANDARD);
+      else {
+        GET_OBJ_VAL(OBJ, 2) = BIOWARE_CULTURED;
+        iedit_disp_menu(d);
+      }
       break;
     case ITEM_GUN_AMMO:
     case ITEM_GUN_MAGAZINE:
@@ -2139,13 +2142,13 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
           }
           break;
         case ITEM_BIOWARE:
-          if (number < 0 || number > 1) {
-            send_to_char("Invalid choice. 1 for yes, 0 for no: ", CH);
+          if (number != BIOWARE_STANDARD && number != BIOWARE_CULTURED) {
+            send_to_char(CH, "Invalid choice. %d for yes, %d for no: ", BIOWARE_CULTURED, BIOWARE_STANDARD);
             return;
           }
           break;
         case ITEM_CYBERWARE:
-          if (number < 0 || number > 3) {
+          if (number < GRADE_STANDARD || number > GRADE_DELTA) {
             send_to_char("Please select grade from list.\r\nGrade: ", CH);
             return;
           }
@@ -2266,12 +2269,12 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             case WEAP_MACHINE_PISTOL:
               GET_OBJ_VAL(OBJ, ACCESS_LOCATION_TOP) = 0;
               GET_OBJ_VAL(OBJ, ACCESS_LOCATION_BARREL) = 0;
-              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_UNDER) = -1;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_UNDER) = -2;
               break;
             case WEAP_TASER:
               GET_OBJ_VAL(OBJ, ACCESS_LOCATION_TOP) = 0;
-              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_BARREL) = -1;
-              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_UNDER) = -1;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_BARREL) = -2;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_UNDER) = -2;
               break;
             case WEAP_SMG:
             case WEAP_LMG:
@@ -2290,9 +2293,9 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               GET_OBJ_VAL(OBJ, ACCESS_LOCATION_UNDER) = 0;
               break;
             default: // includes holdout pistols and all melee weapons
-              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_TOP) = -1;
-              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_BARREL) = -1;
-              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_UNDER) = -1;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_TOP) = -2;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_BARREL) = -2;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_UNDER) = -2;
           }
           break;
         case ITEM_FIREWEAPON:
