@@ -196,7 +196,7 @@ DefaultPos:	Standing
 	Cash:	1000
 	Bank:	5000
 [SKILLS]
-	:	10
+	:	10
 	Armed Combat:	10
 	Stealth:	10
 	Leadership:	10
@@ -236,7 +236,7 @@ DefaultPos:	Standing
 	Cash:	1000
 	Bank:	5000
 [SKILLS]
-	:	10
+	:	10
 	Firearms:	10
 	Leadership:	10
 	Armed Combat:	10
@@ -274,7 +274,7 @@ DefaultPos:	Standing
 	Ballistic:	15
 	Impact:	15
 [SKILLS]
-	:	10
+	:	10
 	Leadership:	10
 	Stealth:	10
 	Athletics:	10
@@ -317,8 +317,8 @@ DefaultPos:	Standing
 	Bank:	6000
 [SKILLS]
 	Sorcery:	10
-	:	10
-	:	10
+	:	10
+	:	10
 	Conjuring:	10
 	Stealth:	10
 BREAK
@@ -357,10 +357,10 @@ DefaultPos:	Standing
 	Cash:	2000
 	Bank:	6000
 [SKILLS]
-	:	10
+	:	10
 	Sorcery:	10
 	Conjuring:	10
-	:	10
+	:	10
 	Throwing Weapons:	10
 BREAK
 #60510
@@ -1320,7 +1320,7 @@ DefaultPos:	Standing
 	Cash:	1000
 	Bank:	5000
 [SKILLS]
-	:	10
+	:	10
 	Armed Combat:	10
 	Stealth:	10
 	Leadership:	10
@@ -1361,7 +1361,7 @@ DefaultPos:	Standing
 	Cash:	1000
 	Bank:	5000
 [SKILLS]
-	:	10
+	:	10
 	Armed Combat:	10
 	Stealth:	10
 	Leadership:	10
@@ -1401,7 +1401,7 @@ DefaultPos:	Standing
 	Cash:	1000
 	Bank:	5000
 [SKILLS]
-	:	10
+	:	10
 	Armed Combat:	10
 	Stealth:	10
 	Leadership:	10
@@ -2219,6 +2219,64 @@ DefaultPos:	Standing
 [POINTS]
 	Height:	183
 	Weight:	93
+[SKILLS]
+BREAK
+#60639
+Keywords:	Doc Chew
+Name:	Doc Chew
+RoomDesc:$
+Doc Chew stands here, checking on a cryogenic vat of cybernetic eyes. 
+
+~
+LookDesc:$
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	143
+	Weight:	95
+[SKILLS]
+BREAK
+#60640
+Keywords:	Doc Croke
+Name:	Doc Croke
+RoomDesc:$
+Doc Croke is sitting here, cooking the books. 
+
+~
+LookDesc:$
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	143
+	Weight:	95
 [SKILLS]
 BREAK
 END

@@ -1,0 +1,1320 @@
+~~~~~ HEADWARE
+
+~~~~~ Brainware
+#XXX
+Keywords:	single-slot single slot chipjack 1 one
+Name:	a chipjack (1 slot)
+RoomDesc:$
+An uninstalled chipjack rests here.~
+LookDesc:$
+Similar to a datajack, but only allowing access to a skillsoft or datasoft.
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	3
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val3:	1
+	Val4:	20
+BREAK
+#XXX
+Keywords:	dual-slot dual slot chipjack 2 two
+Name:	a chipjack (2 slot)
+RoomDesc:$
+An uninstalled chipjack rests here.~
+LookDesc:$
+Similar to a datajack, but only allowing access to a skillsoft or datasoft.
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	2000
+	AvailTN:	3
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val3:	2
+	Val4:	25
+BREAK
+#XXX
+Keywords:	tri-slot triple slot chipjack 3 three
+Name:	a chipjack (3 slot)
+RoomDesc:$
+An uninstalled chipjack rests here.~
+LookDesc:$
+Similar to a datajack, but only allowing access to a skillsoft or datasoft.
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	3000
+	AvailTN:	3
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val3:	3
+	Val4:	30
+BREAK
+#XXX03
+Keywords:	quad-slot quad slot chipjack 4 four
+Name:	a chipjack (4 slot)
+RoomDesc:$
+An uninstalled chipjack rests here.~
+LookDesc:$
+Similar to a datajack, but only allowing access to a skillsoft or datasoft.
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	4000
+	AvailTN:	3
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val3:	4
+	Val4:	35
+BREAK
+#XXX
+Keywords:	chipjack expert driver nerp? i 1
+Name:	a chipjack expert driver I
+RoomDesc:$
+An uninstalled chipjack expert driver rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	5000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	29
+	Val1:	1
+BREAK
+#XXX
+Keywords:	chipjack expert driver nerp? ii 2
+Name:	a chipjack expert driver II
+RoomDesc:$
+An uninstalled chipjack expert driver rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	29
+	Val1:	2
+BREAK
+#XXX
+Keywords:	chipjack expert driver nerp? iii 3
+Name:	a chipjack expert driver III
+RoomDesc:$
+An uninstalled chipjack expert driver rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	15000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	29
+	Val1:	3
+BREAK
+#XXX
+Keywords:	data compactor I
+Name:	a data compactor I
+RoomDesc:$
+An uninstalled data compactor rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	9500
+	AvailTN:	6
+	AvailDay:	2.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	31
+	Val1:	1
+	Val4:	10
+BREAK
+#XXX
+Keywords:	data compactor II
+Name:	a data compactor II
+RoomDesc:$
+An uninstalled data compactor rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	19000
+	AvailTN:	6
+	AvailDay:	2.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	31
+	Val1:	2
+	Val4:	15
+BREAK
+#XXX
+Keywords:	data compactor III
+Name:	a data compactor III
+RoomDesc:$
+An uninstalled data compactor rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	28500
+	AvailTN:	6
+	AvailDay:	2.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	31
+	Val1:	3
+	Val4:	20
+BREAK
+#XXX
+Keywords:	data compactor IV
+Name:	a data compactor IV
+RoomDesc:$
+An uninstalled data compactor rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	38000
+	AvailTN:	6
+	AvailDay:	2.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	31
+	Val1:	4
+	Val4:	25
+BREAK
+#XXX
+Keywords:	data lock nerp?
+Name:	a data lock
+RoomDesc:$
+An uninstalled data lock rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val4:	20
+BREAK
+#XXX
+Keywords:	datajack
+Name:	a datajack
+RoomDesc:$
+An uninstalled datajack rests here.~
+LookDesc:$
+When installed, it lets information travel from a computer, or more commonly,
+the Matrix, directly into the user's brain.
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val4:	20
+BREAK
+#XXX
+Keywords:	encephalon i 1
+Name:	an encephalon I
+RoomDesc:$
+An uninstalled encephalon rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	40000
+	AvailTN:	6
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	32
+	Val1:	1
+	Val4:	75
+[AFFECT 0]
+	Location:	Hacking Pool
+	Modifier:	1
+[AFFECT 1]
+	Location:	Task Pool (Int)
+	Modifier:	1
+BREAK
+#XXX
+Keywords:	encephalon ii 2
+Name:	an encephalon II
+RoomDesc:$
+An uninstalled encephalon rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	115000
+	AvailTN:	6
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	32
+	Val1:	2
+	Val4:	150
+[AFFECT 0]
+	Location:	Hacking Pool
+	Modifier:	2
+[AFFECT 1]
+	Location:	Task Pool (Int)
+	Modifier:	2
+BREAK
+#XXX
+Keywords:	datajack induction
+Name:	an induction datajack
+RoomDesc:$
+An uninstalled induction datajack rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	3000
+	AvailTN:	5
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val3:	1
+	Val4:	30
+BREAK
+#XXX
+Keywords:	knowsoft link
+Name:	a knowsoft link
+RoomDesc:$
+An uninstalled knowsoft link rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val4:	10
+BREAK
+#XXX
+Keywords:	maths spu i 1
+Name:	a math SPU I
+RoomDesc:$
+An uninstalled math SPU rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	2000
+	AvailTN:	6
+	AvailDay:	2.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	33
+	Val1:	1
+	Val4:	10
+[AFFECT 0]
+	Location:	Hacking Pool
+	Modifier:	1
+BREAK
+#XXX
+Keywords:	maths spu ii 2
+Name:	a math SPU II
+RoomDesc:$
+An uninstalled math SPU rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	5000
+	AvailTN:	6
+	AvailDay:	2.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	33
+	Val1:	2
+	Val4:	15
+[AFFECT 0]
+	Location:	Hacking Pool
+	Modifier:	2
+BREAK
+#XXX
+Keywords:	maths spu iii 3
+Name:	a math SPU III
+RoomDesc:$
+An uninstalled math SPU rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	11000
+	AvailTN:	6
+	AvailDay:	2.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	33
+	Val1:	3
+	Val4:	20
+[AFFECT 0]
+	Location:	Hacking Pool
+	Modifier:	3
+BREAK
+#XXX
+Keywords:	memory headware
+Name:	memory (75 Mp)
+RoomDesc:$
+An uninstalled headware memory module rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	11250
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val3:	75
+	Val4:	10
+BREAK
+#XXX
+Keywords:	memory headware
+Name:	memory (150 Mp)
+RoomDesc:$
+An uninstalled headware memory module rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	22500
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val3:	150
+	Val4:	10
+BREAK
+#XXX
+Keywords:	memory headware
+Name:	memory (300 Mp)
+RoomDesc:$
+An uninstalled headware memory module rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	45000
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val3:	300
+	Val4:	10
+BREAK
+
+~~~~~ Communications
+#XXX
+Keywords:	phone headware telephone
+Name:	a phone
+RoomDesc:$
+An uninstalled headware phone rests here.~
+LookDesc:$
+It's a phone, designed to be installed in someone's head.
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	3700
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val4:	50
+BREAK
+#XXX
+Keywords:	radio headware
+Name:	a radio
+RoomDesc:$
+An uninstalled headware radio rests here.~
+LookDesc:$
+A small, delicate device.
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	2000
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	1
+	Val3:	3
+	Val4:	75
+	Val5:	3
+BREAK
+
+~~~~~ Matrixware
+#XXX
+Keywords:	ASIST interface
+Name:	an ASIST interface
+RoomDesc:$
+An uninstalled ASIST interface rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	28
+BREAK
+
+~~~~~ Senseware
+#XXX
+Keywords:	oral dart
+Name:	an oral dart
+RoomDesc:$
+An uninstalled oral dart rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	3600
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	6
+	LegalCode:	14
+	LegalPermit:	1
+[VALUES]
+	Val0:	25
+	Val4:	25
+BREAK
+#XXX
+Keywords:	oral gun
+Name:	an oral gun
+RoomDesc:$
+An uninstalled oral gun rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	5600
+	AvailTN:	6
+	AvailDay:	3.00
+	LegalNum:	6
+	LegalCode:	14
+	LegalPermit:	1
+[VALUES]
+	Val0:	26
+	Val4:	40
+BREAK
+#XXX
+Keywords:	tooth compartment breakable
+Name:	a tooth compartment (breakable)
+RoomDesc:$
+An uninstalled tooth compartment rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	750
+	AvailTN:	3
+	AvailDay:	2.00
+	LegalNum:	10
+	LegalCode:	14
+	LegalPermit:	1
+[VALUES]
+	Val0:	5
+	Val3:	1
+BREAK
+#XXX
+Keywords:	tooth compartment storage
+Name:	a tooth compartment (storage)
+RoomDesc:$
+An uninstalled tooth compartment rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1500
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val3:	1
+BREAK
+
+~~~~~ Eyes
+#XXX
+Keywords:	eye camera
+Name:	a camera
+RoomDesc:$
+An uninstalled eye camera rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	5000
+	AvailTN:	6
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val3:	1
+	Val4:	40
+BREAK
+#XXX
+Keywords:	display link
+Name:	a display link
+RoomDesc:$
+An uninstalled display link rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	4
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val3:	4
+	Val4:	10
+BREAK
+#XXX
+Keywords:	eye dart needs_g
+Name:	an eye dart
+RoomDesc:$
+An uninstalled eye dart rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	4200
+	AvailTN:	8
+	AvailDay:	14.00
+	LegalNum:	7
+	LegalCode:	14
+	LegalPermit:	1
+[VALUES]
+	Val0:	25
+	Val4:	25
+BREAK
+#XXX
+Keywords:	eye datajack
+Name:	an eye datajack
+RoomDesc:$
+An uninstalled eye datajack here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	2200
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	4
+	LegalCode:	13
+	LegalPermit:	1
+[VALUES]
+	Val0:	8
+	Val3:	131072
+	Val4:	25
+BREAK
+#XXX
+Keywords:	eye gun needs_g
+Name:	an eye gun
+RoomDesc:$
+An uninstalled eye gun rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	6400
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	6
+	LegalCode:	14
+	LegalPermit:	1
+[VALUES]
+	Val0:	26
+	Val4:	40
+BREAK
+#XXX
+Keywords:	eye light
+Name:	an eye light
+RoomDesc:$
+An uninstalled eye light rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1200
+	AvailTN:	4
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val3:	1048576
+	Val4:	20
+BREAK
+#XXX
+Keywords:	flare compensation cybereyes
+Name:	a flare compensation module
+RoomDesc:$
+An uninstalled flare compensation module rests here.~
+LookDesc:$
+Once installed, helps reduce damage done to the eyes caused by
+instantaneous, blinding flashes of light.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	2000
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val3:	8
+	Val4:	10
+BREAK
+#508
+Keywords:	image link
+Name:	an image link
+RoomDesc:$
+An uninstalled image link rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1600
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val3:	16
+	Val4:	20
+BREAK
+#XXX
+Keywords:	low-light low light vision
+Name:	a low-light vision
+RoomDesc:$
+An uninstalled low-light vision module rests here.~
+LookDesc:$
+Designed to allow humans to have low-light vision.  Not as good as the
+natural option belonging to Elves and Orcs, but better than nothing.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	10000000000000
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	3000
+	AvailTN:	4
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val3:	32
+	Val4:	20
+BREAK
+#XXX
+Keywords:	protective eye covers
+Name:	protective eye covers
+RoomDesc:$
+An uninstalled set of protective eye covers rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	500
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val3:	64
+BREAK
+#XXX
+Keywords:	thermographic vision
+Name:	a thermographic vision
+RoomDesc:$
+An uninstalled thermographic vision module rests here.~
+LookDesc:$
+Like the low-light version, this allows those born without thermographic
+vision to attain it.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	1000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	3000
+	AvailTN:	4
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val3:	512
+	Val4:	20
+BREAK
+#XXX
+Keywords:	optical magnification
+Name:	an optical magnification I
+RoomDesc:$
+An uninstalled optical magnification module rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	100000000000000000
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	2500
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	1
+	Val3:	1024
+	Val4:	20
+BREAK
+#XXX
+Keywords:	optical magnification
+Name:	an optical magnification II
+RoomDesc:$
+An uninstalled optical magnification module rests here.~
+LookDesc:$
+Optical magnification lets you see farther.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	100000000000000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	4000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	2048
+	Val4:	20
+BREAK
+#XXX
+Keywords:	optical magnification
+Name:	an optical magnification III
+RoomDesc:$
+An uninstalled optical magnification module rests here.~
+LookDesc:$
+This lets you see farther with grater accuracy.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	1000000000000000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	6000
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	3
+	Val3:	4096
+	Val4:	20
+BREAK
+#XXX
+Keywords:	electronic magnification
+Name:	an electronic magnification I
+RoomDesc:$
+An uninstalled electronic magnification module rests here.~
+LookDesc:$
+This is the electronic equivalent of optical magnification 1.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	100000000000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	3500
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	1
+	Val3:	8192
+	Val4:	10
+BREAK
+#XXX
+Keywords:	electronic magnification
+Name:	an electronic magnification II
+RoomDesc:$
+An uninstalled electronic magnification module rests here.~
+LookDesc:$
+The equivalent of optical magnification rating 2.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	100000000000000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	7500
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	16384
+	Val4:	10
+BREAK
+#XXX
+Keywords:	electronic magnification
+Name:	an electronic magnification III
+RoomDesc:$
+An uninstalled electronic magnification module rests here.~
+LookDesc:$
+The equivalent of optical magnification rating 3.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	1000000000000000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	11000
+	AvailTN:	8
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	3
+	Val3:	32768
+	Val4:	10
+BREAK
+
+
+
+
+
+#XXX
+Keywords:	rig vehicle control
+Name:	a vehicle control rig I
+RoomDesc:$
+A mass of thin wires and processors lies here.~
+LookDesc:$
+A mass of thin wires, used to create the nervous system of the rigger. 
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	12000
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	6
+	LegalCode:	13
+	LegalPermit:	1
+[VALUES]
+	Val0:	20
+	Val1:	1
+	Val4:	200
+	Val5:	6
+BREAK
+#XXX
+Keywords:	voice modulator
+Name:	a voice modulator
+RoomDesc:$
+An uninstalled voice modulator rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	45000
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val4:	20
+BREAK
+END
