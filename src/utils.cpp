@@ -827,13 +827,20 @@ void sprintbit(long vektor, const char *names[], char *result)
     strcpy(result, "SPRINTBIT ERROR!");
     return;
   }
+  
+  bool have_printed = FALSE;
   for (nr = 0; vektor; vektor >>= 1) {
     if (IS_SET(1, vektor)) {
       if (*names[nr] != '\n') {
+        if (have_printed) {
+          // Better formatting. Better coding. Papa Lucien's.
+          strcat(result, ", ");
+        }
         strcat(result, names[nr]);
-        strcat(result, " ");
-      } else
+      } else {
         strcat(result, "UNDEFINED ");
+      }
+      have_printed = TRUE;
     }
     if (*names[nr] != '\n')
       nr++;

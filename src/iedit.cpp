@@ -2266,12 +2266,12 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             case WEAP_MACHINE_PISTOL:
               GET_OBJ_VAL(OBJ, ACCESS_LOCATION_TOP) = 0;
               GET_OBJ_VAL(OBJ, ACCESS_LOCATION_BARREL) = 0;
-              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_UNDER) = -1;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_UNDER) = -2;
               break;
             case WEAP_TASER:
               GET_OBJ_VAL(OBJ, ACCESS_LOCATION_TOP) = 0;
-              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_BARREL) = -1;
-              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_UNDER) = -1;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_BARREL) = -2;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_UNDER) = -2;
               break;
             case WEAP_SMG:
             case WEAP_LMG:
@@ -2290,9 +2290,9 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
               GET_OBJ_VAL(OBJ, ACCESS_LOCATION_UNDER) = 0;
               break;
             default: // includes holdout pistols and all melee weapons
-              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_TOP) = -1;
-              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_BARREL) = -1;
-              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_UNDER) = -1;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_TOP) = -2;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_BARREL) = -2;
+              GET_OBJ_VAL(OBJ, ACCESS_LOCATION_UNDER) = -2;
           }
           break;
         case ITEM_FIREWEAPON:
