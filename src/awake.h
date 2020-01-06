@@ -1297,6 +1297,7 @@ enum {
 #define BIO_TAILOREDPHEREMONES	16
 #define BIO_TOXINEXTRACTOR	17
 #define BIO_TRACHEALFILTER	18
+// Everything past this line is assumed to be cultured by default. If you add more that's not cultured, change the cultured check in db.cpp.
 #define BIO_CEREBRALBOOSTER	19
 #define BIO_DAMAGECOMPENSATOR	20
 #define BIO_PAINEDITOR		21
@@ -1305,6 +1306,9 @@ enum {
 #define BIO_THERMOSENSEORGAN	24
 #define BIO_TRAUMADAMPNER	25
 #define NUM_BIOWARE		26
+
+#define BIOWARE_STANDARD 0
+#define BIOWARE_CULTURED 1
 
 /* program types */
 #define SOFT_BOD                1

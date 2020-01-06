@@ -4537,7 +4537,7 @@ void price_cyber(struct obj_data *obj)
      case CYB_MEMORY:
        GET_OBJ_VAL(obj, 1) = 0;
        GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 3) * 150;
-       GET_OBJ_VAL(obj, 4) = GET_OBJ_VAL(obj, 3) / 300;
+       GET_OBJ_VAL(obj, 4) = GET_OBJ_VAL(obj, 3) / 3;
        GET_OBJ_AVAILTN(obj) = 3;
        GET_OBJ_AVAILDAY(obj) = 1;
        break;
@@ -5322,6 +5322,7 @@ void price_bio(struct obj_data *obj)
       GET_OBJ_AVAILDAY(obj) = 8;
       break;
   }
+  // Check for cultured.
   if (GET_OBJ_VAL(obj, 0) < BIO_CEREBRALBOOSTER && GET_OBJ_VAL(obj, 2)) {
     GET_OBJ_COST(obj) *= 4;
     GET_OBJ_VAL(obj, 4) = (int)(GET_OBJ_VAL(obj, 4) * .75);
