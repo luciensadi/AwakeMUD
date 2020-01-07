@@ -826,21 +826,22 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 // ITEM_FOUNTAIN convenience defines
 
 // ITEM_CYBERWARE convenience defines
-#define GET_CYBERWARE_TYPE(cyberware)         (GET_OBJ_VAL((cyberware), 0))
-#define GET_CYBERWARE_FLAGS(cyberware)        (GET_OBJ_VAL((cyberware), 3)) // CYBERWEAPON_RETRACTABLE, CYBERWEAPON_IMPROVED
-#define GET_CYBERWARE_LACING_TYPE(cyberware)  (GET_OBJ_VAL((cyberware), 3)) // Yes, this is also value 3. Great design here.
-#define GET_CYBERWARE_IS_DISABLED(cyberware)  (GET_OBJ_VAL((cyberware), 9))
+#define GET_CYBERWARE_TYPE(cyberware)          (GET_OBJ_VAL((cyberware), 0))
+#define GET_CYBERWARE_FLAGS(cyberware)         (GET_OBJ_VAL((cyberware), 3)) // CYBERWEAPON_RETRACTABLE, CYBERWEAPON_IMPROVED
+#define GET_CYBERWARE_LACING_TYPE(cyberware)   (GET_OBJ_VAL((cyberware), 3)) // Yes, this is also value 3. Great design here.
+#define GET_CYBERWARE_ESSENCE_COST(cyberware)  (GET_OBJ_VAL((cyberware), 4))
+#define GET_CYBERWARE_IS_DISABLED(cyberware)   (GET_OBJ_VAL((cyberware), 9))
 
 // ITEM_CYBERDECK convenience defines
-#define GET_CYBERDECK_MPCP(deck)              (GET_OBJ_VAL((deck), 0))
-#define GET_CYBERDECK_HARDENING(deck)         (GET_OBJ_VAL((deck), 1))
-#define GET_CYBERDECK_ACTIVE_MEMORY(deck)     (GET_OBJ_VAL((deck), 2))
-#define GET_CYBERDECK_TOTAL_STORAGE(deck)     (GET_OBJ_VAL((deck), 3))
-#define GET_CYBERDECK_IO_RATING(deck)         (GET_OBJ_VAL((deck), 4))
-#define GET_CYBERDECK_USED_STORAGE(deck)      (GET_OBJ_VAL((deck), 5))
-#define GET_CYBERDECK_RESPONSE_INCREASE(deck) (GET_OBJ_VAL((deck), 6))
-#define GET_CYBERDECK_IS_INCOMPLETE(deck)     (GET_OBJ_VAL((deck), 9))
-#define GET_CYBERDECK_FREE_STORAGE(deck)      (GET_CYBERDECK_TOTAL_STORAGE((deck)) -GET_CYBERDECK_USED_STORAGE((deck)))
+#define GET_CYBERDECK_MPCP(deck)               (GET_OBJ_VAL((deck), 0))
+#define GET_CYBERDECK_HARDENING(deck)          (GET_OBJ_VAL((deck), 1))
+#define GET_CYBERDECK_ACTIVE_MEMORY(deck)      (GET_OBJ_VAL((deck), 2))
+#define GET_CYBERDECK_TOTAL_STORAGE(deck)      (GET_OBJ_VAL((deck), 3))
+#define GET_CYBERDECK_IO_RATING(deck)          (GET_OBJ_VAL((deck), 4))
+#define GET_CYBERDECK_USED_STORAGE(deck)       (GET_OBJ_VAL((deck), 5))
+#define GET_CYBERDECK_RESPONSE_INCREASE(deck)  (GET_OBJ_VAL((deck), 6))
+#define GET_CYBERDECK_IS_INCOMPLETE(deck)      (GET_OBJ_VAL((deck), 9))
+#define GET_CYBERDECK_FREE_STORAGE(deck)       (GET_CYBERDECK_TOTAL_STORAGE((deck)) -GET_CYBERDECK_USED_STORAGE((deck)))
 
 // ITEM_PROGRAM convenience defines
 
