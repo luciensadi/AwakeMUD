@@ -764,7 +764,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       else strcpy(buf2, "-");
       
       if (IS_OBJ_STAT(obj, ITEM_NERPS)) {
-        sprintf(ENDOF(buf), "%-29s ^Y(N)^n %-6s%2s   %0.2f%c  %9d\r\n", GET_OBJ_NAME(obj),
+        sprintf(ENDOF(buf), "^Y(N)^n %-29s^n %-6s%2s   %0.2f%c  %9d\r\n", GET_OBJ_NAME(obj),
                 GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? "Cyber" : "Bio", buf2, ((float)GET_OBJ_VAL(obj, 4) / 100),
                 GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? 'E' : 'I', buy_price(obj, shop_nr));
       } else {
@@ -802,7 +802,7 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       }
       
       if (IS_OBJ_STAT(obj, ITEM_NERPS)) {
-        sprintf(ENDOF(buf), "%-44s ^Y(N)^n %6d\r\n", GET_OBJ_NAME(obj), buy_price(obj, shop_nr));
+        sprintf(ENDOF(buf), "^Y(N)^n %-44s^n %6d\r\n", GET_OBJ_NAME(obj), buy_price(obj, shop_nr));
       } else {
         sprintf(ENDOF(buf), "%-48s^n %6d\r\n", GET_OBJ_NAME(obj),
                   buy_price(obj, shop_nr));
