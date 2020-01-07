@@ -714,6 +714,9 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         }
       }
       
+      if (IS_OBJ_STAT(obj, ITEM_NERPS))
+        strcat(buf, ". OOC note: It has no coded effect");
+      
       strcat(buf, ".\r\n");
       
       // Clean up so we don't leak the object.
@@ -759,9 +762,16 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       if (GET_OBJ_VAL(obj, 1) > 0)
         sprintf(buf2, "%d", GET_OBJ_VAL(obj, 1));
       else strcpy(buf2, "-");
-      sprintf(ENDOF(buf), "%-33s^n %-6s%2s   %0.2f%c  %9d\r\n", GET_OBJ_NAME(obj),
-              GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? "Cyber" : "Bio", buf2, ((float)GET_OBJ_VAL(obj, 4) / 100),
-              GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? 'E' : 'I', buy_price(obj, shop_nr));
+      
+      if (IS_OBJ_STAT(obj, ITEM_NERPS)) {
+        sprintf(ENDOF(buf), "%-29s ^Y(N)^n %-6s%2s   %0.2f%c  %9d\r\n", GET_OBJ_NAME(obj),
+                GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? "Cyber" : "Bio", buf2, ((float)GET_OBJ_VAL(obj, 4) / 100),
+                GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? 'E' : 'I', buy_price(obj, shop_nr));
+      } else {
+        sprintf(ENDOF(buf), "%-33s^n %-6s%2s   %0.2f%c  %9d\r\n", GET_OBJ_NAME(obj),
+                GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? "Cyber" : "Bio", buf2, ((float)GET_OBJ_VAL(obj, 4) / 100),
+                GET_OBJ_TYPE(obj) == ITEM_CYBERWARE ? 'E' : 'I', buy_price(obj, shop_nr));
+      }
       extract_obj(obj);
     }
   } else
@@ -790,8 +800,13 @@ void shop_list(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
         else
           sprintf(ENDOF(buf), "%-3d         ", sell->stock);
       }
+      
+      if (IS_OBJ_STAT(obj, ITEM_NERPS)) {
+        sprintf(ENDOF(buf), "%-44s ^Y(N)^n %6d\r\n", GET_OBJ_NAME(obj), buy_price(obj, shop_nr));
+      } else {
         sprintf(ENDOF(buf), "%-48s^n %6d\r\n", GET_OBJ_NAME(obj),
                   buy_price(obj, shop_nr));
+      }
       if (strlen(buf) >= MAX_STRING_LENGTH - 200)
         break;
       extract_obj(obj);
@@ -1221,7 +1236,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
   sprintf(ENDOF(buf), " and I couldn't let it go for less than %d nuyen.", buy_price(obj, shop_nr));
   
   if (IS_OBJ_STAT(obj, ITEM_NERPS)) {
-    strcat(buf, " (OOC: It has no special coded effects.)");
+    strcat(buf, " ^Y(OOC: It has no special coded effects.)^n");
   }
   
   do_say(keeper, buf, cmd_say, SCMD_SAYTO);
