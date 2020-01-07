@@ -860,10 +860,283 @@ Material:	paper
 [VALUES]
 	Val0:	28
 BREAK
+#XXX
+Keywords:	cranial cyberdeck allegiance sigma
+Name:	a cranial-implant Allegiance Sigma cyberdeck
+RoomDesc:$
+An uninstalled cranial cyberdeck is lying here.~
+LookDesc:$
+Cyberdecks may be installed as a cranial interface, popular because they have a 
+high concealability and easy mobility and are generally very convenient.
+^n
+Memory: In twentieth-century terms, active memory serves as implanted RAM. It 
+cannot be used for any other purpose than for active utilities. Headware memory 
+can be used for both active and storage memory. Other linked memory sources may 
+also be used for storage memory (but not active memory). Active and storage 
+memory costs are not included in the costs shown and must be purchased  
+separately.~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	14000
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	4
+	LegalCode:	16
+	LegalPermit:	1
+[VALUES]
+	Val0:	30
+	Val3:	1820
+	Val4:	190
+BREAK
+#XXX
+Keywords:	cranial cyberdeck sony ct-360-d 360 needs_deck_check
+Name:	a cranial-implant Sony CT-360-D cyberdeck
+RoomDesc:$
+An uninstalled cranial cyberdeck is lying here.~
+LookDesc:$
+Cyberdecks may be installed as a cranial interface, popular because they have a 
+high concealability and easy mobility and are generally very convenient.
+^n
+Memory: In twentieth-century terms, active memory serves as implanted RAM. It 
+cannot be used for any other purpose than for active utilities. Headware memory 
+can be used for both active and storage memory. Other linked memory sources may 
+also be used for storage memory (but not active memory). Active and storage 
+memory costs are not included in the costs shown and must be purchased  
+separately.~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	75000
+	AvailTN:	6
+	AvailDay:	14.00
+	LegalNum:	4
+	LegalCode:	16
+	LegalPermit:	1
+[VALUES]
+	Val0:	30
+	Val3:	1116
+	Val4:	250
+BREAK
+#XXX
+Keywords:	cranial cyberdeck novadeck hyperdeck 6
+Name:	a cranial-implant Novadeck Hyperdeck-6 cyberdeck
+RoomDesc:$
+An uninstalled cranial cyberdeck is lying here.~
+LookDesc:$
+Cyberdecks may be installed as a cranial interface, popular because they have a 
+high concealability and easy mobility and are generally very convenient.
+^n
+Memory: In twentieth-century terms, active memory serves as implanted RAM. It 
+cannot be used for any other purpose than for active utilities. Headware memory 
+can be used for both active and storage memory. Other linked memory sources may 
+also be used for storage memory (but not active memory). Active and storage 
+memory costs are not included in the costs shown and must be purchased  
+separately.~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	150000
+	AvailTN:	6
+	AvailDay:	14.00
+	LegalNum:	4
+	LegalCode:	16
+	LegalPermit:	1
+[VALUES]
+	Val0:	30
+	Val3:	1916
+	Val4:	270
+BREAK
+#XXX
+Keywords:	cranial cyberdeck cmt avatar needs_deck
+Name:	a cranial-implant CMT Avatar cyberdeck
+RoomDesc:$
+An uninstalled cranial cyberdeck is lying here.~
+LookDesc:$
+Cyberdecks may be installed as a cranial interface, popular because they have a 
+high concealability and easy mobility and are generally very convenient.
+^n
+Memory: In twentieth-century terms, active memory serves as implanted RAM. It 
+cannot be used for any other purpose than for active utilities. Headware memory 
+can be used for both active and storage memory. Other linked memory sources may 
+also be used for storage memory (but not active memory). Active and storage 
+memory costs are not included in the costs shown and must be purchased  
+separately.~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	300000
+	AvailTN:	8
+	AvailDay:	14.00
+	LegalNum:	4
+	LegalCode:	16
+	LegalPermit:	1
+[VALUES]
+	Val0:	30
+	Val3:	1916
+	Val4:	280
+BREAK
+#XXX
+Keywords:	cranial cyberdeck renraku kraftwork-8
+Name:	a cranial-implant Renraku Kraftwork-8 cyberdeck
+RoomDesc:$
+An uninstalled cranial cyberdeck is lying here.~
+LookDesc:$
+Cyberdecks may be installed as a cranial interface, popular because they have a 
+high concealability and easy mobility and are generally very convenient.
+^n
+Memory: In twentieth-century terms, active memory serves as implanted RAM. It 
+cannot be used for any other purpose than for active utilities. Headware memory 
+can be used for both active and storage memory. Other linked memory sources may 
+also be used for storage memory (but not active memory). Active and storage 
+memory costs are not included in the costs shown and must be purchased  
+separately.~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	450000
+	AvailTN:	10
+	AvailDay:	30.00
+	LegalNum:	4
+	LegalCode:	16
+	LegalPermit:	1
+[VALUES]
+	Val0:	30
+	Val3:	17121
+	Val4:	290
+BREAK
+#XXX
+Keywords:	cranial cyberdeck transys highlander
+Name:	a cranial-implant Transys Highlander cyberdeck
+RoomDesc:$
+An uninstalled cranial cyberdeck is lying here.~
+LookDesc:$
+Cyberdecks may be installed as a cranial interface, popular because they have a 
+high concealability and easy mobility and are generally very convenient.
+^n
+Memory: In twentieth-century terms, active memory serves as implanted RAM. It 
+cannot be used for any other purpose than for active utilities. Headware memory 
+can be used for both active and storage memory. Other linked memory sources may 
+also be used for storage memory (but not active memory). Active and storage 
+memory costs are not included in the costs shown and must be purchased  
+separately.~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	700000
+	AvailTN:	14
+	AvailDay:	30.00
+	LegalNum:	4
+	LegalCode:	16
+	LegalPermit:	1
+[VALUES]
+	Val0:	30
+	Val3:	17122
+	Val4:	300
+BREAK
+#XXX
+Keywords:	cranial cyberdeck novatech slimcase-10 needs_deck
+Name:	a cranial-implant Novatech Slimcase-10 cyberdeck
+RoomDesc:$
+An uninstalled cranial cyberdeck is lying here.~
+LookDesc:$
+Cyberdecks may be installed as a cranial interface, popular because they have a 
+high concealability and easy mobility and are generally very convenient.
+^n
+Memory: In twentieth-century terms, active memory serves as implanted RAM. It 
+cannot be used for any other purpose than for active utilities. Headware memory 
+can be used for both active and storage memory. Other linked memory sources may 
+also be used for storage memory (but not active memory). Active and storage 
+memory costs are not included in the costs shown and must be purchased  
+separately.~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	1500000
+	AvailTN:	18
+	AvailDay:	30.00
+	LegalNum:	4
+	LegalCode:	16
+	LegalPermit:	1
+[VALUES]
+	Val0:	30
+	Val3:	9920
+	Val4:	320
+BREAK
+#XXX
+Keywords:	cranial cyberdeck fairlight excalibur needs_deck
+Name:	a cranial-implant Fairlight Excalibur cyberdeck
+RoomDesc:$
+An uninstalled cranial cyberdeck is lying here.~
+LookDesc:$
+Cyberdecks may be installed as a cranial interface, popular because they have a 
+high concealability and easy mobility and are generally very convenient.
+^n
+Memory: In twentieth-century terms, active memory serves as implanted RAM. It 
+cannot be used for any other purpose than for active utilities. Headware memory 
+can be used for both active and storage memory. Other linked memory sources may 
+also be used for storage memory (but not active memory). Active and storage 
+memory costs are not included in the costs shown and must be purchased  
+separately.~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	2000000
+	AvailTN:	24
+	AvailDay:	60.00
+	LegalNum:	4
+	LegalCode:	16
+	LegalPermit:	1
+[VALUES]
+	Val0:	30
+	Val3:	7418
+	Val4:	350
+BREAK
+END
 
 ~~~~~ Senseware
 #XXX
-Keywords:	oral dart
+Keywords:	oral dart nerp
 Name:	an oral dart
 RoomDesc:$
 An uninstalled oral dart is lying here.~
@@ -888,7 +1161,7 @@ Material:	paper
 	Val4:	25
 BREAK
 #XXX
-Keywords:	oral gun
+Keywords:	oral gun nerp
 Name:	an oral gun
 RoomDesc:$
 An uninstalled oral gun is lying here.~
