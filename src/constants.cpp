@@ -884,6 +884,7 @@ const char *extra_bits[] =
     "NOHUMAN",
     "SNIPER",
     "IMMLOAD",
+    "NERPS",
     "\n"
   };
 

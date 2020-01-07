@@ -2157,6 +2157,10 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     strcat(buf, "^n\r\n");
   }
   
+  if (IS_OBJ_STAT(j, ITEM_NERPS)) {
+    strcat(buf, "^YIt has been flagged NERPS, indicating it has no special coded effects.^n\r\n");
+  }
+  
   if (j->source_info) {
     sprintf(ENDOF(buf), "\r\nIt references data from the following source book(s): %s^n\r\n", j->source_info);
   }

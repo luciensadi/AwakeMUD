@@ -231,7 +231,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
           return FALSE;
         }
       }
-      int esscost = GET_OBJ_VAL(obj, 4);
+      int esscost = GET_CYBERWARE_ESSENCE_COST(obj);
       if (GET_TOTEM(ch) == TOTEM_EAGLE)
         esscost *= 2;
       if (ch->real_abils.esshole < esscost) {
@@ -1219,6 +1219,11 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     sprintf(ENDOF(buf), "%d grams", (int)(GET_OBJ_WEIGHT(obj) * 1000));
   } else sprintf(ENDOF(buf), "%.0f kilogram%s", GET_OBJ_WEIGHT(obj), (GET_OBJ_WEIGHT(obj) >= 2 ? "s" : ""));
   sprintf(ENDOF(buf), " and I couldn't let it go for less than %d nuyen.", buy_price(obj, shop_nr));
+  
+  if (IS_OBJ_STAT(obj, ITEM_NERPS)) {
+    strcat(buf, " (OOC: It has no special coded effects.)");
+  }
+  
   do_say(keeper, buf, cmd_say, SCMD_SAYTO);
   send_to_char(ch, "\r\n%s\r\n\r\n", obj->text.look_desc);
 }

@@ -1099,8 +1099,9 @@ enum {
 #define ITEM_NOORK         19
 #define ITEM_NOHUMAN       20
 #define ITEM_SNIPER        21
-#define ITEM_IMMLOAD       22 
-#define ITEM_EXTRA_MAX     23
+#define ITEM_IMMLOAD       22
+#define ITEM_NERPS         23    /* Item does not actually have any coded effect. */
+#define ITEM_EXTRA_MAX     24
 
 /* Ammo types */ 
 #define AMMO_NORMAL     0
