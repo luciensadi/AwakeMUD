@@ -2018,4 +2018,54 @@ Material:	paper
 	Location:	Reaction
 	Modifier:	1
 BREAK
+#60646
+Keywords:	eye dart needs_g
+Name:	an eye dart
+RoomDesc:$
+An uninstalled eye dart rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	4200
+	AvailTN:	8
+	AvailDay:	14.00
+	LegalNum:	7
+	LegalCode:	14
+	LegalPermit:	1
+[VALUES]
+	Val0:	25
+	Val4:	25
+BREAK
+#60647
+Keywords:	eye gun needs_g
+Name:	an eye gun
+RoomDesc:$
+An uninstalled eye gun rests here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	6400
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	6
+	LegalCode:	14
+	LegalPermit:	1
+[VALUES]
+	Val0:	26
+	Val4:	40
+BREAK
 END
