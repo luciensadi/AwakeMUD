@@ -1,0 +1,873 @@
+#XXX
+Keywords:	pump adrenal
+Name:	an adrenal pump II
+RoomDesc:$
+An uninstalled adrenal pump is lying here.~
+LookDesc:$
+This is a small, muscular sac implanted in the lower abdominal cavity and 
+connected to each of the two suprarenal, or adrenal, glands. When dormant, the 
+pump serves as a reservoir for adrenaline and noradrenaline. When activated, 
+the sac contracts, sending a surge of concentrates into the bloodstream. Stress 
+and other emotional states such as anger, fear or lust will also activate the 
+pump.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	100000
+	AvailTN:	10
+	AvailDay:	16.00
+	LegalNum:	5
+	LegalCode:	15
+	LegalPermit:	1
+[VALUES]
+	Val1:	2
+	Val4:	250
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	2
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	2
+[AFFECT 2]
+	Location:	Willpower
+	Modifier:	2
+[AFFECT 3]
+	Location:	Reaction
+	Modifier:	4
+SourceBook:	MM p63-64
+BREAK
+#XXX
+Keywords:	cat's eyes
+Name:	cat's eyes
+RoomDesc:$
+An uninstalled pair of bioware cat's eyes is lying here.~
+LookDesc:$
+The recipient of Cat's Eyes receives a new set of replacement eyes, vat-grown 
+and specially designed to incorporate a structure that amplifies light and 
+enhances the user's night vision. The number of light-sensitive rods and 
+detail-enhancing cones in the eye also increase. Like the eyes of a cat, this 
+bioware incorporates a mirror-like organ in the cornea that reflects light 
+toward the retina. Under low-light conditions, these eyes seem to be reflective 
+and to glow in the dark. The pupils are also slitted like a cat's eyes, to 
+increase the amount of light received. These eyes perceive color.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	10000000000000
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1500
+	AvailTN:	4
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val4:	20
+SourceBook:	MM p64
+BREAK
+#XXX
+Keywords:	enhanced articulation
+Name:	enhanced articulation
+RoomDesc:$
+An uninstalled enhanced articulation package is lying here.~
+LookDesc:$
+Enhanced Articulation is a product of extensive procedures, including 
+joint-surface coating, relubrication and tendon and ligament augmentation 
+designed for fluid muscle and joint action. Studies show that individuals with 
+Enhanced Articulation might be immune to many arthritic conditions.~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	40000
+	AvailTN:	5
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	1
+	Val4:	60
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	1
+SourceBook:	MM p66
+BREAK
+#XXX
+Keywords:	metabolic arrestor
+Name:	a metabolic arrestor
+RoomDesc:$
+An uninstalled metabolic arrestor is lying here.~
+LookDesc:$
+Similar to the Suprathyroid, the Metabolic Arrester is a regulating gland grown 
+on top of the thyroid. Under conditions where the body seems to be suffering 
+from massive trauma, as measured by a severe drop in blood pressure and the 
+presence of high levels of endorphins, the Metabolic Arrester supersedes the 
+thyroid's metabolic functions, drastically decreasing the body's metabolic 
+rate. As the heart and breathing rates slow to minimal levels and the body's 
+temperature drops, the character takes on a death-like pallor. The lowered body 
+functions help stave off the effects of trauma and lower nanite loss.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	20000
+	AvailTN:	6
+	AvailDay:	8.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val4:	60
+SourceBook:	MM p66-67
+BREAK
+#XXX
+Keywords:	muscle augmentation i
+Name:	muscle augmentation I
+RoomDesc:$
+Some uninstalled muscle augmentations are lying here.~
+LookDesc:$
+Using a biological weaving treatment, special vat-grown muscle cables are 
+braided into existing muscle fibers, enhancing the muscle's mass and 
+performance.~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	20000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	4
+	LegalCode:	14
+	LegalPermit:	1
+[VALUES]
+	Val0:	6
+	Val1:	1
+	Val4:	40
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	1
+SourceBook:	MM p67
+BREAK
+#XXX
+Keywords:	muscle augmentation ii
+Name:	muscle augmentation II
+RoomDesc:$
+Some uninstalled muscle augmentations are lying here.~
+LookDesc:$
+Using a biological weaving treatment, special vat-grown muscle cables are 
+braided into existing muscle fibers, enhancing the muscle's mass and 
+performance.~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	40000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	4
+	LegalCode:	14
+	LegalPermit:	1
+[VALUES]
+	Val0:	6
+	Val1:	2
+	Val4:	80
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	2
+SourceBook:	MM p67
+BREAK
+#XXX
+Keywords:	muscle augmentation iii
+Name:	muscle augmentation III
+RoomDesc:$
+Some uninstalled muscle augmentations are lying here.~
+LookDesc:$
+Using a biological weaving treatment, special vat-grown muscle cables are 
+braided into existing muscle fibers, enhancing the muscle's mass and 
+performance.~
+Type:	Bioware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	60000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	4
+	LegalCode:	14
+	LegalPermit:	1
+[VALUES]
+	Val0:	6
+	Val1:	3
+	Val4:	120
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	3
+SourceBook:	MM p67
+BREAK
+#XXX
+Keywords:	muscle augmentation iv
+Name:	muscle augmentation IV
+RoomDesc:$
+Some uninstalled muscle augmentations are lying here.~
+LookDesc:$
+Using a biological weaving treatment, special vat-grown muscle cables are 
+braided into existing muscle fibers, enhancing the muscle's mass and 
+performance.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	80000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	4
+	LegalCode:	14
+	LegalPermit:	1
+[VALUES]
+	Val0:	6
+	Val1:	4
+	Val4:	160
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	4
+SourceBook:	MM p67
+BREAK
+#XXX
+Keywords:	muscle toner i
+Name:	muscle toner I
+RoomDesc:$
+Some uninstalled muscle toners are lying here.~
+LookDesc:$
+This treatment incorporates vat-grown elastic muscle fibers into existing 
+muscle tissue, increasing muscle tension and flexibility. Users of this 
+augmentation are quicker and more limber.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	25000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	4
+	LegalCode:	14
+	LegalPermit:	1
+[VALUES]
+	Val0:	7
+	Val1:	1
+	Val4:	40
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	1
+SourceBook:	MM p67
+BREAK
+#XXX
+Keywords:	muscle toner ii
+Name:	muscle toner II
+RoomDesc:$
+Some uninstalled muscle toners are lying here.~
+LookDesc:$
+This treatment incorporates vat-grown elastic muscle fibers into existing 
+muscle tissue, increasing muscle tension and flexibility. Users of this 
+augmentation are quicker and more limber.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	50000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	4
+	LegalCode:	14
+	LegalPermit:	1
+[VALUES]
+	Val0:	7
+	Val1:	2
+	Val4:	80
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	2
+SourceBook:	MM p67
+BREAK
+#XXX
+Keywords:	muscle toner iii
+Name:	muscle toner III
+RoomDesc:$
+Some uninstalled muscle toners are lying here.~
+LookDesc:$
+This treatment incorporates vat-grown elastic muscle fibers into existing 
+muscle tissue, increasing muscle tension and flexibility. Users of this 
+augmentation are quicker and more limber.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	75000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	4
+	LegalCode:	14
+	LegalPermit:	1
+[VALUES]
+	Val0:	7
+	Val1:	3
+	Val4:	120
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	3
+SourceBook:	MM p67
+BREAK
+#XXX
+Keywords:	muscle toner iv
+Name:	muscle toner IV
+RoomDesc:$
+Some uninstalled muscle toners are lying here.~
+LookDesc:$
+This treatment incorporates vat-grown elastic muscle fibers into existing 
+muscle tissue, increasing muscle tension and flexibility. Users of this 
+augmentation are quicker and more limber.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	100000
+	AvailTN:	6
+	AvailDay:	6.00
+	LegalNum:	4
+	LegalCode:	14
+	LegalPermit:	1
+[VALUES]
+	Val0:	7
+	Val1:	4
+	Val4:	160
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	4
+SourceBook:	MM p67
+BREAK
+#XXX
+Keywords:	orthoskin
+Name:	an orthoskin I
+RoomDesc:$
+Some uninstalled orthoskin material is lying here.~
+LookDesc:$
+Orthoskin weaves an energy-diffusing material just beneath the skin that 
+provides the equivalent of personal armor. The individual's skin is peeled back 
+section by section, and the body's dermal layer is fortified by grafts of 
+synthagen (a strengthened and reinforced collagen-protein derivative), flextin 
+(a synthetic and more resilient form of the elastin protein) and flakes of 
+modified and laced cartilage. Once transplanted, Orthoskin grows like normal 
+skin and is virtually indistinguishable from unaugmented skin, as the 
+underlying subdermis is altered at the same time. Orthoskin usually heals with 
+little or no scarring. However, characters with Orthoskin lose some degree of 
+sensitivity of touch because of the increased density of the dermis.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	25000
+	AvailTN:	8
+	AvailDay:	8.00
+	LegalNum:	5
+	LegalCode:	13
+	LegalPermit:	1
+[VALUES]
+	Val0:	10
+	Val1:	1
+	Val4:	50
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
+SourceBook:	MM p68
+BREAK
+#XXX
+Keywords:	orthoskin
+Name:	an orthoskin II
+RoomDesc:$
+Some uninstalled orthoskin material is lying here.~
+LookDesc:$
+Orthoskin weaves an energy-diffusing material just beneath the skin that 
+provides the equivalent of personal armor. The individual's skin is peeled back 
+section by section, and the body's dermal layer is fortified by grafts of 
+synthagen (a strengthened and reinforced collagen-protein derivative), flextin 
+(a synthetic and more resilient form of the elastin protein) and flakes of 
+modified and laced cartilage. Once transplanted, Orthoskin grows like normal 
+skin and is virtually indistinguishable from unaugmented skin, as the 
+underlying subdermis is altered at the same time. Orthoskin usually heals with 
+little or no scarring. However, characters with Orthoskin lose some degree of 
+sensitivity of touch because of the increased density of the dermis.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	60000
+	AvailTN:	8
+	AvailDay:	8.00
+	LegalNum:	5
+	LegalCode:	13
+	LegalPermit:	1
+[VALUES]
+	Val0:	10
+	Val1:	2
+	Val4:	100
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+SourceBook:	MM p68
+BREAK
+#XXX
+Keywords:	orthoskin
+Name:	an orthoskin III
+RoomDesc:$
+Some uninstalled orthoskin material is lying here.~
+LookDesc:$
+Orthoskin weaves an energy-diffusing material just beneath the skin that 
+provides the equivalent of personal armor. The individual's skin is peeled back 
+section by section, and the body's dermal layer is fortified by grafts of 
+synthagen (a strengthened and reinforced collagen-protein derivative), flextin 
+(a synthetic and more resilient form of the elastin protein) and flakes of 
+modified and laced cartilage. Once transplanted, Orthoskin grows like normal 
+skin and is virtually indistinguishable from unaugmented skin, as the 
+underlying subdermis is altered at the same time. Orthoskin usually heals with 
+little or no scarring. However, characters with Orthoskin lose some degree of 
+sensitivity of touch because of the increased density of the dermis.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	100000
+	AvailTN:	8
+	AvailDay:	8.00
+	LegalNum:	5
+	LegalCode:	13
+	LegalPermit:	1
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val4:	150
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	2
+SourceBook:	MM p68
+BREAK
+BREAK
+#400
+Keywords:	platelet factory
+Name:	a platelet factory
+RoomDesc:$
+An uninstalled application of platelet factories is lying here.~
+LookDesc:$
+Platelets are cell fragments in the blood that play a vital role in clotting. 
+Platelet Factories increase the body's ability to handle damage by selectively 
+accelerating the production of platelets within bone marrow. More platelets in 
+the bloodstream help to lessen the trauma from large wounds, as the bleeding 
+quickly stops and clots.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	30000
+	AvailTN:	5
+	AvailDay:	8.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val4:	40
+SourceBook:	MM p68-69
+BREAK
+#409
+Keywords:	suprathyroid gland
+Name:	a suprathyroid gland
+RoomDesc:$
+An uninstalled suprathyroid gland is lying here.~
+LookDesc:$
+The Suprathyroid Gland is a regulating gland that is grown and then implanted 
+on top of an individual's existing thyroid gland. This Suprathyroid Gland 
+supersedes the metabolic functions of the thyroid, optimizing catabolism (the 
+breakdown of complex substances, such as starches into sugars) and anabolism 
+(the chemical conversion of substances, such as the construction of complex 
+sugars). The altered metabolism produces more energy and effectively 
+supercharges the recipient. With the higher levels of energy available, 
+characters with a Suprathyroid have a tendency toward hyperactivity.
+^n
+Individuals implanted with a Suprathyroid Gland must ingest twice as much food 
+and drink as the normal person to fuel the higher metabolic rate~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	50000
+	AvailTN:	8
+	AvailDay:	12.00
+	LegalNum:	6
+	LegalCode:	14
+	LegalPermit:	1
+[VALUES]
+	Val0:	13
+	Val1:	1
+	Val4:	140
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	1
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	1
+[AFFECT 2]
+	Location:	Reaction
+	Modifier:	1
+[AFFECT 3]
+	Location:	Body
+	Modifier:	1
+SourceBook:	MM p69
+BREAK
+#XXX
+Keywords:	symbiotes i
+Name:	symbiotes I
+RoomDesc:$
+An uninstalled application of symbiotes is lying here.~
+LookDesc:$
+Symbiotes consist of a number of tailored microorganisms that are introduced 
+into the host's bloodstream. They dramatically enhance the body's regenerative 
+functions, reducing the host's natural healing time. To fuel the symbiote 
+activity, the character must increase his food and drink consumption. As this 
+enhancement does not affect the stomach's capacity, the increased demand for 
+food must be handled either by eating more often or by ingesting an expansive 
+diet of tailored nutrients.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	15000
+	AvailTN:	5
+	AvailDay:	10.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	1
+	Val4:	40
+SourceBook:	MM p69-70
+BREAK
+#XXX
+Keywords:	symbiotes ii
+Name:	symbiotes II
+RoomDesc:$
+An uninstalled application of symbiotes is lying here.~
+LookDesc:$
+Symbiotes consist of a number of tailored microorganisms that are introduced 
+into the host's bloodstream. They dramatically enhance the body's regenerative 
+functions, reducing the host's natural healing time. To fuel the symbiote 
+activity, the character must increase his food and drink consumption. As this 
+enhancement does not affect the stomach's capacity, the increased demand for 
+food must be handled either by eating more often or by ingesting an expansive 
+diet of tailored nutrients.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	35000
+	AvailTN:	5
+	AvailDay:	10.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	2
+	Val4:	70
+SourceBook:	MM p69-70
+BREAK
+#XXX
+Keywords:	symbiotes iii
+Name:	symbiotes III
+RoomDesc:$
+An uninstalled application of symbiotes is lying here.~
+LookDesc:$
+Symbiotes consist of a number of tailored microorganisms that are introduced 
+into the host's bloodstream. They dramatically enhance the body's regenerative 
+functions, reducing the host's natural healing time. To fuel the symbiote 
+activity, the character must increase his food and drink consumption. As this 
+enhancement does not affect the stomach's capacity, the increased demand for 
+food must be handled either by eating more often or by ingesting an expansive 
+diet of tailored nutrients.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	60000
+	AvailTN:	5
+	AvailDay:	10.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	3
+	Val4:	100
+SourceBook:	MM p69-70
+BREAK
+#XXX
+Keywords:	synthacardium i
+Name:	synthacardium I
+RoomDesc:$
+An uninstalled synthacardium is lying here.~
+LookDesc:$
+A Synthacardium consists of artificially enhanced myocardium, the heart's 
+muscle tissue. When added to the heart, it enables the organ to perform at 
+higher levels.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	6000
+	AvailTN:	4
+	AvailDay:	10.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	1
+	Val4:	20
+SourceBook:	MM p70
+BREAK
+#XXX
+Keywords:	synthacardium ii
+Name:	synthacardium II
+RoomDesc:$
+An uninstalled synthacardium is lying here.~
+LookDesc:$
+A Synthacardium consists of artificially enhanced myocardium, the heart's 
+muscle tissue. When added to the heart, it enables the organ to perform at 
+higher levels.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	15000
+	AvailTN:	4
+	AvailDay:	10.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	2
+	Val4:	30
+SourceBook:	MM p70
+BREAK
+#XXX
+Keywords:	tailored pheromones i
+Name:	a tailored pheromones I
+RoomDesc:$
+An uninstalled tailored pheromones package is lying here.~
+LookDesc:$
+Pheromones are chemical signals emitted by animals. These pheromones can 
+subconsciously alter other animals' behavior. Pheromones are usually used as 
+"presence scents," to establish a zone of dominance or attract members of the 
+opposite sex.
+^n
+By altering an individual's sweat glands, specially designed pheromones may be 
+released, dispersing into the area and subtly influencing others. These 
+tailored pheromones are full-spectrum, boosting all pheromone scents, not just 
+sex-oriented ones. Pheromone augmentation continues to function even in the 
+person is in the presence of another person with Tailored Pheromones.
+^n
+Pheromones are species-specific; though human and metahuman pheromones are 
+similar, pheromones will have no effect on non-humanoid creatures. Tailored 
+Pheromones are designed to affect all metatypes equally.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	20000
+	AvailTN:	12
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	1
+	Val4:	40
+SourceBook:	MM p70-71
+BREAK
+#XXX
+Keywords:	tailored pheromones ii
+Name:	a tailored pheromones II
+RoomDesc:$
+An uninstalled tailored pheromones package is lying here.~
+LookDesc:$
+Pheromones are chemical signals emitted by animals. These pheromones can 
+subconsciously alter other animals' behavior. Pheromones are usually used as 
+"presence scents," to establish a zone of dominance or attract members of the 
+opposite sex.
+^n
+By altering an individual's sweat glands, specially designed pheromones may be 
+released, dispersing into the area and subtly influencing others. These 
+tailored pheromones are full-spectrum, boosting all pheromone scents, not just 
+sex-oriented ones. Pheromone augmentation continues to function even in the 
+person is in the presence of another person with Tailored Pheromones.
+^n
+Pheromones are species-specific; though human and metahuman pheromones are 
+similar, pheromones will have no effect on non-humanoid creatures. Tailored 
+Pheromones are designed to affect all metatypes equally.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	45000
+	AvailTN:	12
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	2
+	Val4:	60
+SourceBook:	MM p70-71
+BREAK
+#60603
+Keywords:	toxin extractor
+Name:	a toxin extractor
+RoomDesc:$
+An uninstalled toxin extractor package is lying here.~
+LookDesc:$
+The metahuman liver is the body's main organ for catabolism, or the breakdown 
+of complex substances. As such, it is the first line of defense against 
+potentially toxic compounds and drugs. The Toxin Extractor is a specially 
+cultivated cluster of cells implanted in the liver to greatly improve the 
+efficiency and to expand the spectrum of catabolic activity. Potential toxins 
+that make their way into the bloodstream are filtered out in the liver, and 
+with the aid of the extractor they are broken down into harmless fragments and 
+then expelled.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	17
+SourceBook:	MM p71
+BREAK
+
+
+END
