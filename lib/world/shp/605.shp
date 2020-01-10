@@ -19,91 +19,87 @@ Buytypes:	1000000000000000000000000
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	474
+		Vnum:	85063
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	971
+		Vnum:	85064
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	970
+		Vnum:	85065
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	473
+		Vnum:	85066
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	472
+		Vnum:	85067
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	471
+		Vnum:	85071
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	470
+		Vnum:	85072
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	469
+		Vnum:	85073
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	468
+		Vnum:	85074
 		Type:	Always
 		Stock:	0
 	[SELL 9]
-		Vnum:	320
+		Vnum:	85075
 		Type:	Always
 		Stock:	0
 	[SELL 10]
-		Vnum:	319
+		Vnum:	85076
 		Type:	Always
 		Stock:	0
 	[SELL 11]
-		Vnum:	315
+		Vnum:	85077
 		Type:	Always
 		Stock:	0
 	[SELL 12]
-		Vnum:	314
+		Vnum:	85094
 		Type:	Always
 		Stock:	0
 	[SELL 13]
-		Vnum:	313
+		Vnum:	85095
 		Type:	Always
 		Stock:	0
 	[SELL 14]
-		Vnum:	303
+		Vnum:	85096
 		Type:	Always
 		Stock:	0
 	[SELL 15]
-		Vnum:	301
+		Vnum:	85097
 		Type:	Always
 		Stock:	0
 	[SELL 16]
-		Vnum:	300
+		Vnum:	85098
 		Type:	Always
 		Stock:	0
 	[SELL 17]
-		Vnum:	463
+		Vnum:	85103
 		Type:	Always
 		Stock:	0
 	[SELL 18]
-		Vnum:	462
+		Vnum:	85104
 		Type:	Always
 		Stock:	0
 	[SELL 19]
-		Vnum:	318
+		Vnum:	85105
 		Type:	Always
 		Stock:	0
 	[SELL 20]
-		Vnum:	317
-		Type:	Always
-		Stock:	0
-	[SELL 21]
-		Vnum:	316
+		Vnum:	85106
 		Type:	Always
 		Stock:	0
 BREAK
@@ -128,47 +124,51 @@ Buytypes:	1000000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	481
+		Vnum:	85084
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	302
+		Vnum:	85086
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	312
+		Vnum:	85087
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	369
+		Vnum:	85088
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	480
+		Vnum:	85089
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	479
+		Vnum:	85090
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	368
+		Vnum:	85091
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	478
+		Vnum:	85092
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	477
+		Vnum:	85093
 		Type:	Always
 		Stock:	0
 	[SELL 9]
-		Vnum:	476
+		Vnum:	85108
 		Type:	Always
 		Stock:	0
 	[SELL 10]
-		Vnum:	475
+		Vnum:	85117
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	85118
 		Type:	Always
 		Stock:	0
 BREAK
@@ -193,87 +193,75 @@ Buytypes:	1000000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	340
+		Vnum:	85068
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	17144
+		Vnum:	85069
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	355
+		Vnum:	85070
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	361
+		Vnum:	85099
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	348
+		Vnum:	85107
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	337
+		Vnum:	85109
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	2066
+		Vnum:	85110
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	2063
+		Vnum:	85111
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	2062
+		Vnum:	85112
 		Type:	Always
 		Stock:	0
 	[SELL 9]
-		Vnum:	324
+		Vnum:	85113
 		Type:	Always
 		Stock:	0
 	[SELL 10]
-		Vnum:	321
+		Vnum:	85114
 		Type:	Always
 		Stock:	0
 	[SELL 11]
-		Vnum:	333
+		Vnum:	85115
 		Type:	Always
 		Stock:	0
 	[SELL 12]
-		Vnum:	485
+		Vnum:	85116
 		Type:	Always
 		Stock:	0
 	[SELL 13]
-		Vnum:	484
+		Vnum:	85120
 		Type:	Always
 		Stock:	0
 	[SELL 14]
-		Vnum:	483
+		Vnum:	85121
 		Type:	Always
 		Stock:	0
 	[SELL 15]
-		Vnum:	482
+		Vnum:	85122
 		Type:	Always
 		Stock:	0
 	[SELL 16]
-		Vnum:	323
+		Vnum:	85123
 		Type:	Always
 		Stock:	0
 	[SELL 17]
-		Vnum:	322
-		Type:	Always
-		Stock:	0
-	[SELL 18]
-		Vnum:	310
-		Type:	Always
-		Stock:	0
-	[SELL 19]
-		Vnum:	309
-		Type:	Always
-		Stock:	0
-	[SELL 20]
-		Vnum:	308
+		Vnum:	85124
 		Type:	Always
 		Stock:	0
 BREAK
@@ -298,111 +286,167 @@ Buytypes:	1000000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	517
+		Vnum:	85000
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	516
+		Vnum:	85001
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	515
+		Vnum:	85002
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	514
+		Vnum:	85003
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	505
+		Vnum:	85004
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	504
+		Vnum:	85005
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	503
+		Vnum:	85006
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	502
+		Vnum:	85007
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	494
+		Vnum:	85008
 		Type:	Always
 		Stock:	0
 	[SELL 9]
-		Vnum:	493
+		Vnum:	85009
 		Type:	Always
 		Stock:	0
 	[SELL 10]
-		Vnum:	492
+		Vnum:	85010
 		Type:	Always
 		Stock:	0
 	[SELL 11]
-		Vnum:	491
+		Vnum:	85011
 		Type:	Always
 		Stock:	0
 	[SELL 12]
-		Vnum:	490
+		Vnum:	85012
 		Type:	Always
 		Stock:	0
 	[SELL 13]
-		Vnum:	489
+		Vnum:	85013
 		Type:	Always
 		Stock:	0
 	[SELL 14]
-		Vnum:	488
+		Vnum:	85014
 		Type:	Always
 		Stock:	0
 	[SELL 15]
-		Vnum:	487
+		Vnum:	85016
 		Type:	Always
 		Stock:	0
 	[SELL 16]
-		Vnum:	325
+		Vnum:	85017
 		Type:	Always
 		Stock:	0
 	[SELL 17]
-		Vnum:	427
+		Vnum:	85018
 		Type:	Always
 		Stock:	0
 	[SELL 18]
-		Vnum:	371
+		Vnum:	85019
 		Type:	Always
 		Stock:	0
 	[SELL 19]
-		Vnum:	373
+		Vnum:	85020
 		Type:	Always
 		Stock:	0
 	[SELL 20]
-		Vnum:	1110
+		Vnum:	85021
 		Type:	Always
 		Stock:	0
 	[SELL 21]
-		Vnum:	1109
+		Vnum:	85022
 		Type:	Always
 		Stock:	0
 	[SELL 22]
-		Vnum:	1108
+		Vnum:	85023
 		Type:	Always
 		Stock:	0
 	[SELL 23]
-		Vnum:	1107
+		Vnum:	85024
 		Type:	Always
 		Stock:	0
 	[SELL 24]
-		Vnum:	1106
+		Vnum:	85025
 		Type:	Always
 		Stock:	0
 	[SELL 25]
-		Vnum:	486
+		Vnum:	85026
 		Type:	Always
 		Stock:	0
 	[SELL 26]
-		Vnum:	304
+		Vnum:	85027
+		Type:	Always
+		Stock:	0
+	[SELL 27]
+		Vnum:	85028
+		Type:	Always
+		Stock:	0
+	[SELL 28]
+		Vnum:	85029
+		Type:	Always
+		Stock:	0
+	[SELL 29]
+		Vnum:	85030
+		Type:	Always
+		Stock:	0
+	[SELL 30]
+		Vnum:	85031
+		Type:	Always
+		Stock:	0
+	[SELL 31]
+		Vnum:	85032
+		Type:	Always
+		Stock:	0
+	[SELL 32]
+		Vnum:	85033
+		Type:	Always
+		Stock:	0
+	[SELL 33]
+		Vnum:	85034
+		Type:	Always
+		Stock:	0
+	[SELL 34]
+		Vnum:	85035
+		Type:	Always
+		Stock:	0
+	[SELL 35]
+		Vnum:	85036
+		Type:	Always
+		Stock:	0
+	[SELL 36]
+		Vnum:	85037
+		Type:	Always
+		Stock:	0
+	[SELL 37]
+		Vnum:	85038
+		Type:	Always
+		Stock:	0
+	[SELL 38]
+		Vnum:	85039
+		Type:	Always
+		Stock:	0
+	[SELL 39]
+		Vnum:	85040
+		Type:	Always
+		Stock:	0
+	[SELL 40]
+		Vnum:	85041
 		Type:	Always
 		Stock:	0
 BREAK
