@@ -1,6 +1,6 @@
-#XXX
+#85400
 Keywords:	single-slot single slot chipjack 1 one
-Name:	a chipjack (1 slot)
+Name:	a chipjack (1 slot) - beta
 RoomDesc:$
 An uninstalled chipjack is lying here.~
 LookDesc:$
@@ -15,20 +15,21 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	1000
-	AvailTN:	3
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
+	Val2:	2
 	Val3:	1
-	Val4:	20
+	Val4:	0
 SourceBook:	SR3 p298, MM p21-22
 BREAK
-#XXX
+#85401
 Keywords:	dual-slot dual slot chipjack 2 two
-Name:	a chipjack (2 slot)
+Name:	a chipjack (2 slot) - beta
 RoomDesc:$
 An uninstalled chipjack is lying here.~
 LookDesc:$
@@ -43,20 +44,21 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	2000
-	AvailTN:	3
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
+	Val2:	2
 	Val3:	2
-	Val4:	25
+	Val4:	0
 SourceBook:	SR3 p298, MM p21-22
 BREAK
-#XXX
+#85402
 Keywords:	tri-slot triple slot chipjack 3 three
-Name:	a chipjack (3 slot)
+Name:	a chipjack (3 slot) - beta
 RoomDesc:$
 An uninstalled chipjack is lying here.~
 LookDesc:$
@@ -71,20 +73,21 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	3000
-	AvailTN:	3
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
+	Val2:	2
 	Val3:	3
-	Val4:	30
+	Val4:	0
 SourceBook:	SR3 p298, MM p21-22
 BREAK
-#XXX
+#85403
 Keywords:	quad-slot quad slot chipjack 4 four
-Name:	a chipjack (4 slot)
+Name:	a chipjack (4 slot) - beta
 RoomDesc:$
 An uninstalled chipjack is lying here.~
 LookDesc:$
@@ -99,20 +102,21 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	4000
-	AvailTN:	3
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
+	Val2:	2
 	Val3:	4
-	Val4:	35
+	Val4:	0
 SourceBook:	SR3 p298, MM p21-22
 BREAK
-#XXX
+#85404
 Keywords:	chipjack expert driver i 1
-Name:	a chipjack expert driver I
+Name:	a chipjack expert driver I - beta
 RoomDesc:$
 An uninstalled chipjack expert driver is lying here.~
 LookDesc:$
@@ -132,21 +136,22 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	5000
-	AvailTN:	4
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	29
 	Val1:	1
-	Val4:	10
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p19
 BREAK
-#XXX
+#85405
 Keywords:	chipjack expert driver ii 2
-Name:	a chipjack expert driver II
+Name:	a chipjack expert driver II - beta
 RoomDesc:$
 An uninstalled chipjack expert driver is lying here.~
 LookDesc:$
@@ -166,21 +171,22 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	10000
-	AvailTN:	4
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	29
 	Val1:	2
-	Val4:	20
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p19
 BREAK
-#XXX
+#85406
 Keywords:	chipjack expert driver iii 3
-Name:	a chipjack expert driver III
+Name:	a chipjack expert driver III - beta
 RoomDesc:$
 An uninstalled chipjack expert driver is lying here.~
 LookDesc:$
@@ -200,21 +206,22 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	15000
-	AvailTN:	4
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	29
 	Val1:	3
-	Val4:	30
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p19
 BREAK
-#XXX
+#85407
 Keywords:	data compactor I
-Name:	a data compactor I
+Name:	a data compactor I - beta
 RoomDesc:$
 An uninstalled data compactor is lying here.~
 LookDesc:$
@@ -231,21 +238,22 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	9500
-	AvailTN:	6
-	AvailDay:	2.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	31
 	Val1:	1
-	Val4:	10
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p20
 BREAK
-#XXX
+#85408
 Keywords:	data compactor II
-Name:	a data compactor II
+Name:	a data compactor II - beta
 RoomDesc:$
 An uninstalled data compactor is lying here.~
 LookDesc:$
@@ -262,21 +270,22 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	19000
-	AvailTN:	6
-	AvailDay:	2.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	31
 	Val1:	2
-	Val4:	15
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p20
 BREAK
-#XXX
+#85409
 Keywords:	data compactor III
-Name:	a data compactor III
+Name:	a data compactor III - beta
 RoomDesc:$
 An uninstalled data compactor is lying here.~
 LookDesc:$
@@ -293,21 +302,22 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	28500
-	AvailTN:	6
-	AvailDay:	2.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	31
 	Val1:	3
-	Val4:	20
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p20
 BREAK
-#XXX
+#85410
 Keywords:	data compactor IV
-Name:	a data compactor IV
+Name:	a data compactor IV - beta
 RoomDesc:$
 An uninstalled data compactor is lying here.~
 LookDesc:$
@@ -324,21 +334,22 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	38000
-	AvailTN:	6
-	AvailDay:	2.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	31
 	Val1:	4
-	Val4:	25
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p20
 BREAK
-#XXX
+#85411
 Keywords:	data lock nerp
-Name:	a data lock
+Name:	a data lock - beta
 RoomDesc:$
 An uninstalled data lock is lying here.~
 LookDesc:$
@@ -354,20 +365,21 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	1000
-	AvailTN:	6
-	AvailDay:	1.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	2
-	Val4:	20
+	Val2:	2
+	Val4:	0
 SourceBook:	SR3 p298
 BREAK
-#XXX
+#85412
 Keywords:	datajack
-Name:	a datajack
+Name:	a datajack - beta
 RoomDesc:$
 An uninstalled datajack is lying here.~
 LookDesc:$
@@ -397,20 +409,21 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	1000
+	Cost:	0
 	AvailTN:	0
-	AvailDay:	0.00
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	1
-	Val4:	20
+	Val2:	2
+	Val4:	0
 SourceBook:	SR3 p298
 BREAK
-#XXX
+#85413
 Keywords:	encephalon i 1
-Name:	an encephalon I
+Name:	an encephalon I - beta
 RoomDesc:$
 An uninstalled encephalon is lying here.~
 LookDesc:$
@@ -431,7 +444,7 @@ receive the encephalon rating bonus to their Computer Skill, only the Hacking
 Pool.
 ^n
 Encephalons allow a character to learn more quickly. Add the encephalon rating 
-to Intelligence when determining the cost of new skills.
+to Intelligence when determining the Cost:	0
 ^n
 The encephalon does not boost magical ability and does not aid any use of 
 magic, magical perception or Magical Skills.~
@@ -443,16 +456,17 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	40000
-	AvailTN:	6
-	AvailDay:	12.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	32
 	Val1:	1
-	Val4:	75
+	Val2:	2
+	Val4:	0
 [AFFECT 0]
 	Location:	Hacking Pool
 	Modifier:	1
@@ -461,9 +475,9 @@ Material:	paper
 	Modifier:	1
 SourceBook:	MM p20-21
 BREAK
-#XXX
+#85414
 Keywords:	encephalon ii 2
-Name:	an encephalon II
+Name:	an encephalon II - beta
 RoomDesc:$
 An uninstalled encephalon is lying here.~
 LookDesc:$
@@ -484,7 +498,7 @@ receive the encephalon rating bonus to their Computer Skill, only the Hacking
 Pool.
 ^n
 Encephalons allow a character to learn more quickly. Add the encephalon rating 
-to Intelligence when determining the cost of new skills.
+to Intelligence when determining the Cost:	0
 ^n
 The encephalon does not boost magical ability and does not aid any use of 
 magic, magical perception or Magical Skills.~
@@ -496,16 +510,17 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	115000
-	AvailTN:	6
-	AvailDay:	12.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	32
 	Val1:	2
-	Val4:	150
+	Val2:	2
+	Val4:	0
 [AFFECT 0]
 	Location:	Hacking Pool
 	Modifier:	2
@@ -514,9 +529,9 @@ Material:	paper
 	Modifier:	2
 SourceBook:	MM p20-21
 BREAK
-#XXX
+#85415
 Keywords:	datajack induction
-Name:	an induction datajack
+Name:	an induction datajack - beta
 RoomDesc:$
 An uninstalled induction datajack is lying here.~
 LookDesc:$
@@ -532,21 +547,22 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	3000
-	AvailTN:	5
-	AvailDay:	4.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	1
+	Val2:	2
 	Val3:	1
-	Val4:	30
+	Val4:	0
 SourceBook:	MM p21
 BREAK
-#XXX
+#85416
 Keywords:	knowsoft link nerp
-Name:	a knowsoft link
+Name:	a knowsoft link - beta
 RoomDesc:$
 An uninstalled knowsoft link is lying here.~
 LookDesc:$
@@ -560,20 +576,21 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	1000
-	AvailTN:	3
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	3
-	Val4:	10
+	Val2:	2
+	Val4:	0
 SourceBook:	SR3 p298
 BREAK
-#XXX
+#85417
 Keywords:	maths spu i 1
-Name:	a math SPU I
+Name:	a math SPU I - beta
 RoomDesc:$
 An uninstalled math SPU is lying here.~
 LookDesc:$
@@ -593,24 +610,25 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	2000
-	AvailTN:	6
-	AvailDay:	2.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	33
 	Val1:	1
-	Val4:	10
+	Val2:	2
+	Val4:	0
 [AFFECT 0]
 	Location:	Hacking Pool
 	Modifier:	1
 SourceBook:	MM p21
 BREAK
-#XXX
+#85418
 Keywords:	maths spu ii 2
-Name:	a math SPU II
+Name:	a math SPU II - beta
 RoomDesc:$
 An uninstalled math SPU is lying here.~
 LookDesc:$
@@ -630,24 +648,25 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	5000
-	AvailTN:	6
-	AvailDay:	2.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	33
 	Val1:	2
-	Val4:	15
+	Val2:	2
+	Val4:	0
 [AFFECT 0]
 	Location:	Hacking Pool
 	Modifier:	2
 SourceBook:	MM p21
 BREAK
-#XXX
+#85419
 Keywords:	maths spu iii 3
-Name:	a math SPU III
+Name:	a math SPU III - beta
 RoomDesc:$
 An uninstalled math SPU is lying here.~
 LookDesc:$
@@ -667,24 +686,25 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	11000
-	AvailTN:	6
-	AvailDay:	2.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	33
 	Val1:	3
-	Val4:	20
+	Val2:	2
+	Val4:	0
 [AFFECT 0]
 	Location:	Hacking Pool
 	Modifier:	3
 SourceBook:	MM p21
 BREAK
-#XXX
+#85420
 Keywords:	memory headware
-Name:	memory (75 Mp)
+Name:	memory (75 Mp) - beta
 RoomDesc:$
 An uninstalled headware memory module is lying here.~
 LookDesc:$
@@ -702,21 +722,22 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	11250
-	AvailTN:	3
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	4
+	Val2:	2
 	Val3:	75
-	Val4:	25
+	Val4:	0
 SourceBook:	SR3 p298
 BREAK
-#XXX
+#85421
 Keywords:	memory headware
-Name:	memory (150 Mp)
+Name:	memory (150 Mp) - beta
 RoomDesc:$
 An uninstalled headware memory module is lying here.~
 LookDesc:$
@@ -734,21 +755,22 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	22500
-	AvailTN:	3
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	4
+	Val2:	2
 	Val3:	150
-	Val4:	50
+	Val4:	0
 SourceBook:	SR3 p298
 BREAK
-#XXX
+#85422
 Keywords:	memory headware
-Name:	memory (300 Mp)
+Name:	memory (300 Mp) - beta
 RoomDesc:$
 An uninstalled headware memory module is lying here.~
 LookDesc:$
@@ -766,28 +788,29 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	45000
-	AvailTN:	3
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	4
+	Val2:	2
 	Val3:	300
-	Val4:	100
+	Val4:	0
 SourceBook:	SR3 p298
 BREAK
-#XXX
+#85423
 Keywords:	radio headware internal
-Name:	a headware radio
+Name:	a headware radio - beta
 RoomDesc:$
 A headware radio can transmit or receive on any frequency, though it can only 
 hold Rating x 2 programmed frequencies in its memory at any one time. The 
 signal quality is rarely as good as a telephone, but the ability to switch 
 bands makes the system more popular with the military or any user expecting 
 active jamming. When transmitting, the user must speak, though he may do so in 
-tones inaudible to those nearby. For the cost- or health-conscious, 
+tones inaudible to those nearby. For the Cost:	0
 receiver-only models are available.~
 LookDesc:$
 A small, delicate device.
@@ -800,23 +823,24 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	2000
-	AvailTN:	2
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	7
 	Val1:	1
+	Val2:	2
 	Val3:	3
-	Val4:	75
+	Val4:	0
 	Val5:	3
 SourceBook:	SR3 p297-298
 BREAK
-#XXX
+#85424
 Keywords:	phone headware telephone internal
-Name:	a headware telephone
+Name:	a headware telephone - beta
 RoomDesc:$
 An uninstalled headware phone is lying here.~
 LookDesc:$
@@ -833,20 +857,21 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	3700
-	AvailTN:	3
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	6
-	Val4:	50
+	Val2:	2
+	Val4:	0
 SourceBook:	SR3 p298
 BREAK
-#XXX
+#85425
 Keywords:	ASIST converter
-Name:	an ASIST converter
+Name:	an ASIST converter - beta
 RoomDesc:$
 An uninstalled ASIST converter is lying here.~
 LookDesc:$
@@ -865,19 +890,20 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	1000
-	AvailTN:	6
-	AvailDay:	1.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	28
+	Val2:	2
 SourceBook:	MM p19
 BREAK
-#XXX
+#85426
 Keywords:	cranial cyberdeck allegiance sigma nerp
-Name:	a cranial-implant Allegiance Sigma cyberdeck
+Name:	a cranial-implant Allegiance Sigma cyberdeck - beta
 RoomDesc:$
 An uninstalled cranial cyberdeck is lying here.~
 LookDesc:$
@@ -888,7 +914,7 @@ Memory: In twentieth-century terms, active memory serves as implanted RAM. It
 cannot be used for any other purpose than for active utilities. Headware memory 
 can be used for both active and storage memory. Other linked memory sources may 
 also be used for storage memory (but not active memory). Active and storage 
-memory costs are not included in the costs shown and must be purchased  
+memory Cost:	0
 separately.~
 Type:	Cyberware
 WearFlags:	1
@@ -898,21 +924,22 @@ Material:	paper
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	14000
-	AvailTN:	4
-	AvailDay:	7.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	16
 	LegalPermit:	1
 [VALUES]
 	Val0:	30
+	Val2:	2
 	Val3:	1820
-	Val4:	190
+	Val4:	0
 SourceBook:	MM p19-20
 BREAK
-#XXX
+#85427
 Keywords:	cranial cyberdeck sony ct-360-d 360 nerp
-Name:	a cranial-implant Sony CT-360-D cyberdeck
+Name:	a cranial-implant Sony CT-360-D cyberdeck - beta
 RoomDesc:$
 An uninstalled cranial cyberdeck is lying here.~
 LookDesc:$
@@ -923,7 +950,7 @@ Memory: In twentieth-century terms, active memory serves as implanted RAM. It
 cannot be used for any other purpose than for active utilities. Headware memory 
 can be used for both active and storage memory. Other linked memory sources may 
 also be used for storage memory (but not active memory). Active and storage 
-memory costs are not included in the costs shown and must be purchased  
+memory Cost:	0
 separately.~
 Type:	Cyberware
 WearFlags:	1
@@ -933,21 +960,22 @@ Material:	paper
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	75000
-	AvailTN:	6
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	16
 	LegalPermit:	1
 [VALUES]
 	Val0:	30
+	Val2:	2
 	Val3:	1116
-	Val4:	250
+	Val4:	0
 SourceBook:	MM p19-20
 BREAK
-#XXX
+#85428
 Keywords:	cranial cyberdeck novadeck hyperdeck 6 nerp
-Name:	a cranial-implant Novadeck Hyperdeck-6 cyberdeck
+Name:	a cranial-implant Novadeck Hyperdeck-6 cyberdeck - beta
 RoomDesc:$
 An uninstalled cranial cyberdeck is lying here.~
 LookDesc:$
@@ -958,7 +986,7 @@ Memory: In twentieth-century terms, active memory serves as implanted RAM. It
 cannot be used for any other purpose than for active utilities. Headware memory 
 can be used for both active and storage memory. Other linked memory sources may 
 also be used for storage memory (but not active memory). Active and storage 
-memory costs are not included in the costs shown and must be purchased  
+memory Cost:	0
 separately.~
 Type:	Cyberware
 WearFlags:	1
@@ -968,21 +996,22 @@ Material:	paper
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	150000
-	AvailTN:	6
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	16
 	LegalPermit:	1
 [VALUES]
 	Val0:	30
+	Val2:	2
 	Val3:	1916
-	Val4:	270
+	Val4:	0
 SourceBook:	MM p19-20
 BREAK
-#XXX
+#85429
 Keywords:	cranial cyberdeck cmt avatar nerp needs_proper_deck
-Name:	a cranial-implant CMT Avatar cyberdeck
+Name:	a cranial-implant CMT Avatar cyberdeck - beta
 RoomDesc:$
 An uninstalled cranial cyberdeck is lying here.~
 LookDesc:$
@@ -993,7 +1022,7 @@ Memory: In twentieth-century terms, active memory serves as implanted RAM. It
 cannot be used for any other purpose than for active utilities. Headware memory 
 can be used for both active and storage memory. Other linked memory sources may 
 also be used for storage memory (but not active memory). Active and storage 
-memory costs are not included in the costs shown and must be purchased  
+memory Cost:	0
 separately.~
 Type:	Cyberware
 WearFlags:	1
@@ -1003,21 +1032,22 @@ Material:	paper
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	300000
-	AvailTN:	8
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	16
 	LegalPermit:	1
 [VALUES]
 	Val0:	30
+	Val2:	2
 	Val3:	1916
-	Val4:	280
+	Val4:	0
 SourceBook:	MM p19-20
 BREAK
-#XXX
+#85430
 Keywords:	cranial cyberdeck renraku kraftwork-8 nerp
-Name:	a cranial-implant Renraku Kraftwork-8 cyberdeck
+Name:	a cranial-implant Renraku Kraftwork-8 cyberdeck - beta
 RoomDesc:$
 An uninstalled cranial cyberdeck is lying here.~
 LookDesc:$
@@ -1028,7 +1058,7 @@ Memory: In twentieth-century terms, active memory serves as implanted RAM. It
 cannot be used for any other purpose than for active utilities. Headware memory 
 can be used for both active and storage memory. Other linked memory sources may 
 also be used for storage memory (but not active memory). Active and storage 
-memory costs are not included in the costs shown and must be purchased  
+memory Cost:	0
 separately.~
 Type:	Cyberware
 WearFlags:	1
@@ -1038,21 +1068,22 @@ Material:	paper
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	450000
-	AvailTN:	10
-	AvailDay:	30.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	16
 	LegalPermit:	1
 [VALUES]
 	Val0:	30
+	Val2:	2
 	Val3:	17121
-	Val4:	290
+	Val4:	0
 SourceBook:	MM p19-20
 BREAK
-#XXX
+#85431
 Keywords:	cranial cyberdeck transys highlander nerp
-Name:	a cranial-implant Transys Highlander cyberdeck
+Name:	a cranial-implant Transys Highlander cyberdeck - beta
 RoomDesc:$
 An uninstalled cranial cyberdeck is lying here.~
 LookDesc:$
@@ -1063,7 +1094,7 @@ Memory: In twentieth-century terms, active memory serves as implanted RAM. It
 cannot be used for any other purpose than for active utilities. Headware memory 
 can be used for both active and storage memory. Other linked memory sources may 
 also be used for storage memory (but not active memory). Active and storage 
-memory costs are not included in the costs shown and must be purchased  
+memory Cost:	0
 separately.~
 Type:	Cyberware
 WearFlags:	1
@@ -1073,21 +1104,22 @@ Material:	paper
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	700000
-	AvailTN:	14
-	AvailDay:	30.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	16
 	LegalPermit:	1
 [VALUES]
 	Val0:	30
+	Val2:	2
 	Val3:	17122
-	Val4:	300
+	Val4:	0
 SourceBook:	MM p19-20
 BREAK
-#XXX
+#85432
 Keywords:	cranial cyberdeck novatech slimcase-10 nerp needs_proper_deck
-Name:	a cranial-implant Novatech Slimcase-10 cyberdeck
+Name:	a cranial-implant Novatech Slimcase-10 cyberdeck - beta
 RoomDesc:$
 An uninstalled cranial cyberdeck is lying here.~
 LookDesc:$
@@ -1098,7 +1130,7 @@ Memory: In twentieth-century terms, active memory serves as implanted RAM. It
 cannot be used for any other purpose than for active utilities. Headware memory 
 can be used for both active and storage memory. Other linked memory sources may 
 also be used for storage memory (but not active memory). Active and storage 
-memory costs are not included in the costs shown and must be purchased  
+memory Cost:	0
 separately.~
 Type:	Cyberware
 WearFlags:	1
@@ -1108,21 +1140,22 @@ Material:	paper
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	1500000
-	AvailTN:	18
-	AvailDay:	30.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	16
 	LegalPermit:	1
 [VALUES]
 	Val0:	30
+	Val2:	2
 	Val3:	17122
-	Val4:	320
+	Val4:	0
 SourceBook:	MM p19-20
 BREAK
-#XXX
+#85433
 Keywords:	cranial cyberdeck fairlight excalibur nerp
-Name:	a cranial-implant Fairlight Excalibur cyberdeck
+Name:	a cranial-implant Fairlight Excalibur cyberdeck - beta
 RoomDesc:$
 An uninstalled cranial cyberdeck is lying here.~
 LookDesc:$
@@ -1133,7 +1166,7 @@ Memory: In twentieth-century terms, active memory serves as implanted RAM. It
 cannot be used for any other purpose than for active utilities. Headware memory 
 can be used for both active and storage memory. Other linked memory sources may 
 also be used for storage memory (but not active memory). Active and storage 
-memory costs are not included in the costs shown and must be purchased  
+memory Cost:	0
 separately.~
 Type:	Cyberware
 WearFlags:	1
@@ -1143,21 +1176,22 @@ Material:	paper
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	2000000
-	AvailTN:	24
-	AvailDay:	60.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	16
 	LegalPermit:	1
 [VALUES]
 	Val0:	30
+	Val2:	2
 	Val3:	7418
-	Val4:	350
+	Val4:	0
 SourceBook:	MM p19-20
 BREAK
-#XXX
+#85434
 Keywords:	rig vehicle control i
-Name:	a vehicle control rig I
+Name:	a vehicle control rig I - beta
 RoomDesc:$
 An uninstalled vehicle control rig is lying here.~
 LookDesc:$
@@ -1174,21 +1208,22 @@ Material:	metal
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	12000
-	AvailTN:	6
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	20
 	Val1:	1
-	Val4:	200
+	Val2:	2
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85435
 Keywords:	rig vehicle control ii
-Name:	a vehicle control rig II
+Name:	a vehicle control rig II - beta
 RoomDesc:$
 An uninstalled vehicle control rig is lying here.~
 LookDesc:$
@@ -1205,21 +1240,22 @@ Material:	metal
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	60000
-	AvailTN:	8
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	20
 	Val1:	2
-	Val4:	200
+	Val2:	2
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85436
 Keywords:	rig vehicle control iii
-Name:	a vehicle control rig III
+Name:	a vehicle control rig III - beta
 RoomDesc:$
 An uninstalled vehicle control rig is lying here.~
 LookDesc:$
@@ -1236,21 +1272,22 @@ Material:	metal
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	300000
-	AvailTN:	8
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	20
 	Val1:	3
-	Val4:	200
+	Val2:	2
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85437
 Keywords:	oral dart nerp
-Name:	an oral dart
+Name:	an oral dart - beta
 RoomDesc:$
 An uninstalled oral dart is lying here.~
 LookDesc:$
@@ -1265,20 +1302,21 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	3600
-	AvailTN:	6
-	AvailDay:	7.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	25
-	Val4:	25
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p17
 BREAK
-#XXX
+#85438
 Keywords:	oral gun nerp
-Name:	an oral gun
+Name:	an oral gun - beta
 RoomDesc:$
 An uninstalled oral gun is lying here.~
 LookDesc:$
@@ -1293,20 +1331,21 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	5600
-	AvailTN:	6
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	26
-	Val4:	40
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p17
 BREAK
-#XXX
+#85439
 Keywords:	tooth compartment breakable
-Name:	a tooth compartment (breakable)
+Name:	a tooth compartment (breakable) - beta
 RoomDesc:$
 An uninstalled tooth compartment is lying here.~
 LookDesc:$
@@ -1319,20 +1358,21 @@ Material:	paper
 [POINTS]
 	Weight:	0.50
 	Barrier:	1
-	Cost:	700
-	AvailTN:	3
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	10
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	5
+	Val2:	2
 	Val3:	1
 SourceBook:	SR3 p298-299
 BREAK
-#XXX
+#85440
 Keywords:	tooth compartment storage
-Name:	a tooth compartment (storage)
+Name:	a tooth compartment (storage) - beta
 RoomDesc:$
 An uninstalled tooth compartment is lying here.~
 LookDesc:$
@@ -1345,20 +1385,21 @@ Material:	paper
 [POINTS]
 	Weight:	0.50
 	Barrier:	1
-	Cost:	1500
-	AvailTN:	2
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	5
+	Val2:	2
 	Val3:	1
 SourceBook:	SR3 p298-299
 BREAK
-#XXX
+#85441
 Keywords:	balance augmenter
-Name:	a balance augmenter
+Name:	a balance augmenter - beta
 RoomDesc:$
 An uninstalled balance augmenter is lying here.~
 LookDesc:$
@@ -1378,20 +1419,21 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	14000
-	AvailTN:	8
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	24
-	Val4:	40
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p13-14
 BREAK
-#XXX
+#85442
 Keywords:	eye camera
-Name:	a camera
+Name:	a camera - beta
 RoomDesc:$
 An uninstalled eye camera is lying here.~
 LookDesc:$
@@ -1408,21 +1450,22 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	5000
-	AvailTN:	6
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	8
+	Val2:	2
 	Val3:	1
-	Val4:	40
+	Val4:	0
 SourceBook:	SR3 p299-300
 BREAK
-#XXX
+#85443
 Keywords:	display link nerp
-Name:	a display link
+Name:	a display link - beta
 RoomDesc:$
 An uninstalled display link is lying here.~
 LookDesc:$
@@ -1437,21 +1480,22 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	1000
-	AvailTN:	4
-	AvailDay:	1.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	8
+	Val2:	2
 	Val3:	4
-	Val4:	10
+	Val4:	0
 SourceBook:	SR3 p299-300
 BREAK
-#XXX
+#85444
 Keywords:	eye dart nerp
-Name:	an eye dart
+Name:	an eye dart - beta
 RoomDesc:$
 An uninstalled eye dart is lying here.~
 LookDesc:$
@@ -1468,21 +1512,22 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	4200
-	AvailTN:	8
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	7
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	8
+	Val2:	2
 	Val3:	262144
-	Val4:	25
+	Val4:	0
 SourceBook:	MM p16-17
 BREAK
-#XXX
+#85445
 Keywords:	eye datajack
-Name:	an eye datajack
+Name:	an eye datajack - beta
 RoomDesc:$
 An uninstalled eye datajack here.~
 LookDesc:$
@@ -1499,21 +1544,22 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	2200
-	AvailTN:	6
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	8
+	Val2:	2
 	Val3:	131072
-	Val4:	25
+	Val4:	0
 SourceBook:	MM p13-14
 BREAK
-#XXX
+#85446
 Keywords:	eye gun nerp
-Name:	an eye gun
+Name:	an eye gun - beta
 RoomDesc:$
 An uninstalled eye gun is lying here.~
 LookDesc:$
@@ -1530,21 +1576,22 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	6400
-	AvailTN:	6
-	AvailDay:	7.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	8
+	Val2:	2
 	Val3:	65536
-	Val4:	40
+	Val4:	0
 SourceBook:	MM p16-17
 BREAK
-#XXX
+#85447
 Keywords:	eye light nerp
-Name:	an eye light
+Name:	an eye light - beta
 RoomDesc:$
 An uninstalled eye light is lying here.~
 LookDesc:$
@@ -1562,21 +1609,22 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	1200
-	AvailTN:	4
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	8
+	Val2:	2
 	Val3:	1048576
-	Val4:	20
+	Val4:	0
 SourceBook:	MM p15
 BREAK
-#XXX
+#85448
 Keywords:	flare compensation cybereyes nerp
-Name:	a flare compensation module
+Name:	a flare compensation module - beta
 RoomDesc:$
 An uninstalled flare compensation module is lying here.~
 LookDesc:$
@@ -1592,21 +1640,22 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	2000
-	AvailTN:	5
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	8
+	Val2:	2
 	Val3:	8
-	Val4:	10
+	Val4:	0
 SourceBook:	SR3 p299
 BREAK
-#XXX
+#85449
 Keywords:	image link
-Name:	an image link
+Name:	an image link - beta
 RoomDesc:$
 An uninstalled image link is lying here.~
 LookDesc:$
@@ -1621,21 +1670,22 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	1600
-	AvailTN:	4
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	8
+	Val2:	2
 	Val3:	16
-	Val4:	20
+	Val4:	0
 SourceBook:	SR3 p299-300
 BREAK
-#XXX
+#85450
 Keywords:	low-light low light vision modification needs_affect_check
-Name:	a low-light vision modification
+Name:	a low-light vision modification - beta
 RoomDesc:$
 An uninstalled low-light vision module is lying here.~
 LookDesc:$
@@ -1650,21 +1700,22 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	3000
-	AvailTN:	4
-	AvailDay:	1.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	8
+	Val2:	2
 	Val3:	32
-	Val4:	20
+	Val4:	0
 SourceBook:	SR3 p300
 BREAK
-#XXX
+#85451
 Keywords:	protective eye covers nerp
-Name:	protective eye covers
+Name:	protective eye covers - beta
 RoomDesc:$
 An uninstalled set of protective eye covers is lying here.~
 LookDesc:$
@@ -1678,20 +1729,21 @@ Material:	paper
 [POINTS]
 	Weight:	0.50
 	Barrier:	1
-	Cost:	500
-	AvailTN:	4
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	8
+	Val2:	2
 	Val3:	64
 SourceBook:	SR3 p300
 BREAK
-#XXX
+#85452
 Keywords:	retinal clock
-Name:	a retinal clock
+Name:	a retinal clock - beta
 RoomDesc:$
 An uninstalled retinal clock module is lying here.~
 LookDesc:$
@@ -1706,21 +1758,22 @@ Material:	electronics
 [POINTS]
 	Weight:	0.50
 	Barrier:	1
-	Cost:	450
-	AvailTN:	3
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	8
+	Val2:	2
 	Val3:	128
-	Val4:	10
+	Val4:	0
 SourceBook:	SR3 p300
 BREAK
-#XXX
+#85453
 Keywords:	thermographic vision modification needs_affect_check
-Name:	a thermographic vision modification
+Name:	a thermographic vision modification - beta
 RoomDesc:$
 An uninstalled thermographic vision module is lying here.~
 LookDesc:$
@@ -1735,21 +1788,22 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	3000
-	AvailTN:	4
-	AvailDay:	1.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	8
+	Val2:	2
 	Val3:	512
-	Val4:	20
+	Val4:	0
 SourceBook:	SR3 p300
 BREAK
-#XXX
+#85454
 Keywords:	eyes ultrasound modification
-Name:	an ultrasound vision modification
+Name:	an ultrasound vision modification - beta
 RoomDesc:$
 An uninstalled ultrasound vision module is lying here.~
 LookDesc:$
@@ -1764,21 +1818,22 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	10000
-	AvailTN:	6
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	8
+	Val2:	2
 	Val3:	2097152
-	Val4:	50
+	Val4:	0
 SourceBook:	MM p18
 BREAK
-#XXX
+#85455
 Keywords:	optical magnification
-Name:	an optical magnification I
+Name:	an optical magnification I - beta
 RoomDesc:$
 An uninstalled optical magnification module is lying here.~
 LookDesc:$
@@ -1793,22 +1848,23 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	2500
-	AvailTN:	4
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	8
 	Val1:	1
+	Val2:	2
 	Val3:	1024
-	Val4:	20
+	Val4:	0
 SourceBook:	SR3 p300
 BREAK
-#XXX
+#85456
 Keywords:	optical magnification
-Name:	an optical magnification II
+Name:	an optical magnification II - beta
 RoomDesc:$
 An uninstalled optical magnification module is lying here.~
 LookDesc:$
@@ -1823,22 +1879,23 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	4000
-	AvailTN:	4
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	8
 	Val1:	2
+	Val2:	2
 	Val3:	2048
-	Val4:	20
+	Val4:	0
 SourceBook:	SR3 p300
 BREAK
-#XXX
+#85457
 Keywords:	optical magnification
-Name:	an optical magnification III
+Name:	an optical magnification III - beta
 RoomDesc:$
 An uninstalled optical magnification module is lying here.~
 LookDesc:$
@@ -1853,22 +1910,23 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	6000
-	AvailTN:	5
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	8
 	Val1:	3
+	Val2:	2
 	Val3:	4096
-	Val4:	20
+	Val4:	0
 SourceBook:	SR3 p300
 BREAK
-#XXX
+#85458
 Keywords:	electronic magnification
-Name:	an electronic magnification I
+Name:	an electronic magnification I - beta
 RoomDesc:$
 An uninstalled electronic magnification module is lying here.~
 LookDesc:$
@@ -1883,22 +1941,23 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	3500
-	AvailTN:	5
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	8
 	Val1:	1
+	Val2:	2
 	Val3:	8192
-	Val4:	10
+	Val4:	0
 SourceBook:	SR3 p300
 BREAK
-#XXX
+#85459
 Keywords:	electronic magnification
-Name:	an electronic magnification II
+Name:	an electronic magnification II - beta
 RoomDesc:$
 An uninstalled electronic magnification module is lying here.~
 LookDesc:$
@@ -1913,22 +1972,23 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	7500
-	AvailTN:	5
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	8
 	Val1:	2
+	Val2:	2
 	Val3:	16384
-	Val4:	10
+	Val4:	0
 SourceBook:	SR3 p300
 BREAK
-#XXX
+#85460
 Keywords:	electronic magnification
-Name:	an electronic magnification III
+Name:	an electronic magnification III - beta
 RoomDesc:$
 An uninstalled electronic magnification module is lying here.~
 LookDesc:$
@@ -1943,22 +2003,23 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	11000
-	AvailTN:	8
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	8
 	Val1:	3
+	Val2:	2
 	Val3:	32768
-	Val4:	10
+	Val4:	0
 SourceBook:	SR3 p300
 BREAK
-#XXX
+#85461
 Keywords:	balance tail
-Name:	a balance tail
+Name:	a balance tail - beta
 RoomDesc:$
 An uninstalled balance tail is lying here.~
 LookDesc:$
@@ -1974,20 +2035,21 @@ Material:	paper
 [POINTS]
 	Weight:	4.00
 	Barrier:	1
-	Cost:	10000
-	AvailTN:	8
-	AvailDay:	7.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	35
-	Val4:	50
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p25
 BREAK
-#XXX
+#85462
 Keywords:	body compartment
-Name:	a body compartment
+Name:	a body compartment - beta
 RoomDesc:$
 An uninstalled body compartment is lying here.~
 LookDesc:$
@@ -2000,20 +2062,21 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	5000
-	AvailTN:	4
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	36
-	Val4:	20
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p26-27
 BREAK
-#XXX
+#85463
 Keywords:	plastic bone lacing pool needs_weight_adding
-Name:	some bone lacing (plastic)
+Name:	some bone lacing (plastic) - beta
 RoomDesc:$
 Some uninstalled plastic bone lacing is lying here.~
 LookDesc:$
@@ -2031,23 +2094,24 @@ Material:	metal
 [POINTS]
 	Weight:	5.00
 	Barrier:	1
-	Cost:	7500
-	AvailTN:	5
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	9
-	Val4:	50
+	Val2:	2
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	1
 SourceBook:	SR3 p300,302
 BREAK
-#XXX
+#85464
 Keywords:	lacing kevlar bone cyberware needs_weight_adding
-Name:	some bone lacing (kevlar)
+Name:	some bone lacing (kevlar) - beta
 RoomDesc:$
 Some uninstalled kevlar bone lacing is lying here.~
 LookDesc:$
@@ -2065,16 +2129,17 @@ Material:	metal
 [POINTS]
 	Weight:	5.00
 	Barrier:	1
-	Cost:	20000
-	AvailTN:	6
-	AvailDay:	21.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	9
+	Val2:	2
 	Val3:	3
-	Val4:	100
+	Val4:	0
 [AFFECT 1]
 	Location:	Body
 	Modifier:	1
@@ -2083,9 +2148,9 @@ Material:	metal
 	Modifier:	1
 SourceBook:	MM p27
 BREAK
-#XXX
+#85465
 Keywords:	lacing bone aluminum pool cyberware needs_weight_adding
-Name:	some bone lacing (aluminum)
+Name:	some bone lacing (aluminum) - beta
 RoomDesc:$
 Some uninstalled aluminum bone lacing is lying here.~
 LookDesc:$
@@ -2104,16 +2169,17 @@ Material:	electronics
 [POINTS]
 	Weight:	10.00
 	Barrier:	1
-	Cost:	25000
-	AvailTN:	5
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	9
+	Val2:	2
 	Val3:	1
-	Val4:	115
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	1
@@ -2122,9 +2188,9 @@ Material:	electronics
 	Modifier:	1
 SourceBook:	SR3 p300,302
 BREAK
-#XXX
+#85466
 Keywords:	lacing ceramic bone cyberware needs_weight_adding
-Name:	some bone lacing (ceramic)
+Name:	some bone lacing (ceramic) - beta
 RoomDesc:$
 Some uninstalled ceramic bone lacing is lying here.~
 LookDesc:$
@@ -2143,16 +2209,17 @@ Material:	metal
 [POINTS]
 	Weight:	15.00
 	Barrier:	1
-	Cost:	40000
-	AvailTN:	6
-	AvailDay:	21.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	9
+	Val2:	2
 	Val3:	4
-	Val4:	150
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	1
@@ -2161,9 +2228,9 @@ Material:	metal
 	Modifier:	2
 SourceBook:	MM p27
 BREAK
-#XXX
+#85467
 Keywords:	lacing titanium bone pool cyberware needs_weight_adding
-Name:	some bone lacing (titanium)
+Name:	some bone lacing (titanium) - beta
 RoomDesc:$
 Some uninstalled titanium bone lacing is lying here.~
 LookDesc:$
@@ -2182,16 +2249,17 @@ Material:	metal
 [POINTS]
 	Weight:	15.00
 	Barrier:	1
-	Cost:	75000
-	AvailTN:	5
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	15
 	LegalPermit:	0
 [VALUES]
 	Val0:	9
+	Val2:	2
 	Val3:	2
-	Val4:	225
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	2
@@ -2203,9 +2271,9 @@ Material:	metal
 	Modifier:	1
 SourceBook:	SR3 p300,302
 BREAK
-#XXX
+#85468
 Keywords:	boosted reflexes 1 i
-Name:	a boosted reflexes I
+Name:	a boosted reflexes I - beta
 RoomDesc:$
 A treatment of boosted reflexes lies here.~
 LookDesc:$
@@ -2222,24 +2290,25 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	15000
-	AvailTN:	3
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	8
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	15
 	Val1:	1
-	Val4:	50
+	Val2:	2
+	Val4:	0
 [AFFECT 0]
 	Location:	Init Dice
 	Modifier:	1
 SourceBook:	SR3 p300,302
 BREAK
-#XXX
+#85469
 Keywords:	boosted reflexes 2 ii
-Name:	a boosted reflexes II
+Name:	a boosted reflexes II - beta
 RoomDesc:$
 A treatment of boosted reflexes lies here.~
 LookDesc:$
@@ -2256,16 +2325,17 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	40000
-	AvailTN:	3
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	15
 	Val1:	2
-	Val4:	125
+	Val2:	2
+	Val4:	0
 [AFFECT 0]
 	Location:	Reaction
 	Modifier:	1
@@ -2274,9 +2344,9 @@ Material:	electronics
 	Modifier:	1
 SourceBook:	SR3 p300,302
 BREAK
-#XXX
+#85470
 Keywords:	boosted reflexes 3 iii
-Name:	a boosted reflexes III
+Name:	a boosted reflexes III - beta
 RoomDesc:$
 A treatment of boosted reflexes lies here.~
 LookDesc:$
@@ -2293,16 +2363,17 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	90000
-	AvailTN:	5
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	15
 	Val1:	3
-	Val4:	280
+	Val2:	2
+	Val4:	0
 [AFFECT 0]
 	Location:	Reaction
 	Modifier:	2
@@ -2311,9 +2382,9 @@ Material:	electronics
 	Modifier:	2
 SourceBook:	SR3 p300,302
 BREAK
-#XXX
+#85471
 Keywords:	cyberfin cyber fin
-Name:	a set of cyberfins
+Name:	a set of cyberfins - beta
 RoomDesc:$
 Some uninstalled cyberfins are lying here.~
 LookDesc:$
@@ -2327,20 +2398,21 @@ Material:	paper
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	105000
-	AvailTN:	5
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	37
-	Val4:	30
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p27-28
 BREAK
-#XXX
+#85472
 Keywords:	dermal plating i 1
-Name:	a dermal plating I
+Name:	a dermal plating I - beta
 RoomDesc:$
 An uninstalled set of dermal plating is lying here.~
 LookDesc:$
@@ -2355,24 +2427,25 @@ Material:	adv. plastics
 [POINTS]
 	Weight:	10.00
 	Barrier:	1
-	Cost:	6000
-	AvailTN:	4
-	AvailDay:	12.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	16
 	Val1:	1
-	Val4:	50
+	Val2:	2
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	1
 SourceBook:	SR3 p300,302
 BREAK
-#XXX
+#85473
 Keywords:	dermal plating ii 2
-Name:	a dermal plating II
+Name:	a dermal plating II - beta
 RoomDesc:$
 An uninstalled set of dermal plating is lying here.~
 LookDesc:$
@@ -2387,24 +2460,25 @@ Material:	adv. plastics
 [POINTS]
 	Weight:	15.00
 	Barrier:	1
-	Cost:	15000
-	AvailTN:	4
-	AvailDay:	12.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	16
 	Val1:	2
-	Val4:	100
+	Val2:	2
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	2
 SourceBook:	SR3 p300,302
 BREAK
-#XXX
+#85474
 Keywords:	dermal plating iii 3
-Name:	a dermal plating III
+Name:	a dermal plating III - beta
 RoomDesc:$
 An uninstalled set of dermal plating is lying here.~
 LookDesc:$
@@ -2419,24 +2493,25 @@ Material:	adv. plastics
 [POINTS]
 	Weight:	20.00
 	Barrier:	1
-	Cost:	45000
-	AvailTN:	4
-	AvailDay:	12.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	16
 	Val1:	3
-	Val4:	150
+	Val2:	2
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	3
 SourceBook:	SR3 p300,302
 BREAK
-#XXX
+#85475
 Keywords:	dermal sheathing
-Name:	a dermal sheathing I
+Name:	a dermal sheathing I - beta
 RoomDesc:$
 An uninstalled set of dermal sheathing is lying here.~
 LookDesc:$
@@ -2452,16 +2527,17 @@ Material:	adv. plastics
 [POINTS]
 	Weight:	5.00
 	Barrier:	1
-	Cost:	24000
-	AvailTN:	6
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	40
 	Val1:	1
-	Val4:	70
+	Val2:	2
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	2
@@ -2470,9 +2546,9 @@ Material:	adv. plastics
 	Modifier:	1
 SourceBook:	MM p28
 BREAK
-#XXX
+#85476
 Keywords:	dermal sheathing
-Name:	a dermal sheathing II
+Name:	a dermal sheathing II - beta
 RoomDesc:$
 An uninstalled set of dermal sheathing is lying here.~
 LookDesc:$
@@ -2488,16 +2564,17 @@ Material:	adv. plastics
 [POINTS]
 	Weight:	7.00
 	Barrier:	1
-	Cost:	60000
-	AvailTN:	6
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	40
 	Val1:	2
-	Val4:	140
+	Val2:	2
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	3
@@ -2506,9 +2583,9 @@ Material:	adv. plastics
 	Modifier:	1
 SourceBook:	MM p28
 BREAK
-#XXX
+#85477
 Keywords:	dermal sheathing
-Name:	a dermal sheathing III
+Name:	a dermal sheathing III - beta
 RoomDesc:$
 An uninstalled set of dermal sheathing is lying here.~
 LookDesc:$
@@ -2524,16 +2601,17 @@ Material:	adv. plastics
 [POINTS]
 	Weight:	10.00
 	Barrier:	1
-	Cost:	120000
-	AvailTN:	8
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	40
 	Val1:	3
-	Val4:	210
+	Val2:	2
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	4
@@ -2542,9 +2620,9 @@ Material:	adv. plastics
 	Modifier:	2
 SourceBook:	MM p28
 BREAK
-#XXX
+#85478
 Keywords:	ruthenium dermal sheathing i 1
-Name:	a ruthenium dermal sheathing I
+Name:	a ruthenium dermal sheathing I - beta
 RoomDesc:$
 An uninstalled set of ruthenium dermal sheathing is lying here.~
 LookDesc:$
@@ -2567,17 +2645,18 @@ Material:	adv. plastics
 [POINTS]
 	Weight:	5.00
 	Barrier:	1
-	Cost:	174000
-	AvailTN:	8
-	AvailDay:	18.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	40
 	Val1:	1
+	Val2:	2
 	Val3:	1
-	Val4:	90
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	2
@@ -2586,9 +2665,9 @@ Material:	adv. plastics
 	Modifier:	1
 SourceBook:	MM p28
 BREAK
-#XXX
+#85479
 Keywords:	ruthenium dermal sheathing ii 2
-Name:	a ruthenium dermal sheathing II
+Name:	a ruthenium dermal sheathing II - beta
 RoomDesc:$
 An uninstalled set of ruthenium dermal sheathing is lying here.~
 LookDesc:$
@@ -2611,17 +2690,18 @@ Material:	adv. plastics
 [POINTS]
 	Weight:	7.00
 	Barrier:	1
-	Cost:	210000
-	AvailTN:	8
-	AvailDay:	18.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	40
 	Val1:	2
+	Val2:	2
 	Val3:	1
-	Val4:	160
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	3
@@ -2630,9 +2710,9 @@ Material:	adv. plastics
 	Modifier:	1
 SourceBook:	MM p28
 BREAK
-#XXX
+#85480
 Keywords:	ruthenium dermal sheathing iii 3
-Name:	a ruthenium dermal sheathing III
+Name:	a ruthenium dermal sheathing III - beta
 RoomDesc:$
 An uninstalled set of ruthenium dermal sheathing is lying here.~
 LookDesc:$
@@ -2655,17 +2735,18 @@ Material:	adv. plastics
 [POINTS]
 	Weight:	10.00
 	Barrier:	1
-	Cost:	2600000
-	AvailTN:	8
-	AvailDay:	18.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	40
 	Val1:	3
+	Val2:	2
 	Val3:	1
-	Val4:	230
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	4
@@ -2674,9 +2755,9 @@ Material:	adv. plastics
 	Modifier:	2
 SourceBook:	MM p28
 BREAK
-#XXX
+#85481
 Keywords:	air filter i 1 nerp
-Name:	a filter (air) I
+Name:	a filter (air) I - beta
 RoomDesc:$
 An uninstalled air filter is lying here.~
 LookDesc:$
@@ -2690,21 +2771,22 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	15000
-	AvailTN:	6
-	AvailDay:	4.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	17
 	Val1:	1
-	Val4:	10
+	Val2:	2
+	Val4:	0
 SourceBook:	SR3 p300-302
 BREAK
-#XXX
+#85482
 Keywords:	blood filter i 1 nerp
-Name:	a filter (blood) I
+Name:	a filter (blood) I - beta
 RoomDesc:$
 An uninstalled blood filter is lying here.~
 LookDesc:$
@@ -2719,22 +2801,23 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	10000
-	AvailTN:	6
-	AvailDay:	4.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	17
 	Val1:	1
+	Val2:	2
 	Val3:	1
-	Val4:	20
+	Val4:	0
 SourceBook:	SR3 p300-302
 BREAK
-#XXX
+#85483
 Keywords:	ingested toxin filter i 1 nerp
-Name:	a filter (ingested toxin) I
+Name:	a filter (ingested toxin) I - beta
 RoomDesc:$
 An uninstalled ingested toxin filter is lying here.~
 LookDesc:$
@@ -2748,22 +2831,23 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	10000
-	AvailTN:	6
-	AvailDay:	4.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	17
 	Val1:	1
+	Val2:	2
 	Val3:	2
-	Val4:	20
+	Val4:	0
 SourceBook:	SR3 p300-302
 BREAK
-#XXX
+#85484
 Keywords:	fingertip compartment
-Name:	a fingertip compartment
+Name:	a fingertip compartment - beta
 RoomDesc:$
 An unfinished object is lying here.~
 LookDesc:$
@@ -2778,20 +2862,21 @@ Material:	paper
 [POINTS]
 	Weight:	0.50
 	Barrier:	1
-	Cost:	3000
-	AvailTN:	3
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	10
-	Val4:	10
+	Val2:	2
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85485
 Keywords:	foot anchor
-Name:	a foot anchor
+Name:	a foot anchor - beta
 RoomDesc:$
 An uninstalled foot anchor is lying here.~
 LookDesc:$
@@ -2804,20 +2889,21 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	14000
-	AvailTN:	6
-	AvailDay:	7.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	41
-	Val4:	10
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p29
 BREAK
-#XXX
+#85486
 Keywords:	handblade hand blade
-Name:	a hand blade
+Name:	a hand blade - beta
 RoomDesc:$
 An uninstalled hand blade is lying here.~
 LookDesc:$
@@ -2831,20 +2917,21 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	7500
-	AvailTN:	6
-	AvailDay:	5.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	15
 	LegalPermit:	1
 [VALUES]
 	Val0:	11
-	Val4:	10
+	Val2:	2
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85487
 Keywords:	retractable handblade hand blade
-Name:	a hand blade (retractable)
+Name:	a hand blade (retractable) - beta
 RoomDesc:$
 An uninstalled retractable hand blade is lying here.~
 LookDesc:$
@@ -2858,21 +2945,22 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	10000
-	AvailTN:	6
-	AvailDay:	5.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	15
 	LegalPermit:	1
 [VALUES]
 	Val0:	11
+	Val2:	2
 	Val3:	1
-	Val4:	25
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85488
 Keywords:	razors hand handrazors
-Name:	a set of hand razors
+Name:	a set of hand razors - beta
 RoomDesc:$
 An uninstalled set of hand razors is lying here.~
 LookDesc:$
@@ -2880,7 +2968,7 @@ These 2.5-centimeter, chromed steel or carbon fiber blades replace the user’s
 fingernails and are anchored to the user’s bones. Retractable versions slide 
 out of sight under synthetic nail replacements. Hand razors do (STR)L damage. 
 An improved version with compressed carbide blades does more damage, but is 
-costlier. Improved razors do (STR + 2)L damage.~
+Cost:	0
 Type:	Cyberware
 WearFlags:	1
 ExtraFlags:	0
@@ -2889,20 +2977,21 @@ Material:	metal
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	4500
-	AvailTN:	3
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	13
 	LegalPermit:	0
 [VALUES]
 	Val0:	12
-	Val4:	10
+	Val2:	2
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85489
 Keywords:	razors hand handrazors improved
-Name:	a set of hand razors (improved)
+Name:	a set of hand razors (improved) - beta
 RoomDesc:$
 An uninstalled set of hand razors is lying here.~
 LookDesc:$
@@ -2910,7 +2999,7 @@ These 2.5-centimeter, chromed steel or carbon fiber blades replace the user’s
 fingernails and are anchored to the user’s bones. Retractable versions slide 
 out of sight under synthetic nail replacements. Hand razors do (STR)L damage. 
 An improved version with compressed carbide blades does more damage, but is 
-costlier. Improved razors do (STR + 2)L damage.~
+Cost:	0
 Type:	Cyberware
 WearFlags:	1
 ExtraFlags:	0
@@ -2919,21 +3008,22 @@ Material:	metal
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	13000
-	AvailTN:	6
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	13
 	LegalPermit:	0
 [VALUES]
 	Val0:	12
+	Val2:	2
 	Val3:	2
-	Val4:	10
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85490
 Keywords:	razors hand handrazors retractable
-Name:	a set of hand razors (retractable)
+Name:	a set of hand razors (retractable) - beta
 RoomDesc:$
 An uninstalled set of hand razors is lying here.~
 LookDesc:$
@@ -2941,7 +3031,7 @@ These 2.5-centimeter, chromed steel or carbon fiber blades replace the user’s
 fingernails and are anchored to the user’s bones. Retractable versions slide 
 out of sight under synthetic nail replacements. Hand razors do (STR)L damage. 
 An improved version with compressed carbide blades does more damage, but is 
-costlier. Improved razors do (STR + 2)L damage.~
+Cost:	0
 Type:	Cyberware
 WearFlags:	1
 ExtraFlags:	0
@@ -2950,21 +3040,22 @@ Material:	metal
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	9000
-	AvailTN:	5
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	13
 	LegalPermit:	0
 [VALUES]
 	Val0:	12
+	Val2:	2
 	Val3:	1
-	Val4:	20
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85491
 Keywords:	razors hand handrazors improved retractable
-Name:	a set of hand razors (improved retractable)
+Name:	a set of hand razors (improved retractable) - beta
 RoomDesc:$
 An uninstalled set of hand razors is lying here.~
 LookDesc:$
@@ -2972,7 +3063,7 @@ These 2.5-centimeter, chromed steel or carbon fiber blades replace the user’s
 fingernails and are anchored to the user’s bones. Retractable versions slide 
 out of sight under synthetic nail replacements. Hand razors do (STR)L damage. 
 An improved version with compressed carbide blades does more damage, but is 
-costlier. Improved razors do (STR + 2)L damage.~
+Cost:	0
 Type:	Cyberware
 WearFlags:	1
 ExtraFlags:	0
@@ -2981,21 +3072,22 @@ Material:	metal
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	17500
-	AvailTN:	6
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	13
 	LegalPermit:	0
 [VALUES]
 	Val0:	12
+	Val2:	2
 	Val3:	3
-	Val4:	20
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85492
 Keywords:	spurs spur hand
-Name:	a set of hand spurs
+Name:	a set of hand spurs - beta
 RoomDesc:$
 An uninstalled set of hand spurs is lying here.~
 LookDesc:$
@@ -3011,20 +3103,21 @@ Material:	metal
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	7000
-	AvailTN:	3
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	13
 	LegalPermit:	0
 [VALUES]
 	Val0:	13
-	Val4:	10
+	Val2:	2
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85493
 Keywords:	spurs spur hand retractable
-Name:	a set of hand spurs (retractable)
+Name:	a set of hand spurs (retractable) - beta
 RoomDesc:$
 An uninstalled set of hand spurs is lying here.~
 LookDesc:$
@@ -3040,21 +3133,22 @@ Material:	metal
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	11500
-	AvailTN:	5
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	13
 	LegalPermit:	0
 [VALUES]
 	Val0:	13
+	Val2:	2
 	Val3:	1
-	Val4:	30
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85494
 Keywords:	hydraulic jacks i 1
-Name:	hydraulic jacks I
+Name:	hydraulic jacks I - beta
 RoomDesc:$
 An uninstalled set of hydraulic jacks is lying here.~
 LookDesc:$
@@ -3070,21 +3164,22 @@ Material:	paper
 [POINTS]
 	Weight:	5.00
 	Barrier:	1
-	Cost:	5000
-	AvailTN:	5
-	AvailDay:	6.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	42
 	Val1:	1
-	Val4:	75
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p29
 BREAK
-#XXX
+#85495
 Keywords:	hydraulic jacks ii 2
-Name:	hydraulic jacks II
+Name:	hydraulic jacks II - beta
 RoomDesc:$
 An uninstalled set of hydraulic jacks is lying here.~
 LookDesc:$
@@ -3100,21 +3195,22 @@ Material:	paper
 [POINTS]
 	Weight:	5.00
 	Barrier:	1
-	Cost:	10000
-	AvailTN:	5
-	AvailDay:	6.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	42
 	Val1:	1
-	Val4:	100
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p29
 BREAK
-#XXX
+#85496
 Keywords:	hydraulic jacks iii 3
-Name:	hydraulic jacks III
+Name:	hydraulic jacks III - beta
 RoomDesc:$
 An uninstalled set of hydraulic jacks is lying here.~
 LookDesc:$
@@ -3130,21 +3226,22 @@ Material:	paper
 [POINTS]
 	Weight:	5.00
 	Barrier:	1
-	Cost:	15000
-	AvailTN:	5
-	AvailDay:	6.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	42
 	Val1:	3
-	Val4:	125
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p29
 BREAK
-#XXX
+#85497
 Keywords:	hydraulic jacks iv 4
-Name:	hydraulic jacks IV
+Name:	hydraulic jacks IV - beta
 RoomDesc:$
 An uninstalled set of hydraulic jacks is lying here.~
 LookDesc:$
@@ -3160,21 +3257,22 @@ Material:	paper
 [POINTS]
 	Weight:	5.00
 	Barrier:	1
-	Cost:	20000
-	AvailTN:	5
-	AvailDay:	6.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	42
 	Val1:	4
-	Val4:	150
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p29
 BREAK
-#XXX
+#85498
 Keywords:	hydraulic jacks v 5
-Name:	hydraulic jacks V
+Name:	hydraulic jacks V - beta
 RoomDesc:$
 An uninstalled set of hydraulic jacks is lying here.~
 LookDesc:$
@@ -3190,21 +3288,22 @@ Material:	paper
 [POINTS]
 	Weight:	5.00
 	Barrier:	1
-	Cost:	25000
-	AvailTN:	5
-	AvailDay:	6.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	42
 	Val1:	5
-	Val4:	175
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p29
 BREAK
-#XXX
+#85499
 Keywords:	move-by-wire mbw move by wire i
-Name:	a move-by-wire system I
+Name:	a move-by-wire system I - beta
 RoomDesc:$
 An uninstalled move-by-wire system is lying here.~
 LookDesc:$
@@ -3222,21 +3321,22 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	250000
-	AvailTN:	8
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	15
 	LegalPermit:	1
 [VALUES]
 	Val0:	43
 	Val1:	1
-	Val4:	250
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p30-31
 BREAK
-#XXX
+#85500
 Keywords:	move-by-wire mbw move by wire ii
-Name:	a move-by-wire system II
+Name:	a move-by-wire system II - beta
 RoomDesc:$
 An uninstalled move-by-wire system is lying here.~
 LookDesc:$
@@ -3254,21 +3354,22 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	500000
-	AvailTN:	12
-	AvailDay:	20.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	15
 	LegalPermit:	1
 [VALUES]
 	Val0:	43
 	Val1:	2
-	Val4:	400
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p30-31
 BREAK
-#XXX
+#85501
 Keywords:	move-by-wire mbw move by wire iii
-Name:	a move-by-wire system III
+Name:	a move-by-wire system III - beta
 RoomDesc:$
 An uninstalled move-by-wire system is lying here.~
 LookDesc:$
@@ -3286,21 +3387,22 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	1000000
-	AvailTN:	18
-	AvailDay:	30.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	15
 	LegalPermit:	1
 [VALUES]
 	Val0:	43
 	Val1:	3
-	Val4:	550
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p30-31
 BREAK
-#XXX
+#85502
 Keywords:	move-by-wire mbw move by wire iv
-Name:	a move-by-wire system IV
+Name:	a move-by-wire system IV - beta
 RoomDesc:$
 An uninstalled move-by-wire system is lying here.~
 LookDesc:$
@@ -3318,21 +3420,22 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	2000000
-	AvailTN:	20
-	AvailDay:	45.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	15
 	LegalPermit:	1
 [VALUES]
 	Val0:	43
 	Val1:	4
-	Val4:	700
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p30-31
 BREAK
-#XXX
+#85503
 Keywords:	muscle replacement i
-Name:	a muscle replacement I
+Name:	a muscle replacement I - beta
 RoomDesc:$
 Some vat-grown, synthetic muscles lay here.~
 LookDesc:$
@@ -3348,16 +3451,17 @@ Material:	organic
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	20000
-	AvailTN:	4
-	AvailDay:	4.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	46
 	Val1:	1
-	Val4:	100
+	Val2:	2
+	Val4:	0
 [AFFECT 0]
 	Location:	Strength
 	Modifier:	1
@@ -3366,9 +3470,9 @@ Material:	organic
 	Modifier:	1
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85504
 Keywords:	muscle replacement ii
-Name:	a muscle replacement II
+Name:	a muscle replacement II - beta
 RoomDesc:$
 Some vat-grown, synthetic muscles lay here.~
 LookDesc:$
@@ -3384,16 +3488,17 @@ Material:	organic
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	40000
-	AvailTN:	4
-	AvailDay:	4.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	46
 	Val1:	2
-	Val4:	200
+	Val2:	2
+	Val4:	0
 [AFFECT 0]
 	Location:	Strength
 	Modifier:	2
@@ -3402,9 +3507,9 @@ Material:	organic
 	Modifier:	2
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85505
 Keywords:	muscle replacement iii
-Name:	a muscle replacement III
+Name:	a muscle replacement III - beta
 RoomDesc:$
 Some vat-grown, synthetic muscles lay here.~
 LookDesc:$
@@ -3420,16 +3525,17 @@ Material:	organic
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	60000
-	AvailTN:	4
-	AvailDay:	4.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	46
 	Val1:	3
-	Val4:	300
+	Val2:	2
+	Val4:	0
 [AFFECT 0]
 	Location:	Quickness
 	Modifier:	3
@@ -3438,9 +3544,9 @@ Material:	organic
 	Modifier:	3
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85506
 Keywords:	muscle replacement iv
-Name:	a muscle replacement IV
+Name:	a muscle replacement IV - beta
 RoomDesc:$
 Some vat-grown, synthetic muscles lay here.~
 LookDesc:$
@@ -3456,16 +3562,17 @@ Material:	organic
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	80000
-	AvailTN:	4
-	AvailDay:	4.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	46
 	Val1:	4
-	Val4:	400
+	Val2:	2
+	Val4:	0
 [AFFECT 0]
 	Location:	Strength
 	Modifier:	4
@@ -3474,9 +3581,9 @@ Material:	organic
 	Modifier:	4
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85507
 Keywords:	reaction enhancer
-Name:	a reaction enhancer
+Name:	a reaction enhancer - beta
 RoomDesc:$
 An uninstalled reaction enhancer is lying here.~
 LookDesc:$
@@ -3490,26 +3597,27 @@ ExtraFlags:	0
 AffFlags:	0
 Material:	paper
 [POINTS]
-	Weight:	2.00
+	Weight:	1.00
 	Barrier:	1
-	Cost:	60000
-	AvailTN:	6
-	AvailDay:	7.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	15
 	LegalPermit:	1
 [VALUES]
 	Val0:	22
 	Val1:	1
-	Val4:	30
+	Val2:	2
+	Val4:	0
 [AFFECT 0]
 	Location:	Reaction
 	Modifier:	1
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85508
 Keywords:	retractable climbing claws
-Name:	a set of retractable climbing claws
+Name:	a set of retractable climbing claws - beta
 RoomDesc:$
 An uninstalled set of climbing claws is lying here.~
 LookDesc:$
@@ -3522,20 +3630,21 @@ Material:	paper
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	10000
-	AvailTN:	5
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	44
-	Val4:	30
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p31-32
 BREAK
-#XXX
+#85509
 Keywords:	skillwires skill wires i
-Name:	a skillwires I (3 Mp)
+Name:	a skillwires I (3 Mp) - beta
 RoomDesc:$
 An uninstalled skillwires package is lying here.~
 LookDesc:$
@@ -3554,22 +3663,23 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	1500
-	AvailTN:	1
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	19
 	Val1:	1
+	Val2:	2
 	Val3:	3
-	Val4:	20
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85510
 Keywords:	skillwires skill wires ii
-Name:	a skillwires II (12 Mp)
+Name:	a skillwires II (12 Mp) - beta
 RoomDesc:$
 An uninstalled skillwires package is lying here.~
 LookDesc:$
@@ -3588,22 +3698,23 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	12000
-	AvailTN:	2
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	19
 	Val1:	2
+	Val2:	2
 	Val3:	12
-	Val4:	40
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85511
 Keywords:	skillwires skill wires iii
-Name:	a skillwires III (27 Mp)
+Name:	a skillwires III (27 Mp) - beta
 RoomDesc:$
 An uninstalled skillwires package is lying here.~
 LookDesc:$
@@ -3622,22 +3733,23 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	40500
-	AvailTN:	3
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	19
 	Val1:	3
+	Val2:	2
 	Val3:	27
-	Val4:	60
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85512
 Keywords:	skillwires skill wires iv
-Name:	a skillwires IV (48 Mp)
+Name:	a skillwires IV (48 Mp) - beta
 RoomDesc:$
 An uninstalled skillwires package is lying here.~
 LookDesc:$
@@ -3656,22 +3768,23 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	96000
-	AvailTN:	4
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	19
 	Val1:	4
+	Val2:	2
 	Val3:	27
-	Val4:	80
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85513
 Keywords:	skillwires skill wires v
-Name:	a skillwires V (75 Mp)
+Name:	a skillwires V (75 Mp) - beta
 RoomDesc:$
 An uninstalled skillwires package is lying here.~
 LookDesc:$
@@ -3690,22 +3803,23 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	187500
-	AvailTN:	5
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	19
 	Val1:	5
+	Val2:	2
 	Val3:	27
-	Val4:	100
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85514
 Keywords:	skillwires skill wires vi
-Name:	a skillwires VI (108 Mp)
+Name:	a skillwires VI (108 Mp) - beta
 RoomDesc:$
 An uninstalled skillwires package is lying here.~
 LookDesc:$
@@ -3724,22 +3838,23 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	324000
-	AvailTN:	6
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	19
 	Val1:	6
+	Val2:	2
 	Val3:	108
-	Val4:	120
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85515
 Keywords:	skillwires skill wires vii
-Name:	a skillwires VII (147 Mp)
+Name:	a skillwires VII (147 Mp) - beta
 RoomDesc:$
 An uninstalled skillwires package is lying here.~
 LookDesc:$
@@ -3758,22 +3873,23 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	700000
-	AvailTN:	7
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	19
 	Val1:	7
+	Val2:	2
 	Val3:	147
-	Val4:	140
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85516
 Keywords:	skillwires skill wires viii
-Name:	a skillwires VIII (192 Mp)
+Name:	a skillwires VIII (192 Mp) - beta
 RoomDesc:$
 An uninstalled skillwires package is lying here.~
 LookDesc:$
@@ -3792,22 +3908,23 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	768000
-	AvailTN:	8
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	19
 	Val1:	8
+	Val2:	2
 	Val3:	192
-	Val4:	160
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85517
 Keywords:	smartlink
-Name:	a smartlink system
+Name:	a smartlink system - beta
 RoomDesc:$
 An uninstalled smartlink system is here.~
 LookDesc:$
@@ -3824,21 +3941,22 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	2500
-	AvailTN:	3
-	AvailDay:	1.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	45
 	Val1:	1
-	Val4:	50
+	Val2:	2
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85518
 Keywords:	smartlink-2 system
-Name:	a smartlink-2 system
+Name:	a smartlink-2 system - beta
 RoomDesc:$
 An uninstalled smartlink-2 system is here.~
 LookDesc:$
@@ -3855,21 +3973,22 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	3500
-	AvailTN:	6
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	45
 	Val1:	2
-	Val4:	50
+	Val2:	2
+	Val4:	0
 SourceBook:	MM p31-32
 BREAK
-#XXX
+#85519
 Keywords:	voice modulator
-Name:	a voice modulator
+Name:	a voice modulator - beta
 RoomDesc:$
 An uninstalled voice modulator is lying here.~
 LookDesc:$
@@ -3882,20 +4001,21 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	45000
-	AvailTN:	2
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	14
-	Val4:	20
+	Val2:	2
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85520
 Keywords:	wired reflexes
-Name:	a wired reflexes I
+Name:	a wired reflexes I - beta
 RoomDesc:$
 An uninstalled wired reflexes package is lying here.~
 LookDesc:$
@@ -3909,21 +4029,22 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	55000
-	AvailTN:	4
-	AvailDay:	8.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	21
 	Val1:	1
-	Val4:	200
+	Val2:	2
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85521
 Keywords:	wired reflexes
-Name:	a wired reflexes II
+Name:	a wired reflexes II - beta
 RoomDesc:$
 An uninstalled wired reflexes package is lying here.~
 LookDesc:$
@@ -3937,21 +4058,22 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	165000
-	AvailTN:	4
-	AvailDay:	8.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	21
 	Val1:	2
-	Val4:	300
+	Val2:	2
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85522
 Keywords:	wired reflexes
-Name:	a wired reflexes III
+Name:	a wired reflexes III - beta
 RoomDesc:$
 An uninstalled wired reflexes package is lying here.~
 LookDesc:$
@@ -3965,21 +4087,22 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	500000
-	AvailTN:	8
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	15
 	LegalPermit:	0
 [VALUES]
 	Val0:	21
 	Val1:	3
-	Val4:	500
+	Val2:	2
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85523
 Keywords:	reflex trigger
-Name:	a reflex trigger
+Name:	a reflex trigger - beta
 RoomDesc:$
 An uninstalled reflex trigger is lying here.~
 LookDesc:$
@@ -3997,20 +4120,21 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	13000
-	AvailTN:	4
-	AvailDay:	8.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	23
-	Val4:	20
+	Val2:	2
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#XXX
+#85524
 Keywords:	reflex trigger
-Name:	a reflex trigger (stepped)
+Name:	a reflex trigger (stepped) - beta
 RoomDesc:$
 An uninstalled reflex trigger is lying here.~
 LookDesc:$
@@ -4030,16 +4154,17 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	162500
-	AvailTN:	4
-	AvailDay:	8.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	23
+	Val2:	2
 	Val3:	1
-	Val4:	20
+	Val4:	0
 SourceBook:	MM p32-33
 BREAK
 END

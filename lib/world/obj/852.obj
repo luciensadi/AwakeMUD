@@ -15,16 +15,16 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	2000
-	AvailTN:	3
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val2:	1
 	Val3:	1
-	Val4:	16
+	Val4:	0
 SourceBook:	SR3 p298, MM p21-22
 BREAK
 #85201
@@ -44,16 +44,16 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	4000
-	AvailTN:	3
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val2:	1
 	Val3:	2
-	Val4:	20
+	Val4:	0
 SourceBook:	SR3 p298, MM p21-22
 BREAK
 #85202
@@ -73,16 +73,16 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	6000
-	AvailTN:	3
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val2:	1
 	Val3:	3
-	Val4:	24
+	Val4:	0
 SourceBook:	SR3 p298, MM p21-22
 BREAK
 #85203
@@ -102,16 +102,16 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	8000
-	AvailTN:	3
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val2:	1
 	Val3:	4
-	Val4:	28
+	Val4:	0
 SourceBook:	SR3 p298, MM p21-22
 BREAK
 #85204
@@ -136,9 +136,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	10000
-	AvailTN:	4
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -146,7 +146,7 @@ Material:	paper
 	Val0:	29
 	Val1:	1
 	Val2:	1
-	Val4:	8
+	Val4:	0
 SourceBook:	MM p19
 BREAK
 #85205
@@ -171,9 +171,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	20000
-	AvailTN:	4
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -181,7 +181,7 @@ Material:	paper
 	Val0:	29
 	Val1:	2
 	Val2:	1
-	Val4:	16
+	Val4:	0
 SourceBook:	MM p19
 BREAK
 #85206
@@ -206,9 +206,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	30000
-	AvailTN:	4
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -216,7 +216,7 @@ Material:	paper
 	Val0:	29
 	Val1:	3
 	Val2:	1
-	Val4:	24
+	Val4:	0
 SourceBook:	MM p19
 BREAK
 #85207
@@ -238,9 +238,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	19000
-	AvailTN:	6
-	AvailDay:	2.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -248,7 +248,7 @@ Material:	paper
 	Val0:	31
 	Val1:	1
 	Val2:	1
-	Val4:	8
+	Val4:	0
 SourceBook:	MM p20
 BREAK
 #85208
@@ -270,9 +270,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	38000
-	AvailTN:	6
-	AvailDay:	2.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -280,7 +280,7 @@ Material:	paper
 	Val0:	31
 	Val1:	2
 	Val2:	1
-	Val4:	12
+	Val4:	0
 SourceBook:	MM p20
 BREAK
 #85209
@@ -302,9 +302,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	57000
-	AvailTN:	6
-	AvailDay:	2.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -312,7 +312,7 @@ Material:	paper
 	Val0:	31
 	Val1:	3
 	Val2:	1
-	Val4:	16
+	Val4:	0
 SourceBook:	MM p20
 BREAK
 #85210
@@ -334,9 +334,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	76000
-	AvailTN:	6
-	AvailDay:	2.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -344,7 +344,7 @@ Material:	paper
 	Val0:	31
 	Val1:	4
 	Val2:	1
-	Val4:	20
+	Val4:	0
 SourceBook:	MM p20
 BREAK
 #85211
@@ -365,16 +365,16 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	2000
-	AvailTN:	6
-	AvailDay:	1.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	2
 	Val2:	1
-	Val4:	16
+	Val4:	0
 SourceBook:	SR3 p298
 BREAK
 #85212
@@ -409,16 +409,16 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	2000
+	Cost:	0
 	AvailTN:	0
-	AvailDay:	0.00
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	1
 	Val2:	1
-	Val4:	16
+	Val4:	0
 SourceBook:	SR3 p298
 BREAK
 #85213
@@ -444,7 +444,7 @@ receive the encephalon rating bonus to their Computer Skill, only the Hacking
 Pool.
 ^n
 Encephalons allow a character to learn more quickly. Add the encephalon rating 
-to Intelligence when determining the cost of new skills.
+to Intelligence when determining the Cost:	0
 ^n
 The encephalon does not boost magical ability and does not aid any use of 
 magic, magical perception or Magical Skills.~
@@ -456,9 +456,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	80000
-	AvailTN:	6
-	AvailDay:	12.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -466,7 +466,7 @@ Material:	paper
 	Val0:	32
 	Val1:	1
 	Val2:	1
-	Val4:	60
+	Val4:	0
 [AFFECT 0]
 	Location:	Hacking Pool
 	Modifier:	1
@@ -498,7 +498,7 @@ receive the encephalon rating bonus to their Computer Skill, only the Hacking
 Pool.
 ^n
 Encephalons allow a character to learn more quickly. Add the encephalon rating 
-to Intelligence when determining the cost of new skills.
+to Intelligence when determining the Cost:	0
 ^n
 The encephalon does not boost magical ability and does not aid any use of 
 magic, magical perception or Magical Skills.~
@@ -510,9 +510,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	230000
-	AvailTN:	6
-	AvailDay:	12.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -520,7 +520,7 @@ Material:	paper
 	Val0:	32
 	Val1:	2
 	Val2:	1
-	Val4:	120
+	Val4:	0
 [AFFECT 0]
 	Location:	Hacking Pool
 	Modifier:	2
@@ -547,9 +547,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	6000
-	AvailTN:	5
-	AvailDay:	4.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -557,7 +557,7 @@ Material:	paper
 	Val0:	1
 	Val2:	1
 	Val3:	1
-	Val4:	24
+	Val4:	0
 SourceBook:	MM p21
 BREAK
 #85216
@@ -576,16 +576,16 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	2000
-	AvailTN:	3
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	3
 	Val2:	1
-	Val4:	8
+	Val4:	0
 SourceBook:	SR3 p298
 BREAK
 #85217
@@ -610,9 +610,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	4000
-	AvailTN:	6
-	AvailDay:	2.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -620,7 +620,7 @@ Material:	paper
 	Val0:	33
 	Val1:	1
 	Val2:	1
-	Val4:	8
+	Val4:	0
 [AFFECT 0]
 	Location:	Hacking Pool
 	Modifier:	1
@@ -648,9 +648,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	10000
-	AvailTN:	6
-	AvailDay:	2.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -658,7 +658,7 @@ Material:	paper
 	Val0:	33
 	Val1:	2
 	Val2:	1
-	Val4:	12
+	Val4:	0
 [AFFECT 0]
 	Location:	Hacking Pool
 	Modifier:	2
@@ -686,9 +686,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	22000
-	AvailTN:	6
-	AvailDay:	2.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -696,7 +696,7 @@ Material:	paper
 	Val0:	33
 	Val1:	3
 	Val2:	1
-	Val4:	16
+	Val4:	0
 [AFFECT 0]
 	Location:	Hacking Pool
 	Modifier:	3
@@ -722,9 +722,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	22500
-	AvailTN:	3
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -732,7 +732,7 @@ Material:	paper
 	Val0:	4
 	Val2:	1
 	Val3:	75
-	Val4:	20
+	Val4:	0
 SourceBook:	SR3 p298
 BREAK
 #85221
@@ -755,9 +755,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	45000
-	AvailTN:	3
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -765,7 +765,7 @@ Material:	paper
 	Val0:	4
 	Val2:	1
 	Val3:	150
-	Val4:	40
+	Val4:	0
 SourceBook:	SR3 p298
 BREAK
 #85222
@@ -788,9 +788,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	90000
-	AvailTN:	3
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -798,7 +798,7 @@ Material:	paper
 	Val0:	4
 	Val2:	1
 	Val3:	300
-	Val4:	80
+	Val4:	0
 SourceBook:	SR3 p298
 BREAK
 #85223
@@ -810,7 +810,7 @@ hold Rating x 2 programmed frequencies in its memory at any one time. The
 signal quality is rarely as good as a telephone, but the ability to switch 
 bands makes the system more popular with the military or any user expecting 
 active jamming. When transmitting, the user must speak, though he may do so in 
-tones inaudible to those nearby. For the cost- or health-conscious, 
+tones inaudible to those nearby. For the Cost:	0
 receiver-only models are available.~
 LookDesc:$
 A small, delicate device.
@@ -823,9 +823,9 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	4000
-	AvailTN:	2
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -834,7 +834,7 @@ Material:	electronics
 	Val1:	1
 	Val2:	1
 	Val3:	3
-	Val4:	60
+	Val4:	0
 	Val5:	3
 SourceBook:	SR3 p297-298
 BREAK
@@ -857,16 +857,16 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	7400
-	AvailTN:	3
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	6
 	Val2:	1
-	Val4:	40
+	Val4:	0
 SourceBook:	SR3 p298
 BREAK
 #85225
@@ -890,9 +890,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	2000
-	AvailTN:	6
-	AvailDay:	1.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -914,7 +914,7 @@ Memory: In twentieth-century terms, active memory serves as implanted RAM. It
 cannot be used for any other purpose than for active utilities. Headware memory 
 can be used for both active and storage memory. Other linked memory sources may 
 also be used for storage memory (but not active memory). Active and storage 
-memory costs are not included in the costs shown and must be purchased  
+memory Cost:	0
 separately.~
 Type:	Cyberware
 WearFlags:	1
@@ -924,9 +924,9 @@ Material:	paper
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	28000
-	AvailTN:	4
-	AvailDay:	7.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	16
 	LegalPermit:	1
@@ -934,7 +934,7 @@ Material:	paper
 	Val0:	30
 	Val2:	1
 	Val3:	1820
-	Val4:	152
+	Val4:	0
 SourceBook:	MM p19-20
 BREAK
 #85227
@@ -950,7 +950,7 @@ Memory: In twentieth-century terms, active memory serves as implanted RAM. It
 cannot be used for any other purpose than for active utilities. Headware memory 
 can be used for both active and storage memory. Other linked memory sources may 
 also be used for storage memory (but not active memory). Active and storage 
-memory costs are not included in the costs shown and must be purchased  
+memory Cost:	0
 separately.~
 Type:	Cyberware
 WearFlags:	1
@@ -960,9 +960,9 @@ Material:	paper
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	150000
-	AvailTN:	6
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	16
 	LegalPermit:	1
@@ -970,7 +970,7 @@ Material:	paper
 	Val0:	30
 	Val2:	1
 	Val3:	1116
-	Val4:	200
+	Val4:	0
 SourceBook:	MM p19-20
 BREAK
 #85228
@@ -986,7 +986,7 @@ Memory: In twentieth-century terms, active memory serves as implanted RAM. It
 cannot be used for any other purpose than for active utilities. Headware memory 
 can be used for both active and storage memory. Other linked memory sources may 
 also be used for storage memory (but not active memory). Active and storage 
-memory costs are not included in the costs shown and must be purchased  
+memory Cost:	0
 separately.~
 Type:	Cyberware
 WearFlags:	1
@@ -996,9 +996,9 @@ Material:	paper
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	300000
-	AvailTN:	6
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	16
 	LegalPermit:	1
@@ -1006,7 +1006,7 @@ Material:	paper
 	Val0:	30
 	Val2:	1
 	Val3:	1916
-	Val4:	216
+	Val4:	0
 SourceBook:	MM p19-20
 BREAK
 #85229
@@ -1022,7 +1022,7 @@ Memory: In twentieth-century terms, active memory serves as implanted RAM. It
 cannot be used for any other purpose than for active utilities. Headware memory 
 can be used for both active and storage memory. Other linked memory sources may 
 also be used for storage memory (but not active memory). Active and storage 
-memory costs are not included in the costs shown and must be purchased  
+memory Cost:	0
 separately.~
 Type:	Cyberware
 WearFlags:	1
@@ -1032,9 +1032,9 @@ Material:	paper
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	600000
-	AvailTN:	8
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	16
 	LegalPermit:	1
@@ -1042,7 +1042,7 @@ Material:	paper
 	Val0:	30
 	Val2:	1
 	Val3:	1916
-	Val4:	224
+	Val4:	0
 SourceBook:	MM p19-20
 BREAK
 #85230
@@ -1058,7 +1058,7 @@ Memory: In twentieth-century terms, active memory serves as implanted RAM. It
 cannot be used for any other purpose than for active utilities. Headware memory 
 can be used for both active and storage memory. Other linked memory sources may 
 also be used for storage memory (but not active memory). Active and storage 
-memory costs are not included in the costs shown and must be purchased  
+memory Cost:	0
 separately.~
 Type:	Cyberware
 WearFlags:	1
@@ -1068,9 +1068,9 @@ Material:	paper
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	900000
-	AvailTN:	10
-	AvailDay:	30.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	16
 	LegalPermit:	1
@@ -1078,7 +1078,7 @@ Material:	paper
 	Val0:	30
 	Val2:	1
 	Val3:	17121
-	Val4:	232
+	Val4:	0
 SourceBook:	MM p19-20
 BREAK
 #85231
@@ -1094,7 +1094,7 @@ Memory: In twentieth-century terms, active memory serves as implanted RAM. It
 cannot be used for any other purpose than for active utilities. Headware memory 
 can be used for both active and storage memory. Other linked memory sources may 
 also be used for storage memory (but not active memory). Active and storage 
-memory costs are not included in the costs shown and must be purchased  
+memory Cost:	0
 separately.~
 Type:	Cyberware
 WearFlags:	1
@@ -1104,9 +1104,9 @@ Material:	paper
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	1400000
-	AvailTN:	14
-	AvailDay:	30.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	16
 	LegalPermit:	1
@@ -1114,7 +1114,7 @@ Material:	paper
 	Val0:	30
 	Val2:	1
 	Val3:	17122
-	Val4:	240
+	Val4:	0
 SourceBook:	MM p19-20
 BREAK
 #85232
@@ -1130,7 +1130,7 @@ Memory: In twentieth-century terms, active memory serves as implanted RAM. It
 cannot be used for any other purpose than for active utilities. Headware memory 
 can be used for both active and storage memory. Other linked memory sources may 
 also be used for storage memory (but not active memory). Active and storage 
-memory costs are not included in the costs shown and must be purchased  
+memory Cost:	0
 separately.~
 Type:	Cyberware
 WearFlags:	1
@@ -1140,9 +1140,9 @@ Material:	paper
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	3000000
-	AvailTN:	18
-	AvailDay:	30.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	16
 	LegalPermit:	1
@@ -1150,7 +1150,7 @@ Material:	paper
 	Val0:	30
 	Val2:	1
 	Val3:	17122
-	Val4:	256
+	Val4:	0
 SourceBook:	MM p19-20
 BREAK
 #85233
@@ -1166,7 +1166,7 @@ Memory: In twentieth-century terms, active memory serves as implanted RAM. It
 cannot be used for any other purpose than for active utilities. Headware memory 
 can be used for both active and storage memory. Other linked memory sources may 
 also be used for storage memory (but not active memory). Active and storage 
-memory costs are not included in the costs shown and must be purchased  
+memory Cost:	0
 separately.~
 Type:	Cyberware
 WearFlags:	1
@@ -1176,9 +1176,9 @@ Material:	paper
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	4000000
-	AvailTN:	24
-	AvailDay:	60.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	16
 	LegalPermit:	1
@@ -1186,7 +1186,7 @@ Material:	paper
 	Val0:	30
 	Val2:	1
 	Val3:	7418
-	Val4:	280
+	Val4:	0
 SourceBook:	MM p19-20
 BREAK
 #85234
@@ -1208,9 +1208,9 @@ Material:	metal
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	24000
-	AvailTN:	6
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	13
 	LegalPermit:	1
@@ -1218,7 +1218,7 @@ Material:	metal
 	Val0:	20
 	Val1:	1
 	Val2:	1
-	Val4:	160
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
 #85235
@@ -1240,9 +1240,9 @@ Material:	metal
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	120000
-	AvailTN:	8
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	13
 	LegalPermit:	1
@@ -1250,7 +1250,7 @@ Material:	metal
 	Val0:	20
 	Val1:	2
 	Val2:	1
-	Val4:	160
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
 #85236
@@ -1272,9 +1272,9 @@ Material:	metal
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	600000
-	AvailTN:	8
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	13
 	LegalPermit:	1
@@ -1282,7 +1282,7 @@ Material:	metal
 	Val0:	20
 	Val1:	3
 	Val2:	1
-	Val4:	160
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
 #85237
@@ -1302,16 +1302,16 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	7200
-	AvailTN:	6
-	AvailDay:	7.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	25
 	Val2:	1
-	Val4:	20
+	Val4:	0
 SourceBook:	MM p17
 BREAK
 #85238
@@ -1331,16 +1331,16 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	11200
-	AvailTN:	6
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	26
 	Val2:	1
-	Val4:	32
+	Val4:	0
 SourceBook:	MM p17
 BREAK
 #85239
@@ -1358,9 +1358,9 @@ Material:	paper
 [POINTS]
 	Weight:	0.50
 	Barrier:	1
-	Cost:	1400
-	AvailTN:	3
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	10
 	LegalCode:	14
 	LegalPermit:	1
@@ -1385,9 +1385,9 @@ Material:	paper
 [POINTS]
 	Weight:	0.50
 	Barrier:	1
-	Cost:	3000
-	AvailTN:	2
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -1419,16 +1419,16 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	28000
-	AvailTN:	8
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	24
 	Val2:	1
-	Val4:	32
+	Val4:	0
 SourceBook:	MM p13-14
 BREAK
 #85242
@@ -1450,9 +1450,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	10000
-	AvailTN:	6
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -1460,7 +1460,7 @@ Material:	paper
 	Val0:	8
 	Val2:	1
 	Val3:	1
-	Val4:	32
+	Val4:	0
 SourceBook:	SR3 p299-300
 BREAK
 #85243
@@ -1480,9 +1480,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	2000
-	AvailTN:	4
-	AvailDay:	1.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -1490,7 +1490,7 @@ Material:	paper
 	Val0:	8
 	Val2:	1
 	Val3:	4
-	Val4:	8
+	Val4:	0
 SourceBook:	SR3 p299-300
 BREAK
 #85244
@@ -1512,9 +1512,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	8400
-	AvailTN:	8
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	7
 	LegalCode:	14
 	LegalPermit:	1
@@ -1522,7 +1522,7 @@ Material:	paper
 	Val0:	8
 	Val2:	1
 	Val3:	262144
-	Val4:	20
+	Val4:	0
 SourceBook:	MM p16-17
 BREAK
 #85245
@@ -1544,9 +1544,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	4400
-	AvailTN:	6
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	13
 	LegalPermit:	1
@@ -1554,7 +1554,7 @@ Material:	paper
 	Val0:	8
 	Val2:	1
 	Val3:	131072
-	Val4:	20
+	Val4:	0
 SourceBook:	MM p13-14
 BREAK
 #85246
@@ -1576,9 +1576,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	12800
-	AvailTN:	6
-	AvailDay:	7.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	14
 	LegalPermit:	1
@@ -1586,7 +1586,7 @@ Material:	paper
 	Val0:	8
 	Val2:	1
 	Val3:	65536
-	Val4:	32
+	Val4:	0
 SourceBook:	MM p16-17
 BREAK
 #85247
@@ -1609,9 +1609,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	2400
-	AvailTN:	4
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -1619,7 +1619,7 @@ Material:	paper
 	Val0:	8
 	Val2:	1
 	Val3:	1048576
-	Val4:	16
+	Val4:	0
 SourceBook:	MM p15
 BREAK
 #85248
@@ -1640,9 +1640,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	4000
-	AvailTN:	5
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -1650,10 +1650,10 @@ Material:	paper
 	Val0:	8
 	Val2:	1
 	Val3:	8
-	Val4:	8
+	Val4:	0
 SourceBook:	SR3 p299
 BREAK
-#508
+#85249
 Keywords:	image link
 Name:	an image link - alpha
 RoomDesc:$
@@ -1670,9 +1670,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	3200
-	AvailTN:	4
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -1680,10 +1680,10 @@ Material:	paper
 	Val0:	8
 	Val2:	1
 	Val3:	16
-	Val4:	16
+	Val4:	0
 SourceBook:	SR3 p299-300
 BREAK
-#85249
+#85250
 Keywords:	low-light low light vision modification needs_affect_check
 Name:	a low-light vision modification - alpha
 RoomDesc:$
@@ -1700,9 +1700,9 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	6000
-	AvailTN:	4
-	AvailDay:	1.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -1710,10 +1710,10 @@ Material:	electronics
 	Val0:	8
 	Val2:	1
 	Val3:	32
-	Val4:	16
+	Val4:	0
 SourceBook:	SR3 p300
 BREAK
-#85250
+#85251
 Keywords:	protective eye covers nerp
 Name:	protective eye covers - alpha
 RoomDesc:$
@@ -1729,9 +1729,9 @@ Material:	paper
 [POINTS]
 	Weight:	0.50
 	Barrier:	1
-	Cost:	1000
-	AvailTN:	4
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -1741,7 +1741,7 @@ Material:	paper
 	Val3:	64
 SourceBook:	SR3 p300
 BREAK
-#85251
+#85252
 Keywords:	retinal clock
 Name:	a retinal clock - alpha
 RoomDesc:$
@@ -1758,9 +1758,9 @@ Material:	electronics
 [POINTS]
 	Weight:	0.50
 	Barrier:	1
-	Cost:	900
-	AvailTN:	3
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -1768,10 +1768,10 @@ Material:	electronics
 	Val0:	8
 	Val2:	1
 	Val3:	128
-	Val4:	8
+	Val4:	0
 SourceBook:	SR3 p300
 BREAK
-#85252
+#85253
 Keywords:	thermographic vision modification needs_affect_check
 Name:	a thermographic vision modification - alpha
 RoomDesc:$
@@ -1788,9 +1788,9 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	6000
-	AvailTN:	4
-	AvailDay:	1.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -1798,10 +1798,10 @@ Material:	electronics
 	Val0:	8
 	Val2:	1
 	Val3:	512
-	Val4:	16
+	Val4:	0
 SourceBook:	SR3 p300
 BREAK
-#85253
+#85254
 Keywords:	eyes ultrasound modification
 Name:	an ultrasound vision modification - alpha
 RoomDesc:$
@@ -1818,9 +1818,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	20000
-	AvailTN:	6
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -1828,10 +1828,10 @@ Material:	paper
 	Val0:	8
 	Val2:	1
 	Val3:	2097152
-	Val4:	40
+	Val4:	0
 SourceBook:	MM p18
 BREAK
-#85254
+#85255
 Keywords:	optical magnification
 Name:	an optical magnification I - alpha
 RoomDesc:$
@@ -1848,9 +1848,9 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	5000
-	AvailTN:	4
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -1859,10 +1859,10 @@ Material:	electronics
 	Val1:	1
 	Val2:	1
 	Val3:	1024
-	Val4:	16
+	Val4:	0
 SourceBook:	SR3 p300
 BREAK
-#85255
+#85256
 Keywords:	optical magnification
 Name:	an optical magnification II - alpha
 RoomDesc:$
@@ -1879,9 +1879,9 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	8000
-	AvailTN:	4
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -1890,10 +1890,10 @@ Material:	electronics
 	Val1:	2
 	Val2:	1
 	Val3:	2048
-	Val4:	16
+	Val4:	0
 SourceBook:	SR3 p300
 BREAK
-#85256
+#85257
 Keywords:	optical magnification
 Name:	an optical magnification III - alpha
 RoomDesc:$
@@ -1910,9 +1910,9 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	12000
-	AvailTN:	5
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -1921,10 +1921,10 @@ Material:	electronics
 	Val1:	3
 	Val2:	1
 	Val3:	4096
-	Val4:	16
+	Val4:	0
 SourceBook:	SR3 p300
 BREAK
-#85257
+#85258
 Keywords:	electronic magnification
 Name:	an electronic magnification I - alpha
 RoomDesc:$
@@ -1941,9 +1941,9 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	7000
-	AvailTN:	5
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -1952,10 +1952,10 @@ Material:	electronics
 	Val1:	1
 	Val2:	1
 	Val3:	8192
-	Val4:	8
+	Val4:	0
 SourceBook:	SR3 p300
 BREAK
-#85258
+#85259
 Keywords:	electronic magnification
 Name:	an electronic magnification II - alpha
 RoomDesc:$
@@ -1972,9 +1972,9 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	15000
-	AvailTN:	5
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -1983,10 +1983,10 @@ Material:	electronics
 	Val1:	2
 	Val2:	1
 	Val3:	16384
-	Val4:	8
+	Val4:	0
 SourceBook:	SR3 p300
 BREAK
-#85259
+#85260
 Keywords:	electronic magnification
 Name:	an electronic magnification III - alpha
 RoomDesc:$
@@ -2003,9 +2003,9 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	22000
-	AvailTN:	8
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -2014,10 +2014,10 @@ Material:	electronics
 	Val1:	3
 	Val2:	1
 	Val3:	32768
-	Val4:	8
+	Val4:	0
 SourceBook:	SR3 p300
 BREAK
-#85260
+#85261
 Keywords:	balance tail
 Name:	a balance tail - alpha
 RoomDesc:$
@@ -2035,19 +2035,19 @@ Material:	paper
 [POINTS]
 	Weight:	4.00
 	Barrier:	1
-	Cost:	20000
-	AvailTN:	8
-	AvailDay:	7.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	35
 	Val2:	1
-	Val4:	40
+	Val4:	0
 SourceBook:	MM p25
 BREAK
-#85261
+#85262
 Keywords:	body compartment
 Name:	a body compartment - alpha
 RoomDesc:$
@@ -2062,19 +2062,19 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	10000
-	AvailTN:	4
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	36
 	Val2:	1
-	Val4:	16
+	Val4:	0
 SourceBook:	MM p26-27
 BREAK
-#85262
+#85263
 Keywords:	plastic bone lacing pool needs_weight_adding
 Name:	some bone lacing (plastic) - alpha
 RoomDesc:$
@@ -2094,22 +2094,22 @@ Material:	metal
 [POINTS]
 	Weight:	5.00
 	Barrier:	1
-	Cost:	15000
-	AvailTN:	5
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	9
 	Val2:	1
-	Val4:	40
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	1
 SourceBook:	SR3 p300,302
 BREAK
-#85263
+#85264
 Keywords:	lacing kevlar bone cyberware needs_weight_adding
 Name:	some bone lacing (kevlar) - alpha
 RoomDesc:$
@@ -2129,9 +2129,9 @@ Material:	metal
 [POINTS]
 	Weight:	5.00
 	Barrier:	1
-	Cost:	40000
-	AvailTN:	6
-	AvailDay:	21.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	13
 	LegalPermit:	1
@@ -2139,7 +2139,7 @@ Material:	metal
 	Val0:	9
 	Val2:	1
 	Val3:	3
-	Val4:	80
+	Val4:	0
 [AFFECT 1]
 	Location:	Body
 	Modifier:	1
@@ -2148,7 +2148,7 @@ Material:	metal
 	Modifier:	1
 SourceBook:	MM p27
 BREAK
-#85264
+#85265
 Keywords:	lacing bone aluminum pool cyberware needs_weight_adding
 Name:	some bone lacing (aluminum) - alpha
 RoomDesc:$
@@ -2169,9 +2169,9 @@ Material:	electronics
 [POINTS]
 	Weight:	10.00
 	Barrier:	1
-	Cost:	50000
-	AvailTN:	5
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	14
 	LegalPermit:	1
@@ -2179,7 +2179,7 @@ Material:	electronics
 	Val0:	9
 	Val2:	1
 	Val3:	1
-	Val4:	92
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	1
@@ -2188,7 +2188,7 @@ Material:	electronics
 	Modifier:	1
 SourceBook:	SR3 p300,302
 BREAK
-#85265
+#85266
 Keywords:	lacing ceramic bone cyberware needs_weight_adding
 Name:	some bone lacing (ceramic) - alpha
 RoomDesc:$
@@ -2209,9 +2209,9 @@ Material:	metal
 [POINTS]
 	Weight:	15.00
 	Barrier:	1
-	Cost:	80000
-	AvailTN:	6
-	AvailDay:	21.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	14
 	LegalPermit:	1
@@ -2219,7 +2219,7 @@ Material:	metal
 	Val0:	9
 	Val2:	1
 	Val3:	4
-	Val4:	120
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	1
@@ -2228,7 +2228,7 @@ Material:	metal
 	Modifier:	2
 SourceBook:	MM p27
 BREAK
-#85266
+#85267
 Keywords:	lacing titanium bone pool cyberware needs_weight_adding
 Name:	some bone lacing (titanium) - alpha
 RoomDesc:$
@@ -2249,9 +2249,9 @@ Material:	metal
 [POINTS]
 	Weight:	15.00
 	Barrier:	1
-	Cost:	150000
-	AvailTN:	5
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	15
 	LegalPermit:	0
@@ -2259,7 +2259,7 @@ Material:	metal
 	Val0:	9
 	Val2:	1
 	Val3:	2
-	Val4:	180
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	2
@@ -2271,7 +2271,7 @@ Material:	metal
 	Modifier:	1
 SourceBook:	SR3 p300,302
 BREAK
-#85267
+#85268
 Keywords:	boosted reflexes 1 i
 Name:	a boosted reflexes I - alpha
 RoomDesc:$
@@ -2290,9 +2290,9 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	30000
-	AvailTN:	3
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	8
 	LegalCode:	14
 	LegalPermit:	1
@@ -2300,13 +2300,13 @@ Material:	electronics
 	Val0:	15
 	Val1:	1
 	Val2:	1
-	Val4:	40
+	Val4:	0
 [AFFECT 0]
 	Location:	Init Dice
 	Modifier:	1
 SourceBook:	SR3 p300,302
 BREAK
-#85268
+#85269
 Keywords:	boosted reflexes 2 ii
 Name:	a boosted reflexes II - alpha
 RoomDesc:$
@@ -2325,9 +2325,9 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	80000
-	AvailTN:	3
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	14
 	LegalPermit:	1
@@ -2335,7 +2335,7 @@ Material:	electronics
 	Val0:	15
 	Val1:	2
 	Val2:	1
-	Val4:	100
+	Val4:	0
 [AFFECT 0]
 	Location:	Reaction
 	Modifier:	1
@@ -2344,7 +2344,7 @@ Material:	electronics
 	Modifier:	1
 SourceBook:	SR3 p300,302
 BREAK
-#85269
+#85270
 Keywords:	boosted reflexes 3 iii
 Name:	a boosted reflexes III - alpha
 RoomDesc:$
@@ -2363,9 +2363,9 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	180000
-	AvailTN:	5
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	14
 	LegalPermit:	1
@@ -2373,7 +2373,7 @@ Material:	electronics
 	Val0:	15
 	Val1:	3
 	Val2:	1
-	Val4:	224
+	Val4:	0
 [AFFECT 0]
 	Location:	Reaction
 	Modifier:	2
@@ -2382,7 +2382,7 @@ Material:	electronics
 	Modifier:	2
 SourceBook:	SR3 p300,302
 BREAK
-#85270
+#85271
 Keywords:	cyberfin cyber fin
 Name:	a set of cyberfins - alpha
 RoomDesc:$
@@ -2398,19 +2398,19 @@ Material:	paper
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	210000
-	AvailTN:	5
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	37
 	Val2:	1
-	Val4:	24
+	Val4:	0
 SourceBook:	MM p27-28
 BREAK
-#85271
+#85272
 Keywords:	dermal plating i 1
 Name:	a dermal plating I - alpha
 RoomDesc:$
@@ -2427,9 +2427,9 @@ Material:	adv. plastics
 [POINTS]
 	Weight:	10.00
 	Barrier:	1
-	Cost:	12000
-	AvailTN:	4
-	AvailDay:	12.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	13
 	LegalPermit:	1
@@ -2437,13 +2437,13 @@ Material:	adv. plastics
 	Val0:	16
 	Val1:	1
 	Val2:	1
-	Val4:	40
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	1
 SourceBook:	SR3 p300,302
 BREAK
-#85272
+#85273
 Keywords:	dermal plating ii 2
 Name:	a dermal plating II - alpha
 RoomDesc:$
@@ -2460,9 +2460,9 @@ Material:	adv. plastics
 [POINTS]
 	Weight:	15.00
 	Barrier:	1
-	Cost:	30000
-	AvailTN:	4
-	AvailDay:	12.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	13
 	LegalPermit:	1
@@ -2470,13 +2470,13 @@ Material:	adv. plastics
 	Val0:	16
 	Val1:	2
 	Val2:	1
-	Val4:	80
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	2
 SourceBook:	SR3 p300,302
 BREAK
-#85273
+#85274
 Keywords:	dermal plating iii 3
 Name:	a dermal plating III - alpha
 RoomDesc:$
@@ -2493,9 +2493,9 @@ Material:	adv. plastics
 [POINTS]
 	Weight:	20.00
 	Barrier:	1
-	Cost:	90000
-	AvailTN:	4
-	AvailDay:	12.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	13
 	LegalPermit:	1
@@ -2503,13 +2503,13 @@ Material:	adv. plastics
 	Val0:	16
 	Val1:	3
 	Val2:	1
-	Val4:	120
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	3
 SourceBook:	SR3 p300,302
 BREAK
-#85274
+#85275
 Keywords:	dermal sheathing
 Name:	a dermal sheathing I - alpha
 RoomDesc:$
@@ -2527,9 +2527,9 @@ Material:	adv. plastics
 [POINTS]
 	Weight:	5.00
 	Barrier:	1
-	Cost:	48000
-	AvailTN:	6
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	13
 	LegalPermit:	1
@@ -2537,7 +2537,7 @@ Material:	adv. plastics
 	Val0:	40
 	Val1:	1
 	Val2:	1
-	Val4:	56
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	2
@@ -2546,7 +2546,7 @@ Material:	adv. plastics
 	Modifier:	1
 SourceBook:	MM p28
 BREAK
-#85275
+#85276
 Keywords:	dermal sheathing
 Name:	a dermal sheathing II - alpha
 RoomDesc:$
@@ -2564,9 +2564,9 @@ Material:	adv. plastics
 [POINTS]
 	Weight:	7.00
 	Barrier:	1
-	Cost:	120000
-	AvailTN:	6
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	13
 	LegalPermit:	1
@@ -2574,7 +2574,7 @@ Material:	adv. plastics
 	Val0:	40
 	Val1:	2
 	Val2:	1
-	Val4:	112
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	3
@@ -2583,7 +2583,7 @@ Material:	adv. plastics
 	Modifier:	1
 SourceBook:	MM p28
 BREAK
-#85276
+#85277
 Keywords:	dermal sheathing
 Name:	a dermal sheathing III - alpha
 RoomDesc:$
@@ -2601,9 +2601,9 @@ Material:	adv. plastics
 [POINTS]
 	Weight:	10.00
 	Barrier:	1
-	Cost:	240000
-	AvailTN:	8
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	13
 	LegalPermit:	1
@@ -2611,7 +2611,7 @@ Material:	adv. plastics
 	Val0:	40
 	Val1:	3
 	Val2:	1
-	Val4:	168
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	4
@@ -2620,7 +2620,7 @@ Material:	adv. plastics
 	Modifier:	2
 SourceBook:	MM p28
 BREAK
-#85277
+#85278
 Keywords:	ruthenium dermal sheathing i 1
 Name:	a ruthenium dermal sheathing I - alpha
 RoomDesc:$
@@ -2645,9 +2645,9 @@ Material:	adv. plastics
 [POINTS]
 	Weight:	5.00
 	Barrier:	1
-	Cost:	348000
-	AvailTN:	8
-	AvailDay:	18.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	13
 	LegalPermit:	1
@@ -2656,7 +2656,7 @@ Material:	adv. plastics
 	Val1:	1
 	Val2:	1
 	Val3:	1
-	Val4:	72
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	2
@@ -2665,7 +2665,7 @@ Material:	adv. plastics
 	Modifier:	1
 SourceBook:	MM p28
 BREAK
-#85278
+#85279
 Keywords:	ruthenium dermal sheathing ii 2
 Name:	a ruthenium dermal sheathing II - alpha
 RoomDesc:$
@@ -2690,9 +2690,9 @@ Material:	adv. plastics
 [POINTS]
 	Weight:	7.00
 	Barrier:	1
-	Cost:	420000
-	AvailTN:	8
-	AvailDay:	18.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	13
 	LegalPermit:	1
@@ -2701,7 +2701,7 @@ Material:	adv. plastics
 	Val1:	2
 	Val2:	1
 	Val3:	1
-	Val4:	128
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	3
@@ -2710,7 +2710,7 @@ Material:	adv. plastics
 	Modifier:	1
 SourceBook:	MM p28
 BREAK
-#85279
+#85280
 Keywords:	ruthenium dermal sheathing iii 3
 Name:	a ruthenium dermal sheathing III - alpha
 RoomDesc:$
@@ -2735,9 +2735,9 @@ Material:	adv. plastics
 [POINTS]
 	Weight:	10.00
 	Barrier:	1
-	Cost:	5200000
-	AvailTN:	8
-	AvailDay:	18.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	13
 	LegalPermit:	1
@@ -2746,7 +2746,7 @@ Material:	adv. plastics
 	Val1:	3
 	Val2:	1
 	Val3:	1
-	Val4:	184
+	Val4:	0
 [AFFECT 0]
 	Location:	Body
 	Modifier:	4
@@ -2755,7 +2755,7 @@ Material:	adv. plastics
 	Modifier:	2
 SourceBook:	MM p28
 BREAK
-#85280
+#85281
 Keywords:	air filter i 1 nerp
 Name:	a filter (air) I - alpha
 RoomDesc:$
@@ -2771,9 +2771,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	30000
-	AvailTN:	6
-	AvailDay:	4.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -2781,10 +2781,10 @@ Material:	paper
 	Val0:	17
 	Val1:	1
 	Val2:	1
-	Val4:	8
+	Val4:	0
 SourceBook:	SR3 p300-302
 BREAK
-#85281
+#85282
 Keywords:	blood filter i 1 nerp
 Name:	a filter (blood) I - alpha
 RoomDesc:$
@@ -2801,9 +2801,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	20000
-	AvailTN:	6
-	AvailDay:	4.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -2812,10 +2812,10 @@ Material:	paper
 	Val1:	1
 	Val2:	1
 	Val3:	1
-	Val4:	16
+	Val4:	0
 SourceBook:	SR3 p300-302
 BREAK
-#85282
+#85283
 Keywords:	ingested toxin filter i 1 nerp
 Name:	a filter (ingested toxin) I - alpha
 RoomDesc:$
@@ -2831,9 +2831,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	20000
-	AvailTN:	6
-	AvailDay:	4.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -2842,10 +2842,10 @@ Material:	paper
 	Val1:	1
 	Val2:	1
 	Val3:	2
-	Val4:	16
+	Val4:	0
 SourceBook:	SR3 p300-302
 BREAK
-#85283
+#85284
 Keywords:	fingertip compartment
 Name:	a fingertip compartment - alpha
 RoomDesc:$
@@ -2862,19 +2862,19 @@ Material:	paper
 [POINTS]
 	Weight:	0.50
 	Barrier:	1
-	Cost:	6000
-	AvailTN:	3
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	10
 	Val2:	1
-	Val4:	8
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85284
+#85285
 Keywords:	foot anchor
 Name:	a foot anchor - alpha
 RoomDesc:$
@@ -2889,19 +2889,19 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	28000
-	AvailTN:	6
-	AvailDay:	7.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	41
 	Val2:	1
-	Val4:	8
+	Val4:	0
 SourceBook:	MM p29
 BREAK
-#85285
+#85286
 Keywords:	handblade hand blade
 Name:	a hand blade - alpha
 RoomDesc:$
@@ -2917,19 +2917,19 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	15000
-	AvailTN:	6
-	AvailDay:	5.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	15
 	LegalPermit:	1
 [VALUES]
 	Val0:	11
 	Val2:	1
-	Val4:	8
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85286
+#85287
 Keywords:	retractable handblade hand blade
 Name:	a hand blade (retractable) - alpha
 RoomDesc:$
@@ -2945,9 +2945,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	20000
-	AvailTN:	6
-	AvailDay:	5.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	15
 	LegalPermit:	1
@@ -2955,10 +2955,10 @@ Material:	paper
 	Val0:	11
 	Val2:	1
 	Val3:	1
-	Val4:	20
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85287
+#85288
 Keywords:	razors hand handrazors
 Name:	a set of hand razors - alpha
 RoomDesc:$
@@ -2968,7 +2968,7 @@ These 2.5-centimeter, chromed steel or carbon fiber blades replace the user’s
 fingernails and are anchored to the user’s bones. Retractable versions slide 
 out of sight under synthetic nail replacements. Hand razors do (STR)L damage. 
 An improved version with compressed carbide blades does more damage, but is 
-costlier. Improved razors do (STR + 2)L damage.~
+Cost:	0
 Type:	Cyberware
 WearFlags:	1
 ExtraFlags:	0
@@ -2977,19 +2977,19 @@ Material:	metal
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	9000
-	AvailTN:	3
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	13
 	LegalPermit:	0
 [VALUES]
 	Val0:	12
 	Val2:	1
-	Val4:	8
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85288
+#85289
 Keywords:	razors hand handrazors improved
 Name:	a set of hand razors (improved) - alpha
 RoomDesc:$
@@ -2999,7 +2999,7 @@ These 2.5-centimeter, chromed steel or carbon fiber blades replace the user’s
 fingernails and are anchored to the user’s bones. Retractable versions slide 
 out of sight under synthetic nail replacements. Hand razors do (STR)L damage. 
 An improved version with compressed carbide blades does more damage, but is 
-costlier. Improved razors do (STR + 2)L damage.~
+Cost:	0
 Type:	Cyberware
 WearFlags:	1
 ExtraFlags:	0
@@ -3008,9 +3008,9 @@ Material:	metal
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	26000
-	AvailTN:	6
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	13
 	LegalPermit:	0
@@ -3018,10 +3018,10 @@ Material:	metal
 	Val0:	12
 	Val2:	1
 	Val3:	2
-	Val4:	8
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85289
+#85290
 Keywords:	razors hand handrazors retractable
 Name:	a set of hand razors (retractable) - alpha
 RoomDesc:$
@@ -3031,7 +3031,7 @@ These 2.5-centimeter, chromed steel or carbon fiber blades replace the user’s
 fingernails and are anchored to the user’s bones. Retractable versions slide 
 out of sight under synthetic nail replacements. Hand razors do (STR)L damage. 
 An improved version with compressed carbide blades does more damage, but is 
-costlier. Improved razors do (STR + 2)L damage.~
+Cost:	0
 Type:	Cyberware
 WearFlags:	1
 ExtraFlags:	0
@@ -3040,9 +3040,9 @@ Material:	metal
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	18000
-	AvailTN:	5
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	13
 	LegalPermit:	0
@@ -3050,10 +3050,10 @@ Material:	metal
 	Val0:	12
 	Val2:	1
 	Val3:	1
-	Val4:	16
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85290
+#85291
 Keywords:	razors hand handrazors improved retractable
 Name:	a set of hand razors (improved retractable) - alpha
 RoomDesc:$
@@ -3063,7 +3063,7 @@ These 2.5-centimeter, chromed steel or carbon fiber blades replace the user’s
 fingernails and are anchored to the user’s bones. Retractable versions slide 
 out of sight under synthetic nail replacements. Hand razors do (STR)L damage. 
 An improved version with compressed carbide blades does more damage, but is 
-costlier. Improved razors do (STR + 2)L damage.~
+Cost:	0
 Type:	Cyberware
 WearFlags:	1
 ExtraFlags:	0
@@ -3072,9 +3072,9 @@ Material:	metal
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	35000
-	AvailTN:	6
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	13
 	LegalPermit:	0
@@ -3082,10 +3082,10 @@ Material:	metal
 	Val0:	12
 	Val2:	1
 	Val3:	3
-	Val4:	16
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85291
+#85292
 Keywords:	spurs spur hand
 Name:	a set of hand spurs - alpha
 RoomDesc:$
@@ -3103,19 +3103,19 @@ Material:	metal
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	14000
-	AvailTN:	3
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	13
 	LegalPermit:	0
 [VALUES]
 	Val0:	13
 	Val2:	1
-	Val4:	8
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85292
+#85293
 Keywords:	spurs spur hand retractable
 Name:	a set of hand spurs (retractable) - alpha
 RoomDesc:$
@@ -3133,9 +3133,9 @@ Material:	metal
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	23000
-	AvailTN:	5
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	13
 	LegalPermit:	0
@@ -3143,10 +3143,10 @@ Material:	metal
 	Val0:	13
 	Val2:	1
 	Val3:	1
-	Val4:	24
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85293
+#85294
 Keywords:	hydraulic jacks i 1
 Name:	hydraulic jacks I - alpha
 RoomDesc:$
@@ -3164,9 +3164,9 @@ Material:	paper
 [POINTS]
 	Weight:	5.00
 	Barrier:	1
-	Cost:	10000
-	AvailTN:	5
-	AvailDay:	6.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -3174,10 +3174,10 @@ Material:	paper
 	Val0:	42
 	Val1:	1
 	Val2:	1
-	Val4:	60
+	Val4:	0
 SourceBook:	MM p29
 BREAK
-#85294
+#85295
 Keywords:	hydraulic jacks ii 2
 Name:	hydraulic jacks II - alpha
 RoomDesc:$
@@ -3195,9 +3195,9 @@ Material:	paper
 [POINTS]
 	Weight:	5.00
 	Barrier:	1
-	Cost:	20000
-	AvailTN:	5
-	AvailDay:	6.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -3205,10 +3205,10 @@ Material:	paper
 	Val0:	42
 	Val1:	1
 	Val2:	1
-	Val4:	80
+	Val4:	0
 SourceBook:	MM p29
 BREAK
-#85295
+#85296
 Keywords:	hydraulic jacks iii 3
 Name:	hydraulic jacks III - alpha
 RoomDesc:$
@@ -3226,9 +3226,9 @@ Material:	paper
 [POINTS]
 	Weight:	5.00
 	Barrier:	1
-	Cost:	30000
-	AvailTN:	5
-	AvailDay:	6.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -3236,10 +3236,10 @@ Material:	paper
 	Val0:	42
 	Val1:	3
 	Val2:	1
-	Val4:	100
+	Val4:	0
 SourceBook:	MM p29
 BREAK
-#85296
+#85297
 Keywords:	hydraulic jacks iv 4
 Name:	hydraulic jacks IV - alpha
 RoomDesc:$
@@ -3257,9 +3257,9 @@ Material:	paper
 [POINTS]
 	Weight:	5.00
 	Barrier:	1
-	Cost:	40000
-	AvailTN:	5
-	AvailDay:	6.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -3267,10 +3267,10 @@ Material:	paper
 	Val0:	42
 	Val1:	4
 	Val2:	1
-	Val4:	120
+	Val4:	0
 SourceBook:	MM p29
 BREAK
-#85297
+#85298
 Keywords:	hydraulic jacks v 5
 Name:	hydraulic jacks V - alpha
 RoomDesc:$
@@ -3288,9 +3288,9 @@ Material:	paper
 [POINTS]
 	Weight:	5.00
 	Barrier:	1
-	Cost:	50000
-	AvailTN:	5
-	AvailDay:	6.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -3298,10 +3298,10 @@ Material:	paper
 	Val0:	42
 	Val1:	5
 	Val2:	1
-	Val4:	140
+	Val4:	0
 SourceBook:	MM p29
 BREAK
-#85298
+#85299
 Keywords:	move-by-wire mbw move by wire i
 Name:	a move-by-wire system I - alpha
 RoomDesc:$
@@ -3321,9 +3321,9 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	500000
-	AvailTN:	8
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	15
 	LegalPermit:	1
@@ -3331,10 +3331,10 @@ Material:	electronics
 	Val0:	43
 	Val1:	1
 	Val2:	1
-	Val4:	200
+	Val4:	0
 SourceBook:	MM p30-31
 BREAK
-#85299
+#85300
 Keywords:	move-by-wire mbw move by wire ii
 Name:	a move-by-wire system II - alpha
 RoomDesc:$
@@ -3354,9 +3354,9 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	1000000
-	AvailTN:	12
-	AvailDay:	20.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	15
 	LegalPermit:	1
@@ -3364,10 +3364,10 @@ Material:	electronics
 	Val0:	43
 	Val1:	2
 	Val2:	1
-	Val4:	320
+	Val4:	0
 SourceBook:	MM p30-31
 BREAK
-#85300
+#85301
 Keywords:	move-by-wire mbw move by wire iii
 Name:	a move-by-wire system III - alpha
 RoomDesc:$
@@ -3387,9 +3387,9 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	2000000
-	AvailTN:	18
-	AvailDay:	30.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	15
 	LegalPermit:	1
@@ -3397,10 +3397,10 @@ Material:	electronics
 	Val0:	43
 	Val1:	3
 	Val2:	1
-	Val4:	440
+	Val4:	0
 SourceBook:	MM p30-31
 BREAK
-#85301
+#85302
 Keywords:	move-by-wire mbw move by wire iv
 Name:	a move-by-wire system IV - alpha
 RoomDesc:$
@@ -3420,9 +3420,9 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	4000000
-	AvailTN:	20
-	AvailDay:	45.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	15
 	LegalPermit:	1
@@ -3430,10 +3430,10 @@ Material:	electronics
 	Val0:	43
 	Val1:	4
 	Val2:	1
-	Val4:	560
+	Val4:	0
 SourceBook:	MM p30-31
 BREAK
-#85302
+#85303
 Keywords:	muscle replacement i
 Name:	a muscle replacement I - alpha
 RoomDesc:$
@@ -3451,9 +3451,9 @@ Material:	organic
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	40000
-	AvailTN:	4
-	AvailDay:	4.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	14
 	LegalPermit:	1
@@ -3461,7 +3461,7 @@ Material:	organic
 	Val0:	46
 	Val1:	1
 	Val2:	1
-	Val4:	80
+	Val4:	0
 [AFFECT 0]
 	Location:	Strength
 	Modifier:	1
@@ -3470,7 +3470,7 @@ Material:	organic
 	Modifier:	1
 SourceBook:	SR3 p301-302
 BREAK
-#85303
+#85304
 Keywords:	muscle replacement ii
 Name:	a muscle replacement II - alpha
 RoomDesc:$
@@ -3488,9 +3488,9 @@ Material:	organic
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	80000
-	AvailTN:	4
-	AvailDay:	4.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	14
 	LegalPermit:	1
@@ -3498,7 +3498,7 @@ Material:	organic
 	Val0:	46
 	Val1:	2
 	Val2:	1
-	Val4:	160
+	Val4:	0
 [AFFECT 0]
 	Location:	Strength
 	Modifier:	2
@@ -3507,7 +3507,7 @@ Material:	organic
 	Modifier:	2
 SourceBook:	SR3 p301-302
 BREAK
-#85304
+#85305
 Keywords:	muscle replacement iii
 Name:	a muscle replacement III - alpha
 RoomDesc:$
@@ -3525,9 +3525,9 @@ Material:	organic
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	120000
-	AvailTN:	4
-	AvailDay:	4.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	14
 	LegalPermit:	1
@@ -3535,7 +3535,7 @@ Material:	organic
 	Val0:	46
 	Val1:	3
 	Val2:	1
-	Val4:	240
+	Val4:	0
 [AFFECT 0]
 	Location:	Quickness
 	Modifier:	3
@@ -3544,7 +3544,7 @@ Material:	organic
 	Modifier:	3
 SourceBook:	SR3 p301-302
 BREAK
-#85305
+#85306
 Keywords:	muscle replacement iv
 Name:	a muscle replacement IV - alpha
 RoomDesc:$
@@ -3562,9 +3562,9 @@ Material:	organic
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	160000
-	AvailTN:	4
-	AvailDay:	4.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	14
 	LegalPermit:	1
@@ -3572,7 +3572,7 @@ Material:	organic
 	Val0:	46
 	Val1:	4
 	Val2:	1
-	Val4:	320
+	Val4:	0
 [AFFECT 0]
 	Location:	Strength
 	Modifier:	4
@@ -3581,7 +3581,7 @@ Material:	organic
 	Modifier:	4
 SourceBook:	SR3 p301-302
 BREAK
-#85306
+#85307
 Keywords:	reaction enhancer
 Name:	a reaction enhancer - alpha
 RoomDesc:$
@@ -3599,9 +3599,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	120000
-	AvailTN:	6
-	AvailDay:	7.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	15
 	LegalPermit:	1
@@ -3609,13 +3609,13 @@ Material:	paper
 	Val0:	22
 	Val1:	1
 	Val2:	1
-	Val4:	24
+	Val4:	0
 [AFFECT 0]
 	Location:	Reaction
 	Modifier:	1
 SourceBook:	SR3 p301-302
 BREAK
-#85307
+#85308
 Keywords:	retractable climbing claws
 Name:	a set of retractable climbing claws - alpha
 RoomDesc:$
@@ -3630,19 +3630,19 @@ Material:	paper
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	20000
-	AvailTN:	5
-	AvailDay:	3.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	44
 	Val2:	1
-	Val4:	24
+	Val4:	0
 SourceBook:	MM p31-32
 BREAK
-#85308
+#85309
 Keywords:	skillwires skill wires i
 Name:	a skillwires I (3 Mp) - alpha
 RoomDesc:$
@@ -3663,9 +3663,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	3000
-	AvailTN:	1
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -3674,10 +3674,10 @@ Material:	paper
 	Val1:	1
 	Val2:	1
 	Val3:	3
-	Val4:	16
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85309
+#85310
 Keywords:	skillwires skill wires ii
 Name:	a skillwires II (12 Mp) - alpha
 RoomDesc:$
@@ -3698,9 +3698,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	24000
-	AvailTN:	2
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -3709,10 +3709,10 @@ Material:	paper
 	Val1:	2
 	Val2:	1
 	Val3:	12
-	Val4:	32
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85310
+#85311
 Keywords:	skillwires skill wires iii
 Name:	a skillwires III (27 Mp) - alpha
 RoomDesc:$
@@ -3733,9 +3733,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	81000
-	AvailTN:	3
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -3744,10 +3744,10 @@ Material:	paper
 	Val1:	3
 	Val2:	1
 	Val3:	27
-	Val4:	48
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85311
+#85312
 Keywords:	skillwires skill wires iv
 Name:	a skillwires IV (48 Mp) - alpha
 RoomDesc:$
@@ -3768,9 +3768,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	192000
-	AvailTN:	4
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -3779,10 +3779,10 @@ Material:	paper
 	Val1:	4
 	Val2:	1
 	Val3:	27
-	Val4:	64
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85312
+#85313
 Keywords:	skillwires skill wires v
 Name:	a skillwires V (75 Mp) - alpha
 RoomDesc:$
@@ -3803,9 +3803,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	375000
-	AvailTN:	5
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -3814,10 +3814,10 @@ Material:	paper
 	Val1:	5
 	Val2:	1
 	Val3:	27
-	Val4:	80
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85313
+#85314
 Keywords:	skillwires skill wires vi
 Name:	a skillwires VI (108 Mp) - alpha
 RoomDesc:$
@@ -3838,9 +3838,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	648000
-	AvailTN:	6
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -3849,10 +3849,10 @@ Material:	paper
 	Val1:	6
 	Val2:	1
 	Val3:	108
-	Val4:	96
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85314
+#85315
 Keywords:	skillwires skill wires vii
 Name:	a skillwires VII (147 Mp) - alpha
 RoomDesc:$
@@ -3873,9 +3873,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	1400000
-	AvailTN:	7
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -3884,10 +3884,10 @@ Material:	paper
 	Val1:	7
 	Val2:	1
 	Val3:	147
-	Val4:	112
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85315
+#85316
 Keywords:	skillwires skill wires viii
 Name:	a skillwires VIII (192 Mp) - alpha
 RoomDesc:$
@@ -3908,9 +3908,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	1536000
-	AvailTN:	8
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -3919,10 +3919,10 @@ Material:	paper
 	Val1:	8
 	Val2:	1
 	Val3:	192
-	Val4:	128
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85316
+#85317
 Keywords:	smartlink
 Name:	a smartlink system - alpha
 RoomDesc:$
@@ -3941,9 +3941,9 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	5000
-	AvailTN:	3
-	AvailDay:	1.50
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	13
 	LegalPermit:	1
@@ -3951,10 +3951,10 @@ Material:	electronics
 	Val0:	45
 	Val1:	1
 	Val2:	1
-	Val4:	40
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85317
+#85318
 Keywords:	smartlink-2 system
 Name:	a smartlink-2 system - alpha
 RoomDesc:$
@@ -3973,9 +3973,9 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	7000
-	AvailTN:	6
-	AvailDay:	2.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	13
 	LegalPermit:	1
@@ -3983,10 +3983,10 @@ Material:	electronics
 	Val0:	45
 	Val1:	2
 	Val2:	1
-	Val4:	40
+	Val4:	0
 SourceBook:	MM p31-32
 BREAK
-#85318
+#85319
 Keywords:	voice modulator
 Name:	a voice modulator - alpha
 RoomDesc:$
@@ -4001,19 +4001,19 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	90000
-	AvailTN:	2
-	AvailDay:	1.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	14
 	Val2:	1
-	Val4:	16
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85319
+#85320
 Keywords:	wired reflexes
 Name:	a wired reflexes I - alpha
 RoomDesc:$
@@ -4029,9 +4029,9 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	110000
-	AvailTN:	4
-	AvailDay:	8.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	14
 	LegalPermit:	1
@@ -4039,10 +4039,10 @@ Material:	electronics
 	Val0:	21
 	Val1:	1
 	Val2:	1
-	Val4:	160
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85320
+#85321
 Keywords:	wired reflexes
 Name:	a wired reflexes II - alpha
 RoomDesc:$
@@ -4058,9 +4058,9 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	330000
-	AvailTN:	4
-	AvailDay:	8.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	14
 	LegalPermit:	1
@@ -4068,10 +4068,10 @@ Material:	electronics
 	Val0:	21
 	Val1:	2
 	Val2:	1
-	Val4:	240
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85321
+#85322
 Keywords:	wired reflexes
 Name:	a wired reflexes III - alpha
 RoomDesc:$
@@ -4087,9 +4087,9 @@ Material:	electronics
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	1000000
-	AvailTN:	8
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	3
 	LegalCode:	15
 	LegalPermit:	0
@@ -4097,10 +4097,10 @@ Material:	electronics
 	Val0:	21
 	Val1:	3
 	Val2:	1
-	Val4:	400
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85322
+#85323
 Keywords:	reflex trigger
 Name:	a reflex trigger - alpha
 RoomDesc:$
@@ -4120,19 +4120,19 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	26000
-	AvailTN:	4
-	AvailDay:	8.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	23
 	Val2:	1
-	Val4:	16
+	Val4:	0
 SourceBook:	SR3 p301-302
 BREAK
-#85323
+#85324
 Keywords:	reflex trigger
 Name:	a reflex trigger (stepped) - alpha
 RoomDesc:$
@@ -4154,9 +4154,9 @@ Material:	paper
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	325000
-	AvailTN:	4
-	AvailDay:	8.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	14
 	LegalPermit:	1
@@ -4164,7 +4164,7 @@ Material:	paper
 	Val0:	23
 	Val2:	1
 	Val3:	1
-	Val4:	16
+	Val4:	0
 SourceBook:	MM p32-33
 BREAK
 END

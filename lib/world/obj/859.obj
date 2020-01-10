@@ -1,6 +1,6 @@
-#XXX
-Keywords:	pump adrenal
-Name:	an adrenal pump II
+#85900
+Keywords:	pump adrenal i
+Name:	an adrenal pump I - cultured
 RoomDesc:$
 An uninstalled adrenal pump is lying here.~
 LookDesc:$
@@ -18,21 +18,66 @@ Material:	organic
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	100000
-	AvailTN:	10
-	AvailDay:	16.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	5
+	LegalCode:	15
+	LegalPermit:	1
+[VALUES]
+	Val1:	1
+	Val2:	1
+	Val4:	0
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	1
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	2
+[AFFECT 2]
+	Location:	Willpower
+	Modifier:	1
+[AFFECT 3]
+	Location:	Reaction
+	Modifier:	2
+SourceBook:	MM p63-64
+BREAK
+#85901
+Keywords:	pump adrenal ii
+Name:	an adrenal pump II - cultured
+RoomDesc:$
+An uninstalled adrenal pump is lying here.~
+LookDesc:$
+This is a small, muscular sac implanted in the lower abdominal cavity and 
+connected to each of the two suprarenal, or adrenal, glands. When dormant, the 
+pump serves as a reservoir for adrenaline and noradrenaline. When activated, 
+the sac contracts, sending a surge of concentrates into the bloodstream. Stress 
+and other emotional states such as anger, fear or lust will also activate the 
+pump.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	15
 	LegalPermit:	1
 [VALUES]
 	Val1:	2
-	Val4:	250
+	Val2:	1
+	Val4:	0
 [AFFECT 0]
 	Location:	Quickness
 	Modifier:	2
 [AFFECT 1]
 	Location:	Strength
-	Modifier:	2
+	Modifier:	4
 [AFFECT 2]
 	Location:	Willpower
 	Modifier:	2
@@ -41,9 +86,9 @@ Material:	organic
 	Modifier:	4
 SourceBook:	MM p63-64
 BREAK
-#XXX
+#85902
 Keywords:	cat's eyes
-Name:	cat's eyes
+Name:	cat's eyes - cultured
 RoomDesc:$
 An uninstalled pair of bioware cat's eyes is lying here.~
 LookDesc:$
@@ -63,20 +108,21 @@ Material:	organic
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	1500
-	AvailTN:	4
-	AvailDay:	6.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	1
-	Val4:	20
+	Val2:	1
+	Val4:	0
 SourceBook:	MM p64
 BREAK
-#XXX
+#85903
 Keywords:	enhanced articulation
-Name:	enhanced articulation
+Name:	enhanced articulation - cultured
 RoomDesc:$
 An uninstalled enhanced articulation package is lying here.~
 LookDesc:$
@@ -92,24 +138,25 @@ Material:	organic
 [POINTS]
 	Weight:	5.00
 	Barrier:	1
-	Cost:	40000
-	AvailTN:	5
-	AvailDay:	6.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	3
 	Val1:	1
-	Val4:	60
+	Val2:	1
+	Val4:	0
 [AFFECT 0]
 	Location:	Reaction
 	Modifier:	1
 SourceBook:	MM p66
 BREAK
-#XXX
+#85904
 Keywords:	metabolic arrestor
-Name:	a metabolic arrestor
+Name:	a metabolic arrestor - cultured
 RoomDesc:$
 An uninstalled metabolic arrestor is lying here.~
 LookDesc:$
@@ -129,20 +176,21 @@ Material:	organic
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	20000
-	AvailTN:	6
-	AvailDay:	8.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	5
-	Val4:	60
+	Val2:	1
+	Val4:	0
 SourceBook:	MM p66-67
 BREAK
-#XXX
+#85905
 Keywords:	muscle augmentation i
-Name:	muscle augmentation I
+Name:	muscle augmentation I - cultured
 RoomDesc:$
 Some uninstalled muscle augmentations are lying here.~
 LookDesc:$
@@ -157,24 +205,25 @@ Material:	organic
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	20000
-	AvailTN:	6
-	AvailDay:	6.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val4:	40
+	Val2:	1
+	Val4:	0
 [AFFECT 0]
 	Location:	Strength
 	Modifier:	1
 SourceBook:	MM p67
 BREAK
-#XXX
+#85906
 Keywords:	muscle augmentation ii
-Name:	muscle augmentation II
+Name:	muscle augmentation II - cultured
 RoomDesc:$
 Some uninstalled muscle augmentations are lying here.~
 LookDesc:$
@@ -189,24 +238,25 @@ Material:	organic
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	40000
-	AvailTN:	6
-	AvailDay:	6.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	6
 	Val1:	2
-	Val4:	80
+	Val2:	1
+	Val4:	0
 [AFFECT 0]
 	Location:	Strength
 	Modifier:	2
 SourceBook:	MM p67
 BREAK
-#XXX
+#85907
 Keywords:	muscle augmentation iii
-Name:	muscle augmentation III
+Name:	muscle augmentation III - cultured
 RoomDesc:$
 Some uninstalled muscle augmentations are lying here.~
 LookDesc:$
@@ -221,24 +271,25 @@ Material:	organic
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	60000
-	AvailTN:	6
-	AvailDay:	6.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	6
 	Val1:	3
-	Val4:	120
+	Val2:	1
+	Val4:	0
 [AFFECT 0]
 	Location:	Strength
 	Modifier:	3
 SourceBook:	MM p67
 BREAK
-#XXX
+#85908
 Keywords:	muscle augmentation iv
-Name:	muscle augmentation IV
+Name:	muscle augmentation IV - cultured
 RoomDesc:$
 Some uninstalled muscle augmentations are lying here.~
 LookDesc:$
@@ -253,24 +304,25 @@ Material:	organic
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	80000
-	AvailTN:	6
-	AvailDay:	6.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	6
 	Val1:	4
-	Val4:	160
+	Val2:	1
+	Val4:	0
 [AFFECT 1]
 	Location:	Strength
 	Modifier:	4
 SourceBook:	MM p67
 BREAK
-#XXX
+#85909
 Keywords:	muscle toner i
-Name:	muscle toner I
+Name:	muscle toner I - cultured
 RoomDesc:$
 Some uninstalled muscle toners are lying here.~
 LookDesc:$
@@ -281,28 +333,29 @@ Type:	Bioware
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
-Material:	paper
+Material:	organic
 [POINTS]
 	Weight:	2.00
 	Barrier:	1
-	Cost:	25000
-	AvailTN:	6
-	AvailDay:	6.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	7
 	Val1:	1
-	Val4:	40
+	Val2:	1
+	Val4:	0
 [AFFECT 0]
 	Location:	Quickness
 	Modifier:	1
 SourceBook:	MM p67
 BREAK
-#XXX
+#85910
 Keywords:	muscle toner ii
-Name:	muscle toner II
+Name:	muscle toner II - cultured
 RoomDesc:$
 Some uninstalled muscle toners are lying here.~
 LookDesc:$
@@ -313,28 +366,29 @@ Type:	Bioware
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
-Material:	paper
+Material:	organic
 [POINTS]
 	Weight:	0.00
 	Barrier:	1
-	Cost:	50000
-	AvailTN:	6
-	AvailDay:	6.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	7
 	Val1:	2
-	Val4:	80
+	Val2:	1
+	Val4:	0
 [AFFECT 0]
 	Location:	Quickness
 	Modifier:	2
 SourceBook:	MM p67
 BREAK
-#XXX
+#85911
 Keywords:	muscle toner iii
-Name:	muscle toner III
+Name:	muscle toner III - cultured
 RoomDesc:$
 Some uninstalled muscle toners are lying here.~
 LookDesc:$
@@ -345,28 +399,29 @@ Type:	Bioware
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
-Material:	paper
+Material:	organic
 [POINTS]
 	Weight:	0.00
 	Barrier:	1
-	Cost:	75000
-	AvailTN:	6
-	AvailDay:	6.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	7
 	Val1:	3
-	Val4:	120
+	Val2:	1
+	Val4:	0
 [AFFECT 0]
 	Location:	Quickness
 	Modifier:	3
 SourceBook:	MM p67
 BREAK
-#XXX
+#85912
 Keywords:	muscle toner iv
-Name:	muscle toner IV
+Name:	muscle toner IV - cultured
 RoomDesc:$
 Some uninstalled muscle toners are lying here.~
 LookDesc:$
@@ -377,28 +432,29 @@ Type:	Bioware
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
-Material:	paper
+Material:	organic
 [POINTS]
 	Weight:	0.00
 	Barrier:	1
-	Cost:	100000
-	AvailTN:	6
-	AvailDay:	6.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	4
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	7
 	Val1:	4
-	Val4:	160
+	Val2:	1
+	Val4:	0
 [AFFECT 0]
 	Location:	Quickness
 	Modifier:	4
 SourceBook:	MM p67
 BREAK
-#XXX
+#85913
 Keywords:	orthoskin
-Name:	an orthoskin I
+Name:	an orthoskin I - cultured
 RoomDesc:$
 Some uninstalled orthoskin material is lying here.~
 LookDesc:$
@@ -420,24 +476,25 @@ Material:	organic
 [POINTS]
 	Weight:	5.00
 	Barrier:	1
-	Cost:	25000
-	AvailTN:	8
-	AvailDay:	8.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	10
 	Val1:	1
-	Val4:	50
+	Val2:	1
+	Val4:	0
 [AFFECT 0]
 	Location:	Impact
 	Modifier:	1
 SourceBook:	MM p68
 BREAK
-#XXX
+#85914
 Keywords:	orthoskin
-Name:	an orthoskin II
+Name:	an orthoskin II - cultured
 RoomDesc:$
 Some uninstalled orthoskin material is lying here.~
 LookDesc:$
@@ -459,16 +516,17 @@ Material:	organic
 [POINTS]
 	Weight:	5.00
 	Barrier:	1
-	Cost:	60000
-	AvailTN:	8
-	AvailDay:	8.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	10
 	Val1:	2
-	Val4:	100
+	Val2:	1
+	Val4:	0
 [AFFECT 0]
 	Location:	Ballistic
 	Modifier:	1
@@ -477,9 +535,9 @@ Material:	organic
 	Modifier:	1
 SourceBook:	MM p68
 BREAK
-#XXX
+#85915
 Keywords:	orthoskin
-Name:	an orthoskin III
+Name:	an orthoskin III - cultured
 RoomDesc:$
 Some uninstalled orthoskin material is lying here.~
 LookDesc:$
@@ -501,16 +559,17 @@ Material:	organic
 [POINTS]
 	Weight:	5.00
 	Barrier:	1
-	Cost:	100000
-	AvailTN:	8
-	AvailDay:	8.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	5
 	LegalCode:	13
 	LegalPermit:	1
 [VALUES]
 	Val0:	10
 	Val1:	3
-	Val4:	150
+	Val2:	1
+	Val4:	0
 [AFFECT 0]
 	Location:	Ballistic
 	Modifier:	1
@@ -519,10 +578,9 @@ Material:	organic
 	Modifier:	2
 SourceBook:	MM p68
 BREAK
-BREAK
-#400
+#85916
 Keywords:	platelet factory
-Name:	a platelet factory
+Name:	a platelet factory - cultured
 RoomDesc:$
 An uninstalled application of platelet factories is lying here.~
 LookDesc:$
@@ -539,20 +597,21 @@ Material:	organic
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	30000
-	AvailTN:	5
-	AvailDay:	8.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	12
-	Val4:	40
+	Val2:	1
+	Val4:	0
 SourceBook:	MM p68-69
 BREAK
-#409
+#85917
 Keywords:	suprathyroid gland
-Name:	a suprathyroid gland
+Name:	a suprathyroid gland - cultured
 RoomDesc:$
 An uninstalled suprathyroid gland is lying here.~
 LookDesc:$
@@ -575,16 +634,17 @@ Material:	organic
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	50000
-	AvailTN:	8
-	AvailDay:	12.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	6
 	LegalCode:	14
 	LegalPermit:	1
 [VALUES]
 	Val0:	13
 	Val1:	1
-	Val4:	140
+	Val2:	1
+	Val4:	0
 [AFFECT 0]
 	Location:	Quickness
 	Modifier:	1
@@ -599,9 +659,9 @@ Material:	organic
 	Modifier:	1
 SourceBook:	MM p69
 BREAK
-#XXX
+#85918
 Keywords:	symbiotes i
-Name:	symbiotes I
+Name:	symbiotes I - cultured
 RoomDesc:$
 An uninstalled application of symbiotes is lying here.~
 LookDesc:$
@@ -620,21 +680,22 @@ Material:	organic
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	15000
-	AvailTN:	5
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	14
 	Val1:	1
-	Val4:	40
+	Val2:	1
+	Val4:	0
 SourceBook:	MM p69-70
 BREAK
-#XXX
+#85919
 Keywords:	symbiotes ii
-Name:	symbiotes II
+Name:	symbiotes II - cultured
 RoomDesc:$
 An uninstalled application of symbiotes is lying here.~
 LookDesc:$
@@ -653,21 +714,22 @@ Material:	organic
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	35000
-	AvailTN:	5
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	14
 	Val1:	2
-	Val4:	70
+	Val2:	1
+	Val4:	0
 SourceBook:	MM p69-70
 BREAK
-#XXX
+#85920
 Keywords:	symbiotes iii
-Name:	symbiotes III
+Name:	symbiotes III - cultured
 RoomDesc:$
 An uninstalled application of symbiotes is lying here.~
 LookDesc:$
@@ -686,21 +748,22 @@ Material:	organic
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	60000
-	AvailTN:	5
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	14
 	Val1:	3
-	Val4:	100
+	Val2:	1
+	Val4:	0
 SourceBook:	MM p69-70
 BREAK
-#XXX
+#85921
 Keywords:	synthacardium i
-Name:	synthacardium I
+Name:	synthacardium I - cultured
 RoomDesc:$
 An uninstalled synthacardium is lying here.~
 LookDesc:$
@@ -711,25 +774,26 @@ Type:	Bioware
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
-Material:	paper
+Material:	organic
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	6000
-	AvailTN:	4
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	15
 	Val1:	1
-	Val4:	20
+	Val2:	1
+	Val4:	0
 SourceBook:	MM p70
 BREAK
-#XXX
+#85922
 Keywords:	synthacardium ii
-Name:	synthacardium II
+Name:	synthacardium II - cultured
 RoomDesc:$
 An uninstalled synthacardium is lying here.~
 LookDesc:$
@@ -740,25 +804,26 @@ Type:	Bioware
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
-Material:	paper
+Material:	organic
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	15000
-	AvailTN:	4
-	AvailDay:	10.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	15
 	Val1:	2
-	Val4:	30
+	Val2:	1
+	Val4:	0
 SourceBook:	MM p70
 BREAK
-#XXX
+#85923
 Keywords:	tailored pheromones i
-Name:	a tailored pheromones I
+Name:	a tailored pheromones I - cultured
 RoomDesc:$
 An uninstalled tailored pheromones package is lying here.~
 LookDesc:$
@@ -784,21 +849,22 @@ Material:	organic
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	20000
-	AvailTN:	12
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	16
 	Val1:	1
-	Val4:	40
+	Val2:	1
+	Val4:	0
 SourceBook:	MM p70-71
 BREAK
-#XXX
+#85924
 Keywords:	tailored pheromones ii
-Name:	a tailored pheromones II
+Name:	a tailored pheromones II - cultured
 RoomDesc:$
 An uninstalled tailored pheromones package is lying here.~
 LookDesc:$
@@ -824,21 +890,22 @@ Material:	organic
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
-	Cost:	45000
-	AvailTN:	12
-	AvailDay:	14.00
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	16
 	Val1:	2
-	Val4:	60
+	Val2:	1
+	Val4:	0
 SourceBook:	MM p70-71
 BREAK
-#60603
+#85925
 Keywords:	toxin extractor
-Name:	a toxin extractor
+Name:	a toxin extractor - cultured
 RoomDesc:$
 An uninstalled toxin extractor package is lying here.~
 LookDesc:$
@@ -854,20 +921,499 @@ Type:	Bioware
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
-Material:	paper
+Material:	organic
 [POINTS]
 	Weight:	1.00
 	Barrier:	1
 	Cost:	0
-	AvailTN:	4
-	AvailDay:	4.00
+	AvailTN:	0
+	AvailDay:	0
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	17
+	Val2:	1
 SourceBook:	MM p71
 BREAK
-
-
+#85926
+Keywords:	cerebral booster i
+Name:	a cerebral booster I - cultured
+RoomDesc:$
+An uninstalled cerebral booster package is lying here.~
+LookDesc:$
+Enhancing the brain via a Cerebral Booster requires that nerve tissue be added, 
+along with convolutions and gyri (ridges and furrows), into the frontal lobes 
+of the cerebrum. The extra cells and increased surface area improve brain 
+functions.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	19
+	Val1:	1
+	Val2:	1
+	Val4:	0
+[AFFECT 0]
+	Location:	Intelligence
+	Modifier:	1
+SourceBook:	MM p72
+BREAK
+#85927
+Keywords:	cerebral booster ii
+Name:	a cerebral booster II - cultured
+RoomDesc:$
+An uninstalled cerebral booster package is lying here.~
+LookDesc:$
+Enhancing the brain via a Cerebral Booster requires that nerve tissue be added, 
+along with convolutions and gyri (ridges and furrows), into the frontal lobes 
+of the cerebrum. The extra cells and increased surface area improve brain 
+functions.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	19
+	Val1:	2
+	Val2:	1
+	Val4:	0
+[AFFECT 0]
+	Location:	Intelligence
+	Modifier:	2
+[AFFECT 1]
+	Location:	Task Pool (Int)
+	Modifier:	1
+SourceBook:	MM p72
+BREAK
+#85928
+Keywords:	damage compensator i
+Name:	a damage compensator I - cultured
+RoomDesc:$
+An uninstalled damage compensator package is lying here.~
+LookDesc:$
+Compensators are implanted ribbons of transmissive nerve fiber that bypass the 
+safety inhibitors. They allow their hosts to act while suffering from physical 
+and mental trauma. Compensators do not block the actual damage, only the 
+neurological and physiological effects of shock and fatigue on the body.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	9
+	LegalCode:	13
+	LegalPermit:	1
+[VALUES]
+	Val0:	20
+	Val1:	1
+	Val2:	1
+	Val4:	0
+SourceBook:	MM p72
+BREAK
+#85929
+Keywords:	damage compensator ii
+Name:	a damage compensator II - cultured
+RoomDesc:$
+An uninstalled damage compensator package is lying here.~
+LookDesc:$
+Compensators are implanted ribbons of transmissive nerve fiber that bypass the 
+safety inhibitors. They allow their hosts to act while suffering from physical 
+and mental trauma. Compensators do not block the actual damage, only the 
+neurological and physiological effects of shock and fatigue on the body.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	9
+	LegalCode:	13
+	LegalPermit:	1
+[VALUES]
+	Val0:	20
+	Val1:	2
+	Val2:	1
+	Val4:	0
+SourceBook:	MM p72
+BREAK
+#85930
+Keywords:	damage compensator iii
+Name:	a damage compensator III - cultured
+RoomDesc:$
+An uninstalled damage compensator package is lying here.~
+LookDesc:$
+Compensators are implanted ribbons of transmissive nerve fiber that bypass the 
+safety inhibitors. They allow their hosts to act while suffering from physical 
+and mental trauma. Compensators do not block the actual damage, only the 
+neurological and physiological effects of shock and fatigue on the body.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	9
+	LegalCode:	13
+	LegalPermit:	1
+[VALUES]
+	Val0:	20
+	Val1:	3
+	Val2:	1
+	Val4:	0
+SourceBook:	MM p72
+BREAK
+#85931
+Keywords:	damage compensator iv
+Name:	a damage compensator IV - cultured
+RoomDesc:$
+An uninstalled damage compensator package is lying here.~
+LookDesc:$
+Compensators are implanted ribbons of transmissive nerve fiber that bypass the 
+safety inhibitors. They allow their hosts to act while suffering from physical 
+and mental trauma. Compensators do not block the actual damage, only the 
+neurological and physiological effects of shock and fatigue on the body.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	9
+	LegalCode:	13
+	LegalPermit:	1
+[VALUES]
+	Val0:	20
+	Val1:	4
+	Val2:	1
+	Val4:	0
+SourceBook:	MM p72
+BREAK
+#85932
+Keywords:	damage compensator v
+Name:	a damage compensator V - cultured
+RoomDesc:$
+An uninstalled damage compensator package is lying here.~
+LookDesc:$
+Compensators are implanted ribbons of transmissive nerve fiber that bypass the 
+safety inhibitors. They allow their hosts to act while suffering from physical 
+and mental trauma. Compensators do not block the actual damage, only the 
+neurological and physiological effects of shock and fatigue on the body.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	9
+	LegalCode:	13
+	LegalPermit:	1
+[VALUES]
+	Val0:	20
+	Val1:	5
+	Val2:	1
+	Val4:	0
+SourceBook:	MM p72
+BREAK
+#85933
+Keywords:	damage compensator vi
+Name:	a damage compensator VI - cultured
+RoomDesc:$
+An uninstalled damage compensator package is lying here.~
+LookDesc:$
+Compensators are implanted ribbons of transmissive nerve fiber that bypass the 
+safety inhibitors. They allow their hosts to act while suffering from physical 
+and mental trauma. Compensators do not block the actual damage, only the 
+neurological and physiological effects of shock and fatigue on the body.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	9
+	LegalCode:	13
+	LegalPermit:	1
+[VALUES]
+	Val0:	20
+	Val1:	6
+	Val2:	1
+	Val4:	0
+SourceBook:	MM p72
+BREAK
+#85934
+Keywords:	damage compensator vii
+Name:	a damage compensator VII - cultured
+RoomDesc:$
+An uninstalled damage compensator package is lying here.~
+LookDesc:$
+Compensators are implanted ribbons of transmissive nerve fiber that bypass the 
+safety inhibitors. They allow their hosts to act while suffering from physical 
+and mental trauma. Compensators do not block the actual damage, only the 
+neurological and physiological effects of shock and fatigue on the body.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	9
+	LegalCode:	13
+	LegalPermit:	1
+[VALUES]
+	Val0:	20
+	Val1:	7
+	Val2:	1
+	Val4:	0
+SourceBook:	MM p72
+BREAK
+#85935
+Keywords:	damage compensator viii
+Name:	a damage compensator VIII - cultured
+RoomDesc:$
+An uninstalled damage compensator package is lying here.~
+LookDesc:$
+Compensators are implanted ribbons of transmissive nerve fiber that bypass the 
+safety inhibitors. They allow their hosts to act while suffering from physical 
+and mental trauma. Compensators do not block the actual damage, only the 
+neurological and physiological effects of shock and fatigue on the body.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	9
+	LegalCode:	13
+	LegalPermit:	1
+[VALUES]
+	Val0:	20
+	Val1:	8
+	Val2:	1
+	Val4:	0
+SourceBook:	MM p72
+BREAK
+#85936
+Keywords:	damage compensator ix
+Name:	a damage compensator IX - cultured
+RoomDesc:$
+An uninstalled damage compensator package is lying here.~
+LookDesc:$
+Compensators are implanted ribbons of transmissive nerve fiber that bypass the 
+safety inhibitors. They allow their hosts to act while suffering from physical 
+and mental trauma. Compensators do not block the actual damage, only the 
+neurological and physiological effects of shock and fatigue on the body.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	9
+	LegalCode:	13
+	LegalPermit:	1
+[VALUES]
+	Val0:	20
+	Val1:	9
+	Val2:	1
+	Val4:	0
+SourceBook:	MM p72
+BREAK
+#85937
+Keywords:	pain editor
+Name:	a pain editor - cultured
+RoomDesc:$
+An uninstalled pain editor package is lying here.~
+LookDesc:$
+A Pain Editor is a cluster of specialized nervous tissue designed to filter 
+sensory stimuli. Activation and deactivation of the editor is a learned reflex. 
+When the editor is voluntarily triggered, the individual is no longer subject 
+to pain sensations, including feedback pain. With the Pain Editor active, 
+neither mental damage nor fatigue can render the character unconscious.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	6
+	LegalCode:	13
+	LegalPermit:	1
+[VALUES]
+	Val0:	21
+	Val2:	1
+	Val4:	0
+SourceBook:	MM p73-74
+BREAK
+#85938
+Keywords:	synaptic accelerator i
+Name:	a synaptic accelerator I - cultured
+RoomDesc:$
+An uninstalled synaptic accelerator package is lying here.~
+LookDesc:$
+With the implantation of a Synaptic Accelerator, the neural cells, which make 
+up the spinal cord and other main nerve trunks, are encouraged to replicate and 
+lengthen. This provides a wider "datapath" for the transmission of impulses and 
+decreases the amount of time required for the signal to traverse the distance. 
+Thus, more data can be sent from and received by the brain in a shorter period 
+of time.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	5
+	LegalCode:	14
+	LegalPermit:	1
+[VALUES]
+	Val0:	23
+	Val1:	1
+	Val2:	1
+	Val4:	0
+[AFFECT 0]
+	Location:	Init Dice
+	Modifier:	1
+SourceBook:	MM p74-75
+BREAK
+#85939
+Keywords:	synaptic accelerator ii
+Name:	a synaptic accelerator II - cultured
+RoomDesc:$
+An uninstalled synaptic accelerator package is lying here.~
+LookDesc:$
+With the implantation of a Synaptic Accelerator, the neural cells, which make 
+up the spinal cord and other main nerve trunks, are encouraged to replicate and 
+lengthen. This provides a wider "datapath" for the transmission of impulses and 
+decreases the amount of time required for the signal to traverse the distance. 
+Thus, more data can be sent from and received by the brain in a shorter period 
+of time.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	5
+	LegalCode:	14
+	LegalPermit:	1
+[VALUES]
+	Val0:	23
+	Val1:	2
+	Val2:	1
+	Val4:	0
+[AFFECT 0]
+	Location:	Init Dice
+	Modifier:	2
+SourceBook:	MM p74-75
+BREAK
+#85940
+Keywords:	trauma damper
+Name:	a trauma damper - cultured
+RoomDesc:$
+An uninstalled trauma damper package is lying here.~
+LookDesc:$
+A Trauma Damper is a clump of specialized receptors, implanted at the base of the thalamus, near the midbrain. Upon receiving sensory information indicating fatigue, pain or physical trauma, the damper triggers the release of concentrated endorphins and enkephalins — naturally produced opiates and painkillers. These substances do not aid in repairing the trauma, but they may keep the user alive and conscious long enough for him to receive medical help.~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	6
+	LegalCode:	13
+	LegalPermit:	1
+[VALUES]
+	Val0:	25
+	Val2:	1
+	Val4:	0
+SourceBook:	MM p75-76
+BREAK
 END
