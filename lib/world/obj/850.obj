@@ -688,7 +688,7 @@ Name:	memory (75 Mp)
 RoomDesc:$
 An uninstalled headware memory module is lying here.~
 LookDesc:$
-Memory is data storage space inside the head—specifically, the amount of space 
+Memory is data storage space inside the head - specifically, the amount of space 
 available in megapulses (Mp) to record input from a camera, datajack, ear 
 recorder, headphone, headradio, opticam, simrig and so on. Raw data, skill 
 software and certain programs can be stored in headware memory. Stored 
@@ -720,7 +720,7 @@ Name:	memory (150 Mp)
 RoomDesc:$
 An uninstalled headware memory module is lying here.~
 LookDesc:$
-Memory is data storage space inside the head—specifically, the amount of space 
+Memory is data storage space inside the head - specifically, the amount of space 
 available in megapulses (Mp) to record input from a camera, datajack, ear 
 recorder, headphone, headradio, opticam, simrig and so on. Raw data, skill 
 software and certain programs can be stored in headware memory. Stored 
@@ -752,7 +752,7 @@ Name:	memory (300 Mp)
 RoomDesc:$
 An uninstalled headware memory module is lying here.~
 LookDesc:$
-Memory is data storage space inside the head—specifically, the amount of space 
+Memory is data storage space inside the head - specifically, the amount of space 
 available in megapulses (Mp) to record input from a camera, datajack, ear 
 recorder, headphone, headradio, opticam, simrig and so on. Raw data, skill 
 software and certain programs can be stored in headware memory. Stored 
@@ -1162,7 +1162,7 @@ RoomDesc:$
 An uninstalled vehicle control rig is lying here.~
 LookDesc:$
 This device consists of neuro-enhancers and muscular signal transference (MST) 
-interfaces. Each level adds +2 to the user’s Reaction and +1D6 Initiative dice 
+interfaces. Each level adds +2 to the user's Reaction and +1D6 Initiative dice 
 while rigging. Vehicles must be equipped with vehicle control gear in order for 
 a rigging character to use them. VCRs also allow users to default to Reaction 
 for any Vehicle Skill at a +2 modifier, as opposed to the usual +4.~
@@ -1193,7 +1193,7 @@ RoomDesc:$
 An uninstalled vehicle control rig is lying here.~
 LookDesc:$
 This device consists of neuro-enhancers and muscular signal transference (MST) 
-interfaces. Each level adds +2 to the user’s Reaction and +1D6 Initiative dice 
+interfaces. Each level adds +2 to the user's Reaction and +1D6 Initiative dice 
 while rigging. Vehicles must be equipped with vehicle control gear in order for 
 a rigging character to use them. VCRs also allow users to default to Reaction 
 for any Vehicle Skill at a +2 modifier, as opposed to the usual +4.~
@@ -1224,7 +1224,7 @@ RoomDesc:$
 An uninstalled vehicle control rig is lying here.~
 LookDesc:$
 This device consists of neuro-enhancers and muscular signal transference (MST) 
-interfaces. Each level adds +2 to the user’s Reaction and +1D6 Initiative dice 
+interfaces. Each level adds +2 to the user's Reaction and +1D6 Initiative dice 
 while rigging. Vehicles must be equipped with vehicle control gear in order for 
 a rigging character to use them. VCRs also allow users to default to Reaction 
 for any Vehicle Skill at a +2 modifier, as opposed to the usual +4.~
@@ -1427,7 +1427,7 @@ RoomDesc:$
 An uninstalled display link is lying here.~
 LookDesc:$
 This enhancement allows a user to display text-only data from headware memory 
-or a datajack into a “window” in his field of vision, letting him read what is 
+or a datajack into a "window" in his field of vision, letting him read what is 
 displayed in his head.~
 Type:	Cyberware
 WearFlags:	1
@@ -1695,7 +1695,7 @@ Name:	a retinal clock
 RoomDesc:$
 An uninstalled retinal clock module is lying here.~
 LookDesc:$
-This device displays an accurate time/date stamp in the user’s field of vision. 
+This device displays an accurate time/date stamp in the user's field of vision. 
 It can be modified for region and season, and includes stopwatch-style and 
 countdown timers.~
 Type:	Cyberware
@@ -2017,9 +2017,9 @@ Name:	some bone lacing (plastic)
 RoomDesc:$
 Some uninstalled plastic bone lacing is lying here.~
 LookDesc:$
-Bone lacing is a process in which the cellular structure of the subject’s bones 
+Bone lacing is a process in which the cellular structure of the subject's bones 
 is augmented with lattice chains of reinforcing plastics and metals to improve 
-the bone’s integrity and tensile strength.
+the bone's integrity and tensile strength.
 ^n
 Plastic lacing adds +1 to the Body attribute. Unarmed blows by persons with 
 plastic bone lacing do (STR + 2)M damage.~
@@ -2051,9 +2051,9 @@ Name:	some bone lacing (kevlar)
 RoomDesc:$
 Some uninstalled kevlar bone lacing is lying here.~
 LookDesc:$
-Bone lacing is a process in which the cellular structure of the subject’s bones 
+Bone lacing is a process in which the cellular structure of the subject's bones 
 is augmented with lattice chains of reinforcing plastics and metals to improve 
-the bone’s integrity and tensile strength.
+the bone's integrity and tensile strength.
 ^n
 Kevlar lacing adds +1 to the Body attribute, and +1 Ballistic Armor. Armor 
 gained in this fashion is cumulative with worn armor.~
@@ -2089,9 +2089,9 @@ Name:	some bone lacing (aluminum)
 RoomDesc:$
 Some uninstalled aluminum bone lacing is lying here.~
 LookDesc:$
-Bone lacing is a process in which the cellular structure of the subject’s bones 
+Bone lacing is a process in which the cellular structure of the subject's bones 
 is augmented with lattice chains of reinforcing plastics and metals to improve 
-the bone’s integrity and tensile strength.
+the bone's integrity and tensile strength.
 ^n
 Aluminum lacing adds +1 to the Body attribute, and +1 Impact Armor. Unarmed 
 blows by persons with aluminum bone lacing do (STR + 3)M damage. Armor gained 
@@ -2128,9 +2128,9 @@ Name:	some bone lacing (ceramic)
 RoomDesc:$
 Some uninstalled ceramic bone lacing is lying here.~
 LookDesc:$
-Bone lacing is a process in which the cellular structure of the subject’s bones 
+Bone lacing is a process in which the cellular structure of the subject's bones 
 is augmented with lattice chains of reinforcing plastics and metals to improve 
-the bone’s integrity and tensile strength.
+the bone's integrity and tensile strength.
 ^n
 Ceramic lacing adds +1 to the Body attribute, and +2 Impact Armor. Unarmed 
 blows by persons with ceramic bone lacing do (STR + 3)M damage. Armor gained in 
@@ -2167,9 +2167,9 @@ Name:	some bone lacing (titanium)
 RoomDesc:$
 Some uninstalled titanium bone lacing is lying here.~
 LookDesc:$
-Bone lacing is a process in which the cellular structure of the subject’s bones 
+Bone lacing is a process in which the cellular structure of the subject's bones 
 is augmented with lattice chains of reinforcing plastics and metals to improve 
-the bone’s integrity and tensile strength.
+the bone's integrity and tensile strength.
 ^n
 Titanium lacing adds +2 to the Body attribute, and +1 to both Ballistic and 
 Impact Armor. Unarmed blows by persons with titanium bone lacing do (STR + 4)M 
@@ -2769,7 +2769,7 @@ An unfinished object is lying here.~
 LookDesc:$
 This small storage space replaces the last joint of a finger. It is ideal for 
 concealing data chips, and is also commonly used to conceal a monofilament whip 
-because the replacement joint can serve as the whip’s control weight.~
+because the replacement joint can serve as the whip's control weight.~
 Type:	Cyberware
 WearFlags:	1
 ExtraFlags:	0
@@ -2876,8 +2876,8 @@ Name:	a set of hand razors
 RoomDesc:$
 An uninstalled set of hand razors is lying here.~
 LookDesc:$
-These 2.5-centimeter, chromed steel or carbon fiber blades replace the user’s 
-fingernails and are anchored to the user’s bones. Retractable versions slide 
+These 2.5-centimeter, chromed steel or carbon fiber blades replace the user's 
+fingernails and are anchored to the user's bones. Retractable versions slide 
 out of sight under synthetic nail replacements. Hand razors do (STR)L damage. 
 An improved version with compressed carbide blades does more damage, but is 
 Cost:	0
@@ -2906,8 +2906,8 @@ Name:	a set of hand razors (improved)
 RoomDesc:$
 An uninstalled set of hand razors is lying here.~
 LookDesc:$
-These 2.5-centimeter, chromed steel or carbon fiber blades replace the user’s 
-fingernails and are anchored to the user’s bones. Retractable versions slide 
+These 2.5-centimeter, chromed steel or carbon fiber blades replace the user's 
+fingernails and are anchored to the user's bones. Retractable versions slide 
 out of sight under synthetic nail replacements. Hand razors do (STR)L damage. 
 An improved version with compressed carbide blades does more damage, but is 
 Cost:	0
@@ -2937,8 +2937,8 @@ Name:	a set of hand razors (retractable)
 RoomDesc:$
 An uninstalled set of hand razors is lying here.~
 LookDesc:$
-These 2.5-centimeter, chromed steel or carbon fiber blades replace the user’s 
-fingernails and are anchored to the user’s bones. Retractable versions slide 
+These 2.5-centimeter, chromed steel or carbon fiber blades replace the user's 
+fingernails and are anchored to the user's bones. Retractable versions slide 
 out of sight under synthetic nail replacements. Hand razors do (STR)L damage. 
 An improved version with compressed carbide blades does more damage, but is 
 Cost:	0
@@ -2968,8 +2968,8 @@ Name:	a set of hand razors (improved retractable)
 RoomDesc:$
 An uninstalled set of hand razors is lying here.~
 LookDesc:$
-These 2.5-centimeter, chromed steel or carbon fiber blades replace the user’s 
-fingernails and are anchored to the user’s bones. Retractable versions slide 
+These 2.5-centimeter, chromed steel or carbon fiber blades replace the user's 
+fingernails and are anchored to the user's bones. Retractable versions slide 
 out of sight under synthetic nail replacements. Hand razors do (STR)L damage. 
 An improved version with compressed carbide blades does more damage, but is 
 Cost:	0
@@ -2999,7 +2999,7 @@ Name:	a set of hand spurs
 RoomDesc:$
 An uninstalled set of hand spurs is lying here.~
 LookDesc:$
-This narrow blade is attached to the user’s bone, similar to a razor. 
+This narrow blade is attached to the user's bone, similar to a razor. 
 Retractable versions must be placed where they can be withdrawn along a long 
 bone. Alternatively, a set of three smaller blades may be anchored to the back 
 of the hand. A spur does (STR)M damage.~
@@ -3028,7 +3028,7 @@ Name:	a set of hand spurs (retractable)
 RoomDesc:$
 An uninstalled set of hand spurs is lying here.~
 LookDesc:$
-This narrow blade is attached to the user’s bone, similar to a razor. 
+This narrow blade is attached to the user's bone, similar to a razor. 
 Retractable versions must be placed where they can be withdrawn along a long 
 bone. Alternatively, a set of three smaller blades may be anchored to the back 
 of the hand. A spur does (STR)M damage.~
@@ -3336,8 +3336,8 @@ Name:	a muscle replacement I
 RoomDesc:$
 Some vat-grown, synthetic muscles lay here.~
 LookDesc:$
-Implanted, vat-grown synthetic muscles replace the user’s own. Calcium treatments
-and skeletal reinforcement allow an overall increase in the user’s strength. Add
+Implanted, vat-grown synthetic muscles replace the user's own. Calcium treatments
+and skeletal reinforcement allow an overall increase in the user's strength. Add
 the rating of the muscle replacement to Strength and Quickness; this change does
 not affect Reaction. The maximum increase is 4.~
 Type:	Cyberware
@@ -3372,8 +3372,8 @@ Name:	a muscle replacement II
 RoomDesc:$
 Some vat-grown, synthetic muscles lay here.~
 LookDesc:$
-Implanted, vat-grown synthetic muscles replace the user’s own. Calcium treatments
-and skeletal reinforcement allow an overall increase in the user’s strength. Add
+Implanted, vat-grown synthetic muscles replace the user's own. Calcium treatments
+and skeletal reinforcement allow an overall increase in the user's strength. Add
 the rating of the muscle replacement to Strength and Quickness; this change does
 not affect Reaction. The maximum increase is 4.~
 Type:	Cyberware
@@ -3408,8 +3408,8 @@ Name:	a muscle replacement III
 RoomDesc:$
 Some vat-grown, synthetic muscles lay here.~
 LookDesc:$
-Implanted, vat-grown synthetic muscles replace the user’s own. Calcium treatments
-and skeletal reinforcement allow an overall increase in the user’s strength. Add
+Implanted, vat-grown synthetic muscles replace the user's own. Calcium treatments
+and skeletal reinforcement allow an overall increase in the user's strength. Add
 the rating of the muscle replacement to Strength and Quickness; this change does
 not affect Reaction. The maximum increase is 4.~
 Type:	Cyberware
@@ -3444,8 +3444,8 @@ Name:	a muscle replacement IV
 RoomDesc:$
 Some vat-grown, synthetic muscles lay here.~
 LookDesc:$
-Implanted, vat-grown synthetic muscles replace the user’s own. Calcium treatments
-and skeletal reinforcement allow an overall increase in the user’s strength. Add
+Implanted, vat-grown synthetic muscles replace the user's own. Calcium treatments
+and skeletal reinforcement allow an overall increase in the user's strength. Add
 the rating of the muscle replacement to Strength and Quickness; this change does
 not affect Reaction. The maximum increase is 4.~
 Type:	Cyberware
@@ -3482,7 +3482,7 @@ An uninstalled reaction enhancer is lying here.~
 LookDesc:$
 By replacing part of the spinal column with superconducting material, characters
 can increase their reaction times. Characters may take up to six reaction
-enhancements; each increases the user’s Reaction Attribute by 1. The reaction
+enhancements; each increases the user's Reaction Attribute by 1. The reaction
 enhancer is compatible with other reaction/Initiative boosters.~
 Type:	Cyberware
 WearFlags:	1
@@ -3539,7 +3539,7 @@ Name:	a skillwires I (3 Mp)
 RoomDesc:$
 An uninstalled skillwires package is lying here.~
 LookDesc:$
-These neuro-muscular controllers allow the recipient’s neurosystem to interface 
+These neuro-muscular controllers allow the recipient's neurosystem to interface 
 with specially designed and coded optical chips known as activesofts and to 
 read those chips as though they were naturally recorded memories or skills. 
 When purchased, choose a maximum total Mp and maximum skillsoft rating for the 
@@ -3573,7 +3573,7 @@ Name:	a skillwires II (12 Mp)
 RoomDesc:$
 An uninstalled skillwires package is lying here.~
 LookDesc:$
-These neuro-muscular controllers allow the recipient’s neurosystem to interface 
+These neuro-muscular controllers allow the recipient's neurosystem to interface 
 with specially designed and coded optical chips known as activesofts and to 
 read those chips as though they were naturally recorded memories or skills. 
 When purchased, choose a maximum total Mp and maximum skillsoft rating for the 
@@ -3607,7 +3607,7 @@ Name:	a skillwires III (27 Mp)
 RoomDesc:$
 An uninstalled skillwires package is lying here.~
 LookDesc:$
-These neuro-muscular controllers allow the recipient’s neurosystem to interface 
+These neuro-muscular controllers allow the recipient's neurosystem to interface 
 with specially designed and coded optical chips known as activesofts and to 
 read those chips as though they were naturally recorded memories or skills. 
 When purchased, choose a maximum total Mp and maximum skillsoft rating for the 
@@ -3641,7 +3641,7 @@ Name:	a skillwires IV (48 Mp)
 RoomDesc:$
 An uninstalled skillwires package is lying here.~
 LookDesc:$
-These neuro-muscular controllers allow the recipient’s neurosystem to interface 
+These neuro-muscular controllers allow the recipient's neurosystem to interface 
 with specially designed and coded optical chips known as activesofts and to 
 read those chips as though they were naturally recorded memories or skills. 
 When purchased, choose a maximum total Mp and maximum skillsoft rating for the 
@@ -3675,7 +3675,7 @@ Name:	a skillwires V (75 Mp)
 RoomDesc:$
 An uninstalled skillwires package is lying here.~
 LookDesc:$
-These neuro-muscular controllers allow the recipient’s neurosystem to interface 
+These neuro-muscular controllers allow the recipient's neurosystem to interface 
 with specially designed and coded optical chips known as activesofts and to 
 read those chips as though they were naturally recorded memories or skills. 
 When purchased, choose a maximum total Mp and maximum skillsoft rating for the 
@@ -3709,7 +3709,7 @@ Name:	a skillwires VI (108 Mp)
 RoomDesc:$
 An uninstalled skillwires package is lying here.~
 LookDesc:$
-These neuro-muscular controllers allow the recipient’s neurosystem to interface 
+These neuro-muscular controllers allow the recipient's neurosystem to interface 
 with specially designed and coded optical chips known as activesofts and to 
 read those chips as though they were naturally recorded memories or skills. 
 When purchased, choose a maximum total Mp and maximum skillsoft rating for the 
@@ -3743,7 +3743,7 @@ Name:	a skillwires VII (147 Mp)
 RoomDesc:$
 An uninstalled skillwires package is lying here.~
 LookDesc:$
-These neuro-muscular controllers allow the recipient’s neurosystem to interface 
+These neuro-muscular controllers allow the recipient's neurosystem to interface 
 with specially designed and coded optical chips known as activesofts and to 
 read those chips as though they were naturally recorded memories or skills. 
 When purchased, choose a maximum total Mp and maximum skillsoft rating for the 
@@ -3777,7 +3777,7 @@ Name:	a skillwires VIII (192 Mp)
 RoomDesc:$
 An uninstalled skillwires package is lying here.~
 LookDesc:$
-These neuro-muscular controllers allow the recipient’s neurosystem to interface 
+These neuro-muscular controllers allow the recipient's neurosystem to interface 
 with specially designed and coded optical chips known as activesofts and to 
 read those chips as though they were naturally recorded memories or skills. 
 When purchased, choose a maximum total Mp and maximum skillsoft rating for the 
@@ -3812,9 +3812,9 @@ RoomDesc:$
 An uninstalled smartlink system is here.~
 LookDesc:$
 A smartlink is the feedback loop circuitry necessary to take full advantage of 
-a smartgun. Targeting information appears on the user’s retina or cybereye as a 
-small dot or cross hairs that corresponds to the smartweapon’s current line of 
-fire. Typical systems use a subdermal induction pad in the user’s palm to link 
+a smartgun. Targeting information appears on the user's retina or cybereye as a 
+small dot or cross hairs that corresponds to the smartweapon's current line of 
+fire. Typical systems use a subdermal induction pad in the user's palm to link 
 with the smartgun.~
 Type:	Cyberware
 WearFlags:	0
@@ -3843,9 +3843,9 @@ RoomDesc:$
 An uninstalled smartlink-2 system is here.~
 LookDesc:$
 A smartlink is the feedback loop circuitry necessary to take full advantage of 
-a smartgun. Targeting information appears on the user’s retina or cybereye as a 
-small dot or cross hairs that corresponds to the smartweapon’s current line of 
-fire. Typical systems use a subdermal induction pad in the user’s palm to link 
+a smartgun. Targeting information appears on the user's retina or cybereye as a 
+small dot or cross hairs that corresponds to the smartweapon's current line of 
+fire. Typical systems use a subdermal induction pad in the user's palm to link 
 with the smartgun.~
 Type:	Cyberware
 WearFlags:	0
