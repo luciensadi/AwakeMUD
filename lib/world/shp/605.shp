@@ -386,66 +386,34 @@ Etiquette:	46
 		Type:	Always
 		Stock:	0
 	[SELL 25]
-		Vnum:	85026
-		Type:	Always
-		Stock:	0
-	[SELL 26]
-		Vnum:	85027
-		Type:	Always
-		Stock:	0
-	[SELL 27]
-		Vnum:	85028
-		Type:	Always
-		Stock:	0
-	[SELL 28]
-		Vnum:	85029
-		Type:	Always
-		Stock:	0
-	[SELL 29]
-		Vnum:	85030
-		Type:	Always
-		Stock:	0
-	[SELL 30]
-		Vnum:	85031
-		Type:	Always
-		Stock:	0
-	[SELL 31]
-		Vnum:	85032
-		Type:	Always
-		Stock:	0
-	[SELL 32]
-		Vnum:	85033
-		Type:	Always
-		Stock:	0
-	[SELL 33]
 		Vnum:	85034
 		Type:	Always
 		Stock:	0
-	[SELL 34]
+	[SELL 26]
 		Vnum:	85035
 		Type:	Always
 		Stock:	0
-	[SELL 35]
+	[SELL 27]
 		Vnum:	85036
 		Type:	Always
 		Stock:	0
-	[SELL 36]
+	[SELL 28]
 		Vnum:	85037
 		Type:	Always
 		Stock:	0
-	[SELL 37]
+	[SELL 29]
 		Vnum:	85038
 		Type:	Always
 		Stock:	0
-	[SELL 38]
+	[SELL 30]
 		Vnum:	85039
 		Type:	Always
 		Stock:	0
-	[SELL 39]
+	[SELL 31]
 		Vnum:	85040
 		Type:	Always
 		Stock:	0
-	[SELL 40]
+	[SELL 32]
 		Vnum:	85041
 		Type:	Always
 		Stock:	0
@@ -2606,66 +2574,34 @@ Etiquette:	46
 		Type:	Always
 		Stock:	0
 	[SELL 25]
-		Vnum:	85226
-		Type:	Always
-		Stock:	0
-	[SELL 26]
-		Vnum:	85227
-		Type:	Always
-		Stock:	0
-	[SELL 27]
-		Vnum:	85228
-		Type:	Always
-		Stock:	0
-	[SELL 28]
-		Vnum:	85229
-		Type:	Always
-		Stock:	0
-	[SELL 29]
-		Vnum:	85230
-		Type:	Always
-		Stock:	0
-	[SELL 30]
-		Vnum:	85231
-		Type:	Always
-		Stock:	0
-	[SELL 31]
-		Vnum:	85232
-		Type:	Always
-		Stock:	0
-	[SELL 32]
-		Vnum:	85233
-		Type:	Always
-		Stock:	0
-	[SELL 33]
 		Vnum:	85234
 		Type:	Always
 		Stock:	0
-	[SELL 34]
+	[SELL 26]
 		Vnum:	85235
 		Type:	Always
 		Stock:	0
-	[SELL 35]
+	[SELL 27]
 		Vnum:	85236
 		Type:	Always
 		Stock:	0
-	[SELL 36]
+	[SELL 28]
 		Vnum:	85237
 		Type:	Always
 		Stock:	0
-	[SELL 37]
+	[SELL 29]
 		Vnum:	85238
 		Type:	Always
 		Stock:	0
-	[SELL 38]
+	[SELL 30]
 		Vnum:	85239
 		Type:	Always
 		Stock:	0
-	[SELL 39]
+	[SELL 31]
 		Vnum:	85240
 		Type:	Always
 		Stock:	0
-	[SELL 40]
+	[SELL 32]
 		Vnum:	85241
 		Type:	Always
 		Stock:	0
