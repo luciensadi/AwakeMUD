@@ -1226,27 +1226,15 @@ Buytypes:	10000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	60617
+		Vnum:	85802
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	60618
+		Vnum:	85821
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	60619
-		Type:	Always
-		Stock:	0
-	[SELL 3]
-		Vnum:	60614
-		Type:	Always
-		Stock:	0
-	[SELL 4]
-		Vnum:	60615
-		Type:	Always
-		Stock:	0
-	[SELL 5]
-		Vnum:	60616
+		Vnum:	85822
 		Type:	Always
 		Stock:	0
 BREAK
@@ -1271,35 +1259,35 @@ Buytypes:	10000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	410
+		Vnum:	85926
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	411
+		Vnum:	85927
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	413
+		Vnum:	85928
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	414
+		Vnum:	85929
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	60612
+		Vnum:	85937
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	60613
+		Vnum:	85938
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	412
+		Vnum:	85939
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	60611
+		Vnum:	85940
 		Type:	Always
 		Stock:	0
 BREAK
@@ -1324,39 +1312,39 @@ Buytypes:	10000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	416
+		Vnum:	85803
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	417
+		Vnum:	85805
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	418
+		Vnum:	85806
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	419
+		Vnum:	85807
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	60607
+		Vnum:	85808
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	60608
+		Vnum:	85809
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	60609
+		Vnum:	85810
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	60610
+		Vnum:	85811
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	415
+		Vnum:	85812
 		Type:	Always
 		Stock:	0
 BREAK
@@ -1381,47 +1369,23 @@ Buytypes:	10000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	60600
+		Vnum:	85804
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	60601
+		Vnum:	85816
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	60602
+		Vnum:	85818
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	401
+		Vnum:	85819
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	420
-		Type:	Always
-		Stock:	0
-	[SELL 5]
-		Vnum:	421
-		Type:	Always
-		Stock:	0
-	[SELL 6]
-		Vnum:	60603
-		Type:	Always
-		Stock:	0
-	[SELL 7]
-		Vnum:	60604
-		Type:	Always
-		Stock:	0
-	[SELL 8]
-		Vnum:	60605
-		Type:	Always
-		Stock:	0
-	[SELL 9]
-		Vnum:	60606
-		Type:	Always
-		Stock:	0
-	[SELL 10]
-		Vnum:	400
+		Vnum:	85820
 		Type:	Always
 		Stock:	0
 BREAK
