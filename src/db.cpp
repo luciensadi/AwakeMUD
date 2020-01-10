@@ -5327,7 +5327,7 @@ void price_bio(struct obj_data *obj)
   // Check for cultured.
   if (GET_OBJ_VAL(obj, 0) < BIO_CEREBRALBOOSTER && GET_OBJ_VAL(obj, 2)) {
     GET_OBJ_COST(obj) *= 4;
-    GET_OBJ_VAL(obj, 4) = (int)(GET_OBJ_VAL(obj, 4) * .75);
+    GET_OBJ_VAL(obj, 4) = round(GET_OBJ_VAL(obj, 4) * .75);
     GET_OBJ_AVAILTN(obj) += 2;
     GET_OBJ_AVAILDAY(obj) *= 5;
   }
