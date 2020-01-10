@@ -1,0 +1,27 @@
+#86000
+Keywords:	test chip
+Name:	test chip
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	5
+	Val2:	75
+BREAK
+END
