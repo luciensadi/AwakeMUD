@@ -2195,47 +2195,434 @@ Buytypes:	1000000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	60639
+		Vnum:	85284
 		Type:	Always
 		Stock:	0
-	[SELL 0]
-		Vnum:	338
+	[SELL 1]
+		Vnum:	85286
 		Type:	Always
 		Stock:	0
-	[SELL 0]
-		Vnum:	60642
+	[SELL 2]
+		Vnum:	85287
 		Type:	Always
 		Stock:	0
-	[SELL 0]
-		Vnum:	60639
+	[SELL 3]
+		Vnum:	85288
 		Type:	Always
 		Stock:	0
-	[SELL 0]
-		Vnum:	60639
+	[SELL 4]
+		Vnum:	85289
 		Type:	Always
 		Stock:	0
-	[SELL 0]
-		Vnum:	60639
+	[SELL 5]
+		Vnum:	85290
 		Type:	Always
 		Stock:	0
-	[SELL 0]
-		Vnum:	60639
+	[SELL 6]
+		Vnum:	85291
 		Type:	Always
 		Stock:	0
-	[SELL 0]
-		Vnum:	60639
+	[SELL 7]
+		Vnum:	85292
 		Type:	Always
 		Stock:	0
-	[SELL 0]
-		Vnum:	60639
+	[SELL 8]
+		Vnum:	85293
 		Type:	Always
 		Stock:	0
-	[SELL 0]
-		Vnum:	60639
+	[SELL 9]
+		Vnum:	85308
 		Type:	Always
 		Stock:	0
+	[SELL 10]
+		Vnum:	85317
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	85318
+		Type:	Always
+		Stock:	0
+BREAK
+#60641
+Keeper:	60641
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Black
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Hand-based Alphaware
+Flags:	1110
+Races:	0
+Buytypes:	1000000000000000000000001
+Etiquette:	46
+[SELLING]
 	[SELL 0]
-		Vnum:	60639
+		Vnum:	85263
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	85264
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	85265
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	85266
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	85267
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	85271
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	85272
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	85273
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	85274
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	85275
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	85276
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	85277
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	85294
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	85295
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	85296
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	85297
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	85298
+		Type:	Always
+		Stock:	0
+	[SELL 17]
+		Vnum:	85303
+		Type:	Always
+		Stock:	0
+	[SELL 18]
+		Vnum:	85304
+		Type:	Always
+		Stock:	0
+	[SELL 19]
+		Vnum:	85305
+		Type:	Always
+		Stock:	0
+	[SELL 20]
+		Vnum:	85306
+		Type:	Always
+		Stock:	0
+BREAK
+#60642
+Keeper:	60642
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Black
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Hand-based Alphaware
+Flags:	1110
+Races:	0
+Buytypes:	1000000000000000000000001
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	85268
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	85269
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	85270
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	85299
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	85307
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	85309
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	85310
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	85311
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	85312
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	85313
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	85314
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	85315
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	85316
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	85320
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	85321
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	85322
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	85323
+		Type:	Always
+		Stock:	0
+	[SELL 17]
+		Vnum:	85324
+		Type:	Always
+		Stock:	0
+BREAK
+#60643
+Keeper:	60643
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Black
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Hand-based Alphaware
+Flags:	1110
+Races:	0
+Buytypes:	1000000000000000000000001
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	85200
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	85201
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	85202
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	85203
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	85204
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	85205
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	85206
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	85207
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	85208
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	85209
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	85210
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	85211
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	85212
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	85213
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	85214
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	85216
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	85217
+		Type:	Always
+		Stock:	0
+	[SELL 17]
+		Vnum:	85218
+		Type:	Always
+		Stock:	0
+	[SELL 18]
+		Vnum:	85219
+		Type:	Always
+		Stock:	0
+	[SELL 19]
+		Vnum:	85220
+		Type:	Always
+		Stock:	0
+	[SELL 20]
+		Vnum:	85221
+		Type:	Always
+		Stock:	0
+	[SELL 21]
+		Vnum:	85222
+		Type:	Always
+		Stock:	0
+	[SELL 22]
+		Vnum:	85223
+		Type:	Always
+		Stock:	0
+	[SELL 23]
+		Vnum:	85224
+		Type:	Always
+		Stock:	0
+	[SELL 24]
+		Vnum:	85225
+		Type:	Always
+		Stock:	0
+	[SELL 25]
+		Vnum:	85226
+		Type:	Always
+		Stock:	0
+	[SELL 26]
+		Vnum:	85227
+		Type:	Always
+		Stock:	0
+	[SELL 27]
+		Vnum:	85228
+		Type:	Always
+		Stock:	0
+	[SELL 28]
+		Vnum:	85229
+		Type:	Always
+		Stock:	0
+	[SELL 29]
+		Vnum:	85230
+		Type:	Always
+		Stock:	0
+	[SELL 30]
+		Vnum:	85231
+		Type:	Always
+		Stock:	0
+	[SELL 31]
+		Vnum:	85232
+		Type:	Always
+		Stock:	0
+	[SELL 32]
+		Vnum:	85233
+		Type:	Always
+		Stock:	0
+	[SELL 33]
+		Vnum:	85234
+		Type:	Always
+		Stock:	0
+	[SELL 34]
+		Vnum:	85235
+		Type:	Always
+		Stock:	0
+	[SELL 35]
+		Vnum:	85236
+		Type:	Always
+		Stock:	0
+	[SELL 36]
+		Vnum:	85237
+		Type:	Always
+		Stock:	0
+	[SELL 37]
+		Vnum:	85238
+		Type:	Always
+		Stock:	0
+	[SELL 38]
+		Vnum:	85239
+		Type:	Always
+		Stock:	0
+	[SELL 39]
+		Vnum:	85240
+		Type:	Always
+		Stock:	0
+	[SELL 40]
+		Vnum:	85241
 		Type:	Always
 		Stock:	0
 BREAK

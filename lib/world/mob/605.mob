@@ -10,8 +10,8 @@ Neil appears to have had quite a number of cosmetic modifications, most likely
 covering old scars or cyber replacements. Familiar with all of the development
 equipment, Neil is one of the Guild's best trainers. 
 ~
-ArriveMsg:	Ð°X°
-LeaveMsg:	Gears
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	10000000001010
 AffFlags:	0
 Race:	Human
@@ -77,8 +77,8 @@ LookDesc:$
 A fairly young invididual, Dante can teach you the skills necessary for basic
 survival. 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	10000000001010
 AffFlags:	0
 Race:	Human
@@ -110,8 +110,8 @@ LookDesc:$
 He has a long gray mustache, and short gray hair. His mustache is curled at
 the ends, handlebar style. 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	1000000000000000000000000011010
 AffFlags:	0
 Race:	Human
@@ -142,8 +142,8 @@ Covered in grease, this dwarf teaches all manner of vehicle skills.
  Type "prac" to see what skills you can learn, and "prac <skillname>" (no
 <>'s) to practice a specific skill that is available. 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	1000000000000001010000000011010
 AffFlags:	0
 Race:	Human
@@ -173,7 +173,7 @@ LookDesc:$
 Jet shows incredible agility in practicing his martial arts, even for a
 physical adept. His nametag says, "Jet L." 
 ~
-ArriveMsg:	arrives
+ArriveMsg:	arrives from
 LeaveMsg:	leaves
 MobFlags:	10000000001011
 AffFlags:	0
@@ -213,8 +213,8 @@ LookDesc:$
 Dressed in the uniform of the Neophytic Guild, Mick is ready to teach you how
 to operate a firearm. 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	10000000001011
 AffFlags:	1000
 Race:	Human
@@ -253,8 +253,8 @@ A rather small man, capable of incredible feats, the Adept Master's movements
 seem more fluid than even the latest move-by-wire system.  His nametag reads,
 "Bruce L." 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	10000000001011
 AffFlags:	0
 Race:	Human
@@ -293,8 +293,8 @@ Second or Third Masters (of which there are very few).  He is garbed in a
 deep, midnight blue cloak, which matches the color of his eyes with a stark
 exactness. 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	10000000001010
 AffFlags:	0
 Race:	Human
@@ -334,8 +334,8 @@ Serphon was once shaman of a far-away tribe, known far and wide across the
 Sioux Nation.  Due to unfortunate events, he fled to Seattle, where he has
 taken residency at the Guild to teach new shamans his art. 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	10000000001010
 AffFlags:	0
 Race:	Human
@@ -373,7 +373,7 @@ Doc Holiday, the Bodyware specialist, is cleaning some surgical tools.
 LookDesc:$
 Doc Holiday used to work for DocWagon. After being indited in a UCAS spanning
 organ-smuggling operation, he vanished from the face of the earth. He now
-seems to be somewhat atoning by his sins by working for the Neophyte Guild. 
+seems to be somewhat atoning for his sins by working for the Neophyte Guild. 
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
@@ -1229,7 +1229,7 @@ Doc Tanaki stands here, reading through some cyberware installation manuals.
 ~
 LookDesc:$
 Now, Doc Tanaki, literally a guy pulled in off the street. He used to sell
-coffee to executives in Novatech, now, through luck of random lottery, he
+coffee to executives in Novatech. Now, through luck of random lottery, he
 installs cyberware into people's heads in the Neophyte Guild. 
 ~
 ArriveMsg:	arrives from
@@ -1260,9 +1260,9 @@ Doc Bell stands here, poking at a human eyeball in a jar.
 
 ~
 LookDesc:$
-Doc Bell, prize son of Ma and Pa Bell, is what you would call "A sandwiches
-short of a picnic", but he is fully qualified none the less. His favourite
-pasttime is saving all the eye's he's replaced and poking at them with a pen,
+Doc Bell, prize son of Ma and Pa Bell, is what you would call "A few sandwiches 
+short of a picnic", but he is fully qualified none the less. His favourite 
+pasttime is saving all the eye's he's replaced and poking at them with a pen, 
 as he is doing now. 
 ~
 ArriveMsg:	arrives from
@@ -1297,8 +1297,8 @@ In sharp contrast to Jet, Kyle looks more like your typical wage slave who has
 developed an interest in throwing weapons and archery. Still, he looks skilled
 with his craft, even if he's throwing stars that say "MADE IN CHINA". 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	10000000001011
 AffFlags:	0
 Race:	Human
@@ -1338,8 +1338,8 @@ Wearing clothes that could have come straight from the 1800s, this clean-cut
 Swede is pressing cartridges together with such speed and dexterity, it's like
 he invented the technology. 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	10000000001011
 AffFlags:	0
 Race:	Human
@@ -1378,8 +1378,8 @@ its world.
 LookDesc:$
 It's comprised of all the things that showed up in the source books and looked
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	10000000001011
 AffFlags:	0
 Race:	Human
@@ -1881,8 +1881,8 @@ The machines are all emblazoned with adds for snack foods, some as old as the
 late 20th century. Looks like the Neophyte guild struck on hard times and took
 to scavanging dumps. 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	1010
 AffFlags:	0
 Race:	Undefined
@@ -1913,8 +1913,8 @@ The machines are all emblazoned with adds for snack foods, some as old as the
 late 20th century. Looks like the Neophyte guild struck on hard times and took
 to scavanging dumps. 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	1010
 AffFlags:	0
 Race:	Undefined
@@ -1945,8 +1945,8 @@ The machines are all emblazoned with adds for snack foods, some as old as the
 late 20th century. Looks like the Neophyte guild struck on hard times and took
 to scavanging dumps. 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	1010
 AffFlags:	0
 Race:	Undefined
@@ -1977,8 +1977,8 @@ The machines are all emblazoned with adds for snack foods, some as old as the
 late 20th century. Looks like the Neophyte guild struck on hard times and took
 to scavanging dumps. 
 ~
-ArriveMsg:	
-LeaveMsg:	
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
 MobFlags:	1010
 AffFlags:	0
 Race:	Undefined
@@ -2222,13 +2222,15 @@ DefaultPos:	Standing
 [SKILLS]
 BREAK
 #60639
-Keywords:	Doc Chew
+Keywords:	Doc Chew cybertechnician doctor
 Name:	Doc Chew
 RoomDesc:$
 Doc Chew stands here, checking on a cryogenic vat of cybernetic eyes. 
 
 ~
 LookDesc:$
+He makes eyes.
+ Just eyes.
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
@@ -2246,18 +2248,21 @@ DefaultPos:	Standing
 	Wil:	0
 	Mag:	0
 [POINTS]
-	Height:	143
-	Weight:	95
+	Height:	170
+	Weight:	70
 [SKILLS]
 BREAK
 #60640
-Keywords:	Doc Croke
+Keywords:	Doc Croke cybertechnician doctor
 Name:	Doc Croke
 RoomDesc:$
 Doc Croke is sitting here, cooking the books. 
 
 ~
 LookDesc:$
+Okay, so maybe Doc Croke is a crooked character, but that doesn't necessarily
+mean he's a bad doctor. It's not like the Neophyte Guild would hire him if he
+wasn't.... Right? 
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
@@ -2275,8 +2280,104 @@ DefaultPos:	Standing
 	Wil:	0
 	Mag:	0
 [POINTS]
-	Height:	143
+	Height:	180
+	Weight:	90
+[SKILLS]
+BREAK
+#60641
+Keywords:	Doc Killie cybertechnician doctor
+Name:	Doc Killie
+RoomDesc:$
+Doc Killie is here, pretending he knows what he's doing. 
+
+~
+LookDesc:$
+Well, on the bright side, Doc Killie isn't some witty nickname given to him,
+it's his actual birthname. That said, he lives up to the namesake. Feeling
+lucky, chummer? 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+[SKILLS]
+BREAK
+#60642
+Keywords:	Doc Julius cybertechnician doctor
+Name:	Doc Julius
+RoomDesc:$
+Doc Julius is here, enjoying a cup of soykaf before surgery. 
+
+~
+LookDesc:$
+A refined gentlemen if there ever was one. Poor, as the soykaf may hint, but
+refined none the less. When he isn't slicing up greenhorns in the Neophyte
+Guild, he's actually contributing to society (unlike you) by voltuneering at
+free clinics in the Barrens. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	180
 	Weight:	95
+[SKILLS]
+BREAK
+#60643
+Keywords:	Doc Malik cybertechnician doctor
+Name:	Doc Malik
+RoomDesc:$
+Doc Malik is here, tinkering with a headware memory unit. 
+
+~
+LookDesc:$
+Doc Malik may not hold a professional degree, but he's cut more runners than
+flechette. It may not be by the book, but it works, so he's still in business.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
 [SKILLS]
 BREAK
 END
