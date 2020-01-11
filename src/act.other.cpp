@@ -1700,7 +1700,9 @@ ACMD(do_attach)
     }
   }
 
-  attach_attachment_to_weapon(item, item2, ch);
+  // If we failed to attach it, don't destroy the attachment.
+  if (!attach_attachment_to_weapon(item, item2, ch))
+    return;
   
   // Trash the actual accessory object-- the game will look it up by vnum if it's ever needed.
   obj_from_char(item);
