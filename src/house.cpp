@@ -113,6 +113,8 @@ bool House_load(struct house_control_rec *house)
         for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
           if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 && 
              (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
+            // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
+            GET_OBJ_VAL(obj, i) = 0;
             attach_attachment_to_weapon(attach, obj, NULL);
             // At the end of accessory loading, the cost will be negative.
             GET_OBJ_COST(obj) -= GET_OBJ_COST(attach);

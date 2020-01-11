@@ -2721,6 +2721,8 @@ struct obj_data *read_object(int nr, int type)
     for (int i = ACCESS_LOCATION_TOP; i <= ACCESS_LOCATION_UNDER; i++)
       if (GET_OBJ_VAL(obj, i) > 0 && real_object(GET_OBJ_VAL(obj, i)) > 0) {
         struct obj_data *mod = &obj_proto[real_object(GET_OBJ_VAL(obj, i))];
+        // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
+        GET_OBJ_VAL(obj, i) = 0;
         attach_attachment_to_weapon(mod, obj, NULL);
       }
     if (IS_GUN(GET_OBJ_VAL(obj, 3))) {
@@ -4247,6 +4249,8 @@ void load_saved_veh()
             if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 && 
                (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
               // The cost of the item was preserved, but nothing else was. Re-attach the item, then subtract its cost.
+              // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
+              GET_OBJ_VAL(obj, i) = 0;
               attach_attachment_to_weapon(attach, obj, NULL);
               GET_OBJ_COST(obj) -= GET_OBJ_COST(attach);
             }
@@ -4417,8 +4421,10 @@ void load_consist(void)
             for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
               if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 &&
                   (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
+                // We know the attachment code will throw a fit if we attach over the top of an 'existing' object, so wipe it out without removing it.
+                GET_OBJ_VAL(obj, i) = 0;
                 attach_attachment_to_weapon(attach, obj, NULL);
-                // At the end of accessory loading, the cost will be negative.
+                // The cost was already saved at the higher value from when we last attached, so don't increase it again.
                 GET_OBJ_COST(obj) -= GET_OBJ_COST(attach);
               }
           

@@ -715,6 +715,8 @@ bool load_char(const char *name, char_data *ch, bool logon)
           for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
             if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 && 
                (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
+              // Zero out the attachment so that we don't get attaching-overtop errors.
+              GET_OBJ_VAL(obj, q) = 0;
               attach_attachment_to_weapon(attach, obj, NULL);
               // Cost was already added to the object when it was attached in the first place, then saved, so we need to not re-add the cost.
               GET_OBJ_COST(obj) -= GET_OBJ_COST(attach);
@@ -779,7 +781,9 @@ bool load_char(const char *name, char_data *ch, bool logon)
         if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && IS_GUN(GET_OBJ_VAL(obj, 3)))
           for (int q = ACCESS_LOCATION_TOP; q <= ACCESS_LOCATION_UNDER; q++)
             if (GET_OBJ_VAL(obj, q) > 0 && real_object(GET_OBJ_VAL(obj, q)) > 0 &&
-                (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
+               (attach = &obj_proto[real_object(GET_OBJ_VAL(obj, q))])) {
+              // Zero out the attachment so that we don't get attaching-overtop errors.
+              GET_OBJ_VAL(obj, q) = 0;
               attach_attachment_to_weapon(attach, obj, NULL);
               // Fix for ever-increasing cost.
               GET_OBJ_COST(obj) -= GET_OBJ_COST(attach);
