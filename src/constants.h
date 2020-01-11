@@ -115,4 +115,5 @@ extern const char *mount_types[];
 extern const char *deck_accessory_upgrade_types[];
 extern const char *message_history_channels[];
 extern const char *pgroup_settings[];
+extern int acceptable_weapon_attachment_affects[];
 #endif

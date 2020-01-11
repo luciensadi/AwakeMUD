@@ -599,7 +599,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define CAN_WEAR(obj, part) ((obj)->obj_flags.wear_flags.IsSet((part)))
 
 #define IS_WEAPON(type) (((type) >= TYPE_HIT) && ((type) < TYPE_SUFFERING))
-#define IS_GUN(type) (((type) >= WEAP_HOLDOUT) && ((type) < WEAP_GREN_LAUNCHER))
+#define IS_GUN(type) ((((type) >= WEAP_HOLDOUT) && ((type) < WEAP_GREN_LAUNCHER)) || (type) == WEAP_REVOLVER)
 
 
 /* compound utilities and other macros **********************************/

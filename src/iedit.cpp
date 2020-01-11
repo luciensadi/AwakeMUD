@@ -2267,6 +2267,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
             case WEAP_LIGHT_PISTOL:
             case WEAP_HEAVY_PISTOL:
             case WEAP_MACHINE_PISTOL:
+            case WEAP_REVOLVER:
               GET_OBJ_VAL(OBJ, ACCESS_LOCATION_TOP) = 0;
               GET_OBJ_VAL(OBJ, ACCESS_LOCATION_BARREL) = 0;
               GET_OBJ_VAL(OBJ, ACCESS_LOCATION_UNDER) = -2;

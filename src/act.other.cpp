@@ -1768,7 +1768,8 @@ ACMD(do_unattach)
     }
 
   if (!found) {
-    act("That doesn't seem to be attached to $p.", FALSE, ch, gun, 0, TO_CHAR);
+    sprintf(buf, "There doesn't seem to be %s %s attached to $p.", AN(buf1), buf1);
+    act(buf, FALSE, ch, gun, 0, TO_CHAR);
     return;
   }
 

@@ -430,6 +430,7 @@ const char *weapon_type[] =
     "minigun",
     "grenade launcher",
     "missile launcher",
+    "revolver",
     "\n"
   };
 
@@ -2326,4 +2327,15 @@ const char *pgroup_settings[] = {
   "Disabled",
   "Clandestine",
   "Cloned / temporary"
+};
+
+int acceptable_weapon_attachment_affects[] = {
+  AFF_LASER_SIGHT,
+  AFF_VISION_MAG_1,
+  AFF_VISION_MAG_2,
+  AFF_VISION_MAG_3,
+  AFF_INFRAVISION,
+  AFF_LOW_LIGHT,
+  AFF_DETECT_INVIS,
+  -1
 };
