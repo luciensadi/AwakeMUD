@@ -24,6 +24,7 @@ Material:	electronics
 [VALUES]
 	Val0:	7
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86001
 Keywords:	chip carrier brawling 2 activesoft
@@ -51,6 +52,7 @@ Material:	electronics
 [VALUES]
 	Val0:	7
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86002
 Keywords:	chip carrier brawling 3 activesoft
@@ -78,6 +80,7 @@ Material:	electronics
 [VALUES]
 	Val0:	7
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86003
 Keywords:	chip carrier brawling 4 activesoft
@@ -105,6 +108,7 @@ Material:	electronics
 [VALUES]
 	Val0:	7
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86004
 Keywords:	chip carrier brawling 5 activesoft
@@ -132,6 +136,7 @@ Material:	electronics
 [VALUES]
 	Val0:	7
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86005
 Keywords:	chip carrier brawling 6 activesoft
@@ -159,6 +164,7 @@ Material:	electronics
 [VALUES]
 	Val0:	7
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86006
 Keywords:	chip carrier brawling 7 activesoft
@@ -186,6 +192,7 @@ Material:	electronics
 [VALUES]
 	Val0:	7
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86007
 Keywords:	chip carrier brawling 8 activesoft
@@ -213,6 +220,7 @@ Material:	electronics
 [VALUES]
 	Val0:	7
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86008
 Keywords:	chip carrier clubs 1 activesoft
@@ -240,6 +248,7 @@ Material:	electronics
 [VALUES]
 	Val0:	6
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86009
 Keywords:	chip carrier clubs 2 activesoft
@@ -267,6 +276,7 @@ Material:	electronics
 [VALUES]
 	Val0:	6
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86010
 Keywords:	chip carrier clubs 3 activesoft
@@ -294,6 +304,7 @@ Material:	electronics
 [VALUES]
 	Val0:	6
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86011
 Keywords:	chip carrier clubs 4 activesoft
@@ -321,6 +332,7 @@ Material:	electronics
 [VALUES]
 	Val0:	6
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86012
 Keywords:	chip carrier clubs 5 activesoft
@@ -348,6 +360,7 @@ Material:	electronics
 [VALUES]
 	Val0:	6
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86013
 Keywords:	chip carrier clubs 6 activesoft
@@ -375,6 +388,7 @@ Material:	electronics
 [VALUES]
 	Val0:	6
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86014
 Keywords:	chip carrier clubs 7 activesoft
@@ -402,6 +416,7 @@ Material:	electronics
 [VALUES]
 	Val0:	6
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86015
 Keywords:	chip carrier clubs 8 activesoft
@@ -429,6 +444,7 @@ Material:	electronics
 [VALUES]
 	Val0:	6
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86016
 Keywords:	chip carrier edged weapons 1 activesoft
@@ -456,6 +472,7 @@ Material:	electronics
 [VALUES]
 	Val0:	3
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86017
 Keywords:	chip carrier edged weapons 2 activesoft
@@ -483,6 +500,7 @@ Material:	electronics
 [VALUES]
 	Val0:	3
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86018
 Keywords:	chip carrier edged weapons 3 activesoft
@@ -510,6 +528,7 @@ Material:	electronics
 [VALUES]
 	Val0:	3
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86019
 Keywords:	chip carrier edged weapons 4 activesoft
@@ -537,6 +556,7 @@ Material:	electronics
 [VALUES]
 	Val0:	3
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86020
 Keywords:	chip carrier edged weapons 5 activesoft
@@ -564,6 +584,7 @@ Material:	electronics
 [VALUES]
 	Val0:	3
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86021
 Keywords:	chip carrier edged weapons 6 activesoft
@@ -591,6 +612,7 @@ Material:	electronics
 [VALUES]
 	Val0:	3
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86022
 Keywords:	chip carrier edged weapons 7 activesoft
@@ -618,6 +640,7 @@ Material:	electronics
 [VALUES]
 	Val0:	3
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86023
 Keywords:	chip carrier edged weapons 8 activesoft
@@ -645,6 +668,7 @@ Material:	electronics
 [VALUES]
 	Val0:	3
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86024
 Keywords:	chip carrier cyber implants 1 activesoft
@@ -672,6 +696,7 @@ Material:	electronics
 [VALUES]
 	Val0:	9
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86025
 Keywords:	chip carrier cyber implants 2 activesoft
@@ -699,6 +724,7 @@ Material:	electronics
 [VALUES]
 	Val0:	9
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86026
 Keywords:	chip carrier cyber implants 3 activesoft
@@ -726,6 +752,7 @@ Material:	electronics
 [VALUES]
 	Val0:	9
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86027
 Keywords:	chip carrier cyber implants 4 activesoft
@@ -753,6 +780,7 @@ Material:	electronics
 [VALUES]
 	Val0:	9
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86028
 Keywords:	chip carrier cyber implants 5 activesoft
@@ -780,6 +808,7 @@ Material:	electronics
 [VALUES]
 	Val0:	9
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86029
 Keywords:	chip carrier cyber implants 6 activesoft
@@ -807,6 +836,7 @@ Material:	electronics
 [VALUES]
 	Val0:	9
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86030
 Keywords:	chip carrier cyber implants 7 activesoft
@@ -834,6 +864,7 @@ Material:	electronics
 [VALUES]
 	Val0:	9
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86031
 Keywords:	chip carrier cyber implants 8 activesoft
@@ -861,6 +892,7 @@ Material:	electronics
 [VALUES]
 	Val0:	9
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86032
 Keywords:	chip carrier pole arms 1 activesoft
@@ -888,6 +920,7 @@ Material:	electronics
 [VALUES]
 	Val0:	4
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86033
 Keywords:	chip carrier pole arms 2 activesoft
@@ -915,6 +948,7 @@ Material:	electronics
 [VALUES]
 	Val0:	4
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86034
 Keywords:	chip carrier pole arms 3 activesoft
@@ -942,6 +976,7 @@ Material:	electronics
 [VALUES]
 	Val0:	4
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86035
 Keywords:	chip carrier pole arms 4 activesoft
@@ -969,6 +1004,7 @@ Material:	electronics
 [VALUES]
 	Val0:	4
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86036
 Keywords:	chip carrier pole arms 5 activesoft
@@ -996,6 +1032,7 @@ Material:	electronics
 [VALUES]
 	Val0:	4
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86037
 Keywords:	chip carrier pole arms 6 activesoft
@@ -1023,6 +1060,7 @@ Material:	electronics
 [VALUES]
 	Val0:	4
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86038
 Keywords:	chip carrier pole arms 7 activesoft
@@ -1050,6 +1088,7 @@ Material:	electronics
 [VALUES]
 	Val0:	4
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86039
 Keywords:	chip carrier pole arms 8 activesoft
@@ -1077,6 +1116,7 @@ Material:	electronics
 [VALUES]
 	Val0:	4
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86040
 Keywords:	chip carrier whips flails 1 activesoft
@@ -1104,6 +1144,7 @@ Material:	electronics
 [VALUES]
 	Val0:	5
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86041
 Keywords:	chip carrier whips flails 2 activesoft
@@ -1131,6 +1172,7 @@ Material:	electronics
 [VALUES]
 	Val0:	5
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86042
 Keywords:	chip carrier whips flails 3 activesoft
@@ -1158,6 +1200,7 @@ Material:	electronics
 [VALUES]
 	Val0:	5
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86043
 Keywords:	chip carrier whips flails 4 activesoft
@@ -1185,6 +1228,7 @@ Material:	electronics
 [VALUES]
 	Val0:	5
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86044
 Keywords:	chip carrier whips flails 5 activesoft
@@ -1212,6 +1256,7 @@ Material:	electronics
 [VALUES]
 	Val0:	5
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86045
 Keywords:	chip carrier whips flails 6 activesoft
@@ -1239,6 +1284,7 @@ Material:	electronics
 [VALUES]
 	Val0:	5
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86046
 Keywords:	chip carrier whips flails 7 activesoft
@@ -1266,6 +1312,7 @@ Material:	electronics
 [VALUES]
 	Val0:	5
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86047
 Keywords:	chip carrier whips flails 8 activesoft
@@ -1293,6 +1340,7 @@ Material:	electronics
 [VALUES]
 	Val0:	5
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86048
 Keywords:	chip carrier assault cannons 1 activesoft
@@ -1320,6 +1368,7 @@ Material:	electronics
 [VALUES]
 	Val0:	21
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86049
 Keywords:	chip carrier assault cannons 2 activesoft
@@ -1347,6 +1396,7 @@ Material:	electronics
 [VALUES]
 	Val0:	21
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86050
 Keywords:	chip carrier assault cannons 3 activesoft
@@ -1374,6 +1424,7 @@ Material:	electronics
 [VALUES]
 	Val0:	21
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86051
 Keywords:	chip carrier assault cannons 4 activesoft
@@ -1401,6 +1452,7 @@ Material:	electronics
 [VALUES]
 	Val0:	21
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86052
 Keywords:	chip carrier assault cannons 5 activesoft
@@ -1428,6 +1480,7 @@ Material:	electronics
 [VALUES]
 	Val0:	21
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86053
 Keywords:	chip carrier assault cannons 6 activesoft
@@ -1455,6 +1508,7 @@ Material:	electronics
 [VALUES]
 	Val0:	21
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86054
 Keywords:	chip carrier assault cannons 7 activesoft
@@ -1482,6 +1536,7 @@ Material:	electronics
 [VALUES]
 	Val0:	21
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86055
 Keywords:	chip carrier assault cannons 8 activesoft
@@ -1509,6 +1564,7 @@ Material:	electronics
 [VALUES]
 	Val0:	21
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86056
 Keywords:	chip carrier assault rifles 1 activesoft
@@ -1536,6 +1592,7 @@ Material:	electronics
 [VALUES]
 	Val0:	14
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86057
 Keywords:	chip carrier assault rifles 2 activesoft
@@ -1563,6 +1620,7 @@ Material:	electronics
 [VALUES]
 	Val0:	14
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86058
 Keywords:	chip carrier assault rifles 3 activesoft
@@ -1590,6 +1648,7 @@ Material:	electronics
 [VALUES]
 	Val0:	14
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86059
 Keywords:	chip carrier assault rifles 4 activesoft
@@ -1617,6 +1676,7 @@ Material:	electronics
 [VALUES]
 	Val0:	14
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86060
 Keywords:	chip carrier assault rifles 5 activesoft
@@ -1644,6 +1704,7 @@ Material:	electronics
 [VALUES]
 	Val0:	14
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86061
 Keywords:	chip carrier assault rifles 6 activesoft
@@ -1671,6 +1732,7 @@ Material:	electronics
 [VALUES]
 	Val0:	14
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86062
 Keywords:	chip carrier assault rifles 7 activesoft
@@ -1698,6 +1760,7 @@ Material:	electronics
 [VALUES]
 	Val0:	14
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86063
 Keywords:	chip carrier assault rifles 8 activesoft
@@ -1725,6 +1788,7 @@ Material:	electronics
 [VALUES]
 	Val0:	14
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86064
 Keywords:	chip carrier gunnery 1 activesoft
@@ -1752,6 +1816,7 @@ Material:	electronics
 [VALUES]
 	Val0:	18
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86065
 Keywords:	chip carrier gunnery 2 activesoft
@@ -1779,6 +1844,7 @@ Material:	electronics
 [VALUES]
 	Val0:	18
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86066
 Keywords:	chip carrier gunnery 3 activesoft
@@ -1806,6 +1872,7 @@ Material:	electronics
 [VALUES]
 	Val0:	18
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86067
 Keywords:	chip carrier gunnery 4 activesoft
@@ -1833,6 +1900,7 @@ Material:	electronics
 [VALUES]
 	Val0:	18
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86068
 Keywords:	chip carrier gunnery 5 activesoft
@@ -1860,6 +1928,7 @@ Material:	electronics
 [VALUES]
 	Val0:	18
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86069
 Keywords:	chip carrier gunnery 6 activesoft
@@ -1887,6 +1956,7 @@ Material:	electronics
 [VALUES]
 	Val0:	18
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86070
 Keywords:	chip carrier gunnery 7 activesoft
@@ -1914,6 +1984,7 @@ Material:	electronics
 [VALUES]
 	Val0:	18
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86071
 Keywords:	chip carrier gunnery 8 activesoft
@@ -1941,6 +2012,7 @@ Material:	electronics
 [VALUES]
 	Val0:	18
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86072
 Keywords:	chip carrier machine guns 1 activesoft
@@ -1968,6 +2040,7 @@ Material:	electronics
 [VALUES]
 	Val0:	19
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86073
 Keywords:	chip carrier machine guns 2 activesoft
@@ -1995,6 +2068,7 @@ Material:	electronics
 [VALUES]
 	Val0:	19
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86074
 Keywords:	chip carrier machine guns 3 activesoft
@@ -2022,6 +2096,7 @@ Material:	electronics
 [VALUES]
 	Val0:	19
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86075
 Keywords:	chip carrier machine guns 4 activesoft
@@ -2049,6 +2124,7 @@ Material:	electronics
 [VALUES]
 	Val0:	19
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86076
 Keywords:	chip carrier machine guns 5 activesoft
@@ -2076,6 +2152,7 @@ Material:	electronics
 [VALUES]
 	Val0:	19
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86077
 Keywords:	chip carrier machine guns 6 activesoft
@@ -2103,6 +2180,7 @@ Material:	electronics
 [VALUES]
 	Val0:	19
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86078
 Keywords:	chip carrier machine guns 7 activesoft
@@ -2130,6 +2208,7 @@ Material:	electronics
 [VALUES]
 	Val0:	19
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86079
 Keywords:	chip carrier machine guns 8 activesoft
@@ -2157,6 +2236,7 @@ Material:	electronics
 [VALUES]
 	Val0:	19
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86080
 Keywords:	chip carrier pistols 1 activesoft
@@ -2184,6 +2264,7 @@ Material:	electronics
 [VALUES]
 	Val0:	11
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86081
 Keywords:	chip carrier pistols 2 activesoft
@@ -2211,6 +2292,7 @@ Material:	electronics
 [VALUES]
 	Val0:	11
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86082
 Keywords:	chip carrier pistols 3 activesoft
@@ -2238,6 +2320,7 @@ Material:	electronics
 [VALUES]
 	Val0:	11
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86083
 Keywords:	chip carrier pistols 4 activesoft
@@ -2265,6 +2348,7 @@ Material:	electronics
 [VALUES]
 	Val0:	11
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86084
 Keywords:	chip carrier pistols 5 activesoft
@@ -2292,6 +2376,7 @@ Material:	electronics
 [VALUES]
 	Val0:	11
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86085
 Keywords:	chip carrier pistols 6 activesoft
@@ -2319,6 +2404,7 @@ Material:	electronics
 [VALUES]
 	Val0:	11
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86086
 Keywords:	chip carrier pistols 7 activesoft
@@ -2346,6 +2432,7 @@ Material:	electronics
 [VALUES]
 	Val0:	11
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86087
 Keywords:	chip carrier pistols 8 activesoft
@@ -2373,6 +2460,7 @@ Material:	electronics
 [VALUES]
 	Val0:	11
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86088
 Keywords:	chip carrier projectiles 1 activesoft
@@ -2400,6 +2488,7 @@ Material:	electronics
 [VALUES]
 	Val0:	23
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86089
 Keywords:	chip carrier projectiles 2 activesoft
@@ -2427,6 +2516,7 @@ Material:	electronics
 [VALUES]
 	Val0:	23
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86090
 Keywords:	chip carrier projectiles 3 activesoft
@@ -2454,6 +2544,7 @@ Material:	electronics
 [VALUES]
 	Val0:	23
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86091
 Keywords:	chip carrier projectiles 4 activesoft
@@ -2481,6 +2572,7 @@ Material:	electronics
 [VALUES]
 	Val0:	23
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86092
 Keywords:	chip carrier projectiles 5 activesoft
@@ -2508,6 +2600,7 @@ Material:	electronics
 [VALUES]
 	Val0:	23
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86093
 Keywords:	chip carrier projectiles 6 activesoft
@@ -2535,6 +2628,7 @@ Material:	electronics
 [VALUES]
 	Val0:	23
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86094
 Keywords:	chip carrier projectiles 7 activesoft
@@ -2562,6 +2656,7 @@ Material:	electronics
 [VALUES]
 	Val0:	23
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86095
 Keywords:	chip carrier projectiles 8 activesoft
@@ -2589,6 +2684,7 @@ Material:	electronics
 [VALUES]
 	Val0:	23
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86096
 Keywords:	chip carrier rifles 1 activesoft
@@ -2616,6 +2712,7 @@ Material:	electronics
 [VALUES]
 	Val0:	12
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86097
 Keywords:	chip carrier rifles 2 activesoft
@@ -2643,6 +2740,7 @@ Material:	electronics
 [VALUES]
 	Val0:	12
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86098
 Keywords:	chip carrier rifles 3 activesoft
@@ -2670,6 +2768,7 @@ Material:	electronics
 [VALUES]
 	Val0:	12
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86099
 Keywords:	chip carrier rifles 4 activesoft
@@ -2697,6 +2796,7 @@ Material:	electronics
 [VALUES]
 	Val0:	12
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86100
 Keywords:	chip carrier rifles 5 activesoft
@@ -2724,6 +2824,7 @@ Material:	electronics
 [VALUES]
 	Val0:	12
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86101
 Keywords:	chip carrier rifles 6 activesoft
@@ -2751,6 +2852,7 @@ Material:	electronics
 [VALUES]
 	Val0:	12
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86102
 Keywords:	chip carrier rifles 7 activesoft
@@ -2778,6 +2880,7 @@ Material:	electronics
 [VALUES]
 	Val0:	12
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86103
 Keywords:	chip carrier rifles 8 activesoft
@@ -2805,6 +2908,7 @@ Material:	electronics
 [VALUES]
 	Val0:	12
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86104
 Keywords:	chip carrier shotguns 1 activesoft
@@ -2832,6 +2936,7 @@ Material:	electronics
 [VALUES]
 	Val0:	13
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86105
 Keywords:	chip carrier shotguns 2 activesoft
@@ -2859,6 +2964,7 @@ Material:	electronics
 [VALUES]
 	Val0:	13
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86106
 Keywords:	chip carrier shotguns 3 activesoft
@@ -2886,6 +2992,7 @@ Material:	electronics
 [VALUES]
 	Val0:	13
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86107
 Keywords:	chip carrier shotguns 4 activesoft
@@ -2913,6 +3020,7 @@ Material:	electronics
 [VALUES]
 	Val0:	13
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86108
 Keywords:	chip carrier shotguns 5 activesoft
@@ -2940,6 +3048,7 @@ Material:	electronics
 [VALUES]
 	Val0:	13
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86109
 Keywords:	chip carrier shotguns 6 activesoft
@@ -2967,6 +3076,7 @@ Material:	electronics
 [VALUES]
 	Val0:	13
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86110
 Keywords:	chip carrier shotguns 7 activesoft
@@ -2994,6 +3104,7 @@ Material:	electronics
 [VALUES]
 	Val0:	13
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86111
 Keywords:	chip carrier shotguns 8 activesoft
@@ -3021,6 +3132,7 @@ Material:	electronics
 [VALUES]
 	Val0:	13
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86112
 Keywords:	chip carrier smg submachine guns 1 activesoft
@@ -3048,6 +3160,7 @@ Material:	electronics
 [VALUES]
 	Val0:	15
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86113
 Keywords:	chip carrier smg submachine guns 2 activesoft
@@ -3075,6 +3188,7 @@ Material:	electronics
 [VALUES]
 	Val0:	15
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86114
 Keywords:	chip carrier smg submachine guns 3 activesoft
@@ -3102,6 +3216,7 @@ Material:	electronics
 [VALUES]
 	Val0:	15
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86115
 Keywords:	chip carrier smg submachine guns 4 activesoft
@@ -3129,6 +3244,7 @@ Material:	electronics
 [VALUES]
 	Val0:	15
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86116
 Keywords:	chip carrier smg submachine guns 5 activesoft
@@ -3156,6 +3272,7 @@ Material:	electronics
 [VALUES]
 	Val0:	15
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86117
 Keywords:	chip carrier smg submachine guns 6 activesoft
@@ -3183,6 +3300,7 @@ Material:	electronics
 [VALUES]
 	Val0:	15
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86118
 Keywords:	chip carrier smg submachine guns 7 activesoft
@@ -3210,6 +3328,7 @@ Material:	electronics
 [VALUES]
 	Val0:	15
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86119
 Keywords:	chip carrier smg submachine guns 8 activesoft
@@ -3237,6 +3356,7 @@ Material:	electronics
 [VALUES]
 	Val0:	15
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86120
 Keywords:	chip carrier throwing weapons 1 activesoft
@@ -3264,6 +3384,7 @@ Material:	electronics
 [VALUES]
 	Val0:	26
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86121
 Keywords:	chip carrier throwing weapons 2 activesoft
@@ -3291,6 +3412,7 @@ Material:	electronics
 [VALUES]
 	Val0:	26
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86122
 Keywords:	chip carrier throwing weapons 3 activesoft
@@ -3318,6 +3440,7 @@ Material:	electronics
 [VALUES]
 	Val0:	26
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86123
 Keywords:	chip carrier throwing weapons 4 activesoft
@@ -3345,6 +3468,7 @@ Material:	electronics
 [VALUES]
 	Val0:	26
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86124
 Keywords:	chip carrier throwing weapons 5 activesoft
@@ -3372,6 +3496,7 @@ Material:	electronics
 [VALUES]
 	Val0:	26
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86125
 Keywords:	chip carrier throwing weapons 6 activesoft
@@ -3399,6 +3524,7 @@ Material:	electronics
 [VALUES]
 	Val0:	26
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86126
 Keywords:	chip carrier throwing weapons 7 activesoft
@@ -3426,6 +3552,7 @@ Material:	electronics
 [VALUES]
 	Val0:	26
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86127
 Keywords:	chip carrier throwing weapons 8 activesoft
@@ -3453,6 +3580,7 @@ Material:	electronics
 [VALUES]
 	Val0:	26
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86128
 Keywords:	chip carrier build repair heavy weapons 1 activesoft
@@ -3480,6 +3608,7 @@ Material:	electronics
 [VALUES]
 	Val0:	104
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86129
 Keywords:	chip carrier build repair heavy weapons 2 activesoft
@@ -3507,6 +3636,7 @@ Material:	electronics
 [VALUES]
 	Val0:	104
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86130
 Keywords:	chip carrier build repair heavy weapons 3 activesoft
@@ -3534,6 +3664,7 @@ Material:	electronics
 [VALUES]
 	Val0:	104
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86131
 Keywords:	chip carrier build repair heavy weapons 4 activesoft
@@ -3561,6 +3692,7 @@ Material:	electronics
 [VALUES]
 	Val0:	104
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86132
 Keywords:	chip carrier build repair heavy weapons 5 activesoft
@@ -3588,6 +3720,7 @@ Material:	electronics
 [VALUES]
 	Val0:	104
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86133
 Keywords:	chip carrier build repair heavy weapons 6 activesoft
@@ -3615,6 +3748,7 @@ Material:	electronics
 [VALUES]
 	Val0:	104
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86134
 Keywords:	chip carrier build repair heavy weapons 7 activesoft
@@ -3642,6 +3776,7 @@ Material:	electronics
 [VALUES]
 	Val0:	104
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86135
 Keywords:	chip carrier build repair heavy weapons 8 activesoft
@@ -3669,6 +3804,7 @@ Material:	electronics
 [VALUES]
 	Val0:	104
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86136
 Keywords:	chip carrier build repair pistols 1 activesoft
@@ -3696,6 +3832,7 @@ Material:	electronics
 [VALUES]
 	Val0:	101
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86137
 Keywords:	chip carrier build repair pistols 2 activesoft
@@ -3723,6 +3860,7 @@ Material:	electronics
 [VALUES]
 	Val0:	101
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86138
 Keywords:	chip carrier build repair pistols 3 activesoft
@@ -3750,6 +3888,7 @@ Material:	electronics
 [VALUES]
 	Val0:	101
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86139
 Keywords:	chip carrier build repair pistols 4 activesoft
@@ -3777,6 +3916,7 @@ Material:	electronics
 [VALUES]
 	Val0:	101
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86140
 Keywords:	chip carrier build repair pistols 5 activesoft
@@ -3804,6 +3944,7 @@ Material:	electronics
 [VALUES]
 	Val0:	101
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86141
 Keywords:	chip carrier build repair pistols 6 activesoft
@@ -3831,6 +3972,7 @@ Material:	electronics
 [VALUES]
 	Val0:	101
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86142
 Keywords:	chip carrier build repair pistols 7 activesoft
@@ -3858,6 +4000,7 @@ Material:	electronics
 [VALUES]
 	Val0:	101
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86143
 Keywords:	chip carrier build repair pistols 8 activesoft
@@ -3885,6 +4028,7 @@ Material:	electronics
 [VALUES]
 	Val0:	101
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86144
 Keywords:	chip carrier build repair rifles 1 activesoft
@@ -3912,6 +4056,7 @@ Material:	electronics
 [VALUES]
 	Val0:	103
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86145
 Keywords:	chip carrier build repair rifles 2 activesoft
@@ -3939,6 +4084,7 @@ Material:	electronics
 [VALUES]
 	Val0:	103
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86146
 Keywords:	chip carrier build repair rifles 3 activesoft
@@ -3966,6 +4112,7 @@ Material:	electronics
 [VALUES]
 	Val0:	103
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86147
 Keywords:	chip carrier build repair rifles 4 activesoft
@@ -3993,6 +4140,7 @@ Material:	electronics
 [VALUES]
 	Val0:	103
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86148
 Keywords:	chip carrier build repair rifles 5 activesoft
@@ -4020,6 +4168,7 @@ Material:	electronics
 [VALUES]
 	Val0:	103
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86149
 Keywords:	chip carrier build repair rifles 6 activesoft
@@ -4047,6 +4196,7 @@ Material:	electronics
 [VALUES]
 	Val0:	103
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86150
 Keywords:	chip carrier build repair rifles 7 activesoft
@@ -4074,6 +4224,7 @@ Material:	electronics
 [VALUES]
 	Val0:	103
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86151
 Keywords:	chip carrier build repair rifles 8 activesoft
@@ -4101,6 +4252,7 @@ Material:	electronics
 [VALUES]
 	Val0:	103
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86152
 Keywords:	chip carrier build repair shotguns 1 activesoft
@@ -4128,6 +4280,7 @@ Material:	electronics
 [VALUES]
 	Val0:	102
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86153
 Keywords:	chip carrier build repair shotguns 2 activesoft
@@ -4155,6 +4308,7 @@ Material:	electronics
 [VALUES]
 	Val0:	102
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86154
 Keywords:	chip carrier build repair shotguns 3 activesoft
@@ -4182,6 +4336,7 @@ Material:	electronics
 [VALUES]
 	Val0:	102
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86155
 Keywords:	chip carrier build repair shotguns 4 activesoft
@@ -4209,6 +4364,7 @@ Material:	electronics
 [VALUES]
 	Val0:	102
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86156
 Keywords:	chip carrier build repair shotguns 5 activesoft
@@ -4236,6 +4392,7 @@ Material:	electronics
 [VALUES]
 	Val0:	102
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86157
 Keywords:	chip carrier build repair shotguns 6 activesoft
@@ -4263,6 +4420,7 @@ Material:	electronics
 [VALUES]
 	Val0:	102
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86158
 Keywords:	chip carrier build repair shotguns 7 activesoft
@@ -4290,6 +4448,7 @@ Material:	electronics
 [VALUES]
 	Val0:	102
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86159
 Keywords:	chip carrier build repair shotguns 8 activesoft
@@ -4317,6 +4476,7 @@ Material:	electronics
 [VALUES]
 	Val0:	102
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86160
 Keywords:	chip carrier build repair smg submachine guns 1 activesoft
@@ -4344,6 +4504,7 @@ Material:	electronics
 [VALUES]
 	Val0:	105
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86161
 Keywords:	chip carrier build repair smg submachine guns 2 activesoft
@@ -4371,6 +4532,7 @@ Material:	electronics
 [VALUES]
 	Val0:	105
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86162
 Keywords:	chip carrier build repair smg submachine guns 3 activesoft
@@ -4398,6 +4560,7 @@ Material:	electronics
 [VALUES]
 	Val0:	105
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86163
 Keywords:	chip carrier build repair smg submachine guns 4 activesoft
@@ -4425,6 +4588,7 @@ Material:	electronics
 [VALUES]
 	Val0:	105
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86164
 Keywords:	chip carrier build repair smg submachine guns 5 activesoft
@@ -4452,6 +4616,7 @@ Material:	electronics
 [VALUES]
 	Val0:	105
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86165
 Keywords:	chip carrier build repair smg submachine guns 6 activesoft
@@ -4479,6 +4644,7 @@ Material:	electronics
 [VALUES]
 	Val0:	105
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86166
 Keywords:	chip carrier build repair smg submachine guns 7 activesoft
@@ -4506,6 +4672,7 @@ Material:	electronics
 [VALUES]
 	Val0:	105
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86167
 Keywords:	chip carrier build repair smg submachine guns 8 activesoft
@@ -4533,6 +4700,7 @@ Material:	electronics
 [VALUES]
 	Val0:	105
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86168
 Keywords:	chip carrier athletics 1 activesoft
@@ -4560,6 +4728,7 @@ Material:	electronics
 [VALUES]
 	Val0:	1
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86169
 Keywords:	chip carrier athletics 2 activesoft
@@ -4587,6 +4756,7 @@ Material:	electronics
 [VALUES]
 	Val0:	1
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86170
 Keywords:	chip carrier athletics 3 activesoft
@@ -4614,6 +4784,7 @@ Material:	electronics
 [VALUES]
 	Val0:	1
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86171
 Keywords:	chip carrier athletics 4 activesoft
@@ -4641,6 +4812,7 @@ Material:	electronics
 [VALUES]
 	Val0:	1
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86172
 Keywords:	chip carrier athletics 5 activesoft
@@ -4668,6 +4840,7 @@ Material:	electronics
 [VALUES]
 	Val0:	1
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86173
 Keywords:	chip carrier athletics 6 activesoft
@@ -4695,6 +4868,7 @@ Material:	electronics
 [VALUES]
 	Val0:	1
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86174
 Keywords:	chip carrier athletics 7 activesoft
@@ -4722,6 +4896,7 @@ Material:	electronics
 [VALUES]
 	Val0:	1
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86175
 Keywords:	chip carrier athletics 8 activesoft
@@ -4749,6 +4924,7 @@ Material:	electronics
 [VALUES]
 	Val0:	1
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86176
 Keywords:	chip carrier biotech 1 activesoft
@@ -4776,6 +4952,7 @@ Material:	electronics
 [VALUES]
 	Val0:	33
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86177
 Keywords:	chip carrier biotech 2 activesoft
@@ -4803,6 +4980,7 @@ Material:	electronics
 [VALUES]
 	Val0:	33
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86178
 Keywords:	chip carrier biotech 3 activesoft
@@ -4830,6 +5008,7 @@ Material:	electronics
 [VALUES]
 	Val0:	33
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86179
 Keywords:	chip carrier biotech 4 activesoft
@@ -4857,6 +5036,7 @@ Material:	electronics
 [VALUES]
 	Val0:	33
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86180
 Keywords:	chip carrier biotech 5 activesoft
@@ -4884,6 +5064,7 @@ Material:	electronics
 [VALUES]
 	Val0:	33
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86181
 Keywords:	chip carrier biotech 6 activesoft
@@ -4911,6 +5092,7 @@ Material:	electronics
 [VALUES]
 	Val0:	33
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86182
 Keywords:	chip carrier biotech 7 activesoft
@@ -4938,6 +5120,7 @@ Material:	electronics
 [VALUES]
 	Val0:	33
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86183
 Keywords:	chip carrier biotech 8 activesoft
@@ -4965,6 +5148,7 @@ Material:	electronics
 [VALUES]
 	Val0:	33
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86184
 Keywords:	chip carrier police procedures 1 activesoft
@@ -4992,6 +5176,7 @@ Material:	electronics
 [VALUES]
 	Val0:	36
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86185
 Keywords:	chip carrier police procedures 2 activesoft
@@ -5019,6 +5204,7 @@ Material:	electronics
 [VALUES]
 	Val0:	36
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86186
 Keywords:	chip carrier police procedures 3 activesoft
@@ -5046,6 +5232,7 @@ Material:	electronics
 [VALUES]
 	Val0:	36
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86187
 Keywords:	chip carrier police procedures 4 activesoft
@@ -5073,6 +5260,7 @@ Material:	electronics
 [VALUES]
 	Val0:	36
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86188
 Keywords:	chip carrier police procedures 5 activesoft
@@ -5100,6 +5288,7 @@ Material:	electronics
 [VALUES]
 	Val0:	36
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86189
 Keywords:	chip carrier police procedures 6 activesoft
@@ -5127,6 +5316,7 @@ Material:	electronics
 [VALUES]
 	Val0:	36
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86190
 Keywords:	chip carrier police procedures 7 activesoft
@@ -5154,6 +5344,7 @@ Material:	electronics
 [VALUES]
 	Val0:	36
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86191
 Keywords:	chip carrier police procedures 8 activesoft
@@ -5181,6 +5372,7 @@ Material:	electronics
 [VALUES]
 	Val0:	36
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86192
 Keywords:	chip carrier stealth 1 activesoft
@@ -5208,6 +5400,7 @@ Material:	electronics
 [VALUES]
 	Val0:	56
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86193
 Keywords:	chip carrier stealth 2 activesoft
@@ -5235,6 +5428,7 @@ Material:	electronics
 [VALUES]
 	Val0:	56
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86194
 Keywords:	chip carrier stealth 3 activesoft
@@ -5262,6 +5456,7 @@ Material:	electronics
 [VALUES]
 	Val0:	56
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86195
 Keywords:	chip carrier stealth 4 activesoft
@@ -5289,6 +5484,7 @@ Material:	electronics
 [VALUES]
 	Val0:	56
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86196
 Keywords:	chip carrier stealth 5 activesoft
@@ -5316,6 +5512,7 @@ Material:	electronics
 [VALUES]
 	Val0:	56
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86197
 Keywords:	chip carrier stealth 6 activesoft
@@ -5343,6 +5540,7 @@ Material:	electronics
 [VALUES]
 	Val0:	56
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86198
 Keywords:	chip carrier stealth 7 activesoft
@@ -5370,6 +5568,7 @@ Material:	electronics
 [VALUES]
 	Val0:	56
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86199
 Keywords:	chip carrier stealth 8 activesoft
@@ -5397,6 +5596,7 @@ Material:	electronics
 [VALUES]
 	Val0:	56
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86200
 Keywords:	chip carrier driving bike 1 activesoft
@@ -5424,6 +5624,7 @@ Material:	electronics
 [VALUES]
 	Val0:	60
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86201
 Keywords:	chip carrier driving bike 2 activesoft
@@ -5451,6 +5652,7 @@ Material:	electronics
 [VALUES]
 	Val0:	60
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86202
 Keywords:	chip carrier driving bike 3 activesoft
@@ -5478,6 +5680,7 @@ Material:	electronics
 [VALUES]
 	Val0:	60
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86203
 Keywords:	chip carrier driving bike 4 activesoft
@@ -5505,6 +5708,7 @@ Material:	electronics
 [VALUES]
 	Val0:	60
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86204
 Keywords:	chip carrier driving bike 5 activesoft
@@ -5532,6 +5736,7 @@ Material:	electronics
 [VALUES]
 	Val0:	60
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86205
 Keywords:	chip carrier driving bike 6 activesoft
@@ -5559,6 +5764,7 @@ Material:	electronics
 [VALUES]
 	Val0:	60
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86206
 Keywords:	chip carrier driving bike 7 activesoft
@@ -5586,6 +5792,7 @@ Material:	electronics
 [VALUES]
 	Val0:	60
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86207
 Keywords:	chip carrier driving bike 8 activesoft
@@ -5613,6 +5820,7 @@ Material:	electronics
 [VALUES]
 	Val0:	60
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86208
 Keywords:	chip carrier driving car 1 activesoft
@@ -5640,6 +5848,7 @@ Material:	electronics
 [VALUES]
 	Val0:	62
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86209
 Keywords:	chip carrier driving car 2 activesoft
@@ -5667,6 +5876,7 @@ Material:	electronics
 [VALUES]
 	Val0:	62
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86210
 Keywords:	chip carrier driving car 3 activesoft
@@ -5694,6 +5904,7 @@ Material:	electronics
 [VALUES]
 	Val0:	62
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86211
 Keywords:	chip carrier driving car 4 activesoft
@@ -5721,6 +5932,7 @@ Material:	electronics
 [VALUES]
 	Val0:	62
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86212
 Keywords:	chip carrier driving car 5 activesoft
@@ -5748,6 +5960,7 @@ Material:	electronics
 [VALUES]
 	Val0:	62
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86213
 Keywords:	chip carrier driving car 6 activesoft
@@ -5775,6 +5988,7 @@ Material:	electronics
 [VALUES]
 	Val0:	62
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86214
 Keywords:	chip carrier driving car 7 activesoft
@@ -5802,6 +6016,7 @@ Material:	electronics
 [VALUES]
 	Val0:	62
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86215
 Keywords:	chip carrier driving car 8 activesoft
@@ -5829,6 +6044,7 @@ Material:	electronics
 [VALUES]
 	Val0:	62
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86216
 Keywords:	chip carrier driving truck 1 activesoft
@@ -5856,6 +6072,7 @@ Material:	electronics
 [VALUES]
 	Val0:	63
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86217
 Keywords:	chip carrier driving truck 2 activesoft
@@ -5883,6 +6100,7 @@ Material:	electronics
 [VALUES]
 	Val0:	63
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86218
 Keywords:	chip carrier driving truck 3 activesoft
@@ -5910,6 +6128,7 @@ Material:	electronics
 [VALUES]
 	Val0:	63
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86219
 Keywords:	chip carrier driving truck 4 activesoft
@@ -5937,6 +6156,7 @@ Material:	electronics
 [VALUES]
 	Val0:	63
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86220
 Keywords:	chip carrier driving truck 5 activesoft
@@ -5964,6 +6184,7 @@ Material:	electronics
 [VALUES]
 	Val0:	63
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86221
 Keywords:	chip carrier driving truck 6 activesoft
@@ -5991,6 +6212,7 @@ Material:	electronics
 [VALUES]
 	Val0:	63
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86222
 Keywords:	chip carrier driving truck 7 activesoft
@@ -6018,6 +6240,7 @@ Material:	electronics
 [VALUES]
 	Val0:	63
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86223
 Keywords:	chip carrier driving truck 8 activesoft
@@ -6045,6 +6268,7 @@ Material:	electronics
 [VALUES]
 	Val0:	63
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86224
 Keywords:	chip carrier build repair bike 1 activesoft
@@ -6072,6 +6296,7 @@ Material:	electronics
 [VALUES]
 	Val0:	64
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86225
 Keywords:	chip carrier build repair bike 2 activesoft
@@ -6099,6 +6324,7 @@ Material:	electronics
 [VALUES]
 	Val0:	64
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86226
 Keywords:	chip carrier build repair bike 3 activesoft
@@ -6126,6 +6352,7 @@ Material:	electronics
 [VALUES]
 	Val0:	64
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86227
 Keywords:	chip carrier build repair bike 4 activesoft
@@ -6153,6 +6380,7 @@ Material:	electronics
 [VALUES]
 	Val0:	64
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86228
 Keywords:	chip carrier build repair bike 5 activesoft
@@ -6180,6 +6408,7 @@ Material:	electronics
 [VALUES]
 	Val0:	64
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86229
 Keywords:	chip carrier build repair bike 6 activesoft
@@ -6207,6 +6436,7 @@ Material:	electronics
 [VALUES]
 	Val0:	64
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86230
 Keywords:	chip carrier build repair bike 7 activesoft
@@ -6234,6 +6464,7 @@ Material:	electronics
 [VALUES]
 	Val0:	64
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86231
 Keywords:	chip carrier build repair bike 8 activesoft
@@ -6261,6 +6492,7 @@ Material:	electronics
 [VALUES]
 	Val0:	64
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86232
 Keywords:	chip carrier build repair car 1 activesoft
@@ -6288,6 +6520,7 @@ Material:	electronics
 [VALUES]
 	Val0:	65
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86233
 Keywords:	chip carrier build repair car 2 activesoft
@@ -6315,6 +6548,7 @@ Material:	electronics
 [VALUES]
 	Val0:	65
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86234
 Keywords:	chip carrier build repair car 3 activesoft
@@ -6342,6 +6576,7 @@ Material:	electronics
 [VALUES]
 	Val0:	65
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86235
 Keywords:	chip carrier build repair car 4 activesoft
@@ -6369,6 +6604,7 @@ Material:	electronics
 [VALUES]
 	Val0:	65
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86236
 Keywords:	chip carrier build repair car 5 activesoft
@@ -6396,6 +6632,7 @@ Material:	electronics
 [VALUES]
 	Val0:	65
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86237
 Keywords:	chip carrier build repair car 6 activesoft
@@ -6423,6 +6660,7 @@ Material:	electronics
 [VALUES]
 	Val0:	65
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86238
 Keywords:	chip carrier build repair car 7 activesoft
@@ -6450,6 +6688,7 @@ Material:	electronics
 [VALUES]
 	Val0:	65
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86239
 Keywords:	chip carrier build repair car 8 activesoft
@@ -6477,6 +6716,7 @@ Material:	electronics
 [VALUES]
 	Val0:	65
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86240
 Keywords:	chip carrier build repair drone 1 activesoft
@@ -6504,6 +6744,7 @@ Material:	electronics
 [VALUES]
 	Val0:	65
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86241
 Keywords:	chip carrier build repair drone 2 activesoft
@@ -6531,6 +6772,7 @@ Material:	electronics
 [VALUES]
 	Val0:	65
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86242
 Keywords:	chip carrier build repair drone 3 activesoft
@@ -6558,6 +6800,7 @@ Material:	electronics
 [VALUES]
 	Val0:	65
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86243
 Keywords:	chip carrier build repair drone 4 activesoft
@@ -6585,6 +6828,7 @@ Material:	electronics
 [VALUES]
 	Val0:	65
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86244
 Keywords:	chip carrier build repair drone 5 activesoft
@@ -6612,6 +6856,7 @@ Material:	electronics
 [VALUES]
 	Val0:	65
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86245
 Keywords:	chip carrier build repair drone 6 activesoft
@@ -6639,6 +6884,7 @@ Material:	electronics
 [VALUES]
 	Val0:	65
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86246
 Keywords:	chip carrier build repair drone 7 activesoft
@@ -6666,6 +6912,7 @@ Material:	electronics
 [VALUES]
 	Val0:	65
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86247
 Keywords:	chip carrier build repair drone 8 activesoft
@@ -6693,6 +6940,7 @@ Material:	electronics
 [VALUES]
 	Val0:	65
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86248
 Keywords:	chip carrier build repair truck 1 activesoft
@@ -6720,6 +6968,7 @@ Material:	electronics
 [VALUES]
 	Val0:	67
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86249
 Keywords:	chip carrier build repair truck 2 activesoft
@@ -6747,6 +6996,7 @@ Material:	electronics
 [VALUES]
 	Val0:	67
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86250
 Keywords:	chip carrier build repair truck 3 activesoft
@@ -6774,6 +7024,7 @@ Material:	electronics
 [VALUES]
 	Val0:	67
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86251
 Keywords:	chip carrier build repair truck 4 activesoft
@@ -6801,6 +7052,7 @@ Material:	electronics
 [VALUES]
 	Val0:	67
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86252
 Keywords:	chip carrier build repair truck 5 activesoft
@@ -6828,6 +7080,7 @@ Material:	electronics
 [VALUES]
 	Val0:	67
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86253
 Keywords:	chip carrier build repair truck 6 activesoft
@@ -6855,6 +7108,7 @@ Material:	electronics
 [VALUES]
 	Val0:	67
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86254
 Keywords:	chip carrier build repair truck 7 activesoft
@@ -6882,6 +7136,7 @@ Material:	electronics
 [VALUES]
 	Val0:	67
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86255
 Keywords:	chip carrier build repair truck 8 activesoft
@@ -6909,6 +7164,7 @@ Material:	electronics
 [VALUES]
 	Val0:	67
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86256
 Keywords:	chip carrier etiquette corporate 1 activesoft
@@ -6936,6 +7192,7 @@ Material:	electronics
 [VALUES]
 	Val0:	44
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86257
 Keywords:	chip carrier etiquette corporate 2 activesoft
@@ -6963,6 +7220,7 @@ Material:	electronics
 [VALUES]
 	Val0:	44
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86258
 Keywords:	chip carrier etiquette corporate 3 activesoft
@@ -6990,6 +7248,7 @@ Material:	electronics
 [VALUES]
 	Val0:	44
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86259
 Keywords:	chip carrier etiquette corporate 4 activesoft
@@ -7017,6 +7276,7 @@ Material:	electronics
 [VALUES]
 	Val0:	44
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86260
 Keywords:	chip carrier etiquette corporate 5 activesoft
@@ -7044,6 +7304,7 @@ Material:	electronics
 [VALUES]
 	Val0:	44
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86261
 Keywords:	chip carrier etiquette corporate 6 activesoft
@@ -7071,6 +7332,7 @@ Material:	electronics
 [VALUES]
 	Val0:	44
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86262
 Keywords:	chip carrier etiquette corporate 7 activesoft
@@ -7098,6 +7360,7 @@ Material:	electronics
 [VALUES]
 	Val0:	44
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86263
 Keywords:	chip carrier etiquette corporate 8 activesoft
@@ -7125,6 +7388,7 @@ Material:	electronics
 [VALUES]
 	Val0:	44
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86264
 Keywords:	chip carrier etiquette elf 1 activesoft
@@ -7152,6 +7416,7 @@ Material:	electronics
 [VALUES]
 	Val0:	48
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86265
 Keywords:	chip carrier etiquette elf 2 activesoft
@@ -7179,6 +7444,7 @@ Material:	electronics
 [VALUES]
 	Val0:	48
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86266
 Keywords:	chip carrier etiquette elf 3 activesoft
@@ -7206,6 +7472,7 @@ Material:	electronics
 [VALUES]
 	Val0:	48
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86267
 Keywords:	chip carrier etiquette elf 4 activesoft
@@ -7233,6 +7500,7 @@ Material:	electronics
 [VALUES]
 	Val0:	48
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86268
 Keywords:	chip carrier etiquette elf 5 activesoft
@@ -7260,6 +7528,7 @@ Material:	electronics
 [VALUES]
 	Val0:	48
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86269
 Keywords:	chip carrier etiquette elf 6 activesoft
@@ -7287,6 +7556,7 @@ Material:	electronics
 [VALUES]
 	Val0:	48
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86270
 Keywords:	chip carrier etiquette elf 7 activesoft
@@ -7314,6 +7584,7 @@ Material:	electronics
 [VALUES]
 	Val0:	48
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86271
 Keywords:	chip carrier etiquette elf 8 activesoft
@@ -7341,6 +7612,7 @@ Material:	electronics
 [VALUES]
 	Val0:	48
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86272
 Keywords:	chip carrier etiquette media 1 activesoft
@@ -7368,6 +7640,7 @@ Material:	electronics
 [VALUES]
 	Val0:	45
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86273
 Keywords:	chip carrier etiquette media 2 activesoft
@@ -7395,6 +7668,7 @@ Material:	electronics
 [VALUES]
 	Val0:	45
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86274
 Keywords:	chip carrier etiquette media 3 activesoft
@@ -7422,6 +7696,7 @@ Material:	electronics
 [VALUES]
 	Val0:	45
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86275
 Keywords:	chip carrier etiquette media 4 activesoft
@@ -7449,6 +7724,7 @@ Material:	electronics
 [VALUES]
 	Val0:	45
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86276
 Keywords:	chip carrier etiquette media 5 activesoft
@@ -7476,6 +7752,7 @@ Material:	electronics
 [VALUES]
 	Val0:	45
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86277
 Keywords:	chip carrier etiquette media 6 activesoft
@@ -7503,6 +7780,7 @@ Material:	electronics
 [VALUES]
 	Val0:	45
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86278
 Keywords:	chip carrier etiquette media 7 activesoft
@@ -7530,6 +7808,7 @@ Material:	electronics
 [VALUES]
 	Val0:	45
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86279
 Keywords:	chip carrier etiquette media 8 activesoft
@@ -7557,6 +7836,7 @@ Material:	electronics
 [VALUES]
 	Val0:	45
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86280
 Keywords:	chip carrier etiquette street 1 activesoft
@@ -7584,6 +7864,7 @@ Material:	electronics
 [VALUES]
 	Val0:	46
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86281
 Keywords:	chip carrier etiquette street 2 activesoft
@@ -7611,6 +7892,7 @@ Material:	electronics
 [VALUES]
 	Val0:	46
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86282
 Keywords:	chip carrier etiquette street 3 activesoft
@@ -7638,6 +7920,7 @@ Material:	electronics
 [VALUES]
 	Val0:	46
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86283
 Keywords:	chip carrier etiquette street 4 activesoft
@@ -7665,6 +7948,7 @@ Material:	electronics
 [VALUES]
 	Val0:	46
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86284
 Keywords:	chip carrier etiquette street 5 activesoft
@@ -7692,6 +7976,7 @@ Material:	electronics
 [VALUES]
 	Val0:	46
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86285
 Keywords:	chip carrier etiquette street 6 activesoft
@@ -7719,6 +8004,7 @@ Material:	electronics
 [VALUES]
 	Val0:	46
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86286
 Keywords:	chip carrier etiquette street 7 activesoft
@@ -7746,6 +8032,7 @@ Material:	electronics
 [VALUES]
 	Val0:	46
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86287
 Keywords:	chip carrier etiquette street 8 activesoft
@@ -7773,6 +8060,7 @@ Material:	electronics
 [VALUES]
 	Val0:	46
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86288
 Keywords:	chip carrier etiquette tribal 1 activesoft
@@ -7800,6 +8088,7 @@ Material:	electronics
 [VALUES]
 	Val0:	46
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86289
 Keywords:	chip carrier etiquette tribal 2 activesoft
@@ -7827,6 +8116,7 @@ Material:	electronics
 [VALUES]
 	Val0:	46
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86290
 Keywords:	chip carrier etiquette tribal 3 activesoft
@@ -7854,6 +8144,7 @@ Material:	electronics
 [VALUES]
 	Val0:	46
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86291
 Keywords:	chip carrier etiquette tribal 4 activesoft
@@ -7881,6 +8172,7 @@ Material:	electronics
 [VALUES]
 	Val0:	46
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86292
 Keywords:	chip carrier etiquette tribal 5 activesoft
@@ -7908,6 +8200,7 @@ Material:	electronics
 [VALUES]
 	Val0:	46
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86293
 Keywords:	chip carrier etiquette tribal 6 activesoft
@@ -7935,6 +8228,7 @@ Material:	electronics
 [VALUES]
 	Val0:	46
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86294
 Keywords:	chip carrier etiquette tribal 7 activesoft
@@ -7962,6 +8256,7 @@ Material:	electronics
 [VALUES]
 	Val0:	46
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86295
 Keywords:	chip carrier etiquette tribal 8 activesoft
@@ -7989,6 +8284,7 @@ Material:	electronics
 [VALUES]
 	Val0:	46
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86296
 Keywords:	chip carrier negotiation 1 activesoft
@@ -8016,6 +8312,7 @@ Material:	electronics
 [VALUES]
 	Val0:	39
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86297
 Keywords:	chip carrier negotiation 2 activesoft
@@ -8043,6 +8340,7 @@ Material:	electronics
 [VALUES]
 	Val0:	39
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86298
 Keywords:	chip carrier negotiation 3 activesoft
@@ -8070,6 +8368,7 @@ Material:	electronics
 [VALUES]
 	Val0:	39
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86299
 Keywords:	chip carrier negotiation 4 activesoft
@@ -8097,6 +8396,7 @@ Material:	electronics
 [VALUES]
 	Val0:	39
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86300
 Keywords:	chip carrier negotiation 5 activesoft
@@ -8124,6 +8424,7 @@ Material:	electronics
 [VALUES]
 	Val0:	39
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86301
 Keywords:	chip carrier negotiation 6 activesoft
@@ -8151,6 +8452,7 @@ Material:	electronics
 [VALUES]
 	Val0:	39
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86302
 Keywords:	chip carrier negotiation 7 activesoft
@@ -8178,6 +8480,7 @@ Material:	electronics
 [VALUES]
 	Val0:	39
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86303
 Keywords:	chip carrier negotiation 8 activesoft
@@ -8205,6 +8508,7 @@ Material:	electronics
 [VALUES]
 	Val0:	39
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86304
 Keywords:	chip carrier build repair computers 1 activesoft
@@ -8232,6 +8536,7 @@ Material:	electronics
 [VALUES]
 	Val0:	32
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86305
 Keywords:	chip carrier build repair computers 2 activesoft
@@ -8259,6 +8564,7 @@ Material:	electronics
 [VALUES]
 	Val0:	32
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86306
 Keywords:	chip carrier build repair computers 3 activesoft
@@ -8286,6 +8592,7 @@ Material:	electronics
 [VALUES]
 	Val0:	32
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86307
 Keywords:	chip carrier build repair computers 4 activesoft
@@ -8313,6 +8620,7 @@ Material:	electronics
 [VALUES]
 	Val0:	32
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86308
 Keywords:	chip carrier build repair computers 5 activesoft
@@ -8340,6 +8648,7 @@ Material:	electronics
 [VALUES]
 	Val0:	32
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86309
 Keywords:	chip carrier build repair computers 6 activesoft
@@ -8367,6 +8676,7 @@ Material:	electronics
 [VALUES]
 	Val0:	32
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86310
 Keywords:	chip carrier build repair computers 7 activesoft
@@ -8394,6 +8704,7 @@ Material:	electronics
 [VALUES]
 	Val0:	32
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86311
 Keywords:	chip carrier build repair computers 8 activesoft
@@ -8421,6 +8732,7 @@ Material:	electronics
 [VALUES]
 	Val0:	32
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86312
 Keywords:	chip carrier build repair electronics 1 activesoft
@@ -8448,6 +8760,7 @@ Material:	electronics
 [VALUES]
 	Val0:	34
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86313
 Keywords:	chip carrier build repair electronics 2 activesoft
@@ -8475,6 +8788,7 @@ Material:	electronics
 [VALUES]
 	Val0:	34
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86314
 Keywords:	chip carrier build repair electronics 3 activesoft
@@ -8502,6 +8816,7 @@ Material:	electronics
 [VALUES]
 	Val0:	34
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86315
 Keywords:	chip carrier build repair electronics 4 activesoft
@@ -8529,6 +8844,7 @@ Material:	electronics
 [VALUES]
 	Val0:	34
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86316
 Keywords:	chip carrier build repair electronics 5 activesoft
@@ -8556,6 +8872,7 @@ Material:	electronics
 [VALUES]
 	Val0:	34
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86317
 Keywords:	chip carrier build repair electronics 6 activesoft
@@ -8583,6 +8900,7 @@ Material:	electronics
 [VALUES]
 	Val0:	34
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86318
 Keywords:	chip carrier build repair electronics 7 activesoft
@@ -8610,6 +8928,7 @@ Material:	electronics
 [VALUES]
 	Val0:	34
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86319
 Keywords:	chip carrier build repair electronics 8 activesoft
@@ -8637,6 +8956,7 @@ Material:	electronics
 [VALUES]
 	Val0:	34
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86320
 Keywords:	chip carrier computers 1 activesoft
@@ -8664,6 +8984,7 @@ Material:	electronics
 [VALUES]
 	Val0:	30
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86321
 Keywords:	chip carrier computers 2 activesoft
@@ -8691,6 +9012,7 @@ Material:	electronics
 [VALUES]
 	Val0:	30
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86322
 Keywords:	chip carrier computers 3 activesoft
@@ -8718,6 +9040,7 @@ Material:	electronics
 [VALUES]
 	Val0:	30
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86323
 Keywords:	chip carrier computers 4 activesoft
@@ -8745,6 +9068,7 @@ Material:	electronics
 [VALUES]
 	Val0:	30
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86324
 Keywords:	chip carrier computers 5 activesoft
@@ -8772,6 +9096,7 @@ Material:	electronics
 [VALUES]
 	Val0:	30
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86325
 Keywords:	chip carrier computers 6 activesoft
@@ -8799,6 +9124,7 @@ Material:	electronics
 [VALUES]
 	Val0:	30
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86326
 Keywords:	chip carrier computers 7 activesoft
@@ -8826,6 +9152,7 @@ Material:	electronics
 [VALUES]
 	Val0:	30
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86327
 Keywords:	chip carrier computers 8 activesoft
@@ -8853,6 +9180,7 @@ Material:	electronics
 [VALUES]
 	Val0:	30
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86328
 Keywords:	chip carrier cyberterminal design 1 activesoft
@@ -8880,6 +9208,7 @@ Material:	electronics
 [VALUES]
 	Val0:	28
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86329
 Keywords:	chip carrier cyberterminal design 2 activesoft
@@ -8907,6 +9236,7 @@ Material:	electronics
 [VALUES]
 	Val0:	28
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86330
 Keywords:	chip carrier cyberterminal design 3 activesoft
@@ -8934,6 +9264,7 @@ Material:	electronics
 [VALUES]
 	Val0:	28
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86331
 Keywords:	chip carrier cyberterminal design 4 activesoft
@@ -8961,6 +9292,7 @@ Material:	electronics
 [VALUES]
 	Val0:	28
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86332
 Keywords:	chip carrier cyberterminal design 5 activesoft
@@ -8988,6 +9320,7 @@ Material:	electronics
 [VALUES]
 	Val0:	28
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86333
 Keywords:	chip carrier cyberterminal design 6 activesoft
@@ -9015,6 +9348,7 @@ Material:	electronics
 [VALUES]
 	Val0:	28
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86334
 Keywords:	chip carrier cyberterminal design 7 activesoft
@@ -9042,6 +9376,7 @@ Material:	electronics
 [VALUES]
 	Val0:	28
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86335
 Keywords:	chip carrier cyberterminal design 8 activesoft
@@ -9069,6 +9404,7 @@ Material:	electronics
 [VALUES]
 	Val0:	28
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86336
 Keywords:	chip carrier data brokerage 1 activesoft
@@ -9096,6 +9432,7 @@ Material:	electronics
 [VALUES]
 	Val0:	54
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86337
 Keywords:	chip carrier data brokerage 2 activesoft
@@ -9123,6 +9460,7 @@ Material:	electronics
 [VALUES]
 	Val0:	54
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86338
 Keywords:	chip carrier data brokerage 3 activesoft
@@ -9150,6 +9488,7 @@ Material:	electronics
 [VALUES]
 	Val0:	54
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86339
 Keywords:	chip carrier data brokerage 4 activesoft
@@ -9177,6 +9516,7 @@ Material:	electronics
 [VALUES]
 	Val0:	54
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86340
 Keywords:	chip carrier data brokerage 5 activesoft
@@ -9204,6 +9544,7 @@ Material:	electronics
 [VALUES]
 	Val0:	54
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86341
 Keywords:	chip carrier data brokerage 6 activesoft
@@ -9231,6 +9572,7 @@ Material:	electronics
 [VALUES]
 	Val0:	54
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86342
 Keywords:	chip carrier data brokerage 7 activesoft
@@ -9258,6 +9600,7 @@ Material:	electronics
 [VALUES]
 	Val0:	54
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86343
 Keywords:	chip carrier data brokerage 8 activesoft
@@ -9285,6 +9628,7 @@ Material:	electronics
 [VALUES]
 	Val0:	54
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86344
 Keywords:	chip carrier electronics 1 activesoft
@@ -9312,6 +9656,7 @@ Material:	electronics
 [VALUES]
 	Val0:	31
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86345
 Keywords:	chip carrier electronics 2 activesoft
@@ -9339,6 +9684,7 @@ Material:	electronics
 [VALUES]
 	Val0:	31
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86346
 Keywords:	chip carrier electronics 3 activesoft
@@ -9366,6 +9712,7 @@ Material:	electronics
 [VALUES]
 	Val0:	31
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86347
 Keywords:	chip carrier electronics 4 activesoft
@@ -9393,6 +9740,7 @@ Material:	electronics
 [VALUES]
 	Val0:	31
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86348
 Keywords:	chip carrier electronics 5 activesoft
@@ -9420,6 +9768,7 @@ Material:	electronics
 [VALUES]
 	Val0:	31
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86349
 Keywords:	chip carrier electronics 6 activesoft
@@ -9447,6 +9796,7 @@ Material:	electronics
 [VALUES]
 	Val0:	31
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86350
 Keywords:	chip carrier electronics 7 activesoft
@@ -9474,6 +9824,7 @@ Material:	electronics
 [VALUES]
 	Val0:	31
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86351
 Keywords:	chip carrier electronics 8 activesoft
@@ -9501,6 +9852,7 @@ Material:	electronics
 [VALUES]
 	Val0:	31
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86352
 Keywords:	chip carrier program design combat 1 activesoft
@@ -9528,6 +9880,7 @@ Material:	electronics
 [VALUES]
 	Val0:	49
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86353
 Keywords:	chip carrier program design combat 2 activesoft
@@ -9555,6 +9908,7 @@ Material:	electronics
 [VALUES]
 	Val0:	49
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86354
 Keywords:	chip carrier program design combat 3 activesoft
@@ -9582,6 +9936,7 @@ Material:	electronics
 [VALUES]
 	Val0:	49
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86355
 Keywords:	chip carrier program design combat 4 activesoft
@@ -9609,6 +9964,7 @@ Material:	electronics
 [VALUES]
 	Val0:	49
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86356
 Keywords:	chip carrier program design combat 5 activesoft
@@ -9636,6 +9992,7 @@ Material:	electronics
 [VALUES]
 	Val0:	49
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86357
 Keywords:	chip carrier program design combat 6 activesoft
@@ -9663,6 +10020,7 @@ Material:	electronics
 [VALUES]
 	Val0:	49
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86358
 Keywords:	chip carrier program design combat 7 activesoft
@@ -9690,6 +10048,7 @@ Material:	electronics
 [VALUES]
 	Val0:	49
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86359
 Keywords:	chip carrier program design combat 8 activesoft
@@ -9717,6 +10076,7 @@ Material:	electronics
 [VALUES]
 	Val0:	49
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86360
 Keywords:	chip carrier program design cyberterminal 1 activesoft
@@ -9744,6 +10104,7 @@ Material:	electronics
 [VALUES]
 	Val0:	53
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86361
 Keywords:	chip carrier program design cyberterminal 2 activesoft
@@ -9771,6 +10132,7 @@ Material:	electronics
 [VALUES]
 	Val0:	53
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86362
 Keywords:	chip carrier program design cyberterminal 3 activesoft
@@ -9798,6 +10160,7 @@ Material:	electronics
 [VALUES]
 	Val0:	53
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86363
 Keywords:	chip carrier program design cyberterminal 4 activesoft
@@ -9825,6 +10188,7 @@ Material:	electronics
 [VALUES]
 	Val0:	53
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86364
 Keywords:	chip carrier program design cyberterminal 5 activesoft
@@ -9852,6 +10216,7 @@ Material:	electronics
 [VALUES]
 	Val0:	53
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86365
 Keywords:	chip carrier program design cyberterminal 6 activesoft
@@ -9879,6 +10244,7 @@ Material:	electronics
 [VALUES]
 	Val0:	53
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86366
 Keywords:	chip carrier program design cyberterminal 7 activesoft
@@ -9906,6 +10272,7 @@ Material:	electronics
 [VALUES]
 	Val0:	53
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86367
 Keywords:	chip carrier program design cyberterminal 8 activesoft
@@ -9933,6 +10300,7 @@ Material:	electronics
 [VALUES]
 	Val0:	53
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86368
 Keywords:	chip carrier program design defensive 1 activesoft
@@ -9960,6 +10328,7 @@ Material:	electronics
 [VALUES]
 	Val0:	50
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86369
 Keywords:	chip carrier program design defensive 2 activesoft
@@ -9987,6 +10356,7 @@ Material:	electronics
 [VALUES]
 	Val0:	50
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86370
 Keywords:	chip carrier program design defensive 3 activesoft
@@ -10014,6 +10384,7 @@ Material:	electronics
 [VALUES]
 	Val0:	50
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86371
 Keywords:	chip carrier program design defensive 4 activesoft
@@ -10041,6 +10412,7 @@ Material:	electronics
 [VALUES]
 	Val0:	50
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86372
 Keywords:	chip carrier program design defensive 5 activesoft
@@ -10068,6 +10440,7 @@ Material:	electronics
 [VALUES]
 	Val0:	50
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86373
 Keywords:	chip carrier program design defensive 6 activesoft
@@ -10095,6 +10468,7 @@ Material:	electronics
 [VALUES]
 	Val0:	50
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86374
 Keywords:	chip carrier program design defensive 7 activesoft
@@ -10122,6 +10496,7 @@ Material:	electronics
 [VALUES]
 	Val0:	50
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86375
 Keywords:	chip carrier program design defensive 8 activesoft
@@ -10149,6 +10524,7 @@ Material:	electronics
 [VALUES]
 	Val0:	50
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86376
 Keywords:	chip carrier program design operational 1 activesoft
@@ -10176,6 +10552,7 @@ Material:	electronics
 [VALUES]
 	Val0:	51
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86377
 Keywords:	chip carrier program design operational 2 activesoft
@@ -10203,6 +10580,7 @@ Material:	electronics
 [VALUES]
 	Val0:	51
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86378
 Keywords:	chip carrier program design operational 3 activesoft
@@ -10230,6 +10608,7 @@ Material:	electronics
 [VALUES]
 	Val0:	51
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86379
 Keywords:	chip carrier program design operational 4 activesoft
@@ -10257,6 +10636,7 @@ Material:	electronics
 [VALUES]
 	Val0:	51
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86380
 Keywords:	chip carrier program design operational 5 activesoft
@@ -10284,6 +10664,7 @@ Material:	electronics
 [VALUES]
 	Val0:	51
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86381
 Keywords:	chip carrier program design operational 6 activesoft
@@ -10311,6 +10692,7 @@ Material:	electronics
 [VALUES]
 	Val0:	51
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86382
 Keywords:	chip carrier program design operational 7 activesoft
@@ -10338,6 +10720,7 @@ Material:	electronics
 [VALUES]
 	Val0:	51
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86383
 Keywords:	chip carrier program design operational 8 activesoft
@@ -10365,6 +10748,7 @@ Material:	electronics
 [VALUES]
 	Val0:	51
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86384
 Keywords:	chip carrier program design special 1 activesoft
@@ -10392,6 +10776,7 @@ Material:	electronics
 [VALUES]
 	Val0:	52
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86385
 Keywords:	chip carrier program design special 2 activesoft
@@ -10419,6 +10804,7 @@ Material:	electronics
 [VALUES]
 	Val0:	52
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86386
 Keywords:	chip carrier program design special 3 activesoft
@@ -10446,6 +10832,7 @@ Material:	electronics
 [VALUES]
 	Val0:	52
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86387
 Keywords:	chip carrier program design special 4 activesoft
@@ -10473,6 +10860,7 @@ Material:	electronics
 [VALUES]
 	Val0:	52
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86388
 Keywords:	chip carrier program design special 5 activesoft
@@ -10500,6 +10888,7 @@ Material:	electronics
 [VALUES]
 	Val0:	52
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86389
 Keywords:	chip carrier program design special 6 activesoft
@@ -10527,6 +10916,7 @@ Material:	electronics
 [VALUES]
 	Val0:	52
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86390
 Keywords:	chip carrier program design special 7 activesoft
@@ -10554,6 +10944,7 @@ Material:	electronics
 [VALUES]
 	Val0:	52
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86391
 Keywords:	chip carrier program design special 8 activesoft
@@ -10581,6 +10972,7 @@ Material:	electronics
 [VALUES]
 	Val0:	52
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86392
 Keywords:	chip carrier arabic 1 linguasoft
@@ -10608,6 +11000,7 @@ Material:	electronics
 [VALUES]
 	Val0:	89
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86393
 Keywords:	chip carrier arabic 2 linguasoft
@@ -10635,6 +11028,7 @@ Material:	electronics
 [VALUES]
 	Val0:	89
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86394
 Keywords:	chip carrier arabic 3 linguasoft
@@ -10662,6 +11056,7 @@ Material:	electronics
 [VALUES]
 	Val0:	89
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86395
 Keywords:	chip carrier arabic 4 linguasoft
@@ -10689,6 +11084,7 @@ Material:	electronics
 [VALUES]
 	Val0:	89
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86396
 Keywords:	chip carrier arabic 5 linguasoft
@@ -10716,6 +11112,7 @@ Material:	electronics
 [VALUES]
 	Val0:	89
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86397
 Keywords:	chip carrier arabic 6 linguasoft
@@ -10743,6 +11140,7 @@ Material:	electronics
 [VALUES]
 	Val0:	89
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86398
 Keywords:	chip carrier arabic 7 linguasoft
@@ -10770,6 +11168,7 @@ Material:	electronics
 [VALUES]
 	Val0:	89
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86399
 Keywords:	chip carrier arabic 8 linguasoft
@@ -10797,6 +11196,7 @@ Material:	electronics
 [VALUES]
 	Val0:	89
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86400
 Keywords:	chip carrier chinese 1 linguasoft
@@ -10824,6 +11224,7 @@ Material:	electronics
 [VALUES]
 	Val0:	77
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86401
 Keywords:	chip carrier chinese 2 linguasoft
@@ -10851,6 +11252,7 @@ Material:	electronics
 [VALUES]
 	Val0:	77
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86402
 Keywords:	chip carrier chinese 3 linguasoft
@@ -10878,6 +11280,7 @@ Material:	electronics
 [VALUES]
 	Val0:	77
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86403
 Keywords:	chip carrier chinese 4 linguasoft
@@ -10905,6 +11308,7 @@ Material:	electronics
 [VALUES]
 	Val0:	77
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86404
 Keywords:	chip carrier chinese 5 linguasoft
@@ -10932,6 +11336,7 @@ Material:	electronics
 [VALUES]
 	Val0:	77
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86405
 Keywords:	chip carrier chinese 6 linguasoft
@@ -10959,6 +11364,7 @@ Material:	electronics
 [VALUES]
 	Val0:	77
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86406
 Keywords:	chip carrier chinese 7 linguasoft
@@ -10986,6 +11392,7 @@ Material:	electronics
 [VALUES]
 	Val0:	77
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86407
 Keywords:	chip carrier chinese 8 linguasoft
@@ -11013,6 +11420,7 @@ Material:	electronics
 [VALUES]
 	Val0:	77
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86408
 Keywords:	chip carrier crow 1 linguasoft
@@ -11040,6 +11448,7 @@ Material:	electronics
 [VALUES]
 	Val0:	83
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86409
 Keywords:	chip carrier crow 2 linguasoft
@@ -11067,6 +11476,7 @@ Material:	electronics
 [VALUES]
 	Val0:	83
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86410
 Keywords:	chip carrier crow 3 linguasoft
@@ -11094,6 +11504,7 @@ Material:	electronics
 [VALUES]
 	Val0:	83
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86411
 Keywords:	chip carrier crow 4 linguasoft
@@ -11121,6 +11532,7 @@ Material:	electronics
 [VALUES]
 	Val0:	83
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86412
 Keywords:	chip carrier crow 5 linguasoft
@@ -11148,6 +11560,7 @@ Material:	electronics
 [VALUES]
 	Val0:	83
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86413
 Keywords:	chip carrier crow 6 linguasoft
@@ -11175,6 +11588,7 @@ Material:	electronics
 [VALUES]
 	Val0:	83
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86414
 Keywords:	chip carrier crow 7 linguasoft
@@ -11202,6 +11616,7 @@ Material:	electronics
 [VALUES]
 	Val0:	83
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86415
 Keywords:	chip carrier crow 8 linguasoft
@@ -11229,6 +11644,7 @@ Material:	electronics
 [VALUES]
 	Val0:	83
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86416
 Keywords:	chip carrier english 1 linguasoft
@@ -11256,6 +11672,7 @@ Material:	electronics
 [VALUES]
 	Val0:	73
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86417
 Keywords:	chip carrier english 2 linguasoft
@@ -11283,6 +11700,7 @@ Material:	electronics
 [VALUES]
 	Val0:	73
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86418
 Keywords:	chip carrier english 3 linguasoft
@@ -11310,6 +11728,7 @@ Material:	electronics
 [VALUES]
 	Val0:	73
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86419
 Keywords:	chip carrier english 4 linguasoft
@@ -11337,6 +11756,7 @@ Material:	electronics
 [VALUES]
 	Val0:	73
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86420
 Keywords:	chip carrier english 5 linguasoft
@@ -11364,6 +11784,7 @@ Material:	electronics
 [VALUES]
 	Val0:	73
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86421
 Keywords:	chip carrier english 6 linguasoft
@@ -11391,6 +11812,7 @@ Material:	electronics
 [VALUES]
 	Val0:	73
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86422
 Keywords:	chip carrier english 7 linguasoft
@@ -11418,6 +11840,7 @@ Material:	electronics
 [VALUES]
 	Val0:	73
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86423
 Keywords:	chip carrier english 8 linguasoft
@@ -11445,6 +11868,7 @@ Material:	electronics
 [VALUES]
 	Val0:	73
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86424
 Keywords:	chip carrier french 1 linguasoft
@@ -11472,6 +11896,7 @@ Material:	electronics
 [VALUES]
 	Val0:	92
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86425
 Keywords:	chip carrier french 2 linguasoft
@@ -11499,6 +11924,7 @@ Material:	electronics
 [VALUES]
 	Val0:	92
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86426
 Keywords:	chip carrier french 3 linguasoft
@@ -11526,6 +11952,7 @@ Material:	electronics
 [VALUES]
 	Val0:	92
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86427
 Keywords:	chip carrier french 4 linguasoft
@@ -11553,6 +11980,7 @@ Material:	electronics
 [VALUES]
 	Val0:	92
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86428
 Keywords:	chip carrier french 5 linguasoft
@@ -11580,6 +12008,7 @@ Material:	electronics
 [VALUES]
 	Val0:	92
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86429
 Keywords:	chip carrier french 6 linguasoft
@@ -11607,6 +12036,7 @@ Material:	electronics
 [VALUES]
 	Val0:	92
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86430
 Keywords:	chip carrier french 7 linguasoft
@@ -11634,6 +12064,7 @@ Material:	electronics
 [VALUES]
 	Val0:	92
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86431
 Keywords:	chip carrier french 8 linguasoft
@@ -11661,6 +12092,7 @@ Material:	electronics
 [VALUES]
 	Val0:	92
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86432
 Keywords:	chip carrier gaelic 1 linguasoft
@@ -11688,6 +12120,7 @@ Material:	electronics
 [VALUES]
 	Val0:	91
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86433
 Keywords:	chip carrier gaelic 2 linguasoft
@@ -11715,6 +12148,7 @@ Material:	electronics
 [VALUES]
 	Val0:	91
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86434
 Keywords:	chip carrier gaelic 3 linguasoft
@@ -11742,6 +12176,7 @@ Material:	electronics
 [VALUES]
 	Val0:	91
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86435
 Keywords:	chip carrier gaelic 4 linguasoft
@@ -11769,6 +12204,7 @@ Material:	electronics
 [VALUES]
 	Val0:	91
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86436
 Keywords:	chip carrier gaelic 5 linguasoft
@@ -11796,6 +12232,7 @@ Material:	electronics
 [VALUES]
 	Val0:	91
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86437
 Keywords:	chip carrier gaelic 6 linguasoft
@@ -11823,6 +12260,7 @@ Material:	electronics
 [VALUES]
 	Val0:	91
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86438
 Keywords:	chip carrier gaelic 7 linguasoft
@@ -11850,6 +12288,7 @@ Material:	electronics
 [VALUES]
 	Val0:	91
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86439
 Keywords:	chip carrier gaelic 8 linguasoft
@@ -11877,6 +12316,7 @@ Material:	electronics
 [VALUES]
 	Val0:	91
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86440
 Keywords:	chip carrier german 1 linguasoft
@@ -11904,6 +12344,7 @@ Material:	electronics
 [VALUES]
 	Val0:	87
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86441
 Keywords:	chip carrier german 2 linguasoft
@@ -11931,6 +12372,7 @@ Material:	electronics
 [VALUES]
 	Val0:	87
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86442
 Keywords:	chip carrier german 3 linguasoft
@@ -11958,6 +12400,7 @@ Material:	electronics
 [VALUES]
 	Val0:	87
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86443
 Keywords:	chip carrier german 4 linguasoft
@@ -11985,6 +12428,7 @@ Material:	electronics
 [VALUES]
 	Val0:	87
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86444
 Keywords:	chip carrier german 5 linguasoft
@@ -12012,6 +12456,7 @@ Material:	electronics
 [VALUES]
 	Val0:	87
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86445
 Keywords:	chip carrier german 6 linguasoft
@@ -12039,6 +12484,7 @@ Material:	electronics
 [VALUES]
 	Val0:	87
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86446
 Keywords:	chip carrier german 7 linguasoft
@@ -12066,6 +12512,7 @@ Material:	electronics
 [VALUES]
 	Val0:	87
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86447
 Keywords:	chip carrier german 8 linguasoft
@@ -12093,6 +12540,7 @@ Material:	electronics
 [VALUES]
 	Val0:	87
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86448
 Keywords:	chip carrier italian 1 linguasoft
@@ -12120,6 +12568,7 @@ Material:	electronics
 [VALUES]
 	Val0:	79
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86449
 Keywords:	chip carrier italian 2 linguasoft
@@ -12147,6 +12596,7 @@ Material:	electronics
 [VALUES]
 	Val0:	79
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86450
 Keywords:	chip carrier italian 3 linguasoft
@@ -12174,6 +12624,7 @@ Material:	electronics
 [VALUES]
 	Val0:	79
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86451
 Keywords:	chip carrier italian 4 linguasoft
@@ -12201,6 +12652,7 @@ Material:	electronics
 [VALUES]
 	Val0:	79
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86452
 Keywords:	chip carrier italian 5 linguasoft
@@ -12228,6 +12680,7 @@ Material:	electronics
 [VALUES]
 	Val0:	79
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86453
 Keywords:	chip carrier italian 6 linguasoft
@@ -12255,6 +12708,7 @@ Material:	electronics
 [VALUES]
 	Val0:	79
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86454
 Keywords:	chip carrier italian 7 linguasoft
@@ -12282,6 +12736,7 @@ Material:	electronics
 [VALUES]
 	Val0:	79
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86455
 Keywords:	chip carrier italian 8 linguasoft
@@ -12309,6 +12764,7 @@ Material:	electronics
 [VALUES]
 	Val0:	79
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86456
 Keywords:	chip carrier japanese 1 linguasoft
@@ -12336,6 +12792,7 @@ Material:	electronics
 [VALUES]
 	Val0:	76
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86457
 Keywords:	chip carrier japanese 2 linguasoft
@@ -12363,6 +12820,7 @@ Material:	electronics
 [VALUES]
 	Val0:	76
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86458
 Keywords:	chip carrier japanese 3 linguasoft
@@ -12390,6 +12848,7 @@ Material:	electronics
 [VALUES]
 	Val0:	76
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86459
 Keywords:	chip carrier japanese 4 linguasoft
@@ -12417,6 +12876,7 @@ Material:	electronics
 [VALUES]
 	Val0:	76
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86460
 Keywords:	chip carrier japanese 5 linguasoft
@@ -12444,6 +12904,7 @@ Material:	electronics
 [VALUES]
 	Val0:	76
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86461
 Keywords:	chip carrier japanese 6 linguasoft
@@ -12471,6 +12932,7 @@ Material:	electronics
 [VALUES]
 	Val0:	76
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86462
 Keywords:	chip carrier japanese 7 linguasoft
@@ -12498,6 +12960,7 @@ Material:	electronics
 [VALUES]
 	Val0:	76
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86463
 Keywords:	chip carrier japanese 8 linguasoft
@@ -12525,6 +12988,7 @@ Material:	electronics
 [VALUES]
 	Val0:	76
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86464
 Keywords:	chip carrier latin 1 linguasoft
@@ -12552,6 +13016,7 @@ Material:	electronics
 [VALUES]
 	Val0:	90
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86465
 Keywords:	chip carrier latin 2 linguasoft
@@ -12579,6 +13044,7 @@ Material:	electronics
 [VALUES]
 	Val0:	90
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86466
 Keywords:	chip carrier latin 3 linguasoft
@@ -12606,6 +13072,7 @@ Material:	electronics
 [VALUES]
 	Val0:	90
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86467
 Keywords:	chip carrier latin 4 linguasoft
@@ -12633,6 +13100,7 @@ Material:	electronics
 [VALUES]
 	Val0:	90
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86468
 Keywords:	chip carrier latin 5 linguasoft
@@ -12660,6 +13128,7 @@ Material:	electronics
 [VALUES]
 	Val0:	90
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86469
 Keywords:	chip carrier latin 6 linguasoft
@@ -12687,6 +13156,7 @@ Material:	electronics
 [VALUES]
 	Val0:	90
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86470
 Keywords:	chip carrier latin 7 linguasoft
@@ -12714,6 +13184,7 @@ Material:	electronics
 [VALUES]
 	Val0:	90
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86471
 Keywords:	chip carrier latin 8 linguasoft
@@ -12741,6 +13212,7 @@ Material:	electronics
 [VALUES]
 	Val0:	90
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86472
 Keywords:	chip carrier korean 1 linguasoft
@@ -12768,6 +13240,7 @@ Material:	electronics
 [VALUES]
 	Val0:	78
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86473
 Keywords:	chip carrier korean 2 linguasoft
@@ -12795,6 +13268,7 @@ Material:	electronics
 [VALUES]
 	Val0:	78
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86474
 Keywords:	chip carrier korean 3 linguasoft
@@ -12822,6 +13296,7 @@ Material:	electronics
 [VALUES]
 	Val0:	78
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86475
 Keywords:	chip carrier korean 4 linguasoft
@@ -12849,6 +13324,7 @@ Material:	electronics
 [VALUES]
 	Val0:	78
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86476
 Keywords:	chip carrier korean 5 linguasoft
@@ -12876,6 +13352,7 @@ Material:	electronics
 [VALUES]
 	Val0:	78
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86477
 Keywords:	chip carrier korean 6 linguasoft
@@ -12903,6 +13380,7 @@ Material:	electronics
 [VALUES]
 	Val0:	78
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86478
 Keywords:	chip carrier korean 7 linguasoft
@@ -12930,6 +13408,7 @@ Material:	electronics
 [VALUES]
 	Val0:	78
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86479
 Keywords:	chip carrier korean 8 linguasoft
@@ -12957,6 +13436,7 @@ Material:	electronics
 [VALUES]
 	Val0:	78
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86480
 Keywords:	chip carrier makaw 1 linguasoft
@@ -12984,6 +13464,7 @@ Material:	electronics
 [VALUES]
 	Val0:	82
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86481
 Keywords:	chip carrier makaw 2 linguasoft
@@ -13011,6 +13492,7 @@ Material:	electronics
 [VALUES]
 	Val0:	82
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86482
 Keywords:	chip carrier makaw 3 linguasoft
@@ -13038,6 +13520,7 @@ Material:	electronics
 [VALUES]
 	Val0:	82
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86483
 Keywords:	chip carrier makaw 4 linguasoft
@@ -13065,6 +13548,7 @@ Material:	electronics
 [VALUES]
 	Val0:	82
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86484
 Keywords:	chip carrier makaw 5 linguasoft
@@ -13092,6 +13576,7 @@ Material:	electronics
 [VALUES]
 	Val0:	82
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86485
 Keywords:	chip carrier makaw 6 linguasoft
@@ -13119,6 +13604,7 @@ Material:	electronics
 [VALUES]
 	Val0:	82
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86486
 Keywords:	chip carrier makaw 7 linguasoft
@@ -13146,6 +13632,7 @@ Material:	electronics
 [VALUES]
 	Val0:	82
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86487
 Keywords:	chip carrier makaw 8 linguasoft
@@ -13173,6 +13660,7 @@ Material:	electronics
 [VALUES]
 	Val0:	82
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86488
 Keywords:	chip carrier navajo 1 linguasoft
@@ -13200,6 +13688,7 @@ Material:	electronics
 [VALUES]
 	Val0:	86
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86489
 Keywords:	chip carrier navajo 2 linguasoft
@@ -13227,6 +13716,7 @@ Material:	electronics
 [VALUES]
 	Val0:	86
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86490
 Keywords:	chip carrier navajo 3 linguasoft
@@ -13254,6 +13744,7 @@ Material:	electronics
 [VALUES]
 	Val0:	86
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86491
 Keywords:	chip carrier navajo 4 linguasoft
@@ -13281,6 +13772,7 @@ Material:	electronics
 [VALUES]
 	Val0:	86
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86492
 Keywords:	chip carrier navajo 5 linguasoft
@@ -13308,6 +13800,7 @@ Material:	electronics
 [VALUES]
 	Val0:	86
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86493
 Keywords:	chip carrier navajo 6 linguasoft
@@ -13335,6 +13828,7 @@ Material:	electronics
 [VALUES]
 	Val0:	86
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86494
 Keywords:	chip carrier navajo 7 linguasoft
@@ -13362,6 +13856,7 @@ Material:	electronics
 [VALUES]
 	Val0:	86
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86495
 Keywords:	chip carrier navajo 8 linguasoft
@@ -13389,6 +13884,7 @@ Material:	electronics
 [VALUES]
 	Val0:	86
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86496
 Keywords:	chip carrier orzet 1 linguasoft
@@ -13416,6 +13912,7 @@ Material:	electronics
 [VALUES]
 	Val0:	88
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86497
 Keywords:	chip carrier orzet 2 linguasoft
@@ -13443,6 +13940,7 @@ Material:	electronics
 [VALUES]
 	Val0:	88
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86498
 Keywords:	chip carrier orzet 3 linguasoft
@@ -13470,6 +13968,7 @@ Material:	electronics
 [VALUES]
 	Val0:	88
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86499
 Keywords:	chip carrier orzet 4 linguasoft
@@ -13497,6 +13996,7 @@ Material:	electronics
 [VALUES]
 	Val0:	88
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86500
 Keywords:	chip carrier orzet 5 linguasoft
@@ -13524,6 +14024,7 @@ Material:	electronics
 [VALUES]
 	Val0:	88
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86501
 Keywords:	chip carrier orzet 6 linguasoft
@@ -13551,6 +14052,7 @@ Material:	electronics
 [VALUES]
 	Val0:	88
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86502
 Keywords:	chip carrier orzet 7 linguasoft
@@ -13578,6 +14080,7 @@ Material:	electronics
 [VALUES]
 	Val0:	88
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86503
 Keywords:	chip carrier orzet 8 linguasoft
@@ -13605,6 +14108,7 @@ Material:	electronics
 [VALUES]
 	Val0:	88
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86504
 Keywords:	chip carrier russian 1 linguasoft
@@ -13632,6 +14136,7 @@ Material:	electronics
 [VALUES]
 	Val0:	80
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86505
 Keywords:	chip carrier russian 2 linguasoft
@@ -13659,6 +14164,7 @@ Material:	electronics
 [VALUES]
 	Val0:	80
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86506
 Keywords:	chip carrier russian 3 linguasoft
@@ -13686,6 +14192,7 @@ Material:	electronics
 [VALUES]
 	Val0:	80
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86507
 Keywords:	chip carrier russian 4 linguasoft
@@ -13713,6 +14220,7 @@ Material:	electronics
 [VALUES]
 	Val0:	80
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86508
 Keywords:	chip carrier russian 5 linguasoft
@@ -13740,6 +14248,7 @@ Material:	electronics
 [VALUES]
 	Val0:	80
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86509
 Keywords:	chip carrier russian 6 linguasoft
@@ -13767,6 +14276,7 @@ Material:	electronics
 [VALUES]
 	Val0:	80
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86510
 Keywords:	chip carrier russian 7 linguasoft
@@ -13794,6 +14304,7 @@ Material:	electronics
 [VALUES]
 	Val0:	80
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86511
 Keywords:	chip carrier russian 8 linguasoft
@@ -13821,6 +14332,7 @@ Material:	electronics
 [VALUES]
 	Val0:	80
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86512
 Keywords:	chip carrier salish 1 linguasoft
@@ -13848,6 +14360,7 @@ Material:	electronics
 [VALUES]
 	Val0:	84
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86513
 Keywords:	chip carrier salish 2 linguasoft
@@ -13875,6 +14388,7 @@ Material:	electronics
 [VALUES]
 	Val0:	84
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86514
 Keywords:	chip carrier salish 3 linguasoft
@@ -13902,6 +14416,7 @@ Material:	electronics
 [VALUES]
 	Val0:	84
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86515
 Keywords:	chip carrier salish 4 linguasoft
@@ -13929,6 +14444,7 @@ Material:	electronics
 [VALUES]
 	Val0:	84
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86516
 Keywords:	chip carrier salish 5 linguasoft
@@ -13956,6 +14472,7 @@ Material:	electronics
 [VALUES]
 	Val0:	84
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86517
 Keywords:	chip carrier salish 6 linguasoft
@@ -13983,6 +14500,7 @@ Material:	electronics
 [VALUES]
 	Val0:	84
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86518
 Keywords:	chip carrier salish 7 linguasoft
@@ -14010,6 +14528,7 @@ Material:	electronics
 [VALUES]
 	Val0:	84
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86519
 Keywords:	chip carrier salish 8 linguasoft
@@ -14037,6 +14556,7 @@ Material:	electronics
 [VALUES]
 	Val0:	84
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86520
 Keywords:	chip carrier sioux 1 linguasoft
@@ -14064,6 +14584,7 @@ Material:	electronics
 [VALUES]
 	Val0:	81
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86521
 Keywords:	chip carrier sioux 2 linguasoft
@@ -14091,6 +14612,7 @@ Material:	electronics
 [VALUES]
 	Val0:	81
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86522
 Keywords:	chip carrier sioux 3 linguasoft
@@ -14118,6 +14640,7 @@ Material:	electronics
 [VALUES]
 	Val0:	81
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86523
 Keywords:	chip carrier sioux 4 linguasoft
@@ -14145,6 +14668,7 @@ Material:	electronics
 [VALUES]
 	Val0:	81
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86524
 Keywords:	chip carrier sioux 5 linguasoft
@@ -14172,6 +14696,7 @@ Material:	electronics
 [VALUES]
 	Val0:	81
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86525
 Keywords:	chip carrier sioux 6 linguasoft
@@ -14199,6 +14724,7 @@ Material:	electronics
 [VALUES]
 	Val0:	81
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86526
 Keywords:	chip carrier sioux 7 linguasoft
@@ -14226,6 +14752,7 @@ Material:	electronics
 [VALUES]
 	Val0:	81
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86527
 Keywords:	chip carrier sioux 8 linguasoft
@@ -14253,6 +14780,7 @@ Material:	electronics
 [VALUES]
 	Val0:	81
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86528
 Keywords:	chip carrier spanish 1 linguasoft
@@ -14280,6 +14808,7 @@ Material:	electronics
 [VALUES]
 	Val0:	75
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86529
 Keywords:	chip carrier spanish 2 linguasoft
@@ -14307,6 +14836,7 @@ Material:	electronics
 [VALUES]
 	Val0:	75
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86530
 Keywords:	chip carrier spanish 3 linguasoft
@@ -14334,6 +14864,7 @@ Material:	electronics
 [VALUES]
 	Val0:	75
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86531
 Keywords:	chip carrier spanish 4 linguasoft
@@ -14361,6 +14892,7 @@ Material:	electronics
 [VALUES]
 	Val0:	75
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86532
 Keywords:	chip carrier spanish 5 linguasoft
@@ -14388,6 +14920,7 @@ Material:	electronics
 [VALUES]
 	Val0:	75
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86533
 Keywords:	chip carrier spanish 6 linguasoft
@@ -14415,6 +14948,7 @@ Material:	electronics
 [VALUES]
 	Val0:	75
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86534
 Keywords:	chip carrier spanish 7 linguasoft
@@ -14442,6 +14976,7 @@ Material:	electronics
 [VALUES]
 	Val0:	75
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86535
 Keywords:	chip carrier spanish 8 linguasoft
@@ -14469,6 +15004,7 @@ Material:	electronics
 [VALUES]
 	Val0:	75
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86536
 Keywords:	chip carrier sperethiel 1 linguasoft
@@ -14496,6 +15032,7 @@ Material:	electronics
 [VALUES]
 	Val0:	74
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86537
 Keywords:	chip carrier sperethiel 2 linguasoft
@@ -14523,6 +15060,7 @@ Material:	electronics
 [VALUES]
 	Val0:	74
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86538
 Keywords:	chip carrier sperethiel 3 linguasoft
@@ -14550,6 +15088,7 @@ Material:	electronics
 [VALUES]
 	Val0:	74
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86539
 Keywords:	chip carrier sperethiel 4 linguasoft
@@ -14577,6 +15116,7 @@ Material:	electronics
 [VALUES]
 	Val0:	74
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86540
 Keywords:	chip carrier sperethiel 5 linguasoft
@@ -14604,6 +15144,7 @@ Material:	electronics
 [VALUES]
 	Val0:	74
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86541
 Keywords:	chip carrier sperethiel 6 linguasoft
@@ -14631,6 +15172,7 @@ Material:	electronics
 [VALUES]
 	Val0:	74
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86542
 Keywords:	chip carrier sperethiel 7 linguasoft
@@ -14658,6 +15200,7 @@ Material:	electronics
 [VALUES]
 	Val0:	74
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86543
 Keywords:	chip carrier sperethiel 8 linguasoft
@@ -14685,6 +15228,7 @@ Material:	electronics
 [VALUES]
 	Val0:	74
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 #86544
 Keywords:	chip carrier ute 1 linguasoft
@@ -14712,6 +15256,7 @@ Material:	electronics
 [VALUES]
 	Val0:	85
 	Val1:	1
+SourceBook:	SR3 p295-296
 BREAK
 #86545
 Keywords:	chip carrier ute 2 linguasoft
@@ -14739,6 +15284,7 @@ Material:	electronics
 [VALUES]
 	Val0:	85
 	Val1:	2
+SourceBook:	SR3 p295-296
 BREAK
 #86546
 Keywords:	chip carrier ute 3 linguasoft
@@ -14766,6 +15312,7 @@ Material:	electronics
 [VALUES]
 	Val0:	85
 	Val1:	3
+SourceBook:	SR3 p295-296
 BREAK
 #86547
 Keywords:	chip carrier ute 4 linguasoft
@@ -14793,6 +15340,7 @@ Material:	electronics
 [VALUES]
 	Val0:	85
 	Val1:	4
+SourceBook:	SR3 p295-296
 BREAK
 #86548
 Keywords:	chip carrier ute 5 linguasoft
@@ -14820,6 +15368,7 @@ Material:	electronics
 [VALUES]
 	Val0:	85
 	Val1:	5
+SourceBook:	SR3 p295-296
 BREAK
 #86549
 Keywords:	chip carrier ute 6 linguasoft
@@ -14847,6 +15396,7 @@ Material:	electronics
 [VALUES]
 	Val0:	85
 	Val1:	6
+SourceBook:	SR3 p295-296
 BREAK
 #86550
 Keywords:	chip carrier ute 7 linguasoft
@@ -14874,6 +15424,7 @@ Material:	electronics
 [VALUES]
 	Val0:	85
 	Val1:	7
+SourceBook:	SR3 p295-296
 BREAK
 #86551
 Keywords:	chip carrier ute 8 linguasoft
@@ -14901,5 +15452,6 @@ Material:	electronics
 [VALUES]
 	Val0:	85
 	Val1:	8
+SourceBook:	SR3 p295-296
 BREAK
 END
