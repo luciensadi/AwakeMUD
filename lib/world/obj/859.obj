@@ -1395,7 +1395,7 @@ Name:	a trauma damper - cultured
 RoomDesc:$
 An uninstalled trauma damper package is lying here.~
 LookDesc:$
-A Trauma Damper is a clump of specialized receptors, implanted at the base of the thalamus, near the midbrain. Upon receiving sensory information indicating fatigue, pain or physical trauma, the damper triggers the release of concentrated endorphins and enkephalins — naturally produced opiates and painkillers. These substances do not aid in repairing the trauma, but they may keep the user alive and conscious long enough for him to receive medical help.~
+A Trauma Damper is a clump of specialized receptors, implanted at the base of the thalamus, near the midbrain. Upon receiving sensory information indicating fatigue, pain or physical trauma, the damper triggers the release of concentrated endorphins and enkephalins  -  naturally produced opiates and painkillers. These substances do not aid in repairing the trauma, but they may keep the user alive and conscious long enough for him to receive medical help.~
 Type:	Bioware
 WearFlags:	1
 ExtraFlags:	0
