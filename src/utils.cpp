@@ -2051,8 +2051,8 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
       || ((GET_ACCESSORY_ATTACH_LOCATION(attachment) == ACCESS_ACCESSORY_LOCATION_UNDER) && (GET_WEAPON_ATTACH_UNDER_VNUM(weapon)  > 0))) {
     if (ch) {
       send_to_char(ch, "You cannot mount more than one attachment to the %s of %s.\r\n",
-                   CAP(GET_OBJ_NAME(weapon)),
-                   gun_accessory_locations[GET_ACCESSORY_ATTACH_LOCATION(attachment)]);
+                   gun_accessory_locations[GET_ACCESSORY_ATTACH_LOCATION(attachment)],
+                   GET_OBJ_NAME(weapon));
     } else {
       sprintf(buf, "SYSERR: Attempting to attach '%s' (%ld) to already-filled %s location on '%s' (%ld).",
               GET_OBJ_NAME(attachment),
@@ -2094,27 +2094,12 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
     return FALSE;
   }
   
-  // Silecners.
-  if (GET_ACCESSORY_TYPE(attachment) == ACCESS_SILENCER) {
-    // Weapon cannot have BF or FA modes.
-    if (WEAPON_CAN_USE_FIREMODE(weapon, MODE_BF) || WEAPON_CAN_USE_FIREMODE(weapon, MODE_FA)) {
+  // Handling for silencer and suppressor restrictions.
+  if (GET_ACCESSORY_TYPE(attachment) == ACCESS_SILENCER || GET_ACCESSORY_TYPE(attachment) == ACCESS_SOUNDSUPP) {
+    // Weapon cannot be a revolver or shotgun.
+    if (GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_REVOLVER || GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_SHOTGUN) {
       if (ch) {
-        send_to_char(ch, "%s would tear your silencer apart-- it needs a sound suppressor.\r\n", CAP(GET_OBJ_NAME(weapon)));
-      } else {
-        sprintf(buf, "SYSERR: Attempting to attach silencer '%s' (%ld) to BF/FA weapon '%s' (%ld).",
-                GET_OBJ_NAME(attachment),
-                GET_OBJ_VNUM(attachment),
-                GET_OBJ_NAME(weapon),
-                GET_OBJ_VNUM(weapon));
-        mudlog(buf, ch, LOG_SYSLOG, TRUE);
-      }
-      return FALSE;
-    }
-    
-    // Weapon cannot be a revolver, shotgun, or SMG.
-    if (GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_REVOLVER || GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_SHOTGUN || GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_SMG) {
-      if (ch) {
-        send_to_char(ch, "%ss can't use silencers.\r\n", CAP(weapon_type[GET_WEAPON_ATTACK_TYPE(weapon)]));
+        send_to_char(ch, "%ss can't use silencers or suppressors.\r\n", CAP(weapon_type[GET_WEAPON_ATTACK_TYPE(weapon)]));
       } else {
         sprintf(buf, "SYSERR: Attempting to attach silencer '%s' (%ld) to %s '%s' (%ld).",
                 GET_OBJ_NAME(attachment),
@@ -2126,39 +2111,41 @@ bool attach_attachment_to_weapon(struct obj_data *attachment, struct obj_data *w
       }
       return FALSE;
     }
-  }
-  
-  // Sound suppressors.
-  if (GET_ACCESSORY_TYPE(attachment) == ACCESS_SOUNDSUPP) {
-    // Weapon must have BF or FA mode available.
-    if (!(WEAPON_CAN_USE_FIREMODE(weapon, MODE_BF) || WEAPON_CAN_USE_FIREMODE(weapon, MODE_FA))) {
-      if (ch) {
-        send_to_char(ch, "Sound suppressors are too heavy-duty for %s-- it needs a silencer.\r\n", CAP(GET_OBJ_NAME(weapon)));
-      } else {
-        sprintf(buf, "SYSERR: Attempting to attach suppressor '%s' (%ld) to non-BF/FA weapon '%s' (%ld).",
-                GET_OBJ_NAME(attachment),
-                GET_OBJ_VNUM(attachment),
-                GET_OBJ_NAME(weapon),
-                GET_OBJ_VNUM(weapon));
-        mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    
+    // Silencers.
+    if (GET_ACCESSORY_TYPE(attachment) == ACCESS_SILENCER) {
+      // Weapon cannot have BF or FA modes.
+      if (WEAPON_CAN_USE_FIREMODE(weapon, MODE_BF) || WEAPON_CAN_USE_FIREMODE(weapon, MODE_FA)) {
+        if (ch) {
+          send_to_char(ch, "%s would tear your silencer apart-- it needs a sound suppressor.\r\n", CAP(GET_OBJ_NAME(weapon)));
+        } else {
+          sprintf(buf, "SYSERR: Attempting to attach silencer '%s' (%ld) to BF/FA weapon '%s' (%ld).",
+                  GET_OBJ_NAME(attachment),
+                  GET_OBJ_VNUM(attachment),
+                  GET_OBJ_NAME(weapon),
+                  GET_OBJ_VNUM(weapon));
+          mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        }
+        return FALSE;
       }
-      return FALSE;
     }
     
-    // Weapon cannot be a revolver, shotgun, or SMG.
-    if (GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_REVOLVER || GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_SHOTGUN || GET_WEAPON_ATTACK_TYPE(weapon) == WEAP_SMG) {
-      if (ch) {
-        send_to_char(ch, "%ss can't use silencers.\r\n", CAP(weapon_type[GET_WEAPON_ATTACK_TYPE(weapon)]));
-      } else {
-        sprintf(buf, "SYSERR: Attempting to attach silencer '%s' (%ld) to %s '%s' (%ld).",
-                GET_OBJ_NAME(attachment),
-                GET_OBJ_VNUM(attachment),
-                weapon_type[GET_WEAPON_ATTACK_TYPE(weapon)],
-                GET_OBJ_NAME(weapon),
-                GET_OBJ_VNUM(weapon));
-        mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    // Sound suppressors.
+    if (GET_ACCESSORY_TYPE(attachment) == ACCESS_SOUNDSUPP) {
+      // Weapon must have BF or FA mode available.
+      if (!(WEAPON_CAN_USE_FIREMODE(weapon, MODE_BF) || WEAPON_CAN_USE_FIREMODE(weapon, MODE_FA))) {
+        if (ch) {
+          send_to_char(ch, "Sound suppressors are too heavy-duty for %s-- it needs a silencer.\r\n", CAP(GET_OBJ_NAME(weapon)));
+        } else {
+          sprintf(buf, "SYSERR: Attempting to attach suppressor '%s' (%ld) to non-BF/FA weapon '%s' (%ld).",
+                  GET_OBJ_NAME(attachment),
+                  GET_OBJ_VNUM(attachment),
+                  GET_OBJ_NAME(weapon),
+                  GET_OBJ_VNUM(weapon));
+          mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        }
+        return FALSE;
       }
-      return FALSE;
     }
   }
   
