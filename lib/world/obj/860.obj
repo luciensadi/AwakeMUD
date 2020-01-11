@@ -10582,4 +10582,4324 @@ Material:	electronics
 	Val0:	52
 	Val1:	8
 BREAK
+#86392
+Keywords:	chip carrier arabic 1 linguasoft
+Name:	an Arabic 1 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	89
+	Val1:	1
+BREAK
+#86393
+Keywords:	chip carrier arabic 2 linguasoft
+Name:	an Arabic 2 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	89
+	Val1:	2
+BREAK
+#86394
+Keywords:	chip carrier arabic 3 linguasoft
+Name:	an Arabic 3 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	89
+	Val1:	3
+BREAK
+#86395
+Keywords:	chip carrier arabic 4 linguasoft
+Name:	an Arabic 4 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	89
+	Val1:	4
+BREAK
+#86396
+Keywords:	chip carrier arabic 5 linguasoft
+Name:	an Arabic 5 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	89
+	Val1:	5
+BREAK
+#86397
+Keywords:	chip carrier arabic 6 linguasoft
+Name:	an Arabic 6 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	89
+	Val1:	6
+BREAK
+#86398
+Keywords:	chip carrier arabic 7 linguasoft
+Name:	an Arabic 7 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	89
+	Val1:	7
+BREAK
+#86399
+Keywords:	chip carrier arabic 8 linguasoft
+Name:	an Arabic 8 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	89
+	Val1:	8
+BREAK
+#86400
+Keywords:	chip carrier chinese 1 linguasoft
+Name:	a Chinese 1 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	77
+	Val1:	1
+BREAK
+#86401
+Keywords:	chip carrier chinese 2 linguasoft
+Name:	a Chinese 2 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	77
+	Val1:	2
+BREAK
+#86402
+Keywords:	chip carrier chinese 3 linguasoft
+Name:	a Chinese 3 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	77
+	Val1:	3
+BREAK
+#86403
+Keywords:	chip carrier chinese 4 linguasoft
+Name:	a Chinese 4 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	77
+	Val1:	4
+BREAK
+#86404
+Keywords:	chip carrier chinese 5 linguasoft
+Name:	a Chinese 5 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	77
+	Val1:	5
+BREAK
+#86405
+Keywords:	chip carrier chinese 6 linguasoft
+Name:	a Chinese 6 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	77
+	Val1:	6
+BREAK
+#86406
+Keywords:	chip carrier chinese 7 linguasoft
+Name:	a Chinese 7 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	77
+	Val1:	7
+BREAK
+#86407
+Keywords:	chip carrier chinese 8 linguasoft
+Name:	a Chinese 8 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	77
+	Val1:	8
+BREAK
+#86408
+Keywords:	chip carrier crow 1 linguasoft
+Name:	a Crow 1 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	83
+	Val1:	1
+BREAK
+#86409
+Keywords:	chip carrier crow 2 linguasoft
+Name:	a Crow 2 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	83
+	Val1:	2
+BREAK
+#86410
+Keywords:	chip carrier crow 3 linguasoft
+Name:	a Crow 3 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	83
+	Val1:	3
+BREAK
+#86411
+Keywords:	chip carrier crow 4 linguasoft
+Name:	a Crow 4 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	83
+	Val1:	4
+BREAK
+#86412
+Keywords:	chip carrier crow 5 linguasoft
+Name:	a Crow 5 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	83
+	Val1:	5
+BREAK
+#86413
+Keywords:	chip carrier crow 6 linguasoft
+Name:	a Crow 6 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	83
+	Val1:	6
+BREAK
+#86414
+Keywords:	chip carrier crow 7 linguasoft
+Name:	a Crow 7 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	83
+	Val1:	7
+BREAK
+#86415
+Keywords:	chip carrier crow 8 linguasoft
+Name:	a Crow 8 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	83
+	Val1:	8
+BREAK
+#86416
+Keywords:	chip carrier english 1 linguasoft
+Name:	an English 1 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	73
+	Val1:	1
+BREAK
+#86417
+Keywords:	chip carrier english 2 linguasoft
+Name:	an English 2 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	73
+	Val1:	2
+BREAK
+#86418
+Keywords:	chip carrier english 3 linguasoft
+Name:	an English 3 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	73
+	Val1:	3
+BREAK
+#86419
+Keywords:	chip carrier english 4 linguasoft
+Name:	an English 4 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	73
+	Val1:	4
+BREAK
+#86420
+Keywords:	chip carrier english 5 linguasoft
+Name:	an English 5 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	73
+	Val1:	5
+BREAK
+#86421
+Keywords:	chip carrier english 6 linguasoft
+Name:	an English 6 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	73
+	Val1:	6
+BREAK
+#86422
+Keywords:	chip carrier english 7 linguasoft
+Name:	an English 7 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	73
+	Val1:	7
+BREAK
+#86423
+Keywords:	chip carrier english 8 linguasoft
+Name:	an English 8 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	73
+	Val1:	8
+BREAK
+#86424
+Keywords:	chip carrier french 1 linguasoft
+Name:	a French 1 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	92
+	Val1:	1
+BREAK
+#86425
+Keywords:	chip carrier french 2 linguasoft
+Name:	a French 2 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	92
+	Val1:	2
+BREAK
+#86426
+Keywords:	chip carrier french 3 linguasoft
+Name:	a French 3 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	92
+	Val1:	3
+BREAK
+#86427
+Keywords:	chip carrier french 4 linguasoft
+Name:	a French 4 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	92
+	Val1:	4
+BREAK
+#86428
+Keywords:	chip carrier french 5 linguasoft
+Name:	a French 5 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	92
+	Val1:	5
+BREAK
+#86429
+Keywords:	chip carrier french 6 linguasoft
+Name:	a French 6 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	92
+	Val1:	6
+BREAK
+#86430
+Keywords:	chip carrier french 7 linguasoft
+Name:	a French 7 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	92
+	Val1:	7
+BREAK
+#86431
+Keywords:	chip carrier french 8 linguasoft
+Name:	a French 8 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	92
+	Val1:	8
+BREAK
+#86432
+Keywords:	chip carrier gaelic 1 linguasoft
+Name:	a Gaelic 1 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	91
+	Val1:	1
+BREAK
+#86433
+Keywords:	chip carrier gaelic 2 linguasoft
+Name:	a Gaelic 2 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	91
+	Val1:	2
+BREAK
+#86434
+Keywords:	chip carrier gaelic 3 linguasoft
+Name:	a Gaelic 3 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	91
+	Val1:	3
+BREAK
+#86435
+Keywords:	chip carrier gaelic 4 linguasoft
+Name:	a Gaelic 4 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	91
+	Val1:	4
+BREAK
+#86436
+Keywords:	chip carrier gaelic 5 linguasoft
+Name:	a Gaelic 5 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	91
+	Val1:	5
+BREAK
+#86437
+Keywords:	chip carrier gaelic 6 linguasoft
+Name:	a Gaelic 6 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	91
+	Val1:	6
+BREAK
+#86438
+Keywords:	chip carrier gaelic 7 linguasoft
+Name:	a Gaelic 7 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	91
+	Val1:	7
+BREAK
+#86439
+Keywords:	chip carrier gaelic 8 linguasoft
+Name:	a Gaelic 8 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	91
+	Val1:	8
+BREAK
+#86440
+Keywords:	chip carrier german 1 linguasoft
+Name:	a German 1 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	87
+	Val1:	1
+BREAK
+#86441
+Keywords:	chip carrier german 2 linguasoft
+Name:	a German 2 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	87
+	Val1:	2
+BREAK
+#86442
+Keywords:	chip carrier german 3 linguasoft
+Name:	a German 3 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	87
+	Val1:	3
+BREAK
+#86443
+Keywords:	chip carrier german 4 linguasoft
+Name:	a German 4 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	87
+	Val1:	4
+BREAK
+#86444
+Keywords:	chip carrier german 5 linguasoft
+Name:	a German 5 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	87
+	Val1:	5
+BREAK
+#86445
+Keywords:	chip carrier german 6 linguasoft
+Name:	a German 6 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	87
+	Val1:	6
+BREAK
+#86446
+Keywords:	chip carrier german 7 linguasoft
+Name:	a German 7 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	87
+	Val1:	7
+BREAK
+#86447
+Keywords:	chip carrier german 8 linguasoft
+Name:	a German 8 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	87
+	Val1:	8
+BREAK
+#86448
+Keywords:	chip carrier italian 1 linguasoft
+Name:	an Italian 1 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	79
+	Val1:	1
+BREAK
+#86449
+Keywords:	chip carrier italian 2 linguasoft
+Name:	an Italian 2 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	79
+	Val1:	2
+BREAK
+#86450
+Keywords:	chip carrier italian 3 linguasoft
+Name:	an Italian 3 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	79
+	Val1:	3
+BREAK
+#86451
+Keywords:	chip carrier italian 4 linguasoft
+Name:	an Italian 4 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	79
+	Val1:	4
+BREAK
+#86452
+Keywords:	chip carrier italian 5 linguasoft
+Name:	an Italian 5 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	79
+	Val1:	5
+BREAK
+#86453
+Keywords:	chip carrier italian 6 linguasoft
+Name:	an Italian 6 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	79
+	Val1:	6
+BREAK
+#86454
+Keywords:	chip carrier italian 7 linguasoft
+Name:	an Italian 7 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	79
+	Val1:	7
+BREAK
+#86455
+Keywords:	chip carrier italian 8 linguasoft
+Name:	an Italian 8 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	79
+	Val1:	8
+BREAK
+#86456
+Keywords:	chip carrier japanese 1 linguasoft
+Name:	a Japanese 1 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	76
+	Val1:	1
+BREAK
+#86457
+Keywords:	chip carrier japanese 2 linguasoft
+Name:	a Japanese 2 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	76
+	Val1:	2
+BREAK
+#86458
+Keywords:	chip carrier japanese 3 linguasoft
+Name:	a Japanese 3 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	76
+	Val1:	3
+BREAK
+#86459
+Keywords:	chip carrier japanese 4 linguasoft
+Name:	a Japanese 4 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	76
+	Val1:	4
+BREAK
+#86460
+Keywords:	chip carrier japanese 5 linguasoft
+Name:	a Japanese 5 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	76
+	Val1:	5
+BREAK
+#86461
+Keywords:	chip carrier japanese 6 linguasoft
+Name:	a Japanese 6 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	76
+	Val1:	6
+BREAK
+#86462
+Keywords:	chip carrier japanese 7 linguasoft
+Name:	a Japanese 7 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	76
+	Val1:	7
+BREAK
+#86463
+Keywords:	chip carrier japanese 8 linguasoft
+Name:	a Japanese 8 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	76
+	Val1:	8
+BREAK
+#86464
+Keywords:	chip carrier latin 1 linguasoft
+Name:	a Latin 1 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	90
+	Val1:	1
+BREAK
+#86465
+Keywords:	chip carrier latin 2 linguasoft
+Name:	a Latin 2 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	90
+	Val1:	2
+BREAK
+#86466
+Keywords:	chip carrier latin 3 linguasoft
+Name:	a Latin 3 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	90
+	Val1:	3
+BREAK
+#86467
+Keywords:	chip carrier latin 4 linguasoft
+Name:	a Latin 4 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	90
+	Val1:	4
+BREAK
+#86468
+Keywords:	chip carrier latin 5 linguasoft
+Name:	a Latin 5 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	90
+	Val1:	5
+BREAK
+#86469
+Keywords:	chip carrier latin 6 linguasoft
+Name:	a Latin 6 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	90
+	Val1:	6
+BREAK
+#86470
+Keywords:	chip carrier latin 7 linguasoft
+Name:	a Latin 7 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	90
+	Val1:	7
+BREAK
+#86471
+Keywords:	chip carrier latin 8 linguasoft
+Name:	a Latin 8 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	90
+	Val1:	8
+BREAK
+#86472
+Keywords:	chip carrier korean 1 linguasoft
+Name:	a Korean 1 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	78
+	Val1:	1
+BREAK
+#86473
+Keywords:	chip carrier korean 2 linguasoft
+Name:	a Korean 2 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	78
+	Val1:	2
+BREAK
+#86474
+Keywords:	chip carrier korean 3 linguasoft
+Name:	a Korean 3 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	78
+	Val1:	3
+BREAK
+#86475
+Keywords:	chip carrier korean 4 linguasoft
+Name:	a Korean 4 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	78
+	Val1:	4
+BREAK
+#86476
+Keywords:	chip carrier korean 5 linguasoft
+Name:	a Korean 5 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	78
+	Val1:	5
+BREAK
+#86477
+Keywords:	chip carrier korean 6 linguasoft
+Name:	a Korean 6 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	78
+	Val1:	6
+BREAK
+#86478
+Keywords:	chip carrier korean 7 linguasoft
+Name:	a Korean 7 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	78
+	Val1:	7
+BREAK
+#86479
+Keywords:	chip carrier korean 8 linguasoft
+Name:	a Korean 8 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	78
+	Val1:	8
+BREAK
+#86480
+Keywords:	chip carrier makaw 1 linguasoft
+Name:	a Makaw 1 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	82
+	Val1:	1
+BREAK
+#86481
+Keywords:	chip carrier makaw 2 linguasoft
+Name:	a Makaw 2 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	82
+	Val1:	2
+BREAK
+#86482
+Keywords:	chip carrier makaw 3 linguasoft
+Name:	a Makaw 3 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	82
+	Val1:	3
+BREAK
+#86483
+Keywords:	chip carrier makaw 4 linguasoft
+Name:	a Makaw 4 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	82
+	Val1:	4
+BREAK
+#86484
+Keywords:	chip carrier makaw 5 linguasoft
+Name:	a Makaw 5 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	82
+	Val1:	5
+BREAK
+#86485
+Keywords:	chip carrier makaw 6 linguasoft
+Name:	a Makaw 6 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	82
+	Val1:	6
+BREAK
+#86486
+Keywords:	chip carrier makaw 7 linguasoft
+Name:	a Makaw 7 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	82
+	Val1:	7
+BREAK
+#86487
+Keywords:	chip carrier makaw 8 linguasoft
+Name:	a Makaw 8 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	82
+	Val1:	8
+BREAK
+#86488
+Keywords:	chip carrier navajo 1 linguasoft
+Name:	a Navajo 1 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	86
+	Val1:	1
+BREAK
+#86489
+Keywords:	chip carrier navajo 2 linguasoft
+Name:	a Navajo 2 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	86
+	Val1:	2
+BREAK
+#86490
+Keywords:	chip carrier navajo 3 linguasoft
+Name:	a Navajo 3 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	86
+	Val1:	3
+BREAK
+#86491
+Keywords:	chip carrier navajo 4 linguasoft
+Name:	a Navajo 4 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	86
+	Val1:	4
+BREAK
+#86492
+Keywords:	chip carrier navajo 5 linguasoft
+Name:	a Navajo 5 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	86
+	Val1:	5
+BREAK
+#86493
+Keywords:	chip carrier navajo 6 linguasoft
+Name:	a Navajo 6 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	86
+	Val1:	6
+BREAK
+#86494
+Keywords:	chip carrier navajo 7 linguasoft
+Name:	a Navajo 7 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	86
+	Val1:	7
+BREAK
+#86495
+Keywords:	chip carrier navajo 8 linguasoft
+Name:	a Navajo 8 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	86
+	Val1:	8
+BREAK
+#86496
+Keywords:	chip carrier orzet 1 linguasoft
+Name:	an Orzet 1 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	88
+	Val1:	1
+BREAK
+#86497
+Keywords:	chip carrier orzet 2 linguasoft
+Name:	an Orzet 2 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	88
+	Val1:	2
+BREAK
+#86498
+Keywords:	chip carrier orzet 3 linguasoft
+Name:	an Orzet 3 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	88
+	Val1:	3
+BREAK
+#86499
+Keywords:	chip carrier orzet 4 linguasoft
+Name:	an Orzet 4 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	88
+	Val1:	4
+BREAK
+#86500
+Keywords:	chip carrier orzet 5 linguasoft
+Name:	an Orzet 5 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	88
+	Val1:	5
+BREAK
+#86501
+Keywords:	chip carrier orzet 6 linguasoft
+Name:	an Orzet 6 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	88
+	Val1:	6
+BREAK
+#86502
+Keywords:	chip carrier orzet 7 linguasoft
+Name:	an Orzet 7 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	88
+	Val1:	7
+BREAK
+#86503
+Keywords:	chip carrier orzet 8 linguasoft
+Name:	an Orzet 8 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	88
+	Val1:	8
+BREAK
+#86504
+Keywords:	chip carrier russian 1 linguasoft
+Name:	a Russian 1 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	80
+	Val1:	1
+BREAK
+#86505
+Keywords:	chip carrier russian 2 linguasoft
+Name:	a Russian 2 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	80
+	Val1:	2
+BREAK
+#86506
+Keywords:	chip carrier russian 3 linguasoft
+Name:	a Russian 3 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	80
+	Val1:	3
+BREAK
+#86507
+Keywords:	chip carrier russian 4 linguasoft
+Name:	a Russian 4 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	80
+	Val1:	4
+BREAK
+#86508
+Keywords:	chip carrier russian 5 linguasoft
+Name:	a Russian 5 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	80
+	Val1:	5
+BREAK
+#86509
+Keywords:	chip carrier russian 6 linguasoft
+Name:	a Russian 6 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	80
+	Val1:	6
+BREAK
+#86510
+Keywords:	chip carrier russian 7 linguasoft
+Name:	a Russian 7 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	80
+	Val1:	7
+BREAK
+#86511
+Keywords:	chip carrier russian 8 linguasoft
+Name:	a Russian 8 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	80
+	Val1:	8
+BREAK
+#86512
+Keywords:	chip carrier salish 1 linguasoft
+Name:	a Salish 1 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	84
+	Val1:	1
+BREAK
+#86513
+Keywords:	chip carrier salish 2 linguasoft
+Name:	a Salish 2 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	84
+	Val1:	2
+BREAK
+#86514
+Keywords:	chip carrier salish 3 linguasoft
+Name:	a Salish 3 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	84
+	Val1:	3
+BREAK
+#86515
+Keywords:	chip carrier salish 4 linguasoft
+Name:	a Salish 4 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	84
+	Val1:	4
+BREAK
+#86516
+Keywords:	chip carrier salish 5 linguasoft
+Name:	a Salish 5 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	84
+	Val1:	5
+BREAK
+#86517
+Keywords:	chip carrier salish 6 linguasoft
+Name:	a Salish 6 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	84
+	Val1:	6
+BREAK
+#86518
+Keywords:	chip carrier salish 7 linguasoft
+Name:	a Salish 7 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	84
+	Val1:	7
+BREAK
+#86519
+Keywords:	chip carrier salish 8 linguasoft
+Name:	a Salish 8 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	84
+	Val1:	8
+BREAK
+#86520
+Keywords:	chip carrier sioux 1 linguasoft
+Name:	a Sioux 1 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	81
+	Val1:	1
+BREAK
+#86521
+Keywords:	chip carrier sioux 2 linguasoft
+Name:	a Sioux 2 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	81
+	Val1:	2
+BREAK
+#86522
+Keywords:	chip carrier sioux 3 linguasoft
+Name:	a Sioux 3 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	81
+	Val1:	3
+BREAK
+#86523
+Keywords:	chip carrier sioux 4 linguasoft
+Name:	a Sioux 4 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	81
+	Val1:	4
+BREAK
+#86524
+Keywords:	chip carrier sioux 5 linguasoft
+Name:	a Sioux 5 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	81
+	Val1:	5
+BREAK
+#86525
+Keywords:	chip carrier sioux 6 linguasoft
+Name:	a Sioux 6 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	81
+	Val1:	6
+BREAK
+#86526
+Keywords:	chip carrier sioux 7 linguasoft
+Name:	a Sioux 7 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	81
+	Val1:	7
+BREAK
+#86527
+Keywords:	chip carrier sioux 8 linguasoft
+Name:	a Sioux 8 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	81
+	Val1:	8
+BREAK
+#86528
+Keywords:	chip carrier spanish 1 linguasoft
+Name:	a Spanish 1 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	75
+	Val1:	1
+BREAK
+#86529
+Keywords:	chip carrier spanish 2 linguasoft
+Name:	a Spanish 2 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	75
+	Val1:	2
+BREAK
+#86530
+Keywords:	chip carrier spanish 3 linguasoft
+Name:	a Spanish 3 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	75
+	Val1:	3
+BREAK
+#86531
+Keywords:	chip carrier spanish 4 linguasoft
+Name:	a Spanish 4 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	75
+	Val1:	4
+BREAK
+#86532
+Keywords:	chip carrier spanish 5 linguasoft
+Name:	a Spanish 5 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	75
+	Val1:	5
+BREAK
+#86533
+Keywords:	chip carrier spanish 6 linguasoft
+Name:	a Spanish 6 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	75
+	Val1:	6
+BREAK
+#86534
+Keywords:	chip carrier spanish 7 linguasoft
+Name:	a Spanish 7 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	75
+	Val1:	7
+BREAK
+#86535
+Keywords:	chip carrier spanish 8 linguasoft
+Name:	a Spanish 8 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	75
+	Val1:	8
+BREAK
+#86536
+Keywords:	chip carrier sperethiel 1 linguasoft
+Name:	a Sperethiel 1 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	74
+	Val1:	1
+BREAK
+#86537
+Keywords:	chip carrier sperethiel 2 linguasoft
+Name:	a Sperethiel 2 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	74
+	Val1:	2
+BREAK
+#86538
+Keywords:	chip carrier sperethiel 3 linguasoft
+Name:	a Sperethiel 3 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	74
+	Val1:	3
+BREAK
+#86539
+Keywords:	chip carrier sperethiel 4 linguasoft
+Name:	a Sperethiel 4 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	74
+	Val1:	4
+BREAK
+#86540
+Keywords:	chip carrier sperethiel 5 linguasoft
+Name:	a Sperethiel 5 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	74
+	Val1:	5
+BREAK
+#86541
+Keywords:	chip carrier sperethiel 6 linguasoft
+Name:	a Sperethiel 6 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	74
+	Val1:	6
+BREAK
+#86542
+Keywords:	chip carrier sperethiel 7 linguasoft
+Name:	a Sperethiel 7 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	74
+	Val1:	7
+BREAK
+#86543
+Keywords:	chip carrier sperethiel 8 linguasoft
+Name:	a Sperethiel 8 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	74
+	Val1:	8
+BREAK
+#86544
+Keywords:	chip carrier ute 1 linguasoft
+Name:	a Ute 1 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	85
+	Val1:	1
+BREAK
+#86545
+Keywords:	chip carrier ute 2 linguasoft
+Name:	a Ute 2 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	85
+	Val1:	2
+BREAK
+#86546
+Keywords:	chip carrier ute 3 linguasoft
+Name:	a Ute 3 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	85
+	Val1:	3
+BREAK
+#86547
+Keywords:	chip carrier ute 4 linguasoft
+Name:	a Ute 4 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	85
+	Val1:	4
+BREAK
+#86548
+Keywords:	chip carrier ute 5 linguasoft
+Name:	a Ute 5 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	85
+	Val1:	5
+BREAK
+#86549
+Keywords:	chip carrier ute 6 linguasoft
+Name:	a Ute 6 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	85
+	Val1:	6
+BREAK
+#86550
+Keywords:	chip carrier ute 7 linguasoft
+Name:	a Ute 7 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	85
+	Val1:	7
+BREAK
+#86551
+Keywords:	chip carrier ute 8 linguasoft
+Name:	a Ute 8 linguasoft
+RoomDesc:$
+A small chip carrier has been left here.~
+LookDesc:$
+A cylindrical chip carrier, about 5 centimeters long with a tip designed to fit 
+into a chipjack. A quick press of the button will insert and secure the 
+linguasoft.~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.05
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	85
+	Val1:	8
+BREAK
 END
