@@ -16,7 +16,7 @@
 
 #define HOST d->edit_host
 #define NUM_OF_HOST_TYPES 6
-extern int from_ip_zone(int vnum);
+extern int vnum_from_non_connected_zone(int vnum);
 extern char *cleanup(char *dest, const char *src);
 
 #define HT matrix[realcounter]
@@ -203,7 +203,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     switch (*arg) {
     case 'y':
     case 'Y': {
-        if (!from_ip_zone(d->edit_number)) {
+        if (!vnum_from_non_connected_zone(d->edit_number)) {
           sprintf(buf,"%s wrote new host #%ld",
                   GET_CHAR_NAME(d->character), d->edit_number);
           mudlog(buf, d->character, LOG_WIZLOG, TRUE);

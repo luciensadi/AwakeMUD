@@ -3212,7 +3212,7 @@ ACMD(do_show)
       if (ROOM_FLAGGED(&world[i], ROOM_DEATH))
         sprintf(buf, "%s%2d: [%5ld] %s %s\r\n", buf, ++j,
                 world[i].number,
-                from_ip_zone(world[i].number) ? " " : "*",
+                vnum_from_non_connected_zone(world[i].number) ? " " : "*",
                 world[i].name);
     send_to_char(buf, ch);
     break;
@@ -3223,7 +3223,7 @@ ACMD(do_show)
     for (i = 0, j = 0; i <= zone_table[real_zone(GOD_ROOMS_ZONE)].top; i++)
       if (world[i].zone == GOD_ROOMS_ZONE && i > 1 && !(i >= 8 && i <= 12))
         sprintf(buf, "%s%2d: [%5ld] %s %s\r\n", buf, j++, world[i].number,
-                from_ip_zone(world[i].number) ? " " : "*",
+                vnum_from_non_connected_zone(world[i].number) ? " " : "*",
                 world[i].name);
     send_to_char(buf, ch);
     break;
@@ -4777,7 +4777,7 @@ ACMD(do_slist)
     if (shop_table[nr].vnum >= first)
       sprintf(buf + strlen(buf), "%5d. [%5ld] %s %s (%ld)\r\n", ++found,
               shop_table[nr].vnum,
-              from_ip_zone(shop_table[nr].keeper) ? " " : "*",
+              vnum_from_non_connected_zone(shop_table[nr].keeper) ? " " : "*",
               real_mobile(shop_table[nr].keeper) < 0 ? "None" : GET_NAME(&mob_proto[real_mobile(shop_table[nr].keeper)]),
               shop_table[nr].keeper);
 

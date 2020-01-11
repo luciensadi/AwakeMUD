@@ -1955,7 +1955,7 @@ int vnum_mobile_karma(char *searchname, struct char_data * ch)
       }
       if ( i != 10000 && karma > i )
         continue;
-      if (from_ip_zone(MOB_VNUM_RNUM(nr)))
+      if (vnum_from_non_connected_zone(MOB_VNUM_RNUM(nr)))
         continue;
       ++found;
       sprintf(buf, "[%5ld] %4.2f (%4.2f) %4dx %6.2f %s\r\n",
@@ -1994,7 +1994,7 @@ int vnum_mobile_bonuskarma(char *searchname, struct char_data * ch)
       }
       if ( i != 10000 && GET_KARMA(&mob_proto[nr]) > i )
         continue;
-      if (from_ip_zone(MOB_VNUM_RNUM(nr)))
+      if (vnum_from_non_connected_zone(MOB_VNUM_RNUM(nr)))
         continue;
       karma = calc_karma(NULL, &mob_proto[nr]);
       ++found;
@@ -2036,7 +2036,7 @@ int vnum_mobile_nuyen(char *searchname, struct char_data * ch)
       }
       if ( i != 1000*1000*1000 && nuyen > i )
         continue;
-      if (from_ip_zone(MOB_VNUM_RNUM(nr)))
+      if (vnum_from_non_connected_zone(MOB_VNUM_RNUM(nr)))
         continue;
       karma = calc_karma(NULL, &mob_proto[nr]);
       ++found;
@@ -2257,27 +2257,27 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
         for (nr = 0; nr <= top_of_objt; nr++) {
           if (GET_OBJ_TYPE(&obj_proto[nr]) != ITEM_WEAPON)
             continue;
-          if (!IS_GUN(GET_OBJ_VAL(&obj_proto[nr], 3)))
+          if (!IS_GUN(GET_WEAPON_ATTACK_TYPE(&obj_proto[nr])))
             continue;
-          if (GET_OBJ_VAL(&obj_proto[nr],0) < power && power != 0)
+          if (GET_WEAPON_POWER(&obj_proto[nr]) < power && power != 0)
             continue;
-          if (GET_OBJ_VAL(&obj_proto[nr],1) < severity && severity != 1)
+          if (GET_WEAPON_DAMAGE_CODE(&obj_proto[nr]) < severity && severity != 1)
             continue;
-          if (GET_OBJ_VAL(&obj_proto[nr],2) < strength && strength != 0)
+          if (GET_WEAPON_STR_BONUS(&obj_proto[nr]) < strength && strength != 0)
             continue;
-          if (GET_OBJ_VAL(&obj_proto[nr],0) > power && power != 21)
+          if (GET_WEAPON_POWER(&obj_proto[nr]) > power && power != 21)
             continue;
-          if (GET_OBJ_VAL(&obj_proto[nr],1) > severity && severity != DEADLY)
+          if (GET_WEAPON_DAMAGE_CODE(&obj_proto[nr]) > severity && severity != DEADLY)
             continue;
-          if (GET_OBJ_VAL(&obj_proto[nr],2) > strength && strength != 5)
+          if (GET_WEAPON_STR_BONUS(&obj_proto[nr]) > strength && strength != 5)
             continue;
           if (IS_OBJ_STAT(&obj_proto[nr], ITEM_GODONLY))
             continue;
-          if (from_ip_zone(OBJ_VNUM_RNUM(nr)))
+          if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
             continue;
 
           ++found;
-          sprintf(ENDOF(buf), "[%5ld -%2d] %2d%s +%d %s %s %d\r\n",
+          sprintf(ENDOF(buf), "[%5ld -%2d] %2d%s +%d %s %s %d%s\r\n",
                   OBJ_VNUM_RNUM(nr),
                   ObjList.CountObj(nr),
                   GET_OBJ_VAL(&obj_proto[nr], 0),
@@ -2285,7 +2285,8 @@ int vnum_object_weapons(char *searchname, struct char_data * ch)
                   GET_OBJ_VAL(&obj_proto[nr], 2),
                   obj_proto[nr].text.name,
                   weapon_type[GET_OBJ_VAL(&obj_proto[nr], 3)],
-                  GET_OBJ_VAL(&obj_proto[nr], 5));
+                  GET_OBJ_VAL(&obj_proto[nr], 5),
+                  obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
         }
       }
   page_string(ch->desc, buf, 1);
@@ -2307,13 +2308,14 @@ int vnum_object_armors(char *searchname, struct char_data * ch)
     sprint_obj_mods( &obj_proto[nr], xbuf );
     
     ++found;
-    sprintf(buf, "[%5ld -%2d] %2d %d %s%s\r\n",
+    sprintf(buf, "[%5ld -%2d] %2d %d %s%s%s\r\n",
             OBJ_VNUM_RNUM(nr),
             ObjList.CountObj(nr),
             GET_OBJ_VAL(&obj_proto[nr], 0),
             GET_OBJ_VAL(&obj_proto[nr], 1),
             obj_proto[nr].text.name,
-            xbuf);
+            xbuf,
+            obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
     send_to_char(buf, ch);
   }
   
@@ -2364,17 +2366,18 @@ int vnum_object_magazines(char *searchname, struct char_data * ch)
           continue;
         if (IS_OBJ_STAT(&obj_proto[nr], ITEM_GODONLY))
           continue;
-        if (from_ip_zone(OBJ_VNUM_RNUM(nr)))
+        if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
           continue;
 
         ++found;
-        sprintf(ENDOF(buf), "[%5ld -%2d wt %f] %2d %3d %s\r\n",
+        sprintf(ENDOF(buf), "[%5ld -%2d wt %f] %2d %3d %s%s\r\n",
                 OBJ_VNUM_RNUM(nr),
                 ObjList.CountObj(nr),
                 GET_OBJ_WEIGHT(&obj_proto[nr]),
                 GET_OBJ_VAL(&obj_proto[nr], 1),
                 GET_OBJ_VAL(&obj_proto[nr], 0),
-                obj_proto[nr].text.name);
+                obj_proto[nr].text.name,
+                obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
       }
     }
   page_string(ch->desc, buf, 1);
@@ -2388,14 +2391,15 @@ int vnum_object_foci(char *searchname, struct char_data * ch)
   for (nr = 0; nr <= top_of_objt; nr++)
   {
     if (GET_OBJ_TYPE(&obj_proto[nr]) == ITEM_FOCUS
-        && !from_ip_zone(OBJ_VNUM_RNUM(nr))) {
-      sprintf(buf, "%3d. [%5ld -%2d] %s %s +%2d %s\r\n", ++found,
+        && !vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr))) {
+      sprintf(buf, "%3d. [%5ld -%2d] %s %s +%2d %s%s\r\n", ++found,
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
-              from_ip_zone(OBJ_VNUM_RNUM(nr)) ? " " : "*",
+              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : "*",
               foci_type[GET_OBJ_VAL(&obj_proto[nr], 0)],
               GET_OBJ_VAL(&obj_proto[nr], VALUE_FOCUS_RATING),
-              obj_proto[nr].text.name);
+              obj_proto[nr].text.name,
+              obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
       send_to_char(buf, ch);
     }
   }
@@ -2410,11 +2414,12 @@ int vnum_object_type(int type, struct char_data * ch)
   {
     if (GET_OBJ_TYPE(&obj_proto[nr]) == type) {
       ++found;
-      sprintf(buf, "[%5ld -%2d] %s %s\r\n",
+      sprintf(buf, "[%5ld -%2d] %s %s%s\r\n",
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
-              from_ip_zone(OBJ_VNUM_RNUM(nr)) ? " " : "*",
-              obj_proto[nr].text.name);
+              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : "*",
+              obj_proto[nr].text.name,
+              obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
       send_to_char(buf, ch);
     }
   }
@@ -2431,7 +2436,7 @@ int vnum_object_affectloc(int type, struct char_data * ch)
     {
       if (IS_OBJ_STAT(&obj_proto[nr], ITEM_GODONLY))
         continue;
-      if (from_ip_zone(OBJ_VNUM_RNUM(nr)))
+      if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
         continue;
 
       for (int i = 0; i < MAX_OBJ_AFFECT; i++)
@@ -2444,11 +2449,12 @@ int vnum_object_affectloc(int type, struct char_data * ch)
           sprint_obj_mods( &obj_proto[nr], xbuf );
 
           ++found;
-          sprintf(buf, "[%5ld -%2d] %s%s\r\n",
+          sprintf(buf, "[%5ld -%2d] %s%s%s\r\n",
                   OBJ_VNUM_RNUM(nr),
                   ObjList.CountObj(nr),
                   obj_proto[nr].text.name,
-                  xbuf);
+                  xbuf,
+                  obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
           send_to_char(buf, ch);
           break;
         }
@@ -2463,7 +2469,7 @@ int vnum_object_affects(struct char_data *ch) {
   for (nr = 0; nr <= top_of_objt; nr++) {
     if (IS_OBJ_STAT(&obj_proto[nr], ITEM_GODONLY))
       continue;
-    if (from_ip_zone(OBJ_VNUM_RNUM(nr)))
+    if (vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)))
       continue;
     
     for (int i = 0; i < MAX_OBJ_AFFECT; i++) {
@@ -2471,11 +2477,12 @@ int vnum_object_affects(struct char_data *ch) {
         sprint_obj_mods( &obj_proto[nr], xbuf );
         
         ++found;
-        sprintf(buf, "[%5ld -%2d] %s%s\r\n",
+        sprintf(buf, "[%5ld -%2d] %s%s%s\r\n",
                 OBJ_VNUM_RNUM(nr),
                 ObjList.CountObj(nr),
                 obj_proto[nr].text.name,
-                xbuf);
+                xbuf,
+                obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
         send_to_char(buf, ch);
         break;
       }
@@ -2491,10 +2498,11 @@ int vnum_object_affflag(int type, struct char_data * ch)
   for (nr = 0; nr <= top_of_objt; nr++)
     if (obj_proto[nr].obj_flags.bitvector.IsSet(type))
     {
-      sprintf(buf, "[%5ld -%2d] %s\r\n",
+      sprintf(buf, "[%5ld -%2d] %s%s\r\n",
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
-              obj_proto[nr].text.name);
+              obj_proto[nr].text.name,
+              obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
       send_to_char(buf, ch);
       found++;
       break;
@@ -2537,11 +2545,12 @@ int vnum_object(char *searchname, struct char_data * ch)
   {
     if (isname(searchname, obj_proto[nr].text.keywords) ||
         isname(searchname, obj_proto[nr].text.name)) {
-      sprintf(buf, "%3d. [%5ld -%2d] %s %s\r\n", ++found,
+      sprintf(buf, "%3d. [%5ld -%2d] %s %s%s\r\n", ++found,
               OBJ_VNUM_RNUM(nr),
               ObjList.CountObj(nr),
-              from_ip_zone(OBJ_VNUM_RNUM(nr)) ? " " : "*",
-              obj_proto[nr].text.name);
+              vnum_from_non_connected_zone(OBJ_VNUM_RNUM(nr)) ? " " : "*",
+              obj_proto[nr].text.name,
+              obj_proto[nr].source_info ? "  ^g(canon)^n" : "");
       send_to_char(buf, ch);
     }
   }
@@ -3018,7 +3027,7 @@ void reset_zone(int zone, int reboot)
           obj_to_obj(obj, obj_to);
         if (GET_OBJ_TYPE(obj_to) == ITEM_HOLSTER)
           GET_OBJ_VAL(obj_to, 3) = 1;
-        if (!from_ip_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
+        if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
           GET_OBJ_EXTRA(obj).SetBit(ITEM_VOLATILE);
         last_cmd = 1;
       } else
@@ -3034,7 +3043,7 @@ void reset_zone(int zone, int reboot)
           (ZCMD.arg2 == 0 && reboot)) {
         obj = read_object(ZCMD.arg1, REAL);
         obj_to_char(obj, mob);
-        if (!from_ip_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
+        if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
           GET_OBJ_EXTRA(obj).SetBit(ITEM_VOLATILE);
         last_cmd = 1;
       } else
@@ -3060,7 +3069,7 @@ void reset_zone(int zone, int reboot)
             extract_obj(obj);
             last_cmd = 0;
           } else {
-            if (!from_ip_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
+            if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
               GET_OBJ_EXTRA(obj).SetBit(ITEM_VOLATILE);
             last_cmd = 1;
           }
@@ -3079,7 +3088,7 @@ void reset_zone(int zone, int reboot)
                                       (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)); ++i) {
         obj = read_object(ZCMD.arg1, REAL);
         obj_to_char(obj, mob);
-        if (!from_ip_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
+        if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
           GET_OBJ_EXTRA(obj).SetBit(ITEM_VOLATILE);
         last_cmd = 1;
       }

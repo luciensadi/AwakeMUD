@@ -1602,7 +1602,7 @@ struct obj_data *get_obj_in_list_num(int num, struct obj_data * list)
   return NULL;
 }
 
-int from_ip_zone(int vnum)
+int vnum_from_non_connected_zone(int vnum)
 {
   int counter;
   if (vnum == -1)  // obj made using create_obj, like mail and corpses

@@ -471,7 +471,7 @@ void make_corpse(struct char_data * ch)
   }
   
   if (IS_NPC(ch) && (nuyen > 0 || credits > 0))
-    if (from_ip_zone(GET_MOB_VNUM(ch)))
+    if (vnum_from_non_connected_zone(GET_MOB_VNUM(ch)))
     {
       nuyen = 0;
       credits = 0;
@@ -743,7 +743,7 @@ int calc_karma(struct char_data *ch, struct char_data *vict)
   base = MAX(base, 1);
   
   if (ch && !IS_NPC(ch) && !IS_SENATOR(ch) && IS_NPC(vict))
-    if (from_ip_zone(GET_MOB_VNUM(vict)))
+    if (vnum_from_non_connected_zone(GET_MOB_VNUM(vict)))
       base = 0;
   
   
@@ -2063,7 +2063,7 @@ bool can_hurt(struct char_data *ch, struct char_data *victim, int attacktype) {
              && !IS_NPC(ch->master)
              && IS_SENATOR(ch->master)
              && !access_level(ch->master, LVL_ADMIN)))
-        && !from_ip_zone(GET_MOB_VNUM(victim)))
+        && !vnum_from_non_connected_zone(GET_MOB_VNUM(victim)))
     {
       return false;
     }
@@ -2119,7 +2119,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
            && !access_level(ch->master, LVL_ADMIN)))
       && IS_NPC(victim)
       && dam > 0
-      && !from_ip_zone(GET_MOB_VNUM(victim)))
+      && !vnum_from_non_connected_zone(GET_MOB_VNUM(victim)))
   {
     dam = -1;
     buf_mod(rbuf,"Invalid",dam);

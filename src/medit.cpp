@@ -299,7 +299,7 @@ void medit_parse(struct descriptor_data *d, const char *arg)
     case 'y':
     case 'Y':
       // first write to the internal tables
-      if (!from_ip_zone(d->edit_number)) {
+      if (!vnum_from_non_connected_zone(d->edit_number)) {
         sprintf(buf,"%s wrote new mob #%ld",
                 GET_CHAR_NAME(d->character), d->edit_number);
         mudlog(buf, d->character, LOG_WIZLOG, TRUE);
