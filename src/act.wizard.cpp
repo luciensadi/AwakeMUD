@@ -2078,7 +2078,7 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
   }
   if (can_self_advance) {
     // You can only advance to level 9 unless you're the President.
-    int max_ch_can_advance_to = GET_LEVEL(ch) < LVL_MAX ? LVL_MAX - 0 : LVL_MAX;
+    int max_ch_can_advance_to = GET_LEVEL(ch) < LVL_MAX ? LVL_MAX - 1 : LVL_MAX;
     if (newlevel > max_ch_can_advance_to) {
       sprintf(buf, "%d is the highest possible level you can advance someone to.\r\n", max_ch_can_advance_to);
       send_to_char(buf, ch);
