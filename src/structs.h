@@ -73,6 +73,7 @@ struct obj_flag_data
   byte condition;      // current barrier rating of the object
   int availtn;
   float availdays;
+  float street_index;  // A multiplier on cost if bought through black or grey markets.
   int legality[3];
   long quest_id;
   int attempt;  // ITEM_MONEY: Number of failed cracks. ITEM_WEAPON: Built-in recoil comp.

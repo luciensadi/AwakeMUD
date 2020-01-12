@@ -3,6 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
+#include <math.h>
 
 #include "structs.h"
 #include "awake.h"
@@ -106,20 +107,33 @@ bool is_ok_char(struct char_data * keeper, struct char_data * ch, vnum_t shop_nr
   return TRUE;
 }
 
+// Player buying from shop.
 int buy_price(struct obj_data *obj, vnum_t shop_nr)
 {
-  int i = (int)(GET_OBJ_COST(obj) * shop_table[shop_nr].profit_buy);
-  i += (int)((i * shop_table[shop_nr].random_current)/ 100);
-  return i;
+  // Base cost.
+  int cost = GET_OBJ_COST(obj);
+  
+  // Multiply base cost by the shop's profit.
+  cost = (int) round(cost * shop_table[shop_nr].profit_buy);
+  
+  // If the shop is black or grey market, multiply base cost by the item's street index.
+  if (shop_table[shop_nr].type != SHOP_LEGAL && GET_OBJ_STREET_INDEX(obj) > 0)
+    cost = (int) round(cost * GET_OBJ_STREET_INDEX(obj));
+  
+  // Add the random multiplier to the cost.
+  cost += (int) round((cost * shop_table[shop_nr].random_current) / 100);
+  
+  // Return the final value.
+  return cost;
 }
 
+// Player selling to shop.
 int sell_price(struct obj_data *obj, vnum_t shop_nr)
 {
   int i = (int)(GET_OBJ_COST(obj) * shop_table[shop_nr].profit_sell);
   i += (int)((i * shop_table[shop_nr].random_current)/ 100);
   return i;
 }
-
 
 int transaction_amt(char *arg)
 {
@@ -1426,6 +1440,8 @@ void randomize_shop_prices(void)
   for (int i = 0; i <= top_of_shopt; i++) {
     if (shop_table[i].random_amount)
       shop_table[i].random_current = number(-shop_table[i].random_amount, shop_table[i].random_amount);
+    else
+      shop_table[i].random_current = 0;
     for (struct shop_sell_data *sell = shop_table[i].selling; sell; sell = sell->next)
       for (int q = 0; q < SHOP_LAST_IDNUM_LIST_SIZE; q++)
         sell->lastidnum[q] = 0;

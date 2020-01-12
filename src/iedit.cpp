@@ -1248,38 +1248,26 @@ void iedit_disp_legality_menu(struct descriptor_data *d) {
 void iedit_disp_menu(struct descriptor_data * d)
 {
   CLS(CH);
-  send_to_char(CH, "Item number: %s%d%s\r\n", CCCYN(CH, C_CMP), d->edit_number,
-               CCNRM(CH, C_CMP));
-  send_to_char(CH, "1) Item keywords: %s%s%s\r\n",
-               CCCYN(CH, C_CMP), d->edit_obj->text.keywords,
-               CCNRM(CH, C_CMP));
-  send_to_char(CH, "2) Item name: %s%s%s\r\n",
-               CCCYN(CH, C_CMP), d->edit_obj->text.name,
-               CCNRM(CH, C_CMP));
-  send_to_char(CH, "3) Room description:\r\n%s%s%s\r\n",
-               CCGRN(CH, C_CMP), d->edit_obj->text.room_desc,
-               CCNRM(CH, C_CMP));
+  send_to_char(CH, "Item number: ^c%d^n\r\n", d->edit_number);
+  send_to_char(CH, "1) Item keywords: ^c%s^n\r\n", d->edit_obj->text.keywords);
+  send_to_char(CH, "2) Item name: ^c%s^n\r\n", d->edit_obj->text.name);
+  send_to_char(CH, "3) Room description:\r\n^g%s^n\r\n", d->edit_obj->text.room_desc);
   send_to_char(CH, "4) Look description: \r\n%s\r\n",
                d->edit_obj->text.look_desc ? d->edit_obj->text.look_desc :
                "(not set)");
   sprinttype(GET_OBJ_TYPE(d->edit_obj), item_types, buf1);
-  send_to_char(CH, "5) Item type: %s%s%s\r\n", CCCYN(CH, C_CMP), buf1,
-               CCNRM(CH, C_CMP));
+  send_to_char(CH, "5) Item type: ^c%s^n\r\n", buf1);
   GET_OBJ_EXTRA(d->edit_obj).PrintBits(buf1, MAX_STRING_LENGTH,
                                        extra_bits, ITEM_EXTRA_MAX);
-  send_to_char(CH, "6) Item extra flags: %s%s%s\r\n", CCCYN(CH, C_CMP), buf1,
-               CCNRM(CH, C_CMP));
+  send_to_char(CH, "6) Item extra flags: ^c%s^n\r\n", buf1);
   OBJ->obj_flags.bitvector.PrintBits(buf1, MAX_STRING_LENGTH,
                                      affected_bits, AFF_MAX);
   send_to_char(CH, "7) Item affection flags: ^c%s^n\r\n", buf1);
   OBJ->obj_flags.wear_flags.PrintBits(buf1, MAX_STRING_LENGTH,
                                       wear_bits, NUM_WEARS);
-  send_to_char(CH, "8) Item wear flags: %s%s%s\r\n", CCCYN(CH, C_CMP), buf1,
-               CCNRM(CH, C_CMP));
-  send_to_char(CH, "9) Item weight: %s%.2f%s\r\n", CCCYN(CH, C_CMP),
-               GET_OBJ_WEIGHT(d->edit_obj), CCNRM(CH, C_CMP));
-  send_to_char(CH, "a) Item cost: %s%d%s\r\n", CCCYN(CH, C_CMP),
-               GET_OBJ_COST(d->edit_obj), CCNRM(CH, C_CMP));
+  send_to_char(CH, "8) Item wear flags: ^c%s^n\r\n", buf1);
+  send_to_char(CH, "9) Item weight: ^c%.2f^n\r\n", GET_OBJ_WEIGHT(d->edit_obj));
+  send_to_char(CH, "a) Item cost: ^c%d^n\r\n", GET_OBJ_COST(d->edit_obj));
   int availhrs = GET_OBJ_AVAILDAY(d->edit_obj) * 24;
   if (availhrs <= 48) {
   send_to_char(CH, "b) Item availability: ^c%d^n/^c%d hour%s^n\r\n",
@@ -1293,19 +1281,30 @@ void iedit_disp_menu(struct descriptor_data * d)
   send_to_char(CH, "e) Item Barrier Rating: ^c%d^n\r\n", GET_OBJ_BARRIER(d->edit_obj));
   send_to_char(CH, "f) Item Legality: ^c%d%s^n-^c%s^n\r\n", GET_LEGAL_NUM(d->edit_obj), GET_LEGAL_PERMIT(d->edit_obj) ? "P" : "",
                legality_codes[GET_LEGAL_CODE(d->edit_obj)][0]);
-  send_to_char(CH, "g) Item values: ^c%d %d %d %d %d %d %d %d %d %d %d %d^n\r\n",
-               GET_OBJ_VAL(d->edit_obj, 0), GET_OBJ_VAL(d->edit_obj, 1),
-               GET_OBJ_VAL(d->edit_obj, 2), GET_OBJ_VAL(d->edit_obj, 3),
-               GET_OBJ_VAL(d->edit_obj, 4), GET_OBJ_VAL(d->edit_obj, 5),
-               GET_OBJ_VAL(d->edit_obj, 6), GET_OBJ_VAL(d->edit_obj, 7),
-               GET_OBJ_VAL(d->edit_obj, 8), GET_OBJ_VAL(d->edit_obj, 9),
-               GET_OBJ_VAL(d->edit_obj, 10), GET_OBJ_VAL(d->edit_obj, 11));
+  if (GET_OBJ_TYPE(d->edit_obj) == ITEM_WEAPON)
+    send_to_char(CH, "g) Item values: ^c%d %d %d %d %d %d %d %d %d %d %d %d (%d)^n\r\n",
+    GET_OBJ_VAL(d->edit_obj, 0), GET_OBJ_VAL(d->edit_obj, 1),
+    GET_OBJ_VAL(d->edit_obj, 2), GET_OBJ_VAL(d->edit_obj, 3),
+    GET_OBJ_VAL(d->edit_obj, 4), GET_OBJ_VAL(d->edit_obj, 5),
+    GET_OBJ_VAL(d->edit_obj, 6), GET_OBJ_VAL(d->edit_obj, 7),
+    GET_OBJ_VAL(d->edit_obj, 8), GET_OBJ_VAL(d->edit_obj, 9),
+    GET_OBJ_VAL(d->edit_obj, 10), GET_OBJ_VAL(d->edit_obj, 11),
+    GET_WEAPON_INTEGRAL_RECOIL_COMP(d->edit_obj));
+  else
+    send_to_char(CH, "g) Item values: ^c%d %d %d %d %d %d %d %d %d %d %d %d^n\r\n",
+                 GET_OBJ_VAL(d->edit_obj, 0), GET_OBJ_VAL(d->edit_obj, 1),
+                 GET_OBJ_VAL(d->edit_obj, 2), GET_OBJ_VAL(d->edit_obj, 3),
+                 GET_OBJ_VAL(d->edit_obj, 4), GET_OBJ_VAL(d->edit_obj, 5),
+                 GET_OBJ_VAL(d->edit_obj, 6), GET_OBJ_VAL(d->edit_obj, 7),
+                 GET_OBJ_VAL(d->edit_obj, 8), GET_OBJ_VAL(d->edit_obj, 9),
+                 GET_OBJ_VAL(d->edit_obj, 10), GET_OBJ_VAL(d->edit_obj, 11));
   send_to_char(CH, "h) Item applies:\r\n"
                "i) Item extra descriptions:\r\n"
                "j) Source book: ^c%s^n\r\n"
+               "k) Street index: ^c%.2f\r\n^n"
                "q) Quit and save\r\n"
                "x) Exit and abort\r\n"
-               "Enter your choice:\r\n", d->edit_obj->source_info ? d->edit_obj->source_info : "<none>");
+               "Enter your choice:\r\n", d->edit_obj->source_info ? d->edit_obj->source_info : "<none>", GET_OBJ_STREET_INDEX(d->edit_obj));
   d->edit_mode = IEDIT_MAIN_MENU;
 }
 
@@ -1318,6 +1317,7 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
 {
   long             number, j;
   long            obj_number;   /* the RNUM */
+  float fnumber;
   bool modified = FALSE;
   switch (d->edit_mode)
   {
@@ -1686,6 +1686,11 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
         case 'J':
           send_to_char("Enter sourcebook info (abbreviation and pages, ex: MitS p34, 37-48):", d->character);
           d->edit_mode = IEDIT_SOURCEINFO;
+          break;
+        case 'k':
+        case 'K':
+          send_to_char("Enter street index:", d->character);
+          d->edit_mode = IEDIT_STREETINDEX;
           break;
         default:
           /* hm, i just realized you probably can't see this.. maybe prompt for
@@ -2677,7 +2682,15 @@ void iedit_parse(struct descriptor_data * d, const char *arg)
       } else
         iedit_disp_rating_menu(d);
       break;
-      
+    case IEDIT_STREETINDEX:
+      fnumber = atof(arg);
+      if (fnumber <= 0 || fnumber > 10) {
+        send_to_char("Street index (black market cost multiplier) must be between 0 and 10. Enter street index: ", CH);
+      } else {
+        GET_OBJ_STREET_INDEX(OBJ) = fnumber;
+        iedit_disp_menu(d);
+      }
+      break;
     case IEDIT_EXTRADESC_MENU:
       number = atoi(arg);
       switch (number) {
@@ -2835,9 +2848,10 @@ void write_objs_to_disk(int zone)
               "\tAvailDay:\t%.2f\n"
               "\tLegalNum:\t%d\n"
               "\tLegalCode:\t%d\n"
-              "\tLegalPermit:\t%d\n",
+              "\tLegalPermit:\t%d\n"
+              "\tStreetIndex:\t%.2f\n",
               GET_OBJ_WEIGHT(obj), GET_OBJ_BARRIER(obj), GET_OBJ_COST(obj), GET_OBJ_AVAILTN(obj), GET_OBJ_AVAILDAY(obj), 
-              GET_LEGAL_NUM(obj), GET_LEGAL_CODE(obj), GET_LEGAL_PERMIT(obj));
+              GET_LEGAL_NUM(obj), GET_LEGAL_CODE(obj), GET_LEGAL_PERMIT(obj), GET_OBJ_STREET_INDEX(obj));
       
       bool print_vals = false;
       int i;
