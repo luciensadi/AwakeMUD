@@ -130,9 +130,18 @@ int buy_price(struct obj_data *obj, vnum_t shop_nr)
 // Player selling to shop.
 int sell_price(struct obj_data *obj, vnum_t shop_nr)
 {
-  int i = (int)(GET_OBJ_COST(obj) * shop_table[shop_nr].profit_sell);
-  i += (int)((i * shop_table[shop_nr].random_current)/ 100);
-  return i;
+  // Base cost.
+  int cost = (int) round(GET_OBJ_COST(obj) * shop_table[shop_nr].profit_sell);
+  
+  // If the street index is set but is less than 1, multiply by this index regardless of shop legality.
+  // This fixes an exploit where someone could buy a discounted thing at a black/grey shop and sell to a legal one for a profit.
+  if (GET_OBJ_STREET_INDEX(obj) > 0 && GET_OBJ_STREET_INDEX(obj) < 1)
+    cost = (int) round(cost * GET_OBJ_STREET_INDEX(obj));
+  
+  // Add the random multiplier to the cost.
+  cost += (int) round((cost * shop_table[shop_nr].random_current) / 100);
+  
+  return cost;
 }
 
 int transaction_amt(char *arg)

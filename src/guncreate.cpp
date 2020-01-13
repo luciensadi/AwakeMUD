@@ -21,9 +21,9 @@
 void aedit_disp_menu(struct descriptor_data *d)
 {
   CLS(CH);
-  send_to_char(CH, "1) Weapon: ^c%s^n\r\n", weapon_type[GET_OBJ_VAL(OBJ, 1)]);
-  send_to_char(CH, "2) Type: ^c%s^n\r\n", ammo_type[GET_OBJ_VAL(OBJ, 2)].name);
-  send_to_char(CH, "3) Amount: ^c%d^n\r\n", GET_OBJ_VAL(OBJ, 3));
+  send_to_char(CH, "1) Weapon: ^c%s^n\r\n", weapon_type[GET_AMMOBOX_WEAPON(OBJ)]);
+  send_to_char(CH, "2) Type: ^c%s^n\r\n", ammo_type[GET_AMMOBOX_TYPE(OBJ)].name);
+  send_to_char(CH, "3) Amount: ^c%d^n\r\n", GET_AMMOBOX_QUANTITY(OBJ));
   send_to_char(CH, "q) Quit\r\nEnter your choice: ");
   d->edit_mode = AEDIT_MENU;
 }
@@ -32,8 +32,8 @@ void create_ammo(struct char_data *ch)
 {
   struct obj_data *ammo = read_object(121, VIRTUAL);
   STATE(ch->desc) = CON_AMMO_CREATE;
-  GET_OBJ_VAL(ammo, 1) = WEAP_HOLDOUT;
-  GET_OBJ_VAL(ammo, 3) = 10;
+  GET_AMMOBOX_WEAPON(ammo) = WEAP_HOLDOUT;
+  GET_AMMOBOX_QUANTITY(ammo) = 10;
   ch->desc->edit_obj = ammo;
   aedit_disp_menu(ch->desc);
 }
@@ -80,9 +80,9 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
       break;
     case 'q':
       send_to_char(CH, "Ammo design saved!\r\n");
-      sprintf(buf, "a box of %s %s ammunition", ammo_type[GET_OBJ_VAL(OBJ, 2)].name, weapon_type[GET_OBJ_VAL(OBJ, 1)]);
+      sprintf(buf, "a box of %s %s ammunition", ammo_type[GET_AMMOBOX_TYPE(OBJ)].name, weapon_type[GET_AMMOBOX_WEAPON(OBJ)]);
       OBJ->restring = str_dup(buf);
-      GET_OBJ_VAL(OBJ, 9) = GET_IDNUM(CH);
+      GET_AMMOBOX_CREATOR(OBJ) = GET_IDNUM(CH);
       obj_to_char(OBJ, CH);
       STATE(d) = CON_PLAYING;
       OBJ = NULL;
@@ -93,7 +93,7 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
    if (number > AMMO_GEL || number < AMMO_NORMAL)
      send_to_char("Invalid selection.\r\nAmmo Type: ", CH);
    else {
-     GET_OBJ_VAL(OBJ, 2) = number;
+     GET_AMMOBOX_TYPE(OBJ) = number;
      aedit_disp_menu(d);
    }
    break; 
@@ -102,14 +102,14 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
    if (number >= WEAP_CANNON || number < WEAP_HOLDOUT)
      send_to_char("Invalid selection.\r\nWeapon Type: ", CH);
    else {
-     GET_OBJ_VAL(OBJ, 1) = number;
+     GET_AMMOBOX_WEAPON(OBJ) = number;
      aedit_disp_menu(d);
    }
    break; 
   case AEDIT_QUANTITY:
    if (number < 0)
      number = 0;
-   GET_OBJ_VAL(OBJ, 3) = (number / 10) * 10;
+   GET_AMMOBOX_QUANTITY(OBJ) = (number / 10) * 10;
    aedit_disp_menu(d);
    break;
   }
@@ -142,14 +142,14 @@ int gunsmith_skill(int weapon_type)
 
 bool ammo_test(struct char_data *ch, struct obj_data *obj)
 {
-  if (GET_NUYEN(ch) <= ammo_type[GET_OBJ_VAL(obj, 2)].cost * 10) {
+  if (GET_NUYEN(ch) <= ammo_type[GET_AMMOBOX_TYPE(obj)].cost * 10) {
     send_to_char(ch, "You don't have enough nuyen for the materials to create %s.\r\n",
                  GET_OBJ_NAME(obj));
     if (IS_WORKING(ch))
       STOP_WORKING(ch);
     return FALSE;
   }
-  int skillnum = gunsmith_skill(GET_OBJ_VAL(obj, 1)), target = ammo_type[GET_OBJ_VAL(obj, 2)].tn;
+  int skillnum = gunsmith_skill(GET_AMMOBOX_WEAPON(obj)), target = ammo_type[GET_AMMOBOX_TYPE(obj)].tn;
   int skill = get_skill(ch, skillnum, target);
   int success = success_test(skill, target);
   int csuccess = MIN((int)(success * ((float)GET_COST_BREAKUP(ch) / 100)), 10);
@@ -158,16 +158,17 @@ bool ammo_test(struct char_data *ch, struct obj_data *obj)
   sprintf(buf, "AmmoTest: Skill %d, Target %d, Success %d(c%d/t%d)", skill, target, success, csuccess, success - csuccess);
   act(buf, FALSE, ch, NULL, NULL, TO_ROLLS);
   if (success > 0)
-    GET_OBJ_VAL(obj, 4) = (int)((ammo_type[GET_OBJ_VAL(obj, 2)].time / ((success - csuccess) != 0 ? (success - csuccess): 1)) * 60);
-  else GET_OBJ_VAL(obj, 4) = -1;
-  GET_NUYEN(ch) -= (int)((ammo_type[GET_OBJ_VAL(obj, 2)].cost * 10) * (1 - (csuccess * .05)));
-  GET_OBJ_VAL(obj, 10) = GET_OBJ_VAL(obj, 4);
+    GET_AMMOBOX_TIME_TO_COMPLETION(obj) = (int)((ammo_type[GET_AMMOBOX_TYPE(obj)].time / MAX(success - csuccess, 1)) * 60);
+  else
+    GET_AMMOBOX_TIME_TO_COMPLETION(obj) = -1;
+  GET_NUYEN(ch) -= (int)((ammo_type[GET_AMMOBOX_TYPE(obj)].cost * 10) * (1 - (csuccess * .05)));
+  GET_OBJ_VAL(obj, 10) = GET_AMMOBOX_TIME_TO_COMPLETION(obj);
   return TRUE;
 }
 
 void ammo_build(struct char_data *ch, struct obj_data *obj)
 {
-  if (GET_OBJ_VAL(obj, 9) != GET_IDNUM(ch))
+  if (GET_AMMOBOX_CREATOR(obj) != GET_IDNUM(ch))
     send_to_char("You cannot build this batch of ammunition.\r\n", ch);
   else {
     // Find a deployed workshop in the room.
@@ -177,10 +178,10 @@ void ammo_build(struct char_data *ch, struct obj_data *obj)
     if (!workshop) {
       // Find a kit in the character's inventory.
       for (workshop = ch->carrying; workshop; workshop = workshop->next_content) {
-        if (GET_OBJ_TYPE(workshop) == ITEM_WORKSHOP && GET_OBJ_VAL(workshop, 0) == TYPE_AMMO && 
-            GET_OBJ_VAL(workshop, 1) == TYPE_KIT) {
+        if (GET_OBJ_TYPE(workshop) == ITEM_WORKSHOP && GET_WORKSHOP_TYPE(workshop) == TYPE_AMMO &&
+            GET_WORKSHOP_GRADE(workshop) == TYPE_KIT) {
           // Ensure that, if a kit was found, the kit is of the right type.
-          if (GET_OBJ_VAL(obj, 2) == AMMO_NORMAL || (GET_OBJ_VAL(obj, 2) == GET_OBJ_VAL(workshop, 2)))
+          if (GET_AMMOBOX_TYPE(obj) == AMMO_NORMAL || (GET_AMMOBOX_TYPE(obj) == GET_WORKSHOP_AMMOKIT_TYPE(workshop)))
             break;
           else
             kitwarn = TRUE;
@@ -192,12 +193,12 @@ void ammo_build(struct char_data *ch, struct obj_data *obj)
     if (!workshop) {
       if (kitwarn) {
         send_to_char(ch, "Your ammunition kit doesn't have the right tooling for %s ammo. You'll need a different kit or an ammunition workshop.",
-                     ammo_type[GET_OBJ_VAL(obj, 2)].name);
+                     ammo_type[GET_AMMOBOX_TYPE(obj)].name);
       } else {
-        if (GET_OBJ_VAL(obj, 2) != AMMO_NORMAL) {
+        if (GET_AMMOBOX_TYPE(obj) != AMMO_NORMAL) {
           send_to_char(ch, "You need an ammunition workshop or %s %s ammunition kit.\r\n",
-                       strchr((const char *)"aeiouyAEIOUY", *ammo_type[GET_OBJ_VAL(obj, 2)].name) ? "an" : "a",
-                       ammo_type[GET_OBJ_VAL(obj, 2)].name);
+                       strchr((const char *)"aeiouyAEIOUY", *ammo_type[GET_AMMOBOX_TYPE(obj)].name) ? "an" : "a",
+                       ammo_type[GET_AMMOBOX_TYPE(obj)].name);
         } else {
           send_to_char("You need an ammunition workshop or kit.\r\n", ch);
         }
@@ -205,7 +206,7 @@ void ammo_build(struct char_data *ch, struct obj_data *obj)
       return;
     }
 
-    if (GET_OBJ_VAL(obj, 4))
+    if (GET_AMMOBOX_TIME_TO_COMPLETION(obj))
       send_to_char(ch, "You continue working on %s.\r\n", GET_OBJ_NAME(obj));
     else {
       send_to_char(ch, "You start working on %s.\r\n", GET_OBJ_NAME(obj));
