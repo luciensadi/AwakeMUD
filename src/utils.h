@@ -595,6 +595,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
     obj_index[GET_OBJ_RNUM(obj)].func : NULL)
 #define GET_WSPEC(obj) ((obj)->item_number >= 0 ? \
         (obj_index[GET_OBJ_RNUM(obj)].wfunc) : NULL)
+#define GET_OBJ_STREET_INDEX(obj)   ((obj)->obj_flags.street_index)
 
 #define CAN_WEAR(obj, part) ((obj)->obj_flags.wear_flags.IsSet((part)))
 

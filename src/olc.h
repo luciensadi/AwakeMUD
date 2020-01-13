@@ -132,11 +132,12 @@ extern void write_index_file(const char *suffix);
 #define IEDIT_AVAILTN			34
 #define IEDIT_AVAILDAY			35
 #define IEDIT_LEGAL1			36
-#define IEDIT_LEGAL2			37
-#define IEDIT_LEGAL3			38
+#define IEDIT_LEGAL2                    37
+#define IEDIT_LEGAL3                    38
 #define IEDIT_VALUE_11                  39
 #define IEDIT_VALUE_12                  40
 #define IEDIT_SOURCEINFO                41
+#define IEDIT_STREETINDEX               42
 
 /* Submodes of REDIT connectedness */
 #define REDIT_CONFIRM_EDIT              0
