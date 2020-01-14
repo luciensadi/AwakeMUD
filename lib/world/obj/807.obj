@@ -1,0 +1,494 @@
+#XXX
+Keywords:	ordinary shirt
+Name:	a shirt
+RoomDesc:$
+An ordinary shirt is lying here.~
+LookDesc:$
+This is a piece of standard, everyday clothing. Available in numerous styles 
+and colors.~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.80
+SourceBook:	SR3 p283-284
+BREAK
+#XXX
+Keywords:	ordinary pants
+Name:	a pair of pants
+RoomDesc:$
+An ordinary pair of pants is lying here.~
+LookDesc:$
+This is a piece of standard, everyday clothing. Available in numerous styles 
+and colors.~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.80
+SourceBook:	SR3 p283-284
+[VALUES]
+	Val4:	4
+BREAK
+#XXX
+Keywords:	fine shirt
+Name:	a fine shirt
+RoomDesc:$
+A finely-made shirt is lying here.~
+LookDesc:$
+This is a piece of fine quality clothing. Available in numerous styles and 
+colors. This is considered the norm of clothing for those living a High 
+Lifestyle.~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	1.00
+SourceBook:	SR3 p283-284
+BREAK
+#XXX
+Keywords:	fine pants
+Name:	a pair of fine pants
+RoomDesc:$
+A finely-made pair of pants is lying here.~
+LookDesc:$
+This is a piece of fine quality clothing. Available in numerous styles and 
+colors. This is considered the norm of clothing for those living a High 
+Lifestyle.~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	1.00
+SourceBook:	SR3 p283-284
+[VALUES]
+	Val4:	4
+BREAK
+#XXX
+Keywords:	elegant tres chic shirt
+Name:	a tres chic shirt
+RoomDesc:$
+An elegant shirt is lying here.~
+LookDesc:$
+Clothing that is tres chic is most often worn by those living Luxury Lifestyle. 
+Mostly individually crafted to the customers body and with some extras that 
+make the little difference to get noted in certain circles. Nothing to walk in 
+if you want to stay unnoticed for sure.~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	400
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	1.00
+SourceBook:	SR3 p283-284
+BREAK
+#XXX
+Keywords:	elegant tres chic pants
+Name:	a pair of tres chic pants
+RoomDesc:$
+An elegant pair of pants is lying here.~
+LookDesc:$
+Clothing that is tres chic is most often worn by those living Luxury Lifestyle. 
+Mostly individually crafted to the customers body and with some extras that 
+make the little difference to get noted in certain circles. Nothing to walk in 
+if you want to stay unnoticed for sure.~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	600
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	1.00
+SourceBook:	SR3 p283-284
+[VALUES]
+	Val4:	4
+BREAK
+#XXX
+Keywords:	armor shirt
+Name:	an armor shirt
+RoomDesc:$
+An armor shirt is lying here.~
+LookDesc:$
+The prime choice for an everyday stroll along the streets of the Sixth World. 
+Fashion designers worldwide offer a variety of styles in fabrics made from 
+descendants of Kevlar.~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	100
+	AvailTN:	2
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	1.00
+SourceBook:	SR3 p283-284
+[VALUES]
+	Val5:	150
+	Val7:	10
+	Val8:	1
+BREAK
+#XXX
+Keywords:	armor pants
+Name:	a pair of armor pants
+RoomDesc:$
+A pair of armor pants is lying here.~
+LookDesc:$
+The prime choice for an everyday stroll along the streets of the Sixth World. 
+Fashion designers worldwide offer a variety of styles in fabrics made from 
+descendants of Kevlar.~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	150
+	AvailTN:	2
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	1.00
+SourceBook:	SR3 p283-284
+[VALUES]
+	Val4:	4
+	Val5:	150
+	Val7:	10
+	Val8:	1
+BREAK
+#XXX
+Keywords:	armor jacket
+Name:	an armor jacket
+RoomDesc:$
+An armor jacket is lying here.~
+LookDesc:$
+Available in a wide selection of tailoring, from chic street styling to the 
+harsh ribbed and padded aesthetic of macho militarism, these jackets offer 
+substantial protection.~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	900
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+SourceBook:	SR3 p283-284
+[VALUES]
+	Val0:	2
+	Val4:	4
+	Val5:	5
+	Val6:	3
+	Val7:	6
+BREAK
+#XXX
+Keywords:	armor vest
+Name:	an armor vest
+RoomDesc:$
+An armor vest is lying here.~
+LookDesc:$
+The armor vest provides slim-line protection under normal clothing.~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	200
+	AvailTN:	2
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.80
+SourceBook:	SR3 p283-284
+[VALUES]
+	Val5:	2
+	Val6:	1
+	Val7:	12
+BREAK
+#XXX
+Keywords:	armor vest plates
+Name:	an armor vest with plates
+RoomDesc:$
+An armor vest with plates is lying here.~
+LookDesc:$
+The armor vest provides slim-line protection under normal clothing. Additional 
+rigid plates provide improved protection at the expense of subtlety.~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	600
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	1.00
+SourceBook:	SR3 p283-284
+[VALUES]
+	Val5:	4
+	Val6:	3
+	Val7:	10
+BREAK
+#XXX
+Keywords:	securetech shirt
+Name:	a Securetech shirt
+RoomDesc:$
+A Securetech shirt is lying here.~
+LookDesc:$
+Kelmar Technologies' Securetech clothing is similar to standard armor clothing, 
+but slightly more suitable for social situations that require discretion as 
+well as protection. This stylish line of protective clothing is available in a 
+full range of designer colors and styles.~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.75
+	Barrier:	4
+	Cost:	200
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.90
+SourceBook:	SR3 p283-284, SSC p41
+[VALUES]
+	Val5:	150
+	Val7:	12
+	Val8:	2
+BREAK
+#XXX
+Keywords:	securetech pants
+Name:	a pair of Securetech pants
+RoomDesc:$
+A pair of Securetech pants is lying here.~
+LookDesc:$
+Kelmar Technologies' Securetech clothing is similar to standard armor clothing, 
+but slightly more suitable for social situations that require discretion as 
+well as protection. This stylish line of protective clothing is available in a 
+full range of designer colors and styles.~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.75
+	Barrier:	4
+	Cost:	250
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.90
+[VALUES]
+	Val4:	4
+	Val5:	150
+	Val7:	12
+	Val8:	2
+SourceBook:	SR3 p283-284, SSC p41
+BREAK
+#XXX
+Keywords:	leather shirt
+Name:	a leather shirt
+RoomDesc:$
+A leather shirt is lying here.~
+LookDesc:$
+Clothing made out of leather, popular with some lifestyles and motorcycle 
+enthusiasts. Real leather is harder to come by, so the much steeper price 
+compared to synthleathers.~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	325
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val6:	100
+	Val8:	4
+SourceBook:	SR3 p283-284
+BREAK
+#XXX
+Keywords:	leather pants
+Name:	a leather of fine pants
+RoomDesc:$
+A pair of leather pants is lying here.~
+LookDesc:$
+Clothing made out of leather, popular with some lifestyles and motorcycle 
+enthusiasts. Real leather is harder to come by, so the much steeper price 
+compared to synthleathers.~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	425
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val4:	4
+	Val6:	100
+	Val8:	4
+SourceBook:	SR3 p283-284
+BREAK
+#XXX
+Keywords:	synth leather synthleather shirt
+Name:	a synthleather shirt
+RoomDesc:$
+A synthleather shirt is lying here.~
+LookDesc:$
+Clothing made out of leather, popular with some lifestyles and motorcycle 
+enthusiasts. Synthethics can be mass produced thus the significantly lower 
+price in comparison to real leathers.~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.60
+[VALUES]
+	Val6:	50
+	Val8:	5
+SourceBook:	SR3 p283-284
+BREAK
+#XXX
+Keywords:	synth leather synthleather pants
+Name:	a pair of synthleather pants
+RoomDesc:$
+A pair of synthleather pants is lying here.~
+LookDesc:$
+Clothing made out of leather, popular with some lifestyles and motorcycle 
+enthusiasts. Synthethics can be mass produced thus the significantly lower 
+price in comparison to real leathers.~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.60
+[VALUES]
+	Val4:	4
+	Val6:	50
+	Val8:	5
+SourceBook:	SR3 p283-284
+BREAK
+END
