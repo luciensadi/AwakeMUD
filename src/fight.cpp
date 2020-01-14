@@ -3397,7 +3397,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
         }
       }
       
-      // Precondition: If you're using a heavy weapon, you must be strong enough to wield it, or else be using a gyro.
+      // Precondition: If you're using a heavy weapon, you must be strong enough to wield it, or else be using a gyro. CC p99
       if (!att->gyro && !IS_NPC(att->ch)
           && (GET_OBJ_VAL(att->weapon, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(att->weapon, 4) <= SKILL_ASSAULT_CANNON)
           && (GET_STR(att->ch) < 8 || GET_BOD(att->ch) < 8)
