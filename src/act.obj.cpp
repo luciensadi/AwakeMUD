@@ -2406,21 +2406,33 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
     act("$p requires two free hands.", FALSE, ch, GET_EQ(ch, WEAR_HOLD), 0, TO_CHAR);
     return;
   }
+  
+  // Iterate through what they're wearing and check for compatibility.
+  struct obj_data *worn_item = NULL;
+  for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
+    // They're allowed to wear helmets.
+    if (wearloc == WEAR_HEAD)
+      continue;
+    
+    // Not wearing anything here? Skip.
+    if (!(worn_item = GET_EQ(ch, wearloc)))
+      continue;
+    
+    // If this item can't be worn with other armors, check to make sure we meet that restriction.
+    if ((IS_OBJ_STAT(obj, ITEM_BLOCKS_ARMOR) || IS_OBJ_STAT(obj, ITEM_HARDENED_ARMOR)) &&
+        (GET_WORN_IMPACT(worn_item) || GET_WORN_BALLISTIC(worn_item))) {
+      send_to_char(ch, "You can't wear %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(worn_item));
+      return;
+    }
+    
+    // If what they're wearing blocks other armors, and this item is armored, fail.
+    if ((IS_OBJ_STAT(worn_item, ITEM_BLOCKS_ARMOR) || IS_OBJ_STAT(worn_item, ITEM_HARDENED_ARMOR)) &&
+        (GET_WORN_IMPACT(obj) || GET_WORN_BALLISTIC(obj))) {
+      send_to_char(ch, "You can't wear %s with %s.\r\n", GET_OBJ_NAME(obj), GET_OBJ_NAME(worn_item));
+      return;
+    }
+  }
 
-  if (IS_OBJ_STAT(obj, ITEM_FORMFIT)) {
-    if (GET_EQ(ch, WEAR_BODY) && GET_LEGAL_NUM(GET_EQ(ch, WEAR_BODY))) {
-      send_to_char(ch, "You can't wear that with %s.\r\n", GET_OBJ_NAME(GET_EQ(ch, WEAR_BODY)));
-      return;
-    }
-    if (GET_EQ(ch, WEAR_ABOUT) && GET_LEGAL_NUM(GET_EQ(ch, WEAR_ABOUT))) {
-      send_to_char(ch, "You can't wear that with %s.\r\n", GET_OBJ_NAME(GET_EQ(ch, WEAR_ABOUT)));
-      return;
-    }
-  }
-  if ((where == WEAR_ABOUT || where == WEAR_BODY) && GET_LEGAL_NUM(obj) && GET_EQ(ch, WEAR_UNDER) && IS_OBJ_STAT(GET_EQ(ch, WEAR_UNDER), ITEM_FORMFIT)) {
-    send_to_char(ch, "You can't wear that with %s.\r\n", GET_OBJ_NAME(GET_EQ(ch, WEAR_UNDER)));
-    return;
-  }
   wear_message(ch, obj, where);
   if (obj->in_obj)
     obj_from_obj(obj);
