@@ -46,9 +46,9 @@ Material:	fabric
 	LegalCode:	0
 	LegalPermit:	0
 	StreetIndex:	0.80
-SourceBook:	SR3 p283-284
 [VALUES]
 	Val4:	4
+SourceBook:	SR3 p283-284
 BREAK
 #XXX
 Keywords:	fine shirt
@@ -161,6 +161,29 @@ SourceBook:	SR3 p283-284
 	Val4:	4
 BREAK
 #XXX
+Keywords:	shoes
+Name:	shoes
+RoomDesc:$
+A pair of shoes are sitting here.~
+LookDesc:$
+Footwear. They come in a plethora of styles and colors.~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0 
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.80
+BREAK
+#XXX
 Keywords:	armor shirt
 Name:	an armor shirt
 RoomDesc:$
@@ -168,7 +191,9 @@ An armor shirt is lying here.~
 LookDesc:$
 The prime choice for an everyday stroll along the streets of the Sixth World. 
 Fashion designers worldwide offer a variety of styles in fabrics made from 
-descendants of Kevlar.~
+descendants of Kevlar.
+^n
+This shirt is designed to be worn with the armor pants as a set.~
 Type:	Worn
 WearFlags:	100000000000001001
 ExtraFlags:	0
@@ -184,11 +209,11 @@ Material:	fabric
 	LegalCode:	0
 	LegalPermit:	0
 	StreetIndex:	1.00
-SourceBook:	SR3 p283-284
 [VALUES]
 	Val5:	150
 	Val7:	10
 	Val8:	1
+SourceBook:	SR3 p283-284
 BREAK
 #XXX
 Keywords:	armor pants
@@ -198,7 +223,9 @@ A pair of armor pants is lying here.~
 LookDesc:$
 The prime choice for an everyday stroll along the streets of the Sixth World. 
 Fashion designers worldwide offer a variety of styles in fabrics made from 
-descendants of Kevlar.~
+descendants of Kevlar.
+^n
+These pants are designed to be worn with the armor shirt as a set.~
 Type:	Worn
 WearFlags:	100001
 ExtraFlags:	0
@@ -214,12 +241,12 @@ Material:	fabric
 	LegalCode:	0
 	LegalPermit:	0
 	StreetIndex:	1.00
-SourceBook:	SR3 p283-284
 [VALUES]
 	Val4:	4
 	Val5:	150
 	Val7:	10
 	Val8:	1
+SourceBook:	SR3 p283-284
 BREAK
 #XXX
 Keywords:	armor jacket
@@ -245,13 +272,13 @@ Material:	fabric
 	LegalCode:	0
 	LegalPermit:	0
 	StreetIndex:	0.75
-SourceBook:	SR3 p283-284
 [VALUES]
 	Val0:	2
 	Val4:	4
 	Val5:	5
 	Val6:	3
 	Val7:	6
+SourceBook:	SR3 p283-284
 BREAK
 #XXX
 Keywords:	armor vest
@@ -275,14 +302,14 @@ Material:	fabric
 	LegalCode:	0
 	LegalPermit:	0
 	StreetIndex:	0.80
-SourceBook:	SR3 p283-284
 [VALUES]
 	Val5:	2
 	Val6:	1
 	Val7:	12
+SourceBook:	SR3 p283-284
 BREAK
 #XXX
-Keywords:	armor vest plates
+Keywords:	armor vest plates check_material
 Name:	an armor vest with plates
 RoomDesc:$
 An armor vest with plates is lying here.~
@@ -296,7 +323,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	2.00
-	Barrier:	4
+	Barrier:	5
 	Cost:	600
 	AvailTN:	3
 	AvailDay:	1.50
@@ -304,11 +331,43 @@ Material:	fabric
 	LegalCode:	0
 	LegalPermit:	0
 	StreetIndex:	1.00
-SourceBook:	SR3 p283-284
 [VALUES]
 	Val5:	4
 	Val6:	3
 	Val7:	10
+SourceBook:	SR3 p283-284
+BREAK
+#XXX
+Keywords:	lined coat duster
+Name:	a lined coat
+RoomDesc:$
+An lined coat is lying here.~
+LookDesc:$
+Available in a variety of styles, the lined coat is a popular form of armor, 
+reminiscent of the long dusters worn in the days of the Wild West. It uses 
+rigid plates concealed between layers of ballistic cloth to cover vital organs.~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	700
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val0:	4
+	Val4:	10
+	Val5:	4
+	Val6:	2
+	Val7:	8
+SourceBook:	SR3 p284
 BREAK
 #XXX
 Keywords:	securetech shirt
@@ -319,7 +378,9 @@ LookDesc:$
 Kelmar Technologies' Securetech clothing is similar to standard armor clothing, 
 but slightly more suitable for social situations that require discretion as 
 well as protection. This stylish line of protective clothing is available in a 
-full range of designer colors and styles.~
+full range of designer colors and styles.
+^n
+This shirt is designed to be worn with the Securetech pants as a set.~
 Type:	Worn
 WearFlags:	100000000000001001
 ExtraFlags:	0
@@ -335,11 +396,11 @@ Material:	fabric
 	LegalCode:	0
 	LegalPermit:	0
 	StreetIndex:	0.90
-SourceBook:	SR3 p283-284, SSC p41
 [VALUES]
 	Val5:	150
 	Val7:	12
 	Val8:	2
+SourceBook:	SR3 p284, SSC p41
 BREAK
 #XXX
 Keywords:	securetech pants
@@ -350,7 +411,9 @@ LookDesc:$
 Kelmar Technologies' Securetech clothing is similar to standard armor clothing, 
 but slightly more suitable for social situations that require discretion as 
 well as protection. This stylish line of protective clothing is available in a 
-full range of designer colors and styles.~
+full range of designer colors and styles.
+^n
+These pants are designed to be worn with the Securetech shirt as a set.~
 Type:	Worn
 WearFlags:	100001
 ExtraFlags:	0
@@ -371,7 +434,131 @@ Material:	fabric
 	Val5:	150
 	Val7:	12
 	Val8:	2
-SourceBook:	SR3 p283-284, SSC p41
+SourceBook:	SR3 p284, SSC p41
+BREAK
+#XXX
+Keywords:	securetech jacket
+Name:	a Securetech jacket
+RoomDesc:$
+A Securetech jacket is lying here.~
+LookDesc:$
+Kelmar Technologies' Securetech jacket is similar to standard armor jackets, 
+but slightly more suitable for social situations that require discretion as 
+well as protection. This stylish line of protective clothing is available in a 
+full range of designer colors and styles.~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	850
+	AvailTN:	4
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.80
+[VALUES]
+	Val0:	2
+	Val4:	4
+	Val5:	5
+	Val6:	3
+	Val7:	9
+SourceBook:	SR3 p284, SSC p41
+BREAK
+#XXX
+Keywords:	securetech vest
+Name:	a Securetech vest
+RoomDesc:$
+A Securetech vest is lying here.~
+LookDesc:$
+The Kelmar Technologies'Securetech vest provides slim-line protection under 
+normal clothing.~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.75
+	Barrier:	4
+	Cost:	175
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.90
+[VALUES]
+	Val5:	2
+	Val6:	1
+	Val7:	15
+SourceBook:	SR3 p284, SSC p41
+BREAK
+#XXX
+Keywords:	securetech ultra vest ultra-vest check_material
+Name:	a Securetech ultra-vest
+RoomDesc:$
+An Securetech ultra-vest is lying here.~
+LookDesc:$
+The Kelmar Technologies' Securetech ultra-vest provides slim-line protection 
+under normal clothing.  Additional rigid plates provide improved protection at 
+the expense of subtlety.~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.50
+	Barrier:	5
+	Cost:	350
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.90
+[VALUES]
+	Val5:	3
+	Val6:	2
+	Val7:	14
+SourceBook:	SR3 p284, SSC p41
+BREAK
+#XXX
+Keywords:	securetech long coat
+Name:	a Securetech long coat
+RoomDesc:$
+A Securetech long coat is lying here.~
+LookDesc:$
+Available in a variety of styles, the Kelmar Technologies' Securetech long coat 
+is a popular form of armor. It uses rigid plates concealed between layers of 
+ballistic cloth to cover vital organs.~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	650
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.90
+[VALUES]
+	Val0:	4
+	Val4:	10
+	Val5:	4
+	Val6:	2
+	Val7:	10
+SourceBook:	SR3 p284, SSC p41
 BREAK
 #XXX
 Keywords:	leather shirt
@@ -381,7 +568,9 @@ A leather shirt is lying here.~
 LookDesc:$
 Clothing made out of leather, popular with some lifestyles and motorcycle 
 enthusiasts. Real leather is harder to come by, so the much steeper price 
-compared to synthleathers.~
+compared to synthleathers.
+^n
+This shirt is designed to be worn with the leather pants as a set.~
 Type:	Worn
 WearFlags:	100000000000001001
 ExtraFlags:	0
@@ -399,7 +588,7 @@ Material:	leather
 	StreetIndex:	0.75
 [VALUES]
 	Val6:	100
-	Val8:	4
+	Val8:	3
 SourceBook:	SR3 p283-284
 BREAK
 #XXX
@@ -410,7 +599,9 @@ A pair of leather pants is lying here.~
 LookDesc:$
 Clothing made out of leather, popular with some lifestyles and motorcycle 
 enthusiasts. Real leather is harder to come by, so the much steeper price 
-compared to synthleathers.~
+compared to synthleathers.
+^n
+These pants are designed to be worn with the leather shirt as a set.~
 Type:	Worn
 WearFlags:	100001
 ExtraFlags:	0
@@ -429,7 +620,7 @@ Material:	leather
 [VALUES]
 	Val4:	4
 	Val6:	100
-	Val8:	4
+	Val8:	3
 SourceBook:	SR3 p283-284
 BREAK
 #XXX
@@ -440,7 +631,9 @@ A synthleather shirt is lying here.~
 LookDesc:$
 Clothing made out of leather, popular with some lifestyles and motorcycle 
 enthusiasts. Synthethics can be mass produced thus the significantly lower 
-price in comparison to real leathers.~
+price in comparison to real leathers.
+^n
+This shirt is designed to be worn with the synthleather pants as a set.~
 Type:	Worn
 WearFlags:	100000000000001001
 ExtraFlags:	0
@@ -458,7 +651,7 @@ Material:	leather
 	StreetIndex:	0.60
 [VALUES]
 	Val6:	50
-	Val8:	5
+	Val8:	4
 SourceBook:	SR3 p283-284
 BREAK
 #XXX
@@ -469,7 +662,9 @@ A pair of synthleather pants is lying here.~
 LookDesc:$
 Clothing made out of leather, popular with some lifestyles and motorcycle 
 enthusiasts. Synthethics can be mass produced thus the significantly lower 
-price in comparison to real leathers.~
+price in comparison to real leathers.
+^n
+These pants are designed to be worn with the synthleather shirt as a set.~
 Type:	Worn
 WearFlags:	100001
 ExtraFlags:	0
@@ -488,7 +683,369 @@ Material:	leather
 [VALUES]
 	Val4:	4
 	Val6:	50
-	Val8:	5
+	Val8:	4
 SourceBook:	SR3 p283-284
+BREAK
+#XXX
+Keywords:	combat uniform shirt check_wear
+Name:	a combat uniform shirt
+RoomDesc:$
+A combat uniform shirt is lying here.~
+LookDesc:$
+Combat uniforms, also called field uniforms or battledress, are a casual type of 
+uniform used by military, police, fire and other public uniformed services for 
+everyday fieldwork and combat duty purposes. These uniforms come in a variety 
+of colors as well as camouflage patterns.
+^n
+This shirt is designed to be worn with the combat uniform pants and jacket as a 
+set.~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	200
+	AvailTN:	4
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	1.00
+[VALUES]
+	Val4:	2
+	Val5:	150
+	Val6:	50
+	Val7:	8
+	Val8:	5
+SourceBook:	SR3 p283-284, Camouflage Clothing
+BREAK
+#XXX
+Keywords:	combat uniform pants
+Name:	a pair of combat uniform pants
+RoomDesc:$
+A pair of combat uniform pants is lying here.~
+LookDesc:$
+Combat uniforms, also called field uniforms or battledress, are a casual type of 
+uniform used by military, police, fire and other public uniformed services for 
+everyday fieldwork and combat duty purposes. These uniforms come in a variety 
+of colors as well as camouflage patterns.
+^n
+These pants are designed to be worn with the combat uniform shirt and jacket as a 
+set.~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	200
+	AvailTN:	4
+	AvailDay:	36.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	1.00
+[VALUES]
+	Val4:	6
+	Val5:	150
+	Val6:	50
+	Val7:	8
+	Val8:	4
+SourceBook:	SR3 p283-284, Camouflage Clothing
+BREAK
+#XXX
+Keywords:	combat uniform jacket check_wear
+Name:	a combat uniform jacket
+RoomDesc:$
+A combat uniform jacket is lying here.~
+LookDesc:$
+Combat uniforms, also called field uniforms or battledress, are a casual type of 
+uniform used by military, police, fire and other public uniformed services for 
+everyday fieldwork and combat duty purposes. These uniforms come in a variety 
+of colors as well as camouflage patterns.~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.50
+	Barrier:	4
+	Cost:	800
+	AvailTN:	5
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	1.00
+[VALUES]
+	Val4:	4
+	Val5:	300
+	Val6:	100
+	Val7:	4
+SourceBook:	SR3 p283-284, Camouflage Clothing
+BREAK
+#XXX
+Keywords:	combat uniform tactical vest check_wear
+Name:	a combat uniform tactical vest
+RoomDesc:$
+A combat uniform tactical vest is lying here.~
+LookDesc:$
+This MOLLE tactical vest is designed to be worn over clothing, offering some 
+added protection while also allowing the user to attach various holsters or 
+pouches to fit their needs.~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	300
+	AvailTN:	2
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.80
+[VALUES]
+	Val0:	2
+	Val4:	6
+	Val5:	2
+	Val6:	1
+SourceBook:	SR3 p283-284
+BREAK
+#XXX
+Keywords:	combat uniform plate carrier check_wear check_material
+Name:	a combat uniform plate carrier
+RoomDesc:$
+A combat uniform plate carrier is lying here.~
+LookDesc:$
+This MOLLE plate carrier is designed to be worn over clothing, offering added 
+protection with inserted rigid armor plates while also allowing the user to 
+attach various holsters or pouches to fit their needs.~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	5
+	Cost:	750
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	1.00
+[VALUES]
+	Val0:	2
+	Val4:	6
+	Val5:	4
+	Val6:	3
+SourceBook:	SR3 p283-284
+BREAK
+#XXX
+Keywords:	combat boots
+Name:	combat boots
+RoomDesc:$
+A pair of combat boots are sitting here.~
+LookDesc:$
+Armor for your feet. Designed using the latest combat armor construction 
+processes to protect the feet, no matter how severe the trauma. Normal boots 
+protect the foot and ankles. Full height boots protect all the way to the knee.~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0 
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	5
+	Cost:	120
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val6:	1
+BREAK
+#XXX
+Keywords:	combat boots full height
+Name:	combat boots (full height)
+RoomDesc:$
+A pair of full height combat boots are sitting here.~
+LookDesc:$
+Armor for your feet. Designed using the latest combat armor construction 
+processes to protect the feet, no matter how severe the trauma. Normal boots 
+protect the foot and ankles. Full height boots protect all the way to the knee.~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0 
+Material:	leather
+[POINTS]
+	Weight:	1.50
+	Barrier:	5
+	Cost:	275
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val5:	1
+	Val6:	1
+BREAK
+#XXX
+Keywords:	combat boots tres chic
+Name:	combat boots (tres chic)
+RoomDesc:$
+A pair of tres chic combat boots are sitting here.~
+LookDesc:$
+Armor for your feet. Designed using the latest combat armor construction 
+processes to protect the feet, no matter how severe the trauma. Normal boots 
+protect the foot and ankles. Full height boots protect all the way to the knee.~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0 
+Material:	leather
+[POINTS]
+	Weight:	1.75
+	Barrier:	5
+	Cost:	500
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.80
+[VALUES]
+	Val5:	1
+	Val6:	1
+BREAK
+#XXX
+Keywords:	forearm guards check_material
+Name:	a pair of forearm guards
+RoomDesc:$
+A pair of forearm guards lies here.~
+LookDesc:$
+These padded densiplast forearm guards are specifically designed for parrying 
+armed and unarmed attacks.~
+Type:	Worn
+WearFlags:	100000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.20
+	Barrier:	8
+	Cost:	250
+	AvailTN:	5
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val6:	1
+	Val7:	12
+BREAK
+#XXX
+Keywords:	shirt form fitting body armor
+Name:	form-fitting body armor I
+RoomDesc:$
+A shirt of form-fitting armor lies here.~
+LookDesc:$
+Ares Arms has devised a new Form-Fitting Body Armor system that is contour-cut 
+for each individual buyer. A patented design allows the various armor sections 
+to be molded to a specific body size and shape.~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	100000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.75
+	Barrier:	4
+	Cost:	500
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	1.00
+[VALUES]
+	Val5:	2
+	Val7:	14
+BREAK
+#XXX
+Keywords:	suit form fitting body armor
+Name:	form-fitting body armor II
+RoomDesc:$
+A suit of form-fitting armor lies here.~
+LookDesc:$
+Ares Arms has devised a new Form-Fitting Body Armor system that is contour-cut 
+for each individual buyer. A patented design allows the various armor sections 
+to be molded to a specific body size and shape.~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	100000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	6
+	AvailDay:	10.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	1.00
+[VALUES]
+	Val5:	3
+	Val6:	1
+	Val7:	13
+BREAK
+#XXX
+Keywords:	full suit form fitting body armor
+Name:	form-fitting body armor III
+RoomDesc:$
+A full suit of form-fitting armor lies here.~
+LookDesc:$
+Ares Arms has devised a new Form-Fitting Body Armor system that is contour-cut 
+for each individual buyer. A patented design allows the various armor sections 
+to be molded to a specific body size and shape.~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	100000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.25
+	Barrier:	4
+	Cost:	2000
+	AvailTN:	6
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	1.00
+[VALUES]
+	Val5:	4
+	Val6:	1
+	Val7:	12
 BREAK
 END
