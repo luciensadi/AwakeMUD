@@ -886,6 +886,8 @@ const char *extra_bits[] =
     "SNIPER",
     "IMMLOAD",
     "NERPS",
+    "BLOCKS_ARMOR",
+    "HARDENED_ARMOR",
     "\n"
   };
 
