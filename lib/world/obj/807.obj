@@ -716,8 +716,8 @@ Material:	fabric
 	StreetIndex:	1.00
 [VALUES]
 	Val4:	2
-	Val5:	150
-	Val6:	50
+	Val5:	100
+	Val6:	100
 	Val7:	8
 	Val8:	5
 SourceBook:	SR3 p283-284, Camouflage Clothing
@@ -752,8 +752,8 @@ Material:	fabric
 	StreetIndex:	1.00
 [VALUES]
 	Val4:	6
-	Val5:	150
-	Val6:	50
+	Val5:	100
+	Val6:	100
 	Val7:	8
 	Val8:	4
 SourceBook:	SR3 p283-284, Camouflage Clothing
@@ -788,6 +788,7 @@ Material:	fabric
 	Val5:	300
 	Val6:	100
 	Val7:	4
+	Val8:	4
 SourceBook:	SR3 p283-284, Camouflage Clothing
 BREAK
 #XXX
@@ -958,8 +959,10 @@ Material:	plastic
 	LegalCode:	0
 	LegalPermit:	0
 	StreetIndex:	0.75
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
 [VALUES]
-	Val6:	1
 	Val7:	12
 BREAK
 #XXX
