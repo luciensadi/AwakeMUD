@@ -2408,6 +2408,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
   }
   
   // Iterate through what they're wearing and check for compatibility.
+  struct obj_data *worn_item = NULL;
   for (int wearloc = 0; wearloc < NUM_WEARS; wearloc++) {
     // They're allowed to wear helmets.
     if (wearloc == WEAR_HEAD)
