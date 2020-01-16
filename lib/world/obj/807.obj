@@ -1,4 +1,4 @@
-#XXX
+#80700
 Keywords:	ordinary shirt
 Name:	a shirt
 RoomDesc:$
@@ -23,7 +23,7 @@ Material:	fabric
 	StreetIndex:	0.80
 SourceBook:	SR3 p283-284
 BREAK
-#XXX
+#80701
 Keywords:	ordinary pants
 Name:	a pair of pants
 RoomDesc:$
@@ -50,7 +50,7 @@ Material:	fabric
 	Val4:	4
 SourceBook:	SR3 p283-284
 BREAK
-#XXX
+#80702
 Keywords:	fine shirt
 Name:	a fine shirt
 RoomDesc:$
@@ -66,7 +66,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	0.50
-	Barrier:	3
+	Barrier:	4
 	Cost:	200
 	AvailTN:	0
 	AvailDay:	0.00
@@ -76,7 +76,7 @@ Material:	fabric
 	StreetIndex:	1.00
 SourceBook:	SR3 p283-284
 BREAK
-#XXX
+#80703
 Keywords:	fine pants
 Name:	a pair of fine pants
 RoomDesc:$
@@ -92,7 +92,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	0.50
-	Barrier:	3
+	Barrier:	4
 	Cost:	300
 	AvailTN:	0
 	AvailDay:	0.00
@@ -104,7 +104,7 @@ SourceBook:	SR3 p283-284
 [VALUES]
 	Val4:	4
 BREAK
-#XXX
+#80704
 Keywords:	elegant tres chic shirt
 Name:	a tres chic shirt
 RoomDesc:$
@@ -121,7 +121,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	0.50
-	Barrier:	3
+	Barrier:	4
 	Cost:	400
 	AvailTN:	0
 	AvailDay:	0.00
@@ -131,7 +131,7 @@ Material:	fabric
 	StreetIndex:	1.00
 SourceBook:	SR3 p283-284
 BREAK
-#XXX
+#80705
 Keywords:	elegant tres chic pants
 Name:	a pair of tres chic pants
 RoomDesc:$
@@ -148,7 +148,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	0.50
-	Barrier:	3
+	Barrier:	4
 	Cost:	600
 	AvailTN:	0
 	AvailDay:	0.00
@@ -160,7 +160,7 @@ SourceBook:	SR3 p283-284
 [VALUES]
 	Val4:	4
 BREAK
-#XXX
+#80706
 Keywords:	shoes
 Name:	shoes
 RoomDesc:$
@@ -174,7 +174,7 @@ AffFlags:	0
 Material:	leather
 [POINTS]
 	Weight:	0.50
-	Barrier:	4
+	Barrier:	6
 	Cost:	50
 	AvailTN:	0
 	AvailDay:	0.00
@@ -183,7 +183,7 @@ Material:	leather
 	LegalPermit:	0
 	StreetIndex:	0.80
 BREAK
-#XXX
+#80707
 Keywords:	armor shirt
 Name:	an armor shirt
 RoomDesc:$
@@ -201,7 +201,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	1.00
-	Barrier:	4
+	Barrier:	6
 	Cost:	100
 	AvailTN:	2
 	AvailDay:	1.50
@@ -215,7 +215,7 @@ Material:	fabric
 	Val8:	1
 SourceBook:	SR3 p283-284
 BREAK
-#XXX
+#80708
 Keywords:	armor pants
 Name:	a pair of armor pants
 RoomDesc:$
@@ -233,7 +233,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	1.00
-	Barrier:	4
+	Barrier:	6
 	Cost:	150
 	AvailTN:	2
 	AvailDay:	1.50
@@ -248,7 +248,7 @@ Material:	fabric
 	Val8:	1
 SourceBook:	SR3 p283-284
 BREAK
-#XXX
+#80709
 Keywords:	armor jacket
 Name:	an armor jacket
 RoomDesc:$
@@ -264,7 +264,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	2.00
-	Barrier:	4
+	Barrier:	8
 	Cost:	900
 	AvailTN:	3
 	AvailDay:	1.50
@@ -280,7 +280,7 @@ Material:	fabric
 	Val7:	6
 SourceBook:	SR3 p283-284
 BREAK
-#XXX
+#80710
 Keywords:	armor vest
 Name:	an armor vest
 RoomDesc:$
@@ -294,7 +294,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	1.00
-	Barrier:	4
+	Barrier:	6
 	Cost:	200
 	AvailTN:	2
 	AvailDay:	1.50
@@ -308,7 +308,7 @@ Material:	fabric
 	Val7:	12
 SourceBook:	SR3 p283-284
 BREAK
-#XXX
+#80711
 Keywords:	armor vest plates check_material
 Name:	an armor vest with plates
 RoomDesc:$
@@ -323,7 +323,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	2.00
-	Barrier:	5
+	Barrier:	8
 	Cost:	600
 	AvailTN:	3
 	AvailDay:	1.50
@@ -337,7 +337,7 @@ Material:	fabric
 	Val7:	10
 SourceBook:	SR3 p283-284
 BREAK
-#XXX
+#80712
 Keywords:	lined coat duster
 Name:	a lined coat
 RoomDesc:$
@@ -353,7 +353,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	1.00
-	Barrier:	4
+	Barrier:	8
 	Cost:	700
 	AvailTN:	2
 	AvailDay:	1.00
@@ -369,7 +369,7 @@ Material:	fabric
 	Val7:	8
 SourceBook:	SR3 p284
 BREAK
-#XXX
+#80713
 Keywords:	securetech shirt
 Name:	a Securetech shirt
 RoomDesc:$
@@ -388,7 +388,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	0.75
-	Barrier:	4
+	Barrier:	6
 	Cost:	200
 	AvailTN:	3
 	AvailDay:	1.50
@@ -402,7 +402,7 @@ Material:	fabric
 	Val8:	2
 SourceBook:	SR3 p284, SSC p41
 BREAK
-#XXX
+#80714
 Keywords:	securetech pants
 Name:	a pair of Securetech pants
 RoomDesc:$
@@ -421,7 +421,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	0.75
-	Barrier:	4
+	Barrier:	6
 	Cost:	250
 	AvailTN:	3
 	AvailDay:	1.50
@@ -436,7 +436,7 @@ Material:	fabric
 	Val8:	2
 SourceBook:	SR3 p284, SSC p41
 BREAK
-#XXX
+#80715
 Keywords:	securetech jacket
 Name:	a Securetech jacket
 RoomDesc:$
@@ -453,7 +453,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	3.00
-	Barrier:	4
+	Barrier:	8
 	Cost:	850
 	AvailTN:	4
 	AvailDay:	1.50
@@ -469,7 +469,7 @@ Material:	fabric
 	Val7:	9
 SourceBook:	SR3 p284, SSC p41
 BREAK
-#XXX
+#80716
 Keywords:	securetech vest
 Name:	a Securetech vest
 RoomDesc:$
@@ -484,7 +484,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	0.75
-	Barrier:	4
+	Barrier:	6
 	Cost:	175
 	AvailTN:	3
 	AvailDay:	1.50
@@ -498,7 +498,7 @@ Material:	fabric
 	Val7:	15
 SourceBook:	SR3 p284, SSC p41
 BREAK
-#XXX
+#80717
 Keywords:	securetech ultra vest ultra-vest check_material
 Name:	a Securetech ultra-vest
 RoomDesc:$
@@ -514,7 +514,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	2.50
-	Barrier:	5
+	Barrier:	8
 	Cost:	350
 	AvailTN:	3
 	AvailDay:	1.50
@@ -528,7 +528,7 @@ Material:	fabric
 	Val7:	14
 SourceBook:	SR3 p284, SSC p41
 BREAK
-#XXX
+#80718
 Keywords:	securetech long coat
 Name:	a Securetech long coat
 RoomDesc:$
@@ -544,7 +544,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	2.00
-	Barrier:	4
+	Barrier:	8
 	Cost:	650
 	AvailTN:	3
 	AvailDay:	1.00
@@ -560,7 +560,7 @@ Material:	fabric
 	Val7:	10
 SourceBook:	SR3 p284, SSC p41
 BREAK
-#XXX
+#80719
 Keywords:	leather shirt
 Name:	a leather shirt
 RoomDesc:$
@@ -578,7 +578,7 @@ AffFlags:	0
 Material:	leather
 [POINTS]
 	Weight:	0.50
-	Barrier:	1
+	Barrier:	6
 	Cost:	325
 	AvailTN:	0
 	AvailDay:	0.00
@@ -591,7 +591,7 @@ Material:	leather
 	Val8:	3
 SourceBook:	SR3 p283-284
 BREAK
-#XXX
+#80720
 Keywords:	leather pants
 Name:	a leather of fine pants
 RoomDesc:$
@@ -609,7 +609,7 @@ AffFlags:	0
 Material:	leather
 [POINTS]
 	Weight:	0.50
-	Barrier:	4
+	Barrier:	6
 	Cost:	425
 	AvailTN:	0
 	AvailDay:	0.00
@@ -623,7 +623,7 @@ Material:	leather
 	Val8:	3
 SourceBook:	SR3 p283-284
 BREAK
-#XXX
+#80721
 Keywords:	synth leather synthleather shirt
 Name:	a synthleather shirt
 RoomDesc:$
@@ -641,7 +641,7 @@ AffFlags:	0
 Material:	leather
 [POINTS]
 	Weight:	0.50
-	Barrier:	4
+	Barrier:	6
 	Cost:	100
 	AvailTN:	0
 	AvailDay:	0.00
@@ -654,7 +654,7 @@ Material:	leather
 	Val8:	4
 SourceBook:	SR3 p283-284
 BREAK
-#XXX
+#80722
 Keywords:	synth leather synthleather pants
 Name:	a pair of synthleather pants
 RoomDesc:$
@@ -672,7 +672,7 @@ AffFlags:	0
 Material:	leather
 [POINTS]
 	Weight:	0.50
-	Barrier:	4
+	Barrier:	6
 	Cost:	150
 	AvailTN:	0
 	AvailDay:	0.00
@@ -686,7 +686,7 @@ Material:	leather
 	Val8:	4
 SourceBook:	SR3 p283-284
 BREAK
-#XXX
+#80723
 Keywords:	combat uniform shirt check_wear
 Name:	a combat uniform shirt
 RoomDesc:$
@@ -706,7 +706,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	0.50
-	Barrier:	4
+	Barrier:	6
 	Cost:	200
 	AvailTN:	4
 	AvailDay:	1.50
@@ -722,7 +722,7 @@ Material:	fabric
 	Val8:	5
 SourceBook:	SR3 p283-284, Camouflage Clothing
 BREAK
-#XXX
+#80724
 Keywords:	combat uniform pants
 Name:	a pair of combat uniform pants
 RoomDesc:$
@@ -742,7 +742,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	0.50
-	Barrier:	4
+	Barrier:	6
 	Cost:	200
 	AvailTN:	4
 	AvailDay:	36.00
@@ -758,7 +758,7 @@ Material:	fabric
 	Val8:	4
 SourceBook:	SR3 p283-284, Camouflage Clothing
 BREAK
-#XXX
+#80725
 Keywords:	combat uniform jacket check_wear
 Name:	a combat uniform jacket
 RoomDesc:$
@@ -775,7 +775,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	1.50
-	Barrier:	4
+	Barrier:	6
 	Cost:	800
 	AvailTN:	5
 	AvailDay:	1.50
@@ -791,7 +791,7 @@ Material:	fabric
 	Val8:	4
 SourceBook:	SR3 p283-284, Camouflage Clothing
 BREAK
-#XXX
+#80726
 Keywords:	combat uniform tactical vest check_wear
 Name:	a combat uniform tactical vest
 RoomDesc:$
@@ -807,7 +807,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	1.00
-	Barrier:	4
+	Barrier:	6
 	Cost:	300
 	AvailTN:	2
 	AvailDay:	1.50
@@ -822,7 +822,7 @@ Material:	fabric
 	Val6:	1
 SourceBook:	SR3 p283-284
 BREAK
-#XXX
+#80727
 Keywords:	combat uniform plate carrier check_wear check_material
 Name:	a combat uniform plate carrier
 RoomDesc:$
@@ -838,7 +838,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	2.00
-	Barrier:	5
+	Barrier:	8
 	Cost:	750
 	AvailTN:	3
 	AvailDay:	1.50
@@ -853,7 +853,7 @@ Material:	fabric
 	Val6:	3
 SourceBook:	SR3 p283-284
 BREAK
-#XXX
+#80728
 Keywords:	combat boots
 Name:	combat boots
 RoomDesc:$
@@ -869,7 +869,7 @@ AffFlags:	0
 Material:	leather
 [POINTS]
 	Weight:	1.00
-	Barrier:	5
+	Barrier:	8
 	Cost:	120
 	AvailTN:	2
 	AvailDay:	1.00
@@ -880,7 +880,7 @@ Material:	leather
 [VALUES]
 	Val6:	1
 BREAK
-#XXX
+#80729
 Keywords:	combat boots full height
 Name:	combat boots (full height)
 RoomDesc:$
@@ -896,7 +896,7 @@ AffFlags:	0
 Material:	leather
 [POINTS]
 	Weight:	1.50
-	Barrier:	5
+	Barrier:	8
 	Cost:	275
 	AvailTN:	2
 	AvailDay:	1.00
@@ -908,7 +908,7 @@ Material:	leather
 	Val5:	1
 	Val6:	1
 BREAK
-#XXX
+#80730
 Keywords:	combat boots tres chic
 Name:	combat boots (tres chic)
 RoomDesc:$
@@ -924,7 +924,7 @@ AffFlags:	0
 Material:	leather
 [POINTS]
 	Weight:	1.75
-	Barrier:	5
+	Barrier:	8
 	Cost:	500
 	AvailTN:	2
 	AvailDay:	1.00
@@ -936,7 +936,7 @@ Material:	leather
 	Val5:	1
 	Val6:	1
 BREAK
-#XXX
+#80731
 Keywords:	forearm guards check_material
 Name:	a pair of forearm guards
 RoomDesc:$
@@ -965,7 +965,7 @@ Material:	plastic
 [VALUES]
 	Val7:	12
 BREAK
-#XXX
+#80732
 Keywords:	shirt form fitting body armor
 Name:	form-fitting body armor I
 RoomDesc:$
@@ -981,7 +981,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	0.75
-	Barrier:	4
+	Barrier:	6
 	Cost:	500
 	AvailTN:	6
 	AvailDay:	7.00
@@ -993,7 +993,7 @@ Material:	fabric
 	Val5:	2
 	Val7:	14
 BREAK
-#XXX
+#80733
 Keywords:	suit form fitting body armor
 Name:	form-fitting body armor II
 RoomDesc:$
@@ -1009,7 +1009,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	1.00
-	Barrier:	4
+	Barrier:	6
 	Cost:	1000
 	AvailTN:	6
 	AvailDay:	10.00
@@ -1022,7 +1022,7 @@ Material:	fabric
 	Val6:	1
 	Val7:	13
 BREAK
-#XXX
+#80734
 Keywords:	full suit form fitting body armor
 Name:	form-fitting body armor III
 RoomDesc:$
@@ -1038,7 +1038,7 @@ AffFlags:	0
 Material:	fabric
 [POINTS]
 	Weight:	1.25
-	Barrier:	4
+	Barrier:	6
 	Cost:	2000
 	AvailTN:	6
 	AvailDay:	14.00
@@ -1050,5 +1050,417 @@ Material:	fabric
 	Val5:	4
 	Val6:	1
 	Val7:	12
+BREAK
+#80735
+Keywords:	suit light security armor small
+Name:	a suit of light security armor (small)
+RoomDesc:$
+A suit of small-sized light security armor is lying here.~
+LookDesc:$
+Integrated full-protection body armor used by security personnel around the
+world, security armor is often styled for intimidation as much as for
+protection and ease of movement. This armor features a padded undersuit over
+which extensive armor plates are attached.
+^n
+This particular suit was sized to fit a dwarf.~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	1000110110000000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	20.00
+	Barrier:	8
+	Cost:	7500
+	AvailTN:	12
+	AvailDay:	10.00
+	LegalNum:	4
+	LegalCode:	11
+	LegalPermit:	1
+	StreetIndex:	2.00
+[VALUES]
+	Val5:	6
+	Val6:	4
+SourceBook:	SR3 p284
+BREAK
+#80736
+Keywords:	suit light security armor medium
+Name:	a suit of light security armor (medium)
+RoomDesc:$
+A suit of medium-sized light security armor is lying here.~
+LookDesc:$
+Integrated full-protection body armor used by security personnel around the
+world, security armor is often styled for intimidation as much as for
+protection and ease of movement. This armor features a padded undersuit over
+which extensive armor plates are attached.
+^n
+This particular suit was sized to fit a human or elf.~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	1000011010000000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	18.00
+	Barrier:	8
+	Cost:	7500
+	AvailTN:	12
+	AvailDay:	10.00
+	LegalNum:	4
+	LegalCode:	11
+	LegalPermit:	1
+	StreetIndex:	2.00
+[VALUES]
+	Val5:	6
+	Val6:	4
+SourceBook:	SR3 p284
+BREAK
+#80737
+Keywords:	suit light security armor large
+Name:	a suit of light security armor (large)
+RoomDesc:$
+A suit of large-sized light security armor is lying here.~
+LookDesc:$
+Integrated full-protection body armor used by security personnel around the
+world, security armor is often styled for intimidation as much as for
+protection and ease of movement. This armor features a padded undersuit over
+which extensive armor plates are attached.
+^n
+This particular suit was sized to fit an orc or troll.~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	1000101100000000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	25.00
+	Barrier:	8
+	Cost:	7500
+	AvailTN:	12
+	AvailDay:	10.00
+	LegalNum:	4
+	LegalCode:	11
+	LegalPermit:	1
+	StreetIndex:	2.00
+[VALUES]
+	Val5:	6
+	Val6:	4
+SourceBook:	SR3 p284
+BREAK
+#80738
+Keywords:	suit medium security armor small
+Name:	a suit of medium security armor (small)
+RoomDesc:$
+A suit of small-sized medium security armor is lying here.~
+LookDesc:$
+Integrated full-protection body armor used by security personnel around the
+world, security armor is often styled for intimidation as much as for
+protection and ease of movement. This armor features a padded undersuit over
+which extensive armor plates are attached.
+^n
+This particular suit was sized to fit a dwarf.~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	1000110110000000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	22.00
+	Barrier:	8
+	Cost:	9000
+	AvailTN:	14
+	AvailDay:	10.00
+	LegalNum:	3
+	LegalCode:	11
+	LegalPermit:	1
+	StreetIndex:	2.50
+[VALUES]
+	Val5:	6
+	Val6:	5
+SourceBook:	SR3 p284
+BREAK
+#80739
+Keywords:	suit medium security armor medium
+Name:	a suit of medium security armor (medium)
+RoomDesc:$
+A suit of medium-sized medium security armor is lying here.~
+LookDesc:$
+Integrated full-protection body armor used by security personnel around the
+world, security armor is often styled for intimidation as much as for
+protection and ease of movement. This armor features a padded undersuit over
+which extensive armor plates are attached.
+^n
+This particular suit was sized to fit a human or elf.~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	1000011010000000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	20.00
+	Barrier:	8
+	Cost:	9000
+	AvailTN:	14
+	AvailDay:	10.00
+	LegalNum:	3
+	LegalCode:	11
+	LegalPermit:	1
+	StreetIndex:	2.50
+[VALUES]
+	Val5:	6
+	Val6:	5
+SourceBook:	SR3 p284
+BREAK
+#80740
+Keywords:	suit medium security armor large
+Name:	a suit of medium security armor (large)
+RoomDesc:$
+A suit of large-sized medium security armor is lying here.~
+LookDesc:$
+Integrated full-protection body armor used by security personnel around the
+world, security armor is often styled for intimidation as much as for
+protection and ease of movement. This armor features a padded undersuit over
+which extensive armor plates are attached.
+^n
+This particular suit was sized to fit an orc or troll.~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	1000101100000000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	27.00
+	Barrier:	8
+	Cost:	9000
+	AvailTN:	14
+	AvailDay:	10.00
+	LegalNum:	3
+	LegalCode:	11
+	LegalPermit:	1
+	StreetIndex:	2.50
+[VALUES]
+	Val5:	6
+	Val6:	5
+SourceBook:	SR3 p284
+BREAK
+#80741
+Keywords:	suit heavy security armor small
+Name:	a suit of heavy security armor (small)
+RoomDesc:$
+A suit of small-sized heavy security armor is lying here.~
+LookDesc:$
+Integrated full-protection body armor used by security personnel around the
+world, security armor is often styled for intimidation as much as for
+protection and ease of movement. This armor features a padded undersuit over
+which extensive armor plates are attached.
+^n
+This particular suit was sized to fit a dwarf.~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	1000110110000000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	24.00
+	Barrier:	8
+	Cost:	12000
+	AvailTN:	16
+	AvailDay:	14.00
+	LegalNum:	2
+	LegalCode:	11
+	LegalPermit:	1
+	StreetIndex:	3.00
+[VALUES]
+	Val5:	7
+	Val6:	5
+SourceBook:	SR3 p284
+BREAK
+#80742
+Keywords:	suit heavy security armor medium
+Name:	a suit of heavy security armor (medium)
+RoomDesc:$
+A suit of medium-sized heavy security armor is lying here.~
+LookDesc:$
+Integrated full-protection body armor used by security personnel around the
+world, security armor is often styled for intimidation as much as for
+protection and ease of movement. This armor features a padded undersuit over
+which extensive armor plates are attached.
+^n
+This particular suit was sized to fit a human or elf.~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	1000011010000000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	22.00
+	Barrier:	8
+	Cost:	12000
+	AvailTN:	16
+	AvailDay:	14.00
+	LegalNum:	2
+	LegalCode:	11
+	LegalPermit:	1
+	StreetIndex:	3.00
+[VALUES]
+	Val5:	7
+	Val6:	5
+SourceBook:	SR3 p284
+BREAK
+#80743
+Keywords:	suit heavy security armor large
+Name:	a suit of heavy security armor (large)
+RoomDesc:$
+A suit of large-sized heavy security armor is lying here.~
+LookDesc:$
+Integrated full-protection body armor used by security personnel around the
+world, security armor is often styled for intimidation as much as for
+protection and ease of movement. This armor features a padded undersuit over
+which extensive armor plates are attached.
+^n
+This particular suit was sized to fit an orc or troll.~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	1000101100000000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	29.00
+	Barrier:	8
+	Cost:	12000
+	AvailTN:	16
+	AvailDay:	14.00
+	LegalNum:	2
+	LegalCode:	11
+	LegalPermit:	1
+	StreetIndex:	3.00
+[VALUES]
+	Val5:	7
+	Val6:	5
+SourceBook:	SR3 p284
+BREAK
+#80744
+Keywords:	security helmet
+Name:	a security helmet
+RoomDesc:$
+A security helmet gathers rests here.~
+LookDesc:$
+These helmets are designed to offer some measure of protection for security 
+personnel.~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	250
+	AvailTN:	12
+	AvailDay:	14.00
+	LegalNum:	2
+	LegalCode:	11
+	LegalPermit:	1
+	StreetIndex:	2.00
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	2
+SourceBook:	SR3 p284
+BREAK
+#80745
+Keywords:	riot shield small
+Name:	a riot shield (small)
+RoomDesc:$
+A small riot shield is lying here.~
+LookDesc:$
+Constructed of clear, high-impact plasteel, these shields are used for riot 
+control.~
+Type:	Worn
+WearFlags:	1000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	2.00
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	2
+SourceBook:	SR3 p284
+BREAK
+#80746
+Keywords:	riot shield large
+Name:	a riot shield (large)
+RoomDesc:$
+A large riot shield is lying here.~
+LookDesc:$
+Constructed of clear, high-impact plasteel, these shields are used for riot 
+control.~
+Type:	Worn
+WearFlags:	1000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	2.00
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	2
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	3
+SourceBook:	SR3 p284
+BREAK
+#80747
+Keywords:	riot shield ballistic
+Name:	a riot shield (ballistic)
+RoomDesc:$
+A ballistic shield is lying here.~
+LookDesc:$
+This is a special opaque ballistic riot shield used by police for house raids
+and other SWAT-style activities.~
+Type:	Worn
+WearFlags:	1000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	2.00
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	3
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+SourceBook:	SR3 p284
 BREAK
 END
