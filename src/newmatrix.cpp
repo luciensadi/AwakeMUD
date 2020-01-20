@@ -857,11 +857,12 @@ ACMD(do_locate)
     }
     if (success > 0) {
       for (struct exit_data *exit = matrix[PERSONA->in_host].exit; exit; exit = exit->next)
-        if (real_host(exit->host) > 0)
-          if (isname(arg, matrix[real_host(exit->host)].keywords) && matrix[real_host(exit->host)].alert <= 2) {
-            send_to_icon(PERSONA, "Your search returns the address %s.\r\n", fname_allchars(exit->addresses));
-            i++;
-          }
+        if (real_host(exit->host) > 0
+            && isname(arg, matrix[real_host(exit->host)].keywords)
+            && matrix[real_host(exit->host)].alert <= 2) {
+          send_to_icon(PERSONA, "Your search returns the address %s.\r\n", fname_allchars(exit->addresses));
+          i++;
+        }
     }
     if (!success || !i)
       send_to_icon(PERSONA, "You fail to return any data on that search.\r\n");
@@ -1839,15 +1840,16 @@ ACMD(do_decrypt)
     }
     return;
   }
+  int host_rnum = 0;
   for (struct exit_data *exit = matrix[PERSONA->in_host].exit; exit; exit = exit->next)
-    if (isname(argument, exit->addresses)) {
+    if ((host_rnum = real_host(exit->host)) > 0 && isname(argument, exit->addresses)) {
       int inhost = PERSONA->in_host;
       icon_from_host(PERSONA);
-      icon_to_host(PERSONA, real_host(exit->host));
+      icon_to_host(PERSONA, host_rnum);
       int success = system_test(PERSONA->in_host, ch, TEST_ACCESS, SOFT_DECRYPT, 0);
-      if (success > 0 && matrix[real_host(exit->host)].stats[ACCESS][1]) {
+      if (success > 0 && matrix[host_rnum].stats[ACCESS][1]) {
         send_to_icon(PERSONA, "You successfully decrypt that SAN.\r\n");
-        matrix[real_host(exit->host)].stats[ACCESS][1] = 0;
+        matrix[host_rnum].stats[ACCESS][1] = 0;
       } else
         send_to_icon(PERSONA, "You fail to decrypt that SAN.\r\n");
       if (PERSONA) {

@@ -154,7 +154,7 @@ void hedit_disp_exit_menu(struct descriptor_data *d)
   {
     send_to_char(CH, "^G%d^Y) ^c%s^N(^c%ld^N) ^c%s^n%s: %s\r\n",
                  i,
-                 exit->addresses ? matrix[real_host(exit->host)].name : "Nowhere",
+                 (real_host(exit->host) >= 0 && exit->addresses) ? matrix[real_host(exit->host)].name : "Nowhere",
                  exit->host,
                  exit->addresses,
                  exit->hidden ? " (hidden)" : "",
