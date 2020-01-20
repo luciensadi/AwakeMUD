@@ -2120,8 +2120,10 @@ ACMD(do_hedit)
       host->exit = temp;
       for (This = matrix[host_num].exit; This; This = This->next) {
         *temp = *This;
-        if (This->number)
-          temp->number = str_dup(This->number);
+        if (This->addresses)
+          temp->addresses = str_dup(This->addresses);
+        if (This->roomstring)
+          temp->roomstring = str_dup(This->roomstring);
         if (This->next) {
           temp2 = new exit_data;
           temp->next = temp2;

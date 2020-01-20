@@ -68,7 +68,10 @@ void write_host_to_disk(int vnum)
         for (exit = HT.exit; exit; exit = exit->next, i++) {
           fprintf(fl, "\t[EXIT %d]\n", i);
           fprintf(fl, "\t\tExit:\t%ld\n", exit->host);
-          fprintf(fl, "\t\tNumber:\t%s\n", exit->number);
+          fprintf(fl, "\t\tNumber:\t%s\n", exit->addresses);
+          if (exit->roomstring && *(exit->roomstring))
+            fprintf(fl, "\t\tRoomString:\t%s\n", exit->roomstring);
+          fprintf(fl, "\t\tHidden:\t%s\n", exit->hidden ? "1" : "0");
         }
       }
       if (HT.trigger) {
@@ -149,8 +152,13 @@ void hedit_disp_exit_menu(struct descriptor_data *d)
   CLS(CH);
   for (exit = HOST->exit; exit; exit = exit->next)
   {
-    send_to_char(CH, "^G%d^Y) ^c%s^N(^c%ld^N) ^c%s^N\r\n", i, exit->number ? matrix[real_host(exit->host)].name : "Nowhere", exit->host,
-                 exit->number);
+    send_to_char(CH, "^G%d^Y) ^c%s^N(^c%ld^N) ^c%s^n%s: %s\r\n",
+                 i,
+                 exit->addresses ? matrix[real_host(exit->host)].name : "Nowhere",
+                 exit->host,
+                 exit->addresses,
+                 exit->hidden ? " (hidden)" : "",
+                 (exit->roomstring && *(exit->roomstring)) ? exit->roomstring : "(none)");
     i++;
   }
   send_to_char("\r\n^Ga^Y) ^WAdd new exit\r\n^Gd^Y) ^WDelete an exit\r\n^Gq^Y) ^WQuit\r\n^wEnter selection: ", CH);
@@ -664,7 +672,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     break;
   case HEDIT_EXIT_DEL:
     number = atoi(arg);
-    if (number < 1) {
+    if (number < 0) {
       send_to_char(CH, "Invalid choice!\r\n");
       hedit_disp_exit_menu(d);
     } else {
@@ -676,7 +684,8 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
         hedit_disp_exit_menu(d);
       } else {
         REMOVE_FROM_LIST(exit, HOST->exit, next);
-        DELETE_ARRAY_IF_EXTANT(exit->number);
+        DELETE_ARRAY_IF_EXTANT(exit->addresses);
+        DELETE_ARRAY_IF_EXTANT(exit->roomstring);
         delete [] exit;
         hedit_disp_exit_menu(d);
       }
@@ -694,13 +703,29 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
       if (HOST->exit)
         exit->next = HOST->exit;
       HOST->exit = exit;
-      send_to_char(CH, "Enter address to access host: ");
+      send_to_char(CH, "Enter the addresses and keywords for this host, separated by spaces, with the first one being is its official address: ");
       d->edit_mode = HEDIT_EXIT_ADD2;
     }
     break;
   case HEDIT_EXIT_ADD2:
-    DELETE_ARRAY_IF_EXTANT(d->edit_host->exit->number);
-    d->edit_host->exit->number = str_dup(arg);
+    DELETE_ARRAY_IF_EXTANT(d->edit_host->exit->addresses);
+    d->edit_host->exit->addresses = str_dup(arg);
+    send_to_char(CH, "Is the host hidden? (1 = yes, 0 = no): ");
+    d->edit_mode = HEDIT_EXIT_ADD3;
+    break;
+  case HEDIT_EXIT_ADD3:
+    number = atoi(arg);
+    if (number < 0 || number > 1) {
+      send_to_char(CH, "Invalid choice. Is the host hidden from the player when they LOOK in the host? (1 = yes, 0 = no): ");
+    } else {
+      d->edit_host->exit->hidden = (bool) number;
+      send_to_char(CH, "What's the host's icon look like? (ex: 'A glowing eye with a red border around it burns menacingly in the sky.'): \r\n");
+      d->edit_mode = HEDIT_EXIT_ADD4;
+    }
+    break;
+  case HEDIT_EXIT_ADD4:
+    DELETE_ARRAY_IF_EXTANT(d->edit_host->exit->roomstring);
+    d->edit_host->exit->roomstring = str_dup(arg);
     hedit_disp_exit_menu(d);
     break;
   }

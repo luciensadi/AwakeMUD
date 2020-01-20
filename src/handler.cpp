@@ -61,6 +61,19 @@ char *fname(char *namelist)
   return (holder);
 }
 
+char *fname_allchars(char *namelist)
+{
+  static char holder[50];
+  char *point;
+  
+  for (point = holder; *namelist && *namelist != ' ' && *namelist != '\r' && *namelist != '\n' && *namelist != '\t'; namelist++, point++)
+    *point = *namelist;
+  
+  *point = '\0';
+  
+  return (holder);
+}
+
 
 int isname(const char *str, const char *namelist)
 {

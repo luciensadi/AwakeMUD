@@ -51,10 +51,12 @@ struct host_data {
 
 struct exit_data {
   vnum_t host;
-  char *number;
+  char *addresses;
+  char *roomstring;
+  bool hidden;
   struct exit_data *next;
   exit_data():
-    host(0), number(NULL), next(NULL)
+    host(0), addresses(NULL), roomstring(NULL), hidden(FALSE), next(NULL)
   {}
 };
 

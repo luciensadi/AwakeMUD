@@ -27,6 +27,7 @@ void    spell_modify(struct char_data *ch, struct sustain_data *sust, bool add);
 /* utility */
 int isname(const char *str, const char *namelist);
 char    *fname(char *namelist);
+char    *fname_allchars(char *namelist);
 int     get_number(char **name);
 int vnum_from_non_connected_zone(int vnum);
 struct remem *found_mem(struct remem *mem, struct char_data *ch);

@@ -907,7 +907,15 @@ void parse_host(File &fl, long nr)
     sprintf(field, "%s/Exit", name);
     exit->host = data.GetLong(field, 0);
     sprintf(field, "%s/Number", name);
-    exit->number = str_dup(data.GetString(field, "000"));
+    exit->addresses = str_dup(data.GetString(field, "000"));
+    sprintf(field, "%s/RoomString", name);
+    if (*(data.GetString(field, ""))) {
+      exit->roomstring = str_dup(data.GetString(field, ""));
+    } else {
+      exit->roomstring = NULL;
+    }
+    sprintf(field, "%s/Hidden", name);
+    exit->hidden = (bool) data.GetInt(field, 1);
     if (host->exit)
       exit->next = host->exit;
     host->exit = exit;
@@ -3629,7 +3637,8 @@ void free_host(struct host_data * host)
     struct exit_data *exit = NULL, *next = NULL;
     for (exit = host->exit; exit; exit = next) {
       next = exit->next;
-      DELETE_ARRAY_IF_EXTANT(exit->number);
+      DELETE_ARRAY_IF_EXTANT(exit->addresses);
+      DELETE_ARRAY_IF_EXTANT(exit->roomstring);
       delete exit;
     }
     host->exit = NULL;
