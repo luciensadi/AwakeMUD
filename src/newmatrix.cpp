@@ -852,14 +852,14 @@ ACMD(do_locate)
       name++;
     }
     if (x < 3) {
-      send_to_icon(PERSONA, "You return %d useless matches.\r\n", number(1000, 30000));
+      send_to_icon(PERSONA, "Your search returns %d useless matches. Try a longer search string.\r\n", number(1000, 30000));
       return;
     }
     if (success > 0) {
       for (struct exit_data *exit = matrix[PERSONA->in_host].exit; exit; exit = exit->next)
         if (real_host(exit->host) > 0)
           if (isname(arg, matrix[real_host(exit->host)].keywords) && matrix[real_host(exit->host)].alert <= 2) {
-            send_to_icon(PERSONA, "Your search returns the address %s.\r\n", exit->number);
+            send_to_icon(PERSONA, "Your search returns the address %s.\r\n", fname_allchars(exit->addresses));
             i++;
           }
     }
@@ -890,7 +890,7 @@ ACMD(do_locate)
       name++;
     }
     if (x < 3) {
-      send_to_icon(PERSONA, "You return %d useless matches.\r\n", number(1000, 30000));
+      send_to_icon(PERSONA, "Your search returns %d useless matches. Try a longer search string.\r\n", number(1000, 30000));
       return;
     }
     success = system_test(PERSONA->in_host, ch, TEST_INDEX, SOFT_BROWSE, 0);
@@ -1028,8 +1028,38 @@ ACMD(do_matrix_look)
     send_to_char(ch, "You can't do that while hitching.\r\n");
     return;
   }
-  sprintf(buf, "^C%s^n\r\n%s", matrix[PERSONA->in_host].name, matrix[PERSONA->in_host].desc);
+  if ((PRF_FLAGGED(ch, PRF_ROOMFLAGS) && GET_REAL_LEVEL(ch) >= LVL_BUILDER)) {
+    sprintf(buf, "^C[%ld]^n %s^n\r\n%s", matrix[PERSONA->in_host].vnum, matrix[PERSONA->in_host].name, matrix[PERSONA->in_host].desc);
+  } else {
+    sprintf(buf, "^C%s^n\r\n%s", matrix[PERSONA->in_host].name, matrix[PERSONA->in_host].desc);
+  }
   send_to_icon(PERSONA, buf);
+  
+  // Set up for sending our host list.
+  send_to_icon(PERSONA, "^cObvious hosts:^n\r\n");
+  bool sent_any_roomstring = FALSE;
+  
+  // Iterate through connected hosts.
+  for (struct exit_data *exit = matrix[PERSONA->in_host].exit; exit; exit = exit->next) {
+    // Skip exits to hosts that don't exist or exits that are hidden by default.
+    if (real_host(exit->host) <= 0 || exit->hidden)
+      continue;
+    
+    // We're sending something. If they don't have a valid roomstring (legacy exits), craft a generic one.
+    if (!exit->roomstring || !*(exit->roomstring))
+      sprintf(buf, "^cA plain-looking icon with the address %s floats here.^n\r\n", fname_allchars(exit->addresses));
+    else
+      sprintf(buf, "^c%s^n\r\n", exit->roomstring);
+    
+    // Send our composed string and indicate that we've sent something.
+    send_to_icon(PERSONA, buf);
+    sent_any_roomstring = TRUE;
+  }
+  
+  // Finish: If we've not sent anything, just send "None"
+  if (!sent_any_roomstring)
+    send_to_icon(PERSONA, "^cNone.^n\r\n");
+    
   for (struct matrix_icon *icon = matrix[PERSONA->in_host].icons; icon; icon = icon->next_in_host)
     if (has_spotted(PERSONA, icon))
       send_to_icon(PERSONA, "^Y%s^n\r\n", icon->look_desc);
@@ -1212,10 +1242,11 @@ ACMD(do_logon)
     target_host = real_host(matrix[PERSONA->in_host].stats[FILES][5]);
   else if (!str_cmp(argument, "slave") && matrix[PERSONA->in_host].stats[SLAVE][5])
     target_host = real_host(matrix[PERSONA->in_host].stats[SLAVE][5]);
-  else
+  else {
     for (struct exit_data *exit = matrix[PERSONA->in_host].exit; exit; exit = exit->next)
-      if (!str_cmp(argument, exit->number))
+      if (isname(argument, exit->addresses))
         target_host = real_host(exit->host);
+  }
 
   if (target_host > 0 && matrix[target_host].alert <= 2) {
     int success = system_test(target_host, ch, TEST_ACCESS, SOFT_DECEPTION, 0);
@@ -1809,7 +1840,7 @@ ACMD(do_decrypt)
     return;
   }
   for (struct exit_data *exit = matrix[PERSONA->in_host].exit; exit; exit = exit->next)
-    if (!str_cmp(argument, exit->number)) {
+    if (isname(argument, exit->addresses)) {
       int inhost = PERSONA->in_host;
       icon_from_host(PERSONA);
       icon_to_host(PERSONA, real_host(exit->host));
