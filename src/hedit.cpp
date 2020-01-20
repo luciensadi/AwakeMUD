@@ -678,7 +678,7 @@ void hedit_parse(struct descriptor_data *d, const char *arg)
     } else {
       struct exit_data *exit, *temp;
       for (exit = HOST->exit; exit && number; exit = exit->next, number--)
-        break;
+        ;
       if (!exit) {
         send_to_char(CH, "Invalid choice!\r\n");
         hedit_disp_exit_menu(d);
