@@ -1172,7 +1172,10 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
                                                                                      (GET_OBJ_VAL(obj, 0) == 1 ? "barrel" : "bottom")));
     break;
   case ITEM_GUN_AMMO:
-    sprintf(ENDOF(buf), " a box of ammunition for reloading %s magazines.", weapon_type[GET_OBJ_VAL(obj, 1)]);
+    sprintf(ENDOF(buf), " a box of ammunition for reloading %s magazines. It contains %d rounds of %s ammo.",
+            weapon_type[GET_AMMOBOX_WEAPON(obj)],
+            GET_AMMOBOX_QUANTITY(obj),
+            ammo_type[GET_AMMOBOX_TYPE(obj)]);
     break;
   case ITEM_FOCUS:
     sprintf(ENDOF(buf), " a rating %d %s focus.", GET_OBJ_VAL(obj, 1), foci_type[GET_OBJ_VAL(obj, 0)]);

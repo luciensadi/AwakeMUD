@@ -1140,6 +1140,9 @@ void weapon_scatter(struct char_data *ch, struct char_data *victim, struct obj_d
     case WEAP_GREN_LAUNCHER:
       sprintf(ammo_type, "grenade");
       break;
+    case WEAP_TASER:
+      sprintf(ammo_type, "taser dart");
+      break;
     default:
       sprintf(ammo_type, "bullet");
       break;

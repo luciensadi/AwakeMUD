@@ -1499,56 +1499,218 @@ void parse_object(File &fl, long nr)
 
     GET_OBJ_VAL(obj, i) = data.GetInt(field, 0);
   }
+  
+  { // Per-type modifications and settings.
+    int mult;
+    const char *type_as_string = NULL;
+    switch (GET_OBJ_TYPE(obj)) {
+      case ITEM_CHIP:
+        GET_OBJ_VAL(obj, 2) = (GET_OBJ_VAL(obj, 1) * GET_OBJ_VAL(obj, 1)) * 3;
+        GET_OBJ_AVAILTN(obj) = 6;
+        GET_OBJ_AVAILDAY(obj) = 4;
+        if (!skills[GET_OBJ_VAL(obj, 0)].type)
+          GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 2) * 100;
+        else if (GET_OBJ_VAL(obj, 0) >= SKILL_ENGLISH) {
+          GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 2) * 50;
+          GET_OBJ_AVAILDAY(obj) = 1.5;
+        } else {
+          GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 2) * 150;
+          GET_OBJ_AVAILTN(obj) = 5;
+        }
+        break;
+      case ITEM_CYBERWARE:
+        price_cyber(obj);
+        break;
+      case ITEM_BIOWARE:
+        price_bio(obj);
+        break;
+      case ITEM_PROGRAM:
+        if (GET_OBJ_VAL(obj, 0) == SOFT_ATTACK)
+          mult = attack_multiplier[GET_OBJ_VAL(obj, 3) - 1];
+        else
+          mult = programs[GET_OBJ_VAL(obj, 0)].multiplier;
+        GET_OBJ_VAL(obj, 2) = (GET_OBJ_VAL(obj, 1) * GET_OBJ_VAL(obj, 1)) * mult;
+        if (GET_OBJ_VAL(obj, 1) < 4) {
+          GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 2) * 100;
+          GET_OBJ_AVAILTN(obj) = 2;
+          GET_OBJ_AVAILDAY(obj) = 7;
+        } else if (GET_OBJ_VAL(obj, 1) < 7) {
+          GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 2) * 200;
+          GET_OBJ_AVAILTN(obj) = 4;
+          GET_OBJ_AVAILDAY(obj) = 7;
+        } else if (GET_OBJ_VAL(obj, 1) < 10) {
+          GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 2) * 500;
+          GET_OBJ_AVAILTN(obj) = 8;
+          GET_OBJ_AVAILDAY(obj) = 14;
+        } else {
+          GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 2) * 1000;
+          GET_OBJ_AVAILTN(obj) = 16;
+          GET_OBJ_AVAILDAY(obj) = 30;
+        }
+        break;
+      case ITEM_SPELL_FORMULA:
+        GET_OBJ_AVAILTN(obj) = GET_OBJ_VAL(obj, 0);
+        GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 0);
+        switch (spells[GET_OBJ_VAL(obj, 1)].draindamage) {
+          case LIGHT:
+            GET_OBJ_COST(obj) *= 50;
+            GET_OBJ_AVAILDAY(obj) = 1;
+            break;
+          case MODERATE:
+            GET_OBJ_COST(obj) *= 100;
+            GET_OBJ_AVAILDAY(obj) = 2;
+            break;
+          case SERIOUS:
+            GET_OBJ_COST(obj) *= 500;
+            GET_OBJ_AVAILDAY(obj) = 4;
+            break;
+          case DEADLY:
+          default:
+            GET_OBJ_COST(obj) *= 1000;
+            GET_OBJ_AVAILDAY(obj) = 7;
+            break;
+        }
+        break;
+      case ITEM_GUN_AMMO:
+        if (GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON) {
+          // Assault cannons have special ammo and special rules that aren't reflected in our normal table.
+          
+          // Max size 500-- otherwise it's too heavy to carry.
+          GET_AMMOBOX_QUANTITY(obj) = MIN(MAX(GET_AMMOBOX_QUANTITY(obj), 500), 10);
+          
+          // Set values according to Assault Cannon ammo (SR3 p281).
+          GET_OBJ_WEIGHT(obj) = (((float) GET_AMMOBOX_QUANTITY(obj)) / 10) * 1.25;
+          GET_OBJ_COST(obj) = GET_AMMOBOX_QUANTITY(obj) * 45;
+          GET_OBJ_AVAILDAY(obj) = 3;
+          GET_OBJ_AVAILTN(obj) = 5;
+          GET_OBJ_STREET_INDEX(obj) = 2;
+          
+          // They also may only be explosive (SR3 p279).
+          GET_AMMOBOX_TYPE(obj) = AMMO_EXPLOSIVE;
+        } else {
+          // Max size 1000-- otherwise it's too heavy to carry.
+          GET_AMMOBOX_QUANTITY(obj) = MIN(MAX(GET_AMMOBOX_QUANTITY(obj), 1000), 10);
+          
+          // Calculate weight as (count / 10) * multiplier (multiplier is per 10 rounds).
+          GET_OBJ_WEIGHT(obj) = (((float) GET_AMMOBOX_QUANTITY(obj)) / 10) * ammo_type[GET_AMMOBOX_TYPE(obj)].weight;
+          
+          // Calculate cost as count * multiplier (multiplier is per round)
+          GET_OBJ_COST(obj) = GET_AMMOBOX_QUANTITY(obj) * ammo_type[GET_AMMOBOX_TYPE(obj)].cost;
+          
+          // Set the TNs for this ammo per the default values.
+          GET_OBJ_AVAILDAY(obj) = ammo_type[GET_AMMOBOX_TYPE(obj)].time;
+          GET_OBJ_AVAILTN(obj) = ammo_type[GET_AMMOBOX_TYPE(obj)].tn;
+          
+          // Set the street index.
+          GET_OBJ_STREET_INDEX(obj) = ammo_type[GET_AMMOBOX_TYPE(obj)].street_index;
+        }
+        
+        // Set the strings-- we want all these things to match for simplicity's sake.
+        switch (GET_AMMOBOX_WEAPON(obj)) {
+          case WEAP_SHOTGUN:
+          case WEAP_CANNON:
+            type_as_string = "shell";
+            break;
+          case WEAP_MISS_LAUNCHER:
+            type_as_string = "rocket";
+            break;
+          case WEAP_GREN_LAUNCHER:
+            type_as_string = "grenade";
+            break;
+          case WEAP_TASER:
+            type_as_string = "dart";
+          default:
+            type_as_string = "round";
+            break;
+        }
+        
+        sprintf(buf, "metal ammo ammunition box %s %s %d-%s %s%s",
+                GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
+                weapon_type[GET_AMMOBOX_WEAPON(obj)],
+                GET_AMMOBOX_QUANTITY(obj),
+                type_as_string,
+                type_as_string,
+                GET_AMMOBOX_QUANTITY(obj) > 1 ? "s" : "");
+        log_vfprintf("Changing %s to %s for %ld.", obj->text.keywords, buf, nr);
+        DELETE_ARRAY_IF_EXTANT(obj->text.keywords);
+        obj->text.keywords = str_dup(buf);
+        
+        sprintf(buf, "a %d-%s box of %s %s ammunition",
+                GET_AMMOBOX_QUANTITY(obj),
+                type_as_string,
+                GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
+                weapon_type[GET_AMMOBOX_WEAPON(obj)]);
+        log_vfprintf("Changing %s to %s for %ld.", obj->text.name, buf, nr);
+        DELETE_ARRAY_IF_EXTANT(obj->text.name);
+        obj->text.name = str_dup(buf);
+        
+        sprintf(buf, "A metal box of %s %s %s%s has been left here.",
+                GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
+                weapon_type[GET_AMMOBOX_WEAPON(obj)],
+                type_as_string,
+                GET_AMMOBOX_QUANTITY(obj) > 1 ? "s" : "");
+        log_vfprintf("Changing %s to %s for %ld.", obj->text.room_desc, buf, nr);
+        DELETE_ARRAY_IF_EXTANT(obj->text.room_desc);
+        obj->text.room_desc = str_dup(buf);
+        
+        strcpy(buf, "A hefty box of ammunition, banded in metal and secured with flip-down hasps for transportation and storage.");
+        log_vfprintf("Changing %s to %s for %ld.", obj->text.look_desc, buf, nr);
+        DELETE_ARRAY_IF_EXTANT(obj->text.look_desc);
+        obj->text.look_desc = str_dup(buf);
+        break;
+      case ITEM_WEAPON:
+        // Attempt to automatically rectify broken weapons.
+        if (GET_OBJ_VAL(obj, 3) > MAX_WEAP)
+          switch (GET_OBJ_VAL(obj, 4)) {
+            case SKILL_EDGED_WEAPONS:
+              GET_OBJ_VAL(obj, 3) = WEAP_EDGED;
+              break;
+            case SKILL_POLE_ARMS:
+              GET_OBJ_VAL(obj, 3) = WEAP_POLEARM;
+              break;
+            case SKILL_WHIPS_FLAILS:
+              GET_OBJ_VAL(obj, 3) = WEAP_WHIP;
+              break;
+            case SKILL_CLUBS:
+              GET_OBJ_VAL(obj, 3) = WEAP_CLUB;
+              break;
+            case SKILL_PISTOLS:
+              GET_OBJ_VAL(obj, 3) = WEAP_HEAVY_PISTOL;
+              break;
+            case SKILL_RIFLES:
+              GET_OBJ_VAL(obj, 3) = WEAP_SPORT_RIFLE;
+              break;
+            case SKILL_SHOTGUNS:
+              GET_OBJ_VAL(obj, 3) = WEAP_SHOTGUN;
+              break;
+            case SKILL_ASSAULT_RIFLES:
+              GET_OBJ_VAL(obj, 3) = WEAP_ASSAULT_RIFLE;
+              break;
+            case SKILL_SMG:
+              GET_OBJ_VAL(obj, 3) = WEAP_SMG;
+              break;
+            case SKILL_GRENADE_LAUNCHERS:
+              GET_OBJ_VAL(obj, 3) = WEAP_GREN_LAUNCHER;
+              break;
+            case SKILL_MISSILE_LAUNCHERS:
+              GET_OBJ_VAL(obj, 3) = WEAP_MISS_LAUNCHER;
+              break;
+            case SKILL_TASERS:
+              GET_OBJ_VAL(obj, 3) = WEAP_TASER;
+              break;
+            case SKILL_MACHINE_GUNS:
+              GET_OBJ_VAL(obj, 3) = WEAP_LMG;
+              break;
+            case SKILL_ASSAULT_CANNON:
+              GET_OBJ_VAL(obj, 3) = WEAP_CANNON;
+              break;
+          }
+        if (GET_OBJ_VAL(obj, 4) > 100)
+          GET_OBJ_VAL(obj, 4) -= 100;
+        break;
+    }
+  } // End per-type modifications.
 
-  if (GET_OBJ_TYPE(obj) == ITEM_WEAPON) {
-    if (GET_OBJ_VAL(obj, 3) > MAX_WEAP)
-      switch (GET_OBJ_VAL(obj, 4)) {
-        case SKILL_EDGED_WEAPONS:
-          GET_OBJ_VAL(obj, 3) = WEAP_EDGED;
-          break;
-        case SKILL_POLE_ARMS:
-          GET_OBJ_VAL(obj, 3) = WEAP_POLEARM;
-          break;
-        case SKILL_WHIPS_FLAILS:
-          GET_OBJ_VAL(obj, 3) = WEAP_WHIP;
-          break;
-        case SKILL_CLUBS:
-          GET_OBJ_VAL(obj, 3) = WEAP_CLUB;
-          break;
-        case SKILL_PISTOLS:
-          GET_OBJ_VAL(obj, 3) = WEAP_HEAVY_PISTOL;
-          break;
-        case SKILL_RIFLES:
-          GET_OBJ_VAL(obj, 3) = WEAP_SPORT_RIFLE;
-          break;
-        case SKILL_SHOTGUNS:
-          GET_OBJ_VAL(obj, 3) = WEAP_SHOTGUN;
-          break;
-        case SKILL_ASSAULT_RIFLES:
-          GET_OBJ_VAL(obj, 3) = WEAP_ASSAULT_RIFLE;
-          break;
-        case SKILL_SMG:
-          GET_OBJ_VAL(obj, 3) = WEAP_SMG;
-          break;
-        case SKILL_GRENADE_LAUNCHERS:
-          GET_OBJ_VAL(obj, 3) = WEAP_GREN_LAUNCHER;
-          break;
-        case SKILL_MISSILE_LAUNCHERS:
-          GET_OBJ_VAL(obj, 3) = WEAP_MISS_LAUNCHER;
-          break;
-        case SKILL_TASERS:
-          GET_OBJ_VAL(obj, 3) = WEAP_TASER;
-          break;
-        case SKILL_MACHINE_GUNS:
-          GET_OBJ_VAL(obj, 3) = WEAP_LMG;
-          break;
-        case SKILL_ASSAULT_CANNON:
-          GET_OBJ_VAL(obj, 3) = WEAP_CANNON;
-          break;
-      }
-    if (GET_OBJ_VAL(obj, 4) > 100)
-      GET_OBJ_VAL(obj, 4) -= 100;
-  }
   // read in affects
   for (i = 0; i < MAX_OBJ_AFFECT; i++) {
     char sect[16];
@@ -1608,77 +1770,7 @@ void parse_object(File &fl, long nr)
     } else
       break;
   }
-  if (GET_OBJ_TYPE(obj) == ITEM_CHIP) {
-    GET_OBJ_VAL(obj, 2) = (GET_OBJ_VAL(obj, 1) * GET_OBJ_VAL(obj, 1)) * 3;
-    GET_OBJ_AVAILTN(obj) = 6;
-    GET_OBJ_AVAILDAY(obj) = 4;
-    if (!skills[GET_OBJ_VAL(obj, 0)].type)
-      GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 2) * 100;
-    else if (GET_OBJ_VAL(obj, 0) >= SKILL_ENGLISH) {
-      GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 2) * 50;
-      GET_OBJ_AVAILDAY(obj) = 1.5;
-    } else {
-      GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 2) * 150;
-      GET_OBJ_AVAILTN(obj) = 5;
-    }
-  } else if (GET_OBJ_TYPE(obj) == ITEM_CYBERWARE)
-    price_cyber(obj);
-  else if (GET_OBJ_TYPE(obj) == ITEM_BIOWARE)
-    price_bio(obj);
-  else if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM) {
-    int mult;
-    if (GET_OBJ_VAL(obj, 0) == SOFT_ATTACK)
-      mult = attack_multiplier[GET_OBJ_VAL(obj, 3) - 1];
-    else
-      mult = programs[GET_OBJ_VAL(obj, 0)].multiplier;
-    GET_OBJ_VAL(obj, 2) = (GET_OBJ_VAL(obj, 1) * GET_OBJ_VAL(obj, 1)) * mult;
-    if (GET_OBJ_VAL(obj, 1) < 4) {
-      GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 2) * 100;
-      GET_OBJ_AVAILTN(obj) = 2;
-      GET_OBJ_AVAILDAY(obj) = 7;
-    } else if (GET_OBJ_VAL(obj, 1) < 7) {
-      GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 2) * 200;
-      GET_OBJ_AVAILTN(obj) = 4;
-      GET_OBJ_AVAILDAY(obj) = 7;
-    } else if (GET_OBJ_VAL(obj, 1) < 10) {
-      GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 2) * 500;
-      GET_OBJ_AVAILTN(obj) = 8;
-      GET_OBJ_AVAILDAY(obj) = 14;
-    } else {
-      GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 2) * 1000;
-      GET_OBJ_AVAILTN(obj) = 16;
-      GET_OBJ_AVAILDAY(obj) = 30;
-    }
-  } else if (GET_OBJ_TYPE(obj) == ITEM_SPELL_FORMULA) {
-    GET_OBJ_AVAILTN(obj) = GET_OBJ_VAL(obj, 0);
-    GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 0);
-    switch (spells[GET_OBJ_VAL(obj, 1)].draindamage) {
-    case LIGHT:
-      GET_OBJ_COST(obj) *= 50;
-      GET_OBJ_AVAILDAY(obj) = 1;
-      break;
-    case MODERATE:
-      GET_OBJ_COST(obj) *= 100;
-      GET_OBJ_AVAILDAY(obj) = 2;
-      break;
-    case SERIOUS:
-      GET_OBJ_COST(obj) *= 500;
-      GET_OBJ_AVAILDAY(obj) = 4;
-      break;
-    case DEADLY:
-    default:
-      GET_OBJ_COST(obj) *= 1000;
-      GET_OBJ_AVAILDAY(obj) = 7;
-      break;
-    }
-  } else if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
-    GET_OBJ_WEIGHT(obj) = (float)GET_OBJ_VAL(obj, 0) / 10;
-    GET_OBJ_COST(obj) = GET_OBJ_VAL(obj, 0);
-    GET_OBJ_COST(obj) *= ammo_type[GET_OBJ_VAL(obj, 2)].cost;
-    GET_OBJ_WEIGHT(obj) *= ammo_type[GET_OBJ_VAL(obj, 2)].weight;
-    GET_OBJ_AVAILDAY(obj) = ammo_type[GET_OBJ_VAL(obj, 2)].time;
-    GET_OBJ_AVAILTN(obj) = ammo_type[GET_OBJ_VAL(obj, 2)].tn;
-  }
+  
   top_of_objt = rnum++;
 }
 

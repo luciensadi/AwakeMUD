@@ -23,7 +23,7 @@ void aedit_disp_menu(struct descriptor_data *d)
   CLS(CH);
   send_to_char(CH, "1) Weapon: ^c%s^n\r\n", weapon_type[GET_AMMOBOX_WEAPON(OBJ)]);
   send_to_char(CH, "2) Type: ^c%s^n\r\n", ammo_type[GET_AMMOBOX_TYPE(OBJ)].name);
-  send_to_char(CH, "3) Amount: ^c%d^n\r\n", GET_AMMOBOX_QUANTITY(OBJ));
+  send_to_char(CH, "3) Amount: ^c%d^n\r\n", GET_AMMOBOX_INTENDED_QUANTITY(OBJ));
   send_to_char(CH, "q) Quit\r\nEnter your choice: ");
   d->edit_mode = AEDIT_MENU;
 }
@@ -33,7 +33,7 @@ void create_ammo(struct char_data *ch)
   struct obj_data *ammo = read_object(121, VIRTUAL);
   STATE(ch->desc) = CON_AMMO_CREATE;
   GET_AMMOBOX_WEAPON(ammo) = WEAP_HOLDOUT;
-  GET_AMMOBOX_QUANTITY(ammo) = 10;
+  GET_AMMOBOX_INTENDED_QUANTITY(ammo) = 10;
   ch->desc->edit_obj = ammo;
   aedit_disp_menu(ch->desc);
 }
@@ -109,7 +109,7 @@ void aedit_parse(struct descriptor_data *d, const char *arg)
   case AEDIT_QUANTITY:
    if (number < 0)
      number = 0;
-   GET_AMMOBOX_QUANTITY(OBJ) = (number / 10) * 10;
+   GET_AMMOBOX_INTENDED_QUANTITY(OBJ) = (number / 10) * 10;
    aedit_disp_menu(d);
    break;
   }
