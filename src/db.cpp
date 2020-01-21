@@ -1576,7 +1576,7 @@ void parse_object(File &fl, long nr)
           // Assault cannons have special ammo and special rules that aren't reflected in our normal table.
           
           // Max size 500-- otherwise it's too heavy to carry.
-          GET_AMMOBOX_QUANTITY(obj) = MIN(MAX(GET_AMMOBOX_QUANTITY(obj), 500), 10);
+          GET_AMMOBOX_QUANTITY(obj) = MAX(MIN(GET_AMMOBOX_QUANTITY(obj), 500), 10);
           
           // Set values according to Assault Cannon ammo (SR3 p281).
           GET_OBJ_WEIGHT(obj) = (((float) GET_AMMOBOX_QUANTITY(obj)) / 10) * 1.25;
@@ -1589,7 +1589,7 @@ void parse_object(File &fl, long nr)
           GET_AMMOBOX_TYPE(obj) = AMMO_EXPLOSIVE;
         } else {
           // Max size 1000-- otherwise it's too heavy to carry.
-          GET_AMMOBOX_QUANTITY(obj) = MIN(MAX(GET_AMMOBOX_QUANTITY(obj), 1000), 10);
+          GET_AMMOBOX_QUANTITY(obj) = MAX(MIN(GET_AMMOBOX_QUANTITY(obj), 1000), 10);
           
           // Calculate weight as (count / 10) * multiplier (multiplier is per 10 rounds).
           GET_OBJ_WEIGHT(obj) = (((float) GET_AMMOBOX_QUANTITY(obj)) / 10) * ammo_type[GET_AMMOBOX_TYPE(obj)].weight;
