@@ -1631,7 +1631,7 @@ void parse_object(File &fl, long nr)
                 type_as_string,
                 type_as_string,
                 GET_AMMOBOX_QUANTITY(obj) > 1 ? "s" : "");
-        log_vfprintf("Changing %s to %s for %ld.", obj->text.keywords, buf, nr);
+        // log_vfprintf("Changing %s to %s for %ld.", obj->text.keywords, buf, nr);
         DELETE_ARRAY_IF_EXTANT(obj->text.keywords);
         obj->text.keywords = str_dup(buf);
         
@@ -1640,7 +1640,7 @@ void parse_object(File &fl, long nr)
                 type_as_string,
                 GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON ? "normal" : ammo_type[GET_AMMOBOX_TYPE(obj)].name,
                 weapon_type[GET_AMMOBOX_WEAPON(obj)]);
-        log_vfprintf("Changing %s to %s for %ld.", obj->text.name, buf, nr);
+        // log_vfprintf("Changing %s to %s for %ld.", obj->text.name, buf, nr);
         DELETE_ARRAY_IF_EXTANT(obj->text.name);
         obj->text.name = str_dup(buf);
         
@@ -1649,12 +1649,12 @@ void parse_object(File &fl, long nr)
                 weapon_type[GET_AMMOBOX_WEAPON(obj)],
                 type_as_string,
                 GET_AMMOBOX_QUANTITY(obj) > 1 ? "s" : "");
-        log_vfprintf("Changing %s to %s for %ld.", obj->text.room_desc, buf, nr);
+        // log_vfprintf("Changing %s to %s for %ld.", obj->text.room_desc, buf, nr);
         DELETE_ARRAY_IF_EXTANT(obj->text.room_desc);
         obj->text.room_desc = str_dup(buf);
         
         strcpy(buf, "A hefty box of ammunition, banded in metal and secured with flip-down hasps for transportation and storage.");
-        log_vfprintf("Changing %s to %s for %ld.", obj->text.look_desc, buf, nr);
+        // log_vfprintf("Changing %s to %s for %ld.", obj->text.look_desc, buf, nr);
         DELETE_ARRAY_IF_EXTANT(obj->text.look_desc);
         obj->text.look_desc = str_dup(buf);
         break;
