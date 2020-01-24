@@ -879,9 +879,10 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 // ITEM_QUEST convenience defines
 
 // ITEM_GUN_AMMO convenience defines
+#define GET_AMMOBOX_QUANTITY(box)            (GET_OBJ_VAL((box), 0))
 #define GET_AMMOBOX_WEAPON(box)              (GET_OBJ_VAL((box), 1))
 #define GET_AMMOBOX_TYPE(box)                (GET_OBJ_VAL((box), 2))
-#define GET_AMMOBOX_QUANTITY(box)            (GET_OBJ_VAL((box), 3))
+#define GET_AMMOBOX_INTENDED_QUANTITY(box)   (GET_OBJ_VAL((box), 3))
 #define GET_AMMOBOX_TIME_TO_COMPLETION(box)  (GET_OBJ_VAL((box), 4))
 #define GET_AMMOBOX_CREATOR(box)             (GET_OBJ_VAL((box), 9))
 

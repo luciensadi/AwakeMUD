@@ -1346,7 +1346,7 @@ SPECIAL(janitor)
     return 0;
 
   for (i = jan->in_room->contents; i; i = i->next_content) {
-    if (!CAN_WEAR(i, ITEM_WEAR_TAKE) || IS_OBJ_STAT(i, ITEM_CORPSE))
+    if (!CAN_WEAR(i, ITEM_WEAR_TAKE) || IS_OBJ_STAT(i, ITEM_CORPSE) || i->obj_flags.quest_id)
       continue;
     switch (GET_MOB_VNUM(jan)) {
       case 2022:

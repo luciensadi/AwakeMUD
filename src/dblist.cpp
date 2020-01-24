@@ -267,14 +267,16 @@ void objList::UpdateCounters(void)
     }
 
     // In-game this is a UCAS dress shirt. I suspect the files haven't been updated.
+    /*
     if (GET_OBJ_VNUM(OBJ) == 120 && ++GET_OBJ_TIMER(OBJ) >= 72) {
       next = temp->next;
       extract_obj(OBJ);
       continue;
     }
+    */
 
     // Time out objects that end up on the floor a lot (magazines, cash, etc).
-    if (OBJ->in_room && !OBJ->in_obj && !OBJ->carried_by &&
+    if (OBJ->in_room && !OBJ->in_obj && !OBJ->carried_by && !OBJ->obj_flags.quest_id &&
        ((GET_OBJ_TYPE(OBJ) == ITEM_GUN_MAGAZINE && !GET_OBJ_VAL(OBJ, 9)) || (GET_OBJ_TYPE(OBJ) == ITEM_MONEY && !GET_OBJ_VAL(OBJ, 0))) 
         && ++GET_OBJ_TIMER(OBJ) == 3) {
         act("$p is lost on the ground.", TRUE, temp->data->in_room->people,

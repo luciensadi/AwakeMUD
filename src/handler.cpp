@@ -61,6 +61,19 @@ char *fname(char *namelist)
   return (holder);
 }
 
+char *fname_allchars(char *namelist)
+{
+  static char holder[50];
+  char *point;
+  
+  for (point = holder; *namelist && *namelist != ' ' && *namelist != '\r' && *namelist != '\n' && *namelist != '\t'; namelist++, point++)
+    *point = *namelist;
+  
+  *point = '\0';
+  
+  return (holder);
+}
+
 
 int isname(const char *str, const char *namelist)
 {
@@ -1461,8 +1474,8 @@ void equip_char(struct char_data * ch, struct obj_data * obj, int pos)
   {
     act("You are zapped by $p and instantly let go of it.", FALSE, ch, obj, 0, TO_CHAR);
     act("$n is zapped by $p and instantly lets go of it.", FALSE, ch, obj, 0, TO_ROOM);
-    obj_to_char(obj, ch);     /* changed to drop in inventory instead of
-                               * ground */
+    obj_to_room(obj, get_ch_in_room(ch));     /* changed to drop in inventory instead of
+                               * ground */  // and now I've changed it back, who wants morts running around with god-only keys
     return;
   }
   

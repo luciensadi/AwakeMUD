@@ -1052,6 +1052,7 @@ struct ammo_data
   float time;
   float weight;
   unsigned char cost;
+  float street_index;
 };
 
 /* Combat data. */

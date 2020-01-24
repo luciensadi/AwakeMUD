@@ -93,7 +93,6 @@ bool iscolor(char c) {
 /************* Setters w/ Validity Checks *************/
 // Performs validity checks before setting. Returns TRUE if set succeeded, FALSE otherwise.
 bool Playergroup::set_tag(const char *newtag, struct char_data *ch) {
-  // TODO: Validity checks.
   if (strlen(newtag) > MAX_PGROUP_TAG_LENGTH) {
     send_to_char(ch, "Sorry, tag strings can't be longer than %d characters.\r\n", MAX_PGROUP_TAG_LENGTH);
     return FALSE;
@@ -168,22 +167,41 @@ bool Playergroup::set_alias(const char *newalias, struct char_data *ch) {
   }
   
   // Check for duplicates.
-  char querybuf[MAX_STRING_LENGTH];
-  sprintf(querybuf, "SELECT idnum FROM playergroups WHERE alias = '%s'", prepare_quotes(buf, newalias, sizeof(buf) / sizeof(buf[0])));
-  mysql_wrapper(mysql, querybuf);
-  MYSQL_RES *res = mysql_use_result(mysql);
-  MYSQL_ROW row;
-  if (!res || (!(row = mysql_fetch_row(res)) && mysql_field_count(mysql))) {
+  if (!alias_is_in_use(newalias)) {
     raw_set_alias(newalias);
-    mysql_free_result(res);
     return TRUE;
   } else {
     send_to_char("Sorry, that alias has already been taken by another group.\r\n", ch);
-    mysql_free_result(res);
     return FALSE;
   }
   
   // TODO: Race condition. Two people in the edit buf at the same time can use the same alias.
+}
+
+bool Playergroup::alias_is_in_use(const char *alias) {
+  // Declare our local vars-- in this case, something to stick alias in, and something to hold our query.
+  char local_alias[100];
+  char querybuf[1000];
+  
+  // Clone over alias to the new local version. This way we can state conclusively the size of the buffer that contains it-- crucial for prepare_quotes.
+  strcpy(local_alias, alias);
+  
+  // Compose and execute our query.
+  sprintf(querybuf, "SELECT idnum FROM playergroups WHERE alias = '%s'", prepare_quotes(buf, alias, sizeof(local_alias) / sizeof(local_alias[0])));
+  mysql_wrapper(mysql, querybuf);
+  MYSQL_RES *res = mysql_use_result(mysql);
+  MYSQL_ROW row;
+  
+  // We default to returning TRUE (it's in use).
+  bool retval = TRUE;
+  
+  // If the database has stated that it's not in use, we revise the return value to FALSE.
+  if (!res || (!(row = mysql_fetch_row(res)) && mysql_field_count(mysql)))
+    retval = FALSE;
+  
+  // Clean up our database state and return the value.
+  mysql_free_result(res);
+  return retval;
 }
 
 /************* Setters w/ Bypassed Validity Checks *************/

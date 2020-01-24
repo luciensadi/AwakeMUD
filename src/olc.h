@@ -81,6 +81,8 @@ extern void write_index_file(const char *suffix);
 #define HEDIT_EXTRA_ACCESS2	34
 #define HEDIT_EXTRA_FILES2	35
 #define HEDIT_EXTRA_SLAVE2	36
+#define HEDIT_EXIT_ADD3     37
+#define HEDIT_EXIT_ADD4     38
 
 
 #define ICEDIT_MAIN_MENU		0

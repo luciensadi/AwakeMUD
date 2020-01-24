@@ -63,6 +63,7 @@ public:
   static Playergroup *find_pgroup(long idnum);
   int sql_count_members();
   const char *render_settings();
+  bool alias_is_in_use(const char *alias);
   
   // DB management.
   bool save_pgroup_to_db();
