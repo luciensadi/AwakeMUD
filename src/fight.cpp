@@ -3324,19 +3324,18 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
         act("A ball of coherent light leaps from your Dominator, tearing into $N. With a scream, $E crumples, bubbles, and explodes in a shower of gore!", FALSE, att->ch, 0, def->ch, TO_CHAR);
         act("A ball of coherent light leaps from $n's Dominator, tearing into $N. With a scream, $E crumples, bubbles, and explodes in a shower of gore!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
         act("A ball of coherent light leaps from $n's Dominator, tearing into you! A horrible rending sensation tears through you as your vision fades.", FALSE, att->ch, 0, def->ch, TO_VICT);
-        damage(att->ch, def->ch, 100, TYPE_SUFFERING, TRUE);
+        die(def->ch);
         break;
       case WEAP_CANNON:
         // Decomposer? Don't just kill your target-- if they're a player, disconnect them.
         act("A roaring column of force explodes from your Dominator, erasing $N from existence!", FALSE, att->ch, 0, def->ch, TO_CHAR);
         act("A roaring column of force explodes from $n's Dominator, erasing $N from existence!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
         act("A roaring column of force explodes from $n's Dominator, erasing you from existence!", FALSE, att->ch, 0, def->ch, TO_VICT);
-        damage(att->ch, def->ch, 100, TYPE_SUFFERING, TRUE);
+        die(def->ch);
         if (def->ch->desc) {
           STATE(def->ch->desc) = CON_CLOSE;
+          close_socket(def->ch->desc);
         }
-        extract_char(def->ch);
-        close_socket(def->ch->desc);
         break;
       default:
         send_to_char(att->ch, "Dominator code fault.\r\n");
