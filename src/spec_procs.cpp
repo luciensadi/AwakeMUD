@@ -57,6 +57,10 @@ ACMD_CONST(do_say);
 ACMD_DECLARE(do_echo);
 ACMD_CONST(do_time);
 ACMD_CONST(do_gen_door);
+ACMD_DECLARE(do_wield);
+ACMD_DECLARE(do_draw);
+ACMD_DECLARE(do_holster);
+ACMD_DECLARE(do_remove);
 
 struct social_type
 {
@@ -4387,4 +4391,203 @@ SPECIAL(chargen_spirit_combat_west)
   room->dir_option[WEST]->to_room = temp_to_room;
   
   return TRUE;
+}
+
+#define MODE_DEACTIVATED 0
+#define MODE_PARALYZER   1
+#define MODE_ELIMINATOR  2
+#define MODE_DECOMPOSER  3
+
+void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode) {
+  // Formatting.
+  send_to_char(ch, "\r\n");
+  
+  switch (mode) {
+    case MODE_PARALYZER:
+      // This is a bit of a hack, but we know what the previous mode was based on its type and attack type.
+      if (GET_OBJ_TYPE(obj) == ITEM_OTHER) {
+        // It was deactivated. Light it up.
+        sprintf(buf, "The red lights on %s begin to glow with cerulean blue power.", GET_OBJ_NAME(obj));
+        act(buf, FALSE, ch, 0, ch, TO_CHAR);
+        act(buf, FALSE, ch, 0, 0, TO_ROOM);
+      } else if (GET_WEAPON_ATTACK_TYPE(obj) == WEAP_HEAVY_PISTOL) {
+        // It was in Lethal mode. Collapse it.
+        sprintf(buf, "%s retracts and folds down into its standard heavy-pistol format, its status lights glowing blue.", GET_OBJ_NAME(obj));
+        act(buf, FALSE, ch, 0, ch, TO_CHAR);
+        act(buf, FALSE, ch, 0, 0, TO_ROOM);
+      } else if (GET_WEAPON_ATTACK_TYPE(obj) == WEAP_CANNON) {
+        // It was in Destroyer mode. Collapse it.
+        sprintf(buf, "%s vents energy with a sharp snap of power, collapsing with uncanny speed into its standard heavy-pistol format.", GET_OBJ_NAME(obj));
+        act(buf, FALSE, ch, 0, ch, TO_CHAR);
+        act(buf, FALSE, ch, 0, 0, TO_ROOM);
+      }
+      
+      send_to_char(ch, "A dispassionate feminine voice states, \"^cEnforcement mode: Non-Lethal Paralyzer. Please aim calmly and subdue the target.^n\"\r\n");
+      GET_OBJ_TYPE(obj) = ITEM_WEAPON;
+      GET_WEAPON_ATTACK_TYPE(obj) = WEAP_TASER;
+      GET_WEAPON_DAMAGE_CODE(obj) = DEADLY;
+      GET_WEAPON_POWER(obj) = 50;
+      break;
+    case MODE_ELIMINATOR:
+      if (GET_OBJ_TYPE(obj) == ITEM_OTHER || GET_WEAPON_ATTACK_TYPE(obj) == WEAP_TASER) {
+        // It was in a lesser power state. Light it up.
+        sprintf(buf, "%s splits and morphs, cerulean energy pulsing through its rotating circuitry as it deploys into a jaw-like configuration.", GET_OBJ_NAME(obj));
+        act(buf, FALSE, ch, 0, ch, TO_CHAR);
+        act(buf, FALSE, ch, 0, 0, TO_ROOM);
+      } else if (GET_WEAPON_ATTACK_TYPE(obj) == WEAP_CANNON) {
+        // It was in Decomposer mode. Collapse it.
+        sprintf(buf, "%s collapses in on itself, its raging energies focusing down as it retracts into a jaw-like configuration.", GET_OBJ_NAME(obj));
+        act(buf, FALSE, ch, 0, ch, TO_CHAR);
+        act(buf, FALSE, ch, 0, 0, TO_ROOM);
+      }
+      
+      send_to_char(ch, "A dispassionate feminine voice states, \"^cEnforcement mode: Lethal Eliminator. Please aim carefully and eliminate the target.^n\"\r\n");
+      GET_OBJ_TYPE(obj) = ITEM_WEAPON;
+      GET_WEAPON_ATTACK_TYPE(obj) = WEAP_HEAVY_PISTOL;
+      GET_WEAPON_DAMAGE_CODE(obj) = DEADLY;
+      GET_WEAPON_POWER(obj) = 100;
+      break;
+    case MODE_DECOMPOSER:
+      if (GET_OBJ_TYPE(obj) == ITEM_OTHER || GET_WEAPON_ATTACK_TYPE(obj) == WEAP_TASER || GET_WEAPON_ATTACK_TYPE(obj) == WEAP_HEAVY_PISTOL) {
+        // It will either print this message or print nothing (this is the end state of the gun-- either it reaches it or was already there.)
+        sprintf(buf, "%s deploys in a flicker of whirling components, gripping your wrist and hissing with barely-contained destructive energies.", GET_OBJ_NAME(obj));
+        act(buf, FALSE, ch, 0, ch, TO_CHAR);
+        sprintf(buf, "%s deploys in a flicker of whirling components, gripping $n's wrist and hissing with barely-contained destructive energies.", GET_OBJ_NAME(obj));
+        act(buf, FALSE, ch, 0, 0, TO_ROOM);
+      }
+      
+      send_to_char(ch, "A dispassionate feminine voice states, \"^cEnforcement mode: Destroy Decomposer. Target will be completely annihilated. Please proceed with maximum caution.^n\"\r\n");
+      GET_OBJ_TYPE(obj) = ITEM_WEAPON;
+      GET_WEAPON_ATTACK_TYPE(obj) = WEAP_CANNON;
+      GET_WEAPON_DAMAGE_CODE(obj) = DEADLY;
+      GET_WEAPON_POWER(obj) = 100;
+      break;
+    case MODE_DEACTIVATED:
+    default:
+      if (GET_OBJ_TYPE(obj) != ITEM_OTHER) {
+        // It was deployed.
+        if (GET_WEAPON_ATTACK_TYPE(obj) == WEAP_TASER) {
+          // Paralyzer mode-- lights go red.
+          sprintf(buf, "%s's status lights flicker, then turn red.", GET_OBJ_NAME(obj));
+          act(buf, FALSE, ch, 0, ch, TO_CHAR);
+          act(buf, FALSE, ch, 0, 0, TO_ROOM);
+        } else if (GET_WEAPON_ATTACK_TYPE(obj) == WEAP_HEAVY_PISTOL) {
+          // It was in Lethal mode. Collapse it.
+          sprintf(buf, "%s retracts and folds down into its standard heavy-pistol format, its status lights glowing red.", GET_OBJ_NAME(obj));
+          act(buf, FALSE, ch, 0, ch, TO_CHAR);
+          act(buf, FALSE, ch, 0, 0, TO_ROOM);
+        } else if (GET_WEAPON_ATTACK_TYPE(obj) == WEAP_CANNON) {
+          // It was in Destroyer mode. Collapse it.
+          sprintf(buf, "%s vents energy with a sharp snap of power, collapsing with uncanny speed into its standard heavy-pistol format, its status lights glowing red.", GET_OBJ_NAME(obj));
+          act(buf, FALSE, ch, 0, ch, TO_CHAR);
+          act(buf, FALSE, ch, 0, 0, TO_ROOM);
+        }
+      }
+      send_to_char(ch, "A dispassionate feminine voice states, \"^cThe trigger has been locked.^n\"\r\n");
+      GET_OBJ_TYPE(obj) = ITEM_OTHER;
+      break;
+  }
+}
+
+// A completely non-canon implementation of the Dominator from Psycho-Pass. Intended for novelty, staff-only use.
+SPECIAL(weapon_dominator) {
+  
+  struct obj_data *obj = (struct obj_data *) me;
+  const char *rank = "";
+  bool authorized;
+  
+  if (!ch || !cmd)
+    return FALSE;
+  
+  if (CMD_IS("wield") || CMD_IS("draw")) {
+    // They're already wielding it? Do nothing.
+    if (GET_EQ(ch, WEAR_WIELD) == obj)
+      return FALSE;
+    
+    // Let them wield it, then have the gun react.
+    if (CMD_IS("wield"))
+      do_wield(ch, argument, cmd, 0);
+    else if (CMD_IS("draw"))
+      do_draw(ch, argument, cmd, 0);
+    
+    // Check to see if it worked (e.g. they're currently wielding it).
+    if (GET_EQ(ch, WEAR_WIELD) == obj) {
+      // Compose their rank string.
+      if (GET_LEVEL(ch) == LVL_PRESIDENT) {
+        rank = "Inspector";
+        authorized = TRUE;
+      } else if (GET_LEVEL(ch) == LVL_ADMIN) {
+        rank = "Enforcer";
+        authorized = TRUE;
+      } else {
+        authorized = FALSE;
+      }
+      
+      // Act depending on if they're high-enough level or not.
+      if (authorized) {
+        // Send the intro message and configure this as a 50D stun weapon.
+        send_to_char(ch, "As you grasp the weapon, a feminine voice dispassonately states, \"^cDominator Portable Psychological Diagnosis and Suppression System has been activated. User identification: %s %s. Affiliation: Public Safety Bureau, Criminal Investigation Department. Dominator usage approval confirmed; you are a valid user.^n\"\r\n", rank, GET_CHAR_NAME(ch));
+        dominator_mode_switch(ch, obj, MODE_PARALYZER);
+      } else {
+        // Send the rejection message and configure this as a paperweight.
+        send_to_char(ch, "As you grasp the weapon, a feminine voice dispassonately states, \"^cDominator Portable Psychological Diagnosis and Suppression System will not activate. User is unauthorized.^n\"\r\n");
+        dominator_mode_switch(ch, obj, MODE_DEACTIVATED);
+      }
+    }
+
+    return TRUE;
+  }
+  
+  // For all other commands, we require that they're wielding the Dominator already.
+  if (GET_EQ(ch, WEAR_WIELD) == obj) {
+    if (CMD_IS("mode")) {
+      // Override the current mode.
+      if (!*argument) {
+        send_to_char(ch, "You must specify a valid mode from one of the following: Paralyzer, Eliminator, Decomposer.\r\n");
+        return TRUE;
+      }
+      
+      if (GET_LEVEL(ch) < LVL_ADMIN) {
+        send_to_char(ch, "The Dominator doesn't respond.\r\n");
+        return TRUE;
+      }
+      
+      int mode = MODE_DEACTIVATED;
+      
+      skip_spaces(&argument);
+      any_one_arg(argument, buf);
+      
+      
+      if (is_abbrev(buf, "non-lethal") || is_abbrev(buf, "paralyzer")) {
+        mode = MODE_PARALYZER;
+      } else if (is_abbrev(buf, "eliminator") || is_abbrev(buf, "lethal")) {
+        mode = MODE_ELIMINATOR;
+      } else if (is_abbrev(buf, "destroy") || is_abbrev(buf, "decomposer")) {
+        mode = MODE_DECOMPOSER;
+      } else if (is_abbrev(buf, "deactivated")) {
+        mode = MODE_DEACTIVATED;
+      } else {
+        send_to_char(ch, "You must specify a valid mode from one of the following: Deactivated, Paralyzer, Eliminator, Decomposer.\r\n");
+        return TRUE;
+      }
+      
+      send_to_char(ch, "You metally request the Sibyl System to override your Dominator's mode.\r\n");
+      dominator_mode_switch(ch, obj, mode);
+      return TRUE;
+    }
+    
+    if (CMD_IS("holster") || CMD_IS("remove")) {
+      // Holster the weapon.
+      if (CMD_IS("remove"))
+        do_remove(ch, argument, cmd, 0);
+      else if (CMD_IS("holster"))
+        do_holster(ch, argument, cmd, 0);
+      if (GET_EQ(ch, WEAR_WIELD) != obj)
+        dominator_mode_switch(ch, obj, MODE_DEACTIVATED);
+      return TRUE;
+    }
+  }
+  
+  // We did nothing.
+  return FALSE;
 }
