@@ -3308,7 +3308,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   if (att->weapon && GET_OBJ_SPEC(att->weapon) == weapon_dominator) {
     if (GET_LEVEL(def->ch) > GET_LEVEL(att->ch)) {
       send_to_char(att->ch, "As you aim your weapon at %s, a dispassionate feminine voice states: \"^cThe target's Crime Coefficient is below 100. %s is not a target for enforcement. The trigger has been locked.^n\"\r\n", GET_CHAR_NAME(def->ch), HSSH(def->ch));
-      dominator_mode_switch(att->ch, att->weapon, 0);
+      dominator_mode_switch(att->ch, att->weapon, DOMINATOR_MODE_DEACTIVATED);
       return;
     }
     switch (GET_WEAPON_ATTACK_TYPE(att->weapon)) {

@@ -2188,4 +2188,10 @@ struct ban_list_element
 #define MYSQL_UNSIGNED_INT_MAX       4294967295
 // Bigint takes 2^63-1 signed, 2^64-1 unsigned. You probably don't need to care about it.
 
+// Dominator constants.
+#define DOMINATOR_MODE_DEACTIVATED 0
+#define DOMINATOR_MODE_PARALYZER   1
+#define DOMINATOR_MODE_ELIMINATOR  2
+#define DOMINATOR_MODE_DECOMPOSER  3
+
 #endif

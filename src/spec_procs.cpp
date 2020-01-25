@@ -4393,17 +4393,12 @@ SPECIAL(chargen_spirit_combat_west)
   return TRUE;
 }
 
-#define MODE_DEACTIVATED 0
-#define MODE_PARALYZER   1
-#define MODE_ELIMINATOR  2
-#define MODE_DECOMPOSER  3
-
 void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode) {
   // Formatting.
   send_to_char(ch, "\r\n");
   
   switch (mode) {
-    case MODE_PARALYZER:
+    case DOMINATOR_MODE_PARALYZER:
       // This is a bit of a hack, but we know what the previous mode was based on its type and attack type.
       if (GET_OBJ_TYPE(obj) == ITEM_OTHER) {
         // It was deactivated. Light it up.
@@ -4428,7 +4423,7 @@ void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode)
       GET_WEAPON_DAMAGE_CODE(obj) = DEADLY;
       GET_WEAPON_POWER(obj) = 50;
       break;
-    case MODE_ELIMINATOR:
+    case DOMINATOR_MODE_ELIMINATOR:
       if (GET_OBJ_TYPE(obj) == ITEM_OTHER || GET_WEAPON_ATTACK_TYPE(obj) == WEAP_TASER) {
         // It was in a lesser power state. Light it up.
         sprintf(buf, "%s splits and morphs, cerulean energy pulsing through its rotating circuitry as it deploys into a jaw-like configuration.", GET_OBJ_NAME(obj));
@@ -4447,7 +4442,7 @@ void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode)
       GET_WEAPON_DAMAGE_CODE(obj) = DEADLY;
       GET_WEAPON_POWER(obj) = 100;
       break;
-    case MODE_DECOMPOSER:
+    case DOMINATOR_MODE_DECOMPOSER:
       if (GET_OBJ_TYPE(obj) == ITEM_OTHER || GET_WEAPON_ATTACK_TYPE(obj) == WEAP_TASER || GET_WEAPON_ATTACK_TYPE(obj) == WEAP_HEAVY_PISTOL) {
         // It will either print this message or print nothing (this is the end state of the gun-- either it reaches it or was already there.)
         sprintf(buf, "%s deploys in a flicker of whirling components, gripping your wrist and hissing with barely-contained destructive energies.", GET_OBJ_NAME(obj));
@@ -4462,7 +4457,7 @@ void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode)
       GET_WEAPON_DAMAGE_CODE(obj) = DEADLY;
       GET_WEAPON_POWER(obj) = 100;
       break;
-    case MODE_DEACTIVATED:
+    case DOMINATOR_MODE_DEACTIVATED:
     default:
       if (GET_OBJ_TYPE(obj) != ITEM_OTHER) {
         // It was deployed.
@@ -4499,7 +4494,7 @@ SPECIAL(weapon_dominator) {
   if (!ch || !cmd)
     return FALSE;
   
-  if (CMD_IS("wield") || CMD_IS("draw")) {
+  if (CMD_IS("wield")) {
     // They're already wielding it? Do nothing.
     if (GET_EQ(ch, WEAR_WIELD) == obj)
       return FALSE;
@@ -4507,8 +4502,6 @@ SPECIAL(weapon_dominator) {
     // Let them wield it, then have the gun react.
     if (CMD_IS("wield"))
       do_wield(ch, argument, cmd, 0);
-    else if (CMD_IS("draw"))
-      do_draw(ch, argument, cmd, 0);
     
     // Check to see if it worked (e.g. they're currently wielding it).
     if (GET_EQ(ch, WEAR_WIELD) == obj) {
@@ -4527,11 +4520,11 @@ SPECIAL(weapon_dominator) {
       if (authorized) {
         // Send the intro message and configure this as a 50D stun weapon.
         send_to_char(ch, "As you grasp the weapon, a feminine voice dispassonately states, \"^cDominator Portable Psychological Diagnosis and Suppression System has been activated. User identification: %s %s. Affiliation: Public Safety Bureau, Criminal Investigation Department. Dominator usage approval confirmed; you are a valid user.^n\"\r\n", rank, GET_CHAR_NAME(ch));
-        dominator_mode_switch(ch, obj, MODE_PARALYZER);
+        dominator_mode_switch(ch, obj, DOMINATOR_MODE_PARALYZER);
       } else {
         // Send the rejection message and configure this as a paperweight.
         send_to_char(ch, "As you grasp the weapon, a feminine voice dispassonately states, \"^cDominator Portable Psychological Diagnosis and Suppression System will not activate. User is unauthorized.^n\"\r\n");
-        dominator_mode_switch(ch, obj, MODE_DEACTIVATED);
+        dominator_mode_switch(ch, obj, DOMINATOR_MODE_DEACTIVATED);
       }
     }
 
@@ -4552,20 +4545,20 @@ SPECIAL(weapon_dominator) {
         return TRUE;
       }
       
-      int mode = MODE_DEACTIVATED;
+      int mode = DOMINATOR_MODE_DEACTIVATED;
       
       skip_spaces(&argument);
       any_one_arg(argument, buf);
       
       
       if (is_abbrev(buf, "non-lethal") || is_abbrev(buf, "paralyzer")) {
-        mode = MODE_PARALYZER;
+        mode = DOMINATOR_MODE_PARALYZER;
       } else if (is_abbrev(buf, "eliminator") || is_abbrev(buf, "lethal")) {
-        mode = MODE_ELIMINATOR;
+        mode = DOMINATOR_MODE_ELIMINATOR;
       } else if (is_abbrev(buf, "destroy") || is_abbrev(buf, "decomposer")) {
-        mode = MODE_DECOMPOSER;
+        mode = DOMINATOR_MODE_DECOMPOSER;
       } else if (is_abbrev(buf, "deactivated")) {
-        mode = MODE_DEACTIVATED;
+        mode = DOMINATOR_MODE_DEACTIVATED;
       } else {
         send_to_char(ch, "You must specify a valid mode from one of the following: Deactivated, Paralyzer, Eliminator, Decomposer.\r\n");
         return TRUE;
@@ -4583,7 +4576,7 @@ SPECIAL(weapon_dominator) {
       else if (CMD_IS("holster"))
         do_holster(ch, argument, cmd, 0);
       if (GET_EQ(ch, WEAR_WIELD) != obj)
-        dominator_mode_switch(ch, obj, MODE_DEACTIVATED);
+        dominator_mode_switch(ch, obj, DOMINATOR_MODE_DEACTIVATED);
       return TRUE;
     }
   }

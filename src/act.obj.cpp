@@ -33,6 +33,9 @@ extern int return_general(int skill_num);
 extern bool check_quest_delivery(struct char_data *ch, struct char_data *mob, struct obj_data *obj);
 extern void check_quest_delivery(struct char_data *ch, struct obj_data *obj);
 void calc_weight(struct char_data *ch);
+extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
+
+SPECIAL(weapon_dominator);
 
 bool search_cyberdeck(struct obj_data *cyberdeck, struct obj_data *program)
 {
@@ -3083,6 +3086,10 @@ int draw_weapon(struct char_data *ch)
        }
   }
   affect_total(ch);
+  
+  if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_SPEC(GET_EQ(ch, WEAR_WIELD)) == weapon_dominator)
+    dominator_mode_switch(ch, GET_EQ(ch, WEAR_WIELD), DOMINATOR_MODE_PARALYZER);
+  
   return i;
 }
 
