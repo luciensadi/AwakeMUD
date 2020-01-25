@@ -1175,7 +1175,7 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
     sprintf(ENDOF(buf), " a box of ammunition for reloading %s magazines. It contains %d rounds of %s ammo.",
             weapon_type[GET_AMMOBOX_WEAPON(obj)],
             GET_AMMOBOX_QUANTITY(obj),
-            ammo_type[GET_AMMOBOX_TYPE(obj)]);
+            ammo_type[GET_AMMOBOX_TYPE(obj)].name);
     break;
   case ITEM_FOCUS:
     sprintf(ENDOF(buf), " a rating %d %s focus.", GET_OBJ_VAL(obj, 1), foci_type[GET_OBJ_VAL(obj, 0)]);

@@ -850,9 +850,10 @@ bool load_char(const char *name, char_data *ch, bool logon)
     }
     
     // Initialize character pgroup struct.
-    GET_PGROUP_MEMBER_DATA(ch)->pgroup = ptr;
+    GET_PGROUP(ch) = ptr;
   } else {
     mysql_free_result(res);
+    GET_PGROUP_MEMBER_DATA(ch) = NULL;
   }
   
   // Load pgroup invitation data.
@@ -1050,8 +1051,8 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
                player->real_abils.highestindex, GET_MAX_HACKING(player), GET_BODY(player),
                GET_DEFENSE(player), GET_NUYEN(player), GET_BANK(player), GET_KARMA(player),
                GET_REP(player), GET_NOT(player), GET_TKE(player),
-               PLR_FLAGGED(player, PLR_JUST_DIED), GET_PHYSICAL(player), GET_PHYSICAL_LOSS(player),
-               GET_MENTAL(player), GET_MENTAL_LOSS(player), GET_PERM_BOD_LOSS(player), GET_WIMP_LEV(player),
+               PLR_FLAGGED(player, PLR_JUST_DIED), MAX(0, GET_PHYSICAL(player)), GET_PHYSICAL_LOSS(player),
+               MAX(0, GET_MENTAL(player)), GET_MENTAL_LOSS(player), GET_PERM_BOD_LOSS(player), GET_WIMP_LEV(player),
                GET_LOADROOM(player), GET_LAST_IN(player), time(0), GET_COND(player, COND_FULL),
                GET_COND(player, COND_THIRST), GET_COND(player, COND_DRUNK),
                SHOTS_FIRED(player), SHOTS_TRIGGERED(player), GET_TRADITION(player), pgroup_num,

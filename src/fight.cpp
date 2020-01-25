@@ -78,6 +78,9 @@ extern SPECIAL(shop_keeper);
 extern void mob_magic(struct char_data *ch);
 extern void cast_spell(struct char_data *ch, int spell, int sub, int force, char *arg);
 extern char *get_player_name(vnum_t id);
+
+extern void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode);
+
 /* Weapon attack texts */
 struct attack_hit_type attack_hit_text[] =
 {
@@ -3273,6 +3276,9 @@ int get_melee_skill(struct combat_data *cd) {
 
 void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *weap, struct obj_data *vict_weap)
 {
+  // Load our Dominator weapon spec, because that's totally canon and kosher right?
+  SPECIAL(weapon_dominator);
+  
   // Initialize our data structures for holding this round's fight-related data.
   struct combat_data attacker_data(attacker, weap);
   struct combat_data defender_data(victim, vict_weap);
@@ -3294,9 +3300,49 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     return;
   }
   
-  // Precondition: If you're asleep, paralyzed, or out of ammo, you don't get to fight. TODO: How to handle characters wielding non-weapons?
+  // Precondition: If you're asleep, paralyzed, or out of ammo, you don't get to fight.
   if (!AWAKE(att->ch) || GET_QUI(att->ch) <= 0 || !has_ammo(att->ch, att->weapon))
     return;
+  
+  // Short-circuit: If you're wielding an activated Dominator, you don't care about all these pesky rules.
+  if (att->weapon && GET_OBJ_SPEC(att->weapon) == weapon_dominator) {
+    if (GET_LEVEL(def->ch) > GET_LEVEL(att->ch)) {
+      send_to_char(att->ch, "As you aim your weapon at %s, a dispassionate feminine voice states: \"^cThe target's Crime Coefficient is below 100. %s is not a target for enforcement. The trigger has been locked.^n\"\r\n", GET_CHAR_NAME(def->ch), HSSH(def->ch));
+      dominator_mode_switch(att->ch, att->weapon, DOMINATOR_MODE_DEACTIVATED);
+      return;
+    }
+    switch (GET_WEAPON_ATTACK_TYPE(att->weapon)) {
+      case WEAP_TASER:
+        // Paralyzer? Stun your target.
+        act("Your crackling shot of energy slams into $N, disabling $M.", FALSE, att->ch, 0, def->ch, TO_CHAR);
+        act("A crackling shot of energy erupts from $n's Dominator and slams into $N, disabling $M!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
+        act("A crackling shot of energy erupts from $n's Dominator and slams into you! Your vision fades as your muscles lock up.", FALSE, att->ch, 0, def->ch, TO_VICT);
+        damage(att->ch, def->ch, 15, TYPE_SUFFERING, FALSE);
+        break;
+      case WEAP_HEAVY_PISTOL:
+        // Lethal? Kill your target.
+        act("A ball of coherent light leaps from your Dominator, tearing into $N. With a scream, $E crumples, bubbles, and explodes in a shower of gore!", FALSE, att->ch, 0, def->ch, TO_CHAR);
+        act("A ball of coherent light leaps from $n's Dominator, tearing into $N. With a scream, $E crumples, bubbles, and explodes in a shower of gore!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
+        act("A ball of coherent light leaps from $n's Dominator, tearing into you! A horrible rending sensation tears through you as your vision fades.", FALSE, att->ch, 0, def->ch, TO_VICT);
+        die(def->ch);
+        break;
+      case WEAP_CANNON:
+        // Decomposer? Don't just kill your target-- if they're a player, disconnect them.
+        act("A roaring column of force explodes from your Dominator, erasing $N from existence!", FALSE, att->ch, 0, def->ch, TO_CHAR);
+        act("A roaring column of force explodes from $n's Dominator, erasing $N from existence!", FALSE, att->ch, 0, def->ch, TO_NOTVICT);
+        act("A roaring column of force explodes from $n's Dominator, erasing you from existence!", FALSE, att->ch, 0, def->ch, TO_VICT);
+        die(def->ch);
+        if (def->ch->desc) {
+          STATE(def->ch->desc) = CON_CLOSE;
+          close_socket(def->ch->desc);
+        }
+        break;
+      default:
+        send_to_char(att->ch, "Dominator code fault.\r\n");
+        break;
+    }
+    return;
+  }
   
   // Precondition: If your foe is astral, you don't belong here.
   if (IS_ASTRAL(def->ch)) {
@@ -4004,7 +4050,7 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
       }
       for (distance = 1; !is_responding && (nextroom && (distance <= 4)); distance++) {
         for (temp = nextroom->people; !is_responding && temp; temp = temp->next_in_room) {
-          if (temp == ch && (distance > range || distance > sight) && !(IS_NPC(vict) && MOB_FLAGGED(vict, MOB_SENTINEL))) {
+          if (temp == ch && (distance > range || distance > sight) && IS_NPC(vict) && !MOB_FLAGGED(vict, MOB_SENTINEL)) {
             is_responding = TRUE;
             act("$n charges towards $s distant foe.", TRUE, vict, 0, 0, TO_ROOM);
             act("You charge after $N.", FALSE, vict, 0, ch, TO_CHAR);
@@ -4025,7 +4071,7 @@ bool ranged_response(struct char_data *ch, struct char_data *vict)
     }
     is_responding = TRUE;
     set_fighting(vict, ch);
-  } else if (!(IS_NPC(vict) && MOB_FLAGGED(vict, MOB_SENTINEL))) {
+  } else if (IS_NPC(vict) && !MOB_FLAGGED(vict, MOB_SENTINEL)) {
     for (dir = 0; dir < NUM_OF_DIRS && !is_responding; dir++) {
       if (CAN_GO(vict, dir) && EXIT2(room, dir)->to_room == ch->in_room) {
         is_responding = TRUE;

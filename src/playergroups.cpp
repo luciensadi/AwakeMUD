@@ -1144,7 +1144,7 @@ void pgedit_parse(struct descriptor_data * d, const char *arg) {
             if (GET_PGROUP_MEMBER_DATA(CH))
               delete GET_PGROUP_MEMBER_DATA(CH);
             GET_PGROUP_MEMBER_DATA(CH) = new Pgroup_data();
-            GET_PGROUP_MEMBER_DATA(CH)->pgroup = d->edit_pgroup;
+            GET_PGROUP(CH) = d->edit_pgroup;
             GET_PGROUP_MEMBER_DATA(CH)->rank = MAX_PGROUP_RANK;
             GET_PGROUP_MEMBER_DATA(CH)->privileges.SetBit(PRIV_LEADER);
             if (GET_PGROUP_MEMBER_DATA(CH)->title)

@@ -482,7 +482,7 @@ void Playergroup::add_member(struct char_data *ch) {
     delete GET_PGROUP_MEMBER_DATA(ch);
   }
   GET_PGROUP_MEMBER_DATA(ch) = new Pgroup_data();
-  GET_PGROUP_MEMBER_DATA(ch)->pgroup = this;
+  GET_PGROUP(ch) = this;
   GET_PGROUP_MEMBER_DATA(ch)->rank = 1;
   if (GET_PGROUP_MEMBER_DATA(ch)->title)
     delete GET_PGROUP_MEMBER_DATA(ch)->title;

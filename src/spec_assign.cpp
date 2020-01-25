@@ -609,6 +609,7 @@ void assign_objects(void)
   SPECIAL(chargen_hopper);
   SPECIAL(quest_debug_scanner);
   SPECIAL(taxi_sign);
+  SPECIAL(weapon_dominator);
 
   ASSIGNOBJ(3, gen_board);  /* Rift's Board */
   ASSIGNOBJ(4, gen_board);  /* Pook's Board */
@@ -690,6 +691,7 @@ void assign_objects(void)
   ASSIGNOBJ(OBJ_SEATTLE_TAXI_SIGN, taxi_sign);
   ASSIGNOBJ(OBJ_PORTLAND_TAXI_SIGN, taxi_sign);
   
+  ASSIGNOBJ(10005, weapon_dominator);
   
   WSPEC(monowhip);
 
