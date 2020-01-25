@@ -3057,6 +3057,10 @@ int draw_weapon(struct char_data *ch)
             act("You draw $p from $P.", FALSE, ch, hols, GET_EQ(ch, x), TO_CHAR);
             act("$n draws $p from $P.", TRUE, ch, hols, GET_EQ(ch, x), TO_ROOM);
             i++;
+            
+            if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_SPEC(GET_EQ(ch, WEAR_WIELD)) == weapon_dominator) {
+              dominator_mode_switch(ch, GET_EQ(ch, WEAR_WIELD), DOMINATOR_MODE_PARALYZER);
+            }
           }
         } else if (GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_WORN) {
           for (obj = GET_EQ(ch, x)->contains; obj; obj = obj->next_content) {
@@ -3081,14 +3085,15 @@ int draw_weapon(struct char_data *ch)
                 act("You draw $p from $P.", FALSE, ch, hols, GET_EQ(ch, x), TO_CHAR);
                 act("$n draws $p from $P.", TRUE, ch, hols, GET_EQ(ch, x), TO_ROOM);
                 i++;
+                
+                if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_SPEC(GET_EQ(ch, WEAR_WIELD)) == weapon_dominator) {
+                  dominator_mode_switch(ch, GET_EQ(ch, WEAR_WIELD), DOMINATOR_MODE_PARALYZER);
+                }
               }
             }
           }
         }
       }
-    }
-    if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_SPEC(GET_EQ(ch, WEAR_WIELD)) == weapon_dominator) {
-      dominator_mode_switch(ch, GET_EQ(ch, WEAR_WIELD), DOMINATOR_MODE_PARALYZER);
     }
   }
   affect_total(ch);
