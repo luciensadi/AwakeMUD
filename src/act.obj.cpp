@@ -3034,7 +3034,7 @@ int draw_weapon(struct char_data *ch)
 
   if (!GET_EQ(ch, WEAR_WIELD) || !GET_EQ(ch, WEAR_HOLD))
   {
-    for (int x = 0; x < NUM_WEARS; x++)
+    for (int x = 0; x < NUM_WEARS; x++) {
       if (GET_EQ(ch, x)) {
         if (GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_HOLSTER && GET_OBJ_VAL(GET_EQ(ch, x), 3)) {
           hols = GET_EQ(ch, x)->contains;
@@ -3058,8 +3058,8 @@ int draw_weapon(struct char_data *ch)
             act("$n draws $p from $P.", TRUE, ch, hols, GET_EQ(ch, x), TO_ROOM);
             i++;
           }
-        } else if (GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_WORN)
-          for (obj = GET_EQ(ch, x)->contains; obj; obj = obj->next_content)
+        } else if (GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_WORN) {
+          for (obj = GET_EQ(ch, x)->contains; obj; obj = obj->next_content) {
             if (GET_OBJ_TYPE(obj) == ITEM_HOLSTER && GET_OBJ_VAL(obj, 3)) {
               hols = obj->contains;
               if (!hols) {
@@ -3083,12 +3083,15 @@ int draw_weapon(struct char_data *ch)
                 i++;
               }
             }
-       }
+          }
+        }
+      }
+    }
+    if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_SPEC(GET_EQ(ch, WEAR_WIELD)) == weapon_dominator) {
+      dominator_mode_switch(ch, GET_EQ(ch, WEAR_WIELD), DOMINATOR_MODE_PARALYZER);
+    }
   }
   affect_total(ch);
-  
-  if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_SPEC(GET_EQ(ch, WEAR_WIELD)) == weapon_dominator)
-    dominator_mode_switch(ch, GET_EQ(ch, WEAR_WIELD), DOMINATOR_MODE_PARALYZER);
   
   return i;
 }
