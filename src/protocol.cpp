@@ -2677,14 +2677,14 @@ static void SendMSSP( descriptor_t *apDescriptor )
       { "LANGUAGE",           "English", NULL },
       { "LOCATION",           "USA", NULL },
       { "MINIMUM AGE",        "13", NULL }, // COPPA compliance-- we do not service those under 13.
-      { "WEBSITE",            "https://github.com/luciensadi/AwakeMUD", NULL },
+      { "WEBSITE",            "https://awakemud.com", NULL },
       /* Categorisation */
 
       { "FAMILY",             "Custom", NULL },
       { "GENRE",              "Science Fiction", NULL },
       { "GAMEPLAY",           "Player versus Environment", NULL },
       { "STATUS",             "Open Beta", NULL },
-      { "GAMESYSTEM",         "Shadowrun 3E", NULL },
+      { "GAMESYSTEM",         "Shadowrun 3rd Edition", NULL },
       { "INTERMUD",           "Gossip", NULL },
       { "SUBGENRE",           "Cyberpunk", NULL },
      
@@ -2695,29 +2695,29 @@ static void SendMSSP( descriptor_t *apDescriptor )
       { "MOBILES",            "0" },
       { "OBJECTS",            "0" },
       { "ROOMS",              "0" },
-      { "CLASSES",            "0" },
-      { "LEVELS",             "0" },
+*/
+      { "CLASSES",            "0", NULL }, // Indicates classless
+      { "LEVELS",             "0", NULL }, // Indicates levelless
+/*
       { "RACES",              "0" },
       { "SKILLS",             "0" },
 */
       /* Protocols */
-/*
-      { "ANSI",               "1" },
-      { "GMCP",               "0" },
+      { "ANSI",               "1", NULL },
+      { "GMCP",               "0", NULL },
 #ifdef USING_MCCP
-      { "MCCP",               "1" },
+      { "MCCP",               "1", NULL },
 #else
-      { "MCCP",               "0" },
+      { "MCCP",               "0", NULL },
 #endif // USING_MCCP
-      { "MCP",                "0" },
-      { "MSDP",               "1" },
-      { "MSP",                "1" },
-      { "MXP",                "1" },
-      { "PUEBLO",             "0" },
-      { "UTF-8",              "1" },
-      { "VT100",              "0" },
-      { "XTERM 256 COLORS",   "1" },
-*/
+      { "MCP",                "0", NULL },
+      { "MSDP",               "1", NULL },
+      { "MSP",                "1", NULL },
+      { "MXP",                "1", NULL },
+      { "PUEBLO",             "0", NULL },
+      { "UTF-8",              "1", NULL },
+      { "VT100",              "0", NULL },
+      { "XTERM 256 COLORS",   "1", NULL },
       /* Commercial */
 
       { "PAY TO PLAY",        "0", NULL },
@@ -2746,8 +2746,8 @@ static void SendMSSP( descriptor_t *apDescriptor )
       { "NEWBIE FRIENDLY",    "1", NULL },
       { "PLAYER CITIES",      "0", NULL },
       { "PLAYER CLANS",       "1", NULL },
-      { "PLAYER CRAFTING",    "0", NULL },
-      { "PLAYER GUILDS",      "0", NULL },
+      { "PLAYER CRAFTING",    "1", NULL },
+      { "PLAYER GUILDS",      "1", NULL },
      /*
       { "EQUIPMENT SYSTEM",   "" },
       { "MULTIPLAYING",       "" },

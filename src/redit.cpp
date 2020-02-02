@@ -332,7 +332,9 @@ void redit_disp_menu(struct descriptor_data * d)
   send_to_char(CH, "i) Smoke Level: ^c%s^n\r\n", light_levels[d->edit_room->vision[1]]);
   send_to_char(CH, "j) Combat Options: Crowd (^c%d^n) Cover: (^c%d^n) Room Type: (^c%s^n) X: (^c%d^n) Y: (^c%d^n) Z: (^c%.2f^n)\r\n",
                d->edit_room->crowd, d->edit_room->cover, room_types[d->edit_room->type], d->edit_room->x, d->edit_room->y, d->edit_room->z);
-  send_to_char(CH, "k) Background Count: ^c%d (%s)^n\r\n", d->edit_room->background[0], background_types[d->edit_room->background[1]]);
+  send_to_char(CH, "k) Background Count: ^c%d (%s)^n\r\n",
+               d->edit_room->background[PERMANENT_BACKGROUND_COUNT],
+               background_types[d->edit_room->background[PERMANENT_BACKGROUND_TYPE]]);
   send_to_char(CH, "l) Extra descriptions\r\n", d->character);
   if (d->edit_room->sector_type == SPIRIT_LAKE || d->edit_room->sector_type == SPIRIT_SEA ||
       d->edit_room->sector_type == SPIRIT_RIVER || d->edit_room->room_flags.IsSet(ROOM_FALL))
@@ -835,21 +837,22 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     d->edit_room->address = str_dup(arg);
     redit_disp_mtx_menu(d);
     break;
+  case REDIT_BACKGROUND:
+    number = MAX(MIN(10, atoi(arg)), 0);
+    d->edit_room->background[CURRENT_BACKGROUND_COUNT] = d->edit_room->background[PERMANENT_BACKGROUND_COUNT] = number;
+    for (number = 0; number < AURA_PLAYERCOMBAT; number++)
+      send_to_char(CH, "%d) %s\r\n", number, background_types[number]);
+    send_to_char("Enter background count type: ", CH);
+    d->edit_mode = REDIT_BACKGROUND2;
+    break;
   case REDIT_BACKGROUND2:
     number = atoi(arg);
     if (number < 0 || number >= AURA_PLAYERCOMBAT) {
       send_to_char(CH, "Number must be between 0 and %d. Enter Type: ", AURA_PLAYERCOMBAT - 1);
       return;
     }
-    d->edit_room->background[1] = number;
+    d->edit_room->background[CURRENT_BACKGROUND_TYPE] = d->edit_room->background[PERMANENT_BACKGROUND_TYPE] = number;
     redit_disp_menu(d);
-    break;
-  case REDIT_BACKGROUND:
-    d->edit_room->background[0] = atoi(arg);
-    for (number = 0; number < AURA_PLAYERCOMBAT; number++)
-      send_to_char(CH, "%d) %s\r\n", number, background_types[number]);
-    send_to_char("Enter background count type: ", CH);
-    d->edit_mode = REDIT_BACKGROUND2;
     break;
   case REDIT_NAME:
     if (d->edit_room->name)
@@ -1318,7 +1321,7 @@ void write_world_to_disk(int vnum)
               "\tSmoke:\t%d\n"
               "\tBackground:\t%d\n"
               "\tBackgroundType:\t%d\n",
-              RM.spec, RM.rating, RM.vision[0], RM.vision[1], RM.background[0], RM.background[1]);
+              RM.spec, RM.rating, RM.vision[0], RM.vision[1], RM.background[PERMANENT_BACKGROUND_COUNT], RM.background[PERMANENT_BACKGROUND_TYPE]);
 
       for (counter2 = 0; counter2 < NUM_OF_DIRS; counter2++) {
         room_direction_data *ptr = RM.dir_option[counter2];

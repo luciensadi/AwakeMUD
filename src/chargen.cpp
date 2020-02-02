@@ -121,7 +121,7 @@ void init_create_vars(struct descriptor_data *d)
   int i;
 
   d->ccr.mode = CCR_SEX;
-  for (i = 0; i < 5; i++)
+  for (i = 0; i < NUM_CCR_PR_POINTS - 1; i++)
     d->ccr.pr[i] = PR_NONE;
   d->ccr.force_points = 0;
   d->ccr.temp = 0;
@@ -280,7 +280,7 @@ int parse_assign(struct descriptor_data *d, const char *arg)
   case '2':
   case '3':
   case '4':
-    for (i = 0; i < 5; i++)
+    for (i = 0; i < NUM_CCR_PR_POINTS - 1; i++)
       if (d->ccr.pr[i] == (int)(*arg - '0')) {
         switch (d->ccr.pr[i]) {
         case PR_ATTRIB:
@@ -330,7 +330,7 @@ void priority_menu(struct descriptor_data *d)
 
   d->ccr.mode = CCR_PRIORITY;
   SEND_TO_Q("\r\nPriority  Setting     Attributes   Skills Resources\r\n", d);
-  for (i = 0; i < 5; i++)
+  for (i = 0; i < NUM_CCR_PR_POINTS - 1; i++)
   {
     sprintf(buf2, "%-10c", 'A' + i);
     switch (d->ccr.pr[i]) {

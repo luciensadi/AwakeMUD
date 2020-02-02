@@ -204,7 +204,7 @@ enum {
 #define WEAR_EYES       2
 #define WEAR_EAR        3
 #define WEAR_EAR2       4
-#define WEAR_FACE	5
+#define WEAR_FACE	      5
 #define WEAR_NECK_1     6
 #define WEAR_NECK_2     7
 #define WEAR_BACK       8
@@ -306,17 +306,16 @@ enum {
 #define MOB_SNIPER              21 /* mob searches area for PCs              */
 #define MOB_PRIVATE             22 /* mob cannot be statted                  */
 #define MOB_TRACK               23 /* (R) for security routines              */
-#define MOB_FLAMEAURA		24
-#define MOB_SPIRITGUARD		25
+#define MOB_FLAMEAURA		        24
+#define MOB_SPIRITGUARD		      25
 #define MOB_STUDY               26 /* Saeder Krupp*/
 #define MOB_AIDSORCERY          27
 #define MOB_AZTECHNOLOGY        28 /* Azzies                                 */
 #define MOB_RENRAKU             29 /* Renraku   */
-#define MOB_NOKILL         30 /* Unkillable mob */
-/* New Race(s)! -- Khepri is a dumb slut */
+#define MOB_NOKILL              30 /* Unkillable mob */
 #define MOB_TOTALINVIS          31 /* auto attack dragon PCs                 */
-#define MOB_INANIMATE		32
-#define MOB_MAX			33
+#define MOB_INANIMATE		        32
+#define MOB_MAX			            33
 
 /* preference flags: used by char_data.player_specials.pref */
 
@@ -491,18 +490,18 @@ enum {
 #define ROOM_BFS_MARK           15  /* (R) breath-first srch mrk */
 #define ROOM_LOW_LIGHT          16  /* Room viewable with ll-eyes */
 #define ROOM_NO_RADIO           18  /* Radio is sketchy and phones dont work */
-#define ROOM_NOBIKE		          19
-#define ROOM_FREEWAY            20  /* Room is a medicin lodge   */
+#define ROOM_NOBIKE		          19  // Room blocks bikes from passing through it.
+#define ROOM_FREEWAY            20  /* Room cannot be walked across. */
 #define ROOM_FALL               21  // room is a 'fall' room
-#define ROOM_ROAD               22
-#define ROOM_GARAGE             23
-#define ROOM_STAFF_ONLY         24
-#define ROOM_NOQUIT             25
+#define ROOM_ROAD               22  // Room is compatible with cars.
+#define ROOM_GARAGE             23  // Room stores cars.
+#define ROOM_STAFF_ONLY         24  // Room does not allow mortals to walk into it.
+#define ROOM_NOQUIT             25  // Room does not allow quitting in it.
 #define ROOM_SENT               26
 #define ROOM_ASTRAL 	       	  27 // Astral room
-#define ROOM_NOGRID    	       	28
-#define ROOM_STORAGE	        	29
-#define ROOM_NO_TRAFFIC         30
+#define ROOM_NOGRID    	       	28 // Room blocks gridguide.
+#define ROOM_STORAGE	        	29 // Room stores items dropped in it.
+#define ROOM_NO_TRAFFIC         30 // Prevents display of traffic atmospheric messages.
 #define ROOM_ELEVATOR_SHAFT     31 // Don't set this manually
 #define ROOM_MAX        	      32
 
@@ -1355,7 +1354,6 @@ enum {
 #define SOFT_RESPONSE		38
 #define NUM_PROGRAMS		39
 
-
 #define PART_ACTIVE		1
 #define PART_STORAGE		2
 #define PART_ASIST_HOT		3
@@ -1882,6 +1880,7 @@ enum {
 #define PO_SKILL	2
 #define PO_RESOURCES	3
 #define PO_MAGIC	4
+#define PO_I_DONT_EVEN_KNOW 5
 
 /* priority choosing chargen modes */
 #define PR_NONE         0
@@ -2193,5 +2192,15 @@ struct ban_list_element
 #define DOMINATOR_MODE_PARALYZER   1
 #define DOMINATOR_MODE_ELIMINATOR  2
 #define DOMINATOR_MODE_DECOMPOSER  3
+
+#define MAX_RADIO_FREQUENCY 24
+#define MIN_RADIO_FREQUENCY 6
+
+#define FOOD_DRINK_MAX 24
+
+#define CURRENT_BACKGROUND_COUNT   0
+#define CURRENT_BACKGROUND_TYPE    1
+#define PERMANENT_BACKGROUND_COUNT 2
+#define PERMANENT_BACKGROUND_TYPE  3
 
 #endif

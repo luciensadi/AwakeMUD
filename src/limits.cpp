@@ -298,9 +298,9 @@ void gain_condition(struct char_data * ch, int condition, int value)
   
   GET_COND(ch, condition) = MAX(0, GET_COND(ch, condition));
   if ( condition == COND_DRUNK )
-    GET_COND(ch, condition) = MIN(24, GET_COND(ch, condition));
+    GET_COND(ch, condition) = MIN(FOOD_DRINK_MAX, GET_COND(ch, condition));
   else
-    GET_COND(ch, condition) = MIN(24, GET_COND(ch, condition));
+    GET_COND(ch, condition) = MIN(FOOD_DRINK_MAX, GET_COND(ch, condition));
   
   if (GET_COND(ch, condition) || PLR_FLAGGED(ch, PLR_CUSTOMIZE) ||
       PLR_FLAGGED(ch, PLR_WRITING) || PLR_FLAGGED(ch, PLR_MAILING) || PLR_FLAGGED(ch, PLR_AUTH) || PLR_FLAGGED(ch, PLR_MATRIX))
@@ -392,7 +392,9 @@ void check_idling(void)
           send_to_char("You have been idle, and are pulled into a void.\r\n", ch);
           char_from_room(ch);
           char_to_room(ch, &world[1]);
-        } else if (ch->char_specials.timer > 30) {
+        }
+        /* Disabled-- I get protecting them by moving them to the void, but why DC them?
+        else if (ch->char_specials.timer > 30) {
           if (ch->in_room)
             char_from_room(ch);
           char_to_room(ch, &world[1]);
@@ -406,6 +408,7 @@ void check_idling(void)
           mudlog(buf, ch, LOG_CONNLOG, TRUE);
           extract_char(ch);
         }
+        */
       } else if (!ch->desc && ch->char_specials.timer > 15) {
         sprintf(buf, "%s removed from game (no link).", GET_CHAR_NAME(ch));
         mudlog(buf, ch, LOG_CONNLOG, TRUE);
@@ -544,8 +547,10 @@ void process_regeneration(int half_hour)
     if (world[i].icesheet[0])
       if (!--world[i].icesheet[1])
         world[i].icesheet[0] = 0;
-    if (world[i].background[0] && world[i].background[1] >= 14)
-      world[i].background[0]--;
+    
+    // Decrement player combat and player death auras.
+    if (world[i].background[CURRENT_BACKGROUND_COUNT] && world[i].background[CURRENT_BACKGROUND_TYPE] >= AURA_BLOOD_MAGIC)
+      world[i].background[CURRENT_BACKGROUND_COUNT]--;
   }
 }
 
@@ -1132,7 +1137,7 @@ void misc_update(void)
           case DRUG_BURN:
             sprintf(buf, "You suddenly feel very intoxicated.\r\n");
             GET_DRUG_AFFECT(ch) = GET_DRUG_DOSE(ch) = GET_DRUG_DURATION(ch) = 0;
-            GET_COND(ch, COND_DRUNK) = 24;
+            GET_COND(ch, COND_DRUNK) = FOOD_DRINK_MAX;
             break;
           case DRUG_CRAM:
             sprintf(buf, "Your body feels alive with energy.\r\n");

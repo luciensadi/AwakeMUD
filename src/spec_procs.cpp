@@ -608,8 +608,9 @@ SPECIAL(teacher)
     return FALSE;
 
   if (teachers[ind].type != NEWBIE && PLR_FLAGGED(ch, PLR_NEWBIE)) {
-    sprintf(buf, "You're not quite ready for that yet! Come back when you've earned at least %d karma.", NEWBIE_KARMA_THRESHOLD + 1);
-    do_say(master, buf, 0, 0);
+    sprintf(arg, "%s You're not quite ready yet!", GET_CHAR_NAME(ch));
+    do_say(master, arg, 0, SCMD_SAYTO);
+    send_to_char(ch, "(^mOOC^n: You can't raise your skills until you've earned at least %d karma.)\r\n", NEWBIE_KARMA_THRESHOLD + 1);
     return TRUE;
   }
 
@@ -918,8 +919,9 @@ SPECIAL(trainer)
     return FALSE;
 
   if (!trainers[ind].is_newbie && PLR_FLAGGED(ch, PLR_NEWBIE)) {
-    sprintf(arg, "%s You are not quite ready yet! Come back when you've earned at least %d karma.", GET_CHAR_NAME(ch), NEWBIE_KARMA_THRESHOLD);
+    sprintf(arg, "%s You're not quite ready yet!", GET_CHAR_NAME(ch));
     do_say(trainer, arg, 0, SCMD_SAYTO);
+    send_to_char(ch, "(^mOOC^n: You can't raise your stats until you've earned at least %d karma.)\r\n", NEWBIE_KARMA_THRESHOLD + 1);
     return TRUE;
   }
 
@@ -1202,8 +1204,9 @@ SPECIAL(adept_trainer)
     mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return TRUE;
   } else if (!adepts[ind].is_newbie && PLR_FLAGGED(ch, PLR_NEWBIE)) {
-    sprintf(arg, "%s You're not quite ready yet! Come back when you've earned at least %d karma.", GET_CHAR_NAME(ch), NEWBIE_KARMA_THRESHOLD + 1);
+    sprintf(arg, "%s You're not quite ready yet!", GET_CHAR_NAME(ch));
     do_say(trainer, arg, 0, SCMD_SAYTO);
+    send_to_char(ch, "(^mOOC^n: You can't train until you've earned at least %d karma.)\r\n", NEWBIE_KARMA_THRESHOLD + 1);
     return TRUE;
   }
   
@@ -3022,7 +3025,7 @@ SPECIAL(neophyte_entrance)
   if ((CMD_IS("south") || CMD_IS("enter")) && !PLR_FLAGGED(ch, PLR_NEWBIE)
       && !(IS_SENATOR(ch))) {
     send_to_char("The barrier prevents you from entering the guild.\r\n", ch);
-    send_to_char("NOTE: You may only visit the training grounds until you have received 26 karma.\r\n", ch);
+    send_to_char(ch, "(^mOOC^n: You may only visit the training grounds until you have received %d karma.)\r\n", NEWBIE_KARMA_THRESHOLD);
     act("$n stumbles into the barrier covering the entrance.", FALSE, ch, 0, 0, TO_ROOM);
     return TRUE;
   }
