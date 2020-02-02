@@ -100,9 +100,9 @@ Material:	fabric
 	LegalCode:	0
 	LegalPermit:	0
 	StreetIndex:	1.00
-SourceBook:	SR3 p283-284
 [VALUES]
 	Val4:	4
+SourceBook:	SR3 p283-284
 BREAK
 #80704
 Keywords:	elegant tres chic shirt
@@ -156,9 +156,9 @@ Material:	fabric
 	LegalCode:	0
 	LegalPermit:	0
 	StreetIndex:	1.00
-SourceBook:	SR3 p283-284
 [VALUES]
 	Val4:	4
+SourceBook:	SR3 p283-284
 BREAK
 #80706
 Keywords:	shoes
@@ -170,7 +170,7 @@ Footwear. They come in a plethora of styles and colors.~
 Type:	Worn
 WearFlags:	1000001
 ExtraFlags:	0
-AffFlags:	0 
+AffFlags:	1
 Material:	leather
 [POINTS]
 	Weight:	0.50
@@ -865,7 +865,7 @@ protect the foot and ankles. Full height boots protect all the way to the knee.~
 Type:	Worn
 WearFlags:	1000001
 ExtraFlags:	0
-AffFlags:	0 
+AffFlags:	1
 Material:	leather
 [POINTS]
 	Weight:	1.00
@@ -892,7 +892,7 @@ protect the foot and ankles. Full height boots protect all the way to the knee.~
 Type:	Worn
 WearFlags:	1000001
 ExtraFlags:	0
-AffFlags:	0 
+AffFlags:	1
 Material:	leather
 [POINTS]
 	Weight:	1.50
@@ -920,7 +920,7 @@ protect the foot and ankles. Full height boots protect all the way to the knee.~
 Type:	Worn
 WearFlags:	1000001
 ExtraFlags:	0
-AffFlags:	0 
+AffFlags:	1
 Material:	leather
 [POINTS]
 	Weight:	1.75
@@ -959,11 +959,11 @@ Material:	plastic
 	LegalCode:	0
 	LegalPermit:	0
 	StreetIndex:	0.75
+[VALUES]
+	Val7:	12
 [AFFECT 0]
 	Location:	Impact
 	Modifier:	1
-[VALUES]
-	Val7:	12
 BREAK
 #80732
 Keywords:	shirt form fitting body armor
@@ -1462,5 +1462,646 @@ Material:	adv. plastics
 	Location:	Impact
 	Modifier:	1
 SourceBook:	SR3 p284
+BREAK
+#80748
+Keywords:	armante dallas line cross-buttoned buttoned shirt old west
+Name:	an Armante 'Dallas' cross-buttoned shirt
+RoomDesc:$
+An Old West-style cross-buttoned shirt with an Armante label is lying here.~
+LookDesc:$
+According to the press release, the unveiling of this line represented a
+"return to our roots." The fact that Armante's roots are divided among five
+continents and thirty companies didn't seem to factor into the
+nineteenth-century Southwestern American look and feel of the clothes. A
+strong seller in the CAS, this line has also proven popular among Aztlan and
+CalFree executives. 
+~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	600
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val5:	75
+	Val7:	14
+	Val8:	6
+SourceBook:	CC p46
+BREAK
+#80749
+Keywords:	armante dallas line double breasted jacket old west
+Name:	an Armante 'Dallas' double breasted jacket
+RoomDesc:$
+An Old West-style double breasted jacket with an Armante label is lying here.~
+LookDesc:$
+According to the press release, the unveiling of this line represented a
+"return to our roots." The fact that Armante's roots are divided among five
+continents and thirty companies didn't seem to factor into the
+nineteenth-century Southwestern American look and feel of the clothes. A
+strong seller in the CAS, this line has also proven popular among Aztlan and
+CalFree executives. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.50
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val0:	1
+	Val4:	2
+	Val5:	200
+	Val6:	200
+	Val7:	12
+	Val8:	6
+SourceBook:	CC p46
+BREAK
+#80750
+Keywords:	armante dallas line short jacket old west
+Name:	an Armante 'Dallas' short jacket
+RoomDesc:$
+An Old West-style short jacket with an Armante label is lying here.~
+LookDesc:$
+According to the press release, the unveiling of this line represented a
+"return to our roots." The fact that Armante's roots are divided among five
+continents and thirty companies didn't seem to factor into the
+nineteenth-century Southwestern American look and feel of the clothes. A
+strong seller in the CAS, this line has also proven popular among Aztlan and
+CalFree executives. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	600
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val0:	1
+	Val4:	2
+	Val5:	100
+	Val6:	50
+	Val7:	13
+	Val8:	6
+SourceBook:	CC p46
+BREAK
+#80751
+Keywords:	armante dallas line slacks old west
+Name:	a pair of Armante 'Dallas' slacks
+RoomDesc:$
+Some Old West-style slacks with an Armante label are lying here.~
+LookDesc:$
+According to the press release, the unveiling of this line represented a
+"return to our roots." The fact that Armante's roots are divided among five
+continents and thirty companies didn't seem to factor into the
+nineteenth-century Southwestern American look and feel of the clothes. A
+strong seller in the CAS, this line has also proven popular among Aztlan and
+CalFree executives. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	400
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val4:	2
+	Val5:	75
+	Val6:	25
+	Val7:	14
+	Val8:	6
+SourceBook:	CC p46
+BREAK
+#80752
+Keywords:	armante dallas vest old west
+Name:	an Armante 'Dallas' vest
+RoomDesc:$
+An Old West-style vest with an Armante label is lying here.~
+LookDesc:$
+According to the press release, the unveiling of this line represented a
+"return to our roots." The fact that Armante's roots are divided among five
+continents and thirty companies didn't seem to factor into the
+nineteenth-century Southwestern American look and feel of the clothes. A
+strong seller in the CAS, this line has also proven popular among Aztlan and
+CalFree executives. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	250
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val5:	50
+	Val6:	25
+	Val7:	14
+	Val8:	6
+SourceBook:	CC p46
+BREAK
+#80753
+Keywords:	armante executive suit tuxedo jacket
+Name:	an Armante 'Executive Suit' tuxedo jacket
+RoomDesc:$
+An 'Executive Suite' tuxedo jacket has been left here.~
+LookDesc:$
+Armante brings style for the tuxedo into the second half of the twenty-first
+century. This line features the high side-vents, split cuffs and double collar
+favored by Japanese senior executives. The fabric is firm without appearing
+stiff, and provides significant protection. Though designed for men, a number
+of female executives have begun wearing the line in a not-so-subtle power
+play. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	600
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val0:	1
+	Val4:	2
+	Val5:	150
+	Val6:	50
+	Val7:	12
+	Val8:	7
+SourceBook:	CC p46
+BREAK
+#80754
+Keywords:	armante executive suit tuxedo pants
+Name:	a pair of Armante 'Executive Suite' tuxedo pants
+RoomDesc:$
+A pair of 'Executive Suite' tuxedo pants have been left here.~
+LookDesc:$
+Armante brings style for the tuxedo into the second half of the twenty-first
+century. This line features the high side-vents, split cuffs and double collar
+favored by Japanese senior executives. The fabric is firm without appearing
+stiff, and provides significant protection. Though designed for men, a number
+of female executives have begun wearing the line in a not-so-subtle power
+play. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	500
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val4:	2
+	Val5:	150
+	Val6:	50
+	Val7:	12
+	Val8:	7
+SourceBook:	CC p46
+BREAK
+#80755
+Keywords:	armante london fog count cloak black burgundy lining
+Name:	an Armante 'Count' cloak
+RoomDesc:$
+A stylish black cloak with burgundy lining is lying here.~
+LookDesc:$
+This knee-lenght, over-the-shoulder cloak is clasped with sterling silver at
+the throat. It remains a favorite, particularly for its sturdy black wool
+construction, burgundy sateen lining and invisible layer of Kevlar II.  
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	600
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val5:	2
+	Val6:	2
+	Val7:	12
+SourceBook:	CC p46
+BREAK
+#80756
+Keywords:	armante london fog chairman great coat
+Name:	an Armante 'Chairman' great coat
+RoomDesc:$
+A fashionable great coat has been left here.~
+LookDesc:$
+An official-looking great coat, the Chairman incorporates a nonporous polymer
+skin that protects against material hazards. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	5000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val0:	2
+	Val4:	8
+	Val5:	2
+	Val6:	2
+	Val7:	11
+SourceBook:	CC p46
+BREAK
+#80757
+Keywords:	armante london fog majesty overcoat richly decorated
+Name:	an Armante 'Majesty' overcoat
+RoomDesc:$
+A richly decorated overcoat has been left here.~
+LookDesc:$
+An overcoat richly decorated in ruffles and piping, the Majesty is constructed
+from fire-resistant and non-conductive materials. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	3000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val0:	2
+	Val4:	8
+	Val5:	2
+	Val6:	2
+	Val7:	11
+SourceBook:	CC p46
+BREAK
+#80758
+Keywords:	armante london fog merlin cloak hooded mystical patterns
+Name:	an Armante 'Merlin' cloak
+RoomDesc:$
+A hooded cloak with subtle mystical patterns has been left here.~
+LookDesc:$
+With a deep, voluminous hood, this floor-length cloak incorporates "mystical"
+emblems and patterns, many of which are commonly employed by British druids. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	1500
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val4:	4
+	Val5:	2
+	Val6:	2
+	Val7:	12
+SourceBook:	CC p46
+BREAK
+#80759
+Keywords:	armante london fog professional overcoat plain
+Name:	an Armante 'Majesty' overcoat
+RoomDesc:$
+A rather plain overcoat has been left here.~
+LookDesc:$
+A stout and rather plain overcoat, the Professional offers no special design
+qualities. Many actually prefer the lack of adronments, though its numerous
+and deep pockets are also popular. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val0:	2
+	Val4:	8
+	Val5:	2
+	Val6:	2
+	Val7:	11
+SourceBook:	CC p46
+BREAK
+#80760
+Keywords:	armante starlight evening gown cloth-of-gold diamonds
+Name:	an Armante 'Starlight' evening gown
+RoomDesc:$
+A sparkling evening gown has been left here.~
+LookDesc:$
+This evening gown line enhances the striking cloth-of-gold effect by
+sprinkling brilliant faux diamonds across the dress in a way that provides
+considerable protection. More traditional in style, these include full-length
+dresses that offer protection to the shoulders, back and legs. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.75
+	Barrier:	6
+	Cost:	4500
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val5:	1
+	Val6:	1
+	Val7:	13
+SourceBook:	CC p46
+BREAK
+#80761
+Keywords:	armante venetian dress renaissance
+Name:	an Armante 'Venetian' dress
+RoomDesc:$
+A Renaissance-styled dress is lying here.~
+LookDesc:$
+These evening gowns and cocktail dresses bring back a look popular in the
+Renaissance, when threads of gold were woven into the fabric. Using the
+patented Crystle weaves, the fabric seems to shimmer and even come alive.
+Though the gowns come in many styles, almost all have low-cut bodices and are
+backless. The length of dress varies between very short and floor length. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	3500
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val5:	1
+	Val7:	14
+SourceBook:	CC p46-48
+BREAK
+#80762
+Keywords:	armante ancien shawl fashionable
+Name:	an Armante 'Ancien' shawl
+RoomDesc:$
+A fashionable shawl is lying here.~
+LookDesc:$
+The success of the Venetian Line gave rise to accessories that also include
+the gold-weave technology. The most successful of these lines, the Ancien
+deisgns, feature shawls and scarves that offer ballistic protection to the
+wearer's neck, back and shoulders. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.30
+	Barrier:	4
+	Cost:	750
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val5:	1
+	Val7:	14
+SourceBook:	CC p46-48
+BREAK
+#80763
+Keywords:	mortimer london greatcoat coat classic
+Name:	a Mortimer 'Greatcoat'
+RoomDesc:$
+A classic greatcoat is lying here.~
+LookDesc:$
+A classic design that placed Mortimer on the map, these heavy, waterproofed
+coats are reminiscent of twentieth-century naval greatcoats. Though apparently
+thick with wool and lined with silk, most of the greatcoat's weight comes from
+heavy ballistic fabric and semi-rigid plates disguised by the cut of the coat.
+Greatcoats are waterproofed and chemically resistant to the "hard rain" common
+in many urban sprawls. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	2000
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val4:	6
+	Val5:	4
+	Val6:	2
+	Val7:	11
+SourceBook:	CC p48
+BREAK
+#80764
+Keywords:	mortimer london ulysses coat hooded
+Name:	A Mortimer 'Ulysses' coat
+RoomDesc:$
+A hooded raincoat is lying here.~
+LookDesc:$
+Ulysses coats are for those whose life requires them to be outdoors in the
+rain for hours or even days on end. Even more water- and chemical-resistant
+than the Greatcoat line, these hooded coats exchange the heavy, warm lining
+for liquid-proof plastiweaves. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	4.00
+	Barrier:	6
+	Cost:	4000
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val4:	6
+	Val5:	4
+	Val6:	2
+	Val7:	10
+SourceBook:	CC p48
+BREAK
+#80765
+Keywords:	mortimer london crimson sky aviator jacket leather
+Name:	A Mortimer 'Crimson Sky' aviator jacket
+RoomDesc:$
+A leather aviator jacket is lying here.~
+LookDesc:$
+Lined with insulating thermal weaves and ballistic nylon mesh, this series of
+suave leather aviator jackets has become a favorite of certain go-gangs, who
+invariably paint the back with their symbol and colors. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	1500
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val4:	4
+	Val5:	2
+	Val6:	2
+	Val7:	12
+SourceBook:	CC p48
+BREAK
+#80766
+Keywords:	mortimer london summit parka
+Name:	a Mortimer 'Summit' parka
+RoomDesc:$
+A heavy winter parka is lying here.~
+LookDesc:$
+This line of winter parkas and outdoor coats is a hot seller in far northern
+and mountainous climates. In addition to ballistic protection and thermal
+layering, the Summit Line's major selling point is that each coat features a
+built-in attachment for a concealable holster for weapons as large as a
+submachine gun. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	2500
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+	StreetIndex:	0.75
+[VALUES]
+	Val0:	1
+	Val4:	6
+	Val5:	3
+	Val6:	2
+	Val7:	12
+SourceBook:	CC p48
 BREAK
 END
