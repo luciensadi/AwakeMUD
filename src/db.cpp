@@ -1122,6 +1122,15 @@ void parse_room(File &fl, long nr)
       sprintf(field, "%s/HiddenRating", sect);
       dir->hidden = data.GetInt(field, 0);
       
+      sprintf(field, "%s/GoIntoSecondPerson", sect);
+      dir->go_into_secondperson = str_dup(data.GetString(field, NULL));
+      
+      sprintf(field, "%s/GoIntoThirdPerson", sect);
+      dir->go_into_thirdperson = str_dup(data.GetString(field, NULL));
+      
+      sprintf(field, "%s/ComeOutOfThirdPerson", sect);
+      dir->come_out_of_thirdperson = str_dup(data.GetString(field, NULL));
+      
 #ifdef USE_DEBUG_CANARIES
       dir->canary = CANARY_VALUE;
 #endif

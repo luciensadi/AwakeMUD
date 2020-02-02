@@ -30,6 +30,7 @@
 extern class memoryClass *Mem;
 
 #define ROOM d->edit_room
+#define DOOR d->edit_room->dir_option[d->edit_number2]
 
 extern sh_int r_mortal_start_room;
 extern sh_int r_immort_start_room;
@@ -141,7 +142,6 @@ const char *render_door_type_string(struct room_direction_data *door) {
 void redit_disp_exit_menu(struct descriptor_data * d)
 {
   CLS(CH);
-#define DOOR d->edit_room->dir_option[d->edit_number2]
   /* if exit doesn't exist, alloc/create it and clear it*/
   if(!DOOR)
   {
@@ -174,9 +174,16 @@ void redit_disp_exit_menu(struct descriptor_data * d)
 
 
   send_to_char(CH,       "9) Hidden Rating: %s%d%s\r\n"
-               "a) Purge exit.\r\n"
-               "Enter choice, 0 to quit:",
-               CCCYN(CH, C_CMP), DOOR->hidden, CCNRM(CH, C_CMP));
+               "a) Leaving-through-this-exit second-person custom message: %s%s%s\r\n"
+               "b) Leaving-through-this-exit third-person custom message: %s%s%s\r\n"
+               "c) Entering-from-this-exit third-person custom message: %s%s%s\r\n"
+               "\r\n^rx) Purge exit.^n\r\n"
+               "0) Quit\r\n"
+               "Enter choice (0 to quit):",
+               CCCYN(CH, C_CMP), DOOR->hidden, CCNRM(CH, C_CMP),
+               CCCYN(CH, C_CMP), DOOR->go_into_secondperson, CCNRM(CH, C_CMP),
+               CCCYN(CH, C_CMP), DOOR->go_into_thirdperson, CCNRM(CH, C_CMP),
+               CCCYN(CH, C_CMP), DOOR->come_out_of_thirdperson, CCNRM(CH, C_CMP));
   d->edit_mode = REDIT_EXIT_MENU;
 }
 
@@ -1025,13 +1032,25 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       send_to_char("Enter hidden rating of the exit: ", CH);
       break;
     case 'a':
+        d->edit_mode = REDIT_EXIT_ENTRY_STRING_SECONDPERSON;
+        send_to_char("Enter the custom second-person string that displays when your character leaves through this exit. Make sure to include the direction in the string. Ex: 'You get on your hands and knees and crawl into the eastern shaft.' If you want no custom string, just hit enter now.\r\n", d->character);
+        break;
+    case 'b':
+        d->edit_mode = REDIT_EXIT_ENTRY_STRING_THIRDPERSON;
+        send_to_char("Enter the custom third-person string that displays when a character leaves through this exit. Make sure to include the direction in the string. Use '$n' for their name, '$s' for his/her/its, '$m' for him/her/it. Example: '$n gets on $s hands and knees and crawls into the eastern shaft.' If you want no custom string, just hit enter now.\r\n", d->character);
+        break;
+    case 'c':
+        d->edit_mode = REDIT_EXIT_EXIT_STRING_THIRDPERSON;
+        send_to_char("Enter the custom third-person string that displays when a character enters through this exit. Make sure to include the direction in the string. Use '$n' for their name, '$s' for his/her/its, '$m' for him/her/it. Example: '$n crawls on $s hands and knees out of the eastern shaft.' If you want no custom string, just hit enter now.\r\n", d->character);
+      break;
+    case 'x':
       /* delete exit */
-      if (d->edit_room->dir_option[d->edit_number2]->keyword)
-        delete [] d->edit_room->dir_option[d->edit_number2]->keyword;
-      if (d->edit_room->dir_option[d->edit_number2]->general_description)
-        delete [] d->edit_room->dir_option[d->edit_number2]->general_description;
-      delete d->edit_room->dir_option[d->edit_number2];
-      d->edit_room->dir_option[d->edit_number2] = NULL;
+      DELETE_ARRAY_IF_EXTANT(DOOR->keyword);
+      DELETE_ARRAY_IF_EXTANT(DOOR->general_description);
+      DELETE_ARRAY_IF_EXTANT(DOOR->go_into_thirdperson);
+      DELETE_ARRAY_IF_EXTANT(DOOR->go_into_secondperson);
+      DELETE_ARRAY_IF_EXTANT(DOOR->come_out_of_thirdperson);
+      DELETE_AND_NULL(DOOR);
       redit_disp_menu(d);
       break;
     default:
@@ -1044,7 +1063,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     if (number < 0)
       send_to_char("Invalid choice!\r\nExit to room number:", d->character);
     else {
-      d->edit_room->dir_option[d->edit_number2]->to_room_vnum = number;
+      DOOR->to_room_vnum = number;
       redit_disp_exit_menu(d);
     }
     break;
@@ -1052,14 +1071,13 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     /* we should NEVER get here */
     break;
   case REDIT_EXIT_KEYWORD:
-    if (d->edit_room->dir_option[d->edit_number2]->keyword)
-      delete [] d->edit_room->dir_option[d->edit_number2]->keyword;
-    d->edit_room->dir_option[d->edit_number2]->keyword = str_dup(arg);
+    DELETE_ARRAY_IF_EXTANT(DOOR->keyword);
+    DOOR->keyword = str_dup(arg);
     redit_disp_exit_menu(d);
     break;
   case REDIT_EXIT_KEY:
     number = atoi(arg);
-    d->edit_room->dir_option[d->edit_number2]->key = number;
+    DOOR->key = number;
     redit_disp_exit_menu(d);
     break;
   case REDIT_EXIT_KEY_LEV:
@@ -1092,6 +1110,36 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     } else
       redit_disp_barrier_menu(d);
     break;
+  case REDIT_EXIT_ENTRY_STRING_SECONDPERSON:
+    // What's displayed to you when you walk into the exit.
+    DELETE_ARRAY_IF_EXTANT(DOOR->go_into_secondperson);
+    if (*arg) {
+      strcpy(buf, arg);
+      delete_doubledollar(buf);
+      DOOR->go_into_secondperson = str_dup(buf);
+    }
+    redit_disp_exit_menu(d);
+    break;
+  case REDIT_EXIT_ENTRY_STRING_THIRDPERSON:
+    // What's displayed to others when you walk into the exit.
+    DELETE_ARRAY_IF_EXTANT(DOOR->go_into_thirdperson);
+    if (arg && *arg) {
+      strcpy(buf, arg);
+      delete_doubledollar(buf);
+      DOOR->go_into_thirdperson = str_dup(buf);
+    }
+    redit_disp_exit_menu(d);
+  break;
+  case REDIT_EXIT_EXIT_STRING_THIRDPERSON:
+    // What's displayed when you walk out of the exit into the room.
+    DELETE_ARRAY_IF_EXTANT(DOOR->come_out_of_thirdperson);
+    if (*arg) {
+      strcpy(buf, arg);
+      delete_doubledollar(buf);
+      DOOR->come_out_of_thirdperson = str_dup(buf);
+    }
+    redit_disp_exit_menu(d);
+    break;
 
   case REDIT_LIBRARY_RATING:
     number = atoi(arg);
@@ -1112,15 +1160,15 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       /* doors are a bit idiotic, don't you think? :) */
       /* yep -LS */
       if (number == 0)
-        d->edit_room->dir_option[d->edit_number2]->exit_info = 0;
+        DOOR->exit_info = 0;
       else if (number == 1)
-        d->edit_room->dir_option[d->edit_number2]->exit_info = EX_ISDOOR;
+        DOOR->exit_info = EX_ISDOOR;
       else if (number == 2)
-        d->edit_room->dir_option[d->edit_number2]->exit_info = EX_ISDOOR | EX_PICKPROOF;
+        DOOR->exit_info = EX_ISDOOR | EX_PICKPROOF;
       else if (number == 3)
-        d->edit_room->dir_option[d->edit_number2]->exit_info = EX_ISDOOR | EX_ASTRALLY_WARDED;
+        DOOR->exit_info = EX_ISDOOR | EX_ASTRALLY_WARDED;
       else if (number == 4)
-        d->edit_room->dir_option[d->edit_number2]->exit_info = EX_ISDOOR | EX_PICKPROOF | EX_ASTRALLY_WARDED;
+        DOOR->exit_info = EX_ISDOOR | EX_PICKPROOF | EX_ASTRALLY_WARDED;
       /* jump out to menu */
       redit_disp_exit_menu(d);
     }
@@ -1320,6 +1368,14 @@ void write_world_to_disk(int vnum)
 
           if (ptr->hidden > 0)
             fprintf(fp, "\tHiddenRating:\t%d\n", ptr->hidden);
+          
+          // Add the new custom entry / exit strings.
+          if (ptr->go_into_secondperson)
+            fprintf(fp, "\tGoIntoSecondPerson:$\n%s~\n", ptr->go_into_secondperson);
+          if (ptr->go_into_thirdperson)
+            fprintf(fp, "\tGoIntoThirdPerson:$\n%s~\n", ptr->go_into_thirdperson);
+          if (ptr->come_out_of_thirdperson)
+            fprintf(fp, "\tComeOutOfThirdPerson:$\n%s~\n", ptr->come_out_of_thirdperson);
         }
       }
       if (RM.ex_description) {
