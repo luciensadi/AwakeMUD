@@ -757,6 +757,10 @@ void perform_group_gain(struct char_data * ch, int base, struct char_data * vict
 {
   int share;
   
+  // Short-circuit: Auth? No karma.
+  if (PLR_FLAGGED(ch, PLR_AUTH))
+    return;
+  
   share = MIN(max_exp_gain, MAX(1, base));
   if (!IS_NPC(ch))
     share = MIN(base, (PLR_FLAGGED(ch, PLR_NEWBIE) ? 20 : GET_TKE(ch) * 2));
@@ -2428,23 +2432,25 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
         extern struct char_data *mob_proto;
         mob_proto[GET_MOB_RNUM(victim)].mob_specials.count_death++;
       }
-      if (IS_AFFECTED(ch, AFF_GROUP)) {
-        group_gain(ch, victim);
-      } else {
-        exp = calc_karma(ch, victim);
-        exp = gain_exp(ch, exp, 0);
-        if ( exp >= 100 || access_level(ch, LVL_BUILDER) ) {
-          sprintf(buf,"%s gains %.2f karma from killing %s.",
-                  IS_NPC(ch) ? GET_NAME(ch) : GET_CHAR_NAME(ch),
-                  (double)exp/100.0, GET_NAME(victim));
-          mudlog(buf, ch, LOG_DEATHLOG, TRUE);
+      if (PLR_FLAGGED(ch, PLR_AUTH)) {
+        if (IS_AFFECTED(ch, AFF_GROUP)) {
+          group_gain(ch, victim);
+        } else {
+          exp = calc_karma(ch, victim);
+          exp = gain_exp(ch, exp, 0);
+          if ( exp >= 100 || access_level(ch, LVL_BUILDER) ) {
+            sprintf(buf,"%s gains %.2f karma from killing %s.",
+                    IS_NPC(ch) ? GET_NAME(ch) : GET_CHAR_NAME(ch),
+                    (double)exp/100.0, GET_NAME(victim));
+            mudlog(buf, ch, LOG_DEATHLOG, TRUE);
+          }
+          if ( IS_NPC( victim ) ) {
+            extern struct char_data *mob_proto;
+            mob_proto[GET_MOB_RNUM(victim)].mob_specials.value_death_karma += exp;
+          }
+          
+          send_to_char(ch, "You receive %0.2f karma.\r\n", ((float)exp / 100));
         }
-        if ( IS_NPC( victim ) ) {
-          extern struct char_data *mob_proto;
-          mob_proto[GET_MOB_RNUM(victim)].mob_specials.value_death_karma += exp;
-        }
-        
-        send_to_char(ch, "You receive %0.2f karma.\r\n", ((float)exp / 100));
       }
     }
     if (!IS_NPC(victim)) {

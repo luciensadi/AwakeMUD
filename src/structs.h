@@ -14,6 +14,7 @@
 #include "utils.h"
 #include "playergroup_classes.h"
 #include "protocol.h"
+#include "chargen.h"
 
 #define SPECIAL(name) \
    int (name)(struct char_data *ch, void *me, int cmd, char *argument)

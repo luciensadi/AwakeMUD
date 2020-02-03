@@ -3873,7 +3873,7 @@ ACMD(do_watch)
 ACMD(do_trade)
 {
   skip_spaces(&argument);
-  if (PLR_FLAGGED(ch, PLR_NEWBIE))
+  if (PLR_FLAGGED(ch, PLR_NEWBIE) || PLR_FLAGGED(ch, PLR_AUTH))
     send_to_char("You are not ready to use this command.\r\n", ch);
   else if (is_abbrev(argument, "karma")) {
     if (GET_KARMA(ch) < 100)
