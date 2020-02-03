@@ -2464,21 +2464,26 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
   return 0;
 }
 
-bool has_ammo(struct char_data *ch, struct obj_data *wielded)
-{
+bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduct_one_round) {
   int i;
   bool found = FALSE;
   struct obj_data *obj, *cont;
   
+  if (!ch || !wielded) {
+    mudlog("SYSERR: process_has_ammo received null value. Returning TRUE.", ch, LOG_SYSLOG, TRUE);
+    return TRUE;
+  }
   
-  if (wielded && GET_OBJ_TYPE(wielded) == ITEM_FIREWEAPON)
-  {
+  // Fireweapon code.
+  if (GET_OBJ_TYPE(wielded) == ITEM_FIREWEAPON) {
     for (i = 0; i < NUM_WEARS; i++) {
       if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_QUIVER)
         for (obj = GET_EQ(ch, i)->contains; obj; obj = obj->next_content)
           if (GET_OBJ_TYPE(obj) == ITEM_MISSILE && GET_OBJ_VAL(obj, 0) == GET_OBJ_VAL(wielded, 5)) {
-            GET_OBJ_VAL(GET_EQ(ch, i), 2)--;
-            extract_obj(obj);
+            if (deduct_one_round) {
+              GET_OBJ_VAL(GET_EQ(ch, i), 2)--;
+              extract_obj(obj);
+            }
             found = TRUE;
           }
       if (GET_EQ(ch, i) && GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_WORN)
@@ -2486,11 +2491,13 @@ bool has_ammo(struct char_data *ch, struct obj_data *wielded)
           if (GET_OBJ_TYPE(cont) == ITEM_QUIVER)
             for (obj = cont->contains; obj; obj = obj->next_content)
               if (GET_OBJ_TYPE(obj) == ITEM_MISSILE && GET_OBJ_VAL(obj, 0) == GET_OBJ_VAL(wielded, 5)) {
-                GET_OBJ_VAL(cont, 2)--;
-                extract_obj(obj);
+                if (deduct_one_round) {
+                  GET_OBJ_VAL(cont, 2)--;
+                  extract_obj(obj);
+                }
                 found = TRUE;
               }
-      
+      // Was there really no better way to do this whole block?
     }
     if (found)
       return TRUE;
@@ -2504,49 +2511,79 @@ bool has_ammo(struct char_data *ch, struct obj_data *wielded)
         return FALSE;
       }
     }
-  }
-  if (wielded && (GET_OBJ_VAL(wielded, 5) > 0))
+  } // End fireweapon code.
+  
+  // Check for guns. We can get here either with wielded or mounted guns.
+  if (GET_OBJ_TYPE(wielded) == ITEM_WEAPON && IS_GUN(GET_WEAPON_ATTACK_TYPE(wielded)))
   {
-    if (IS_NPC(ch)) {
-      if (GET_OBJ_VAL(wielded, 6) > 0) {
-        GET_OBJ_VAL(wielded, 6)--;
-        if (wielded->contains)
-          GET_OBJ_VAL(wielded->contains, 9)--;
+    // First, check if they're manning a turret-- if they are, special handling is required.
+    if (AFF_FLAGGED(ch, AFF_MANNING))  {
+      // NPCs don't care about ammo in their mounts. No deduction needed here.
+      if (IS_NPC(ch))
         return TRUE;
-      } else
-        if (!attempt_reload(ch, wielded->worn_on))
-          switch_weapons(ch, wielded->worn_on);
-      return FALSE;
-    } else {
-      if (AFF_FLAGGED(ch, AFF_MANNING)) {
-        // NPCs don't care about ammo in their mounts.
-        if (IS_NPC(ch))
-          return TRUE;
-        
-        for (struct obj_data *obj = wielded->in_obj->contains; obj; obj = obj->next_content) {
-          if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
-            if (GET_OBJ_VAL(obj, 0) > 0) {
-              GET_OBJ_VAL(obj, 0)--;
-              return TRUE;
-            } else {
-              send_to_char("*Click*\r\n", ch);
-              return FALSE;
-            }
+      
+      // It's a player. Look through their gun and locate any ammo boxes in there.
+      for (struct obj_data *obj = wielded->in_obj->contains; obj; obj = obj->next_content) {
+        if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
+          // It's an ammo box. If it also has enough ammo for us, return true.
+          if (GET_AMMOBOX_QUANTITY(obj) > 0) {
+            if (deduct_one_round)
+              GET_AMMOBOX_QUANTITY(obj)--;
+            return TRUE;
           }
         }
-        send_to_char("*Click*\r\n", ch);
-        return FALSE;
-      } else if (wielded->contains && GET_OBJ_VAL(wielded->contains, 9) > 0) {
-        if (wielded->contains)
+      }
+      
+      // No ammo boxes found, or the ones that were found were empty. Click it.
+      send_to_char("*Click*\r\n", ch);
+      return FALSE;
+    } // End manned checks.
+    
+    // Check for a magazine.
+    if (wielded->contains) {
+      // Loaded? Good to go.
+      if (GET_MAGAZINE_AMMO_COUNT(wielded->contains)) {
+        // Deduct one round if required.
+        if (deduct_one_round)
           GET_MAGAZINE_AMMO_COUNT(wielded->contains)--;
         return TRUE;
-      } else {
-        send_to_char("*Click*\r\n", ch);
-        return FALSE;
       }
-    }
-  } else
-    return TRUE;
+      
+      // Empty magazine. Send the empty-gun click.
+      send_to_char("*Click*\r\n", ch);
+
+      // NPCs try to reload, and if they fail they switch weapons.
+      if (IS_NPC(ch) && !attempt_reload(ch, wielded->worn_on))
+        switch_weapons(ch, wielded->worn_on);
+      
+      // Regardless-- no ammo in the current weapon means we lose our turn.
+      return FALSE;
+    } // End magazine checks.
+    
+    // Check for a non-ammo-requiring gun. No deduction needed here.
+    if (GET_WEAPON_MAX_AMMO(wielded) < 0)
+      return TRUE;
+    
+    // The weapon requires a magazine and doesn't have one.
+    send_to_char("*Click*\r\n", ch);
+    return FALSE;
+  }
+  
+  // Error state. Needs followup.
+  sprintf(buf, "Got to end of process_has_ammo (%s, %s (%ld)) with no result. Returning true.",
+          GET_CHAR_NAME(ch), GET_OBJ_NAME(wielded), GET_OBJ_VNUM(wielded));
+  mudlog(buf, ch, LOG_SYSLOG, TRUE);
+  return TRUE;
+}
+
+bool has_ammo(struct char_data *ch, struct obj_data *wielded) {
+  // Compatibility wrapper: Any call to has_ammo requires ammo deduction.
+  return process_has_ammo(ch, wielded, TRUE);
+}
+
+bool has_ammo_no_deduct(struct char_data *ch, struct obj_data *wielded) {
+  // Calls process_has_ammo with deduction turned off.
+  return process_has_ammo(ch, wielded, FALSE);
 }
 
 int check_smartlink(struct char_data *ch, struct obj_data *weapon)
@@ -3306,7 +3343,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     return;
   }
   
-  // Precondition: If you're asleep, paralyzed, or out of ammo, you don't get to fight.
+  // Precondition: If you're asleep, paralyzed, or out of ammo, you don't get to fight. Note the use of the deducting has_ammo here.
   if (!AWAKE(att->ch) || GET_QUI(att->ch) <= 0 || !has_ammo(att->ch, att->weapon))
     return;
   
@@ -3454,7 +3491,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       
       // Precondition: If you're using a heavy weapon, you must be strong enough to wield it, or else be using a gyro. CC p99
       if (!att->gyro && !IS_NPC(att->ch)
-          && (GET_OBJ_VAL(att->weapon, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(att->weapon, 4) <= SKILL_ASSAULT_CANNON)
+          && (GET_WEAPON_SKILL(att->weapon) >= SKILL_MACHINE_GUNS && GET_WEAPON_SKILL(att->weapon) <= SKILL_ASSAULT_CANNON)
           && (GET_STR(att->ch) < 8 || GET_BOD(att->ch) < 8)
           && !(AFF_FLAGGED(att->ch, AFF_PRONE)))
       {
@@ -3478,7 +3515,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     // Setup: Limit the burst of the weapon to the available ammo, and decrement ammo appropriately.
     if (att->burst_count) {
       if (att->magazine) {
-        // When we called has_ammo() earlier, we decremented their ammo by one. Give it back.
+        // When we called has_ammo() earlier, we decremented their ammo by one. Give it back to true up the equation.
         GET_MAGAZINE_AMMO_COUNT(att->magazine)++;
         
         // Cap their burst to their magazine's ammo.
@@ -3489,7 +3526,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       // Setup: Compute recoil.
       att->recoil_comp = check_recoil(att->ch, att->weapon);
       att->modifiers[COMBAT_MOD_RECOIL] += MAX(0, att->burst_count - att->recoil_comp);
-      switch (GET_OBJ_VAL(att->weapon, 4)) {
+      switch (GET_WEAPON_SKILL(att->weapon)) {
         case SKILL_SHOTGUNS:
         case SKILL_MACHINE_GUNS:
         case SKILL_ASSAULT_CANNON:
@@ -3616,9 +3653,9 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
     
     // Calculate the attacker's total skill and execute a success test.
-    att->dice = get_skill(att->ch, GET_OBJ_VAL(att->weapon, 4), att->tn);
+    att->dice = get_skill(att->ch, GET_WEAPON_SKILL(att->weapon), att->tn);
     if (!att->too_tall)
-      att->dice += MIN(GET_SKILL(att->ch, GET_OBJ_VAL(att->weapon, 4)), GET_OFFENSE(att->ch));
+      att->dice += MIN(GET_SKILL(att->ch, GET_WEAPON_SKILL(att->weapon)), GET_OFFENSE(att->ch));
     
     att->successes = success_test(att->dice, att->tn);
     
@@ -3754,8 +3791,8 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   if (att->weapon) {
     // Ranged weapon?
     if (att->weapon_is_gun) {
-      att->power = GET_OBJ_VAL(att->weapon, 0) + att->burst_count;
-      att->damage_level = GET_OBJ_VAL(att->weapon, 1) + (int)(att->burst_count / 3);
+      att->power = GET_WEAPON_POWER(att->weapon) + att->burst_count;
+      att->damage_level = GET_WEAPON_DAMAGE_CODE(att->weapon) + (int)(att->burst_count / 3);
       
       // Calculate effects of armor on the power of the attack.
       if (att->magazine) {
@@ -3789,12 +3826,12 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       }
       
       // Increment character's shots_fired.
-      if (GET_SKILL(att->ch, GET_OBJ_VAL(att->weapon, 4)) >= 8 && !SHOTS_TRIGGERED(att->ch))
+      if (GET_SKILL(att->ch, GET_WEAPON_SKILL(att->weapon)) >= 8 && !SHOTS_TRIGGERED(att->ch))
         SHOTS_FIRED(att->ch)++;
     }
     // Melee weapon.
     else {
-      att->power = GET_OBJ_VAL(att->weapon, 2) + GET_STR(att->ch);
+      att->power = GET_WEAPON_STR_BONUS(att->weapon) + GET_STR(att->ch);
       att->power -= GET_IMPACT(def->ch);
     }
     
@@ -3932,10 +3969,10 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   }
   
   // If you're firing a heavy weapon without a gyro, you need to test against the damage of the recoil.
-  if (att->weapon && !IS_NPC(att->ch) && !att->gyro && GET_OBJ_VAL(att->weapon, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(att->weapon, 4) <= SKILL_ASSAULT_CANNON
+  if (att->weapon && !IS_NPC(att->ch) && !att->gyro && GET_WEAPON_SKILL(att->weapon) >= SKILL_MACHINE_GUNS && GET_WEAPON_SKILL(att->weapon) <= SKILL_ASSAULT_CANNON
       && !(PLR_FLAGGED(att->ch, PLR_REMOTE) || AFF_FLAGGED(att->ch, AFF_RIG) || AFF_FLAGGED(att->ch, AFF_MANNING)))
   {
-    int recoil_successes = success_test(GET_BOD(att->ch) + GET_BODY(att->ch), GET_OBJ_VAL(att->weapon, 0) / 2 + modify_target(att->ch));
+    int recoil_successes = success_test(GET_BOD(att->ch) + GET_BODY(att->ch), GET_WEAPON_POWER(att->weapon) / 2 + modify_target(att->ch));
     int staged_dam = stage(-recoil_successes, LIGHT);
     sprintf(rbuf, "Heavy Recoil: %d successes, L->%s wound.", recoil_successes, staged_dam == LIGHT ? "L" : "no");
     act( rbuf, 1, att->ch, NULL, NULL, TO_ROLLS );
@@ -3993,7 +4030,7 @@ int find_weapon_range(struct char_data *ch, struct obj_data *weapon)
     return temp;
   }
   
-  switch(GET_OBJ_VAL(weapon, 3))
+  switch(GET_WEAPON_ATTACK_TYPE(weapon))
   {
     case WEAP_HOLDOUT:
     case WEAP_LIGHT_PISTOL:
@@ -4097,8 +4134,8 @@ void explode(struct char_data *ch, struct obj_data *weapon, struct room_data *ro
   struct char_data *victim, *next_vict;
   struct obj_data *obj, *next;
   
-  power = GET_OBJ_VAL(weapon, 0);
-  level = GET_OBJ_VAL(weapon, 1);
+  power = GET_WEAPON_POWER(weapon);
+  level = GET_WEAPON_DAMAGE_CODE(weapon);
   
   extract_obj(weapon);
   
@@ -4160,7 +4197,7 @@ void target_explode(struct char_data *ch, struct obj_data *weapon, struct room_d
   struct obj_data *obj, *next;
   
   sprintf(buf, "The room is lit by a%s explosion!",
-          (GET_OBJ_VAL(weapon, 3) == TYPE_ROCKET ? " massive" : "n"));
+          (GET_WEAPON_ATTACK_TYPE(weapon) == TYPE_ROCKET ? " massive" : "n"));
   
   if (room->people)
   {
@@ -4171,8 +4208,8 @@ void target_explode(struct char_data *ch, struct obj_data *weapon, struct room_d
   for (obj = room->contents; obj; obj = next)
   {
     next = obj->next_content;
-    damage_obj(NULL, obj, GET_OBJ_VAL(weapon, 1) * 2 +
-               (int)(GET_OBJ_VAL(weapon, 0) / 6), DAMOBJ_EXPLODE);
+    damage_obj(NULL, obj, GET_WEAPON_DAMAGE_CODE(weapon) * 2 +
+               (int)(GET_WEAPON_POWER(weapon) / 6), DAMOBJ_EXPLODE);
   }
   
   for (victim = room->people; victim; victim = next_vict)
@@ -4186,32 +4223,32 @@ void target_explode(struct char_data *ch, struct obj_data *weapon, struct room_d
     for (obj = victim->carrying; obj; obj = next) {
       next = obj->next_content;
       if (number(1, 100) < 50)
-        damage_obj(NULL, obj, GET_OBJ_VAL(weapon, 1) * 2 +
-                   (int)(GET_OBJ_VAL(weapon, 0) / 6), DAMOBJ_EXPLODE);
+        damage_obj(NULL, obj, GET_WEAPON_DAMAGE_CODE(weapon) * 2 +
+                   (int)(GET_WEAPON_POWER(weapon) / 6), DAMOBJ_EXPLODE);
     }
     
     for (i = 0; i < (NUM_WEARS - 1); i++)
       if (GET_EQ(victim, i) && number(1, 100) < 100)
-        damage_obj(NULL, GET_EQ(victim, i), GET_OBJ_VAL(weapon, 1) * 2 +
-                   (int)(GET_OBJ_VAL(weapon, 0) / 6), DAMOBJ_EXPLODE);
+        damage_obj(NULL, GET_EQ(victim, i), GET_WEAPON_DAMAGE_CODE(weapon) * 2 +
+                   (int)(GET_WEAPON_POWER(weapon) / 6), DAMOBJ_EXPLODE);
     
     if (IS_NPC(victim) && !CH_IN_COMBAT(victim)) {
       GET_DEFENSE(victim) = GET_COMBAT(victim);
       GET_OFFENSE(victim) = 0;
     }
     if (!mode) {
-      if (GET_OBJ_VAL(weapon, 3) == TYPE_ROCKET)
+      if (GET_WEAPON_ATTACK_TYPE(weapon) == TYPE_ROCKET)
         damage_total = convert_damage(stage((number(3,6) - success_test(GET_BOD(victim) + GET_BODY(victim),
-                                                                        MAX(2, (GET_OBJ_VAL(weapon, 0) - (int)(GET_IMPACT(victim) / 2))) +
-                                                                        modify_target(victim))), GET_OBJ_VAL(weapon, 1)));
+                                                                        MAX(2, (GET_WEAPON_POWER(weapon) - (int)(GET_IMPACT(victim) / 2))) +
+                                                                        modify_target(victim))), GET_WEAPON_DAMAGE_CODE(weapon)));
       else
         damage_total = convert_damage(stage((number(2,5) - success_test(GET_BOD(victim) + GET_BODY(victim),
-                                                                        MAX(2, (GET_OBJ_VAL(weapon, 0) - (int)(GET_IMPACT(victim) / 2))) +
-                                                                        modify_target(victim))), GET_OBJ_VAL(weapon, 1)));
+                                                                        MAX(2, (GET_WEAPON_POWER(weapon) - (int)(GET_IMPACT(victim) / 2))) +
+                                                                        modify_target(victim))), GET_WEAPON_DAMAGE_CODE(weapon)));
     } else
       damage_total = convert_damage(stage((number(2,5) - success_test(GET_BOD(victim) + GET_BODY(victim),
-                                                                      MAX(2, (GET_OBJ_VAL(weapon, 0) - 4 - (int)(GET_IMPACT(victim) / 2))) +
-                                                                      modify_target(victim))), GET_OBJ_VAL(weapon, 1) - 1));
+                                                                      MAX(2, (GET_WEAPON_POWER(weapon) - 4 - (int)(GET_IMPACT(victim) / 2))) +
+                                                                      modify_target(victim))), GET_WEAPON_DAMAGE_CODE(weapon) - 1));
     damage(ch, victim, damage_total, TYPE_EXPLOSION, PHYSICAL);
   }
   
@@ -4219,8 +4256,8 @@ void target_explode(struct char_data *ch, struct obj_data *weapon, struct room_d
     for (i = 0; i < NUM_OF_DIRS; i++)
       if (room->dir_option[i] &&
           IS_SET(room->dir_option[i]->exit_info, EX_CLOSED))
-        damage_door(NULL, room, i, GET_OBJ_VAL(weapon, 1) * 2 +
-                    (int)(GET_OBJ_VAL(weapon, 0) / 6), DAMOBJ_EXPLODE);
+        damage_door(NULL, room, i, GET_WEAPON_DAMAGE_CODE(weapon) * 2 +
+                    (int)(GET_WEAPON_POWER(weapon) / 6), DAMOBJ_EXPLODE);
 }
 
 void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
@@ -4247,7 +4284,7 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
   else
     nextroom = NULL;
   
-  if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && GET_OBJ_VAL(weapon, 3) == TYPE_HAND_GRENADE)
+  if (GET_OBJ_TYPE(weapon) == ITEM_WEAPON && GET_WEAPON_ATTACK_TYPE(weapon) == TYPE_HAND_GRENADE)
   {
     if (!nextroom) {
       send_to_char("There seems to be something in the way...\r\n", ch);
@@ -4358,10 +4395,9 @@ void range_combat(struct char_data *ch, char *target, struct obj_data *weapon,
     
     act("$n aims $p and fires into the distance!", TRUE, ch, weapon, 0, TO_ROOM);
     act("You aim $p at $N and fire!", FALSE, ch, weapon, vict, TO_CHAR);
-    if (IS_GUN(GET_OBJ_VAL(weapon, 3))) {
+    if (IS_GUN(GET_WEAPON_ATTACK_TYPE(weapon))) {
       check_killer(ch, vict);
-      if (GET_OBJ_VAL(weapon, 3) < TYPE_PISTOL
-          || GET_OBJ_VAL(weapon, 6) > 0) {
+      if (GET_WEAPON_ATTACK_TYPE(weapon) < TYPE_PISTOL || has_ammo_no_deduct(ch, weapon)) {
         if (IS_NPC(vict) && !IS_PROJECT(vict) && !CH_IN_COMBAT(vict)) {
           GET_DEFENSE(vict) = GET_COMBAT(vict);
           GET_OFFENSE(vict) = 0;
@@ -5207,22 +5243,26 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
     
     if (!has_ammo(ch, wielded))
       return;
-    if (IS_BURST(wielded)) {
-      if (GET_OBJ_VAL(wielded, 6) >= 2) {
+    // If it's gotten here, it's a gun with either a magazine or infinite ammo. Deduct ammo from magazine if it exists.
+    if (IS_BURST(wielded) && wielded->contains && GET_OBJ_TYPE(wielded->contains) == ITEM_GUN_MAGAZINE) {
+      if (GET_MAGAZINE_AMMO_COUNT(wielded->contains) >= 2) {
         burst = 3;
-        GET_OBJ_VAL(wielded, 6) -= 2;
-      } else if (GET_OBJ_VAL(wielded, 6) == 1) {
+        GET_MAGAZINE_AMMO_COUNT(wielded->contains) -= 2;
+      } else if (GET_MAGAZINE_AMMO_COUNT(wielded->contains) == 1) {
         burst = 2;
-        GET_OBJ_VAL(wielded, 6)--;
-      } else
+        GET_MAGAZINE_AMMO_COUNT(wielded->contains)--;
+      } else {
         burst = 0;
+      }
     }
     
-    if (IS_GUN(GET_OBJ_VAL(wielded, 3)))
-      power = GET_OBJ_VAL(wielded, 0);
+    // TODO: Wait, so where is the code that has burst increase the power of the shot? -LS
+    
+    if (IS_GUN(GET_WEAPON_ATTACK_TYPE(wielded)))
+      power = GET_WEAPON_POWER(wielded);
     else
-      power = GET_STR(ch) + GET_OBJ_VAL(wielded, 2);
-    damage_total = GET_OBJ_VAL(wielded, 1);
+      power = GET_STR(ch) + GET_WEAPON_STR_BONUS(wielded);
+    damage_total = GET_WEAPON_DAMAGE_CODE(wielded);
   } else
   {
     power = GET_STR(ch);
