@@ -1490,6 +1490,8 @@ void parse_object(File &fl, long nr)
   GET_LEGAL_CODE(obj) = data.GetInt("POINTS/LegalCode", 0);
   GET_LEGAL_PERMIT(obj) = data.GetInt("POINTS/LegalPermit", 0);
   GET_OBJ_STREET_INDEX(obj) = data.GetFloat("POINTS/StreetIndex", 0);
+  if (GET_OBJ_TYPE(obj) == ITEM_WEAPON)
+    GET_WEAPON_INTEGRAL_RECOIL_COMP(obj) = data.GetInt("POINTS/InnateRecoilComp", 0);
   obj->obj_flags.material = data.LookupInt("Material", material_names, 5);
 
   // No such thing as a negative-weight object.

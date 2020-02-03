@@ -204,6 +204,9 @@ static int process_elevator(struct room_data *room,
 // Taxi
 // ____________________________________________________________________________
 
+// Define to collapse validation logic for destinations. Input is an integer index in the destination list.
+#define DEST_IS_VALID(destination, dest_list) ((dest_list)[(destination)].enabled && !vnum_from_non_connected_zone((dest_list)[(destination)].vnum))
+
 // Taxi sign: If you look at it, it prints a dynamic description instead of the hardcoded one.
 SPECIAL(taxi_sign) {
   struct obj_data *obj = (struct obj_data *) me;
@@ -257,7 +260,7 @@ SPECIAL(taxi_sign) {
     // Scan the list once to see if we have any of this dest type in the system.
     bool has_this_dest_type = FALSE;
     for (int dest_index = 0; *dest_data_list[dest_index].keyword != '\n'; dest_index++) {
-      if (dest_data_list[dest_index].enabled && dest_data_list[dest_index].type == taxi_dest_type) {
+      if (DEST_IS_VALID(dest_index, dest_data_list) && dest_data_list[dest_index].type == taxi_dest_type) {
         has_this_dest_type = TRUE;
         break;
       }
@@ -273,7 +276,7 @@ SPECIAL(taxi_sign) {
     
     // Iterate through and populate the dest list with what we've got available.
     for (unsigned int dest_index = 0; *dest_data_list[dest_index].keyword != '\n'; dest_index++) {
-      if (dest_data_list[dest_index].enabled && dest_data_list[dest_index].type == taxi_dest_type) {
+      if (DEST_IS_VALID(dest_index, dest_data_list) && dest_data_list[dest_index].type == taxi_dest_type) {
         sprintf(ENDOF(buf), "%-30s - %s%s^n\r\n",
                 dest_data_list[dest_index].str,
                 taxi_dest_type_info[taxi_dest_type].entry_color_string,
@@ -630,12 +633,17 @@ SPECIAL(taxi)
     
     bool found = FALSE;
     if (GET_ACTIVE(driver) == ACT_AWAIT_CMD)
-      for (dest = 0; (portland ? *port_destinations[dest].keyword : *taxi_destinations[dest].keyword) != '\n'; dest++)
+      for (dest = 0; (portland ? *port_destinations[dest].keyword : *taxi_destinations[dest].keyword) != '\n'; dest++) {
+        // Skip invalid destinations.
+        if (!DEST_IS_VALID(dest, portland ? port_destinations : taxi_destinations))
+          continue;
+        
         if ( str_str((const char *)argument, (portland ? port_destinations[dest].keyword : taxi_destinations[dest].keyword))) {
           comm = CMD_TAXI_DEST;
           found = TRUE;
           break;
         }
+      }
     if (!found) {
       if (str_str(argument, "yes") || str_str(argument, "sure") || str_str(argument, "alright") ||
           str_str(argument, "yeah") || str_str(argument, "okay") || str_str(argument, "yup")) {
