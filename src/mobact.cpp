@@ -559,8 +559,8 @@ bool mobact_process_movement(struct char_data *ch) {
   if (GET_POS(ch) != POS_STANDING && !AFF_FLAGGED(ch, AFF_PILOT))
     return FALSE;
   
-  // Slow down movement-- this way they'll only try to move every other tick on average.
-  if (number(0, 1) == 0)
+  // Slow down movement.
+  if (number(0, 3) == 0)
     return FALSE;
     
   // NPC in a vehicle that's not in another vehicle? Have them drive and obey the rules of the road.

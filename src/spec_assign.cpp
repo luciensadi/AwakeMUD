@@ -150,6 +150,13 @@ teach_t teachers[] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     "You spend some time making small talk with the secretary.\r\n", AMATEUR },
   
+#ifdef USE_PRIVATE_CE_WORLD
+  // Jessie (SPLAT! Paintballer)
+  { 70604, { SKILL_PISTOLS, SKILL_BR_PISTOL, SKILL_STEALTH, SKILL_CLIMBING, SKILL_ATHLETICS,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+  "You learn a few things from the surprisingly-knowledgeable kid.\r\n", AMATEUR },
+#endif
+  
 /*                     { 65106, { SKILL_MEDIA_ETIQUETTE, SKILL_STEALTH, 0, 0, 0, 0, 0, 0 }, "You talk to the reporter about current events for"
                          " a while.\r\n", AMATEUR },
                        { 18311, { SKILL_STREET_ETIQUETTE, SKILL_MEDIA_ETIQUETTE, SKILL_ELF_ETIQUETTE, SKILL_CORPORATE_ETIQUETTE, 
