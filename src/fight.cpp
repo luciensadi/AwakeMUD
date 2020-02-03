@@ -2538,7 +2538,7 @@ bool has_ammo(struct char_data *ch, struct obj_data *wielded)
         return FALSE;
       } else if (wielded->contains && GET_OBJ_VAL(wielded->contains, 9) > 0) {
         if (wielded->contains)
-          GET_OBJ_VAL(wielded->contains, 9)--;
+          GET_MAGAZINE_AMMO_COUNT(wielded->contains)--;
         return TRUE;
       } else {
         send_to_char("*Click*\r\n", ch);
@@ -3477,16 +3477,13 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     
     // Setup: Limit the burst of the weapon to the available ammo, and decrement ammo appropriately.
     if (att->burst_count) {
-      if (!IS_NPC(att->ch) && !att->magazine) {
-        att->burst_count = MIN(att->burst_count, GET_OBJ_VAL(att->weapon, 6));
-        GET_OBJ_VAL(att->weapon, 6) -= att->burst_count;
-      } else if (att->magazine) {
-        att->burst_count = MIN(att->burst_count, GET_OBJ_VAL(att->magazine, 9));
-        GET_OBJ_VAL(att->magazine, 9) -= att->burst_count;
+      if (att->magazine) {
+        // When we called has_ammo() earlier, we decremented their ammo by one. Give it back.
+        GET_MAGAZINE_AMMO_COUNT(att->magazine)++;
         
-        //todo what is this for, wouldn't this drive the npc's ammo count negative
-        // if (IS_NPC(att->ch))
-        //   GET_OBJ_VAL(att->weapon, 6) -= att->burst_count;
+        // Cap their burst to their magazine's ammo.
+        att->burst_count = MIN(att->burst_count, GET_MAGAZINE_AMMO_COUNT(att->magazine));
+        GET_MAGAZINE_AMMO_COUNT(att->magazine) -= att->burst_count;
       }
       
       // Setup: Compute recoil.
@@ -3762,7 +3759,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       
       // Calculate effects of armor on the power of the attack.
       if (att->magazine) {
-        switch (GET_OBJ_VAL(att->magazine, 2)) {
+        switch (GET_MAGAZINE_AMMO_TYPE(att->magazine)) {
           case AMMO_APDS:
             att->power -= (int)(GET_BALLISTIC(def->ch) / 2);
             break;

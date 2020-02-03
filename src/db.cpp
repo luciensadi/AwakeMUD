@@ -3110,7 +3110,7 @@ void reset_zone(int zone, int reboot)
         obj = read_object(ZCMD.arg1, REAL);
         obj_to_room(obj, &world[ZCMD.arg3]);
         
-        act("You blink and realize that $o must have been here the whole time.", TRUE, 0, obj, 0, TO_ROOM);
+        act("You blink and realize that $p must have been here the whole time.", TRUE, 0, obj, 0, TO_ROOM);
         
         if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(obj) == TYPE_SHOP) {
           if (GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE && !ROOM_FLAGGED(obj->in_room, ROOM_GARAGE)) {
