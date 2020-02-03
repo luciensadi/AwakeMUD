@@ -278,6 +278,8 @@ void do_start(struct char_data * ch)
   GET_REP(ch) = 0;
   GET_NOT(ch) = 0;
   GET_TKE(ch) = 0;
+  
+  GET_INVIS_LEV(ch) = 0;
 
   ch->points.max_physical = 1000;
   ch->points.max_mental = 1000;
@@ -287,22 +289,22 @@ void do_start(struct char_data * ch)
   GET_PHYSICAL(ch) = GET_MAX_PHYSICAL(ch);
   GET_MENTAL(ch) = GET_MAX_MENTAL(ch);
 
-  GET_COND(ch, COND_THIRST) = 24;
-  GET_COND(ch, COND_FULL) = 24;
+  GET_COND(ch, COND_THIRST) = FOOD_DRINK_MAX;
+  GET_COND(ch, COND_FULL) = FOOD_DRINK_MAX;
   GET_COND(ch, COND_DRUNK) = 0;
   GET_LOADROOM(ch) = RM_NEWBIE_LOADROOM;
 
   PLR_FLAGS(ch).SetBit(PLR_NEWBIE);
   PRF_FLAGS(ch).SetBits(PRF_AUTOEXIT, PRF_LONGEXITS, ENDBIT);
-  PRF_FLAGS(ch).RemoveBit(PRF_NOHASSLE);
-  PLR_FLAGS(ch).SetBit(PLR_AUTH);
+  PRF_FLAGS(ch).RemoveBits(PRF_NOHASSLE, PRF_HOLYLIGHT, PRF_PACIFY, PRF_ROLLS, PRF_QUESTOR, PRF_NEWBIEHELPER, ENDBIT);
+  // PLR_FLAGS(ch).SetBit(PLR_AUTH);
   ch->player.time.played = 0;
   ch->player.time.lastdisc = time(0);
 
   // Clear all their skills except for English.
   for (int i = SKILL_ATHLETICS; i < MAX_SKILLS; i++) {
     if (i == SKILL_ENGLISH)
-      set_character_skill(ch, i, 8, FALSE);
+      set_character_skill(ch, i, STARTING_LANGUAGE_SKILL_LEVEL, FALSE);
     else
       set_character_skill(ch, i, 0, FALSE);
   }

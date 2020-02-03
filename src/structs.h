@@ -14,6 +14,7 @@
 #include "utils.h"
 #include "playergroup_classes.h"
 #include "protocol.h"
+#include "chargen.h"
 
 #define SPECIAL(name) \
    int (name)(struct char_data *ch, void *me, int cmd, char *argument)
@@ -147,13 +148,19 @@ struct room_direction_data
   byte condition;      // current barrier rating
   vnum_t to_room_vnum;       /* the vnum of the room. Used for OLC   */
   
+  const char *go_into_secondperson;
+  const char *go_into_thirdperson;
+  const char *come_out_of_thirdperson;
+  
 #ifdef USE_DEBUG_CANARIES
   // No sense in initializing the value since it's memset to 0 in most invocations.
   int canary;
 #endif
   room_direction_data() :
       general_description(NULL), keyword(NULL), exit_info(0), key(0), to_room(NULL),
-      key_level(0), ward(0), idnum(0), hidden(0), material(0), barrier(0), condition(0), to_room_vnum(NOWHERE)
+      key_level(0), ward(0), idnum(0), hidden(0), material(0), barrier(0), condition(0),
+      to_room_vnum(NOWHERE), go_into_secondperson(NULL), go_into_thirdperson(NULL),
+      come_out_of_thirdperson(NULL)
   {}
 }
 ;
@@ -763,7 +770,7 @@ struct ccreate_t
 {
   sh_int mode;
   sh_int archetype;
-  sh_int pr[6];
+  sh_int pr[NUM_CCR_PR_POINTS];
   sh_int force_points;
   sh_int temp;
   int points;

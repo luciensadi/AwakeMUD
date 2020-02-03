@@ -1043,8 +1043,8 @@ void parse_room(File &fl, long nr)
   room->rating = data.GetInt("POINTS/Rating", 0);
   room->vision[0] = data.GetInt("POINTS/Light", 0);
   room->vision[1] = data.GetInt("POINTS/Smoke", 0);
-  room->background[0] = room->background[2] = data.GetInt("POINTS/Background", 0);
-  room->background[1] = room->background[3] = data.GetInt("POINTS/BackgroundType", 0);
+  room->background[CURRENT_BACKGROUND_COUNT] = room->background[PERMANENT_BACKGROUND_COUNT] = data.GetInt("POINTS/Background", 0);
+  room->background[CURRENT_BACKGROUND_TYPE] = room->background[PERMANENT_BACKGROUND_TYPE] = data.GetInt("POINTS/BackgroundType", 0);
   if (room->vision[0] == -1) {
     if (room->room_flags.IsSet(ROOM_DARK))
       room->vision[0] = LIGHT_FULLDARK;
@@ -1121,6 +1121,15 @@ void parse_room(File &fl, long nr)
 
       sprintf(field, "%s/HiddenRating", sect);
       dir->hidden = data.GetInt(field, 0);
+      
+      sprintf(field, "%s/GoIntoSecondPerson", sect);
+      dir->go_into_secondperson = str_dup(data.GetString(field, NULL));
+      
+      sprintf(field, "%s/GoIntoThirdPerson", sect);
+      dir->go_into_thirdperson = str_dup(data.GetString(field, NULL));
+      
+      sprintf(field, "%s/ComeOutOfThirdPerson", sect);
+      dir->come_out_of_thirdperson = str_dup(data.GetString(field, NULL));
       
 #ifdef USE_DEBUG_CANARIES
       dir->canary = CANARY_VALUE;
@@ -1481,6 +1490,8 @@ void parse_object(File &fl, long nr)
   GET_LEGAL_CODE(obj) = data.GetInt("POINTS/LegalCode", 0);
   GET_LEGAL_PERMIT(obj) = data.GetInt("POINTS/LegalPermit", 0);
   GET_OBJ_STREET_INDEX(obj) = data.GetFloat("POINTS/StreetIndex", 0);
+  if (GET_OBJ_TYPE(obj) == ITEM_WEAPON)
+    GET_WEAPON_INTEGRAL_RECOIL_COMP(obj) = data.GetInt("POINTS/InnateRecoilComp", 0);
   obj->obj_flags.material = data.LookupInt("Material", material_names, 5);
 
   // No such thing as a negative-weight object.
@@ -3099,7 +3110,7 @@ void reset_zone(int zone, int reboot)
         obj = read_object(ZCMD.arg1, REAL);
         obj_to_room(obj, &world[ZCMD.arg3]);
         
-        act("You blink and realize that $o must have been here the whole time.", TRUE, 0, obj, 0, TO_ROOM);
+        act("You blink and realize that $p must have been here the whole time.", TRUE, 0, obj, 0, TO_ROOM);
         
         if (GET_OBJ_TYPE(obj) == ITEM_WORKSHOP && GET_WORKSHOP_GRADE(obj) == TYPE_SHOP) {
           if (GET_WORKSHOP_TYPE(obj) == TYPE_VEHICLE && !ROOM_FLAGGED(obj->in_room, ROOM_GARAGE)) {
@@ -3367,9 +3378,9 @@ void reset_zone(int zone, int reboot)
   for (int counter = zone_table[zone].number * 100;
        counter <= zone_table[zone].top; counter++) {
     long rnum = real_room(counter);
-    if (rnum > 0 && world[rnum].background[2]) {
-      world[rnum].background[0] = world[rnum].background[2];
-      world[rnum].background[1] = world[rnum].background[3];
+    if (rnum > 0 && world[rnum].background[PERMANENT_BACKGROUND_COUNT]) {
+      world[rnum].background[CURRENT_BACKGROUND_COUNT] = world[rnum].background[PERMANENT_BACKGROUND_COUNT];
+      world[rnum].background[CURRENT_BACKGROUND_TYPE] = world[rnum].background[PERMANENT_BACKGROUND_TYPE];
     }
   }
 

@@ -757,6 +757,10 @@ void perform_group_gain(struct char_data * ch, int base, struct char_data * vict
 {
   int share;
   
+  // Short-circuit: Auth? No karma.
+  if (PLR_FLAGGED(ch, PLR_AUTH))
+    return;
+  
   share = MIN(max_exp_gain, MAX(1, base));
   if (!IS_NPC(ch))
     share = MIN(base, (PLR_FLAGGED(ch, PLR_NEWBIE) ? 20 : GET_TKE(ch) * 2));
@@ -2428,23 +2432,25 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
         extern struct char_data *mob_proto;
         mob_proto[GET_MOB_RNUM(victim)].mob_specials.count_death++;
       }
-      if (IS_AFFECTED(ch, AFF_GROUP)) {
-        group_gain(ch, victim);
-      } else {
-        exp = calc_karma(ch, victim);
-        exp = gain_exp(ch, exp, 0);
-        if ( exp >= 100 || access_level(ch, LVL_BUILDER) ) {
-          sprintf(buf,"%s gains %.2f karma from killing %s.",
-                  IS_NPC(ch) ? GET_NAME(ch) : GET_CHAR_NAME(ch),
-                  (double)exp/100.0, GET_NAME(victim));
-          mudlog(buf, ch, LOG_DEATHLOG, TRUE);
+      if (PLR_FLAGGED(ch, PLR_AUTH)) {
+        if (IS_AFFECTED(ch, AFF_GROUP)) {
+          group_gain(ch, victim);
+        } else {
+          exp = calc_karma(ch, victim);
+          exp = gain_exp(ch, exp, 0);
+          if ( exp >= 100 || access_level(ch, LVL_BUILDER) ) {
+            sprintf(buf,"%s gains %.2f karma from killing %s.",
+                    IS_NPC(ch) ? GET_NAME(ch) : GET_CHAR_NAME(ch),
+                    (double)exp/100.0, GET_NAME(victim));
+            mudlog(buf, ch, LOG_DEATHLOG, TRUE);
+          }
+          if ( IS_NPC( victim ) ) {
+            extern struct char_data *mob_proto;
+            mob_proto[GET_MOB_RNUM(victim)].mob_specials.value_death_karma += exp;
+          }
+          
+          send_to_char(ch, "You receive %0.2f karma.\r\n", ((float)exp / 100));
         }
-        if ( IS_NPC( victim ) ) {
-          extern struct char_data *mob_proto;
-          mob_proto[GET_MOB_RNUM(victim)].mob_specials.value_death_karma += exp;
-        }
-        
-        send_to_char(ch, "You receive %0.2f karma.\r\n", ((float)exp / 100));
       }
     }
     if (!IS_NPC(victim)) {
@@ -2532,7 +2538,7 @@ bool has_ammo(struct char_data *ch, struct obj_data *wielded)
         return FALSE;
       } else if (wielded->contains && GET_OBJ_VAL(wielded->contains, 9) > 0) {
         if (wielded->contains)
-          GET_OBJ_VAL(wielded->contains, 9)--;
+          GET_MAGAZINE_AMMO_COUNT(wielded->contains)--;
         return TRUE;
       } else {
         send_to_char("*Click*\r\n", ch);
@@ -3471,16 +3477,13 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
     
     // Setup: Limit the burst of the weapon to the available ammo, and decrement ammo appropriately.
     if (att->burst_count) {
-      if (!IS_NPC(att->ch) && !att->magazine) {
-        att->burst_count = MIN(att->burst_count, GET_OBJ_VAL(att->weapon, 6));
-        GET_OBJ_VAL(att->weapon, 6) -= att->burst_count;
-      } else if (att->magazine) {
-        att->burst_count = MIN(att->burst_count, GET_OBJ_VAL(att->magazine, 9));
-        GET_OBJ_VAL(att->magazine, 9) -= att->burst_count;
+      if (att->magazine) {
+        // When we called has_ammo() earlier, we decremented their ammo by one. Give it back.
+        GET_MAGAZINE_AMMO_COUNT(att->magazine)++;
         
-        //todo what is this for, wouldn't this drive the npc's ammo count negative
-        // if (IS_NPC(att->ch))
-        //   GET_OBJ_VAL(att->weapon, 6) -= att->burst_count;
+        // Cap their burst to their magazine's ammo.
+        att->burst_count = MIN(att->burst_count, GET_MAGAZINE_AMMO_COUNT(att->magazine));
+        GET_MAGAZINE_AMMO_COUNT(att->magazine) -= att->burst_count;
       }
       
       // Setup: Compute recoil.
@@ -3756,7 +3759,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
       
       // Calculate effects of armor on the power of the attack.
       if (att->magazine) {
-        switch (GET_OBJ_VAL(att->magazine, 2)) {
+        switch (GET_MAGAZINE_AMMO_TYPE(att->magazine)) {
           case AMMO_APDS:
             att->power -= (int)(GET_BALLISTIC(def->ch) / 2);
             break;

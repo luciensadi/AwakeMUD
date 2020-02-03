@@ -164,7 +164,10 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     sprintf(buf1, "$n drag $N %s.", fulldirs[dir]);
     sprintf(buf2, "$n drags %s %s.", GET_NAME(vict), fulldirs[dir]);
     act(buf1, FALSE, ch, 0, vict, TO_CHAR);
-  } else if (ch->char_specials.leave)
+  }
+  else if (ch->in_room->dir_option[dir]->go_into_thirdperson)
+    strcpy(buf2, ch->in_room->dir_option[dir]->go_into_thirdperson);
+  else if (ch->char_specials.leave)
     sprintf(buf2, "$n %s %s.", ch->char_specials.leave, fulldirs[dir]);
   else if (IS_WATER(ch->in_room) && !IS_WATER(EXIT(ch, dir)->to_room))
     sprintf(buf2, "$n climbs out of the water to the %s.", fulldirs[dir]);
@@ -172,6 +175,9 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     sprintf(buf2, "$n jumps into the water to the %s.", fulldirs[dir]);
   else
     sprintf(buf2, "$n %s %s.", (IS_WATER(ch->in_room) ? "swims" : "leaves"), fulldirs[dir]);
+  
+  if (ch->in_room->dir_option[dir]->go_into_secondperson)
+    send_to_char(ch, "%s\r\n", ch->in_room->dir_option[dir]->go_into_secondperson);
 
   if (IS_AFFECTED(ch, AFF_SNEAK))
   {
@@ -237,6 +243,8 @@ int do_simple_move(struct char_data *ch, int dir, int extra, struct char_data *v
     sprintf(buf2, "$n gets out of the taxi.");
   else if (vict)
     sprintf(buf2, "$n drags %s in from %s.", GET_NAME(vict), thedirs[rev_dir[dir]]);
+  else if (ch->in_room->dir_option[rev_dir[dir]] && ch->in_room->dir_option[rev_dir[dir]]->come_out_of_thirdperson)
+    strcpy(buf2, ch->in_room->dir_option[rev_dir[dir]]->come_out_of_thirdperson);
   else if (ch->char_specials.arrive)
     sprintf(buf2, "$n %s %s.", ch->char_specials.arrive, thedirs[rev_dir[dir]]);
   else if (IS_WATER(was_in) && !IS_WATER(ch->in_room))

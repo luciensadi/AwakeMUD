@@ -624,6 +624,9 @@ void assign_objects(void)
   ASSIGNOBJ(1038, gen_board);  /* Coders Board */
   ASSIGNOBJ(1074, gen_board);  /* Administration Board */
   ASSIGNOBJ(10018, gen_board);  /* ImmHQ Board */
+#ifdef USE_PRIVATE_CE_WORLD
+  ASSIGNOBJ(10034, gen_board); /* Mortal Relations Board */
+#endif
 //ASSIGNOBJ(65126, gen_board);
 //ASSIGNOBJ(26150, gen_board);
   ASSIGNOBJ(1117, desktop);

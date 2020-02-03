@@ -2853,6 +2853,9 @@ void write_objs_to_disk(int zone)
               GET_OBJ_WEIGHT(obj), GET_OBJ_BARRIER(obj), GET_OBJ_COST(obj), GET_OBJ_AVAILTN(obj), GET_OBJ_AVAILDAY(obj), 
               GET_LEGAL_NUM(obj), GET_LEGAL_CODE(obj), GET_LEGAL_PERMIT(obj), GET_OBJ_STREET_INDEX(obj));
       
+      if (GET_OBJ_TYPE(obj) == ITEM_WEAPON && GET_WEAPON_INTEGRAL_RECOIL_COMP(obj))
+        fprintf(fp, "\tInnateRecoilComp:\t%d\n", GET_WEAPON_INTEGRAL_RECOIL_COMP(obj));
+      
       bool print_vals = false;
       int i;
       for (i = 0; i < NUM_VALUES; i++)

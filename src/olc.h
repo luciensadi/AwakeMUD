@@ -185,6 +185,9 @@ extern void write_index_file(const char *suffix);
 #define REDIT_Z				46
 #define REDIT_BACKGROUND		47
 #define REDIT_BACKGROUND2		48
+#define REDIT_EXIT_ENTRY_STRING_SECONDPERSON 49
+#define REDIT_EXIT_ENTRY_STRING_THIRDPERSON 50
+#define REDIT_EXIT_EXIT_STRING_THIRDPERSON  51
 
 #define MEDIT_CONFIRM_EDIT              0
 #define MEDIT_CONFIRM_SAVESTRING        1

@@ -2357,7 +2357,7 @@ ACMD(do_conjure)
       return;
     }
     int skill = GET_SKILL(ch, SKILL_CONJURING), target = force;
-    if (ch->in_room->background[1] == AURA_POWERSITE)
+    if (ch->in_room->background[CURRENT_BACKGROUND_TYPE] == AURA_POWERSITE)
       skill += GET_BACKGROUND_COUNT(ch->in_room);
     else
       target += GET_BACKGROUND_COUNT(ch->in_room);

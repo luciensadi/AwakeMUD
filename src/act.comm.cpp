@@ -552,12 +552,14 @@ ACMD(do_radio)
     WAIT_STATE(ch, 16); /* Takes time to switch it */
   } else if (!str_cmp(one, "center")) {
     i = atoi(two);
-    if (i > 24)
-      act("$p cannot center a frequency higher than 24 MHz.", FALSE, ch, radio,
-          0, TO_CHAR);
-    else if (i < 6)
-      act("$p cannot center a frequency lower than 6 MHz.", FALSE, ch, radio,
-          0, TO_CHAR);
+    if (i > MAX_RADIO_FREQUENCY) {
+      sprintf(buf, "$p cannot center a frequency higher than %d MHz.", MAX_RADIO_FREQUENCY);
+      act(buf, FALSE, ch, radio, 0, TO_CHAR);
+    }
+    else if (i < MIN_RADIO_FREQUENCY) {
+      sprintf(buf, "$p cannot center a frequency lower than %d MHz.", MIN_RADIO_FREQUENCY);
+      act(buf, FALSE, ch, radio, 0, TO_CHAR);
+    }
     else {
       sprintf(buf, "$p is now centered at %d MHz.", i);
       act(buf, FALSE, ch, radio, 0, TO_CHAR);
@@ -565,13 +567,17 @@ ACMD(do_radio)
       WAIT_STATE(ch, 16); /* Takes time to adjust */
     }
   } else if (!str_cmp(one, "crypt")) {
-    if ((i = atoi(two)))
-      if (i > (GET_OBJ_VAL(radio, (cyberware ? 5 : (vehicle ? 3 : 2)))))
-        act("$p's crypt mode isn't that high.", FALSE, ch, radio, 0, TO_CHAR);
+    if ((i = atoi(two))) {
+      int max_crypt = GET_OBJ_VAL(radio, (cyberware ? 5 : (vehicle ? 3 : 2)));
+      if (i > max_crypt) {
+        sprintf(buf, "$p's max crypt rating is %d.", max_crypt);
+        act(buf, FALSE, ch, radio, 0, TO_CHAR);
+      }
       else {
-        send_to_char("Crypt mode enabled.\r\n", ch);
+        send_to_char(ch, "Crypt mode enabled at rating %d..\r\n", max_crypt);
         GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3))) = i;
       }
+    }
     else {
       if (!GET_OBJ_VAL(radio, (cyberware ? 6 : (vehicle ? 5 : 3))))
         act("$p's crypt mode is already disabled.", FALSE, ch, radio, 0, TO_CHAR);
@@ -629,8 +635,8 @@ ACMD(do_broadcast)
       frequency = -1;
     else {
       frequency = atoi(arg);
-      if (frequency < 6 || frequency > 24) {
-        send_to_char("Frequency must range between 6 and 24.\r\n", ch);
+      if (frequency < MIN_RADIO_FREQUENCY || frequency > MAX_RADIO_FREQUENCY) {
+        send_to_char(ch, "Frequency must range between %d and %d.\r\n", MIN_RADIO_FREQUENCY, MAX_RADIO_FREQUENCY);
         return;
       }
     }

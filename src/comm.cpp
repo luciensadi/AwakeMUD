@@ -229,7 +229,7 @@ int main(int argc, char **argv)
       fprintf(stderr, "Usage: %s [-c] [-m] [-q] [-r] [-s] [-d pathname] [port #]\n", argv[0]);
       exit(1);
     } else if ((port = atoi(argv[pos])) <= 1024) {
-      fprintf(stderr, "Illegal port number.\n");
+      fprintf(stderr, "Illegal port number. Port must be higher than 1024.\n");
       exit(1);
     }
   }
