@@ -3695,6 +3695,8 @@ SPECIAL(quest_debug_scanner)
         send_to_char(ch, "%-20s - [%6ld] %s^n\r\n", GET_CHAR_NAME(tch), GET_ROOM_VNUM(room), GET_ROOM_NAME(room));
       }
     }
+    
+    return TRUE;
   }
   
   return FALSE;
