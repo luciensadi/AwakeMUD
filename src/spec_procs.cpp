@@ -3680,6 +3680,23 @@ SPECIAL(quest_debug_scanner)
     send_to_char(buf, ch);
     return TRUE;
   }
+    
+  // WHERE debugger.
+  if (CMD_IS("where")) {
+    send_to_char("^RUsing extended WHERE due to you holding a diagnostic scanner.^n\r\n", ch);
+    
+    struct room_data *room;
+    for (int i = 0; i <= top_of_world; i++) {
+      room = &world[i];
+      for (struct char_data *tch = room->people; tch; tch = tch->next_in_room) {
+        if (IS_NPC(tch))
+          continue;
+        
+        send_to_char(ch, "%-20s - [%6ld] %s^n\r\n", GET_CHAR_NAME(tch), GET_ROOM_VNUM(room), GET_ROOM_NAME(room));
+      }
+    }
+  }
+  
   return FALSE;
 }
 
