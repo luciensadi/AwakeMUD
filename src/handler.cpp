@@ -1420,7 +1420,7 @@ void obj_from_char(struct obj_data * object)
     mudlog("ERROR: NULL object passed to obj_from_char", NULL, LOG_SYSLOG, TRUE);
     return;
   }
-  if (!obj->carried_by) {
+  if (object->carried_by == NULL) {
     mudlog("ERROR: obj_from_char() called on obj that had no carried_by!", NULL, LOG_SYSLOG, TRUE);
     return;
   }
@@ -1953,6 +1953,28 @@ void extract_veh(struct veh_data * veh)
       mudlog(buf, NULL, LOG_SYSLOG, TRUE);
     }
   }
+  
+  // Strip it out of its subscriber list.
+  if (veh->prev_sub) {
+    // If there is a prior entry in the subscriber doubly-linked list, just strip us out.
+    veh->prev_sub->next_sub = veh->next_sub;
+  } else {
+    // If we had no previous subs, we're the head of the list. Find the character who controls us, if anyone.
+    for (struct char_data *owner = character_list; owner; owner = owner->next) {
+      if (owner->char_specials.subscribe == veh) {
+        send_to_char(owner, "^ROOC Alert: Your vehicle '%s' has been purged by an administrator.^n\r\n", GET_VEH_NAME(veh));
+        owner->char_specials.subscribe = veh->next_sub;
+        break;
+      }
+    }
+    // If nobody online subs this vehicle, nothing to do.
+    // TODO: Mail the owner to inform them that their vehicle got shrekt.
+  }
+  
+  // If there's a vehicle after us in the list, make sure its prev reflects our prev.
+  if (veh->next_sub)
+    veh->next_sub->prev_sub = veh->prev_sub;
+  
   // If any vehicles are inside, drop them where the vehicle is.
   struct veh_data *temp = NULL;
   while ((temp = veh->carriedvehs)) {
@@ -2782,5 +2804,3 @@ int veh_skill(struct char_data *ch, struct veh_data *veh)
   
   return skill;
 }
-
-

@@ -827,6 +827,11 @@ void save_vehicles(void)
               found = TRUE;
           if (!found) {
             veh->next_sub = i->char_specials.subscribe;
+            
+            // Doubly link it into the list.
+            if (i->char_specials.subscribe)
+              i->char_specials.subscribe->prev_sub = veh;
+              
             i->char_specials.subscribe = veh;
           }
           break;

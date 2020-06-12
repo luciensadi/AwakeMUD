@@ -5081,7 +5081,7 @@ void vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
       sprintf(buf2, "%s can't even get close to you!", GET_VEH_NAME(veh));
       send_to_driver(buf, veh);
     } else if (damage_total < LIGHT) {
-      sprintf(buf, "You ram into %s, but %s armor holds!", thrdgenders[(int)GET_SEX(ch)], HSHR(GET_SEX(ch)));
+      sprintf(buf, "You ram into %s, but %s armor holds!", thrdgenders[(int)GET_SEX(ch)], HSHR(ch));
       sprintf(buf1, "%s rams into $n, but $s armor holds!", GET_VEH_NAME(veh));
       sprintf(buf2, "%s rams into you, but your armor holds!", GET_VEH_NAME(veh));
       send_to_driver(buf, veh);

@@ -855,7 +855,7 @@ ACMD(do_control)
 
 ACMD(do_subscribe)
 {
-  struct veh_data *veh = NULL, *temp;
+  struct veh_data *veh = NULL;
   struct obj_data *obj;
   bool has_deck = FALSE;
   int i = 0, num;
@@ -887,9 +887,19 @@ ACMD(do_subscribe)
       send_to_char("Your subscriber list isn't that big.\r\n", ch);
       return;
     }
-    REMOVE_FROM_LIST(veh, ch->char_specials.subscribe, next_sub);
+    // It's a doubly-linked list now, so we have to do both next and prev subs.
+    if (veh->prev_sub)
+      veh->prev_sub->next_sub = veh->next_sub;
+    else
+      ch->char_specials.subscribe = veh->next_sub;
+    
+    if (veh->next_sub)
+      veh->next_sub->prev_sub = veh->prev_sub;
+      
+    // Now that we've removed it from the list, wipe the sub data from this vehicle.
     veh->sub = FALSE;
     veh->next_sub = NULL;
+    veh->prev_sub = NULL;
     sprintf(buf, "You remove %s from your subscriber list.\r\n", GET_VEH_NAME(veh));
     send_to_char(buf, ch);
     return;
@@ -934,6 +944,8 @@ ACMD(do_subscribe)
   }
   veh->sub = TRUE;
   veh->next_sub = ch->char_specials.subscribe;
+  if (ch->char_specials.subscribe)
+    ch->char_specials.subscribe->prev_sub = veh;
   ch->char_specials.subscribe = veh;
   sprintf(buf, "You add %s to your subscriber list.\r\n", GET_VEH_NAME(veh));
   send_to_char(buf, ch);

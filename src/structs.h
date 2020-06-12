@@ -659,6 +659,7 @@ struct veh_data
   struct veh_data *fight_veh;
   struct veh_data *next_veh;
   struct veh_data *next_sub;
+  struct veh_data *prev_sub;
   struct veh_data *carriedvehs;
   struct veh_data *in_veh;
   struct veh_data *towing;
@@ -674,7 +675,7 @@ struct veh_data
       followers(NULL), following(NULL), followch(NULL), mount(NULL),
       idnum(0), owner(0), spare(0), spare2(0), dest(NULL),
       contents(NULL), people(NULL), rigger(NULL), fighting(NULL), fight_veh(NULL), next_veh(NULL),
-      next_sub(NULL), carriedvehs(NULL), in_veh(NULL), towing(NULL), grid(NULL), 
+      next_sub(NULL), prev_sub(NULL), carriedvehs(NULL), in_veh(NULL), towing(NULL), grid(NULL), 
       leave(NULL), arrive(NULL), next(NULL)
   {
     for (int i = 0; i < NUM_MODS; i++)
