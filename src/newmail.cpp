@@ -24,8 +24,24 @@ MYSQL_ROW row;
 SPECIAL(pocket_sec);
 
 void store_mail(long to, struct char_data *from, const char *message_pointer) {
-  if (!from || IS_NPC(from)) {
-    log("SYSERR: Bad character or NPC attempted to use mail system.");
+  if (to < 0) {
+    log_vfprintf("SYSERR: Negative 'to' value passed to store_mail: %ld.", to);
+    return;
+  }
+  
+  if (!from) {
+    log("SYSERR: Null character passed to store_mail.");
+    return;
+  }
+  
+  if (IS_NPC(from)) {
+    log_vfprintf("SYSERR: NPC '%s' attempted to use mail system. NPCs can't send mail.", GET_CHAR_NAME(from));
+    send_to_char("NPCs can't send mail, so your mail was rejected.\r\n", from);
+    return;
+  }
+  
+  if (message_pointer == NULL) {
+    log("SYSERR: Null message_pointer passed to store_mail.");
     return;
   }
   
@@ -253,4 +269,3 @@ void postmaster_receive_mail(struct char_data * ch, struct char_data *mailman, i
     act("$N gives $n several pieces of mail.", FALSE, ch, 0, mailman, TO_ROOM);
   }
 }
-

@@ -1954,21 +1954,20 @@ void extract_veh(struct veh_data * veh)
     }
   }
   
-  // Strip it out of its subscriber list.
+  // Find the online owner of the vehicle for future modifications and notifications.
+  
+  
   if (veh->prev_sub) {
     // If there is a prior entry in the subscriber doubly-linked list, just strip us out.
     veh->prev_sub->next_sub = veh->next_sub;
   } else {
-    // If we had no previous subs, we're the head of the list. Find the character who controls us, if anyone.
+    // Veh is the list head. Look for an online owner– they need their list's head updated to point to our next_sub value.
     for (struct char_data *owner = character_list; owner; owner = owner->next) {
       if (owner->char_specials.subscribe == veh) {
-        send_to_char(owner, "^ROOC Alert: Your vehicle '%s' has been purged by an administrator.^n\r\n", GET_VEH_NAME(veh));
         owner->char_specials.subscribe = veh->next_sub;
         break;
       }
     }
-    // If nobody online subs this vehicle, nothing to do.
-    // TODO: Mail the owner to inform them that their vehicle got shrekt.
   }
   
   // If there's a vehicle after us in the list, make sure its prev reflects our prev.

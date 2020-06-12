@@ -1963,6 +1963,21 @@ ACMD(do_purge)
       act(buf1, FALSE, ch, NULL, 0, TO_ROOM);
       sprintf(buf1, "%s purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
       mudlog(buf1, ch, LOG_WIZLOG, TRUE);
+      
+      // Notify the owner.
+      sprintf(buf2, "^ROOC Alert: Your vehicle '%s' has been deleted by administrator '%s'.^n\r\n", GET_VEH_NAME(veh), GET_CHAR_NAME(ch));
+      
+      struct char_data *owner = NULL;
+      for (owner = character_list; owner; owner = owner->next)
+        if (owner->char_specials.subscribe == veh) {
+          send_to_char(buf2, owner);
+          break;
+        }
+      if (owner == NULL) {
+        // Owner was not online-- send them a mail.
+        store_mail(veh->owner, ch, buf2);
+      }
+      
       purgelog(veh);
       extract_veh(veh);
     } else {
