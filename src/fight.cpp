@@ -5076,12 +5076,12 @@ void vram(struct veh_data * veh, struct char_data * ch, struct veh_data * tveh)
     
     if (IS_NPC(ch) && MOB_FLAGGED(ch, MOB_NORAM)) {
       damage_total = -1;
-      sprintf(buf, "You can't seem to get close enough to %s to run them down!\r\n", thrdgenders[(int)GET_SEX(ch)]);
-      sprintf(buf1, "%s can't seem to get close enough to $n to run them down!", GET_VEH_NAME(veh));
+      sprintf(buf, "You can't seem to get close enough to run %s down!\r\n", thrdgenders[(int)GET_SEX(ch)]);
+      sprintf(buf1, "%s can't seem to get close enough to $n to run $m down!", GET_VEH_NAME(veh));
       sprintf(buf2, "%s can't even get close to you!", GET_VEH_NAME(veh));
       send_to_driver(buf, veh);
     } else if (damage_total < LIGHT) {
-      sprintf(buf, "You ram into %s, but %s armor holds!", thrdgenders[(int)GET_SEX(ch)], thrdgenders[(int)GET_SEX(ch)]);
+      sprintf(buf, "You ram into %s, but %s armor holds!", thrdgenders[(int)GET_SEX(ch)], HSHR(GET_SEX(ch)));
       sprintf(buf1, "%s rams into $n, but $s armor holds!", GET_VEH_NAME(veh));
       sprintf(buf2, "%s rams into you, but your armor holds!", GET_VEH_NAME(veh));
       send_to_driver(buf, veh);
@@ -5447,4 +5447,3 @@ void mount_fire(struct char_data *ch)
     }
   }
 }
-

@@ -1417,15 +1417,19 @@ void obj_from_char(struct obj_data * object)
   
   if (object == NULL)
   {
-    log("SYSLOG: NULL object passed to obj_from_char");
+    mudlog("ERROR: NULL object passed to obj_from_char", NULL, LOG_SYSLOG, TRUE);
+    return;
+  }
+  if (!obj->carried_by) {
+    mudlog("ERROR: obj_from_char() called on obj that had no carried_by!", NULL, LOG_SYSLOG, TRUE);
     return;
   }
   if (object->in_obj)
   {
-    sprintf(buf, "%s removed from char (%s), also in obj (%s). Removing.", object->text.name,
+    sprintf(buf, "DEBUG: %s removed from char (%s), also in obj (%s). Removing.", object->text.name,
             GET_CHAR_NAME(object->carried_by) ? GET_CHAR_NAME(object->carried_by) :
             GET_NAME(object->carried_by), object->in_obj->text.name);
-    mudlog(buf, object->carried_by, LOG_WIZLOG, TRUE);
+    mudlog(buf, object->carried_by, LOG_SYSLOG, TRUE);
     obj_from_obj(object);
   }
   REMOVE_FROM_LIST(object, object->carried_by->carrying, next_content);
@@ -1792,34 +1796,47 @@ void obj_to_obj(struct obj_data * obj, struct obj_data * obj_to)
     return;
   }
   
+  // Scan through the contents for something that matches this item. If we find it, that's where we can nest this item.
   for (i = obj_to->contains; i; i = i->next_content)
   {
     if (i->item_number == obj->item_number &&
         !strcmp(i->text.room_desc, obj->text.room_desc) &&
         IS_INVIS(i) == IS_INVIS(obj))
       break;
+    // op points to the last thing we saw-- if a match is found, op is the thing immediately before it. Otherwise, op is the last thing in the list.
     op=i;
   }
   
   if (i)
   {
+    // i points to a similar object to obj.
     obj->next_content = i;
+    
+    // with i existing, op must point to the object immediately before i in the list.
     if (op)
       op->next_content = obj;
+    
+    // op will be null if the very first object in the list was a match for obj.
     else
       obj_to->contains = obj;
   } else
   {
+    // No matches, so stick it at the top of the list.
     obj->next_content = obj_to->contains;
     obj_to->contains = obj;
   }
   
   obj->in_obj = obj_to;
   
+  // Cascade the weight change all the way up to the second-highest containing object (handles bag-in-bag-in-bag situations).
   for (tmp_obj = obj->in_obj; tmp_obj->in_obj; tmp_obj = tmp_obj->in_obj)
     weight_change_object(tmp_obj, GET_OBJ_WEIGHT(obj));
+  
+  // Update the highest container's weight as well.
   if (GET_OBJ_TYPE(tmp_obj) != ITEM_CYBERDECK || GET_OBJ_TYPE(tmp_obj) != ITEM_CUSTOM_DECK || GET_OBJ_TYPE(tmp_obj) != ITEM_DECK_ACCESSORY)
     weight_change_object(tmp_obj, GET_OBJ_WEIGHT(obj));
+  
+  // If someone's carrying or wearing the highest container, increment their carry weight by the weight of the obj we just put in.
   if (tmp_obj->carried_by)
     IS_CARRYING_W(tmp_obj->carried_by) += GET_OBJ_WEIGHT(obj);
   if (tmp_obj->worn_by)
