@@ -1960,6 +1960,7 @@ ACMD(do_purge)
     }
     
     if ((veh = get_veh_list(buf, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
+      // Notify the room.
       sprintf(buf1, "$n purges %s.", GET_VEH_NAME(veh));
       act(buf1, FALSE, ch, NULL, 0, TO_ROOM);
       sprintf(buf1, "%s purged %s.", GET_CHAR_NAME(ch), GET_VEH_NAME(veh));
@@ -1967,18 +1968,9 @@ ACMD(do_purge)
       
       // Notify the owner.
       sprintf(buf2, "^ROOC Alert: Your vehicle '%s' has been deleted by administrator '%s'.^n\r\n", GET_VEH_NAME(veh), GET_CHAR_NAME(ch));
+      store_mail(veh->owner, ch, buf2);
       
-      struct char_data *owner = NULL;
-      for (owner = character_list; owner; owner = owner->next)
-        if (owner->char_specials.subscribe == veh) {
-          send_to_char(buf2, owner);
-          break;
-        }
-      if (owner == NULL) {
-        // Owner was not online-- send them a mail.
-        store_mail(veh->owner, ch, buf2);
-      }
-      
+      // Log the purge and finalize extraction.
       purgelog(veh);
       extract_veh(veh);
     } else {
