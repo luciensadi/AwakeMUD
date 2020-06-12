@@ -44,6 +44,7 @@
 #include "limits.h"
 #include "security.h"
 #include "perfmon.h"
+#include "newmail.h"
 
 #if defined(__CYGWIN__)
 #include <crypt.h>
