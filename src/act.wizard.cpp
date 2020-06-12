@@ -1967,8 +1967,10 @@ ACMD(do_purge)
       mudlog(buf1, ch, LOG_WIZLOG, TRUE);
       
       // Notify the owner.
-      sprintf(buf2, "^ROOC Alert: Your vehicle '%s' has been deleted by administrator '%s'.^n\r\n", GET_VEH_NAME(veh), GET_CHAR_NAME(ch));
-      store_mail(veh->owner, ch, buf2);
+      if (veh->owner > 0) {
+        sprintf(buf2, "^ROOC Alert: Your vehicle '%s' has been deleted by administrator '%s'.^n\r\n", GET_VEH_NAME(veh), GET_CHAR_NAME(ch));
+        store_mail(veh->owner, ch, buf2);
+      }
       
       // Log the purge and finalize extraction.
       purgelog(veh);
