@@ -24,8 +24,8 @@ MYSQL_ROW row;
 SPECIAL(pocket_sec);
 
 void store_mail(long to, struct char_data *from, const char *message_pointer) {
-  if (to < 0) {
-    log_vfprintf("SYSERR: Negative 'to' value passed to store_mail: %ld.", to);
+  if (to < 1) {
+    log_vfprintf("SYSERR: Invalid 'to' value passed to store_mail: %ld (must be >= 1).", to);
     return;
   }
   
