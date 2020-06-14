@@ -1129,10 +1129,11 @@ void shop_info(char *arg, struct char_data *ch, struct char_data *keeper, vnum_t
       strcat(buf, " huge");
     else
       strcat(buf, " gigantic");
+      
     if (obj->obj_flags.wear_flags.AreAnySet(ITEM_WEAR_BACK, ITEM_WEAR_ABOUT, ENDBIT))
       strcat(buf, " backpack.");
     else
-      strcat(buf, " piece of furniture.");
+      strcat(buf, " container.");
     break;
   case ITEM_DECK_ACCESSORY:
     if (GET_OBJ_VAL(obj, 0) == TYPE_COOKER) {
@@ -2053,4 +2054,3 @@ void shedit_parse(struct descriptor_data *d, const char *arg)
     break;
   }
 }
-
