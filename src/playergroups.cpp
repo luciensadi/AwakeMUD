@@ -896,16 +896,17 @@ void do_pgroup_vote(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_wire(struct char_data *ch, char *argument) {
-  // TODO: Log.
   // wire <amount> <target> <reason>  Sends a given amount of nuyen to the target, identifed by PC unique name. Reason must be given.
-  unsigned long amount;
   
+  // Parse out the amount of nuyen the character wishes to wire.
   char *remainder = any_one_arg(argument, buf); // Amount
-  remainder = any_one_arg(remainder, buf1); // Target, remainder is reason
+  unsigned long amount = atol(buf);
+  
+  // Parse out the target into buf1, and store the reason in remainder.
+  remainder = any_one_arg(remainder, buf1);
   skip_spaces(&remainder);
   
-  amount = atol(buf);
-  // Must specify a number greater than zero.
+  // Must specify an amount greater than zero.
   FAILURE_CASE(amount <= 0, "How much do you wish to wire?");
   
   // Must have enough cash in group bank to cover the transaction.
