@@ -1015,8 +1015,12 @@ char    *crypt(const char *key, const char *salt);
 #define CRYPT(a,b) ((char *) crypt((a),(b)))
 #endif
 
+// A simple error handling define to cut out some of the boilerplate.
+#define FAILURE_CASE(condition, message) { \
+  if ((condition)) {                       \
+    send_to_char(ch, "%s\r\n", (message)); \
+    return;                                \
+  }                                        \
+}                                          \
+
 #endif
-
-
-
-

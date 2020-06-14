@@ -35,15 +35,8 @@ Playergroup *loaded_playergroups = NULL;
 
 // The invitations command, for viewing your pgroup invitations.
 ACMD(do_invitations) {
-  if (IS_NPC(ch)) {
-    send_to_char("NPCs don't get playergroup invitations.\r\n", ch);
-    return;
-  }
-  
-  if (ch->pgroup_invitations == NULL) {
-    send_to_char("You have no playergroup invitations at this time.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(IS_NPC(ch), "NPCs don't get playergroup invitations.");
+  FAILURE_CASE(ch->pgroup_invitations == NULL, "You have no playergroup invitations at this time.");
   
   // Remove any expired invitations.
   Pgroup_invitation::prune_expired(ch);
@@ -70,15 +63,8 @@ ACMD(do_invitations) {
 
 // The accept command.
 ACMD(do_accept) {
-  if (IS_NPC(ch)) {
-    send_to_char("NPCs don't get playergroup invitations.\r\n", ch);
-    return;
-  }
-  
-  if (ch->pgroup_invitations == NULL) {
-    send_to_char("You have no playergroup invitations at this time.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(IS_NPC(ch), "NPCs don't get playergroup invitations.");
+  FAILURE_CASE(ch->pgroup_invitations == NULL, "You have no playergroup invitations at this time.");
   
   if (!*argument) {
     send_to_char(ch, "Syntax: ACCEPT <alias of playergroup>.\r\n", ch);
@@ -106,19 +92,15 @@ ACMD(do_accept) {
     if (strn_cmp(argument, pgr->get_name(), strlen(argument)) == 0 || strn_cmp(argument, pgr->get_alias(), strlen(argument)) == 0) {
       send_to_char(ch, "You accept the invitation and declare yourself a member of '%s'.\r\n", pgr->get_name());
       
-      // Notify all online members.
+      // Notify all online members. If someone is offline, they need to check the roster or logs to see what changed.
       for (struct char_data* i = character_list; i; i = i->next) {
         if (!IS_NPC(i) && GET_PGROUP_MEMBER_DATA(i) && GET_PGROUP(i)->get_idnum() == pgr->get_idnum()) {
           // Notify the character.
-          if (pgr->is_secret() && !GET_PGROUP_MEMBER_DATA(i)->privileges.AreAnySet(PRIV_COCONSPIRATOR, PRIV_LEADER, ENDBIT)) {
-            send_to_char(i, "You notice that the membership numbers for '%s' have gone up.\r\n", pgr->get_name());
-          } else {
+          if (!pgr->is_secret() || !GET_PGROUP_MEMBER_DATA(i)->privileges.AreAnySet(PRIV_COCONSPIRATOR, PRIV_LEADER, ENDBIT)) {
             send_to_char(i, "%s has joined '%s'.\r\n", GET_CHAR_NAME(ch), pgr->get_name());
           }
         }
       }
-      
-      // TODO: Should we send mail (but account for secret status), or require people to view the roster/logs?
       
       // Add the player to the group. This function also removes the invitation and logs the character's joining (if applicable).
       pgr->add_member(ch);
@@ -133,15 +115,8 @@ ACMD(do_accept) {
 
 // The decline command.
 ACMD(do_decline) {
-  if (IS_NPC(ch)) {
-    send_to_char("NPCs don't get playergroup invitations.\r\n", ch);
-    return;
-  }
-  
-  if (ch->pgroup_invitations == NULL) {
-    send_to_char("You have no playergroup invitations at this time.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(IS_NPC(ch), "NPCs don't get playergroup invitations.");
+  FAILURE_CASE(ch->pgroup_invitations == NULL, "You have no playergroup invitations at this time.");
   
   if (!*argument) {
     send_to_char(ch, "Syntax: DECLINE <alias of playergroup>.\r\n", ch);
@@ -249,14 +224,11 @@ struct pgroup_cmd_struct {
 
 /* Main Playergroup Command */
 ACMD(do_pgroup) {
+  FAILURE_CASE(IS_NPC(ch), "NPCs can't participate in PC groups.");
+  
   char command[MAX_STRING_LENGTH];
   char parameters[MAX_STRING_LENGTH];
   int cmd_index = 0;
-  
-  if (IS_NPC(ch)) {
-    send_to_char("NPCs can't participate in PC groups.\r\n", ch);
-    return;
-  }
   
   skip_spaces(&argument);
   half_chop(argument, command, parameters);
@@ -321,7 +293,7 @@ ACMD(do_pgroup) {
     
     if (GET_PGROUP(ch)->is_secret() && pgroup_commands[cmd_index].requires_coconspirator_if_secret) {
       if (!(GET_PGROUP_MEMBER_DATA(ch)->privileges.AreAnySet(PRIV_COCONSPIRATOR, PRIV_LEADER, ENDBIT))) {
-        send_to_char("This group is clandestine, limiting your ability to dive deeper into this information.\r\n", ch);
+        send_to_char("This group is clandestine, so you need to be a Co-Conspirator to do that.\r\n", ch);
         return;
       }
     }
@@ -347,39 +319,28 @@ ACMD(do_pgroup) {
 }
 
 void do_pgroup_abdicate(struct char_data *ch, char *argument) {
-  // TODO: Log.
   // TODO: Successor mode, where you can specify who becomes the next leader.
+  // TODO: Line of succession, where the next-highest-ranking member becomes the next leader.
   
+  // Require confirmation.
   if (!*argument || str_cmp(argument, "confirm") != 0) {
-    send_to_char(ch, "If you're sure you want to abdicate from leadership of '%s', type PGROUP ABCIDATE CONFIRM.\r\n",
+    send_to_char(ch, "If you're sure you want to abdicate from leadership of '%s', type PGROUP ABDICATE CONFIRM.\r\n",
                  GET_PGROUP(ch)->get_name());
     return;
   }
   
-  Playergroup *pgr = GET_PGROUP(ch);
-  
-  // TODO: notify the entire group that the head has abdicated
+  // Demote them one rank to 9 and remove their leader bit.
   GET_PGROUP_MEMBER_DATA(ch)->rank = 9;
   GET_PGROUP_MEMBER_DATA(ch)->privileges.RemoveBit(PRIV_LEADER);
   
+  Playergroup *pgr = GET_PGROUP(ch);
+  
+  // Notify the character and log it.
   send_to_char(ch, "You abdicate your leadership position in '%s'.\r\n", GET_PGROUP(ch)->get_name());
+  pgr->audit_log_vfprintf("%s has abdicated from leadership of the group.", GET_CHAR_NAME(ch));
+  pgr->secret_log("A shadowy figure has abdicated from leadership of the group.");
   
-  if (GET_PGROUP(ch)->is_secret())
-    sprintf(buf, "A shadowy figure has abdicated from the leadership of '%s'.", pgr->get_name());
-  else
-    sprintf(buf, "%s has abdicated from the leadership of '%s'.", GET_CHAR_NAME(ch), pgr->get_name());
-  
-  // Notify all online members.
-  for (struct char_data* i = character_list; i; i = i->next) {
-    if (!IS_NPC(i) && GET_PGROUP_MEMBER_DATA(i) && GET_PGROUP(i)->get_idnum() == pgr->get_idnum()) {
-      // Notify the character, unless they're the person doing the disbanding.
-      if (i != ch) {
-        send_to_char(i, buf);
-      }
-    }
-  }
-  
-  // Mail all members, online or not.
+  // Find all group members and add them to a list.
   sprintf(buf2, "SELECT idnum FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
   mysql_wrapper(mysql, buf2);
   MYSQL_RES *res = mysql_use_result(mysql);
@@ -399,6 +360,14 @@ void do_pgroup_abdicate(struct char_data *ch, char *argument) {
   }
   mysql_free_result(res);
   
+  // Compose a mail message.
+  if (GET_PGROUP(ch)->is_secret()) {
+    sprintf(buf, "A shadowy figure has abdicated from the leadership of '%s'.", pgr->get_name());
+  } else {
+    sprintf(buf, "%s has abdicated from the leadership of '%s'.", GET_CHAR_NAME(ch), pgr->get_name());
+  }
+  
+  // Mail everyone in the list.
   while ((ns = results.Head())) {
     store_mail(ns->data->idnum, ch, buf);
     delete ns->data;
@@ -424,10 +393,7 @@ void do_pgroup_contest(struct char_data *ch, char *argument) {
 
 void do_pgroup_create(struct char_data *ch, char *argument) {
   // If the player is already in a group, they can't create a new one.
-  if (GET_PGROUP_MEMBER_DATA(ch)) {
-    send_to_char("You are already part of a playergroup. You'll need to leave it first.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(GET_PGROUP_MEMBER_DATA(ch), "You are already part of a playergroup.");
   
   // Set char editing. This does not remove the character from the game world.
   PLR_FLAGS(ch).SetBit(PLR_EDITING);
@@ -451,7 +417,7 @@ void do_pgroup_demote(struct char_data *ch, char *argument) {
 
 void do_pgroup_design(struct char_data *ch, char *argument) {
   // TODO: Log
-  send_to_char("design", ch);
+  send_to_char("Sorry, the design feature is still under construction.", ch);
   
   /* Requirements for design:
    - You must obtain an architect's drafting board (to be built)
@@ -521,18 +487,19 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
   sprintf(query_buf, "DELETE FROM pfiles_playergroups WHERE `group` = %ld", pgr->get_idnum());
   mysql_wrapper(mysql, query_buf);
   
-  // Delete pgroup's invitations. TODO: Notify the invitee that the invitation has expired.
+  // Delete pgroup's sent invitations.
   sprintf(query_buf, "DELETE FROM playergroup_invitations WHERE `Group` = %ld", pgr->get_idnum());
   mysql_wrapper(mysql, query_buf);
   
-  // TODO: How should we handle old logfiles?
+  /* We deliberately do not remove old logfiles. They can be cleaned up by hand if they clutter things up.
+   * This prevents any issues where players might abuse pgroup commands and then delete them to hide their tracks. */
   
   // Remove this group from all active players' char_data structs. Delete members' pgroup_data pointers.
   for (struct char_data* i = character_list; i; i = i->next) {
     if (!IS_NPC(i) && GET_PGROUP_MEMBER_DATA(i) && GET_PGROUP(i)->get_idnum() == pgr->get_idnum()) {
       // Notify the character, unless they're the person doing the disbanding.
       if (i != ch) {
-        send_to_char(i, "The playergroup %s has been disbanded.", pgr->get_name());
+        send_to_char(i, "The playergroup '%s' has been disbanded.", pgr->get_name());
       }
       
       // Wipe out the data and null the pointer.
@@ -554,26 +521,25 @@ void do_pgroup_disband(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_donate(struct char_data *ch, char *argument) {
-  // TODO: Log.
   // Wires the specified amount from your bank account to the pgroup's shell accounts.
-  // pgroup  donate  <amount>  [reason]   Deposits <amount> of nuyen. Reason is listed in logs.
+  // pgroup  donate  <amount>  <reason>   Deposits <amount> of nuyen. Reason is listed in logs.
   long amount;
   
   char *remainder = any_one_arg(argument, buf); // Amount, remainder = reason
   skip_spaces(&remainder);
   
-  if ((amount = atoi(buf)) <= 0) {
-    send_to_char(ch, "How much nuyen do you wish to donate to '%s'?\r\n", GET_PGROUP(ch)->get_name());
+  if ((amount = atol(buf)) <= 0) {
+    send_to_char(ch, "How much nuyen do you wish to donate to '%s'? (Syntax: DONATE <amount> <reason>)\r\n", GET_PGROUP(ch)->get_name());
     return;
   }
   
   if (amount > GET_BANK(ch)) {
-    send_to_char("Your bank account doesn't have that much nuyen.\r\n", ch);
+    send_to_char(ch, "Your bank account only has %ld nuyen in it.\r\n", GET_BANK(ch));
     return;
   }
   
   if (!*remainder) {
-    send_to_char("You must specify a reason for transferring these funds.\r\n", ch);
+    send_to_char("You must specify a reason for transferring these funds. (Syntax: DONATE <amount> <reason>)\r\n", ch);
     return;
   }
   
@@ -620,10 +586,7 @@ void do_pgroup_edit(struct char_data *ch, char *argument) {
 
 void do_pgroup_found(struct char_data *ch, char *argument) {
   // Precondition: The group may not have already been founded.
-  if (GET_PGROUP(ch)->is_founded()) {
-    send_to_char("Your group has already been founded.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(GET_PGROUP(ch)->is_founded(), "Your group has already been founded.");
   
   // Precondition: The group must meet the minimum membership requirements.
   int member_count = GET_PGROUP(ch)->sql_count_members();
@@ -657,12 +620,13 @@ void do_pgroup_grant(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_help(struct char_data *ch, char *argument) {
-  send_to_char("help", ch);
+  send_to_char("Sorry, the help feature is still under construction.", ch);
   
   // pgroup  help  [command]     Displays info on pgroup or its subcommands.
 }
 
 void do_pgroup_invitations(struct char_data *ch, char *argument) {
+  send_to_char("Sorry, the invitations feature is still under construction.", ch);
   // pgroup  invitations  [revoke]  [name]  No args: Displays group's open invitations. With revoke: Deletes the specified invitation.
 }
 
@@ -674,7 +638,7 @@ void do_pgroup_invite(struct char_data *ch, char *argument) {
 void do_pgroup_lease(struct char_data *ch, char *argument) {
   // TODO: Log.
   // pgroup  lease  <apartment>      Lease an apartment in your pgroup's name using pgroup bank funds.
-  send_to_char("lease", ch);
+  send_to_char("Sorry, the lease feature is still under construction.", ch);
 }
 
 void do_pgroup_logs(struct char_data *ch, char *argument) {
@@ -721,10 +685,7 @@ void do_pgroup_logs(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_note(struct char_data *ch, char *argument) {
-  if (!*argument) {
-    send_to_char("You must specify something to notate in the logs.\r\n", ch);
-    return;
-  }
+  FAILURE_CASE(!*argument, "You must specify something to notate in the logs.");
   
   if (strlen(argument) > MAX_PGROUP_LOG_LENGTH) {
     send_to_char(ch, "Sorry, log entries must be %d characters or fewer.", MAX_PGROUP_LOG_LENGTH);
@@ -738,19 +699,15 @@ void do_pgroup_note(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_outcast(struct char_data *ch, char *argument) {
-  // TODO: Require a reason to be given for outcasting.
   char name[strlen(argument)];
   struct char_data *vict = NULL;
   bool vict_is_logged_in = TRUE;
   
-  // Parse argument into name and rank string.
-  any_one_arg(argument, name);
+  // Parse argument to obtain a name and a reason.
+  char *reason = any_one_arg(argument, name);
   
-  // Require name.
-  if (!*name) {
-    send_to_char(ch, "Syntax: PGROUP OUTCAST <character> <rank>\r\n");
-    return;
-  }
+  // Require name and reason to both be filled out.
+  FAILURE_CASE(!*name || !*reason, "Syntax: PGROUP OUTCAST <character name> <reason>");
   
   // Search the online characters for someone matching the specified name.
   for (vict = character_list; vict; vict = vict->next) {
@@ -769,6 +726,7 @@ void do_pgroup_outcast(struct char_data *ch, char *argument) {
   }
   
   // Ensure targeted character is part of the same group as the invoking character.
+  // Note that this is not info leakage-- you must be Co-Conspirator to do this in a secret group.
   if (!(GET_PGROUP_MEMBER_DATA(vict) && GET_PGROUP(vict) && GET_PGROUP(vict) == GET_PGROUP(ch))) {
     send_to_char(ch, "%s's not part of your group.\r\n", capitalize(HSSH(vict)));
     return;
@@ -794,21 +752,22 @@ void do_pgroup_outcast(struct char_data *ch, char *argument) {
   mysql_wrapper(mysql, buf2);
   
   // Log the action.
-  GET_PGROUP(ch)->audit_log_vfprintf("%s has outcasted %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
+  GET_PGROUP(ch)->audit_log_vfprintf("%s has outcasted %s (reason: %s).", 
+                                      GET_CHAR_NAME(ch), GET_CHAR_NAME(vict), reason);
+  // No reason given in secret logs.
   GET_PGROUP(ch)->secret_log_vfprintf("A shadowy figure has outcasted %s.", GET_CHAR_NAME(vict));
   
   // Notify the character.
   send_to_char(ch, "You outcast %s from '%s'.\r\n", GET_CHAR_NAME(vict), GET_PGROUP(ch)->get_name());
-  sprintf(buf, "You have been cast out of '%s'.\r\n", GET_PGROUP(ch)->get_name());
+  sprintf(buf, "You have been outcasted from '%s' (reason: %s).\r\n", GET_PGROUP(ch)->get_name(), reason);
+  store_mail(GET_IDNUM(vict), ch, buf);
   
   // Save the character.
   if (vict_is_logged_in) {
     // Online characters are saved to the DB without unloading.
-    send_to_char(buf, vict);
     playerDB.SaveChar(vict, GET_LOADROOM(vict));
   } else {
     // Loaded characters are unloaded (saving happens during extract_char).
-    store_mail(GET_IDNUM(vict), ch, buf);
     extract_char(vict);
   }
 }
@@ -823,14 +782,23 @@ void do_pgroup_privileges(struct char_data *ch, char *argument) {
 }
 
 void do_pgroup_resign(struct char_data *ch, char *argument) {
-  // TODO: Log, but only if group is not secret.
   skip_spaces(&argument);
   
+  // Leaders can't resign without first abdicating.
+  FAILURE_CASE(GET_PGROUP_MEMBER_DATA(ch)->privileges.IsSet(PRIV_LEADER), 
+               "You can't resign without abdicating your leadership first.");
+  
+  // Require confirmation.
   if (!*argument || str_cmp(argument, "confirm") != 0) {
     send_to_char(ch, "If you're sure you want to resign from '%s', type PGROUP RESIGN CONFIRM.\r\n",
                  GET_PGROUP(ch)->get_name());
     return;
   }
+  
+  // Log the action. No secret log here.
+  GET_PGROUP(ch)->audit_log_vfprintf("%s has resigned from the group.", GET_CHAR_NAME(ch));
+  
+  // Notify the player, then strip their membership.
   send_to_char(ch, "You resign your position in '%s'.\r\n", GET_PGROUP(ch)->get_name());
   GET_PGROUP(ch)->remove_member(ch);
 }
@@ -880,9 +848,7 @@ void do_pgroup_status(struct char_data *ch, char *argument) {
   char query_buf[512];
   Playergroup *pgr = GET_PGROUP(ch);
   
-  send_to_char(ch, "Playergroup information for %s (tag %s, alias %s):\r\n", pgr->get_name(), pgr->get_tag(), pgr->get_alias());
-  
-  send_to_char("\r\n", ch);
+  send_to_char(ch, "Playergroup information for %s (tag %s, alias %s):\r\n\r\n", pgr->get_name(), pgr->get_tag(), pgr->get_alias());
   
   // If group is disabled, display this and end status readout.
   if (pgr->is_disabled()) {
@@ -899,7 +865,7 @@ void do_pgroup_status(struct char_data *ch, char *argument) {
   
   send_to_char("\r\n", ch);
   
-  // If group is secret and member is not, they stop here.
+  // If group is secret and member is not privileged, they stop here.
   if (pgr->is_secret() && !GET_PGROUP_MEMBER_DATA(ch)->privileges.AreAnySet(PRIV_COCONSPIRATOR, PRIV_LEADER, ENDBIT)) {
     send_to_char("This group is clandestine, limiting your ability to delve deeper into its information.\r\n", ch);
     return;
@@ -921,12 +887,12 @@ void do_pgroup_status(struct char_data *ch, char *argument) {
 void do_pgroup_transfer(struct char_data *ch, char *argument) {
   // TODO: Log.
   // pgroup  transfer  <vehicle>  <target>   Transfer a vehicle like do_transfer.
-  send_to_char("transfer", ch);
+  send_to_char("Sorry, the transfer feature is still under construction.", ch);
 }
 
 void do_pgroup_vote(struct char_data *ch, char *argument) {
   // PGROUP VOTE to list candidates (assuming a contest is open). PGROUP VOTE FOR <name> to cast/change vote.
-  send_to_char("vote", ch);
+  send_to_char("Sorry, the vote feature is still under construction.", ch);
 }
 
 void do_pgroup_wire(struct char_data *ch, char *argument) {
@@ -938,25 +904,18 @@ void do_pgroup_wire(struct char_data *ch, char *argument) {
   remainder = any_one_arg(remainder, buf1); // Target, remainder is reason
   skip_spaces(&remainder);
   
-  if ((amount = atoi(buf)) <= 0) {
-    send_to_char("How much do you wish to wire?\r\n", ch);
-    return;
-  }
+  amount = atol(buf);
+  // Must specify a number greater than zero.
+  FAILURE_CASE(amount <= 0, "How much do you wish to wire?");
   
-  if (amount > GET_PGROUP(ch)->get_bank()) {
-    send_to_char("The group doesn't have that much nuyen.\r\n", ch);
-    return;
-  }
+  // Must have enough cash in group bank to cover the transaction.
+  FAILURE_CASE(amount > GET_PGROUP(ch)->get_bank(), "The group doesn't have that much nuyen.");
   
-  if (!*buf1) {
-    send_to_char("Whom do you want to wire funds to?\r\n", ch);
-    return;
-  }
+  // Must specify a target.
+  FAILURE_CASE(!*buf1, "Whom do you want to wire funds to? (Syntax: PGROUP WIRE <amount> <recipient> <reason>)");
   
-  if (!*remainder) {
-    send_to_char("You must specify a reason for transferring these funds.\r\n", ch);
-    return;
-  }
+  // Must specify a reason.
+  FAILURE_CASE(!*remainder, "Why are you sending this wire? (Syntax: PGROUP WIRE <amount> <recipient> <reason>)");
   
   if (strlen(remainder) > MAX_PGROUP_LOG_LENGTH - 2) {
     send_to_char(ch, "That reason is too long; you're limited to %d characters.", MAX_PGROUP_LOG_LENGTH - 2);
@@ -967,7 +926,7 @@ void do_pgroup_wire(struct char_data *ch, char *argument) {
   long isfile = FALSE;
   if (!(vict = get_player_vis(ch, buf1, FALSE))) {
     if ((isfile = get_player_id(buf1)) == -1) {
-      send_to_char("It won't let you transfer to that account\r\n", ch);
+      send_to_char("There is no such player.\r\n", ch);
       return;
     }
   }
@@ -1016,7 +975,7 @@ void do_pgroup_wire(struct char_data *ch, char *argument) {
 /* Help messaging for main pgroup command. Specific help on these commands should be written into helpfiles (eg HELP PGROUP FOUND). */
 void display_pgroup_help(struct char_data *ch) {
   int cmds_written = 0;
-  sprintf(buf, "Valid PGROUP commands for you are: \r\n");
+  sprintf(buf, "You have access to the following PGROUP commands: \r\n");
   
   // If they're not part of a group, the only command they can do is 'create'.
   if (!GET_PGROUP_MEMBER_DATA(ch)) {
@@ -1293,8 +1252,8 @@ void perform_pgroup_grant_revoke(struct char_data *ch, char *argument, bool revo
   // Since a lot of logic is the same, combined grant and revoke methods.
   
   // Can't overflow the substring buffer if the substring buffer is always the length of your string.
-  char name[strlen(argument)];
-  char privilege[strlen(argument)];
+  char name[strlen(argument)+1];
+  char privilege[strlen(argument)+1];
   int priv;
   struct char_data *vict = NULL;
   bool vict_is_logged_in = TRUE;
