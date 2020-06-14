@@ -425,6 +425,8 @@ void do_pgroup_design(struct char_data *ch, char *argument) {
    - You must sit at the drafting board (like a computer)
    - PGROUP DESIGN puts you into a mode where you're essentially projecting (body vulnerable to attack, etc)
    
+   TODO: What happens if you're attacked while designing?
+   
    Creates a new zone (or uses one that already exists if you've done this before) and puts you in a new empty room.
    Allows use of BLUEPRINT commands. Changes save automatically (there's no undo, just like normal building).
    Allows RETURN to return to your body.
