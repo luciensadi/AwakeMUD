@@ -746,6 +746,7 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       }
       send_to_char("Enter the privilege level a character must have to enter this room (0: NPC; 1: Player; X>1: Staff rank X): ", CH);
       d->edit_mode = REDIT_STAFF_LOCK_LEVEL;
+      break;
     default:
       send_to_char("Invalid choice!\r\n", d->character);
       redit_disp_menu(d);
