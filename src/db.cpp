@@ -1045,6 +1045,7 @@ void parse_room(File &fl, long nr)
   room->vision[1] = data.GetInt("POINTS/Smoke", 0);
   room->background[CURRENT_BACKGROUND_COUNT] = room->background[PERMANENT_BACKGROUND_COUNT] = data.GetInt("POINTS/Background", 0);
   room->background[CURRENT_BACKGROUND_TYPE] = room->background[PERMANENT_BACKGROUND_TYPE] = data.GetInt("POINTS/BackgroundType", 0);
+  room->staff_level_lock = data.GetInt("POINTS/StaffLockLevel", 0);
   if (room->vision[0] == -1) {
     if (room->room_flags.IsSet(ROOM_DARK))
       room->vision[0] = LIGHT_FULLDARK;

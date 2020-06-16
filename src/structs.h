@@ -200,6 +200,8 @@ struct room_data
   byte shadow[2];
   byte silence[2];
   SPECIAL(*func);
+  
+  int staff_level_lock;
 
   struct obj_data *contents;   /* List of items in room              */
   struct char_data *people;    /* List of NPC / PC in room           */
@@ -215,8 +217,8 @@ struct room_data
   room_data() :
       name(NULL), description(NULL), night_desc(NULL), ex_description(NULL),
       matrix(0), access(0), io(0), trace(0),
-      bandwidth(0), jacknumber(0), address(NULL), peaceful(0), func(NULL), contents(NULL),
-      people(NULL), vehicles(NULL), watching(NULL)
+      bandwidth(0), jacknumber(0), address(NULL), peaceful(0), func(NULL),
+      staff_level_lock(0), contents(NULL), people(NULL), vehicles(NULL), watching(NULL)
   {
     for (int i = 0; i < NUM_OF_DIRS; i++) {
       dir_option[i] = NULL;

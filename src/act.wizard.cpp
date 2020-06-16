@@ -567,13 +567,31 @@ ACMD(do_goto)
   
   half_chop(argument, buf, command);
 
-  if ((location = find_target_room(ch, buf))) {
-    if (location->number == 0 || location->number == 1) {
-      send_to_char("You're not able to GOTO that room. If you need to do something there, use AT.\r\n", ch);
+  // Look for either a target room or someone standing in a room.
+  location = find_target_room(ch, buf);
+  
+  // We found no target in a room-- look for one in a veh.
+  if (!location) {
+    vict = get_char_vis(ch, buf);
+    
+    if (!vict || !vict->in_veh) {
+      // Error message happens in get_char_vis.
       return;
     }
-  } else if (!(vict = get_char_vis(ch, buf)) || !vict->in_veh) {
-    // Error message happens in get_char_vis.
+    
+    // Set location to be the room their vehicle is in.
+    location = get_veh_in_room(vict->in_veh);
+  }
+  
+  // Perform location validity check for room number.
+  if (location->number == 0 || location->number == 1) {
+    send_to_char("You're not able to GOTO that room. If you need to do something there, use AT.\r\n", ch);
+    return;
+  }
+  
+  // Perform location validity check for level lock.
+  if (location->staff_level_lock > GET_REAL_LEVEL(ch)) {
+    send_to_char(ch, "Sorry, you need to be a level-%d immortal to go there.", location->staff_level_lock);
     return;
   }
 
