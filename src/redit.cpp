@@ -739,6 +739,11 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       }
       break;
     case 'n':
+      if (ROOM->staff_level_lock > GET_REAL_LEVEL(CH)) {
+        send_to_char("The lock level for this room is higher than your lock level-- you can't change it.\r\n", CH);
+        redit_disp_menu(d);
+        return;
+      }
       send_to_char("Enter the privilege level a character must have to enter this room (0: NPC; 1: Player; X>1: Staff rank X): ", CH);
       d->edit_mode = REDIT_STAFF_LOCK_LEVEL;
     default:
@@ -1164,6 +1169,8 @@ void redit_parse(struct descriptor_data * d, const char *arg)
     if ((number < 0) || (number > 10)) {
       send_to_char("Value must be between 0 and 10.\r\n", CH);
       send_to_char("Enter staff lock level: ", CH);
+    } else if (number > GET_REAL_LEVEL(CH)) {
+      send_to_char("You can't set a lock level greater than your own level.\r\n", CH);
     } else {
       ROOM->staff_level_lock = number;
       redit_disp_menu(d);
