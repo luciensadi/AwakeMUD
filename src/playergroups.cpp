@@ -423,6 +423,7 @@ void do_pgroup_design(struct char_data *ch, char *argument) {
    - You must obtain an architect's drafting board (to be built)
    - You must deploy this drafting board (like a workshop)
    - You must sit at the drafting board (like a computer)
+   - You must pay an initial design deposit (will be either refunded when you destroy your blueprint or applied as a credit towards your costs)
    - PGROUP DESIGN puts you into a mode where you're essentially projecting (body vulnerable to attack, etc)
    
    TODO: What happens if you're attacked while designing?
@@ -604,7 +605,7 @@ void do_pgroup_found(struct char_data *ch, char *argument) {
     return;
   }
   
-  // TODO: Should this be done in a specific place or in the presence of a specific NPC for RP reasons?
+  // Eventual TODO: Should this be done in a specific place or in the presence of a specific NPC for RP reasons?
   send_to_char(ch, "You pay %d nuyen to found '%s'.\r\n", COST_TO_FOUND_GROUP, GET_PGROUP(ch)->get_name());
   GET_NUYEN(ch) -= COST_TO_FOUND_GROUP;
   playerDB.SaveChar(ch);
