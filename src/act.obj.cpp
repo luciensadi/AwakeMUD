@@ -2227,7 +2227,7 @@ int can_wield_both(struct char_data *ch, struct obj_data *one, struct obj_data *
 {
   if (!one || !two)
     return TRUE;
-  if (GET_OBJ_TYPE(one) != ITEM_WEAPON || GET_OBJ_TYPE(one) != ITEM_WEAPON)
+  if (GET_OBJ_TYPE(one) != ITEM_WEAPON || GET_OBJ_TYPE(two) != ITEM_WEAPON)
     return TRUE;
   if ((IS_GUN(GET_OBJ_VAL(one, 3)) && !IS_GUN(GET_OBJ_VAL(two, 3))) ||
       (IS_GUN(GET_OBJ_VAL(two, 3)) && !IS_GUN(GET_OBJ_VAL(one, 3))))
@@ -3027,75 +3027,69 @@ ACMD(do_crack)
   }
 }
 
+// Draw a weapon from the provided holster. Returns 1 if drawn, 0 if not.
+int draw_from_readied_holster(struct char_data *ch, struct obj_data *holster) {
+  struct obj_data *contents = holster->contains;
+  
+  if (!contents) {
+    // Readied holster was empty: un-ready the holster, but continue looking for a valid ready holster.
+    GET_HOLSTER_READY_STATUS(holster) = 0;
+    return 0;
+  }
+  
+  // Did we fill up our hands, or do we only have one free hand for a two-handed weapon? Skip.
+  if ((GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)) || ((GET_EQ(ch, WEAR_WIELD) || GET_EQ(ch, WEAR_HOLD)) && IS_OBJ_STAT(contents, ITEM_TWOHANDS)))
+    return 0;
+  
+  // TODO: What does this check mean?
+  if (GET_OBJ_VAL(holster, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(holster, 4) <= SKILL_ASSAULT_CANNON)
+    return 0;
+  
+  int where = 0;
+  if (!GET_EQ(ch, WEAR_WIELD) && can_wield_both(ch, GET_EQ(ch, WEAR_HOLD), contents))
+    where = WEAR_WIELD;
+  else if (!GET_EQ(ch, WEAR_HOLD) && can_wield_both(ch, GET_EQ(ch, WEAR_WIELD), contents))
+    where = WEAR_HOLD;
+  if (where) {
+    obj_from_obj(contents);
+    equip_char(ch, contents, where);
+    act("You draw $p from $P.", FALSE, ch, contents, holster, TO_CHAR);
+    act("$n draws $p from $P.", TRUE, ch, contents, holster, TO_ROOM);
+    
+    if (GET_OBJ_SPEC(contents) == weapon_dominator) {
+      dominator_mode_switch(ch, contents, DOMINATOR_MODE_PARALYZER);
+    }
+    
+    // We wielded 1 weapon.
+    return 1;
+  }
+  
+  // We wielded 0 weapons.
+  return 0;
+}
+
 int draw_weapon(struct char_data *ch)
 {
-  struct obj_data *hols, *obj;
+  struct obj_data *potential_holster, *obj;
   int i = 0;
 
-  if (!GET_EQ(ch, WEAR_WIELD) || !GET_EQ(ch, WEAR_HOLD))
-  {
-    for (int x = 0; x < NUM_WEARS; x++) {
-      if (GET_EQ(ch, x)) {
-        if (GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_HOLSTER && GET_OBJ_VAL(GET_EQ(ch, x), 3)) {
-          hols = GET_EQ(ch, x)->contains;
-          if (!hols) {
-            GET_OBJ_VAL(GET_EQ(ch, x), 3) = 0;
-            return 0;
-          }
-          if ((GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)) || ((GET_EQ(ch, WEAR_WIELD) || GET_EQ(ch, WEAR_HOLD)) && IS_OBJ_STAT(hols, ITEM_TWOHANDS)))
-            continue;
-          if (GET_OBJ_VAL(hols, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(hols, 4) <= SKILL_ASSAULT_CANNON)
-            continue;
-          int where = 0;
-          if (!GET_EQ(ch, WEAR_WIELD) && can_wield_both(ch, GET_EQ(ch, WEAR_HOLD), hols))
-            where = WEAR_WIELD;
-          else if (!GET_EQ(ch, WEAR_HOLD) && can_wield_both(ch, GET_EQ(ch, WEAR_WIELD), hols))
-            where = WEAR_HOLD;
-          if (where) {
-            obj_from_obj(hols);
-            equip_char(ch, hols, where);
-            act("You draw $p from $P.", FALSE, ch, hols, GET_EQ(ch, x), TO_CHAR);
-            act("$n draws $p from $P.", TRUE, ch, hols, GET_EQ(ch, x), TO_ROOM);
-            i++;
-            
-            if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_SPEC(GET_EQ(ch, WEAR_WIELD)) == weapon_dominator) {
-              dominator_mode_switch(ch, GET_EQ(ch, WEAR_WIELD), DOMINATOR_MODE_PARALYZER);
-            }
-          }
-        } else if (GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_WORN) {
-          for (obj = GET_EQ(ch, x)->contains; obj; obj = obj->next_content) {
-            if (GET_OBJ_TYPE(obj) == ITEM_HOLSTER && GET_OBJ_VAL(obj, 3)) {
-              hols = obj->contains;
-              if (!hols) {
-                GET_OBJ_VAL(GET_EQ(ch, x), 3) = 0;
-                return 0;
-              }
-              if ((GET_EQ(ch, WEAR_WIELD) && GET_EQ(ch, WEAR_HOLD)) || ((GET_EQ(ch, WEAR_WIELD) || GET_EQ(ch, WEAR_HOLD)) && IS_OBJ_STAT(hols, ITEM_TWOHANDS)))
-                continue;
-              if (GET_OBJ_VAL(hols, 4) >= SKILL_MACHINE_GUNS && GET_OBJ_VAL(hols, 4) <= SKILL_ASSAULT_CANNON)
-                continue;
-              int where = 0;
-              if (!GET_EQ(ch, WEAR_WIELD) &&  can_wield_both(ch, GET_EQ(ch, WEAR_HOLD), hols))
-                where = WEAR_WIELD;
-              else if (!GET_EQ(ch, WEAR_HOLD) && can_wield_both(ch, GET_EQ(ch, WEAR_WIELD), hols))
-                where = WEAR_HOLD;
-              if (where) {
-                obj_from_obj(hols);
-                equip_char(ch, hols, where);
-                act("You draw $p from $P.", FALSE, ch, hols, GET_EQ(ch, x), TO_CHAR);
-                act("$n draws $p from $P.", TRUE, ch, hols, GET_EQ(ch, x), TO_ROOM);
-                i++;
-                
-                if (GET_EQ(ch, WEAR_WIELD) && GET_OBJ_SPEC(GET_EQ(ch, WEAR_WIELD)) == weapon_dominator) {
-                  dominator_mode_switch(ch, GET_EQ(ch, WEAR_WIELD), DOMINATOR_MODE_PARALYZER);
-                }
-              }
-            }
+  // Go through all the wearslots, provided that the character is not already wielding & holding things.
+  for (int x = 0; x < NUM_WEARS && (!GET_EQ(ch, WEAR_WIELD) || !GET_EQ(ch, WEAR_HOLD)); x++) {
+    if ((potential_holster = GET_EQ(ch, x))) {
+      if (GET_OBJ_TYPE(potential_holster) == ITEM_HOLSTER && GET_HOLSTER_READY_STATUS(potential_holster)) {
+        i += draw_from_readied_holster(ch, potential_holster);
+      }
+      
+      else if (GET_OBJ_TYPE(potential_holster) == ITEM_WORN) {
+        for (obj = potential_holster->contains; obj; obj = obj->next_content) {
+          if (GET_OBJ_TYPE(obj) == ITEM_HOLSTER && GET_HOLSTER_READY_STATUS(obj)) {
+            i += draw_from_readied_holster(ch, obj);
           }
         }
       }
     }
   }
+  
   affect_total(ch);
   
   return i;

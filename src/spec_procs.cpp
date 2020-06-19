@@ -4439,7 +4439,7 @@ void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode)
         act(buf, FALSE, ch, 0, 0, TO_ROOM);
       }
       
-      send_to_char(ch, "A dispassionate feminine voice states, \"^cEnforcement mode: Non-Lethal Paralyzer. Please aim calmly and subdue the target.^n\"\r\n");
+      send_to_char(ch, "\r\nA dispassionate female voice states, \"^cEnforcement mode: Non-Lethal Paralyzer. Please aim calmly and subdue the target.^n\"\r\n");
       GET_OBJ_TYPE(obj) = ITEM_WEAPON;
       GET_WEAPON_ATTACK_TYPE(obj) = WEAP_TASER;
       GET_WEAPON_DAMAGE_CODE(obj) = DEADLY;
@@ -4458,7 +4458,7 @@ void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode)
         act(buf, FALSE, ch, 0, 0, TO_ROOM);
       }
       
-      send_to_char(ch, "A dispassionate feminine voice states, \"^cEnforcement mode: Lethal Eliminator. Please aim carefully and eliminate the target.^n\"\r\n");
+      send_to_char(ch, "\r\nA dispassionate female voice states, \"^cEnforcement mode: Lethal Eliminator. Please aim carefully and eliminate the target.^n\"\r\n");
       GET_OBJ_TYPE(obj) = ITEM_WEAPON;
       GET_WEAPON_ATTACK_TYPE(obj) = WEAP_HEAVY_PISTOL;
       GET_WEAPON_DAMAGE_CODE(obj) = DEADLY;
@@ -4473,7 +4473,7 @@ void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode)
         act(buf, FALSE, ch, 0, 0, TO_ROOM);
       }
       
-      send_to_char(ch, "A dispassionate feminine voice states, \"^cEnforcement mode: Destroy Decomposer. Target will be completely annihilated. Please proceed with maximum caution.^n\"\r\n");
+      send_to_char(ch, "\r\nA dispassionate female voice states, \"^cEnforcement mode: Destroy Decomposer. Target will be completely annihilated. Please proceed with maximum caution.^n\"\r\n");
       GET_OBJ_TYPE(obj) = ITEM_WEAPON;
       GET_WEAPON_ATTACK_TYPE(obj) = WEAP_CANNON;
       GET_WEAPON_DAMAGE_CODE(obj) = DEADLY;
@@ -4500,7 +4500,7 @@ void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode)
           act(buf, FALSE, ch, 0, 0, TO_ROOM);
         }
       }
-      send_to_char(ch, "A dispassionate feminine voice states, \"^cThe trigger has been locked.^n\"\r\n");
+      send_to_char(ch, "\r\nA dispassionate feminine voice states, \"^cThe trigger has been locked.^n\"\r\n");
       GET_OBJ_TYPE(obj) = ITEM_OTHER;
       break;
   }
@@ -4510,6 +4510,8 @@ void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode)
 SPECIAL(weapon_dominator) {
   
   struct obj_data *obj = (struct obj_data *) me;
+  struct obj_data *prev_wield = GET_EQ(ch, WEAR_WIELD);
+  struct obj_data *prev_hold = GET_EQ(ch, WEAR_HOLD);
   const char *rank = "";
   bool authorized;
   
@@ -4517,16 +4519,16 @@ SPECIAL(weapon_dominator) {
     return FALSE;
   
   if (CMD_IS("wield")) {
-    // They're already wielding it? Do nothing.
-    if (GET_EQ(ch, WEAR_WIELD) == obj)
-      return FALSE;
+    // Process the wield command as normal, then process the gun's reaction (if any).
+    do_wield(ch, argument, cmd, 0);
     
-    // Let them wield it, then have the gun react.
-    if (CMD_IS("wield"))
-      do_wield(ch, argument, cmd, 0);
+    // Nothing changed? Bail out. Return TRUE because we intercepted wield.
+    if (GET_EQ(ch, WEAR_WIELD) == prev_wield && GET_EQ(ch, WEAR_HOLD) == prev_hold)
+      return TRUE;
     
-    // Check to see if it worked (e.g. they're currently wielding it).
-    if (GET_EQ(ch, WEAR_WIELD) == obj) {
+    // Are they now wielding this object?
+    if ((GET_EQ(ch, WEAR_WIELD) == obj && prev_wield != obj) ||
+        (GET_EQ(ch, WEAR_HOLD) == obj && prev_hold != obj)) {
       // Compose their rank string.
       if (GET_LEVEL(ch) == LVL_PRESIDENT) {
         rank = "Inspector";
@@ -4556,9 +4558,10 @@ SPECIAL(weapon_dominator) {
   // For all other commands, we require that they're wielding the Dominator already.
   if (GET_EQ(ch, WEAR_WIELD) == obj) {
     if (CMD_IS("mode")) {
+      const char *mode_string = "You must specify a valid mode from one of the following: Deactivated, Paralyzer, Eliminator, Decomposer.\r\n";
       // Override the current mode.
       if (!*argument) {
-        send_to_char(ch, "You must specify a valid mode from one of the following: Paralyzer, Eliminator, Decomposer.\r\n");
+        send_to_char(ch, mode_string);
         return TRUE;
       }
       
@@ -4572,7 +4575,7 @@ SPECIAL(weapon_dominator) {
       skip_spaces(&argument);
       any_one_arg(argument, buf);
       
-      
+      // Switch mode, or tell the player the syntax.
       if (is_abbrev(buf, "non-lethal") || is_abbrev(buf, "paralyzer")) {
         mode = DOMINATOR_MODE_PARALYZER;
       } else if (is_abbrev(buf, "eliminator") || is_abbrev(buf, "lethal")) {
@@ -4582,7 +4585,7 @@ SPECIAL(weapon_dominator) {
       } else if (is_abbrev(buf, "deactivated")) {
         mode = DOMINATOR_MODE_DEACTIVATED;
       } else {
-        send_to_char(ch, "You must specify a valid mode from one of the following: Deactivated, Paralyzer, Eliminator, Decomposer.\r\n");
+        send_to_char(ch, mode_string);
         return TRUE;
       }
       
@@ -4592,13 +4595,21 @@ SPECIAL(weapon_dominator) {
     }
     
     if (CMD_IS("holster") || CMD_IS("remove")) {
-      // Holster the weapon.
+      // Holster or remove as normal, then check to see if the Dominator has been removed.
       if (CMD_IS("remove"))
         do_remove(ch, argument, cmd, 0);
       else if (CMD_IS("holster"))
         do_holster(ch, argument, cmd, 0);
-      if (GET_EQ(ch, WEAR_WIELD) != obj)
+      
+      // Nothing changed? Bail out.
+      if (GET_EQ(ch, WEAR_WIELD) == prev_wield && GET_EQ(ch, WEAR_HOLD) == prev_hold)
+        return TRUE;
+      
+      // Did they unwield a Dominator?
+      if ((prev_wield == obj && GET_EQ(ch, WEAR_WIELD) != obj) ||
+          (prev_hold == obj && GET_EQ(ch, WEAR_HOLD) != obj))
         dominator_mode_switch(ch, obj, DOMINATOR_MODE_DEACTIVATED);
+      
       return TRUE;
     }
   }

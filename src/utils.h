@@ -876,6 +876,7 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define GET_VEHICLE_MOD_TYPE(mod)            (GET_OBJ_VAL((mod), 0))
 
 // ITEM_HOLSTER convenience defines
+#define GET_HOLSTER_READY_STATUS(holster)    (GET_OBJ_VAL((holster), 3))
 
 // ITEM_DESIGN convenience defines
 
