@@ -3090,7 +3090,7 @@ void reset_zone(int zone, int reboot)
       if ((veh_index[ZCMD.arg1].number < ZCMD.arg2) || (ZCMD.arg2 == -1) || (ZCMD.arg2 == 0 && reboot)) {        
         veh = read_vehicle(ZCMD.arg1, REAL);
         veh_to_room(veh, &world[ZCMD.arg3]);
-        sprintf(buf, "%s has arrived.", capitalize(GET_VEH_NAME(veh)));
+        sprintf(buf, "%s has arrived.\r\n", capitalize(GET_VEH_NAME(veh)));
         send_to_room(buf, veh->in_room);
         last_cmd = 1;
       } else

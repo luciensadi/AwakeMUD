@@ -531,23 +531,23 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define STOP_WORKING(ch)      {AFF_FLAGS((ch)).RemoveBits(AFF_PROGRAM, AFF_DESIGN, AFF_PART_BUILD, AFF_PART_DESIGN, AFF_BONDING, AFF_CONJURE, AFF_PACKING, AFF_LODGE, AFF_CIRCLE, AFF_SPELLDESIGN, AFF_AMMOBUILD, ENDBIT); \
                                GET_BUILDING((ch)) = NULL;}
 
-#define GET_TOTEM(ch)           (ch->player_specials->saved.totem)
-#define GET_TOTEMSPIRIT(ch)	(ch->player_specials->saved.totemspirit)
+#define GET_TOTEM(ch)            (ch->player_specials->saved.totem)
+#define GET_TOTEMSPIRIT(ch)      (ch->player_specials->saved.totemspirit)
 
-#define GET_DRUG_AFFECT(ch)     (ch->player_specials->drug_affect[0])
-#define GET_DRUG_DURATION(ch)   (ch->player_specials->drug_affect[1])
-#define GET_DRUG_DOSE(ch)       (ch->player_specials->drug_affect[2])
-#define GET_DRUG_STAGE(ch)      (ch->player_specials->drug_affect[3])
-#define GET_DRUG_EDGE(ch, i)    (ch->player_specials->drugs[i][0])
-#define GET_DRUG_ADDICT(ch, i)  (ch->player_specials->drugs[i][1])
-#define GET_DRUG_DOSES(ch, i)   (ch->player_specials->drugs[i][2])
-#define GET_DRUG_LASTFIX(ch, i) (ch->player_specials->drugs[i][3])
-#define GET_DRUG_ADDTIME(ch, i) (ch->player_specials->drugs[i][4])
+#define GET_DRUG_AFFECT(ch)      (ch->player_specials->drug_affect[0])
+#define GET_DRUG_DURATION(ch)    (ch->player_specials->drug_affect[1])
+#define GET_DRUG_DOSE(ch)        (ch->player_specials->drug_affect[2])
+#define GET_DRUG_STAGE(ch)       (ch->player_specials->drug_affect[3])
+#define GET_DRUG_EDGE(ch, i)     (ch->player_specials->drugs[i][0])
+#define GET_DRUG_ADDICT(ch, i)   (ch->player_specials->drugs[i][1])
+#define GET_DRUG_DOSES(ch, i)    (ch->player_specials->drugs[i][2])
+#define GET_DRUG_LASTFIX(ch, i)  (ch->player_specials->drugs[i][3])
+#define GET_DRUG_ADDTIME(ch, i)  (ch->player_specials->drugs[i][4])
 #define GET_DRUG_TOLERANT(ch, i) (ch->player_specials->drugs[i][5])
 #define GET_DRUG_LASTWITH(ch, i) (ch->player_specials->drugs[i][6])
-#define GET_MENTAL_LOSS(ch)	(ch->player_specials->mental_loss)
-#define GET_PHYSICAL_LOSS(ch)	(ch->player_specials->physical_loss)
-#define GET_PERM_BOD_LOSS(ch)	(ch->player_specials->perm_bod)
+#define GET_MENTAL_LOSS(ch)      (ch->player_specials->mental_loss)
+#define GET_PHYSICAL_LOSS(ch)    (ch->player_specials->physical_loss)
+#define GET_PERM_BOD_LOSS(ch)    (ch->player_specials->perm_bod)
 /* descriptor-based utils ************************************************/
 
 #define WAIT_STATE(ch, cycle) { \

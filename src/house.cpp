@@ -524,8 +524,10 @@ SPECIAL(landlord_spec)
     room_record = find_room(arg, lord->rooms, recep);
     if (!room_record)
       do_say(recep, "Which room is that?", 0, 0);
-    else if (room_record->owner != GET_IDNUM(ch))
+    else if (room_record->owner && room_record->owner != GET_IDNUM(ch))
       do_say(recep, "I'm afraid I can't release that information.", 0, 0);
+    else if (!room_record->owner)
+      do_say(recep, "That room is currently available for lease.", 0, 0);
     else {
       if (room_record->date - time(0) < 0)
         strcpy(buf2, "Your rent has expired on that apartment.");

@@ -146,18 +146,20 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
     return TRUE;
   }
   
-  if (!*arg)
-  {
+  if (!*arg) {
     sprintf(buf, "%s what?\r\n", cmdname);
     send_to_char(ch, CAP(buf));
     return TRUE;
-  } else if (!(vict = get_char_room_vis(ch, arg)) && !(veh = get_veh_list(arg, ch->in_room->vehicles, ch)))
-  {
+  }
+  
+  vict = get_char_room_vis(ch, arg);
+  veh = get_veh_list(arg, ch->in_room->vehicles, ch);
+  
+  if (!vict && !veh) {
     if ((dir = messageless_find_door(ch, arg, buf2, cmdname)) < 0)
       return FALSE;
     if (!str_cmp(cmdname, "kill") || !str_cmp(cmdname, "murder")) {
-      send_to_char(ch, "How would you go about %sing an object?\r\n",
-                   cmdname);
+      send_to_char(ch, "How would you go about %sing an object?\r\n", cmdname);
       return TRUE;
     } else if (CH_IN_COMBAT(ch)) {
       send_to_char("Maybe you'd better wait...\r\n", ch);
@@ -270,6 +272,10 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
 
   if (veh)
   {
+    if (veh->damage >= 10) {
+      send_to_char(ch, "%s is already destroyed, better find something else to %s.\r\n", GET_VEH_NAME(veh), cmdname);
+      return TRUE;
+    }
     if (FIGHTING_VEH(ch)) {
       if (FIGHTING_VEH(ch) == veh) {
         send_to_char(ch, "But you're already attacking it.\r\n");

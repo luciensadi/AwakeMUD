@@ -4510,13 +4510,14 @@ void dominator_mode_switch(struct char_data *ch, struct obj_data *obj, int mode)
 SPECIAL(weapon_dominator) {
   
   struct obj_data *obj = (struct obj_data *) me;
-  struct obj_data *prev_wield = GET_EQ(ch, WEAR_WIELD);
-  struct obj_data *prev_hold = GET_EQ(ch, WEAR_HOLD);
   const char *rank = "";
   bool authorized;
   
   if (!ch || !cmd)
     return FALSE;
+  
+  struct obj_data *prev_wield = GET_EQ(ch, WEAR_WIELD);
+  struct obj_data *prev_hold = GET_EQ(ch, WEAR_HOLD);
   
   if (CMD_IS("wield")) {
     // Process the wield command as normal, then process the gun's reaction (if any).

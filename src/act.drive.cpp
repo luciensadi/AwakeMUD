@@ -212,8 +212,7 @@ ACMD(do_drive)
     send_to_char(TOOBUSY, ch);
     return;
   }
-  if(GET_SKILL(ch, SKILL_PILOT_CAR) == 0 && GET_SKILL(ch, SKILL_PILOT_BIKE) == 0 &&
-      GET_SKILL(ch, SKILL_PILOT_TRUCK) == 0) {
+  if(!IS_NPC(ch) && GET_SKILL(ch, SKILL_PILOT_CAR) == 0 && GET_SKILL(ch, SKILL_PILOT_BIKE) == 0 && GET_SKILL(ch, SKILL_PILOT_TRUCK) == 0) {
     send_to_char("You have no idea how to do that.\r\n", ch);
     return;
   }
