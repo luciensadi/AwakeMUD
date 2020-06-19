@@ -681,11 +681,12 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 #define LOCK_LEVEL(ch, obj, door) ((obj) ? GET_OBJ_VAL(obj, 4) : \
            get_ch_in_room(ch)->dir_option[door]->key_level)
 
-#define CAN_GO(ch, door)     ( EXIT(ch,door) &&                                                                            \
-                               (EXIT(ch,door)->to_room && EXIT(ch,door)->to_room != &world[0]) &&                                                      \
-                               !(IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED)) &&                                          \
-                               !(IS_ASTRAL(ch) && IS_SET(EXIT(ch, door)->exit_info, EX_ASTRALLY_WARDED)) &&                \
-                               !(ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_STAFF_ONLY) && GET_REAL_LEVEL(ch) < LVL_BUILDER)  \
+#define CAN_GO(ch, door)     ( EXIT(ch,door) &&                                                                                 \
+                               (EXIT(ch,door)->to_room && EXIT(ch,door)->to_room != &world[0]) &&                               \
+                               !(IS_SET(EXIT(ch, door)->exit_info, EX_CLOSED)) &&                                               \
+                               !(IS_ASTRAL(ch) && IS_SET(EXIT(ch, door)->exit_info, EX_ASTRALLY_WARDED)) &&                     \
+                               !(ROOM_FLAGGED(EXIT(ch, door)->to_room, ROOM_STAFF_ONLY) && GET_REAL_LEVEL(ch) < LVL_BUILDER) && \
+                               (EXIT(ch, door)->to_room->staff_level_lock <= GET_REAL_LEVEL(ch))    \
                              )
 
 #define OUTSIDE(ch)           (!ROOM_FLAGGED(get_ch_in_room(ch), ROOM_INDOORS))

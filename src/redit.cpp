@@ -340,6 +340,7 @@ void redit_disp_menu(struct descriptor_data * d)
       d->edit_room->sector_type == SPIRIT_RIVER || d->edit_room->room_flags.IsSet(ROOM_FALL))
     send_to_char(CH, "m) %s test difficulty (TN): %s%d%s\r\n", d->edit_room->room_flags.IsSet(ROOM_FALL) ? "Fall" : "Swim", CCCYN(CH, C_CMP),
                  ROOM->rating, CCNRM(CH, C_CMP));
+  send_to_char(CH, "n) Staff Level Required to Enter: %s%d%s\r\n", CCCYN(CH, C_CMP), ROOM->staff_level_lock, CCNRM(CH, C_CMP));
   if (d->edit_convert_color_codes)
     send_to_char("t) Restore color codes\r\n", d->character);
   else
@@ -736,6 +737,15 @@ void redit_parse(struct descriptor_data * d, const char *arg)
         redit_disp_menu(d);
         return;
       }
+      break;
+    case 'n':
+      if (ROOM->staff_level_lock > GET_REAL_LEVEL(CH)) {
+        send_to_char("The lock level for this room is higher than your lock level-- you can't change it.\r\n", CH);
+        redit_disp_menu(d);
+        return;
+      }
+      send_to_char("Enter the privilege level a character must have to enter this room (0: NPC; 1: Player; X>1: Staff rank X): ", CH);
+      d->edit_mode = REDIT_STAFF_LOCK_LEVEL;
       break;
     default:
       send_to_char("Invalid choice!\r\n", d->character);
@@ -1154,6 +1164,20 @@ void redit_parse(struct descriptor_data * d, const char *arg)
       redit_disp_menu(d);
     }
     break;
+  
+  case REDIT_STAFF_LOCK_LEVEL:
+    number = atoi(arg);
+    if ((number < 0) || (number > 10)) {
+      send_to_char("Value must be between 0 and 10.\r\n", CH);
+      send_to_char("Enter staff lock level: ", CH);
+    } else if (number > GET_REAL_LEVEL(CH)) {
+      send_to_char("You can't set a lock level greater than your own level.\r\n", CH);
+    } else {
+      ROOM->staff_level_lock = number;
+      redit_disp_menu(d);
+    }
+    break;
+  
   case REDIT_EXIT_DOORFLAGS:
     number = atoi(arg);
     if ((number < 0) || (number > 4)) {
@@ -1320,8 +1344,9 @@ void write_world_to_disk(int vnum)
               "\tLight:\t%d\n"
               "\tSmoke:\t%d\n"
               "\tBackground:\t%d\n"
-              "\tBackgroundType:\t%d\n",
-              RM.spec, RM.rating, RM.vision[0], RM.vision[1], RM.background[PERMANENT_BACKGROUND_COUNT], RM.background[PERMANENT_BACKGROUND_TYPE]);
+              "\tBackgroundType:\t%d\n"
+              "\tStaffLockLevel:\t%d\n",
+              RM.spec, RM.rating, RM.vision[0], RM.vision[1], RM.background[PERMANENT_BACKGROUND_COUNT], RM.background[PERMANENT_BACKGROUND_TYPE], RM.staff_level_lock);
 
       for (counter2 = 0; counter2 < NUM_OF_DIRS; counter2++) {
         room_direction_data *ptr = RM.dir_option[counter2];
@@ -1406,4 +1431,3 @@ void write_world_to_disk(int vnum)
   /* do NOT free strings! just the room structure */
 }
 #undef RM
-

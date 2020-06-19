@@ -697,6 +697,7 @@ void assign_objects(void)
   ASSIGNOBJ(9826, locker);
   ASSIGNOBJ(60500, chargen_hopper);
   ASSIGNOBJ(10033, quest_debug_scanner);
+  ASSIGNOBJ(70605, desktop);
   
   ASSIGNOBJ(OBJ_SEATTLE_TAXI_SIGN, taxi_sign);
   ASSIGNOBJ(OBJ_PORTLAND_TAXI_SIGN, taxi_sign);

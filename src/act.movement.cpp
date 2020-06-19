@@ -792,6 +792,17 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data *vic
     send_to_char("Sorry, that area is for game administration only.\r\n", ch);
     return 0;
   }
+  
+  if (EXIT(ch, dir)->to_room->staff_level_lock > GET_REAL_LEVEL(ch)) {
+    if (GET_REAL_LEVEL(ch) == 0) {
+      send_to_char("NPCs aren't allowed in there.\r\n", ch);
+    } else if (GET_REAL_LEVEL(ch) == 1) {
+      send_to_char("Sorry, that area is for game administration only.\r\n", ch);
+    } else {
+      send_to_char(ch, "Sorry, you need to be a level-%d immortal to go there.", EXIT(ch, dir)->to_room->staff_level_lock);
+    }
+    return 0;
+  }
 
   int total = 0;
   if (GET_TOTALBAL(ch) > GET_QUI(ch))
