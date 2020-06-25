@@ -1133,8 +1133,10 @@ SPECIAL(spell_trainer)
         }
       
       // Subtract the cost.
-      GET_FORCE_POINTS(ch) -= force;
-      GET_KARMA(ch) -= force * 100;
+      if (PLR_FLAGGED(ch, PLR_AUTH))
+        GET_FORCE_POINTS(ch) -= force;
+      else
+        GET_KARMA(ch) -= force * 100;
       
       send_to_char(ch, "%s sits you down and teaches you the ins and outs of casting %s at force %d.\r\n", GET_NAME(trainer), spelltrainers[i].name, force);
       
