@@ -180,7 +180,7 @@ CREATE TABLE `pfiles_spirits` (
 CREATE TABLE `pfiles_bioware` ( 
   `idnum` mediumint(5) unsigned default '0', 
   `Vnum` mediumint(5) unsigned default '0', 
-  `Cost` mediumint(5) unsigned default '0', 
+  `Cost` int(5) unsigned default '0', 
   `Value0` mediumint(2) default '0', 
   `Value1` mediumint(2) default '0', 
   `Value2` mediumint(2) default '0', 
@@ -199,7 +199,7 @@ CREATE TABLE `pfiles_bioware` (
 CREATE TABLE `pfiles_cyberware` ( 
   `idnum` mediumint(5) unsigned default '0', 
   `Vnum` mediumint(5) unsigned default '0', 
-  `Cost` mediumint(5) unsigned default '0', 
+  `Cost` int(5) unsigned default '0', 
   `Restring` varchar(256), 
   `Photo` text, 
   `Value0` mediumint(2) default '0', 
@@ -222,7 +222,7 @@ CREATE TABLE `pfiles_cyberware` (
 CREATE TABLE `pfiles_inv` ( 
   `idnum` mediumint(5) unsigned default '0', 
   `Vnum` mediumint(5) unsigned default '0', 
-  `Cost` mediumint(5) unsigned default '0', 
+  `Cost` int(5) unsigned default '0', 
   `Restring` varchar(256), 
   `Photo` text, 
   `Value0` mediumint(2) default '0', 
@@ -249,7 +249,7 @@ CREATE TABLE `pfiles_inv` (
 CREATE TABLE `pfiles_worn` ( 
   `idnum` mediumint(5) unsigned default '0', 
   `Vnum` mediumint(5) unsigned default '0', 
-  `Cost` mediumint(5) unsigned default '0', 
+  `Cost` int(5) unsigned default '0', 
   `Restring` varchar(256), 
   `Photo` text, 
   `Value0` mediumint(2) default '0', 
