@@ -1320,7 +1320,7 @@ ACMD(do_connect)
   struct obj_data *cyber, *cyberdeck = NULL, *jack = NULL;
   rnum_t host;
 
-  if ((!ch->in_room->matrix || (host = real_host(ch->in_room->matrix)) < 1)) {
+  if (!ch->in_room || !ch->in_room->matrix || (host = real_host(ch->in_room->matrix)) < 1) {
     send_to_char("You cannot connect to the matrix from here.\r\n", ch);
     return;
   }
