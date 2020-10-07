@@ -1770,7 +1770,7 @@ bool does_player_exist(char *name)
 {
   char buf[MAX_STRING_LENGTH];
   char prepare_quotes_buf[250];
-  if (!name || !*name)
+  if (!name || !*name || !str_cmp(name, CHARACTER_DELETED_NAME_FOR_SQL))
     return FALSE;
   sprintf(buf, "SELECT idnum FROM pfiles WHERE Name='%s';", prepare_quotes(prepare_quotes_buf, name, 250));
   if (mysql_wrapper(mysql, buf))
@@ -1788,7 +1788,7 @@ bool does_player_exist(char *name)
 bool does_player_exist(long id)
 {
   char buf[MAX_STRING_LENGTH];
-  sprintf(buf, "SELECT idnum FROM pfiles WHERE idnum=%ld AND name != 'deleted';", id);
+  sprintf(buf, "SELECT idnum FROM pfiles WHERE idnum=%ld AND name != '%s';", id, CHARACTER_DELETED_NAME_FOR_SQL);
   mysql_wrapper(mysql, buf);
   MYSQL_RES *res = mysql_use_result(mysql);
   MYSQL_ROW row = mysql_fetch_row(res);
@@ -1890,7 +1890,7 @@ void DeleteChar(long idx)
   sprintf(buf, "DELETE FROM playergroup_invitations WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
   
-  sprintf(buf, "UPDATE pfiles SET Name='deleted', Password='', NoDelete=TRUE WHERE idnum=%ld", idx); 
+  sprintf(buf, "UPDATE pfiles SET Name='%s', Password='', NoDelete=TRUE WHERE idnum=%ld", CHARACTER_DELETED_NAME_FOR_SQL, idx); 
 //  sprintf(buf, "DELETE FROM pfiles WHERE idnum=%ld", idx);
   mysql_wrapper(mysql, buf);
 }

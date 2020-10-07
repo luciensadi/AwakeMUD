@@ -1269,7 +1269,7 @@ const char *reserved[] =
     "something",
     "new",
     "guest",
-    "deleted",
+    CHARACTER_DELETED_NAME_FOR_SQL,
     "admin", // Added here since this is the one random bots like to try.
     "\n"
   };
