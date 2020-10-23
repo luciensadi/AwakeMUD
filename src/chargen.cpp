@@ -273,6 +273,20 @@ int parse_totem(struct descriptor_data *d, const char *arg)
 int parse_assign(struct descriptor_data *d, const char *arg)
 {
   int i;
+  
+  // Magic is only okay if placed in 0, 1, or l_k_m_s.
+  int lowest_kosher_magic_slot = 4;
+  if (d->ccr.pr[lowest_kosher_magic_slot] == PR_RACE)
+    lowest_kosher_magic_slot--;
+  
+  if (*arg == '2' && (d->ccr.temp > 1 && d->ccr.temp != lowest_kosher_magic_slot)) {
+    char kosher_slot = 'A' + lowest_kosher_magic_slot;
+    sprintf(buf2, "Magic can only fit in slots A, B, or %c for %s characters.", 
+            kosher_slot, 
+            pc_race_types[(int)GET_RACE(d->character)]);
+    SEND_TO_Q(buf2, d);
+    return 0;
+  }
 
   switch (*arg)
   {
@@ -1289,4 +1303,3 @@ void create_parse(struct descriptor_data *d, const char *arg)
     break;
   }
 }
-
