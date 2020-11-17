@@ -1140,4 +1140,11 @@ struct help_data {
     original_title = title_to_keep_for_sql;
   }
 };
+
+struct preference_bit_struct {
+  const char *name; // the name of the bit (ex: "PACIFY")
+  bool staff_only;  // only displays to level > 1?
+  bool on_off;      // true for ONOFF, false for YESNO
+};
+
 #endif

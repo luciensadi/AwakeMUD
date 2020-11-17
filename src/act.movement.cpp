@@ -1033,7 +1033,12 @@ int ok_pick(struct char_data *ch, int keynum, int pickproof, int scmd, int lock_
   if (scmd == SCMD_PICK)
   {
     if (keynum <= 0) {
-      send_to_char("Odd - you can't seem to find an electronic lock.\r\n", ch);
+      if (access_level(ch, LVL_BUILDER)) {
+        sprintf(buf, "That door can't be bypassed since its key vnum is %d. Give it a key vnum to make it bypassable.\r\n", keynum);
+        send_to_char(buf, ch);
+      } else {
+        send_to_char("Odd - you can't seem to find an electronic lock.\r\n", ch);
+      }
       return 0;
     } else {
       WAIT_STATE(ch, PULSE_VIOLENCE);

@@ -13,6 +13,7 @@ extern const char *thrdgenders[];
 extern const char *position_types[];
 extern const char *player_bits[];
 extern const char *action_bits[];
+extern struct preference_bit_struct preference_bits_v2[];
 extern const char *preference_bits[];
 extern const char *affected_bits[];
 extern const char *room_bits[];

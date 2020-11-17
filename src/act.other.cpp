@@ -1067,78 +1067,51 @@ ACMD(do_toggle)
   }
   skip_spaces(&argument);
   if (!*argument) {
-    if (GET_WIMP_LEV(ch) == 0)
-      strcpy(buf2, "OFF");
-    else
-      sprintf(buf2, "%-3d", GET_WIMP_LEV(ch));
-    if (!IS_SENATOR(ch))
-      sprintf(buf,
-              "       Fightgag: %-3s              NoOOC: %-3s              Hired: %-3s\r\n"
-              "        Movegag: %-3s            Compact: %-3s          AutoExits: %-3s\r\n"
-              "     AutoAssist: %-3s            NoShout: %-3s               Echo: %-3s\r\n"
-              "           Pker: %-3s         Long Exits: %-3s         Wimp Level: %-3s\r\n"
-              "        Menugag: %-3s        Long Weapon: %-3s        Show PG Tag: %-3s\r\n"
-              "     Keep-Alive: %-3s       Screenreader: %-3s           No Color: %-3s\r\n"
-              "      No Prompt: %-3s",
-
-              ONOFF(PRF_FLAGGED(ch, PRF_FIGHTGAG)),
-              ONOFF(PRF_FLAGGED(ch, PRF_NOOOC)),
-              YESNO(PRF_FLAGGED(ch, PRF_QUEST)),
-              ONOFF(PRF_FLAGGED(ch, PRF_MOVEGAG)),
-              ONOFF(PRF_FLAGGED(ch, PRF_COMPACT)),
-              ONOFF(PRF_FLAGGED(ch, PRF_AUTOEXIT)),
-              ONOFF(PRF_FLAGGED(ch, PRF_ASSIST)),
-              ONOFF(PRF_FLAGGED(ch, PRF_DEAF)),
-              ONOFF(!PRF_FLAGGED(ch, PRF_NOREPEAT)),
-              YESNO(PRF_FLAGGED(ch, PRF_PKER)),
-              ONOFF(PRF_FLAGGED(ch, PRF_LONGEXITS)),
+    // Wipe out our string.
+    strcpy(buf, "");
+    
+      int printed = 0;
+    for (int i = 0; i < PRF_MAX; i++) {
+      // Skip the unused holes in our preferences.
+      if (i == PRF_UNUSED1_PLS_REPLACE || i == PRF_UNUSED2_PLS_REPLACE) {
+        continue;
+      }
+      
+      // Skip the things that morts should not see.
+      if (!IS_SENATOR(ch) && preference_bits_v2[i].staff_only) {
+        continue;
+      }
+      
+      // Select ONOFF or YESNO display type based on field 2.
+      if (preference_bits_v2[i].on_off) {
+        strcpy(buf2, ONOFF(PRF_FLAGGED(ch, i)));
+      } else {
+        strcpy(buf2, YESNO(PRF_FLAGGED(ch, i)));
+      }
+      
+      // Compose and append our line.
+      sprintf(ENDOF(buf), 
+              "%18s: %-3s%s", 
+              preference_bits_v2[i].name, 
               buf2, 
-              ONOFF(PRF_FLAGGED(ch, PRF_MENUGAG)),
-              YESNO(PRF_FLAGGED(ch, PRF_LONGWEAPON)),
-              YESNO(PRF_FLAGGED(ch, PRF_SHOWGROUPTAG)),
-              ONOFF(PRF_FLAGGED(ch, PRF_KEEPALIVE)),
-              YESNO(PRF_FLAGGED(ch, PRF_SCREENREADER)),
-              ONOFF(PRF_FLAGGED(ch, PRF_NOCOLOR)),
-              ONOFF(PRF_FLAGGED(ch, PRF_NOPROMPT)));
-    else
-      sprintf(buf,
-              "       Fightgag: %-3s              NoOOC: %-3s              Hired: %-3s\r\n"
-              "        Movegag: %-3s            Compact: %-3s          AutoExits: %-3s\r\n"
-              "         NoTell: %-3s            NoShout: %-3s               Echo: %-3s\r\n"
-              "         Newbie: %-3s           Nohassle: %-3s            Menugag: %-3s\r\n"
-              "      Holylight: %-3s          Roomflags: %-3s               Pker: %-3s\r\n"
-              "          Radio: %-3s         Long Exits: %-3s         Wimp Level: %-3s\r\n"
-              "         Pacify: %-3s         AutoAssist: %-3s          Autoinvis: %-3s\r\n"
-              "    Long Weapon: %-3s        Show PG Tag: %-3s         Keep-Alive: %-3s\r\n"
-              "   Screenreader: %-3s           No Color: %-3s          No Prompt: %-3s\r\n",
-              
-              ONOFF(PRF_FLAGGED(ch, PRF_FIGHTGAG)),
-              ONOFF(PRF_FLAGGED(ch, PRF_NOOOC)),
-              YESNO(PRF_FLAGGED(ch, PRF_QUEST)),
-              ONOFF(PRF_FLAGGED(ch, PRF_MOVEGAG)),
-              ONOFF(PRF_FLAGGED(ch, PRF_COMPACT)),
-              ONOFF(PRF_FLAGGED(ch, PRF_AUTOEXIT)),
-              ONOFF(PRF_FLAGGED(ch, PRF_NOTELL)),
-              ONOFF(PRF_FLAGGED(ch, PRF_DEAF)),
-              ONOFF(!PRF_FLAGGED(ch, PRF_NOREPEAT)),
-              ONOFF(!PRF_FLAGGED(ch, PRF_NONEWBIE)),
-              ONOFF(PRF_FLAGGED(ch, PRF_NOHASSLE)),
-              ONOFF(PRF_FLAGGED(ch, PRF_MENUGAG)),
-              ONOFF(PRF_FLAGGED(ch, PRF_HOLYLIGHT)),
-              ONOFF(PRF_FLAGGED(ch, PRF_ROOMFLAGS)),
-              YESNO(PRF_FLAGGED(ch, PRF_PKER)),
-              ONOFF(PRF_FLAGGED(ch, PRF_NORADIO)),
-              ONOFF(PRF_FLAGGED(ch, PRF_LONGEXITS)),
-              buf2,
-              ONOFF(PRF_FLAGGED(ch, PRF_ASSIST)),
-              ONOFF(PRF_FLAGGED(ch, PRF_AUTOINVIS)),
-              ONOFF(PRF_FLAGGED(ch, PRF_PACIFY)),
-              YESNO(PRF_FLAGGED(ch, PRF_LONGWEAPON)),
-              YESNO(PRF_FLAGGED(ch, PRF_SHOWGROUPTAG)),
-              ONOFF(PRF_FLAGGED(ch, PRF_KEEPALIVE)),
-              YESNO(PRF_FLAGGED(ch, PRF_SCREENREADER)),
-              ONOFF(PRF_FLAGGED(ch, PRF_NOCOLOR)),
-              ONOFF(PRF_FLAGGED(ch, PRF_NOPROMPT)));
+              printed%3 == 2 ? "\r\n" : "");
+      
+      // Increment our spacer.
+      printed++;
+      
+    }
+    
+    // Calculate and add the wimpy level.
+    if (GET_WIMP_LEV(ch) == 0) {
+      strcpy(buf2, "OFF");
+    } else {
+      sprintf(buf2, "%-3d", GET_WIMP_LEV(ch));
+    }
+    sprintf(ENDOF(buf), "%s%18s: %-3s", 
+      printed%3 == 0 ? "\r\n" : "", 
+      "Wimpy", 
+      buf2
+    );
     send_to_char(buf, ch);
   } else {
     if (is_abbrev(argument, "afk"))
