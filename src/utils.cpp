@@ -2867,7 +2867,7 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
     // Compose the notification string.
     sprintf(notification_string_buf, "The name '%s' probably doesn't fit anymore, so we'll call it '%s'.\r\n",
       GET_OBJ_NAME(into),
-      buf2
+      new_name_buf
     );
     
     // Commit the change and notify the player.
