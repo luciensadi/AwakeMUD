@@ -339,7 +339,10 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       return FALSE;
     }
     if ((GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_PARTS) ||
-        (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(obj, 0) == TYPE_SUMMONING)) {
+        (GET_OBJ_TYPE(obj) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(obj, 0) == TYPE_SUMMONING) ||
+        (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO)) {
+          
+      // Deduct money up to the amount they can afford. Update the object's cost to match.
       while (bought < buynum && (cred ? GET_OBJ_VAL(cred, 0) : GET_NUYEN(ch)) >= price) {
         if (cred)
           GET_OBJ_VAL(cred, 0) -= price;
@@ -348,16 +351,40 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         bought++;
       }
       GET_OBJ_COST(obj) = GET_OBJ_COST(obj) * bought;
-      struct obj_data *orig = ch->carrying;
-      for (; orig; orig = orig->next_content)
-        if (GET_OBJ_TYPE(obj) == GET_OBJ_TYPE(orig) && GET_OBJ_VAL(obj, 0) == GET_OBJ_VAL(orig, 0) &&
-            GET_OBJ_VAL(obj, 1) == GET_OBJ_VAL(orig, 1))
-          break;
-      if (orig) {
-        GET_OBJ_COST(orig) += GET_OBJ_COST(obj);
-        extract_obj(obj);
-      } else
-        obj_to_char(obj, ch);
+      
+      // Give them the item (it's gun ammo)
+      if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
+        struct obj_data *orig = ch->carrying;
+        for (; orig; orig = orig->next_content) {
+          if (GET_OBJ_TYPE(obj) == GET_OBJ_TYPE(orig) && 
+              !GET_AMMOBOX_CREATOR(obj) &&
+              GET_AMMOBOX_WEAPON(obj) == GET_AMMOBOX_WEAPON(orig) &&
+              GET_AMMOBOX_TYPE(obj) == GET_AMMOBOX_TYPE(orig))
+            break;
+        }
+        if (orig) {
+          // They were carrying one already. Combine them.
+          combine_ammo_boxes(ch, obj, orig);
+        } else {
+          // Just give the purchased thing to them directly.
+          obj_to_char(obj, ch);
+        }
+      } 
+      
+      // Give them the item (it's parts or conjuring materials)
+      else {
+        struct obj_data *orig = ch->carrying;
+        for (; orig; orig = orig->next_content)
+          if (GET_OBJ_TYPE(obj) == GET_OBJ_TYPE(orig) && GET_OBJ_VAL(obj, 0) == GET_OBJ_VAL(orig, 0) &&
+              GET_OBJ_VAL(obj, 1) == GET_OBJ_VAL(orig, 1))
+            break;
+        if (orig) {
+          GET_OBJ_COST(orig) += GET_OBJ_COST(obj);
+          extract_obj(obj);
+        } else {
+          obj_to_char(obj, ch);
+        }
+      }
     } else
       while(obj && (bought < buynum && IS_CARRYING_N(ch) < CAN_CARRY_N(ch) && IS_CARRYING_W(ch) +
                     GET_OBJ_WEIGHT(obj) <= CAN_CARRY_W(ch) && (cred ? GET_OBJ_VAL(cred, 0) : GET_NUYEN(ch)) >= price)) {

@@ -456,36 +456,10 @@ ACMD(do_put)
       return;
     }
     
-    // Combine them.
-    GET_AMMOBOX_QUANTITY(cont) += GET_AMMOBOX_QUANTITY(obj);
-    GET_AMMOBOX_QUANTITY(obj) = 0;
-    send_to_char(ch, "You dump %s into %s and throw away the empty.\r\n",
-      GET_OBJ_NAME(obj),
-      GET_OBJ_NAME(cont)
-    );
-    
-    // Junk the empty.
-    extract_obj(cont);
-    
-    // Restring it, as long as it's not already restrung.
-    if (!cont->restring) {
-      // Compose the new name.
-      sprintf(buf2, "a box of %s %s ammo", 
-        ammo_type[GET_AMMOBOX_TYPE(cont)].name,
-        weapon_type[GET_AMMOBOX_WEAPON(cont)]
-      );
-      
-      // Compose the notification string.
-      sprintf(buf, "The name '%s' probably doesn't fit anymore, so we'll call it '%s'.\r\n",
-        GET_OBJ_NAME(cont),
-        buf2
-      );
-      
-      // Commit the change and notify the player.
-      cont->restring = str_dup(buf2);
-      send_to_char(buf, ch);
+    // Combine them. This handles junking of empties, restringing, etc.
+    if (!combine_ammo_boxes(ch, obj, cont)) {
+      send_to_char("Something went wrong. Please reach out to the staff.\r\n", ch);
     }
-    
     return;
   }
   

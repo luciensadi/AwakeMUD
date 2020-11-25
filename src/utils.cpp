@@ -2809,3 +2809,72 @@ char *replace_substring(char *source, char *dest, const char *replace_target, co
   // Return the dest they gave us.
   return dest;
 }
+
+
+bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_data *into) {
+  if (!ch || !from || !into) {
+    mudlog("SYSERR: combine_ammo_boxes received a null value.", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  if (GET_AMMOBOX_CREATOR(from) || GET_AMMOBOX_CREATOR(into)) {
+    mudlog("SYSERR: combine_ammo_boxes received a box that was not yet completed.", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  // If the weapons don't match, no good.
+  if (GET_AMMOBOX_WEAPON(from) != GET_AMMOBOX_WEAPON(into)) {
+    mudlog("SYSERR: combine_ammo_boxes received boxes with non-matching weapon types.", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  // If the ammo types don't match, no good.
+  if (GET_AMMOBOX_TYPE(from) != GET_AMMOBOX_TYPE(into)) {
+    mudlog("SYSERR: combine_ammo_boxes received boxes with non-matching ammo types.", ch, LOG_SYSLOG, TRUE);
+    return FALSE;
+  }
+  
+  // Combine them.
+  GET_AMMOBOX_QUANTITY(into) += GET_AMMOBOX_QUANTITY(from);
+  GET_AMMOBOX_QUANTITY(from) = 0;
+  
+  // Notify the owner, then destroy the empty.
+  if (!from->restring) {
+    send_to_char(ch, "You dump the ammo into %s and throw away the now-empty '%s'.\r\n",
+      GET_OBJ_NAME(into),
+      GET_OBJ_NAME(from)
+    );
+    
+    extract_obj(from);
+  } else {
+    send_to_char(ch, "You dump the ammo from %s into %s, but hang on to the customized empty container.\r\n",
+      GET_OBJ_NAME(from),
+      GET_OBJ_NAME(into)
+    );
+  }
+  
+  // Restring it, as long as it's not already restrung.
+  if (!into->restring) {
+    char new_name_buf[500];
+    char notification_string_buf[500];
+    
+    // Compose the new name.
+    sprintf(new_name_buf, "a box of %s %s ammo", 
+      ammo_type[GET_AMMOBOX_TYPE(into)].name,
+      weapon_type[GET_AMMOBOX_WEAPON(into)]
+    );
+    
+    // Compose the notification string.
+    sprintf(notification_string_buf, "The name '%s' probably doesn't fit anymore, so we'll call it '%s'.\r\n",
+      GET_OBJ_NAME(into),
+      buf2
+    );
+    
+    // Commit the change and notify the player.
+    into->restring = str_dup(new_name_buf);
+    send_to_char(notification_string_buf, ch);
+  }
+  
+  // Everything succeeded.
+  return TRUE;
+}
