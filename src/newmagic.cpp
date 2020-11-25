@@ -1929,6 +1929,7 @@ ACMD(do_bond)
   int karma = 0, spirit = 0;
   struct spell_data *spell = GET_SPELLS(ch);
 
+  // Find the object in their inventory or equipment.
   for (obj = ch->carrying; obj; obj = obj->next_content)
     if (isname(buf1, obj->text.keywords) || isname(buf2, GET_OBJ_NAME(obj)))
       break;
@@ -1936,10 +1937,13 @@ ACMD(do_bond)
     for (int i = 0; i < NUM_WEARS && !obj; i++)
       if (GET_EQ(ch, i) && (isname(buf1, GET_EQ(ch, i)->text.keywords) || isname(buf1, GET_OBJ_NAME(GET_EQ(ch, i)))))
         obj = GET_EQ(ch, i);
+        
+  // No object-- failure case.
   if (!obj) {
     send_to_char("You don't have that item.\r\n", ch);
     return;
   }
+  
   if (GET_OBJ_TYPE(obj) == ITEM_DOCWAGON) {
     if (GET_DOCWAGON_BONDED_IDNUM(obj)) {
       if (GET_DOCWAGON_BONDED_IDNUM(obj) == GET_IDNUM(ch))
@@ -1959,13 +1963,21 @@ ACMD(do_bond)
     struct obj_data *magazine = obj, *weapon = NULL;
     
     // Convenience: If they selected a pre-bonded magazine, just keep rolling through.
-    while (magazine && GET_OBJ_VAL(magazine, 0)) {
-      for (obj = magazine->next_content; obj; obj = obj->next_content)
-        if (isname(buf1, obj->text.keywords) || isname(buf2, GET_OBJ_NAME(obj)))
+    if (GET_OBJ_VAL(magazine, 0)) {
+      for (obj = obj->next_content; obj; obj = obj->next_content) {
+        if (isname(buf1, obj->text.keywords) || isname(buf2, GET_OBJ_NAME(obj))) {
+          // We found something that matches the keywords-- but is it already bonded?
+          if (GET_OBJ_VAL(magazine, 0))
+            continue;
+          
+          // Good to go.
           magazine = obj;
+          break;
+        }
+      }
     }
     
-    // If the pre-bonded magazine was the _only_ magazine available, then they're done.
+    // If we found no valid magazines, terminate.
     if (!magazine || GET_OBJ_VAL(magazine, 0)) {
       send_to_char("All of your magazines have already been bonded to something else.\r\n", ch);
       return;
