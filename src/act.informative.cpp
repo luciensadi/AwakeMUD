@@ -202,10 +202,10 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
       strcat(buf, object->graffiti);
     else {
       // Gun magazines get special consideration.
-      if (GET_OBJ_TYPE(object) == ITEM_GUN_MAGAZINE && GET_MAGAZINE_BONDED_ATTACKTYPE(object)) {
+      if (GET_OBJ_TYPE(object) == ITEM_GUN_MAGAZINE && GET_MAGAZINE_BONDED_MAXAMMO(object)) {
         sprintf(buf, "A%s %d-round %s %s magazine has been left here.",
           GET_MAGAZINE_AMMO_COUNT(object) <= 0 ? "n empty" : "",
-          GET_MAGAZINE_AMMO_MAX(object),
+          GET_MAGAZINE_BONDED_MAXAMMO(object),
           ammo_type[GET_MAGAZINE_AMMO_TYPE(object)].name,
           weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(object)]
         );
@@ -335,6 +335,35 @@ void list_veh_to_char(struct veh_data * list, struct char_data * ch)
 
 #define IS_INVIS(o) IS_OBJ_STAT(o, ITEM_INVISIBLE)
 
+bool items_are_visually_similar(struct obj_data *first, struct obj_data *second) {
+  // Biggest litmus test: Are they even the same thing?
+  if (first->item_number != second->item_number)
+    return FALSE;
+    
+  // If the names don't match, they're not similar.
+  if (strcmp(first->text.name, second->text.name))
+    return FALSE;
+    
+  // If their invis statuses don't match...
+  if (IS_INVIS(first) != IS_INVIS(second))
+    return FALSE;
+    
+  // If their restrings don't match...
+  if ((first->restring && !second->restring) || 
+      (!first->restring && second->restring) ||
+      (first->restring && second->restring && strcmp(first->restring, second->restring)))
+    return FALSE;
+    
+  // If they're magazines, their various bonded stats must match too.
+  if (GET_OBJ_TYPE(first) == ITEM_GUN_MAGAZINE) {
+    if (GET_MAGAZINE_BONDED_MAXAMMO(first) != GET_MAGAZINE_BONDED_MAXAMMO(second) ||
+        GET_MAGAZINE_BONDED_ATTACKTYPE(first) != GET_MAGAZINE_BONDED_ATTACKTYPE(second))
+      return FALSE;
+  }
+  
+  return TRUE;
+}
+
 void
 list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
                  bool show, bool corpse)
@@ -349,59 +378,52 @@ list_obj_to_char(struct obj_data * list, struct char_data * ch, int mode,
   {
     if ((i->in_veh && ch->in_veh) && i->vfront != ch->vfront)
       continue;
-    if (ch->in_veh && i->in_room != ch->in_veh->in_room) {
-      if (ch->in_veh->cspeed > SPEED_IDLE) {
-        if (get_speed(ch->in_veh) >= 200) {
-          if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 7))
-            continue;
-          else if (get_speed(ch->in_veh) < 200 && get_speed(ch->in_veh) >= 120) {
-            if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6))
-              continue;
-            else if (get_speed(ch->in_veh) < 120 && get_speed(ch->in_veh) >= 60) {
-              if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5))
-                continue;
-              else
-                if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4))
-                  continue;
-            }
-          }
-        }
-      }
-    }
-    
-    
+      
     if (ch->char_specials.rigging) {
       if (ch->char_specials.rigging->cspeed > SPEED_IDLE) {
+        int success_test_tn;
+        
         if (get_speed(ch->char_specials.rigging) >= 240) {
-          if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 6))
-            continue;
-          else if (get_speed(ch->char_specials.rigging) < 240 && get_speed(ch->char_specials.rigging) >= 180) {
-            if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 5))
-              continue;
-            else if (get_speed(ch->char_specials.rigging) < 180 && get_speed(ch->char_specials.rigging) >= 90) {
-              if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 4))
-                continue;
-              else
-                if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), 3))
-                  continue;
-            }
-          }
+          success_test_tn = 6;
+        } else if (get_speed(ch->char_specials.rigging) < 240 && get_speed(ch->char_specials.rigging) >= 180) {
+          success_test_tn = 5;
+        } else if (get_speed(ch->char_specials.rigging) < 180 && get_speed(ch->char_specials.rigging) >= 90) {
+          success_test_tn = 4;
+        } else {
+          success_test_tn = 3;
         }
+        
+        if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), success_test_tn))
+          continue;
+      }
+    } else if (ch->in_veh && i->in_room && i->in_room == ch->in_veh->in_room) {
+      if (ch->in_veh->cspeed > SPEED_IDLE) {
+        int success_test_tn;
+        
+        if (get_speed(ch->in_veh) >= 200) {
+          success_test_tn = 7;
+        } else if (get_speed(ch->in_veh) >= 120) {
+          success_test_tn = 6;
+        } else if (get_speed(ch->in_veh) >= 60) {
+          success_test_tn = 5;
+        } else {
+          success_test_tn = 4;
+        }
+        
+        if (!success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT), success_test_tn))
+          continue;
       }
     }
     
     while (i->next_content) {
-      if (i->item_number != i->next_content->item_number ||
-          strcmp(i->text.name, i->next_content->text.name) ||
-          IS_INVIS(i) != IS_INVIS(i->next_content) || (i->restring && !i->next_content->restring) ||
-          (!i->restring && i->next_content->restring) ||(i->restring && i->next_content->restring && strcmp(i->restring, i->next_content->restring)))
+      if (!items_are_visually_similar(i, i->next_content))
         break;
-      if (CAN_SEE_OBJ(ch, i)) {
+        
+      if (CAN_SEE_OBJ(ch, i))
         num++;
-      }
+        
       i = i->next_content;
-    }
-    
+    }    
     
     if (CAN_SEE_OBJ(ch, i)) {
       if (corpse && IS_OBJ_STAT(i, ITEM_CORPSE)) {
