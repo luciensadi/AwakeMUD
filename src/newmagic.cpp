@@ -1967,7 +1967,7 @@ ACMD(do_bond)
     }
     
     // If the pre-bonded magazine was the _only_ magazine available, then they're done.
-    if (GET_OBJ_VAL(magazine, 0)) {
+    if (!magazine || GET_OBJ_VAL(magazine, 0)) {
       send_to_char("All of your magazines have already been bonded to something else.\r\n", ch);
       return;
     }
