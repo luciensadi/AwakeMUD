@@ -362,6 +362,13 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         GET_AMMOBOX_QUANTITY(obj) *= bought;
         GET_OBJ_WEIGHT(obj) *= bought;
         
+        if (IS_CARRYING_W(ch) + GET_OBJ_WEIGHT(obj) > CAN_CARRY_W(ch)) {
+          send_to_char("You start gathering up the ammo you paid for, but realize you can't carry it all! The shopkeeper gives you a /look/, then refunds you in cash.\r\n", ch);
+          GET_NUYEN(ch) += price * bought;
+          extract_obj(obj);
+          return FALSE;
+        }
+        
         struct obj_data *orig = ch->carrying;
         for (; orig; orig = orig->next_content) {
           if (GET_OBJ_TYPE(obj) == GET_OBJ_TYPE(orig) && 

@@ -1347,7 +1347,8 @@ struct obj_data * find_magazine(struct obj_data *gun, struct obj_data *i)
   for (; i; i = i->next_content)
   {
     if (GET_OBJ_TYPE(i) == ITEM_GUN_MAGAZINE) {
-      if (GET_OBJ_VAL(i, 0) == GET_OBJ_VAL(gun, 5) && GET_OBJ_VAL(i, 1) == GET_OBJ_VAL(gun, 3))
+      if (GET_MAGAZINE_BONDED_MAXAMMO(i) == GET_WEAPON_MAX_AMMO(gun) && 
+          GET_MAGAZINE_BONDED_ATTACKTYPE(i) == GET_WEAPON_ATTACK_TYPE(gun))
         return i;
     }
     if (i->contains && GET_OBJ_TYPE(i) == ITEM_WORN) {

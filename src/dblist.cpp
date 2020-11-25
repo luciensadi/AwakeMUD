@@ -277,7 +277,7 @@ void objList::UpdateCounters(void)
 
     // Time out objects that end up on the floor a lot (magazines, cash, etc).
     if (OBJ->in_room && !OBJ->in_obj && !OBJ->carried_by && !OBJ->obj_flags.quest_id &&
-       ((GET_OBJ_TYPE(OBJ) == ITEM_GUN_MAGAZINE && !GET_OBJ_VAL(OBJ, 9)) || (GET_OBJ_TYPE(OBJ) == ITEM_MONEY && !GET_OBJ_VAL(OBJ, 0))) 
+       ((GET_OBJ_TYPE(OBJ) == ITEM_GUN_MAGAZINE && !GET_MAGAZINE_AMMO_COUNT(OBJ)) || (GET_OBJ_TYPE(OBJ) == ITEM_MONEY && !GET_OBJ_VAL(OBJ, 0))) 
         && ++GET_OBJ_TIMER(OBJ) == 3) {
         act("$p is lost on the ground.", TRUE, temp->data->in_room->people,
                 OBJ, 0, TO_CHAR);
@@ -378,5 +378,3 @@ void objList::RemoveQuestObjs(int id)
     }
   }
 }
-
-

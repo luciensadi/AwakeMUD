@@ -1958,9 +1958,17 @@ ACMD(do_bond)
     // Define aliases used for code readability; nobody likes juggling 'i' and 'obj'.
     struct obj_data *magazine = obj, *weapon = NULL;
     
-    // Fallthrough: If they selected a pre-bonded magazine, we can abort now.
+    // Convenience: If they selected a pre-bonded magazine, just keep rolling through.
+    while (magazine && GET_OBJ_VAL(magazine, 0)) {
+      for (obj = magazine->next_content; obj; obj = obj->next_content)
+        if (isname(buf1, obj->text.keywords) || isname(buf2, GET_OBJ_NAME(obj)))
+          break;
+      magazine = obj;
+    }
+    
+    // If the pre-bonded magazine was the _only_ magazine available, then they're done.
     if (GET_OBJ_VAL(magazine, 0)) {
-      send_to_char("That magazine's already been bonded to something else.\r\n", ch);
+      send_to_char("All of your magazines have already been bonded to something else.\r\n", ch);
       return;
     }
     
@@ -1977,9 +1985,9 @@ ACMD(do_bond)
     }
     
     // Assign the magazine's values to the correct values supplied by the weapon.
-    GET_OBJ_VAL(magazine, 0) = GET_OBJ_VAL(weapon, 5);
-    GET_OBJ_VAL(magazine, 1) = GET_OBJ_VAL(weapon, 3);
-    sprintf(buf, "a %d-round %s magazine", GET_OBJ_VAL(magazine, 0), weapon_type[GET_OBJ_VAL(magazine, 1)]);
+    GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(weapon);
+    GET_MAGAZINE_AMMO_TYPE(magazine) = GET_WEAPON_ATTACK_TYPE(weapon);
+    sprintf(buf, "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_AMMO_TYPE(magazine)]);
     if (magazine->restring)
       delete [] magazine->restring;
     magazine->restring = strdup(buf);
@@ -2001,7 +2009,11 @@ ACMD(do_bond)
           return;
         }
       }
-    } else send_to_char("There is no need to bond a magazine to that weapon.\r\n", ch);
+      send_to_char("You can't find any blank magazines to bond to that weapon.\r\n", ch);
+      return;
+    } 
+    else 
+      send_to_char(ch, "%s can't take magazines.\r\n", GET_OBJ_NAME(obj));
     return;
   }
   if (GET_OBJ_TYPE(obj) == ITEM_FOCUS) {

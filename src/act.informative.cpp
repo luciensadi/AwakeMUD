@@ -200,7 +200,19 @@ void show_obj_to_char(struct obj_data * object, struct char_data * ch, int mode)
     strcpy(buf, CCHAR ? CCHAR : "");
     if (object->graffiti)
       strcat(buf, object->graffiti);
-    else strcat(buf, object->text.room_desc);
+    else {
+      // Gun magazines get special consideration.
+      if (GET_OBJ_TYPE(object) == ITEM_GUN_MAGAZINE && GET_MAGAZINE_BONDED_ATTACKTYPE(object)) {
+        sprintf(buf, "A%s %d-round %s %s magazine has been left here.",
+          GET_MAGAZINE_AMMO_COUNT(object) <= 0 ? "n empty" : "",
+          GET_MAGAZINE_AMMO_MAX(object),
+          ammo_type[GET_MAGAZINE_AMMO_TYPE(object)].name,
+          weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(object)]
+        );
+      } else {
+        strcat(buf, object->text.room_desc);
+      }
+    }
   } else if (GET_OBJ_NAME(object) && mode == 1)
   {
     strcpy(buf, GET_OBJ_NAME(object));

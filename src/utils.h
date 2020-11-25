@@ -850,8 +850,11 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 // ITEM_PROGRAM convenience defines
 
 // ITEM_GUN_MAGAZINE convenience defines
-#define GET_MAGAZINE_AMMO_TYPE(magazine)       (GET_OBJ_VAL((magazine), 2))
-#define GET_MAGAZINE_AMMO_COUNT(magazine)      (GET_OBJ_VAL((magazine), 9))
+#define GET_MAGAZINE_BONDED_MAXAMMO(magazine)    (GET_OBJ_VAL((magazine), 0))
+#define GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) (GET_OBJ_VAL((magazine), 1))
+#define GET_MAGAZINE_AMMO_TYPE(magazine)         (GET_OBJ_VAL((magazine), 2))
+#define GET_MAGAZINE_AMMO_MAX(magazine)          (GET_OBJ_VAL((magazine), 5))
+#define GET_MAGAZINE_AMMO_COUNT(magazine)        (GET_OBJ_VAL((magazine), 9))
 
 // ITEM_GUN_ACCESSORY convenience defines
 #define GET_ACCESSORY_ATTACH_LOCATION(accessory) (GET_OBJ_VAL((accessory), 0))
