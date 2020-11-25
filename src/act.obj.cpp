@@ -457,7 +457,7 @@ ACMD(do_put)
     }
     
     // Combine them. This handles junking of empties, restringing, etc.
-    if (!combine_ammo_boxes(ch, obj, cont)) {
+    if (!combine_ammo_boxes(ch, obj, cont, TRUE)) {
       send_to_char("Something went wrong. Please reach out to the staff.\r\n", ch);
     }
     return;

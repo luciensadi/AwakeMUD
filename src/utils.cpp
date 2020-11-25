@@ -2811,7 +2811,7 @@ char *replace_substring(char *source, char *dest, const char *replace_target, co
 }
 
 
-bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_data *into) {
+bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_data *into, bool print_messages) {
   if (!ch || !from || !into) {
     mudlog("SYSERR: combine_ammo_boxes received a null value.", ch, LOG_SYSLOG, TRUE);
     return FALSE;
@@ -2840,17 +2840,21 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
   
   // Notify the owner, then destroy the empty.
   if (!from->restring) {
-    send_to_char(ch, "You dump the ammo into %s and throw away the now-empty '%s'.\r\n",
-      GET_OBJ_NAME(into),
-      GET_OBJ_NAME(from)
-    );
+    if (print_messages) {
+      send_to_char(ch, "You dump the ammo into %s and throw away the now-empty '%s'.\r\n",
+        GET_OBJ_NAME(into),
+        GET_OBJ_NAME(from)
+      );
+    }
     
     extract_obj(from);
   } else {
-    send_to_char(ch, "You dump the ammo from %s into %s, but hang on to the customized empty container.\r\n",
-      GET_OBJ_NAME(from),
-      GET_OBJ_NAME(into)
-    );
+    if (print_messages) {
+      send_to_char(ch, "You dump the ammo from %s into %s, but hang on to the customized empty container.\r\n",
+        GET_OBJ_NAME(from),
+        GET_OBJ_NAME(into)
+      );
+    }
   }
   
   // Restring it, as long as it's not already restrung.
@@ -2859,7 +2863,7 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
     char notification_string_buf[500];
     
     // Compose the new name.
-    sprintf(new_name_buf, "a box of %s %s ammo", 
+    sprintf(new_name_buf, "a box of %s %s ammunition", 
       ammo_type[GET_AMMOBOX_TYPE(into)].name,
       weapon_type[GET_AMMOBOX_WEAPON(into)]
     );
@@ -2872,7 +2876,9 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
     
     // Commit the change and notify the player.
     into->restring = str_dup(new_name_buf);
-    send_to_char(notification_string_buf, ch);
+    
+    if (print_messages)
+      send_to_char(notification_string_buf, ch);
   }
   
   // Everything succeeded.

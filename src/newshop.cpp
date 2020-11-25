@@ -366,9 +366,24 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         }
         if (orig) {
           // They were carrying one already. Combine them.
-          combine_ammo_boxes(ch, obj, orig);
+          sprintf(buf2, "You add the purchased %d rounds into %s.", GET_AMMOBOX_QUANTITY(obj), GET_OBJ_NAME(orig));
+          combine_ammo_boxes(ch, obj, orig, FALSE);
         } else {
-          // Just give the purchased thing to them directly.
+          // Just give the purchased thing to them directly. Handle restring if needed.
+          if (bought > 1) {
+            char new_name_buf[500];
+            
+            // Compose the new name.
+            sprintf(new_name_buf, "a box of %s %s ammunition", 
+              ammo_type[GET_AMMOBOX_TYPE(obj)].name,
+              weapon_type[GET_AMMOBOX_WEAPON(obj)]
+            );
+            
+            // Commit the change.
+            obj->restring = str_dup(new_name_buf);
+          }
+          
+          sprintf(buf2, "You now have %s.", GET_OBJ_NAME(obj));
           obj_to_char(obj, ch);
         }
       } 
@@ -441,7 +456,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
   // Compose the sayto string for the keeper.
   sprintf(buf, "%s %s", GET_CHAR_NAME(ch), buf3);
   do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-  if (bought > 1)
+  if (bought > 1 && GET_OBJ_TYPE(obj) != ITEM_GUN_AMMO)
     sprintf(ENDOF(buf2), " (x%d)\r\n", bought);
   send_to_char(buf2, ch);
   send_to_char("\r\n", ch);
