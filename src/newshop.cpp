@@ -354,6 +354,8 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       
       // Give them the item (it's gun ammo)
       if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
+        GET_AMMOBOX_QUANTITY(obj) *= bought;
+        
         struct obj_data *orig = ch->carrying;
         for (; orig; orig = orig->next_content) {
           if (GET_OBJ_TYPE(obj) == GET_OBJ_TYPE(orig) && 
