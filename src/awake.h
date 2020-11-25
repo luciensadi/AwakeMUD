@@ -712,6 +712,7 @@ enum {
 #define TYPE_UNDEFINED               -1
 
 
+#define MIN_SKILLS                   1
 #define SKILL_ATHLETICS              1
 #define SKILL_ARMED_COMBAT           2
 #define SKILL_EDGED_WEAPONS          3

@@ -2111,7 +2111,7 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
   send_to_char(OK, ch);
   
   if (newlevel < GET_LEVEL(victim)) {
-    send_to_char(victim, "%s has demoted you from %s to %s.\r\n", GET_CHAR_NAME(ch), status_ratings[(int) GET_LEVEL(victim)], status_ratings[newlevel]);
+    send_to_char(victim, "%s has demoted you from %s to %s. Note that this has reset your skills, stats, karma, etc.\r\n", GET_CHAR_NAME(ch), status_ratings[(int) GET_LEVEL(victim)], status_ratings[newlevel]);
     sprintf(buf3, "%s has demoted %s from %s to %s.",
             GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), status_ratings[(int)GET_LEVEL(victim)], status_ratings[newlevel]);
     do_start(victim);
@@ -2131,10 +2131,13 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
         "snaps you back to reality.\r\n\r\n"
         "You feel slightly different.", FALSE, ch, 0, victim, TO_VICT);
      */
-    send_to_char(victim, "%s has promoted you from %s to %s.\r\n", GET_CHAR_NAME(ch), status_ratings[(int) GET_LEVEL(victim)], status_ratings[newlevel]);
+    send_to_char(victim, "%s has promoted you from %s to %s. Note that this has reset your skills, stats, chargen data, etc.\r\n", GET_CHAR_NAME(ch), status_ratings[(int) GET_LEVEL(victim)], status_ratings[newlevel]);
     sprintf(buf3, "%s has advanced %s from %s to %s.",
             GET_CHAR_NAME(ch), GET_CHAR_NAME(victim), status_ratings[(int)GET_LEVEL(victim)], status_ratings[newlevel]);
     GET_LEVEL(victim) = newlevel;
+    
+    // Auto-restore them to set their skills, stats, etc.
+    restore_character(victim);
   }
   
   if (IS_SENATOR(victim)) {
@@ -2250,62 +2253,91 @@ ACMD(do_penalize)
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
 }
 
+void restore_character(struct char_data *vict, bool reset_staff_stats) {  
+  // Restore their physical and mental damage levels.
+  GET_PHYSICAL(vict) = GET_MAX_PHYSICAL(vict);
+  GET_MENTAL(vict) = GET_MAX_MENTAL(vict);
+  
+  // Touch up their hunger, thirst, etc. Mortals get it set to zero.
+  if (!IS_SENATOR(vict)) {
+    for (int i = COND_DRUNK; i <= COND_THIRST; i++)
+      GET_COND(victim, i) = 0;
+  }
+  
+  // Staff members get their skills set to max, and also their stats boosted.
+  if (reset_staff_stats && !IS_NPC(vict) && IS_SENATOR(vict)) {
+    // Touch up their hunger, thirst, etc. Staff get it set to -1 ('off').
+    for (int i = COND_DRUNK; i <= COND_THIRST; i++)
+      GET_COND(victim, i) = (char) -1;
+      
+    // Give them 100 in every skill.
+    for (int i = MIN_SKILLS; i < MAX_SKILLS; i++)
+      set_character_skill(vict, i, 100, FALSE);
+      
+    // Restore their essence to 6.00.
+    vict->real_abils.ess = 600;
+    
+    // All staff members get attributes at level 15...
+    int stat_level = 15;
+    
+    // Except executives and higher, who get 50 instead. Gotta have that e-peen?
+    if (access_level(vict, LVL_EXECUTIVE))
+      stat_level = 50;
+      
+    // Set all their stats to the requested level.
+    GET_REAL_INT(vict) = stat_level;
+    GET_REAL_WIL(vict) = stat_level;
+    GET_REAL_QUI(vict) = stat_level;
+    GET_REAL_STR(vict) = stat_level;
+    GET_REAL_BOD(vict) = stat_level;
+    GET_REAL_CHA(vict) = stat_level;
+    vict->real_abils.mag = stat_level * 100;
+
+    // Recalculate their affects.
+    affect_total(vict);
+  }
+  
+  // Update their position (restores them from death, etc)
+  update_pos(vict);
+}
 
 ACMD(do_restore)
 {
   struct char_data *vict;
-  struct descriptor_data *d;
   int i;
 
   one_argument(argument, buf);
-  if (!*buf)
+  
+  // We require an argument.
+  if (!*buf) {
     send_to_char("Whom do you wish to restore?\r\n", ch);
-  else if (*buf == '*') {
+    return;
+  }
+  
+  // We require that the argument is either '*' for all PCs, or a specific target.
+  if (*buf != '*' && !(vict = get_char_vis(ch, buf))) {
+    send_to_char(NOPERSON, ch);
+  }
+  
+  // Restore-all mode.
+  if (*buf == '*') {
+    for (struct descriptor_data *d = descriptor_list; d; d = d->next) {
+      restore_character(d->character, FALSE);
+      act("You have been fully healed by $N!", FALSE, vict, 0, ch, TO_CHAR);
+    }
     sprintf(buf2, "%s restored all players.", GET_CHAR_NAME(ch));
     mudlog(buf2, ch, LOG_WIZLOG, TRUE);
-    for (d = descriptor_list; d; d = d->next) {
-      GET_PHYSICAL(d->character) = GET_MAX_PHYSICAL(d->character);
-      GET_MENTAL(d->character) = GET_MAX_MENTAL(d->character);
-    }
-    return;
-  } else if (!(vict = get_char_vis(ch, buf)))
-    send_to_char(NOPERSON, ch);
-  else {
-    GET_PHYSICAL(vict) = GET_MAX_PHYSICAL(vict);
-    GET_MENTAL(vict) = GET_MAX_MENTAL(vict);
-
-    if ((access_level(ch, LVL_DEVELOPER)) &&
-        (IS_SENATOR(vict)) && !IS_NPC(vict)) {
-      for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
-        set_character_skill(vict, i, 100, FALSE);
-
-      if (IS_SENATOR(vict) && !access_level(vict, LVL_EXECUTIVE)) {
-        GET_REAL_INT(vict) = 15;
-        GET_REAL_WIL(vict) = 15;
-        GET_REAL_QUI(vict) = 15;
-        GET_REAL_STR(vict) = 15;
-        GET_REAL_BOD(vict) = 15;
-        GET_REAL_CHA(vict) = 15;
-        vict->real_abils.ess = 600;
-        vict->real_abils.mag = 1500;
-      } else if (IS_SENATOR(vict) && access_level(vict, LVL_EXECUTIVE)) {
-        GET_REAL_INT(vict) = 50;
-        GET_REAL_WIL(vict) = 50;
-        GET_REAL_QUI(vict) = 50;
-        GET_REAL_STR(vict) = 50;
-        GET_REAL_BOD(vict) = 50;
-        GET_REAL_CHA(vict) = 50;
-        vict->real_abils.ess = 600;
-        vict->real_abils.mag = 5000;
-      }
-      affect_total(vict);
-    }
-    update_pos(vict);
     send_to_char(OK, ch);
-    act("You have been fully healed by $N!", FALSE, vict, 0, ch, TO_CHAR);
-    sprintf(buf, "%s restored %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
-    mudlog(buf, ch, LOG_WIZLOG, TRUE);
-  }
+    return;
+  } 
+  
+  // Restore-single-target mode.
+  restore_character(vict, TRUE);
+  act("You have been fully healed by $N!", FALSE, vict, 0, ch, TO_CHAR);
+  sprintf(buf, "%s restored %s.", GET_CHAR_NAME(ch), GET_CHAR_NAME(vict));
+  mudlog(buf, ch, LOG_WIZLOG, TRUE);
+  send_to_char(OK, ch);
+  return;
 }
 
 void perform_immort_vis(struct char_data *ch)
