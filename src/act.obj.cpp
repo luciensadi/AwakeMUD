@@ -1818,13 +1818,13 @@ ACMD(do_drink)
     send_to_char("You have to be holding that to drink from it.\r\n", ch);
     return;
   }
-  if ((GET_COND(ch, COND_DRUNK) > 10)) {
+  if ((GET_COND(ch, COND_DRUNK) > MAX_DRUNK)) {
     send_to_char("You can't seem to get close enough to your mouth.\r\n", ch);
     act("$n tries to drink but misses $s mouth!", TRUE, ch, 0, 0, TO_ROOM);
     return;
   }
 #ifdef ENABLE_HUNGER
-  if ((GET_COND(ch, COND_FULL) > 20) && (GET_COND(ch, COND_THIRST) > 0)) {
+  if ((GET_COND(ch, COND_FULL) > MAX_FULLNESS) && (GET_COND(ch, COND_THIRST) > MIN_QUENCHED)) {
     send_to_char("Your stomach can't contain anymore!\r\n", ch);
     return;
   }
@@ -1865,14 +1865,14 @@ ACMD(do_drink)
                  (int) ((int) drink_aff[GET_OBJ_VAL(temp, 2)][COND_THIRST] * amount) / 4);
 #endif
 
-  if (GET_COND(ch, COND_DRUNK) > 10)
+  if (GET_COND(ch, COND_DRUNK) > MAX_DRUNK)
     send_to_char("You feel drunk.\r\n", ch);
 
 #ifdef ENABLE_HUNGER
-  if (GET_COND(ch, COND_THIRST) > 20)
+  if (GET_COND(ch, COND_THIRST) > MAX_QUENCHED)
     send_to_char("You don't feel thirsty any more.\r\n", ch);
 
-  if (GET_COND(ch, COND_FULL) > 20)
+  if (GET_COND(ch, COND_FULL) > MAX_FULLNESS)
     send_to_char("You are full.\r\n", ch);
 #endif
 
@@ -1915,7 +1915,7 @@ ACMD(do_eat)
     send_to_char("You can't eat THAT!\r\n", ch);
     return;
   }
-  if (GET_COND(ch, COND_FULL) > 20) {/* Stomach full */
+  if (GET_COND(ch, COND_FULL) > MAX_FULLNESS) {/* Stomach full */
     act("You are too full to eat more!", FALSE, ch, 0, 0, TO_CHAR);
     return;
   }

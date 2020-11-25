@@ -85,6 +85,10 @@ extern const char *pgroup_print_privileges(Bitfield privileges);
 
 extern int mother_desc, port;
 
+/* Prototypes. */
+void restore_character(struct char_data *vict, bool reset_staff_stats);
+
+
 #define EXE_FILE "bin/awake" /* maybe use argv[0] but it's not reliable */
 
 ACMD(do_crash_mud) {
@@ -2137,7 +2141,7 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
     GET_LEVEL(victim) = newlevel;
     
     // Auto-restore them to set their skills, stats, etc.
-    restore_character(victim);
+    restore_character(victim, TRUE);
   }
   
   if (IS_SENATOR(victim)) {
@@ -2243,58 +2247,75 @@ ACMD(do_penalize)
   sprintf(buf, "You have been penalized %0.2f karma for %s.\r\n", (float)k*0.01, reason);
   send_to_char(buf, vict);
 
-  sprintf(buf2, "You penalized %0.2f karma to %s for %s.\r\n", (float)k*0.01,
+  sprintf(buf2, "You penalized %0.2f karma from %s for %s.\r\n", (float)k*0.01,
           GET_NAME(vict), reason);
   send_to_char(buf2, ch);
 
-  sprintf(buf2, "%s penalized %0.2f karma to %s for %s (%d to %d).",
+  sprintf(buf2, "%s penalized %0.2f karma from %s for %s (%d to %d).",
           GET_CHAR_NAME(ch), (float)k*0.01,
           GET_CHAR_NAME(vict), reason, GET_KARMA(vict) + k, GET_KARMA(vict));
   mudlog(buf2, ch, LOG_WIZLOG, TRUE);
 }
 
+// Restores a character to peak physical condition.
 void restore_character(struct char_data *vict, bool reset_staff_stats) {  
   // Restore their physical and mental damage levels.
   GET_PHYSICAL(vict) = GET_MAX_PHYSICAL(vict);
   GET_MENTAL(vict) = GET_MAX_MENTAL(vict);
   
-  // Touch up their hunger, thirst, etc. Mortals get it set to zero.
-  if (!IS_SENATOR(vict)) {
+  // Non-NPCs get further consideration.
+  if (!IS_NPC(vict)) {  
+    // Touch up their hunger, thirst, etc. 
     for (int i = COND_DRUNK; i <= COND_THIRST; i++)
-      GET_COND(victim, i) = 0;
-  }
-  
-  // Staff members get their skills set to max, and also their stats boosted.
-  if (reset_staff_stats && !IS_NPC(vict) && IS_SENATOR(vict)) {
-    // Touch up their hunger, thirst, etc. Staff get it set to -1 ('off').
-    for (int i = COND_DRUNK; i <= COND_THIRST; i++)
-      GET_COND(victim, i) = (char) -1;
+      // Staff don't deal with hunger, etc-- disable it for them.
+      if IS_SENATOR(vict) {
+        GET_COND(vict, i) = COND_IS_DISABLED;
+      } 
       
-    // Give them 100 in every skill.
-    for (int i = MIN_SKILLS; i < MAX_SKILLS; i++)
-      set_character_skill(vict, i, 100, FALSE);
+      // Mortals get theirs set to full (not drunk, full food/water).
+      else {
+        switch (i) {
+          case COND_DRUNK:
+            GET_COND(vict, i) = MIN_DRUNK;
+            break;
+          case COND_FULL:
+            GET_COND(vict, i) = MAX_FULLNESS;
+            break;
+          case COND_THIRST:
+            GET_COND(vict, i) = MAX_QUENCHED;
+            break;
+          default:
+            sprintf(buf, "ERROR: Unknown condition type %d in restore_character switch statement.", i);
+            mudlog(buf, vict, LOG_SYSLOG, TRUE);
+            return;
+        }
+      }
       
-    // Restore their essence to 6.00.
-    vict->real_abils.ess = 600;
-    
-    // All staff members get attributes at level 15...
-    int stat_level = 15;
-    
-    // Except executives and higher, who get 50 instead. Gotta have that e-peen?
-    if (access_level(vict, LVL_EXECUTIVE))
-      stat_level = 50;
       
-    // Set all their stats to the requested level.
-    GET_REAL_INT(vict) = stat_level;
-    GET_REAL_WIL(vict) = stat_level;
-    GET_REAL_QUI(vict) = stat_level;
-    GET_REAL_STR(vict) = stat_level;
-    GET_REAL_BOD(vict) = stat_level;
-    GET_REAL_CHA(vict) = stat_level;
-    vict->real_abils.mag = stat_level * 100;
+    // Staff members get their skills set to max, and also their stats boosted.
+    if (IS_SENATOR(vict) && reset_staff_stats) {
+      // Give them 100 in every skill.
+      for (int i = MIN_SKILLS; i < MAX_SKILLS; i++)
+        set_character_skill(vict, i, 100, FALSE);
+        
+      // Restore their essence to 6.00.
+      vict->real_abils.ess = 600;
+      
+      // Non-executive staff get 15's in stats. Executives get 50s.
+      int stat_level = access_level(vict, LVL_EXECUTIVE) ? 50 : 15;
+        
+      // Set all their stats to the requested level.
+      GET_REAL_INT(vict) = stat_level;
+      GET_REAL_WIL(vict) = stat_level;
+      GET_REAL_QUI(vict) = stat_level;
+      GET_REAL_STR(vict) = stat_level;
+      GET_REAL_BOD(vict) = stat_level;
+      GET_REAL_CHA(vict) = stat_level;
+      vict->real_abils.mag = stat_level * 100;
 
-    // Recalculate their affects.
-    affect_total(vict);
+      // Recalculate their affects.
+      affect_total(vict);
+    }
   }
   
   // Update their position (restores them from death, etc)
@@ -2304,7 +2325,6 @@ void restore_character(struct char_data *vict, bool reset_staff_stats) {
 ACMD(do_restore)
 {
   struct char_data *vict;
-  int i;
 
   one_argument(argument, buf);
   

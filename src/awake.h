@@ -394,6 +394,17 @@ enum {
 #define COND_FULL         1
 #define COND_THIRST       2
 
+
+#define COND_IS_DISABLED  -1
+
+#define MIN_FULLNESS      0
+#define MIN_QUENCHED      0  // Note that 'quenched' is the inversion of thirst.
+#define MIN_DRUNK         0
+
+#define MAX_FULLNESS      20
+#define MAX_QUENCHED      20
+#define MAX_DRUNK         10
+
 /* affect bits: used in char_data.char_specials.saved.affected_by */
 /* WARNING: In the world files, NEVER set the bits marked "R" ("Reserved") */
 

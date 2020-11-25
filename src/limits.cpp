@@ -80,7 +80,7 @@ void mental_gain(struct char_data * ch)
     gain = (int)(gain * 1.5);
   
 #ifdef ENABLE_HUNGER
-  if ((GET_COND(ch, COND_FULL) == 0) || (GET_COND(ch, COND_THIRST) == 0))
+  if ((GET_COND(ch, COND_FULL) == MIN_FULLNESS) || (GET_COND(ch, COND_THIRST) == MIN_QUENCHED))
     gain >>= 1;
 #endif
   
@@ -127,7 +127,7 @@ void physical_gain(struct char_data * ch)
   }
   
 #ifdef ENABLE_HUNGER
-  if ((GET_COND(ch, COND_FULL) == 0) || (GET_COND(ch, COND_THIRST) == 0))
+  if ((GET_COND(ch, COND_FULL) == MIN_FULLNESS) || (GET_COND(ch, COND_THIRST) == MIN_QUENCHED))
     gain >>= 1;
 #endif
   
@@ -265,7 +265,7 @@ void gain_condition(struct char_data * ch, int condition, int value)
   if (GET_COND(ch, condition) == -1)    /* No change */
     return;
   
-  intoxicated = (GET_COND(ch, COND_DRUNK) > 0);
+  intoxicated = (GET_COND(ch, COND_DRUNK) > MIN_DRUNK);
   
   if (value == -1) {
     for (bio = ch->bioware; bio; bio = bio->next_content) {
