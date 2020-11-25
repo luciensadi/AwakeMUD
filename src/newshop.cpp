@@ -191,6 +191,8 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
   char buf[MAX_STRING_LENGTH], buf2[MAX_STRING_LENGTH];
   strcpy(buf, GET_CHAR_NAME(ch));
   int bought = 0;
+  bool print_multiples_at_end = TRUE;
+  
   if (sell && sell->type == SELL_STOCK && sell->stock < 1)
   {
     sprintf(ENDOF(buf), " That item isn't currently available.");
@@ -354,6 +356,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       
       // Give them the item (it's gun ammo)
       if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
+        print_multiples_at_end = FALSE;
         GET_AMMOBOX_QUANTITY(obj) *= bought;
         
         struct obj_data *orig = ch->carrying;
@@ -366,8 +369,9 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
         }
         if (orig) {
           // They were carrying one already. Combine them.
-          sprintf(buf2, "You add the purchased %d rounds into %s.", GET_AMMOBOX_QUANTITY(obj), GET_OBJ_NAME(orig));
+          sprintf(buf2, "You add the purchased %d rounds", GET_AMMOBOX_QUANTITY(obj));
           combine_ammo_boxes(ch, obj, orig, FALSE);
+          sprintf(ENDOF(buf2), " into %s.", GET_OBJ_NAME(orig));
         } else {
           // Just give the purchased thing to them directly. Handle restring if needed.
           if (bought > 1) {
@@ -456,7 +460,7 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
   // Compose the sayto string for the keeper.
   sprintf(buf, "%s %s", GET_CHAR_NAME(ch), buf3);
   do_say(keeper, buf, cmd_say, SCMD_SAYTO);
-  if (bought > 1 && GET_OBJ_TYPE(obj) != ITEM_GUN_AMMO)
+  if (bought > 1 && print_multiples_at_end)
     sprintf(ENDOF(buf2), " (x%d)\r\n", bought);
   send_to_char(buf2, ch);
   send_to_char("\r\n", ch);
