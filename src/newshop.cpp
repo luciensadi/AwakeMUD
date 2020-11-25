@@ -357,7 +357,10 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
       // Give them the item (it's gun ammo)
       if (GET_OBJ_TYPE(obj) == ITEM_GUN_AMMO) {
         print_multiples_at_end = FALSE;
+        
+        // Update its quantity and weight to match the increased ammo load. Cost already done above.
         GET_AMMOBOX_QUANTITY(obj) *= bought;
+        GET_OBJ_WEIGHT(obj) *= bought;
         
         struct obj_data *orig = ch->carrying;
         for (; orig; orig = orig->next_content) {
@@ -385,9 +388,12 @@ bool shop_receive(struct char_data *ch, struct char_data *keeper, char *arg, int
             
             // Commit the change.
             obj->restring = str_dup(new_name_buf);
+            
+            sprintf(buf2, "You now have %s (contains %d rounds).", GET_OBJ_NAME(obj), GET_AMMOBOX_QUANTITY(obj));
+          } else {
+            sprintf(buf2, "You now have %s.", GET_OBJ_NAME(obj));
           }
           
-          sprintf(buf2, "You now have %s.", GET_OBJ_NAME(obj));
           obj_to_char(obj, ch);
         }
       } 
@@ -948,6 +954,7 @@ bool shop_probe(char *arg, struct char_data *ch, struct char_data *keeper, vnum_
     return FALSE;
   }
   
+  send_to_char(ch, "^yProbing shopkeeper's %s...^n\r\n", GET_OBJ_NAME(obj));
   do_probe_object(ch, obj);
   return TRUE;
   

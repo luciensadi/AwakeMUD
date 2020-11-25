@@ -2834,7 +2834,14 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
     return FALSE;
   }
   
-  // Combine them.
+  // Combine them, then set the donor container's values to 0.
+  GET_OBJ_COST(into) += GET_OBJ_COST(from);
+  GET_OBJ_COST(from) = 0;
+  
+  GET_OBJ_WEIGHT(into) += GET_OBJ_WEIGHT(from);
+  GET_OBJ_WEIGHT(from) = 0;
+  // No need to update the character's carried weight here-- it's net zero.
+  
   GET_AMMOBOX_QUANTITY(into) += GET_AMMOBOX_QUANTITY(from);
   GET_AMMOBOX_QUANTITY(from) = 0;
   

@@ -2103,11 +2103,11 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       break;
     case ITEM_GUN_AMMO:
       if (GET_OBJ_VAL(j, 3))
-        send_to_char(ch, "It has %d/%d %s round%s of %s ammunition left.\r\n", GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 0) +
+        sprintf(ENDOF(buf), "It has %d/%d %s round%s of %s ammunition left.\r\n", GET_OBJ_VAL(j, 0), GET_OBJ_VAL(j, 0) +
                      GET_OBJ_VAL(j, 3), ammo_type[GET_OBJ_VAL(j, 2)].name,GET_OBJ_VAL(j, 0) != 1 ? "s" : "",
                      weapon_type[GET_OBJ_VAL(j, 1)]);
       else
-        send_to_char(ch, "It has %d %s round%s of %s ammunition left.\r\n", GET_OBJ_VAL(j, 0),
+        sprintf(ENDOF(buf), "It has %d %s round%s of %s ammunition left.\r\n", GET_OBJ_VAL(j, 0),
                      ammo_type[GET_OBJ_VAL(j, 2)].name,GET_OBJ_VAL(j, 0) != 1 ? "s" : "",
                      weapon_type[GET_OBJ_VAL(j, 1)]);
       break;
@@ -2117,7 +2117,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
     case ITEM_OTHER:
     case ITEM_CAMERA:
     case ITEM_PHONE:
-      sprintf(ENDOF(buf), "Nothing stands out about this item's OOC values.");
+      sprintf(ENDOF(buf), "Nothing stands out about this item's OOC values. Try EXAMINE it instead.");
       break;
     default:
       strcat(buf, "This item type has no probe string. Contact the staff to request one.");
