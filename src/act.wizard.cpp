@@ -1139,18 +1139,7 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
   int i, i2, found = 0;
   struct obj_data *j;
   struct follow_type *fol;
-
-  const char *aspects[] =
-    {
-      "Full",
-      "Conjurer",
-      "Shamanist",
-      "Sorcerer",
-      "Elementalist (Earth)",
-      "Elementalist (Air)",
-      "Elementalist (Fire)",
-      "Elementalist (Water)"
-    };
+  
   if (!access_level(ch, LVL_FIXER))
   {
     send_to_char("You're not quite erudite enough to do that!\r\n", ch);
@@ -1196,11 +1185,11 @@ void do_stat_character(struct char_data * ch, struct char_data * k)
     sprintf(ENDOF(buf), "Tradition: Adept, Grade: %d Extra Power: %d/%d", GET_GRADE(k), k->points.extrapp, (int)(GET_REP(k) / 50) + 1);
     break;
   case TRAD_HERMETIC:
-    sprintf(ENDOF(buf), "Tradition: Hermetic, Aspect: %s, Grade: %d", aspects[GET_ASPECT(k)], GET_GRADE(k));
+    sprintf(ENDOF(buf), "Tradition: Hermetic, Aspect: %s, Grade: %d", aspect_names[GET_ASPECT(k)], GET_GRADE(k));
     break;
   case TRAD_SHAMANIC:
     sprinttype(GET_TOTEM(k), totem_types, buf2);
-    sprintf(ENDOF(buf), "Tradition: Shamanic, Aspect: %s, Totem: %s, ", aspects[GET_ASPECT(k)], buf2);
+    sprintf(ENDOF(buf), "Tradition: Shamanic, Aspect: %s, Totem: %s, ", aspect_names[GET_ASPECT(k)], buf2);
     if (GET_TOTEM(k) == TOTEM_GATOR || GET_TOTEM(k) == TOTEM_SNAKE || GET_TOTEM(k) == TOTEM_WOLF)
       sprintf(ENDOF(buf), "Spirit Bonus: %s, ", spirits[GET_TOTEMSPIRIT(k)].name);
     sprintf(ENDOF(buf), "Grade: %d", GET_GRADE(k));
@@ -4037,6 +4026,7 @@ ACMD(do_set)
   case 55:
     RANGE(0, 7);
     GET_TRADITION(vict) = value;
+    send_to_char(ch, "%s is now %s %s.\r\n", GET_CHAR_NAME(vict), AN(aspect_names[value]), tradition_names[value]);
     break;
   case 56: /* nosnoop flag */
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_NOSNOOP);
@@ -4072,6 +4062,7 @@ ACMD(do_set)
   case 66:
     RANGE(0, 7);
     GET_ASPECT(vict) = value;
+    send_to_char(ch, "%s is now %s %s.\r\n", GET_CHAR_NAME(vict), AN(aspect_names[value]), aspect_names[value]);
     break;
   case 67:
     SET_OR_REMOVE(PRF_FLAGS(vict), PRF_NEWBIEHELPER);

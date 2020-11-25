@@ -117,4 +117,7 @@ extern const char *deck_accessory_upgrade_types[];
 extern const char *message_history_channels[];
 extern const char *pgroup_settings[];
 extern int acceptable_weapon_attachment_affects[];
+
+extern const char *aspect_names[];
+extern const char *tradition_names[];
 #endif

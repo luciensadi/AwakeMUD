@@ -2397,14 +2397,31 @@ ACMD(do_conjure)
 
 ACMD(do_spells)
 {
-  if (GET_ASPECT(ch) == ASPECT_CONJURER || GET_TRADITION(ch) == TRAD_ADEPT || GET_TRADITION(ch) == TRAD_MUNDANE || !GET_SKILL(ch, SKILL_SORCERY)) {
-    send_to_char("You don't have the ability to do that.\r\n", ch);
+  // Conjurers cannot cast spells.
+  if (GET_ASPECT(ch) == ASPECT_CONJURER) {
+    send_to_char(ch, "%ss don't have the aptitude for spells.\r\n", aspect_names[GET_ASPECT(ch)]);
     return;
   }
+  
+  // Adepts and Mundanes cannot cast spells.
+  if (GET_TRADITION(ch) == TRAD_ADEPT || GET_TRADITION(ch) == TRAD_MUNDANE) {
+    send_to_char(ch, "%ss don't have the aptitude for spells.\r\n", tradition_names[GET_ASPECT(ch)]);
+    return;
+  }
+  
+  // Character is of the right type to cast spells, but doesn't have the skill trained yet.
+  if (!GET_SKILL(ch, SKILL_SORCERY)) {
+    send_to_char(ch, "You need to learn the %s skill first.\r\n", skills[SKILL_SORCERY].name);
+    return;
+  }
+  
+  // Character has no spells known.
   if (!GET_SPELLS(ch)) {
     send_to_char("You don't know any spells.\r\n", ch);
     return;
   }
+  
+  // Character knows spells. List them.
   send_to_char("You know the following spells:\r\n", ch);
   for (struct spell_data *spell = GET_SPELLS(ch); spell; spell = spell->next)
     send_to_char(ch, "%-50s Category: %12s Force: %d\r\n", spell->name, spell_category[spells[spell->type].category], spell->force);
@@ -4163,5 +4180,3 @@ ACMD(do_think)
   act(buf, FALSE, ch, 0, ch->char_specials.mindlink, TO_VICT);
   send_to_char(ch, "You think, \"%s\"\r\n", argument);
 }
-
-

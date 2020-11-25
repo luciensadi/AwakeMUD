@@ -2400,3 +2400,21 @@ int acceptable_weapon_attachment_affects[] = {
   AFF_DETECT_INVIS,
   -1
 };
+
+const char *aspect_names[] = {
+  "Full Mage",
+  "Conjurer",
+  "Shamanist",
+  "Sorcerer",
+  "Earth Elementalist",
+  "Air Elementalist",
+  "Fire Elementalist",
+  "Water Elementalist"
+};
+
+const char *tradition_names[] = {
+  "Hermetic",
+  "Shamanic",
+  "Mundane",
+  "Adept"
+};
