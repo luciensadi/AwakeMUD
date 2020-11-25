@@ -2469,8 +2469,13 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
   bool found = FALSE;
   struct obj_data *obj, *cont;
   
-  if (!ch || !wielded) {
-    mudlog("SYSERR: process_has_ammo received null value. Returning TRUE.", ch, LOG_SYSLOG, TRUE);
+  if (!ch) {
+    mudlog("SYSERR: process_has_ammo received null value for ch. Returning TRUE.", ch, LOG_SYSLOG, TRUE);
+    return TRUE;
+  }
+  
+  if (!wielded) {
+    // If you're not wielding anything, then not having ammo won't stop you.
     return TRUE;
   }
   
@@ -2569,10 +2574,11 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
     return FALSE;
   }
   
-  // Error state. Needs followup.
-  sprintf(buf, "Got to end of process_has_ammo (%s, %s (%ld)) with no result. Returning true.",
-          GET_CHAR_NAME(ch), GET_OBJ_NAME(wielded), GET_OBJ_VNUM(wielded));
-  mudlog(buf, ch, LOG_SYSLOG, TRUE);
+  // sprintf(buf, "Got to end of process_has_ammo (%s, %s (%ld)) with no result. Returning true.",
+  //         GET_CHAR_NAME(ch), GET_OBJ_NAME(wielded), GET_OBJ_VNUM(wielded));
+  // mudlog(buf, ch, LOG_SYSLOG, TRUE);
+  
+  // You're wielding something that's not a fireweapon or a gun. Ammo's a given.
   return TRUE;
 }
 
@@ -3344,7 +3350,7 @@ void hit(struct char_data *attacker, struct char_data *victim, struct obj_data *
   }
   
   // Precondition: If you're asleep, paralyzed, or out of ammo, you don't get to fight. Note the use of the deducting has_ammo here.
-  if (!AWAKE(att->ch) || GET_QUI(att->ch) <= 0 || !has_ammo(att->ch, att->weapon))
+  if (!AWAKE(att->ch) || GET_QUI(att->ch) <= 0 || (att->weapon && !has_ammo(att->ch, att->weapon)))
     return;
   
   // Short-circuit: If you're wielding an activated Dominator, you don't care about all these pesky rules.
