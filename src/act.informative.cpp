@@ -2247,7 +2247,7 @@ ACMD(do_examine)
     if (tmp_object) {
       do_probe_object(ch, tmp_object);
     } else {
-      send_to_char("You're not carrying any such object, and there are no vehicles like that here.\r\n", ch);
+      send_to_char("You're not wearing or carrying any such object, and there are no vehicles like that here.\r\n", ch);
     }
     return;
   } else {

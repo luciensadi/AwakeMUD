@@ -1449,18 +1449,18 @@ ACMD(do_reload)
        return;    
      }
      for (i = ch->carrying; i; i = i->next_content)
-       if (GET_OBJ_TYPE(i) == ITEM_GUN_MAGAZINE && !GET_OBJ_VAL(gun, 9) &&
-           (GET_OBJ_VAL(i, 1) == GET_OBJ_VAL(gun, 1) || (GET_OBJ_VAL(gun, 1) == WEAP_LIGHT_PISTOL &&
+       if (GET_OBJ_TYPE(i) == ITEM_GUN_MAGAZINE && !GET_AMMOBOX_CREATOR(gun) &&
+           (GET_OBJ_VAL(i, 1) == GET_AMMOBOX_WEAPON(gun) || (GET_AMMOBOX_WEAPON(gun) == WEAP_LIGHT_PISTOL &&
            GET_OBJ_VAL(i, 1) == WEAP_MACHINE_PISTOL))
            && GET_OBJ_VAL(i, 9) < GET_OBJ_VAL(i, 0)) {
-         if (GET_OBJ_VAL(gun, 2) != GET_OBJ_VAL(i, 2) && GET_OBJ_VAL(i, 9) > 0) {
+         if (GET_AMMOBOX_TYPE(gun) != GET_OBJ_VAL(i, 2) && GET_OBJ_VAL(i, 9) > 0) {
            send_to_char("You cannot mix ammunition types in magazines.\r\n", ch);
            return;
          }
-         n = MIN((GET_OBJ_VAL(i, 0) - GET_OBJ_VAL(i, 9)), GET_OBJ_VAL(gun, 0));
+         n = MIN((GET_OBJ_VAL(i, 0) - GET_OBJ_VAL(i, 9)), GET_AMMOBOX_QUANTITY(gun));
          GET_OBJ_VAL(i, 9) += n;
-         GET_OBJ_VAL(gun, 0) -= n;
-         GET_OBJ_VAL(i, 2) = GET_OBJ_VAL(gun, 2);
+         GET_AMMOBOX_QUANTITY(gun) -= n;
+         GET_OBJ_VAL(i, 2) = GET_AMMOBOX_TYPE(gun);
          sprintf(buf, "You reload %d rounds into $p.", n);
          act("$n inserts some rounds into $p.", FALSE, ch, i, NULL, TO_ROOM);
          act(buf, FALSE, ch, i, NULL, TO_CHAR);

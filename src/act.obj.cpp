@@ -411,6 +411,85 @@ ACMD(do_put)
     return;
   }
   
+  // Combine ammo boxes.
+  if (GET_OBJ_TYPE(cont) == ITEM_GUN_AMMO) {
+    if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying))) {
+      send_to_char(ch, "You aren't carrying %s %s.\r\n", AN(arg1), arg1);
+      return;
+    }
+    
+    // Restriction: You can't wombo-combo non-ammo into ammo.
+    if (GET_OBJ_TYPE(obj) != ITEM_GUN_AMMO) {
+      send_to_char(ch, "%s will only accept the contents of other ammo boxes, and %s doesn't qualify.",
+        GET_OBJ_NAME(cont),
+        GET_OBJ_NAME(obj)
+      );
+      return;
+    }
+    
+    // If it's got a creator set, it's not done yet.
+    if (GET_AMMOBOX_CREATOR(cont)) {
+      send_to_char(ch, "%s still has disassembled rounds in it. It needs to be completed first.\r\n", GET_OBJ_NAME(cont));
+      return;
+    }
+    
+    if (GET_AMMOBOX_CREATOR(obj)) {
+      send_to_char(ch, "%s still has disassembled rounds in it. It needs to be completed first.\r\n", GET_OBJ_NAME(obj));
+      return;
+    }
+    
+    // If the weapons don't match, no good.
+    if (GET_AMMOBOX_WEAPON(cont) != GET_AMMOBOX_WEAPON(obj)) {
+      send_to_char(ch, "You can't combine %s ammo with %s ammo.\r\n", 
+        weapon_type[GET_AMMOBOX_WEAPON(cont)], 
+        weapon_type[GET_AMMOBOX_WEAPON(obj)]
+      );
+      return;
+    }
+    
+    // If the ammo types don't match, no good.
+    if (GET_AMMOBOX_TYPE(cont) != GET_AMMOBOX_TYPE(obj)) {
+      send_to_char(ch, "You can't combine %s ammo with %s ammo.\r\n", 
+        ammo_type[GET_AMMOBOX_TYPE(cont)].name, 
+        ammo_type[GET_AMMOBOX_TYPE(obj)].name
+      );
+      return;
+    }
+    
+    // Combine them.
+    GET_AMMOBOX_QUANTITY(cont) += GET_AMMOBOX_QUANTITY(obj);
+    GET_AMMOBOX_QUANTITY(obj) = 0;
+    send_to_char(ch, "You dump %s into %s and throw away the empty.\r\n",
+      GET_OBJ_NAME(obj),
+      GET_OBJ_NAME(cont)
+    );
+    
+    // Junk the empty.
+    extract_obj(cont);
+    
+    // Restring it, as long as it's not already restrung.
+    if (!cont->restring) {
+      // Compose the new name.
+      sprintf(buf2, "a box of %s %s ammo", 
+        ammo_type[GET_AMMOBOX_TYPE(cont)].name,
+        weapon_type[GET_AMMOBOX_WEAPON(cont)]
+      );
+      
+      // Compose the notification string.
+      sprintf(buf, "The name '%s' probably doesn't fit anymore, so we'll call it '%s'.\r\n",
+        GET_OBJ_NAME(cont),
+        buf2
+      );
+      
+      // Commit the change and notify the player.
+      cont->restring = str_dup(buf2);
+      send_to_char(buf, ch);
+    }
+    
+    return;
+  }
+  
+  // Combine cyberdeck parts/chips, or combine summoning materials.
   if ((GET_OBJ_TYPE(cont) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(cont, 0) == TYPE_PARTS) ||
              (GET_OBJ_TYPE(cont) == ITEM_MAGIC_TOOL && GET_OBJ_VAL(cont, 0) == TYPE_SUMMONING)) {
     if (!(obj = get_obj_in_list_vis(ch, arg1, ch->carrying)))
