@@ -547,8 +547,8 @@ void zedit_parse(struct descriptor_data *d, const char *arg)
     case 'y':
     case 'Y':
       zone_num = real_zone(ZON->number);
-      sprintf(buf,"%s wrote new zcmd %ld in zone %d",
-              GET_CHAR_NAME(d->character), d->edit_number, zone_table[zone_num].number);
+      sprintf(buf,"%s wrote new zone data for zone %d",
+              GET_CHAR_NAME(d->character), ZON->number);
       mudlog(buf, d->character, LOG_WIZLOG, TRUE);
       // first we insert into memory
       if (zone_num > -1) { // ie, it already exists
