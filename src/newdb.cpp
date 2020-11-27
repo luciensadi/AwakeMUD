@@ -34,6 +34,8 @@ extern char *cleanup(char *dest, const char *src);
 extern void add_phone_to_list(struct obj_data *);
 extern Playergroup *loaded_playergroups;
 
+void auto_repair_obj(struct obj_data *obj);
+
 // ____________________________________________________________________________
 //
 // global variables
@@ -900,6 +902,16 @@ bool load_char(const char *name, char_data *ch, bool logon)
                                                                                          : MIN(max, GET_OBJ_VAL(chip, 1));
       break;
     }
+    
+  // Self-repair their gear. Don't worry about contents- it's recursive.
+  for (struct obj_data *obj = ch->carrying; obj; obj = obj->next_content) {
+    auto_repair_obj(obj);
+  }
+  
+  for (int i = 0; i < NUM_WEARS; i++) {
+    if (GET_EQ(ch, i))
+      auto_repair_obj(GET_EQ(ch, i));
+  }
 
   affect_total(ch);
 
@@ -1936,4 +1948,31 @@ void verify_db_password_column_size() {
     exit(1);
   }
   mysql_free_result(res);
+}
+
+void auto_repair_obj(struct obj_data *obj) {
+  // Go through its contents first and rectify them.
+  for (struct obj_data *contents = obj->contains; contents; contents = contents->next_content) {
+    auto_repair_obj(contents);
+  }
+  
+  // Now that any changes have bubbled up, rectify this object too.
+  switch(GET_OBJ_TYPE(obj)) {
+    case ITEM_CYBERDECK:
+      // Rectify the memory.
+      int old_storage = GET_CYBERDECK_USED_STORAGE(obj);
+      GET_CYBERDECK_USED_STORAGE(obj) = 0;
+      for (struct obj_data *installed = obj->contains; installed; installed = installed->next_content) {
+        GET_CYBERDECK_USED_STORAGE(obj) += GET_DECK_ACCESSORY_FILE_SIZE(installed);
+      }
+      if (old_storage != GET_CYBERDECK_USED_STORAGE(obj)) {
+        sprintf(buf, "INFO: System self-healed mismatching cyberdeck memory amount for %s (was %d, should have been %d)",
+                GET_OBJ_NAME(obj),
+                old_storage,
+                GET_CYBERDECK_USED_STORAGE(obj)
+        );
+        mudlog(buf, obj->carried_by, LOG_SYSLOG, TRUE);
+      }
+      break;
+  }
 }
