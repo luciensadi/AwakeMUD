@@ -368,7 +368,8 @@ enum {
 #define PRF_NOPROMPT            45
 #define PRF_HELPLOG             46
 #define PRF_PURGELOG            47
-#define PRF_MAX   		          48
+#define PRF_AUTOKILL            48
+#define PRF_MAX   		          49
 
 /* log watch */
 

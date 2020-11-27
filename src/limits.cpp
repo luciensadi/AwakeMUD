@@ -691,16 +691,20 @@ void point_update(void)
       }
       GET_ESS(i) -= 100;
       if (GET_ESS(i) <= 0) {
-        send_to_char("As you feel the attachment to your physical body fade you quickly return.\r\n", i);
+        struct char_data *victim = i->desc->original;
+        send_to_char("As you feel the attachment to your physical body fade, you quickly return. The backlash from the fading connection rips through you...\r\n", i);
         PLR_FLAGS(i->desc->original).RemoveBit(PLR_PROJECT);
         i->desc->character = i->desc->original;
         i->desc->original = NULL;
-        GET_PHYSICAL(i->desc->character) = -(GET_BOD(i->desc->character) - 1) * 100;
-        act("$n collapses in a heap.", TRUE, i->desc->character, 0, 0, TO_ROOM);
-        update_pos(i->desc->character);
+        // GET_PHYSICAL(i->desc->character) = -(GET_BOD(i->desc->character) - 1) * 100;
+        // act("$n collapses in a heap.", TRUE, i->desc->character, 0, 0, TO_ROOM);
+        // update_pos(i->desc->character);
         i->desc->character->desc = i->desc;
         i->desc = NULL;
         extract_char(i);
+        
+        // Deal the damage instead of setting it.
+        damage(victim, victim, (GET_BOD(victim) - 1) * 100, TYPE_SUFFERING, TRUE);
       } else if (GET_ESS(i) <= 100)
         send_to_char("You feel memories of your physical body slipping away.\r\n", i);
     }

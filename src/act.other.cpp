@@ -1053,7 +1053,9 @@ const char *tog_messages[][2] = {
                             {"You will now receive ANSI color codes again.\r\n",
                              "You will no longer receive ANSI color codes.\r\n"},
                             {"You will now receive prompts.\r\n",
-                             "You will no longer receive prompts automatically.\r\n"}
+                             "You will no longer receive prompts automatically.\r\n"},
+                            {"You will no longer autokill NPCs, and will instead stop when they're downed.\r\n",
+                             "You will now continue attacking downed NPCs.\r\n"}
                           };
 
 ACMD(do_toggle)
@@ -1236,6 +1238,9 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "noprompts") || is_abbrev(argument, "prompts")) {
       result = PRF_TOG_CHK(ch, PRF_NOPROMPT);
       mode = 31;
+    } else if (is_abbrev(argument, "noautokill")) {
+      result = PRF_TOG_CHK(ch, PRF_AUTOKILL);
+      mode = 32;
     } else {
       send_to_char("That is not a valid toggle option.\r\n", ch);
       return;
