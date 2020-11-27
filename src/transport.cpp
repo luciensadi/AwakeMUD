@@ -1002,7 +1002,7 @@ SPECIAL(call_elevator)
     return TRUE;
   }
 
-  if (CMD_IS("look") || CMD_IS("examine")) {
+  if (CMD_IS("look") || CMD_IS("examine") || CMD_IS("read")) {
     one_argument(argument, arg);
     if (!*arg || index < 0 ||
         !(!strn_cmp("panel", arg, strlen(arg)) || !strn_cmp("elevator", arg, strlen(arg))))
@@ -2321,4 +2321,3 @@ void MonorailProcess(void)
   //process_victoria_ferry();
   //process_sugarloaf_ferry();
 }
-
