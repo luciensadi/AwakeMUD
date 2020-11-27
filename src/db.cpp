@@ -3926,8 +3926,8 @@ void clear_char(struct char_data * ch)
   GET_WAS_IN(ch) = NULL;
   GET_POS(ch) = POS_STANDING;
   ch->mob_specials.default_pos = POS_STANDING;
-  ch->points.max_mental = 1000;
-  ch->points.max_physical = 1000;
+  if (ch->points.max_mental < 1000)
+    ch->points.max_mental = 1000;
   ch->player.time.logon = time(0);
 }
 
