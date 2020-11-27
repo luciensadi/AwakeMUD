@@ -34,7 +34,6 @@ extern struct skill_data skills[];
 extern void respond(struct char_data *ch, struct char_data *mob, char *str);
 extern bool can_send_act_to_target(struct char_data *ch, bool hide_invisible, struct obj_data * obj, void *vict_obj, struct char_data *to, int type);
 extern char *how_good(int skill, int percent);
-extern char *colorize(struct descriptor_data *d, const char *str, bool skip_check = FALSE);
 int find_skill_num(char *name);
 
 
@@ -1571,7 +1570,8 @@ void send_message_history_to_descriptor(struct descriptor_data *d, int channel, 
       continue;
     
     sprintf(buf, "  %s", currnode->data);
-    write_to_output(colorize(d, buf, TRUE), d);
+    int size = strlen(buf);
+    write_to_output(ProtocolOutput(d, buf, &size), d);
   }
 }
 

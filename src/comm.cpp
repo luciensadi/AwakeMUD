@@ -1084,7 +1084,7 @@ void make_prompt(struct descriptor_data * d)
       prompt = colorize(d, prompt);
       write_to_descriptor(d->descriptor, prompt);
     } else {
-      char temp[MAX_INPUT_LENGTH], str[11], *final_str;
+      char temp[MAX_INPUT_LENGTH], str[11];
       int i = 0, j, physical;
       
       for (; *prompt; prompt++) {
@@ -1306,7 +1306,8 @@ void make_prompt(struct descriptor_data * d)
         }
       }
       temp[i] = '\0';
-      final_str = colorize(d, temp);
+      int size = strlen(temp);
+      const char *final_str = ProtocolOutput(d, temp, &size);
       write_to_descriptor(d->descriptor, final_str);
     }
   }
@@ -1531,7 +1532,8 @@ int new_descriptor(int s)
   // Once the descriptor has been fully created and added to any lists, it's time to negotiate:
   ProtocolNegotiate(newd);
   
-  SEND_TO_Q(colorize(newd, GREETINGS, TRUE), newd);
+  int size = strlen(GREETINGS);
+  SEND_TO_Q(ProtocolOutput(newd, GREETINGS, &size), newd);
   return 0;
 }
   

@@ -52,7 +52,6 @@ extern long beginning_of_time;
 extern int ability_cost(int abil, int level);
 extern void weight_change_object(struct obj_data * obj, float weight);
 extern void calc_weight(struct char_data *ch);
-extern char *colorize(struct descriptor_data *d, const char *str, bool skip_check = FALSE);
 
 /* creates a random number in interval [from;to] */
 int number(int from, int to)
