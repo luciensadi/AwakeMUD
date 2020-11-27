@@ -469,7 +469,7 @@ SPECIAL(nerp_skills_teacher) {
   if (!*argument) {
     // Send them a list of skills they can learn here.
     bool found_a_skill_already = FALSE;
-    for (int skill = SKILL_ATHLETICS; skill < MAX_SKILLS; skill++) {
+    for (int skill = MIN_SKILLS; skill < MAX_SKILLS; skill++) {
       if (can_teach_skill[skill]) {
         // Mundanes can't learn magic skills.
         if (GET_TRADITION(ch) == TRAD_MUNDANE && skills[skill].requires_magic)
@@ -2256,6 +2256,9 @@ SPECIAL(hacker)
     do_say(hacker, buf1, 0, SCMD_SAYTO);
     extract_obj(obj);
     return TRUE;
+  } else if (CMD_IS("sell")) {
+    send_to_char(ch, "You can't do that here. You can GIVE credsticks to %s for cracking.\r\n", GET_CHAR_NAME(hacker));
+    return TRUE;
   }
   return FALSE;
 }
@@ -2976,9 +2979,13 @@ const char *traffic_messages[] = {
   "The sound of squealing tires echoes from somewhere in the distance.\r\n",
   "A troll on a rusted bicycle pedals squeakily by.\r\n",
   "A badly doppler-shifted track from The Elementals follows a truck speeding by.\r\n", // 30
-  "A ^Lmatte-black^n LAV-93 roars through, narrowly missing you.\r\n"
+  "A ^Lmatte-black^n LAV-93 roars through, narrowly missing you.\r\n",
+  "A few sporadic pops of gunfire sound from somewhere in the distance.\r\n",
+  "The stench of garbage wafts from somewhere nearby.\r\n",
+  "A harried-looking salaryman hurries by.\r\n",
+  "A backfiring Ford-Canada Bison splutters past.\r\n" // 35
 };
-#define NUM_TRAFFIC_MESSAGES 32
+#define NUM_TRAFFIC_MESSAGES 36
 
 SPECIAL(traffic)
 {
@@ -3429,7 +3436,7 @@ SPECIAL(auth_room)
   if ((CMD_IS("say") || CMD_IS("'") || CMD_IS("sayto") || CMD_IS("\"")) && !IS_ASTRAL(ch)) {
     skip_spaces(&argument);
     if (   !strcmp("I have read the rules and policies, understand them, and agree to abide by them during my stay here.", argument)
-        || !strcmp("have read the rules and policies, understand them, and agree to abide by them during my stay here.\"", argument) // Complete copy-paste with both quotes
+        || !strcmp("\"I have read the rules and policies, understand them, and agree to abide by them during my stay here.\"", argument) // Complete copy-paste with both quotes
         || !strcmp("I have read the rules and policies, understand them, and agree to abide by them during my stay here.\"", argument)) // Partial copy-paste with trailing quote.
     {
       PLR_FLAGS(ch).RemoveBit(PLR_AUTH);
@@ -3610,10 +3617,12 @@ SPECIAL(matchsticks)
         act("$n nods once then digs briefly behind the bar, bringing out a small card and handing it to $N.", TRUE, carl, 0, ch, TO_ROOM);
       else
         act("$n nods once then digs briefly behind the bar, bringing out a small card and handing it to $N, smirking.", TRUE, carl, 0, ch, TO_ROOM);
+      /* -- Removed, this object does not exist. -LS
+      
       struct obj_data *obj = read_object(31714, VIRTUAL);
       obj_to_char(obj, ch);
       GET_NUYEN(ch) -= amount;
-      return TRUE;
+      return TRUE; */
     }
   }
   return FALSE;

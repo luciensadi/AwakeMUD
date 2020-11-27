@@ -1117,7 +1117,8 @@ enum {
 #define ITEM_NERPS          23    /* Item does not actually have any coded effect. */
 #define ITEM_BLOCKS_ARMOR   24    // Can't wear other armors with this.
 #define ITEM_HARDENED_ARMOR 25    // Applies hardened armor rules (deflect attacks with power <= armor rating) CC p51
-#define ITEM_EXTRA_MAX      26
+#define ITEM_DONT_TOUCH     26    // Warns strenuously on editing.
+#define ITEM_EXTRA_MAX      27
 
 /* Ammo types */ 
 #define AMMO_NORMAL     0
@@ -2106,6 +2107,7 @@ enum {
 #define OBJ_DOCWAGON_BASIC_MOD     601
 #define OBJ_SEATTLE_TAXI_SIGN      600
 #define OBJ_PORTLAND_TAXI_SIGN     699
+#define OBJ_BLANK_AMMOBOX          121
 
 /* ban struct */
 struct ban_list_element

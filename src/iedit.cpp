@@ -1248,6 +1248,9 @@ void iedit_disp_legality_menu(struct descriptor_data *d) {
 void iedit_disp_menu(struct descriptor_data * d)
 {
   CLS(CH);
+  if (IS_OBJ_STAT(OBJ, ITEM_DONT_TOUCH)) {
+    send_to_char(CH, "^RWARNING: THIS IS A TEMPLATE OBJECT. CHANGING IT BREAKS THINGS.\r\n");
+  }
   send_to_char(CH, "Item number: ^c%d^n\r\n", d->edit_number);
   send_to_char(CH, "1) Item keywords: ^c%s^n\r\n", d->edit_obj->text.keywords);
   send_to_char(CH, "2) Item name: ^c%s^n\r\n", d->edit_obj->text.name);
@@ -1301,11 +1304,19 @@ void iedit_disp_menu(struct descriptor_data * d)
   send_to_char(CH, "h) Item applies:\r\n"
                "i) Item extra descriptions:\r\n"
                "j) Source book: ^c%s^n\r\n"
-               "k) Street index: ^c%.2f\r\n^n"
-               "q) Quit and save\r\n"
+               "k) Street index: ^c%.2f\r\n^n",  d->edit_obj->source_info ? d->edit_obj->source_info : "<none>", GET_OBJ_STREET_INDEX(d->edit_obj));
+  if (IS_OBJ_STAT(OBJ, ITEM_DONT_TOUCH)) {
+    send_to_char(CH, "^Rq) Quit and save (WARNING: TEMPLATED OBJECT)^n\r\n");
+  } else {
+    send_to_char(CH, "q) Quit and save\r\n");
+  }
+  send_to_char(CH, "q) Quit and save\r\n"
                "x) Exit and abort\r\n"
-               "Enter your choice:\r\n", d->edit_obj->source_info ? d->edit_obj->source_info : "<none>", GET_OBJ_STREET_INDEX(d->edit_obj));
+               "Enter your choice:\r\n");
   d->edit_mode = IEDIT_MAIN_MENU;
+  if (IS_OBJ_STAT(OBJ, ITEM_DONT_TOUCH)) {
+    send_to_char(CH, "^RWARNING: THIS IS A TEMPLATE OBJECT. CHANGING IT BREAKS THINGS.\r\n");
+  }
 }
 
 /***************************************************************************

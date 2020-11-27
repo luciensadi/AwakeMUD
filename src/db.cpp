@@ -1584,6 +1584,10 @@ void parse_object(File &fl, long nr)
         }
         break;
       case ITEM_GUN_AMMO:
+        // Magic number skip: We don't touch item 121, which is a template.
+        if (GET_OBJ_VNUM(obj) == OBJ_BLANK_AMMOBOX)
+          break;
+      
         if (GET_AMMOBOX_WEAPON(obj) == WEAP_CANNON) {
           // Assault cannons have special ammo and special rules that aren't reflected in our normal table.
           

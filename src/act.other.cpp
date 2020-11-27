@@ -1276,7 +1276,7 @@ ACMD(do_skills)
   
   if (subcmd == SCMD_SKILLS) {
     // Append skills.
-    for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++) {
+    for (i = MIN_SKILLS; i < MAX_SKILLS; i++) {
       if (!mode_all && *arg && !is_abbrev(arg, skills[i].name))
         continue;
       
@@ -1294,7 +1294,7 @@ ACMD(do_skills)
     else
       sprintf(ENDOF(buf), "\r\n\r\nYou know the following languages that start with '%s':\r\n", arg);
     
-    for (i = SKILL_ENGLISH; i < SKILL_FRENCH; i++) {
+    for (i = SKILL_ENGLISH; i <= SKILL_FRENCH; i++) {
       if (!mode_all && *arg && !is_abbrev(arg, skills[i].name))
         continue;
       
@@ -1371,84 +1371,123 @@ ACMD(do_reload)
 
   two_arguments(argument, buf, buf1);
 
+  // Disqualifying condition: If you're in combat and wielding an assault cannon, you don't get to reload it. (TODO: what stops someone from unwield, reload, wield?)
   if (GET_POS(ch) == POS_FIGHTING && GET_EQ(ch, WEAR_WIELD) && GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 4) == SKILL_ASSAULT_CANNON) {
     send_to_char("You have no free hands to reload with.\r\n", ch);
     return;
   }
+  
+  // In-vehicle mounted-weapon reloading via 'reload mount [x]'
   if (ch->in_veh && is_abbrev(buf, "mount")) {
     veh = ch->in_veh;
     mount = atoi(buf1);
-  } else if ((veh = get_veh_list(buf, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
+  } 
+  
+  // Mounted weapon reloading via 'reload <vehicle> [x]'
+  else if ((veh = get_veh_list(buf, ch->in_veh ? ch->in_veh->carriedvehs : ch->in_room->vehicles, ch))) {
     if (veh->type != VEH_DRONE) {
       send_to_char("You have to be inside a vehicle to reload the mounts.\r\n", ch);
       return;
     }
     mount = atoi(buf1);
   }
+  
+  // Process mount reloading.
   if (veh && mount >= 0) {
+    // Find the mount, and give an error if it's not there.
     for (m = veh->mount; m; m = m->next_content)
       if (--mount < 0)
         break;
-    if (!m) 
+        
+    if (!m) {
       send_to_char("There aren't that many mounts.\r\n", ch);
-    else {
-      for (struct obj_data *search = m->contains; search; search = search->next_content)
-        if (GET_OBJ_TYPE(search) == ITEM_WEAPON)
-          gun = search;
-        else if (GET_OBJ_TYPE(search) == ITEM_GUN_AMMO)
-          ammo = search;
-        /* Code does not appear to be used.
-        else if (GET_OBJ_TYPE(search) == ITEM_MOD)
-          bin = search; */
-      if (!gun) {
-        send_to_char("There is no weapon attached to that mount.\r\n", ch);
-        return;
-      }
-      for (i = ch->carrying; i; i = i->next_content)
-        if (GET_OBJ_VAL(i, 1) == GET_OBJ_VAL(gun, 3)) {
-          int max = GET_OBJ_VAL(gun, 5) * 2;   
-          if (ammo) {
-            if (GET_OBJ_VAL(i, 1) != GET_OBJ_VAL(ammo, 1) || GET_OBJ_VAL(i, 2) != GET_OBJ_VAL(ammo, 2)) {
-              send_to_char("You cannot mix ammunition types in ammunition bins.\r\n", ch);
-              return;
-            }
-            max -= GET_OBJ_VAL(ammo, 0);
-            if (max < 1) {
-              send_to_char("The ammunition bin on that mount is already full.\r\n", ch);
-              return;
-
-            } else {
-              max = MIN(max, GET_OBJ_VAL(i, 0));
-              GET_OBJ_VAL(ammo, 1) = GET_OBJ_VAL(i, 1);
-              GET_OBJ_VAL(ammo, 2) = GET_OBJ_VAL(i, 2);
-              GET_OBJ_VAL(ammo, 0) += max;
-              GET_OBJ_VAL(i, 0) -= max;
-              send_to_char(ch, "You insert %d rounds of ammunition into %s.\r\n", max, GET_OBJ_NAME(m));
-              return;
-            }            
-          } else {
-            max = MIN(max, GET_OBJ_VAL(i, 0));
-            ammo = read_object(121, VIRTUAL);
-            obj_to_obj(ammo, m);
-            GET_OBJ_VAL(ammo, 1) = GET_OBJ_VAL(i, 1);
-            GET_OBJ_VAL(ammo, 2) = GET_OBJ_VAL(i, 2);
-            GET_OBJ_VAL(ammo, 0) += max;
-            GET_OBJ_VAL(i, 0) -= max;
-            send_to_char(ch, "You insert %d rounds of ammunition into %s.\r\n", max, GET_OBJ_NAME(m));
+      return;
+    }
+      
+    // Iterate over the mount and look for its weapon and ammo box.
+    for (struct obj_data *search = m->contains; search; search = search->next_content)
+      if (GET_OBJ_TYPE(search) == ITEM_WEAPON)
+        gun = search;
+      else if (GET_OBJ_TYPE(search) == ITEM_GUN_AMMO)
+        ammo = search;
+      /* Code does not appear to be used.
+      else if (GET_OBJ_TYPE(search) == ITEM_MOD)
+        bin = search; */
+        
+    if (!gun) {
+      send_to_char("There is no weapon attached to that mount.\r\n", ch);
+      return;
+    }
+    
+    for (i = ch->carrying; i; i = i->next_content)
+      if (GET_OBJ_TYPE(i) == ITEM_GUN_AMMO &&
+          GET_AMMOBOX_WEAPON(i) == GET_WEAPON_ATTACK_TYPE(gun)) {
+        int max = GET_WEAPON_MAX_AMMO(gun) * 2;   
+        
+        // Reload an ammo box directly.
+        if (ammo) {
+          if (GET_AMMOBOX_WEAPON(i) != GET_AMMOBOX_WEAPON(ammo) || 
+              GET_AMMOBOX_TYPE(i) != GET_AMMOBOX_TYPE(ammo)) {
+            send_to_char("You cannot mix ammunition types in ammunition bins.\r\n", ch);
             return;
           }
-        }
+          max -= GET_AMMOBOX_QUANTITY(ammo);
+          if (max < 1) {
+            send_to_char("The ammunition bin on that mount is already full.\r\n", ch);
+            return;
 
-    }   
+          } else {
+            max = MIN(max, GET_AMMOBOX_QUANTITY(i));
+            update_ammobox_ammo_quantity(ammo, max);
+            update_ammobox_ammo_quantity(i, -max);
+            send_to_char(ch, "You insert %d rounds of ammunition into %s.\r\n", max, GET_OBJ_NAME(m));
+            return;
+          }            
+        } 
+        
+        // No ammo box-- reload the gun itself.
+        else {
+          max = MIN(max, GET_AMMOBOX_QUANTITY(i));
+          ammo = read_object(OBJ_BLANK_AMMOBOX, VIRTUAL);
+          obj_to_obj(ammo, m);
+          GET_AMMOBOX_WEAPON(ammo) = GET_AMMOBOX_WEAPON(i);
+          GET_AMMOBOX_TYPE(ammo) = GET_AMMOBOX_TYPE(i);
+          update_ammobox_ammo_quantity(ammo, max);
+          update_ammobox_ammo_quantity(i, -max);
+          send_to_char(ch, "You insert %d rounds of ammunition into %s.\r\n", max, GET_OBJ_NAME(m));
+          return;
+        }
+      }
+
     send_to_char("You don't have the right ammunition for that mount.\r\n", ch); 
     return;
-  }
+  } /* End of mount evaluation. */
+  
+  // Are they wielding a reloadable gun?
+  if (GET_EQ(ch, WEAR_WIELD)
+      && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON
+      && IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3))
+      && GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 5) >= 1) {
+        // Is it magless or loaded with an empty mag?
+        if (!gun->contains
+            || (GET_MAGAZINE_AMMO_COUNT(gun->contains) <= 0)) {
+          // TODO: Prioritize reloading the weapon.
+        }
+      }
+  
   for (gun = ch->carrying; gun; gun = gun->next_content)
-   if (GET_OBJ_TYPE(gun) == ITEM_GUN_AMMO && GET_OBJ_VAL(gun, 0) > 0) {
+    /* TODO: Sanity design:
+      - If your weapon is empty, and if you have a loaded magazine, reload your weapon.
+      - If you have specified your weapon as a keyword (reload predator), reload your weapon.
+      - Otherwise, reload a magazine from a box.
+    */
+  
+   if (GET_OBJ_TYPE(gun) == ITEM_GUN_AMMO && GET_OBJ_VAL(gun, 0) > 0) {     
      if (CH_IN_COMBAT(ch)) {
        send_to_char("You are too busy fighting!\r\n", ch);
        return;    
      }
+     
      for (i = ch->carrying; i; i = i->next_content)
        if (GET_OBJ_TYPE(i) == ITEM_GUN_MAGAZINE && !GET_AMMOBOX_CREATOR(gun) &&
            (GET_OBJ_VAL(i, 1) == GET_AMMOBOX_WEAPON(gun) || (GET_AMMOBOX_WEAPON(gun) == WEAP_LIGHT_PISTOL &&
@@ -1460,7 +1499,7 @@ ACMD(do_reload)
          }
          n = MIN((GET_OBJ_VAL(i, 0) - GET_OBJ_VAL(i, 9)), GET_AMMOBOX_QUANTITY(gun));
          GET_OBJ_VAL(i, 9) += n;
-         GET_AMMOBOX_QUANTITY(gun) -= n;
+         update_ammobox_ammo_quantity(gun, -n);
          GET_OBJ_VAL(i, 2) = GET_AMMOBOX_TYPE(gun);
          sprintf(buf, "You reload %d rounds into $p.", n);
          act("$n inserts some rounds into $p.", FALSE, ch, i, NULL, TO_ROOM);

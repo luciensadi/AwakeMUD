@@ -126,11 +126,11 @@ static void init_char(struct char_data * ch)
   }
 
   if (!access_level(ch, LVL_VICEPRES))
-    for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++) {
+    for (i = MIN_SKILLS; i < MAX_SKILLS; i++) {
       set_character_skill(ch, i, 0, FALSE);
     }
   else
-    for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++) {
+    for (i = MIN_SKILLS; i < MAX_SKILLS; i++) {
       set_character_skill(ch, i, MAX_SKILL_LEVEL_FOR_IMMS, FALSE);
     }
 
@@ -302,7 +302,7 @@ void do_start(struct char_data * ch)
   ch->player.time.lastdisc = time(0);
 
   // Clear all their skills except for English.
-  for (int i = SKILL_ATHLETICS; i < MAX_SKILLS; i++) {
+  for (int i = MIN_SKILLS; i < MAX_SKILLS; i++) {
     if (i == SKILL_ENGLISH)
       set_character_skill(ch, i, STARTING_LANGUAGE_SKILL_LEVEL, FALSE);
     else
@@ -342,7 +342,7 @@ void advance_level(struct char_data * ch)
 bool load_char(const char *name, char_data *ch, bool logon)
 {
   init_char(ch);
-  for (int i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
+  for (int i = MIN_SKILLS; i < MAX_SKILLS; i++)
     ch->char_specials.saved.skills[i][0] = 0;
   ch->char_specials.carry_weight = 0;
   ch->char_specials.carry_items = 0;
@@ -1089,7 +1089,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
     sprintf(buf, "DELETE FROM pfiles_skills WHERE idnum=%ld", GET_IDNUM(player));
     mysql_wrapper(mysql, buf);
     strcpy(buf, "INSERT INTO pfiles_skills (idnum, skillnum, rank) VALUES (");
-    for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
+    for (i = MIN_SKILLS; i < MAX_SKILLS; i++)
       if (GET_SKILL(player, i)) {
         if (q)
           strcat(buf, "), (");

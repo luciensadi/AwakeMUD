@@ -3310,7 +3310,7 @@ ACMD(do_show)
     send_to_char(ch, "%s's skills:", GET_NAME(vict));
     j = 0;
     sprintf(buf, "\r\n");
-    for (i = SKILL_ATHLETICS; i < MAX_SKILLS; i++)
+    for (i = MIN_SKILLS; i < MAX_SKILLS; i++)
       if (GET_SKILL(vict, i) > 0) {
         sprintf(buf, "%s[%-20s%4d]", buf, skills[i].name, GET_SKILL(vict, i));
         j++;
@@ -4510,7 +4510,7 @@ ACMD(do_mlist)
               MOB_VNUM_RNUM(nr), mob_proto[nr].player.physical_text.name);
 
   if (!found)
-    send_to_char("No mobiles where found in those parameters.\r\n", ch);
+    send_to_char("No mobiles were found in those parameters.\r\n", ch);
   else
     page_string(ch->desc, buf, 1);
 }
@@ -4563,7 +4563,7 @@ ACMD(do_ilist)
   }
 
   if (!found)
-    send_to_char("No objects where found in those parameters.\r\n", ch);
+    send_to_char("No objects were found in those parameters.\r\n", ch);
   else
     page_string(ch->desc, buf, 1);
 }
@@ -4606,7 +4606,7 @@ ACMD(do_vlist)
               VEH_VNUM_RNUM(nr), veh_proto[nr].short_description);
 
   if (!found)
-    send_to_char("No vehicles where found in those parameters.\r\n", ch);
+    send_to_char("No vehicles were found in those parameters.\r\n", ch);
   else
     page_string(ch->desc, buf, 1);
 }
@@ -4652,7 +4652,7 @@ ACMD(do_qlist)
               quest_table[nr].johnson);
 
   if (!found)
-    send_to_char("No quests where found in those parameters.\r\n", ch);
+    send_to_char("No quests were found in those parameters.\r\n", ch);
   else
     page_string(ch->desc, buf, 1);
 }
@@ -4710,7 +4710,7 @@ ACMD(do_rlist)
   }
 
   if (!found)
-    send_to_char("No rooms where found in those parameters.\r\n", ch);
+    send_to_char("No rooms were found in those parameters.\r\n", ch);
   else
     page_string(ch->desc, buf, 1);
 }
@@ -4759,7 +4759,7 @@ ACMD(do_hlist)
               matrix[nr].vnum, matrix[nr].name);
 
   if (!found)
-    send_to_char("No hosts where found in those parameters.\r\n", ch);
+    send_to_char("No hosts were found in those parameters.\r\n", ch);
   else
     page_string(ch->desc, buf, 1);
 }
@@ -4808,7 +4808,7 @@ ACMD(do_iclist)
               ic_index[nr].vnum, ic_proto[nr].name, ic_type[ic_proto[nr].ic.type], ic_proto[nr].ic.rating);
 
   if (!found)
-    send_to_char("No IC where found in those parameters.\r\n", ch);
+    send_to_char("No IC were found in those parameters.\r\n", ch);
   else
     page_string(ch->desc, buf, 1);
 }

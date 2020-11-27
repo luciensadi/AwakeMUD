@@ -1637,7 +1637,7 @@ ACMD(do_gridguide)
         return;
       }
       x = (x + ((y - 100) * 3));
-      if (!(x = real_room(x)) || !(ROOM_FLAGGED(&world[x], ROOM_ROAD) || ROOM_FLAGGED(&world[x], ROOM_GARAGE)) ||
+      if ((x = real_room(x)) <= 0 || !(ROOM_FLAGGED(&world[x], ROOM_ROAD) || ROOM_FLAGGED(&world[x], ROOM_GARAGE)) ||
           ROOM_FLAGGED(&world[x], ROOM_NOGRID)) {
         send_to_char("Those co-ordinates seem invalid.\r\n", ch);
         return;

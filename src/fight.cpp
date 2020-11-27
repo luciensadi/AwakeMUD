@@ -2533,7 +2533,7 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
           // It's an ammo box. If it also has enough ammo for us, return true.
           if (GET_AMMOBOX_QUANTITY(obj) > 0) {
             if (deduct_one_round)
-              GET_AMMOBOX_QUANTITY(obj)--;
+              update_ammobox_ammo_quantity(obj, -1);
             return TRUE;
           }
         }

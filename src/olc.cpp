@@ -52,6 +52,7 @@ extern void zedit_disp_data_menu(struct descriptor_data *d);
 extern void vedit_disp_menu(struct descriptor_data * d);
 extern void hedit_disp_data_menu(struct descriptor_data *d);
 extern void icedit_disp_menu(struct descriptor_data *d);
+extern void redit_parse(struct descriptor_data * d, const char *arg);
 
 // mem class
 extern class memoryClass *Mem;
@@ -461,19 +462,75 @@ ACMD(do_dig)
   }
 
   if (subcmd == SCMD_DIG) {
-    if (!atoi(buf)) {
-      send_to_char("Please enter a valid room.\r\n", ch);
+    int atoi_buf = atoi(buf);
+    if (!atoi_buf) {
+      send_to_char("Please enter a room vnum.\r\n", ch);
       return;
     }
 
-    room = real_room(atoi(buf));
+    room = real_room(atoi_buf);
+    
+    // TODO: This allows creation of rooms in a zone you can't edit.
+    if (room == -1) {
+      // Make sure the room is part of a valid zone.
+      int counter, found = 0;
+      for (counter = 0; counter <= top_of_zone_table; counter++) {
+        if ((atoi_buf >= (zone_table[counter].number * 100)) && (atoi_buf <= (zone_table[counter].top))) {
+          found = 1;
+          break;
+        }
+      }
+      if (!found) {
+        send_to_char ("Sorry, that number is not part of any zone.\r\n", ch);
+        return;
+      }
+      
+      // Check if they can edit this zone.
+      if (!can_edit_zone(ch, counter)) {
+        send_to_char(ch, "Sorry, you can't edit zone %d.", zone_table[counter].number);
+        return;
+      }
+      
+      // Boilerplate things required by redit.
+      PLR_FLAGS(ch).SetBit(PLR_EDITING);
+      STATE(ch->desc) = CON_REDIT;
+      GET_WAS_IN(ch) = ch->in_room;
+      char_from_room(ch);
+      
+      // Create the new room in their editing struct.
+      ch->desc->edit_number = atoi_buf;
+      ch->desc->edit_room = Mem->GetRoom();
+      ch->desc->edit_room->name = str_dup("An unfinished but connected room");
+      ch->desc->edit_room->description = str_dup("You are in an unfinished room.\r\n");
+      ch->desc->edit_room->address = str_dup("An undisclosed location");
+      int i = 0;
+      while ((ch->desc->edit_number > zone_table[i].top) && (i < top_of_zone_table))
+        ++i;
+      if (i <= top_of_zone_table)
+        ch->desc->edit_room->zone = i;
+        
+      // Then save it right away. This undoes the boilerplate above.
+      ch->desc->edit_mode = REDIT_CONFIRM_SAVESTRING;
+      redit_parse(ch->desc, "y");
+      
+      // And update the room variable to point to the room's index.
+      room = real_room(atoi_buf);
+      
+      // Sanity check: Is the room now kosher?
+      if (room == -1) {
+        send_to_char("Sorry, we encountered an error while creating your room.\r\n", ch);
+        sprintf(buf, "ERROR: Failed to create room %d with dig!", atoi_buf);
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        return;
+      }
+    }
   } else {
     room = real_room(in_room->number);
-  }
-
-  if (room == -1) {
-    send_to_char("No such room.\r\n", ch);
-    return;
+    if (room == -1) {
+      send_to_char("ERROR: You appear to be standing in a room that doesn't exist. How? Fuck if I know.\r\n", ch);
+      mudlog("ERROR: Attempting to dig from nonexistent room!", ch, LOG_SYSLOG, TRUE);
+      return;
+    }
   }
 
   for (counter = 0; counter <= top_of_zone_table; counter++) {
@@ -489,6 +546,16 @@ ACMD(do_dig)
     send_to_char("Sorry, you don't have access to edit this zone.\r\n", ch);
     return;
   }
+  
+  /* send_to_char(ch, "DEBUG: Digging %s from %d (z %d) to %d (z %d): preexisting exit %d and %d.",
+    dirs[dir],
+    ch->in_room->number,
+    zone_table[zone1].number,
+    world[room].number,
+    zone_table[zone2].number,
+    in_room->dir_option[dir] ? in_room->dir_option[dir]->to_room->number : -1,
+    world[room].dir_option[rev_dir[dir]] ? world[room].dir_option[rev_dir[dir]]->to_room->number : -1
+  ); */
 
   if (subcmd == SCMD_DIG && (in_room->dir_option[dir] || world[room].dir_option[rev_dir[dir]])) {
     send_to_char("You can't dig over an existing exit.\r\n", ch);
@@ -1846,6 +1913,7 @@ ACMD(do_shedit)
     d->edit_shop->sell = str_dup("Here's your %d nuyen.");
     d->edit_shop->keeper = -1;
     d->edit_shop->open = 0;
+    d->edit_shop->close = 24;
     d->edit_shop->type = SHOP_GREY;
     d->edit_shop->ettiquete = SKILL_STREET_ETIQUETTE;
     d->edit_mode = SHEDIT_CONFIRM_EDIT;

@@ -947,6 +947,7 @@ const char *extra_bits[] =
     "NERPS",
     "BLOCKS_ARMOR",
     "HARDENED_ARMOR",
+    "DONT_TOUCH",
     "\n"
   };
 

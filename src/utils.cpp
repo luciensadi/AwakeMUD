@@ -51,7 +51,7 @@ extern const char *log_types[];
 extern long beginning_of_time;
 extern int ability_cost(int abil, int level);
 extern void weight_change_object(struct obj_data * obj, float weight);
-
+extern void calc_weight(struct char_data *ch);
 extern char *colorize(struct descriptor_data *d, const char *str, bool skip_check = FALSE);
 
 /* creates a random number in interval [from;to] */
@@ -2474,7 +2474,7 @@ void set_character_skill(struct char_data *ch, int skill_num, int new_value, boo
     return;
   }
   
-  if (skill_num < SKILL_ATHLETICS || skill_num >= MAX_SKILLS) {
+  if (skill_num < MIN_SKILLS || skill_num >= MAX_SKILLS) {
     sprintf(msgbuf, "SYSERR: Invalid skill number %d passed to set_character_skill.", skill_num);
     mudlog(msgbuf, ch, LOG_SYSLOG, TRUE);
     return;
@@ -2810,6 +2810,35 @@ char *replace_substring(char *source, char *dest, const char *replace_target, co
   return dest;
 }
 
+// Adds the amount to the ammobox, then processes its weight etc. 
+void update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount) {
+  if (!ammobox || amount == 0) {
+    mudlog("SYSERR: Illegal values passed to update_ammobox_ammo_quantity.", ammobox->carried_by, LOG_SYSLOG, TRUE);
+    return;
+  }
+  
+  if (GET_OBJ_TYPE(ammobox) != ITEM_GUN_AMMO) {
+    mudlog("SYSERR: Non-ammobox passed to update_ammobox_ammo_quantity.", ammobox->carried_by, LOG_SYSLOG, TRUE);
+  }
+  
+  // Calculate what the new amount of ammo will be.
+  int new_amount = GET_AMMOBOX_QUANTITY(ammobox) + amount;
+  
+  // Update the cost to reflect the changed ammo quantity.
+  GET_OBJ_COST(ammobox) = new_amount * ammo_type[GET_AMMOBOX_TYPE(ammobox)].cost;
+  
+  // Update the weight as well.
+  GET_OBJ_WEIGHT(ammobox) = new_amount * ammo_type[GET_AMMOBOX_TYPE(ammobox)].weight;
+  
+  // Update the carrier's carry weight.
+  if (ammobox->carried_by) {
+    calc_weight(ammobox->carried_by);
+  }
+  
+  // Finally, update the actual ammo count.
+  GET_AMMOBOX_QUANTITY(ammobox) = new_amount;
+}
+
 
 bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_data *into, bool print_messages) {
   if (!ch || !from || !into) {
@@ -2834,16 +2863,8 @@ bool combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_
     return FALSE;
   }
   
-  // Combine them, then set the donor container's values to 0.
-  GET_OBJ_COST(into) += GET_OBJ_COST(from);
-  GET_OBJ_COST(from) = 0;
-  
-  GET_OBJ_WEIGHT(into) += GET_OBJ_WEIGHT(from);
-  GET_OBJ_WEIGHT(from) = 0;
-  // No need to update the character's carried weight here-- it's net zero.
-  
-  GET_AMMOBOX_QUANTITY(into) += GET_AMMOBOX_QUANTITY(from);
-  GET_AMMOBOX_QUANTITY(from) = 0;
+  update_ammobox_ammo_quantity(into, GET_AMMOBOX_QUANTITY(from));
+  update_ammobox_ammo_quantity(from, -GET_AMMOBOX_QUANTITY(from));
   
   // Notify the owner, then destroy the empty.
   if (!from->restring) {

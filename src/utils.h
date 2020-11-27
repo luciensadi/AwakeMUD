@@ -92,7 +92,7 @@ char *  generate_new_loggable_representation(struct obj_data *obj);
 void    purgelog(struct veh_data *veh);
 char *  replace_substring(char *source, char *dest, const char *replace_target, const char *replacement);
 bool    combine_ammo_boxes(struct char_data *ch, struct obj_data *from, struct obj_data *into, bool print_messages);
-
+void    update_ammobox_ammo_quantity(struct obj_data *ammobox, int amount);
 
 // Skill-related.
 char *how_good(int skill, int rank);
