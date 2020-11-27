@@ -2405,7 +2405,10 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
   
   if (GET_MENTAL(victim) < 100 || GET_PHYSICAL(victim) < 0)
     if (FIGHTING(ch) == victim)
-      stop_fighting(ch);
+      if (GET_POS(victim) == POS_DEAD || !PRF_FLAGGED(ch, PRF_AUTOKILL)) {
+        stop_fighting(ch);
+        act("You leave off attacking $N.", FALSE, ch, 0, victim, TO_CHAR);
+      }
   
   if (!AWAKE(victim))
     if (CH_IN_COMBAT(victim))

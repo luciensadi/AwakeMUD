@@ -1238,7 +1238,7 @@ ACMD(do_toggle)
     } else if (is_abbrev(argument, "noprompts") || is_abbrev(argument, "prompts")) {
       result = PRF_TOG_CHK(ch, PRF_NOPROMPT);
       mode = 31;
-    } else if (is_abbrev(argument, "noautokill")) {
+    } else if (is_abbrev(argument, "autokill")) {
       result = PRF_TOG_CHK(ch, PRF_AUTOKILL);
       mode = 32;
     } else {
@@ -1469,16 +1469,18 @@ ACMD(do_reload)
   } /* End of mount evaluation. */
   
   // Are they wielding a reloadable gun?
+  /*
   if (GET_EQ(ch, WEAR_WIELD)
       && GET_OBJ_TYPE(GET_EQ(ch, WEAR_WIELD)) == ITEM_WEAPON
       && IS_GUN(GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 3))
       && GET_OBJ_VAL(GET_EQ(ch, WEAR_WIELD), 5) >= 1) {
         // Is it magless or loaded with an empty mag?
-        if (!gun->contains
-            || (GET_MAGAZINE_AMMO_COUNT(gun->contains) <= 0)) {
+        if (!GET_EQ(ch, WEAR_WIELD)->contains
+            || (GET_MAGAZINE_AMMO_COUNT(GET_EQ(ch, WEAR_WIELD)->contains) <= 0)) {
           // TODO: Prioritize reloading the weapon.
         }
       }
+  */
   
   for (gun = ch->carrying; gun; gun = gun->next_content)
     /* TODO: Sanity design:
