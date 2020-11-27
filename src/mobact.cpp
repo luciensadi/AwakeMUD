@@ -42,6 +42,7 @@ extern bool ranged_response(struct char_data *ch, struct char_data *vict);
 bool memory(struct char_data *ch, struct char_data *vict);
 int violates_zsp(int security, struct char_data *ch, int pos, struct char_data *mob);
 bool attempt_reload(struct char_data *mob, int pos);
+bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed);
 
 #define MOB_AGGR_TO_RACE MOB_AGGR_ELF, MOB_AGGR_DWARF, MOB_AGGR_HUMAN, MOB_AGGR_ORK, MOB_AGGR_TROLL
 
@@ -141,8 +142,8 @@ bool mobact_process_in_vehicle_guard(struct char_data *ch) {
       if (tveh == ch->in_veh)
         continue;
       
-      // TODO: Only attack player-owned vehicles and vehicles that have player occupants or drivers.
-      if (tveh->damage < 10 && tveh->owner > 0) {
+      // Check for our usual conditions.
+      if (vehicle_is_valid_mob_target(tveh, GET_MOBALERT(ch) == MALERT_ALARM)) {
         // Found a target, stop processing vehicles.
         break;
       }
@@ -215,7 +216,10 @@ bool mobact_process_in_vehicle_aggro(struct char_data *ch) {
   
   // Target selection. We disallow targeting of unowned vehicles so our guards don't Thunderdome each other before players even show up.
   for (tveh = ch->in_veh->in_room->vehicles; tveh; tveh = tveh->next_veh) {
-    if (tveh != ch->in_veh && tveh->damage < 10 && tveh->owner > 0) {
+    if (tveh == ch->in_veh)
+      continue;
+      
+    if (vehicle_is_valid_mob_target(tveh, TRUE)) {
       // Found a valid target, stop looking.
       break;
     }
@@ -303,10 +307,11 @@ bool mobact_process_aggro(struct char_data *ch, struct room_data *room) {
     // If I am not astral, am in the same room, and am willing to attack a vehicle this round (coin flip), pick a fight with a vehicle.
     if (ch->in_room->number == room->number && !IS_ASTRAL(ch) && number(0, 1)) {
       for (veh = room->vehicles; veh; veh = veh->next_veh) {
-        if (veh->damage < 10) {
+        // Aggros don't care about road/garage status, so they act as if always alarmed.
+        if (vehicle_is_valid_mob_target(veh, TRUE)) {
           stop_fighting(ch);
           set_fighting(ch, veh);
-          return true;
+          return TRUE;
         }
       }
     }
@@ -424,6 +429,34 @@ bool mobact_process_helper(struct char_data *ch) {
   return false;
 }
 
+bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed) {
+  struct room_data *room = veh->in_room;
+  
+  // Vehicle's not in a room? Skip.
+  if (!room)
+    return FALSE;
+  
+  // We don't attack vehicles in their proper places-- unless we're alarmed.
+  if (!alarmed && (ROOM_FLAGGED(room, ROOM_ROAD) || ROOM_FLAGGED(room, ROOM_GARAGE)))
+    return FALSE;
+    
+  // We don't attack destroyed vehicles.
+  if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED)
+    return FALSE;
+    
+  // We attack player-owned vehicles.
+  if (veh->owner > 0)
+    return TRUE;
+    
+  // We attack player-occupied vehicles.
+  for (struct char_data *vict = veh->people; vict; vict = vict->next_in_veh)
+    if (!IS_NPC(vict)) 
+      return TRUE;
+  
+  // Otherwise, no good.
+  return FALSE;
+}
+
 bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
   struct char_data *vict = NULL;
   struct veh_data *veh = NULL;
@@ -440,14 +473,10 @@ bool mobact_process_guard(struct char_data *ch, struct room_data *room) {
     if (ch->in_room == room) {
       for (veh = room->vehicles; veh; veh = veh->next_veh) {
         // If the room we're in is neither a road nor a garage, attack any vehicles we see.
-        // NOTE: Previous logic required that the vehicle be damaged to be a valid attack target.
-        if (!(ROOM_FLAGGED(room, ROOM_ROAD) || ROOM_FLAGGED(room, ROOM_GARAGE))) {
-          // TODO: Only attack player-owned vehicles and vehicles that have player occupants or drivers.
-          if (veh->damage < 10 && veh->owner > 0) {
-            stop_fighting(ch);
-            set_fighting(ch, veh);
-            return true;
-          }
+        if (vehicle_is_valid_mob_target(veh, GET_MOBALERT(ch) == MALERT_ALARM)) {
+          stop_fighting(ch);
+          set_fighting(ch, veh);
+          return TRUE;
         }
       }
     }
@@ -945,4 +974,3 @@ void switch_weapons(struct char_data *mob, int pos)
   else if (temp2)
     perform_wear(mob, temp2, pos);
 }
-

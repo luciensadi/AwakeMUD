@@ -37,7 +37,7 @@ extern bool memory(struct char_data *ch, struct char_data *vict);
 extern bool is_escortee(struct char_data *mob);
 extern bool hunting_escortee(struct char_data *ch, struct char_data *vict);
 extern void death_penalty(struct char_data *ch);
-extern int modify_veh(struct veh_data *veh);
+extern int get_vehicle_modifier(struct veh_data *veh);
 
 extern sh_int mortal_start_room;
 extern sh_int frozen_start_room;
@@ -561,7 +561,7 @@ void move_vehicle(struct char_data *ch, int dir)
   char empty_argument = '\0';
 
   RIG_VEH(ch, veh);
-  if (!veh || veh->damage >= 10)
+  if (!veh || veh->damage >= VEH_DAM_THRESHOLD_DESTROYED)
     return;
   if (ch && !(AFF_FLAGGED(ch, AFF_PILOT) || PLR_FLAGGED(ch, PLR_REMOTE)) && !veh->dest)
   {
@@ -666,8 +666,8 @@ void move_vehicle(struct char_data *ch, int dir)
     }
     int target = get_speed(v->follower) - get_speed(veh), target2 = 0;
     target = (int)(target / 20);
-    target2 = target + veh->handling + modify_veh(veh) + modify_target(ch);
-    target = -target + v->follower->handling + modify_veh(v->follower) + modify_target(pilot);
+    target2 = target + veh->handling + get_vehicle_modifier(veh) + modify_target(ch);
+    target = -target + v->follower->handling + get_vehicle_modifier(v->follower) + modify_target(pilot);
     int success = resisted_test(veh_skill(pilot, v->follower), target, veh_skill(ch, veh), target2);
     if (success > 0) {
       send_to_char(pilot, "You gain ground.\r\n");
@@ -1196,7 +1196,7 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
     front = FALSE;
   
   // Too damaged? Can't (unless admin).
-  if (found_veh->damage >= 10) {
+  if (found_veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
     if (access_level(ch, LVL_ADMIN)) {
       send_to_char("You use your staff powers to enter the destroyed vehicle.\r\n", ch);
     } else {

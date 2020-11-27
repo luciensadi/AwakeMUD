@@ -73,7 +73,7 @@ extern void perform_tell(struct char_data *, struct char_data *, char *);
 extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data *);
 extern void draw_weapon(struct char_data *);
 extern void crash_test(struct char_data *ch);
-extern int modify_veh(struct veh_data *veh);
+extern int get_vehicle_modifier(struct veh_data *veh);
 extern SPECIAL(shop_keeper);
 extern void mob_magic(struct char_data *ch);
 extern void cast_spell(struct char_data *ch, int spell, int sub, int force, char *arg);
@@ -2405,7 +2405,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
   
   if (GET_MENTAL(victim) < 100 || GET_PHYSICAL(victim) < 0)
     if (FIGHTING(ch) == victim)
-      if (GET_POS(victim) == POS_DEAD || !PRF_FLAGGED(ch, PRF_AUTOKILL)) {
+      if (GET_POS(victim) == POS_DEAD || !IS_NPC(victim) || !PRF_FLAGGED(ch, PRF_AUTOKILL)) {
         stop_fighting(ch);
         if (GET_POS(victim) != POS_DEAD)
           act("You leave off attacking $N.", FALSE, ch, 0, victim, TO_CHAR);
@@ -4965,13 +4965,13 @@ void order_list(struct matrix_icon *start)
 
 void chkdmg(struct veh_data * veh)
 {
-  if (veh->damage <= 1) {
+  if (veh->damage <= VEH_DAM_THRESHOLD_LIGHT) {
     send_to_veh("A scratch appears on the paintwork.\r\n", veh, NULL, TRUE);
-  } else if (veh->damage <= 3) {
+  } else if (veh->damage <= VEH_DAM_THRESHOLD_MODERATE) {
     send_to_veh("You see some dings and scratches appear on the paintwork.\r\n", veh, NULL, TRUE);
-  } else if (veh->damage <= 6) {
+  } else if (veh->damage <= VEH_DAM_THRESHOLD_SEVERE) {
     send_to_veh("The wind screen shatters and the bumper falls off.\r\n", veh, NULL, TRUE);
-  } else if (veh->damage < 10) {
+  } else if (veh->damage < VEH_DAM_THRESHOLD_DESTROYED) {
     send_to_veh("The engine starts spewing smoke and flames.\r\n", veh, NULL, TRUE);
   } else {
     struct char_data *i, *next;
@@ -5215,19 +5215,26 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
   
   if (IS_AFFECTED(ch, AFF_PETRIFY))
     return;
-  if (veh->damage > 9)
-  {
+    
+  if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
     stop_fighting(ch);
     return;
   }
+  
   wielded = GET_EQ(ch, WEAR_WIELD);
+  
   if (get_speed(veh) > 10 && !AFF_FLAGGED(ch, AFF_COUNTER_ATT) && ((!wielded || !IS_GUN(GET_OBJ_VAL(wielded, 3)))))
   {
     vram(veh, ch, NULL);
     return;
   }
-  if (wielded)
-  {
+  
+  if (wielded) {
+    // Ensure it has ammo.
+    if (!has_ammo(ch, wielded))
+      return;
+      
+    // Set the attack description.
     switch(GET_OBJ_VAL(wielded, 3)) {
       case WEAP_SHOTGUN:
         sprintf(ammo_type, "horde of pellets");
@@ -5251,9 +5258,7 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
         break;
     }
     
-    if (!has_ammo(ch, wielded))
-      return;
-    // If it's gotten here, it's a gun with either a magazine or infinite ammo. Deduct ammo from magazine if it exists.
+    // Deduct burstfire ammo. Note that one has already been deducted in has_ammo.
     if (IS_BURST(wielded) && wielded->contains && GET_OBJ_TYPE(wielded->contains) == ITEM_GUN_MAGAZINE) {
       if (GET_MAGAZINE_AMMO_COUNT(wielded->contains) >= 2) {
         burst = 3;
@@ -5266,10 +5271,8 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
       }
     }
     
-    // TODO: Wait, so where is the code that has burst increase the power of the shot? -LS
-    
     if (IS_GUN(GET_WEAPON_ATTACK_TYPE(wielded)))
-      power = GET_WEAPON_POWER(wielded);
+      power = GET_WEAPON_POWER(wielded) + burst;
     else
       power = GET_STR(ch) + GET_WEAPON_STR_BONUS(wielded);
     damage_total = GET_WEAPON_DAMAGE_CODE(wielded);
@@ -5374,7 +5377,7 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
     weapon_scatter(ch, ch, wielded);
     return;
   }
-  attack_resist = success_test(veh->body, power + modify_veh(veh));
+  attack_resist = success_test(veh->body, power + get_vehicle_modifier(veh));
   attack_success -= attack_resist;
   
   int staged_damage = stage(attack_success, damage_total);

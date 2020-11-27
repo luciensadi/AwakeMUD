@@ -64,7 +64,7 @@ int get_maneuver(struct veh_data *veh)
   return score;
 }
 
-int modify_veh(struct veh_data *veh)
+int get_vehicle_modifier(struct veh_data *veh)
 {
   struct char_data *ch;
   struct obj_data *cyber;
@@ -95,16 +95,16 @@ int modify_veh(struct veh_data *veh)
   }
   switch (veh->damage)
   {
-  case 1:
+  case VEH_DAM_THRESHOLD_LIGHT:
   case 2:
     mod += 1;
     break;
-  case 3:
+  case VEH_DAM_THRESHOLD_MODERATE:
   case 4:
   case 5:
     mod += 2;
     break;
-  case 6:
+  case VEH_DAM_THRESHOLD_SEVERE:
   case 7:
   case 8:
   case 9:
@@ -147,7 +147,7 @@ void crash_test(struct char_data *ch)
   struct char_data *tch, *next;
 
   RIG_VEH(ch, veh);
-  target = veh->handling + modify_veh(veh) + modify_target(ch);
+  target = veh->handling + get_vehicle_modifier(veh) + modify_target(ch);
   power = (int)(ceilf(get_speed(veh) / 10));
 
   sprintf(buf, "%s begins to lose control!\r\n", GET_VEH_NAME(veh));
@@ -216,7 +216,7 @@ ACMD(do_drive)
     send_to_char("You have no idea how to do that.\r\n", ch);
     return;
   }
-  if (VEH->damage >= 10) {
+  if (VEH->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
     send_to_char("This vehicle is too much of a wreck to move!\r\n", ch);
     return;
   }
@@ -300,7 +300,7 @@ ACMD(do_rig)
     send_to_char("You have no idea how to do that.\r\n", ch);
     return;
   }
-  if (VEH->damage >= 10) {
+  if (VEH->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
     send_to_char("This vehicle is too much of a wreck to move!\r\n", ch);
     return;
   }
@@ -422,7 +422,7 @@ void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tve
   int skill = veh_skill(ch, veh), target = 0, vehm = 0, tvehm = 0;
   
   if (tveh) {
-    target = modify_veh(veh) + veh->handling + modify_target(ch);
+    target = get_vehicle_modifier(veh) + veh->handling + modify_target(ch);
     vehm = get_maneuver(veh);
     tvehm = get_maneuver(tveh);
     if (vehm > (tvehm + 10))
@@ -441,7 +441,7 @@ void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tve
     send_to_room(buf1, veh->in_room);
     send_to_char(buf2, ch);
   } else {
-    target = modify_veh(veh) + veh->handling + modify_target(ch);
+    target = get_vehicle_modifier(veh) + veh->handling + modify_target(ch);
     sprintf(buf, "%s heads straight towards you.", GET_VEH_NAME(veh));
     sprintf(buf1, "%s heads straight towards $n.", GET_VEH_NAME(veh));
     act(buf, FALSE, vict, 0, 0, TO_CHAR);
@@ -454,7 +454,7 @@ void do_raw_ram(struct char_data *ch, struct veh_data *veh, struct veh_data *tve
       AFF_FLAGS(vict).SetBit(AFF_COUNTER_ATT);
       vcombat(vict, veh);
       AFF_FLAGS(vict).RemoveBit(AFF_COUNTER_ATT);
-      if (veh->damage > 9)
+      if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED)
         return;
     }
   }
@@ -1006,7 +1006,7 @@ ACMD(do_repair)
       mod = TYPE_KIT;
   shop = find_workshop(ch, TYPE_VEHICLE);
   if (!shop) {
-    if (veh->damage >= 7) {
+    if (veh->damage >= VEH_DAMAGE_NEEDS_WORKSHOP) {
       send_to_char("You'd better get it to a garage before you try and fix this much damage.\r\n", ch);
       return;
     }
@@ -1661,7 +1661,7 @@ void process_autonav(void)
   for (struct veh_data *veh = veh_list; veh; veh = veh->next) {
     bool veh_moved = FALSE;
   
-    if (veh->in_room && veh->dest && veh->cspeed > SPEED_IDLE && veh->damage < 10) {
+    if (veh->in_room && veh->dest && veh->cspeed > SPEED_IDLE && veh->damage < VEH_DAM_THRESHOLD_DESTROYED) {
       struct char_data *ch = NULL;
       
       if (!(ch = veh->rigger))
@@ -1969,7 +1969,7 @@ ACMD(do_push)
       send_to_char("There is not enough room in there for that.\r\n", ch);
     else if (found_veh->locked)
       send_to_char("You can't push it into a locked vehicle.\r\n", ch);
-    else if (veh->locked && veh->damage < 10)
+    else if (veh->locked && veh->damage < VEH_DAM_THRESHOLD_DESTROYED)
       send_to_char("The wheels seem to be locked.\r\n", ch);
     else {
       strcpy(buf2, GET_VEH_NAME(veh));

@@ -2739,7 +2739,7 @@ ACMD(do_photo)
     for (struct veh_data *vehicle = ch->in_room->vehicles; vehicle; vehicle = vehicle->next_veh) {
       if (ch->in_veh != vehicle) {
         strcat(buf, "^y");
-        if (vehicle->damage >= 10) {
+        if (vehicle->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
           strcat(buf, GET_VEH_NAME(vehicle));
           strcat(buf, " lies here wrecked.\r\n");
         } else {

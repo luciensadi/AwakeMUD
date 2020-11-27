@@ -782,7 +782,7 @@ void save_vehicles(void)
   int num_veh = 0;
   bool found;
   for (veh = veh_list; veh; veh = veh->next)
-    if ((veh->owner > 0 && (veh->damage < 10 || !veh_is_in_junkyard(veh) || veh->in_veh || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE))) && (does_player_exist(veh->owner)))
+    if ((veh->owner > 0 && (veh->damage < VEH_DAM_THRESHOLD_DESTROYED || !veh_is_in_junkyard(veh) || veh->in_veh || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE))) && (does_player_exist(veh->owner)))
       num_veh++;
   
   if (!(fl = fopen("veh/vfile", "w"))) {
@@ -797,7 +797,7 @@ void save_vehicles(void)
       continue;
     
     bool send_veh_to_junkyard = FALSE;
-    if ((veh->damage >= 10 && !(veh->in_veh || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)))) {
+    if ((veh->damage >= VEH_DAM_THRESHOLD_DESTROYED && !(veh->in_veh || ROOM_FLAGGED(veh->in_room, ROOM_GARAGE)))) {
       // If the vehicle is wrecked and is in neither a containing vehicle nor a garage...
       if (veh_is_in_junkyard(veh)) {
         // If it's already in the junkyard, we don't save it-- they should have come and fixed it.

@@ -272,7 +272,7 @@ bool perform_hit(struct char_data *ch, char *argument, const char *cmdname)
 
   if (veh)
   {
-    if (veh->damage >= 10) {
+    if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
       send_to_char(ch, "%s is already destroyed, better find something else to %s.\r\n", GET_VEH_NAME(veh), cmdname);
       return TRUE;
     }

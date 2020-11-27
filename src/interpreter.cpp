@@ -2642,7 +2642,7 @@ void nanny(struct descriptor_data * d, char *arg)
       }
       if (d->character->player_specials->saved.last_veh) {
         for (struct veh_data *veh = veh_list; veh; veh = veh->next)
-          if (veh->idnum == d->character->player_specials->saved.last_veh && veh->damage < 10) {
+          if (veh->idnum == d->character->player_specials->saved.last_veh && veh->damage < VEH_DAM_THRESHOLD_DESTROYED) {
             if (!veh->seating[CH->vfront])
               CH->vfront = !CH->vfront;
             char_to_veh(veh, d->character);

@@ -285,7 +285,7 @@ void show_veh_to_char(struct veh_data * vehicle, struct char_data * ch)
   
   strcpy(buf, CCHAR ? CCHAR : "");
   
-  if (vehicle->damage >= 10)
+  if (vehicle->damage >= VEH_DAM_THRESHOLD_DESTROYED)
   {
     sprintf(ENDOF(buf), "%s lies here wrecked.", GET_VEH_NAME(vehicle));
   } else
