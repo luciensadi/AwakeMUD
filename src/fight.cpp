@@ -2407,7 +2407,8 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
     if (FIGHTING(ch) == victim)
       if (GET_POS(victim) == POS_DEAD || !PRF_FLAGGED(ch, PRF_AUTOKILL)) {
         stop_fighting(ch);
-        act("You leave off attacking $N.", FALSE, ch, 0, victim, TO_CHAR);
+        if (GET_POS(victim) != POS_DEAD)
+          act("You leave off attacking $N.", FALSE, ch, 0, victim, TO_CHAR);
       }
   
   if (!AWAKE(victim))
