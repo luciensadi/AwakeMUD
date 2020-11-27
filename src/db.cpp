@@ -449,10 +449,10 @@ void DBInit()
     log_vfprintf("Resetting %s (rooms %d-%d).", zone_table[i].name,
         (i ? (zone_table[i - 1].top + 1) : 0), zone_table[i].top);
     reset_zone(i, 1);
-    log_vfprintf("Reset of %s complete. Writing to disk...", zone_table[i].name);
+    // log_vfprintf("Reset of %s complete. Writing to disk...", zone_table[i].name);
     extern void write_zone_to_disk(int vnum);
     write_zone_to_disk(zone_table[i].number);
-    log("Written.");
+    // log("Written.");
   }
   
   log("Loading saved vehicles.");
