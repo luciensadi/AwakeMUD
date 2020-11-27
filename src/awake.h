@@ -1002,6 +1002,10 @@ enum {
 #define WEAP_REVOLVER       22
 #define MAX_WEAP            23
 
+// Defines our weapon ranges for bullet pants. Holdout -> revolver.
+#define START_OF_AMMO_USING_WEAPONS 5
+#define END_OF_AMMO_USING_WEAPONS   22
+
 /* all those attack types can be used plus these for damage types to
 * objects */
 
@@ -1128,6 +1132,7 @@ enum {
 #define AMMO_EX         3
 #define AMMO_FLECHETTE  4
 #define AMMO_GEL        5
+#define NUM_AMMOTYPES   6
 
 /* material type for item */
 #define ITEM_NONE                  0

@@ -475,6 +475,7 @@ const char *player_bits[] =
     "INIT",
     "DRIVEBY",
     "RPE",
+    "NOIDLEOUT",
     "\n"
   };
 
@@ -625,6 +626,7 @@ const char *preference_bits[] =
     "!PROMPT",
     "HELPLOG",
     "PURGELOG",
+    "AUTOKILL",
     "\n"
   };
 

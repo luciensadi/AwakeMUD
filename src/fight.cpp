@@ -5213,10 +5213,14 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
   int attack_success = 0, attack_resist=0, skill_total = 1;
   int recoil=0, burst=0, recoil_comp=0, newskill, modtarget = 0;
   
-  if (IS_AFFECTED(ch, AFF_PETRIFY))
+  if (IS_AFFECTED(ch, AFF_PETRIFY)) {
+    act("$n: is petrified, aborting attack.", 0, ch, 0, 0, TO_ROLLS);
+    stop_fighting(ch);
     return;
+  }
     
   if (veh->damage >= VEH_DAM_THRESHOLD_DESTROYED) {
+    act("$n: target vehicle has been destroyed, aborting attack.", 0, ch, 0, 0, TO_ROLLS);
     stop_fighting(ch);
     return;
   }
@@ -5231,8 +5235,10 @@ void vcombat(struct char_data * ch, struct veh_data * veh)
   
   if (wielded) {
     // Ensure it has ammo.
-    if (!has_ammo(ch, wielded))
+    if (!has_ammo(ch, wielded)) {
+      act("$n has no ammo, aborting attack.", 0, ch, 0, 0, TO_ROLLS);
       return;
+    }
       
     // Set the attack description.
     switch(GET_OBJ_VAL(wielded, 3)) {
