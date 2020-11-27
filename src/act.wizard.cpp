@@ -2149,7 +2149,7 @@ void do_advance_with_mode(struct char_data *ch, char *argument, int cmd, int sub
       GET_COND(victim, i) = (char) -1;
     if (PLR_FLAGS(victim).IsSet(PLR_NEWBIE)) {
       PLR_FLAGS(victim).RemoveBit(PLR_NEWBIE);
-      PLR_FLAGS(victim).RemoveBit(PLR_AUTH);
+      PLR_FLAGS(victim).RemoveBit(PLR_NOT_YET_AUTHED);
     }
     PRF_FLAGS(victim).SetBit(PRF_HOLYLIGHT);
     PRF_FLAGS(victim).SetBit(PRF_CONNLOG);
@@ -2918,11 +2918,11 @@ ACMD(do_wizutil)
         mudlog(buf, ch, LOG_WIZLOG, TRUE);
         break;
       case SCMD_AUTHORIZE:
-        if (!PLR_FLAGS(vict).IsSet(PLR_AUTH)) {
+        if (!PLR_FLAGS(vict).IsSet(PLR_NOT_YET_AUTHED)) {
           send_to_char("Your victim is already authorized.\r\n", ch);
           return;
         }
-        PLR_FLAGS(vict).RemoveBit(PLR_AUTH);
+        PLR_FLAGS(vict).RemoveBit(PLR_NOT_YET_AUTHED);
         send_to_char("Authorized.\r\n", ch);
         send_to_char("Your character has been authorized!\r\n", vict);
         sprintf(buf, "%s authorized by %s", GET_CHAR_NAME(vict), GET_CHAR_NAME(ch));
@@ -4092,8 +4092,8 @@ ACMD(do_set)
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_WANTED);
     break;
   case 59:
-    SET_OR_REMOVE(PLR_FLAGS(vict), PLR_AUTH);
-    send_to_char(ch, "%s is now %sauthorized.\r\n", GET_CHAR_NAME(vict), PLR_FLAGS(vict).IsSet(PLR_AUTH) ? "un-" : "");
+    SET_OR_REMOVE(PLR_FLAGS(vict), PLR_NOT_YET_AUTHED);
+    send_to_char(ch, "%s is now %sauthorized.\r\n", GET_CHAR_NAME(vict), PLR_FLAGS(vict).IsSet(PLR_NOT_YET_AUTHED) ? "un-" : "");
     break;
   case 60:
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_EDCON);
@@ -5025,7 +5025,7 @@ ACMD(do_restring)
     send_to_char("That restring is too long, please shorten it.\r\n", ch);
     return;
   }
-  if (PLR_FLAGGED(ch, PLR_AUTH)) {
+  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
     if (!GET_RESTRING_POINTS(ch)) {
       send_to_char("You don't have enough restring points left to restring that.\r\n", ch);
       return;

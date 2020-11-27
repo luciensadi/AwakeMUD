@@ -3193,6 +3193,20 @@ void reset_zone(int zone, int reboot)
             if (!vnum_from_non_connected_zone(GET_OBJ_VNUM(obj)) && !zone_table[zone].connected)
               GET_OBJ_EXTRA(obj).SetBit(ITEM_VOLATILE);
             last_cmd = 1;
+            
+            // If it's a weapon, reload it.
+            if (GET_OBJ_TYPE(obj) == ITEM_WEAPON
+                && IS_GUN(GET_WEAPON_ATTACK_TYPE(obj))
+                && GET_WEAPON_MAX_AMMO(obj) != -1) {
+                // Load it with a magazine.
+                struct obj_data *magazine = read_object(127, VIRTUAL);
+                GET_MAGAZINE_AMMO_COUNT(magazine) = GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(obj);
+                GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(obj);
+                sprintf(buf, "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
+                DELETE_ARRAY_IF_EXTANT(magazine->restring);
+                magazine->restring = strdup(buf);
+                obj_to_obj(magazine, obj);
+            }
           }
         }
       } else

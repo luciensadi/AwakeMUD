@@ -584,7 +584,7 @@ void raw_kill(struct char_data * ch)
             break;
         }
       GET_DRUG_AFFECT(ch) = GET_DRUG_DURATION(ch) = GET_DRUG_STAGE(ch) = 0;
-      if (PLR_FLAGGED(ch, PLR_AUTH))
+      if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED))
         i = real_room(RM_CHARGEN_START_ROOM);
       else switch (GET_JURISDICTION(ch->in_room)) {
         case ZONE_SEATTLE:
@@ -757,8 +757,8 @@ void perform_group_gain(struct char_data * ch, int base, struct char_data * vict
 {
   int share;
   
-  // Short-circuit: Auth? No karma.
-  if (PLR_FLAGGED(ch, PLR_AUTH))
+  // Short-circuit: Not authed yet? No karma.
+  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED))
     return;
   
   share = MIN(max_exp_gain, MAX(1, base));
@@ -1658,7 +1658,7 @@ void docwagon(struct char_data *ch)
   int i, creds;
   struct obj_data *docwagon = NULL;
   
-  if (IS_NPC(ch) || PLR_FLAGGED(ch, PLR_AUTH))
+  if (IS_NPC(ch) || PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED))
     return;
   
   for (i = 0; (i < NUM_WEARS && !docwagon); i++)
@@ -2436,7 +2436,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
         extern struct char_data *mob_proto;
         mob_proto[GET_MOB_RNUM(victim)].mob_specials.count_death++;
       }
-      if (!PLR_FLAGGED(ch, PLR_AUTH)) {
+      if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
         if (IS_AFFECTED(ch, AFF_GROUP)) {
           group_gain(ch, victim);
         } else {
@@ -2560,6 +2560,8 @@ bool process_has_ammo(struct char_data *ch, struct obj_data *wielded, bool deduc
       
       // Empty magazine. Send the empty-gun click.
       send_to_char("*Click*\r\n", ch);
+      
+      act("$n can't fire- no ammo.", TRUE, ch, 0, 0, TO_ROLLS);
 
       // NPCs try to reload, and if they fail they switch weapons.
       if (IS_NPC(ch) && !attempt_reload(ch, wielded->worn_on))

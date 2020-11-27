@@ -3520,7 +3520,7 @@ ACMD(do_who)
         continue;
       if (sort > 0 && GET_LEVEL(tch) != sort)
         continue;
-      if (ooc && (PRF_FLAGGED(tch, PRF_NOOOC) || PLR_FLAGGED(tch, PLR_AUTH)))
+      if (ooc && (PRF_FLAGGED(tch, PRF_NOOOC) || PLR_FLAGGED(tch, PLR_NOT_YET_AUTHED)))
         continue;
       if (newbie && !PLR_FLAGGED(tch, PLR_NEWBIE))
         continue;
@@ -3609,7 +3609,7 @@ ACMD(do_who)
           strcat(buf1, " (editing)");
         if (PRF_FLAGGED(tch, PRF_QUESTOR))
           strcat(buf1, " ^Y(questor)^n");
-        if (PLR_FLAGGED(tch, PLR_AUTH))
+        if (PLR_FLAGGED(tch, PLR_NOT_YET_AUTHED))
           strcat(buf1, " ^G(unauthed)^n");
         if (PLR_FLAGGED(tch, PLR_MATRIX))
           strcat(buf1, " (decking)");

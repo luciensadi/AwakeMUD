@@ -303,7 +303,7 @@ void gain_condition(struct char_data * ch, int condition, int value)
     GET_COND(ch, condition) = MIN(FOOD_DRINK_MAX, GET_COND(ch, condition));
   
   if (GET_COND(ch, condition) || PLR_FLAGGED(ch, PLR_CUSTOMIZE) ||
-      PLR_FLAGGED(ch, PLR_WRITING) || PLR_FLAGGED(ch, PLR_MAILING) || PLR_FLAGGED(ch, PLR_AUTH) || PLR_FLAGGED(ch, PLR_MATRIX))
+      PLR_FLAGGED(ch, PLR_WRITING) || PLR_FLAGGED(ch, PLR_MAILING) || PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) || PLR_FLAGGED(ch, PLR_MATRIX))
     return;
   
   switch (condition)

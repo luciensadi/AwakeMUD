@@ -219,29 +219,29 @@ void perform_put_cyberdeck(struct char_data * ch, struct obj_data * obj,
     return;
   } else if (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY)
   {
-    switch (GET_OBJ_VAL(obj, 0)) {
-    case TYPE_FILE:
-      if (GET_OBJ_VAL(cont, 5) + GET_OBJ_VAL(obj, 1) > GET_OBJ_VAL(cont, 3)) {
-        act("$p takes up too much memory to be uploaded into $P.", FALSE, ch, obj, cont, TO_CHAR);
+    switch (GET_DECK_ACCESSORY_TYPE(obj)) {
+      case TYPE_FILE:
+        if (GET_OBJ_VAL(cont, 5) + GET_DECK_ACCESSORY_FILE_SIZE(obj) > GET_OBJ_VAL(cont, 3)) {
+          act("$p takes up too much memory to be uploaded into $P.", FALSE, ch, obj, cont, TO_CHAR);
+          return;
+        }
+        obj_from_char(obj);
+        obj_to_obj(obj, cont);
+        GET_OBJ_VAL(cont, 5) += GET_DECK_ACCESSORY_FILE_SIZE(obj);
+        act("You upload $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
         return;
-      }
-      obj_from_char(obj);
-      obj_to_obj(obj, cont);
-      GET_OBJ_VAL(cont, 5) += GET_OBJ_VAL(obj, 2);
-      act("You upload $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
-      return;
-    case TYPE_UPGRADE:
-      if (GET_OBJ_VAL(obj, 1) != 3) {
+      case TYPE_UPGRADE:
+        if (GET_OBJ_VAL(obj, 1) != 3) {
+          send_to_char(ch, "You can't seem to fit this in.\r\n");
+          return;
+        }
+        obj_from_char(obj);
+        obj_to_obj(obj, cont);
+        act("You fit $p into a FUP in $P.", FALSE, ch, obj, cont, TO_CHAR);
+        return;
+      default:
         send_to_char(ch, "You can't seem to fit this in.\r\n");
         return;
-      }
-      obj_from_char(obj);
-      obj_to_obj(obj, cont);
-      act("You fit $p into a FUP in $P.", FALSE, ch, obj, cont, TO_CHAR);
-      return;
-    default:
-      send_to_char(ch, "You can't seem to fit this in.\r\n");
-      return;
     }
   }
   if (!GET_OBJ_TIMER(obj) && GET_OBJ_VNUM(obj) == 108)
@@ -710,7 +710,7 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
         
         if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM ||
             (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_FILE))
-          GET_OBJ_VAL(cont, 5) -= GET_OBJ_VAL(obj, 2);
+          GET_OBJ_VAL(cont, 5) -= GET_DECK_ACCESSORY_FILE_SIZE(obj);
         
         if (GET_OBJ_TYPE(obj) == ITEM_PART) {
           if (GET_OBJ_VAL(obj, 0) == PART_STORAGE) {
@@ -1437,8 +1437,8 @@ ACMD(do_drop)
     return;
   }
 
-  if (PLR_FLAGGED(ch, PLR_AUTH) && (subcmd == SCMD_DROP || subcmd == SCMD_DONATE)) {
-    send_to_char(ch, "You cannot drop items until you are authed.\r\n");
+  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) && (subcmd == SCMD_DROP || subcmd == SCMD_DONATE)) {
+    send_to_char(ch, "You cannot drop or donate items until you complete character generation.\r\n");
     return;
   } else if (IS_WORKING(ch)) {
     send_to_char(TOOBUSY, ch);
@@ -1544,7 +1544,7 @@ ACMD(do_drop)
         amount += perform_drop(ch, obj, mode, sname, random_donation_room);
     }
   }
-  if (amount && (subcmd == SCMD_JUNK) && !PLR_FLAGGED(ch, PLR_AUTH)) {
+  if (amount && (subcmd == SCMD_JUNK) && !PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
     send_to_char(ch, "You receive %d nuyen for recycling.\r\n", amount >> 4);
     GET_NUYEN(ch) += amount >> 4;
   }
@@ -1688,7 +1688,7 @@ ACMD(do_give)
 
   argument = one_argument(argument, arg);
 
-  if (IS_ASTRAL(ch) || PLR_FLAGGED(ch, PLR_AUTH)) {
+  if (IS_ASTRAL(ch) || PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
     send_to_char("You can't!\r\n", ch);
     return;
   }
@@ -2739,24 +2739,27 @@ void perform_remove(struct char_data * ch, int pos)
     log("Error in perform_remove: bad pos passed.");
     return;
   }
-  if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch))
+  if (IS_CARRYING_N(ch) >= CAN_CARRY_N(ch)) {
     act("$p: you can't carry that many items!", FALSE, ch, obj, 0, TO_CHAR);
-  else
-  {
-    obj_to_char(unequip_char(ch, pos, TRUE), ch);
-    act("You stop using $p.", FALSE, ch, obj, 0, TO_CHAR);
-    act("$n stops using $p.", TRUE, ch, obj, 0, TO_ROOM);
-
-    if (GET_OBJ_TYPE(obj) == ITEM_HOLSTER)
-      GET_OBJ_VAL(obj, 3) = 0;
-    /* add damage back from stim patches */
-    /* it doesn't do anything to keep track, */
-    /* so I'm just makeing it a mod mental damage to it */
-    if ( GET_OBJ_TYPE(obj) == ITEM_PATCH && GET_OBJ_VAL(obj, 0) == 1 ) {
-      GET_MENTAL(ch) = GET_OBJ_VAL(obj,5);
-      GET_OBJ_VAL(obj,5) = 0;
-    }
+    return;
   }
+
+  obj_to_char(unequip_char(ch, pos, TRUE), ch);
+  act("You stop using $p.", FALSE, ch, obj, 0, TO_CHAR);
+  act("$n stops using $p.", TRUE, ch, obj, 0, TO_ROOM);
+
+  // Unready the holster.
+  if (GET_OBJ_TYPE(obj) == ITEM_HOLSTER)
+    GET_HOLSTER_READY_STATUS(obj) = 0;
+  /* add damage back from stim patches */
+  /* it doesn't do anything to keep track, */
+  /* so I'm just makeing it a mod mental damage to it */
+  else if ( GET_OBJ_TYPE(obj) == ITEM_PATCH && GET_OBJ_VAL(obj, 0) == 1 ) {
+    GET_MENTAL(ch) = GET_OBJ_VAL(obj,5);
+    GET_OBJ_VAL(obj,5) = 0;
+  }
+  
+  return;
 }
 
 ACMD(do_remove)
@@ -3249,18 +3252,18 @@ ACMD(do_ready)
     send_to_char(ch, "There is nothing in it.\r\n");
     return;
   }
-  if (GET_OBJ_VAL(obj, 3) > 0) {
+  if (GET_HOLSTER_READY_STATUS(obj) > 0) {
     act("You unready $p.", FALSE, ch, obj, NULL, TO_CHAR);
-    GET_OBJ_VAL(obj, 3) = 0;
+    GET_HOLSTER_READY_STATUS(obj) = 0;
     return;
   } else {
     for (int i = 0; i < NUM_WEARS; i++)
       if (GET_EQ(ch, i)) {
-        if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_HOLSTER && GET_OBJ_VAL(GET_EQ(ch, i), 3) > 0)
+        if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_HOLSTER && GET_HOLSTER_READY_STATUS(GET_EQ(ch, i)) > 0)
           num++;
         else if (GET_OBJ_TYPE(GET_EQ(ch, i)) == ITEM_WORN && GET_EQ(ch, i)->contains)
           for (struct obj_data *cont = GET_EQ(ch, i)->contains; cont; cont = cont->next_content)
-            if (GET_OBJ_TYPE(cont) == ITEM_HOLSTER && GET_OBJ_VAL(cont, 3) > 0)
+            if (GET_OBJ_TYPE(cont) == ITEM_HOLSTER && GET_HOLSTER_READY_STATUS(cont) > 0)
               num++;
       }
     if (num >= 2) {
@@ -3268,7 +3271,7 @@ ACMD(do_ready)
       return;
     }
     act("You ready $p.", FALSE, ch, obj, NULL, TO_CHAR);
-    GET_OBJ_VAL(obj, 3) = 1;
+    GET_HOLSTER_READY_STATUS(obj) = 1;
     return;
   }
 }

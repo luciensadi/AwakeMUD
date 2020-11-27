@@ -187,7 +187,7 @@ ACMD(do_steal)
   char obj_name[MAX_INPUT_LENGTH];
   int eq_pos;
 
-  if (PLR_FLAGGED(ch, PLR_AUTH)) {
+  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
     send_to_char(ch, "You cannot steal items until you are authed.\r\n");
     return;
   }
@@ -807,7 +807,7 @@ ACMD(do_gen_write)
   extern int max_filesize;
   time_t ct;
 
-  if(PLR_FLAGGED(ch, PLR_AUTH)) {
+  if(PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
     send_to_char("You must be Authorized to use that command.\r\n", ch);
     return;
   }
@@ -1201,7 +1201,7 @@ ACMD(do_toggle)
       result = PRF_TOG_CHK(ch, PRF_LONGWEAPON);
       mode = 26;
     } else if (is_abbrev(argument, "hardcore")) {
-      if (!PLR_FLAGGED(ch, PLR_AUTH)) {
+      if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
         send_to_char("It's too late for you to toggle Hardcore Mode.\r\n", ch);
         return;
       }
@@ -3893,7 +3893,7 @@ ACMD(do_watch)
 ACMD(do_trade)
 {
   skip_spaces(&argument);
-  if (PLR_FLAGGED(ch, PLR_NEWBIE) || PLR_FLAGGED(ch, PLR_AUTH))
+  if (PLR_FLAGGED(ch, PLR_NEWBIE) || PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED))
     send_to_char("You are not ready to use this command.\r\n", ch);
   else if (is_abbrev(argument, "karma")) {
     if (GET_KARMA(ch) < 100)

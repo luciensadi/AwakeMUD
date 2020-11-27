@@ -11,6 +11,8 @@
 
 #define MAX_CUSTOM_MPCP_RATING 15
 
+#define FILE_PROTECTION_SCRAMBLED 1
+
 struct host_data {
   vnum_t vnum;
   rnum_t rnum;

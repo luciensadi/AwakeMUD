@@ -297,7 +297,7 @@ void do_start(struct char_data * ch)
   PLR_FLAGS(ch).SetBit(PLR_NEWBIE);
   PRF_FLAGS(ch).SetBits(PRF_AUTOEXIT, PRF_LONGEXITS, ENDBIT);
   PRF_FLAGS(ch).RemoveBits(PRF_NOHASSLE, PRF_HOLYLIGHT, PRF_PACIFY, PRF_ROLLS, PRF_QUESTOR, PRF_NEWBIEHELPER, ENDBIT);
-  // PLR_FLAGS(ch).SetBit(PLR_AUTH);
+  // PLR_FLAGS(ch).SetBit(PLR_NOT_YET_AUTHED);
   ch->player.time.played = 0;
   ch->player.time.lastdisc = time(0);
 
@@ -477,7 +477,7 @@ bool load_char(const char *name, char_data *ch, bool logon)
   mysql_free_result(res);
 
 
-  if (PLR_FLAGGED(ch, PLR_AUTH)) {
+  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
     sprintf(buf, "SELECT * FROM pfiles_chargendata WHERE idnum=%ld;", GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
     res = mysql_use_result(mysql);
@@ -1079,7 +1079,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
       equip_char(player, char_eq[i], i);
   }
   affect_total(player);
-  if (PLR_FLAGGED(player, PLR_AUTH)) {
+  if (PLR_FLAGGED(player, PLR_NOT_YET_AUTHED)) {
     sprintf(buf, "UPDATE pfiles_chargendata SET AttPoints=%d, SkillPoints=%d, ForcePoints=%d, RestringPoints=%d WHERE idnum=%ld;",
                  GET_ATT_POINTS(player), GET_SKILL_POINTS(player), GET_FORCE_POINTS(player), GET_RESTRING_POINTS(player),
                  GET_IDNUM(player));
@@ -1503,12 +1503,12 @@ char_data *CreateChar(char_data *ch)
     GET_TKE(ch) = 0;
     GET_IDNUM(ch) = 1;
 
-    PLR_FLAGS(ch).RemoveBits(PLR_NEWBIE, PLR_AUTH, ENDBIT);
+    PLR_FLAGS(ch).RemoveBits(PLR_NEWBIE, PLR_NOT_YET_AUTHED, ENDBIT);
     PLR_FLAGS(ch).SetBits(PLR_OLC, PLR_NODELETE, ENDBIT);
     PRF_FLAGS(ch).SetBits(PRF_HOLYLIGHT, PRF_CONNLOG, PRF_ROOMFLAGS,
                           PRF_NOHASSLE, PRF_AUTOINVIS, PRF_AUTOEXIT, ENDBIT);
   } else {
-    PLR_FLAGS(ch).SetBit(PLR_AUTH);
+    PLR_FLAGS(ch).SetBit(PLR_NOT_YET_AUTHED);
     GET_IDNUM(ch) = MAX(playerDB.find_open_id(), atol(row[0]) + 1);
   }
   mysql_free_result(res);
@@ -1548,12 +1548,12 @@ char_data *PCIndex::CreateChar(char_data *ch)
     GET_NOT(ch) = 0;
     GET_TKE(ch) = 0;
 
-    PLR_FLAGS(ch).RemoveBits(PLR_NEWBIE, PLR_AUTH, ENDBIT);
+    PLR_FLAGS(ch).RemoveBits(PLR_NEWBIE, PLR_NOT_YET_AUTHED, ENDBIT);
     PLR_FLAGS(ch).SetBits(PLR_OLC, PLR_NODELETE, ENDBIT);
     PRF_FLAGS(ch).SetBits(PRF_HOLYLIGHT, PRF_CONNLOG, PRF_ROOMFLAGS,
                           PRF_NOHASSLE, PRF_AUTOINVIS, PRF_AUTOEXIT, ENDBIT);
   } else {
-    PLR_FLAGS(ch).SetBit(PLR_AUTH);
+    PLR_FLAGS(ch).SetBit(PLR_NOT_YET_AUTHED);
   }
   init_char(ch);
   init_char_strings(ch);

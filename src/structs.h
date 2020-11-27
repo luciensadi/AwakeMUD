@@ -745,8 +745,8 @@ struct char_data
       equipment[i] = NULL;
     
     /*  
-    // Initialize our bullet pants.
-    for (int wp = START_OF_AMMO_USING_WEAPONS; wp <= END_OF_AMMO_USING_WEAPONS; wp++)
+    // Initialize our bullet pants. Note that we index from 0 here.
+    for (int wp = 0; wp < END_OF_AMMO_USING_WEAPONS - START_OF_AMMO_USING_WEAPONS; wp++)
       for (int am = 0; am < NUM_AMMOTYPES; am++)
         bullet_pants[wp][am] = 0;
     */

@@ -550,12 +550,12 @@ SPECIAL(nerp_skills_teacher) {
     send_to_char("You don't have enough karma to improve that skill.\r\n", ch);
     return TRUE;
   }
-  if (!PLR_FLAGGED(ch, PLR_AUTH) && GET_NUYEN(ch) < MAX(1000, (GET_SKILL(ch, skill_num) * 5000))) {
+  if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) && GET_NUYEN(ch) < MAX(1000, (GET_SKILL(ch, skill_num) * 5000))) {
     send_to_char(ch, "You can't afford the %d nuyen practice fee!\r\n",
                  MAX(1000, (GET_SKILL(ch, skill_num) * 5000)));
     return TRUE;
   }
-  if (!PLR_FLAGGED(ch, PLR_AUTH))
+  if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED))
     GET_NUYEN(ch) -= MAX(1000, (GET_SKILL(ch, skill_num) * 5000));
   if (GET_SKILL_POINTS(ch) > 0)
     GET_SKILL_POINTS(ch)--;
@@ -932,7 +932,7 @@ SPECIAL(trainer)
     GET_ATT_POINTS(ch) = 0;
   }
   
-  else if (PLR_FLAGGED(ch, PLR_AUTH) && GET_ATT_POINTS(ch) <= 0) {
+  else if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) && GET_ATT_POINTS(ch) <= 0) {
     send_to_char(ch, "You don't have any more attribute points to spend.\r\n");
     return TRUE;
   }
@@ -1027,7 +1027,7 @@ SPECIAL(spell_trainer)
 
           send_to_char(ch, "%-30s Force Max: %d\r\n", spelltrainers[i].name, spelltrainers[i].force);
         }
-    if (PLR_FLAGGED(ch, PLR_AUTH)) {
+    if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
       if (GET_TRADITION(ch) == TRAD_HERMETIC && GET_ASPECT(ch) != ASPECT_SORCERER)
         send_to_char("Conjuring  Materials          1 Force Point/Level\r\n", ch);
       send_to_char("Extra Force Point             25000 nuyen\r\n", ch);
@@ -1045,7 +1045,7 @@ SPECIAL(spell_trainer)
         *buf1 = '\0';
     } else
       two_arguments(argument, buf, buf1);
-    if (PLR_FLAGGED(ch, PLR_AUTH)) {
+    if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
       if (!str_cmp(buf, "force")) {
         if (GET_NUYEN(ch) < 25000)
           send_to_char("You don't have enough nuyen to buy an extra force point.\r\n", ch);
@@ -1104,7 +1104,7 @@ SPECIAL(spell_trainer)
     else {
       // TODO: Decrease force by amount already known.
       
-      if (PLR_FLAGGED(ch, PLR_AUTH)) {
+      if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
         if (force > GET_FORCE_POINTS(ch)) {
           send_to_char("You don't have enough force points to learn the spell at that high a force.\r\n", ch);
           return TRUE;
@@ -1133,7 +1133,7 @@ SPECIAL(spell_trainer)
         }
       
       // Subtract the cost.
-      if (PLR_FLAGGED(ch, PLR_AUTH))
+      if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED))
         GET_FORCE_POINTS(ch) -= force;
       else
         GET_KARMA(ch) -= force * 100;
@@ -3439,7 +3439,7 @@ SPECIAL(auth_room)
         || !strcmp("\"I have read the rules and policies, understand them, and agree to abide by them during my stay here.\"", argument) // Complete copy-paste with both quotes
         || !strcmp("I have read the rules and policies, understand them, and agree to abide by them during my stay here.\"", argument)) // Partial copy-paste with trailing quote.
     {
-      PLR_FLAGS(ch).RemoveBit(PLR_AUTH);
+      PLR_FLAGS(ch).RemoveBit(PLR_NOT_YET_AUTHED);
       GET_NUYEN(ch) = 0;
       make_newbie(ch->carrying);
       for (int i = 0; i < NUM_WEARS; i++)

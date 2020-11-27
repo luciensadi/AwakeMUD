@@ -430,7 +430,7 @@ void init_char_sql(struct char_data *ch)
                GET_HEIGHT(ch), GET_WEIGHT(ch), ch->player.host, GET_TRADITION(ch), ch->player.time.birth, "A blank slate.",
                "A nondescript person.\r\n", "A nondescript entity.\r\n", "A nondescript entity.\r\n", time(0));
   mysql_wrapper(mysql, buf);
-  if (PLR_FLAGGED(ch, PLR_AUTH)) {
+  if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
     sprintf(buf, "INSERT INTO pfiles_chargendata (idnum, AttPoints, SkillPoints, ForcePoints) VALUES"\
                "('%ld', '%d', '%d', '%d');", GET_IDNUM(ch), GET_ATT_POINTS(ch), GET_SKILL_POINTS(ch), GET_FORCE_POINTS(ch));
     mysql_wrapper(mysql, buf);
@@ -463,7 +463,7 @@ static void start_game(descriptor_data *d)
   GET_LOADROOM(d->character) = RM_CHARGEN_START_ROOM;
 
   init_char_sql(d->character);
-  if(PLR_FLAGGED(d->character,PLR_AUTH)) {
+  if(PLR_FLAGGED(d->character,PLR_NOT_YET_AUTHED)) {
     sprintf(buf, "%s [%s] new player.",
             GET_CHAR_NAME(d->character), d->host);
     mudlog(buf, d->character, LOG_CONNLOG, TRUE);

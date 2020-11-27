@@ -2107,7 +2107,7 @@ ACMD(do_bond)
           return;
         }
       }
-      if (PLR_FLAGGED(ch, PLR_AUTH)) {
+      if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
         if (GET_FORCE_POINTS(ch) < karma) {
           send_to_char(ch, "You don't have enough force points to bond that (Need %d).\r\n", karma);
           return;
@@ -2452,7 +2452,7 @@ ACMD(do_spells)
 
 ACMD(do_forget)
 {
-  if (!PLR_FLAGGED(ch, PLR_AUTH) || !GET_SPELLS(ch)) {
+  if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED) || !GET_SPELLS(ch)) {
     nonsensical_reply(ch);
     return;
   }

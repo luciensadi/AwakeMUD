@@ -269,7 +269,7 @@ enum {
 #define PLR_NOSNOOP             29 /* Player is not snoopable                */
 #define PLR_WANTED              30 /* Player wanted by the law      */
 #define PLR_NOOOC               31 /* Player is muted from the OOC channel   */
-#define PLR_AUTH                32 /* Player needs Auth */
+#define PLR_NOT_YET_AUTHED      32 /* Player needs Auth */
 #define PLR_EDCON               33
 #define PLR_REMOTE              34
 #define PLR_INITIATE		        35
@@ -2114,6 +2114,7 @@ enum {
 #define OBJ_SEATTLE_TAXI_SIGN      600
 #define OBJ_PORTLAND_TAXI_SIGN     699
 #define OBJ_BLANK_AMMOBOX          121
+#define OBJ_BLANK_OPTICAL_CHIP     106
 
 /* ban struct */
 struct ban_list_element

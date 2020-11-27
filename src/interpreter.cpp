@@ -2463,7 +2463,7 @@ void nanny(struct descriptor_data * d, char *arg)
       else
         SEND_TO_Q(motd, d);
 
-      if(PLR_FLAGGED(d->character,PLR_AUTH))
+      if(PLR_FLAGGED(d->character,PLR_NOT_YET_AUTHED))
         sprintf(buf, "%s [%s] has connected (UNAUTHORIZED).",
                 GET_CHAR_NAME(d->character), d->host);
       else
@@ -2530,7 +2530,7 @@ void nanny(struct descriptor_data * d, char *arg)
       if (STATE(d) != CON_CHPWD_VRFY)
         d->character = playerDB.LoadChar(GET_CHAR_NAME(d->character), TRUE);
       SEND_TO_Q("\r\nDone.\r\n", d);
-      if (PLR_FLAGGED(d->character,PLR_AUTH)) {
+      if (PLR_FLAGGED(d->character,PLR_NOT_YET_AUTHED)) {
         playerDB.SaveChar(d->character);
         SEND_TO_Q(MENU, d);
         STATE(d) = CON_MENU;
@@ -2619,7 +2619,7 @@ void nanny(struct descriptor_data * d, char *arg)
       if (ROOM_FLAGGED(&world[load_room], ROOM_HOUSE) && !House_can_enter(d->character, world[load_room].number))
         load_room = real_room(mortal_start_room);
       /* If char was saved with NOWHERE, or real_room above failed... */
-      if (PLR_FLAGGED(d->character, PLR_AUTH))
+      if (PLR_FLAGGED(d->character, PLR_NOT_YET_AUTHED))
         load_room = real_room(newbie_start_room);
 
       if (load_room == NOWHERE) {

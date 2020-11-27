@@ -39,10 +39,13 @@ extern bool hunting_escortee(struct char_data *ch, struct char_data *vict);
 
 extern bool ranged_response(struct char_data *ch, struct char_data *vict);
 
+extern struct obj_data * find_magazine(struct obj_data *gun, struct obj_data *i);
+
 bool memory(struct char_data *ch, struct char_data *vict);
 int violates_zsp(int security, struct char_data *ch, int pos, struct char_data *mob);
 bool attempt_reload(struct char_data *mob, int pos);
 bool vehicle_is_valid_mob_target(struct veh_data *veh, bool alarmed);
+void switch_weapons(struct char_data *mob, int pos);
 
 #define MOB_AGGR_TO_RACE MOB_AGGR_ELF, MOB_AGGR_DWARF, MOB_AGGR_HUMAN, MOB_AGGR_ORK, MOB_AGGR_TROLL
 
@@ -57,9 +60,10 @@ void mobact_change_firemode(struct char_data *ch) {
   int prev_value = GET_OBJ_VAL(weapon, 11);
   int mode_count = 0;
   
-  // Reload the weapon if possible.
-  if (!weapon->contains)
-    attempt_reload(ch, WEAR_WIELD);
+  // Reload the weapon if possible. If not, swap weapons.
+  if (!weapon->contains && !attempt_reload(ch, WEAR_WIELD)) {
+    switch_weapons(ch, WEAR_WIELD);
+  }
   
   // Lowest-priority mode is single-shot.
   if (IS_SET(GET_OBJ_VAL(weapon, 10), 1 << MODE_SS)) {
@@ -907,32 +911,58 @@ bool attempt_reload(struct char_data *mob, int pos)
   // I would call the reload routine for players, but this is slightly faster
   struct obj_data *magazine, *gun = NULL;
   bool found = FALSE;
-
-  if (!(gun = GET_EQ(mob, pos)) || GET_OBJ_TYPE(GET_EQ(mob, pos)) != ITEM_WEAPON)
+  
+  if (!(gun = GET_EQ(mob, pos))) {
+    sprintf(buf, "SYSERR: attempt_reload received invalid wield position %d for %s.", pos, GET_CHAR_NAME(mob));
+    mudlog(buf, mob, LOG_SYSLOG, TRUE);
     return FALSE;
-
-  for (magazine = mob->carrying; magazine; magazine = magazine->next_content)
-  {
-    if (GET_OBJ_TYPE(magazine) == ITEM_GUN_MAGAZINE &&
-        !GET_OBJ_VAL(magazine, 0)) {
-      GET_OBJ_VAL(magazine, 9) = GET_OBJ_VAL(magazine, 0) = GET_OBJ_VAL(gun, 5);
-      GET_OBJ_VAL(magazine, 1) = GET_OBJ_VAL(gun, 3);
-      sprintf(buf, "a %d-round %s magazine", GET_OBJ_VAL(magazine, 0), weapon_type[GET_OBJ_VAL(magazine, 1)]);
-      DELETE_ARRAY_IF_EXTANT(magazine->restring);
-      magazine->restring = strdup(buf);
-      found = TRUE;
-      break;      
-    } else if (GET_OBJ_TYPE(magazine) == ITEM_GUN_MAGAZINE &&
-        GET_OBJ_VAL(magazine, 0) == GET_OBJ_VAL(gun, 5) &&
-        GET_OBJ_VAL(magazine, 1) == (GET_OBJ_VAL(gun, 3))) {
-      found = TRUE;
-      break;
-    } 
-
   }
 
-  if (!found)
+  if (GET_OBJ_TYPE(gun) != ITEM_WEAPON) {
+    act("$n can't reload weapon- $o is not a weapon.", TRUE, mob, gun, NULL, TO_ROLLS);
     return FALSE;
+  }
+  
+  // With the coming ammo rework, I can't be assed to give all NPCs blank mags in resets. -- LS
+  magazine = read_object(127, VIRTUAL);
+  GET_MAGAZINE_AMMO_COUNT(magazine) = GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(gun);
+  GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(gun);
+  sprintf(buf, "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
+  DELETE_ARRAY_IF_EXTANT(magazine->restring);
+  magazine->restring = strdup(buf);
+  found = TRUE;
+
+/*
+  for (magazine = mob->carrying; magazine && !found; magazine = magazine->next_content)
+  {
+    // Found a magazine. Does it work for us?
+    if (GET_OBJ_TYPE(magazine) == ITEM_GUN_MAGAZINE) {
+      // Carrying an unbonded mag? Sweet, adapt it to this gun and load it up.
+      if (!GET_MAGAZINE_BONDED_MAXAMMO(magazine)) {
+        GET_MAGAZINE_AMMO_COUNT(magazine) = GET_MAGAZINE_BONDED_MAXAMMO(magazine) = GET_WEAPON_MAX_AMMO(gun);
+        GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) = GET_WEAPON_ATTACK_TYPE(gun);
+        sprintf(buf, "a %d-round %s magazine", GET_MAGAZINE_BONDED_MAXAMMO(magazine), weapon_type[GET_MAGAZINE_BONDED_ATTACKTYPE(magazine)]);
+        DELETE_ARRAY_IF_EXTANT(magazine->restring);
+        magazine->restring = strdup(buf);
+        found = TRUE;
+        break;
+      } 
+      
+      // Carrying a bonded mag? Use it if it matches our loadout already.
+      else if (GET_MAGAZINE_BONDED_MAXAMMO(magazine) == GET_WEAPON_MAX_AMMO(gun) 
+               && GET_MAGAZINE_BONDED_ATTACKTYPE(magazine) == (GET_WEAPON_ATTACK_TYPE(gun))) {
+        found = TRUE;
+        break;
+      }
+    } 
+  }
+  
+
+  if (!found) {
+    act("$n can't reload weapon- no magazines available for $o.", TRUE, mob, gun, NULL, TO_ROLLS);
+    return FALSE;
+  }
+  */
 
   if (gun->contains)
   {
@@ -940,9 +970,9 @@ bool attempt_reload(struct char_data *mob, int pos)
     obj_from_obj(tempobj);
     obj_to_room(tempobj, mob->in_room);
   }
-  obj_from_char(magazine);
+  // obj_from_char(magazine);
   obj_to_obj(magazine, gun);
-  GET_OBJ_VAL(gun, 6) = GET_OBJ_VAL(magazine, 9);
+  // GET_OBJ_VAL(gun, 6) = GET_OBJ_VAL(magazine, 9);
 
   act("$n reloads $p.", TRUE, mob, gun, 0, TO_ROOM);
   act("You reload $p.", FALSE, mob, gun, 0, TO_CHAR);
@@ -951,13 +981,21 @@ bool attempt_reload(struct char_data *mob, int pos)
 
 void switch_weapons(struct char_data *mob, int pos)
 {
-  struct obj_data *i, *temp = NULL, *temp2 = NULL;
+  struct obj_data *i, *unlimited_ammo_weapon = NULL, *limited_ammo_weapon = NULL, *melee_weapon = NULL;
 
-  if (!GET_EQ(mob, pos) || GET_OBJ_TYPE(GET_EQ(mob, pos)) != ITEM_WEAPON)
+  if (!GET_EQ(mob, pos)) {
+    act("$n won't switch weapons- not equipped.", TRUE, mob, NULL, NULL, TO_ROLLS);
     return;
+  }
+  
+  if (GET_OBJ_TYPE(GET_EQ(mob, pos)) != ITEM_WEAPON) {
+    act("$n won't switch weapons- currently-equipped $o is not a weapon.", TRUE, mob, GET_EQ(mob, pos), NULL, TO_ROLLS);
+    return;
+  }
 
-  for (i = mob->carrying; i && !temp; i = i->next_content)
+  for (i = mob->carrying; i; i = i->next_content)
   {
+    /* No idea what these used to be, but now they're max ammo and reach.
     // search for a new gun
     if (GET_OBJ_TYPE(i) == ITEM_WEAPON)
       if (GET_OBJ_VAL(i, 6) > 0)
@@ -965,12 +1003,45 @@ void switch_weapons(struct char_data *mob, int pos)
     if (GET_OBJ_TYPE(i) == ITEM_WEAPON)
       if (GET_OBJ_VAL(i, 5) == -1)
         temp2 = i;
+    */
+    
+    
+    // We like using weapons that have unlimited ammo.
+    if (GET_OBJ_TYPE(i) == ITEM_WEAPON) {
+      if (IS_GUN(GET_WEAPON_ATTACK_TYPE(i))) {
+        // Check for an unlimited-ammo weapon.
+        if (GET_WEAPON_MAX_AMMO(i) == -1) {
+          // TODO: Check if it's a better weapon.
+          unlimited_ammo_weapon = i;
+          continue;
+        }
+        
+        // It's a limited-ammo weapon. Check to see if we have ammo for it.
+        if ((i->contains && GET_MAGAZINE_AMMO_COUNT(i->contains) > 0)
+            || find_magazine(i, mob->carrying)) {
+              // TODO: Check if it's a better weapon.
+              limited_ammo_weapon = i;
+              break;
+            }
+        
+      } else {
+        // It's a melee weapon (or a bow, grenade, etc that we don't support).
+        // TODO: Check for a better weapon.
+        melee_weapon = i;
+        continue;
+      }
+    }
   }
 
   perform_remove(mob, pos);
 
-  if (temp)
-    perform_wear(mob, temp, pos);
-  else if (temp2)
-    perform_wear(mob, temp2, pos);
+  // We want to wield limited-ammo weapons first to burn those ammo counts down.
+  if (limited_ammo_weapon)
+    perform_wear(mob, limited_ammo_weapon, pos);
+  else if (unlimited_ammo_weapon)
+    perform_wear(mob, unlimited_ammo_weapon, pos);
+  else if (melee_weapon)
+    perform_wear(mob, melee_weapon, pos);
+  else
+    act("$n won't wield a new weapon- no alternative weapon found.", TRUE, mob, GET_EQ(mob, pos), NULL, TO_ROLLS);
 }

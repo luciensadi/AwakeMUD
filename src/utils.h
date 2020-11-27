@@ -216,15 +216,17 @@ void    update_pos(struct char_data *victim);
  * CircleMUD 4.0 will be...
  */
 #define REMOVE_FROM_LIST(item, head, next)      \
-   if ((item) == (head))                \
-      head = (item)->next;              \
-   else {                               \
-      temp = head;                      \
-      while (temp && (temp->next != (item))) \
-         temp = temp->next;             \
-      if (temp)                         \
-         temp->next = (item)->next;     \
-   }                                    \
+{  if ((item) == (head))                        \
+      head = (item)->next;                      \
+   else {                                       \
+      temp = head;                              \
+      while (temp && (temp->next != (item)))    \
+         temp = temp->next;                     \
+      if (temp)                                 \
+         temp->next = (item)->next;             \
+   }                                            \
+   (item)->next = NULL;                         \
+}
 
 
 /* basic bitvector utils *************************************************/
@@ -871,6 +873,18 @@ extern bool PLR_TOG_CHK(char_data *ch, dword offset);
 // ITEM_QUIVER convenience defines
 
 // ITEM_DECK_ACCESSORY convenience defines
+#define GET_DECK_ACCESSORY_TYPE(accessory)               (GET_OBJ_VAL((accessory), 0))
+
+// ITEM_DECK_ACCESSORY TYPE_FILE convenience defines
+#define GET_DECK_ACCESSORY_FILE_CREATION_TIME(accessory) (GET_OBJ_VAL((accessory), 1))
+#define GET_DECK_ACCESSORY_FILE_SIZE(accessory)          (GET_OBJ_VAL((accessory), 2))
+#define GET_DECK_ACCESSORY_FILE_HOST_VNUM(accessory)     (GET_OBJ_VAL((accessory), 3))
+#define GET_DECK_ACCESSORY_FILE_HOST_COLOR(accessory)    (GET_OBJ_VAL((accessory), 4))
+#define GET_DECK_ACCESSORY_FILE_PROTECTION(accessory)    (GET_OBJ_VAL((accessory), 5))
+#define GET_DECK_ACCESSORY_FILE_RATING(accessory)        (GET_OBJ_VAL((accessory), 6))
+#define GET_DECK_ACCESSORY_FILE_FOUND_BY(accessory)      (GET_OBJ_VAL((accessory), 7))
+#define GET_DECK_ACCESSORY_FILE_WORKER_IDNUM(accessory)  (GET_OBJ_VAL((accessory), 8))
+#define GET_DECK_ACCESSORY_FILE_REMAINING(accessory)     (GET_OBJ_VAL((accessory), 9))
 
 // ITEM_RCDECK convenience defines
 
