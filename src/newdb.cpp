@@ -1966,7 +1966,7 @@ void auto_repair_obj(struct obj_data *obj) {
         GET_CYBERDECK_USED_STORAGE(obj) += GET_DECK_ACCESSORY_FILE_SIZE(installed);
       }
       if (old_storage != GET_CYBERDECK_USED_STORAGE(obj)) {
-        sprintf(buf, "INFO: System self-healed mismatching cyberdeck memory amount for %s (was %d, should have been %d)",
+        sprintf(buf, "INFO: System self-healed mismatching cyberdeck used storage for %s (was %d, should have been %d)",
                 GET_OBJ_NAME(obj),
                 old_storage,
                 GET_CYBERDECK_USED_STORAGE(obj)

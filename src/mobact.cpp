@@ -20,6 +20,7 @@
 #include "handler.h"
 #include "constants.h"
 #include "act.drive.h"
+#include "transport.h"
 
 /* external structs */
 extern void resist_drain(struct char_data *ch, int power, int drain_add, int wound);
@@ -40,6 +41,11 @@ extern bool hunting_escortee(struct char_data *ch, struct char_data *vict);
 extern bool ranged_response(struct char_data *ch, struct char_data *vict);
 
 extern struct obj_data * find_magazine(struct obj_data *gun, struct obj_data *i);
+
+SPECIAL(elevator_spec);
+extern int num_elevators;
+extern struct elevator_data *elevator;
+extern int process_elevator(struct room_data *room, struct char_data *ch, int cmd, char *argument);
 
 bool memory(struct char_data *ch, struct char_data *vict);
 int violates_zsp(int security, struct char_data *ch, int pos, struct char_data *mob);
@@ -583,6 +589,22 @@ bool mobact_process_scavenger(struct char_data *ch) {
   return false;
 }
 
+// Find where the 'push' command is in the command index. This is SUCH a hack.
+int global_push_command_index = -1;
+int get_push_command_index() {
+  if (global_push_command_index != -1)
+    return global_push_command_index;
+  
+  for (int i = 0; *cmd_info[i].command != '\n'; i++)
+    if (!strncmp(cmd_info[i].command, "push", 4)) {
+      global_push_command_index = i;
+      return global_push_command_index;
+    }
+  
+  mudlog("FATAL ERROR: Unable to find index of PUSH command. Put it back.", NULL, LOG_SYSLOG, TRUE);
+  exit(1);
+}
+
 bool mobact_process_movement(struct char_data *ch) {
   int door;
   
@@ -626,6 +648,46 @@ bool mobact_process_movement(struct char_data *ch) {
     // Skip NOWHERE-located NPCs since they'll break things.
     if (!ch->in_room)
       return FALSE;
+      
+    // NPC in an elevator? Maybe they feel like pressing buttons.
+    if (ch->in_room->func == elevator_spec && number(0, 6) == 0) {
+      // Yeah, they do. Push that thang.
+      int num;
+      for (num = 0; num < num_elevators; num++) {
+        if (ch->in_room->number == elevator[num].room)
+          break;
+      }
+      if (num == num_elevators) {
+        mudlog("ERROR: Failed to find the elevator an NPC was standing in.", ch, LOG_SYSLOG, TRUE);
+        return FALSE;
+      }
+      
+      // If the elevator's not moving...
+      if (elevator[num].dir != UP && elevator[num].dir != DOWN) {
+        // Select the floor. Make sure it's not the current floor.
+        int target_floor = -31337; // yes, it's a magic number, hush.
+        for (int loop_limit = 10; loop_limit > 0; loop_limit--) {
+          target_floor = number(elevator[num].start_floor, elevator[num].start_floor + elevator[num].num_floors);
+          if (target_floor != ch->in_room->rating)
+            break;
+          target_floor = -31337;
+        }
+        
+        if (target_floor != -31337) {
+          // We found a valid button to push. Push it.
+          char push_arg[10];
+          if (target_floor == 0)
+            strcpy(push_arg, "g");
+          else if (target_floor < 0)
+            sprintf(push_arg, "b%d", -target_floor);
+          else
+            sprintf(push_arg, "%d", target_floor);
+          
+          process_elevator(ch->in_room, ch, get_push_command_index(), push_arg);
+          return TRUE;
+        }
+      }
+    }
     
     for (int tries = 0; tries < 5; tries++) {
       // Select an exit, and bail out if they can't move that way.

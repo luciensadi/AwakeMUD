@@ -194,10 +194,10 @@ static struct transport_type seattle[NUM_SEATTLE_STATION] =
 // ______________________________
 
 SPECIAL(taxi);
-static int process_elevator(struct room_data *room,
-                            struct char_data *ch,
-                            int cmd,
-                            char *argument);
+int process_elevator(struct room_data *room,
+                     struct char_data *ch,
+                     int cmd,
+                     char *argument);
 
 // ____________________________________________________________________________
 //
@@ -974,7 +974,8 @@ SPECIAL(call_elevator)
   if (CMD_IS("push") || CMD_IS("press")) {
     skip_spaces(&argument);
     if (!*argument || !(!strcasecmp("elevator", argument) ||
-                        !strcasecmp("button", argument)))
+                        !strcasecmp("button", argument)   ||
+                        !strcasecmp("call", argument)))
       send_to_char("Press what?\r\n", ch);
     else {
       if (ch->in_veh)
@@ -1043,10 +1044,10 @@ SPECIAL(elevator_spec)
 // processing funcs
 // ______________________________
 
-static int process_elevator(struct room_data *room,
-                            struct char_data *ch,
-                            int cmd,
-                            char *argument)
+int process_elevator(struct room_data *room,
+                     struct char_data *ch,
+                     int cmd,
+                     char *argument)
 {
   int num, temp, number, floor = 0, dir;
   int base_target, dice, power, success, dam;

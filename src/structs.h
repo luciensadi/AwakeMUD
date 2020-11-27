@@ -202,6 +202,7 @@ struct room_data
   SPECIAL(*func);
   
   int staff_level_lock;
+  int elevator_number;
 
   struct obj_data *contents;   /* List of items in room              */
   struct char_data *people;    /* List of NPC / PC in room           */
