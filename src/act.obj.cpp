@@ -709,13 +709,13 @@ void perform_get_from_container(struct char_data * ch, struct obj_data * obj,
         }
         
         if (GET_OBJ_TYPE(obj) == ITEM_PROGRAM ||
-            (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_FILE))
+            (GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(obj) == TYPE_FILE))
           GET_OBJ_VAL(cont, 5) -= GET_DECK_ACCESSORY_FILE_SIZE(obj);
         
         if (GET_OBJ_TYPE(obj) == ITEM_PART) {
           if (GET_OBJ_VAL(obj, 0) == PART_STORAGE) {
             for (struct obj_data *k = cont->contains; k; k = k->next_content)
-              if ((GET_OBJ_TYPE(k) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(k, 0) == TYPE_FILE) ||
+              if ((GET_OBJ_TYPE(k) == ITEM_DECK_ACCESSORY && GET_DECK_ACCESSORY_TYPE(k) == TYPE_FILE) ||
                   GET_OBJ_TYPE(k) == ITEM_PROGRAM) {
                 send_to_char("You cannot uninstall that while you have files installed.\r\n", ch);
                 return;

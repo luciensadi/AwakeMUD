@@ -2071,7 +2071,7 @@ void do_probe_object(struct char_data * ch, struct obj_data * j) {
       break;
     case ITEM_DECK_ACCESSORY:
       if (GET_OBJ_VAL(j, 0) == TYPE_FILE) {
-        sprintf(ENDOF(buf), "This file requires ^c%d^n units of space.", GET_OBJ_VAL(j, 2));
+        sprintf(ENDOF(buf), "This file requires ^c%d^n units of space.", GET_DECK_ACCESSORY_FILE_SIZE(j));
       } else if (GET_OBJ_VAL(j, 0) == TYPE_UPGRADE) {
         if (GET_OBJ_VAL(j, 1) == 3) {
           sprintf(ENDOF(buf), "This cyberdeck upgrade affects ^c%s^n with a rating of ^c%d^n.",

@@ -166,7 +166,7 @@ ACMD(do_copyover)
         sprintf(buf, "%s's location could not be determined by the current copyover logic. %s will load at Grog's (35500).",
                 GET_CHAR_NAME(och), HSSH(och));
         mudlog(buf, och, LOG_SYSLOG, TRUE);
-        GET_LAST_IN(och) = 35500;
+        GET_LAST_IN(och) = RM_ENTRANCE_TO_DANTES;
       }
       playerDB.SaveChar(och, GET_LOADROOM(och));
       write_to_descriptor(d->descriptor, messages[mesnum]);

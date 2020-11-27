@@ -2287,18 +2287,19 @@ SPECIAL(fence)
       send_to_char(buf, ch);
       return(TRUE);
     }
-    if (!(GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY && GET_OBJ_VAL(obj, 0) == TYPE_FILE &&
-          GET_OBJ_VAL(obj, 3))) {
+    if (!(GET_OBJ_TYPE(obj) == ITEM_DECK_ACCESSORY 
+          && GET_DECK_ACCESSORY_TYPE(obj) == TYPE_FILE 
+          && GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj))) {
       act("You say, \"I only buy datafiles, chummer.\"\n", FALSE, fence, 0, 0, TO_CHAR);
       act("$n says, \"I only buy datafiles, chummer.\"\n", FALSE, fence, 0, ch, TO_VICT);
       return(TRUE);
     }
     value = negotiate(ch, fence, SKILL_DATA_BROKERAGE, market[GET_OBJ_VAL(obj, 4)], 2, FALSE);
-    value /= MAX(1, (time(0) - GET_OBJ_VAL(obj, 1)) / SECS_PER_MUD_DAY);
+    value /= MAX(1, (time(0) - GET_DECK_ACCESSORY_FILE_CREATION_TIME(obj)) / SECS_PER_MUD_DAY);
     GET_NUYEN(ch) += value;
-    market[GET_OBJ_VAL(obj, 4)] -= (int)(market[GET_OBJ_VAL(obj, 4)] * ((float)(5 - GET_OBJ_VAL(obj, 4))/ 50));
-    if (market[GET_OBJ_VAL(obj, 4)] < 100)
-      market[GET_OBJ_VAL(obj, 4)] = 100;
+    market[GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj)] -= (int)(market[GET_DECK_ACCESSORY_FILE_HOST_VNUM(obj)] * ((float)(5 - GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj))/ 50));
+    if (market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)] < 100)
+      market[GET_DECK_ACCESSORY_FILE_HOST_COLOR(obj)] = 100;
     obj_from_char(obj);
     extract_obj(obj);
     sprintf(buf, "%s says, \"Here's your %d creds.\"\r\n",
