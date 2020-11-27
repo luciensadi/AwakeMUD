@@ -708,7 +708,7 @@ int calc_karma(struct char_data *ch, struct char_data *vict)
                (GET_REAL_QUI(vict) + (int)(vict->real_abils.mag / 100) +
                 GET_REAL_STR(vict) + GET_REAL_WIL(vict) + GET_REAL_REA(vict)));
   
-  for (i = 0; i < MAX_SKILLS; i++)
+  for (i = MIN_SKILLS; i < MAX_SKILLS; i++)
     if (GET_SKILL(vict, i) > 0)
     {
       if (i == SKILL_SORCERY && GET_MAG(vict) > 0)
@@ -2436,7 +2436,7 @@ bool damage(struct char_data *ch, struct char_data *victim, int dam, int attackt
         extern struct char_data *mob_proto;
         mob_proto[GET_MOB_RNUM(victim)].mob_specials.count_death++;
       }
-      if (PLR_FLAGGED(ch, PLR_AUTH)) {
+      if (!PLR_FLAGGED(ch, PLR_AUTH)) {
         if (IS_AFFECTED(ch, AFF_GROUP)) {
           group_gain(ch, victim);
         } else {
