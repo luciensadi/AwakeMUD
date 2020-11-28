@@ -1,4 +1,4 @@
-#10000
+#100000
 Keywords:	formula anti bullet barrier
 Name:	anti bullet barrier
 RoomDesc:$
@@ -23,7 +23,7 @@ Material:	paper
 	Val0:	4
 	Val1:	52
 BREAK
-#10002
+#100002
 Keywords:	pak flash compact package
 Name:	a Flash Pak
 RoomDesc:$
@@ -47,7 +47,7 @@ Material:	adv. plastics
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#10004
+#100004
 Keywords:	rifle viper black gun
 Name:	a Viper Rifle
 RoomDesc:$
@@ -80,7 +80,7 @@ Material:	metal
 	Val6:	30
 	Val10:	28
 BREAK
-#10006
+#100006
 Keywords:	GPHMG gun machine heavy duty
 Name:	a GPHMG
 RoomDesc:$
@@ -112,7 +112,7 @@ Material:	metal
 	Val6:	50
 	Val10:	16
 BREAK
-#10008
+#100008
 Keywords:	harness climbing
 Name:	a climbing harness
 RoomDesc:$
@@ -138,7 +138,7 @@ Material:	fabric
 [VALUES]
 	Val0:	2
 BREAK
-#10009
+#100009
 Keywords:	pads combat pair
 Name:	a pair of combat pads
 RoomDesc:$
@@ -165,7 +165,7 @@ Material:	fabric
 	Location:	Impact
 	Modifier:	1
 BREAK
-#10010
+#100010
 Keywords:	blade dikote gleaming
 Name:	a dikote blade
 RoomDesc:$
@@ -198,7 +198,7 @@ Material:	metal
 	Val8:	-1
 	Val9:	-1
 BREAK
-#10012
+#100012
 Keywords:	jacket leather worn
 Name:	a worn leather jacket
 RoomDesc:$
@@ -227,7 +227,7 @@ Material:	fabric
 	Val5:	3
 	Val6:	3
 BREAK
-#10016
+#100016
 Keywords:	sign
 Name:	a large sign
 RoomDesc:$
@@ -253,7 +253,7 @@ Material:	metal
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
-#10017
+#100017
 Keywords:	ruthenium dermal sheathing I
 Name:	ruthenium coated dermal sheathing I
 RoomDesc:$
@@ -286,7 +286,7 @@ Material:	paper
 	Location:	Body
 	Modifier:	2
 BREAK
-#10018
+#100018
 Keywords:	ceramic bone lacing alpha
 Name:	ceramic bone lacing -alpha
 RoomDesc:$
@@ -319,7 +319,7 @@ Material:	paper
 	Location:	Impact
 	Modifier:	2
 BREAK
-#10019
+#100019
 Keywords:	encephalon 2 beta
 Name:	Encephalon II -beta
 RoomDesc:$
@@ -352,7 +352,7 @@ Material:	paper
 	Location:	Hacking Pool
 	Modifier:	2
 BREAK
-#10020
+#100020
 Keywords:	induction datajack beta
 Name:	induction datajack -beta
 RoomDesc:$
