@@ -680,7 +680,7 @@ The entrance to DeClerry's lies east.
 	KeyVnum:	0
 [EXIT south]
 	Desc:$
-The restaraunt part of DeClerry's is south.
+The restaurant part of DeClerry's is south.
 ~
 	ToVnum:	2015
 	Flags:	0
@@ -689,10 +689,10 @@ The restaraunt part of DeClerry's is south.
 	KeyVnum:	0
 BREAK
 #2015
-Name:	DeClerry's Restaraunt
+Name:	DeClerry's Restaurant
 Desc:$
    DeClerry's is famous for its liquor and infamous for its food. The
-restaraunt does brisk business anyway, largely on dares, but there are some
+restaurant does brisk business anyway, largely on dares, but there are some
 menu items that a squatter wouldn't touch. 
 ~
 Flags:	1000
@@ -734,9 +734,9 @@ BREAK
 Name:	DeClerry's Bar
 Desc:$
    The brainchild of Vincent "Bonecrusher" DeClerry, an ex-Urban Brawl player,
-this bar caters to a tough crowd composed mostly of orks and orklike humans.
+this bar caters to a tough crowd composed mostly of orks and ork-like humans.
 The walls celebrate DeClerry's career, with pictures of himself and other
-players, as well as the occassional simsense starlet. 
+players, as well as the occasional simsense starlet. 
 ~
 Flags:	1100
 SecType:	Inside
@@ -787,7 +787,7 @@ BREAK
 Name:	Bar
 Desc:$
    The bar is simply designed, with great amounts of space between seats to
-allow the often large patrons room to manuever. It is often said by patrons
+allow the often large patrons room to maneuver. It is often said by patrons
 that the bartender of DeClerry's has the easiest job in the world; he only has
 to pour shots and clean glasses. In the words of the owner, "Mixed drinks are
 for elves." 
@@ -819,7 +819,7 @@ The entrance lies north.
 	KeyVnum:	0
 [EXIT west]
 	Desc:$
-The restaraunt lies west.
+The restaurant lies west.
 ~
 	ToVnum:	2015
 	Flags:	0
@@ -1110,7 +1110,7 @@ RoomType:	0
 	KeyVnum:	0
 [EXIT south]
 	Desc:$
-Cresent & Anselm meet to the south.
+Crescent & Anselm meet to the south.
 ~
 	ToVnum:	2022
 	Flags:	0
@@ -1895,7 +1895,7 @@ Name:	North Main & Little
 Desc:$
    North Main cuts across the northern edge of the city of Tacoma.  It is a
 busy street, though not worthy of being dubbed the 'main' street, as it is in
-all actuality, a rather minor sidestreet that sees moderate traffic for the
+all actuality, a rather minor side street that sees moderate traffic for the
 city.  Little Road is a sleazy road, despite its proximity to the Night of
 Rage memorial, that ends southwards on Interstate 5, where it ends at a
 half-cloverleaf highway junction.  The smell of poorly treated sewage fills
@@ -2000,7 +2000,7 @@ Name:	Stuffer Shack Cashwrap
 Desc:$
    The cashier sits on a stool behind bulletproof glass. You need only show
 your purchases to the cashier, and insert your credstick into the slot
-provided. A panicbutton sits in plain view near the cashier's hand. 
+provided. A panic button sits in plain view near the cashier's hand. 
 ~
 Flags:	1000
 SecType:	Inside
@@ -2031,7 +2031,7 @@ Desc:$
    The Stuffer Shack is a popular convenience store, carrying a large
 assortment of prepackaged food. The store consists of several shelves lined
 with small colorless boxes which differ only in the writing printed upon them.
-The products are generally freezedried or soy, and designed to nuked and eaten
+The products are generally freeze-dried or soy, and designed to nuked and eaten
 quickly. 
 ~
 Flags:	1000
@@ -2868,7 +2868,7 @@ Name:	North Main & Venice
 Desc:$
    North Main cuts through the northern edge of Tacoma, where the buildings
 meet the bogs and marshlands between here and Puget Sound.  To the distant
-north you see a white tower, the control station of the Gaeatronics sewage
+north you see a white tower, the control station of the Gaiatronics sewage
 treatment plant.  Occasionally a foghorn from a ship coming into the shipyards
 will override the noises of traffic, but not often.  The street is lined with
 brick buildings, covered in graffiti from the Rovers gang.  Eastwards, you can
@@ -2997,7 +2997,7 @@ Name:	North Main
 Desc:$
    Moving towards the eastern edge of North Main, you see a bright neon light
 display, advertising the Afterlife Club, a popular club amongst executives,
-shadowrunners, and low end organized crime.  The street sees alot of traffic,
+shadowrunners, and low end organized crime.  The street sees a lot of traffic,
 except during the wee hours of the morning, as much commerce finds its way on
 this road.  The brick buildings on each side of the street are covered with
 sprawling Rovers graffiti.  The corner of Venice and Main is just west of
@@ -3043,7 +3043,7 @@ Name:	North Main
 Desc:$
    On the north side of the street, marked clearly by the Ares Macrotechnology
 insignia, and the very visible Knight-Errant guards on the inside, is the Ares
-Armor Store.  The street appears to be better kept on this side of Venice,
+Armor Store.  The street appears to be better kept on this side of Venice
 than the pothole pockmarked other end of North Main.  Eastwards on North Main
 are the Ares Weapons Store and a large neon sign at the end of North Main,
 advertising the Afterlife club.  Westwards past a cracked and broken stretch
@@ -3388,6 +3388,15 @@ Athens Road leads south.
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
+[EXIT west]
+	Desc:$
+There's a whole pile of garbage to the west.
+~
+	ToVnum:	70500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 BREAK
 #2071
 Name:	Athens Road
@@ -3704,7 +3713,7 @@ BREAK
 Name:	Ares Armor Store
 Desc:$
    A limited amount of armor equipment is available here. The signs in the
-store promise competetive prices, a six-month warranty, and a completely
+store promise competitive prices, a six-month warranty, and a completely
 hassle-free shopping session. 
 ~
 Flags:	10000000000000001000
@@ -3973,7 +3982,7 @@ BREAK
 Name:	W. Anselm Street
 Desc:$
    Anselm Street comes to an end just west of here.  The gates of the Crying
-Wall, a memorial in rememberence of the Night of Rage, are to the north.
+Wall, a memorial in remembrance of the Night of Rage, are to the north.
 Eastwards, Tacoma is a busy town, with traffic problems, gangs, busy
 wageslaves working for subsidiaries of subsidiaries of the monolithic
 megacorps, and general urban blight. 
@@ -4413,7 +4422,7 @@ Name:	Interstate 5 - Venice Street Offramp
 Desc:$
    The offramp has recently been retrofitted to fit the more intense traffic
 that has hit the Tacoma area in recent years.  Venice now runs underneath I-5
-and this offramp brings traffic from the interstate to Vence and vice versa. 
+and this offramp brings traffic from the interstate to Venice and vice versa. 
 ~
 Flags:	10000000000010000000000
 SecType:	Inside
@@ -4448,8 +4457,8 @@ BREAK
 Name:	Venice Street - Beneath Interstate 5
 Desc:$
    Venice Street runs underneath an eight-lane overpass here. The roar of
-trucks, buzz of racebikes and putter of commuter cars are somewhat muffled by
-the many meters of tarmac and concrete above. The sharp smell of hot peppers
+trucks, buzz of racing bikes and putter of commuter cars are somewhat muffled
+by the many meters of tarmac and concrete above. The sharp smell of hot peppers
 from the east adds a tang to the thick scents of exhaust and car oil. 
 ~
 Flags:	10000000000010000000000
@@ -4503,7 +4512,7 @@ Desc:$
    A half-cloverleaf of single lane road bringing traffic up and down from
 Interstate 5 to Little Road, and vice versa.  This appears to be a bottleneck
 of sorts, slowing traffic from Little Road to a near standstill.  Once cars
-get up on the freeway though, its smooth speeding. 
+get up on the freeway though, it's smooth speeding. 
 ~
 Flags:	10000000000010000000000
 SecType:	City

@@ -1800,7 +1800,7 @@ BREAK
 #17151
 Name:	Miyoko Hamamoto's Office
 Desc:$
-   You are in a very tidy office, with a ^ccalender^N on the wall, and a modern
+   You are in a very tidy office, with a ^ccalendar^N on the wall, and a modern
 desk with a computer on top of the desk.  The executive's family is in
 holographic pictures that sit upon the desk, and the computer displays a
 screen saver.  There is a seat for visitors and a great view of Downtown
@@ -1829,7 +1829,7 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXTRADESC 0]
-	Keywords:	calender
+	Keywords:	calendar
 	Desc:$
 Today's date is marked: "Lunch at Dante's Inferno, Ninth Hell." 
 ~
