@@ -1983,7 +1983,7 @@ ACMD(do_pour)
 
 void wear_message(struct char_data * ch, struct obj_data * obj, int where)
 {
-  const char *wear_messages[][2] = {
+  char *wear_messages[][2] = {
                                {"$n activates $p and holds it.",
                                 "You activate $p and hold it."},
 
@@ -2145,7 +2145,7 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
                             ITEM_WEAR_BELLY, ITEM_WEAR_WAIST, ITEM_WEAR_THIGH, ITEM_WEAR_THIGH,
                             ITEM_WEAR_LEGS, ITEM_WEAR_ANKLE, ITEM_WEAR_ANKLE, ITEM_WEAR_SOCK, ITEM_WEAR_FEET };
 
-  const char *already_wearing[] = {
+  char *already_wearing[] = {
                               "You're already using a light.\r\n",
                               "You're already wearing something on your head.\r\n",
                               "You're already wearing something on your eyes.\r\n",
@@ -2244,13 +2244,12 @@ void perform_wear(struct char_data * ch, struct obj_data * obj, int where)
     if (GET_EQ(ch, where))
       where++;
 
-  if (where == WEAR_FINGER_R) {
+  if (where == WEAR_FINGER_R)
     while ((GET_EQ(ch, where)) && (where < WEAR_FINGER8))
       if (where == WEAR_FINGER_L)
         where = WEAR_FINGER3;
       else
         where++;
-  }
 
 
   if ((where == WEAR_WIELD || where == WEAR_HOLD) && IS_OBJ_STAT(obj, ITEM_TWOHANDS) &&
@@ -2985,8 +2984,8 @@ ACMD(do_holster)
     send_to_char("You need to holster a weapon into a holster.\r\n", ch);
     return;
   }
-  if (!generic_find(buf1, FIND_OBJ_EQUIP | FIND_OBJ_INV, ch, &tmp_char, &cont)) {
-    for (int x = 0; x < NUM_WEARS; x++) {
+  if (!generic_find(buf1, FIND_OBJ_EQUIP | FIND_OBJ_INV, ch, &tmp_char, &cont))
+    for (int x = 0; x < NUM_WEARS; x++)
       if (GET_EQ(ch, x) && GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_WORN && GET_EQ(ch, x)->contains) {
         for (struct obj_data *temp = GET_EQ(ch, x)->contains; temp; temp = temp->next_content)
           if (GET_OBJ_TYPE(temp) == ITEM_HOLSTER && !temp->contains) {
@@ -2994,11 +2993,9 @@ ACMD(do_holster)
             break;
           }
       } else if (GET_EQ(ch, x) && GET_OBJ_TYPE(GET_EQ(ch, x)) == ITEM_HOLSTER && !GET_EQ(ch, x)->contains) {
-          cont = GET_EQ(ch, x);
-          break;
+        cont = GET_EQ(ch, x);
+        break;
       }
-    }
-  }
   if (!cont) {
     send_to_char("You need to holster a weapon into a holster.\r\n", ch);
     return;

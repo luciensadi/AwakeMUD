@@ -26,7 +26,7 @@
 
 struct ban_list_element *ban_list = NULL;
 
-const char *ban_types[] = {
+char *ban_types[] = {
                       "no",
                       "new",
                       "select",

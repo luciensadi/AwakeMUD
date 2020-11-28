@@ -20,7 +20,7 @@
 extern MYSQL *mysql;
 extern int mysql_wrapper(MYSQL *mysql, char *buf);
 extern char *prepare_quotes(char *dest, const char *str);
-extern void display_help(char *help, const char *arg);
+extern void display_help(char *help, char *arg);
 
 const char *pc_race_types[] =
   {
@@ -339,7 +339,7 @@ int parse_race(struct descriptor_data *d, char *arg)
     default:
       return RACE_UNDEFINED;
     }
-    strcat(buf2, "\r\n Press [return] to continue");
+    strcat(buf2, "\r\nª Press [return] to continue ´");
     SEND_TO_Q(buf2, d);
     d->ccr.temp = CCR_RACE;
     d->ccr.mode = CCR_AWAIT_CR;
@@ -369,7 +369,7 @@ int parse_totem(struct descriptor_data *d, char *arg)
   {
     i = atoi(++temp);
     display_help(buf2, (char *)totem_types[i]);
-    strcat(buf2, "\r\n Press [return] to continue ");
+    strcat(buf2, "\r\nª Press [return] to continue ´");
     SEND_TO_Q(buf2, d);
     d->ccr.temp = CCR_TOTEM;
     d->ccr.mode = CCR_AWAIT_CR;
@@ -446,7 +446,7 @@ void priority_menu(struct descriptor_data *d)
     sprintf(buf2, "%-10c", 'A' + i);
     switch (d->ccr.pr[i]) {
     case PR_NONE:
-      sprintf(buf2, "%s?           %-2d           %-2d        %d \xC2\xA5 / %d\r\n",
+      sprintf(buf2, "%s?           %-2d           %-2d        %d ¥ / %d\r\n",
               buf2, attrib_vals[i], skill_vals[i], nuyen_vals[i], force_vals[i]);
       break;
     case PR_RACE:
@@ -506,7 +506,7 @@ void priority_menu(struct descriptor_data *d)
               skill_vals[i]);
       break;
     case PR_RESOURCE:
-      sprintf(buf2, "%sResources   -            -         %d \xC2\xA5 / %d\r\n",
+      sprintf(buf2, "%sResources   -            -         %d ¥ / %d\r\n",
               buf2, nuyen_vals[i], force_vals[i]);
       break;
     }
@@ -520,12 +520,11 @@ void init_char_sql(struct char_data *ch)
   char buf2[MAX_STRING_LENGTH];
   sprintf(buf, "INSERT INTO pfiles (idnum, name, password, race, gender, Rank, Voice,"\
                "Physical_Keywords, Physical_Name, Whotitle, Height, Weight, Host,"\
-               "Tradition, Born, Background, Physical_LookDesc, Matrix_LookDesc, Astral_LookDesc) VALUES ('%ld', '%s', '%s', %d, '%d',"\
-               "'%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%ld', '%s', '%s', '%s', '%s');", GET_IDNUM(ch),
+               "Tradition, Born) VALUES ('%ld', '%s', '%s', %d, '%d',"\
+               "'%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%ld');", GET_IDNUM(ch),
                GET_CHAR_NAME(ch), GET_PASSWD(ch), GET_RACE(ch), GET_SEX(ch), MAX(1, GET_LEVEL(ch)),
                prepare_quotes(buf2, ch->player.physical_text.room_desc), GET_KEYWORDS(ch), GET_NAME(ch), GET_WHOTITLE(ch),
-               GET_HEIGHT(ch), GET_WEIGHT(ch), ch->player.host, GET_TRADITION(ch), ch->player.time.birth, "A blank slate.",
-               "A nondescript person.", "A nondescript entity.", "A nondescript entity.");
+               GET_HEIGHT(ch), GET_WEIGHT(ch), ch->player.host, GET_TRADITION(ch), ch->player.time.birth);
   mysql_wrapper(mysql, buf);
   if (PLR_FLAGGED(ch, PLR_AUTH)) {
     sprintf(buf, "INSERT INTO pfiles_chargendata (idnum, AttPoints, SkillPoints, ForcePoints) VALUES"\
@@ -750,7 +749,7 @@ void create_parse(struct descriptor_data *d, char *arg)
         d->ccr.points += resource_table[1][d->ccr.pr[PO_RESOURCES]];
         sprintf(buf, " ");
         for (int x = 0; x < 8; x++)
-          sprintf(ENDOF(buf), " %d) %8d\xC2\xA5   (%2d points)\r\n ", x+1, resource_table[0][x], resource_table[1][x]);
+          sprintf(ENDOF(buf), " %d) %8d¥   (%2d points)\r\n ", x+1, resource_table[0][x], resource_table[1][x]);
         SEND_TO_Q(buf, d);
         send_to_char(CH, "Enter desired amount of nuyen points (^c%d^n available): ", d->ccr.points);
         d->ccr.mode = CCR_PO_RESOURCES;
@@ -1213,7 +1212,7 @@ void create_parse(struct descriptor_data *d, char *arg)
       break;
     case '?':
       display_help(buf2, "priorities");
-      strcat(buf2, "\r\n Press [return] to continue ");
+      strcat(buf2, "\r\nª Press [return] to continue ´");
       SEND_TO_Q(buf2, d);
       d->ccr.temp = CCR_PRIORITY;
       d->ccr.mode = CCR_AWAIT_CR;

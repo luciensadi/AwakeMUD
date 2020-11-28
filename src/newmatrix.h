@@ -20,7 +20,7 @@ struct host_data {
   sh_int colour;
   sh_int security;
   sh_int intrusion;
-  long stats[5][6];
+  long stats[5][4];
 
   int type;
   int reset;

@@ -90,7 +90,7 @@ ACMD(do_copyover)
   FILE *fp;
   struct descriptor_data *d, *d_next;
   int mesnum = number(0, 18);
-  const char *messages[] =
+  char *messages[] =
     {
       "This copyover has been brought to you by NERPS.  Its more than a lubricant, its a lifestyle!\r\n",
       "Yes, the mud is lagging.  Deal with it.\r\n",
@@ -394,7 +394,7 @@ sh_int find_target_room(struct char_data * ch, char *rawroomstr)
     send_to_char("You must supply a room number or name.\r\n", ch);
     return NOWHERE;
   }
-  if (isdigit(*roomstr) && !strchr(roomstr, '.'))
+  if (isdigit(*roomstr) && !strchr((const char *)roomstr, '.'))
   {
     tmp = atoi(roomstr);
     if ((location = real_room(tmp)) < 0) {
@@ -779,7 +779,7 @@ void do_stat_veh(struct char_data *ch, struct veh_data * k)
   send_to_char(buf, ch);
 }
 
-const char *workshops[] = {
+char *workshops[] = {
                       "General",
                       "Electronics",
                       "Microtronics",
@@ -2180,7 +2180,7 @@ ACMD(do_poofset)
 
   *msg = str_dup(argument);
 
-  sprintf(buf, "UPDATE pfiles_immortdata SET poofin='%s', poofout='%s' WHERE idnum=%ld;", prepare_quotes(buf2, POOFIN(ch)), prepare_quotes(buf3, POOFOUT(ch)), GET_IDNUM(ch));
+  sprintf(buf, "UPDATE pfiles_immortdata SET poofin='%s', poofout='%s' WHERE idnum=%ld;", POOFIN(ch), POOFOUT(ch), GET_IDNUM(ch));
   mysql_wrapper(mysql, buf);
   send_to_char(OK, ch);
 }
@@ -2557,7 +2557,7 @@ ACMD(do_wiztitle)
       set_whotitle(ch, argument);
       sprintf(buf, "Okay, your whotitle is now %s.\r\n", GET_WHOTITLE(ch));
       send_to_char(buf, ch);
-      sprintf(buf, "UPDATE pfiles SET Whotitle='%s' WHERE idnum=%ld;", prepare_quotes(buf2, GET_WHOTITLE(ch)), GET_IDNUM(ch));
+      sprintf(buf, "UPDATE pfiles SET Whotitle='%s' WHERE idnum=%ld;", GET_WHOTITLE(ch), GET_IDNUM(ch));
       mysql_wrapper(mysql, buf);
     }
   } else if (subcmd == SCMD_PRETITLE) {
@@ -2567,7 +2567,7 @@ ACMD(do_wiztitle)
     }
     skip_spaces(&argument);
     if (GET_LEVEL(ch) < LVL_BUILDER && *argument)
-      strcat(buf, "^n");
+      strcat(argument, "^n");
     if (strstr((const char *)argument, "^l")) {
       send_to_char("Whotitles can't contain pure black.\r\n", ch);
     } else if (strlen(argument) > (MAX_TITLE_LENGTH -2)) {
@@ -2803,7 +2803,7 @@ ACMD(do_show)
   SPECIAL(call_elevator);
 
   struct show_struct {
-    const char *cmd;
+    char *cmd;
     char level;
   }
   fields[] = {
@@ -2896,7 +2896,7 @@ ACMD(do_show)
      
       sprintf(buf, "Player: %-12s (%s) [%2d]\r\n", GET_NAME(vict),
               genders[(int) GET_SEX(vict)], GET_LEVEL(vict));
-      sprintf(buf, "%sY: %-8ld  Bal: %-8ld  Karma: %-8d\r\n",
+      sprintf(buf, "%s¥: %-8ld  Bal: %-8ld  Karma: %-8d\r\n",
               buf, GET_NUYEN(vict), GET_BANK(vict), GET_KARMA(vict));
       strcpy(birth, ctime(&vict->player.time.birth));
       sprintf(buf,
@@ -3212,7 +3212,7 @@ ACMD(do_set)
   int parse_class(struct descriptor_data *d, char *arg);
 
   struct set_struct {
-    const char *cmd;
+    char *cmd;
     char level;
     char pcnpc;
     char type;
@@ -4517,7 +4517,7 @@ ACMD(do_tail)
   char arg[MAX_STRING_LENGTH];
   FILE *out;
   int lines = 20;
-  char *temp;
+  char *temp = '\0';
   int i = 0;
   char *buf;
 

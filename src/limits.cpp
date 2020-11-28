@@ -158,60 +158,48 @@ void physical_gain(struct char_data * ch)
   update_pos(ch);
 }
 
-const char* get_new_kosherized_title(const char *title, unsigned short max_length) {
+void set_title(struct char_data * ch, char *title)
+{
   if (title == NULL)
     title = "";
-  
-  // Uses NEW.
-  char* mutable_title = str_dup(title);
-  
-  if (strlen(mutable_title) > max_length)
-    mutable_title[max_length] = '\0';
-  
-  return mutable_title;
-}
 
-void set_title(struct char_data * ch, const char *title)
-{
-  // Invokes NEW.
-  const char* kosherized_title = (const char*) get_new_kosherized_title(title, MAX_TITLE_LENGTH);
-  
-  if (GET_TITLE(ch) != NULL)
+  if (strlen(title) > MAX_TITLE_LENGTH)
+    title[MAX_TITLE_LENGTH] = '\0';
+
+  if (GET_TITLE(ch))
     delete [] GET_TITLE(ch);
 
-  GET_TITLE(ch) = str_dup(kosherized_title);
-  
-  // Clean up after NEW.
-  delete kosherized_title;
+  GET_TITLE(ch) = str_dup(title);
 }
 
 
-void set_whotitle(struct char_data * ch, const char *title)
+void set_whotitle(struct char_data * ch, char *title)
 {
-  // Invokes NEW.
-  const char* kosherized_title = (const char*) get_new_kosherized_title(title, MAX_WHOTITLE_LENGTH);
+  if (title == NULL)
+    title = "title";
+
+  if (strlen(title) > MAX_WHOTITLE_LENGTH)
+    title[MAX_WHOTITLE_LENGTH] = '\0';
+
 
   if (GET_WHOTITLE(ch) != NULL)
     delete [] GET_WHOTITLE(ch);
 
   GET_WHOTITLE(ch) = str_dup(title);
-  
-  // Clean up after NEW.
-  delete kosherized_title;
 }
 
-void set_pretitle(struct char_data * ch, const char *title)
+void set_pretitle(struct char_data * ch, char *title)
 {
-  // Invokes NEW.
-  const char* kosherized_title = (const char*) get_new_kosherized_title(title, MAX_TITLE_LENGTH);
+  if (title == NULL)
+    title = "";
+
+  if (strlen(title) > MAX_TITLE_LENGTH)
+    title[MAX_TITLE_LENGTH] = '\0';
 
   if (GET_PRETITLE(ch) != NULL)
     delete [] GET_PRETITLE(ch);
 
   GET_PRETITLE(ch) = str_dup(title);
-  
-  // Clean up after NEW.
-  delete kosherized_title;
 }
 
 int gain_exp(struct char_data * ch, int gain, bool rep)
@@ -286,9 +274,10 @@ void gain_condition(struct char_data * ch, int condition, int value)
 
   intoxicated = (GET_COND(ch, DRUNK) > 0);
 
-  if (value == -1) {
-    for (bio = ch->bioware; bio; bio = bio->next_content) {
-      if (GET_OBJ_VAL(bio, 0) == BIO_SYMBIOTES) {
+  if (value == -1)
+    for (bio = ch->bioware; bio; bio = bio->next_content)
+      if (GET_OBJ_VAL(bio, 0) == BIO_SYMBIOTES)
+      {
         switch (GET_OBJ_VAL(bio, 1)) {
         case 1:
           if (GET_OBJ_VAL(bio, 6))
@@ -305,14 +294,10 @@ void gain_condition(struct char_data * ch, int condition, int value)
           value--;
           break;
         }
-      } else if (GET_OBJ_VAL(bio, 0) == BIO_SUPRATHYROIDGLAND) {
+      } else if (GET_OBJ_VAL(bio, 0) == BIO_SUPRATHYROIDGLAND)
         value *= 2;
-      } else if (GET_OBJ_VAL(bio, 0) == BIO_DIGESTIVEEXPANSION) {
+      else if (GET_OBJ_VAL(bio, 0) == BIO_DIGESTIVEEXPANSION)
         value = (int)((float)value / .8);
-      }
-    }
-  }
-  
   GET_COND(ch, condition) += value;
 
   GET_COND(ch, condition) = MAX(0, GET_COND(ch, condition));

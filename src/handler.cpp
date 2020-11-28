@@ -60,7 +60,7 @@ char *fname(char *namelist)
 }
 
 
-int isname(const char *str, const char *namelist)
+int isname(char *str, char *namelist)
 {
   if(namelist == NULL)
     return 0;
@@ -69,13 +69,12 @@ int isname(const char *str, const char *namelist)
   if (namelist[0] == '\0')
     return 0;
 
-  register const char *curname, *curstr;
+  register char *curname, *curstr;
 
   curname = namelist;
   for (;;) {
     for (curstr = str;; curstr++, curname++) {
       if ((!*curstr && !isalpha(*curname)) || is_abbrev(curstr, curname))
-        //      if (!*curstr && !isalpha(*curname))
         return (1);
 
       if (!*curname)
@@ -1440,21 +1439,21 @@ struct obj_data *unequip_char(struct char_data * ch, int pos, bool focus)
 
 int get_number(char **name)
 {
+
   int i;
   char *ppos;
-  char number[MAX_INPUT_LENGTH];
-
+  char number[MAX_INPUT_LENGTH], tname[MAX_INPUT_LENGTH];
+  
   *number = '\0';
-
   if ((ppos = strchr(*name, '.'))) {
     *ppos++ = '\0';
     strcpy(number, *name);
-    strcpy(*name, ppos);
+    strcpy(tname, ppos);
+    strcpy(*name, tname);
 
     for (i = 0; *(number + i); i++)
       if (!isdigit(*(number + i)))
         return 0;
-
     return (atoi(number));
   }
   return 1;
@@ -1525,8 +1524,7 @@ struct char_data *get_char_room(char *name, long room)
 
   strcpy(tmp, name);
   if (!(number = get_number(&tmp)))
-    return NULL;
-
+    return NULL;     
   for (i = world[room].people; i && (j <= number); i = i->next_in_room)
     if (isname(tmp, GET_KEYWORDS(i)) ||
         isname(tmp, GET_NAME(i)) || isname(tmp, GET_CHAR_NAME(i)))
@@ -2103,7 +2101,6 @@ struct char_data *get_char_room_vis(struct char_data * ch, char *name)
   int j = 0, number;
   char tmpname[MAX_INPUT_LENGTH];
   char *tmp = tmpname;
-
   /* JE 7/18/94 :-) :-) */
   if (!str_cmp(name, "self") || !str_cmp(name, "me"))
     return ch;
@@ -2116,13 +2113,14 @@ struct char_data *get_char_room_vis(struct char_data * ch, char *name)
   if (ch->in_veh)
     if ((i = get_char_veh(ch, name, ch->in_veh)))
       return i;
-
-  for (i = world[ch->in_room].people; i && j <= number; i = i->next_in_room)
+	
+  for (i = world[ch->in_room].people; i && j <= number; i = i->next_in_room) {
     if ((isname(tmp, GET_KEYWORDS(i)) ||
          isname(tmp, GET_NAME(i)) || recog(ch, i, name)) &&
         CAN_SEE(ch, i))
       if (++j == number)
         return i;
+  }
 
   return NULL;
 }

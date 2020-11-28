@@ -63,7 +63,7 @@ void medit_parse(struct descriptor_data *d, char *arg);
 void qedit_parse(struct descriptor_data *d, char *arg);
 void shedit_parse(struct descriptor_data *d, char *arg);
 void zedit_parse(struct descriptor_data *d, char *arg);
-void hedit_parse(struct descriptor_data *d, const char *arg);
+void hedit_parse(struct descriptor_data *d, char *arg);
 void icedit_parse(struct descriptor_data *d, char *arg);
 void pedit_parse(struct descriptor_data *d, char *arg);
 void dbuild_parse(struct descriptor_data *d, char *arg);
@@ -271,7 +271,7 @@ ACMD(do_sneak);
 ACMD(do_snoop);
 ACMD(do_spec_comm);
 ACMD(do_spells);
-//ACMD(do_spray);
+ACMD(do_spray);
 ACMD(do_spool);
 ACMD(do_stand);
 ACMD(do_stat);
@@ -421,7 +421,7 @@ struct command_info cmd_info[] =
     { "beg"      , POS_RESTING , do_action   , 0, 0, FREE },
     { "bioware"  , POS_DEAD    , do_bioware  , 0, 0, FREE },
     { "bite"     , POS_RESTING , do_action   , 0, 0, FREE },
-//  { "blastoff" , POS_RESTING , do_not_here , 0, 0, FREE },
+    { "blastoff" , POS_RESTING , do_not_here , 0, 0, FREE },
     { "blink"    , POS_LYING   , do_action   , 0, 0, FREE },
     { "bleed"    , POS_LYING   , do_action   , 0, 0, FREE },
     { "blush"    , POS_LYING   , do_action   , 0, 0, FREE },
@@ -857,7 +857,7 @@ struct command_info cmd_info[] =
     { "spank"    , POS_LYING   , do_action   , 0, 0 },
     { "spirits"  , POS_LYING   , do_elemental, 0, 0 },
     { "spit"     , POS_STANDING, do_action   , 0, 0 },
-//    { "spray"    , POS_STANDING, do_spray    , 0, 0 },
+    { "spray"    , POS_STANDING, do_spray    , 0, 0 },
     { "squeeze"  , POS_LYING   , do_action   , 0, 0 },
     { "stand"    , POS_LYING   , do_stand    , 0, 0 },
     { "stare"    , POS_LYING   , do_action   , 0, 0 },
@@ -1417,8 +1417,8 @@ ACMD(do_alias)
       skip_spaces(&repl);
       delete_doubledollar(repl);
       a->replacement = str_dup(repl);
-      if (strchr(repl, ALIAS_SEP_CHAR) ||
-          strchr(repl, ALIAS_VAR_CHAR))
+      if (strchr((const char *)repl, ALIAS_SEP_CHAR) ||
+          strchr((const char *)repl, ALIAS_VAR_CHAR))
         a->type = ALIAS_COMPLEX;
       else
         a->type = ALIAS_SIMPLE;
@@ -1588,7 +1588,7 @@ char *delete_doubledollar(char *string)
 {
   char *read, *write;
 
-  if ((write = strchr(string, '$')) == NULL)
+  if ((write = str_chr((const char *)string, '$')) == NULL)
     return string;
 
   read = write;
@@ -1678,7 +1678,7 @@ char *two_arguments(char *argument, char *first_arg, char *second_arg)
  *
  * returns 1 if arg1 is an abbreviation of arg2
  */
-int is_abbrev(const char *arg1, const char *arg2)
+int is_abbrev(char *arg1, const char *arg2)
 {
   if (!*arg1)
     return 0;
@@ -1704,7 +1704,7 @@ void half_chop(char *string, char *arg1, char *arg2)
 }
 
 /* Used in specprocs, mostly.  (Exactly) matches "command" to cmd number */
-int find_command(const char *command)
+int find_command(char *command)
 {
   int cmd;
 

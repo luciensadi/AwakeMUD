@@ -319,7 +319,7 @@ void VTable::separate(const char *where,
   while (*src_ptr && *src_ptr == ' ')
     src_ptr++;
 
-  const char *delim = strchr(src_ptr, '/');
+  char *delim = str_chr(src_ptr, '/');
 
   if (!delim) {
     strncpy(field_name, src_ptr, MAX_FIELD_LENGTH);

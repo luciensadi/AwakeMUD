@@ -34,16 +34,16 @@ char    *two_arguments(char *argument, char *first_arg, char *second_arg);
 int     fill_word(char *argument);
 void    half_chop(char *string, char *arg1, char *arg2);
 void    nanny(struct descriptor_data *d, char *arg);
-int     is_abbrev(const char *arg1, const char *arg2);
+int     is_abbrev(char *arg1, const char *arg2);
 int     is_number(char *str);
-int     find_command(const char *command);
+int     find_command(char *command);
 int     find_mcommand(char *command);
 void    skip_spaces(char **string);
 char    *delete_doubledollar(char *string);
 
 struct command_info
 {
-  const char *command;
+  char *command;
   byte minimum_position;
   void (*command_pointer)
   (struct char_data *ch, char * argument, int cmd, int subcmd);

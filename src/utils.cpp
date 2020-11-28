@@ -635,7 +635,7 @@ void log(const char *format, ...)
  * mudlog -- log mud messages to a file & to online imm's syslogs
  * based on syslog by Fen Jul 3, 1992
  */
-void mudlog(const char *str, struct char_data *ch, int log, bool file)
+void mudlog(char *str, struct char_data *ch, int log, bool file)
 {
   char buf[MAX_STRING_LENGTH], buf2[MAX_STRING_LENGTH];
   extern struct descriptor_data *descriptor_list;
@@ -748,10 +748,10 @@ void sprintbit(long vektor, const char *names[], char *result)
 void sprinttype(int type, const char *names[], char *result)
 {
   sprintf(result, "%s", names[type]);
-  
-  if (str_cmp(result, "(null)") == 0) {
-    sprintf(result, "UNDEFINED");
-  }
+
+  if (str_cmp(result, "(null)"))
+    result = "UNDEFINED";
+
 }
 
 void sprint_obj_mods(struct obj_data *obj, char *result)
@@ -948,7 +948,7 @@ bool PLR_TOG_CHK(char_data *ch, dword offset)
   return PLR_FLAGS(ch).IsSet(offset);
 }
 
-char * buf_mod(char *rbuf, const char *name, int bonus)
+char * buf_mod(char *rbuf, char *name, int bonus)
 {
   if ( !rbuf )
     return rbuf;
@@ -963,7 +963,7 @@ char * buf_mod(char *rbuf, const char *name, int bonus)
   return rbuf;
 }
 
-char * buf_roll(char *rbuf, const char *name, int bonus)
+char * buf_roll(char *rbuf, char *name, int bonus)
 {
   if ( !rbuf )
     return rbuf;
@@ -1097,16 +1097,14 @@ int get_skill(struct char_data *ch, int skill, int &target)
               chip = TRUE;
       if (chip && expert)
         totalskill += MIN(REAL_SKILL(ch, skill), expert);
-    } else if (ch->bioware) {
-      for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content) {
+    } else if (ch->bioware)
+      for (struct obj_data *bio = ch->bioware; bio; bio = bio->next_content)
         if (GET_OBJ_VAL(bio, 0) == BIO_REFLEXRECORDER && GET_OBJ_VAL(bio, 3) == skill)
           totalskill++;
         else if (GET_OBJ_VAL(bio, 0) == BIO_ENHANCEDARTIC)
           enhan = TRUE;
         else if (GET_OBJ_VAL(bio, 0) == BIO_SYNTHACARDIUM)
           synth = GET_OBJ_VAL(bio, 1);
-      }
-    }
     if (skill == SKILL_STEALTH)
       totalskill += mbw;
     if (skill == SKILL_ATHLETICS)
@@ -1354,4 +1352,12 @@ void magic_loss(struct char_data *ch, int magic, bool msg)
     reduce_abilities(ch);
   }
 }
+
+char *str_chr(const char *s, int c)
+{
+    while (*s != (char)c)
+        if (!*s++) 
+            return 0;
+    return (char *)s;
+}                  
 

@@ -173,7 +173,7 @@ void hedit_disp_rating_menu(struct descriptor_data *d)
 }
 
 
-void hedit_parse(struct descriptor_data *d, const char *arg)
+void hedit_parse(struct descriptor_data *d, char *arg)
 {
   long number, host_num;
   int i = 0;

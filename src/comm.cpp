@@ -154,7 +154,7 @@ void save_vehicles(void);
 class memoryClass *Mem = new memoryClass();
 void show_string(struct descriptor_data * d, char *input);
 
-#if (defined(WIN32) && !defined(__CYGWIN__))
+#if defined(WIN32) && !defined(__CYGWIN__)
 void gettimeofday(struct timeval *t, struct timezone *dummy)
 {
   DWORD millisec = GetTickCount();
@@ -883,7 +883,7 @@ void make_prompt(struct descriptor_data * d)
   if (d->str)
     write_to_descriptor(d->descriptor, "] ");
   else if (d->showstr_point)
-    write_to_descriptor(d->descriptor, " Press [return] to continue, [q] to quit ");
+    write_to_descriptor(d->descriptor, "« Press [return] to continue, [q] to quit »");
   else if (STATE(d) == CON_POCKETSEC)
     write_to_descriptor(d->descriptor, " > ");  
   else if (!d->connected)
@@ -1131,7 +1131,7 @@ void make_prompt(struct descriptor_data * d)
   }
 }
 
-void write_to_q(const char *txt, struct txt_q * queue, int aliased)
+void write_to_q(char *txt, struct txt_q * queue, int aliased)
 {
   struct txt_block *temp = new txt_block;
   temp->text = new char[strlen(txt) + 1];
@@ -1399,7 +1399,7 @@ int process_output(struct descriptor_data *t) {
   return result;
 }
 
-int write_to_descriptor(int desc, const char *txt) {
+int write_to_descriptor(int desc, char *txt) {
   int total, bytes_written;
 
   total = strlen(txt);
@@ -2112,6 +2112,7 @@ char *colorize(struct descriptor_data *d, char *str)
   return &buffer[0];
 }
 
+char buf3[MAX_STRING_LENGTH];
 void send_to_char(struct char_data * ch, const char * const messg, ...)
 {
   if (!ch->desc || !messg)
@@ -2151,7 +2152,7 @@ void send_to_icon(struct matrix_icon * icon, const char * const messg, ...)
 }
 
 
-void send_to_all(const char *messg)
+void send_to_all(char *messg)
 {
   struct descriptor_data *i;
 
@@ -2200,7 +2201,7 @@ void send_to_host(vnum_t room, char *messg, struct matrix_icon *icon, bool needs
         if (!needsee || (needsee && has_spotted(i, icon)))
           send_to_icon(i, messg);
 }
-void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, bool torig, ...)
+void send_to_veh(char *messg, struct veh_data *veh, struct char_data *ch, bool torig, ...)
 {
   struct char_data *i;
 
@@ -2216,7 +2217,7 @@ void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, 
   }
 }
 
-void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, struct char_data *cha, bool torig)
+void send_to_veh(char *messg, struct veh_data *veh, struct char_data *ch, struct char_data *cha, bool torig)
 {
   struct char_data *i;
 
@@ -2232,7 +2233,7 @@ void send_to_veh(const char *messg, struct veh_data *veh, struct char_data *ch, 
   }
 }
 
-void send_to_room(const char *messg, int room)
+void send_to_room(char *messg, int room)
 {
   struct char_data *i;
   struct veh_data *v;
@@ -2254,7 +2255,7 @@ char *ACTNULL = "<NULL>";
 
 
 /* higher-level communication: the act() function */
-void perform_act(const char *orig, struct char_data * ch, struct obj_data * obj,
+void perform_act(char *orig, struct char_data * ch, struct obj_data * obj,
                  void *vict_obj, struct char_data * to)
 {
   extern char *make_desc(char_data *ch, char_data *i, char *buf, int act);
@@ -2373,7 +2374,7 @@ void perform_act(const char *orig, struct char_data * ch, struct obj_data * obj,
 /* modified to include spell creation menu */
 #define SENDOK(ch) ((ch)->desc && (AWAKE(ch) || sleep) && !(PLR_FLAGGED((ch), PLR_WRITING) || PLR_FLAGGED((ch), PLR_EDITING) || PLR_FLAGGED((ch), PLR_MAILING) || PLR_FLAGGED((ch), PLR_CUSTOMIZE)) && (STATE(ch->desc) != CON_SPELL_CREATE))
 
-void act(const char *str, int hide_invisible, struct char_data * ch,
+void act(char *str, int hide_invisible, struct char_data * ch,
          struct obj_data * obj, void *vict_obj, int type)
 {
   struct char_data *to, *next;
@@ -2432,8 +2433,7 @@ void act(const char *str, int hide_invisible, struct char_data * ch,
   else
   {
     log("SYSERR: no valid target to act()!");
-    sprintf(buf, "Invocation: act('%s', '%d', char_data, obj_data, vict_obj, '%d').", str, hide_invisible, type);
-    log(buf);
+    log(str);
     return;
   }
 
@@ -2461,7 +2461,9 @@ void act(const char *str, int hide_invisible, struct char_data * ch,
     else
       next = to->next_in_room;
     if (SENDOK(to)
-        && !(hide_invisible && ch && !CAN_SEE(to, ch))
+        && !(hide_invisible
+             && ch
+             && !CAN_SEE(to, ch))
         && (to != ch) && !(PLR_FLAGGED(to, PLR_REMOTE) || PLR_FLAGGED(to, PLR_MATRIX))
         && (type == TO_ROOM || type == TO_ROLLS || (to != vict_obj)))
       perform_act(str, ch, obj, vict_obj, to);

@@ -9,8 +9,7 @@ char *NOPERSON = "You don't see that person here.\r\n";
 char *TOOBUSY = "You're too busy.\r\n";
 char *NOOBJECT = "You don't see that here.\r\n";
 long newbie_start_room = 60500;
-//long mortal_start_room = 30700;
-long mortal_start_room = 35500;
+long mortal_start_room = 30700;
 long immort_start_room = 1000;
 long frozen_start_room = 1050;
 vnum_t donation_room_1 = 60570;
@@ -44,12 +43,11 @@ char *QMENU =
 
 char *GREETINGS =
   "\r\n"
-  "Administration Email: luciensadi@gmail.com\r\n"
+  "Administration Email: che@awakenedworlds.net\r\n"
   "The following mud is based on CircleMUD 3.0 by Jeremy Elson.  It is a\r\n"
   "derivative of DikuMUD (GAMMA 0.0) by Hans Henrik Staerfeldt, Katja Nyboe,\r\n"
   "Tom Madsen, Michael Seifert, and Sebastian Hammer.\r\n"
   "AwakeMUD Code Level 0.8.19 BETA, by Flynn, Fastjack, Rift, Washu, and Che.\r\n"
-  "Modifications by Lucien Sadi.\r\n"
   "\r\n"
   "_____   .                    A            .              .   .       .\r\n"
   "o o o\\            .        _/_\\_                                  |\\\r\n"
@@ -80,4 +78,10 @@ char *START_MESSG =
   "Welcome to the future, 2064, where mankind has entered what the Mayans would\r\n"
   "call the Sixth World.  New races, magic, and technology all clash in what we\r\n"
   "call Awakened Worlds.  If you have never experienced this world before, typing\r\n"
-  "HELP NEWBIE will help you understand what exactly is going on here.\r\n\r\n";
+  "help NEWBIE will help you understand what exactly is going on here.\r\n\r\n";
+
+char *mysql_host = "127.0.0.1";
+char *mysql_password = "";
+char *mysql_user = "";
+char *mysql_db = "awakemud";
+

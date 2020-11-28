@@ -14,11 +14,6 @@
 #include <stdio.h>
 #include "bitfield.h"
 
-#if defined(osx)
-/* crypt() is defined in unistd.h in OSX. */
-#include <unistd.h>
-#endif
-
 /* external declarations and prototypes **********************************/
 
 extern struct weather_data weather_info;
@@ -32,8 +27,9 @@ char    *str_dup(const char *source);
 char *str_str( const char *str1, const char *str2 );
 int     str_cmp(const char *arg1, const char *arg2);
 int strn_cmp(const char *arg1, const char *arg2, int n);
+char *str_chr(const char *s, int c);
 void    log(const char *format, ...);
-void    mudlog(const char *str, struct char_data *ch, int log, bool file);
+void    mudlog(char *str, struct char_data *ch, int log, bool file);
 void    log_death_trap(struct char_data *ch);
 int     number(int from, int to);
 int     dice(int number, int size);
@@ -48,8 +44,8 @@ int     success_test(int number, int target);
 int     resisted_test(int num4ch, int tar4ch, int num4vict, int tar4vict);
 int     stage(int successes, int wound);
 bool    access_level(struct char_data *ch, int level);
-char * buf_mod(char *buf, const char *name, int bonus);
-char * buf_roll(char *buf, const char *name, int bonus);
+char * buf_mod(char *buf, char *name, int bonus);
+char * buf_roll(char *buf, char *name, int bonus);
 int modify_target_rbuf(struct char_data *ch, char *rbuf);
 int modify_target(struct char_data *ch);
 int damage_modifier(struct char_data *ch, char *rbuf);
@@ -98,9 +94,9 @@ int perform_move(struct char_data *ch, int dir, int extra, struct char_data
 void    mental_gain(struct char_data *ch);
 void    physical_gain(struct char_data *ch);
 void    advance_level(struct char_data *ch);
-void    set_title(struct char_data *ch, const char *title);
-void    set_pretitle(struct char_data *ch, const char *title);
-void    set_whotitle(struct char_data *ch, const char *title);
+void    set_title(struct char_data *ch, char *title);
+void    set_pretitle(struct char_data *ch, char *title);
+void    set_whotitle(struct char_data *ch, char *title);
 int     gain_exp(struct char_data *ch, int gain, bool rep);
 void    gain_exp_regardless(struct char_data *ch, int gain);
 void    gain_condition(struct char_data *ch, int condition, int value);
@@ -149,7 +145,7 @@ void    update_pos(struct char_data *victim);
 // Calls a function that uses a static buffer.  Good.
 #define CAP(st)  capitalize((st))
 
-#define AN(string) (strchr("aeiouAEIOU", *string) ? "an" : "a")
+#define AN(string) (strchr((const char *)"aeiouAEIOU", *string) ? "an" : "a")
 
 
 #define CREATE(result, type, number)  do {\

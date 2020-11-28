@@ -413,7 +413,7 @@ void matrix_fight(struct matrix_icon *icon, struct matrix_icon *targ)
       target = 7;
     break;
   }
-  target += targ->parry;
+  target =+ targ->parry;
   target -= icon->position;
   targ->parry = 0;
   icon->position = 0;

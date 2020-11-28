@@ -19,5 +19,9 @@ extern char *QMENU;
 extern char *GREETINGS;
 extern char *WELC_MESSG;
 extern char *START_MESSG;
+extern char *mysql_host;
+extern char *mysql_user;
+extern char *mysql_password;
+extern char *mysql_db;
 
 #endif

@@ -23,10 +23,6 @@
 #include "interpreter.h" // for alias
 #include "config.h"
 
-/* mysql_config.h must be filled out with your own connection info. */
-/* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
-#include "mysql_config.h"
-
 extern void kill_ems(char *);
 extern void init_char_sql(struct char_data *ch);
 static const char *const INDEX_FILENAME = "etc/pfiles/index";
@@ -250,7 +246,7 @@ char *prepare_quotes(char *dest, const char *str)
     return NULL;
   register char *temp = &dest[0];
   while (*str) {
-    if (*str == '\'' || *str == '`' || *str == '"' || *str == '\\')
+    if (*str == '\'' || *str == '`' || *str == '"')
       *temp++ = '\\';
     *temp++ = *str++;
   }
@@ -952,7 +948,7 @@ static bool save_char(char_data *player, DBIndex::vnum_t loadroom)
   mysql_wrapper(mysql, buf);
   for (temp = player->carrying; temp; temp = next_obj) {
     next_obj = temp->next_content;
-    if (GET_OBJ_TYPE(temp) == ITEM_CYBERWARE) {
+    if ((GET_OBJ_TYPE(temp) == ITEM_CYBERWARE)) {
       obj_from_char(temp);
       obj_to_cyberware(temp, player);
     }
@@ -1464,8 +1460,6 @@ void PCIndex::reset()
 
 bool PCIndex::load()
 {
-  // Sorry, PCIndex::load, but with the SQL DB in place you'll never work again.
-  /*
   File index(INDEX_FILENAME, "r");
 
   if (!index.IsOpen()) {
@@ -1521,8 +1515,6 @@ bool PCIndex::load()
   sort_by_id();
  // clear_by_time();
   return true;
-  */
-  return false;
 }
 
 int  PCIndex::count_entries(File *index)

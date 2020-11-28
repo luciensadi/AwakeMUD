@@ -172,7 +172,6 @@ struct help_index_data
 char    buf[MAX_STRING_LENGTH];
 char    buf1[MAX_STRING_LENGTH];
 char    buf2[MAX_STRING_LENGTH];
-char    buf3[MAX_STRING_LENGTH]; // NOW WITH EVEN MOAR BUFFERS
 char    arg[MAX_STRING_LENGTH];
 #else
 extern struct room_data *world;
@@ -229,7 +228,6 @@ extern int market[5];
 extern char buf[MAX_STRING_LENGTH];
 extern char buf1[MAX_STRING_LENGTH];
 extern char buf2[MAX_STRING_LENGTH];
-extern char buf3[MAX_STRING_LENGTH];
 extern char arg[MAX_STRING_LENGTH];
 extern char *credits;
 extern char *news;

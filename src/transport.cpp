@@ -1183,9 +1183,6 @@ struct transport_type seattle_ferry[2] =
 
 void extend_walkway_st(int ferry, int to, int room, int from)
 {
-  assert(ferry > 0);
-  assert(room > 0);
-  
   if (!world[ferry].dir_option[to]) {
     world[ferry].dir_option[to] = new room_direction_data;
     memset((char *) world[ferry].dir_option[to], 0,
@@ -1211,9 +1208,6 @@ void extend_walkway_st(int ferry, int to, int room, int from)
 }
 void contract_walkway_st(int ferry, int to, int room, int from)
 {
-  assert(ferry > 0);
-  assert(room > 0);
-
   if (world[ferry].dir_option[to]->keyword)
     delete [] world[ferry].dir_option[to]->keyword;
   if (world[ferry].dir_option[to]->general_description)
@@ -1601,9 +1595,6 @@ struct transport_type tacsea[2] =
 
 void extend_walkway(int ferry, int to, int room, int from)
 {
-  assert(ferry > 0);
-  assert(room > 0);
-  
   if (!world[ferry].dir_option[to]) {
     world[ferry].dir_option[to] = new room_direction_data;
     memset((char *) world[ferry].dir_option[to], 0,
@@ -1630,9 +1621,6 @@ void extend_walkway(int ferry, int to, int room, int from)
 
 void contract_walkway(int ferry, int to, int room, int from)
 {
-  assert(ferry > 0);
-  assert(room > 0);
-  
   if (world[ferry].dir_option[to]->keyword)
     delete [] world[ferry].dir_option[to]->keyword;
   if (world[ferry].dir_option[to]->general_description)
@@ -1893,18 +1881,16 @@ void TransportInit()
   init_elevators();
 }
 
-/* Also known as the 'cause a segfault randomly' function. 
-   This would work if the rooms being referenced actually existed. */
 void MonorailProcess(void)
 {
-  //process_seatac_monorail();
-  //process_seattle_ferry();
-  //process_seatac_ferry();
-  //process_hellhound_bus();
-  //process_lightrail_train();
-  //process_camas_ferry();
-  //process_grenada_plane();
-  //process_victoria_ferry();
-  //process_sugarloaf_ferry();
+  process_seatac_monorail();
+  process_seattle_ferry();
+  process_seatac_ferry();
+  process_hellhound_bus();
+  process_lightrail_train();
+  process_camas_ferry();
+  process_grenada_plane();
+  process_victoria_ferry();
+  process_sugarloaf_ferry();
 }
 

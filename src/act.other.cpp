@@ -740,18 +740,17 @@ ACMD(do_display)
 
   skip_spaces(&argument);
   delete_doubledollar(argument);
-  prepare_quotes(buf, argument);
 
-  if (!*buf) {
+  if (!*argument) {
     send_to_char(ch, "Current prompt:\r\n%s\r\n", GET_PROMPT(tch));
     return;
-  } else if (strlen(buf) > LINE_LENGTH - 1) {
+  } else if (strlen(argument) > LINE_LENGTH - 1) {
     send_to_char(ch, "Customized prompts are limited to %d characters.\r\n",
                  LINE_LENGTH - 1);
     return;
   } else {
     delete [] GET_PROMPT(tch);
-    GET_PROMPT(tch) = str_dup(buf);
+    GET_PROMPT(tch) = str_dup(argument);
     send_to_char(OK, ch);
     sprintf(buf, "UPDATE pfiles SET%sPrompt='%s' WHERE idnum=%ld;", PLR_FLAGGED((ch), PLR_MATRIX) ? " Matrix" : " ", GET_PROMPT(ch), GET_IDNUM(ch));
     mysql_wrapper(mysql, buf);
@@ -3783,7 +3782,6 @@ ACMD(do_tridlog)
   }
 }
 
-/* Spray spec-proc not available.
 ACMD(do_spray)
 {
   skip_spaces(&argument);
@@ -3811,7 +3809,7 @@ ACMD(do_spray)
 
 
   send_to_char("You don't have anything to spray with.\r\n", ch);
-} */
+}
 
 ACMD(do_costtime)
 {

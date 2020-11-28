@@ -226,20 +226,20 @@ bool List<T>::Add(T item, const char *filename, int lineno)
 {
 
 #ifdef DEBUG
-  if (this->FindItem(item)) {
+  if (FindItem(item)) {
     cerr << "SYSERR: Attempt to add duplicate item to list in file " << filename
     << ", line: " << lineno << endl;
     abort();
   }
 #endif
 
-  return this->AddItem(NULL, item);
+  return AddItem(NULL, item);
 }
 
 template <class T>
 bool List<T>::Remove(T item)
 {
-  return this->RemoveItem(this->FindItem(item));
+  return RemoveItem(FindItem(item));
 }
 
 #endif

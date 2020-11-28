@@ -47,7 +47,6 @@ extern class helpList WizHelp;
 extern char *short_object(int virt, int where);
 extern const char *dist_name[];
 
-extern char *prepare_quotes(char *dest, const char *str);
 extern int same_obj(struct obj_data * obj1, struct obj_data * obj2);
 extern int find_sight(struct char_data *ch);
 extern int belongs_to(struct char_data *ch, struct obj_data *obj);
@@ -81,8 +80,8 @@ char *make_desc(struct char_data *ch, struct char_data *i, char *buf, int act)
   if (!IS_NPC(i) && ((GET_EQ(i, WEAR_HEAD) && GET_OBJ_VAL(GET_EQ(i, WEAR_HEAD), 7) > 1) ||
        (GET_EQ(i, WEAR_FACE) && GET_OBJ_VAL(GET_EQ(i, WEAR_FACE), 7) > 1)) && (act == 2 ||
            success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT),
-                        (GET_EQ(i, WEAR_HEAD) ? GET_OBJ_VAL(GET_EQ(i, WEAR_HEAD), 7) : 0) +
-                        (GET_EQ(i, WEAR_FACE) ? GET_OBJ_VAL(GET_EQ(i, WEAR_FACE), 7) : 0)) < 1))
+                        GET_EQ(i, WEAR_HEAD) ? GET_OBJ_VAL(GET_EQ(i, WEAR_HEAD), 7) : 0 +
+                        GET_EQ(i, WEAR_FACE) ? GET_OBJ_VAL(GET_EQ(i, WEAR_FACE), 7) : 0) < 1))
   {
     int conceal = (GET_EQ(i, WEAR_ABOUT) ? GET_OBJ_VAL(GET_EQ(i, WEAR_ABOUT), 7) : 0) +
                   (GET_EQ(i, WEAR_BODY) ? GET_OBJ_VAL(GET_EQ(i, WEAR_BODY), 7) : 0) +
@@ -469,8 +468,8 @@ void look_at_char(struct char_data * i, struct char_data * ch)
   if (((GET_EQ(i, WEAR_HEAD) && GET_OBJ_VAL(GET_EQ(i, WEAR_HEAD), 7) > 1) ||
        (GET_EQ(i, WEAR_FACE) && GET_OBJ_VAL(GET_EQ(i, WEAR_FACE), 7) > 1)) &&
       success_test(GET_INT(ch) + GET_POWER(ch, ADEPT_IMPROVED_PERCEPT),
-                   (GET_EQ(i, WEAR_HEAD) ? GET_OBJ_VAL(GET_EQ(i, WEAR_HEAD), 7) : 0) +
-                   (GET_EQ(i, WEAR_FACE) ? GET_OBJ_VAL(GET_EQ(i, WEAR_FACE), 7) : 0)) < 1)
+                   GET_EQ(i, WEAR_HEAD) ? GET_OBJ_VAL(GET_EQ(i, WEAR_HEAD), 7) : 0 +
+                   GET_EQ(i, WEAR_FACE) ? GET_OBJ_VAL(GET_EQ(i, WEAR_FACE), 7) : 0) < 1)
   {
     if (GET_EQ(i, WEAR_HEAD))
       send_to_char(ch, GET_EQ(i, WEAR_HEAD)->text.look_desc);
@@ -2218,11 +2217,11 @@ return;/*
 */
 }
 
-void display_help(char *help, const char *arg) {
+void display_help(char *help, char *arg) {
   char query[MAX_STRING_LENGTH];
   MYSQL_RES *res;
   MYSQL_ROW row;
-  sprintf(query, "SELECT * FROM help_topic WHERE name LIKE '%%%s%%' ORDER BY name ASC", prepare_quotes(buf, arg));
+  sprintf(query, "SELECT * FROM help_topic WHERE name LIKE '%%%s%%' ORDER BY name ASC", arg);
   if (mysql_wrapper(mysql, query)) {
     sprintf(help, "No such help file exists.\r\n");
     return;
@@ -2234,7 +2233,7 @@ void display_help(char *help, const char *arg) {
     sprintf(help, "No such help file exists.\r\n");
   else if (x > 5) {
     mysql_free_result(res);
-    sprintf(query, "SELECT * FROM help_topic WHERE name LIKE '%s%%' ORDER BY name ASC", prepare_quotes(buf, arg));
+    sprintf(query, "SELECT * FROM help_topic WHERE name LIKE '%s%%' ORDER BY name ASC", arg);
     if (mysql_wrapper(mysql, query)) {
       sprintf(help, "%d articles returned, please narrow your search.aa\r\n", x);
       return;
@@ -2678,7 +2677,7 @@ ACMD(do_users)
       sprintf(line, format, d->desc_num, "UNDEFINED",
               state, idletime, timeptr);
 
-    if (*d->host)
+    if (d->host && *d->host)
       sprintf(line + strlen(line), "[%s]\r\n", d->host);
     else
       strcat(line, "[Hostname unknown]\r\n");

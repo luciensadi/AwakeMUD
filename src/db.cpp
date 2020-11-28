@@ -28,10 +28,6 @@
 #include <unistd.h>
 #endif
 
-/* mysql_config.h must be filled out with your own connection info. */
-/* For obvious reasons, DO NOT ADD THIS FILE TO SOURCE CONTROL AFTER CUSTOMIZATION. */
-#include "mysql_config.h"
-
 #include "structs.h"
 #include "awake.h"
 #include "utils.h"
@@ -171,7 +167,7 @@ void assign_rooms(void);
 void assign_shopkeepers(void);
 void assign_johnsons(void);
 void randomize_shop_prices(void);
-int zone_is_empty(int zone_nr);
+int is_empty(int zone_nr);
 void reset_zone(int zone, int reboot);
 int file_to_string(char *name, char *buf);
 int file_to_string_alloc(char *name, char **buf);
@@ -254,9 +250,8 @@ void boot_world(void)
 {
   mysql = mysql_init(NULL);
   if (!mysql_real_connect(mysql, mysql_host, mysql_user, mysql_password, mysql_db, 0, NULL, 0)) {
-    sprintf(buf, "FATAL ERROR: %s\r\n", mysql_error(mysql));
+    sprintf(buf, "ERROR: %s\r\n\r\n", mysql_error(mysql));
     log(buf);
-    log("Suggestion: Make sure your DB is running and that you've specified your connection info in src/mysql_config.cpp.\r\n");
     shutdown();
   }
   log("Booting MYSQL database.");
@@ -1724,7 +1719,7 @@ void load_zones(File &fl)
     shutdown();
   }
   fl.GetLine(buf, 256, FALSE);
-  if ((ptr = strchr(buf, '~')) != NULL)   /* take off the '~' if it's there */
+  if ((ptr = str_chr((const char *)buf, '~')) != NULL)   /* take off the '~' if it's there */
     *ptr = '\0';
   Z.name = str_dup(buf);
 
@@ -1763,7 +1758,7 @@ void load_zones(File &fl)
     ptr++;
 
     error = 0;
-    if (strchr("MVOENPDHL", ZCMD.command) == NULL) { /* a 3-arg command */
+    if (strchr((const char *)"MVOENPDHL", ZCMD.command) == NULL) { /* a 3-arg command */
       if (sscanf(ptr, " %d %ld %ld ", &tmp, &ZCMD.arg1, &ZCMD.arg2) != 3)
         error = 1;
     } else {
@@ -2586,7 +2581,7 @@ void zone_update(void)
       if (zone_table[i].age >= MAX(zone_table[i].lifespan,5) &&
           zone_table[i].age < ZO_DEAD && zone_table[i].reset_mode &&
           (zone_table[i].reset_mode == 2 ||
-           zone_is_empty(i))) {
+           is_empty(i))) {
         reset_zone(i, 0);
       }
     }
@@ -2959,7 +2954,7 @@ void reset_zone(int zone, int reboot)
 }
 
 /* for use in reset_zone; return TRUE if zone 'nr' is Free of PC's  */
-int zone_is_empty(int zone_nr)
+int is_empty(int zone_nr)
 {
   struct descriptor_data *i;
 
@@ -3057,12 +3052,12 @@ char *fread_string(FILE * fl, char *error)
       shutdown();
     }
     /* If there is a '~', end the string; else put an "\r\n" over the '\n'. */
-    if ((point = strchr(tmp, '~')) != NULL) {
+    if ((point = str_chr((const char *)tmp, '~')) != NULL) {
       *point = '\0';
       done = 1;
       /* Instead of an unconditional 'else', we only replace on what we want
       to replace, instead of acting blindly. */
-    } else if ((point = strchr(tmp, '\n')) != NULL) {
+    } else if ((point = str_chr((const char *)tmp, '\n')) != NULL) {
       *(point++) = '\r';
       *(point++) = '\n';
       *point = '\0';

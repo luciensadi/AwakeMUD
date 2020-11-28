@@ -166,7 +166,7 @@ struct room_data
   sbyte rating;                 // rating of room for various things
   int cover, crowd, type, x, y;
   float z;
-  byte light[3];                  /* Number of lightsources in room     */
+  byte light[2];                  /* Number of lightsources in room     */
   byte peaceful;
   byte poltergeist[2];
   byte icesheet[2];
@@ -205,7 +205,7 @@ struct spell_data
 
 struct spell_types
 {
-  const char *name;
+  char *name;
   bool physical;
   sh_int category;
   sh_int vector;
@@ -227,7 +227,7 @@ typedef struct teach_data
 {
   vnum_t vnum;
   sh_int s[8];
-  const char *msg;
+  char *msg;
   sh_int type;
 }
 teach_t;
@@ -467,7 +467,7 @@ struct player_special_data
   sh_int *obj_complete;
   sh_int *mob_complete;
   long last_quest[QUEST_TIMER];
-  ush_int drugs[NUM_DRUGS+1][7];
+  ush_int drugs[NUM_DRUGS+1][6];
   sh_int drug_affect[5];
   ubyte mental_loss;
   ubyte physical_loss;
@@ -693,7 +693,7 @@ struct ccreate_t
 {
   sh_int mode;
   sh_int archetype;
-  sh_int pr[6];
+  sh_int pr[5];
   sh_int force_points;
   sh_int temp;
   int points;
@@ -766,9 +766,9 @@ struct descriptor_data
 
 struct msg_type
 {
-  const char *attacker_msg;  /* message to attacker */
-  const char *victim_msg;    /* message to victim   */
-  const char *room_msg;      /* message to room     */
+  char *attacker_msg;  /* message to attacker */
+  char *victim_msg;    /* message to victim   */
+  char *room_msg;      /* message to room     */
 
   msg_type() :
       attacker_msg(NULL), victim_msg(NULL), room_msg(NULL)
@@ -913,9 +913,9 @@ struct sustain_data {
 
 struct attack_hit_type
 {
-  const char *singular;
-  const char *plural;
-  const char *different;
+  char *singular;
+  char *plural;
+  char *different;
 };
 
 struct spirit_sustained
@@ -931,7 +931,7 @@ struct spirit_sustained
 
 struct mod_data
 {
-  const char *name;
+  char *name;
   int tools;
 };
 
@@ -949,7 +949,7 @@ struct spell_queue
 
 struct ammo_data
 {
-  const char *name;
+  char *name;
   unsigned char tn;
   float time;
   float weight;
