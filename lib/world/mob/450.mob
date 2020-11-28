@@ -1,0 +1,761 @@
+#45000
+Keywords:	toxic wind spirit dust devil dustdevil
+Name:	a toxic wind spirit
+RoomDesc:$
+A dustdevil twirls about here. 
+
+~
+LookDesc:$
+The sick gray color of the dust that coats the landscape is thick, and twirls
+about in a chaotic, though seemingly intelligent manner. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101000
+AffFlags:	0
+Race:	Elemental
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	5
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	6
+[SKILLS]
+	sorcery:	5
+	unarmed combat:	5
+BREAK
+#45001
+Keywords:	toxic wind spirit dust devil dustdevil
+Name:	a toxic wind spirit
+RoomDesc:$
+A dustdevil twirls about here. 
+
+~
+LookDesc:$
+The sick gray color of the dust that coats the landscape is thick, and twirls
+about in a chaotic, though seemingly intelligent manner. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000101000
+AffFlags:	0
+Race:	Elemental
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	5
+	Cha:	5
+	Int:	6
+	Wil:	4
+	Mag:	5
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	sorcery:	5
+	unarmed combat:	5
+BREAK
+#45002
+Keywords:	disgusting mess toxic waste bubbling earth spirit
+Name:	a bubbling toxic earth spirit
+RoomDesc:$
+A disgusting mess of toxic waste bubbles here, then REACHES for you! 
+
+~
+LookDesc:$
+A toxic earth spirit is a vile hideous beast, a manifestation of a
+horrifically abused land, summoned by a poisoner shaman, a powerful shaman who
+has gone toxic, who revels in destruction. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000101010
+AffFlags:	0
+Race:	Elemental
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	4
+	Str:	7
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	5
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	unarmed combat:	5
+	sorcery:	5
+	:	2
+	:	1
+BREAK
+#45174
+Keywords:	bald-headed humanis recruits
+Name:	A bald-headed man
+RoomDesc:$
+A bald-headed man in a Humanis jacket looks for new recruits here. 
+
+~
+LookDesc:$
+He looks like an average human, nothing entirely out of the ordinary, aside
+from maybe his shaved head and the occasional tattoo. Hes sporting the
+tell-tale colours of Humanis on his jacket, proudly at that, and he seems to
+be handing out leaflets, in hopes to bring more people into his racist fold. 
+~
+ArriveMsg:	goose-steps in from
+LeaveMsg:	goose-steps out to the
+MobFlags:	10001100
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	178
+	Weight:	75
+	Cash:	15
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#45175
+Keywords:	invae insect guard guardian flesh-form bug scarab squat
+Name:	An invae spirit flesh-form guardian
+RoomDesc:$
+A wide, squat humanoid shaped bug guardian looms before you here. 
+
+~
+LookDesc:$
+It looks like nothing so much as a giant scarab shaped humanoid, perhaps with
+too many arms and legs, some of which resemble a normal humans, while others
+are obviously insectoid in nature. They quiver even while it is standing
+still, making it difficult to count them. Two large antennae sit posted atop
+its head, just above large, multi-faceted sets of eyes. Its shell seperates
+along its shoulders an arms, apparently for a display of how large it is,
+meant to intimidate and scare off intruders. If that isn't enough, it shakes
+its massive mandibles, which drip readily with a thick saliva-like substance.
+It seems to be sporting some sort of security armour, which has had most of
+its seems ripped open to allow for its massive body structure to fit snugly
+inside of it. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101100000111010
+AffFlags:	10001000000000
+Race:	Troll
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	16
+	Qui:	10
+	Str:	15
+	Cha:	2
+	Int:	10
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	280
+	Weight:	160
+	Ballistic:	1
+	Impact:	2
+[SKILLS]
+	unarmed combat:	10
+	edged weapons:	9
+	pole arms:	9
+	assault rifles:	9
+BREAK
+#45176
+Keywords:	invae insect guard guardian flesh-form bug scarab squat
+Name:	An invae spirit flesh-form guardian
+RoomDesc:$
+A wide, squat humanoid shaped bug guardian looms before you here. 
+
+~
+LookDesc:$
+It looks like nothing so much as a giant scarab shaped humanoid, perhaps with
+too many arms and legs, some of which resemble a normal humans, while others
+are obviously insectoid in nature. They quiver even while it is standing
+still, making it difficult to count them. Two large antennae sit posted atop
+its head, just above large, multi-faceted sets of eyes. Its shell seperates
+along its shoulders an arms, apparently for a display of how large it is,
+meant to intimidate and scare off intruders. If that isn't enough, it shakes
+its massive mandibles, which drip readily with a thick saliva-like substance.
+It seems to be sporting some sort of security armour, which has had most of
+its seems ripped open to allow for its massive body structure to fit snugly
+inside of it. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101100000111010
+AffFlags:	10001000000000
+Race:	Troll
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	16
+	Qui:	10
+	Str:	15
+	Cha:	2
+	Int:	10
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	280
+	Weight:	160
+	Ballistic:	1
+	Impact:	2
+[SKILLS]
+	unarmed combat:	10
+	edged weapons:	9
+	pole arms:	9
+	assault rifles:	9
+BREAK
+#45177
+Keywords:	invae insect spirit drone bug black
+Name:	An invae spirit drone
+RoomDesc:$
+A two-meter long black drone crawls along the wall here. 
+
+~
+LookDesc:$
+It is a large, black-shelled drone. Its head is distended back from its neck,
+which sweeps back slightly over its chitinous back plating. A long, whiplike
+tail flails back and forth behind it as it extends bluntly clawed hands and
+feet, pulling itself along the floor, wall, ceiling, or whatever it damn well
+pleases. Its eyes are huge and multi-faceted, and it doesn't seem to be
+bothered by the darkness that surrounds it. Below them is its maw, which is a
+ragged gash full of semi-translucent, needle-sharp teeth, and as it growls, it
+also drools a viscous saliva all over the floor and itself. 
+~
+ArriveMsg:	crawls in from
+LeaveMsg:	crawls
+MobFlags:	100100010101010
+AffFlags:	10001000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	8
+	Str:	12
+	Cha:	2
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	120
+	Ballistic:	8
+	Impact:	8
+[SKILLS]
+	unarmed combat:	8
+	athletics:	10
+	biotech:	8
+BREAK
+#45178
+Keywords:	invae insect spirit drone bug black
+Name:	An invae spirit drone
+RoomDesc:$
+A two-meter long black drone crawls along the wall here. 
+
+~
+LookDesc:$
+It is a large, black-shelled drone. Its head is distended back from from its
+neck, which sweeps back slightly over its chitinous back plating. A long,
+whiplike tail flails back and forth behind it as it extends bluntly clawed
+hands and feet, pulling itself along the floor, wall, ceiling, or whatever it
+damn well pleases. Its eyes are huge and multi-faceted, and it doesn't seem to
+be bothered by the darkness that surrounds it. Below them is its maw, which is
+a ragged gash full of semi-translucent, needle-sharp teeth, and as it growls,
+it also drools a viscous saliva all over the floor and itself. 
+~
+ArriveMsg:	crawls in from
+LeaveMsg:	crawls
+MobFlags:	100100010101010
+AffFlags:	10001000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	8
+	Str:	12
+	Cha:	2
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	120
+	Ballistic:	8
+	Impact:	8
+[SKILLS]
+	unarmed combat:	8
+	athletics:	10
+	biotech:	8
+BREAK
+#45179
+Keywords:	invae insect spirit warrior soldier bug six-legged carapaced
+Name:	An invae spirit warrior
+RoomDesc:$
+A six-legged, carapaced invae spirit skitters about here. 
+
+~
+LookDesc:$
+It is a bug bigger than any bug you've ever laid eyes on. Its carapace is
+striped green and gold, like a chiphead's idea of a tiger. Four of its six
+legs are obviously meant for walking, ending in small, thin barbs - perfect
+for climbing surfaces. Its forward two legs end in six tiers of oblique barbs,
+like the blade of a flamberge. Should it attack, it will always have some
+section of its tearing talons at a rending angle to the flesh it has
+targetted. As if that weren't enough, its triangular head has an armoured
+plate rising to cover its neck, ending at the bottom in wicked, shredding
+fangs and mandibles. 
+~
+ArriveMsg:	skitters in from
+LeaveMsg:	crawls off
+MobFlags:	101100010101000
+AffFlags:	1000001000000000
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	16
+	Qui:	10
+	Str:	18
+	Cha:	2
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	275
+	Weight:	150
+	Ballistic:	8
+	Impact:	8
+[SKILLS]
+	unarmed combat:	10
+	athletics:	10
+	stealth:	10
+	edged weapons:	10
+BREAK
+#45180
+Keywords:	invae insect guard guardian flesh-form bug scarab squat
+Name:	An invae spirit flesh-form guardian
+RoomDesc:$
+A wide, squat humanoid shaped bug guardian looms before you here. 
+
+~
+LookDesc:$
+It looks like nothing so much as a giant scarab shaped humanoid, perhaps with
+too many arms and legs, some of which resemble a normal humans, while others
+are obviously insectoid in nature. They quiver even while it is standing
+still, making it difficult to count them. Two large antennae sit posted atop
+its head, just above large, multi-faceted sets of eyes. Its shell seperates
+along its shoulders an arms, apparently for a display of how large it is,
+meant to intimidate and scare off intruders. If that isn't enough, it shakes
+its massive mandibles, which drip readily with a thick saliva-like substance.
+It seems to be sporting some sort of security armour, which has had most of
+its seems ripped open to allow for its massive body structure to fit snugly
+inside of it. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101100000111010
+AffFlags:	10001000000000
+Race:	Troll
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	16
+	Qui:	10
+	Str:	15
+	Cha:	2
+	Int:	10
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	280
+	Weight:	160
+	Ballistic:	1
+	Impact:	2
+[SKILLS]
+	unarmed combat:	10
+	edged weapons:	9
+	pole arms:	9
+	assault rifles:	9
+BREAK
+#45181
+Keywords:	queen invae insect hive
+Name:	The invae spirit hive queen
+RoomDesc:$
+An invae spirit queen the size of a tower sits coiled atop a spire here. 
+
+~
+LookDesc:$
+The invae spirit queen is the veritable embodiment of pain. Ridges of black
+exoskeletal plating cover her entire body like the armour of some monstrous
+tank. Like the other invae spirits, her eyes are large and multi-faceted, and
+have a smooth, glossy black appearance. Her mouth itself has two sets of
+mandibles, one set above the other, the larger of the pair the size of a
+trolls arms. Her cavernous maw is lined with rows of semi-translucent,
+needle-sharp teeth, which ooze and drip with thick, clear saliva. Six arms
+extend from her torso, two major pairs and one lesser pair consisting of the
+upper-most set, and they are fully functional - not atrophied in the least.
+Her thorax is the size of a car, and her equally massive abdomen hangs down
+off the side of her pedastal. Coiled around both her abdomen and pedastal is
+her tail, a heavy chain-like structure of layered blades that look as if it
+could flense a man where he stands. As it uncoils, you fear it may do exactly
+that. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	110100000111010
+AffFlags:	10001000000000
+Race:	Troll
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Sting
+[ATTRIBUTES]
+	Bod:	18
+	Qui:	18
+	Str:	20
+	Cha:	14
+	Int:	14
+	Wil:	14
+	Mag:	14
+[POINTS]
+	Height:	820
+	Weight:	600
+	Level:	14
+	Ballistic:	14
+	Impact:	14
+[SKILLS]
+	unarmed combat:	8
+	:	4
+	:	3
+BREAK
+#45182
+Keywords:	invae insect spirit drone bug black
+Name:	An invae spirit drone
+RoomDesc:$
+A two-meter long black drone crawls along the wall here. 
+
+~
+LookDesc:$
+It is a large, black-shelled drone. Its head is distended back from from its
+neck, which sweeps back slightly over its chitinous back plating. A long,
+whiplike tail flails back and forth behind it as it extends bluntly clawed
+hands and feet, pulling itself along the floor, wall, ceiling, or whatever it
+damn well pleases. Its eyes are huge and multi-faceted, and it doesn't seem to
+be bothered by the darkness that surrounds it. Below them is its maw, which is
+a ragged gash full of semi-translucent, needle-sharp teeth, and as it growls,
+it also drools a viscous saliva all over the floor and itself. 
+~
+ArriveMsg:	crawls in from
+LeaveMsg:	crawls
+MobFlags:	100100010101010
+AffFlags:	10001000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	8
+	Str:	12
+	Cha:	2
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	120
+	Ballistic:	8
+	Impact:	8
+[SKILLS]
+	unarmed combat:	8
+	athletics:	10
+	biotech:	8
+BREAK
+#45183
+Keywords:	invae insect spirit warrior soldier bug six-legged carapaced
+Name:	An invae spirit warrior
+RoomDesc:$
+A six-legged, carapaced invae spirit skitters about here. 
+
+~
+LookDesc:$
+It is a bug bigger than any bug you've ever laid eyes on. Its carapace is
+striped green and gold, like a chiphead's idea of a tiger. Four of its six
+legs are obviously meant for walking, ending in small, thin barbs - perfect
+for climbing surfaces. Its forward two legs end in six tiers of oblique barbs,
+like the blade of a flamberge. Should it attack, it will always have some
+section of its tearing talons at a rending angle to the flesh it has
+targetted. As if that weren't enough, its triangular head has an armoured
+plate rising to cover its neck, ending at the bottom in wicked, shredding
+fangs and mandibles. 
+~
+ArriveMsg:	skitters in from
+LeaveMsg:	crawls off
+MobFlags:	101100010101000
+AffFlags:	1000001000000000
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	16
+	Qui:	10
+	Str:	18
+	Cha:	2
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	275
+	Weight:	150
+	Ballistic:	8
+	Impact:	8
+[SKILLS]
+	unarmed combat:	10
+	athletics:	10
+	stealth:	10
+	edged weapons:	10
+BREAK
+#45184
+Keywords:	figure man bug shaman commander reverend john matthews
+Name:	Commander "Reverend" John Matthews
+RoomDesc:$
+A tall figure, cloaked in black, looms over the altar. 
+
+~
+LookDesc:$
+Here he is, the Reverend Commander John Matthews. He wears a black cloak and
+is dressed like a priest. He has a black shirt and pants, white collar, and a
+platinum cross that takes up a decent area of chest. Each button of his
+priestly shirt has a swastika enameled onto it. Every button. Including the
+ones on his cuffs. All six of them. Six? Oh, yes, see, he isn't exactly human
+any more. His face is distinctly insectoid, with a layer of chitin starting to
+grow in under his skin. His eyes, still human in shape, are faceted like those
+of a bee. When he opens his mouth to grin, a pair of quivering mandibles
+extends from the sides of his jaw. He turns to move toward you, and a long,
+whiplike tail emerges from beneath his heavy cloak. Four of his hands fold in
+prayer-form as he glares at you, and the last pair begin weaving a spell... 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10100111100001010
+AffFlags:	10001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	18
+	Qui:	18
+	Str:	18
+	Cha:	6
+	Int:	12
+	Wil:	12
+	Mag:	12
+[POINTS]
+	Height:	218
+	Weight:	117
+	Cash:	1250
+[SKILLS]
+	unarmed combat:	12
+	sorcery:	12
+	conjuring:	12
+	aura reading:	12
+	biotech:	12
+BREAK
+#45196
+Keywords:	walters lieutenant commander cell xiii humanis stern human intense paramilitary
+Name:	Lieutenant Commander Abram Walters
+RoomDesc:$
+A stern human with intense eyes wearing a paramilitary uniform stands here. 
+
+~
+LookDesc:$
+He looks like in another life he could have been a Nazi SS commander of great
+importance. He is built to perfect form, and has a short blonde hair which is
+cut short, not to mention chiseled features and baby blue eyes. He is dressed
+in a highly decorated Humanis uniform, which looks very similar to a Nazi
+uniform, even down to the SS skull and crossbones pin on the military
+officers' hat he wears. He walks with precise military bearing, and looks like
+he is going to jump into a goosestep march at any moment. 
+~
+ArriveMsg:	goose-steps in from
+LeaveMsg:	goose-steps out to the
+MobFlags:	1000000001100000111010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	178
+	Weight:	78
+	Ballistic:	3
+	Impact:	3
+	Cash:	225
+	Bank:	60
+[SKILLS]
+	unarmed combat:	12
+	pistols:	12
+	leadership:	10
+	assault rifles:	8
+	clubs:	8
+BREAK
+#45197
+Keywords:	soldier thug cell XIII humanis skinhead
+Name:	a Cell XIII soldier
+RoomDesc:$
+A skinhead thug wearing Humanis colors flaunts his rifle. 
+
+~
+LookDesc:$
+Dressed in the colors of Humanis, and carrying himself with the militancy of
+the infamous Cell XIII, he is trained with paramilitary precision, and loyal
+to his 'cause', the destruction of the magically oriented and the metahuman
+races. 
+~
+ArriveMsg:	goose-steps in from
+LeaveMsg:	shuffles out
+MobFlags:	1000000001100010111000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	3
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	172
+	Weight:	75
+	Cash:	95
+	Bank:	65
+[SKILLS]
+	unarmed combat:	8
+	assault rifles:	8
+	clubs:	8
+BREAK
+#45198
+Keywords:	cell xiii recruit skinhead thug
+Name:	A Cell XIII Recruit
+RoomDesc:$
+A skinhead thug walks around spouting propaganda as gospel. 
+
+~
+LookDesc:$
+Your run-of-the-mill Humanis thug, with his head shaved bald and sporting
+shiney steel-toed boots. A mindless drone and soldier for all intents and
+purposes, he lives to serve the cause, and his job is to spout racist gospel
+in second-hand accounts given to him by his superiors. He has no reason or
+willingness to think for himself, and as far as hes concerned, there are only
+a few simple requirements he must meet. Eat, sleep, shit and kill. Hes not
+currently eating anything, and he doesn't look like hes asleep, and you're
+really hoping that hes not currently taking a dump... so you may want to watch
+yourself. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001011110011000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	6
+	Cha:	2
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	75
+	Cash:	75
+	Bank:	45
+[SKILLS]
+	unarmed combat:	7
+	assault rifles:	7
+	clubs:	7
+BREAK
+#45199
+Keywords:	cell XIII guard humanis thug
+Name:	A Cell XIII guard
+RoomDesc:$
+A thug in a Humanis uniform stands here guarding the entrance. 
+
+~
+LookDesc:$
+A bald headed skinhead thug-type, recruited from the streets of the Barrens
+and taught how to be a good hateful bigot, and how to kill mercilessly, those
+who threaten his paradigm. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001111110011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	6
+	Cha:	2
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	169
+	Weight:	80
+	Cash:	75
+	Bank:	55
+[SKILLS]
+	assault rifles:	6
+	unarmed combat:	6
+	clubs:	6
+BREAK
+END

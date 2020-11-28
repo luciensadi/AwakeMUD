@@ -1,0 +1,33 @@
+#39800
+Name:	che tentacle mobile limosine
+ShortDesc:	Che's Tentacle Mobile
+RoomDesc:	A limosine is parked here, with eight organic tentacles flailing about
+LongDesc:$
+Che's Tentacle Mobile zooms about, with tentacles flailing around the air. 
+~
+Inside:$
+The interior of Che's Tentacle Mobile is pretty creepy. The walls seem to be
+living, excreting various bodily fluids as they pulsate with life. A waterbed
+is in the center of the limo, underneath a suspended disco ball. 
+~
+InsideRear:$
+You are inside a boring vehicle.~
+Leaving:	It's job complete, Che's limosine drives off
+Arriving:	Looking for purity to extinguish, Che's limosine cruises from
+Handling:	2
+Speed:	200
+Accel:	10
+Body:	6
+Armour:	8
+Pilot:	0
+Sig:	2
+Autonav:	2
+Seating:	6
+SeatingBack:	0
+Load:	200
+Cost:	0
+Type:	2
+Flags:	0
+Engine:	3
+BREAK
+END

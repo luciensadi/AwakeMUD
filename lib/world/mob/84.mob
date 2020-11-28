@@ -1,0 +1,1991 @@
+#8400
+Keywords:	doctor surgeon adams cloaked renraku
+Name:	Doctor Adams
+RoomDesc:$
+A cloaked surgeon strolls up to you. 
+
+~
+LookDesc:$
+Doctor Adams is obviously not the head Doctor in the Arcology. If he was,
+someone would have heard of him, and you would have probably seen him
+at least once. As it is, you can only assume he is actually *more*
+important than the head doctor. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1100000000000000000000001001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	5
+	Cha:	3
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	67
+	Ballistic:	2
+	Impact:	1
+	Bank:	80
+[SKILLS]
+	biotech:	15
+BREAK
+#8401
+Keywords:	samurai red renraku heavily armed man
+Name:	a Red Samurai
+RoomDesc:$
+A heavily armed Red Samurai checks you over carefully. 
+
+~
+LookDesc:$
+The Red Samurai are Renraku's most elite and specialised guard force. Dressed
+in protective metallic grey armour, their rank is denoted by small streaks on
+the bright red sash that has set them out from other guards. In this case, all
+actual guards have a black streak at the base of the sash attachment. They are
+armed with superior firepower, and possess not only the training, but also the
+field experience of any government or military's finest. 
+~
+ArriveMsg:	enters silently from
+LeaveMsg:	heads
+MobFlags:	100000000010100011100000001000
+AffFlags:	1000000000000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	7
+	Str:	6
+	Cha:	3
+	Int:	7
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	179
+	Weight:	88
+	Level:	2
+	Ballistic:	8
+	Impact:	6
+	Bank:	100
+[SKILLS]
+	assault rifles:	9
+	unarmed combat:	6
+BREAK
+#8402
+Keywords:	lieutenant red samurai man renraku
+Name:	a Red Samurai Lieutenant
+RoomDesc:$
+A Red Samurai Lieutenant watches over you and his guards. 
+
+~
+LookDesc:$
+The Lieutenant watches over the guards in his patrol, and is held directly
+responsible for their actions and mistakes. Thus, he drills all of them to a
+degree no man would choose to swap with. The Lieutenant is marked out by a
+yellow streak across his red sash. 
+~
+ArriveMsg:	marches in from
+LeaveMsg:	leaves
+MobFlags:	100000000010101111100000001000
+AffFlags:	1000000000001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	11
+	Str:	10
+	Cha:	3
+	Int:	9
+	Wil:	9
+	Mag:	9
+[POINTS]
+	Height:	180
+	Weight:	96
+	Level:	3
+	Ballistic:	6
+	Impact:	6
+[SKILLS]
+	edged weapons:	11
+	sorcery:	6
+BREAK
+#8403
+Keywords:	huang sherman huge man darkly dressed renraku director
+Name:	Sherman Huang
+RoomDesc:$
+A huge, darkly-dressed man looms over you.
+
+~
+LookDesc:$
+Sherman Huang is known as one of the sternest directors, and stands
+without comparison as far as respect goes from Renraku's competitors.
+He towers at an impressive six and a half feet, dressed impeccably in
+extortionately priced designer clothes. His hair is forcefully tied
+back into a shining black ponytail, perfectly trimmed and groomed.
+Under his slightly tanned brow, his dark, positively black eyes stare
+out at you with the conviction of a concerned executioner.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	4
+	Str:	5
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Bank:	200
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#8404
+Keywords:	keratsu jonathan director handsome young man
+Name:	Jonathan Keratsu
+RoomDesc:$
+A devilishly handsome young man scans you quickly.
+
+~
+LookDesc:$
+Jonathan Keratsu is probably the one director everybody fears the most. 
+Keratsu is famous in the corporate grapevine for climbing to the top
+faster than anyone else around. While all the directors are notably
+hard and sinister, Keratsu has earned a reputation for being 
+unchallenged in the absolute evil department. Starting quite literally
+as a mail messenger, Keratsu has manipulated, shafted and stomped on
+enough people to finally get enough power to wipe them all out. He looks
+in top form, probably quick from the gym with his personal trainer,
+and almost says it out loud that he looks good. Evil, maniacal,
+ruthless and a consumate corporate genius, Keratsu loves no one. If
+Satan walked among us, he'd be this guy. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000101010100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	9
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	187
+	Weight:	76
+	Level:	2
+	Ballistic:	6
+	Impact:	8
+	Bank:	200
+[SKILLS]
+	unarmed combat:	8
+BREAK
+#8405
+Keywords:	powicke etsu director man intelligent
+Name:	Etsu Powicke
+RoomDesc:$
+An intelligent-looking man in shades turns towards you in interest.
+
+~
+LookDesc:$
+Etsu Powicke certainly enjoys a touch of mystery. Very few people know
+more than a smidgen about this guy, and those that do never mention it.
+He's noted as the most intelligent of the four "Big Guys," but never
+enjoys filling in this character. Often hiding behind his usual designer
+shades, Powicke is a private fascination of quite a few important people.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000010100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	7
+	Str:	8
+	Cha:	6
+	Int:	9
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	156
+	Weight:	56
+	Level:	1
+	Ballistic:	6
+	Impact:	7
+[SKILLS]
+	unarmed combat:	10
+BREAK
+#8406
+Keywords:	snurlson george chief executive man angry
+Name:	George Snurlson
+RoomDesc:$
+An angry looking man turns and growls at you, ruffling his expensive suit.
+
+~
+LookDesc:$
+George Snurlson is only well known, because of his run in with Jonathan
+Keratsu when the two switched jobs. Since then, the two are well known
+to confront each other on numerous occasions, but Keratsu's stranglehold
+on the company has forced Snurlson to back off. The guy looks obviously
+frustrated, probably by more than just his job. Under his silver-graphite
+suit, there's a suitable amount of uncool stirring.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000101010100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	8
+	Str:	9
+	Cha:	9
+	Int:	10
+	Wil:	8
+	Mag:	7
+[POINTS]
+	Height:	177
+	Weight:	89
+	Level:	3
+	Ballistic:	7
+	Impact:	7
+	Cash:	200
+[SKILLS]
+	unarmed combat:	9
+BREAK
+#8407
+Keywords:	barstow joan raven chief executive woman
+Name:	Joan Barstow
+RoomDesc:$
+A raven haired Chief Executive checks you over in curiosity.
+
+~
+LookDesc:$
+Joan Barstow has worked all her life to get here, and makes a point that
+people know this. "Megabitch" would be a generous understatement. This
+woman is obsessed with the throne of Renraku, and is only second to
+Keratsu as far as getting there goes. Her jet black hair sweeps gently
+over her neck and onto the sapphire blue collar of her suit. As you
+approach, she skims over you with a touch of concern and temptation.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000101010100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	9
+	Str:	7
+	Cha:	10
+	Int:	10
+	Wil:	9
+	Mag:	0
+[POINTS]
+	Height:	181
+	Weight:	46
+	Level:	3
+	Ballistic:	7
+	Impact:	7
+	Bank:	20
+[SKILLS]
+	unarmed combat:	10
+BREAK
+#8408
+Keywords:	carnet reynard charismatic director man
+Name:	Reynard Carnet
+RoomDesc:$
+A charismatic, well-dressed man approaches you calmly.
+
+~
+LookDesc:$
+Reynard Carnet is loved by everyone. Simple as that. Nobody here in the
+right mind or with a good sense of humour dislikes the man. He possesses
+a unique charm and charismatic air that few rival and all adore. He also
+takes to his own individual dress sense, combining numerous brilliant
+outfits rather than merely paying the bill and wearing them. Thus, he
+carries himself confidently, stylishly, and is admired by all who know
+him.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000101010100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	8
+	Str:	9
+	Cha:	7
+	Int:	9
+	Wil:	9
+	Mag:	6
+[POINTS]
+	Height:	156
+	Weight:	77
+	Level:	3
+	Ballistic:	7
+	Impact:	7
+	Bank:	200
+[SKILLS]
+	unarmed combat:	10
+BREAK
+#8409
+Keywords:	tangier lucinda snobby fragile executive woman
+Name:	Lucinda Tangier
+RoomDesc:$
+A snobby, yet fragile looking executive observes her colleagues carefully.
+
+~
+LookDesc:$
+Lucinda Tangier doesn't get along too well with her peers. Considered an
+utter snob, most of Renraku's employees prefer to jab at her in the dark
+than confront her anywhere else. Thus, as one can expect, she has turned
+into a dark, introspective bi-product of the twisted corporate atmosphere
+swirling around her. She looks especially fragile, though the realisation
+that she can fire almost anyone on this floor at any time helps get her
+through each day.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000101010100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	8
+	Str:	7
+	Cha:	8
+	Int:	9
+	Wil:	7
+	Mag:	4
+[POINTS]
+	Height:	178
+	Weight:	66
+	Level:	1
+	Ballistic:	7
+	Impact:	7
+	Bank:	100
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#8410
+Keywords:	lucifer corben twitching uncomfortable young man executive
+Name:	Corben Lucifer
+RoomDesc:$
+A twitching, uncomfortable young man stares at a hologram.
+
+~
+LookDesc:$
+Corben Lucifer shouldn't have been named by his parents. Since he was young,
+Corben has been the focus of predictable assault, and has developed not only
+an embarrasing twitch in his left eye, but also a severe social complex, a
+lethal cocktail of paranoia and schizophrenia. The only reason this man stands
+on this floor and not in the basement, is because of his utter genius in the
+world of computers. While people may frighten the shit out of him, computers
+are like a second brain. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000101010100010001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	76
+	Level:	1
+	Ballistic:	7
+	Impact:	7
+	Bank:	200
+[SKILLS]
+	unarmed combat:	6
+BREAK
+#8411
+Keywords:	dumont michael decorated stern red samurai captain man
+Name:	Michael Dumont
+RoomDesc:$
+A highly decorated and stern looking Red Samurai checks you out suspiciously.
+
+~
+LookDesc:$
+If the Red Samurai make you worry, you might as well leave now. Obviously,
+such a large group of some of the best soldiers in the world need a leader
+and experienced mentor. Well, here he stands. Michael Dumont is Renraku's
+most prized commander. He has never failed to date, or so Renraku claims,
+and is regarded on the authority in almost every miltary subject. He is
+dressed in the usual Samurai outfit, with three major differences. His red
+sash has every single mark on it, and a golden samurai blade embroidered
+at shoulder seam. His left eye has been replaced with a state-of-the-art
+infra-red smartlink model. And finally, Dumont is armed with about twice
+as many little gadgets and weapons as any Samurai you've come across up
+to now.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000010000010100000001010
+AffFlags:	1000000100000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	13
+	Str:	12
+	Cha:	6
+	Int:	9
+	Wil:	12
+	Mag:	10
+[POINTS]
+	Height:	184
+	Weight:	79
+	Level:	4
+	Ballistic:	9
+	Impact:	9
+	Bank:	200
+[SKILLS]
+	edged weapons:	10
+	sorcery:	5
+BREAK
+#8412
+Keywords:	pedestrian short man
+Name:	a pedestrian
+RoomDesc:$
+A short pedestrian tries to shuffle past you, keeping his head down.
+
+~
+LookDesc:$
+He really doesn't want the attention, mister. He just wants to get to
+his shops, pick up his little toys, and retreat to his dark little
+hole.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001100
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	4
+	Cha:	4
+	Int:	3
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	74
+	Impact:	1
+[SKILLS]
+	unarmed combat:	1
+BREAK
+#8413
+Keywords:	shopper busy
+Name:	a shopper
+RoomDesc:$
+A busy shopper rumbles towards you.
+
+~
+LookDesc:$
+These people are dangerous. The hardcore shoppers don't like humans; they
+don't like anyone. Stay outta their way.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	2
+	Str:	3
+	Cha:	2
+	Int:	1
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	149
+	Weight:	59
+	Impact:	1
+	Bank:	200
+[SKILLS]
+	unarmed combat:	2
+BREAK
+#8414
+Keywords:	employee renraku man
+Name:	a Renraku employee
+RoomDesc:$
+A Renraku employee strolls past you, more concerned with the job at hand.
+
+~
+LookDesc:$
+Although these people aren't exactly kings, they get paid an enormous salary
+compared to most hard workers in Seattle. Renraku enjoys its huge body of
+able, qualified and intelligent staff, and pampers them fittingly.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	4
+	Cha:	5
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	173
+	Weight:	98
+	Cash:	100
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#8415
+Keywords:	executive renraku man
+Name:	a Renraku Executive
+RoomDesc:$
+A Renraku executive scans you quickly and returns to his work.
+
+~
+LookDesc:$
+Renraku Executives, despite what you may have heard, are scumbags. The
+chief execs are all straight from Hell's 7th Bolgia, and it trickles
+down through all their henchmen. They dress sharp, they talk sharp,
+and for all practical purposes, they are sharp.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	4
+	Cha:	6
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	163
+	Weight:	79
+	Level:	1
+	Ballistic:	2
+	Bank:	400
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#8416
+Keywords:	scientist renraku whitecloaked
+Name:	a Renraku scientist
+RoomDesc:$
+A whitecloaked scientist checks over the monitor readings carefully.
+
+~
+LookDesc:$
+These scientists actually enjoy their work. Wouldn't you? They get
+one of the most powerful corps in the world's financing, the best
+equipment, and a setting where they can focus on what they enjoy
+24/7. Still, many of these guys are qualified in extremely dangerous
+fields, from bacterial agents to warfare artillery.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	3
+	Cha:	3
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	164
+	Weight:	69
+	Level:	1
+	Ballistic:	2
+	Impact:	1
+[SKILLS]
+	unarmed combat:	2
+BREAK
+#8417
+Keywords:	chemist renraku short man
+Name:	a Renraku chemist
+RoomDesc:$
+A short chemist checks his equipment before the next experiment.
+
+~
+LookDesc:$
+Chemists aren't usually very good looking, and this guy doesn't help break the
+mould. However, at his job, he's in the top of his class, the central reason
+for his being here. Renraku pays him well, and he gives them top of the line
+work on any number of scientific exploits. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000000010001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	5
+	Str:	4
+	Cha:	3
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	154
+	Weight:	70
+	Ballistic:	1
+	Impact:	2
+	Cash:	100
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#8418
+Keywords:	engineer renraku man
+Name:	a Renraku Engineer
+RoomDesc:$
+A scruffy looking engineer grins at you under a gigantic, unnamed structure.
+
+~
+LookDesc:$
+Despite Renraku's forceful reforms to keep all staff immaculately dressed and
+groomed, engineers will be engineers. And that's that.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	5
+	Cha:	2
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	89
+	Ballistic:	2
+	Impact:	1
+	Bank:	20
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#8419
+Keywords:	harley sales executive maple
+Name:	Harley
+RoomDesc:$
+Harley, the Maple Sales Executive smiles at you. 
+
+~
+LookDesc:$
+Harley looks like he could suck a golf ball through a foot-long garden hose.
+Or something along those lines.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	88
+[SKILLS]
+BREAK
+#8420
+Keywords:	chris sales executive
+Name:	Chris
+RoomDesc:$
+A Body + Tech sales executive waits to attend to your order.
+
+~
+LookDesc:$
+Chris probably hasn't worked here all that long, though he certainly looks
+enthusiastic enough to help you with whatever queries you might have.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#8421
+Keywords:	executive man sales ares
+Name:	a sales executive
+RoomDesc:$
+An Ares sales executive stands behind the counter. 
+
+~
+LookDesc:$
+He doesn't look like the most interesting of sorts, and not exactly a big fan
+of small talk over the counter. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#8422
+Keywords:	hashimoto man
+Name:	Hashimoto
+RoomDesc:$
+Hashimoto greets you at the entrance with a neat holo-menu.
+
+~
+LookDesc:$
+Hashimoto is the proud owner of one of the most successful oriental
+restaurants in the Arcology's shopping mall area. He's carved out
+a nice living here, and the clientele is always polite and well dressed.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#8423
+Keywords:	chen xu man
+Name:	Chen Xu
+RoomDesc:$
+Chen Xu waits by the large wall-menu for your order.
+
+~
+LookDesc:$
+The Green Village is run by this man, and while they compete heavily
+with Hashimoto's the two restaurants have learned to live with each other
+and make a nice living, milking the varying tastes of Renraku's high-class
+clientele.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#8424
+Keywords:	jude woman
+Name:	Jude
+RoomDesc:$
+Jude strolls around the clothes racks, making sure you know what you want.
+
+~
+LookDesc:$
+As one would expect, Jude is dressed in the latest fashions and sports an
+ultra-chic hairstyle. Unfortunately, this also brings about a snotty, high
+class aloof that sweeps around her like a dank cloud.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#8425
+Keywords:	sam sybrespace employee man
+Name:	Sam
+RoomDesc:$
+A Sybrespace employee named Sam sides up to you with a smile.
+
+~
+LookDesc:$
+Being what it is, Sybrespace attracts a weird hybrid of a law-abiding
+citizen and a high-class decker. Unfortunately, that creates a sort
+of snotty, arrogant weed like the dude smiling at you right now.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#8426
+Keywords:	keith purple haze waiter
+Name:	Keith
+RoomDesc:$
+A Purple Haze waiter strolls up to you with a smile.
+
+~
+LookDesc:$
+Keith is the name on his nametag, and hopefully that's all
+you'll need to know about him.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#8427
+Keywords:	charlie docwagon employee man
+Name:	Charlie
+RoomDesc:$
+Charlie, a DocWagon employee waits behind the sales desk.
+
+~
+LookDesc:$
+The guy looks like utter slime, but to be honest, he sells one of
+the most essential items in the city. Swallow your pride.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#8428
+Keywords:	pharmacist woman quickway
+Name:	a pharmacist
+RoomDesc:$
+A Quickway pharmacist stands behind the counter. 
+
+~
+LookDesc:$
+The pharmacist looks like a nice enough girl, and she doesn't
+seem to have any problem selling you enormous amounts of legal drugs.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#8429
+Keywords:	droid cleaner small
+Name:	a cleaner droid
+RoomDesc:$
+A small-sized cleaner droid whirrs silently past you. 
+
+~
+LookDesc:$
+The cleaner droids are the backbone to Renraku's extraordinary cleanliness,
+and they continuously roam the entire Arcology, never stopping to rest.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000010000000001100
+AffFlags:	1000001000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Sting
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	1
+	Str:	3
+	Cha:	1
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	48
+	Impact:	1
+[SKILLS]
+	unarmed combat:	1
+BREAK
+#8430
+Keywords:	technician renraku man dirty
+Name:	a Renraku technician
+RoomDesc:$
+A Renraku technician works on a huge lumbering machine above you.
+
+~
+LookDesc:$
+The technician is covered in grime and dirt, but that comes naturally
+with his job. He works tirelessly to fix, tweak and remodulate any
+glitches or errors that come up in the company's products.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	6
+	Cha:	1
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	67
+	Ballistic:	1
+	Impact:	2
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#8431
+Keywords:	decker renraku man
+Name:	a Renraku decker
+RoomDesc:$
+A Renraku Decker sits at his terminal, locked into the central mainframe. 
+
+~
+LookDesc:$
+Renraku deckers are considered to have the best jobs in the world. With
+the company at the top of the computer-age advances, deckers working under
+its name get the absolute best equipment to work with. They are kitted out
+with top-of-the-line gear and a fiber-optic connection to a high-speed
+turtle.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	178
+	Weight:	78
+	Level:	1
+	Ballistic:	2
+	Impact:	2
+[SKILLS]
+	unarmed combat:	3
+	computers:	7
+	electronics:	8
+BREAK
+#8432
+Keywords:	man young cyber kid cyberkid emaciated clubber
+Name:	a cyberkid
+RoomDesc:$
+An emaciated, flourescently dressed young man dashes around you. 
+
+~
+LookDesc:$
+This kid can't be more than about 20 or so, but he's here, in the depth of the
+club quarter, spending more time in the flickering shadows of his favourite
+hangout than anywhere else. There are legions of these people, taking the city
+by night. Corporations aren't keen on having these sorts around, but they're
+undeniably the core of a lot of goings on when the sun goes down. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	11000000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	1
+	Cha:	4
+	Int:	2
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	56
+	Cash:	85
+[SKILLS]
+	unarmed combat:	1
+	street etiquette:	1
+BREAK
+#8433
+Keywords:	girl young clubber kid
+Name:	a young girl
+RoomDesc:$
+A young girl in huge, baggy clothing darts through the room. 
+
+~
+LookDesc:$
+She spends her time here with her friends, either from outside or purely from
+a crew of people she met while going out. Dressed in all manner of fashions,
+all at once, she's indicative of the confused yet determined undercurrent in
+today's youth. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	2
+	Str:	1
+	Cha:	5
+	Int:	3
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	90
+	Weight:	25
+	Impact:	1
+	Cash:	90
+[SKILLS]
+	unarmed combat:	1
+	street etiquette:	1
+BREAK
+#8434
+Keywords:	tourist man woman fat big bulbous
+Name:	a big fat tourist
+RoomDesc:$
+A fairly large tourist waddles past you quietly. 
+
+~
+LookDesc:$
+They cannot be avoided. Even with intensive countermeasures both outside and
+within the arcology, even the mighty Renraku Corporation cannot stop these
+evil, greasy little devils finding their way into the mall. Admittedly, if
+they go any further than that, they get shot, and rightly so. But they do
+provide a large financial backbone to the everyday trading in the city, so
+they get some slack. But not much. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	1
+	Str:	3
+	Cha:	3
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	90
+	Impact:	1
+	Cash:	142
+[SKILLS]
+	unarmed combat:	1
+BREAK
+#8435
+Keywords:	silent ninja shimmering form
+Name:	a silent ninja
+RoomDesc:$
+A shimmering form stands here, obscured from view. 
+
+~
+LookDesc:$
+For some reason, you cannot focus on the outline or the details of the person
+standing before you. It's as if your eyes are clouded in water or some blurred
+substance. Exceedingly rare, you have only seen such figures around some of
+the most important figures in the world today. Be on your guard. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001010
+AffFlags:	10001000001010
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	9
+	Str:	8
+	Cha:	3
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	65
+	Level:	3
+	Ballistic:	4
+	Impact:	6
+[SKILLS]
+	edged weapons:	10
+	unarmed combat:	6
+BREAK
+#8436
+Keywords:	spider drone mechanical
+Name:	a spider drone
+RoomDesc:$
+A large, mechanical spider is working here. 
+
+~
+LookDesc:$
+This creature looks like an immense metal spider.  The body is an ellipse
+about 2.5 meters around, and there are 8 telescoping arms attached to it.
+Each arm ends in some sort of a tool: a saw, nailgun, hammer, and so on. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000000000000001100
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	6
+	Cha:	1
+	Int:	4
+	Wil:	20
+	Mag:	0
+[POINTS]
+	Height:	250
+	Weight:	180
+[SKILLS]
+BREAK
+#8437
+Keywords:	robot skelebot humanoid
+Name:	a skelebot
+RoomDesc:$
+A humanoid robot patrols here. 
+
+~
+LookDesc:$
+This drone has the appearance of a large, metal human skeleton.  The head is
+particularly frightening, being essentially a grinning skull with glowing red
+eyes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000011000000011000000111000
+AffFlags:	1000000000001000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Crush
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	1
+	Int:	6
+	Wil:	20
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	150
+	Ballistic:	7
+	Impact:	7
+[SKILLS]
+	:	3
+	unarmed combat:	4
+	firearms:	4
+BREAK
+#8438
+Keywords:	gun sentry
+Name:	a sentry gun
+RoomDesc:$
+A sentry gun tracks your movement. 
+
+~
+LookDesc:$
+It appears to be a small turret with a light machine gun mounted on it.  This
+sentry gun is probably run by sophisticated target aquisition algorithms
+that... who am I kidding, you don't care.  Ratatatatat! 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000001000000011000000111010
+AffFlags:	1000000100001000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	6
+	Str:	8
+	Cha:	1
+	Int:	4
+	Wil:	14
+	Mag:	0
+[POINTS]
+	Height:	40
+	Weight:	20
+	Ballistic:	6
+	Impact:	6
+[SKILLS]
+	unarmed combat:	5
+	firearms:	5
+	:	3
+BREAK
+#8439
+Keywords:	spirit elemental twisted guardian
+Name:	a guardian spirit
+RoomDesc:$
+A twisted looking elemental hovers here. 
+
+~
+LookDesc:$
+This fire elemental looks as if the summoner was insane - it is twisted and
+appears to be in a constant state of agony and pain.  Which it would surely
+like to share with you. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11000001100000101010
+AffFlags:	1000001000
+Race:	Spirit
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	300
+	Weight:	0
+[SKILLS]
+	unarmed combat:	7
+	:	1
+BREAK
+#8440
+Keywords:	soldier ucas
+Name:	a UCAS soldier
+RoomDesc:$
+A soldier stands guard here. 
+
+~
+LookDesc:$
+You see a member of the UCAS military.  These guys were called in to help with
+the arcology situation when it became clear that the Metroplex guard was
+woefully understaffed. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	85
+	Cash:	150
+[SKILLS]
+	firearms:	5
+	unarmed combat:	4
+BREAK
+#8441
+Keywords:	swirl ic ice
+Name:	a swirl of zeroes and ones
+RoomDesc:$
+A swirl of zeroes and ones floats here. 
+
+~
+LookDesc:$
+You stare at this swirling mass of 1's and 0's.  It's very hypnotic. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	6
+[SKILLS]
+	unarmed combat:	6
+BREAK
+#8442
+Keywords:	man lunatic 
+Name:	a lunatic
+RoomDesc:$
+A man sits here muttering to himself. 
+
+~
+LookDesc:$
+This man looks terrible.  He is unwashed and clearly undernourished as well.
+But the creepiest thing about him is that he is constantly repeating "...the
+machines... ...the machines..." under his breath as he scans the room. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	2
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	60
+	Cash:	40
+[SKILLS]
+BREAK
+#8443
+Keywords:	ancient elven soldier andriel knight
+Name:	A Knight of Andriel
+RoomDesc:$
+An elven soldier in ancient moonsilver chainmail guards the room. 
+
+~
+LookDesc:$
+Wearing a suit of plate and chain, with a helmet that masks the face, this elf
+stands guard over Harlequin's office, a living piece of the Fourth World of
+old.  His moonsilver chainmail suit gives an unworldly white illusory glow, an
+effect of the sheen of the rare metal.  His build is that of an athletic elf.
+At the collar is the insignia of the Knights of Andriel, the ancient guardians
+of the realm of Tirlannon. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	45
+	Qui:	10
+	Str:	40
+	Cha:	10
+	Int:	9
+	Wil:	40
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Ballistic:	60
+	Impact:	60
+[SKILLS]
+	edged weapons:	50
+BREAK
+#8444
+Keywords:	doctor
+Name:	a doctor
+RoomDesc:$
+A doctor stands here examining some schematics on a wallscreen. 
+
+~
+LookDesc:$
+The doctor is a kindly looking older woman.  Which is completely at odds with
+her apparent actions and location.  The most unusual thing about her is that
+she has a pair of shocking green cybereyes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	155
+	Weight:	70
+[SKILLS]
+	:	8
+	biotech:	8
+	:	8
+BREAK
+#8445
+Keywords:	samurai man guard converted
+Name:	Timmy the non-gender specific Aardvark
+RoomDesc:$
+A deadly looking man gaurds this area. 
+
+~
+LookDesc:$
+Judging by his insignia, this man was at one time a Renraku security asset.
+Since he is now part of the occupying force of the arcology, you're pretty
+sure he is serving a new master.  Who that may be, you have no idea.  This
+guard has brilliant solid blue cybereyes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001000000111000
+AffFlags:	1000000010001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	7
+	Str:	1
+	Cha:	3
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	80
+	Level:	5
+	Bank:	3000
+[SKILLS]
+	firearms:	5
+	armed combat:	4
+	:	1
+	unarmed combat:	5
+BREAK
+#8446
+Keywords:	boy lanky tall guy
+Name:	a go-go boy
+RoomDesc:$
+A tall lanky guy bounces around you. 
+
+~
+LookDesc:$
+Always up for a good time, almost annoyingly so, these guys will forever keep
+clubs populated. Usually shirtless, and leaving a less than pleasant trail of
+sweat and charm behind them, they glide in and out of conversations and crowds
+with utmost ease. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	3
+	Cha:	5
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	70
+[SKILLS]
+BREAK
+#8447
+Keywords:	samurai red tall security guard man renraku
+Name:	a Red Samurai security guard
+RoomDesc:$
+A tall Red Samurai ushers you towards the security checkpoint. 
+
+~
+LookDesc:$
+These Samurai are enlisted specifically for security check duty, hence their
+even increased diligence and attention in conducting even minor searches.
+Security within the Arcology is one of the company's most prized possessions,
+and it is this guy's job to see it stays that way. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	8
+	Str:	8
+	Cha:	3
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	6
+	Impact:	5
+	Bank:	10
+[SKILLS]
+	unarmed combat:	6
+	sub-machine guns:	6
+BREAK
+#8448
+Keywords:	concierge man smart renraku
+Name:	the Concierge
+RoomDesc:$
+A smartly dressed Concierge stands behind the counter. 
+
+~
+LookDesc:$
+Impeccable in movement and manner, this job demands utmost courtesy and
+understanding in the face of even violent customers. So as far as finding a
+place to stay, you could do a lot worse than talking to this guy. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#8449
+Keywords:	clenrys clerk
+Name:	a Clenry's Clerk
+RoomDesc:$
+A Clenry's clerk is here, polishing a stainless steel fridge. 
+
+~
+LookDesc:$
+He is buffing away so hard he's going to wear the metal through, but he still
+seems to be getting nowhere. Maybe he needs a distraction. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#8700
+Keywords:	Red Samuri Security High
+Name:	A Red Samuri Security Officer
+RoomDesc:$
+A Red Samuri Officer in an armored containment suit surveys the area here. 
+
+~
+LookDesc:$
+The best of the best, that doesn't even begin to describe this guy. Hand
+picked by Renraku to guard the Corps power stations this man is a prime
+example of Security at it's best. His large suit protects him from the minor
+levels of radiation he experiences on a day to day basis without limiting his
+mobility. His hard demeanor and blank expression show him to be very dedicated
+to his job. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000101011100000111010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	12
+	Str:	9
+	Cha:	3
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	214
+	Weight:	150
+	Level:	1
+	Ballistic:	12
+	Impact:	12
+[SKILLS]
+	assault rifles:	12
+	unarmed combat:	12
+BREAK
+#8701
+Keywords:	Samurai Red Security Officer High
+Name:	A Red Samuri Security Officer
+RoomDesc:$
+A Red Samurai Officer in an armoured containment suit surveys the area. 
+
+~
+LookDesc:$
+The best of the best, that doesn't even begin to describe this guy. Hand
+picked by Renraku to guard the Corps power stations this man is a prime
+example of Security at it's best. His large suit protects him from the minor
+levels of radiation he experiences on a day to day basis without limiting his
+mobility. His hard demenor and blank expression show him to be very dedicated
+to his job. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000101011100000111010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	14
+	Qui:	17
+	Str:	19
+	Cha:	3
+	Int:	8
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	214
+	Weight:	150
+	Level:	1
+	Ballistic:	16
+	Impact:	16
+[SKILLS]
+	assault rifles:	30
+	unarmed combat:	12
+BREAK
+#8702
+Keywords:	security guard pudgy
+Name:	A pudgy security guard
+RoomDesc:$
+A pudgy security guard sits behind his desk eating a donut. 
+
+~
+LookDesc:$
+He's a classic stereotypical security guard, he's fat, he's white, and he has
+donut glaze all over his face. He looks to be in his early 50's maybe and not
+counting the large gut, he seems to be in decent physical condition. The gun
+at his side proves that he may not be totally useless. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000010001000000000011010
+AffFlags:	1
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	5
+	Impact:	6
+[SKILLS]
+	pistols:	12
+	corporate etiquette:	12
+	police procedures:	12
+	unarmed combat:	12
+BREAK
+#8703
+Keywords:	security guard pudgy
+Name:	A pudgy security guard
+RoomDesc:$
+A pudgy security guard sits behind his desk eating a donut. 
+
+~
+LookDesc:$
+He's a classic stereotypical security guard, he's fat, he's white, and he has
+donut glaze all over his face. He looks to be in his early 50's maybe and not
+counting the large gut, he seems to be in decent physical condition. The gun
+at his side proves that he may not be totally useless. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000010001000000000011010
+AffFlags:	1
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	5
+	Impact:	6
+[SKILLS]
+	pistols:	12
+	corporate etiquette:	12
+	police procedures:	12
+	unarmed combat:	12
+BREAK
+END

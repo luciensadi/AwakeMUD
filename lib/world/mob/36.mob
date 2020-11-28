@@ -1,0 +1,270 @@
+#3600
+Keywords:	Cain huge troll
+Name:	Cain
+RoomDesc:$
+Cain looks you over.
+
+~
+LookDesc:$
+The massive troll who stands before you is a unique, if not terrifying, sight.
+His obviously sculpted muscles bulge when he moves, and move he does.  His quick
+movements infer to you that his neurons have had a little cyber boosted.  The
+most unusual thing about Cain isn't his lack of weapons, but his clothing. Cain
+wears only a leather loincloth...bolted to his waist.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1100000101000
+AffFlags:	1000000000000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Crush
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	8
+	Str:	9
+	Cha:	3
+	Int:	3
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	90
+	Ballistic:	9
+	Impact:	7
+	Cash:	800
+[SKILLS]
+	unarmed combat:	10
+	armed combat:	5
+BREAK
+#3601
+Keywords:	Overlord Red Dragon Lieutenant
+Name:	Overlord
+RoomDesc:$
+Overlord examines you but dismisses you as a threat.
+
+~
+LookDesc:$
+Overlord is the controlling lieutenant for the Red Dragons.  His closely cropped
+hair and trim body are the remnants from his military days.  Overlord is not
+a outwardly powerful person.  Yet, he does command respect.  And the other Red
+Dragons obey, often with deadly results.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1100000001000
+AffFlags:	1000000000000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	9
+	Str:	9
+	Cha:	4
+	Int:	3
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	189
+	Weight:	80
+	Ballistic:	7
+	Impact:	5
+	Cash:	600
+[SKILLS]
+	cyber implants:	8
+	unarmed combat:	6
+BREAK
+#3602
+Keywords:	Johnny boy orc Iron Legion ganger
+Name:	Johnny Boy
+RoomDesc:$
+Johnny Boy is here pretending that he can dance.
+
+~
+LookDesc:$
+Never seen without his Iron Legion apparel, Johnny Boy is next in command under
+Overlord.  His tall lanky body makes this orc appear rather scrawny, but you
+know that if he has reached this rank in the Iron Legion he can hold his own.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001100000001000
+AffFlags:	1000000000000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	4
+	Str:	3
+	Cha:	2
+	Int:	2
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	7
+	Impact:	5
+	Cash:	500
+	Bank:	1000
+[SKILLS]
+	firearms:	4
+	unarmed combat:	3
+BREAK
+#3603
+Keywords:	Sigmund Red Dragon trainer teacher
+Name:	Sigmund
+RoomDesc:$
+Sigmund looks over you as he hums a phat tune. 
+
+~
+LookDesc:$
+The immense scaly body of Sigmund puts you in awe.  As you sweep you gaze over
+to him he raises up on his hind legs and stands at least 15 meters tall.  One
+horn has been broken off of his head and the other is twisted into an
+unnatural gnarled twirl.  His tail is at least 13 meters longs and sweeps back
+and forth over the stone floor raking small clouds of granite dust as it goes.
+Sigmund slowly beats his wings to steady himself on his back legs as he look
+over you. A huge gold chain hangs around his neck, a large dollar symbol
+attached to it, swinging casually from his movement. A black and white bandana
+is wrapped around his head, and he shoots you a gang sign. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000010000101110100000001110
+AffFlags:	0
+Race:	Dragon
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	25
+	Qui:	22
+	Str:	28
+	Cha:	18
+	Int:	21
+	Wil:	30
+	Mag:	10
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	17
+	Impact:	15
+	Karma:	104
+[SKILLS]
+	unarmed combat:	10
+BREAK
+#3604
+Keywords:	Ivil Krushya Red Dragon
+Name:	Ivil Krushya
+RoomDesc:$
+Ivil Krushya is here plotting.
+
+~
+LookDesc:$
+A terror to all around him.  Ivil is the main tactician for the Red Dragons.
+It is up to Ivil to decide when, where, and what the Dragons attack.  Although
+only a human, Ivil has a powerful build that leads back to his Russian
+heritage.  He peers at you from behind chromed cybereyes and a small smile is
+visible beneath his heavy greying beard and mustache. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000101000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	6
+	Str:	6
+	Cha:	2
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	195
+	Weight:	95
+	Ballistic:	10
+	Impact:	8
+	Karma:	20
+[SKILLS]
+	firearms:	6
+	unarmed combat:	4
+BREAK
+#3605
+Keywords:	doberman dog pinscher
+Name:	a doberman pinscher
+RoomDesc:$
+A menacing black dog snarls as at you as you enter.
+
+~
+LookDesc:$
+A muscular black dog.  Froth drips from its mouth and he looks perfectly willing to perform a tracheotomy on you, the hard way.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	5
+	Str:	6
+	Cha:	1
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Impact:	2
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#3606
+Keywords:	ganger red dragon
+Name:	a Red Dragon ganger
+RoomDesc:$
+A ganger wonders why you are here.
+
+~
+LookDesc:$
+This ganger is short, squat, and very pissed off to find you in his den of
+evil. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	3
+	Int:	3
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	90
+	Ballistic:	4
+	Impact:	2
+	Cash:	300
+[SKILLS]
+	unarmed combat:	4
+	firearms:	5
+BREAK
+END

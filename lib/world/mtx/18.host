@@ -1,0 +1,23 @@
+#1800
+Name:	Nybbles and Bytes Customer Access Host
+Keywords:	unfinished host
+Description:$
+This host is very simply designed, lacking the now common sculpting of true
+matrix hosts. It is merely a black void stretching in all directions. Icons
+are dotted through, either another customer, a datafile to test on and even a
+few low grade IC that would struggle to give even the weakest decker a run for
+their money. 
+~
+Parent:	0
+Colour:	0
+Security:	5
+Difficulty:	1
+Access:	5
+Control:	5
+Index:	4
+Files:	4
+Slave:	4
+Type:	Datastore
+Search:	records
+BREAK
+END

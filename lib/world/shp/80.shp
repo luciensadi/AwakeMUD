@@ -1,0 +1,225 @@
+#8000
+Keeper:	8024
+ProfitBuy:	1.000000
+ProfitSell:	1.000000
+Random:	5
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	8011
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	8010
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	684
+		Type:	Always
+		Stock:	0
+BREAK
+#8010
+Keeper:	8011
+ProfitBuy:	1.000000
+ProfitSell:	0.000000
+Random:	5
+Open:	0
+Close:	28
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	Trying to sell something you don't have?
+NoNuyen:	Seems your cred balance is a bit low...
+DoesntBuy:	Sorry, chummer, we don't buy.
+Buy:	That'll be %d.
+Sell:	Here ya go, %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 3]
+		Vnum:	936
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	941
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	609
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	605
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	604
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	603
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	606
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	8011
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	8010
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	684
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	8005
+		Type:	Always
+		Stock:	0
+BREAK
+#8015
+Keeper:	8013
+ProfitBuy:	1.000000
+ProfitSell:	0.000000
+Random:	5
+Open:	0
+Close:	28
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	Trying to sell something you don't have?
+NoNuyen:	Seems your cred balance is a bit low...
+DoesntBuy:	Sorry, chummer, we don't buy.
+Buy:	That'll be %d.
+Sell:	Here ya go, %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 14]
+		Vnum:	8011
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	8010
+		Type:	Always
+		Stock:	0
+BREAK
+#8020
+Keeper:	8012
+ProfitBuy:	1.000000
+ProfitSell:	0.000000
+Random:	5
+Open:	0
+Close:	28
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	Trying to sell something you don't have?
+NoNuyen:	Seems your cred balance is a bit low...
+DoesntBuy:	Sorry, chummer, we don't buy.
+Buy:	That'll be %d.
+Sell:	Here ya go, %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 16]
+		Vnum:	8011
+		Type:	Always
+		Stock:	0
+	[SELL 17]
+		Vnum:	8010
+		Type:	Always
+		Stock:	0
+	[SELL 18]
+		Vnum:	8009
+		Type:	Always
+		Stock:	0
+	[SELL 19]
+		Vnum:	8008
+		Type:	Always
+		Stock:	0
+	[SELL 20]
+		Vnum:	8007
+		Type:	Always
+		Stock:	0
+BREAK
+#8025
+Keeper:	8014
+ProfitBuy:	1.000000
+ProfitSell:	0.000000
+Random:	5
+Open:	0
+Close:	28
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	Trying to sell something you don't have?
+NoNuyen:	Seems your cred balance is a bit low...
+DoesntBuy:	Sorry, chummer, we don't buy.
+Buy:	That'll be %d.
+Sell:	Here ya go, %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 21]
+		Vnum:	8011
+		Type:	Always
+		Stock:	0
+	[SELL 22]
+		Vnum:	8010
+		Type:	Always
+		Stock:	0
+BREAK
+#8043
+Keeper:	8020
+ProfitBuy:	1.000000
+ProfitSell:	0.000000
+Random:	5
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	It seems you don't have enough credits to buy that.
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d creds.
+Sell:	Here's your %d creds.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 23]
+		Vnum:	8010
+		Type:	Always
+		Stock:	0
+	[SELL 24]
+		Vnum:	8011
+		Type:	Always
+		Stock:	0
+	[SELL 25]
+		Vnum:	8012
+		Type:	Always
+		Stock:	0
+BREAK
+END

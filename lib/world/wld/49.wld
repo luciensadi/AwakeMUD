@@ -1,0 +1,2883 @@
+#4900
+Name:	An abandoned warehouse in the Elven District.
+Desc:$
+   A musky, dirty old warehouse from the 20's, with litter, smashed beer
+bottles, cigarette butts, empty beer bottles, smashed cardboard boxes, and
+burned-out BTL chips strewn about.
+   You see elven street kids, who you figure are castaways, runaways, and
+other examples of the harsh side of life in this awakened world. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	4.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+North side of warehouse.
+~
+	ToVnum:	4901
+	Flags:	0
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+Abernathy Street SE
+~
+	ToVnum:	4903
+	Flags:	0
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+South end of warehouse
+~
+	ToVnum:	4902
+	Flags:	0
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4901
+Name:	North side of warehouse
+Desc:$
+   As you walk up to the northern end of the warehouse, you see a couple of
+mattresses and couches, tattered and torn, and a few half-empty beer bottles.
+Right near the northwestern corner of the warehouse is a dirty, trash filled
+hovel, festooned with fetishes. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	4.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	4900
+	Flags:	0
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4902
+Name:	South end of the warehouse.
+Desc:$
+   You see a bit of litter strewn about here, and several elven street urchins
+who try and call this place home. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	4.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+An abandoned warehouse.
+~
+	ToVnum:	4900
+	Flags:	0
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4903
+Name:	Abernathy Street SE
+Desc:$
+   Abernathy Street SE runs from North to South, cutting through the heart of
+Tarislar, the elven district of the Puyallup barrens.  Not a good neighborhood
+for some of the worst Seattle area gangs, such as the Silent P's, and the
+Black Rains claim these streets as theirs. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Abernathy St. SE
+~
+	ToVnum:	4904
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Abernathy St. SE
+~
+	ToVnum:	4905
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+An abandoned warehouse.
+~
+	ToVnum:	4900
+	Flags:	0
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4904
+Name:	Abernathy St. SE
+Desc:$
+   Abernathy Street SE runs from North to South, cutting through the heart of
+Tarislar, the elven district of the Puyallup barrens.  Not a good neighborhood
+for some of the worst Seattle area gangs, such as the Silent P's, and the
+Black Rains claim these streets as theirs. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Abernathy St. SE
+~
+	ToVnum:	4906
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Abernathy St. SE
+~
+	ToVnum:	4903
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4905
+Name:	Abernathy Street SE
+Desc:$
+   Abernathy Street SE runs from North to South, cutting through the heart of
+Tarislar, the elven district of the Puyallup barrens.  Not a good neighborhood
+for some of the worst Seattle area gangs, such as the Silent P's, and the
+Black Rains claim these streets as theirs. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Abernathy St. SE
+~
+	ToVnum:	4903
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Abernathy St. SE
+~
+	ToVnum:	4907
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4906
+Name:	Intersection of SE Abernathy St. and Swan Blvd.
+Desc:$
+   You look around and see a very busy corner for this particular part of the
+Puyallup Barrens.  Cars, motorcycles, and various sirens fill the air with an
+unnerving background cacophony.  Despite the fact that this is an elven
+neighborhood, you do not feel safe, because you know that you are entering
+Tarislar, an area with a history of misery. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	4908
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+SE Abernathy Street.
+~
+	ToVnum:	4904
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4907
+Name:	SE Abernathy Street
+Desc:$
+   Here, SE Abernathy goes deeper into the heart of the Elvish slum, Tarislar
+and graffiti covers the bullet pockmarked brick walls.  You see squatters,
+gangers, and all other kinds of people living a rough life, but still
+seemingly unaged by their toils and troubles.   
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+SE Abernathy
+~
+	ToVnum:	4905
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4963
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4908
+Name:	Swan Boulevard
+Desc:$
+   The busiest street in the elvish slum of Tarislar.  Cars, trucks, and
+motorcycles buzz back and forth, gangers hang out here and there, and all
+kinds of other people move to and fro, just trying to survive in this harsh
+world. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	4909
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4906
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4909
+Name:	Swan Boulevard
+Desc:$
+   On the south side of the street is a large brick wall that has been covered
+in graffiti from the Black Rains gang, all being crossed out by Ancients
+graffiti.  To the north, you hear the sounds of very loud screech metal music
+playing, and see a neon sign with an ornate blue dracoform motif, and the
+words "Blue Wyvern" in lights.  You hear the sounds of motorcycle engines
+taking off and rolling up. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4910
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4919
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4908
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4910
+Name:	In Front of the Blue Wyvern
+Desc:$
+   The Blue Wyvern is a bar, recently built, a roadhouse for the Ancients
+motorcycle gang.  It is built with brick, and despite its location, has no
+graffiti on it.  A line of motorcycles are parked in front, Harley Scorpions,
+Honda Vikings, and Yamaha Rapiers, all with Ancients colors tagged and painted
+on them.  The entrance is a large oaken door, ornately designed with celtic
+knot-like patterns. 
+~
+Flags:	100000000000010000000100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door~~~~~~
+	ToVnum:	4911
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4909
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4911
+Name:	Inside the Blue Wyvern
+Desc:$
+   A bar filled with hardened go-gangers, mercenaries, joygirls, and very loud
+music, the Blue Wyvern is where you will find many of the Ancients go-gang at
+any time of the day or night.  Built on what used to be the Black Rains
+headquarters, its a prime location, and staging point for moving into the
+Smuggler's highway to Tir Tairngire. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4912
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4913
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4910
+	Flags:	0
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4914
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4912
+Name:	Inside the Blue Wyvern
+Desc:$
+   The alcohol smell is thick here, the smell of ale and whiskey permeating
+the air.  The sound all around you is that of screech metal and pool balls
+smacking against each other as several gangers intently play a few rounds, and
+make or lose much nuyen over the results of their games. The lighting around
+you is dim, and the walls are painted black, with green and blue patterns
+painted on the wall that glow softly in the blacklights. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door~~~~~
+	ToVnum:	4918
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4917
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4911
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4916
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4913
+Name:	A room inside the Blue Wyvern
+Desc:$
+   The room has mirrors on the wall and various neon signs advertising a
+myriad of alcoholic beverages, from Grimm's Gold to Everclear.  A few tables
+are spaced evenly, with mercenaries and gangers seated at them. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	4911
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4914
+Name:	A wing of the Blue Wyvern
+Desc:$
+   A loud area with several tables arranged at equal intervals, with six
+chairs surrounding each one.  The music fills the air, generally screech rock
+and chrome rock, and the smell of alcohol is a constant. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4915
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4911
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4915
+Name:	A back booth
+Desc:$
+   This booth sits behind an array of tables, and is cramped and hidden away
+from the rest of the bar. 
+~
+Flags:	1000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	4914
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4916
+Name:	The Blue Wyvern Bar
+Desc:$
+   A long bar, with many people sitting at it, from mercenaries to go-gangers
+and joygirls.  A trideo set is constantly on, tuned to the Urban Brawl
+channel, which specializes in the Urban Brawl sport, whether it be Collegiate
+or Professional, or minor-league.  Tad, the bartender, who also serves as a
+lieutenant of the Ancients, stands tall here, serving alcohol in one hand, and
+threatening a belligerent mercenary with a shotgun in the other. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	4912
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4917
+Name:	The Stage
+Desc:$
+   A stage stands over here, often with no-name bands playing here to make
+enough nuyen for nutrisoy and a coffin.  Blacklights are arranged with a
+single bright light towards the singer. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	4912
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4918
+Name:	Back Room of the Blue Wyvern
+Desc:$
+   The back room of the Blue Wyvern is set up with a very high tech
+communications system, you see trideo screens along all the walls, with many
+channels in many languages.  A cyberterminal sits in the corner, with a 24/7
+connection to the matrix. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	1101
+IO:	200
+Bandwidth:	20
+Access:	-2
+Trace:	-2
+RTG:	1101
+JackID:	62060248
+Address:	Blue Wyvern, Swan Boulevard, Tarislar
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door~~~~~
+	ToVnum:	4912
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4919
+Name:	Swan Boulevard
+Desc:$
+   As you traverse further down the busy Swan Boulevard, you see more
+graffiti, more broken down tenements and abandoned office buildings, more
+gangers, and more evidence of crime.  You look down into the gutter and see
+burned-out BTL chips, used syringes, and other signs of the decadence of a
+lost generation of elvenkind. 
+~
+Flags:	10000000010000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	777
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	6
+[EXIT east]
+	ToVnum:	4922
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4920
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4909
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4920
+Name:	Tarislar Park
+Desc:$
+   Tarislar Park was made in the '40s in rememberance to the many elves and
+other metahumans who died in the infamous Night of Rage.  An attempt to make a
+very destitute area more beautiful, but now the hangout of chipheads,
+wireheads, dope fiends, gangers, and losers. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4919
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4921
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4921
+Name:	Tarislar Park
+Desc:$
+   Deeper into Tarislar Park, you see a swingset that is half broken down, a
+bunch of ashes in a pit, and a sandbox that no child has probably played in
+for years.  The only people you see around here are chipheads, dope users,
+chip pushers, pimps, and prostitutes, all elven.  You see members of the Black
+Rains in a confrontation with the members of the Silent P's.  
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4920
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4922
+Name:	Intersection of Kennedy Avenue and Swan Boulevard
+Desc:$
+   Kennedy and Swan meet at a busy intersection, with heavy motorcycle and car
+traffic.  You think you hear a police siren, until you see that it is coming
+from a heavily graffiti'ed gangers van.  It passes by obviously going some 60
+Kph above the posted speed limit. You see a stop sign here, that looks like
+swiss cheese from target practice. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	4923
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4919
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4923
+Name:	Kennedy Avenue
+Desc:$
+   You are going down Kennedy Avenue, which cuts through the elven slum of
+Tarislar north to south.  You see abandoned buildings, rubble, tenements full
+of destitute and miserable people.  Graffiti covers the walls that still stand
+and many other signs of misery surround you in the form of burned out BTL
+chips, syringes, and broken and empty bottles of alcoholic beverages. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4922
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4924
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4924
+Name:	Kennedy Avenue
+Desc:$
+   Kennedy Avenue runs north and south through Tarislar.  You see many
+abandoned buildings, broken down tenements, and destitute street folk.  Litter
+is strewn all over the place, making the place look especially ugly. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4923
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4925
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4925
+Name:	Kennedy Avenue
+Desc:$
+   You continue down Kennedy Avenue, and a building to the east of you catches
+your eye.  Shiny and new, it sticks out like a sore thumb in this otherwise
+destitute area.  To your west is what appears to be an abandoned police
+department. 
+~
+Flags:	10000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4924
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4930
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4926
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4950
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4926
+Name:	Intersection of Kennedy Avenue and East Coleman Street.
+Desc:$
+   In a more barren and less busy part of Tarislar, Kennedy Avenue meets East
+Coleman Street.  East Coleman Street is famous for the elven street gang The
+Silent P's, so you feel extra cautious, as you know you are walking across a
+gang boundary. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4925
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4951
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4930
+Name:	A heavily secured front gate.
+Desc:$
+   You come up to the front gate, and a security guard asks you for your name,
+reason for being here, and your identification.  After he harasses you a bit
+he still decides to not let you pass.  Kennedy Avenue is to the west, and the
+shiny building is to the east. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	4931
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4925
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4931
+Name:	Courtyard in front of an office building
+Desc:$
+   You see a fountain here, a circular driveway, and a parking lot.  Ahead of
+you is the entrance to the compound. 
+~
+Flags:	100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	4932
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4930
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4932
+Name:	Lobby of an office building
+Desc:$
+   A rather rich looking place for the neighborhood its located in.  Green
+marble decorates the walls, and a bright green carpet covers the floors.  You
+see a couple of suits walking around here and there, and a receptionist at a
+desk right in front of you.  To your north is an elevator, and to your east
+and southeast are two rooms marked "restrooom." 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4935
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4933
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	4934
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4931
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4933
+Name:	Men's Restroom.
+Desc:$
+   Looks like a typical office building men's restroom.  You see urinals on
+the wall to your left as you enter, and stalls near the end of the room.  To
+your right you see five sinks, a mirror and air hand dryer. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	4932
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4934
+Name:	Women's restroom
+Desc:$
+   As you walk in, you see a clean restroom, with a white marble floor, stalls
+on your left and a mirror with three sinks on your right.  Also on your right
+is a air powered hand dryer. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	ToVnum:	4932
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4935
+Name:	An elevator
+Desc:$
+   You are in a large fancy elevator, with mirrors on the walls, a camera in
+the corner, making you aware that Uncle Lofwyr is watching you, and a
+expensive looking golden brass finished keypad for you to choose your floor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	4932
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	4936
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4936
+Name:	An elevator
+Desc:$
+   The elevator reaches the second floor, and the door opens.  Ahead of you is
+a hallway.  You are sure that whatever it is that you are looking for is in
+the hallway ahead of you. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	4937
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	4935
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4937
+Name:	A long hallway in an office building
+Desc:$
+   You are in a long hallway in an office building.  You see doors to your
+left and right, and the hall continues straight ahead of you.  To the north
+there is an elevator 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4936
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door~~~~~~
+	Desc:$
+A door.
+~
+	ToVnum:	4938
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4940
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door~~~~~~
+	Desc:$
+A door.
+~
+	ToVnum:	4939
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4938
+Name:	The office of Dr. Theodore S. Bradley
+Desc:$
+   An office filled with all sorts of little wiz gadgets that run on
+magnetism, pendulums, or other things that would only entertain a scientist.
+You look around the room at his various toys, thinking that he is some kind of
+an inventor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door~~~~~~
+	Desc:$
+A door
+~
+	ToVnum:	4937
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4939
+Name:	An office
+Desc:$
+   You walk into an average office room, with an average desk, an average
+chair and what looks like an average executive.  He stands up and looks at you
+and asks, "do you have an appointment?" 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door~~~~~~
+	Desc:$
+A door.
+~
+	ToVnum:	4937
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4940
+Name:	A long hallway inside an office building
+Desc:$
+   You walk further down the hallway, and see two more doors, one to your
+east, and one to your west.  To your north you see an elevator, and the
+hallway continues to the south. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4937
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door~~~~~~
+	Desc:$
+A door with the name Research and Development stamped on it.
+~
+	ToVnum:	4941
+	Flags:	2
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	4995
+	LockRating:	12
+[EXIT west]
+	Keywords:	door~~~~~~
+	ToVnum:	4942
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4941
+Name:	Nuclear Research and Development
+Desc:$
+   You have walked into the room that is Dr. Bradley's pet project.  You see a
+nuclear reactor system that looks really high tech.  Luckily for you, you
+notice a radiation count monitor on the wall that reads 'GREEN:SAFE.'  There
+also seems to be a highly polished mirror metal parabolic dish on the other
+side of the room that looks very shiny.  A million instruments are wired to
+this dish.  You see a computer terminal here that looks like it is attatched
+directly to the Matrix.  Could this be the place you are looking for?  Well if
+its paydirt and prototypes you want, this is the place to be. 
+~
+Flags:	1101100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door maglocked~~~~~~
+	Desc:$
+locked door
+~
+	ToVnum:	4940
+	Flags:	2
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	4995
+	LockRating:	10
+BREAK
+#4942
+Name:	Office of Dr. John Andburg
+Desc:$
+   You enter a scientist's office, with a holographic poster of the nine
+planets on the wall near the window.  A computer is on the desk, with a
+holographic vidscreen.  You also see a couple of golf clubs near the end of
+the room, as well as a coffee maker. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door~~~~~~
+	ToVnum:	4940
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	window~~~~~~
+	Desc:$
+This window leads outside. 
+~
+	ToVnum:	4943
+	Flags:	1
+	Material:	glass
+	Barrier:	2
+	KeyVnum:	0
+BREAK
+#4943
+Name:	Out the window
+Desc:$
+   There's nothing to hold onto out here, the floor below looks solid enough
+to support your weight however. 
+~
+Flags:	1000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	20
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	4931
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4950
+Name:	Outside an Abandoned Police Station
+Desc:$
+   Once again, the Tarislar Lone Star Station is abandoned. Squatters have
+made their homes inside the fortified building, having already broken down the
+thick iron door. Graffiti covered the walls, from simple tags to more
+elaborate designs, there doesn't seem to be any space left to add to it. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	4925
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4951
+Name:	Coleman Street
+Desc:$
+   You are walking down Coleman Street, which cuts through the south side of
+the elven slum Tarislar, in the southeasternmost part of the Puyallup Barrens.
+You see Silent P's graffiti scrawled all over the walls.  You also see a set
+of abandoned condominiums, broken down by crime, fires, weather, etc. just to
+the south. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	4926
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4952
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4952
+Name:	Coleman Street
+Desc:$
+   You are walking down Coleman Street, a crime-ridden, gang infested example
+of the negative affects of poverty on the metahuman psyche.  You see elven
+gangers, squatters, and other poverty-stricken individuals struggling to
+survive in this harsh world. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	4951
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4953
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4953
+Name:	Coleman Street
+Desc:$
+   You are walking down Coleman Street through the southern portion of the
+elven slum of Tarislar.  You see gangers and squatters, all trying to survive
+in this mess of abandoned buildings, crime-infested streets, and otherwise
+hellish living conditions.  
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	4952
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4954
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4954
+Name:	Coleman Street and Sims Drive
+Desc:$
+   You reach the intersection of Coleman Street and Sims Drive.  Sims Drive
+continues on south, where it approaches another cross street and a  dead end.
+At the end of Sims Drive you see a well maintained warehouse that looks a
+little out of place in the middle of the Puyallup Barrens. Around you you see
+the usual, graffiti'ed walls with Silent P's scrawled all over the place, and
+a torn down stoplight that hasn't been operational for about ten years. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	4953
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4955
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4962
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4955
+Name:	Sims Drive
+Desc:$
+   Sims Drive goes north to south through the southern end of Tarislar, the
+elven neighborhood in the Puyallup Barrens.  Abandoned buildings surround you.
+Ahead of you a few blocks is a large warhouse that appears to be well
+maintained.  Around you are torn down walls and other signs of urban blight.
+You look into the gutter and see some poor elf sleeping by a broken simsense
+unit and about ten burned out BTL's. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4954
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4956
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4956
+Name:	Intersection of Sims Drive and Puyallup Court
+Desc:$
+   Sims Drive meets Puyallup Court here, where it intersects in a 'T.'  Sims
+continues on to end by a fortified warehouse.  Puyallup Court goes east and to
+the west there is a set of abandoned condominiums, covered with Silent P's
+graffiti. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4955
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4960
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4957
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4957
+Name:	Sims Drive
+Desc:$
+   You continue on down Sims Drive, where things begin to look more and more
+like the rest of the Barrens.  Desolate that is.  Ahead of you a ways is a
+heavily fortified warehouse.  You see little sign of life to the west and
+east, just vacant lots and rubble. 
+~
+NightDesc:$
+   You continue on down Sims Drive, where things begin to look more and more
+like the rest of the Barrens.  Desolate that is.  Ahead of you a ways is a
+heavily fortified warehouse.  You see little sign of life to the west and the
+east, just vacant lots and rubble.  Sometimes, late in the evening, a
+nondescript truck will veer widly onto the road from the berm, heading towards
+Highway 229. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4956
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4958
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	camouflage netting
+	Desc:$
+Camouflage Netting 
+~
+	ToVnum:	19711
+	Flags:	1
+	Material:	leather
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	24
+BREAK
+#4958
+Name:	Sims Drive, Begin Highway 229
+Desc:$
+   Things around you get more desolate, as you get closer to a large fortified
+warehouse to the south.  As you get a closer look, you can see it may not be
+too wise to stumble upon their grounds.  To your west and east are piles of
+rubble and vacant lots, and to your north is Tarislar.  Highway 229, a
+desolate long stretch of lonely mountain road begins here, and extends to the
+southwest. Being a side road that goes into Tir Tairngire, it is a favorite
+route among smugglers. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4957
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4959
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	17510
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4959
+Name:	Sims Drive
+Desc:$
+   All around you, you see little signs of life, but right ahead of you you
+see a well protected warehouse.  It has twenty foot high fences with monowire
+surrounding it to prevent intrusion, and an extremely well guarded gate to the
+front.  From here you can see they are wearing full security armor, but it is
+all black with no corporate markings.  A sign over the entrance to the
+warehouse says "Ly'trelli Imports." 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4958
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4970
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4960
+Name:	Puyallup Court
+Desc:$
+   You are walking down a street that ends in a dead end ahead, connected to
+an abandoned shopping center.  Desolation surrounds you, in the form of vacant
+lots and torn down buildings, lying in volcanic dust. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	4961
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4956
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4961
+Name:	Puyallup Court
+Desc:$
+   You continue on down Puyallup Court, and reach its end.  Before you is an
+abandoned mini-mall, which looks like it dates back to the late nineteen
+nineties,  to the north is a fenced off warehouse.  Both the fence and the
+mini-mall are covered in Silent P's graffiti, and the mall seem to be heavily
+populated by the gang.  A cold breeze blows through the streets. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	19702
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4980
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4960
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4962
+Name:	Coleman Street
+Desc:$
+   You continue down Coleman Street, and to your east a little further, you
+see where Coleman meets Abernathy Street southeast.  You have reached the
+border of the Silent P's and Black Rains gang territories.  Around you there
+is graffiti from both gangs, some crossing out others, or writing tags upside
+down to show the other gang intends to kill that ganger, and so forth.  
+~
+Flags:	10000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	4954
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4963
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4963
+Name:	Intersection of Coleman Street and Abernathy St. SE
+Desc:$
+   You are at the busy heart of Tarislar.  Here, elven gangers go to and fro,
+cars and motorcycles buzz by, ignoring the posted speed limit of 80 kph. (The
+speed limit sign kinda reminds you of swiss cheese, with all the bullet
+holes.) You see poverty-stricken individuals of all kinds buzz by, trying to
+make their way in this harsh, unfriendly 21st century world. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4907
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4962
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4964
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4964
+Name:	Coleman Street
+Desc:$
+   As you go down Coleman Street you see many abandoned buildings, some
+wrecked by the eruption of Mount Rainier in 2017, others wrecked by crime,
+fire, and so forth.  Squatters and gangers fight to stay alive in this harsh
+Tarislar reality. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	4963
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4965
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4965
+Name:	Coleman Street, entering Tarislar
+Desc:$
+   You continue through the Puyallup Barrens, until you reach what appears to
+be a more heavily populated area.  You see elves living in destitution and
+poverty, the only escape from their harsh daily lives being a BTL, or some
+drug made in a lab somewhere.  These are castaways from the  Sinsearach
+Council, a people who after the Night of Rage were not accepted into the
+Salish Sidhe Nation, and therefore stuck to living a harsh life at the edge of
+the Barrens.  It is named Tarislar, the Sperethiel word for "Rememberance," to
+remember the Night of Rage and their subsequent rejection. 
+~
+Flags:	10000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	2346
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4964
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4970
+Name:	Ly'trelli Imports front gate
+Desc:$
+      The first thing you notice is the huge red and black sign that says,
+"KEEP OUT-DEADLY FORCE IS AUTHORIZED."    You look around you and notice the
+twenty foot high chain-link fence which looks like it is heavily protected by
+monowire.  You look and think there may  be a way up... Then you suddenly have
+a vision of being sliced up like a piece of cheese and quickly dismiss the
+idea. 
+~
+Flags:	100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4959
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4971
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	4998
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4971
+Name:	Entrance to Ly'trelli Imports
+Desc:$
+   You enter the place, which looks heavily guarded. The guards seem to wear
+no corporate colors or insignia, which strikes you as odd. From their shape
+and size, you would assume that all, if not most of them were elven. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4970
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4972
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4972
+Name:	Inside the Ly'trelli warehouse
+Desc:$
+   You walk inside a dark warehouse filled with cardboard boxes stacked up to
+the ceiling.  They are all marked "simsense chips."  Simsense, yeah right!
+BTL's and tons of them.  The street value of the contents of this part of the
+warehouse probably reaches the billions in nuyen. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4971
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4973
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4973
+Name:	Inside the Ly'trelli Imports warehouse
+Desc:$
+   You see boxes upon boxes of BTL chips stacked up to the ceiling.  A ladder
+goes up to a set of lofts above the room to the south. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4972
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4975
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	4974
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4974
+Name:	Loft above the warehouse
+Desc:$
+   From here you can see the entire warehouse, and wherever most of the guards
+are lurking.  You look around here, and see boxes marked "weapons."  
+~
+Flags:	1101
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	4973
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4975
+Name:	Ly'trelli's Office
+Desc:$
+   You enter an office with stacks of file cabinets, a large oak desk, and a
+computer terminal so ancient it uses a mouse. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4973
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4980
+Name:	Parking lot to an abandoned mini-mall
+Desc:$
+   You are standing in the parking lot of an abandoned mini-mall.  You see
+abandoned stores just ahead of you. 
+~
+Flags:	100000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4981
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	4982
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4983
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	4984
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4985
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4961
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4981
+Name:	An abandoned sporting goods store
+Desc:$
+   You walk into an old sporting goods store, that has been looted many years
+ago. The only thing that tells you what this place used to be are the various
+shoe and sports gear ads that still adorn these graffiti covered walls. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	4980
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4982
+Name:	An abandoned store
+Desc:$
+   You can not tell what kind of store this used to be, due to the vandalism
+and looting this place had taken after the Mt. Rainier eruption back in '17.
+You see graffiti all over the walls. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	4980
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4983
+Name:	An abandoned electronics store
+Desc:$
+   You can tell what kind of store due to the broken and smashed television
+(not trid) sets, the broken printed circuits strewn about, and the thrashed
+sign that reads "Circuit Sprawl." 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	4980
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4984
+Name:	Puke Feend's Discount Street Gear!!!
+Desc:$
+    The whole place is turned upside down.  Bloodstains are on the wall. A
+chalk outline surrounds a blood smear.  Crime scene tape is strewn about.
+Bullet holes cover some walls.  Dried blood splatterings are everywhere.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	ToVnum:	4980
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4985
+Name:	An abandoned clothing store
+Desc:$
+   You see old clothes racks broken apart, hangers strewn here and there,
+smashed beer bottles, and burned out BTL chips thrown around. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4980
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4990
+Name:	A shimmering gateway
+Desc:$
+   You see a shimmering gateway before a set of glimmering stairs.  To your
+left you see in the distance, a tower of some kind, and ahead of you is a
+palace. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	4
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	4991
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4991
+Name:	A palace hallway
+Desc:$
+   You enter the palace, and see various banners with a Great Western Dragon
+emblazoned on them.  To your left, you see shiny lights coming from what you
+figure is probably the tower.  To your right you see a storeroom, and straight
+ahead is a hallway. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	5
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	4994
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4992
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4993
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	4990
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4992
+Name:	A storeroom
+Desc:$
+   In here you see copper coins neatly stacked, appearing to be in some kind
+of order.  Little coin-bags are stacked here and there, appearing to contain
+treasure of little value. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	8
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	4991
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4993
+Name:	A crystal tower
+Desc:$
+   You see crystal windows everywhere, looking off to distant horizons and
+other worlds. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	7
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	4991
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4994
+Name:	A dark dank hallway
+Desc:$
+   You are walking down a very dark stone hallway.  A small gutter to the left
+of you is carrying muddy water down through what looks like the palace
+drainage system.  You hear moaning and crying coming from what appears to be a
+dungeon ahead of you. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	4991
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#4998
+Name:	Scaling the fence
+Desc:$
+   You begin to scale the fence,  and almost instantly you lose an arm that
+gets caught in the monowire.  The monowire gets tangled all around your body,
+and you fall down dead. 
+~
+Flags:	10000000000000000110
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+END

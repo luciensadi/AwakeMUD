@@ -1,0 +1,1464 @@
+#33000
+Keywords:	table metal four-point star
+Name:	A ^Lblack marble^N table in the shape of a ^Lfour^N-^Lpoint star^N
+RoomDesc:$
+^gA ^Lblack marble^g table in the shape of a ^Lfour^g-^Lpoint star^g is bolted down here.^N~
+LookDesc:$
+This ^Lblack marble^N table is several meters wide and offers seating for upwards
+of a dozen patrons. Its sturdy legs are crafted from high tensile steel to
+help keep up the heavy marble slab. Striations are cut into its surface to act
+as not only cup holders for the patrons drinks, but also for keep pencils and
+pens from rolling off, since most of the people who visit this coffeehouse are
+on their lunch hours, a perfect time to catch up on work they haven't
+finished. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	100.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#33001
+Keywords:	coffee decaf cup blended
+Name:	a tall cup of blended decaf coffee
+RoomDesc:$
+A tall paper cup of coffee sits here, still steaming.~
+LookDesc:$
+This incredible medium roast blend has incredible depth and a smooth flavor.
+This combination of light and dark beans offers the best from two distinct
+roasting profiles. The even, smooth flavor from a lighter roast combined with
+the smokiness and dark chocolate notes of a darker roast deliver a
+well-balanced and intense coffee. You wouldn't belive you're drinking decaf
+coffee if it didn't say so on the label. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	80
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+	Val2:	2
+BREAK
+#33002
+Keywords:	coffee latte iced caramel cup
+Name:	a cup of caramel Latte iced coffee
+RoomDesc:$
+A paper cup of latte iced coffee sits here, slowly melting.~
+LookDesc:$
+Made with blended Arabica coffee beans for a delicious, rich flavor, and mixed
+with indulgent caramel, finely crushed ice chips and rich, heavy cream makes
+this a god send on any hot day. This is sure to drop your temperature a few
+degrees, in a good way, ofcourse. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	85
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+	Val2:	2
+BREAK
+#33003
+Keywords:	coffee cup espresso blended Italian
+Name:	a tall cup of blended Italian Espresso
+RoomDesc:$
+A tall cup full of Espresso sits here, its contents steaming.~
+LookDesc:$
+Roasted slightly darker than most Italian Espressos, this blend of 100%
+Aribica coffee beans will take you back in time to a sidewalk cafe in Europe.
+Rich brown crema, robust aroma, very rich and thick body, and an after taste
+like no other. You sure as hell don't have to be Italian to enjoy this tastey
+good of goodness. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	80
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+	Val2:	9
+BREAK
+#33004
+Keywords:	tea cup stylized Amazonia white paper sleeved
+Name:	a stylized paper sleeved cup of Amazonia white tea
+RoomDesc:$
+A stylized paper sleeved cup of tea sits here.~
+LookDesc:$
+These white tips are plucked from young plants to brew some of the best
+tasting tea in the western hemisphere, and is sure to continue being a money
+making export for Amazonia for many years to come. Served in a wide styrofoam
+cup with a stylized Spacebucks paper sleeve to insulate the drinkers hand from
+its piping hot contents. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	90
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+	Val2:	5
+BREAK
+#33005
+Keywords:	tea cup white peony blossom herbal
+Name:	a tall cup of White Peony Blossom herbal tea
+RoomDesc:$
+A tall paper cup of steaming hot tea sits here.~
+LookDesc:$
+White teas come from the Camellia sinensis plant, just like green tea, oolong
+tea and black tea. However, white tea is picked early in Spring when all the
+leaves are still in a bud and covered with fine white hair, hence the name,
+white tea. The production of this white tea is similar to green tea and has
+very light processing and no fermentation, giving it a perfect sweet and
+savory balance. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+	Val2:	5
+BREAK
+#33006
+Keywords:	tea cup pomi-berry herbal
+Name:	a small cup of Pomi-Berry herbal tea
+RoomDesc:$
+A small paper cup of herbal tea sits here, wafting steam.~
+LookDesc:$
+A delicious but very complex berry blend. Consisting of forest berries
+combined with the flavor of pomegranate, apple, lavender and hibiscus to
+create a balanced, sweet but relaxing herbal blend. Hints of chamomile and
+lemon grass make this a great after-meal or anytime tea. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	95
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+	Val2:	5
+BREAK
+#33007
+Keywords:	tea cup carribean mango slender
+Name:	a slender cup of Carribean Mango tea
+RoomDesc:$
+A slender paper cup of tea has been left behind here.~
+LookDesc:$
+This delicious blend of black tea is mixed with a (non-synthetic) mango syrup
+imported from various islands within the Carribean League, offering its
+drinker a sumptious taste of what it must be like to relax upon the beaches
+there, cup in hand, enjoying the breeze off the ocean. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	85
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+	Val2:	5
+BREAK
+#33008
+Keywords:	tea chai Oregon cup green tall
+Name:	a tall cup of Oregon Chai Matcha green tea
+RoomDesc:$
+A tall paper cup of chai tea sits here.~
+LookDesc:$
+This smooth, festive drink originates from India, and consists of a blend of
+green tea accented with almond, honey and vanilla beans. Made for those chai
+drinkers who enjoy exotic spices and almond lusciousness. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	85
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+	Val2:	5
+BREAK
+#33009
+Keywords:	tea chai black Oregon original cup
+Name:	a tall cup of Oregon Original Chai black tea
+RoomDesc:$
+A tall paper cup of chai tea sits here.~
+LookDesc:$
+This is where it all started. Where creation evolved to a higher plane. Where
+paradise lingers and the scent of cinnamon and vanilla drifts from the
+heavens. Where the landing of mild and honey brought perfection to your world.
+Morning, noon or night, nivana awaits. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	80
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+	Val2:	5
+BREAK
+#33010
+Keywords:	cider apple hot eastmans stout plastic
+Name:	a stout mug of Eastmans hot apple cider
+RoomDesc:$
+A stout plastic mug sits here, steaming with hot apple cider.~
+LookDesc:$
+This disposable plastic encased styrofoam mug is designed to keep its contents
+nice and hot for those cold winter days. Inside is hot apple cider with a
+distinctive bite, which is sure to bring the drinker back to simpler times
+enjoyed in their childhood, even if only for a brief time. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	75
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	25
+	Val1:	25
+	Val2:	4
+BREAK
+#33015
+Keywords:	notes papers pile disorganized
+Name:	a disorganized pile of papers and notes
+RoomDesc:$
+A disorganized pile of papers and notes has been left here.~
+LookDesc:$
+This ruffled and disorganized pile of papers is quite thick, and all seems to
+be written by hand, in a cursive script. It is apparently a work of poetry, an
+act or play of some sort, although its nearly impossible to read the chicken
+scratch that permeates each page, with notes taped haphazardly upon almost
+each one. 
+~
+Type:	Quest Item
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#33020
+Keywords:	Greatcoat Serthilion ornately stylized coat
+Name:	an ornately stylized Serathilion Greatcoat
+RoomDesc:$
+An ornately stylized greatcoat has been left folded here.~
+LookDesc:$
+This greatcoat belongs to the Serathilion line, which translates from
+Sperethiel as "Attraction that cannot be denied. Demanding desire." The lush
+fabric is perfect for those who crave a noble, pomp appearance, as its
+stylized piping and design aims to complete such a look. Its interior is lined
+with a soft, crushed velvet, between which is layered with a lightweight
+kevlar weave, which is doubled up on strategicly placed portions of anatomy
+for maximum protection. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.50
+	Barrier:	6
+	Cost:	10000
+	AvailTN:	4
+	AvailDay:	60.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	6
+	Val2:	2
+	Val3:	4
+	Val4:	6
+	Val5:	350
+	Val6:	350
+	Val7:	12
+	Val8:	9
+BREAK
+#33021
+Keywords:	vest Serathilion six-button stylized
+Name:	a stylized Serathilion six-button vest
+RoomDesc:$
+A stylized six-button vest has been left behind here.~
+LookDesc:$
+This stylized vest belongs to the Serathilion line, which translates from
+Sperethiel as "Attraction that cannot be denied. Demanding desire." The lush
+fabric is perfect for those who crave a noble, pomp appearance, as its
+stylized piping and design aims to complete such a look. Its six-buttons shine
+verily and are ornately designed to resemble ivy leaves. Its comfortable
+fabric construction is layered with a lightweight kevlar weave, which is
+doubled up on strategicly placed portions of anatomy for maximum protection. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	6
+	Cost:	2500
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	4
+	Val2:	2
+	Val3:	2
+	Val4:	2
+	Val5:	150
+	Val6:	150
+	Val7:	10
+	Val8:	9
+BREAK
+#33022
+Keywords:	shirt collared Serathilion dress
+Name:	a collared Serathilion dress shirt
+RoomDesc:$
+A collared dress shirt is neatly pressed and folded here.~
+LookDesc:$
+This stylized dress shirt belongs to the Serathilion line, which translates
+from Sperethiel as "Attraction that cannot be denied. Demanding desire." The
+cleanly pressed fabric is crisp and perfect for those who crave a noble, pomp
+appearance, as its stylized piping along its collar aims to complete such a
+look. Its double-collar buttons shine verily and are ornately designed to
+resemble ivy leaves. Its comfortable fabric construction is thinly layered
+with a lightweight kevlar weave, which is doubled up on strategicly placed
+portions of anatomy for maximum protection. 
+~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	1500
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val5:	150
+	Val6:	150
+	Val7:	8
+	Val8:	9
+BREAK
+#33023
+Keywords:	slacks pants Serathilion pleated dress
+Name:	a pair of Serathilion pleated dress slacks
+RoomDesc:$
+A pair of pleated dress slacks is neatly folded up here.~
+LookDesc:$
+These stylized dress slacks belong to the Serathilion line, which translates
+from Sperethiel as "Attraction that cannot be denied. Demanding desire." The
+cleanly pressed fabric is pleated and perfect for those who crave a noble,
+pomp appearance, and its stylized silver buttons are ornately designed to
+resemble ivy leaves. Its comfortable yet crisp fabric construction is thinly
+layered with a lightweight kevlar weave, which is doubled up on strategicly
+placed portions of anatomy for maximum protection. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	2
+	Val2:	1
+	Val3:	2
+	Val4:	2
+	Val5:	150
+	Val6:	150
+	Val7:	6
+	Val8:	9
+BREAK
+#33024
+Keywords:	overcoat coat Serulos sleek savvy
+Name:	a sleek and savvy Serulos overcoat
+RoomDesc:$
+A sleek and savvy overcoat has been left behind here.~
+LookDesc:$
+This stylized overcoat belongs to the Serulos line, which translates from
+Sperethiel as "Machismo; Childish Masculinity". Its designed is aimed towards
+the younger generation of higher end elven wageslaves, as its name might
+suggest. It is, however, finely tailored and appealing to the senses. Its
+sleek lines and curves drape beautifully down the frame of its wearer, and is
+lined with a sturdy and flexible kevlar weave that allows it to move and
+breathe while offering a bit of protection. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	2500
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	6
+	Val2:	2
+	Val3:	2
+	Val4:	4
+	Val5:	350
+	Val6:	350
+	Val7:	10
+	Val8:	9
+BREAK
+#33025
+Keywords:	jacket Serulos business sleek savvy
+Name:	a sleek and savvy Serulos business jacket
+RoomDesc:$
+A sleek and savvy business jacket has been left here.~
+LookDesc:$
+This stylized business jacket belongs to the Serulos line, which translates
+from Sperethiel as "Machismo; Childish Masculinity". Its designed is aimed
+towards the younger generation of higher end elven wageslaves, as its name
+might suggest. It is, however, finely tailored and appealing to the senses.
+Its sleek lines and curves drape beautifully down the frame of its wearer, and
+is lined with a sturdy and flexible kevlar weave that allows it to move and
+breathe while offering a bit of protection. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	1500
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	4
+	Val2:	2
+	Val3:	2
+	Val4:	4
+	Val5:	150
+	Val6:	150
+	Val7:	8
+	Val8:	9
+BREAK
+#33026
+Keywords:	shirt dress high-collared Serulos
+Name:	a high-collar Serulos dress shirt
+RoomDesc:$
+A high-collared dress shirt is pressed and folded neatly here.~
+LookDesc:$
+This stylized, high-collared dress shirt belongs to the Serulos line, which
+translates from Sperethiel as "Machismo; Childish Masculinity". Its designed
+is aimed towards the younger generation of higher end elven wageslaves, as its
+name might suggest. It is, however, finely tailored and appealing to the
+senses. Its sleek lines and curves drape beautifully down the frame of its
+wearer, and is lined with a sturdy and flexible kevlar weave that allows it to
+move and breathe while offering a bit of protection. Its collar sports two
+sets of golden buttons decorated as four-point stars, which are left
+unbuttoned for that 'rebel' look this clothing line attempts to capture. 
+~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val5:	150
+	Val6:	150
+	Val7:	6
+	Val8:	9
+BREAK
+#33027
+Keywords:	slacks pants Serulos business pressed
+Name:	a pair of Serulos business slacks
+RoomDesc:$
+A pair of pressed business slacks are neatly folded here.~
+LookDesc:$
+This stylized, pressed and crisp pair of business slacks belong to the Serulos
+line, which translates from Sperethiel as "Machismo; Childish Masculinity".
+Its designed is aimed towards the younger generation of higher end elven
+wageslaves, as its name might suggest. It is, however, finely tailored and
+appealing to the senses. Its sleek lines and curves drape beautifully down the
+frame of its wearer, and is lined with a sturdy and flexible kevlar weave that
+allows it to move and breathe while offering a bit of protection. Its hem
+sports two sets of golden buttons decorated as four-point stars, one of which
+is left unbuttoned for that 'rebel' look this clothing line attempts to
+capture. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	4
+	Val4:	2
+	Val5:	150
+	Val6:	150
+	Val7:	4
+	Val8:	9
+BREAK
+#33028
+Keywords:	gloves dress Speren
+Name:	a pair of Speren dress gloves
+RoomDesc:$
+A pair of dress gloves have been tossed carelessly here.~
+LookDesc:$
+These stylized dress gloves belong to the Speren line, which translates from
+Sperethiel as "Harmony; Peacefulness". The name itself beguiles the fact that
+these gloves have the knuckles and back of the hand reinforced with dense,
+weighted plastics, making it perfect for use as knuckledusters. The next time
+you're challenged to a duel, be forewarned, if the person is sporting a pair
+of these, you may just a lose a tooth. 
+~
+Type:	Weapon
+WearFlags:	10000010000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	6
+	Cost:	800
+	AvailTN:	4
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	4
+	Val4:	7
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#33029
+Keywords:	shoes dress Speren slick
+Name:	a pair of slick Speren dress shoes
+RoomDesc:$
+A pair of slick dress shoes have been left here.~
+LookDesc:$
+These stylized dress shoes belong to the Speren line, which translates from
+Sperethiel as "Harmony; Peacefulness". Crafted from expensive black leather,
+they are extremely comfortable, as well as appealing to any up-and-comers
+wanting to make an impression at their next business meeting, or just a night
+on the town. The heels and lining are reinforced with lightweight advanced
+plastics, leaving them flexible and breathable, while offering an extra bit of
+protection to the wearers feet. They also feature a small hidden pocket, just
+incase you need a stash an emergency credstick or the like in them. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	900
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	1
+	Val5:	100
+	Val6:	100
+	Val8:	9
+BREAK
+#33040
+Keywords:	sausage sausages spicey dish hamonado
+Name:	a dish of spicey hamonado sausages
+RoomDesc:$
+A dish of hot sliced sausages sits here, still steaming.~
+LookDesc:$
+Hailing originally from the Philippines, Hamonado sausage is made with lots of
+garlic, black pepper and other spices, which caters especially well to most
+ork and troll tastes. Smoked and cooked thoroughly before being sliced and
+served on a bed of spinach leaves. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	125
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#33041
+Keywords:	lamb shanks plate seasoned
+Name:	a plate of seasoned lamb shanks
+RoomDesc:$
+A plate of lamb shanks goes to waste here.~
+LookDesc:$
+Lamb shanks are a cut of meat from the upper part of the leg, both fore and
+hind. This particular set of shanks are heavily seasoned and spiced to appeal
+towards orks and trolls in particular, and are garnished with a very light
+glaze of butter and tabasco sauce, giving them an extra little kick. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	135
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#33042
+Keywords:	soup poyo thick bowl meat
+Name:	a bowl of thick poyo soup
+RoomDesc:$
+A bowl of some thick meat soup has been left here.~
+LookDesc:$
+Poyo, whose literal translation is 'crushed meat', is a thick soup of meat
+crushed in a mortar, seasoned with several spices and vegetables. It is
+originally considered a meal only eaten by the people of scarce resources.
+Made in the traditional manner using crushed meat, cold water, rice, oil,
+onion, sweet red pepper, tomato, scallion, flour (just a dash), salt, black
+pepper, oregano and parsley. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.20
+	Barrier:	3
+	Cost:	65
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#33043
+Keywords:	flask Tej vase-shaped glass
+Name:	a vase-shaped glass flask of Tej
+RoomDesc:$
+A vase-shaped glass flask of liquid is sitting here.~
+LookDesc:$
+Tej is a strong and very potent honey wine, quite similar to mead. It is
+flavored with the powdered leaves and twigs of gesho, a hops-like bittering
+agent which is a species of buckthorn. Tej has a deceptively sweet taste that
+masks its high alcohol content, and is served in the traditional rounded
+vase-shaped glass vessel called a berele. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	80
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+	Val2:	18
+BREAK
+#33044
+Keywords:	cup wooden navegado
+Name:	a wooden cup of navegado
+RoomDesc:$
+A wooden cup of some kind has been left sitting here.~
+LookDesc:$
+Navegado is a kind of mulled wine typically from Chile. The word navegado
+comes from the Spanish 'navegar' meaning 'sailing'. Navegado is heated and
+spiced with cinnamon sticks, orange slices, cloves and sugar. Almonds and
+raisins are often added. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.20
+	Barrier:	3
+	Cost:	65
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+	Val2:	26
+BREAK
+#33045
+Keywords:	baton stun AZ-150
+Name:	an AZ-150 stun baton
+RoomDesc:$
+A slender stun baton has been left carelessly here.~
+LookDesc:$
+The AZ-150 stun baton was designed intentionally for use by security forces
+against orks, trolls and other larger opponents, as it delivers a stronger
+jolt than most standard stun batons. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	1500
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	5
+	LegalCode:	3
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	3
+	Val3:	9
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#33046
+Keywords:	newspaper portland times
+Name:	The Portland Times newspaper
+RoomDesc:$
+Someone has left their newspaper behind here.~
+LookDesc:$
+It looks like its one Portland's most popular newsprints, 'The Portland
+Times', an off-shoot of The Times, which is found through-out most North
+American countries. The front paper features a local political leader (elven,
+obviously) who has recently donated a large sum of money to help the 'Poor,
+unfortunate souls of metahumanity', by which they obviously mean the orks and
+trolls unfortunate enough to find themselves within the walls. <read page1,
+etc> 
+~
+Type:	UNDEFINED
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.05
+	Barrier:	2
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	Page6
+	Desc:$
+Stocks, stocks, more stocks.. Well, if you have any money invested in the Tir
+market, this is the page for you. Otherwise, its a bunch of nonsensical lines
+of numbers and acryonyms you probably won't even begin to understand, or for
+that matter, care about. 
+~
+[EXTRADESC 1]
+	Keywords:	Page5
+	Desc:$
+Its the crossword puzzle page, alright! Damnit.. Looks like someone already
+solved todays puzzle, and in pen too... Bastards.. There are also horoscopes
+offered for whatever zodiac sign you may have been born under, but they're
+basicly little more than what you'd receive from fortune cookies. Good stuff.
+~
+[EXTRADESC 2]
+	Keywords:	Page4
+	Desc:$
+Basicly, its the 'Crime and Punishment' page, which is an absolute farce in
+its finest. If you read through the articles offered, you'll quickly realize
+that you're never going to find any of them that feature 'superior' elven
+social classes being involved in any wrong doing. They might be the victims in
+some of the stories, but certainly never the the perpetrators, its simply
+below them. Ahh.. Censorship of media, the Tir at its finest. There is,
+ofcourse, plenty of stories about barbaric orks and trolls, and even humans,
+who make for the perfect criminal masterminds. 
+~
+[EXTRADESC 3]
+	Keywords:	Page3
+	Desc:$
+This particular page is chock full of the 'finer' things in Tir life. Between
+exposes and interviews with Tir artists, it practically bombards the senses
+from anything related to art. It ranges right across the spectrum, from
+painting and sculpting, to embroidery, bonsai-like tree cultivation,
+manuscript illumination and other art forms, using both conventional and high
+tech tools. 
+~
+[EXTRADESC 4]
+	Keywords:	Page2
+	Desc:$
+This page is dedicated to the current events revolving around the NHA
+(National Hurling Association). Hurling is to Tir Tairngire as football
+(soccer) is to Great britain; a sport, a diversion, and a national obsession.
+It features articles such as "Portland Marchers (5-0) continue their
+undefeated streak after their destruction of the Eugene Lords! (3-2)" You can
+find all the current statistics revolving around this low-brow game, along
+with interviews with some of the more well known players and managers. 
+~
+[EXTRADESC 5]
+	Keywords:	Page1
+	Desc:$
+This page is dedicated to publics works in process, from ubran planners to the
+dedication of tracts of forest and land to local gardening clubs and the
+like.. Frankly, its all boring drek. Most of this information has been printed
+and reprinted more than a few times already, but apparently they enjoy
+chalking up the 'good deeds' of elven citizenry as much as they possibly can.
+This -is- the Tir, afterall. 
+~
+BREAK
+#33047
+Keywords:	bar synthwood polished stalagmites
+Name:	a polished synthwood bar held up by stalagmites
+RoomDesc:$
+A polished ^ysynthwood^N bar held up by stalagmites is posted here.~
+LookDesc:$
+Its a polished synthetic wooden bar, dull brown in colour, featuring shallow
+grooves to place drinks on. It doesn't look overly expensive, but, it fits in
+quite well with the surroundings, especially considering the stalagmites that
+make up the scenery are used to build it into the landscape. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	1
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	400.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#33050
+Keywords:	dikote application treatment glazing large jar chemical
+Name:	a large application of dikote glazing
+RoomDesc:$
+A jar of some kind of chemical treatment is sitting here.~
+LookDesc:$
+Dikote glazing is a process that deposits a thin diamond film on a solid
+surface. Treated surfaces are smooth, relatively frictionless, conduct heat
+very well and reinforce material its applied to. Treat your vehicle with this,
+and you won't have to worry about those tiny scratches in your paint job ever
+again. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	0.00
+	Barrier:	24
+	Cost:	16000
+	AvailTN:	6
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val2:	1
+	Val5:	62
+	Val6:	13
+[AFFECT 0]
+	Location:	Intelligence
+	Modifier:	1
+[AFFECT 1]
+	Location:	Charisma
+	Modifier:	1
+BREAK
+#33051
+Keywords:	motorcycle sidecar small
+Name:	a small motorcycle sidecar
+RoomDesc:$
+A small motorcycle sidecar sits here, unattached.~
+LookDesc:$
+This is a motorcycle sidecar, that much is blatently obvious. It is meant to
+be attached to the side of a motorcycle and offer more seating for a larger
+number of passengers. This model is a small one-seater with a bucket seat,
+leaving little in the way of leg room or space. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	40.00
+	Barrier:	12
+	Cost:	1000
+	AvailTN:	3
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	19
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	-15
+[AFFECT 1]
+	Location:	Body
+	Modifier:	1
+[AFFECT 2]
+	Location:	Reaction
+	Modifier:	1
+BREAK
+#33052
+Keywords:	dikote application treatment glazing small jar chemical
+Name:	a small application of dikote glazing
+RoomDesc:$
+A small jar of some kind of chemical treatment is sitting here.~
+LookDesc:$
+Dikote glazing is a process that deposits a thin diamond film on a solid
+surface. Treated surfaces are smooth, relatively frictionless, conduct heat
+very well and reinforce material its applied to. Treat your drone with this,
+and you won't have to worry about those tiny scratches in your paint job ever
+again. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	0.00
+	Barrier:	24
+	Cost:	8000
+	AvailTN:	6
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	1
+	Val5:	62
+[AFFECT 0]
+	Location:	Intelligence
+	Modifier:	1
+[AFFECT 1]
+	Location:	Charisma
+	Modifier:	1
+BREAK
+#33053
+Keywords:	sidecar motorcycle medium-sized
+Name:	a medium-sized motorcycle sidecar
+RoomDesc:$
+A medium-sized motorcycle sidecar sits here, unattached.~
+LookDesc:$
+This is a motorcycle sidecar, that much is blatently obvious. It is meant to
+be attached to the side of a motorcycle and offer more seating for a larger
+number of passengers. This model is a medium-sized one-seater with a bucket
+seat, and offers a bit of leg room and extra space. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	50.00
+	Barrier:	12
+	Cost:	2000
+	AvailTN:	3
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	19
+	Val6:	21
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+[AFFECT 1]
+	Location:	Reaction
+	Modifier:	1
+[AFFECT 2]
+	Location:	Quickness
+	Modifier:	-15
+[AFFECT 3]
+	Location:	Age
+	Modifier:	2
+BREAK
+#33054
+Keywords:	sidecar spacious motorcycle
+Name:	a spacious motorcycle sidecar
+RoomDesc:$
+A spacious motorcycle sidecar sits here, unattached.~
+LookDesc:$
+This is a motorcycle sidecar, that much is blatently obvious. It is meant to
+be attached to the side of a motorcycle and offer more seating for a larger
+number of passengers. This model is a spacious one-seater features a bucket
+seat, along with a good deal of leg room and extra space. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	50.00
+	Barrier:	12
+	Cost:	3500
+	AvailTN:	3
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	19
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	-15
+[AFFECT 1]
+	Location:	Body
+	Modifier:	2
+[AFFECT 2]
+	Location:	Reaction
+	Modifier:	1
+[AFFECT 3]
+	Location:	Age
+	Modifier:	6
+BREAK
+#33055
+Keywords:	sidecar large double-seated motorcycle
+Name:	a large, double-seated motorcycle sidecar
+RoomDesc:$
+A large, double-seated motorcycle sidecar sits here, unattached.~
+LookDesc:$
+This is a motorcycle sidecar, that much is blatently obvious. It is meant to
+be attached to the side of a motorcycle and offer more seating for a larger
+number of passengers. This model is a large in-line two-seater, one bucket
+seat placed behind the other. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	60.00
+	Barrier:	12
+	Cost:	3500
+	AvailTN:	3
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	19
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	-15
+[AFFECT 1]
+	Location:	Reaction
+	Modifier:	2
+[AFFECT 2]
+	Location:	Body
+	Modifier:	2
+BREAK
+#33056
+Keywords:	engine upgrade customized Speed Package [Speed Package]
+Name:	a customized engine [Speed Package] upgrade
+RoomDesc:$
+A part of an engine is sitting here on a small crane lift.~
+LookDesc:$
+This engine kit consists of everything needed to be installed on a vehicle
+short of the necessary tools, but at least the directions are included. This
+particular kit is labeled as a [Speed Package] engine upgrade, and can
+increase the top speed of what it's installed in. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	50.00
+	Barrier:	12
+	Cost:	15000
+	AvailTN:	8
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	30
+BREAK
+#33057
+Keywords:	engine customized Acceleration Package upgrade [Acceleration Package]
+Name:	a customized engine [Acceleration Package] upgrade
+RoomDesc:$
+A part of an engine is sitting here on a small crane lift.~
+LookDesc:$
+This engine kit consists of everything needed to be installed on a vehicle
+short of the necessary tools, but at least the directions are included. This
+particular kit is labeled as an [Acceleration Package] engine upgrade, and can
+increase the acceleration of what it's installed in. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	50.00
+	Barrier:	12
+	Cost:	15000
+	AvailTN:	8
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	2
+BREAK
+#33058
+Keywords:	engine customized Power Package upgrade [Power Package]
+Name:	a customized engine [Power Package] upgrade
+RoomDesc:$
+A part of an engine is sitting here on a small crane lift.~
+LookDesc:$
+This engine kit consists of everything needed to be installed on a vehicle
+short of the necessary tools, but at least the directions are included. This
+particular kit is labeled as a [Power Package] engine upgrade, and can
+increase the load capacity of what it's installed in. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	50.00
+	Barrier:	12
+	Cost:	15000
+	AvailTN:	8
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+[AFFECT 0]
+	Location:	Age
+	Modifier:	50
+BREAK
+#33059
+Keywords:	engine customized Sports Package [Sports Package]
+Name:	a customized engine [Sports Package] upgrade
+RoomDesc:$
+A part of an engine is sitting here on a small crane lift.~
+LookDesc:$
+This engine kit consists of everything needed to be installed on a vehicle
+short of the necessary tools, but at least the directions are included. This
+particular kit is labeled as a [Sports Package] engine upgrade, and can
+increase the top end speed and acceleration of what it's installed in. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	50.00
+	Barrier:	12
+	Cost:	25000
+	AvailTN:	8
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	30
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	2
+BREAK
+#33060
+Keywords:	engine customized Torque Package upgrade [Torque Package]
+Name:	a customized engine [Torque Package] upgrade
+RoomDesc:$
+A part of an engine is sitting here on a small crane lift.~
+LookDesc:$
+This engine kit consists of everything needed to be installed on a vehicle
+short of the necessary tools, but at least the directions are included. This
+particular kit is labeled as a [Torque Package] engine upgrade, and can
+increase the acceleration and load capacity of what it's installed in. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	50.00
+	Barrier:	12
+	Cost:	25000
+	AvailTN:	8
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	2
+[AFFECT 1]
+	Location:	Age
+	Modifier:	50
+BREAK
+#33061
+Keywords:	engine customized upgrade Deluxe Package [Deluxe Package]
+Name:	a customized engine [Deluxe Package] upgrade
+RoomDesc:$
+A part of an engine is sitting here on a small crane lift.~
+LookDesc:$
+This engine kit consists of everything needed to be installed on a vehicle
+short of the necessary tools, but at least the directions are included. This
+particular kit is labeled as a [Deluxe] engine upgrade, and can increase the
+top end, acceleration and load capacity of what it's installed in. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	50.00
+	Barrier:	12
+	Cost:	35000
+	AvailTN:	8
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	30
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	2
+[AFFECT 2]
+	Location:	Age
+	Modifier:	50
+BREAK
+END

@@ -1,0 +1,51 @@
+#40300
+Keywords:	tuba jon's jon
+Name:	Jon's tuba
+RoomDesc:$
+Jon's tuba is here, collecting dust...~
+LookDesc:$
+IT'S JON'S TUBA! GIVE IT BACK TO HIM! NOW! 
+~
+Type:	Container
+WearFlags:	1000110000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2147483647
+BREAK
+#40301
+Keywords:	a sign
+Name:	a sign
+RoomDesc:$
+A sign sits here, waiting to have the look command used on it!~
+LookDesc:$
+Hey guys, Jon here, just wanted to say welcome to my end of the world and i
+hope you explore around a bit...
+ Hope you enjoy the place... 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	1000001101
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	9999.00
+	Barrier:	24
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

@@ -1,0 +1,217 @@
+#24100
+Keywords:	crimson white armor jacket
+Name:	a ^rcrimson^N and ^Wwhite ^Narmor jacket
+RoomDesc:$
+a ^rcrimson^n and ^Wwhite ^narmor jacket~
+LookDesc:$
+This is a standard-issue uniform of the TPF police. An armor jacket with the
+TPF crimson and white colors and a numbered badge. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	5.00
+	Barrier:	6
+	Cost:	3000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val3:	2
+	Val5:	5
+	Val6:	4
+	Val7:	2
+BREAK
+#24102
+Keywords:	shotgun double barreled black
+Name:	a black double-barreled shotgun
+RoomDesc:$
+A black double-barreled shotgun lies here.~
+LookDesc:$
+A plain black double-barreled shotgun.  It doesn't appear to have any markings
+that would designate who made it, etc.  Looks nasty though. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	16
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	2
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+	Val10:	2
+BREAK
+#24104
+Keywords:	cigar cuban havana
+Name:	a cuban cigar
+RoomDesc:$
+A thick cigar lies here in its shrinkwrap.~
+LookDesc:$
+You look closely at this cigar and you see "Cortez Habana" on the cigar band.
+Cuban.  Smells real nice too. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.02
+	Barrier:	1
+	Cost:	1299
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	3
+BREAK
+#24106
+Keywords:	dermal plating delta
+Name:	dermal plating I -delta
+RoomDesc:$
+Upgraded dermal plating.~
+LookDesc:$
+More essence-friendly than normal, alpha, & beta dermal plating 3.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	15.00
+	Barrier:	1
+	Cost:	48000
+	AvailTN:	13
+	AvailDay:	36.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	1
+	Val2:	3
+	Val4:	25
+[AFFECT 0]
+	Location:	Body
+	Modifier:	3
+BREAK
+#24107
+Keywords:	lacing bone cyberware titanium pool
+Name:	titanium bone lacing -delta
+RoomDesc:$
+A pool of liquid metal is lying here.~
+LookDesc:$
+The pool looks like some form of liquid metal, obviously created for
+Cyberware purposes.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	600000
+	AvailTN:	14
+	AvailDay:	42.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val2:	3
+	Val3:	2
+	Val4:	112
+[AFFECT 0]
+	Location:	Body
+	Modifier:	2
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+[AFFECT 2]
+	Location:	Ballistic
+	Modifier:	1
+BREAK
+#24108
+Keywords:	wired reflexes delta
+Name:	wired reflexes III -delta
+RoomDesc:$
+Upgraded wired reflexes.~
+LookDesc:$
+More essence-friendly than normal, alpha, & beta wired reflexes 3.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	4000000
+	AvailTN:	17
+	AvailDay:	42.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	3
+	Val2:	3
+	Val4:	250
+BREAK
+#24110
+Keywords:	4 level l4 move by wire move-by-wire delta cyberware
+Name:	Move-by-Wire IV -delta
+RoomDesc:$
+A piece of delta grade cyberware is lying here.~
+LookDesc:$
+This piece of cyberware increases the reflexes of the host by putting them
+into a controlled state of seizure. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	16000000
+	AvailTN:	29
+	AvailDay:	135.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	43
+	Val1:	4
+	Val2:	3
+	Val4:	350
+BREAK
+END

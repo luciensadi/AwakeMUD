@@ -1,0 +1,3866 @@
+#7200
+Name:	Entrance to Chinatown
+Desc:$
+   You stand at the entrance to Chinatown, in between two large buildings.
+Behind you lies Tacoma, some of the noise pollution fading into this area,
+along with the new noise directly ahead. You stand on the beginning of the
+main road through Chinatown, "Wu Street". 
+~
+Flags:	10000000000010000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	2527
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7201
+Name:	Intersection of Wu and Xing Streets
+Desc:$
+   The sounds of bustling Chinatown draw your attention all over Wu street.
+Cars are not so common here, though you do see a few, and a few motorcycles
+can be seen in Triad colors zooming past on occasion. To the south is Xing
+Square, home to the market. To the east is a large black brick building with
+oriental designs, seeming rather ominous in a place like this, and to the west
+is a large sign stating 'Massage Parlor'. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7200
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7202
+Name:	Wu Street
+Desc:$
+   The sounds of bustling Chinatown draw your attention all over Wu street.
+Cars are not so common here, though you do see a few, and a few motorcycles
+can be seen in Triad colors zooming past on occasion. Not so far away is Xing
+Square, home to the market. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7203
+Name:	Wu Street
+Desc:$
+   The sounds of bustling Chinatown draw your attention all over Wu street.
+Cars are not so common here, though you do see a few, and a few motorcycles
+can be seen in Triad colors zooming past on occasion. Directly nearby, to the
+south, is Xing Square. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	7224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7223
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7204
+Name:	Xing Square
+Desc:$
+   This is Xing Square, home of the Chinatown marketplace. Ramshackle shops
+line the street sides, and people browse and buy all around, speaking in
+several different languages. A building to the northeast seems rather odd
+here, and a sign on its side indictates "Kiriyama's". Xing Square is also the
+intersection of Wu and Guang Street. You draw back a bit as a crusty old
+fountain shoots an irregular burst of water in your direction. Damn, all over
+your new clothes, too.... 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	7250
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7223
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7205
+Name:	Wu Street
+Desc:$
+   The sounds of bustling Chinatown draw your attention all over Wu street.
+Cars are not so common here, though you do see a few, and a few motorcycles
+can be seen in Triad colors zooming past on occasion. Directly nearby, to the
+north, is Xing Square. Farther to the south, a sign is seen stating 'Si Ma
+Yi's' with arrows pointing down at an angle to the ground, both east and west.
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	7224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	7223
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7206
+Name:	Wu Street
+Desc:$
+   The sounds of bustling Chinatown draw your attention all over Wu street.
+Cars are not so common here, though you do see a few, and a few motorcycles
+can be seen in Triad colors zooming past on occasion. Slightly off to the
+north, is Xing Square. To the south, a sign is seen stating 'Si Ma Yi's' with
+arrows pointing down at an angle to the ground, both east and west. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7207
+Name:	Intersection of Wu and Xhu Streets
+Desc:$
+   The sounds of bustling Chinatown draw your attention all over Wu street.
+Cars are not so common here, though you do see a few, and a few motorcycles
+can be seen in Triad colors zooming past on occasion. Far off to the north, is
+Xing Square. A sign reading "Si Ma Yi's" with arrows pointing down at an angle
+to the ground, both east and west, is seen hanging from a wire over the road.
+This is also the intersection of Wu and Xhu Streets, and far off in both the
+east and west directions you see dark alleyways.   
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7219
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7208
+Name:	Wu Street
+Desc:$
+   The sounds of bustling Chinatown draw your attention all over Wu Street.
+Cars are not so common here, though you do see a few, and a few motorcycles
+can be seen in Triad colors flying by on occasion. To the northwest is a sign
+hanging on a wire advertising "Si Ma Yi's."  Far to the south you see a large
+sign stating "Vehicle Parking". 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	Keywords:	door
+	ToVnum:	7232
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7209
+Name:	Wu Street
+Desc:$
+   The sounds of bustling Chinatown draw your attention all over Wu street.
+Cars are not so common here, though you do see a few, and a few motorcycles
+can be seen in Triad colors zooming past on occasion. Somewhat to the north is
+a sign hanging on a wire advertising  "Si Ma Yi's" and an arrow pointing down
+at an angle in both east and west directions. Far to the south you see a large
+sign advertising "Vehicle Parking". 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	ToVnum:	7229
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7210
+Name:	Wu Street
+Desc:$
+   The sounds of bustling Chinatown draw your attention all over Wu street.
+Cars are not so common here, though you do see a few, and a few motorcycles
+can be seen in Triad colors zooming past on occasion. A small town sign on a
+building wall to the east states "Mystics and Mantras". Somewhat far to the
+south you see a large sign advertising "Vehicle Parking".  
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	7244
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7211
+Name:	Wu Street
+Desc:$
+   The sounds of bustling Chinatown draw your attention all over Wu street.
+Cars are not so common here, though you do see a few, and a few motorcycles
+can be seen in Triad colors zooming past on occasion. A small town sign on a
+building wall to the west states "Xiang's". To the south you see a large sign
+stating "Vehicle Parking". 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7212
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	ToVnum:	7230
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7212
+Name:	Intersection of Wu and Xhang Streets
+Desc:$
+   The sounds of bustling Chinatown draw your attention all over Wu Street.
+Cars are not so common here, though you do see a few, and a few motorcycles
+can be seen in Triad colors zooming past on occasion. To the south you see a
+large sign stating "Vehicle Parking". Xhang Street leads to other
+intersections to the east.  
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7247
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7231
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7213
+Name:	Intersection of Xing and Huang Streets
+Desc:$
+   This is Xing Street, a side street running east/west in comparison to Wu
+Street. There are few vehicles travelling here, but you notice that most of
+the ones that do are in triad colors. Right to the west is a sign hanging
+about a large archway stating, 'Massage Parlor'. To the south runs Huang
+Street, another main street in Chinatown. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7226
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7214
+Name:	Xing Street
+Desc:$
+   This is Xing Street, a side street running east/west in comparison to Wu
+Street. There are few vehicles travelling here, but you notice that most of
+the ones that do are in triad colors. A bit to the west is a sign hanging
+about a large archway stating, 'Massage Parlor'. Nearby to the east is Wu
+Street. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7215
+Name:	Xing Street
+Desc:$
+   This is Xing Street, a side street running east/west in comparison to Wu
+Street. There are few vehicles travelling here, but you notice that most of
+the ones that do are in Triad colors. The dark, ominous and oriental building
+looms over you nearer to the east. Nearby to the west is Wu Street.  
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7216
+Name:	Intersection of Xing and Zhao Streets
+Desc:$
+   This is Xing Street, a side street running east/west in comparison to Wu
+Street. There are few vehicles travelling here, but you notice that most of
+the ones that do are in Triad colors. A dark and ominous oriental building
+looms over you directly to the northeast. To the south runs Zhao Street,
+another main street in Chinatown.  
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	7281
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7217
+Name:	Huang Street
+Desc:$
+   You are on Huang Street, one of Chinatown's main streets.  Triad gangers
+stalk the streets looking for any sign of someone, anyone, muscling in on
+their turf.  On either side of you are some small shops set up selling
+oriental trinkets.  Further south you see the prestigious Flying Dragon
+Restraunt. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7218
+Name:	Huang Street
+Desc:$
+   This is the site of Huang Street's major attractions.  The street is alive
+with the noise and motion of tourists, and locals moving in and out of shops.
+To your east is the "Flying Dragon Restaraunt", infamous for its egg drop soup
+and hot tempered owner. To the south Huang Street intersects with Guang
+Street. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	7257
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7222
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7219
+Name:	Xhu Street
+Desc:$
+   The sights and sounds of Chinatown give you the vivid impression of being
+overseas.  Xhu and Wu Street intersect to your east, and a dark forbidding
+alley is off to the west.  You start to notice fewer Triad gangers. 
+~
+Flags:	10000000000010000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7220
+Name:	A Dark Alleyway
+Desc:$
+   The noise of China Town drowns out and becomes distant the further into the
+alleyway you go.  The soothing sound of water forming an eddie and running
+down a drain begins to cast a hypnotic spell on you.  If it weren't for that
+awful smell portruding from the manhole, you might even consider curling up
+next to that bum for a nice nap. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7237
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7219
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	manhole
+	Desc:$
+A manhole cover is set into the road here. 
+~
+	ToVnum:	7251
+	Flags:	1
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	0
+	HiddenRating:	2
+BREAK
+#7221
+Name:	Guang Street
+Desc:$
+   You stand on Guang Street, another calm side street with low amounts of
+traffic. The Triad population seems about the same as the other places, and a
+incense smell emanates from the building to the west. This building has a
+small sign stating "Yun's Bar" and inside seems to be a seating area, and past
+that a bar. To the east is located Xing Square, a bit after the intersection
+of Huang Street. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7222
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7234
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7222
+Name:	Intersection of Guang and Huang Streets
+Desc:$
+   You stand on Guang Street, another calm side street with low amounts of
+traffic. The Triad population seems about the same as the other places, and a
+faint incense smell emanates from the building to the west. This building has
+a small sign stating "Yun's Bar" and just inside seems to be a seating area.
+To the east is located Xing Square, and running north and south from here is
+Huang Street.  
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7223
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7236
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7234
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7223
+Name:	Guang Street
+Desc:$
+   You stand on Guang Street, another calm side street with low amounts of
+traffic. The triad population here seems about the same as the other places.
+The activity is a bit higher here than the rest of Guang Street, due to the
+nearby Xing Square. Directly to the east is the square. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	7203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	7205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7222
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7224
+Name:	Guang Street
+Desc:$
+   You stand on Guang Street, another calm side street with low amounts of
+traffic. The triad population here seems about the same as the other places.
+The activity is a bit higher here than the rest of Guang Street, due to the
+nearby Xing Square. Directly to the west is the square. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	7203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7225
+Name:	Intersection of Guang and Zhao Streets
+Desc:$
+   You stand on Guang Street, another calm side street with low amounts of
+traffic. The Triad population here seems about the same as the other places. A
+faint stench emanates from the east, coming from what seems to be a large
+manhole. Nearby to the west is Xing Square. Running north and south from here
+is Zhao Street. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7241
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7238
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	manhole
+	Desc:$
+A manhole cover protects you from falling into the sewers. 
+~
+	ToVnum:	7243
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	2
+BREAK
+#7226
+Name:	Massage Parlor
+Desc:$
+   Past a large archway, decorated in shades of red and yellow, you see a set
+of double doors. Past those, the floor is littered with petals from some
+flower you are unfamiliar with. The room generates a peaceful, easy feeling
+that pervades your senses and relaxes you. You look over to your right at a
+small counter with an Asian woman in her 40s standing behind it. She smiles at
+you in an odd manner, as if she expects that you already know what kind of
+place this is. You don't, but a moan from a door at the other end of the room
+quickly tells you all you need to know. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7227
+Name:	Xhu Street
+Desc:$
+   You are on Xhu Street, to your west is the intersection of Wu and Xhu
+Street.  The street begins to narrow as it runs eastward, making you unsure of
+whether or not you'll be able to get all the way to the end.  Filthy-looking
+chicken cages are in the alley, housing tonight's dinner for customers of the
+surrounding restaraunts. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7228
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7228
+Name:	Dark Alleyway
+Desc:$
+   To your west is Xhu Street, to your north Zhao Street.  The alley is small
+and dirty.  You're not even sure YOU can pass through here let alone a CAR.
+Chicken cages are stacked up against buildings, some with chickens, some
+without.  In any case the cages look like they haven't been cleaned in years.
+Water runs down a grate in the center of the alleyway. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7239
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7274
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	grate metal
+	ToVnum:	64990
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7229
+Name:	Honest Obie's All-Knight Armory
+Desc:$
+   Ole honest Obie sits behind his counter waiting to sell you some piece of
+overpriced armor.  He has an antique suit of medieval knight's armor standing
+in the corner next to the cash register; cleverly disguised in the helmet is a
+security camera.  Glass cases are spread throughout the shop holding helmets,
+full body armor, and just about anything else to keep yer hoop from getting
+shot. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	7209
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7230
+Name:	Xiangs Boom-Boom Shop
+Desc:$
+   Xiang's Boom Boom shop, so named because the last time the Triads came in
+here to charge Xiang for protection money, he lost it and picked up an assault
+cannon. That's right, Boom-Boom. The door and front window display case area
+look brand new, as though they have just been rebuilt. Guns are hanging from
+the walls enclosed in thick bullet proof glass. If you want anything out of
+those cases, Xiang's gonna have to get it for you. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	7211
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7231
+Name:	Parking Lot
+Desc:$
+   The Chinatown parking lot.  Probably not the first place you'd want to
+leave your vehicle, but if you must, you must.  Triad gangers cruise into the
+parking lot, only to whip a shitty on their motorcycles and scream off back
+down Wu Street.  A few of the local shop owners have parked their vehicles
+here. 
+~
+Flags:	100000000000010000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7212
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7232
+Name:	Si Ma Yi's
+Desc:$
+   You are standing in Si Ma Yi's furniture store.  Couches, end tables,
+and;coffee tables are spread throughout the shop.  Three women, probably
+sisters, work on the cleaning and upkeep of this place.  If you didn't know
+any better you'd say they had their sewing circle build the furniture for
+sale, needless to say it's not exactly quality products they're selling. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	Keywords:	door
+	ToVnum:	7208
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Keywords:	Trap Hatch
+	ToVnum:	7298
+	Flags:	1
+	Material:	brick
+	Barrier:	32
+	KeyVnum:	0
+	HiddenRating:	2
+BREAK
+#7234
+Name:	Yun's Seating Area
+Desc:$
+   The seating area of Yun's Bar looks more like something you would find on a
+tropical island then in the middle of Chinatown.  The ceiling is made out of
+sod and is held up by bamboo rafters, and supports.  Tables and chairs are
+scattered about, and an impressive view of the surrounding area is visible
+from just about anywhere in this area.  Yun's bar is to the west. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7222
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7235
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7235
+Name:	Yun's Bar
+Desc:$
+   This room, like the seating area, is designed to look like a tropical
+island.  There is no hint of oriental origins except from the owner, Yun, who
+sits behind the bar in a Hawaiian shirt.  Pictures of beaches, and far away
+places line the walls, an older era juke box is set up in one corner playing
+music you're not sure your parents have even heard of. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7234
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7236
+Name:	Huang Street
+Desc:$
+   The noise of the city is as loud here as it would be anywhere else.  Triad
+gangers fly by on motorcycles, while others stalk the streets eyeing you a
+little too closely. To the north Guang intersects with Huang Street and to
+your south the road narrows into a dark alley.  There seems to be more triad
+gangers in this area than the rest of Chinatown. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7222
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7237
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7237
+Name:	Huang Street
+Desc:$
+      The noise of the city is as loud here as it would be anywhere else.
+Triad gangers fly by on motorcycles, while others stalk the streets eyeing you
+a little too closely.  Shops are spread a little more thinly in this area and
+you feel as though you are crossing into a more dangerous part of Chinatown.
+To your south is a dark alleyway, to your north is more of Huang Street.  
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7236
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7238
+Name:	Zhao Street
+Desc:$
+   The constant chatter of Chinatown can be heard almost everywhere you go,
+here is no exception.  Triads prowl the streets looking for trouble, every now
+and then a motrocycle will scream by a little too close for comfort.  To your
+north Guang intersects with Zhao, which continues to run south from here.  
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7239
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7239
+Name:	Zhao Street
+Desc:$
+   Zhao Street runs to the north from here, and disappears into a dark alley
+to the south.  You're not all that sure you want to see what's in that alley.
+Probably nothing but still....  There aren't very many Triad gangers roaming
+this area, and the noise of Chinatown has sufficiently dropped.  
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7238
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7228
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7240
+Name:	Zhao Street
+Desc:$
+   This is Zhao Street, one of the main streets in Chinatown.  To your north
+is a rather large ominous building that has more stories than your lazy hoop
+feels like counting right now.  To the far south Zhao Street seems to
+intersect with another street, but you're a little too far away to tell which
+one. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7241
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7241
+Name:	Zhao Street
+Desc:$
+   You are standing on Zhao street, if you haven't realized it until now
+there's a good chance you took a wrong turn somewhere.  The intersection of
+Guand and Zhao Streets lies to the south.  A weathered wooden sign is hanging
+over a drab looking shop to your east that says,  "Xhen's Den".  
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	7242
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7242
+Name:	Xhen's Den
+Desc:$
+   You enter the tiny shop and upon taking your first breath feel somewhat
+euphoric.  The walls seem to close in and move away from you at the same time.
+You're not all that sure what made you feel this good, but you'd be willing to
+give your left eye to have some of it!  Past the counter and the little
+Chinese man sitting at it is a back room, but you're not sure how to get
+there. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	ToVnum:	7241
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7243
+Name:	Down in the sewers
+Desc:$
+   Well you've found your way in and out of the sewer sytem, and much to your
+dismay the area is filled with, yep you guessed it, shit.  It's everywhere.
+It's on the walls, on the ground, on the ceiling, and now it's on your shoes.
+The smell of the sewer system is so strong you're not too sure if you'll be
+able to stay down here for too long without some type of breathing apparatus.
+~
+Flags:	10000000100001100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	4
+	Smoke:	6
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	7255
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Keywords:	manhole
+	Desc:$
+A manhole cover provides access to the street. 
+~
+	ToVnum:	7225
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7244
+Name:	Mystics and Mantras
+Desc:$
+   Oak trim lines the walls just below the ceiling of this shop, depicting
+ancient carvings.  Six pillars that look like the Roman gods of old are carved
+out of stone and set to look as if they are holding up the ceiling.  You stare
+down at the floor and begin to feel a little motion sickness.  Comets shoot by
+in a blazing fury, while stars are dotted across the flooring.  It seems as
+though someone cut a chunk of the night sky out and set it into place here in
+this shop's floor.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	ToVnum:	7210
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7245
+Name:	The Botanical Garden
+Desc:$
+   As you cross from the street to the indoors it really feels as though
+you're stepping from the city into a rain forest.  Speakers mounted in the
+ceiling throughout the store play soothing nature sounds, and all sorts of
+plants grow up from everywhere.  The floor is actually made out of dirt!
+Stepping stones are in place for all the aisles, and seem to lead to the cash
+register.  The shelves are lined with the latest in natural herbal supplements
+and remedies.  
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	7247
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7246
+Name:	In the sewers
+Desc:$
+   The water flow doesn't seem as bad here, although the smell seems to have
+become worse since you started this little endeavor.  Who's fraggin idea was
+it to come down into the Chinatown shitter system anyways?!?!  Oh well, might
+as well keep looking for whatever it is you're after, your clothes are already
+ruined. 
+~
+Flags:	100001001
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	3
+	Smoke:	6
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7279
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7252
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7247
+Name:	Xhang Street
+Desc:$
+   You are standing Xhang Street.  It continues west to intersect with Wu
+street, and seems to run east quite a ways.  Triad gangers are everywhere.
+They seem to be hanging out on the doorsteps of every shop, and their vehicles
+crowd the road.  A wooden sign is hanging above a shop door to your north that
+says, "The Botanical Garden". 
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	7245
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7272
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7212
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7248
+Name:	In the sewers
+Desc:$
+   You are in the Chinatown sewer system.  The smell is worse then ten hundred
+trolls in a holding cell.  The system connects and intertwines with several
+other coulverts.  
+~
+Flags:	100001000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	3
+	Smoke:	6
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7252
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7249
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7249
+Name:	In the sewers
+Desc:$
+   You are in the Chinatown sewer system.  The smell is worse then ten hundred
+trolls in a holding cell.  The system connects and intertwines with several
+other coulverts.  
+~
+Flags:	100001000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	3
+	Smoke:	6
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7248
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7251
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7250
+Name:	Kiriyama's
+Desc:$
+   You are struck by the sparse decoration of what is either a weapons store
+or a grisly trophy room. There are only a few weapons on the walls here, but
+most of them didn't get the blood cleaned off of them before they were put up
+for sale. You wonder how the shopkeeper came across this variety of weaponry.
+In the corner, sitting on a low cabinet in the back of the shop, is an
+expressionless young man who looks like he is (or was) bleeding from his eyes.
+He says nothing, but simply watches as you browse. He must be the owner. Next
+to him you notice what appears to be a ^Bclass picture^N from Japan.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	7204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	class picture photo~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	Desc:$
+This picture looks like it was taken a couple of years ago. In it are a bunch
+of children who look Japanese, some smiling, some not. You notice ^Rred X^Ns
+through a majority of the students' heads or bodies, and you also see a
+circular inset picture of the kid who runs this shop, as well as another inset
+picture next to it, in the upper right corner of the photo. Man, who's shop
+did you just walk into? 
+~
+BREAK
+#7251
+Name:	Down in the sewers
+Desc:$
+   Well, you've found your way in and out of the sewer, and much to your
+dismay the rooms is filled with a substance that can only be described as
+shit.  It's everywhere.  It's on the walls, on the ground, on the ceiling, and
+now on your shoes.  The smell of the sewer system is so strong you're not too
+sure if you'll be able to stay down here for too long without some type of
+breathing apparatus.  
+~
+Flags:	100001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7249
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Keywords:	manhole
+	Desc:$
+A Manhole cover provides access to the street above. 
+~
+	ToVnum:	7220
+	Flags:	1
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	0
+BREAK
+#7252
+Name:	In the sewers
+Desc:$
+   You are in the Chinatown sewer system.  The smell is worse then ten hundred
+trolls in a holding cell.  The system connects and intertwines with several
+other coulverts.  
+~
+Flags:	100001001
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	3
+	Smoke:	6
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7253
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7246
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7248
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7253
+Name:	In the sewers
+Desc:$
+   You are in the Chinatown sewer system.  The smell is worse then ten hundred
+trolls in a holding cell.  The system connects and intertwines with several
+other coulverts.  
+~
+Flags:	100001001
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	3
+	Smoke:	6
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7254
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7252
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7254
+Name:	Down in the sewers
+Desc:$
+   Waterlines seem to converge from every direction and feed straight up into
+the ceiling.  There's probably a fountain or something directly above you. 
+~
+Flags:	100001001
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	3
+	Smoke:	6
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7255
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7253
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7255
+Name:	In the sewers
+Desc:$
+   You are in the Chinatown sewer system.  The smell is worse then ten hundred
+trolls in a holding cell.  The system connects and intertwines with several
+other coulverts. 
+~
+Flags:	100001001
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	3
+	Smoke:	6
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7243
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7254
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7257
+Name:	Entrance to The Flying Dragon Restaurant
+Desc:$
+   You stand at the entrance to the Flying Dragon Restaurant.  Walls have been
+constructed out of bamboo, as well as the ceiling.  It looks as if each piece
+of bamboo has been intricately carved with chinese symbols.  You imagine each
+piece contains a story.  Elemental symbols carved out of jade hang above the
+doorway. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7258
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	ToVnum:	7218
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7258
+Name:	Hostess Station
+Desc:$
+   The room is lavishly decorated with Oriental tapestries and rugs.
+Decorative katanas and fans are hung on the walls while designer Chinese paper
+lamps hang from the ceiling. A beautiful Oriental woman in a kimono waits
+behind a podium to seat you. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7264
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7259
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7257
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7259
+Name:	The Flying Dragon
+Desc:$
+   As you move into this portion of the Flying Dragon, you can see that the
+bathrooms and kitchen are located to the north, the manager's office is to the
+south, and the bar is to your east.  Waitresses are coming and going through
+this area. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7262
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7271
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7260
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7258
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7260
+Name:	The Flying Dragon
+Desc:$
+   Decorated like the other areas of the restaraunt, lamps hang from the
+ceiling and sayings written in Chinese cover the walls.  There is a portrait
+painted on the wall of Sun Tzu sitting beneath an elm tree.  On the other wall
+a legion of samurais riding into battle on horses.  To your east is the
+manager's office. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7259
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	7261
+	Flags:	1
+	Material:	brick
+	Barrier:	3
+	KeyVnum:	0
+	LockRating:	6
+BREAK
+#7261
+Name:	Managers Office
+Desc:$
+   Bereft of all things asian, this office look as though you went from east
+to west in a hurry.  Modern furnishings fill the office, and technological
+devices seem set up in accordance with the decor.  A muted trid screen
+displays news live as it is reported, as a humble looking white man works
+dilligently behind a mahogany desk. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	ToVnum:	7260
+	Flags:	1
+	Material:	brick
+	Barrier:	3
+	KeyVnum:	0
+BREAK
+#7262
+Name:	The Flying Dragon
+Desc:$
+   You're at an intersection between the kitchen, the bathrooms, and the rest
+of the restaurant.  It would probably be in your best interest not to linger
+too long, given that the waitresses are moving quickly in and out of this
+area.  To the east is the kitchen, north and west lead to the bathrooms. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	7269
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	double
+	ToVnum:	7263
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7259
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	ToVnum:	7270
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7263
+Name:	Flying Dragon Kitchen
+Desc:$
+   Inside the kitchen a frenzy of culinary arts is taking place.  Several
+cooks are working quickly behind the line preparing custoemr meals.  A dish
+washing machine is stuck into the corner, and a harassed boy that can't be
+more than ten slaves away thanklessly.  You get the creeping sensation your
+presence is not wanted here. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	double
+	ToVnum:	7262
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7264
+Name:	Seating Area
+Desc:$
+   Tables are laid out symmetricaly in this room, while booths line the walls
+all around you.  An enormous three-dimensinal map of Asia has been intricately
+carved into the ceilig of this area.  Chinese men in business suits chat idly
+at their tables while awaiting their food.   
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7265
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7258
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7265
+Name:	Seating Area
+Desc:$
+   Tables are laid out symmetrically in this room, while booth sline the walls
+all around you. An enormous three-dimensinal map of Asia has been intricatley
+carved into the ceiling of this area. China men in business suits chat idly at
+there tables while awaiting their food. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7268
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7264
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7267
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7267
+Name:	A booth
+Desc:$
+      You slip into the booth and have a pretty good view of the street from
+here.  Thin cloth shades conceal you from the world outside, yet allow you to
+observe it at the same time.  A golden buddha sits in the middle of the table
+with incense burning slowly inside.  The waitress seems to understand most
+people who sit in the booths do not want to be disturbed, you'll have to catch
+her on the run if you want to place an order. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7265
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7268
+Name:	A booth
+Desc:$
+   Although you can't see all the way to the street from this booth, it's
+spacious none the less.  A golden buddha sits in the middle of the table,
+incense burning slowly inside.  You try to flag down the waitress to place an
+order, but realize she doesn't seem to go to the booths, given the
+sensitive;nature of things usually being discussed there in.  You'll have to
+catch her on the run if you'd like to place an order.  
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	7265
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7269
+Name:	Men's Bathroom
+Desc:$
+   A urinal is set into the wall, next to a stall that houses a toilet.
+Uplifting Chinese sayings are carved into the walls imbuing the room with a
+peaceful feeling. One in particular catches your eye: 'If life's successes
+equal 'A', then 'X' plus 'Y' plus 'Z' equals 'A', where 'X' is hard work, 'Y'
+is fun, and 'Z' is knowing when to keep your mouth shut. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	7262
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7270
+Name:	Women's Bathroom
+Desc:$
+   A quaint little bathroom with one toilet, and a simple porcelain sink.  As
+you look about the women's bathroom you notice the tiles on the floor are made
+of jade!  There are Chinese writings carved into the wall, one Chinese proverb
+catches your eye. It says, 'The participant's perspectives are clouded while
+the bystander's views are clear.' 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	7262
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7271
+Name:	Flying Dragon Bar
+Desc:$
+    Chinese tapestries hang from the walls here, as oriental music plays in
+the background.  The bar is composed of an ivory counter top and glass stools.
+Behind the counter stands a very well built Asian man ready to take and serve
+you your order.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	7259
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7272
+Name:	Xhang Street
+Desc:$
+   This portion of Xhang Street is fairly empty.  Shops are boarded up on
+either side of the street, and Triads seem to wander about aimlessly, not
+paying much attention to your pressence.  To the east Xhang Street intersects
+with Macau Street, and to the west is more of Xhang Street.   
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7273
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7247
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7273
+Name:	Intersection of Xhang and Macau
+Desc:$
+   You are standing in the intersection of Xhang and Macau street.  The
+constant drone of the ciy is muffled slightly by the cars zipping by in this
+area.  Triads are prevalent in this part of the city as they are anywhere
+else.  Macau street runs to the north.  
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7275
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7272
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7274
+Name:	Intersection of Macau and Xhu
+Desc:$
+   Macau Street runs in from the south connecting with Xhu Street.  You look
+southward down the desolate street and doubt it's even worth the time to walk
+down it.  Far more interesting aspects of the city lie to the west, down Xhu
+Street.  
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	7278
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7228
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7275
+Name:	Macau Street
+Desc:$
+   Macau Street seems like more of a back alley street than a main through
+street of Chinatown.  Aside from a few shops spread out along the street, it
+seems as if the only real reason this street is in place is to offer an
+alternate route between Xhu and Xhang Street.  A metal sign is set into the
+bricks above the building to your west that says, "Ritas Body Sculpture".  
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7276
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7273
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	ToVnum:	7297
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7276
+Name:	Macau Street
+Desc:$
+   You are on Macau Street, and much to your surprise there seems to be a shop
+tucked away off to the east.  A wooden sign hangs out from the building that
+looks fairly new indicates the shop is called, "The Sharpest Edge".
+Ancient-looking, samurai armor-clothed mannequins in the display case wield
+katanas fiercely...well, as fiercely as mannequins can wield katanas. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7277
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	7280
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7275
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7277
+Name:	Macau Street
+Desc:$
+   Macau street seems like more of a back alley street than a main through
+street of Chinatown.  It seems as though it's only purpose is to connect Xhu
+and Xhang street together. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7278
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7276
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7278
+Name:	Macau Street
+Desc:$
+   Macau Street seems like more of a back alley street than a main through
+street of Chinatown.  It seems as though it's only purpose is to connect Xhu
+and Xhang Streets together. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7274
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7277
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7279
+Name:	A small hovel
+Desc:$
+   The smell of the sewer wafts into this small alcove, overwhelming your
+senses. It seems that this area has been converted into a makeshift hovel.
+Rubbish is strewn around the room and rats scurry about your feet. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	3
+	Smoke:	6
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	7246
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7280
+Name:	The Sharpest Edge
+Desc:$
+   Katanas, war axes, and broad swords are hung with care from the walls.
+Glass cases are spread throughout the shop containing throwing stars, sais and
+deadly fans.  Behind the counter an oriental looking human is sharping a
+custom sword.  You catch a glimpse of the hilt and see the letters TSE
+engraved on it.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	ToVnum:	7276
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7281
+Name:	Outside a dojo
+Desc:$
+   A huge multi-story dojo stands here, clevery mixing traditional chinese
+styling with modern techniques. Outside lies a traditional bamboo garden,
+immaculate, even amongst all the pollution of china town. Triad enforcers
+stand guard outside the doors, taking careful note of who enters and leaves
+but never stopping anyone. 
+~
+Flags:	100
+SecType:	City
+MatrixExit:	0
+Crowd:	2
+Cover:	8
+X:	10
+Y:	5
+Z:	2.50
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	Desc:$
+The entrance to the dojo is wide open. 
+~
+	ToVnum:	7282
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7282
+Name:	Dojo entrance hall
+Desc:$
+   The traditional styling outside gives way to modern styling inside. You
+could aswell be in a corporate HQ as a martial arts school. Chinese motifs,
+however, are carried throughout the room. From the tapestries hanging on the
+wall, to the guardian statues flanking the entrance way into the main training
+hall. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	1
+Cover:	0
+X:	10
+Y:	15
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7283
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7281
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7283
+Name:	First floor of an abandoned dojo
+Desc:$
+   This room is nearly always filled with students pracitising various forms
+of traditional chinese martial arts. It's possible to have 3 or 4 seperate
+groups at once in here without them getting in the way. Training equipment
+lines the walls, everything from weapons racks to punching bags. The huge
+center area is often used as an arena. A sliding door constructed of thick
+paper is located off to the side of the area, which none of the students seem
+to go near. 
+~
+NightDesc:$
+   While busy during the day, at night the training hall is more the domain of
+Triad gangers looking to further their personal training. Various shady
+looking individuals are making use of the training equipment. A sliding door
+constructed of thick paper is located off to the side of the area, which
+nobody seems to go near. 
+~
+Flags:	1000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	10
+Cover:	1
+X:	80
+Y:	80
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door sliding thick paper
+	Desc:$
+A sliding door constructed on thick paper opens up into the abandoned dojo. 
+~
+	ToVnum:	7284
+	Flags:	1
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	34
+[EXIT south]
+	ToVnum:	7282
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7284
+Name:	First floor of an abandoned dojo
+Desc:$
+   You're on the first floor of what appears to be an abandoned dojo, and it
+is very clear this Triad territory, chum. How could this possibly be noticed?
+For starters, the walls are spray painted with Triad colors, along with
+various other pieces of graffiti. Thin paper walls that once divided rooms
+have been torn to shreds, flapping slightly in the cross breeze. Someone has
+gone through the trouble of spray painting across one of the walls in very
+large letters, "^RALL FIREARMS PROHIBITED!^N" Oh yeah, this place is definitely a
+dive chummer, no doubt about it. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	Keywords:	door thin paper
+	Desc:$
+A thin paper door that has almost been reduced to confetti blocks the way. 
+~
+	ToVnum:	7285
+	Flags:	1
+	Material:	paper
+	Barrier:	2
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door sliding thick paper
+	Desc:$
+A sliding door constructed on thick paper opens back up into the dojo
+entrance. 
+~
+	ToVnum:	7283
+	Flags:	1
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7285
+Name:	First floor of an abandoned dojo
+Desc:$
+   The first floor of this abandoned dojo seems much the same, no matter what
+portion of it one travels into, since most of it is spray painted with
+graffiti, some of which is a bit lewd, even for gangers. The thin paper walls
+are all but pieces of confetti, threatening to blow away at even the slightest
+of breezes. Off to the west is what appears to be a shoddy looking staircase.
+~
+Flags:	100001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	3
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	7286
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	Keywords:	door thin paper
+	Desc:$
+A thin paper door that has almost been reduced to confetti blocks the way. 
+~
+	ToVnum:	7284
+	Flags:	1
+	Material:	paper
+	Barrier:	2
+	KeyVnum:	0
+BREAK
+#7286
+Name:	A decaying stair case
+Desc:$
+   Upon moving from the landing on the first floor to the inside of the stair
+case, one is greeted with a menagerie of old rotting wooden boards that spiral
+upwards towards the next floor above. It looks as though if you don't know
+where to step, you shouldn't proceed, since it may just be your last. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7285
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	7287
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7287
+Name:	Second Floor of the Dojo
+Desc:$
+   Below is a set of rickety old stairs (or what's left of them) leading
+downward to the first floor landing, while off to the southeast is a corridor
+leading to the main rooms located on the second floor of this abandoned drek
+hole... err dojo. A bit of dust and debris trickles down through the spaces in
+the floor boards overhead, showering visitors with Kibo knows what kind of
+drek. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	7289
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	7286
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7289
+Name:	Second floor of the dojo
+Desc:$
+   The second floor seems to be a little bit cleaner than the first floor of
+this dojo, but it isn't enough to actually make much difference since you
+could probably contract tetanus from damn near every rusty nail sticking out
+of nearly every surface. You should probably watch your hoop, chum, since
+you're not exactly an invited guest around these parts. 
+~
+Flags:	100001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	3
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	7290
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	7287
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7290
+Name:	Another decaying wood staircase
+Desc:$
+   The second floor landing isn't much better off than the first, and by this
+time, one has probably become quite familiar with the half-rotten wooden
+boards that consist of what can barely be designated as a staircase. In fact,
+it's more along the lines of stacked planks of what was once wood, but has
+become heavily discoloured by the elements and various other forms of abuse,
+both natural and intentional. The climb up them is probably treacherous unless
+you have a degree in street urchin spelunking. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7289
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	7291
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7291
+Name:	Third Floor of the Dojo
+Desc:$
+   The third floor isn't much better off than the previous, so don't go
+getting your hopes up just yet. Various bits and pieces of what were once
+furniture are strewn about after what one can only assume was a scuffle, and
+ofcourse, nobody bothered to clean up after themselves either. The corridor
+leading to other portions of the third floor heads off to the southeast from
+here. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	7292
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	7290
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7292
+Name:	Third Floor of the Dojo
+Desc:$
+   More broken bits and shards of what was once furniture are scattered across
+the floor, as if someone had a temper tantrum and decided to redecorate the
+place with a sledgehammer. A single boarded up window can be noted on the
+eastern wall, while the rest of the walls seem to be plastered with classy
+spray painted murals, consisting of old favourites such as, "^WFor a good time
+call...^N" and "^REat at Joe's!^N". One of the gangers seems to have gone through
+the trouble of spray painting what could be considered a fairly nice work of
+art, one that isn't even lewd or crude... But, ofcourse, some wise ass had to
+go and write next to the artists name, adding on "Sucks!". Classy guys huh? 
+~
+Flags:	100001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	3
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	7293
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	7291
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7293
+Name:	Yet another decaying staircase
+Desc:$
+   By now, it's pretty obvious what kind of trouble one is going to have to go
+through to ascend to the next floor, and frankly, it's getting kind of old.
+Couldn't these bastards have the common decency to spring for at least one
+intact set of stairs? Seriously? But no, they couldn't, and instead you're
+left with climbing up the equivalent of little more than rotten wooden
+pallettes nailed together by the hand what could only be described as an
+epileptic in mid-convulsion. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7292
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	7294
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7294
+Name:	Fourth Floor of the Dojo
+Desc:$
+   Now atop the fourth floor landing, one can only let out a sigh of relief
+after having scaled a mountain of easily broken stairs (if they can even be
+called that). More of the same seems to be on the menu, and visitors are
+greeted with crude depictions of sexual acts spray painted on the walls.. Or
+at least you think they're sexual acts? Frankly, some of them you've never
+seen, and hell, you're kind of hoping you never do. The corridor leads off to
+the other portion of the fourth floor of the dojo. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	7295
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	7293
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7295
+Name:	Fourth Floor of the Dojo
+Desc:$
+   The fourth floor seems to be a bit better off than the previous levels, and
+at the least, there appears to be some couches to lounge around upon. Then
+again, do you really wanna test your luck? They look pretty beat up, and
+probably have more diseases than your local joy girl. There was a trideo set
+at one time, but someone seems to have decided they didn't enjoy the
+programming offered, since they went through the trouble of smashing against
+the wall until it was little more than a smattering of broken glass and
+plastic. Even so, they plugged it back in, perhaps expecting it would still
+work? Who knows. A heavy oak door is set off to the west, and probably appears
+to be the most valuable furnishing this entire joint has. 
+~
+Flags:	100001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	3
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door oak
+	Desc:$
+A heavy oak door leads into the final room. 
+~
+	ToVnum:	7296
+	Flags:	1
+	Material:	wood
+	Barrier:	8
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	7294
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7296
+Name:	The last endeavor.. Or not?
+Desc:$
+   After making it through the previous levels of the dojo, and upon reaching
+the very end, one is greeted by.... Nobody..? Absolutely nothing? Isn't the
+'Big Bad' supposed to be here..? Instead, there seems to be nothing of
+immediate interest or worth, unless you count the sparse, shabby moth eaten
+furnishings and a few cobwebs stacked up in the corners. Then what the hell
+was the purpose of this dojo? Man.. Talk about disappointment. Also, if you
+don't get the Game of Death reference, sucks to be you. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A heavy oak door leads back out into the dojo. 
+~
+	ToVnum:	7295
+	Flags:	1
+	Material:	wood
+	Barrier:	8
+	KeyVnum:	0
+BREAK
+#7297
+Name:	Rita's Body Sculpture
+Desc:$
+   You are inside Rita's Body Sculpture shop, and true to the name there are
+pieces of artificial flesh ready to be grafted onto a willing patient. The
+room has a sterile feel and smell to it, not uncommon to upscale shops and
+hospitals like this. The doctor, Rita, is busy examining specimens underneath
+a microscope when you walk in. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	7275
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7298
+Name:	Doc Oblivions Chop Shop
+Desc:$
+   A tiny little man in a white smock is sitting behind a counter, hidden by a
+massive stack of books.  You wonder if it would kill him in the event that
+they fell over.  In the middle of the room is a shiny metal operating table
+with a tray holding some tools.  Lining the walls are heavy duty metal
+refrigerators housing the products the good doctor sells. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	Keywords:	trap hatch
+	ToVnum:	7232
+	Flags:	1
+	Material:	brick
+	Barrier:	32
+	KeyVnum:	0
+BREAK
+#7299
+Name:	A Training Room
+Desc:$
+   This seems to be the martial arts training room of the Triad that owns this
+dojo. The dark blue padded matting that covers the floor feels slightly
+springy under your steps. Weapons, practice dummies and various other training
+implements litter the area. A few Triad members, dressed in white training gi,
+spar together; they don't seem too interested in causing trouble. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7282
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

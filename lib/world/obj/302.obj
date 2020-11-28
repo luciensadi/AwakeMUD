@@ -1,0 +1,344 @@
+#30200
+Keywords:	spider charm
+Name:	A pendant with a small glossy object hanging down.
+RoomDesc:$
+Something has been left here. It looks like a pendant.~
+LookDesc:$
+The glossy object is a small spider enclosed in some semi-transparent
+material. The spider seems still vivid and moving, kept floating within the
+bubble like without any garvity! Strange powers must be working within... 
+~
+Type:	Focus
+WearFlags:	101000000010100
+ExtraFlags:	101001011011
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	666666
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	10
+	Val2:	4
+[AFFECT 0]
+	Location:	Age
+	Modifier:	100
+[AFFECT 1]
+	Location:	Magic Pool
+	Modifier:	100
+[AFFECT 2]
+	Location:	Willpower
+	Modifier:	50
+[AFFECT 3]
+	Location:	Ballistic
+	Modifier:	10
+[AFFECT 4]
+	Location:	Impact
+	Modifier:	10
+[AFFECT 5]
+	Location:	Willpower
+	Modifier:	5
+BREAK
+#30250
+Keywords:	glass water
+Name:	a glass of water
+RoomDesc:$
+A glass of clear water (fresh as the spring) has been left here.~
+LookDesc:$
+Even the glass has a logo on it- in detailed colors the Fed Boeing emblem is
+fixed to it. But if they claim for just one glass such a lot, maybe you also
+just can take the glass with you... 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	3
+BREAK
+#30251
+Keywords:	bagel
+Name:	a suspicious-looking bagel
+RoomDesc:$
+A bagel filled with BLT has been left here.~
+LookDesc:$
+If one ain't hungry enough- maybe it just has already seen to much time
+passing by. At least this isn't the bagel you have been waiting for. If you
+are trying not to die of starvation, maybe you can try to force it down. And
+the next problem: keep it inside your stomach. At least it doesn't run away...
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+BREAK
+#30252
+Keywords:	burger meat hamburger greasy
+Name:	a very greasy burger
+RoomDesc:$
+A burger is lying on a lake formed by pure grease. Enjoy!~
+LookDesc:$
+You can't actually make out any meat in the damn thing, because the grease
+has shaped the burger itself. If there is any meat in there anyway, don't
+count on it being your prime Texan cow either.
+~
+Type:	Food
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.60
+	Barrier:	1
+	Cost:	40
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+BREAK
+#30277
+Keywords:	q
+Name:	The broken down entrance of the Heaven and Earth association
+RoomDesc:$
+There are the remains of the entrance to the Heaven and Earth association.~
+LookDesc:$
+After the bombing the entrance to the Heaven and Earth association is no more.
+Paramedic teams and security officers try to clear the area and to get inside
+the building. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30400
+Keywords:	rag oily
+Name:	an oily rag
+RoomDesc:$
+An oily rag has been discarded here~
+LookDesc:$
+Covered in oil stains, this is good for wiping your hands on, or burning 
+~
+Type:	Worn
+WearFlags:	100000000000
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	100
+[AFFECT 1]
+	Location:	Target Numbers
+	Modifier:	-100
+[AFFECT 2]
+	Location:	Reaction
+	Modifier:	100
+BREAK
+#30401
+Keywords:	tentacle
+Name:	a large ^mPurple^n tentacle
+RoomDesc:$
+A large tentacle twitches and spurts a mysterious goo here.~
+LookDesc:$
+A huge purple tentacle, designed to emulate all your school tentacle rape
+fantasies. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	100001000000
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val2:	4
+	Val3:	3
+	Val4:	5
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	100
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	100
+[AFFECT 3]
+	Location:	Body
+	Modifier:	10
+BREAK
+#30402
+Keywords:	japanese school girl schoolgirl
+Name:	a screaming japanese school girl
+RoomDesc:$
+A japanese school girl screams in terror here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val3:	300
+BREAK
+#30403
+Keywords:	power fc-x racing computer
+Name:	a Power FC-X racing computer
+RoomDesc:$
+A small box, with a hell of alot of wires coming from it lies here.~
+LookDesc:$
+It's the latest in a long line of A'PEXi products designed to give a finer
+control over the engine of the car. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	5000
+	AvailTN:	6
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	3
+	Val2:	1
+	Val5:	8
+	Val6:	24
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	5
+[AFFECT 1]
+	Location:	Quickness
+	Modifier:	40
+[AFFECT 2]
+	Location:	Willpower
+	Modifier:	-1
+BREAK
+#30404
+Keywords:	aluminium gt spoiler
+Name:	a aluminium GT spoiler
+RoomDesc:$
+A huge spoiler, designed to fit on a sports car, lies here.~
+LookDesc:$
+This is the biggest fucking spoiler you have ever seen. 
+~
+Type:	Vehicle Mod
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	8.00
+	Barrier:	1
+	Cost:	900
+	AvailTN:	2
+	AvailDay:	0.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	21
+	Val1:	8
+	Val2:	1
+	Val6:	17
+BREAK
+#30405
+Keywords:	youthful head che forgotten pow
+Name:	the youthful head of Che the forgotten POW
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

@@ -1,0 +1,50 @@
+#3797
+Keeper:	2424
+ProfitBuy:	1.20
+ProfitSell:	0.30
+Random:	7
+Open:	9
+Close:	19
+Type:	Black
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough creds!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d creds.
+Sell:	Here's your %d creds.
+Name:	Nicky's Clinic
+Flags:	10
+Races:	0
+Buytypes:	1000000000000000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	318
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	317
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	316
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	345
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	347
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	344
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	346
+		Type:	Avail
+		Stock:	0
+BREAK
+END

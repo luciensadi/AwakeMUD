@@ -1,0 +1,47 @@
+#5200
+Keywords:	map computer kiosk
+Name:	a map of the mall
+RoomDesc:$
+^gA computer kiosk stands here displaying a map of the mall.^n 
+
+~
+LookDesc:$
+
+This large kiosk is covered in stained oak and has a computer screen displaying a map of the mall.
+
+^r  ______________________________________________________________________
+^r |                                                                      ^r|
+^r | ^gConnecting to MapNet...                                              ^r|
+^r |                                                                      ^r|
+^r | ^bWelcome to the                                                       ^r|
+^r |^B  ___           _   _   _       __  __      _ _                       ^r|
+^r |^B / __| ___ __ _| |_| |_| |___  |  \/  |__ _| | |                      ^r|
+^r |^B \__ \/ -_) _` |  _|  _| / -_) | |\/| / _` | | |                      ^r|
+^r |^B |___/\___\__,_|\__|\__|_\___| |_|  |_\__,_|_|_|                      ^r|
+^r |                                                                      ^r|
+^r | ^cView the ^GGround^c, ^GLower^c, ^GUpper^c, & ^GFood ^cmaps for detailed information  ^r|
+^r | ^con where to find what you're looking for. ^L[^ROOC ^rExample: ^wread lower^L]  ^r|
+^r |______________________________________________________________________|^l..
+..
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	1000000000
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	230
+	Weight:	125
+[SKILLS]
+BREAK
+END

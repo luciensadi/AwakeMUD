@@ -1,0 +1,1637 @@
+#61000
+Name:	Onramp to Seattle-Tacoma International Airport
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	61001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61001
+Name:	A Road Adjacent to the Sea-Tac Entry Gates
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	61000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61002
+Name:	A Road Adjacent to the Sea-Tac Entry Gates
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	61001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61003
+Name:	A Road Adjacent to the Sea-Tac Entry Gates
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	61002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61004
+Name:	A Turn in the Road
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	61003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61005
+Name:	Inside Entry Gate C
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61006
+Name:	Inside Entry Gate B
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61007
+Name:	Inside Entry Gate A
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61010
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61008
+Name:	Inside the Seattle-Tacoma International Airport Waiting Area
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61011
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61009
+Name:	Inside the Seattle-Tacoma International Airport Waiting Area
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61012
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	61008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61010
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61010
+Name:	Inside the Seattle-Tacoma International Airport Waiting Area
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61013
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	61009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61011
+Name:	The Northeast Corner of the Waiting Area
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61014
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61012
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61012
+Name:	At the Ticket Sales Counter
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	61011
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61013
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61013
+Name:	The Northwest Corner of the Waiting Area
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61015
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	61012
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61010
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61014
+Name:	Entering a Security Checkpoint
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	61011
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	61016
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61015
+Name:	Entering a Security Checkpoint
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	61016
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61013
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61016
+Name:	Being Processed through Another Security Checkpoint
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	61017
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	61014
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	61015
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	61018
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61017
+Name:	Going Through a Security Checkpoint
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61019
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	61016
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61018
+Name:	Going Through a Security Checkpoint
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	61016
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61019
+Name:	South End of Sea-Tac Central Plaza
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61031
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	61030
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61017
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61020
+Name:	South End of Sea-Tac Central Plaza
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61032
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	61019
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61018
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61021
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61021
+Name:	Southwest Corner of Sea-Tac Central Plaza
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61022
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	61020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61035
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61041
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61022
+Name:	West End of Sea-Tac Central Plaza
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61023
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	61032
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61021
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61042
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61023
+Name:	West End of Sea-Tac Central Plaza
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61024
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	61033
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61022
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61043
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61024
+Name:	Northwest Corner of Sea-Tac Central Plaza
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	61025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61023
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61044
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	61045
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61025
+Name:	North Side of Sea-Tac Central Plaza
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	61047
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	61026
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61033
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61024
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61026
+Name:	North Side of Sea-Tac Central Plaza
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	61027
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61034
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	61047
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61027
+Name:	Northeast Corner of Sea-Tac Central Plaza
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	61046
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	61040
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61028
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61026
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61028
+Name:	East Side of Sea-Tac Central Plaza
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61027
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	61039
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61029
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61034
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61029
+Name:	East Side of Sea-Tac Central Plaza
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61028
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	61038
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61030
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61031
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61030
+Name:	Southeast Corner of Sea-Tac Central Plaza
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61029
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	61037
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61036
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61019
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61031
+Name:	By the Luggage Carousels
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61034
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	61029
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61019
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61032
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61032
+Name:	By the Luggage Carousels
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61033
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	61031
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61022
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61033
+Name:	By the Luggage Carousels
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	61034
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61032
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61023
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61034
+Name:	By the Luggage Carousels
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61026
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	61028
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61031
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	61033
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61035
+Name:	The Men's Restroom
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61021
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61036
+Name:	The Women's Restroom
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61030
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61037
+Name:	A Clothing Shop
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	61030
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61038
+Name:	A Gift Shop
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	61029
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61039
+Name:	A Media Outlet
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	61028
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61040
+Name:	A Newspaper Stand/Book store
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	61027
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61041
+Name:	A Cafe
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	61021
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61042
+Name:	A Five-Star Restaurant
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	61022
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61043
+Name:	A Camera Supply Store
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	61023
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61044
+Name:	A Survival Gear Store
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	61024
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61045
+Name:	An Escalator Down to the Employee Level
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	61024
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61046
+Name:	An Escalator Up to the Promenade Level
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	ToVnum:	61027
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61047
+Name:	Entering a Restricted Area
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61048
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	61026
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	61025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61048
+Name:	A Restricted Security Hall
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61049
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61047
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61049
+Name:	A Restricted Security Hall
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61050
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61048
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61050
+Name:	Gateway to the Sea-Tac Flight Deck
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	61051
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	61049
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#61051
+Name:	South End of the Flight Deck
+Desc:$
+You are in an unfinished room.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	61050
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

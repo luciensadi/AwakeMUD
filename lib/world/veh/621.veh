@@ -1,0 +1,276 @@
+#62100
+Name:	boat skiff aztechnology nightrunner
+ShortDesc:	An Aztechnology Nightrunner
+RoomDesc:	An Aztechnology Nightrunner rocks on the waves here
+LongDesc:$
+This small, efficient skiff can easily keep up with watercraft that are twice
+its size. While available in electric versions, this particular model sports a
+good old fashioned methane driven workhorse, which boasts a better
+acceleration and and top end over the prior model. Whether fishing or
+joyriding the waves, this baby is sure to leave an impression and live up to
+its namesake. 
+~
+Inside:$
+While small are not very comfortable, it contains everything necessary to
+complete any task at sea one would wish to do. It boasts a bit of electronic
+functionality, as its autonavigation unit and GPS system hints towards. 
+~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	motors off
+Arriving:	motors in
+Handling:	3
+Speed:	75
+Accel:	8
+Body:	3
+Armour:	0
+Pilot:	0
+Sig:	4
+Autonav:	3
+Seating:	2
+SeatingBack:	0
+Load:	250
+Cost:	30000
+Type:	8
+Flags:	0
+Engine:	4
+BREAK
+#62101
+Name:	boat sailboat Sendako Marlin
+ShortDesc:	A Sendako Marlin
+RoomDesc:	A Sendako Marlin is here with its sails billowing in the wind
+LongDesc:$
+While it won't be winning any races against motorboats even half its size,
+this sail powered craft is silent, affordable, and better yet, inconspicuous.
+Whether a smuggler or an amateur sailor who only takes it out on weekends,
+this traditional design serves multiple purposes and fills them well enough to
+keep customers coming back for more. Dilettante Mortimer Profacas won the
+Chicago Mackinac race in this humble craft, which has rocketed its sales
+amongst boat enthusiasts in the last few years. 
+~
+Inside:$
+While not exactly a high class suite, it certainly is more comfortable and
+spacious than most civilian sailboats, though it's by no means something you'd
+wish to spend more than a day or two at a time upon. It features several seats
+on the deck, which are placed out of the way of the boats rigging and sail
+mechanics, allowing passengers to sit back and relax while they enjoy the
+ride. 
+~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	sails off
+Arriving:	sails in
+Handling:	3
+Speed:	30
+Accel:	3
+Body:	3
+Armour:	0
+Pilot:	0
+Sig:	6
+Autonav:	0
+Seating:	5
+SeatingBack:	0
+Load:	150
+Cost:	18750
+Type:	8
+Flags:	0
+Engine:	0
+BREAK
+#62102
+Name:	hydrofoil cigarette colorado craft
+ShortDesc:	A Colorado Craft Cigarette Hydrofoil
+RoomDesc:	A Colorado Craft Cigarette Hydrofoil effortlessly skims over the waves
+LongDesc:$
+Colorado Craft has outdone itself once again, which was a fortunate turn as
+they've become stagnant over the last few years, but they've most certainly
+blown the competition out of the water with the Cigarette Hydrofoil. Its
+namesake comes from its slim design, which is fast becoming a mainstay in the
+racing circuits, and thanks to the improvements in the latest model it is sure
+to stay at the top for years to come. 
+~
+Inside:$
+The interior of the craft isn't very spacious, and aside from two bucket seats
+(which are fairly comfortable), there isn't much to be seen aside from the
+electronic meters, autonavigation systems and GPS screens on the dashboard
+infront of them. A small hatch behind the seats lifts to reveal the rather
+large engine used to power this bad boy. 
+~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	skims off
+Arriving:	skims in
+Handling:	5
+Speed:	105
+Accel:	15
+Body:	3
+Armour:	0
+Pilot:	0
+Sig:	1
+Autonav:	2
+Seating:	2
+SeatingBack:	0
+Load:	240
+Cost:	35000
+Type:	8
+Flags:	0
+Engine:	3
+BREAK
+#62103
+Name:	Anago Mitsuhama Sea Sled
+ShortDesc:	A Mitsuhama Anago sea sled
+RoomDesc:	A Mitsuhama Anago sea sled lazily floats upon the water
+LongDesc:$
+The Mitsuhama Anago has found its place as a security craft for waterfront
+property owners and corporations, although it was originally marketed to
+coastal resorts for scuba tours. It features a jet ski styled frame, which
+pulls a larger seating arrangement that can hold at least a half dozen
+passengers. 
+~
+Inside:$
+The front section consists of a jet ski styled frame setup with two slender
+seats for the pilot and co-pilot, both of which are in easy reach of the
+simple electronic devices the watercraft is equipped with. 
+~
+InsideRear:$
+The rear section of the sea sled is a box-like configuration with three seats
+lining each edge, allowing passengers to take in the scenery, as well as the
+view beneath their feet, as the floor is crafted from a safety glass bottom. 
+~
+Leaving:	floats off
+Arriving:	floats in
+Handling:	3
+Speed:	35
+Accel:	4
+Body:	2
+Armour:	0
+Pilot:	0
+Sig:	9
+Autonav:	1
+Seating:	2
+SeatingBack:	6
+Load:	450
+Cost:	13750
+Type:	8
+Flags:	0
+Engine:	1
+BREAK
+#62104
+Name:	Kawasaki Aqualisk jet ski
+ShortDesc:	A Kawasaki Aqualisk jet ski
+RoomDesc:	A Kawasaki Aqualisk jet ski sits here, rocking on the waves
+LongDesc:$
+Kawasaki offers all of the maneuverability and speed of one of their own
+motorcycles with the introduction of the Aqualisk to the market, which is
+directly aimed at the recreational crowd. It offers dynamic paint schemes and
+minor body modification options so each and every one can be personalized by
+their owner, which is an obvious attempt to keep up with their main
+competitor, Suzuki. This particular model sports a gasoline engine, which
+sacrafices peace of mind at saving the enviroment for good old fashioned speed
+and accelleration. 
+~
+Inside:$
+There isn't much to see, afterall, it's just a water scooter. It features all
+the necessary dials and meters to show things such as water speed and fuel
+availability, and is comfortably upholstered with waterproof seat padding. 
+~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	speeds off
+Arriving:	speeds in
+Handling:	2
+Speed:	45
+Accel:	7
+Body:	2
+Armour:	0
+Pilot:	0
+Sig:	3
+Autonav:	0
+Seating:	2
+SeatingBack:	0
+Load:	38
+Cost:	10000
+Type:	8
+Flags:	0
+Engine:	3
+BREAK
+#62105
+Name:	Ford Rebel pick-up truck
+ShortDesc:	A Ford Rebel pick-up
+RoomDesc:	A Ford Rebel pick-up is parked here
+LongDesc:$
+Designed and manufactured by Ford sometime during the last decade or so, the
+Ford Rebel is an alternative for labour workers who simply need something to
+hail their tools around and perhaps a few buddies for drinks after work. It
+certainly won't be winning and drag races, but it gets the job done if all you
+plan to do is get from point A to point B. 
+~
+Inside:$
+The front seats are the most comfortable and there may not be many accessories
+to keep the driver occupied, it still manages to fit the basics into the small
+dashboard, which features a basic autonavigation system, as well as an
+outdated CD player with a port for optical music chips. 
+~
+InsideRear:$
+The back of this vehicle is little more than a pick-up bed, though if your
+passengers don't mind crouching down on the wheelhub or grabbing onto the
+side, you could probably fit a few of your buddies or just some regular cargo
+in the back. 
+~
+Leaving:	putters
+Arriving:	putters off
+Handling:	4
+Speed:	90
+Accel:	6
+Body:	4
+Armour:	0
+Pilot:	0
+Sig:	3
+Autonav:	2
+Seating:	2
+SeatingBack:	2
+Load:	350
+Cost:	18000
+Type:	3
+Flags:	0
+Engine:	3
+BREAK
+#62106
+Name:	Honda Sprite Scooter
+ShortDesc:	A Honda Sprite
+RoomDesc:	A Honda Sprite with its kickstand down is here
+LongDesc:$
+A very basic electric scooter for a very basic demographic, as long as you're
+not concerned with the looks you'll be getting (not the good kind, mind you)
+as you drive this little thing around, it'll certainly do its best to get you
+where you need to be. 
+~
+Inside:$
+This small electric scooter could probably fit two average sized (meta)humans,
+if you don't mind being close enough to smell the other passenger or getting a
+surprise in your lower back. It might not be very powerful, but it does come
+standard with a low end autonavigation unit, which isn't even a gridguide
+system persay, since all it does is tell you the directions and makes you
+steer. 
+~
+InsideRear:$
+Seriously? A back seat on a scooter? 
+~
+Leaving:	zips
+Arriving:	zips off
+Handling:	3
+Speed:	55
+Accel:	4
+Body:	2
+Armour:	0
+Pilot:	0
+Sig:	4
+Autonav:	1
+Seating:	2
+SeatingBack:	0
+Load:	10
+Cost:	3500
+Type:	1
+Flags:	0
+Engine:	1
+BREAK
+END

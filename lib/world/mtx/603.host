@@ -1,0 +1,606 @@
+#60300
+Name:	Novatech Central Matrix Host, Seattle
+Keywords:	novatech
+Description:$
+This is the central host for Novatech's Seattle offices.  Various hosts and
+subnets are connected here, all in a topology that faintly resembles a cross
+between older-era network maps and a sculpted host that shows the actual
+buildings and storefronts in question. Below you employees shuffle about on
+various pathways as packets flying in and out from a router just above you are
+sent to the central offices, retail outlets, management, executive hosts, and
+various other subnets too numerous to mention.  A few of the hosts seem to
+have their pathways obscured in flame creating a literal firewall, such as the
+upper echelon host above you. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	1100
+Colour:	2
+Security:	9
+Difficulty:	1
+Access:	12
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	10
+ControlTrapdoor:	0
+Index:	10
+IndexTrapdoor:	0
+Files:	10
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	9
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	PLTG
+[EXITS]
+	[EXIT 0]
+		Exit:	60301
+		Number:	Outlet
+	[EXIT 1]
+		Exit:	60303
+		Number:	Routing
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	28
+		Alert:	No Alert
+		IC:	60304
+	[TRIGGER 1]
+		Step:	25
+		Alert:	No Alert
+		IC:	60304
+	[TRIGGER 2]
+		Step:	22
+		Alert:	Active
+		IC:	60302
+	[TRIGGER 3]
+		Step:	18
+		Alert:	No Alert
+		IC:	60303
+	[TRIGGER 4]
+		Step:	13
+		Alert:	No Alert
+		IC:	60302
+	[TRIGGER 5]
+		Step:	9
+		Alert:	No Alert
+		IC:	60305
+	[TRIGGER 6]
+		Step:	7
+		Alert:	Passive
+		IC:	60300
+	[TRIGGER 7]
+		Step:	3
+		Alert:	No Alert
+		IC:	60301
+BREAK
+#60301
+Name:	Novatech Cyberdeck Outlet Subhost
+Keywords:	Novatech Cyberdeck Outlet SPU
+Description:$
+After locating the correct exit point, the urban landscape disappears and is
+replaced by a large cyberdeck store. Row after row of cyberdeck and cyberdeck
+program racks line the area. Small drones buzz around you, keeping their eye
+out for "shoplifters." 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	60300
+Colour:	2
+Security:	8
+Difficulty:	0
+Access:	7
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	8
+ControlTrapdoor:	0
+Index:	7
+IndexTrapdoor:	0
+Files:	7
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	6
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	PLTG
+[EXITS]
+	[EXIT 8]
+		Exit:	60302
+		Number:	Storage
+	[EXIT 9]
+		Exit:	60300
+		Number:	Central
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	10
+		Alert:	Passive
+		IC:	60300
+	[TRIGGER 1]
+		Step:	15
+		Alert:	Active
+		IC:	60300
+BREAK
+#60302
+Name:	Novatech Cyberdeck Outlet Datastore
+Keywords:	Novatech Cyberdeck Outlet Datastore
+Description:$
+The host around you is just a sea of file cabinets, all unlabeled and
+unmarked. It would be impossible to find anything here, unless you knew what
+you were looking for. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	60301
+Colour:	2
+Security:	6
+Difficulty:	2
+Access:	7
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	7
+ControlTrapdoor:	0
+Index:	7
+IndexTrapdoor:	0
+Files:	9
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	5
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[EXITS]
+	[EXIT 2]
+		Exit:	60301
+		Number:	Outlet
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	10
+		Alert:	Passive
+		IC:	60301
+	[TRIGGER 1]
+		Step:	15
+		Alert:	Active
+		IC:	60300
+BREAK
+#60303
+Name:	Novatech Employee Data Routing
+Keywords:	Employee Data Routing
+Description:$
+A massive, complex web of tubes stream data throughout the Novatech system.
+The extensive system of transport connects the Central Host to various other
+sections of the Novatech Matrix system. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	60300
+Colour:	1
+Security:	7
+Difficulty:	1
+Access:	8
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	6
+ControlTrapdoor:	0
+Index:	7
+IndexTrapdoor:	0
+Files:	7
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	9
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	PLTG
+[EXITS]
+	[EXIT 2]
+		Exit:	60300
+		Number:	Novatech
+	[EXIT 3]
+		Exit:	60304
+		Number:	Office
+	[EXIT 4]
+		Exit:	60305
+		Number:	Management
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	15
+		Alert:	Passive
+		IC:	60300
+	[TRIGGER 1]
+		Step:	20
+		Alert:	Active
+		IC:	60300
+BREAK
+#60304
+Name:	Novatech Office Central
+Keywords:	office central
+Description:$
+The node around you takes the appearance of a sea of bright blue cubicles.
+Wage slaves in Novatech uniforms, representing data streams, walk from cubicle
+to cubicle, unloading and loading stacks of papers at each one. You notice
+that every single cubicle in this enormous network is labeled with a Novatech
+employee's name. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	60303
+Colour:	2
+Security:	7
+Difficulty:	1
+Access:	8
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	7
+ControlTrapdoor:	0
+Index:	7
+IndexTrapdoor:	0
+Files:	8
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	6
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[EXITS]
+	[EXIT 2]
+		Exit:	60303
+		Number:	Routing
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	10
+		Alert:	No Alert
+		IC:	60300
+	[TRIGGER 1]
+		Step:	15
+		Alert:	Passive
+		IC:	60300
+	[TRIGGER 2]
+		Step:	20
+		Alert:	Active
+		IC:	60302
+BREAK
+#60305
+Name:	Novatech Management Central Data Processing
+Keywords:	Management Central
+Description:$
+The host suddenly takes the appearance of the interior of a black marble
+corporate building. Fine, redwood doors lead off into officers of the
+middle-ranking members of the Novatech hierarchy. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	60303
+Colour:	2
+Security:	8
+Difficulty:	1
+Access:	9
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	7
+ControlTrapdoor:	0
+Index:	7
+IndexTrapdoor:	0
+Files:	8
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	7
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	PLTG
+[EXITS]
+	[EXIT 3]
+		Exit:	60303
+		Number:	Routing
+	[EXIT 4]
+		Exit:	60306
+		Number:	Research
+	[EXIT 5]
+		Exit:	60307
+		Number:	Executive
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	10
+		Alert:	Passive
+		IC:	60302
+	[TRIGGER 1]
+		Step:	20
+		Alert:	Active
+		IC:	60303
+BREAK
+#60306
+Name:	Novatech Research Datastore
+Keywords:	Research Datastore
+Description:$
+File cabinets line the node, locked and storing data and information from
+Novatech's research firms. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	60305
+Colour:	2
+Security:	8
+Difficulty:	2
+Access:	9
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	7
+ControlTrapdoor:	0
+Index:	7
+IndexTrapdoor:	0
+Files:	10
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	7
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[EXITS]
+	[EXIT 2]
+		Exit:	60305
+		Number:	Management
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	10
+		Alert:	Passive
+		IC:	60302
+	[TRIGGER 1]
+		Step:	15
+		Alert:	Active
+		IC:	60303
+BREAK
+#60307
+Name:	Novatech Executive Area
+Keywords:	Executive Area
+Description:$
+The node takes on a posh appearance, with comfortable sofas and executive
+lounge chairs on a thick, red carpet. The lights are pleasantly dimmed, and
+soothing jazz music floats through the air. Wet bars dispense alcoholic
+beverages, and various doors in the area lead off to other sections of the
+system. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	60305
+Colour:	3
+Security:	8
+Difficulty:	1
+Access:	9
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	7
+ControlTrapdoor:	0
+Index:	7
+IndexTrapdoor:	0
+Files:	7
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	9
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	PLTG
+[EXITS]
+	[EXIT 2]
+		Exit:	60305
+		Number:	Management
+	[EXIT 3]
+		Exit:	60308
+		Number:	Project
+	[EXIT 4]
+		Exit:	60309
+		Number:	Finance
+	[EXIT 5]
+		Exit:	60310
+		Number:	Echelon
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	10
+		Alert:	Passive
+		IC:	60303
+	[TRIGGER 1]
+		Step:	17
+		Alert:	Active
+		IC:	60304
+BREAK
+#60308
+Name:	Novatech Project Data
+Keywords:	Project Data
+Description:$
+The setting of this node is that of a laboratory. Beakers of fluids stream
+liquid through a maze of glass tubes, sending the data streams throughout the
+entire node. Various chambers in the node house scientists and test subjects.
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	60307
+Colour:	3
+Security:	10
+Difficulty:	2
+Access:	9
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	9
+ControlTrapdoor:	0
+Index:	9
+IndexTrapdoor:	0
+Files:	10
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	9
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[EXITS]
+	[EXIT 2]
+		Exit:	60307
+		Number:	Executive
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	5
+		Alert:	No Alert
+		IC:	60305
+	[TRIGGER 1]
+		Step:	10
+		Alert:	Passive
+		IC:	60303
+	[TRIGGER 2]
+		Step:	15
+		Alert:	Active
+		IC:	60304
+	[TRIGGER 3]
+		Step:	20
+		Alert:	Active
+		IC:	60306
+BREAK
+#60309
+Name:	Novatech Finance Data
+Keywords:	Finance financial processing
+Description:$
+The entire node is pitch black, save for a single pillar in the center of the
+room. A light shines on it, and a steel, black safe is mounted at the very
+top. Steps wind around the column to reach the top of the pillar, which
+undoubtedly stores some sensitive data. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	60307
+Colour:	3
+Security:	9
+Difficulty:	2
+Access:	10
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	9
+ControlTrapdoor:	0
+Index:	9
+IndexTrapdoor:	0
+Files:	10
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	9
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[EXITS]
+	[EXIT 4]
+		Exit:	60307
+		Number:	Executive
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	5
+		Alert:	Passive
+		IC:	60305
+	[TRIGGER 1]
+		Step:	10
+		Alert:	Active
+		IC:	60304
+	[TRIGGER 2]
+		Step:	15
+		Alert:	Active
+		IC:	60306
+	[TRIGGER 3]
+		Step:	20
+		Alert:	Active
+		IC:	60306
+BREAK
+#60310
+Name:	The Upper Echelon
+Keywords:	Echelon Upper
+Description:$
+The node takes on a pitch black appearance, save for a central conference
+table in the center of the node, which is illuminated by a light from an
+unseen source. Various important documents are on the table, outlining the
+operations of Novatech Inc. in Seattle. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	60307
+Colour:	4
+Security:	8
+Difficulty:	2
+Access:	12
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	12
+ControlTrapdoor:	0
+Index:	12
+IndexTrapdoor:	0
+Files:	12
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	12
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	PLTG
+[EXITS]
+	[EXIT 4]
+		Exit:	60307
+		Number:	Executive
+	[EXIT 5]
+		Exit:	60311
+		Number:	Confidential
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	5
+		Alert:	No Alert
+		IC:	60303
+	[TRIGGER 1]
+		Step:	10
+		Alert:	Passive
+		IC:	60304
+	[TRIGGER 2]
+		Step:	15
+		Alert:	Active
+		IC:	60306
+	[TRIGGER 3]
+		Step:	20
+		Alert:	Active
+		IC:	60306
+BREAK
+#60311
+Name:	Novatech Confidential Data
+Keywords:	Confidential data
+Description:$
+A single table in the center of the room has various manilla folders on it,
+containing extremely sensitive information about the Novatech Corporation. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	60310
+Colour:	4
+Security:	10
+Difficulty:	2
+Access:	12
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	12
+ControlTrapdoor:	0
+Index:	12
+IndexTrapdoor:	0
+Files:	12
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	12
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[EXITS]
+	[EXIT 4]
+		Exit:	60310
+		Number:	Echelon
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	5
+		Alert:	Passive
+		IC:	60305
+	[TRIGGER 1]
+		Step:	10
+		Alert:	Active
+		IC:	60306
+	[TRIGGER 2]
+		Step:	15
+		Alert:	Active
+		IC:	60306
+	[TRIGGER 3]
+		Step:	20
+		Alert:	Active
+		IC:	60306
+BREAK
+END

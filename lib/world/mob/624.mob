@@ -1,0 +1,36 @@
+#62400
+Keywords:	manager pelagie waterfront apartments
+Name:	a manager for Pelagie Waterfront Apartments
+RoomDesc:$
+A manager for Pelagie Waterfront Apartments is watching the trid here. 
+
+~
+LookDesc:$
+This rather young gentleman appears to be in charge of the apartment complex,
+which isn't really much of a complex. He munches loudly on his current snack
+of choice as he watches the small trideo set on his desk, occasionally
+glancing up when someone arrives to see if they need any help. If you wish to
+rent out a boat house, it seems this is the guy to talk about it with. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	8
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+[SKILLS]
+	unarmed combat:	7
+BREAK
+END

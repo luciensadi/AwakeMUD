@@ -1,0 +1,603 @@
+#17206
+Keywords:	Ares MP Laser
+Name:	an Ares MP Laser
+RoomDesc:$
+An Ares MP Laser is lying here.~
+LookDesc:$
+The first ever portable laser system brought to you by Ares.  Built from seven
+differn't Ares patents, the MP Laser is designed to be carried by a single
+person in high threat situations. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	100000000000000
+Material:	plastic
+[POINTS]
+	Weight:	5.00
+	Barrier:	12
+	Cost:	2500000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	4
+	Val3:	8
+	Val4:	11
+	Val5:	20
+	Val6:	20
+	Val8:	-1
+BREAK
+#17208
+Keywords:	Ares Vigorous Assault Cannon
+Name:	an Ares Vigorous Assault Cannon
+RoomDesc:$
+An Ares Vigorous Assault Cannon is lying here.~
+LookDesc:$
+This weapon fires massive explosive shells much like bullets, minus the
+instability. An 'Ares' logo is stamped cleanly across its side. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	20.00
+	Barrier:	12
+	Cost:	12500
+	AvailTN:	16
+	AvailDay:	14.00
+	LegalNum:	2
+	LegalCode:	8
+	LegalPermit:	0
+[VALUES]
+	Val0:	18
+	Val1:	4
+	Val3:	18
+	Val4:	21
+	Val5:	20
+	Val6:	20
+	Val10:	2
+BREAK
+#17216
+Keywords:	grenade offensive
+Name:	a grenade
+RoomDesc:$
+A grenade lies here.~
+LookDesc:$
+A standard hand grenade: a small, self-contained explosive device with a timer
+and a detonator. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#17220
+Keywords:	Systeri Monokatana katana
+Name:	a Systeri monokatana
+RoomDesc:$
+A sleek titanium monokatana lays here.~
+LookDesc:$
+An expensive elven import katana made complete with a mono-edge, this katana
+is sleek and deadly. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	2
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#17223
+Keywords:	flowing black dress
+Name:	a Flowing Black Dress
+RoomDesc:$
+A crumble of silk cloth is lying here.~
+LookDesc:$
+This long and loose fitting silk black dress has various symbols printed upon
+it, I wonder what they mean... 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	1001000000
+AffFlags:	11000000000000000
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	16
+	Cost:	100000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	3
+	Val6:	2
+BREAK
+#17224
+Keywords:	collar leather black
+Name:	a Black Leather Collar
+RoomDesc:$
+A Black Leather Collar is lying here.~
+LookDesc:$
+A Black Leather Collar with small metal studs.  It makes you feel kinda funny.
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	1001000000
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	16
+	Cost:	100000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	-1
+[AFFECT 1]
+	Location:	Magic
+	Modifier:	1
+BREAK
+#17225
+Keywords:	Cyberterminal terminal phone fone
+Name:	a Cyberterminal
+RoomDesc:$
+A Cyberterminal is here attached to one of the couches~
+LookDesc:$
+Just your basic Cyberterminal, complete with jack points for those of us with
+datajacks. 
+~
+Type:	Phone
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	100000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#17226
+Keywords:	Spell Combat Powerball Formula
+Name:	a spell formula
+RoomDesc:$
+A piece of paper is floating gently to the ground...~
+LookDesc:$
+this spell is the combat spell Powerball. It is an area effect spell and can
+be cast at a distance. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	4000
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	5
+BREAK
+#17227
+Keywords:	Spell Health Formula Stabilize
+Name:	a spell formula
+RoomDesc:$
+A piece of paper is floating gently to the ground...~
+LookDesc:$
+This is the spell that allows you to stablize someone's condition, when they
+are dying. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	400
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	32
+BREAK
+#17228
+Keywords:	Formula Spell Protection Armor
+Name:	a spell formula
+RoomDesc:$
+A piece of paper floats gently to the ground...~
+LookDesc:$
+This is the mage spell for armor. This spell can be locked on the caster only
+and provides the abilty to soak more damage. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	400
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	51
+BREAK
+#17229
+Keywords:	spell formula chaos bound paper
+Name:	a bound stack of paper
+RoomDesc:$
+A large stack of bound paper is here.~
+LookDesc:$
+This bound paper stack contains numerous formulae and diagrams pertaining to
+hermetic magic. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	3000
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	35
+BREAK
+#17230
+Keywords:	Powerball spell formula wolfskin pelt
+Name:	a grey wolfskin pelt
+RoomDesc:$
+A grey wolfskin is on the floor like a small rug.~
+LookDesc:$
+This grey wolfskin seems charged with energy and power. You can feel the
+energies of the powerball spell locked inside awaiting for your knowledge to
+learn its secrets. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	4000
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	5
+	Val2:	1
+BREAK
+#17231
+Keywords:	stabilize spell formula snake skin
+Name:	a snake skin
+RoomDesc:$
+A dried out piece of snake skin lying on the ground.~
+LookDesc:$
+This snake skin is very thin and you can almost see through it. It looks like
+it has come from the hognosed snake. A snake that is excellent in playing dead
+so it's enemies will leave it alone. Very well choosen for a stabilize spell.
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	400
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	32
+	Val2:	1
+BREAK
+#17232
+Keywords:	armor medicine shield formula
+Name:	a medicine shield
+RoomDesc:$
+An old leather inidan shield is gathering dust here.~
+LookDesc:$
+This shield contains the secrets to the armor spell. it looks like the shield
+is made from some very tough animal hide. The shield has leather fringes and
+the designs seem to swirl and mix into each other. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	400
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	51
+	Val2:	1
+BREAK
+#17233
+Keywords:	stone tablet spell petrify formula
+Name:	an engraved stone tablet
+RoomDesc:$
+An engraved piece of stone is lying here.~
+LookDesc:$
+A picture of a swirling whirlpool has been carved into this heavy stone
+tablet. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	8.40
+	Barrier:	32
+	Cost:	2000
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	35
+	Val2:	1
+[EXTRADESC 0]
+	Keywords:	carvings
+	Desc:$
+They almost look like a snake headed woman, but it is hard to make out. 
+~
+BREAK
+#17234
+Keywords:	athame foci dagger
+Name:	an athame dagger
+RoomDesc:$
+A small dagger is lying here.~
+LookDesc:$
+A small dagger with a mirrored blade made of orichalcum. It has a symbol of
+Mars the god of war on the hilt. 
+~
+Type:	Focus
+WearFlags:	100000000000001
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	225000
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	3
+BREAK
+#17235
+Keywords:	gold orichalcum golden collar
+Name:	a gold and orichalcum collar
+RoomDesc:$
+A golden collar shimmers in the light as it lays upon the ground~
+LookDesc:$
+A very well made chain mesh collar made of orichalcum and gold. It has runes
+on each of the links, and when you look at them they seem to be egyptian
+glyphs used in by there priests. You can make out the sun symbol of Ra and the
+death symbol for Anubis.  
+~
+Type:	Focus
+WearFlags:	101
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	24
+	Cost:	225000
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	3
+	Val2:	4
+BREAK
+#17236
+Keywords:	sprig mistletoe twig
+Name:	a sprig of mistletoe
+RoomDesc:$
+A twig is lying on the ground.~
+LookDesc:$
+This is an enchanted sprig of mistletoe that has been harvested by a virgin
+druidess in the light of a full moon using a golden sickle. 
+~
+Type:	Focus
+WearFlags:	10001
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.30
+	Barrier:	2
+	Cost:	30000
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	2
+BREAK
+#17237
+Keywords:	earring diamond gold
+Name:	a gold diamond encrusted earring
+RoomDesc:$
+A diamond encrusted earring is lying here.~
+LookDesc:$
+This is a very expensive looking earring. The gold seems to flow around each
+othe diamonds forming the symbol for infinity. As you look into the diamonds
+they seem to swirl and pull you deeper into them with a subtle tug on your
+mind. 
+~
+Type:	Focus
+WearFlags:	10000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	50000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+[AFFECT 0]
+	Location:	Charisma
+	Modifier:	1
+BREAK
+#17298
+Keywords:	Thermoptic Cloak Therm Optic
+Name:	a Transparent Cloak
+RoomDesc:$
+A Transparent Cloak is lying here.~
+LookDesc:$
+This Transparent cloak seems to be warm by nature.  It extends over the full
+length of the body and includes a hood and face covering so the whole body can
+be wrapped in it. 
+~
+Type:	Worn
+WearFlags:	10000000101
+ExtraFlags:	1000000000
+AffFlags:	10000000000000000
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#17299
+Keywords:	A Black Katana
+Name:	a Black Bladed Katana
+RoomDesc:$
+A Katana is lying here.~
+LookDesc:$
+A Very Well Made Katana which seems to have an inscription on it, "Masamune".
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	2
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+END

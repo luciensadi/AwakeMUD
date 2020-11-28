@@ -1,0 +1,4118 @@
+#60200
+Name:	Entrance to a Run Down, Abandoned Building
+Desc:$
+   A rickety looking abandoned building is next to the street, juxtaposing the
+upper class, corporate surroundings. Every window that isn't already smashed
+has been darkened, and the red brick building looks like it's going to
+collapse any second now. The trash piled around the base of the three story
+building is incredibly unsanitary, and boards to the west block off the
+entrance from any curious wanderer.  
+~
+Flags:	10000000000000001001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	1558
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	boards door
+	ToVnum:	60201
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60201
+Name:	Inside an Abandoned Building
+Desc:$
+   A thick layer of dust is on everything in the area. Smashed furniture,
+broken glass, spent condoms.. every conceivable piece of trash is littered in
+the area. Massive cobwebs are supported in between the pillars that hold the
+building together. You can help but feel as is something, or someone, is
+lurking in the shadows around you. The bright light from the formerly blocked
+off entryway is visible, and seems to beckon you to leave while you still can.
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	boards door
+	ToVnum:	60200
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60202
+Name:	Undernearth a Huge Hole in the Ceiling
+Desc:$
+    There is a huge gaping hole in the ceiling above you. Iron bars and
+bracing jut out from the decaying plaster. The room above is near pitch dark,
+and you can't see anything in it.  
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60203
+Name:	Under a Decaying Building
+Desc:$
+   A thick layer of dust is on everything in the area. Smashed furniture,
+broken glass, spent condoms.. every conceivable piece of trash is littered in
+the area. Massive cobwebs are supported in between the pillars that hold the
+building together. You can help but feel as is something, or someone, is
+lurking in the shadows around you. The bright light from the formerly blocked
+off entryway is visible, and seems to beckon you to leave while you still can.
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60204
+Name:	Under a Decaying Building
+Desc:$
+   A thick layer of dust is on everything in the area. Smashed furniture,
+broken glass, spent condoms.. every conceivable piece of trash is littered in
+the area. Massive cobwebs are supported in between the pillars that hold the
+building together. You can help but feel as is something, or someone, is
+lurking in the shadows around you. The bright light from the formerly blocked
+off entryway is visible, and seems to beckon you to leave while you still can.
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	60201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60205
+Name:	Standing Next to a Pile of Trash
+Desc:$
+   This corner of the abandoned building seems to be a dead end. Most of the
+massive crates piled around it seem to have been smashed to bits; rats scamper
+around in the wreckage, scavenging for food. Some footprints are barely
+discernible in the thick layer of dust on the floor. They lead towards a pile
+of crates, then suddenly disappear. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	Keywords:	crates
+	ToVnum:	60206
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	8
+BREAK
+#60206
+Name:	At the Bottom of a Elevator Shaft
+Desc:$
+   If the previous rooms were dusty, this old elevator shaft is even worse.
+The elevator rope apparently broke, as the elevator, now a crushed cube of
+metal, is lodged in the shaft directly below you. Bricks jut out from the
+sides of the walls, allowing you to climb up if you wish. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	Keywords:	crates
+	ToVnum:	60205
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	8
+[EXIT up]
+	ToVnum:	60207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60207
+Name:	At the Top of an Elevator Shaft
+Desc:$
+      The top of the elevator shaft connects to a torch-lit hallway of sorts.
+A few uneven bricks in the side of the shaft allow you to climb back down, if
+you're careful.  
+~
+Flags:	1000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	2
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	60208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	60206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60208
+Name:	At the Doorway into the School of the Red Dragon
+Desc:$
+   The ruinous look of the building quickly dissipates as you approach a
+sturdy wooden door bearing an insignia of a red dragon. The immediate area is
+adequately illuminated and appears structurally sound, almost as if the first
+floor was just for appearances. You're standing in front of the School of the
+Red Dragon, an establishment of highly trained martial artists dedicated to
+fostering and devloping all forms of martial arts. The members of the
+establishment all resent organized crime, but welcome Shadowrunners- provided
+they return some benefit to the institution in exchange for their training.
+The location of the School is kept secret for fear of being discovered by
+enemies, although a direct attack at the school itself would prove to be
+suicidal. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	Keywords:	door red dragon
+	ToVnum:	60209
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	60207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60209
+Name:	At an Oriental-Decorated Training Area
+Desc:$
+   The interior of the school has been designed to look like a dojo, with wall
+scrolls, racks of melee weapons, trophies, and various other martial art
+paraphernalia. The students are of all different nationalities, races, and
+social backgrounds, and are all welcomed like brothers or sisters. 
+   
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	Keywords:	door red dragon
+	ToVnum:	60208
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60210
+Name:	On Some Sparring Mats
+Desc:$
+   The interior of the school has been designed to look like a dojo, with wall
+scrolls, racks of melee weapons, trophies, and various other martial art
+paraphernalia. The students are of all different nationalities, races, and
+social backgrounds, and are all welcomed like brothers or sisters. Students
+nearby train with melee weapons, dueling each other with practice swords and
+halberds. More experienced masters are even using real bladed weapons. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60211
+Name:	At the School's Indoor Garden
+Desc:$
+   Through a remarkable mixture of Magical Botany and architecture, the
+designers of the school have managed to create a lush garden in the interior
+of the building. Plants, grass, and small trees are all in the immediate area.
+Students run about sparring in the forest, incorporating the terrain into
+their matches. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60212
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60212
+Name:	Among the Bamboo Reeds
+Desc:$
+   Tall bamboo reeds grow from the soil below, creating a maze of sorts.
+Vision is obscured, and it is even difficult to see where you came from.
+Students train in here as well, grappling with each other and tossing them
+through the thick bamboo walls. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60213
+Name:	Near an Obstacle Course of Broken Furniture
+Desc:$
+   A curious display of random furniture is before you. Students crash into
+all the chairs, tables, and various other objects in a drunken stupor, until
+you realize that they're actually practicing the haphazard, fluid movement of
+the Drunken Boxing fighting style. Students adapt to the rapidly changing
+environment of flying chairs and broken furniture, trying to kick chairs at
+each other to distract their fellow students without success. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60212
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60214
+Name:	On Some Sparring Mats
+Desc:$
+   The interior of the school has been designed to look like a dojo, with wall
+scrolls, racks of melee weapons, trophies, and various other martial art
+paraphernalia. The students are of all different nationalities, races, and
+social backgrounds, and are all welcomed like brothers or sisters. The
+training mats in the center of this area are filled with students practicing
+the fundamentals of Kung Fu. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60215
+Name:	Near Some Practice Dummies
+Desc:$
+   Row after row of training dummies have been set up in this section of the
+dojo. A majority of the dummies' limbs have been completely ripped from their
+sockets. Students in this area repeatedly strike at vital portions of the
+body, practicing some obscure, rare form of martial art. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60216
+Name:	On a Sparring Mat
+Desc:$
+   Unlike the rest of the dojo, this specific area bears a chaotic air. The
+sand pit in the center of the room is never still as sand flies into the faces
+of students, who immediately recover and try to grapple at their opponent.
+Trainers here teach Jujitsu, a no-rule martial art style in which anything
+goes. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60217
+Name:	At a Boxing Ring
+Desc:$
+   A padded boxing ring is in the center of the room. Trainers practice Muay
+Thai Kick Boxing here. The students currently fighting in the ring are
+incredibly diminutive, but move with unbelievable speed and strike with a
+ferocity that makes bones shatter. A wooden door to the north leads into
+another section of the dojo. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	60221
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60218
+Name:	A Dimly Lit Hallway
+Desc:$
+   The area darkens as you leave the lighted area of the training area behind
+you, and the building resumes it worn down appearance. The hallway splits off
+into two pathways. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	60219
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	60220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60219
+Name:	Inside a Thickly Forrested Room
+Desc:$
+   The designers of the school have included yet another indoor forested area.
+Tall trees of all sorts fill the area, and you marvel at how such tall trees
+could possibly fit inside the building. You swear that you can see movement in
+the shadows created by the nature around you.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	60218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60220
+Name:	In a Near Pitch Black Room
+Desc:$
+   This appears to be a large storage room, stacked with crates and crates of
+materials. A large gaping hole in the center of the room allows you to look
+down on the first floor of the building. You make out a faint outline of the
+human body in a crate nearby, which immediately disappears seconds after you
+notice it. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	ToVnum:	60218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60221
+Name:	By an Indoor Waterfall
+Desc:$
+   You are astonished once more by a large running waterfall that has been
+built inside the building. Students gather around a single, frail meditating
+figure in the center of the room. All the students are sitting in deep
+meditation, apparently being led by the wise master at the base of the
+waterfall. Large columns of stone rise from the pool of water, and if you're
+careful, you can jump from stone to stone to reach the top of the waterfall. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60223
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	60217
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60222
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60222
+Name:	At a Feng Shui Garden
+Desc:$
+   The lush garden in front of you has been meticulously arranged and directed
+by various Feng Shui experts to provide as much harmony as possible. Students
+may find it easier to meditate in this garden due to the arrangement of the
+shrubbery and running water fountains. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60221
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60223
+Name:	At a Japanese Sand Garden
+Desc:$
+   A three-tiered circular pagoda stands at the center of the room in the
+middle of a Japanese sand garden. Stepping stones allow students to travel
+about without disturbing the perfectly smooth layer of sand. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	60221
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60224
+Name:	At the Top of the Waterfall
+Desc:$
+   The pillars of stone rise to meet the third level of the complex, a hallway
+lined with bamboo. Below lies the base of the waterfall, with the students
+still in deep meditation. 
+~
+Flags:	1000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	3
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	60225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	60221
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60225
+Name:	A Bamboo-lined Hallway
+Desc:$
+   The walls are lined with logs of bamboo wood. The students and teachers
+apparently reside on this level of the complex. Various wooden doorways lead
+off into the rooms of the habitation level. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60226
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60226
+Name:	Inside the School Barracks
+Desc:$
+   Bunk bed after bunk bed has been set up in perfectly neat rows, with
+footlockers at the base of every bed. Here the students retire after a long
+day's training. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	60225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60227
+Name:	A Steamy Shower Room
+Desc:$
+   Rows of showers are set up in this co-ed shower room. The steaming hot
+water creates a misty haze that collects on your skin and moistens your
+clothing. A small doorway leads north into a private spa. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60228
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60228
+Name:	Relaxing by a Spa
+Desc:$
+   The spa in the center of the room jets out steaming hot bubbly water,
+perfect for relaxing sore muscles. The green tile around the spa sports
+various racks for storing bathrobes and towels.
+   
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	60227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60229
+Name:	A Bamboo-lined Hallway
+Desc:$
+   The walls are lined with logs of bamboo wood. The students and teachers
+apparently reside on this level of the complex. Various wooden doorways lead
+off into the rooms of the habitation level. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60231
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	60232
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	60236
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60230
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60230
+Name:	Inside the School Mess Hall
+Desc:$
+   Benches and long wooden tables have been set up in horizontal rows, and the
+smell of Asian food is in the air. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60231
+Name:	Inside the Armoury
+Desc:$
+   The walls are completely lined with a multitude of melee weapons. Spears,
+swords, halberds, axes, daggers, knives, whips, staves.. all avaliable for use
+by the students of the dojo. Outsides can still purchase some specially
+crafted weapons, at a price. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	60229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60232
+Name:	In a Bamboo-lined Hallway
+Desc:$
+   The walls are lined with logs of bamboo wood. The students and teachers
+apparently reside on this level of the complex. Various wooden doorways lead
+off into the rooms of the habitation level. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	60233
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	60234
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	60229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60233
+Name:	Eagle Rock's Chambers
+Desc:$
+   Various shamanic items decorate the room. A red hellhound pelt is in the
+center of the room being used as a rug, and a wendigo skin is off the the side
+providing Eagle Rock with a fluffy bed. An intricately designed shamanic
+circle has been engraved in the middle of the room. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	ToVnum:	60232
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60234
+Name:	In Front of a Red Wooden Door
+Desc:$
+   The walls are lined with logs of bamboo wood. The students and teachers
+apparently reside on this level of the complex. Various wooden doorways lead
+off into the rooms of the habitation level. A large red door the the south
+bears the insignia of the Red Dragon. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	60232
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	60235
+	Flags:	1
+	Material:	wood
+	Barrier:	12
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	60236
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60235
+Name:	Xian Zhong's Chambers
+Desc:$
+   Xian Zhong goes by many names, and is known to many people, though it is
+rare for anyone to deduce that all her aliases are the same. The chamber of
+the head trainer of the School of the Red Dragon is decorated with artifacts
+from many cultures around the world: it appears that the Red Dragon has had
+many disciples throughout her relatively short lifetime. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	60234
+	Flags:	1
+	Material:	wood
+	Barrier:	12
+	KeyVnum:	0
+BREAK
+#60236
+Name:	In a Bamboo-lined Hallway
+Desc:$
+   The walls are lined with logs of bamboo wood. The students and teachers
+apparently reside on this level of the complex. Various wooden doorways lead
+off into the rooms of the habitation level.
+   
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	60229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	60234
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	ToVnum:	60237
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60237
+Name:	Vincent Templar's Chambers
+Desc:$
+   Vincent Templar's chambers are a stark contrast to the other decorated
+parts of the dojo: the room bears no decorations at all. The only objects in
+the room a plain, circular matress in the center of the room which Templar
+meditates on and a few unlit candles. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	60236
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60238
+Name:	Entrance to Fenris Nacht
+Desc:$
+   The entryway into the Fenris Nacht nightclub is flanked by two totem poles
+decorated with the carved heads of various totemic animals. The nightclub
+bears a shamanic theme, and many practicing shamans and shapeshifters are
+known to congregate here. The small parking lot out front seems mostly vacant,
+since apparently patrons prefer hoofing it to this local, or using the public
+transportation system. Tribal music emanates out past the entrance into the
+lot itself, hinting towards the atmosphere inside. 
+~
+Flags:	110000000000010000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	1
+Cover:	1
+X:	15
+Y:	15
+Z:	4.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60239
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	1554
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60239
+Name:	Inside the Fenris Nacht
+Desc:$
+   The interior of the Fenris Nacht club is dimly lit by flickering flame
+torches and candles. A beastial musk lingers in the air, inflaming your more
+animalistic characteristics. The patrons of the club are apparently affected
+by the air as well, as many of them have reverted to a more primitave, simple
+nature and are barely draped in animal furs. The music tends to be of a
+cultural nature, with a mostly Native American or African theme. Smooth,
+soulful live jazz performances are also common. The walls are decorated with
+various shamanic symbols and animal hides. 
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60238
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60242
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60240
+Name:	Inside the Fenris Nacht
+Desc:$
+   The interior of the Fenris Nacht club is dimly lit by flickering flame
+torches and candles. A beastial musk lingers in the air, inflaming your more
+animalistic characteristics. The patrons of the club are apparently affected
+by the air as well, as many of them have reverted to a more primitave, simple
+nature and are barely draped in animal furs. The music tends to be of a
+cultural nature, with a mostly Native American or African theme. Smooth,
+soulful live jazz performances are also common. The walls are decorated with
+various shamanic symbols and animal hides. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60241
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60246
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60239
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60248
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60241
+Name:	By the Grill
+Desc:$
+   The interior of the Fenris Nacht club is dimly lit by flickering flame
+torches and candles. A beastial musk lingers in the air, inflaming your more
+animalistic characteristics. The patrons of the club are apparently affected
+by the air as well, as many of them have reverted to a more primitave, simple
+nature and are barely draped in animal furs. The music tends to be of a
+cultural nature, with a mostly Native American or African theme. Smooth,
+soulful live jazz performances are also common. The walls are decorated with
+various shamanic symbols and animal hides. A grill has been set up, and
+provides lavish cultural cuisine for those who can afford it. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	60252
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60247
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60249
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60242
+Name:	Inside the Fenris Nacht
+Desc:$
+   The interior of the Fenris Nacht club is dimly lit by flickering flame
+torches and candles. A beastial musk lingers in the air, inflaming your more
+animalistic characteristics. The patrons of the club are apparently affected
+by the air as well, as many of them have reverted to a more primitave, simple
+nature and are barely draped in animal furs. The music tends to be of a
+cultural nature, with a mostly Native American or African theme. Smooth,
+soulful live jazz performances are also common. The walls are decorated with
+various shamanic symbols and animal hides. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60248
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60239
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60245
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60243
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60243
+Name:	By the Bar
+Desc:$
+   The interior of the Fenris Nacht club is dimly lit by flickering flame
+torches and candles. A beastial musk lingers in the air, inflaming your more
+animalistic characteristics. The patrons of the club are apparently affected
+by the air as well, as many of them have reverted to a more primitave, simple
+nature and are barely draped in animal furs. The music tends to be of a
+cultural nature, with a mostly Native American or African theme. Smooth,
+soulful live jazz performances are also common. The walls are decorated with
+various shamanic symbols and animal hides. A bar serves drinks to the parched
+patrons worn out from exhibiting their animalistic tendencies. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60250
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60242
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60244
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60244
+Name:	Inside a Private Booth
+Desc:$
+   The private booth has a fine view of most of the club, except the backrooms
+which are out of sight. The thick animalistic musk still lingers in the air.
+The walls of the booth are lined with tribal artwork, mostly of a Native
+American nature, consisting heavily of beadwork tapestries, polished wood and
+small bone carvings. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60243
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60245
+Name:	Inside a Private Booth
+Desc:$
+   The private booth has a fine view of most of the club, except the backrooms
+which are out of sight. The thick animalistic musk still lingers in the air.
+The walls of the booth are lined with tribal artwork, mostly of an Australian
+Aboriginal nature. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60242
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60246
+Name:	Inside a Private Room
+Desc:$
+   A crackling fire is in the center of the room, surrounded by a circle of
+stones. Rugs of animal hide provide comfortable mattresses to sit on. Earthen
+clay pots store various liquids, most with water, some with ritual
+signifigance.  
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	60240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60247
+Name:	Inside a Private Room
+Desc:$
+   A crackling fire is in the center of the room, surrounded by a circle of
+stones. Rugs of animal hide provide comfortable mattresses to sit on. Earthen
+clay pots store various liquids, most with water, some with ritual
+signifigance.  
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	15
+[EXIT west]
+	ToVnum:	60241
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60248
+Name:	On the Dance Floor
+Desc:$
+   The stage area is lined with various tribal musical instruments. Players
+play their instruments with much vigor and skill, and outgoing patrons dance
+to the rhythmic beats. Wild Zimbabweian beats are currently floating and
+reverberating throughout the nightclub. The dance floor itself extends into
+the stage area, and it isn't uncommon to see patrons dancing amongst the
+players themselves as they groove out on tribal melodies and work themselves
+up into a fervor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60249
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60242
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60250
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60249
+Name:	On the Dancefloor
+Desc:$
+   The stage area is lined with various tribal musical instruments. Players
+play their instruments with much vigor and skill, and outgoing patrons dance
+to the rhythmic beats. Wild Zimbabweian beats are currently floating and
+reverberating throughout the nightclub. The dance floor itself extends into
+the stage area, and it isn't uncommon to see patrons dancing amongst the
+players themselves as they groove out on tribal melodies and work themselves
+up into a fervor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60241
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60248
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60251
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60250
+Name:	On the Dancefloor
+Desc:$
+   The stage area is lined with various tribal musical instruments. Players
+play their instruments with much vigor and skill, and outgoing patrons dance
+to the rhythmic beats. Wild Zimbabweian beats are currently floating and
+reverberating throughout the nightclub. The dance floor itself extends into
+the stage area, and it isn't uncommon to see patrons dancing amongst the
+players themselves as they groove out on tribal melodies and work themselves
+up into a fervor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60251
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60248
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60243
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60251
+Name:	On the Stage
+Desc:$
+   The stage area is lined with various tribal musical instruments. Players
+play their instruments with much vigor and skill, and outgoing patrons dance
+to the rhythmic beats. Wild Zimbabweian beats are currently floating and
+reverberating throughout the nightclub. The dance floor itself extends into
+the stage area, and it isn't uncommon to see patrons dancing amongst the
+players themselves as they groove out on tribal melodies and work themselves
+up into a fervor. The stage here seems to be occupied by a the local stage
+band for the Fenris Nacht, who are busy pumping out the beats for their
+dancing breathren. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60249
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60250
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60252
+Name:	Inside the Fenris Nacht Backrooms
+Desc:$
+   The area behind the grill is about as dimly lit as it is barely decorated,
+and aside from the occasional flicker of light and echoing noise that dances
+in from the main section of the club, there is very much scenery offered here.
+A short hallway leads towards the Fenris Nacht Manager's office off to the
+west, while a stairway leading to the roof is tucked away into a back corner
+to the east. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	10
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60254
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	60241
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60253
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60253
+Name:	The Manager's Office
+Desc:$
+   The managers office isn't much larger than most of the private booths
+available around the club itself, but what it lacks in size, it certainly
+makes up for with atmosphere. The walls are covered with everything ranging
+expensive and rare animal pelts, some of which are even from the more
+paranormal species, to tribal sculptures of various worshipped deities and
+gods. A good deal of ornamental fixtures crafted from what seems to be bone
+and tanned rawhide also dot the scenery, and the managers desk seems to be
+little more than an unworked slab of wood, complete with the occasional insect
+bored hole. Its quite a change of pace to see such natural furnishings in a
+world thats obsessed with the SOTA innovations, and it even lacks the most
+basic of electronics. Instead, the lightning here is offered by several stacks
+of handmade candles and matching sconces. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60252
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60254
+Name:	A Stairway to the Roof
+Desc:$
+   Light shines through a hatch in the ceiling, and a stairway that leads up
+onto the roof of the club. The smell of nature is in the air, which wafts down
+from above even when the hatch is left open, and you swear you just heard the
+roar of a large cat. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	60252
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60255
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60255
+Name:	On the Roof of the Fenris Nacht
+Desc:$
+   Amazing. The roof has been surrounded by a tall brick wall, enclosing it
+from outside influences. Plants of all types have been planted onto the roof
+itself, forming an isolated garden of sorts that rivals the quality of a
+national park.  
+~
+Flags:	100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	1
+X:	12
+Y:	12
+Z:	2.50
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	60256
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	60254
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60256
+Name:	A Heavily Forrested Rooftop
+Desc:$
+   Tall trees have been planted into the brown dirt on the roof, which cover
+the entire roof in a cool, comfortable shade. Animals scamper about the
+forrested area, doing what animals usually do: eat, be merry, and have sex. A
+dirt path leads off to other sections of the roof habitat. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60255
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60261
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60257
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60257
+Name:	On a Heavily Forrested Rooftop
+Desc:$
+   Tall trees have been planted into the brown dirt on the roof, which cover
+the entire roof in a cool, comfortable shade. Animals scamper about the
+forrested area, doing what animals usually do: eat, be merry, and have sex. A
+dirt path leads off to other sections of the roof habitat. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60256
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60258
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60258
+Name:	By a Rock Formation
+Desc:$
+   Huge, heavy boulders have been arranged to create an earthly feel in this
+section of the roof habitat. Various bones lie scattered about, and there's no
+doubt that a fiercely territorial animal resides nearby. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60257
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60259
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60259
+Name:	On a Grassy Field
+Desc:$
+   You walk onto a grassy field which is directly under the sky, unobstructed
+by neighboring trees. At day the field basks in the warm heat of the sun, at
+dawn the field is covered by the cool night sky. 
+~
+Flags:	100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60258
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60260
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60264
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60260
+Name:	By a Small Pond
+Desc:$
+   A small reflecting pool is at the center of the rooftop. Here, the pool
+acts as a sort of neutral ground for all the animals that reside in the roof
+habitation. The shapeshifter-types often congregate here to hold secretive
+meetings and rituals. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60261
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60259
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60261
+Name:	In a Forrested Area
+Desc:$
+   Tall trees have been planted into the brown dirt on the roof, which cover
+the entire roof in a cool, comfortable shade. Animals scamper about the
+forrested area, doing what animals usually do: eat, be merry, and have sex. A
+dirt path leads off to other sections of the roof habitat. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60256
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60262
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60260
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60262
+Name:	Walking through a Jungle
+Desc:$
+   The trees on the roof suddenly take on a more tropical jungle look, with
+heavy, bright green leaves hanging over the area. Insects are abundant, and
+the air bears musky, humid qualities. Low growling is audible among the trees:
+it appears as if a predatory animal resides here. 
+~
+Flags:	100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60261
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60263
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60263
+Name:	Walking Through a Jungle
+Desc:$
+   The trees on the roof suddenly take on a more tropical jungle look, with
+heavy, bright green leaves hanging over the area. Insects are abundant, and
+the air bears musky, humid qualities. Low growling is audible among the trees:
+it appears as if a predatory animal resides here. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60262
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60264
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60264
+Name:	Walking Through a Jungle
+Desc:$
+   The trees on the roof suddenly take on a more tropical jungle look, with
+heavy, bright green leaves hanging over the area. Insects are abundant, and
+the air bears musky, humid qualities. Low growling is audible among the trees:
+it appears as if a predatory animal resides here. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60259
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60263
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60265
+Name:	Entrance to Pharoah's
+Desc:$
+   Pharoah's is one of the hottest nightclubs in the Tacoma region, and serves
+as one of the Afterlife's chief competitors. The exterior of the building is
+the only aspect of the nightclub that has anything to do with ancient Egypt,
+whose aesthetic design has elements of sandstone and Egyptian symbolism.
+Spotlights illuminate the night sky, and a steady stream of clubbers line up
+at the doorway for admittance. 
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60266
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1560
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60266
+Name:	Corridor Between Sectors 1 and 2
+Desc:$
+   The entry corridor is located inbetween two of the Pharoah's "sectors",
+which are nothing more than large dance chambers made out of strong reinforced
+glass. Two additional sectors can be seen above the ground floor, packed with
+nightclubbers and giving off the illusion that they're dancing in midair.
+Florescent lighting is all the rage here, and the neon haze is almost blinding
+to those not used to the atmosphere. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60273
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	glass door
+	ToVnum:	60269
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60265
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	glass door
+	ToVnum:	60267
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60267
+Name:	On the Glass Dancefloor of Sector 1
+Desc:$
+   You can see why Pharoah's is such a popular nightclub, which would be the
+innovative design of stacked, transparent dancing sections that makes this an
+incredibly unique hang out. Beat-filled techno music is blasted into the
+chamber from a system of speakers, and neon lights flash about in a psychedlic
+haze. Small alcoves have been built into the wall and are separated from the
+dance floor by transparent glass dividers. Inside are pole dancers dressed in
+a variety of revealing, tight outfits, enticing the patrons on the other side
+of the glass with their fluid movements. The dancers on the level above are
+equally raunchy, and a few of the more adventurous patrons have decided to
+wear skirts, knowing that they'd be spending the night dancing on a glass
+surface with people below. It's taking every bit of your ability to avoid
+being clubbed by a flailing limb as the people around you dance in a fervor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	6
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60274
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	glass door
+	ToVnum:	60266
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60268
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60268
+Name:	By the Bar of Sector 1
+Desc:$
+   The dancing in this sector subsides in your immediate surroundings. The bar
+provides seating for people who've worn themselves out, and also sells a few
+high-priced pick-me-ups for revitalizing those dancing bones. The atmopshere
+is noticably calmer, and conversations can actually be carried out without
+shouting above the noise, since apparently the sound systems are targeted to
+funnel music into the dance floors rather then the seating area. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60275
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60267
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60269
+Name:	On the Glass Dancefloor of Sector 2
+Desc:$
+   You can see why Pharoah's is such a popular nightclub, which would be the
+innovative design of stacked, transparent dancing sections that makes this an
+incredibly unique hang out. Beat-filled techno music is blasted into the
+chamber from a system of speakers, and neon lights flash about in a psychedlic
+haze. Small alcoves have been built into the wall and are separated from the
+dance floor by transparent glass dividers. Inside are pole dancers dressed in
+a variety of revealing, tight outfits, enticing the patrons on the other side
+of the glass with their fluid movements. The dancers on the level above are
+equally raunchy, and a few of the more adventurous patrons have decided to
+wear skirts, knowing that they'd be spending the night dancing on a glass
+surface with people below. It's taking every bit of your ability to avoid
+being clubbed by a flailing limb as the people around you dance in a fervor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	6
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60272
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60270
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	glass door
+	ToVnum:	60266
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60270
+Name:	By the Bar of Sector 2
+Desc:$
+   The dancing in this sector subsides in your immediate surroundings. The bar
+provides seating for people who've worn themselves out, and also sells a few
+high-priced pick-me-ups for revitalizing those dancing bones. The atmopshere
+is noticably calmer, and conversations can actually be carried out without
+shouting above the noise, since apparently the sound systems are targeted to
+funnel music into the dance floors rather then the seating area. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60271
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60269
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60271
+Name:	On the Glass Dancefloor of Sector 2
+Desc:$
+   You can see why Pharoah's is such a popular nightclub, which would be the
+innovative design of stacked, transparent dancing sections that makes this an
+incredibly unique hang out. Beat-filled techno music is blasted into the
+chamber from a system of speakers, and neon lights flash about in a psychedlic
+haze. Small alcoves have been built into the wall and are separated from the
+dance floor by transparent glass dividers. Inside are pole dancers dressed in
+a variety of revealing, tight outfits, enticing the patrons on the other side
+of the glass with their fluid movements. The dancers on the level above are
+equally raunchy, and a few of the more adventurous patrons have decided to
+wear skirts, knowing that they'd be spending the night dancing on a glass
+surface with people below. It's taking every bit of your ability to avoid
+being clubbed by a flailing limb as the people around you dance in a fervor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	6
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	60270
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60272
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60272
+Name:	On the Glass Dancefloor of Sector 2
+Desc:$
+   You can see why Pharoah's is such a popular nightclub, which would be the
+innovative design of stacked, transparent dancing sections that makes this an
+incredibly unique hang out. Beat-filled techno music is blasted into the
+chamber from a system of speakers, and neon lights flash about in a psychedlic
+haze. Small alcoves have been built into the wall and are separated from the
+dance floor by transparent glass dividers. Inside are pole dancers dressed in
+a variety of revealing, tight outfits, enticing the patrons on the other side
+of the glass with their fluid movements. The dancers on the level above are
+equally raunchy, and a few of the more adventurous patrons have decided to
+wear skirts, knowing that they'd be spending the night dancing on a glass
+surface with people below. It's taking every bit of your ability to avoid
+being clubbed by a flailing limb as the people around you dance in a fervor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	6
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60271
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60269
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60273
+Name:	Corridor next to a Staircase Leading to the Second Level
+Desc:$
+   The entry corridor is located inbetween two of the Pharoah's "sectors",
+which are nothing more than large dance chambers made out of strong reinforced
+glass. Two additional sectors can be seen above the ground floor, packed with
+nightclubbers and giving off the illusion that they're dancing in midair.
+Florescent lighting is all the rage here, and the neon haze is almost blinding
+to those not used to the atmosphere. A stairway leads up towards the third and
+fourth sectors, while the hallway itself continues north into a dimly lit
+area. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60276
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60266
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	60291
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60274
+Name:	On the Glass Dancefloor of Sector 1
+Desc:$
+   You can see why Pharoah's is such a popular nightclub, which would be the
+innovative design of stacked, transparent dancing sections that makes this an
+incredibly unique hang out. Beat-filled techno music is blasted into the
+chamber from a system of speakers, and neon lights flash about in a psychedlic
+haze. Small alcoves have been built into the wall and are separated from the
+dance floor by transparent glass dividers. Inside are pole dancers dressed in
+a variety of revealing, tight outfits, enticing the patrons on the other side
+of the glass with their fluid movements. The dancers on the level above are
+equally raunchy, and a few of the more adventurous patrons have decided to
+wear skirts, knowing that they'd be spending the night dancing on a glass
+surface with people below. It's taking every bit of your ability to avoid
+being clubbed by a flailing limb as the people around you dance in a fervor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	6
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	60267
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60275
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60275
+Name:	On the Glass Dancefloor of Sector 1
+Desc:$
+   You can see why Pharoah's is such a popular nightclub, which would be the
+innovative design of stacked, transparent dancing sections that makes this an
+incredibly unique hang out. Beat-filled techno music is blasted into the
+chamber from a system of speakers, and neon lights flash about in a psychedlic
+haze. Small alcoves have been built into the wall and are separated from the
+dance floor by transparent glass dividers. Inside are pole dancers dressed in
+a variety of revealing, tight outfits, enticing the patrons on the other side
+of the glass with their fluid movements. The dancers on the level above are
+equally raunchy, and a few of the more adventurous patrons have decided to
+wear skirts, knowing that they'd be spending the night dancing on a glass
+surface with people below. It's taking every bit of your ability to avoid
+being clubbed by a flailing limb as the people around you dance in a fervor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	6
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60274
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60268
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60276
+Name:	A Blocked-Off Hallway
+Desc:$
+   This section of Pharoah's appears to be off limits to all but "special"
+guests, who apparently have to be on the bouncers list to pass beyond the
+velvet rope draped across its entrance. From the looks of the rich businessmen
+who enter through the guarded doorway, and the sultry women that follow them,
+the backrooms of the nightclub appear to condone activities that would be
+considered less-than-moral. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	rope velvet
+	Desc:$
+Its a slick velvet rope, most often seen outfront of top-knotch clubs, they're
+meant to show you that you're not welcome, unless you're on the list ofcourse.
+~
+	ToVnum:	60277
+	Flags:	1
+	Material:	fabric
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60273
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60277
+Name:	Inside the Pharoah Nightclub's Backrooms
+Desc:$
+   The back hallway behind the velvet roped-off sections of Pharoah's has a
+rather seedy atmosphere. Seductive courtesans parade around the area, trying
+to attract the gazes of the affluent businessmen looking to schedule special
+"business meetings" with them. Doorways lined alone the back hallway lead into
+various private rooms, and also to the glass alcoves adjacent to the dancing
+sections, where one can find a bit of entertainment as well. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	60284
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60278
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	rope velvet
+	Desc:$
+Its a slick velvet rope, most often seen outfront of top-knotch clubs, they're
+meant to show you that you're not welcome, unless you're on the list ofcourse.
+~
+	ToVnum:	60276
+	Flags:	1
+	Material:	fabric
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60285
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60278
+Name:	Inside the Pharoah Nightclub's Backrooms
+Desc:$
+   The back hallway behind the velvet roped-off sections of Pharoah's has a
+rather seedy atmosphere. Seductive courtesans parade around the area, trying
+to attract the gazes of the affluent businessmen looking to schedule special
+"business meetings" with them. Doorways lined alone the back hallway lead into
+various private rooms, and also to the glass alcoves adjacent to the dancing
+sections, where one can find a bit of entertainment as well. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A solid metal door offers a bit of privacy. 
+~
+	ToVnum:	60283
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60279
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60281
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60277
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60279
+Name:	Inside the Pharoah Nightclub's Backrooms
+Desc:$
+   The back hallway behind the velvet roped-off sections of Pharoah's has a
+rather seedy atmosphere. Seductive courtesans parade around the area, trying
+to attract the gazes of the affluent businessmen looking to schedule special
+"business meetings" with them. Doorways lined alone the back hallway lead into
+various private rooms, and also to the glass alcoves adjacent to the dancing
+sections, where one can find a bit of entertainment as well. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A solid metal door offers a bit of privacy. 
+~
+	ToVnum:	60282
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60280
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60278
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60280
+Name:	Inside a Glass Cage
+Desc:$
+   This small alcove is blocked off of the rest of the nightclub by a panel
+leading back the way you came, while a thick layer of reinforced glass stands
+in front of you to the south. Steel poles connect the floor to the ceiling,
+and a few of Pharoah's most attractive employees provide the patrons on the
+other side of the glass with a rather good show, for a price ofcourse. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60279
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60281
+Name:	Inside a Glass Cage
+Desc:$
+   This small alcove is blocked off of the rest of the nightclub by a panel
+leading back the way you came, while a thick layer of reinforced glass stands
+in front of you to the south. Steel poles connect the floor to the ceiling,
+and a few of Pharoah's most attractive employees provide the patrons on the
+other side of the glass with a rather good show, for a price ofcourse. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60278
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60282
+Name:	In a Dingy Backroom
+Desc:$
+   It's not exactly a five star hotel, but really, was that what you were
+expecting? The heavy musk of sweat and cheap cigar smoke hangs heavily in the
+air, and the room is lit by a single dim lightbulb suspended from the ceiling.
+A ratty grey circular mattress is in the center of the room, and drawers lined
+up next to the wall sport various sensual clothing and other objects you
+probably don't want to inspect too closely. Your presence in this room,
+however, is an indication that the aforementioned details are likely the least
+of your concern at the moment. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+A solid metal door offers a bit of privacy. 
+~
+	ToVnum:	60279
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60283
+Name:	In a Dingy Backroom
+Desc:$
+   It's not exactly a five star hotel, but really, was that what you were
+expecting? The heavy musk of sweat and cheap cigar smoke hangs heavily in the
+air, and the room is lit by a single dim lightbulb suspended from the ceiling.
+A ratty grey circular mattress is in the center of the room, and drawers lined
+up next to the wall sport various sensual clothing and other objects you
+probably don't want to inspect too closely. Your presence in this room,
+however, is an indication that the aforementioned details are likely the least
+of your concern at the moment. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+A solid metal door offers a bit of privacy. 
+~
+	ToVnum:	60278
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60284
+Name:	Phillipe Vizzini's Office
+Desc:$
+   The office of Phillipe "Mugsy" Vizzini, the owner of Pharoah's, is lavishly
+decorated. Exotic artifacts from around the world can be seen displayed about
+the room, and a massive wooden business desk is in the center of the room.
+Various symbols and objects in the room catch the eye and tend to suggest that
+Vizzini is somehow connected to an organized crime group, most likely the
+Mafia. 
+~
+Flags:	10011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	60277
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60285
+Name:	Inside the Pharoah Nightclub's Backrooms
+Desc:$
+   The back hallway behind the velvet roped-off sections of Pharoah's has a
+rather seedy atmosphere. Seductive courtesans parade around the area, trying
+to attract the gazes of the affluent businessmen looking to schedule special
+"business meetings" with them. Doorways lined alone the back hallway lead into
+various private rooms, and also to the glass alcoves adjacent to the dancing
+sections, where one can find a bit of entertainment as well. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A solid metal door offers a bit of privacy. 
+~
+	ToVnum:	60286
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60277
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60287
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60288
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60286
+Name:	In a Dingy Backroom
+Desc:$
+   It's not exactly a five star hotel, but really, was that what you were
+expecting? The heavy musk of sweat and cheap cigar smoke hangs heavily in the
+air, and the room is lit by a single dim lightbulb suspended from the ceiling.
+A ratty grey circular mattress is in the center of the room, and drawers lined
+up next to the wall sport various sensual clothing and other objects you
+probably don't want to inspect too closely. Your presence in this room,
+however, is an indication that the aforementioned details are likely the least
+of your concern at the moment. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+A solid metal door offers a bit of privacy. 
+~
+	ToVnum:	60285
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60287
+Name:	Inside a Glass Cage
+Desc:$
+   This small alcove is blocked off of the rest of the nightclub by a panel
+leading back the way you came, while a thick layer of reinforced glass stands
+in front of you to the south. Steel poles connect the floor to the ceiling,
+and a few of Pharoah's most attractive employees provide the patrons on the
+other side of the glass with a rather good show, for a price ofcourse. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60285
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60288
+Name:	Inside the Pharoah Nightclub's Backrooms
+Desc:$
+   The back hallway behind the velvet roped-off sections of Pharoah's has a
+rather seedy atmosphere. Seductive courtesans parade around the area, trying
+to attract the gazes of the affluent businessmen looking to schedule special
+"business meetings" with them. Doorways lined alone the back hallway lead into
+various private rooms, and also to the glass alcoves adjacent to the dancing
+sections, where one can find a bit of entertainment as well. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A solid metal door offers a bit of privacy. 
+~
+	ToVnum:	60290
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60285
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60289
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60289
+Name:	Inside a Glass Cage
+Desc:$
+   This small alcove is blocked off of the rest of the nightclub by a panel
+leading back the way you came, while a thick layer of reinforced glass stands
+in front of you to the south. Steel poles connect the floor to the ceiling,
+and a few of Pharoah's most attractive employees provide the patrons on the
+other side of the glass with a rather good show, for a price ofcourse. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60288
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60290
+Name:	In a Dingy Backroom
+Desc:$
+   It's not exactly a five star hotel, but really, was that what you were
+expecting? The heavy musk of sweat and cheap cigar smoke hangs heavily in the
+air, and the room is lit by a single dim lightbulb suspended from the ceiling.
+A ratty grey circular mattress is in the center of the room, and drawers lined
+up next to the wall sport various sensual clothing and other objects you
+probably don't want to inspect too closely. Your presence in this room,
+however, is an indication that the aforementioned details are likely the least
+of your concern at the moment. 
+~
+Flags:	11000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+A solid metal door offers a bit of privacy. 
+~
+	ToVnum:	60288
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60291
+Name:	On the Second Level of Pharoah's
+Desc:$
+   The stairway leads to the upper sections of Pharoah's, where dancers and
+visiting patrons can dance on the glass surfaces suspended above the first two
+sectors. The masses of bodies moving to the rhythm being pumped out from
+visible and concealed speakers alike drowns out most speech, and one would
+have to literally scream to be heard above it. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60296
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60292
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	60273
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60292
+Name:	On the Glass Dancefloor of Sector 3
+Desc:$
+   The feeling of dancing a good fifteen feet above the ground can offer quite
+a rush to ones head, which seems to be working well enough on most of the
+dancing patrons. Nightclubbers around you gyrate about feverishly, creating a
+humid, stuffy atmosphere that is almost guarunteed to make you break out into
+a sweat. Florescent lights flicker widely from above and below in sync with
+the beat of the music as it pounds away like a hammer against your eardrums. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	5
+Cover:	0
+X:	12
+Y:	12
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60291
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60295
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60293
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60293
+Name:	On the Glass Dancefloor of Sector 3
+Desc:$
+   The feeling of dancing a good fifteen feet above the ground can offer quite
+a rush to ones head, which seems to be working well enough on most of the
+dancing patrons. Nightclubbers around you gyrate about feverishly, creating a
+humid, stuffy atmosphere that is almost guarunteed to make you break out into
+a sweat. Florescent lights flicker widely from above and below in sync with
+the beat of the music as it pounds away like a hammer against your eardrums. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	5
+Cover:	0
+X:	12
+Y:	12
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60292
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60294
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60294
+Name:	By the Bar of Sector 3
+Desc:$
+   The dancing in this sector subsides in your immediate surroundings. The bar
+provides seating for people who've worn themselves out, and also sells a few
+high-priced pick-me-ups for revitalizing those dancing bones. The atmopshere
+is noticably calmer, and conversations can actually be carried out without
+shouting above the noise, since apparently the sound systems are targeted to
+funnel music into the dance floors rather then the seating area. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	0
+X:	12
+Y:	12
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60293
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60295
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60295
+Name:	On the Glass Dancefloor of Sector 3
+Desc:$
+   The feeling of dancing a good fifteen feet above the ground can offer quite
+a rush to ones head, which seems to be working well enough on most of the
+dancing patrons. Nightclubbers around you gyrate about feverishly, creating a
+humid, stuffy atmosphere that is almost guarunteed to make you break out into
+a sweat. Florescent lights flicker widely from above and below in sync with
+the beat of the music as it pounds away like a hammer against your eardrums. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	5
+Cover:	0
+X:	12
+Y:	12
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60292
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60294
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60296
+Name:	On the Glass Dancefloor of Sector 4
+Desc:$
+   The feeling of dancing a good fifteen feet above the ground can offer quite
+a rush to ones head, which seems to be working well enough on most of the
+dancing patrons. Nightclubbers around you gyrate about feverishly, creating a
+humid, stuffy atmosphere that is almost guarunteed to make you break out into
+a sweat. Florescent lights flicker widely from above and below in sync with
+the beat of the music as it pounds away like a hammer against your eardrums. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	5
+Cover:	0
+X:	12
+Y:	12
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60297
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60299
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60291
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60297
+Name:	On the Glass Dancefloor of Sector 4
+Desc:$
+   The feeling of dancing a good fifteen feet above the ground can offer quite
+a rush to ones head, which seems to be working well enough on most of the
+dancing patrons. Nightclubbers around you gyrate about feverishly, creating a
+humid, stuffy atmosphere that is almost guarunteed to make you break out into
+a sweat. Florescent lights flicker widely from above and below in sync with
+the beat of the music as it pounds away like a hammer against your eardrums. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	5
+Cover:	0
+X:	12
+Y:	12
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	60298
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60296
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60298
+Name:	By the Bar of Sector 4
+Desc:$
+   The dancing in this sector subsides in your immediate surroundings. The bar
+provides seating for people who've worn themselves out, and also sells a few
+high-priced pick-me-ups for revitalizing those dancing bones. The atmopshere
+is noticably calmer, and conversations can actually be carried out without
+shouting above the noise, since apparently the sound systems are targeted to
+funnel music into the dance floors rather then the seating area. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	0
+X:	12
+Y:	12
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60297
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60299
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60299
+Name:	On the Glass Dancefloor of Sector 4
+Desc:$
+   The feeling of dancing a good fifteen feet above the ground can offer quite
+a rush to ones head, which seems to be working well enough on most of the
+dancing patrons. Nightclubbers around you gyrate about feverishly, creating a
+humid, stuffy atmosphere that is almost guarunteed to make you break out into
+a sweat. Florescent lights flicker widely from above and below in sync with
+the beat of the music as it pounds away like a hammer against your eardrums. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	5
+Cover:	0
+X:	12
+Y:	12
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60296
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60298
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

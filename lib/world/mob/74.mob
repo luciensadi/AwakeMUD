@@ -407,7 +407,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Ballistic:	3
 	Impact:	1
-	Bank:	215
+	Bank:	115
 [SKILLS]
 	unarmed combat:	2
 BREAK

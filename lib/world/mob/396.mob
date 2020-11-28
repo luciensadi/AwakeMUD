@@ -1,0 +1,1953 @@
+#39600
+Keywords:	Black robes minos
+Name:	Minos
+RoomDesc:$
+A man in black robes stands here 
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000101000
+AffFlags:	100000001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	4
+	Cha:	6
+	Int:	8
+	Wil:	7
+	Mag:	8
+[POINTS]
+	Height:	200
+	Weight:	60
+	Level:	1
+	Ballistic:	7
+	Impact:	7
+	Cash:	400
+	Bank:	4000
+	Karma:	1
+[SKILLS]
+	edged weapons:	2
+BREAK
+#39601
+Keywords:	mob unfinished
+Name:	Douglas Wolfard
+RoomDesc:$
+A man in black with long, stringy hair and scraggly beard 
+
+~
+LookDesc:$
+This dark haired, dark eyed man peers at you through glasses perched
+precariously on his nose.  When you engage him in conversation, his long
+fingered hands wave eloquently with the flow of his voice.  His clothes are a
+washed-dull black and non-descript.  He rarely leaves his seat in which he
+slumps forward with rounded shoulders over his work. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	6
+	Str:	3
+	Cha:	6
+	Int:	10
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	185
+	Weight:	80
+[SKILLS]
+	computers:	10
+	computer B/R:	10
+	negotiation:	10
+BREAK
+#39602
+Keywords:	johnson confident sneer
+Name:	a confident man
+RoomDesc:$
+A confident man is seated alone with an insipid sneer on his lips. 
+
+~
+LookDesc:$
+A man sits at one of the many tables here.  On his lips is a sneer that leads
+you to believe he has no confidence in your work.  His hair, eyebrows and even
+nails are fastidiously manicured and groomed and his dapper, designer suit is
+immaculately clean. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	8
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	182
+	Weight:	80
+[SKILLS]
+BREAK
+#39603
+Keywords:	charlie girl young
+Name:	a young girl
+RoomDesc:$
+A young girl with short black hair and pale skin. 
+
+~
+LookDesc:$
+Charlie, obviously, a young girl whose eyes are red from fatigue and puffy
+from weeping.  She is dressed in thin, white cotton prisoner garments.  No
+time to change them now, we got a clock to beat! 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	3
+	Str:	3
+	Cha:	6
+	Int:	10
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	154
+	Weight:	55
+[SKILLS]
+BREAK
+#39604
+Keywords:	hairstix sales associate bubbly
+Name:	young, bubbly female
+RoomDesc:$
+A Hairstix sales associate rings up your purchase. 
+
+~
+LookDesc:$
+Dressed in the latest fashion, this bubbly young female tries to make small
+talk over your purchase.  She probably doesn't get much human contact outside
+of her job.  Her hair is bedecked with all sorts of hair ties, clips and
+gadgets. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	167
+	Weight:	45
+[SKILLS]
+	English:	10
+BREAK
+#39605
+Keywords:	hobogotten sales associate
+Name:	a boy dressed in shabby chic
+RoomDesc:$
+A Hobogotten sales associate waits for you to make up your mind already. 
+
+~
+LookDesc:$
+This guy has a blank stare and is dressed in shabby chic.  A thin cotton,
+vintage shirt clings to his puny chest and his legs are wrapped in faux dirty
+jeans. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	182
+	Weight:	65
+[SKILLS]
+	English:	10
+BREAK
+#39606
+Keywords:	threat mime bouncer
+Name:	A threatening looking Mime
+RoomDesc:$
+A threatening looking Mime wrinkles his nose in distaste at you. 
+
+~
+LookDesc:$
+You look at him, but this massive bouncer dressed like a pansy-ass-mime acts
+like you're beneath his notice...at least that's the case if you're not one of
+the "beautiful people"; he then fawns all over you, but silently of course.
+His massive arms are usually crossed over his equally massive chest as he
+eyeballs the people passing in and out of the club. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	250
+	Level:	2
+	Ballistic:	4
+	Impact:	4
+	Cash:	70
+[SKILLS]
+	athletics:	4
+	unarmed combat:	6
+	clubs:	4
+BREAK
+#39607
+Keywords:	mafia johnathan glarritano
+Name:	Johnathan Glarritano
+RoomDesc:$
+The Renton Mafia Don Glarritano sits here calmly. 
+
+~
+LookDesc:$
+A surprisingly young man sits here with a calm demeanor and warm chocolate
+eyes.  His hair is suavely styled away from his chiseled features.  His
+prominent nose has obviously seen some breaks and a few scars mar his good
+looks, but that just makes him seem more fierce. 
+~
+ArriveMsg:	a loving couple
+LeaveMsg:	ÿD¢0Å£
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	4
+	Str:	6
+	Cha:	10
+	Int:	12
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	140
+	Weight:	200
+[SKILLS]
+	English:	10
+	negotiation:	10
+	leadership:	10
+	interrogation:	10
+BREAK
+#39608
+Keywords:	mafia enforcer
+Name:	a mafia enforcer
+RoomDesc:$
+A Mafia Enforcer holds vigil here. 
+
+~
+LookDesc:$
+The Mafia Enforcer is mean, scarred and HUGE!  This isn't a cat that you'd
+cross deliberately.  Maybe he'll just let you pass.... 
+~
+ArriveMsg:	f Lavazza espresso steams here.
+LeaveMsg:	®∆W	 ≥W	
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Crush
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	12
+	Str:	14
+	Cha:	2
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	200
+[SKILLS]
+	English:	10
+	unarmed combat:	12
+BREAK
+#39609
+Keywords:	mafia enforcer
+Name:	a mafia enforcer
+RoomDesc:$
+A Mafia Enforcer scans the area. 
+
+~
+LookDesc:$
+The enforcer is a big mean human of Italian decent.  His clothes are
+impeccably clean and in the gaudiest fashion.  Total stereotype.. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Crush
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	12
+	Str:	14
+	Cha:	2
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	200
+	Ballistic:	4
+	Impact:	5
+	Cash:	200
+	Bank:	400
+[SKILLS]
+	English:	10
+	unarmed combat:	12
+BREAK
+#39610
+Keywords:	bartender Harold Wo
+Name:	Harold Wo
+RoomDesc:$
+A grandfatherly fellow tends bar. 
+
+~
+LookDesc:$
+This man is definitely of chinese-italian descent.  His skin is swarthy and
+dark and his jaw is strong, but his eyes are slanted over high cheekbones.  He
+seems genuinely nice and welcoming as he waves you over for a drink from his
+bar. 
+~
+ArriveMsg:	*shakes her head*
+LeaveMsg:	¯AX	ò÷}
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	5
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	63
+[SKILLS]
+	English:	10
+	negotiation:	8
+	street etiquette:	10
+BREAK
+#39611
+Keywords:	bernard slotto crazed man
+Name:	Bernard Slotto
+RoomDesc:$
+A crazed-looking man in a checkered zoot suit sits behind the desk. 
+
+~
+LookDesc:$
+The owner of the MM is quite possibly the most disturbing person ever beheld.
+His eyes spin wildly in his head and often an uncontrollable giggle escapes
+his lips.  His attire is as eclectic as the man.  As you stand before him, he
+drums his fingers nervously on the top of his desk and watches you
+expectantly. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	5
+	Cha:	4
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	90
+[SKILLS]
+	English:	10
+	negotiation:	10
+BREAK
+#39612
+Keywords:	bartender cheeks pretty pigtail blonde
+Name:	the bubbly bartending mime
+RoomDesc:$
+A mime with rosy cheeks waits silently for your order. 
+
+~
+LookDesc:$
+The bartender is a young human woman with blonde pigtails high on her head
+that are curled into thick locks.  She has bright rosy cheeks and an eager
+smile.  Her gloves are lacy, white fingerless numbers.  Her skirt is super
+short and pushed up with a frothy petticoat.  Her busty torso is secured with
+a super-tight black vinyl corset. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	5
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	63
+[SKILLS]
+	English:	10
+	negotiation:	8
+	street etiquette:	10
+BREAK
+#39613
+Keywords:	dancers crowd people
+Name:	the crowd of dancers
+RoomDesc:$
+The most beautiful habitues ever seen dance in perfect harmony to the beat. 
+
+~
+LookDesc:$
+The scantily clad, perfected forms of the habitues of the Murdered Mime dances
+here.  They are a sight to behold as every single one of them is the most
+striking and beautiful creature in their own right.  It almost brings a tear
+to the eye... 
+~
+ArriveMsg:	Employee Lounge 
+LeaveMsg:	0MX	(c£
+MobFlags:	1000000000000000000000010001010
+AffFlags:	0
+Race:	Undefined
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	1
+	Impact:	1
+	Bank:	15
+[SKILLS]
+BREAK
+#39614
+Keywords:	yakuza gang members
+Name:	a crowd of Yakuza gang members
+RoomDesc:$
+Some Yakuza gang members lounge here, watching the dancefloor. 
+
+~
+LookDesc:$
+Beautiful, Japanese members of the Yakuza gang lounge in a booth here.
+They're watching the dancefloor with an indifferent air. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000010001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	1
+	Impact:	1
+	Bank:	15
+[SKILLS]
+BREAK
+#39615
+Keywords:	yakuza orman koseba
+Name:	Orman Koseba
+RoomDesc:$
+An extremely agitated Japanese man stalks around. 
+
+~
+LookDesc:$
+He would be considered somewhat attractive if it wasn't for the rage that
+distorts his visage so.  His face is screwed up into a mask of blood flushed
+hate and veins are popping out all over his temples and neck.  For all that,
+his suit is of sleek, oriental design and his hair is short and brushed
+forward over his brow. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	12
+	Str:	14
+	Cha:	10
+	Int:	12
+	Wil:	20
+	Mag:	0
+[POINTS]
+	Height:	140
+	Weight:	200
+	Ballistic:	10
+	Impact:	10
+	Cash:	100
+	Bank:	300
+	Karma:	5
+[SKILLS]
+	English:	10
+	pole arms:	12
+	athletics:	10
+	stealth:	12
+BREAK
+#39616
+Keywords:	loving couple
+Name:	a loving couple
+RoomDesc:$
+A loving couple stands here embracing and staring into each others eyes. 
+
+~
+LookDesc:$
+The Yakuza boss' sister, Haiku and the Mafia Don's brother, DaVinci stand here
+before the judge to profess their love for each other. 
+~
+ArriveMsg:	h¡\	ves from
+LeaveMsg:	 }es
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	English:	10
+BREAK
+#39617
+Keywords:	officiating judge
+Name:	the officiating judge
+RoomDesc:$
+The officiating judge stands here to witness the union. 
+
+~
+LookDesc:$
+A judge stands here in full dress officiating civil ceremonies. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	155
+	Weight:	60
+[SKILLS]
+	English:	10
+BREAK
+#39618
+Keywords:	Femme Fatale sales associate woman posh
+Name:	a posh, immaculately dressed woman
+RoomDesc:$
+The Femme Fatale sales associate calmly awaits your decision. 
+
+~
+LookDesc:$
+A posh, immaculately dressed woman stands here, surveying you with a
+calculating eye and plastic smile. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	155
+	Weight:	54
+[SKILLS]
+	English:	10
+BREAK
+#39619
+Keywords:	watcherz sales associate
+Name:	a bearded man
+RoomDesc:$
+The Watcherz sales associate tells you about today's sales. 
+
+~
+LookDesc:$
+A bearded man in a Watcherz store uniform.  His nametag reads "Peter". 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	173
+	Weight:	81
+[SKILLS]
+BREAK
+#39620
+Keywords:	Silver Heron sales associate
+Name:	a cute, trendy girl
+RoomDesc:$
+A Silver Heron sales associate asks if she can show you something. 
+
+~
+LookDesc:$
+This cute, trendy girl stands ready behind the jewelry displays to show you
+anything her store has to offer. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	161
+	Weight:	49
+[SKILLS]
+BREAK
+#39621
+Keywords:	stix n stuff professional
+Name:	a professional man with a big smile
+RoomDesc:$
+A Stix n' Stuff professional 
+
+~
+LookDesc:$
+The smile on this guy's face hinges on desperate.  He REALLY wants this sale,
+so give him a break, mmkay?  His job is probably commission only. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	183
+	Weight:	73
+[SKILLS]
+	English:	10
+BREAK
+#39622
+Keywords:	Kitchen bath sales associate
+Name:	a freshfaced youth wearing a crisp pink apron
+RoomDesc:$
+A Kitchen & Bath sales associate waits to assist you. 
+
+~
+LookDesc:$
+This pretty young girl looks so proud of her first job!  She has her light
+blonde hair pulled back into a ponytail and her cheeks look freshly pinched!
+Be nice to her.. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	158
+	Weight:	50
+[SKILLS]
+	English:	10
+BREAK
+#39623
+Keywords:	beatnik associate sales lucas
+Name:	Lucas
+RoomDesc:$
+A beatnik sales associate named "Lucas" works the register. 
+
+~
+LookDesc:$
+A man dressed in tight black clothes with close cropped dark hair and moody
+black eyes.  His nametag reads "Lucas".  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	183
+[SKILLS]
+	English:	10
+	negotiation:	4
+BREAK
+#39624
+Keywords:	pizza palace employee
+Name:	pizza palace employee
+RoomDesc:$
+The Pizza Palace employee awaits your order. 
+
+~
+LookDesc:$
+The Pizza Palace employee is a greasy teenager that probably picks his nose
+and doesn't wash his hands.. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	4
+	Int:	5
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	54
+[SKILLS]
+	English:	10
+BREAK
+#39625
+Keywords:	cluck employee chicken
+Name:	Cluck U Chicken employee
+RoomDesc:$
+The Cluck U Chicken employee awaits your order. 
+
+~
+LookDesc:$
+The Cluck U Chicken employee is a greasy teenager that probably picks his nose
+and doesn't wash his hands.. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	3
+	Cha:	4
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	188
+	Weight:	60
+[SKILLS]
+	English:	10
+BREAK
+#39626
+Keywords:	shoppe attendant
+Name:	ice cream shoppe attendant
+RoomDesc:$
+The Ice Cream Shoppe attendant awaits your pleasure. 
+
+~
+LookDesc:$
+A girl with a ready smile wearing chinos and a pastel baby tee waits to make
+your sweet treats! 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	4
+	Cha:	6
+	Int:	3
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	40
+[SKILLS]
+	English:	10
+BREAK
+#39627
+Keywords:	Fry electronic cashier
+Name:	Fry's Electronics cashier
+RoomDesc:$
+A cashier stands here. 
+
+~
+LookDesc:$
+This guy has pale red hair that sticks up in all directions, unintentionally.
+His skin is pasty white and covered with freckles.  His uniform is creased and
+wrinkly, he obviously has no idea how to properly dress. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	2
+	Str:	3
+	Cha:	1
+	Int:	6
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	60
+[SKILLS]
+	English:	10
+BREAK
+#39628
+Keywords:	Office Box employee black man
+Name:	Office Box Employee
+RoomDesc:$
+A black man wearing the Office Box uniform asks if he can help you. 
+
+~
+LookDesc:$
+A black man with a smile is ready to sell you drek. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	5
+	Cha:	6
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	207
+	Weight:	95
+[SKILLS]
+BREAK
+#39629
+Keywords:	otaku girl cute
+Name:	a cute otaku girl
+RoomDesc:$
+A cute otaku girl waits to take your money for crap. 
+
+~
+LookDesc:$
+She has a cute round face with almond shaped eyes.  Her long black hair is
+pulled into pigtails with ribbons twirled around her hanging hair.  She wears
+a messy uniform with striped thigh-highs and tall, clunky shoes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	4
+	Cha:	5
+	Int:	6
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	155
+	Weight:	35
+[SKILLS]
+	English:	10
+BREAK
+#39630
+Keywords:	Sofbyte nerdy salesman glasses
+Name:	A nerdy looking Sofbyte salesman
+RoomDesc:$
+A nerdy salesman with thick glasses awaits your purchases here. 
+
+~
+LookDesc:$
+Your typical computer nerd, complete with a fastfood and powerdrink stained
+T-shirt with some obscure reference you most likely wouldn't get, that is,
+unless you've memorized the Linux manual and spent twenty years of your life
+in a dark secluded room. He sports thick glasses, which he keeps having to
+press back into place on the bridge of his nose, and seems to be keeping
+himself busy with a video game on the stores computer. He stops playing just
+long enough to help customers, but thats about it. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	2
+	Int:	6
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	90
+[SKILLS]
+BREAK
+#39631
+Keywords:	plastic smile doc
+Name:	Dr. Bob
+RoomDesc:$
+Dr. Bob stands here with his plastic smile. 
+
+~
+LookDesc:$
+Dr. Bob is a shining example of his craft, surgery...plastic smile and all. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	188
+	Weight:	66
+[SKILLS]
+	English:	10
+BREAK
+#39632
+Keywords:	drone guard btl black sleek
+Name:	A patrol drone
+RoomDesc:$
+A sleek black patrol drone is here, investigating you. 
+
+~
+LookDesc:$
+A dark black drone, it almost looks like a miniature tank. It gets around on a
+pair of treads, with a base on top of them. Just by glancing at it, you can
+see a rather large minigun attached to each side of it. You also notice a pair
+of laser sights emitting from its sensor array. They start pointing straight
+at you... 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001000000101000
+AffFlags:	1000001000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	4
+	Str:	2
+	Cha:	1
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	95
+	Weight:	160
+	Ballistic:	2
+	Impact:	2
+[SKILLS]
+	unarmed combat:	6
+BREAK
+#39633
+Keywords:	drone guard 
+Name:	a guard drone
+RoomDesc:$
+A guard drone stalks the area, hovering silently. 
+
+~
+LookDesc:$
+The drone whirs silently, stalking the hallways, always on the lookout for
+intruders in the complex. Exquisitely programmed and constructed, this is
+the top of the line model for all corporate artificial defence.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010001011000000001100
+AffFlags:	1000000001001000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	7
+	Cha:	0
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	56
+	Ballistic:	5
+	Impact:	5
+[SKILLS]
+	machine guns:	5
+BREAK
+#39634
+Keywords:	man trainee knight errant academy
+Name:	a Knight Errant trainee
+RoomDesc:$
+A Trainee of the Academy stands here. 
+
+~
+LookDesc:$
+A young man wearing the uniform of the Knight Errant Training Academy. He is
+of medium height, but extremely physically fit. He is currently being trained
+to deal with "intrusion situations". That's right, chummer, you qualify. 
+~
+ArriveMsg:	walks in from
+LeaveMsg:	leaves
+MobFlags:	10000010000001100001001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	5
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	85
+	Cash:	120
+	Bank:	300
+[SKILLS]
+	pistols:	6
+	unarmed combat:	10
+	machine guns:	6
+	assault rifles:	7
+	English:	10
+BREAK
+#39635
+Keywords:	man uniformed knight errant sniper
+Name:	A Knight Errant sniper
+RoomDesc:$
+A uniformed man is aiming at the targets with a long rifle. 
+
+~
+LookDesc:$
+He is older, in his mid thirties, and bears a large UCAS Marines tattoo on his
+left shoulder. He is heavily muscled, and appears to be taking very precise
+aim at something. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000000000000000101010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	6
+	Cha:	4
+	Int:	5
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	167
+	Weight:	79
+[SKILLS]
+	rifles:	9
+	athletics:	5
+	pistols:	5
+BREAK
+#39636
+Keywords:	knight errant guard
+Name:	A Knight-Errant Entrance Guard
+RoomDesc:$
+A Knight-Errant stands guard watching for anything suspicious. 
+
+~
+LookDesc:$
+The Corporate Guard KE are specialy trained for dealing with security in
+places where alot of people have access such as the public levels of the
+Knight Center. His heavy security vest, helmet and large assault rifle are
+enough to keep most people from messing with them. Dressed in black they have
+a large Ares logo embroidered on their back. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10100011100000111010
+AffFlags:	1000000000000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	18
+	Qui:	16
+	Str:	16
+	Cha:	6
+	Int:	10
+	Wil:	16
+	Mag:	0
+[POINTS]
+	Height:	240
+	Weight:	90
+	Level:	12
+	Ballistic:	10
+	Impact:	10
+	Cash:	125
+	Bank:	100
+[SKILLS]
+	assault rifles:	15
+	corporate etiquette:	9
+	unarmed combat:	15
+	pole arms:	12
+	clubs:	12
+BREAK
+#39637
+Keywords:	knight errant security guard
+Name:	a Knight-Errant security guard
+RoomDesc:$
+A KE guard patrols the area. 
+
+~
+LookDesc:$
+This KE guard is big, well armored & cybered out.  His primary objective is to
+keep little rats like you out of the Academy! 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010100000111010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	9
+	Str:	9
+	Cha:	4
+	Int:	5
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	210
+	Weight:	130
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	English:	10
+	pistols:	8
+BREAK
+#39638
+Keywords:	warden
+Name:	the warden of SCF
+RoomDesc:$
+The Warden glares at you with bloodshot eyes. 
+
+~
+LookDesc:$
+The warden has tousled brown hair that is shorn around the sides and longer on
+top.  His skin looks like week old meat and is sagging around the jowls.  His
+teeth are stained yellow and his murderous eyes are bloodshot and bulging. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	8
+	Int:	8
+	Wil:	9
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	66
+	Ballistic:	10
+	Impact:	10
+	Cash:	500
+	Bank:	2000
+[SKILLS]
+	unarmed combat:	10
+	shotguns:	10
+	English:	10
+BREAK
+#39639
+Keywords:	daily grind barista
+Name:	the Daily Grind barista
+RoomDesc:$
+A Daily Grind barista stands here 
+
+~
+LookDesc:$
+This barista is hopped up on caffeine from chewing espresso beans and knocking
+back shot after shot of super sugary coffee concoctions.  They get your order
+REALLY fast though.. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	3
+	Cha:	4
+	Int:	5
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	184
+	Weight:	130
+[SKILLS]
+	English:	10
+BREAK
+#39640
+Keywords:	sassy tender rita howard black
+Name:	Rita Howard
+RoomDesc:$
+A sassy black woman tends bar here. 
+
+~
+LookDesc:$
+A tall black woman dressed in a shimmery dress that drapes beautifully over
+her slim body.  Her hair is twisted into tiny locks of curls that spring up
+from her scalp and frame her lovely face with its big green eyes, flat nose
+and luscious lips.  She definitely keeps customers coming back, if not with
+her looks, but also her genial nature. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	6
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	182
+	Weight:	54
+[SKILLS]
+	English:	10
+BREAK
+#39641
+Keywords:	RHoB Waitress
+Name:	RHoB Waitress
+RoomDesc:$
+A Night-One waitress weaves thru the crowd. 
+
+~
+LookDesc:$
+A female Night-One resplendent in raven fur with long, black hair piled atop
+her head and secured with a long banana clip.  She wears a tight, white baby-T
+that reads "^BRhapsody's House of Blues^n" across the fullest part of her chest.
+A small black pleated skirt swings as she lithely maneuvers through the
+restaurant carrying an overflowing tray over her shoulder. 
+~
+ArriveMsg:	glides in from
+LeaveMsg:	rushes
+MobFlags:	1000000000000000000000000001000
+AffFlags:	0
+Race:	Night-One
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	5
+	Cha:	7
+	Int:	4
+	Wil:	3
+	Mag:	10
+[POINTS]
+	Height:	160
+	Weight:	85
+[SKILLS]
+	English:	10
+BREAK
+#39642
+Keywords:	Ganger Test
+Name:	Ganger Test
+RoomDesc:$
+A freaky ganger with a malicious glint in his eye 
+
+~
+LookDesc:$
+How long did he have to spend on that crazy mohawk?!  He is pierced, tattooed
+and riddled with chrome.  He's looking at you!  He probably is the kind of
+person to attack for next to no reason-- unless you want to join his cause
+that is. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000010001011101001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	6
+	Cha:	0
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	182
+	Weight:	81
+	Cash:	400
+[SKILLS]
+	English:	10
+BREAK
+#39643
+Keywords:	technician Body TECH
+Name:	a Body + TECH technician
+RoomDesc:$
+A Body + TECH technician oversees operations here. 
+
+~
+LookDesc:$
+He doesn't look entirely thrilled with this line of work, as cutting people
+open and stuffing things inside of them isn't exactly a dream job for most. If
+anything, he appears bored, mostly due to the fact that the automatic implant
+robots do almost all of the heavy lifting, he just keeps a close eye on the
+vital displays. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+BREAK
+#39644
+Keywords:	cashier shady supply store
+Name:	a Shady Supply Store cashier
+RoomDesc:$
+A Shady Supply Store cashier rings up purchases. 
+
+~
+LookDesc:$
+He looks absolutely thrilled for some reason.. Maybe he thinks he's in on the
+action? He gleefully helps potential customers picking out articles and
+outfits that would make them look like super awesome runners. Clearly he knows
+what he's talking about, he knows a friend that knows a guy that once met a
+Shadowrunner once after all. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+BREAK
+#39645
+Keywords:	Municipal Airport security officer guard
+Name:	a Municipal Airport security officer
+RoomDesc:$
+A Municipal Airport security officer stands guard here. 
+
+~
+LookDesc:$
+While they aren't the biggest security detail around, they do have a sense of
+authority and control that is desired amongst security officers, acting more
+as visual deterrents than anything. Their main job is to stand around looking
+vaguely tough, but not so much that they frighten away possible clients for
+utilizing the airport, just tough enough to make people think twice about
+starting any trouble. They carry radios, stun batons, pepper spray and hand
+held MAD wands, which helps them carry out their tasks without getting too
+much hassle from the people they stop. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001010
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	6
+	Str:	7
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+	Cash:	200
+	Bank:	125
+[SKILLS]
+	clubs:	4
+BREAK
+#39646
+Keywords:	officer municipal airport customs clerk
+Name:	a Customs Officer
+RoomDesc:$
+A Municipal Airport Customs Officer is double checking paperwork here. 
+
+~
+LookDesc:$
+He appears rather busy, and he is, what with all of the constant incoming and
+outgoing paperwork he has to shuffle and fill out. He appears to be double
+checking to make sure he's crossed all of his T's and dotted all of his I's,
+taking his work quite seriously it seems. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Ballistic:	2
+	Impact:	2
+	Cash:	85
+	Bank:	275
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#39647
+Keywords:	receptionist administrative
+Name:	an administrative receptionist
+RoomDesc:$
+An administrative receptionist is seated behind her desk. 
+
+~
+LookDesc:$
+Dressed all prim and proper as expected, this administrative receptionist is
+keeping things running smoothly for the others working in nearby offices,
+keeping everyone informed of the various changes that come up in day to day
+operations. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+	Cash:	80
+	Bank:	185
+[SKILLS]
+	unarmed combat:	2
+BREAK
+#39648
+Keywords:	operator phone
+Name:	a phone operator
+RoomDesc:$
+A phone operator is behind his desk, answering calls as expected. 
+
+~
+LookDesc:$
+He seems to be quite busy, working at an almost frantic pace to answer all of
+the phones connected to his desk, which all seem to be ringing one after the
+other in an attempt to fry his last bit of patience. He swiftly taps and
+presses buttons inbetween answering calls, sending them off and connecting
+them to the proper offices they're intended. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+	Cash:	115
+	Bank:	195
+[SKILLS]
+	unarmed combat:	2
+BREAK
+#39649
+Keywords:	Security Control Officer guard
+Name:	a Security Control Officer
+RoomDesc:$
+A Security Control Officer checks over the monitors behind his desk. 
+
+~
+LookDesc:$
+This security guards job consists of keeping a close eye on the control panels
+and monitor displays for the cameras posted around the interior of the
+Municipal Airport. He has a radio close by, just in case he has to call in the
+other security guards to specific locations to help out, or just to check up
+on the hourly patrols of the guards milling around the building. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	5
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Cash:	145
+	Bank:	165
+[SKILLS]
+	unarmed combat:	4
+	pistols:	5
+	clubs:	4
+BREAK
+#39650
+Keywords:	accountant
+Name:	an accountant
+RoomDesc:$
+An accountant works quietly behind his desk here. 
+
+~
+LookDesc:$
+This small dwarven women can barely be seen over the edge of her desk, or at
+least when she's not sitting upon the block seat atop her chair so she doesn't
+have to deal with that issue. Sifting through papers, double checking numbers
+and keeping things moving smoothly for this place is her job. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Dwarf
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	5
+	Cha:	4
+	Int:	6
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	140
+	Weight:	60
+	Cash:	210
+	Bank:	205
+[SKILLS]
+	unarmed combat:	2
+BREAK
+#39651
+Keywords:	logistics coordinator
+Name:	a logistics coordinator
+RoomDesc:$
+A logistics coordinator sifting through data on their computer. 
+
+~
+LookDesc:$
+What logistics coordinators do can vary greatly, but generally, they are
+responsible for overseeing entire events or projects that typically have many
+facets. Which is a nice way of saying nobody really knows what they're doing
+except them. Don't ask for details, just make unreasonable demands of them,
+that's what they're there for. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	3
+	Int:	6
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	89
+	Cash:	185
+	Bank:	215
+[SKILLS]
+	unarmed combat:	2
+BREAK
+#39652
+Keywords:	Xavier Biafore chunky man
+Name:	Xavier Biafore
+RoomDesc:$
+A chunky man in a business suit is seated behind his desk here. 
+
+~
+LookDesc:$
+This man is doing his best to work with the fact that he may have gained a few
+pounds since he bought his business suit, as it's a bit too tight around the
+collar and waist, not to mention the cuffs fall short of where they should be
+upon his wrists. His tie is doing as good a job as it can manage to maintain
+the thick neck of his, and it appears to be straining not only his collar, but
+his neck as well, making him a bit red in the face. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	4
+	Str:	6
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	120
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#39653
+Keywords:	ground controller
+Name:	a ground controller
+RoomDesc:$
+A ground controller is communicating with various personnel around the site. 
+
+~
+LookDesc:$
+He appears quite busy, and is, as his job consists of keeping in communication
+with all of the employees on the ground around the site and keeping everything
+running smoothly, errors tend to cause accidents and those tend to cost lives.
+He swiftly scans between displays and has a stream of updates coming in over
+the radio, which he then analyzes and gives out commands to others. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	4
+	Cha:	5
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Cash:	128
+	Bank:	222
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#39654
+Keywords:	air controller
+Name:	an air controller
+RoomDesc:$
+An air controller is busy with the radio here. 
+
+~
+LookDesc:$
+With the swiftness of someone who has been at it for years, with plenty of
+experience and practice to show for it, this air controller works the radio
+frequencies and dances between receiving transmissions and broadcasting them.
+His job is to keep any mishaps from happening once something leaves the
+ground, and while it's in the air it's entirely his responsibility to keep
+them accident free, though once they touch down he could care less, that's
+someone elses job. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	70
+	Cash:	155
+	Bank:	190
+[SKILLS]
+BREAK
+END

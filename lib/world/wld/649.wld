@@ -1,0 +1,832 @@
+#64900
+Name:	The Executive Washroom
+Desc:$
+   A spotless bathroom, everything is shiny and white. Your shoes squeak on
+the white tiled floors as you move into the room. Washbasins with golden
+faucets and crystal taps sit embedded in a marble benchtop set across the room
+from the 3 toilet stalls.
+   The only blemish to this shrine to bathrooms everywhere is that the door to
+the far stall is missing its lock. On closer inspection, the inside of the
+door has been scribbled all over by many hands. 
+~
+Flags:	101000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	Keywords:	door
+	ToVnum:	35611
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	64901
+	LockRating:	50
+BREAK
+#64901
+Name:	A large warehouse
+Desc:$
+   You stand in a cavernous warehouse, criss-crossed with catwalks and full to
+the brim with large, regular shapes hidden under dark green tarpaulin. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#64902
+Name:	An OfficeWorks Furniture Outlet
+Desc:$
+   A large warehouse has been converted to an office furniture store, with
+chairs and desks placed in haphazard isles all over the floor. The whole room
+is heavy with the smell of furniture polish and leather, and the floor is
+scattered with sawdust from a tiny partitioned work area off to one side. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	29300
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#64910
+Name:	The Shrine to Sean
+Desc:$
+   A pile of bodies lies piled here, on a bed of red sand. A huge flag
+protruding from the mound of corpses bears the image of a massive, curly
+haired ork grinning while chewing on a computer displaying the words 'Awake
+2062'. A large troll is standing very close behind him, with his pants around
+his ankles and a large grin on his face. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#64911
+Name:	A Dark Storage room.
+Desc:$
+   A dim, overhead light bulb provides the only illumination to this small
+room. Grime covered walls covered in a grey, peeling wallpaper, provide a
+perfect compliment to the dark hardwood floor covered in deep scratches. A
+thin layer of dust covers everything, and the smell of cigar smoke hangs thick
+in the air. 
+~
+Flags:	10000000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#64915
+Name:	Bob's Workroom
+Desc:$
+   You stand on the brink of a bottomless pit under an infinitely clear sky.
+An alien sun, dim and distant, sits against a canopy of stars and celestial
+bodies, all slowly rotating as if the pit at your feet was the axis of the
+heavens. Lines of energy hug the ground, like some fantastic multicoloured
+mist slowly creeping from the inky blackness. And standing, surrounded by
+these primal forces of creation is a single whitewashed sign, reading "No
+Fishing."  
+~
+Flags:	1000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	64916
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#64916
+Name:	A bottomless pit
+Desc:$
+   When you read 'a bottomless pit', exactly how long did it take you to reach
+the conclusion that stepping into it was a good idea?
+   The depths of the pit are obscured by moving fields of energy, reaching up
+toward the surface. Veins of gold and coal, iron and silver twist together up
+the sheer rock face and glint in the darkness as if somehow polished to a
+sheen. Off to one side, someone has helpfully installed a nice set of rosewood
+shelves, bolting them roughly into a vein of orichalcum. 
+~
+Flags:	100000000000000000000000001010
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	64915
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	1004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#64925
+Name:	Yargh's Talismongery and Chicken
+Desc:$
+   You have entered a small shop, crowded with all sorts of magical
+paraphernalia. Strange objects, some glowing softly and others moving of their
+own volition hang from the ceiling or sit on racks on the walls. Towards one
+end of the shop, three chairs sit against a small bar, behind which a tiny
+grill is creating the smell of grilled chicken that fills the store. Towards
+the back of the store sits a doorway with a cloth rag draped across it,
+blocking its contents from view. 
+~
+Flags:	1000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	9955
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	Keywords:	door rag cloth
+	Desc:$
+A door made of dirty cloth rags leads into the backrooms to the northwest. 
+~
+	ToVnum:	16400
+	Flags:	1
+	Material:	fabric
+	Barrier:	2
+	KeyVnum:	0
+BREAK
+#64951
+Name:	LS Tactical Enforcer Unit
+Desc:$
+   Like any locker room, this one is complete with showers, toilets and
+lockers.  On each locker is the name of a given officer and his rank.  Above
+the door as you go to exit is LS-TEU.  This is the Tactical Enforcers Unit! 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	64952
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	64950
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#64952
+Name:	Heavy Lone Star Enforcer Unit
+Desc:$
+   You move up the stairs into the second floor of the lone star enforcer
+unit.  It's a typical locker room like the one below it, only it seems of a
+little higher quality. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	64953
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	64951
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#64953
+Name:	Elite Lone Star Enforcer
+Desc:$
+   You enter the third and final floor of the Lone Star Enforcers, reserved
+for the best, of the best.  On the door before you entered was a poster
+depicting a man with an auto cannon that said "Shoot em all and let God sort
+em out!" 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	64952
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#64985
+Name:	Entrance to a Children's Shelter
+Desc:$
+   In front of you sits a small shelter for homeless children, white in color
+with a light blue trim. The paint is slightly chipped, but the building itself
+seems in good order. Three windows sit on the front of the shelter: two of
+them to the right of the oak front door, and one more to the left which is
+covered from the inside with many colorful finger paintings and drawings,
+obviously made by the hands of children. A small, grassy area off to the side
+contains has a couple of plastic playground big toys. On the shelters door
+sits a knocker in the shape of an elaborate silver dragon. 
+~
+Flags:	10000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	64986
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	2415
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#64986
+Name:	Recreation Room
+Desc:$
+   Stepping inside the place, you notice the temperature is at a comfortably
+warm level. A soft, dark red carpet lays beneath your feet. The beige colored
+walls inside here have child-made drawings placed randomly throughout, as well
+as the occasional finger-shaped smudge print. A small black stand sits
+underneath a 15 inch trideo, and contains a small variety of children's
+movies. Many bean bag chairs, and several relatively lengthy couches provide
+the seating for this recreation room. A few loose color crayons and pencils
+lay scattered about the floor. A doorway to the north leads into a small mess
+hall. Another doorway to the east leads into the bunk room. To the west, one
+last doorway allows entrance into the school room. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	64987
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	64988
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	64985
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	64989
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#64987
+Name:	A small mess hall
+Desc:$
+    A small makeshift mess hall has been set up in here. Six tan-colored,
+somewhat long lunch tables sit in the room with worn stickers and a few small
+stains on them. On the far north side of the room, a relatively small metal
+cooking center sits, with large pots sitting on top of it. A large
+refridgeration unit sits to the side of the cooking center, with numerous
+small pints of milk visible inside through its glass door. While the shelter
+mainly serves food for the children staying in it, they are also known to
+provide very cheap meals to less fortunate people, homeless or not.  
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	64986
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#64988
+Name:	Bunk room
+Desc:$
+   This is a long, narrow room with a fairly large number of plain looking
+bunk beds lining every side of it. On the side of each bunk bed is a cheap but
+suitable double doored, white cabinet for the children to store their
+belongings in. Even the few people who keep up the shelter sleep in this room,
+having no homes to return to themselves. Simple light blue sheets, a single
+pillow, and a warm thermal blanket make up the accomodations for each
+individual bed. A single long window sits on one side of this room, letting
+sunlight in at day time, and street light in at night. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	64986
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#64989
+Name:	Class room
+Desc:$
+   This is a small, but adequate room reserved for education purposes. Roughly
+35 desks have been squeezed in here, with small drawers on them for storing
+supplies. An old-fashion white board sits in the front of the room, with one
+more desk in front of it reserved for the teacher. Shelves sit on either side
+of the room, one filled with a variety of educational books and children's
+short stories, while the other contains an array of utensils and some art
+supplies. In the back of the room lies the art-shrouded window that you saw
+from outside.  
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	64986
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#64990
+Name:	Entering a tunnel
+Desc:$
+   Murky water runs down a channel in this tunnel for a ways. It doesn't look
+too welcoming to step in, but thankfully there are walkways on either side of
+it. Above the sound of the running water, you *think* you can make out some
+other type of background noise coming from further in. Also the tunnel seems
+to be illuminated by a faint light from a source you can't yet determine,
+though it seems to get vaguely bright further down. Mold and small vines seem
+to have no problem thriving off of the cold, dirty atmosphere down here as
+they grow in various cracks in the walls.  
+~
+Flags:	10000000100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	grate metal
+	ToVnum:	7228
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	64991
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#64991
+Name:	Further into the tunnel
+Desc:$
+   While the tunnel dims as it loses light from the outside, just up ahead it
+grows brighter again. There's definatly another source up ahead, and you're
+sure you hear voices and possibly foot steps. The tunnel seems to be slightly,
+but still noticeably warmer now. Small vines and mold still run rampant on
+various portions of the decayed looking wall. Just ahead you see the channel
+of water take a turn westward. 
+~
+Flags:	10000000000000100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	2
+Z:	2.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	64990
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	64992
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#64992
+Name:	An intersection in the tunnel
+Desc:$
+   To the west, the channel of water flows through a pile of fallen bricks and
+debris. This piles blocks the entire tunnel, making it impassable except for
+the water which flows swiftly through the gaps. To the east, is a thick metal
+door that's typically kept open. Light shines from within it, and several
+people are gathered around tables of... Gear? 
+~
+Flags:	10000000100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	64991
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	64993
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#64993
+Name:	A Smuggler Ring
+Desc:$
+   A wave of warmth hits you from various space heaters placed throughout this
+long, rectangular room. Lights line the ceiling, one above each of the four
+tables lying to the south. It looks like some sort of smuggling ring is here
+trying to offload their merchandise. Gear is laid out for display on the
+tables, each one tended by a different person. The inside of this place is
+fairly well kept, and not infested with stray mold and vines. In order to help
+repel potential thieves, several sentry guns are strategically placed through
+out the room, including a light machine gun above the door to the west. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	64994
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	64992
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#64994
+Name:	At a Table
+Desc:$
+   Another table sits here, with its very own sentry turret to guard it. Gear
+is strung across it, displayed in a semi-orderly fashion. Crude price tags are
+attached to the items, and written up on in sloppy print. This particular
+table seems to be loaded with sheathes, holsters, backpacks and the like. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	64993
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	64995
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#64995
+Name:	At a Table
+Desc:$
+   Another table sits here, with its very own sentry turret to guard it. Gear
+is strung across it, displayed in a semi-orderly fashion. Crude price tags are
+attached to the items, and written up on in sloppy print. This particular
+table seems to be loaded with all sorts of miscellaneous items that may be of
+interest to a runner. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	64994
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	64996
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#64996
+Name:	At the Last Table
+Desc:$
+   This final table in the room is pressed against the decaying wall. Like the
+other tables, it's guarded by a sentry gun and sports an assortment of gear
+bearing sloppily-written price tags. Every variety of gun accessory sits on
+this table, from scopes, to smart links, to gas vents and tripods. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	64995
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

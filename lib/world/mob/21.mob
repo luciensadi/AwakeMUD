@@ -1,0 +1,740 @@
+#2100
+Keywords:	dancers crowd people
+Name:	the crowd of dancers
+RoomDesc:$
+People are packed in here, dancing to the beat of the music. 
+
+~
+LookDesc:$
+There is not a group of people not represented here. Trolls mix with elves,
+Amerinds mix with Asians. Even despite the huge mixture of race and culture
+everyone seems to be getting along. The only thing these people are interested
+in is the music and dancing. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000010001010
+AffFlags:	0
+Race:	Undefined
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	1
+	Impact:	1
+	Bank:	15
+[SKILLS]
+BREAK
+#2101
+Keywords:	young elf girl
+Name:	Danielle
+RoomDesc:$
+A young elf girl, looking ready to dance. 
+
+~
+LookDesc:$
+It's obvious she is a habitue of Club Penumbra. She wears the standard get up
+of the up-and-coming clubber, tight, bright clothing, designed to not only
+look good but be easy to move in. She can be seen eyeing off more than a few
+of the male crowd. 
+~
+ArriveMsg:	dances in from
+LeaveMsg:	dances
+MobFlags:	1000
+AffFlags:	10000000000000
+Race:	Elf
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	4
+	Str:	1
+	Cha:	4
+	Int:	3
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	168
+	Weight:	55
+	Cash:	24
+[SKILLS]
+BREAK
+#2102
+Keywords:	ork bouncer large male
+Name:	the ork bouncer
+RoomDesc:$
+A large male ork keeps an eye on who comes and goes. 
+
+~
+LookDesc:$
+While much smaller than the troll at the door, this ork is still very
+imposing. He stands perfectly still, in his tailored suit, keeping an eye on
+who comes and goes from the rooms. He can be seen turning away quite a few
+patrons who seem intent on sneaking in to try and catch a glimpse of one of
+Seattle's power-players. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000100000000001010
+AffFlags:	1000000000
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	2
+	Str:	2
+	Cha:	1
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	201
+	Weight:	130
+	Ballistic:	5
+	Impact:	5
+[SKILLS]
+	unarmed combat:	12
+BREAK
+#2103
+Keywords:	dancer Dee
+Name:	Dee
+RoomDesc:$
+An attractive dark-haired woman named Dee is looking for a dance partner.
+
+~
+LookDesc:$
+She is quite beautiful, and used to approbation.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	1
+	Cha:	6
+	Int:	3
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	167
+	Weight:	54
+	Impact:	2
+	Bank:	35
+[SKILLS]
+BREAK
+#2104
+Keywords:	dancer Mustang Sally
+Name:	Mustang Sally
+RoomDesc:$
+Mustang Sally, the famed decker, dances here.
+
+~
+LookDesc:$
+She is the most kinetic person in the room. Her only release from the Net is 
+the Penumbra, and she takes full advantage.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	2
+	Cha:	3
+	Int:	6
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	162
+	Weight:	54
+	Bank:	30
+[SKILLS]
+BREAK
+#2105
+Keywords:	dancer Edna
+Name:	Edna
+RoomDesc:$
+A scantily clad ork named Edna smiles at you.
+
+~
+LookDesc:$
+This one's for you, if you're attracted to dermal plating.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	4
+	Str:	6
+	Cha:	1
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	73
+	Ballistic:	2
+	Impact:	1
+	Bank:	63
+[SKILLS]
+BREAK
+#2106
+Keywords:	dancer Freddy
+Name:	Freddy
+RoomDesc:$
+Freddy is here, refusing to dance.
+
+~
+LookDesc:$
+You see a tall man with a luxuriant mustache. He wanders around the room, 
+whispering "Ariadne, I love thee."
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	1
+	Str:	2
+	Cha:	1
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	60
+	Bank:	17
+[SKILLS]
+BREAK
+#2107
+Keywords:	Gregorio dancer
+Name:	Gregorio
+RoomDesc:$
+Gregorio, a troll, is here attempting to dance.
+
+~
+LookDesc:$
+You see a huge troll dressed entirely in black, with a black fedora and huge, 
+blocky sunglasses.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	1
+	Str:	8
+	Cha:	1
+	Int:	4
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	240
+	Weight:	150
+	Ballistic:	3
+	Impact:	2
+	Bank:	70
+[SKILLS]
+BREAK
+#2108
+Keywords:	Pat dancer
+Name:	Pat
+RoomDesc:$
+Pat is dancing here.
+
+~
+LookDesc:$
+It is a strange sight, indeed: a square, broad-shouldered individual with a 
+mass of curly hair atop a round face.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	3
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	75
+	Bank:	13
+[SKILLS]
+BREAK
+#2109
+Keywords:	Alan dancer
+Name:	Alan
+RoomDesc:$
+A thin, well-dressed Vietnamese man named Alan is here, looking for a good 
+time.
+
+~
+LookDesc:$
+He dances in a frenzy, carnal desires apparent in his eyes.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	3
+	Cha:	1
+	Int:	2
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	172
+	Weight:	60
+	Bank:	27
+[SKILLS]
+BREAK
+#2110
+Keywords:	Kevin dancer
+Name:	Kevin
+RoomDesc:$
+Kevin drinks more than he dances, but he enjoys both.
+
+~
+LookDesc:$
+You see a man, obviously a wageslave, trying to find someone to connect with 
+and relieve the tedium of his life.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	2
+	Str:	2
+	Cha:	2
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	68
+	Bank:	23
+[SKILLS]
+BREAK
+#2111
+Keywords:	johnny clean dark built man
+Name:	Johnny Clean
+RoomDesc:$
+A dark, thickly built man in a fine italian suit relaxes on a couch here. 
+
+~
+LookDesc:$
+Johnny Clean has a reputation of one of the most ruthless Johnson's in the
+business. His reputation is sterling, and his revenge on any who attempts to
+tarnish it is swift. Above all, he is trustworthy, as long as you do not cross
+him. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	5
+	Str:	7
+	Cha:	2
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	75
+	Ballistic:	6
+	Impact:	5
+[SKILLS]
+	unarmed combat:	6
+	firearms:	8
+	stealth:	4
+	media etiquette:	4
+	:	4
+BREAK
+#2112
+Keywords:	troll bouncer
+Name:	The Troll Bouncer
+RoomDesc:$
+The Troll Bouncer stands here, watching everyone who enters. 
+
+~
+LookDesc:$
+The tailored suit this troll is wearing must have cost a fortune in material
+alone. He towers above most of the crowd, even the other trolls, and he is
+wide enough to be declared a fire hazard. He is watching everyone who comes
+in, and on more than a few occasions literally tosses them out the front door.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000101000000001010
+AffFlags:	0
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	5
+	Str:	9
+	Cha:	1
+	Int:	1
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	325
+	Weight:	318
+	Ballistic:	5
+	Impact:	4
+	Bank:	625
+[SKILLS]
+	unarmed combat:	8
+BREAK
+#2113
+Keywords:	mage bouncer
+Name:	a Mage Bouncer
+RoomDesc:$
+The Mage Bouncer stands here looking bored.
+
+~
+LookDesc:$
+At first glance, she seems to be wearing a lot of jewelry. Looking again, you 
+realize she's wearing a lot of focus items.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	2
+	Cha:	3
+	Int:	5
+	Wil:	5
+	Mag:	6
+[POINTS]
+	Height:	140
+	Weight:	58
+	Ballistic:	5
+	Impact:	4
+	Bank:	515
+[SKILLS]
+	sorcery:	10
+	conjuring:	6
+	pistols:	9
+	armed combat:	9
+BREAK
+#2114
+Keywords:	bar staff
+Name:	bar staff
+RoomDesc:$
+The bar staff moves with a slick fluidity that suggests years of training. 
+
+~
+LookDesc:$
+There would be no less than a half dozen people crammed behind the bar at any
+one time. They range in age from early 20s to late 50s. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1110
+AffFlags:	1000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	4
+	Cha:	3
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	5
+	Impact:	3
+	Cash:	50
+	Bank:	50
+[SKILLS]
+BREAK
+#2115
+Keywords:	receptionist
+Name:	the receptionist
+RoomDesc:$
+The receptionist is here, awaiting a transaction.
+
+~
+LookDesc:$
+A frail, elderly woman smiles warmly at you.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	5
+	Int:	3
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	143
+	Weight:	50
+	Cash:	50
+	Bank:	50
+[SKILLS]
+BREAK
+#2116
+Keywords:	clarence johnson professional man suit
+Name:	Clarence
+RoomDesc:$
+A professional, white-haired man stands here in a business suit. 
+
+~
+LookDesc:$
+Clarence is an average sized man, of anglo descent.  his hair is shortly
+cropped and pure white. 
+~
+ArriveMsg:	walks in from
+LeaveMsg:	walks
+MobFlags:	11010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	12
+	Str:	12
+	Cha:	12
+	Int:	12
+	Wil:	12
+	Mag:	12
+[POINTS]
+	Height:	170
+	Weight:	60
+	Level:	3
+	Ballistic:	10
+	Impact:	4
+	Cash:	13
+	Bank:	100000
+	Karma:	20
+[SKILLS]
+	unarmed combat:	8
+	firearms:	8
+	sorcery:	4
+	elf etiquette:	9
+	corporate etiquette:	4
+BREAK
+#2117
+Keywords:	huge fucking troll franklin dobbs vigilante
+Name:	Franklin Dobbs
+RoomDesc:$
+A huge fucking troll with insane eyes stands here menacingly. 
+
+~
+LookDesc:$
+This looks like some goblinized version of Schwartzenegger with the mind of
+the character from "One Flew Over the Cuckoo's Nest". 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11010
+AffFlags:	1000000000001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	200
+	Weight:	105
+	Level:	3
+	Ballistic:	80
+	Impact:	80
+[SKILLS]
+	firearms:	50
+	rifles:	50
+	:	4
+	unarmed combat:	50
+	sorcery:	50
+BREAK
+#2118
+Keywords:	officer man lone star
+Name:	a Lone Star Officer
+RoomDesc:$
+A Lone Star Officer stands here, ready to take care of the situation. 
+
+~
+LookDesc:$
+The Lone Star officer is the backbone of Lone Star's strength. Although not
+specifically trained for any special operations, without these officers Lone
+Star would not have undercover operatives or people to walk the beat.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	66
+	Ballistic:	5
+	Impact:	5
+[SKILLS]
+	pistols:	6
+	unarmed combat:	5
+BREAK
+#2119
+Keywords:	terleis tuvrien morningstar executive
+Name:	Terleis Tuvrien
+RoomDesc:$
+A blond elf in an Zavon of Paris suit stands here. 
+
+~
+LookDesc:$
+He is tall for an elf, and a bit on the slender side, even as far as elves go.
+His hair is a light golden blonde, and his eyes are a sapphire blue that
+glints slightly in the reflected light. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	12
+	Str:	9
+	Cha:	11
+	Int:	10
+	Wil:	12
+	Mag:	15
+[POINTS]
+	Height:	213
+	Weight:	103
+	Ballistic:	12
+	Impact:	12
+	Bank:	100
+[SKILLS]
+	unarmed combat:	20
+	sorcery:	19
+BREAK
+#2120
+Keywords:	johnny johnson man pinstripe
+Name:	a man in a pinstripe suit
+RoomDesc:$
+A man in a pinstripe suit is sitting here. 
+
+~
+LookDesc:$
+This man is sitting in his booth quietly wearing a pale blue pinstripe suit.
+His blue eyes scan the room every now and then but they don't pause on
+anything. His jet black hair goes down to his shoulders and is pulled back
+roughly in a single ponytail. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000010000001001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	172
+	Weight:	87
+[SKILLS]
+BREAK
+END

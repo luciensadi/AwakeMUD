@@ -1,47 +1,865 @@
 #10000
-Name:	^W(^cIMMHQ^W)^C A Grand Laboratory
+Name:	Coal Plains
 Desc:$
-   Pristine polymer countertops and gleaming metal fume hoods line the walls
-of this well-outfitted laboratory. The floor, a freshly-waxed tile, gives off
-the faintest scent of lemon, offsetting the otherwise-sterile atmosphere. 
+   Clouds of blackened dust and polluted ash kick up as you push your way
+through the deep plains. In the distance, you can see a niche in the plain
+surface, dipping below ground level. 
 ~
-Flags:	1000010000000000000011000
-SecType:	Inside
+Flags:	100
+SecType:	Field
 MatrixExit:	0
 Crowd:	0
 Cover:	0
 X:	20
 Y:	20
-Z:	20.00
-RoomType:	9
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
 	Light:	0
 	Smoke:	0
 	Background:	0
-	BackgroundType:	15
+	BackgroundType:	0
 [EXIT north]
-	Keywords:	door armored firing range
-	Desc:$
-Thick and sturdy, this hardened steel door is designed to stop rounds from
-even the strongest weapon. Embossed in the metal are the words 'To Firing
-Range.'  
-~
-	ToVnum:	10001
-	Flags:	2
-	Material:	metal
-	Barrier:	32
+	ToVnum:	10000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
 	KeyVnum:	0
-	LockRating:	50
+[EXIT northeast]
+	ToVnum:	10000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT east]
+	ToVnum:	10000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	10001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	10000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2421
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10001
+Name:	Coal Plains
+Desc:$
+   The small path you clear through the dark coal disappears just as fast as
+it was created, as you move across the plains. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	10001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	10001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	10000
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10002
+Name:	A Path Through the Hills
+Desc:$
+   You begin to follow a small path, that although not totally clear, points
+out some sort of direction through the coal. The dust is oppressive, making it
+hard to breathe, and even harder to see. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	10002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	3627
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	10002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	10002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	10002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10003
+Name:	Coal Hills
+Desc:$
+   Small compacted hills rise out of the muck, giving you a better view of the
+huge plains. Coal reaches out in all directions, but a little to the
+southeast, you can just make out a large structure. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	10003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	10003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	10003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	10003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10004
+Name:	Coal Plains
+Desc:$
+   The plains reach out as far as the eye can see, and it seems like there
+really is nowhere to turn. However, near here you can make out some sort of
+drop in the ground. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	10004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
 	ToVnum:	10004
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
-	ToVnum:	10021
+	ToVnum:	10005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	10004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	10004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10005
+Name:	Coal Plains
+Desc:$
+   Scuffling up dust, it doesn't look like you're going to get very far at
+this rate. Perhaps you should turn back, before you completely lose your way.
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	10005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	10005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	10005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	10005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10006
+Name:	Coal Hills
+Desc:$
+   Standing atop one of the larger hills with the polluted breeze brushing
+against your clothes, you can see down into a large valley that breaks through
+the surface of the plains and cuts an underpass in the ground. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	10007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	10006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	10006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10007
+Name:	Edge of the Valley
+Desc:$
+   Coal and rubble tumbles over the side and into the valley, plummeting for
+ages before ever touching the ground again. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	10007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	10006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	10007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10008
+Name:	Narrow Pass
+Desc:$
+   You step down into a narrow walkway, obstructed mainly by the large piles
+of coal that have built up over time. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	10008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	10008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	10008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	10008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10009
+Name:	Deep Valley
+Desc:$
+   The valley clears a darkened path under the ground level, keeping you out
+of the blackened sun's beams. The air is much denser down here, and almost
+harder to navigate through. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	10009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	10009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10010
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	10009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	10009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10010
+Name:	Deep Valley
+Desc:$
+   The valley continues on into the darkness, shielding you from the harsh
+atmosphere above. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	10011
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10011
+Name:	Deep Valley
+Desc:$
+   The valley twists and turns, the actual direction become harder to follow
+as you dip deeper. Several beams of light begin to patter on your skin as you
+approach a rise in the valley floor. This process continues for quite a while,
+dipping and rising you constantly. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10011
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10011
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10011
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	10012
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10011
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	10010
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10012
+Name:	Deep Valley
+Desc:$
+   The path suddenly becomes really steep, leading upwards, out of the canyon
+in the plains. The path disappears under the massive blankets of dust and
+coal, leaving you with several options for exit. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	10011
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10012
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	10012
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10013
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10012
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	10012
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10013
+Name:	Coal Peak
+Desc:$
+   You reach the end of the valley, pulling yourself out of the darkness and
+into the light. Clouds of dust float around you, drifting aimlessly through
+the grey sky, a narrow breeze making your skin crawl. The grey, the desolation
+all around you, certainly doesn't make this place the nicest place to be. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10012
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10014
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	10013
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	10016
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	10013
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10014
+Name:	Coal Plains
+Desc:$
+   The plains reach out too far, even with binoculars for you to find a remote
+destination. Just rising mountains of coal and ash, toppling every now and
+then in clouds of dust, falling to the wind. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	10014
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	10014
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10015
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	10014
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -52,153 +870,28 @@ Range.'
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[EXIT up]
-	ToVnum:	10018
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#10001
-Name:	^W(^cIMMHQ^W)^C A Firing Range
-Desc:$
-   Long, open lanes stretch to the west, solidly-built targets standing at
-various distances along them to challenge even the most skilled shooter. To
-the east, a target is surrounded by helper automatons that will return fire if
-the target is attacked. 
-~
-Flags:	1000000000000000000001000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	20.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	15
-[EXIT north]
-	ToVnum:	10019
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT east]
-	Desc:$
-A partition stands here, blocking fire. 
-~
-	ToVnum:	10002
-	Flags:	1
-	Material:	metal
-	Barrier:	32
-	KeyVnum:	0
-[EXIT south]
-	Keywords:	door armored
-	Desc:$
-Thick and sturdy, this hardened steel door is designed to stop rounds from
-even the strongest weapon. Embossed in the metal are the words 'To
-Laboratory.'  
-~
-	ToVnum:	10000
-	Flags:	2
-	Material:	metal
-	Barrier:	32
-	KeyVnum:	0
-	LockRating:	50
-[EXIT west]
+[EXIT northwest]
 	ToVnum:	10014
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#10002
-Name:	^W(^cIMMHQ^W)^C A Guarded Target
+#10015
+Name:	Coal Path
 Desc:$
-   A target dominates the center of this firing lane, flanked by two armed
-guards whose sole purpose is to return fire. 
+   A small path looks beaten out of the coal, leading off into the distance.
+The clumps of coal seem to almost mark out the trail, leading you away from
+your original direction. 
 ~
-Flags:	1000000000000000000001000
-SecType:	Inside
+Flags:	0
+SecType:	Field
 MatrixExit:	0
 Crowd:	0
 Cover:	0
 X:	20
 Y:	20
-Z:	20.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	15
-[EXIT west]
-	Keywords:	partition door
-	Desc:$
-A partition stands here, blocking fire. 
-~
-	ToVnum:	10001
-	Flags:	1
-	Material:	metal
-	Barrier:	32
-	KeyVnum:	0
-BREAK
-#10003
-Name:	^W(^cIMMHQ^W)^C Amongst the Hermetic Tomes
-Desc:$
-   Away from the open spaces of the main reading room, you find yourself in an
-area of comfortable silence. Motes of dust drift languidly through the air
-here, glimmering in the warm light of the incandescent bulbs above. The great
-mahogany shelves that line these aisles seem to deal exclusively with the
-Hermetic tradition. 
-~
-Flags:	100001000010000000000000011000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	20.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	2
-	BackgroundType:	13
-[EXIT south]
-	ToVnum:	10004
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#10004
-Name:	^W(^cIMMHQ^W)^C The Central Library
-Desc:$
-   Absolutely packed with dusty tomes, this magical library seems to hold
-every secret in the world-- if only you had the time to find them. Between the
-large oaken reading tables stands a white marble pedestal, upon which sits a
-pristine copy of Richard Bartle's "Designing Virtual Worlds."   
-~
-Flags:	1000010000000000000011000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	20.00
+Z:	2.50
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
@@ -208,430 +901,31 @@ RoomType:	0
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	10003
+	ToVnum:	10014
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[EXIT south]
-	ToVnum:	10005
-	Flags:	0
-	Material:	wood
-	Barrier:	4
-	KeyVnum:	0
-[EXIT west]
-	ToVnum:	10000
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#10005
-Name:	^W(^cIMMHQ^W)^C A Hallway of Shamanic Lodges
-Desc:$
-   Eschewing the stacks of printed materials that entrance the Hermetic mages
-to the north, this rotunda is instead devoted to paintings and sculptures of
-the aspects of various Shamanic totems. Nestled amongst the iconography are
-doors, each leading to a reserveable room to build your Shamanic lodge in. 
-~
-Flags:	1000010000010000000011000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	20.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	2
-	BackgroundType:	13
-[EXIT north]
-	Keywords:	door wooden simple
-	Desc:$
-A simple wooden door has been installed here. 
-~
-	ToVnum:	10004
-	Flags:	1
-	Material:	wood
-	Barrier:	4
-	KeyVnum:	10010
-	LockRating:	1
 [EXIT northeast]
-	Keywords:	door wooden simple
-	Desc:$
-A simple wooden door has been installed here. 
-~
-	ToVnum:	10006
-	Flags:	1
-	Material:	wood
-	Barrier:	4
-	KeyVnum:	10010
-	LockRating:	1
-[EXIT east]
-	Keywords:	door wooden simple
-	Desc:$
-A simple wooden door has been installed here. 
-~
-	ToVnum:	10007
-	Flags:	1
-	Material:	wood
-	Barrier:	4
-	KeyVnum:	10010
-	LockRating:	1
-[EXIT southeast]
-	Keywords:	door wooden simple
-	Desc:$
-A simple wooden door has been installed here. 
-~
-	ToVnum:	10008
-	Flags:	1
-	Material:	wood
-	Barrier:	4
-	KeyVnum:	10010
-	LockRating:	1
-[EXIT south]
-	Keywords:	door wooden simple
-	Desc:$
-A simple wooden door has been installed here. 
-~
-	ToVnum:	10009
-	Flags:	1
-	Material:	wood
-	Barrier:	4
-	KeyVnum:	10010
-	LockRating:	1
-[EXIT southwest]
-	Keywords:	door wooden simple
-	Desc:$
-A simple wooden door has been installed here. 
-~
-	ToVnum:	10010
-	Flags:	1
-	Material:	wood
-	Barrier:	4
-	KeyVnum:	10010
-	LockRating:	1
-[EXIT west]
-	Keywords:	door wooden simple
-	Desc:$
-A simple wooden door has been installed here. 
-~
-	ToVnum:	10011
-	Flags:	1
-	Material:	wood
-	Barrier:	4
-	KeyVnum:	10010
-	LockRating:	1
-[EXIT northwest]
-	Keywords:	door wooden simple
-	Desc:$
-A simple wooden door has been installed here. 
-~
-	ToVnum:	10012
-	Flags:	1
-	Material:	wood
-	Barrier:	4
-	KeyVnum:	10010
-	LockRating:	1
-BREAK
-#10006
-Name:	^W(^cIMMHQ^W)^C A Quiet Room
-Desc:$
-   Sparsely-decorated, this room awaits its owner's personalizing touch. 
-~
-Flags:	1000010000000000000011000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	20.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	2
-	BackgroundType:	13
-[EXIT southwest]
-	Keywords:	door wooden simple
-	Desc:$
-A simple wooden door has been installed here. 
-~
-	ToVnum:	10005
-	Flags:	1
-	Material:	wood
-	Barrier:	4
-	KeyVnum:	10010
-	LockRating:	1
-BREAK
-#10007
-Name:	^W(^cIMMHQ^W)^C A Quiet Room
-Desc:$
-   Sparsely-decorated, this room awaits its owner's personalizing touch. 
-~
-Flags:	1000010000000000000011000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	20.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	2
-	BackgroundType:	13
-[EXIT west]
-	Keywords:	door wooden simple
-	Desc:$
-A simple wooden door has been installed here. 
-~
-	ToVnum:	10005
-	Flags:	1
-	Material:	wood
-	Barrier:	4
-	KeyVnum:	10010
-	LockRating:	1
-BREAK
-#10008
-Name:	^W(^cIMMHQ^W)^C A Quiet Room
-Desc:$
-   Sparsely-decorated, this room awaits its owner's personalizing touch. 
-~
-Flags:	1000010000000000000011000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	20.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	2
-	BackgroundType:	13
-[EXIT northwest]
-	Keywords:	door wooden simple
-	Desc:$
-A simple wooden door has been installed here. 
-~
-	ToVnum:	10005
-	Flags:	1
-	Material:	wood
-	Barrier:	4
-	KeyVnum:	10010
-	LockRating:	1
-BREAK
-#10009
-Name:	^W(^cIMMHQ^W)^C A Quiet Room
-Desc:$
-   Sparsely-decorated, this room awaits its owner's personalizing touch. 
-~
-Flags:	1000010000000000000011000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	20.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	2
-	BackgroundType:	13
-[EXIT north]
-	Keywords:	door wooden simple
-	Desc:$
-A simple wooden door has been installed here. 
-~
-	ToVnum:	10005
-	Flags:	1
-	Material:	wood
-	Barrier:	4
-	KeyVnum:	10010
-	LockRating:	1
-BREAK
-#10010
-Name:	^W(^cIMMHQ^W)^C A Quiet Room
-Desc:$
-   Sparsely-decoraed, this room awaits its owner's personalizing touch. 
-~
-Flags:	1000010000000100000011000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	20.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	2
-	BackgroundType:	13
-[EXIT northeast]
-	Keywords:	door wooden simple
-	Desc:$
-A simple wooden door has been installed here. 
-~
-	ToVnum:	10005
-	Flags:	1
-	Material:	wood
-	Barrier:	4
-	KeyVnum:	10010
-	LockRating:	1
-BREAK
-#10011
-Name:	^W(^cIMMHQ^W)^C A Quiet Room
-Desc:$
-   Sparsely-decorated, this room awaits its owner's personalizing touch. 
-~
-Flags:	1000010000000000000011000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	20.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	2
-	BackgroundType:	13
-[EXIT east]
-	Keywords:	door wooden simple
-	Desc:$
-A simple wooden door has been installed here. 
-~
-	ToVnum:	10005
-	Flags:	1
-	Material:	wood
-	Barrier:	4
-	KeyVnum:	10010
-	LockRating:	1
-BREAK
-#10012
-Name:	^W(^cIMMHQ^W)^C A Quiet Room
-Desc:$
-   Sparsely-decorated, this room awaits its owner's personalizing touch. 
-~
-Flags:	1000010000000000000011000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	20.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	2
-	BackgroundType:	13
-[EXIT southeast]
-	Keywords:	door wooden simple
-	Desc:$
-A simple wooden door has been installed here. 
-~
-	ToVnum:	10005
-	Flags:	1
-	Material:	wood
-	Barrier:	4
-	KeyVnum:	10010
-	LockRating:	1
-BREAK
-#10013
-Name:	^W(^cIMMHQ^W)^C A Climate-Controlled Server Farm
-Desc:$
-   Enormous banks of humming machinery stretch throughout this air-conditioned
-complex, kept online by redundant power supplies that are nothing short of
-enormous. Neat rows of network cabling split and weave amongst the racks. The
-outlets of an industrial-grade halon fire suppression system suggest that this
-may not be the healthiest room to spend your time in. 
-~
-Flags:	100001000010000000000010011000
-SecType:	Inside
-MatrixExit:	10013
-IO:	0
-Bandwidth:	0
-Access:	0
-Trace:	0
-RTG:	1100
-JackID:	0
-Address:	An undisclosed location
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	20.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT east]
-	ToVnum:	10000
+	ToVnum:	10015
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-BREAK
-#10014
-Name:	^W(^cIMMHQ^W)^C A Close-Range Target
-Desc:$
-   The firing range stretches westward, with the shooting stands to the east.
-~
-Flags:	1000000000000000000001000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	20
-Y:	20
-Z:	20.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT east]
-	ToVnum:	10001
+	ToVnum:	10015
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	10029
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	10015
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -643,19 +937,21 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#10015
-Name:	^W(^cIMMHQ^W)^C A Mid-Range Target
+#10016
+Name:	A Bubbling Pool
 Desc:$
-   The firing range stretches westward, with the shooting stands to the east.
+   Tiny white bubbles rise up through a crack in the ground near you, foaming
+and spilling everywhere. Mixing with the coal, the liquid makes a sort of foul
+tar, one that most likely would never come off if you got any on yourself. 
 ~
-Flags:	1000000000000000000001000
-SecType:	Inside
+Flags:	0
+SecType:	Field
 MatrixExit:	0
 Crowd:	0
 Cover:	0
 X:	20
 Y:	20
-Z:	20.00
+Z:	2.50
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
@@ -664,8 +960,32 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10016
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	10013
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT east]
-	ToVnum:	10014
+	ToVnum:	10016
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10016
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	10017
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -677,19 +997,20 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#10016
-Name:	^W(^cIMMHQ^W)^C A Long-Range Target
+#10017
+Name:	Coal Piles
 Desc:$
-   The firing range stretches westward, with the shooting stands to the east.
+   The coal has been piled up along the sides of a path, that seems a lot more
+defined than any of the ones you've encountered so far. 
 ~
-Flags:	1000000000000000000001000
-SecType:	Inside
+Flags:	0
+SecType:	Field
 MatrixExit:	0
 Crowd:	0
 Cover:	0
 X:	20
 Y:	20
-Z:	20.00
+Z:	2.50
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
@@ -698,8 +1019,32 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10017
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	10016
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT east]
-	ToVnum:	10015
+	ToVnum:	10017
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10017
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	10018
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -711,19 +1056,21 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#10017
-Name:	^W(^cIMMHQ^W)^C An Extreme-Range Target
+#10018
+Name:	Coal Piles
 Desc:$
-   The firing range stretches westward, with the shooting stands to the east.
+   A little in the distance, you can see a *MASSIVE* lava flow, ploughing
+through the plains, heading south. Huge streams of molten rock and metal lie
+trapped under the burning waves. The path continues southwards. 
 ~
-Flags:	1000000000000000000001000
-SecType:	Inside
+Flags:	0
+SecType:	Field
 MatrixExit:	0
 Crowd:	0
 Cover:	0
 X:	20
 Y:	20
-Z:	20.00
+Z:	2.50
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
@@ -732,84 +1079,58 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT east]
-	ToVnum:	10016
+[EXIT northeast]
+	ToVnum:	10017
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-BREAK
-#10018
-Name:	^W(^cIMMHQ^W)^C The Experimental Annex
-Desc:$
-Bright and sterile, this white-walled chamber is ringed by hermetically-sealed
-airlocks that lead to various testing chambers. Icons and emblems have been
-etched into the burnished plasteel surfaces of the various hatches to indicate
-what lies beyond. 
-~
-Flags:	1000010000000000000011100
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	20.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT north]
-	Keywords:	vault door sealed
-	Desc:$
-A sealed vault door prevents NPCs from escaping. 
-~
-	ToVnum:	10023
-	Flags:	2
-	Material:	metal
-	Barrier:	32
-	KeyVnum:	0
-	LockRating:	50
-	HiddenRating:	50
 [EXIT east]
-	ToVnum:	10027
+	ToVnum:	10018
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	10018
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
-	ToVnum:	10028
+	ToVnum:	10019
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[EXIT down]
-	ToVnum:	10000
+[EXIT west]
+	ToVnum:	10018
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	10018
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10019
-Name:	^W(^cIMMHQ^W)^C An Alcove in the Firing Range
+Name:	Coal Riverside
 Desc:$
-Tucked into the side of the firing range is an alcove, separated from the
-chaos by panels of bulletproof glass as thick as a troll's neck. Benches,
-tables, and presses here provide the necessities for deploying a full
-ammunition workshop for handloading rounds. 
+   Huge plumes of steam and smoke rise up from the river, curling around you,
+suffocatingly dense. The river itself glows brightly against the darkened grey
+backdrop of the plains. 
 ~
-Flags:	100001000000000000000000011000
-SecType:	Inside
+Flags:	0
+SecType:	Field
 MatrixExit:	0
 Crowd:	0
 Cover:	0
-X:	0
-Y:	0
-Z:	20.00
+X:	20
+Y:	20
+Z:	2.50
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
@@ -818,27 +1139,70 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10018
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	10019
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10019
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	10019
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT south]
-	ToVnum:	10001
+	ToVnum:	10020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	10019
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10019
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	10019
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10020
-Name:	^W(^CIMMHQ^W)^C The ImmHQ Vehicle Shop's Loading Area
+Name:	Coal Pathway
 Desc:$
-Vehicles that are zoneloaded here will be available for purchase in room
-10021. 
+   The path continues southward, towards the heat. A little to your right, you
+can make out a disused bridge that passes over the river....with a large gap
+in the middle. 
 ~
-Flags:	1110000000000000000001000
-SecType:	Inside
+Flags:	0
+SecType:	Field
 MatrixExit:	0
 Crowd:	0
 Cover:	0
-X:	100
-Y:	100
-Z:	20.00
+X:	20
+Y:	20
+Z:	2.50
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
@@ -847,29 +1211,69 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT up]
+[EXIT north]
+	ToVnum:	10019
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	10020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	10020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
 	ToVnum:	10021
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	10020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10020
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	10020
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10021
-Name:	^W(^cIMMHQ^W)^C A Spacious Garage
+Name:	Turn - Off
 Desc:$
-Cavernous and hangar-like, this massive vehicle storage area is enclosed by
-massive steel beams that arch gracefully overhead to support the thick slabs
-of reinforced concrete of this obdurate building. A kiosk near the entrance
-allows the purchase of vehicles.  
+   The path doesn't end here, but presents you with a turn onto the bridge
+that passes over the Mowich Lava Flow. 
 ~
-Flags:	100001110000000000000000001000
-SecType:	Inside
+Flags:	0
+SecType:	Field
 MatrixExit:	0
 Crowd:	0
 Cover:	0
-X:	50
-Y:	50
-Z:	20.00
+X:	20
+Y:	20
+Z:	2.50
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
@@ -879,127 +1283,65 @@ RoomType:	0
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	10000
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT east]
-	Keywords:	door wooden office
-	Desc:$
-A wooden door leads to an office. 
-~
-	ToVnum:	10022
-	Flags:	1
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#10022
-Name:	^W(^cIMMHQ^W)^C A Mechanic's Office
-Desc:$
-Packed full of vehicle parts, miscellaneous upgrades, and an array of tools
-large enough to take up two walls, this office is less of a place of
-administration and more a den of controlled mechanical chaos. 
-~
-Flags:	1000000000000000000001000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	50
-Y:	50
-Z:	20.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT west]
-	Keywords:	door wooden
-	Desc:$
-A wooden door leads back out to the garage. 
-~
-	ToVnum:	10021
-	Flags:	1
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#10023
-Name:	^W(^cIMMHQ^W)^C NPC Behavioral Analysis Lab
-Desc:$
-Racks of data processing units hooked up to electrode helmets lend a sinister
-air to this sterile laboratory. A sign on the wall informs you that this is an
-excellent area for loading in NPCs and testing their behavior in various
-circumstances. 
-~
-Flags:	1000000000000000000001000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	4
-Cover:	4
-X:	10
-Y:	10
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT north]
-	ToVnum:	10025
+	ToVnum:	10020
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT northeast]
-	ToVnum:	10026
+	ToVnum:	10021
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	10021
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
-	Keywords:	vault sealed door
-	Desc:$
-A vault door prevents NPCs from escaping. 
-~
-	ToVnum:	10018
-	Flags:	2
-	Material:	metal
-	Barrier:	32
+	ToVnum:	10023
+	Flags:	0
+	Material:	brick
+	Barrier:	4
 	KeyVnum:	0
-	LockRating:	50
-	HiddenRating:	50
+[EXIT southwest]
+	ToVnum:	10021
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10022
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT northwest]
-	ToVnum:	10024
+	ToVnum:	10021
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#10024
-Name:	^W(^cIMMHQ^W)^C NPC Behavioral Analysis Lab - The Western Road
+#10022
+Name:	Mowich Bridge
 Desc:$
-A flat stretch of asphalt with a small, caution-taped sidewalk stretches out
-here, looping endlessly through N-dimensional space to create an infinite test
-track for driving NPCs. 
+   The Bridge is constructed of heavy duty aluminum alloy, allowing for the
+intense heat and corrosive qualities of the lava. The bridge continues a
+little bit, but then collapses in the middle, disconnected with the other
+side. 
 ~
-Flags:	1010000000000000000000000
-SecType:	Inside
+Flags:	100
+SecType:	Field
 MatrixExit:	0
-Crowd:	4
-Cover:	4
-X:	10
-Y:	10
-Z:	2.00
-RoomType:	9
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
@@ -1008,91 +1350,60 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT east]
+	ToVnum:	10021
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
 	ToVnum:	10025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10023
+Name:	Coal Pathway
+Desc:$
+   The pathway, although a little less distinct, begins to disappear into the
+coal itself. From here, the plains stretch out in all directions. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10021
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	10023
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10023
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT southeast]
 	ToVnum:	10023
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT west]
-	ToVnum:	10026
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#10025
-Name:	^W(^cIMMHQ^W)^C NPC Behavioral Analysis Lab - The Central Road
-Desc:$
-A flat stretch of asphalt with a small, caution-taped sidewalk stretches out
-here, looping endlessly through N-dimensional space to create an infinite test
-track for driving NPCs. 
-~
-Flags:	1010000000000000000000000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	4
-Cover:	4
-X:	10
-Y:	10
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	16
-[EXIT east]
-	ToVnum:	10026
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT south]
-	ToVnum:	10023
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT west]
-	ToVnum:	10024
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#10026
-Name:	^W(^cIMMHQ^W)^C NPC Behavioral Analysis Lab - The Eastern Road
-Desc:$
-A flat stretch of asphalt with a small, caution-taped sidewalk stretches out
-here, looping endlessly through N-dimensional space to create an infinite test
-track for driving NPCs. 
-~
-Flags:	1010000000000000000000000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	4
-Cover:	4
-X:	10
-Y:	10
-Z:	2.00
-RoomType:	9
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT east]
-	ToVnum:	10024
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -1104,26 +1415,832 @@ RoomType:	9
 	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
+	ToVnum:	10023
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	10023
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10024
+Name:	Mowich Bridge
+Desc:$
+   Your feet touch down on the other side hard. You fall to your hands and
+roll out the fall. Looking back, the river bubbles and fizzes, probably with
+the remains of the last jumper. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10079
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10025
+Name:	Underneath the Bridge
+Desc:$
+   Your jump doesn't take you far enough, and you begin to sail slowly towards
+the massive lava flow below....faster...faster..faster..faster... 
+~
+Flags:	1000000000000000000000
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	6
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	10022
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	10026
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10026
+Name:	Underneath the Bridge
+Desc:$
+   Gases and clouds of steam heat up your clothing at an astonishing rate,
+sweat almost boils on your forehead as the lava below reaches up for you....
+well, at least you gave it a shot... 
+~
+Flags:	1000000000000000000000
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	7
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	13057
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
 	ToVnum:	10025
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	10027
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
 #10027
-Name:	^W(^cIMMHQ^W)^C The Shop of Horrors
+Name:	Mid - Air
 Desc:$
-Great for testing all manner of shopkeeper quirks, from negative profit
-margins to so many items the MUD crashes. 
+   Sinking, all time seems to go out of sync. Little do you care for anything
+other than the lava below. What reason would you have to care about anything
+else? 
 ~
-Flags:	1000000000000000000011000
+Flags:	1000000000000000000000
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	8
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	ToVnum:	10028
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10028
+Name:	LAVA!!!
+Desc:$
+   You blood boils, your skin melts away, as the lava burns your flesh away in
+chunks. As the flow carries your burning body southwards, your heart explodes
+under the heat and your bones begin to crumble. Your brain fries in your skull
+and oozes away through what orifices are left of your now dissolved corpse. 
+~
+Flags:	10
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	16
+BREAK
+#10029
+Name:	Coal Pathway
+Desc:$
+   You seem to be getting close to that large structure somewhere in the
+south, although that may simply be the noxious fumes making you hallucinate. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10029
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	10029
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10014
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10029
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	10030
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	10015
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10030
+Name:	Coal Plains
+Desc:$
+   You come off the path as it disappears, only to find yourself close to the
+big building. At this distance, you no longer need a path, you can just head
+straight towards it. Gee...it sure looks homely. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10030
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	10030
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10031
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	10030
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10030
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	10030
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10029
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	10030
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10031
+Name:	An Open Pathway
+Desc:$
+   Someone has obviously cleared a pathway out of the coal, as a route to the
+structure. It looks pretty beaten up, not totally disused, but even that seems
+possible. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	10031
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	10031
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10032
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	10031
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10030
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	10031
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10032
+Name:	The Crime Mall
+Desc:$
+   You're here. The most notorious citadel of crooks and their crooked
+merchandise, this is certainly not one of Puyallup's most loved landmarks.
+None of the windows have glass, and neither would you expect them to. Random
+rants and yells pour out of the dark hallways a couple of floors up, followed
+by the usual suspicious looking liquids. 
+~
+Flags:	100
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10031
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10033
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10033
+Name:	Mall Entrance
+Desc:$
+   The mall opens its maws to you, the darkness swallowing up the sunlight.
+Strange looking people peer out at you from the more shadowed areas. The
+architecture is pretty archaic, dating back before the St. Helen's blast. Ash
+has seeped through the cracks in the walls, probably pushed through by the
+constant northerly winds.  
+~
+Flags:	1000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
 Cover:	0
-X:	10
-Y:	10
-Z:	10.00
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10032
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10034
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10035
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	10047
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10034
+Name:	Dark Corner
+Desc:$
+   The corner is bathed in perpetual darkness, home to millions of strange
+little things we don't really know about. A small child lies huddled in
+against the wall, its parent most likely off their face on btl's. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	10037
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10033
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10035
+Name:	Dark Corner
+Desc:$
+   The masonry at the seams is crumbling, if not destroyed completely.
+Numerous gunfights, brawls, and all sorts of violence have gone on in this
+mall, leaving the overall state of the place in ruins. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	10033
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10036
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10036
+Name:	Wet Corridor
+Desc:$
+   Water drips, slowly adding to amorphous pools that lie sleepily on the
+floor. The flickering light bounces off of the walls and water to batter your
+eyes, almost as consistent as a fucked clock. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10035
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10038
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10045
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10037
+Name:	Damp Corridor
+Desc:$
+   The corridor reaches outwards into the darkness, each new turn off
+presenting some god forsaken horror. It's not like this place is scary or
+anything... 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10034
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10043
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10039
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10038
+Name:	Wet Corridor
+Desc:$
+   Fizzles. Crackles. Sparks flying...some from electric faults, some from
+other sources. All of them deliberate, none of them on purpose. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10036
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10040
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10046
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10039
+Name:	Damp Corridor
+Desc:$
+   Your feet crunch over gravel that's collected over the years of use. People
+pass through these corridors everyday, every hour, every minute, to get
+whatever it is they can find in here. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10037
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10044
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10042
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10040
+Name:	Dark Corner
+Desc:$
+   The corridor turns eastwards, dissapearing round the corner. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10038
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10041
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10091
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10041
+Name:	Flickering Hallway
+Desc:$
+   The walls stretch eastward, carrying the hallway with it. Random strangers
+stumble out of light and right into you, not knowing or caring what on earth
+is going on. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	10042
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10073
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	7
+[EXIT west]
+	ToVnum:	10040
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10042
+Name:	Dark Corner
+Desc:$
+   You follow a weird looking fellow through the corridors, only because
+you're unable to get around him. Either he's packing some heavy duty hardware,
+or one hell of a lot of hamburgers. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10039
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10041
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10043
+Name:	Karl's
+Desc:$
+   Several racks lie behind the counter, behind which also stands Karl, the
+store attendant. The room is pretty sparsely decorated, obviously very
+straightforward about its clientele and its merchandise. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
@@ -1133,26 +2250,28 @@ RoomType:	0
 	Background:	0
 	BackgroundType:	0
 [EXIT west]
-	ToVnum:	10018
+	ToVnum:	10037
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#10028
-Name:	^W(^cIMMHQ^W)^C Elevator Testing Annex (G)
+#10044
+Name:	EkkoMate
 Desc:$
-Lift goes up, lift goes down. How does it work? You can't explain it, it's
-magic. 
+   Bright fluorescent wires run across the walls and ceiling, bathing the
+store in a strange glowing blanket. Almost as psychadelic as the Matrix
+itself, this place has the reputation for being one of the best Decker stores
+in Seattle. 
 ~
-Flags:	1000000000000000000011000
+Flags:	1000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
 Cover:	0
-X:	10
-Y:	10
-Z:	10.00
+X:	20
+Y:	20
+Z:	2.50
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
@@ -1161,50 +2280,28 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT north]
-	ToVnum:	10018
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT south]
-	Keywords:	doors shaft
-	Desc:$
-A pair of elevator doors allows access to the liftway.
-~
-	ToVnum:	0
-	Flags:	1
-	Material:	metal
-	Barrier:	8
-	KeyVnum:	998
-	LockRating:	8
-[EXIT up]
-	ToVnum:	10029
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT down]
-	ToVnum:	10030
+[EXIT west]
+	ToVnum:	10039
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#10029
-Name:	^W(^cIMMHQ^W)^C Elevator Testing Annex (1)
+#10045
+Name:	Heavy Gear
 Desc:$
-Lift goes up, lift goes down. How does it work? You can't explain it, it's
-magic. 
+   Two large display cases hang above the register, chock full of brilliant
+looking goodies. From prototype goggles to the latest magnification scopes,
+the gear in those cases is top notch. 
 ~
-Flags:	1000000000000000000011000
+Flags:	1000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
 Cover:	0
-X:	10
-Y:	10
-Z:	10.00
+X:	20
+Y:	20
+Z:	2.50
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
@@ -1213,38 +2310,27 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT south]
-	Keywords:	doors shaft
-	Desc:$
-A pair of elevator doors allows access to the liftway.
-~
-	ToVnum:	0
-	Flags:	1
-	Material:	metal
-	Barrier:	8
-	KeyVnum:	998
-	LockRating:	8
-[EXIT down]
-	ToVnum:	10028
+[EXIT east]
+	ToVnum:	10036
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#10030
-Name:	^W(^cIMMHQ^W)^C Elevator Testing Annex (B1)
+#10046
+Name:	Combat Emporium
 Desc:$
-Lift goes up, lift goes down. How does it work? You can't explain it, it's
-magic. 
+   Blades, clubs, whips, you name it. A fighting man's dream. Like an attack
+of nostalgia to the days of fighting without guns, just skill. 
 ~
-Flags:	1000000000000000000011000
+Flags:	1000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
 Cover:	0
-X:	10
-Y:	10
-Z:	10.00
+X:	20
+Y:	20
+Z:	2.50
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
@@ -1253,37 +2339,26 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT south]
-	Keywords:	doors shaft
-	Desc:$
-A pair of elevator doors allows access to the liftway.
-~
-	ToVnum:	0
-	Flags:	1
-	Material:	metal
-	Barrier:	8
-	KeyVnum:	998
-	LockRating:	8
-[EXIT up]
-	ToVnum:	10028
+[EXIT east]
+	ToVnum:	10038
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#10031
-Name:	^W(^cIMMHQ^W)^C Elevator Car
+#10047
+Name:	2nd Floor Hallway
 Desc:$
-Will it go up, though? Will it go down? Does it even work? 
+   The hallway extends east and west. 
 ~
-Flags:	11000
+Flags:	1000
 SecType:	Inside
 MatrixExit:	0
 Crowd:	0
 Cover:	0
-X:	0
-Y:	0
-Z:	50.00
+X:	20
+Y:	20
+Z:	2.50
 RoomType:	0
 [POINTS]
 	SpecIdx:	0
@@ -1292,125 +2367,1247 @@ RoomType:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT north]
-	Keywords:	doors shaft
-	Desc:$
-A pair of elevator doors allows access to the liftway.
-~
-	ToVnum:	0
-	Flags:	1
-	Material:	metal
-	Barrier:	8
-	KeyVnum:	998
-	LockRating:	8
-BREAK
-#10032
-Name:	^W(^cIMMHQ^W)^C Elevator Shaft - B1
-Desc:$
-Will it go up, though? Will it go down? Does it even work? 
-~
-Flags:	10000000001010000000000000011100
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	50.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	6
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT north]
-	Keywords:	doors shaft
-	Desc:$
-A pair of elevator doors allows access to the liftway.
-~
-	ToVnum:	10030
-	Flags:	1
+[EXIT east]
+	ToVnum:	10048
+	Flags:	0
 	Material:	brick
 	Barrier:	4
-	KeyVnum:	998
-	LockRating:	8
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10049
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 [EXIT up]
-	ToVnum:	10033
+	ToVnum:	10060
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-BREAK
-#10033
-Name:	^W(^cIMMHQ^W)^C Elevator Shaft - G
-Desc:$
-Will it go up, though? Will it go down? Does it even work? 
-~
-Flags:	10000000001010000000000000011100
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	50.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	6
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT north]
-	Keywords:	doors shaft
-	Desc:$
-A pair of elevator doors allows access to the liftway.
-~
-	ToVnum:	0
-	Flags:	1
-	Material:	metal
-	Barrier:	6
-	KeyVnum:	998
-	LockRating:	8
-[EXIT up]
-	ToVnum:	10034
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT down]
-	ToVnum:	10032
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#10034
-Name:	^W(^cIMMHQ^W)^C Elevator Shaft - 1
-Desc:$
-Will it go up, though? Will it go down? Does it even work? 
-~
-Flags:	10000000001010000000000000011100
-SecType:	Inside
-MatrixExit:	0
-Crowd:	0
-Cover:	0
-X:	0
-Y:	0
-Z:	50.00
-RoomType:	0
-[POINTS]
-	SpecIdx:	0
-	Rating:	6
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
 [EXIT down]
 	ToVnum:	10033
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10048
+Name:	A Dirty Stall
+Desc:$
+   Some grubby little imp hops around behind a stall that is populated with
+some quite unusual junk. From a bicycle chain to half a pair of sunglasses.
+People occasionally stop and look at the oddities, but if you're looking for
+real merchandise, you're better off heading to the shops. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	10053
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10047
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10049
+Name:	Darkened Corner
+Desc:$
+   The corridor stretches outwards, and you lose sight of the coffee brown
+walls. The passage way dodges around rubble and pitfalls, some actually
+dangerous. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	10047
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10050
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10050
+Name:	Unstable Walkway
+Desc:$
+   The walkway shivers as you pound your way across it. It would seem a little
+bit more stable, especially if the masonry didn't keep falling off. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10049
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10051
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10058
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10051
+Name:	Corridor
+Desc:$
+   This place is so dirty you can almost see the bacteria coming to eat you.
+It's terrible. You'd think with the cash that flows through this place they'd
+take the time to renovate some of it. But no... 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10050
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10052
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10052
+Name:	Corner
+Desc:$
+   The passage reaches around a corner and zips off, leaving you in the
+darkness. A faint light peeks out from further down the hallway, beckoning to
+you with a tiny sparkle of life. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10051
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10056
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10053
+Name:	Filthy Hallway
+Desc:$
+   Okay, this mall is pretty dirty. That's a given. But of all the halls
+you've passed through so far, they all pale in comparison to this shithole.
+This is not even funny, actually. The filth is a couple of inches thick,
+reeking of stale faeces and urine, stuck to the walls like plaster. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10048
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10057
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10054
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10054
+Name:	Unstable Walkway
+Desc:$
+   Shaky, and definitely not much fun to be on. Kind of like those blasted
+bouncy castles back in the 20th Century. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10053
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10055
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10055
+Name:	Corner
+Desc:$
+   The corner no longer has a line where the two passages connect and change
+direction, for the dirt has smeared it out of comparison. It is now more of a
+gradiation from grey to black to grey. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10054
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10056
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10056
+Name:	Hallway
+Desc:$
+   The hallway takes you alongside many of the shops that make the mall so
+popular with runners and the like. Most of them are constantly peopled by the
+odd passer by, and sometimes places for brawls over gear. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	10055
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10059
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10052
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10057
+Name:	Run Run Gear
+Desc:$
+   The shop is decked out in immodest army camouflage drapery, not leaving a
+single bit of masonry to show. The drapes fill out the room nicely, giving the
+place a more confident touch. On three walls, there are four display cases,
+two on the back wall and one on either side. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	10053
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10058
+Name:	Kevlar UnInc.
+Desc:$
+   The room is pretty badly torn up; it appears there was a gunfight here not
+too long ago. Still, the business goes on. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	10050
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10059
+Name:	Jool's
+Desc:$
+   The shop isn't much to look at, but it's well known around Seattle. Jool
+used to work for a corp that shut down but pumped out some incredible protypes
+that never got funded. Luckily, Jool managed to salvage some of the prints and
+get some excellent weaponry produced. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10056
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10060
+Name:	3rd Floor
+Desc:$
+   Your breath steams up the chilled air as you pull yourself over the last
+step. The top floor branches out along the walls, with a large space in the
+center for people to send merchandise, projectiles, and all manner of other
+strange things up. Three shops seem to be in business, in the east, west and
+north. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	10061
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10062
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	10047
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10061
+Name:	Corner
+Desc:$
+   The walkway curves along the wall, taking you slowly towards the shops. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	10066
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10060
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10062
+Name:	Corner
+Desc:$
+   The shadows from the massive skylight, or at least what used to be one, are
+sparse but intensely contrasting. The shards of thick smoke lined glass throw
+jagged lines of black over the browned out masonry. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	10060
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10063
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10063
+Name:	Hallway
+Desc:$
+   The hallway continues southwards, taking you past the degenerates, towards
+the nearest store. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10062
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10064
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10071
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10064
+Name:	Filthy Corridor
+Desc:$
+   Filthy? Can one come up with no better word for this shit? Shit, perhaps?
+No matter how comical it may seem though, it really is dirty. The smell is so
+damn strong, it drains the colour out of your clothes. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10063
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10065
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10065
+Name:	Corner
+Desc:$
+   The walkway curves around, taking your around the 3rd floor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10064
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10069
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10066
+Name:	Overhanging Walkway
+Desc:$
+   As you peer over the walkway, you see a black morass of people, huddled and
+skulking around down on the other two floors. Like a bustling market
+ecosystem, there is a delicate balance between the disease ridden lot that
+live here and the shops, and anyone else that comes in. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10061
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10070
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10067
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10067
+Name:	Crumbling Hallway
+Desc:$
+   The walkway is beginning to give way under the constant ware of people
+passing through. The place looks like it could give way at any time, and at
+one point, you can actually see *through* the damn floor. Maybe think twice
+before taking this route again. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10066
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10068
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10068
+Name:	Corner
+Desc:$
+   You stand at the far end of the floor, scanning behind you to check who
+might be in the shop with you at the same time. Small things like these
+actually make a difference around here, cos you most certainly do not want to
+make any enemies in here. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10067
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10069
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10069
+Name:	Hallway
+Desc:$
+   The hallway continues onwards, taking you towards the shops. Follow on. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	10068
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10072
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10065
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10070
+Name:	Parker's Artillery
+Desc:$
+   This is one hardcore artillery place. Known extremely well as a place for
+those that like big guns, Parker's reputation is anything but passable. The
+room doesn't display anything here, in fact, Parker simply sits behind a desk
+filled with little cardboard boxes without labels. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	10066
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10071
+Name:	Blades
+Desc:$
+   The name says it all. This store is filled with a variety of edged weapons
+that would make even the most blood thirsty of warriors happy. They are all
+packed in simple, easy to remove cases, just incase Lone Star decide to raid
+the place. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	10063
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10072
+Name:	The Metal Market
+Desc:$
+   Racks upon racks of various armour gear line the walls. The room is
+installed with three security cameras, by the looks of it the most security
+you've seen yet. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10069
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10073
+Name:	Dark Corridor
+Desc:$
+   You step through the secret passageway, and into the darkness. The
+passageway forks a little onwards. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10041
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10074
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10074
+Name:	Flickering Lights
+Desc:$
+   How annoying. A bulb is only half working, and thus pesters you with its
+dying gasps. The light gives you a fleeting glance of the hallway, but not
+enough to actually see where you're going. Great. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10073
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	10075
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10077
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10075
+Name:	Checkpoint
+Desc:$
+   The corridor sweeps forwards, but you are suddenly stopped in your tracks,
+by a dark figure that steps in your way. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	10076
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10074
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10076
+Name:	Lambert's Chop Shop
+Desc:$
+   There are three operating tables, in more of a mess hall rather than a
+clinic. A small desk sits near the entrance, checking people that come for an
+op. The room is shiny clean, and reeks of sterilizers. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	10075
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10077
+Name:	Checkpoint
+Desc:$
+   The corridor continues, but you are suddenly obstructed by a large shadowed
+figure. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	10074
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10078
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10078
+Name:	BioGrowth Laboratory
+Desc:$
+   Several jars and vials lie against the wall, bubbling away silently.
+Organisms, growths, and all sorts of other strange things sit around in tanks
+and monitors. The room smells kind of funny, and people stand by the test
+tubes to gather information on the projects at hand.  
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	10077
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10079
+Name:	Coal Plains
+Desc:$
+   The Coal Plains extend as far as the eye can see, leading you into the far
+distance, through the clouds of blackness and unpredictability. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10080
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10024
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10080
+Name:	Coal Plains
+Desc:$
+   The Coal Plains extend as far as the eye can see, leading you into the far
+distance, through the clouds of blackness and unpredictability. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	10080
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	10079
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	10080
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#10091
+Name:	A dark room
+Desc:$
+   This room is a dark shadowy place, with a cold otherworldly chill.  The
+ambient pale light coming into this room unmasks a shadowy figure who gives
+you a grave stare. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	10040
 	Flags:	0
 	Material:	brick
 	Barrier:	4

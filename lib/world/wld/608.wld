@@ -1,0 +1,2780 @@
+#60800
+Name:	Parking Lot
+Desc:$
+   A sun-bleached slab of concrete is all that remains of the lot where St.
+Boniface's staff and visitors used to park their vehicles. It's mostly vacant
+now, save for a few derelict and burnt-out relics which have been picked clean
+by scavengers. Vegetation pokes through the concrete, and the outer edges of
+the lot have begun to crack and slide away with the hill's erosion. Another
+century and perhaps the crumbling hilltop will reach the building itself, but
+there doesn't seem to be any action from the corporates or government to deal
+with the problem. Everyone seems to be content to let the derelict building
+rot.
+   St. Boniface's looms from your east, stretching north and continues west,
+like a semi-closed hand eager to wrap itself around you. To the north is the
+entrance. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	50
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	1
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+Near the entrance to St.Boniface. 
+~
+	ToVnum:	60801
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60801
+Name:	The front doors
+Desc:$
+   The building looms over you, an immense wall of broken windows and rusted
+steel grating, suffocated by weeds. Tendrils of dried ivy creep around an old
+metal sign bolted on the bricking and reads: "St. Boniface Shelter for the
+Persecuted and Maligned. EST 2021". History recalls that after Goblinization
+Day most of the people who had survived UGE had suffered from severe mental
+and emotional trauma. St. Boniface was created by the Seattle government to
+offer a place of shelter for those most tortured by their experiences, as well
+as for the safety of the populace at large. The organisation created to govern
+and run St. Boniface, the Seattle Council for Abhorrent Behaviour, or SCAB,
+had many financial backers, including corporate sponsors who funded the
+building of the asylum atop a prominent hill on Seattle's outskirts. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	50
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door entrance front
+	Desc:$
+The front doors of St.Boniface. 
+~
+	ToVnum:	60802
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	5
+[EXIT south]
+	Desc:$
+The parking lot. 
+~
+	ToVnum:	60800
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60802
+Name:	Foyer
+Desc:$
+You are standing in a large circular room, the dome high above you shrouded in darkness. This was the foyer of St. Boniface's, with its high sloping walls and murals of angels and nature scenes, now defaced. In the center of the foyer, a large empty water fountain quietly sits, rusting. Trash  litters the floor and a dripping sound can be heard from somewhere overhead.
+Despite the careful wording, St. Boniface was in fact a mental institution for those rendered insane by goblinization. Unfortunately, it soon became nothing more than a dumping ground for hundreds of society's newly-mutated breeds, and the mounting operational costs forced the government to sell the institution, handing ownership over to the corporate-backed SCAB.
+In answer to the increasing 'problem' of UGE, SCAB was later discovered to have attempted to 'cure' its patients of their physical afflictions by performing horrendeous acts of physical and mental abuse.
+After a few internal riots and several protests by civil-action groups, SCAB was able to avoid criminal persecution (thanks to a few large campaign contributions to influential statesmen), eventually shutting down the asylum in 2048.
+The surviving patients of St. Boniface were given monetary compensation and released.
+
+To the north are the Administrative offices. The Women's ward begins to the east and the Men's ward lies to the west. Some apartments are to the southeast.
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	20.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door locked
+	Desc:$
+A door marked: "Keep locked at all times!" 
+~
+	ToVnum:	60845
+	Flags:	1
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	60826
+	LockRating:	10
+[EXIT northeast]
+	Desc:$
+A doorless frame marked "Rec". 
+~
+	ToVnum:	60804
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+A dark hallway. 
+~
+	ToVnum:	60825
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	Desc:$
+Towards a series of small rooms. 
+~
+	ToVnum:	60803
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+The front door of St. Boniface 
+~
+	ToVnum:	60801
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+A long hall cloaked in shadows. 
+~
+	ToVnum:	60805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60803
+Name:	Matron apartments
+Desc:$
+   This large room is where the matrons who staffed the Women's Ward lived,
+easily housing over forty women who worked around a two-day shift. Given the
+apartments' close proximity to the main exit of St. Boniface's, most of the
+female staff that lived here were able to escape the calamitous riots that
+occurred within the facility. The yellowed linoleum tiles have mostly peeled
+off, revealing several holes and rotting wood subfloors. Dozens of skeletal
+bunk frames have been piled up against the southern wall, completely blocking
+the windows and looking more like the twisted intestinal tract of some massive
+metallic creature. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	20.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	Desc:$
+Back to the building's foyer. 
+~
+	ToVnum:	60802
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60804
+Name:	Day Room
+Desc:$
+   Visitors who came to meet patients often conducted their meetings here in a
+relaxed environment. A legless pool table lies on the ground, crushing an
+empty metallic barrel. An old jukebox leans against the north wall, its
+interior mechanics ripped out and lying across the cracked tile floor like
+silvery entrails with shards of glass scattered about the room. There are
+pamphlets strewn about, lauding SCAB's work on promoting mental health. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	10.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	Desc:$
+The main foyer. 
+~
+	ToVnum:	60802
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60805
+Name:	Male Ward Hallway A
+Desc:$
+   This is the first ward of St. Boniface's east wing where male patients were
+kept. The drop ceiling now hangs precariously, exposing a web of dead
+electrical wires and plumbing pipes overhead. Trash and broken furniture are
+strewn across the corridor. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	3
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door outside
+	Desc:$
+A door leading outside. 
+~
+	ToVnum:	60807
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+Towards the central foyer. 
+~
+	ToVnum:	60802
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+A series of large dormitories. 
+~
+	ToVnum:	60806
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60808
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60806
+Name:	24-Bedded Rooms
+Desc:$
+   These large communal rooms once housed those less afflicted by their UGE
+experiences, and served as a place to hide away society's undesireable
+metavariants rather than the clinically insane. Conflict between patients was
+a problem, especially when the corporates took control of St. Boniface. As a
+result, special tanks full of tear gas were installed alongside the facility's
+fire-extinquishing pipes, allowing for a quick and easy method of controlling
+flaring tempers.
+   Graffiti artists have left a few tags here and there. Most of the paint on
+the walls has started to peel, giving one the impression of looking at the
+skin of a shedding snake. Broken window panes along the south wall let in
+plenty of sunlight or moonlight, depending on the time of day. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60807
+Name:	Male Airing Courts
+Desc:$
+   You are once again outside, standing in an enclosed courtyard at the rear
+of St. Boniface. The cracked sidewalk at your feet was once used to roll out
+patients in wheelchairs who were either non-responsive or simply too weak to
+move about on their own. Patients who were equally disabled and considered
+problematic were sometimes wheeled out and left here for hours - sometimes
+days - on end.
+   The lawn is now choked with weeds and debris lies scattered about the
+courtyard. Along the fence to the west is a large pile of empty spray paint
+cans. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door metal
+	Desc:$
+An old metal door marked: "Fuk da humies!" 
+~
+	ToVnum:	60805
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60808
+Name:	Male Ward Dining Room
+Desc:$
+   Most of the windows that form the sunroof overhead have broken, leaving a
+thin layer of broken glass on the cracked tile floor that has begun to rot,
+due to exposure. There is scarcely any furniture here, with most of the junk
+comprising of mildewy serving trays and broken kitchen implements. Old posters
+are still stapled to the wall, delineating a patient's rights and code of
+conduct. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60811
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	60809
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60817
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60816
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60809
+Name:	Male Washrooms
+Desc:$
+   Given the St. Boniface's need to constantly monitor patients at all times,
+modesty was not granted to those admitted to the facility. A row of dingy
+toilets line the west wall, with not partitions to seperate them. One of the
+toilets has overflowed, spilling sewage refuse across the cracked concrete
+floor. In the center is a large circular urinal with a non-functional
+foot-operated flushing mechanism.
+   The sharp stink in this room testifies that it is still used by the
+occasional scavengers, thrill-seekers and homeless that still haunt St.
+Boniface's halls. The sinks to the east were also foot-operated with large
+slabs of polished metal hanging above that served as mirrors. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	60810
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	60808
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60810
+Name:	Male Showers
+Desc:$
+   Cracked tiles and the stench of feces permeates this room. Trash has piled
+up in one corner where a tangle of old hoses now lies, cracked and useless.
+   Given that most of the patients weren't cognitive enough to comprehend, let
+alone be bothered with hygiene, they were taken here on a rotating basis to be
+cleansed and washed. The corporate solution to the problem was a bit more
+direct: line the patients against the far wall and hose them down, usually
+with the water pressure turned up way too high. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60809
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60811
+Name:	Male Kitchens
+Desc:$
+   There seems to have been a fire here. The blackened metal counters, now
+covered with trash and animal scat, have begun to rust away. An old stove and
+refrigerator seem half-melted by whatever conflagration that occurred here,
+and the weakened support structures have caused the cabinets to collapse in
+some areas, adding to the detritus. Against the north wall, barely perceptible
+through the soot, pegs in the tiled wall show where kitchen utensils were
+hung.
+   During St. Boniface's operation, someone sprayed the walls with paint as
+the utensils were still hanging there, leaving the silouette of each tool in
+its place. This was to facilitate the detection of missing kitchen implements
+by patients who often stole kitchenware for more sinister purposes. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	10.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	metal door
+	Desc:$
+A metal door with a small broken window that leads outside. 
+~
+	ToVnum:	60812
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60808
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	metal door exit
+	Desc:$
+A metal door with the EXIT sign overhead glowing dimly. 
+~
+	ToVnum:	60814
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60812
+Name:	Male Work House
+Desc:$
+   You are in a gazebo covered by a stilted plasfab roof. This is where the
+more cognitive patients were given mundane tasks to keep them busy, as well as
+a place where analysts could monitor their subjects' behaviour in a more
+social setting.
+   Now, the concrete slab is slowly crumbling away with a large pool of
+brackish water near its concave center. Climbing vines have wound their way up
+the support structures and are spreading out across the roof that has started
+to sag with age. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	30
+Z:	10.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	metal door
+	Desc:$
+A metal door with a small broken window that leads back inside. 
+~
+	ToVnum:	60811
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Desc:$
+A weathered wooden door. 
+~
+	ToVnum:	60813
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60813
+Name:	General Store
+Desc:$
+   At first-glance this building seems to have been a storage area, but the
+remnants of several display cases - all smashed now - indicate that it served
+as some sort of internal business venue. Indeed, another reward for compliancy
+and good behavior was the use of non-monetary credits. A patient who had
+accrued enough credits could use them to buy small perishable items here.
+   The room now lies in tatters with most of its shelving units smashed or
+toppled and is strewn with debris. A engraved plaque of wood hangs
+precariously on a single nail with a faded list of items that were available.
+Barely discernable are such items as cigarettes (4 credits), soap (5 credits),
+and long  underwear (20 credits). 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Desc:$
+A weathered wooden door. 
+~
+	ToVnum:	60812
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	wooden door
+	Desc:$
+A wooden door blackened by fire. 
+~
+	ToVnum:	60814
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60814
+Name:	Yard
+Desc:$
+   This open gravel courtyard, ringed by chain- and barbed-wire fencing, is
+where some of the male patient populace were allowed to mingle. It was also
+one of the most heavily watched and guarded areas (outside the isolation ward)
+as it was a haven for smuggling, bribery of staff members and fights between
+inmates.
+   Most of the gravel seems to have been recently sprayed with whitewash, and
+a graffitic burner on the brick wall resembles an orc with its mouth gaping
+open, similar to Edvard Munch's "The Scream". 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	40
+Y:	40
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Desc:$
+A wooden door blackened by fire.  
+~
+	ToVnum:	60813
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	metal door kitchen
+	Desc:$
+A metal door marked: "Kitchen". 
+~
+	ToVnum:	60811
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	iron door metal
+	Desc:$
+An iron door with a metal security grating, marked "NO ACCESS!" 
+~
+	ToVnum:	60816
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	metal door
+	Desc:$
+A dented metal door marked "Linens". 
+~
+	ToVnum:	60815
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60815
+Name:	Male Linens
+Desc:$
+   Soiled linens and bedding were brought to this seperate building, with
+large steam washers that managed to take out virtually any stain. The washers
+are now wrecked, with one having taking the brunt of a close-proximity shotgun
+blast a few years ago. Across one of the windows someone attempted to hang an
+old canvas cloth, but it is now so full of holes as to be rendered useless. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A door leading back to the outer yard. 
+~
+	ToVnum:	60814
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60816
+Name:	Male Staff's Hall
+Desc:$
+   These are a series of small rooms, no more than 4 feet wide by 6 feet deep.
+Male contracted workers and orderlies were housed here usually in 48-hour
+shifts. A few still have the skeletal remains of rusting bunk-beds, their
+metal frames twisted and brittle. The windows to most of these small chambers
+are broken, leaving the tiled floors cracked and pitted due to exposure. One
+of the lower bunks shows signs of recent use - most likely by some homeless
+dreg who has preferred to roost here rather than brave the slums of Seattle. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	iron door metal
+	Desc:$
+An iron door with a metal security grating. 
+~
+	ToVnum:	60814
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60808
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60817
+Name:	Male Ward Hallway C
+Desc:$
+   This corridor marked the second ward for St. Boniface's male populace. The
+concrete hall, once painted sea-foam teal, has paled into a sickly green hue
+and is an obstacle course of broken furniture and garbage. Dead electrical
+wires hang in neck-high loops from holes in the drop ceiling overhead. It
+looks like something big and heavy was dragged down this corridor a few years
+ago and left deep gouges in the cracked linoleum floor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	10
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60808
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60818
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60820
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	steel metal
+	Desc:$
+A steel fire door with a crash bar. 
+~
+	ToVnum:	60819
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60818
+Name:	4-Bedded Rooms
+Desc:$
+   Patients with a means of financial aid, such as the wealthy or those with
+enough influence, were housed here in semi-private rooms, though the care they
+received was no better than their fellow inmates. Today, these rooms are bare,
+devoid of any large pieces of furniture. In one of them, an empty metal drum
+appears to have served as a firepit for some individuals eager to find solace
+from a cold night's chill. The grated windows needlessly look out upon the
+sky. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	60817
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60819
+Name:	Male Airing Courts
+Desc:$
+   Patients who reacted favorably to the asylum's administration and staff
+(read: compliant) were often allowed to roam this enclosed area and get some
+fresh air. The ground is now thick with crumbling mortar and choking weeks. At
+the far end, near the twisted chain-link fence, an old flat gurney with a
+black mattress lies on its side, its wheels wrapped in barbed wire. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	30
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	steel door
+	Desc:$
+A steel fire door with a handle. 
+~
+	ToVnum:	60817
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60820
+Name:	Junction of Corridors C&E
+Desc:$
+   A nurses' station precedes the way west, followed by what may have been a
+checkpoint, complete with built-in metal detector. The device's electrical
+wirings have been ripped out, and it looks like someone tried to start a fire
+within its mechanical housing. A stack of clip-boards lies in the corner,
+half-buried by dust and the paint peeling off the decaying walls looks like
+strips of rags.
+   Overhead, a single fluorescent lamp flickers dimly, testament to the latent
+power still seeping throughout St. Boniface. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	20.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60817
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60821
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60823
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60821
+Name:	Surgeons' Offices
+Desc:$
+   A once-spacious managerial offices where St.Boniface's physicians conducted
+clinical interviews of their patients. Now, the once-plush desks and furniture
+are in ruin, with a chesterfield looking like it's been cut in half by a
+chainsaw and the empty filing cabinet that has been used for target practice.
+What little there remains of the wallpaper has faded and dried to the point of
+being brittle, looking more like wrinkled skin.
+   Directly across a desk is an old metallic chair, twisted and rusted but
+still bolted in place, with iron rings fastened to the floor, testament to the
+precautions taken with some of the patients.
+   A very old elevator door, no longer functional, lies to the west.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60822
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60820
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60822
+Name:	Study
+Desc:$
+   The stout wooden door to this room has been ripped from its hinges and now
+lies on the floor of this room, thick with dust and mildew. The bookshelves of
+this once luxurious study have had most of their contents piled in the center
+of the room and lit on fire. A quick scan of the remaining volumes still lying
+on the dusty shelves offers such titles as; "Freud's Folly", "2021: Humanity
+at a Crossroads?", "Cognitive and Societive Disorders within the Humanis
+Ingentis Genome" and "Evolution: the New Faces of Evil". The ensuing
+conflagration at the rooms's center  has left a deep pit in the floor that now
+descends into a gaping maw of blackness. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	10.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	60821
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Desc:$
+A hole in the floor that leads into darkness. 
+~
+	ToVnum:	60856
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	7
+BREAK
+#60823
+Name:	Male Ward Hallway E
+Desc:$
+   You are in what once was the Isolation Ward of St.Boniface's, usually
+reserved for the most violent and erraticly behaved patients. The narrow
+corridor is laced with long shadows, the only light spewing from the open cell
+doors. The drop ceiling has been replaced here with a high concrete ceiling
+that seems to hang heavily in the gloom. Empty light sockets hang from single
+wires that stretch into the darkness overhead. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	7
+Z:	30.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60824
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60820
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60824
+Name:	Solitary Rooms
+Desc:$
+   These dark rooms are no more than a few meters square with a high ceiling.
+Their doors rest on stout metallic hinges. The pink and yellow padding lining
+their walls has mostly rotted away, leaving bare the cold and pitted concrete
+beyond. There are no windows here, though the stench of copper is pervasive.
+In white chalk, someone has managed to write on the exposed concrete, "Darwin
+es correcto".
+   Given the high propensity for violence from some of UGE's sufferers,
+St.Boniface made full use of these 'punative segregation' rooms, sometimes
+donning their patients further in sensory-deprivation attire. The asylum's
+physicians got mixed results, depending on how long they could keep inmates
+locked up in these rooms.
+   An old pair of red children's shoes lies within one of the cells.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	3
+Y:	3
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	60823
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60825
+Name:	Female Ward Hallway B
+Desc:$
+   This corridor to the first female ward was kept for those spared the more
+terrible psychological trauma of UGE. Nevertheless, the continued exposure to
+St. Boniface took its toll on the mental health of the patients, yet the
+facilities and programs for treatment did not exist beyond the crude remedies
+such as the use of the solitary confinement rooms. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	10
+Z:	20.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	pink steel door
+	Desc:$
+A faded pink steel door, chipped and pitted. 
+~
+	ToVnum:	60826
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60827
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60802
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60826
+Name:	Female Airing Courts
+Desc:$
+   Many female patients who were docile enough or simply too weak to walk
+around on their own were rolled outside and left to bask in the sun within
+this enclosed courtyard. Of course, those who's behaviour were less than ideal
+were left outside for much longer.The paved stones are now choked with weeds
+and someone has managed to drag out a dented metallic desk which now faces the
+chain-link fencing. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	pink steel door
+	Desc:$
+A faded pink steel door, chipped and pitted. 
+~
+	ToVnum:	60825
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60827
+Name:	Female Ward Dining Room
+Desc:$
+   The high ceiling here tapers to a glass skyroof that is still intact, but
+worn with neglect. The pink-painted walls are faded and chipped, and the
+concrete floor covered with discarded papers. The chairs and tables, though
+showing signs of exposure and covered with a patina of black dust, are still
+perfectly set. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60830
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60836
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60837
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	60828
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60825
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60828
+Name:	Female Washrooms
+Desc:$
+   A row of open rusty toilets lines the west wall of this room with a trio of
+yellowing sinks stuck in the opposite wall. A single slab of polished metal,
+serving as a mirror, hangs precariously above the sinks and is covered with
+graffitic tags. Someone has kicked a hole through the tiled wall, revealing a
+black hole from which can be discerned some old plumbing pipes. A single
+wheelchair sits here, resting forward upon one of the bare toilets. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	60827
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60829
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60829
+Name:	Female Showers
+Desc:$
+   The tiles of this room are cracked and yellowed. The showerheads are all
+missing while the grill for one of the drainage holes has been pried off and,
+judging from the smell, used as an ad hoc toilet, most likely by female
+visitors to the asylum seeking some modicum of privacy not found in the open
+washroom. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60828
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60830
+Name:	Female Kitchens
+Desc:$
+   Slabs of corroding metal and dull, pitted steelwork indicate where meals
+used to be prepared. The counters and shelves are strewn with discarded trash
+and the peach colored paint on the walls is flaking and molding, looking like
+an huge psoriasis-ridden piece of skin. Overhead, all of the drop ceiling's
+tiles are gone, revealing the entrails of the kitchen's ventilation system,
+wrapped in plumbing and electric wires. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60835
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	steel door
+	Desc:$
+A steel door barely hanging from its hinges. 
+~
+	ToVnum:	60833
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60827
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60831
+Name:	Work place
+Desc:$
+   A once-enclosed gazebo where, as part of their rehabilitative education,
+female patients were given mundane tasks and art crafts to accomplish, all
+under the watchful gaze of the clinical physicians.
+   Of the six posts that held up the gazebo, two have been snapped off and
+another has mostly rusted away, leaving the plasfab room standing
+precariously. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60834
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	storm door
+	Desc:$
+A flimsy aluminum storm door. 
+~
+	ToVnum:	60836
+	Flags:	1
+	Material:	adv. plastics
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60832
+Name:	General Store
+Desc:$
+   Rows of metal shelving, bare but for the dust and rat droppings, are lined
+up here. Some of them have been shoved around, giving the room an odd
+maze-like quality, and in one of the corners a pile of old metal filing
+cabinets have be halfhazardly stacked, leaving most of their paper contents
+splayed across the floor. The walls have shelves with many labels categorizing
+personal effects such as clothing, seperated by age and size. Posters and
+drawings on the wall promote personal hygiene, geared towards the female
+patients.
+   St. Boniface's patients were given credits for good behaviour which were in
+turn redeemed here for supplies, from bars of soaps to tampons to new shoes.
+The SCAB staff was rumored to have once purposely given a female ork patient
+two left shoes as part of a pair. This so distraught the severely emotionally
+disturbed woman that she later committed suicide. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	steel door
+	Desc:$
+A steel door leading outside. 
+~
+	ToVnum:	60833
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60835
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60833
+Name:	Yard
+Desc:$
+   The gravel crunches under your feet and you find yourself outside,
+surrounded by chain-link fencing. A few empty propane tanks are piled in a
+corner, silenty rusting. The twisted barbed-wire spools atop the fencing have
+begun to sag, making even approaching the yard's outer perimeter dangerous. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	30
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	steel door
+	Desc:$
+A steel door covered in purplish green moss. 
+~
+	ToVnum:	60832
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60834
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	iron door 
+	Desc:$
+A wrought iron door with a caged window marked "NO ACCESS!" 
+~
+	ToVnum:	60836
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	steel door
+	Desc:$
+A steel door barely hanging from its hinges. 
+~
+	ToVnum:	60830
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60834
+Name:	Drying Yard
+Desc:$
+   A set of wide concrete steps descends into a larger enclosed yard that is
+lined with old six-foot tall iron poles now seemingly made of rust and moss.
+The once well-manicured grass has dried away, leaving behind a field of thorns
+and choking weeds. A single string of metal wire still hangs between two
+poles, signaling that this was once a yard where St. Boniface's linens were
+air-dried when the weather was favorable. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	50
+Z:	100.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	60831
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60833
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60835
+Name:	Linens
+Desc:$
+   This building stands seperate from the rest of the asylum and houses what
+used to be industrial steam cleaners. All that remains are the pitted and
+rusted hulks of the washing machines, mostly bent and tossed about. One seems
+to have been picked up and thrown out a window and is now splayed across the
+gravel outside. A pair of large plastic laundry carts with caster casings (but
+no wheels) are piled up in the corner. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60832
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60830
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60836
+Name:	Female Staff's Hall
+Desc:$
+   Orderlies and janitors were housed here for the duration of their shifts,
+as well as the cooking staff and aid workers to the matrons of the Women's
+Ward. It comprises of a series of small rooms with the remains of what appears
+to have been bunkbeds and the odd small piece of furniture. Most of the
+linoleum tiles have yellowed and cracked off, exposing the rotting subfloor.
+The patterned wallpaper is barely discernable through the graffiti, and the
+stench of mold is overwhelming. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	iron door 
+	Desc:$
+A wrought iron door with a caged window. 
+~
+	ToVnum:	60833
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	storm door
+	Desc:$
+A flimsy aluminum storm door. 
+~
+	ToVnum:	60831
+	Flags:	1
+	Material:	adv. plastics
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60827
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60837
+Name:	Female Ward Hallway D
+Desc:$
+   This corridor marks the second ward for St. Boniface's female populace.
+Dust and debris are scattered here, and the face of the "Birth of Aphrodite"
+mural on the concrete wall has been chiseled off. The drop ceiling panels have
+started to crack and fall off, exposing wires that are still humming. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	10
+Z:	20.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60827
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60839
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60840
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60838
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60838
+Name:	4-Bedded Rooms
+Desc:$
+   A series of semi-private rooms where the more docile patients were allowed
+to live (as well as those with monetary influence). Each room has a single
+window through which the protective grating casts a long shadow, echoing the
+dark corners and places beneath the long-abandoned hospital beds. Many of the
+dormitories still have the patients' name tags upon the doors.
+   In one of the rooms is an old metallic Attica crib, which is an enclosed
+bed where patients were encaged to prevent them from falling out and hurting
+themselves, or others. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	30
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60837
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60839
+Name:	Female Airing Courts
+Desc:$
+   An area open to the sky, but surrounded by a two-meter high brick wall that
+is blackened with grime and dust. The cracked concrete is covered with dead
+leaves, and the patches of grass have long-ago been overrun by weeds. Once,
+this is where the more compliant and ambulatory patients were allowed to get
+some fresh air, but the rusted barbed-wire spools atop the wall were grisly
+reminders of exactly what the asylum was all about. A few graffitic tags are
+on the wall and several broken bottles of beer are scattered here and there. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	60837
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60840
+Name:	Junction of Corridors D&F
+Desc:$
+   This is where hallways D and F intersect, with a nurse's station sitting in
+the corner, covered with papers and garbage. To the east are the remains of
+some type of security checkpoint, but its metal detector has been ripped out
+by scavengers long ago. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	10
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60837
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60843
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60841
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60841
+Name:	Surgeons' Offices
+Desc:$
+   The physicians in attendance conducted most of their research and
+interviews of patients in these posh offices. The wallpapered walls and
+stately furniture, however, are in ruin, with graffitic tags and burners
+hiding the faded wall decors and the remaining desks having been hacked at
+with various sharp tools. The labels for some of the now-empty desk drawers
+read: "foot cuffs", and "wrist restraints". A very stately red chair lies here
+on its side, its cushioning slashed repeatedly. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60842
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60840
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60842
+Name:	Study
+Desc:$
+   The wall shelves of this study are mostly empty, with only a few scraps of
+paper and lost file segments strewn about. A stack of old 2D computer
+monitors, as well as antiquated keyboards and data storage drives lie in one
+corner, all ruined and useless. Boxes and boxes of old software packages lie
+half-decomposed under the cracked windows. On the water-stained wall, a clean
+circular silouette amidst the rotting black wallpaper indicates where a clock
+most likely once hung. A note on a pegboard keeps track of peer-to-peer
+aggression and client-to-staff injuries that occurred up until the asylum's
+closing. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	10.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	60841
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60843
+Name:	Female Ward Hallway F
+Desc:$
+   The Women's Isolation Ward of St.Boniface was initially reserved for those
+patients deemed too dangerous to themselves or others. Of course, when SCAB
+took the mantle of ownership, the IsoWard was also used as punishment for any
+slight, whether real or imagined, done to the staff. The dark hall is narrow,
+with its high ceiling hidden within shadows. Rows of thick metal doors line
+the walls, almost daring you to enter. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	10
+Z:	30.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60844
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60840
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60844
+Name:	Solitary Rooms
+Desc:$
+   Being seclusion rooms, these concrete cubes used to be covered with padding
+that has mostly rotted away. In one of them are the remains of a plastic blue
+bed frame. Spherical mirrors in the walls' upper corners allowed one to see
+everything in the room just by peering in through the thick metal door's
+observation slits.
+   The light filtering through the dusty double-grated window panes is
+softened, basking these cells in pale light rather than the usual bright sheen
+of day, and causing the shadows to encroach closer. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	3
+Y:	3
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	60843
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60845
+Name:	Administration Hall
+Desc:$
+   A stout set of security doors leads to the staff's administration hall. The
+once-reflective tile floors are mostly covered with leaves and shards of
+glass, as the windows lining the walls have all shattered. On the walls are
+several pegboards with a slew of procedural forms, corporate adverts and
+staffing schedules still stapled to them. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	10
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60847
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door locked
+	Desc:$
+A door marked: "Keep locked at all times!" 
+~
+	ToVnum:	60802
+	Flags:	1
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	60826
+	LockRating:	10
+[EXIT west]
+	ToVnum:	60846
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60846
+Name:	Dispensary
+Desc:$
+   The sliding glass doors of this room seem to have once been controlled by a
+tight security key device, but the doors are now frozen open, the tracks on
+which they slid caked with rocks, dirt, and moss. Row upon row of cabinets and
+metal files lie here, and the counters are littered with trash, graffiti and
+even a small rusted weight scale.
+   The remains of many computer motherboards and other circuitry are scattered
+about, but a lone flatscreen mounted within the wall is still on and casting a
+soft green light. A yellowed index card is still pinned by the door, noting
+the location of several pieces of equipment, notably the emergency drug box,
+portable oxygen, resuscitator, IV equipment and suture set. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	60845
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60847
+Name:	Committee Room
+Desc:$
+   The drop ceiling looks intact, especially compared to the sordid shape of
+the painted lavender walls which are peeling,  giving them a very uneven
+texture. A series of long plasfab tables are still bolted to the floor here,
+but the chairs are long gone. In addition, this was undoubtedly an employee
+lounge, complete with refrigerator, microwave, and reading materials which are
+all still here, but totally trashed.
+   A row of rusty lockers along the east wall still bear the names of their
+former owners. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	10
+Z:	10.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	metal door
+	Desc:$
+A metal door with a panic bar, clearly marked "EXIT". 
+~
+	ToVnum:	60848
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60845
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60848
+Name:	Garden
+Desc:$
+   As well as give the patients of St. Boniface a place to immerse themselves
+in a natural surrounding, the asylum attempted to grow some of its own organic
+food to help curb costs.  When SCAB and its corporate backers took over,
+however, this part of the property was simply abandoned and left to go fowl.
+The field now has several large bushes and small trees marring its straight
+orderly rows underwhich weeds and creeping ivy fight a never-ending battle
+against waves of urban trash and detritus from the crumbling asylum. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	40
+Z:	100.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	60849
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	metal door
+	Desc:$
+A metal door marked: "Staff only" 
+~
+	ToVnum:	60847
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60849
+Name:	Yard
+Desc:$
+   A field of grass and flowers are slowly creeping across this slab of broken
+concrete and gravel. An old golf cart sits here with its battery-operated
+engine ripped-out and overtaken by weeds and moss. Someone has drawn a
+hopscotch pattern on the ground with white spray paint. Old empty cans of beer
+are scattered about. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	50
+Z:	100.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	
+	Desc:$
+
+~
+	ToVnum:	60852
+	Flags:	0
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	60848
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	metal door
+	Desc:$
+A metal door with "Enter, all ye who despair!" written in red spray paint. 
+~
+	ToVnum:	60850
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60850
+Name:	Dead House
+Desc:$
+   This small building looks more like a huge walk-in freezer, and an old
+yellow sign at the entrance warns at the biohazard presence of blood and body
+fluids. Once inside, however, there is nothing apart from some discarded tools
+and a dismantled shelving unit. A refrigeration unit  dangles precariously
+from the ceiling.
+   Given the difficulty of breaking ground during the winter months, deceased
+patients from the asylum where kept here until the warmer months of Spring
+allowed the staff to bury the dead.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	steel door rusted
+	Desc:$
+A rusted steel door. 
+~
+	ToVnum:	60849
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	metal door
+	Desc:$
+A metal door with severel dents and scratches on it. 
+~
+	ToVnum:	60851
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60851
+Name:	Burial Grounds
+Desc:$
+   You are standing in a bleak, brown field at the back of St. Boniface,
+surrounded by low headstones in poor shape. This is where patients who
+succumbed to their mental illnesses or suffered from too much trauma as part
+of their UGE experience were buried when they died. Families, too ashamed of
+their deceased relatives' transformations, were usually content to have a
+number rather than the patient's name put on the stone.
+   Many markers are askew, as well as sunken in or pushed up.
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	100
+Y:	100
+Z:	100.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	metal door
+	Desc:$
+A metal door with severel dents and scratches on it. 
+~
+	ToVnum:	60850
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60852
+Name:	Orchard
+Desc:$
+   This field is overgrown with grass and the gnarled remains of fruit trees
+look like black fingers pointing accusingly at the sky. A handful have
+survived but most of their fruit has been picked off by wild animals. 
+~
+Flags:	0
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	100
+Y:	100
+Z:	100.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	metal door boiler
+	Desc:$
+A metal door marked: "Boiler Room". 
+~
+	ToVnum:	60853
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60849
+	Flags:	0
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60853
+Name:	Boiler Room and Power Plant
+Desc:$
+   There are pipes here. A LOT of pipes! They all seem to be drooping from the
+ceiling like big metal vines and the valves resemble rust-brown flower bulbs
+frozen in time. The floor crunches under your feet, signaling the remains of
+hundreds of smashed fluorescent light bulbs that have been left here. The
+transformers are humming loudly.
+   A small seperate office in the far corner still has piles of junk and files
+upon it, all covered with green-orange mold. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	40
+Y:	40
+Z:	60.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	metal door boiler
+	Desc:$
+A metal door with the broken 'EXIT' sign dangling precariously overhead. 
+~
+	ToVnum:	60852
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60854
+Name:	Sub-basement Hallway
+Desc:$
+   The hallway seems to have a steady incline here, with this end of the
+corridor being the higher part. Some old moldy men's suits hang from the
+basement pipes, while other damp pieces of clothing lie crumpled and rotting
+on the floor. 
+~
+Flags:	1000000000000001001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	3
+Z:	5.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	2
+	Smoke:	0
+	Background:	0
+	BackgroundType:	1
+[EXIT north]
+	Keywords:	steel door
+	Desc:$
+An old steel door marked "Operation Theatre". 
+~
+	ToVnum:	60857
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	60855
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+A thick wooden door with a shattered glass window. 
+~
+	ToVnum:	60860
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60856
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60855
+Name:	Sub-basement Hallway: bottom of the ramp
+Desc:$
+   Having reached the bottom of the incline in this hallway, you are wading in
+ankle-deep water and the air around you is cold. The tiles on the walls seem
+to be airbrushed with moss. Electric wires dangle from the ceiling overhead.
+Upon the rusted door to the north, something seems has been carved with an
+Exacto knife: "pestis eram vivus - moriens tua mors ero".
+   You can hear the echo of water dripping far away.
+~
+Flags:	1000000000000001001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	3
+Z:	5.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	2
+	Smoke:	0
+	Background:	0
+	BackgroundType:	1
+[EXIT north]
+	Keywords:	steel door
+	Desc:$
+A steel door marred by impossibly deep fingernail marks. 
+~
+	ToVnum:	60859
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	set automatic doors morgue
+	Desc:$
+A set of automatic swinging doors, marked "Morgue". 
+~
+	ToVnum:	60861
+	Flags:	1
+	Material:	adv. plastics
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	rusty steel door
+	Desc:$
+A rusty steel door covered with an oily substance. 
+~
+	ToVnum:	60858
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	60854
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60856
+Name:	Sub-basement Hallway - at elevators
+Desc:$
+   The corridor ends here at a non-functioning elevator. Several flat metal
+gurneys have been halfhazardly piled against the elevator doors, looking like
+a desperate blockade attempt. The high ceiling has completely collapsed,
+leaving a pile of broken concrete and building material on the concrete floor,
+and a single shaft of light from overhead seems hesitant to proceed any
+further down the hallway. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	3
+Z:	5.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	3
+	Smoke:	0
+	Background:	0
+	BackgroundType:	1
+[EXIT east]
+	ToVnum:	60854
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Desc:$
+A hole in the ceiling that leads into brightness. 
+~
+	ToVnum:	60822
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	7
+BREAK
+#60857
+Name:	Operating Room
+Desc:$
+   This is the place where human physicians performed gruesome experiments for
+the sake of learning about UGE, all in the name of medicine. Twisted and
+useless pieces of rusty metal and machinery lie scattered about this damp
+room. There are puddles of brackish water on the concrete floor. Tendrils of
+black mold have climbed up the white-washed walls. It looks like someone took
+a blowtorch to the rusty metal door, leaving it scarred. In one corner are the
+broken remains of a low-lying sink or wash basin, used for rinsing out a
+corpse's organs after they were removed. 
+~
+Flags:	1000000000000001001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	5.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	2
+	Smoke:	6
+	Background:	0
+	BackgroundType:	7
+[EXIT south]
+	Keywords:	steel door rusted
+	Desc:$
+A rusted old steel door with tendrils of black mold crawling across its
+surface. 
+~
+	ToVnum:	60854
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60858
+Name:	Sensory Deprivation Room
+Desc:$
+   A single metal chair is bolted upon a raised concrete dais in the middle of
+this room, the remains of velcro straps and an old IV bag lying at its base. A
+fluorescent light overhead stutters and buzzes, casting ugly dead colors
+about.
+   Along with the newly-awakened, individuals were sent to St. Boniface
+because they had suddenly sprouted latent magical abilities that were as yet
+uncontrolled, and hence considered a hazard. Others who had managed a small
+grasp of their new abilities were deemed even more of a threat. As a cure,
+SCAB's corporate backers suggested the use of mage masks. These were
+tight-fitting, eyeless masks that had a breathing tube shoved down the mage's
+throat and speakers over the ears that pumped over 90dB of white noise, thus
+making the individual incapable of concentrating, and therefore unable to cast
+any spells. Prologned exposure to these masks often drove the wearers insane.
+~
+Flags:	1000000000000001001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	5.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	2
+	Smoke:	0
+	Background:	0
+	BackgroundType:	1
+[EXIT north]
+	Keywords:	rusty steel door
+	Desc:$
+A rusty steel door covered with an oily substance. 
+~
+	ToVnum:	60855
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60859
+Name:	Hydrotherapy room
+Desc:$
+   Cobwebs and steel support struts frame a huge tank of water, with a winding
+catwalk leading to its top. The vat itself is made from semi-transparent
+plasfab pieces banded together with iron casings. The remaining water within
+the tank is black and thick, with nothing disturbing its surface.
+   With the success of hydrotherapy to alleviate arthritic pain, St. Boniface
+attempted to mirror the soothing effects of warm water upon its metavariant
+patients. Of course, given the severity of mental problems, the asylum's
+physicians concluded that one merely needed to turn up the heat considerably,
+hoping that an increaseof blood flow, oxygen and nutrients would speed the
+elimination of toxins in the bloodstream. Patients came to refer to this
+practice as 'deep-frying'. 
+~
+Flags:	1000000000010001001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	50
+Z:	20.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	2
+	Smoke:	6
+	Background:	0
+	BackgroundType:	1
+[EXIT south]
+	Keywords:	steel door
+	Desc:$
+A steel door marred by impossibly deep fingernail marks. 
+~
+	ToVnum:	60855
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60860
+Name:	X-Ray
+Desc:$
+   Dank and dark, the concrete floor has cracked here with some brown liquid
+filling up the gaps and causing the room to reek. Several old x-ray viewing
+panes still line the far wall of this room, and the tiled walls have beads of
+rusty-brown water on them. Abandoned X-Ray films,  an operating chassis and
+chemicals from Kodak and 3M are scattered about. 
+~
+Flags:	1000000000000001001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	5.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	2
+	Smoke:	6
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	wooden door
+	Desc:$
+A thick wooden door with a shattered glass window. 
+~
+	ToVnum:	60854
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#60861
+Name:	Morgue
+Desc:$
+   A series of small metal doors line the east wall. Most of them have been
+opened and the wheeled slabs within pulled completely out. The paint on the
+ceiling is peeling in great sheets, giving the appearance of looking like
+drapes hanging precariously overhead, and clumps of white powder are spread
+across the pink-tiled floor. The air here is moist and the smell of burnt hair
+is pervasive. 
+~
+Flags:	1000000000000001001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	10
+Z:	5.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	2
+	Smoke:	6
+	Background:	0
+	BackgroundType:	7
+[EXIT west]
+	Keywords:	set automatic doors
+	Desc:$
+A set of automatic swinging doors. 
+~
+	ToVnum:	60855
+	Flags:	1
+	Material:	adv. plastics
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

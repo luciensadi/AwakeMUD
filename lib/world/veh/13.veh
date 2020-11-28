@@ -136,8 +136,8 @@ trimmed with lambskin and woodgrain is provided for your relaxation needs. Two
 screens have been placed in the back of the front seats, allowing the people
 in the back to watch any 2D broadcast they want. 
 ~
-Leaving:	zips out 
-Arriving:	roars in from the
+Leaving:	zips out
+Arriving:	roars in
 Handling:	3
 Speed:	210
 Accel:	10
@@ -184,7 +184,7 @@ trimmed with lambskin and woodgrain is provided for your relaxation needs. Two
 screens have been placed in the back of the front seats, allowing the people
 in the back to watch any 2D broadcast they want. 
 ~
-Leaving:	zips out 
+Leaving:	zips out
 Arriving:	roars in from the
 Handling:	3
 Speed:	240
@@ -223,8 +223,8 @@ allowing a more compact rear end. The seats are more utilitarian than
 comfortable, but if you're riding in the back of one of these things, you
 aren't in much of a position to be picky. 
 ~
-Leaving:	drives off into
-Arriving:	drives in from the
+Leaving:	drives off
+Arriving:	drives in
 Handling:	4
 Speed:	105
 Accel:	8
@@ -255,7 +255,11 @@ It's not big, it's not clever. It just feels a little bit good between your
 legs, and can get you places quicker than normal human methods will. 
 ~
 InsideRear:$
-You are inside a boring vehicle.~
+The sidecar shell houses a single, quite comfortable bucket seat, along with a
+reinforced crash cage frame. The ride in the sidecar is surprisingly smooth,
+most likely due to its seperate suspension, and allows the passenger to ride
+in relative style and comfort. 
+~
 Leaving:	scoots off
 Arriving:	scoots in from
 Handling:	3
@@ -291,10 +295,10 @@ urge to gun the engine, making it go as hard and fast as you can. Come on!
 It's a Harley! You know you want to! 
 ~
 InsideRear:$
-The engine between your legs sends vibrations up through your body, though the
-advanced weave of the rear bucket seat tries to limit that to increase your
-comfort. Your life is completly in the hand of the driver up front, you just
-get to sit there and enjoy the ride. 
+The sidecar shell houses a single, quite comfortable bucket seat, along with a
+reinforced crash cage frame. The ride in the sidecar is surprisingly smooth,
+most likely due to its seperate suspension, and allows the passenger to ride
+in relative style and comfort. 
 ~
 Leaving:	roars out
 Arriving:	roars in
@@ -306,8 +310,8 @@ Armour:	1
 Pilot:	0
 Sig:	2
 Autonav:	2
-Seating:	1
-SeatingBack:	1
+Seating:	2
+SeatingBack:	0
 Load:	60
 Cost:	14300
 Type:	1
@@ -325,7 +329,11 @@ Inside:$
 You feel ready to take on the world in this thing. 
 ~
 InsideRear:$
-You are inside a boring vehicle.~
+The sidecar shell houses a single, quite comfortable bucket seat, along with a
+reinforced crash cage frame. The ride in the sidecar is surprisingly smooth,
+most likely due to its seperate suspension, and allows the passenger to ride
+in relative style and comfort. 
+~
 Leaving:	leaves
 Arriving:	arrives
 Handling:	3
@@ -352,23 +360,23 @@ LongDesc:$
 The Ford-Canada Bison is large, and tough as nails. It's a descendant of the
 RV's of yesteryear, with enough space in the back for a family to comfortably
 live. It's actually so wide it barely fits in a lane and is likely to attract
-alot of attention no matter where it goes. 
+a lot of attention no matter where it goes. 
 ~
 Inside:$
 The twin front seats of this behemoth are built more like the cockpit of a
 plane. The cockpit is actually partitioned off from the rest of the vehicle
 allowing you to concentrate more on the road, and less on what the wife is
 shouting at the kids about. The seats are large plush affairs, with plenty of
-padding to spare your postierior on those long trips. 
+padding to spare your posterior on those long trips. 
 ~
 InsideRear:$
 The back end of the Bison is huge, enough for a family to live in for quite a
 while. It could easily house 4 people without them getting in each others way
 too much. Plush seating up the front gives way to a kitchen, small bathroom
-and two seperated bedrooms at the rear. 
+and two separated bedrooms at the rear. 
 ~
 Leaving:	rolls off
-Arriving:	rolls in from
+Arriving:	rolls in
 Handling:	4
 Speed:	135
 Accel:	6
@@ -401,9 +409,10 @@ As you roar down the road on the BMW Blitzen, you can feel a gentle roar
 beneath you.  The ride of this bike is smooth, despite its sheer power. 
 ~
 InsideRear:$
-Designed for Combat Bike competitions the rear seat is heavily reinforced and
-padded to allow someone to comfortably use a weapon from it while speeding
-along. This would have to be one of the safest bikes on the road. 
+The sidecar shell houses a single, quite comfortable bucket seat, along with a
+reinforced crash cage frame. The ride in the sidecar is surprisingly smooth,
+most likely due to its seperate suspension, and allows the passenger to ride
+in relative style and comfort. 
 ~
 Leaving:	roars
 Arriving:	roars in
@@ -415,8 +424,8 @@ Armour:	2
 Pilot:	0
 Sig:	1
 Autonav:	2
-Seating:	1
-SeatingBack:	1
+Seating:	2
+SeatingBack:	0
 Load:	40
 Cost:	26300
 Type:	1
@@ -438,7 +447,11 @@ Inside:$
 The Honda Viking roars with power as you ride down the road. 
 ~
 InsideRear:$
-You are inside a boring vehicle.~
+The sidecar shell houses a single, quite comfortable bucket seat, along with a
+reinforced crash cage frame. The ride in the sidecar is surprisingly smooth,
+most likely due to its seperate suspension, and allows the passenger to ride
+in relative style and comfort. 
+~
 Leaving:	roars off
 Arriving:	roars in from
 Handling:	5
@@ -474,7 +487,11 @@ The Suzuki Aurora handles curves and speeds faster by far than just about any
 other motorcycle you have ridden on before. Its feel is smooth and responsive.
 ~
 InsideRear:$
-You are inside a boring vehicle.~
+The sidecar shell houses a single, quite comfortable bucket seat, along with a
+reinforced crash cage frame. The ride in the sidecar is surprisingly smooth,
+most likely due to its seperate suspension, and allows the passenger to ride
+in relative style and comfort. 
+~
 Leaving:	speeds off
 Arriving:	speeds in from
 Handling:	2
@@ -507,7 +524,11 @@ The speed and handling of this motorcycle make for the most pleasant of rides,
 even when escaping fire from that Salish Sidhe Thunderbird. 
 ~
 InsideRear:$
-You are inside a boring vehicle.~
+The sidecar shell houses a single, quite comfortable bucket seat, along with a
+reinforced crash cage frame. The ride in the sidecar is surprisingly smooth,
+most likely due to its seperate suspension, and allows the passenger to ride
+in relative style and comfort. 
+~
 Leaving:	speeds off
 Arriving:	speeds in from
 Handling:	2
@@ -646,7 +667,7 @@ Seating:	2
 SeatingBack:	6
 Load:	750
 Cost:	32000
-Type:	2
+Type:	3
 Flags:	0
 Engine:	5
 BREAK
@@ -742,8 +763,8 @@ harnesses of the front you are left to pretty much slide around
 uncontrollably. Getting out of this thing without some bruises would be a
 miracle. 
 ~
-Leaving:	screams
-Arriving:	screams in from
+Leaving:	screams off
+Arriving:	screams in
 Handling:	4
 Speed:	250
 Accel:	15
@@ -774,14 +795,16 @@ The inside of the runabout has a single seat, a basic GridGuide(tm) system for
 inner city uses, a speedometer, and a half-dome shaped windshield. 
 ~
 InsideRear:$
-You are inside a boring vehicle.~
+There normally isn't a back seat to a Runabout... So good for you? You now
+have an incredibly small coffin of a backseat. 
+~
 Leaving:	zips off
 Arriving:	zips in from
 Handling:	4
 Speed:	75
 Accel:	4
-Body:	0
-Armour:	3
+Body:	3
+Armour:	0
 Pilot:	0
 Sig:	7
 Autonav:	1
@@ -796,7 +819,7 @@ BREAK
 #1321
 Name:	gmc 4201 truck transport heavy
 ShortDesc:	A GMC 4201
-RoomDesc:	A sturdy looking truck is taking up alot of room here
+RoomDesc:	A sturdy looking truck is taking up a lot of room here
 LongDesc:$
 The sturdy box-like construction of this heavy transport make it easily
 recognizable as the GMC 4201. It looks as though it could take quite a beating
@@ -929,7 +952,7 @@ InsideRear:$
 The cargo area of the Bulldog is even roomier than the front. It is easy to
 tell why its the number one van in the delivery business.  
 ~
-Leaving:	drives out
+Leaving:	drives out to
 Arriving:	drives in
 Handling:	4
 Speed:	85
@@ -1059,8 +1082,8 @@ Name:	medium minibus leyland-rover rover transport
 ShortDesc:	A Leyland-Rover Transport Minibus
 RoomDesc:	A medium sized minibus has been left stationary here
 LongDesc:$
-This medium sized pickup blends into its surroundings very well. It has alot of
-seating and is easily moved by it's gutsy gasoline engine.
+This medium sized minibus blends into its surroundings very well. It has alot
+of seating and is easily moved by it's gutsy gasoline engine. 
 ~
 Inside:$
 The Leyland-Rover Transport has plenty of headroom. Making it a popular choice
@@ -1179,7 +1202,11 @@ it doesn't lose any handling when taken up to insane racing speeds, it just
 weaves around traffic as if it were walking through an obstacle course. 
 ~
 InsideRear:$
-You are inside a boring vehicle.~
+The sidecar shell houses a single, quite comfortable bucket seat, along with a
+reinforced crash cage frame. The ride in the sidecar is surprisingly smooth,
+most likely due to its seperate suspension, and allows the passenger to ride
+in relative style and comfort. 
+~
 Leaving:	roars off
 Arriving:	roars in from
 Handling:	2
@@ -1215,7 +1242,11 @@ popularity amongst the Ancients go-gangs inside Tir Tairngire, though it has
 yet to take off abroad.  Its very fast, and picks up almost instantaneously. 
 ~
 InsideRear:$
-You are inside a boring vehicle.~
+The sidecar shell houses a single, quite comfortable bucket seat, along with a
+reinforced crash cage frame. The ride in the sidecar is surprisingly smooth,
+most likely due to its seperate suspension, and allows the passenger to ride
+in relative style and comfort. 
+~
 Leaving:	zooms off
 Arriving:	zooms in
 Handling:	2
@@ -1259,7 +1290,10 @@ for an elven user.  There is a refrigerator on board as well, and a shoe-shine
 machine, and a top of the line DIR-X simsense machine. 
 ~
 InsideRear:$
-You are inside a boring vehicle.~
+There is a refrigerator, a shoe-shine machine, a top of the line DIR-X
+simsense machine and practically anything else you could desire in the
+luxurious back seat of this limousine. 
+~
 Leaving:	quietly cruises off
 Arriving:	quietly cruises in from
 Handling:	3
@@ -1270,8 +1304,8 @@ Armour:	4
 Pilot:	0
 Sig:	3
 Autonav:	5
-Seating:	8
-SeatingBack:	0
+Seating:	4
+SeatingBack:	6
 Load:	50
 Cost:	1175000
 Type:	2

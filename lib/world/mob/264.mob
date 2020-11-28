@@ -1,0 +1,66 @@
+#26400
+Keywords:	makaila woman ork
+Name:	Makaila
+RoomDesc:$
+An orkish woman sits here behind a desk. 
+
+~
+LookDesc:$
+Her nametag reads, "Makaila".  She is strikingly pretty for an ork, with a
+sleight grin, she looks to you, and smiles, her soft melodic voice, in an
+almost singsong way asks what she can do for you. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	148
+	Weight:	80
+[SKILLS]
+BREAK
+#26401
+Keywords:	slumlord max hertfield tall elf male
+Name:	Max Herfield
+RoomDesc:$
+A tall elf in a business suit stands here. 
+
+~
+LookDesc:$
+Despite his ramrod-straight posture, well-groomed appearance and expensive
+clothes, there's something indefinably seedy about this tall, brown-haired
+elf. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	80
+[SKILLS]
+BREAK
+END

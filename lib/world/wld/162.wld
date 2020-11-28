@@ -1,0 +1,2337 @@
+#16200
+Name:	Dark Alley
+Desc:$
+   You step into a dark and disgusting alley.  The stench of rotting garbage
+and human excrement is overpowering...but somehow you manage to not throw up
+and continue on. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2552
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16201
+Name:	End of the Alley
+Desc:$
+   You are at the end of the filthiest stretch of alley you have ever seen.
+It's worse even than the interior of that damn cab you take all the time.
+Barely managing not to vomit, you wonder again just why you're here. 
+~
+Flags:	10000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	16200
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16202
+Name:	DocWagon Clinic
+Desc:$
+   You stand just inside the door of Seattle's DocWagon clinic. The entrance
+is cool, clean and clinical, with spotless linoleum floors and white walls
+filled with DocWagon posters and advertisements. A service representative is
+to the west. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	30
+Y:	20
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	1
+	BackgroundType:	11
+[EXIT east]
+	Keywords:	door metal garage
+	Desc:$
+You see a large metal door with the word "Garage" printed on it. 
+~
+	ToVnum:	16251
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	0
+	HiddenRating:	4
+[EXIT south]
+	ToVnum:	32688
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	16203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16203
+Name:	Service Counter
+Desc:$
+   The wall behind the polished wooden counter is filled with video screens
+showing DocWagon teams pulling their clients out of all sorts of dangerous
+situations. Just the kind of thing to inspire confidence in even the most
+hardened of runners. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	25
+Y:	20
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	1
+	BackgroundType:	11
+[EXIT east]
+	ToVnum:	16202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16204
+Name:	PJ's Coffee Corner
+Desc:$
+   You stand in PJ's Coffee Corner.  This small establishment has quickly
+become a favorite among Tacoma residents of the, shall we say, unsavory
+nature.  But even runners need a caffeine fix before they go on a crime spree,
+and PJ has no problems catering to that crowd. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	16205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	16207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	16206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	2001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16205
+Name:	Seating Area
+Desc:$
+   There are a couple of small tables here with spindly looking chairs next to
+them.  Here and there you see someone enjoying a cup of java and reading the
+newspaper. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	16207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	16206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	16204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16206
+Name:	Seating Area
+Desc:$
+   There are a couple of small tables here with spindly looking chairs next to
+them.  Here and there you see someone enjoying a cup of java and reading the
+newspaper. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	16205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	16207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16207
+Name:	Coffee Bar
+Desc:$
+   A well worn bar occupies this corner of the coffe shop.  An ancient looking
+cash register takes up a portion of it.  Behind the bar you see an
+intimidating stainless steel espresso machine and a bunch of noisy coffee
+grinders. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	16206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	16204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16208
+Name:	The Android's Dungeon
+Desc:$
+   When Obi Wan Kenobi muttered the infamous words "You'll never find a more
+wretched hive of scum and villainy", he definitely wasn't talking about this
+place. No sir, The Android's Dungeon is a place devoted to the good, clean,
+and wholesome fun of comicbooks and roleplaying games. Just ignore the freak
+in the corner painting miniatures and remember that the bathroom is for paying
+customers only. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	16210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	16211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	16209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	2030
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16209
+Name:	Cashwrap
+Desc:$
+   Here is where you can pay for your sundry purchases.  Ensconced behind a
+mountain of really old Dragon magazines and Wolverine comics, the owner has
+set up a cash register. Attached to the register with a tangle of wires are
+all sorts of esoteric computer equipment whose puposes you can only guess at.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	16210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	16211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16210
+Name:	The Miniatures Section
+Desc:$
+   This corner is devoted to those tiny little cancer-causing lead miniatures
+that the kids just seem to love.  You see every type of figurine your heart
+could desire, from the Little Mutant Vic Ninja Boy XI action statue to the
+classic Warhammer 40k Cybernetic War Turkey.  Ok, now wipe the drool off your
+chin. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	16211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	16209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	16208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16211
+Name:	The Comic Backlist Section
+Desc:$
+   This section is filled with tons of acid-free cardboard boxes stuffed with
+plastic wrapped old issues of classic comics like The Adventures of Eddie the
+Goiter Boy.  Maybe if you look long enough you'll find that copy of Latex
+Warriors of Planet Bimbo where Amber finds out that there's just not enough
+time to fight crime AND have a successful porn career at the same time... 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door~~
+	Desc:$
+A wooden door. 
+~
+	ToVnum:	16212
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	16209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	16208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16212
+Name:	The Android's Dungeon Infamous Back Room
+Desc:$
+   This is the mythical back room where the really hardcore gamers come and
+while away the hours playing Truncheons and Flagons (tm).  It is a dimly-lit
+area with a single rickety table in the middle of the room.  Old pizza boxes
+and empty two liter bottles of Bouncy Bubble Beverage litter the floor and
+make it hard to walk. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door~~
+	Desc:$
+A wooden door. 
+~
+	ToVnum:	16211
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	trapdoor~~
+	Desc:$
+A wooden trapdoor set in the floor 
+~
+	ToVnum:	16249
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16213
+Name:	The Afterlife
+Desc:$
+   You are in the infamous Club Afterlife.  This place is built with three
+levels, representing Heaven, Purgatory, and Hell.  From where you stand, you
+can either ascend to Heaven, decend into Hell, or move forward into Purgatory.
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	16236
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	2072
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	16214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16214
+Name:	Stairway to Heaven
+Desc:$
+   You are at the foot of a large spiral staircase that leads up.  From here
+you can go to Heaven, or east to the club's entrance.  And hey, aren't you
+glad I didn't make the obvious Led Zeppelin joke here? 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	16213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	16215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16215
+Name:	Stairway to Heaven
+Desc:$
+   You are at the top of a large spiral staircase.  You can go down, or head
+north to the inviting lights of Heaven. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	16214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16216
+Name:	Dance Floor
+Desc:$
+   You stand on Heaven's dance floor.  The floor is constructed in a chess
+board pattern of gold and silver lights.  Everything is slightly obscured by
+billowing clouds of smoke from vents along the walls.  High above you can
+barely make out winged figures that seem to be dancing in the air.  To the
+west you see a small stage, while to the east are private booths. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	16220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	16215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	16219
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	16223
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16217
+Name:	Dance Floor
+Desc:$
+   You are on the dance floor.  Here in the middle of everything it is very
+confusing.  People whirl around you dancing to the band.  Mixed among them are
+waiters and waitresses dressed as angels carrying trays laden with drinks.  To
+the west you can make out the bar and to the east are more private booths. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	16221
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	16216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	16219
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	16223
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	16224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16218
+Name:	Dance Floor
+Desc:$
+   The dance floor is somewhat less crazy here, probably due to the line of
+anxious people waiting to use the restrooms to the north.  The bar lies to the
+west, and if you want some privacy there are some suitable booths to the east.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	16226
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	16222
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	16217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	16223
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	16224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	16225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16219
+Name:	Stage
+Desc:$
+   This is the stage for Heaven.  It's currently crammed full of sound
+equipment, speakers, and various intruments.  This close to the action it's
+pretty hard to even hear yourself think. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16223
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	16217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	16216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16220
+Name:	Private Booth
+Desc:$
+   This booth is dark and quiet.  Looks like just the place to arrange some
+biz. 
+~
+Flags:	1000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	16216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16221
+Name:	Private Booth
+Desc:$
+   This booth is dark and quiet.  Looks like just the place to arrange some
+biz. 
+~
+Flags:	1000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	16217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16222
+Name:	Private Booth
+Desc:$
+   This booth is dark and quiet.  Looks like just the place to arrange some
+biz. 
+~
+Flags:	1000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	16218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16223
+Name:	The Bar
+Desc:$
+   The bar is a single piece of marble shot through with streaks of silver.
+Behind the bar is a large mirror - handy for watching your back or checking to
+see if that chick you're hitting on is a vampire.  There is also a rack of
+various bottles of booze.  Looks like the makings of a good night to me... 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	16218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	16217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	16216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	16219
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16224
+Name:	The Bar
+Desc:$
+   The bar is a single piece of marble shot throught with streaks of silver.
+This end of the bar is a little more quiet.  You sit among other lonely souls
+sipping expensive drinks in a vain attempt to forget just how alone they are
+in the world.  The bartender is taking orders further to the south. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	16218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	16217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	16223
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16225
+Name:	Men's Room
+Desc:$
+   You step into an immaculately clean restroom.  Everything is so white it
+almost hurts your eyes.  There is soothing music playing in the background and
+a lovely outdoorsy scent to the air.  Ah, the bathroom in Heaven... 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	16218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16226
+Name:	Women's Room
+Desc:$
+   You have never seen a nicer bathroom in your entire life.  Everything is
+super clean and smells wonderful.  Fresh flowers are scattered throughout the
+room.  Hard to believe you're in a bathroom at a club, no? 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	16218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16227
+Name:	Entrance to Purgatory
+Desc:$
+   You are standing at the entrance of Pugatory. This part of the club seems
+to be reserved for more quiet pursuits. There are small, private tables and
+booths spread liberally thoughout the large room. The lighting is soft and
+indirect. A large circular bar is in the middle of the area. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16235
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	16234
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	16229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	16213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	16228
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	16232
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16228
+Name:	Corner Booth
+Desc:$
+   The corner of Purgatory has a nice, spacious booth.  Upholstered in leather
+so black you can see your own reflection in it, this booth could easily seat
+six people.  A small candle provides the only light.  As you near it, your
+ears pick up a faint ultrasonic vibration - clearly they have set up white
+noise generators here to foil evesdroppers. 
+~
+Flags:	1000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16232
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	16235
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	16227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16229
+Name:	Corner Booth
+Desc:$
+   The corner of Purgatory has a nice, spacious booth.  Upholstered in leather
+so black you can see your own reflection in it, this booth could easily seat
+six people.  A small candle provides the only light.  As you near it, your
+ears pick up a faint ultrasonic vibration - clearly they have set up white
+noise generators here to foil evesdroppers. 
+~
+Flags:	1000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16234
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	16227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	16235
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16230
+Name:	Corner Booth
+Desc:$
+   The corner of Purgatory has a nice, spacious booth.  Upholstered in leather
+so black you can see your own reflection in it, this booth could easily seat
+six people.  A small candle provides the only light.  As you near it, your
+ears pick up a faint ultrasonic vibration - clearly they have set up white
+noise generators here to foil evesdroppers. 
+~
+Flags:	1000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	16233
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	16235
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	16232
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16231
+Name:	Corner Booth
+Desc:$
+   The corner of Purgatory has a nice, spacious booth.  Upholstered in leather
+so black you can see your own reflection in it, this booth could easily seat
+six people.  A small candle provides the only light.  As you near it, your
+ears pick up a faint ultrasonic vibration - clearly they have set up white
+noise generators here to foil evesdroppers. 
+~
+Flags:	1000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	16234
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	16235
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	16233
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16232
+Name:	Seating Area
+Desc:$
+   This area is sparsely furnished with small, intimate tables.  They are
+placed just far enough apart from each other that no one can overhear what
+you're saying.  Here and there you can see small groups of people speaking in
+hushed tones. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16230
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	16233
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	16235
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	16227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	16228
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16233
+Name:	Seating Area
+Desc:$
+   This area is sparsely furnished with small, intimate tables.  They are
+placed just far enough apart from each other that no one can overhear what
+you're saying.  Here and there you can see small groups of people speaking in
+hushed tones. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	16231
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	16234
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	16235
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	16232
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	16230
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16234
+Name:	Seating Area
+Desc:$
+   This area is sparsely furnished with small, intimate tables.  They are
+placed just far enough apart from each other that no one can overhear what
+you're saying.  Here and there you can see small groups of people speaking in
+hushed tones. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16231
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	16229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	16227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	16235
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	16233
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16235
+Name:	Circular Bar
+Desc:$
+   You have reached the center of Purgatory.  Before you is a large circular
+bar made from a deep reddish colored wood.  A single bartender deftly handles
+all the orders while somehow managing not to get dizzy.  A padded leather
+stool seems to be calling your name - why don't you sit down and have a drink?
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16233
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	16231
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	16234
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	16229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	16227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	16228
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	16232
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	16230
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16236
+Name:	Stairway to Hell
+Desc:$
+   You are at the top of a staircase.  It descends down into a smokey area
+that glows with a red light.  Is that brimstone you smell? 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	16213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	16237
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16237
+Name:	Stairway to Hell
+Desc:$
+   You are at the foot of a staircase.  From here you can go back up to
+Purgatory or head north into the spookily light expanse of Hell.  As you are
+pondering your choices, a woman's voice lets out a horrible scream from that
+direction. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16238
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	16236
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16238
+Name:	Hell's Gate
+Desc:$
+   You are standing at the threshold to Hell.  It looks absolutely, fucking
+crazy in there.  It's very smokey and lit only by flickering flames.  All
+around you see people chained to walls, to each other - it's insane.  At the
+far end of the room you can barely make out at bar and a small stage. To the
+east and west are Hell's Bathrooms.  Over each door you see a sign that says
+Abandon Hope, all ye who enter. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	16241
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	16239
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	16237
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	16240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	16242
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16239
+Name:	Men's Room
+Desc:$
+   This is the most disgusting place you have ever been in, hands down.  The
+floor is covered with pools of stuff you don't even want to contemplate, and
+the walls and ceiling are likewise splattered with unspeakable substances.
+The one toilet in here is so clogged and overflowing that it makes you sick to
+even glance at it.   
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	16238
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16240
+Name:	Women's Room
+Desc:$
+   The most disturbing aspect of this restroom isn't so much the unmentionable
+things smeared all over every surface - no, it's the smell.  Remember that one
+time you kept that body in the trunk of your car for an entire summer because
+you just forgot to get rid of the damn thing?  Well, this bathroom smells
+about ten times worse than that.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	16238
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16241
+Name:	Dance Floor
+Desc:$
+   Boogie 'til you drop, baby.  You're surrounded by the damned.  And they're
+all dancing like madmen. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16243
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	16238
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	16242
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	16244
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16242
+Name:	Dance Floor
+Desc:$
+   Looks like it's bondage night here at the Afterlife - at least, that must
+be why that chick walked over and handcuffed herself to you. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16244
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	16243
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	16241
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	16238
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16243
+Name:	Dance Floor
+Desc:$
+   You're almost to the bar now, chummer.  Not long until you can drown out
+the voices in your head with copious amounts of alcohol. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16245
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	16241
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	16242
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	16244
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	16246
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16244
+Name:	Dance Floor
+Desc:$
+   Now you're in front of the stage.  It's pretty much so loud here that if
+you don't leave your eardrums are sure to explode and start bleeding. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	16246
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	16245
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	16243
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	16241
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	16242
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16245
+Name:	Hell's Bar
+Desc:$
+   The bar here looks as if it's fashioned from a single piece of obsidian,
+carved into the forms of tortured souls intertwined with each other.  God only
+knows what kind of horrible drinks they serve here. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door metal ~~
+	Desc:$
+You see a cleverly concealed metal door. 
+~
+	ToVnum:	16247
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	16238
+	LockRating:	10
+	HiddenRating:	10
+[EXIT south]
+	ToVnum:	16243
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	16244
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	16246
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16246
+Name:	Stage
+Desc:$
+   This little stage is currently occupied by a nova hot band.  They're
+jamming away doing songs from their latest album. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	16245
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	16243
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	16244
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16247
+Name:	Hell's Backroom
+Desc:$
+   You enter a quiet, dark room.  There is a large mahogany desk just opposite
+from where you are standing; you can barely make out someone sitting in the
+shadows behind the desk. 
+~
+Flags:	10000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door metal~~
+	Desc:$
+You see a metal door. 
+~
+	ToVnum:	16245
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	16238
+	LockRating:	10
+BREAK
+#16248
+Name:	The Razor's Edge
+Desc:$
+   blah blah blah 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#16249
+Name:	Dan's Private Lair
+Desc:$
+   The flight of stairs ends in a small dimly lit room. Its walls are covered
+in posters of old B-movies and classic anime. The room, like the one above, is
+littered with old pizza boxes, burrito wrappers and empty cups. The only
+furnishings in the room are a small single unkept bed and a desk. The room is
+lit by the glow of a cyberterminal on that desk. Examining it, you see it is
+littered with old invoices, receipts and what appear to be diagrams of matrix
+systems, half completed and badly drawn. Apparently the owner is a hacker. It
+appears possible to jack in and connect to the matrix here. 
+~
+Flags:	101000
+SecType:	Inside
+MatrixExit:	1101
+IO:	300
+Bandwidth:	20
+Access:	0
+Trace:	0
+RTG:	1100
+JackID:	0
+Address:	An undisclosed location
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	Keywords:	trapdoor~~
+	Desc:$
+A trapdoor is set into the ceiling. A small flight of creaky steps leads up to
+it. 
+~
+	ToVnum:	16212
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16250
+Name:	Krackerjack's Box
+Desc:$
+You are in an unfinished room.
+~
+Flags:	110101001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#16251
+Name:	DocWagon Outlet Garage
+Desc:$
+   Many ambulances with DocWagon markings fill the parking spaces of this
+small covered garage. Occasionally, one of them will scream in or out of here,
+sirens blaring, the sound echoing off the concrete walls. The north wall of
+the garage has a large set of glass sliding doors, which is presumably how all
+of the emergency cases are shuttled into the facility. The lights here are
+constantly dim, as though turning them up to a brighter level would damage the
+meticulous paintwork on the vehicles. Sunlight streams through the garage
+entrance way to the east. 
+~
+NightDesc:$
+   Many ambulances with DocWagon markings fill the parking spaces of this
+small covered garage. Occasionally, one of them will scream in or out of here,
+sirens blaring, the sound echoing off the concrete walls. The north wall of
+the garage has a large set of glass sliding doors, which is presumably how all
+of the emergency cases are shuttled into the facility. The lights here are
+constantly dim, as though turning them up to a brighter level would damage the
+meticulous paintwork on the vehicles. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	32694
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door metal
+	ToVnum:	16202
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	0
+BREAK
+#16295
+Name:	A DocWagon Recovery Room
+Desc:$
+   This is where DocWagon parks its recovering patients: a bare white room
+furnished with little more than a hospital bed, a side table and a host of
+monitoring machinery. Fluorescent light reflects harshly off the shiny
+linoleum floors. A door to the south presumably leads out of here. 
+~
+Flags:	10000000000000000010011100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door south
+	ToVnum:	16203
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#16300
+Name:	Airlock
+Desc:$
+   blah 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+END

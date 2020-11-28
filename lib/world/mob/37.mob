@@ -1,0 +1,826 @@
+#3700
+Keywords:	Captain
+Name:	a Lone Star captain
+RoomDesc:$
+Lone Star Captain O'Reilly stands here.
+
+~
+LookDesc:$
+Captain O'Reilly has been with the force for ten years now, the endless toil
+of crime fighting has left a heavy sagging on his face. Even in his old age
+however, he has the cold stare of a killer and shows no strain of carrying
+the responsibility of the whole precinct on his shoulders.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000100000001001
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	5
+	Str:	6
+	Cha:	2
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	87
+	Ballistic:	7
+	Impact:	6
+[SKILLS]
+	pistols:	8
+BREAK
+#3701
+Keywords:	Viper
+Name:	a Platinum Sea Viper
+RoomDesc:$
+A platinum sea viper swims here.
+
+~
+LookDesc:$
+This is a Fijian Sea Viper, that guards Waipook's Fishtank. It is the guardian
+of all the other species here, and is 6 feet long. It is the colour of
+platinum, and it shines in the sun that pierces the water in the tank. The
+Viper has a voltage capacity of 100,000 volts, and is extremely dangerous.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Sting
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	10
+	Str:	5
+	Cha:	3
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	10
+	Impact:	20
+[SKILLS]
+	unarmed combat:	9
+BREAK
+#3703
+Keywords:	guard lone star man parking
+Name:	a Lone Star Parking Guard
+RoomDesc:$
+A Lone Star Parking Guard is standing here.
+
+~
+LookDesc:$
+The Lot guard takes care to see that all the cars in the lot are treated with
+the utmost care. Dressed in a fluorescent orange strip, the guard eyes all
+visitors with suspicion.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000100000001011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	5
+	Cha:	2
+	Int:	13
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	98
+	Ballistic:	5
+	Impact:	3
+[SKILLS]
+	firearms:	6
+BREAK
+#3704
+Keywords:	secretary woman lone star
+Name:	a Lone Star Secretary
+RoomDesc:$
+A Lone Star Secretary sits here, behind a desk.
+
+~
+LookDesc:$
+A young slim woman, in your mind unworthy of such a boring occupation. Her
+ordinary budget clothing shows the obviously poor lifestyle she must lead.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001110
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	30
+	Str:	6
+	Cha:	6
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	179
+	Weight:	76
+	Ballistic:	1
+	Bank:	200
+[SKILLS]
+	computers:	5
+	corporate etiquette:	6
+BREAK
+#3705
+Keywords:	cadet birkin
+Name:	Cadet Birkin
+RoomDesc:$
+A hairy cadet stands here.
+
+~
+LookDesc:$
+Cadet Alex Birkin is the most fiercely primal person you have seen yet. Even
+in the age of the Awakening, instead of conforming to the cyberware era,
+Birkin seems to have turned more to the natural side of society. His hair is
+scraggy and soiled, his clothed worn beyond repair.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1100
+AffFlags:	100010000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	5
+	Str:	10
+	Cha:	1
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	90
+	Ballistic:	5
+	Impact:	2
+	Cash:	45
+	Bank:	120
+[SKILLS]
+	unarmed combat:	7
+	biotech:	4
+BREAK
+#3706
+Keywords:	cadet lone rookie
+Name:	a Lone Star Cadet
+RoomDesc:$
+A Lone Star Cadet is standing here.
+
+~
+LookDesc:$
+The cadet is weary and hot from numerous hours of training in the gym. As a   
+ cadet, he is still a learner, and no way near as tough as the veterans. So go
+  easy on him. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000010001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	3
+	Cha:	6
+	Int:	4
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	3
+	Impact:	2
+	Cash:	50
+	Bank:	125
+[SKILLS]
+	unarmed combat:	4
+	firearms:	4
+BREAK
+#3707
+Keywords:	Ben Hacker Dealer
+Name:	Ben Hacker the BTL dealer
+RoomDesc:$
+Ben Hacker is lying here, shackled to the wall.
+
+~
+LookDesc:$
+Ben Hacker is the toughest dealer in the city. You name it, he's got it. He   
+ looks truly fucked out of his head, and very dangerous. The cops have got him
+  for now, but he'll probably be out soon, selling BTLs again.~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000001110
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Fighting
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	6
+	Str:	7
+	Cha:	2
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	87
+	Ballistic:	6
+	Impact:	5
+[SKILLS]
+	unarmed combat:	6
+	street etiquette:	8
+BREAK
+#3708
+Keywords:	Lieutenant Rodgers
+Name:	Lieutenant Rodgers
+RoomDesc:$
+Lieutenant Rodgers is standing here.
+
+~
+LookDesc:$
+Lieutenant Rodgers has brown hair, a scar, and tanned skin. Dressed in a very 
+ casual outfit, Rodgers is a relaxed lieutenant. It has taken him a long time 
+  to get here, and he's happy with his position. Try and screw him around, and
+you've got trouble on your hands.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000011001
+AffFlags:	11000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	4
+	Str:	6
+	Cha:	4
+	Int:	6
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	78
+	Ballistic:	5
+	Impact:	4
+	Bank:	100
+[SKILLS]
+	pistols:	7
+	unarmed combat:	6
+BREAK
+#3709
+Keywords:	Lieutenant Delaney
+Name:	Lieutenant Delaney
+RoomDesc:$
+Lieutenant Delaney is standing here.
+
+~
+LookDesc:$
+Lieutenant Delaney is a scrawny officer, and has bony features. He looks very 
+ suspicious, bt you suppose that's just part of the job. Perhaps it isn't, but
+  you don't want to ask and draw attention to yourself. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000011100
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	5
+	Cha:	6
+	Int:	6
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	178
+	Weight:	69
+	Ballistic:	5
+	Impact:	3
+	Bank:	100
+[SKILLS]
+	pistols:	7
+	unarmed combat:	5
+BREAK
+#3710
+Keywords:	instructor teacher
+Name:	a Lone Star instructor
+RoomDesc:$
+An instructor stands here.
+
+~
+LookDesc:$
+The instructor is a strict, tightassed looking mutha. Just graduated from the
+marine school, he is the best candidate for whipping, yes whipping, the 
+young cadets into shape for life in the sprawl.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	walks
+MobFlags:	1000100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	7
+	Str:	5
+	Cha:	6
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	6
+	Impact:	4
+	Cash:	65
+	Bank:	145
+[SKILLS]
+	unarmed combat:	8
+	athletics:	6
+	firearms:	7
+	biotech:	6
+BREAK
+#3711
+Keywords:	female lone rookie
+Name:	a Lone Star rookie
+RoomDesc:$
+A rookie stands here.
+
+~
+LookDesc:$
+The rookie is still taking in all the points and tips that go with being an   
+ officer. More experienced than the cadets, they are almost ready for life as 
+  an officer of the law. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000100000001100
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	5
+	Str:	3
+	Cha:	6
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	4
+	Impact:	2
+[SKILLS]
+	unarmed combat:	4
+	armed combat:	5
+	firearms:	3
+BREAK
+#3712
+Keywords:	janitor george scrawny
+Name:	George the janitor
+RoomDesc:$
+George the scrawny janitor is here, sweeping up garbage.
+
+~
+LookDesc:$
+George is no stranger to these premices. He has worker for the firm for much  
+ of his life, and looks after the whole building himself. With such a task,   
+  George has grown weary of his job, and will retire soon. 
+~
+ArriveMsg:	sweeps trash from
+LeaveMsg:	sweeps
+MobFlags:	10001101
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	145
+	Weight:	45
+	Ballistic:	3
+	Impact:	3
+	Bank:	70
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#3713
+Keywords:	officer man dispatch lone star
+Name:	a dispatch officer
+RoomDesc:$
+A dispatch officer is sitting behind a desk.
+
+~
+LookDesc:$
+The dispatch officer shows strong signs of stress and overworking. Her job
+creates so much havoc, that she never seems to get any rest. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Sitting
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	7
+	Str:	3
+	Cha:	5
+	Int:	7
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	157
+	Weight:	62
+	Ballistic:	3
+	Impact:	4
+	Bank:	20
+[SKILLS]
+	unarmed combat:	6
+	shotguns:	5
+BREAK
+#3714
+Keywords:	accountant man nerdy
+Name:	a Lone Star Accountant
+RoomDesc:$
+A nerdy looking accountant is standing here.
+
+~
+LookDesc:$
+The accountan is a true example of a nerd. With thick rimmed glasses, freckles
+ and a calculator in hand, he is totally complete. Life could not be better
+for  him, so try not to bother him while he's calculating. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	2
+	Cha:	6
+	Int:	7
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	80
+	Ballistic:	5
+	Impact:	3
+[SKILLS]
+	unarmed combat:	4
+	:	7
+BREAK
+#3715
+Keywords:	sergeant man homicide
+Name:	a Homicide Sergeant
+RoomDesc:$
+A Homicide Sergeant is sitting here.
+
+~
+LookDesc:$
+The homicide sergeant has seen more than you will in you entire life twice    
+ over. Death, rape, arsen,and theft are nothing to him. He sits behind a desk,
+  only because younger, more agile officers have taken his place. He is,
+however   a very worthy adversary
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000011000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	7
+	Cha:	2
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	193
+	Weight:	76
+	Ballistic:	6
+	Impact:	5
+	Cash:	150
+	Bank:	200
+[SKILLS]
+	unarmed combat:	5
+	pistols:	5
+BREAK
+#3716
+Keywords:	interrogator man mean lone star
+Name:	an interrogator
+RoomDesc:$
+A mean looking man stares you down.
+
+~
+LookDesc:$
+The interrogator is a truly evil and demeaning man, who obviously doesn't
+like any of lower rank than himself. His eyes see everything and his ears hear
+everything, small traces of metal inform you that he is definitely wired up as
+well.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	7
+	Cha:	1
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	59
+	Ballistic:	5
+	Impact:	8
+	Cash:	55
+	Bank:	155
+[SKILLS]
+	unarmed combat:	7
+	pistols:	5
+BREAK
+#3717
+Keywords:	mortician woman sad
+Name:	a Mortician
+RoomDesc:$
+A sad looking mortician is standing here wiping her scalpel.
+
+~
+LookDesc:$
+The mortician is covered in blood and gore, the last remaining pieces of a
+trigger happy cop lie on the operating table.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	3
+	Cha:	4
+	Int:	5
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	3
+	Bank:	203
+[SKILLS]
+	edged weapons:	3
+	biotech:	4
+BREAK
+#3718
+Keywords:	guard man lone star jail
+Name:	a Jail Guard
+RoomDesc:$
+A Jail Guard wanders around, spinning his keys.
+
+~
+LookDesc:$
+The jail guard looks after the detainees, who under interrogation, have not
+been charged yet. He's a mean and violent brute, but with the people he has to
+look after in the cells, can you blame him?
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	5
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	1
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	6
+	Impact:	6
+[SKILLS]
+	shotguns:	7
+	unarmed combat:	5
+BREAK
+#3719
+Keywords:	murderer man evil shady shackled
+Name:	a shady murderer
+RoomDesc:$
+A shady looking man is lying here, shackled to the wall.
+
+~
+LookDesc:$
+The murderer is obviously guilty of some vicious crime, be it rape or the
+pillaging of small flightless water-fowl. Unfortunately, the cops are unable
+to charge with him any crime due to lack of evidence. So, Lone Star decided to
+throw the guy into this cesspool.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1110
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	5
+	Cha:	0
+	Int:	2
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	5
+	Impact:	5
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#3720
+Keywords:	officer man lone star
+Name:	a Lone Star Officer
+RoomDesc:$
+A Lone Star Officer patrols the precinct, looking out for strangers.
+
+~
+LookDesc:$
+The Lone Star officer is the backbone of Lone Star's strength. Although not
+specifically trained for any special operations, without these officers Lone
+Star would not have undercover operatives or people to walk the beat.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001001
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	66
+	Ballistic:	5
+	Impact:	5
+[SKILLS]
+	pistols:	6
+	unarmed combat:	5
+BREAK
+#3721
+Keywords:	oronado man spanish chef lone tubby
+Name:	Oronado the tubby Chef
+RoomDesc:$
+Oronado the chef stands here, handing out piping hot food.
+
+~
+LookDesc:$
+Oronado has been working for the force for most of his life, his talents
+ranging from stir-fried szechuan soykaf nutri-noodles to scrambled egg. You
+name it, he can cook it up, no doubt about it. The entire force relies on
+Oronado to come up with enough food to keep the officers going, and at the
+same time supply them with the healthiest nutrients.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#3722
+Keywords:	chief instructor man
+Name:	the Chief Instructor
+RoomDesc:$
+The Chief Instructor shows one of the students a couple of worthy tips. 
+
+~
+LookDesc:$
+The Chief is one of the most respected officers at the precinct, being the the
+teacher of so many excellent students. He is well known locally as well,
+performing as one of the best street officers around. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000100000001001
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	7
+	Str:	5
+	Cha:	6
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	6
+	Impact:	4
+	Cash:	50
+	Bank:	150
+[SKILLS]
+	unarmed combat:	8
+	athletics:	6
+	firearms:	7
+	biotech:	6
+BREAK
+END

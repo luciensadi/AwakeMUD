@@ -1,0 +1,1119 @@
+#3301
+Keywords:	White Buffalo
+Name:	a White Buffalo
+RoomDesc:$
+A white buffalo stands here, eating fresh straw.
+
+~
+LookDesc:$
+This massive White Buffalo glares back at visitors and intruders alike,
+blatently unhappy with its captivity. It has a coat of brilliant white and
+sports two short, stubby black horns atop its head. This hefty creature is
+very territorial, and aside from being generally pissed off all the time, it
+has little reason -not- to attack anyone trespassing in its pen. 
+~
+ArriveMsg:	stampedes in from
+LeaveMsg:	stampedes off
+MobFlags:	1000000101000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	6
+	Str:	12
+	Cha:	2
+	Int:	3
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	300
+	Weight:	600
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#3302
+Keywords:	bandit
+Name:	a Bandit
+RoomDesc:$
+A bandit is here, staring you down curiously from its perch. 
+
+~
+LookDesc:$
+This rather large raccoon looking creature is a Bandit, an awakened version of
+said animal. It is nearly a meter in length and has disproportionately long
+front legs, as well as opposable thumbs, which it puts to good use picking
+locks and doing its best to escape captivity. They are very fond of shiny
+objects and with steal/gather any they get their paws on. 
+~
+ArriveMsg:	scampers in from
+LeaveMsg:	scampers off
+MobFlags:	1000010001000
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	4
+	Str:	2
+	Cha:	4
+	Int:	5
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	40
+	Weight:	30
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#3304
+Keywords:	uncle al
+Name:	Uncle Al
+RoomDesc:$
+Uncle Al is flipping burgers on the grill here.
+
+~
+LookDesc:$
+Uncle Al is a large, older gentleman that is almost completely bald. He
+seems to really enjoy cooking and wears a constant smile in addition to
+his greasy, 'kiss the cook' apron.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	2
+	Str:	4
+	Cha:	6
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#3305
+Keywords:	secretary
+Name:	a bored secretary
+RoomDesc:$
+A rather bored looking secretary is doing her nails here. 
+
+~
+LookDesc:$
+The secretary glances in your direction with a severely bored expression.
+How dare you inturrupt her self-manicuring session?!? 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+	Cash:	25
+	Bank:	125
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#3306
+Keywords:	curator zoo
+Name:	the zoo curator
+RoomDesc:$
+The zoo curator is behind his desk, going over some paperwork. 
+
+~
+LookDesc:$
+The curator is an older gentleman with an almost exhausted appearance about
+him. He appears to be very busy doing paperwork, so much so that he doesn't
+even seem to notice when people enter his office. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Cash:	125
+	Bank:	125
+[SKILLS]
+	unarmed combat:	5
+BREAK
+#3307
+Keywords:	century ferret
+Name:	a century ferret
+RoomDesc:$
+A century ferret playfully climbs around its enclosure. 
+
+~
+LookDesc:$
+The Century Ferret was the first Awakened species to be recorded, and the news
+station KSAF first discovered this animal on January 1st, 2000, which is where
+its namesake comes from. It is a sleek, playful little critter, and while not
+very aggressive, it has been known to attack (meta)humans who have cornered
+it. 
+~
+ArriveMsg:	slinks in from
+LeaveMsg:	slinks off
+MobFlags:	101000010011100
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	6
+	Str:	2
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	30
+	Weight:	20
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#3308
+Keywords:	firedrake
+Name:	a firedrake
+RoomDesc:$
+A firedrake stalks around its enclosure here. 
+
+~
+LookDesc:$
+The firedrake resembles a western dragon, except for the fact it is wingless.
+It crawls around on all fors similar to a lizard, simply on a much larger
+scale. It's scales are a reddish brown colour which fdes to a light tan on its
+underbelly. This highly territorial and aggressive predator attacks using both
+its powerful tail and maw, and will attack anything that dares to enter its
+enclosure. 
+~
+ArriveMsg:	crawls in from
+LeaveMsg:	crawls off
+MobFlags:	101000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	6
+	Cha:	2
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	300
+	Impact:	1
+[SKILLS]
+	unarmed combat:	6
+BREAK
+#3309
+Keywords:	saber-tooth cat saber tooth
+Name:	a saber-tooth cat
+RoomDesc:$
+A saber-tooth cat is here, preening its fur. 
+
+~
+LookDesc:$
+The saber-tooth cat sports two large, curved fangs that protrude down over its
+lower jaw, which it uses with lethal effectiveness against its prey. While it
+only hunts when hungry, that certainly won't stop it from attacking if anyone
+wanders into its holding pen. 
+~
+ArriveMsg:	stalks in from
+LeaveMsg:	stalks off
+MobFlags:	1000000101000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	6
+	Cha:	2
+	Int:	4
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	200
+[SKILLS]
+	unarmed combat:	6
+BREAK
+#3310
+Keywords:	shadowhound
+Name:	a shadowhound
+RoomDesc:$
+A shadowhound senses you as an intruder and attacks!
+
+~
+LookDesc:$
+This nocturnal predator resembles a huge dog and is normally found in packs.
+It sports a gray fur coat with various black patches, which it can shift by
+moving the muscles beneath, providing it with excellent night camouflage. He
+doesn't look particularly happy about having his territory encroached upon,
+and chances are he'll attack anything that enters his pen. 
+~
+ArriveMsg:	pads in from
+LeaveMsg:	pads off
+MobFlags:	111000
+AffFlags:	10000000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	5
+	Cha:	3
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	120
+	Weight:	60
+[SKILLS]
+	unarmed combat:	5
+BREAK
+#3311
+Keywords:	black annis
+Name:	a black annis
+RoomDesc:$
+A black annis howls in outrage at having its territory invaded. 
+
+~
+LookDesc:$
+This aggressive and highly territorial and solitary hunter resembles some sort
+of ape. It has hair atop its head, which travels down along its spine,
+sporting thick tufts upon its shoulders and hands as well. It has rather nasty
+looking claws, which it uses for both chasing down and catching prey, as well
+as digging out lairs amongst the trunks of old trees. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10101000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	6
+	Str:	10
+	Cha:	3
+	Int:	2
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	80
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#3312
+Keywords:	bombardier
+Name:	a bombardier
+RoomDesc:$
+A bombardier glides from tree to tree overhead. 
+
+~
+LookDesc:$
+This awakened version of the flying squirrel resembles a slightly larger
+version of its progenitor. It has light tan fur with a shading of white on its
+belly as well as a black stripe running down along its spine. These little
+creatures are notorious for dropping things from trees onto unsuspecting
+passer bys, hence its namesake. 
+~
+ArriveMsg:	glides in from
+LeaveMsg:	glides off
+MobFlags:	1000010001100
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	6
+	Str:	1
+	Cha:	5
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	20
+	Weight:	5
+[SKILLS]
+	unarmed combat:	2
+BREAK
+#3313
+Keywords:	Duane scrawny blonde ork
+Name:	Duane
+RoomDesc:$
+A scrawny, blonde haired ork named Duane is here to serve you. 
+
+~
+LookDesc:$
+Duane has fulfilled his life long dream by owning his own business, and while
+it has not been too successful as of yet, he just KNOWS that his next
+brainstorm....the wacky wall walkers, will go over big time and he'll be rich!
+Filthy fragging rich! 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	6
+	Str:	3
+	Cha:	3
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	90
+[SKILLS]
+	unarmed combat:	5
+BREAK
+#3314
+Keywords:	piasma massive
+Name:	a massive piasma
+RoomDesc:$
+A massive piasma growls and paces back and forth in its cage. 
+
+~
+LookDesc:$
+This carnivore descended from the common black bear and shares many of its
+traits. While non-territorial, that certainly doesn't mean the creature won't
+defend itself if provoked or startled, or for that matter cornered, which is
+exactly what happens when anyone enters the cage. 
+~
+ArriveMsg:	tramples in from
+LeaveMsg:	tramples off
+MobFlags:	101000
+AffFlags:	0
+Race:	Troll
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	6
+	Str:	13
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	600
+	Impact:	2
+[SKILLS]
+	unarmed combat:	6
+BREAK
+#3315
+Keywords:	icedrake
+Name:	an vicious looking icedrake
+RoomDesc:$
+An icedrake crawls around the frozen ground in its pen. 
+
+~
+LookDesc:$
+This icedrake closely resembles a western dragon without wings. It moves along
+on all fours like a giant lizard, using both its powerful tail and maw to
+savagely attack anything that dares enter its domain. It is an aggressive and
+fearless predator, and will attack creatures several times larger than itself
+without a moment of hestitation. The ground around it freezes over as its aura
+of cold sucks the heat from the air itself. 
+~
+ArriveMsg:	crawls in from
+LeaveMsg:	crawls off
+MobFlags:	101000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	6
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	300
+[SKILLS]
+	unarmed combat:	6
+BREAK
+#3316
+Keywords:	scorpyrine scorpion
+Name:	a scorpyrine
+RoomDesc:$
+A massive scorpion skitters around inside of this pen. 
+
+~
+LookDesc:$
+This massive arachnid sports two large and nasty looking claws, as well as an
+extremely sharp, curved stinger with two large venom glands. Every inch of its
+body is covered with shiney black chitinous plates, helping it blend in
+durings it nocturnal hunting sessions. If provoked if it will not hestitate to
+attack even the largest of (meta)humans, and will be sure to put those claws
+and venomous stinger to good use. 
+~
+ArriveMsg:	skitters in from
+LeaveMsg:	skitters off
+MobFlags:	1000000101000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Sting
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	5
+	Str:	4
+	Cha:	1
+	Int:	4
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	40
+	Weight:	40
+	Impact:	1
+[SKILLS]
+	unarmed combat:	5
+BREAK
+#3317
+Keywords:	juggernaut armadillo garantuan
+Name:	An absolutely gargantuan juggernaut
+RoomDesc:$
+An absolutely gargantuan armadillo stomps around its enclosure. 
+
+~
+LookDesc:$
+The juggernaut is a giant variation of the common armadillo, which reaches
+lengths on average as fourteen meters, or even more on some occasions. This
+creature is an aggressive hunter and omnivore, devouring anything it can get
+ahold of, from plants and even people if they're stupid enough not to haul ass
+in the opposite direction. Its absolutely immense body is covered with thick
+jointed armour, making it very hard to take down. 
+~
+ArriveMsg:	stomps in from
+LeaveMsg:	stomps off
+MobFlags:	101000
+AffFlags:	0
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Crush
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	6
+	Str:	42
+	Cha:	1
+	Int:	3
+	Wil:	9
+	Mag:	0
+[POINTS]
+	Height:	300
+	Weight:	800
+	Ballistic:	8
+	Impact:	8
+[SKILLS]
+	unarmed combat:	6
+BREAK
+#3318
+Keywords:	small child
+Name:	a small child
+RoomDesc:$
+A small child is throwing a tantrum here.
+
+~
+LookDesc:$
+This sniveling little brat is whining because his parents say it's time
+to go home. Someone should shut this kid up!
+~
+ArriveMsg:	stumbles in from
+LeaveMsg:	stumbles
+MobFlags:	10001100
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	3
+	Str:	1
+	Cha:	1
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	70
+	Weight:	30
+	Cash:	10
+[SKILLS]
+	unarmed combat:	1
+BREAK
+#3319
+Keywords:	janitor
+Name:	a janitor
+RoomDesc:$
+A janitor cleans up garbage here.
+
+~
+LookDesc:$
+The janitor has a very bored look on his face. He can't wait till the
+weekend.
+~
+ArriveMsg:	sweeps his way in from
+LeaveMsg:	sweeps
+MobFlags:	1100
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	1
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Cash:	30
+	Bank:	50
+[SKILLS]
+	unarmed combat:	3
+	clubs:	3
+BREAK
+#3320
+Keywords:	guard security troll
+Name:	A large troll security guard
+RoomDesc:$
+A large troll security guard for the zoo keeps the peace here. 
+
+~
+LookDesc:$
+This large troll was hired on for a security job for one simple reason, he
+looks like he can do the job, afterall, trolls are tough aren't they? Or, at
+least, that's the general impression. While he probably knows how to shoot the
+sidearm at his hip straight, chances are he just has it to make sure none of
+the animals get out of hand... Just in case. 
+~
+ArriveMsg:	patrols in from
+LeaveMsg:	patrols
+MobFlags:	10000001100000001000
+AffFlags:	0
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	6
+	Str:	8
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+	Ballistic:	3
+	Impact:	3
+	Cash:	35
+	Bank:	65
+[SKILLS]
+	clubs:	4
+	unarmed combat:	3
+	pistols:	4
+BREAK
+#3321
+Keywords:	zookeeper
+Name:	a zookeeper
+RoomDesc:$
+A zookeeper flashes a smile as visitors pass by him. 
+
+~
+LookDesc:$
+The zookeeper is tasked with traveling around the zoo and keeping an eye on
+the exhibits, as well as making sure all of the animals here at the zoo are
+well cared for. He honestly seems to enjoy his job, which is odd to see in
+this day and age.. A wageslave who likes being a slave, weird. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	35
+	Bank:	50
+[SKILLS]
+	clubs:	4
+BREAK
+#3322
+Keywords:	woman older
+Name:	a hysterical woman
+RoomDesc:$
+An older woman is seated here, sobbing and weeping hysterically. 
+
+~
+LookDesc:$
+The woman is frantically searching for her lost child. She is very distraught
+and not paying much attention to her surroundings...looks like an easy target
+for an evil-doer.
+~
+ArriveMsg:	rushes in from
+LeaveMsg:	rushes
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	4
+	Int:	3
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	50
+	Bank:	50
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#3323
+Keywords:	baby goat
+Name:	a baby goat
+RoomDesc:$
+A baby goat waits to be petted.
+
+~
+LookDesc:$
+This little, cute creature looks at you, expecting to be petted. It looks
+to be about 6 months old or so, and is very friendly.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	3
+	Str:	1
+	Cha:	4
+	Int:	2
+	Wil:	3
+	Mag:	1
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	clubs:	4
+BREAK
+#3324
+Keywords:	lion
+Name:	a large, albeit old lion
+RoomDesc:$
+A large, albeit old lion growls in outrage and attacks anything in its domain.
+
+~
+LookDesc:$
+Better known as the 'King' of the jungle, and there's a reason behind that.
+He's quite the large specimen, certainly larger than most, and even if he has
+gotten a little slower in his old age he's still very dangerous. If you're
+going to tangle with this prideful creature than you're either extremely
+brave, or extremely stupid. Your best bet would to be to run before he notices
+you. 
+~
+ArriveMsg:	pads in from
+LeaveMsg:	pads off
+MobFlags:	101000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	6
+	Str:	8
+	Cha:	4
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	250
+[SKILLS]
+	unarmed combat:	6
+BREAK
+#3325
+Keywords:	chimpanzee chimp primate
+Name:	a chimpanzee
+RoomDesc:$
+A chimpanzee swings from branch to branch here.
+
+~
+LookDesc:$
+This intelligent primate returns your gaze inquisitively, seemingly as
+interested at trespassers as they are wary of their presence. They stand
+around four feet in height and have lanky limbs, having exceptional strength
+for their size and stature. Their bodies are covered in thick, dark orange
+coloured hair aside from their faces, palms and soles of their feet. 
+~
+ArriveMsg:	wanders in from
+LeaveMsg:	wanders off
+MobFlags:	10001100
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	8
+	Str:	6
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	120
+	Weight:	70
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#3326
+Keywords:	bear grizzly
+Name:	a large grizzly bear
+RoomDesc:$
+A grizzly bear growls ferociously at intruders at charges! 
+
+~
+LookDesc:$
+This grizzly bear is large even by normal standards, and while just a common
+and mundane species, it is still extremely dangerous if provoked. It's thick
+matted fur is several shades of brown and covers it hulking form, which is
+probably a bit flabby from not being able to get the type of exercise it would
+in the wild. Instead, it seems content to lounge around most of the day and
+eat whatever is tossed into its cage. 
+~
+ArriveMsg:	lumbers in from
+LeaveMsg:	lumbers off
+MobFlags:	1101000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	6
+	Str:	8
+	Cha:	3
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	300
+	Weight:	500
+[SKILLS]
+	unarmed combat:	5
+BREAK
+#3327
+Keywords:	zoo employee
+Name:	a zoo employee
+RoomDesc:$
+A zoo employee is slacking off here.
+
+~
+LookDesc:$
+This zoo employee seems to be an expert at doing nothing, though that isn't an
+accident by any means, and instead should be attributed to doing his absolute
+best at avoiding anything resembling work. He has a broom nearby, in case a
+boss happens to walk by, so he can at least look busy. He pays no attention to
+visitors or zoo animals alike. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001100
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	2
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Cash:	20
+	Bank:	80
+[SKILLS]
+	clubs:	4
+BREAK
+#3328
+Keywords:	sheep baby fluffy
+Name:	a fluffy, ^Wwhite^N baby sheep
+RoomDesc:$
+A fluffy, ^Wwhite^N baby sheep is grazing here. 
+
+~
+LookDesc:$
+This little baby sheep has a fluffy ^Wwhite^N wool coat and spends most of its
+time either sleeping, grazing, or just plain looking cute, which he does very
+well. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001010
+AffFlags:	0
+Race:	Undef
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	2
+	Str:	1
+	Cha:	4
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	40
+	Weight:	20
+[SKILLS]
+	unarmed combat:	1
+BREAK
+#3329
+Keywords:	horse miniature over-the-hill old
+Name:	an over-the-hill miniature horse
+RoomDesc:$
+An over-the-hill miniature horse munches on hay here. 
+
+~
+LookDesc:$
+This miniature horse has certainly seen his fair share, and by the looks of
+it, most of his best days are far behind him. While relatively healthy and
+well-fed, he takes his time with everything he does, wether its eating hay or
+going to get something to drink. Despite being so old, he is very friendly and
+loves to be pet by children, though he'll still bite any of them if they pull
+on his tail or mane. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001010
+AffFlags:	0
+Race:	Undef
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	4
+	Str:	2
+	Cha:	4
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	90
+	Weight:	50
+[SKILLS]
+BREAK
+#3330
+Keywords:	overweight visitor
+Name:	an overweight visitor
+RoomDesc:$
+An overweight visitor chews on a burger as he wanders between exhibits. 
+
+~
+LookDesc:$
+This guy definitely needs some exercise, and while he may be getting a bit of
+it by walking around the zoo to see the different exhibits, it's all wasted
+effort due to the fact he can't go more than a few minutes without shoving
+another burger in his mouth. The clothes he's wearing are a bit outdated and a
+little tight, not to mention greasy, no doubt from his high octane workout
+regime. 
+~
+ArriveMsg:	waddles in from
+LeaveMsg:	waddles
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	5
+	Cha:	2
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	120
+	Cash:	80
+	Bank:	85
+[SKILLS]
+	unarmed combat:	5
+BREAK
+#3331
+Keywords:	child small crying bawling
+Name:	a small child bawling his eyes out
+RoomDesc:$
+A small child is here, bawling his poor little eyes out. 
+
+~
+LookDesc:$
+This poor little child seems to be lost, he's practically bawling his eyes out
+since he can't find his mother. He can barely get a few words out inbetween
+sniffs and stuttering inhales of breath. 
+~
+ArriveMsg:	stumbles in from
+LeaveMsg:	stumbles
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	60
+	Weight:	20
+[SKILLS]
+BREAK
+#3332
+Keywords:	guard security head
+Name:	a head security guard for the zoo
+RoomDesc:$
+The head zoo security guard is here, flipping through a magazine. 
+
+~
+LookDesc:$
+This security guard seems to be the head honcho of the zoo's security forces,
+which aren't really anything more than a few lightly armed rent-a-cops who are
+only kept around in case one of the animals happens to escape and threaten the
+safety of visitors. How do you know he's the head honcho around here? Simple,
+he gets to sit inside of an air-conditioned security office all day while all
+the other chumps have to patrol around outside. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	110
+	Cash:	50
+	Bank:	50
+[SKILLS]
+	unarmed combat:	5
+	clubs:	5
+	pistols:	5
+BREAK
+END

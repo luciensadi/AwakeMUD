@@ -1,0 +1,49 @@
+#2501
+Keeper:	2507
+ProfitBuy:	2.30
+ProfitSell:	1.00
+Random:	4
+Open:	8
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough creds!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d creds.
+Sell:	Here's your %d creds.
+Flags:	100
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	2510
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	2511
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	453
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	450
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	2508
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	2507
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	2506
+		Type:	Always
+		Stock:	0
+BREAK
+END

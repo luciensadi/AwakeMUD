@@ -1,0 +1,127 @@
+#5600
+Keywords:	drexl man rasta rastafarian strange
+Name:	Drexl
+RoomDesc:$
+A strange Rastafarian stands glaring at you. 
+
+~
+LookDesc:$
+Ewwww. This guy is sleaze, to a greater extent than anything you've seen
+before. Long, greasy dreads dangle over his bloodshot eyes, sweat dribbles
+onto the floor from his fevered brow. Lovely. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11000101010100001001100
+AffFlags:	1000000000001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Stab
+[ATTRIBUTES]
+	Bod:	13
+	Qui:	14
+	Str:	10
+	Cha:	1
+	Int:	5
+	Wil:	9
+	Mag:	8
+[POINTS]
+	Height:	0
+	Weight:	87
+	Ballistic:	10
+	Impact:	9
+	Cash:	200
+[SKILLS]
+	unarmed combat:	5
+	machine guns:	7
+BREAK
+#5601
+Keywords:	newscaster brighton early KSAF brown tweed suit human male man
+Name:	A smooth-voiced KSAF newscaster
+RoomDesc:$
+A man in a brown tweed suits sits jacked into the equipment here. 
+
+~
+LookDesc:$
+This man wouldn't win any beauty contents, but his omni-present brown tweed
+suit and his silky voice are easy to remember: this is Brighton Early, the
+KSAF ActionNews coorespondent. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	10
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	4
+	Impact:	3
+	Cash:	4000
+	Bank:	10000
+[SKILLS]
+	pistols:	5
+	computers:	5
+	electronics:	5
+	negotiation:	12
+	interrogation:	12
+BREAK
+#5606
+Keywords:	Chrono goddess operator lady
+Name:	Chrono, the Goddess Operator
+RoomDesc:$
+Chrono is here, in a state of endless panic as she hurries about her task. 
+
+~
+LookDesc:$
+A lovely young Goddess with short silver hair and emerald eyes stand before
+you.  Always in a hurry to complete her tasks. As all the information passes
+through her post, she makes sure that each and every detail goes to where its
+needed.  Not a thankful job, but very important.  And she's doing
+exceptionally well in the 30 years she's been in service. 
+~
+ArriveMsg:	glides from
+LeaveMsg:	glides
+MobFlags:	101010000101100001001010
+AffFlags:	1000000000000001001000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Pierce
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	13
+	Str:	7
+	Cha:	20
+	Int:	16
+	Wil:	12
+	Mag:	6
+[POINTS]
+	Height:	183
+	Weight:	71
+	Level:	5
+	Ballistic:	10
+	Impact:	10
+	Cash:	30000
+	Bank:	90000
+	Karma:	1
+[SKILLS]
+	pole arms:	6
+	unarmed combat:	5
+	computers:	7
+	corporate etiquette:	7
+	:	7
+BREAK
+END

@@ -1,0 +1,1758 @@
+#24500
+Keywords:	handgun sidearm pistol light h&k h k hk and koch heckler 13 7 p m m13 p7 p7m13
+Name:	A Heckler and Koch P7M13 Light Pistol
+RoomDesc:$
+A short-barreled hammerless light pistol lies here.~
+LookDesc:$
+The P7 is probably the greatest light pistol on the market.  Chambered for a
+cartridge bordering on Heavy Pistol, the 9x19mm or 9mm NATO round, the P7
+outperforms any other pistol in it's size class on the market. The cold hammer
+forged polygonal bore barrel is top quality, and unlike the Glock handguns
+which simply have a concealed hammer, the P7 truly is hammerless, using a
+spring propelled firing pin. Tied into the squeeze-cocker at the front of the
+grip, the firing pin is totally blocked if not in the hand of the firer,
+preventing accidental discharges from dropping entirely.  The gun sits low in
+your hand, nearly adjacent to your index finger. Because of this, it's a
+simple matter to point the P7 instinctively, becoming a literal 'point and
+shoot' handgun.  The magazine capacity is 13 rounds, and this military model
+is loaded with +P Black Talon ammunition. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	100000000000000
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	8
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	6
+	Val1:	1
+	Val3:	6
+	Val4:	11
+	Val5:	13
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+	Val10:	4
+BREAK
+#24501
+Keywords:	pistol handgun heckler koch HK H&K tactical heavy USP45
+Name:	a Heckler and Koch USP45 Tactical heavy pistol
+RoomDesc:$
+A wicked looking black handgun is lying here.~
+LookDesc:$
+The Heckler and Koch USP45 Tactical is essentially a scaled-down version of
+the Mark 23 Model 0, or SOCOM handgun. It features a threaded barrel and
+integral mounting rails situated overbarrel. Though less accurate than the
+SOCOM due to it's shorter barrel, it is still extremely effective, due mostly
+to the higher than standard powder load they implement. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.50
+	Barrier:	12
+	Cost:	1850
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	12
+	Val6:	12
+	Val7:	5105
+	Val9:	-1
+	Val10:	4
+BREAK
+#24502
+Keywords:	assault rifle HK-G38 modular Heckler Koch
+Name:	An HK-G38 assault rifle
+RoomDesc:$
+A modular assault rifle is laying here.~
+LookDesc:$
+The HK-G38 was designed by the famous German arms manufacturer, Heckler and
+Koch. This particular model is a modular weapons system, also known as the
+HK-G38 modular carbine, and is based on the outdated G3 rifle. It is primarily
+used for close quarters shooting and close protection detail, but depending on
+its configuration, it can be used for much more than that. It comes standard
+with a top-mounted laser sight, an improved gas vent II and an underbarrel
+foregrip. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	12
+	Cost:	4000
+	AvailTN:	12
+	AvailDay:	7.00
+	LegalNum:	2
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	30
+	Val7:	5105
+	Val8:	650
+	Val9:	28618
+	Val10:	28
+BREAK
+#24504
+Keywords:	HK-G38 Heckler Koch LMG light machinegun modular
+Name:	An HK-G38 drum-fed light machinegun
+RoomDesc:$
+A modular, drum-fed light machinegun rests here.~
+LookDesc:$
+The HK-G38 was designed by the famous German arms manufacturer, Heckler and
+Koch. This particular model is a modular weapons system, also known as the
+HK-G38 modular carbine, and is based on the outdated G3 rifle. It is primarily
+used for close quarters shooting and close protection detail, but depending on
+its configuration, it can be used for much more than that. This particular
+configuration is a heavier machinegun barrel, a drum-fed firing mechanism, and
+features both burstfire and full-automatic modes. It comes standard with a
+top-mounted laser sight, an improved gas vent II and an underbarrel foregrip.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	4.00
+	Barrier:	6
+	Cost:	6500
+	AvailTN:	12
+	AvailDay:	7.00
+	LegalNum:	3
+	LegalCode:	8
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	15
+	Val4:	19
+	Val5:	100
+	Val7:	5105
+	Val8:	650
+	Val9:	28618
+	Val10:	24
+BREAK
+#24506
+Keywords:	pistol heavy auto mag model 280
+Name:	an Auto Mag model 280 heavy pistol
+RoomDesc:$
+A polished, heavy pistol waits to be picked up here.~
+LookDesc:$
+The original Auto Mag pistol was conceived by American businessman Harry
+Sanford during late 1960s. Sanford envisioned the semiautomatic pistol,
+similar in power to the very powerful Smith & Wesson .44 Magnum revolvers, but
+with less felt recoil and a higher round capacity. This particular production
+model number is 280, and is made to fire the trusty .44AMP caliber round. The
+key niche for such monstrous pistols was handgun hunting (a sport rather
+popular in USA), as well as silhouette shooting. It must be noted that back in
+the early 1970's Auto Mag pistols were in a class of its own, as there were no
+other production pistols with such power; rivals like Wildey and Desert Eagle
+appeared later than the old grand daddy Auto Mag. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.60
+	Barrier:	8
+	Cost:	1250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	7
+	Val8:	-1
+	Val10:	4
+BREAK
+#24507
+Keywords:	revolver pistol colt detective special snub-nose
+Name:	a Colt Detective Special snub-nose revolver
+RoomDesc:$
+An old snub-nose revolver rests here.~
+LookDesc:$
+The Colt Detective Special is one of the famous Colt six-guns, a classic
+snub-nose style, swing out cylinder, double action compact revolver with fixed
+blade front sight and notch-style rear sights and full length ejector rod. It
+was very popular among plain-cloth cops, security men and others who needed a
+compact, reliable handgun. The Colt Detective Special was introduced in 1927
+and manufactured until 1936. Lately, Colt at least twice reintroduced this
+popular revolver, last time in 1973 as the Colt Detective Special 3rd issue,
+which this particular model is. Chambered for a .38 special round, this baby
+packs enough of a punch to still be a contender in the shadows. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.25
+	Barrier:	6
+	Cost:	850
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	6
+	Val8:	-1
+	Val9:	-1
+	Val10:	2
+BREAK
+#24520
+Keywords:	rifle mauser K98k carbine bolt-action
+Name:	a Mauser K98k bolt-action rifle
+RoomDesc:$
+An old bolt-action rifle rests against the wall here.~
+LookDesc:$
+Based on the Mauser model 1898 rifle, also known as the Gewehr 98, this rifle
+was designed from the experience, gained on previous Mauser designs, and first
+appeared as a standard German army infantry rifle. This fine design was
+slightly altered to become the K98k (Karbiner Kurz, or short carbine), a
+somewhat shorter, lighter and handier version of the original one. The model
+98 rifle is a manually operated, magazine fed, bolt action rifle. The magazine
+and the bolt action itself are the two most famous features of the model 98,
+which is simple, extremely strong and a well thought out design. 
+~
+Type:	Weapon
+WearFlags:	10001000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	4.00
+	Barrier:	6
+	Cost:	3500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val3:	11
+	Val4:	12
+	Val5:	5
+	Val8:	-1
+	Val10:	2
+BREAK
+#24521
+Keywords:	rifle bolt-action Steyr Mannlicher M95/30
+Name:	a Steyr Mannlicher M95/30 bolt-action rifle
+RoomDesc:$
+A vintage bolt-action rifle has been left here.~
+LookDesc:$
+The Steyr M1895 rifle, also known as the Steyr-Mannlicher M95 straight pull
+rifle, was developed by famous Austrian arms designer Ferdinand Ritter Von
+Mannlicher. Based on his previous M1890 design, this rifle was manufactured in
+Austro-Hungarian Empire at state arms factories in Steyr (Austria) and
+Budapest (Hungary). More than 3 millions of M95 rifles were produced between
+1895 and 1918. These rifles are generally considered as reasonably strong and
+accurate, but somewhat sensitive to mud and dirt, as most others military
+straight pull bolt action rifles are. 
+~
+Type:	Weapon
+WearFlags:	10001000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	3.30
+	Barrier:	6
+	Cost:	3450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val3:	11
+	Val4:	12
+	Val5:	5
+	Val8:	-1
+	Val10:	2
+BREAK
+#24522
+Keywords:	Carbine rifle battle Jungle Lee-Enfield SMLE No.5
+Name:	a Lee-Enfield SMLE No.5 Jungle carbine
+RoomDesc:$
+A vintage battle rifle rests here, going to waste.~
+LookDesc:$
+The Lee-Enfield series of rifles was born in 1895 as a marriage between the
+magazine and bolt action. The SMLE No. 5 "Jungle Carbine" is a manually
+operated, rotating bolt action magazine fed rifle. The Lee-designed SMLE
+magazine itself is the first easily distinguishable feature. This particular
+model is the Jungle Carbine, a shorter and lighter design than its
+predecessors. In general the SMLE series were ones of the best bolt action
+battle rifles, as they are fast-firing, powerful and reliable. 
+~
+Type:	Weapon
+WearFlags:	10001000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	3.25
+	Barrier:	6
+	Cost:	3350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val3:	11
+	Val4:	12
+	Val5:	10
+	Val8:	-1
+	Val10:	2
+BREAK
+#24523
+Keywords:	rifle bolt-action Mosin-Nagant M1938 carbine
+Name:	a Mosin-Nagant M1938 bolt-action rifle
+RoomDesc:$
+An old bolt-action rifle has been left to collect dust here.~
+LookDesc:$
+The Mosin-Nagant rifle, known in Russia as a "Vintovka Mosina" (Mosin Rifle),
+was developed under the government commission in the late 1880s and early
+1890s, and was officially adopted for service by the Russian Tsar in 1891. The
+Mosin-Nagant rifle is a bolt operated, magazine fed rifle. It uses an
+integral, single stack magazine, loaded from the clip chargers, with capacity
+for 5 rounds. The positive aspects of the Mosin rifle is reliability and
+simplicity of both manufacture and service, a paramount for generally poorly
+trained, low-educated and poorly funded Russian army of the time. This
+particular model is an M1938 carbine, which is slightly lighter and shorter
+than its long rifle breathren. 
+~
+Type:	Weapon
+WearFlags:	10001000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	3.90
+	Barrier:	6
+	Cost:	3450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val3:	11
+	Val4:	12
+	Val5:	5
+	Val8:	-1
+	Val10:	2
+BREAK
+#24524
+Keywords:	rifle bolt-action Springfield M1903A4 vintage
+Name:	a Springfield M1903A4 bolt-action rifle
+RoomDesc:$
+A vintage, bolt-action rifle is set aside here.~
+LookDesc:$
+The M1903A4 rifle is a manually operated, rotating bolt, magazine fed rifle.
+With the outbreak of the Second World War, the US army again found itself
+short of rifles, and while the standard US rifle was already a semi-automatic
+Garand M1, it was decided they needed to be supplemented by simpler and
+cheaper bolt-action rifles. The Remington Arms company was set up to create a
+simplified version for wartime production with variants of the M1903. Cheap,
+simple, generally reliable, making it a perfect addition to any collection. 
+~
+Type:	Weapon
+WearFlags:	10001000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	3.94
+	Barrier:	6
+	Cost:	3500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val3:	11
+	Val4:	12
+	Val5:	5
+	Val8:	-1
+	Val10:	2
+BREAK
+#24525
+Keywords:	rifle M1 Garand semi-automatic
+Name:	an M1 Garand semi-automatic rifle
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+The story of the first semi-automatic rifle ever widely-adopted as a standard
+military arm began after the start of the First World War, when the inventor
+John C. Garand began to develop semi-automatic (or self-loading) rifles. When
+the USA entered the WWII, the mass production of the M1 rifles was set up at
+the Springfield armory along with Winchester. During the war, both companies
+developed about 4 million M1 rifles, making the M1 Garand the most widely used
+semi-automatic rifle of the World War 2. During WWII, the M1 Garand proved
+itself as a reliable and powerful weapon, gaining an almost cult following in
+the process, and for good reason. 
+~
+Type:	Weapon
+WearFlags:	10001000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	4.00
+	Barrier:	6
+	Cost:	5250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val3:	11
+	Val4:	12
+	Val5:	8
+	Val8:	-1
+	Val10:	4
+BREAK
+#24526
+Keywords:	rifle carbine SKS Simonov self-loading semi-automatic
+Name:	a Simonov SKS self-loading carbine
+RoomDesc:$
+An old semi-automatic rifle rests here.~
+LookDesc:$
+The experience gained during the first part of the World War 2 showed some
+deficiencies of the existing rifles, both manually operated and
+semi-automatic. Those rifles were too long and heavy, and fired too powerful
+cartridge that had excessive recoil and effective range of about 2000 meters,
+while most fights were at distances of no more than 600-800 meters. The SKS
+(Samozaryadnyj Karabin Simonova = Simonov Self-loading Carbine) was designed
+by famous Russian arms designer Simonov, who set out to design a gas operated,
+magazine fed, self-loading rifle. Being a sound, but outdated military design,
+the SKS is a great all-around civilian arm, capable of numerous functions:
+small and even a medium game hunting, plinking or home defense. 
+~
+Type:	Weapon
+WearFlags:	10001000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	3.86
+	Barrier:	6
+	Cost:	3250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val3:	11
+	Val4:	12
+	Val5:	10
+	Val8:	-1
+	Val10:	4
+BREAK
+#24527
+Keywords:	Rifle lever-action Henry Repeating Arms Big Boy
+Name:	a Henry Repeating Arms 'Big Boy' lever-action rifle
+RoomDesc:$
+An old lever-action rifle sits here, waiting to be cocked.~
+LookDesc:$
+An American classic, the Henry Repeating Arms lever action rifle has seen
+plenty of action in its hay day. Featuring a 20" octagonal barrel, it is bored
+to fire a .357 Magnum round with a 1:38rh twist. Its straight-grip polished
+American walnut stock and brass finishings make it a piece of art, but don't
+let it fool you into thinking its only capable of being a mantle piece. Its
+trigger guard and cocking loop has been widened to make it easier for anyone
+wearing gloves, or even those with larger hands and fingers. 
+~
+Type:	Weapon
+WearFlags:	10001000010000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	6
+	Cost:	5250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val3:	11
+	Val4:	12
+	Val5:	10
+	Val10:	4
+BREAK
+#24530
+Keywords:	Pistol P48 Heckler & Koch HK H&K hold-out
+Name:	a Heckler & Koch P48 pistol
+RoomDesc:$
+A sleek little hold-out pistol has been left here.~
+LookDesc:$
+The HK P48 is a small, easily concealed hold-out pistol, which can often not
+be seen until it's too late. Smaller than a standard handgun, it packs six
+rounds of ammunition, making it a reliable semi-automatic pistol. Thanks to a
+shutter firing mechanism, even short bursts are possible. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	10000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.45
+	Barrier:	6
+	Cost:	300
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	10
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	1
+	Val3:	5
+	Val4:	11
+	Val5:	6
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+	Val10:	12
+BREAK
+#24531
+Keywords:	pistol Glock-Mini lightweight Poison Dwarf
+Name:	a Glock-Mini "Poison Dwarf" light pistol
+RoomDesc:$
+A lightweight pistol made of black plastic sits here.~
+LookDesc:$
+This roughly five inch pocket pistol from Austria fires superplast explosive
+rounds, comparable in effect of firing EX-explosive munitions, its potential
+aggressiveness supported by the unusual power of this weapon. The weapon was
+produced partly from non-metallic composite materials, which complicates the
+discovery by weapon (MAD) detectors. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.50
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	8
+	AvailDay:	7.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	1
+	Val3:	8
+	Val4:	11
+	Val5:	10
+	Val9:	-1
+	Val10:	2
+BREAK
+#24532
+Keywords:	pistol Caveat Heckler & Koch HK H&K light
+Name:	a Heckler & Koch Caveat light pistol
+RoomDesc:$
+A small, sleek little pistol has been left behind here.~
+LookDesc:$
+The Heckler and Koch Caveat is ideal for the traveling businessmen. It looks
+like a heavy pistol, but is light and handy. The Caveat proves that it pays to
+make a good first impression. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.25
+	Barrier:	6
+	Cost:	500
+	AvailTN:	4
+	AvailDay:	1.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	6
+	Val1:	1
+	Val3:	6
+	Val4:	11
+	Val5:	9
+	Val9:	-1
+	Val10:	4
+BREAK
+#24533
+Keywords:	pistol Mauser Ladyline light fashionable
+Name:	a Mauser Ladyline light pistol
+RoomDesc:$
+A fashionable light pistol has been left here.~
+LookDesc:$
+An elegant weapon with a fashionable design, it contains the required
+firepower to give anyone wearing a fur a way to teach a lesson to those less
+fortunate. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.75
+	Barrier:	6
+	Cost:	350
+	AvailTN:	4
+	AvailDay:	1.00
+	LegalNum:	8
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	6
+	Val1:	1
+	Val3:	6
+	Val4:	11
+	Val5:	12
+	Val9:	-1
+	Val10:	4
+BREAK
+#24534
+Keywords:	pistol Altmayr White Star heavy
+Name:	an Altmayr White Star heavy pistol
+RoomDesc:$
+A polished heavy pistol has been left behind here.~
+LookDesc:$
+As a product of a sponsorship contract between Lone Star and Altmayr
+Protective Security Company, the White Star has found itself spread nationwide
+within a short time after being deployed. Because of its integrated gas
+venting, the White Star has relatively little recoil, but it also makes it
+incompatible with a silencer or sound suppressor. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	500
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	12
+	Val8:	650
+	Val9:	-1
+	Val10:	4
+BREAK
+#24535
+Keywords:	pistol Glock Dragon Killer heavy
+Name:	a Glock 'Dragon Killer' heavy pistol
+RoomDesc:$
+A heavy pistol crafted from high quality polymers sits here.~
+LookDesc:$
+As a response to the Predator series, the Glock Dragon Killer pistol attempts
+to make its mark in the heavy pistol class. This weapon performs well even
+under the most adverse of circumstances, almost wholly goal oriented towards
+accuracy, it also features a large capacity magazine that holds 40 rounds. The
+Dragon Killer's design consists of synthetic materials and is therefore all
+but invisible to metal (MAD) scanners. The firearm comes standard with a
+built-in Smartlink-II, as well as an electronic level-3 scope. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	1950
+	AvailTN:	8
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	40
+	Val7:	629
+	Val8:	31111
+	Val9:	-1
+	Val10:	2
+BREAK
+#24536
+Keywords:	pistol Heckler & Koch HK H&K Urban Fighter
+Name:	a Heckler & Koch Urban Fighter heavy pistol
+RoomDesc:$
+A sleek heavy pistol has been left here by its owner.~
+LookDesc:$
+The HK Urban Fighter is a heavy pistol from the Urban Family by Heckler and
+Koch, which comes along quite fully in the good old urban style both in
+sculpture and ceramics. Made a sensational seven inches long and weighing
+under a kilo, it is surprisingly compact for its size, making it relatively
+easy to conceal from most standard searches. The weapon comes standard with a
+top mounted Smartlink-II, its design not allowing for other accessories to be
+installed. With this weapon, the ammunition is in sealed magazines, which are
+sealed by chemically treated strips, which cannot be detected by chemsniffers
+unless the seal is broken or has been loaded into the firearm. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	0.90
+	Barrier:	6
+	Cost:	2300
+	AvailTN:	12
+	AvailDay:	10.00
+	LegalNum:	5
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	10
+	Val7:	64988
+	Val9:	-1
+	Val10:	4
+BREAK
+#24537
+Keywords:	pistol Luger Model 58 heavy stylized
+Name:	a Luger Model 58 heavy pistol
+RoomDesc:$
+A slender, stylized heavy pistol rests here.~
+LookDesc:$
+The Luger Model 58 is very deserving in its title as a trusty and reliable
+weapon for all situations in which there is no time to reload. It has a
+six-fold internal safety system that prevents accidental discharges in the
+field. This very rugged gun is elegant despite meditations that combined the
+traditional Luger design with functionality. What is special about this weapon
+is undoubtedly the high capacity magazine, which can hold a magnificent 18
+shots. This bountifully bestowed amount of munitions has earned this weapon a
+broad customer base. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	600
+	AvailTN:	6
+	AvailDay:	8.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	18
+	Val9:	-1
+	Val10:	4
+BREAK
+#24538
+Keywords:	pistol Makarov V.22 heavy foreign
+Name:	a Makarov V.22 heavy pistol
+RoomDesc:$
+A small, foreign pistol has been left behind here.~
+LookDesc:$
+The Makarov V.22 pistol is one of the quietest in the world. The combination
+of an acoustic barrel liner along with so-called 'cold ammunition', thanks to
+these innovations the firearm emits relatively little noise. While potent for
+its caliber, it is almost as quiet as an air pistol. Additionally, the firing
+pin has been modified and sealed on the housing, so that even the mere
+mechanical movement causes less noise. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.95
+	Barrier:	6
+	Cost:	3000
+	AvailTN:	10
+	AvailDay:	20.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	7
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	6
+	Val10:	2
+BREAK
+#24539
+Keywords:	pistol Mauser Gladiator heavy
+Name:	a Mauser Gladiator heavy pistol
+RoomDesc:$
+A blocky, heavy pistol sits here, going to waste.~
+LookDesc:$
+After the good experiences the Thunderbolt model had with Lone Star, a special
+development team within the Ruger company made a bid to fit the needs of some
+security companies and peace keeping forces. Interest in a registered weapon,
+which can be discreetly worn on the belts and holsters, with the benefits of
+an automatic weapon. After two years of intensive development, Mauser has now
+fulfilled all the wishes that were left unresolved. The Gladiator comes in
+direct competition with pistols already established under Ruger, such as the
+Savalette Guardian and Thunderbolt. The firearm works on a preserved firing
+mechanism that is more familiar in machine guns. The Gladiator has a heavy
+catch, absorbs recoil relatively well, but due to the fact of a machine guns
+conventional technique, the weapon in burst mode is, unfortunately, somewhat
+inaccurate. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	10000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	1200
+	AvailTN:	10
+	AvailDay:	16.00
+	LegalNum:	5
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	12
+	Val9:	-1
+	Val10:	12
+BREAK
+#24540
+Keywords:	pistol Walther Nova II heavy polished
+Name:	a Walther Nova II heavy pistol
+RoomDesc:$
+A slender, highly polished heavy pistol has been left here.~
+LookDesc:$
+The Walther Nova II was planned by the manufacturer as the German counterpart
+to the Ares Predator, but was shot down by the heavy pistol market, even in
+spite of aggressive market strategies. The Nova II is equipped with a built-in
+integral laser sight, and keeping up with the request of the customers, offers
+personal designs, imprinting or engravings, which is included in the price.
+The Nova II cannot mount any underbarrel accessories. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.25
+	Barrier:	6
+	Cost:	1250
+	AvailTN:	4
+	AvailDay:	0.50
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	15
+	Val8:	626
+	Val9:	-1
+	Val10:	4
+BREAK
+#24541
+Keywords:	pistol Walther P-059 Futura heavy compact
+Name:	a Walther P-059 'Futura' heavy pistol
+RoomDesc:$
+A compact heavy pistol has been left here.~
+LookDesc:$
+After several years and about 15,000 man hours of development, Carl Walther
+now brings the P-059 Futura on the market. This heavy pistol saw good sales in
+its initial release, not only due to their compelling offer of a spacious
+15-round magazine, a Smartgun-II system and a robust design, it is also the
+first handgun from the Walther house with an electronic ignition system. This
+feature not only significantly reduces the likelihood of a misfire, but also
+its efficiency when brought together with a silencer. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.25
+	Barrier:	6
+	Cost:	900
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	15
+	Val7:	64988
+	Val9:	-1
+	Val10:	4
+BREAK
+#24542
+Keywords:	pistol Walther Secura heavy plastic
+Name:	a Walther Secura heavy pistol
+RoomDesc:$
+^gA sleek ^Lblack plastic^g pistol has been left here.^N~
+LookDesc:$
+The Walther Secura is the best selling service pistol amongst the European
+nations Federal Police agencies and security services. Its sturdy, reliable
+design offers a modest clip capacity, not to mention its a great firearm for
+anyone on a budget. The heavy pistol accepts all standard accessories and is
+also available in standard Smartlink versions. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.20
+	Barrier:	6
+	Cost:	500
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	12
+	Val9:	-1
+	Val10:	4
+BREAK
+#24543
+Keywords:	pistol Walther Secura Compact heavy plastic
+Name:	a Walther Secura Compact heavy pistol
+RoomDesc:$
+^gA compact ^Lblack plastic^g heavy pistol has been left here.^N~
+LookDesc:$
+Crafted in line with the good old tradition of the Walther company, a few
+years after its successful counterpart was placed on the market, the compact
+version was inevitable. The Secura Compact is 4 cm shorter than her big
+brother, and as such has to make do by adopting a smaller nine-shot magazine.
+Aside from its difference in size, it looks just like the standard Secura. The
+magazine ejector is mounted on the back of the grip, making it perfect for
+both left and right handed users. The weapon also accepts all standard firearm
+accessories, and as with the standard version, it is available in a Smartlink
+version. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.80
+	Barrier:	6
+	Cost:	450
+	AvailTN:	6
+	AvailDay:	1.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	9
+	Val9:	-1
+	Val10:	4
+BREAK
+#24544
+Keywords:	SMG Ares Folding-SMG submachine gun compact
+Name:	an Ares Folding-SMG
+RoomDesc:$
+A compact little SMG has been left here.~
+LookDesc:$
+The Folding-SMG may be a draft from the last century, but is also a good
+example for the old adage "Gentiles need not be good". The weapon is folded up
+smaller than a pistol and it takes only a moment to unfold it. The Folding-SMG
+comes with a top-mounted Smartlink-II accordingly, and while further
+modifications are indeed possible, the weapon can not be folded when it has,
+due to its design. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	2500
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	4
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	2
+	Val3:	10
+	Val4:	15
+	Val5:	36
+	Val7:	64988
+	Val9:	-1
+	Val10:	28
+BREAK
+#24545
+Keywords:	SMG Urban Combat Heckler & Koch H&K HK submachinegun
+Name:	a Heckler & Koch Urban Combat SMG
+RoomDesc:$
+A powerful looking SMG has been left behind here.~
+LookDesc:$
+For many years this weapon was only a dream, but in the meantime, the Urban
+series of Heckler & Koch established itself as an integral part in the
+security sector. This weapon was first built by HK, which was built completely
+from non-metallic materials, making it all but invisible in the presence of
+metal detectors. A built-in sound suppressor and venting system contributes
+their weight to the refined design of the weapon. It cannot accept barrel
+mounted accessories due to its design, this particular model is the Smartlink
+variant. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.50
+	Barrier:	6
+	Cost:	4000
+	AvailTN:	12
+	AvailDay:	12.00
+	LegalNum:	4
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	2
+	Val3:	10
+	Val4:	15
+	Val5:	36
+	Val7:	64988
+	Val8:	28640
+	Val10:	28
+BREAK
+#24546
+Keywords:	SMG submachinegun Urban Enforcer Heckler & Koch H&K HK
+Name:	a Heckler & Koch Urban Enforcer SMG
+RoomDesc:$
+A sleek and smoothly designed SMG has been left here.~
+LookDesc:$
+The Enforcer is the official successor of the legendary HK Urban Combat. Once
+a project that had been produced under the name Urban Assassin, it was
+abandoned after a short time. First, the design did not meet the expectations
+of customers, on the other hand, the name chosen name Assassin was a rather
+clumsy marketing tactic with negative consequences. The Enforcer is now based
+on the Urban Combat, which applies its integral suppressor and venting system
+design, which has distinguished its predecessor in the realm of Urban Combat.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	4.00
+	Barrier:	6
+	Cost:	6200
+	AvailTN:	14
+	AvailDay:	16.00
+	LegalNum:	2
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	2
+	Val3:	10
+	Val4:	15
+	Val5:	36
+	Val7:	5105
+	Val10:	28
+BREAK
+#24547
+Keywords:	rifle Mannlicher Wilderer hunting robust
+Name:	a Mannlicher 'Wilderer' hunting rifle
+RoomDesc:$
+A robust looking hunting rifle has been propped up here.~
+LookDesc:$
+This robust weapon from Austria comes with a pair of binocular mounted scope
+systems. Delivered in the original project, this weapon was built with special
+bacteria treated ammunition, but, was discontinued after a short time, as it
+had been shown that the bacteria could cause allergies and serious health
+problems, leading to severe damage if it migrated within an hour to the
+digestive tract. Since no hunter was willing to contribute to the
+chemical-hunting suit, its ammunition disappeared very quickly from the market
+and there are no more today. But the weapon, even operated with standard
+ammunition, is a reliable hunting rifle. 
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	3.50
+	Barrier:	6
+	Cost:	1500
+	AvailTN:	6
+	AvailDay:	1.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	3
+	Val3:	11
+	Val4:	12
+	Val5:	8
+	Val7:	60553
+	Val10:	2
+BREAK
+#24548
+Keywords:	rifle sniper Urban Striker Heckler & Koch H&K HK
+Name:	a Heckler & Koch Urban Striker sniper rifle
+RoomDesc:$
+A sniper rifle comprised of polymers is resting here.~
+LookDesc:$
+The Urban Striker features an improved version of an UP silencer originally
+developed for the Urban Combat. It is a folding sniper rifle, which is largely
+constructed from non-metallic materials, making it all but invisible by metal
+(MAD) detectors. In addition to a built-in integral barrel Smartlink-II, it
+keeps up with the usual for the latest weapons of the HK Urban series,
+featuring specifically sealed clips to keep down its detection under scrutiny
+from chemsniffers. 
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	1000000001000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	5.00
+	Barrier:	6
+	Cost:	12200
+	AvailTN:	18
+	AvailDay:	30.00
+	LegalNum:	2
+	LegalCode:	9
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	3
+	Val3:	12
+	Val4:	12
+	Val5:	10
+	Val8:	31111
+	Val10:	4
+BREAK
+#24549
+Keywords:	rifle sniper Mauser SEK 41
+Name:	a Mauser SEK 41 sniper rifle
+RoomDesc:$
+A robust and powerful looking sniper rifle sits here, waiting to be fired.~
+LookDesc:$
+After the huge success with the Gladiator product on the market for small
+arms, the German company also wanted to be known for really big guns. The new
+Mauser sniper rifle is an attempt to build a very precise and very deadly
+weapon. The SEK 41 is specially developed for the military sniper rifle role,
+which puts less emphasis on stealth and transportation, and much more on
+penetration, precision and robustness. Those development objectives have been
+achieved and is evident in the large number of pre-orders. Allegedly the MET
+and the Bundswehr, as well as the BKA, have shown quite an interest in this
+rifle. 
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	1000000001000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	7.50
+	Barrier:	6
+	Cost:	10900
+	AvailTN:	15
+	AvailDay:	24.00
+	LegalNum:	2
+	LegalCode:	9
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	3
+	Val3:	12
+	Val4:	12
+	Val5:	8
+	Val10:	4
+BREAK
+#24550
+Keywords:	rifle assault G61A2 high-velocity Heckler & Koch H&K HK
+Name:	a Heckler & Koch G61A2 assault rifle
+RoomDesc:$
+A high-velocity assault rifle is sitting here, waiting to pour out lead.~
+LookDesc:$
+The G61 is the first German high-speed assault rifle, which has made its way
+into the series. Since its induction the MET has placed the majority of
+ordered units for the new G61A2, and it is likely that more armies will be
+joining in on the bids. Heckler & Koch has included the development from the
+50's firmly into the program, and due to higher volumes and price, can now
+compete with the big competitor from America. The G61 is based more on the old
+technology of the G11 and achieves an extremely high rate of fire with the
+same recoil. The mechanics in the volley mode is designed that the six bullets
+fired so fast that the felt recoil is only from the second salvo. The G61
+features a bull-pup design, an integral gas vent IV, and can only fire
+caseless ammunition. 
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	5.50
+	Barrier:	6
+	Cost:	4000
+	AvailTN:	16
+	AvailDay:	21.00
+	LegalNum:	2
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	48
+	Val8:	691
+	Val10:	28
+BREAK
+#24551
+Keywords:	rifle assault G9A4z International Heckler & Koch H&K HK
+Name:	a Heckler & Koch G9A4z International assault rifle
+RoomDesc:$
+A heavy assault rifle has been left behind here.~
+LookDesc:$
+Upon conversion of the Bundeswehr to the new G12, H&K proved it was willing to
+listen to customer feedback and hammer out all the small drawbacks of previous
+models in this line, quickly making it a premiere available weapon. For
+decades all over the world this popular assault rifle has filled the role
+perfectly with its classic and proven design, and coupled with readily
+available ammunition, its easy to see why it has been accepted so widely. 
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	4.50
+	Barrier:	6
+	Cost:	1500
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	2
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	30
+	Val10:	28
+BREAK
+#24552
+Keywords:	rifle assault heavy Nitama Optimum stylized
+Name:	a Nitama Optimum heavy assault rifle
+RoomDesc:$
+A stylized heavy assault rifle has been left here.~
+LookDesc:$
+The Nitama Optimum is the new standard weapon of the Imperial Japanese
+security forces, and has also become increasingly common in the hands of
+German security forces. Even if the Optimum is formally an assault rifle, it
+has made the best of its bullpup configuration and shortened it to make it an
+extremely compact, but heavy weapon. The Optimum features the following
+extras: A gas vent III, a top mounted Smartgun-II and a biometric safety. The
+biometric safety can be encoded to individuals or entire units. Due to the
+current marketing of the weapon, namely the controlled sale exclusively to
+security companies, there are currently very few specimens turning up in the
+shadows. The weapon cannot be fitted with additional underbarrel accessories
+due to its biometric safety feature. 
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	5.85
+	Barrier:	6
+	Cost:	7000
+	AvailTN:	16
+	AvailDay:	14.00
+	LegalNum:	1
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	30
+	Val7:	64988
+	Val8:	653
+	Val10:	28
+BREAK
+#24553
+Keywords:	rifle assault Steinhardt StG 58/F Exterminator
+Name:	a Steinhardt StG 58/F "Exterminator" assault rifle
+RoomDesc:$
+A heavy assault rifle of extrodinary design has been left here.~
+LookDesc:$
+The small company, Steinhardt from Hanover, which has distinguished itself in
+the past by only producing very high-quality replicas of light and heavy
+firearms, making the StG 58/F its first own product. The assault rifle, which
+had its launch in 2060 with the nickname "Exterminator", was primarily used
+for hunting manifested insects spirits, and was modeled on a more classical
+design, but abruptly was abandoned. The weapon eventually came out a full two
+years later to the market than originally planned, because the tight
+integration adopted as the lower receiver caused more problems than the
+designers were prepared for. 
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	6.00
+	Barrier:	6
+	Cost:	2800
+	AvailTN:	8
+	AvailDay:	18.00
+	LegalNum:	2
+	LegalCode:	10
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	40
+	Val7:	64988
+	Val8:	653
+	Val10:	28
+BREAK
+#24554
+Keywords:	shotgun lever-action Desperado Boyd & Richards western-styled
+Name:	a Boyd & Richards "Desperado" lever-action shotgun
+RoomDesc:$
+An old western-styled shotgun has fallen right out of a 2D-trid film here.~
+LookDesc:$
+This weapon is mainly a draw for collectors in a small series usually directly
+made to order and can be provided with various ornaments, such as an engraving
+on the handle, or mother of pearl inlays. The unusually rustic design is
+reminiscent of times past, when the western United States was still wild and
+unexplored, but uses more of the old 2-D movies and series than from reality.
+The weapon can, like most shotguns, be loaded with shot as well as solid slug
+shells, and the reliable repeating mechanism makes the Desperado in actual use
+a trusty companion on the road. However, the recognition due to the small
+numbers in the shadows as well as the fancy designs, in most cases, is too
+high to be used for illegal operations. Custom accessories are available for
+the Desperado, but it can be adapted to normal accessories as well, but this
+would ruin the Western look completely, making it undesirable for most owners
+of these weapons. 
+~
+Type:	Weapon
+WearFlags:	10001000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	2.25
+	Barrier:	6
+	Cost:	2200
+	AvailTN:	2
+	AvailDay:	12.00
+	LegalNum:	6
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	5
+	Val10:	2
+BREAK
+#24555
+Keywords:	shotgun lever-action PJSS LNB/13 Schinderhannes western-styled
+Name:	a PJSS LNB/13 "Schinderhannes" lever-action shotgun
+RoomDesc:$
+An old western-styled lever-action shotgun has been left here.~
+LookDesc:$
+The LNB/13 "Schinderhannes" is made by the production "Sohler Community
+Hunting and Sporting Weapons", is a direct replica of the American licensed
+Desperado. This short cycle shotgun, which is also meant more for collectors
+than for road warriors, is high up on the German markets, its price
+approximately the same as its American counterpart model. It is also the same
+with regards to the usability of external accessories. The short barrel gives
+the Schinderhannes the range of a heavy pistol, and the choke is not
+adjustable, instead it must be specified when placing an order for the weapon.
+~
+Type:	Weapon
+WearFlags:	10001000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	2.25
+	Barrier:	6
+	Cost:	3100
+	AvailTN:	4
+	AvailDay:	8.00
+	LegalNum:	6
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	5
+	Val10:	2
+BREAK
+#24556
+Keywords:	shotgun PJSS LNB/13-K Schinderhannes double-barreled western-styled
+Name:	a PJSS LNB/13-K "Schinderhannes" double-barreled shotgun
+RoomDesc:$
+An old western-styled double-barreled shotgun has been left here.~
+LookDesc:$
+The PJSS manufactures this special variant, which is produced and delivered
+only on an individual order. The LNB/13-K characterized by two adjacent
+barrels, and from the breach loading mechanism, which are also in line with
+the traditional hunting weapons that have made Sohler famous. This version can
+fire both barrels simultaneously, making it a very dangerous weapon at close
+ranges. 
+~
+Type:	Weapon
+WearFlags:	10001000010000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	3550
+	AvailTN:	4
+	AvailDay:	10.00
+	LegalNum:	6
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	2
+	Val10:	10
+BREAK
+#24557
+Keywords:	shotgun TEC 603 Taurus rapid-assault
+Name:	a TEC 603 "Taurus" rapid-assault shotgun
+RoomDesc:$
+A rapid-assault shotgun has been left here.~
+LookDesc:$
+The TEC 603 "Taurus" is a semi-automatic and burstfire rapid assault shotgun
+with outstanding penetration capabilities, though the tremendous recoil of the
+weapon is rough on the shoulder. The TEC 603 features a feed system for the
+use with an ammunition drum, which keeps it from mounting any underbarrel
+accessories. 
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	8.00
+	Barrier:	6
+	Cost:	3500
+	AvailTN:	10
+	AvailDay:	14.00
+	LegalNum:	4
+	LegalCode:	6
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	30
+	Val9:	-1
+	Val10:	12
+BREAK
+#24558
+Keywords:	shotgun Wirtz SW31 Demo Control crowd control
+Name:	a Wirtz SW31 "Demo Control" shotgun
+RoomDesc:$
+A crowd control shotgun has been left behind here.~
+LookDesc:$
+The grand daddy of crowd control firearms, capable of firing standard shotgun
+shells, rubber bullets and gel rounds. This is an insurgency suppression
+weapon, which is found in fairly small numbers on the streets. The weapon is
+about as accurate as a heavy pistol at the same ranges, regardless of the
+munitions being fired. Its unique barrel rifling keeps it from accepting any
+accessories, but sports top and underbarrel rails for variable accessories. 
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	600
+	AvailTN:	8
+	AvailDay:	14.00
+	LegalNum:	2
+	LegalCode:	6
+	LegalPermit:	0
+[VALUES]
+	Val0:	11
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	4
+	Val8:	-1
+	Val10:	2
+BREAK
+#24559
+Keywords:	LMG Heckler & Koch MG4/46 light machinegun H&K HK belt-fed
+Name:	a Heckler & Koch MG4/46 light machinegun
+RoomDesc:$
+A belt-fed light machinegun has been left propped up here.~
+LookDesc:$
+The birth of the MG4/46 saw its birth along with others during the development
+of famous machine guns from the Euro Wars era. Designed as a light machine gun
+for police action, and manufactured under the strictest quality controls by
+the military. It features a detachable telescopic sight, along with a folding
+bipod to help reduce its felt recoil. The MG4/46 also features a feed
+mechanism that accepts 100-round ammunition boxes. 
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	7.00
+	Barrier:	6
+	Cost:	2500
+	AvailTN:	11
+	AvailDay:	8.00
+	LegalNum:	2
+	LegalCode:	8
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	3
+	Val3:	15
+	Val4:	19
+	Val5:	100
+	Val7:	629
+	Val9:	697
+	Val10:	24
+BREAK
+#24560
+Keywords:	HMG Ruhrmetall SF20 heavy machinegun
+Name:	a Ruhrmetall SF20 heavy machinegun
+RoomDesc:$
+A heavy machinegun has been left here, waiting to spit molten lead.~
+LookDesc:$
+This is the standard heavy machine gun support for the MET2000, and is
+especially rare on the streets, as getting ahold of them, through both legal
+and illegal means is not easy. Nevertheless, the Ruhrmetall SF20 is very
+popular among mercenaries and samurai, and it is known for its quality,
+stability and reliability under extreme conditions. It comes standard with a
+built-in gas vent III system to compensate for its enormous recoil. The
+ammunition supply is done either through a self-dissolution belt-fed mechanism
+or an 80-round box. The weapon can be fitted with any standard accessories for
+both top and underbarrel mounting. 
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	14.00
+	Barrier:	8
+	Cost:	7200
+	AvailTN:	17
+	AvailDay:	29.00
+	LegalNum:	1
+	LegalCode:	8
+	LegalPermit:	0
+[VALUES]
+	Val0:	11
+	Val1:	3
+	Val3:	17
+	Val4:	19
+	Val5:	80
+	Val8:	653
+	Val10:	16
+BREAK
+#24598
+Keywords:	attache case paperwork
+Name:	An attache case filled with paperwork
+RoomDesc:$
+An attache case filled with paperwork has been left here.~
+LookDesc:$
+Its a pretty sweet soft leather attache carrying case. Its filled to the brim
+with stacks of various paperwork, most of which is written in English, while
+others in Chinese. Its barely held shut by a simple brass locking clasp. 
+~
+Type:	Quest Item
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.50
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#24599
+Keywords:	paper note folded
+Name:	a folded note of paper
+RoomDesc:$
+A folded note of paper is blowing around here.~
+LookDesc:$
+This simple piece of old fashioned paper has been neatly folded twice. Upon
+unfolding, a series of passwords can be seen written on it, some of which have
+been scribbled off and rewritten beneath. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.01
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

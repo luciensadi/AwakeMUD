@@ -1,0 +1,85 @@
+#23500
+Keywords:	Hellhound ganger go-ganger biker
+Name:	A 405 Hellhound go-ganger
+RoomDesc:$
+A Hellhound go-ganger sporting ^Rred^N and ^yorange^N rides his bike here. 
+
+~
+LookDesc:$
+This rough looking, and obviously human, go-ganger is seated atop a slightly
+modified street biker, which is adorned with their trademark ^Rred^N and ^yorange^N
+colours done in flame decals. He sports the same colours on his synthleather
+jacket, along with a Hellhound's head emblazoned across their backs. The 405
+Hellhounds run this strip of highway, as their namesake would suggest, and
+they keep a close watch on any other gangers attempting to muscle into their
+territory. Their main source of income comes from smuggling along the
+north/south trade lanes, so they're more timid than most gangers as far as
+messing with civilians go. 
+~
+ArriveMsg:	roars in from
+LeaveMsg:	roars off
+MobFlags:	1000001001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	2
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	95
+[SKILLS]
+	unarmed combat:	5
+	pistols:	5
+	sub-machine guns:	5
+	clubs:	5
+	whips & flails:	5
+BREAK
+#23501
+Keywords:	ganger Lake Acids tie-dye
+Name:	A Lake Acids go-ganger
+RoomDesc:$
+A ganger wearing tie-dye ^gg^Br^ge^Be^gn^N and ^gb^Bl^gu^Be^N clothes stands here. 
+
+~
+LookDesc:$
+He doesn't look much different than any other breed of ganger, and its
+probably safe to say his intentions are those of any ganger in the world. He
+sports mostly colours of blue and green, along with some tie-dyed mixtures of
+these two, including a bandana thats displayed upon his upper arm. They own
+Route 520, and damn well aren't going to be giving up their turf to any chumps
+without a fight. Careful, you may bite off more than you can chew for starting
+trouble with the Lake Acid crew. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	5
+	Str:	4
+	Cha:	2
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	70
+	Cash:	45
+[SKILLS]
+	clubs:	5
+	unarmed combat:	5
+	sub-machine guns:	5
+BREAK
+END

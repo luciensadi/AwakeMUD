@@ -1,0 +1,320 @@
+#22100
+Keywords:	Ezra's bed
+Name:	Ezra's Bed
+RoomDesc:$
+A neatly made bed sits here.~
+LookDesc:$
+The bed sports silk sheets and a colourful comforter.  A layer of dust coats
+the bed. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	100.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22101
+Keywords:	dagger
+Name:	A dagger
+RoomDesc:$
+A small silver dagger is lying here.~
+LookDesc:$
+A small silver dagger with a razor sharp tip. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#22102
+Keywords:	Throne
+Name:	Ezra's Throne
+RoomDesc:$
+An ornate throne sits here.~
+LookDesc:$
+A wooden throne decorated with fake jewels. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22103
+Keywords:	corpse
+Name:	a rotting corpse
+RoomDesc:$
+The rotten body of a rather large Maze Guardian has been thrown into the corner.~
+LookDesc:$
+Something killed this poor beastie and left him here to rot.  Maggots chew at
+what meat is on his bones. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22104
+Keywords:	rock stone
+Name:	a big rock
+RoomDesc:$
+An oddly shaped rock pokes out of the ground here~
+LookDesc:$
+Now that you take a closer look, this rock reminds you of an ork. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	1000.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22105
+Keywords:	stone rock pebble
+Name:	a pond pebble
+RoomDesc:$
+A shiny pebble lies here, lighting the immediate area softly.~
+LookDesc:$
+An oval stone polished to a brilliant rainbowy sheen. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Magic Pool
+	Modifier:	1
+BREAK
+#22106
+Keywords:	Porno magazine
+Name:	A Porno Magazine
+RoomDesc:$
+A rather racey porno magazine lays here.~
+LookDesc:$
+A well-read female porno magazine.  This paticular issue seems to be featuring
+female piercings. 
+~
+Type:	Worn
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22107
+Keywords:	desk
+Name:	A Desk
+RoomDesc:$
+A badly abused desk sits here.~
+LookDesc:$
+It once could have been in the cubicle of some poor office employee.  Now it
+bears deep scratches, spraypaint and other such markings as battlescars.  It
+looks more suited for a junkpile. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22108
+Keywords:	pile of filth
+Name:	a pile of filth
+RoomDesc:$
+A pile of rotting filth sits against the wall here.~
+LookDesc:$
+Human feces, dead rats, clothes and other disgusting things lay thrown
+together.  You repress the urge to vomit as the stench invades your nostrils.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	toxic wastes
+[POINTS]
+	Weight:	6.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22109
+Keywords:	poke me oloth doll
+Name:	A 'Poke Me Oloth' Doll
+RoomDesc:$
+A doll that looks like Oloth lays here!~
+LookDesc:$
+It looks like Oloth with a big stupid grin.  It has a 'poke me!' sticker on
+it's belly. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	1000000001
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22110
+Keywords:	used syringe
+Name:	a syringe
+RoomDesc:$
+A used syringe is lying here.~
+LookDesc:$
+A glass synringe.  The needle is speckled with blood and heroine. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22111
+Keywords:	urine soaked clothes
+Name:	A pile of urine soaked clothing lies here.
+RoomDesc:$
+A pile of filthy clothes lies here, reeking of piss.~
+LookDesc:$
+Shirts, pants, underwear and even a pair of socks are thrown together here.
+They are slightly damp and reek of human urine. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22199
+Keywords:	psicorps badge
+Name:	a PsiCorps Badge
+RoomDesc:$
+A pin with a psi symbol on it sits here.~
+LookDesc:$
+A Psi Symbol pin.  The trademark of those belonging to the PsiCorps.  The
+Corps is Mother, the Corps is Father. 
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

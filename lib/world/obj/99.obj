@@ -320,12 +320,13 @@ Material:	paper
 	LegalPermit:	0
 BREAK
 #9917
-Keywords:	key vent
+Keywords:	key small
 Name:	a small key
 RoomDesc:$
 A small key is lying here.~
 LookDesc:$
-A small key
+It's a small key. Pretty non-descript. Seriously, what the frag do you think
+it looks like? It's just a run of the mill key, afterall. 
 ~
 Type:	Key
 WearFlags:	1
@@ -334,7 +335,7 @@ AffFlags:	0
 Material:	paper
 [POINTS]
 	Weight:	0.00
-	Barrier:	1
+	Barrier:	4
 	Cost:	0
 	AvailTN:	0
 	AvailDay:	0.00
@@ -716,8 +717,8 @@ A grenade sits here.~
 LookDesc:$
 Your standard IPE offensive grenade. 
 ~
-Type:	Weapon
-WearFlags:	10000000000001
+Type:	Other
+WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
 Material:	adv. plastics
@@ -730,16 +731,6 @@ Material:	adv. plastics
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
-[VALUES]
-	Val0:	15
-	Val1:	3
-	Val3:	318
-	Val4:	27
-	Val5:	-1
-	Val6:	-1
-	Val7:	-1
-	Val8:	-1
-	Val9:	-1
 BREAK
 #9937
 Keywords:	pinstripe suit

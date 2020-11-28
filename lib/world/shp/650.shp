@@ -1,0 +1,33 @@
+#65004
+Keeper:	65004
+ProfitBuy:	3.000000
+ProfitSell:	0.750000
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	10100000001000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	5901
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	35513
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	65004
+		Type:	Always
+		Stock:	0
+BREAK
+END

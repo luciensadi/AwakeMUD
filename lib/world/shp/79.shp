@@ -1,0 +1,196 @@
+#7900
+Keeper:	7908
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, master, we don't have those.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That will be %d nuyen, master. Many thanks.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	15891
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	7922
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	15705
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	7916
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	7917
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	7918
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	7919
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	7920
+		Type:	Always
+		Stock:	0
+BREAK
+#7901
+Keeper:	7912
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, no such item was found.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	Outsourcing and raw materials cost not met.
+DoesntBuy:	Error.
+Buy:	Outsourcing and raw materials bring costs to %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	The Estate Vendor
+Flags:	100
+Races:	1101100
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	7923
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	7948
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	7937
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	7938
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	7939
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	7940
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	7936
+		Type:	Avail
+		Stock:	0
+	[SELL 7]
+		Vnum:	7935
+		Type:	Avail
+		Stock:	0
+	[SELL 8]
+		Vnum:	7930
+		Type:	Avail
+		Stock:	0
+	[SELL 9]
+		Vnum:	7931
+		Type:	Avail
+		Stock:	0
+	[SELL 10]
+		Vnum:	7932
+		Type:	Avail
+		Stock:	0
+	[SELL 11]
+		Vnum:	7926
+		Type:	Avail
+		Stock:	0
+	[SELL 12]
+		Vnum:	7929
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	7928
+		Type:	Avail
+		Stock:	0
+	[SELL 14]
+		Vnum:	7925
+		Type:	Avail
+		Stock:	0
+	[SELL 15]
+		Vnum:	7927
+		Type:	Avail
+		Stock:	0
+	[SELL 16]
+		Vnum:	7924
+		Type:	Avail
+		Stock:	0
+BREAK
+#7902
+Keeper:	7913
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, there is no such listing.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	Costs for raw materials necessary.
+DoesntBuy:	We don't buy that.
+Buy:	Materials and labour costs come to %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Gresham Estate
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	7962
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	7942
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	7943
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	7944
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	7945
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	7946
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	7934
+		Type:	Avail
+		Stock:	0
+	[SELL 7]
+		Vnum:	7933
+		Type:	Avail
+		Stock:	0
+BREAK
+END

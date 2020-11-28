@@ -1,0 +1,299 @@
+#9101
+Keeper:	9113
+ProfitBuy:	1.10
+ProfitSell:	1.00
+Random:	1
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	unnamed shop
+Flags:	100
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	9167
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	9166
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	9165
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	9164
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	9163
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	9162
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	9161
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	9160
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	9159
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	9158
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	9157
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	9156
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	3484
+		Type:	Always
+		Stock:	0
+BREAK
+#9185
+Keeper:	9124
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	1
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough creds!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d creds.  Have a nice day.
+Sell:	Here's your %d creds.
+Name:	unnamed shop
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	9142
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	9143
+		Type:	Always
+		Stock:	0
+BREAK
+#9198
+Keeper:	9199
+ProfitBuy:	1.40
+ProfitSell:	0.55
+Random:	3
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough creds!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d creds.
+Sell:	Here's your %d creds.
+Name:	unnamed shop
+Flags:	10
+Races:	0
+Buytypes:	1010000000000000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	415
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	411
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	408
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	419
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	421
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	361
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	355
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	343
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	340
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	337
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	331
+		Type:	Always
+		Stock:	0
+BREAK
+#9237
+Keeper:	9202
+ProfitBuy:	20.00
+ProfitSell:	0.10
+Random:	2
+Open:	8
+Close:	23
+Type:	Black
+NoSuchItemKeeper:	You wish I had that...heh heh...I wish I had that.
+NoSuchItemPlayer:	Can't buy what you ain't got!
+NoNuyen:	You know, money is the root of all evil, and I'm evil.  Too bad you don't have enough money to water my roots!
+DoesntBuy:	That's nice, but not my style.
+Buy:	That'll lighten your load by %d creds, thank you.
+Sell:	Here's %d creds for that piece of crap.
+Name:	Dr. Alex Scriptshaw
+Flags:	0
+Races:	0
+Buytypes:	1000000000000000001010100000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	863
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	943
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	911
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	881
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	829
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	720
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	782
+		Type:	Avail
+		Stock:	0
+	[SELL 7]
+		Vnum:	721
+		Type:	Avail
+		Stock:	0
+BREAK
+#9401
+Keeper:	9103
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	1
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	We ain't got none.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You ain't got the cash chummer!
+DoesntBuy:	Try selling that to someone who cares.
+Buy:	That'll be %d creds.
+Sell:	Here's your %d creds.
+Name:	unnamed shop
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	9102
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	2014
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	2015
+		Type:	Always
+		Stock:	0
+BREAK
+#9439
+Keeper:	9409
+ProfitBuy:	1.20
+ProfitSell:	0.30
+Random:	3
+Open:	8
+Close:	21
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough creds!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d creds.
+Sell:	Here's your %d creds.
+Name:	Dr. Kack Vajorkian
+Flags:	10
+Races:	0
+Buytypes:	1000000000000000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	373
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	363
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	362
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	319
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	325
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	328
+		Type:	Always
+		Stock:	0
+BREAK
+END

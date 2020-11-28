@@ -1,0 +1,188 @@
+#61548
+Keeper:	61504
+ProfitBuy:	1.20
+ProfitSell:	0.10
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	The Caryard Bazaar
+Flags:	0
+Races:	0
+Buytypes:	100000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	917
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	919
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	853
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	863
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	865
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	61515
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	61514
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	61513
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	61512
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	61511
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	61510
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	61509
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	61508
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	61507
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	61506
+		Type:	Always
+		Stock:	0
+BREAK
+#61549
+Keeper:	61505
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	The Caryard Bazaar
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	61521
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	61520
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	61519
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	61518
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	61517
+		Type:	Always
+		Stock:	0
+BREAK
+#61550
+Keeper:	61506
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	The Caryard Bazaar
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	61536
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	61531
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	61530
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	61529
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	61528
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	61527
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	61526
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	61525
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	61524
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	61523
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	61522
+		Type:	Always
+		Stock:	0
+BREAK
+END

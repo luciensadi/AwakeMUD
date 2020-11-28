@@ -1,0 +1,1498 @@
+#14600
+Keywords:	tpf beat cop elf peace force tir tairngire
+Name:	a Tir Tairngire Peace Force Beat Cop
+RoomDesc:$
+A beat cop in TPF colors wanders here slowly, eyeing the scene. 
+
+~
+LookDesc:$
+A male elf, adorned in a police uniform with the crimson and white colors of
+Tir Tairngire's Peace Force.  He appears disinterested in any of the goings on
+around him, just doing his rounds.  
+~
+ArriveMsg:	wanders in from
+LeaveMsg:	wanders
+MobFlags:	10000000000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	4
+	Cha:	5
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+	Ballistic:	3
+	Impact:	1
+	Cash:	100
+	Bank:	500
+[SKILLS]
+BREAK
+#14601
+Keywords:	rose city ancients ganger elf hoodlum
+Name:	a Rose City Ancients ganger
+RoomDesc:$
+A hoodlum elf in Ancients colors glares at you. 
+
+~
+LookDesc:$
+Wearing the ^ggreen^n and ^bblue^n colors of the Ancients, he sports a mean look in
+his eyes, and has a weathered look that makes this elf look far older than he
+should. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100010000000100001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	6
+	Cha:	5
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	188
+	Weight:	78
+	Cash:	10
+	Bank:	20
+[SKILLS]
+BREAK
+#14602
+Keywords:	greg ork waiter
+Name:	Greg the Waiter
+RoomDesc:$
+An orkish waiter stands behind here, wearing a nametag that reads "Greg". 
+
+~
+LookDesc:$
+He's a young adult, has a rather bored look on his face, and serves food
+quickly to the many people seated here at the Sisters.  He is wearing a white
+apron, underneath a torn up Portland Marchers t-shirt, and has a New York
+Yankees ballcap on his head.  He is well groomed and clean, and has regularly
+polished tusks. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	3
+	Str:	6
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	120
+[SKILLS]
+BREAK
+#14603
+Keywords:	kit elf sexy female woman
+Name:	Kit
+RoomDesc:$
+A sexy elven woman in a miniskirt dances giddily, drink in hand. 
+
+~
+LookDesc:$
+She is rather well endowed, and shows alot of cleavage.  She wears a lot of
+makeup, and purple lipstick.  Her hair is long and black, and her eyes are a
+dark violet-blue.  She seems to be having way too much fun for her own good. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	3
+	Cha:	7
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	179
+	Weight:	56
+	Cash:	200
+	Bank:	300
+[SKILLS]
+BREAK
+#14604
+Keywords:	jester elf magician bartender
+Name:	Jester
+RoomDesc:$
+An elf in a 20th century magician's outfit stands here grinning. 
+
+~
+LookDesc:$
+He wears white facepaint, has jet black hair, and a red stone earring.  His
+eyes are surrounded by black paint circles, that give him sort of the "hell
+zombie" appearance.  He grins broadly, as he watches the patrons of this bar
+slide straight into the netherworld of drunkeness. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	5
+	Str:	4
+	Cha:	6
+	Int:	6
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	177
+	Weight:	90
+[SKILLS]
+BREAK
+#14605
+Keywords:	bald dwarven hobo rooney
+Name:	Rooney
+RoomDesc:$
+A bald dwarven hobo mans the front counter here. 
+
+~
+LookDesc:$
+A bald bum, wearing ramshackle clothing and probably making half a nuyen an
+hour in this bottom of the drek-barrel job, he is chain smoking and watching a
+cheap black and white trid set sitting on a table behind the counter.  He is
+fair skinned, with freckles on his shiny head, and he smells like he hasn't
+bathed since the week Dunkelzahn got geeked. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	5
+	Cha:	2
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	135
+	Weight:	80
+[SKILLS]
+BREAK
+#14606
+Keywords:	qarac elf fixer cowboy armorer
+Name:	Qarac the Armorer
+RoomDesc:$
+An elf wearing a cowboy hat stands here, ready to serve you. 
+
+~
+LookDesc:$
+A pasty white country boy, with pointy ears, and a cowboy hat, he stands
+proudly over his merchandise. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	7
+	Str:	5
+	Cha:	7
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	192
+	Weight:	70
+	Cash:	4000
+	Bank:	6000
+	Karma:	1
+[SKILLS]
+BREAK
+#14607
+Keywords:	dwarven bag lady tania
+Name:	a dwarven bag lady
+RoomDesc:$
+A dwarven bag lady pushes her shopping cart through here. 
+
+~
+LookDesc:$
+A dwarven bag lady, covered in dirt and grime, with a thick beard, full of
+mats and kinks and bundles of grunge.  She is wearing a pair of used trousers
+cut off where the knees would be on the human who wore them before.  She wears
+a blue and brown (once white) vertical striped blouse. 
+~
+ArriveMsg:	pushes her shopping cart in from
+LeaveMsg:	pushes her shopping cart
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	1
+	Str:	4
+	Cha:	2
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	110
+	Weight:	80
+[SKILLS]
+BREAK
+#14608
+Keywords:	Hal rigger trainer vehicle teacher albino elf greasy
+Name:	Hal the Rigger
+RoomDesc:$
+An albino elf with a datajack and a greasy t-shirt stands here. 
+
+~
+LookDesc:$
+Skin of snow white, hair of silver, and cybernetic eyes to replace the pink
+ones he was born with, he stands tall, reeking of gasoline and hydraulic
+fluid, the blood and bile of his profession.  He is well known in Seattle and
+Portland as a stock car racer rigger, and known in the shadows under his
+former shadowrunner name "Snow Razor". 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	7
+	Str:	7
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	12
+	Impact:	12
+[SKILLS]
+BREAK
+#14609
+Keywords:	rat disgusting black
+Name:	a disgusting black rat
+RoomDesc:$
+A disgusting-looking black rat with bugged out eyes skitters about. 
+
+~
+LookDesc:$
+This rat looks awful, with its fur greasy and dirty, and a shade of black that
+could remind someone of a large grease stain in somebody's driveway.  Its eyes
+are a dull amber color and bug out of its sockets slightly, lending to its
+ugliness. 
+~
+ArriveMsg:	skitters in from
+LeaveMsg:	skitters off
+MobFlags:	1000
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	12
+	Str:	2
+	Cha:	2
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	unarmed combat:	5
+BREAK
+#14610
+Keywords:	blue dawg ancients lieutenant ganger rose city
+Name:	Blue Dawg
+RoomDesc:$
+An Ancients Lieutenant decked out in blue stands here playing with his knives.
+
+~
+LookDesc:$
+Dressed in a blue synthleather jacket adorned with razors and spikes, covered
+in biker tattoos with pure blue cybereyes (no whites) and wired to the hilt,
+he guards this floor ferociously.  He smells of liquor and motor oil, and his
+hair is greased back, and dyed blue with a green streak in it. 
+~
+ArriveMsg:	walks in from
+LeaveMsg:	walks
+MobFlags:	100010011010100011000
+AffFlags:	100000000001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	17
+	Str:	14
+	Cha:	7
+	Int:	6
+	Wil:	9
+	Mag:	0
+[POINTS]
+	Height:	185
+	Weight:	80
+	Ballistic:	10
+	Impact:	8
+	Cash:	500
+[SKILLS]
+	unarmed combat:	4
+	edged weapons:	20
+BREAK
+#14611
+Keywords:	rose city ancients ganger elf hoodlum elite
+Name:	An elite Ancients ganger
+RoomDesc:$
+An elite Ancients ganger prowls about the floor. 
+
+~
+LookDesc:$
+Wearing the green and blue colors of the Ancients, he sports a mean look in
+his eyes, and has a weathered look that makes this elf look far older than he
+should. Carrying an FN HAR Assault Rifle, he is one of the upper tier of the
+Rose City Ancients. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100010001000100001000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	188
+	Weight:	78
+	Cash:	50
+[SKILLS]
+	assault rifles:	7
+	edged weapons:	3
+	shotguns:	4
+	unarmed combat:	4
+	pistols:	5
+BREAK
+#14612
+Keywords:	Leiath ancients ganger woman elven elf
+Name:	Leiath
+RoomDesc:$
+A nasty looking elven woman in Ancients colors stands here. 
+
+~
+LookDesc:$
+She's got jet black hair and glass-crystal cybereyes that you can see into the
+innards of her cranium through.  Light glistens off them almost like diamonds.
+She has a datajack behind her ear, but doesn't carry a cyberdeck. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100010011010100011000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	15
+	Str:	12
+	Cha:	6
+	Int:	9
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	65
+	Ballistic:	8
+	Impact:	7
+	Cash:	300
+[SKILLS]
+	unarmed combat:	12
+	shotguns:	9
+BREAK
+#14613
+Keywords:	Aggie dope dealer drug salesman
+Name:	Aggie the Dope Dealer
+RoomDesc:$
+An elven dope dealer, greasy, grimy and sleazy stands behind the storefront. 
+
+~
+LookDesc:$
+This guy is on a Drexl-scale of sleazy, with grimey dreadlocks and pointy
+ears, and great bloodshot eyes.  He is the official middleman for the dope
+trade in Portland, running all the sales operation and controlling all the
+dealers through the Ancients.  And he will sell you anything you are looking
+for. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000001000000000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	9
+	Str:	9
+	Cha:	9
+	Int:	9
+	Wil:	9
+	Mag:	0
+[POINTS]
+	Height:	171
+	Weight:	100
+	Ballistic:	9
+	Impact:	9
+[SKILLS]
+BREAK
+#14614
+Keywords:	Aves arms dealer elven
+Name:	Aves
+RoomDesc:$
+An elven arms dealer stands behind the swap-meet style table. 
+
+~
+LookDesc:$
+He dresses in a clean white buttoned shirt and plain khakis, wears simple
+wire-rimmed glasses and has blonde hair. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	185
+	Weight:	75
+	Ballistic:	15
+	Impact:	15
+[SKILLS]
+	unarmed combat:	50
+	negotiation:	5
+BREAK
+#14615
+Keywords:	green dawg ancients lieutenant ganger rose city
+Name:	Green Dawg
+RoomDesc:$
+An Ancients Lieutenant decked out in green stands here polishing his rifle. 
+
+~
+LookDesc:$
+Dressed in a green synthleather jacket adorned with razors and spikes, covered
+in biker tattoos with pure green cybereyes (no whites) and wired to the hilt,
+he guards this floor ferociously.  He smells of liquor and motor oil, and his
+hair is greased back, and dyed green with a blue streak in it. 
+~
+ArriveMsg:	walks in from
+LeaveMsg:	walks
+MobFlags:	100110011110100011000
+AffFlags:	1000000000001000000010
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	17
+	Str:	14
+	Cha:	7
+	Int:	6
+	Wil:	9
+	Mag:	0
+[POINTS]
+	Height:	185
+	Weight:	80
+	Ballistic:	11
+	Impact:	9
+	Cash:	500
+[SKILLS]
+	unarmed combat:	10
+	rifles:	20
+BREAK
+#14616
+Keywords:	gearhead dealer auto parts
+Name:	Gearhead
+RoomDesc:$
+An auto parts dealer stands behind the stand. 
+
+~
+LookDesc:$
+Selling auto parts probably stolen in hack shops, and parts considered illegal
+in most territories, he stands here waiting to serve you.  He is short for an
+elf, and has long greasy black hair. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	163
+	Weight:	85
+[SKILLS]
+BREAK
+#14617
+Keywords:	morkhan salesman dealer armor elven
+Name:	Morkhan
+RoomDesc:$
+An elven armor salesman stands behind the counter, with a nametag reading
+"Morkhan". 
+
+~
+LookDesc:$
+He is tall, with beady squinted bloodshot eyes, and reaks of marijuana smoke.
+He is wearing an armor suit of mil-spec grade. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	9
+	Str:	9
+	Cha:	9
+	Int:	9
+	Wil:	9
+	Mag:	0
+[POINTS]
+	Height:	179
+	Weight:	75
+	Ballistic:	12
+	Impact:	12
+[SKILLS]
+BREAK
+#14618
+Keywords:	Smith elf burly
+Name:	Smith
+RoomDesc:$
+A burly elf stands here sharpening a claymore. 
+
+~
+LookDesc:$
+An elf with muscles close to Schwarzenegger at his peak, and shortly cropped
+red hair. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	173
+	Weight:	115
+	Cash:	10000
+[SKILLS]
+BREAK
+#14619
+Keywords:	shady mick electronics dealer
+Name:	Shady Mick
+RoomDesc:$
+An elven electronics dealer stands behind the tables, counting cash. 
+
+~
+LookDesc:$
+Shady Mick is his name, and selling stolen electronics is his game.  He's a
+greasy young tech freak who happens to work for the Ancients. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	50
+[SKILLS]
+BREAK
+#14620
+Keywords:	phantasma jinn jet black ebony furred night-one woman
+Name:	Phantasma Jinn
+RoomDesc:$
+An exotic Night-One woman with jet black fur and ebony black hair sits here. 
+
+~
+LookDesc:$
+She has dazzlingly bright blue eyes that contrast sharply with her body fur
+and hair, which is completely black.  Her build is athletic, to a modest
+level, and curvy to a less-than-modest level.  She is adorned in all sorts of
+magical trinkets of all kinds, from spell locks to high level foci. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001010
+AffFlags:	1000001000
+Race:	Night-One
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	7
+	Str:	5
+	Cha:	7
+	Int:	6
+	Wil:	5
+	Mag:	12
+[POINTS]
+	Height:	174
+	Weight:	65
+[SKILLS]
+BREAK
+#14621
+Keywords:	chubb poole dwarven bartender smoking
+Name:	Chubb Poole
+RoomDesc:$
+A dwarven bartender polishes a shotglass, smoking a cigar. 
+
+~
+LookDesc:$
+The telltale datajacks behind his ear show his former trade, a rigger, who ran
+the shadows prior to the opening of this bar.  He seems to grump about with a
+foul scowl on his face, as he works on keeping the bar clean, and serves the
+patrons of this place. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	139
+	Weight:	85
+	Ballistic:	5
+	Impact:	3
+[SKILLS]
+BREAK
+#14622
+Keywords:	burly ork guard
+Name:	a burly ork guard
+RoomDesc:$
+A burly ork guards the hallway northward. 
+
+~
+LookDesc:$
+He looks like an ork who overdosed on troll steroids, then had his body filled
+with muscle augmentations and dermal enhancement chrome.  He moves like he's
+been slotted up with wires that could carry the bandwidth for the West Coast
+Meta-RTG backbone, and grins as if he was possessed with the spirit of Chucky
+from those Childs Play movies from the 1980's and 1990's. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	9
+	Str:	12
+	Cha:	1
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	185
+	Weight:	120
+	Ballistic:	7
+	Impact:	5
+	Bank:	400
+[SKILLS]
+	assault rifles:	7
+	unarmed combat:	7
+BREAK
+#14623
+Keywords:	larry maclaury human man pinstripe
+Name:	Larry MacLaury
+RoomDesc:$
+A human man in a pinstripe suit sits behind the desk. 
+
+~
+LookDesc:$
+Larry MacLaury is a younger brother to Seattle's notorious gangster Mac
+MacLaury.  He is reputedly the hand of the O'Malley Syndicate in the Portland
+area, keeping many lesser rings in line.
+ 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Stab
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	4
+	Cha:	6
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	168
+	Weight:	68
+	Ballistic:	4
+	Impact:	4
+[SKILLS]
+	unarmed combat:	4
+	pistols:	4
+	media etiquette:	6
+	corporate etiquette:	8
+	street etiquette:	5
+BREAK
+#14624
+Keywords:	jana ca'haeden reception elven woman
+Name:	Jana Ca'Haeden
+RoomDesc:$
+An elven woman, very lovely, sits behind the front desk. 
+
+~
+LookDesc:$
+Jana is a rather beautiful elven woman with long silky blonde hair and curves
+that make her rather conservative attire still look novahot sexy.  She has a
+smile that could melt the heart of Tzeentch, and well, is a well-rounded
+knockout. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	3
+	Cha:	9
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	171
+	Weight:	65
+[SKILLS]
+BREAK
+#14625
+Keywords:	red aura access ic
+Name:	a shimmering red aura
+RoomDesc:$
+A shimmering red aura covers the mouth of the cavern. 
+
+~
+LookDesc:$
+A very thin looking shimmering red film that covers the mouth of the cavern. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Cannon
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	6
+[SKILLS]
+BREAK
+#14626
+Keywords:	black pool sludge
+Name:	a black pool of sludge
+RoomDesc:$
+A black pool of sludge seeps from the cavern floor. 
+
+~
+LookDesc:$
+Looking at the pool, you see no sign of any sort of light, reflected from or
+eminated from.  The pool just seeps about, taking in anything in its path. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	8
+[SKILLS]
+BREAK
+#14627
+Keywords:	skeleton knight killer ic
+Name:	a skeleton knight
+RoomDesc:$
+A human skeleton, wearing the armor of a knight, stands guard. 
+
+~
+LookDesc:$
+Made entirely of the bones of the dead, he wields a nasty battle axe, and has
+glowing red eyes, fueled with the fires of hades. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	9
+[SKILLS]
+BREAK
+#14628
+Keywords:	grand skeleton knight black armor ic
+Name:	a grand skeleton knight
+RoomDesc:$
+A very large skeleton wearing black obsidian armor guards the way. 
+
+~
+LookDesc:$
+The armor he wears is the blackest of the black, an obsidian platemail
+covering his whole skeletal body.  His eyes glow a dull red through the helmet
+he wears, which carries no faceplate. 
+~
+ArriveMsg:	ÄùÏPÓ
+LeaveMsg:	YÁYÁ
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	10
+[SKILLS]
+BREAK
+#14629
+Keywords:	grand skeleton knight black armor ic
+Name:	a grand skeleton knight
+RoomDesc:$
+A very large skeleton wearing black obsidian armor guards the way. 
+
+~
+LookDesc:$
+The armor he wears is the blackest of the black, an obsidian platemail
+covering his whole skeletal body.  His eyes glow a dull red through the helmet
+he wears, which carries no faceplate. 
+~
+ArriveMsg:	ÄùÏPÓ
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	10
+[SKILLS]
+BREAK
+#14630
+Keywords:	grand skeleton knight black armor ic
+Name:	a grand skeleton knight
+RoomDesc:$
+A very large skeleton wearing black obsidian armor guards the way. 
+
+~
+LookDesc:$
+The armor he wears is the blackest of the black, an obsidian platemail
+covering his whole skeletal body.  His eyes glow a dull red through the helmet
+he wears, which carries no faceplate. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	»G@»G@
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	10
+[SKILLS]
+BREAK
+#14631
+Keywords:	shadowlich black shadowlike being black ic
+Name:	a shadowlich
+RoomDesc:$
+A being of pure shadow floats about here, brandishing a black blade. 
+
+~
+LookDesc:$
+The shadowlich is a very powerful Black IC coded by Andalusian Light
+Industries information division.  With Semi-Autonomous Knowbot (SK)
+capabilities, the shadowlich can be the deckers' worst nightmare come true. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	1
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	14
+[SKILLS]
+BREAK
+#14632
+Keywords:	elven docwagon dealer rudy
+Name:	Rudy
+RoomDesc:$
+An elven DocWagon contract dealer sits behind a counter. 
+
+~
+LookDesc:$
+Rudy is a rather nondescript male elf with ash colored hair and pale blue
+eyes.  He is wearing a plain white uniform with the Tir Tairngire Royal
+Hospital Staff patch, and a DocWagon Tir Tairngire Services patch on the
+opposing shoulder.  He is not frail, though he is lanky in a manner common to
+most male elves of his age group, and presents a neat and clean front. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	70
+[SKILLS]
+BREAK
+#14633
+Keywords:	dianne heavyset orkish woman bartender
+Name:	Dianne
+RoomDesc:$
+A heavy-set orkish woman tends the bar here, looking unfriendly. 
+
+~
+LookDesc:$
+Mary's only hires women who can serve a dual function of bouncer and bartender
+at once.  Dianne is no exception.  She's wired to the teeth and is built like
+an ultra-compact panzer. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	7
+	Str:	12
+	Cha:	1
+	Int:	3
+	Wil:	5
+	Mag:	6
+[POINTS]
+	Height:	190
+	Weight:	115
+[SKILLS]
+	unarmed combat:	7
+	:	3
+	:	3
+BREAK
+#14634
+Keywords:	sexy elven stripper violet hair nude
+Name:	a violet-haired elven stripper
+RoomDesc:$
+A sexy elven stripper with violet hair dances here in the nude. 
+
+~
+LookDesc:$
+An elven female with a plastic-perfect body, dancing in time to the music
+being played by the jukebox next to the stage.  Her hair is ^mdark violet^n, and
+her eyes are an unreal shade of ^Bblue^n, most likely contacts or iris
+modifications. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	4
+	Cha:	6
+	Int:	4
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	178
+	Weight:	60
+	Cash:	250
+[SKILLS]
+BREAK
+#14635
+Keywords:	sleazy elf corduroy smoking cigar bert
+Name:	Bert
+RoomDesc:$
+A sleazy elf wearing all corduroy drools at the stripper, smoking a cigar. 
+
+~
+LookDesc:$
+He's pretty sleazy looking, greasy hair, greasy skin, piercings a plenty in
+both ears.  He is wearing a corduroy 'smoking jacket' type jacket, corduroy
+pants, and a plain shirt underneath.  He smells like beer. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	2
+	Cha:	2
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	89
+	Cash:	120
+	Bank:	100
+[SKILLS]
+BREAK
+#14636
+Keywords:	bucko blonde elf glasses dreadlocks
+Name:	Bucko
+RoomDesc:$
+A blonde dreadlocked male elf wearing glasses covers the front counter. 
+
+~
+LookDesc:$
+His style of dress, his mannerisms, and the look in his eyes create the
+illusion that he had been taken out of a Rainbow Gathering kicking and
+screaming and was forced to get a real job.  Working at Stuffer Shack.  He
+just sits here all day, disgruntled, listening to political pirate radio and
+doing his job at the Stuffer Shack. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	5
+	Str:	3
+	Cha:	5
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	186
+	Weight:	70
+[SKILLS]
+BREAK
+#14637
+Keywords:	edgar black haired elf
+Name:	Edgar
+RoomDesc:$
+A black haired elf wearing glasses is here to serve you. 
+
+~
+LookDesc:$
+He is dressed conservatively but the conservative dress is sort of offset by
+the pierced eyebrow.  And septum.  And lip.  And the bones piercing his ears.
+And the skull and crossbone patterns in his eyeglasses.  But he doesn't look
+very tough.  Any runner one day out of the hall can flatten him in seconds.
+But that's not what he's here for.  He sells coffee.  Wonderful wonderful
+coffee. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	4
+	Str:	2
+	Cha:	4
+	Int:	6
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	188
+	Weight:	60
+[SKILLS]
+BREAK
+#14638
+Keywords:	gargamel decker elf balding male tall lanky black haired waptec bill
+Name:	Gargamel
+RoomDesc:$
+A tall, balding black haired elf decker fiddles with some disassembled gadget.
+
+~
+LookDesc:$
+Gargamel was a novahot decker throughout the 2050's but has retired to do what
+he finds most gratifying.  Teach up and coming deckers.  His style of teaching
+is a tad bit orthodox, but it works.  He doesn't dress in anything trendy, or
+even all that good looking, but that doesn't concern him, functionality does.
+He is known by some to be an absolute genius, but being known by all for his
+talents doesn't concern him. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	5
+	Cha:	7
+	Int:	15
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	210
+	Weight:	90
+[SKILLS]
+	computers:	20
+	electronics:	20
+	:	20
+	BR/Drone:	10
+	biotech:	10
+BREAK
+#14639
+Keywords:	megan cute short girl pigtails blue eyes
+Name:	Megan
+RoomDesc:$
+A cute short elven girl with blue eyes and pigtails sits behind the counter. 
+
+~
+LookDesc:$
+She has red hair tied in two pigtails, kind of puffy cheeks, and blue eyes.
+She acts like a ditz until you start talking the nuances of cyberdeck
+hardware, then she says the damnedest things.  She has a datajack just behind
+the ear, you don't notice it until she turns around, which she often does, as
+there is a special inventory for sale here that is not advertised.  Utility
+software for cyberterminals.  Or so it is labelled. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	7
+	Str:	5
+	Cha:	8
+	Int:	8
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	65
+[SKILLS]
+BREAK
+#14640
+Keywords:	laine rocco's pizza clerk elven woman
+Name:	Laine
+RoomDesc:$
+An elven woman sits behind the front counter, taking orders. 
+
+~
+LookDesc:$
+Laine is about as superficial as it comes, but she does her job well.  She
+wears tight clothes that flaunt what nature has given her, and has bleached
+blonde hair, long down to the shoulders with pink streaks.  She wears emo
+style thin rectangular lens glasses with glitter speckles on the rims.  She
+has a curvy body and moves and dresses in such a way to accentuate that. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	4
+	Cha:	5
+	Int:	2
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	174
+	Weight:	71
+[SKILLS]
+BREAK
+#14641
+Keywords:	stephanie woman spun goard purple sequined robe
+Name:	Stephanie
+RoomDesc:$
+A woman in a purple sequined robe, seemingly spun out, welcomes you. 
+
+~
+LookDesc:$
+She wears a purple sequined robe, that flashes brightly against the
+phosphorescent lighting overhead.  She is very thin, though not frail, and
+frolicks about the altar at all hours.  She wears horn-rimmed glasses with
+silver sequines glued around the edges.  Straaaaange lady.  Straaaaaaange lady
+indeed. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	5
+	Str:	2
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	166
+	Weight:	58
+[SKILLS]
+BREAK
+#14799
+Keywords:	G-Spot gspot georgie porn guy sleazy scrawny elf
+Name:	G-Spot Georgie the Porn Guy
+RoomDesc:$
+A sleazy, scrawny Elf stands behind the counter, nametag reading "G-Spot
+Georgie". 
+
+~
+LookDesc:$
+Now this is a man with one of the greatest jobs on earth. The sleazy Elf with
+greased back hair is dressed in loose fitting clothing, and piercings adorn
+his body. He stands behind the counter, giving expert advice on the
+merchandise in the store to inquisitive customers. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	5
+	Cha:	2
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	55
+	Cash:	5000
+	Bank:	5000
+[SKILLS]
+BREAK
+END

@@ -1019,52 +1019,6 @@ Material:	metal
 	Val5:	7
 	Val6:	12
 BREAK
-#41
-Keywords:	call button elevator
-Name:	an elevator call button
-RoomDesc:$
-^cAn elevator call button is visible here.^n~
-LookDesc:$
-Perfect for summoning an elevator. Why don't you ^WPUSH^n it? 
-~
-Type:	Other
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	0.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#42
-Keywords:	panel
-Name:	an elevator control panel
-RoomDesc:$
-^cA panel of buttons allows you to control the lift.^n~
-LookDesc:$
-You shouldn't be able to look at this. Please alert staff. 
-~
-Type:	Other
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	0.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
 #50
 Keywords:	flat panel display monitor terminal board floating
 Name:	A Floating Display Panel
@@ -1165,30 +1119,31 @@ Material:	paper
 [VALUES]
 	Val0:	25000
 BREAK
-#99
-Keywords:	a sign
-Name:	a sign
+#83
+Keywords:	can sprite drink
+Name:	A Can of Sprite
 RoomDesc:$
-An arrow suspended in the dimness points you to the north.~
+This is a can of sprite with bubbles and everything~
 LookDesc:$
-Che didn't include the Docwagon or similar recovery rooms in the distributed
-code, so for now everyone who dies is loading in to this room. Head north to
-go to Dante's Inferno. Other exits may be added by popular request. 
-~
-Type:	UNDEFINED
-WearFlags:	0
+It looks pretty much like an unfinished object~
+Type:	Gun Clip
+WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
-Material:	metal
+Material:	paper
 [POINTS]
-	Weight:	0.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
+	Weight:	0.45
+	Barrier:	1
+	Cost:	60
+	AvailTN:	6
+	AvailDay:	3.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	24
+	Val2:	3
 BREAK
 #100
 Keywords:	credstick plastic
@@ -1513,7 +1468,7 @@ AffFlags:	0
 Material:	paper
 [POINTS]
 	Weight:	0.00
-	Barrier:	4
+	Barrier:	1
 	Cost:	0
 	AvailTN:	0
 	AvailDay:	0.00
@@ -1663,7 +1618,7 @@ AffFlags:	0
 Material:	metal
 [POINTS]
 	Weight:	0.00
-	Barrier:	6
+	Barrier:	32
 	Cost:	0
 	AvailTN:	0
 	AvailDay:	0.00
@@ -1696,24 +1651,22 @@ Material:	metal
 	LegalPermit:	0
 BREAK
 #120
-Keywords:	ucas army dress uniform
-Name:	^gA UCAS Army dress uniform shirt^n
+Keywords:	grafitti
+Name:	a piece of graffiti
 RoomDesc:$
-Army dress greens lie here, folded meticulously.~
+a non-descript piece of graffiti is here.~
 LookDesc:$
-A UCAS Army dress green uniform shirt, with a brass pin etched with the word
-"Straten" upon it, and three stars denoting Major General rank on the collar
-and on the shoulders. 
+It's just paint. 
 ~
-Type:	Worn
-WearFlags:	1001
+Type:	Other
+WearFlags:	0
 ExtraFlags:	0
 AffFlags:	0
-Material:	fabric
+Material:	concrete
 [POINTS]
-	Weight:	1.00
+	Weight:	0.00
 	Barrier:	32
-	Cost:	1200
+	Cost:	0
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
@@ -1721,24 +1674,24 @@ Material:	fabric
 	LegalPermit:	0
 BREAK
 #121
-Keywords:	box ammo ammunition
-Name:	a box of ammunition
+Keywords:	ammo box
+Name:	a blank ammo box
 RoomDesc:$
-A box of ammunition has been left here.~
+Someone has left a box of ammunition here.~
 LookDesc:$
 It is a box of ammo. 
 ~
 Type:	Ammo Box
-WearFlags:	10001
-ExtraFlags:	0
+WearFlags:	1
+ExtraFlags:	1000001000
 AffFlags:	0
-Material:	plastic
+Material:	metal
 [POINTS]
 	Weight:	0.00
-	Barrier:	4
+	Barrier:	32
 	Cost:	0
-	AvailTN:	2
-	AvailDay:	1.00
+	AvailTN:	0
+	AvailDay:	0.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
@@ -1874,33 +1827,6 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
-BREAK
-#127
-Keywords:	blank empty magazine clip
-Name:	a blank empty magazine
-RoomDesc:$
-A blank empty magazine has been dropped here.~
-LookDesc:$
-This is a nondescript chunk of material, made of mimetic alloy and designed to
-be ^WBOND^ned to a firearm. Once bonded, it assumes the shape and internal
-structure of a magazine that best fits the selected weapon. 
-~
-Type:	Gun Magazine
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	0.05
-	Barrier:	4
-	Cost:	50
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val1:	22
 BREAK
 #140
 Keywords:	customized cc10 ares sniper rifle

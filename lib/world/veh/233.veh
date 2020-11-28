@@ -1,0 +1,176 @@
+#23300
+Name:	hovercraft hover craft red black sleek wx-1000 wx 1000
+ShortDesc:	A sleek black and red wx-1000 hovercraft
+RoomDesc:	^nA ^Lblack ^nand ^Rred^n hovercraft floats slightly off the ground here^R.^n
+LongDesc:$
+It looks pretty much like an unfinished object~
+Inside:$
+You see an uncreative vehicle.~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	floats out to
+Arriving:	floats in from
+Handling:	4
+Speed:	10
+Accel:	4
+Body:	4
+Armour:	8
+Pilot:	4
+Sig:	0
+Autonav:	4
+Seating:	2
+SeatingBack:	2
+Load:	800
+Cost:	245000
+Type:	7
+Flags:	0
+Engine:	2
+BREAK
+#23301
+Name:	wuxing wu xing vector thrust fighter
+ShortDesc:	A WuXing Vector Thrust Fighter
+RoomDesc:	A WuXing Vector Thrust Fighter has landed here
+LongDesc:$
+It looks pretty much like an unfinished object~
+Inside:$
+You see an uncreative vehicle.~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	flies out to the
+Arriving:	flies in from the
+Handling:	9
+Speed:	12
+Accel:	12
+Body:	12
+Armour:	16
+Pilot:	12
+Sig:	10
+Autonav:	30
+Seating:	1
+SeatingBack:	3
+Load:	500
+Cost:	0
+Type:	6
+Flags:	10
+Engine:	2
+BREAK
+#23302
+Name:	steel lynx combat drone
+ShortDesc:	A Steel Lynx Combat Drone
+RoomDesc:	A moderately sized treaded robot sits idly here.
+LongDesc:$
+This is a moderately sized drone with metal treads and looking like it could
+pack a serious punch. It has a mini-turret mount and plenty of other
+possibilities. 
+~
+Inside:$
+You see an uncreative vehicle.~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	rolls out to the
+Arriving:	rolls in from the
+Handling:	4
+Speed:	80
+Accel:	6
+Body:	2
+Armour:	9
+Pilot:	2
+Sig:	6
+Autonav:	0
+Seating:	0
+SeatingBack:	0
+Load:	225
+Cost:	75000
+Type:	0
+Flags:	0
+Engine:	1
+BREAK
+#23303
+Name:	MCT Hachiman drone
+ShortDesc:	An MCT Hachiman
+RoomDesc:	A small treaded robot idles here.
+LongDesc:$
+This is a small drone with metal treads and not a lot of space for
+improvement. However, considering the price, it has to make up for that
+somehow...right? 
+~
+Inside:$
+You see an uncreative vehicle.~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	rolls out to the
+Arriving:	rolls in from the
+Handling:	3
+Speed:	10
+Accel:	2
+Body:	2
+Armour:	5
+Pilot:	3
+Sig:	7
+Autonav:	0
+Seating:	0
+SeatingBack:	0
+Load:	125
+Cost:	40000
+Type:	0
+Flags:	0
+Engine:	1
+BREAK
+#23304
+Name:	appaloosa light scout ferrari apc
+ShortDesc:	A Ferrari Appaloosa Light Scout
+RoomDesc:	A large civilian APC is parked here.
+LongDesc:$
+It looks pretty much like an unfinished object~
+Inside:$
+
+~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	leaves
+Arriving:	arrives
+Handling:	2
+Speed:	125
+Accel:	10
+Body:	6
+Armour:	9
+Pilot:	6
+Sig:	5
+Autonav:	2
+Seating:	2
+SeatingBack:	4
+Load:	625
+Cost:	775300
+Type:	3
+Flags:	0
+Engine:	2
+BREAK
+#23305
+Name:	harley davidson electro glide electroglide bike motor motorcycle cycle
+ShortDesc:	A Harley Davidson ElectroGlide
+RoomDesc:	A massive motorcycle is parked on the curb here.
+LongDesc:$
+It looks pretty much like an unfinished object~
+Inside:$
+You see an uncreative vehicle.~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	leaves
+Arriving:	arrives
+Handling:	3
+Speed:	225
+Accel:	13
+Body:	2
+Armour:	2
+Pilot:	0
+Sig:	1
+Autonav:	1
+Seating:	1
+SeatingBack:	1
+Load:	140
+Cost:	70000
+Type:	1
+Flags:	0
+Engine:	2
+BREAK
+END

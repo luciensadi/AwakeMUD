@@ -1,0 +1,1176 @@
+#22200
+Keywords:	brawling ork
+Name:	a brawling Ork
+RoomDesc:$
+A brawling Ork throws a chair. 
+
+~
+LookDesc:$
+An abnormally large ork is heaving chairs, tables, and even other people.
+Best stay away from him. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010
+AffFlags:	10000000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	13
+	Str:	8
+	Cha:	13
+	Int:	6
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	302
+	Weight:	102
+	Level:	5
+	Ballistic:	6
+	Impact:	7
+[SKILLS]
+BREAK
+#22201
+Keywords:	buff human man
+Name:	a buff human male
+RoomDesc:$
+A buff, human male punches other customers. 
+
+~
+LookDesc:$
+A very strong human, most likely a criminal from the orange jumpsuit he's
+wearing and the broken handcuffs around his wrists.  He's loaded up on coffee
+and quite twitchy. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100001010
+AffFlags:	10000000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	9
+	Str:	12
+	Cha:	11
+	Int:	20
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	210
+	Weight:	80
+	Level:	4
+	Ballistic:	7
+	Impact:	5
+	Cash:	42
+	Bank:	462
+[SKILLS]
+BREAK
+#22202
+Keywords:	Lydia
+Name:	Lydia
+RoomDesc:$
+Lydia sneers at you as she adjusts her spiked collar. 
+
+~
+LookDesc:$
+Lydia is pale, with black eyeliner and lipstick, and bright blue, spiked hair.
+She sneers at you, and cusses at her co-workers.  Hardly anyone you'd trust to
+make your beverage. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001001010
+AffFlags:	10000000000000
+Race:	Humanoid
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	13
+	Qui:	15
+	Str:	12
+	Cha:	2
+	Int:	7
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	161
+	Weight:	60
+	Level:	1
+	Ballistic:	5
+	Impact:	5
+	Cash:	6669
+	Bank:	6669
+[SKILLS]
+BREAK
+#22203
+Keywords:	Joey
+Name:	Joey
+RoomDesc:$
+Joey sits here, shooting up on heroin. 
+
+~
+LookDesc:$
+A tall, skinny boy, maybe 17 years old.  He looks like he's been on drugs all
+his life.  Disgusting brown dreadlocks hang down infront of his oily face.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001010
+AffFlags:	10000000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	4
+	Str:	8
+	Cha:	2
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	2
+	Ballistic:	4
+	Impact:	4
+	Cash:	103
+	Bank:	203
+[SKILLS]
+BREAK
+#22204
+Keywords:	school fish
+Name:	a school of fish
+RoomDesc:$
+A school of fish swim around you. 
+
+~
+LookDesc:$
+A simple school of tiny, orangish fish.  There around maybe 200 little fish,
+but they look pretty pathetic. 
+~
+ArriveMsg:	swims in from
+LeaveMsg:	zips
+MobFlags:	11001000
+AffFlags:	10000000000000
+Race:	Animal
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	6
+	Str:	3
+	Cha:	10
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	1
+	Ballistic:	2
+	Impact:	3
+	Cash:	43
+[SKILLS]
+BREAK
+#22205
+Keywords:	old man scarred
+Name:	Nickoli
+RoomDesc:$
+A scarred old man broods here. 
+
+~
+LookDesc:$
+Wearing a long cape over heavily damaged armor, it's obvious this man has been
+through alot.  A long scar starts at his forehead and disappears under his
+clothing. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101110000001001010
+AffFlags:	100100001000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	30
+	Qui:	15
+	Str:	19
+	Cha:	12
+	Int:	20
+	Wil:	25
+	Mag:	10
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	3
+	Ballistic:	3
+	Impact:	7
+	Cash:	999999
+	Bank:	999999
+[SKILLS]
+BREAK
+#22206
+Keywords:	raven
+Name:	an unusually large raven
+RoomDesc:$
+A raven is perched barely out of your reach. 
+
+~
+LookDesc:$
+A normal raven, except unusally large.  It has a small ring around it's left
+ankle. 
+~
+ArriveMsg:	flutters in from
+LeaveMsg:	raises from it's perch and flies
+MobFlags:	1001000
+AffFlags:	100000000000000000
+Race:	Animal
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	15
+	Str:	6
+	Cha:	2
+	Int:	17
+	Wil:	5
+	Mag:	3
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	6
+	Impact:	4
+	Cash:	286
+[SKILLS]
+BREAK
+#22207
+Keywords:	man
+Name:	a naked man
+RoomDesc:$
+A man scrubs himself furiously. 
+
+~
+LookDesc:$
+A naked man.  Need more description?  Go buy a PlayGirl. 
+~
+ArriveMsg:	covers his privates and runs in from
+LeaveMsg:	fears being whipped with a towel and runs
+MobFlags:	1010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	7
+	Str:	15
+	Cha:	2
+	Int:	5
+	Wil:	11
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	5
+	Impact:	4
+[SKILLS]
+BREAK
+#22208
+Keywords:	woman
+Name:	a naked woman
+RoomDesc:$
+A woman scrubs at the scar on her neck. 
+
+~
+LookDesc:$
+A naked woman.  Get a Playboy, you pervert. 
+~
+ArriveMsg:	places her arms over herself and enters from
+LeaveMsg:	runs
+MobFlags:	1010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	12
+	Str:	10
+	Cha:	3
+	Int:	10
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	4
+	Impact:	3
+[SKILLS]
+BREAK
+#22209
+Keywords:	sleeping soldier
+Name:	a sleeping soldier
+RoomDesc:$
+A soldier restlessly tosses on his cot. 
+
+~
+LookDesc:$
+ A strong man.  He looks like he could pick up a Buick with his pinkie, and
+maybe not even notice.  He struggles to get comfortable on the all too-small
+cot. 
+~
+ArriveMsg:	sleepwalks in from
+LeaveMsg:	sleepwalks
+MobFlags:	100001001010
+AffFlags:	10000000000000
+Race:	Humanoid
+Gender:	Male
+Position:	Resting
+DefaultPos:	Resting
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	4
+	Str:	13
+	Cha:	4
+	Int:	7
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	6
+	Impact:	5
+	Cash:	542
+	Bank:	1024
+[SKILLS]
+BREAK
+#22210
+Keywords:	Anya
+Name:	Anya
+RoomDesc:$
+Anya sits here, twitching and spilling pills from the bottle in her hand. 
+
+~
+LookDesc:$
+Anya is loaded on drugs.  Pill popper, acid, heroin, ecstacy.  Kill her.  Put
+her out of her misery. 
+~
+ArriveMsg:	sulks in from
+LeaveMsg:	runs
+MobFlags:	10001010
+AffFlags:	10000000000000
+Race:	Humanoid
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	15
+	Str:	4
+	Cha:	5
+	Int:	7
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	3
+	Impact:	4
+	Cash:	194
+	Bank:	183
+[SKILLS]
+BREAK
+#22211
+Keywords:	sleeping soldier
+Name:	a sleeping soldier
+RoomDesc:$
+A soldier mumbles in her sleep. 
+
+~
+LookDesc:$
+A buff woman sleeps on a scratchy cot, curled up underneath a scratchy
+blanket. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001010
+AffFlags:	10000000000000
+Race:	Humanoid
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	5
+	Str:	12
+	Cha:	6
+	Int:	3
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	253
+	Bank:	1036
+[SKILLS]
+BREAK
+#22212
+Keywords:	sergeant jeacopello
+Name:	Sergeant Jeacopello
+RoomDesc:$
+Sergeant Jeacopello rests with his feet on the desk. 
+
+~
+LookDesc:$
+Sergeant Seth Jeacopello.  A strong man, but not too bright.  He barks orders
+at anything that moves and sleeps the rest of the time.  A really whiner, er,
+winner. 
+~
+ArriveMsg:	barks orders as he runs in from
+LeaveMsg:	announces that he's got to go to the bathroom and runs
+MobFlags:	100000001001010
+AffFlags:	10000000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	6
+	Str:	11
+	Cha:	3
+	Int:	5
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	4
+	Impact:	7
+	Cash:	1023
+	Bank:	5923
+[SKILLS]
+BREAK
+#22213
+Keywords:	lieutenant bowers
+Name:	Lieutenant Bowers
+RoomDesc:$
+Lieutenant Bowers twiddles his thumbs. 
+
+~
+LookDesc:$
+Lieutenant Jack Bowers.  He usually can be found doing paperwork at his desk,
+or sitting, waiting to recieve more paperwork. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100100000001010
+AffFlags:	10000000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	7
+	Str:	8
+	Cha:	4
+	Int:	6
+	Wil:	9
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	4
+	Impact:	5
+	Cash:	4176
+	Bank:	6582
+[SKILLS]
+BREAK
+#22214
+Keywords:	undergrowth plant
+Name:	moldy undergrowth
+RoomDesc:$
+Some moldy plant tries to grab your ankles. 
+
+~
+LookDesc:$
+A moldy, gross plant! 
+~
+ArriveMsg:	scoots in from
+LeaveMsg:	says, "Squish squish!" and moves
+MobFlags:	100000001101010
+AffFlags:	1000000000
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Whip
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	5
+	Cha:	2
+	Int:	1
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	4
+	Impact:	2
+	Cash:	100
+[SKILLS]
+BREAK
+#22215
+Keywords:	military guard
+Name:	a military guard
+RoomDesc:$
+A military guard stands here. 
+
+~
+LookDesc:$
+A guard, dressed in military garb, isn't gonna just let you walk past! 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000001101010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	7
+	Str:	11
+	Cha:	5
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	5
+	Impact:	8
+	Cash:	725
+	Bank:	4956
+[SKILLS]
+BREAK
+#22216
+Keywords:	corporal
+Name:	a corporal
+RoomDesc:$
+A corporal punches something into a cyberdeck. 
+
+~
+LookDesc:$
+A woman, in the military.  Hah hah hah. 
+~
+ArriveMsg:	taps something into her cyberdeck as she wanders in from
+LeaveMsg:	stares at her cyberdeck as she wanders
+MobFlags:	1001000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	6
+	Str:	9
+	Cha:	7
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	7
+	Impact:	5
+	Cash:	545
+	Bank:	4221
+[SKILLS]
+BREAK
+#22217
+Keywords:	man
+Name:	an exercising man
+RoomDesc:$
+A man runs on the treadmill. 
+
+~
+LookDesc:$
+He's workin' out, getting fit, burning those calories! 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	13
+	Qui:	4
+	Str:	10
+	Cha:	6
+	Int:	2
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	5
+	Impact:	4
+	Cash:	753
+	Bank:	5321
+[SKILLS]
+BREAK
+#22218
+Keywords:	woman
+Name:	an exercising woman
+RoomDesc:$
+A woman pumps her legs on an exercise bike. 
+
+~
+LookDesc:$
+Working out, you should try it!  She's buff! 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	13
+	Qui:	6
+	Str:	9
+	Cha:	6
+	Int:	9
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	6
+	Impact:	6
+	Cash:	456
+	Bank:	4563
+[SKILLS]
+BREAK
+#22219
+Keywords:	man
+Name:	a kickboxing man
+RoomDesc:$
+A man practices kickboxing. 
+
+~
+LookDesc:$
+He's strong, lean and heh... not quite a fighting machine.  You can take him
+(I hope) 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	5
+	Str:	12
+	Cha:	2
+	Int:	3
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	5
+	Impact:	5
+	Cash:	654
+	Bank:	4321
+[SKILLS]
+BREAK
+#22220
+Keywords:	dummy man
+Name:	a punching man
+RoomDesc:$
+A man flails at a dummy. 
+
+~
+LookDesc:$
+He's fighting for his life against... a stuffed dummy?  Well, he's a man,
+dummy. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	4
+	Str:	7
+	Cha:	3
+	Int:	2
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	542
+	Bank:	5413
+[SKILLS]
+BREAK
+#22221
+Keywords:	woman
+Name:	a shooting woman
+RoomDesc:$
+A woman practices at the firing range. 
+
+~
+LookDesc:$
+A woman with a gun.  Rock on.  She's buff, and has an odd scar on the back of
+her neck which is visible because her hair is up in a ponytail. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	8
+	Str:	10
+	Cha:	6
+	Int:	8
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	7
+	Impact:	6
+	Cash:	542
+	Bank:	6542
+[SKILLS]
+BREAK
+#22222
+Keywords:	psycho surgeon
+Name:	a psycho-surgeon
+RoomDesc:$
+A psycho-surgeon pieces together random parts. 
+
+~
+LookDesc:$
+A crazy doctor.  His coat and gloves are covered in blood, some red, some
+green, some yellow (if that's even blood). 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Stab
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	9
+	Str:	6
+	Cha:	3
+	Int:	15
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	4
+	Impact:	3
+	Cash:	843
+	Bank:	7651
+[SKILLS]
+BREAK
+#22223
+Keywords:	doctor
+Name:	a doctor
+RoomDesc:$
+A doctor installs a chip in a soldier's head. 
+
+~
+LookDesc:$
+He looks pretty much like a normal doctor, except for the shock collar around
+his neck, which pretty much tells you that he doesn't want to be here. 
+~
+ArriveMsg:	walks in from
+LeaveMsg:	thinks he may have hope for escape and runs
+MobFlags:	1001000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	7
+	Str:	4
+	Cha:	7
+	Int:	14
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	231
+	Bank:	543
+[SKILLS]
+BREAK
+#22224
+Keywords:	master sergeant
+Name:	a master sergeant
+RoomDesc:$
+A master sergent struts around, making sure everyone's on task. 
+
+~
+LookDesc:$
+This man looks pretty damn strong, and he probably earned his position by
+beating down the competion.  A scar over his right eye implies he's been
+though some tough battle. 
+~
+ArriveMsg:	struts in from
+LeaveMsg:	barks an order and runs
+MobFlags:	101000000001001000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	13
+	Qui:	7
+	Str:	11
+	Cha:	5
+	Int:	8
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	8
+	Impact:	9
+	Cash:	8456
+	Bank:	8456
+[SKILLS]
+	firearms:	9
+	assault rifles:	3
+BREAK
+#22225
+Keywords:	private
+Name:	a private
+RoomDesc:$
+A private wanders aimlessly. 
+
+~
+LookDesc:$
+She's built, and pretty, except the whole super-tight ponytail and mean
+expression don't really add too much in the area of character. 
+~
+ArriveMsg:	looks you over as she stumbles in from
+LeaveMsg:	hears her name and clumsily runs
+MobFlags:	1001000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	6
+	Str:	9
+	Cha:	6
+	Int:	10
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	6
+	Impact:	4
+	Cash:	432
+	Bank:	5321
+[SKILLS]
+BREAK
+#22226
+Keywords:	soldier
+Name:	an eating soldier
+RoomDesc:$
+A soldier grumbles as he picks at the food on his tray. 
+
+~
+LookDesc:$
+He looks like he just woke up, and obviously finds the food he's eating
+utterly disgusting. 
+~
+ArriveMsg:	walks in from
+LeaveMsg:	picks up his tray and walks
+MobFlags:	1001000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Stab
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	5
+	Str:	9
+	Cha:	5
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	5
+	Impact:	6
+	Cash:	243
+	Bank:	5112
+[SKILLS]
+	edged weapons:	3
+BREAK
+#22227
+Keywords:	cook
+Name:	a cook
+RoomDesc:$
+A cook stirs chemicals into the pot of gruel. 
+
+~
+LookDesc:$
+This cook is wearing a shock collar, implying that she really doesn't want to
+be here, and she's mixing some chemicals into the food, probably steroids. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	9
+	Str:	7
+	Cha:	3
+	Int:	3
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	3
+	Impact:	4
+	Cash:	210
+	Bank:	512
+[SKILLS]
+BREAK
+#22228
+Keywords:	ceiling turret
+Name:	a ceiling turret
+RoomDesc:$
+A ceiling turret swivels to fire at you! 
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000010000000111010
+AffFlags:	100011000000001000
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	5
+	Str:	10
+	Cha:	1
+	Int:	4
+	Wil:	20
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	8
+	Impact:	8
+[SKILLS]
+	unarmed combat:	5
+BREAK
+#22296
+Keywords:	Bernie man
+Name:	Bernie
+RoomDesc:$
+A man, wearing a nice pressed suit, sits here, staring at you expectantly. 
+
+~
+LookDesc:$
+He looks like a business man.  His brown hair is combed neatly, and his navy
+blue suit is pressed, and he hold a briefcase and carries a cellphone.  Not
+someone you'd really be afraid of judging by apperance, but the power he
+wields is tremendous. 
+~
+ArriveMsg:	peers into the room suspiciously before entering from
+LeaveMsg:	glances around cautiously before exiting
+MobFlags:	1010
+AffFlags:	10000000000000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	6
+	Str:	5
+	Cha:	7
+	Int:	9
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	195
+	Weight:	86
+	Ballistic:	7
+	Impact:	6
+	Bank:	27012
+[SKILLS]
+BREAK
+#22297
+Keywords:	Man Thomas
+Name:	Thomas Langer
+RoomDesc:$
+A man coughs up blood and barely manages to raise his head to look at you. 
+
+~
+LookDesc:$
+Thomas looks like any normal man, except he has a large gash across his chest
+issuing a concerning about of blood, creating a large puddle around him, and
+soaking his clothing a crimson red.  He raises his head and looks to you,
+shadowrunner, for help. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	25
+	Qui:	2
+	Str:	1
+	Cha:	2
+	Int:	16
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	3
+	Impact:	2
+	Cash:	321
+	Bank:	532
+[SKILLS]
+BREAK
+#22298
+Keywords:	Chief Roberts
+Name:	Chief Roberts
+RoomDesc:$
+Chief Roberts huddles in the corner, cradling a broken arm. 
+
+~
+LookDesc:$
+Chief Roberts wears a nice buisness suit that is soiled in blood and dirt.  He
+is very bruised, and has a few puncuture wounds on his neck, arms, and face.
+He sticks close to you, afraid of anything that makes a noise. 
+~
+ArriveMsg:	runs towards you from
+LeaveMsg:	cautiously exits
+MobFlags:	100000010001010
+AffFlags:	10000000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	4
+	Str:	5
+	Cha:	3
+	Int:	10
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#22299
+Keywords:	man frightened Joesph Markin
+Name:	Joesph Markin
+RoomDesc:$
+A frightened man begs for your help. 
+
+~
+LookDesc:$
+Joesph obviously just came out of a battle or brawl.  A cut on his forehead
+bleeds profusely, and he cradles an injured arm.  Blood leaks from the corner
+of his mouth and he looks as pale as a sheet. 
+~
+ArriveMsg:	runs in from
+LeaveMsg:	screams and runs
+MobFlags:	100000010001010
+AffFlags:	1000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	2
+	Str:	5
+	Cha:	10
+	Int:	6
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	4
+	Impact:	3
+	Cash:	345
+	Bank:	374
+[SKILLS]
+BREAK
+END

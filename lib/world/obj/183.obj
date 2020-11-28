@@ -1,0 +1,1169 @@
+#18300
+Keywords:	electrobuzz electro thick shake thickshake blue
+Name:	an Electrobuzz thickshake
+RoomDesc:$
+A blue thickshake container~
+LookDesc:$
+The Electrobuzz(TM) thickshake - desc not finished 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	8
+[EXTRADESC 0]
+	Keywords:	electrobuzz electro thick thickshake shake blue
+	Desc:$
+The Electrobuzz(TM) thickshake is known for its electric blue color and
+refreshing blueberry-like taste. A treat for the young and young at heart. 
+~
+[EXTRADESC 1]
+	Keywords:	electro electrobuzz thick shake thickshake container blue
+	Desc:$
+The Electrobuzz(TM) thickshake is known for its electric blue color and
+refreshing blueberry-like taste. A treat for the young and young at heart. 
+~
+BREAK
+#18301
+Keywords:	triple choc mud shake mudshake brown
+Name:	a Triple Choc Mud Shake
+RoomDesc:$
+A brown thickshake container~
+LookDesc:$
+The ultimate thickshake experience - the Triple Choc Mud Shake(TM). So thick
+that it almost like a solid block of icecream in a cup. It's made up of a
+combination of chocolate thickshake mix, swirls of chocolate fudge and mini
+chocolate coated chocolate mudcake balls. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	8
+BREAK
+#18312
+Keywords:	yellow orange sign
+Name:	a hanging sign
+RoomDesc:$
+A yellow and orange sign hangs from the ceiling.~
+LookDesc:$
+You see a thin sign hanging from the ceiling above. The one half of the sign
+has a yellow background and the words 'History' indicate that the history
+section is to the north. The other half, in orange, indicates that the
+literature section is to the south. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18313
+Keywords:	blue green sign
+Name:	a hanging sign
+RoomDesc:$
+A blue and green sign hangs from the ceiling.~
+LookDesc:$
+You see a thin sign hanging from the ceiling above. The one half of the sign
+has a blue background and the words 'Science' indicate that the science
+section is to the north. The other half, in green, indicates that the
+technology section is to the south. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18314
+Keywords:	red purple sign
+Name:	a hanging sign
+RoomDesc:$
+A red and purple sign hangs from the ceiling.~
+LookDesc:$
+You see a thin sign hanging from the ceiling above. The one half of the sign
+has a red background and the words 'Entertainment' indicate that the
+entertainment section is to the north. The other half, in purple, indicates
+that the lifestyle section is to the south. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18315
+Keywords:	brown white sign
+Name:	a hanging sign
+RoomDesc:$
+A brown and white sign hangs from the ceiling.~
+LookDesc:$
+You see a thin sign hanging from the ceiling above. The one half of the sign
+has a brown background and the words 'Periodicals' indicate that the
+periodical section is to the north. The other half, in white, indicates that
+the reference section is to the south. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18316
+Keywords:	blue information sign oval
+Name:	an infomation sign
+RoomDesc:$
+A blue oval sign hangs over the information desk.~
+LookDesc:$
+You look up towards an oval sign in blue that hangs over the information desk.
+A stylised 'i' in white indicates that this is the place to come for
+information. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18317
+Keywords:	blue information desk counter oval
+Name:	an oval information desk
+RoomDesc:$
+A blue information counter.~
+LookDesc:$
+You see before you an oval counter in blue. Brochures sit in stands on top of
+the counter giving various tips on how to use the V.I.G. information
+resources. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18331
+Keywords:	book shelf tome
+Name:	a book shelf
+RoomDesc:$
+A bookshelf containing old leather bound tomes.~
+LookDesc:$
+You see before you a tall bookshelf that contains leather bound tomes that
+seem centuries old. 
+~
+Type:	Decking Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	10
+	Val2:	1
+	Val3:	4
+BREAK
+#18332
+Keywords:	leather tome stand
+Name:	a leather bound tome on a stand
+RoomDesc:$
+A leather bound tome lies open on a stand.~
+LookDesc:$
+A old leather bound tomes lies open before you on a marble stand. Runes of
+unknown origin are scrawled over the visible pages in shimmering silver. As
+you continue to look apon the pages the runes shift and change shape in what
+seems to be a random fashion. You cannot help but feel the raw power that
+emminates from tome. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	1
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18340
+Keywords:	hush puppy hound dog
+Name:	a hound dog Hush Puppy
+RoomDesc:$
+A hound dog Hush Puppy lies here.~
+LookDesc:$
+You look apon an adorable hound dog Hush Puppy with its big floppy ears, its
+soft brown fur and its big hound dog eyes looking up at you. It makes you feel
+all warm and fuzzy on the inside. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18341
+Keywords:	dalmatian toy hush puppy stuffed
+Name:	a dalmatian Hush Puppy
+RoomDesc:$
+A dalmation Hush Puppy lies on the floor.~
+LookDesc:$
+This cute dalmatian Hush Puppy toy is covered in soft, snow-white fur with
+black spots, and sports an endearing grin. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18342
+Keywords:	chest toy
+Name:	a large toy chest
+RoomDesc:$
+A large toy chest sits here.~
+LookDesc:$
+This is a large toy chest made out of plastic but moulded and painted in such
+a way to give it an appearance of a wooden chest with iron reinforcing strips.
+This chest is large enough to hold many toys. 
+~
+Type:	Container
+WearFlags:	100000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	15.00
+	Barrier:	4
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	5
+	Val2:	-1
+BREAK
+#18343
+Keywords:	red bean bag
+Name:	a red bean bag
+RoomDesc:$
+A red bean bag lies here.~
+LookDesc:$
+You see before you a red bean bag - a cloth bag filled with styrofoam beads
+used as a makeshift seat or perhaps a bed for a child to have a little nap.
+You notice a zip running down one side of the bean bag. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	5
+	Val2:	-1
+BREAK
+#18344
+Keywords:	yellow bean bag
+Name:	a yellow bean bag
+RoomDesc:$
+A yellow bean bag lies here.~
+LookDesc:$
+You see before you a yellow bean bag - a cloth bag filled with styrofoam beads
+used as a makeshift seat or perhaps a bed for a child to have a little nap.
+You notice a zip running down one side of the bean bag. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	5
+	Val2:	-1
+BREAK
+#18345
+Keywords:	green bean bag
+Name:	a green bean bag
+RoomDesc:$
+A green bean bag lies here.~
+LookDesc:$
+You see before you a green bean bag - a cloth bag filled with styrofoam beads
+used as a makeshift seat or perhaps a bed for a child to have a little nap.
+You notice a zip running down one side of the bean bag. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	5
+	Val2:	-1
+BREAK
+#18346
+Keywords:	white small styrofoam beads
+Name:	a heap of styrofoam beads
+RoomDesc:$
+A heap of styrofoam beads lie in a pile here.~
+LookDesc:$
+Small, white beads of lightweight styrofoam used as filling for bean bags. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18347
+Keywords:	red rubber ball
+Name:	a red rubber ball
+RoomDesc:$
+A red rubber ball lies here.~
+LookDesc:$
+This is a soft rubber red ball the size of a basketball. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18348
+Keywords:	front desk
+Name:	the front desk counter
+RoomDesc:$
+The library's front desk stands before you.~
+LookDesc:$
+The clean uncluttered counter before you is the library's front desk. This is
+where you can come for information or to borrow one of the library's many data
+disks. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	50.00
+	Barrier:	6
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18349
+Keywords:	dirty scratched glasses
+Name:	A pair of scratched and dirty glasses.
+RoomDesc:$
+A pair of scratched and dirty glasses lie folded here.~
+LookDesc:$
+This is a pair of glasses with a thin silver frame. The lenses are scratched
+and dirty, which makes it hard to see through them. 
+~
+Type:	Worn
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	2
+BREAK
+#18350
+Keywords:	ivory shirt
+Name:	an ivory shirt
+RoomDesc:$
+An ivory shirt lies crumpled here.~
+LookDesc:$
+This is a long sleeved collared business shirt in an off-white ivory color.
+THe lightweight material it is made from feels soft to the touch. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18351
+Keywords:	tan pants
+Name:	a pair of tan pants
+RoomDesc:$
+A pair of tan pants lie crumpled here.~
+LookDesc:$
+This is comfortable pair of pants in a tan color with pockets you can put
+small items in. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	2
+	Val3:	2
+	Val4:	2
+BREAK
+#18352
+Keywords:	tan suit jacket
+Name:	a tan suit jacket
+RoomDesc:$
+A tan suit jacket lies crumpled here.~
+LookDesc:$
+This is old suit jacket in tan. There are several pockets to store items in. 
+~
+Type:	Container
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	3
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val2:	-1
+BREAK
+#18353
+Keywords:	whistle
+Name:	a whistle with lanyard
+RoomDesc:$
+A whistle lies tangled in its lanyard here.~
+LookDesc:$
+This is a tin whistle, similar to one a gym instructor would use. It has a
+lanyard attached to it so you can hang it around you neck. 
+~
+Type:	Other
+WearFlags:	100000000000101
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18354
+Keywords:	yellow vial
+Name:	a vial of yellow liquid
+RoomDesc:$
+A vial of yellow liquid sits here.~
+LookDesc:$
+You see a viscous yellow liquid in the glass vial that has a glass stopper
+keeping the liquid from spilling from the vessel. When you open the vial, the
+liquid gives off an acrid odur. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val3:	19
+BREAK
+#18355
+Keywords:	silver necklace key
+Name:	A silver necklace
+RoomDesc:$
+A silver necklace with a pendant lies here.~
+LookDesc:$
+This is a silver necklace with something that vagely resembles a key as its
+pendant. 
+~
+Type:	Key
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18356
+Keywords:	study desk
+Name:	a study desk
+RoomDesc:$
+A study desk stands here.~
+LookDesc:$
+This is a large and sturdy study desk made from some composite material. A
+bronze lamp that is attached to the desk shines down onto the desktop. There
+is a jack that is embedded into the desktop that gives a user access to the
+library's Virtual Information Grid - the online version of the library's
+Database. Next to the jack, you see something etched into the desk. It reads
+"BlAsTeD By ThE BiTbOmMa". 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	30.00
+	Barrier:	4
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18357
+Keywords:	yellow orange sign
+Name:	a hanging sign
+RoomDesc:$
+A yellow and orange sign hangs from the ceiling.~
+LookDesc:$
+You see a thin sign hanging from the ceiling above. The one half of the sign
+has a yellow background and the words 'History' indicate that the history
+section is to the north. The other half, in orange, indicates that the
+literature section is to the south. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18358
+Keywords:	blue green sign
+Name:	a hanging sign
+RoomDesc:$
+A blue and green sign hangs from the ceiling.~
+LookDesc:$
+You see a thin sign hanging from the ceiling above. The one half of the sign
+has a blue background and the words 'Science' indicate that the science
+section is to the north. The other half, in green, indicates that the
+technology section is to the south. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18359
+Keywords:	red purple sign
+Name:	a hanging sign
+RoomDesc:$
+A red and purple sign hangs from the ceiling.~
+LookDesc:$
+You see a thin sign hanging from the ceiling above. The one half of the sign
+has a red background and the words 'Entertainment' indicate that the
+entertainment section is to the north. The other half, in purple, indicates
+that the lifestyle section is to the south. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18360
+Keywords:	brown white sign
+Name:	a hanging sign
+RoomDesc:$
+A brown and white sign hangs from the ceiling.~
+LookDesc:$
+You see a thin sign hanging from the ceiling above. The one half of the sign
+has a brown background and the words 'Periodicals' indicate that the
+periodical section is to the north. The other half, in white, indicates that
+the reference section is to the south. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18387
+Keywords:	iron ball
+Name:	a large iron ball
+RoomDesc:$
+A large iron ball lies here.~
+LookDesc:$
+This is a large, heavy iron ball 
+~
+Type:	Container
+WearFlags:	100000000000001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	300.00
+	Barrier:	6
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	13
+	Val2:	-1
+	Val3:	6
+[AFFECT 0]
+	Location:	Charisma
+	Modifier:	-1
+[AFFECT 1]
+	Location:	Quickness
+	Modifier:	-3
+[AFFECT 2]
+	Location:	Strength
+	Modifier:	-2
+BREAK
+#18388
+Keywords:	diamond ring
+Name:	a diamond ring
+RoomDesc:$
+A diamond ring~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Light
+WearFlags:	11
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	-1
+BREAK
+#18390
+Keywords:	blue steel walther pb-120 pistol
+Name:	a blue steel Walther PB-120
+RoomDesc:$
+A blue steel Walther PB-120~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	4
+	Val3:	8
+	Val4:	11
+	Val5:	10
+	Val6:	10
+	Val8:	-1
+BREAK
+#18391
+Keywords:	thin briefcase case metal
+Name:	a thin metal briefcase
+RoomDesc:$
+A thin metal briefcase lies on its side.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Container
+WearFlags:	100000000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20000
+	Val1:	5
+	Val2:	-1
+BREAK
+#18392
+Keywords:	ice blue scarf
+Name:	an ice blue scarf
+RoomDesc:$
+An ice blue scarf lies here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18393
+Keywords:	platinum snow flake necklace
+Name:	A platinum snowflake necklace
+RoomDesc:$
+A platinum necklace with a snowflake pendant.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Radio
+WearFlags:	101
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	5
+	Val2:	6
+BREAK
+#18394
+Keywords:	silver stud earring
+Name:	a silver stud
+RoomDesc:$
+A silver stud lies here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Phone
+WearFlags:	10000000000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18395
+Keywords:	white knee boots
+Name:	a pair of white knee-high boots
+RoomDesc:$
+A pair of knee-high boots stand here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	100000000000
+AffFlags:	11000000000000010
+Material:	leather
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18396
+Keywords:	silver thin rimmed glasses specs
+Name:	a pair of thin rimmed glasses
+RoomDesc:$
+A pair of thin rimmed glasses.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Worn
+WearFlags:	1000000000000001
+ExtraFlags:	100000000000
+AffFlags:	1000000110001000101000
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18397
+Keywords:	white suit jacket
+Name:	a white suit jacket
+RoomDesc:$
+A white suit jacket lies here.~
+LookDesc:$
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#18398
+Keywords:	white mini skirt
+Name:	a white mini skirt
+RoomDesc:$
+A white mini skirt lies here.~
+LookDesc:$
+A white mini skirt made from the softest of natural fibres. Short enough to
+entice but long enough to give it a conservative unslutty look. The skirt's
+tag shows an emblem of a snowfalke. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Max Mental
+	Modifier:	30
+[AFFECT 1]
+	Location:	Max Physical
+	Modifier:	30
+[AFFECT 2]
+	Location:	Magic
+	Modifier:	10
+[AFFECT 3]
+	Location:	Reaction
+	Modifier:	20
+[AFFECT 4]
+	Location:	Age
+	Modifier:	7
+[AFFECT 5]
+	Location:	Init Dice
+	Modifier:	20
+BREAK
+#18399
+Keywords:	white blouse
+Name:	a white sleeveless blouse
+RoomDesc:$
+A white sleeveless blouse~
+LookDesc:$
+A white sleeveless blouse. The tag on the blouse has a snowflake emblem
+stitched into it. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	8
+	Val6:	8
+[AFFECT 0]
+	Location:	Body
+	Modifier:	14
+[AFFECT 1]
+	Location:	Quickness
+	Modifier:	13
+[AFFECT 2]
+	Location:	Strength
+	Modifier:	14
+[AFFECT 3]
+	Location:	Charisma
+	Modifier:	17
+[AFFECT 4]
+	Location:	Intelligence
+	Modifier:	14
+[AFFECT 5]
+	Location:	Willpower
+	Modifier:	14
+BREAK
+END

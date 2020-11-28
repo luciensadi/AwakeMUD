@@ -1,0 +1,157 @@
+#2700
+Keywords:	knight-errant Knight Errant elven guard
+Name:	an elven Knight-Errant guard
+RoomDesc:$
+An elven security guard wearing Knight-Errant colors stands watch. 
+
+~
+LookDesc:$
+Knight-Errant, in Tir Tairngire is a subsidiary of a Tir based Ares
+Macrotechnology satellite corporation, a way Ares gets around corporate
+regulation inside the elven kingdom, where others would just give up and
+consider the nations laws too draconian.  As long as the majority of the Ares
+satellite corporation in the Tir's money stays in the Tir, they can work
+within the borders.  Nonetheless, this guard is as well trained, even more so
+than any KE guard you may find in Seattle, Detroit, or wherever. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	7
+	Str:	6
+	Cha:	4
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	75
+	Ballistic:	2
+	Impact:	2
+[SKILLS]
+	sub-machine guns:	6
+	unarmed combat:	5
+BREAK
+#2701
+Keywords:	toh li tall young asian elf adept trainer
+Name:	Toh Li
+RoomDesc:$
+A tall, young, male Asian elf stands here, in a Tai Chi stance. 
+
+~
+LookDesc:$
+Toh Li is young, maybe in his late teens, but he is a prodigy in many ways,
+having mastered 15 asiatic martial arts, one Israeli martial art, and two
+elven martial arts, Carromeleg and Mal'thain.  His movements are precise and
+calculated, almost as if he is aware of every appendage, every hair on his
+body, and controls them all concurrently.  A year ago he had even been the
+chief trainer in a dojo in Lake Oswego, but the dojo was closed down for
+teaching unliscensed martial art techniques. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101110000000011010
+AffFlags:	1000000000001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	19
+	Str:	12
+	Cha:	8
+	Int:	9
+	Wil:	10
+	Mag:	12
+[POINTS]
+	Height:	181
+	Weight:	57
+	Ballistic:	19
+	Impact:	19
+[SKILLS]
+	:	4
+	:	3
+	:	3
+	unarmed combat:	50
+	:	1
+BREAK
+#2702
+Keywords:	noblewoman blonde curly haired elven woman executive Ann Foley
+Name:	Ann Foley
+RoomDesc:$
+An elven noblewoman in executive dress with blonde curly hair sits behind the
+desk, talking on the telephone. 
+
+~
+LookDesc:$
+Ann Foley is a busy woman, having come into the prestige level of being
+elevated from Miss Ann Foley to Lady Ann Foley recently.  This has resulted in
+a huge promotion to senior executive at TTB, and she works overtime to do a
+better job then the previous senior executive of the accounting division. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	7
+	Str:	5
+	Cha:	8
+	Int:	6
+	Wil:	5
+	Mag:	8
+[POINTS]
+	Height:	191
+	Weight:	60
+[SKILLS]
+	athletics:	8
+	unarmed combat:	8
+	computers:	9
+	:	2
+	:	2
+BREAK
+#2703
+Keywords:	kelovan martin tall gaunt dusty blonde male elf
+Name:	Kelovan Martin
+RoomDesc:$
+A tall gaunt male elf with dusty blonde hair sits behind his desk. 
+
+~
+LookDesc:$
+Kelovan Martin is an older elf, born the first year they appeared in the
+world, 2011.  He started here long ago, when Portland was still in Oregon, and
+TTB was still USBank.  He is tall and gaunt in his build and complexion, and
+has dusty colored hair, long in the manner common to upper class elves, tied
+back in a ponytail.  He dresses in a gray Armante suit.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	4
+	Cha:	6
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	204
+	Weight:	80
+[SKILLS]
+BREAK
+END

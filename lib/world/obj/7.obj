@@ -552,7 +552,7 @@ Material:	metal
 [POINTS]
 	Weight:	16.00
 	Barrier:	8
-	Cost:	9000
+	Cost:	4500
 	AvailTN:	14
 	AvailDay:	10.00
 	LegalNum:	3
@@ -648,15 +648,13 @@ Material:	fabric
 	Weight:	2.00
 	Barrier:	4
 	Cost:	55000
-	AvailTN:	0
-	AvailDay:	0.00
+	AvailTN:	5
+	AvailDay:	14.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
-	Val5:	2
-	Val6:	2
-	Val7:	1
+	Val7:	10
 BREAK
 #726
 Keywords:	small pistol morrissey elan
@@ -684,14 +682,14 @@ Material:	adv. plastics
 [VALUES]
 	Val0:	5
 	Val1:	1
-	Val3:	8
+	Val3:	5
 	Val4:	11
 	Val5:	5
 	Val6:	5
 	Val7:	-1
 	Val8:	-1
 	Val9:	-1
-	Val10:	2
+	Val10:	4
 BREAK
 #727
 Keywords:	pistol holdout raecor sting
@@ -718,7 +716,7 @@ Material:	metal
 [VALUES]
 	Val0:	4
 	Val1:	2
-	Val3:	8
+	Val3:	5
 	Val4:	11
 	Val5:	5
 	Val6:	5
@@ -753,7 +751,7 @@ Material:	metal
 [VALUES]
 	Val0:	4
 	Val1:	1
-	Val3:	8
+	Val3:	5
 	Val4:	11
 	Val5:	6
 	Val6:	6
@@ -788,7 +786,7 @@ Material:	metal
 [VALUES]
 	Val0:	5
 	Val1:	2
-	Val3:	8
+	Val3:	5
 	Val4:	11
 	Val5:	4
 	Val6:	4
@@ -811,18 +809,18 @@ ExtraFlags:	0
 AffFlags:	0
 Material:	metal
 [POINTS]
-	Weight:	0.00
+	Weight:	0.50
 	Barrier:	4
-	Cost:	338
-	AvailTN:	0
-	AvailDay:	0.00
+	Cost:	450
+	AvailTN:	2
+	AvailDay:	0.50
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
 	Val0:	4
 	Val1:	1
-	Val3:	8
+	Val3:	5
 	Val4:	11
 	Val5:	4
 	Val6:	4
@@ -857,14 +855,14 @@ Material:	metal
 [VALUES]
 	Val0:	4
 	Val1:	1
-	Val3:	8
+	Val3:	5
 	Val4:	11
 	Val5:	2
 	Val6:	2
 	Val7:	-1
 	Val8:	-1
 	Val9:	-1
-	Val10:	2
+	Val10:	10
 BREAK
 #732
 Keywords:	light pistol ares fire 70
@@ -892,7 +890,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	8
+	Val3:	6
 	Val4:	11
 	Val5:	16
 	Val6:	16
@@ -924,7 +922,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	8
+	Val3:	6
 	Val4:	11
 	Val5:	26
 	Val6:	26
@@ -957,7 +955,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	8
+	Val3:	6
 	Val4:	11
 	Val5:	11
 	Val6:	11
@@ -990,7 +988,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	8
+	Val3:	6
 	Val4:	11
 	Val5:	24
 	Val6:	24
@@ -1023,9 +1021,9 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	8
+	Val3:	6
 	Val4:	11
-	Val5:	12
+	Val5:	22
 	Val6:	22
 	Val9:	-1
 	Val10:	4
@@ -1055,7 +1053,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	8
+	Val3:	6
 	Val4:	11
 	Val5:	10
 	Val6:	10
@@ -1069,7 +1067,7 @@ RoomDesc:$
 A sleek machine pistol lies here.~
 LookDesc:$
 The Crusader is a light pistol capable of burst fire.  It comes with an
-extended magazine and an improved gas vent II system. 
+extended clip and an improved gas vent II system. 
 ~
 Type:	Weapon
 WearFlags:	10000000000001
@@ -1088,7 +1086,7 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	8
+	Val3:	7
 	Val4:	11
 	Val5:	40
 	Val6:	40
@@ -1122,9 +1120,9 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	8
+	Val3:	7
 	Val4:	11
-	Val5:	35
+	Val5:	25
 	Val6:	25
 	Val9:	692
 	Val10:	12
@@ -1189,11 +1187,11 @@ Material:	metal
 [VALUES]
 	Val0:	6
 	Val1:	1
-	Val3:	8
+	Val3:	6
 	Val4:	11
 	Val5:	6
 	Val6:	6
-	Val8:	654
+	Val8:	652
 	Val9:	-1
 	Val10:	4
 BREAK
@@ -1269,7 +1267,7 @@ Material:	plastic
 BREAK
 #744
 Keywords:	shotgun sawed-off street sweeper
-Name:	a street sweeper shotgun
+Name:	a Street Sweeper shotgun
 RoomDesc:$
 A sawed-off shotgun is lying here.~
 LookDesc:$
@@ -1354,15 +1352,15 @@ Material:	metal
 [POINTS]
 	Weight:	2.75
 	Barrier:	6
-	Cost:	1400
+	Cost:	1250
 	AvailTN:	14
 	AvailDay:	12.00
 	LegalNum:	2
 	LegalCode:	5
 	LegalPermit:	1
 [VALUES]
-	Val0:	12
-	Val1:	3
+	Val0:	9
+	Val1:	2
 	Val3:	8
 	Val4:	11
 	Val5:	12
@@ -1464,6 +1462,534 @@ Material:	metal
 	Val0:	2
 	Val1:	9
 BREAK
+#750
+Keywords:	pistol cavalier scout hold-out holdout compact
+Name:	a Cavalier Scout
+RoomDesc:$
+A compact little pistol has been discarded here.~
+LookDesc:$
+The Cavalier Scout hold-out pistol is one of the most compact and lightweight
+semi-automatic pistol designs on the market, which also makes it easy to
+conceal within ones pocket. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	600
+	AvailTN:	10
+	AvailDay:	3.00
+	LegalNum:	10
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	4
+	Val1:	1
+	Val3:	5
+	Val4:	11
+	Val5:	7
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+	Val10:	4
+BREAK
+#751
+Keywords:	Taurus Multi-6 revolver pistol six-shot
+Name:	a Taurus Multi-6
+RoomDesc:$
+A small six-shot revolver has been left here.~
+LookDesc:$
+The Taurus Multi-6 is a reliable little revolver that chambers six rounds,
+which is capable of handling a wide variety of ammunition types. A sturdy
+little piece, which is compact and relatively easy to conceal. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	500
+	AvailTN:	5
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	1
+	Val3:	6
+	Val4:	11
+	Val5:	6
+	Val7:	5105
+	Val9:	-1
+	Val10:	4
+BREAK
+#752
+Keywords:	Steyr TMP pistol automatic
+Name:	a Steyr TMP
+RoomDesc:$
+A small automatic pistol molded from plastics lies here.~
+LookDesc:$
+The Steyr TMP relies heavily on the use of polymers in its frame design,
+making it a very lightweight machine pistol. What makes the Steyr TMP stand
+apart from its machine-pistol breathren is its full-auto capabilities,
+however, its light weight construction makes it difficult to control when
+dumping hot lead in full auto. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	900
+	AvailTN:	8
+	AvailDay:	2.00
+	LegalNum:	5
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	1
+	Val3:	7
+	Val4:	11
+	Val5:	30
+	Val7:	5105
+	Val9:	-1
+	Val10:	28
+BREAK
+#753
+Keywords:	cavalier deputy revolver wild-west pistol
+Name:	a Cavalier Deputy
+RoomDesc:$
+An old wild-west styled revolver waits for a gunslinger here.~
+LookDesc:$
+A reliable heavy revolver whos image harkens back to an image of the wild-west
+era. Its firing action is quicker than the larger and heavier Ruger Super
+Warhawk, which makes it a solid adversary for automatic pistols, even in
+todays market. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.25
+	Barrier:	6
+	Cost:	300
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	7
+	Val7:	5105
+	Val9:	-1
+	Val10:	4
+BREAK
+#754
+Keywords:	Eichiro Hatamoto II heavy pistol large-bore
+Name:	an Eichiro Hatamoto II
+RoomDesc:$
+A large-bore heavy pistol has been left here.~
+LookDesc:$
+The Hatamoto II is a single-shot, large-bore defensive firearm, which fires
+shotgun rounds from a heavy pistol-sized package. Its design comes with a
+detachable wrist-brace due to the brutal amount of recoil generated when
+fired, since even for a heavy pistol it kicks like a mule. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	1200
+	AvailTN:	12
+	AvailDay:	7.00
+	LegalNum:	5
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	8
+	Val1:	3
+	Val3:	8
+	Val4:	11
+	Val5:	1
+	Val7:	5105
+	Val8:	651
+	Val9:	-1
+	Val10:	2
+BREAK
+#755
+Keywords:	pistol FN 5-7C heavy fabrique nationale semi-automatic
+Name:	a FN 5-7C
+RoomDesc:$
+A heavy semi-automatic pistol lies here.~
+LookDesc:$
+The FN 5-7C is classified as a heavy pistol that fires light pistol ammunition
+at an extremely high velocity. It is capable of operating in both standard
+semi-automatic and burstfire modes, its frame designed to efficiently
+compensate and lower its felt recoil. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	700
+	AvailTN:	9
+	AvailDay:	2.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	6
+	Val1:	1
+	Val3:	8
+	Val4:	11
+	Val5:	20
+	Val7:	5105
+	Val9:	-1
+	Val10:	12
+BREAK
+#756
+Keywords:	machinegun FN MAG-5 MMG medium fabrique national
+Name:	a FN MAG-5 MMG
+RoomDesc:$
+A medium machinegun has been left propped up here.~
+LookDesc:$
+Brought to the market by Fabrique National, the FN MAG-5 poses serious
+competition as a medium machinegun setup for mercenary factions and security
+alike. It comes standard with a top-mounted laser sight, an improved gas vent
+II and a folding tripod, making it an effective defensive firearm right off
+the shelf. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	9.50
+	Barrier:	8
+	Cost:	3200
+	AvailTN:	18
+	AvailDay:	14.00
+	LegalNum:	2
+	LegalCode:	8
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	3
+	Val3:	16
+	Val4:	19
+	Val5:	50
+	Val7:	5105
+	Val8:	650
+	Val9:	28704
+	Val10:	16
+BREAK
+#757
+Keywords:	puzzler SA shiawase armaments light pistol inconspicious
+Name:	a SA Puzzler
+RoomDesc:$
+An inconspicious light pistol has been left behind here.~
+LookDesc:$
+This little weapon is manufactured by Shiawase Armaments and is composed
+entirely of polyresin materials, making it impossible to detect by magnetic
+(MAD) scanners. The pistol itself can be broken down into component parts that
+mimic jewelry and other commonly carried items, making it extremely easy to
+transport illegally. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.75
+	Barrier:	8
+	Cost:	900
+	AvailTN:	9
+	AvailDay:	7.00
+	LegalNum:	8
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	6
+	Val1:	1
+	Val3:	6
+	Val4:	11
+	Val5:	12
+	Val7:	5105
+	Val9:	-1
+	Val10:	4
+BREAK
+#758
+Keywords:	Remington Roomsweeper shotgun
+Name:	a Remington Roomsweeper
+RoomDesc:$
+A short-barreled shotgun has been ditched here.~
+LookDesc:$
+This short-barreled heavy shotgun can be found in the hands of urban fighters
+and gangers alike due to its brutal power and intimidation factor. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	8
+	Val8:	-1
+	Val9:	-1
+	Val10:	4
+BREAK
+#759
+Keywords:	Colt Cobra TZ-118 SMG submachinegun
+Name:	a Colt Cobra TZ-118
+RoomDesc:$
+A standard looking submachinegun has been tossed here.~
+LookDesc:$
+This variant of the popular submachine gun choice of mercenary outfits all
+over the world functions in the same manner and design as the TZ-110, but
+features an internal smartlink system. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	850
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	4
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	2
+	Val3:	10
+	Val4:	15
+	Val5:	32
+	Val8:	670
+	Val10:	28
+BREAK
+#760
+Keywords:	shotgun Remington 990 sawed-off
+Name:	a Remington 990 sawed-off shotgun
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+The Remington 990 is a classic, all purpose shotgun used as a heavy backup by
+many law enforcement agencies around the world. It appears this one has been
+modified for easier concealability, with a slightly shortened barrel and a
+sawed-off stock. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	650
+	AvailTN:	3
+	AvailDay:	2.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	6
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	8
+	Val8:	-1
+	Val10:	4
+BREAK
+#761
+Keywords:	goggles smart low-light pair
+Name:	a pair of low-light Smart Goggles
+RoomDesc:$
+Someone has left a pair of goggles with a jack in the side here.~
+LookDesc:$
+These goggles completely cover the eyes, but still allow for a full field of
+vision. Not much of a fashion statement and likely to get you noticed by law
+enforcement, these goggles are useless without a weapon with a smartgun link
+installed. This particular model of goggles seem to have a low-light vision
+system built into it as well. 
+~
+Type:	Gun Accessory
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	10000000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.10
+	Barrier:	6
+	Cost:	4000
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	4
+	LegalCode:	13
+	LegalPermit:	1
+[VALUES]
+	Val1:	7
+BREAK
+#762
+Keywords:	goggles smart thermographic pair
+Name:	a pair of thermographic Smart Goggles
+RoomDesc:$
+Someone has left a pair of goggles with a jack in the side here.~
+LookDesc:$
+These goggles completely cover the eyes, but still allow for a full field of
+vision. Not much of a fashion statement and likely to get you noticed by law
+enforcement, these goggles are useless without a weapon with a smartgun link
+installed. This particular model of goggles seem to have a thermographic
+vision system built into it as well. 
+~
+Type:	Gun Accessory
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	1000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.10
+	Barrier:	6
+	Cost:	4000
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	4
+	LegalCode:	13
+	LegalPermit:	1
+[VALUES]
+	Val1:	7
+BREAK
+#763
+Keywords:	shades smart pair
+Name:	a pair of Smart Shades
+RoomDesc:$
+A pair of stylish looking shades have been left behind.~
+LookDesc:$
+These shades are of a stylish design and have concealed within their frames
+the same electronics as a pair of smart goggles, which are much more likely to
+go unnoticed by law enforcement and security, but are all but useless without
+a firearm with a smartgun link installed. 
+~
+Type:	Gun Accessory
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	6000
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	7
+BREAK
+#764
+Keywords:	shades smart low-light pair
+Name:	a pair of low-light Smart Shades
+RoomDesc:$
+A pair of stylish looking shades have been left behind.~
+LookDesc:$
+These shades are of a stylish design and have concealed within their frames
+the same electronics as a pair of smart goggles, which are much more likely to
+go unnoticed by law enforcement and security, but are all but useless without
+a firearm with a smartgun link installed. This particular model comes equipped
+with a low-light vision system built into it as well.  
+~
+Type:	Gun Accessory
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	10000000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	8000
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	7
+BREAK
+#765
+Keywords:	shades smart thermographic pair
+Name:	a pair of thermographic Smart Shades
+RoomDesc:$
+A pair of stylish looking shades have been left behind.~
+LookDesc:$
+These shades are of a stylish design and have concealed within their frames
+the same electronics as a pair of smart goggles, which are much more likely to
+go unnoticed by law enforcement and security, but are all but useless without
+a firearm with a smartgun link installed. This particular model comes equipped
+with a thermographic vision system built into it as well. 
+~
+Type:	Gun Accessory
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	1000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	8000
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	7
+BREAK
 #776
 Keywords:	ak-97 ak 97 smg carbine
 Name:	an AK-97 SMG
@@ -1502,7 +2028,7 @@ Name:	a Beretta Model 70
 RoomDesc:$
 A Beretta submachinegun lies here.~
 LookDesc:$
-The Beretta Model 70 holds the distinction of having one of the large magazines
+The Beretta Model 70 holds the distinction of having one of the large clips
 available for a smg. It also comes with an integral laser sight. 
 ~
 Type:	Weapon
@@ -1676,7 +2202,7 @@ A deadly little submachine gun lies here.~
 LookDesc:$
 The Ingram SuperMach actually fires light pistol rounds in incredible six
 round bursts.  It has a very distinctive profile due to it's 40 round tube
-magazine. 
+clip. 
 ~
 Type:	Weapon
 WearFlags:	10000000000001
@@ -1876,11 +2402,10 @@ RoomDesc:$
 A high quality heavy SMG lies here.~
 LookDesc:$
 A very solid feeling submachine gun, which looked like it was crafted with
-mutch attention to detail.  The barrel looks like it is a higher calibre than
-most SMG's but not to extremity.  The gun comes with gas vent and smartlink
-installed.  Has a logo on it that says "Telestrien Arms - Made in Tir
-Tairngire" on it.
- 
+much attention to detail. The barrel looks like it is a higher calibre than
+most SMG's but not to extremity. The gun comes with gas vent and smartlink
+installed. Has a logo on it that says "Telestrien Arms - Made in Tir
+Tairngire" on it. 
 ~
 Type:	Weapon
 WearFlags:	10000000000001
@@ -2350,7 +2875,7 @@ Material:	metal
 [VALUES]
 	Val0:	14
 	Val1:	4
-	Val3:	11
+	Val3:	12
 	Val4:	12
 	Val5:	14
 	Val6:	14
@@ -2385,7 +2910,7 @@ Material:	metal
 [VALUES]
 	Val0:	14
 	Val1:	3
-	Val3:	11
+	Val3:	12
 	Val4:	12
 	Val5:	6
 	Val6:	6
@@ -2419,7 +2944,7 @@ Material:	metal
 [VALUES]
 	Val0:	14
 	Val1:	3
-	Val3:	11
+	Val3:	12
 	Val4:	12
 	Val5:	10
 	Val6:	10
@@ -2933,6 +3458,661 @@ Material:	metal
 	Val9:	-1
 	Val10:	4
 BREAK
+#850
+Keywords:	box normal pistol ammunition ammo
+Name:	a box of normal light pistol ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of normal ammunition suitable for a light or
+machine pistol. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	200
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	500
+	Val1:	6
+BREAK
+#851
+Keywords:	box pistol ammunition ammo
+Name:	a box of APDS light pistol ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of APDS suitable for a light or machine pistol.
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	700
+	AvailTN:	14
+	AvailDay:	14.00
+	LegalNum:	3
+	LegalCode:	12
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	6
+	Val2:	1
+BREAK
+#852
+Keywords:	box explosive pistol ammunition ammo
+Name:	a box of explosive light pistol ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of explosive ammunition suitable for a light or
+machine pistol. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	7.50
+	Barrier:	6
+	Cost:	500
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	6
+	Val2:	2
+BREAK
+#853
+Keywords:	box EX pistol ammunition ammo
+Name:	a box of EX light pistol ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of EX ammunition suitable for a light or machine
+pistol. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	7.50
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	6
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	6
+	Val2:	3
+BREAK
+#854
+Keywords:	box flechette pistol ammunition ammo
+Name:	a box of flechette light pistol ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains round of flechette ammunition suitable for a light or
+machine pistol. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	6
+	Val2:	4
+BREAK
+#855
+Keywords:	box gel pistol ammunition ammo
+Name:	a box of gel light pistol ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of gel ammunition suitable for a light or
+machine pistol. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	6
+	Val2:	5
+BREAK
+#856
+Keywords:	box heavy pistol ammunition ammo normal
+Name:	a box of normal heavy pistol ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This box contains rounds of normal ammunition suitable for a heavy pistol. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	200
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	500
+	Val1:	8
+BREAK
+#857
+Keywords:	box heavy pistol ammunition ammo apds
+Name:	a box of APDS heavy pistol ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains round of APDS ammunition suitable for a heavy pistol. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	700
+	AvailTN:	14
+	AvailDay:	14.00
+	LegalNum:	3
+	LegalCode:	12
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	8
+	Val2:	1
+BREAK
+#858
+Keywords:	box heavy pistol ammunition ammo explosive
+Name:	a box of explosive heavy pistol ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of Explosive ammunition suitable for a heavy
+pistol. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	7.50
+	Barrier:	6
+	Cost:	500
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	8
+	Val2:	2
+BREAK
+#859
+Keywords:	box heavy pistol ammunition ammo ex
+Name:	a box of EX heavy pistol ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of EX ammunition suitable for a heavy pistol. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	7.50
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	6
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	8
+	Val2:	3
+BREAK
+#860
+Keywords:	box heavy pistol ammunition ammo flechette
+Name:	a box of flechette heavy pistol ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of flechette ammunition suitable for a heavy
+pistol. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	8
+	Val2:	4
+BREAK
+#861
+Keywords:	box heavy pistol ammunition ammo gel
+Name:	a box of gel heavy pistol ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of gel ammunition suitable for a heavy pistol. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	8
+	Val2:	5
+BREAK
+#862
+Keywords:	box normal smg ammunition ammo
+Name:	a box of normal submachine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of normal ammunition suitable for a submachine
+gun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	200
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	500
+	Val1:	10
+BREAK
+#863
+Keywords:	box smg ammunition ammo apds
+Name:	a box of APDS submachine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of APDS ammunition suitable for a submachine
+gun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	700
+	AvailTN:	14
+	AvailDay:	14.00
+	LegalNum:	3
+	LegalCode:	12
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	10
+	Val2:	1
+BREAK
+#864
+Keywords:	box smg ammunition ammo explosive
+Name:	a box of explosive submachine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of explosive ammunition suitable for a
+submachine gun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	7.50
+	Barrier:	6
+	Cost:	500
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	10
+	Val2:	2
+BREAK
+#865
+Keywords:	box smg ammunition ammo ex
+Name:	a box of EX submachine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of EX ammunition suitable for a submachine gun.
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	7.50
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	6
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	10
+	Val2:	3
+BREAK
+#866
+Keywords:	box smg ammunition ammo flechette
+Name:	a box of flechette submachine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of flechette ammunition suitable for a
+submachine gun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	10
+	Val2:	4
+BREAK
+#867
+Keywords:	box smg ammunition ammo gel
+Name:	a box of gel submachine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of gel ammunition suitable for a submachine gun.
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	10
+	Val2:	5
+BREAK
+#868
+Keywords:	box sport rifle ammunition ammo normal
+Name:	a box of normal sport rifle ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of normal ammunition suitable for a sport rifle.
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	500
+	Val1:	11
+BREAK
+#869
+Keywords:	box sport riffle ammunition ammo apds
+Name:	a box of APDS sport rifle ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of APDS ammunition suitable for a sport rifle. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	11
+	Val2:	1
+BREAK
+#870
+Keywords:	box sport rifle ammunition ammo explosive
+Name:	a box of explosive sport rifle ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of explosive ammunition suitable for a sport rifle.
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	11
+	Val2:	2
+BREAK
+#871
+Keywords:	box sport rifle ammunition ammo EX
+Name:	a box of EX sport rifle ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of EX ammunition suitable for a sport rifle.
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	11
+	Val2:	3
+BREAK
+#872
+Keywords:	box sport rifle ammunition ammo flechette
+Name:	a box of flechette sport rifle ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of flechette ammunition suitable for a sport rifle.
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	11
+	Val2:	4
+BREAK
+#873
+Keywords:	box sport rifle ammunition ammo gel
+Name:	a box of gel sport rifle ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of gel ammunition suitable for a sport rifle.
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	11
+	Val2:	5
+BREAK
 #876
 Keywords:	ares hv lmg mp-lmg gun light machine
 Name:	an Ares HV MP-LMG
@@ -3060,7 +4240,7 @@ Material:	metal
 [VALUES]
 	Val0:	7
 	Val1:	3
-	Val3:	15
+	Val3:	19
 	Val4:	19
 	Val5:	50
 	Val6:	50
@@ -3094,7 +4274,7 @@ Material:	metal
 [VALUES]
 	Val0:	9
 	Val1:	3
-	Val3:	15
+	Val3:	16
 	Val4:	19
 	Val5:	40
 	Val6:	40
@@ -3336,7 +4516,7 @@ This weapon is a simple rocket launcher.  It is reusable and breaks open to
 accept up to four rockets. 
 ~
 Type:	Weapon
-WearFlags:	10000000000001
+WearFlags:	10000000000000
 ExtraFlags:	1000000000000
 AffFlags:	0
 Material:	metal
@@ -3595,7 +4775,6 @@ Material:	metal
 	Val7:	-1
 	Val8:	-1
 	Val9:	-1
-	Val10:	12
 BREAK
 #902
 Keywords:	autocannon cannon vigilant medium
@@ -3669,6 +4848,1195 @@ Material:	metal
 	Val8:	-1
 	Val9:	-1
 	Val10:	18
+BREAK
+#910
+Keywords:	box sport rifle ammunition ammo normal
+Name:	a box of normal sniper rifle ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of normal ammunition suitable for a sniper rifle.
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	500
+	Val1:	12
+BREAK
+#911
+Keywords:	box sniper rifle ammunition ammo apds
+Name:	a box of APDS sniper rifle ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of APDS ammunition suitable for a sniper rifle. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	12
+	Val2:	1
+BREAK
+#912
+Keywords:	box sniper rifle ammunition ammo explosive
+Name:	a box of explosive sniper rifle ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of explosive ammunition suitable for a sniper rifle. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	12
+	Val2:	2
+BREAK
+#913
+Keywords:	box sniper rifle ammunition ammo ex
+Name:	a box of EX sniper rifle ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of EX ammunition suitable for a sniper rifle. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	12
+	Val2:	3
+BREAK
+#914
+Keywords:	box sniper rifle ammunition ammo flechette
+Name:	a box of flechette sniper rifle ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of flechette ammunition suitable for a sniper rifle. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	12
+	Val2:	4
+BREAK
+#915
+Keywords:	box sniper rifle ammunition ammo gel
+Name:	a box of gel sniper rifle ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of gel ammunition suitable for a sniper rifle. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	12
+	Val2:	5
+BREAK
+#916
+Keywords:	box assault rifle ammunition ammo normal
+Name:	a box of normal assault rifle ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of normal ammunition suitable for a assault rifle.
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	500
+	Val1:	13
+BREAK
+#917
+Keywords:	box assault rifle ammunition ammo apds
+Name:	a box of APDS assault rifle ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of APDS ammunition suitable for a assault rifle. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	13
+	Val2:	1
+BREAK
+#918
+Keywords:	box assault rifle ammunition ammo explosive
+Name:	a box of explosive assault rifle ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of explosive ammunition suitable for a assault rifle. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	13
+	Val2:	2
+BREAK
+#919
+Keywords:	box assault rifle ammunition ammo ex
+Name:	a box of EX assault rifle ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of EX ammunition suitable for a assault rifle. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	13
+	Val2:	3
+BREAK
+#920
+Keywords:	box assault rifle ammunition ammo flechette
+Name:	a box of flechette assault rifle ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of flechette ammunition suitable for a assault rifle. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	13
+	Val2:	4
+BREAK
+#921
+Keywords:	box assault rifle ammunition ammo gel
+Name:	a box of gel assault rifle ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of gel ammunition suitable for a assault rifle. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	13
+	Val2:	5
+BREAK
+#922
+Keywords:	box shotgun ammunition ammo normal
+Name:	a box of normal shotgun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of normal ammunition suitable for a shotgun.
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	500
+	Val1:	14
+BREAK
+#923
+Keywords:	box shotgun ammunition ammo apds
+Name:	a box of APDS shotgun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of APDS ammunition suitable for a shotgun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	14
+	Val2:	1
+BREAK
+#924
+Keywords:	box shotgun ammunition ammo explosive
+Name:	a box of explosive shotgun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of explosive ammunition suitable for a shotgun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	14
+	Val2:	2
+BREAK
+#925
+Keywords:	box shotgun ammunition ammo ex
+Name:	a box of EX shotgun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of EX ammunition suitable for a shotgun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	14
+	Val2:	3
+BREAK
+#926
+Keywords:	box shotgun ammunition ammo flechette
+Name:	a box of flechette shotgun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of flechette ammunition suitable for a shotgun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	14
+	Val2:	4
+BREAK
+#927
+Keywords:	box shotgun ammunition ammo gel
+Name:	a box of gel shotgun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of gel ammunition suitable for a shotgun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	14
+	Val2:	5
+BREAK
+#928
+Keywords:	box lmg ammunition ammo normal
+Name:	a box of normal light machine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of normal ammunition suitable for a light machine gun.
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	500
+	Val1:	15
+BREAK
+#929
+Keywords:	box lmgammunition ammo apds
+Name:	a box of APDS light machine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of APDS ammunition suitable for a light machine gun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	15
+	Val2:	1
+BREAK
+#930
+Keywords:	box lmg ammunition ammo explosive
+Name:	a box of explosive light machine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of explosive ammunition suitable for a light machine gun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	15
+	Val2:	2
+BREAK
+#931
+Keywords:	box lmg ammunition ammo ex
+Name:	a box of EX light machine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of EX ammunition suitable for a light machine gun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	15
+	Val2:	3
+BREAK
+#932
+Keywords:	box lmg ammunition ammo flechette
+Name:	a box of flechette light machine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of flechette ammunition suitable for a light machine gun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	15
+	Val2:	4
+BREAK
+#933
+Keywords:	box lmg ammunition ammo gel
+Name:	a box of gel light machine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of gel ammunition suitable for a light machine gun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	15
+	Val2:	5
+BREAK
+#934
+Keywords:	box mmg ammunition ammo normal
+Name:	a box of normal medium machine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of normal ammunition suitable for a medium machine gun.
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	500
+	Val1:	16
+BREAK
+#935
+Keywords:	box mmg ammunition ammo apds
+Name:	a box of APDS medium machine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of APDS ammunition suitable for a medium machine gun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	16
+	Val2:	1
+BREAK
+#936
+Keywords:	box mmg ammunition ammo explosive
+Name:	a box of explosive medium machine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of explosive ammunition suitable for a medium machine gun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	16
+	Val2:	2
+BREAK
+#937
+Keywords:	box mmg ammunition ammo ex
+Name:	a box of EX medium machine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of EX ammunition suitable for a medium machine gun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	16
+	Val2:	3
+BREAK
+#938
+Keywords:	box mmg ammunition ammo flechette
+Name:	a box of flechette medium machine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of flechette ammunition suitable for a medium machine gun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	16
+	Val2:	4
+BREAK
+#939
+Keywords:	box mmg ammunition ammo gel
+Name:	a box of gel medium machine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of gel ammunition suitable for a medium machine gun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	16
+	Val2:	5
+BREAK
+#940
+Keywords:	box hmg ammunition ammo normal
+Name:	a box of normal heavy machine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of normal ammunition suitable for a heavy machine gun.
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	500
+	Val1:	17
+BREAK
+#941
+Keywords:	box hmg ammunition ammo apds
+Name:	a box of APDS heavy machine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of APDS ammunition suitable for a heavy machine gun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	17
+	Val2:	1
+BREAK
+#942
+Keywords:	box hmg ammunition ammo explosive
+Name:	a box of explosive heavy machine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of explosive ammunition suitable for a heavy machine gun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	17
+	Val2:	2
+BREAK
+#943
+Keywords:	box hmg ammunition ammo ex
+Name:	a box of EX heavy machine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of EX ammunition suitable for a heavy machine gun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	17
+	Val2:	3
+BREAK
+#944
+Keywords:	box hmg ammunition ammo flechette
+Name:	a box of flechette heavy machine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of flechette ammunition suitable for a heavy machine gun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	17
+	Val2:	4
+BREAK
+#945
+Keywords:	box hmg ammunition ammo gel
+Name:	a box of gel heavy machine gun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of gel ammunition suitable for a heavy machine gun. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	250
+	Val1:	17
+	Val2:	5
+BREAK
+#946
+Keywords:	box assault cannon ammunition ammo normal
+Name:	a box of assault cannon ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of ammunition suitable for a assault cannon.
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	100
+	Val1:	18
+BREAK
+#947
+Keywords:	box minigun ammunition ammo normal
+Name:	a box of minigun ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of ammunition suitable for a minigun.
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	6
+	Cost:	300
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	500
+	Val1:	19
+BREAK
+#948
+Keywords:	workshop ammunition
+Name:	an Ammunition Workshop
+RoomDesc:$
+A workshop dedicated to the creation of ammunition dominates the area.~
+LookDesc:$
+This workshop consists of all the machinery, presses and measuring devices
+necessary to build ammunition from base materials. With all of this, one could
+create any type of ammunition for any type of firearm their heart desires. 
+~
+Type:	Workshop
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	20.00
+	Barrier:	12
+	Cost:	10000
+	AvailTN:	8
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	2
+BREAK
+#949
+Keywords:	kit ammo APDS manufacturing
+Name:	an APDS ammo manufacturing kit
+RoomDesc:$
+A kit of some kind for creating ammunition is here.~
+LookDesc:$
+This kit contains all of the basic necessities used in the creation of
+standard rounds of ammunition, and also appears to contain the tools required
+to manufacture APDS (Armour Piercing Discarding Sabot) rounds as well. 
+~
+Type:	Workshop
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	1
+	Val2:	1
+BREAK
+#950
+Keywords:	kit manufacturing ammo explosive
+Name:	an explosive ammo manufacturing kit
+RoomDesc:$
+A kit of some kind for creating ammunition is here.~
+LookDesc:$
+This kit contains all of the basic necessities used in the creation of
+standard rounds of ammunition, and also appears to contain the tools required
+to manufacture explosive rounds as well. 
+~
+Type:	Workshop
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	1
+	Val2:	2
+BREAK
+#951
+Keywords:	kit manfacturing ammo EX
+Name:	an EX ammo manufacturing kit
+RoomDesc:$
+A kit of some kind for creating ammunition is here.~
+LookDesc:$
+This kit contains all of the basic necessities used in the creation of
+standard rounds of ammunition, and also appears to contain the tools required
+to manufacture EX (Enhanced eXplosive) rounds as well. 
+~
+Type:	Workshop
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	1
+	Val2:	3
+BREAK
+#952
+Keywords:	kit manufacturing flechette ammo
+Name:	a flechette ammo manufacturing kit
+RoomDesc:$
+A kit of some kind for creating ammunition is here.~
+LookDesc:$
+This kit contains all of the basic necessities used in the creation of
+standard rounds of ammunition, and also appears to contain the tools required
+to manufacture flechette rounds as well. 
+~
+Type:	Workshop
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	1
+	Val2:	4
+BREAK
+#953
+Keywords:	ammo ammunition box hold-out pistol
+Name:	a box of normal hold-out pistol ammunition
+RoomDesc:$
+An ammo box has been left here.~
+LookDesc:$
+This ammo box contains rounds of normal ammunition suitable for a hold-out
+pistol. 
+~
+Type:	Ammo Box
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	12.50
+	Barrier:	6
+	Cost:	200
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	500
+	Val1:	5
 BREAK
 #970
 Keywords:	skillwires V
@@ -3840,7 +6208,7 @@ these business outfits have a flat, smooth and sharp no-frills style.  As with
 previous lines, integrated Kevlar fibers and custom-shaped carbon-ceramic
 plates provided adequate protection.  The Actioneer long-coat designs are
 specially tailored for bodyguards and feature built-in concealed holsters and
-ammo-magazine pockets. 
+ammo-clip pockets. 
 ~
 Type:	Worn
 WearFlags:	10000000001
@@ -4046,9 +6414,9 @@ A pair of gloves has been left here.~
 LookDesc:$
 To accompany the Sleeping Tiger line, Vashon Island produces an array of
 stylish leather gloves that discreetly provide a little extra punch when the
-chips are down. Each glove contains a thin layer of densiplast set into the
+chips are down. Each glove contains a thin layer of dentiplast set into the
 knuckles and along the edge of the hand, essentially making the gloves an
-effective set of kunckle-dusters. 
+effective set of knuckle-dusters. 
 ~
 Type:	Weapon
 WearFlags:	10000010000001
@@ -4067,10 +6435,9 @@ Material:	leather
 [VALUES]
 	Val1:	2
 	Val2:	1
-	Val3:	307
+	Val3:	4
 	Val4:	7
 	Val5:	-1
-	Val6:	-1
 	Val7:	-1
 	Val8:	-1
 	Val9:	-1
@@ -4121,31 +6488,6 @@ Material:	organic
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
-BREAK
-#998
-Keywords:	standardized elevator shaft key long metal rod hinged protrusion
-Name:	a standardized elevator shaft key
-RoomDesc:$
-A long metal rod with a hinged protrusion on the end has been left here.~
-LookDesc:$
-A beefy metal rod with a hinged toggle on the end, this universal elevator key
-will fit into most hoistway doors and unlock the service mechanism. A tag
-dangling from the end reads, "Use at your own risk!" 
-~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	1.00
-	Barrier:	4
-	Cost:	1000
-	AvailTN:	6
-	AvailDay:	4.00
-	LegalNum:	3
-	LegalCode:	18
-	LegalPermit:	1
 BREAK
 #999
 Keywords:	formula thick black tome volume book

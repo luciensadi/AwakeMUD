@@ -1,0 +1,70 @@
+#62500
+Keeper:	62500
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	We don't serve that drek here.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	Beat it, coozan.
+DoesntBuy:	We don't buy that.
+Buy:	It'll run ya %d nuyen. Enjoy your drink, coozan.
+Sell:	Here's your %d nuyen.
+Name:	Beachfront bar
+Flags:	1100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	7203
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	7206
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	60266
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	22824
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	42175
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	60267
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	30112
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	60269
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	22826
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	30118
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	22827
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	39234
+		Type:	Always
+		Stock:	0
+BREAK
+END

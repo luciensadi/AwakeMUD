@@ -1,0 +1,1794 @@
+#22800
+Keywords:	Jason Dunlap over-muscled bartender
+Name:	Jason Dunlap
+RoomDesc:$
+An over-muscled bartender casually polishes glasses behind the bar here. 
+
+~
+LookDesc:$
+Decked out in the makings of a cheap suit combo, this bartender has fine,
+straight black hair which is worn long and in a practical manner, and an
+over-muscled build. His nose is crooked, giving the impression it has been
+broken multiple times, and his knuckles bear the wear and tear one would
+expect from a bare knuckled boxer. He casually polishes glasses whenever he
+isn't serving up customers or hailing waitresses back to the bar. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	4
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	100
+[SKILLS]
+	unarmed combat:	8
+BREAK
+#22801
+Keywords:	man hefty fat
+Name:	a rather hefty man
+RoomDesc:$
+A rather hefty man enjoying a rack of ribs is seated here. 
+
+~
+LookDesc:$
+He's a bit wider around the midsection than most other customers, which should
+attest to the fact he has returned for more of this grills delicious grub.
+He's currently chowing down on a rack of ribs as if his life depended upon him
+finishing as fast as humanly possible, and as such, has no time for
+conversation. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	4
+	Str:	6
+	Cha:	2
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	65
+	Bank:	50
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#22802
+Keywords:	wageslave hungry
+Name:	a hungry wageslave
+RoomDesc:$
+A hungry wageslave is here, debating what to get off the menu. 
+
+~
+LookDesc:$
+Dressed in low-level corporate attire, it's pretty safe to say this guy busts
+his ass for pennies on the dollar for whatever business he is a slave to. He
+looks awful hungry, and mills through the tables to find the right one. He
+seems to be contemplating what to eat, slowly and methodically, with a zen
+that Buddha himself would be jealous of. 
+~
+ArriveMsg:	wanders in from
+LeaveMsg:	wanders off
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Cash:	45
+	Bank:	25
+[SKILLS]
+	unarmed combat:	2
+BREAK
+#22803
+Keywords:	chubby man cheap suit Johnson Mister
+Name:	a chubby man sporting a cheap suit
+RoomDesc:$
+A chubby man sporting a cheap suit is here, tearing up a meal in privacy. 
+
+~
+LookDesc:$
+Well, maybe saying he is chubby is a bit of an understatement. The cheap suit
+he sports is practically bursting at the seams, which is impressive,
+considering most of the buttons have been undone and his tie has been loosened
+to accommodate multiple neck rolls. His entire frame swells and deflates along
+with his slow, heavy breathing, which is occasionally interrupted by a hacking
+fit brought on by apparently having never learned how to chew his food. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	100
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#22804
+Keywords:	troll butcher chef surly
+Name:	a surly troll butcher turned chef
+RoomDesc:$
+A surly troll butcher is busy carving meat and slapping it on the grill here.
+
+~
+LookDesc:$
+About the size of two orks duct taped together, this troll does little to
+quell the stereotypes about big dumb trogs. The white (or at least at one
+point) butchers apron is stained with blood and charred in various places. He
+wields a butcher knife with frightening proficiency as he carves up carcasses
+before slapping them on the grills. The set of crooked horns sitting atop his
+head made it kind of hard to wear a hair net, then again, who is going to tell
+him to put one on? Nobody. That's who. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	5
+	Str:	10
+	Cha:	2
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	290
+	Weight:	150
+[SKILLS]
+	edged weapons:	7
+BREAK
+#22805
+Keywords:	troll guard massive
+Name:	a massive troll sporting a dull grey suit
+RoomDesc:$
+A massive troll sporting a dull grey suit stands guard here with a shotgun. 
+
+~
+LookDesc:$
+With broad, well muscled shoulders and a definitively mean disposition, it's
+easy to see why he's on guard duty. Standing almost as wide as he is tall, his
+dull grey suit threatens to burst apart as it attempts to keep his girth
+contained. Across his shoulder is slung a heavy, troll-sized shotgun, which he
+certainly looks like he knows how to use. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001010
+AffFlags:	0
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	5
+	Str:	8
+	Cha:	2
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	290
+	Weight:	140
+	Ballistic:	5
+	Impact:	5
+	Cash:	125
+	Bank:	50
+[SKILLS]
+	shotguns:	5
+	clubs:	5
+BREAK
+#22806
+Keywords:	guy fat old Italian
+Name:	an old, fat Italian guy puffing on a stogie
+RoomDesc:$
+An old, fat Italian guy puffing on a stogie is here at the table. 
+
+~
+LookDesc:$
+Quite old, quite fat and quite Italian, this man has no qualms with loosening
+his tie and getting in on sold good old fashioned gambling action. He chews on
+a roughly cut, cheap cigar, which is only removed from his mouth to hassle one
+of his fellow players. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	100
+	Cash:	185
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#22807
+Keywords:	man Italian thoroughly soused drunk
+Name:	a thoroughly soused Italian man
+RoomDesc:$
+A thoroughly soused Italian man eyes his cards carefully at the table. 
+
+~
+LookDesc:$
+Having had one too many drinks, he seems almost too preoccupied to play cards
+when he's so busy rambling on about random topics, as most drunks are want to
+do. It's hard to tell if he's a great player, or simply lucky, but for the
+most part he seems to be doing very well for himself at this table. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Cash:	225
+[SKILLS]
+	unarmed combat:	5
+BREAK
+#22808
+Keywords:	man suit roughed Italian
+Name:	a man sporting a roughed up black suit
+RoomDesc:$
+A man sporting a roughed up black suit is here, grumbling about his hand. 
+
+~
+LookDesc:$
+His suit is a bit rough by the looks of it, as his tie is loosened and the top
+buttons of his undershirt are undone, apparently having the need for
+ventilation during his gambling stints. Having the appearance of someone who
+has just gotten off from a long, hard day at the office, it's easy to see why
+he needs to unwind with a good card game. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	5
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	70
+	Cash:	175
+[SKILLS]
+	unarmed combat:	6
+BREAK
+#22809
+Keywords:	Alfieri Ciarniello burly Italian man Mafia
+Name:	Alfieri Ciarniello
+RoomDesc:$
+A burly Italian man in an expensive suit is seated behind his desk here. 
+
+~
+LookDesc:$
+Reputed to be an underling of the powerful mafia presence in Everett, Alfieri
+is a member of the Ciarniello family, and as such enjoys the benefits of being
+related to powerful figures in the underworld. While not having nearly as much
+pull or clout as other members, he still carries enough power in the area to
+get whatever he wants. And from the looks of it, he wants a whole hell of a
+lot. He sports a suit that would make most people envious, and carries himself
+with a skull crackers confidence. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	5
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Cash:	225
+	Bank:	165
+[SKILLS]
+	pistols:	6
+	clubs:	5
+	unarmed combat:	4
+BREAK
+#22820
+Keywords:	Ebey Pratt Lanky cybereyes bartender
+Name:	Ebey Pratt
+RoomDesc:$
+A lanky bartender with piercing ^Bblue^N cybereyes serves up drinks here. 
+
+~
+LookDesc:$
+None other than the owner of the establishment is behind the bar, serving up
+drinks and wiping down the synthwood surface of residue left behind from cold
+drinks. He has a very lanky physique, long-limbed and gaunt faced, upon which
+shine piercing blue cybereyes that glow like cold embers of a dying fire. He
+has done quite well for himself over the years, rumor being that he ran the
+shadows for many of them, and lived long enough to profit quite well from his
+choice of work. He extends that lifespan which common sense, which comes in
+the form of not asking questions and keeping his customers nice and drunk. He
+could care less about metahumans or humans alike, and doesn't seem to favour
+or dislike any of them (which is a little wierd, considering he's an elf). All
+he seems to care about is if they have the nuyen to pay for their drinks. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	7
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+[SKILLS]
+	unarmed combat:	8
+BREAK
+#22821
+Keywords:	Maxwell Jensen well-kept smoking Johnson
+Name:	Maxwell Jensen
+RoomDesc:$
+A well-kept man smoking a cigarette is seated here, flanked by a bodyguard. 
+
+~
+LookDesc:$
+Even those his clothes aren't that slick, and his shades aren't that dark and
+expensive, his body language and posture practically scream 'suit', especially
+considering the company he has brought along with him. He calmly and casually
+smokes his cigarette, his gaze sifting through the grizzled faces of runners
+as they pass through the bar, awaiting one who is brave enough, stupid enough,
+or just plain desperate enough to take up a job offer from him. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	unarmed combat:	5
+	negotiation:	5
+BREAK
+#22822
+Keywords:	bodyguard significantly cybered
+Name:	A significantly cybered bodyguard
+RoomDesc:$
+A significantly cybered bodyguard flanks a smoking man at a table here. 
+
+~
+LookDesc:$
+Sporting some of the latest, and obvious, advances in cybertechnology, it's
+safe to say he has corporate backing for all his medical bills. Cyberarms
+gleam brightly even in poorly lit rooms, polished with care, and showcased
+with his sleeves rolled up, just incase anyone gets any ideas about messing
+with his client. Ziess cybereyes, costing more than most people make in their
+entire life, focus and unfocus as they calibrate to the constantly shifting
+light levels, doing away with such useless and unnecessary things such as
+blinking. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	8
+	Str:	10
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	100
+	Ballistic:	7
+	Impact:	7
+	Cash:	250
+[SKILLS]
+	unarmed combat:	7
+	pistols:	7
+	clubs:	6
+BREAK
+#22823
+Keywords:	man dwarven gruffy little dwarf
+Name:	A gruffy little dwarven man
+RoomDesc:$
+A gruffy little dwarven man is sitting on a box down here. 
+
+~
+LookDesc:$
+Standing just a little over four feet tall, with a beard that is almost as
+large as he is. This little dwarven fellow has a gruff appearance and an even
+gruffier demeanor, which most likely comes from sitting down in the storeroom
+for so long. His wide-eyed gaze immediately locks onto any tresspassers that
+wander their way down, silently debating wether or not he can make a quick
+buck off of them. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Dwarf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	5
+	Str:	8
+	Cha:	4
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	130
+	Weight:	70
+[SKILLS]
+	negotiation:	4
+BREAK
+#22824
+Keywords:	habituate drunken drunkard
+Name:	a drunken habituate
+RoomDesc:$
+A drunken habituate stumbles through the bar here. 
+
+~
+LookDesc:$
+Having had one too many drinks, or perhaps not enough, this patron seems to
+have been flagged for their stay here by the tender for their own safety. They
+mill around with a stumble, occasionally bumping into other patrons on
+accident and nearly losing their life over it, all of which goes right over
+their head as far as comprehension or realization goes. 
+~
+ArriveMsg:	stumbles in from
+LeaveMsg:	stumbles off to the
+MobFlags:	1001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	35
+	Bank:	45
+[SKILLS]
+BREAK
+#22825
+Keywords:	shadowrunner runner suspiciously dubious
+Name:	a suspiciously dubious shadowrunner
+RoomDesc:$
+A suspiciously dubious shadowrunner creeps through here, looking for someone.
+
+~
+LookDesc:$
+He's got all the tell tale signs of someone who runs the shadows, but there is
+something you can't quite place about his demeanor. A beady gaze sifts through
+the patrons as he creeps around the bar, apparently on the lookout for someone
+or something in particular. 
+~
+ArriveMsg:	creeps in from
+LeaveMsg:	creeps off to the
+MobFlags:	1000001001000
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	7
+	Str:	5
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Ballistic:	4
+	Impact:	4
+	Cash:	115
+[SKILLS]
+	unarmed combat:	5
+BREAK
+#22826
+Keywords:	Eliza The Lighter Bic petite woman flame red hair redhead
+Name:	Eliza "The Lighter" Bic
+RoomDesc:$
+A petite woman with flame red hair is here, sipping on a drink. 
+
+~
+LookDesc:$
+This sweet looking dame earned her nickname the old fashioned way, by melting
+hearts, and faces. Better known for her adversion towards flame magicks, she
+has become quite well known in certain runner circles for not only being
+reliable, but also for being a totally cold hearted bitch. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Elf
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	7
+	Str:	5
+	Cha:	7
+	Int:	6
+	Wil:	6
+	Mag:	10
+[POINTS]
+	Height:	180
+	Weight:	60
+	Ballistic:	5
+	Impact:	5
+	Cash:	180
+[SKILLS]
+	unarmed combat:	5
+	sorcery:	7
+BREAK
+#22827
+Keywords:	Juno trog troll big ol' crusher
+Name:	Juno the Crusher
+RoomDesc:$
+A big ol' trog is here, kicking back and relaxing. 
+
+~
+LookDesc:$
+This broad shouldered trog fits right in with the grizzled mugs found
+throughout the bar. His physique is comparable to a GMC Bulldog, and it looks
+like his face has taken more hits than a speed bag. Two large, very crooked
+horns attempt to curl in upon themselves, and look like an epileptic with
+Parkinson's drew them on. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	8
+	Str:	14
+	Cha:	2
+	Int:	4
+	Wil:	6
+	Mag:	12
+[POINTS]
+	Height:	280
+	Weight:	180
+	Ballistic:	4
+	Impact:	4
+	Cash:	200
+[SKILLS]
+	unarmed combat:	8
+	clubs:	8
+BREAK
+#22828
+Keywords:	ork tusker rough bouncer
+Name:	a rough looking tusker
+RoomDesc:$
+A rough looking tusker pulls bouncer duty here. 
+
+~
+LookDesc:$
+With a keen set of cybereyes and an even keener set of tusks, this rough
+looking bastard is pulling bouncer duty for the bar, either for a paycheck, or
+maybe working off a bar tab. He takes the job somewhat seriously, but for the
+most only really bothers with hassling wannabes and other posers, taking it
+upon himself to put them where they belong, back out onto the streets. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Ork
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	5
+	Str:	9
+	Cha:	2
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	155
+[SKILLS]
+	unarmed combat:	6
+BREAK
+#22830
+Keywords:	employee dadson vision
+Name:	a Dadson Vision employee
+RoomDesc:$
+A Dadson Vision employee works the register here. 
+
+~
+LookDesc:$
+This employee wears a clean and pressed casual business outfit with a name tag
+pinned neatly to the front of his shirt , attempting to exude a professional
+aura about himself, which he does fairly well. He works the register and
+credstick reader with the smoothness and quickness expected from a corporate
+slave. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	negotiation:	4
+BREAK
+#22831
+Keywords:	employee dadson vision
+Name:	a Dadson Vision employee
+RoomDesc:$
+A Dadson Vision employee works the register here. 
+
+~
+LookDesc:$
+This employee wears a clean and pressed casual business outfit with a name tag
+pinned neatly to the front of his shirt , attempting to exude a professional
+aura about himself, which he does fairly well. He works the register and
+credstick reader with the smoothness and quickness expected from a corporate
+slave. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	negotiation:	4
+BREAK
+#22832
+Keywords:	employee dadson vision
+Name:	a Dadson Vision employee
+RoomDesc:$
+A Dadson Vision employee works the register here. 
+
+~
+LookDesc:$
+This employee wears a clean and pressed casual business outfit with a name tag
+pinned neatly to the front of his shirt , attempting to exude a professional
+aura about himself, which he does fairly well. He works the register and
+credstick reader with the smoothness and quickness expected from a corporate
+slave. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	negotiation:	4
+BREAK
+#22833
+Keywords:	employee dadson vision
+Name:	a Dadson Vision employee
+RoomDesc:$
+A Dadson Vision employee works the register here. 
+
+~
+LookDesc:$
+This employee wears a clean and pressed casual business outfit with a name tag
+pinned neatly to the front of his shirt , attempting to exude a professional
+aura about himself, which he does fairly well. He works the register and
+credstick reader with the smoothness and quickness expected from a corporate
+slave. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	negotiation:	4
+BREAK
+#22834
+Keywords:	shopper run mill
+Name:	a run of the mill shopper
+RoomDesc:$
+A run of the mill shopper drifts through the outlets here. 
+
+~
+LookDesc:$
+An every day, run of the mill shopper, who mills their way about the building,
+trolling for new trideo and simsense sustenance. The only real difference
+between a beetle head and these people are the fact they're too poor to afford
+the really good stuff, so they settle for mindless fluff offered. 
+~
+ArriveMsg:	drifts in from
+LeaveMsg:	drifts
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	15
+	Bank:	85
+[SKILLS]
+	unarmed combat:	2
+BREAK
+#22835
+Keywords:	shopper run mill
+Name:	a run of the mill shopper
+RoomDesc:$
+A run of the mill shopper drifts through the outlets here. 
+
+~
+LookDesc:$
+An every day, run of the mill shopper, who mills their way about the building,
+trolling for new trideo and simsense sustenance. The only real difference
+between a beetle head and these people are the fact they're too poor to afford
+the really good stuff, so they settle for mindless fluff offered. 
+~
+ArriveMsg:	drifts in from
+LeaveMsg:	drifts
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	15
+	Bank:	85
+[SKILLS]
+	unarmed combat:	2
+BREAK
+#22836
+Keywords:	guard security dadson vision
+Name:	a Dadson Vision security guard
+RoomDesc:$
+A Dadson Vision security guard is doing his rounds here. 
+
+~
+LookDesc:$
+A simple private security guard hired to make sure nobody causes either the
+business or the customers any trouble, or at least any that is too small to
+call in Lone Star forces, such as simple thefts and the like. He is armed with
+a nasty little stun baton, just in case any of the shoppers get out of
+control. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	4
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Cash:	55
+	Bank:	55
+[SKILLS]
+	clubs:	3
+	unarmed combat:	3
+BREAK
+#22850
+Keywords:	SentryGun(TM) Sentry Gun turret concealed
+Name:	a concealed SentryGun(TM) turret
+RoomDesc:$
+A ruthenium coated SentryGun(TM) turret is neatly tucked away in the scenery.
+
+~
+LookDesc:$
+This is a SentryGun(TM) smart turret, which can be both manually controlled or
+function autonomously as defensive units. They seem to have been coated in
+ruthenium, and are tucked neatly within the scenery to stand out as little as
+possible, while still retaining and full and clear range of fire to protect
+the compound with. Fortunately, it seems they are armed with non-lethal gel
+rounds, just in case they need to deal with anyone without outright killing
+them. You may want to keep your movements slow and non-aggressive around these
+babies, just in case. 
+~
+ArriveMsg:	A cold storage room
+LeaveMsg:	XÉã	PPã	
+MobFlags:	100000000000010000000000000001010
+AffFlags:	1000000000000000000000000000000000000000010
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	6
+	Str:	8
+	Cha:	1
+	Int:	8
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	200
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	machine guns:	7
+	clubs:	7
+BREAK
+#22851
+Keywords:	receptionist bicson biomedical
+Name:	a Bicson Biomedical receptionist
+RoomDesc:$
+A receptionist for Bicson Biomedical is seated behind the desk here. 
+
+~
+LookDesc:$
+This mousey looking woman is dressed down in professional attire, doing her
+best to put on the persona as a successful businesswoman, and doing quite well
+in the attempt. She spends most of her time tending to the phones and dealing
+with various visitors that come to this corporate holding. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	60
+	Cash:	35
+	Bank:	200
+[SKILLS]
+	unarmed combat:	2
+BREAK
+#22852
+Keywords:	guard security pudgy
+Name:	a pudgy security guard
+RoomDesc:$
+A pudgy security guard munches on a donut as he maintains his post here. 
+
+~
+LookDesc:$
+This security guard seems to sum up just about every stereotype possible. He's
+quite a bit overweight (IE, Fat), starting to go bald, and is currently trying
+to get some donut frosting off of his uniform since he tends to get a bit
+messy with handling them. He may or may not be a push-over, but just from the
+looks of him... It's probably the first. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	2
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	90
+	Ballistic:	5
+	Impact:	5
+	Cash:	125
+[SKILLS]
+	unarmed combat:	5
+	clubs:	5
+BREAK
+#22853
+Keywords:	guard security casually dressed clinic
+Name:	a casually dressed clinic security guard
+RoomDesc:$
+A casually dressed clinic security guard toting a stun baton doing his rounds.
+
+~
+LookDesc:$
+Dressed down to suit a more casual enviroment, this security is doing his best
+to keep things civil and protect any patients, or more likely, protect the
+corporation from the patients. He totes a stun baton with him at all times,
+just in case anyone gives him a reason. 
+~
+ArriveMsg:	makes his way in from
+LeaveMsg:	makes his rounds, leaving
+MobFlags:	10000001000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	5
+	Cha:	3
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	6
+	Impact:	6
+	Cash:	150
+	Bank:	100
+[SKILLS]
+	clubs:	6
+	unarmed combat:	6
+BREAK
+#22854
+Keywords:	doctor proper looking
+Name:	a proper looking doctor
+RoomDesc:$
+A proper looking doctor is here, dealing with patient procedures. 
+
+~
+LookDesc:$
+Decked out in a sterile gown and sporting latex gloves, this doctor actually
+looks like.. Well, a doctor. Knowing some of the types around, this is
+probably the first time they've had to deal with a doctor that doesn't work
+out of the back of their trunk with a crowbar and hacksaw. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	170
+[SKILLS]
+BREAK
+#22855
+Keywords:	doctor proper looking
+Name:	A proper looking doctor
+RoomDesc:$
+A proper looking doctor is here, dealing with patient procedures. 
+
+~
+LookDesc:$
+Decked out in a sterile gown and sporting latex gloves, this doctor actually
+looks like.. Well, a doctor. Knowing some of the types around, this is
+probably the first time they've had to deal with a doctor that doesn't work
+out of the back of their trunk with a crowbar and hacksaw. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+BREAK
+#22856
+Keywords:	Kelvin Merritt administrator private troll
+Name:	Kelvin Merritt
+RoomDesc:$
+An administrator for the private wards is here, sifting through paperwork. 
+
+~
+LookDesc:$
+This would be Kelvin Merritt, the one of the head administrators left with the
+duty of running the private wards and seeing to the needs of the doctors,
+physicians and nurses under his watchful gaze. The first detail that might
+jump to the foreground is that Kelvin is a troll, which in a professional
+field almost seems amusing, but don't let it fool you into thinking he's
+incompetent, since he's worked his way up through the ranks and earns himself
+a nifty bit of yen. Obviously he's been doing -something- right. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	6
+	Str:	10
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	280
+	Weight:	150
+	Cash:	200
+[SKILLS]
+	unarmed combat:	6
+BREAK
+#22857
+Keywords:	guard security
+Name:	a security guard
+RoomDesc:$
+A security guard is here, restricting access to non-authorized personel. 
+
+~
+LookDesc:$
+He looks to be a fairly competent, and hopefully, decent trained member of the
+security squad. His job is to keep an eye on the level-2 access post, turning
+away those without the proper access or papers required to get through the
+checkpoint. The robust heavy pistol tucked into its holster at his side gives
+the impression he knows how to handle it, which is emphasized by his demeanor
+and vigilance to guarding his station. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	8
+	Str:	6
+	Cha:	3
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	8
+	Impact:	8
+	Cash:	225
+[SKILLS]
+	unarmed combat:	6
+	clubs:	6
+	pistols:	6
+BREAK
+#22858
+Keywords:	guard security Bicson Biomedical
+Name:	a Bicson Biomedical security guard
+RoomDesc:$
+A Bicson Biomedical security guard doing his rounds through the corridors. 
+
+~
+LookDesc:$
+This grunt is more suited to tasks in security that take a steady hand and
+little to no remorse for dealing with intruders. Just because he's an ork
+doesn't mean he's any more prone to violence, but you would never know that
+fact if you ran into this guy in a dark alley way at night. He sports a small
+little SMG, but he does so in a manner that suggests several years of
+training. 
+~
+ArriveMsg:	strolls in from
+LeaveMsg:	strolls off
+MobFlags:	1000000101000
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	6
+	Cha:	3
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	100
+	Ballistic:	7
+	Impact:	7
+	Cash:	200
+	Bank:	125
+[SKILLS]
+	unarmed combat:	6
+	clubs:	7
+	sub-machine guns:	7
+BREAK
+#22859
+Keywords:	officer security guard
+Name:	a security officer
+RoomDesc:$
+A security officer sipping on coffee as he watches the camera feeds. 
+
+~
+LookDesc:$
+Toting around firearms and gunning down intruders isn't this guys idea of a
+fun day at work, in fact, he'd much rather lounge around, keeping an eye on
+the security monitors (and occasionally an Urban Brawl game). He has
+everything he could possibly want, a hot cup of coffee, a bit of privacy, and
+a job that consists of little to no manual labour. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	5
+	Cha:	3
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Ballistic:	4
+	Impact:	4
+	Cash:	125
+	Bank:	150
+[SKILLS]
+	unarmed combat:	5
+BREAK
+#22860
+Keywords:	guard security sleeping
+Name:	a sleeping security guard
+RoomDesc:$
+A security guard is sprawled out here, sleeping soundly on his break. 
+
+~
+LookDesc:$
+This security guard is taking it easy on his break, and has decided the best
+thing to do before getting back onto his shift is a lengthy nap. He snores
+loudly, sprawled out across one of the small cots posted about the barracks. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	2
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	4
+	Impact:	4
+	Cash:	150
+[SKILLS]
+	unarmed combat:	5
+BREAK
+#22861
+Keywords:	SentryGun(TM) Sentry Gun turret concealed
+Name:	a concealed SentryGun(TM) turret
+RoomDesc:$
+A SentryGun(TM) smart turret is concealed within the ceiling above. 
+
+~
+LookDesc:$
+This is a SentryGun(TM) smart turret, which can be both manually controlled or
+function autonomously as defensive units. They seem to have been coated in
+ruthenium, and are tucked neatly within the scenery to stand out as little as
+possible, while still retaining and full and clear range of fire to protect
+the compound with. Fortunately, it seems they are armed with non-lethal gel
+rounds, just in case they need to deal with anyone without outright killing
+them. You may want to keep your movements slow and non-aggressive around these
+babies, just in case. 
+~
+ArriveMsg:	smartlink-2 -beta
+LeaveMsg:	‡ùå	)å	
+MobFlags:	100000000000000000000000000101010
+AffFlags:	10000001000000000
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	6
+	Str:	8
+	Cha:	1
+	Int:	8
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	200
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	machine guns:	7
+	clubs:	7
+BREAK
+#22862
+Keywords:	guard troll heavy-set security
+Name:	a heavy-set troll security guard
+RoomDesc:$
+A heavy-set troll security guard is here, waiting for intruders. 
+
+~
+LookDesc:$
+This heavy-set guard is obviously a troll, since the massive body and big
+fugly horns and tusks are a dead give away, along with the smell, which is
+more of a musk. This fellas job is pretty easy, which is to put to an end any
+and all infiltrations and intruders who are stupid enough to fall into their
+crosshairs. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010
+AffFlags:	1000000000
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	8
+	Str:	10
+	Cha:	2
+	Int:	6
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	280
+	Weight:	160
+	Ballistic:	1
+	Impact:	1
+	Cash:	225
+[SKILLS]
+	shotguns:	7
+	clubs:	7
+	unarmed combat:	7
+BREAK
+#22863
+Keywords:	man sporting hazmat cleaner worker
+Name:	a man sporting a hazmat suit
+RoomDesc:$
+A man sporting a hazmat suit is working here, scrubbing down the lab. 
+
+~
+LookDesc:$
+This worker is decked out in a snazzy bright ^Yyellow^N hazmat suit, and his task
+is to deal with the mess that is leftover after all the lab technicians have
+their way with the rooms. He wields his mighty scrub-brush with the skill of a
+professional cleaner, laying waste to the leftover bacteria and organic matter
+left and leave every surface in the room sterile. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	pole arms:	6
+BREAK
+#22864
+Keywords:	technician lab bicson biomedical
+Name:	a Bicson Biomedical lab technician
+RoomDesc:$
+A Bicson Biomedical lab technician is on the clock here, minding his business.
+
+~
+LookDesc:$
+This lab technician sees to all various testing and experimenting the compound
+is in need of, most of which includes dealing with biological contaminates. He
+sports a set of sterile instruments and clothing, and has his face covered in
+a clean white mask with his hair tucked beneath his cap. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	6
+	Cha:	4
+	Int:	8
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	edged weapons:	7
+BREAK
+#22865
+Keywords:	Bianca Singleton head technician
+Name:	Bianca Singleton
+RoomDesc:$
+The Head Technician, Bianca Singleton, is seated behind her office desk. 
+
+~
+LookDesc:$
+This is Bianca Singleton, the Head Technician for Everett Sector Bicson
+Biomedical labs, and as such has the task of keeping things running not only
+smoothly, but efficiently. She oversees the majority of experimental testing
+and various other procedures that go on in the compound. Not only does she
+have a medical degree, but a degree in business as well, making her a very
+affluent and productive member of the corporation. It also makes her more
+trustworthy, so she has access to all sorts of things. She also has a very
+pretty set of ^Cbaby blue^N eyes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Elf
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	7
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	60
+	Ballistic:	5
+	Impact:	5
+[SKILLS]
+	unarmed combat:	5
+BREAK
+#22866
+Keywords:	guard security troll
+Name:	a huge troll security guard
+RoomDesc:$
+A huge troll security guard is here, hefting a large blade over his shoulder.
+
+~
+LookDesc:$
+This large troll likes his job, very much so. He gets to lounge around all day
+looking tough, and when the time comes for him to flex, he gets to put his
+equally large blade to work on any intruders stupid enough to try and break
+in. He's a stone cold killer, put on the payroll to clean up messes and make
+sure everything runs smoothly without needing to ask questions about trivial
+things such as morals. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000111010
+AffFlags:	0
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	10
+	Str:	15
+	Cha:	4
+	Int:	6
+	Wil:	8
+	Mag:	12
+[POINTS]
+	Height:	290
+	Weight:	300
+	Ballistic:	2
+	Impact:	2
+	Cash:	250
+[SKILLS]
+	pole arms:	8
+BREAK
+#22867
+Keywords:	guard dwarven stocky
+Name:	a stocky dwarven security guard
+RoomDesc:$
+A stocky dwarven security guard lounging around at his post. 
+
+~
+LookDesc:$
+This little dwarven scrapper is built like a brick shithouse, barely coming up
+past the waist on most normal (meta)humans, and almost as wide and stocky as
+he is tall. He has a fairly shitty diposition, considering everyone looks down
+at him and he can't even get on most amusement park rides. Hell, he has to
+ride the tea cups, wouldn't you be pissed all the time too? 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000111010
+AffFlags:	0
+Race:	Dwarf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	12
+	Str:	12
+	Cha:	6
+	Int:	8
+	Wil:	8
+	Mag:	12
+[POINTS]
+	Height:	140
+	Weight:	80
+	Ballistic:	2
+	Impact:	2
+	Cash:	225
+[SKILLS]
+	clubs:	7
+	rifles:	7
+	unarmed combat:	7
+BREAK
+#22868
+Keywords:	SentryGun(TM) Sentry Gun turret concealed
+Name:	a concealed SentryGun(TM) turret
+RoomDesc:$
+A SentryGun(TM) smart turret is concealed within the ceiling above. 
+
+~
+LookDesc:$
+This is a SentryGun(TM) smart turret, which can be both manually controlled or
+function autonomously as defensive units. They seem to have been coated in
+ruthenium, and are tucked neatly within the scenery to stand out as little as
+possible, while still retaining and full and clear range of fire to protect
+the compound with. Fortunately, it seems they are armed with non-lethal gel
+rounds, just in case they need to deal with anyone without outright killing
+them. You may want to keep your movements slow and non-aggressive around these
+babies, just in case. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000000000000101010
+AffFlags:	10000001000000000
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	6
+	Str:	8
+	Cha:	1
+	Int:	8
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	200
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	machine guns:	7
+	clubs:	7
+BREAK
+#22869
+Keywords:	technician nervous laboratory
+Name:	a nervous laboratory technician
+RoomDesc:$
+A nervous laboratory technician is waiting around here. 
+
+~
+LookDesc:$
+This is obviously a lab technician, which is made blatent by the uniform he is
+wearing, and overall he looks rather nervous. His attention is constantly on
+the area around him, very often glancing over his shoulder as if expecting
+someone to be behind him. His fingernails have been chewed quite a bit,
+indicating some of the stress he's dealing with. 
+~
+ArriveMsg:	hurries in from
+LeaveMsg:	hurries off
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#22870
+Keywords:	Stanley Yaha surly dwarven
+Name:	Stanley Yaha
+RoomDesc:$
+A surly looking dwarven man proudly works the front counter here. 
+
+~
+LookDesc:$
+This surly looking dwarf is built like a tank (a miniature one, ofcourse), and
+his shoulder to neck ratio is almost non-existent, most likely due to working
+with heavy machinery day in and day out. He sports a massive grin, one that
+seems almost too creepy and too large for his size, which is framed by a
+massive beard with singe marks on it. He seems all too happy to oblige any
+recreational gun nuts who come in for a visit, and barely shuts up for more
+than a few seconds at a time as he yammers on and on about his love for
+gunsmithing. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Dwarf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	90
+[SKILLS]
+BREAK
+#22871
+Keywords:	Gunsmithing Library
+Name:	Gunsmithing Library
+RoomDesc:$
+A trainer mob you shouldn't be seeing is here.. 
+
+~
+LookDesc:$
+You really shouldn't be seeing this... And if you are, report it to Yojimbo
+(Or Che, that'll work too). 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+BREAK
+END

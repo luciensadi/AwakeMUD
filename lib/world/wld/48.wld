@@ -1,0 +1,2421 @@
+#4801
+Name:	Entrance to McDonald's
+Desc:$
+   You stand at the entrance to an ultra-modern McDonald's.  The smell of
+cooked fat is very strong.  A golden arch hologram shoots into the sky.  A
+door leads inside to the north, and a sidewalk runs east. 
+~
+Flags:	100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	door glass
+	Desc:$
+Inside McDonald's
+~
+	ToVnum:	4802
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	6741
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign arch hologram
+	Desc:$
+The trademark Golden arches still exist.  Every second the number of customers
+served flashes by.  It's roughly 650 trillion.
+~
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4802
+Name:	Inside McDonald's
+Desc:$
+   You stand inside a slick McDonald's.  Neon colored plastic flows smoothly
+throughtout the room.  Busy customers shuttle trays of fatty food back and
+forth There are some tables to the east, and you can order to the north.  The
+exit is to the south. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Desc:$
+Service Counter
+~
+	ToVnum:	4803
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Desc:$
+Tables
+~
+	ToVnum:	4804
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door glass exit
+	Desc:$
+Outside
+~
+	ToVnum:	4801
+	Flags:	1
+	Material:	glass
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4803
+Name:	McDonald's Service Counter
+Desc:$
+   You stand in front of the counter, where you can purchase various foods.
+The kitchen can be seen to the north. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	Desc:$
+Inside McDonald's
+~
+	ToVnum:	4802
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4804
+Name:	Entrance to Eating Area
+Desc:$
+   You are now in the eating area.  Tables are scattered throughtout the area,
+and trash disintigraters are located in several different spots.  A hallway
+leads north, and the eating area continues east. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Desc:$
+Hallway
+~
+	ToVnum:	4805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4810
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4802
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4805
+Name:	Hallway
+Desc:$
+   You are in a well lit hallway.  There is a door to the west, and the
+hallway continues north. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Desc:$
+Hallway
+~
+	ToVnum:	4807
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Desc:$
+Eating Area
+~
+	ToVnum:	4804
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+Kitchen
+~
+	ToVnum:	4806
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+	LockRating:	4
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4806
+Name:	McDonald's Kitchen
+Desc:$
+   You stand inside the kitchen.  The sound of microwaves and fryers beeping
+is almost overwhelming.  There appears to be a grill to the west, and the
+kitchen continues to the north. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Desc:$
+The preparation area is to the north.
+~
+	ToVnum:	4815
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4805
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4807
+Name:	Hallway
+Desc:$
+   You are at the end of the hallway.  Doors lead both east and west, and the
+restaurant is to the south. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	Keywords:	door women's women east
+	Desc:$
+Women's Restroom
+~
+	ToVnum:	4809
+	Flags:	1
+	Material:	plastic
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door men's men west
+	Desc:$
+Men's Restroom
+~
+	ToVnum:	4808
+	Flags:	1
+	Material:	plastic
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4808
+Name:	Men's Restroom
+Desc:$
+   You are in the men's restroom. 
+~
+Flags:	1100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4807
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4809
+Name:	Women's Restroom
+Desc:$
+   You are in the women's restroom.  As most public restrooms are, this one is
+dirty and reeks of urine.  A large McDonald's Arch is painted on the ceiling.
+Someone has decided to squeeze ktechup packets all over the ground, further
+enhancing your experience.  There is a toilet stall to the north. 
+~
+Flags:	1100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	4807
+	Flags:	1
+	Material:	plastic
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4810
+Name:	Eating Area
+Desc:$
+   You are in the eating area where tables are scattered throughtout.  Tables
+continue east and north. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4812
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	4811
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4813
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4804
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4811
+Name:	Eating Area
+Desc:$
+   You are in the eating area where tables are scattered throughtout.  Tables
+continue east and north. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	4813
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	4810
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4812
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4812
+Name:	Eating Area
+Desc:$
+   You are in the eating area where tables are scattered throughtout.  Tables
+continue east and north. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4811
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	4813
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4810
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4813
+Name:	Eating Area
+Desc:$
+   You are in the eating area where tables are scattered throughtout.  Tables
+continue east and north. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4811
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4810
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	4812
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4814
+Name:	Eating Area
+Desc:$
+   You are in the eating area where tables are scattered throughtout.  Tables
+continue east and north. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4811
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4810
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4815
+Name:	Food Preparation Area
+Desc:$
+   This part of the kitchen is where customer's food is assembled.  Hamburgers
+are loaded with all the favorite codiments and mystery sauces.  A walk in
+refrigerator is to the north, and the manager's office is to the west. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	4806
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4816
+Name:	McDonald's Grill
+Desc:$
+   You are in an unfinished room. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4820
+Name:	Entrance to McDonald's
+Desc:$
+   You stand at the entrance to an ultra-modern McDonald's.  The smell of
+cooked fat is very strong.  A golden arch hologram shoots into the sky.  A
+door leads inside to the north, and a sidewalk runs east. 
+~
+Flags:	100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	4821
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	8232
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign arch hologram
+	Desc:$
+The trademark Golden arches still exist.  Every second the number of customers
+served flashes by.  It's roughly 650 trillion.
+~
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4821
+Name:	Inside McDonald's
+Desc:$
+   You stand inside a slick McDonald's.  Neon colored plastic flows smoothly
+throughtout the room.  Busy customers shuttle trays of fatty food back and
+forth There are some tables to the east, and you can order to the north.  The
+exit is to the south. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4820
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4822
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4822
+Name:	McDonald's Service Counter
+Desc:$
+   You stand in front of the counter, where you can purchase various foods.
+The kitchen can be seen to the north. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4821
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4823
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4823
+Name:	Entrance to Eating Area
+Desc:$
+   You are now in the eating area.  Tables are scattered throughtout the area,
+and trash disintigraters are located in several different spots.  A hallway
+leads north, and the eating area continues east. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4829
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4824
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4822
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4824
+Name:	Hallway
+Desc:$
+   You stand in a clean smelling, well lit hallway. The buzz of the kitched
+floats towards you from the west, and the bathrooms lie nearby. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4827
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4828
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	4825
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4823
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4825
+Name:	McDonald's Kitchen
+Desc:$
+   You stand inside the kitchen.  The sound of microwaves and fryers beeping
+is almost overwhelming.  There appears to be a grill to the west, and the
+kitchen continues to the north. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	4824
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4826
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4826
+Name:	Food Preparation Area
+Desc:$
+   This part of the kitchen is where customer's food is assembled.  Hamburgers
+are loaded with all the favorite codiments and mystery sauces.  A walk in
+refrigerator is to the north, and the manager's office is to the west. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4825
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4830
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4827
+Name:	Men's Restroom
+Desc:$
+   You are in the men's restroom. 
+~
+Flags:	1100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	4824
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4828
+Name:	Women's Restroom
+Desc:$
+   You are in the women's restroom.  As most public restrooms are, this one is
+dirty and reeks of urine.  A large McDonald's Arch is painted on the ceiling.
+Someone has decided to squeeze ktechup packets all over the ground, further
+enhancing your experience.  There is a toilet stall to the north. 
+~
+Flags:	1100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4824
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4829
+Name:	Eating Area
+Desc:$
+   You are in the eating area where tables are scattered throughtout.  Tables
+continue east and north. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	4823
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4830
+Name:	McDonald's Grill
+Desc:$
+   The smell of sizzling "beef" hangs over this place like a bad cold. Hunched
+over yellowshirts tend the grill and toss the hamburgers, trying as best they
+can to match the furious ordering rate. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4826
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4831
+Name:	Entrance to McDonald's
+Desc:$
+   You stand at the entrance to an ultra-modern McDonald's.  The smell of
+cooked fat is very strong.  A golden arch hologram shoots into the sky.  A
+door leads inside to the north, and a sidewalk runs east. 
+~
+Flags:	100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	4832
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	5354
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign arch hologram
+	Desc:$
+The trademark Golden arches still exist.  Every second the number of customers
+served flashes by.  It's roughly 650 trillion.
+~
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4832
+Name:	Inside McDonald's
+Desc:$
+   You stand inside a slick McDonald's.  Neon colored plastic flows smoothly
+throughtout the room.  Busy customers shuttle trays of fatty food back and
+forth There are some tables to the east, and you can order to the north.  The
+exit is to the south. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4831
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4833
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4833
+Name:	McDonald's Service Counter
+Desc:$
+   You stand in front of the counter, where you can purchase various foods.
+The kitchen can be seen to the north. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4832
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4834
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4834
+Name:	Entrance to Eating Area
+Desc:$
+   You are now in the eating area.  Tables are scattered throughtout the area,
+and trash disintigraters are located in several different spots.  A hallway
+leads north, and the eating area continues east. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4840
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4835
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4833
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4835
+Name:	Hallway
+Desc:$
+   You stand in a clean smelling, well-lit hallway. To the west, the buzz of a
+busy kitchen seeps through the swinging door, and the eating area lies just
+ahead. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	4838
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	4836
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4834
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4836
+Name:	McDonald's Kitchen
+Desc:$
+   The kitchen appears as one big mass of chaos to the ignorant outsider.
+However, to the untrained eye, that is all that one can see. In truth, the
+kitchen is a complicated chain of interspersed tasks, that different workers
+handle cooperatively to keep the food running. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	4835
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4837
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4837
+Name:	Food Preparation Area
+Desc:$
+   This part of the kitchen is where customer's food is assembled.  Hamburgers
+are loaded with all the favorite codiments and mystery sauces.  A walk in
+refrigerator is to the north, and the manager's office is to the west. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4836
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4841
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4838
+Name:	Men's Restroom
+Desc:$
+   You are in the men's restroom. 
+~
+Flags:	1100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4835
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4839
+Name:	Women's Restroom
+Desc:$
+   You are in the women's restroom.  As most public restrooms are, this one is
+dirty and reeks of urine.  A large McDonald's Arch is painted on the ceiling.
+Someone has decided to squeeze ktechup packets all over the ground, further
+enhancing your experience.  There is a toilet stall to the north. 
+~
+Flags:	1100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4840
+Name:	Eating Area
+Desc:$
+   You are in the eating area where tables are scattered throughtout.  Tables
+continue east and north. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	4834
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4841
+Name:	McDonald's Grill
+Desc:$
+   The smell of sizzling "beef" hangs over this place like a bad cold. Hunched
+over yellowshirts tend the grill and toss the hamburgers, trying as best they
+can to match the furious ordering rate. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4837
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4842
+Name:	Entrance to McDonald's
+Desc:$
+   You stand at the entrance to an ultra-modern McDonald's.  The smell of
+cooked fat is very strong.  A golden arch hologram shoots into the sky.  A
+door leads inside to the north, and a sidewalk runs east. 
+~
+Flags:	100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	4843
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	5596
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign arch hologram
+	Desc:$
+The trademark Golden arches still exist.  Every second the number of customers
+served flashes by.  It's roughly 650 trillion.
+~
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4843
+Name:	Inside McDonald's
+Desc:$
+   You stand inside a slick McDonald's. Neon colored plastic flows smoothly
+throughout the room. Hurried fast-food consumers shuttle trays of saturated
+fat, soy pseudomeats and artificial preservatives in waxy recycled paper.
+Booth seating lines the wall to the east, and the floor is bisected with a row
+of tiny plastic tables standing on a single aluminum leg, each surrounded with
+small round stools of colorful hard plastic that whine shrilly as their
+occupants rotate upon them. Toward the south is the sizzle of deep fat frying
+and the tweets and chings of electronic transactions. The exit is through a
+clear glass door to the north. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4842
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4844
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4844
+Name:	McDonald's Service Counter
+Desc:$
+   You stand in front of the counter, where you can purchase various fast
+foods. The kitchen can be seen beyond the counter to the south. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4843
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4845
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4845
+Name:	Entrance to Eating Area
+Desc:$
+   You are now in the eating area.  Tables are scattered throughtout the area,
+and trash disintigraters are located in several different spots.  A hallway
+leads north, and the eating area continues east. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4851
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4846
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4844
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4846
+Name:	Hallway
+Desc:$
+   You stand in a clean smelling, well-lit hallway. To the west, the buzz of a
+busy kitchen seeps through the swinging door, and the eating area lies just
+ahead. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4849
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4850
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	4847
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4845
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4847
+Name:	McDonald's Kitchen
+Desc:$
+   The kitchen appears as one big mass of chaos to the ignorant outsider.
+However, to the untrained eye, that is all that one can see. In truth, the
+kitchen is a complicated chain of interspersed tasks, that different workers
+handle cooperatively to keep the food running. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT northeast]
+	ToVnum:	4846
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4848
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4848
+Name:	Food Preparation Area
+Desc:$
+   This part of the kitchen is where customer's food is assembled.  Hamburgers
+are loaded with all the favorite codiments and mystery sauces.  A walk in
+refrigerator is to the north, and the manager's office is to the west. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4847
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4852
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4849
+Name:	Men's Restroom
+Desc:$
+   You are in the men's restroom. 
+~
+Flags:	1100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	4846
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4850
+Name:	Women's Restroom
+Desc:$
+   You are in the women's restroom.  As most public restrooms are, this one is
+dirty and reeks of urine.  A large McDonald's Arch is painted on the ceiling.
+Someone has decided to squeeze ktechup packets all over the ground, further
+enhancing your experience.  There is a toilet stall to the north. 
+~
+Flags:	1100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4846
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4851
+Name:	Eating Area
+Desc:$
+   You are in the eating area where tables are scattered throughtout.  Tables
+continue east and north. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	4845
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4852
+Name:	McDonald's Grill
+Desc:$
+   The smell of sizzling "beef" hangs over this place like a bad cold. Hunched
+over yellowshirts tend the grill and toss the hamburgers, trying as best they
+can to match the furious ordering rate. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4848
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4853
+Name:	Entrance to McDonald's
+Desc:$
+   You stand at the entrance to an ultra-modern McDonald's.  The smell of
+cooked fat is very strong.  A golden arch hologram shoots into the sky.  A
+door leads inside to the north, and a sidewalk runs east. 
+~
+Flags:	100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4854
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	5787
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign arch hologram
+	Desc:$
+The trademark Golden arches still exist.  Every second the number of customers
+served flashes by.  It's roughly 650 trillion.
+~
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4854
+Name:	Inside McDonald's
+Desc:$
+   You stand inside a slick McDonald's.  Neon colored plastic flows smoothly
+throughtout the room.  Busy customers shuttle trays of fatty food back and
+forth There are some tables to the east, and you can order to the north.  The
+exit is to the south. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4855
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4856
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4853
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4857
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4855
+Name:	McDonald's Service Counter
+Desc:$
+   You stand in front of the counter, where you can purchase various foods.
+The kitchen can be seen to the north. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	4854
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4856
+Name:	Entrance to Eating Area
+Desc:$
+   You are now in the eating area.  Tables are scattered throughtout the area,
+and trash disintigraters are located in several different spots.  A hallway
+leads north, and the eating area continues east. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4862
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4854
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4857
+Name:	Hallway
+Desc:$
+   You stand in a clean smelling, well-lit hallway. To the west, the buzz of a
+busy kitchen seeps through the swinging door, and the eating area lies just
+ahead. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4854
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	4858
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4858
+Name:	McDonald's Kitchen
+Desc:$
+   The kitchen appears as one big mass of chaos to the ignorant outsider.
+However, to the untrained eye, that is all that one can see. In truth, the
+kitchen is a complicated chain of interspersed tasks, that different workers
+handle cooperatively to keep the food running. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4859
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	4857
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4863
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4859
+Name:	Food Preparation Area
+Desc:$
+   This part of the kitchen is where customer's food is assembled.  Hamburgers
+are loaded with all the favorite codiments and mystery sauces.  A walk in
+refrigerator is to the north, and the manager's office is to the west. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	4858
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4860
+Name:	Men's Restroom
+Desc:$
+   You are in the men's restroom. 
+~
+Flags:	1100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	4862
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4861
+Name:	Women's Restroom
+Desc:$
+   You are in the women's restroom.  As most public restrooms are, this one is
+dirty and reeks of urine.  A large McDonald's Arch is painted on the ceiling.
+Someone has decided to squeeze ktechup packets all over the ground, further
+enhancing your experience.  There is a toilet stall to the north. 
+~
+Flags:	1100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	4862
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4862
+Name:	Eating Area
+Desc:$
+   You are in the eating area where tables are scattered throughtout.  Tables
+continue east and north. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4860
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4861
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4856
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4863
+Name:	McDonald's Grill
+Desc:$
+   The smell of sizzling "beef" hangs over this place like a bad cold. Hunched
+over yellowshirts tend the grill and toss the hamburgers, trying as best they
+can to match the furious ordering rate. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4858
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4864
+Name:	Entrance to McDonald's
+Desc:$
+   You stand at the entrance to an ultra-modern McDonald's.  The smell of
+cooked fat is very strong.  A golden arch hologram shoots into the sky.  A
+door leads inside to the north, and a sidewalk runs east. 
+~
+Flags:	100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4865
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	5260
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign arch hologram
+	Desc:$
+The trademark Golden arches still exist.  Every second the number of customers
+served flashes by.  It's roughly 650 trillion.
+~
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4865
+Name:	Inside McDonald's
+Desc:$
+   You stand inside a slick McDonald's.  Neon colored plastic flows smoothly
+throughtout the room.  Busy customers shuttle trays of fatty food back and
+forth There are some tables to the east, and you can order to the north.  The
+exit is to the south. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4866
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4867
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4864
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4868
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4866
+Name:	McDonald's Service Counter
+Desc:$
+   You stand in front of the counter, where you can purchase various foods.
+The kitchen can be seen to the north. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	4865
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4867
+Name:	Entrance to Eating Area
+Desc:$
+   You are now in the eating area.  Tables are scattered throughtout the area,
+and trash disintigraters are located in several different spots.  A hallway
+leads north, and the eating area continues east. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4873
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4865
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4868
+Name:	Hallway
+Desc:$
+   You stand in a clean smelling, well-lit hallway. To the west, the buzz of a
+busy kitchen seeps through the swinging door, and the eating area lies just
+ahead. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4865
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	4869
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4869
+Name:	McDonald's Kitchen
+Desc:$
+   The kitchen appears as one big mass of chaos to the ignorant outsider.
+However, to the untrained eye, that is all that one can see. In truth, the
+kitchen is a complicated chain of interspersed tasks, that different workers
+handle cooperatively to keep the food running. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4870
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	4868
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4874
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4870
+Name:	Food Preparation Area
+Desc:$
+   This part of the kitchen is where customer's food is assembled.  Hamburgers
+are loaded with all the favorite codiments and mystery sauces.  A walk in
+refrigerator is to the north, and the manager's office is to the west. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	4869
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4871
+Name:	Men's Restroom
+Desc:$
+   You are in the men's restroom. 
+~
+Flags:	1100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	4873
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4872
+Name:	Women's Restroom
+Desc:$
+   You are in the women's restroom.  As most public restrooms are, this one is
+dirty and reeks of urine.  A large McDonald's Arch is painted on the ceiling.
+Someone has decided to squeeze ktechup packets all over the ground, further
+enhancing your experience.  There is a toilet stall to the north. 
+~
+Flags:	1100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	4873
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4873
+Name:	Eating Area
+Desc:$
+   You are in the eating area where tables are scattered throughtout.  Tables
+continue east and north. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4871
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4872
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4867
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4874
+Name:	McDonald's Grill
+Desc:$
+   The smell of sizzling "beef" hangs over this place like a bad cold. Hunched
+over yellowshirts tend the grill and toss the hamburgers, trying as best they
+can to match the furious ordering rate. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4869
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4875
+Name:	Entrance to McDonald's
+Desc:$
+   The terrace to one of the largest McDonalds in Seattle certainly does any
+kind of re-grilled hamburger you can think of justice. A huge holographic
+golden arch hovers over the trees, and an open Jurassic Park-type entrance
+gate leads into a vast eating area and service desk. 
+~
+Flags:	100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4876
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	8431
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	sign arch hologram
+	Desc:$
+The trademark Golden arches still exist.  Every second the number of customers
+served flashes by.  It's roughly 650 trillion.
+~
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4876
+Name:	Inside McDonald's
+Desc:$
+   You stand inside a slick McDonald's.  Neon colored plastic flows smoothly
+throughtout the room.  Busy customers shuttle trays of fatty food back and
+forth There are some tables to the east, and you can order to the north.  The
+exit is to the south. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4877
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4878
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	4875
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4879
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4877
+Name:	McDonald's Service Counter
+Desc:$
+   You stand in front of the counter, where you can purchase various foods.
+The kitchen can be seen to the north. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	4876
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4878
+Name:	Entrance to Eating Area
+Desc:$
+   You are now in the eating area.  Tables are scattered throughtout the area,
+and trash disintigraters are located in several different spots.  A hallway
+leads north, and the eating area continues east. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4884
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4876
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4879
+Name:	Hallway
+Desc:$
+   You stand in a clean smelling, well-lit hallway. To the west, the buzz of a
+busy kitchen seeps through the swinging door, and the eating area lies just
+ahead. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4876
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	4880
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4880
+Name:	McDonald's Kitchen
+Desc:$
+   The kitchen appears as one big mass of chaos to the ignorant outsider.
+However, to the untrained eye, that is all that one can see. In truth, the
+kitchen is a complicated chain of interspersed tasks, that different workers
+handle cooperatively to keep the food running. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4881
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	4879
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4885
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4881
+Name:	Food Preparation Area
+Desc:$
+   This part of the kitchen is where customer's food is assembled.  Hamburgers
+are loaded with all the favorite codiments and mystery sauces.  A walk in
+refrigerator is to the north, and the manager's office is to the west. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	4880
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4882
+Name:	Men's Restroom
+Desc:$
+   You are in the men's restroom. 
+~
+Flags:	1100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	4884
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4883
+Name:	Women's Restroom
+Desc:$
+   You are in the women's restroom.  As most public restrooms are, this one is
+dirty and reeks of urine.  A large McDonald's Arch is painted on the ceiling.
+Someone has decided to squeeze ktechup packets all over the ground, further
+enhancing your experience.  There is a toilet stall to the north. 
+~
+Flags:	1100
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	4884
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4884
+Name:	Eating Area
+Desc:$
+   You are in the eating area where tables are scattered throughtout.  Tables
+continue east and north. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	4882
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	4883
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	4878
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#4885
+Name:	McDonald's Grill
+Desc:$
+   The smell of sizzling "beef" hangs over this place like a bad cold. Hunched
+over yellowshirts tend the grill and toss the hamburgers, trying as best they
+can to match the furious ordering rate. 
+~
+Flags:	0
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	4880
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[DIMENSIONS]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

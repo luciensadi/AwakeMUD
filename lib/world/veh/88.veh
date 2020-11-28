@@ -1,0 +1,38 @@
+#8800
+Name:	Suzuki Watersport water scooter jet ski
+ShortDesc:	A Suzuki Watersport
+RoomDesc:	A Suzuki Watersport jet ski sits here, rocking on the waves
+LongDesc:$
+Suzuki offers all of the maneuverability and speed of one of their own
+motorcycles with the introduction of the Watersport to the market, which is
+directly aimed at the recreational crowd, offering dynamic paint schemes and
+minor body modification options so each and every one can be personalized by
+their owner. This particular model sports an electric engine, which sacrafices
+a bit of power and acceleration for enviromental peace of mind. 
+~
+Inside:$
+There isn't much to see, afterall, it's just a water scooter. It features all
+the necessary dials and meters to show things such as water speed and fuel
+availability, and is comfortably upholstered with waterproof seat padding. 
+~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	rides the waves off
+Arriving:	rides the waves in
+Handling:	2
+Speed:	30
+Accel:	4
+Body:	2
+Armour:	0
+Pilot:	0
+Sig:	5
+Autonav:	0
+Seating:	1
+SeatingBack:	0
+Load:	53
+Cost:	9250
+Type:	1
+Flags:	0
+Engine:	1
+BREAK
+END

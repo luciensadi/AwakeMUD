@@ -1,0 +1,97 @@
+#33200
+Keywords:	Shopkeeper test
+Name:	A test shopkeeper
+RoomDesc:$
+An unfinished mob stands here.
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	4
+	Cha:	1
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	50
+[SKILLS]
+BREAK
+#33201
+Keywords:	mob astral quest test
+Name:	an astral quest test mob
+RoomDesc:$
+It's an astral quest test mob. 
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives
+LeaveMsg:	departs
+MobFlags:	1000000000000011010
+AffFlags:	0
+Race:	Elemental
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	8
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	15
+	Impact:	15
+[SKILLS]
+	rifles:	8
+BREAK
+#33202
+Keywords:	mob astral quest giver test
+Name:	An astral quest giver test mob
+RoomDesc:$
+It's an astral quest giver test mob, for testing astral quests. 
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	8
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	15
+	Impact:	15
+[SKILLS]
+	rifles:	8
+BREAK
+END

@@ -1,0 +1,53 @@
+#50300
+Keeper:	50300
+ProfitBuy:	2.000000
+ProfitSell:	0.500000
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, can't get that for ya right now.
+NoSuchItemPlayer:	What, is it fuckin'invisible? Come on now.
+NoNuyen:	Oh you gotta be shittin'me! Go get some more cred.
+DoesntBuy:	Sorry, don't want it.
+Buy:	Usually I charge twice as much, but for you, %d creds.
+Sell:	Heck, I guess I can find someone to buy this piece o'drek. Here's %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	11111111111111111111111111111111111111110
+Etiquette:	46
+[SELLING]
+BREAK
+#50301
+Keeper:	50301
+ProfitBuy:	2.000000
+ProfitSell:	0.500000
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	10
+Races:	0
+Buytypes:	1010000000000000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	50309
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	50307
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	50306
+		Type:	Always
+		Stock:	0
+BREAK
+END

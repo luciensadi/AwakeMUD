@@ -1,0 +1,38 @@
+#30901
+Keywords:	lone star armed evidence chamber guard
+Name:	a Lone Star armed guard
+RoomDesc:$
+A Lone Star armed guard watches over the evidence chamber. 
+
+~
+LookDesc:$
+Chromed and mean and has a badge, the Lone Star armed guard watches over the
+evidence chamber for anything or anyone who doesn't belong. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000100010000001101000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	12
+	Str:	12
+	Cha:	3
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	110
+	Ballistic:	9
+	Impact:	9
+	Cash:	100
+[SKILLS]
+	unarmed combat:	9
+	rifles:	9
+BREAK
+END

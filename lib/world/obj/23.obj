@@ -1,0 +1,706 @@
+#2301
+Keywords:	key card
+Name:	a key card
+RoomDesc:$
+You see an ordinary keycard.~
+LookDesc:$
+The card is black.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#2302
+Keywords:	key card
+Name:	a key card
+RoomDesc:$
+A keycard sits here.~
+LookDesc:$
+The card is mauve.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#2303
+Keywords:	key card
+Name:	a keycard
+RoomDesc:$
+An ordinary keycard is here.~
+LookDesc:$
+The card is tan.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#2304
+Keywords:	key card
+Name:	a key card
+RoomDesc:$
+A keycard rests here.~
+LookDesc:$
+The card is teal.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#2305
+Keywords:	pond
+Name:	a small pond
+RoomDesc:$
+There is a small pond here.~
+LookDesc:$
+This looks like a fairly ordinary pond. There is a strange pile at
+the opposite bank.
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	25.00
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	30
+	Val1:	30
+[EXTRADESC 0]
+	Keywords:	pile bank
+	Desc:$
+It is a pair of dead birds.
+~
+BREAK
+#2306
+Keywords:	key card
+Name:	a keycard
+RoomDesc:$
+A keycard is sitting here.~
+LookDesc:$
+The card is grey.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#2313
+Keywords:	cleaver meat
+Name:	a meat cleaver
+RoomDesc:$
+A gigantic and scary-looking meat cleaver has been dropped here.~
+LookDesc:$
+Judging from the size of the weapon, the cleaver is used on elephants.
+~
+Type:	Weapon
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	16
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val4:	3
+	Val5:	-1
+BREAK
+#2314
+Keywords:	dermal plating secondhand
+Name:	secondhand dermal plating
+RoomDesc:$
+Some beat up body plating is lying here.~
+LookDesc:$
+It's dermal armor - but slightly used. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val2:	23
+	Val4:	20
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	-1
+[AFFECT 1]
+	Location:	Body
+	Modifier:	1
+BREAK
+#2315
+Keywords:	cyberware wired reflexes secondhand
+Name:	secondhand wired reflexes
+RoomDesc:$
+Some cyberware is lying here.~
+LookDesc:$
+These reflexes seem to work ok, except for the occasional twitch.  Ouch. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val2:	30
+	Val4:	20
+BREAK
+#2316
+Keywords:	smartlink used
+Name:	a used smartlink
+RoomDesc:$
+An uninstalled smartlink cyberware interface lies here.~
+LookDesc:$
+It looks like you're not the first owner of this fine piece of 'ware. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val2:	22
+	Val4:	20
+BREAK
+#2317
+Keywords:	move-by-wire secondhand mbw
+Name:	secondhand move-by-wire
+RoomDesc:$
+An advanced reflex system is lying here.~
+LookDesc:$
+It looks like an experimental piece of cyberware, that has been really  dinged
+up. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val2:	30
+	Val4:	20
+BREAK
+#2318
+Keywords:	Ghost heavy pistol STK
+Name:	an STK 'Ghost' heavy pistol
+RoomDesc:$
+A sleek black heavy pistol is lying on the ground.~
+LookDesc:$
+4 The perfect choice for anyone involved in covert ops. The Ghost is small,
+lightweight, sturdy, and packs more power than a Predator. The entire gun is
+made completely out of ceramic components, rendering it literally invisible to
+MAD systems, hence the name. The light weight of the weapon is not to be
+misinterpreted. This thing is built solid, and made to work under all but the
+most adverse conditions. Unlike standard heavy pistols, the Ghost is capable
+of accepting accessories under its barrel in addition to on the barrel and
+above it. The barrel, while not requiring a silencer, is built specially to
+work with one. When one is attached, hardly more than a very hushed whistle of
+disturbed air is heard when the Ghost is fired. Even the paint on the gun is
+designed for maximum stealth, posessing a pitch black non-reflective coloring.
+An internal high-power laser sight comes standard with the weapon. The phrase
+"Shoot To Kill" is etched into the handle, signifying it's creator. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	100000000000000
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	6380
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	14
+	Val6:	14
+	Val8:	18981
+	Val10:	4
+BREAK
+#2319
+Keywords:	Gas Vent four 4
+Name:	A gas vent IV system
+RoomDesc:$
+A level four gas vent system has been dropped here.~
+LookDesc:$
+A specialized system made to modify the barrel of your gun to better vent gas,
+and reduce recoil. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	700
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	3
+	Val2:	-3
+BREAK
+#2320
+Keywords:	STK judgement medium machine gun MMG
+Name:	an STK 'Judgement' medium machine gun
+RoomDesc:$
+An intimidating medium machine gun is resting here.~
+LookDesc:$
+The ultimate in squad level support weapons. This medium machine gun rips out
+firepower through a dual-feed firing mechanism operating off of two 35-round
+clips. Big, fairly heavy, and built as solid as most armored vehicles, the
+Judgement is a truely impressive weapon. Able to handle recoil with uncanny
+ability, compliments of the gas vent 4 system, this thing puts Ultimax and
+FN's medium machine guns to shame. Aside from the barrel, the gun is painted
+an imposing smooth black color. The barrel, made out of titanium, and covered
+in a chromium coating, is able to sustain incredible amounts of firepower
+without much heat build up. This is a life saver when it comes to preventing
+barrel warping under excessive use. The gun is also RIS (Rail Interface
+System) fitted, allowing attachments above and under the barrel to easily be
+slid on and off. The phrase "Shoot To Kill" is etched into the handle,
+signifying it's creator. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	15.00
+	Barrier:	12
+	Cost:	24375
+	AvailTN:	14
+	AvailDay:	14.00
+	LegalNum:	2
+	LegalCode:	8
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	3
+	Val3:	16
+	Val4:	19
+	Val5:	70
+	Val6:	70
+	Val7:	31111
+	Val8:	2319
+	Val9:	28618
+	Val10:	16
+BREAK
+#2321
+Keywords:	STK nemesis gyrojet pistol jet 
+Name:	an STK 'Nemesis' gyrojet pistol
+RoomDesc:$
+A sleek, high-tech pistol is laying here.~
+LookDesc:$
+Based on the concept of the FN-AAL gyrojet pistol, the Nemesis has design
+improvements which allow for better land functionality. Still remaining
+operational underwater, it fires an improved 6.5mm rocket, rather than the
+standard 6mm. The engineering of these rounds is made specifically for greater
+range and higher velocity, in order to make the weapon a little harder to
+dodge by those wired to hell street samurai. The drawback is a slightly
+smaller clip capacity, and more weight in the pistol itself to withstand the
+added launch power. The rockets themselves, once fired, emit an audible
+high-pitched shriek as they travel through the air. Due to the special design
+needed to accept and fire the rocket type ammo, the Nemesis is incapable of
+using barrel mounted attachments. To make up for this however, it has been
+designed to accept attachments both above and below the barrel. A special
+high-powered laser sight made for underwater operation is built into the
+weapon. The phrase "Shoot To Kill" is etched into the handle, signifying it's
+creator.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	100000000000000
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	12
+	Cost:	10300
+	AvailTN:	8
+	AvailDay:	10.00
+	LegalNum:	6
+	LegalCode:	10
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	9
+	Val6:	9
+	Val7:	31111
+	Val8:	-1
+	Val10:	2
+BREAK
+#2322
+Keywords:	STK storm hammer stormhammer tactical shotgun shot gun
+Name:	an STK 'Stormhammer' tactical shotgun
+RoomDesc:$
+A large, imposing shotgun takes up part of the ground here.~
+LookDesc:$
+A nasty shotgun by any measure, it packs the punch of a Spas-22, but with a
+higher ammo capacity and more optimizations. The Stormhammer is made
+specifically to fire rifled slugs, and it has numerous smoothly made holes
+going down the length of the barrel. While it creates a large and frightening
+muzzle flash because of this, it also acts as a type of gas vent. A high-power
+laser sight is built internally into the gun for greater accuracy. The bullpup
+configuration of the weapon, which places the trigger well in front of the
+clip, makes this shotgun even easier to handle... As well as hide. But the
+Stormhammer is in no way a stealthy weapon, it's very name is derrived from
+the thundering, bassy noise it makes when fired. The Stormhammers construction
+also seems quite sturdy, and weighted in key points to make it an effective
+last-resort clubbing weapon. The phrase "Shoot To Kill" is etched into the
+handle, signifying it's creator. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	100000000000000
+Material:	metal
+[POINTS]
+	Weight:	8.00
+	Barrier:	12
+	Cost:	8860
+	AvailTN:	8
+	AvailDay:	8.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	12
+	Val6:	12
+	Val8:	60551
+	Val9:	28618
+	Val10:	4
+BREAK
+#2323
+Keywords:	STK auto heavy pistol Juggernaught automatic
+Name:	an STK 'Juggernaught' automatic heavy pistol
+RoomDesc:$
+A large, frightening looking heavy pistol claims part of the ground here.~
+LookDesc:$
+In a direct attempt to make the Ruger Thunderbolt look like a cap gun, Shoot
+To Kill created this monstrosity of a heavy pistol. The Juggernaught is
+designed from the ground up to be a frightening weapon. A square and blocky
+shape, with a visibly weighted barrel and largely extended clip make this
+pistol hard to conceal. Many small slits are made on the upper right and left
+sides of the reinforced barrel, making even the muzzle flash look
+intimidating. The entirety of the gun is a smooth silver color, with the
+occasional black metal plate for style. The Juggernaught takes firepower to a
+whole new step, able to fire in semi, and fully automatic modes. To strike
+further terror in your foes heart, firing this massive pistol unleashes an awe
+inspiring bassy roar. Aside from the gas venting and heavy barrel to reduce
+recoil, the Juggernaught also sports a very soft rubber grip to keep it stable
+in the firers hand. The phrase "Shoot To Kill" is etched into the handle,
+signifying it's creator. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	10000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	6.00
+	Barrier:	12
+	Cost:	16260
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	25
+	Val6:	25
+	Val8:	653
+	Val9:	2324
+	Val10:	12
+BREAK
+#2324
+Keywords:	LAM
+Name:	a LAM
+RoomDesc:$
+a LAM is lying on the ground here.~
+LookDesc:$
+This is a LAM, a laser assisted targeting device designed mainly for pistols,
+though it is useable on other weapons. Complete with both a high-powered laser
+sight and smartlink circuitry. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	100000000000000
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	1300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	1
+BREAK
+#2325
+Keywords:	thermographic scope
+Name:	a thermographic scope
+RoomDesc:$
+an advanced scope is sitting on the ground here.~
+LookDesc:$
+There is a switch ontop of this optical scope for switching thermographic
+imaging on and off. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	1000000000
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	8
+	Cost:	1500
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+BREAK
+#2326
+Keywords:	STK virulence assault rifle AR
+Name:	an STK 'Virulence' assault rifle
+RoomDesc:$
+A sleek looking assault rifle rests here.~
+LookDesc:$
+The Virulence assault rifle, one of STK's most prized creations. This weapon
+is the epitome of versatality. It's size is more compact than many SMGs, and
+it's fire power is still able to contend with the better assault rifles.
+Partial composition of ceramic materials also make this assault rifle harder
+to detect by MAD systems than normal. Bullpup style design, with the trigger
+placed well in front of the clip, improves the weapons concealability and
+handling. It's accuracy is even further increased by a level 3 gas vent
+system. The power of the Virulence mainly lies in the special chambering,
+designed for the best use of the propellant force behind the 7.62mm caseless
+ammo it takes. One other unique feature, is that the weapon is designed to
+break down and be put together again rather easily... Allowing it to fit into
+a small briefcase. The gun is also fitted with an RIS (Rail Interface System)
+to allow attachments to be quickly slid on to, and off of, the top and bottom
+of the weapon. The phrase "Shoot To Kill" is etched into the handle,
+signifying it's creator. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	100000000000000
+Material:	adv. plastics
+[POINTS]
+	Weight:	5.00
+	Barrier:	12
+	Cost:	23580
+	AvailTN:	8
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	42
+	Val6:	42
+	Val7:	2325
+	Val8:	653
+	Val10:	28
+BREAK
+#2327
+Keywords:	STK phalance SMG sub machine gun sub-machine
+Name:	an STK 'Phalanx' sub-machine gun
+RoomDesc:$
+A compact, but dangerous looking SMG lies here.~
+LookDesc:$
+Want a good SMG that isn't one of those 15 million MP5 variants? Then the
+Phalanx is the gun for you. Not even loosely based on the MP5's design, the
+Phalanx takes on a more circular, streamlined type of appearance. It's barrel
+is hidden under a small blocky covering made to channel the force of the
+expelled gas from firing to help compensate with recoil. The stock is neither
+folding nor rigid, but rather able to actually be pushed inside of the gun,
+and then brought back out by the push of a button or smartlink command. When
+extended, the thin stock helps cushion pressure on the shoulder with a complex
+spring-loaded system inside the gun. It's also able to be adjusted in length
+to better suit the size of the users arm, and make firing more comfortable.
+Another distinguishing characteristic is that the clip loads in diagnally, and
+on the top of the gun. The stock, coupled with the small size and relatively
+light weight of the Phalanx, make this an excellent choice for concealable
+fire power. However, the stealth of the gun is lowered by the inability to
+accept a silencer. On the plus side, it generates noticeably less noise than
+is normal for unsilenced SMGs. The phrase "Shoot To Kill" is etched into the
+handle, signifying it's creator. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	4.00
+	Barrier:	12
+	Cost:	7400
+	AvailTN:	10
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	2
+	Val3:	10
+	Val4:	15
+	Val5:	36
+	Val6:	36
+	Val8:	653
+	Val9:	31111
+	Val10:	28
+BREAK
+END

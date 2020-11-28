@@ -295,8 +295,8 @@ An elf, with a cold steel look in his eyes, wearing a black jumpsuit.
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1000001010101010100000111010
-AffFlags:	1000010100001000001000
+MobFlags:	1010000000100000111010
+AffFlags:	1000000100000000001000
 Race:	Human
 Gender:	Male
 DefaultPos:	Standing
@@ -549,7 +549,8 @@ DefaultPos:	Standing
 	Weight:	100
 	Ballistic:	9
 	Impact:	7
-	Cash:	20
+	Cash:	125
+	Bank:	125
 [SKILLS]
 	sub-machine guns:	10
 	unarmed combat:	12
@@ -858,7 +859,7 @@ AttackType:	Punch
 	Ballistic:	2
 	Impact:	2
 	Cash:	100
-	Bank:	200
+	Bank:	80
 [SKILLS]
 	unarmed combat:	2
 	corporate etiquette:	5

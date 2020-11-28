@@ -1,0 +1,358 @@
+#11500
+Name:	Dockside U-Stor-It
+Desc:$
+   Black bitchumen stretches in every direction from here around the U-Stor-It
+complex, allowing people to drive straight through to their storage lockers.
+Worn white lines are painted infront of the offices to the east, dictating
+where you should park, but are currently being ignored as people seem to be
+parking anywhere they like. 
+~
+NightDesc:$
+   Orange flourescent lighting floods the carpark and fades off between the
+storage garages in all directions from here, the offices to the east are
+mostly dark, only entrance foyer is lit, manned by a solitary clerk. The
+carpark is completly empty here, but the thumping of loud music brings news of
+activity from further inside the complex. 
+~
+Flags:	110000000000000000000100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	50
+Y:	50
+Z:	0.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	12528
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	11501
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	11502
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#11501
+Name:	Dockside U-Stor-It Office
+Desc:$
+   The doors here are locked. Hung on the door is a sign reading, "CLOSED FOR
+REPAIRS". Peeking through the doors it is obvious that the administration of
+this facility had a run in with some gangers. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	1
+Cover:	4
+X:	18
+Y:	15
+Z:	2.80
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	11500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#11502
+Name:	Alongside Locker Storage
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000010000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	11500
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	11503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	11508
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#11504
+Name:	Alongside Storage Rooms
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000010000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	11503
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	11505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	11513
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#11506
+Name:	Alongside Storage Garages
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000010000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	0
+Y:	0
+Z:	0.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	11505
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	11518
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#11523
+Name:	Inside A Block Storage
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	1
+X:	100
+Y:	3
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	11508
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#11524
+Name:	Inside B Block Storage
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	1
+X:	100
+Y:	3
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	11509
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#11525
+Name:	Inside C Block Storage
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	1
+X:	100
+Y:	3
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	11510
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#11526
+Name:	Inside D Block Storage
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	1
+X:	100
+Y:	3
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	11511
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#11527
+Name:	Inside E Block Storage
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	1
+X:	100
+Y:	3
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	11512
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#11528
+Name:	Inside B Block Storage
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	1
+X:	100
+Y:	3
+Z:	5.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+END

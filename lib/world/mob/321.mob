@@ -1,0 +1,512 @@
+#32100
+Keywords:	Lucious
+Name:	a suspicious character
+RoomDesc:$
+A suspicious-looking man stands here with an odd bulge under his jacket. 
+
+~
+LookDesc:$
+This character looks pretty short, hunched over in his tan trenchcoat, hands
+hiding underneath the cloth.  He's bald, and his eyes are a pale green, with
+that crazy look in them as he shies away from you.  He elicits that feeling of
+a little rodent who always skitters and hides...and chews through your gas
+lines. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	5
+	Str:	3
+	Cha:	2
+	Int:	8
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	186
+	Weight:	50
+	Ballistic:	10
+	Impact:	9
+	Karma:	1
+[SKILLS]
+	electronics:	10
+	demolitions:	10
+	pistols:	5
+	unarmed combat:	4
+BREAK
+#32101
+Keywords:	pink koala edward large corpse
+Name:	The Corpse of the Koala
+RoomDesc:$
+The dessicated remains of a koala suit is here 
+
+~
+LookDesc:$
+Edward the Pink Koala is the premier children's simsense star.  Standing at
+about average height and speaking in the world's most annoying goofy voice,
+just looking at him makes you want to off this global threat to sanity.
+Dressed in a large pink koala suit, he occasionally hums one of his annoying
+songs as he goes about his business. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001010
+AffFlags:	1000000000001000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Crush
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	88
+	Level:	1
+	Ballistic:	12
+	Impact:	12
+	Karma:	1
+[SKILLS]
+	unarmed combat:	7
+	media etiquette:	10
+BREAK
+#32102
+Keywords:	Katie little girl crying
+Name:	Katie
+RoomDesc:$
+A little girl with big blonde pigtails sits here, crying. 
+
+~
+LookDesc:$
+Little Katie is wearing a pink dress with big lace fluffy frills.  She rubs
+her big blue eyes and says, "Where's Kitty?!" She looks to be about 5 years
+old, and strangely enough, alone out here in the Sprawl? 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	1000000000001000000000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	100
+	Weight:	30
+[SKILLS]
+	unarmed combat:	12
+BREAK
+#32103
+Keywords:	enedor man lector psychopath
+Name:	Enedor Lector
+RoomDesc:$
+A somewhat short, overweight, middle aged man stands here, leaning on a cane.
+
+~
+LookDesc:$
+A rather short individual, middle aged, with a bit of a paunch on him.  He is
+more or less bald, and the hair he has remaining is starting to grey around
+the edges.  He wears a white suit with a fashionable fedora hat in the same
+color and a black band around the base.  In one hand he has a cane, and he has
+a white overcoat to complete his ensemble.  His eyes betray a spark of extreme
+intelligence, and he speaks with a slight accent of someone from the eastern
+seaboard.  He also has an aura...a dangerous feeling about him. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000100000011010
+AffFlags:	11000000000001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	12
+	Str:	12
+	Cha:	12
+	Int:	24
+	Wil:	24
+	Mag:	0
+[POINTS]
+	Height:	168
+	Weight:	80
+	Ballistic:	15
+	Impact:	15
+[SKILLS]
+	edged weapons:	10
+	unarmed combat:	10
+	biotech:	10
+BREAK
+#32104
+Keywords:	man Gregory Loran shopkeeper
+Name:	Gregory Loran
+RoomDesc:$
+Gregory Loran, owner of Seattle Formal Wear, waits to take your measurements.
+
+~
+LookDesc:$
+An elderly gentleman standing at about average height, Gregory has a slight
+paunch from too much wedding cake.  With a roll of measuring tape in one hand,
+and pins to ensure the clothing fits in all the right places in one way or
+another, he will make sure you get what you bargained for, and more. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000000001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	120
+	Ballistic:	50
+	Impact:	50
+[SKILLS]
+	unarmed combat:	20
+BREAK
+#32105
+Keywords:	priest
+Name:	Priest
+RoomDesc:$
+An aging decker stands here, in a Jesuit uniform, with the Good Book. 
+
+~
+LookDesc:$
+Priest has been around longer than most people can remember.  One of the best
+in his day, he's a Jesuit-trained decker, and also a true man of the cloth. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000000000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	150
+	Ballistic:	50
+	Impact:	50
+[SKILLS]
+	unarmed combat:	20
+BREAK
+#32106
+Keywords:	man mr. johnson
+Name:	Mr. Guitierez
+RoomDesc:$
+A Hispanic man wearing a suit is here, looking calm and collected. 
+
+~
+LookDesc:$
+This man wears a snazzy business suit and high-cost leather shoes.  He looks
+somewhat overweight for his 5'11" height, but he betrays no hint of
+nervousness in whatever deals he makes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000011010
+AffFlags:	1000000000000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	2
+	Cha:	6
+	Int:	6
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	182
+	Weight:	100
+[SKILLS]
+	street etiquette:	8
+	corporate etiquette:	10
+	:	8
+BREAK
+#32107
+Keywords:	man mr johnson
+Name:	Mr. Inakawa
+RoomDesc:$
+A middle-aged Japanese fellow is here, watching the room with a keen eye. 
+
+~
+LookDesc:$
+This fellow has the look that just screams 'Johnson'.  Short-cropped black
+hair, a poker face that the boys in Vegas would love, and a business attire
+that speaks of a well off corporate fellow.  He's pretty wiry for his height
+and age, but looks toned enough to make a safe assumption he works out in the
+executive gym on a daily basis. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	1000000000000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	3
+	Cha:	5
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+	street etiquette:	7
+	corporate etiquette:	8
+	unarmed combat:	5
+	:	4
+BREAK
+#32108
+Keywords:	corpse walking shedim
+Name:	Walking corpse
+RoomDesc:$
+The decayed remains of a human body is here.  Moving! 
+
+~
+LookDesc:$
+This dessicated corpse seems to be inhabited by one of those 'Shedim' spirits
+you've heard about.  The flesh doesn't seem to rot anymore, but boy does that
+thing look pissed off. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000101000
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	6
+	Str:	10
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	12
+[POINTS]
+	Height:	200
+	Weight:	100
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	unarmed combat:	10
+BREAK
+#32109
+Keywords:	walking elf corpse shedim
+Name:	Walking elven corpse
+RoomDesc:$
+The remains of an Elf is here.  And they're moving! 
+
+~
+LookDesc:$
+This dead Elf seems to be alive again.  It's also pissed off.  And it's coming
+for you. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000101000
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	10
+	Cha:	5
+	Int:	5
+	Wil:	8
+	Mag:	12
+[POINTS]
+	Height:	200
+	Weight:	80
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	unarmed combat:	10
+BREAK
+#32110
+Keywords:	walking dead corpse shedim ork
+Name:	Walking ork corpse
+RoomDesc:$
+The dessicated remains of an ork are here.  Now they're coming for you! 
+
+~
+LookDesc:$
+These remains of this once-powerful Ork look pissed off, and they seem to want
+to be coming straight for you. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000101000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	8
+	Str:	8
+	Cha:	5
+	Int:	6
+	Wil:	12
+	Mag:	12
+[POINTS]
+	Height:	200
+	Weight:	200
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	unarmed combat:	10
+BREAK
+#32111
+Keywords:	NItler walking dead
+Name:	Dead Nitler
+RoomDesc:$
+An unfinished mob stands here.
+
+~
+LookDesc:$
+Nitler's back.  Since he was freshly dead, the spirit of the Shedim has only
+made him stronger, faster and better. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000101000
+AffFlags:	0
+Race:	Spirit
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	12
+	Str:	12
+	Cha:	5
+	Int:	11
+	Wil:	12
+	Mag:	14
+[POINTS]
+	Height:	200
+	Weight:	10
+	Ballistic:	20
+	Impact:	20
+[SKILLS]
+	unarmed combat:	10
+BREAK
+#32112
+Keywords:	Peacekeeper
+Name:	The Peacekeeper
+RoomDesc:$
+A Peacekeeper stands here, ready to jump in at the first sign of trouble. 
+
+~
+LookDesc:$
+He looks very strong and wise.  For his day and age. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1100001011001
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	100
+	Ballistic:	2
+	Impact:	6
+	Cash:	250
+[SKILLS]
+	unarmed combat:	4
+	edged weapons:	12
+BREAK
+#32115
+Keywords:	spider tank
+Name:	Fascisti Spider Tank
+RoomDesc:$
+A ^rFascisti^N spider tank is here. 
+
+~
+LookDesc:$
+A bright red tank with eight mechanical legs and a machine gun on either side
+of the front.  A single yellow eye bulges out from its head tracking your
+every movement.  On the side is a curious symbol, the symbol of the ^rRP
+Fascisti^N. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000011000001001000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	40
+	Qui:	5
+	Str:	40
+	Cha:	1
+	Int:	1
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	300
+	Weight:	1500
+	Ballistic:	20
+	Impact:	25
+	Karma:	150
+[SKILLS]
+	unarmed combat:	8
+	:	10
+BREAK
+END

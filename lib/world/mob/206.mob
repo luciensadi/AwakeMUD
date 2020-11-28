@@ -1,0 +1,71 @@
+#20600
+Keywords:	saeder krupp special ops soldier
+Name:	A Saeder-Krupp Special Ops soldier
+RoomDesc:$
+A man in a Saeder Krupp uniform stands tall here. 
+
+~
+LookDesc:$
+Wearing a Saeder-Krupp uniform, he stands tall and ready for anything. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	15
+	Str:	15
+	Cha:	15
+	Int:	15
+	Wil:	15
+	Mag:	0
+[POINTS]
+	Height:	195
+	Weight:	100
+	Ballistic:	90
+	Impact:	90
+	Karma:	121
+[SKILLS]
+	armed combat:	15
+	unarmed combat:	12
+	pistols:	50
+BREAK
+#20601
+Keywords:	saeder krupp sniper soldier special ops man black
+Name:	A Saeder-Krupp Special Ops Sniper
+RoomDesc:$
+A nondescript man in black tries to blend in with the shadows here. 
+
+~
+LookDesc:$
+A man wearing an all black suit wielding a sniper rifle. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	20
+	Str:	20
+	Cha:	20
+	Int:	20
+	Wil:	20
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	120
+	Impact:	120
+[SKILLS]
+	rifles:	50
+	unarmed combat:	50
+BREAK
+END

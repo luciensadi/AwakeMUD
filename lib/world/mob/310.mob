@@ -1,0 +1,716 @@
+#31000
+Keywords:	abracax man angel 
+Name:	Abracax
+RoomDesc:$
+A small man with angel wings stands here, chanting Latin words. 
+
+~
+LookDesc:$
+He's humanoid, but far from human. His face is warped, with a large nose,
+large eyes, a tiny mouth, and small horns stand out where his ears were
+supposed to be. His stomach is huge, but his serpent legs are thin, rendering
+this creature as something very different. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000111010
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	11
+	Str:	10
+	Cha:	7
+	Int:	12
+	Wil:	13
+	Mag:	10
+[POINTS]
+	Height:	150
+	Weight:	110
+	Ballistic:	15
+	Impact:	13
+[SKILLS]
+	sorcery:	10
+	unarmed combat:	9
+BREAK
+#31001
+Keywords:	fly beelzebub
+Name:	Beelzebub
+RoomDesc:$
+A large fly buzzez around. 
+
+~
+LookDesc:$
+A large fly that looks nothing like other flies. It has several jagged and
+long claws, and two large eyes. It moves fast and buzzez a large hissing sound
+that drills into your head. 
+~
+ArriveMsg:	flies in from
+LeaveMsg:	flies
+MobFlags:	111010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Sting
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	16
+	Str:	9
+	Cha:	9
+	Int:	8
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	13
+	Impact:	12
+[SKILLS]
+	unarmed combat:	12
+BREAK
+#31002
+Keywords:	girl young ash
+Name:	Ash
+RoomDesc:$
+A beautiful young girl stands here, chanting Latin words. 
+
+~
+LookDesc:$
+Ash is one of the ancient gods, she can take any shape she wants, but
+generally takes the shape of her preys inner dreams or nightmares. She looks
+to be about 17 years old, and she has long raven black hair to her shoulders.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000101110000000101010
+AffFlags:	1000000000001000001010
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	18
+	Qui:	19
+	Str:	11
+	Cha:	23
+	Int:	20
+	Wil:	22
+	Mag:	16
+[POINTS]
+	Height:	160
+	Weight:	56
+	Ballistic:	10
+	Impact:	9
+[SKILLS]
+	unarmed combat:	10
+	sorcery:	17
+BREAK
+#31003
+Keywords:	man strange mephisto
+Name:	Mephisto
+RoomDesc:$
+A strange man stands here, humming. 
+
+~
+LookDesc:$
+He looks very much like an ordinary man.. Short black hair, kind of tall and
+skinny and he has a serious expression. He looks like one of those you don't
+wanna mess with, as if he's hiding some hidden power. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101110000000111010
+AffFlags:	1000000000000000001010
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	19
+	Qui:	19
+	Str:	11
+	Cha:	13
+	Int:	20
+	Wil:	22
+	Mag:	18
+[POINTS]
+	Height:	187
+	Weight:	70
+	Ballistic:	12
+	Impact:	10
+[SKILLS]
+	unarmed combat:	12
+	sorcery:	15
+	:	12
+BREAK
+#31004
+Keywords:	lucifer man
+Name:	Lucifer
+RoomDesc:$
+The man stands here. 
+
+~
+LookDesc:$
+Lucifer was once a very powerful angel, his name means "bringer of light". He
+turned against god and became a fallen angel. He now leads the dark powers of
+the underworld in a crusade to overthrow god. He doesn't have any specific
+shape, but right now he's in the shape of a human, his wings are cut off and
+he looks like any other man, hence why he is so dangerous. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000101110000000111010
+AffFlags:	1000000000000000001010
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bludgeon
+[ATTRIBUTES]
+	Bod:	23
+	Qui:	20
+	Str:	21
+	Cha:	19
+	Int:	22
+	Wil:	19
+	Mag:	20
+[POINTS]
+	Height:	198
+	Weight:	71
+	Ballistic:	14
+	Impact:	12
+[SKILLS]
+	unarmed combat:	16
+	sorcery:	15
+	:	15
+BREAK
+#31005
+Keywords:	wraith cloudy swirl dark
+Name:	a wraith
+RoomDesc:$
+A dark, cloudy swirl whips around you, chilling you to the bone.  
+
+~
+LookDesc:$
+A weird looking creature with no legs.. it looks like a ghost, almost
+transparent. 
+~
+ArriveMsg:	arrives
+LeaveMsg:	leaves
+MobFlags:	101000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	7
+	Str:	9
+	Cha:	7
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#31006
+Keywords:	ghoul creature hideous
+Name:	a ghoul
+RoomDesc:$
+A hideous creature stalks the tunnels here. 
+
+~
+LookDesc:$
+It once looked like a human.. Now.. It's face is warped and rotten, legs
+skinny and decayed, in the torso you can even see a rib sticking out.. These
+are the damned souls, Doomed to stalk the earth forever. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	9
+	Str:	9
+	Cha:	9
+	Int:	9
+	Wil:	9
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	50
+	Ballistic:	13
+	Impact:	10
+[SKILLS]
+	unarmed combat:	5
+BREAK
+#31007
+Keywords:	shadow furfur
+Name:	Furfur
+RoomDesc:$
+A shadow stands here. 
+
+~
+LookDesc:$
+A humanoid of some sort stands here, he is completely black, like a shadow,
+lacking any sort of definition. The air around him is shimmering, and the
+shadows of his cloak are dancing. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000111010
+AffFlags:	110000000000010
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	25
+	Qui:	18
+	Str:	18
+	Cha:	18
+	Int:	17
+	Wil:	17
+	Mag:	18
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	13
+	Impact:	15
+[SKILLS]
+	unarmed combat:	12
+	sorcery:	6
+	:	3
+BREAK
+#31008
+Keywords:	naga serpent dark green
+Name:	a huge naga
+RoomDesc:$
+A large, dark green serpent of another world lies here, hissing as you enter.
+
+~
+LookDesc:$
+Another amazing creature in this godforsaken place you never thought existed..
+A naga.. It's large almost coal black eyes analyze you as you walk in, it
+lifts it's large green, shell covered dragonskin body off the ground, and
+grits it's long 10 inch teeth to you. You see it's large claws extracting from
+underneath his skin on his large paws. If you leave now, maybe it won't
+totally rip you to shreds.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000101010
+AffFlags:	1000001000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	11
+	Str:	12
+	Cha:	18
+	Int:	11
+	Wil:	11
+	Mag:	0
+[POINTS]
+	Height:	600
+	Weight:	300
+	Ballistic:	13
+	Impact:	15
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#31050
+Keywords:	dirty druggie drug man trashed
+Name:	Trashed looking druggie
+RoomDesc:$
+A trashed looking druggie stands here 
+
+~
+LookDesc:$
+A small looking man sits here trashed out of his mind. his eyes are barely
+open and he smells of dope. Sitting next to him is a open crate of BTL's this
+guy would be so doped up he wouldn't be able to feel a sword go into his
+chest. Why don't you test him out? 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Neutral
+Position:	Resting
+DefaultPos:	Resting
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	5
+	Cha:	2
+	Int:	1
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	12
+	Bank:	100
+	Karma:	1
+[SKILLS]
+BREAK
+#31051
+Keywords:	squatter filthy
+Name:	A filthy looking squatter
+RoomDesc:$
+A filthy looking squatter sits around here, being useless. 
+
+~
+LookDesc:$
+He looks like any other squatter you might see passed out in some gutter,
+aside from the fact that he's armed. He twitches and tweaks from not having
+his fix within the past five minutes, but first he has to do his job and act
+as a guard for the household before he can get paid in whatever drugs it is
+he's strung out on. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000101010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	2
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+	Ballistic:	3
+	Impact:	3
+	Cash:	60
+[SKILLS]
+	clubs:	3
+	assault rifles:	4
+	unarmed combat:	3
+BREAK
+#31052
+Keywords:	troll guard nasty
+Name:	A nasty looking troll guard
+RoomDesc:$
+A nasty looking troll guards the back rooms here. 
+
+~
+LookDesc:$
+Well, he's a troll, that much is obvious. He looks much nastier than most of
+his race, probably from having to live underground and do grunt work every day
+of his life to survive. He's got a nasty disposition, and it is reflected
+physically in his body language. He lugs around a large shotgun, waiting to
+put it to use on some unfortunate chump, like you. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000101010
+AffFlags:	0
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	5
+	Str:	10
+	Cha:	4
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	245
+	Weight:	110
+	Cash:	150
+[SKILLS]
+	clubs:	5
+	shotguns:	5
+	unarmed combat:	5
+BREAK
+#31053
+Keywords:	Snahl drug dealer
+Name:	Snahl the drug dealer
+RoomDesc:$
+Snahl the drug dealer is here, counting stacks of nuyen. 
+
+~
+LookDesc:$
+This here is Snahl, some two-bit drug dealer who's been helping push venom
+around the sewers for a few years now. He's known to be a cheap ass bastard,
+along with being a ruthless punk who would probably slit his mothers throat
+for a nickel. He seems to be using one of the money counters here, granted
+he's not exactly counting the largest stacks around. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000101010
+AffFlags:	0
+Race:	Dwarf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	6
+	Str:	8
+	Cha:	2
+	Int:	6
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	80
+	Ballistic:	4
+	Impact:	4
+	Cash:	325
+[SKILLS]
+	clubs:	4
+	sub-machine guns:	5
+	unarmed combat:	4
+BREAK
+#31054
+Keywords:	Vurgel dealer
+Name:	Vurgel the dealer
+RoomDesc:$
+Vurgel the dealer oversees the counting, just to be sure Snahl isn't skimming.
+
+~
+LookDesc:$
+This here is Vurgel, one of the higher-ups in this particular ring. He's not
+too bright, being an ork and all, but he makes up for it by being keen. He's
+currently helping Snahl count out some nuyen, and at the same time, making
+sure his partner isn't skimming anything for himself. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000101010
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	6
+	Str:	8
+	Cha:	2
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	90
+	Ballistic:	2
+	Impact:	2
+	Cash:	350
+[SKILLS]
+	clubs:	4
+	assault rifles:	6
+	unarmed combat:	4
+BREAK
+#31055
+Keywords:	ork bodyguard guard ugly
+Name:	An ugly ork bodyguard
+RoomDesc:$
+An ugly ork bodyguard stands here, just in case. 
+
+~
+LookDesc:$
+Oh man, is this ork fraggin' ugly. His face alone could cause small children
+to cry, and when he smiles its enough to make cattle stampede. He lugs around
+a light machinegun, fully intent on putting it to use when and if he gets the
+chance, which is probably sooner rather than later considering his line of
+business. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000101010
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	6
+	Str:	8
+	Cha:	2
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	100
+	Cash:	145
+[SKILLS]
+	clubs:	6
+	machine guns:	6
+	unarmed combat:	6
+BREAK
+#31056
+Keywords:	wraith cloudy swirl dark
+Name:	a wraith
+RoomDesc:$
+A dark, cloudy swirl whips around you, chilling you to the bone.  
+
+~
+LookDesc:$
+A weird looking creature with no legs.. it looks like a ghost, almost
+transparent. 
+~
+ArriveMsg:	hovers in from
+LeaveMsg:	hovers
+MobFlags:	101010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	7
+	Str:	9
+	Cha:	7
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	60
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#31057
+Keywords:	watchman guard strung-out
+Name:	A strung-out watchman
+RoomDesc:$
+A strung-out watchman is stationed here as a guard. 
+
+~
+LookDesc:$
+This strung-out watchman is tweaking for his next fix, which is payment for
+keeping an eye on any tresspassers that might have snuck into the house hold.
+Ofcourse, he doesn't get paid with his drugs until he finishes his task for
+the day, so he is rather vigilant, regardless of his addiction. Afterall, if
+he does a good job, maybe he'll get a little extra for the hard work. A salary
+payment at its finest. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000101010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	5
+	Cha:	2
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Cash:	95
+[SKILLS]
+	clubs:	4
+	shotguns:	4
+	unarmed combat:	4
+BREAK
+#31058
+Keywords:	cutter drug
+Name:	A drug cutter
+RoomDesc:$
+A drug cutter is here, cutting up drugs. 
+
+~
+LookDesc:$
+He's all dressed up in an apron and facemask, and sports a slender razor
+blade, which he's currently using to cut up various sorts of powders,
+presumably drugs of some sort. He doesn't necessarily seem interested in whats
+goin on around him, and instead, is probably so zonked out on whatever he's
+cutting via contact high, he barely even remembers where he is. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000010001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	5
+	Cha:	2
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+	edged weapons:	5
+BREAK
+#31063
+Keywords:	Starch orkish drug lord
+Name:	Starch
+RoomDesc:$
+An orkish drug lord named Starch is here. 
+
+~
+LookDesc:$
+This ork is bloody huge, and normally when one thinks of drug lords, the
+picture that pops to mind are small, fat Columbian guys, that certainly isn't
+Starch. For starters, he is often mistaken as a troll due to his physique,
+which often plays to his advantage. Pronounced, slightly curled tusks jut out
+to make themselves known, adding to his fearsome appearance. He constantly
+carries around a sawed off shotgun at his side, itching to put it to use. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000011010
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	6
+	Str:	8
+	Cha:	4
+	Int:	5
+	Wil:	6
+	Mag:	12
+[POINTS]
+	Height:	220
+	Weight:	100
+	Cash:	355
+[SKILLS]
+	unarmed combat:	9
+	shotguns:	9
+	clubs:	9
+BREAK
+END

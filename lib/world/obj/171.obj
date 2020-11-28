@@ -736,7 +736,7 @@ ExtraFlags:	0
 AffFlags:	0
 Material:	glass
 [POINTS]
-	Weight:	1.00
+	Weight:	0.20
 	Barrier:	8
 	Cost:	5
 	AvailTN:	0
@@ -745,10 +745,9 @@ Material:	glass
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
-	Val0:	1
-	Val1:	1
+	Val0:	5
+	Val1:	5
 	Val2:	32
-	Val3:	1
 BREAK
 #17127
 Keywords:	rocket fuel bottle liquor
@@ -794,7 +793,7 @@ ExtraFlags:	0
 AffFlags:	0
 Material:	glass
 [POINTS]
-	Weight:	2.00
+	Weight:	0.25
 	Barrier:	1
 	Cost:	8
 	AvailTN:	0
@@ -1318,7 +1317,7 @@ Material:	fabric
 	LegalPermit:	0
 [VALUES]
 	Val0:	4
-	Val1:	4
+	Val1:	1
 BREAK
 #17148
 Keywords:	sai blade wooden handled
@@ -1856,6 +1855,34 @@ Material:	metal
 	LegalCode:	0
 	LegalPermit:	0
 BREAK
+#17188
+Keywords:	chip data underground passage datachip optical
+Name:	a datachip with a blue label
+RoomDesc:$
+A datachip with a blue label sits here.~
+LookDesc:$
+A black optical datachip labelled with a blue label, and the number: CC-88801
+written in black ink upon the label. 
+~
+Type:	Decking Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	12
+	Val2:	7
+	Val3:	4
+BREAK
 #17189
 Keywords:	badge spd police old rusty
 Name:	an old Seattle P.D. badge
@@ -1948,9 +1975,9 @@ ExtraFlags:	0
 AffFlags:	0
 Material:	fabric
 [POINTS]
-	Weight:	2.00
+	Weight:	0.20
 	Barrier:	32
-	Cost:	0
+	Cost:	50
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0

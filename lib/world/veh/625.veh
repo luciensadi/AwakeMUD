@@ -1,0 +1,123 @@
+#62500
+Name:	banca boat
+ShortDesc:	a slender banca boat
+RoomDesc:	A slender banca boat is anchored in the water here
+LongDesc:$
+This narrow watercraft is generally meant for traveling along rivers, hence
+its slender design, which measures around fifteen feet in length. While most
+are un-powered, this one seems to have been outfitted with a small outboard
+gasoline engine. It may not be the best craft to venture out onto the open
+ocean with, but it does just fine skimming along the shorelines. 
+~
+Inside:$
+There isn't much to be seen, aside from the small benches built into the boat,
+allowing for sailors to take a load off while traveling along the waves. There
+are a few old tangled fishing nets lining the bottom of the vessel, so be
+careful not to trip. 
+~
+InsideRear:$
+There isn't much to be seen, aside from the small benches built into the boat,
+allowing for sailors to take a load off while traveling along the waves. There
+are a few old tangled fishing nets lining the bottom of the vessel, so be
+careful not to trip. 
+~
+Leaving:	skims off
+Arriving:	skims in from
+Handling:	3
+Speed:	30
+Accel:	4
+Body:	2
+Armour:	0
+Pilot:	0
+Sig:	5
+Autonav:	0
+Seating:	4
+SeatingBack:	4
+Load:	40
+Cost:	300
+Type:	8
+Flags:	0
+Engine:	3
+BREAK
+#62501
+Name:	banca boat
+ShortDesc:	a slender banca boat
+RoomDesc:	A slender banca boat is anchored in the water here
+LongDesc:$
+This narrow watercraft is generally meant for traveling along rivers, hence
+its slender design, which measures around fifteen feet in length. While most
+are un-powered, this one seems to have been outfitted with a small outboard
+gasoline engine. It may not be the best craft to venture out onto the open
+ocean with, but it does just fine skimming along the shorelines. 
+~
+Inside:$
+There isn't much to be seen, aside from the small benches built into the boat,
+allowing for sailors to take a load off while traveling along the waves. There
+are a few old tangled fishing nets lining the bottom of the vessel, so be
+careful not to trip. 
+~
+InsideRear:$
+There isn't much to be seen, aside from the small benches built into the boat,
+allowing for sailors to take a load off while traveling along the waves. There
+are a few old tangled fishing nets lining the bottom of the vessel, so be
+careful not to trip. 
+~
+Leaving:	skims off
+Arriving:	skims in from
+Handling:	3
+Speed:	30
+Accel:	4
+Body:	2
+Armour:	0
+Pilot:	0
+Sig:	5
+Autonav:	0
+Seating:	4
+SeatingBack:	4
+Load:	40
+Cost:	300
+Type:	8
+Flags:	0
+Engine:	3
+BREAK
+#62502
+Name:	Celebrian Mallornica yacht
+ShortDesc:	A Celebrian Mallornica
+RoomDesc:	A Celebrian Mallornica yacht is anchored here
+LongDesc:$
+A common piece of scenery amongst rental companies and executives on the rise,
+this ten meter long yacht is as seaworthy as it is classy. While it may not be
+as fancy or as expensive as some of the other yachts on the seas, it certainly
+is a work of art. 
+~
+Inside:$
+Complete with all the luxuries one would expect from a high quality yacht,
+this floating mansion is more than enough to keep the most flamboyant of
+playboys content. The bridge itself is partially covered, its adjustable
+tinted windows allowing the owner to change the amount of sunlight they'd
+enjoy while cruising around on the high seas. 
+~
+InsideRear:$
+The lower decks consist of the galley, lounge, multiple cabins and enough
+toilet facilities to keep all of the passengers comfortable for quite some
+time. 
+~
+Leaving:	cruises
+Arriving:	cruises in from
+Handling:	3
+Speed:	45
+Accel:	4
+Body:	8
+Armour:	0
+Pilot:	0
+Sig:	2
+Autonav:	4
+Seating:	4
+SeatingBack:	8
+Load:	1200
+Cost:	125000
+Type:	8
+Flags:	0
+Engine:	5
+BREAK
+END

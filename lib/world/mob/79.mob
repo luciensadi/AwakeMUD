@@ -1,0 +1,546 @@
+#7900
+Keywords:	guard elven regal armour security
+Name:	An elven guard in regal armour
+RoomDesc:$
+An elven guard in regal armour stands on duty here, handling tresspassers. 
+
+~
+LookDesc:$
+The slender build and noble features, not to mention an almost always upturned
+nose, chin held high were too dead a give away of the manners befitting an
+elf. He looks to be packing some fairly serious hardware and firepower, and
+between the look in his eyes and his demeanor, it tends to give the impression
+hes well trained. The sturdy, embossed plates on his light milispec armour has
+been polished to a sheen, imprinted over the heart is the coat of arms for Tir
+Tairngire, consisting of a bold ^ggreen^N oak tree flanked by a semi-circle of
+twelve ^Ygolden stars^N. Upon the shoulder sits another emblem, this one
+consisting of a ^Wwhite full moon^N, within which is contained two ^Lblack crescent
+moons^N, one smaller than the other, which fits into the inner curve of the
+first. 
+~
+ArriveMsg:	oom
+LeaveMsg:	xJ«	˜”‘
+MobFlags:	1000000000000000100000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	10
+	Str:	8
+	Cha:	8
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+[SKILLS]
+	unarmed combat:	10
+	assault rifles:	10
+BREAK
+#7901
+Keywords:	guard elven regal armour security
+Name:	An elven guard in regal armour
+RoomDesc:$
+An elven guard in regal armour keeps an eye on the security monitors here. 
+
+~
+LookDesc:$
+The slender build and noble features, not to mention an almost always upturned
+nose, chin held high were too dead a give away of the manners befitting an
+elf. He looks to be packing some fairly serious hardware and firepower, and
+between the look in his eyes and his demeanor, it tends to give the impression
+hes well trained. The sturdy, embossed plates on his light milispec armour has
+been polished to a sheen, imprinted over the heart is the coat of arms for Tir
+Tairngire, consisting of a bold ^ggreen^N oak tree flanked by a semi-circle of
+twelve ^Ygolden stars^N. Upon the shoulder sits another emblem, this one
+consisting of a ^Wwhite full moon^N, within which is contained two ^Lblack crescent
+moons^N, one smaller than the other, which fits into the inner curve of the
+first. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000100000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	10
+	Str:	8
+	Cha:	8
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+[SKILLS]
+	unarmed combat:	10
+	assault rifles:	10
+BREAK
+#7902
+Keywords:	guard elven regal armour security
+Name:	An elven guard in regal armour
+RoomDesc:$
+An elven guard in regal armour stands on duty here, handling tresspassers. 
+
+~
+LookDesc:$
+The slender build and noble features, not to mention an almost always upturned
+nose, chin held high were too dead a give away of the manners befitting an
+elf. He looks to be packing some fairly serious hardware and firepower, and
+between the look in his eyes and his demeanor, it tends to give the impression
+hes well trained. The sturdy, embossed plates on his light milispec armour has
+been polished to a sheen, imprinted over the heart is the coat of arms for Tir
+Tairngire, consisting of a bold ^ggreen^N oak tree flanked by a semi-circle of
+twelve ^Ygolden stars^N. Upon the shoulder sits another emblem, this one
+consisting of a ^Wwhite full moon^N, within which is contained two ^Lblack crescent
+moons^N, one smaller than the other, which fits into the inner curve of the
+first. 
+~
+ArriveMsg:	oom
+LeaveMsg:	xJ«	˜”‘
+MobFlags:	1000000000000000100000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	10
+	Str:	8
+	Cha:	8
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+[SKILLS]
+	unarmed combat:	10
+	assault rifles:	10
+BREAK
+#7903
+Keywords:	guard armed hellhounds security
+Name:	An armed security guard trailing a group of leashed hellhounds
+RoomDesc:$
+An armed security guard trailing a group of leashed hellhounds patrols here. 
+
+~
+LookDesc:$
+Even with his fairly stocky build, his noble features, not to mention an
+almost always upturned nose, chin held high were too dead a give away of the
+manners befitting an elf. He looks to be packing some fairly serious hardware
+and firepower, and between the look in his eyes and his demeanor, it tends to
+give the impression hes well trained. He has at the end of sturdy steel-weaved
+leather leashes a trio of hellhounds, whos jaws spill freely with what can
+only be called hellfire, as their namesake is well deserved. The sturdy,
+embossed plates on his light milispec armour has been polished to a sheen,
+imprinted over the heart is the coat of arms for Tir Tairngire, consisting of
+a bold green oak tree flanked by a semi-circle of twelve golden stars. Upon
+the shoulder sits another emblem, this one consisting of a white full moon,
+within which is contained two black crescent moons, one smaller than the
+other, which fits into the inner curve of the first. 
+~
+ArriveMsg:	patrols in from
+LeaveMsg:	follows a scent
+MobFlags:	1000000000000000100000000001000
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	8
+	Int:	6
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	190
+	Weight:	80
+[SKILLS]
+	unarmed combat:	10
+	assault rifles:	8
+BREAK
+#7904
+Keywords:	mob unfinished
+Name:	An Oracle Owl
+RoomDesc:$
+An ^yoracle owl^N sits perched atop the northern archway, surveying the estate. 
+
+~
+LookDesc:$
+This Oracle Owl is a fairly big specimen, standing about a meter tall and
+almost eight kilograms. It has light brown wings, tail and dorsal feathers,
+which lightens to a yellow-brown on its ventral feathers, and sports a puffed
+white tufted of white feathers upon its chest. The delicate feathers upon the
+edges of its wings make flight virtually silent, and thanks to its large ears,
+tipped with white feathers that stand erect upon its head, it makes for an
+excellent predator. Rumors abound of the owls precognitive abilities, since
+surprising or ambushing one of these birds is near impossible, as nothing
+escapes its piercing gaze and sense of hearing unparalleled. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000100000000011010
+AffFlags:	0
+Race:	Undef
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	5
+	Str:	1
+	Cha:	4
+	Int:	3
+	Wil:	3
+	Mag:	8
+[POINTS]
+	Height:	100
+	Weight:	8
+[SKILLS]
+	unarmed combat:	10
+	sorcery:	10
+BREAK
+#7905
+Keywords:	mongoose quicksilver weasel
+Name:	A quicksilver mongoose
+RoomDesc:$
+A quicksilver mongoose scurries and digs around for a meal here. 
+
+~
+LookDesc:$
+The quicksilver mongoose is a small, subtropical relative of Europeon weasels
+and martens, and measures a little over a meter from its slender snout and
+whiskers to the tip of its thick tail, and weighs a little over three
+kilograms. Its body sports a sleek coat of gray'ish-brown fur, which turns to
+a black-tipped tail towards the end. It hunts small mammals, lizards and birds
+(along with their eggs, and also eats beetles, centipedes and worms. Its
+favourite prey item, however, is the serpent, particularly the venomous types,
+as their metabolism requires venom and hepatic secretions from these
+creatures. It relies on its speed and agility to capture its prey, employing
+its mesmeric talents against serpents, who are all but fixated like statues
+upon being caught in its sight. 
+~
+ArriveMsg:	scurries in from
+LeaveMsg:	prances off
+MobFlags:	1000000000000000100000000001000
+AffFlags:	0
+Race:	Undef
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	7
+	Str:	1
+	Cha:	1
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	105
+	Weight:	3
+[SKILLS]
+	unarmed combat:	6
+BREAK
+#7906
+Keywords:	elderly old gentleman Aflred
+Name:	An elderly gentleman in an old three-piece suit
+RoomDesc:$
+An elderly gentleman in an old three-piece suit awaits his master here. 
+
+~
+LookDesc:$
+This old gentleman is easily into his eighties, and quite human from the looks
+of it. His hair is well-kempt and tidy, and is stark white and thinning from
+age. He has a slight haunch in his posture, once again, a natural occurance
+for his elderly status, but his eyes radiate with youth, experience and awe,
+albeit slightly clouded due to his cataracts. Hes sporting an old three piece
+suit that went out of style before most greater dragons were born, consisting
+of a black blazer, a formal white shirt beneath it, and a pair of dull red and
+green pinestriped and tailored pants, and yet, somehow makes them look good.
+At first, and even second glance, the thought that his name is Alfred seems
+readily plausible, yet unknown since he doesn't introduce himself. Hes a
+butler, afterall. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	12
+	Str:	8
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	unarmed combat:	12
+BREAK
+#7907
+Keywords:	maid elven female slender young
+Name:	A young and slender elven maid
+RoomDesc:$
+A young and slender elven maid tidies up the manor here. 
+
+~
+LookDesc:$
+Shes young, well fed and quite fit, which tends to be a benefit of tending to
+a manor such as this. Her outfit is conversative and classy, although her
+natural beauty still manages to show through. She spends her day tending to
+and tidying up the rooms in the estate while the master is away, and sees to
+any guests that are permitted onto the property accordingly. 
+~
+ArriveMsg:	dusts off surfaces as she arrives from
+LeaveMsg:	moves onto tidy up the room to the
+MobFlags:	1000
+AffFlags:	0
+Race:	Elf
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	7
+	Str:	3
+	Cha:	7
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	60
+[SKILLS]
+	unarmed combat:	6
+BREAK
+#7908
+Keywords:	keymaster elven rail-thin librarian robes
+Name:	A rail-thin elven librarian decked out in robes
+RoomDesc:$
+A rail-thin elven librarian decked out in robes sits behind his desk here. 
+
+~
+LookDesc:$
+This elven man is rail-thin and has a stark white complexion, giving him a
+look of weariness beyond his age, but is beguiled by the knowledge and insight
+possessed by his striking ^Yyellow^N eyes. Lithe, boney fingers caress across the
+velvet cover of a nearby book, while his other hand is busy dipping a quill
+into an ink resevoir, writing almost absent-mindedly upon parchment as he
+thinks. He sports a mass of plush, comfortable robes that are perfect for any
+librarian who spends his days (and nights) like this. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	6
+	Str:	3
+	Cha:	8
+	Int:	8
+	Wil:	8
+	Mag:	15
+[POINTS]
+	Height:	180
+	Weight:	60
+[SKILLS]
+	unarmed combat:	10
+BREAK
+#7909
+Keywords:	watcher spirit
+Name:	a watcher spirit
+RoomDesc:$
+a small blob of ectoplasm wanders around here 
+
+~
+LookDesc:$
+This small blob of ectoplasm wanders from here to there on the look out for
+anything it's master has asked it to watch for. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000001000000100001001000
+AffFlags:	0
+Race:	Elemental
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	unarmed combat:	6
+BREAK
+#7910
+Keywords:	horse mare ghazu stark-white Gumption
+Name:	A graceful ^Wstark^N-^Wwhite^N Ghazu mare
+RoomDesc:$
+A graceful ^Wstark^N-^Wwhite^N Ghazu mare munches on the hay stacked here. 
+
+~
+LookDesc:$
+The Ghazu is an awakened breed of Arabian horse, which is smaller in
+comparison to most others, but are incredibly fast, not to mention beautiful.
+They are jealously guarded amongst collectors and breeders around the world,
+and for a very good reason. This particular mare's name is "Gumption", who has
+a slender and graceful build, with a ^Wstark white^N coat, along with a matching
+wild ^Wwhite^N mane. Careful, they're very picky about who they let ride them, and
+they're as stubborn as a mule unless they find their rider worthy. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Undef
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	7
+	Str:	5
+	Cha:	5
+	Int:	4
+	Wil:	5
+	Mag:	6
+[POINTS]
+	Height:	170
+	Weight:	300
+[SKILLS]
+BREAK
+#7911
+Keywords:	horse stallion ghazu bourbon brown powerful Gram
+Name:	A powerful ^ybourbon brown^N Ghazu stallion
+RoomDesc:$
+A powerful ^ybourbon brown^N Ghazu stallion grazes through the meadow contently. 
+
+~
+LookDesc:$
+The Ghazu is an awakened breed of Arabian horse, which is smaller in
+comparison to most others, but are incredibly fast, not to mention beautiful.
+They are jealously guarded amongst collectors and breeders around the world,
+and for a very good reason. This particular stallion's name is
+"Thirty-Thirty", who has a powerful build, even for this small of a breed, and
+his coat is a faded ^ybourbon brown^N colour with a messy ^Lblack^N mane. They're as
+stubborn as mules, and this one doesn't look to be an exception to that rule.
+Only the master of the estate would attempt to saddle it and ride it, and has
+a reputation for 'politely' dismounting any others who attempt to climb on its
+back. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Undef
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	7
+	Str:	5
+	Cha:	5
+	Int:	4
+	Wil:	5
+	Mag:	6
+[POINTS]
+	Height:	180
+	Weight:	400
+[SKILLS]
+BREAK
+#7912
+Keywords:	machine automated equipment
+Name:	An automated equipment sorting machine
+RoomDesc:$
+An automated equipment sorting machine is stacked against the wall here. 
+
+~
+LookDesc:$
+This automated storage device is both voice activated and manually accessed
+via a touch-screen pad built into its face, which can be used to cycle through
+its contents digitally before the user selects and activates a specific
+container to access. The interior of the machine then revolves quietly until
+the selected container the item is in opens up from a sliding drawer. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	500
+[SKILLS]
+BREAK
+#7913
+Keywords:	machine equipment automated sorting
+Name:	An automated equipment sorting machine
+RoomDesc:$
+An automated equipment sorting machine is stacked against the wall here. 
+
+~
+LookDesc:$
+This automated storage device is both voice activated and manually accessed
+via a touch-screen pad built into its face, which can be used to cycle through
+its contents digitally before the user selects and activates a specific
+container to access. The interior of the machine then revolves quietly until
+the selected container the item is in opens up from a sliding drawer. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	500
+[SKILLS]
+BREAK
+END

@@ -1,0 +1,2225 @@
+#19400
+Keywords:	Buffalo
+Name:	Large shaggy Buffalo
+RoomDesc:$
+Large Brown shaggy Buffalo. 
+
+~
+LookDesc:$
+A Large Brown shaggy Buffalo stands here staring at you.  Yes at you.  He
+looks large and incharge.  He glows a soft blueish color. 
+~
+ArriveMsg:	Rushes
+LeaveMsg:	Stampedes
+MobFlags:	10100111000000101110
+AffFlags:	1000010000001000000000
+Race:	Spirit
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Crush
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	7
+	Cha:	1
+	Int:	5
+	Wil:	5
+	Mag:	5
+[POINTS]
+	Height:	200
+	Weight:	1000
+	Level:	2
+	Ballistic:	5
+	Impact:	5
+[SKILLS]
+	athletics:	7
+	unarmed combat:	10
+	:	10
+	conjuring:	5
+BREAK
+#19401
+Keywords:	Spirit of Propriety
+Name:	Spirit of Propriety
+RoomDesc:$
+You see the Spirit of Propriety here. 
+
+~
+LookDesc:$
+If your seeing this your shouldn't be here.  Run man Run. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000100000000101010
+AffFlags:	1001000001000
+Race:	Spirit
+Gender:	Neutral
+Position:	Fighting
+DefaultPos:	Fighting
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	300
+	Weight:	50
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	:	7
+	unarmed combat:	7
+BREAK
+#19402
+Keywords:	Snaping plant
+Name:	a nasty snapping plant
+RoomDesc:$
+A nasty snapping plant is here. 
+
+~
+LookDesc:$
+You see a Giant venus flytrap on steroids.  You think carefully before getting
+near it. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10100000101100
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	10
+	Str:	5
+	Cha:	1
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	100
+	Weight:	100
+	Ballistic:	3
+	Impact:	10
+[SKILLS]
+	:	4
+	unarmed combat:	5
+BREAK
+#19403
+Keywords:	buddha
+Name:	Buddha
+RoomDesc:$
+You are astounded to see Buddha sitting cross-legged on the sand. 
+
+~
+LookDesc:$
+You see a quiet soft spoke man dressed in simple robes and sandals. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Sitting
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	450
+	Weight:	120
+	Ballistic:	100
+	Impact:	100
+[SKILLS]
+BREAK
+#19404
+Keywords:	seatac guard
+Name:	a Seatac guard
+RoomDesc:$
+A Seatac guard stands here. 
+
+~
+LookDesc:$
+You see a mean looking Seatac guard. He carries himself with the cool
+assurance of skill and strength. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001000
+AffFlags:	100000000000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	280
+	Ballistic:	6
+	Impact:	4
+	Karma:	30
+[SKILLS]
+	firearms:	7
+	pistols:	7
+BREAK
+#19405
+Keywords:	Skycap
+Name:	Skycab
+RoomDesc:$
+A seattle internation skycap stands at attention. 
+
+~
+LookDesc:$
+Seattle International Airport Skycap.  Dressed in a cap with silver tassels
+and black jacket with gold buttons and you can almost see the body armor
+underneath. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	160
+	Ballistic:	3
+	Impact:	3
+[SKILLS]
+	elf etiquette:	7
+	tribal etiquette:	7
+	corporate etiquette:	1
+	leadership:	7
+	unarmed combat:	8
+BREAK
+#19406
+Keywords:	Porter
+Name:	Porter
+RoomDesc:$
+A Seatac Porter 
+
+~
+LookDesc:$
+Older but wiser person greets you fondly.  He wonders if there is anything you
+need.  He's dressed in Red crossover jacket with gold buttons. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	130
+	Weight:	120
+	Ballistic:	2
+	Impact:	2
+[SKILLS]
+	unarmed combat:	5
+	street etiquette:	8
+BREAK
+#19407
+Keywords:	Jal Attendant
+Name:	a Jal service attendant stands here.
+RoomDesc:$
+A Jal service attendant stands here. 
+
+~
+LookDesc:$
+A neatly attired attendant.  Quickly and efficiently moves from customer to
+customer. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	20
+	Int:	10
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	130
+	Weight:	120
+	Ballistic:	5
+	Impact:	5
+	Cash:	8000
+	Bank:	8000
+[SKILLS]
+	corporate etiquette:	10
+	:	3
+	interrogation:	5
+	unarmed combat:	5
+BREAK
+#19408
+Keywords:	Blue Samurai
+Name:	Blue Samurai
+RoomDesc:$
+A striking Blue Samurai  
+
+~
+LookDesc:$
+A striking Blue Samurai stands before you.  He radiates cool composure and
+skill.  You notice just by the cut of his uniform that he wears heavy body
+armor. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10100011100000001010
+AffFlags:	1000000000001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Cannon
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	12
+	Str:	12
+	Cha:	12
+	Int:	12
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	100
+	Ballistic:	8
+	Impact:	8
+	Karma:	2
+[SKILLS]
+	:	3
+	:	3
+	assault rifles:	9
+	rifles:	9
+	armed combat:	9
+BREAK
+#19409
+Keywords:	Brit Air Attendant
+Name:	Brit Air Attendant
+RoomDesc:$
+An lovely but quick Brit air attendant. 
+
+~
+LookDesc:$
+She moves with the speed and quiet grace of a cat.  You hesitate to even
+bother this lovely creature. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	65
+[SKILLS]
+BREAK
+#19410
+Keywords:	Digi-Tronics Salesman
+Name:	Digi-Tronics Salesman
+RoomDesc:$
+A friendly Digi-Tronics Salesman 
+
+~
+LookDesc:$
+A suave and well dressed salesman stands here.  This is one of those salesmen
+that could sell ice to an Eskimo. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	145
+	Weight:	145
+	Level:	1
+	Ballistic:	100
+	Impact:	100
+[SKILLS]
+BREAK
+#19411
+Keywords:	Florist
+Name:	Pretty Florist
+RoomDesc:$
+A very pretty florist. 
+
+~
+LookDesc:$
+A very pretty and cheerful florist.  She is bouncing around the shop showing
+off the goods. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	10
+	Int:	1
+	Wil:	1
+	Mag:	1
+[POINTS]
+	Height:	180
+	Weight:	150
+[SKILLS]
+BREAK
+#19412
+Keywords:	Pamam'I Attendant
+Name:	Pamam'I service attendant
+RoomDesc:$
+A cold Pamam'I service attendant. 
+
+~
+LookDesc:$
+The lights from the computer display seem to center in his cold dead eye's.
+You wonder that anyone buy's tickets. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#19413
+Keywords:	Bartender
+Name:	Bartender
+RoomDesc:$
+Swarthy muscular bartender stands here waiting for orders 
+
+~
+LookDesc:$
+Tall and compact you wouldn't want to rumble with this fellow. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100010000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	250
+	Weight:	300
+	Ballistic:	20
+	Impact:	20
+[SKILLS]
+	unarmed combat:	20
+BREAK
+#19414
+Keywords:	Legend attendant
+Name:	Legend attendant
+RoomDesc:$
+Legend Airline Attendant stands here. 
+
+~
+LookDesc:$
+Immaculately dress and well groomed.  Even though this is a low price airline
+they try to give you the best service they can 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	180
+	Ballistic:	50
+	Impact:	50
+[SKILLS]
+	media etiquette:	5
+	corporate etiquette:	5
+	unarmed combat:	9
+BREAK
+#19415
+Keywords:	Cybernetic Bartender
+Name:	Cybernetic Bartender
+RoomDesc:$
+A heavy set Cybernetic bartender is here.   
+
+~
+LookDesc:$
+He looks like someone who could bounce you off all four walls and then
+ceiling. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	400
+	Level:	5
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	negotiation:	20
+	tribal etiquette:	20
+	elf etiquette:	20
+BREAK
+#19416
+Keywords:	reaz bouncer
+Name:	Reaz the bouncer
+RoomDesc:$
+Reaz the cyborg bouncer is here. 
+
+~
+LookDesc:$
+This is a mountain of elf.  Chrome gleams from almost every inch of his frame.
+Attacking him would be like attacking a mountain. 
+~
+ArriveMsg:	glides in
+LeaveMsg:	flows
+MobFlags:	1000100010000000001000
+AffFlags:	1000001100000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	130
+	Weight:	500
+	Level:	5
+	Ballistic:	20
+	Impact:	20
+	Karma:	10
+[SKILLS]
+	unarmed combat:	12
+	firearms:	12
+	gunnery:	12
+	assault rifles:	12
+	armed combat:	12
+BREAK
+#19417
+Keywords:	Spirit of Propriety
+Name:	Spirit of Propriety
+RoomDesc:$
+You see the Spirit of Propriety here. 
+
+~
+LookDesc:$
+If your seeing this your shouldn't be here.  Run man Run. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000100000000101010
+AffFlags:	1001000001000
+Race:	Spirit
+Gender:	Neutral
+Position:	Fighting
+DefaultPos:	Fighting
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	300
+	Weight:	50
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	:	7
+	unarmed combat:	7
+BREAK
+#19418
+Keywords:	Spirit of Propriety
+Name:	Spirit of Propriety
+RoomDesc:$
+You see the Spirit of Propriety here. 
+
+~
+LookDesc:$
+If your seeing this your shouldn't be here.  Run man Run. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000100000000101010
+AffFlags:	1001000001000
+Race:	Spirit
+Gender:	Neutral
+Position:	Fighting
+DefaultPos:	Fighting
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	300
+	Weight:	50
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	:	7
+	unarmed combat:	7
+BREAK
+#19419
+Keywords:	Spirit of Propriety
+Name:	Spirit of Propriety
+RoomDesc:$
+You see the Spirit of Propriety here. 
+
+~
+LookDesc:$
+If your seeing this your shouldn't be here.  Run man Run. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000100000000101010
+AffFlags:	1001000001000
+Race:	Spirit
+Gender:	Neutral
+DefaultPos:	Fighting
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	300
+	Weight:	50
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	:	7
+	unarmed combat:	7
+BREAK
+#19420
+Keywords:	Wild Dancer 
+Name:	Wild Dancer
+RoomDesc:$
+A wild dancer is gyrating here. 
+
+~
+LookDesc:$
+Dressed in the high fashion demanded by raving lunatic dancers the sprawl
+around, which is practically drenched in sweat from their frantic dance moves.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1110
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	5
+	Impact:	5
+	Cash:	200
+	Bank:	500
+[SKILLS]
+	unarmed combat:	5
+BREAK
+#19421
+Keywords:	customer officer troll
+Name:	Customs Officer
+RoomDesc:$
+An unhappy troll customs officer 
+
+~
+LookDesc:$
+A very unhappy troll stands here dealing with passengers who missed their
+luggage.  His only joy is make life difficult for them. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10101010000000001010
+AffFlags:	100000100001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	5
+	Str:	10
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	320
+	Weight:	240
+	Level:	2
+	Ballistic:	8
+	Impact:	8
+	Bank:	200
+	Karma:	1
+[SKILLS]
+	pistols:	7
+	unarmed combat:	7
+BREAK
+#19422
+Keywords:	famerican attendant
+Name:	famerican attendant
+RoomDesc:$
+A skinny Famerican airline attendant stands here. 
+
+~
+LookDesc:$
+You notice that she is really thin.  You wonder if she is living on only the
+airline food they serve. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	173
+	Weight:	50
+[SKILLS]
+BREAK
+#19423
+Keywords:	Delta-wing attendant
+Name:	Delta-wing attendant
+RoomDesc:$
+A delta-wing ticket agent stands here. 
+
+~
+LookDesc:$
+Dressed in a spotless uniform she stands here at easy and ready to deal with
+any problem. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	178
+	Weight:	120
+[SKILLS]
+	corporate etiquette:	12
+	elf etiquette:	12
+	tribal etiquette:	12
+	unarmed combat:	20
+BREAK
+#19424
+Keywords:	United Skyways Attendant
+Name:	United Skyways Attendant
+RoomDesc:$
+A United Skyways attendant is working here. 
+
+~
+LookDesc:$
+She looks harried and busy.  You are loath to disturb her but you need a
+ticket. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	88
+[SKILLS]
+BREAK
+#19425
+Keywords:	wizened old man
+Name:	a wizened old man
+RoomDesc:$
+A wizened old man is bent over the till 
+
+~
+LookDesc:$
+Old beyond belief you see this man as a mass of wrinkles.  You wonder if he
+will fall over dead just looking at him. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	125
+	Weight:	75
+[SKILLS]
+BREAK
+#19426
+Keywords:	customs officer troll
+Name:	Customs Officer
+RoomDesc:$
+ An unhappy troll customs officer 
+
+~
+LookDesc:$
+A very unhappy troll stands here dealing with passengers who missed their
+luggage.  His only joy is make life difficult for them. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010100010000000001010
+AffFlags:	100000100000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	5
+	Str:	10
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	300
+	Weight:	240
+	Level:	2
+	Ballistic:	8
+	Impact:	8
+	Bank:	200
+	Karma:	1
+[SKILLS]
+	pistols:	7
+	unarmed combat:	7
+BREAK
+#19427
+Keywords:	Northdeath attendant
+Name:	Northdeath attendant
+RoomDesc:$
+You see a bored northdeath service attendant. 
+
+~
+LookDesc:$
+A bored man stands here looking at you.  You can tell he couldn't care if you
+live or die just pay him. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	171
+	Weight:	90
+	Ballistic:	100
+	Impact:	100
+[SKILLS]
+BREAK
+#19428
+Keywords:	crowd of people
+Name:	crowd of people
+RoomDesc:$
+You find yourself in an unruly crowd of people. 
+
+~
+LookDesc:$
+Ack it's a whole crowd of people.  You wish you had a autocannon right now. 
+~
+ArriveMsg:	rushes in
+LeaveMsg:	rushes out
+MobFlags:	1100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	1000
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#19429
+Keywords:	Man in a fly suit
+Name:	Man in a fly suit
+RoomDesc:$
+A well dressed man in a fly suit. 
+
+~
+LookDesc:$
+You see a businessman in a really fly suit.  He is dressed to kill and looking
+fine. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000100011000000001110
+AffFlags:	1000000100001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	12
+	Str:	12
+	Cha:	12
+	Int:	12
+	Wil:	12
+	Mag:	12
+[POINTS]
+	Height:	170
+	Weight:	150
+	Level:	5
+	Ballistic:	10
+	Impact:	10
+	Cash:	500
+	Karma:	80
+[SKILLS]
+	sorcery:	10
+	armed combat:	10
+	:	7
+BREAK
+#19430
+Keywords:	crowd of people
+Name:	crowd of people
+RoomDesc:$
+You find yourself in an unruly crowd of people. 
+
+~
+LookDesc:$
+Ack it's a whole crowd of people.  You wish you had a autocannon right now. 
+~
+ArriveMsg:	rushes in
+LeaveMsg:	rushes out
+MobFlags:	1100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	1000
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#19431
+Keywords:	crowd of people
+Name:	crowd of people
+RoomDesc:$
+You find yourself in an unruly crowd of people. 
+
+~
+LookDesc:$
+Ack it's a whole crowd of people.  You wish you had a autocannon right now. 
+~
+ArriveMsg:	rushes in
+LeaveMsg:	rushes out
+MobFlags:	1100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	1000
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#19432
+Keywords:	crowd of people
+Name:	crowd of people
+RoomDesc:$
+You find yourself in an unruly crowd of people. 
+
+~
+LookDesc:$
+Ack it's a whole crowd of people.  You wish you had a autocannon right now. 
+~
+ArriveMsg:	rushes in
+LeaveMsg:	rushes out
+MobFlags:	1100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	1000
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#19433
+Keywords:	crowd of people
+Name:	crowd of people
+RoomDesc:$
+You find yourself in an unruly crowd of people. 
+
+~
+LookDesc:$
+Ack it's a whole crowd of people.  You wish you had a autocannon right now. 
+~
+ArriveMsg:	rushes in
+LeaveMsg:	rushes out
+MobFlags:	1100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	1000
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#19434
+Keywords:	crowd of people
+Name:	crowd of people
+RoomDesc:$
+You find yourself in an unruly crowd of people. 
+
+~
+LookDesc:$
+Ack it's a whole crowd of people.  You wish you had a autocannon right now. 
+~
+ArriveMsg:	rushes in
+LeaveMsg:	rushes out
+MobFlags:	1100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	1000
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#19435
+Keywords:	crowd of people
+Name:	crowd of people
+RoomDesc:$
+You find yourself in an unruly crowd of people. 
+
+~
+LookDesc:$
+Ack it's a whole crowd of people.  You wish you had a autocannon right now. 
+~
+ArriveMsg:	rushes in
+LeaveMsg:	rushes out
+MobFlags:	1100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	1000
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#19436
+Keywords:	crowd of people
+Name:	crowd of people
+RoomDesc:$
+You find yourself in an unruly crowd of people. 
+
+~
+LookDesc:$
+Ack it's a whole crowd of people.  You wish you had a autocannon right now. 
+~
+ArriveMsg:	rushes in
+LeaveMsg:	rushes out
+MobFlags:	1100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	1000
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#19437
+Keywords:	crowd of people
+Name:	crowd of people
+RoomDesc:$
+You find yourself in an unruly crowd of people. 
+
+~
+LookDesc:$
+Ack it's a whole crowd of people.  You wish you had a autocannon right now. 
+~
+ArriveMsg:	rushes in
+LeaveMsg:	rushes out
+MobFlags:	1100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	1000
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#19438
+Keywords:	crowd of people
+Name:	crowd of people
+RoomDesc:$
+You find yourself in an unruly crowd of people. 
+
+~
+LookDesc:$
+Ack it's a whole crowd of people.  You wish you had a autocannon right now. 
+~
+ArriveMsg:	rushes in
+LeaveMsg:	rushes out
+MobFlags:	1100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	1000
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#19439
+Keywords:	crowd of people
+Name:	crowd of people
+RoomDesc:$
+You find yourself in an unruly crowd of people. 
+
+~
+LookDesc:$
+Ack it's a whole crowd of people.  You wish you had a autocannon right now. 
+~
+ArriveMsg:	rushes in
+LeaveMsg:	rushes out
+MobFlags:	1100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	1000
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#19440
+Keywords:	crowd of people
+Name:	crowd of people
+RoomDesc:$
+You find yourself in an unruly crowd of people. 
+
+~
+LookDesc:$
+Ack it's a whole crowd of people.  You wish you had a autocannon right now. 
+~
+ArriveMsg:	rushes in
+LeaveMsg:	rushes out
+MobFlags:	1100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	1000
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#19441
+Keywords:	crowd of people
+Name:	crowd of people
+RoomDesc:$
+You find yourself in an unruly crowd of people. 
+
+~
+LookDesc:$
+Ack it's a whole crowd of people.  You wish you had a autocannon right now. 
+~
+ArriveMsg:	rushes in
+LeaveMsg:	rushes out
+MobFlags:	1100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	1000
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#19442
+Keywords:	crowd of people
+Name:	crowd of people
+RoomDesc:$
+You find yourself in an unruly crowd of people. 
+
+~
+LookDesc:$
+Ack it's a whole crowd of people.  You wish you had a autocannon right now. 
+~
+ArriveMsg:	rushes in
+LeaveMsg:	rushes out
+MobFlags:	1100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	1000
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#19443
+Keywords:	crowd of people
+Name:	crowd of people
+RoomDesc:$
+You find yourself in an unruly crowd of people. 
+
+~
+LookDesc:$
+Ack it's a whole crowd of people.  You wish you had a autocannon right now. 
+~
+ArriveMsg:	rushes in
+LeaveMsg:	rushes out
+MobFlags:	1100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	1000
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#19444
+Keywords:	Rich tourist
+Name:	a rich tourist
+RoomDesc:$
+A rich tourist wanders here. 
+
+~
+LookDesc:$
+You can't see how someone this rich comes to tacoma. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	80
+[SKILLS]
+	unarmed combat:	5
+BREAK
+#19445
+Keywords:	Rich Japanese tourist
+Name:	a rich japanese tourist
+RoomDesc:$
+A rich japanese tourist wanders by you. 
+
+~
+LookDesc:$
+You would like to be this rich and well dressed 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001100
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	145
+	Weight:	50
+	Ballistic:	5
+	Impact:	5
+[SKILLS]
+	corporate etiquette:	5
+	unarmed combat:	5
+BREAK
+#19446
+Keywords:	Tourist
+Name:	a tourist
+RoomDesc:$
+A tourist wanders by taking pictures. 
+
+~
+LookDesc:$
+Dressed like and idiot with a camara hanging around his neck you just want to
+choke him.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	100
+	Ballistic:	5
+	Impact:	5
+	Cash:	100
+[SKILLS]
+	:	1
+	unarmed combat:	4
+	:	1
+BREAK
+#19447
+Keywords:	tourist
+Name:	a tourist
+RoomDesc:$
+A tourist wanders by taking pictures 
+
+~
+LookDesc:$
+Dressed like and idiot with a camara hanging around his neck you just want to
+choke him.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000011000
+AffFlags:	100000001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	15
+	Str:	15
+	Cha:	15
+	Int:	15
+	Wil:	15
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	100
+	Level:	5
+	Ballistic:	10
+	Impact:	10
+	Cash:	200
+	Karma:	5
+[SKILLS]
+	unarmed combat:	10
+	:	2
+	:	2
+	:	7
+BREAK
+#19448
+Keywords:	Wooden indian
+Name:	a wooden indian
+RoomDesc:$
+A wooden indian is standing here holding a cigar.  
+
+~
+LookDesc:$
+You wonder if it's healthy for even a wooden indian to be smoking.  Thinking
+about it you wonder if it would be healthy to metion that it's not healthy to
+smoke. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101110000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	4
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	100
+	Weight:	50
+	Ballistic:	100
+	Impact:	100
+	Cash:	5000
+[SKILLS]
+	elf etiquette:	5
+	:	10
+	sorcery:	10
+BREAK
+#19449
+Keywords:	Large talking book
+Name:	Large talking book
+RoomDesc:$
+A large talking book is here. 
+
+~
+LookDesc:$
+A large talking book is here reading.  Studing the powers of universe. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	66
+	Weight:	20
+[SKILLS]
+BREAK
+#19450
+Keywords:	Hostess
+Name:	a lovely hostess
+RoomDesc:$
+A lovely hostess stands here waiting to seat you. 
+
+~
+LookDesc:$
+Looking at her you can't see why she doesn't fall out of the tight black dress
+she is sort of wearing. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100010000000001110
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Taser
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	8
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	40
+	Ballistic:	10
+	Impact:	10
+	Cash:	2000
+	Bank:	5000
+[SKILLS]
+	tasers:	6
+	corporate etiquette:	5
+	media etiquette:	5
+	elf etiquette:	5
+	tribal etiquette:	5
+BREAK
+#19451
+Keywords:	dressed diner
+Name:	a well dressed diner
+RoomDesc:$
+A well dressed man sits here dining on his meal. 
+
+~
+LookDesc:$
+Suave and controlled, impeccably groomed. Compared to the way this man is
+dressed, you wonder why they let you in at all. 
+~
+ArriveMsg:	Glides in
+LeaveMsg:	Saunters
+MobFlags:	10000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	80
+	Ballistic:	5
+	Impact:	5
+	Cash:	200
+	Karma:	1
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#19452
+Keywords:	Waiter
+Name:	a waiter
+RoomDesc:$
+A well dressed waiter works diligently here 
+
+~
+LookDesc:$
+Looking posh and well dressed he glides from table to table serving guests.  
+~
+ArriveMsg:	glides in from
+LeaveMsg:	glides out to
+MobFlags:	1010000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	75
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+BREAK
+#19453
+Keywords:	church delight member
+Name:	Clergy
+RoomDesc:$
+A Church of Infinite Delights member is handing out pamphlets here. 
+
+~
+LookDesc:$
+A member of the Church of Infinite Delights. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	2
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	110
+	Weight:	35
+	Ballistic:	2
+	Impact:	2
+	Cash:	100
+	Bank:	20
+[SKILLS]
+BREAK
+#19454
+Keywords:	church delights member clergy
+Name:	Clergy
+RoomDesc:$
+A Church of Infinite Delights member is handing out pamphlets here. 
+
+~
+LookDesc:$
+A member of the Church of Infinite Delights. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	2
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	100
+	Bank:	20
+[SKILLS]
+BREAK
+#19455
+Keywords:	Attendant
+Name:	a attendant
+RoomDesc:$
+A service attendant 
+
+~
+LookDesc:$
+A well dress Stellar deer attendant.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	50
+[SKILLS]
+BREAK
+#19456
+Keywords:	crowd of people
+Name:	crowd of people
+RoomDesc:$
+You find yourself in an unruly crowd of people. 
+
+~
+LookDesc:$
+Ack it's a whole crowd of people.  You wish you had a autocannon right now. 
+~
+ArriveMsg:	rushes in
+LeaveMsg:	rushes out
+MobFlags:	1100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	1000
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#19457
+Keywords:	crowd of people
+Name:	crowd of people
+RoomDesc:$
+You find yourself in an unruly crowd of people. 
+
+~
+LookDesc:$
+Ack it's a whole crowd of people.  You wish you had a autocannon right now. 
+~
+ArriveMsg:	rushes in
+LeaveMsg:	rushes out
+MobFlags:	1100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	1000
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#19458
+Keywords:	crowd of people
+Name:	crowd of people
+RoomDesc:$
+You find yourself in an unruly crowd of people. 
+
+~
+LookDesc:$
+Ack it's a whole crowd of people.  You wish you had a autocannon right now. 
+~
+ArriveMsg:	rushes in
+LeaveMsg:	rushes out
+MobFlags:	1100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	1000
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#19459
+Keywords:	crowd of people
+Name:	crowd of people
+RoomDesc:$
+You find yourself in an unruly crowd of people. 
+
+~
+LookDesc:$
+Ack it's a whole crowd of people.  You wish you had a autocannon right now. 
+~
+ArriveMsg:	rushes in
+LeaveMsg:	rushes out
+MobFlags:	1100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	1000
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#19460
+Keywords:	crowd of people
+Name:	crowd of people
+RoomDesc:$
+You find yourself in an unruly crowd of people. 
+
+~
+LookDesc:$
+Ack it's a whole crowd of people.  You wish you had a autocannon right now. 
+~
+ArriveMsg:	rushes in
+LeaveMsg:	rushes out
+MobFlags:	1100000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	1000
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#19461
+Keywords:	orc attendant
+Name:	a large orc
+RoomDesc:$
+A large orc attendant 
+
+~
+LookDesc:$
+It's amazing that he never seems to shed on the icecream.  Even with all that
+hair.  You wonder if there is magic involved. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#19462
+Keywords:	Ares Combat Mage
+Name:	an Ares combat mage
+RoomDesc:$
+An Ares combat mage looking for his flight. 
+
+~
+LookDesc:$
+As you see him walking thru the crowds they part like water before a ship.  He
+walks with power and strength. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1110100000011100
+AffFlags:	1000000000001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Crush
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	7
+	Str:	5
+	Cha:	10
+	Int:	20
+	Wil:	20
+	Mag:	20
+[POINTS]
+	Height:	143
+	Weight:	80
+	Ballistic:	15
+	Impact:	17
+	Karma:	20
+[SKILLS]
+	sorcery:	20
+	conjuring:	10
+	:	3
+	armed combat:	5
+	unarmed combat:	5
+BREAK
+#19463
+Keywords:	middle manager
+Name:	a middle manager
+RoomDesc:$
+You see a middle manager sitting here. 
+
+~
+LookDesc:$
+Looking at him in his suit with a power tie and slick shined boots. You wonder
+why he's not somewhere giving someone the shaft. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	8
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	250
+	Weight:	200
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	armed combat:	8
+	pole arms:	5
+	corporate etiquette:	8
+BREAK
+#19464
+Keywords:	heavy salesman
+Name:	a heavy set salesman
+RoomDesc:$
+A heavy set salesman 
+
+~
+LookDesc:$
+Solid build and towering muscle you can tell he has moved around a lot of
+luggage in his time. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	250
+	Weight:	400
+[SKILLS]
+BREAK
+END

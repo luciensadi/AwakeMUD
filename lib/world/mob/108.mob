@@ -1,0 +1,1062 @@
+#11100
+Keywords:	guard aztechnology man black brown
+Name:	an aztechnology security guard
+RoomDesc:$
+A guard dressed black and red Aztech colours watches you carefully. 
+
+~
+LookDesc:$
+The guard maintains a stern, diligent facade, even as you stare at him
+curiously. He is dressed in an ironed, tucked in suit of red and black
+fibre, that gives no camouflage to the heavy armour beneath it.
+~
+ArriveMsg:	strolls in from
+LeaveMsg:	strolls
+MobFlags:	1010000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	4
+	Cha:	0
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	68
+	Ballistic:	6
+	Impact:	6
+	Bank:	200
+	Karma:	48
+[SKILLS]
+	sub-machine guns:	7
+BREAK
+#11101
+Keywords:	guardsman man aztec tribal
+Name:	an aztec guardsman
+RoomDesc:$
+A tribal guardsman loiters around, waiting for his next catch. 
+
+~
+LookDesc:$
+The guardsman is dressed in a snakeskin garment, twisted around his body.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	0
+	Str:	1
+	Cha:	0
+	Int:	1
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	9
+[SKILLS]
+BREAK
+#11102
+Keywords:	fence bamboo tall rigid
+Name:	a bamboo fence
+RoomDesc:$
+A tall, rigid bamboo fence blocks your path.
+
+~
+LookDesc:$
+The fence stands tall and rigid, apparently unaware of your presence.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	0
+	Str:	1
+	Cha:	0
+	Int:	1
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	4
+[SKILLS]
+BREAK
+#11103
+Keywords:	boar wild angry
+Name:	a wild boar
+RoomDesc:$
+An angry wild boar stands and glares at you.
+
+~
+LookDesc:$
+A few hundred pounds of annoyed muscle and bone scratches the dusty
+floor with a dirty old hoof. It grunts and oinks about, peering at
+you continuously.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	8
+[SKILLS]
+BREAK
+#11104
+Keywords:	crocodile huge dark green
+Name:	a crocodile
+RoomDesc:$
+A huge dark green crocodile slides up to you cautiously.
+
+~
+LookDesc:$
+The crocodile slithers around in the mud, quietly figuring out your
+position and purpose.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	4
+[SKILLS]
+BREAK
+#11105
+Keywords:	bog vast
+Name:	a green swamp
+RoomDesc:$
+You halt your steps just in time to miss falling into a vast bog. 
+
+~
+LookDesc:$
+A huge, expansive, putrid swamp of foul-smelling green slime. Nice.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11106
+Keywords:	bog steaming 
+Name:	a steaming bog
+RoomDesc:$
+A steaming bog bubbles and ripples before you.
+
+~
+LookDesc:$
+ôÿÿ
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11107
+Keywords:	panther black
+Name:	a panther
+RoomDesc:$
+A black panther crouches above you tensely.
+
+~
+LookDesc:$
+A sleek black panther hangs in the tree above you, staring down at you
+figure as you notice it. Shining black fur and deep red-coal eyes gleam
+out at you, covering a tight skeleton of muscle and tense sinew.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11108
+Keywords:	naga snake coiled green
+Name:	a naga
+RoomDesc:$
+A thickly coiled green snake shifts its head in your direction. 
+
+~
+LookDesc:$
+A gigantic Naga sweeps around a tall jungle tree, coiling its sleek,
+muscular body around and over branches.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11109
+Keywords:	anaconda gigantic
+Name:	an anaconda
+RoomDesc:$
+A gigantic anaconda wraps itself around a tree and pokes its eyes at you. 
+
+~
+LookDesc:$
+As you move through the jungle, the sight of a snake unlike any you've
+ever seen before halts you in your tracks. Its sides reach all the way
+around the tree, almost 5 feet in width, on every inch.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	9
+[SKILLS]
+BREAK
+#11110
+Keywords:	serpent giant feathered slim
+Name:	a feathered serpent
+RoomDesc:$
+A giant feathered serpent climbs slowly upwards, to get a better look at you.
+
+~
+LookDesc:$
+A slim feathered serpent hisses at you, obviously unnerved by your
+intrusion.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11111
+Keywords:	guard leopard armoured heavily
+Name:	a leopard guard
+RoomDesc:$
+A heavily armoured Leopard Guard eyes you quietly. 
+
+~
+LookDesc:$
+The Leopard Guards are the focus and pinnacle of Aztechnology's military
+section, reliable and efficient killers in all known fields. They sport
+several melee weapons, securely attached to their body armour, as well
+as a sufficient supply of ammunition to support their chosen firearm.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010101110100001011000
+AffFlags:	1000000100001000001000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	10
+[POINTS]
+	Height:	0
+	Weight:	90
+	Ballistic:	11
+	Impact:	11
+[SKILLS]
+	pistols:	10
+BREAK
+#11112
+Keywords:	captain guard leopard 
+Name:	a leopard guard captain
+RoomDesc:$
+A Leopard Guard Captain checks all his troops' positions. 
+
+~
+LookDesc:$
+The captain sports the same golden yellow body armour as the Leopard
+guards, save for the silver stars on his shoulder. Rather than the
+traditional decoration on the chest, the captain has three stars
+pinned to his right shoulder. He also seems to be sporting a more
+advanced weapon.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	8
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	firearms:	20
+	unarmed combat:	20
+	armed combat:	20
+BREAK
+#11113
+Keywords:	operator surveillance tired alert
+Name:	a surveillance operator
+RoomDesc:$
+A tired, yet alert surveillance operator checks his screen. 
+
+~
+LookDesc:$
+The surveillance operator checks all data bars on the monitor before
+him, checking essential life levels for all conditioned sectors. The
+man basically has to sit in front of this screen 24/7, or suffer
+the dire consequences of sleeping on the job.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	6
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	67
+	Ballistic:	3
+	Impact:	2
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#11114
+Keywords:	secretary woman
+Name:	a secretary
+RoomDesc:$
+A secretary files her nails quietly behind a polished steel desk. 
+
+~
+LookDesc:$
+A refined, expensively dressed woman sits behind the counter, checking
+her daily schedule for the day.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	3
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	55
+	Ballistic:	2
+	Impact:	2
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#11115
+Keywords:	employee aztechnology man
+Name:	an aztechnology employee
+RoomDesc:$
+An Aztechnology employee strolls past you casually. 
+
+~
+LookDesc:$
+The Aztechnology employee is one of the highest ranking in the city for
+efficiency, work force, and performance. These guys spend their lives
+working within the air-conditioned confines of the arcology, deeply
+rooted to the company and its executives.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000010001100
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	6
+	Str:	6
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	69
+	Ballistic:	4
+	Impact:	4
+	Cash:	49
+[SKILLS]
+	unarmed combat:	6
+BREAK
+#11116
+Keywords:	mage man tall 
+Name:	a tall mage
+RoomDesc:$
+A tall mage dressed in formal corporate robes walks quietly. 
+
+~
+LookDesc:$
+There are no real discerning features to tell you about this guy, save
+for his dark blue robes that sweep down to his feet, dragging lightly
+against the carpet.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10100010100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	7
+	Mag:	7
+[POINTS]
+	Height:	0
+	Weight:	77
+	Ballistic:	6
+	Impact:	7
+	Bank:	200
+[SKILLS]
+	unarmed combat:	6
+	sorcery:	7
+BREAK
+#11117
+Keywords:	elder mage man old wrinkled
+Name:	a mage elder
+RoomDesc:$
+The wrinkled face of a Mage Elder peeks out from under a darkened robe. 
+
+~
+LookDesc:$
+The biggest noticeable feature about this mage, is his age. This guy is
+really, really old. Most likely has also seen a hell of a lot of action. His
+face is carved into a deep scowl, by time, by wounds, probably by the company.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101011100000001000
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	8
+	Mag:	9
+[POINTS]
+	Height:	0
+	Weight:	67
+	Ballistic:	6
+	Impact:	5
+	Bank:	200
+	Karma:	67
+[SKILLS]
+	unarmed combat:	7
+	sorcery:	7
+BREAK
+#11118
+Keywords:	apprentice mage young yellow
+Name:	a mage apprentice
+RoomDesc:$
+A young mage in yellow robes strolls casually through the hallway. 
+
+~
+LookDesc:$
+The man beneath the lighter shade of yellow robes looks at you, with  a
+curiosity you wouldn't expect from the elder mages around. Almost taken off
+guard by your appearance, his countenance looks much like that of a
+still-learner, only just coming to grasp with the confined life of an
+Aztechnology Mage. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11000010001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	0
+	Weight:	66
+	Ballistic:	5
+	Impact:	6
+	Cash:	10
+	Bank:	50
+[SKILLS]
+	unarmed combat:	6
+	sorcery:	6
+BREAK
+#11119
+Keywords:	librarian short man
+Name:	the librarian
+RoomDesc:$
+Draped in deep black furs, the Librarian studies a huge tome in silence. 
+
+~
+LookDesc:$
+The age old tradition for a mage to look a little bit too weird has stayed
+with the profession over the centuries. Even in this day and age, the
+librarian is still the creepiest guy you'll meet for quite some time. Obsessed
+with books and their protection, these guys are more than fanatics for the
+oddest of categories. At least since trainspotters died out. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101110100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	6
+	Str:	7
+	Cha:	8
+	Int:	9
+	Wil:	9
+	Mag:	9
+[POINTS]
+	Height:	0
+	Weight:	78
+	Ballistic:	5
+	Impact:	5
+	Cash:	100
+	Karma:	72
+[SKILLS]
+	clubs:	7
+	sorcery:	8
+BREAK
+#11120
+Keywords:	service drone
+Name:	a service drone
+RoomDesc:$
+A service drone whirrs quietly about. 
+
+~
+LookDesc:$
+The service drone whirrs around quietly, making only the slightest hum as it
+gently whisks random items of luxury around the hallways. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000000000000001000
+AffFlags:	0
+Race:	Undefined
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	77
+	Ballistic:	2
+	Impact:	3
+[SKILLS]
+BREAK
+#11121
+Keywords:	guard surveillance aztechnology man
+Name:	a surveillance guard
+RoomDesc:$
+A surveillance guard monitors his perimeter diligently. 
+
+~
+LookDesc:$
+The guard checks his perimeter carefully, before turning and again checking
+his weak side. He appears totally awake and diligent, probably enhanced with
+various stamina boosters and advanced cyberware. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10101001100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	5
+	Str:	6
+	Cha:	2
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	79
+	Ballistic:	6
+	Impact:	5
+	Bank:	250
+[SKILLS]
+	shotguns:	5
+BREAK
+#11122
+Keywords:	guard floor aztechnology man
+Name:	a floor guard
+RoomDesc:$
+A floor guard monitors the hallways. 
+
+~
+LookDesc:$
+While it is only a simple job, the floor guard is on a 24/7 watch, taking care
+of the millions of commuters that pass through their floor. Definitely not as
+lazy and stupid as they might seem to a stranger. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000011100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bludgeon
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	77
+	Ballistic:	10
+	Impact:	12
+	Cash:	20
+	Bank:	150
+	Karma:	20
+[SKILLS]
+	pistols:	5
+BREAK
+#11123
+Keywords:	maria cruzan slim professional woman
+Name:	Maria Cruzan
+RoomDesc:$
+A slim, professional-looking woman looks you over. 
+
+~
+LookDesc:$
+You recognise this woman from the numerous times you've spotted her on the
+daily news. Her face is a lot softer-looking than on the big screen, but
+considering she's the Executive Officer of Aztechnology Public Relations,
+she's probably not the nicest person to ask questions. Her thick red hair is
+swept back and held against her head with extra-hold spray, and she wears a
+tantalizing fragrance that almost drags you along behind her. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	55
+	Ballistic:	10
+	Impact:	10
+	Bank:	400
+	Karma:	88
+[SKILLS]
+	unarmed combat:	10
+BREAK
+#11124
+Keywords:	emilio pascua greasy man
+Name:	Emilio Pascua
+RoomDesc:$
+A greasy Emilio Pascua winks at you. 
+
+~
+LookDesc:$
+Emilio Pascua looks like one of the scummiest people you've ever met, second
+to some of the more evil mercs straight from Hell. Thin, tall, and terribly
+scrawny, he most likely uses the flimsy carapace as a cover for enhanced cyber
+implants. He wears sterling silver-rimmed glasses, and pokes his dark eyes at
+you inquisitively, as if you don't actually have a right to look back at him.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101011100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	12
+	Str:	12
+	Cha:	12
+	Int:	12
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	59
+	Ballistic:	12
+	Impact:	12
+	Bank:	200
+[SKILLS]
+	unarmed combat:	12
+BREAK
+#11125
+Keywords:	unfinished mob
+Name:	Salvador Ramirez
+RoomDesc:$
+An unfinished mob stands here.
+LookDesc:$
+As the Chief Executive Officer of Finance for the company, Ramirez stands
+pretty high up on the rat-ladder. You've spotted him a couple of times
+reassuring the press as to Aztechnology's apparent stock instability. He wears
+a coal black suit, with a white shirt and silver tie, strolling casually yet
+powerfully through the halls. He looks you over quickly, but if you're standin
+next to him, then there's obviously nothing wrong with you. 
+
+~
+LookDesc:$
+He looks pretty unfinished.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11126
+Keywords:	galvez avelino stressed official man
+Name:	Avelino Galvez
+RoomDesc:$
+A very stressed-out Aztechnology official stares at you glumly. 
+
+~
+LookDesc:$
+Chief Technology Advisor to the President of the company, this guy oversees
+most of the stuff you'd probably be interested in. Planes, guns, cyberware,
+bioware, AI, advanced matrix technology, that sort of petty stuff. Funnily
+enough, with a job like that, this is one guy with whom the stress really does
+make an appearance. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000010001000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	7
+	Str:	7
+	Cha:	7
+	Int:	7
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	77
+	Ballistic:	18
+	Impact:	18
+	Bank:	200
+[SKILLS]
+	unarmed combat:	12
+BREAK
+#11127
+Keywords:	martinez reynaldo tall man aztechnology
+Name:	Reynaldo Martinez
+RoomDesc:$
+A tall man flanked by nine bodyguards stares at you quickly, and piercingly. 
+
+~
+LookDesc:$
+You stand before one of the most powerful, influential, and important people
+of your world today. Cybernetically enhanced to an impressive 5'9, Reynaldo
+Martinez isn't really what you might expect of one of the few squillionaires
+left on the planet. Instead, apart from his height, he is remarkably normal.
+He has greying white hair, swept backwards and tied up into a ponytail, that
+that hangs comfortably over his navy blue silk suit. In any case, as you meet
+him, you also meet the eight bodyguards flanking him, guns raised and
+obviously worth a couple of 'mill in cyberware alone.Even blinking
+aggressively would not be wise. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#11128
+Keywords:	juan gonzales jr pudgy aztlaner
+Name:	Juan Gonzalez Jr.
+RoomDesc:$
+A pudgy old Aztlaner stands here. 
+
+~
+LookDesc:$
+A fat Aztlaner with a face tattoo of teardrops, eight total on his left cheek.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	5
+	Str:	8
+	Cha:	2
+	Int:	6
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Ballistic:	4
+	Impact:	3
+[SKILLS]
+BREAK
+#11140
+Keywords:	jose trujillo aztechnology scientist
+Name:	Jose Trujillo
+RoomDesc:$
+An Aztechnology hermetic scientist scours through the data. 
+
+~
+LookDesc:$
+Tall with black hair, wearing a white mage lab-coat he studies data closely,
+to gain new insight into the Cerberus Project. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	8
+	Str:	12
+	Cha:	12
+	Int:	10
+	Wil:	12
+	Mag:	8
+[POINTS]
+	Height:	186
+	Weight:	90
+[SKILLS]
+	sorcery:	8
+	unarmed combat:	8
+BREAK
+END

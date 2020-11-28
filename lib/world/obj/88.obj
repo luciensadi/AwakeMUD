@@ -1,0 +1,48 @@
+#8800
+Keywords:	key big rusty skeleton
+Name:	a big rusty skeleton key
+RoomDesc:$
+A big rusty skeleton key has been left sitting here.~
+LookDesc:$
+It's an awfully big, and awfully rusty, having been exposed heavily to the
+elements over its many, many years of use. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.20
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8801
+Keywords:	key padlock sturdy
+Name:	a sturdy padlock key
+RoomDesc:$
+A sturdy padlock key has been left behind here.~
+LookDesc:$
+It looks like a metal padlock key, which goes to... You guessed it, a padlock.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

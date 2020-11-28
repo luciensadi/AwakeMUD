@@ -1,0 +1,33 @@
+#38279
+Keeper:	-1
+ProfitBuy:	1.000000
+ProfitSell:	1.000000
+Random:	0
+Open:	6
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Try again, I got tables waiting...
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	10000000000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	1938
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	13415
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	38200
+		Type:	Always
+		Stock:	0
+BREAK
+END

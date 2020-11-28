@@ -1,0 +1,830 @@
+#3301
+Keywords:	key exhibit
+Name:	an exhibit key
+RoomDesc:$
+A small steel key lies here discarded.~
+LookDesc:$
+It's a rather non-descript key, as plain and common as any other. It has an
+older design to it, not only for that nostalgic appeal, but the fact that it
+goes to an old fashioned lock to match. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	100
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	
+	Desc:$
+~
+BREAK
+#3302
+Keywords:	table picnic macroplast
+Name:	a macroplast picnic table
+RoomDesc:$
+A large table offers a place to sit here.~
+LookDesc:$
+This heavy picnic table is conveniently parked right in the shade so visitors
+can kick up their feet on its spacious seats and take a load off. It is made
+of some kind of macroplast compound, which was filled into a mold and cured to
+create a single piece of furniture. The legs are bolted to the ground, just in
+case someone tries to steal it, for whatever reason that may be. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	400.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3303
+Keywords:	key
+Name:	a steel key
+RoomDesc:$
+A small steel key marked 'security office' lies here.~
+LookDesc:$
+It's a plain old fashioned steel key, a label upon which reads: "Security
+Office". 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3304
+Keywords:	key holding pen
+Name:	a holding pen key
+RoomDesc:$
+A large key on an iron ring lies on a table here.~
+LookDesc:$
+A large old fashioned key is slapped onto a wide ring of iron, harkening back
+to the olden days of jails. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3305
+Keywords:	spatula
+Name:	a spatula
+RoomDesc:$
+A greasy spatula has been misplaced by a cook here.~
+LookDesc:$
+This old spatula has certainly seen better days. It is caked with grease and
+other food oils, along with charred bits and pieces of what you can only
+assume is what was originally a hamburger. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#3307
+Keywords:	plate bone dermal armoured
+Name:	an armoured dermal bone plate
+RoomDesc:$
+An armoured dermal bone plate has been stripped from some hapless creature and tossed here.~
+LookDesc:$
+This thick and sturdy armoured slab is actually a dermal bone plate from a
+juggernaut, a massive awakened version of the common armadillo. It is
+surprisingly durable and even a modern knife would have quite a bit of trouble
+making a scratch in it. Hell, it'd probably stop a small arms round in its
+tracks. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	3500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	4
+	Val6:	3
+	Val7:	10
+BREAK
+#3308
+Keywords:	wacky wall walker
+Name:	wacky wall walker
+RoomDesc:$
+A wacky wall-walker is stuck here.~
+LookDesc:$
+It's a wacky wall walker! What does it do, you ask? Well..... It kinda does...
+nothing. They have small sticky pads, so when you slap it onto the wall
+gravity will take hold and make it flop down, where it'll then stick and wait
+to repeat the process, so as its namesake implies, it's a wall walker. Someone
+is going to make a fortune off of these babies.. Definitely. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3309
+Keywords:	fake unicorn horn
+Name:	a fake unicorn horn
+RoomDesc:$
+A plastic unicorn horn is here.~
+LookDesc:$
+This is a magical unicorn horn.. As long as you look past the fact that it's
+made of plastic, and has 'Made in China' stamped on the bottom of it. Feel
+free to wear it on your head and make a fool of yourself, or even better, use
+it as a makeshift shiv to stab people who annoy you. 
+~
+Type:	Weapon
+WearFlags:	10000000010001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val3:	2
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#3310
+Keywords:	kazoo
+Name:	a kazoo
+RoomDesc:$
+A kazoo lies discarded here.~
+LookDesc:$
+It's a kazoo! Better known as the most annoying musical instrument ever
+invented by mankind, which is sure to drive any level headed parent insane and
+swerve their car into oncoming traffic after having to listen to their
+children play it the entire car ride home. Enjoy. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3311
+Keywords:	bombardier stuffed plushie
+Name:	a stuffed bombardier plushie
+RoomDesc:$
+A plush, stuffed bombardier has been left here by some child.~
+LookDesc:$
+This plushie resembles a bombardier, which appears to be a normal flying
+squirrel upon first glance, and even after the second and third. It is stuffed
+full of a mixture of cotton and plastic beads, making it soft to the squeeze.
+Admittedly, it is rather cute. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3312
+Keywords:	shirt t-shirt
+Name:	a t-shirt with '^WI ^R<3^W Seattle Zoo^N' printed on the front
+RoomDesc:$
+An 'I love the Seattle Zoo' T-shirt is here.~
+LookDesc:$
+This rather cheap t-shirt is constructed out of what you assume is cotton
+(though the tag on it doesn't even attempt to claim it as such..). Printed
+onto the front of it is a stylized red heart in an attempt to be cute and hip,
+including the insinuation that the wearer loves the Seattle Zoo. 
+~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3313
+Keywords:	soyburger burger big kahuna
+Name:	a big kahuna soy burger
+RoomDesc:$
+A soyburger sits here, unattended.~
+LookDesc:$
+It looks neither big nor kahuna-ish, but it's definitely a burger, or at the
+least, shaped like one. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.20
+	Barrier:	3
+	Cost:	60
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#3314
+Keywords:	soyshake cold
+Name:	a cold soyshake
+RoomDesc:$
+A yummy soyshake is here.~
+LookDesc:$
+This milkshake isn't actually made of real milk, but rather, soymilk.
+Fortunately, it still seems to be cold, so help yourself to a tip before it
+melts. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	8
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	7
+BREAK
+#3315
+Keywords:	fish sandwich
+Name:	A fish sandwich
+RoomDesc:$
+A 'tasty' looking fish sandwich is here.~
+LookDesc:$
+It appears to be fish... But, you aren't sold on the sales pitch yet. In
+fact.. After taking a bite, you're almost positive it isn't fish, or edible
+for that matter. Time to slather it in ketchup or mayonaise to drown out those
+trivial details. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	toxic wastes
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	12
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+BREAK
+#3317
+Keywords:	cola cheep-o can
+Name:	a can of Cheep-O Cola
+RoomDesc:$
+A can of Cheep-O Cola is sitting here.~
+LookDesc:$
+A red-and-white soda can with the Cheep-o Cola logo printed on it. Generic
+soda at it's finest -- or, more accurately, it's most mediocre. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	2
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	6
+	Val2:	1
+BREAK
+#3318
+Keywords:	jersey
+Name:	a Philadelphia Eagles jersey
+RoomDesc:$
+A jersey is here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3319
+Keywords:	broom
+Name:	a long handled broom
+RoomDesc:$
+A broom is leaning against a wall here, waiting to be used.~
+LookDesc:$
+This broom features a very long wooden handle for getting to those hard to
+reach places, it also appears to be very well used. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+	Val3:	1
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#3320
+Keywords:	scooper pooper heavy duty
+Name:	a heavy duty pooper scooper
+RoomDesc:$
+A heavy duty pooper scooper is leaning upright against the wall here.~
+LookDesc:$
+It's a pooper scooper! A pretty damn heavy duty one too, afterall, paranormal
+animals result in paranormal sized piles of poo to clean up. It could probably
+be used to bludgeon someone with, or if you just want to be an ass and
+randomly poke people with it and make them smell awful. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	35
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#3321
+Keywords:	head mascot grizzly bear
+Name:	A large, ^ybrown^N grizzly bear mascot head
+RoomDesc:$
+^gA large, ^ybrown^g grizzly bear mascot head is sitting here.^N~
+LookDesc:$
+This massive plushie head appears to have once been crafted in the image of a
+grizzly bear, which was worn by the zoo employees during specials at the zoo
+to help with revenue and entertain the kiddies. It hasn't been used in quite
+some time, as the ragged and mangled ears on the bear head can attest to. It
+certainly hasn't been cleaned in quite some time either, as bits and particles
+of dust waft off of it when its moved. It features no mouth hole, and its eyes
+are just little slits, allowing the wearer to see just a little bit of whats
+infront of them, and that's about it. While it may have once been cute and
+child friendly, its mangled and rather creepy appearance will probably only
+frighten them and cause them to have nightmares for several weeks. Hence the
+reason it's been stuffed into storage for so long. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	12
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#3322
+Keywords:	suit mascot grizzly bear mangled
+Name:	a rather mangled ^ybrown^N grizzly bear mascot outfit
+RoomDesc:$
+^gA mangled ^ybrown^g grizzly bear mascot outfit has been tossed into the corner here.^N~
+LookDesc:$
+After years of abuse and poor handling, this once child friendly grizzly bear
+mascot outfit is mangled to hell and quite dirty. It has been stretched out a
+little, and will undoubtedly drape and hang loosely on the frame of anyone
+wearing it. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	6
+	Val2:	2
+	Val3:	2
+	Val4:	4
+	Val6:	2
+	Val7:	12
+BREAK
+#3380
+Keywords:	jug water
+Name:	a water jug
+RoomDesc:$
+A jug of water is here.~
+LookDesc:$
+A large plastic jug used for holding water. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.20
+	Barrier:	3
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+BREAK
+#3381
+Keywords:	burrito beef cheese
+Name:	a beef and cheese burrito
+RoomDesc:$
+A burrito has been left sitting here.~
+LookDesc:$
+It's a burrito alright, but what isn't clear is what exactly the meat is
+inside of it.. It's supposedly beef, but by the looks of things, you're not
+entirely sold on that fact. The cheese is probably fake too, but, you get what
+you pay for. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+BREAK
+#3383
+Keywords:	biscuit gorilla
+Name:	a gorilla biscuit
+RoomDesc:$
+A biscuit in the shape of a gorilla has been left here.~
+LookDesc:$
+It's a biscuit cooked vaguely in the shape of a gorilla. Obviously they used
+your mothers face to press these. Ohhhhhhh! Burn. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.05
+	Barrier:	3
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#3384
+Keywords:	crap
+Name:	a pile of crap
+RoomDesc:$
+A steaming, smelly pile of crap is here.~
+LookDesc:$
+It's a big ol' honkin pile o' poopie. If you've seen one, you've seen em all.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.20
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#3390
+Keywords:	slippers
+Name:	Animaniac slippers
+RoomDesc:$
+Slippers~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3391
+Keywords:	cutoff
+Name:	Cut-off sweatpants
+RoomDesc:$
+Sweatpants~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3392
+Keywords:	stein
+Name:	a Huge Eagle's beer stein
+RoomDesc:$
+A stein~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Worn
+WearFlags:	100000000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3393
+Keywords:	hat
+Name:	a Philadelphia Eagles Hat
+RoomDesc:$
+A hat~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3394
+Keywords:	stick
+Name:	a Big stick with a Burlap Bag on the end
+RoomDesc:$
+Stick~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val3:	300
+BREAK
+#3396
+Keywords:	terrible towel
+Name:	a Terrible Towel
+RoomDesc:$
+A Terrible Towel lays here.~
+LookDesc:$
+GO STEELERS!!!!!!!!!!!!!!!!!! 
+WHUP DEM COWGIRL'S ASSES!!!!!!
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

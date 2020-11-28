@@ -1,0 +1,188 @@
+#70000
+Keywords:	valjean satyr smiling
+Name:	Valjean
+RoomDesc:$
+A smiling satyr stands here, opening the door for everyone who wishes to come
+in. 
+
+~
+LookDesc:$
+Not something you see everyday, this satyr stands here next to the door,
+opening it for those that are allowed to enter. He will let you know if you
+can enter or not, and if you are not allowed, he will dump you back outside on
+your big or little behind. Just to look at him he doesn't seem to be much, but
+he can more than handle himself to kep the unwanted rifraff out of this
+establishment. And never does he lose that smile on his face. He welcomes each
+person inside with a "How are you doing on this fine day?" 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Satyr
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	4
+	Cha:	5
+	Int:	6
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	162
+	Weight:	60
+[SKILLS]
+	athletics:	2
+	unarmed combat:	6
+	sub-machine guns:	7
+	pistols:	7
+BREAK
+#70001
+Keywords:	Chrystal Sharde slender woman fragile
+Name:	Chrystal Sharde
+RoomDesc:$
+A slender woman with a fragile apperance serves you with a smile 
+
+~
+LookDesc:$
+This woman looks as fragile as her name. She looks very fragile and he skin
+color is glassy looking, but she greets each customer with a smile, even those
+with a bad temperment. It's just in her nature to be friendly to everyone she
+meets. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	5
+	Str:	3
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	55
+[SKILLS]
+	athletics:	2
+	unarmed combat:	4
+BREAK
+#70002
+Keywords:	Dawn Edwards woman young
+Name:	Dawn Edwards
+RoomDesc:$
+A young, brown haired woman asks if she can help you as you come in. 
+
+~
+LookDesc:$
+A little taller than most women, Dawn has shoulder length brown hair and large
+brown eyes. She has a wondeful smile on her face most of the time, has a quick
+wit, and won't hesitate to put you in your place if you deserve it. She goes
+about her work with pride and from the number of things that move out of this
+place, and the boxes and crates of things seen in here, you can tell she does
+a great job. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	6
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	60
+[SKILLS]
+	athletics:	2
+	shotguns:	5
+	pistols:	5
+	unarmed combat:	4
+BREAK
+#70003
+Keywords:	frail old keymaster
+Name:	A frail, old keymaster
+RoomDesc:$
+A frail, older man sits at the table, training his new apprentice 
+
+~
+LookDesc:$
+Short, frail looking, and stooped over, this man is the keymaster, but even
+masters need to pass their knowledge on to someone. He has wispy, gray hair,
+steely gray eyes, arthritic hands, and always seems to wear the same wife
+beater shirt and gray pair of slacks. On his right middle finger is a gold
+ring with the letters ^YDE^n in the center, showing him to be a company man. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	4
+	Str:	2
+	Cha:	2
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	50
+[SKILLS]
+BREAK
+#70004
+Keywords:	young blonde apprentice
+Name:	A young apprentice keymaster
+RoomDesc:$
+A young, blonde headed man tries to do as his master shows him. 
+
+~
+LookDesc:$
+Well, at least you can give this kid an "A" for effort. With sweat running
+down into his eyes and a stern look of concentration on his face. this kid
+tries and tries, but just can't seem to get it right. He has broken and
+discarded keys littered all around him, and another in his hand that he is
+trying to make. From time to time he brushes his blonde locks out of his blue
+eyes so he can keep looking at what he is doing. Maybe one day he will get it
+right and the old man can retire, but at this pace, the old man will die long
+before he does. On his right middle finger is a ring with the letters ^YDE^n in
+the center, showing him to be a company man too. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	65
+[SKILLS]
+BREAK
+END

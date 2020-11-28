@@ -33,7 +33,7 @@ AttackType:	Pistol
 	Bank:	50
 [SKILLS]
 	firearms:	4
-	£":	5
+	unarmed combat:	5
 BREAK
 #1801
 Keywords:	employee salesman
@@ -139,7 +139,7 @@ DefaultPos:	Standing
 	Cash:	5
 	Bank:	15
 [SKILLS]
-	£":	3
+	unarmed combat:	3
 BREAK
 #1804
 Keywords:	customer
@@ -174,7 +174,7 @@ DefaultPos:	Standing
 	Impact:	1
 	Cash:	75
 [SKILLS]
-	£":	1
+	unarmed combat:	1
 BREAK
 #1805
 Keywords:	sentinel soldier
@@ -285,8 +285,8 @@ LookDesc:$
 Given the general reputation of Knight-Errant Security, you'd
 likely be better off leaving him alone.
 ~
-ArriveMsg:	arrives from
-LeaveMsg:	credstick
+ArriveMsg:	Ð†—
+LeaveMsg:	
 MobFlags:	100011000000001010
 AffFlags:	0
 Race:	Human
@@ -306,11 +306,10 @@ AttackType:	Pistol
 	Weight:	0
 	Ballistic:	4
 	Impact:	4
-	Cash:	500
-	Karma:	10
+	Cash:	20
 [SKILLS]
 	firearms:	6
-	£":	5
+	unarmed combat:	5
 BREAK
 #1809
 Keywords:	guard security knight-errant knight errant
@@ -348,7 +347,7 @@ AttackType:	Pistol
 	Karma:	10
 [SKILLS]
 	firearms:	6
-	£":	5
+	unarmed combat:	5
 BREAK
 #1810
 Keywords:	cashier employee
@@ -560,7 +559,7 @@ AttackType:	Pistol
 	Cash:	75
 [SKILLS]
 	firearms:	6
-	£":	5
+	unarmed combat:	5
 BREAK
 #1816
 Keywords:	clerk sales zalensky
@@ -609,7 +608,7 @@ scalpel between his fingers.
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1010
+MobFlags:	1011
 AffFlags:	0
 Race:	Human
 Gender:	Male
@@ -628,8 +627,8 @@ DefaultPos:	Standing
 	Cash:	500
 	Bank:	600
 [SKILLS]
-	£":	9
-	£":	6
+	:	9
+	:	6
 	biotech:	7
 BREAK
 #1818
@@ -665,7 +664,7 @@ DefaultPos:	Standing
 	Bank:	175
 [SKILLS]
 	firearms:	5
-	£":	6
+	unarmed combat:	6
 BREAK
 #1819
 Keywords:	elf grieving
@@ -698,7 +697,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Bank:	25
 [SKILLS]
-	£":	4
+	unarmed combat:	4
 BREAK
 #1820
 Keywords:	troll visitor
@@ -733,7 +732,7 @@ DefaultPos:	Standing
 	Weight:	134
 	Cash:	50
 [SKILLS]
-	£":	5
+	unarmed combat:	5
 BREAK
 #1821
 Keywords:	dwarf visitor
@@ -764,7 +763,7 @@ DefaultPos:	Standing
 	Height:	0
 	Weight:	0
 [SKILLS]
-	£":	6
+	unarmed combat:	6
 BREAK
 #1822
 Keywords:	tourist human
@@ -797,7 +796,7 @@ DefaultPos:	Standing
 	Weight:	0
 	Cash:	85
 [SKILLS]
-	£":	2
+	unarmed combat:	2
 BREAK
 #1823
 Keywords:	aegnor bouncer elvish elf
@@ -835,10 +834,10 @@ DefaultPos:	Standing
 	Karma:	10
 [SKILLS]
 	firearms:	6
-	£":	6
+	unarmed combat:	6
 	armed combat:	6
 	cyber implants:	6
-	£":	3
+	:	3
 BREAK
 #1824
 Keywords:	nick man well-dressed
@@ -876,7 +875,7 @@ DefaultPos:	Sitting
 	corporate etiquette:	4
 	street etiquette:	4
 	interrogation:	4
-	£":	6
+	unarmed combat:	6
 BREAK
 #1825
 Keywords:	waiter man
@@ -909,7 +908,7 @@ DefaultPos:	Standing
 	Weight:	70
 	Cash:	78
 [SKILLS]
-	£":	5
+	unarmed combat:	5
 	armed combat:	4
 BREAK
 #1826
@@ -943,7 +942,7 @@ DefaultPos:	Standing
 	Weight:	48
 	Cash:	94
 [SKILLS]
-	£":	5
+	unarmed combat:	5
 	armed combat:	4
 BREAK
 #1827
@@ -979,7 +978,7 @@ DefaultPos:	Standing
 	Bank:	104
 [SKILLS]
 	armed combat:	7
-	£":	6
+	unarmed combat:	6
 BREAK
 #1828
 Keywords:	patron man client
@@ -1011,7 +1010,7 @@ DefaultPos:	Standing
 	Weight:	68
 	Cash:	40
 [SKILLS]
-	£":	4
+	unarmed combat:	4
 BREAK
 #1829
 Keywords:	troll relaxing
@@ -1046,7 +1045,7 @@ DefaultPos:	Sitting
 	Impact:	5
 	Cash:	195
 [SKILLS]
-	£":	6
+	unarmed combat:	6
 BREAK
 #1830
 Keywords:	dwarf female
@@ -1081,7 +1080,7 @@ DefaultPos:	Standing
 	Impact:	3
 	Bank:	43
 [SKILLS]
-	£":	6
+	unarmed combat:	6
 BREAK
 #1831
 Keywords:	marcos saracho manager
@@ -1113,13 +1112,13 @@ DefaultPos:	Standing
 	Height:	195
 	Weight:	75
 	Cash:	743
-	Karma:	40
+	Karma:	49
 [SKILLS]
-	£":	7
+	unarmed combat:	7
 	armed combat:	7
-	£":	3
-	£":	3
-	£":	4
+	:	3
+	:	3
+	:	4
 BREAK
 #1832
 Keywords:	jim repairman man
@@ -1135,7 +1134,7 @@ dark...
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1010
+MobFlags:	1000000000000000000000000001010
 AffFlags:	0
 Race:	Human
 Gender:	Male
@@ -1158,7 +1157,7 @@ DefaultPos:	Sitting
 	biotech:	6
 	street etiquette:	6
 	computers:	6
-	£":	6
+	unarmed combat:	6
 BREAK
 #1833
 Keywords:	bartender ork
@@ -1189,7 +1188,7 @@ DefaultPos:	Standing
 	Height:	205
 	Weight:	90
 [SKILLS]
-	£":	6
+	unarmed combat:	6
 	firearms:	6
 BREAK
 #1834
@@ -1255,7 +1254,7 @@ DefaultPos:	Standing
 	Bank:	70
 [SKILLS]
 	firearms:	6
-	£":	6
+	unarmed combat:	6
 BREAK
 #1899
 Keywords:	doctor scalpel street doc man
@@ -1272,7 +1271,7 @@ other doc out there.
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1010000001001010
+MobFlags:	1010000001001011
 AffFlags:	10000000000000000000
 Race:	Human
 Gender:	Male
@@ -1293,9 +1292,9 @@ AttackType:	Stab
 	Cash:	50000
 	Bank:	100000
 [SKILLS]
-	£":	50
-	£":	20
-	£":	45
+	:	50
+	:	20
+	:	45
 BREAK
 #1900
 Keywords:	employee postal
@@ -1366,7 +1365,7 @@ DefaultPos:	Sitting
 [SKILLS]
 BREAK
 #1902
-Keywords:	receptionist man
+Keywords:	receptionist man smartly
 Name:	the receptionist
 RoomDesc:$
 A smartly dressed receptionist stands behind the desk.
@@ -1386,7 +1385,7 @@ Gender:	Neutral
 DefaultPos:	Standing
 [ATTRIBUTES]
 	Bod:	0
-	Qui:	0
+	Qui:	1
 	Str:	0
 	Cha:	4
 	Int:	0
@@ -1414,7 +1413,7 @@ comparative experience, this dude looks like a heavy duty magic user.
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1010
+MobFlags:	1011
 AffFlags:	0
 Race:	Human
 Gender:	Neutral
@@ -1432,8 +1431,8 @@ DefaultPos:	Standing
 	Weight:	0
 [SKILLS]
 	negotiation:	4
-	£":	8
-	£":	6
+	:	8
+	:	6
 	biotech:	7
 BREAK
 #1904
@@ -1797,9 +1796,9 @@ DefaultPos:	Standing
 	Weight:	0
 [SKILLS]
 	negotiation:	2
-	£":	9
-	£":	7
-	£":	6
+	:	9
+	:	7
+	:	6
 BREAK
 #1915
 Keywords:	marc attendant short bespectacled man
@@ -1867,7 +1866,7 @@ DefaultPos:	Standing
 	Impact:	3
 	Bank:	165
 [SKILLS]
-	£":	4
+	unarmed combat:	4
 	pistols:	6
 BREAK
 #1917
@@ -1961,6 +1960,6 @@ DefaultPos:	Standing
 	Weight:	67
 	Bank:	65
 [SKILLS]
-	£":	2
+	unarmed combat:	2
 BREAK
 END

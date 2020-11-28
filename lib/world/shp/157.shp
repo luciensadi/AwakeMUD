@@ -1,0 +1,172 @@
+#15700
+Keeper:	15700
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Legal
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Sorry, we're closed.
+Name:	unnamed shop
+Flags:	0
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	29326
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	29325
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	29324
+		Type:	Always
+		Stock:	0
+BREAK
+#15701
+Keeper:	15701
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	What are ya fraggin blind?!?  I don't sell that drek here, frag face!
+NoSuchItemPlayer:	What are you trying to pull, slitch?!  You trying to sell me drek you don't even have?!
+NoNuyen:	Listen up, numbnutz! No shirt? No shoes? Fine by me, but no creds?  NO FRAGGIN SERVICE!
+DoesntBuy:	I don't want that drek!  Go pawn it of on your mother, slitch!
+Buy:	Alright fragface, gimme %d nuyen for that drek.
+Sell:	Fine fine, I'll take it, just quit your begging!  Heres %d nuyen, now piss off!
+Name:	BWS Supplies
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	15704
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	946
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	947
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	15713
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	15709
+		Type:	Always
+		Stock:	0
+BREAK
+#15702
+Keeper:	15703
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Mmmm, that sounds good.  Too bad we don't make it!
+NoSuchItemPlayer:	Right... you wanna sell back your food?  Uhh, no thanks.
+NoNuyen:	Sorry pal, this ain't a free kitchen.
+DoesntBuy:	I don't need to buy products from you, chummer.
+Buy:	That'll be %d nuyen.
+Sell:	Sorry, we're closed.
+Name:	unnamed shop
+Flags:	0
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	42146
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	4657
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	9948
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	13415
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	10111
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	4811
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	35513
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	65204
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	60345
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	3035
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	2401
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	8465
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	14722
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	14721
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	14720
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	14719
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	14718
+		Type:	Always
+		Stock:	0
+	[SELL 17]
+		Vnum:	14717
+		Type:	Always
+		Stock:	0
+	[SELL 18]
+		Vnum:	14716
+		Type:	Always
+		Stock:	0
+BREAK
+END

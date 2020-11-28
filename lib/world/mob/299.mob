@@ -1,0 +1,102 @@
+#29900
+Keywords:	kenji sword smith swordsmith elf
+Name:	Kenji
+RoomDesc:$
+An elf is beating a katana on the anvil. 
+
+~
+LookDesc:$
+You see ayoung elf with soot all over his face. He wears what may once have
+been a white singlet and a bandana around his head. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	30
+	Qui:	30
+	Str:	30
+	Cha:	0
+	Int:	30
+	Wil:	30
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	unarmed combat:	12
+	:	4
+BREAK
+#29901
+Keywords:	fixer barney
+Name:	Barney
+RoomDesc:$
+A rather plump fixer stands here, dealing weapons out of the back of his van.
+
+~
+LookDesc:$
+Yuck, he's wearing a stained, greasy shirt that looks a few sizes too small
+for him.  He puts down his steak burger as you approach.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	0
+	Str:	10
+	Cha:	0
+	Int:	6
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	negotiation:	8
+BREAK
+#29902
+Keywords:	man manager suit
+Name:	the manager
+RoomDesc:$
+A man in a suit sits behind the desk, silently filling out some paperwork. 
+
+~
+LookDesc:$
+A fairly nondescrip suit, this middle aged white man seems content filling in
+the veritable mountain of forms piled up on his desk.  His black hair is
+parted in such a way that it attempts to conceal his rapidly receding
+hairline, but fails miserably.  It shines with greasy gel goodness. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	50
+	Level:	6
+[SKILLS]
+	unarmed combat:	4
+	corporate etiquette:	4
+BREAK
+END

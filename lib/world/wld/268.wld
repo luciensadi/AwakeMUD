@@ -1,0 +1,2866 @@
+#26800
+Name:	a large vestibule in front of the Space Needle
+Desc:$
+   An immense glass entry way into the base of the tower. It stretches up with
+a high glass ceiling to allow light to filter in from the cloudy skies
+outside. the floor looks like white marble, and is well polished by years and
+years of constant traffic. Small tourist shops line either side of the indoor
+plaza and a large row of glass elevators stand against the back wall, directly
+under the tower. Large the large arching struts of the tower's base can be
+seen overhead through the glass roof  
+~
+Flags:	10010000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26801
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26801
+Name:	Infront of the elevators.
+Desc:$
+   you're standing before the elevators, there are several large glass lifts
+set in the wall some have already begin their trip up, whiring softly as they
+go. on the wall seems to be a large banner, celebrating the tower's one
+hundreth birthday as a recognized landmark of seatle. and between two of the
+doors is a small engraved plaque, detailing the construction at the worlds'
+fair, a century ago. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	an elevator door~~~~~~~~~~~~~~~~~~~
+	Desc:$
+an elevator door 
+~
+	ToVnum:	26802
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26800
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26802
+Name:	inside the elevator
+Desc:$
+   a nice glass paneled window with authentic looking wood floors, a brass
+fixture for the buttons this elevator is pretty swank by most standards, and
+looks like it was recently remodled 
+~
+Flags:	111000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	Keywords:	elevator door~~~~~~~~~~~~~~~~~~~
+	ToVnum:	26801
+	Flags:	1
+	Material:	metal
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	26853
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26803
+Name:	entrance to the first observation deck
+Desc:$
+   you are near the elevators, opening out into the first level observation
+deck. the deck is positioned about 100 feet up from the base of the tower, and
+is held in place by the three support tresses, which merge upwards above to
+form the tower itself. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26853
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	26812
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26813
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	26814
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26815
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	26816
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26804
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	26810
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26804
+Name:	on the first observatory deck.
+Desc:$
+   a large open area, with lounge seats, and tourist riff-raff everywhere, the
+trash receptacles overflow with kipple, nearby you can see large windows which
+display the view outside. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26810
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26803
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26816
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26805
+Name:	observatory deck
+Desc:$
+   a huge panorama of the city spreds out before you. with the dark smoggy
+skys overhead and the bleak grey buildings on the skyline, reality looks
+pretty bleak. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26806
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26804
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26827
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26806
+Name:	observatory deck
+Desc:$
+   a huge panorama of the city spreds out before you. with the dark smoggy
+skys overhead and the bleak grey buildings on the skyline, reality looks
+pretty bleak. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26807
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26810
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26807
+Name:	observatory deck
+Desc:$
+   you're at the corner of the observatory deck, the curve of the windowed
+wall infront of you continues on around, behind the railings. the fantastic
+sight of the 2060's seatle skyline streches out in all directions. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	26808
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	26810
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26806
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26808
+Name:	north side of the observation deck
+Desc:$
+   you're on the northern side of the first observatory level, looking out
+over the city whitman road streches north into the forest of buildings,
+directly below you,  a hundred feet down, you can see people wandering around
+in the seatle center. below the tower. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	26809
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26810
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26807
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26809
+Name:	north side of the observation deck
+Desc:$
+   you're on the northern side of the first observatory level, looking out
+over the city whitman road streches north into the forest of buildings,
+directly below you,  a hundred feet down, you can see people wandering around
+in the seatle center below the tower.  
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	26817
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26811
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26808
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26810
+Name:	looking about.
+Desc:$
+   you're on the first floor of the observation deck, the tourists wander
+about snapping photos but there is really not much to see besides skyscrapers
+towering in the distance, and dirty gray smog 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26808
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26811
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	26803
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26804
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26806
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	26807
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26811
+Name:	behind the elevator
+Desc:$
+   a room on the first floor of the observation deck, not really much to see
+or do here.  kinda bland. the elevator is nearby, why don't you take it? 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26809
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26812
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26810
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26812
+Name:	east vista
+Desc:$
+   a large room, with a large window, looking east over the skyline of seatle,
+buildings and other things often dwarfing the very structure you're standing
+in, the sky overhead is nothing but a usual smoggy gray day or night. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26817
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	26818
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26819
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26813
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	26803
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26811
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26813
+Name:	on the first observation deck
+Desc:$
+   a large open area, part of the first level observatory platform, around in
+the distance you see the large glass windows. beyond which, you can make out a
+parts of the seattle sky-line. tourists wander to and fro, snapping pictures 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26812
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26820
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26814
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26803
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26814
+Name:	a room in the tower
+Desc:$
+   you're in the southeast area of the first floor of the space needle, and
+around you is the littered and semi-crowded observation deck, tourists
+miander. around, snapping photos of the bland and dull gray seattle skyscape.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26813
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26821
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	26822
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26823
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	26824
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26815
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	26803
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26815
+Name:	on the first observation deck
+Desc:$
+   a large room, in the middle of the first observation floor of the space
+needle.  there are tourists wandering here and there, and litter piled up
+around the trashcan. farther away, you can see the viewing windows, and the
+smog of the gray seattle skyscape outside. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26803
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26814
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	26823
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26824
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	26825
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26816
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26816
+Name:	on the first observation deck
+Desc:$
+   you're in a room on the first observation deck of the Seatle Space Needle,
+from here, you can see crowds of tourists pressed against the glass windows
+incircling the deck. and wandering to and fro, dropping their litter
+everywhere. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26804
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	26803
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26815
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	26824
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26825
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	26826
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26827
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26817
+Name:	northeast vista
+Desc:$
+   you're on the northeast side of the deck, below you Espanoza Way streches
+of towards the north east, into the sprawl. from this hight, the bustle of
+city life below is still quite visable. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	26818
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26812
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26809
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26818
+Name:	the northeast corner of the platform
+Desc:$
+   you're at the north east area of the platform the circular wall continues
+its curve on to the west and south of you. below you can see Espanoza Way
+directly below you, headed northeast into the sprawl and the citizens of
+seatle wandering around in miniature, below you, in Seattle Center 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	26819
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	26812
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26817
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26819
+Name:	east side of the platform
+Desc:$
+   you're on the east side of the first level obeservation platform, with the
+sprawl spredding out before you, to your left you can see a massive structure.
+like a giant black pyramid, completly dwarfing the structure you're in. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26818
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26820
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26812
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26820
+Name:	east side of the platform
+Desc:$
+   you're on the east side of the first level obeservation platform, with the
+sprawl spredding out before you, to your left you can see a massive structure.
+like a giant black pyramid, completly dwarfing the structure you're in. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26819
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26821
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26813
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26821
+Name:	east side of the platform
+Desc:$
+   you're on the east side of the first level obeservation platform, with the
+sprawl spredding out before you, to your left you can see a massive structure.
+like a giant black pyramid, completly dwarfing the structure you're in. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26820
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26822
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26814
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26822
+Name:	Hey look! Renraku Arcology!
+Desc:$
+   you're standing at the southeast most area of the first level observatory,
+and your view looking out is completly dominated by a positivly huge pyramidal
+building, which dominates the skyline of seatle, its size completly dwarfs
+the;tower you're in. its windows a block away shine like silver 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26821
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26823
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	26814
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26823
+Name:	along the south vista.
+Desc:$
+   you're looking out across the south of downtown seattle. Renraku Acology
+dominates the view to the southeast, and to the south the sprawl continnues
+expansivly to the smoggy gray horizon. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26814
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26822
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26824
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	26815
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26824
+Name:	along the south vista.
+Desc:$
+   you're looking out across the south of downtown seattle. Renraku Acology
+dominates the view to the southeast, and to the south the sprawl continnues
+expansivly to the smoggy gray horizon. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26815
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	26814
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26823
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26825
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	26816
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26825
+Name:	along the south vista.
+Desc:$
+   you're looking out across the south of downtown seattle. Renraku Acology
+dominates the view to the southeast, and to the south the sprawl continnues
+expansivly to the smoggy gray horizon. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26816
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	26815
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26824
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26826
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26826
+Name:	along the south vista.
+Desc:$
+   you're looking out across the south of downtown seattle. Renraku Acology
+dominates the view to the southeast, and to the south the sprawl continnues
+expansivly to the smoggy gray horizon. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26827
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	26816
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26825
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26827
+Name:	along the south vista.
+Desc:$
+   you're looking out across the south of downtown seattle. Renraku Acology
+dominates the view to the southeast, and to the south the sprawl continnues
+expansivly to the smoggy gray horizon. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26805
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26816
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26826
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26828
+Name:	Room A.
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	26829
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26833
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26829
+Name:	northwest view over seattle
+Desc:$
+   a really nice table overlooking the north section of the sprawl... laid out
+before you in a dirty gray of towering building and smoggy, rainy skies. yet
+the atmosphere here gives the gray monotone view with the streetlights and
+life sparkling below a surreal kind of feeling. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	26830
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26834
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	0
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26828
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26830
+Name:	looking north over seattle
+Desc:$
+   a luxurious table with elegant settings, a silk tablecloth, and crystal
+glassware is here.  along with some incredibly comfterble looking dining
+chairs. the area is well lit and you have a very good view of the towering
+buildings and the dark grey city below, of the north side of the downtown
+seattle metroplex. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	26831
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26835
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26829
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26831
+Name:	northeast view 
+Desc:$
+   a nice quiet corner of the resturant... so to speak, since the level you're
+on is circular.  the atmosphere here is quiet, and private, and the settings
+for the table are exquiste, the soft rug under your feet is the sort that
+always feels good to walk on. and the view outside, is unusually spectacular,
+for being one of a dirty gray cityscape. it has a strange sort of beauty to
+it. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	26832
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26836
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26830
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26832
+Name:	Room B
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	26837
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26831
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26833
+Name:	northwest view over seattle
+Desc:$
+   the sprawl spreds out below you in a bustly gray panorama as the restraunt
+slowly rotates. the dining area where you are seems incredibly posh, with
+subdued but elegant lighting, well set tables with what looks like real silk
+napkins..  the Eye of the Needle resturant does in fact seem to deserve every
+bit of it's 5 star rating. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26828
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26834
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26838
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26834
+Name:	Eye of the Needle dining area.
+Desc:$
+   you are in yet another section of the eye of the needle resturant, the lush
+carpet is soft beneath your feet. and the tables are carefully set with real
+china and crystal, and genuine silk napkins a few customers that can atcually
+afford this place are sitting at their tables eating their gourmet food   
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26829
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26835
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26839
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26833
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26835
+Name:	Eye of the Star resturant dining area
+Desc:$
+   you are in yet another section of the eye of the needle resturant, the lush
+carpet is soft beneath your feet. and the tables are carefully set with real
+china and crystal, and genuine silk napkins a few customers that can atcually
+afford this place are sitting at their tables eating their gourmet food 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26830
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26836
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26834
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26836
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26831
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26837
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26841
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26835
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26837
+Name:	an elegant view
+Desc:$
+   a quiet corner of the rotating platform which makes up the swank Eye of the
+Needle resturant below you and to the northest lies the packed I-90 with
+sprawl commuters buzzing back and forth along it like so many ants, from up
+here it seems peaceful as the view slowly rotates, the sparkling of the
+headlights from the interstate, and the buildings around, against the cold
+rainy gray of the city 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26832
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26842
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26836
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26838
+Name:	a spectacular view
+Desc:$
+   you're at a private table near the window of the slowly rotating platform
+which makes up the eye. Right now your view is to the west, overlooking the
+downtown shoping district of the seattle metroplex, the surroundings of the
+interior are subtlely lit, with elegant settings on the table.  
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26833
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26839
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26843
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26839
+Name:	in the dining area
+Desc:$
+   a fairly large area, with white silk table clothes and large well set
+tables.. the lush red carpet is exquisitly soft beneth your shoes, and the
+waiters which bustle about in their fine black tuxedos seem to glace at you
+with distain. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26834
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26840
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26844
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26838
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26840
+Name:	Entrance to The Eye of the Needle.
+Desc:$
+   you've arrived in a very swank looking resturant, with dark red carpeting
+and what looks like real wood finish on the walls. a matre d's podium stands
+near the elevator entrance, and a man in a tux stands behind it, waiting to
+see if you're on the guest list. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26854
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26841
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26845
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26839
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26841
+Name:	in the resturant
+Desc:$
+   a fairly large area, with white silk table clothes and large well set
+tables.. the lush red carpet is exquisitly soft beneth your shoes, and the
+waiters which bustle about in their fine black tuxedos seem to glace at you
+with distain. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26836
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26842
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26846
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26840
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26842
+Name:	looking east
+Desc:$
+   you're standing on what is currently the east side of the eye of the needle
+resturant platform, as it slowly spins clockwise, one revolution per 45
+minutes, giving all diners a terrific panorama of the bleak grey greater
+seattle metroplex sprawl.  below you twists the I-90 packed with cars, slowed
+to a crawl by a traffic jam.  the luxury surrounding you makes you feel quite
+safe, and there is an elegantly sculpted white noise generator and sound
+dampener set up in the center of the table, for privacy's sake.  
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26837
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26847
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26841
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26843
+Name:	south west view over seattle
+Desc:$
+   you're at a private table near the window of the slowly rotating platform
+which makes up the eye. Right now your view is to the west, overlooking the
+downtown shoping district of the seattle metroplex, the surroundings of the
+interior are subtlely lit, with elegant settings on the table.  
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26838
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26844
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26848
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26844
+Name:	a lesser specatular view
+Desc:$
+   you are in yet another section of the eye of the needle resturant, the lush
+carpet is soft beneath your feet. and the tables are carefully set with real
+china and crystal, and genuine silk napkins a few customers that can atcually
+afford this place are sitting at their tables eating their gourmet food 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26839
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26845
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26849
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26843
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26845
+Name:	somewhere in the dining room.
+Desc:$
+   a beautifully set diningroom, with a very elegent table and low subdued
+lighting.  you can look out in almost all directions and see some part of the
+seattle skyline from here the waiters buzz back and forth over the lush
+burgandy carpet, waiting for a chance to serve with snobbery. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26840
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26846
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26850
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26844
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26846
+Name:	a quiet area
+Desc:$
+   the area here is quiet and about as secluded as you can get, as most of the
+other tables around are empty, the waiters hover unobtrusivly in the
+background, and there is a  small and very elegently sculpted white-noise
+generator set on the table. made to look like an exquisite centerpiece. this
+would obviously be an ideal meetingplace for some high-class johnsons. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26841
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26847
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26851
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26845
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26847
+Name:	another angle of the archology.
+Desc:$
+   a quiet 'corner' of the resturant where no one is likely to overhear
+conversations.  the table has a great view of the massive archology directly
+to the southeast of here.. a huge black and gray monolithic pyrimid. from this
+angle its brillance is almost blinding, as a single ray of sun makes it
+through the cloud cover to reflect off its surface. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26842
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26852
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26846
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26848
+Name:	Room C
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26843
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26849
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26849
+Name:	south west view over seattle
+Desc:$
+   you're at a private table near the window of the slowly rotating platform
+which makes up the eye. Right now your view is to the west, overlooking the
+downtown shoping district of the seattle metroplex, the surroundings of the
+interior are subtlely lit, with elegant settings on the table. 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26844
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26850
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26844
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26848
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26850
+Name:	South Vista
+Desc:$
+   a beautiful grey cityscape spreds before you with the lights of the town
+twinkling amonst the grey buildings, and rainy skies. giving everything a
+surreal look. The table is elegantly laid, with real china, and real silk
+tablecloths..  about you is the soft murmur of dinner conversations as people
+eat.  
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26845
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26851
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26849
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26851
+Name:	View of the Archology
+Desc:$
+   a quiet 'corner' of the resturant where no one is likely to overhear
+conversations.  the table has a great view of the massive archology directly
+to the southeast of here.. a huge black and gray monolithic pyrimid.  the
+smell of exquisite 5 star cuisine floats to you from nearby 
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26846
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26852
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26850
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26852
+Name:	Room D
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26847
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26851
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26853
+Name:	Elevator, First observation level
+Desc:$
+   you're in an elevator, it looks pretty plain, built to hold lots of people
+and move them up and down quickly. fake wood walls, dingy carpet where
+thousands upon thousands of tourists have stepped before you. 
+~
+Flags:	111000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	26803
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	26854
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	26802
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26854
+Name:	Elevator, Eye of the Needle level
+Desc:$
+   you're in an elevator, it looks pretty plain, built to hold lots of people
+and move them up and down quickly. fake wood walls, dingy carpet where
+thousands upon thousands of tourists have stepped before you. the indicatior
+next to the door tells you you're at the resturant level. 
+~
+Flags:	111000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	26840
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	26855
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	26853
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26855
+Name:	Elevator, top observation deck.
+Desc:$
+   you're in an elevator, it looks pretty plain, built to hold lots of people
+and move them up and down quickly. fake wood walls, dingy carpet where
+thousands upon thousands of tourists have stepped before you. the indicatior
+next to the door tells you you're at the top of the Seattle Space Needle. 
+~
+Flags:	111000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	26856
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	26854
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26856
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26855
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26857
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26857
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26856
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26858
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26858
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26857
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26874
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26859
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26859
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26860
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26858
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26860
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26861
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26859
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26866
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26861
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26862
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26860
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26865
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26862
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26863
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26875
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26861
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26864
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26863
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	26876
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26862
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26864
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	26862
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26865
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26865
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26864
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26861
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26866
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26866
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26865
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26860
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26867
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26868
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26869
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26870
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	26871
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26876
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26871
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26870
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26872
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26875
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26872
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26871
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26873
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26873
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26872
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26874
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26874
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26873
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26858
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26875
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	26876
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	26871
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26862
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26876
+Name:	An unfinished room
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	26870
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	26875
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26863
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26897
+Name:	A spacious court-room
+Desc:$
+   you are in a spacious court-room with low wooden benches in the back,
+approaching the front, where the rail sections off the  court area from the
+audiance section. beyond that is a pair of wooden tables for the defendances
+and the proscecutors  each with plain wooden chairs behind them... in the
+center of the room is the Judges' dais. a large wooden structure which looks
+to be made out of real oak.  to the left, is the jury-box. 
+~
+Flags:	100011110000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26898
+Name:	storeroom
+Desc:$
+   a big storeroom underneath maria's penthouse for her to stash her stuff. 
+~
+Flags:	110000000000000000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Desc:$
+~
+	ToVnum:	32591
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door big wooden~~~~~~~~~~~~~~~
+	ToVnum:	1000
+	Flags:	1
+	Material:	concrete
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	26840
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	26899
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#26899
+Name:	Maria's penthouse
+Desc:$
+   a simple, yet elegant large apartment, in which Maria stays, when she's not
+globtrotting around the world doing concerts. the apartment itself is quite
+roomy, with a great view, and a terrific entertainment taking up one wall a
+simple large bed takes up the other side, and here and there are strewn decor
+items to spruce up the place. 
+~
+Flags:	1100000000000100000001000
+SecType:	Inside
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	5699
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Keywords:	trapdoor roof~~~~~~~~~~~~~~~~~~~
+	Desc:$
+a trapdoor which you'd think would lead to the roof, but it doesn't 
+~
+	ToVnum:	22499
+	Flags:	1
+	Material:	metal
+	Barrier:	24
+	KeyVnum:	0
+	HiddenRating:	4
+[EXIT down]
+	ToVnum:	26898
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

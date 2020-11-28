@@ -1,0 +1,42 @@
+#6700
+Keywords:	overworked male human gray hair
+Name:	Quintus Allard
+RoomDesc:$
+An old man is here, pouring over information in his head, stress weighing
+visibly upon him. 
+
+~
+LookDesc:$
+This man is aged 65 to 70, with silver-grey hair-- although he isn't balding
+much. His face is free of all but the most noble of wrinkles and his body
+shows obvious signs of training. His manner is tousled but need-- as though
+practicality demands that he choose function over aesthetics. 
+~
+ArriveMsg:	
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Other
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	4
+	Cha:	8
+	Int:	7
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	174
+	Weight:	75
+	Ballistic:	2
+	Impact:	2
+[SKILLS]
+	corporate etiquette:	6
+	street etiquette:	8
+	negotiation:	7
+	interrogation:	8
+	pistols:	3
+BREAK
+END

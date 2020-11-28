@@ -1,0 +1,1090 @@
+#3000
+Keywords:	dog hot hotdog
+Name:	a hot dog
+RoomDesc:$
+A mouth-watering hot dog has been left behind by someone.~
+LookDesc:$
+Still warm to the touch, this frank would take the edge off of
+any hunger pangs you may be feeling.
+~
+Type:	Food
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	24
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+BREAK
+#3001
+Keywords:	pretzel
+Name:	a hot pretzel
+RoomDesc:$
+One of those hot soft pretzels has been dropped here.~
+LookDesc:$
+Made of the best warm dough, and just the right amount of salt,
+this snack brings back memories of better times.
+~
+Type:	Food
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	7
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+BREAK
+#3002
+Keywords:	lemonade can
+Name:	a can of lemonade
+RoomDesc:$
+A cold can of lemonade has been set down here.~
+LookDesc:$
+This frosty can of lemonade calls out to your throat, offering instant
+refreshment. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.20
+	Barrier:	3
+	Cost:	8
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	12
+	Val2:	4
+BREAK
+#3003
+Keywords:	apron
+Name:	a full-length apron
+RoomDesc:$
+A piece of fabric with a few mustard stains is on the ground.~
+LookDesc:$
+Used by Jodie the vendor to keep condiments off herself, the apron
+can be tied about the waist with the two strings attached.
+~
+Type:	Worn
+WearFlags:	100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	3
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3004
+Keywords:	briefcase case leather
+Name:	a leather briefcase
+RoomDesc:$
+A leather briefcase has been left behind by some executive type.~
+LookDesc:$
+Of moderate size, the case could hold a good number of hard-copy
+documents, decking equipment, or simply lunch.  The handles look
+a bit worn from use.
+~
+Type:	Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	3
+	Cost:	120
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	1
+	Val2:	-1
+BREAK
+#3005
+Keywords:	fountain pool
+Name:	a recirculating fountain
+RoomDesc:$
+The fountain rises and falls in its wide concrete pool.~
+LookDesc:$
+Approximately ten meters in diameter, the fountain has become a
+recognizable part of the Tacoma Station in recent years.
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1000.00
+	Barrier:	16
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10000
+	Val1:	10000
+BREAK
+#3006
+Keywords:	pepper green
+Name:	a green pepper
+RoomDesc:$
+A green pepper has been left on the ground.~
+LookDesc:$
+Of the "bell pepper" variety, this produce seems to be in
+edible condition.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	3
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+BREAK
+#3007
+Keywords:	apple red
+Name:	a red apple
+RoomDesc:$
+A delicious red apple has been left here.~
+LookDesc:$
+Polished to a shine, and nutritious as well, the apple would
+make a perfect on-the-go snack for any who need filling.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	4
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+BREAK
+#3008
+Keywords:	tomato ripe
+Name:	a ripe tomato
+RoomDesc:$
+A plump, ripe tomato has been left behind.~
+LookDesc:$
+Typical garden variety, this tomato looks meaty enough to satisfy
+without any accompaniment.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	4
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+BREAK
+#3009
+Keywords:	pendant cameo ivory jade
+Name:	a cameo pendant
+RoomDesc:$
+A family heirloom made of ivory and jade lays here.~
+LookDesc:$
+The ivory image of a woman's silhouette has been imposed over a
+jade oval, and attached to a fine gold chain.
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3010
+Keywords:	club billy
+Name:	a billy club
+RoomDesc:$
+A short club lays on the ground.~
+LookDesc:$
+Made of ebony wood and polished to a shine, the club is no more
+than a meter in length, with a rubber grip and a strap to carry
+on the wrist.
+~
+Type:	Weapon
+WearFlags:	111000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	3.00
+	Barrier:	32
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#3011
+Keywords:	band ring gold wedding
+Name:	a gold wedding band
+RoomDesc:$
+A simple gold ring is laying on the ground.~
+LookDesc:$
+A token of undying love and affection, this ring was given by
+someone to their precious beloved.
+~
+Type:	Worn
+WearFlags:	11
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	400
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3012
+Keywords:	machine vending vend-tix
+Name:	a Vend-Tix machine
+RoomDesc:$
+A Vend-Tix machine is here for the purchase of admission cards.~
+LookDesc:$
+A credstick slot and a ticket dispenser are located on the front of the
+machine. A sign gives instructions on how to use it.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1000.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3013
+Keywords:	card ticket
+Name:	a ticket card
+RoomDesc:$
+A ticket card for monorail travel has been carelessly dropped here.~
+LookDesc:$
+About the same dimensions as a standard credit card, the ticket has been
+designated with the value of a one-way trip on the Sea-Tac monorail
+lines, either in Tacoma at the OldTown Station, or in Seattle at the 
+Brighton Avenue Station.
+~
+Type:	Key
+WearFlags:	100000000000001
+ExtraFlags:	1000
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3014
+Keywords:	notice table
+Name:	a table notice
+RoomDesc:$
+A small notice has been set on the table by the waitress.~
+LookDesc:$
+The notice reads, is handwritten script:
+  This table is designated for those
+   who have already obtained their
+  orders, which can be purchased at
+     the alternate booth nearby.
+                          Moira
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3015
+Keywords:	key card keycard green
+Name:	a green keycard
+RoomDesc:$
+A green keycard has been dropped on the ground.~
+LookDesc:$
+The only distinguishing feature on the card's surface is
+the logo ^GM-S-T^N embossed upon it.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1100
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3016
+Keywords:	card security passcard
+Name:	a security passcard
+RoomDesc:$
+A security passcard has been carelessly left here.~
+LookDesc:$
+It bears the logo of MST Rail Services, as well as the insignia
+of the private security team that they employ.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1100
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3018
+Keywords:	notice order post
+Name:	an out-of-order notice
+RoomDesc:$
+An out-of-order notice has been mounted on a signpost here.~
+LookDesc:$
+The notice reads in bold red lettering:
+"We regret that this portion of the zone is inoperative, out
+ of order, and otherwise downright broken.  We apologize for
+ the inconvenience this causes, and are working on the solution
+ with all due haste.
+                          The Awakening Administration Team."
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	200.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3019
+Keywords:	broom short
+Name:	a short-handled broom
+RoomDesc:$
+A short-handled broom has been left leaning here.~
+LookDesc:$
+Not much to see, the stick is only about four feet long, as if
+it were intended for use by shorter individuals.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	5.00
+	Barrier:	3
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+BREAK
+#3023
+Keywords:	knuckles dentiplast
+Name:	a pair of dentiplast knuckles
+RoomDesc:$
+Two chunks of dentiplast with finger fittings lay here.~
+LookDesc:$
+The digit holes in these knuckles are intended to fit any width up to 2.5 cm,
+rendering them usable by most metahuman forms.  Their dentiplast composition
+rates them slighty more effective and durable than their metal counterparts.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.75
+	Barrier:	12
+	Cost:	300
+	AvailTN:	2
+	AvailDay:	24.00
+	LegalNum:	8
+	LegalCode:	3
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	4
+	Val4:	7
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#3025
+Keywords:	cane sword
+Name:	a cane sword
+RoomDesc:$
+A tasteful cane with an added touch of style has been set down.~
+LookDesc:$
+A rare and beautiful shaft of real ebony wood encases a meter long
+blade, double-edged and honed to perfection.  The top knob bears the
+emblem of the original owner.
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	5.00
+	Barrier:	4
+	Cost:	350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#3026
+Keywords:	secure jacket MST uniform
+Name:	an MST uniform secure jacket
+RoomDesc:$
+A secure jacket bearing the MST logo is on the ground.~
+LookDesc:$
+Standard issue for the Monorail Seattle-Tacoma guards, the secure jacket
+has enough flexibililty to allow free movement while maintaining its
+protective integrity.
+~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	5.00
+	Barrier:	6
+	Cost:	850
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	4
+	Val2:	1
+	Val4:	3
+	Val5:	5
+	Val6:	3
+BREAK
+#3027
+Keywords:	security helmet MST uniform
+Name:	an MST security helmet
+RoomDesc:$
+A heavy helmet equipped with a visor has been set down here.~
+LookDesc:$
+The helmet bears the MST logo on the front, and has a visor
+mounted that can flip down to provide eye protection as well.
+It appears to be reinforced with curved dentiplast plates.
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	2
+	LegalCode:	11
+	LegalPermit:	1
+[VALUES]
+	Val5:	1
+	Val6:	2
+BREAK
+#3028
+Keywords:	staff etched oaken
+Name:	an etched oaken staff
+RoomDesc:$
+A intricately carved staff made of oak lays on the ground.~
+LookDesc:$
+The carvings on its surface are in a Celtic motif, with images
+of serpents, geese and lions as could be seen in the ancient
+Book of Kells.
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3029
+Keywords:	fountain drinking cement
+Name:	a cement drinking fountain
+RoomDesc:$
+A cement drinking fountain has been stuck in the running position.~
+LookDesc:$
+The lever that was intended to turn the water on and off has 
+seemingly been "removed", rendering the fountain a constant
+supply of water.
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	500.00
+	Barrier:	12
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	100000
+	Val1:	100000
+BREAK
+#3030
+Keywords:	jacket suit houndstooth
+Name:	a Houndstooth suit jacket
+RoomDesc:$
+A stylish suit jacket lays in a heap, getting wrinkled.~
+LookDesc:$
+Houndstooth's main line of fine wearables always spotlights this
+jacket as it's 'piece de resistance', made of the best polyfibers
+and guaranteed for life against rips and tears from normal wear.
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	120
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	6
+	Val3:	4
+	Val4:	10
+BREAK
+#3031
+Keywords:	shooter pea thin
+Name:	a thin pea shooter
+RoomDesc:$
+A narrow tube with a pea stuck in one end is on the ground.~
+LookDesc:$
+The tube appears to be a thin piece of piping, and one end of it
+is slightly discolored from, apparently, saliva.
+~
+Type:	Weapon
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+	Val3:	301
+	Val4:	24
+	Val5:	12
+	Val6:	12
+BREAK
+#3034
+Keywords:	pendant owl jade
+Name:	a jade owl pendant
+RoomDesc:$
+A pendant carved from jade in the form of an owl lays here.~
+LookDesc:$
+Craftsmanship has reached a new level with this work of art.  The
+jade is cut to as to catch light even in dark environments, and is
+suspended from a long strand of synthetic leather.
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	3.00
+	Barrier:	3
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3035
+Keywords:	burger deluxe
+Name:	a burger deluxe
+RoomDesc:$
+A simulated soy burger lays on a paper plate.~
+LookDesc:$
+Almost cooked with enough spices to be appetizing...almost.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	70
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#3036
+Keywords:	mug warm coffee
+Name:	a warm mug of coffee
+RoomDesc:$
+A warm mug of java sits here, cooling.~
+LookDesc:$
+It seems as though it already has just the right amount of
+cream and sucrose to match your tastes....how odd.
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	7
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	7
+	Val2:	2
+BREAK
+#3037
+Keywords:	shot whiskey
+Name:	a whiskey shot
+RoomDesc:$
+A shot glass rests here, filled with a strong spirit.~
+LookDesc:$
+The side of the glass has the bar's logo etched upon its surface:
+   
+^Y@^B####^Y{^N===^MC^N=^ME^N=^ME^N==^MO^N==^MT^N=^ME^N=^ME^N=^M'^N=^MS^N===---
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	2
+	Val2:	23
+BREAK
+#3038
+Keywords:	glass backstabber dirty
+Name:	a glass of the "Dirty Backstabber"
+RoomDesc:$
+A boiling glass of a viscious liquor shudders as it sits.~
+LookDesc:$
+The specialty of Cee-o-Tee's, the D.B. is known to cause such
+biological anomalies as blindness, loss of motor functions
+and even pattern baldness.  Not for the weak of heart.
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	8
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	3
+	Val2:	32
+	Val3:	3
+BREAK
+#3039
+Keywords:	pipe peace native american
+Name:	a Native American peace pipe
+RoomDesc:$
+An ancient tribal peace pipe smolders on the floor.~
+LookDesc:$
+The shaft is about a meter long, with a cedar bowl at the end,
+and hawk's feathers tied with rawhide along its length.
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	2.00
+	Barrier:	3
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3050
+Keywords:	buns steel cyber skinktech
+Name:	a set of SkinkTech Cyber-Buns of Steel
+RoomDesc:$
+A pair of chromed half-moons lay on the floor in a mess of wires.~
+LookDesc:$
+Incredibly detailed so as to provide maximum attractiveness,
+once installed, the effect is sexiness beyond all belief.
+^R *** Another Prize Product of SkinkTech Cyberware Inc.***^N
+~
+Type:	Cyberware
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	4.00
+	Barrier:	0
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val2:	20
+	Val4:	20
+BREAK
+#3085
+Keywords:	water cooler bubbler
+Name:	water bubbler
+RoomDesc:$
+A small water bubbler is here, offering a cool drink.~
+LookDesc:$
+Made of stainless steel and copper pipes it brings purified water to you at
+your time of thirst. 
+~
+Type:	Fountain
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	145.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	200
+	Val1:	200
+BREAK
+#3086
+Keywords:	a key
+Name:	a key
+RoomDesc:$
+a key is here~
+LookDesc:$
+this is a key 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	122
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3087
+Keywords:	bomb
+Name:	a bomb
+RoomDesc:$
+a timer connected to some c-12 and other explosives is here on the ground.~
+LookDesc:$
+This bomb is constructed from a simple timer and various types of explosives,
+predominantly c-12. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	1000001100
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	124411
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3088
+Keywords:	glasses goggles shades
+Name:	^na ^rred^n pair of shades with ^bblue^n lenses
+RoomDesc:$
+Some red rimmed glasses with blue lenses are here~
+LookDesc:$
+These nice wrap around shades look mighty durable and technical. The frame is
+composed of a very light, flexible metal, with small embedded wires. The
+lenses are mirrored and contain a myriad of small displays. 
+~
+Type:	Worn
+WearFlags:	1100000000000001
+ExtraFlags:	1000001000
+AffFlags:	1000000110001000011100
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	123312
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	3
+BREAK
+#3089
+Keywords:	note
+Name:	a note
+RoomDesc:$
+a scrap of paper is here.~
+LookDesc:$
+Written in neat english, "Excellent work chums. They attributed the alarms to
+an escaped experiment, and you got off home free. After a preliminary look at
+the images, I can already tell I will need your services again. I shall
+contact you later.
+ -Mr. Johnson" 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3090
+Keywords:	ring silver emblem
+Name:	a silver ring with an eagle emblem
+RoomDesc:$
+A small silver ring glints here.~
+LookDesc:$
+Rings of this design are often given as gifts from the Mob Bosses in the
+Seattle area. This one represents Don Bonanno. Its safe to assume that the
+person who wears this ring has done some work for the Mob. 
+~
+Type:	Worn
+WearFlags:	11
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

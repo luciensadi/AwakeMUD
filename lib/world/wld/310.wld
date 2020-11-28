@@ -1,0 +1,1656 @@
+#31000
+Name:	Dark tunnel
+Desc:$
+   You're in a dark tunnel, and can barely see 3 feet ahead of you. Not far up
+a faint yellow light can be seen. The tunnel is really small, and you keep
+hitting your head in the sharp, cold rock. 
+~
+Flags:	10000000010000000100001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	31001
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31001
+Name:	Dark tunnel
+Desc:$
+   The tunnel seems to be getting smaller and the rocks around you sharper.
+The yellow light is getting closer. 
+~
+Flags:	10000000010000000100001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	31002
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31002
+Name:	Dark tunnel
+Desc:$
+   As you look behind you it seems as if the darkness is turning the tunnel
+into nothing as if it was never there. You see the opening where the yellow
+light is coming from, only a few feet up. 
+~
+Flags:	10000000010000000100001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	31003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31003
+Name:	A small cave
+Desc:$
+   A small, not so cramped cavern. A torch hangs on the wall providing a dim,
+yellow light. Several howls and growls can be heard echoing through the
+obviously big network of tunnels and caverns. 
+~
+Flags:	10000000010000000000101000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	31004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31004
+Name:	A small cave
+Desc:$
+   A small, not so cramped cavern. A torch hangs on the wall providing a dim,
+yellow light. Several howls and growls can be heard echoing through the
+obviously big network of tunnels and caverns. 
+~
+Flags:	10000000010000000000101000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	31005
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31003
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31005
+Name:	End of the small cave
+Desc:$
+   The cave stops here, and a small ragged opening is right above you. The
+torch in the southern part of the cave isn't lighting this part up very well,
+it's almost completely dark. 
+~
+Flags:	10000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	31004
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	31006
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31006
+Name:	A cramped, dark tunnel
+Desc:$
+   A small, dark tunnel leads upwards. The rocks are sharp and cold against
+your skin and there doesn't seem to be any other way out of here. 
+~
+Flags:	10000000000000000100001001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	31007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31007
+Name:	A small passageway
+Desc:$
+    A small, dark tunnel leads upwards. The rocks are sharp and cold against
+your skin and there doesn't seem to be any other way out of here. 
+~
+Flags:	10000000000000000000001001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	31008
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31008
+Name:	An open cavern
+Desc:$
+   A small room has been carved out here, it's completely dark. Another small
+tunnel continues upwards. The haunted howls and groans of the dead/undead
+echoes in the tunnel. 
+~
+Flags:	10000000000000000000001001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	31007
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	31009
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31009
+Name:	A small, dank chute
+Desc:$
+   Another rather large cavern opening leads east. The room is lit from the
+ray of light coming from the room to the east. The rocks are pointy and
+scratches your hand as you grab them. 
+~
+Flags:	10000000010000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	31010
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31010
+Name:	A large cave
+Desc:$
+   Two torches hang on both ends of the cave, which emits a dim yellow light.
+The shadows dance on the walls in a rhytmic and scary manner. A foul aroma
+fills the room, and it stings your nostrils. 
+~
+Flags:	10000000010000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	31011
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31011
+Name:	A small chute
+Desc:$
+   The tunnels seem to never stop..  The foul aroma seems closer nowm and you
+hear a deep roaring from above. 
+~
+Flags:	10000000000000000000001001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	31012
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31012
+Name:	A small opening
+Desc:$
+   The stench in this small cave is unbearable, the air is humid yet dusty,
+making breathing a whole other problem. A torch hang on the wall, emitting a
+strange blue light.. As if it was a magic light. 
+~
+Flags:	10000000010000000000001000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	31013
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31013
+Name:	A small chute
+Desc:$
+   Another chute in the endless list of chutes.. Sharp rocks, humid yet dusty
+air, and roaring and howling can be heard near as well as far away. The tunnel
+continues up. 
+~
+Flags:	10000000000000000000001001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	31014
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31014
+Name:	A small, dank cavern
+Desc:$
+   The air gets less humid here, now it's all dust in your lunges. Some
+strange ancient looking artwork is drawn on the smoothed rock walls, and a
+torch has been nailed to the wall as well. 
+~
+Flags:	10000000010000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT up]
+	ToVnum:	31015
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31015
+Name:	A larger cave
+Desc:$
+   A long cave opens up to the north.  A torch hangs to the right and lights
+up the cave a few feet, but beyond that it's pitch black. The cave seems to
+have been worked more on, the walls and ceiling is smoother, and you see some
+artwork painted on the walls too. 
+~
+Flags:	10000000010000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	31016
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31016
+Name:	A larger cave
+Desc:$
+   A long cave opens up to the north.  A torch hangs to the right and lights
+up the cave a few feet, but beyond that it's pitch black. The cave seems to
+have been worked more on, the walls and ceiling is smoother, and you see some
+artwork painted on the walls too. 
+~
+Flags:	10000000010000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	31017
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31015
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31017
+Name:	A dark cave
+Desc:$
+   The cave continues north and south, it's quite dark and many lost souls can
+be seen haunting it. Weird rock formations stand out of the floor and it's
+quite hard to walk through. 
+~
+Flags:	1001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	31018
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31016
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31018
+Name:	A dark cave
+Desc:$
+   The cave continues north and south, it's quite dark and many lost souls can
+be seen haunting it. Weird rock formations stand out of the floor and it's
+quite hard to walk through.  
+~
+Flags:	1001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	31017
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	Keywords:	man hole manhole sewer
+	ToVnum:	31050
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31050
+Name:	Dark smelly street.
+Desc:$
+   A large house is directly north of you. You hear what seems to be people in
+the house. There is a huge dead tree in the front yard of the house. You can
+smell a foul odour which seems to be seeping from the manhole before you. 
+~
+Flags:	10000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	31051
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31090
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31051
+Name:	Near the porch
+Desc:$
+   A huge tree that has been dead for quite some time manages to shield most
+of the house beyond it here, keeping one from getting a close look until
+they're practically on top of it. The porch creaks and groans as it threatens
+to give at every step, consisting of half-rotten planks and rusty nails that
+constantly attempt to snag at clothing and limbs. Strange noises can be heard
+from inside the house, mostly the sound of a few people talking, while at
+other times, their origin is unknown. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden
+	Desc:$
+A half-rotten wooden door stands to the north. 
+~
+	ToVnum:	31052
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31050
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31052
+Name:	Entering the house
+Desc:$
+   The front door creaks open loudly, regardless of how fast or slowly it is
+pushed, the hinges themselves having caked over with rust. The house is
+constructed mostly from wood, which has by now suffered greatly from water
+damage and old age, infested with everything from mold to tiny roaches, which
+scurry in and out of the walls and floors. A suspect looking staircase stands
+off to the right, while a larger room lays beyond it. A single doorway adorns
+the northern wall, offering access to another part of the house. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden
+	Desc:$
+A half-broken wooden door blocks off the passage north. 
+~
+	ToVnum:	31053
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31054
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door wooden
+	Desc:$
+A half-rotten wooden door stands to the south. 
+~
+	ToVnum:	31051
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	31055
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31053
+Name:	The kitchen
+Desc:$
+   The surroundings here are pitiful. A large table is covered in old
+newspapers and some kind of sticky substance, which is also covering the floor
+about it with a nasty film. The fridge is leaking in several spots,
+consolidating itself at its base and giving off a god awful funk, most likely
+due to year old take-out food. The sink is filled with dirty and mostly broken
+cutlery and unwashed dishes, attracting all sorts of bugs and mold. Off to the
+east is a dining area, or at least thats what it used to be. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	31056
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door wooden
+	Desc:$
+A half-broken wooden door stands to the south. 
+~
+	ToVnum:	31052
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31054
+Name:	The lounge
+Desc:$
+   There are two long couches furnishing this lounge, both of which have
+certainly seen better days, having been cut, ripped and slashed (and even
+partially burned in some spots). They are turned in towards a trideo set,
+which has been riddled with bullets, so obviously its not working anymore.
+Spent casings and the occasional food wrapper are strewn about on the floor,
+along with some fried BTL chips and a few other druggie leftovers. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	31052
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31055
+Name:	Top of the stairs
+Desc:$
+   Glancing back down, its amazing that the stairs held up against the climb
+and didn't collapse inward. This smaller room has doorways leading off in just
+about every cardinal direction, along with a hallway that stretches off to the
+west. A few strange noises can be heard slipping through the various cracks in
+the walls and floors, indicating that someone, or something else, is still
+scuttling around up here. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	31057
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	31058
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	31060
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31059
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	31052
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31056
+Name:	The dining room
+Desc:$
+   There is a huge table in the middle of this dining area, on top of which is
+the residue of every drug one could probably imagine. At each end of the table
+are small money counting machines, apparently ready for business. Underneath
+the table there are a few crates, some empty, while others have weapon parts
+and other odds and ends. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	31053
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31057
+Name:	The study
+Desc:$
+   This room is apparently a decent sized study, except it is pretty obvious
+that very little studying goes on here. Along the back wall are wooden crates,
+their tops cracked and ripped off, containing all sorts of chemicals, or at
+least whats left of the stash. The lengthy wooden desk pressed against the
+eastern wall is covered in chemical residue, beakers and vials, and everything
+else needed for mixing and cutting the various drugs being manufactured. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	31055
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31058
+Name:	A small room
+Desc:$
+   Upon entering this small bedroom one is bombarded by a stale funk that
+permeates the air, making it taste old and dusty, wreaking havoc upon any
+allergies one may have. A tiny ramshackled bed is posted in the center of the
+room, consisting of little more than a ratty, ripped-up and heavily stained
+futon. On the far wall is a metal gun rack, which is threatening to fall off
+the wall. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door
+	ToVnum:	31055
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31059
+Name:	Down a creepy hallway
+Desc:$
+   Aside from a flickering lightbulb hanging down from the ceiling, its cover
+having long been yanked off, little else offers help in traversing the
+horribly weakened floor planks that threaten to give way under foot with each
+step. The house seems to breathe as one travels down the length of the
+hallway, expanding and contracting slightly, probably due to the fact its in
+such disrepair. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	2
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	31055
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31061
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31060
+Name:	A dark storage room
+Desc:$
+   The doorway opens up into a small storage room, its only window having been
+boarded and nailed up, leaving it completely bereft of any lighting. There are
+crates and boxes of various sizes and shapes stacked hastily across the floor
+and pushed up against the walls, looking as if they had simply been tossed in
+here, as opposed to being stored. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	2
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	31055
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31061
+Name:	Down the hallway
+Desc:$
+   Staggering, is the best way to explain how one gets down this section of
+hallway, as the floorboards are either loose and water damaged, or missing
+completely. A lop-sided wooden door stands along the northern end of the path,
+while the hallway itself continues to stretch along towards the west, leading
+to another doorway at its end. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	2
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door
+	ToVnum:	31063
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	31059
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	ToVnum:	31062
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31062
+Name:	In the ammo room
+Desc:$
+   This small room has been left aside for the storage of ammunition, which is
+packed away in shipping crates and ontop of palettes. The entire western end
+is blocked off by stacked up crates, some smashed and collapsed in upon
+themselves, creating an almost impassable blockade. A small window on the
+northern wall allows the faintest bit of light spill in, as well as offering a
+glimpse of a small shed out in the back yard of the house. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	window frame
+	Desc:$
+A window stands at the northern end of the room here. 
+~
+	ToVnum:	31066
+	Flags:	1
+	Material:	glass
+	Barrier:	2
+	KeyVnum:	0
+	HiddenRating:	4
+[EXIT east]
+	Keywords:	door
+	ToVnum:	31061
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31063
+Name:	In the master bedroom
+Desc:$
+   Rows and rows of packing crates and boxes are filled to the brim with
+everything from trash, firearms, drugs, chemical containers, and anything else
+one can imagine. A few small holes in the ceiling leak down onto the boxes and
+floor, making the old floor boards swell and shrink, causing even more damage
+to their flimsy construction. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door
+	ToVnum:	31061
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31064
+Name:	Out back the house
+Desc:$
+   From here one can make out what remains of the back yard behind the house.
+There is a shabby looking shed standing off to the northern end with a dim,
+flickering light spilling out of it. The yard itself is a mess, consisting of
+little more than junk piles and old broken down cars and trucks, or at the
+least, bits and pieces of what used to be them. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	31065
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	31066
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31065
+Name:	A dank trashed yard
+Desc:$
+   As one starts to make their way through this section of the yard, its
+pretty easy to see its used for storing all sorts of leftover junk. There are
+smashed up cars, bikes and bits and pieces of various other vehicles scattered
+all over the place. A lot of old electrical appliances are strewn about as
+well, along with mostly ripped open and gutted black trashbags full of all
+kinds of nasty stuff. Amongst all the chaos, there seems to be a small, rusty
+tin shed, which oddly enough is the nicest part of the entire yard. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	31064
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31066
+Name:	Crawling out the window
+Desc:$
+   Having successfully crawled ones way outside of the window, there was
+little more than an ivy and mold covered lattice work plastered along the side
+of the house, offering hand and foot holds for one to climb up and down. Below
+is a junk covered back yard, full of all sorts of odds and ends, along with
+the occasional base head doped out and sleeping in a bush. 
+~
+Flags:	1000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	3
+Y:	2
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	window frame
+	Desc:$
+A window on the side of the house may offer access back inside. 
+~
+	ToVnum:	31062
+	Flags:	1
+	Material:	glass
+	Barrier:	2
+	KeyVnum:	0
+	HiddenRating:	4
+[EXIT down]
+	ToVnum:	31064
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31090
+Name:	A small and dark tunnel
+Desc:$
+   A small tunnel has been dug out here, and it doesn't look very lit it up,
+in fact, it's completely dark. You have to crawl through, and you feel the
+sewage against your hands and the smell hits your nostrils. 
+~
+Flags:	100001001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	31050
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31091
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31091
+Name:	A small and dark tunnel
+Desc:$
+   A small tunnel has been dug out here, and it doesn't look very lit it up,
+in fact, it's completely dark. You have to crawl through, and you feel the
+sewage against your hands and the smell hits your nostrils. 
+~
+Flags:	100001001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	31090
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31092
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31092
+Name:	A small and dark tunnel
+Desc:$
+   A small tunnel has been dug out here, and it doesn't look very lit it up,
+in fact, it's completely dark. You have to crawl through, and you feel the
+sewage against your hands and the smell hits your nostrils. 
+~
+Flags:	100001001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	31091
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31093
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31093
+Name:	A small and dark tunnel
+Desc:$
+   A small tunnel has been dug out here, and it doesn't look very lit it up,
+in fact, it's completely dark. You have to crawl through, and you feel the
+sewage against your hands and the smell hits your nostrils. 
+~
+Flags:	100001001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	31092
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31094
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31094
+Name:	A small and dark tunnel
+Desc:$
+   By now your clothes are full of sewage and other filth, and your nose is
+getting used to the godawful smell.. but not quite. The tunnel turns here, and
+continues east and south, you see some faint light to the east and complete
+darkness to the south. 
+~
+Flags:	100001001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	31093
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31095
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31095
+Name:	A small and dark tunnel
+Desc:$
+   A small tunnel has been dug out here, and it doesn't look very lit it up,
+in fact, it's completely dark. You have to crawl through, and you feel the
+sewage against your hands and the smell hits your nostrils. 
+~
+Flags:	100001001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	31094
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	31096
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31096
+Name:	A small and dark tunnel
+Desc:$
+   To the west some light shines through an enclosed grate and darkness fills
+the northern end. A sewage pipe comes out from the above and some green liquid
+squirts out every now and then. 
+~
+Flags:	100001001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	31095
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31097
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31097
+Name:	A small and dark tunnel
+Desc:$
+   A small tunnel has been dug out here, and it doesn't look very lit it up,
+in fact, it's completely dark. You have to crawl through, and you feel the
+sewage against your hands and the smell hits your nostrils. 
+~
+Flags:	100001001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	31096
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31098
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31098
+Name:	A small and dark tunnel
+Desc:$
+   A small tunnel has been dug out here, and it doesn't look very lit it up,
+in fact, it's completely dark. You have to crawl through, and you feel the
+sewage against your hands and the smell hits your nostrils. 
+~
+Flags:	100001001
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	31097
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	31099
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#31099
+Name:	A small and dark tunnel
+Desc:$
+   A grate is nailed to the wall to the west, and some light shines through
+it. The sewage lightens up here, and the dirty ground is dusty with some paper
+bis strewn about. 
+~
+Flags:	10000000100001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	31098
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	grate
+	ToVnum:	10106
+	Flags:	1
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

@@ -342,7 +342,7 @@ FOUNTAIN          - item is a fountain
 CYBERWARE         - !!DO NOT USE!!
 CYBERDECK         - item is a cyberdeck
 PROGRAM           - item is a cyberdeck program
-GUN_MAGAZINE      - item is a magazine
+GUN_CLIP          - item is a clip
 GUN_ACCESSORY     - item is a gun attachment
 SPELL_FORMULA     - item is a spell formula
 WORKING_GEER      - item is a kit
@@ -1096,29 +1096,6 @@ WearFlags:	0
 ExtraFlags:	0
 AffFlags:	0
 Material:	computers
-[POINTS]
-	Weight:	0.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
-#1040
-Keywords:	sign
-Name:	a sign
-RoomDesc:$
-A sign notes, ^Y"We've moved! New HQ is at 10000."^g~
-LookDesc:$
-1000 is the old HQ, preserved for posterity's sake. 10k is the new one. 
-~
-Type:	UNDEFINED
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
 [POINTS]
 	Weight:	0.00
 	Barrier:	32

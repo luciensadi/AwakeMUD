@@ -1,0 +1,402 @@
+#8100
+Keywords:	grey gray bdu shirt uniform battle dress combat
+Name:	A ^wgray^n BDU shirt
+RoomDesc:$
+A plain gray BDU shirt lies here.~
+LookDesc:$
+A gray BDU shirt with pockets and rigid armor protection with a fine polymer
+kevlar mesh underneath, which has an affect of keeping a soldier cool or warm
+depending on weather, and protecting from low calibre ballistics. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	1200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val2:	4
+	Val4:	10
+	Val5:	4
+	Val6:	2
+BREAK
+#8101
+Keywords:	doughnut plain glazed donut
+Name:	A glazed doughnut
+RoomDesc:$
+A plain doughnut sits here.~
+LookDesc:$
+A yummy glazed doughnut. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+BREAK
+#8102
+Keywords:	cup coffee paper cup soykaf
+Name:	A paper cup, filled with coffee
+RoomDesc:$
+A paper cup, filled with soykaf sits here.~
+LookDesc:$
+A plain paper Dixie cup, filled with black soykaf. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	4
+	Val2:	2
+BREAK
+#8103
+Keywords:	broken down semi truck
+Name:	A broken-down truck
+RoomDesc:$
+^yA broken-down semi is parked on the side of the road.^n~
+LookDesc:$
+A very large white semi, with the sign "^WAZTLAN TRUCKING AND SHIPPING^n"
+emblazoned on its tractor-trailer.  The hood is up and the cab is abandoned. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1000000000.00
+	Barrier:	16
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8104
+Keywords:	shot up shot-up thunderbird tbird t-bird remains
+Name:	The shot-up remains of a T-bird
+RoomDesc:$
+^yThe shot-up remains of a thunderbird are lying on the highway's shoulder.^n~
+LookDesc:$
+This is an unmarked thunderbird, as far as you can tell.  It has extensive
+gunshot and shelling marks on it, as well as a decimated portside, probably
+the result of a launched missile.  Examining the interior shows that whatever
+cargo that was carried has been ransacked or retrieved. Looks like some t-bird
+jock bit the dust. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1000000000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8105
+Keywords:	wrecked motorcycle
+Name:	A wrecked motorcycle
+RoomDesc:$
+^yA motorcycle is wrecked into the center divider.^n~
+LookDesc:$
+The remains of a Harley Scorpion.  It looks like someone was driving
+recklessly along this treacherous stretch of highway. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	500.00
+	Barrier:	24
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8106
+Keywords:	shot up ford bison wreck wrecked crashed shot-up red
+Name:	A shot-up red Ford Bison
+RoomDesc:$
+^yA ^Rred^y Ford Bison covered in gunshots is wrecked on the shoulder.^n~
+LookDesc:$
+The Bison has been completely ruined by gun blasts, with lines of bullet holes
+created by some weapons' autofire.  Whether it was destroyed by gangers or
+government you can not tell. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2500.00
+	Barrier:	12
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8107
+Keywords:	wrecked ford americar
+Name:	A wrecked Ford Americar
+RoomDesc:$
+^yA Ford Americar is wrecked into a tree on the side of the highway.^n~
+LookDesc:$
+A gray Ford Americar, completely totalled from sliding into a tree.  It
+appears that anything of value was ransacked from the wreckage, probably by
+the Sinsearach Ancients that roam these highways. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1500.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8108
+Keywords:	dark blue lined coat duster
+Name:	A ^bdark blue^n lined duster
+RoomDesc:$
+^LA ^bdark blue^L lined duster sits here in a heap.^n~
+LookDesc:$
+A very well put together duster, with Mortimer of London tags on the inside.
+There are pockets and compartments inside this duster, for concealing anything
+that might need to be hidden. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	3.00
+	Barrier:	12
+	Cost:	2600
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	6
+	Val2:	2
+	Val3:	2
+	Val4:	10
+	Val5:	4
+	Val6:	2
+	Val7:	3
+BREAK
+#8110
+Keywords:	large semi truck wrecked
+Name:	A wrecked truck
+RoomDesc:$
+^yA large semi is wrecked on the side of the road, sitting on its side.^n~
+LookDesc:$
+A completely blown to shreds Mack Truck, with its trailer sitting on its side,
+wheels facing towards the highway.  The cargo has been removed, and the truck
+has been ransacked for any valuables that may have been in its cab. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10000.00
+	Barrier:	16
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8111
+Keywords:	white kevlar chest plate partial heavy armor
+Name:	^Wa white kevlar chestplate^n
+RoomDesc:$
+A white chestplate, looking much like platemail lies here.~
+LookDesc:$
+Upon first look, it appears to be a piece of platemail made from kevlar.  Upon
+closer inspection, one can discern that this is a very cleverly modified piece
+of partial heavy armor. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	111010000001000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	4.00
+	Barrier:	16
+	Cost:	3500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	3
+	LegalCode:	11
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val2:	4
+	Val5:	6
+	Val6:	4
+	Val7:	2
+BREAK
+#8112
+Keywords:	lance white long
+Name:	^Wa white lance^n
+RoomDesc:$
+A long white lance sits here.~
+LookDesc:$
+A lance, much like one would imagine was used by the knights of old, but made
+of high grade ballistic plastics. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	24
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	2
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#8113
+Keywords:	wrecked motorcycle bike decimated
+Name:	the decimated wreck of a motorcycle
+RoomDesc:$
+^yA decimated wreck of a bike is strewn along the shoulder.^n~
+LookDesc:$
+The motorcycle was once a Honda Viking, with a green and blue color scheme. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	500.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8114
+Keywords:	corpse knight mark elf elven go ganger go-ganger goganger
+Name:	the corpse of a Knights of the Mark go-ganger
+RoomDesc:$
+^rThe corpse of a Knights of the Mark go-ganger is lying here.^n~
+LookDesc:$
+You see nothing special.. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	200.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8115
+Keywords:	corpse ancients sinsearach elf elven go-ganger go ganger goganger
+Name:	the corpse of a Sinsearach Ancients go-ganger
+RoomDesc:$
+^rThe corpse of A Sinsearach Ancients go-ganger is lying here.^n~
+LookDesc:$
+You see nothing special.. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	90.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

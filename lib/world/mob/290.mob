@@ -1,0 +1,899 @@
+#29000
+Keywords:	sandra dark woman beautiful
+Name:	Sandra Dark
+RoomDesc:$
+a woman is here 
+
+~
+LookDesc:$
+A rather tall woman, dressed in corprate attire, is here. A badge pinned to
+the right side of her chest reads "Sandra Dark". She appears to be in her late
+20's and carries herself with a diginified walk. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010
+AffFlags:	1000001010
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	13
+	Qui:	11
+	Str:	13
+	Cha:	14
+	Int:	10
+	Wil:	13
+	Mag:	10
+[POINTS]
+	Height:	175
+	Weight:	65
+	Level:	1
+	Ballistic:	13
+	Impact:	12
+	Cash:	20
+[SKILLS]
+	sorcery:	15
+	unarmed combat:	15
+BREAK
+#29001
+Keywords:	decker test cmt man
+Name:	A Decker wearing a Cross Applied Technologies polo shirt
+RoomDesc:$
+A Decker is sitting here, tinkering with what looks like a cyberdeck. 
+
+~
+LookDesc:$
+Frazzled hair, coke bottle glasses, and a pocket protector. These guys are
+legitimate nerds, but they are -good- when it comes to computer sciences. They
+have been hired by Cross Applied Technology for just this purpose. They test
+and make new cyberdecks. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	6
+	Str:	6
+	Cha:	5
+	Int:	9
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	67
+	Level:	1
+	Ballistic:	7
+	Impact:	7
+[SKILLS]
+	unarmed combat:	11
+	computers:	12
+BREAK
+#29002
+Keywords:	Cross Applied Technology security guard
+Name:	a Cross Applied Technology security guard
+RoomDesc:$
+a Cross Applied Technology security guard stands here doing his job 
+
+~
+LookDesc:$
+This guy is tall, with broad shoulders. He stands absolutely still, only
+gazing you as you walk in. He has a short army cut, barely visible under the
+helmet he's wearing. There's no slouch here and he looks deeply concentrated
+and ready for action. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000011010
+AffFlags:	1000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	13
+	Qui:	9
+	Str:	11
+	Cha:	9
+	Int:	12
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Level:	1
+	Ballistic:	4
+	Impact:	3
+	Bank:	100
+[SKILLS]
+	sub-machine guns:	15
+BREAK
+#29003
+Keywords:	scientist
+Name:	a scientist
+RoomDesc:$
+A scientist that looks busy is standing here. 
+
+~
+LookDesc:$
+A small man in his 50's scurries around fiddling with electronics. He has
+glasses and is bald, with some white curly hair in the back. He looks
+interrested in what he's doing and doesn't even look at you when you walk in.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	7
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	168
+	Weight:	60
+	Ballistic:	3
+	Impact:	3
+	Bank:	20
+[SKILLS]
+	unarmed combat:	10
+BREAK
+#29004
+Keywords:	guard heavy security catco
+Name:	A Cross Applied heavy arms security guard
+RoomDesc:$
+A guard in heavy armor stands here alert 
+
+~
+LookDesc:$
+Tall, muscular, and mean looking. This man is obviously more interested in
+doing his job than he is about anything else. His plated armor bears the logo
+of Cross Applied Technology, and his weapon is allready leveled off in an
+offensive pose. Perhaps coming within reach of this chummer wasn't such a good
+idea? 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Shotgun
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	9
+	Str:	10
+	Cha:	9
+	Int:	10
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	10
+	Impact:	9
+	Cash:	200
+	Bank:	300
+[SKILLS]
+	shotguns:	15
+BREAK
+#29006
+Keywords:	guard surveillance catco
+Name:	A surveillance guard
+RoomDesc:$
+A guard sits here watching the monitors 
+
+~
+LookDesc:$
+An older gentleman, balding, grey haired and alert. He sits in his chair
+watching the monitors with an avid interest, occasionally speaking into a
+microphone to check up on different posts throughout the building. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	4
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	120
+	Ballistic:	4
+	Impact:	5
+	Cash:	50
+	Bank:	50
+[SKILLS]
+	pistols:	10
+BREAK
+#29007
+Keywords:	mage guard catco
+Name:	A mage wearing the Cross Applied logo
+RoomDesc:$
+A powerful mage wearing the Cross Applied logo stands here chanting to
+herself. 
+
+~
+LookDesc:$
+She's low and skinny, and of an asian origin. Her hair is short ad black, and
+made into a ponytail in the back. She stands with her hands palm to palm
+meditating, channeling mana. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10101010000000001010
+AffFlags:	1000001010
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	10
+	Str:	8
+	Cha:	12
+	Int:	13
+	Wil:	12
+	Mag:	11
+[POINTS]
+	Height:	165
+	Weight:	60
+	Ballistic:	9
+	Impact:	10
+[SKILLS]
+	sorcery:	15
+	unarmed combat:	10
+BREAK
+#29008
+Keywords:	lilith teenage girl
+Name:	Lilith
+RoomDesc:$
+A teenage girl stands here. 
+
+~
+LookDesc:$
+A medium height girl stands here, she looks to be about 16 years old.. and
+she's very beautiful. She gives you an ice cold glare as you walk in. She
+doesn't seem very nice. Her skinny, but still voluptuous body and stunning
+face makes you mellow. She has medium long black hair to her shoulders.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000101010000000111010
+AffFlags:	1000001000001000001010
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	15
+	Str:	9
+	Cha:	15
+	Int:	13
+	Wil:	13
+	Mag:	11
+[POINTS]
+	Height:	160
+	Weight:	56
+	Ballistic:	24
+	Impact:	23
+[SKILLS]
+	sorcery:	17
+	unarmed combat:	12
+	:	11
+BREAK
+#29009
+Keywords:	man tall suit michael black
+Name:	Michael Black
+RoomDesc:$
+A tall and handsome man in an expensive suit stands here. 
+
+~
+LookDesc:$
+Talk about good looking.. this guy could easily pose for any Calvin Klein
+photoshoots..  Short black hair, tall and broad shoulders.. any woman's dream.
+He has a glint in his eyes.. with a million dollar man grin, that makes him
+look unique. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010000000101010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	6
+	Cha:	5
+	Int:	7
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	185
+	Weight:	70
+	Ballistic:	7
+	Impact:	7
+	Bank:	100
+[SKILLS]
+	unarmed combat:	10
+BREAK
+#29010
+Keywords:	ganger brain eater troll
+Name:	a Brain Eater's ganger
+RoomDesc:$
+A Brain Eater's ganger is stomping about here. 
+
+~
+LookDesc:$
+This is one huge troll. Smelly, greasy and generally vile, not a mommas
+dreamboy. He wears his colors proudly as he polishes his gun. 
+~
+ArriveMsg:	stomps in from
+LeaveMsg:	stomps
+MobFlags:	100000000011100011100
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	14
+	Qui:	7
+	Str:	13
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	210
+	Weight:	220
+	Ballistic:	10
+	Impact:	9
+	Cash:	20
+[SKILLS]
+	pistols:	12
+BREAK
+#29011
+Keywords:	diggas leader troll
+Name:	Diggas
+RoomDesc:$
+Diggas, the leader of the Brain Eater's, is standing here. 
+
+~
+LookDesc:$
+Diggas is small for a troll, he doesn't look very strong nor mean. He has some
+white fur on his head, something is definetly strange about this troll. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000101010000000111010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	13
+	Qui:	12
+	Str:	7
+	Cha:	6
+	Int:	10
+	Wil:	11
+	Mag:	12
+[POINTS]
+	Height:	210
+	Weight:	140
+	Ballistic:	10
+	Impact:	13
+[SKILLS]
+	sorcery:	17
+	unarmed combat:	12
+BREAK
+#29012
+Keywords:	motorcycle lone star unit
+Name:	a Lone Star motorcycle unit
+RoomDesc:$
+A Lone Star motorcycle unit races by here. 
+
+~
+LookDesc:$
+A beautiful Diablo motorcycle, with full armor platings, LS logo and
+bulletproof glass on the front. 
+~
+ArriveMsg:	races in from
+LeaveMsg:	zips
+MobFlags:	100000000000010000010000000001000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	10
+	Str:	10
+	Cha:	8
+	Int:	8
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	130
+	Weight:	800
+	Ballistic:	12
+	Impact:	11
+[SKILLS]
+	machine guns:	12
+BREAK
+#29013
+Keywords:	car vehicle lone star squad
+Name:	^ya Lone Star Patrol Vehicle^n
+RoomDesc:$
+^yA Lone Star squad car cruises by here.^n 
+
+~
+LookDesc:$
+A beautiful car equipped with high velocity armor on the sides and front, and
+bullet proof glass. Judging by the extremely huge machine gun fitted between
+the headlights, this looks like one badass vehicle. 
+~
+ArriveMsg:	drives in from
+LeaveMsg:	drives
+MobFlags:	100000000000010100010000000001000
+AffFlags:	1000000000001000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	16
+	Qui:	9
+	Str:	16
+	Cha:	10
+	Int:	9
+	Wil:	15
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	3000
+	Ballistic:	20
+	Impact:	23
+[SKILLS]
+	gunnery:	26
+BREAK
+#29014
+Keywords:	officer lone star
+Name:	a Lone Star officer
+RoomDesc:$
+A Lone Star officer stands here, looking around. 
+
+~
+LookDesc:$
+A tall, broad-shouldered man with a military crewcut, ramrod-straight posture
+and a serious expression on his face. He's dressed in the standard Lone Star
+uniform, and armed accordingly. 
+~
+ArriveMsg:	enters from
+LeaveMsg:	walks
+MobFlags:	10000000100000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	8
+	Str:	7
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	185
+	Weight:	70
+	Ballistic:	13
+	Impact:	15
+	Cash:	85
+	Bank:	85
+[SKILLS]
+	pistols:	14
+	unarmed combat:	12
+BREAK
+#29015
+Keywords:	man special op
+Name:	a Special Op
+RoomDesc:$
+A man stands here, tinkering with his gun. 
+
+~
+LookDesc:$
+You can barely see anything of him behind his hooded trenchcoat. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000101010000000101010
+AffFlags:	1000001000000010
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	20
+	Str:	9
+	Cha:	10
+	Int:	12
+	Wil:	13
+	Mag:	0
+[POINTS]
+	Height:	189
+	Weight:	70
+	Ballistic:	23
+	Impact:	23
+[SKILLS]
+	sub-machine guns:	14
+	unarmed combat:	20
+BREAK
+#29016
+Keywords:	gabe vogel lanky man suit
+Name:	Gabe Vogel
+RoomDesc:$
+A lanky man in a snazzy suit sits in his leather chair here. 
+
+~
+LookDesc:$
+He has medium long hair to just above his ears, he's also quite lanky. Doesn't
+look very scary. He sits in his leather chair with a bored look on his face. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000000000001010
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	10
+	Str:	10
+	Cha:	10
+	Int:	10
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	177
+	Weight:	69
+	Ballistic:	9
+	Impact:	10
+	Cash:	300
+	Bank:	300
+[SKILLS]
+	unarmed combat:	9
+BREAK
+#29017
+Keywords:	arnold spencer man fat chief
+Name:	Arnold Spencer
+RoomDesc:$
+A fat man sits here, eating donuts. 
+
+~
+LookDesc:$
+He's bald, fat and he seems to love those donuts. His shirt has the first
+button unbuttoned and he's wearing a cheap suit that looks like it hasn't been
+cleaned for quite some time. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bludgeon
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	4
+	Str:	8
+	Cha:	3
+	Int:	6
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	220
+	Ballistic:	7
+	Impact:	8
+	Cash:	80
+	Bank:	100
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#29018
+Keywords:	man george
+Name:	George
+RoomDesc:$
+A small man sits in behind bulletproof glass here. 
+
+~
+LookDesc:$
+He's kinda short, with grey hair in his 50's. He's always happy to see people
+and greets you as you enter. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+BREAK
+#29019
+Keywords:	receptionist woman
+Name:	a receptionist
+RoomDesc:$
+The receptionist is protected by bulletproof glass here. 
+
+~
+LookDesc:$
+She's in her mid 40's, as you walk in she greets you with a smile. She has
+grey hair made into a ponytail in the back. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	156
+	Weight:	67
+[SKILLS]
+BREAK
+#29020
+Keywords:	doctor man coax streetdoc
+Name:	a doctor
+RoomDesc:$
+A doctor stands here, messing with a gland of some kind. 
+
+~
+LookDesc:$
+This small, bespectacled man seems to regard everything and everyone with a
+wild, slightly crazy glare. He's wearing a dirty labcoat that might once have
+been white, but is now covered with a plethora of red and dark-brown stains. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	56
+[SKILLS]
+	:	50
+BREAK
+#29021
+Keywords:	pedestrian
+Name:	a pedestrian
+RoomDesc:$
+A pedestrian walks by you here. 
+
+~
+LookDesc:$
+Your average joe. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	3
+	Cha:	2
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	2
+	Impact:	3
+	Cash:	50
+	Bank:	65
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#29022
+Keywords:	kid child
+Name:	a kid
+RoomDesc:$
+A kid is here, jumping around and playing. 
+
+~
+LookDesc:$
+He looks about 6 years old, has a baseball cap on and some jeans and a
+t-shirt. He's running around playing with his friends and laughing. 
+~
+ArriveMsg:	jumps in from
+LeaveMsg:	runs
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	130
+	Weight:	36
+	Ballistic:	5
+	Impact:	6
+[SKILLS]
+BREAK
+#29023
+Keywords:	parent woman mother
+Name:	a parent
+RoomDesc:$
+A parent stands here, glancing around. 
+
+~
+LookDesc:$
+Your average parent-type: a young woman in blue jeans and a knit sweater, with
+long hair tied back into a ponytail. She glances around constantly, presumably
+for her child. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	9
+	Str:	8
+	Cha:	6
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	166
+	Weight:	60
+	Ballistic:	8
+	Impact:	9
+	Cash:	85
+	Bank:	85
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#29024
+Keywords:	woman hen chi asian
+Name:	Hen Chi
+RoomDesc:$
+A woman of Asian descent stands behind the counter, puffing on a clove
+cigarette. 
+
+~
+LookDesc:$
+This middle-aged woman looks like she hasn't aged a day, she's wearing a
+purple t-shirt and blue jeans, and looks 'americanized' even though she speaks
+in broken english. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	3
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	167
+	Weight:	56
+[SKILLS]
+	negotiation:	3
+BREAK
+#29025
+Keywords:	guy skinny bored-looking teenager male human drugstore cashier
+Name:	a skinny guy
+RoomDesc:$
+A skinny, bored-looking teenaged guy stands behind the counter. 
+
+~
+LookDesc:$
+Just a normal-looking teenaged human in a Triple-D uniform: tall, skinny, pale
+and not looking terribly happy to be here. His brown eyes sometimes seem as if
+they're about to droop shut, then snap open again to pay attention to his
+surroundings. He seems fairly courteous and quick with customers, at least. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000001011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	2
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+[SKILLS]
+BREAK
+END

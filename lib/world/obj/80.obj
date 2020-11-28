@@ -1,0 +1,351 @@
+#8000
+Keywords:	terminal computer
+Name:	a terminal
+RoomDesc:$
+A computer terminal sits by a wall, displaying a screen saver.~
+LookDesc:$
+It has a large, 21" screen with a built-in microphone for its voice
+recognition software.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8001
+Keywords:	terminal computer
+Name:	a terminal
+RoomDesc:$
+A computer terminal sits on a desk.~
+LookDesc:$
+You shouldn't be seeing this, I think..
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8002
+Keywords:	terminal computer
+Name:	a terminal
+RoomDesc:$
+A computer terminal sits on a desk.~
+LookDesc:$
+You shouldn't be seeing this, I think..
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8003
+Keywords:	terminal computer
+Name:	a terminal
+RoomDesc:$
+A computer terminal sits on a desk.~
+LookDesc:$
+You shouldn't be seeing this, I think..
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8004
+Keywords:	terminal computer
+Name:	a terminal
+RoomDesc:$
+A computer terminal sits on a desk.~
+LookDesc:$
+You shouldn't be seeing this, I think..
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8005
+Keywords:	vest armor red
+Name:	a red armor vest
+RoomDesc:$
+A dull red armor vest lies here.~
+LookDesc:$
+It's a dull red vest padded with anti-bullet material.  On the tag is
+the symbol of the Neophytic Guild.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	4.00
+	Barrier:	3
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	2
+	Val6:	1
+BREAK
+#8007
+Keywords:	cyberdeck basik
+Name:	a Basik cyberdeck
+RoomDesc:$
+A Basik-brand cyberdeck rests on the ground.~
+LookDesc:$
+It's not much to look at, but it serves its function well enough.
+~
+Type:	Cyberdeck
+WearFlags:	1000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	225
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val2:	10
+	Val3:	25
+	Val4:	2
+BREAK
+#8008
+Keywords:	program bod basik
+Name:	a Basik bod program
+RoomDesc:$
+A small disk with the Basik logo on it is here.~
+LookDesc:$
+A standard input data disk, with the Basik logo printed on the label.
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	300
+	AvailTN:	2
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+	Val2:	3
+	Val3:	300
+BREAK
+#8009
+Keywords:	program attack basik
+Name:	a Basik attack program
+RoomDesc:$
+A small disk with the Basik logo on it is here.~
+LookDesc:$
+A standard input data disk, with the Basik logo printed on the label.
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	2
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	1
+	Val3:	1
+BREAK
+#8010
+Keywords:	canteen water
+Name:	a canteen
+RoomDesc:$
+A canteen has been discarded.~
+LookDesc:$
+Made of a special material to keep its contents cool.
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	15
+BREAK
+#8011
+Keywords:	ration bar
+Name:	a ration bar
+RoomDesc:$
+A preserved ration bar sits here.~
+LookDesc:$
+While it doesn't have much taste, it will sustain you for some time.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+BREAK
+#8012
+Keywords:	suit fighting
+Name:	a fighting suit
+RoomDesc:$
+A folded fighting suit lies on the floor.~
+LookDesc:$
+A grey, sleeveless fighting suit, fashioned in the typical martial
+arts style, accompanied by a white belt.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	75
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	1
+	Val6:	2
+BREAK
+#8013
+Keywords:	terminal computer
+Name:	a terminal
+RoomDesc:$
+A computer terminal sits on a desk.~
+LookDesc:$
+You shouldn't be seeing this, I think..
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8014
+Keywords:	computer terminal
+Name:	a computer terminal
+RoomDesc:$
+A computer terminal sits on a desk here, with a flashing cursor.~
+LookDesc:$
+If you see this, report it.  It is a bug. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	10
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	2147483648.00
+	Barrier:	32
+	Cost:	10000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

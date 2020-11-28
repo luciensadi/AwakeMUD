@@ -1,20 +1,23 @@
 #1000
-Keywords:	teacher Lorenzo
-Name:	the teacher Lorenzo
+Keywords:	nerp receptionist
+Name:	the NERP receptionist
 RoomDesc:$
-Lorenzo, the teacher, is standing here waiting to teach you.  
+The NERP Industries receptionist sits behind her desk here. 
 
 ~
 LookDesc:$
-With black hair obscured by a hairnet, Lorenzo slouches here. 
+Is she an elf, a troll or a gnome? No one has ever been able to tell. She
+pleasantly answers the phones here at NERP Industries all day long. She seems
+to be forever trying to explain what it is NERPs actually does. 
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1011
+MobFlags:	1000000000000000000000000001010
 AffFlags:	1000001000
 Race:	Human
 Gender:	Female
-DefaultPos:	Standing
+Position:	Sitting
+DefaultPos:	Sitting
 AttackType:	Maul
 [ATTRIBUTES]
 	Bod:	25
@@ -25,8 +28,8 @@ AttackType:	Maul
 	Wil:	25
 	Mag:	25
 [POINTS]
-	Height:	20
-	Weight:	208
+	Height:	0
+	Weight:	0
 	Ballistic:	8
 	Impact:	7
 	Cash:	10
@@ -40,18 +43,19 @@ AttackType:	Maul
 	sorcery:	15
 BREAK
 #1001
-Keywords:	teacher chole
-Name:	the teacher Chole
+Keywords:	nerp branded projector
+Name:	a NERP branded projector
 RoomDesc:$
-Chole, the teacher, is standing here waiting to teach you. 
+A NERP branded projector has been left here. 
 
 ~
 LookDesc:$
-With black hair obscured by a hairnet, Chole slouches here. 
+There is a large box of projector slides left next to the projector.
+Apparently you have to train yourself. 
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1011
+MobFlags:	1000000000000000000000000001010
 AffFlags:	1000001000
 Race:	Human
 Gender:	Male
@@ -59,15 +63,15 @@ DefaultPos:	Standing
 AttackType:	Maul
 [ATTRIBUTES]
 	Bod:	25
-	Qui:	25
-	Str:	25
-	Cha:	25
-	Int:	40
-	Wil:	25
-	Mag:	25
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
 [POINTS]
-	Height:	20
-	Weight:	208
+	Height:	0
+	Weight:	0
 	Ballistic:	8
 	Impact:	7
 	Cash:	10
@@ -80,1036 +84,331 @@ AttackType:	Maul
 	sorcery:	15
 BREAK
 #1002
-Keywords:	khepri cow black white dairy
-Name:	Khepri
+Keywords:	nerp branded projector
+Name:	a NERP branded projector
 RoomDesc:$
-A black and white dairy cow grazes peacefully here.  
+A NERP branded projector has been left here. 
 
 ~
 LookDesc:$
-It's a rather peaceful looking cow, that common expression of complete and
-utter cluelessness on its face. It  happily (?) munches on some cud oblivious
-to it's surroundings.  
+There is a large box of projector slides left next to the projector.
+Apparently you have to train yourself. 
 ~
-ArriveMsg:	ΐΛw	8£Θ
-LeaveMsg:	ΘZΧX^ζ
-MobFlags:	1011011
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
 AffFlags:	1000001000
 Race:	Human
-Gender:	Female
+Gender:	Male
 DefaultPos:	Standing
-AttackType:	Stab
+AttackType:	Maul
 [ATTRIBUTES]
-	Bod:	50
-	Qui:	40
-	Str:	25
-	Cha:	25
-	Int:	40
-	Wil:	50
-	Mag:	25
+	Bod:	25
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
 [POINTS]
-	Height:	20
-	Weight:	208
-	Ballistic:	100
-	Impact:	100
+	Height:	0
+	Weight:	0
+	Ballistic:	8
+	Impact:	7
 	Cash:	10
-	Bank:	100
+	Bank:	10
 [SKILLS]
-	edged weapons:	50
-	unarmed combat:	50
+	:	10
+	interrogation:	12
 	:	20
 	conjuring:	18
 	sorcery:	15
 BREAK
 #1003
-Keywords:	bunny vorpal
-Name:	a vorpal bunny
+Keywords:	nerp branded projector
+Name:	a NERP branded projector
 RoomDesc:$
-A small, cute, cuddly bunny rabbit sits here. 
+A NERP branded projector has been left here. 
 
 ~
 LookDesc:$
-It looks so cute and loveable!  However, you do notice it has rather sharp
-looking teeth. 
-~
-ArriveMsg:	hops in from
-LeaveMsg:	hops
-MobFlags:	1100000001100
-AffFlags:	0
-Race:	Human
-Gender:	Female
-Position:	Sitting
-DefaultPos:	Sitting
-AttackType:	Bite
-[ATTRIBUTES]
-	Bod:	12
-	Qui:	8
-	Str:	8
-	Cha:	15
-	Int:	12
-	Wil:	12
-	Mag:	6
-[POINTS]
-	Height:	50
-	Weight:	2
-	Ballistic:	5
-	Impact:	5
-[SKILLS]
-BREAK
-#1004
-Keywords:	geordi la forge laforge
-Name:	Geordi LaForge
-RoomDesc:$
-A young black man wearing a visor over his eyes here mans Engineering. 
-
-~
-LookDesc:$
-A confident african descended man, smiling and working very swiftly.  He
-administrates Engineering with a fierce proficiency and a razor sharp sense of
-innovation.  He wears a visor over his eyes, as he was born blind, that allows
-him to see far beyond the normal visual range. 
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1110
-AffFlags:	1000000000
-Race:	Human
-Gender:	Male
-Position:	Sitting
-DefaultPos:	Sitting
-AttackType:	Thrash
-[ATTRIBUTES]
-	Bod:	6
-	Qui:	6
-	Str:	6
-	Cha:	6
-	Int:	6
-	Wil:	6
-	Mag:	6
-[POINTS]
-	Height:	160
-	Weight:	70
-	Ballistic:	8
-	Impact:	8
-	Bank:	10000
-[SKILLS]
-BREAK
-#1005
-Keywords:	postal postmaster worker
-Name:	a postal worker
-RoomDesc:$
-A postal worker stands here ready to serve you. 
-
-~
-LookDesc:$
-A woman wearing a stylish jacket, white shirt and tie, and a pair of dark
-slacks stands here working with some papers.  She smiles as she hears your
-approach and stands ready to help you. 
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1110
-AffFlags:	1000
-Race:	Human
-Gender:	Female
-DefaultPos:	Standing
-AttackType:	Thrash
-[ATTRIBUTES]
-	Bod:	6
-	Qui:	6
-	Str:	6
-	Cha:	6
-	Int:	6
-	Wil:	6
-	Mag:	6
-[POINTS]
-	Height:	0
-	Weight:	0
-	Ballistic:	10
-	Impact:	10
-	Bank:	100
-[SKILLS]
-BREAK
-#1006
-Keywords:	Sebastian
-Name:	Sebastian
-RoomDesc:$
-Sebastian eyes you warily, discerning if you are a threat to his beloved
-Aerial.  
-
-~
-LookDesc:$
-Sebastian cocks his head towards you as you look at him.  He decides that you
-are no threat to him or his beloved Aerial and as he yawns nonchalantly he
-exposes dripping fangs.  Sebastian stretches lazily, digging razor sharp claws
-into the ground.  Corded muscles flex under his silky black coat and you can
-only hope that Aerial has control over her oversized panther. 
-~
-ArriveMsg:	stalks in from
-LeaveMsg:	stalks
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Male
-Position:	Sitting
-DefaultPos:	Sitting
-AttackType:	Claw
-[ATTRIBUTES]
-	Bod:	5
-	Qui:	5
-	Str:	5
-	Cha:	5
-	Int:	2
-	Wil:	5
-	Mag:	5
-[POINTS]
-	Height:	30
-	Weight:	30
-[SKILLS]
-BREAK
-#1007
-Keywords:	keyn jraye j'raye priest strange man human silver haired
-Name:	a strange silver haired man in a robe
-RoomDesc:$
-A strange silver-haired man in white robes stands here. 
-
-~
-LookDesc:$
-His eyes are strange, as if he bled mercury from his pupils.  His hair is
-purest silver in appearance, and he emits a glow of an unearthly wisdom. 
-~
-ArriveMsg:	θω@θω@from
-LeaveMsg:	leaves
-MobFlags:	10000000001010
-AffFlags:	1000000000001000000000
-Race:	Human
-Gender:	Male
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	30
-	Qui:	16
-	Str:	25
-	Cha:	12
-	Int:	18
-	Wil:	40
-	Mag:	40
-[POINTS]
-	Height:	0
-	Weight:	0
-	Ballistic:	90
-	Impact:	90
-[SKILLS]
-	sorcery:	50
-	unarmed combat:	20
-	:	4
-	:	3
-	armed combat:	3
-BREAK
-#1008
-Keywords:	keyn jraye j'raye priest strange man human metallic haired unrari
-Name:	a strange dark metallic haired man
-RoomDesc:$
-A strange dark metallic haired man stands here, wearing normal clothing. 
-
-~
-LookDesc:$
-His eyes are strange, as if he bled mercury from his pupils.  His hair is a
-dark metallic color, almost like a dark lead color.  His skin is olive-toned.
-He emits a glow of unearthly wisdom. 
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	10000000001010
-AffFlags:	1000000000001000000000
-Race:	Human
-Gender:	Male
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	30
-	Qui:	16
-	Str:	25
-	Cha:	12
-	Int:	18
-	Wil:	40
-	Mag:	40
-[POINTS]
-	Height:	0
-	Weight:	0
-	Ballistic:	90
-	Impact:	90
-[SKILLS]
-	sorcery:	50
-	unarmed combat:	20
-	:	4
-	:	3
-	armed combat:	3
-BREAK
-#1020
-Keywords:	beautiful golden haired elven woman jenna n'fairra
-Name:	Jenna N'Fairra
-RoomDesc:$
-A stunningly beautiful golden haired elven woman stands here regal in
-countenance. 
-
-~
-LookDesc:$
-One of the infamous Council of Princes of Tir Tairngire, Jenna N'Fairra is
-also an ethereal beauty, with eyes that pierce thru the aeons as if the were
-no more than air. 
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	101010000000011010
-AffFlags:	1000011000001000011010
-Race:	Human
-Gender:	Female
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	30
-	Qui:	35
-	Str:	30
-	Cha:	8
-	Int:	10
-	Wil:	40
-	Mag:	45
-[POINTS]
-	Height:	0
-	Weight:	0
-	Level:	4
-	Ballistic:	30
-	Impact:	30
-[SKILLS]
-	edged weapons:	30
-	sorcery:	45
-	pistols:	35
-	driving/Car:	10
-BREAK
-#1021
-Keywords:	Aithne Oakforest
-Name:	Aithne Oakforest
-RoomDesc:$
-Aithne Oakforest stands over the council. 
-
-~
-LookDesc:$
-A charming, black haired elf with long hair tied back in a ponytail. 
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Male
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	20
-	Qui:	50
-	Str:	18
-	Cha:	12
-	Int:	12
-	Wil:	12
-	Mag:	18
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#1022
-Keywords:	Sean Laverty
-Name:	Sean Laverty
-RoomDesc:$
-Sean Laverty stands over the council. 
-
-~
-LookDesc:$
-Sean Laverty, a red-haired elf of Irish descent, with a keen business sense.
-He is the spearhead of the innovative economic measures within Tir Tairngire.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Male
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	12
-	Qui:	12
-	Str:	12
-	Cha:	12
-	Int:	12
-	Wil:	12
-	Mag:	8
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#1023
-Keywords:	myrddin strange old wizard
-Name:	A strange old wizard
-RoomDesc:$
-A strange old wizard with the eyes of a hawk stands here. 
-
-~
-LookDesc:$
-A strange old wizard in strange old wizard robes. 
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Male
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	6
-	Qui:	16
-	Str:	19
-	Cha:	8
-	Int:	40
-	Wil:	40
-	Mag:	40
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-	sorcery:	40
-BREAK
-#1024
-Keywords:	high queen nadali murana
-Name:	Nadali Murana
-RoomDesc:$
-An elegantly adorned elven woman with long black hair stands here regally. 
-
-~
-LookDesc:$
-An elven woman, of dazzling natural beauty.  She is slender and athletic in
-build, though shorter than most elven females of her age.  Her hair is long,
-down to her waist, jet black and curly, and is tied back into a ponytail.  Her
-lips are red and full.  She wears little makeup, as it would detract from her
-natural glow. Her movements are graceful and precise, almost unnatural, though
-she shows no sign of any technological reflex augmentation.  Her face is
-chiseled in appearance, though curved in just the right spots, making her
-countenance soft.  Her eyes are fiery blue, almost as the flame of a cutting
-torch.  She smells vaguely of an exotic flower, and is dressed meticulously,
-and is very clean. 
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	11010
-AffFlags:	1000000000
-Race:	Human
-Gender:	Female
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	9
-	Qui:	9
-	Str:	9
-	Cha:	12
-	Int:	8
-	Wil:	12
-	Mag:	12
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-	edged weapons:	7
-BREAK
-#1025
-Keywords:	anthraen tartali grim gazed elf
-Name:	Anthraen Tartali
-RoomDesc:$
-A grimly gazed elf stands here, deep in thought. 
-
-~
-LookDesc:$
-Very tall for an elf, with long black hair and sharply cutting ice blue eyes,
-Anthraen Tartali commands the Ki'ronyx faction of the Tir Tairngire armies
-with strategic cunning unmatched by nearly all. 
+There is a large box of projector slides left next to the projector.
+Apparently you have to train yourself. 
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
 MobFlags:	1000000000000000000000000001010
-AffFlags:	0
+AffFlags:	1000001000
 Race:	Human
 Gender:	Male
 DefaultPos:	Standing
+AttackType:	Maul
 [ATTRIBUTES]
-	Bod:	20
-	Qui:	10
-	Str:	20
-	Cha:	10
-	Int:	15
-	Wil:	12
+	Bod:	25
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
 	Mag:	0
 [POINTS]
 	Height:	0
 	Weight:	0
-[SKILLS]
-BREAK
-#1026
-Keywords:	pook
-Name:	Pook
-RoomDesc:$
-An unfinished mob stands here.
-
-~
-LookDesc:$
-It looks barely coherent as it waits to be created.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	0
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#1028
-Keywords:	goo
-Name:	Goo
-RoomDesc:$
-Goo stands here. 
-
-~
-LookDesc:$
-It looks barely coherent as it waits to be created.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	0
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#1029
-Keywords:	rifkin danny
-Name:	Rifkin
-RoomDesc:$
-Rifkin is standing here. 
-
-~
-LookDesc:$
-It looks barely coherent as it waits to be created.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	0
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#1030
-Keywords:	agent bob
-Name:	Agent BOB
-RoomDesc:$
-Agent BOB is standing here., 
-
-~
-LookDesc:$
-It looks barely coherent as it waits to be created.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	0
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#1031
-Keywords:	harlequin
-Name:	Harlequin
-RoomDesc:$
-Harlequin is standing here. 
-
-~
-LookDesc:$
-It looks barely coherent as it waits to be created.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	0
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#1032
-Keywords:	che
-Name:	Che
-RoomDesc:$
-Che is standing here. 
-
-~
-LookDesc:$
-It looks barely coherent as it waits to be created.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	0
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#1033
-Keywords:	root
-Name:	Root
-RoomDesc:$
-Root is standing here. 
-
-~
-LookDesc:$
-It looks barely coherent as it waits to be created.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	0
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#1034
-Keywords:	hatchetman
-Name:	Hatchetman
-RoomDesc:$
-Hatchetman is standing here. 
-
-~
-LookDesc:$
-Hatchetman is standing here. 
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	0
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#1035
-Keywords:	oloth
-Name:	Oloth
-RoomDesc:$
-Oloth is standing here. 
-
-~
-LookDesc:$
-It looks barely coherent as it waits to be created.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	0
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#1036
-Keywords:	zaer
-Name:	Zaer
-RoomDesc:$
-Zaer is standing here. 
-
-~
-LookDesc:$
-It looks barely coherent as it waits to be created.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	0
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#1037
-Keywords:	nikklaus
-Name:	Nikklaus
-RoomDesc:$
-Nikklaus is standing here. 
-
-~
-LookDesc:$
-It looks barely coherent as it waits to be created.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	0
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#1038
-Keywords:	loki
-Name:	Loki
-RoomDesc:$
-Loki is standing here. 
-
-~
-LookDesc:$
-It looks barely coherent as it waits to be created.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	0
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#1040
-Keywords:	cow khepri
-Name:	Khepri
-RoomDesc:$
-A cow wanders through here chewing her cud. 
-
-~
-LookDesc:$
-A black and white heifer. 
-~
-ArriveMsg:	stalks in from
-LeaveMsg:	stalks off
-MobFlags:	1011011
-AffFlags:	1000001000
-Race:	Human
-Gender:	Female
-DefaultPos:	Standing
-AttackType:	Stab
-[ATTRIBUTES]
-	Bod:	50
-	Qui:	40
-	Str:	25
-	Cha:	25
-	Int:	40
-	Wil:	50
-	Mag:	25
-[POINTS]
-	Height:	20
-	Weight:	208
-	Ballistic:	100
-	Impact:	100
+	Ballistic:	8
+	Impact:	7
 	Cash:	10
-	Bank:	100
+	Bank:	10
 [SKILLS]
-	edged weapons:	50
-	unarmed combat:	50
+	:	10
+	interrogation:	12
 	:	20
 	conjuring:	18
 	sorcery:	15
 BREAK
-#1041
-Keywords:	savina
-Name:	Savina
+#1004
+Keywords:	nerp branded projector
+Name:	a NERP branded projector
 RoomDesc:$
-Savina is standing here. 
+A NERP branded projector has been left here. 
 
 ~
 LookDesc:$
-It looks barely coherent as it waits to be created.
+There is a large box of projector slides left next to the projector.
+Apparently you have to train yourself. 
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	0
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#1042
-Keywords:	stealth
-Name:	Stealth
-RoomDesc:$
-Stealth is standing here. 
-
-~
-LookDesc:$
-It looks barely coherent as it waits to be created.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	0
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#1043
-Keywords:	coax
-Name:	Coax
-RoomDesc:$
-Coax is standing here. 
-
-~
-LookDesc:$
-It looks barely coherent as it waits to be created.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	0
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#1044
-Keywords:	ki'ronyx kironyx rebel agent tir tairngire peace force ghost elf elven dark shadow
-Name:	An elven agent
-RoomDesc:$
-A dark shadow moves in the corner of your eye. 
-
-~
-LookDesc:$
-You aren't even sure you see him, until he is staring right back at you. The
-shape of an elf, wearing clothing that blends perfectly with the faint shadows
-that he is hiding in. 
-~
-ArriveMsg:	^n
-LeaveMsg:	^n
-MobFlags:	101010000000011010
-AffFlags:	11000001000000000
+MobFlags:	1000000000000000000000000001010
+AffFlags:	1000001000
 Race:	Human
 Gender:	Male
 DefaultPos:	Standing
-AttackType:	Punch
+AttackType:	Maul
 [ATTRIBUTES]
-	Bod:	12
-	Qui:	15
-	Str:	11
-	Cha:	6
-	Int:	10
-	Wil:	10
+	Bod:	25
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
 	Mag:	0
 [POINTS]
-	Height:	180
-	Weight:	85
+	Height:	0
+	Weight:	0
+	Ballistic:	8
+	Impact:	7
+	Cash:	10
+	Bank:	10
 [SKILLS]
-	stealth:	15
-	rifles:	17
-	unarmed combat:	16
-	gunnery:	8
-	pistols:	8
+	:	10
+	interrogation:	12
+	:	20
+	conjuring:	18
+	sorcery:	15
 BREAK
-#1077
-Keywords:	gang death jackal ganger sweaty member man young
-Name:	a Death Jackals ganger
+#1005
+Keywords:	nerp branded projector
+Name:	a NERP branded projector
 RoomDesc:$
-A sweaty young man stands here. 
+A NERP branded projector has been left here. 
 
 ~
 LookDesc:$
-A tanned normal sized young man stands here.  His mean face has sweat dripping
-off it.  As he lays eyes on you he jacks a shell into his Stainless Mach 10. 
+There is a large box of projector slides left next to the projector.
+Apparently you have to train yourself. 
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1100000001000
-AffFlags:	10000000000000
+MobFlags:	1000000000000000000000000001010
+AffFlags:	1000001000
 Race:	Human
 Gender:	Male
 DefaultPos:	Standing
-AttackType:	Machine Gun
+AttackType:	Maul
 [ATTRIBUTES]
-	Bod:	4
-	Qui:	5
-	Str:	5
-	Cha:	3
-	Int:	4
-	Wil:	4
+	Bod:	25
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
 	Mag:	0
 [POINTS]
-	Height:	185
-	Weight:	98
-	Ballistic:	6
-	Impact:	5
+	Height:	0
+	Weight:	0
+	Ballistic:	8
+	Impact:	7
+	Cash:	10
+	Bank:	10
 [SKILLS]
-	sub-machine guns:	6
-	unarmed combat:	5
+	:	10
+	interrogation:	12
+	:	20
+	conjuring:	18
+	sorcery:	15
+BREAK
+#1006
+Keywords:	nerp branded projector
+Name:	a NERP branded projector
+RoomDesc:$
+A NERP branded projector has been left here. 
+
+~
+LookDesc:$
+There is a large box of projector slides left next to the projector.
+Apparently you have to train yourself. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	1000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	25
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	8
+	Impact:	7
+	Cash:	10
+	Bank:	10
+[SKILLS]
+	:	10
+	interrogation:	12
+	:	20
+	conjuring:	18
+	sorcery:	15
+BREAK
+#1007
+Keywords:	nerp branded projector
+Name:	a NERP branded projector
+RoomDesc:$
+A NERP branded projector has been left here. 
+
+~
+LookDesc:$
+There is a large box of projector slides left next to the projector.
+Apparently you have to train yourself. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	1000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	25
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	8
+	Impact:	7
+	Cash:	10
+	Bank:	10
+[SKILLS]
+	:	10
+	interrogation:	12
+	:	20
+	conjuring:	18
+	sorcery:	15
+BREAK
+#1008
+Keywords:	nerp branded projector
+Name:	a NERP branded projector
+RoomDesc:$
+A NERP branded projector has been left here. 
+
+~
+LookDesc:$
+There is a large box of projector slides left next to the projector.
+Apparently you have to train yourself. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	1000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	25
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	8
+	Impact:	7
+	Cash:	10
+	Bank:	10
+[SKILLS]
+	:	10
+	interrogation:	12
+	:	20
+	conjuring:	18
+	sorcery:	15
+BREAK
+#1009
+Keywords:	nerp branded projector
+Name:	a NERP branded projector
+RoomDesc:$
+A NERP branded projector has been left here. 
+
+~
+LookDesc:$
+There is a large box of projector slides left next to the projector.
+Apparently you have to train yourself. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	1000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	25
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	8
+	Impact:	7
+	Cash:	10
+	Bank:	10
+[SKILLS]
+	biotech:	10
+	edged weapons:	10
+	unarmed combat:	10
+	police procedures:	10
+	athletics:	10
 BREAK
 END

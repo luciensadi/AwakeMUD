@@ -1,0 +1,161 @@
+#41020
+Keywords:	very sexy young lady angela bradburry mob
+Name:	Angela Bradburry
+RoomDesc:$
+A very sexy young lady is restocking the racks here. 
+
+~
+LookDesc:$
+This young lady is the sales person for this department. She looks quite sexy
+in the store's own products. She works on commission, so buy a lot! 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	3
+	Cha:	5
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	50
+[SKILLS]
+BREAK
+#41021
+Keywords:	pertty young lady cleo ramires mob
+Name:	Cleo Ramires
+RoomDesc:$
+A pretty young lady is standing here behind the counter smiling at you. 
+
+~
+LookDesc:$
+This young lady looks like an Egyptian princess. The clothes from the store
+look pretty awesome on her. You start to wonder how much it costs to look that
+good. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	1000
+Race:	Humanoid
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	155
+	Weight:	50
+[SKILLS]
+BREAK
+#41022
+Keywords:	very sexy lady mature teresa mcgillis mob
+Name:	Teresa McGillis
+RoomDesc:$
+A very sexy mature lady is sitting here. 
+
+~
+LookDesc:$
+This lady is a little older and more mature then you would expect in a store
+like this but on a second glance you see that on her name tag stands the word
+"Manager". She must be the boss here. She does look very sexy in the clothes
+from the store. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	1000
+Race:	Humanoid
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+[SKILLS]
+BREAK
+#41023
+Keywords:	mob unfinished
+Name:	an unfinished mob
+RoomDesc:$
+An unfinished mob stands here.
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#41050
+Keywords:	young lady serena strawberry mob
+Name:	Serena Strawberry
+RoomDesc:$
+A young lady stands here. 
+
+~
+LookDesc:$
+This young girl looks kind of out of place amongst the other sales people here
+in the Portland Crime Mall. It seems that one of the dawgs has his eye on her
+tho so she should be pretty safe. She turns to you and smiles, offering you a
+pricelist of her wares. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	1000001000
+Race:	Humanoid
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	60
+[SKILLS]
+BREAK
+END

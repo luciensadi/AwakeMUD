@@ -1,0 +1,290 @@
+#62200
+Name:	Gaz-Niki White Eagle off-road bike
+ShortDesc:	A Gaz-Niki White Eagle off-road bike
+RoomDesc:	A Gaz-Niki White Eagle off-road bike is parked here
+LongDesc:$
+The Gaz-Niki White Eagle was designed as an off-road motorcycle and excels in
+that area due to its durability and generally easy maintenance. This bike is
+built to withstand almost any punishment from off-road trails, and even when
+it does eventually gets bogged down, it is very easy to service and repair
+under most conditions. 
+~
+Inside:$
+The ride on this bike is relatively smooth, even when driving conditions that
+would send most other motorcycles leaping, the superior suspension allows the
+rider to take every bump and groove in stride. While not as powerful as some
+other bikes, it makes up for it with its performance and reliability under any
+condition. The seating arrangement allows for a driver and a single passenger.
+~
+InsideRear:$
+The sidecar shell houses a single, quite comfortable bucket seat, along with a
+reinforced crash cage frame. The ride in the sidecar is surprisingly smooth,
+most likely due to its seperate suspension, and allows the passenger to ride
+in relative style and comfort.  
+~
+Leaving:	prowls off
+Arriving:	prowls in
+Handling:	3
+Speed:	100
+Accel:	4
+Body:	2
+Armour:	0
+Pilot:	0
+Sig:	1
+Autonav:	0
+Seating:	2
+SeatingBack:	0
+Load:	30
+Cost:	13000
+Type:	1
+Flags:	0
+Engine:	3
+BREAK
+#62201
+Name:	bike Hyundai Offroader motorbike
+ShortDesc:	A Hyundai Offroader motorbike
+RoomDesc:	A Hyundai Offroader motorbike is parked here with its kickstand down
+LongDesc:$
+The Hyundai Offroader ranks high on the list of all-terrain cycles on the
+market, making it a tough competitor in the business of off-road bikes, not to
+mention the fact it was voted best off-road terrain cycle by none other than
+Easy Rider magazine. It lives up to expectations and has earned quite a
+reputation for its reliable off-road performance, which has caught the eye of
+several military contracts in the countries of North America, who have already
+placed in orders for their own. 
+~
+Inside:$
+This bike offers an extremely smooth ride, reguardless of the terrain being
+traversed, its off-road suspension is second to none on the market in that
+respect. It has a comfortable, albeit synthetic molded leather seat, on the
+sides of which are small travel containers for any odds and ends the driver
+may need to bring along. This bike has a solid, powerful feel when mounted,
+immediately giving the impression it can handle anything the trail can throw
+at it. 
+~
+InsideRear:$
+The sidecar shell houses a single, quite comfortable bucket seat, along with a
+reinforced crash cage frame. The ride in the sidecar is surprisingly smooth,
+most likely due to its seperate suspension, and allows the passenger to ride
+in relative style and comfort. 
+~
+Leaving:	traverses off
+Arriving:	traverses in
+Handling:	2
+Speed:	90
+Accel:	4
+Body:	2
+Armour:	0
+Pilot:	0
+Sig:	4
+Autonav:	1
+Seating:	2
+SeatingBack:	0
+Load:	20
+Cost:	13000
+Type:	1
+Flags:	0
+Engine:	4
+BREAK
+#62202
+Name:	Thundercloud Pinto trike
+ShortDesc:	A Thundercloud Pinto trike
+RoomDesc:	A Thundercloud Pinto trike is parked here
+LongDesc:$
+While manufactured in Pueblo, its attention to detail and focus on creating a
+design that could flourish across the untamed wilds of their own nation has
+made it quite popular in other areas where up-to-date travel routes and
+pavement aren't always available. The Thundercloud's tri-wheel base and fat
+balloon tires allow the Pinto to handle almost any terrain thrown in its path.
+~
+Inside:$
+The rugged construction of the exterior is reflected in its spartan
+furnishings, its answer to sturdiness and reliability being a low tech
+approach barren of electronics and anything that isn't necessary to keeping it
+up and running. 
+~
+InsideRear:$
+The sidecar shell houses a single, quite comfortable bucket seat, along with a
+reinforced crash cage frame. The ride in the sidecar is surprisingly smooth,
+most likely due to its seperate suspension, and allows the passenger to ride
+in relative style and comfort. 
+~
+Leaving:	rumbles off
+Arriving:	rumbles in
+Handling:	4
+Speed:	85
+Accel:	4
+Body:	2
+Armour:	0
+Pilot:	0
+Sig:	2
+Autonav:	0
+Seating:	3
+SeatingBack:	0
+Load:	40
+Cost:	35000
+Type:	1
+Flags:	0
+Engine:	3
+BREAK
+#62203
+Name:	scooter Yamaha Star
+ShortDesc:	A Yamaha Star
+RoomDesc:	A Yamaha Star scooter is parked here with its kickstand down
+LongDesc:$
+This electrically powered scooter is Yamaha's answer to the Dodge Scoot. It
+has seen quite the rise in market sales in the past few years, mostly from a
+combination of an unwillingness to keep up with fuel costs and its relatively
+tiny price tag to most vehicles on the market, making it a cheap and efficient
+way to get from point A to point B. 
+~
+Inside:$
+While it doesn't have all of the bells and whistles that most modern vehicles
+are expected to contain, it has enough to get the job done. Waste not, want
+not, that seems to be the motto behind its design. 
+~
+InsideRear:$
+The sidecar shell houses a single, quite comfortable bucket seat, along with a
+reinforced crash cage frame. The ride in the sidecar is surprisingly smooth,
+most likely due to its seperate suspension, and allows the passenger to ride
+in relative style and comfort. 
+~
+Leaving:	whines off
+Arriving:	whines in
+Handling:	4
+Speed:	65
+Accel:	4
+Body:	2
+Armour:	0
+Pilot:	0
+Sig:	4
+Autonav:	0
+Seating:	2
+SeatingBack:	0
+Load:	15
+Cost:	4000
+Type:	1
+Flags:	0
+Engine:	1
+BREAK
+#62204
+Name:	Mazda Watcher car
+ShortDesc:	A Mazda Watcher
+RoomDesc:	A Mazda Watcher is parked at the curb here
+LongDesc:$
+Designed for short commutes in mind, and especially those involving short
+distances between point A and point B. The Watcher is one of the smaller cars
+you're likely to see on the road, which makes it very easy to find a place to
+park it almost anywhere, and thanks to its small electric motor it's quite
+efficient. Ofcourse, the drawbacks to these features are limited passenger and
+cargo space. 
+~
+Inside:$
+Complete with all the bells and whistles one would expect from a small, single
+seat compact car, which is to say.... Pretty much none. There is a basic
+gridguide unit installed, and aside from the cheap furnishings there isn't
+much to see aside from the windshield. 
+~
+InsideRear:$
+A back seat in this thing...? What the hell kind of modifications did you put
+on it? Wowzers. The ride back here is comparable to being squeezed to death by
+a boa constrictor. 
+~
+Leaving:	zips off
+Arriving:	zips in
+Handling:	4
+Speed:	75
+Accel:	5
+Body:	3
+Armour:	0
+Pilot:	0
+Sig:	5
+Autonav:	1
+Seating:	1
+SeatingBack:	0
+Load:	50
+Cost:	10000
+Type:	2
+Flags:	0
+Engine:	1
+BREAK
+#62205
+Name:	Volkswagen Messenger car subcompact
+ShortDesc:	A Volkswagen Messenger
+RoomDesc:	A Volkswagen Messenger subcompact is sitting here
+LongDesc:$
+Volkswagen brings the Messenger to the market, attempting to fill a specific
+niche in the subcompact class, as it's one of the few that offers cargo space
+and a luggage rack, which are quite rare in that spectrum of the market. It
+has an electric motor, so while it may not be winning any drag races any time
+soon, it's still a reliable method of transport. 
+~
+Inside:$
+The front of the vehicle actually consists of only a single seat, which is
+made specifically for the driver. A passenger can ride along in the back,
+which features a bit of cargo space as well. There is a basic gridguide unit
+installed on the dash near the rather unglamorous gauges. 
+~
+InsideRear:$
+The passenger space isn't the most comfortable or spacious, but it's certainly
+better than most of vehicles of the subcompact class. Oh look, a cup holder!
+That there is more than most small vehicles on the market can offer! 
+~
+Leaving:	whirs off
+Arriving:	whirs in
+Handling:	4
+Speed:	75
+Accel:	4
+Body:	3
+Armour:	0
+Pilot:	0
+Sig:	5
+Autonav:	1
+Seating:	1
+SeatingBack:	1
+Load:	50
+Cost:	12000
+Type:	2
+Flags:	0
+Engine:	1
+BREAK
+#62206
+Name:	COP car General Products police
+ShortDesc:	a General Products COP
+RoomDesc:	a General Products COP is parked at the curb here
+LongDesc:$
+Known as the City Operations Patroller, this vehicle is an alternative to full
+sized patrol cars, which isn't as big nor as well armoured as most of its
+counterparts. It is, however, cheap and easier to afford for precincts who
+aren't exactly rolling in dough. It certainly gets the job done, ofcourse. 
+~
+Inside:$
+The interior of this security vehicle has several bells and whistles,
+including a standard gridguide unit and a communications system used by the
+police to keep in contact with their precinct, just in case they have to call
+in for backup. 
+~
+InsideRear:$
+There isn't much to see in this rear seat, aside from a thick plastic window
+blocking off access to the front of the vehicle. There appear to be no door
+handles on the inside of this portion of the vehicle. 
+~
+Leaving:	cruises off
+Arriving:	cruises in from
+Handling:	4
+Speed:	90
+Accel:	6
+Body:	3
+Armour:	1
+Pilot:	0
+Sig:	4
+Autonav:	1
+Seating:	2
+SeatingBack:	0
+Load:	185
+Cost:	28800
+Type:	2
+Flags:	0
+Engine:	1
+BREAK
+END

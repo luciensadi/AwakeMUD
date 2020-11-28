@@ -1,0 +1,3809 @@
+#40700
+Name:	Manufacturing Warehouse
+Desc:$
+   Raw material is brought into this area of the facility while industrial
+machining is completed by huge fabricators. The finished parts, wings, bodies,
+and mechanical components slowly move down the assembly line shepherded by the
+massive Titans.  
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	5
+Cover:	5
+X:	75
+Y:	75
+Z:	30.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT north]
+	ToVnum:	40701
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40702
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40732
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40701
+Name:	Manufacturing Warehouse
+Desc:$
+   The core of the remotely piloted F-B Commuter is begun here. Engines and
+internal mechanics and devices are swiftly put in place, aligned to the
+massive fabricated frame. The rapid clack-clack-clack-clack of pneumatic tools
+echo off the walls. As the plane moves down the line parts of the airframe are
+placed over its internal structure. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	3
+X:	75
+Y:	0
+Z:	30.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT east]
+	ToVnum:	40702
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40732
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40700
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40702
+Name:	Manufacturing Warehouse
+Desc:$
+   The airframe is held in place and sealed here. Plumes of erupting plasma
+fly high into the air as the Titans weld the seams on the F-B Commuters.  As
+the giant aircraft move toward the south along the automated assembly line
+they look almost complete. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	5
+Cover:	5
+X:	75
+Y:	75
+Z:	30.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT south]
+	ToVnum:	40732
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40700
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40701
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40703
+Name:	A well lit lobby
+Desc:$
+   A very utilitarian building with none of the flare and flash of a corporate
+head quarters. It is obvious that this facility was not built for guests but
+for employees to get work done. Some plants supply this lobby with welcome
+warmth and life. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	1
+Cover:	2
+X:	15
+Y:	15
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A door 
+~
+	ToVnum:	40705
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A door 
+~
+	ToVnum:	40719
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door
+	Desc:$
+A door 
+~
+	ToVnum:	40706
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A door 
+~
+	ToVnum:	40704
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40704
+Name:	Conference room
+Desc:$
+   This is less the corporate board room and more a lecture hall you would see
+in an engineering program. A large trideo unit takes up the center of a
+massive table. The wall's have the tell tale hematite look of being display
+screens. Flow charts and pocket secretaries litter one table as a coffee pot
+simmers on another. It is obvious that a great deal of work and planning is
+done here. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	2
+X:	15
+Y:	15
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT east]
+	ToVnum:	40703
+	Flags:	0
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40705
+Name:	Facilities managers office
+Desc:$
+   This office looks much nicer than the lobby. Much nicer. After looking
+around a bit you notice the furniture is all real oak and teak, many pieces
+may even be antiques. Settling your eyes on the manager you wonder what else
+he might have going here. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	2
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT south]
+	ToVnum:	40703
+	Flags:	0
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40706
+Name:	Human Resources Office
+Desc:$
+   As you enter this large room you hit a wall of smoke and body odor, female
+body odor. Here and there you see middle aged women sitting at desks seemingly
+doing nothing. Some munch on candy while others are drinking sodas. A few sit
+and chat with each other while a phone rings in the background. A few turn as
+you enter wondering why you are interrupting their extremely busy schedules. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	5
+Cover:	5
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	5
+	BackgroundType:	10
+[EXIT north]
+	ToVnum:	40703
+	Flags:	0
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40707
+Name:	Main Dock
+Desc:$
+   offloading cargo, crane 
+~
+Flags:	10000000000010000000000
+SecType:	Sea
+MatrixExit:	0
+Crowd:	5
+Cover:	5
+X:	50
+Y:	50
+Z:	100.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT north]
+	ToVnum:	40708
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40718
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40708
+Name:	On the deck of the general cargo vessel Bunga Delima flying Malaysian colors
+Desc:$
+   This is a 30,000 ton Handysize freighter. One of the most common comercial
+cargo vessels sailing the oceans in the last 100 years. A number of rough
+looking, weather hardened asian men go about their jobs glancing at you out of
+the corner of their eyes. Now and then they nod towards you snickering under
+their breath. A few claugh deeply now and then pushing and shoving one
+another. Laid out on the deck are dozens of cargo containers being busily
+unloaded to the Federated-Boeing Renton dockyards. 
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	4
+Cover:	4
+X:	100
+Y:	20
+Z:	100.00
+RoomType:	1
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	1
+	BackgroundType:	7
+[EXIT south]
+	ToVnum:	40707
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	hatch
+	Desc:$
+A hatch 
+~
+	ToVnum:	40709
+	Flags:	2
+	Material:	metal
+	Barrier:	24
+	KeyVnum:	0
+	HiddenRating:	12
+BREAK
+#40709
+Name:	A slave galley
+Desc:$
+   All around you hear the moans and cries of helpless victims. Stripped from
+their homes and forced aboard this freighter these young girls look worn and
+hopeless, their final destination and purpose unknown. Most are in chains and
+from the look and smell have gone without bathing for many weeks.  
+~
+Flags:	101000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	7
+Cover:	3
+X:	20
+Y:	20
+Z:	2.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	2
+	BackgroundType:	10
+[EXIT up]
+	ToVnum:	40708
+	Flags:	0
+	Material:	metal
+	Barrier:	24
+	KeyVnum:	0
+BREAK
+#40710
+Name:	A heavily fortified checkpoint
+Desc:$
+   This is the main entrance to the Federated-Boeing Renton facility. A
+hydraulic barrier rises from the ground as you approach. Adjacent to the
+Renton Airport this sprawling industrial complex is set on 11 acres of land.
+Surrounding the entire compound is a 5 meter high concrete wall atop which can
+be seen sensor clusters and a mini monorail track. Now and then the hum of a
+passing Ares Sentinel drone can be heard. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	4
+Cover:	4
+X:	50
+Y:	50
+Z:	100.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT east]
+	ToVnum:	40806
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	Door
+	Desc:$
+A Door 
+~
+	ToVnum:	40713
+	Flags:	1
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	40713
+	LockRating:	6
+[EXIT west]
+	Keywords:	Barrier
+	Desc:$
+Hydraulic Barrier 
+~
+	ToVnum:	40711
+	Flags:	2
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	40713
+[EXTRADESC 0]
+	Keywords:	barrier
+	Desc:$
+The huge hydraulic barrier rises out of the ground to a height of 3 meters. It
+rises with such speed as you approach you wonder if it could flip a car over.
+Probably could. 
+~
+BREAK
+#40711
+Name:	Logan Ave
+Desc:$
+   This is Logan Ave. It runs north around the eastern edge of the compound
+passing by the commisary, manufacturing warehouse, storage and maintenance
+warehouse, and the secure R&D facility. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	50
+Y:	50
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT north]
+	ToVnum:	40712
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40710
+	Flags:	0
+	Material:	concrete
+	Barrier:	32
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40719
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40712
+Name:	Logan Ave
+Desc:$
+   All along Logan Ave you see employees riding bicycles and small trucks.
+Workmen lay on the many grassy areas eating their meals and talking of life.
+The setting is much at odds with life outside. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	50
+Y:	50
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT north]
+	ToVnum:	40714
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40711
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40720
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40713
+Name:	Guard House
+Desc:$
+   Small, cramped, bulletproof, and it even comes with a mini-fridge,
+microwave oven, and porn magazine. The perfect spot for guards to watch over
+the entrance to the Federated-Boeing Renton facility. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	5
+Cover:	5
+X:	5
+Y:	5
+Z:	2.20
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT north]
+	ToVnum:	40710
+	Flags:	0
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	0
+BREAK
+#40714
+Name:	Logan Ave
+Desc:$
+   The main warehouse is to the north, trucks and engineers constantly moving
+in and out of it. The smell of polluted water wiffs in from the north west.
+Further along to the north east you can make out the storage warehouse. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	4
+Cover:	4
+X:	50
+Y:	50
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT north]
+	ToVnum:	40721
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40715
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40712
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40715
+Name:	Logan Ave
+Desc:$
+   Along the road guards walk casually doing their rounds. Security seems to
+be getting tighter in this area. The storage warehouse is to the north. North
+west of here is the heavily guarded research and development facility. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	50
+Y:	50
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT north]
+	ToVnum:	40722
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40716
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40714
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40717
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40716
+Name:	Logan Ave
+Desc:$
+   You come to the end of Logan Ave. Drones skim over the top of the larger
+bunker type building to the north, as Sentinel Drones spend more time in this
+area of the facility. Employees spend little time around here making sure to
+leave the area as soon as possible. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	50
+Y:	50
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT north]
+	ToVnum:	40723
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40715
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40717
+Name:	Logan Ave
+Desc:$
+   The smell of polluted water blows in from the north as you approach the
+small dockyard. Mixed with the smell of steel and aluminum alloys being
+twisted, bent, and vaporized from the manufacturing warehouse, the oppressive
+feeling of heavy industry lingers around you. 
+~
+Flags:	10000000000010000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	50
+Y:	50
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT north]
+	Keywords:	Barrier
+	Desc:$
+A Hydraulic Barrier 
+~
+	ToVnum:	40718
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+	LockRating:	4
+[EXIT southeast]
+	ToVnum:	40715
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40718
+Name:	Federated-Boeing Dockyard
+Desc:$
+   Docks, cranes, trucks, cargo containers, a cargo ship. zepplin docks maybe,
+drones, guards, maybe a shop or johonson. 
+~
+Flags:	10000000000010000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	50
+Y:	50
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT north]
+	ToVnum:	40707
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40717
+	Flags:	0
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+BREAK
+#40719
+Name:	Employee Parking
+Desc:$
+   This vast parking lot is for Federated-Boeing employees and visitors. To
+the west you see the administration building. 
+~
+Flags:	110000000000010000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	1
+Cover:	5
+X:	10
+Y:	10
+Z:	2.40
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	40711
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40703
+	Flags:	0
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40720
+Name:	The Commissary Parking Lot
+Desc:$
+   This parking lot is for employees and their families. To the west is a
+giant warehouse that has been transformed into a small town. In it employees
+can find everything they need for everyday life including banking, healthcare,
+food, and entertainment. Given the 10,000 plus employees of this facility,
+Federated-Boeing makes sure to take back a sizeable amount of all their
+salaries while at the same time reducing the need for employees to leave work
+for any reason.  
+~
+Flags:	110000000000010000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	3
+X:	20
+Y:	20
+Z:	2.40
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT east]
+	ToVnum:	40712
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40733
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40721
+Name:	A massive manufacturing warehouse
+Desc:$
+   This warehouse is just massive. You can hear the sounds of heavy machinery
+inside. Employee's move steadily in and out of it as trucks and automated fork
+lifts bring raw materials in and finished products out. 
+~
+Flags:	10000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	5
+Cover:	5
+X:	50
+Y:	50
+Z:	20.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A door 
+~
+	ToVnum:	40732
+	Flags:	1
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	0
+	LockRating:	5
+[EXIT south]
+	ToVnum:	40714
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40722
+Name:	A massive maintenance and storage warehouse
+Desc:$
+   Huge metal bay doors, large enough to move aircraft through stand in front
+of you. The hum of machinery can be heard inside. Nearby you see a human sized
+door with a maglock, letting employees in and out of the maintnanence and
+storage warehouse for the Federated-Boeing Renton Facility. 
+~
+Flags:	10000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	5
+Cover:	5
+X:	50
+Y:	50
+Z:	20.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A metal door 
+~
+	ToVnum:	40728
+	Flags:	1
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	0
+	LockRating:	4
+[EXIT south]
+	ToVnum:	40715
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40723
+Name:	Entrance to the Federated-Boeing Research & Development warehouse
+Desc:$
+   The small warehouse that is Federated-Boeing Renton Research & Development
+center stands before you. A secure checkpoint composed of Elite Security
+Guards and some very serious looking drones awaits. The identity of everyone
+coming and going is put through a vigourous screening process before they are
+cleared for entry or exit. Hope you have a plan chummer. 
+~
+Flags:	10000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	4
+Cover:	4
+X:	50
+Y:	50
+Z:	20.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	16
+[EXIT north]
+	Keywords:	door
+	Desc:$
+A Secure Door 
+~
+	ToVnum:	40724
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	40700
+[EXIT south]
+	ToVnum:	40716
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40724
+Name:	R&D Center
+Desc:$
+   This massive room is filled with scientists and engineers working on
+various projects. Most of the projects involve drones of one type or another.
+They appear to be small and animal like such as rabbits and squirrels, the few
+nearing completion have lifelike skin and fur attached on most of their frame.
+~
+Flags:	11000000000000101000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	5
+Cover:	5
+X:	50
+Y:	50
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT north]
+	ToVnum:	40725
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40723
+	Flags:	0
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	0
+BREAK
+#40725
+Name:	R&D Warehouse
+Desc:$
+   An overwhelming buzz is heard in this room. As you look around you see
+hummingbird flitting here and there in all corners of the massive warehouse
+room. Scientists and engineers laugh and giggle like school girls while
+clapping themselves on the back. It gives the high security and presence of
+the beautiful almost magical birds a surreal quality. 
+~
+Flags:	11000000000000101000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	5
+Cover:	5
+X:	50
+Y:	50
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT north]
+	ToVnum:	40726
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40724
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40726
+Name:	R&D warehouse
+Desc:$
+   Now this is it. When you think of corporate R&D and high security this is what you want to find. Facing off on either side of the huge warehouse floor are 2 massive somewhat anthropomorphic robots similar in size to the massive giant metatype. Although of similar size, shape, and design the resemblance stops there. One look tells you these are robots, not in anyway attempting to conceal the fact. From the huge mechanical arms, to the sensor pods set atop them like heads. They circle one another as scien
+tists and engineers cluster in a small control room with thick armored glasses. You cannot hear them but they appear to be giggling like little school girls. One of the robots shoots forward with blinding speed, the room shaking from the impact of its foot steps. It brings a massive sledgehammer down onto the sensor pod of the other, sparks, and the smell of burning ozone fills the room as the headless robot falls over. An intercom switches on and a nasally voice says, "FATALITY!" snorts and giggles are he
+ard before the intercom switches off.
+~
+Flags:	11000000000000101000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	5
+Cover:	5
+X:	50
+Y:	50
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT north]
+	ToVnum:	40727
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40725
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40727
+Name:	R&D Warehouse back room
+Desc:$
+   This back area of the warehouse is largely deserted. You can here someone
+tinkering way in the back behind a large barrier of crates and racks. The
+place looks like its used for storage and recycling. 
+~
+Flags:	11000000000000101000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	5
+Cover:	5
+X:	50
+Y:	50
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT south]
+	ToVnum:	40726
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40728
+Name:	Maintenance Warehouse
+Desc:$
+   This section of the warehouse is relegated to aircraft supply. Turbines,
+hydraulic controls, and fly-by-wire systems are just a few of the components
+loaded onto the massively tall industrial shelving units. Robotic forklifts
+hum around, now and then, picking up and dropping off shipments. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	3
+X:	50
+Y:	50
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT north]
+	ToVnum:	40731
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40722
+	Flags:	0
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40729
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40730
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40729
+Name:	Maintenance Warehouse
+Desc:$
+   This area is reserved for the intricate parts to the facilities various
+robotic drones. Forklift, assembler, and small unknown devices are all stacked
+neatly up and down the towering industrial shelving. In a corner you see
+engineers and mechanics working on a broken down forklift. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	3
+X:	50
+Y:	50
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT north]
+	ToVnum:	40730
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40731
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40728
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40730
+Name:	Maintenance Warehouse
+Desc:$
+   The loading dock is to the west as the self aware forklifts shuttle parts
+into and out of the waiting trucks. In a corner are a group of mechanics and
+warehouse workers playing a game of cards. Now and then they break into
+laughter as an engineer walks out of their earshot. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	3
+X:	50
+Y:	50
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT east]
+	ToVnum:	40731
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40728
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40729
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40731
+Name:	Maintenance Warehouse
+Desc:$
+   Drone parts fill this part of the warehouse. Wheels, tracks, rotors,
+control circuits, all stacked neatly on the 10 meter high industrial shelving.
+Robotic forklifts hum along unerringly placing and picking up shipments. Here
+and there engineers & mechanics walk, manually checking inventory and double
+checking orders. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	3
+Cover:	3
+X:	50
+Y:	50
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT south]
+	ToVnum:	40728
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40729
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40730
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40732
+Name:	Manufacturing warehouse
+Desc:$
+   Final touches are put on a remotely piloted F-B Commuter aircraft. Tire
+pressure is checked and even the windows cleaned by the massive Titan assembly
+robots. Engineers are spaced here and there monitoring every phase of
+construction. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	5
+Cover:	5
+X:	75
+Y:	75
+Z:	30.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	8
+[EXIT north]
+	ToVnum:	40702
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40721
+	Flags:	0
+	Material:	metal
+	Barrier:	8
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40700
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40701
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40733
+Name:	Central Atrium of the Commissary
+Desc:$
+   Far above massive skylights provide warmth from the sun, fountains bubble
+ringed by lush fauna making this area a favorite of employees. Benches and a
+small play-land for children complete this ideal consumer setting as families
+relax and celebrate their fortune on being members of a AAA megacorporation. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	5
+Cover:	5
+X:	50
+Y:	50
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40737
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40735
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40720
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40736
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40738
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40740
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40734
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40739
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40734
+Name:	Federated-Boeing Credit Uninon
+Desc:$
+   Plush carpet, comfortable seating and the humming whisper like silence of a
+banking institution highlight the credit union. Real live tellers are here
+smiling as they ask for the next person in line. Along the walls are pictures
+of Fed-Boeing commercial success, showing a few of the mile stone aircraft
+they have produced for the world during the past 148 years. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40741
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40733
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40735
+Name:	Santori Time
+Desc:$
+   Bartender, Food, Japenese/Irish/American cuisine 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	4
+Cover:	4
+X:	15
+Y:	15
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	40733
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40736
+Name:	New Navy
+Desc:$
+   Clothing, womens, mens, kids, babies, bags, shoes 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	20
+Y:	20
+Z:	4.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	ToVnum:	40733
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40737
+Name:	Family Health Network
+Desc:$
+   You enter a moderate sized waiting room. People are sitting here looking
+unhappy and sick. There is a desk with a few pretty ladies waiting to help
+you. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	1
+Cover:	1
+X:	5
+Y:	5
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	40733
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40738
+Name:	UberCuts
+Desc:$
+   hairsaloon 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	1
+Cover:	1
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40733
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40739
+Name:	Lifestyles Family Fitness Club
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	4
+X:	10
+Y:	10
+Z:	4.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	40733
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40740
+Name:	Entrance to A to Z Mart
+Desc:$
+   You are now standing in a massive department store. Almost anything you may
+need to better your life can be found here. People cruise through here with
+gigantic shopping carts, and angry or vacant looks in their eyes. Maybe there
+is something in the air. The artificial lighting casts everyone in a pasty
+glow, was that a ghoul that just shambled down an aisle? You hear screams and
+children crying in the distance. Above you hover small lighter than air
+drones, they skim the aisles watching everyone. Better get what you need
+chummer and get the frag out of dodge. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40749
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	40733
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40750
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40751
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40741
+Name:	A row of ATM machines
+Desc:$
+   This small area houses a number of ATMs for the shopper on the go. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	1
+Cover:	1
+X:	4
+Y:	4
+Z:	2.40
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	40734
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40742
+Name:	Northern 2nd floor Cellblock
+Desc:$
+   The open weave of the steel grating that stretches between the north
+catwalk and the curved span of cell doors is painted a bright yellow and
+allows one to watch the goings on down below.  The door of each cell is made
+of opaque, reinforced glass charged with ions that can be rendered transparent
+at the touch of a button for easy viewing of the prisoner inside.  The doors
+to the cells have the ID# etched into the glass and they slide into a recess
+to open.  To the south is a catwalk leading back to the guard room.  Following
+the walkway southwest, leads to the Lab and to the southeast takes one to more
+cell doors. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	9
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	Keywords:	door
+	ToVnum:	40746
+	Flags:	2
+	Material:	adv. plastics
+	Barrier:	32
+	KeyVnum:	39774
+	LockRating:	50
+[EXIT southeast]
+	ToVnum:	40743
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39797
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40744
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	Keywords:	door
+	ToVnum:	40745
+	Flags:	2
+	Material:	adv. plastics
+	Barrier:	32
+	KeyVnum:	39774
+	LockRating:	50
+BREAK
+#40743
+Name:	Eastern 2nd floor Cellblock
+Desc:$
+   The open weave of the steel grating that stretches between the east catwalk
+and a bank of cell doors is painted a bright yellow and allows one to watch
+the goings on down below. The door of each cell is made of opaque, reinforced
+glass charged with ions that can be rendered transparent at the touch of a
+button for easy viewing of the prisoner inside.  The doors to the cells have
+the ID# etched into the glass and they slide into a recess to open.  Following
+the grating north will take you to the northern cellblock area and heading
+west over the catwalk will take you back to the guard area. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	40747
+	Flags:	2
+	Material:	adv. plastics
+	Barrier:	32
+	KeyVnum:	39774
+	LockRating:	50
+[EXIT west]
+	ToVnum:	39798
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40742
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40744
+Name:	Western 2nd floor Cellblock
+Desc:$
+   The open weave of the steel grating that stretches between the west catwalk
+and the lab area is painted a bright yellow and allows one to watch the goings
+on down below.  To the west is the lab, one half of that closed room is a span
+of floor to ceiling mirrors.  The door leading to the lab area is heavily
+surveyed and has a complex entry system. Following the grating north will take
+you to the northern cellblock area. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	40742
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39799
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	ToVnum:	39778
+	Flags:	2
+	Material:	adv. plastics
+	Barrier:	32
+	KeyVnum:	39778
+	LockRating:	50
+BREAK
+#40745
+Name:	Cell 206
+Desc:$
+   A single solitary cell composed for reflection upon oneself and the life
+one has lead.  The reinforced glass door is opaque, yet when a guard wants to
+see inside, an electrical current is sent through it and the door turns
+transparent.  The walls are painted white and are made of plastisteel.  There
+is a steel bedshelf covered with a thin pallet coming out of one wall, a desk
+and a toilet and sink in the small room, but it is devoid of everything else,
+including a window.  Up above, a bright white fluorescent light is recessed
+into the ceiling and sealed off by a plexiglass shield. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	5
+Z:	3.04
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	Keywords:	ion glass door
+	Desc:$
+Ion Glass Door 
+~
+	ToVnum:	40742
+	Flags:	2
+	Material:	adv. plastics
+	Barrier:	32
+	KeyVnum:	39774
+	LockRating:	50
+BREAK
+#40746
+Name:	Cell 209
+Desc:$
+   A single solitary cell composed for reflection upon oneself and the life
+one has lead.  The reinforced glass door is opaque, yet when a guard wants to
+see inside, an electrical current is sent through it and the door turns
+transparent.  The walls are painted white and are made of plastisteel.  There
+is a steel bedshelf covered with a thin pallet coming out of one wall, a desk
+and a toilet and sink in the small room, but it is devoid of everything else,
+including a window.  Up above, a bright white fluorescent light is recessed
+into the ceiling and sealed off by a plexiglass shield. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	5
+Z:	3.04
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	Keywords:	ion glass door
+	Desc:$
+Ion Glass Door 
+~
+	ToVnum:	40742
+	Flags:	2
+	Material:	adv. plastics
+	Barrier:	32
+	KeyVnum:	39774
+	LockRating:	50
+BREAK
+#40747
+Name:	Cell 214
+Desc:$
+   A single solitary cell composed for reflection upon oneself and the life
+one has lead.  The reinforced glass door is opaque, yet when a guard wants to
+see inside, an electrical current is sent through it and the door turns
+transparent.  The walls are painted white and are made of plastisteel.  There
+is a steel bedshelf covered with a thin pallet coming out of one wall, a desk
+and a toilet and sink in the small room, but it is devoid of everything else,
+including a window.  Up above, a bright white fluorescent light is recessed
+into the ceiling and sealed off by a plexiglass shield. 
+~
+Flags:	1000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	5
+Z:	3.04
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	ion glass door
+	Desc:$
+Ion Glass Door 
+~
+	ToVnum:	40743
+	Flags:	2
+	Material:	adv. plastics
+	Barrier:	32
+	KeyVnum:	39774
+	LockRating:	50
+BREAK
+#40748
+Name:	The Daily Grind
+Desc:$
+   This eclectic little coffeehouse is painted with garish, clashing colors.
+The tiles on the floor are even mismatched.  The effect is charming shabby
+chic with an affluence that is hinted at with the rich sculptures and
+fountains tucked away into each sitting area.  The sitting areas are circles
+of seating that varies to different tastes.  Sprawling chaise lounges butt up
+against bean bag chairs and stiff wooden seats in various areas and more
+besides.  A long counter laden with glass cases of all of the favorite,
+assorted coffeehouse delicacies is where one would shout their order to the
+hyped up baristas behind a field of steam. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	39600
+IO:	100
+Bandwidth:	650
+Access:	0
+Trace:	0
+RTG:	1102
+JackID:	0
+Address:	The Daily Grind
+Crowd:	7
+Cover:	8
+X:	10
+Y:	10
+Z:	6.00
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	ToVnum:	40800
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40824
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40749
+Name:	Sporting Goods
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	40740
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40750
+Name:	Computers & Electronics Department
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40740
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40751
+Name:	Housewares Department
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40752
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40740
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40753
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40752
+Name:	Bed, Bath, & Beyond
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	40751
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40753
+Name:	Home & Decor
+Desc:$
+You are in an unfinished room.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40751
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40754
+Name:	SR 167N to Renton
+Desc:$
+   The rolling foothills of the Cascade Mountain range begins welling up on
+the eastern side of this highway.  To the west side, it is pretty flat ground,
+the horizon is wide and the sky along with it.  Heading north on this road,
+one would reach Auburn and eventually Renton and I-405.  South is the junction
+with State Route 18. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40755
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	45240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40755
+Name:	SR 167
+Desc:$
+   The rolling foothills of the Cascade Mountain range begins welling up on
+the eastern side of this highway.  To the west side, is flatter ground, the
+horizon is wide and the sky along with it.  Heading north on this road, one
+would reach Auburn's Main Street and eventually Renton and I-405.  South leads
+to the junction with State Route 18. 
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40756
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40754
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40756
+Name:	SR 167 & Auburn Main Street
+Desc:$
+   The rolling foothills of the Cascade Mountain range begins welling up on
+the eastern side of this highway.  To the west side, is flatter ground, the
+horizon is wide and the sky along with it.  Heading north on this road, one
+will eventually reach Renton and I-405.  South leads to the junction with
+State Route 18. Auburn's Main Street traffic exits to the east. 
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40757
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40838
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40755
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40757
+Name:	SR 167
+Desc:$
+   The rolling foothills of the Cascade Mountain range begin to well up to the
+east of this highway.  To the west side, is flatter ground, the horizon is
+wide and the sky along with it.  Heading north on this road, one will
+eventually reach Renton and I-405.  South leads to the junction with State
+Route 18. 
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40758
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40756
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40758
+Name:	SR 167
+Desc:$
+   The rolling foothills of the Cascade Mountain range begins welling up on
+the eastern side of this highway.  To the west side, is flatter ground, the
+horizon is wide and the sky along with it.  Heading north on this road, one
+will eventually reach Renton and I-405.  South leads to the junction with
+State Route 18. Renton's 240th Street traffic exits to the east. 
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	40759
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40786
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40757
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40759
+Name:	SR 167
+Desc:$
+   This road is crossing over from the plains, over rolling foothills of the
+Cascade Mountain range.  The elevation is signifcantly higher and to the
+southwest side, the horizon is wide and the sky along with it.  Heading
+northward on this road, one will eventually reach Renton and I-405.  South
+leads to the junction with State Route 18. 
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40760
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40758
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40760
+Name:	SR 167
+Desc:$
+   Riding high over the foothills of the Cascade Mountains, this road
+stretches northward to Renton and I-405 then south to the junction with State
+Route 18.  On either side of the road there are the many businesses,
+industries and housing of the Renton suburbs. 
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40761
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40759
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40761
+Name:	SR 167
+Desc:$
+   Riding high over the foothills of the Cascade Mountains, this road
+stretches northward to Renton and I-405 then south to the junction with State
+Route 18.  On either side of the road there are the many businesses,
+industries and housing of the Renton suburbs. 
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40762
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40760
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40762
+Name:	SR 167
+Desc:$
+   Riding high over the foothills of the Cascade Mountains, this road
+stretches northward to Renton and I-405 then south to the junction with State
+Route 18.  On either side of the road there are the many businesses,
+industries and housing of the Renton suburbs. 
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40763
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40761
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40763
+Name:	SR 167 Junction with I-405
+Desc:$
+   This huge interchange between I-405 to the east and west, south to the
+junction with State Route 18 and north into Downtown Renton via Rainier Ave is
+heavily forested on all sides to form a natural sound barrier.  Traffic is
+almost always crawling by here and most likely there are quite a few horns to
+be heard over your stereo. 
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40810
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	40767
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40762
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40764
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40764
+Name:	I-405 & Grady Way
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	40763
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40765
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40765
+Name:	I-405 & Interurban Ave
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	40764
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40766
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40766
+Name:	I-405
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	40765
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	1319
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40767
+Name:	I-405 over Benson Ave
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	40768
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40763
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40768
+Name:	I-405
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	40769
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40767
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40769
+Name:	I-405 & Maple Valley Highway
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40770
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	40775
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40768
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40770
+Name:	I-405 over Sunset Blvd
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40771
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40769
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40771
+Name:	I-405 & Lake Washington Blvd
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40772
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40770
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40772
+Name:	I-405
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40773
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40771
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40773
+Name:	I-405 & Coal Creek Pkwy
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40774
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40772
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40774
+Name:	I-405
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	19845
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40773
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40775
+Name:	Maple Valley Highway
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	40776
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40811
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40769
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40776
+Name:	Maple Valley Highway & 104th Ave
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	40777
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40775
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40777
+Name:	Maple Valley Highway & 156th Ave
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	40778
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40776
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40778
+Name:	Maple Valley Highway
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	40779
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40777
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40779
+Name:	Maple Valley Highway & 196th Ave
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	40780
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40789
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40778
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40780
+Name:	Maple Valley Highway & Cedar Grove
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	40781
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40779
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40781
+Name:	Maple Valley Highway
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	40782
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	40780
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40782
+Name:	SR 18 Junction with Maple Valley Highway
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40781
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40783
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40783
+Name:	SR 18
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	40782
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	40784
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40784
+Name:	SR 18
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	40783
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40785
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40785
+Name:	SR 18
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	40784
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	45241
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40786
+Name:	240th Street
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	40787
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40758
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40787
+Name:	240th & E Valley Hwy
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	40788
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40786
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40788
+Name:	240th Street
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39601
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	40787
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40789
+Name:	196th Ave
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40779
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40790
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40790
+Name:	19th Ave by Spring Lake
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40789
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40791
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40791
+Name:	196th Ave & Petrovitsky Road
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40790
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40792
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40792
+Name:	196th Ave by Shadow Lake
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40791
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39769
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40793
+Name:	Benson Ave
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40794
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39601
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40794
+Name:	Benson Ave & 208th Street
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40795
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40793
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40795
+Name:	Benson Ave
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39610
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40794
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40796
+Name:	Benson Ave
+Desc:$
+You are in an unfinished room.
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40797
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39610
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40797
+Name:	Benson Ave & 192nd Street
+Desc:$
+   
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40798
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40796
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40798
+Name:	Benson Ave
+Desc:$
+   
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40799
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40797
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#40799
+Name:	Benson Ave & Petrovitsky Road
+Desc:$
+   
+~
+Flags:	10000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	2
+Cover:	2
+X:	100
+Y:	24
+Z:	100.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	40801
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	40798
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

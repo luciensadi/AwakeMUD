@@ -1,0 +1,569 @@
+#7800
+Keywords:	dress shadows
+Name:	Dress of shadows
+RoomDesc:$
+Dress of shadows is laying here~
+LookDesc:$
+This form fitting, floor-length, backless dress is made of the spider's silk.
+It shimmers in the dullest light as if diamonds on black sands. Woven in a
+lace fashion the fire pattern covers the proper parts of the body. Seemingly
+made for one person alone.  
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	100000000001
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	50000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	1000
+	Val6:	1000
+BREAK
+#7801
+Keywords:	crown hell fire
+Name:	Crown of Hell's fire
+RoomDesc:$
+Crown of Hell's fire is laying here~
+LookDesc:$
+This Crown, constructed of Pure Onyx and Ruby, was crafted many years ago by
+the Dwarves of the undermountain. A perfect ring with the center slightly
+higer then the rest. The main body, Onyx. In the center a blood ruby is set,
+darker than the purest blood of any race. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	1000100000000001
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	1000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	2000
+	Val6:	2000
+BREAK
+#7803
+Keywords:	table meeting
+Name:	Large Meeting Table
+RoomDesc:$
+A large meeting table made of Onyx stone sits in the center of this room~
+LookDesc:$
+This table made of Onyx stone is large. About two and a half feet tall to its
+surface. Its smooth surface looks like glass when you look at it. Gargoyles
+are carved into the legs that hold this table in place. Ten chairs surround
+this table made of the finest leather. Highbacked and very comfortable.  
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	10000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7804
+Keywords:	highback chair leather
+Name:	Leather highbacked chair
+RoomDesc:$
+A leather highbacked chair sits around a table.~
+LookDesc:$
+Easily enough, just a plain leather chair made of the finest leather of this
+time. Highbacked and very comfortable. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.00
+	Barrier:	24
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7805
+Keywords:	fireplace
+Name:	Hell's fireplace
+RoomDesc:$
+A large fireplace spans the length of the southern wall burning with the flames of Baator~
+LookDesc:$
+This fireplace sets inside the wall highth of at least 6 feet spanning the
+length of the room itself. Around 20 feet. The Obisiden walls carved out for
+the edges and mantle piece look liek art with the sculptures that have been
+made. Gargoyles, demons, flames even Angel's are seen here. The flames burning
+within are everlasting and the darkest black that can be imagined. If one
+steps too close they would think they were in Baator itself. At a better look,
+you notice that there are no logs inside. Just the flames burning. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	10000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7806
+Keywords:	crimson cloak
+Name:	Crimson cloak
+RoomDesc:$
+A crimson cloak lays at the foot of the bed~
+LookDesc:$
+A long bellowing crimson cloak is seen. The material of the finest silk. A
+large hood hides the face quite well when worn on the head.  
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	1000100000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	50000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7807
+Keywords:	black leather pants
+Name:	black leather pants
+RoomDesc:$
+A pair of black leather pants lies here.~
+LookDesc:$
+You see a pair of very formfitting leather pants. Holes have been cut along
+the sides, and silver clasps have been stretched across them, allowing the
+wearer to show lots of flesh. 
+~
+Type:	Worn
+WearFlags:	100000000100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7808
+Keywords:	black leather knee boots
+Name:	Black leather knee-high boots
+RoomDesc:$
+A pair of black leather knee-high boots rest here.~
+LookDesc:$
+Just a normal pair of knee-high leather boots. Silver clasps run from top to
+bottom along their sides. 
+~
+Type:	Worn
+WearFlags:	100000001000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	2000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7809
+Keywords:	silver leather tanktop
+Name:	Silver leather tanktop
+RoomDesc:$
+A silver leather tanktop lays here~
+LookDesc:$
+Just your average leather tank top. Tight and form fitting. 
+~
+Type:	Worn
+WearFlags:	100000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.30
+	Barrier:	6
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7810
+Keywords:	Waffle Iron Smiting
+Name:	The Almighty Waffle Iron of Smiting
+RoomDesc:$
+The Waffle Iron of Smiting hums here~
+LookDesc:$
+Looks like your average Waffle Iron. Black steel, lots of cool ridges. But you
+can tell that is it not your average waffle iron. It hums...and has Zeaq's
+name allllll over it. 
+~
+Type:	Weapon
+WearFlags:	110000010000001
+ExtraFlags:	101000001011
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	50000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val2:	4
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Max Mental
+	Modifier:	50
+[AFFECT 1]
+	Location:	Max Physical
+	Modifier:	50
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	100
+[AFFECT 3]
+	Location:	Body
+	Modifier:	20
+[AFFECT 4]
+	Location:	Reaction
+	Modifier:	10
+[AFFECT 5]
+	Location:	Init Dice
+	Modifier:	100
+BREAK
+#7815
+Keywords:	two handed hells scream
+Name:	Hells Scream
+RoomDesc:$
+A two-handed sword seemingly made from flames lays here~
+LookDesc:$
+This two-handed sword is made interly of Baators flames. You can hear the
+screams of the dead as it moves past your head in flight. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1001001000001001
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	1000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Init Dice
+	Modifier:	10
+[AFFECT 1]
+	Location:	Body
+	Modifier:	1
+[AFFECT 2]
+	Location:	Strength
+	Modifier:	1
+[AFFECT 3]
+	Location:	Combat Pool
+	Modifier:	5
+BREAK
+#7820
+Keywords:	lazy boy
+Name:	Lazy-Boy
+RoomDesc:$
+A large Lazy-Boy sits here~
+LookDesc:$
+This plush chair, made of leather, is grey in color. It swivels and leans back
+all the way. As you sit in it you almost fall instatly asleep from its comfort
+as you lay in all the way back. Having mulitple adjustments for different
+grades of relazation. It even has a vid controller, cup holder and massage
+controler built in. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	100.00
+	Barrier:	1
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7821
+Keywords:	couch
+Name:	Leather Couch
+RoomDesc:$
+A rather large leather couch rests here~
+LookDesc:$
+This large leather couch is very comfortable looking. Gray in color to match
+the surroundings. It looks as if 4 Trolls could sit on this thing and still
+have enough room to rest comfortably. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	400.00
+	Barrier:	1
+	Cost:	15000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7822
+Keywords:	iron wrought table glass
+Name:	Iron-Wrought Table with Glass Surface
+RoomDesc:$
+An Iron-Wrought coffee table sits here~
+LookDesc:$
+This coffee table is actually quite amazing in the metal work that was done on
+it. Blackened steel is its composition. Beautifully forged. The glass surface
+crystal clear. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	150.00
+	Barrier:	1
+	Cost:	7000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7823
+Keywords:	Maytag fridge refridgerator large
+Name:	Maytag Refridgerator
+RoomDesc:$
+A large Maytag Refridgerator sits here.~
+LookDesc:$
+Just your normal fridge.  Metal surface, big enought ot hold a month's worth
+of food for a family of Trolls...And of course, it's armor-plated. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	500.00
+	Barrier:	32
+	Cost:	4500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	5
+	Val2:	-1
+BREAK
+#7824
+Keywords:	Weapons Locker
+Name:	weapon
+RoomDesc:$
+A heavy steel weapons locker sits here~
+LookDesc:$
+Just your run of the mill, very heavily plated weapons locker. A maglock pad
+rests on the top, many buttons blinking. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1000.00
+	Barrier:	24
+	Cost:	25000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2000
+	Val1:	9
+	Val2:	7884
+	Val3:	10
+BREAK
+#7869
+Keywords:	four post bed
+Name:	Large four-post canopy bed
+RoomDesc:$
+A rather large four-post canpoy bed sits in the center of the room.~
+LookDesc:$
+This bed is rather large. Made of Onxy stone. Full blankets made of the finest
+silks. Crimson red and Onyx black are the colors seen. Pillows almost fall off
+the sides as they set and the head of this bed. Black silken curtains cover
+the top canopy loosely as the fall to the sides over the posts. Shut at the
+moment they shimmer under the black flames of the candle's that adorn this
+room. You can tell that this bed can hold at least 5 people very comfortably.
+By the looks of it you think you just might sink into nothingness once you lay
+apon its matress. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	10000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7880
+Keywords:	House key
+Name:	House key
+RoomDesc:$
+House key to Angel's Dawn lies here~
+LookDesc:$
+An electronic keycard. Simple and in the colors of red and gray. 
+~
+Type:	Key
+WearFlags:	100000000000001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7884
+Keywords:	locker key
+Name:	Locker Key
+RoomDesc:$
+A weapons locker key lays here~
+LookDesc:$
+Looks as if it is a high security maglock. In the colors of the {SDM} 
+~
+Type:	Key
+WearFlags:	100000000000001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#7899
+Keywords:	note
+Name:	A ^cOOC^n note for SDM and friends
+RoomDesc:$
+A ^cOOC^n note for SDM and friends is tapped to the fridge~
+LookDesc:$
+Just wanted to let you all know that I have enjoyed RPing with all of you.
+Even though the last week has been hard on me I want to apologize for acting
+the way I have. Purging vehilces changing room desc.'s for no reason. Kicking
+you guys in the ass repeatidly. -smiles- (Even though it was fun) I left a ooc
+post in pooks. Just go to the terminal and up. Should be one of the last posts
+in there. Ill miss you. And please take care. -hugs and kisses to all...with a
+quick bashing over the head with her Waffle Iron- Bye...^YHOOFTA!^n
+Theresa...aka...Terry out 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

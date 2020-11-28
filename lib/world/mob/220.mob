@@ -1,0 +1,743 @@
+#22000
+Keywords:	wolfpack ganger
+Name:	a Wolfpack ganger
+RoomDesc:$
+A Wolfpack ganger stalks the streets. 
+
+~
+LookDesc:$
+The Wolfpack gang is the dominant force on the streets of Gresham.  All its
+members are heavily tatooed elves, draped in green and black trenchcoats.  It
+seems this one constantly has one eye on you, but keeps to himself. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100001011000
+AffFlags:	1000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	8
+	Str:	5
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	73
+	Level:	1
+	Cash:	200
+[SKILLS]
+	sub-machine guns:	8
+	unarmed combat:	6
+BREAK
+#22001
+Keywords:	mob unnamed
+Name:	an unnamed mob
+RoomDesc:$
+
+~
+LookDesc:$
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	111000001101010
+AffFlags:	1000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	12
+	Str:	12
+	Cha:	1
+	Int:	2
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	1
+	Weight:	140
+	Ballistic:	14
+	Impact:	14
+[SKILLS]
+	unarmed combat:	9
+BREAK
+#22003
+Keywords:	vinnie man
+Name:	Vinnie
+RoomDesc:$
+A bearded, legless man in a wheelchair sits here eyeing you intently. 
+
+~
+LookDesc:$
+Wearing Wolfpack colors, Vinnie probably had his legs removed in some sort of
+gang war. Now he runs a smalltime smuggling business in Gresham. 
+~
+ArriveMsg:	wheels himself in from
+LeaveMsg:	rolls
+MobFlags:	1010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	1
+	Weight:	80
+	Cash:	50000
+[SKILLS]
+BREAK
+#22004
+Keywords:	ben barkeeper man
+Name:	Ben
+RoomDesc:$
+Ben stands behind the counter, polishing a glass. 
+
+~
+LookDesc:$
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	156
+	Weight:	100
+[SKILLS]
+BREAK
+#22005
+Keywords:	tpf elite paladin guard elven elf
+Name:	an elite TPF Paladin
+RoomDesc:$
+A heavily cybered elven guard wearing the TPF colors protects this area. 
+
+~
+LookDesc:$
+Tall for elves, all with the same blue cybereyes, these guards look like the
+Terminator.  They stalk across the camp with an inhuman stride. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000001000000011100001101010
+AffFlags:	1000000000001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	12
+	Str:	15
+	Cha:	5
+	Int:	8
+	Wil:	15
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	110
+	Ballistic:	2
+	Impact:	1
+[SKILLS]
+	rifles:	3
+	shotguns:	10
+	unarmed combat:	6
+	assault cannons:	4
+BREAK
+#22006
+Keywords:	sniper guard tpf
+Name:	a TPF sniper
+RoomDesc:$
+An obvious sniper is crouching here. 
+
+~
+LookDesc:$
+Disguised in a camouflaged longcoat, this guard searches the area for any
+intruders, and promptly disposes of them. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000001000000011000001101010
+AffFlags:	1000000000001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	15
+	Str:	4
+	Cha:	1
+	Int:	15
+	Wil:	9
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	80
+	Ballistic:	14
+	Impact:	10
+[SKILLS]
+	firearms:	8
+	rifles:	16
+	unarmed combat:	9
+BREAK
+#22007
+Keywords:	spider tank
+Name:	A spider tank
+RoomDesc:$
+A huge metallic spider tank is patrolling here. 
+
+~
+LookDesc:$
+A bright red tank with eight mechanical legs, and a machine gun on either side
+of the front. A single, large, yellow eye bulges out from its head tracking
+your every movement. This is it, don't get scared now! 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000011000001101000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	40
+	Qui:	5
+	Str:	40
+	Cha:	1
+	Int:	1
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	300
+	Weight:	1500
+	Ballistic:	20
+	Impact:	25
+	Karma:	150
+[SKILLS]
+	unarmed combat:	8
+	:	10
+BREAK
+#22008
+Keywords:	recruit soldier tpf
+Name:	a TPF recruit
+RoomDesc:$
+A recruit is standing here, learning to use firearms. 
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001101010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	5
+	Cha:	2
+	Int:	6
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	80
+	Cash:	20000
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#22009
+Keywords:	tpf soldier instructor
+Name:	a TPF weapons instructor
+RoomDesc:$
+An instructor stands here, giving lessons about firearm safety. 
+
+~
+LookDesc:$
+Dressed in a red jumpsuit, and sporting a buzzcut, this elf shouts safety
+procedures to the trainees. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	111010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	9
+	Str:	6
+	Cha:	10
+	Int:	10
+	Wil:	15
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	15
+	Impact:	15
+[SKILLS]
+	unarmed combat:	10
+BREAK
+#22010
+Keywords:	dr doctor john armidale distinguished scientist
+Name:	Dr. John Armidale
+RoomDesc:$
+A distinguished looking scientist is examining some blueprints behind his
+computer here. 
+
+~
+LookDesc:$
+A very professional looking elven doctor, wearing spectacles and a classy
+suit. He seems oblivious to your presence as he studies a set of plans. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	1
+	Int:	12
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	90
+[SKILLS]
+BREAK
+#22011
+Keywords:	red humanoid test robot
+Name:	a test robot
+RoomDesc:$
+A red humanoid robot is standing here, awaiting an order. 
+
+~
+LookDesc:$
+Colored BRIGHT red and yellow, this robot is obviously used for testing new
+TPF gear. It doesn't look too upset with your presence, but it doesn't look
+like you should bother it, either.. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000000000001101000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	12
+	Str:	12
+	Cha:	1
+	Int:	12
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	40
+	Ballistic:	30
+	Impact:	30
+[SKILLS]
+	unarmed combat:	20
+	firearms:	20
+	:	10
+BREAK
+#22012
+Keywords:	wolfpack wolf pack ganger gang
+Name:	a Wolfpack ganger
+RoomDesc:$
+A Wolfpack ganger prowls the streets here. 
+
+~
+LookDesc:$
+Draped in black and green, this elven ganger looks you up and down before
+drawing a machinegun at you. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1101000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	12
+	Str:	8
+	Cha:	0
+	Int:	8
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	90
+	Cash:	400
+[SKILLS]
+	unarmed combat:	6
+	firearms:	7
+BREAK
+#22013
+Keywords:	doc doctor vortex street
+Name:	Doc Vortex
+RoomDesc:$
+A bumbling street doc fiddles around with new stock behind the counter. 
+
+~
+LookDesc:$
+Wearing a stained labcoat and a thick pair of spectacles, Doc Vortex doesn't
+look to be the most hygenic of street docs. Rumour has it that he stocks some
+tasty ware, though.. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	90
+	Cash:	999999
+[SKILLS]
+BREAK
+#22014
+Keywords:	clawed hunched figure ninja
+Name:	a clawed ninja
+RoomDesc:$
+A clawed, hunched figure scuttles about in the darkness. 
+
+~
+LookDesc:$
+Completely covered in a hardened suit of armor, this demonic looking creature
+pounces on you once it realizes it's been seen. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000101000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	12
+	Str:	6
+	Cha:	1
+	Int:	12
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	60
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	unarmed combat:	8
+	:	9
+BREAK
+#22015
+Keywords:	human guard
+Name:	the door guard
+RoomDesc:$
+A human guard stands here, nose upturned at your presence. 
+
+~
+LookDesc:$
+Even for a human, he doesn't look like the type to be walked all over.  You
+glance at him and see your reflection in his solid chrome cybereyes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1101010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	6
+	Cha:	1
+	Int:	12
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Level:	1
+	Ballistic:	9
+	Impact:	9
+	Cash:	2
+	Bank:	8
+[SKILLS]
+	unarmed combat:	8
+	clubs:	14
+BREAK
+#22016
+Keywords:	robert james hark iii well dressed well-dressed elf
+Name:	Robert James Hark III
+RoomDesc:$
+A well-dressed elf sits behind his table, reading the newspaper. 
+
+~
+LookDesc:$
+Dressed in a classy suit and sporting an intelligent looking set of
+spectacles, Robert James Hark the third has found a new niche in the
+underworld of Portland.  He glances up at you casually, closes his newspaper,
+and fingers a sword, wondering if you wish to discuss business, or pick a
+fight. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	12
+	Str:	12
+	Cha:	1
+	Int:	24
+	Wil:	24
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	90
+	Ballistic:	10
+	Impact:	10
+	Karma:	111
+[SKILLS]
+	unarmed combat:	10
+	armed combat:	10
+	:	9
+	:	3
+	:	3
+BREAK
+#22017
+Keywords:	shady fixer Cyrus
+Name:	Cyrus
+RoomDesc:$
+A shady looking fixer loiters here, occasionally peering behind him. 
+
+~
+LookDesc:$
+Wearing a black, hooded trenchcoat, you don't see much of his features. He
+looks up at you with a set of all black cybereyes, and you can see that he's a
+human. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	20
+	Qui:	20
+	Str:	20
+	Cha:	20
+	Int:	20
+	Wil:	20
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	30
+	Impact:	30
+[SKILLS]
+	firearms:	10
+	unarmed combat:	10
+BREAK
+#22096
+Keywords:	elven elf guard eldrae
+Name:	an Eldrae guard
+RoomDesc:$
+An Eldrae guard stands here, plotting your death. 
+
+~
+LookDesc:$
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000010100001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	12
+	Str:	12
+	Cha:	0
+	Int:	12
+	Wil:	12
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	90
+	Ballistic:	12
+	Impact:	12
+[SKILLS]
+	unarmed combat:	8
+	firearms:	8
+BREAK
+#22097
+Keywords:	lar police
+Name:	the Lar Police
+RoomDesc:$
+A BIG LAR POLICE MAN STANDS HERE. 
+
+~
+LookDesc:$
+NO LAR, LAR BAD! 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	unarmed combat:	12
+	firearms:	12
+BREAK
+#22098
+Keywords:	buff human bodyguard monstrous
+Name:	a monstrous bodyguard
+RoomDesc:$
+A huge bodyguard stands here, fiddling with a crowbar. 
+
+~
+LookDesc:$
+Large.  Hairy.  Muscular. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000000001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	15
+	Str:	15
+	Cha:	0
+	Int:	15
+	Wil:	15
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	1
+	Ballistic:	20
+	Impact:	20
+[SKILLS]
+	armed combat:	14
+	clubs:	14
+	unarmed combat:	14
+BREAK
+#22099
+Keywords:	budgie budgerigar olaf
+Name:	a budgie
+RoomDesc:$
+A budgerigar sits on top of the monitor, squawking random cuss words. 
+
+~
+LookDesc:$
+It's a budgie.  A blue one. 
+~
+ArriveMsg:	flies in from
+LeaveMsg:	flies
+MobFlags:	101110000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	30
+	Weight:	1
+	Level:	8
+	Ballistic:	20000
+	Impact:	20000
+	Cash:	2500
+	Bank:	25000
+	Karma:	7500
+[SKILLS]
+	unarmed combat:	50
+	:	4
+	:	3
+	:	10
+	:	3
+BREAK
+END

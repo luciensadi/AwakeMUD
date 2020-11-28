@@ -1,0 +1,564 @@
+#14300
+Keywords:	spike wheels go ganger go-ganger
+Name:	a Spike Wheels go-ganger
+RoomDesc:$
+A Spike Wheels go-ganger leans against his bike.
+
+~
+LookDesc:$
+A Spike Wheels go-ganger leans against his bike, wearing his colors
+proudly.
+~
+ArriveMsg:	rides in from
+LeaveMsg:	jumps on his bike and rides
+MobFlags:	1101000
+AffFlags:	100010000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	4
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	4
+	Impact:	3
+	Karma:	5
+[SKILLS]
+	shotguns:	6
+	unarmed combat:	5
+	armed combat:	6
+BREAK
+#14301
+Keywords:	halloweener ganger human punk street
+Name:	a Halloweeners Ganger
+RoomDesc:$
+A ganger decked out in white facepaint, black and orange stands here.
+
+~
+LookDesc:$
+Wearing a black and orange leather jacket with blazing pumpkins
+on it, face painted with white makeup, and a hell-bent expression
+on his face.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	5
+	Cha:	4
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	6
+	Impact:	5
+[SKILLS]
+	pistols:	5
+	unarmed combat:	6
+BREAK
+#14302
+Keywords:	paulie halloweener weapons dealer shop shopkeeper
+Name:	Paulie
+RoomDesc:$
+Paulie stands behind a counter cleaning a shotgun.
+
+~
+LookDesc:$
+A pudgy african descended human, wearing halloweeners colors, glances
+at you as he cleans his shotgun.  Behind him is a sign that says,
+Orders from Slash and Burn - Don't frag with Paulie's customers
+unless they frag with you.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	3
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	90
+	Ballistic:	7
+	Impact:	6
+	Cash:	4000
+	Bank:	4000
+[SKILLS]
+	unarmed combat:	9
+	shotguns:	7
+	negotiation:	4
+BREAK
+#14303
+Keywords:	sam hain samhain samantha dwarf mage halloweener
+Name:	Samhain
+RoomDesc:$
+Samhain meditates here, waiting to take you to Arawn.
+
+~
+LookDesc:$
+A dwarven woman with a psychotic look in her eyes, adorned in a black
+trench with strange magical symbols on it.  She sits in the pentacle
+circle, meditating.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000011010
+AffFlags:	1000
+Race:	Dwarf
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	5
+	Cha:	4
+	Int:	6
+	Wil:	8
+	Mag:	8
+[POINTS]
+	Height:	106
+	Weight:	86
+	Ballistic:	7
+	Impact:	8
+	Cash:	200
+	Karma:	25
+[SKILLS]
+	unarmed combat:	6
+	shotguns:	6
+	sorcery:	8
+BREAK
+#14304
+Keywords:	clown halloweeners jack psycho
+Name:	Jack the Clown
+RoomDesc:$
+A clown with an psychotic expression on his face prances about madly.
+
+~
+LookDesc:$
+He looks like he has gotten a little bit too into the persona of his
+costume.  He prances about cackling and speaking of killing little children.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000101000
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	6
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	186
+	Weight:	84
+	Ballistic:	6
+	Impact:	4
+	Karma:	10
+[SKILLS]
+	edged weapons:	6
+BREAK
+#14305
+Keywords:	halloweeners ganger female human
+Name:	a female Halloweeners ganger
+RoomDesc:$
+A female Halloweeners ganger is standing here.
+
+~
+LookDesc:$
+A female human, in Halloweeners colors, probably somewhere around
+the ages of 16 to 19.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000010101000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	5
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	50
+	Ballistic:	5
+	Impact:	4
+	Cash:	140
+	Bank:	200
+[SKILLS]
+	edged weapons:	4
+BREAK
+#14306
+Keywords:	halloweeners male ganger
+Name:	a Halloweeners Ganger
+RoomDesc:$
+A male Halloweeners ganger stands here, drinking a bottle of Everclear.
+
+~
+LookDesc:$
+A ganger partying and getting drunk.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000101000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	5
+	Cha:	2
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	195
+	Weight:	85
+	Ballistic:	6
+	Impact:	6
+	Cash:	145
+	Bank:	250
+[SKILLS]
+	armed combat:	6
+BREAK
+#14307
+Keywords:	wraith mist black
+Name:	a wraith
+RoomDesc:$
+A black mist hovers about the astral plane here. 
+
+~
+LookDesc:$
+You look into the blackness of this creature, and see nothing but darkness. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000111010
+AffFlags:	10000000000001000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	15
+	Str:	15
+	Cha:	15
+	Int:	15
+	Wil:	15
+	Mag:	15
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	1
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	unarmed combat:	20
+	sorcery:	20
+BREAK
+#14308
+Keywords:	slash burn halloweeners leader human
+Name:	Slash, the Leader of the Halloweeners
+RoomDesc:$
+A fire-scarred human with a shaved head, wearing Halloweeners colors, stands here.
+
+~
+LookDesc:$
+There is a fire in his eyes that chills you to the bone.  He wears
+the colors orange and black, but also has a fire pattern painted on
+the back of his leather jacket.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000101010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	5
+	Str:	6
+	Cha:	6
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	208
+	Weight:	88
+	Ballistic:	8
+	Impact:	6
+	Cash:	150
+[SKILLS]
+	edged weapons:	9
+	unarmed combat:	9
+	firearms:	9
+BREAK
+#14309
+Keywords:	garbage huge mound free spirit
+Name:	a huge mound of garbage
+RoomDesc:$
+A huge mound of garbage comes up from under you and attacks! 
+
+~
+LookDesc:$
+All sorts of rubbish have become animated, by some sort of metaplanar entity.
+From the looks of it, this thing hasn't come to the world to show us the way,
+or to create a new era of peace.  Rather, it looks bent on killing and maiming
+and destroying. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000111110
+AffFlags:	10000001000001000
+Race:	Spirit
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	8
+	Str:	9
+	Cha:	8
+	Int:	8
+	Wil:	8
+	Mag:	8
+[POINTS]
+	Height:	250
+	Weight:	250
+	Level:	1
+	Ballistic:	11
+	Impact:	11
+	Cash:	105
+[SKILLS]
+	unarmed combat:	10
+	:	4
+BREAK
+#14310
+Keywords:	schizz ganger halloweener
+Name:	Schizz
+RoomDesc:$
+Schizz stands here, cleaning his fingernails with the blade of his monosword.
+
+~
+LookDesc:$
+He has a bloodthirsty look in his eye as he plays with his monosword. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101110
+AffFlags:	10000000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	4
+	Str:	6
+	Cha:	6
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	70
+	Ballistic:	8
+	Impact:	7
+	Bank:	500
+	Karma:	30
+[SKILLS]
+	edged weapons:	11
+	stealth:	8
+BREAK
+#14311
+Keywords:	psychotic serial killer teddy bear evil
+Name:	A psychotic serial killer named Teddy Bear
+RoomDesc:$
+An evil, psychotic man in a bloody teddy stands here, laughing maniacally. 
+
+~
+LookDesc:$
+A pallid, towering figure, wearing a white teddy that is now crimson red from
+the blood of his poor victims.  Teddy Bear is the executioner of the
+Halloweeners gang, and loves his job.  He is also a cannibal. He escaped from
+the South Seattle mental hospital two years ago and he is a wanted man, as you
+have probably seen on the trids.  He is called Teddy Bear because he wears a
+teddy and is as large as a bear. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101100000111110
+AffFlags:	10000001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	9
+	Str:	10
+	Cha:	1
+	Int:	8
+	Wil:	9
+	Mag:	9
+[POINTS]
+	Height:	220
+	Weight:	180
+	Level:	1
+	Ballistic:	10
+	Impact:	8
+[SKILLS]
+	armed combat:	9
+	unarmed combat:	9
+	sorcery:	9
+	:	3
+BREAK
+#14312
+Keywords:	receptionist halloweener girl female woman
+Name:	the receptionist
+RoomDesc:$
+A woman in Halloweeners colors sits at the desk. 
+
+~
+LookDesc:$
+A skinny girl in Halloweeners clothes, sitting at the desk as if she had
+important stuff to do. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+Position:	Sitting
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	5
+	Int:	4
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	1
+	Ballistic:	2
+	Impact:	2
+	Cash:	20
+	Bank:	200
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#14313
+Keywords:	doctor white
+Name:	Doctor White
+RoomDesc:$
+Dr. White stands here waiting to make "adjustments" on you. 
+
+~
+LookDesc:$
+A man in a sterile white gown, with sterile gloves, and a Halloweeners' tatto
+on his forehead.  He is currently wiping one of his cutting utensils, er
+medical instruments down with a sterilization solvent. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	4
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	1
+	Ballistic:	8
+	Impact:	8
+	Cash:	8000
+	Bank:	10000
+[SKILLS]
+	:	10
+BREAK
+#14314
+Keywords:	ghoul nasty
+Name:	a nasty ghoul
+RoomDesc:$
+A nasty ghoul hobbles around, nibbling on a human bone. 
+
+~
+LookDesc:$
+A disgusting ghoul, wearing tattered clothes, reeking of dead bodies eaten,
+probably victims of the transvestite cannibal lurking above. 
+~
+ArriveMsg:	hobbles in from
+LeaveMsg:	hobbles away
+MobFlags:	101000001101000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	5
+	Str:	9
+	Cha:	1
+	Int:	4
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	9
+	Impact:	7
+[SKILLS]
+	unarmed combat:	8
+	armed combat:	8
+BREAK
+END

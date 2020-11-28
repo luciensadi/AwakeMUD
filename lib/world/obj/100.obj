@@ -1,708 +1,266 @@
 #10000
-Keywords:	massive hermetic library mahogany shelves
-Name:	a massive hermetic library
+Keywords:	formula anti bullet barrier
+Name:	anti bullet barrier
 RoomDesc:$
-Mahogany shelves line the walls, groaning under the weight of centuries of knowledge.~
-LookDesc:$
-Wait a minute, are all these books just Shadowrun manuals bound in leather? 
-~
-Type:	Magic Tool
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	500000.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-	StreetIndex:	0.00
-[VALUES]
-	Val0:	1
-	Val1:	15
-BREAK
-#10001
-Keywords:	peashooter shooter gun
-Name:	a peashooter
-RoomDesc:$
-A testing object (peashooter) has been dropped here.~
+A spell formula~
 LookDesc:$
 It looks pretty much like an unfinished object~
-Type:	Weapon
-WearFlags:	10000000000001
+Type:	Spell Formula
+WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	0.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-	StreetIndex:	0.00
-[VALUES]
-	Val1:	1
-	Val3:	5
-	Val4:	11
-	Val5:	1000
-	Val7:	-1
-	Val8:	-1
-	Val9:	-1
-	Val10:	30
-BREAK
-#10003
-Keywords:	ring invisibility test
-Name:	A tester's ring of invisibility
-RoomDesc:$
-A simple gold ring has been left here, a vague red glow emanating from it.~
-LookDesc:$
-It looks pretty much like an unfinished object~
-Type:	Worn
-WearFlags:	11
-ExtraFlags:	100000000000
-AffFlags:	1000000000000000000000000000000000000000000
 Material:	paper
 [POINTS]
-	Weight:	0.00
+	Weight:	1.00
 	Barrier:	1
-	Cost:	0
+	Cost:	2000
+	AvailTN:	4
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	52
+BREAK
+#10002
+Keywords:	pak flash compact package
+Name:	a Flash Pak
+RoomDesc:$
+A small compact package is lying here.~
+LookDesc:$
+The Flash Pak is a small compacted box, incredibly useful in the right hands.
+Watch where you wave it though.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	300
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
-	StreetIndex:	0.00
 BREAK
 #10004
-Keywords:	testing armor
-Name:	a suit of testing armor
+Keywords:	rifle viper black gun
+Name:	a Viper Rifle
 RoomDesc:$
-An unfinished object is lying here.~
+A black rifle is lying here.~
 LookDesc:$
-It looks pretty much like an unfinished object~
-Type:	Worn
-WearFlags:	1001
-ExtraFlags:	0
+The Viper Rifle was originally a prototype of an unknown artillery company,
+dropped after field tests deemed it too expensive to market. Somehow, someone
+got their hands on one, and here it is. Looks pretty heavy duty.
+~
+Type:	Weapon
+WearFlags:	1000010010000000001
+ExtraFlags:	1000000000000
 AffFlags:	0
 Material:	metal
 [POINTS]
-	Weight:	0.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
+	Weight:	4.00
+	Barrier:	8
+	Cost:	9000
+	AvailTN:	10
+	AvailDay:	6.00
+	LegalNum:	1
+	LegalCode:	7
 	LegalPermit:	0
-	StreetIndex:	0.00
 [VALUES]
-	Val0:	1000
-	Val1:	1000
-	Val2:	1000
-	Val3:	1000
-	Val4:	1000
-	Val5:	10000
-	Val6:	10000
-	Val7:	-1000
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	30
+	Val6:	30
+	Val10:	28
 BREAK
-#10005
-Keywords:	lsa dominator
-Name:	a gunmetal-grey Dominator
+#10006
+Keywords:	GPHMG gun machine heavy duty
+Name:	a GPHMG
 RoomDesc:$
-A chunky sniper rifle has been left here.~
+A heavy duty machine gun is lying on the ground.~
 LookDesc:$
-Seemingly formed out of a solid block of matte-black alloy, this advanced
-sniper rifle uses a curious combination of an electronic firing system and
-self-guiding munitions to enable precision shooting even while on the move. 
+The General Purpose Heavy Machine Gun is pretty self explanatory. Large,
+mean, and very popular for the more brutal runs.
 ~
 Type:	Weapon
 WearFlags:	1000010000000000001
-ExtraFlags:	1101000001000
-AffFlags:	100000000010001000000000
-Material:	metal
-[POINTS]
-	Weight:	12.00
-	Barrier:	32
-	Cost:	10000000
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	100
-	LegalCode:	10
-	LegalPermit:	0
-	StreetIndex:	0.00
-[VALUES]
-	Val0:	1
-	Val1:	1
-	Val3:	9
-	Val4:	11
-	Val5:	-1
-	Val6:	1
-	Val8:	-2
-	Val9:	-2
-	Val10:	4
-[AFFECT 0]
-	Location:	Target Numbers
-	Modifier:	-50
-BREAK
-#10007
-Keywords:	sleek rifle suppressor
-Name:	a sleek rifle suppressor
-RoomDesc:$
-An unfinished object is lying here.~
-LookDesc:$
-It looks pretty much like an unfinished object~
-Type:	Gun Accessory
-WearFlags:	1
-ExtraFlags:	0
+ExtraFlags:	1000000000000
 AffFlags:	0
 Material:	metal
 [POINTS]
-	Weight:	0.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
+	Weight:	8.00
+	Barrier:	8
+	Cost:	5900
+	AvailTN:	18
+	AvailDay:	18.00
+	LegalNum:	2
+	LegalCode:	8
 	LegalPermit:	0
-	StreetIndex:	0.00
 [VALUES]
-	Val0:	1
-	Val1:	6
+	Val0:	10
+	Val1:	3
+	Val3:	17
+	Val4:	19
+	Val5:	50
+	Val6:	50
+	Val10:	16
 BREAK
 #10008
-Keywords:	pile dusty conjuring books
-Name:	a great stack of conjuring materials
+Keywords:	harness climbing
+Name:	a climbing harness
 RoomDesc:$
-A pile of dusty conjuring books has been set aside on one of the tables.~
+A climbing harness is lying here.~
 LookDesc:$
-Someone has kindly taken the time to sort these conjuring-related tomes out
-from the rest of the library. 
+The harness straps around your body snugly, ensuring that little bit of extra
+help while you're trying to climb out of that cavern.
 ~
-Type:	Magic Tool
-WearFlags:	0
+Type:	Climbing gear
+WearFlags:	110000000001
 ExtraFlags:	0
 AffFlags:	0
-Material:	metal
+Material:	fabric
 [POINTS]
-	Weight:	500000.00
-	Barrier:	32
-	Cost:	0
+	Weight:	0.25
+	Barrier:	3
+	Cost:	75
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
-	StreetIndex:	0.00
 [VALUES]
-	Val1:	15
+	Val0:	2
 BREAK
 #10009
-Keywords:	summoning materials
-Name:	an extensive library of summoning materials
+Keywords:	pads combat pair
+Name:	a pair of combat pads
 RoomDesc:$
-An extensive collection of summoning materials is arrayed about the room.~
+A pair of combat pads is lying on the ground.~
 LookDesc:$
-You're not sure what the tiny Stay-Puft Marshmallow Man figurine is intended
-to be used for. 
+Combat Pads are usually quite useless, unless you know how to use em. Most
+people don't, thus they're useless.
 ~
-Type:	Magic Tool
-WearFlags:	1
+Type:	Worn
+WearFlags:	100000001
 ExtraFlags:	0
 AffFlags:	0
-Material:	metal
+Material:	fabric
 [POINTS]
-	Weight:	500000.00
-	Barrier:	32
-	Cost:	1410065407
+	Weight:	2.00
+	Barrier:	3
+	Cost:	100
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
-	StreetIndex:	0.00
-[VALUES]
-	Val0:	4
-	Val1:	15
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
 BREAK
 #10010
-Keywords:	skeleton key
-Name:	a skeleton key
+Keywords:	blade dikote gleaming
+Name:	a dikote blade
 RoomDesc:$
-A skeleton key has been dropped here.~
+A gleaming blade lies on the floor.~
 LookDesc:$
-It looks like it's designed to work with the doors in the Immortal HQ. 
+The blade looks like a normal blade, that is, until the guy at the desk shows
+you a little test. This thing cut that army boot clean in two, without any
+sagging. That would be because of the Dikote edge.
 ~
-Type:	Key
-WearFlags:	1
-ExtraFlags:	100000000000
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	0.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-	StreetIndex:	0.00
-BREAK
-#10011
-Keywords:	cart monitor mechanical keyboard
-Name:	a server interface
-RoomDesc:$
-Hooked into one of the servers is a cart bearing a wide-screen monitor and mechanical keyboard.~
-LookDesc:$
-Excellent for those long working sessions. You're not here to play games on
-it, right? 
-~
-Type:	Decking Accessory
-WearFlags:	0
+Type:	Weapon
+WearFlags:	10000000000001
 ExtraFlags:	0
 AffFlags:	0
 Material:	metal
 [POINTS]
-	Weight:	500000.00
-	Barrier:	32
-	Cost:	0
+	Weight:	1.00
+	Barrier:	6
+	Cost:	4650
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
-	StreetIndex:	0.00
 [VALUES]
-	Val0:	2
-	Val1:	100000000
-	Val2:	100000000
+	Val1:	2
+	Val2:	1
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
 BREAK
 #10012
-Keywords:	electronics workbench
-Name:	an electronics workbench
+Keywords:	jacket leather worn
+Name:	a worn leather jacket
 RoomDesc:$
-A workbench strewn with electronics stands along the southern wall.~
+A black worn leather jacket is lying here.~
 LookDesc:$
-It looks pretty much like an unfinished object~
-Type:	Workshop
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	500000.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-	StreetIndex:	0.00
-[VALUES]
-	Val0:	1
-	Val1:	3
-BREAK
-#10013
-Keywords:	microtronics setup
-Name:	a microtronics setup
-RoomDesc:$
-A microtronics setup by the door provides tools for cyberdeck construction.~
-LookDesc:$
-It looks pretty much like an unfinished object~
-Type:	Workshop
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	50000.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-	StreetIndex:	0.00
-[VALUES]
-	Val0:	2
-	Val1:	3
-BREAK
-#10014
-Keywords:	slot optical chip cooker
-Name:	an integrated chip cooker
-RoomDesc:$
-The slot of an optical chip cooker is visible on one of the racks.~
-LookDesc:$
-Fancy! 
+A ragged jacket made from real leather with extra padding underneath to add to
+protection. 
 ~
-Type:	Decking Accessory
-WearFlags:	0
+Type:	Worn
+WearFlags:	10000001001
 ExtraFlags:	0
 AffFlags:	0
-Material:	metal
+Material:	fabric
 [POINTS]
-	Weight:	0.00
-	Barrier:	32
-	Cost:	0
+	Weight:	2.00
+	Barrier:	4
+	Cost:	50
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
-	StreetIndex:	0.00
 [VALUES]
-	Val0:	4
-BREAK
-#10015
-Keywords:	rack parts
-Name:	a rack of parts
-RoomDesc:$
-An organized rack of replacement server parts has been installed here.~
-LookDesc:$
-It looks pretty much like an unfinished object~
-Type:	Decking Accessory
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	500000.00
-	Barrier:	32
-	Cost:	999999999
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-	StreetIndex:	0.00
-[VALUES]
-	Val0:	3
+	Val1:	2
+	Val4:	3
+	Val5:	3
+	Val6:	3
 BREAK
 #10016
-Keywords:	blank optical chips stack
-Name:	a stack of blank optical chips
+Keywords:	sign
+Name:	a large sign
 RoomDesc:$
-A stack of blank optical chips teeters by the cart.~
+READ THIS SIGN !~
 LookDesc:$
-It looks pretty much like an unfinished object~
-Type:	Decking Accessory
-WearFlags:	1
+^cMOWICH BRIDGE CONSTRUCTION COMPANY^N
+-----------------------------------------------------------
+^w*^gABSAILING IS STRICTLY FORBIDDEN ON THESE PREMISES^w*^n
+----------------------------------------------------------- 
+~
+Type:	Other
+WearFlags:	0
 ExtraFlags:	0
 AffFlags:	0
 Material:	metal
 [POINTS]
-	Weight:	50000.00
-	Barrier:	32
-	Cost:	99999999
+	Weight:	5.00
+	Barrier:	6
+	Cost:	67
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
-	StreetIndex:	0.00
-[VALUES]
-	Val0:	3
-	Val1:	1
 BREAK
 #10017
-Keywords:	stat tweaker
-Name:	an immortal's stat-tweaker
-RoomDesc:$
-report this~
-LookDesc:$
-It looks pretty much like an unfinished object~
-Type:	Worn
-WearFlags:	1111111111111111111111111
-ExtraFlags:	101000001000
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	0.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-	StreetIndex:	0.00
-[AFFECT 0]
-	Location:	Target Numbers
-	Modifier:	127
-[AFFECT 1]
-	Location:	Reaction
-	Modifier:	127
-[AFFECT 2]
-	Location:	Target Numbers
-	Modifier:	-127
-[AFFECT 3]
-	Location:	Init Dice
-	Modifier:	127
-[AFFECT 4]
-	Location:	Target Numbers
-	Modifier:	-127
-[AFFECT 5]
-	Location:	Target Numbers
-	Modifier:	-127
-BREAK
-#10018
-Keywords:	whiteboard board message immortal
-Name:	an Immortal message board
-RoomDesc:$
-A whiteboard bears scrawled notes and reminders for the staff.~
-LookDesc:$
-It looks pretty much like an unfinished object~
-Type:	Other
-WearFlags:	0
-ExtraFlags:	100010001100
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	500000.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-	StreetIndex:	0.00
-BREAK
-#10019
-Keywords:	ammunition workshop ammo
-Name:	an ammunition workshop
-RoomDesc:$
-A reloading workbench with a hand press and small machine-shop setup occupies this area.~
-LookDesc:$
-Constructed from dense plastics and reinforced with steel tubing, this neutral
-grey workbench is the perfect surface to hold the assortment of
-ammunition-crafting tools that have been deployed and mounted on its surface.
-~
-Type:	Workshop
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	50.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-	StreetIndex:	0.00
-[VALUES]
-	Val0:	7
-	Val1:	2
-BREAK
-#10020
-Keywords:	sign
-Name:	An Immortal notification sign
-RoomDesc:$
-^gA sign on the kiosk recommends you type '^yLIST^g', or '^yGOTO 10020^g' to make changes.~
-LookDesc:$
-The sign informs you that room 10020 is the vehicle dealer's storage room for
-room 10021, and that to change the stock of this shop you can load or remove
-vehicles there. 
-~
-Type:	UNDEFINED
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	0.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-	StreetIndex:	0.00
-BREAK
-#10021
-Keywords:	vehicle workshop
-Name:	a non-saving vehicular workshop
-RoomDesc:$
-An array of tools for the modification and maintenance of vehicles occupies this area.~
-LookDesc:$
-It contains everything you need to upgrade, modify, and repair vehicles. 
-~
-Type:	Workshop
-WearFlags:	1
-ExtraFlags:	100
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	40.00
-	Barrier:	6
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-	StreetIndex:	0.00
-[VALUES]
-	Val0:	4
-	Val1:	2
-BREAK
-#10022
-Keywords:	cheat deck cyberdeck immortal staff
-Name:	an Immortal's cheat cyberdeck
-RoomDesc:$
-Report this deck to an imm.~
-LookDesc:$
-Great for testing. 
-~
-Type:	Cyberdeck
-WearFlags:	1
-ExtraFlags:	101000001000
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	0.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-	StreetIndex:	0.00
-[VALUES]
-	Val0:	30
-	Val1:	1783793664
-	Val2:	1783793664
-	Val3:	1783793664
-	Val4:	1783793664
-	Val6:	5
-BREAK
-#10023
-Keywords:	cheat bod 20
-Name:	cheat bod 20
+Keywords:	ruthenium dermal sheathing I
+Name:	ruthenium coated dermal sheathing I
 RoomDesc:$
 An unfinished object is lying here.~
 LookDesc:$
 It looks pretty much like an unfinished object~
-Type:	Program
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	0.00
-	Barrier:	32
-	Cost:	1200000
-	AvailTN:	16
-	AvailDay:	30.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-	StreetIndex:	0.00
-[VALUES]
-	Val0:	1
-	Val1:	20
-	Val2:	1200
-BREAK
-#10024
-Keywords:	cheat evas 20
-Name:	cheat evas 20
-RoomDesc:$
-An unfinished object is lying here.~
-LookDesc:$
-It looks pretty much like an unfinished object~
-Type:	Program
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	0.00
-	Barrier:	32
-	Cost:	1200000
-	AvailTN:	16
-	AvailDay:	30.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-	StreetIndex:	0.00
-[VALUES]
-	Val0:	2
-	Val1:	20
-	Val2:	1200
-BREAK
-#10025
-Keywords:	testing pocket secretary
-Name:	a testing pocket secretary
-RoomDesc:$
-Some imm's dropped their pocket secretary. Gross.~
-LookDesc:$
-It looks pretty much like an unfinished object~
-Type:	Other
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	0.00
-	Barrier:	32
-	Cost:	10
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-	StreetIndex:	0.00
-BREAK
-#10026
-Keywords:	cheat masking 20
-Name:	cheat masking 20
-RoomDesc:$
-An unfinished object is lying here.~
-LookDesc:$
-It looks pretty much like an unfinished object~
-Type:	Program
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	0.00
-	Barrier:	32
-	Cost:	800000
-	AvailTN:	16
-	AvailDay:	30.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-	StreetIndex:	0.00
-[VALUES]
-	Val0:	3
-	Val1:	20
-	Val2:	800
-BREAK
-#10027
-Keywords:	cheat sensor 20
-Name:	cheat sensor 20
-RoomDesc:$
-An unfinished object is lying here.~
-LookDesc:$
-It looks pretty much like an unfinished object~
-Type:	Program
+Type:	Cyberware
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
@@ -710,125 +268,115 @@ Material:	paper
 [POINTS]
 	Weight:	0.00
 	Barrier:	1
-	Cost:	800000
-	AvailTN:	16
-	AvailDay:	30.00
+	Cost:	174000
+	AvailTN:	8
+	AvailDay:	18.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
-	StreetIndex:	0.00
 [VALUES]
-	Val0:	4
-	Val1:	20
-	Val2:	800
+	Val0:	40
+	Val1:	1
+	Val3:	1
+	Val4:	90
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
+[AFFECT 1]
+	Location:	Body
+	Modifier:	2
 BREAK
-#10028
-Keywords:	BFG-9000 9000 rocket launcher report staff
-Name:	a BFG-9000 rocket launcher
-RoomDesc:$
-^rReport this to the staff!^n~
-LookDesc:$
-It looks pretty much like an unfinished object~
-Type:	Weapon
-WearFlags:	10000000000001
-ExtraFlags:	1100000000100
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	0.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-	StreetIndex:	0.00
-[VALUES]
-	Val0:	20
-	Val1:	4
-	Val3:	21
-	Val4:	20
-	Val5:	-1
-	Val7:	-1
-	Val8:	-1
-	Val9:	-1
-	Val10:	2
-BREAK
-#10029
-Keywords:	imm camera
-Name:	an imm camera
+#10018
+Keywords:	ceramic bone lacing alpha
+Name:	ceramic bone lacing -alpha
 RoomDesc:$
 An unfinished object is lying here.~
 LookDesc:$
 It looks pretty much like an unfinished object~
-Type:	Camera
-WearFlags:	100000000000001
+Type:	Cyberware
+WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
-Material:	metal
+Material:	paper
 [POINTS]
 	Weight:	0.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
+	Barrier:	1
+	Cost:	80000
+	AvailTN:	6
+	AvailDay:	21.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
-	StreetIndex:	0.00
+[VALUES]
+	Val0:	9
+	Val2:	1
+	Val3:	4
+	Val4:	120
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	2
 BREAK
-#10030
-Keywords:	heavy testing attachment
-Name:	a heavy testing attachment
+#10019
+Keywords:	encephalon 2 beta
+Name:	Encephalon II -beta
 RoomDesc:$
 An unfinished object is lying here.~
 LookDesc:$
 It looks pretty much like an unfinished object~
-Type:	Gun Accessory
+Type:	Cyberware
 WearFlags:	1
-ExtraFlags:	101000001000
+ExtraFlags:	0
 AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	50.00
-	Barrier:	32
-	Cost:	10000
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-	StreetIndex:	0.00
-[VALUES]
-	Val1:	2
-[AFFECT 0]
-	Location:	Target Numbers
-	Modifier:	10
-BREAK
-#10033
-Keywords:	quest diagnostic scanner
-Name:	a quest diagnostic scanner
-RoomDesc:$
-A staff member's Quest Diagnostic Scanner has been left here. Don't touch it if you're not a staff member.~
-LookDesc:$
-You must HOLD this device for it to work. While holding it, you may DIAGNOSE
-<player> to examine their quest-related information. 
-~
-Type:	Other
-WearFlags:	100000000000001
-ExtraFlags:	100000000000
-AffFlags:	0
-Material:	metal
+Material:	paper
 [POINTS]
 	Weight:	0.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
+	Barrier:	1
+	Cost:	460000
+	AvailTN:	11
+	AvailDay:	18.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
-	StreetIndex:	0.00
+[VALUES]
+	Val0:	32
+	Val1:	2
+	Val2:	2
+	Val4:	89
+[AFFECT 0]
+	Location:	Task Pool (Int)
+	Modifier:	2
+[AFFECT 1]
+	Location:	Hacking Pool
+	Modifier:	2
+BREAK
+#10020
+Keywords:	induction datajack beta
+Name:	induction datajack -beta
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	12000
+	AvailTN:	10
+	AvailDay:	6.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val2:	2
+	Val3:	1
+	Val4:	17
 BREAK
 END

@@ -1,0 +1,525 @@
+#61500
+Keywords:	Quentin razor halloweener biker troll
+Name:	Quentin the Razor
+RoomDesc:$
+A fairly chromed troll in Halloweener colors is perched on his bike, resting
+his head on an assault rifle. 
+
+~
+LookDesc:$
+Quentin the Razor is one of the Halloweener's lower ranked lieutenants,
+granted with the task of making sure the Weeners' rivals in Glow City stay out
+of their territory in the Redmond Barrens. Quentin manages the Halloweener
+roadblock with care, and has held off the advances of opposing gangs very
+well. 
+~
+ArriveMsg:	roars into the room on his Harley from
+LeaveMsg:	roars off on his Harley
+MobFlags:	1000000010100000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	14
+	Qui:	7
+	Str:	11
+	Cha:	2
+	Int:	5
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	250
+	Weight:	150
+	Ballistic:	6
+	Impact:	6
+[SKILLS]
+	assault rifles:	8
+	unarmed combat:	6
+BREAK
+#61501
+Keywords:	biker halloweener
+Name:	A Halloweener Biker
+RoomDesc:$
+A Halloweener Biker roars around on his Suzuki motorcycle, patrolling the
+area. 
+
+~
+LookDesc:$
+His spiked hair and facepaint makes him look very menacing, and his
+motorcycle, lined with sharp blades and spikes, adds to his intimidating
+image. 
+~
+ArriveMsg:	roars in from
+LeaveMsg:	roars off
+MobFlags:	100000001000
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	8
+	Str:	8
+	Cha:	5
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	200
+	Ballistic:	5
+	Impact:	5
+	Cash:	485
+[SKILLS]
+	whips & flails:	7
+BREAK
+#61502
+Keywords:	flat foot duke troll
+Name:	Flat-foot Duke
+RoomDesc:$
+Flat-foot Duke, the guard for the Caryards, stands by the gates leading into
+the arena. 
+
+~
+LookDesc:$
+Flat-foot Duke's a huge troll with a multitude of piercings all over his face.
+No one knows how he acquired his nickname, because of the black steel boots
+that he wears over his feet, and judging by the crusted blood on his spurs,
+people who inquire don't end up looking very pretty later. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	7
+	Str:	12
+	Cha:	2
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	250
+	Weight:	200
+	Cash:	225
+[SKILLS]
+	unarmed combat:	8
+	cyber implants:	8
+BREAK
+#61503
+Keywords:	orkish male brawler
+Name:	An Orkish male brawler
+RoomDesc:$
+An Orkish brawler wanders around the Caryard, booze in hand. 
+
+~
+LookDesc:$
+An Ork brawler, with a nose ring and spiked blue hair. His face is covered
+with vicious scars: it appears as if he is not only a spectator, but a
+participant. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000001100
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	6
+	Str:	9
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	140
+	Cash:	225
+[SKILLS]
+	unarmed combat:	6
+	edged weapons:	7
+BREAK
+#61504
+Keywords:	gun dealer cheeky chino
+Name:	Cheeky Chino the Gun Dealer
+RoomDesc:$
+A gun dealer is here, operating out of a small tent set up next to a junkpile.
+
+~
+LookDesc:$
+The short, stocky ork is here, fixing up salvagable junk for customers in the
+Caryards. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000001010
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	90
+[SKILLS]
+	negotiation:	8
+BREAK
+#61505
+Keywords:	stocky dwarf fletch armourer
+Name:	Fletch the Armourer
+RoomDesc:$
+A stocky dwarf is hammering away at a set of metal plates. 
+
+~
+LookDesc:$
+This dwarf is hammering away at a few scavenged plates, crafting a new set of
+armor for the brawlers to purchase. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000001010
+AffFlags:	1000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	120
+	Weight:	40
+[SKILLS]
+	negotiation:	8
+BREAK
+#61506
+Keywords:	Stash female elf junk
+Name:	Stash
+RoomDesc:$
+A female Elf is here, wiping her hands on a dirty rag. 
+
+~
+LookDesc:$
+Dressed in large coveralls, Stash has the appearance of a blonde tomboy. She'd
+probably look very attractive if she just changed her clothes and wiped by
+layers of smudge off her face. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	8
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	40
+[SKILLS]
+	negotiation:	8
+BREAK
+#61507
+Keywords:	king troll the
+Name:	the King
+RoomDesc:$
+The King stands here, looking regal. 
+
+~
+LookDesc:$
+There is a reason they call this troll "The King", and it ain't his crown.
+This guy has pectorals the size of your head and his arms are bigger than your
+legs. This is one tough cookie. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	5
+	Str:	16
+	Cha:	2
+	Int:	4
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	200
+	Level:	3
+	Ballistic:	12
+	Impact:	10
+	Cash:	185
+[SKILLS]
+BREAK
+#61508
+Keywords:	roaming glow city ganger
+Name:	a roaming Glow City ganger
+RoomDesc:$
+A roaming ganger is here, looking for travelers to waylay and loot. 
+
+~
+LookDesc:$
+He looks pretty pissed and angry, and a little sick from the radiation as
+well. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	3
+	Cha:	2
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	80
+	Cash:	50
+[SKILLS]
+	sub-machine guns:	3
+BREAK
+#61509
+Keywords:	mobile gun turret
+Name:	A mobile gun turret
+RoomDesc:$
+A mobile gun turret pops out from the wall to scan for threats. 
+
+~
+LookDesc:$
+This gun turret is armed with a light machine gun, and is trained towards the
+door to eliminate threats. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000001000101010000000001010
+AffFlags:	1000000000001000001000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	10
+	Str:	1
+	Cha:	1
+	Int:	8
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	machine guns:	8
+BREAK
+#61510
+Keywords:	irradiated resident glow
+Name:	An irradiated resident of Glow City
+RoomDesc:$
+An irradiated resident of Glow City is delirious from overexposure to
+radiation. 
+
+~
+LookDesc:$
+Looks like he's suffering quite a bit. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	2
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	40
+	Cash:	35
+	Bank:	25
+[SKILLS]
+BREAK
+#61511
+Keywords:	pale malnourished elf vedger receptionist
+Name:	Vedger, the owner of The Safehouse
+RoomDesc:$
+A pale, malnourished Elf sits behind the desk with a breather over his face. 
+
+~
+LookDesc:$
+The owner of the safehouse, Vedger is a retired Physical Adept, which explains
+how he can afford to operate the Safehouse in Glow City without suffering too
+much long term damage. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101110000000001010
+AffFlags:	1000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	12
+	Str:	10
+	Cha:	6
+	Int:	8
+	Wil:	9
+	Mag:	6
+[POINTS]
+	Height:	180
+	Weight:	60
+	Cash:	45
+	Bank:	45
+[SKILLS]
+	unarmed combat:	10
+BREAK
+#61512
+Keywords:	brain eater troll
+Name:	A ^RBrain Eaters^N ganger
+RoomDesc:$
+A troll in the ^RBrain Eaters^N colors wanders around, protecting his turf. 
+
+~
+LookDesc:$
+A member of the all-trog Brain Eaters gang, this troll wears the trademark red
+fez hat, and looks pretty mean. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	1000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	4
+	Str:	10
+	Cha:	2
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	250
+	Weight:	200
+	Cash:	185
+[SKILLS]
+	clubs:	5
+	edged weapons:	4
+BREAK
+#61513
+Keywords:	rat keeng furred monstrosity
+Name:	Keeng Rat, the furred monstrosity
+RoomDesc:$
+The Caryard King's pet rat is here, tethered to a junk pile with a huge
+tungsten chain. 
+
+~
+LookDesc:$
+Mutated by the background radiation, the King's pet, Keeng Rat, is a vicious,
+enormous rabid rat. Sharp fangs protrude from his mousey mouth, and lucky for
+you he's chained at a safe distance. A pile of human bones are littered around
+him. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000001110
+AffFlags:	1000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	9
+	Str:	12
+	Cha:	1
+	Int:	4
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	400
+[SKILLS]
+	unarmed combat:	8
+BREAK
+#61514
+Keywords:	rusted stiletto ganger
+Name:	A ^LRusted Stiletto^N Ganger
+RoomDesc:$
+A ^LRusted Stiletto^N ganger stalks through the area, playing with his knife. 
+
+~
+LookDesc:$
+He's one mean-looking man. His face is scarred, his hair is spiked, his nose
+is pierced with a bull ring, and his earlobes are linked together with a metal
+chain. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000001000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	8
+	Str:	5
+	Cha:	3
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	50
+	Ballistic:	4
+	Impact:	2
+	Cash:	300
+[SKILLS]
+	edged weapons:	4
+	pistols:	5
+BREAK
+END

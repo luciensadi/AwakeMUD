@@ -1,0 +1,174 @@
+#10794
+Keywords:	novatech sensors eight program datachip viii
+Name:	A Novatech Sensors VIII Program
+RoomDesc:$
+A datachip lies here.~
+LookDesc:$
+Sensors VIII, a persona program by Novatech. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	64000
+	AvailTN:	8
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	8
+	Val2:	128
+	Val3:	300
+BREAK
+#10795
+Keywords:	novatech masking program x ten datachip
+Name:	A Novatech Masking X program
+RoomDesc:$
+A datachip lies here.~
+LookDesc:$
+Masking X, a persona program by Novatech. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	200000
+	AvailTN:	16
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	10
+	Val2:	200
+	Val3:	300
+BREAK
+#10796
+Keywords:	program novatech evasion xii twelve datachip
+Name:	A Novatech Evasion XII program
+RoomDesc:$
+A datachip lies here.~
+LookDesc:$
+A Novatech Evasion XII program. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	432000
+	AvailTN:	16
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	12
+	Val2:	432
+	Val3:	300
+BREAK
+#10797
+Keywords:	bod xii twelve novatech
+Name:	A Novatech Bod-XII Program
+RoomDesc:$
+A datachip with a Novatech emblem on it lies here.~
+LookDesc:$
+The emblem on it says Bod-XII. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	432000
+	AvailTN:	16
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	12
+	Val2:	432
+	Val3:	300
+BREAK
+#10798
+Keywords:	attack twelve novatech
+Name:	A Novatech Attack XII program
+RoomDesc:$
+A datachip with a sword label on it lies here.~
+LookDesc:$
+A datachip with a sword label on it, saying "Attack XII" underneath it.  On
+the other side is the Novatech emblem. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	101000000000
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	288000
+	AvailTN:	16
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	12
+	Val2:	288
+	Val3:	2
+BREAK
+#10799
+Keywords:	cyberdeck novatech esquire esquire-15
+Name:	A Novatech Esquire-15 Cyberdeck
+RoomDesc:$
+A sleek black cyberdeck with sperethiel keys sits here.~
+LookDesc:$
+The cyberdeck is designed to be absolutely SOTA and easily upgradable to keep
+it SOTA.  Its capabilities far surpass the much sought-for Fairlight
+Excalibur, as it is decades ahead of it in engineering.  This one is a special
+edition with a Tir Tairngire charset sperethiel keyboard. 
+~
+Type:	Cyberdeck
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	1900000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	12
+	Val2:	12000
+	Val3:	12000
+	Val4:	12000
+BREAK
+END

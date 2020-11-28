@@ -1,0 +1,282 @@
+#28400
+Keywords:	yeth young man
+Name:	Yeth
+RoomDesc:$
+A rather young man stands by the counter. 
+
+~
+LookDesc:$
+Yeth is a young man, aroun his twenties. He has a calm and relaxed expression
+on his face, just watching the customers as they browse his ware. He smokes a
+small cigarette, silent. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000100010000000001011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	6
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	75
+	Level:	4
+[SKILLS]
+	unarmed combat:	5
+	negotiation:	8
+BREAK
+#28401
+Keywords:	raul young troll
+Name:	Raul
+RoomDesc:$
+A young troll walks around, brawling. 
+
+~
+LookDesc:$
+Raul is a young looking troll, aging around his twenties. He is completely
+cybered and heavily armed, he often comes by the mall to brawl with the
+customers or just steal something. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000100010100001101100
+AffFlags:	1000001000001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	14
+	Qui:	14
+	Str:	12
+	Cha:	1
+	Int:	9
+	Wil:	13
+	Mag:	0
+[POINTS]
+	Height:	280
+	Weight:	190
+	Level:	4
+	Ballistic:	13
+	Impact:	11
+	Bank:	200
+[SKILLS]
+	unarmed combat:	8
+	machine guns:	9
+	:	3
+BREAK
+#28402
+Keywords:	yamato young elf
+Name:	Yamato
+RoomDesc:$
+A young elf sits in front of a computer. 
+
+~
+LookDesc:$
+He is a young looking elf, looking to age around twenty-five. He has a very
+long and straight deep black hair that he wears regathered into a ponytail. He
+wears some exotic oriental clothing, and looks at you from time to time. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	7
+	Str:	5
+	Cha:	5
+	Int:	4
+	Wil:	5
+	Mag:	8
+[POINTS]
+	Height:	74
+	Weight:	180
+[SKILLS]
+	unarmed combat:	8
+	edged weapons:	6
+	negotiation:	6
+BREAK
+#28403
+Keywords:	dagobah old man
+Name:	Dagobah
+RoomDesc:$
+An old man stands by the counter. 
+
+~
+LookDesc:$
+Dagobah is rather old, looking to age around his fifties. But his technique
+and skills are of a professional rip-doc, working in the area for more than
+twenty ears. He wears all in white, and has the gloves in his hands very
+clean. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	2
+	Cha:	3
+	Int:	9
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	76
+	Weight:	187
+	Level:	4
+[SKILLS]
+	:	9
+	:	7
+BREAK
+#28404
+Keywords:	akira young blond man
+Name:	Akira
+RoomDesc:$
+A young blond man sits on a chair, smoking a cigarette. 
+
+~
+LookDesc:$
+Akira is a young man, aging around his twenties. He is in the area of selling
+technology about ten years ago. He started helping his father in his offices,
+and has finally opened up his own shop at Lloyd. He has a short straight blond
+hair and strikingly green eyes. He is wearing a pair of jeans pants and a
+white blouse. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	169
+	Weight:	69
+	Level:	4
+[SKILLS]
+BREAK
+#28405
+Keywords:	assis young elf
+Name:	Assis
+RoomDesc:$
+A young elf sits by a chair, smiling at you. 
+
+~
+LookDesc:$
+Assis is a young elf, looking to age around his twenties. He is a very well
+reknown scientist and doctor in the area of stethic adjusts. He has recently
+developed many treatments to people that are not satisfied with their bodies.
+He has light brown hair and deep black eyes, and is wearing a white lab coat.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001010
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	191
+	Weight:	62
+	Level:	4
+[SKILLS]
+	:	8
+BREAK
+#28406
+Keywords:	unfinished mob
+Name:	Richard
+RoomDesc:$
+A young man with sparse beard sits on a chair. 
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	71
+	Level:	4
+[SKILLS]
+BREAK
+#28407
+Keywords:	maul old short fat dwarf
+Name:	Maul
+RoomDesc:$
+An old, short and fat dwarf stands by a counter. 
+
+~
+LookDesc:$
+He is an old, extremelly fat and slightly shorter than the average dwarf. A
+dull gray long beard combines with his also dull gray long hair, that he wears
+tied back into a ponytail. His eyes are heavy and meany. He wears a ragged
+pair of jeans pants, a dirty white t-shirt and glove for protection of his
+hands. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	139
+	Weight:	91
+[SKILLS]
+BREAK
+END

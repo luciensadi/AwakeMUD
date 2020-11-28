@@ -1,0 +1,2147 @@
+#65100
+Keywords:	croissant fresh flaky buttery crescent-shaped pastry
+Name:	a croissant
+RoomDesc:$
+A crescent-shaped pastry sits here.~
+LookDesc:$
+The flaky, butter-laden French croissant is named for its crescent shape. It's
+made by layering pastry with butter, rolling and folding many times in
+succession, then baking till the croissant is a rich golden-brown. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+BREAK
+#65101
+Keywords:	quiche lorraine pie rich-looking plate
+Name:	quiche Lorraine
+RoomDesc:$
+A creamy pie lies here.~
+LookDesc:$
+This filling pie consists of a pastry crust with a rich filling of eggs, milk,
+heavy cream, bacon, butter and a bit of nutmeg baked into it. Heavy, rich and
+sinfully delicious. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.30
+	Barrier:	2
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#65102
+Keywords:	madeleine cake sponge shell-shaped
+Name:	a madeleine
+RoomDesc:$
+A small, shell-shaped cake lies here.~
+LookDesc:$
+A small but rich sponge cake, shaped like a shell and perfect for dipping into
+coffee or tea. Arguably as delicious as reading "Remembrance of Things Past,"
+but requiring much less time. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.01
+	Barrier:	16
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+[EXTRADESC 0]
+	Keywords:	
+	Desc:$
+ 
+~
+BREAK
+#65103
+Keywords:	cup coffee rich thick
+Name:	a cup of coffee
+RoomDesc:$
+A ceramic coffee mug is here.~
+LookDesc:$
+A cup of thick, rich coffee - definitely the real thing, from the smell and
+look of it. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	2
+BREAK
+#65104
+Keywords:	salad nicoise tuna vegetables bowl
+Name:	salad Nicoise
+RoomDesc:$
+A bowl of salad lies here.~
+LookDesc:$
+A flavorful blend of tuna, green beans, potatoes and olives topped with
+chives, parsley, slices of hard-boiled egg and a mustard-vinegar dressing. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.20
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+BREAK
+#65105
+Keywords:	crepes pancakes chocolate plate
+Name:	chocolate crepes
+RoomDesc:$
+A plate of thin pancakes lies here.~
+LookDesc:$
+These thin pancakes made of cocoa, flour, eggs, milk and butter are filled
+with a rich, creamy, bittersweet chocolate filling, rolled up, then drizzled
+with chocolate-and-cognac sauce. Exquisite. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.20
+	Barrier:	1
+	Cost:	40
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#65106
+Keywords:	ticket electronic movie plastic card small
+Name:	a ticket
+RoomDesc:$
+A small plastic card lies here.~
+LookDesc:$
+This small plastic card has a magstrip on it, and is similar to those used as
+tickets in monorail stations. "Le Cinema Vieux" has been printed on one side
+in delicate, flowing script. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	100
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65107
+Keywords:	glass flute champagne tulip-shaped
+Name:	a flute of champagne
+RoomDesc:$
+A tulip-shaped glass is here.~
+LookDesc:$
+Just a champagne flute. May or may not have champagne in it. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	40
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	5
+	Val2:	25
+BREAK
+#65108
+Keywords:	collar priest's white
+Name:	a ^Wwhite^n priest's collar
+RoomDesc:$
+A white collar lies here.~
+LookDesc:$
+A stiff white collar, about an inch and a half wide, like those worn by
+Catholic priests. 
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65109
+Keywords:	cassock priest's black robes
+Name:	a ^Lblack^n priest's cassock
+RoomDesc:$
+A set of black robes lies here.~
+LookDesc:$
+Long-sleeved, floor-length black robes, fitted at the top and loose at the
+bottom - just like those worn by both Anglican and Catholic priests. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val3:	2
+	Val4:	2
+BREAK
+#65110
+Keywords:	dress outfit French maid skimpy black apron white
+Name:	a skimpy French maid's outfit
+RoomDesc:$
+A tiny ^Lblack^n dress with a ^Wwhite^n apron on it lies here.~
+LookDesc:$
+An ever-popular Halloween choice for the woman who wants to look sexy (or the
+man who wants to cross-dress interestingly), the French maid costume consists
+of a very short-skirted black dress with a little white apron on top of it. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65111
+Keywords:	fangs teeth vampire white set
+Name:	a set of vampire fangs
+RoomDesc:$
+A set of white teeth with enlarged canines is here.~
+LookDesc:$
+A set of fake plastic vampire fangs, meant to be worn in your mouth. 
+~
+Type:	Worn
+WearFlags:	100000000100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65112
+Keywords:	mask Kabuki white
+Name:	a Kabuki mask
+RoomDesc:$
+A white mask with a stylized face painted onto it lies here.~
+LookDesc:$
+A white mask with a plastic strap around the back to secure it. A stylized
+Kabuki face has been painted in the front in simple, striking colors. 
+~
+Type:	Worn
+WearFlags:	100000000100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	0.75
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	6
+BREAK
+#65113
+Keywords:	suit clown colorful
+Name:	a ^Yco^n^Clor^n^Gful^n clown suit
+RoomDesc:$
+A loose, ^Yco^n^Clor^n^Gful^n suit lies crumpled in a heap.~
+LookDesc:$
+This baggy suit is made of a shiny, synthetic fabric. It features ruffled
+wrists and ankles, and a row of large, equally colorful buttons running down
+its front. Available in an unnerving variety of sizes. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65114
+Keywords:	wings gauzy fairy pair
+Name:	a pair of gauzy fairy wings
+RoomDesc:$
+A large pair of diaphanous wings lies here.~
+LookDesc:$
+Large, butterfly wing-shaped fairy wings, constructed out of a shimmering
+gauze material on a delicate, silver-painted wire frame. Discreet clear straps
+allow the wearer to attach them to his or her body. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.75
+	Barrier:	1
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65115
+Keywords:	tail black long belt thin
+Name:	a long tail
+RoomDesc:$
+A long tail attached to a thin belt lies here.~
+LookDesc:$
+This supple pleather tail can be adjusted to reach down to most human and
+metahuman ankles. An optional triangular attachement at the end allows the
+wearer to simulate the stereotypical "demon tail" look as well as the more
+generic "cat" look. 
+~
+Type:	Worn
+WearFlags:	100100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65116
+Keywords:	ears cat pair
+Name:	a pair of cat ears
+RoomDesc:$
+A pair of pointed, furry ears lies here.~
+LookDesc:$
+This velvety pair of cat ears can be slipped over each individual ear or
+clipped to a headband and worn that way. 
+~
+Type:	Worn
+WearFlags:	10000000000010001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65117
+Keywords:	suit bunny rabbit white fluffy full-body
+Name:	a full-body, floppy-eared ^Wwhite^n bunny suit
+RoomDesc:$
+A fluffy white suit with bunny ears on it lies here.~
+LookDesc:$
+A furry, full-body bunny suit, with a floppy-eared hood and discreet zippers
+up each side for ease of wearing and removal. Available, scarily enough, in
+all sizes. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	4.00
+	Barrier:	1
+	Cost:	700
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65118
+Keywords:	kit stage makeup theater
+Name:	a stage makeup kit
+RoomDesc:$
+A rectangular box full of makeup supplies sits here.~
+LookDesc:$
+This kit contains every type of cosmetic, applicator and remover required for
+most stage productions, including fairly specialty items such as white Kabuki
+makeup, fake blood, spirit gum and even some hairnets. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	4.00
+	Barrier:	1
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65119
+Keywords:	costume security guard uniform navy-blue
+Name:	a security guard outfit
+RoomDesc:$
+A navy-blue security guard uniform lies here.~
+LookDesc:$
+A standard-looking ^bnavy-blue^n security uniform, consisting of pants,
+long-sleeved shirt, security belt and a peaked security cap with a brim. An
+^yAcme Security Services^n patch has been sewn over one breast pocket, and a
+nametag has been affixed to the other. The outfit also comes with an ID card
+that, upon closer inspection, reads, "For entertainment purposes only." 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65120
+Keywords:	bomb smoke silvery sphere
+Name:	a smoke bomb
+RoomDesc:$
+A silvery sphere lies here.~
+LookDesc:$
+This small silvery sphere has a rounded safety pin on one end. Tiny
+instructions are printed on its bottom: "Smoke Bomb: To use, pull pin and
+throw/roll bomb at area to be affected. Smoke coverage may vary depending on
+air and weather conditions. Smoke is guaranteed to be non-toxic. Keep away
+from small children and idiots. Non-flammable." 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.20
+	Barrier:	1
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65121
+Keywords:	grenade flash grey sphere
+Name:	a flash grenade
+RoomDesc:$
+A grey sphere lies here.~
+LookDesc:$
+This small grey sphere has a circular pin at its top. Tiny instructions
+printed on the bottom read: "Flash grenade: Pull pin and throw/place in area
+to be affected to produce a brief, bright flash of light. Use with caution.
+Keep out of the hands of small children and idiots." 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65122
+Keywords:	uniform repairman coveralls gray
+Name:	a repairman's uniform
+RoomDesc:$
+A set of grey repairman's coveralls lies here.~
+LookDesc:$
+A standard-looking set of full-length grey coveralls, with buttons down the
+front and a large ^RAcme Repairs^n patch sewn onto the back. A utility belt is
+also included with the outfit. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65123
+Keywords:	mask alien grey gray plastic
+Name:	an alien mask
+RoomDesc:$
+A grey alien mask is here.~
+LookDesc:$
+A plastic mask depicting the smooth grey features and large, tilted, all-black
+eyes of a stereotypical alien. An elastic strap allows it to be attached to
+the wearer's face. 
+~
+Type:	Worn
+WearFlags:	100000000100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	6
+BREAK
+#65125
+Keywords:	magazine newspaper paper seattle voice newsprint tabloid-sized
+Name:	an issue of the "Seattle Voice"
+RoomDesc:$
+A tabloid-sized newsprint magazine lies here.~
+LookDesc:$
+The "Seattle Voice" is the area's most prominent "underground" weekly. It's
+fully ad-supported, and can usually be found for free both physically and on
+the Matrix, though newsstands do charge for copies. This latest issue of it is
+a typical one, containing: corp/government exposes and conspiracy theories;
+left-leaning political rants about police brutality, metahuman rights, magic
+versus technology and other such subjects; gossip columns focused on the
+seedier and artsier sides of Seattle society; dining and entertainment reviews
+that favor some of the more obscure haunts and productions; horoscopes, advice
+columns, classifieds, and way too many personal ads. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.75
+	Barrier:	1
+	Cost:	2
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65126
+Keywords:	cyberterminal terminal green seattle voice
+Name:	a cyberterminal
+RoomDesc:$
+A green cyberterminal displaying the "Seattle Voice" online forums sits here.~
+LookDesc:$
+Just your standard cyberterminal. This one's currently displaying what seems
+to be the "Seattle Voice" Matrix forums. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	8.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65127
+Keywords:	caviar red pancakes plate
+Name:	red caviar
+RoomDesc:$
+A small plate of caviar is here.~
+LookDesc:$
+A small portion of high-quality whitefish roe, served with three blini (thin
+potato pancakes), fresh herbs, chopped hard-boiled eggs, minced onions and a
+dollop of sour cream on the side. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	400
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+BREAK
+#65128
+Keywords:	caviar black pancakes plate
+Name:	black caviar
+RoomDesc:$
+A small plate of caviar is here.~
+LookDesc:$
+A small portion of high-quality Russian sturgeon roe, served with three blini
+(thin potato pancakes), fresh herbs, chopped hard-boiled eggs, minced onions
+and a dollop of sour cream on the side. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	700
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+BREAK
+#65129
+Keywords:	seafood appetizers platter plate tsar's
+Name:	a seafood appetizer plate
+RoomDesc:$
+A large platter of assorted seafood sits here.~
+LookDesc:$
+This seafood appetizer plate consists of tender pieces of Beluga fish, Russian
+herring and smoked salmon, as well as eggs stuffed with black and red caviar.
+It's served with lemon, butter and olives on a bed of salad greens, and
+accompanied by hot bread rolls. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	600
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+BREAK
+#65130
+Keywords:	vegetables platter plate pickled appetizer
+Name:	a vegetable appetizer plate
+RoomDesc:$
+A large platter of assorted vegetables sits here.~
+LookDesc:$
+This traditional appetizer consists of a variety of pickled vegetables,
+including sour gherkins, red cabbage, wild mushrooms and pepper. It's served
+with fresh herbs. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+BREAK
+#65131
+Keywords:	borscht soup russian bowl beet red
+Name:	borscht soup
+RoomDesc:$
+A large bowl of dark-red soup sits here.~
+LookDesc:$
+This Russian soup has a distinctive dark red color. It's made with beef,
+beets, cabbage, potatoes, carrots, tomatoes, onions, parsley and various
+spices, and served with a healthy dollop of sour cream on top. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.30
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+BREAK
+#65132
+Keywords:	cabbage leaves stuffed plate
+Name:	stuffed cabbage leaves
+RoomDesc:$
+A plate of stuffed cabbage leaves lies here.~
+LookDesc:$
+Cabbage leaves filled with mushrooms, rice, fresh herbs and vegetables in
+cream sauce. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.30
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+BREAK
+#65133
+Keywords:	cutlets mushroom plate
+Name:	mushroom cutlets
+RoomDesc:$
+A plate of cutlets lies here.~
+LookDesc:$
+Minced wild porcini and champignon mushrooms, shaped into cutlets and fried.
+Served with rice and vegetables. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+BREAK
+#65134
+Keywords:	tartare steak beef raw plate garnishes
+Name:	steak tartare
+RoomDesc:$
+A plate of raw meat and various garnishes lies here.~
+LookDesc:$
+Chopped high-quality real beef steak served with fresh egg yolk, pepper, black
+Russian caviar, pickles, potatoes, onion and black bread. Also known as farsh
+po tatarsky. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.75
+	Barrier:	1
+	Cost:	1400
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+BREAK
+#65135
+Keywords:	stroganoff beef sauce mushrooms plate
+Name:	beef Stroganoff
+RoomDesc:$
+A plate of meat in a rich sauce lies here.~
+LookDesc:$
+Tender strips of beef fillet sauteed in a rich cognac and sour cream sauce
+with mushrooms. Served with your choice of rice, potatoes or black bread. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.75
+	Barrier:	1
+	Cost:	900
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#65136
+Keywords:	strawberries romanoff bowl
+Name:	strawberries Romanoff
+RoomDesc:$
+A bowl of strawberries in cream lies here.~
+LookDesc:$
+Fresh, plump strawberries marinated in sugar, Grand Marnier and orange peels,
+then refrigerated and covered in real whipped cream. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.20
+	Barrier:	1
+	Cost:	400
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+BREAK
+#65137
+Keywords:	vodka glass ginger-infused shotglass 
+Name:	a shot of ginger vodka
+RoomDesc:$
+A large shotglass sits here.~
+LookDesc:$
+A large shotglass full of, or once full of, ginger-infused vodka. Tastes and
+smells rather like plain vodka, but with a sharp, lemony-pungent kick to it. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	5
+	Val2:	19
+BREAK
+#65138
+Keywords:	vodka glass shotglass pepper-infused vodka
+Name:	a shot of peppercorn vodka
+RoomDesc:$
+A large shotglass sits here.~
+LookDesc:$
+A thick shotglass that holds/once held a quantity of pepper-infused vodka.
+Tastes and smells rather like regular vodka, but with a sharp, peppery tang to
+it. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	5
+	Val2:	19
+BREAK
+#65139
+Keywords:	glass vodka shotglass horseradish-infused
+Name:	a shot of horseradish vodka
+RoomDesc:$
+A large shotglass sits here.~
+LookDesc:$
+A thick shotglass that holds/may have once held a quantity of
+horseradish-infused vodka. It smells and tastes rather like plain vodka, but
+with a pungent, horseradishy bite to it. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	5
+	Val2:	19
+BREAK
+#65140
+Keywords:	glass vodka rosemary-infused shotglass
+Name:	a shot of rosemary vodka
+RoomDesc:$
+A large shotglass sits here.~
+LookDesc:$
+A large shotglass that holds/may have once held a quantity of rosemary-infused
+vodka. Tastes and smells rather like plain vodka, but with an aromatic,
+slightly bitter kick to it. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	5
+	Val2:	19
+BREAK
+#65141
+Keywords:	glass vodka shotglass honey-infused
+Name:	a shot of honey vodka
+RoomDesc:$
+A large shotglass sits here.~
+LookDesc:$
+A thick shotglass that holds/may once have held a quantity of honey-infused
+vodka. It tastes and smells rather like regular vodka, but with a sweet,
+not-quite-syrupy aspect to it. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	5
+	Val2:	19
+BREAK
+#65142
+Keywords:	glass shotglass vodka paprika-infused
+Name:	a shot of paprika vodka
+RoomDesc:$
+A large shotglass sits here.~
+LookDesc:$
+A thick shotglass that holds/may have once held a quantity of paprika-infused
+vodka. Tastes and smells rather like regular vodka, but with a touch of the
+sweet, aromatic yet spicy kick of paprika. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	5
+	Val2:	19
+BREAK
+#65143
+Keywords:	glass shotglass vodka lemon-infused
+Name:	a shot of lemon vodka
+RoomDesc:$
+A large shotglass sits here.~
+LookDesc:$
+A thick shotglass that holds/once held a quantity of lemon-infused vodka.
+Tastes and smells rather like plain vodka, but with a sour, citrusy kick. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	5
+	Val2:	19
+BREAK
+#65144
+Keywords:	glass shotglass vodka jalapeno-infused
+Name:	a shot of jalapeno vodka
+RoomDesc:$
+A large shotglass sits here.~
+LookDesc:$
+A thick shotglass that holds/once held a quantity of jalapeno-infused vodka.
+Tastes and smells rather like plain vodka, but with that sharp, hot, slightly
+musky jalapeno kick to it. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	5
+	Val2:	19
+BREAK
+#65145
+Keywords:	glass vodka mint-infused shotglass
+Name:	a shot of mint vodka
+RoomDesc:$
+A large shotglass sits here.~
+LookDesc:$
+A thick shotglass that holds/once held a quantity of mint-infused vodka.
+Tastes and smells rather like plain vodka, but with a cool, refreshing,
+slightly pungent kick. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	5
+	Val2:	19
+BREAK
+#65146
+Keywords:	glass shotglass vodka plain
+Name:	a shot of plain vodka
+RoomDesc:$
+A thick shotglass sits here.~
+LookDesc:$
+A thick shotglass that holds/once held a quantity of Russian vodka - any of a
+dizzying array of brands available at the Muscovite Lounge. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	5
+	Val2:	19
+BREAK
+#65147
+Keywords:	keycard gold electronic
+Name:	a gold-colored keycard
+RoomDesc:$
+A gold-colored keycard lies here.~
+LookDesc:$
+A small, unmarked gold-colored keycard, meant to be used with an electronic
+lock. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65148
+Keywords:	shirt flickercladding shiny t-shirt plastic
+Name:	a flickercladding shirt
+RoomDesc:$
+A shiny plastic t-shirt lies here.~
+LookDesc:$
+This skintight, short-sleeved t-shirt is made out of flickercladding, a
+plastic material impregnated with fiberoptics and gauges designed to respond
+to skin temperature. Think of it as a much larger mood ring. 
+~
+Type:	Worn
+WearFlags:	100000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65149
+Keywords:	pants flickercladding pair shiny plastic
+Name:	a pair of flickercladding pants
+RoomDesc:$
+A pair of shiny plastic pants lies here.~
+LookDesc:$
+These formfitting pants are made out of flickercladding, a plastic material
+impregnated with fiberoptics and gauges designed to respond to skin
+temperature. Think of it as a much larger mood ring. 
+~
+Type:	Worn
+WearFlags:	100000000100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.75
+	Barrier:	1
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65150
+Keywords:	minidress dress flickercladding tight skimpy plastic shiny
+Name:	a flickercladding minidress
+RoomDesc:$
+A shiny plastic minidress lies here.~
+LookDesc:$
+This short, sleeveless, backless and almost frontless minidress is made out of
+flickercladding, a synthetic material impregnated with fiberoptics and gauges
+designed to respond to skin temperature. Think of it as a mood ring on a
+softer and much larger scale. 
+~
+Type:	Worn
+WearFlags:	100000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.75
+	Barrier:	1
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65151
+Keywords:	lights blinking string
+Name:	a string of blinking lights
+RoomDesc:$
+A string of small blinking lights lies here.~
+LookDesc:$
+Just a set of small bulbs of various colors strung on a wire and powered by a
+tiny battery. They can be worn as a single strand or looped around wrists,
+necks or ankles. 
+~
+Type:	Light
+WearFlags:	10000101100000010101
+ExtraFlags:	1
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65152
+Keywords:	glowstone glowing stone sphere oval small
+Name:	a glowstone
+RoomDesc:$
+A small, glowing sphere lies here.~
+LookDesc:$
+This small plastic sphere is capable of emitting anything from a bright,
+sustained light to intermittent pulses to a soft, irregular glow. It's
+malleable enough to be molded into someone's bellybutton, and comes with
+attachable posts that can turn it into an earring. Both the batteries and the
+controls are in a tiny compartment in its back. 
+~
+Type:	Light
+WearFlags:	1000010100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	-1
+BREAK
+#65153
+Keywords:	paint bodypaint glitter shiny gel
+Name:	some ^Wglitter^n
+RoomDesc:$
+A glob of glittery gel sits here.~
+LookDesc:$
+This stuff usually comes in transparent tubes or cylinders. It's basically
+transparent gel mixed with powdery, glowy glitter. They /claim/ it's non-toxic
+and hypoallergenic, too. 
+~
+Type:	Worn
+WearFlags:	101011101001100110101111
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65154
+Keywords:	scarf silk square fabric large
+Name:	a silk scarf
+RoomDesc:$
+A large square of silk fabric lies here.~
+LookDesc:$
+A large square of 100% pure, soft silk, which can be worn in any number of
+ways: around the neck, as a scarf; folded into a triangle, upon the head, and
+tied under the chin; even as a belt or bandeaux. Depending on the moths which
+produce the cocoons from which the silk is extracted, undyed silk can be brown
+(from wild moths), white, green or yellow (from cultivated moths, depending on
+their diet). 
+~
+Type:	Worn
+WearFlags:	1000000011101
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	1700
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65155
+Keywords:	tie necktie silk
+Name:	a silk necktie
+RoomDesc:$
+A silk necktie lies here.~
+LookDesc:$
+A simple but exquisitely crafted, hand-sewn silk necktie. A discreet label on
+its back guarantees that it's made from 100% pure silk. Depending on the moths
+which produce the cocoons from which the silk is extracted, undyed silk can be
+brown (from wild moths), white, green or yellow (from cultivated moths,
+depending on their diet). 
+~
+Type:	Worn
+WearFlags:	1000000010101
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65156
+Keywords:	shirt silk dress button-down
+Name:	a silk dress shirt
+RoomDesc:$
+A button-down silk dress shirt lies here.~
+LookDesc:$
+A well-tailored button-down silk dress shirt with long sleeves and a discreet
+collar. A tag in the back of the neck assures that the shirt's crafted from
+100% pure silk. Depending on the moths which produce the cocoons from which
+the silk is extracted, undyed silk can be brown (from wild moths), white,
+green or yellow (from cultivated moths, depending on their diet). 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	2500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65157
+Keywords:	blouse silk
+Name:	a silk blouse
+RoomDesc:$
+A silk blouse lies here.~
+LookDesc:$
+A handmade, short-sleeved silk blouse - loose, but still tailored enough to
+hug the body in an aesthetically-pleasing manner. A tag in the back of the
+neck assures that it's crafted from 100% genuine silk. Depending on the moths
+which produce the cocoons from which the silk is extracted, undyed silk can be
+brown (from wild moths), white, green or yellow (from cultivated moths,
+depending on their diet). 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	2700
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65158
+Keywords:	sweater cashmere soft-looking v-neck
+Name:	a v-necked cashmere sweater
+RoomDesc:$
+A soft-looking sweater lies here.~
+LookDesc:$
+This long-sleeved, V-necked sweater is luxuriously soft. The fabric is thin,
+yet warm, and the sweater manages to be comfortable, stylish and exquisite to
+the touch at the same time. It's also quite pricey, as takes a single Kashmir
+goat about four years to produce enough underdown for a single sweater.
+Available naturally in white, grey or brown, or dyed in a variety of other
+colors. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	3000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65159
+Keywords:	sweater cashmere soft-looking white round-necked
+Name:	a round-necked cashmere sweater
+RoomDesc:$
+A soft-looking sweater lies here.~
+LookDesc:$
+This long-sleeved, round-necked sweater is luxuriously soft. The fabric is
+thin, yet warm, and the sweater manages to be comfortable, stylish and
+exquisite to the touch at the same time. It's also quite pricey, as takes a
+single Kashmir goat about four years to produce enough underdown for a single
+sweater. Available naturally in white, grey or brown, or dyed in a variety of
+other colors. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	3000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65160
+Keywords:	turtleneck cashmere long-sleeved soft-looking
+Name:	a fitted cashmere turtleneck
+RoomDesc:$
+A long-sleeved, soft-looking turtleneck lies here.~
+LookDesc:$
+This long-sleeved, form-fitting cashmere turtleneck is luxuriously soft. The
+fabric is thin, yet warm, and the turtleneck manages to be comfortable,
+stylish and exquisite to the touch at the same time. It's also quite pricey,
+as takes a single Kashmir goat about four years to produce enough underdown
+for a single sweater. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	2500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65161
+Keywords:	scarf cashmere soft-looking long
+Name:	a cashmere scarf
+RoomDesc:$
+A long, soft-looking scarf lies here.~
+LookDesc:$
+This narrow cashmere scarf has tassels at either end and is long enough to
+wrap around one's head and neck several times. It's incredibly soft, and made
+from the finest quality material. It's also quite pricey, given that each
+Kashmir goat produces only a couple of ounces of cashmere per year. Available
+naturally in white, grey or brown, or dyed in a variety of other colors. 
+~
+Type:	Worn
+WearFlags:	1000000010101
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65180
+Keywords:	hotpants pants shorts black vinyl pair
+Name:	a pair of ^Lblack^n vinyl hotpants
+RoomDesc:$
+A pair of very short shorts lies here.~
+LookDesc:$
+Tight, shiny and very snug, these vinyl hotpants expose the navel and a good
+half of the wearer's derriere. 
+~
+Type:	Worn
+WearFlags:	100000100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65181
+Keywords:	parka tan fur-lined hood jacket coat
+Name:	a ^ytan^n parka with a fur-lined hood
+RoomDesc:$
+A hooded parka lies here.~
+LookDesc:$
+This thick, warm-looking parka features a fur-lined hood with a drawstring,
+long sleeves and large side pockets. It reaches down to about mid-thigh. 
+~
+Type:	Worn
+WearFlags:	100010000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	5
+	Val2:	5
+	Val3:	5
+	Val4:	5
+	Val6:	1
+BREAK
+#65182
+Keywords:	coat navy peacoat thick blue
+Name:	a ^bnavy^n peacoat
+RoomDesc:$
+A blue peacoat lies here.~
+LookDesc:$
+Your standard wool navy peacoat, long-sleeved, straight-lined and coming down
+to slightly above mid-thigh. A double row of black buttons with little anchors
+on them runs down the front of the coat. 
+~
+Type:	Worn
+WearFlags:	100010000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	5
+	Val2:	2
+	Val3:	2
+	Val4:	5
+	Val6:	1
+BREAK
+#65183
+Keywords:	coat leopard-print fur
+Name:	a ^Yl^n^Le^n^Yo^n^Lp^n^Ya^n^Lr^n^Yd^n^L-^n^Yp^n^Lr^n^Yi^n^Ln^n^Yt^n fur coat
+RoomDesc:$
+A brightly-patterned fur coat lies here.~
+LookDesc:$
+This luxe-looking ^Yl^n^Le^n^Yo^n^Lp^n^Ya^n^Lr^n^Yd^n^L-^n^Yp^n^Lr^n^Yi^n^Ln^n^Yt^n coat is an obvious fake, but quite stylish
+nonetheless. It's slightly flared, with heavily-furred collar and sleeve ends,
+and comes down to the knees. Perfect for a variety of vintage looks. 
+~
+Type:	Worn
+WearFlags:	100010000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	2
+	Val2:	2
+	Val3:	2
+	Val4:	2
+	Val6:	1
+BREAK
+#65184
+Keywords:	top tube silver tight
+Name:	a ^Wsilver^n tube top
+RoomDesc:$
+A shiny tube top lies here.~
+LookDesc:$
+This strapless, formfitting ^Wsilver^n lame top looks scratchy to wear but
+spetacular to behold. It doesn't leave very much to the imagination. 
+~
+Type:	Worn
+WearFlags:	100100000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65185
+Keywords:	bellbottoms gold pair pants flared tight hiphugging
+Name:	a pair of ^Ygold^n bellbottoms
+RoomDesc:$
+A pair of shiny pants lies here.~
+LookDesc:$
+Shiny gold lame bellbottoms, snug from the waist to the thighs, then flaring
+out widely at the bottom of the leg. 
+~
+Type:	Worn
+WearFlags:	100000000100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65186
+Keywords:	blouse peasant's white loose cotton thin shirt
+Name:	a ^Wwhite^n peasant's blouse
+RoomDesc:$
+A thin white blouse lies here.~
+LookDesc:$
+This blouse is made of a thin, almost translucent cotton that simultaneously
+clings to and billows gauzily about the figure. It's long-sleeved and
+embroidered along the front. 
+~
+Type:	Worn
+WearFlags:	100100000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65187
+Keywords:	shirt t-shirt tie-dyed bright
+Name:	a ^Yt^n^Ci^n^Re^n^W-^n^Gd^n^Ry^n^Ce^n^Yd^n shirt
+RoomDesc:$
+A really bright t-shirt lies here.~
+LookDesc:$
+Just a loud, colorful tie-dyed cotton t-shirt. 
+~
+Type:	Worn
+WearFlags:	100100000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	40
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65188
+Keywords:	hat bowler black brim round
+Name:	a ^Lblack^n bowler hat
+RoomDesc:$
+A round hat with a curved brim lies here.~
+LookDesc:$
+Your standard British bowler hat - felt, with a rounded top and a brim that
+curls sharply in the front and back. The hatband is black, as well. 
+~
+Type:	Worn
+WearFlags:	100000000010001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65189
+Keywords:	hat straw boater
+Name:	a ^ystraw^n boater
+RoomDesc:$
+A straw hat with a black band lies here.~
+LookDesc:$
+Just your standard boater - a straw hat with a short cylindrical top and a
+flat, round brim. 
+~
+Type:	Worn
+WearFlags:	100000000010001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	75
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65190
+Keywords:	blazer navy jacket dress
+Name:	a ^bnavy^n blazer
+RoomDesc:$
+A blue blazer lies here.~
+LookDesc:$
+A standard, well-tailored navy-blue blazer with a double row of discreet gold
+buttons down the front. 
+~
+Type:	Worn
+WearFlags:	100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	1
+	Val3:	1
+	Val4:	1
+BREAK
+#65191
+Keywords:	feather black raven's
+Name:	a ^Lblack^n feather
+RoomDesc:$
+A small black feather lies here.~
+LookDesc:$
+Just a small, glossy black feather that looks like it might be from the wing
+of a raven or some other, similar bird. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65192
+Keywords:	paper scrap passcode
+Name:	a scrap of paper
+RoomDesc:$
+A scribbled-on scrap of paper lies here.~
+LookDesc:$
+Under the heading "SvS Current Passcode," someone's scribbled a long, complex
+series of numbers. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65193
+Keywords:	raincoat coat long transparent clear plastic
+Name:	a clear plastic raincoat
+RoomDesc:$
+A clear plastic coat with a hood lies here.~
+LookDesc:$
+This clear plastic raincoat reaches to the wearer's knees. It features a
+plastic hood, pockets and buttons all the way down its front. While none too
+sturdy, it looks like it would do a decent job of keeping your clothes dry. 
+~
+Type:	UNDEFINED
+WearFlags:	100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	75
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65194
+Keywords:	poncho rain plastic cape transparent hooded clear
+Name:	a clear plastic poncho
+RoomDesc:$
+A clear plastic poncho with a hood lies here.~
+LookDesc:$
+A clear, blanketlike hooded garment with a hole in the center to slip one's
+head through. It's made out of a transparent plastic material that, while none
+too sturdy, should be good enough to keep the rain off. 
+~
+Type:	Worn
+WearFlags:	100010000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65195
+Keywords:	umbrella transparent plastic
+Name:	a clear plastic umbrella
+RoomDesc:$
+A transparent plastic umbrella lies here.~
+LookDesc:$
+A standard collapsible umbrella with an aluminum frame and a transparent
+plastic top. It looks far too flimsy to use as a weapon. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	75
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65196
+Keywords:	folder blue manila
+Name:	a blue folder
+RoomDesc:$
+A blue folder lies here.~
+LookDesc:$
+Just your standard blue manila folder, elaborately sealed with wax, tape and
+scrawled signatures in such a way as to make any attempt at tampering
+extremely apparent. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65197
+Keywords:	datadisk passcode vault code
+Name:	a vault passcode
+RoomDesc:$
+A datadisk lies here.~
+LookDesc:$
+Just your standard datadisk. Might be something interesting on it. 
+~
+Type:	Decking Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	30
+BREAK
+#65198
+Keywords:	bottle pills tranquilizer pink
+Name:	a bottle of pills
+RoomDesc:$
+A small ^Mpink^g bottle lies here.~
+LookDesc:$
+A neatly-printed label on the bottle's side reads: "Prescription for: Dr. Alex
+Scriptshaw." It seems to contain some sort of tranquilizer with an unfamiliar
+name. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65199
+Keywords:	disk datadisk black unlabelled
+Name:	an unlabelled datadisk
+RoomDesc:$
+An unlabelled black disk lies here.~
+LookDesc:$
+Just a black, unabelled datadisk. The type you slot into a terminal or
+cyberdeck. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

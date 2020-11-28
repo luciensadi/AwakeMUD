@@ -1,0 +1,274 @@
+#17900
+Keywords:	Mossberg 10 Gauge Shotgun Grater
+Name:	A Mossberg "Grater" 10-gauge shotgun
+RoomDesc:$
+A Mossberg "Grater" 10 guage sits here~
+LookDesc:$
+This particular shotgun is a model that isn't easy to find. The only place
+where the Grater is used frequently is used is among Ork and Troll communities
+due to the large size and rifled barrel used for 10 gauge slugs. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	101100001000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	4
+	Cost:	8000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	8
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	9
+	Val6:	9
+	Val7:	5105
+	Val8:	651
+	Val10:	2
+BREAK
+#17901
+Keywords:	Stonefist "Warlord" Assault Rifle
+Name:	Stonefist "Warlord" Assault Rifle
+RoomDesc:$
+A Stonefist Weapons "Warlord" Assault Rifle lies here~
+LookDesc:$
+This assault rifle built by the Cascade Ork corporation "Stonefist Weaponry"
+is basically a AK-97 assault rifle built to Troll and Ork specifications with
+its large handles, heavier weight, and much larger rounds. Its a good weapon
+but like all Stonefist products it can only be found in large quantities in
+Cascade Ork, along with having a small clip that can also only be bought in
+Cascade Ork. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	101100001000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	6
+	Cost:	2400
+	AvailTN:	8
+	AvailDay:	4.00
+	LegalNum:	2
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	30
+	Val6:	30
+	Val10:	28
+BREAK
+#17902
+Keywords:	Stonefist Mono-Knife
+Name:	Stonefist Mono-Knife
+RoomDesc:$
+A Stonefist Mono-Knife is stuck in the ground here.~
+LookDesc:$
+Stonefist Weapons provides the Cascade Ork tribe with their weaponry which has
+been customized to fit in a Ork or Troll's hands, along with adding weight and
+length. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	101100000000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+BREAK
+#17905
+Keywords:	Stonefist Kevlar Armor
+Name:	Stonefist Kevlar Armor
+RoomDesc:$
+A suit of Stonefist Kevlar armor lies here~
+LookDesc:$
+Made by Stonefist Weaponry this suit is of the same design used for TPF
+paladins except made to fit the frame of Orks and Trolls. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	101100000000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	7.00
+	Barrier:	16
+	Cost:	35000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	10
+	Val2:	10
+	Val4:	2
+	Val5:	7
+	Val6:	5
+	Val7:	3
+BREAK
+#17906
+Keywords:	Stonefist Hardened Leather Armor
+Name:	Stonefist Hardened Leather Armor
+RoomDesc:$
+Stonefist Hardened Leather Armor lies here on the ground~
+LookDesc:$
+This armor from Stonefist is made of leather thats been hardened and than
+layered with some sort of calcium build up to create a thin clear shell. It
+has been scaled in a way so as to allow movement still. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	101100000000000000000
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	3.00
+	Barrier:	24
+	Cost:	25000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	2
+	Val5:	3
+	Val6:	7
+BREAK
+#17907
+Keywords:	Goats Milk Jug
+Name:	A Goats Milk Jug
+RoomDesc:$
+A Jug full of Goats Milk sits here~
+LookDesc:$
+This jug is used to hold Goats milk that has been mixed with a bit of alchohol
+as are most Ork and Troll drinks. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	12
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	40
+	Val1:	40
+	Val2:	10
+BREAK
+#17908
+Keywords:	Stonefist "Mush Mouth" liquor
+Name:	Stonefist "Mush Mouth" Liquor
+RoomDesc:$
+A mushroom shaped bottle of Stonefist "Mush Mouth" liquor has been set here~
+LookDesc:$
+Stonefist Eateries, A branch of the Stonefist Corporation that makes most of
+the items for cascade ork, has made a alchoholic substance mixed with the
+chemicals of the Phsychedelic Mushroom native to the Salish area. You're in
+for a ride if you take a drink of this chummer... 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+	Val2:	16
+	Val3:	3
+BREAK
+#17909
+Keywords:	A rack of heavily spiced lamb
+Name:	A rack of heavily spiced lamb
+RoomDesc:$
+A rack of heavily spiced Lamb sits here~
+LookDesc:$
+Made from the huge Cascade Ork sheep this rack of lamb has been prepared in
+the heavily spiced Ork and Troll style. Its is dripping with fat and has been
+cooked rare also in the Ork and Troll style. Oh and of course its huge... 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+BREAK
+#17910
+Keywords:	test light
+Name:	A test light
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Light
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	1
+BREAK
+END

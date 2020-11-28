@@ -1,0 +1,1243 @@
+#65400
+Keywords:	tall red pillar candle
+Name:	a tall ^Rred^n pillar candle
+RoomDesc:$
+a tall ^Rred^g pillar candle sits here, giving off a slight glow~
+LookDesc:$
+This is a pillar candle, about 15 cm tall. It is a bright ^Rred^n color, and its
+lit wick fills the room with a soft glow. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65401
+Keywords:	tall blue pillar candle
+Name:	a tall ^Bblue^n pillar candle
+RoomDesc:$
+a tall ^Bblue^g pillar candle sits here, giving off a slight glow~
+LookDesc:$
+This is a pillar candle, about 15 cm tall. It is a bright ^Bblue^n color, and its
+lit wick fills the room with a soft glow. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	1
+BREAK
+#65402
+Keywords:	tall green pillar candle
+Name:	a tall ^Ggreen^n pillar candle
+RoomDesc:$
+a tall ^Ggreen^g pillar candle sits here, giving off a slight glow~
+LookDesc:$
+This is a pillar candle, about 15 cm tall. It is a bright ^Ggreen^n color, and its
+lit wick fills the room with a soft glow.  5 1 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	1
+BREAK
+#65403
+Keywords:	tall ^Yyellow^n pillar candle
+Name:	a tall ^Yyellow^n pillar candle
+RoomDesc:$
+a tall ^Yyellow^g pillar candle sits here, giving off a slight glow~
+LookDesc:$
+This is a pillar candle, about 15 cm tall. It is a bright ^Yyellow^n color, and
+its lit wick fills the room with a soft glow.  
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	1
+BREAK
+#65404
+Keywords:	tall black pillar candle
+Name:	a tall ^Lblack^n pillar candle
+RoomDesc:$
+a tall ^Lblack^g pillar candle sits here, giving off a slight glow~
+LookDesc:$
+This is a pillar candle, about 15 cm tall. It is a dark ^Lblack^n color, and its
+lit wick fills the room with a soft glow.  
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	1
+BREAK
+#65405
+Keywords:	red candle strawberry
+Name:	a ^Rred^n jar candle that smells like strawberry
+RoomDesc:$
+a ^Rred^g candle in a jar makes the place smell like strawberrys~
+LookDesc:$
+This is a small ^Rred^n candle, in a thick glass jar. It has three wicks to ensure
+proper burning, and gives off a strong scent of strawberrys as it is burned. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	3
+BREAK
+#65406
+Keywords:	green jar candle apple
+Name:	a ^Ggreen^n jar candle that smells like apple
+RoomDesc:$
+a ^Ggreen^g candle in a jar makes the place smell like apple~
+LookDesc:$
+This is a small ^Ggreen^n candle, in a thick glass jar. It has three wicks to
+ensure proper burning, and gives off a strong scent of apple as it is burned.
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65407
+Keywords:	candle jar pink watermellon
+Name:	a ^Mpink^n jar candle that smells like watermelon
+RoomDesc:$
+A pink candle in a jar makes the place smell like watermelon.~
+LookDesc:$
+This is a small ^Mpink^n candle, in a thick glass jar. It has three wicks to
+ensure proper burning, and gives off a strong scent of watermellon as it is
+burned.  
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	3
+BREAK
+#65408
+Keywords:	dark green candle pine tree
+Name:	a ^gdark green^n jar candle that smells like pine
+RoomDesc:$
+a ^gdark green^g candle in a jar makes the place smell like a pine tree~
+LookDesc:$
+This is a small red candle, in a thick glass jar. It has three wicks to ensure
+proper burning, and gives off a strong scent of a pine forest as it is burned.
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	3
+BREAK
+#65409
+Keywords:	jar candle yellow lemon
+Name:	a ^Yyellow^n jar candle that smells like lemons
+RoomDesc:$
+a ^Yyellow^g candle in a jar makes the place smell like lemmons~
+LookDesc:$
+This is a small ^Yyellow^n candle, in a thick glass jar. It has three wicks to
+ensure proper burning, and gives off a strong scent of lemon as it is burned.
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	3
+BREAK
+#65410
+Keywords:	black leather jar candle
+Name:	a ^Lblack^n jar candle that smells like leather
+RoomDesc:$
+a ^Lblack^g candle in a jar makes the place smell like leather~
+LookDesc:$
+This is a small ^Lblack^n candle, in a thick glass jar. It has three wicks to
+ensure proper burning, and gives off a strong scent of leather as it is
+burned.  
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	3
+BREAK
+#65411
+Keywords:	long red tapered candle
+Name:	a long ^Rred^n tapered candle
+RoomDesc:$
+a long ^Rred^g tapered candle in a ^Cglass^g holder illuminates the room~
+LookDesc:$
+This is a long tapered candle, about 30 cm long, sitting in a ^Cclear glass^n
+holder. It is a bright ^Rred^n color, and its lit wick gently fills the room with
+light   
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65412
+Keywords:	long blue tapered candle
+Name:	a long ^Bblue^n tapered candle
+RoomDesc:$
+a long ^Bblue^g tapered candle in a ^Cglass^g holder illuminates the room~
+LookDesc:$
+This is a long tapered candle, about 30 cm long, sitting in a ^Cclear glass^n
+holder. It is a bright ^Bblue^n color, and its lit wick gently fills the room with
+light  
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	1
+BREAK
+#65413
+Keywords:	long green tapered candle
+Name:	a long ^Ggreen^n tapered candle
+RoomDesc:$
+a long ^Ggreen^g tapered candle in a ^Cglass^g holder illuminates the room~
+LookDesc:$
+This is a long tapered candle, about 30 cm long, sitting in a ^Cclear glass^n
+holder. It is a bright ^Ggreen^n color, and its lit wick gently fills the room
+with light 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	1
+BREAK
+#65414
+Keywords:	long yellow tapered candle
+Name:	a long ^Yyellow^n tapered candle
+RoomDesc:$
+a long ^Yyellow^g tapered candle in a ^Cglass^g holder illuminates the room~
+LookDesc:$
+This is a long tapered candle, about 30 cm long, sitting in a ^Cclear glass^n
+holder. It is a bright ^Yyellow^n color, and its lit wick gently fills the room
+with light 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	1
+BREAK
+#65415
+Keywords:	long black tapered candle
+Name:	a long ^Lblack^n tapered candle
+RoomDesc:$
+a long ^Lblack^g tapered candle in a ^Cglass^g holder illuminates the room~
+LookDesc:$
+This is a long tapered candle, about 30 cm long, sitting in a ^Cclear glass^n
+holder. It is a dark ^Lblack^n color, and its lit wick gently fills the room with
+light 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	1
+BREAK
+#65416
+Keywords:	tall red black pillar candle
+Name:	a tall ^Rred^n and ^Lblack^n swirled pillar candle
+RoomDesc:$
+a tall ^Rred^g and ^Lblack^g swirled candle glows gently~
+LookDesc:$
+This is a pillar candle, about 15 cm tall. It is a bright ^Rred^n swirled with ^Ljet
+black^n, and its lit wick fills the room with a soft glow. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65417
+Keywords:	tall red blue pillar candle
+Name:	a tall ^Bblue^n and ^Lblack^n swirled pillar candle
+RoomDesc:$
+a tall ^Bblue^g and ^Lblack^g swirled candle glows gently~
+LookDesc:$
+This is a pillar candle, about 15 cm tall. It is a bright ^Bblue^n swirled with
+^Ljet black^n, and its lit wick fills the room with a soft glow. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65418
+Keywords:	tall green black pillar candle
+Name:	a tall ^Ggreen^n and ^Lblack^n swirled pillar candle
+RoomDesc:$
+a tall ^Ggreen^g and ^Lblack^g swirled candle glows gently~
+LookDesc:$
+This is a pillar candle, about 15 cm tall. It is a bright ^Ggreen^n swirled with
+^Ljet black^n, and its lit wick fills the room with a soft glow.  
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65419
+Keywords:	tall yellow black pillar candle
+Name:	a tall ^Yyellow^n and ^Lblack^n swirled pillar candle
+RoomDesc:$
+a tall ^Yyellow^g and ^Lblack^g swirled candle glows gently~
+LookDesc:$
+This is a pillar candle, about 15 cm tall. It is a bright ^Yyellow^n swirled with
+^Ljet black^n, and its lit wick fills the room with a soft glow.  
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65420
+Keywords:	tall white black pillar candle
+Name:	a tall ^Wwhite^n and ^Lblack^n swirled pillar candle
+RoomDesc:$
+a tall ^Wwhite^g and ^Lblack^g swirled candle glows gently~
+LookDesc:$
+This is a pillar candle, about 15 cm tall. It is a bright ^Wwhite^n swirled with
+^Ljet black^n, and its lit wick fills the room with a soft glow. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65421
+Keywords:	tall pink black pillar candle
+Name:	a tall ^Mpink^n and ^Lblack^n swirled pillar candle
+RoomDesc:$
+a tall ^Mpink^g and ^Lblack^g swirled candle glows gently~
+LookDesc:$
+This is a pillar candle, about 15 cm tall. It is a bright ^Mpink^n swirled with
+^Ljet black^n, and its lit wick fills the room with a soft glow. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65422
+Keywords:	tall red blue pillar candle
+Name:	a tall ^Rred^n and ^Bblue^n swirled pillar candle
+RoomDesc:$
+a tall ^Rred^g and ^Bblue^g swirled candle glows gently~
+LookDesc:$
+This is a pillar candle, about 15 cm tall. It is a bright ^Rred^n swirled with
+^Bblue^n, and its lit wick fills the room with a soft glow. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65423
+Keywords:	tall yellow blue pillar candle
+Name:	a tall ^Yyellow^n and ^Bblue^n swirled pillar candle
+RoomDesc:$
+a tall ^Yyellow^g and ^Bblue^g swirled candle glows gently~
+LookDesc:$
+This is a pillar candle, about 15 cm tall. It is a bright ^Yyellow^n swirled with
+^Bblue^n, and its lit wick fills the room with a soft glow. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65424
+Keywords:	tall green blue pillar candle
+Name:	a tall ^Ggreen^n and ^Bblue^n swirled pillar candle
+RoomDesc:$
+a tall ^Ggreen^g and ^Bblue^g swirled candle glows gently~
+LookDesc:$
+This is a pillar candle, about 15 cm tall. It is a bright ^Ggreen^n swirled with
+^Bblue^n, and its lit wick fills the room with a soft glow. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65425
+Keywords:	tall white blue pillar candle
+Name:	a tall ^Wwhite^n and ^Bblue^n swirled pillar candle
+RoomDesc:$
+a tall ^Wwhite^g and ^Bblue^g swirled candle glows gently~
+LookDesc:$
+This is a pillar candle, about 15 cm tall. It is a bright ^Wwhite^n swirled with
+^Bblue^n, and its lit wick fills the room with a soft glow. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65426
+Keywords:	tall yellow red pillar candle
+Name:	a tall ^Yyellow^n and ^Rred^n swirled pillar candle
+RoomDesc:$
+a tall ^Yyellow^g and ^Rred^g swirled candle glows gently~
+LookDesc:$
+This is a pillar candle, about 15 cm tall. It is a bright ^Yyellow^n swirled with
+^Rred^n, and its lit wick fills the room with a soft glow. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65427
+Keywords:	tall green red pillar candle
+Name:	a tall ^Ggreen^n and ^Rred^n swirled pillar candle
+RoomDesc:$
+a tall ^Ggreen^g and ^Rred^g swirled candle glows gently~
+LookDesc:$
+This is a pillar candle, about 15 cm tall. It is a bright ^Ggreen^n swirled with
+^Rred^n, and its lit wick fills the room with a soft glow. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65428
+Keywords:	tall white red pillar candle
+Name:	a tall ^Wwhite^n and ^Rred^n swirled pillar candle
+RoomDesc:$
+a tall ^Wwhite^g and ^Rred^g swirled candle glows gently~
+LookDesc:$
+This is a pillar candle, about 15 cm tall. It is a bright ^Wwhite^n swirled with
+^Rred^n, and its lit wick fills the room with a soft glow. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65429
+Keywords:	tall green white pillar candle
+Name:	a tall ^Ggreen^n and ^Wwhite^n swirled pillar candle
+RoomDesc:$
+a tall ^Ggreen^g and ^Wwhite^g swirled candle glows gently~
+LookDesc:$
+This is a pillar candle, about 15 cm tall. It is a bright ^Ggreen^n swirled with
+^Wwhite^n, and its lit wick fills the room with a soft glow. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65430
+Keywords:	tall yellow white pillar candle
+Name:	a tall ^Yyellow^n and ^Wwhite^n swirled pillar candle
+RoomDesc:$
+a tall ^Yyellow^g and ^Wwhite^g swirled candle glows gently~
+LookDesc:$
+This is a pillar candle, about 15 cm tall. It is a bright ^Yyellow^n swirled with
+^Wwhite^n, and its lit wick fills the room with a soft glow. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65431
+Keywords:	tall yellow green pillar candle
+Name:	a tall ^Yyellow^n and ^Ggreen^n swirled pillar candle
+RoomDesc:$
+a tall ^Yyellow^g and ^Ggreen^g swirled candle glows gently~
+LookDesc:$
+This is a pillar candle, about 15 cm tall. It is a bright ^Yyellow^n swirled with
+^Ggreen^n, and its lit wick fills the room with a soft glow. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65432
+Keywords:	candelabra
+Name:	a candelabra holding black candles
+RoomDesc:$
+a candelabra holding five candles is mounted on the wall to the left~
+LookDesc:$
+Beautifly handcrafted out of brass, these candelabras hold five ^Lblack^n candles,
+each lit, and adding to the ambiance of the room. 
+~
+Type:	Light
+WearFlags:	0
+ExtraFlags:	1
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65433
+Keywords:	candelabra
+Name:	a candelabra holding black candles
+RoomDesc:$
+a candelabra holding five candles is mounted on the wall to the right~
+LookDesc:$
+Beautifly handcrafted out of brass, these candelabras hold five ^Lblack^n candles,
+each lit, and adding to the ambiance of the room. 
+~
+Type:	Light
+WearFlags:	0
+ExtraFlags:	1
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#65480
+Keywords:	NERF boxing gloves
+Name:	large foam NERF boxing gloves
+RoomDesc:$
+a humorously large pair of orange boxing gloves lies here~
+LookDesc:$
+These large boxing gloves have a solid bar to hold on to in the center, but
+all of the outside is covered with a thick foam, in the NERF orange color. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val3:	4
+	Val4:	7
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#65481
+Keywords:	nerf whip orange rubber
+Name:	A long orange rubber NERF whip
+RoomDesc:$
+a long piece of orange rubber is curled on the floor~
+LookDesc:$
+This is a long pice of rubbery foam, meant to be used as a whip. It comes only
+in this hidious orange color. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.75
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val3:	3
+	Val4:	5
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#65482
+Keywords:	nerf hammer orange
+Name:	A humongous orange NERF sledgehammer
+RoomDesc:$
+a humongous orange hammer lies here on its side~
+LookDesc:$
+This hammer is outstandingly large, almost 2 meters in length. The entire
+thing is the nerf foam, but the handle has somthing inside of it to keep it
+straight. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	175
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#65483
+Keywords:	nerf sword orange
+Name:	a large foam nerf sword
+RoomDesc:$
+a large orange foam sword looking thing lies here~
+LookDesc:$
+This is a long foam sword, that comes standard in the NERF orange 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.25
+	Barrier:	1
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#65485
+Keywords:	nerf rocket launcher
+Name:	a humongous NERF rocket launcher
+RoomDesc:$
+a humongous NERF rocket launcher lies her on its side~
+LookDesc:$
+Blue plastic, with a large pump handle, this contraption is made to launch
+humoungous orange NERF rockets at its target. While it may only sting, it sure
+is a distraction 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	2.50
+	Barrier:	4
+	Cost:	550
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val3:	21
+	Val4:	20
+	Val5:	1
+BREAK
+#65487
+Keywords:	nerf cannon shoulder
+Name:	a NERF (tm) shoulder mounted cannon
+RoomDesc:$
+a humongous NERF cannon lies on its side~
+LookDesc:$
+Blue plastic, with a large pump handle, this contraption is made to hurl
+orange NERF balls the size of softballs at high velocities. While it may only
+sting, it sure is a distraction. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+	Val3:	18
+	Val4:	21
+	Val5:	8
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+	Val10:	2
+BREAK
+#65489
+Keywords:	airsoft decimator shotgun
+Name:	an Airsoft (tm) Decimator shotgun
+RoomDesc:$
+a clear plastic shotgun lies on its side~
+LookDesc:$
+Made of hard clear plastic, the interior of this Airsoft (tm) gun is visiable.
+This gun takes non-standard clips, filled with little yellow foam bb's. It may
+not be designed to do serious damage, but it looks like it would be fun to
+play with. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.25
+	Barrier:	4
+	Cost:	350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+	Val3:	14
+	Val4:	13
+	Val5:	125
+	Val10:	4
+BREAK
+#65491
+Keywords:	airsoft sureshot rifle sniper
+Name:	an Airsoft (tm) SureShot sniper rifle
+RoomDesc:$
+a clear plastic sniper rifle lies on its side~
+LookDesc:$
+Made of hard clear plastic, the interior of this Airsoft (tm) gun is visiable.
+This gun takes non-standard clips, filled with little yellow foam bb's. It may
+not be designed to do serious damage, but it looks like it would be fun to
+play with. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.50
+	Barrier:	4
+	Cost:	550
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+	Val3:	11
+	Val4:	12
+	Val5:	200
+	Val10:	4
+BREAK
+#65493
+Keywords:	airsoft mistique machinegun
+Name:	an Airsoft (tm) Mistique machinegun
+RoomDesc:$
+a clear plastic machinegun lies on its side~
+LookDesc:$
+Made of hard clear plastic, the interior of this Airsoft (tm) gun is visiable.
+This gun takes non-standard clips, filled with little yellow foam bb's. It may
+not be designed to do serious damage, but it looks like it would be fun to
+play with. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.50
+	Barrier:	4
+	Cost:	700
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+	Val3:	15
+	Val4:	19
+	Val5:	400
+	Val10:	16
+BREAK
+#65495
+Keywords:	airsoft eliminator assault rifle
+Name:	an Airsoft (tm) Eliminator assault rifle
+RoomDesc:$
+a clear plastic assault rifle lies on its side~
+LookDesc:$
+Made of hard clear plastic, the interior of this Airsoft (tm) gun is visiable.
+This gun takes non-standard clips, filled with little yellow foam bb's. It may
+not be designed to do serious damage, but it looks like it would be fun to
+play with. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.15
+	Barrier:	4
+	Cost:	550
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+	Val3:	13
+	Val4:	14
+	Val5:	250
+	Val10:	28
+BREAK
+#65497
+Keywords:	airsoft spitfire sub smg
+Name:	an Airsoft (tm) Spitfire sub-machinegun
+RoomDesc:$
+a clear plastic sub-machinegun lies on its side~
+LookDesc:$
+Made of hard clear plastic, the interior of this Airsoft (tm) gun is visiable.
+This gun takes non-standard clips, filled with little yellow foam bb's. It may
+not be designed to do serious damage, but it looks like it would be fun to
+play with. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+	Val3:	10
+	Val4:	15
+	Val5:	150
+	Val10:	28
+BREAK
+#65499
+Keywords:	airsoft elite pistol
+Name:	an Airsoft (tm) Elite heavy pistol
+RoomDesc:$
+A clear plastic pistol lies on its side~
+LookDesc:$
+Made of hard clear plastic, the interior of this Airsoft (tm) gun is visiable.
+This gun takes non-standard clips, filled with little yellow foam bb's. It may
+not be designed to do serious damage, but it looks like it would be fun to
+play with. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.75
+	Barrier:	4
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+	Val3:	8
+	Val4:	11
+	Val5:	50
+	Val10:	4
+BREAK
+END

@@ -12,6 +12,7 @@ NoNuyen:	Go get money, or pay in blood!
 DoesntBuy:	I buy not such wretched things!
 Buy:	Turn over my %d nuyen!
 Sell:	Take this %d nuyen and be gone!
+Name:	unnamed shop
 Flags:	100
 Races:	0
 Buytypes:	10100000000000000000
@@ -64,20 +65,21 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
+Name:	unnamed shop
 Flags:	0
 Races:	0
 Buytypes:	0
 Etiquette:	46
 [SELLING]
-	[SELL 8]
+	[SELL 0]
 		Vnum:	35508
 		Type:	Always
 		Stock:	0
-	[SELL 9]
+	[SELL 1]
 		Vnum:	35507
 		Type:	Always
 		Stock:	0
-	[SELL 10]
+	[SELL 2]
 		Vnum:	35506
 		Type:	Always
 		Stock:	0
@@ -96,32 +98,33 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
+Name:	unnamed shop
 Flags:	100
 Races:	0
 Buytypes:	0
 Etiquette:	46
 [SELLING]
-	[SELL 11]
+	[SELL 0]
 		Vnum:	35514
 		Type:	Always
 		Stock:	0
-	[SELL 12]
+	[SELL 1]
 		Vnum:	35513
 		Type:	Always
 		Stock:	0
-	[SELL 13]
+	[SELL 2]
 		Vnum:	35511
 		Type:	Always
 		Stock:	0
-	[SELL 14]
+	[SELL 3]
 		Vnum:	16236
 		Type:	Always
 		Stock:	0
-	[SELL 15]
+	[SELL 4]
 		Vnum:	35512
 		Type:	Always
 		Stock:	0
-	[SELL 16]
+	[SELL 5]
 		Vnum:	35510
 		Type:	Always
 		Stock:	0
@@ -140,44 +143,45 @@ NoNuyen:	You might want to check your wallet, that won't be enough.
 DoesntBuy:	This bar does not purchase items, sorry.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
+Name:	unnamed shop
 Flags:	100
 Races:	0
 Buytypes:	0
 Etiquette:	46
 [SELLING]
-	[SELL 17]
+	[SELL 0]
 		Vnum:	35521
 		Type:	Always
 		Stock:	0
-	[SELL 18]
+	[SELL 1]
 		Vnum:	35522
 		Type:	Always
 		Stock:	0
-	[SELL 19]
+	[SELL 2]
 		Vnum:	9948
 		Type:	Always
 		Stock:	0
-	[SELL 20]
+	[SELL 3]
 		Vnum:	35523
 		Type:	Always
 		Stock:	0
-	[SELL 21]
+	[SELL 4]
 		Vnum:	16236
 		Type:	Always
 		Stock:	0
-	[SELL 22]
+	[SELL 5]
 		Vnum:	31102
 		Type:	Always
 		Stock:	0
-	[SELL 23]
+	[SELL 6]
 		Vnum:	13415
 		Type:	Always
 		Stock:	0
-	[SELL 24]
+	[SELL 7]
 		Vnum:	1036
 		Type:	Always
 		Stock:	0
-	[SELL 25]
+	[SELL 8]
 		Vnum:	3484
 		Type:	Always
 		Stock:	0
@@ -196,68 +200,69 @@ NoNuyen:	Ya tryin' ta stiff me, slotface?!
 DoesntBuy:	I ain't interested.
 Buy:	That'll be %d nuyen.
 Sell:	Yeah, give ya %d nuyen fer that.  Thanks.
+Name:	unnamed shop
 Flags:	100
 Races:	0
 Buytypes:	0
 Etiquette:	46
 [SELLING]
-	[SELL 26]
+	[SELL 0]
 		Vnum:	14609
 		Type:	Always
 		Stock:	0
-	[SELL 27]
+	[SELL 1]
 		Vnum:	13415
 		Type:	Always
 		Stock:	0
-	[SELL 28]
+	[SELL 2]
 		Vnum:	9948
 		Type:	Always
 		Stock:	0
-	[SELL 29]
+	[SELL 3]
 		Vnum:	5901
 		Type:	Always
 		Stock:	0
-	[SELL 30]
+	[SELL 4]
 		Vnum:	5904
 		Type:	Always
 		Stock:	0
-	[SELL 31]
+	[SELL 5]
 		Vnum:	4953
 		Type:	Always
 		Stock:	0
-	[SELL 32]
+	[SELL 6]
 		Vnum:	35522
 		Type:	Always
 		Stock:	0
-	[SELL 33]
+	[SELL 7]
 		Vnum:	35523
 		Type:	Always
 		Stock:	0
-	[SELL 34]
+	[SELL 8]
 		Vnum:	35510
 		Type:	Always
 		Stock:	0
-	[SELL 35]
+	[SELL 9]
 		Vnum:	17130
 		Type:	Always
 		Stock:	0
-	[SELL 36]
+	[SELL 10]
 		Vnum:	2004
 		Type:	Always
 		Stock:	0
-	[SELL 37]
+	[SELL 11]
 		Vnum:	9942
 		Type:	Always
 		Stock:	0
-	[SELL 38]
+	[SELL 12]
 		Vnum:	4955
 		Type:	Always
 		Stock:	0
-	[SELL 39]
+	[SELL 13]
 		Vnum:	17156
 		Type:	Always
 		Stock:	0
-	[SELL 40]
+	[SELL 14]
 		Vnum:	35513
 		Type:	Always
 		Stock:	0
@@ -276,24 +281,25 @@ NoNuyen:	You don't got the nuyen chum.
 DoesntBuy:	Come on chum, I don't want that.
 Buy:	Heh heh, %d nuyen... enjoy.
 Sell:	Here's your %d nuyen.
+Name:	Shady dealer
 Flags:	0
 Races:	0
 Buytypes:	0
 Etiquette:	46
 [SELLING]
-	[SELL 41]
+	[SELL 0]
 		Vnum:	35528
 		Type:	Avail
 		Stock:	0
-	[SELL 42]
+	[SELL 1]
 		Vnum:	35527
 		Type:	Avail
 		Stock:	0
-	[SELL 43]
+	[SELL 2]
 		Vnum:	35526
 		Type:	Avail
 		Stock:	0
-	[SELL 44]
+	[SELL 3]
 		Vnum:	35525
 		Type:	Avail
 		Stock:	0

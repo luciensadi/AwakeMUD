@@ -1,17 +1,28 @@
 #70300
-Name:	TSS template room
+Name:	A slate driveway
 Desc:$
-You are in an unfinished room.
+   A clean black slate driveway stretches to the north here, winding its way
+through a peaceful green field dotted here and there with old-growth oak trees
+and sweeping patches of blue rosebushes. A little ways to the north, a
+blue-glass hotel rises over the tree line, its delicate silver archwork and
+glimmering glass windows casting brilliant beams of sunlight over the grounds.
 ~
-Flags:	1000
-SecType:	Inside
+NightDesc:$
+   A clean black slate driveway stretches to the north here, winding its way
+through a peaceful green field dotted here and there with old-growth oak trees
+and sweeping patches of blue rosebushes. A little ways to the north, a
+blue-glass hotel rises over the tree line, its delicate silver archwork and
+glimmering glass windows catching and diffusing the moonlight. 
+~
+Flags:	10000000000000000000100
+SecType:	Forest
 MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
-Z:	3.00
-RoomType:	10
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	100.00
+RoomType:	4
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
@@ -19,22 +30,46 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+[EXIT north]
+	ToVnum:	70301
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	1513
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 BREAK
 #70301
-Name:	A Wide Roundabout Circling a Marble Fountain
+Name:	A roundabout before the hotel
 Desc:$
-   You are in an unfinished room.
-   It is very unfinished. 
+   A sweeping slate roundabout circles here, a ^Ccerulean^n marble fountain
+soaring from its neatly-trimmed grassy center. A stand of oak trees encircles
+the drive, broken in places to allow cars to enter and leave the dual parking
+lots that flank the way. To the north stands a marble entranceway to a
+gleaming sapphire-glassed hotel, a liveried footman standing calmly by the
+doors. 
 ~
-Flags:	1000000010000000000000000000100
-SecType:	City
+NightDesc:$
+   A sweeping slate roundabout circles here, an underlit ^Ccerulean^n marble
+fountain soaring from its neatly-trimmed grassy center. A stand of oak trees
+encircles the well-lit drive, broken in places to allow cars to enter and
+leave the dual parking lots that flank the way. To the north stands a marble
+entranceway to a gleaming sapphire-glassed hotel, a liveried footman standing
+calmly by the doors. 
+~
+Flags:	10000000000010000000000
+SecType:	Forest
 MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
-Z:	3.00
-RoomType:	10
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	100.00
+RoomType:	4
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
@@ -43,101 +78,14 @@ RoomType:	10
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70302
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT east]
-	ToVnum:	70306
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT south]
-	ToVnum:	70303
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#70302
-Name:	A Bright, Modern Lobby
-Desc:$
-You are in an unfinished room.
-~
-Flags:	10000000000000001000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
-Z:	3.00
-RoomType:	10
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT north]
-	Keywords:	doors shaft
+	Keywords:	doors glass sliding door
 	Desc:$
-A pair of elevator doors allows access to the liftway.
+A pair of sliding glass doors stand to the north. 
 ~
-	ToVnum:	0
+	ToVnum:	70303
 	Flags:	1
-	Material:	metal
+	Material:	glass
 	Barrier:	8
-	KeyVnum:	998
-	LockRating:	8
-[EXIT east]
-	ToVnum:	70313
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT south]
-	ToVnum:	70301
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT west]
-	ToVnum:	70316
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#70303
-Name:	Approaching a Sapphire-Glassed Skyscraper
-Desc:$
-You are in an unfinished room.
-~
-Flags:	1000000010000000000000000000100
-SecType:	City
-MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
-Z:	3.00
-RoomType:	10
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT north]
-	ToVnum:	70301
-	Flags:	0
-	Material:	brick
-	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
 	ToVnum:	70304
@@ -146,99 +94,128 @@ RoomType:	10
 	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
+	ToVnum:	70300
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	gate steel parking private
+	Desc:$
+A steel gate stands to the east. 
+~
+	ToVnum:	70302
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70300
+BREAK
+#70302
+Name:	A private parking lot
+Desc:$
+   Really not much more than a sturdy stone box, this parking lot has space
+for perhaps forty or fifty cars to fit in its neatly-marked parking spaces.
+The asphalt underfoot has been roughened slightly to provide a good grip in
+even the wettest weather, and the rows of halogen lighting overhead provide a
+constant pale illumination. A guard stands next to the gate, marking entrances
+and exits and guarding the cars from would-be thieves. 
+~
+Flags:	100000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	50
+Z:	6.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	gate steel parking private
+	Desc:$
+A steel gate stands to the west. 
+~
+	ToVnum:	70301
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70300
+BREAK
+#70303
+Name:	An elegant foyer
+Desc:$
+   Spacious and opulent, this foyer is lit from overhead by a glorious crystal
+chandelier, casting a warm light through the area and causing the polished
+blue marble floor to practically glow. The walls of this large room are
+painted a rich cream, with tapestries and paintings around the area placed to
+provide comfort and warmth for the patrons of the hotel. A receptionist's desk
+stands along the western wall, while to the north are the doors to the main
+elevator. 
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	50
+Z:	6.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
 	ToVnum:	70305
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[EXIT west]
-	ToVnum:	32694
-	Flags:	0
-	Material:	brick
-	Barrier:	4
+[EXIT south]
+	Keywords:	doors glass sliding door
+	Desc:$
+A pair of sliding glass doors stand to the south. 
+~
+	ToVnum:	70301
+	Flags:	1
+	Material:	glass
+	Barrier:	8
 	KeyVnum:	0
 BREAK
 #70304
-Name:	The Star Sapphire's Public Parking Garage
+Name:	A public parking lot
 Desc:$
-You are in an unfinished room.
+   A spacious asphalt lot stands here in the shade of the trees, clean and
+well-kept for visitors to the hotel. Neatly divided into parking stalls and
+small pathways, this lot has space for perhaps thirty vehicles to park at
+once. Though the lot is unguarded, several security cameras keep watch over
+the area, making sure that everything is in order. 
 ~
-Flags:	110000000000000000001000
+NightDesc:$
+   A spacious asphalt lot stands here in the midst of the trees, clean and
+well-kept for visitors to the hotel. Lamp-poles here and there provide circles
+of dim illumination, pushing back the night. Neatly divided into parking
+stalls and small pathways, this lot has space for perhaps thirty vehicles to
+park at once. Though the lot is unguarded, several security cameras keep watch
+over the area, making sure that everything is in order. 
+~
+Flags:	100000000000010000000000
 SecType:	Inside
 MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
-Z:	3.00
-RoomType:	10
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT west]
-	ToVnum:	70303
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#70305
-Name:	Public Parking for the Star Sapphire
-Desc:$
-You are in an unfinished room.
-~
-Flags:	110000000000000000001000
-SecType:	City
-MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
-Z:	3.00
-RoomType:	10
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT north]
-	ToVnum:	70303
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT east]
-	ToVnum:	70322
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT south]
-	ToVnum:	70323
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#70306
-Name:	TSS Outdoor Grounds Template
-Desc:$
-You are in an unfinished room.
-~
-Flags:	10000000000000000000
-SecType:	Field
-MatrixExit:	0
-Crowd:	2
-Cover:	1
-X:	20
-Y:	20
-Z:	20.00
+Crowd:	0
+Cover:	0
+X:	100
+Y:	100
+Z:	100.00
 RoomType:	3
 [POINTS]
 	SpecIdx:	0
@@ -247,14 +224,8 @@ RoomType:	3
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT east]
-	ToVnum:	70308
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT south]
-	ToVnum:	70307
+[EXIT north]
+	ToVnum:	70369
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -266,20 +237,24 @@ RoomType:	3
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70307
-Name:	TSS Outdoor Grounds Template
+#70305
+Name:	A velvet-carpeted hallway
 Desc:$
-You are in an unfinished room.
+   This hallway extends for a short way to the east before turning northwards
+towards the in-house restaurant and bar, The Green Room. The hallway is
+carpeted with a deep blue weave, offseting the cream-colored walls in a
+pleasant manner. Large, full-length windows line the southern wall, giving a
+pleasant view of the well-manicured grounds outside. 
 ~
-Flags:	0
-SecType:	Field
+Flags:	1000
+SecType:	Inside
 MatrixExit:	0
-Crowd:	2
-Cover:	1
-X:	20
-Y:	20
-Z:	20.00
-RoomType:	3
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	9
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
@@ -293,27 +268,96 @@ RoomType:	3
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
-[EXIT east]
-	ToVnum:	70309
+[EXIT west]
+	ToVnum:	70303
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
+BREAK
+#70306
+Name:	The Green Room
+Desc:$
+   Comfortable and dimly-lit, this combination restaurant and bar stretches
+out through a good portion of the hotel's ground floor. Strong mahogany tables
+are placed here and there for patrons to eat at, while a long bar runs most of
+the length of the northern wall, the shelves behind it stocked with all sorts
+of liquor and imported alcohol. An older man stands behind the bar, serving
+patrons with a smile. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.50
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	70305
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70307
+Name:	A transparent glass elevator
+Desc:$
+   Though not overly large, this elevator provides a stunning view of the city
+outside through its floor-to-ceiling glass panels. Gleaming steel guards the
+ceiling and floor of the car, reinforcing the glass to provide perfect
+security and stability for the riders as they move along the outside the
+building. 
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	5
+Y:	5
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	3
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
 BREAK
 #70308
-Name:	TSS Outdoor Grounds Template
+Name:	A well-lit hallway
 Desc:$
-You are in an unfinished room.
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, currently unlit. 
 ~
-Flags:	0
-SecType:	Field
+NightDesc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, radiating a soft golden light
+that warms the room. 
+~
+Flags:	1000
+SecType:	Inside
 MatrixExit:	0
-Crowd:	2
-Cover:	1
-X:	20
-Y:	20
-Z:	20.00
-RoomType:	3
+Crowd:	0
+Cover:	0
+X:	12
+Y:	6
+Z:	3.00
+RoomType:	9
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
@@ -321,263 +365,43 @@ RoomType:	3
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT northeast]
-	ToVnum:	70310
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT south]
+[EXIT east]
 	ToVnum:	70309
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
-	ToVnum:	70306
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#70309
-Name:	TSS Outdoor Grounds Template
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Field
-MatrixExit:	0
-Crowd:	2
-Cover:	1
-X:	20
-Y:	20
-Z:	20.00
-RoomType:	3
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT north]
-	ToVnum:	70308
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT west]
-	ToVnum:	70307
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#70310
-Name:	TSS Outdoor Grounds Template
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Field
-MatrixExit:	0
-Crowd:	2
-Cover:	1
-X:	20
-Y:	20
-Z:	20.00
-RoomType:	3
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	15
-[EXIT north]
-	ToVnum:	70311
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT east]
-	Keywords:	door hollow metal
-	Desc:$
-A hollow metal door is inset into the wall of the shed. 
-~
-	ToVnum:	70312
-	Flags:	1
-	Material:	metal
-	Barrier:	3
-	KeyVnum:	70301
-	LockRating:	5
-[EXIT southwest]
-	ToVnum:	70308
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#70311
-Name:	TSS Outdoor Grounds Template
-Desc:$
-You are in an unfinished room.
-~
-Flags:	0
-SecType:	Field
-MatrixExit:	0
-Crowd:	2
-Cover:	1
-X:	20
-Y:	20
-Z:	20.00
-RoomType:	3
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT south]
-	ToVnum:	70310
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT west]
-	Keywords:	door metal cerulean cheery
-	Desc:$
-A metal door with cheery cerulean paint leads indoors. 
-~
-	ToVnum:	70315
-	Flags:	1
-	Material:	metal
-	Barrier:	4
-	KeyVnum:	70300
-	LockRating:	5
-BREAK
-#70312
-Name:	Inside the Gardener's Shed
-Desc:$
-You are in an unfinished room.
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
-Z:	3.00
-RoomType:	10
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT west]
-	Keywords:	door metal hollow
-	Desc:$
-A hollow metal door leads back out to the grounds. 
-~
-	ToVnum:	70310
-	Flags:	1
-	Material:	metal
-	Barrier:	3
-	KeyVnum:	70300
-	LockRating:	5
-BREAK
-#70313
-Name:	Hallway before the Jeweler's Loupe
-Desc:$
-You are in an unfinished room.
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
-Z:	3.00
-RoomType:	10
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT north]
-	ToVnum:	70314
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT west]
-	ToVnum:	70302
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#70314
-Name:	The Jeweler's Loupe
-Desc:$
-You are in an unfinished room.
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
-Z:	3.00
-RoomType:	10
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT north]
-	Keywords:	doors double
-	Desc:$
-A pair of double doors lead into the kitchen. 
-~
-	ToVnum:	70315
-	Flags:	1
-	Material:	metal
-	Barrier:	4
-	KeyVnum:	70300
-	LockRating:	5
-[EXIT south]
 	ToVnum:	70313
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70315
-Name:	A Veritable Forest of Stainless Steel Appliances
+#70309
+Name:	A well-lit hallway
 Desc:$
-You are in an unfinished room.
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, currently unlit. 
+~
+NightDesc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, radiating a soft golden light
+that warms the room. 
 ~
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
+Crowd:	0
+Cover:	0
+X:	12
+Y:	6
 Z:	3.00
-RoomType:	10
+RoomType:	9
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
@@ -585,71 +409,63 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT east]
-	Keywords:	door metal
+[EXIT north]
+	Keywords:	door strong oaken
 	Desc:$
-A metal exit door leads outside. 
+A strong oaken door marked '209' stands to the north. 
 ~
-	ToVnum:	70311
-	Flags:	1
-	Material:	metal
+	ToVnum:	70323
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70361
+[EXIT east]
+	ToVnum:	70310
+	Flags:	0
+	Material:	brick
 	Barrier:	4
-	KeyVnum:	70300
-	LockRating:	5
+	KeyVnum:	0
 [EXIT south]
-	Keywords:	doors double
+	Keywords:	door strong oaken
 	Desc:$
-A pair of double doors lead back out to the restaurant. 
+A strong oaken door marked '210' stands to the south. 
 ~
-	ToVnum:	70314
-	Flags:	1
-	Material:	metal
-	Barrier:	4
-	KeyVnum:	70300
-	LockRating:	5
-BREAK
-#70316
-Name:	The Mailroom
-Desc:$
-You are in an unfinished room.
-~
-Flags:	1000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
-Z:	3.00
-RoomType:	10
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT east]
-	ToVnum:	70302
+	ToVnum:	70331
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70362
+[EXIT west]
+	ToVnum:	70308
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70317
-Name:	TSS Elevator Car
+#70310
+Name:	A well-lit hallway
 Desc:$
-You are in an unfinished room.
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, currently unlit. 
+~
+NightDesc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, radiating a soft golden light
+that warms the room. 
 ~
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
+Crowd:	0
+Cover:	0
+X:	6
+Y:	12
 Z:	3.00
-RoomType:	10
+RoomType:	9
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
@@ -657,32 +473,482 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-[EXIT south]
-	Keywords:	doors shaft
+[EXIT north]
+	Keywords:	door strong oaken
 	Desc:$
-A pair of elevator doors allows access to the liftway.
+A strong oaken door marked '211' stands to the north. 
 ~
-	ToVnum:	0
-	Flags:	1
-	Material:	metal
-	Barrier:	8
-	KeyVnum:	998
-	LockRating:	8
+	ToVnum:	70324
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70363
+[EXIT east]
+	ToVnum:	70311
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door marked '212' stands to the south. 
+~
+	ToVnum:	70332
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70364
+[EXIT west]
+	ToVnum:	70309
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
 BREAK
-#70318
-Name:	TSS template room
+#70311
+Name:	A well-lit hallway
 Desc:$
-You are in an unfinished room.
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, currently unlit. 
+~
+NightDesc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, radiating a soft golden light
+that warms the room. 
 ~
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
+Crowd:	0
+Cover:	0
+X:	6
+Y:	12
 Z:	3.00
-RoomType:	10
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door marked '213' stands to the north. 
+~
+	ToVnum:	70325
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70365
+[EXIT east]
+	ToVnum:	70312
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door marked '214' stands to the south. 
+~
+	ToVnum:	70333
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70366
+[EXIT west]
+	ToVnum:	70310
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70312
+Name:	A well-lit hallway
+Desc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, currently unlit. 
+~
+NightDesc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, radiating a soft golden light
+that warms the room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	12
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door marked '215' stands to the north. 
+~
+	ToVnum:	70326
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70367
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door marked '216' stands to the south. 
+~
+	ToVnum:	70334
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70368
+[EXIT west]
+	ToVnum:	70311
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70313
+Name:	A well-lit hallway
+Desc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, currently unlit. 
+~
+NightDesc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, radiating a soft golden light
+that warms the room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	12
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door marked '207' stands to the north. 
+~
+	ToVnum:	70322
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70359
+[EXIT east]
+	ToVnum:	70308
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door marked '208' stands to the south. 
+~
+	ToVnum:	70330
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70360
+[EXIT west]
+	ToVnum:	70314
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70314
+Name:	A well-lit hallway
+Desc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, currently unlit. 
+~
+NightDesc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, radiating a soft golden light
+that warms the room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	12
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door marked '205' stands to the north. 
+~
+	ToVnum:	70321
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70357
+[EXIT east]
+	ToVnum:	70313
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door marked '206' stands to the south. 
+~
+	ToVnum:	70329
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70358
+[EXIT west]
+	ToVnum:	70315
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70315
+Name:	A well-lit hallway
+Desc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, currently unlit. 
+~
+NightDesc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, radiating a soft golden light
+that warms the room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	12
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door marked '203' stands to the north. 
+~
+	ToVnum:	70320
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70355
+[EXIT east]
+	ToVnum:	70314
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door marked '204' stands to the south. 
+~
+	ToVnum:	70328
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70356
+[EXIT west]
+	ToVnum:	70316
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70316
+Name:	A well-lit hallway
+Desc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, currently unlit. 
+~
+NightDesc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, radiating a soft golden light
+that warms the room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	12
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door marked '201' stands to the north. 
+~
+	ToVnum:	70319
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70353
+[EXIT east]
+	ToVnum:	70315
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door marked '202' stands to the south. 
+~
+	ToVnum:	70327
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70354
+BREAK
+#70317
+Name:	A well-lit hallway
+Desc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Large silver-framed
+windows are spaced generously along the length of the hall, providing a
+tranquil view of the Sapphire's grounds below. A single mahogany door stands
+in the southern wall, opposite of the elevator doors to the north. 
+~
+NightDesc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Large silver-framed
+windows are spaced generously along the length of the hall, providing a
+tranquil nighttime view of the Sapphire's grounds below. A single mahogany
+door stands in the southern wall, opposite of the elevator doors to the north.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	6
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	70335
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door sturdy mahogany
+	Desc:$
+A sturdy mahogany door stands to the south. 
+~
+	ToVnum:	70340
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70319
+[EXIT west]
+	ToVnum:	70341
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70318
+Name:	Empty Room
+Desc:$
+   This room is empty, fill it in? 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	9
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
@@ -692,19 +958,23 @@ RoomType:	10
 	BackgroundType:	0
 BREAK
 #70319
-Name:	TSS template room
+Name:	A comfortable room
 Desc:$
-You are in an unfinished room.
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the north wall
+gives an excellent view of the city outside. 
 ~
-Flags:	1000
+Flags:	100000000000000000000000001000
 SecType:	Inside
 MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
 Z:	3.00
-RoomType:	10
+RoomType:	9
 [POINTS]
 	SpecIdx:	0
 	Rating:	0
@@ -712,17 +982,1281 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the south. 
+~
+	ToVnum:	70316
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70353
 BREAK
 #70320
-Name:	TSS template room
+Name:	A comfortable room
 Desc:$
-You are in an unfinished room.
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the north wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the south. 
+~
+	ToVnum:	70315
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70355
+BREAK
+#70321
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the north wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the south. 
+~
+	ToVnum:	70314
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70357
+BREAK
+#70322
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the north wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the south. 
+~
+	ToVnum:	70313
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70359
+BREAK
+#70323
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the north wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the south. 
+~
+	ToVnum:	70309
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70361
+BREAK
+#70324
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the north wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the south. 
+~
+	ToVnum:	70310
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70363
+BREAK
+#70325
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the north wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the south. 
+~
+	ToVnum:	70311
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70365
+BREAK
+#70326
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the north wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the south. 
+~
+	ToVnum:	70312
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70367
+BREAK
+#70327
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the south wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the north. 
+~
+	ToVnum:	70316
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70354
+BREAK
+#70328
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the south wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the north. 
+~
+	ToVnum:	70315
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70356
+BREAK
+#70329
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the south wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the north. 
+~
+	ToVnum:	70314
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70358
+BREAK
+#70330
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the south wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the north. 
+~
+	ToVnum:	70313
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70360
+BREAK
+#70331
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the south wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the north. 
+~
+	ToVnum:	70309
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70362
+BREAK
+#70332
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the south wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the north. 
+~
+	ToVnum:	70310
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70364
+BREAK
+#70333
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the south wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the north. 
+~
+	ToVnum:	70311
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70366
+BREAK
+#70334
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the south wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the north. 
+~
+	ToVnum:	70312
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70368
+BREAK
+#70335
+Name:	A well-lit hallway
+Desc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Large silver-framed
+windows are spaced generously along the length of the hall, providing a
+tranquil view of the Sapphire's grounds below. Three mahogany doors stand
+here, one at the center of each wall, each adorned with their own nameplates.
+~
+NightDesc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Large silver-framed
+windows are spaced generously along the length of the hall, providing a
+tranquil nighttime view of the Sapphire's grounds below. Three mahogany doors
+stand here, one at the center of each wall, each adorned with their own
+nameplates. 
 ~
 Flags:	1000
 SecType:	Inside
 MatrixExit:	0
-Crowd:	2
-Cover:	4
+Crowd:	0
+Cover:	0
+X:	12
+Y:	6
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong mahogany
+	Desc:$
+A strong mahogany door stands to the north, its nameplate reading "Lucien
+Sadi". 
+~
+	ToVnum:	70336
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70320
+[EXIT east]
+	Keywords:	door strong mahogany boardroom
+	Desc:$
+A strong mahogany door stands to the east, its nameplate reading "Boardroom".
+~
+	ToVnum:	70337
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70321
+[EXIT south]
+	Keywords:	door strong mahogany
+	Desc:$
+A strong mahogany door stands to the south, its nameplate reading "Dusk N.
+Glory". 
+~
+	ToVnum:	70338
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70322
+[EXIT west]
+	ToVnum:	70317
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70336
+Name:	A spacious office
+Desc:$
+   Painted a rich, warm cream and carpetted with a sea-blue weave, this office
+is one of the most comfortable and spacious places in the entire hotel. The
+walls are lined with strong mahogany bookshelves, each shelf stacked high with
+reference materials and books of all types and styles. The northern wall is
+taken up entirely by a massive picture window, a stainless steel railing
+running along its length. A large cherry-wood desk stands just in front of the
+window, a comfortable leather chair pulled up behind it. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A concealed door stands in the eastern wall. 
+~
+	ToVnum:	70339
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70323
+	HiddenRating:	8
+[EXIT south]
+	Keywords:	door strong mahogany
+	Desc:$
+A strong mahogany door stands to the south. 
+~
+	ToVnum:	70335
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70320
+BREAK
+#70337
+Name:	A large, wood-panelled conference room
+Desc:$
+   Mahogany panels line the walls of this SOTA conference room, small speaker
+grilles standing in their faces at regular intervals. A large trideo screen
+stands on the wall, used for presentations and displays of all sorts of
+information. The center of the room is dominated by a long white marble
+conference table surrounded by black-leather chairs. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door strong mahogany
+	Desc:$
+A strong mahogany door stands to the west. 
+~
+	ToVnum:	70335
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70321
+BREAK
+#70338
+Name:	Dusk's Office
+Desc:$
+   This is a decent-sized office with a whole wall dedicated to windows with a
+view of the city below. Standing in the middle of the office is a large desk,
+adorned with a slightly-chipped black mug filled with pencils and a matching
+black electric pencil sharpener next to it. On one wall hangs a picture of a
+man and woman, both with black hair, the smiling woman holding a little boy in
+her arms. Flanking the picture are illustrated maps of the Star Sapphire. The
+floor is carpeted with a soft, comfortably cushiony carpet. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong mahogany
+	Desc:$
+A strong mahogany door stands to the north. 
+~
+	ToVnum:	70335
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70322
+BREAK
+#70339
+Name:	A small storage closet
+Desc:$
+   Small and cramped, this storage closet is home to a black steel dispensing
+machine mounted on the wall. The walls are constructed of a heavily reinforced
+titanium, accented by liberally-spaced support beams and studs. Four security
+cameras stand in each corner of the room, along with a sophisticated thermal
+scanning unit and an ultrasonic sensor. The floor is pressure-sensitive, and
+many fine wires hang in the air, sensing for the slightest hint of movement. 
+~
+Flags:	100000000000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	4
+Y:	4
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door reinforced steel
+	Desc:$
+A reinforced steel door stands to the west. 
+~
+	ToVnum:	70336
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70323
+BREAK
+#70340
+Name:	A large storage closet
+Desc:$
+   Nothing more than a secured storage room lined with steel shelves, this
+large closet is apparently used to hold belongings from overdue rooms. Lit
+from overhead by long lines of halogen strips, this area is by no means nearly
+as pleasant as the rest of the hotel. A large sign on the wall states,
+"Register all deposits and withdrawals on the boards!" 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door steel reinforced
+	Desc:$
+A reinforced steel door stands to the north. 
+~
+	ToVnum:	70317
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70319
+BREAK
+#70341
+Name:	A well-lit hallway
+Desc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Large silver-framed
+windows are spaced generously along the length of the hall, providing a
+tranquil view of the Sapphire's grounds below. Three mahogany doors stand
+here, one at the center of each wall, each adorned with their own nameplates.
+~
+NightDesc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Large silver-framed
+windows are spaced generously along the length of the hall, providing a
+tranquil nighttime view of the Sapphire's grounds below. Three mahogany doors
+stand here, one at the center of each wall, each adorned with their own
+nameplates. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	6
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong mahogany
+	Desc:$
+A strong mahogany door stands to the north, its nameplate reading "Leopold". 
+~
+	ToVnum:	70342
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70324
+[EXIT east]
+	ToVnum:	70317
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door strong mahogany
+	Desc:$
+A strong mahogany door stands to the west, its nameplate reading "Raphael". 
+~
+	ToVnum:	70343
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70325
+BREAK
+#70342
+Name:	Leopold's Office
+Desc:$
+   The interior of this room is well-lit, with plush black carpeting underfoot
+and walls decorated with all sorts of memorabilia, tasteful erotica, and
+vintage war posters. A large ebony desk and a black leather chair dominate the
+central portion of the office, while a black leather couch rests against the
+wall for any visitors who might be present. With supplies neatly organized and
+filed away on numerous storage devices, the office seems clean, wholesome, and
+certainly not the location of any sordid affairs that soap operas too often
+resort to when they find their already-sparse material lacking. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door strong mahogany
+	Desc:$
+A strong mahogany door stands to the south. 
+~
+	ToVnum:	70341
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70324
+BREAK
+#70343
+Name:	Raphael's Office
+Desc:$
+The first thing noticed upon entering this room is the view: The entire western
+wall is, in fact, one large window offering an extraordinary vantage point from
+which to look out over the city. The walls of the office a painted a pleasant
+^bblue^n colour, which along with the pale ^Wcream^n of the plush carpet and view
+from the window almost gives the impression of standing on a cloud. A comfy
+high-backed ^Lblack^n leather chair and ultra-modern steel-and-glass desk sit
+before the window, the latter scattered with a few unimportant papers and lit
+by the flickering of a SOTA desktop computer's flying toaster screensaver.
+A pair of matched chairs, also ^Lblack^n leather but not high-backed nor quite
+as comfy, sit before the desk. The office as a whole seems rather sparse and
+impersonal, with few of those little touches which make it seem truly lived in.
+What little bit of decoration there is, just two paintings hung on opposite walls,
+'Dogs Playing Poker' and a (authentic!) velvet Elvis, proves that the owner of this
+office either has an odd sense of humour, or lacks any sense of taste whatsoever.
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door strong mahogany
+	Desc:$
+A strong mahogany door stands to the east. 
+~
+	ToVnum:	70341
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70325
+BREAK
+#70344
+Name:	A well-lit hallway
+Desc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, currently unlit. 
+~
+NightDesc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, radiating a soft golden light
+that warms the room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	6
+Z:	2.50
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	70357
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	70345
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70345
+Name:	A well-lit hallway
+Desc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, currently unlit. 
+~
+NightDesc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, radiating a soft golden light
+that warms the room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	6
+Z:	2.50
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door oaken strong
+	Desc:$
+A strong oaken door marked '307' stands to the north. 
+~
+	ToVnum:	70352
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70375
+[EXIT east]
+	ToVnum:	70344
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door oaken strong
+	Desc:$
+A strong oaken door marked '308' stands to the south. 
+~
+	ToVnum:	70356
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70376
+[EXIT west]
+	ToVnum:	70346
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70346
+Name:	A well-lit hallway
+Desc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, currently unlit. 
+~
+NightDesc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, radiating a soft golden light
+that warms the room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	6
+Z:	2.50
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door oaken strong
+	Desc:$
+A strong oaken door marked '305' stands to the north. 
+~
+	ToVnum:	70351
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70373
+[EXIT east]
+	ToVnum:	70345
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door oaken strong
+	Desc:$
+A strong oaken door marked '306' stands to the south. 
+~
+	ToVnum:	70355
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70374
+[EXIT west]
+	ToVnum:	70347
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70347
+Name:	A well-lit hallway
+Desc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, currently unlit. 
+~
+NightDesc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, radiating a soft golden light
+that warms the room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	6
+Z:	2.50
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door oaken strong
+	Desc:$
+A strong oaken door marked '303' stands to the north. 
+~
+	ToVnum:	70350
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70371
+[EXIT east]
+	ToVnum:	70346
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door oaken strong
+	Desc:$
+A strong oaken door marked '304' stands to the south. 
+~
+	ToVnum:	70354
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70372
+[EXIT west]
+	ToVnum:	70348
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70348
+Name:	A well-lit hallway
+Desc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, currently unlit. 
+~
+NightDesc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, radiating a soft golden light
+that warms the room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	6
+Z:	2.50
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door oaken strong
+	Desc:$
+A strong oaken door marked '301' stands to the north. 
+~
+	ToVnum:	70349
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70369
+[EXIT east]
+	ToVnum:	70347
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door oaken strong
+	Desc:$
+A strong oaken door marked '302' stands to the south. 
+~
+	ToVnum:	70353
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70370
+BREAK
+#70349
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the north wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
 X:	10
 Y:	10
 Z:	3.00
@@ -734,355 +2268,1387 @@ RoomType:	10
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
-BREAK
-#70321
-Name:	TSS garage template room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	100000110000000000000000001000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
-Z:	3.00
-RoomType:	6
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT east]
-	ToVnum:	70329
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#70322
-Name:	private parking leasing office
-Desc:$
-You are in an unfinished room.
-~
-Flags:	10000000000000001000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
-Z:	3.00
-RoomType:	6
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT west]
-	ToVnum:	70305
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#70323
-Name:	Amongst the Private Garages
-Desc:$
-You are in an unfinished room.
-~
-Flags:	1000000010000000000000000001000
-SecType:	City
-MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
-Z:	3.00
-RoomType:	6
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT north]
-	ToVnum:	70305
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT east]
-	ToVnum:	70324
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
 [EXIT south]
-	ToVnum:	70326
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT west]
-	ToVnum:	70325
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#70324
-Name:	TSS garage template room
-Desc:$
-You are in an unfinished room.
+	Keywords:	door oaken strong
+	Desc:$
+A strong oaken door stands to the south. 
 ~
-Flags:	100000110000000000000000001000
+	ToVnum:	70348
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70369
+BREAK
+#70350
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the north wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
 SecType:	Inside
 MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
-Z:	3.00
-RoomType:	6
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT west]
-	ToVnum:	70323
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#70325
-Name:	TSS garage template room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	100000110000000000000000001000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
-Z:	3.00
-RoomType:	6
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT east]
-	ToVnum:	70323
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#70326
-Name:	Amongst the Private Garages
-Desc:$
-You are in an unfinished room.
-~
-Flags:	1000000010000000000000000001000
-SecType:	City
-MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
-Z:	3.00
-RoomType:	6
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT north]
-	ToVnum:	70323
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT east]
-	ToVnum:	70327
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT south]
-	ToVnum:	70329
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT west]
-	ToVnum:	70328
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#70327
-Name:	TSS garage template room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	100000110000000000000000001000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
-Z:	3.00
-RoomType:	6
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT west]
-	ToVnum:	70326
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#70328
-Name:	TSS garage template room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	100000110000000000000000001000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
-Z:	3.00
-RoomType:	6
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT east]
-	ToVnum:	70326
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#70329
-Name:	The Southern End of the Private Garages
-Desc:$
-You are in an unfinished room.
-~
-Flags:	1000000010000000000000000001000
-SecType:	City
-MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
-Z:	3.00
-RoomType:	6
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT north]
-	ToVnum:	70326
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT east]
-	ToVnum:	70330
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-[EXIT west]
-	ToVnum:	70321
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#70330
-Name:	TSS garage template room
-Desc:$
-You are in an unfinished room.
-~
-Flags:	100000110000000000000000001000
-SecType:	Inside
-MatrixExit:	0
-Crowd:	2
-Cover:	4
-X:	10
-Y:	10
-Z:	3.00
-RoomType:	6
-[POINTS]
-	SpecIdx:	0
-	Rating:	0
-	Light:	0
-	Smoke:	0
-	Background:	0
-	BackgroundType:	0
-[EXIT west]
-	ToVnum:	70329
-	Flags:	0
-	Material:	brick
-	Barrier:	4
-	KeyVnum:	0
-BREAK
-#70331
-Name:	TSS elevator shaft
-Desc:$
-You are in an unfinished room.
-~
-Flags:	10000000001010000000000000001100
-SecType:	Inside
-MatrixExit:	0
-Crowd:	2
-Cover:	4
+Crowd:	0
+Cover:	0
 X:	10
 Y:	10
 Z:	3.00
 RoomType:	10
 [POINTS]
 	SpecIdx:	0
-	Rating:	6
+	Rating:	0
 	Light:	0
 	Smoke:	0
 	Background:	0
 	BackgroundType:	0
+[EXIT south]
+	Keywords:	door oaken strong
+	Desc:$
+A strong oaken door stands to the south. 
+~
+	ToVnum:	70347
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70371
+BREAK
+#70351
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the north wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door oaken strong
+	Desc:$
+A strong oaken door stands to the south. 
+~
+	ToVnum:	70346
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70373
+BREAK
+#70352
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the north wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door oaken strong
+	Desc:$
+A strong oaken door stands to the south. 
+~
+	ToVnum:	70345
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70375
+BREAK
+#70353
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the south wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door oaken strong
+	Desc:$
+A strong oaken door stands to the north. 
+~
+	ToVnum:	70348
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70370
+BREAK
+#70354
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the south wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door oaken strong
+	Desc:$
+A strong oaken door stands to the north. 
+~
+	ToVnum:	70347
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70372
+BREAK
+#70355
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the south wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door oaken strong
+	Desc:$
+A strong oaken door stands to the north. 
+~
+	ToVnum:	70346
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70374
+BREAK
+#70356
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the south wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door oaken strong
+	Desc:$
+A strong oaken door stands to the north. 
+~
+	ToVnum:	70345
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70376
+BREAK
+#70357
+Name:	A well-lit hallway
+Desc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, currently unlit. 
+~
+NightDesc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, radiating a soft golden light
+that warms the room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	6
+Z:	2.50
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door marked '309' stands to the north. 
+~
+	ToVnum:	70361
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70377
+[EXIT east]
+	ToVnum:	70358
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door marked '310' stands to the south. 
+~
+	ToVnum:	70365
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70378
+[EXIT west]
+	ToVnum:	70344
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70358
+Name:	A well-lit hallway
+Desc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, currently unlit. 
+~
+NightDesc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, radiating a soft golden light
+that warms the room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	6
+Z:	2.50
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door marked '311' stands to the north. 
+~
+	ToVnum:	70362
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70379
+[EXIT east]
+	ToVnum:	70359
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door marked '312' stands to the south. 
+~
+	ToVnum:	70366
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70380
+[EXIT west]
+	ToVnum:	70357
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70359
+Name:	A well-lit hallway
+Desc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, currently unlit. 
+~
+NightDesc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, radiating a soft golden light
+that warms the room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	6
+Z:	2.50
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door marked '313' stands to the north. 
+~
+	ToVnum:	70363
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70381
+[EXIT east]
+	ToVnum:	70360
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door marked '314' stands to the south. 
+~
+	ToVnum:	70367
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70382
+[EXIT west]
+	ToVnum:	70358
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70360
+Name:	A well-lit hallway
+Desc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, currently unlit. 
+~
+NightDesc:$
+   Carpeted with a pattern of beautiful opal-hued Persian rugs, this wide
+hallway extends almost forty feet long, its cream-colored walls studded with
+antique oil paintings and tapestries of the finest sort. Frosted-glass wall
+sconces are spaced generously along the walls, radiating a soft golden light
+that warms the room. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	6
+Z:	2.50
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door marked '315' stands to the north. 
+~
+	ToVnum:	70364
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70383
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door marked '316' stands to the south. 
+~
+	ToVnum:	70368
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70384
+[EXIT west]
+	ToVnum:	70359
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70361
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the north wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the south. 
+~
+	ToVnum:	70357
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70377
+BREAK
+#70362
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the north wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the south. 
+~
+	ToVnum:	70358
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70379
+BREAK
+#70363
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the north wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the south. 
+~
+	ToVnum:	70359
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70381
+BREAK
+#70364
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the north wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the south. 
+~
+	ToVnum:	70360
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70383
+BREAK
+#70365
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the south wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the north. 
+~
+	ToVnum:	70357
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70378
+BREAK
+#70366
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the south wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the north. 
+~
+	ToVnum:	70358
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70380
+BREAK
+#70367
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the south wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the north. 
+~
+	ToVnum:	70359
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70382
+BREAK
+#70368
+Name:	A comfortable room
+Desc:$
+   Comfortable and spacious, this one-room apartment is divided into three
+sections: A small mini-kitchen, a living area and a sleeping area. Carpetted
+in a deep blue weave and painted a warm, rich cream, this room seems to
+radiate a sense of comfort and home. A long picture window in the south wall
+gives an excellent view of the city outside. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	10
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door strong oaken
+	Desc:$
+A strong oaken door stands to the north. 
+~
+	ToVnum:	70360
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	70384
+BREAK
+#70369
+Name:	A concrete underground hallway
+Desc:$
+   Spacious and well-lit, this hallway is made entirely of cement and floored
+with heavy-duty gripping asphalt to ensure the safety of the drivers. Garages
+are built here and there along the hall, each protected by a reinforced steel
+garage door with a hardened keycard reader. A security guard stands nearby,
+keeping an eye on things. 
+~
+Flags:	10000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	70371
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	70304
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	70370
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70370
+Name:	A concrete underground hallway
+Desc:$
+   Spacious and well-lit, this hallway is made entirely of cement and floored
+with heavy-duty gripping asphalt to ensure the safety of the drivers. Garages
+are built here and there along the hall, each protected by a reinforced steel
+garage door with a hardened keycard reader. A security guard stands nearby,
+keeping an eye on things. 
+~
+Flags:	10000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door garage steel
+	Desc:$
+A steel garage door stands to the north, L1 marked in ^Ccerulean^n at the center.
+~
+	ToVnum:	70372
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70385
+[EXIT east]
+	ToVnum:	70369
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door garage steel
+	Desc:$
+A steel garage door stands to the south, L5 marked in ^Ccerulean^n at the center.
+~
+	ToVnum:	70376
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70390
+[EXIT southwest]
+	Keywords:	door garage steel
+	Desc:$
+A steel garage door stands to the southwest, L4 marked in ^Ccerulean^n at the
+center. 
+~
+	ToVnum:	70375
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70389
+[EXIT west]
+	Keywords:	door garage steel
+	Desc:$
+A steel garage door stands to the west, L3 marked in ^Ccerulean^n at the center. 
+~
+	ToVnum:	70374
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70388
+[EXIT northwest]
+	Keywords:	door garage steel
+	Desc:$
+A steel garage door stands to the northwest, L2 marked in ^Ccerulean^n at the
+center. 
+~
+	ToVnum:	70373
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70387
+BREAK
+#70371
+Name:	A concrete underground hallway
+Desc:$
+   Spacious and well-lit, this hallway is made entirely of cement and floored
+with heavy-duty gripping asphalt to ensure the safety of the drivers. Garages
+are built here and there along the hall, each protected by a reinforced steel
+garage door with a hardened keycard reader. A security guard stands nearby,
+keeping an eye on things. 
+~
+Flags:	10000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door garage steel
+	Desc:$
+A steel garage door stands to the north, R1 marked in ^Ccerulean^n at the center.
+~
+	ToVnum:	70377
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70391
+[EXIT northeast]
+	Keywords:	door garage steel
+	Desc:$
+A steel garage door stands to the northeast, R2 marked in ^Ccerulean^n at the
+center. 
+~
+	ToVnum:	70378
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70392
+[EXIT east]
+	Keywords:	door garage steel
+	Desc:$
+A steel garage door stands to the east, R3 marked in ^Ccerulean^n at the center. 
+~
+	ToVnum:	70379
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70393
+[EXIT southeast]
+	Keywords:	door garage steel
+	Desc:$
+A steel garage door stands to the southeast, R4 marked in ^Ccerulean^n at the
+center. 
+~
+	ToVnum:	70380
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70394
+[EXIT south]
+	Keywords:	door garage steel
+	Desc:$
+A steel garage door stands to the south, R5 marked in ^Ccerulean^n at the center.
+~
+	ToVnum:	70381
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70395
+[EXIT west]
+	ToVnum:	70369
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#70372
+Name:	A quiet, private garage
+Desc:$
+   Simple yet secure, this garage is sound-shielded and perfect for the
+aspiring mechanic. Large enough to hold three GMC 4201s side-by-side, this
+spacious concrete room spares no effort in making the area as usable as
+possible. A set of built-in shelves in the corner allows for limited storage,
+and a small security camera set discreetly into a ceiling corner provides
+security for you and your vehicles. 
+~
+Flags:	100000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door garage steel
+	Desc:$
+A steel garage door stands to the south. 
+~
+	ToVnum:	70370
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70385
+BREAK
+#70373
+Name:	A quiet, private garage
+Desc:$
+   Simple yet secure, this garage is sound-shielded and perfect for the
+aspiring mechanic. Large enough to hold three GMC 4201s side-by-side, this
+spacious concrete room spares no effort in making the area as usable as
+possible. A set of built-in shelves in the corner allows for limited storage,
+and a small security camera set discreetly into a ceiling corner provides
+security for you and your vehicles. 
+~
+Flags:	100000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	Keywords:	door garage steel
+	Desc:$
+A steel garage door stands to the southeast. 
+~
+	ToVnum:	70370
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70387
+BREAK
+#70374
+Name:	A quiet, private garage
+Desc:$
+   Simple yet secure, this garage is sound-shielded and perfect for the
+aspiring mechanic. Large enough to hold three GMC 4201s side-by-side, this
+spacious concrete room spares no effort in making the area as usable as
+possible. A set of built-in shelves in the corner allows for limited storage,
+and a small security camera set discreetly into a ceiling corner provides
+security for you and your vehicles. 
+~
+Flags:	100000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door garage steel
+	Desc:$
+A steel garage door stands to the east. 
+~
+	ToVnum:	70370
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70388
+BREAK
+#70375
+Name:	A quiet, private garage
+Desc:$
+   Simple yet secure, this garage is sound-shielded and perfect for the
+aspiring mechanic. Large enough to hold three GMC 4201s side-by-side, this
+spacious concrete room spares no effort in making the area as usable as
+possible. A set of built-in shelves in the corner allows for limited storage,
+and a small security camera set discreetly into a ceiling corner provides
+security for you and your vehicles. 
+~
+Flags:	100000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	Keywords:	door garage steel
+	Desc:$
+A steel garage door stands to the northeast. 
+~
+	ToVnum:	70370
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70389
+BREAK
+#70376
+Name:	A quiet, private garage
+Desc:$
+   Simple yet secure, this garage is sound-shielded and perfect for the
+aspiring mechanic. Large enough to hold three GMC 4201s side-by-side, this
+spacious concrete room spares no effort in making the area as usable as
+possible. A set of built-in shelves in the corner allows for limited storage,
+and a small security camera set discreetly into a ceiling corner provides
+security for you and your vehicles. 
+~
+Flags:	100000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door garage steel
+	Desc:$
+A steel garage door stands to the north. 
+~
+	ToVnum:	70370
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70390
+BREAK
+#70377
+Name:	A quiet, private garage
+Desc:$
+   Simple yet secure, this garage is sound-shielded and perfect for the
+aspiring mechanic. Large enough to hold three GMC 4201s side-by-side, this
+spacious concrete room spares no effort in making the area as usable as
+possible. A set of built-in shelves in the corner allows for limited storage,
+and a small security camera set discreetly into a ceiling corner provides
+security for you and your vehicles. 
+~
+Flags:	100000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door garage steel
+	Desc:$
+A steel garage door stands to the south. 
+~
+	ToVnum:	70371
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70391
+BREAK
+#70378
+Name:	A quiet, private garage
+Desc:$
+   Simple yet secure, this garage is sound-shielded and perfect for the
+aspiring mechanic. Large enough to hold three GMC 4201s side-by-side, this
+spacious concrete room spares no effort in making the area as usable as
+possible. A set of built-in shelves in the corner allows for limited storage,
+and a small security camera set discreetly into a ceiling corner provides
+security for you and your vehicles. 
+~
+Flags:	100000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	Keywords:	door garage steel
+	Desc:$
+A steel garage door stands to the southwest. 
+~
+	ToVnum:	70371
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70392
+BREAK
+#70379
+Name:	A quiet, private garage
+Desc:$
+   Simple yet secure, this garage is sound-shielded and perfect for the
+aspiring mechanic. Large enough to hold three GMC 4201s side-by-side, this
+spacious concrete room spares no effort in making the area as usable as
+possible. A set of built-in shelves in the corner allows for limited storage,
+and a small security camera set discreetly into a ceiling corner provides
+security for you and your vehicles. 
+~
+Flags:	100000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door garage steel
+	Desc:$
+A steel garage door stands to the west. 
+~
+	ToVnum:	70371
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70393
+BREAK
+#70380
+Name:	A quiet, private garage
+Desc:$
+   Simple yet secure, this garage is sound-shielded and perfect for the
+aspiring mechanic. Large enough to hold three GMC 4201s side-by-side, this
+spacious concrete room spares no effort in making the area as usable as
+possible. A set of built-in shelves in the corner allows for limited storage,
+and a small security camera set discreetly into a ceiling corner provides
+security for you and your vehicles. 
+~
+Flags:	100000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northwest]
+	Keywords:	door garage steel
+	Desc:$
+A steel garage door stands to the northwest. 
+~
+	ToVnum:	70371
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70394
+BREAK
+#70381
+Name:	A quiet, private garage
+Desc:$
+   Simple yet secure, this garage is sound-shielded and perfect for the
+aspiring mechanic. Large enough to hold three GMC 4201s side-by-side, this
+spacious concrete room spares no effort in making the area as usable as
+possible. A set of built-in shelves in the corner allows for limited storage,
+and a small security camera set discreetly into a ceiling corner provides
+security for you and your vehicles. 
+~
+Flags:	100000100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door garage steel
+	Desc:$
+A steel garage door stands to the north. 
+~
+	ToVnum:	70371
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	70395
 BREAK
 END

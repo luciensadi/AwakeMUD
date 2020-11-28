@@ -1,0 +1,204 @@
+#19500
+Keywords:	ring black obsidian bcs bcst membership
+Name:	a Black Circle Membership ring
+RoomDesc:$
+A small black ring is lying here.~
+LookDesc:$
+A small black ring of obsidian, with the letters B.C.S. engraved on it.  It
+seems to shimmer every now and then when put in the light. 
+~
+Type:	Worn
+WearFlags:	11
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	-1
+BREAK
+#19501
+Keywords:	ooth bracer runes emblem
+Name:	an OotH bracer
+RoomDesc:$
+A bracer marked with strange runes lays here.~
+LookDesc:$
+The runes read "Official Member: Order of the Hunters. Inducted 2050" in the
+Predator text. 
+~
+Type:	Worn
+WearFlags:	1000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	12
+	Cost:	2000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Willpower
+	Modifier:	1
+BREAK
+#19503
+Keywords:	sdm insignia
+Name:	an ^C{^cSDM^C}^N insignia
+RoomDesc:$
+An armband is lying here, with letters on it.~
+LookDesc:$
+An armband with the letters, ^C{^cSDM^C}^N emblazoned on it. 
+~
+Type:	Worn
+WearFlags:	100000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Willpower
+	Modifier:	1
+[AFFECT 1]
+	Location:	Intelligence
+	Modifier:	1
+BREAK
+#19504
+Keywords:	duster fire ice black
+Name:	a long, black ^B{^RFire ^Wand ^CIce^B}^n duster
+RoomDesc:$
+A long black duster with a curious logo is lying here.~
+LookDesc:$
+A long black duster.  On the back of the duster is a medium grey snowflake,
+with a maroon flame in the center. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	4.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19505
+Keywords:	dead deckers society dds bracelet golden
+Name:	a gold bracelet with the letters "D.D.S." engraved on it
+RoomDesc:$
+A gold bracelet lies here, with an inscription on it.~
+LookDesc:$
+A golden bracelet, with a circuitry design etched onto it, and the letters
+"D.D.S." engraved upon it. 
+~
+Type:	Worn
+WearFlags:	1000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Willpower
+	Modifier:	1
+[AFFECT 1]
+	Location:	Hacking Pool
+	Modifier:	1
+BREAK
+#19506
+Keywords:	Kane's mask
+Name:	^RK^La^Rn^Le^R's ^RM^La^Rs^Lk
+RoomDesc:$
+^RK^La^Rn^Le^R'^Ls ^RM^La^Rs^Lk is laying here.~
+LookDesc:$
+Wooden slats bound with hard leather, and polished to look like vinyl covers
+the whole face.  No opening for a mouth, and the eye holes seem to absorb all
+light going in. This mask is striped red and black. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	101000001000
+AffFlags:	1000000000
+Material:	concrete
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	500000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Height
+	Modifier:	100
+[AFFECT 1]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 2]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#19507
+Keywords:	Talonclaw
+Name:	Talonclaw
+RoomDesc:$
+Talonclaaw~
+LookDesc:$
+A Runed dagger which glows with ancient magics. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1010000001
+AffFlags:	1000000000000000001000
+Material:	ceramic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+END

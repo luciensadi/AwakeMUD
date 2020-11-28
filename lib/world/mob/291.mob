@@ -1,0 +1,458 @@
+#29100
+Keywords:	king troll the
+Name:	the King
+RoomDesc:$
+The King stands here, looking regal. 
+
+~
+LookDesc:$
+There is a reason they call this troll "The King", and it ain't his crown.
+This guy has pectorals the size of your head and his arms are bigger than your
+legs. This is one tough cookie. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	5
+	Str:	16
+	Cha:	2
+	Int:	4
+	Wil:	8
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	200
+	Level:	3
+	Ballistic:	12
+	Impact:	10
+	Cash:	100
+[SKILLS]
+BREAK
+#29101
+Keywords:	kandar smithy shop seller
+Name:	Kandar the Smithy
+RoomDesc:$
+Kandar is here, selling his goods. 
+
+~
+LookDesc:$
+A human man dressed in medieval style clothing is the owner of this fine
+establishment. He looks as though he could bend a fence post with his bare
+hands, better watch out for this one. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000001001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	25
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	10000
+[SKILLS]
+BREAK
+#29102
+Keywords:	Gurney shop keeper seller
+Name:	Gurney the shop owner
+RoomDesc:$
+Gurney stands here, urging you to blow something up. 
+
+~
+LookDesc:$
+A burned and scarred man stands here. He looks as though he has been lit on
+fire a hundred times, but you know he hasn't, it's more like a thousand times.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	25
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	10000
+[SKILLS]
+BREAK
+#29166
+Keywords:	news man anchor caster
+Name:	Mark Trenton , News Anchor Man
+RoomDesc:$
+A witty , well dressed man stands here. 
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#29184
+Keywords:	a small black shadow
+Name:	a small black shadow
+RoomDesc:$
+A small black shadow says,"Take your pick." 
+
+~
+LookDesc:$
+Just a black shadow, do you find something wrong with it? 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101110000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#29185
+Keywords:	crazed dwarf crazy little
+Name:	a crazy little dwarf
+RoomDesc:$
+A crazy little dwarf is here, swinging his axe around. 
+
+~
+LookDesc:$
+This guy is insane! He is here swinging his huge ass axe around and yelling
+"DIE!" at everything that moves. He is dressed in classic medieval attire,
+consisting of leather armor and an animal skin vest. 
+~
+ArriveMsg:	waddles in from
+LeaveMsg:	waddles
+MobFlags:	101000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	4
+	Str:	10
+	Cha:	6
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	100
+	Weight:	120
+	Level:	2
+	Ballistic:	6
+	Impact:	4
+[SKILLS]
+	edged weapons:	7
+	armed combat:	7
+BREAK
+#29191
+Keywords:	clerk digital underground a
+Name:	a Clerk
+RoomDesc:$
+A disheveled clerk is here, selling stuff. 
+
+~
+LookDesc:$
+A rather messy looking man is here, working at the desk, selling stuff to
+people who want to buy it. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	100000
+	Bank:	100000
+[SKILLS]
+BREAK
+#29192
+Keywords:	clerk digital underground a
+Name:	a Clerk
+RoomDesc:$
+A disheveled clerk is here, selling stuff. 
+
+~
+LookDesc:$
+A rather messy looking man is here, working at the desk, selling stuff to
+people who want to buy it. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	100000
+	Bank:	100000
+[SKILLS]
+BREAK
+#29195
+Keywords:	danphor troll big
+Name:	Danphor
+RoomDesc:$
+A very big troll is standing here. 
+
+~
+LookDesc:$
+This troll seems to be able to hold his own very well. He looks to be a bit
+bigger than the biggest troll you have ever seen. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	6
+	Str:	12
+	Cha:	4
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	250
+	Weight:	300
+	Level:	4
+	Ballistic:	10
+	Impact:	8
+	Cash:	5000
+	Bank:	2500
+[SKILLS]
+	unarmed combat:	8
+BREAK
+#29196
+Keywords:	killer man smile disturbing
+Name:	That smiling psycho
+RoomDesc:$
+A man with a disturbing smile is here, eyeing you like prey. 
+
+~
+LookDesc:$
+The guy has the most disturbing smile you have ever seen. He has blood caked
+and smeared all over his face and clothes. Much of that blood is smeared all
+around his mouth where you see that disturbing smile once again. 
+~
+ArriveMsg:	stalks in from
+LeaveMsg:	stalks
+MobFlags:	1000
+AffFlags:	1000000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	8
+	Str:	6
+	Cha:	2
+	Int:	6
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	120
+	Level:	2
+	Ballistic:	6
+	Impact:	4
+	Cash:	3000
+[SKILLS]
+	unarmed combat:	7
+	:	2
+BREAK
+#29197
+Keywords:	chemical ganger a 
+Name:	a Chemical Ganger
+RoomDesc:$
+A ^gC^Gh^ge^Gm^gi^Gc^ga^Gl ^gG^Ga^gn^Gg^ge^Gr ^Nis here, looking tough. 
+
+~
+LookDesc:$
+A Chemical Ganger is here, with a bright green spiked mohawk and green armor.
+He looks tough, but he also carries a gun, so you better watch out. 
+~
+ArriveMsg:	trudges in from
+LeaveMsg:	trudges
+MobFlags:	1101000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	4
+	Str:	6
+	Cha:	2
+	Int:	4
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	175
+	Weight:	120
+	Level:	2
+	Ballistic:	8
+	Impact:	6
+	Cash:	300
+	Bank:	1000
+[SKILLS]
+	pistols:	4
+	unarmed combat:	6
+BREAK
+#29198
+Keywords:	ugly little demon tunnel crawler
+Name:	A tunnel crawler
+RoomDesc:$
+An ugly little tunnel crawler is here. 
+
+~
+LookDesc:$
+With pale white skin and large inky black eyes, this is one of the slimiest
+wretches you have ever layed eyes on. It has a humanoid figure with a small
+nub of a tail protruding from its backside. It seems to be constantly sweating
+and twitching. You hear it reciting little half words. No one but itself may
+ever understand what it is saying. 
+~
+ArriveMsg:	crawls in from
+LeaveMsg:	crawls
+MobFlags:	1001100
+AffFlags:	1000000000001000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Bite
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	2
+	Cha:	3
+	Int:	1
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	100
+	Weight:	35
+	Level:	1
+	Ballistic:	2
+	Impact:	6
+	Cash:	120
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#29199
+Keywords:	big humongous troll
+Name:	a humongous troll
+RoomDesc:$
+A humongous troll stands here, blocking your way. 
+
+~
+LookDesc:$
+This is a big troll......very , very big and he seems to not want anyone to
+get passed him. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1110000001101010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	4
+	Str:	16
+	Cha:	4
+	Int:	2
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	300
+	Weight:	400
+	Level:	8
+	Ballistic:	14
+	Impact:	12
+[SKILLS]
+	unarmed combat:	9
+	:	3
+	stealth:	9
+BREAK
+END

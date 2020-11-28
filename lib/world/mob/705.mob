@@ -1,22 +1,22 @@
 #70500
-Keywords:	slouching hulk old man overalls baxter morgan supervisor
-Name:	Baxter Morgan, the Junkyard's supervisor
+Keywords:	An energetic host is here, offering you choice tickets man
+Name:	A ticket agent
 RoomDesc:$
-A slouching hulk of an old man sits here, barely contained by his overalls. 
+An energetic host is here, offering you choice tickets. 
 
 ~
 LookDesc:$
-Few words can describe such a being. "Grungy" would be too kind; "grimy", too
-evocative of a street urchin, the likes of which would be roundly offended to
-be compared with Baxter Morgan. Slobbish, boorish, and with a shock of matted
-grey-black hair, Baxter stares out at the world through jaundiced eyes that
-vie with his teeth in an eternal competition to see which of the two can be
-yellower. His overalls, tattered and oil-stained, strain at the seams as he
-slouches carelessly behind his desk. 
+Before you stands a pompous, tiresome, and moreover, ridiculously annoying
+man. If it were not for his perpetual smile, resonant voice, and seeming
+acquaintance with the entire clientele of the opera house, you might very well
+slap him silly. He is well-dressed, handsome, and middle-aged, but not
+particularly unique. His forgettable features almost make you feel bad for not
+remembering his name when he greets you, until you recall that you never knew
+it in the first place. 
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1000000000000000000000000001010
+MobFlags:	1011
 AffFlags:	0
 Race:	Human
 Gender:	Male
@@ -24,200 +24,215 @@ DefaultPos:	Standing
 [ATTRIBUTES]
 	Bod:	2
 	Qui:	2
-	Str:	6
-	Cha:	1
+	Str:	3
+	Cha:	6
 	Int:	5
-	Wil:	2
+	Wil:	5
 	Mag:	0
 [POINTS]
-	Height:	178
-	Weight:	180
+	Height:	180
+	Weight:	100
 [SKILLS]
 BREAK
 #70501
-Keywords:	cobbled-together makeshift security drone junkbot bot
-Name:	a cobbled-together JunkBot-3 security drone
+Keywords:	man human male Sascha bartender
+Name:	Sascha
 RoomDesc:$
-A makeshift security drone trundles around, its wheels grinding in the gravel.
+A carefree middle-aged, ruggedly-handsome bartender chats with the clientele
+here. 
 
 ~
 LookDesc:$
-Expertly welded together from the parts of ten different commercial drones,
-this amalgamation of technology trundles around the entrance to the Junkyard,
-intimidating trespassers and the occasional stray dog as they approach the
-chain-link gate. 
+A middle-aged man with short hair grins as he cleans a glass behind the bar,
+talking with his clientele. 
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	100000000000010100000100000001010
-AffFlags:	110001000001000
-Race:	Undef
-Gender:	Neutral
+MobFlags:	1011
+AffFlags:	0
+Race:	Human
+Gender:	Male
 DefaultPos:	Standing
-AttackType:	Machine Gun
 [ATTRIBUTES]
-	Bod:	12
-	Qui:	8
-	Str:	8
-	Cha:	1
-	Int:	8
-	Wil:	6
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	4
+	Int:	5
+	Wil:	5
 	Mag:	0
 [POINTS]
-	Height:	150
-	Weight:	300
-	Ballistic:	14
-	Impact:	14
+	Height:	180
+	Weight:	80
 [SKILLS]
-	Armed Combat:	8
-	Brawling:	8
 BREAK
 #70502
-Keywords:	spindly man rat's-head tattoo hollow scythe
-Name:	Hollow Scythe
+Keywords:	male man player sam content black
+Name:	Sam
 RoomDesc:$
-A spindly man with a rat's-head tattoo roots around restlessly. 
+A content black man smiles as he plays the piano here. 
 
 ~
 LookDesc:$
-Twitchy and beady-eyed, this too-thin man bears the mark of having spent far
-too many nights on the streets. His unkempt snarl of stringy blond hair falls
-limply around his bony shoulders, leaving oily marks on his ragged robe. The
-tattoo of a black rat's head ripples on the back of his left hand as he
-clenches and unclenches his fist repeatedly. 
+A quiet African-American's fingers dance over the ivory and ebony keys of his
+piano, keeping the bar alive as he smiles contentedly. 
 ~
-ArriveMsg:	scrambles in from the
-LeaveMsg:	clambers on all fours to the
-MobFlags:	100100010001010
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	6
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	75
+[SKILLS]
+BREAK
+#70503
+Keywords:	A young man of the cloth scribes something, next to a rack of supplies
+Name:	Father Sebastian
+RoomDesc:$
+A young man of the cloth scribes something, next to a rack of supplies. 
+
+~
+LookDesc:$
+A clean-shaven young brown-haired human sits in ascetic silence, scribing
+something while apparently protecting a cache of armaments and other supplies.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	70
+[SKILLS]
+BREAK
+#70504
+Keywords:	A blind priest quietly kneels here, praying father Hernandez
+Name:	Father Hernandez
+RoomDesc:$
+A blind priest quietly kneels here, praying. 
+
+~
+LookDesc:$
+A blind, Hispanic priest, wearing a white collar and black suit kneels here in
+obeisance, muttering under his breath and praying, next to a rack outfitted
+with a number of supplies. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+BREAK
+#70505
+Keywords:	A sultry, ebon-haired woman smiles coyly as she stands here black widow
+Name:	The Black Widow
+RoomDesc:$
+A sultry, ebon-haired woman smiles coyly as she stands here. 
+
+~
+LookDesc:$
+A sultry, ebon-haired woman smiles coyly as she stands here by the entrance to
+the Seattle Opera. Her soft, ruby lips parted in a sensuous smile, she seems
+ever-so-happy to greet the cultured patrons of the Seattle Opera. Her
+voluptuous feminine form is accentuated by her risque, yet tasteful black
+evening dress, this pale-skinned vixen characterizes the allure of the higher
+arts. Perhaps the only strange thing about her is her coal-black eyes, along
+with the blinding aura surrounding her on the Astral plane. Perhaps she is
+more than she seems... 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	15
+	Str:	12
+	Cha:	8
+	Int:	8
+	Wil:	9
+	Mag:	12
+[POINTS]
+	Height:	170
+	Weight:	60
+[SKILLS]
+	unarmed combat:	12
+BREAK
+#70506
+Keywords:	Julius A quiet black man dressed in a tuxedo and sunglasses sits patiently here
+Name:	Julius
+RoomDesc:$
+A quiet black man dressed in a tuxedo and sunglasses sits patiently here. 
+
+~
+LookDesc:$
+This quiet African-American man bears a striking resemblance to the
+piano-player out by the bar, though one could not be certain due to the dark
+sunglasses he wears. Dressed in a formal tuxedo, he waits patiently by a small
+basket of amenities, offering them to the patrons of the Opera. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
 AffFlags:	0
 Race:	Human
 Gender:	Male
 DefaultPos:	Standing
 [ATTRIBUTES]
 	Bod:	5
-	Qui:	8
-	Str:	2
-	Cha:	6
-	Int:	8
-	Wil:	8
-	Mag:	10
-[POINTS]
-	Height:	184
-	Weight:	68
-	Ballistic:	5
-	Impact:	5
-[SKILLS]
-	Sorcery:	12
-BREAK
-#70503
-Keywords:	furtive night-one scavenger
-Name:	a furtive Night-One scavenger
-RoomDesc:$
-A Night-One scavenger furtively works to loosen a chunk of scrap. 
-
-~
-LookDesc:$
-Scruffed-up and scraggly, this pale female Night-One has rubbed oil and dirt
-into her fur in an attempt to be less noticeable. Her outfit is serviceable
-enough for junkyard scavenging, consisting of heavy denim and canvas with a
-belt of padded homemade tools for silent disassembly. A wicked-looking bat
-with nails sticking out of it seems to be her primary mode of defense. 
-~
-ArriveMsg:	slinks in from
-LeaveMsg:	scurries
-MobFlags:	10001100
-AffFlags:	1010000000000000
-Race:	Night-One
-Gender:	Female
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	6
-	Qui:	7
-	Str:	5
-	Cha:	5
-	Int:	6
-	Wil:	4
-	Mag:	0
-[POINTS]
-	Height:	172
-	Weight:	54
-	Ballistic:	4
-	Impact:	6
-[SKILLS]
-	Stealth:	7
-	Armed Combat:	5
-	Brawling:	4
-BREAK
-#70504
-Keywords:	tired junkyard scavenger
-Name:	a tired employee of the Junkyard
-RoomDesc:$
-A tired-looking Junkyard employee is detaching usable parts from a wreck. 
-
-~
-LookDesc:$
-Looking like he's badly missing a cup or two of soykaf, this dwarven male's
-baggy eyes and sallow complexion are barely concealed by the wiry chestnut
-beard exploding from his chin. He's burly and stoutly-built, and despite his
-exhaustion manipulates the scrap with apparent expertise. 
-~
-ArriveMsg:	drags himself grumpily in from
-LeaveMsg:	heaves a sigh and walks
-MobFlags:	1100
-AffFlags:	10000000000000
-Race:	Dwarf
-Gender:	Male
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	8
-	Qui:	6
-	Str:	8
-	Cha:	5
-	Int:	6
-	Wil:	7
-	Mag:	0
-[POINTS]
-	Height:	98
-	Weight:	63
-	Ballistic:	5
-	Impact:	7
-[SKILLS]
-	BR/Car:	5
-	Armed Combat:	5
-	Brawling:	4
-BREAK
-#70505
-Keywords:	malformed city spirit decaying mass amorphous materials
-Name:	a malformed city spirit
-RoomDesc:$
-An amorphous mass of decaying materials wobbles through the area. 
-
-~
-LookDesc:$
-Exhibiting poor mimicry of its surroundings, this amorphous mass of magic
-appears to be a city spirit that has taken in too much of the decay of the
-Junkyard. It bobs and weaves drunkenly, trails of ectoplasmic garbage juice
-dripping from its form. 
-~
-ArriveMsg:	trails ectoplasmic garbage liquid as it wobbles in from
-LeaveMsg:	bobs drunkenly
-MobFlags:	1000000000000001000
-AffFlags:	0
-Race:	Undef
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	4
 	Qui:	4
 	Str:	4
-	Cha:	4
-	Int:	4
-	Wil:	6
-	Mag:	5
+	Cha:	6
+	Int:	5
+	Wil:	5
+	Mag:	0
 [POINTS]
-	Height:	0
-	Weight:	0
+	Height:	180
+	Weight:	75
 [SKILLS]
-	Sorcery:	6
+	unarmed combat:	6
 BREAK
 END

@@ -1,0 +1,681 @@
+#65200
+Name:	A Vacant Parking Lot
+Desc:$
+   The wind whips across the gravel graveyard, kicking dust and litter against
+old, rusted-out car shells. The few still-operable vehicles here probably
+belong to the occupants of the old, one-level brick warehouse to the north.
+While most of the structure seems deserted, its windows boarded over and its
+walls graffiti-filled, the center portion sports a sturdy metal door,
+surrounded by lit windows with fresh panes of glass in them. A tilted neon
+sign above the door identifies this establishment as The Gentleman Loser.  A
+large garage door occupies the northeastern corner of the building, and the
+intersection of Seneca and Ninth is to the northwest. 
+~
+Flags:	110000000000000000000100
+SecType:	City
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	65201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	Keywords:	garage sturdy door
+	Desc:$
+The garage door seems to be made of a combonation of polymer plastics combined
+with ceramic meshing.  You'd most likely need a few rockets in a heavy
+launcher to blow it open, but there is a small electronic card swiper next to
+the door. 
+~
+	ToVnum:	65210
+	Flags:	2
+	Material:	ceramic
+	Barrier:	32
+	KeyVnum:	65200
+	LockRating:	50
+[EXIT northwest]
+	ToVnum:	32712
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65201
+Name:	The Gentleman Loser
+Desc:$
+   Recessed ceiling lights cast a hazy golden glow over the large main room of
+The Gentleman Loser. The mingled smells of tobacco and beer hang in the air,
+despite the best efforts of the air filtration vents over head. The synthwood
+walls and genuine hardwood floor are worn smooth with age. A few synthwood
+tables and chairs occupy the center of the room and a worn pool table and a
+rack of cues sit in the northwest corner, near a fancy looking wooden door. A
+spotless synthwood bar occupies most of the eastern wall, with the usual
+mirrored shelves and trideo unit behind it, mounted to the ceiling in the
+northeast corner. A small raised platform in the southeast corner acts as a
+stage for the occassional live musician. A short hallway is to the north, and
+the exit to the parking lot is to the south. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	65202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	65200
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door heavy wood
+	Desc:$
+This heavy synthwood door is set firmly into the wall and has a little keycard
+slot just above the door knob. 
+~
+	ToVnum:	65205
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	65200
+	LockRating:	5
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65202
+Name:	A Short Hallway
+Desc:$
+   The wall of this short, dimly-lit hallway are plastered with faded posters
+for long-past concerts and sporting events. You even manage to catch sight of
+an old ^Y2600^N meeting poster.  The air seems clearer here, and the sounds from
+the bar are fairly muffled.  The ladies' room is to the west, the men's room
+east, and an unmarked, sturdy-looking synthwood door occupies the north wall.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	Keywords:	door solid wooden
+	Desc:$
+A solid door which seems to be made of synthwood with a little keycard slot in
+it near the handle. 
+~
+	ToVnum:	65206
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	65200
+	LockRating:	50
+[EXIT east]
+	ToVnum:	65203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	65201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	65204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	2600 meeting poster~~~~~
+	Desc:$
+According to this 2600 meeting poster, there's supposed to be a meeting at the
+food court in the Espanoza Way Complex at sometime.  You can't exactly tell
+what's written after that because it's been faded out and is nothing more than
+a blur on the paper. 
+~
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65203
+Name:	Mens Bathroom
+Desc:$
+   A naked fluorescent bulb dangles from the ceiling, casting harsh light on
+the white tiles and porcelain fixtures of this small, brightly-lit bathroom.
+A single, old-fashioned toilet sits in one corner with a small sink and mirror
+crowded together in another.  The room smells faintly of lemon-scented air
+freshener. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT west]
+	ToVnum:	65202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65204
+Name:	Women's Bathroom
+Desc:$
+   A naked fluorescent bulb dangles from the ceiling, casting harsh light on
+the white tiles and porcelain fixtures of this small, brightly-lit bathroom.
+A single, old-fashioned toilet sits in one corner with a small sink and mirror
+crowded together in another.  The room smells faintly of lemon-scented air
+freshener. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	65202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65205
+Name:	A Private Room
+Desc:$
+   A fluorescent office light glares down from the ceiling of this bright,
+windowless room.  A circular synthwood poker table, covered in a ^ggreen^N felt,
+sits in the center of the room, surrounded by several metal folding chairs.  A
+small shelf runs the length of the south wall, a few ashtrays and empty
+glasses occupying its surface. The majority of the north wall is taken up by a
+large whiteboard.  The small switch next to it presumably activates the white
+noise generator mounted in plain sight directly over the poker table. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	Keywords:	door heavy wood
+	Desc:$
+This heavy synthwood door is set firmly into the wall and has a little keycard
+slot just above the door knob. 
+~
+	ToVnum:	65201
+	Flags:	1
+	Material:	wood
+	Barrier:	6
+	KeyVnum:	65200
+	LockRating:	5
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65206
+Name:	At The Top of The Stairs
+Desc:$
+   A single recessed ceiling light casts a dim glow over this cramped room,
+which is much less lavish than the bar area proper. The wooden walls have been
+stripped away, revealing bare bricks, and the door to your south is actually
+made of metal, not the synthwood it appears to be from the other side.  A set
+of freshly-laid concrete stairs lead down into near-darness. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	Keywords:	door metal steel
+	Desc:$
+While from the otherside this door looks perfectly fine, from this side you
+can see that it's clearly made of steel that you judge is at least two inches
+thick.  There's a small keycard slot near the heavy industrial handle on the
+door. 
+~
+	ToVnum:	65202
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	65200
+	LockRating:	50
+[EXIT down]
+	ToVnum:	65207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65207
+Name:	At The Bottom of The Stairs
+Desc:$
+   The foot of the stairs is masked in shadows, a small amount of light
+filtering in from above. Your nose is assaulted by the smells of fresh soil in
+the brick covered hallway, indicating your location as somewhere underground.
+To your south you can make out small amounts of light coming from open door
+ways and the sounds of business being done.   
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT south]
+	ToVnum:	65208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	65206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65208
+Name:	A Hallway Made of Heavy Bricks
+Desc:$
+   Rough-hewn bricks dominate the walls of the corridor, lit by a single
+overhead light mounted in the ceiling.  Door ways have been hewn through out
+the hallway into various rooms, and a stair way can be seen close by to the
+north, while the hallway extends further to the south. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	65207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	65209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	65213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	65211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65209
+Name:	The Underground Parking Garage
+Desc:$
+   Small halogen lights are set into the ceiling at one-meter intervals,
+keeping this underground parking garage fairly well lit. Tire marks and oil
+stains mark the concrete floor around the twisting maze of pillars that
+support the building above it. A large metal ramp, presumably for vehicle
+repairs, stands in the northwest corner.  The concrete floor slopes upward to
+the southeast, and a small doorway to the west leads inside the building. 
+~
+Flags:	110000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southeast]
+	ToVnum:	65210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	65208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65210
+Name:	A Slopping Ramp
+Desc:$
+   You find yourself on a downward slanting ramp leading to what seems to be
+an underground parking lot.  The ramp itself is barely lit with dingy
+fluorecsent tubing that lines the roof and is covered in oil stains and tire
+marks. 
+~
+Flags:	10000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT southwest]
+	Keywords:	garage sturdy door
+	Desc:$
+The garage door seems to be made of a combonation of polymer plastics combined
+with ceramic meshing.  You'd most likely need a few rockets in a heavy
+launcher to blow it open, but there is a small electronic card swiper next to
+the door. 
+~
+	ToVnum:	65200
+	Flags:	2
+	Material:	ceramic
+	Barrier:	32
+	KeyVnum:	65200
+	LockRating:	50
+[EXIT northwest]
+	ToVnum:	65209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65211
+Name:	The Shop
+Desc:$
+   This room is dominated by a large bartop which is fixed to the north and
+south walls, with the taps and sink ripped out and a mesh of wire over a layer
+of bulletproof glass has been planted into the bartop.  The makeshift wall
+reveals a table full of various objects on the otherside, belts of ammo,
+clips, swords, suits of padded clothing, automatic weapons.  You name it and
+you can see it.  A small slot is cut out of one section of the glass and mesh
+for transactions to be made and a section of the bartop has been cut away and
+a makeshift door has been constructed with a very high tech security lock on
+it.  Towards your east is another doorway back into the hallway. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	65208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door security
+	Desc:$
+A heavy duty security door made of complex mess grating and bulletproof glass.
+~
+	ToVnum:	65212
+	Flags:	2
+	Material:	ceramic
+	Barrier:	32
+	KeyVnum:	65206
+	LockRating:	50
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65212
+Name:	The Backroom
+Desc:$
+   You stand now beyond the armored front of the shop, amongst crates and
+boxes over flowing with ammo.  Lockers against the wall have had the doors
+removed and their insides display weapons and armor marked with the logos of
+various corporations.  A pile of crates with their tops pulled off sit in the
+northwest corner, revealing their contents; mini-rockets, grenades, shurikens.
+This place is a gun nuts dream, and only the most loyal of folk get access to
+it.  From this side of the security barrier you can also see that a laser
+system has been implemented just beyond of the bulletproof glass, and it's
+currently off.  There's a switch near the hole in the security wall that you
+assume activates it. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	Keywords:	door security
+	Desc:$
+A heavy duty security door made of complex mess grating and bulletproof glass.
+~
+	ToVnum:	65211
+	Flags:	2
+	Material:	ceramic
+	Barrier:	32
+	KeyVnum:	65206
+	LockRating:	50
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65213
+Name:	A Hallway Made of Heavy Bricks
+Desc:$
+   You stand at the south end of a brick made hallway, the smell of soil
+infiltrating your nose ever so slightly as a small light shines down on you
+from above. A large room can be seen, lit up quite well from here, to your
+south.  Two more door ways lead both east and west, and the hallway itself
+stretches to the north, a stairway barely out of sight. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	65208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	65215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	65216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	65214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65214
+Name:	A Bunkroom
+Desc:$
+   This long room is done with a warm fuzzy carpet and has the normal brick
+walls of this location done over in a synthwood covering.  Along the walls
+bunk beds, a total of five altogether, provide a spot for the people who run
+the place to rest. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	ToVnum:	65213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65215
+Name:	A Tiny Library
+Desc:$
+   This small room is done up with wall to wall bookshelves, various titles
+catching your eye as you look around. In the middle of the ceiling is a dim
+domed light, making everything in here easy on the eyes.  In the northeast
+corner there is a comfortable looking arm chair and to the southeast is a
+small computer terminal with a cable running to a small black box with two
+blinking lights, possibly a matrix device as it in turn is plugged into a
+dataport. 
+~
+Flags:	10000000000000011000
+SecType:	Inside
+MatrixExit:	1100
+[POINTS]
+	SpecIdx:	0
+	Rating:	4
+[EXIT west]
+	ToVnum:	65213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65216
+Name:	A Large Meeting Room
+Desc:$
+   This room is decorated with lavish looking picture frames containing scenes
+from some of the Shadows greatest moments in history.  The plane crash at
+BioHyde, the bombing of the Titty Twister, the Renraku Shutdown; trully
+terrific moments captured in printed photo.  The frames are mounted on a
+synthwood pine that covers the walls and the floor.  A large projector is
+mounted in the ceiling in the center of the room and in the four corners small
+light tubes from floor to ceiling, keeping the place well lit.  A switch near
+the door controls the light and another, marked "noise", you assume controls a
+white noise generator.  In the middle of the room, below the projector, is a
+round table with ten chairs around it. A lavish looking door is set in the
+west wall with a hightech lock next to it. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT north]
+	ToVnum:	65213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door heavy wood
+	Desc:$
+A lavish wooden door that, when knocked on, sounds nothing like wood. 
+~
+	ToVnum:	65217
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	65206
+	LockRating:	50
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+#65217
+Name:	A Small Office
+Desc:$
+   This office, while not as lavish as the meeting room outside, is fully
+functional.  A large desk in the middle of the room has a large terminal
+mounted on it with a bunch of cables running to a dataport in the wall.  Two
+tall lamps are set in the northeast and southeast corners of the room,
+providing plenty of light, and two potted plants rest in the corners opposite
+the lamps. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	1100
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+[EXIT east]
+	Keywords:	door wood heavy
+	Desc:$
+A lavish wooden door that, when knocked on, sounds nothing like wood. 
+~
+	ToVnum:	65216
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	65206
+	LockRating:	50
+[COORDINATES]
+	X:	0
+	Y:	0
+	Z:	0
+BREAK
+END

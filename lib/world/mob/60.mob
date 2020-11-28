@@ -1,0 +1,78 @@
+#6000
+Keywords:	guard man jet-black blackwind 
+Name:	a guard in jet-black armour
+RoomDesc:$
+A guard in jet-black armor guards the gates to the dock. 
+
+~
+LookDesc:$
+Wearing unmarked jet-black armour, this bulky looking guard may be a large
+human or an average sized ork. With the helmet, one can not tell his metatype.
+His duty is to not allow anyone to pass through the gate without proper
+credentials. Have the papers and he opens the gate to lets you use the
+Blackwind Shipping ferry. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000010000011000000001010
+AffFlags:	1000000010001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	10
+	Str:	8
+	Cha:	2
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	196
+	Weight:	130
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	assault rifles:	14
+	unarmed combat:	12
+	clubs:	12
+BREAK
+#6001
+Keywords:	guard jet black jet-black armor convectant
+Name:	a guard in jet-black armor
+RoomDesc:$
+A guard in jet-black armor guards the gates to the dock. 
+
+~
+LookDesc:$
+Wearing unmarked jet-black armor, this bulky looking guard may be a large
+human or an average sized ork. With the helmet, one can not tell his metatype.
+His duty is to not allow anyone to pass through the gate without proper
+credentials. Have the papers and he opens the gate to lets you use the
+Blackwind Shipping ferry. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000010000011000000001010
+AffFlags:	1000000010001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	10
+	Str:	8
+	Cha:	2
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	196
+	Weight:	130
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	assault rifles:	12
+BREAK
+END

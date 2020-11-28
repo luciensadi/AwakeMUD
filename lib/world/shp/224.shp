@@ -1,0 +1,153 @@
+#22432
+Keeper:	22432
+ProfitBuy:	1.03
+ProfitSell:	1.00
+Random:	0
+Open:	8
+Close:	22
+Type:	Grey
+NoSuchItemKeeper:	Naw, we ain't sell anything like that, chum.
+NoSuchItemPlayer:	What? Where?
+NoNuyen:	Hyuck hyuck.. come back when you get the money chummer.
+DoesntBuy:	Nuh uh, we dun buy drek like that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	22439
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	22438
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	22437
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	22436
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	41051
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	22434
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	22433
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	22432
+		Type:	Always
+		Stock:	0
+BREAK
+#22435
+Keeper:	22435
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	8
+Close:	22
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	Sorry, you don't seem to have enough nuyen to make that purchase.
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	22444
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	22443
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	22442
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	450
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	22440
+		Type:	Always
+		Stock:	0
+BREAK
+#22495
+Keeper:	22495
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry... never heard of THAT before.
+NoSuchItemPlayer:	You don't have it!
+NoNuyen:	Come back when you got the creds, chum, this ain't a shelter.
+DoesntBuy:	Hey, I only sell the drinks.
+Buy:	%d nuyen.  Enjoy.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	2041
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	22401
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	17156
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	17131
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	17130
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	17129
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	17128
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	17127
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	17126
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	17125
+		Type:	Always
+		Stock:	0
+BREAK
+END

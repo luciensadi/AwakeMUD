@@ -1,0 +1,1413 @@
+#30500
+Keywords:	bulky large dryer drying machine
+Name:	a large, bulky dryer
+RoomDesc:$
+A large dryer sits here idly, waiting for someone to use it.~
+LookDesc:$
+This large, industrial dryer has a clear door which you can look through to
+see the contents.  Actually, it looks like someone left some of their clothes
+behind. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	180.00
+	Barrier:	6
+	Cost:	1200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2000
+	Val1:	5
+	Val2:	-1
+	Val3:	3
+BREAK
+#30501
+Keywords:	sock lonely single clean
+Name:	a single, solitary sock
+RoomDesc:$
+A lone sock has been forgotten by its owner.~
+LookDesc:$
+This sock seems to be freshly cleaned and dried.  It smells really good! 
+~
+Type:	Worn
+WearFlags:	100000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	4
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30502
+Keywords:	safeway uniform suit
+Name:	a Safeway uniform
+RoomDesc:$
+A convenience store uniform has been left here by an angsting teen who just quit there job.~
+LookDesc:$
+The uniform of the teenage soldier; Safeway hires mostly teens between 14 and
+18 and turns them into their behind-the-counter drones that you find located
+at Safeway's across the country. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	3
+	Cost:	120
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val6:	1
+	Val7:	3
+BREAK
+#30503
+Keywords:	water bottle
+Name:	a bottle of water
+RoomDesc:$
+A bottle of ^BSafeway Brand^N water.~
+LookDesc:$
+A bottle of clear water with a label on it that reads ^BSafeway Brand^N water. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.25
+	Barrier:	3
+	Cost:	6
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	15
+BREAK
+#30504
+Keywords:	knife spoon fort set kitchen dinner ware
+Name:	a set of dinner ware
+RoomDesc:$
+A set of dinner ware has been left here.~
+LookDesc:$
+A knife, spoon and fork set, of no particular interest really.  You could eat
+with it, or if you got really desperate you could fight with it. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	1
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#30505
+Keywords:	chips bag 250 gram potatoe
+Name:	a bag of chips
+RoomDesc:$
+A 250 gram bag of potatoe chips.~
+LookDesc:$
+A rather large foil bag of chips, labelled with the ^BSafeway Brand^N label. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#30506
+Keywords:	quick-cook cook hotdog
+Name:	a Quick-Cook Hotdog
+RoomDesc:$
+A Quick-Cook Hotdog has fallen off it's rotary stand.~
+LookDesc:$
+It's a bit stale, but all the Quick-Cook 'Dogs are, at least when they come
+from the Safeway. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+BREAK
+#30507
+Keywords:	rose flower
+Name:	a rose
+RoomDesc:$
+A red rose has been dropped here.~
+LookDesc:$
+It's a freshly-cut red rose. It smells wonderful, but beware its thorns. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30508
+Keywords:	skin restructure bioware vat-grown
+Name:	a skin-restructing I
+RoomDesc:$
+A tube of vat-grown flesh is here.~
+LookDesc:$
+It's a rather long tube of vat-grown skin used for biosculpting. 
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	20000
+	AvailTN:	12
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	1
+	Val4:	40
+BREAK
+#30509
+Keywords:	skin restructure bioware vat-grown
+Name:	a skin-restructing II
+RoomDesc:$
+A tube of vat-grown flesh is here.~
+LookDesc:$
+It's a rather long tube of vat-grown skin used for biosculpting. 
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	45000
+	AvailTN:	12
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	2
+	Val4:	60
+BREAK
+#30510
+Keywords:	tissue biosculpt tube vat-grown
+Name:	biosculpting tissue I
+RoomDesc:$
+A tube of vat-grown flesh is here.~
+LookDesc:$
+It's a rather long tube of vat-grown skin used for biosculpting. 
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	20000
+	AvailTN:	12
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	1
+	Val4:	40
+BREAK
+#30511
+Keywords:	tissue biosculpt tube vat-grown
+Name:	biosculpting tissue II
+RoomDesc:$
+A tube of vat-grown flesh is here.~
+LookDesc:$
+It's a rather long tube of vat-grown skin used for biosculpting. 
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	45000
+	AvailTN:	12
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	2
+	Val4:	60
+BREAK
+#30512
+Keywords:	tissue biosculpt tube vat-grown
+Name:	biosculpting tissue II -cultured
+RoomDesc:$
+A tube of vat-grown flesh is here.~
+LookDesc:$
+It's a rather long tube of vat-grown skin used for biosculpting. 
+~
+Type:	Bioware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	180000
+	AvailTN:	14
+	AvailDay:	70.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	2
+	Val2:	1
+	Val4:	45
+BREAK
+#30520
+Keywords:	sweatshirt shirt
+Name:	a sweatshirt
+RoomDesc:$
+A sweatshirt lies here.~
+LookDesc:$
+Just your standard long-sleeved cotton sweatshirt, with loose elastic around
+the bottom and wrists. 
+~
+Type:	Worn
+WearFlags:	100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30521
+Keywords:	sweatshirt hooded hoodie
+Name:	a hooded sweatshirt
+RoomDesc:$
+A hooded sweatshirt lies here.~
+LookDesc:$
+Just your standard long-sleeved cotton sweatshirt with a drawstring hood and a
+single large pocket over the belly area for hand warming/miscellaneous
+storage. 
+~
+Type:	Worn
+WearFlags:	100010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	2
+	Val4:	2
+BREAK
+#30522
+Keywords:	sweatpants pants
+Name:	a pair of sweatpants
+RoomDesc:$
+A pair of sweatpants lies here.~
+LookDesc:$
+Just a normal pair of standard cotton sweatpants, with a drawstring waist and
+loose elastic around the ankles. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30523
+Keywords:	shorts biker elastic
+Name:	a pair of biker shorts
+RoomDesc:$
+A pair of elastic shorts lies here.~
+LookDesc:$
+Just your standard pair of biker shorts, made out of skintight, elastic
+material and reaching to about mid-thigh. 
+~
+Type:	Worn
+WearFlags:	100000100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30524
+Keywords:	shorts boxers pair underwear
+Name:	a pair of boxer shorts
+RoomDesc:$
+A pair of boxer shorts lies here.~
+LookDesc:$
+Just your standard pair of cotton boxer shorts. 
+~
+Type:	Worn
+WearFlags:	100100100000100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	-1
+BREAK
+#30525
+Keywords:	briefs cotton y-fronts tighty whities pair
+Name:	a pair of briefs
+RoomDesc:$
+A pair of Y-front briefs lies here.~
+LookDesc:$
+Just your standard pair of tighty whities, with the Y-front and the elastic
+waistline. 
+~
+Type:	Worn
+WearFlags:	100100100000100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	7
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	-1
+BREAK
+#30526
+Keywords:	briefs boxer pair cotton underwear
+Name:	a pair of boxer briefs
+RoomDesc:$
+A pair of boxer briefs lies here.~
+LookDesc:$
+Just your standard pair of boxer briefs: tight like briefs, reaching down to
+nearly mid-thigh like boxers. 
+~
+Type:	Worn
+WearFlags:	100100100000100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	-1
+BREAK
+#30527
+Keywords:	panties cotton pair underwear
+Name:	a pair of cotton panties
+RoomDesc:$
+A pair of panties lies here.~
+LookDesc:$
+Just your standard pair of cotton bikini panties. 
+~
+Type:	Worn
+WearFlags:	100100000100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	-1
+BREAK
+#30528
+Keywords:	bra sports cotton
+Name:	a sports bra
+RoomDesc:$
+A sports bra lies here.~
+LookDesc:$
+Just your standard cotton sports bra, with thick straps and extra support. 
+~
+Type:	Worn
+WearFlags:	100100000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	12
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	-1
+BREAK
+#30530
+Keywords:	suit pressed cleaned hanger
+Name:	a pressed and cleaned suit on a hanger
+RoomDesc:$
+A pressed and cleaned suit on a hanger has been left draped here.~
+LookDesc:$
+This pressed and cleaned suit has been neatly wrapped in a protective plastic
+sheath, which hangs nicely from a sturdy brass hanger. The plastic itself is
+strong, but thin, offering the faintest glimpse at the ID card impression
+pinned to the lapel beneath. 
+~
+Type:	Quest Item
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.20
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30550
+Keywords:	golden crown tir tairngire ki'ronyx
+Name:	A magnificant golden grown with an eight pointed star in the center
+RoomDesc:$
+A magnificent orichalcum, silver and golden crown lies here.~
+LookDesc:$
+A magnificent orichalcum and silver crown, fashioned with rare jewels, and and
+inlaid ki'ronyx, the eight pointed star of the Royal Tilaen regime of Tir
+Tairngire. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30599
+Keywords:	ucas navy dress uniform shirt
+Name:	a UCAS Navy Dress black shirt
+RoomDesc:$
+A UCAS navy dress black shirt lies here.~
+LookDesc:$
+A UCAS navy dress black shirt 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30700
+Keywords:	keycard
+Name:	The keycard to 1A
+RoomDesc:$
+A keycard is lying here.~
+LookDesc:$
+It seems like a tpyical keycard to a room, seemingly 1A. It has a magnetic
+strip on one side. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30701
+Keywords:	keycard
+Name:	The keycard to 1B
+RoomDesc:$
+A keycard is lying here.~
+LookDesc:$
+It seems like a typical keycard to a room, seemingly 1B. It has a magnetic
+stripe on one side. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30702
+Keywords:	keycard
+Name:	The keycard to 1C
+RoomDesc:$
+A keycard is lying here.~
+LookDesc:$
+It seems like a typical keycard to a room, seemingly 1C. It has a magnetic
+stripe on one side. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30703
+Keywords:	keycard
+Name:	The keycard to 1D
+RoomDesc:$
+A keycard is lying here.~
+LookDesc:$
+It seems like a typical keycard to a room, seemingly 1D. It has a magnetic
+stripe on one side. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30704
+Keywords:	keycard
+Name:	The keycard to 2A
+RoomDesc:$
+A keycard is lying here.~
+LookDesc:$
+It seems like a typical keycard to a room, seemingly 2A. It has a magnetic
+stripe on one side. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30705
+Keywords:	keycard
+Name:	The keycard to 2B
+RoomDesc:$
+A keycard is lying here.~
+LookDesc:$
+It seems like a typical keycard to a room, seemingly 2B. It has a magnetic
+stripe on one side. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30706
+Keywords:	keycard
+Name:	The keycard to 2C
+RoomDesc:$
+A keycard is lying here.~
+LookDesc:$
+It seems like a typical keycard to a room, seemingly 2C. It has a magnetic
+stripe on one side. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30707
+Keywords:	keycard
+Name:	The keycard to 2D
+RoomDesc:$
+A keycard is lying here.~
+LookDesc:$
+It seems like a typical keycard to a room, seemingly 2D. It has a magnetic
+stripe on one side. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30708
+Keywords:	keycard
+Name:	The keycard to 3A
+RoomDesc:$
+A keycard is lying here.~
+LookDesc:$
+It seems like a typical keycard to a room, seemingly 3A. It has a magnetic
+stripe on one side. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30709
+Keywords:	keycard
+Name:	The keycard to 3B
+RoomDesc:$
+A keycard is lying here.~
+LookDesc:$
+It seems like a typical keycard to a room, seemingly 3B. It has a magnetic
+stripe on one side. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30710
+Keywords:	keycard
+Name:	The keycard to 3C
+RoomDesc:$
+A keycard is lying here.~
+LookDesc:$
+It seems like a typical keycard to a room, seemingly 3C. It has a magnetic
+stripe on one side. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30711
+Keywords:	keycard
+Name:	The keycard to 3D
+RoomDesc:$
+A keycard is lying here.~
+LookDesc:$
+It seems like a typical keycard to a room, seemingly 3D. It has a magnetic
+stripe on one side. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30712
+Keywords:	keycard
+Name:	The keycard to 4A
+RoomDesc:$
+A keycard is lying here.~
+LookDesc:$
+It seems like a typical keycard to a room, seemingly 4A. It has a magnetic
+stripe on one side. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30713
+Keywords:	keycard
+Name:	The keycard to 4B
+RoomDesc:$
+A keycard is lying here.~
+LookDesc:$
+It seems like a typical keycard to a room, seemingly 4B. It has a magnetic
+stripe on one side. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30714
+Keywords:	keycard
+Name:	The keycard to 4C
+RoomDesc:$
+A keycard is lying here.~
+LookDesc:$
+It seems like a typical keycard to a room, seemingly 4C. It has a magnetic
+stripe on one side. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30715
+Keywords:	keycard
+Name:	The keycard to 4D
+RoomDesc:$
+A keycard is lying here.~
+LookDesc:$
+It seems like a typical keycard to a room, seemingly 4D. It has a magnetic
+stripe on one side. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30716
+Keywords:	keycard
+Name:	The keycard to 5A
+RoomDesc:$
+A keycard is lying here.~
+LookDesc:$
+It seems like a typical keycard to a room, seemingly 5A. It has a magnetic
+stripe on one side. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30717
+Keywords:	keycard
+Name:	The keycard to 5B
+RoomDesc:$
+A keycard is lying here.~
+LookDesc:$
+It seems like a typical keycard to a room, seemingly 5B. It has a magnetic
+stripe on one side. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30718
+Keywords:	keycard
+Name:	The keycard to 5C
+RoomDesc:$
+A keycard is lying here.~
+LookDesc:$
+It seems like a typical keycard to a room, seemingly 5C. It has a magnetic
+stripe on one side. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30719
+Keywords:	keycard
+Name:	The keycard to 5D
+RoomDesc:$
+A keycard is lying here.~
+LookDesc:$
+It seems like a typical keycard to a room, seemingly 5D. It has a magnetic
+stripe on one side. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#30720
+Keywords:	english 3 linguasoft
+Name:	an English 3 Linguasoft
+RoomDesc:$
+Someone has left a small plastic chip dispenser here.~
+LookDesc:$
+It is a chip dispenser, made for easy insertion and removal of chips into a
+standard chipjack. It contains the English 3 Linguasoft. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.12
+	Barrier:	3
+	Cost:	1350
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	73
+	Val1:	3
+	Val2:	27
+BREAK
+#30721
+Keywords:	sperehiel 4 linguasoft
+Name:	a Sperethiel 4 Linguasoft
+RoomDesc:$
+Someone has left a small plastic chip dispenser here.~
+LookDesc:$
+It is a chip dispenser, made for easy insertion and removal of chips into a
+standard chipjack. It contains the Sperethiel 4 Linguasoft. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.12
+	Barrier:	3
+	Cost:	2400
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	74
+	Val1:	4
+	Val2:	48
+BREAK
+#30722
+Keywords:	japanese 5 linguasoft
+Name:	a Japanese 5 LinguaSoft
+RoomDesc:$
+Someone has left a small plastic chip dispenser here.~
+LookDesc:$
+It is a chip dispenser, made for easy insertion and removal of chips into a
+standard chipjack. It contains the Japanese 5 Linguasoft. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.12
+	Barrier:	3
+	Cost:	3750
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	76
+	Val1:	5
+	Val2:	75
+BREAK
+#30723
+Keywords:	chinese 4 linguasoft
+Name:	a Chinese 4 Linguasoft
+RoomDesc:$
+Someone has left a small plastic chip dispenser here.~
+LookDesc:$
+It is a chip dispenser, made for easy insertion and removal of chips into a
+standard chipjack. It contains the English 4 Linguasoft. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.12
+	Barrier:	3
+	Cost:	2400
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	77
+	Val1:	4
+	Val2:	48
+BREAK
+#30724
+Keywords:	korean 2 linguasoft
+Name:	a Korean 2 Linguasoft
+RoomDesc:$
+Someone has left a small plastic chip dispenser here.~
+LookDesc:$
+It is a chip dispenser, made for easy insertion and removal of chips into a
+standard chipjack. It contains the Korean 2 Linguasoft. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.12
+	Barrier:	3
+	Cost:	600
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	78
+	Val1:	2
+	Val2:	12
+BREAK
+#30725
+Keywords:	italian 5 linguasoft
+Name:	an Italian 5 LinguaSoft
+RoomDesc:$
+Someone has left a small plastic chip dispenser here.~
+LookDesc:$
+It is a chip dispenser, made for easy insertion and removal of chips into a
+standard chipjack. It contains the Italian 5 Linguasoft. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.12
+	Barrier:	3
+	Cost:	3750
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	79
+	Val1:	5
+	Val2:	75
+BREAK
+#30726
+Keywords:	russian 4 linguasoft
+Name:	a Russian 4 Linguasoft
+RoomDesc:$
+Someone has left a small plastic chip dispenser here.~
+LookDesc:$
+It is a chip dispenser, made for easy insertion and removal of chips into a
+standard chipjack. It contains the Russian 4 Linguasoft. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.12
+	Barrier:	3
+	Cost:	2400
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	80
+	Val1:	4
+	Val2:	48
+BREAK
+#30727
+Keywords:	german 3 Linguasoft
+Name:	a German 3 Linguasoft
+RoomDesc:$
+Someone has left a small plastic chip dispenser here.~
+LookDesc:$
+It is a chip dispenser, made for easy insertion and removal of chips into a
+standard chipjack. It contains the German 3 Linguasoft. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.12
+	Barrier:	3
+	Cost:	1350
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	87
+	Val1:	3
+	Val2:	27
+BREAK
+#30728
+Keywords:	sperethiel 6 linguasoft
+Name:	a Sperethiel 6 Linguasoft
+RoomDesc:$
+Someone has left a small plastic chip dispenser here.~
+LookDesc:$
+It is a chip dispenser, made for easy insertion and removal of chips into a
+standard chipjack. It contains the Sperethiel 6 Linguasoft. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.12
+	Barrier:	3
+	Cost:	5400
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	74
+	Val1:	6
+	Val2:	108
+BREAK
+#30729
+Keywords:	japanese 2 linguasoft
+Name:	a Japanese 2 Linguasoft
+RoomDesc:$
+Someone has left a small plastic chip dispenser here.~
+LookDesc:$
+It is a chip dispenser, made for easy insertion and removal of chips into a
+standard chipjack. It contains the Japanese 2 Linguasoft. 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.12
+	Barrier:	3
+	Cost:	600
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	76
+	Val1:	2
+	Val2:	12
+BREAK
+END

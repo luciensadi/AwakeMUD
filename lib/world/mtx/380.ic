@@ -1,0 +1,140 @@
+#38000
+Name:	a silver sphere crackling with lightning
+LongDesc:	A small silver sphere is here, its surface dancing with lightning.
+Description:$
+This small sphere is made entirely of silver. It's difficult to tell what this
+thing can do in combat. It doesn't seem particularly dangerous, but you can
+never be too careful in the Matrix. 
+~
+Rating:	8
+Type:	^WKiller^n
+Subtype:	0
+BREAK
+#38001
+Name:	an envelope with wings
+LongDesc:	One of the envelopes seem to be hovering around you.
+Description:$
+This envelope follows the same design as the rest of the envelopes in the
+datastreams. This one features the logo of the EWC and it doesn't seem to be
+going anywhere specific. 
+~
+Rating:	6
+Type:	^WProbe^n
+Subtype:	0
+BREAK
+#38002
+Name:	a red envelope with wings
+LongDesc:	An envelope seems to have detached itself from the datastream.
+Description:$
+This envelope looks pretty much like the other envelopes in the datasreams,
+with one exception. It's a bright red colour, as though to get your attention.
+~
+Rating:	7
+Type:	^WScout^n
+Subtype:	0
+BREAK
+#38003
+Name:	a blue sphere cracking with electricity
+LongDesc:	A small blue sphere is here, it's surface dancing with electricity.
+Description:$
+This small sphere is made entirely of a blue metal. It's surface is
+reflective, reflecting the electricity as it dances across it's surface. 
+~
+Rating:	7
+Type:	^WCrippler^n
+Subtype:	1
+BREAK
+#38004
+Name:	a matte black sphere
+LongDesc:	A small black sphere floats through the host.
+Description:$
+It is a small black sphere, made out of a strange black material. It's surface
+seems to suck light in from around. Some strage datastreams also seem to get
+stuck in it. 
+~
+Rating:	6
+Type:	^WTar Baby^n
+Subtype:	1
+BREAK
+#38005
+Name:	a large matte black sphere
+LongDesc:	A large black sphere hovers through the host.
+Description:$
+This large sphere is made from a black material. It's surface seems to suck
+light, and stray datastreams, in from around it. 
+~
+Rating:	6
+Type:	Tar Pit
+Subtype:	0
+BREAK
+#38006
+Name:	a set of 3 sphere
+LongDesc:	A set of 3 colour-shifting spheres follows you carefully.
+Description:$
+These three spheres are constantly switching colours, never seeming to stay
+the same for more than a second. They rotate around each other as they move
+throughout the host. 
+~
+Rating:	5
+Type:	Trace
+Subtype:	0
+BREAK
+#38007
+Name:	a red sphere crackling with white lightning
+LongDesc:	A red sphere is here, surrounded by white lightning.
+Description:$
+This sphere is made from a reflective red material, mirroring everything in
+the host. White lightning dances menacingly across it's surface, ready to
+strike out at anything suspicious. 
+~
+Rating:	6
+Type:	Blaster
+Subtype:	0
+BREAK
+#38008
+Name:	a red sphere crackling with red lightning
+LongDesc:	A red sphere floats through the host, crackling with red lightning.
+Description:$
+A large, menacing looking, red sphere floats through here. It's reflective red
+surface dancing with red lightning, ready to strike out at any passing icons.
+~
+Rating:	8
+Type:	Blaster
+Subtype:	0
+BREAK
+#38009
+Name:	a yellow sphere crackling with electricity
+LongDesc:	A small yellow sphere, it's surface alive with electricty, hovers here.
+Description:$
+It seems to be made from a dense, reflective, yellow metal. Electricty dances
+around it, making it look threatening. 
+~
+Rating:	7
+Type:	Ripper
+Subtype:	3
+BREAK
+#38010
+Name:	a deep purple sphere crackling with white lightning
+LongDesc:	A deep purple sphere, surrounded by white lightning, floats here.
+Description:$
+It's surface is so dark it is almost black, but the purple sheen is obvious as
+the lightning dancing over it  illuminates the surface. It tracks the
+movements of any nearby icons carefully. 
+~
+Rating:	5
+Type:	^LNon-Lethal Black^n
+Subtype:	0
+BREAK
+#38011
+Name:	a deep purple sphere crackling with black lightning
+LongDesc:	A deep purple sphere, surrounded by a dull light, floats through the host.
+Description:$
+This sphere is so dark it's almost black, but a purple sheen is evident when a
+brighter icon passes it. It is surrounded by what seems to be black lightning,
+it's darkness looking more like the surface is flickering. 
+~
+Rating:	10
+Type:	^LNon-Lethal Black^n
+Subtype:	0
+BREAK
+END

@@ -4,7 +4,7 @@ Desc:$
    A large immaculate lobby, brightly lit by subtly disguised fluorescent
 lighting. The silence is broken only by the gentle sweep of the revolving
 doors, providing access to the street. A bored looking receptionist doesn't
-look up at your approach, and continues slowly organizing her desk. A small
+look up at your approach, and continues slowly organising her desk. A small
 tiled corridor leads off to the west and an unremarkable door with a small
 'Staff Only' sign is behind the reception desk to the north. 
 ~
@@ -151,7 +151,7 @@ BREAK
 #1104
 Name:	A cluttered workroom
 Desc:$
-   A small room, lined with benches playing host to hordes of unrecognizable
+   A small room, lined with benches playing host to hordes of unrecognisable
 electronic parts. A few complete terminals flicker occasionally, showing brief
 glimpses of some project or another. A large paper sign is pinned to a notice
 board here, along with numerous other small post-it notes and scribblings. 
@@ -222,11 +222,11 @@ MatrixExit:	0
 	Keywords:	panel~~~~~~~~~~~~~~~~
 	Desc:$
 A small panel with three buttons lit from behind by a subtle blue glow.
- 2 - Research and Development / Sales
+ 2 - Research and Devlopment / Sales
  1 - Conference rooms / Security
  G -
 Sales / Showrooms
- A small red sticker below the buttons reads 'Authorized Personnel Only'.
+ A small red sticker below the buttons reads 'Authorised Personnel Only'.
 ~
 BREAK
 #1107
@@ -344,7 +344,7 @@ BREAK
 #1111
 Name:	A modest showroom
 Desc:$
-   A pair of fluorescent tubes casts everything in a sharp white light, the
+   A pair of fluorescent tubes casts everthing in a sharp white light, the
 single window here has its blinds pulled closed. The walls are the same light
 yellow as the hallway outside, and a number of tables are pushed hard up
 against them. On these tables, a series of computer towers and flat monitors
@@ -408,7 +408,7 @@ BREAK
 Name:	A Cluttered Showroom
 Desc:$
    Stacks of large boxes and crates make this place seem more like a warehouse
-than a showroom. A microtronics workshop has been set up in the center of the
+athan a showroom. A microtronics workshop has been set up in the center of the
 clutter, to allow prospective customers to get a feel for what it offers.
 Despite the mess surrounding them, the tools are set up neatly and the
 workshop seems to shine with that "just been polished" gleam.  

@@ -1,0 +1,39 @@
+#40800
+Keywords:	A heavily armored guard
+Name:	Billy Bob
+RoomDesc:$
+A heavily armored guard stands here, pissing into a urinal 
+
+~
+LookDesc:$
+You see the back of a heavily armored guard as he pisses into a urinal..take a
+picture, it lasts longer! 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	7
+	Str:	7
+	Cha:	2
+	Int:	5
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	198
+	Weight:	77
+	Ballistic:	10
+	Impact:	10
+	Cash:	100
+	Bank:	50
+[SKILLS]
+	shotguns:	8
+	clubs:	8
+BREAK
+END

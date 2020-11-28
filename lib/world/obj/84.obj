@@ -1,0 +1,2637 @@
+#8400
+Keywords:	lenses green contacts
+Name:	a pair of green contact lenses
+RoomDesc:$
+A pair of green contacts is lying here.~
+LookDesc:$
+The lenses are bathed in a saline solution, and specially tinted with a
+natural shade of pine green.
+~
+Type:	Other
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8401
+Keywords:	lenses contacts black
+Name:	a pair of black contact lenses
+RoomDesc:$
+A pair of black contacts is lying here.~
+LookDesc:$
+The lenses are coloured with a heavy black undertone and subtle shades of
+greys to allow optimum view and clarity.
+~
+Type:	Other
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8402
+Keywords:	lenses contacts brown
+Name:	a pair of brown contact lenses
+RoomDesc:$
+A pair of brown contacts is lying here.~
+LookDesc:$
+The lenses are tinted with a natural shade of brown, and coated in a        
+protective film.
+~
+Type:	Other
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8403
+Keywords:	lenses contacts contact blue
+Name:	a pair of blue contact lenses
+RoomDesc:$
+A pair of blue contacts is lying here.~
+LookDesc:$
+The lenses are tinted with a delicate blue shade, naturally highlighted and
+expertly hued.
+~
+Type:	Other
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8404
+Keywords:	lenses contacts contact yellow
+Name:	a pair of yellow contact lenses
+RoomDesc:$
+A pair of yellow contacts is lying here.~
+LookDesc:$
+The contacts are coloured with a delicate mix of honey shades and sunbright
+hues.
+~
+Type:	Other
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8405
+Keywords:	passkey small silver key1
+Name:	a passkey
+RoomDesc:$
+A small silver card is lying on the floor.~
+LookDesc:$
+The entire front surface of the card is taken up by the complex Renraku
+holo-logo. There's a black magnetic strip on the back, just above an etched
+password that reads : AF2X7E13BTK.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8406
+Keywords:	passkey silver small key2
+Name:	a passkey
+RoomDesc:$
+A small silver card is lying here.~
+LookDesc:$
+The entire front surface of the card is taken up by the complex Renraku
+holo-logo. There's a black magnetic strip on the back, just above an etched
+password that reads : TOWT798SDFQ.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8407
+Keywords:	passkey silver small key3
+Name:	a passkey
+RoomDesc:$
+A small silver card is lying here.~
+LookDesc:$
+The entire front surface of the card is taken up by the complex Renraku
+holo-logo. There's a black magnetic strip on the back, just above an etched
+password that reads : GT21YEMO3LZ.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8408
+Keywords:	trousers fine black
+Name:	a pair of fine black trousers
+RoomDesc:$
+A pair of fine black trousers is lying here.~
+LookDesc:$
+Crafted from expensive black silk material, these trousers mark a true
+businessman. Only the top-of-the-line outfits get this high up, and only the
+most successful will even think of wearing them.
+~
+Type:	Other
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8409
+Keywords:	suit navy blue expensive
+Name:	a navy blue suit
+RoomDesc:$
+An expensive navy blue suit is lying here.~
+LookDesc:$
+Expertly stitched and measured, this suit is a symbol of true commercial
+decadence in this day and age. 
+~
+Type:	Other
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8410
+Keywords:	tie silk black
+Name:	a black silk tie
+RoomDesc:$
+A thin black silk tie is lying on the ground.~
+LookDesc:$
+Slim, chic, and incredibly attractive, this tie is just one small part of
+a full corporate outfit that costs more than our usual yearly wages.
+~
+Type:	Other
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8411
+Keywords:	machine coffee electric small
+Name:	a coffee machine
+RoomDesc:$
+A small electric coffee machine bubbles away contently.~
+LookDesc:$
+Two jugs, filled with tar black double caffeinated coffee bubble away,
+brewing happily.
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1000.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	100
+	Val1:	100
+	Val2:	12
+BREAK
+#8412
+Keywords:	clipboard shiny metal
+Name:	a clipboard
+RoomDesc:$
+A shiny metal clipboard lies here.~
+LookDesc:$
+Several notes are scribbled down all over the board, totally illegible and
+thorougly messy.
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8414
+Keywords:	yakitori plate steaming meat
+Name:	Yakitori
+RoomDesc:$
+A plate of steaming yakitori is lying here.~
+LookDesc:$
+Small cocktail sticks, with a delicious barbequed pork and chicken attached,
+bathed in a sumptious soy sauce.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+BREAK
+#8415
+Keywords:	yakisoba noodles hot
+Name:	Yakisoba
+RoomDesc:$
+A plate of hot Yakisoba is lying here.~
+LookDesc:$
+Yakisoba have been a customary Japanese dish, consisting mainly of stir
+fried noodles and various condiments. With just a slight dash of strong
+pickle, this is one meal everyone enjoys.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	600
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#8416
+Keywords:	tonkatsu plate
+Name:	Tonkatsu
+RoomDesc:$
+A plate of Tonkatsu lies here, cooling off.~
+LookDesc:$
+Tonkatsu is quite simply meat fried in breadcrumbs and served with
+rice and shredded raw cabbage. Delicious.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	600
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+BREAK
+#8417
+Keywords:	teppanyaki meat plate
+Name:	Teppanyaki
+RoomDesc:$
+A plate of teppanyaki lies here.~
+LookDesc:$
+Teppanyaki, or Korean Barbecue as it's called, is a huge hit with
+anyone that enjoys tender meat and a tangy barbecue sauce.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	670
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+BREAK
+#8418
+Keywords:	duck szechuan large roasted
+Name:	Szechuan Duck
+RoomDesc:$
+A large roasted duck is lying here.~
+LookDesc:$
+Szechuan Duck has always been a favorite of anyone ordering Chinese food.
+Served with cucumber slices and thin steamed pancakes, people can shovel huge
+amounts of this stuff down without blinking. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	1200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#8419
+Keywords:	wonton bowl boiling
+Name:	Wonton
+RoomDesc:$
+A bowl of boiling Wonton is lying here.~
+LookDesc:$
+The bowl of steaming water is pretty misty, but you can make out
+several delicious-looking wonton dumplings floating around.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+BREAK
+#8420
+Keywords:	shumai dish steaming dumplings
+Name:	Shumai
+RoomDesc:$
+A small dish of steaming Shumai is lying here.~
+LookDesc:$
+Everybody loves these small dumplings, the staple diet for Chinese
+breakfasts.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	320
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+BREAK
+#8421
+Keywords:	passkey silver small key4
+Name:	a passkey
+RoomDesc:$
+A small silver card is lying here.~
+LookDesc:$
+The entire front surface of the card is taken up by the complex Renraku
+holo-logo. There's a black magnetic strip on the back, just above an etched
+password that reads : ISHX4562ZTV.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8422
+Keywords:	passkey silver small key5
+Name:	a passkey
+RoomDesc:$
+A small silver card is lying here.~
+LookDesc:$
+The entire front surface of the card is taken up by the complex Renraku
+holo-logo. There's a black magnetic strip on the back, just above an etched
+password that reads : P2M304T5S6G.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8423
+Keywords:	passkey silver small key6
+Name:	a passkey
+RoomDesc:$
+A small silver card is lying here.~
+LookDesc:$
+The entire front surface of the card is taken up by the complex Renraku
+holo-logo. There's a black magnetic strip on the back, just above an etched
+password that reads : UWL27VAPEQ5.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8424
+Keywords:	passkey silver small key7
+Name:	a passkey
+RoomDesc:$
+A small silver card is lying here.~
+LookDesc:$
+The entire front surface of the card is taken up by the complex Renraku
+holo-logo. There's a black magnetic strip on the back, just above an etched
+password that reads : LUTI2465FSK.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8425
+Keywords:	passkey silver small key8
+Name:	a passkey
+RoomDesc:$
+A small silver card is lying here.~
+LookDesc:$
+The entire front surface of the card is taken up by the complex Renraku
+holo-logo. There's a black magnetic strip on the back, just above an etched
+password that reads : AS3RMV03RTH.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8426
+Keywords:	passkey silver small key9
+Name:	a passkey
+RoomDesc:$
+A small silver card is lying here.~
+LookDesc:$
+The entire front surface of the card is taken up by the complex Renraku
+holo-logo. There's a black magnetic strip on the back, just above an etched
+password that reads : FMV12V9N4W3.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8427
+Keywords:	passkey silver small key10
+Name:	a passkey
+RoomDesc:$
+A small silver card is lying here.~
+LookDesc:$
+The entire front surface of the card is taken up by the complex Renraku
+holo-logo. There's a black magnetic strip on the back, just above an etched
+password that reads : EVA3TKVC8C2.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8428
+Keywords:	passkey silver small key11
+Name:	a passkey
+RoomDesc:$
+A small silver card is lying here.~
+LookDesc:$
+The entire front surface of the card is taken up by the complex Renraku
+holo-logo. There's a black magnetic strip on the back, just above an etched
+password that reads : BWK461ET9R1.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8429
+Keywords:	passkey silver small key12
+Name:	a passkey
+RoomDesc:$
+A small silver card is lying here.~
+LookDesc:$
+The entire front surface of the card is taken up by the complex Renraku
+holo-logo. There's a black magnetic strip on the back, just above an etched
+password that reads : ODA21MD4W90.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8430
+Keywords:	armante dallas vest
+Name:	an Armante Dallas Vest
+RoomDesc:$
+Someone has left a fine vest here.~
+LookDesc:$
+This line represents a "return to the roots" of Armante. Based of 19th century
+south-western american styles it is a strong seller in the CAS, and also has
+also proven popular amongst Aztland and CalFree executives. This is a woven
+mesh of wool and kevlar, balancing comfort with protection. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	8
+	Cost:	250
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	50
+	Val6:	25
+	Val7:	1
+	Val8:	1
+BREAK
+#8431
+Keywords:	armante dallas slack
+Name:	a pair of Armante Dallas slacks
+RoomDesc:$
+Someone has left a fine pair of trousers here.~
+LookDesc:$
+This line represents a "return to the roots" of Armante. Based of 19th century
+south-western american styles it is a strong seller in the CAS, and also has
+also proven popular amongst Aztland and CalFree executives. There are 2 hip
+pockets in this pair of slacks. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	6
+	Cost:	400
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val5:	75
+	Val6:	25
+	Val8:	1
+BREAK
+#8432
+Keywords:	armante dallas short jacket
+Name:	an Armante Dallas short jacket
+RoomDesc:$
+Someone has left a fine jacket laying here.~
+LookDesc:$
+This line represents a "return to the roots" of Armante. Based of 19th century
+south-western american styles it is a strong seller in the CAS, and also has
+also proven popular amongst Aztland and CalFree executives. This jacket stops
+just above the waist and provides minimal protection. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	6
+	Cost:	600
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val5:	100
+	Val6:	50
+	Val7:	-1
+	Val8:	1
+BREAK
+#8433
+Keywords:	armante dallas double brested jacket
+Name:	an Armante Dallas double breasted jacket
+RoomDesc:$
+Someone has left a fine jacket on the floor here.~
+LookDesc:$
+This line represents a "return to the roots" of Armante. Based of 19th century
+south-western american styles it is a strong seller in the CAS, and also has
+also proven popular amongst Aztland and CalFree executives. This double
+breasted jacket is the flagship of the Dallas Line. It's heavy design provides
+more than enough protection for your executive on the go. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.50
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	4
+	Val5:	200
+	Val6:	200
+	Val7:	2
+	Val8:	1
+BREAK
+#8434
+Keywords:	shirt fine dallas armante cross buttoned
+Name:	an Armante Dallas cross-buttoned shirt
+RoomDesc:$
+A fine mens shirt has been left here.~
+LookDesc:$
+This line represents a "return to the roots" of Armante. Based of 19th century
+south-western american styles it is a strong seller in the CAS, and also has
+also proven popular amongst Aztland and CalFree executives.  
+~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	600
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	1
+	Val5:	75
+	Val8:	1
+BREAK
+#8435
+Keywords:	london fog count cloak
+Name:	a London Fog 'Count' cloak
+RoomDesc:$
+Someone has left a large fine cloak here.~
+LookDesc:$
+This knee-length, over-the-shoulder cloak is clasped with stirling silver at
+the throat. It remains a favourite, particularly for its sturdy black wool
+construction, burgundy sateen lining and invisible layer of Kevlar II. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	600
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	2
+	Val6:	2
+	Val7:	-3
+BREAK
+#8436
+Keywords:	london fog chairman great coat
+Name:	a London Fog 'Chairman' great coat
+RoomDesc:$
+Someone has left a large great coat here.~
+LookDesc:$
+An official-looking great coat, the Chairman incorporates a nonporous polymer
+skin that protects against hazardous materials. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	5000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	6
+	Val5:	2
+	Val6:	2
+	Val7:	-3
+BREAK
+#8437
+Keywords:	london fog majesty overcoat
+Name:	a London Fog 'Majesty' overcoat
+RoomDesc:$
+Someone has left a ruffled overcoat here.~
+LookDesc:$
+An overcoat richly decorated in ruffles and piping, the Majesty is constructed
+from fire-resistant and non-conductive materials. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	12
+	Cost:	3000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	6
+	Val5:	2
+	Val6:	2
+	Val7:	-3
+BREAK
+#8438
+Keywords:	hooded cloak london fog merlin
+Name:	a London Fog 'Merlin' cloak
+RoomDesc:$
+Someone has left a hooded cloak on the ground here.~
+LookDesc:$
+With a deep, voluminous hood, this floor-length cloak is made from the same
+materials as fire-resistant and non-conductive materials as the Majesty and
+offers the same advantages. The Merlin lacks the flair of the Majesty,
+however, and instead incorporates subtle "mystical" emblems and patterns, many
+of which are commonly employed by British druids. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	1500
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	2
+	Val6:	2
+	Val7:	-3
+BREAK
+#8439
+Keywords:	london fog professional overcoat
+Name:	a London Fog 'Professional' overcoat
+RoomDesc:$
+Someone has left an overcoat here.~
+LookDesc:$
+A stout and rather plain overcoat, the Professional offers no special design
+qualities. Many actually prefer its lack of adornments, though its numerous
+and deep pockets are also popular. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	1000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	8
+	Val5:	2
+	Val6:	2
+	Val7:	-3
+BREAK
+#8440
+Keywords:	shirt armante executive suite split
+Name:	an Armante Executive Suite split-cuff shirt
+RoomDesc:$
+A fine shirt has been left here.~
+LookDesc:$
+Armante brings style for the tuxedo into the second half of the 21st century.
+This line features the high-side vents, split cuffs and double collar favored
+by Japanese senior executives. The fabric is firm without appearing stiff, and
+provides significant protection. Though designed for men, a number of female
+executives have begun wearing the line in a not-so-subtle power play. 
+~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	6
+	Cost:	150
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	75
+	Val7:	1
+	Val8:	2
+BREAK
+#8441
+Keywords:	armante executive suite pants
+Name:	a pair of Armante Executive Suite pants
+RoomDesc:$
+A fine pair of pants has been left in a pile here.~
+LookDesc:$
+Armante brings style for the tuxedo into the second half of the 21st century.
+This line features the high-side vents, split cuffs and double collar favored
+by Japanese senior executives. The fabric is firm without appearing stiff, and
+provides significant protection. Though designed for men, a number of female
+executives have begun wearing the line in a not-so-subtle power play. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	6
+	Cost:	150
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val5:	75
+	Val6:	25
+	Val8:	2
+BREAK
+#8442
+Keywords:	armante executive suite tailed jacket
+Name:	an Armante Executive Suite tailed jacket
+RoomDesc:$
+A tailed jacket has been left here.~
+LookDesc:$
+Armante brings style for the tuxedo into the second half of the 21st century.
+This line features the high-side vents, split cuffs and double collar favored
+by Japanese senior executives. The fabric is firm without appearing stiff, and
+provides significant protection. Though designed for men, a number of female
+executives have begun wearing the line in a not-so-subtle power play. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	6
+	Cost:	600
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val5:	100
+	Val6:	50
+	Val7:	1
+	Val8:	2
+BREAK
+#8443
+Keywords:	armante executive suite vest
+Name:	an Armante Executive Suite vest
+RoomDesc:$
+Someone has left a fine tailored vest here.~
+LookDesc:$
+Armante brings style for the tuxedo into the second half of the 21st century.
+This line features the high-side vents, split cuffs and double collar favored
+by Japanese senior executives. The fabric is firm without appearing stiff, and
+provides significant protection. Though designed for men, a number of female
+executives have begun wearing the line in a not-so-subtle power play. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.30
+	Barrier:	6
+	Cost:	200
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	50
+	Val6:	25
+	Val7:	1
+	Val8:	2
+BREAK
+#8444
+Keywords:	armante starlight dress shimmering
+Name:	an Armante Starlight full length dress
+RoomDesc:$
+A shimmering dress has been left here.~
+LookDesc:$
+This evening gown line enhances the striking cloth-of-gold effect by
+sprinkling faux diamonds across the dress in a way that provides considerable
+impact protection. More traditional in style, these include full length
+dresses that offer protection to the shoulders, back and legs. 
+~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.75
+	Barrier:	12
+	Cost:	4500
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	1
+	Val6:	1
+	Val7:	1
+BREAK
+#8445
+Keywords:	armante venetian evening gown
+Name:	an Armante Venetian evening gown
+RoomDesc:$
+Someone has left a shimmering evening gown here.~
+LookDesc:$
+This evening gown brings back a look popular in the Renaissance, where threads
+of gold were woven in the fabric. Using the patented Crystle(TM) weaves, the
+fabric seems to shimmer and even come alive. Though the gowns come in many
+styles, almost all have low-cut bodicies and are backless. The length of the
+dress varies between very short and floor length. 
+~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	8
+	Cost:	3500
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	100
+	Val7:	1
+	Val8:	3
+BREAK
+#8446
+Keywords:	armante venetian cocktail dress
+Name:	an Armante Venetian cocktail dress
+RoomDesc:$
+Someone has left a shimmering cocktail dress here~
+LookDesc:$
+This cocktail dress brings back a look popular in the Renaissance, where
+threads of gold were woven in the fabric. Using the patented Crystle(TM)
+weaves, the fabric seems to shimmer and even come alive. Though the gowns come
+in many styles, almost all have low-cut bodicies and are backless. The length
+of the dress varies between very short and floor length. 
+~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	8
+	Cost:	3500
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	100
+	Val7:	1
+	Val8:	3
+BREAK
+#8447
+Keywords:	chicken plate chow mein steaming noodles
+Name:	Chicken Chow Mein
+RoomDesc:$
+A steaming of chicken and noodles is lying here.~
+LookDesc:$
+A true delicacy, this dish has been served for centuries now. Stir
+fried chinese noodles covered in boneless chunks of tender chicken
+smothered in a smooth stock sauce.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	400
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#8448
+Keywords:	sweet sour pork plate red
+Name:	Sweet and Sour Pork
+RoomDesc:$
+A plate of red pork is lying on the ground.~
+LookDesc:$
+Covered in the original sweet and sour sauce first developed by the Chinese
+with spices from many centuries ago.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	540
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#8449
+Keywords:	dermal plating
+Name:	a dermal plating I
+RoomDesc:$
+A set of dermal plating lies in the corner.~
+LookDesc:$
+Made of advanced plastices that are sewn into the skin, this increases
+the player's body attribute.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	6000
+	AvailTN:	4
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	1
+	Val4:	50
+[AFFECT 0]
+	Location:	Body
+	Modifier:	1
+BREAK
+#8450
+Keywords:	dermal plating
+Name:	a dermal plating II
+RoomDesc:$
+A set of dermal plating lies in the corner.~
+LookDesc:$
+Made of advanced plastics and bonded to the player's skin, this increases the
+player's body attribute.
+~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	15.00
+	Barrier:	1
+	Cost:	15000
+	AvailTN:	4
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	2
+	Val4:	100
+[AFFECT 0]
+	Location:	Body
+	Modifier:	2
+BREAK
+#8453
+Keywords:	sportscoat armani jacket pinstripe silky
+Name:	a silky Armani sportscoat
+RoomDesc:$
+A luxuriant piece of clothing is lying here in the dust.~
+LookDesc:$
+Pinstriped and and fabricate from the finest Oriental silk, not the fake cheap
+stuff, this jacket is part of Armani's new line of clothing and accessories.
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	14230
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8454
+Keywords:	slacks purple velvet
+Name:	purple velvet slacks
+RoomDesc:$
+A nice pair of purple velvet slacks lies here.~
+LookDesc:$
+Made from the almightily comfortable velvet, and dyed a deep purple in color.
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	8230
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8455
+Keywords:	slacks black
+Name:	a pair of black slacks
+RoomDesc:$
+A black pair of slacks is lying here.~
+LookDesc:$
+The slacks are neatly pressed and clean. There are no stains or damage to them
+and they look like the owner is determined to keep them in a good condition. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+BREAK
+#8456
+Keywords:	armante ancien shawl
+Name:	an Armante Ancien shawl
+RoomDesc:$
+Someone has left a shimmering shawl here.~
+LookDesc:$
+The success of the Venetian line gave rise to accessories that also included
+the gold-weave technology. The most successful of these lines, the Ancien
+designs, feature shawls and scarves that offer ballistic protection to the
+weare's neck, back and shoulders. 
+~
+Type:	Worn
+WearFlags:	1000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.30
+	Barrier:	4
+	Cost:	750
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	100
+	Val8:	3
+BREAK
+#8457
+Keywords:	suit blue
+Name:	a dark blue suit
+RoomDesc:$
+A fine dark blue suit lies here.~
+LookDesc:$
+This is an expensive suit, dyed to a dark blue color.
+It has added armor protection for those paranoid execs.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val5:	3
+	Val6:	1
+BREAK
+#8458
+Keywords:	renraku x12 desktop computer
+Name:	A Renraku X12
+RoomDesc:$
+A desktop computer sits here, waiting to be used.~
+LookDesc:$
+Not a very common sight these days, it's a desktop computer, perfect for
+working on code. 
+~
+Type:	Decking Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	40.00
+	Barrier:	1
+	Cost:	3000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	300
+	Val2:	300
+BREAK
+#8459
+Keywords:	renraku multisys desktop computer
+Name:	a Renraku Multisys
+RoomDesc:$
+A cheap desktop computer displays the Renraku logo on its screen.~
+LookDesc:$
+It's a desktop computer, perfect for working on that whiz new program you were
+thinking up. 
+~
+Type:	Decking Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	brick
+[POINTS]
+	Weight:	30.00
+	Barrier:	3
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	150
+	Val2:	150
+BREAK
+#8463
+Keywords:	fries french
+Name:	a large french fries
+RoomDesc:$
+A large french fries waits to be eaten.~
+LookDesc:$
+The fries are covered in artery-clogging grease.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#8464
+Keywords:	hamburger quarter pounder
+Name:	a quarter pounder with cheese
+RoomDesc:$
+A quarter pounder with cheese lies here uneaten.~
+LookDesc:$
+Even though the meat is of a poor quality and fatty, and the cheese is
+fused together in a radiation producing microwave, the quarter pounder
+does look awfully tasty.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	630
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+BREAK
+#8465
+Keywords:	chili-burger hamburger burger chili
+Name:	a chili burger
+RoomDesc:$
+A chili-burger lies here uneaten.~
+LookDesc:$
+Even though you know this thing just shot out of a microwave, there's
+something uniquely appetising about a juicy chili-burger. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.40
+	Barrier:	1
+	Cost:	720
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+BREAK
+#8466
+Keywords:	cola can troll
+Name:	Troll Cola
+RoomDesc:$
+A can lies here.~
+LookDesc:$
+The cola bubbles and fizzes in the frosted glass. Better drink it quickly. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	245
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+	Val2:	9
+BREAK
+#8467
+Keywords:	dog hot hotdog
+Name:	a hot dog
+RoomDesc:$
+A mouth-watering hot dog has been left behind by someone.~
+LookDesc:$
+Still warm to the touch, this frank would take the edge off of
+any hunger pangs you may be feeling.
+~
+Type:	Food
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	465
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+BREAK
+#8468
+Keywords:	dog hot hotdog chili
+Name:	a chili dog
+RoomDesc:$
+A tasty looking chili dog has been left here.~
+LookDesc:$
+Still warm to the touch, this frank would take the edge off of
+any hunger pangs you may be feeling.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	520
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+BREAK
+#8469
+Keywords:	bottle beer
+Name:	a bottle of beer
+RoomDesc:$
+A bottle of ordinary beer lies here.~
+LookDesc:$
+It's a brown bottle, filled with golden beer.
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	210
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+	Val1:	24
+	Val2:	10
+BREAK
+#8473
+Keywords:	cyberdeck deck slim silver blue sony cty 550
+Name:	a Sony CTY-550
+RoomDesc:$
+A slim, silver and blue cyberdeck is lying on the floor.~
+LookDesc:$
+This is the newer budget model of Sony's well known cyberdeck. While they are
+no longer the omnipotence they used to be in all things technological, they
+continue to both learn(and steal) from their competitors, and package the
+final products in an effective yet stylish form. 
+~
+Type:	Cyberdeck
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	5.00
+	Barrier:	4
+	Cost:	138934
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	3
+	Val2:	1100
+	Val3:	1300
+	Val4:	90
+BREAK
+#8474
+Keywords:	deck cyberdeck sony small solid titanium silver keyboard
+Name:	a Sony CTY-770
+RoomDesc:$
+A small, solid titanium and silver trim keyboard is lying here.~
+LookDesc:$
+The 770 model is Sony's latest midrange offering to the decking community.
+Enough space and punch to make it worthwhile, without a price tag to make it
+absurd. A wise choice for any decker who's concerned with both his equipment,
+and his style. 
+~
+Type:	Cyberdeck
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	425982
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	4
+	Val2:	3000
+	Val3:	2900
+	Val4:	160
+BREAK
+#8475
+Keywords:	rifle assault black large fn fn-argl argl
+Name:	a FN-ARGL
+RoomDesc:$
+A large, black assault rifle is lying here.~
+LookDesc:$
+The FN-ARGL is a custom-designed, high calibre assault rifle, used by the Red
+Samurai within the Arcology. While a twin sound suppressor reduces the noise
+level from the gun, it is still able to penetrate all but the toughest armour,
+and can even cause considerable damage to vehicles. Around the handle and
+trigger mechanism, a collection of sensors are installed, as a theft
+countermeasure for anyone thinking of keeping one of these exquisite rifles
+for themselves. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	14.00
+	Barrier:	1
+	Cost:	2250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	38
+	Val6:	38
+	Val10:	28
+BREAK
+#8476
+Keywords:	data file datafile
+Name:	a datafile
+RoomDesc:$
+A datafile floats here.~
+LookDesc:$
+You quickly examine the datafile.  It appears to be a phone record that
+occured at the exact time that the Arcology was being locked down.  An
+excerpt: ...for the love of God, you have to help me!  These things are
+murdering everyone! <gurgling scream, followed by a dial tone> 
+~
+Type:	Decking Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	10
+	Val2:	1
+	Val3:	1
+BREAK
+#8477
+Keywords:	rapier blade sword coal silver coalsilver long thin steel blackish
+Name:	a coal-meshed silver rapier
+RoomDesc:$
+A long, thin blade of blackish silver is lying here.~
+LookDesc:$
+The blade is almost 1 and a half meters long, and expertly constructed out of
+materials you have never laid eyes on before. The hilt is made of sandy
+marbled ivory, the handle sculpted in the figure of two tails twisting
+downwards towards a dragon's head at the bottom, where two cut rubies are set
+in the eyesockets. From the hilt, a sheen blade of rare coal-meshed silver
+rises for nearly two meters. Double edged, the blade is almost too big for any
+normal person. Intricately carved ancient symbols ride up the inside of the
+blade, dancing off of highlighted spots of dikote-strengthened silver, up into
+a point at the end that is almost too fine to see with the naked eye.  
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	11.00
+	Barrier:	4
+	Cost:	912382
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	1
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#8478
+Keywords:	cyberarm
+Name:	a cyberarm, vI
+RoomDesc:$
+A severed metal arm lies here.~
+LookDesc:$
+It's a cybernetic arm. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	5001000
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	100
+	Val2:	27
+	Val4:	20
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	2
+BREAK
+#8479
+Keywords:	cyberarm
+Name:	a cyberarm, vII
+RoomDesc:$
+A cyberarm is lying on the floor.~
+LookDesc:$
+It's a cyberarm. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	5001000
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	100
+	Val2:	27
+	Val4:	20
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	2
+BREAK
+#8480
+Keywords:	cyberarm
+Name:	a cyberarm, vIII
+RoomDesc:$
+A cyberarm lies on the ground.~
+LookDesc:$
+It's a cyberarm. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	5001000
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	100
+	Val2:	27
+	Val4:	20
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	1
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	1
+BREAK
+#8481
+Keywords:	cyberarm
+Name:	an armored cyberarm, vI
+RoomDesc:$
+A cyberarm is lying here.~
+LookDesc:$
+It's an armored cyberarm. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	5001000
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	100
+	Val2:	27
+	Val4:	20
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	2
+[AFFECT 1]
+	Location:	Ballistic
+	Modifier:	1
+BREAK
+#8482
+Keywords:	cyberarm
+Name:	an armored cyberarm, vII
+RoomDesc:$
+A cyberarm is lying here.~
+LookDesc:$
+It's an armored cyberarm. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	5001000
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	100
+	Val2:	27
+	Val4:	20
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	2
+[AFFECT 1]
+	Location:	Ballistic
+	Modifier:	1
+BREAK
+#8483
+Keywords:	cyberarm
+Name:	an armored cyberarm, vIII
+RoomDesc:$
+A cyberarm lies here.~
+LookDesc:$
+It's a cyberarm. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	5001000
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	100
+	Val2:	27
+	Val4:	20
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	1
+[AFFECT 1]
+	Location:	Strength
+	Modifier:	1
+[AFFECT 2]
+	Location:	Ballistic
+	Modifier:	1
+BREAK
+#8484
+Keywords:	ceramic bone lacing
+Name:	ceramic bone lacing
+RoomDesc:$
+A cannister of bone lacing materials lies here.~
+LookDesc:$
+Ummm, nevermind. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	15.00
+	Barrier:	8
+	Cost:	40000
+	AvailTN:	6
+	AvailDay:	21.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val3:	4
+	Val4:	150
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	2
+[AFFECT 1]
+	Location:	Body
+	Modifier:	1
+BREAK
+#8485
+Keywords:	kevlar bone lacing
+Name:	kevlar bone lacing
+RoomDesc:$
+A cannister of raw materials for bone lacing lies here.~
+LookDesc:$
+Blah, blah, blah. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	5.00
+	Barrier:	4
+	Cost:	20000
+	AvailTN:	6
+	AvailDay:	21.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val3:	3
+	Val4:	100
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 1]
+	Location:	Body
+	Modifier:	1
+BREAK
+#8486
+Keywords:	cybereyes experimental
+Name:	experimental cybereyes
+RoomDesc:$
+A pair of cybereyes lies on the floor.~
+LookDesc:$
+It looks like a pair of unusual cybereyes.  These happen to be a bright,
+glowing green. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	1
+AffFlags:	1000000010001000000000
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	801000
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	40
+	Val2:	31
+	Val4:	20
+[AFFECT 0]
+	Location:	Charisma
+	Modifier:	-1
+BREAK
+#8487
+Keywords:	keycard key card small yellow
+Name:	a yellow keycard
+RoomDesc:$
+A small yellow keycard is lying on the ground.~
+LookDesc:$
+The small yellow key fits snugly in the palm of your hand, and weighs almost
+nothing. The only discerning mark is a small, intricate Japanese symbol in the
+top left corner of the card. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8488
+Keywords:	keycard key card small green
+Name:	a green keycard
+RoomDesc:$
+A small green keycard is lying on the ground.~
+LookDesc:$
+The small green keycard fits snugly into the palm of your hand, and weighs
+almost nothing. The only discerning mark is a small, intricate Japanese symbol
+in the top left corner of the card. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8489
+Keywords:	keycard key card small blue
+Name:	a blue keycard
+RoomDesc:$
+A small blue keycard is lying on the ground.~
+LookDesc:$
+The small blue key fits snugly into the palm of your hand, and weighs almost
+nothing. The only discerning mark is a small, intricate Japanese symbol in the
+top left corner of the card. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8490
+Keywords:	keycard key card small red
+Name:	a red keycard
+RoomDesc:$
+A small red keycard is lying on the ground.~
+LookDesc:$
+The small red keycard is slightly smaller than the other keycards you have
+encountered up to this point. It has almost microscopic lines of black silver
+trim on its outer edges, and an exquisitely carved Japanese ancient symbol in
+the center of one side. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8491
+Keywords:	masamune shimmering sword curved polymimetic oriental
+Name:	a polymimetic masamune
+RoomDesc:$
+A shimmering, curved oriental sword is lying here.~
+LookDesc:$
+This long traditional Japanese sword is crafted in a technique you've never
+seen before. Enscrypted with various glyphs along its curved blade, the metal
+its made out of seems somehow otherworldly, dissatisfied with any one physical
+state. It tiptoes lightly between liquid and solid, obviously crafted by some
+obscure metallurgist with more than mere materials at his disposal. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#8492
+Keywords:	bright red security key card keycard
+Name:	a bright ^Rred^N security keycard
+RoomDesc:$
+A bright red keycard lays here.~
+LookDesc:$
+This keycard grants you access to the depths of Renraku's top floor. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8493
+Keywords:	thin zoe second skin bodysuit
+Name:	a Zoe Second Skin bodysuit
+RoomDesc:$
+Someone has left a thin bodysuit here.~
+LookDesc:$
+Second Skin bodysuits provide protection, comfort and style while leaving
+little to the imagination. Based on form-fitting body armour, Second Skin
+outfits use transparent or opaque skin-tight ballistic polylatex and sculpted
+denti-plast. Each bodysuit must be custom tailored for the user. 
+~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	100000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	5000
+	AvailTN:	10
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	2
+	Val6:	2
+	Val7:	8
+BREAK
+#8494
+Keywords:	zoe futura blazer
+Name:	a Zoe Futura Blazer
+RoomDesc:$
+Someone has left a chic blazer here.~
+LookDesc:$
+The standard for corporate chic, the Futura line offers mix-and-match blazers,
+skirts and slacks in various styles, cuts and colours. All of the items are
+lined with Kevlar ande incorporate crystallized polymer into the surface of
+the fabric, providing an almost subliminal sparkle and "fresh" look. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.50
+	Barrier:	4
+	Cost:	2500
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	2
+	Val6:	1
+	Val7:	-1
+	Val8:	6
+BREAK
+#8495
+Keywords:	zoie futura sweater
+Name:	a Zoe Futura Sweater
+RoomDesc:$
+Someone has left a chic sweater here.~
+LookDesc:$
+The standard for corporate chic, the Futura line offers mix-and-match blazers,
+skirts and slacks in various styles, cuts and colours. All of the items are
+lined with Kevlar ande incorporate crystallized polymer into the surface of
+the fabric, providing an almost subliminal sparkle and "fresh" look. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.50
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	2
+	Val6:	1
+	Val7:	-1
+	Val8:	6
+BREAK
+#8496
+Keywords:	zoe futura slacks
+Name:	a pair of Zoe Futura Slacks
+RoomDesc:$
+Someone has left a pair of chic slacks here.~
+LookDesc:$
+The standard for corporate chic, the Futura line offers mix-and-match blazers,
+skirts and slacks in various styles, cuts and colours. All of the items are
+lined with Kevlar ande incorporate crystallized polymer into the surface of
+the fabric, providing an almost subliminal sparkle and "fresh" look. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	1500
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val5:	1
+	Val6:	1
+	Val7:	-1
+	Val8:	6
+BREAK
+#8497
+Keywords:	zoe futura skirt
+Name:	a Zoe Futura Skirt
+RoomDesc:$
+Someone has left a chic skirt here.~
+LookDesc:$
+The standard for corporate chic, the Futura line offers mix-and-match blazers,
+skirts and slacks in various styles, cuts and colours. All of the items are
+lined with Kevlar ande incorporate crystallized polymer into the surface of
+the fabric, providing an almost subliminal sparkle and "fresh" look. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	1500
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	1
+	Val6:	1
+	Val7:	-1
+	Val8:	6
+BREAK
+#8498
+Keywords:	renraku clearview trideo display
+Name:	a Renraku Clearview(tm) Trideo Display
+RoomDesc:$
+A top of the line Renraku Clearview(tm) Trideo Display is here.~
+LookDesc:$
+The Renraku Clearview(tm) range is one of the best Trideo systems on the
+market. The picture clarity and sound is next to none, plus the design of the
+unit itself comes straight out of the same design team that created Renraku's
+award winning desktop computer systems. This means that not only is the build
+quality excellent, but it also makes any room seem a little more cultured. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	35.00
+	Barrier:	4
+	Cost:	1200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8700
+Keywords:	light containment suit
+Name:	A light Nuclear Containment Suit
+RoomDesc:$
+A metalic silver body suit is hanging here waiting to be used.~
+LookDesc:$
+A full body suit and head protection the suit is designed to give protection
+against small ammounts of radiation but is not proper for high levels of
+contamination. The suit is a metalic silver color with a golden
+semi-transperent face shield for security purposes. The suit also features an
+air filtration system and coolin to keep the user comfortable during long use.
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	1000011101
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	10.00
+	Barrier:	6
+	Cost:	1000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	19
+	LegalPermit:	0
+[VALUES]
+	Val5:	2
+	Val6:	1
+	Val7:	20
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	-1
+BREAK
+#8701
+Keywords:	contacts key circles plastic rectangle
+Name:	A pair of contacts and a plastic key card
+RoomDesc:$
+There are two barely visible clear circles on the floor here, as well as a plastic rectangle.~
+LookDesc:$
+A pair of contacts and a plastic key card marked with the Renraku Archology
+insignia. The words HIGH SECURITY are printed on the card in big black letters
+that give you the feeling that you shouldn't be touching this unless you're
+it's owner. The contacts appear to alter your iris so that it matches that
+needed for some scanner. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#8702
+Keywords:	plastic key security
+Name:	A ^Bblue^n security key card
+RoomDesc:$
+A blue piece of plastic with a magnetic stip on one side lies here collecting dust.~
+LookDesc:$
+The majority of this key card is a wonderful ^Bblue^n color that lets it be easily
+identified by those searching for it. The front of the card reads RENRAKU
+ARCHOLOGY REACTOR ROOM KEY giving the key a rather obvious purpose. 
+~
+Type:	Key
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.30
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	12
+	LegalCode:	19
+	LegalPermit:	0
+BREAK
+END

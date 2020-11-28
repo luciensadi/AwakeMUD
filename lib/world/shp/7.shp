@@ -1,7 +1,7 @@
 #700
 Keeper:	707
-ProfitBuy:	1.000000
-ProfitSell:	1.000000
+ProfitBuy:	1.00
+ProfitSell:	1.00
 Random:	3
 Open:	0
 Close:	24
@@ -12,6 +12,7 @@ NoNuyen:	Seventh Tradition says, "Every AA Group ought to be fully self-supporti
 DoesntBuy:	This ain't a shop.
 Buy:	That's %d nuyen.  Keep coming back!
 Sell:	Here's your %d nuyen.
+Name:	Alcoholics Anonymous
 Flags:	0
 Races:	0
 Buytypes:	0

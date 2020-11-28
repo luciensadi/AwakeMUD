@@ -1,0 +1,366 @@
+#22400
+Keywords:	bear
+Name:	a bear
+RoomDesc:$
+A lumbering bear is resting against the tree here. 
+
+~
+LookDesc:$
+This large black bear eyes you silently as you approach, then sits up and
+greets you. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#22432
+Keywords:	Maurice
+Name:	Maurice
+RoomDesc:$
+Maurice sits behind the counter, spit shining a knife. 
+
+~
+LookDesc:$
+Wearing a fur collared jacket and one of those goofy hats with the flap at the
+back, this guy looks like a game hunter extraordinaire. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	100
+[SKILLS]
+BREAK
+#22435
+Keywords:	docwagon smiling cashier
+Name:	a DocWagon cashier
+RoomDesc:$
+A DocWagon cashier greets you with a smile. 
+
+~
+LookDesc:$
+Wearing a DocWagon uniform, this middle-aged woman asks if you'd like to try
+on a biomonitor. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	1
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	70
+[SKILLS]
+BREAK
+#22437
+Keywords:	elven elf woman
+Name:	an assistant
+RoomDesc:$
+An smiling elven woman stands behind the desk at the kiosk. 
+
+~
+LookDesc:$
+Dressed in black and white, this friendly looking elf asks you if you're
+enjoying your stay, and offers you a pamphlet. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	2
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	65
+[SKILLS]
+	corporate etiquette:	5
+BREAK
+#22492
+Keywords:	richley thorn johnson fixer business suit man middle aged
+Name:	Richley Thorn
+RoomDesc:$
+A middle aged white man in a business suit sits here. 
+
+~
+LookDesc:$
+He sits here drinking an ale and reading the paper, with a laptop on the table
+with him. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11010
+AffFlags:	1000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	4
+	Cha:	3
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	65
+	Level:	1
+[SKILLS]
+BREAK
+#22493
+Keywords:	tyler durden cocky human
+Name:	Tyler Durden
+RoomDesc:$
+A cocky looking human with blood on his face stands here smirking. 
+
+~
+LookDesc:$
+With eyes that say, "death... come an' get me", and a smartass smirk on his
+face, he watches over his creation... the bloodbath known as Fight Club.  His
+face is bruised and cut up in some parts, showing that even he is not beyond
+fighting here. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000011010
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	30
+	Qui:	20
+	Str:	20
+	Cha:	6
+	Int:	6
+	Wil:	15
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	98
+	Level:	3
+	Ballistic:	18
+	Impact:	18
+[SKILLS]
+	unarmed combat:	20
+	killing hands:	4
+BREAK
+#22494
+Keywords:	machine gun turret machinegun
+Name:	a machinegun turret
+RoomDesc:$
+A turret hangs from the roof, keeping an electronic eye on things. 
+
+~
+LookDesc:$
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11010
+AffFlags:	0
+Race:	Other
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	unarmed combat:	50
+	firearms:	50
+BREAK
+#22495
+Keywords:	bartender cheerful smokey pooks
+Name:	the bartender
+RoomDesc:$
+A cheerful looking bartender stands behind the counter, polishing a glass. 
+
+~
+LookDesc:$
+Dressed in a navy vest and black pants, this barkeep looks content conversing
+with the patrons as he tidies up. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000001010000000001010
+AffFlags:	100000000001000000000
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	19
+	Str:	6
+	Cha:	6
+	Int:	19
+	Wil:	19
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	40
+	Impact:	40
+[SKILLS]
+	shotguns:	14
+	unarmed combat:	14
+BREAK
+#22496
+Keywords:	ork mercenary weathered gauss
+Name:	Gauss
+RoomDesc:$
+A weathered looking ork mercenary walks around, laughing with his buds. 
+
+~
+LookDesc:$
+This ork looks like he could eat Arnold Schwarzenegger for breakfast, but he
+seems placid enough as he laughs about the days events with his chummers. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Other
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Shotgun
+[ATTRIBUTES]
+	Bod:	13
+	Qui:	13
+	Str:	13
+	Cha:	4
+	Int:	13
+	Wil:	13
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	110
+[SKILLS]
+	unarmed combat:	12
+	firearms:	12
+BREAK
+#22497
+Keywords:	attractive young woman emily
+Name:	Emily
+RoomDesc:$
+An attractive young woman sits alone at a table, sipping at a glass of spirits
+sadly. 
+
+~
+LookDesc:$
+This young woman stares into space from her table.  Her shoulder length, brown
+hair is worn up in a pigtail, and, judging by her attire, a white blouse and a
+tight black skirt, she looks as if she's just finished work for the day.  She
+shakes up the ice in her drink occasionally, and sighs sadly. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Other
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	2
+	Cha:	4
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	65
+[SKILLS]
+BREAK
+#22499
+Keywords:	sda security guard
+Name:	an SDA security guard
+RoomDesc:$
+A security guard wanders around, twirling a baton. 
+
+~
+LookDesc:$
+Looking rather bored, this guard observes the actions of shoppers, especially
+young women, that pass him by. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001000
+AffFlags:	0
+Race:	Humanoid
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	2
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	90
+[SKILLS]
+	unarmed combat:	6
+	combat sense:	3
+	clubs:	6
+BREAK
+END

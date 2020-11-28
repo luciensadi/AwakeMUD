@@ -1,0 +1,610 @@
+#4700
+Keywords:	bouncer troll
+Name:	a troll bouncer
+RoomDesc:$
+A troll bouncer stands here, making sure noone causes trouble.
+
+~
+LookDesc:$
+This huge troll looks you over and growls something at you. His job is to
+sit in front of the door and make sure no one causes any trouble. And if
+he has to break a few skulls to do his job, so be it.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001010
+AffFlags:	100000000001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	3
+	Str:	10
+	Cha:	2
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	240
+	Weight:	233
+	Ballistic:	5
+	Impact:	4
+	Bank:	500
+[SKILLS]
+	firearms:	4
+	unarmed combat:	5
+	armed combat:	4
+	street etiquette:	6
+BREAK
+#4701
+Keywords:	guard security
+Name:	a security guard
+RoomDesc:$
+A security guard stands here, laughing at you.
+
+~
+LookDesc:$
+This ork takes one look at you and starts laughing. He turns his attention
+back to the mosh pit, apparently highly amused by the people beating each
+other up.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	7
+	Qui:	4
+	Str:	8
+	Cha:	2
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	90
+	Bank:	400
+[SKILLS]
+	armed combat:	4
+	unarmed combat:	4
+	edged weapons:	3
+	firearms:	5
+	leadership:	2
+BREAK
+#4702
+Keywords:	squatter
+Name:	a squatter
+RoomDesc:$
+A squatter stands here, trying to sneak in.
+
+~
+LookDesc:$
+This squatter sits around outside of the bar, trying occasionally
+to slip by the bouncer.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1110
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Stab
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	5
+	Cha:	2
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	173
+	Weight:	75
+	Ballistic:	2
+	Impact:	2
+	Bank:	100
+[SKILLS]
+	edged weapons:	5
+	armed combat:	3
+	unarmed combat:	3
+	firearms:	1
+BREAK
+#4703
+Keywords:	bartender
+Name:	the bartender
+RoomDesc:$
+A bartender stands here, waiting to take your order.
+
+~
+LookDesc:$
+This is the bartender of the Reaper, a huge ork. Years of mercenary work
+have trained him into a deadly fighter. He got sick of killing however,
+and bought a bar.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Stab
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	5
+	Str:	10
+	Cha:	4
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	100
+	Ballistic:	6
+	Impact:	6
+	Bank:	1000
+[SKILLS]
+	firearms:	7
+	armed combat:	6
+	unarmed combat:	8
+	street etiquette:	5
+BREAK
+#4704
+Keywords:	darrell guitarist
+Name:	the guitarist, Darrell
+RoomDesc:$
+Darrell stands here, playing his guitar.
+
+~
+LookDesc:$
+This is Darrell. Long black hair, a moustache and goatee, knee-length shorts,
+and a black t-shirt describes him. He is the guitarist for this unknown band.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Stab
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	6
+	Str:	5
+	Cha:	4
+	Int:	4
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	178
+	Weight:	68
+	Ballistic:	3
+	Impact:	3
+[SKILLS]
+	armed combat:	4
+	unarmed combat:	6
+	media etiquette:	6
+BREAK
+#4705
+Keywords:	phil vocalist singer
+Name:	Phil, the vocalist
+RoomDesc:$
+Phil stands here, screaming out lyrics.
+
+~
+LookDesc:$
+Phil, the band's vocalist, has a moustache and a beard. He is wearing combat
+boots, a sweatshirt, a pair of shorts, and is currently screaming into a
+microphone. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Stab
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	4
+	Cha:	5
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	153
+	Weight:	65
+	Ballistic:	3
+	Impact:	3
+[SKILLS]
+	unarmed combat:	6
+	armed combat:	4
+	media etiquette:	6
+BREAK
+#4706
+Keywords:	rex bassist
+Name:	Rex, the bassist
+RoomDesc:$
+Rex stands here, plucking on his bass.
+
+~
+LookDesc:$
+This is Rex. He is wearing combat boots and a pair of shorts. His long hair
+covers most of his face. He is the bassist for this unknown band.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	4
+	Cha:	3
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	173
+	Weight:	68
+	Ballistic:	3
+	Impact:	3
+[SKILLS]
+	unarmed combat:	5
+	armed combat:	4
+	firearms:	4
+	media etiquette:	6
+BREAK
+#4707
+Keywords:	vinnie drummer
+Name:	Vinnie, the drummer
+RoomDesc:$
+Vinnie sits here, pounding on his drum set.
+
+~
+LookDesc:$
+This is Vinnie, the bands drummer. He sits behind his drum and pounds
+out a beat that sets your pulse racing, making you want to head for
+the mosh pit. He is wearing jeans and a black t-shirt, and clutches
+a pair of drumsticks in his hand.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	5
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	174
+	Weight:	74
+	Ballistic:	3
+	Impact:	3
+[SKILLS]
+	unarmed combat:	5
+	armed combat:	4
+	media etiquette:	4
+BREAK
+#4708
+Keywords:	drunk
+Name:	a drunk
+RoomDesc:$
+A drunk wobbles here, trying to stay upright.
+
+~
+LookDesc:$
+This man has had just a bit too much to drink. He staggers around,
+and stares at you, trying to bring you into focus.
+~
+ArriveMsg:	staggers in from
+LeaveMsg:	stumbles
+MobFlags:	1001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Stab
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	3
+	Cha:	2
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	75
+	Ballistic:	1
+	Impact:	1
+	Bank:	100
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#4709
+Keywords:	troll mosher
+Name:	a troll mosher
+RoomDesc:$
+A troll stands here, ready to pound in your face.
+
+~
+LookDesc:$
+This troll glares down at you and clenches his fists, eagerly
+waiting to squash you.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Stab
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	6
+	Str:	8
+	Cha:	3
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	225
+	Weight:	229
+	Ballistic:	3
+	Impact:	3
+[SKILLS]
+	unarmed combat:	6
+	street etiquette:	4
+BREAK
+#4710
+Keywords:	ork mosher
+Name:	an ork mosher
+RoomDesc:$
+An ork stands here, getting ready to pound on you.
+
+~
+LookDesc:$
+This ork thrives on dealing out pain to people. So, he comes to the
+Reaper to play in the mosh pit, and brutally pounds people into the
+ground.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Thrash
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	4
+	Str:	8
+	Cha:	2
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	201
+	Weight:	98
+	Ballistic:	4
+	Impact:	4
+[SKILLS]
+	unarmed combat:	7
+	street etiquette:	6
+BREAK
+#4711
+Keywords:	vic runner man
+Name:	Vic
+RoomDesc:$
+Vic stands here, waiting for a run.
+
+~
+LookDesc:$
+This is Vic. He is a human street sam, skilled in his art. 
+He looks you over, then snorts and dismisses you as a threat.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pound
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	5
+	Cha:	2
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	172
+	Weight:	69
+	Ballistic:	1
+	Impact:	1
+[SKILLS]
+	unarmed combat:	5
+	firearms:	5
+	street etiquette:	6
+BREAK
+#4712
+Keywords:	guard huge troll
+Name:	a huge guard
+RoomDesc:$
+A troll stands here, glaring at you.
+
+~
+LookDesc:$
+This huge troll is The Frog's personal bodyguard. I wouldnt mess 
+with him if you enjoy drawing breath.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000100000011010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Bludgeon
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	6
+	Str:	9
+	Cha:	4
+	Int:	5
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	240
+	Weight:	227
+	Ballistic:	6
+	Impact:	6
+	Cash:	10
+[SKILLS]
+	unarmed combat:	7
+	firearms:	8
+	street etiquette:	5
+BREAK
+#4713
+Keywords:	mac maclaury human man pinstripe
+Name:	Mac MacLaury
+RoomDesc:$
+A human man in a pinstripe suit sits behind the desk. 
+
+~
+LookDesc:$
+Mac MacLaury is a notorious gangster from Seattle, who has served the O'Malley
+Crime Syndicate his whole life.  He has earned his way to lead a comfortable
+life, more comfortable than most, through managing 'establishments' for his
+O'Malley Syndicate superiors. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	11010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Stab
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	4
+	Cha:	6
+	Int:	4
+	Wil:	4
+	Mag:	1
+[POINTS]
+	Height:	168
+	Weight:	68
+	Ballistic:	4
+	Impact:	4
+	Bank:	100
+[SKILLS]
+	firearms:	4
+	media etiquette:	6
+	street etiquette:	5
+	corporate etiquette:	8
+	unarmed combat:	4
+BREAK
+#4714
+Keywords:	bouncer troll
+Name:	a bouncer
+RoomDesc:$
+A huge troll stands here, glaring at you.
+
+~
+LookDesc:$
+This huge troll is a bouncer for the Reaper. He wanders around inside the bar,
+breaking up the all too common brawls. He glances you over, waiting for you to
+start some trouble.
+~
+ArriveMsg:	stomps in from
+LeaveMsg:	stomps
+MobFlags:	10000001000001001000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	4
+	Str:	10
+	Cha:	2
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	235
+	Weight:	220
+	Ballistic:	5
+	Impact:	4
+	Bank:	300
+[SKILLS]
+	unarmed combat:	6
+	armed combat:	5
+	firearms:	4
+	street etiquette:	5
+BREAK
+#4715
+Keywords:	dancer human
+Name:	a dancer
+RoomDesc:$
+A human male is here, dancing.
+
+~
+LookDesc:$
+This human male is strutting around the room, dancing some outdated form
+of dancing from the 1970's.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	3
+	Cha:	2
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	68
+	Ballistic:	1
+	Bank:	100
+[SKILLS]
+	unarmed combat:	3
+BREAK
+END

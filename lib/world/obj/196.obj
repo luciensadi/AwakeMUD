@@ -1,0 +1,1135 @@
+#19600
+Keywords:	cane
+Name:	a solid silver cane with an orichalcem top
+RoomDesc:$
+A cane is here~
+LookDesc:$
+It's Quiggely's, don't touch. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val3:	8
+	Val4:	11
+	Val5:	999999
+	Val6:	999999
+	Val8:	-1
+BREAK
+#19601
+Keywords:	shoes
+Name:	a pair of dragonskin shoes
+RoomDesc:$
+Some shoes are here.~
+LookDesc:$
+It's Quiggely's, don't touch. 
+~
+Type:	Worn
+WearFlags:	100000001000001
+ExtraFlags:	0
+AffFlags:	1000000000000000000000
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	50
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	50
+[AFFECT 2]
+	Location:	Target Numbers
+	Modifier:	-100
+[AFFECT 3]
+	Location:	Init Dice
+	Modifier:	10
+BREAK
+#19602
+Keywords:	pants slacks
+Name:	a pair of black slacks
+RoomDesc:$
+A pair of pants are here.~
+LookDesc:$
+It's Quiggely's, don't touch. 
+~
+Type:	Worn
+WearFlags:	100000000100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Body
+	Modifier:	50
+[AFFECT 1]
+	Location:	Quickness
+	Modifier:	50
+[AFFECT 2]
+	Location:	Strength
+	Modifier:	50
+[AFFECT 3]
+	Location:	Charisma
+	Modifier:	50
+[AFFECT 4]
+	Location:	Intelligence
+	Modifier:	50
+[AFFECT 5]
+	Location:	Willpower
+	Modifier:	50
+BREAK
+#19603
+Keywords:	jacket
+Name:	a black suit jacket
+RoomDesc:$
+A jacket is here.~
+LookDesc:$
+It's a single-breasted black suit jacket with an inside pocket. 
+~
+Type:	Worn
+WearFlags:	100010000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.75
+	Barrier:	6
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val7:	-1
+BREAK
+#19604
+Keywords:	glasses
+Name:	a pair of chromed sunglasses
+RoomDesc:$
+Some glasses are here~
+LookDesc:$
+It's Quiggely's, don't touch. 
+~
+Type:	Worn
+WearFlags:	1100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19605
+Keywords:	briefcase
+Name:	a black dragonskin briefcase
+RoomDesc:$
+A briefcase is here~
+LookDesc:$
+It's Quiggely's, don't touch. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	-1
+	Val2:	-1
+	Val3:	31
+BREAK
+#19606
+Keywords:	shirt
+Name:	a black silk shirt
+RoomDesc:$
+A shirt is here~
+LookDesc:$
+It's Quiggely, don't touch! 
+~
+Type:	Worn
+WearFlags:	100000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19607
+Keywords:	watch rolex
+Name:	a diamond Rolex
+RoomDesc:$
+A watch is here~
+LookDesc:$
+It's Quiggelys 
+~
+Type:	Worn
+WearFlags:	101000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19608
+Keywords:	earbud
+Name:	an earbud radio-phone
+RoomDesc:$
+An earbud is here~
+LookDesc:$
+tgoessel@fbw.htwk-leipzig.de Booker 
+~
+Type:	Worn
+WearFlags:	10100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19609
+Keywords:	keycard card
+Name:	an electronic keycard
+RoomDesc:$
+A keycard has been dropped here.~
+LookDesc:$
+The small card has the a UCAS military emblem on one side and the other side
+has, "Unathorized use of this card is punishable by military code 87-2-94"
+written in red letters. 
+~
+Type:	Key
+WearFlags:	100000000000001
+ExtraFlags:	1000001100
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19611
+Keywords:	keycard
+Name:	a keycard
+RoomDesc:$
+A keycard has been left here.~
+LookDesc:$
+The small keycard is unlabled. 
+~
+Type:	Key
+WearFlags:	100000000000001
+ExtraFlags:	1000001100
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19612
+Keywords:	key
+Name:	a key
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Key
+WearFlags:	100000000000001
+ExtraFlags:	1000000100
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19613
+Keywords:	cone traffic
+Name:	a traffic cone
+RoomDesc:$
+An orange traffic cone is lieing on it's side here.~
+LookDesc:$
+The cone is about 1 meter tall and usually used to route traffic. 
+~
+Type:	Other
+WearFlags:	100000000010001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19614
+Keywords:	soap rope
+Name:	a soap on a rope
+RoomDesc:$
+A sope on a rope was dropped here.~
+LookDesc:$
+Its soap, its on a rope. 
+~
+Type:	Food
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val3:	1
+BREAK
+#19615
+Keywords:	barbell
+Name:	a barbell
+RoomDesc:$
+Someone left a barbell out when they were done working out.~
+LookDesc:$
+Its a 35kilo barbell. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	35.00
+	Barrier:	8
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19616
+Keywords:	HK77 rifle short
+Name:	an HK77
+RoomDesc:$
+A short barreled rifle is here.~
+LookDesc:$
+This carbine assault rifle fires 7.62 caseless ammo and stores the extra
+rounds in its stock allowing for an extended capacity. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	4500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	45
+	Val6:	45
+BREAK
+#19617
+Keywords:	colt 1911A1
+Name:	a Colt 1911A1
+RoomDesc:$
+A Colt pistol has been left here.~
+LookDesc:$
+With a design dating back almost 150 years the Colt automatic has remained
+virtually unchanged since it's introduction. The A1 variant fires 13mm rounds
+instead of .45 caliber and has a larger magazine capacity. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	600
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	11
+	Val6:	11
+	Val8:	-1
+BREAK
+#19620
+Keywords:	Tatsumaki assault cannon
+Name:	a Tatsumaki assault cannon
+RoomDesc:$
+A huge cannon has been left here.~
+LookDesc:$
+The Tatsumaki assault cannon fires rocket assisted high explosive ordinance
+designed to pierce the skin or body panel of its target before exploding on
+the inside. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	15.00
+	Barrier:	6
+	Cost:	15000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	4
+	Val3:	18
+	Val4:	21
+	Val5:	4
+	Val6:	4
+BREAK
+#19622
+Keywords:	chandler capture shotgun
+Name:	a Capture 120
+RoomDesc:$
+A pistol sized shotgun is here.~
+LookDesc:$
+The Chandler brand Capture 120 is the ultimate in short barrel shotguns. Its
+small enough to be carried as a backup weapon, but packs enough punch to send
+a troll to the white light, this is the ultimate sidearm. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	5.00
+	Barrier:	4
+	Cost:	600
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	3
+	Val3:	8
+	Val4:	11
+	Val5:	6
+	Val6:	6
+	Val8:	-1
+BREAK
+#19624
+Keywords:	seburu J9 rifle
+Name:	a Seburu J9
+RoomDesc:$
+A Seburu assault rifle has been dropped here.~
+LookDesc:$
+The Seburu J9 assault rifle fired high-velocity rounds designed to pierce
+armored targets from a 45 round helical magazine. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	4
+	Cost:	1600
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	45
+	Val6:	45
+BREAK
+#19626
+Keywords:	cap camouflage camoflage
+Name:	a camouflage cap
+RoomDesc:$
+Someone dropped their cap here.~
+LookDesc:$
+This cap has a grey and black urban camouflage pattern and is flat on top
+instead of rounded. 
+~
+Type:	Worn
+WearFlags:	100000000010001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19627
+Keywords:	pants camouflage bdu BDU
+Name:	a pair of camouflage BDU pants
+RoomDesc:$
+A pair of pants are crumpled on the ground.~
+LookDesc:$
+These pants are patterned in grey and black urban camouflage and have several
+pockets. 
+~
+Type:	Worn
+WearFlags:	100000000100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	5
+	Val2:	4
+	Val4:	10
+	Val7:	1
+BREAK
+#19628
+Keywords:	shirt TeeShirt
+Name:	a UCAS reserve T-Shirt
+RoomDesc:$
+A T-shirt has been tossed here.~
+LookDesc:$
+The olive drab T-Shirt has the UCAS Reserve Corp emblem on the left pocket. 
+~
+Type:	Container
+WearFlags:	100000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val2:	-1
+BREAK
+#19629
+Keywords:	armband MP
+Name:	an MP armband
+RoomDesc:$
+A black armband is here.~
+LookDesc:$
+The black armband has MP written in large white letters on it. 
+~
+Type:	Worn
+WearFlags:	100000100000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	2
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19630
+Keywords:	helmet MP
+Name:	a MP helmet
+RoomDesc:$
+A MP helmet is here.~
+LookDesc:$
+The kelvar helmet was a thick white band with MP written on it in black
+letters. 
+~
+Type:	Worn
+WearFlags:	100000000010001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	4
+	Val6:	3
+BREAK
+#19631
+Keywords:	cabinet
+Name:	a cabinet
+RoomDesc:$
+A white cabinet is sitting here.~
+LookDesc:$
+The white cabinet has several drawers to hold medical supplies. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	1
+	Val2:	-1
+BREAK
+#19632
+Keywords:	tongue depressor stick
+Name:	a tongue depressor
+RoomDesc:$
+A small flat stick is here.~
+LookDesc:$
+The tongue depessor holds down tongues. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19633
+Keywords:	potion
+Name:	a potion
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val3:	6
+BREAK
+#19634
+Keywords:	shackles
+Name:	a set of shackles
+RoomDesc:$
+A set of shackles are mounted to the wall.~
+LookDesc:$
+The iron shackles are large enough to hold a massive trolls arms. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19635
+Keywords:	sandwich ham
+Name:	a ham sandwich
+RoomDesc:$
+Someone left a ham sandwich on the desk.~
+LookDesc:$
+The sandwich has a bite taken out of it. 
+~
+Type:	Food
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+BREAK
+#19636
+Keywords:	boots combat
+Name:	a pair of spitshined combat boots
+RoomDesc:$
+A pair of boots glimmer in the light.~
+LookDesc:$
+The leather toe and heel of the combat boot has been polished so well you can
+see yourself in it. 
+~
+Type:	Worn
+WearFlags:	100000001000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	3
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19638
+Keywords:	knife robar
+Name:	a Robar combat knife
+RoomDesc:$
+A mean looking knife is here.~
+LookDesc:$
+The knife has a straight 25 centimeter blade that has several notches in the
+lower part and has a razor sharp edge at the top. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.20
+	Barrier:	1
+	Cost:	55
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#19639
+Keywords:	necktie tie black silk
+Name:	a black silk necktie
+RoomDesc:$
+A black necktie lies here.~
+LookDesc:$
+Just a standard black silk necktie. Looks fairly expensive. 
+~
+Type:	Worn
+WearFlags:	100000000000101
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19640
+Keywords:	table steel
+Name:	a steel table
+RoomDesc:$
+A steel table is in the corner.~
+LookDesc:$
+The table is made of brushed steel and has a large drawer on one side. 
+~
+Type:	Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	30.00
+	Barrier:	4
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	13
+	Val2:	19641
+	Val3:	4
+BREAK
+#19641
+Keywords:	key small metal
+Name:	a small metal key
+RoomDesc:$
+A small key has been dropped here.~
+LookDesc:$
+It looks like a padlock key. 
+~
+Type:	Key
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19642
+Keywords:	badge ID necklace
+Name:	An ID badge
+RoomDesc:$
+A small ID badge is here.~
+LookDesc:$
+The ID badge has a picture and a barcode on it. A chain is run through to back
+of it so you can wear it around your neck. 
+~
+Type:	Worn
+WearFlags:	100000000000101
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19643
+Keywords:	machine x-ray
+Name:	an x-ray machine
+RoomDesc:$
+An X-ray machine hangs from the ceiling.~
+LookDesc:$
+The machine looks like a cannon on an articulating arm. It is mounted in the
+ceiling and can be swiveled to anywhere in the room. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19644
+Keywords:	body corpse
+Name:	a corpse
+RoomDesc:$
+A corpse is here.~
+LookDesc:$
+The corpse is sliced open with a Y shaped incision in the chest, the skull has
+been pulled back and the brain removed.  Most of the internal organs have been
+replaced with cyberware and all the limbs are cybered. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	140.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19645
+Keywords:	key
+Name:	a key
+RoomDesc:$
+A key is here.~
+LookDesc:$
+A large metal key. 
+~
+Type:	Key
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19646
+Keywords:	staff
+Name:	a black staff
+RoomDesc:$
+A large black staff is here.~
+LookDesc:$
+The staff is approx 2 meters long and a deep non-reflective black in color. 
+~
+Type:	Focus
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	4
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	2
+BREAK
+#19647
+Keywords:	scrubs gown
+Name:	a surgical gown
+RoomDesc:$
+A green surgical gown is here.~
+LookDesc:$
+The gown is olive drab and designed to cover the body from the neck down. 
+~
+Type:	Worn
+WearFlags:	100010000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19648
+Keywords:	labcoat coat white
+Name:	a white labcoat
+RoomDesc:$
+A white coat lies here.~
+LookDesc:$
+This clean white coat is long sleeved and comes down to about the knees of a
+normal human being. It's the type traditionally worn around laboratories or
+research centers. 
+~
+Type:	Worn
+WearFlags:	100010000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#19650
+Keywords:	locker
+Name:	a locker
+RoomDesc:$
+A weapons locker is built into the wall.~
+LookDesc:$
+The metal locker contains weapons and other gear for the troops. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	100.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	200
+	Val1:	5
+	Val2:	-1
+BREAK
+END

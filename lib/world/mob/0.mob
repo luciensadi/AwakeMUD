@@ -29,7 +29,7 @@ AttackType:	Bite
 [POINTS]
 	Height:	0
 	Weight:	0
-	Karma:	75
+	Karma:	74
 [SKILLS]
 BREAK
 #4
@@ -164,7 +164,7 @@ Her hair is curly, and raven black in color, and her eyes are a deep sky blue.
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	10000100000000001010
+MobFlags:	10000100000000001011
 AffFlags:	1000000000001000001000
 Race:	Human
 Gender:	Neutral
@@ -254,7 +254,7 @@ DefaultPos:	Standing
 	Ballistic:	20
 	Impact:	20
 [SKILLS]
-	Assault Rifles:	6
+	assault rifles:	6
 BREAK
 #10
 Keywords:	cow
@@ -324,10 +324,10 @@ DefaultPos:	Standing
 	Weight:	70
 	Level:	9
 [SKILLS]
-	:	50
-	Pistols:	50
-	Edged Weapons:	50
-	Sorcery:	50
+	unarmed combat:	50
+	pistols:	50
+	edged weapons:	50
+	sorcery:	50
 BREAK
 #12
 Keywords:	crackhead crack head
@@ -969,7 +969,7 @@ BREAK
 Keywords:	spirit sea merfolk
 Name:	a sea spirit
 RoomDesc:$
-A merfolk swins effortlessly around.
+A merfolk swims effortlessly around. 
 
 ~
 LookDesc:$
@@ -1510,8 +1510,8 @@ AttackType:	Bite
 [ATTRIBUTES]
 	Bod:	1
 	Qui:	5
-	Str:	1
-	Cha:	1
+	Str:	0
+	Cha:	0
 	Int:	1
 	Wil:	1
 	Mag:	0
@@ -2393,7 +2393,7 @@ AttackType:	Cannon
 	Level:	1
 	Ballistic:	20
 	Impact:	20
-	Karma:	152
+	Karma:	151
 [SKILLS]
 BREAK
 #105

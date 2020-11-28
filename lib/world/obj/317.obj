@@ -1,0 +1,1090 @@
+#31700
+Keywords:	redwood pool table pooltable
+Name:	a large, redwood pool table
+RoomDesc:$
+A large, redwood pool table stands in the center of the room.~
+LookDesc:$
+A very large pool table made of fine redwood, and green felt on the table
+itself. The balls are hand-painted and crafted with ivory. Whoever paid for
+this exquisite table put out a lot of money for them, as this is a rather rare
+piece of superb craftsmanship. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31701
+Keywords:	SOTA trid trideo screen unit
+Name:	an SOTA wall-mounted trideo unit
+RoomDesc:$
+A top of the line trideo unit is mounted to the western wall.~
+LookDesc:$
+This trid unit has SOTA written all over it. A full 100 inches diagonal, this
+screen is HUGE. It comes fully equipped with a fully immersive sound system
+and the high-resolution dynamic scanning makes for a display that invites you
+to crawl into. They don't make them any better than this. It's no surprise
+that this unit cold kill a troll if it ever fell off its mounts. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	30.00
+	Barrier:	4
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#31702
+Keywords:	cork dartboard board
+Name:	a well used, cork dartboard
+RoomDesc:$
+A dartboard is mounted on the southern wall.~
+LookDesc:$
+Just your basic cork dartboard, hours upon hours can still be passed playing
+this time consuming game of skill. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31703
+Keywords:	pair mirrored sun glasses sunglasses ultrasound
+Name:	a pair of ^Wmirrored^n shades, with the MIDG logo
+RoomDesc:$
+A pair of mirrored sunglasses lies here.~
+LookDesc:$
+These are a pair of sunglasses with the MIDG logo etched into the right lens.
+There are a pair of concealed Ultrasound emitters on the sides of the lenses.
+These, while visible to you holding them, would not be apparent to an outside
+observer. 
+~
+Type:	Worn
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	1000001000
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	20000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	1
+BREAK
+#31704
+Keywords:	greasy grease key keycard card electronic
+Name:	a greasy, electronic key card
+RoomDesc:$
+A key card lies here, smothered in grease.~
+LookDesc:$
+This electronic key card is filthy, positively covered in all sorts of
+mechanical grease. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.15
+	Barrier:	1
+	Cost:	25000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31705
+Keywords:	lavender key card keycard electronic
+Name:	a lavender colored key card
+RoomDesc:$
+A lavender card lays here.~
+LookDesc:$
+This plastic card is in pristine condition.  The top left corner of the
+lavender colored card features a graphic of devil horns, while the top right
+corner features a graphic of angelic wings. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.15
+	Barrier:	1
+	Cost:	25000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31706
+Keywords:	circuit board key card keycard device parts
+Name:	a circuit-board key card
+RoomDesc:$
+A strange device crafted from cyberdeck parts lays here.~
+LookDesc:$
+This key card is made out of various electronic components, fashioned together
+from what looks like left over deck parts. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1000001010
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.15
+	Barrier:	1
+	Cost:	25000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31707
+Keywords:	chrome chromed key card keycard
+Name:	a chrome plated electronic key card
+RoomDesc:$
+A shiny card has been left here.~
+LookDesc:$
+This chrome plated key card features etchings of circuitry reminiscent of
+cyberware on both sides. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.15
+	Barrier:	1
+	Cost:	25000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31708
+Keywords:	black MIDG keycard key card
+Name:	a black key card emblazoned with the ^CMIDG^n logo
+RoomDesc:$
+A black key card has been left here.~
+LookDesc:$
+This sleek black key card bares the ^CMIDG^n logo. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.15
+	Barrier:	1
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31709
+Keywords:	bottle massage oils
+Name:	A bottle of massage oils
+RoomDesc:$
+A bottle of massage oils is on the floor here.~
+LookDesc:$
+You see a small, plastic bottle. It is marked 'Aloe vera massage oil'. A
+sweet, delicate aroma comes from the bottle, inviting you to use it. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.30
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31710
+Keywords:	massage table bed
+Name:	A cushioned ^Wwhite^N massage table
+RoomDesc:$
+A single, cushioned ^Wwhite^n massage bed sits unobtrusivly beside the spa.~
+LookDesc:$
+A comfortable massage bed. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	500.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31711
+Keywords:	suit pin stripe pinstripe black
+Name:	A high fashion, late 1920's cut black suit jacket with thin red pinstripes
+RoomDesc:$
+A suit jacket is folded neatly here~
+LookDesc:$
+A high fashion, late 1920's cut suit jacket. Black, with thin vertical red
+pinstripes. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	101000001000
+AffFlags:	1000000
+Material:	fabric
+[POINTS]
+	Weight:	4.00
+	Barrier:	32
+	Cost:	234000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	25000
+	Val6:	25000
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	-50
+BREAK
+#31713
+Keywords:	trousers pants pinstriped pair
+Name:	a pair of tailored pinstriped trousers
+RoomDesc:$
+A pair of tailored pinstripe trousers lies here folded neatly.~
+LookDesc:$
+This well-tailored pair of pinstriped trousers has a loose, but flattering
+cut. The pant legs come halfway down the heels. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31714
+Keywords:	matchstick club membership card key keycard
+Name:	a Matchstick Club membership card
+RoomDesc:$
+A ^rred^n and ^Lblack^n card has been left here.~
+LookDesc:$
+Embossed with the Matchstick logo, this card is both your symbol of membership
+to the Matchstick Nightclub, but also serves as the key to the private,
+members only areas of the Matchstick Nightclub. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.15
+	Barrier:	1
+	Cost:	25000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31715
+Keywords:	booze bottle whiskey
+Name:	a bottle of Johnny Walker Gold Label
+RoomDesc:$
+A bottle of Johnny Walker Gold Label sits here.~
+LookDesc:$
+The rarest of whiskies and the best...and smooooth.
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	40
+	Val1:	40
+	Val2:	23
+BREAK
+#31716
+Keywords:	MIDG keycard key card deep blue
+Name:	a ^bdeep blue^n key card emblazoned with the ^CMIDG^n logo
+RoomDesc:$
+A Deep Blue key card has been left here.~
+LookDesc:$
+This deep metallic blue key card drinks in the light, even as it bares the
+MIDG logo. It seems to have replaces the old black ones. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.15
+	Barrier:	1
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31717
+Keywords:	fluffy white towel
+Name:	A fluffy white towel
+RoomDesc:$
+A fluffy towel has been left here~
+LookDesc:$
+This towel is soft, fluffy, and HUGE. A troll could comfortably use this towel
+~
+Type:	Worn
+WearFlags:	100000110100001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31718
+Keywords:	a black MIDG keycard
+Name:	a black MIDG keycard
+RoomDesc:$
+A keycard sits here.~
+LookDesc:$
+This is a keycard to MIDG. 
+~
+Type:	Key
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	8
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31719
+Keywords:	a white MIDG keycard
+Name:	a white MIDG keycard
+RoomDesc:$
+A keycard sits here.~
+LookDesc:$
+This is a keycard to MIDG. 
+~
+Type:	Key
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	8
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31720
+Keywords:	a blue MIDG keycard
+Name:	a blue MIDG keycard
+RoomDesc:$
+A keycard sits here.~
+LookDesc:$
+This is a keycard to MIDG. 
+~
+Type:	Key
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	8
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31721
+Keywords:	a red MIDG keycard
+Name:	a red MIDG keycard
+RoomDesc:$
+A keycard sits here.~
+LookDesc:$
+This is a keycard to MIDG. 
+~
+Type:	Key
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	8
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31722
+Keywords:	a ^Bblue^N zippo with a M inlaid in ^Wmother of pearl^N
+Name:	a ^Bblue^N zippo with a M inlaid in ^Wmother of pearl^N
+RoomDesc:$
+A ^Bblue^N zippo sits here.~
+LookDesc:$
+This is a blue zippo with a M on it inlaid with mother of pearl. 
+~
+Type:	Key
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	8
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31723
+Keywords:	keycard one plain written
+Name:	a plain keycard with 'One' written on it
+RoomDesc:$
+A plain keycard with 'One' written on it lies here.~
+LookDesc:$
+Its a plain maglock keycard, with the word 'One' written on it. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31724
+Keywords:	keycard two plain written
+Name:	a plain keycard with 'Two' written on it
+RoomDesc:$
+A plain keycard with 'Two' written on it lies here.~
+LookDesc:$
+Its a plain maglock keycard, with the word 'Two' written on it. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31725
+Keywords:	zippo silver engraved M
+Name:	a ^Wsilver^n zippo engraved with 'M'
+RoomDesc:$
+^gA ^Wsilver^g zippo sits here.^N~
+LookDesc:$
+This is a silver zippo with an M on it. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31726
+Keywords:	keycard MIDG black
+Name:	a ^Lblack^N MIDG keycard
+RoomDesc:$
+A keycard sits here.~
+LookDesc:$
+This is a keycard to MIDG. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31727
+Keywords:	keycard MIDG white
+Name:	a ^Wwhite^N MIDG keycard
+RoomDesc:$
+A keycard sits here.~
+LookDesc:$
+This is a keycard to MIDG. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31728
+Keywords:	keycard MIDG blue
+Name:	a ^Bblue^N MIDG keycard
+RoomDesc:$
+A keycard sits here.~
+LookDesc:$
+This is a keycard to MIDG. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31729
+Keywords:	keycard MIDG red
+Name:	a ^Rred^N MIDG keycard
+RoomDesc:$
+A keycard sits here.~
+LookDesc:$
+This is a keycard to MIDG. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31730
+Keywords:	burrito chili cheese big
+Name:	a chili-cheese burrito as big as your head
+RoomDesc:$
+There's a burrito here big enough to trip over.~
+LookDesc:$
+This is a masterpiece of a burrito, using a huge, made-from-scratch flour
+tortillas to maximize space available for sweet, delicious chili and cheese.
+All in all, the massive vessel of the finest chili and cheese weighs about
+five pounds.
+ Five pounds.
+ Five fucking pounds of chili and cheese.
+ (Roll willpower TN 7 to not get arroused by this burrito.)
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.26
+	Barrier:	1
+	Cost:	125
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+BREAK
+#31731
+Keywords:	Rockstar can 16 fluid ounce
+Name:	a 16 fluid ounce can of Rockstar
+RoomDesc:$
+A black can with a gold star sits here, waiting to make you more useful.~
+LookDesc:$
+The can says, 'Double Strength', but you know you're going to drink sixty four
+cans of it today anyway. How can you not?  This is Rockstar, the greatest
+energy drink the world has ever known. The sleek ^Lblack^n can guards the tastiest
+blend of taurine, ginseng, ginkgo and milk thistle mixed by mortal men. This,
+my friend, is decker fuel.  Pure and simple. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	16
+	Val1:	16
+	Val2:	8
+BREAK
+#31732
+Keywords:	Funyuns bag chips big
+Name:	a big bag of ^YFunyuns^n
+RoomDesc:$
+^gA big ^Yyellow^g bag of chips is sitting here.^N~
+LookDesc:$
+The biggest, extra gluttony-sized bag of ^YFunyuns^n ever made. They taste
+delicious, even though the expiration date on the bag is....Whoa.  Long time
+ago. Oh well, they /do/ taste pretty damn good. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	75
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+BREAK
+#31733
+Keywords:	keyring jailors jailor's iron
+Name:	a jailor's iron keyring
+RoomDesc:$
+Someone lost their keys again.~
+LookDesc:$
+It's simply a huge iron ring onto which you could clip an immense amount of
+keys. Wear it on your belt to feel important. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	8
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	5
+	Val2:	-1
+BREAK
+#31734
+Keywords:	combination printout
+Name:	a printout of the combination
+RoomDesc:$
+A printout of some kind is left here, forgotten.~
+LookDesc:$
+36-24-36. Perfect combination. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.05
+	Barrier:	2
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31735
+Keywords:	lockpick pick lock
+Name:	a lockpick
+RoomDesc:$
+A pick for a lock was discarded here.~
+LookDesc:$
+It might be handy if you, the master of unlocking, take it with you. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.05
+	Barrier:	6
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31736
+Keywords:	ring signet symbol
+Name:	a signet ring stamped with a nuyen symbol
+RoomDesc:$
+A ring is sitting on the ground, fair game.~
+LookDesc:$
+This is one of those neat rings that have a hidden latch that opens the top of
+the ring, allowing it to hold things like cyanide pills, drugs, that kind of
+thing. The ring itself features a bold stamp of the nuyen symbol, big and
+gaudy. 
+~
+Type:	Container
+WearFlags:	11
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.50
+	Barrier:	6
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	5
+	Val2:	-1
+BREAK
+#31737
+Keywords:	briefcase
+Name:	a black briefcase with an ^Wivory^n handle
+RoomDesc:$
+A black briefcase waits here for the bagman.~
+LookDesc:$
+This is a pretty nondescript briefcase, aside from it's elegant handle, made
+from carved ^Wivory^n. It has a lock on it, which seems sturdy enough. 
+~
+Type:	Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	13
+	Val2:	31735
+BREAK
+#31738
+Keywords:	safe wall-safe painting
+Name:	an immensely deep wall-safe disguised by a large painting
+RoomDesc:$
+A painting of a mushroom cloud completely obliterating a metropolis is tastefully hung here.~
+LookDesc:$
+This is a remarkably deep combination wall safe, which was hidden by the
+absolutely beautiful painting of a mushroom cloud rising out of the vaporizing
+Seattle cityscape, hung in an elegant oak frame. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	90.00
+	Barrier:	16
+	Cost:	2500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	400
+	Val1:	13
+	Val2:	31734
+BREAK
+#31739
+Keywords:	spinach can food
+Name:	an ordinary can of spinach
+RoomDesc:$
+A bent can of some kind of food is lying here.~
+LookDesc:$
+This is just an ordinary can of spinach. The label features a picture of a
+sailor with a pipe and some sort of facial disfiguration. According to the
+label, this spinach is 100% genuine. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#31740
+Keywords:	fourty 40 ounce brown-bagged bottle Mickeys Mickey's
+Name:	a fourty ounce ^ybrown^N-^ybagged^N bottle of Mickey's
+RoomDesc:$
+^ga fourty ounce ^ybrown^g-^ybagged^g bottle of Mickey's sits here.^N~
+LookDesc:$
+Its a fourty ounce (40oz) of Mickey's, which has been stuffed into a sturdy
+brown paper bag, which is tightly twisted about its neck for perfect holding
+purposes. Really.. do you need an explaination as to what this is? If you do,
+ask Frank to bash you over the head with this baby until you get the point. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.20
+	Barrier:	3
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	40
+	Val1:	40
+	Val2:	15
+BREAK
+#31741
+Keywords:	spotlight batman Talos giant symbol
+Name:	The Talos signal
+RoomDesc:$
+A giant spotlight with a bat-like symbol beaming off of it sits here.~
+LookDesc:$
+This is a giant spotlight normally used for epic media events, but this one
+has been modified to project light in the shape of some sort of bat-like
+insignia. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	20.00
+	Barrier:	8
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31742
+Keywords:	decoy frank tenpenny caramel-skinned bloodshot cornrows
+Name:	Frank's decoy
+RoomDesc:$
+A caramel-skinned man with bloodshot eyes and platinum cornrows is sitting here, spacing out.~
+LookDesc:$
+Upon closer inspection, you realize this is just the classic 'black guy' decoy
+dummy dressed up in fancy clothes.  What a dipshit you must be, to fall for
+this.
+ But the clothes /are/ pretty damn fancy. 
+~
+Type:	UNDEFINED
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	20.00
+	Barrier:	3
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31743
+Keywords:	statue pimp golden shiny
+Name:	a large, shiny ^Ygolden statue^n depicting a ^Wpimp^N
+RoomDesc:$
+a large, shiny ^Ygolden statue^n depicting a ^Wpimp^n stands here, being awesome.~
+LookDesc:$
+This is a heavy-looking golden statue of a some black guy wearing a fur coat,
+posed with a raised hand, as though it were about to backhand it's admirers,
+with a stern look chiseled on it's face.  Looking closer, one would notice
+that whoever created this statue chiseled it some rather bitchin' threads.
+(Roll willpower vs TN 7 to resist wishing you were that awesome. >.>) 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	1
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	50.00
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

@@ -1,0 +1,8267 @@
+#39200
+Name:	FREE ROOM
+Desc:$
+   Fill this description in later, its for Everett, you dummy. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#39201
+Name:	At Front Street and Mukilteo Speedway
+Desc:$
+   Just a stone throw away from the edge of Puget Sound is Front Street (Hence
+its namesake), bordering its waters and allowing for both foot traffic and
+vehicles to make their way along its shores. Puget Sound itself stretches out
+almost endlessly to both the west and north from here, while off to the south
+Mukilteo Speedway travels deeper down into the territory of Everett. Off to
+the west one can make out a sizable park, its shades of green standing out
+against the background of the Sound. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	39202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39202
+Name:	Along Mukilteo Speedway, crossing the tracks
+Desc:$
+   At this point along the Mukilteo Speedway, an old railroad track that sees
+little public use, cuts across the road, announcing itself with multiple
+crossing signs to alert travelers along it of incoming traffic. The road
+begins to curve off in a subtle manner towards the southwest, heading off
+through a small collection buildings, most likely for industrial use, before
+it straightens once again to continue its journey south. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39203
+Name:	Along Mukilteo Speedway
+Desc:$
+   As one continues their journey along the speedway, they're offered a view
+of older buildings that have seen their share of the elements, and still
+remain standing for the most part. Most of the buildings are still occupied,
+and are kept in relatively good shape, instead of the usual husks or remnants
+scattered through out the barrens. Puget Sound, and ever present landscape of
+water and waves, can be seen off to the west as the speedway continues in a
+north/south direction, parallel to its shore. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39202
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39204
+Name:	Front Street, at Mukilteo State Park
+Desc:$
+   Traveling down along the west side of Front Street is like traveling into a
+different world, one of lush green and earthen hues coupled with a background
+of blue from the Sound. Mukilteo State Park certainly does its best to
+showcase the 'sleepy town' image that Everett has held for years, which is
+certainly the case during the daylight hours, granted there are rumours abound
+of the cities less desirable citizens (or non-citizens, rather) that come out
+at night and make this area their haven. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39201
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39300
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39205
+Name:	Continuing along Mukilteo Speedway
+Desc:$
+   This rather lonely stretch of speedway features little in the way of
+man-made structures, and instead off to the west the expansive collection of
+water known as Puget Sound stretches off almost to the horizon, an occasional
+ship passing by adding itself to the almost portrait like nature of the view
+offered here. The Mukilteo Speedway itself continues its journey along towards
+the southeast into what looks to be a more familiar surrounding to those born
+into the plasticrete jungles of the city. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39203
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	39206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	12400
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39206
+Name:	A curve in the Mukilteo Speedway
+Desc:$
+   Buildings begin to become more and more prevalent as the serene view of
+Puget Sound becomes cluttered and blocked from view, an occasional peek
+between structures allowing a glimpse as its surface. Several side streets
+branch off from the main speedway, which curl and slither their way into the
+collection of buildings that dot the landscape here, most passing through and
+linking both commercial and residential buildings alike with one another. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	39208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39205
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39207
+Name:	Along 88th Street (SW), in front of The Gravity Bar
+Desc:$
+   Turning off from the main strip of Mukilteo Speedway and onto the western
+stretch of 88th Street (SW) leads to a fairly popular restaurant located on
+its northern end, The Gravity Bar. A few other restaurants and buildings are
+collected around this particular stretch along side the intersection, which is
+a popular location for both locals and tourists eager to sample a selection of
+seafood from the Puget Sound in the background. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39325
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39212
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39208
+Name:	Mukilteo Speedway and 84th Street (SW)
+Desc:$
+   Mukilteo Speedway, Route 525, meets the southwestern stretch of 84th
+Street, better known as Route 526, which travels off in an easternly direction
+away from the main speedway strip. Along the sides of the speedway here are
+very few buildings, mostly consisting of commercial warehouses and other
+industrial storage facilities, lacking the foot traffic common in the more
+residential areas. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39206
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39212
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39209
+Name:	Heading down 84th Street (SW) - Route 526
+Desc:$
+   This strip of southwestern 84th Street bridges the gap inbetween Mukilteo
+Speedway to the west, to Paine Field Boulevard off to the east. The road
+itself is fairly barren, with a sparse amount of buildings dotting its length,
+and very few streets leading off from it. Even from here, the large gates
+surrounding an area to the east can be seen quite clearly. 
+~
+Flags:	10100000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39210
+Name:	84th Street (SW) at Paine Field Boulevard
+Desc:$
+   Meeting up with Paine Field Boulevard at this intersection, 84th Street
+(SW) turns into Boeing Highway as it curves off to the northeast. Paine Field
+Boulevard itself runs south from here, parallel of the airport of the same
+name, which is known as Paine Field-Snohomish County Airport. Massive
+chainlink fencing borders the eastern edge of the road, keeping any would-be
+tresspassers, thanks to some help from tangles of razorwire atop of it, from
+climbing over and causing any trouble. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39241
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39209
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39211
+Name:	Along Chennault Beach Road
+Desc:$
+   Chennault Beach Road winds its way through a collection of what appears to
+be various dives and lower end offices, along with a few road front stores.
+One in particular stands out from the bunch, which isn't saying much,
+considering little more than old half-lit neon signs and metal stamped
+letterings that are in dire need of cleaning note their existence. A small
+building, aptly named as 'The Lore Store', stands in the foreground of this
+selection, its namesake easily getting across their particular niche in the
+economy. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	39317
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39212
+Name:	Mukilteo Speedway at 88th Street (SW)
+Desc:$
+   Approaching the curve in Mukilteo Speedway meets with the intersection of
+88th Street (SW), which runs west to east through it, leading off into less
+populated commercial zones, popular with younger crowds due to the nightclubs
+and bars that dot the landscape every so often. The speedway itself turns off
+towards the southeast here, heading off towards the 92nd Street Park. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39208
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	39213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39213
+Name:	Mukilteo Speedway, passing by 92th Street Park
+Desc:$
+   This particular stretch of Mukilteo Speedway is dominated on its western
+edge by 92nd Street Park, its vibrant green tones clashing with the usual
+scenery of slate grey concrete and road paving. Small pockets of wildlife make
+themselves known along this part of the road, apparently having taken up
+residence in the partially man-made scenery of the park. Mukilteo Speedway,
+once again, continues its journey along in a southeastern direction, meeting
+up with Paine Field Boulevard a little ways further down its length. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	39214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39212
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39214
+Name:	Mukilteo Speedway and Paine Field Boulevard
+Desc:$
+   An odd mixture of scenery makes up this particular intersection as the
+Mukilteo Speedway and Paine Field Boulevard merge into a single road. At the
+western end of the road is a background of green and brown earthen tones, the
+92nd Street Park showcasing the splendors and tranquility of nature, even if
+only for a small moment. To the east, however, is an almost about-face travel
+into the cement and tar covered hearts of men, the Paine Field-Snohomish
+County Airport an winding mass of plasticrete and aluminum structures,
+emitting dull roars of machinery as they bend to their masters will. The
+speedway continues along down further into Everett, headed away from the
+airport and its mechanical musings. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39213
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39215
+Name:	Paine Field Boulevard, approaching Mukilteo Speedway
+Desc:$
+   An almost endless line of chainlink fencing dominates the eastern stretch
+of the boulevard, making for a bleak reminder that perhaps ones presence isn't
+as readily accepted as previously thought. The dull roar of powerful aircraft
+engines, winding up or down for either pre-flight checks or maintenance as
+distorted by the lines of hangars and building on the other side of the fence,
+their rumblings eventually pouring out onto the roadway, which is mostly
+drowned out by the sound of constant vehicle traffic. Mukilteo Speedway looms
+in the distance to the south as Paine Field Boulevard merges with it. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39216
+Name:	Along Paine Field Boulevard
+Desc:$
+   Double sets of a chainlink fencing borders the eastern edge of this section
+of roadway, blocking all access onto the restriction sections of runway that
+can be seen off a little ways into the distance. Rows of both vacant and
+occupied hangars and warehouses are set along in steady repetition,
+occasionally offering a glimpse at either an aircraft parked in their
+vicinity, or an inbound or outbound craft making its way along the runway. The
+western edge of the road features a few industrial warehouses and the like,
+mostly consisting of small commercial businesses using them for storage. 
+~
+Flags:	10000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39215
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39217
+Name:	Along the Mukilteo Speedway
+Desc:$
+   The ever-present view of Paine Field-Snohomish County Airport is as
+pressing as ever along this specific stretch of road, its prison of razorwire
+topped chainlink fencing a constant reminder of where both vehicle and foot
+traffic isn't requested. Traffic itself, both forms, buzz back and forth along
+the length of the speedway as travelers make their way to their next
+destinations, wether for tourism or simply locals trying to get to work. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39214
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39219
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39218
+Name:	20th Avenue (W) at the Federated Boeing Facility
+Desc:$
+   This section of road is used for only a single purpose, which is to move
+vehicles and personel into and out of the Federated Boeing Facility, which
+stands just off to the west beyond tall walls of concrete and steel. A main
+gates, which are heavily guarded, stand just near the end of 20th Avenue (W),
+where security is busily going over the credentials of anyone vehicles or foot
+traffic that even attempt to approach it. Off to the south is the off-ramp to
+get back onto Route 526, better known as Boeing Freeway, obviously due to the
+fact that it acts as a main thoroughfare for the facility. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	39243
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39219
+Name:	Mukilteo Speedway, near Harbour Pointe Boulevard
+Desc:$
+   Mukilteo Speedway, as its title might suggest, keeps traffic flowing at a
+constant rate from north to south, occasionally branching off onto a lesser
+side street. An intersection here by the name of Harbour Pointe Boulevard
+splits off to the west, heading into what looks like a collection of sparse
+residential housing, but is mostly filled by commercial offices for various
+businesses that call Everett home, namely lower end companies that can't
+afford the price tags on those fancy highrises and skyscrapers deeper into the
+heart of the city to the southeast. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39217
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39220
+Name:	Mukiteo Speedway at Chennault Beach Road
+Desc:$
+   The chainlink fence that normally dominates this section of highway has
+apparently retreated into the distance a ways, cutting in at an easternly
+direction to hug up against a line of buildings. The change in pace offers an
+almost spacious feeling to the normally confined view, which also expands out
+towards the southwest as the commercial offices begin appearing more friendly
+to those who wish to spend a little cash during their journey along the
+speedway. Chennault Beach Road breaks off from the main road and heads into a
+patch of the more appealing configuration of money sinks, which houses several
+bars and other dives. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39219
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	39221
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39221
+Name:	Mukilteo Speedway, near Harbour Pointe Boulevard (SW)
+Desc:$
+   A terraced wall of concrete now borders the eastern edge of Mukilteo
+Speedway, atop of which, stretching even higher, is that familiar scenery of
+razorwire and chainlink of Paine Field, announcing itself as if it desperately
+needed the attention. Traffic from Harbour Pointe Boulevard (SW) pours in and
+merges onto the speedway, adding to its congestion as it continues its travel
+northwest and southeast from here, the foot traffic having dropped off in lieu
+of its vehicular counterpart. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39279
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	39222
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39220
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39222
+Name:	Along Mukilteo Speedway, near Picnic Point
+Desc:$
+   Finally, the speedway has broken free from its bond of chainlink fencing at
+this point, and is now lined by fairly sparse sets of buildings, most of which
+have given way to allow for a feature rarely seen elsewhere in other cities.
+To the west is Picnic Point, a clearing consisting of mostly trees dotting its
+landscape, where locals and tourists alike can soak up the scenery and enjoy
+the day (or night) in relative peace, aside from the occasional roar overhead
+of a passing aircraft. Directly to the southeast the speedway approaches
+Beverly Park Road, which allows access into the more commercialized areas of
+Everett. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	39223
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39221
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39223
+Name:	Intersection of Mukilteo Speedway and Beverly Park Road
+Desc:$
+   Mukilteo Speedway intersects with Beverly Park Road here, to the west is
+Picnic Point, while off to the south a ways is the area known as which Lake
+Serene, surrounding, what else, Lake Serene. The name itself may sound
+appealing, but it mostly consists of lower end residential housing and mobile
+home parks, certainly a step up above the barrens, but it certainly doesn't
+speak volumes of wealth or decadence. Beverly Park Road itself spans off to
+the southwest and northeast, its northernly path heading off up into a
+commercial section of the city. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39222
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39224
+Name:	Beverly Park Road, approaching Mukilteo Speedway
+Desc:$
+   Both sides of the road here consist of landscape littered with corporate
+offices and other lower end commercial businesses, having taken the approach
+of keeping their businesses away from the faster paced scenery of uptown
+Everett. Traffic begins to grow as travelers make their way into and out of
+the main thoroughfare for Paine Field-Snohomish County Airport, which begins
+to loom back into the background off in the distance to the north. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39297
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39223
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39225
+Name:	Along Beverly Park Road
+Desc:$
+   The southern most corner of Paine Field-Snohomish County Airport becomes
+visible along this portion of roadway, its familiar razorwire topped chainlink
+fence apparently having found itself a few residents in the form of several
+types of avians, who are nesting contently in its protective features.
+Traveling off to the south would bring one to the Mukilteo Speedway, a major
+traffic flow for the city, while Beverly Park Road continues its journey
+northeastward 112th Street (SW) and Airport Road. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39226
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39279
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39226
+Name:	Along Beverly Park Road
+Desc:$
+   Rows of lower end apartments decorate the side streets along the western
+edge of the road here, which are much nicer than one would expect. Due to
+their close proximity to Paine Field-Snohomish County Airport, the rent tends
+to be a little cheaper, for obvious reasons. The landscape is tastefully
+filled in with healthy looking trees and other greenery, adding a touch of
+class to an otherwise sparsely commercialized zone, lacking the usual store
+fronts and businesses that make their home in the city. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	16
+[EXIT northeast]
+	ToVnum:	39227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39227
+Name:	Intersection of Beverly Park Road and 112th Street (SW)
+Desc:$
+   This intersection is at one of the main entrances to the Paine
+Field-Snohomish County Airport, and as such is well defended by various design
+implications, such as the lack of high rise buildings along its borders, whose
+landscape consists of the occasional set of office buildings. Instead, patches
+of native trees and small parks are doubled as natural defenses, making it
+considerably harder to approach the airport by other means than the main
+roadways into it, no to mention corporations, both small and large, are kept
+at an arms length, with the exception of Fed-Boeing, just in case. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39230
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39228
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39226
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39228
+Name:	Along 112th Street (SW), near Bicson Biomedical
+Desc:$
+   The myriad of overgrown, well tended trees that dominates the edges of this
+roadway continues its course with little interruption, aside from a parking
+lot that cuts through the tree line to the south. The northern entrance lot to
+Bicson Biomedical, one of Everett's cutting edge biomedical corporations, is
+tucked tastefully into the sea of trees and other such greenery. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	16
+[EXIT east]
+	ToVnum:	39229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39285
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39229
+Name:	Intersection of 112th Street (SW) and Airport Road
+Desc:$
+   Upon each end of the intersection, lining the roads themselves and
+extending quite a ways beyond them, are masses of vegetation and other flora,
+mostly native trees, growing thick and healthy. They practically dominate the
+landscape, blocking the views of the more modern structures within the city
+limits, aside from a handful of the largest in the distance. To only portion
+of the roadway that is not swamped with such scenery is the southwestern end,
+which is only dotted with a handful of small office buildings, tucked into and
+sheltered by their green surroundings. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	16
+[EXIT east]
+	ToVnum:	39272
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	39270
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39228
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39231
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39230
+Name:	Along Beverly Park Road
+Desc:$
+   Swathes of various shades and hues of green and brown dominate this
+particular sub-section of roadways and byways that cut through them, upon each
+side native flora of all types is well tended and groomed, making for a very
+aestheticly pleasing atmosphere. Beverly Park Road, aptly named such,
+continues its journey along southwest by northeast. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	16
+[EXIT northeast]
+	ToVnum:	39232
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39227
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39287
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39231
+Name:	Along Airport Road
+Desc:$
+   Both sides of the road here are blocked by tall rows of native trees,
+planted so thick that it is almost impossible to make out anything beyond
+their green veil, aside from occasionally spotting a skyscraper or high rise
+further into the city past them. Everett is quite a green city, or at the
+least, attempts it best to live up to this sort of scenery, while still
+retaining a very steadfast and quickly growing economy in the Sixth World. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	16
+[EXIT southeast]
+	ToVnum:	39229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39232
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39232
+Name:	Intersection of Beverly Park Road and Airport Road
+Desc:$
+   A rather uninhabited intersection, as far as buildings or other commercial
+offices are concerned, instead, almost every end of this stretch of road is
+bordered by masses of vegetation. The trees here are large and healthy,
+obviously well tended for, with tangles of native flora growing in an abundant
+manner. Apparently there is little interest to surround the airport west of
+here with obstacles such as high rise or even low rise buildings of any real
+substance. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	16
+[EXIT southeast]
+	ToVnum:	39231
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39230
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39233
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39233
+Name:	Airport Road, near Beverly Park Road
+Desc:$
+   Rather plain looking office buildings with little to no aesthetic design
+line the eastern edge of the road here, consisting mostly of Paine
+Field-Snohomish County Airport administrative and record offices, relatively
+well guarded due to the fact they are used to store most of the 'paperwork' in
+them. To the southeast, Airport road meets up with Beverly Park Road as it
+continues its journey along. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	39232
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	8825
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39234
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39234
+Name:	Along Airport Road
+Desc:$
+   Trapped between the industrial scenery of nearby Paine Field-Snohomish
+County Airport to the west, and Kasch Memorial Park to the east, Everett
+showcases its constant struggle to find a balance between corporate
+infringement and its attempts to keep a 'green' atmosphere in its city. It
+does, however, quite a good job, as long as one doesn't look too far into
+things, the impact on natural wildlife alone is masked by the various swathes
+of parks and small patches of trees and other greenery. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	39233
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39235
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39235
+Name:	Along Airport Road
+Desc:$
+   A murky patch of marshland to the west is set aside on the edge of the
+airport, surrounded on three sides by the usual buildings crafted from strong
+aluminum, with its eastern edge sitting right up against Airport Road. A few
+geese can be occasionally spotted flying overhead, or sunning themselves and
+feeding within the fairly small lake hidden between the swathe of trees, where
+apparently they've taken up residence, much to the airports chagrine. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39237
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	39234
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39236
+Name:	Along 79th Place (SE)
+Desc:$
+   79th Place (SE) meanders its way between rows of bars and dives, along with
+an occasional store front that doesn't offer some various vice or pleasure. A
+few restaraunts of various themes and offered cuisine also line the roadway,
+attempting to ply their trade upon passerbys with wafting aromas that mix and
+mingle with one another, helping to drown out the thin cloud of smog from the
+nearby freeway to the south, which is still visible from even this distance. A
+rustic wooden and metal restaraunt sign hanging off the nearest building to
+the northwest is labeled "Jason's Bar & Grill", which, as one might expect,
+offers exactly what is noted. 
+~
+Flags:	10000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39248
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	22800
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39237
+Name:	Airport Road at Casino Road (W)
+Desc:$
+   The western landscape of Airport Road is dotted with aicraft parked for
+both maintenance and storage, as it borders along the eastern edge of the
+Paine Field-Snohomish County Airport, a busy central hub of the city for
+inbound and outbound travel. The end of Casino Road (W) is noted by several
+street signs as it travels east off of the roadway here, helping to carrying
+traffic along to the commercial sector of the city, while also helping ease
+the traffic problems of the usually congested freeway to the north. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39283
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39280
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39235
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39238
+Name:	Route 526 - (Boeing Freeway) at Airport Road
+Desc:$
+   The Federated Boeing Facility dominates the northern landscape along this
+section of the freeway, which now intersects with Airport Road, aptly named
+after the fact that it helps usher along traffic into and out of Paine Field
+Airport, which sits just off to the southwest from here. The freeway itself
+continues along in a west by east fashion, its elevated platform structure
+offering a decent view of the southern end of Everett, while the view to the
+north, obviously, is blocked off by towers of aluminum and steel. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	100
+Y:	20
+Z:	2.50
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39242
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39283
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39239
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39239
+Name:	Route 526 - (Boeing Freeway)
+Desc:$
+   Route 526 spans along at a steady pace, its traffic constantly flowing back
+and forth as citizens and tourists alike scurry and speed around to their
+destinations. The Federated Boeing Facility continues to dominate the entire
+northern end of the roadway, its structures a constant reminder of the
+industrialization of the area as it attempts to grow and keep up with the
+times. Off in the distance a ways to the southwest, Paine Field-Snohomish
+County Airport makes itself apparent, bringing in and taking out an ever
+changing population of (meta)humans and the like. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39238
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39240
+Name:	Along Route 526 - (Boeing Freeway)
+Desc:$
+   Heading along the curve of Route 526 continues to offer a great view of the
+airport south of here, and it isn't until one reaches this point that another
+set of scenery begins rolling into sight. The Federated Boeing Facility,
+considered by some as a local eye sore, looms into view to the northeast along
+the freeway that was named after it. Love it, or hate it, some citizens of
+Everett owe their livelihoods to the corporation, so they're more than willing
+to put up with massive expanse of aluminum and concrete structures that
+dominate a large plot of the landscape. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	39239
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39241
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39241
+Name:	Merging onto Route 526 - (Boeing Freeway)
+Desc:$
+   The Route 526 overpass begins elevating itself above the ground as it winds
+its way along the northern edge of Paine Field-Snohomish County Airport. The
+view offered here is perfect for anyone who wishes to watch the daily routine
+of aircraft inbound and outbound on their travels. Sturdy concrete reinforced
+walls keep any accidents from spilling off onto the areas beneath, as traffic
+pours across its length at a steady rate. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	100
+Y:	20
+Z:	2.50
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39240
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39210
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39242
+Name:	Along Route 526
+Desc:$
+   The close proximity of The Federated Boeing Facility along the northern
+edge of Route 526 makes it an especially good place to keep an eye on, and its
+rather obvious that the security there is doing just that. Dotting the
+landscape along side the freeway are both automated guard towers, most of
+which apparently have the decency to disguise themselves as structural
+supports for their outer perimeter wall and fence, along with multiple
+able-bodied security teams, remainig constantly vigilant as they make sure
+nobody is stupid enough to leap off the freeway overpass and make a run for
+their walls. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39243
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39238
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39243
+Name:	Route 526 - (Boeing Freeway) at 20th Avenue (W)
+Desc:$
+   This section of the freeway is congested a bit moreso than other stretches
+of the road, mostly due to the intersection of 20th Avenue (W), which allows
+traffic into and out of the main gateway entrance of the Federated Boeing
+Facility off to the northwest. The freeway itself continues along to the east,
+and curves off a little to the southwest as it journeys along to the west.
+Security seems to be quite tight, doing little to blend into the scenery at
+this particular section of roadway, making sure only authorized vehicles and
+those belonging to employees are taking a northern turn towards the facility.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	15
+[EXIT north]
+	ToVnum:	39218
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39245
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39242
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39244
+Name:	Along 7th Avenue (SE)
+Desc:$
+   Multitudes of office buildings and store front businesses are scattered
+along this section of 7th Avenue (SE), ranging from high end electronic
+dealerships to various other smaller stores dealing in odds and ends, all
+attempting to draw business away from the nearby Everett Beacon Mall. One in
+particular stands out amongst the crowd of buildings, that being Dadson Vision
+Entertainments, which is a very popular outlet that deals with just about
+anything electronic. 
+~
+Flags:	10000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	22830
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39275
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39245
+Name:	Along Route 526 - (Boeing Freeway)
+Desc:$
+   The landscape to the south begins to weave into an orchestra of vibrant
+greens and soft tans and browns, offering a splendid view of the Walter E.
+Hall Golf course off in the distance to the south. It is a relatively welcome
+change of pace from the usual mixture of dull greys and reflections cast by
+windows made of high tempered glass. Ofcourse, the view doesn't last for long,
+and once again shifts back to these monotonous hues once one travelers a
+little further along to the west or east. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39246
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39243
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39246
+Name:	Further along Route 526 - (Boeing Freeway)
+Desc:$
+   The western stretch of Casino Road can be seen running parallel along the
+southern edge of the freeway to the south, dotted with businesses mostly
+designed as tourist traps, tempting passerbys to empty their wallets as
+quickly as possible. Other such businesses and offices can be seen a bit
+further to the north as well, since apparently this section of the city of
+Everett is geared towards vices and other such trades, bars and other dives as
+far as the eye can see. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39247
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39245
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39247
+Name:	Western Route 526 / Evergreen Way Exchange
+Desc:$
+   Traffic here becomes a bit more drastic in both quality and quantity as
+vehicles hecticly pour onto and off of the freeway, their destination being
+Evergreen Way, one of the main thoroughfares within the city. The underpass
+stretches beneath its expanse as it continues its way east, heading towards
+collections of bright neon lighting that can only mean one is close to the
+economic center of the city. 
+~
+Flags:	10100000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39250
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	39254
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39246
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39248
+Name:	Evergreen Way near 79th Place (SE)
+Desc:$
+   Off in every direction, the dominating features of the landscape is Casino
+Corner, the largest collection of nightclubs and vices in the entire city,
+which draws a lot of attention from both locals and tourists alike. 79th Place
+(SE) marks the northern end of this section of highway as it journeys its way
+away from the looming overpass of Route 526 to the south. 
+~
+Flags:	10000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	39250
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39249
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39236
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39249
+Name:	Evergreen Way, on the Route 526 Overpass 
+Desc:$
+   The Route 526 overpass looms and stretches across this section of Route 526
+(Boeing Freeway), its sturdy structure a monument to sound architectural
+design, having held out against all the rigors the awakening had to throw at
+it, and still coming out in one piece. The occasional bit of graffiti can be
+seen along its edges, most of which has been either power washed off or
+painted over, leaving little more than slight colour differences where they
+once were. 
+~
+Flags:	10000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39248
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39254
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39250
+Name:	Eastern Route 526 / Evergreen Way Exchange
+Desc:$
+   Traffic continues to be a burden along this particular section of the
+exchange, masses of vehicles attempting to merge onto the freeway clogging it
+up to quite an extent, regardless of the time of day. Fortunately, some of the
+congestion clears the way as other vehicles eagerly attempt to get off,
+apparently destined for the collection of bright neon lights and signs that
+designate Casino Corner, the largest collection of vices within the city
+limits. Towards the east the interstate can be seen in the distance, whose
+traffic is even worse than the freeways, lucky you. 
+~
+Flags:	10100000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39251
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39247
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39248
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39251
+Name:	Route 526 between Evergreen Way and South Broadway
+Desc:$
+   Off to the west a way, brightly lit and begging for attention is Casino
+Corner, which lives up to its namesake as a place to be in this city, wether
+it be for business or for pleasure. The fast paced action there is nearly tied
+with the fervor with which vehicles pace themselves along this section of the
+freeway, but, at the least, traffic is moving swiftly, making it easier to get
+from point A to point B, as long as one doesn't mind the occasional twenty car
+pile up. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39252
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39250
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39252
+Name:	South Broadway Exit on Route 526
+Desc:$
+   The South Broadway exit leads off the southern edge of this section of the
+freeway, while further off to the east I-5 dominates the landscape, its
+multiple lanes making this road look like a side street. Bright lighting and a
+faint neon glow can be seen off to the west, while to the south the skyline is
+dotted with various highrise buildings, both commercial and office spaces
+alike. A pleasant view of Cypress Lawn Memorial Park can be seen from this
+raised section of roadway, which looks almost out of place in the center of
+the city hub. 
+~
+Flags:	10100000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	100
+Y:	20
+Z:	2.50
+RoomType:	2
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	45211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39278
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39251
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39253
+Name:	Northern Everett Beacon Mall parking lot
+Desc:$
+   An expanse of asphalt larger than some third world countries is spread out
+before visitors, littered with row after row of parking spaces and cement
+dividers. The parking lot itself stretches out almost as far as the eye can
+see to the south and southwest, while in the background Everett Beacon Mall
+stands in all its glory, an unmistakable landmark that draws not only the eye,
+but swarms of citizens to its inner sanctum. 
+~
+Flags:	110000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	39376
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39360
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39276
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39254
+Name:	Evergreen Way and Casino Road
+Desc:$
+   This busy intersection sees a constant flow of traffic as vehicles pour off
+of the Route 526, while Casino Road spans across the exchange in a west by
+east direction. Casino Corner practically dominates what little landscape
+isn't already taken up by the freeway overpass system, taking up its position
+as one of the central commercial hubs of the city. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39249
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39255
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39260
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39257
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39247
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39255
+Name:	East Casino Road near Casino Corner
+Desc:$
+   Living up to its title, East Casino Road is the main thoroughfare for
+traffic heading into and out of the acclaimed Casino Corner, the largest
+collection of vices in the city of Everett. The amount of traffic, both
+vehicle and foot is practically overwhelming, and even with multiple lanes,
+congestion is a common thing to see. Between road rage and the occasional
+drunk driver, this area sees its fair share of accidents, not all of which are
+all that accidental. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39256
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39254
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39256
+Name:	Along Casino Corner
+Desc:$
+   Casino Corner, the largest collection of nightclubs, bars, and other such
+vices in the city of Everett, utterly dominates the landscape from this point
+on, making even the interstate and freeway nearby look miniscule in
+comparison. While not as busy or as large as the Gates Casino, they certainly
+make a profitable business for themselves with a wide range of offered vices.
+No matter what your tastes may be, its more than likely Casino Corner can and
+will cater to their clients desires. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	39255
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39257
+Name:	Along Casino Road (E)
+Desc:$
+   Casino Road continues along to the west, while off to the east stands the
+intersection at Evergreen Way. Casino Road houses many of the nightclubs, bars
+and other such dives, making up a portion of the area known as Casino Corner,
+a massive collection of vices all packed together for optimum nuyen draining
+effects. Both sides of the road are covered in various businesses and trades
+that cater to the desires of both citizens and SIN-less along, drawing in the
+shadowy crowd from their hiding places and pulling them into the social arena.
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39254
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39258
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39258
+Name:	Casino Road (W) at Upper Ridge Road
+Desc:$
+   The various vices offered here are enough to make most wage slaves drool,
+and can even make a shadowrunners mouth water at the sheer range of trades at
+their fingertips. The area is alight with the social crowds, consisting of
+wage slaves, bar hoppers, drunks, runners, and pretty much everyone inbetween,
+including the various criminals and even the corporate suits (often one in the
+same). Upper Ridge Road breaks off and heads north into a collection of
+'business' offices, mostly nightclubs and bars. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39259
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39257
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39282
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39259
+Name:	Along Upper Ridge Road
+Desc:$
+   Various bars and other dives are scattered all along this short stretch of
+road, catering to the denizens, eagerly drawing them in with advertisements of
+their vices, along with band dates and other appearances upon glowing neon
+signs. Wether a denizen of the city or the shadows, wage slave or corp suit,
+SIN-less or sinful, these businesses only care about one thing, and thats if
+you've got the cash to blow on anything they offer. If one does, then they'll
+welcome you with open arms, as long as you're not stupid enough to flash the
+wrong gang colours or come equipped with clashing titles of the various crowds
+that mingle. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39336
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39258
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39260
+Name:	Along Evergreen Way, near Casino Road
+Desc:$
+   Commercial businesses of all shapes and sizes are scattered throughout the
+web of office buildings and side streets, along with a few warehouses used for
+the larger corporations that call the Intercity area home. There are hardly
+any vacant or run-down buildings, aside from maybe one or two that have
+sustained some sort of damage, wether accidental or intentional, and are being
+renovated for their new owners. Evergreen Way churns traffic along at a steady
+pace here, trying its best to manage the crowded lanes into a constant motion
+of pedestrians and vehicles. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39254
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39261
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39261
+Name:	Along Evergreen Way
+Desc:$
+   The heart of the Intercity area is plagued by the usual culprits of
+traffic, smog, the occasional bout of street violence, but all in all is
+fairly tame in comparison to other places in the metroplex. One might see a
+gang member or two, but for the most part they aren't flying their colours as
+boldly or as freely as one might expect, probably due to the high
+concentration of public security officers that patrol the area, trying to keep
+it as clean as possible to uphold the stereotype of Everett being a sleepy
+town without all the problems of other big cities. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39260
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39262
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39262
+Name:	Along Evergreen Way, near Everett Mall Way (SW)
+Desc:$
+   The Intercity area does its best to display the various businesses and
+store fronts that make up its commercial sector, while also managing to curb
+the usual territory disputes that erupt when SIN-less perps are given an inch
+of freedom. What little graffiti that has been tagged onto the buildings or
+property along the road side have been swiftly painted over to mask their
+presence. To the southwest a ways, Evergreen Way meets up with Everett Mall
+Way (SW), one of the main arteries that usher traffic to and fro to Everett
+Beacon Mall. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39261
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39263
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39263
+Name:	Intersection of Evergreen Way and Everett Mall Way (SE)
+Desc:$
+   Evergreen Way bisects its way in a northeastern by southwestern fashion
+through the lower heart of the city of Everett, acting as a main artery
+between the areas of Intercity to the north and Fairmont to the west. The
+landscape along either side of the intersection here is littered with
+commercial offices of all sorts, while amidst them are a massive collection of
+billboards and other such advertisements for services all across the city. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39262
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39273
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39264
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39264
+Name:	Traveling along Evergreen Way
+Desc:$
+   Various streets signs are posted inbetween a colourful menagerie of
+billboards featuring advertisements for businesses ranging from simple Stuffer
+Shacks, to the higher end restaraunts and other tourist traps designed to
+drain the wallets of any visitors to the city. A safety green signed
+highlighted with multiple reading lights beneath it reads, "Everett Mall Way
+(SE) Exit - Northeast 220m", while another mimics its design on the other side
+of the road, reading "112th Street (SW) - Southwest 280m". 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39263
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39265
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39265
+Name:	Intersection of Evergreen Way and 112th Street (SW)
+Desc:$
+   Trees of various type and size decorate the edges of the roadway here,
+attempting to add a bit more natural colour to the scenery, as opposed to the
+usual clashing mixture of neon and brightly lit signs that are also posted
+along each corner of the intersection. 112th Street (SW) cuts through this
+part of Evergreen Way, moving traffic along to the southern end of Fairmont as
+it heads its way along towards Paine Field-Snohomish County Airport upon its
+other side. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39264
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39266
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39271
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39266
+Name:	Along Evergreen Way
+Desc:$
+   Quite a bit of construction is taking place along the western edge of the
+roadway here, consisting of mostly dirt lots that are being excavated and
+being prepped for weight bearing sub-basements and other such structures
+needed to start the construction off on the right foot. A few recently
+finished buildings have their surfaces covered in a thin layer of dust, which
+is being kicked up by all the nearby work, so they don't look as flashy as
+they normally would. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39265
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39267
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39267
+Name:	Along Evergreen Way
+Desc:$
+   Several billboards are posted along this section of Evergreen Way, mostly
+consisting of advertisements for other businesses and trades located in other
+parts of the city, while some are offering prices for rent or lease of the
+newly built office buildings. Most of the finished projects in the area have
+already been claimed by various corporations, eager to get their offices into
+the growing hub of both industrial and commercial wares as Everett expands its
+horizons. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39266
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39268
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39268
+Name:	Intersection of Airport Road and Evergreen Way
+Desc:$
+   The usual assortment of office buildings and low rises make their home at
+this corner of the intersection of Airport Road and Evergreen Way, where the
+whole 'green' atmosphere seen in other places nearby has taken a back seat to
+good old fashioned capitalism. The Commercial sector begins picking up the
+slack, posting signs of various shades of colour, all intended to catch the
+eye of passerbys, attempting to draw in business from them, wether they be
+locals or tourists. Evergreen Way continues its journey off to the northwest,
+while Airport Road travels up towards the northwest. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39267
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39269
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39269
+Name:	Along Airport Road
+Desc:$
+   Offices spaces and other low rise buildings continue to make their presence
+known from inbetween shades of green and brown, their aluminum siding and
+concrete bases standing out quite a deal in comparison, but not enough to
+unnecessarily clash with the enviroment. For the most part, the nuisance of
+industrialization is ignored in these parts, as long as businesses do their
+part to keep it from getting out to where anyone else can see it, so in most
+cases the structures here are owned by small private corporations in need for
+lab space, or a good spot to keep their records from the prying eyes of their
+competition. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	39268
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39284
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39270
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39270
+Name:	Along Airport Road
+Desc:$
+   Various businesses claim this section of Airport Road, consisting of both
+commercial and industrial suppliers and their offices in Everett, one of many
+sectors that has seen a spurt of growth due to Everett's ever expanding
+corporate structures and businesses attempting to climb to the top of the food
+chain. The city, however, has done their best to help incorporate these
+buildings into the area while still keeping a green atmosphere, forcing them
+to build around patches of flora and insisting they 'keep up' with an
+appearance that the city can be proud of. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	22886
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	39269
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39271
+Name:	Along 112th Street (SW)
+Desc:$
+   The southern edge of Fairmont is considerably more green than most areas
+within the city, which tries to find a balance between a growing industrial
+sector while still trying to make room for a bit of nature in the process. The
+mixture of concrete and ranging shades of green and brown makes for a cozy
+change from most other areas, giving it an appeal that simply can't be found
+in the rotting husks of places such as the barrens, which seem like some far
+off land in comparison. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39265
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39272
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39272
+Name:	Along 112th Street (SW)
+Desc:$
+   Low rise office buildings are tastefully tucked behind and blended into the
+scenery of lush, healthy greens, masking their dull grey structures to lend
+this stretch of road a more natural look to it. Wildlife, one thing that is
+hardly even present in most parts of the cities these days, can actually be
+seen every now and then as they make their homes in the offered swathes of
+nature. Even in this setting, however, the shadows stretch their tendrils
+forth, making their presence known even in this kind of territory, as
+buildings catering to the less respectable clients of the underworld make
+themselves known. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	16
+[EXIT east]
+	ToVnum:	39271
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	22820
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39229
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39273
+Name:	Everett Mall Way (SW), near Evergreen Way
+Desc:$
+   To the west, Evergreen Way intersects with Everett Mall Way (SW), creating
+a pile up of traffic in the process. Further beyond that is the area known as
+Fairmont, while Evergreen Way itself winds up along in a north/south manner,
+connecting it to the Intercity area of Everett. Both sides of the roadway are
+covered in a office spaces, which consist of a healthy mixture of businesses
+that keep the economy of the city flowing. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39274
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39263
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39274
+Name:	Along Everett Mall Way (SW)
+Desc:$
+   Everett Mall Way cuts a swathe through a very busy section of the city
+proper, the constant motion of traffic and pedestrians creating an atmosphere
+of movement that is hard not to get swept up in. Everett Beacon Mall, an ever
+present landmark in this area, practically dominates the skyline to the east,
+its base swamped with more vehicles than most people have seen in a single
+place, which in of itself is a very impressive feat. Off to the southwest,
+Evergreen Way meets intersects with this roadway, helping to carry along the
+abundance of traffic. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	16
+[EXIT northeast]
+	ToVnum:	39275
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39273
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39275
+Name:	Everett Mall Way (SE) at 7th Avenue (SE)
+Desc:$
+   Various businesses are clumped together in a sporadic amalgamation of both
+high rise and low rise buildings, some featuring office space, while others
+are store fronts for larger businesses looking to fill a niche and steal a
+little business from the nearby Everett Beacon Mall. The constant repetition
+of stop and go traffic forced by pedestrians slows down the flow, lining the
+roadway with red and green walk and stop signs, which flash and glow in an
+orchestra of light. 7th Avenue (SE) branches off from the main roadway and
+heads along from north to south here as well. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39244
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	39276
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39274
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39276
+Name:	Everett Mall Way (SE), at Everett Beacon Mall
+Desc:$
+   Bordering the southern edge of this roadway is a massive expanse of asphalt
+parking lots, filled with rows after rows of vehicles. Multiple crosswalks
+criss-cross the landscape, allowing for swift and safe passage for those who
+wish to spend their hard earned cash at Everett Beacon Mall, the largest of
+its kind in the city of Everett. As its namesake implies, it acts as a beacon
+for all walks of both citizenry and SIN-less alike, drawing in crowds from all
+over the county. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	16
+[EXIT north]
+	ToVnum:	39277
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	39253
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39275
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39277
+Name:	Intersection of South Broadway and Everett Mall Way (SE)
+Desc:$
+   Dominating the landscape to the east is the ever imposing I-5, a main
+artery in the flow of traffic through Everett, featuring a 'last chance'
+onramp that winds its way off beneath its structure to the northeast. South
+Broadway eventually merges with Everett Mall Way (SE), which practically herds
+both vehicle and foot traffic towards Everett Beacon Mall, its structure
+standing out amongst the masses of lowrise office building and other store
+front buildings that call this section of the city home. 
+~
+Flags:	10000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39278
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	45216
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39276
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39278
+Name:	South Broadway approaching Route 526
+Desc:$
+   Winding masses of roadways and overpasses twist and turn both overhead and
+around each side of South Broadway, masses of traffic flowing to and fro along
+them as they attempt to merge onto the interstate and freeway alike.
+Commercial buildings and office spaces dot the landscape inbetween these
+sections of roadway, while an occasional crosswalk halts traffic so citizens
+and wage slaves can mill their way across in relative safety. Hidden behind
+the buildings to the west is Cypress Lawn Memorial Park, where most of the
+foot traffic seems to be pouring in and out of. 
+~
+Flags:	10000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39252
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39277
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39279
+Name:	Along 121st Street (SW)
+Desc:$
+   Nestled between Mukilteo Speedway to the west and Beverly Park Road to the
+east, this little stretch of road features the usual road side nuyen traps,
+consisting mostly of Stuffer Shacks and many of the other competitors
+attempting to fill the same niche. A gas station or two is settled between
+these businesses, helping travelers fill up for their eventual venture deeper
+into the city, or out of it. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39286
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39225
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39221
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39280
+Name:	Along Casino Road (W), near Airport Road
+Desc:$
+   Meandering its way between Boeing Freeway to the north, and Kasch Memorial
+Park to the south, the western end of Casino Road offers a stark contrast of
+scenery between the two as it travels its way to the east. Only a handful of
+office buildings can be found here, all of which are tastefully set into the
+landscape to in lieu of a more natural feel to the area. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39281
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39237
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39281
+Name:	Along Casino Road (W)
+Desc:$
+   Casino Road (W) continues to hug along near the underbelly of Route 526,
+almost constantly in the shadow of the menacing structure. Off to the south,
+Walter E. Hall golf course, one of the few in the area, consists of well
+tended tree lines, constantly trimmed grass and hedges, and an occasional sand
+trap or two of varying tan shades. It stands as a dedication, to what can be
+accomplished when concern for the land is put before the care of the lower
+dregs of citizenry, as precious resources such as water are put to 'better'
+use. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39282
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39280
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39282
+Name:	Along Casino Road (W)
+Desc:$
+   The clashing of the big city atmosphere and the landscape of green is ever
+present along this particular stretch of road, with Casino Corner and its
+multiple vices just to the east, while to the west memorial parks and golf
+courses seem to be more on par (Cue pained groan as that pun sinks in). At
+some points, the two simply overlap one another, making for quite a bit of
+scenery. But, for the most part, public security forces manage to keep them at
+bay from one another, just in case things get out of hand. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39299
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39258
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39281
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39283
+Name:	Route 526 off-ramp at Airport Road
+Desc:$
+   The off-ramp climbs up along to the northern overpass, leading to Route 526
+(Boeing Freeway), while off to the south Airport Road travels along the
+eastern edge of Paine Field-Snohomish County Airport, which eventually meets
+up with the western end of Casino Road. Aside from a few office buildings
+built on the other side of cement sound barriers, little of worth is notable
+for a casual passerby. 
+~
+Flags:	10000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39238
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39237
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39284
+Name:	Along Center Road, near Bicson Biomedical
+Desc:$
+   Center Road acts as an access route to various office buildings, the
+largest in particular belonging to Bicson Biomedical to the north, who
+apparently prefer their business to be private. The area is surrounded mostly
+with large, healthy trees, making it hard to get a good look at until one is
+almost upon their front step. Security here is sparse, with little in the way
+of apparent features, such as bulky guards and security vehicles. Instead,
+arrays of sensors and other such implements, along with cameras of all sizes
+and substance are posted often along this length of road. 
+~
+Flags:	10000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39269
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39285
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39285
+Name:	Along 117th Street (SW), at Bicson Biomedical
+Desc:$
+   A lengthy expanse of parking spaces has paved itself into the scenery,
+which houses most, if not all of the vehicles used by employees at Bicson
+Biomedical, which sits just a short way off to the east of the lot itself. The
+view from this point of the building is, by any means, unimpressive, as it
+looks like any other corporate owned office building might. Little aesthetic
+design has been implemented in its construction, and for all intents and
+purposes, was built to serve its purpose, and nothing else. 
+~
+Flags:	110000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39228
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	22850
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	39284
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39286
+Name:	Stuffer Shack
+Desc:$
+   Not as run down as some of the other Stuffer Shacks around, and the fact
+the cashier isn't behind a meter of bulletproof glass tends to give the
+impression they don't see some of the rougher treatment as their counterparts.
+Filled to the brim with all of the essential goodies and snacks one has come
+to expect from the brand, it proves an invaluable asset to the masses of
+fodder who need a cheap and quick bite to eat. 
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	6
+Z:	2.50
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	39279
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39287
+Name:	Everett Gala Inn
+Desc:$
+   The Everett Gala Inn is a family-styled hotel that is known for its
+comfort, especially over the normal run-of-the-mill coffin. The atmosphere is
+quiet, and the service is friendly (as long as you're paying your bill
+ofcourse), and the nightly rates could be worse, considering its location. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	10
+Y:	6
+Z:	2.50
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	39230
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39288
+Name:	A room at Everett Gala Inn
+Desc:$
+   It's not a bad place to crash for a one-nighter. It has a decent bed, a
+trideo (bolted down), a small bathroom with running water and clean towels,
+plus heavy blinds to keep light and noise out for the windows. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	2.50
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT down]
+	Desc:$
+Down to the main lobby. 
+~
+	ToVnum:	39287
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39289
+Name:	Everett Room Space
+Desc:$
+   Fill this description in later, its for Everett, you dummy. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#39290
+Name:	Everett Room Space
+Desc:$
+   Fill this description in later, its for Everett, you dummy. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#39291
+Name:	Everett Room Space
+Desc:$
+   Fill this description in later, its for Everett, you dummy. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#39292
+Name:	FREE ROOM
+Desc:$
+   Fill this description in later, its for Everett, you dummy. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#39293
+Name:	FREE ROOM
+Desc:$
+   Fill this description in later, its for Everett, you dummy. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#39294
+Name:	FREE ROOM
+Desc:$
+   Fill this description in later, its for Everett, you dummy. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#39295
+Name:	FREE ROOM
+Desc:$
+   Fill this description in later, its for Everett, you dummy. 
+~
+Flags:	10000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#39296
+Name:	Everett Vehicle Load Room #1
+Desc:$
+   This is the Everett Vehicle Shop #1 Load Room. Linked vehicle shop is room
+39297. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#39297
+Name:	Beverly Park Automotives
+Desc:$
+   This automotive dealership caters to the lower fringe of society, namely
+the working class, along with vehicles for smaller security companies looking
+for a name brand automobile. Sturdy, reliable vehicles line the lot, some of
+which have gained a foothold in the market and refuse to give their spot up
+without a fight. Several dealers skulk around the lot, biding their time until
+they can lure a customer in and ambush them for a sale. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	39224
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39298
+Name:	Everett Vehicle Load Room #2
+Desc:$
+   This is the Everett Vehicle Shop #2 Load Room. Linked vehicle shop is room
+39299. 
+~
+Flags:	0
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	2.50
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#39299
+Name:	Casino Road Limousine Retailer
+Desc:$
+   The atmosphere within this vehicle lot is one of pampered decadence and
+aesthetics, which blatently caters to the more well off of socialites, which
+is reinforced by first glance at the price tags on some of the vehicles
+offered. Specializing in limousine sales for the upper crust of society who
+have sold their souls for a fat paycheck and a pretty ride. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	39282
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39300
+Name:	Entrance to Mukilteo State Park
+Desc:$
+   An expansive paved parking lot marks the front of Mukilteo State Park,
+which stretches down along the shores of Puget Sound, making a great spot for
+tourist traffic. Occasional patches of trees pop up inbetween the rows of
+painted white lines marked for parking vehicles. The shore itself is further
+off to the west, while the lot continues around the entrance. 
+~
+Flags:	100000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39204
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39301
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39303
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39301
+Name:	A back corner of the parking lot
+Desc:$
+   A rear corner of this expansive parking lot is a bit cleaner than the rest,
+its pavement safeguarded from most of the sand and rocks by its distance from
+the shore area. A few trees have been planted to offer shade for tourists and
+visitors to the park, along with occasional benches flanked with trash bins
+for sitting and relaxing. A small beverage stand has been set up along the
+edge of the lot, a purveyor for parched pedestrians. 
+~
+Flags:	100000000000000000000000
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39300
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39302
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39302
+Name:	Along a dusty section of parking lot
+Desc:$
+   Thin blankets of sand cover have been blown and drifted inward from the
+shore into this edge of the parking lot, which seems to be swept back out
+every so often to keep it from becoming a real issue. Off to the north and
+west one can clearly see footpaths winding their way along the rocky shore
+front, while bordering the lot to the south end is set of sandy dunes,
+cordoned off by a small eco-friendly wire fence, peppered with sparse
+vegetation and scrub. 
+~
+Flags:	100000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39303
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39301
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39303
+Name:	Entering the State Park
+Desc:$
+   The pavement of the parking lot has a thin layer of sand and the occasional
+scattered pebbles, having been trekked and blown in from the western end,
+which opens up into wide foot paths towards the shore area of the park. A
+manicured lawn borders the northern edge, which a few old breakfast and bed
+houses have set up shop, helping to drawn in tourists for a stay. Occasional
+patrols of park security can be seen doing their rounds, trying their best to
+keep the area free of criminal activity. 
+~
+Flags:	100000000000000000000000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39300
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39302
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39305
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39304
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39304
+Name:	Beyond a break water on the shore
+Desc:$
+   Sitting beyond the bed and breakfast buildings is a carefully compiled row
+of large rocks used as a break water for rougher weather, keeping the
+buildings safe from wave activity and preserving their manicured lawns from
+sand. The shore itself stretches a few dozen meters out, depending on the
+tide, creating a large strip of beach front. Some tourists have set up lawn
+chairs and even blankets to take the scenery in from, and considering how free
+of trash and other refuse the area is, it's safe to say the park officials
+take pride in it and go to quite an extent to keep it this way. 
+~
+Flags:	0
+SecType:	Mist
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	39303
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39305
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39305
+Name:	Along the Puget Sound shore front
+Desc:$
+   Several foot paths diverge and wind their way along the stretch of shore
+front, which consists of sand and the occasional large chunks of rock sticking
+up from it. The beach itself travels along in a northeast by southwest
+fashion, traveling along the waters of Puget Sound. A few docks of varying
+lengths jut off into the waves, which are often used for casual fishermen,
+tourists and other visitors here to relax. 
+~
+Flags:	10000000000000000000000
+SecType:	Mist
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	15
+[EXIT northeast]
+	ToVnum:	39304
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39303
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39307
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39306
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39306
+Name:	Out on a small dock
+Desc:$
+   Cool breezes blow in from Puget Sound, this small dock jutting out into its
+waters twenty or so meters, making it perfect for both sight seeing or a
+little fishing, which some of the visitors have taken to. Large cargo ships
+and other miscellaneous vessels can be seen out on the Sound, heading to and
+from the Everett docks, since the waters are a fairly busy shipping lane. 
+~
+Flags:	100
+SecType:	Mist
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	39305
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39307
+Name:	Along the shore front
+Desc:$
+   A scenery of slightly off-white sand peppered with grey rocky formations
+occasionally jutting up from its depths sits upon the shore of Puget Sound,
+sparsely dotted with scrub brush and other grasses that dwell in this
+enviroment. Along the shore here is another dock, looming out into the waters
+along side another, while beaten foot paths stretch their way along the beach
+front in both directions. 
+~
+Flags:	10000000000000000000000
+SecType:	Mist
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39305
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39309
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39308
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39308
+Name:	Out on the dock
+Desc:$
+   Stretching out into the waters of Puget Sound, this squat little dock
+pushes maybe twenty or so meters out before coming to an end. An occasional
+group of fishermen can be seen casting out from here, while others are taking
+up the offer of a small line of viewing binoculars, bolted directly to the
+dock, protected from the elements with casings of plastic. 
+~
+Flags:	100
+SecType:	Mist
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	39307
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39309
+Name:	A path along the shore front
+Desc:$
+   The western edge of this section of the shore front consists mostly of
+rocky crags half-hidden beneath the tide, the sandy path traveling between it
+and the area of dunes to the east. Other well-beaten foot paths split off from
+this main lane and venture further into the rolling dunes, while to the south
+the shore front continues in usual fashion. 
+~
+Flags:	10000000000000000000000
+SecType:	Mist
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39307
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39314
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39310
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39310
+Name:	Infront of the Bait Shop
+Desc:$
+   Set up along the shore front of the Sound is a conveniently placed bait
+shop, housed within what looks to be a fairly flimsy wooden structure, though
+it must be sturdier than it appears to have survived the elements along the
+shore. Sandy pathways stretch further north and south, while off to the east a
+collection of dunes appear as ripples in the scenery. 
+~
+Flags:	10000000000000000000000
+SecType:	Mist
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39309
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	39314
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39311
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door
+	Desc:$
+A simple wooden door opens up into the Bait Shop. 
+~
+	ToVnum:	39316
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39311
+Name:	An upper pathway along the shore
+Desc:$
+   The shore front widens along this stretch, bordered on one side by multiple
+dunes, while off closer to the waters of Puget Sound are several lower
+pathways along its length. Ships passing by off in the distance can be heard,
+along with the small wildlife that call this enviroment home. 
+~
+Flags:	0
+SecType:	Mist
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39310
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	39313
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39312
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39312
+Name:	Further along the shore
+Desc:$
+   Narrowing paths in the sand are interupted by the encroachment of the
+Sound, the shore having been eroded by the tides and pulled out into the
+depths of the water. The pathway to the northeast climbs back up along the
+sand speckled with rocky formations, while the State Park itself ends and the
+narrowing shoreline is the property of both public and private owners. 
+~
+Flags:	0
+SecType:	Mist
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	10
+Z:	3.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39311
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39313
+Name:	Tucked behind a set of dunes
+Desc:$
+   Tucked behind a set of dunes here is an open area, where apparently someone
+has set up a rental service for sand buggies, though whoever is running it
+seems to be missing in action. Several rows of buggies are lined up here, used
+for exploring and traversing the sand dunes in comfort. The shore front can be
+seen off to the northwest, where one can see the waters of the Sound if they
+look close enough. 
+~
+Flags:	10000000000000000000100
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39315
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39311
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39314
+Name:	In a section of dunes
+Desc:$
+   Several pathways delve through the dunes and patches of scrub and other
+sparsely littered greenery, some of which are obvious foot paths, while others
+are wider and deeper, consistent with off-road vehicles and ATV's. A small
+maze of dunes is available to tourists to stumble around in, the tops of which
+can offer very nice views of the Sound west of here. 
+~
+Flags:	10000000000000000000000
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	15
+[EXIT south]
+	ToVnum:	39315
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39310
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39309
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39315
+Name:	Weaving through the dunes
+Desc:$
+   Rolling dunes of sand held together by a patchwork of scrub bushes and wild
+grasses dip and lift along this ATV path, winding its way through the area and
+past several small picnic spots and elevated veiwing areas. Several trash bins
+are chained down and are accompanied by 'No Littering' signs, warning of fines
+and other punishments for those caught. 
+~
+Flags:	10000000000000000000000
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39314
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39313
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39316
+Name:	Inside of a Bait Shop
+Desc:$
+   This rustic little shack looks flimsy from the outside, but seems to be
+holding up quite well inside, considering its placement upon the shores of
+Puget Sound. Buckets and bins of various types of bait are labeled, most of
+which is still alive, perfect for fishing. While a little cramped, all in all,
+this shack isn't so bad, if you can stand the smell of large quantities of
+live and dead bait. 
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	2.50
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door
+	Desc:$
+A simple wooden door keeps the elements out. 
+~
+	ToVnum:	39310
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	Keywords:	hidden panel secret trap
+	Desc:$
+A hidden panel beneath the shop is embedded into the floor boards. 
+~
+	ToVnum:	8800
+	Flags:	2
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+	HiddenRating:	15
+BREAK
+#39317
+Name:	Inside the Lore Store
+Desc:$
+   An odd array of talismans and other magical goodies can be found on
+display, along with books and scrolls of all types tucked away into the rows
+of shelves that cover most of the wall space here. As its name might suggest,
+this particular shop caters to the awakened, hermetics in particular. A
+hallway leads off to the back of the store, which is blocked off by a closed
+wooden door. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	2.50
+RoomType:	5
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door wooden
+	Desc:$
+A sturdy wooden door blocks the way into the back room. 
+~
+	ToVnum:	39318
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39211
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39318
+Name:	Back room of the Lore Store
+Desc:$
+   Shelves upon shelves continue to decorate most of the wall space here, the
+back room leading down a path to a set of wide spiral stairs, which apparently
+lead down beneath the store itself. The smell of cigar smoke and a hint of
+booze wafts up from below, along with the occasional echo of muffled laughter
+and casual conversation being carried on. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door wooden
+	Desc:$
+A sturdy wooden door blocks the exit out. 
+~
+	ToVnum:	39317
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	39319
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39319
+Name:	Dirty Rikki's Bar
+Desc:$
+   At the bottom of the stairs, the room opens up quite a bit, allowing for
+foot traffic of those coming and going. The atmosphere is obviously one of a
+bar, a fairly rustic one at that, with laid back occupants who would rather
+enjoy a drink and a little conversation than the usual ear-splitting techno
+babble music most other clubs offer. Off to the east the bar itself can be
+found, while further along this path to the south the rooms split and
+partition themselves off to act as private booths, for those who wish to drink
+in peace. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39320
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39321
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	39318
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39320
+Name:	At the bar
+Desc:$
+   A full length synthwood bar curves along a corner of the room, allowing for
+a dozen or so seats at it, its surface occasionally polished to a rough shine
+with a rag by the tender. A few small circular wooden tables have been set up
+with a few chairs scattered between each of them, for anyone who doesn't wish
+to have a seat at the bar itself. Behind the counter is a large, full-length
+mirror, allowing everyone, regardless of their seating arrangements, to have a
+clear view of the entrance. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	4
+Cover:	4
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	39321
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39319
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39321
+Name:	Near the back of the bar
+Desc:$
+   A few scattered tables have been set up along in this area, featuring
+comfortable wooden seats to lounge and relax in. The air is hazy with cigar
+smoke and the smell of booze, but, at the least, it doesn't smell like the
+cheap stuff. A few private booths have been set up and partitioned off from
+the main area, offering privacy for those who wish to do business, or simply
+enjoy their drinks by themselves. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39319
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	39320
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	partition door
+	Desc:$
+A simple partition of synthwood folds open and closed, making it ideal for
+keeping privacy. 
+~
+	ToVnum:	39323
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	partition door
+	Desc:$
+A simple partition of synthwood folds open and closed, making it ideal for
+keeping privacy. 
+~
+	ToVnum:	39322
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39322
+Name:	In a private booth
+Desc:$
+   This spacious private booth is partitioned off from the main area, and
+features a few options that may come in handy, wether for relaxing, or
+conducting business privately. Small white noise generators are bolted to the
+center of the ceiling, half-hidden behind a decorative wooden fan, which can
+be turned on by a simple tug of its beaded chain cord. Comfortable, albeit
+fake, leather upholstered seats adorn the wide private booths, padded for
+extra comfort. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	partition door
+	Desc:$
+A simple partition of synthwood folds open and closed, making it ideal for
+keeping privacy. 
+~
+	ToVnum:	39321
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39323
+Name:	In a private booth
+Desc:$
+   This spacious private booth is partitioned off from the main area, and
+features a few options that may come in handy, wether for relaxing, or
+conducting business privately. Small white noise generators are bolted to the
+center of the ceiling, half-hidden behind a decorative wooden fan, which can
+be turned on by a simple tug of its beaded chain cord. Comfortable, albeit
+fake, leather upholstered seats adorn the wide private booths, padded for
+extra comfort. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	2.50
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	partition door
+	Desc:$
+A simple partition of synthwood folds open and closed, making it ideal for
+keeping privacy. 
+~
+	ToVnum:	39321
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39325
+Name:	Entering Gravity Bar North
+Desc:$
+   The Gravity Bar North restaurant is quite popular with both tourists and
+mid-level corporate types alike, which enjoys its time in the lime light
+thanks to several local celebrities that make appearances here for a bite to
+eat. Seafood seems to be the item of choice amongst the chefs, which is
+suitable considering its close proximity to the Sound, making a perfect
+backdrop for its theme. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39326
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39207
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39327
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39326
+Name:	Approaching the second level
+Desc:$
+   Modern design gives way to a casual, relaxed architecture, full of soft
+whites and various shades of blue. The soft lighting is used to highlight some
+of the artwork that has lines the wall, some of which are paintings, while
+others are signed photographs by local celebrities, forming a mural of
+customers who enjoy the food and service. Further towards the back end of the
+area is an open air dining area, along with several wide sets of stairs to
+allow access up to the second level. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	39325
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39329
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	39333
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39327
+Name:	The main dining area
+Desc:$
+   The main dining area is spacious, consisting of neaty arranged tables and
+chairs, all of which are cleaned and polished to a shine. The area is brightly
+lit to show off the modern architecture, but soft enough on the eyes for
+comfort sake, making for a relaxing and casual atmosphere. Waiters slink
+gracefully between tables, taking or delivering orders, or just checking to
+see if customers are satisfied with their meals. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39329
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39325
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39328
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39328
+Name:	The Gravity Bar
+Desc:$
+   The Gravity Bar North, living up to its name, features a full length bar
+for patrons who would rather kick back and relax while they enjoy a drink. The
+walls here are used to showcase several different fish tanks, some salt water
+with tropical species swimming around, while others are freshwater, ranging in
+both size and shape to add to the decor of the place. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39329
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39327
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39329
+Name:	Carousing through The Gravity Bar
+Desc:$
+   This eating area is designed for those who would prefer a bit more privacy
+as they dine, or perhaps for business sake, since the corporate types are
+considered locals here. Several fish tanks are built into the architecture,
+showcasing their contents to diners, most of which have been carefully placed
+for maximum aesthetic affect. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39330
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39326
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39327
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39328
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39332
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39331
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39330
+Name:	Inside a private dining booth
+Desc:$
+   The lighting offered in the private booths are dimmer and more comfortable
+for those tending to business or other matters, which feature plush leather
+upholstered seats to relax in. Small white noise generators are located out of
+view beneath the tables themselves, while a backdrop of blacklight lit fish
+tanks, the tropical fish inside of which glow bright fluorescent colours in
+response. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	39329
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39331
+Name:	Inside a private dining booth
+Desc:$
+   The lighting offered in the private booths are dimmer and more comfortable
+for those tending to business or other matters, which feature plush leather
+upholstered seats to relax in. Small white noise generators are located out of
+view beneath the tables themselves, while a backdrop of blacklight lit fish
+tanks, the tropical fish inside of which glow bright fluorescent colours in
+response. An RJ-715 datapoint is in the wall, providing matrix access to the
+private booth. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	1108
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1108
+JackID:	32062202
+Address:	Gravity Bar North -  88th Street (SW)
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	39329
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39332
+Name:	Inside a private dining booth
+Desc:$
+   The lighting offered in the private booths are dimmer and more comfortable
+for those tending to business or other matters, which feature plush leather
+upholstered seats to relax in. Small white noise generators are located out of
+view beneath the tables themselves, while a backdrop of blacklight lit fish
+tanks, the tropical fish inside of which glow bright fluorescent colours in
+response. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39329
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39333
+Name:	Ascending to the second level
+Desc:$
+   The open air area below climbs up to meet the second level, its walls
+plastered with more photographs and other various artwork, most of which leans
+towards a tropical or ocean theme, going nicely with the choice of colour
+coordination of the restaurants design. As the dining area stretches along
+towards the west, the walls themselves are constructed of thick, but still
+quite transparent safety glass, helping to show off the view of the shore
+area. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	39334
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	39326
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39334
+Name:	A splendid view of Puget Sound
+Desc:$
+   The entire wall is crafted from a thick and durable safety glass, which act
+as massive panoramic windows to offer an almost unrestricted view of the
+western shore of Everett. Even at this low of a height, the lack of taller
+buildings and the placement make it great for viewing Puget Sound in all of
+its glory. Multiple sets of smaller rectangular tables and chairs are lined
+along both walls, leading back further into the dining area south of here. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39333
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39335
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39335
+Name:	Amongst several private tables
+Desc:$
+   Reserved for some of the favourite locals and higher paying customers, this
+area is set up to take advantage of the scenery of Puget Sound for all it's
+worth. Larger private tables are available, built in half-circle designs to
+give every diner the best possible view they can. Discreet white noise
+generators and other mechanisms are built into the scenery itself, along with
+fold-up trideo screens and telecoms with satellite uplinks for business
+meetings and other arrangements. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	8
+Z:	3.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39334
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39336
+Name:	Outside of The Rubber Suit
+Desc:$
+   Before you stands The Rubber Suit, easily the hottest and most popular
+nightclub in all of Everett, and for good reason to. All types of people are
+attempting to get inside, ranging from low-level corporate scum, wage slaves,
+shadow wannabes, posers and all of the other various plebes looking for a
+taste of the night life. Some of the rougher locals of the shadows seem to be
+getting in quicker and with little complaint, while others are ushered back
+into line to wait their turn. Word on the streets is the yaks have their hands
+in this establishment. 
+~
+Flags:	100000000000000000000100
+SecType:	City
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39337
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39259
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39337
+Name:	Into The Rubber Suit
+Desc:$
+   The smell of booze, cigar smoke, sweat and maybe even a hint of tears and
+blood bombards the senses, mingled with the various perfumes and colognes that
+habituates are sporting. The area opens up into different sections,
+partitioned from one another in various manners, consisting of thin rice paper
+designed screens, potted plants and other tricks of the trade to give
+occupants the feeling of privacy from the other sections. Despite this
+arrangement, all of the areas can clearly see the main stages at the center of
+the club, offering perfect views of who or whatever is performing that night.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39350
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39338
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39336
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39344
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39338
+Name:	Southeastern edge of the club
+Desc:$
+   Lines of booths and smaller tables with comfortable padded chairs
+surrounding them are scattered along this section of the club, offering plenty
+of seating for patrons as they enjoy the shows offered on the stages nearby.
+The air is hazy with cigar and cigarette smoke (and maybe a little something
+else), which becomes more prominent as the various neon lighting bores through
+it and spills down onto the habituates gathered here. An unmolested view of
+the stages is offered here, while off to the bordering edge of the club there
+are several private booths for those who wish to escape the hustle and bustle
+of the nightclub. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	7
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39340
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	private door
+	Desc:$
+A stylized shoji screen door leads to a private booth here. 
+~
+	ToVnum:	39339
+	Flags:	1
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39337
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39350
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39339
+Name:	In a private booth
+Desc:$
+   This private booth is sealed off from the main club by way of an almost
+soundproof door, which muffles the action outside to little more than a low
+murmur of background noise. Shaded lamps and kanji lined edging decorate the
+room, inbetween the traditional Japanese art adorning the walls. Several small
+potted plants add a bit of life to the scenery, one of which no doubt houses a
+concealed white noise generator for those private business talks, without
+sacraficing the aesthetics of design. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	private door
+	Desc:$
+A stylized shoji screen door leads to a private booth here. 
+~
+	ToVnum:	39338
+	Flags:	1
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39340
+Name:	The eastern end of the nightclub
+Desc:$
+   The Japanese oriented decoration and design of the nightclub is ever
+present, as the rice screens and shaded lamps lining booths and tables neatly
+organized along its flanks. Private booths are set up further to the side,
+which lack the impressive scenery of acts performing on the nearby and easily
+viewed stages towards the center of the floor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39342
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	private door
+	Desc:$
+A stylized shoji screen door leads to a private booth here. 
+~
+	ToVnum:	39341
+	Flags:	1
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39338
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39350
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39341
+Name:	In a private booth
+Desc:$
+   This private booth is sealed off from the main club by way of an almost
+soundproof door, which muffles the action outside to little more than a low
+murmur of background noise. Shaded lamps and kanji lined edging decorate the
+room, inbetween the traditional Japanese art adorning the walls. Several small
+potted plants add a bit of life to the scenery, one of which no doubt houses a
+concealed white noise generator for those private business talks, without
+sacraficing the aesthetics of design. An RJ-715 datapoint is built into the
+scenery as well, decorated as a traditional, stylized Japanese lion, its mouth
+opening wide to provide matrix access. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	1108
+IO:	1
+Bandwidth:	-1
+Access:	1
+Trace:	1
+RTG:	1108
+JackID:	32062120
+Address:	The Rubber Suit - Casino Road, Everett
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	private door
+	Desc:$
+A stylized shoji screen door leads to a private booth here. 
+~
+	ToVnum:	39340
+	Flags:	1
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39342
+Name:	The northeastern end of the nightclub
+Desc:$
+   Lines of booths and smaller tables with comfortable padded chairs
+surrounding them are scattered along this section of the club, offering plenty
+of seating for patrons as they enjoy the shows offered on the stages nearby.
+The air is hazy with cigar and cigarette smoke (and maybe a little something
+else), which becomes more prominent as the various neon lighting bores through
+it and spills down onto the habituates gathered here. An unmolested view of
+the stages is offered here, while off to the bordering edge of the club there
+are several private booths for those who wish to escape the hustle and bustle
+of the nightclub. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	7
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	private door
+	Desc:$
+A stylized shoji screen door leads to a private booth here. 
+~
+	ToVnum:	39343
+	Flags:	1
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39340
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39350
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39351
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39343
+Name:	In a private booth
+Desc:$
+   This private booth is sealed off from the main club by way of an almost
+soundproof door, which muffles the action outside to little more than a low
+murmur of background noise. Shaded lamps and kanji lined edging decorate the
+room, inbetween the traditional Japanese art adorning the walls. Several small
+potted plants add a bit of life to the scenery, one of which no doubt houses a
+concealed white noise generator for those private business talks, without
+sacraficing the aesthetics of design. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	private door
+	Desc:$
+A stylized shoji screen door leads to a private booth here. 
+~
+	ToVnum:	39342
+	Flags:	1
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39344
+Name:	Southwestern edge of the club
+Desc:$
+   Lines of booths and smaller tables with comfortable padded chairs
+surrounding them are scattered along this section of the club, offering plenty
+of seating for patrons as they enjoy the shows offered on the stages nearby.
+The air is hazy with cigar and cigarette smoke (and maybe a little something
+else), which becomes more prominent as the various neon lighting bores through
+it and spills down onto the habituates gathered here. An unmolested view of
+the stages is offered here, while off to the bordering edge of the club there
+are several private booths for those who wish to escape the hustle and bustle
+of the nightclub. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	7
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39346
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	39350
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39337
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	private door
+	Desc:$
+A stylized shoji screen door leads to a private booth here. 
+~
+	ToVnum:	39345
+	Flags:	1
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39345
+Name:	In a private booth
+Desc:$
+   This private booth is sealed off from the main club by way of an almost
+soundproof door, which muffles the action outside to little more than a low
+murmur of background noise. Shaded lamps and kanji lined edging decorate the
+room, inbetween the traditional Japanese art adorning the walls. Several small
+potted plants add a bit of life to the scenery, one of which no doubt houses a
+concealed white noise generator for those private business talks, without
+sacrificing the aesthetics of design. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door private
+	Desc:$
+A stylized shoji screen door leads to a private booth here. 
+~
+	ToVnum:	39344
+	Flags:	1
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39346
+Name:	The western end of the nightclub
+Desc:$
+   The Japanese oriented decoration and design of the nightclub is ever
+present, as the rice screens and shaded lamps lining booths and tables neatly
+organized along its flanks. Private booths are set up further to the side,
+which lack the impressive scenery of acts performing on the nearby and easily
+viewed stages towards the center of the floor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39348
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39350
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39344
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	private door
+	Desc:$
+A stylized shoji screen door leads to a private booth here. 
+~
+	ToVnum:	39347
+	Flags:	1
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39347
+Name:	In a private booth
+Desc:$
+   This private booth is sealed off from the main club by way of an almost
+soundproof door, which muffles the action outside to little more than a low
+murmur of background noise. Shaded lamps and kanji lined edging decorate the
+room, inbetween the traditional Japanese art adorning the walls. Several small
+potted plants add a bit of life to the scenery, one of which no doubt houses a
+concealed white noise generator for those private business talks, without
+sacraficing the aesthetics of design. An RJ-715 datapoint is built into the
+scenery as well, decorated as a traditional, stylized Japanese lion, its mouth
+opening wide to provide matrix access. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	1108
+IO:	0
+Bandwidth:	-1
+Access:	1
+Trace:	1
+RTG:	1108
+JackID:	32062120
+Address:	The Rubber Suit - Casino Road, Everett
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	private door
+	Desc:$
+A stylized shoji screen door leads to a private booth here. 
+~
+	ToVnum:	39346
+	Flags:	1
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39348
+Name:	The northwestern end of the nightclub
+Desc:$
+   Lines of booths and smaller tables with comfortable padded chairs
+surrounding them are scattered along this section of the club, offering plenty
+of seating for patrons as they enjoy the shows offered on the stages nearby.
+The air is hazy with cigar and cigarette smoke (and maybe a little something
+else), which becomes more prominent as the various neon lighting bores through
+it and spills down onto the habituates gathered here. An unmolested view of
+the stages is offered here, while off to the bordering edge of the club there
+are several private booths for those who wish to escape the hustle and bustle
+of the nightclub. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	7
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39351
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	39350
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39346
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	private door
+	Desc:$
+A stylized shoji screen door leads to a private booth here. 
+~
+	ToVnum:	39349
+	Flags:	1
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39349
+Name:	In a private booth
+Desc:$
+   This private booth is sealed off from the main club by way of an almost
+soundproof door, which muffles the action outside to little more than a low
+murmur of background noise. Shaded lamps and kanji lined edging decorate the
+room, inbetween the traditional Japanese art adorning the walls. Several small
+potted plants add a bit of life to the scenery, one of which no doubt houses a
+concealed white noise generator for those private business talks, without
+sacraficing the aesthetics of design. 
+~
+Flags:	11100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	private door
+	Desc:$
+A stylized shoji screen door leads to a private booth here. 
+~
+	ToVnum:	39348
+	Flags:	1
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39350
+Name:	Near the central stage area
+Desc:$
+   The main stage actually consists of one large, wide central raised platform
+for performers, with multiple catwalk like extentions that branch off into
+smaller platforms, allowing for a wide range of performances to take place at
+once. The artists slated at The Rubber Suit come in all shapes and forms,
+between live local bands, female dancers, or a mixture of the two for added
+flavour, though a majority seem to hint at Japanese tastes. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39351
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	39342
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39340
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	39338
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39337
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39344
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39346
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39348
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39351
+Name:	At a staircase leading to the bar
+Desc:$
+   Paths converge in this area, snaking their way through the smaller stages
+and other sections of the club. On the northern end a set of wide, low stepped
+stairs make their way up to the bar area, which is located on a raised
+platform that overlooks the main area of the nightclub, making it a great
+place to take in the scenery and performers as they do their thing on both the
+main stage and its smaller counterparts. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39352
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39342
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39350
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39348
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39352
+Name:	At the bar area
+Desc:$
+   The bar itself is set up on a raised platform that is reached by a low,
+wide stepped staircase, leading up to the bar area while still retaining a
+full view of the stage and performers in the main club area below. Habituates
+mill up and down and along the raised section, while waitresses slip between
+them on their way to deliver beverages. A long, highly polished synthwood bar
+is set up to take full advantage of the space, curving along in a half circle
+from one side to the other and featuring multiple tenders to keep things
+running smoothly. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39353
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39351
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39354
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39353
+Name:	The eastern balcony
+Desc:$
+   The eastern balcony rises even further up along a gently sloping gradient,
+offering an even better view of the main floor below, its length decked out
+with multiple sets of tables and booths for patrons who would rather enjoy a
+drink than the hustle and bustle of the nightclub below. At its zenith, a
+corridor of stairs doubles back to the northwest and climbs up into the
+highest point of the club, reserved for the big wigs and reputable locals. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	39352
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39355
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39354
+Name:	The western balcony
+Desc:$
+   The western balcony rises even further up along a gently sloping gradient,
+offering an even better view of the main floor below, its length decked out
+with multiple sets of tables and booths for patrons who would rather enjoy a
+drink than the hustle and bustle of the nightclub below. At its zenith, a
+corridor of stairs doubles back to the northeast and climbs up into the
+highest point of the club, reserved for the big wigs and reputable locals. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39355
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39352
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39355
+Name:	A private area of The Rubber Suit
+Desc:$
+   Adorned in the ever present traditional Japanese design, with a hint of
+modern influence, this private area is reserved for the owner of The Rubber
+Suit and his personal clientele and business partners. Armed Japanese
+bodyguards flank the area as it leads to a door in the back, its shoji screen
+design marked clearly with "Off-Limits" in both English and Japanese, just so
+there aren't any mistakes to be made. Invitation only is the word of the day.
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	7
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door shoji
+	Desc:$
+A decorative shoji screen door with "Off-Limits" written in both Japanese
+kanji and English text. 
+~
+	ToVnum:	39356
+	Flags:	1
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	39353
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39354
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39356
+Name:	Back office of The Rubber Suit
+Desc:$
+   Reserved for the private business dealings of the Shotozumi clan kobun,
+Hirafuku Yoshito, the marching orders of the local yakuza comes straight from
+this office. Decked out in what one would come to expect from a successful
+rung in the criminal pecking order, the design screams traditional Japanese,
+with little dilution from modern day influences. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	15
+Y:	15
+Z:	3.00
+RoomType:	9
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door shoji
+	Desc:$
+A decorative shoji screen door with Japanese kanji adorning it is here. 
+~
+	ToVnum:	39355
+	Flags:	1
+	Material:	paper
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39360
+Name:	Everett Beacon Mall southern parking lot
+Desc:$
+   An expansive collection of asphalt littered with the droves of vehicles of
+wage slaves and corp wannabes alike continues on for quite a distance,
+stretching along like an ocean, its waves only occasionally disrupted by
+fleshy masses of shoppers looking for the best deals in town. Approaching
+closer to the opposite end of the mall, a large underground garage opens up
+for those who either don't feel like walking (who does?), or just want to keep
+their vehicle clean and cozy in its confines during their stay at the mall. 
+~
+Flags:	100000000000000000000100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	25
+Y:	25
+Z:	3.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39253
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	39361
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39361
+Name:	Entering the Everett Beacon Mall garage
+Desc:$
+   The ramp leading down into the underground garage is four lanes wide, two
+lanes each for incoming and outgoing traffic, with sturdy concrete curbs to
+keep anyone from cutting over from one to the other. Wide and spacious
+clearance is offered for vehicles making their way around inside of the garage
+itself, along with imbedded gridguide systems so visitors don't even need to
+park themselves. The garage itself continues along for quite some distance,
+containing plenty of parking spots for even the most massive flood of
+shoppers. 
+~
+Flags:	100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39362
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39364
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39360
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39362
+Name:	Underground Garage, near the elevators
+Desc:$
+   Row after row of vehicles are parked in neat lines, with only the
+occasional douchebag parking their SUV in two lanes, since gridguide
+technology has of yet not developed the capability to process the needs of
+those kinds of social run-off. Shoppers of all shades and sizes mill through
+the garage, some of which have their arms full of bags and attempting to make
+a quick getaway, while others push forward to find a place on the nearby set
+of elevators to reach the upper floors of the mall. 
+~
+Flags:	100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39363
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39361
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39363
+Name:	A well-lit corner of an underground garage
+Desc:$
+   This corner of the garage is just as heavily packed with vehicles as any
+other portion of the underground lot, and is well-lit for the sake of its
+patrons. Various security cameras are posted in regular intervals along its
+length, mostly to disuade any wrong-doing on behalf of those shadey folks who
+show up anywhere that has the steady exchange of nuyen and material goods.
+Along with the technological watchdogs, quite a few security guards seem to
+have their rounds overlap in this area, just in case. 
+~
+Flags:	100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	39364
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39362
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39364
+Name:	An underground garage, near the stairs
+Desc:$
+   The flow of shoppers isn't quite as heavy in this portion of the garage,
+most likely due to the fact that unlike the spacious elevators offered on the
+opposite side, the only way up to the shopping levels are a set of good old
+fashioned stairs. They see comparably less traffic, mostly due to the fact
+that people are lazy, and what's the point of being a fat consumer if you
+actually have to walk up stairs? What little traffic this area sees are due to
+security patrols whose job it is to wander up and down along them, along with
+the occasional chump who is too impatient to wait for an open spot on the
+elevators. 
+~
+Flags:	100000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39363
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door stairs garage
+	Desc:$
+A door labeled "Stairs" is posted off to the eastern side of the parking
+garage. 
+~
+	ToVnum:	39365
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39361
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39365
+Name:	The bottom of the stairs
+Desc:$
+   The area here is quite clean and tidy, its cement facade obviously well
+maintenanced, and aside from the occasional scuff marks on the stairs and a
+few scratches in the hand rail paint, they seem to do a fairly good job at
+keeping things nice. The occasional trash can is bolted down along the side of
+the pathway that leads up to the ground level shopping area above, while a
+central set of railings keep the two flows of foot traffic seperated from one
+another, making it quite efficient. 
+~
+Flags:	10000000010000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	8
+Y:	6
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door stairs garage
+	Desc:$
+A door labeled "Garage" is off to the west here. 
+~
+	ToVnum:	39364
+	Flags:	1
+	Material:	metal
+	Barrier:	6
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	39366
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39366
+Name:	Top of the ground floor staircase
+Desc:$
+   The hustle and bustle of the mall begins to intensify as one steps closer
+and closer to the spacious ground floor, which sees its fair amount of foot
+traffic, granted it usually isn't via the staircase. The wide steps and
+rubberized grip railings make it smooth strolling from here on out on ones
+journey either up to the shops, or down to the parking garage below. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39367
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	39365
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39367
+Name:	Near the ground floor entrance
+Desc:$
+   The scent of something delicious wafts through the staircase corridor,
+bringing with it all of the temptations the food court on the ground floor has
+to offer mall goers. The hustle and bustle begins to become louder as the
+entrance of the ground floor opens up, but the small trickle of foot traffic
+along the stairs is still minimal. Off to the east there is an alcove set up
+for ATM transactions, offering customers a place of privacy to pull out their
+life savings and blow it on things they don't really need. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39368
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39397
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39366
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39373
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39368
+Name:	At the bottom of the first floor stairs
+Desc:$
+   Heading up further and further, climbing higher and higher, patrons are
+sure to get a workout upon these stairs as they ascend to the shopping floor
+above. While most mall goers would rather use the elevators on the opposite
+side of the building, a few brave 'fitness nuts' still try their luck at the
+old fashioned way to get between floors. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	39367
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	39369
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39369
+Name:	At the top of the first floor stairs
+Desc:$
+   Ascending the stairs leads to the first floor (Who'da thunk it?), and guess
+what, the foot traffic is still thin. Lazy mall goers at their finest. The
+corridor cuts back and heads towards the main entrance to the first floor,
+while from here, a security sign can be seen pointing to the rent-a-cops
+office. Feeling adventurous? Then keep on walking! 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	39370
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	39368
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39370
+Name:	Corridor between the shopping sector and security
+Desc:$
+   The entrance to the shopping sector on the first floor widens here, even
+though it is pretty pointless consider the lack luster attendance on the
+stairs. A backlit sign is bolted to the ceiling, its black lettering over a
+dull red light making it easy to spot, its arrow pointing off eastward to the
+office set up there. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39369
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door office
+	Desc:$
+A security office door seals off the rent-a-cops from society here. 
+~
+	ToVnum:	39398
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39388
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39371
+Name:	A busy corner of the mall
+Desc:$
+   Droves of customers and other patrons trudge along in a non-stop, steady
+stream of clicking boots and the scuffing and squeaking of shoes. Over towards
+the western edge of the large, open room, is an ice cream shop of some sorts,
+who are doling out delicious treats to the masses. Off to the south, in a bit
+of irony, is a spacious furniture shop, who probably isn't very keen on having
+any of the customers of the previous store strolling in and getting their
+sticky mitts all over the merchandise. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39375
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	39374
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39372
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39382
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39381
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39372
+Name:	A corner of the malls ground floor
+Desc:$
+   The crowd thins slightly before once again pressing together in a large mob
+of limbs and the occasional horn or two. Various ash trays and other pieces of
+stylized painted furniture are lined along the edges of the displays, most of
+which consist of giant potted plants, some of which are hard to tell if
+they're actually real or not. Off to the south is a busy sporting goods store,
+while off further north are the stairs heading up to the shopping floor above,
+as well as the parking garage down below. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39373
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39383
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39371
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39374
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39373
+Name:	Approaching the stairs of Beacon Mall
+Desc:$
+   The crowd thins a bit as they near one of the nations greatest fears of all
+time; Exercise. The stairs are wide enough to easily accomodate the largest
+streams of foot traffic.. But it never even remotely nears more than a dozen
+or so sets of feet upon it at a time. Lazy bastards. Then again, who the hell
+even uses stairs anymore? These should be escalators, lets be serious. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39377
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39367
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39372
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39374
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39374
+Name:	In the center of the ground floor
+Desc:$
+   The masses of customers stop and rest upon the variously styled benches,
+most of which are accompanied by a large plant of some type for atmosphere. A
+large central display has been set up here, which apparently shows the
+location of shoppers, along with information and directions to the shops that
+are spread out in all directions from it. Off to the west a way, the elevators
+can be seen, while to the east, wide sets of stairs accomplish the same task,
+albeit with a bit more physical exertion. Can you tell which route gets more
+use? Thought so. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39377
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39373
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	39372
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39371
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39375
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39376
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39375
+Name:	Everett Beacon Mall elevators - Ground Floor
+Desc:$
+   The area opens up slightly to expose the large elevator doors along the
+western end of the open room, where metahumans of every size and shape wait
+their turn (or cut in line), to take advantage of the mechanized contraptions.
+The smell of the food court nearby is sure to make anyones mouth water when
+they pass through this area. Lines of patrons mill along in mismatched patches
+of bodies, weaving themselves between and around one another as they go about
+their business. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39376
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39374
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39371
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39376
+Name:	At the entrance of Everett Beacon Mall
+Desc:$
+   The rush of foot traffic and the hustle and bustle of conversations mixing
+together echoes softly throughout the entrance way, whose revolving glass
+doors seal in like a sound barrier, unleashing it upon those who stroll
+through them. Thankfully, due to a powerful venting system, and the almost
+overpowering waft of smells coming from the food court nearby, being around
+this many people isn't too bad. 
+~
+Flags:	10000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39379
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39377
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	39374
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39375
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39380
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39253
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39377
+Name:	A noisy corner of the mall
+Desc:$
+   The droves of metahumans continue to trudge along in an fairly upbeat
+manner, considering most of them are youngsters hanging on the arms of their
+parents, croning and complaining about what they want or need. Granted, most
+of them are a bit annoying, but that's children afterall. The sounds are
+partially drowned out by the occasional off tune note drifting out of the
+instrument shop to the north, which seems to have a wide range of musician
+tools. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39378
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39373
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39374
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39376
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39378
+Name:	The Pied Pipers
+Desc:$
+   Hanging upon the walls and within display cases, as well as several floor
+models available to the curious public, this assortment of instruments is sure
+to encourage any music lover into parting with a bit of their hard earned yen.
+The types of instruments offered vary in both size and type, from mundane,
+classical instruments to the more exotic or usual. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	39377
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39379
+Name:	Street Urchin Chic
+Desc:$
+   This store seems to be composed of mostly youngsters and other wannabes,
+since apparently the shop tends towards the 'Street Urchin Chic' end of the
+spectrum, as far as their customers and apparel goes. Racks of clothing line
+the walls and display cases, showing off their wares to the rebellious youth
+that reside within, with enough wrist slitting depression (or at least the
+cool faux kind) to go around. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	39376
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39380
+Name:	The Downtown Delicatessen
+Desc:$
+   The deli atmosphere is cued up and running smoothly, granted it also helps
+that this eatery caters to just that sort of niche. Sandwiches of all shapes
+and sizes are advertised for sale, and with the smell of meats and fresh
+vegetables in the air, it's hard to say no to good eats like these. The
+sandwiches are meals in of themselves, and can be customized however the
+hungry patron desires, for an extra bit of yen ofcourse. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39376
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39381
+Name:	Delicious Desserts
+Desc:$
+   The scent of smoothly churned cream and milk is thick in the air, along
+with the occasional tang of fruit based treats. All of the good stuff is on
+sale here, from basics such as ice cream wrapped in trademark Belgian waffle
+cones, to silken frozen custard and fruit based sorbets, hell, they even have
+gelato. The workers here seem to be in overdrive, attempting to placate the
+masses with their brain freeze inducing goods. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39371
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39382
+Name:	Fanciful Furniture
+Desc:$
+   An assortment of furniture and other upholstery is scattered about the
+shop, showcasing displays of full room decor and matching sets. A nice mixture
+of ornate and modern design can be found here, making it the perfect place to
+find the right look, no matter the size or set up of ones residence. Classy
+floor salesmen eagerly jumpat the chance to peddle their wares, smiling
+brightly all the while. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39371
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39383
+Name:	Wang's Sporting Goods
+Desc:$
+   The necessities of any good sport can be found here, since this store is
+lined with all sorts of choices to pick from. Baseball, hockey, even golf
+goods can be had for sale, as long as you have a certified credstick.
+Protective equipment is on display, while neatly stacked boxes lay nearby for
+easy transportation once a transaction has been made by the customer. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39372
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39384
+Name:	A somewhat sterile corner of the mall
+Desc:$
+   The shuffle of metahuman bodies is stiffling along this clinically
+sterilized section of the first floor, but still remains as polluted as ever
+with the noise of patrons squawking and carrying on without the use of their
+inside voices. A survival store, catering to those more at home to the
+outdoors than the urban rat race has been set up off to the west, while off to
+the south is what appears to be a cyber clinic whose business revolves around
+eye work and other optics. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39386
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	39387
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39385
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39395
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39394
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39385
+Name:	A fairly sterile corner of the mall
+Desc:$
+   Multiple advertisements can be seen tacked along the large windows of the
+outlet shops nearby, offering various deals for customers who choose to
+purchase their goods, along with comparisons of their competitors offered
+pricetags in relation to their own. Most of the mall goers who head off into
+these shops come out with snazzy new bells and whistles, most of which are of
+the cyberware variety, since a majority of their business is based on just
+that. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39388
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39396
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39384
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39387
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39386
+Name:	Near the mall elevators - First Floor
+Desc:$
+   The elevators, once again, have record attendance, as metahumans of all
+shapes and sizes (most of them of the larger variety) scramble in line for
+their place to hop the lift on next. The hustle and bustle of the mall
+atmosphere is mixed with a tinge of bleach and lemon scented soap, which has
+been used to clean off the multitude of scuff marks from mall goers shoes. The
+shops are set up along the outer rim of the spacious main first floor, where
+lines of foot traffic weave and mill their way amongst one another. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39389
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39387
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39384
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39387
+Name:	Center of Beacon Mall's first floor
+Desc:$
+   The main display here is the expansive water fountain, which is surrounded
+along its edges with potted plants of various shapes and sizes, since they
+help soak up the scent of all the bleach used in the water. The air venting
+system does its best to keep up with all of the cleaning supplies, but the
+lemon scented disinfectant used to cover up the smell of bleach does little
+else but mingle and mix into the scent of a sterile hospital room. At the
+least, it's much better than having to smell the rest of the mall goers that
+mill their way through the upper floor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	39390
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39388
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	39385
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39384
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39386
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	39389
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39388
+Name:	Near the stairs on the first floor
+Desc:$
+   The loud, rough and tumble mall atmosphere can easily bombard the senses,
+its mass of noisey mall goers echoing throughout the room as it opens up and
+away from the stairs east of here. The smell up here on the first floor is a
+bit more sterile, as no edible goods are to be had up here. Unfortunately,
+that smell is replaced by the tinge of bleach masked with lemon scented soap
+from the floors, and a hint of polishing wax to boot. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39390
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39370
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39385
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39387
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39389
+Name:	A corner of the first floor
+Desc:$
+   Lines of bodies shuffle along in an almost zombie like manner, waiting for
+the mall goers infront of them to move a foot or two before closing the gap,
+and repeating the entire maneuver like a well choreographed dance sequence.
+More outlet shops are to be found along the outer edge of the spacious main
+room, which is a bit of a misnomer, since it is anything but spacious with all
+of these patrons packed in here. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39392
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	39390
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	39387
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39386
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39393
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39390
+Name:	A corner of the first floor
+Desc:$
+   The crowd thins and thickens randomly as the masses of mall goers jockey
+for position, most of them having no problem cutting infront of others in an
+attempt to get at the goods offered in the nearby stores. Granted, such
+tactics aren't even necessary, as the permanent fixtures have plenty of their
+goods in stock, but leave it to society to look beyond such reasonable things,
+and resort to passive aggressive behavior instead. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39391
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	39388
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	39387
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	39389
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39391
+Name:	ActiveSoft Central
+Desc:$
+   Datachips of all sizes are lined throughout display cases, clearly marked
+for customers to browse through. Why not? Afterall, everyone wants awesome
+face melting talent, but whats the point if you actually have to practice to
+get that good? If one is lazy, then dishing out a bit of yen for a chip full
+of skill juice is right up their alley. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	39390
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39392
+Name:	LinguaSoft Central
+Desc:$
+   This room is lined from floor to ceiling with LinguaSofts of all types,
+dialects, on both local and worldwide level. Each is meticulously labeled and
+arranged in order to the grand design known as alphabetical order. Sliding
+steps are fastened to the walls and floor, which slide along and allow even
+the shortest or laziest customer to fetch their own merchadise for themselves.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	39389
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39393
+Name:	A Microdeck Outlet
+Desc:$
+   This shop seems to be dedicated to the more technology driven aspects of
+society, most of which is integrated into daily life by this time. Helpful
+employees work their way from customer to customer, attempting to placate and
+see to their every need, as long as it ends in a sale ofcourse. Several
+personal computers and other do-it-yourself kits are featured for both
+amateurs and those more inclined towards the higher end of the spectrum of
+tech nerds. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39389
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39394
+Name:	The Survival Store
+Desc:$
+   All sorts of tools and sundries are available for purchase in this store,
+consisting of the outdoor necessities for campers and survivalists alike. From
+survival knives to campfire grills, even a few small hatchets are on display
+for the shearing of branches and other pesky plant life that's just begging
+for a good hacking. Other survival gear, such as small tents, bedrolls, and
+even insulated sleeping bags. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	39384
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39395
+Name:	Eye-Spy Cybereyes
+Desc:$
+   This room is quite sterile, and has an air of professionalism, aside from
+the fact that it is an outlet store in a mall. They do, however, offer quality
+optics and cybereyes, and their team of employees are very knowledgable about
+their area of expertise. Multiple back rooms are set up for privacy, and
+sanitation, since some of their surgeries can be slightly invasive. Completely
+replacing someones eyes is very serious business, and they take their jobs
+very seriously here at Eye Spy. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39384
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39396
+Name:	Simon's Cyberware Odds and Ends
+Desc:$
+   This sterile enviroment is home to Simon's Cyberware Odds and Ends, which
+deals in some high quality bits and pieces of ware that aren't particularly
+easy to get ones hands on. A professional atmosphere has taken over the shop,
+which resembles more of a clinic than an actual store. Though, with a bit of
+humour, their selection of wares has been set up like a fast food restaurant,
+letting patients mix and match their desires as it suits them. Several back
+rooms are set up for privacy and recovery of patients having gone through some
+of the more invasive of surgeries. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	39385
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39397
+Name:	A private alcove with ATMs
+Desc:$
+   This private little alcove offers shelter to those who wish to max out
+their credsticks and go on shopping benders, all the while keeping their
+personal information safe with fairly secure booths where transactions can be
+done in privacy. Several cameras are trained on this area, all of which point
+away from the machines, covering the entrance/exit, keeping an eye out for any
+misfits who are looking to cause the rent-a-cops here trouble. There also
+seems to be matrix landline phone booths set off to the side, if you don't
+mind the fact they've been lightly defaced by sharpie pen graffiti. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	39300
+IO:	0
+Bandwidth:	0
+Access:	0
+Trace:	0
+RTG:	1108
+JackID:	32068454
+Address:	Everett Beacon Mall
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	39367
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39398
+Name:	Inside of a security office
+Desc:$
+   Haven to rent-a-cops everywhere, this office is a sweet deal, equipped with
+necessities such as coffee pots, doughnuts and closed circuit trideo sets.
+They keep a watchful eye on the camera feeds, whenever their favourite sports
+team isn't on the portable trideo set parked on a nearby desk. Afterall,
+beating down young mall punks doesn't exactly require the expertise of a SWAT
+team, since a good spritz of pepperspray and a few lumps from a billyclub
+usually get the job done just fine. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	Keywords:	door office
+	Desc:$
+An office door closes the security room off from the rest of the mall. 
+~
+	ToVnum:	39370
+	Flags:	1
+	Material:	wood
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#39399
+Name:	Inside of a spacious elevator
+Desc:$
+   This wide and powerful elevator has been beefed up to handle a dozen or
+more shoppers at once, which makes quick work lifting and lowering them to
+their requested floors in a swift manner. Cheesy music is being pumped out of
+hidden speakers in the ceiling, which echoes off of the polished metal walls
+and fills the area with outdated music that most folks wouldn't be caught dead
+listening to. A panel along side of the door is clearly labeled, along with
+braille notations upon their surfaces. 
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	3.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+END

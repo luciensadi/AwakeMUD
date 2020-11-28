@@ -1,0 +1,24 @@
+#5500
+Keywords:	camo fatigue pants
+Name:	a pair of wrinkled and stained camo fatigue pants
+RoomDesc:$
+Some camo fabric is rumpled in the corner here, smelling faintly of piss and blood.~
+LookDesc:$
+Wrinkled and stained camo pants. They smell funny, too. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

@@ -1,0 +1,438 @@
+#29700
+Keywords:	combat gloves
+Name:	a pair of black combat gloves
+RoomDesc:$
+A pair of black gloves with some metal on them lay here.~
+LookDesc:$
+A pair of black leather fingerless gloves. The back side of them have metal to
+guard the back of your hand and slots for retractable hand spurs to pop out
+without damaging them. They also have wrist guards that buckle. 
+~
+Type:	Worn
+WearFlags:	10000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	24
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29701
+Keywords:	black latex dominatrix bodysuit
+Name:	a black latex dominatrix bodysuit
+RoomDesc:$
+A black latex suit that seems to weigh more than you think it should is lying here.~
+LookDesc:$
+This body suit if kind of heavy considering it's latex. If you didn't know
+better, you would think there was a mesh between two layers of latex.... The
+body suit itself looks like something someone into bondage or domination would
+wear. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	8.00
+	Barrier:	32
+	Cost:	20000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	1
+	Val6:	1
+	Val7:	2
+BREAK
+#29702
+Keywords:	black latex pants
+Name:	a pair of tight black latex pants
+RoomDesc:$
+A pair of latex pants have been left here.~
+LookDesc:$
+These pants look as through they were meant to fit very tightly on someone. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29703
+Keywords:	black motorcyycle jacket pocket
+Name:	a black motorcycle jacket
+RoomDesc:$
+A black leather motocycle jacket has been left here.~
+LookDesc:$
+This motocyble jacket has six zipped up pockets on it. I looks like your
+standard motorcycle jacket. 
+~
+Type:	Container
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val2:	-1
+BREAK
+#29704
+Keywords:	motorcycle boots
+Name:	a pair of black motorcycle boots
+RoomDesc:$
+A pair of black leather motorcycle boots are lying here.~
+LookDesc:$
+These boots look like biker boots. They have a zipper on the sides and buckles
+near the ankles. A black leather strap is used to tighten the fit around your
+ankles. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29705
+Keywords:	black trench coat with chainmail
+Name:	a black trench coat with bits of chainmail on it
+RoomDesc:$
+A black trench coat with bits of chainmail on it has been left here.~
+LookDesc:$
+This trench coat looks very punkish. It has chainmail on the interior and
+various pieces on the outside. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	4.00
+	Barrier:	8
+	Cost:	3500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	4
+	Val5:	3
+	Val6:	2
+	Val7:	2
+BREAK
+#29706
+Keywords:	dress slacks
+Name:	a pair of gray dress slacks
+RoomDesc:$
+A pair of gray dress slacks have been neatly folded and left here.~
+LookDesc:$
+This pair of gray dress slacks looks expensive and seem to have a permanent
+crease going down the front of the legs. They appear to be made of a very good
+fabric. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29707
+Keywords:	suit jacket gray
+Name:	a expensive gray suit jacket
+RoomDesc:$
+A expensive looking gray suit jacket is lying here.~
+LookDesc:$
+This suit jacket isnt normal. Its unusually heavy. Upon further examination
+you can feel some type of mesh inbetween the jacket and the lining. You would
+have never noticed from just looking at it though. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	8.00
+	Barrier:	24
+	Cost:	20000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val5:	3
+	Val6:	2
+	Val7:	1
+BREAK
+#29708
+Keywords:	white dress shirt
+Name:	a expensive white dress shirt
+RoomDesc:$
+A expensive white dress shirt is lying here neatly folded.~
+LookDesc:$
+This is a nice looking dress shirt. It looks to be made of fine fabric. Its
+neatly pressed and has creases in the sleeves and down the center of the back.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29709
+Keywords:	black neck tie
+Name:	a nice looking black neck tie
+RoomDesc:$
+A nice looking black neck tie has been carelessly dropped here.~
+LookDesc:$
+This is a really nice looking tie. It looks as though it could go with any
+suit. The tie appears to be made of silk. 
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29710
+Keywords:	black dress shoes
+Name:	a pair of expensive black dress shoes
+RoomDesc:$
+A pair of expensive black leather dress shoes have been left behind here.~
+LookDesc:$
+Theses shoes appear to be really expensive. It looks like they were made in
+Italy. The have a high shine on them and look very good. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29711
+Keywords:	black silk choker
+Name:	a delicate black silk choker
+RoomDesc:$
+A thin strap of black silk has be dropped here.~
+LookDesc:$
+It's a black silk choker. 
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.05
+	Barrier:	4
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29712
+Keywords:	New Rock Boots
+Name:	a pair of new rock boots
+RoomDesc:$
+A pair of new rock boots are lying here.~
+LookDesc:$
+These boots look to weigh a nice deal. They are black with alot of metal on
+them. They would probably give a fair ammount of protection. Also they would
+give you alittle more to your height. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	8
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	1
+	Val6:	1
+BREAK
+#29713
+Keywords:	white blouse
+Name:	a white cotton blouse
+RoomDesc:$
+A white cotton blouse has been left here.~
+LookDesc:$
+This white cotton blouse looks to have been made from a nice fabric and looks
+rather nice. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	60
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29714
+Keywords:	knee length skirt
+Name:	a gray knee length skirt
+RoomDesc:$
+A gray knee length skirt has been left here.~
+LookDesc:$
+This skirt looks like it is ment to be semi snug on a womans hips though it
+looks professional and is knee length. 
+~
+Type:	Worn
+WearFlags:	100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29715
+Keywords:	boots stilettos knee-high black
+Name:	a pair of black, knee-high stilettos
+RoomDesc:$
+A pair of black, knee-high boots with stiletto heels is lying here.~
+LookDesc:$
+These boots look to be made out of glossy black leather, with black steel
+heels. They'd reach about knee-high on a human or elf. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29716
+Keywords:	black belt pouch
+Name:	a glossy black leather belt
+RoomDesc:$
+A glossy black leather belt with a pouch on the back is lying here.~
+LookDesc:$
+This belt is a glossy black leather belt. It has a pouch in the back that
+looks like it could hold various things for you. It has a silver buckle. 
+ 
+~
+Type:	Worn
+WearFlags:	100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val7:	-1
+BREAK
+END

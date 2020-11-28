@@ -1,0 +1,293 @@
+#4100
+Keywords:	postal mailman disgruntled worker
+Name:	a disgruntled postal worker
+RoomDesc:$
+A disgruntled postal worker stands here, polishing his Uzi.
+
+~
+LookDesc:$
+With a tattered uniform, unshaven face, and a crazed glint in his eyes,
+you fear that his highly-polished uzi will see some action soon.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1111
+AffFlags:	1001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	3
+	Str:	4
+	Cha:	1
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	90
+	Ballistic:	15
+	Impact:	15
+	Bank:	5
+	Karma:	60
+[SKILLS]
+	firearms:	7
+BREAK
+#4101
+Keywords:	kiol older man
+Name:	Kiol
+RoomDesc:$
+An older man stands here, pistol in hand.
+
+~
+LookDesc:$
+You can tell by the countless scars and distrustful glare that Kiol
+is, or was at one point, a shadowrunner.  And a surviving runner is a
+successful one.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	11000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Pistol
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	189
+	Weight:	90
+	Ballistic:	15
+	Impact:	15
+[SKILLS]
+	firearms:	10
+	armed combat:	8
+	unarmed combat:	8
+BREAK
+#4102
+Keywords:	duuness teacher master guildmaster
+Name:	Duuness
+RoomDesc:$
+Duuness is fencing with his distorted shadow.
+
+~
+LookDesc:$
+Wearing a long navy cape, with his combat axe leaning next to a nearby chair
+and his Ares Monofilament sword in his hand, Duuness appears to be a modern
+version of a Dark Age knight.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000001010000000001011
+AffFlags:	1001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	196
+	Weight:	100
+	Ballistic:	15
+	Impact:	15
+[SKILLS]
+	armed combat:	10
+	unarmed combat:	8
+	firearms:	6
+BREAK
+#4103
+Keywords:	renxt teacher master marksman guildmaster
+Name:	Renxt
+RoomDesc:$
+Renxt, the Master Marksman, lounges here.
+
+~
+LookDesc:$
+A raven-haired man, with a long scar cutting down his left cheek and
+an elaborate, red and black tattoo on his forehead.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	1001000001000
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	182
+	Weight:	85
+	Ballistic:	15
+	Impact:	15
+	Bank:	18329
+[SKILLS]
+	firearms:	10
+	unarmed combat:	8
+	stealth:	6
+BREAK
+#4104
+Keywords:	physin teacher wielder master guildmaster
+Name:	Physin
+RoomDesc:$
+Physin the Wielder is standing here.
+
+~
+LookDesc:$
+Renowned throughout Seattle (but rarely ever seen), Physin is the best
+with any close-range weapon.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	1001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Slash
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	95
+	Ballistic:	15
+	Impact:	15
+	Bank:	32282
+[SKILLS]
+	armed combat:	11
+	unarmed combat:	8
+	firearms:	8
+BREAK
+#4107
+Keywords:	feng shui muscular japanese
+Name:	Feng Shui
+RoomDesc:$
+A muscular Japanese man surveys the room. 
+
+~
+LookDesc:$
+Bioware would be the instant assumption upon spying this man's physique,
+however its never obvious.  His hair is jet-black and oiled into a neat
+ponytail, pulled away from his face entirely.  Clear oriental features mark
+him as a typical Japanese, tho the scar that carves its way from his hair line
+and down across his left eye is surely to have a very interesting story behind
+it indeed. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	7
+	Str:	5
+	Cha:	6
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	210
+	Weight:	90
+	Ballistic:	4
+	Impact:	3
+[SKILLS]
+BREAK
+#4109
+Keywords:	mob unfinished
+Name:	Yae Kefenzie
+RoomDesc:$
+An tall, elegant woman observes the room with intelligent eyes. 
+
+~
+LookDesc:$
+Oriental features are smoothed by the pale tone of her face. Gentle over all,
+she has a certain elegance to her stance, a perceived superiority in the way
+she holds herself. Dressed in a beautiful silk dress styled akin to a
+traditional Japanese kimono, the royal blues and regal reds compliment the
+obsidian shine of her hair. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	7
+	Int:	6
+	Wil:	6
+	Mag:	10
+[POINTS]
+	Height:	172
+	Weight:	60
+[SKILLS]
+BREAK
+#4160
+Keywords:	random string mob
+Name:	a random string mob
+RoomDesc:$
+A random-string mob sits here.
+
+~
+LookDesc:$
+It looks barely coherent as it waits to be created.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Taser
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	10
+	Weight:	10
+[SKILLS]
+BREAK
+END

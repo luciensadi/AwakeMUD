@@ -1,0 +1,381 @@
+#28600
+Keeper:	28602
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	7
+Close:	12
+Type:	Grey
+NoSuchItemKeeper:	I don't stock what you want, only what I want.
+NoSuchItemPlayer:	Got to have it first genius.
+NoNuyen:	You don't have enough for that.
+DoesntBuy:	I don't purchase trash like that.
+Buy:	Give me my %d nuyen and remember where you didn't buy that.
+Sell:	Hah. Here is you %d nuyen and here is my new toy.
+Flags:	0
+Races:	11100
+Buytypes:	1000000000000000000000000000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	32911
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	32931
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	28618
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	28615
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	28614
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	28612
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	936
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	28610
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	28609
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	28604
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	28603
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	28602
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	28601
+		Type:	Always
+		Stock:	0
+BREAK
+#28601
+Keeper:	28604
+ProfitBuy:	3.00
+ProfitSell:	1.00
+Random:	0
+Open:	7
+Close:	12
+Type:	Grey
+NoSuchItemKeeper:	I don't carry that weapon.
+NoSuchItemPlayer:	Sell me what you have.
+NoNuyen:	Whats the matter? I know! YOU'RE TO POOR!
+DoesntBuy:	I don't want that so get it away.
+Buy:	For that, it will cost.... %d nuyen. Now I'dlike it if you left.
+Sell:	Take this %d nuyen and be off wit' ya.
+Flags:	0
+Races:	0
+Buytypes:	100000
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	28620
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	28617
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	28616
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	28611
+		Type:	Always
+		Stock:	0
+BREAK
+#28602
+Keeper:	28603
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	7
+Close:	12
+Type:	Grey
+NoSuchItemKeeper:	I ain't got none of that.
+NoSuchItemPlayer:	You ain't got that there armer.
+NoNuyen:	It seems to ain't got enuff' fer' that there armer.
+DoesntBuy:	I don't buy that there trash, ya hear?
+Buy:	That'd be uhhh...one two three... uhhh %d nuyen pa-leeez.
+Sell:	Ummm... Where'd my calcu-thingy go... ahh yes... Ayeeh.. Thats gonna be %d, ok?
+Flags:	0
+Races:	11100
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	718
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	719
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	720
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	721
+		Type:	Avail
+		Stock:	0
+BREAK
+#28603
+Keeper:	28605
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	9
+Close:	20
+Type:	Grey
+NoSuchItemKeeper:	I am sorry for I do not stock that.
+NoSuchItemPlayer:	You do not have that.
+NoNuyen:	You are to poor.
+DoesntBuy:	I don't buy and or want that.
+Buy:	That is %d nuyen. Have a nice day.
+Sell:	Have your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	28638
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	28637
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	28636
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	28624
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	28623
+		Type:	Always
+		Stock:	0
+BREAK
+#28604
+Keeper:	28606
+ProfitBuy:	5.00
+ProfitSell:	1.00
+Random:	0
+Open:	7
+Close:	0
+Type:	Grey
+NoSuchItemKeeper:	I don't got that
+NoSuchItemPlayer:	You don't got that
+NoNuyen:	You ain't got enuff...
+DoesntBuy:	I don't want that trash...
+Buy:	Gimme %d 'yen and I'll give ya your item.
+Sell:	Here is ya %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	28627
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	28626
+		Type:	Always
+		Stock:	0
+BREAK
+#28605
+Keeper:	28607
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	7
+Close:	0
+Type:	Grey
+NoSuchItemKeeper:	I really don't have that.
+NoSuchItemPlayer:	Get it and try me again, sonny.
+NoNuyen:	Man, I outta break your knee-caps right here. Get the 'yen.
+DoesntBuy:	We don't buy that.
+Buy:	Thats gonna cost %d 'yen ya know...
+Sell:	Take you %d 'yen and leave.
+Flags:	0
+Races:	11100
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	28629
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	28628
+		Type:	Always
+		Stock:	0
+BREAK
+#28636
+Keeper:	28614
+ProfitBuy:	3.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	28648
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	28647
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	28646
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	28645
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	19903
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	28643
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	28642
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	28641
+		Type:	Always
+		Stock:	0
+BREAK
+#28637
+Keeper:	28616
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	10
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	28649
+		Type:	Always
+		Stock:	0
+BREAK
+#28641
+Keeper:	28617
+ProfitBuy:	1.27
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	28651
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	28660
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	28659
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	28658
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	28657
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	28656
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	28655
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	28654
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	28653
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	704
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	28650
+		Type:	Always
+		Stock:	0
+BREAK
+END

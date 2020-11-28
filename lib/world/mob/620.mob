@@ -1,0 +1,66 @@
+#62000
+Keywords:	Jules
+Name:	Jules
+RoomDesc:$
+A small old man works here making keys. 
+
+~
+LookDesc:$
+This is Jules. He makes keys for just about anything. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1011
+AffFlags:	0
+Race:	Dwarf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	4
+	Int:	6
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	130
+	Weight:	60
+[SKILLS]
+	unarmed combat:	12
+BREAK
+#62001
+Keywords:	fag man naked
+Name:	a naked fag
+RoomDesc:$
+a naked fag 
+
+~
+LookDesc:$
+This fag is totally naked. His body is well oiled in cum scented massage lube.
+His cock is a swollen 8 inches with a big mushroom head surrounded by a thick
+patch of wiry pubic hair. He looks at you and grins. Yeah, he knows just what
+you need. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	9
+[POINTS]
+	Height:	190
+	Weight:	90
+[SKILLS]
+	unarmed combat:	1
+BREAK
+END

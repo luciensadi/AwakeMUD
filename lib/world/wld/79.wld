@@ -1,0 +1,4095 @@
+#7900
+Name:	Beyond the heavy wrought iron gates
+Desc:$
+   A lengthy stretch of road paved with cobblestones twists and winds its way
+uphill and through the thickets of trees and plants. It eventually opens up to
+an open area infront of an area that widens considerably, with part of its
+pathway breaking off towards the side of a piece of earth jutting up from the
+west. The main path, however, continues along to the north, traversing its way
+through the tranquil woodland scenery. The massive wrought iron gates of the
+estates outer wall dominate the landscape to the south, along with its natural
+and modern barrier of metal and flora, namely in the form of trees and
+overgrown ivy covered hedges. A relatively concealed drive large enough to
+accomodate a truck can be noticed winding its way northeast along a side path.
+~
+Flags:	100000000000000000000100
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	35
+Z:	6.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7901
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	7978
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	gates wrought iron massive
+	Desc:$
+A pair of massive wrought iron gates blocks all hopes of passage out into the
+cobbled streets of Gresham. 
+~
+	ToVnum:	22003
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	7916
+[EXIT northwest]
+	Keywords:	slab stone massive secret
+	Desc:$
+A massive slab of polished smooth stone seals off passage to the northwest. 
+~
+	ToVnum:	6036
+	Flags:	2
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	7916
+	HiddenRating:	32
+BREAK
+#7901
+Name:	Nearing the estates inner wall
+Desc:$
+   The cobblestone pathway eventually winds itself up towards the interior
+wall of the estate, which actually sits above this section of earth on a
+natural ledge. Most of its sides are laced with large limestone blocks to
+flatten and reinforced some areas, while others are completely covered and
+draped with ivy and other climbing plantlife bold enough to make its way
+skyward. A single, albeit large elevator door marks the entrance, and is lined
+with stone that leads into the wall itself, complete with commsystem built
+into the cove to one side, and several security cameras in key locations. 
+~
+Flags:	10000000000000000100
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	16
+Z:	6.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	7900
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7902
+Name:	An estate access elevator
+Desc:$
+   This large elevator has been constructed with all the bells and whistles
+one would expect from such a lavish estate. All of the metal surfaces are
+gilded in sterling silver filagree, while the rest of its walls and ceiling
+are made from flat, carved slabs of lightly coloured wood. The panel is silver
+plated as well, and all of the buttons are labeled in inlaid sperethiel
+characters for their designations. 
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	6
+Y:	6
+Z:	4.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+BREAK
+#7903
+Name:	At the foot of a long pathway
+Desc:$
+   The top of a massive mansion can be seen from this vantage point, most of
+which is obscured by the large trees that dominate the landscape about the
+estate. A long pathway of paved stones lined with larger, roughly hewn stones
+along their sides travels up towards the interior entrance gates of the
+estates main residence. Back to the south stands a large elevator for
+visitors, while off to the east stands a small, but astheticly pleasing guard
+house for the estates security. 
+~
+Flags:	10000000000000000100
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	12
+Z:	6.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7904
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7905
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7904
+Name:	Standing infront of the mansion gates
+Desc:$
+   Another massive ^Lwrought iron^N gate dominates the stone terrace wall the
+mansion itself sits upon, its exterior lined with massive trees, mostly
+species of ^yoak^N. The lengthy stretches of lawn covering most of the land
+between the exterior and interior walls are dotted with manicured and well
+tended ^ggardens^N and plots of various types of other trees and flowering
+^Gplantlife^N, ranging from common ^Yhoneysuckles^N to even the more exotic types. 
+~
+Flags:	10000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	12
+Z:	6.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	gate wrought iron massive
+	Desc:$
+A massive wrought iron gate blocks all hopes of entering the main portion of
+the estate, beyond which lies a magnificent mansion of splendid design. 
+~
+	ToVnum:	7906
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	7917
+[EXIT south]
+	ToVnum:	7903
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7905
+Name:	Inside the guard house
+Desc:$
+   The interior of the guard house is fairly spartan, though its design makes
+best use of its limited space available, and is just as aesthetically pleasing
+as its exterior. Various desks and monitor displays are posted around in a
+neat manner, along with a communications station with some quite SOTA looking
+toys to be found being put to use. Security camera feeds are watched by
+guards, who in turn keep in touch with their patrol counters that wander
+around and keep an eye on the estate. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	3.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	7903
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7906
+Name:	Infront of the stone archway
+Desc:$
+   Beyond the massive interior gates, the estate itself divides its decor
+amongst three distinct pathways. To the north stands a large archway
+constructed of cut and worked stone, the keystone of which is set with several
+detailed symbolic carvings, while other portions of it are covered in climbing
+plants that drape down over its entrance. Along the arch are Sperethiel
+symbols, carved into the stones themselves and inlaid with precious metals,
+which glimmer and almost glow. The ^Lsymbols^N upon the masterfully cut stones
+read: "^LOzidano teheron, milessaratish. Imo medaron co versakhan.^N" To the west
+and east run pathways on between the two interior walls, which has trees of
+various sizes and species planted along their lengths. 
+~
+Flags:	10000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	6.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7909
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7908
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	gates wrought iron massive
+	Desc:$
+A massive wrought iron gate blocks all hopes of escaping the main portion of
+the estate, beyond which lies a lengthy stone paved pathway down towards the
+exterior walls entrance. 
+~
+	ToVnum:	7904
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	7917
+[EXIT west]
+	ToVnum:	7907
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXTRADESC 0]
+	Keywords:	symbols stones
+	Desc:$
+Ozidano teheron, milessaratish. Imo medaron co versakhan... Which translates
+from Sperethiel to English as: "Leave behind your existance, servant-soldier.
+To be death to my enemies." 
+~
+BREAK
+#7907
+Name:	Along the outer wall path
+Desc:$
+   Running between two walls set a fair ways apart runs a compacted earthen
+pathway flanked on either side with various trees, between which are planted
+small patches of flowering plants that are currently in full bloom. The entire
+area smells heavily due to the amount of sweet smelling flora amassed along
+its length. A subtle curve slowly draws the pathway off to the northwest, and
+towards what looks to be the west wing of the mansion itself, while back off
+to the east is the main archway entrance. 
+~
+Flags:	0
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	20
+Z:	6.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7906
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	7912
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7908
+Name:	Along the outer wall path
+Desc:$
+   Running between two walls set a fair ways apart runs a compacted earthen
+pathway flanked on either side with various trees, between which are planted
+small patches of flowering plants that are currently in full bloom. The entire
+area smells heavily due to the amount of sweet smelling flora amassed along
+its length. A subtle curve slowly draws the pathway off to the northwest, and
+towards what looks to be the west wing of the mansion itself, while back off
+to the east is the main archway entrance. 
+~
+Flags:	0
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	20
+Z:	6.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	7913
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7906
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7909
+Name:	The center of a courtyard
+Desc:$
+   Beyond the archway, and infront of the mansion proper itself, stands an
+open area encased in a circular wall of beautifully cut and carved stone work.
+Two massive oak trees stand on either side of the large decorative iron weave
+reinforced wooden double doors to the north. Two smaller archways split off in
+either direction west and east, while the center of the area is dominated by a
+beautifully crafted white marble statue. ^YSunlight^N trickles in through the
+leaves and branches from above and covers the statue with its light, which in
+turn shines verily as it basks in its glow.  
+~
+NightDesc:$
+   Beyond the archway, and infront of the mansion proper itself, stands an
+open area encased in a circular wall of beautifully cut and carved stone work.
+Two massive oak trees stand on either side of the large decorative iron weave
+reinforced wooden double doors to the north. Two smaller archways split off in
+either direction west and east, while the center of the area is dominated by a
+beautifully crafted white marble statue. ^WMoonlight^N trickles in through the
+leaves and branches from above and covers the statue with its light, which in
+turn shines verily as it basks in its glow.  
+~
+Flags:	100
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	16
+Y:	16
+Z:	6.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden doors
+	Desc:$
+A large set of decorative iron weave reinforced wooden doors, covered in
+masses of intricate carvings down the smallest detail seal off the main
+entrance of the mansion. 
+~
+	ToVnum:	7918
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7917
+[EXIT east]
+	ToVnum:	7911
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7906
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7910
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7910
+Name:	The western courtyard
+Desc:$
+   The western courtyard opens up into a wide garden, which contains a
+dazzling array of carved stone latice work integrated into the matching stone
+walls encompassing the area. A single large oak tree stands near the center,
+along with an etched stone bench covered in decorative carvings sitting
+beneath its shade, facing off towards a large and intricately crafted ^Wwhite
+marble^N fountain. An almost euphoric mixture of scents permeates this section
+of courtyard, thanks in part to the wonderful assortment of sweet smelling
+flowers that bloom and appease the senses. 
+~
+Flags:	0
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	16
+Y:	16
+Z:	6.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7909
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7911
+Name:	The eastern courtyard
+Desc:$
+   The eastern courtyard opens up into a wide garden, which contains a
+dazzling array of carved stone latice work integrated into the matching stone
+walls encompassing the area. A single large oak tree stands near the center,
+along with an etched stone bench covered in decorative carvings sitting
+beneath its shade, facing off towards a large and intricately crafted ^Wwhite
+marble^N fountain. An almost euphoric mixture of scents permeates this section
+of courtyard, thanks in part to the wonderful assortment of sweet smelling
+flowers that bloom and appease the senses. 
+~
+Flags:	0
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	16
+Y:	16
+Z:	6.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	7909
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7912
+Name:	Infront of the western wing
+Desc:$
+   The pathway curves along slowly until it reaches the western wing entrance
+of the mansion, which continues to be lined with the various assortment of
+wildlife that seems prevelant through out the estate. The worked stone walls
+lead themselves up to the master masonry work done by the builders of the
+mansion, its corners constructed with thicker and heavier cut blocks, while
+thinner slates of stacked brickwork occasionally adorned with carved wooden
+shutters and window sills are set in even levels. A large reinforced wooden
+door leads into the western wing to the north here, onfront of which is bolted
+a decorative heavy iron door knockers. To the west is a winding path that
+heads off towards what seems to be a section of helipads. 
+~
+Flags:	0
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	16
+Y:	16
+Z:	6.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden heavy
+	Desc:$
+A heavy wooden door dominates the northern wall of the west wing. 
+~
+	ToVnum:	7928
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7917
+[EXIT southeast]
+	ToVnum:	7907
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7973
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7913
+Name:	Infront of the eastern wing
+Desc:$
+   The pathway curves along slowly until it reaches the eastern wing entrance
+of the mansion, as well as the guest house, which continues to be lined with
+the various assortment of wildlife that seems prevelant through out the
+estate. The worked stone walls lead themselves up to the master masonry work
+done by the builders of the mansion, its corners constructed with thicker and
+heavier cut blocks, while thinner slates of stacked brickwork occasionally
+adorned with carved wooden shutters and window sills are set in even levels. A
+large reinforced wooden door leads into the eastern wing to the north here,
+onfront of which is bolted a decorative heavy iron door knockers. To the east
+there is a pathway leading to an area penned in with wooden fence work, and
+what looks to be a horse stable partitioned off by a railed wooden fence gate.
+~
+Flags:	0
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	16
+Y:	16
+Z:	6.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden heavy
+	Desc:$
+A heavy wooden door dominates the northern wall of the east wing. 
+~
+	ToVnum:	7932
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7917
+[EXIT east]
+	Keywords:	gate wooden rail fence
+	Desc:$
+A wooden posted fence rail swivels open for access to the horse stables east
+of here. 
+~
+	ToVnum:	7979
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7908
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7914
+Name:	Entering the guest house
+Desc:$
+   The interior of this guest house is decorated in a manner consisting of
+grace, tastefulness, and an overall aestheticly pleasing design. Several large
+closets line the southern wall, their folding doors opening to allow one to
+hang any coats or clothing needed for the weather. An archway to the north
+leads off into what looks to be the kitchen, and aside from a few furnishings
+consisting of plush sofas and end tables, capped with a vase of some ornate
+design filled with flowers from the garden, the main entrance is relatively
+empty. 
+~
+Flags:	100000000010000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	6.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7915
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door ornate guest wooden polished
+	Desc:$
+An ornate, polished ^Wwhite oak^N door seals off the exit west of here. 
+~
+	ToVnum:	7978
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7920
+BREAK
+#7915
+Name:	A spacious kitchen
+Desc:$
+   The large kitchen is dominated by SOTA appliances, almost all of which are
+disguised cleverly as older, more ornate fixtures, harkening back to an
+earlier time in their appearance. A thick ^Lblack marble^N countertop dominates
+the center of the room, running almost from one side to the other, seperating
+the eating area from the food preperation portion of the kitchen. A sturdy
+^ymahogany^N dining table takes up a good part of the portion set aside for
+enjoying meals, around which are posted heavy wooden chairs, padded with plush
+^Lblack leather^N to match the countertops. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	6.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7916
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7914
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7916
+Name:	A huge living room
+Desc:$
+   The ammenities offered in this room would be enough to give any noble
+little reason for complaint. Plush ^Lblack leather^N sofas and matching ottomans
+are set up to take advantage of the space offered, making the room look ever
+larger than it already is. A massive stereo and entertainment system dominates
+the northern wall of this room, most of which consists of its wide, obviously
+expensive, flatscreen holo-trid set and speakers. A sturdy wooden door
+decorated with various carvings and symbols of some signifigance adorn its
+surface, and opens up into the guest house bedroom. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	6.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door wooden ornately
+	Desc:$
+An ornately carved wooden door stands to the south. 
+~
+	ToVnum:	7917
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7920
+[EXIT west]
+	ToVnum:	7915
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7917
+Name:	A simply massive bedroom
+Desc:$
+   The bedroom is wide open and spacious, and aside from the huge hardwood
+carved bed covered with plush, and expensive, mattresses, the rest of the
+furnishings are lined along the walls, giving the whole space a larger
+appearance. Two closests are set into the eastern wall, one larger than the
+other, but both more than capable of being walked into and around with ease.
+The lightning is offered by a simple, yet elegantly designed ^Wcrystal^N
+chandelier, giving the place an added hint of class and sophistication. 
+~
+Flags:	100000000000000000000000000100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	18
+Y:	18
+Z:	6.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden ornately
+	Desc:$
+An ornately carved wooden door stands to the north. 
+~
+	ToVnum:	7916
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7920
+BREAK
+#7918
+Name:	An ornately decorated entrance
+Desc:$
+   The sense that this mansion is massive in the proportions seen from outside
+are mirrored in its interior. The ceilings are higher than some cathedrals,
+and the beautiful works of art that line the extensive walls, meticulous
+pieces of work that most private collectors would murder their own family for.
+This room is a perfect example of what seperates the rich, from the wealthy,
+and its quite simply put, proportion. Several sets of ornately decorated and
+carved wooden doors are set into the walls, giving access to other rooms of
+the mansion, while the massive room itself continues to stretch along almost
+endlessly to the north. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	50
+Z:	15.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7919
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7929
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door wooden doors
+	Desc:$
+A large set of decorative iron weave reinforced wooden doors, covered in
+masses of intricate carvings down the smallest detail seal off the main exit
+of the mansion. 
+~
+	ToVnum:	7909
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7917
+[EXIT west]
+	ToVnum:	7925
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7919
+Name:	A simply massive, high ceiling room
+Desc:$
+   This room was designed for one particular purpose, intended to awe any
+visitors with its simply massive proportions and spacious construction. This
+single room itself is large enough to fit most houses, and luxury is the name
+of the game. Fine paintings of ranging degree and scenery line the room, along
+with an occasional suit of armour spaced along its length, preciously crafted
+weapons and shields held effortlessly by their strong grips, each one of a
+different design than the last. The top of the high ceiling is dominated by a
+massive ^Wcrystal^N chandelier that pours light down upon almost the entire area,
+behind which the artistic beauty of the ceiling paintings can be enjoyed in
+full visibility. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	50
+Z:	15.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7920
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door wooden carved decoratively
+	Desc:$
+A decoratively carved wooden door leads off to the lounge east of here. 
+~
+	ToVnum:	7930
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7918
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door wooden carved decoratively
+	Desc:$
+A decoratively carved wooden door leads off to the kitchen west of here. 
+~
+	ToVnum:	7926
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+BREAK
+#7920
+Name:	At the foot of the staircases
+Desc:$
+   These stairs are more akin to hallways that lift and span themselves up
+along the walls of this vaulted room, stretching up towards the heavens. The
+stairways themselves are lined with beautifully columns constructed of white
+marble washed clean of any inperfections, which travel up along the curved
+walls to the floors above. The central set of stone steps descends down a
+level to the north, offering entrance to the room itself the staircases are
+built along. A large circular pool of water can be seen from here, covering
+most of the floor and reflecting the sunlight as it pours in from the northern
+facing windows. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	30
+Z:	18.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7924
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	7922
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7919
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	7921
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7921
+Name:	The main western staircase
+Desc:$
+   The western set of stairs continues its travel up to the second level of
+the mansion, its eastern side lined with columns of stark ^Wwhite marble^N spaced
+evenly apart along the path. The western side of the stairs are covered mostly
+in decorative works of art, small statues on ornate display tables, or
+paintings of various natures. The soft sound of trickling water can be heard
+below, echoing up along the center shaft of the main room that lies below. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	6
+Z:	12.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	7923
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	7920
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7922
+Name:	The main eastern staircase
+Desc:$
+   The eastern set of stairs continues its travel up to the second level of
+the mansion, its western side lined with columns of stark ^Wwhite marble^N spaced
+evenly apart along the path. The eastern side of the stairs are covered mostly
+in decorative works of art, small statues on ornate display tables, or
+paintings of various natures. The soft sound of trickling water can be heard
+below, echoing up along the center shaft of the main room that lies below. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	6
+Z:	12.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	7920
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	7923
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7923
+Name:	The second floor landing
+Desc:$
+   An intricately woven silk ^Ltapestry^N of unknown origins stands boldly
+displayed at the top of the stairs, the second landing of the mansion
+dominated by its presence, as it covers almost the entire northern wall.
+Several soft lighting fixtures, consisting of ornate hoods to pool their
+collective illumination onto the walls and stairs. The stairs themselves turn
+and double back as they make a short climb to the main hallways extending off
+along the second floor. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	16
+Y:	16
+Z:	8.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	7922
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7921
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	7938
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7924
+Name:	In a dim circular pool room
+Desc:$
+   A wide circular pool of water, roughly six meters deep, is displayed
+proudly as the rooms distinguishing feature.  Surrounding its edges, which
+span most of the floor, sit twelve small statues, some of which are more
+simplistic, while others are intricate and delicate in their construction and
+design. Each one holds some value, obviously, but as to what value it is,
+isn't readily available from just the statues alone. The winds topping the
+northern end of the wall allow miniscule amounts of light to filter in,
+allowing only those with an accute sense of sight to take in the artistic work
+put into the surfaces here. 
+~
+Flags:	1100
+SecType:	Lake
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	25
+Y:	25
+Z:	16.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	3
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	7920
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7925
+Name:	A spacious dining hall
+Desc:$
+   This dining hall has dimensions that would put most theatres to shame, and
+the furnishings look like they belong in a museum moreso than as a decorative
+piece for a meal. A lengthy cherrywood slab crafted from a single piece of
+wood stretches along with the room, and has the capablity of seating atleast
+several dozen diners with room to spare. The acoustic qualities of the hall
+allows one to barely raise their voice to be heard across its expanse, thanks
+mostly in part due to the articulate angles and design of the vaulted ceiling
+and walls. Sunlight from the beautiful stained glass windows lining the upper
+portion of the walls allows multi-coloured shades of colours to spill down
+along the opposite walls. 
+~
+NightDesc:$
+   This dining hall has dimensions that would put most theatres to shame, and
+the furnishings look like they belong in a museum moreso than as a decorative
+piece for a meal. A lengthy cherrywood slab crafted from a single piece of
+wood stretches along with the room, and has the capablity of seating atleast
+several dozen diners with room to spare. The acoustic qualities of the hall
+allows one to barely raise their voice to be heard across its expanse, thanks
+mostly in part due to the articulate angles and design of the vaulted ceiling
+and walls. Moonlight from the beautiful stained glass windows lining the upper
+portion of the walls allows dark multi-coloured shades of colours to spill
+down along the opposite walls. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	50
+Z:	15.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden carved decoratively
+	Desc:$
+A decoratively carved wooden door leads off to the kitchen north of the dining
+hall. 
+~
+	ToVnum:	7926
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7918
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7926
+Name:	Inside a large kitchen
+Desc:$
+   This expansive kitchen is looks perfectly in place with its proportions and
+decorative, yet effective design and application of what space is offered it.
+It is quite obvious that nobody but the hired help sees much of this room, but
+even that isn't enough to keep it from being pleasing to the eye, as well as
+having a comfortable feel to it. Some portions are set aside from the more
+modern accomodations, along side which the mechanism and design harkens back
+to an age long past. A small team of cooks and servants mill about, seeing to
+the cuisine preperations of the manner estate, all of whom look well fed, and
+frankly, quite happy to be working in such a place, since it certainly came
+with its own benefits. The scenery beyond the large windows offer a great
+backdrop while working, and slows down the pace of a normally fast and hectic
+demeanor that most kitchens imply. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	8
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door wooden carved decoratively
+	Desc:$
+A decoratively carved wooden door leads off to the main hallway east of here.
+~
+	ToVnum:	7919
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door wooden carved decoratively
+	Desc:$
+A decoratively carved wooden door leads off to the dining hall connected to
+the kitchen. 
+~
+	ToVnum:	7925
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door wooden carved decoratively
+	Desc:$
+A decoratively carved wooden door leads off to the western wing here. 
+~
+	ToVnum:	7927
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+BREAK
+#7927
+Name:	At the end of the western wing
+Desc:$
+   The western wing continues along with more of the same features, its
+stained glass windows adding extra colour to the hallway and its decor. The
+wing eventually meets with the main section of the mansion, which splits off
+to the east from here. The north is dominated by another set of heavy wooden
+doors leading out into the massive gardens that dominated the scenery behind
+the mansion, some of which can be seen from the vantage point offered by the
+large pane glass windows set to each side. 
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	10
+Z:	8.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door heavy wooden
+	Desc:$
+A heavy wooden door leads out into the gardens behind the estate. 
+~
+	ToVnum:	7937
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7917
+[EXIT east]
+	Keywords:	door wooden carved decoratively
+	Desc:$
+A decoratively carved wooden door stands to the east. 
+~
+	ToVnum:	7926
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7928
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7928
+Name:	Entrance to the western wing
+Desc:$
+   The entrance to the western wing of the large mansion features a lengthy
+hallway sporting various stained glass windows, some of which are obvious into
+their symbology and design, while others feature esoteric and archaic decor.
+Sunlight filters in and casts multi-coloured rays of light onto the adjoining
+wall, practically blanketed with potted plants in expensive vases, their
+flowers apparently closed during the daytime hours. A heavy wooden door stands
+to the south, allowing access out into the courtyard, while to the north the
+hallway continues along the western wing. 
+~
+NightDesc:$
+   The entrance to the western wing of the large mansion features a lengthy
+hallway sporting various stained glass windows, some of which are obvious into
+their symbology and design, while others feature esoteric and archaic decor.
+Moonlight filters in and casts darkly shaded multi-coloured rays of light onto
+the adjoining wall, practically blanketed with potted plants in expensive
+vases, their flowers blooming widely during the night time hours. A heavy
+wooden door stands to the south, allowing access out into the courtyard, while
+to the north the hallway continues along the western wing. 
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	10
+Z:	8.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7927
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door wooden heavy
+	Desc:$
+A heavy wooden door dominates the southern end of this hallway. 
+~
+	ToVnum:	7912
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7917
+BREAK
+#7929
+Name:	A massive grand ballroom
+Desc:$
+   Elegance in design, as well as an almost over the top space in which to
+house it, that is the hallmark of a grand ballroom, and this one certainly
+does not disappoint. Its vaulted cathedral ceilings are designed to not only
+be aesthetically and artistically pleasing to ones eye, but also act as an
+echo chamber, allowing one to hear someone at nearly its other end while
+speaking at a casual volume. The floors are polished smooth to an extent that
+they act as nearly as mirrors, and are crafted from the highest quality wood
+that money can buy, and considering their sole purpose is to be stepped upon,
+it says quite a bit about the expense the owner went through when building
+this mansion. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	50
+Y:	20
+Z:	15.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden carved decoratively
+	Desc:$
+A decoratively carved wooden door leads off to the lounge north of the grand
+ballroom. 
+~
+	ToVnum:	7930
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7918
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7930
+Name:	In the lounge
+Desc:$
+   The corridors meet in several places with the lounge area, its northern
+wall covered in an array of concentric  circular windows, expanding out itself
+to offer a magnificent view of the woodland stretching off behind the estate.
+Neatly composed setups of chairs and tables, all bearing the same tell tale
+affection for natural wood furnishings of exquisite design. They are gathered
+about varying bits of media, some spread out about an old phono-graph, while
+other more plush seating is offered for trideo sets that cost more than most
+peoples lives. A large circular bar has been set up toward one edge, offering
+comfortable stools and a sleek polished ^Lblack mahogany^N bar counter, fully
+stocked with the finest hooch money can buy, ofcourse. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door wooden carved decoratively
+	Desc:$
+A decoratively carved wooden door leads off to the eastern wing here. 
+~
+	ToVnum:	7931
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door wooden carved decoratively
+	Desc:$
+A decoratively carved wooden door leads off to the grand ballroom south of
+here. 
+~
+	ToVnum:	7929
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door wooden carved decoratively
+	Desc:$
+A decoratively carved wooden door leads off to the main hallway west of here.
+~
+	ToVnum:	7919
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+BREAK
+#7931
+Name:	At the end of the eastern wing
+Desc:$
+   The eastern wing continues along with more of the same features, its
+stained glass windows adding extra colour to the hallway and its decor. The
+wing eventually meets with the main section of the mansion, which splits off
+to the west from here. The north is dominated by another set of heavy wooden
+doors leading out into the massive gardens that dominated the scenery behind
+the mansion, some of which can be seen from the vantage point offered by the
+large pane glass windows set to each side. 
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	10
+Z:	8.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door heavy wooden
+	Desc:$
+A heavy wooden door leads out into the gardens behind the estate. 
+~
+	ToVnum:	7933
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7917
+[EXIT south]
+	ToVnum:	7932
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door wooden carved decoratively
+	Desc:$
+A decoratively carved wooden door leads off from the eastern wing and into the
+lounge. 
+~
+	ToVnum:	7930
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+BREAK
+#7932
+Name:	Entrance to the eastern wing
+Desc:$
+   The entrance to the eastern wing of the large mansion features a lengthy
+hallway sporting various stained glass windows, some of which are obvious into
+their symbology and design, while others feature esoteric and archaic decor.
+Sunlight filters in and casts multi-coloured rays of light onto the adjoining
+wall, practically blanketed with potted plants in expensive vases, their
+flowers apparently closed during the daytime hours. A heavy wooden door stands
+to the south, allowing access out into the courtyard, while to the north the
+hallway continues along the eastern wing. 
+~
+NightDesc:$
+   The entrance to the eastern wing of the large mansion features a lengthy
+hallway sporting various stained glass windows, some of which are obvious into
+their symbology and design, while others feature esoteric and archaic decor.
+Moonlight filters in and casts darkly shaded multi-coloured rays of light onto
+the adjoining wall, practically blanketed with potted plants in expensive
+vases, their flowers blooming widely during the night time hours. A heavy
+wooden door stands to the south, allowing access out into the courtyard, while
+to the north the hallway continues along the eastern wing. 
+~
+Flags:	10000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	10
+Z:	8.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7931
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door wooden heavy
+	Desc:$
+A heavy wooden door dominates the southern end of this hallway. 
+~
+	ToVnum:	7913
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7917
+BREAK
+#7933
+Name:	Behind the eastern wing
+Desc:$
+   In the shadow of the eastern wing lies a massive expanse of gardens, most
+of which is seperated by beautifully crafted limestone hedges, most of which
+have been dominated by climbing plants that drape themselves over them like
+magnificent, lush green and white veined cloaks. The pathway begins to curve
+off to meet in the central section of the gardens, while small stonework
+waterways and irrigation fountains carry sustenance to every corner of the
+gardens, articulating their way through the thickets of healthy flora. 
+~
+Flags:	10000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	25
+Y:	12
+Z:	10.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door heavy wooden
+	Desc:$
+A heavy wooden door leads out of the garden and into the eastern wing south of
+here. 
+~
+	ToVnum:	7931
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7917
+[EXIT northwest]
+	ToVnum:	7934
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7934
+Name:	Along the garden pathways
+Desc:$
+   The hanging gardens display their splendors and make a magnificent view for
+any who step foot into the back of the expansive estate. Flowers of various
+sorts, ranging from common to rare, every colour of the rainbow, dot the
+landscape like some mosiac painting crafted by an artistic genius. The
+pathways are lined with carved stone benches, etched with old germanic runes,
+mostly depicting fertility, tranquility, splender and growth, suiting
+considering their placement. Each one is spanned on either side by oak trees,
+as well as redwood and other species that aren't native to this portion of the
+world. 
+~
+Flags:	0
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	12
+Z:	10.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	7933
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7935
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7935
+Name:	Before the oak tree archway
+Desc:$
+   Two massive oak trees dominate this portion of the garden, creating a wide
+natural archway beneath it as the paths join together, one leading off to the
+east, another to the west, and the archway itself to the north. The trees
+themselves look to be older than most creatures on earth, and gave the
+impression they were standing strong when some dragons were mere whelps in
+comparison. The shade offered by the lush canopy of high reaching branches,
+along with the cool trickle and movement of water through the cut stone
+irrigation and fountains washes over the air here, causing a cool, but
+comfortable breeze. 
+~
+NightDesc:$
+   Two massive oak trees dominate this portion of the garden, creating a wide
+natural archway beneath it as the paths join together, one leading off to the
+east, another to the west, and the archway itself to the north. The trees
+themselves look to be older than most creatures on earth, and gave the
+impression they were standing strong when some dragons were mere whelps in
+comparison. The shade offered by the lush canopy of high reaching branches,
+along with the cool trickle and movement of water through the cut stone
+irrigation and fountains washes over the air here, causing a cool, but
+comfortable breeze. Moonlight spills through in soft rays through the leaves,
+casting shadows all across the gardens beneath them. 
+~
+Flags:	10000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	40
+Y:	20
+Z:	6.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7972
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7934
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7936
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7936
+Name:	Along the garden pathways
+Desc:$
+   The hanging gardens display their splendors and make a magnificent view for
+any who step foot into the back of the expansive estate. Flowers of various
+sorts, ranging from common to rare, every colour of the rainbow, dot the
+landscape like some mosiac painting crafted by an artistic genius. The
+pathways are lined with carved stone benches, etched with old germanic runes,
+mostly depicting fertility, tranquility, splender and growth, suiting
+considering their placement. Each one is spanned on either side by oak trees,
+as well as redwood and other species that aren't native to this portion of the
+world. 
+~
+Flags:	0
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	12
+Z:	10.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7935
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7937
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7937
+Name:	Behind the western wing
+Desc:$
+   In the shadow of the western wing lies a massive expanse of gardens, most
+of which is seperated by beautifully crafted limestone hedges, most of which
+have been dominated by climbing plants that drape themselves over them like
+magnificent, lush green and white veined cloaks. The pathway begins to curve
+off to meet in the central section of the gardens, while small stonework
+waterways and irrigation fountains carry sustenance to every corner of the
+gardens, articulating their way through the thickets of healthy flora. 
+~
+Flags:	10000000000000000000
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	25
+Y:	12
+Z:	10.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	7936
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door heavy wooden
+	Desc:$
+A heavy wooden door leads out of the garden and into the western wing south of
+here. 
+~
+	ToVnum:	7927
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7917
+BREAK
+#7938
+Name:	Atop the main staircases
+Desc:$
+   The walls are windowless here, and instead are covered from floor to
+ceiling with various types of paintings, delicately woven tapestries and other
+works of art. Crystal capped lamps are etched and positioned to cast most of
+their light onto the walls, while leaving what remains of the climb of stairs
+lit well enough to be traversed. Both tops of the stairs come to meet infront
+of an eeriely darker corridor, and the manor takes on a distinctly different
+demeanor than the scenery downstairs. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	16
+Y:	8
+Z:	6.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	7939
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	7923
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7939
+Name:	A split in the hallway
+Desc:$
+   The light continues to dwindle until only the slightest dim glow remains,
+casting a blanket of shadows across the hallways and corridors that split off
+from the main path. The wood trim is heavily decorated with various species of
+leaves and flowers, along with sprawling vines that connect them all together.
+Two archways in particular are located across from one another, one leading
+west, while the other heads off to the east, leaving the main hall to continue
+its journey south. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	8
+Z:	8.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7938
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7952
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7940
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7948
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7940
+Name:	Between two large doorways
+Desc:$
+   Two equally impressive heavy wooden doors adorn each side of the hallway
+here, their trim and edges reinforced with bands of decorative wrought iron
+for both aesthetic and durability against any attempts to bypass them. Only
+the faintest glow of shaded bulb lamps in their etched prefices help to
+alleviate the darkness that sprawls from end to end in the hallway, which lies
+further down along to the north and south from here. An occasional suit of
+armour, regal in appearance, are posted along on either side of the doorways
+that branch off from here, apparently acting as symbolic guardians for the
+manor.. or atleast you hope its a figurative, and not a literal reference. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	8
+Z:	6.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7939
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door wooden heavy decorative sturdy
+	Desc:$
+A heavy wooden oak door, bound by wrought iron, is heavily carved and
+decorated. It stands off to the east, blocking all hopes of passage. 
+~
+	ToVnum:	7946
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7917
+[EXIT south]
+	ToVnum:	7941
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door wooden heavy decorative sturdy
+	Desc:$
+A heavy wooden oak door, bound by wrought iron, is heavily carved and
+decorated. It stands off to the west, blocking all hopes of passage. 
+~
+	ToVnum:	7944
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7917
+BREAK
+#7941
+Name:	Towards the south end of the hallway
+Desc:$
+   The faintest glimmers of light begin to stream in from the south, where an
+ornate set of glass doors held together by decorative twists of wrought iron,
+opens up to the outside word in the form of a garden balcony. The scenery here
+is in suit with the portion of hallway to the north, its length dotted with
+various bits and pieces of artwork, ranging in size, shape and symbolism in an
+assorted, apparently random order. The ceiling is set with ornate etched glass
+hoods, which are oddly enough, not even turned on. Apparently the owner of
+this estate either really likes saving electricity, or they obviously have
+something against brightly lit rooms. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	8
+Z:	8.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7940
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7942
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7942
+Name:	Before the balcony archway
+Desc:$
+   An ornate compilation of etched glass and masterwork wrought iron
+decoration, equally as sturdy in its construction as it is in its beauty,
+stand proudly display at the southern end of the hallway here. Above which is
+a stone archway, as ornate as everything else contained within the estate,
+some times to the excess. Sunlight filters in through the windows, but its
+efforts are usually in vein, due to the cardinal positioning of it in relation
+to the sun itself, and offer little in the way of visibility when navigating
+the dark, upper levels of the manor. The north stretches back along in a long,
+darkly lit hallway, while off to the west and east another set of stairs can
+be seen. 
+~
+NightDesc:$
+   An ornate compilation of etched glass and masterwork wrought iron
+decoration, equally as sturdy in its construction as it is in its beauty,
+stand proudly display at the southern end of the hallway here. Above which is
+a stone archway, as ornate as everything else contained within the estate,
+some times to the excess. Moonlight filters in through the windows, and its
+efforts are put to good use, creating an eerie and solemn scenery, offering
+little in the way of visibility (and confidence) when navigating the dark,
+upper levels of the manor. The north stretches back along in a long, darkly
+lit hallway, while off to the west and east another set of stairs can be seen.
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	8.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7941
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7955
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	doors double glass wrought iron decorative etched
+	Desc:$
+An ornate compilation of etched glass and masterwork wrought iron decoration
+opens up onto the balcony south of here. 
+~
+	ToVnum:	7943
+	Flags:	1
+	Material:	glass
+	Barrier:	32
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7951
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7943
+Name:	Posted atop a wide balcony
+Desc:$
+   Two ornate glass doors ringed with wrought iron open up onto a spacious
+balcony set into the front of the second landing. It is bordered by budding
+and bloom plants and their decorative stone potters, stacked with the sweetest
+smelling flowers known to humankind. Gazing down off the front of the manner,
+one can take in a large section of the front of the manner, including its
+expansive gardens and stone artwork, while further to the south one can make
+out the main drive leading up the estate, as well as the distant streets of
+Gresham, the only remotely convincing detail that reminds one they are still
+near civilization. 
+~
+Flags:	100
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	8.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	doors double glass wrought iron decorative etched
+	Desc:$
+An ornate compilation of etched glass and masterwork wrought iron decoration
+leads back into the manor north of here. 
+~
+	ToVnum:	7942
+	Flags:	1
+	Material:	glass
+	Barrier:	32
+	KeyVnum:	0
+BREAK
+#7944
+Name:	A neatly composed gallery
+Desc:$
+   This gallery is quite expansive, as contains everything an artist could
+ever need, or ever dream of for that matter. Wooden racks line the walls where
+ever a piece of art hasn't already found a place, stocked with the multitudes
+tools needed for any endevour imagined. Work tables, some with chisels,
+hammers, brushes, carpenter pencils, and measuring devices archaic and modern
+alike, are scattered about and spaced in a relatively neat manner. An ornate
+double wooden door takes up a place to the south end of the room, while back
+to the east a smaller doorway leads back into the main landing hallway. 
+~
+Flags:	100000000000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door wooden heavy decorative sturdy
+	Desc:$
+A heavy wooden oak door, bound by wrought iron, is heavily carved and
+decorated. It stands off to the east, blocking all hopes of passage. 
+~
+	ToVnum:	7940
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7917
+[EXIT south]
+	Keywords:	door wooden heavy decorative sturdy
+	Desc:$
+A heavy wooden oak door, bound by wrought iron, is heavily carved and
+decorated. It stands off to the south, blocking all hopes of passage. 
+~
+	ToVnum:	7945
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7917
+BREAK
+#7945
+Name:	A room filled with statues
+Desc:$
+   This room is almost packed to the brim with scattered statues of all
+shapes, sizes, material and conception. Most of which seem to be cut into
+humanoid forms, some more complete than others, while the processing and
+forming of others are nothing more than blank slabs of stone. They all seem to
+be turned in towards the center of the room, as if standing before an unseen
+power greater than their own and are offering their homage to its presence.
+Shaping tools, hammers and chisels line the walls, going unused as they hang
+in place and await their masters touch. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden heavy decorative sturdy
+	Desc:$
+A heavy wooden oak door, bound by wrought iron, is heavily carved and
+decorated. It stands off to the north, blocking all hopes of passage. 
+~
+	ToVnum:	7944
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7917
+BREAK
+#7946
+Name:	A private study permeated with books
+Desc:$
+   This wide, circular room is lined with massive carved oak bookshelves, all
+of which are packed to the brim with written works of art that would cause
+most private collectors to have an aneurism at the mere sight of such a
+grimoire of rare works and limited editions. Silver, gold and orichalcum
+gilded spines shine verily from their places, some with stronger auras than
+others, which beckon and tempt anyone who lays eyes upon them to reach up and
+take a better look. If knowledge itself was tangible, this room would be thick
+with its fog of permeated technique and wisdom. A sturdy wooden desk of
+distinguishable size and heft is parked back towards the eastern edge of the
+room, with scattered contents of scroll cases and small, sterile metal tools
+used for preservation and refurbishing of older works. 
+~
+Flags:	100000000000000000000000001100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door wooden heavy decorative sturdy
+	Desc:$
+A heavy wooden oak door, bound by wrought iron, is heavily carved and
+decorated. It stands off to the south, blocking all hopes of passage. 
+~
+	ToVnum:	7947
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7919
+[EXIT west]
+	Keywords:	door wooden heavy decorative sturdy
+	Desc:$
+A heavy wooden oak door, bound by wrought iron, is heavily carved and
+decorated. It stands off to the west, blocking all hopes of passage. 
+~
+	ToVnum:	7940
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7917
+BREAK
+#7947
+Name:	A library of unfathomable knowledge
+Desc:$
+   If the study would be permeated by knowledge, this library would, quite
+simply be, a massive block and form and function, whos knowledge and power are
+barely contained by this rune laced prison. Its walls feature shelves that
+travel from floor to ceiling, each of which is accompanied by sturdy ladders
+to reach the higher shelves. Lock boxes of various sizes and constructions
+dominate the center of the room, guarded by strong magicks and the best
+security measures money can buy. The ceiling and floor are covered by nearly
+every inch with a wide variety of runic emblems and symbols, ranging from a
+sperethiel based letter form, to the more archaic looking germanic runes, and
+even a few dwarven runes that haven't seen use in many centuries. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden heavy decorative sturdy
+	Desc:$
+A heavy wooden oak door, bound by wrought iron, is heavily carved and
+decorated. It stands off to the north, blocking all hopes of passage. 
+~
+	ToVnum:	7946
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7919
+BREAK
+#7948
+Name:	Along the western corridor
+Desc:$
+   This hallway travels away from the main hallway, and seems to lead in a
+large curve about the western wing on the second landing. The light, what
+little is offered, is only enough to take advantage of when it comes to
+getting a closer look at the works of art that dominated the surfaces in this
+section of corridor. To the southwest, sunlight can be seen in various
+brighter hues and shades cast by their reflective filters, but none of it
+quite reaches this far into the depths of the manner. 
+~
+NightDesc:$
+   This hallway travels away from the main hallway, and seems to lead in a
+large curve about the western wing on the second landing. The light, what
+little is offered, is only enough to take advantage of when it comes to
+getting a closer look at the works of art that dominated the surfaces in this
+section of corridor. To the southwest, moonlight can be seen in various dark
+hues and shades cast by their reflective filters, but none of it quite reaches
+this far into the depths of the manner. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	8
+Z:	8.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7939
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7949
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7949
+Name:	Passing a large stained glass window
+Desc:$
+   The scenery here changes quite drastically, considering the passages in
+which led to this portion of the western wing hallway. Almost the entire
+western length of the wall is covered by a single, massive stained glass
+window, whos colours and hues can only be described as vibrant, powerful, and
+brimming with an unseen sense of purpose. The figures depicted have obviously
+elven features, whos fair complexion and noble features tend to stand out in
+artwork even moreso than in life. The scene shows various elven warriors, some
+of which are obviously less important, while others bear symbolic
+representations in their poses and on their clothing and other garb, and in
+some cases, their suits of armour. Several archers stand with their bows
+posted into the ground, while others, surrounding a central figure of an elven
+woman, of noted high standing, has amassed about her heavily armed soldiers
+and warriors. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	8
+Z:	8.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	7948
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7950
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7950
+Name:	Along another stained glass window
+Desc:$
+   Another stained glass window continues the tradition along the western wall
+here as well, though the colours and shades it has put to use, for lack of a
+better word, are.. darker. In an almost exact copy of the window further north
+of here, the depictions of various elves are plastered across its expanse.
+There is, however, one major difference, aside from the symbolically darker
+colour scheme used. Something isn't quite right with these elves, as their
+normally flawlessly depicted complexions are marred by slender, delicate
+thorn-like needles that press up from beneath their flesh, piercing through it
+and dripping lightly with droplets of blood, which collect in tiny droplets
+near their tips before being cast to the ground below them; whos flowering
+plants, grasses and trees bask and soak up, their forms slightly twisted, and
+in general give the impression that something, somehow, isn't quite right. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	8
+Z:	8.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7949
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	7951
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7951
+Name:	At the foot of the western staircase
+Desc:$
+   Sunlight filters in from the northwest, due to the lengthy stained glass
+windows, and in turn offer the prefect amount of ambient lighting to make this
+portion of the hallway comfortable. Standing astride on the western side of
+the foot of a set of stairs that leads up even further into the higher levels
+of the estate, is a set of armour. Its form and design, along with the massive
+amounts of decor and fine detail, give the impression it is a ceremonial suit,
+used in various rites and rituals, none of which are readily detailed by just
+their appearance, but perhaps if one took a close look at their symbolic
+properties, they could gleam a bit of information. 
+~
+NightDesc:$
+   Moonlight filters in from the northwest, due to the lengthy stained glass
+windows, and in turn offer the prefect amount of ambient lighting to make this
+portion of the hallway feel uncomfortable, perhaps even eerie in its stillness
+and lack of illumination. Standing astride on the western side of the foot of
+a set of stairs that leads up even further into the higher levels of the
+estate, is a set of armour. Its form and design, along with the massive
+amounts of decor and fine detail, give the impression it is a ceremonial suit,
+used in various rites and rituals, none of which are readily detailed by just
+their appearance, but perhaps if one took a close look at their symbolic
+properties, they could gleam a bit of information. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	8
+Z:	8.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7942
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	7950
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	7956
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7952
+Name:	Along the eastern corridor
+Desc:$
+   This hallway travels away from the main hallway, and seems to lead in a
+large curve about the eastern wing on the second landing. The light, what
+little is offered, is only enough to take advantage of when it comes to
+getting a closer look at the works of art that dominated the surfaces in this
+section of corridor. To the southeast, sunlight can be seen in various
+brighter hues and shades cast by their reflective filters, but none of it
+quite reaches this far into the depths of the manner. 
+~
+NightDesc:$
+   This hallway travels away from the main hallway, and seems to lead in a
+large curve about the eastern wing on the second landing. The light, what
+little is offered, is only enough to take advantage of when it comes to
+getting a closer look at the works of art that dominated the surfaces in this
+section of corridor. To the southeast, moonlight can be seen in various dark
+hues and shades cast by their reflective filters, but none of it quite reaches
+this far into the depths of the manner. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	8
+Z:	8.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	7953
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7939
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7953
+Name:	Passing a large stained glass window
+Desc:$
+   The scenery here changes quite drastically, considering the passages in
+which led to this portion of the western wing hallway. Almost the entire
+western length of the wall is covered by a single, massive stained glass
+window, whos colours and hues can only be described as vibrant, powerful, and
+brimming with an unseen sense of purpose. The figures depicted have obviously
+elven features, whos fair complexion and noble features tend to stand out in
+artwork even moreso than in life. The scene shows various elven warriors, some
+of which are obviously less important, while others bear symbolic
+representations in their poses and on their clothing and other garb, and in
+some cases, their suits of armour. Several archers stand with their bows
+posted into the ground, while others, surrounding a central figure of an elven
+woman, of noted high standing, has amassed about her heavily armed soldiers
+and warriors. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	8
+Z:	8.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	7954
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	7952
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7954
+Name:	Along another stained glass window
+Desc:$
+   Another stained glass window continues the tradition along the western wall
+here as well, though the colours and shades it has put to use, for lack of a
+better word, are.. darker. In an almost exact copy of the window further north
+of here, the depictions of various elves are plastered across its expanse.
+There is, however, one major difference, aside from the symbolically darker
+colour scheme used. Something isn't quite right with these elves, as their
+normally flawlessly depicted complexions are marred by slender, delicate
+thorn-like needles that press up from beneath their flesh, piercing through it
+and dripping lightly with droplets of blood, which collect in tiny droplets
+near their tips before being cast to the ground below them; whos flowering
+plants, grasses and trees bask and soak up, their forms slightly twisted, and
+in general give the impression that something, somehow, isn't quite right. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	8
+Z:	8.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7953
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7955
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7955
+Name:	At the foot of the eastern staircase
+Desc:$
+   Sunlight filters in from the northwest, due to the lengthy stained glass
+windows, and in turn offer the prefect amount of ambient lighting to make this
+portion of the hallway comfortable. Standing astride on the eastern side of
+the foot of a set of stairs that leads up even further into the higher levels
+of the estate, is a set of armour. Its form and design, along with the massive
+amounts of decor and fine detail, give the impression it is a ceremonial suit,
+used in various rites and rituals, none of which are readily detailed by just
+their appearance, but perhaps if one took a close look at their symbolic
+properties, they could gleam a bit of information. 
+~
+NightDesc:$
+   Moonlight filters in from the northwest, due to the lengthy stained glass
+windows, and in turn offer the prefect amount of ambient lighting to make this
+portion of the hallway feel uncomfortable, perhaps even eerie in its stillness
+and lack of illumination. Standing astride on the eastern side of the foot of
+a set of stairs that leads up even further into the higher levels of the
+estate, is a set of armour. Its form and design, along with the massive
+amounts of decor and fine detail, give the impression it is a ceremonial suit,
+used in various rites and rituals, none of which are readily detailed by just
+their appearance, but perhaps if one took a close look at their symbolic
+properties, they could gleam a bit of information. 
+~
+Flags:	1000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	8
+Z:	8.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	7954
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7942
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT up]
+	ToVnum:	7957
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7956
+Name:	Atop the western staircase
+Desc:$
+   Masks, a few dozen of them at least, adorn the walls atop the western
+staircase. They vary greatly from one another for the most part, and in most
+cases, have been crafted by cultures seperated by half the globe. There are
+the almost obvious native american animal masks decorated with feathered
+ridges and carefully carved and detailed symbols etched deeply into their
+surfaces. Others are not quite as readily defined, some of them have oriental
+features akin to mythological creatures, who bear wild eyes and meticulously
+adorned tusks, and fangs and teeth. One common thread attaching them all is
+the fact they all only feature a single eye socket, the right to be more
+precise, giving the impression whoever these were made for has no use of their
+left eye, and instead they were fully detailed on the masks themselves in its
+place. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7958
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	7951
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7957
+Name:	Atop the eastern staircase
+Desc:$
+   Masks, a few dozen of them at least, adorn the walls atop the eastern
+staircase. They vary greatly from one another for the most part, and in most
+cases, have been crafted by cultures seperated by half the globe. There are
+the almost obvious native american animal masks decorated with feathered
+ridges and carefully carved and detailed symbols etched deeply into their
+surfaces. Others are not quite as readily defined, some of them have oriental
+features akin to mythological creatures, who bear wild eyes and meticulously
+adorned tusks, and fangs and teeth. One common thread attaching them all is
+the fact they all only feature a single eye socket, the right to be more
+precise, giving the impression whoever these were made for has no use of their
+left eye, and instead they were fully detailed on the masks themselves in its
+place. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT west]
+	ToVnum:	7958
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT down]
+	ToVnum:	7955
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7958
+Name:	Infront of a massive set of wooden doors
+Desc:$
+   The two passages meet infront of a massive set of wrought iron wrapped
+wooden doors, which reach almost up to the ceiling, which is an impressive
+display considering the size of the archway that was constructed for them.
+Their design makes an almost hermetic seal when closed, not even allowing the
+faintest glow or ray of light through from the other side. In the center of
+each of the doors are heavy, iron work knockers, crafted in the semblance of
+some horrific gargoyle like creatures faces, their fanged mouths clenched
+tightly about the top, which allows the rounded ball knocker to be struck
+against their tongues. The carpets that line the floors look like they belong
+in a museum, and it almost seems a tragedy that they aren't hung up on a wall
+where they won't be tread upon. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	16
+Y:	16
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden ornate double wrought iron
+	Desc:$
+A heavy set of wooden doors wrought with ornate iron work block all hopes of
+passage to the north. 
+~
+	ToVnum:	7959
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7918
+[EXIT east]
+	ToVnum:	7957
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7956
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7959
+Name:	An entrance alcove
+Desc:$
+   Flanking either side of this wide alcove are wooden rolling closet doors
+lining the walls, between which are posted worn brass pegs for hanging coats,
+along with a few low shelves to match for shoes and other footwear. One has to
+ascend the carved wooden banister lined set of stairs, which only travel a
+short way before leading up into the master living room. Bouqets of sweet
+smelling roses with their thorns still intact are set upon small, dark
+laquered wooden tables upon either side of both the bottom and top of the
+short stairway. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	8
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7960
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door wooden ornate double wrought iron
+	Desc:$
+A heavy set of wooden doors wrought with ornate iron work block all hopes of
+passage to the hallway south of here. 
+~
+	ToVnum:	7958
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7918
+BREAK
+#7960
+Name:	The master living room
+Desc:$
+   The living room is more extravegant than most rooms in the estate, its
+walls and ceiling practically covered in murial like paintings of various
+plantlife, enough to make most parabotonists foam at the mouth at such
+delicate and detailed art work. The edges of the vaulted ceiling, angled to
+act as an echo chamber, are molded with exquisite ^Lblack ash^N wood carved trims.
+Plush ^Lblack leather^n sofas of multiple sizes are scattered about infront of a
+massive personal entertainment system, with speakers nearly six meters tall
+and a widescreen holo-trid that puts most luxury class movie theatres to
+shame. The lightning is kept to a minimum, and can be either manually or
+automatically, since almost everything is controlled by a expert-driven
+computer system, and simply awaits an audio command. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7963
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7959
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door wooden ornate heavy sturdy
+	Desc:$
+A heavy wooden door, as ornate as any other, blocks the way west. 
+~
+	ToVnum:	7961
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+BREAK
+#7961
+Name:	A spacious master study
+Desc:$
+   High end SOTA meets old fashioned in this room, consisting of either
+weathered and worn ashes and oak wood carved furnishings, intricately worked
+to the finest and most meticulous of details, and almost exuding an aura of
+turn of the century high class. The remainder of the study is filled to the
+brim with electronics most third world countries have never even glimpsed. A
+large executive desk is piled high with random scroll cases, mostly paper,
+while others are written completely on electronic paper, a medium that can be
+bent, rolled and stored like its mundane counterpart, but is dependant upon a
+computer driven memory system that displays its details like a book page. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door wooden ornate heavy sturdy
+	Desc:$
+A heavy wooden door, as ornate as any other, blocks the way east. 
+~
+	ToVnum:	7960
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door wooden oak heavy sturdy
+	Desc:$
+A heavy oak door blocks all passage to the southern room here. 
+~
+	ToVnum:	7962
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7919
+BREAK
+#7962
+Name:	An immense private library
+Desc:$
+   This private library puts most national libraries to shame with its massive
+stained oak wood shelves, each one beautifully detailed, line the vaulted
+walls literally up to fit snugly against the ceiling. It would take years to
+categorize all of these books, tomes, scrolls, wood cuttings and grimoires,
+since none of the shelves seem to be labeled as to any indication what their
+particular genres of knowledge contained. A few tables, matching the shelves
+in design and grain, are scattered about, most of which are covered in the
+various books and journals that once populated the shelves. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door wooden oak heavy sturdy
+	Desc:$
+A heavy oak door blocks all passage to the northern room here. 
+~
+	ToVnum:	7961
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7919
+BREAK
+#7963
+Name:	The estates master bedroom
+Desc:$
+   The proportions of this master bedroom are vast, and only equaled by the
+exquisite scenery its design and decor exude. The vaulted cathedral ceilings
+are angled to reflect sound evenly down into the room, with every single
+surface covered in solid, darkly laquered ^Lblack oak^N, its length etched and
+engraved with multitudes of roses in both full bloom and as budding flowers,
+their thorn covered vines writhing and snaking down and across the ceilings to
+the walls, where matching trim work continues their design. The other
+furnishings here match in both their dark wood grains and decoration,
+including the massive master bed, which dominations a good portion of the
+room. The hardwood floors are polished smooth and are only covered by the
+occasional beautiful ^Wpristine white^N fur rug. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	25
+Y:	25
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door glass patio
+	Desc:$
+A set of thick glass doors open up to reveal the open-air patio north of here.
+~
+	ToVnum:	7969
+	Flags:	2
+	Material:	glass
+	Barrier:	32
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door wooden rolling
+	Desc:$
+A set of wooden rolling doors conceal the walk-in closet east of here. 
+~
+	ToVnum:	7966
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7960
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door ornate wooden polished
+	Desc:$
+An ornate, smoothly polished white ash door opens to the bathroom west of
+here. 
+~
+	ToVnum:	7964
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+BREAK
+#7964
+Name:	An exquisite master bathroom
+Desc:$
+   A luxurious master bathroom, in all its splendor and glory, opens up into
+one the largest you're ever likely to see in your lifetime. The entire
+southern wall is dominated by a single slab of finely tooled ^Lblack marble^N,
+whose trim consists of inlaid ^Wsilver filagree^N to match its polished ^Wsilver^N
+faucets and other instruments. Settled behind it is a setup of atleast a dozen
+wall length mirrors angled to allow various views of oneself while standing
+infront of it. A small pool-sized hot tub and whirlpool is built into the
+northern wall, consisting of yet another single slab of cut ^Lblack marble^N,
+while in the northwest corner a spacious multi-nozzle standing shower has been
+set up. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door ornate wooden
+	Desc:$
+An ornate, smoothly polished white ash door opens to the bathroom east of
+here. 
+~
+	ToVnum:	7963
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+BREAK
+#7965
+Name:	A spacious, open-air patio
+Desc:$
+   This secluded section of the extended open-air patio is centered around a
+deep, olympic-sized swimming pool, which is deep and full of small little
+shimmering waves of water. Stone benches and more comfortable padded ^Lblack
+leather^N and plush wooden chairs for relaxing are posted the perimeter of the
+pool. The scenery offered is essentially a peaceful, serene one, thanks in due
+part by the stretches of forest and woodland behind the estate. 
+~
+Flags:	100000000000000000000000000000
+SecType:	Lake
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	7969
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7966
+Name:	A lengthy walk-in closet
+Desc:$
+   This closet is larger than most peoples apartments, and features a wide
+pathway to walk down when looking over the enormous stacks of decorative, yet
+sturdy lockboxes, shelves, hangers, and old fashioned chests, all of which are
+ornate and most likely more expensive than they looked. Two larger archways
+towards the rear of the are sealed off with sliding metal doors with palmprint
+readers and SOTA encrypted maglock pads. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	6
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door doorway sliding metal
+	Desc:$
+A sliding metal doorway blocks off a portion of the walk-in closet. 
+~
+	ToVnum:	7967
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	7918
+[EXIT south]
+	Keywords:	door doorway sliding metal
+	Desc:$
+A sliding metal doorway blocks off a portion of the walk-in closet. 
+~
+	ToVnum:	7968
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	7918
+[EXIT west]
+	Keywords:	door wooden rolling
+	Desc:$
+A set of wooden rolling doors conceal the bedroom west of here. 
+~
+	ToVnum:	7963
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+BREAK
+#7967
+Name:	A sterile storage room
+Desc:$
+   This storage room is starkly different than most in the manor, as its
+surfaces are metal and polished to a smooth shine, giving the room a feel more
+akin to a surgical theatre. Compact folding shelves automatically extend out
+and flip open with small mechanical ease due to their concealed electric
+motors, which whir softly as they unfold and expand to be filled or lightened
+of stored items. Various containers of practicall every type are available for
+any sort of equipment or object needing to be stored, lining the room along
+each of the walls. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	Keywords:	door doorway sliding metal
+	Desc:$
+A sliding metal doorway blocks off passage back into the walk-in closet. 
+~
+	ToVnum:	7966
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	7918
+BREAK
+#7968
+Name:	A sterile storage room
+Desc:$
+   This storage room is starkly different than most in the manor, as its
+surfaces are metal and polished to a smooth shine, giving the room a feel more
+akin to a surgical theatre. Compact folding shelves automatically extend out
+and flip open with small mechanical ease due to their concealed electric
+motors, which whir softly as they unfold and expand to be filled or lightened
+of stored items. Various containers of practicall every type are available for
+any sort of equipment or object needing to be stored, lining the room along
+each of the walls. 
+~
+Flags:	100000000000000000000000001000
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	door doorway sliding metal
+	Desc:$
+A sliding metal doorway blocks off passage back into the walk-in closet. 
+~
+	ToVnum:	7966
+	Flags:	2
+	Material:	metal
+	Barrier:	32
+	KeyVnum:	7918
+BREAK
+#7969
+Name:	A large, open air patio
+Desc:$
+   Upon this sunlit open-air patio are all the luxuries of the wealthy,
+ranging from stonework ovens and smokers, to hot tubs and whirlpools, all
+surrounded by masses of plantlife, which is deeply rooted into the carved
+stone basins that travel along in various patterns along the sides of the
+patio. Small railed paths split off on either edge and head out onto
+observation platforms to the northwest and northeast, while another set of
+stairs leads down to the northern portion of the patio. 
+~
+NightDesc:$
+   Upon this moonlit open-air patio are all the luxuries of the wealthy,
+ranging from stonework ovens and smokers, to hot tubs and whirlpools, all
+surrounded by masses of plantlife, which is deeply rooted into the carved
+stone basins that travel along in various patterns along the sides of the
+patio. Small railed paths split off on either edge and head out onto
+observation platforms to the northwest and northeast, while another set of
+stairs leads down to the northern portion of the patio. 
+~
+Flags:	100000000000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7965
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	7971
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	Keywords:	door glass patio
+	Desc:$
+A set of thick glass doors lead out of the open-air patio and into the manor
+south of here. 
+~
+	ToVnum:	7963
+	Flags:	2
+	Material:	glass
+	Barrier:	32
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	7970
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7970
+Name:	The northwestern observation platform
+Desc:$
+   Upon the northwestern observation platform, which extends out behind the
+patio to allow for an unobscured profile of the woodland surrounding the
+estate, as well as a prefect view of the stars when night has fallen. A few
+viewing telescopes have been bolted to the railing to peer up at the celestial
+heavens, but also work just as well to get a good peek into the depths of the
+forests that compose the backdrop of the scenery here. 
+~
+NightDesc:$
+   Upon the northwestern observation platform, which extends out behind the
+patio to allow for an unobscured profile of the woodland surrounding the
+estate, as well as a prefect view of the stars since night has fallen. A few
+viewing telescopes have been bolted to the railing to peer up at the celestial
+heavens, which glimmer and sparkle boldly overhead, but also work just as well
+to get a good peek into the dark depths of the forests that compose the
+backdrop of the scenery here. 
+~
+Flags:	100000000000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	6.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	7969
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7971
+Name:	The northeastern observation platform
+Desc:$
+   Upon the northeastern observation platform, which extends out behind the
+patio to allow for an unobscured profile of the woodland surrounding the
+estate, as well as a prefect view of the stars when night has fallen. A few
+viewing telescopes have been bolted to the railing to peer up at the celestial
+heavens, but also work just as well to get a good peek into the depths of the
+forests that compose the backdrop of the scenery here. 
+~
+NightDesc:$
+   Upon the northeastern observation platform, which extends out behind the
+patio to allow for an unobscured profile of the woodland surrounding the
+estate, as well as a prefect view of the stars since night has fallen. A few
+viewing telescopes have been bolted to the railing to peer up at the celestial
+heavens, which glimmer and sparkle boldly overhead, but also work just as well
+to get a good peek into the dark depths of the forests that compose the
+backdrop of the scenery here. 
+~
+Flags:	100000000000000000000000000000
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	12
+Y:	12
+Z:	6.00
+RoomType:	10
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southwest]
+	ToVnum:	7969
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7972
+Name:	Standing infront of a massive ash tree
+Desc:$
+   An absolutely massive white ash tree has been planted in the center of this
+section of garden, and is larger than most trees one will ever witness in
+their life time. It is, quite simply put, huge. The courtyard like alcove is
+surrounded by the subtle curves of mason work etched and cut, which show no
+tool marks to testify their creators hands having touched them, which is
+rather surprising due to the sheer size and amount of work done. If one looks
+carefully, they might be able to make out the zodiac represented with various
+runes, some more common, while others are estoeric, and in some cases, simply
+an unknown dialect. The thirteenth zodiac, it seems, is representing about the
+ash tree standing in the middle. To the north stands a large, smoothly
+polished slab of stone, which has been sealed into place at the entrance of
+some sort of cavern. 
+~
+Flags:	10000000000000000100
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	25
+Y:	25
+Z:	25.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	Keywords:	slab stone polished secret massive
+	Desc:$
+A massive slab of stone, polished smooth with a masterful sheen, seals the
+passage to the north. 
+~
+	ToVnum:	6032
+	Flags:	2
+	Material:	stone
+	Barrier:	32
+	KeyVnum:	7917
+	HiddenRating:	32
+[EXIT south]
+	ToVnum:	7935
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7983
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7973
+Name:	A twisting path between the helipad
+Desc:$
+   The pathway here is polished cobblestone, lined on either side of its
+twisting path with decorative planter lights, and seems to be heading off
+towards the helipads located on the western side of the manor. An occasional
+bush sprouting various berries of different shapes and colours dot path as
+well, inviting passerbys to a snack as they head between the eastern wing
+entrance and the landing pads.  
+~
+Flags:	100
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7912
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7976
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7975
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	7974
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7974
+Name:	The northern helipad
+Desc:$
+   The helipad here is a large space resurfaced with heat resistant earthen
+materials with a large painted white '^WH^N' in its center. The cleared area
+around the wide landing pad makes it suited perfectly for any VTOL or
+tilt-wing aircraft to easily maneuver to and off of. The scenery surrounding
+the perimeter of the area consists of large trees of various sizes and
+species, making this portion of the estate rather concealed from all but
+nearby air traffic. 
+~
+NightDesc:$
+   The helipad here is a large space resurfaced with heat resistant earthen
+materials with a large painted white '^WH^N' in its center, along with
+multi-coloured lights dotting the perimeter and lettering itself for night
+time landings. The cleared area around the wide landing pad makes it suited
+perfectly for any VTOL or tilt-wing aircraft to easily maneuver to and off of.
+The scenery surrounding the perimeter of the area consists of large trees of
+various sizes and species, making this portion of the estate rather concealed
+from all but nearby air traffic. 
+~
+Flags:	100
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT southeast]
+	ToVnum:	7973
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7975
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southwest]
+	ToVnum:	7977
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7975
+Name:	An empty central helipad
+Desc:$
+   The helipad here is a large space resurfaced with heat resistant earthen
+materials with a large painted white '^WH^N' in its center. The cleared area
+around the wide landing pad makes it suited perfectly for any VTOL or
+tilt-wing aircraft to easily maneuver to and off of. The scenery surrounding
+the perimeter of the area consists of large trees of various sizes and
+species, making this portion of the estate rather concealed from all but
+nearby air traffic. 
+~
+NightDesc:$
+   The helipad here is a large space resurfaced with heat resistant earthen
+materials with a large painted white '^WH^N' in its center, along with
+multi-coloured lights dotting the perimeter and lettering itself for night
+time landings. The cleared area around the wide landing pad makes it suited
+perfectly for any VTOL or tilt-wing aircraft to easily maneuver to and off of.
+The scenery surrounding the perimeter of the area consists of large trees of
+various sizes and species, making this portion of the estate rather concealed
+from all but nearby air traffic. 
+~
+Flags:	100
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7974
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7973
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT south]
+	ToVnum:	7976
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	ToVnum:	7977
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7976
+Name:	The southern helipad
+Desc:$
+   The helipad here is a large space resurfaced with heat resistant earthen
+materials with a large painted white 'H' in its center. The cleared area
+around the wide landing pad makes it suited perfectly for any VTOL or
+tilt-wing aircraft to easily maneuver to and off of. The scenery surrounding
+the perimeter of the area consists of large trees of various sizes and
+species, making this portion of the estate rather concealed from all but
+nearby air traffic. 
+~
+NightDesc:$
+   The helipad here is a large space resurfaced with heat resistant earthen
+materials with a large painted white 'H' in its center, along with
+multi-coloured lights dotting the perimeter and lettering itself for night
+time landings. The cleared area around the wide landing pad makes it suited
+perfectly for any VTOL or tilt-wing aircraft to easily maneuver to and off of.
+The scenery surrounding the perimeter of the area consists of large trees of
+various sizes and species, making this portion of the estate rather concealed
+from all but nearby air traffic. 
+~
+Flags:	100
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7975
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northeast]
+	ToVnum:	7973
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT northwest]
+	ToVnum:	7977
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7977
+Name:	The western helipad
+Desc:$
+   The helipad here is a large space resurfaced with heat resistant earthen
+materials with a large painted white 'H' in its center. The cleared area
+around the wide landing pad makes it suited perfectly for any VTOL or
+tilt-wing aircraft to easily maneuver to and off of. The scenery surrounding
+the perimeter of the area consists of large trees of various sizes and
+species, making this portion of the estate rather concealed from all but
+nearby air traffic. 
+~
+NightDesc:$
+   The helipad here is a large space resurfaced with heat resistant earthen
+materials with a large painted white 'H' in its center, along with
+multi-coloured lights dotting the perimeter and lettering itself for night
+time landings. The cleared area around the wide landing pad makes it suited
+perfectly for any VTOL or tilt-wing aircraft to easily maneuver to and off of.
+The scenery surrounding the perimeter of the area consists of large trees of
+various sizes and species, making this portion of the estate rather concealed
+from all but nearby air traffic. 
+~
+Flags:	100
+SecType:	Wind
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	0
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT northeast]
+	ToVnum:	7974
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	ToVnum:	7975
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT southeast]
+	ToVnum:	7976
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7978
+Name:	A spacious, circular driveway
+Desc:$
+   This concealed pathway weaves its way through thickets of trees as its
+cobblestone construction carries it up along the side of a small hill. It
+eventually comes to a halt and circles around on itself, turning into a
+spacious driveway for ones vehicles. A large guest house has been erected here
+near the outer perimeter of the estate, but still tucked away enough as not to
+be bothered by anything going on outside of the exterior walls. 
+~
+Flags:	100000000000000000000100
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	15
+Y:	15
+Z:	10.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	Keywords:	door ornate guest wooden polished
+	Desc:$
+An ornate, polished ^Wwhite oak^N door seals off the guest house east of here. 
+~
+	ToVnum:	7914
+	Flags:	2
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	7920
+[EXIT southwest]
+	ToVnum:	7900
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7979
+Name:	Entrance to the stables
+Desc:$
+   This wide open area beyond the wooden gate is lush with vibrant green
+grasses where ever packed dirt pathways aren't present. One path leads off to
+the east, to what looks to be the horse stable itself, and also connects to
+the large grazing meadow on the other side. To the north, running along a path
+constructed by the same posted wooden fence that encircles a sizable chunk of
+land off to the northeast, is a lengthy field of loosely compacted dirt for
+riding and even racing purposes. 
+~
+Flags:	100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	20
+Y:	20
+Z:	10.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7980
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT east]
+	Keywords:	door stable gate
+	Desc:$
+A sturdy set of double wooden doors closes of the stable east off here. 
+~
+	ToVnum:	7981
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	gate wooden rail fence
+	Desc:$
+A wooden posted fence rail swivels open for access back to the manor west of
+here. 
+~
+	ToVnum:	7913
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+BREAK
+#7980
+Name:	A set of lengthy fields of dirt
+Desc:$
+   This large, fenced off area is composed of two lengthy stretches of land
+that have been tilled and loosely compacted and set next to one another,
+seperated by another length of swiveling rail fence work. The fences
+themselves swivel and can be turned to allow for a large oval shaped racing
+track to be constructed out of the two, making it a prime suspect for bets on
+whoever wins. 
+~
+Flags:	100
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	100
+Y:	40
+Z:	10.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	7979
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7981
+Name:	Inside a horse stable
+Desc:$
+   This horse stable has a vaulted ceiling and plenty of space to house
+atleast a dozen of the creatures, tucked away comfortably in their spacious
+pens seperated above the shoulder from one another by their sturdy railed
+walls. The walls are lined with instruments used for replacing shoes, along
+with a few step stools and brushes. Further down along the stable are the
+bridles and tack and saddles, hanging on roughly cut pegs sticking from the
+walls at even intervals, along with several horse brushes and blankets. 
+~
+Flags:	1100
+SecType:	Inside
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	30
+Y:	20
+Z:	12.00
+RoomType:	6
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT north]
+	ToVnum:	7982
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+[EXIT west]
+	Keywords:	door stable gate
+	Desc:$
+A sturdy set of double wooden doors block the way back west. 
+~
+	ToVnum:	7979
+	Flags:	1
+	Material:	wood
+	Barrier:	32
+	KeyVnum:	0
+BREAK
+#7982
+Name:	A lush and vibrant green meadow
+Desc:$
+   This lush meadow opens up beyond the horse stables, where it stretches
+across a decent chunk of land, all of which is surrounded by the same rustic,
+brown wooden fence posts, which stand out fairly well in the vibrant greens
+and brighter colours that dot the landscape. Wild grasses, dandelions, various
+weeds and other straws and stalked grasslands permeate this secluded area,
+offering great grazing for the horses being kept. 
+~
+Flags:	0
+SecType:	Field
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	120
+Y:	120
+Z:	0.00
+RoomType:	3
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT south]
+	ToVnum:	7981
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+#7983
+Name:	Wandering through the laesal grove
+Desc:$
+   This lush and vibrant orchard seems to have been plucked free of any
+invasive species of weeds and other pesky plants that could possibly do harm
+to the several dozen trees lining the area. A central pathway of unhewn
+cobblestones, worn smooth by nature itself, have been positioned and lined to
+create a wide walkway that snakes its way through the lines of trees. The
+orchard itself is dominated by one particular species, the laesal tree, which
+bears a golden cherry-like fruit, its skin shimmering as the ^Ysunlight^N filters
+through from canopy above. Several collection containers are placed around the
+area, which are climate and temperature controlled to keep the collected
+fruits from decaying once placed inside, keeping them nice and fresh for quite
+a while. 
+~
+NightDesc:$
+   This lush and vibrant orchard seems to have been plucked free of any
+invasive species of weeds and other pesky plants that could possibly do harm
+to the several dozen trees lining the area. A central pathway of unhewn
+cobblestones, worn smooth by nature itself, have been positioned and lined to
+create a wide walkway that snakes its way through the lines of trees. The
+orchard itself is dominated by one particular species, the laesal tree, which
+bears a golden cherry-like fruit, its skin shimmering as the ^Wmoonlight^N filters
+through from canopy above. Several collection containers are placed around the
+area, which are climate and temperature controlled to keep the collected
+fruits from decaying once placed inside, keeping them nice and fresh for quite
+a while. 
+~
+Flags:	100
+SecType:	Forest
+MatrixExit:	0
+Crowd:	0
+Cover:	0
+X:	100
+Y:	20
+Z:	6.00
+RoomType:	4
+[POINTS]
+	SpecIdx:	0
+	Rating:	0
+	Light:	0
+	Smoke:	0
+	Background:	0
+	BackgroundType:	0
+[EXIT east]
+	ToVnum:	7972
+	Flags:	0
+	Material:	brick
+	Barrier:	4
+	KeyVnum:	0
+BREAK
+END

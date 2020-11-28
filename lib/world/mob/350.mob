@@ -1,0 +1,956 @@
+#35000
+Keywords:	rich elven patron woman handsome nose furs
+Name:	A rich elven patron
+RoomDesc:$
+A handsome elven woman, bedecked in furs, glares down her nose. 
+
+~
+LookDesc:$
+Wearing enough furs to deplete a species, this woman is the embodiment of
+gaudiness. Bands of gold and other precious metals weigh down her arms, and a
+pair of armless glasses balances upon her upraised nose - a nose she is often
+looking down. She is not beautiful, as she is past the prime of even an elf's
+lifetime, but she carries herself with the stately air of wealth, and so could
+be described as handsome, though she radiates arrogance like a fire does heat.
+~
+ArriveMsg:	stalks in from
+LeaveMsg:	marches off
+MobFlags:	100001001000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Maul
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	9
+	Str:	5
+	Cha:	6
+	Int:	7
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	165
+	Weight:	59
+	Level:	6
+	Ballistic:	12
+	Impact:	17
+	Bank:	125
+[SKILLS]
+	armed combat:	15
+	clubs:	15
+	negotiation:	12
+BREAK
+#35001
+Keywords:	girl skyline smiling employee cafe
+Name:	A smiling Skyline employee
+RoomDesc:$
+A Skyline Cafe' girl stands, smiling. 
+
+~
+LookDesc:$
+She is young, no more than 17, with blonde hair in a ponytail that just about
+hides those pointy elf ears. Blue eyes seem vacant, untouched by the smile on
+her face, which seems almost too professional. Her uniform hides whatever she
+might have to show, which doesn't seem to be much. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000100000011010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	57
+[SKILLS]
+BREAK
+#35002
+Keywords:	Rook mage troll shaman shamanic
+Name:	Rook
+RoomDesc:$
+A massive troll with shamanic tattoos, clad in wizardly garb, lounges here. 
+
+~
+LookDesc:$
+Rook is a massive troll with a pair of thin silver glasses balanced upon his
+nose. His skin is very tough and dark gray, like granite. It seems he was the
+victim of a Petrify spell gone awry, and managed to turn it into an advantage
+- armorlike skin. It's almost enough of a demonstration of his magical might
+in and of itself, but the brain-numbingly complex formula emerging under his
+quick pen proves it that much more completely. How amazing is it, then, when
+he offers to share his knowledge? 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000110000000001010
+AffFlags:	11000
+Race:	Human
+Gender:	Male
+Position:	Resting
+DefaultPos:	Resting
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	4
+	Str:	10
+	Cha:	8
+	Int:	10
+	Wil:	10
+	Mag:	20
+[POINTS]
+	Height:	263
+	Weight:	180
+	Level:	9
+	Ballistic:	15
+	Impact:	20
+[SKILLS]
+	:	30
+	:	30
+	sorcery:	30
+	conjuring:	30
+	negotiation:	45
+BREAK
+#35003
+Keywords:	mage rook rook's
+Name:	Rook's mage
+RoomDesc:$
+A mage in long red robes and a pointy hat stands, grinning. 
+
+~
+LookDesc:$
+A mage employed by Rook. He is clad head to toe in red: red robes, red hat,
+red boots, and so on. He is a human of middle years, a touch of gray about his
+temples but otherwise a full head of jet black hair, and big green eyes that
+hint at an - at least partially - elven heritage. Though his smile is as
+disarming as that of any elf, it never touches his eyes, which look at the
+world with the practiced logic of an old wizard. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000110000000001010
+AffFlags:	11000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	158
+	Weight:	53
+	Ballistic:	10
+	Impact:	7
+[SKILLS]
+BREAK
+#35004
+Keywords:	shaman shamaness rook rook's
+Name:	Rook's shaman
+RoomDesc:$
+A scantily clad shamaness leans on the display case. 
+
+~
+LookDesc:$
+A shamaness - coyote, by the fur that is just about wrapped around her -
+employed by Rook. She is an elf, and Rook uses her as a liason sometimes for
+his elven patrons, who are often initially dismayed at being trained by a
+troll. A flash of that fetching smile and a shine from those big green eyes is
+enough to have any man - and most women - eating out of her hand, sometimes
+literally. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	11000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	6
+[POINTS]
+	Height:	158
+	Weight:	45
+	Ballistic:	15
+	Impact:	10
+[SKILLS]
+BREAK
+#35005
+Keywords:	Faylie jeweless jeweler
+Name:	Faylie
+RoomDesc:$
+Faylie, jeweless extraordinaire, perches behind her counter, beaming a smile.
+
+~
+LookDesc:$
+Faylie sits, perched in a tall framework chair, looking down into her
+counters. With a touch of magic, she can summon up anything on her extensive
+list of pretty little baubles, and make a pile of nuyen disappear all at the
+same time. Her face denies her age, looking like a teenager despite being what
+humans would consider geriatric. Her lips form just as lovely a smile, and her
+eyes have not lost their glimmer, a shine almost as bright as her jewelry. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	1000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	153
+	Weight:	38
+	Ballistic:	8
+	Impact:	10
+[SKILLS]
+BREAK
+#35006
+Keywords:	Francois furrier gay elf homosexual
+Name:	Francois the furrier
+RoomDesc:$
+A flamboyantly effeminate elf pads about anxiously. 
+
+~
+LookDesc:$
+Francois dashes here and there, wrapped in furs and velvet, with a black beret
+balanced atop his head, leaning rather heavily on one pointy ear. A filterless
+imported cigarette almost always dangles from his thin lips, held in place by
+equally thin fingertips. He has an eye for what looks good on a lady, and in
+fact he often wears many of his own designs. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	174
+	Weight:	66
+	Ballistic:	12
+	Impact:	4
+[SKILLS]
+BREAK
+#35007
+Keywords:	Twilight Glory elven punks band
+Name:	Twilight of Glory
+RoomDesc:$
+A band of elven punks pumps out loud music. 
+
+~
+LookDesc:$
+Four elves, all of them obviously alcoholic, blast music from mismatched
+instruments. Their eyes are sullen and sad, and their lyrics - hidden mostly
+by loud party-style music - speak of the loss of purity in the elven blood.
+They wear ragged clothes, mostly t-shirts of other pureblood bands. When
+they're not playing, they sit around lamenting the humanity in their own
+veins, a deformity they hope strong elven ale will someday wash away. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+BREAK
+#35008
+Keywords:	Ricky cook rotund elf grill
+Name:	Ricky the grill cook
+RoomDesc:$
+A big, rotund elf looms over the grill. 
+
+~
+LookDesc:$
+Ricky is a big, hulking elf with a gentle way and a bright smile. His shirt is
+stained with grease, but no more than any grill cook's should be - you can't
+trust a grill cook who's too clean, or so Ricky says. A spatula in one hand
+and a bottle of imported elven beer in the other, he works the grill with
+almost too casual perfection. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	10000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	197
+	Weight:	95
+[SKILLS]
+BREAK
+#35009
+Keywords:	waitress lovely elven elf girl
+Name:	a lovely elven waitress
+RoomDesc:$
+A lovely elven waitress smiles, waiting to take your order. 
+
+~
+LookDesc:$
+A sweet, smiling young elven girl leans forward, pad in hand. Auburn curls
+hang in two tails, one behind each pointy ear, showing them off. She is slim,
+but not exactly petite - well proportioned at very least. Her smile is
+disarming, her wit, engaging. And her manner is strictly professional. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	166
+	Weight:	57
+[SKILLS]
+BREAK
+#35010
+Keywords:	waiter elven elf smiling boy
+Name:	an elven waiter
+RoomDesc:$
+A smiling elven waiter awaits your order. 
+
+~
+LookDesc:$
+He is tall and wide in the shoulders. Pointy elven ears stick out far from his
+head, his close-cropped hair doing nothing to cover them, which is exactly as
+he wanted. He is the image of professionalism, his uniform spotless and
+impeccably pressed, his every manner and motion almost too fluid. And that
+shining elven smile... 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	188
+	Weight:	102
+[SKILLS]
+BREAK
+#35011
+Keywords:	Aiden Cloud johnson elf tall slim mage
+Name:	Aiden St. Cloud
+RoomDesc:$
+A tall, slim elf peers at you from under the hood of a black cloak. 
+
+~
+LookDesc:$
+He is a tall, slim elf with hair so pale it appears white. Big green eyes gaze
+from beneath his hooded cloak, draining the image of all that surrounds him
+into his fathomlessly deep memory. Pointy ears stand ever perked, listening to
+every minute sound that might approach him. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	110100000011010
+AffFlags:	1000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	9
+	Str:	6
+	Cha:	9
+	Int:	7
+	Wil:	15
+	Mag:	12
+[POINTS]
+	Height:	188
+	Weight:	74
+	Level:	2
+	Ballistic:	9
+	Impact:	12
+	Bank:	100
+[SKILLS]
+	:	15
+	sorcery:	15
+	conjuring:	15
+	unarmed combat:	27
+BREAK
+#35012
+Keywords:	mage elf aquilor security battlemage high threat
+Name:	an Aquilor High-Threat Battlemage
+RoomDesc:$
+A mage glares at you with glowing eyes from beneath the hood of a shaded
+cloak. 
+
+~
+LookDesc:$
+Clad in the uniform blues of an Aquilor, this mage looks like he has been
+steeped in magic all his life. His step is so light and graceful you could
+almost swear his feet are not actually touching the ground, and with the extra
+lengths of his robes, they very well might not be. Pale hands weave spells
+with mind-bending alacrity, and sharp eyes deliver them with deadly accuracy.
+~
+ArriveMsg:	slides in from
+LeaveMsg:	drifts away
+MobFlags:	1010101110100001011000
+AffFlags:	1000000010000000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	14
+	Str:	11
+	Cha:	8
+	Int:	7
+	Wil:	9
+	Mag:	14
+[POINTS]
+	Height:	189
+	Weight:	95
+	Level:	1
+	Ballistic:	13
+	Impact:	9
+	Bank:	200
+[SKILLS]
+	:	15
+	conjuring:	15
+	sorcery:	15
+	edged weapons:	15
+BREAK
+#35013
+Keywords:	aquilor troll guard slave
+Name:	an Aquilor High-Threat troll slave
+RoomDesc:$
+A massive troll in ^bAquilor ^Lcolors^n looms over you. 
+
+~
+LookDesc:$
+At first, the troll looks out of place in Aquilor colors. Then you realize
+there are no sigils of rank on his breast. Instead is the glowing-gold
+signature of a mage. That, combined with the glassy-eyed look on the troll's
+face, marks him as a brain-burned slave, forced into guard duty by a
+particularly ruthless Aquilor Captain Commander. Still, he wears Aquilor
+colors, and wether the words on his lips are his own or his master's, the only
+ones he wants from you are, "Yes, sir." 
+~
+ArriveMsg:	plods in from
+LeaveMsg:	shuffles off
+MobFlags:	1010001010100001111000
+AffFlags:	1000000010001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Rifle
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	11
+	Str:	13
+	Cha:	4
+	Int:	3
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	275
+	Weight:	175
+	Level:	1
+	Ballistic:	15
+	Impact:	13
+[SKILLS]
+	assault rifles:	30
+	unarmed combat:	30
+BREAK
+#35014
+Keywords:	captain commander daethan answyr elf officer aquilor
+Name:	Captain Commander Daethan Answyr
+RoomDesc:$
+A tall, slim elf in Aquilor officer's dress inspects the area. 
+
+~
+LookDesc:$
+Captain Commander Daethan Answyr, leader of the Aquilor Security Forces, is
+not a young man. By elven standards, he is considered young - however, Daethan
+Answyr is only half elf. His hair, lustrous black in his youth, is now cropped
+short and speckled with more gray than he might care to admit. It has lost
+none of its luster, though, nor have his eyes. He is as sharp as ever, in mind
+as well as body, and the Aquilor Forces follow him without question. On the
+breast of his jacket is the Sigil of the All-Seeing Eye encircled by the
+symbols of all other Aquilor branches, marking him as the Captain Commander. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10100011100001011000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	11
+	Str:	9
+	Cha:	10
+	Int:	12
+	Wil:	10
+	Mag:	13
+[POINTS]
+	Height:	172
+	Weight:	71
+	Level:	2
+	Ballistic:	18
+	Impact:	15
+[SKILLS]
+	pistols:	20
+	:	20
+	conjuring:	20
+	sorcery:	20
+	interrogation:	20
+BREAK
+#35015
+Keywords:	doctor carolina llwellyn woman elf
+Name:	Dr. Carolina Llwellyn
+RoomDesc:$
+A short elven woman with glasses and a lab coat greets you warmly. 
+
+~
+LookDesc:$
+Doctor Llwellyn is short for an elf, with raven-black hair pulled back in a
+ponytail. Big green eyes peer at you from behind wide-rimmed glasses, with the
+intense but vacant look of someone focused intently on something that is not
+before her eyes. Her mind is continually absorbed in the making and
+application of biological and technological advancements, and she will do
+anything for science. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000010100000011010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	8
+	Str:	5
+	Cha:	7
+	Int:	15
+	Wil:	10
+	Mag:	0
+[POINTS]
+	Height:	125
+	Weight:	38
+[SKILLS]
+	:	25
+	:	25
+	biotech:	25
+	:	25
+BREAK
+#35016
+Keywords:	chaez fylin elf smith blacksmith
+Name:	Chaez Fylin
+RoomDesc:$
+A slim elf with muscles like wires wipes the sweat from his brow and looks
+over the counter. 
+
+~
+LookDesc:$
+Chaez Faylin is an elf in his middle years. Half a life spent working the
+forge in the traditional style has given him muscles like iron cords and an
+eye for metal no one can beat. His dark brown hair is kept closely cropped.
+Often he forgets to take off his heavy blacksmith's apron, even as he's
+attending the counter. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101010000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	6
+	Str:	15
+	Cha:	5
+	Int:	7
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	90
+[SKILLS]
+BREAK
+#35017
+Keywords:	elf girl teen spiders parlor
+Name:	a Spider's Parlor girl
+RoomDesc:$
+A teenage elf girl in Spider's Parlor gear lounges behind the counter. 
+
+~
+LookDesc:$
+Her slim body could only be described as girlish; she's far too young for it
+to be otherwise. Her hair, dyed a shade of black nature might disagree with,
+hangs around her face. Her black shirt ends in tatters just below her breasts
+and is sleeveless, revealing a tattoo of a black Millenium Dragon on her
+shoulder. Black pants hug her tiny hips and extend down to her ankles, ending
+just above her sandal-clad feet. Her normally green eyes are tinged dark
+purple by contact lenses and look at you with what could - almost - be called
+pity. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000010100000011010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	6
+	Str:	3
+	Cha:	7
+	Int:	4
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	159
+	Weight:	46
+[SKILLS]
+BREAK
+#35018
+Keywords:	volunteer guy
+Name:	a fundraiser volunteer
+RoomDesc:$
+A seriously bland volunteer stands here. 
+
+~
+LookDesc:$
+He's a pretty plain guy, in a jacket and slacks, with short hair and blue
+eyes. He's a human, not an elf, and obviously not a doctor. Overall he's a
+totally unremarkable guy. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	2
+	Int:	2
+	Wil:	2
+	Mag:	0
+[POINTS]
+	Height:	163
+	Weight:	96
+[SKILLS]
+BREAK
+#35019
+Keywords:	elf elven decker cybered
+Name:	a heavily cybered elven decker
+RoomDesc:$
+An almost completely metallic elf stands behind the counter. 
+
+~
+LookDesc:$
+Covered head to toe in cyberware, you almost can't tell he's an elf at all. He
+has a nametag pinned on all that metal, probably with a magnet or something
+similar. It reads "Maximilian." Draped over his armorlike carapace is the
+uniform of Semitronic Computer Supply. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000010100000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	11
+	Qui:	8
+	Str:	10
+	Cha:	9
+	Int:	12
+	Wil:	7
+	Mag:	0
+[POINTS]
+	Height:	177
+	Weight:	122
+	Level:	2
+	Ballistic:	8
+	Impact:	11
+[SKILLS]
+BREAK
+#35020
+Keywords:	guy radio shack sales clerk salesman
+Name:	a Radio Shack sales clerk
+RoomDesc:$
+A guy in a Radio Shack vest stands behind the counter. 
+
+~
+LookDesc:$
+He's a plain kid, freckle-faced, fair-haired, and almost totally nondescript.
+Aside from his pointy ears, he looks like practically every other kid working
+a low-paying after-school job. Taking his ears into account, he looks like
+practically ever other elven kid working a low-paying after-school job. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000100000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	2
+	Cha:	4
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	153
+	Weight:	48
+[SKILLS]
+BREAK
+#35021
+Keywords:	guy radio shack sales clerk salesman
+Name:	a Radio Shack sales clerk
+RoomDesc:$
+A guy in a Radio Shack vest stands behind the counter. 
+
+~
+LookDesc:$
+He's a plain kid, freckle-faced, fair-haired, and almost totally nondescript.
+Aside from his pointy ears, he looks like practically every other kid working
+a low-paying after-school job. Taking his ears into account, he looks like
+practically ever other elven kid working a low-paying after-school job. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000100000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	2
+	Cha:	4
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	153
+	Weight:	48
+[SKILLS]
+BREAK
+#35022
+Keywords:	captain jaeden wollstonecraft black-haired elven elf mage lone star
+Name:	Captain Jaeden Wollstonecraft
+RoomDesc:$
+A black-haired elven mage in red LoneStar armor glares pointedly about. 
+
+~
+LookDesc:$
+He is a tall man, and slim in the way of one who lives in the gym. Jet black
+hair hangs down his back in a single thick, intricate braid, pulled back to
+expose the tips of of his pointed elven ears. From a fair-skinned and
+clean-shaven face gaze a pair of eyes like fire-embued emeralds, eyes that
+seem to consume the very image of all they perceive. He does not dress much
+like a LoneStar. His body is covered in thin, sleek, red-and-black military
+ceramic armor. Around this hangs a red cloak, also trimmed in black. The
+symbol on the breast of his armor - a pentagram overlaid on the usual LoneStar
+symbol - marks him as an officer of the LoneStar Supernova Squad, a
+special-ops division used to handle extremely high-threat situations. 
+~
+ArriveMsg:	strides in from
+LeaveMsg:	departs
+MobFlags:	1110100000011010
+AffFlags:	10001000000010001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Blast
+[ATTRIBUTES]
+	Bod:	10
+	Qui:	15
+	Str:	14
+	Cha:	13
+	Int:	15
+	Wil:	15
+	Mag:	14
+[POINTS]
+	Height:	180
+	Weight:	107
+	Ballistic:	9
+	Impact:	13
+[SKILLS]
+	edged weapons:	20
+	:	20
+	sorcery:	35
+	conjuring:	35
+BREAK
+#35198
+Keywords:	irishman lone star officer ex-officer o'malley unshaven
+Name:	ex-officer O'Malley
+RoomDesc:$
+An unshaven Irishman in a ragged Lone Star uniform stands here. 
+
+~
+LookDesc:$
+Standing six foot three with black hair and green eyes, Officer O'Malley would
+look rather impressive... if he didn't look like he just got mugged. His Lone
+Star uniform is unbuttoned, showing a white t-shirt he has long since sweat
+through. His face carries several days of unshaven stubble and his eyes glare
+glassily from the centers of dark rings. His black hair in an unkempt tangle,
+and hangs greasily from his head. Oddly enough, he is not wearing a badge...
+perhaps not so oddly... Rough as he looks, it's really no wonder he reeks
+horribly of cheap alchohol and strong cigarettes, and the way his hands
+twitch, he's probably already on the breaking point. 
+~
+ArriveMsg:	lurches in from
+LeaveMsg:	shuffles off
+MobFlags:	1000000000010100000011010
+AffFlags:	100000010001000001000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	15
+	Str:	8
+	Cha:	4
+	Int:	3
+	Wil:	9
+	Mag:	0
+[POINTS]
+	Height:	187
+	Weight:	121
+	Level:	6
+	Ballistic:	10
+	Impact:	12
+[SKILLS]
+	unarmed combat:	9
+	pistols:	9
+	assault cannons:	9
+BREAK
+#35199
+Keywords:	elf kaylin leger child goddess
+Name:	Kaylin Leger
+RoomDesc:$
+A child floats, cross-legged, a few feet above the ground. 
+
+~
+LookDesc:$
+A child of no more than ten, Kaylin is the picture of innocence. Black hair
+hangs in rings down her back, with some pulled forward to frame her pale face.
+The tips of her pointy ears show past her hair, and those big green eyes seem
+to see more than they let on. She always dresses in simple clothes, except for
+her coat, which her father, Jean Leger, gave her many years ago. Kaylin, like
+her father, is much more than she seems. 
+~
+ArriveMsg:	glides in from
+LeaveMsg:	glides off
+MobFlags:	11000101110100000011010
+AffFlags:	1000000000001000001000
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Arrow/bolt
+[ATTRIBUTES]
+	Bod:	40
+	Qui:	40
+	Str:	40
+	Cha:	40
+	Int:	40
+	Wil:	40
+	Mag:	40
+[POINTS]
+	Height:	158
+	Weight:	52
+	Ballistic:	20
+	Impact:	20
+[SKILLS]
+	:	40
+	conjuring:	40
+	sorcery:	40
+	artillery:	50
+BREAK
+END

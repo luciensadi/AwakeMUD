@@ -1,0 +1,1026 @@
+#24800
+Keywords:	large crystalline fountain
+Name:	a large crystalline fountain
+RoomDesc:$
+A large crystalline fountain spews bubbly water into the sky in the center of the mall.~
+LookDesc:$
+The fountain is of very ornate design, with a very strange looking yet
+beautiful sculpture in the middle of it, whose dimensions are impossible in a
+physical plane. 
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	2147483648.00
+	Barrier:	24
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2147483647
+	Val1:	2147483647
+BREAK
+#24802
+Keywords:	armor jacket midnight blue aquilor
+Name:	a ^bmidnight blue^n and ^Lblack^n armor jacket
+RoomDesc:$
+A midnight blue and black armor jacket lies here folded up neatly.~
+LookDesc:$
+Colored ^bmidnight blue^n and ^Lblack^n, the colors of Aquilor Magical Security, this
+looks like a high quality armor jacket, lined in kevlar and a metallic mesh on
+the interior for impact armor protection. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	8
+	Cost:	900
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	3
+	Val5:	4
+	Val6:	2
+	Val7:	1
+BREAK
+#24804
+Keywords:	crystal wand power focus amethyst
+Name:	an amethyst crystal wand
+RoomDesc:$
+A crystal wand, made with amethyst lies here, softly glowing ^Bblue^n.~
+LookDesc:$
+Crafted with purest radical amethyst, this wand glows softly ^Bblue^n. The body of
+the wand is made with dense black oak, and there are magical sigils scribed
+onto it, apparently similar to the characters in Sperethiel, the elven
+language. 
+~
+Type:	Focus
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	1.00
+	Barrier:	16
+	Cost:	1000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	4
+BREAK
+#24805
+Keywords:	spell formula deer skin deerskin
+Name:	a deer skin
+RoomDesc:$
+A deerskin with magical writing lies here.~
+LookDesc:$
+A deer skin with cryptic hieroglyphics on it written in red and black. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	7000
+	AvailTN:	7
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	6
+	Val2:	1
+BREAK
+#24806
+Keywords:	spell formula tree bark piece chaotic world
+Name:	a piece of tree bark with a crude painting on it
+RoomDesc:$
+A piece of tree bark with crude painted designs lies here.~
+LookDesc:$
+Very crudely painted, are some figures on a piece of tree bark. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	6000
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	36
+	Val2:	1
+BREAK
+#24808
+Keywords:	etched oaken wooden ring forest spirit focus
+Name:	an etched dark oaken ring
+RoomDesc:$
+An etched oaken ring lies here.~
+LookDesc:$
+An etched oaken ring with some stick-figure like characters scratched into the
+sides. 
+~
+Type:	Focus
+WearFlags:	11
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	180000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	3
+	Val2:	9
+BREAK
+#24809
+Keywords:	dove feather dove's doves spell formula heal
+Name:	a dove's feather
+RoomDesc:$
+The feather of a dove lies here, glowing softly.~
+LookDesc:$
+White as the driven snow, the feather of the dove appears to have a few faint
+blue "runes" etched onto the spine of the feather. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	1
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	8000
+	AvailTN:	8
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	21
+	Val2:	1
+BREAK
+#24810
+Keywords:	book spell formula booklet
+Name:	a small book
+RoomDesc:$
+A small book lies here.~
+LookDesc:$
+A small book, entitled "Truly Understanding the Inner Workings of Anything". 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	600
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	8
+BREAK
+#24811
+Keywords:	parchment scroll spell formula acid 
+Name:	a parchment scroll
+RoomDesc:$
+A parchment scroll is rolled up here, tied together with a string.~
+LookDesc:$
+A parchment scroll, covered with geometric designs and words in an obscure
+language. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	5000
+	AvailTN:	5
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	43
+BREAK
+#24812
+Keywords:	ruby ring fire elemental focus spirit
+Name:	a fiery ruby ring
+RoomDesc:$
+A ^Rfiery ^ygolden^n ring, with a large ^rruby ^non it lies here, glowing.~
+LookDesc:$
+Upon examination, the quality of the ruby stone held in the center of the ring
+is impressive, probably placed in there by some master jeweller with an eye
+for perfection.  Some tiny runes are engraved into the golden metal of the
+ring.  The ring gives off a soft glow. 
+~
+Type:	Focus
+WearFlags:	11
+ExtraFlags:	0
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	0.50
+	Barrier:	16
+	Cost:	240000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	4
+	Val2:	3
+BREAK
+#24813
+Keywords:	lead crystal glass spell formula improved invisibility
+Name:	a pane of lead crystal etched in runes
+RoomDesc:$
+A small pane of lead crystal lies here softly glowing.~
+LookDesc:$
+This piece of lead crystal looks like it was expensive as all frag to make, it
+refracts light perfectly, and seems to shimmer.  Etched onto the pane of
+crystal are a series of runes, and incantations of a magical sort. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	800
+	AvailTN:	8
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	37
+BREAK
+#24814
+Keywords:	deep golden sword orichalcum
+Name:	a miniature golden sword on a silver chain
+RoomDesc:$
+A miniature, deep golden sword crafted with orichalcum lies here.~
+LookDesc:$
+Crafted with the finest elemental radicals, this miniature orichalcum sword
+has a silver chain attached to its hilt, allowed it to be worn about the neck,
+wrist or perhaps even the ankle. 
+~
+Type:	Focus
+WearFlags:	10000001000000000101
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	180000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	3
+BREAK
+#24815
+Keywords:	card business paper
+Name:	a business ^wcard^n
+RoomDesc:$
+^nA small business ^wcard^n was dropped on the floor.~
+LookDesc:$
+This businees card bears the ^YMorning^Wstar ^CEnchantments^n logo
+ ^YMorning^Wstar ^CEnchantments^n
+ "Quality Metaphysical Goods"
+ Larani H'wanrael
+^BCEO^n 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	1100001100
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	logo morningstar enchantments
+	Desc:$
+A simple, yet beautifully designed logo, is emblazoned on the card.
+ It is the MC-escher-esque eight-pointed star.
+~
+BREAK
+#24816
+Keywords:	eagle feather focus spirit forest
+Name:	an eagle feather
+RoomDesc:$
+A large feather plucked from a bald eagle lies here.~
+LookDesc:$
+A large feather, probably from the wing of a mature Bald Eagle, long and
+black, with a glossy but natural look to it.  The feather is in perfect
+condition, and has a white tip. 
+~
+Type:	Focus
+WearFlags:	100000000010001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.05
+	Barrier:	2
+	Cost:	300000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	5
+	Val2:	9
+BREAK
+#24817
+Keywords:	pebble etched heal focus sun
+Name:	a pebble, etched with an image of the Sun
+RoomDesc:$
+A pebble sits here on the ground, with an etching of the Sun on it.~
+LookDesc:$
+At first glance, this appears to be a rather common pebble.  However upon
+close examination, you see a carefully etched image of the Sun, and feel a
+slight electrostatic eminating from it.  It appears to be carefully polished.
+~
+Type:	Focus
+WearFlags:	100000000000001
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	45000
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	3
+	Val2:	19
+BREAK
+#24818
+Keywords:	arrowhead obsidian
+Name:	an obsidian arrowhead
+RoomDesc:$
+A small obsidian arrowhead lies here, with a faint glow surrounding it.~
+LookDesc:$
+A carefullly crafted obsidian arrowhead, with a sharp edge and a slight glow
+surrounding it. The arrowhead is translucent black obsidian, and some light
+makes it through it, refracting with a murky dark color. It hangs from a
+single leather thong so it can be worn about the neck, or perhaps the wrist or
+ankle as well. 
+~
+Type:	Focus
+WearFlags:	10000001000000000101
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	0.20
+	Barrier:	4
+	Cost:	210000
+	AvailTN:	6
+	AvailDay:	2.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	2
+BREAK
+#24819
+Keywords:	spell skin buffalo clairvoyance
+Name:	a buffalo skin
+RoomDesc:$
+A buffalo skin lies in a heap here.~
+LookDesc:$
+The skin of a buffalo, carefully cured, with painted tribal patterns on it. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	800
+	AvailTN:	8
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	10
+	Val2:	1
+BREAK
+#24820
+Keywords:	silver fedora moon
+Name:	^wA ^Wsilver^w fedora with a ^Ygolden^w moon on it^n
+RoomDesc:$
+A silver fedora lies here, unattended to.~
+LookDesc:$
+A silver fedora, glinting in the light.  A moon made of a ^Ygolden^n metal is on
+the front side of it. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Magic Pool
+	Modifier:	2
+BREAK
+#24821
+Keywords:	white robes geometric
+Name:	white robes
+RoomDesc:$
+^WWhite^w robes, covered in geometric designs lay here in a bundle.~
+LookDesc:$
+Covered in many sorts of geometric designs, these robes attribute to a
+mystical air. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#24822
+Keywords:	crystal
+Name:	a crystal
+RoomDesc:$
+A crystal lies here.~
+LookDesc:$
+A plain crystal. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	400
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#24823
+Keywords:	magic wand
+Name:	a magic wand
+RoomDesc:$
+A magic wand sits here, with a star on the end.~
+LookDesc:$
+A stage magician's magic wand.  Nothing more. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#24825
+Keywords:	book shadows power dart spell formula
+Name:	a book of shadows
+RoomDesc:$
+A magical book, enscribed "book of shadows" lies here.~
+LookDesc:$
+Its a magical book, filled with some basic arcane formula probably sketched
+out by some rank amateur who discovered he had the talent last week. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	1
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	4
+BREAK
+#24842
+Keywords:	radio advanced encrypted
+Name:	an encrypted radio
+RoomDesc:$
+A highly advanced radio broadcasting unit lies here.~
+LookDesc:$
+A powerful radio that can send a highly encrypted signal over longwave
+frequncies. 
+~
+Type:	Radio
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	4.00
+	Barrier:	32
+	Cost:	22000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	5
+	Val2:	6
+BREAK
+#24843
+Keywords:	formula charcoal black blackened ignight spell
+Name:	a blackened piece of charcoal
+RoomDesc:$
+Some blackened charcoal has been discareded hear.~
+LookDesc:$
+Sooty and black this charred remnant of wood feels extremely light in your
+hands and seems to get increasingly hotter the longer you hold it. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	3000
+	AvailTN:	3
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	55
+	Val2:	1
+BREAK
+#24844
+Keywords:	sooty soot covered charred tome formula spell ignite
+Name:	a well charred, soot covered tome
+RoomDesc:$
+a sooty, well charred tome smolders here~
+LookDesc:$
+This book is hot to the touch and as you thumb through it the pages smolder,
+yet, the text seems to remain unburned if not difficult to read through the
+soot, smoke and charred pages. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	3000
+	AvailTN:	3
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	55
+BREAK
+#24886
+Keywords:	polymer mesh armor bodysuit
+Name:	a polymer mesh armored bodysuit
+RoomDesc:$
+A bodysuit made of a polymer mesh lies here.~
+LookDesc:$
+Made from a hybrid polymer meshed finely and tightly in many microfine layers,
+this polymer suit allows for high ballistic and impact protection as well as
+mobility. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	38000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	6
+	Val6:	4
+BREAK
+#24887
+Keywords:	customized automatic chrome telestrian black adder
+Name:	A ^Wchrome^N plated cutomized Telestrian Arms Black Adder-II
+RoomDesc:$
+^wA ^Wpolished chrome^w pistol sits here, shining brightly.^n~
+LookDesc:$
+A brightly polished chrome pistol, customized and modified for autofire, its
+calibre is as large as the original Black Adder, but packs more of a punch
+with APDS bullets standard, and burst-fire capability. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	10001000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	950
+	AvailTN:	14
+	AvailDay:	18.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	22
+	Val6:	22
+	Val7:	626
+	Val8:	14844
+	Val9:	-1
+	Val10:	12
+BREAK
+#24888
+Keywords:	spidersilk overcoat coat
+Name:	a silver spidersilk overcoat
+RoomDesc:$
+A spidersilk coat with a silver glint lies here.~
+LookDesc:$
+Made of the finest spidersilk, which is known to be the strongest tensile
+fiber in nature, this overcoat is probably quite well at stopping a bullet, a
+blade, or a hellblast. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	1000001001
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	3
+	Val6:	1
+BREAK
+#24889
+Keywords:	CCT-Thunderbane.mtxt cct thunderbane matrix text datafile
+Name:	CCT-Thunderbane.mtxt
+RoomDesc:$
+A Matrix Hypertext (mtxt) file floats above your head, full of data.~
+LookDesc:$
+The label reads: Project Thunderbane. 
+~
+Type:	Decking Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	120
+	Val2:	6
+	Val3:	7
+BREAK
+#24890
+Keywords:	envelope project thunderbane
+Name:	an envelope with a label
+RoomDesc:$
+An envelope with a red label lies here.~
+LookDesc:$
+The label reads: Project Thunderbane. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#24891
+Keywords:	identification card license class a magical security permit
+Name:	a Class A Security License - Magical
+RoomDesc:$
+An identification card lies here.~
+LookDesc:$
+The bearer of this card is fully registered and permitted to carry any manner
+of weapons, ranging up to assault rifles, in Morningstar jurisdiction or any
+area in which security is contracted to Aquilor Security Corp, and is allowed
+to know any magical spell, up to a force of 10, in any Morningstar or UCAS
+jurisdiction. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#24892
+Keywords:	opal weapon focus
+Name:	an opal
+RoomDesc:$
+An opal lies here, glowing luminescently.~
+LookDesc:$
+A beautiful opal with a spectrum of color inside. 
+~
+Type:	Focus
+WearFlags:	1
+ExtraFlags:	100001000000
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	10
+BREAK
+#24893
+Keywords:	tie string silver black glowing
+Name:	a string tie, with a silvery clasp that glows softly.
+RoomDesc:$
+A string tie with a silvery black thread and a silver clasp glows softly.~
+LookDesc:$
+Upon close examination of the clasp, you see some bizarre runes etched on it,
+similar to Sperethiel, the elven language but not quite. The clasp has an odd
+glow about it. 
+~
+Type:	Focus
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	900000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	3
+BREAK
+#24894
+Keywords:	shoes black leather
+Name:	Black leather dress shoes
+RoomDesc:$
+A pair of leather shoes have been left here.~
+LookDesc:$
+Black, well cleaned shoes. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	1000000000000000
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#24895
+Keywords:	slacks white stylish
+Name:	stylish, white designer slacks
+RoomDesc:$
+A pair of stylish, white designer slacks lie neatly folded here.~
+LookDesc:$
+Made from the finest linen, these slacks look like they were imported from a
+country that really cares about the design in their textiles.  They look very
+expensive as well.  Examining the inside of the slacks you see a small label
+with some odd characters on it that one might recognize as Sperethiel, the
+elven language. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	100000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	1
+BREAK
+#24898
+Keywords:	suit white
+Name:	a white suit
+RoomDesc:$
+A white suit lies crumpled here.~
+LookDesc:$
+This is a fine white suit, of excellent quality.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	4
+	Val5:	1
+	Val6:	1
+BREAK
+#24899
+Keywords:	emerald ring power focus
+Name:	an ^gemerald^n ring
+RoomDesc:$
+A modest ^gemerald^n ring lies here, glowing softly.~
+LookDesc:$
+A thin silver band with a very exquisitely cut emerald in the center of it.
+Close inspection shows small engraved runes along the band of the ring, and a
+faint glow. 
+~
+Type:	Focus
+WearFlags:	11
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	3200000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	5
+[AFFECT 0]
+	Location:	Charisma
+	Modifier:	2
+BREAK
+END

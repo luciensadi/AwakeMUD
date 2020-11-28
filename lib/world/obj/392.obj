@@ -1,0 +1,3944 @@
+#39200
+Keywords:	notepad note
+Name:	a messy notepad
+RoomDesc:$
+a worn out notepad lies here~
+LookDesc:$
+A messy note pad covered with lots of cryptic writing barely you can make out
+in a margin "z = 392???? Ever??/ " and a set of initials on the back cover
+read "SsT" 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39201
+Keywords:	flower lily delicate
+Name:	a small delicate lily
+RoomDesc:$
+A small flower pokes up from the ground here.~
+LookDesc:$
+A small lily lies on the dusty ground, its beauty unperturbed by its position
+at the feet of men. 
+~
+Type:	Food
+WearFlags:	10000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+[EXTRADESC 0]
+	Keywords:	sniff smell
+	Desc:$
+A delicate fragrance fills your nostrils... making you feel giddy... 
+~
+[AFFECT 0]
+	Location:	Age
+	Modifier:	-5
+BREAK
+#39202
+Keywords:	warhawk super ruger pistol
+Name:	a Ruger Super Warhawk
+RoomDesc:$
+A Ruger Super Warhawk rests on the ground.~
+LookDesc:$
+An up-to-date version of the original, with much added power.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	8
+	Cost:	300
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	10
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	6
+	Val6:	6
+	Val7:	5105
+	Val8:	-1
+	Val9:	-1
+	Val10:	2
+BREAK
+#39203
+Keywords:	heckler koch hk227 smg gun submachinegun
+Name:	a Heckler & Koch HK227
+RoomDesc:$
+A submachinegun lies in the dust here.~
+LookDesc:$
+The HK227 is one of the most common submachineguns in the world; it is
+commonly seen in corporate security forces as well as on the streets. This
+particular model comes standard with a gas vent III and smartlink accessory. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	6
+	Cost:	1750
+	AvailTN:	4
+	AvailDay:	1.00
+	LegalNum:	4
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	2
+	Val3:	10
+	Val4:	15
+	Val5:	28
+	Val6:	28
+	Val7:	670
+	Val8:	653
+	Val10:	28
+BREAK
+#39204
+Keywords:	kevlar police lone star armor vest plated
+Name:	A Lone Star police vest
+RoomDesc:$
+A blue-and-gold kevlar police vest lies here.~
+LookDesc:$
+A standard-issue Lone Star kevlar police vest. While the plates between its
+kevlar layers make it bulky, they also provide it with superior ballistic and
+impact protection. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	700
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val4:	1
+	Val5:	4
+	Val6:	3
+	Val7:	10
+BREAK
+#39210
+Keywords:	stand drink wooden painted white
+Name:	A wooden drink stand
+RoomDesc:$
+^gA wooden drink stand painted ^Wwhite^g is set up here.^N~
+LookDesc:$
+Its wooden frame is nailed together in a sturdy and simple manner, and it has
+been painted a bright ^Wwhite^N, which has faded a bit from being in the sun so
+long. Various prices of drinks are labeled along its front, while behind it
+are several coolers and ice chests to keep the beverages cold. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	100.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39211
+Keywords:	towel beach
+Name:	a large beach towel
+RoomDesc:$
+A large beach towel with gaudy designs is laying here.~
+LookDesc:$
+Its a large beach towel, covered in a gaudy design, something like a tropical
+fish or a shark, or whatever other corny designs a tourist would enjoy. 
+~
+Type:	Worn
+WearFlags:	1000000110000000101
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39212
+Keywords:	fishing rod reel wooden old
+Name:	an old wooden fishing rod and reel
+RoomDesc:$
+An old wooden fishing rod and reel has been left here.~
+LookDesc:$
+Its an old timers fishing rod and reel, none of that new-fangled high tech
+nonsense, all that one really needs is a wooden rod and a spool of fishing
+wire. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	125
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val3:	3
+	Val4:	5
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#39213
+Keywords:	box styrofoam slender white
+Name:	a slender ^Wwhite^N styrofoam box
+RoomDesc:$
+^gA slender ^Wwhite^g styrofoam box sits here.^N~
+LookDesc:$
+Its a light weight little box, constructed from ^Wwhite^N styrofoam. It is perfect
+for keeping things both cold or hot, and works equally as well for storage of
+fresh food. 
+~
+Type:	Container
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.15
+	Barrier:	3
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	5
+	Val2:	-1
+BREAK
+#39214
+Keywords:	cooler plastic large
+Name:	a large plastic cooler
+RoomDesc:$
+A large plastic cooler sits here.~
+LookDesc:$
+It's a large plastic cooler, great for stocking full of ice and beverages for
+a hot sunny day. It features a small spout on one end, to help drain out any
+remaining fluid for easy cleaning. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	125
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	25
+	Val1:	5
+	Val2:	-1
+BREAK
+#39215
+Keywords:	worms nightcrawlers plastic cup
+Name:	a plastic cup full of nightcrawlers
+RoomDesc:$
+A plastic cup full of nightcrawlers sits here.~
+LookDesc:$
+It's a clear plastic cup, about a pint, full of nightcrawlers. These little
+worms are full of blood, and a great choice for fishermen everywhere. A
+catch-all bait. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.20
+	Barrier:	2
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#39216
+Keywords:	crabmeat meat cup plastic raw
+Name:	A plastic cup full of raw crab meat
+RoomDesc:$
+A plastic cup full of raw crab meat sits here.~
+LookDesc:$
+Dark and light chunks of raw crab meat, fairly fresh too. While one could
+simply eat it (after cooking it, ofcourse), it is best used to bait traps
+with. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.20
+	Barrier:	2
+	Cost:	45
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#39217
+Keywords:	rod fishing slender graphite
+Name:	a slender graphite fishing rod
+RoomDesc:$
+A slender graphite fishing rod is propped up here.~
+LookDesc:$
+It's a slender, durable graphite fishing rod, complete with all of the
+standard bells and whistles one could expect from a modern rod. A full reel of
+strong fishing wire has already been threaded for ease, mostly for tourist
+sake. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val3:	3
+	Val4:	5
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#39220
+Keywords:	library sorcery books charts collection
+Name:	a rating 3 sorcery library
+RoomDesc:$
+A small collection of books and charts dedicated to sorcery fill the room.~
+LookDesc:$
+It's everything a novice hermetic mage could want for designing and learning
+spells, and much much more. Even a mundane could find something interesting to
+peruse in this collection. 
+~
+Type:	Magic Tool
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	25.00
+	Barrier:	4
+	Cost:	9000
+	AvailTN:	3
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	3
+BREAK
+#39221
+Keywords:	library conjuring novice collection books charts
+Name:	a novice conjuring library
+RoomDesc:$
+A small collection of books and charts dedicated to conjuring fill the room.~
+LookDesc:$
+This small, select assortment of books contains everything a novice hermetic
+mage would need to conjure elementals in the privacy of his home or place of
+business. The small collection of books can prove intimidating for those just
+starting, and it would take quite some time to collect just this many. 
+~
+Type:	Magic Tool
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	25.00
+	Barrier:	4
+	Cost:	9000
+	AvailTN:	3
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+BREAK
+#39222
+Keywords:	materials jar conjuring
+Name:	a small jar of conjuring materials
+RoomDesc:$
+A small jar of conjuring materials has been left sitting here.~
+LookDesc:$
+It contains representative portions of each true element, water, earth, fire
+and air. Very useful to any mage trying to conjure elementals. 
+~
+Type:	Magic Tool
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	3000
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	3
+BREAK
+#39223
+Keywords:	spectacles glasses orichalcum-rimmed
+Name:	a pair of ^Worichalcum^N-^Wrimmed^N spectacles
+RoomDesc:$
+A pair of spectacles have been left behind here.~
+LookDesc:$
+These fine spectacles are rimmed in what looks to be silver threaded with
+subtle geometric designs inlaid with orichalcum, its screw caps tipped with
+tiny emeralds. 
+~
+Type:	Focus
+WearFlags:	1000000000000001
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	0.20
+	Barrier:	4
+	Cost:	60000
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	4
+BREAK
+#39224
+Keywords:	sash belt wyvern hide sturdy
+Name:	a sturdy wyvern hide fashioned into a sash
+RoomDesc:$
+A sash or belt of some kind sits here in a pile.~
+LookDesc:$
+Crafted from the hide of a wyvern, this thick, sturdy leather is quite
+durable, even without the extra layer of scales usually worn ontop for
+protection. It has been triple stitched with orichalcum thread and is studded
+with various precious gems, forming intricate geometric and symbolic designs
+along its surface. The large belt buckle is crafted from wyvern teeth,
+overlapping one another to make for a sturdy, yet simple lock. 
+~
+Type:	Focus
+WearFlags:	100000000001
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	315000
+	AvailTN:	6
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	3
+BREAK
+#39225
+Keywords:	manual book leather bound vellum scribed
+Name:	a ^yleather^N bound manual scribed on vellum
+RoomDesc:$
+A leather bound book of some kind is here, its vellum pages poking out.~
+LookDesc:$
+This manual is bound in tanned and stitched ^yleather^N, while its interior
+consist of carefully scribed pages crafted of vellum. It seems to describe a
+magical technique to produce direct heat and energy. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.20
+	Barrier:	4
+	Cost:	3000
+	AvailTN:	3
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	55
+BREAK
+#39226
+Keywords:	thesis stack papers bound physical perception
+Name:	a thesis on physical perception
+RoomDesc:$
+A bound stack of papers has been left here.~
+LookDesc:$
+This thesis consists of a bound stack of papers, which apparently describes
+not only the spiritual, but physical and biomechanical perceptions, and how to
+manipulate them accordingly to reach the desired results. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.25
+	Barrier:	3
+	Cost:	300
+	AvailTN:	3
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	40
+BREAK
+#39230
+Keywords:	lobster tails plate broiled
+Name:	a plate of broiled lobster tails
+RoomDesc:$
+A large plate of broiled lobster tails is sitting here, smelling delicious.~
+LookDesc:$
+Consisted of four whole broiled lobster tails, lightly browned and succulent,
+served in their shell to retain all their flavour. Lightly sprinkled with salt
+and garnished with lemon wedges, a large dish of warm melted butter
+accompanies it for dipping. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#39231
+Keywords:	calamari red wine tomato sauce bowl
+Name:	calamari in red wine and tomato sauce
+RoomDesc:$
+A bowl of calamari in red wine and tomato sauce is sitting here.~
+LookDesc:$
+Half inch rings of sliced calamari have been combined with simmered tomato
+sauce, red wine, lemon juice, olive oil, garlic, black pepper, cayenne pepper,
+basil and cheese. The calamari is perfectly cooked and plump, having soaked up
+all the flavour from its sauce without becoming overdone and rubbery. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.50
+	Barrier:	2
+	Cost:	285
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#39232
+Keywords:	fettucini seafood bowl creamy
+Name:	a bowl of seafood fettucini
+RoomDesc:$
+A bowl of seafood with a creamy texture is sitting here.~
+LookDesc:$
+A creamy mushroom sauce of sauteed onions and garlic containing fresh shrimp,
+crabmeat and bay scallops over fettuccini noodles. It doesn't need a fancy
+name to be delicious. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	2
+	Cost:	225
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#39233
+Keywords:	chowder clam westcoast style bowl
+Name:	a bowl of westcoast style clam chowder
+RoomDesc:$
+A bowl of clam chowder has been left sitting here, wafting steam.~
+LookDesc:$
+Freshly steamed baby clams are cooked together in this western styled chowder,
+consisting of stewed tomatoes, diced bacon, chopped carrots and celery, spiced
+with black pepper and a dash of salt to compliment its flavour. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.20
+	Barrier:	2
+	Cost:	185
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#39234
+Keywords:	shrimp cocktail martini glass
+Name:	a shrimp cocktail in a martini glass
+RoomDesc:$
+A martini glass with shrimp lining its lip sits here.~
+LookDesc:$
+Cooked and peeled shrimp line the lip of a martini glass, having been prepared
+with garlic, red onion, and cilantro. The cocktail sauce consists of chili
+sauce, horseradish, sugar, lemon juice and a dash of hot sauce, giving it a
+kick with a touch of sweetness to it. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.15
+	Barrier:	2
+	Cost:	125
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#39235
+Keywords:	wine glass expensive red
+Name:	a glass of expensive red wine
+RoomDesc:$
+A glass of expensive red wine has been left behind here.~
+LookDesc:$
+Crafted with traditional Bordeaux wine making practices and French oak
+barrels, which allow the wine to fully express its nuances, making it a superb
+choice by any serious wine connoisseur. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	85
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	15
+	Val2:	26
+BREAK
+#39236
+Keywords:	wine glass riesling white
+Name:	a glass of white riesling wine
+RoomDesc:$
+A glass of white wine has been left sitting here.~
+LookDesc:$
+This aged white Riesling wine has developed complex aromas reminiscent of
+honey, cinnamon and apricots. A remarkably elegant and full-bodied wine,
+perfect company to any seafood dish. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	85
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	15
+	Val2:	27
+BREAK
+#39240
+Keywords:	SMG Intratec TEC-DC9 TEC-9 lightweight polymers compact
+Name:	an Intratec TEC-DC9 SMG
+RoomDesc:$
+A compact SMG made of lightweight polymers has been left here.~
+LookDesc:$
+The Intratec TEC-DC9, better known on the streets as the TEC-9, is compact for
+concealment, yet still packs the needed punch. Its checkered grip is made of
+epoxy powdered resin, which makes it lightweight and durable, but also makes
+it look kind of cheap. It has a folding stock and decent open sights with a
+dove tail scope mount. Its barrel has been vented for recoil compensation
+while being used in burstfire mode, and the trigger seems to have been filed
+down, giving it a super hair trigger. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.50
+	Barrier:	4
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	4
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	2
+	Val3:	10
+	Val4:	15
+	Val5:	32
+	Val7:	630
+	Val8:	650
+	Val9:	692
+	Val10:	12
+BREAK
+#39241
+Keywords:	suit black slick
+Name:	a slick ^Lblack^N business suit
+RoomDesc:$
+^gA slick ^Lblack^g business suit is neatly folded here.^N~
+LookDesc:$
+This slick ^Lblack^N business suit is tailored and cut perfectly for the frame of
+a normal human, so it may be a bit tight around the shoulders and arms on
+metahumans. It is lined with a kevlar weave material, making it quite
+resilient to every day rough and tumble situations, while still looking pretty
+damn good. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	850
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	6
+	Val2:	2
+	Val3:	2
+	Val4:	2
+	Val5:	3
+	Val6:	2
+	Val7:	5
+BREAK
+#39242
+Keywords:	katana masterfully crafted
+Name:	a masterfully crafted katana
+RoomDesc:$
+A masterfully crafted katana is here, looking deadly.~
+LookDesc:$
+Crafted by the hand of a master no doubt. The blade sweeps back gracefully and
+almost to sheer perfection, not a single millimeter of it dedicated to
+aesthetics, this baby is 100% dedicated to functionality. And what might that
+function be? Simple. Hacking its way through damn near anything that opposes
+it. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	1250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	2
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#39243
+Keywords:	suit white pressed clean
+Name:	a clean, pressed ^Wwhite^N suit
+RoomDesc:$
+^gA clean, pressed ^Wwhite^g suit has been neatly folded and left here.^N~
+LookDesc:$
+This slick looking, pristine ^Wwhite^N suit is pressed and immaculately clean,
+perfect for any crime boss around. Its interior is lined with a durable and
+quite flexible weave of a kevlar-like material and advanced plastics, giving
+it an edge over most other luxury suits. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	850
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	4
+	Val2:	2
+	Val3:	2
+	Val4:	4
+	Val5:	3
+	Val6:	2
+	Val7:	5
+BREAK
+#39244
+Keywords:	tsurugi lethal polished sword highly broadsword
+Name:	a highly polished and lethal tsurugi broadsword
+RoomDesc:$
+A highly polished broadsword of some type has been left here.~
+LookDesc:$
+Tsurugi is a Japanese word used to refer to any type of straight, double-edged
+broadsword, much different in appearance to the traditional katana. While no
+longer in common use, this sword is more than capable of delivering fatal
+wounds that would make the revered katana green with envy. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	1450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	4
+	LegalCode:	2
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#39246
+Keywords:	smartlink-2 -beta
+Name:	smartlink-2 -beta
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	8
+	Cost:	14000
+	AvailTN:	11
+	AvailDay:	3.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	45
+	Val1:	2
+	Val2:	2
+	Val4:	29
+BREAK
+#39295
+Keywords:	assault rifle h&k g12a3z
+Name:	an H&K G12A3z
+RoomDesc:$
+A large assault rifle is lying here.~
+LookDesc:$
+The G12A3z is a contender in the UCAS Squad Rifle Trials, along with the
+M22A2.  This gun comes standard with a laser sight and an improved gas vent II
+system. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.25
+	Barrier:	8
+	Cost:	2200
+	AvailTN:	8
+	AvailDay:	4.00
+	LegalNum:	2
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	32
+	Val6:	32
+	Val7:	626
+	Val8:	650
+	Val10:	28
+BREAK
+#39296
+Keywords:	Beretta Model 70 SMG submachine gun sub-machine
+Name:	a Beretta Model 70
+RoomDesc:$
+A slick looking sub-machine gun has been left sitting here.~
+LookDesc:$
+The Beretta Model 70 holds the distinction of having one of the large clips
+available for a smg. This particular firearm seems to come equipped with a top
+mounted laser sight, and an improved gas venting III system. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	1200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	4
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	2
+	Val3:	10
+	Val4:	15
+	Val5:	35
+	Val7:	626
+	Val8:	653
+	Val10:	24
+BREAK
+#39297
+Keywords:	envelope death threat eloquently oddly polite
+Name:	an eloquently written, yet oddly polite death threat
+RoomDesc:$
+A slender envelope with a wax stamp has been left here.~
+LookDesc:$
+At first glance, this note reads like a correspondance from an old friend to
+another, but the further it goes on, it quickly becomes apparent that it is an
+eloquently written, yet oddly polite death threat on this persons life.
+There's no excuse for not having manners, afterall. 
+~
+Type:	Quest Item
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.01
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39298
+Keywords:	datafile billing information containing
+Name:	a datafile containing billing information
+RoomDesc:$
+A datafile of some kind has been left here.~
+LookDesc:$
+It appears to be some type of datafile, and features a label reading "Billing
+Information". From where..? Whose to say. From who..? Guess it's a mystery,
+unless you're in the know. 
+~
+Type:	Decking Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	1
+BREAK
+#39299
+Keywords:	disk datafile non-descript
+Name:	a non-descript datafile disk
+RoomDesc:$
+A non-descript datafile disk has been left lying here.~
+LookDesc:$
+It's... Well, non-descript best sums it. It has no markings, no labels, and
+nothing to really define it aside from the fact it's probably carrying some
+kind of program or software. Whatever it is, it's encrypted, so it's probably
+best to leave it be. 
+~
+Type:	Decking Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	1
+BREAK
+#39300
+Keywords:	datachip chip linguasoft gaelic three 3
+Name:	a Gaelic 3 LinguaSoft
+RoomDesc:$
+A small datachip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Gaelic - Rating Three".
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	1350
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	91
+	Val1:	3
+	Val2:	27
+BREAK
+#39301
+Keywords:	datachip chip linguasoft gaelic five 5
+Name:	a Gaelic 5 LinguaSoft
+RoomDesc:$
+A small datachip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Gaelic - Rating Five". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	3750
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	91
+	Val1:	5
+	Val2:	75
+BREAK
+#39302
+Keywords:	datachip chip linguasoft german three 3
+Name:	a German 3 LinguaSoft
+RoomDesc:$
+A small datachip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "German - Rating Three".
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	1350
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	87
+	Val1:	3
+	Val2:	27
+BREAK
+#39303
+Keywords:	datachip chip linguasoft german five 5
+Name:	a German 5 LinguaSoft
+RoomDesc:$
+A small datachip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "German - Rating Five". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	3750
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	87
+	Val1:	5
+	Val2:	75
+BREAK
+#39304
+Keywords:	datachip chip linguasoft russian three 3
+Name:	a Russian 3 LinguaSoft
+RoomDesc:$
+A small datachip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Russian - Rating Three".
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	1350
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	80
+	Val1:	3
+	Val2:	27
+BREAK
+#39305
+Keywords:	datachip chip linguasoft russian five 5
+Name:	a Russian 5 LinguaSoft
+RoomDesc:$
+A small datachip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Russian - Rating Five".
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	3750
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	80
+	Val1:	5
+	Val2:	75
+BREAK
+#39306
+Keywords:	datachip chip linguasoft Salish three 3
+Name:	a Salish 3 LinguaSoft
+RoomDesc:$
+A small datachip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Salish - Rating Three".
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	1350
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	84
+	Val1:	3
+	Val2:	27
+BREAK
+#39307
+Keywords:	datachip chip linguasoft salish five 5
+Name:	a Salish 5 LinguaSoft
+RoomDesc:$
+A small datachip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Salish - Rating Five". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	3750
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	84
+	Val1:	5
+	Val2:	75
+BREAK
+#39308
+Keywords:	datachip chip linguasoft ute three 3
+Name:	a Ute 3 LinguaSoft
+RoomDesc:$
+A small datachip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Ute - Rating Three". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	1350
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	85
+	Val1:	3
+	Val2:	27
+BREAK
+#39309
+Keywords:	datachip chip linguasoft ute five 5
+Name:	a Ute 5 LinguaSoft
+RoomDesc:$
+A small datachip has been left here.~
+LookDesc:$
+It looks to be an LinguaSoft chip, packed full of software to be used in
+conjunction with a chipjack. It seems to be labeled: "Ute - Rating Five". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	3750
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	85
+	Val1:	5
+	Val2:	75
+BREAK
+#39310
+Keywords:	datachip chip activesoft athletics 5 five
+Name:	an Athletics 5 ActiveSoft
+RoomDesc:$
+A small datachip has been left here.~
+LookDesc:$
+It looks to be an ActiveSoft chip, packed full of software to be used in
+conjunction with skillwires. It seems to be labeled: "Athletics - Rating
+Five". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	5
+	Val2:	75
+BREAK
+#39311
+Keywords:	datachip chip Stealth 4 four activesoft
+Name:	a Stealth 4 ActiveSoft
+RoomDesc:$
+A small datachip has been left here.~
+LookDesc:$
+It looks to be an ActiveSoft chip, packed full of software to be used in
+conjunction with skillwires. It seems to be labeled: "Stealth - Rating Four".
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	4800
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	56
+	Val1:	4
+	Val2:	48
+BREAK
+#39312
+Keywords:	datachip chip biotech five 5 activesoft
+Name:	a Biotech 5 ActiveSoft
+RoomDesc:$
+A small datachip has been left here.~
+LookDesc:$
+It looks to be an ActiveSoft chip, packed full of software to be used in
+conjunction with skillwires. It seems to be labeled: "Biotech - Rating Five".
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	33
+	Val1:	5
+	Val2:	75
+BREAK
+#39313
+Keywords:	datachip chip driving/truck 4 four activesoft
+Name:	a Driving/Truck 4 ActiveSoft
+RoomDesc:$
+A datachip has been left here.~
+LookDesc:$
+It looks to be an ActiveSoft chip, packed full of software to be used in
+conjunction with skillwires. It seems to be labeled: "Driving/Truck - Rating
+Four". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	4800
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	63
+	Val1:	4
+	Val2:	48
+BREAK
+#39314
+Keywords:	datachip chip cyberterminal design 5 five activesoft
+Name:	a Cyberterminal Design 5 ActiveSoft
+RoomDesc:$
+A small datachip has been left here.~
+LookDesc:$
+It looks to be an ActiveSoft chip, packed full of software to be used in
+conjunction with skillwires. It seems to be labeled: "Cyberterminal Design -
+Rating Five". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	7500
+	AvailTN:	5
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	28
+	Val1:	5
+	Val2:	75
+BREAK
+#39315
+Keywords:	datachip chip data brokerage 5 five activesoft
+Name:	a Data Brokerage 5 ActiveSoft
+RoomDesc:$
+A small datachip has been left here.~
+LookDesc:$
+It looks to be an ActiveSoft chip, packed full of software to be used in
+conjunction with skillwires. It seems to be labeled: "Data Brokerage - Rating
+Five". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	7500
+	AvailTN:	5
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	54
+	Val1:	5
+	Val2:	75
+BREAK
+#39316
+Keywords:	datachip chip clubs 5 five activesoft
+Name:	a Clubs 5 ActiveSoft
+RoomDesc:$
+A small datachip has been left here.~
+LookDesc:$
+It looks to be an ActiveSoft chip, packed full of software to be used in
+conjunction with skillwires. It seems to be labeled: "Clubs - Rating Five". 
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	7500
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	5
+	Val2:	75
+BREAK
+#39317
+Keywords:	datachip chip unarmed four 4 activesoft
+Name:	an Unarmed 4 ActiveSoft
+RoomDesc:$
+A small datachip has been left here.~
+LookDesc:$
+It looks to be an ActiveSoft chip, packed full of software to be used in
+conjunction with skillwires. It seems to be labeled: "Unarmed - Rating Four".
+~
+Type:	Skillsoft
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	4800
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	4
+	Val2:	48
+BREAK
+#39318
+Keywords:	jacket synthetic synth-leather covered buckles D-Rings
+Name:	a synth-leather jacket covered in buckles and D-rings
+RoomDesc:$
+A synth-leather jacket covered in buckles and D-rings has been left here.~
+LookDesc:$
+A double-stitched synth-leather construction makes this jacket fairly durable
+to scuffs and scraps, as well as the elements. It is practically covered with
+D-rings and other straps and buckles, giving it an appearance of a
+straight-jacket, chic insanity, obviously It has multiple zippered pockets,
+allowing its wearer a place to store all their broken dreams and hurt
+feelings. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	750
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	6
+	Val2:	2
+	Val3:	2
+	Val4:	4
+	Val6:	1
+	Val7:	4
+BREAK
+#39319
+Keywords:	jacket hooded thick black PVC
+Name:	a thick ^Lblack PVC^N hooded jacket
+RoomDesc:$
+^gA hooded jacket made from ^Lblack PVC^g material has been left here.^N~
+LookDesc:$
+Crafted from a thick black vinyl polymer material, it features one inch black
+nylon straps with matching black grommets and snaps, which criss-cross along
+it's front. Multiple gun-metal D-rings are riveted and bound with nylon straps
+to securely bind the jacket to ones body. Definitely a BDSM kind of thing...
+Kinky. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	725
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	6
+	Val2:	2
+	Val3:	2
+	Val4:	4
+	Val6:	1
+	Val7:	4
+BREAK
+#39320
+Keywords:	pants synthetic synth-leather covered buckles d-rings
+Name:	a pair of synth-leather pants covered in buckles and D-rings
+RoomDesc:$
+A pair of synth-leather pants has been left here in a pile.~
+LookDesc:$
+These sturdy, double-stitched synth-leather pants can stand up to the rigors
+of wear and tear, and should prove to be quite weather proof. They are covered
+with D-rings and riveted buckles and straps, and look as if they are the
+matching set to a straight-jacket for the clinically insane. It features
+multiple pockets, so the wearer can keep their razors close at hand should
+they feel the urge to slit their wrists. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	650
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	4
+	Val2:	2
+	Val3:	2
+	Val4:	2
+	Val6:	1
+	Val7:	2
+BREAK
+#39321
+Keywords:	pants sturdy black PVC
+Name:	a pair of sturdy ^Lblack PVC^N pants
+RoomDesc:$
+^gA pair of sturdy ^Lblack PVC^g pants have been left here in a pile.^N~
+LookDesc:$
+These pants are crafted from a thick black vinyl polymer material, and feature
+two inch side-release buckles and strap down along the outside of the legs.
+Several sections have been double-stitched with black synth-leather padding,
+namely over the knees and thighs. Nickel plated grommets are riveted snugly
+into place, allowing the wearer to adjust the fit to their own comfort. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	600
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	4
+	Val2:	2
+	Val3:	2
+	Val4:	2
+	Val6:	1
+	Val7:	2
+BREAK
+#39322
+Keywords:	skirt mid-thigh length black synthetic synth-leather
+Name:	a mid-thigh length ^Lblack synth^N-^Lleather^N skirt
+RoomDesc:$
+^gA mid-thigh length ^Lblack synth-leather^g skirt has been left here.^N~
+LookDesc:$
+This militant styled skirt is made from sturdy black synth-leather and reaches
+down to about mid-thigh in length. Secured along the sides with locking snap
+vertical zippers, it also features large fastened pockets with the occasional
+polished D-ring hanging off of its sides and hem. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	4
+	Val2:	2
+	Val3:	2
+	Val4:	2
+	Val7:	2
+BREAK
+#39323
+Keywords:	mini-skirt hard candy pink black
+Name:	a hard candy ^Mpink^N and ^Lblack^N mini-skirt
+RoomDesc:$
+An outrageous looking mini-skirt has been left here.~
+LookDesc:$
+This ultra-violet light reactive mini-skirt is a must for the raver club
+scene, or just some wannabe looking to fit in with the crowd. Its shiney black
+material is a backdrop for its bright pink mesh material the lower hem of the
+skirt is made from, which flares out to the side in an almost tutu'ish manner.
+Six different buckles are placed around two straps around the waist for a
+secure fit, which is a bit redundant considering its appearance. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.20
+	Barrier:	4
+	Cost:	550
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	2
+BREAK
+#39324
+Keywords:	boots mid-calf black synth-leather styled brogue
+Name:	a pair of ^Lblack synth^N-^Lleather^N mid-calf brogue styled boots
+RoomDesc:$
+^gA pair of ^Lblack synth-leather^g brogue styled boots are sitting here.^N~
+LookDesc:$
+These brogue styled boots are crafted from thick black synth-leather and pull
+up to about mid-calf. A line of four stylied chromed skulls are set along its
+sides for buckles, allowing thick straps to be adjusted to the wearers
+comfort. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.25
+	Barrier:	4
+	Cost:	350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val3:	2
+	Val6:	1
+BREAK
+#39325
+Keywords:	boots heavy black chrome
+Name:	a pair of heavy ^Lblack^N and ^Wchrome^N boots
+RoomDesc:$
+^gA pair of ^Lblack^g and ^Wchrome^g boots are sitting here.^N~
+LookDesc:$
+These are, for all intents and purposes, Romper Stomper boots. If someone
+needs a boot up the ass, or upside the side of the head, these are the perfect
+choice. Thick, rugged rubber soles and a sturdy construction are bound
+together not only with thick laces, but with multiple straps across its top
+half. Steel-toe inserts make sure whatever scuffle the wearer gets into, at
+least their toes won't be on the wrong side of it. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.25
+	Barrier:	4
+	Cost:	350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val3:	2
+	Val4:	1
+	Val6:	1
+BREAK
+#39326
+Keywords:	gloves fishnet black elbow-length
+Name:	a pair of ^Lblack fishnet^N elbow-length gloves
+RoomDesc:$
+^gA pair of ^Lblack fishnet^g gloves have been left here by some tramp.^N~
+LookDesc:$
+While you may not be a whore, you're certainly going to look like one with
+these babies slipped on. These old tramp gloves are a great addition to any
+sleazy outfit, and are sure to drive the guys (and maybe even gals) crazy. 
+~
+Type:	Worn
+WearFlags:	10000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	125
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39327
+Keywords:	gloves fingerless studded black synth-leather
+Name:	a pair of fingerless, studded ^Lblack synth^N-^Lleather^N gloves
+RoomDesc:$
+^gA pair of fingerless, studded ^Lblack synth-leather^g gloves have been left here.^N~
+LookDesc:$
+These synth-leather gloves are double stitched to remain intact during use.
+Gaudy aluminum studs have been riveted into position along the back of the
+knuckles and around the adjustable wrist strap, and the fingers have been
+roughly hewn off for that 'badass' look everyone craves. 
+~
+Type:	Worn
+WearFlags:	10000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39328
+Keywords:	bag golf deluxe burgundy leather
+Name:	a deluxe ^rburgundy leather^N golf bag
+RoomDesc:$
+^gA deluxe ^rburgundy leather^g golf bag has been left standing here.^N~
+LookDesc:$
+Featuring a polyethylene tube construction with 6-way dividers, and a
+fur-lined top with matching detachable leather hood for a secure closure. This
+particular model has a full-length belly pocket with a small pocket on top,
+offering plenty of spare not only for clubs, but smaller pieces of equipment
+as well. It's sturdy shoulder strap can be adjusted to fit the smallest and
+largest of metahumans alike. 
+~
+Type:	Container
+WearFlags:	1000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	5.00
+	Barrier:	6
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	60
+	Val1:	1
+	Val2:	-1
+BREAK
+#39329
+Keywords:	driver aluminum Callaway Big Bertha 2058 tour club golf
+Name:	an aluminum Callaway 'Big Bertha 2058' tour driver
+RoomDesc:$
+An aluminum driver has been left here by an absent minded golfer.~
+LookDesc:$
+This aluminum driver with a graphite shaft combines wicked power and distance
+with a generous sweet spot. Edge Technology provides a high MOI and an
+optimized CG location for Draw or Neutral models that produce long,
+penetrating ball flights with the desired shot shape. Hyperbolic Face
+Technology(TM) increases ball speed along the entire face of the club, helping
+send balls farther down the fairway, even on miss-hits. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.50
+	Barrier:	8
+	Cost:	1750
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#39330
+Keywords:	golf club nine iron stainless steel graphite
+Name:	a stainless steel and graphite nine iron
+RoomDesc:$
+An absent minded golfer has left their nine iron here.~
+LookDesc:$
+Its stainless steel head is more forgiving than the traditional iron and makes
+it easier to get the ball airborne. Its ultra-lightweight graphite flex shaft
+improves swing speed and distance for increased confidence on precision shots.
+It'd also probably smart something fierce if you were smacked with it. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.50
+	Barrier:	8
+	Cost:	1250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#39331
+Keywords:	hockey stick composite ice
+Name:	a composite ice hockey stick
+RoomDesc:$
+An ice hockey stick has been left here... Odd.~
+LookDesc:$
+This ice hockey stick features a fiberglass/carbon fiber weave and
+custom-blended resin, which binds the materials together, resulting in
+excellent response, comfort level and durability. The blade is built with a
+high tensile-strength carbon composition that retains perfect rebound memory
+while absorbing impact and providing consistent puck control for receiving and
+fast release for shooting. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.50
+	Barrier:	8
+	Cost:	850
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#39332
+Keywords:	mask goalie cooper vintage
+Name:	a vintage Cooper goalie mask
+RoomDesc:$
+An old goalie mask found its way here from Camp Crystal Lake.~
+LookDesc:$
+The ol' Cooper, better known as the Jason mask, an oldie but goodie whose
+reputation is larger than life. No matter where you go, people are going to
+ask you, "Holy shit, is that a Jason mask?", and you will reply, "Why yes. Yes
+it is." Known side effects from wearing this mask include, but are not limited
+to: The ability to teleport as long as nobody is looking at you, and an
+uncontrollable urge to disembowel young campers (But totally not the virgins).
+~
+Type:	Worn
+WearFlags:	100000000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.20
+	Barrier:	6
+	Cost:	850
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	8
+BREAK
+#39333
+Keywords:	bat baseball wooden Louisville Slugger
+Name:	a wooden Louisville Slugger(R) baseball bat
+RoomDesc:$
+A wooden Louisville Slugger baseball bat has been left here.~
+LookDesc:$
+For over 100 years, the name Louisville Slugger(R) has been recognized as one
+of the most celebrated in baseball. During that time, this wood bat has become
+as legendary as the players it helped to immortalize. Its balanced design
+makes it a great choice for baseball games and street fights alike. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.20
+	Barrier:	4
+	Cost:	350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#39334
+Keywords:	bat cricket wooden
+Name:	a wooden cricket bat
+RoomDesc:$
+An old fashioned wooden cricket bat has been left here.~
+LookDesc:$
+This cricket bat utilizes expert, precise hand crafting to redistribute weight
+from the shoulders to the angled toe for better balanced and an enhanced sweet
+spot. This particular model features a raised middle to aid in powerful stroke
+play off both the front and back foot. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.20
+	Barrier:	4
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#39335
+Keywords:	racket tennis tour wilson(TM) high-performance
+Name:	a high-performance Wilson(TM) tour tennis racket
+RoomDesc:$
+A tennis racket has been left behind here.~
+LookDesc:$
+You can maintain confidence at the net and from the baseline with the
+Wilson(TM) Tour hi-performance racket. This particular racket is designed for
+the aggressive all-court player looking for a flexible racket with a smaller
+head size. The tight string bed and incredible feel yield precise shots from
+the baseline and at the net.  
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.20
+	Barrier:	4
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#39336
+Keywords:	knife cougar fineblade short sharp
+Name:	a Cougar Fineblade short knife
+RoomDesc:$
+A short knife with a wickedly sharp edge has been left here.~
+LookDesc:$
+Crafted with SOTA molecular bonding and edging technology, it is easy to see
+why this double-edged knife is favoured by mercenaries and military personnel
+world wide. High quality steel and a coating of rust proofing make this a
+durable tool, whose edge needs not be sharpened ever again. This particular
+version is a short blade, making it easier to conceal for those tasks that
+require a bit of subterfuge. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.50
+	Barrier:	6
+	Cost:	800
+	AvailTN:	5
+	AvailDay:	2.50
+	LegalNum:	8
+	LegalCode:	1
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#39337
+Keywords:	knife cougar fineblade long sharp
+Name:	a Cougar Fineblade long knife
+RoomDesc:$
+A long knife with a wickedly sharp edge has been left here.~
+LookDesc:$
+Crafted with SOTA molecular bonding and edging technology, it is easy to see
+why this double-edged knife is favoured by mercenaries and military personnel
+world wide. High quality steel and a coating of rust proofing make this a
+durable tool, whose edge needs not be sharpened ever again. This particular
+version is a long blade, giving it a greater capacity to deal a lethal blow,
+but at the cost of being harder to conceal. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.75
+	Barrier:	6
+	Cost:	1500
+	AvailTN:	8
+	AvailDay:	2.50
+	LegalNum:	8
+	LegalCode:	1
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#39338
+Keywords:	hatchet axe kick Gerber folding
+Name:	a Gerber 'Kick Axe' folding hatchet
+RoomDesc:$
+A folding hatchet has been left bundled up here.~
+LookDesc:$
+This portable hatchet is brought to the market by Gerber, who has earned its
+reputation for offering high quality tools and gear made for the most rugged
+of environments. Its metal bodied frame with a hardcore black oxide coating
+equates to durability in the field, and it folds up like a knife for easy and
+safe transportation and storage. Whether the task at hand is chopping up wood
+or chopping up bodies in the woods, this baby is sure to handle anything put
+in its path. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	1500
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	5
+	LegalCode:	1
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#39339
+Keywords:	shovel deluxe tri-fold folding camping
+Name:	a deluxe tri-fold shovel
+RoomDesc:$
+A tri-fold camping shovel has been left in a neat little package here.~
+LookDesc:$
+Crafted from heavy duty steel for strength and durability, this compact triple
+folding shovel breaks down into three sections, and extends to an overall
+length of 24", whereas when it is folded for transport it just barely reaches
+9" in length. It features a sturdy locking thread to ensure a strong and
+secure extension. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#39340
+Keywords:	bag insulated sleeping
+Name:	an insulated sleeping bag
+RoomDesc:$
+An insulated sleeping bag has been spread out here. Comfy.~
+LookDesc:$
+This is an ideal summer bag for camping and river trips, but it also has
+enough down insulation to keep you warm when frost is in the air. It features
+two-way zipper sliders for venting and the mating of bags, with reversible
+slider tabs for easy use inside or outside of the bag. Its draw-cord hook can
+be adjusted for a comfortable fit while taking a nap in colder environments. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.20
+	Barrier:	4
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39341
+Keywords:	tent small single person
+Name:	a small, single person tent
+RoomDesc:$
+A small tent has been pitched here by someone. Damn hobos.~
+LookDesc:$
+Its sturdy double canvas constructed features a double weave to make sure it
+can hold up to the toughest of environments. Simplicity is a trait this tent
+excels at, its breakdown and construction both taking a few short minutes.
+There is enough room for a single, large metahuman, or two average sized
+metahumans if they don't mind a snug fit. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	4.00
+	Barrier:	4
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39342
+Keywords:	tent large two room
+Name:	a large, two room tent
+RoomDesc:$
+A large tent has been pitched here by a classy hobo.~
+LookDesc:$
+This rather massive tent is large enough to fit a half dozen occupants, and
+features an interior divider to separate the two 'rooms' inside of it. Thick,
+double layered canvas makes it weather proof, and its simplistic design allows
+it to be put together or broken down by even a small child. If comfort is what
+you seek on the trail, this baby is sure to impress. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	8.00
+	Barrier:	4
+	Cost:	850
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39343
+Keywords:	grill portable heavy duty campfire
+Name:	a portable, heavy duty campfire grill
+RoomDesc:$
+A portable, heavy duty campfire grill has been set up here.~
+LookDesc:$
+Crafted from stainless steel and welded to perfection, this grill is meant to
+be propped over an open campfire, it's two, sturdy folding box legs more than
+suitable to keep it standing over the hottest of fires. Once it's legs have
+been folded in, this grill takes up very little space, making it quite
+portable and easy to transport out to the camp site. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	1
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39344
+Keywords:	bottle juice plastic sparkling fruit
+Name:	a plastic bottle of sparkling fruit juice
+RoomDesc:$
+A plastic bottle full of sparkling fruit juice has been left sitting here.~
+LookDesc:$
+A simple plastic bottle, filled to the brim with sparkling fruit juice. Not
+only will it quench your thirst, it's also rather healthy, plus it tastes
+pretty good. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	80
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	12
+	Val2:	4
+BREAK
+#39345
+Keywords:	bottle plastic juice orange fresh
+Name:	a plastic bottle of fresh orange juice
+RoomDesc:$
+A plastic bottle of fresh orange juice has been left sitting here.~
+LookDesc:$
+A simple plastic bottle, filled with ice cold, freshly squeezed orange juice.
+A label on it notes: Not from concentrate. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	65
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	15
+	Val2:	4
+BREAK
+#39346
+Keywords:	sub roast beef large provolone
+Name:	a large roast beef and provolone sub
+RoomDesc:$
+A large roast beef and provolone sub has been left here.~
+LookDesc:$
+Decked out with thick slices of roast beef and layered with provolone cheese,
+with it's construction completed with a thin spread of dill horseradish
+mayonnaise. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.20
+	Barrier:	2
+	Cost:	120
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#39347
+Keywords:	sandwich turkey BLT submarine large
+Name:	a large turkey BLT submarine sandwich
+RoomDesc:$
+A large turkey BLT submarine sandwich has been left here.~
+LookDesc:$
+Consisting of thin slices of turkey, bacon, tomatoes, lettuce and cucumbers,
+all sandwiched inside of a large amarosa peanut roll, which is slathered with
+a thin layer of ranch dressing. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.20
+	Barrier:	2
+	Cost:	125
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#39348
+Keywords:	sandwich submarine turkey brie sliced apple large
+Name:	a large turkey, brie and sliced apple submarine sandwich
+RoomDesc:$
+A large turkey, brie and sliced apple submarine sandwich has been left here.~
+LookDesc:$
+A mixtured of honey glazed turkey, brie, sliced granny smith apples, and
+finished off with a fig spread to boot. Sure to satisfy any size appetite. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.20
+	Barrier:	2
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#39349
+Keywords:	sandwich vegetarian wrap
+Name:	a vegetarian wrap sandwich
+RoomDesc:$
+A vegetarian wrap sandwich has been left here to age.~
+LookDesc:$
+Healthy servings of hummus, cucumbers & red peppers rolled up inside of a pita
+wrap. Delicious. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.20
+	Barrier:	2
+	Cost:	135
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#39350
+Keywords:	salad oriental noodle turkey veggies vegetables
+Name:	an oriental noodle salad with turkey & veggies
+RoomDesc:$
+An oriental noodle salad with turkey & veggies has been left here.~
+LookDesc:$
+Tons of oriental noodles are tossed heavily with crisp salad greens, with
+chunks of smoked turkey and various vegetables tossed in for colour and
+flavour. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.20
+	Barrier:	2
+	Cost:	125
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#39351
+Keywords:	salad garlic hummus mixed veggies vegetables
+Name:	a garlic hummus with mixed veggies salad
+RoomDesc:$
+A garlic hummus and mixed veggies salad has been left sitting here.~
+LookDesc:$
+Mmmm... Garlic hummus tossed together with crisp salad greens, with healthy
+doses of freshly diced vegetables. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.20
+	Barrier:	2
+	Cost:	120
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#39352
+Keywords:	gelato belgian waffle cone chocolate hazelnut
+Name:	a belgian waffle cone with chocolate hazelnut gelato
+RoomDesc:$
+A belgian waffle cone has been left here, which is melting quickly.~
+LookDesc:$
+Homemade Italian chocolate hazelnut gelato, drizzled heavily with chocolate
+syrup, all contained within a Belgian waffle cone. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	120
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#39353
+Keywords:	custard belgian waffle cone strawberry
+Name:	a belgian waffle cone with strawberry and custard
+RoomDesc:$
+A belgian waffle cone has been left here, which is melting quickly.~
+LookDesc:$
+Fresh, made-from-scratch custard and pure strawberry topping, stuffed inside
+of a Belgian waffle cone. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	125
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#39354
+Keywords:	waffle cone belgian fig blue cheese
+Name:	a belgian waffle cone with fig and blue cheese
+RoomDesc:$
+A belgian waffle cone has been left here, which is melting quickly.~
+LookDesc:$
+Sliced figs and blue cheese with maple-butter sauce drizzled all over it, it's
+Belgian waffle cone keeping it from making a huge mess. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	130
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#39355
+Keywords:	fruit waffle cone fresh belgian mint butter
+Name:	a belgian waffle cone with fresh fruit and mint butter
+RoomDesc:$
+A belgian waffle cone has been left here, which is quickly melting.~
+LookDesc:$
+Seasonal fresh fruit with a compound mint butter sauce drizzled all over it,
+stuffed inside of a Belgian waffle cone to keep it all intact. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	120
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#39356
+Keywords:	dessert ice cream amaretti delicious
+Name:	an amaretti ice cream dessert
+RoomDesc:$
+An ice cream dessert has been left here, looking delicious.~
+LookDesc:$
+Consisting of several scoops of French vanilla ice cream with crumbled
+amaretti cookies, which are then doused with almond liqueur and topped with a
+healthy dose of whipped cream and chopped almonds. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	140
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#39357
+Keywords:	sorbet pomegranate mint delicious
+Name:	a pomegranate and mint sorbet
+RoomDesc:$
+A delicious looking sorbet has been left here.~
+LookDesc:$
+Crafted from a mixture of mint syrup, pomegranate juice and orange juice,
+which has been blended and chilled into a perfect sorbet texture. Garnished
+with a few chopped mint leaves and sprinkled with a handful of semi-sweet
+chocolate chips. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	145
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#39358
+Keywords:	chair plush comfortable denim lounge
+Name:	a plush, comfortable denim lounge chair
+RoomDesc:$
+A plush denim lounge chair is here, looking quite comfortable.~
+LookDesc:$
+This chair offers both sophisticated style and country cottage charm with its
+juxtaposition of clean lines and skirted base. 100% cotton denim upholstery
+will remind you of your favorite pair of jeans, providing a relaxed and
+comfortable experience. The pale mushroom hue complements any of today's
+popular home fashions. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	20.00
+	Barrier:	6
+	Cost:	2500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39359
+Keywords:	ottoman plush comfortable denim
+Name:	a plush, comfortable denim ottoman
+RoomDesc:$
+A plush denim ottoman is sitting here, waiting for someone to kick their feet up on it.~
+LookDesc:$
+This ottoman offers both sophisticated style and country cottage charm with
+its juxtaposition of clean lines and skirted base. 100% cotton denim
+upholstery will remind you of your favorite pair of jeans, providing a relaxed
+and comfortable experience. The pale mushroom hue complements any of today's
+popular home fashions. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	8.00
+	Barrier:	6
+	Cost:	1800
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39360
+Keywords:	table cocktail two-drawer antique
+Name:	an antique, two-drawer cocktail table
+RoomDesc:$
+An antique, two-drawer cocktail table is sitting here.~
+LookDesc:$
+This cocktail table boasts timeless design elements that transition easily
+from contemporary to traditional decor as needed. A planked surface and turned
+legs create visual interest from top to bottom, and the medium brown finish
+warms any room instantly. Textured ring hardware is presented with an antiqued
+look, enhancing the amply sized drawers. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	10.00
+	Barrier:	6
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	30
+	Val1:	5
+	Val2:	-1
+BREAK
+#39361
+Keywords:	lamp faux stone table
+Name:	a faux stone table lamp
+RoomDesc:$
+A faux stone table lamp has been set up here.~
+LookDesc:$
+This table lamp features a sphere of faux stone on a hand-forged iron base.
+The linen shade is topped with a whimsical finial, adding a light hearted
+touch to its solid, earthy design. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	1
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	1250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39362
+Keywords:	sofa leather luxurious brown burgundy
+Name:	a luxurious ^rbrown burgundy^N leather sofa
+RoomDesc:$
+^gA luxurious ^rbrown burgundy^g leather sofa is here, looking pretty damn comfortable.^N~
+LookDesc:$
+Whether having quiet evenings at home, or entertaining important guests, this
+sofa has the elegant style and comfort you want. Wood trim, rolled arms and a
+camelback silhouette give this sofa its refined appearance. 100% top grain,
+semi-corrected leather is fully dyed to show a suavage effect in this nearly
+chocolate brown burgundy, emphasizing its beauty and texture. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	25.00
+	Barrier:	4
+	Cost:	2850
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39363
+Keywords:	loveseat leather luxurious brown burgundy
+Name:	a luxurious ^rbrown burgundy^N leather loveseat
+RoomDesc:$
+^gA luxurious ^rbrown burgundy^g leather loveseat is here, waiting to be snuggled upon.^N~
+LookDesc:$
+Whether having quiet evenings at home, or entertaining important guests, this
+loveseat has the elegant style and comfort you want. Wood trim, rolled arms
+and a camelback silhouette give this loveseat its refined appearance. 100% top
+grain, semi-corrected leather is fully dyed to show a suavage effect in this
+nearly chocolate brown burgundy, emphasizing its beauty and texture. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	20.00
+	Barrier:	4
+	Cost:	2650
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39364
+Keywords:	table wooden end brown cherry finish
+Name:	a wooden end table with a ^ybrown cherry^N finish
+RoomDesc:$
+^gA wooden end table with a ^ybrown cherry^g finish is sitting here.^N~
+LookDesc:$
+A pretty brown cherry finish creates a warm setting for hand-distressed
+details that offer the charm of an aged look. Visually appealing
+quarter-matched veneers top off the rounded shape, and gently curved columns
+and feet complete the design. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	10.00
+	Barrier:	6
+	Cost:	2250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	30
+	Val1:	5
+	Val2:	-1
+BREAK
+#39365
+Keywords:	rug large exquisitely crafted area carpet
+Name:	a large, exquisitely crafted area rug
+RoomDesc:$
+A large, exquisitely crafted area rug covers a good portion of the floor here.~
+LookDesc:$
+With its exquisitely detailed patterns, this rug will serve as a regal
+centerpiece in any room. And with its rich, yet muted colour palette, this 8'
+x 11' rug can complement any traditional decor. The durable nylon material is
+remarkably soft and lustrous, and boasts wonderful texture, adding to its
+already timeless craftsmanship. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	5.00
+	Barrier:	6
+	Cost:	2000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39366
+Keywords:	cybereyes hypnotic swirl
+Name:	a pair of hypnotic swirl cybereyes
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	1
+	Val3:	4194304
+BREAK
+#39367
+Keywords:	cybereyes mono-chromatic
+Name:	a pair of mono-chromatic cybereyes
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	1
+	Val3:	4194304
+BREAK
+#39368
+Keywords:	cybereyes cross-hair
+Name:	a pair of cross-hair cybereyes
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	1
+	Val3:	4194304
+BREAK
+#39369
+Keywords:	cybereyes mercury liquid
+Name:	a pair of liquid mercury cybereyes
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	1
+	Val3:	4194304
+BREAK
+#39370
+Keywords:	datajack eye
+Name:	an eye datajack -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	4400
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	1
+	Val2:	1
+	Val3:	131072
+	Val4:	20
+BREAK
+#39371
+Keywords:	retinal clock
+Name:	a retinal clock -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	900
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	1
+	Val2:	1
+	Val3:	128
+	Val4:	8
+BREAK
+#39372
+Keywords:	cybereyes package w/LL TH OM II
+Name:	an eye package w/LL, TH and OM II -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	20000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	1
+	Val2:	1
+	Val3:	2592
+	Val4:	48
+BREAK
+#39373
+Keywords:	cybereyes package w/TH FC EM II
+Name:	an eye package w/TH, FC and EM II -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	25000
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	1
+	Val2:	1
+	Val3:	16904
+	Val4:	32
+BREAK
+#39374
+Keywords:	fingertip compartment
+Name:	a fingertip compartment -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	6000
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val2:	1
+	Val4:	8
+BREAK
+#39375
+Keywords:	balance tail
+Name:	a balance tail -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	20000
+	AvailTN:	8
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	35
+	Val2:	1
+	Val4:	40
+BREAK
+#39376
+Keywords:	voice modulator
+Name:	a voice modulator -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	90000
+	AvailTN:	2
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val2:	1
+	Val4:	16
+BREAK
+#39377
+Keywords:	induction datajack
+Name:	an induction datajack -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	6000
+	AvailTN:	5
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val2:	1
+	Val3:	1
+	Val4:	24
+BREAK
+#39378
+Keywords:	Math SPU II
+Name:	a Math SPU II -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	10000
+	AvailTN:	6
+	AvailDay:	2.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	33
+	Val1:	2
+	Val2:	1
+	Val4:	12
+[AFFECT 0]
+	Location:	Hacking Pool
+	Modifier:	2
+BREAK
+#39379
+Keywords:	Math SPU III
+Name:	a Math SPU III -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	22000
+	AvailTN:	6
+	AvailDay:	2.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	33
+	Val1:	3
+	Val2:	1
+	Val4:	16
+[AFFECT 0]
+	Location:	Hacking Pool
+	Modifier:	3
+BREAK
+#39380
+Keywords:	Encephalon I
+Name:	an Encephalon I -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	8000
+	AvailTN:	6
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	32
+	Val1:	1
+	Val2:	1
+	Val4:	60
+[AFFECT 0]
+	Location:	Hacking Pool
+	Modifier:	1
+[AFFECT 1]
+	Location:	Task Pool (Int)
+	Modifier:	1
+BREAK
+#39381
+Keywords:	Encephalon II
+Name:	an Encephalon II -alpha
+RoomDesc:$
+An unfinished object is lying here.~
+LookDesc:$
+It looks pretty much like an unfinished object~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	230000
+	AvailTN:	6
+	AvailDay:	12.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	32
+	Val1:	2
+	Val2:	1
+	Val4:	120
+[AFFECT 0]
+	Location:	Hacking Pool
+	Modifier:	2
+[AFFECT 1]
+	Location:	Task Pool (Int)
+	Modifier:	2
+BREAK
+#39382
+Keywords:	harmonica nickel-plated
+Name:	a ^Wnickel^N-^Wplated^N harmonica
+RoomDesc:$
+^gA sweet looking ^Wnickel^g-^Wplated^g harmonica has been left behind here.^N~
+LookDesc:$
+This mouth organ is a free reed wind instrument used primarily in the blues,
+American folk music, and jazz. Each chamber has multiple, variable-tuned brass
+reeds, and has a sturdy stamped stainless steel comb. It's reed-plate is made
+from high quality brass, and it's cover plates are nickel plated polished
+aluminum with classic western designs etched into its surface. A simple
+leather throng is attached to one corner, which can be worn about the wrist,
+or loosened and drape about the neck. 
+~
+Type:	Other
+WearFlags:	101000000000101
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	6
+	Cost:	850
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39383
+Keywords:	flute pan bamboo ornate tubes
+Name:	an ornate ^gbamboo^N pan flute
+RoomDesc:$
+A flute of some kind with multiple tubes has been left here.~
+LookDesc:$
+The pan flute (or pan pipe) is an ancient musical instrument based on a closed
+tube design, usually with five or more pipes of gradually increasing length.
+The flute is named after the Greek god Pan, and as such is a popular folk
+instrument. It is considered the first mouth organ, ancestor of both the pipe
+organ and the harmonica. This particular model has passed up the traditional
+wood in favour of a bamboo construction, and is adorned in a classy manner
+with an ornate leather and silver strand binding. 
+~
+Type:	Other
+WearFlags:	100000000000101
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.10
+	Barrier:	6
+	Cost:	850
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39384
+Keywords:	trombone brass polished brightly
+Name:	a brightly polished ^ybrass^N trombone
+RoomDesc:$
+^gA brightly polished ^ybrass^g trombone has been left here.^N~
+LookDesc:$
+The trombone was developed from the trumpet. The name trombone is from Italian
+and means "big trumpet", and has not changed much since its invention. It has
+9 feet of tubing and a cylindrical bore, with seven playing positions on the
+slide. The slide itself is made from one tube tightly fitted over another.
+Notes are produced by changing the length of the tubing, which is accomplished
+by changing the position of the slide. Higher pitches, on the other hand, are
+achieved by changing the pressure of ones breath. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.50
+	Barrier:	6
+	Cost:	1200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39385
+Keywords:	lyre carbon fiber
+Name:	a modern carbon fiber lyre
+RoomDesc:$
+An old, classical lyre crafted from carbon fiber is sitting here.~
+LookDesc:$
+The lyre is a string musical instrument well known for its use in classical
+antiquity. And while it may appear to be a harp, it is played by being
+strummed, much like a guitar, rather than plucked like a harp.This particular
+instrument follows its classical design, but with a modern twist in materials
+used in its construction, namely its exchange of wood in favour of sturdier
+and longer lasting carbon fiber. 
+~
+Type:	Other
+WearFlags:	1000100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.20
+	Barrier:	6
+	Cost:	1250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39386
+Keywords:	mandolin stained darkly synth-wood
+Name:	a darkly stained ^rsynth^N-^rwood^N mandolin
+RoomDesc:$
+^gA darkly stained ^rsynth^g-^rwood^g mandolin has been left here.^N~
+LookDesc:$
+This particular mandolin is crafted from synthetic wood and is stained a dark
+reddish brown colour, and features a traditional oval sound hole. Its small
+size and higher pitch make mandolin notes decay faster than larger stringed
+instruments like the guitar, which encourages the use of tremolo (rapid
+picking of one or more pairs of strings) to create sustained notes or chords.
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.20
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39387
+Keywords:	ukulele classical concert
+Name:	a classical concert ukulele
+RoomDesc:$
+A classical concert ukulele has been left sitting here.~
+LookDesc:$
+The ukulele is a chordophone classified as a plucked lute, and is a subset of
+the guitar family of instruments, and features four nylon strings. This
+particular instrument is a concert design, and is commonly associated with
+music from Hawai'i, where the namely roughly translates as "Jumping Flea",
+most likely due to the action of ones fingers as they play it. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	850
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39388
+Keywords:	drum steel tuned finely
+Name:	a finely tuned ^Wsteel^N drum
+RoomDesc:$
+^gA finely tuned ^Wsteel^g drum has been left sitting here.^N~
+LookDesc:$
+For the experienced professional or dedicated student, this pan are worth
+every penny of it's price tag. Fine tuned to A-440 standard, this drum is
+calibrated to near perfection, offering a high quality sound and appearance.
+They are decorated in a traditional manner, and as such are only slightly
+gaudy, which is usually the norm for these sweet babies. 
+~
+Type:	Other
+WearFlags:	100100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	1200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39389
+Keywords:	cowbell cast metal large
+Name:	a large cast metal cowbell
+RoomDesc:$
+Here lies more cowbell. It's the only cure.~
+LookDesc:$
+The cowbell is an idiophone hand percussion instrument used in various styles
+of music, including salsa and infrequently in popular music. No matter what
+ails you, there is only one prescription that is sure to cure you without fail
+More cowbell. 
+~
+Type:	Other
+WearFlags:	101000000000101
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	6
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39390
+Keywords:	fountain stylish modern
+Name:	a stylish, modern design fountain
+RoomDesc:$
+A stylish, modern design fountain is here, full of coins and wishes.~
+LookDesc:$
+It smells a bit.. strong, perhaps a little too much bleach? It certainly
+doesn't look very sanitary, at least from the stand point of wanting to have a
+sip. All of that bleach must be for the coins that lay scattered across its
+bottom, awaiting their chance to be scooped up for some charity. This wishing
+well is either uplifting, or depressing, depending on ones point of view. 
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	2000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	99999
+	Val1:	99998
+BREAK
+#39391
+Keywords:	fountain stylish modern
+Name:	a stylish, modern design fountain
+RoomDesc:$
+A stylish, modern design fountain is here, full of coins and wishes.~
+LookDesc:$
+It smells a bit.. strong, perhaps a little too much bleach? It certainly
+doesn't look very sanitary, at least from the stand point of wanting to have a
+sip. All of that bleach must be for the coins that lay scattered across its
+bottom, awaiting their chance to be scooped up for some charity. This wishing
+well is either uplifting, or depressing, depending on ones point of view. 
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	2000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	99999
+	Val1:	99998
+BREAK
+#39392
+Keywords:	atm automatic teller
+Name:	An ATM
+RoomDesc:$
+An automatic teller capable of using credsticks is here, mounted on the wall.~
+LookDesc:$
+There appears to be only three options on this standard ATM. BALANCE will give
+you your balance of credits in your bank. WITHDRAW will allow you to withdraw
+whatever available credits you have in the bank, and place them into your
+credstick. DEPOSIT will deposit funds from your credstick to your bank
+account. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	200.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39393
+Keywords:	club billy
+Name:	a billy club
+RoomDesc:$
+A billy club has been left behind here.~
+LookDesc:$
+A simple length of lacquered, polished wood with a simple throng to wrap about
+ones wrist, which helps to keep it handy for when you need to smack someone in
+the face with it. 
+~
+Type:	Weapon
+WearFlags:	11000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	6
+	LegalCode:	3
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#39398
+Keywords:	crate shipping goods
+Name:	a large shipping crate of goods
+RoomDesc:$
+A large shipping crate of goods has been stashed here.~
+LookDesc:$
+It's a run of the mill shipping crate, designed for easy carry purposes with a
+single person, but preferably two since it's relatively heavy. Upon its side
+is a black on white label, which has been scribbled across with magic marker
+in an attempt to make it illegible. It currently reads, Property of: Ev**e*t
+~
+Type:	Quest Item
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	20.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#39399
+Keywords:	datafile unlabeled
+Name:	an unlabeled datafile
+RoomDesc:$
+An unlabeled datafile has been left here.~
+LookDesc:$
+It looks to be a simple datafile, which bears no markings or labels hinting
+towards its content. It does, however, appear to be encrypted, and whatever is
+stored on it is certainly valuable to certain parties. 
+~
+Type:	Quest Item
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

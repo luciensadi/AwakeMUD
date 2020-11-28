@@ -1,0 +1,308 @@
+#25300
+Keywords:	parking meter
+Name:	a parking meter
+RoomDesc:$
+A parking meter is bolted down to the sidewalk.~
+LookDesc:$
+Just a run of the mill parking meter, which consists of a clear plastic meter
+to show how much time is left on it, along with a credstick reader to register
+credits charged to it. It has a rather sturdy construction, mostly steel, just
+to make sure nobody screws with it, though considering it sports some graffiti
+that hasn't stopped everyone from defacing it the best they can. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	20.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#25301
+Keywords:	broken parking meter
+Name:	a broken parking meter
+RoomDesc:$
+A broken and bent parking meter sits askew on the sidewalk.~
+LookDesc:$
+Broken down and beat to hell and back, this parking meter hasn't worked for
+quite some time if its fogged up and broken plastic casing and gutted interior
+is any indication. Half of the keypad is broken and the credstick reader is
+nowhere to be found. The steel pole jutting up from the cement is bent in half
+and the meter itself sticks out at an odd angle due to it. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	20.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#25302
+Keywords:	debris jumble
+Name:	a jumble of debris
+RoomDesc:$
+A jumble of debris is strewn across the side of the street here.~
+LookDesc:$
+What was originally pieces of structural foundation is little more than a
+messy mixture of crumbling cement chunks, twisted steel rebar rods, ruined
+sheet rock and aluminum sheathings with a smattering of broken glass that were
+once exterior windows. The entire mess has been bulldozed aside and away from
+the main road to keep it out of the way until crews can begin sifting through
+it and haul it off to be disposed of. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	500.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#25303
+Keywords:	dumpster old rusted
+Name:	an old rusted dumpster
+RoomDesc:$
+An old rusted dumpster sits askew in the alley way.~
+LookDesc:$
+It originally had a dark green paint job, but almost all of it has long since
+chipped and flaked off, leaving behind the bare metal to fend for itself
+against the elements, resulting in large portions of its surfaces that have
+rusted nearly all the way through. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	500.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	500
+	Val1:	5
+	Val2:	-1
+BREAK
+#25304
+Keywords:	sign street broken
+Name:	a broken street sign
+RoomDesc:$
+A broken street sign lays on its side here.~
+LookDesc:$
+It consists of sturdy aluminum (or at least used to be) folded into a tight
+square to create a pole, which has along its length holes drilled into it to
+lighten it up without sacrificing its structural integrity. Bolted to the top
+are two aluminum panels painted with reflective green paint with white
+lettering that read "79th Street" and "Northeast 168th Avenue" respectively.
+It appears to have bent and broken near its base, since apparently the welding
+keeping it in place finally gave out. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1001000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	15.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	1
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#25305
+Keywords:	hydrant fire yellow old
+Name:	an old ^yyellow^N fire hydrant
+RoomDesc:$
+^gAn old ^yyellow^g fire hydrant stands on the side of the street.^N~
+LookDesc:$
+One of the few things that have held up relatively well over the decades of
+abuse and neglect, mostly due to their robust and durable construction. Their
+paint is flaking off, which was originally a bright safety yellow colour, but
+has since faded and looks more brown than anything. 
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	100.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9999
+	Val1:	9999
+BREAK
+#25306
+Keywords:	vest police armoured Lone Star
+Name:	a Lone Star armoured police vest
+RoomDesc:$
+An armoured vest with a Lone Star insignia has been left here.~
+LookDesc:$
+This easily adjustable vest can be modified to fit almost any (meta)human
+frame with minimal effort, and features slender pockets sewn into its layered
+kevlar construction to allow for armoured ballistic plates to be added for
+additional protection. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	850
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val4:	1
+	Val5:	4
+	Val6:	3
+	Val7:	4
+BREAK
+#25307
+Keywords:	object unfinished
+Name:	a light weight ballistic helmet
+RoomDesc:$
+A light weight ballistic helmet rolls around here.~
+LookDesc:$
+This ergonomically designed helmet is made of ballistic resistant materials
+and is often employed by Lone Star patrol units. It's fully adjustable straps
+and light weight design make it comfortable to wear for long term use and
+features an internal ear piece radio for in-the-field communication purposes.
+~
+Type:	Radio
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	850
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+BREAK
+#25308
+Keywords:	thunderbolt ruger pistol heavy
+Name:	a Ruger Thunderbolt
+RoomDesc:$
+A heavy looking pistol has been left unholstered here.~
+LookDesc:$
+From the minds at Lone Star's R&D Division of Technical Research emerges the
+cutting edge in firearm technology. Originally licensed to Ruger to
+manufacture under the terms that for the first year all units would only be
+sold to Lone Star for a predetermined (and very low) price before being
+allowed to bring them to the public market. It fires a controlled burst with
+amazing accuracy designed to put officers on a level playing field with
+criminals and runners alike. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.75
+	Barrier:	6
+	Cost:	1400
+	AvailTN:	14
+	AvailDay:	12.00
+	LegalNum:	2
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	12
+	Val9:	630
+	Val10:	8
+BREAK
+#25309
+Keywords:	fez red hat
+Name:	a small ^rred^N fez
+RoomDesc:$
+^gA small ^rred^g fez remains unworn here.^g~
+LookDesc:$
+This small ^rred^N cap is better known as the fez, which is best associated with
+The Shriners that ride those miniature cars during parades. It's also known as
+the distinctive symbol of The Brain Eaters, a thrill gang that operates out of
+Redmond. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

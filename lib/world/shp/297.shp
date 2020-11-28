@@ -1,0 +1,89 @@
+#29700
+Keeper:	29700
+ProfitBuy:	1.000000
+ProfitSell:	1.000000
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Flags:	0
+Races:	0
+Buytypes:	0
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	29716
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	29715
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	29714
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	29713
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	29712
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	29711
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	29710
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	29709
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	29708
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	29707
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	29706
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	29705
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	29704
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	29703
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	29702
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	29701
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	29700
+		Type:	Always
+		Stock:	0
+BREAK
+END

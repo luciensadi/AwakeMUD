@@ -1,0 +1,475 @@
+#22800
+Keeper:	22800
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	We don't serve that shit here.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	Yeah.. Come back when you're not a broke bastard.
+DoesntBuy:	The fuck do I look like, a pawn shop?
+Buy:	%d nuyen, cough it up.
+Sell:	Here's your %d nuyen.
+Name:	Jason's Bar & Grill
+Flags:	1100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	22807
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	22806
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	22801
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	22802
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	22803
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	22804
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	22805
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	39956
+		Type:	Always
+		Stock:	0
+BREAK
+#22820
+Keeper:	22820
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	We don't serve that here.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	Get lost, ya broke bastard.
+DoesntBuy:	We don't buy that.
+Buy:	It'll run ya %d nuyen, chummer.
+Sell:	Here's your %d nuyen.
+Name:	Ebey Pratt
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	22820
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	22821
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	22822
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	22823
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	22824
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	22825
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	22826
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	22827
+		Type:	Always
+		Stock:	0
+BREAK
+#22821
+Keeper:	22823
+ProfitBuy:	1.25
+ProfitSell:	0.10
+Random:	15
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	We don't fraggin' sell that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll cost ya %d fraggin' nuyen.
+Sell:	Here's your %d fraggin' nuyen.
+Name:	Ebey's Storeroom
+Flags:	0
+Races:	0
+Buytypes:	1000000000000000100000100001
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	62100
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	757
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	24544
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	22830
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	22831
+		Type:	Avail
+		Stock:	0
+BREAK
+#22830
+Keeper:	22830
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	6
+Close:	22
+Type:	Legal
+NoSuchItemKeeper:	I'm sorry, but we do not carry that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	Sorry, you'll have to pay the sticker price.
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Dadson Electronics
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	22858
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	22837
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	22836
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	22835
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	1182
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	28422
+		Type:	Avail
+		Stock:	0
+BREAK
+#22831
+Keeper:	22831
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	6
+Close:	22
+Type:	Legal
+NoSuchItemKeeper:	I'm sorry, but we do not carry that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	Sorry, you'll have to pay the sticker price.
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Dadson Linguasofts
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	22843
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	22842
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	22841
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	22840
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	22839
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	22838
+		Type:	Avail
+		Stock:	0
+BREAK
+#22832
+Keeper:	22832
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	6
+Close:	22
+Type:	Legal
+NoSuchItemKeeper:	I'm sorry, but we do not carry that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	Sorry, you'll have to pay the sticker price.
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Dadson Activesofts
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	22844
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	22845
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	22846
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	22847
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	22848
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	22849
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	22850
+		Type:	Avail
+		Stock:	0
+BREAK
+#22833
+Keeper:	22833
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	6
+Close:	22
+Type:	Legal
+NoSuchItemKeeper:	I'm sorry, but we do not carry that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	Sorry, you'll have to pay the sticker price.
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Dadson Vision
+Flags:	100
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	22851
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	22852
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	22853
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	22854
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	22855
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	22856
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	22857
+		Type:	Avail
+		Stock:	0
+BREAK
+#22850
+Keeper:	22854
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	8
+Close:	22
+Type:	Legal
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Bicson Biomedical
+Flags:	110
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	33250
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	33251
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	33260
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	33261
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	33255
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	33256
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	33263
+		Type:	Avail
+		Stock:	0
+BREAK
+#22851
+Keeper:	22855
+ProfitBuy:	1.00
+ProfitSell:	0.10
+Random:	0
+Open:	8
+Close:	22
+Type:	Legal
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	Bicson Biomedical
+Flags:	110
+Races:	0
+Buytypes:	1
+Etiquette:	44
+[SELLING]
+	[SELL 0]
+		Vnum:	33262
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	33254
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	33257
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	33258
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	33259
+		Type:	Avail
+		Stock:	0
+	[SELL 5]
+		Vnum:	33252
+		Type:	Avail
+		Stock:	0
+	[SELL 6]
+		Vnum:	33253
+		Type:	Avail
+		Stock:	0
+BREAK
+#22860
+Keeper:	22870
+ProfitBuy:	3.00
+ProfitSell:	0.10
+Random:	0
+Open:	6
+Close:	22
+Type:	Legal
+NoSuchItemKeeper:	I don't have anything like that..
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	I love guns.. But I love money just as much, chum.
+DoesntBuy:	Don't carry it, chum.
+Buy:	Comes to %d nuyen, chummer.
+Sell:	Here's your %d nuyen.
+Name:	Stanley's RGA
+Flags:	1100
+Races:	0
+Buytypes:	1
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	948
+		Type:	Avail
+		Stock:	0
+	[SELL 1]
+		Vnum:	949
+		Type:	Avail
+		Stock:	0
+	[SELL 2]
+		Vnum:	950
+		Type:	Avail
+		Stock:	0
+	[SELL 3]
+		Vnum:	951
+		Type:	Avail
+		Stock:	0
+	[SELL 4]
+		Vnum:	952
+		Type:	Avail
+		Stock:	0
+BREAK
+END

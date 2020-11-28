@@ -1,0 +1,135 @@
+#70400
+Keywords:	leshy guard plant-like humanoid
+Name:	a leshy guard
+RoomDesc:$
+A plant-like humanoid in leaf-and-moss garments stands guard on the pathway. 
+
+~
+LookDesc:$
+This humanoid appears rather plant-like, the impression reinforced by the fact
+its wearing leaf-and-moss garments, its rough skin, and green tinged hair that
+is messy and disheveled. He appears quite at home on this island, and seems to
+be guarding the place against intruders and trespassers. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	9
+	Qui:	8
+	Str:	9
+	Cha:	4
+	Int:	8
+	Wil:	8
+	Mag:	10
+[POINTS]
+	Height:	198
+	Weight:	90
+[SKILLS]
+	unarmed combat:	10
+BREAK
+#70401
+Keywords:	Sam Spade man old
+Name:	Sam Spade
+RoomDesc:$
+An old man smoking a cigar mixes up drinks at the bar here. 
+
+~
+LookDesc:$
+This old timer is puffing heavily upon a cuban cigar as he expertly mixes
+together drinks from every point across the globe, without much rhyme or
+reason aside from the fact that they're worth drinking. He seems to be quite
+old, but that certainly hasn't slowed him down when it comes to drinking,
+smoking or partying. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	2
+	Str:	3
+	Cha:	4
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	184
+	Weight:	80
+[SKILLS]
+BREAK
+#70402
+Keywords:	woman old caribbean
+Name:	an old Caribbean woman
+RoomDesc:$
+An old Caribbean woman tends to the BBQ pits in the back. 
+
+~
+LookDesc:$
+This woman is obviously a native to the nearby Caribbean, as her dark
+complexion and skin tone are apt to indicate. She is quite old, in fact,
+probably old enough to remember when the world was still a normal place, or as
+normal as it ever was. She masterfully handles the hot coals and pits with her
+old and rough hands, suggesting that this isn't the first time she's had to
+cook a meal. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	6
+	Str:	6
+	Cha:	8
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	183
+	Weight:	54
+[SKILLS]
+	unarmed combat:	8
+BREAK
+#70403
+Keywords:	Keymaster
+Name:	A keymaster
+RoomDesc:$
+A keymaster stands here making keys. 
+
+~
+LookDesc:$
+It's a keymaster. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	1
+	Qui:	2
+	Str:	3
+	Cha:	4
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+BREAK
+END

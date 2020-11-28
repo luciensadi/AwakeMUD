@@ -1,0 +1,33 @@
+#3400
+Name:	Pandora Null
+LongDesc:	A beautiful woman fabricated from shimmering hues floats around here.
+Description:$
+Shes breathtakingly beautiful.. and looks oddly familiar. Her body is
+compromised of shimmering waves of colours that range all across the spectrum
+of a rainbow. Although she is beautiful, the look upon her face is one of
+deathly seriousness. She narrows the glowing orbs that make up her eyes at
+you, debating what to do. 
+~
+Rating:	8
+Type:	^WProbe^n
+Subtype:	0
+Flags:	10000000
+Trap:	3401
+BREAK
+#3401
+Name:	Dev Null
+LongDesc:	A figure comprised of deathly shades of black floats here.
+Description:$
+Its quite obviously a masculine form, simply by looking at how it carries
+itself. The figure itself is comprised of pulsating shades of a deathly black
+colour, which seem horribly out of place in this node of beautiful colours and
+hues. Bright red pinpoints of light make up its pupils, while the rest of its
+face is all but cloaked by the shadows of darkness it seems to be carrying
+around with it. 
+~
+Rating:	8
+Type:	^LLethal Black^n
+Subtype:	0
+Flags:	0
+BREAK
+END

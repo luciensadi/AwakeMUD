@@ -1,0 +1,2357 @@
+#39200
+Keywords:	wage slave unassuming
+Name:	an unassuming wage slave
+RoomDesc:$
+An unassuming wage slave wanders through the area. 
+
+~
+LookDesc:$
+Busting his ass to make a days wage, this slave to the corporate machine has
+all but given up on life, but still isn't willing to let his trideo get
+unplugged. There is work to do, and bills to be paid, and this sorry little
+bastard is the blood that greases the gears. 
+~
+ArriveMsg:	wanders in from
+LeaveMsg:	wanders off
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	2
+	Str:	2
+	Cha:	2
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+	Cash:	20
+	Bank:	35
+[SKILLS]
+	unarmed combat:	2
+BREAK
+#39201
+Keywords:	cop Lone Star beat
+Name:	a Lone Star beat cop
+RoomDesc:$
+A Lone Star beat cop patrols the streets here. 
+
+~
+LookDesc:$
+Thoroughly trained at the academy to clean the riff-raff and BTL junkies off
+the streets, this beat cop might still be a little wet behind the ears, but
+he's more than willing to put himself out a limb to make sure criminals don't
+get their way. While fresh to the patrol, the hand cannon hanging off his belt
+may make criminals think twice about crossing him. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	2
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+[SKILLS]
+	pistols:	3
+	clubs:	3
+	police procedures:	4
+BREAK
+#39202
+Keywords:	officer cop lone star
+Name:	a Lone Star patrol officer
+RoomDesc:$
+A Lone Star patrol officer keeps an eye out for trouble makers here. 
+
+~
+LookDesc:$
+Decked out in an armoured vest and usually seen behind the wheel of a patrol
+vehicle, this cop does his best to cruise around the city proper and outlying
+areas to make sure criminals don't cause any trouble for the citizenry. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	2
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	pistols:	3
+	clubs:	3
+	police procedures:	4
+	driving/Car:	3
+BREAK
+#39203
+Keywords:	cop officer Lone Star Chromer Cop chromed-out patrol
+Name:	a Lone Star 'Chromer Cop' patrol officer
+RoomDesc:$
+A chromed-out Lone Star patrol officer surveys the area here. 
+
+~
+LookDesc:$
+Chromed-out and pissed off, it makes one wonder if this is just coincidence?
+Decked out with cybereyes and other bits and pieces of chrome that most beat
+cops aren't issued, this officer is the front line when criminals get out of
+hand and need to be taught a lesson in manners. His movements are fluid, and
+obviously enhanced to some degree, making this fuzz a bit more dangerous than
+other officers. 
+~
+ArriveMsg:	wanders in from
+LeaveMsg:	leaves
+MobFlags:	10000001000000001000
+AffFlags:	10001000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	1
+	Int:	3
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+	sub-machine guns:	4
+	clubs:	3
+	police procedures:	4
+BREAK
+#39204
+Keywords:	businessman well-dressed
+Name:	a well-dressed businessman
+RoomDesc:$
+A well-dressed businessman wanders through the area. 
+
+~
+LookDesc:$
+Fairly well-dressed and sporting a clean and pressed suit, this businessman
+has clawed his way up the corporate ladder and stepped over many of his wage
+slave breathren, all for an extra ten cents an hour. 
+~
+ArriveMsg:	arrives hastily from
+LeaveMsg:	leaves hastily
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	2
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	25
+	Bank:	45
+[SKILLS]
+	unarmed combat:	2
+BREAK
+#39205
+Keywords:	bicyclist ten-speed
+Name:	a bicyclist riding a ten-speed
+RoomDesc:$
+A bicyclist riding a ten-speed peddles through the area. 
+
+~
+LookDesc:$
+This bicyclist is trying to keep fit, or at least that is the assumption, why
+else would someone ride a ten-speed? He looks quite athletic, especially when
+compared to the weak and pale wage slaves he peddles past. 
+~
+ArriveMsg:	peddles in from
+LeaveMsg:	peddles off to the
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	4
+	Str:	2
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	25
+	Bank:	30
+[SKILLS]
+	unarmed combat:	2
+BREAK
+#39206
+Keywords:	ucas metroplex guard citymaster ares patrol vehicle
+Name:	A UCAS Metroplex Guard patrol vehicle
+RoomDesc:$
+An Ares Citymaster with UCAS Metroplex Guard markings rolls through. 
+
+~
+LookDesc:$
+A very large, armored to the hilt Ares Citymaster with UCAS Metroplex Guard
+markings.  Gun turrets are mounted on each side with heavy machine guns. A
+small tinted armored glass pane protects the driver on the inside from any
+direct fire. 
+~
+ArriveMsg:	rolls in from
+LeaveMsg:	rolls
+MobFlags:	100000000000010000000000000011000
+AffFlags:	1000000000
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+AttackType:	Machine Gun
+[ATTRIBUTES]
+	Bod:	15
+	Qui:	15
+	Str:	20
+	Cha:	2
+	Int:	15
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	350
+	Weight:	2000
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	unarmed combat:	9
+BREAK
+#39207
+Keywords:	pedestrian
+Name:	a pedestrian
+RoomDesc:$
+A pedestrian walks along here. 
+
+~
+LookDesc:$
+An average Joe, nothing fancy about this guy. He's on foot and doing his best
+to get to where he needs to be. His gaze is lowered in an anti-social manner,
+not bothering to lift it until he needs to watch out for traffic. 
+~
+ArriveMsg:	walks in from
+LeaveMsg:	walks off
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	5
+	Str:	3
+	Cha:	2
+	Int:	2
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	60
+	Ballistic:	2
+	Impact:	3
+	Cash:	50
+	Bank:	65
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#39208
+Keywords:	employee Stuffer Shack
+Name:	a Stuffer Shack employee
+RoomDesc:$
+A Stuffer Shack employee mans the cash register here. 
+
+~
+LookDesc:$
+A young dwarf by the looks of it, probably not even out of his teens. He seems
+more interested in the trideo he is constantly flipping through channels on
+whenever he isn't ringing up purchases, and only glances up occasionally to
+make sure he doesn't have to mash the PanicButton(TM), if, heaven forbid,
+someone tried to rob the joint. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Dwarf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	4
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	150
+	Weight:	80
+[SKILLS]
+BREAK
+#39209
+Keywords:	receptionist friendly hotel Gala Inn
+Name:	a friendly hotel receptionist
+RoomDesc:$
+A friendly hotel receptionist sits behind the front desk here. 
+
+~
+LookDesc:$
+The receptionist is relatively friendly by most standards, and is more than
+willing to help book a guest a room for the night. He's middle-aged, and has
+learned by now that it's best for business for everyone when the guests
+privacy is respected. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+BREAK
+#39210
+Keywords:	drink salesman
+Name:	a drink stand salesman
+RoomDesc:$
+A drink stand salesman is here at his stand, peddling his beverages. 
+
+~
+LookDesc:$
+Standing in the shade of his stand, this purveyor of beverages is attempting
+to peddle his drinks to thirsty tourists and locals alike. All of the prices
+are listed clearly on the front of his stand. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	4
+	Str:	3
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	unarmed combat:	2
+BREAK
+#39211
+Keywords:	tourist
+Name:	a shore front tourist
+RoomDesc:$
+A tourist is here, enjoying the shore front. 
+
+~
+LookDesc:$
+This tourist is enjoying their time at the shore front, between enjoying the
+view and soaking up the sun, their days seem to be pretty full of the pursuit
+of relaxation. 
+~
+ArriveMsg:	waddles in from
+LeaveMsg:	waddles off
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	2
+	Cha:	3
+	Int:	3
+	Wil:	3
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	45
+	Bank:	45
+[SKILLS]
+	unarmed combat:	2
+BREAK
+#39212
+Keywords:	fisherman old dwarven
+Name:	an old dwarven fisherman
+RoomDesc:$
+An old dwarven fisherman stands at the end of the dock, fishing. 
+
+~
+LookDesc:$
+He's an old, grizzled little dwarf, who apparently enjoys spending his time
+fishing. He doesn't look to be much for conversation, and instead, seems to
+prefer to spend his days staring out over Puget Sound, waiting for a bite. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Dwarf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	5
+	Cha:	3
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	140
+	Weight:	90
+	Cash:	105
+[SKILLS]
+	whips & flails:	4
+BREAK
+#39213
+Keywords:	owner bait shop
+Name:	a bait shop owner
+RoomDesc:$
+A bait shop owner is here, hustling his bait. 
+
+~
+LookDesc:$
+The owner of the bait shop, obviously. He sits behind the counter, trying to
+sell off his wares to both local fishermen and tourists, who he can hike the
+prices up for and make a bundle. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+BREAK
+#39220
+Keywords:	Delmer Morin owner
+Name:	Delmer Morin
+RoomDesc:$
+Delmer Morin stands behind the counter here, helping customers. 
+
+~
+LookDesc:$
+His wisened white hair is a good reference to his age, though he doesn't look
+to be quite as old as it would suggest. Gold wire rimmed spectables sit upon a
+pert nose, which is usually tucked into a book when he's not helping customers
+out with purchases. He lifts his gaze occasionally as potential customers
+enter or leave, just to double check they haven't lifted anything without
+paying for it. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	4
+	Cha:	5
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	negotiation:	5
+BREAK
+#39221
+Keywords:	Estelle Richmond dark-skinned woman
+Name:	Estelle Richmond
+RoomDesc:$
+A dark-skinned woman is serving up drinks from behind the bar. 
+
+~
+LookDesc:$
+Dark skin and inky black hair frame a serious face, her eyes the colour of
+stained brown mahogany. She wipes down the bar every so often to keep it
+polished and free of condensation from the drinks. She doesn't talk much, and
+instead, seems content just to serve and keep her customers full of booze. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	5
+	Str:	4
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#39222
+Keywords:	drunkard old man
+Name:	an old drunkard
+RoomDesc:$
+An old drunkard is at the bar, drowning his sorrows in a pint or five. 
+
+~
+LookDesc:$
+He's an old ork with rough tusks, which seem to have taken some abuse over the
+years. His hair is thin and turning grey, and the fact that he's downing pints
+one after another is a clear indication that he doesn't quite care to keep
+healthy. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	2
+	Qui:	3
+	Str:	3
+	Cha:	2
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	90
+	Cash:	125
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#39223
+Keywords:	dockworker ragged
+Name:	a ragged dockworker
+RoomDesc:$
+A ragged dockworker is here, enjoying a drink. 
+
+~
+LookDesc:$
+Rather ragged in appearance, which is to be expected from those who work their
+finger to the bone to earn a living. Think being a shadowrunner is hard work?
+Trying working a six to ten job at the docks, an honest days work for a slave
+wage. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	5
+	Str:	6
+	Cha:	2
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Cash:	85
+	Bank:	50
+[SKILLS]
+	unarmed combat:	5
+BREAK
+#39224
+Keywords:	businesswoman woman low-level
+Name:	a low-level businesswoman
+RoomDesc:$
+A low-level businesswoman is here, trying to relax. 
+
+~
+LookDesc:$
+Well dressed and sporting a relatively chic business suit, she is probably a
+low to mid level corporate slave, earning just enough to live comfortably.
+Granted, corporate life isn't all it is chalked up to be, as can be noted by
+the amount of alcohol she seems intent on imbibing as she relaxes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Elf
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	6
+	Str:	3
+	Cha:	5
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+	Cash:	85
+	Bank:	55
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#39225
+Keywords:	Rex Jackson slick businessman suit johnson
+Name:	Rex Jackson
+RoomDesc:$
+A man wearing a slick business suit is here, relaxing. 
+
+~
+LookDesc:$
+Sporting a slick business suit, cut for the corporate elite, this stout
+dwarven fellow practically oozes with cred. Which is odd, considering his
+choice in places to have a drink... Perhaps he has a different agenda for
+being here? 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Dwarf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	4
+	Str:	6
+	Cha:	4
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	140
+	Weight:	80
+[SKILLS]
+BREAK
+#39226
+Keywords:	gentleman fairly dark skinned
+Name:	A fairly dark skinned gentleman
+RoomDesc:$
+A fairly dark skinned gentleman is seated in the booth here. 
+
+~
+LookDesc:$
+This confident gentleman has hooded brown eyes, and his thick, straight
+chestnut coloured hair is short and is worn in a businesslike, practical
+style. He is very tall and has a slender build, with skin the colour of
+creamed coffee. He has a hooked nose and his choice in wardrobe has a
+professional touch to it. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	80
+[SKILLS]
+	unarmed combat:	8
+BREAK
+#39230
+Keywords:	Concierge snooty well-dressed
+Name:	a well-dressed snooty concierge
+RoomDesc:$
+A well-dressed snooty concierge checks reservations at the door here. 
+
+~
+LookDesc:$
+Tall and slender, with delicate elven features, he keeps his nose up and his
+posture straight. His snooty nature is almost surely due to the fact that he
+has a French accent, so pretty much anything that leaves his lips has the
+insinuation that it is too good for your ears. He checks reservations and
+seats individuals, and ofcourse, he seats the ones who tip well the fastest. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	5
+	Str:	3
+	Cha:	6
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Cash:	85
+[SKILLS]
+BREAK
+#39231
+Keywords:	bartender sophistication
+Name:	a bartender with an air of sophistication
+RoomDesc:$
+A bartender with an air of sophistication about him serves up drinks here. 
+
+~
+LookDesc:$
+Dressed up in a classy tender outfit, even the buttons upon his vest shine
+with careful dedication to polishing. He takes orders and gets them to the
+customers in the blink of an eye, and is always partial to a tip or two every
+now and again. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+BREAK
+#39232
+Keywords:	diners classy group
+Name:	a group of classy diners
+RoomDesc:$
+A group of classy diners is here, enjoying a meal and a chat. 
+
+~
+LookDesc:$
+This group of classy diners are all dressed up, or as well as mid-level
+corpsters can be, granted a few of them are dressed above their league in an
+attempt to save face. They're chatting and going on about the food, the news,
+the weather, all of meaningless things in life that are a perfect topic of
+conversation over a dish. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Undefined
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	0
+	Qui:	0
+	Str:	0
+	Cha:	0
+	Int:	0
+	Wil:	0
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Cash:	85
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#39233
+Keywords:	waitress finely dressed
+Name:	a finely dressed waitress
+RoomDesc:$
+A finely dressed waitress is making her rounds through the restaurant here. 
+
+~
+LookDesc:$
+Finely dressed and moving with a grace that notes years of practice, this
+waitress moves amongst the tables one by one, seeing to all the needs of
+diners. 
+~
+ArriveMsg:	makes her rounds in from
+LeaveMsg:	makes her rounds off to the
+MobFlags:	1000000000000000000000000001000
+AffFlags:	0
+Race:	Elf
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	4
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#39234
+Keywords:	Weston Lynn elven man suit
+Name:	Weston Lynn
+RoomDesc:$
+An elven man wearing a tailored suit is seated here, enjoying a meal. 
+
+~
+LookDesc:$
+Decked out in a suit that you could probably never afford, and wearing
+sunglasses (yes, while inside) that the devil himself would be envious of,
+this elven gentleman seems to be about business, and a decent bite to eat. His
+reserved table is always open, it seems, denoting his comfort and common place
+here at the Gravity Bar North. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Elf
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	4
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+BREAK
+#39240
+Keywords:	bouncer Japanese biggest guard large
+Name:	A large Japanese bouncer
+RoomDesc:$
+The biggest Jap you've ever seen works bouncer duty at the entrance. 
+
+~
+LookDesc:$
+Quite literally the biggest asian you've ever had the displeasure of having
+stand infront of you for any reason, this bouncer is not only natural built,
+but obviously chromed to the gills. His suit seems a bit tight around the
+shoulders and arms, most likely due to being crammed full of the latest muscle
+augmentations, while his movements are fluid and unreasonably graceful for
+someone his size. It may be best to wait your turn to be waved into the
+nightclub, rather than step on this big bastards toes. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	4
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	200
+	Weight:	100
+	Ballistic:	5
+	Impact:	5
+	Cash:	125
+[SKILLS]
+	unarmed combat:	6
+	clubs:	6
+BREAK
+#39241
+Keywords:	bartender Japanese cyber-eyes
+Name:	A Japanese bartender
+RoomDesc:$
+A Japanese bartender with ^Wwhite^N cyber-eyes serves drinks at the bar. 
+
+~
+LookDesc:$
+Decked out in casual business attire one would expect from a low level suit,
+consisting of slacks and a crisp white collared shirt, pressed so neatly that
+you can nearly smell the synth-starch. Flawless, milky white cyber-eyes stare
+blankly as he moves from customer to customer, swiftly and smoothly serving up
+drinks with a grace that hints towards further cyberization. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	4
+	Cha:	5
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	80
+[SKILLS]
+BREAK
+#39242
+Keywords:	punk young yakuza
+Name:	a young yakuza punk
+RoomDesc:$
+A young yakuza punk is here, harassing the locals. 
+
+~
+LookDesc:$
+Just one of many of the younger, low level soldiers in the Yakuza's employ.
+Branded with multiple traditional Japanese tattoos to look the part, this one
+is young, dumb, and full of ambition, and not an ounce of class to his name.
+He seems to have had a few too many drinks, and as a result of which is
+getting a bit too opinionated about the non-Japanese locals at the nightclub.
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10000000100001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	5
+	Cha:	2
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Ballistic:	3
+	Impact:	3
+[SKILLS]
+	unarmed combat:	5
+BREAK
+#39243
+Keywords:	habituate nightclub
+Name:	a nightclub habituate
+RoomDesc:$
+A nightclub habituate mingles with the locals here. 
+
+~
+LookDesc:$
+Probably some low level Japanese suit, out for a night on the town, or as far
+as his corporate paycheck will take him at least. When they aren't taking in
+the scenery of chatting it up with the locals, their attention is glued on the
+stages nearby. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	4
+	Str:	3
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	65
+	Bank:	45
+[SKILLS]
+	unarmed combat:	2
+BREAK
+#39244
+Keywords:	wannabe clubber
+Name:	a wannabe clubber
+RoomDesc:$
+A wannabe clubber is outside here, dejectedly waiting in line. 
+
+~
+LookDesc:$
+This poser has been trying desperately to get into this nightclub for weeks
+probably, without success. Maybe it was the clothes? Too clean, too neat, not
+gritty enough to be real, they scream wannabe or rich kid out for a night on a
+town. No wonder they haven't managed to get in yet. Ahwell, to the back of the
+line again. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	3
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	35
+	Bank:	40
+[SKILLS]
+	unarmed combat:	2
+BREAK
+#39245
+Keywords:	woman japanese business
+Name:	a Japanese business woman
+RoomDesc:$
+A Japanese business woman mills through the club, enjoying her drink. 
+
+~
+LookDesc:$
+Sporting a clean and pressed womans business suit, thanks to her respective
+employer, whom she probably works her fingers to the bone for. Japanese, or at
+the least, asian in appearance, her familiarity with the surroundings denotes
+the fact she probably spends her time here at least one night a week. 
+~
+ArriveMsg:	strides in from
+LeaveMsg:	strides off to the
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+AttackType:	Claw
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	5
+	Str:	3
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+	Cash:	55
+	Bank:	35
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#39246
+Keywords:	chubby yakuza low-life man fat
+Name:	chubby yakuza low-life
+RoomDesc:$
+A chubby yakuza low-life is here, enjoying the show. 
+
+~
+LookDesc:$
+This chubby yak sports the fact of his affiliation on his sleeve, so to speak,
+and the fact that he is Japanese is pretty hard to miss, considering his
+choice in traditional clothing. He sports a shaved, almost shiny bald head
+with only a ponytail to speak of, which is pulled back and tied accordingly.
+He seems intent on giving the ladies around him a hard time, and is usually
+drooling over them when he's not enjoying the show on stage. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	3
+	Str:	5
+	Cha:	3
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	140
+	Ballistic:	2
+	Impact:	2
+	Cash:	85
+	Bank:	95
+[SKILLS]
+	unarmed combat:	5
+BREAK
+#39247
+Keywords:	bodyguard yakuza obviously cybered
+Name:	An obviously cybered Yakuza bodyguard
+RoomDesc:$
+An obviously cybered Yakuza bodyguard is watching the back office here. 
+
+~
+LookDesc:$
+Dressed in a slick black suit with sleek, with polished chrome 'enhancements'
+added tastefully to his slender physique, this bodyguard surely looks the
+part. A barely concealed SMG is tucked at his side, one hand permanently glued
+to its grip, just waiting for someone to give him a reason to use it. He is
+obviously guarding the back office here, making sure nobody gets in without an
+invitiation, or leaves in a bodybag. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	100
+	Ballistic:	3
+	Impact:	3
+	Cash:	185
+[SKILLS]
+	sub-machine guns:	7
+	unarmed combat:	6
+	clubs:	5
+BREAK
+#39248
+Keywords:	bodyguard Yakuza slick
+Name:	A slick looking Yakuza bodyguard
+RoomDesc:$
+A slick looking Yak bodyguard with a katana slung over his shoulder is here. 
+
+~
+LookDesc:$
+Dressed to kill in a slick black suit with matching shades, this modern day
+samurai has almost all of his visible flesh covered in a full body tattoo,
+depicting several clashing traditional Japanese works of art battling one
+another. His gaze moves around the area, seemingly staring through patrons,
+his piercing gaze not missing a single thing around him. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000011010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	4
+	Impact:	4
+	Cash:	115
+[SKILLS]
+	edged weapons:	7
+	unarmed combat:	7
+BREAK
+#39249
+Keywords:	Hirafuku Yoshito yakuza kobun
+Name:	Hirafuku Yoshito
+RoomDesc:$
+Hirafuku Yoshito, the Yakuza kobun, is seated in a chair here. 
+
+~
+LookDesc:$
+This is Hirafuku Yoshito, acting kobun for the local Yakuza in the Everett
+area. He looks the part of a criminal underworld figure, and even at first
+glance you can tell he is used to being feared or respected, and often both at
+the same time. An unforgiving gaze falls upon his subordinates when he issues
+orders, and isn't one to take being crossed lightly. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+	Ballistic:	3
+	Impact:	3
+	Cash:	225
+[SKILLS]
+	unarmed combat:	6
+	edged weapons:	6
+BREAK
+#39250
+Keywords:	bodyguard Yakuza deadly
+Name:	a deadly looking Yakuza bodyguard
+RoomDesc:$
+A deadly looking Yakuza bodyguard is here, waiting to strike. 
+
+~
+LookDesc:$
+Trained since a young age to be a bodyguard, it becomes quite obvious when he
+draws his blade that he intends to put it to good use. This Yakuza underling
+is loyal, lethal, and above all else, doesn't question his superiors, making
+him perfect for the role of kamikazi fodder. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000111010
+AffFlags:	10000000000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	8
+[POINTS]
+	Height:	170
+	Weight:	70
+	Ballistic:	6
+	Impact:	6
+	Cash:	85
+[SKILLS]
+	edged weapons:	7
+	unarmed combat:	6
+BREAK
+#39251
+Keywords:	asian businessman
+Name:	an asian businessman
+RoomDesc:$
+An asian businessman is here, out for a night on the town. 
+
+~
+LookDesc:$
+Dressed up in his finest corp purchased suit, this asian businessman is
+certainly looking to party. Who knows, by the end of the night, he'll have a
+lampshade on his head, and may even sing karaoke. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	10001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	3
+	Qui:	3
+	Str:	4
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+	Cash:	50
+	Bank:	50
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#39252
+Keywords:	Mister Zaibatsu old Japanese businessman
+Name:	Mister Zaibatsu
+RoomDesc:$
+An old Japanese businessman is here, enjoying some tea. 
+
+~
+LookDesc:$
+Dressed in a slick black business suit that would take most people a year or
+two to save up for, his appearance practically screams 'corp suit'. He is
+rather old, his hair having turned white quite a while back, hinted at by the
+few crows feet and a few frown lines adorning his face. He looks wise, and he
+must be, considering he's gotten this far in life without getting geeked. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+[SKILLS]
+	unarmed combat:	4
+BREAK
+#39253
+Keywords:	Mister Keiretsu businessman young suit Johnson
+Name:	Mister Keiretsu
+RoomDesc:$
+A young businessman dressed to kill is here, enjoying a drink. 
+
+~
+LookDesc:$
+Sporting the latest and greatest in all the bells and whistles that set off
+alarm bells for runners in the shadows, this young businessman is obviously in
+the "Asset Management" line of work. Although rather young, his gaze alone and
+stoic expression denote the fact that he works with snakes and serpents, day
+in, day out, and is still quite alive, and doing very well. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	unarmed combat:	5
+BREAK
+#39293
+Keywords:	woman frightened abused young
+Name:	a frightened and abused young woman
+RoomDesc:$
+A frightened and abused young woman is here, cowering. 
+
+~
+LookDesc:$
+She looks rather young, perhaps in her mid-twenties or there abouts, but the
+abuse she has seen certainly has taken its toll on her looks. She must have
+been quite good looking at one point or another, but her slightly swollen eyes
+and cheeks, most likely from crying, make her seem a bit older and worse for
+wear. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	4
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+[SKILLS]
+BREAK
+#39294
+Keywords:	man frightened extremely
+Name:	an extremely frightened looking man
+RoomDesc:$
+An extremely frightened looking man is here, absolutely terrified. 
+
+~
+LookDesc:$
+He looks.. Well, scared shitless. His face is covered in cuts and bruises, and
+his wrists show tell tale signs of having been binded, having rubbed raw the
+flesh upon them. He walks with a noticable limp, but seems more than eager to
+get moving once he's told to. 
+~
+ArriveMsg:	limps in from
+LeaveMsg:	limps off
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Ballistic:	5
+	Impact:	5
+[SKILLS]
+	unarmed combat:	2
+BREAK
+#39295
+Keywords:	alfredo fist mafia mafioso
+Name:	Alfredo the Fist
+RoomDesc:$
+Alfredo the Fist stands here, looking pissed off. 
+
+~
+LookDesc:$
+Better known as "The Fist" within his branch of the familia, Alfredo is an
+enforcer of quite some reputation, having earned it by being ruthless and
+merciless when it comes to business matters. He is not known to use half
+measures, and believes that everything can be solved by applying the right
+amount (IE, too much) violence. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	111010
+AffFlags:	1000000000
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	12
+	Str:	14
+	Cha:	6
+	Int:	8
+	Wil:	6
+	Mag:	12
+[POINTS]
+	Height:	190
+	Weight:	90
+	Level:	14
+	Ballistic:	14
+	Impact:	14
+	Cash:	300
+[SKILLS]
+	unarmed combat:	10
+	clubs:	10
+BREAK
+#39296
+Keywords:	bodyguard mafia heavyset
+Name:	a heavyset mafia bodyguard
+RoomDesc:$
+A heavyset mafia bodyguard stands on lookout duty here. 
+
+~
+LookDesc:$
+He has a stocky build, even for an ork, and it gives him an imposing demeanor.
+The fact that he's toting a fully automatic sidearm certainly helps with the
+look, of course, as does the slick suit and serious attitude he's sporting. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	111010
+AffFlags:	1000000000
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	13
+	Qui:	9
+	Str:	12
+	Cha:	3
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	100
+	Ballistic:	12
+	Impact:	12
+	Cash:	250
+[SKILLS]
+	unarmed combat:	8
+	clubs:	8
+	sub-machine guns:	8
+	shotguns:	8
+BREAK
+#39297
+Keywords:	bodyguard mafia heavyset
+Name:	a heavyset mafia bodyguard
+RoomDesc:$
+A heavyset mafia bodyguard stands on lookout duty here. 
+
+~
+LookDesc:$
+He has a stocky build, even for an ork, and it gives him an imposing demeanor.
+The fact that he's toting a fully automatic sidearm certainly helps with the
+look, of course, as does the slick suit and serious attitude he's sporting. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101010
+AffFlags:	1000000000
+Race:	Ork
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	13
+	Qui:	9
+	Str:	12
+	Cha:	3
+	Int:	5
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	190
+	Weight:	100
+	Ballistic:	12
+	Impact:	12
+	Cash:	250
+[SKILLS]
+	unarmed combat:	8
+	clubs:	8
+	sub-machine guns:	8
+	shotguns:	8
+BREAK
+#39298
+Keywords:	mafioso tubby suit
+Name:	a tubby mafioso wearing a fine suit
+RoomDesc:$
+A tubby mafioso wearing a fine suit is here, waiting for something. 
+
+~
+LookDesc:$
+He's a bit overweight... Well, that's an understatement, but at least he has
+the good sense to get his tailored suit cut to fit his girth, so he's still
+looking stylish. He impatiently taps his foot as he waits for something, most
+likely looking for a good time here at this establishment of ill repute. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Punch
+[ATTRIBUTES]
+	Bod:	8
+	Qui:	6
+	Str:	8
+	Cha:	4
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	90
+	Ballistic:	8
+	Impact:	8
+	Cash:	250
+	Bank:	200
+[SKILLS]
+	unarmed combat:	7
+BREAK
+#39299
+Keywords:	wyvern large barbed tail
+Name:	a large wyvern with a long barbed tail
+RoomDesc:$
+A large wyvern with a long barbed tail is circling through the air here. 
+
+~
+LookDesc:$
+This wyvern is quite large, much larger than most found in the region. Its
+scales are of a light dusty brown colour, which darkens along the length of
+its spine. Its claws and teeth look quite nasty, but its lengthy tail is
+blatantly more dangerous, atop of which is a wicked looking spiked barb, which
+drips occasionally with venom. It'd be best to be very wary of that baby. 
+~
+ArriveMsg:	swoops in from
+LeaveMsg:	disappears with a buffet of scaley wings, flying off
+MobFlags:	111000
+AffFlags:	0
+Race:	Troll
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Sting
+[ATTRIBUTES]
+	Bod:	12
+	Qui:	8
+	Str:	14
+	Cha:	6
+	Int:	4
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	350
+	Weight:	300
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+	unarmed combat:	10
+BREAK
+#39300
+Keywords:	salesclerk pied pipers
+Name:	A Pied Pipers salesclerk
+RoomDesc:$
+A salesclerk for The Pied Pipers is working the floor here. 
+
+~
+LookDesc:$
+Friendly and greeting customers with a warm smile, that's the way to do
+business.. As long as it's the legal kind. Earning a decent wage is easily the
+most demeaning of all forms of labour, since it includes socializing with all
+sorts of scum bags and seedy customers who probably can't even afford any of
+these instruments. But, he doesn't miss a beat, his insanity intact after day
+in and day out of selling the same exact thing. Truly, he is a champion
+amongst wage slaves. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	6
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	negotiation:	4
+	unarmed combat:	4
+BREAK
+#39301
+Keywords:	clerk street urchin chic retail
+Name:	A Street Urchin Chic retail clerk
+RoomDesc:$
+A Street Chic retail clerk is here, selling clothes. 
+
+~
+LookDesc:$
+Standing around and helping customers who pick over and complain about
+clothing, that's the life of a retail salesclerk. This particular employee
+seems unmotivated, which actually does with the atmosphere inside of the shop,
+fitting right into the genre of customers their goods are aimed at. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	departs
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	6
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	negotiation:	4
+	unarmed combat:	4
+BREAK
+#39302
+Keywords:	Employee Delicatessen Downtown
+Name:	A Downtown Delicatessen employee
+RoomDesc:$
+A Downtown Delicatessen employee is here, serving up fresh sammiches. 
+
+~
+LookDesc:$
+Slicing and dishing out meat stuffed sammiches seems to be the gameplan, and
+the faster the line moves, the more yen that is sure to make its home in the
+cash register. All of the sandwiches and salads are made fresh each day, and
+this employee is doing his best to make sure everyone is satisfied with their
+purchases. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	departs
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	6
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	negotiation:	4
+	unarmed combat:	4
+BREAK
+#39303
+Keywords:	attendant Delicious Desserts
+Name:	A Delicious Desserts attendant
+RoomDesc:$
+A Delicious Desserts attendant is here, dishing out frozen sweets. 
+
+~
+LookDesc:$
+A slender young dame sees to the needs of the masses here, expertly commanding
+the machines to make magic before she reaps the plentiful bounty of frozen
+deserts an dishes them out in no time flat. Unfortunately, repetitive
+movements have dulled her personality, and has become nothing more than a
+slave zombie to the fat bastards who constantly crave these frozen treats. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	departs
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	6
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	negotiation:	4
+	unarmed combat:	4
+BREAK
+#39304
+Keywords:	Salesman eager fanciful furniture
+Name:	An eager, Fanciful Furniture floor salesman
+RoomDesc:$
+An eager, Fanciful Furniture floor salesman is here, looking for customers. 
+
+~
+LookDesc:$
+This eager salesman is doing his best to make a sale, any sale will do. It's
+all about making the quota, afterall, so buttering up possible customers is
+mandatory in his line of work. He slinks from patron to patron as they carouse
+the shops wares on display, intent on finding an easy mark. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	departs
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	6
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	negotiation:	4
+	unarmed combat:	4
+BREAK
+#39305
+Keywords:	Wang owner store sporting goods
+Name:	Wang, the owner of the store
+RoomDesc:$
+Wang, the owner of the store mans the register here. 
+
+~
+LookDesc:$
+Good old Wang, he sure has some snazzy goods. He's middle aged and still in
+retail, which is normally a death sentence, or a quick route to suicide. Tsk
+tsk. Wang, however, is unerringly upbeat about his lot in life though, and
+seems to actually enjoy what he does for a living. Now that's just plain
+weird. He greets customers with a smile and politely offers them a look around
+his store. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	6
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	negotiation:	4
+	unarmed combat:	4
+BREAK
+#39306
+Keywords:	employee activesoft central
+Name:	An ActiveSoft Central employee
+RoomDesc:$
+An ActiveSoft Central employee is here, manning the register. 
+
+~
+LookDesc:$
+She definitely looks like a tech head, which is just a nice way of saying
+nerd. Staring at computer screens and punching up sales all day have earned
+her a thick pair of glasses, which certainly help to add to her already
+'classy' appearance. She sifts through chips and scans them before bagging
+them off for customers, not so much as even attempting to offer a smile in the
+process. Socializing is for chumps, afterall. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	departs
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Female
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	6
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	160
+	Weight:	50
+[SKILLS]
+	negotiation:	4
+	unarmed combat:	4
+BREAK
+#39307
+Keywords:	employee overweight linguasoft employee
+Name:	An overweight LinguaSoft Central employee
+RoomDesc:$
+An overweight LinguaSoft Central employee sits behind his register here. 
+
+~
+LookDesc:$
+Well, it's probably a safe bet to assume this guy uses the elevator each and
+every day. Maybe the gut gave it away? Or the stack of wrappers from the
+nearby food court he apparently seems to have devoured for the day? He isn't
+exactly friendly, but he knows everything about everything in the store, which
+is languages. He will kindly insult you as he explains the nuances and
+characteristics of different languages like they were a flavour of his
+favourite ice cream. Hey, at least he's passionate about his work. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	departs
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	6
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	negotiation:	4
+	unarmed combat:	4
+BREAK
+#39308
+Keywords:	salesman microdeck outlet
+Name:	A Microdeck Outlet salesman
+RoomDesc:$
+A Microdeck Outlet salesman helps customers out with their purchases here. 
+
+~
+LookDesc:$
+Sporting a clean and pressed business shirt and slacks, this employee is
+dressed for success in the land of retail. He strums away upon the computer
+next to the register and credstick readers all day, looking up item numbers
+and information about their stocked values. He is quick to answer and offer
+his help whenever possible, especially if it means making a sale. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	departs
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	6
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	negotiation:	4
+	unarmed combat:	4
+BREAK
+#39309
+Keywords:	employee survival store
+Name:	A Survival Store employee
+RoomDesc:$
+A Survival Store employee is here, helping out customers. 
+
+~
+LookDesc:$
+He seems fairly knowledgable about hiking, outdoors survival, and all other
+bits and pieces of information that prove useful in this line of work. He
+answers the questions posed by customers in a well spoken, yet blunt manner,
+coming off with an odd mixture of intensity and responsibility one would
+expect from a survival expert. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	departs
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	6
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	negotiation:	4
+	unarmed combat:	4
+BREAK
+#39310
+Keywords:	attending eye spy cybereyes
+Name:	An Eye Spy Cybereyes attending
+RoomDesc:$
+An Eye Spy Cybereyes attending is here, scheduling in customers. 
+
+~
+LookDesc:$
+This woman seems quite professional, from her attire to her attitude, both of
+which are neat and tidy. She offers potential customers and clients a warm
+smile, and gladly helps them with any questions they may have about the
+procedures performed here. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	departs
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	6
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	negotiation:	4
+	unarmed combat:	4
+BREAK
+#39311
+Keywords:	Simon cyberware odds ends
+Name:	Simon, the owner of the store
+RoomDesc:$
+Simon, the owner of the store is here, helping potential patients. 
+
+~
+LookDesc:$
+Here is Simon, the head honcho over at the Cyberware Odds and Ends store,
+which he runs more like a clinic considering the merchadise they have for sale
+here. He's middle aged, with streaks of grey showing, giving him a somewhat
+elderly appearance, though in a good way, since it adds to his perceived
+professionalism. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	departs
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	6
+	Cha:	5
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	70
+[SKILLS]
+	negotiation:	4
+	unarmed combat:	4
+BREAK
+#39312
+Keywords:	goer mall noisy
+Name:	a noisy mall goer
+RoomDesc:$
+A noisy mall goer shuffles through the area here. 
+
+~
+LookDesc:$
+They seem to be more interested in finding good deals than they are about
+actually socializing with the rest of the crowd gathered here. In between
+stuffing their faces at the food court, and perusing the wares of various
+outlets in the mall, they still find time to be horrible parents to the badass
+children they're dragging around with them. 
+~
+ArriveMsg:	shuffles in from
+LeaveMsg:	shuffles off
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	3
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	80
+	Cash:	55
+	Bank:	60
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#39313
+Keywords:	goer mall noisy
+Name:	a noisy mall goer
+RoomDesc:$
+A noisy mall goer shuffles through the area here. 
+
+~
+LookDesc:$
+They seem to be more interested in finding good deals than they are about
+actually socializing with the rest of the crowd gathered here. In between
+stuffing their faces at the food court, and perusing the wares of various
+outlets in the mall, they still find time to be horrible parents to the badass
+children they're dragging around with them. 
+~
+ArriveMsg:	shuffles in from
+LeaveMsg:	shuffles off
+MobFlags:	1000
+AffFlags:	0
+Race:	Human
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	4
+	Str:	3
+	Cha:	3
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	80
+	Cash:	55
+	Bank:	60
+[SKILLS]
+	unarmed combat:	3
+BREAK
+#39314
+Keywords:	guard security lightly armed mall
+Name:	a lightly armed mall security guard
+RoomDesc:$
+A lightly armed mall security guard patrols the outlets here. 
+
+~
+LookDesc:$
+He isn't heavily armed, since after all, he's barely above rent-a-cop status.
+However, that won't stop him from taking his billy club to anyone who gives
+him trouble, either that or a face full of pepper spray. Fortunately, most of
+his time is spent chasing down young punks or older shoplifters, so he doesn't
+have to be in the greatest of shape to get the job done. 
+~
+ArriveMsg:	wanders in from
+LeaveMsg:	continues his patrol
+MobFlags:	10000000000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	2
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Cash:	25
+	Bank:	65
+[SKILLS]
+	unarmed combat:	3
+	clubs:	4
+BREAK
+#39315
+Keywords:	guard security lightly armed mall
+Name:	a lightly armed mall security guard
+RoomDesc:$
+A lightly armed mall security guard patrols the outlets here. 
+
+~
+LookDesc:$
+He isn't heavily armed, since after all, he's barely above rent-a-cop status.
+However, that won't stop him from taking his billy club to anyone who gives
+him trouble, either that or a face full of pepper spray. Fortunately, most of
+his time is spent chasing down young punks or older shoplifters, so he doesn't
+have to be in the greatest of shape to get the job done. 
+~
+ArriveMsg:	wanders in from
+LeaveMsg:	continues his patrol
+MobFlags:	10000000000000001000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	2
+	Int:	5
+	Wil:	5
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	70
+	Cash:	25
+	Bank:	65
+[SKILLS]
+	unarmed combat:	3
+	clubs:	4
+BREAK
+#39316
+Keywords:	guard lazy mall office security
+Name:	a lazy mall office security guard
+RoomDesc:$
+A lazy mall security guard is here, watching an Urban Brawl game on the trid.
+
+~
+LookDesc:$
+Ah, the good life. That is, if the good life consists of lounging around
+watching sports while stuffing ones face full of greasy soy chips and other
+salty artery clogging snacks. He's supposed to be watching the feeds from the
+closed circuit security monitors, but screw that, he'd rather watch the game.
+Can you blame him? 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	6
+	Qui:	6
+	Str:	6
+	Cha:	6
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	180
+	Weight:	80
+[SKILLS]
+	unarmed combat:	6
+BREAK
+#39320
+Keywords:	decker anemic hacker
+Name:	an anemic looking decker
+RoomDesc:$
+An anemic looking decker is here, oblivious to reality as he surfs the trix. 
+
+~
+LookDesc:$
+He looks rather anemic, and has little or no complexion beyond that of a stark
+white linen bedsheet. He seems to be completely oblivious to reality around
+him, since he's much too busy hacking the interwebs. The shabby looking
+cyberdeck tucked under his arm is a dead give away that he's a decker. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+Position:	Sitting
+DefaultPos:	Sitting
+[ATTRIBUTES]
+	Bod:	4
+	Qui:	6
+	Str:	4
+	Cha:	2
+	Int:	6
+	Wil:	6
+	Mag:	0
+[POINTS]
+	Height:	170
+	Weight:	60
+	Ballistic:	4
+	Impact:	4
+	Cash:	250
+[SKILLS]
+	unarmed combat:	5
+BREAK
+END
