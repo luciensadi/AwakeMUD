@@ -703,6 +703,14 @@ SPECIAL(johnson)
   } else if (CMD_IS("shake")) {
     comm = CMD_JOB_NO;
     need_to_act = TRUE;
+  } else if (CMD_IS("quests") || CMD_IS("jobs")) {
+    // Intercept the 'quests' and 'jobs' ease-of-use commands to give them a new one if they don't have one yet.
+    if (!GET_QUEST(ch)) {
+      do_say(ch, "I'm looking for a job.", 0, 0);
+      comm = CMD_JOB_START;
+    } else {
+      return FALSE;
+    }
   } else
     return FALSE;
   
