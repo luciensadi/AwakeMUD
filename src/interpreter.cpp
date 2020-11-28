@@ -623,6 +623,7 @@ struct command_info cmd_info[] =
     { "open"     , POS_SITTING , do_gen_door , 0, SCMD_OPEN },
     { "osay"     , POS_LYING   , do_say      , 0, SCMD_OSAY },
     { "osays"    , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_OSAYS },
+    { "out"      , POS_SITTING , do_leave    , 0, 0 },
     { "."        , POS_LYING   , do_say      , 0, SCMD_OSAY },
 
     { "put"      , POS_RESTING , do_put      , 0, 0 },

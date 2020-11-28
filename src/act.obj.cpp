@@ -122,12 +122,21 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
       return;
     }
 
-
+    int old_carry_w = IS_CARRYING_W(ch);
+    int old_carry_n = IS_CARRYING_N(ch);
     if (obj->in_obj)
       obj_from_obj(obj);
     else
       obj_from_char(obj);
     obj_to_obj(obj, cont);
+    if (old_carry_w != IS_CARRYING_W(ch) || old_carry_n != IS_CARRYING_N(ch) - 1) {
+      sprintf(buf, "SYSERR: Weight/number calculations are off. Carry weight delta is %d, carry number delta is %d. Auto-fixing.",
+              IS_CARRYING_W(ch) - old_carry_w,
+              IS_CARRYING_N(ch) - old_carry_n);
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
+      calc_weight(ch);
+    }
+    
     act("You put $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
     act("$n puts $p in $P.", FALSE, ch, obj, cont, TO_ROOM);
     return;
@@ -635,7 +644,8 @@ void calc_weight(struct char_data *ch)
       IS_CARRYING_W(ch) += GET_OBJ_WEIGHT(GET_EQ(ch, i));
 
   for (obj = ch->carrying; obj; obj = obj->next_content)
-    IS_CARRYING_W(ch) +=GET_OBJ_WEIGHT(obj);
+    IS_CARRYING_W(ch) += GET_OBJ_WEIGHT(obj);
+    
   for (obj = ch->cyberware; obj; obj = obj->next_content)
     if (GET_OBJ_VAL(obj, 0) == CYB_BONELACING)
       switch (GET_OBJ_VAL(obj, 3))
