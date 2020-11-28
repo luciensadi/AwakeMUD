@@ -1,0 +1,449 @@
+#28700
+Keywords:	kilo heroin
+Name:	a kilo of heroin
+RoomDesc:$
+A kilo of heroin is here on the ground.~
+LookDesc:$
+Packaged in plastic wrap, this Grade A heroin is the most pure drek on the
+streets.  The label says, "Mojo Magic". 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#28702
+Keywords:	Nicami 12x scope
+Name:	a Nicami 12x Sniper Model scope
+RoomDesc:$
+A high powered scope is lying here.~
+LookDesc:$
+This is an electronic auto focusing scope that binds precision aiming with the
+durability of a tank. Its autocharging by light and offers infravision night
+vision and high powered optics. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	1000000000001000000000
+Material:	electronics
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	1200
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+BREAK
+#28703
+Keywords:	small cylinder wilson xtr suppressor
+Name:	a Wilson XTR rifle suppressor
+RoomDesc:$
+A small cylinder is here.~
+LookDesc:$
+This is ingraved "Wilson XTR Rifle Suppressor", which means it quiets the gun
+to a hush. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	8
+	Cost:	1500
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	6
+	Val2:	-3
+BREAK
+#28704
+Keywords:	tripod carbon fiber
+Name:	a carbon fiber tripod
+RoomDesc:$
+A sniper rifle tripod is here.~
+LookDesc:$
+This is a tripod made from carbon fiber. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	8.00
+	Barrier:	8
+	Cost:	600
+	AvailTN:	10
+	AvailDay:	0.50
+	LegalNum:	1
+	LegalCode:	18
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	9
+BREAK
+#28705
+Keywords:	steak
+Name:	a REAL beef steak
+RoomDesc:$
+A slab of meat is lying here.~
+LookDesc:$
+This is a REAL slab of beef. Imported specially, this is top grade meat made
+for no ordinary person. Rather than that soy drek, this is killer on your
+body. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	100000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+BREAK
+#28706
+Keywords:	pasta salad
+Name:	a bowl of pasta salad
+RoomDesc:$
+a bowl of pasta salad is here.~
+LookDesc:$
+Its a white glass bowl filled with pasta salad. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#28707
+Keywords:	lobster
+Name:	a boiled lobster
+RoomDesc:$
+A boiled lobster on a plate in here.~
+LookDesc:$
+This lobster looks yummy. It has been boiled and placed on a plate with butter
+to soak it in. Supreme! 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+BREAK
+#28708
+Keywords:	fish fillet
+Name:	a fish fillet
+RoomDesc:$
+a fillet of fish, cooked and on a plate is here.~
+LookDesc:$
+This freshly caught fish, cooked to perfection, smells, looks, and tastes
+great, 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	9000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+BREAK
+#28709
+Keywords:	shrimp salad
+Name:	a shrimp salad
+RoomDesc:$
+A bowl of shrimp salad is here.~
+LookDesc:$
+Shrimp salad in a crystal bowl. The shrimp seem fresh and plump; the dressing,
+tangy. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	2000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#28710
+Keywords:	glass water
+Name:	a glass of water
+RoomDesc:$
+A glass of water is here.~
+LookDesc:$
+A crystal glass filled with crystal clear water. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	3
+BREAK
+#28711
+Keywords:	shot glass scotch
+Name:	a shot of scotch
+RoomDesc:$
+A shot glass filled with scotch is here.~
+LookDesc:$
+A shotglass filled with scotch. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+	Val2:	23
+BREAK
+#28712
+Keywords:	shotglass tequila
+Name:	a shot of tequila
+RoomDesc:$
+A shot of tequila is here.~
+LookDesc:$
+It's a shot of tequila. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+	Val2:	20
+BREAK
+#28713
+Keywords:	shot glass whisky whiskey
+Name:	a shot of whiskey
+RoomDesc:$
+A shot of whiskey is here.~
+LookDesc:$
+An ordinary show of Whiskey Honestly 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+	Val2:	23
+BREAK
+#28714
+Keywords:	glass lemonade
+Name:	a glass of lemonade
+RoomDesc:$
+A glass of lemonade is here.~
+LookDesc:$
+A regualr cup of lemonade. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	3
+	Val2:	7
+BREAK
+#28715
+Keywords:	bottle wine
+Name:	a bottle of wine
+RoomDesc:$
+A bottle of wine is here.~
+LookDesc:$
+A bottle of expensive white wine, it isnt cheap, but it is worth it. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	30
+	Val1:	30
+	Val2:	27
+BREAK
+#28716
+Keywords:	ticket
+Name:	a free steak dinner ticket
+RoomDesc:$
+A tiny shred of paper is here.~
+LookDesc:$
+This ticket states:
+ S/he who possess this ticket gets one free steak meal redeemable only through
+Kristin Burch, owner of Kristin's restaurant. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	20000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#28717
+Keywords:	bottle wine
+Name:	a bottle of red wine
+RoomDesc:$
+A bottle of red wine is here.~
+LookDesc:$
+A normal bottle of red wine thats good and expensive. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	30
+	Val1:	30
+	Val2:	26
+BREAK
+END

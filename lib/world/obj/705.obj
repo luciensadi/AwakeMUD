@@ -1,196 +1,895 @@
 #70500
-Keywords:	firmpoint internal mount
-Name:	a firmpoint internal mount
+Keywords:	a ticket to West Wing: First Balcony
+Name:	a ticket to the West Wing: First Balcony
 RoomDesc:$
-A boxed-up firmpoint internal mount has been left here.~
+A ticket lies here.~
 LookDesc:$
-Used for mounting weaponry on a vehicle, this item must be installed before it
-can be used. 
+This is a ticket to one of the private balconies at the Seattle Opera House. 
 ~
-Type:	Vehicle Mod
+Type:	Key
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
-Material:	metal
+Material:	paper
 [POINTS]
-	Weight:	2.50
-	Barrier:	6
-	Cost:	1500
-	AvailTN:	6
-	AvailDay:	7.00
-	LegalNum:	3
-	LegalCode:	19
-	LegalPermit:	1
-[VALUES]
-	Val0:	15
-	Val2:	5
-	Val4:	2
-	Val5:	62
-	Val6:	27
+	Weight:	0.01
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
 BREAK
 #70501
-Keywords:	firmpoint external mount
-Name:	a firmpoint external mount
+Keywords:	a ticket to West Wing: Second Balcony
+Name:	a ticket to West Wing: Second Balcony
 RoomDesc:$
-A boxed-up firmpoint external mount has been left here.~
+A ticket lies here.~
 LookDesc:$
-It is a weapons mount made to attach to a vehicle or drone. 
+This is a ticket to one of the private balconies at the Seattle Opera House 
 ~
-Type:	Vehicle Mod
+Type:	Key
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
-Material:	metal
+Material:	paper
 [POINTS]
-	Weight:	2.50
-	Barrier:	32
-	Cost:	750
-	AvailTN:	6
-	AvailDay:	7.00
-	LegalNum:	3
-	LegalCode:	19
-	LegalPermit:	1
-[VALUES]
-	Val0:	15
-	Val1:	1
-	Val2:	1
-	Val4:	2
-	Val5:	62
+	Weight:	0.01
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
 BREAK
 #70502
-Keywords:	hardpoint internal mount
-Name:	a hardpoint internal mount
+Keywords:	a ticket to East Wing: First Balcony
+Name:	a ticket to the East Wing: First Balcony
 RoomDesc:$
-A boxed-up hardpoint internal mount has been left here.~
+A ticket lies here.~
 LookDesc:$
-It is a weapons mount made to attach to a vehicle or drone. 
+This is a ticket to one of the private balconies at the Seattle Opera House. 
 ~
-Type:	Vehicle Mod
+Type:	Key
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
-Material:	metal
+Material:	paper
 [POINTS]
-	Weight:	2.50
-	Barrier:	32
-	Cost:	3000
-	AvailTN:	6
-	AvailDay:	7.00
-	LegalNum:	3
-	LegalCode:	19
-	LegalPermit:	1
-[VALUES]
-	Val0:	15
-	Val1:	2
-	Val2:	1
-	Val4:	2
-	Val5:	62
+	Weight:	0.01
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
 BREAK
 #70503
-Keywords:	hardpoint external mount
-Name:	a hardpoint external mount
+Keywords:	a ticket to East Wing: Second Balcony
+Name:	a ticket to East Wing: Second Balcony
 RoomDesc:$
-A boxed-up hardpoint external mount has been left here.~
+A ticket lies here.~
 LookDesc:$
-It is a weapons mount made to attach to a vehicle or drone. 
+This is a ticket to one of the private balconies at the Seattle Opera House. 
 ~
-Type:	Vehicle Mod
+Type:	Key
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
-Material:	metal
+Material:	paper
 [POINTS]
-	Weight:	2.50
-	Barrier:	32
-	Cost:	2000
-	AvailTN:	6
-	AvailDay:	7.00
-	LegalNum:	3
-	LegalCode:	19
-	LegalPermit:	1
-[VALUES]
-	Val0:	15
-	Val1:	3
-	Val2:	1
-	Val4:	2
+	Weight:	0.01
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
 BREAK
 #70504
-Keywords:	bulky vehicular turret vehicle-mounted
-Name:	a vehicle-mounted turret
+Keywords:	a ticket to House Seating
+Name:	a ticket to House Seating
 RoomDesc:$
-A bulky vehicular turret sits here, waiting to be installed.~
+A ticket lies here.~
 LookDesc:$
-It is a weapons mount made to attach to a vehicle or drone. 
+This is a general admission ticket for the Seattle Opera House. 
 ~
-Type:	Vehicle Mod
+Type:	Key
 WearFlags:	1
 ExtraFlags:	0
 AffFlags:	0
-Material:	metal
+Material:	paper
 [POINTS]
-	Weight:	10.00
-	Barrier:	32
-	Cost:	7500
-	AvailTN:	6
-	AvailDay:	7.00
-	LegalNum:	3
-	LegalCode:	19
-	LegalPermit:	1
-[VALUES]
-	Val0:	15
-	Val1:	4
-	Val2:	1
-	Val4:	2
-	Val5:	62
+	Weight:	0.01
+	Barrier:	1
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
 BREAK
 #70505
-Keywords:	lightweight vehicular mini-turret turret
-Name:	a vehicular mini-turret
+Keywords:	a steinway model concert grand piano
+Name:	A Steinway Concert Grand Piano
 RoomDesc:$
-A lightweight vehicular mini-turret sits here, waiting to be installed.~
+A Steinway Concert Grand Piano sits here, the polished keys sparkling.~
 LookDesc:$
-It is a weapons mount made to attach to a vehicle or drone. 
+This massive black monolith seems to almost be alive. It is a Steinway & Sons
+Model D Concert Grand Piano, they do not make piano's any better than this
+one. Made by hand it takes a boggling 1 year to build and assemble. People
+place orders for these years in advance. Made of real maple, oak, spruce,
+ebony, and ivory this piano is a treasure of rarity and almost priceless. The
+melodies arising from it as Sam strokes the keys fill the room with a soft
+glow of peace and hope. Underneath the piano is a small box. 
 ~
-Type:	Vehicle Mod
-WearFlags:	1
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	8.00
-	Barrier:	32
-	Cost:	5000
-	AvailTN:	6
-	AvailDay:	7.00
-	LegalNum:	3
-	LegalCode:	19
-	LegalPermit:	1
-[VALUES]
-	Val0:	15
-	Val1:	5
-	Val2:	1
-	Val4:	2
-BREAK
-#70506
-Keywords:	battered old battleship desk sheet-metal metal
-Name:	a battered old sheet-metal desk
-RoomDesc:$
-A battered old battleship of a desk hunkers obstinately near the door.~
-LookDesc:$
-Constructed out of what appears to be painted sheet metal and lag bolts bigger
-than a troll's wrist, this massive hunk of cobbled-together debris vaguely
-resembles the desk that its occupant has made it serve as. Streaks of blue and
-yellow enamel on a white background identify it as once belonging to "The
-Sunrise Corporation". 
-~
-Type:	Container
+Type:	Other
 WearFlags:	0
 ExtraFlags:	0
 AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	500.00
+	Barrier:	32
+	Cost:	500000
+	AvailTN:	20
+	AvailDay:	365.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	small box
+	Desc:$
+An efficient silent dehumidifier sits here protecting the Piano from any
+damage from humidity. 
+~
+BREAK
+#70506
+Keywords:	A glass of white milk
+Name:	a glass of white milk
+RoomDesc:$
+A glass of milk sits here.~
+LookDesc:$
+A clear frosty glass of refreshing ice-cold milk sits here, condensation
+pooling into droplets on the outside of the glass. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	3
+BREAK
+#70507
+Keywords:	sardines a small tin
+Name:	a small tin of sardines
+RoomDesc:$
+A small tin of sardines sits here.~
+LookDesc:$
+A small tin of sardines. mmmmm...salty fishy goodness. 
+~
+Type:	Food
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
 Material:	metal
 [POINTS]
-	Weight:	600.00
-	Barrier:	8
+	Weight:	0.05
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+BREAK
+#70508
+Keywords:	A glass of chocolate milk
+Name:	a glass of chocolate milk
+RoomDesc:$
+A glass of chocolate milk sits here.~
+LookDesc:$
+A glass of chocolate milk. Does a body good. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	3
+BREAK
+#70509
+Keywords:	dinner a delicious lobster sprinkled with garlic and butter
+Name:	a delicious lobster sprinkled with garlic and butter
+RoomDesc:$
+A delicious lobster sprinkled with garlic and butter.~
+LookDesc:$
+Lobster, butter, garlic... can you say mouth orgasm? 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#70510
+Keywords:	filet a juicy mignon
+Name:	a juicy filet mignon
+RoomDesc:$
+A juicy filet mignon rests here waiting to be enjoyed.~
+LookDesc:$
+A juicy filet mignon. King of steaks. Lean and flavorful. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#70511
+Keywords:	cheese a small bowl of cubes
+Name:	a small bowl of cheese cubes
+RoomDesc:$
+A small bowl of cheese cubes sits here, waiting to be nibbled on.~
+LookDesc:$
+A small bowl of cheese cubes sits here waiting to be nibbled on 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#70512
+Keywords:	peanuts a small bowl
+Name:	a small bowl of peanuts
+RoomDesc:$
+A small bowl of peanuts sits here for snacking.~
+LookDesc:$
+A small bowl of peanuts sits here for snacking 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#70513
+Keywords:	A bottle of Blue Moon with an ^yorange^N slice
+Name:	a bottle of Blue Moon with an ^yorange^N slice
+RoomDesc:$
+A bottle of Blue Moon with an ^yorange^N slice sits here.~
+LookDesc:$
+A bottle of Blue Moon with an ^yorange^N slice sits here 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	31
+BREAK
+#70514
+Keywords:	A glass of white zinfandel sits here.
+Name:	a glass of white zinfandel
+RoomDesc:$
+A glass of white zinfandel sits here.~
+LookDesc:$
+A glass of white Zinfandel. Wine for people who know nothing about wine. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	27
+BREAK
+#70515
+Keywords:	a glass of riesling
+Name:	a glass of riesling
+RoomDesc:$
+A glass of riesling sits here.~
+LookDesc:$
+A glass of riesling. A sweet white wine that goes great with deserts. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	27
+BREAK
+#70516
+Keywords:	A russian rose martini
+Name:	a Russian rose martini
+RoomDesc:$
+A Russian rose martini sits here.~
+LookDesc:$
+A russian rose martini 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	16
+BREAK
+#70517
+Keywords:	A dirty martini
+Name:	a dirty martini
+RoomDesc:$
+A dirty martini sits here.~
+LookDesc:$
+A dirty martini 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	16
+BREAK
+#70518
+Keywords:	A french martini
+Name:	a French martini
+RoomDesc:$
+A French martini sits here.~
+LookDesc:$
+A french martini. Maybe it has cheese in it. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	16
+BREAK
+#70519
+Keywords:	a glass of lethal weapon
+Name:	a glass of lethal weapon
+RoomDesc:$
+An awful shot of something sits here.~
+LookDesc:$
+1 shot Bacardi 151 rum, 2 shots vodka, 1 can Mountain Dew citrus soda, 1 dash
+triple sec. Nuff said. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	16
+BREAK
+#70520
+Keywords:	A mexican coffee in a stout mug
+Name:	a Mexican coffee in a stout mug
+RoomDesc:$
+A stout mug of coffee sits here.~
+LookDesc:$
+A mexican coffee in a stout mug 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	2
+BREAK
+#70521
+Keywords:	A double irish coffee in a large mug
+Name:	a double Irish coffee in a large mug
+RoomDesc:$
+A large mug of sweet smelling coffee sits here.~
+LookDesc:$
+A double irish coffee in a large mug 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	2
+BREAK
+#70522
+Keywords:	A tall mug of B52 coffee
+Name:	a tall mug of B52 coffee
+RoomDesc:$
+A tall mug of coffee sits here.~
+LookDesc:$
+A tall mug of B52 coffee 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	2
+BREAK
+#70523
+Keywords:	A ^Wwhite^N russian in a stylish glass
+Name:	a ^WWhite^N Russian in a stylish glass
+RoomDesc:$
+A ^WWhite^N Russian in a stylish glass sits here.~
+LookDesc:$
+A ^Wwhite^N russian in a stylish glass 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	12
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	16
+BREAK
+#70524
+Keywords:	A ^Mpink^N skwerl with an umbrella in it
+Name:	a ^Mpink^N skwerl with an umbrella in it
+RoomDesc:$
+A ^Mpink^N skwerl with an umbrella in it sits here.~
+LookDesc:$
+A ^Mpink^N skwerl with an umbrella in it 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	16
+BREAK
+#70525
+Keywords:	A tall glass of long island ice tea
+Name:	a tall glass of long island ice tea
+RoomDesc:$
+A drink that kind of looks like ice tea or coke sits here.~
+LookDesc:$
+1 part vodka, 1 part tequila, 1 part rum, 1 part gin, 1 part triple sec, 1 1/2
+parts sweet and sour mix, 1 splash Coca-Cola. The "I'm gonna get this girl
+drunk quick!" drink. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	32
+BREAK
+#70526
+Keywords:	A bottle of Corona with a ^Glime^N in it
+Name:	a bottle of Corona with a ^Glime^N in it
+RoomDesc:$
+A bottle of Corona with a ^Glime^N in it sits here.~
+LookDesc:$
+A bottle of Corona with a ^Glime^N in it 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	11
+BREAK
+#70527
+Keywords:	A Tequila Sunrise
+Name:	a tequila Sunrise
+RoomDesc:$
+A beautiful cocktail sits here.~
+LookDesc:$
+A Tequila Sunrise 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	16
+BREAK
+#70528
+Keywords:	A tall glass of Jose Quervo Black Medallion and Coke
+Name:	a tall glass of Jose Quervo Black Medallion and Coke
+RoomDesc:$
+A tall glass of Jose Quervo Black Medallion and Coke sits here.~
+LookDesc:$
+A tall glass of Jose Quervo Black Medallion and Coke 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	16
+BREAK
+#70529
+Keywords:	A tumbler of Jack and Coke
+Name:	a tumbler of Jack and Coke
+RoomDesc:$
+A tumbler of Jack and Coke sits here.~
+LookDesc:$
+A tumbler of Jack and Coke 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	16
+BREAK
+#70530
+Keywords:	A glass of Captain Morgan's Tattoo and Coke
+Name:	a glass of Captain Morgans's Tattoo and coke
+RoomDesc:$
+A glass of Captain Morgans's Tattoo and coke sits here.~
+LookDesc:$
+A glass of Captain Morgan's Tattoo and Coke 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	10
+	Val2:	16
+BREAK
+#70531
+Keywords:	A refreshing, chilled spring bubbles softly here.
+Name:	A refreshing, chilled spring bubbles softly here
+RoomDesc:$
+A refreshing, chilled spring bubbles softly here.~
+LookDesc:$
+A refreshing, chilled spring bubbles softly here. 
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	500.00
+	Barrier:	24
+	Cost:	50000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10000
+	Val1:	10000
+BREAK
+#70532
+Keywords:	a silk pair of "French Connection TM" ^BFre^Wnch F^Rlag^N boxers
+Name:	a silk pair of "French Connection TM" ^BFre^Wnch F^Rlag^N boxers
+RoomDesc:$
+A silk pair of pair of "French Connection(tm)" ^BFre^Wnch F^Rlag^N boxers lay here.~
+LookDesc:$
+a silk pair of "French Connection TM" ^BFre^Wnch F^Rlag^N boxers 
+~
+Type:	Worn
+WearFlags:	100000100100100000010001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	1
+	Val4:	2
+BREAK
+#70533
+Keywords:	A ^cturquoise^N pool of ^wsteaming^R hot^N spring water bubbles invitingly here.
+Name:	A ^cturquoise^N pool of ^wsteaming^R hot^N spring water
+RoomDesc:$
+A ^cturquoise^N pool of ^wsteaming^R hot^N spring water bubbles invitingly here.~
+LookDesc:$
+This pool looks very old. Made of marble, granite, and plaster, it looks like
+something out of the time of Rome. Whomever built it knew what it meant to
+really bathe. Seats are set underwater here and there while giving plenty of
+room to still swim and float without invading anyone else's space. A smaller
+pool is walled off near the back, being fed the warmer water coming from the
+deep heated springs beneath this cavern. 
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	1
+AffFlags:	1000000
+Material:	stone
+[POINTS]
+	Weight:	10000.00
+	Barrier:	24
 	Cost:	0
 	AvailTN:	0
 	AvailDay:	0.00
@@ -198,25 +897,430 @@ Material:	metal
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
-	Val0:	25
-	Val1:	1
-	Val2:	-1
-	Val3:	3
+	Val0:	10000
+	Val1:	10000
 BREAK
-#70507
-Keywords:	crooked junkyard sign rusty beam
-Name:	a crooked junkyard sign
+#70534
+Keywords:	A tarnished ^wsilver^N Maltese cross hanging from a silver ^wchain^N
+Name:	a tarnished ^wsilver^N Maltese cross hanging from a silver ^wchain^N
 RoomDesc:$
-^YA crooked sign hangs lazily from a rusty L-shaped beam.^n~
+A silver cross on a chain sits here.~
 LookDesc:$
-Scrawled across this chunk of weatherbeaten wood, you can vaguely make out the
-words "Stop leavin yur drek here, fix it and go". 
+A tarnished ^wsilver^N Maltese cross hanging from a silver ^wchain^N 
 ~
-Type:	UNDEFINED
-WearFlags:	0
-ExtraFlags:	100
+Type:	Key
+WearFlags:	100000000000101
+ExtraFlags:	0
 AffFlags:	0
 Material:	metal
+[POINTS]
+	Weight:	0.02
+	Barrier:	12
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70535
+Keywords:	A ^Wcrystalline^N scepter, the top of which is imprinted with a ^Rruby^N Maltese cross
+Name:	a ^Wcrystalline^N scepter, the top of which is imprinted with a ^Rruby^N Maltese cross
+RoomDesc:$
+A ^Wcrystalline^N scepter lays here.~
+LookDesc:$
+A ^Wcrystalline^N scepter, the top of which is imprinted with a ^Rruby^N Maltese cross
+~
+Type:	Key
+WearFlags:	100000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70536
+Keywords:	an ^Wivory^N bishop chess piece
+Name:	an ^Wivory^N bishop chess piece
+RoomDesc:$
+An ^Wivory^N bishop chess piece sits here.~
+LookDesc:$
+an ^Wivory^N bishop chess piece 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.01
+	Barrier:	8
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70537
+Keywords:	an ^Wivory^N knight chess piece
+Name:	an ^Wivory^N knight chess piece
+RoomDesc:$
+An ^Wivory^N knight chess piece sits here.~
+LookDesc:$
+an ^Wivory^N knight chess piece 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.01
+	Barrier:	6
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70538
+Keywords:	an ^Wivory^N king chess piece
+Name:	an ^Wivory^N king chess piece
+RoomDesc:$
+An ^Wivory^N king chess piece sits here.~
+LookDesc:$
+an ^Wivory^N king chess piece 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.01
+	Barrier:	6
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70539
+Keywords:	an antique WW2 German dagger
+Name:	an antique WW2 German dagger
+RoomDesc:$
+An antique WW2 German dagger lies here.~
+LookDesc:$
+Sturmabteilung translates to Storm Division, or more commonly, Stormtroopers.
+This dagger belonged to an officer of the SA Standarte Felderrnhalle, an elite
+unit of the Sturmabteilung charged with protecting the rulers of Nazi Germany.
+The pommel is made of Ivory and based on an eagle with wings spread open, its
+talons clutching a Swastika the emblem of the 3rd Reich. It is 45 cm long and
+etched into the blade with precision is the motto "Alles fur Deutschland"
+(Everything for Germany). Reputedly there are less than 50 of these daggers
+that were made, making it one of the rarest and most valuable daggers of the
+3rd Reich. 
+~
+Type:	Key
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70540
+Keywords:	An ^Lebony^n rook chess piece
+Name:	An ^Lebony^n rook chess piece
+RoomDesc:$
+An ^Lebony^N rook chess piece sits here.~
+LookDesc:$
+An ^Lebony^n rook chess piece 
+~
+Type:	Key
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.01
+	Barrier:	6
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70541
+Keywords:	A small pool of water fed by hot springs
+Name:	A small pool of water fed by hot springs
+RoomDesc:$
+A small pool of water fed by hot springs is here.~
+LookDesc:$
+This small pool is large enough for 3 or 4 human sized occupants. Its heated
+mineral rich water easily melts away the days fatigue. 
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	0.00
+	Barrier:	16
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	100000
+	Val1:	100000
+BREAK
+#70542
+Keywords:	A large number of titanium shelving units
+Name:	A large number of titanium shelving units
+RoomDesc:$
+A large number of titanium shelving units line the walls here.~
+LookDesc:$
+Now THESE are industrial shelving units. They go from the floor to the top of
+the ceiling and are securely bolted in both places to avoid falling. They even
+come with a ladder to help non-trolls reach the top shelves. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	12
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	300
+	Val2:	-1
+	Val3:	-1
+BREAK
+#70543
+Keywords:	A ^ywooden^N St. Andrews cross
+Name:	A ^ywooden^N St. Andrews cross
+RoomDesc:$
+A ^ywooden^N St. Andrews cross lays inclined at an angle here.~
+LookDesc:$
+St. Andrews cross, constructed from the sturdiest wood, lies bolted to the
+floor here. Adjustments at the supports allow for various heights and angles,
+and a secure iron manacle rests at the end of each arm of the cross, along
+with a black leather restraint for binding about the waist. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	16
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70544
+Keywords:	A padded ^ywooden^N bondage horse
+Name:	A padded ^ywooden^N bondage horse
+RoomDesc:$
+A padded ^ywooden^N bondage horse sits here, awaiting use.~
+LookDesc:$
+This object looks similar to an enlarged carpenter's horse, with two sets of
+upside-down V-shaped legs connected by a vertical plank. White cloth provides
+padding for the person secured, and a solid leather cuff is attached to each
+leg of the horse for precisely this purpose. 
+~
+Type:	Drug
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	16
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70545
+Keywords:	A set of ^Lsteel^N suspension shackles
+Name:	A set of ^Lsteel^N suspension shackles
+RoomDesc:$
+A set of ^Lsteel^N suspension shackles hangs down from the ceiling.~
+LookDesc:$
+Several shackles attached to sturdy lengths of chain are suspended from a
+ceiling mount, allowing for all manner of bondage. There is a hand crank
+attached to the floor nearby for the unattached chain, allowing the shackles
+to be raised or lowered as desired. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70546
+Keywords:	A sturdy ^ywooden^N bondage frame
+Name:	A sturdy ^ywooden^N bondage frame
+RoomDesc:$
+A sturdy ^ywooden^N bondage frame is mounted to the floor here.~
+LookDesc:$
+This device looks similar to a regular door frame, except free-standing and
+bolted to the floor. Heavy iron shackles have been secured at each corner of
+the frame, leaving both the back and the front of the victim exposed. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	16
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70547
+Keywords:	A small generator
+Name:	A small generator
+RoomDesc:$
+A small generator rests here, waiting to be engaged.~
+LookDesc:$
+A small, advanced generator sits here. Rugged and reliable, it can also be
+recharged through a variety of means. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	12
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70548
+Keywords:	An expensive ^Lblack^N trophy rack
+Name:	An expensive ^Lblack^N trophy rack
+RoomDesc:$
+An expensive ^Lblack^N trophy rack sits here, showing off its contents.~
+LookDesc:$
+An expensive black trophy rack, constructed from quality ebony wood, provides
+an excellent, complementary view of its contents. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.01
+	Barrier:	8
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	100
+	Val1:	1
+	Val2:	-1
+	Val3:	-1
+BREAK
+#70549
+Keywords:	An antique four-post canopy bed 
+Name:	An antique four-post canopy bed 
+RoomDesc:$
+An antique four-poster canopy bed sits here.~
+LookDesc:$
+A luxurious king-sized bed. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70550
+Keywords:	A rather monstrous pipe organ stands here
+Name:	A rather monstrous pipe organ stands here
+RoomDesc:$
+A rather monstrous pipe organ stands here.~
+LookDesc:$
+This pipe organ seems to be ancient, the survivor of some cathedral long lost
+to history. Its pipes tower, jutting out in intriguing directions and nearly
+reaching the high cavern ceiling. It is fitted with a number of stops and
+plugs, lending it a dark and haunting tone that echoes throughout the
+chambers. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
 [POINTS]
 	Weight:	0.00
 	Barrier:	32
@@ -226,67 +1330,423 @@ Material:	metal
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
+[VALUES]
+	Val2:	-1
 BREAK
-#70508
-Keywords:	refurbished gridguide guide unit chunk electronics trailing wires
-Name:	a refurbished GridGuide unit
+#70551
+Keywords:	A king-sized canopied bed, shrouded in ^Wwhite^N Egyptian silk curtains.
+Name:	A king-sized canopied bed, shrouded in ^Wwhite^N Egyptian silk curtains.
 RoomDesc:$
-A chunk of electronics and trailing wires has been abandoned here.~
+A king-sized canopied bed, shrouded in ^Wwhite^N Egyptian silk curtains sits here.~
 LookDesc:$
-Rough around the edges and bearing the distinct appearance of a component that
-has been salvaged from a wrecked vehicle, this GridGuide unit has seen better
-days. However, the interface ports look to have been recently replaced, and
-the memory chips with their tiny logos are intact. Might be worth something to
-the right buyer. 
+This bed is astoundingly large, each corner outfitted with a towering rosewood
+post, from which white Egyptian silk curtains shroud the bed. A peek past the
+shrouds reveal the interior to be of matching elegance. White Egyptian silks
+sheets are tightly fitted over the down mattress, and are topped with a number
+of plush pillows and a down comforter. 
 ~
-Type:	Other
-WearFlags:	1
-ExtraFlags:	100
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
 AffFlags:	0
-Material:	metal
+Material:	wood
 [POINTS]
-	Weight:	2.30
-	Barrier:	4
+	Weight:	0.00
+	Barrier:	32
 	Cost:	0
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
-[EXTRADESC 0]
-	Keywords:	memory chip logo
-	Desc:$
-You peer closer at the logo and make out the mark of Mitsuhama's paramilitary
-branch. This run just got a lot hotter. 
-~
+[VALUES]
+	Val2:	-1
 BREAK
-#70509
-Keywords:	battered toolbox vehicle repair kit
-Name:	a vehicle repair kit
+#70552
+Keywords:	A bubbling ^Rhot^N spring has pooled in the ^Lonyx-tiled^N stone.
+Name:	A bubbling ^Rhot^N spring has pooled in the ^Lonyx-tiled^N stone.
 RoomDesc:$
-Someone has left a battered toolbox behind.~
+A bubbling ^Rhot^N spring has pooled in the ^Lonyx-tiled^N stone.~
 LookDesc:$
-Although it's seen better days, this battered-looking toolbox contains a
-useful selection of tools for working on vehicles-- everything from spudgers
-to 10mm sockets, and even a few heavier wrenches for the really stubborn bits.
-It won't fix everything, but it's a start. 
+A bubbling ^Rhot^N spring has pooled in the ^Lonyx-tiled^N stone. 
 ~
-Type:	Workshop
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10000
+	Val1:	10000
+BREAK
+#70553
+Keywords:	A comfortable, stout oak king-sized bed sits here.
+Name:	a comfortable, stout oak king-sized bed sits here
+RoomDesc:$
+A comfortable, stout oak king-sized bed sits here.~
+LookDesc:$
+A comfortable, stout oak king-sized bed sits here. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	-1
+BREAK
+#70554
+Keywords:	an eightball of novacoke
+Name:	an eightball of novacoke
+RoomDesc:$
+A nice size bag of white powder sits here.~
+LookDesc:$
+This is an eighth of an ounce of Novacoke in a clear plastic baggie. 
+~
+Type:	Drug
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.01
+	Barrier:	4
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	6
+	LegalCode:	21
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+BREAK
+#70555
+Keywords:	A ^BFr^Wen^Rch^N Connection(tm) condom
+Name:	a ^BFr^Wen^Rch^N Connection(tm) condom
+RoomDesc:$
+A packaged condom lies here, waiting to help prevent teen pregnancy.~
+LookDesc:$
+This is a ^BFr^Wen^Rch^N Connection(tm) condom, ready-to-wear and available in a wide
+variety of sizes and styles. It helps you control your future or something. 
+~
+Type:	Worn
+WearFlags:	100100100101100010010101
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	1
+	Val4:	1
+BREAK
+#70556
+Keywords:	a ^YBlitkrieg!^N Enterprises(tm) condom
+Name:	a ^YBlitkrieg!^N Enterprises(tm) condom
+RoomDesc:$
+A unpackaged condom lies here, waiting to help prevent teen pregnancy.~
+LookDesc:$
+This is a ^YBlitkrieg!^N Enterprises(tm) condom, ready-to-wear and available in a
+wide variety of sizes and styles. It is also clearly superior to any condoms
+made by the French. 
+~
+Type:	Worn
+WearFlags:	100100100101100010010101
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	1
+	Val4:	1
+BREAK
+#70557
+Keywords:	a small chocolate mint
+Name:	a small chocolate mint
+RoomDesc:$
+A small chocolate mint sits here, looking delicious.~
+LookDesc:$
+A thin, chocolate mint wafer, just perfect to cleanse the pallate after an
+expensive meal. 
+~
+Type:	Food
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	3
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+BREAK
+#70558
+Keywords:	a ^rrosewood^N weapons rack is mounted to the wall
+Name:	a ^rrosewood^N weapons rack is mounted to the wall
+RoomDesc:$
+A ^rrosewood^N weapons rack is mounted to the wall.~
+LookDesc:$
+A finely carved weapons rack has been mounted to the stone wall, where it
+holds a number of fanciful swords and firearms. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.01
+	Barrier:	32
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	100
+	Val2:	-1
+BREAK
+#70559
+Keywords:	a mounted suit of armor
+Name:	a mounted suit of armor
+RoomDesc:$
+A mounted suit of armor.~
+LookDesc:$
+A wooden armor rack has been mounted here, covered with a shimmering suit of
+armor, and occasionally seen bare. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	20.00
+	Barrier:	32
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val2:	-1
+BREAK
+#70560
+Keywords:	An enormous antique ^rrosewood^N armoire 
+Name:	An enormous antique ^rrosewood^N armoire 
+RoomDesc:$
+An enormous antique ^rrosewood^N armoire sits here.~
+LookDesc:$
+This antique piece of furniture seems to have survived generations, and
+survived them well. The rosewood is polished nicely, free of nicks and dents,
+and two shuttered doors make up its front, with the carved design of matching
+roses on each door. When opened, the doors have mirrors on the inside,
+allowing the user to utilize them to his advantage when dressing. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.01
+	Barrier:	32
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	300
+	Val1:	1
+	Val2:	-1
+BREAK
+#70561
+Keywords:	an antique ^ybrass^N skeleton key
+Name:	an antique ^ybrass^N skeleton key
+RoomDesc:$
+An antique ^ybrass^N skeleton key sits here.~
+LookDesc:$
+A large ^ybrass^N skeleton key, darkened with the rich patina of age. 
+~
+Type:	Key
 WearFlags:	100000000000001
 ExtraFlags:	0
 AffFlags:	0
 Material:	metal
 [POINTS]
-	Weight:	5.00
-	Barrier:	6
-	Cost:	500
-	AvailTN:	5
-	AvailDay:	2.00
+	Weight:	0.01
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70562
+Keywords:	A huge antique oak armoire stained a ^rdeep red^N stands here.
+Name:	A huge antique oak armoire stained a ^rdeep red^N
+RoomDesc:$
+A huge antique oak armoire stained a ^rdeep red^N stands here.~
+LookDesc:$
+A Lee Weitzman Crown Armoire. This finely built piece is made of solid oak
+with a deep red stain to bring out the fine grain. At 50 years old this
+armoire shows almost no signs of wear or age. Built to last it measures 225
+centimeters in width, 66 centimeters in diameter, and 239 centimeters in
+height. Built for those who luxuriate in fine things this is surely the king
+of furniture. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.01
+	Barrier:	32
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
-	Val0:	4
-	Val1:	1
+	Val0:	400
+	Val1:	2
+	Val2:	70561
+BREAK
+#70563
+Keywords:	holster pocket slim
+Name:	a slim ^Lblack leather^n pocket holster
+RoomDesc:$
+A leather wallet-like object lies here.~
+LookDesc:$
+Also called a wallet holster, this tiny holster is designed to safely and
+securely hold the smallest of guns. When slipped into a pocket, the holster is
+indistinguishable from a normal wallet, making it a perfect choice for low-key
+self-defense. 
+~
+Type:	Holster
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.10
+	Barrier:	6
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70564
+Keywords:	sheath adjustable
+Name:	an adjustable ^Lblack nylon^N strap-on knife sheath
+RoomDesc:$
+A small nylon sheath lies here.~
+LookDesc:$
+Designed to be adjusted and worn in several different places, including the
+wrist, thigh (either over pants or under a skirt) or ankle, this versatile
+sheath can be adjusted to hold knives of various shapes and sizes. In
+addition, it can be attached to a lanyard and worn like a necklace, for those
+people who just need that one additional knife. (OOC: Anyone caught putting
+swords or large bladed weapons in these things will be penalised karma.
+consider this your warning.) 
+~
+Type:	Holster
+WearFlags:	1000010000001000000000101
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	6
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#70565
+Keywords:	pond stream crystal clear trickling koi
+Name:	A trickling stream feeding a crystal clear koi pond.
+RoomDesc:$
+A trickling stream flows through here, feeding a crystal clear koi pond.~
+LookDesc:$
+A small stream flowing out from a pile of rocks, it gives every impression of
+being a natural spring (though that would seem unlikely, with it being on the
+roof of a building). It flows in a lazy path around the garden, before finally
+reaching the small pond under the center of the dome. Brightly colored koi
+swim just under the surface, waiting for some friendly passerby to toss in
+some breadcrumbs. 
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	500.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	99999
+	Val1:	99998
 BREAK
 END

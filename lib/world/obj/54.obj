@@ -1,0 +1,632 @@
+#5400
+Keywords:	BDUs pants camoflage camo bdu
+Name:	a pair of ^Gc^gam^Go^gufl^Gag^ge^n BDU pants
+RoomDesc:$
+A pair of camouflage BDU pants lie here.~
+LookDesc:$
+The camoflage combat pants worn by the militaries and corpsec agencies have
+many pockets and are made of very tough material. 
+~
+Type:	Worn
+WearFlags:	100000000100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	16
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	8
+	Val2:	4
+	Val4:	10
+	Val5:	2
+	Val6:	1
+BREAK
+#5401
+Keywords:	camoflage bdu shirt uniform battle dress combat
+Name:	A ^Gc^gam^Go^gufl^Gag^ge^n BDU shirt
+RoomDesc:$
+A camouflage BDU shirt lies here.~
+LookDesc:$
+A camoflage BDU shirt with pockets and rigid armor protection with a fine
+polymer kevlar mesh underneath, which has an affect of keeping a soldier cool
+or warm depending on weather, and protecting from low calibre ballistics. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val2:	4
+	Val4:	10
+	Val5:	4
+	Val6:	2
+BREAK
+#5402
+Keywords:	salish-sidhe salish sidhe issue camoflage flak jacket
+Name:	A ^Gc^gam^Go^gufl^Gag^ge^n flak jacket
+RoomDesc:$
+A camouflage flak jacket sits here.~
+LookDesc:$
+A flak jacket designed to take high powered ballistics from your standard
+battlefield weapons such as submachineguns, pistols, and assault rifles. 
+~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	24
+	Cost:	600
+	AvailTN:	3
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	4
+	Val6:	3
+	Val7:	-2
+BREAK
+#5403
+Keywords:	oak desk
+Name:	An oak desk
+RoomDesc:$
+An oak desk sits here, with a computer console on top of it.~
+LookDesc:$
+A large oak desk, that fits in well with the posh decor of the lobby of
+Executive Body Enhancements. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	5000.00
+	Barrier:	24
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	4
+	Val2:	-1
+	Val3:	-1
+BREAK
+#5404
+Keywords:	mannequin
+Name:	a mannequin
+RoomDesc:$
+A mannequin stands here wearing a full suit of heavy armor.~
+LookDesc:$
+A display mannequin wearing black mil-spec full body armor.  He wields a toy
+assault rifle, and looks very Schwarzenegger-esque. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	20.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#5405
+Keywords:	mannequin
+Name:	a mannequin
+RoomDesc:$
+A mannequin stands here wearing a fashionable vest/lined coat combo.~
+LookDesc:$
+A display mannequin wearing fashionable street armor.  He is wearing a long
+coat/duster type armor jacket, and a vest. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	20.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#5406
+Keywords:	secure tech old western duster long coat securetech high quality synthleather kevlar
+Name:	A SecureTech Old Western(tm) duster
+RoomDesc:$
+A high quality synthleather/kevlar hybrid duster lies here.~
+LookDesc:$
+The best synthetic leather and the best kevlar/polymer mesh armor has been put
+into this retro yet very classy looking duster.  Not only does it protect you
+from bullets, it looks damn good too. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	3.00
+	Barrier:	12
+	Cost:	2000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	6
+	Val2:	4
+	Val3:	2
+	Val4:	8
+	Val5:	5
+	Val6:	4
+	Val7:	2
+BREAK
+#5407
+Keywords:	armor military light suit securetech dmz
+Name:	A suit of SecureTech DMZ(tm) light military armor
+RoomDesc:$
+A suit of light miltary armor lies here, with a SecureTech imprint on the chest.~
+LookDesc:$
+This suit of armor consists of a padded undersuit covered with form fitted
+hardened armorplast plates, with a dark black color that can be painted
+camoflage easily. On the chestplate is the SecureTech(tm) logo with the
+letters D.M.Z. underneath it. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	17.00
+	Barrier:	12
+	Cost:	100000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	2
+	LegalCode:	11
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val2:	2
+	Val4:	2
+	Val5:	7
+	Val6:	6
+	Val7:	-6
+BREAK
+#5408
+Keywords:	dress silver silk dazzling
+Name:	a ^Wsilver^n silk dress
+RoomDesc:$
+A dazzling, silver-colored silk dress is folded neatly here.~
+LookDesc:$
+This dress is made of rare silk, imported from somewhere, though the tags do
+not speak of any origination.  The dress is beautiful and long, with a split
+up to the mid thigh, and hugs the body nicely, as it was well tailored.  Its
+cut is not so low cut as to show far too much cleavage, but is not prudish
+either.  Its hemlines are well put together, indicative of a great designer
+who wished to create something that would last. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#5409
+Keywords:	stockings silk white pair
+Name:	^Wwhite^n silk stockings
+RoomDesc:$
+A pair of white silk stockings lie here.~
+LookDesc:$
+These delicate white stockings are made from pure silk. They cling to the legs
+tightly, but not uncomfortably. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#5410
+Keywords:	dress red silk dazzling
+Name:	a ^Rred^n silk dress
+RoomDesc:$
+A dazzling red silk dress is neatly folded here.~
+LookDesc:$
+This dress is made of rare silk, imported from somewhere, though the tags do
+not speak of any origination.  The dress is beautiful and long, with a split
+up to the mid thigh, and hugs the body nicely, as it was well tailored.  Its
+cut is not so low cut as to show far too much cleavage, but is not prudish
+either.  Its hemlines are well put together, indicative of a great designer
+who wished to create something that would last. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#5411
+Keywords:	stockings silk red pair
+Name:	^Rred^n silk stockings
+RoomDesc:$
+A pair of red silk stockings lies here.~
+LookDesc:$
+These red stockings are crafted from pure silk. They hug the legs tightly, but
+not uncomfortably. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#5412
+Keywords:	belt garter white
+Name:	a ^Wwhite^n silk garter belt
+RoomDesc:$
+A white silk garter belt is lying here.~
+LookDesc:$
+A garter belt made of white silk, designed to keep a pair of stockings up. 
+~
+Type:	Worn
+WearFlags:	1000000000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	750
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	6
+BREAK
+#5413
+Keywords:	belt garter black
+Name:	a ^Lblack^n silk garter belt
+RoomDesc:$
+A black silk garter belt is lying here.~
+LookDesc:$
+A garter belt made of black silk, designed for keeping a pair of stockings up.
+~
+Type:	Worn
+WearFlags:	1000000000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	750
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	6
+BREAK
+#5414
+Keywords:	stockings silk black
+Name:	^Lblack^n silk stockings
+RoomDesc:$
+A pair of black silk stockings lies here.~
+LookDesc:$
+These black stockings are crafted from pure silk. They hug the legs tightly,
+but not uncomfortably. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#5415
+Keywords:	panties lace white
+Name:	a pair of ^Wwhite^n lace panties
+RoomDesc:$
+A pair of white lace panties are lying here.~
+LookDesc:$
+A pair of panties made with pure silk, with elastic that form fits snugly, to
+fit well without causing discomfort. 
+~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	8
+BREAK
+#5416
+Keywords:	panties lace black
+Name:	a pair of ^Lblack^n lace panties
+RoomDesc:$
+A pair of black lace panties are lying here.~
+LookDesc:$
+A pair of panties made with pure silk, with elastic that form fits snugly, to
+fit well without causing discomfort. 
+~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	8
+BREAK
+#5417
+Keywords:	panties lace red
+Name:	a pair of ^Rred^n lace panties
+RoomDesc:$
+A pair of red lace panties are lying here.~
+LookDesc:$
+A pair of panties made with pure silk, with elastic that form fits snugly, to
+fit well without causing discomfort. 
+~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	8
+BREAK
+#5418
+Keywords:	dress black silk dazzling
+Name:	a ^Lblack^n silk dress
+RoomDesc:$
+A dazzling black silk dress is neatly folded here.~
+LookDesc:$
+This dress is made of rare silk, imported from somewhere, though the tags do
+not speak of any origination.  The dress is beautiful and long, with a split
+up to the mid thigh, and hugs the body nicely, as it was well tailored.  Its
+cut is not so low cut as to show far too much cleavage, but is not prudish
+either.  Its hemlines are well put together, indicative of a great designer
+who wished to create something that would last. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#5419
+Keywords:	overcoat plaid flannel armored red black
+Name:	a ^Rred^n and ^Lblack^n plaid flannel armored overcoat
+RoomDesc:$
+A red and black plaid overcoat is lying here.~
+LookDesc:$
+A heavy flannel designed for rough weather conditions, with added armor to
+protect from 'hunting accidents', this flannel would be excellent for a
+woodsman who wished to go out for some 'Extreme Hunting', or a poseur who
+wished to look like a hunter who did. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	16
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	4
+	Val4:	4
+	Val5:	5
+	Val6:	3
+BREAK
+#5420
+Keywords:	wine fine bottle sinsearach elven
+Name:	a bottle of fine Sinsearach elven wine
+RoomDesc:$
+A bottle of wine with a Sperethiel label lies here.~
+LookDesc:$
+A bottle of fine wine, with a label covered in Sperethiel characters, with a
+gold trim.  The fine print shows that it is of 2030 vintage, a great year for
+fine wines. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	3200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+	Val1:	24
+	Val2:	27
+BREAK
+#5421
+Keywords:	ki'ayolas kiayolas vegetables spices steaming
+Name:	a plate of Ki'ayolas
+RoomDesc:$
+A plate of vegetables and spices sits here steaming.~
+LookDesc:$
+Onions, lettuce, long roma-like tomatoes, peppers, and other vegetables are
+put together with fine spices and beans to create a filling vegetarian dish. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#5499
+Keywords:	sword deadly blade ice
+Name:	^LDark Blade ^Nof ^BIce^N
+RoomDesc:$
+A cold shadowy blade lies here.~
+LookDesc:$
+Said to have been used my the Legendary Samurai Black Ice. The blade is
+composed of a combination of Orichalcum, Melted Shaow, and Liquid Nitrogen,
+the handle is made of emerald, and covered in dragon scales. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1001000000101
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	5.00
+	Barrier:	32
+	Cost:	100000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val3:	300
+BREAK
+END

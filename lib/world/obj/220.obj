@@ -1,0 +1,869 @@
+#22000
+Keywords:	necklace ruby
+Name:	a ruby necklace
+RoomDesc:$
+A silver necklace with a ruby pendant is lying here.~
+LookDesc:$
+A small, polished ruby is attached to the center of this thin, silver
+necklace. The ruby seems to be engraved with letters in some ancient language,
+and it emits a soft, warm glow. 
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	1001001
+AffFlags:	1000000000
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	500000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22001
+Keywords:	collar teeth tooth
+Name:	a collar of teeth
+RoomDesc:$
+A collar made of teeth is lying here in a heap.~
+LookDesc:$
+Made of hundreds of teeth, presumably from its owners victims, it's threaded
+with a thin strand of twine. 
+~
+Type:	Worn
+WearFlags:	100000101
+ExtraFlags:	1001000
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	100000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22003
+Keywords:	full suit kevlar armor
+Name:	a full suit of kevlar armor
+RoomDesc:$
+A full suit of armor is lying here.~
+LookDesc:$
+Designed to protect the entire body, this heavy suit covers the upper leg and
+forearms. The inside has been lined with kevlar for protection. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	11010000001000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	10.00
+	Barrier:	16
+	Cost:	100000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	8
+	Val6:	6
+BREAK
+#22004
+Keywords:	sign
+Name:	a sign
+RoomDesc:$
+A large warning sign surrounded in sandbags demands your attention.~
+LookDesc:$
+WARNING: Authorized Tir Peace Force personnel ONLY beyond this point. DEADLY
+FORCE will be issued in instances of trespassing. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	40.00
+	Barrier:	24
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22005
+Keywords:	overcoat coat crimson white
+Name:	A ^rcrimson^N and ^Wwhite^N overcoat
+RoomDesc:$
+An overcoat bearing the Tir Peace Force colors is lying here.~
+LookDesc:$
+A long, heavy trenchcoat, with a crimson and white stripe down the left side.
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	5
+	Val4:	4
+	Val5:	4
+	Val6:	2
+	Val7:	-4
+BREAK
+#22008
+Keywords:	coat longcoat camouflage camo
+Name:	a camouflage longcoat
+RoomDesc:$
+A heavy, camouflaged trenchcoat is lying here.~
+LookDesc:$
+A long, heavy camouflage trenchcoat. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val4:	6
+	Val5:	4
+	Val6:	4
+	Val7:	3
+BREAK
+#22009
+Keywords:	barret r6 sniper rifle
+Name:	a Barret R6
+RoomDesc:$
+An impressive looking sniper rifle is resting here.~
+LookDesc:$
+The Barret 0.50 'Light Fifty' R6 is a long-range hard target interdiction
+weapon. It's equipped with a built in laser targetting system and vision
+magnification.  
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000001000000000000
+AffFlags:	1000000100000000000000
+Material:	metal
+[POINTS]
+	Weight:	15.00
+	Barrier:	6
+	Cost:	15000
+	AvailTN:	12
+	AvailDay:	7.00
+	LegalNum:	2
+	LegalCode:	9
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	3
+	Val3:	12
+	Val4:	12
+	Val5:	10
+	Val6:	10
+	Val7:	629
+	Val8:	-1
+	Val9:	-1
+	Val10:	4
+BREAK
+#22010
+Keywords:	cloak thermoptic plastic
+Name:	a thermoptic cloak
+RoomDesc:$
+A transparent plastic cloak is crumpled on the ground here.~
+LookDesc:$
+Made of an advanced transparent plastic, this hooded cloak grants its wearer
+nearly complete invisibility through the use of thermoptic technology. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	10
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22011
+Keywords:	vest bulletproof armor
+Name:	a bulletproof vest
+RoomDesc:$
+A rugged looking armor vest is lying here.~
+LookDesc:$
+The inside of this vest is lined with kevlar, making it quite protective
+against all manner of ballistics. 
+~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	20000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	4
+	Val6:	3
+	Val7:	1
+BREAK
+#22012
+Keywords:	tent camp camouflage large
+Name:	a tent
+RoomDesc:$
+A large, camouflage tent has been pitched here.~
+LookDesc:$
+It's probably full of TPF recruits. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22014
+Keywords:	troll target
+Name:	a troll-sized target
+RoomDesc:$
+A troll-sized target has been set up here.~
+LookDesc:$
+A big troll test dummy, its head is full of shells. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	20.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22017
+Keywords:	armor ar-256 256 experimental armor
+Name:	AR-256 experimental armor
+RoomDesc:$
+Some high tech armor is resting here.~
+LookDesc:$
+A suit of jet black, nonreflective plastic body armor. It has a small
+biomonitor on the chest. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	10
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	8.00
+	Barrier:	16
+	Cost:	2000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	11
+	Val6:	10
+BREAK
+#22019
+Keywords:	ares mp9 mp-9 laser
+Name:	an Ares MP-9
+RoomDesc:$
+A huge, shoulder mounted laser cannon is resting here.~
+LookDesc:$
+Around 1.5 meters long, this incredibly heavy cannon is equipped with a
+shoulder strap. There is a compartment in the side for battery packs. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	40.00
+	Barrier:	8
+	Cost:	900000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	18
+	Val1:	4
+	Val3:	11
+	Val4:	12
+	Val5:	16
+	Val6:	16
+	Val8:	-1
+BREAK
+#22020
+Keywords:	lamppost lamp light
+Name:	a lamppost
+RoomDesc:$
+Someone has rammed into a lamppost here, leaving it twisted and broken.~
+LookDesc:$
+It flickers every now and again. It's almost been cut in half.. must have been
+something pretty powerful. 
+~
+Type:	Light
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	200.00
+	Barrier:	24
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22021
+Keywords:	wrecked burning pile car cars
+Name:	a pile of wrecked cars
+RoomDesc:$
+A burning pile of wrecked cars lines most of the street.~
+LookDesc:$
+Looks like they've been there a while. This is probably meant to keep out
+unwanted visitors. What does this mean for you? 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22031
+Keywords:	crimson dark suit
+Name:	a dark crimson suit
+RoomDesc:$
+A blood crimson suit is lying neatly folded here.~
+LookDesc:$
+An extremely stylish deep crimson suit. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	40000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val4:	4
+	Val5:	4
+	Val6:	6
+BREAK
+#22032
+Keywords:	silver katana
+Name:	a silver katana
+RoomDesc:$
+A shining silver katana is lying here.~
+LookDesc:$
+This katana is polished so well, you can see all the embarassing features of
+your face in its reflection. The blade curves slightly, and meets with the
+handle, wrapped in blue material. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	24
+	Cost:	30000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	2
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#22033
+Keywords:	titanium chestplate armor
+Name:	a titanium chestplate
+RoomDesc:$
+A plate of titanium armor is resting here.~
+LookDesc:$
+A double plated, body hugging suit of titanium armor designed to protect the
+torso. 
+~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	24
+	Cost:	200000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	7
+	Val6:	7
+BREAK
+#22034
+Keywords:	nailbomb nail bomb grenade paper bag
+Name:	a nailbomb grenade
+RoomDesc:$
+A paper bag full of nails sits on the floor.~
+LookDesc:$
+A paper bag full of high explosives, nuts, bolts and nails. How terrible. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	2000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	4
+	Val3:	318
+	Val4:	27
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#22037
+Keywords:	mug beer glass drink
+Name:	a mug of beer
+RoomDesc:$
+A mug of beer sits here.~
+LookDesc:$
+It's a clear glass, full of frothy, golden beer. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	5
+	Val2:	10
+BREAK
+#22038
+Keywords:	flashlight torch light
+Name:	a couch
+RoomDesc:$
+A comfy looking couch sits here.~
+LookDesc:$
+It's a hotdog. You're fairly familiar with this sort of thing. 
+~
+Type:	Light
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	-1
+BREAK
+#22039
+Keywords:	dr pepper drink can
+Name:	a can of Dr. Pepper
+RoomDesc:$
+A can of Dr. Pepper has been discarded here.~
+LookDesc:$
+It's a tin can, full of Dr. Pepper (a soft drink). 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	2
+	Val2:	1
+BREAK
+#22040
+Keywords:	enhanced spinal routing plastic
+Name:	enhanced spinal routing (plastic)
+RoomDesc:$
+How did this spine replacement get here?~
+LookDesc:$
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	12
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val2:	28
+	Val4:	20
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	2
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#22041
+Keywords:	enhanced spinal routing aluminium
+Name:	enhanced spinal routing (aluminium)
+RoomDesc:$
+How did this spine replacement get here?~
+LookDesc:$
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	12
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val2:	28
+	Val4:	20
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
+[AFFECT 1]
+	Location:	Reaction
+	Modifier:	2
+[AFFECT 2]
+	Location:	Init Dice
+	Modifier:	1
+BREAK
+#22042
+Keywords:	advanced spinal routing titanium
+Name:	advanced spinal routing (titanium)
+RoomDesc:$
+How did this spine replacement get here?~
+LookDesc:$
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	12
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val2:	28
+	Val4:	20
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	1
+[AFFECT 1]
+	Location:	Reaction
+	Modifier:	4
+[AFFECT 2]
+	Location:	Impact
+	Modifier:	1
+[AFFECT 3]
+	Location:	Init Dice
+	Modifier:	2
+BREAK
+#22094
+Keywords:	attack program
+Name:	a Hardcore (tm) attack program
+RoomDesc:$
+A cyberdeck program sits on the ground.~
+LookDesc:$
+A datachip with a black skull and crossbones on a white background. 
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	972000
+	AvailTN:	16
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	18
+	Val2:	972
+	Val3:	3
+BREAK
+#22095
+Keywords:	computer terminal 3d
+Name:	a computer
+RoomDesc:$
+A computer displays wtell spam scrolling by.~
+LookDesc:$
+Blah blah blah.. don't they ever shut up? 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22096
+Keywords:	wrist deck cyberdeck computer
+Name:	a wrist computer
+RoomDesc:$
+A wristwatch sized computer lies here.~
+LookDesc:$
+Gienevive, Loki's computerized personal assistant, smiles at you from behind
+the display. 
+~
+Type:	Cyberdeck
+WearFlags:	1000000000001
+ExtraFlags:	100000000000
+AffFlags:	1010000100000000000000
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	2147483647
+	Val2:	2147483647
+	Val3:	2147483647
+	Val4:	2147483647
+BREAK
+#22097
+Keywords:	knife
+Name:	a flick-knife
+RoomDesc:$
+-> A FUCKIN' KNIFE <-~
+LookDesc:$
+It's a fucking knife. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#22098
+Keywords:	hooded sweater
+Name:	a hooded sweater
+RoomDesc:$
+A sweater sits in a heap.~
+LookDesc:$
+Yep. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22099
+Keywords:	pants dickies
+Name:	a pair of Dickies
+RoomDesc:$
+Some pants lie on the floor.~
+LookDesc:$
+Pants. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	2000
+	Val6:	2000
+BREAK
+END

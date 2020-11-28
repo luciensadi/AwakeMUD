@@ -1,0 +1,705 @@
+#32100
+Keywords:	Sig P229
+Name:	Sig P229
+RoomDesc:$
+A Sig-Sauer pistol, freshly cleaned and oiled, sits here.~
+LookDesc:$
+The Sig-Sauer P229 was one of the most accurate pistols of its day.  Able to
+chamber 13 rounds of .357 Sig, it packed a lot of punch, was dead accurate at
+the range, and didn't break the bank. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	100000000000
+AffFlags:	1000000100000000000000
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val3:	8
+	Val4:	11
+	Val5:	-1
+	Val6:	-1
+[EXTRADESC 0]
+	Keywords:	sig p229 pistol
+	Desc:$
+~
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	50
+[AFFECT 1]
+	Location:	Quickness
+	Modifier:	50
+[AFFECT 2]
+	Location:	Reaction
+	Modifier:	50
+[AFFECT 3]
+	Location:	Target Numbers
+	Modifier:	-50
+BREAK
+#32102
+Keywords:	a gold ring with ruby and opal
+Name:	A ruby and opal inlaid gold ring
+RoomDesc:$
+A wedding band with rubies and opals inlaid upon its surface lies here.~
+LookDesc:$
+This exquisitely crafted golden wedding ring has several small opals inlaid in
+the band leading to a larger, perfectly cut ruby in the center.  Within the
+band is the inscription, "To my dearest Dawn.  I, like this ring, will be with
+you forever." 
+~
+Type:	Worn
+WearFlags:	11
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Init Dice
+	Modifier:	50
+[AFFECT 1]
+	Location:	Ballistic
+	Modifier:	50
+[AFFECT 2]
+	Location:	Impact
+	Modifier:	50
+[AFFECT 3]
+	Location:	Target Numbers
+	Modifier:	-50
+[AFFECT 4]
+	Location:	Reaction
+	Modifier:	50
+[AFFECT 5]
+	Location:	Body
+	Modifier:	50
+BREAK
+#32103
+Keywords:	inscripted gold wedding ring
+Name:	An inscribed gold wedding ring
+RoomDesc:$
+A golden wedding ring with an inscription within the band lies here.~
+LookDesc:$
+This perfectly crafted wedding ring is a simple gold band for the most part.
+However, on the inside of the band is an inscription that says, "Eternally
+yours.  I love you, Angel." 
+~
+Type:	Worn
+WearFlags:	11
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#32104
+Keywords:	a black tuxedo
+Name:	Tuxedo
+RoomDesc:$
+A well-tailored tuxedo lies here, neatly folded.~
+LookDesc:$
+This tuxedo looks like a perfect fit for you.  Using new 'one size fits all'
+nanotechnology, the tuxedo automatically adjusts to fit your specific body
+type!  It comes with a white undershirt, cummerbund in your color choice,
+cufflinks, and a black bowtie. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	15000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#32105
+Keywords:	a white wedding dress
+Name:	Wedding Dress
+RoomDesc:$
+A beautiful white wedding dress, complete with veil, lies here neatly folded.~
+LookDesc:$
+This white wedding dress also has the benefit of 'one size fits all'
+nanotechnology.  Sensors imbedded within the fabric detect ground height as
+well as figure, and adjust accordingly.  Comes with a veil.  Make your groom
+to be's heart flutter when he sees you walking down the aisle in this! 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	15000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#32106
+Keywords:	white felmale dress shoes heels
+Name:	A pair of white dress heels
+RoomDesc:$
+A pair of white dress heels, to go with a wedding dress, sit here.~
+LookDesc:$
+These white dress shoes look like they'd go perfect with a wedding dress.
+They're even reinforced as to not break in a grating, like so many high heels
+do. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	800
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#32107
+Keywords:	crimson lace dress backless floor length
+Name:	Floor-length backless crimson lace dress
+RoomDesc:$
+A long dress made entirely of crimson lace is piled here.~
+LookDesc:$
+This form-fitting lace dress was made for one person, and one person only.
+The dark crimson fabric looks almost like a dress made of blood, yet it does
+show through in some parts... 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	10.00
+	Barrier:	32
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Charisma
+	Modifier:	50
+[AFFECT 1]
+	Location:	Reaction
+	Modifier:	50
+[AFFECT 2]
+	Location:	Target Numbers
+	Modifier:	-50
+BREAK
+#32108
+Keywords:	cake slice
+Name:	Cake Slice
+RoomDesc:$
+A slice of wedding cake sits here on a plate.~
+LookDesc:$
+This is a slice of Dawn and Cade's wedding cake.  Looks delish! 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#32109
+Keywords:	blue silk robes
+Name:	Silken ^Bblue^N robes
+RoomDesc:$
+A lavishly embroidered silk ^Bblue^N robe lies here, neatly folded.~
+LookDesc:$
+Utilizing nanotech construction, this durable silken garment can stand up to
+the rigors of every day life.  The soft ^Bblue^N fabric is inlaid with a ^Ygold^N line
+pattern along the edges of the garment.  It has no sleeves, acting almost more
+like a poncho than a robe, with arm holes nearly cut near the front for easy
+wearing.  
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#32110
+Keywords:	a small infant baby
+Name:	A baby
+RoomDesc:$
+A small infant is here.~
+LookDesc:$
+This little child looks like it needs a lot of tender loving care.  It doesn't
+matter what the child looks like, since you'll likely make anything up about
+the child anyway. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	5.00
+	Barrier:	8
+	Cost:	100000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	-1
+[AFFECT 1]
+	Location:	Charisma
+	Modifier:	1
+BREAK
+#32111
+Keywords:	sandals strapped pair
+Name:	A pair of strapped sandals
+RoomDesc:$
+A pair of sandals that lash around the foot and ankle are here.~
+LookDesc:$
+This pair of sandals are meant to function as open-air footwear with no chance
+of the sandal actually falling off.  Leather straps wrap around the foot and
+ankle, ending as high as one likes to the mid-calf section as a maximum.
+Utilizing nanoweave techonology, this footwear can withstand the rigors of
+time, though doesn't provide any protection against fatality. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#32112
+Keywords:	full suit kevlar armor ki'roynx
+Name:	^GGreen^N and ^Wwhite^N kevlar armor
+RoomDesc:$
+A full suit of armor in the colors of the ki'roynx lies here.~
+LookDesc:$
+Designed to protect the entire body, this heavy suit covers the upper legs and
+forearms.  The inside has been lined with kevlar for protection.  This
+particular set has been painted in the traditional colors of the ki'roynx
+faction of the Tir Peace Force. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	10.00
+	Barrier:	16
+	Cost:	100000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	8
+	Val6:	6
+BREAK
+#32113
+Keywords:	Nurse's uniform white skintight
+Name:	^WMedevac^N Nurse's uniform
+RoomDesc:$
+A skintight, highly-durable suit with the DocWagon logo lies here.~
+LookDesc:$
+This full-body stocking seems to be made of a super-durable compound which
+makes it highly resistant to all types of damage.  The main part of the
+stocking is a ^Ldark grey^N to a ^lblack^N, with ^Wwhite^N stripes about two inches long
+running down the sides of the body, starting at the shoulders and becoming
+fully ^Wwhite^N at the knees, while the arms remain ^Ldark grey^N.  Over the upper
+section is a larger carbon-fiber shell, ^Wwhite^N in color with an insigina on
+each forward-facing shoulder panel.  The symbol is that of ^BDoc^YWagon^N, a ^Rred
+cross^N in a ^Bblue circle^N, with ^WDOC^N in ^Wwhite^N letters across the horziontal plane
+of the ^Rcross^N, and ^WWAGON^N along the bottom of the whole design.  Down the
+vertical plane of the ^Rcross^N is the greek Libra.  At the botom of this whole
+patch design is a small saying in ^Bblue italic lettering^N, which states,
+"^BMedEvac-Saving metahumanity, one life at a time.^N" 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	150000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#32114
+Keywords:	white frilly blouse
+Name:	A ^Wwhite^N blouse with frills
+RoomDesc:$
+A very frilly ^Wwhite^N slip is lying here in a silk pile.~
+LookDesc:$
+This silken garment is meant to be worn next to the skin, judging by the
+texture and the construction of the slip.  The ^Wwhite^N fabric is very soft and
+surprisingly sturdy, using nanotech construction to make it super-durable,
+even if it offers no protection from ballistics or impact.  Think of it as the
+ultimate in casual wear.  Along the arms, neck, and wrists are silken ^Wwhite^N
+frills, adding a garish look that seems to go well with the entire ensemble. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	2147483647
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#32116
+Keywords:	Colt .45 ancient revolver
+Name:	A Colt .45 revolver
+RoomDesc:$
+An ancient .45 caliber revolver lies here.~
+LookDesc:$
+It's an old piece of junk, but it looks like it shoots straight and has a lot
+of power. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	8
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	6
+	Val6:	6
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+	Val10:	2
+BREAK
+#32117
+Keywords:	armband d7sec
+Name:	^R|/|^bD^B7^WSec^R|/|^N armband
+RoomDesc:$
+a fabric armband is lying here.~
+LookDesc:$
+It pretty much looks like a distinguishing mark for someone who runs with
+^bD^B7^WSec^N. 
+~
+Type:	Worn
+WearFlags:	100000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	1000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#32118
+Keywords:	Havoc's rolled up newspaper
+Name:	Havoc's Rolled-up Newspaper
+RoomDesc:$
+A bigass rolled-up, glowing newspaper sits here.~
+LookDesc:$
+This is Havoc's Newsprint of punishment.  Sunday edition.  Beware. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	4
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	50
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	50
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	50
+[AFFECT 3]
+	Location:	Reaction
+	Modifier:	50
+[AFFECT 4]
+	Location:	Init Dice
+	Modifier:	50
+[AFFECT 5]
+	Location:	Target Numbers
+	Modifier:	-50
+BREAK
+#32119
+Keywords:	racoon cap hat tanuki real fuzzy cute
+Name:	a cute ^LR^Wa^Lc^Wc^Lo^Wo^Ln^n skin cap, with ^Wf^nuzz^Wy '^Lc^noo^Ln^n ears on top
+RoomDesc:$
+a cute ^LR^Wa^Lc^Wc^Lo^Wo^Ln^n skin cap with ^Wf^nuzz^Wy '^Lc^Woo^Ln^n ears on top has been left here in the dust~
+LookDesc:$
+an adorable real raccoon fur hat, made out of the finest choice fur with cute
+fuzzy racoon ears sticking out of the top of the thick furry racoon marked
+hat.  
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#32120
+Keywords:	raccoon tail tanuki real fuzzy cute
+Name:	a cute ^Lf^nuzz^Ly^n real ^Lr^Wa^Lc^Wc^Lo^Wo^Ln ^n^Wt^nai^Wl 
+RoomDesc:$
+^LA cute f^Nuzz^Ly^N real ^Lr^Wa^Lc^Wc^Lo^Wo^Ln^N ^Wt^Nai^Wl^N has been left behind here.~
+LookDesc:$
+a cute racoon distinctivly stripped raccoon's tail, soft and fuzzy looking, it
+seems to be made out of the real thing 
+~
+Type:	Worn
+WearFlags:	100000000001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#32121
+Keywords:	long earrings datacable elegant
+Name:	A pair of ear-mounted datacables
+RoomDesc:$
+A pair of long, elegant datacables with ear-clips lie here.~
+LookDesc:$
+These two datacables make excellent earrings with their earclips.  The thick
+monofiliament lines run to the lower back, ending in jack clips while at the
+ears, a larger data-module begins about two inches from the ear, and running
+for three inches beyond that.  Nano-crafted, it's built to withstand nearly
+anything, while remain very light and comfortable to wear. 
+~
+Type:	Worn
+WearFlags:	10000000000000001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	100000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#32122
+Keywords:	gold collar BR Lianne
+Name:	Lianne's ^Ygold^N B.R. collar
+RoomDesc:$
+a ^Ygold^N collar with a serial number and the inscription "Lianne" on it lies here.~
+LookDesc:$
+This ^Ygold^N metal collar has a nine-digit serial number and looks fairly bulky,
+perhaps owing to the contents, whatever they may be.  Above the inscription of
+the serial number is another, the word "Lianne" acid-etched into the metal.
+It looks like it's custom designed to fit on one person only, perhaps the name
+inscribed on the collar. 
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	120000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#32123
+Keywords:	sniper rifle thompson center contender ancient
+Name:	An ancient Thompson Center Contender rifle
+RoomDesc:$
+A decidedly-old scoped rifle is lying here.~
+LookDesc:$
+This ancient Thompson Center Contender isn't scoped, per se, but can take one
+with no problem.  It's been rechambered to take a larger round, and the magazine
+feed has been reworked to take an extended magazine. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000001000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	18.00
+	Barrier:	6
+	Cost:	33100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	3
+	Val3:	11
+	Val4:	12
+	Val5:	14
+	Val6:	14
+	Val8:	650
+	Val9:	630
+	Val10:	4
+BREAK
+#32124
+Keywords:	raccoon fuzzy plush cute
+Name:	a super ^Lc^nut^Le ^WF^nuzz^Wy ^LR^na^Lc^nc^Lo^no^Ln ^npl^Lus^nh
+RoomDesc:$
+a super ^Lc^nut^Le ^WF^nuzz^Wy ^LR^na^Lc^nc^Lo^no^Ln ^npl^Lus^nh has been left here in the dust.~
+LookDesc:$
+a cute stuffed animal raccoon, it is well made and its fur is soft and silky
+and its markings are flawless, it has small beady eyes behind the dark
+markings around its eyes, and its striped gray and white tail is well kept, it
+is in good condition and could easily be taken for a collectors item for
+someone who collects stuffed animals. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

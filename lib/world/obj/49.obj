@@ -1,0 +1,1624 @@
+#4900
+Keywords:	switch blade switchblade
+Name:	a switchblade
+RoomDesc:$
+A shiny switchblade is lying on the ground here.~
+LookDesc:$
+It's a switchblade with a shiny blade, that looks rather sharp.  You see
+signs of use on the handle, where a bit of dried blood is stuck.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	1
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#4901
+Keywords:	knife butterfly butter
+Name:	a butterfly knife
+RoomDesc:$
+A butterfly knife is lying here.~
+LookDesc:$
+A sharp shiny butterfly knife, with an engraving on the blade that says
+"Fynk."
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+BREAK
+#4906
+Keywords:	orichalcum bracelet
+Name:	an orichalcum bracelet
+RoomDesc:$
+A glowing orichalcum bracelet is lying on the ground here.~
+LookDesc:$
+An orichalcum bracelet is lying on the ground here. 
+~
+Type:	Focus
+WearFlags:	1000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	0.30
+	Barrier:	4
+	Cost:	45000
+	AvailTN:	2
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	3
+BREAK
+#4907
+Keywords:	weapon focus sword magic
+Name:	a magical sword
+RoomDesc:$
+A magical sword is lying here, glowing softly.~
+LookDesc:$
+Made from orichalcum, you could easily see that this is not your ordinary run
+of the mill Ares Monosword.  You see elvish runes etched into the blade, and
+notice that it emits a faint glow. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	3.00
+	Barrier:	32
+	Cost:	2300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#4909
+Keywords:	securty jacket
+Name:	a kevlar security jacket
+RoomDesc:$
+A heavy kevlar security jacket is lying here.~
+LookDesc:$
+A heavy kevlar security jacket with Saeder-Krupp markings.
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	850
+	AvailTN:	4
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	2
+	Val2:	1
+	Val3:	4
+	Val4:	3
+	Val5:	5
+	Val6:	3
+BREAK
+#4911
+Keywords:	collar dog hell hound
+Name:	a hell hound's collar
+RoomDesc:$
+A hell hound's collar is lying here.~
+LookDesc:$
+A black leather collar with spikes.
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4912
+Keywords:	bag snackie soy trail mix
+Name:	a bag of Snackie-Soy energy mix
+RoomDesc:$
+A bag of Snackie-Soy (tm) High-Energy trail mix is lying here.~
+LookDesc:$
+A bag filled with pieces of flavored soy products fortified with vitamins and
+minerals.  A high protein snack.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.20
+	Barrier:	1
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#4913
+Keywords:	bottle sports water drink
+Name:	a sports bottle of water
+RoomDesc:$
+A sports bottle of water is lying here.~
+LookDesc:$
+A green sports bottle, filled with water.
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	15
+BREAK
+#4914
+Keywords:	pass card passcard
+Name:	a Saeder-Krupp Tarislar Compound pass
+RoomDesc:$
+A white card with a small laser strip is lying here.~
+LookDesc:$
+A shiny plastic white card, with a holographic strip for a laser to read
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4916
+Keywords:	helmet security black
+Name:	a black security helmet
+RoomDesc:$
+A black security helmet is lying here.~
+LookDesc:$
+A shiny black security helmet. Examing it's interior you find cushioned pads
+to soften impact trauma. A pair of reflective lenses flap up and down from the
+helmet over the eyes of the user. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	2
+	LegalCode:	11
+	LegalPermit:	1
+[VALUES]
+	Val7:	8
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#4917
+Keywords:	vest armor plated kevlar
+Name:	a plated kevlar vest
+RoomDesc:$
+A plated armor vest is lying here.~
+LookDesc:$
+A black armor vest, one of the pieces to a plain black security
+uniform.
+~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	700
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	4
+	Val5:	4
+	Val6:	3
+BREAK
+#4918
+Keywords:	plated armor trench coat trenchcoat
+Name:	a plated armor trenchcoat
+RoomDesc:$
+A heavy armor trenchcoat is lying here.~
+LookDesc:$
+A plain jet black security trenchcoat 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val4:	5
+	Val5:	5
+	Val6:	3
+	Val7:	2
+BREAK
+#4919
+Keywords:	pants plated security armor
+Name:	a pair of plated armor security pants
+RoomDesc:$
+A pair of plated security pants is lying here.~
+LookDesc:$
+Jet black security armor pants.
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	4.00
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	1
+BREAK
+#4920
+Keywords:	boots security combat
+Name:	a pair of combat boots
+RoomDesc:$
+A pair of combat boots are lying here.~
+LookDesc:$
+A pair of quick-lace heavy armor combat boots.
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	5.00
+	Barrier:	4
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val6:	1
+BREAK
+#4921
+Keywords:	radio comm
+Name:	a multi-band mini radio transceiver
+RoomDesc:$
+A walkie-talkie is lying on the ground here.~
+LookDesc:$
+Marked "MOTOROLA" with a digital display, a black speaker, and a pushbutton
+control for which band you wish to speak on.
+~
+Type:	Radio
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	5
+	Val2:	3
+BREAK
+#4922
+Keywords:	wrist phone
+Name:	a wrist phone
+RoomDesc:$
+A wristwatch-size telephone is lying here.~
+LookDesc:$
+You see a small vidscreen and speakers on this wristwatched sized telephone.
+~
+Type:	Phone
+WearFlags:	1000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4923
+Keywords:	data chip datachip large crystal clear
+Name:	a large clear crystal datachip
+RoomDesc:$
+A large crystal datachip lies here.~
+LookDesc:$
+This type of datachip is a rare find, usually only used for archiving vast
+arrays of data.  A more common use of this kind of datachip is to have it
+hardwired into a large system where it will act as a major datastore. 
+~
+Type:	Decking Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	2.00
+	Barrier:	2
+	Cost:	30000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	32
+	Val2:	7
+	Val3:	7
+BREAK
+#4924
+Keywords:	black concrete dreams 2060 tour tshirt t-shirt shirt
+Name:	a black Concrete Dreams 2060 Tour t-shirt
+RoomDesc:$
+A black concert t-shirt lies here in a heap.~
+LookDesc:$
+A t-shirt advertising the legendary rock band Concrete Dream's novahot 2060
+tour.  It has a screaming man on it with electrical arcs coming out of his
+eyeballs. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4925
+Keywords:	pink freud black t-shirt rock band shirt tshirt
+Name:	a black-colored Pink Freud t-shirt
+RoomDesc:$
+A black t-shirt with the Pink Freud logo lies here.~
+LookDesc:$
+The cover of the Pink Freud album "Signs" is emblazoned on this fashionable
+rock t-shirt.  On the back there is a silver ghost and some bizarre symbols. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	34
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4926
+Keywords:	spiked wristband leather
+Name:	a black leather spiked wristband
+RoomDesc:$
+A black leather spiked wristband lies here.~
+LookDesc:$
+The spikes are steel, sharp, and two centimeters long.  The band is made of
+leather, and is adjustible.  It is sooo punk rock. 
+~
+Type:	Worn
+WearFlags:	1000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4927
+Keywords:	docs doc martens black boots
+Name:	a pair of black Doc Martens(tm)
+RoomDesc:$
+A pair of black Doc Martens(tm) boots stand upright here.~
+LookDesc:$
+Doc Martens with the Air-Wair tag, in the 14-eye variety. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4928
+Keywords:	docs doc martens blue boots
+Name:	a pair of ^bblue^n Doc Martens(tm)
+RoomDesc:$
+A pair of ^bblue^n Doc Martens(tm) boots stand upright here.~
+LookDesc:$
+Doc Martens with the Air-Wair tag, in the 14-eye variety. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4929
+Keywords:	docs doc martens red boots
+Name:	a pair of ^rred^n Doc Martens(tm)
+RoomDesc:$
+A pair of ^rred^n Doc Martens(tm) boots stand upright here.~
+LookDesc:$
+Doc Martens with the Air-Wair tag, in the 14-eye variety. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4930
+Keywords:	docs doc martens plaid boots
+Name:	a pair of ^rp^yl^ba^ri^Ld^n Doc Martens(tm)
+RoomDesc:$
+A pair of ^rp^Ll^ra^bi^yd^n Doc Martens(tm) boots stand upright here.~
+LookDesc:$
+Doc Martens with the Air-Wair tag, in the 14-eye variety. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	255
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4932
+Keywords:	black jeans pants denim
+Name:	a pair of black denim jeans
+RoomDesc:$
+A pair of black jeans lie here.~
+LookDesc:$
+A pair of black denim jeans, made by Levi's. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.30
+	Barrier:	32
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4950
+Keywords:	green and blue armored leather trenchcoat
+Name:	A green and blue armored leather trenchcoat
+RoomDesc:$
+A green and blue armored leather trenchcoat lays here in a heap.~
+LookDesc:$
+Green and blue, with several layers of armor protection in the interior.  On
+the back is an ornate patch, with a 12 pointed geometric star, runes in
+Sperethiel, and a fiery sword between two glowing green eyes, and the words
+"Ancients M.C., Puyallup Chapter" over the top of it. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	24
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val4:	4
+	Val5:	4
+	Val6:	2
+	Val7:	2
+BREAK
+#4952
+Keywords:	pool table pooltable
+Name:	a pool table
+RoomDesc:$
+A large mahogany pool table is here.~
+LookDesc:$
+A very large pool table made of fine mahogany wood, and real felt on the table
+itself.  The balls are made of ivory and are hand-painted.  Whoever had paid
+for these tables put out a lot of money for them, as this is a rather rare
+piece of elven craftsmanship. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4953
+Keywords:	ale sierra cascadia gold bottle pale
+Name:	A bottle of Sierra Cascadia Gold pale ale
+RoomDesc:$
+A bottle, labeled Sierra Cascadia Gold Pale Ale rests here.~
+LookDesc:$
+A bottle of ale, with a fancy gold trimmed label, and the Sierra Cascadia logo
+on it. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	12
+	Val2:	11
+BREAK
+#4954
+Keywords:	whiskey whisky grimms black label bottle
+Name:	A bottle of Grimm's Black Label whiskey
+RoomDesc:$
+A bottle of Grimm's Black Label whiskey sits here.~
+LookDesc:$
+Grimm's Black Label, Genuine Tennessee Whiskey. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	17
+	Val1:	17
+	Val2:	23
+BREAK
+#4955
+Keywords:	formula 666 drink bottle liquor booze
+Name:	a bottle of Formula 666
+RoomDesc:$
+A black glass bottle with a black label with flames and a skull sits here.~
+LookDesc:$
+Formula 666, the "Official Drink of Hell", notorious for being the most
+perverse fuckup juice in existence.  Illegal in most jurisdictions, its a
+wonder you can find it in Tir Tairngire.  Does the Liquor Board know about
+this? 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	2
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+	Val1:	24
+	Val2:	32
+BREAK
+#4956
+Keywords:	dead kennedys too drunk to fuck t-shirt tshirt t shirt
+Name:	A Dead Kennedys "Too Drunk To Fuck" t-shirt
+RoomDesc:$
+A Dead Kennedys t-shirt lies here in a heap.~
+LookDesc:$
+A black t-shirt, with an artwork of a goofy looking guy and a woman and a sort
+of chaotic setting.  Above the artwork is the words "^gDEAD KENNEDYS^n", and then
+in bright white "^WToo Drunk To Fuck^n" on the left side of the artwork. 
+~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4957
+Keywords:	Dwarves T-Shirt Naked Chicks Blood Drenched Blood, Guts and Pussy
+Name:	A Dwarves "Blood, Guts and Pussy" T-shirt
+RoomDesc:$
+A dirty T-shirt with naked chicks drenched in blood lies on the ground here~
+LookDesc:$
+Here it is a peice of Seattle Punk culture, a original Dwarves "Blood, Guts
+and Pussy" T-shirt. On the front there is a picture of two lovely ladies and a
+midget drenched in blood and the words "Blood, Guts and Pussy" in a bold red.
+This T-shirt is known to offend people due to its nude models covered in cows
+blood so its not a shirt you want your mommy to see you in. On the back is the
+original Skull and Cross Boners emblem of the Dwarves which is just a normal
+skull and cross-bones except instead of cross-bones it is two penises with the
+testicles on one end made to look like a regular bone and on the other end
+there are of course the penis heads. 
+~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4958
+Keywords:	Exploited t-shirt punks not dead t shirt tshirt
+Name:	An Exploited "Punks Not Dead" t-shirt
+RoomDesc:$
+An Exploited t-shirt lies here in a heap.~
+LookDesc:$
+A t-shirt with "The Exploited" written in red bones, underneath the caption is
+a skull with a very tall mohawk.  In gray bone-letters is the caption on the
+side of the skull, "Punks Not Dead". 
+~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4959
+Keywords:	misfits fiend club t-shirt t shirt tshirt black skull
+Name:	^LA black Misfits "^WFiend Club^L" t-shirt^n
+RoomDesc:$
+A black t-shirt with a white fiend skull lies here.~
+LookDesc:$
+A plain black t-shirt with a fiend skull logo on it, and the words "Misfits
+Fiend Club" surrounding the skull. 
+~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4960
+Keywords:	anarchy sign necklace silver
+Name:	An (A)narchy sign necklace
+RoomDesc:$
+A necklace with a silver logo lies here.~
+LookDesc:$
+A silver chain with a logo in silver plated metal, with an A, surrounded by a
+circle. 
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	16
+	Cost:	40
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4961
+Keywords:	Corporate Avenger Christians Murdered Indians 
+Name:	A Corporate Avenger "Christians Murdered Indians" T-shirt
+RoomDesc:$
+A blue shirt with a graphic black and white photo of 13 amerindians being hung lies on the ground here.~
+LookDesc:$
+Complete with a horrific photo of thirteen Amerindians being hung this dark
+blue shirt is good for making a statement. On the front it has the photo and
+the words "Christians Murdered Indians" in Military-esque white print and on
+the back it has "Corporate Avenger" in the same blue font 
+~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4962
+Keywords:	AFI East Bay Hardcore T-Shirt
+Name:	A AFI "East Bay Hardcore" T-shirt
+RoomDesc:$
+A black T-shirt with the letters "AFI" clearly visible in white lies in the dirt here.~
+LookDesc:$
+its a black shirt with "AFI" in huge white letters on the front and the words
+"East Bay Hardcore" in smaller white letters on the back. 
+~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4963
+Keywords:	Sick Of It All Hooded Sweatshirt
+Name:	A "Sick Of It All" hooded sweatshirt
+RoomDesc:$
+A black hooded sweatshirt with the words "Sick Of It All" in red lettering lies here.~
+LookDesc:$
+This black sweatshirt features the classic Sick Of It All red dragon design on
+the back and the words "Sick Of It All" in red followed by "NY Hardcore" in
+white just beneath. It features a large pocket that would work great for
+hiding stuff. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	40
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	3
+	Val3:	4
+	Val4:	8
+BREAK
+#4964
+Keywords:	dead milkmen metaphysical graffiti t-shirt tshirt t shirt silkscreened album cover
+Name:	A Dead Milkmen "Metaphysical Graffiti" t-shirt
+RoomDesc:$
+A t-shirt lies here with some silkscreened album cover on it.~
+LookDesc:$
+There is a building with a bunch of goofy things happening in it, the design a
+parody of Led Zeppelin's "Physical Graffiti" album.  Above the building are
+the words "Dead Milkmen", and below are several symbols designed to mock the
+symbols on Led Zeppelin IV, saying "Bozo" instead of "Zoso", then a feather, a
+smiley face, and a stick figure. 
+~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4965
+Keywords:	shirt black flag t-shirt
+Name:	A Black Flag t-shirt
+RoomDesc:$
+A ^Wwhite^n shirt with a ^LBlack Flag^n logo on it lies here.~
+LookDesc:$
+A white t-shirt with four black bars parallel to each other but not aligned,
+and the worlds "^LBLACK FLAG^N" above the bars emblazoned in black. 
+~
+Type:	Worn
+WearFlags:	100000000000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4975
+Keywords:	double helix formation datafile
+Name:	A datafile
+RoomDesc:$
+A formation, shaped like a double helix floats about the node.~
+LookDesc:$
+Inside the matrix, this appears as a great double helix that floats about the
+datastore.  Outside the matrix, this appears as a simple optical chip. 
+~
+Type:	Decking Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	0.00
+	Barrier:	12
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	6
+	Val3:	7
+BREAK
+#4980
+Keywords:	dead weight
+Name:	a dead weight on your essence
+RoomDesc:$
+Its nothing.  Balancing mechanism.~
+LookDesc:$
+Nothing. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val4:	20
+BREAK
+#4981
+Keywords:	corpse puke feend
+Name:	^rthe corpse of Puke Feend^n
+RoomDesc:$
+^rThe mutilated corpse of Puke Feend is lying here.^n~
+LookDesc:$
+Oh my god, they really fragged him good.  His eyes have been cut out as has
+his tongue.  He's dead.  Good and dead. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4982
+Keywords:	saber light green lightsaber jedi
+Name:	^Wa ^Ggreen^W light saber^n
+RoomDesc:$
+A green jedi light saber lies here.~
+LookDesc:$
+A Jedi's weapon. 
+~
+Type:	Weapon
+WearFlags:	10100000000001
+ExtraFlags:	100000000010
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#4983
+Keywords:	light saber blue lightsaber jedi
+Name:	^Wa ^Bblue^W light saber^n
+RoomDesc:$
+A blue jedi lightsaber lies here.~
+LookDesc:$
+A Jedi's weapon. 
+~
+Type:	Weapon
+WearFlags:	10100000000001
+ExtraFlags:	100000000010
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#4984
+Keywords:	attack program
+Name:	an attack program
+RoomDesc:$
+An attack program is lying here.~
+LookDesc:$
+In the matrix, this program appears as a squirtgun.
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	1000000000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	96000
+	AvailTN:	8
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	8
+	Val2:	192
+	Val3:	3
+BREAK
+#4985
+Keywords:	sensors program
+Name:	a sensors program
+RoomDesc:$
+A sensors program is lying here.~
+LookDesc:$
+A sensors program
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	10000
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	5
+	Val2:	50
+	Val3:	300
+BREAK
+#4986
+Keywords:	masking program
+Name:	a masking program
+RoomDesc:$
+A masking program is lying here.~
+LookDesc:$
+A masking program.
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	14400
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	6
+	Val2:	72
+	Val3:	304
+BREAK
+#4987
+Keywords:	evasion program
+Name:	an evasion program
+RoomDesc:$
+An evasion program is lying here.~
+LookDesc:$
+An evasion program.
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	15000
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	5
+	Val2:	75
+	Val3:	300
+BREAK
+#4989
+Keywords:	bod program
+Name:	a bod program
+RoomDesc:$
+A bod program is lying here.~
+LookDesc:$
+Its a bod program
+~
+Type:	Program
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	15000
+	AvailTN:	4
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	5
+	Val2:	75
+	Val3:	304
+BREAK
+#4990
+Keywords:	scroll parchment
+Name:	a scroll
+RoomDesc:$
+An ancient Jedi scroll made of parchment is lying here.~
+LookDesc:$
+A tattered parchment scroll with some arcane scribblings on it...
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	7000
+	AvailTN:	7
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	2
+BREAK
+#4991
+Keywords:	dark scroll
+Name:	a dark scroll
+RoomDesc:$
+A blackened scroll with reddish writing is lying here.~
+LookDesc:$
+A dark colored charred scroll, written in blood.  The writing in blood
+covers most of the page, while at the bottom in readable English, is
+"BEWARE THE DARK SIDE"
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	500
+	AvailTN:	5
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	57
+BREAK
+#4992
+Keywords:	sith cloak
+Name:	a black Sith cloak
+RoomDesc:$
+A black cloak is lying here.~
+LookDesc:$
+The black cloak worn by Sith Lords since the old days of Darth Bane, and Iggy
+and the Stooges.  Man those were the days, dropping acid and chillin' to the
+dark side of the Force. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	101000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	10000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	20
+	Val6:	20
+BREAK
+#4993
+Keywords:	red light saber
+Name:	^La ^Rred ^Llight saber^n
+RoomDesc:$
+A lightsaber lies here.~
+LookDesc:$
+Holy fuck where did you find this?  This is Darth Vader's infamous light
+saber, used for genocide and murder-a-plenty(tm). 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	101000000010
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	20000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val1:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#4994
+Keywords:	cyber deck cyberdeck novatech radia
+Name:	a Novatech Radia-7 Cyberdeck
+RoomDesc:$
+A customized cyberdeck is lying here.~
+LookDesc:$
+A Novatech Radia-7 Cyberdeck, with some custom modifications. 
+~
+Type:	Cyberdeck
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	150000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	3
+	Val2:	100
+	Val3:	750
+	Val4:	30
+BREAK
+#4995
+Keywords:	key maglock
+Name:	an electronic key with a red security stripe on it
+RoomDesc:$
+An electronic key is lying here.~
+LookDesc:$
+An electronic key with a red security stripe on it, and the name "Dr. John
+Andburg - Nuclear Research Division - Saeder-Krupp Tarislar Compound.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4996
+Keywords:	saber light
+Name:	a lightsaber
+RoomDesc:$
+A lightsaber like the one you see in the old Star Wars vids is lying here.~
+LookDesc:$
+As lightsaber, with a long glowing green blade.
+~
+Type:	Weapon
+WearFlags:	110100000000001
+ExtraFlags:	100101000011
+AffFlags:	100
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	100000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	35
+	Val1:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#4997
+Keywords:	spell formula
+Name:	a spell formula
+RoomDesc:$
+A tattered deerskin scroll is lying here.~
+LookDesc:$
+A tattered deerskin scroll with a bunch of scribblings of some kind written on
+it.
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	6000
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	21
+BREAK
+#4998
+Keywords:	mithril black lined coat
+Name:	a mithril black lined coat
+RoomDesc:$
+A black lined coat is lying here.~
+LookDesc:$
+A black lined coat.
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	101001001011
+AffFlags:	1001000000000
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	10000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	12
+	Val6:	9
+BREAK
+#4999
+Keywords:	atom smasher atomsmasher cannon assault
+Name:	Atomsmasher
+RoomDesc:$
+A jury-rigged assault cannon is lying here.~
+LookDesc:$
+a jury-rigged assault cannon
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	101000101110
+AffFlags:	10
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	1000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	14
+	Val1:	4
+	Val3:	18
+	Val4:	21
+	Val5:	-1
+BREAK
+END

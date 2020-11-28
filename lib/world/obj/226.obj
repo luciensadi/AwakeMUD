@@ -1,0 +1,1301 @@
+#22600
+Keywords:	versk head decapitated mutilated hehe
+Name:	Versk's decapitated head
+RoomDesc:$
+A grotesque head lays here, looks familiar..~
+LookDesc:$
+This is the head of your former buddy Versk, removed at the neck. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	6.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22610
+Keywords:	key
+Name:	the key for Apartment 1A 
+RoomDesc:$
+The key for Apartment 1A sits here.~
+LookDesc:$
+It's a simple key, engraved with the number of the apartment. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22611
+Keywords:	key
+Name:	the key to Apartment 2A
+RoomDesc:$
+The key to Apartment 2A is laying here.~
+LookDesc:$
+It's pretty bland, engraved with the number of the apartment. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22612
+Keywords:	key
+Name:	the key to Apartment 4A
+RoomDesc:$
+The key to Apartment  2A is lying here.~
+LookDesc:$
+It's pretty bland, engraved with the number of the apartment. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22613
+Keywords:	key
+Name:	the key to Apartment 5A
+RoomDesc:$
+The key to Apartment  5A is lying here.~
+LookDesc:$
+It's pretty bland, engraved with the number of the apartment. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22614
+Keywords:	key
+Name:	the key to Apartment 6A
+RoomDesc:$
+The key to Apartment  6A is lying here.~
+LookDesc:$
+It's pretty bland, engraved with the number of the apartment. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22615
+Keywords:	key
+Name:	the key to Apartment 1B
+RoomDesc:$
+The key to Apartment 1B is lying here.~
+LookDesc:$
+It's pretty bland, engraved with the number of the apartment. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22616
+Keywords:	key
+Name:	the key to Apartment 3B
+RoomDesc:$
+The key to Apartment 3B is lying here.~
+LookDesc:$
+It's pretty bland, engraved with the number of the apartment. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22617
+Keywords:	key
+Name:	the key to Apartment 4B
+RoomDesc:$
+The key to Apartment 4B is lying here.~
+LookDesc:$
+It's pretty bland, engraved with the number of the apartment. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22618
+Keywords:	key
+Name:	the key to Apartment 6B
+RoomDesc:$
+The key to Apartment 6B is lying here.~
+LookDesc:$
+It's pretty bland, engraved with the number of the apartment. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22619
+Keywords:	key
+Name:	the key to Apartment 7B
+RoomDesc:$
+The key to Apartment 7B is lying here.~
+LookDesc:$
+It's pretty bland, engraved with the number of the apartment. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22620
+Keywords:	key
+Name:	the key to Apartment 8B
+RoomDesc:$
+The key to Apartment 8B is lying here.~
+LookDesc:$
+It's pretty bland, engraved with the number of the apartment. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22621
+Keywords:	key
+Name:	the key to Apartment 9A
+RoomDesc:$
+The key to Apartment 9A is lying here.~
+LookDesc:$
+It's pretty bland, engraved with the number of the apartment. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22622
+Keywords:	key
+Name:	the key to Apartment 11A
+RoomDesc:$
+The key to Apartment 11A is lying here.~
+LookDesc:$
+It's pretty bland, engraved with the number of the apartment. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22623
+Keywords:	key
+Name:	the key to Apartment 12A
+RoomDesc:$
+The key to Apartment 12A is lying here.~
+LookDesc:$
+It's pretty bland, engraved with the number of the apartment. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22624
+Keywords:	key
+Name:	the key to Apartment 14A
+RoomDesc:$
+The key to Apartment 14A is lying here.~
+LookDesc:$
+It's pretty bland, engraved with the number of the apartment. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22625
+Keywords:	key
+Name:	the key to Apartment 15A
+RoomDesc:$
+The key to Apartment 15A is lying here.~
+LookDesc:$
+It's pretty bland, engraved with the number of the apartment. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22626
+Keywords:	key
+Name:	the key to Apartment 10B
+RoomDesc:$
+The key to Apartment 10B is lying here.~
+LookDesc:$
+It's pretty bland, engraved with the number of the apartment. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22627
+Keywords:	key
+Name:	the key to Apartment 11B
+RoomDesc:$
+The key to Apartment 11B is lying here.~
+LookDesc:$
+It's pretty bland, engraved with the number of the apartment. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22628
+Keywords:	key
+Name:	the key to Apartment 12B
+RoomDesc:$
+The key to Apartment 12B is lying here.~
+LookDesc:$
+It's pretty bland, engraved with the number of the apartment. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22629
+Keywords:	key
+Name:	the key to Apartment 14B
+RoomDesc:$
+The key to Apartment 14B is lying here.~
+LookDesc:$
+It's pretty bland, engraved with the number of the apartment. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22630
+Keywords:	key
+Name:	the key to Apartment 15B
+RoomDesc:$
+The key to Apartment 15B is lying here.~
+LookDesc:$
+It's pretty bland, engraved with the number of the apartment. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22631
+Keywords:	key
+Name:	the key to Apartment 16B
+RoomDesc:$
+The key to Apartment 16B is lying here.~
+LookDesc:$
+It's pretty bland, engraved with the number of the apartment. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22656
+Keywords:	onyx earring
+Name:	an onyx stud earring
+RoomDesc:$
+The earring lies here, it draws you..in.~
+LookDesc:$
+It's so beautiful, my precious.. 
+~
+Type:	Worn
+WearFlags:	10000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Willpower
+	Modifier:	4
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	20
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	10
+[AFFECT 3]
+	Location:	Strength
+	Modifier:	2
+[AFFECT 4]
+	Location:	Ballistic
+	Modifier:	10
+BREAK
+#22657
+Keywords:	humanis policlub ring
+Name:	a humanis policlub branded ring
+RoomDesc:$
+Fuck ya.~
+LookDesc:$
+Eat it. 2 5 
+~
+Type:	Worn
+WearFlags:	11
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	10
+[AFFECT 1]
+	Location:	Ballistic
+	Modifier:	3
+[AFFECT 2]
+	Location:	Impact
+	Modifier:	3
+[AFFECT 3]
+	Location:	Age
+	Modifier:	21
+BREAK
+#22658
+Keywords:	cloak lush
+Name:	a thick cloak with a hood framed in velvet
+RoomDesc:$
+A thick cloak lays here.~
+LookDesc:$
+It's a beautiful shade of deep black, and seems to be made out of some
+endurably thick material. The hood is rimmed in a slip of crimson velvet,
+which is soft to the touch. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	5.00
+	Barrier:	32
+	Cost:	4000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	4
+	Val6:	4
+	Val7:	4
+BREAK
+#22670
+Keywords:	jingles
+Name:	Mr. Jingles
+RoomDesc:$
+AAAHHH!~
+LookDesc:$
+OOOHHH! 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22673
+Keywords:	cyberwings
+Name:	a pair of cyberwings
+RoomDesc:$
+A massive twist of metal is here.~
+LookDesc:$
+Some twisted fuck has amassed a bunch of metal and hacked it together to form
+these impressive cyberwings, they look hideously neo-industrial. 
+~
+Type:	Cyberware
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	1000
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val2:	27
+	Val4:	10
+BREAK
+#22675
+Keywords:	shirt black
+Name:	a black shirt
+RoomDesc:$
+A black t-shirt is laying on the floor.~
+LookDesc:$
+Looks like your average run-of-the-mill black t-shirt. In pretty good
+condition too. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22676
+Keywords:	shirt black
+Name:	a white shirt
+RoomDesc:$
+A white t-shirt lays here on the floor, crumpled.~
+LookDesc:$
+It's pretty clean, not one stain on it. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22677
+Keywords:	shirt green
+Name:	a green shirt
+RoomDesc:$
+An ugly green shirt is on the floor.~
+LookDesc:$
+This shirt is pretty hip, if you're into looking like a nutcase. It's bright
+green and will really catch the eye. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22678
+Keywords:	shirt blue
+Name:	a blue shirt
+RoomDesc:$
+A peaceful blue shirt lays on the floor.~
+LookDesc:$
+This shirt reminds you of loose-fit jeans. Makes you look like quite the
+relaxed fellow. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22679
+Keywords:	shirt maria mercurial
+Name:	a Maria Mercurial shirt
+RoomDesc:$
+A shirt advertising Maria Mercurial is on the floor here.~
+LookDesc:$
+This shirt is the most happening thing you've seen in a while. Maria is posing
+on the floor, in the middle of what looks like a bloodcurdling scream. This
+shirt was sold in her tour of '48. It's fairly worn in, with some small holes.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22680
+Keywords:	shirt white button
+Name:	a white button-up shirt
+RoomDesc:$
+A white shirt is on the floor, yippie.~
+LookDesc:$
+This white shirt is professional looking, with no buttons missing. It's rare.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22681
+Keywords:	shirt black button
+Name:	a black button-up shirt
+RoomDesc:$
+A black shirt is lying here.~
+LookDesc:$
+Not much to say, it's a dark color and it has buttons. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22682
+Keywords:	jeans pants
+Name:	a pair of jeans
+RoomDesc:$
+A pair of jeans lay here.~
+LookDesc:$
+These jeans are in pretty good condition, only being messed up around the
+ankles, where the fabric is worn. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	40
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22683
+Keywords:	jeans pants worn
+Name:	a worn-in pair of jeans
+RoomDesc:$
+A pair of holey jeans lay here.~
+LookDesc:$
+These jeans are pretty worn-in. There're numerous holes in them and the colors
+have faded from them. They've ended up with a dirty grey-bluish shade to them.
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	35
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22684
+Keywords:	pants business
+Name:	a pair of dress pants
+RoomDesc:$
+A pair of business pants are folded here.~
+LookDesc:$
+These pants look good for one trying to look fancy. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22685
+Keywords:	pants corduroy
+Name:	a pair of corduroy pants
+RoomDesc:$
+A pair of corduroy pants lay here.~
+LookDesc:$
+They're a tannish color and are worn in pretty good. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	46
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22686
+Keywords:	pants slacks
+Name:	a pair of slacks
+RoomDesc:$
+Some lame slacks are on the floor.~
+LookDesc:$
+They look like pants for middle-aged jerks. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22687
+Keywords:	pants synth leather
+Name:	a pair of synth-leather pants
+RoomDesc:$
+A happening pair of pants rest here.~
+LookDesc:$
+You'll look absolutely rock-star with these pants. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	75
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22688
+Keywords:	shoes sneakers black
+Name:	a pair of black sneakers
+RoomDesc:$
+A pair of sneakers sit here, stealthy!~
+LookDesc:$
+These sneakers are based on the retro-trend of last year. Although the corps
+managed to almost redesign the original Converse design, crucial details were
+left out. You also don't remember so many logo's.. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	40
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22689
+Keywords:	boots shoes fuzzy
+Name:	a pair of pink fuzzy boots
+RoomDesc:$
+Some really strange boots sit all by their lonesome here.~
+LookDesc:$
+Well, these boots look like they started out as a normal pair of combat boots.
+Then some nutcase came along and thought it'd be cute to glue on pink fur all
+over them except for the soles. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	35
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22690
+Keywords:	shoes sneakers blue
+Name:	a pair of blue sneakers
+RoomDesc:$
+A calm pair of blue sneakers look at you.~
+LookDesc:$
+These sneakers are basic, and essentially a dark blue color. The other colors
+included in the texture are white and black. They all blend with a classic
+sneaker pattern. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	40
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22691
+Keywords:	shoes trainers white
+Name:	a pair of white trainers
+RoomDesc:$
+A pair of white running shoes sit here.~
+LookDesc:$
+These were marketted to make you run faster, jump higher and get laid more by
+a disfunct Corp a few years back. You've now got your hands on them at a
+fraction of the original price. Hurrah, you cheap drekhead! 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	75
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22692
+Keywords:	boots shoes
+Name:	a pair of boots
+RoomDesc:$
+A pair of lonely boots sit here.~
+LookDesc:$
+These boots don't have much in the way of personality, aside from looking
+hardcore. If a clothes designer could made boots that look like they were made
+to kick more ass, you'd probably want them. To add to the effect, these boots
+look like they've already done some ass-kicking, testifying to it with several
+scuffs. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	60
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22693
+Keywords:	boots whore knee high
+Name:	a pair of knee-high boots
+RoomDesc:$
+A LONG pair of boots sit here.~
+LookDesc:$
+These boots look like the type a pirate wanna-be would wear. Made from what
+looks and smells like synth-leather, they've been worn in pretty well and
+sport a nice tan color. On a normal sized 'runner, they would reach the knee
+(trolls and dwarves optional .) 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22694
+Keywords:	longcoat coat kevlar layered
+Name:	a black suede longcoat with high Edwardian collar
+RoomDesc:$
+A black suede longcoat with kevlar lining lies here.~
+LookDesc:$
+This SecureTech longcoat offers civilian ballistic and armor protection with
+additional kevlar protection enhancing liner, tasteful and suited to medium
+security forces. This custom cut longcoat features a stiff, high Edwardian
+collar and single vent in back. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	24
+	Cost:	570
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	6
+	Val2:	2
+	Val3:	4
+	Val4:	6
+	Val5:	3
+	Val6:	2
+BREAK
+#22695
+Keywords:	jacket coat leather woern
+Name:	a worn-in leather jacket
+RoomDesc:$
+A leather jacket is on the floor~
+LookDesc:$
+In places it looks like someone had sewn on patches, then removed them. It's a
+nice black color. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	3
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val4:	4
+	Val5:	1
+	Val6:	2
+BREAK
+#22696
+Keywords:	jacket bomber
+Name:	a bomber jacket
+RoomDesc:$
+A happening bomber jacket is on the floor, fool.~
+LookDesc:$
+It's green with an orange lining and looks mighty comfy. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	2
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22697
+Keywords:	jean jacket
+Name:	a jean jacket
+RoomDesc:$
+There's a hip jacket laying on the floor..~
+LookDesc:$
+The retro-style returned in flux two years ago, but now that it's out the
+jackets have become a lot cheaper. You'll still look suave in this jacket.
+There's still a pin stuck in the left breast, advertising a band you've never
+heard of before. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	3
+	Cost:	30
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22698
+Keywords:	suede two tone
+Name:	a pair of two-tone shoes
+RoomDesc:$
+A fancy pair of retro two-tone shoes are here.~
+LookDesc:$
+These shoes radiate cool, with their black and white offtones. Wear these with
+your favorite jeans and you'll be getting ALL the babes, mmhmm, yeah. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	60
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#22699
+Keywords:	loafers boring youre so square
+Name:	a pair of brown loafers
+RoomDesc:$
+A pair of boring loafers sit here.~
+LookDesc:$
+corp meetings. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	40
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

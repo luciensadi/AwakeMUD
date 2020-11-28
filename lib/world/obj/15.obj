@@ -1,0 +1,289 @@
+#1500
+Keywords:	lone star partial heavy armor
+Name:	a Lone Star partial heavy armor suit
+RoomDesc:$
+Some heavy armor with Lone Star markings have been left here.~
+LookDesc:$
+This armor is styled to intimidate as well as to protect.  The torso is
+covered by rigid plates attached to an undersuit with a kevlar weave. Lone
+Star's colors are painted plainly on this particular suit, with a police
+officer's badge number stenciled on it. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	16.00
+	Barrier:	16
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	4
+	LegalCode:	11
+	LegalPermit:	0
+[VALUES]
+	Val5:	6
+	Val6:	4
+	Val7:	3
+BREAK
+#1501
+Keywords:	parking meter
+Name:	a parking meter
+RoomDesc:$
+A parking meter stands upright here.~
+LookDesc:$
+A meter standing on a pole, with a credstick slot, and a timer, as well as a
+keypad to designate exactly how many creds one is putting in for time on the
+meter. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	12
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1502
+Keywords:	knight errant k-e ke partial heavy armor
+Name:	a Knight-Errant partial heavy armor suit
+RoomDesc:$
+Some heavy armor with Knight-Errant blue and white colors lie here.~
+LookDesc:$
+This armor is styled to intimidate as well as to protect.  The torso is
+covered by rigid plates attached to an undersuit with a kevlar weave.
+Knight-Errant's blue and white are painted plainly on this particular suit,
+with the ID number and Sergeant's rank clearly stenciled on it. 
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	16.00
+	Barrier:	16
+	Cost:	1500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	6
+	Val6:	4
+	Val7:	3
+BREAK
+#1503
+Keywords:	red fez cylindrical cap
+Name:	a ^Rred^n fez
+RoomDesc:$
+A red, cylindrical shaped cap lies here.~
+LookDesc:$
+These look like the caps that the Shriners wear when they run through town in
+their miniature cars during parades.  A red fez.  Its a part of the uniform of
+the Brain Eaters thrill gang, a gang with much power in East Tacoma. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1504
+Keywords:	white black stripe t-shirt tshirt shirt horizontally
+Name:	a ^Lblack^n and ^Wwhite^n horizontally striped shirt
+RoomDesc:$
+A black and white striped shirt lies here.~
+LookDesc:$
+A black and white striped t-shirt. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#1520
+Keywords:	ACTH inhaler tube
+Name:	an inhaler tube of ACTH
+RoomDesc:$
+An inhaler tube of some kind has been discarded here.~
+LookDesc:$
+This here is Adrenocoricotrophic hormone, which is a mouthful to say, so
+everyone on the streets just calls it ACTH. It comes packaged in a flimsy
+little plastic inhaler, and once you take a deep breath, the naturally
+occuring hormone goes to work immediately. It is primarily used to voluntarily
+trigger the activation of adrenal pumps, and while not addictive, users tend
+to build up a tolerance to it over time, eventually rendering it ineffective
+as an external trigger. 
+~
+Type:	Drug
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	100
+	AvailTN:	5
+	AvailDay:	0.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#1521
+Keywords:	Hyper syringe sterile
+Name:	a syringe of Hyper
+RoomDesc:$
+A sterile syringe is sitting here, waiting to be injected.~
+LookDesc:$
+This syringe is packed full of Hyper, a direct neural stimulator, which acts
+on the nerves connected to the lobes of the brain that interpret the majority
+of nerve sensations, including but not limited to, taste, smell, sound and
+sight. Hyper artificially produces the effects of hyperaesthesia, a condition
+of excessive acuteness to sensory stimuli, resulting in pain from even the
+most minor of sensations. A light tap registers as a hard blow, and the
+softest whisper becomes a loud shout in the ear. Wanna get ripped outta your
+gourd? Then Hyper is right up your alley. 
+~
+Type:	Drug
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.05
+	Barrier:	3
+	Cost:	180
+	AvailTN:	4
+	AvailDay:	1.00
+	LegalNum:	4
+	LegalCode:	21
+	LegalPermit:	1
+[VALUES]
+	Val0:	2
+BREAK
+#1522
+Keywords:	Jazz inhaler single-dose
+Name:	an inhaler of Jazz
+RoomDesc:$
+A single-dose inhaler has been left behind here, looking lonely.~
+LookDesc:$
+Developed by the good ol' boys over at Lone Star's R&D Division labs. Jazz was
+initially designed to help run-of-the-mill law enforcement officers who run
+against the slotted assortment of heavily wired and chromed out street
+samurais. Designated officially as an "energizer", Jazz significantly boosts
+the user's reflexes and reactions for a short period. Users often suffer from
+crash periods after it wears off, and those who over-use or use it too often
+have been known to have been subject to brutal side effects. 
+~
+Type:	Drug
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	120
+	AvailTN:	8
+	AvailDay:	4.00
+	LegalNum:	4
+	LegalCode:	21
+	LegalPermit:	1
+[VALUES]
+	Val0:	3
+BREAK
+#1523
+Keywords:	Psyche pill white violet
+Name:	a white and violet Psyche pill
+RoomDesc:$
+A white and violet pill goes to waste here on the floor.~
+LookDesc:$
+This designer drug has recently hit the streets and shadows, and is allegedly
+produced by the brain-trust over at MCT. Psyche stimulates the brain into
+hyperactivity by interacting with neural receptors, increasing the users
+ability to concentrate by a severe degree. It is especially prized amongst the
+magician crowd for this very reason, but, like any designer drug, abuse is
+known to cause unwanted side effects. 
+~
+Type:	Drug
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.01
+	Barrier:	3
+	Cost:	1000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#1599
+Keywords:	wizard's eye red ale wizards
+Name:	a pint of Wizard's Eye Red ale
+RoomDesc:$
+A bottle with a label reading "Wizard's Eye Red Ale" lies here.~
+LookDesc:$
+A pint bottle of a red ale, with a dark coppery cast to it, in brown glass.
+The label says "Wizard's Eye Red" in Sperethiel and English, and has a
+painting of an old Wizard's tower, with two figures rolling a barrel together
+down a path under it.  On the back side of the bottle, near the ingredients,
+it reads, "Ch'celte Eroshniel/Product of Cascadia". 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	65
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+	Val2:	11
+BREAK
+END

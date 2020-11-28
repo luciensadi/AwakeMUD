@@ -1,0 +1,992 @@
+#60700
+Keywords:	Peanut Key
+Name:	A key with a nut engraved into the base
+RoomDesc:$
+A small key sits on the ground, mocking you.~
+LookDesc:$
+4 A small key.  The nut engraved into the base of the key looks somewhat like
+a peanut. 
+~
+Type:	Key
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60701
+Keywords:	book shakespeare william complete works
+Name:	"The Complete Works of William Shakespeare"
+RoomDesc:$
+A large book rests here.~
+LookDesc:$
+Yep. This is it. The whole thing. Start to finish. Every sonnet, every play,
+every letter to his mother. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60702
+Keywords:	book novel dead air
+Name:	"Dead Air: The Novel"
+RoomDesc:$
+A paperback book lies here.~
+LookDesc:$
+The killer combat biker simflick of 2057 is now a whopping 300 page, very
+limited print run paperback.  Get yours today before you miss this once in a
+lifetime opportunity! 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60703
+Keywords:	Shadowrun FASA box set complete Roleplaying System
+Name:	A complete set of 'Shadowrun' RPG manuals
+RoomDesc:$
+A box with "Shadowrun" written across it in gold rests here~
+LookDesc:$
+Damn.  All this stuff has started to decay, in fact, it's completely
+unreadable.  What a waste of nuyen. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	100000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60704
+Keywords:	pot coffee
+Name:	a pot of coffee
+RoomDesc:$
+A pot of coffee rests here, fortunately upright.~
+LookDesc:$
+I swear, if you're holding this, I'm going to kill you. - Scrier. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	100
+	Val1:	100
+	Val2:	2
+BREAK
+#60705
+Keywords:	book poetry poems ble casket olivia
+Name:	"'My casket is blue': The poetry of Olivia"
+RoomDesc:$
+A book of poetry with a blue cover rests here.~
+LookDesc:$
+Clambake!  This contains all of Olivia's most famous poetry, that's four
+hundred poems! Grab a copy today, mellow out and learn from the true master of
+soul. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60706
+Keywords:	shoe box foot hole shiner automated
+Name:	An automated shoe shiner
+RoomDesc:$
+A small box with a foot size hole rests on the ground.~
+LookDesc:$
+A troll sized shoe shiner! Just insert your shoe, and the shoe shiner will do
+the rest! Warning! Never insert your foot when not wearing a shoe. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60707
+Keywords:	book year pictures 2062 patrak ranam
+Name:	"2062: A Year in Pictures," by Patrak Ranam
+RoomDesc:$
+A book consisting primarily of pictures rests here.~
+LookDesc:$
+Every major event of 2062 is captured here in pictures.  The shimmering
+Dunkelzahn rift, Awakening anniversary balls, the pain of the Japanese
+eruptions.  That's right, every moment of human emotion from this year has
+been captured within. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60708
+Keywords:	trenchcoat coat trench plated armor
+Name:	a ^Lblack^n leather trenchcoat with ^gP^y-nut^n written across the shoulders
+RoomDesc:$
+A black leather trenchcoat sits on the floor in a heap.~
+LookDesc:$
+A knee-length black leather trenchcoat. The inside lining of the coat explains
+that this coat was made specifically for the Peanut Gallery, whoever that is.
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	11000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	2
+	Val4:	5
+	Val5:	5
+	Val6:	3
+	Val7:	2
+BREAK
+#60709
+Keywords:	cyberterminal green yellow computer screen monitor p-nut
+Name:	a ^yyellow^n and ^ggreen^n cyberterminal
+RoomDesc:$
+A small cyberterminal sits here.~
+LookDesc:$
+This compact cyberterminal has been painted ^yyellow^n, with a ^ggreen^n frame around
+its monitor. 
+~
+Type:	UNDEFINED
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	10.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60710
+Keywords:	black beret
+Name:	A ^Lblack^N beret
+RoomDesc:$
+A black beret is on the floor. Very Beat.~
+LookDesc:$
+It's a black beret made of fine imported wool, lined in the interior with soft
+silk. Cool, daddio. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.25
+	Barrier:	12
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60711
+Keywords:	automated dual-minigun smart turret
+Name:	An automated dual-minigun smart turret
+RoomDesc:$
+An automated dual-minigun ceiling turret is mounted above the room, aimed towards the stairway.~
+LookDesc:$
+Looks like they could turn any unwanted visitor into hamburger if they started
+firing. It's positioned to pin down the entire stairway, making it a deathwish
+for an intruder to climb the stairs. A message is scrawled onto the side of
+the right minigun in permanent marker: "Made with care. Love, Lans McKay." 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	400.00
+	Barrier:	8
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60712
+Keywords:	spa
+Name:	A ^Bpiping hot water^N spa
+RoomDesc:$
+A blue tiled spa bubbles piping hot ^Bwater^g, waiting for you to climb in.~
+LookDesc:$
+A warm, natural spring-water supplied spa. 
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	500.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	100000
+	Val1:	100000
+BREAK
+#60713
+Keywords:	peanut pnut p-nut terminal board
+Name:	The ^yP-nut^N terminal
+RoomDesc:$
+A message terminal with a ^yPeanut^g shaped keyboard sits in the corner.~
+LookDesc:$
+It's the Peanut Terminal. Durrr. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60714
+Keywords:	grandfather clock
+Name:	A large grandfather clock
+RoomDesc:$
+A large grandfather clock sits here, ticking away.~
+LookDesc:$
+For over 155 years, the name Bulova has symbolized a blend of old-world
+craftsmanship and new-world innovation. The frame is a hardwood and vaneer
+cabinet with tempered beveled glass. The cable-wound triple-chime movement
+with bronze bushings and stainless steel pivots plays the Westminster chimes
+on every hour. A rotating moonphase dial covers part of the upper half of the
+clock. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	200.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	time
+	Desc:$
+If you look closely, you can see that the roman numerals for the time have all
+been replaced with the carved in words, "Justice". According to this clock,
+its always time for Justice. 
+~
+BREAK
+#60715
+Keywords:	aquarium fish
+Name:	An aquarium with many fish swimming about in it
+RoomDesc:$
+An aquarium with many fish swimming about is placed against the wall.~
+LookDesc:$
+Dozens of colorful fish swim about in this large aquarium, around tiny
+treasure chests and an impressive castle amidst plastic seaweed, shells, and
+pebbles. Outside the aquarium, one can usually find a small container of fish
+flakes for feeding time.  
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	50.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60716
+Keywords:	workstation
+Name:	A large workstation
+RoomDesc:$
+A large workstation sits along the west wall.~
+LookDesc:$
+A few tools are sprawled across the top of this workstation, the rest placed
+away orderly. Many sockets line the wall, for power tools and other electrical
+instruments. Other tools are placed on a rack nailed into the wall. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	100.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60717
+Keywords:	control panel weather console fog rain day night
+Name:	A Control Panel
+RoomDesc:$
+A metal panel is built into the wall by the door to the west.~
+LookDesc:$
+This panel has been built to be as sturdy as possible, and the buttons on the
+console are large enough to easily accommodate a Troll's fingers without
+having to worry about multi-pushing. Various knobs and dials have text
+underneath them, giving a brief explanation as to what they do. This handy
+little piece of technology is for controlling the weather inside the training
+area. Because of the time and money that has gone into it, the controls are
+able to simulate rainfall with the same purified water that is pumped through
+the stream, and even create a cold fog with dimmed lights to help those
+training learn to fight under adverse conditions. There are also buttons that
+control the paint of the wall, with various pre-set "times" that can be
+brought up with a few presses to mimic any time of day and almost any climate
+with air conditioning and heat to match as well as possible. A lot of effort
+to put forth to an area that only seems to have one bedroom. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	100.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60718
+Keywords:	stream fountain pure
+Name:	A trickling stream of pure water
+RoomDesc:$
+A stream babbles as it flows to and from different ports in the room.~
+LookDesc:$
+The crystalline water makes its way from a section in the corner of the room,
+purified and cleansed of any particulate matter or impurities it may pick up
+while en route to the recycling center beneath the arena. The sound of it
+gushing forth adds another layer of serenity to the massive room, hopefully
+able to refresh those who train and fight here and take their mind off the
+violence that can erupt at a moments notice. 
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	200.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9999
+	Val1:	9998
+BREAK
+#60719
+Keywords:	sammich sandwich roll cheesesteak
+Name:	An enormous greasy philly cheesesteak, wrapped in bacon and deep-fried
+RoomDesc:$
+A gargantuan sandwich roll lies here, a holy light descending upon it.~
+LookDesc:$
+With enough grease covering this thing to keep a car running for at least a few hundred years or so, healthy isnt the word one would associate with this piece of food. Delicious? Yes. With a whopping thirteen pounds of rib-eye and other assorted meats crammed into the roll and cheese smothered upon it, hunger could be easily defeated for any metahuman just by glancing in its general direction. Condiments abound on this sandwich, with fried onions, sauteed green peppers, mushrooms, hot sauce, ketchup, mayo,
+ dijon mustard, and many other things a man could ask for on a sandwich, slathered all over the insides of the roll. And what seemed at first like a heavenly light around it, one would notice soon that it wasnt traveling towards the sandwich, but rather away from it, reflected by the massive amounts of grease. To add to this heartburn-inducing mess, thick strips of bacon have been wrapped about the entire sandwich itself, and the roll has even been deep fried to add to the delicious tastiness. To any real 
+man, this tasty morsel would be called a culinary masterpiece--a true delicacy that is fit for a meal of the GODS!
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	6.00
+	Barrier:	6
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#60720
+Keywords:	cup big gulp
+Name:	A Super-Ultra-Omega Big Gulp, with an Orange Slice logo
+RoomDesc:$
+A humongous cup lies here.~
+LookDesc:$
+AKA "Trog-sized", the Super-Ultra-Omega Big Gulp is perfect for any metahuman
+in need of gratuitous amounts of liquids to be drawn directly into his body,
+or for one who has no fear of bladder failure. Holding a ridiculous
+three-hundred-and-twenty fluid ounces of the chosen beverage, one will never
+go thirsty for several hours, or even days to be exact while this is around.
+The cover is easily about half the size of a manhole, and the straw to deliver
+the liquid itself is obviously about the size of the average garden hose in
+width, capable of moving several pints of the drink straight into your gullet
+at the fastest speeds imaginable. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	9.00
+	Barrier:	2
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	80
+	Val1:	80
+	Val2:	1
+BREAK
+#60721
+Keywords:	cup big gulp
+Name:	A Super-Ultra-Omega Big Gulp, with a Dr. Pepper logo
+RoomDesc:$
+A humongous cup lies here.~
+LookDesc:$
+AKA "Trog-sized", the Super-Ultra-Omega Big Gulp is perfect for any metahuman
+in need of gratuitous amounts of liquids to be drawn directly into his body,
+or for one who has no fear of bladder failure. Holding a ridiculous
+three-hundred-and-twenty fluid ounces of the chosen beverage, one will never
+go thirsty for several hours, or even days to be exact while this is around.
+The cover is easily about half the size of a manhole, and the straw to deliver
+the liquid itself is obviously about the size of the average garden hose in
+width, capable of moving several pints of the drink straight into your gullet
+at the fastest speeds imaginable. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	9.00
+	Barrier:	2
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	80
+	Val1:	80
+	Val2:	1
+BREAK
+#60722
+Keywords:	anvil huge thor urthor
+Name:	The Anvil of Thor, well, Urthor
+RoomDesc:$
+A huge anvil sits here proudly amidst a group of other smaller pieces like it.~
+LookDesc:$
+This massive anvil looks to be the piece that is most often worked on by
+whomever runs this place. Hard, dense metal has been worked masterfully to
+create working surfaces that can take a hammer blow from the large smiths who
+work here without denting or otherwise deforming in a way that would affect
+the pieces created on it. The horn that curves up from one end tapers more
+dramatically than a typical anvil, showing that this is meant to be used on
+pieces of variable sizes and can be used for working with fine detailing.
+Along one side of the huge piece are Elder Futhark runes, spelling out Uruz
+Raidho Thurisaz Othala Raidho for those who might actually know the alphabet
+or have access to the matrix. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	500.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60723
+Keywords:	ammo crate box
+Name:	Ammo Crates
+RoomDesc:$
+Several crates are piled along the walls here.~
+LookDesc:$
+Towering variably between a meter or two, crates are piled high, containing
+different amounts and types of magazines, rounds, and slugs for various weapons.
+Anti-static wrap line the insides of the crates, avoiding the chance of
+setting off the bullets through a spark from static buildup. The crates are
+stacked in such a way to create a small maze, offering cover if one was so
+inclined to have a shootout, though the chance for the ammo in the large boxes
+to be set off would be high in that regard. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	150.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	350
+	Val2:	-1
+BREAK
+#60724
+Keywords:	shelves shelf storage
+Name:	Weapon Shelves
+RoomDesc:$
+Several shelves are lined along the southern wall here.~
+LookDesc:$
+Shelving is spaced in rows, offering aisles for one to peruse through, with
+weapons lining them on either side. Racks are placed for all sorts of melee
+weapons, and stands for the larger types are located near the edge of the
+shelves. Pistol racks take up a small area of the shelves, with several
+vertical racks stacked side-by-side for the larger rifles and shotguns taking
+up the rest of the shelving. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	200.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	400
+	Val2:	-1
+BREAK
+#60725
+Keywords:	lockers
+Name:	Armor Lockers
+RoomDesc:$
+A set of lockers cover the walls here.~
+LookDesc:$
+Self-illuminating lockers line the walls, with a bullet-proofed and
+smash-resistant glass allowing one to see through to the clothing and armor
+stored within. High-security maglocks look to hold these shut and most likely
+connected to an alarm, making one more likely to be able to open them if they
+were allowed, rather than trying to bypass the locks. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	100.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	300
+	Val2:	-1
+BREAK
+#60726
+Keywords:	ergonomic weapon sling
+Name:	an ergonomically-designed weapon sling
+RoomDesc:$
+A weapon harness is stretched out on the floor here.~
+LookDesc:$
+Carefully designed and available in sizes to fit Gnomes and Giants, this
+weapon sling accepts most types of sheaths and can distribute the weight and
+load of equipment evenly over a persons body to make sure that they remain
+comfortable. Composed of durable polymer compounds that provide comfort and a
+long life in the line of duty, this allows even the richest street samurais to
+strap themselves to the teeth better than ever before so they will be prepared
+for anything short of all out nuclear warfare. 
+~
+Type:	Worn
+WearFlags:	10001000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	8
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val2:	6
+	Val3:	10
+	Val4:	6
+BREAK
+#60727
+Keywords:	belt utility duty
+Name:	an^L ashen gray^n leather field utility belt
+RoomDesc:$
+A leather belt lies coiled up here.~
+LookDesc:$
+Several loops and pouches line the length of this nifty little belt. Made out
+of a durable weave of some fire-resistant cloth, its fairly light as most
+belts go. An alloy of some flexible metal serves as the core, giving it a
+rigid yet supple form to stick straight to the waist and not impair the users
+mobility any. It looks to be capable of holding several holsters, various
+other amenities that can be thought of, and a small covering on the side of
+the belt looks to even be able to accommodate a single throwing knife, hidden
+from those who dont give a detailed search. It comes in several sizes, fitting
+the smallest Gnome up to the largest Giant. 
+~
+Type:	Worn
+WearFlags:	100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	8
+	Cost:	800
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val2:	2
+	Val3:	1
+	Val4:	5
+BREAK
+#60728
+Keywords:	holster thigh shoulder
+Name:	a lightweight tactical holster
+RoomDesc:$
+A holster has been tossed aside here.~
+LookDesc:$
+Made up of a durable, lightweight nylon, this holster can accommodate any SMG
+or pistol-sized weapon with a few simple modifications that dont take more
+than a moment or two to accomplish. Designed with quick-drawing in mind, the
+weapon can be brought out from the shoulder, waist, or even the thigh with
+nary a problem. Comes in several different colors and styles, straps are
+standard, and will fit any size of metahuman. 
+~
+Type:	Holster
+WearFlags:	1010000000000100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	8
+	Cost:	400
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60729
+Keywords:	pouch medic
+Name:	a lightweight field medic pouch
+RoomDesc:$
+A small pouch with several straps is piled up here.~
+LookDesc:$
+With a simple one-wire release on this pouch, it offers quick access to all
+items within-handy for those times when you find yourself in the middle of a
+warzone. Several straps along the underside secure the pouch snugly against
+the user if worn on the thigh or waist, and can be attached together to allow
+one to wear it under the shoulder. Lightweight and fairly durable for the
+material it is made from, this little trusty pouch will stay with you in the
+long run. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	8
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	50
+	Val2:	-1
+BREAK
+#60730
+Keywords:	maglock passkey gray
+Name:	a simple gray maglock passkey with a black stripe
+RoomDesc:$
+A simple gray passkey lies here.~
+LookDesc:$
+Used to open maglocks, this keycard is usually slid through a keycard reader
+or held nearby the lock itself, with an RF tag hidden in the card giving off a
+signal to the door for it to be unlocked. What this opens? Who knows. Many
+places have maglocks in this day and age, so there are several choices for one
+to try this on. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60731
+Keywords:	maglock passkey black
+Name:	a simple black maglock passkey with a yellow stripe
+RoomDesc:$
+A simple black passkey lies here.~
+LookDesc:$
+Used to open maglocks, this card is usually slid through a keycard reader or
+held nearby the lock itself, with an RF tag hidden in the card giving off a
+signal to the door for it to be unlocked. What this opens? Who knows. Many
+places have maglocks in this day and age, so there are several choices for one
+to try this on. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60732
+Keywords:	pistol colt double eagle custom
+Name:	a custom Colt Double Eagle pistol
+RoomDesc:$
+a large handgun was left here.~
+LookDesc:$
+The Colt Double Eagle was created back in the 1990's, but came late to the market as more 'modern' pistols took to sleeker and more compact designs, and so most gun enthusiasts considered it outdated with its heavy, all-steel construction. This particular model is chambered for the .45 ACP cartridge, made specifically for combat with its combined accuracy and stopping power against human targets. This one uses the double-action trigger type with a ring hammer and fixed dovetail sights. The gun itself is a 
+recoil-operated, locked breech pistol and uses the Browning-type locking system made famous by the Colt M1911 pistol and uses several lightweight polymers to make up the majority of the frame, along with a steel slide and chrome-plated barrel to make up a reliable, accurate, and light firearm while still retaining enough weight to be useful enough for clubbing someone across the dome with it when ammo has run out. The select fire switch flips between the Safe and Semi-Automatic positions, but strangely loo
+ks to be able to be set to a third, non-labeled option.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	10000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.25
+	Barrier:	12
+	Cost:	1500
+	AvailTN:	5
+	AvailDay:	1.00
+	LegalNum:	6
+	LegalCode:	5
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	15
+	Val9:	-1
+	Val10:	12
+[EXTRADESC 0]
+	Keywords:	Signature
+	Desc:$
+The gun's handle seems to have been molded to a particular person, with the
+grooves fitted for what seems to be either human or elf-sized fingers. Near
+the base of the grip is a small stylized sword blade with straight quillions,
+forming a slanted capital T. 
+~
+BREAK
+#60733
+Keywords:	Anti-Aircraft handgun hellbringer pistol
+Name:	^na heavy, handcrafted 'Hellbringer' handgun
+RoomDesc:$
+^nA massive handcannon lying here threatens to crush through the floor.~
+LookDesc:$
+Created off of the revolver frame, this handgun uses a short, three-round magazine inserted near the rear of the gun. As for why it only contains three cartridges, after skimming over the engraving painstakingly carved across the side of the barrel, the reason becomes clear for this 'shortcoming'. It reads: The Magnum Opus 'Hellbringer' .666 caliber handgun. You read that correctly, .666 caliber. As for the weapon's design, it is best described as a large, hefty brick soldered to a handgun grip, its large size only somewhat offsetting the massive recoil the ammo delivers to its user. Across the sides, several engravings of flames and other infernal elements originate from the barrel and cover the entirety of the weapon, showing how lovingly handcrafted this weapon was. On top of all this, a secondary barrel underneath looks to be able to take a single shotgun round. 'Rumours' told of this weapon tell that it is better described as an anti-aircraft gun rather than a simple handgun, and stories of the fact that this handcannon comes 'standard' with anti-vehicular cartridges leaves little room for one to think otherwise. From the size of the bullets, the recoil on this weapon is a beast and can easily snap one's wrist bones if they aren't careful or using a weapon brace. And don't even think of firing this one-handed, as after snapping your wrist clean off, the gun itself will be embedded in your skull after it flies out of your hand. To make sure it is held with both hands, the designer made the weapon have a heavy trigger pull beyond what normal weapons usually have so the strength from both arms were necessary for it to fire, and while this may make it a little less accurate, it has the added benefit of there being less accidental misfires as it's damn hard for the hammer to be released and fire on a random bystander, since it lacks any other kind of safety.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.25
+	Barrier:	8
+	Cost:	1500
+	AvailTN:	3
+	AvailDay:	1.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	3
+	Val8:	-1
+	Val10:	2
+[EXTRADESC 0]
+	Keywords:	Signature
+	Desc:$
+The gun's handle seems to have been molded to a particular person, with the
+grooves fitted for what seems to be either human or elf-sized fingers. Near
+the base of the grip is a small stylized sword blade with straight quillions,
+forming a slanted capital T. 
+~
+BREAK
+END

@@ -1,0 +1,1292 @@
+#35000
+Keywords:	fancy purse
+Name:	a fancy purse
+RoomDesc:$
+A fancy purse has been carelessly left behind.~
+LookDesc:$
+A purse like this was not meant to hold anything: it is made for bashing men -
+or women - who would abuse its owner. The gilt along its edged is not gold but
+plated steel, made to inflict a lot of hurting. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#35001
+Keywords:	cup skyline mocha latte mocha-latte decaf
+Name:	a cup of Skyline mocha-latte
+RoomDesc:$
+A cup of decaf-mocha-latte marked "Skyline" is lying here.~
+LookDesc:$
+A brown paper cup marked "Skyline Cafe'" holds watery sofkaf mocha-latte. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	3
+	Val2:	6
+BREAK
+#35002
+Keywords:	priceless mink fur coat
+Name:	a rich fur coat
+RoomDesc:$
+A priceless fur coat lies abandoned.~
+LookDesc:$
+A coat, wrought of the fur of poor defenseless animals. What would the
+animal-rights people say? Nothing, because they would be too busy drooling
+over how fine a coat this is. Resplendent in every way, it makes you feel
+prettier just sliding it on. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	10.00
+	Barrier:	8
+	Cost:	1200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	20
+BREAK
+#35003
+Keywords:	sliver tofu cake
+Name:	a sliver of tofu cake
+RoomDesc:$
+A sliver of tofu cake lays on a plate.~
+LookDesc:$
+It consists of tofu processed to taste like chocolate, or so the tofu people
+claim. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#35004
+Keywords:	sign
+Name:	a sign
+RoomDesc:$
+^GA metal sign hangs between the doors.^n~
+LookDesc:$
+Elves welcome.
+ Humans and dwarves accepted.
+ Orks and trolls need not enter.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#35005
+Keywords:	quintessence dollop
+Name:	quintessence
+RoomDesc:$
+A dollop of quintessence shimmers in the air.~
+LookDesc:$
+A shimmering glob of... something... shimmers as it hangs in the air. Whatever
+it is, it verily glows with magic. Its colors are as mercurial as its form,
+sometimes becoming totally transparent. It is, in fact, quintessence - a
+distillation of raw magic meant to enhance the natural properties of anything
+it is applied to. 
+~
+Type:	Focus
+WearFlags:	100000000000001
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	3000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	4
+BREAK
+#35006
+Keywords:	necklace silver dragonfly
+Name:	a dragonfly necklace
+RoomDesc:$
+A necklace with a dragonfly encased in amber lies in a tangle.~
+LookDesc:$
+A fine silver chain, cast into a Celtic Endless Knot, is strung through a lump
+of amber. Inside the thin, wide amber disk rests a fossilized dragonfly, its
+shades of blue and green still visible through the shiney amber resin. A soft
+glow shines deep within the heart of the ancient stone whenever light plays
+across it. 
+~
+Type:	Focus
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	135000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	3
+BREAK
+#35007
+Keywords:	belt sash
+Name:	a color-shifting belt
+RoomDesc:$
+A shimmering sash lays piled on the ground.~
+LookDesc:$
+A wide belt of cloth, its colors shift as light plays across it. As much as it
+gleams in outside lighting, it also seems to flare with a power all its own.
+It narrows at the ends to be easily tied about the waist, and can even be slid
+between the belt loops of jeans, slacks, and other pants. 
+~
+Type:	Focus
+WearFlags:	100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	2300000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	4
+BREAK
+#35008
+Keywords:	ring copper wire
+Name:	a copper wire ring
+RoomDesc:$
+A ring of twisted copper wire lays abandoned.~
+LookDesc:$
+Copper wire, coiled about the finger, forms a simple but shiney ring. It makes
+a different number of coils depending on the wearer - five for a human or an
+elf, three for an ork or dwarf, one for a troll - but regardless, it always
+shines like a freshly minted penny. 
+~
+Type:	Focus
+WearFlags:	11
+ExtraFlags:	0
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	0.00
+	Barrier:	16
+	Cost:	34000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	4
+	Val2:	5
+BREAK
+#35010
+Keywords:	eyepatch
+Name:	an eyepatch with the All-Seeing Eye bound on it
+RoomDesc:$
+An eyepatch with an intricate design lays here.~
+LookDesc:$
+An eyepatch hangs on a simple black cord. On the front it is emblazoned with
+the All-Seeing Eye, but the eye above the pyramid is closed, with a
+cross-shaped dagger through it top to bottom. 
+~
+Type:	Focus
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val2:	23
+BREAK
+#35011
+Keywords:	chameleon skin scroll roll
+Name:	a chameleon skin
+RoomDesc:$
+A chameleon skin lays here in a neat roll.~
+LookDesc:$
+It is a chameleon skin, rolled up like sushi and tied with its own intact
+legs. The way it is rolled, the eyes seem to be looking back at you. Somehow
+it has retained its ability to slowly merge with the colors around it. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	600
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	38
+	Val2:	1
+BREAK
+#35012
+Keywords:	scroll improved invisibility clear plastic
+Name:	a scroll of improved invisibility
+RoomDesc:$
+A scroll with clear plastic handles lies here, neatly tied.~
+LookDesc:$
+The scroll is made of parchment with clear plastic handles. Etched below the
+handles in letters that are just about visible are the words "Improved
+Invisibility." 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	600
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	38
+BREAK
+#35013
+Keywords:	scroll red parchment flamethrower
+Name:	a red parchment scroll
+RoomDesc:$
+A scroll printed on red parchment lies here.~
+LookDesc:$
+The scroll is neatly and tightly wrapped, bound about with black cord. It is
+written on thick red parchment and wrapped around yellow scroll rods. Etched
+about the handles in jet black, the scroll reads "Flamethrower - Caution:
+Volatile."  
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	6000
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	45
+BREAK
+#35014
+Keywords:	horn goat flamethrower
+Name:	a blackened goat's horn
+RoomDesc:$
+A blackened goat's horn stands here, pointed up.~
+LookDesc:$
+It is a goat's horn, blackened as though by fire, though no ash rubs off when
+it is touched. When held in the hand, it seems to still be warm, as though it
+were fresh from the goat. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	6000
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	45
+	Val2:	1
+BREAK
+#35015
+Keywords:	scroll clairvoyance eye
+Name:	a scroll of clairvoyance
+RoomDesc:$
+A scroll bound with an eye looks back at you.~
+LookDesc:$
+The blue parchment is accentuated by the black cord holding the neat scroll
+wrapped shut. The tie of the cord is clipped in place by an ornate eye clasp
+which, no matter how you turn it, always seems to be looking right at you. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	600
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	10
+BREAK
+#35016
+Keywords:	eye glass bird bird's ball
+Name:	a glass-encased bird's eye
+RoomDesc:$
+A ball of glass surrounding a bird's eye faces up from the ground.~
+LookDesc:$
+Peering through the glass into the depths of the eye, you are led to wonder
+how far it can see, or how far you could see if only its secrets could be
+unlocked. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	600
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	10
+	Val2:	1
+BREAK
+#35017
+Keywords:	scroll black white checker confusion
+Name:	a scroll of confusion
+RoomDesc:$
+A scroll in black and white lies here.~
+LookDesc:$
+The parchment is in a checkerboard motif, with opposite handles also colored
+oppositely. Written on the handles, in the other handle's color, reads
+"confusion." 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	3000
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	33
+BREAK
+#35018
+Keywords:	bill platypus platypus's severed duck
+Name:	a platypus's bill
+RoomDesc:$
+The severed bill of a duck-billed platypus lies here.~
+LookDesc:$
+The bill of the duck-billed platypus, a now rare and always comical creature.
+It has been carefully preserved and heavily enchanted. Just holding it makes
+you a little dizzy. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	3000
+	AvailTN:	6
+	AvailDay:	4.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	33
+	Val2:	1
+BREAK
+#35019
+Keywords:	scroll stabilize scales
+Name:	a scroll of stabilize
+RoomDesc:$
+A scroll printed with a scales-of-justice printed on it lies here.~
+LookDesc:$
+A simple parchment scroll with the image of the Scales of Justice printed
+across the back of the neat, tidy little roll. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	600
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	32
+BREAK
+#35020
+Keywords:	tail squirrel squirrel's
+Name:	a squirrel's tail
+RoomDesc:$
+A preserved squirrel's tail lies on the ground.~
+LookDesc:$
+The hairs are still fuzzy, the tail still flexes, and it seems to have a bit
+of magic about it too. You can just see the perfect balance of the squirrel as
+he sprints across a taut power line. 
+~
+Type:	Spell Formula
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	600
+	AvailTN:	6
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	32
+	Val2:	1
+BREAK
+#35021
+Keywords:	shawl mink fine
+Name:	a mink shawl
+RoomDesc:$
+A fine mink shawl lies, carefully folded, on the ground.~
+LookDesc:$
+A fine mink shawl, meant to wrap around the torso like the top half of a
+cloak, minus the hood. It is slightly colored into soft earth-tones, meant to
+go with just about anything. 
+~
+Type:	Worn
+WearFlags:	10000000101
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	9.00
+	Barrier:	8
+	Cost:	14000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	30
+BREAK
+#35022
+Keywords:	roll soy
+Name:	a soy roll
+RoomDesc:$
+A soy roll sits here.~
+LookDesc:$
+It is a simple, plain, flavorless soy roll. It's supposed to taste like a
+donut - the manufacturers swear it tastes just like one - but in fact it
+tastes more like ground-up sawdust. 
+~
+Type:	Food
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+BREAK
+#35023
+Keywords:	hat fur puffy
+Name:	a puffy fur hat
+RoomDesc:$
+A puffy fur hat lies, collapsed, on the ground.~
+LookDesc:$
+A squat, cylindrical hat made of rich, warm fur. It sits nicely over the ears,
+be they pointy or rounded, to keep out the chill. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	23000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#35024
+Keywords:	ring dragon sleeping snoozing
+Name:	a snoozing-dragon ring
+RoomDesc:$
+A ring depicting a sleeping dragon shines in the dust.~
+LookDesc:$
+It's a shiny silver ring, carved in intricate detail, to look like a dragon
+with its head resting on its own shoulder, eyes closed, soundly asleep. It is
+cast of platinum and rather heavy. 
+~
+Type:	Other
+WearFlags:	11
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	8
+	Cost:	1975
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#35025
+Keywords:	earring diamond diamonds cluster grapes dangle
+Name:	a dangling cluster of diamonds
+RoomDesc:$
+An earring with diamonds like grapes lies where it was dropped.~
+LookDesc:$
+This earring has many many many tiny little diamonds all over it, hanging from
+thin white-gold wires like a cluster of grapes. The effect is a shimmering
+dazzle of reflections not unlike a miniature disco ball. 
+~
+Type:	Other
+WearFlags:	10000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	3550
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#35026
+Keywords:	Rolex watch pocket pocketwatch fine
+Name:	a flashy Rolex pocket watch
+RoomDesc:$
+A fine pocketwatch emblazoned with the Rolex sigil has been left behind.~
+LookDesc:$
+A fine platinum watch strung on the end of a long chain. It is meant to be
+clipped to an article of clothing and looks very classy with just about any
+formalwear. 
+~
+Type:	Other
+WearFlags:	100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	3500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#35027
+Keywords:	hooded cloak black heap
+Name:	a black hooded cloak
+RoomDesc:$
+A hooded black cloak lays crumpled in a heap.~
+LookDesc:$
+It is a hooded black cloak so black you don't seem to be able to focus on it.
+When you try to touch it, your fingers pass through it, leading you to wonder
+if perhaps its magical. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	1000000
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	-2
+BREAK
+#35028
+Keywords:	fountain techno color-shifting color shifting
+Name:	a color-shifting fountain
+RoomDesc:$
+A techno-designed fountain is built into the wall.~
+LookDesc:$
+The fountain is more like a recess into the wall. Water sprays constantly from
+one side of the black metal basin to the other, recycling itself continuously.
+Clusters of LEDs pulse through the water, changing its color through the
+entire visible spectrum every few minutes. 
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4987
+	Val1:	4987
+BREAK
+#35029
+Keywords:	green fiberoptic crystal
+Name:	a green fiberoptic crystal
+RoomDesc:$
+A green crystal glows faintly on the ground.~
+LookDesc:$
+The green crystal is obviously synthetic. It is made to reflect light within
+itself, forming a very specific pattern. Its shape is irregular, with no two
+facets exactly alike. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#35030
+Keywords:	midnight blue black hooded mage mages robe aquilor
+Name:	a ^bmidnight blue^n and ^Lblack^n hooded mage's robe
+RoomDesc:$
+A hooded mage's robe in ^bAquilor ^Lcolors^n lays, crumpled, on the ground.~
+LookDesc:$
+It is an extra-long mage's robe, complete with hood. It is in the midnight
+blue and black colors of an Aquilor Security official, with a pentagram on the
+breast. Surrounded by four smaller stars, the sigil marks the wearer as an
+officer of the Battlemage Division. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	10010000000001000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val4:	5
+	Val5:	3
+	Val7:	23
+BREAK
+#35031
+Keywords:	athame aquilor
+Name:	an ^bAquilor ^Lathame^n
+RoomDesc:$
+A long, thin-bladed athame in ^bAquilor ^Lcolors^n lies here.~
+LookDesc:$
+At seven inches in blade length, the athame stand midway between being a
+dagger and being a short sword. Either way, it is made for rending flesh and
+spirit with equal ease, and making any mage who can lay a hand on it much more
+potent. Sigils adorn the blade, acid-etched in what looks like a cross between
+Sperethiel and Sanskrit, and they verily shine with magic. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1001001001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	0.50
+	Barrier:	16
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#35032
+Keywords:	custom rifle aquilor assault
+Name:	a custom-designed ^bAquilor ^Lassault rifle^n
+RoomDesc:$
+A heavily customized assault rifle lies, locked, on the ground.~
+LookDesc:$
+With a slightly elongated barrel and large  bore size the rifle has
+considerably increased power. The shoulder stock has been affixed with a large
+spring system that helps the user reduce the amount of recoil felt in an
+effort to increase accuracy. The flat black and blue color scheme add to the
+guns surprisingly simplistic look with the barrel being blue to define it
+against the body of the gun. The one surprising feature of the gun is a system
+that stores spent rounds so they don't clatter to the ground. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1101000000000
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	3
+	Val3:	13
+	Val4:	14
+	Val5:	-1
+	Val6:	-1
+	Val7:	28702
+	Val8:	20373
+	Val9:	9194
+BREAK
+#35033
+Keywords:	sword greatsword monofilament mercurial
+Name:	a monofilament mercurial greatsword
+RoomDesc:$
+An enormous, heavy sword lies on the ground.~
+LookDesc:$
+A huge weapon, it looks like a sword but handles like an axe. Inside the heavy
+steel blade is a slender channel filled with mercury. When swung, this mercury
+flows from a bulb in the handle to fill the channel in the blade, making the
+tip heavier and giving it a mighty, cleaving swing. Combined with its
+monofilament edge, it is capable of ripping through just about any defense.  
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	7.00
+	Barrier:	16
+	Cost:	587000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#35034
+Keywords:	apron leather heavy blacksmiths
+Name:	a heavy leather blacksmith's apron
+RoomDesc:$
+A heavy leather apron hangs on a peg.~
+LookDesc:$
+Made of stout leather, its sole purpose is to keep chips of hot metal from
+leaving marks on a blacksmith's flesh and fire on his clothes. 
+~
+Type:	Worn
+WearFlags:	1000
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	4
+	Val6:	9
+	Val7:	50
+BREAK
+#35035
+Keywords:	torn-off black tshirt
+Name:	a "Bad Kitty" torn-off t-shirt
+RoomDesc:$
+A torn-off black t-shirt lies here.~
+LookDesc:$
+A girl's t-shirt, made to end just below the breasts. It features the words
+"Bad Kitty" in sparkly letters meant to lay across the tops of the girl's
+breasts. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#35036
+Keywords:	sign
+Name:	a sign
+RoomDesc:$
+A sign stands on the counter.~
+LookDesc:$
+Due to legal issues, the Radio Shack Decking Supply department has been
+temporarily shut down. We apologise for the inconveniance. - Radio Shack
+Management 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#35037
+Keywords:	miniature winch block tackle block-and-tackle motorized
+Name:	a miniature motorized winch
+RoomDesc:$
+A miniature block-and-tackle lies on its side.~
+LookDesc:$
+The rope on this small but powerful winch is attached to a grappling hook.
+Self-deploying and self-retracting, it is the perfect aid when climbing. 
+~
+Type:	Climbing gear
+WearFlags:	1000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	10.00
+	Barrier:	8
+	Cost:	200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+BREAK
+#35038
+Keywords:	silencer
+Name:	a silencer
+RoomDesc:$
+A long, thin silencer rolls around slowly.~
+LookDesc:$
+It's a silencer, plain and simple. Made of black brushed metal and made to
+attach to the barrel of your pistol, it is guaranteed to keep your violent
+tendencies under wraps. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	1000
+	AvailTN:	4
+	AvailDay:	2.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	5
+BREAK
+#35039
+Keywords:	color-shifting hooded cloak
+Name:	a color-shifting hooded cloak
+RoomDesc:$
+A transparent cloak lies on the ground, hard to see for its ever-shifting colors.~
+LookDesc:$
+By bending light around and through itself, this cloak uses both magic and
+technology to make its wearer invisible to the naked eye. Even on thermograph,
+only a subtle distortion created by its heat dissipation hardware makes it
+possible to spot the wearer. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	10000000000000000000000000
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#35040
+Keywords:	suit red armor lone star custom
+Name:	LoneStar custom red armor
+RoomDesc:$
+A suit of red armor with an odd LoneStar symbol on it has been abandoned.~
+LookDesc:$
+A sleek suit of red military ceramic armor, this stuff could stop an antitank
+shell as easily as an antipersonnel round. On the breastplate, there is the
+symbol of the Supernova Squad, LoneStar's elite super-high-threat group. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	100001000000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val5:	13
+	Val6:	13
+	Val7:	-10
+[AFFECT 0]
+	Location:	Magic Pool
+	Modifier:	40
+[AFFECT 1]
+	Location:	Target Numbers
+	Modifier:	-20
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	20
+BREAK
+#35197
+Keywords:	black epic katana apollyon one blade
+Name:	Apollyon
+RoomDesc:$
+A katana of epic proportions stands, stuck in the ground, waiting...~
+LookDesc:$
+This is the One Blade - Apollyon. Forged in the black fires of the Shai Realm
+by the Lord Supreme Shai himself, Apollyon cannot be destroyed. It cannot be
+wielded by any who are not Shai, or at least equivalent to a Shai in power and
+knowledge. In form, Apollyon is made like a katana, though it is much larger
+than any normal weapon. Its handle is two feet long and made of pure black
+onyx, embued by the Shai with their magic to make it harder than titanium.
+Platinum studs show through the black leather wrapping that makes the stone
+handle grippable. Its blade extends an incredible seven feet in length. It,
+too, is black. The Shai forged this weapon from an alloy of Damascus steel,
+orichalcum, and the metal that in the First Age was called Mithril. Forging in
+the black fires in the heart of Mount Scardai, the center of the Shai Realm,
+stained the weapon, blade and handle, a shade of black like the void of space.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1100001000011
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	30
+	Val1:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+[AFFECT 0]
+	Location:	Magic Pool
+	Modifier:	125
+[AFFECT 1]
+	Location:	Max Mental
+	Modifier:	120
+[AFFECT 2]
+	Location:	Max Physical
+	Modifier:	100
+[AFFECT 3]
+	Location:	Impact
+	Modifier:	100
+[AFFECT 4]
+	Location:	Ballistic
+	Modifier:	100
+[AFFECT 5]
+	Location:	Combat Pool
+	Modifier:	110
+BREAK
+#35198
+Keywords:	callandor sword
+Name:	Callandor
+RoomDesc:$
+The Sword that Cannot be Touched hovers in the air.~
+LookDesc:$
+It is a massive sword, as large as a claymore, and cast of pure irridescent
+white crystal. The etchings along its translucent blade are in Syrian Aramaic,
+a language that has not been widely spoken in almost three millenia. It verily
+glows with an inner fire, the magnification ten-thousand-fold of the innate
+magical abilities of whosoever should possess it. 
+~
+Type:	Weapon
+WearFlags:	10000000000000
+ExtraFlags:	101001001100
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	15.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	4
+	Val3:	322
+	Val4:	22
+	Val5:	-1
+	Val6:	-1
+[AFFECT 0]
+	Location:	Magic
+	Modifier:	50
+[AFFECT 1]
+	Location:	Reaction
+	Modifier:	50
+[AFFECT 2]
+	Location:	Magic Pool
+	Modifier:	50
+[AFFECT 3]
+	Location:	Combat Pool
+	Modifier:	50
+[AFFECT 4]
+	Location:	Max Physical
+	Modifier:	100
+[AFFECT 5]
+	Location:	Max Mental
+	Modifier:	100
+BREAK
+#35199
+Keywords:	silver dress
+Name:	a simple silvery dress
+RoomDesc:$
+A rather plain, if shiney, silver dress is laid out.~
+LookDesc:$
+It is a very plain dress, made for a child. A bit of frills accent the edges,
+and the whole thing shines with a silvery color. Overall it creates the image
+of a rich girl trying to look dressed down. 
+~
+Type:	Worn
+WearFlags:	1000
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	5
+	Val5:	30
+	Val6:	30
+	Val7:	90
+[AFFECT 0]
+	Location:	Essence
+	Modifier:	15
+[AFFECT 1]
+	Location:	Body
+	Modifier:	10
+BREAK
+END

@@ -1,0 +1,538 @@
+#5600
+Keywords:	bodysuit black cut-away revealing
+Name:	a revealing black cut-away bodysuit
+RoomDesc:$
+A very stylish and sexy bodysuit lays here~
+LookDesc:$
+This garment belongs to the Goddess Peorth.  Reflecting her tastes, this
+fashion number's become completely associated with her.  Insisting that its
+more than just for comfort, this bodysuit can also maintain a set temperature.
+((Will think of a better description for this soon - Peorth)) 
+~
+Type:	Worn
+WearFlags:	100000000001001
+ExtraFlags:	100101000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	32
+	Cost:	200000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	bodysuit black cut-away revealing
+	Desc:$
+It's Sexy, it's pretty, it's skimpy, it's Peorth's. 
+~
+[EXTRADESC 1]
+	Keywords:	bodysuit black cut-away revealing
+	Desc:$
+It's Sexy, it's pretty, it's skimpy, it's Peorth's. 
+~
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	4
+[AFFECT 1]
+	Location:	Charisma
+	Modifier:	6
+[AFFECT 2]
+	Location:	Magic
+	Modifier:	9
+[AFFECT 3]
+	Location:	Magic Pool
+	Modifier:	5
+[AFFECT 4]
+	Location:	Ballistic
+	Modifier:	4
+[AFFECT 5]
+	Location:	Impact
+	Modifier:	4
+BREAK
+#5601
+Keywords:	boots half-boots leather
+Name:	a pair of Leather Half-boots
+RoomDesc:$
+A pair of leather half-boots lay here~
+LookDesc:$
+It's Cute, it's fashionable, it allows your feet to breathe while still
+providing protection. 
+~
+Type:	Worn
+WearFlags:	100000001000001
+ExtraFlags:	100101000000
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	4.00
+	Barrier:	32
+	Cost:	167000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Quickness
+	Modifier:	4
+[AFFECT 1]
+	Location:	Reaction
+	Modifier:	3
+[AFFECT 2]
+	Location:	Init Dice
+	Modifier:	5
+BREAK
+#5602
+Keywords:	gloves finger-less brown soft
+Name:	a pair of soft, brown, finger-less gloves
+RoomDesc:$
+A pair of delicate gloves lay here, uncherished~
+LookDesc:$
+It protects the hands. ((better item description will come soon - Peorth)) 
+~
+Type:	Worn
+WearFlags:	100000010000001
+ExtraFlags:	100101000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	50000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Magic
+	Modifier:	4
+[AFFECT 1]
+	Location:	Magic Pool
+	Modifier:	3
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	3
+BREAK
+#5603
+Keywords:	protective eye-glasses glasses
+Name:	a pair of protective eye-glasses
+RoomDesc:$
+An elegant-looking glasses lay here~
+LookDesc:$
+It's actually just another alloy neatly painted silver, but the intricate
+design of it all still makes the spectacles a must-have for any respectable
+fashion freak. 
+~
+Type:	Worn
+WearFlags:	1100000000010001
+ExtraFlags:	0
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	50000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Body
+	Modifier:	2
+[AFFECT 1]
+	Location:	Charisma
+	Modifier:	2
+[AFFECT 2]
+	Location:	Target Numbers
+	Modifier:	-10
+[AFFECT 3]
+	Location:	Init Dice
+	Modifier:	12
+[AFFECT 4]
+	Location:	Combat Pool
+	Modifier:	12
+[AFFECT 5]
+	Location:	Intelligence
+	Modifier:	2
+BREAK
+#5604
+Keywords:	shawl waist-buckled angelic
+Name:	An angelic waist-buckled shawl
+RoomDesc:$
+A lovely fashion accessory lies here~
+LookDesc:$
+((to be added soon -- Peorth)) 
+~
+Type:	Worn
+WearFlags:	100010000000001
+ExtraFlags:	100101000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	120000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	10
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	10
+[AFFECT 2]
+	Location:	Magic Pool
+	Modifier:	10
+BREAK
+#5605
+Keywords:	earrings earring heavenly silver
+Name:	a pair of heavenly, silver earrings
+RoomDesc:$
+A shimmering pair of earrings lay here~
+LookDesc:$
+((to be added soon --Peorth)) 
+~
+Type:	Focus
+WearFlags:	10100000000000001
+ExtraFlags:	100101000000
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	75000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	6
+	Val2:	3
+[AFFECT 0]
+	Location:	Intelligence
+	Modifier:	10
+[AFFECT 1]
+	Location:	Magic Pool
+	Modifier:	10
+[AFFECT 2]
+	Location:	Charisma
+	Modifier:	4
+BREAK
+#5607
+Keywords:	object unfinished
+Name:	a clear optical chip with the Sony/RCA logo
+RoomDesc:$
+An optical chip with a corporate logo has been left here.~
+LookDesc:$
+This optical chip is marked with the Sony/RCA corporate logo. Inserting the
+chip into any sim- or cyber-deck plays back the recording:
+ [TIME INDEX - ERR/ERR/2062 1200 PST]
+ Your first sensation is a cool silk
+dress against your strong but suple orkish body. The second is a beautiful,
+dark haired woman woman smiling at you. You smile back to her as she takes
+your hand and steps out of the limo.
+ You look at the expensive boutique, then head inside, hand-in-hand with your
+[SIMSENSE WARNING - PEAK EMOTIONAL SIGNAL DETECTED - NATURE UNKNOWN] lover.
+ [The time indexes become sporadic as the recording is turned on and off, but
+it becomes quite clear you (the ork woman) and the human woman spend the day
+driving around in a limo and shopping at expensive boutiques.]
+ [After dinner at a posh resteraunt, the couple returns to an equally posh
+apartment. They share a shower, then retire to bed for an evening of loving,
+tender intercourse.]
+ [TIME INDEX - ERR/ERR/2062 0900 PST]
+ You wake up alone and cold. You slip out from under the covers, your body
+pleasantly sore from last night's activities. You slip your feet into a pair
+of slippers and pull a robe around you. Smiling to yourself, you head towards
+the kitchen.
+ When you get there, the door is ajar. You push it open and stop, gasping.
+Your lover is there, what looks to be a half-eaten a human leg in her hand,
+her mouth covered in blood.
+ You scream, slam the door, and run out of the apartment. [RECORDING
+SUSPENDED]
+ 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#5608
+Keywords:	simsense optical chip lonesome dove
+Name:	a pale blue optical chip with a round black sticker
+RoomDesc:$
+An optical chip with a round black sticker has been left here.~
+LookDesc:$
+This optical chip is marked with a round black sticker. Inserting the chip
+into any sim- or cyber-deck plays back the video:
+ [INVALID TIME INDEX - PLEASE VERIFY DATA]
+ You find yourself looking at the
+ceiling. Your head pans around, taking in your surroundings. Looking left and
+right, you discover that your well-muscled arms are securely fastened to the
+headboard. You lift your head and look down the lengh of your fine body - you
+realize that you're tied, spread eagled on the bed.
+ Your body heaves, breasts bouncing, muscles clencing and unclencing as you
+try to break free from the bonds. [SIMSENSE WARNING - MODERATE FEAR  DETECTED]
+Your head slews back and forth as you struggle  you notice your own reflection
+in the miror, lovely despite your tusks and your erratic movements. You ignore
+it and continue to test your bonds.
+ A few moments go by, and you see a man walk intot he room. He is dressed in
+all black leather, from his neck down to his boots - even his hands are
+covered. He walks over to you as you writhe on the bed, reaching out a hand to
+touch your firm stomach. [SIMSENSE WARNING - PEAK FEAR SIGNAL DETECTED]
+ You scream as he climbs on the bed with you. The pitch goes up even louder as
+he unfastens his pants and begins having his way with you. You try to fight
+him, but the bonds are too tight.
+ After a few moments of his savage attack, he draws a gun and points it at
+your forehead. Still ravaging your body, he squeezes the trigger. A blast of
+searing pain lances through your forhe-
+ [SIMSENSE WARNING - UNKNOWN PEAK SIGNAL DETECTED - RECORDING SUSPENDED]
+ 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#5609
+Keywords:	dull brown suit business
+Name:	a dull brown suit
+RoomDesc:$
+A brown suit is hanging here.~
+LookDesc:$
+A conservative brown business suit. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	5.00
+	Barrier:	4
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#5610
+Keywords:	corpse prostitute hooker body woman young tacky
+Name:	^rThe corpse of a young woman^n
+RoomDesc:$
+^rThe body of a young woman in tacky clothes lies crumpled against the wall in a pool of blood.^n~
+LookDesc:$
+She appears to have been a member of one of Seattle's many hordes of
+streetwalkers. Upon closer examination, the cause of death becomes obvious.
+She has large chunk of flesh missing from the base of her skull, where the
+hair has been neatly shaved away. The clotting blood makes it difficult to
+tell, but the wounds look like they were made with a sharp blade. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	56.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	30
+	Val2:	-1
+BREAK
+#5611
+Keywords:	suit man body corpse
+Name:	^rThe corpse of a businessman^n
+RoomDesc:$
+^rThe body of a man in a cheap suit lies on its back staring blankly into the sky.^n~
+LookDesc:$
+A balding, middle aged man lies here, quite dead. A pool of blood is slowly
+forming behind his head. Upon closer inspection, you discover that the cause
+of death was most likely the neat, surgical removal of a square of flesh from
+the base of his neck. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	93.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	60
+	Val2:	-1
+BREAK
+#5612
+Keywords:	body child runaway
+Name:	^rThe corpse of a runaway^n
+RoomDesc:$
+^rThe body of a young child is lying here in the fetal position.^n~
+LookDesc:$
+A young child, with dirty skin and shabby clothes lies here, curled in a ball.
+His still blue eyes open, in an expression of abject fear, and his hands are
+clutched in tight little balls against his chest. His whole frame is rigid,
+clutched tightly to himself, from his knees below his chin to his neck curled
+tightly over them, revealing a bloody wound. A section of flesh has been
+removed, obviously with a sharp blade of some kind, although the direction of
+the cuts show clearly that they were not made without a struggle. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	28.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val2:	-1
+BREAK
+#5613
+Keywords:	body corpse bum man unshaven
+Name:	^rThe corpse of a bum^n
+RoomDesc:$
+^rAn unshaven man sits propped up against a wall, his head slumped over his knees.^n~
+LookDesc:$
+A man in a dirty brown trenchcoat is propped up here, his head resting
+unnaturally on his knees. A thin trickle of blood makes its way from within
+his mop of greasy grey hair, under his ear and dissapears under his unkempt
+grey-flecked beard. His arms hang limply at his sides, as if in surrender.
+ Upon inspection, you find that the hair at the base of his skull has been
+removed, and a series of neat, surgical cuts have been made, deep, and a
+section of flesh has been removed, revealing a bleached-white vertebrae, with
+a neat puncture hole dead in its center. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	35
+	Val2:	-1
+BREAK
+#5614
+Keywords:	young scantily girl
+Name:	^rThe corpse of a clubber^n
+RoomDesc:$
+^rA young, scantily dressed girl lies here, mouth agape.^n~
+LookDesc:$
+A young girl, in her late teens, lies stretched out here. Her mouth hangs open
+slackly and she stares into space, one arm flung out such that if it wasn't
+for the pool of blood forming beneath her head, most would say she was posing.
+She is dressed as if for a night out, in trendy, revealing clothes, now soiled
+by grime and blood. Upon examination, her strawberry blonde hair has been
+shaved past its dark roots at the base of her neck, and a deep wound, obscured
+by blood, provides an obvious cause of death. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	49.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val2:	-1
+BREAK
+#5615
+Keywords:	gurney mortician sheet dead body
+Name:	a cold, steel gurney
+RoomDesc:$
+A cold, steel gurney sits here, waiting for the dead.~
+LookDesc:$
+This gurney is made of steel, with hard rubber wheels. It's shined to a high
+sheen and smells faintly of bleach and formaldihyde. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	20.00
+	Barrier:	4
+	Cost:	3000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	4
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+END

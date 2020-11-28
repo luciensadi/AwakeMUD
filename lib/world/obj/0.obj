@@ -1165,31 +1165,6 @@ Material:	paper
 [VALUES]
 	Val0:	25000
 BREAK
-#99
-Keywords:	a sign
-Name:	a sign
-RoomDesc:$
-An arrow suspended in the dimness points you to the north.~
-LookDesc:$
-Che didn't include the Docwagon or similar recovery rooms in the distributed
-code, so for now everyone who dies is loading in to this room. Head north to
-go to Dante's Inferno. Other exits may be added by popular request. 
-~
-Type:	UNDEFINED
-WearFlags:	0
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	0.00
-	Barrier:	32
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-BREAK
 #100
 Keywords:	credstick plastic
 Name:	a plastic credstick
@@ -1513,7 +1488,7 @@ AffFlags:	0
 Material:	paper
 [POINTS]
 	Weight:	0.00
-	Barrier:	4
+	Barrier:	1
 	Cost:	0
 	AvailTN:	0
 	AvailDay:	0.00
@@ -1663,7 +1638,7 @@ AffFlags:	0
 Material:	metal
 [POINTS]
 	Weight:	0.00
-	Barrier:	6
+	Barrier:	32
 	Cost:	0
 	AvailTN:	0
 	AvailDay:	0.00
@@ -1696,24 +1671,22 @@ Material:	metal
 	LegalPermit:	0
 BREAK
 #120
-Keywords:	ucas army dress uniform
-Name:	^gA UCAS Army dress uniform shirt^n
+Keywords:	grafitti
+Name:	a piece of graffiti
 RoomDesc:$
-Army dress greens lie here, folded meticulously.~
+a non-descript piece of graffiti is here.~
 LookDesc:$
-A UCAS Army dress green uniform shirt, with a brass pin etched with the word
-"Straten" upon it, and three stars denoting Major General rank on the collar
-and on the shoulders. 
+It's just paint. 
 ~
-Type:	Worn
-WearFlags:	1001
+Type:	Other
+WearFlags:	0
 ExtraFlags:	0
 AffFlags:	0
-Material:	fabric
+Material:	concrete
 [POINTS]
-	Weight:	1.00
+	Weight:	0.00
 	Barrier:	32
-	Cost:	1200
+	Cost:	0
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
@@ -1721,24 +1694,24 @@ Material:	fabric
 	LegalPermit:	0
 BREAK
 #121
-Keywords:	box ammo ammunition
-Name:	a box of ammunition
+Keywords:	ammo box ammunition
+Name:	a blank ammo box
 RoomDesc:$
-A box of ammunition has been left here.~
+Someone has left a box of ammunition here.~
 LookDesc:$
 It is a box of ammo. 
 ~
 Type:	Ammo Box
-WearFlags:	10001
-ExtraFlags:	0
+WearFlags:	1
+ExtraFlags:	1000001000
 AffFlags:	0
-Material:	plastic
+Material:	metal
 [POINTS]
 	Weight:	0.00
-	Barrier:	4
+	Barrier:	32
 	Cost:	0
-	AvailTN:	2
-	AvailDay:	1.00
+	AvailTN:	0
+	AvailDay:	0.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0

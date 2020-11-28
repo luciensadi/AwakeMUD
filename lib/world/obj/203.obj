@@ -1,0 +1,24 @@
+#20300
+Keywords:	pot weed dope nickel bag
+Name:	a nickel bag
+RoomDesc:$
+A small bag of weed sits here.~
+LookDesc:$
+A smallish bag of weed.  Looks like about half a gram. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	4
+	LegalCode:	21
+	LegalPermit:	1
+BREAK
+END

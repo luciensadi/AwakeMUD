@@ -1,0 +1,1438 @@
+#4000
+Keywords:	anduril sword
+Name:	Anduril
+RoomDesc:$
+A great, bright sword is lying here, tempered from steel hardened by magic.~
+LookDesc:$
+You gaze in awe at the fine crafted sword.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	15.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	anduril sword
+	Desc:$
+A sharp steel sword from ancient times.
+~
+BREAK
+#4001
+Keywords:	shirt black plain
+Name:	0
+RoomDesc:$
+0~
+LookDesc:$
+A plain, simple, black shirt.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	100000010000
+AffFlags:	111100
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	1
+	Val6:	1
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	2
+[AFFECT 1]
+	Location:	Body
+	Modifier:	5
+[AFFECT 2]
+	Location:	Willpower
+	Modifier:	2
+[AFFECT 3]
+	Location:	Intelligence
+	Modifier:	2
+BREAK
+#4002
+Keywords:	gloves boxing
+Name:	a pair of boxing gloves
+RoomDesc:$
+A pair of large red gloves are lying here.~
+LookDesc:$
+They look like pair of gloves from the old-fashioned sport of 'boxing'
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	100000011100
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	-1
+[AFFECT 0]
+	Location:	Strength
+	Modifier:	20
+BREAK
+#4003
+Keywords:	shoes converse
+Name:	a pair of Converse All-Stars
+RoomDesc:$
+A pair of bleached shoes are lying here.~
+LookDesc:$
+Designed in the early 20th century, but modified in the mid 21st.
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	100000010000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4004
+Keywords:	pants jeans
+Name:	faded blue jeans
+RoomDesc:$
+A pair of faded blue jeans are lying here.~
+LookDesc:$
+They wore out of fashion some time ago, but are still sold.
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	100000010000
+AffFlags:	1000000000000000
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	2
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4005
+Keywords:	fountain water
+Name:	a large, elaborate fountain
+RoomDesc:$
+A large fountain is here.~
+LookDesc:$
+An unidentifyable centerpiece shoots water high into the air.  The water
+returns perfectly back down into the base.
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	3000.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000000
+	Val1:	1000000
+BREAK
+#4006
+Keywords:	watch swiss
+Name:	a fine-quality Swiss watch
+RoomDesc:$
+(null)~
+LookDesc:$
+Handcrafted, fine-quality, all at a low, affordable price.
+~
+Type:	Worn
+WearFlags:	1000000000001
+ExtraFlags:	100000010000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4007
+Keywords:	ring gold silver
+Name:	an intertwined gold-silver ring
+RoomDesc:$
+A ring is here, shining both gold and silver.~
+LookDesc:$
+Very thin bands of gold and silver were twined together to create this.
+~
+Type:	Worn
+WearFlags:	11
+ExtraFlags:	100000010000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	2
+BREAK
+#4008
+Keywords:	trench coat shadowy
+Name:	a shadowy trench coat
+RoomDesc:$
+A long coat is lying here, blending in with the shadows.~
+LookDesc:$
+The trench coat seems to absorb light to blend with the shadows around it.
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	100000010000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4009
+Keywords:	magic endowing ring
+Name:	a magic-endowing ring
+RoomDesc:$
+A strange glowing ring lies here.~
+LookDesc:$
+It seems to be able to give magical powers to its wearer...
+~
+Type:	Worn
+WearFlags:	11
+ExtraFlags:	100000010011
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	12
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	2
+	Val6:	2
+BREAK
+#4011
+Keywords:	sweatshirt
+Name:	a sweatshirt
+RoomDesc:$
+A gray sweatshirt is lying here.~
+LookDesc:$
+Hour of use have made this smell awful.  There are sweat stains around the
+neck and under the armpits.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4012
+Keywords:	sweatpants
+Name:	a pair of sweatpants
+RoomDesc:$
+A pair of well-used sweatpants is lying here.~
+LookDesc:$
+Matches perfectly with the sweatshirt.
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4013
+Keywords:	running shoes
+Name:	a pair of running shoes
+RoomDesc:$
+A pair of running shoes lies here.~
+LookDesc:$
+They are faded red, and are well-used.  The laces are about to fall apart.
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4014
+Keywords:	hand weights
+Name:	a set of hand weights
+RoomDesc:$
+A set of hand weights is lying here.~
+LookDesc:$
+They are heavy, and are meant to be held.
+~
+Type:	Other
+WearFlags:	100000010000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	15.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4015
+Keywords:	leather jacket
+Name:	a leather jacket
+RoomDesc:$
+A leather jacket is lying here.~
+LookDesc:$
+It's a jacket made of leather.
+~
+Type:	Worn
+WearFlags:	10000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val6:	2
+BREAK
+#4016
+Keywords:	torn blue jeans
+Name:	a pair of torn blue jeans
+RoomDesc:$
+A pair of torn blue jeans is lying here.~
+LookDesc:$
+They might have been new once, very long ago...
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4018
+Keywords:	frisbee disk plastic
+Name:	a frisbee
+RoomDesc:$
+A circular, plastic disk is lying here.~
+LookDesc:$
+It's a newer rendition of the old style 'frisbee', commonly used on the
+beaches of California.
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4019
+Keywords:	picnic basket woven
+Name:	a picnic basket
+RoomDesc:$
+A woven basket is lying here.~
+LookDesc:$
+It's used to store food, generally, although there has been an occasion
+or two where explosives were set in them, and it was planted near a
+U.C.A.S. government building.
+~
+Type:	Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	1
+	Val2:	-1
+BREAK
+#4020
+Keywords:	sandwich ham cheese
+Name:	a ham and cheese sandwich
+RoomDesc:$
+A sandwich is lying here.~
+LookDesc:$
+It's two slices of white bread, buttered, with a few pieces of ham and
+cheese in the middle.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+BREAK
+#4021
+Keywords:	broom
+Name:	a sturdy broom
+RoomDesc:$
+A wooden broom is lying here.~
+LookDesc:$
+It is normally used to sweep the ground, although it may be used as a 
+weapon.
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	-1
+BREAK
+#4022
+Keywords:	trash bag
+Name:	a trash bag
+RoomDesc:$
+A bag full of trash is lying here.~
+LookDesc:$
+It is a container, used for storing unwanted objects.
+~
+Type:	Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val2:	-1
+BREAK
+#4023
+Keywords:	pink ribbon
+Name:	a pink ribbon
+RoomDesc:$
+A pink ribbon rests here.~
+LookDesc:$
+It's a small pink ribbon, tied around the finger when one wants to remember
+something.
+~
+Type:	Worn
+WearFlags:	11
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4025
+Keywords:	bottle beer
+Name:	a bottle of beer
+RoomDesc:$
+A bottle of ordinary beer lies here.~
+LookDesc:$
+It's a brown bottle, filled with golden beer.
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+	Val1:	24
+	Val2:	10
+BREAK
+#4026
+Keywords:	guitar acoustic
+Name:	an acoustic guitar
+RoomDesc:$
+An acoustic guitar lies here.~
+LookDesc:$
+It has six strings, a long neck, a strap, and a hole in the middle to
+amplify the sound.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	-1
+BREAK
+#4027
+Keywords:	steel credstick metal
+Name:	a steel credstick
+RoomDesc:$
+A glint of metal can be seen through the dirt.~
+LookDesc:$
+It's made of steel to resist minor damage.
+~
+Type:	Money
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	252
+	Val1:	1
+	Val2:	1
+BREAK
+#4028
+Keywords:	sink row
+Name:	a row of sinks
+RoomDesc:$
+A row of sinks have been mounted on the wall.~
+LookDesc:$
+The once-white coating of the sinks have now turned a pale yellow, mostly due
+to bad plumbing.  When the taps are turned on, it takes a few seconds for the
+water to emerge. 
+~
+Type:	Fountain
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	500.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4029
+Keywords:	toilet
+Name:	a toilet
+RoomDesc:$
+A toilet rests on the ground.~
+LookDesc:$
+It's chipped, and would be quite uncomfortable to use...
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	500.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	35
+	Val1:	35
+	Val2:	14
+BREAK
+#4030
+Keywords:	toilet
+Name:	a toilet
+RoomDesc:$
+A toilet rests on the ground.~
+LookDesc:$
+It's chipped, and would be quite uncomfortable to use...
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	500.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val2:	-1
+BREAK
+#4031
+Keywords:	vomit
+Name:	yellow and green vomit
+RoomDesc:$
+A puddle of yellow and green vomit is here.~
+LookDesc:$
+It's yellow and green, with small chunks of half-digested food in it.  It
+emits a repulsive smell.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4032
+Keywords:	small shining key
+Name:	a small shining key
+RoomDesc:$
+A small, shining key lies here.~
+LookDesc:$
+It's small, it shines, and it's a key.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1100
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4033
+Keywords:	key keycard
+Name:	an electronic keycard
+RoomDesc:$
+An electronic keycard is lying here.~
+LookDesc:$
+It looks like the key to some security door of some sort.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1100
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4034
+Keywords:	silver key
+Name:	a silver key
+RoomDesc:$
+A silver key lies here.~
+LookDesc:$
+It's a small key made of silver.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1100
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4036
+Keywords:	sparkling toilet
+Name:	a sparkling toilet
+RoomDesc:$
+A sparkling-clean toilet rests here.~
+LookDesc:$
+It is so clean and polished, that you can see distorted nearby objects
+reflected in the white porcelain.  It also includes a built-in air
+freshener, so that awful just-used odor does not leave the room.
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	300.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	55
+	Val1:	55
+BREAK
+#4037
+Keywords:	sink clean
+Name:	a clean sink
+RoomDesc:$
+A clean ceramic sink is mounted on the wall.~
+LookDesc:$
+It's made of white ceramic material, much like that of the toilet nearby.
+~
+Type:	Fountain
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	200.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1000
+	Val1:	100
+BREAK
+#4038
+Keywords:	cabinet medicine
+Name:	a medicine cabinet
+RoomDesc:$
+A medicine cabinet is mounted above the sink.~
+LookDesc:$
+The door takes the form of a mirror.  Inside, you deduct, is small vials
+of medicine.
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	5
+	Val2:	-1
+BREAK
+#4039
+Keywords:	wok skillet
+Name:	a wok
+RoomDesc:$
+A skillet lies here.~
+LookDesc:$
+It's a skillet of oriental origin, more commonly known as a wok.
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	-1
+BREAK
+#4040
+Keywords:	ginsu knife
+Name:	a ginsu knife
+RoomDesc:$
+A superior knife rests here.~
+LookDesc:$
+It's a Japanese ginsu knife.  It's been rumored that it can cut through a
+leather shoe with no hassle, so flesh wouldn't prove too much a problem.
+ 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#4041
+Keywords:	white jacket
+Name:	a white chef's jacket
+RoomDesc:$
+A white chef's jacket lies here.~
+LookDesc:$
+It's pure white, with a row of buttons running down the right side of it.
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	75
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4042
+Keywords:	white chef's hat
+Name:	a white chef's hat
+RoomDesc:$
+A chef's hat rests here.~
+LookDesc:$
+It's quite tall, and even has the little mushroom top.
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4043
+Keywords:	white trousers
+Name:	a pair of white trousers
+RoomDesc:$
+A pair of white trousers is lying here.~
+LookDesc:$
+They're plain trousers, colored white.
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.20
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	2
+	Val4:	4
+BREAK
+#4044
+Keywords:	nukerin bottle
+Name:	a Nukerin bottle
+RoomDesc:$
+A bottle of Nukerin lies here.~
+LookDesc:$
+The label reads 'Nukerin: tiny, blue, effective.  For all those unbearable
+headaches, and a pain killer, too!'  Marked in big letters on the reverse side
+is: 'WARNING!  This medicine has been known to cause severe drowsiness!'
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val3:	26
+BREAK
+#4045
+Keywords:	sushi fish
+Name:	Sushi Roll
+RoomDesc:$
+Some sushi lies on a plate here.~
+LookDesc:$
+Sushi is uncooked fish, enjoyed primarily by the Japanese.
+~
+Type:	Food
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	90
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+BREAK
+#4046
+Keywords:	noodles oriental
+Name:	Ramen Noodles
+RoomDesc:$
+A box of oriental noodles rests here.~
+LookDesc:$
+They're long, thin noodles, cooked oriental-style.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	130
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+BREAK
+#4047
+Keywords:	pool table
+Name:	a pool table
+RoomDesc:$
+A pool table stands here, the balls set for eight-ball.~
+LookDesc:$
+It's a full size table, with brand new green felt.  Near one end of the
+table, fifteen differently colored balls are arranged in a triangular
+formation, while at the other end, only one, plain white one rests.
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	500.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4048
+Keywords:	drawer polished rosewood desk
+Name:	a polished rosewood desk
+RoomDesc:$
+A polished rosewood desk is here.~
+LookDesc:$
+The dark red wood is polished to a shine.  It is large, and behind it stands
+a large, comfortable leather chair.  It has only one unlocked drawer.
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	500.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	5
+	Val2:	-1
+BREAK
+#4049
+Keywords:	phone portable vidphone
+Name:	a portable vidphone
+RoomDesc:$
+A portable vidphone sits here.~
+LookDesc:$
+This phone supports both old-style microphone and speakers, or it
+can interface directly with cyberware radios to keep the noise (and
+notice) down.  Its small 2.5" screen has a high resolution, approximately
+1600x1200.
+~
+Type:	Phone
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	1250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4050
+Keywords:	notepad
+Name:	a notepad
+RoomDesc:$
+A notepad has been thrown on the ground.~
+LookDesc:$
+In hastily scribbed letters, it reads: 65JQSN9123LN-*IO3.
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	1100
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4051
+Keywords:	rifle assault
+Name:	an assault rifle
+RoomDesc:$
+An assault rifle sits here.~
+LookDesc:$
+An assault rifle, keeping the design of the late 20th century ones.
+~
+Type:	Weapon
+WearFlags:	1000110000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	7.00
+	Barrier:	6
+	Cost:	950
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	2
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	30
+	Val6:	30
+	Val10:	28
+BREAK
+#4053
+Keywords:	bracer dragonscale scale dragon
+Name:	a dragonscale bracer
+RoomDesc:$
+A strange bracer of legendary dragonscale lies here.~
+LookDesc:$
+Made of the golden scales of a Great Dragon, this bracer holds powers beyond
+the limits of mortal magic.
+~
+Type:	Worn
+WearFlags:	1000000000001
+ExtraFlags:	1010010
+AffFlags:	10000000001000
+Material:	orichalcum
+[POINTS]
+	Weight:	5.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	1
+	Val6:	1
+[AFFECT 0]
+	Location:	Willpower
+	Modifier:	1
+[AFFECT 1]
+	Location:	Combat Pool
+	Modifier:	-1
+BREAK
+#4056
+Keywords:	sight laser
+Name:	a laser sight
+RoomDesc:$
+A small laser sight lies here.~
+LookDesc:$
+It looks pretty much like a laser sight.
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	100000000000000
+Material:	paper
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	500
+	AvailTN:	6
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+BREAK
+#4057
+Keywords:	note crumbled
+Name:	a crumbled note
+RoomDesc:$
+A crumbled-up note lies here.~
+LookDesc:$
+Syinleuth s@& dru@&(0@* gone to(@( mi(^^!%@^
+An advan&&@ ^^%@ning
+K%yuts&@!min^!@
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	10000000000000000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4058
+Keywords:	map sign park
+Name:	a map of the Park
+RoomDesc:$
+A sign rests on a post.~
+LookDesc:$
+                                Seattle State Park
+Seattle State Park was designed by the architect Edward Hjieln, sometimes
+called the symmetrical freak of the 21st century.  He began his work in the
+early 2020's, and construction began in 2031.
+Map of Seattle State Park:             / ^ \
+                                      /  |  \
+                                     /   |   \
+                                    /    |    \
+                                   /     |pond \
+                                  <------+-     >
+                                   \     |     /
+                                    \    |    /
+                                     \   |   /
+                                      \  |  /
+                                       --e--     <-- You are here.
+The mansion north of Seattle Park is the private property of the Tsuyama
+family.  Seattle State Park and its associates, including Lone Star
+Security, Incorporated, take no responsibility for your safety, should
+you decide to trespass.
+Thank you, and have a nice day.
+Seattle Parks Commission
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	15.00
+	Barrier:	1
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4070
+Keywords:	key large
+Name:	a large key
+RoomDesc:$
+A rather large key sits here.~
+LookDesc:$
+You see nothing special.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1100
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#4071
+Keywords:	keycard black dragon silver
+Name:	a black and silver keycard
+RoomDesc:$
+A black and silver keycard has been dropped here.~
+LookDesc:$
+At a glance, this appears to be the typical keycard to an electronic keycard.
+However, closer inspection reveals that it's actually embossed with a winding,
+Japanese dragon, gilded in a shinier gloss than its matte background. A thin
+silver line runs across the edge, reflecting almost like a hologram. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

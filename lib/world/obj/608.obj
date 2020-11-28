@@ -1,0 +1,686 @@
+#60800
+Keywords:	roadster bmw
+Name:	BMW
+RoomDesc:$
+A delapidated 2040-edition BMW roadster.~
+LookDesc:$
+Once on the cutting-edge of the automotive industry with its patented fluidics
+and design, this rusty hulk now sits, squalid and sinister, long-forgotten by
+its owners. The techno vultures have come and gone, stripping this
+once-beautiful car of nearly everything remotely of value, leaving a metallic
+skeletal remain. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60801
+Keywords:	motorcycle
+Name:	motorcycle
+RoomDesc:$
+A charred motorcycle.~
+LookDesc:$
+What was once a rocket-like Harley-Davidson Thundergod chopper has been
+wrecked and lit on fire numerous times. Now is lies, a forgotten ruin and
+overtaken by weeds. What a waste! 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60802
+Keywords:	glock pistol
+Name:	a Glock Model 40 pistol
+RoomDesc:$
+A high-powered 10-mil sits here.~
+LookDesc:$
+Chambered to use high-powered 10mm rounds and able to accept all variants,
+this Ares/Glock GesmbH pistol's reliability and stopping power are second to
+none. Available with either laser sights or smartlink system, the 40 is
+today's weapon of today's soldier. 
+~
+Type:	Weapon
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	1
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	3
+	LegalCode:	5
+	LegalPermit:	1
+[VALUES]
+	Val0:	6
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	17
+	Val8:	-1
+BREAK
+#60803
+Keywords:	wheelchair
+Name:	Wheelchair
+RoomDesc:$
+An old wheelchair sits here, quietly rusting away.~
+LookDesc:$
+This cheap metal and black wheelchair has seen better days. Rot and rust are
+slowly gnawing away at it, and it's only a matter of time before it collapses
+on its own weight. The letters SCAB are stenciled across the back. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	1
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60804
+Keywords:	cup taco
+Name:	a Taco Bell cup
+RoomDesc:$
+a used Taco Bell cup lies here~
+LookDesc:$
+Empty and town, it's made of waxy paper and stained. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val2:	1
+BREAK
+#60805
+Keywords:	pillow
+Name:	a dirty and used plastic pillow
+RoomDesc:$
+Someone's left a grungy plastic pillow rotting here.~
+LookDesc:$
+Yellow with age and a reek to match! Looks like something may have burrowed in
+there and died from the smell of it. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+BREAK
+#60806
+Keywords:	chair
+Name:	headless chair
+RoomDesc:$
+A broken yellow plastic chair is here, lying on its side.~
+LookDesc:$
+Made from a cheap plasfab molding, the dorsal section of this cracked chair is
+missing. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+BREAK
+#60807
+Keywords:	frame
+Name:	picture frame
+RoomDesc:$
+A cracked picture frame lies here.~
+LookDesc:$
+This cheap black plastic frame once held decorative sheets of paper, but now
+it's cracked to the point of being brittle to the touch. Absolutely useless! 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60808
+Keywords:	light bulbs
+Name:	light bulbs
+RoomDesc:$
+A pair of large stained light bulbs lie here.~
+LookDesc:$
+These bulbous incandescent lights are old and scratched. They're also covered
+with a yellowish goo that has dried with age and now flaking off. Exactly what
+the stuff is, you don't want to know! 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60809
+Keywords:	admission form blank
+Name:	an admission form to St.Boniface
+RoomDesc:$
+There's a sheet of paper left discarded on the floor here.~
+LookDesc:$
+It appears to be a blank admission form for St.Boniface's Shelter for the
+Persecuted and Maligned. Questions inquire about one's apparent psychological
+or physiological disorders, next of kin, and a rather lenghty section
+regarding the patient's ability to pay for treatment. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60810
+Keywords:	shelves
+Name:	a set of old metal shelves
+RoomDesc:$
+Some bent and rusted metal shelves have been piled here in a heap.~
+LookDesc:$
+Once used to file and store items, these olds shelves have been subjected to
+age, abuse, and neglect. They resemble more like a twisted sculpture of
+aluminum, steel and rust than any workable storage unit. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60811
+Keywords:	gurney
+Name:	a flat metal gurney
+RoomDesc:$
+An old metal hospital gurney sits here, stinking up the place.~
+LookDesc:$
+A skeletal metal frame, reinforced to provide stability, to aid in
+transferring and transporting patients. Most of it is caked with mold and with
+a multitude of dents and scratches. The hydraulic fowler back rest hasn't
+worked in years and the casters are gone. The black foam padding is still
+there, allowing one to lay back and rest...if you can handle the stench. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60812
+Keywords:	papers
+Name:	a stack of old papers
+RoomDesc:$
+Some papers lie scattered about, unwanted.~
+LookDesc:$
+A handful of yellowed papers and documents for Seattle's Council for Abhorrent
+Behaviour, ranging from work orders to inter-departmental memos. One sheet in
+particular seems to be a pamphlet that was distributed amongst Seattle's
+populace during the rise of UGE many years ago, entitled: "Are Your Neighbours
+Too Open Minded?" 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.20
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60813
+Keywords:	holiday decorations
+Name:	some old Holiday decorations
+RoomDesc:$
+The aged remnants of some Holiday decorations hang here.~
+LookDesc:$
+The forgotten remnants of Christmases celebrated decades ago. Strings of
+silvery garland, their glitter faded and gone, hang lazily like unwanted
+fishing nets. A plastic bag draped over a red velvet bow, perhaps to protect
+the material, now sags futilely, the bow within shredded and blackened by rot.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60814
+Keywords:	plastic chair
+Name:	a old plastic chair
+RoomDesc:$
+An old outdoor plastic chair sits here.~
+LookDesc:$
+One of countless cheap outdoor plastic chairs, made of PP plastic and an
+homage to esthetic shame: its once-white frame is cracked and speckled with
+black mold. Across the back the letters SCAB have been stenciled. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	2.50
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60815
+Keywords:	plastic lounge chair captain
+Name:	a plastic lounge chair
+RoomDesc:$
+An abused plastic captain's chair sits here, barely held together.~
+LookDesc:$
+Made from recycled plastics, this aged captain's chaise is in bad shape. Its
+warm teak coloring, after severe exposure to years of neglect and weather, is
+now mottled with varying shades of black, grey, and green mold. All six legs
+have been melted off, but at least the back support still works. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	30.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60816
+Keywords:	shopping cart trolley
+Name:	a metal shopping cart
+RoomDesc:$
+A metal basket-style shopping cart is here.~
+LookDesc:$
+Once predominant in retail businesses, the zinc-plated framework for this
+large supermarket trolley is bent and twisted. The casters are gone and
+someone seems to have taken a blowtorch to the handle, rendering the plastic
+handle into a melted stub. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	19.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	80
+	Val2:	-1
+BREAK
+#60817
+Keywords:	wheelchair chair
+Name:	a lightweight wheelchair
+RoomDesc:$
+An old foldable wheelchair lies here on its side.~
+LookDesc:$
+An old chrome-plated folding chair used for patient transport, the moulded
+armrests have been ripped off and the foot rests twisted in awkward angles.
+The wheels still turn, but the vinyl seat and backrest are stained with dirt,
+grime, blood and other bodily fluids. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	6.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60818
+Keywords:	fire extinguisher
+Name:	an empty fire extinguisher
+RoomDesc:$
+an empty fire extinguisher lies here, useless.~
+LookDesc:$
+Once filled with a chemical powder and effective against a wide variety of
+materials, this model was probably used in everything from small businesses to
+light industrial operations. This unit in particular is empty and its nozzle
+and hose have been removed. The metal handle and valve are scratched and
+rusted, and the tank has a big dent in it. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	4.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60819
+Keywords:	plastic bucket
+Name:	a plastic wheeled bucket
+RoomDesc:$
+A damaged old yellow bucket is here, needing a mop.~
+LookDesc:$
+Made of polypropylene plastic, this old yellow bucket still rolls around on
+three of its four castors. The metal handle is gone. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	9.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+BREAK
+#60820
+Keywords:	test tubes
+Name:	some old test tubes
+RoomDesc:$
+Someone's discarded a few test tubes here.~
+LookDesc:$
+A handful of pitted glass test tubes. Some still contain the dried, caked
+remains of whatever bodily fluids they once held. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60821
+Keywords:	metal syringe needle
+Name:	a vintage metal syringe
+RoomDesc:$
+There's a metal syringe lying on the ground here. Scary.~
+LookDesc:$
+Made of metal (now rusted), this old syringe consists of a double-looped
+handle with a third loop atop the plunger. The barrel is exposed on one side
+to reveal the glass vial within. The four-inch long needle is still
+dangerously exposed. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60822
+Keywords:	cork board
+Name:	an old cork board
+RoomDesc:$
+An old cork board lies here like so much garbage.~
+LookDesc:$
+Used to pin memos and notes, this 24" x 18" cork board is water-stained.
+Exposure and age have rendered it brittle with cracks stretching across its
+surface. There is a wood frame on three sides. Handwritten on the cork by a
+permanent marker are the seven deadly sins, with each having been crossed off
+like a shopping list. 'Wrath' is unchecked. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	1.30
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60823
+Keywords:	cable spool metal
+Name:	a large spool of metal cable
+RoomDesc:$
+A spool of cable has been coiled up and left here.~
+LookDesc:$
+An old plastic spool holding about 350 meters of solid copper cable, used for
+industrial wiring. Examining the black outer jacket reveals it be an outdoor
+CAT5e UV resistant grade, but the plastic is so brittle as to be practically
+useless. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	11.79
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#60824
+Keywords:	pail drum plastic
+Name:	a ten-gallon plastic pail
+RoomDesc:$
+Someone's discarded an old plastic drum here.~
+LookDesc:$
+An old open-headed plastic drum. The threads of its screw top have been hacked
+on with some sharp object as well as on the bottom, rendering it useless as a
+liquid container. Barely discernable on the yellowing plastic is the logo for
+an old dog food manufacturer. 
+~
+Type:	Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	3.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+BREAK
+#60825
+Keywords:	rib spreaders tool surgical
+Name:	a rusty pair of rib-spreaders
+RoomDesc:$
+An old surgical tool lies here in the dirt, useless.~
+LookDesc:$
+Once used in thoracic surgery and postmortem dissections, the stainless steel
+tool is now corroded with rust and mold, its ratchet and lock mechanism fused
+to the serrated shaft. Curiously, the 70mm spread seems much too small to be
+used on any adult patient. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

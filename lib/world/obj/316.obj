@@ -1,0 +1,94 @@
+#31600
+Keywords:	locker rusted
+Name:	An old rusted locker
+RoomDesc:$
+~
+LookDesc:$
+This locker is hanging slightly open, perhaps there is something inside. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	200.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31601
+Keywords:	sign
+Name:	A large yellow sign
+RoomDesc:$
+A large yellow sign is fixed to the door here.~
+LookDesc:$
+^YAUTHORIZED PERSONNEL ONLY 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31602
+Keywords:	
+Name:	A stainless steel operating table
+RoomDesc:$
+A stainless steel operating table sits here.~
+LookDesc:$
+It's a standard stainless steel operating table. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1000.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#31603
+Keywords:	vat large fluid clear glass
+Name:	A large vat of clear fluid
+RoomDesc:$
+A large glass vat filled with a clear fluid is standing in the corner.~
+LookDesc:$
+To anyone with the relevant knowledge this vat shows a similarity to those
+used for growing clonal tissue, only much much larger. 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	glass
+[POINTS]
+	Weight:	500.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

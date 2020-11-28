@@ -1,0 +1,1051 @@
+#16400
+Keywords:	sign please read
+Name:	^gA sign with ^W"^RPLEASE READ!^W"^g on it.^N
+RoomDesc:$
+^gA sign with ^W"^RPLEASE READ!^W"^g is hung up here.^N~
+LookDesc:$
+- WARNING! -
+ All of the items sold here are NERP (Non-Essential Role Playing) Items. They
+only function as normal weapons in the game itself. For RP purposes they are
+Weapon Foci. After purchasing one, if you wish to have it function in RP as a
+Weapon Focus, you -must- contact an RP Immortal and pay the appropriate karma
+to bond it.
+ ( 3 + Weapon Reach ) x Force = Karma cost to bond.
+ This is your only warning, you will _NOT_ receive reimbursments for any
+weapons you purchase. You have been given fair warning ahead of time. If you
+complain, I will personally smite you.
+ Signed: Yojimbo 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	100.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#16401
+Keywords:	knuckles dragon ornate pair
+Name:	an ornate pair of dragon knuckles
+RoomDesc:$
+^gA pair of ornate ^Wchrome^g knuckles shaped like dragon sit here.^N~
+LookDesc:$
+This set of highly polished knuckle dusters are crafted to look like some kind
+of oriental dragon. The hand grip is a highly detailed torso, covered in small
+scales and wings that sweep smoothly along its back. The wearers knuckles are
+covered by its long tail as it curls over and conforms in several waves to
+mold themselves into finger rings, while the dragons jaw is slightly ajar,
+teeth sunk deeply into the tip of the tail as they meet above the thumb. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	0.50
+	Barrier:	8
+	Cost:	280000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	4
+	Val4:	7
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR+1 M) Stun - Force 2 Weapon Focus: Unarmed Combat 
+~
+BREAK
+#16402
+Keywords:	knuckle dusters iron cross
+Name:	a pair of iron cross knuckle dusters
+RoomDesc:$
+A pair of knuckle dusters with iron crosses on them sit here.~
+LookDesc:$
+These knuckle dusters seem to be more for handling business than for aesthetic
+pleasure. They are rather plain, but heavy duty, and the thick banded finger
+rings covering the knuckles are molded for a perfect fit. Each knuckle is
+slightly narrower towards their tips, on the front of which is emblazoned with
+an inlaid iron cross emblem. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	0.75
+	Barrier:	8
+	Cost:	370000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	4
+	Val4:	7
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	Weaponspecs
+	Desc:$
+(STR+1 M) Stun - Force 3 Weapon Focus: Unarmed Combat 
+~
+BREAK
+#16403
+Keywords:	cesti cestus glove leather
+Name:	a pair of old leather cesti
+RoomDesc:$
+An leather glove with straps has been left here.~
+LookDesc:$
+The cestus is an ancient battle glove, sometimes used in pankration. In
+effect, it is the classic world's equivalent to brass knuckles. It consists of
+a series of leather thongs tied over the hand, with orichalcum weaved plates
+for a bit of an extra punch. 
+~
+Type:	Weapon
+WearFlags:	10000010000001
+ExtraFlags:	1000001000001
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	0.50
+	Barrier:	8
+	Cost:	280000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	312
+	Val4:	7
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR+1 M) Stun - Force 2 Weapon Focus: Unarmed Combat 
+~
+BREAK
+#16404
+Keywords:	katar orichalcum beautiful filagreed
+Name:	a beautiful orichalcum filagreed katar
+RoomDesc:$
+A beautiful katar has been left behind here.~
+LookDesc:$
+This traditional Indian punch dagger features a sturdy stainless steel
+H-shaped handgrip with a soft leather wrapping. The blade itself is about 10
+inches long, and is adorned with a filagree of orichalcum lacing weaved
+throughout its construction, its beauty beguiling its deadly nature. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	0.75
+	Barrier:	8
+	Cost:	370000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	3
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR+3 L) - Force 3 Weapon Focus: Edged Weapons 
+~
+BREAK
+#16405
+Keywords:	dagger kris serpent twisted
+Name:	a twisted serpent kris dagger
+RoomDesc:$
+A twisted serpent kris dagger lies here.~
+LookDesc:$
+This polished silver bladed kris dagger has a wave-like construction along its
+entire blade, which measures almost 12 inches in length, its edges honed to
+the sharpness of a razor. Its handle consists of two serpents entwining about
+one another, their heads protruding off towards to sides of the blade to form
+its hilt. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	0.75
+	Barrier:	8
+	Cost:	280000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR+M) - Force 2 Weapon Focus: Edged Weapons 
+~
+BREAK
+#16406
+Keywords:	machete bolo full tang wicked
+Name:	a full tang bolo machete
+RoomDesc:$
+A wicked looking machete is stuck in the ground here.~
+LookDesc:$
+Known throughout Asia and Pacific Rim, the Bolo Machete features a fat point
+that shifts its weight forward where it can do the most good when heavy
+chopping or slashing is called for. Its a sturdy full tang construction makes
+it not only a reliable, but a deadly tool to have at ones disposal. The flat
+of the blade is etched with designs inlaid with orichalcum, while its handle
+is wrapped with tightly bound black cord for an infallible grip. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	370000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR+M) - Force 3 Weapon Focus: Edged Weapons 
+~
+BREAK
+#16407
+Keywords:	jutte sai bejeweled pommel exquisite
+Name:	an exquisite jutte with a bejeweled pommel
+RoomDesc:$
+A bejeweled half of a sai has been left here.~
+LookDesc:$
+This fine weapon is known as the Jutte, which resembles a single pronged sai,
+its name literally means "ten-hand" (i.e., the weapon with the power of ten
+hands). It measures about 18 inches in length and has no cutting edge, with a
+single one-pronged tine, which is about 2 inches long and protrudes from just
+above the handle and extends outward towards the tip. The weighted
+counter-balance at the pommel is bejeweled with an exquisite gems of an
+unknown variety, which sparkle verily in the presence of light. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	280000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR+2L) Stun - Force 2 Weapon Focus: Clubs 
+~
+BREAK
+#16408
+Keywords:	tonfa wooden beautifully
+Name:	a beautifully crafted wooden tonfa
+RoomDesc:$
+A lonely tonfa has been left here.~
+LookDesc:$
+The tonfa is reminiscent of a police nightstick, which were based on their
+design and practical use as both a defensive and offensive weapon. The handle
+is perpendicular and extends out from about one-fourth its way down the shaft,
+which is long enough to cover the entire forearm to the elbow, and is carved
+from a single piece of hardwood with an exceptionally beautiful grain pattern.
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	0.75
+	Barrier:	8
+	Cost:	370000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR+2L) Stun - Force 3 Weapon Focus: Clubs 
+~
+BREAK
+#16409
+Keywords:	xiphos sword wickedly wicked short sharp
+Name:	a wickedly sharp xiphos sword
+RoomDesc:$
+A wicked looking short sword lies here, going to waste.~
+LookDesc:$
+The xiphos sword has a double-edged blade, widest at about two-thirds of its
+length from the point, and ending in a very long point which is more than
+capable of impaling an opponent. Its leaf shaped design lends itself to both
+cutting and thrusting, the design itself has most likely been in existence
+since the appearance of the first swords. The blade itself is lined with
+leaf-like designs of veins inlaid with orichalcum threading, making it as
+beautiful as it is deadly. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	290000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR+2M) - Force 1 Weapon Focus: Edged Weapons 
+~
+BREAK
+#16410
+Keywords:	cane sword beautiful ebony finely honed
+Name:	a finely honed cane sword
+RoomDesc:$
+A beautiful ebony cane has been left here.~
+LookDesc:$
+A rare and beautifully carved shaft of real ebony wood encases a meter long
+blade, sporting a double-edge thats honed to perfection. Aside from being
+beautiful, it is perfectly balanced and very sturdy in ones grip, making
+itself very capable as either a decorative piece or a weapon meant for real
+combat. The top of the cane swords pommel has a single orichalcum rune lined
+with silver inlaid filagree surrounding it, while several other threaded bands
+are spaced down along its length to its 'hilt'. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	380000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR+2M) - Force 2 Weapon Focus: Edged Weapons 
+~
+BREAK
+#16411
+Keywords:	wakizashi magnificent stylish wood wooden bare
+Name:	a magnificent bare wood wakizashi
+RoomDesc:$
+A stylish wooden handled wakizashi lies here.~
+LookDesc:$
+This nearly meter long weapon has a subtly curved razor sharp blade adorned
+with beautiful pattern folding techniques. The wielder can feel the wood
+grains and ribbing from the natural wood styled handle, while its pommel is
+capped with a decorative orichalcum fish sculpture. The hilt consists of
+another oriental styled fish that twists almost entirely around the width of
+the handle to guard the fingers and hands with its head and fins. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	290000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR+2M) - Force 1 Weapon Focus: Edged Weapons 
+~
+BREAK
+#16412
+Keywords:	katana jintachi antique styled
+Name:	an antique styled jintachi katana
+RoomDesc:$
+An antique katana is displayed in all its glory here.~
+LookDesc:$
+The katana, steeped in legend and myth. If one were to showcase the beauty and
+elegance of the katanas design, this one would make one of the best examples.
+The handle is bound with a traditional cloth wrap, with silver and orichalcum
+nubs to keep it tightly aligned for a sure grip. The long sweeping curve of
+the jintachi styled blade is sharp enough to split hairs, and while it may not
+live up to the mythical hype and stereotype this weapon is preceded with, it
+can still easily lop off a limb or head when given the chance to find its
+mark. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	380000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR+3M) - Force 2 Weapon Focus: Edged Weapons 
+~
+BREAK
+#16413
+Keywords:	tomahawk axe vicious chieftains
+Name:	a vicious looking chieftains tomahawk
+RoomDesc:$
+Some injin has left their tomahawk behind here.~
+LookDesc:$
+The tomahawk is a type of axe native to North America, traditionally
+resembling a hatchet with a straight shaft, which is almost a meter long,
+giving the weapon a hefty swing. The flexible ash wood shaft has been
+meticulously carved and shaped to offer a perfect balance for the wielder, and
+the highly polished axe head is not only thick, but amazingly sharp. The butt
+of the tomahawk features a decorative orichalcum cap with several eagle
+feathers dangling from short braided leather strips. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	290000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR M) - Force 1 Weapon Focus: Edged Weapons 
+~
+BREAK
+#16414
+Keywords:	axe knights gem studded fancy royal
+Name:	a gem studded royal knights axe
+RoomDesc:$
+A fancy looking axe has been left on display here.~
+LookDesc:$
+This axe might look fancy and mainly for decorative purposes, but in reality
+it is an effective and very lethal weapon. The broad axe blade gleams brightly
+as the light catches its razor sharp edge, while it sports a thick triangular
+armour punching spike on its reverse end, another one adorns its tip for good
+measure, as well as increasing its killing power. The entire shaft is
+decorated with various designs acid etched into its highly polished surface,
+and gems of all sizes, shapes and colours are embedded into its construction.
+The butt cap sports another nasty looking spike below its molded hand grip,
+just in case. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	380000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR+2M) - Force 2 Weapon Focus: Edged Weapons 
+~
+BREAK
+#16415
+Keywords:	mace spiked flange damascus steel nasty
+Name:	a damascus steel spiked flange mace
+RoomDesc:$
+A nasty looking spiked mace has been left here.~
+LookDesc:$
+This classic 16th century mace is just as deadly as it was when it was
+invented. It is crafted from high quality damascus steel, able to absorb just
+about any punishment it takes in the line of duty. The meter long shaft is
+topped with a solid ball of steel with sharply spiked flanges that are capable
+of tearing into flesh and reducing it to ribbons, while its heavy weight can
+crush bone effortlessly. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	290000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR+1M) - Force 1 Weapon Focus: Clubs 
+~
+BREAK
+#16416
+Keywords:	club gunstock war black ash carved
+Name:	a black ash gunstock war club
+RoomDesc:$
+A carved club crafted from a gunstock has been left here.~
+LookDesc:$
+One of the truths of close quarter combat is that a rifle, shotgun or musket
+can be an improvised club in the absence of suitable ammunition or a bayonet.
+American Indians in the early 16th century observed these facts and wasted no
+time in fashioning their own gunstock war clubs, which were made of straight
+grain hard woods. This one in particular is fashioned from a single beautiful
+piece of black ash, while its 'edge' has been fire treated and narrowed like
+an axe blade, and sports a single silver lance point at the point of its outer
+curve for an extra punch. Its classic 'fawns foot' handle supplies the wielder
+with a sturdy, reliable grip when smashing in their enemies skulls. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	380000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR+1M) - Force 2 Weapon Focus: Clubs 
+~
+BREAK
+#16417
+Keywords:	fork military triple-pronged pole arm stick
+Name:	a triple-pronged military fork
+RoomDesc:$
+A long fork-like stick has been left here.~
+LookDesc:$
+The military fork is a two-meter long pole weapon which has been used
+throughout Europe between the 15th and 19th centuries, but even in the modern
+age they are still deadly implements of war. The outer pair of tines (prongs)
+run parallel from the shaft in a slightly flared trident configuration, but
+reversed, since its outer set of spikes are longer and more slender than the
+short, robust spike that is the center tine. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	390000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR+2L) - Force 1 Weapon Focus: Pole Arms 
+~
+BREAK
+#16418
+Keywords:	spear medieval war heavy
+Name:	a heavy medieval war spear
+RoomDesc:$
+Some viking has left behind his spear here.~
+LookDesc:$
+This weapon has a distinct Viking ancestry and Frankish styling to it, and
+measures over two-meters long, almost a third of it being the elongate spade
+styled spear head, capable of both thrusting and slashing with equal ease. The
+smooth polished hardwood shaft is extremely sturdy, and the lugged head is
+balanced by a heavy tailspike capped on its opposite tip. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	480000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	4
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR+4L) - Force 2 Weapon Focus: Pole Arms 
+~
+BREAK
+#16419
+Keywords:	nagamaki bladed large heavy
+Name:	a large and heavy bladed nagamaki
+RoomDesc:$
+A large and deadly looking nagamaki has been left here.~
+LookDesc:$
+The nagamaki's katana-like blade has a single-edge, but is straighter and
+thinner. The spine is beveled along its back edge to reduce weight, and a long
+bloodgroove has been inlaid with orichalcum. It resembles a traditional
+naginata, but the main difference is that the handle of the nagamaki is not
+constructed of wood, but instead wrapped tightly with cords in criss-crossed
+manner, very similar to the wrapping that is made on a katana. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	5.00
+	Barrier:	8
+	Cost:	390000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	1
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR+1S) - Force 1 Weapon Focus: Pole Arms 
+~
+BREAK
+#16420
+Keywords:	zweihander sword ceremonial ornate two-handed massive
+Name:	a massive ceremonial zweihander
+RoomDesc:$
+A highly ornate two-handed sword lies here.~
+LookDesc:$
+The Zweihander, or 'two-hander' was implemented in Germany in the 14th
+century, and gained renown during the 16th century as the hallmark weapon of
+the German Landsknechts from the time of Maximilian I. Its long, heavy blade
+makes it an ideal sword for dealing with pikemen and spearmen, and able to
+cleave a man in half with a single swing. The sword has hilt-mounted
+side-rings and an ornately enlarged cross-guard, while just above it are
+parrying hooks shaped like lugs to help prevent other weapons from sliding
+down the blade. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	6.00
+	Barrier:	8
+	Cost:	480000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	1
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR+1S) - Force 2 Weapon Focus: Pole Arms 
+~
+BREAK
+#16421
+Keywords:	staff telescoping orichalcum designs
+Name:	a telescoping staff covered in orichalcum designs
+RoomDesc:$
+A telescoping staff covered in mystical designs lies here.~
+LookDesc:$
+This telescoping staff is a modified version of one of the oldest weapons
+known to man, and is still quite effective when placed in the hands of a
+talented wielder. The casing of the staff is lined with various runes and
+designs, both hermetic and shamanic in nature, intertwining with one another
+as they cover its surface. The staff stretches to over two meters long when
+fully extended and locked in place. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	3.00
+	Barrier:	8
+	Cost:	390000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR+2M) Stun - Force 1 Weapon Focus: Pole Arms 
+~
+BREAK
+#16422
+Keywords:	club spiked war berserker hefty
+Name:	a hefty spiked berserker war club
+RoomDesc:$
+A hefty looking club lined with spikes lies here.~
+LookDesc:$
+This massive sliver of dark hardwood is over two meters long, and is as thick
+as a mans forearm. Its tapered shaft widens as it travels up to its
+octagonally hewn upper haft that covers the top third of the war club, which
+is wrapped with thick metal bands that are lined with nasty two inch long
+spikes upon each of their sides. Six rows of eight spikes, counting one at
+each tip, adds up to fifty spikes, more than enough to leave your enemies
+broken corpses at your feet. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	6.00
+	Barrier:	8
+	Cost:	480000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR S) - Force 2 Weapon Focus: Pole Arms 
+~
+BREAK
+#16423
+Keywords:	staff three-section white oak
+Name:	a three-section white oak staff
+RoomDesc:$
+A three-section white oak staff lies bound up here.~
+LookDesc:$
+This weapon is traditionally crafted from three sturdy white oak sticks, the
+slightly shorter pair of them connected at both ends of the larger by a few
+inches of chain rings. A few markings blemish its smooth white construction,
+but for the most part the weapons surface is bare, showing off its beautiful
+wood grain patterning. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	390000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	3
+	Val4:	5
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR+2M) Stun - Force 1 Weapon Focus: Whips and Flails 
+~
+BREAK
+#16424
+Keywords:	axe battleaxe double-bladed menacing
+Name:	a menacing double-bladed battleaxe
+RoomDesc:$
+A menacing double-bladed battleaxe rests here.~
+LookDesc:$
+This massive double-bladed battleaxe measures over two meters in length, most
+of which is a sturdy hardwood shaft wrapped tightly with strips of black
+leather for an infallible grip. Its dual curved blades resemble a large
+cleaver in their design and are adorned with orichalcum accents. Embedded in
+the center of the single piece axe head is a fist-sized, smoothly polished orb
+of bloodstone, green jasper dotted with bright red spots of iron oxide. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001000001
+AffFlags:	0
+Material:	orichalcum
+[POINTS]
+	Weight:	3.00
+	Barrier:	8
+	Cost:	480000
+	AvailTN:	8
+	AvailDay:	1.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	1
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[EXTRADESC 0]
+	Keywords:	weaponspecs
+	Desc:$
+(STR+1S) - Force 2 Weapon Focus: Pole Arms 
+~
+BREAK
+END

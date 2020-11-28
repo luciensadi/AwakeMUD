@@ -1,0 +1,1411 @@
+#12000
+Keywords:	plastic jungle key alpha dome grey stripe green
+Name:	A ^Lgrey^n plastic keycard marked with a ^Ggreen^n alpha
+RoomDesc:$
+A ^Lgrey^g plastic keycard marked with a ^Ggreen^g alpha has been left here.~
+LookDesc:$
+This keycard is made from a dull grey plastic material, emblazoned across the
+front of which is a single large Greek character. The back has a solitary
+black magnetic stripe, but is otherwise featureless. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.05
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#12001
+Keywords:	tree willow weeping massive
+Name:	A massive weeping willow tree
+RoomDesc:$
+A massive weeping willow tree dominates the area here.~
+LookDesc:$
+This tree is simply massive, and is easily recognized as a weeping willow by
+its distinctive long, graceful branches that sweep toward the ground. The
+branches and twigs themselves are thin, almost rope-like, and sway even in the
+lightest of breezes. Its lance-shaped leaves are a yellowish-green on their
+tops, and a milky green on their undersides, measuring roughly six inches or
+so each. It extends out and above an area roughly fifty feet across and
+stretches out into the sky just as high. A set of rope ladders and scaffolding
+have been constructed onto the main trunk itself, lending a bit of strength to
+their design. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	2000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#12002
+Keywords:	sign post old
+Name:	An old sign post
+RoomDesc:$
+An old sign post is stuck into the ground here.~
+LookDesc:$
+The sign is old and half-rotted, but the carved letters on it are still
+somewhat visible:
+ ^WBEWARE THE LAKE!^N 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	250.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#12003
+Keywords:	tree fallen freshly log
+Name:	A freshly fallen tree
+RoomDesc:$
+A freshly fallen tree lies on the ground here.~
+LookDesc:$
+This lenthy, freshly fallen log is actually a part of a nearby tree thats
+apparently been chopped down. Most of its branches have been cleaved and
+cleaned off from the main trunk, as if someone were preparing it for use in
+some sort of construction. Whoever did it, however, only finished the task
+half way. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val2:	-1
+BREAK
+#12004
+Keywords:	hatchet handaxe axe rusty
+Name:	an old rusty hatchet
+RoomDesc:$
+Someone left a hatchet stuck in the ground here.~
+LookDesc:$
+The blade on this hatchet has seen a lot of action, though most of its edge is
+still intact and remains relatively sharp. A bit of rust here and there
+blemishes its surface, ruining its shine without compromising its sturdy steel
+construction. Its black, formed rubber grip is almost worn down completely. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.50
+	Barrier:	12
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#12005
+Keywords:	roadblock junk heap make-shift pile
+Name:	A make-shift junk heap roadblock
+RoomDesc:$
+A make-shift junk heap roadblock is piled up here.~
+LookDesc:$
+This pile is simply a large amalgamation of various hunks of junk, ranging
+from burned out vehicle husks, old car doors, bumpers, branches, tangled
+masses of rebar, as well as various lengths of rotten wood and half-dead tree
+branches. The intent is obvious, its being used to block off the road as it
+heads northwest along the Alpha Domes outer wall. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#12006
+Keywords:	shotgun winchester defender pump-action
+Name:	a Winchester Defender pump-action shotgun
+RoomDesc:$
+An oldschool pump-action shotgun is propped up here.~
+LookDesc:$
+The Winchester 1300 Defender is a fast cycling, pump-action operated,
+reliable, tough as nails shotgun that offers plenty of firepower for hunting
+and security purposes alike. It chambers twelve gauge slugs and accepts them
+from a five shell tubular underbarrel magazine, making it impossible to mount
+any sort of underbarrel accessory on the firearm. Its polished wood finish
+makes it shine like the beautiful piece of artwork that it is. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.50
+	Barrier:	8
+	Cost:	1250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	1
+[VALUES]
+	Val0:	10
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	5
+	Val7:	5105
+	Val8:	651
+	Val9:	-1
+	Val10:	4
+BREAK
+#12007
+Keywords:	knife buck hunting
+Name:	an old buck knife
+RoomDesc:$
+Some hunter left their buck knife laying here.~
+LookDesc:$
+The Buck 110 has a four inch steel blade, a high-tension lock and a
+low-pressure release, with handles crafted from a stained wood with brass
+bolsters. The 'Buck Knife' was introduced nearly two centuries ago, and it
+revolutionized hunting knives, quickly becoming one of the most popular knives
+ever made. It was the first ever successful folding lock-blade knife design,
+as well as earning the title of one of the most imitated knife patterns in the
+world. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#12008
+Keywords:	overalls jean blue
+Name:	a pair of ^cblue jean^N overalls
+RoomDesc:$
+^gA pair of ^cblue jean^g overalls sit here in a pile.^N~
+LookDesc:$
+They're a pair of old ^cblue jean^N overalls, most commonly sported by field
+laborers. All of its dull brass buttons are still intact, and its seams are
+only slightly frayed, but all in all they're in pretty good condition, aside
+from an occasional dirt spot. 
+~
+Type:	Worn
+WearFlags:	100000010000001001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	6
+	Val2:	4
+	Val3:	6
+	Val4:	4
+	Val6:	1
+	Val7:	8
+BREAK
+#12009
+Keywords:	truck pick-up abandoned
+Name:	an old abandoned pick-up truck
+RoomDesc:$
+^gAn old abandoned pick-up truck is bogged down on the side of the road.^N~
+LookDesc:$
+This pick-up certainly isn't going anywhere, and not just because its entire
+chassis was swallowed up by the boggy ground, covering up almost the entire
+wheelwell. Its been abandoned for quite some time, and its about to fall apart
+thanks to all the rust eating away at its frame. Its doors are still intact,
+but all the windows have long been since broken out by vandals. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	50.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	100
+	Val1:	5
+	Val2:	-1
+BREAK
+#12010
+Keywords:	iron tire rusted black metal
+Name:	a rusted black metal tire iron
+RoomDesc:$
+A rusty black metal tire iron has been left here.~
+LookDesc:$
+Its a slightly rusty tire iron, forged from two solid metal bars welded
+together to form a symmetrical cross. Its rather heavy, and could probably
+crush a mans skull easily with a single blow. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	12
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	1
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#12011
+Keywords:	rifle carbine MSAR STG-556 bullpup
+Name:	an MSAR STG-556 bullpup carbine
+RoomDesc:$
+A bullpup rifle has been left here.~
+LookDesc:$
+Based on the famous Austrian Steyr AUG assault rifle, manufacture of this
+clone became possible because original patents for Steyr AUG had expired, and
+the demand for civilian version of this weapon in UCAS were not covered by
+import of original Austrian-made rifles. New features consist of a bolt stop
+release button and an AR-15 style bolt-closure forward assist button on the
+left side of receiver. Otherwise, the STG-556 follows the Steyr AUG-A2 rifle
+pattern to the tee, and in its own right is a sturdy, reliable bullpup
+carbine. 
+~
+Type:	Weapon
+WearFlags:	1000010000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	4500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	3
+	LegalCode:	6
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	3
+	Val3:	13
+	Val4:	14
+	Val5:	10
+	Val7:	5105
+	Val8:	654
+	Val9:	28618
+	Val10:	12
+BREAK
+#12012
+Keywords:	campfire pit unkempt
+Name:	an old unkempt campfire pit
+RoomDesc:$
+An old unkempt campfire pit has been dug here.~
+LookDesc:$
+The campfire pit itself consists of local rocks that have been gathered up
+nearby, all packed and lined together in a lopsided circle around a shallow
+pit dug into the dirt. Old ashes smothered by rain water fill most of it,
+along with the occasional charred twig or sliver of wood that didn't finish
+burning. A layer of what can only be described as 'grease' marks some of the
+stones and ashes, most likely the drippings of whatever kind of meat was being
+cooked on it. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	200.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	500
+	Val2:	-1
+BREAK
+#12013
+Keywords:	jumpsuit patch-work rugged
+Name:	a rugged patch-work jumpsuit
+RoomDesc:$
+A rugged patch-work jumpsuit sits here in a pile.~
+LookDesc:$
+This jumpsuit is constructed with a patch-work of various materials, ranging
+from thick leather, salvaged kevlar strips, blue blue jean material as well as
+synthetic nylon, all sewn and bound tightly together with wire thread. It
+doesn't look pretty, but it may offer a bit of protection, considering how its
+materials overlap one another, which cover the more vital areas of the wearers
+anatomy. It smells a little funky, but it should come out after a wash.. or
+three.. right? 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	1200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	4
+	Val2:	2
+	Val3:	2
+	Val4:	4
+	Val5:	4
+	Val6:	1
+	Val7:	10
+BREAK
+#12014
+Keywords:	bone sliver sharpened
+Name:	a sharpened sliver of bone
+RoomDesc:$
+A sharpened sliver of bone has been left here.~
+LookDesc:$
+This sliver of bone measures about eight inches in length and seems to have
+been laying outside for quite a while. It has several teeth marks on its
+surface, and one of its tips has been sharpened to a fine point. It looks like
+it would make a good utensil to cook food on over a fire, or as a make-shift
+weapon, it probably does both tasks just as well. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#12015
+Keywords:	assault rifle HK-G38 modular Heckler Koch
+Name:	An HK-G38 assault rifle
+RoomDesc:$
+A modular assault rifle is laying here.~
+LookDesc:$
+The HK-G38 was designed by the famous German arms manufacturer, Heckler and
+Koch. This particular model is a modular weapons system, also known as the
+HK-G38 modular carbine, and is based on the outdated G3 rifle. It is primarily
+used for close quarters shooting and close protection detail, but depending on
+its configuration, it can be used for much more than that. It comes standard
+with a top-mounted laser sight, an improved gas vent II and an underbarrel
+foregrip. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	3.00
+	Barrier:	12
+	Cost:	4000
+	AvailTN:	12
+	AvailDay:	7.00
+	LegalNum:	2
+	LegalCode:	7
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	2
+	Val3:	13
+	Val4:	14
+	Val5:	30
+	Val7:	5105
+	Val8:	650
+	Val9:	28618
+	Val10:	28
+BREAK
+#12016
+Keywords:	jacket leather heavy mix-matched patches
+Name:	A heavy leather jacket with mix-matched patches
+RoomDesc:$
+A heavy leather jacket with mix-matched patches sits here.~
+LookDesc:$
+Its a heavy leather jacket (Real..? Hard to tell..), adorned with massive
+amounts of safety pins, which hold together its mix-matched assortment of
+rocker/pop logos from various bands. Some of the patches are from local bands
+from the nearby Barrens, while others are mainstream household names. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	4.00
+	Barrier:	6
+	Cost:	800
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	4
+	Val2:	2
+	Val4:	3
+	Val5:	2
+	Val6:	2
+	Val7:	5
+BREAK
+#12017
+Keywords:	magazine porn XXX folded
+Name:	A folded XXX porn magazine
+RoomDesc:$
+A folded magazine sits on the floor here.~
+LookDesc:$
+Its a porno magazine labeled: "Busty Elven Beauties". It features, you guessed
+it, busty elven beauties, most of which are probably biosculpted from head to
+toe. But its not like the pictures are of any interest, you're only reading it
+for the articles, right? Obviously. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.05
+	Barrier:	2
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	Articles
+	Desc:$
+Holy shit.. You're -actually- reading the articles? Well.. uhh.. hell. Theres
+like, an article about global warming, or something.. Whatever, you're not
+really reading them, you may be able to fool others, but you can't fool
+yourself. 
+~
+BREAK
+#12018
+Keywords:	cask ceramic brown jug
+Name:	A large ^ybrown^N ceramic cask
+RoomDesc:$
+^gA large ^ybrown^g ceramic cask sits on a pedestal here.^N~
+LookDesc:$
+This large cask looks to be hand-made from thick layers of baked clay. It has
+two large curved handles and a bit of design work done along its top and
+bottom with two distinct bands. It seems to have been built into a heavy stone
+base, so nobody runs off with it, and is connected to some sort of rain water
+collection system position on the roof of the shack. 
+~
+Type:	Liq Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	20.00
+	Barrier:	12
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	500
+	Val1:	499
+BREAK
+#12019
+Keywords:	robe tattered horribly brown
+Name:	A horribly tattered ^ybrown^N robe
+RoomDesc:$
+A tattered set of robes sits here in a pile.~
+LookDesc:$
+It might have been a pretty spiffy robe at one point, but it has long since
+been stained and soiled with dirt, mud, and a few other things you probably
+don't want to know. Its sleeves have been either ripped or roughly cut off,
+either way, they're almost completely missing. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	6
+	Cost:	125
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	2
+	Val4:	2
+	Val6:	1
+	Val7:	12
+BREAK
+#12020
+Keywords:	mattress newspaper ragged nasty
+Name:	a ragged newspaper mattress
+RoomDesc:$
+A nasty looking mattress is laid out in a corner here.~
+LookDesc:$
+This squalid little mattress is nothing more than a bunch of old newspapers
+stacked into a pile and held together by dirt and grime. You could probably
+steal it.. but its more than likely it'd simply fall apart if you attempted.
+Besides, what kind of rat bastard steals someones bed? Even shadowrunners have
+morals.. Right? 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	10.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#12021
+Keywords:	kanabo club oak
+Name:	an oak and iron kanabo club
+RoomDesc:$
+An oak club with an iron jacket wrapped about it sits here.~
+LookDesc:$
+The trademark weapon of demons in Japanese folklore, the oni. It is roughly
+two meters long and constructed out of heavy oak wood, with its top two-thirds
+covered with a thick jacket of iron all the way up to its tip. The weapon is
+covered with metal studs along the entirety of its metal-shod end, and is able
+to crush bones easily, along with whatever else tries standing in its way. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000001000000000000
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	3.00
+	Barrier:	12
+	Cost:	750
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	3
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#12022
+Keywords:	coat trench chains old riveted
+Name:	an old trench coat with chains riveted on its shoulders
+RoomDesc:$
+An old trench coat with chains riveted to its shoulders has been left here.~
+LookDesc:$
+This trench coat is obviously old and way past its prime. Draped over each of
+its shoulder are several lengths of thick steel chain, which travel down along
+its lapels and stop just below the chest, acting as an intimidation just as
+much as it does make-shift armour. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	4.00
+	Barrier:	8
+	Cost:	2350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	4
+	Val4:	2
+	Val5:	3
+	Val6:	2
+	Val7:	6
+BREAK
+#12059
+Keywords:	apron leather heavy cook
+Name:	A heavy leather apron reading "Kiss the Cook"
+RoomDesc:$
+A heavy leather apron hangs on a peg.~
+LookDesc:$
+Upon closer examination, this heavy leather apron looks less like a cook's
+attire and more like a soldier's. The backside appears to be fitted with think
+plastisteel plates, providing some unknown degreen of armor protection. 
+~
+Type:	Worn
+WearFlags:	1000
+ExtraFlags:	1000000100
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	30.00
+	Barrier:	12
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	4
+	Val6:	6
+	Val7:	4
+BREAK
+#12060
+Keywords:	knife
+Name:	A plasteel carving knife
+RoomDesc:$
+A dull-colored, plastic-looking knife is on the ground here.~
+LookDesc:$
+To a casual glance, this is a common butcher's knive. On closer examination,
+it's appears to be made of some sort of plastisteel compound. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val4:	3
+	Val5:	-1
+	Val6:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#12061
+Keywords:	sandwich grilled cheese
+Name:	a grilled cheese sandwich
+RoomDesc:$
+A warm, gooey grilled cheese sandwich has been left here to congeal.~
+LookDesc:$
+Two slices of real white bread and three thick slices of cheese, smothered in
+butter, and grilled to perfection. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+BREAK
+#12062
+Keywords:	pancakes plate whole wheat
+Name:	a plate of whole-wheat pancakes
+RoomDesc:$
+A plate of pancakes is getting cold here.~
+LookDesc:$
+Warm, thick pancakes drenched with syrup and topped with fresh butter. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	24
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#12063
+Keywords:	sausage steaming plate
+Name:	a plate of steaming sausage
+RoomDesc:$
+A plump, juicy sausage is on a plate, and miraculously not eaten yet.~
+LookDesc:$
+It's sausage, and it looks real. You've gotta wonder where the cow came from.
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#12064
+Keywords:	cup coffee paper cup soykaf
+Name:	a paper cup of coffee
+RoomDesc:$
+A paper cup, filled with soykaf sits here.~
+LookDesc:$
+A plain paper Dixie cup, filled with black soykaf. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	4
+	Val1:	4
+	Val2:	2
+BREAK
+#12065
+Keywords:	Spaghetti-O's(R) can original franco american
+Name:	A can of Original-flavor ^rSpaghetti-^RO^r's^n(R)
+RoomDesc:$
+A can of Original-flavor ^rSpaghetti-^RO^r's^g(R) is lying here, unopenned.~
+LookDesc:$
+Water, Tomato Puree (Water, Tomato Paste), Enriched Macaroni Product (Wheat
+Flour, Niacin, Ferrous Sulfate, Thiamine Mononitrate, Riboflavin, Folic Acid),
+High Fructose Corn Syrup, Contains Less Than 2% Of: Salt, Enzyme Modified
+Cheddar Cheese (Cheddar Cheese [Milk, Cheese Culture, Salt Enzymes], Water,
+Disodium Phosphate), Vegetable Oil (Corn, Cottonseed, Canola, and/or Soybean),
+Enzyme Modified Butter, Oleoresin Paprika, Spice Extract, Citric Acid, Nonfat
+Dry Milk 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	6
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+BREAK
+#12066
+Keywords:	Twinkie(R) cake yellow cream death
+Name:	a ^YTwinkie^n(R) snack cake
+RoomDesc:$
+A bright ^Yyellow^g snack cake has been left here to endure the years.~
+LookDesc:$
+Nobody knows what this thing is made of; what we *do* know is that they'll
+last through a nuclear holocaust. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	toxic wastes
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+BREAK
+#12072
+Keywords:	tank black white read fucking manual RTFM
+Name:	a ^Lblack^n tank top with "^WRTFM^n" in block text
+RoomDesc:$
+A small black shirt is folded up nearby.~
+LookDesc:$
+This shirt has an old pre-Matrix computer hacker saying on the front. The tag
+inside includes washing instructions and the maker's mark, "l33t st33t
+w34r"... whatever that means. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#12073
+Keywords:	tee five black yellow baby
+Name:	a ^Lblack^n baby tee with "^Y2+2=5^n" in chalk-like letters
+RoomDesc:$
+A small black shirt rests here, folded neatly.~
+LookDesc:$
+This shirt has an old pre-Matrix computer hacker saying on the front. The tag
+inside includes washing instructions and the maker's mark, "l33t st33t
+w34r"... whatever that means. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#12074
+Keywords:	tank reverse engineer blue
+Name:	a ^Bblue^n tanktop with "^CreenignE esreveR^n" in block text
+RoomDesc:$
+A blue tank top is lying here, folded into a neat square.~
+LookDesc:$
+This shirt has an old pre-Matrix computer hacker saying on the front. The tag
+inside includes washing instructions and the maker's mark, "l33t st33t
+w34r"... whatever that means. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#12075
+Keywords:	shirt tee blue home localhost
+Name:	a ^Lblack^n baby tee with "^RThere's no place like 127.0.0.1^n" in block text
+RoomDesc:$
+A black tee shirt is folded up neatly nearby.~
+LookDesc:$
+This shirt has an old pre-Matrix computer hacker saying on the front. The tag
+inside includes washing instructions and the maker's mark, "l33t st33t
+w34r"... whatever that means. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#12076
+Keywords:	tee baby green dark binary neon
+Name:	a ^ggreen^n baby tee with "^GThere are 10 types of people in this world, those that understand binary, and those that don't^n" in block text
+RoomDesc:$
+A small, dark green tee shirt is folded up nearby.~
+LookDesc:$
+This shirt has an old pre-Matrix computer hacker saying on the front. The tag
+inside includes washing instructions and the maker's mark, "l33t st33t
+w34r"... whatever that means. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#12077
+Keywords:	tee baby pink sparkly
+Name:	a ^Mpink^n baby tee with "^RI Read Your E-Mail^n" in sparkly script
+RoomDesc:$
+A tiny pink shirt is folded up neatly nearby.~
+LookDesc:$
+This shirt has an old pre-Matrix computer hacker saying on the front. The tag
+inside includes washing instructions and the maker's mark, "l33t st33t
+w34r"... whatever that means. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#12078
+Keywords:	tanktop root black silver
+Name:	a ^Lblack^n tanktop with "^WGOT ROOT?^n" in block text
+RoomDesc:$
+A neatly folded black tanktop is resting nearby.~
+LookDesc:$
+This shirt has an old pre-Matrix computer hacker saying on the front. The tag
+inside includes washing instructions and the maker's mark, "l33t st33t
+w34r"... whatever that means. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#12079
+Keywords:	shorts jeans faded
+Name:	a pair of faded, ^cblue denim^n shorts
+RoomDesc:$
+A small ball of ^cblue^g denim has been left here.~
+LookDesc:$
+A pair of acid-washed denim shorts, harsly treated until they're soft and
+comfortable. There don't appear to be any pockets, but it looks like you could
+tuck a single small item into the waistband without affecting the hard-won
+comfort. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	1
+	Val7:	4
+BREAK
+#12080
+Keywords:	short spandex tight
+Name:	a pair of tight, ^Lblack spandex^n shorts
+RoomDesc:$
+A scrunched up ball of ^Lblack^g fabric is sitting here.~
+LookDesc:$
+This pair of tight, black shorts leaves little to the imagination. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	4
+BREAK
+#12081
+Keywords:	shorts short tiny green vinyl
+Name:	a pair of tiny, ^gdark green vinyl^n short-shorts
+RoomDesc:$
+A lump of dark green vinyl is rolled up into a ball here.~
+LookDesc:$
+This pair of tiny green short is cut so short in the leg and so low in the
+waist that it might as well be a belt. 
+~
+Type:	Worn
+WearFlags:	100000100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	275
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val7:	4
+BREAK
+#12087
+Keywords:	gun P90 FN submachine bullpup smg fabrique nationale
+Name:	a Fabrique Nationale P90 submachine gun
+RoomDesc:$
+A bullpup SMG with a top-mounted clear plastic magazine is resting here.~
+LookDesc:$
+This original submachine gun was built for military use and is illegal in the
+civilian sector. Its construction was preciptated by the observation that
+about two-thirds of an army - vehicle crews, officers, cooks, and other
+support personnel - didn't carry a rifle, nor did they need to. This bullpup
+SMG was devised to arm them.
+ This particular model comes with an assault sling, a nylon belt that holds it
+in a ready position across the user's chest. It also features an integrated
+laser sight and day/night magnifaction scope, and includes rails to add
+additional accessories without compromising the integrated features. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	3000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	2
+	Val3:	10
+	Val4:	15
+	Val5:	50
+	Val6:	50
+	Val7:	626
+	Val8:	653
+	Val10:	28
+BREAK
+#12089
+Keywords:	pistol FN fabrique nationale five-seven
+Name:	a Fabrique Nationale Five-seveN pistol
+RoomDesc:$
+A small pistol has been left here.~
+LookDesc:$
+The Five-seveN is FN's contribution to the next generation of pistol warfare,
+designed to be used in tandem with the P90 submachine gun. Both weapons use
+the same custom-built ammunition, a somewhat longer round than usual for
+pistols this size; however, the two weapons do not use compatible magazines. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	700
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	20
+	Val6:	20
+	Val9:	-1
+BREAK
+#12100
+Keywords:	plastic jungle key beta dome grey green
+Name:	A ^Lgrey^n plastic keycard marked with a ^Ggreen^n beta
+RoomDesc:$
+A ^Lgrey^g plastic keycard marked with a ^Ggreen^g beta has been left here.~
+LookDesc:$
+This keycard is made of grey plastic, emblazoned with a large Greek character
+on the front. The back has the customary black stripe, but is otherwise
+featureless. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#12200
+Keywords:	plastic jungle key delta dome grey green
+Name:	A ^Lgrey^n plastic keycard marked with a ^Ggreen^n delta
+RoomDesc:$
+A ^Lgrey^g plastic keycard marked with a ^Ggreen^g delta has been left here.~
+LookDesc:$
+This keycard is made of grey plasic, emblazoned with a large Greek alpha on
+the front. The black has the customary black stripe, but is otherwise
+featureless. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#12201
+Keywords:	plastic jungle key delta dome green grey scratched
+Name:	A ^Lgrey^n plastic keycard marked with a ^Ggreen^n delta
+RoomDesc:$
+A ^Lgrey^g plastic keycard marked with a ^Ggreen^g beta has been left here.~
+LookDesc:$
+This keycard is made of grey plastic, emblazoned with a large Greek character
+on the front. The back has the customary black stripe, though this one is
+scratched beyond usability. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#12202
+Keywords:	plastic jungles key gamma dome grey green
+Name:	A ^Lgrey^n plastic keycard marked with a ^Ggreen^n gamma
+RoomDesc:$
+A ^Lgrey^g plastic keycard marked with a ^Ggreen^g gamma has been left here.~
+LookDesc:$
+This keycard is made of grey plastic, emblazoned with a large Greek character
+on the front. The back has the customary black stripe, but is otherwise
+featureless. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

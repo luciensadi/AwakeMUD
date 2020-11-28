@@ -1,0 +1,359 @@
+#29900
+Keywords:	engraved katana
+Name:	an engraved katana
+RoomDesc:$
+A katana with a dragon engraved on the blade lies unsheathed here.~
+LookDesc:$
+The handle is is wrapped in crimson cloth, and a dragon is engraved on the
+blade, its fiery breath on the tip. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	6
+	Cost:	30000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	2
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#29901
+Keywords:	silver kris
+Name:	a silver kris
+RoomDesc:$
+A kris is here.~
+LookDesc:$
+A nasty looking kris, around 30cm long.  The handle is made of the same silver
+as the blade. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	15000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#29902
+Keywords:	black komono
+Name:	a black komono
+RoomDesc:$
+A komono is here.~
+LookDesc:$
+A mean looking black komono. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.00
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29903
+Keywords:	sheath
+Name:	a sword sheath
+RoomDesc:$
+A sword sheath is here.~
+LookDesc:$
+A black belt, with a black leather sheath attached to one side. 
+~
+Type:	Holster
+WearFlags:	100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#29904
+Keywords:	sleek black bow
+Name:	a sleek black bow
+RoomDesc:$
+A sleek looking bow is on the ground here.~
+LookDesc:$
+This bow seems to be made from carbon fiber, and is as black as night. 
+~
+Type:	Bow/X-bow
+WearFlags:	10000000000001
+ExtraFlags:	1000000000000
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	8000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val2:	2
+	Val3:	317
+	Val4:	124
+	Val6:	3
+BREAK
+#29905
+Keywords:	opal
+Name:	an opal
+RoomDesc:$
+An opal has been left here!~
+LookDesc:$
+A small opal, it almost glows. 
+~
+Type:	Focus
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	2000000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	3
+BREAK
+#29906
+Keywords:	scroll
+Name:	a scroll
+RoomDesc:$
+A scroll, covered in Japanese is here.~
+LookDesc:$
+Both sides are covered in Kanji. 
+~
+Type:	Focus
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	500000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val1:	1
+BREAK
+#29907
+Keywords:	automatic sniper rifle krieg 900 warrior
+Name:	a Krieg 900 Warrior
+RoomDesc:$
+An automatic sniper rifle is here.~
+LookDesc:$
+This sniper rifle is capable of firing Burst fire. While damaging, this also
+causes the accuracy to drop considerably. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1000000001000000000000
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	5.50
+	Barrier:	6
+	Cost:	5200
+	AvailTN:	14
+	AvailDay:	30.00
+	LegalNum:	2
+	LegalCode:	9
+	LegalPermit:	0
+[VALUES]
+	Val0:	7
+	Val1:	3
+	Val3:	12
+	Val4:	12
+	Val5:	30
+	Val6:	30
+	Val10:	12
+BREAK
+#29910
+Keywords:	van black gmc
+Name:	a black GMC Bulldog
+RoomDesc:$
+A black GMC Bulldog is parked here, weapons displayed in the back.~
+LookDesc:$
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	300.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29911
+Keywords:	accodata radio
+Name:	an Accodata radio (Crypt: 4)
+RoomDesc:$
+A radio is here.~
+LookDesc:$
+A radio with level 4 encryption. 
+~
+Type:	Radio
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	2000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	4
+BREAK
+#29997
+Keywords:	computer terminal
+Name:	a computer terminal
+RoomDesc:$
+A computer is here.~
+LookDesc:$
+You shouldn't be seeing this! 
+~
+Type:	UNDEFINED
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	3.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#29998
+Keywords:	armor heavy suit
+Name:	a suit of heavy combat armor
+RoomDesc:$
+A set of combat armor is lying here.~
+LookDesc:$
+A suit of heavy combat armor, composed of kevlar plates connected to a padded
+and ribbed undersuit. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	12.00
+	Barrier:	12
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	7
+	Val6:	6
+[AFFECT 0]
+	Location:	Combat Pool
+	Modifier:	-1
+BREAK
+#29999
+Keywords:	ears puppy dog radio furry
+Name:	deck
+RoomDesc:$
+deck~
+LookDesc:$
+~
+Type:	Cyberdeck
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	computers
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	25000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	6
+	Val2:	900
+	Val3:	1800
+	Val4:	90
+[EXTRADESC 0]
+	Keywords:	initiate
+	Desc:$
+Its the initiate insignia this ring is obviously owned by one of the people
+who belongs to the clan 
+~
+BREAK
+END

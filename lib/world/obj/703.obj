@@ -1,11 +1,12 @@
 #70300
-Keywords:	blue plastic keycard sapphire tss-lc lc
-Name:	a blue plastic keycard embossed with ^W[^CTSS-LC^W]^n
+Keywords:	keycard cerulean pg parking garage
+Name:	a ^Ccerulean^n keycard marked 'PG'
 RoomDesc:$
-A blue plastic keycard has been left here.~
+^gA ^Ccerulean^g keycard has been left here carelessly.~
 LookDesc:$
-A slab of blue plastic embossed with the Star Sapphire's logo. Just above the
-magstripe is the lettering, "Clearance Level: Laborer / Contractor" 
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the letters PG on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
 ~
 Type:	Key
 WearFlags:	1
@@ -13,9 +14,9 @@ ExtraFlags:	0
 AffFlags:	0
 Material:	plastic
 [POINTS]
-	Weight:	0.05
+	Weight:	0.01
 	Barrier:	3
-	Cost:	0
+	Cost:	1
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
@@ -23,43 +24,19 @@ Material:	plastic
 	LegalPermit:	0
 BREAK
 #70301
-Keywords:	pair garden shears
-Name:	a pair of garden shears
+Keywords:	fountain
+Name:	A carved ^Ccerulean^n marble fountain
 RoomDesc:$
-A pair of garden shears glints from the floor.~
+^gA carved ^Ccerulean^g marble fountain soars up from the ground^N.~
 LookDesc:$
-Sharp and well-oiled, these shears were clearly owned and maintained by
-someone who valued their tools. 
-~
-Type:	Weapon
-WearFlags:	10000000000001
-ExtraFlags:	0
-AffFlags:	0
-Material:	metal
-[POINTS]
-	Weight:	0.50
-	Barrier:	4
-	Cost:	0
-	AvailTN:	0
-	AvailDay:	0.00
-	LegalNum:	0
-	LegalCode:	0
-	LegalPermit:	0
-[VALUES]
-	Val1:	3
-	Val4:	3
-	Val5:	-1
-	Val7:	-1
-	Val8:	-1
-	Val9:	-1
-BREAK
-#70302
-Keywords:	large fountain veined white marble impressive
-Name:	an impressive marble fountain
-RoomDesc:$
-A large fountain of veined white marble dominates the center of the roundabout.~
-LookDesc:$
-It's a fountain. TODO 
+Standing perhaps twenty feet tall at its peak, this tall marble fountain has
+been carved in three tiers. The first, at the base, is a large pool ringed by
+a single massive ouroboros, with thin jets of water splashing into the pool at
+odd intervals to provide a quiet counterpoint to the fall of water from the
+second tier, the middle. The second tier is a wide bowl of water with carved
+cherubs and angels sitting around its edge, their cool marble eyes looking out
+upon the world. The highest tier, the third, is a marble spire from which a
+flowing wash of water streams. 
 ~
 Type:	Fountain
 WearFlags:	0
@@ -67,8 +44,8 @@ ExtraFlags:	0
 AffFlags:	0
 Material:	stone
 [POINTS]
-	Weight:	500000.00
-	Barrier:	12
+	Weight:	500.00
+	Barrier:	16
 	Cost:	0
 	AvailTN:	0
 	AvailDay:	0.00
@@ -79,30 +56,2358 @@ Material:	stone
 	Val0:	100000
 	Val1:	100000
 BREAK
-#70303
-Keywords:	impressive array tooling tools vehicle workshop built-in
-Name:	a built-in vehicle workshop
+#70302
+Keywords:	desk mahogany
+Name:	a nice mahogany desk
 RoomDesc:$
-An impressive array of tooling for vehicle work has been installed in this garage.~
+A nice mahogany desk stands here.~
 LookDesc:$
-tbd 
+This is your stereotypical office desk. It has a chipped coffee mug resting on
+it with a few pencils sitting in it. There's also a nametag sitting on the
+edge of the desk that reads "^YDusk N. Glory^n" in gold letters. 
 ~
-Type:	Workshop
+Type:	Container
 WearFlags:	0
-ExtraFlags:	100
+ExtraFlags:	0
 AffFlags:	0
-Material:	metal
+Material:	wood
 [POINTS]
-	Weight:	485.00
-	Barrier:	32
-	Cost:	50000
+	Weight:	25.00
+	Barrier:	4
+	Cost:	0
 	AvailTN:	0
 	AvailDay:	0.00
 	LegalNum:	0
 	LegalCode:	0
 	LegalPermit:	0
 [VALUES]
-	Val0:	4
-	Val1:	2
+	Val0:	30
+	Val1:	1
+	Val2:	-1
+BREAK
+#70303
+Keywords:	keycard cerulean 216
+Name:	a ^Ccerulean^n keycard marked '216'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 216 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70304
+Keywords:	keycard cerulean 215
+Name:	a ^Ccerulean^n keycard marked '215'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 215 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70305
+Keywords:	keycard cerulean 214
+Name:	a ^Ccerulean^n keycard marked '214'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 214 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70306
+Keywords:	keycard cerulean 213
+Name:	a ^Ccerulean^n keycard marked '213'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 213 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70307
+Keywords:	keycard cerulean 212
+Name:	a ^Ccerulean^n keycard marked '212'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 212 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70308
+Keywords:	keycard cerulean 211
+Name:	a ^Ccerulean^n keycard marked '211'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 211 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70309
+Keywords:	keycard cerulean 210
+Name:	a ^Ccerulean^n keycard marked '210'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 210 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70310
+Keywords:	keycard cerulean 209
+Name:	a ^Ccerulean^n keycard marked '209'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 209 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70311
+Keywords:	keycard cerulean 208
+Name:	a ^Ccerulean^n keycard marked '208'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 208 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70312
+Keywords:	keycard cerulean 207
+Name:	a ^Ccerulean^n keycard marked '207'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 209 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70313
+Keywords:	keycard cerulean 206
+Name:	a ^Ccerulean^n keycard marked '206'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 206 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70314
+Keywords:	keycard cerulean 205
+Name:	a ^Ccerulean^n keycard marked '205'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 205 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70315
+Keywords:	keycard cerulean 204
+Name:	a ^Ccerulean^n keycard marked '204'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 204 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70316
+Keywords:	keycard cerulean 203
+Name:	a ^Ccerulean^n keycard marked '203'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 203 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70317
+Keywords:	keycard cerulean 202
+Name:	a ^Ccerulean^n keycard marked '202'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 202 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70318
+Keywords:	keycard cerulean 201
+Name:	a ^Ccerulean^n keycard marked '201'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 201 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70319
+Keywords:	keycard cerulean storage
+Name:	a ^Ccerulean^n keycard marked 'Storage'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the name 'Storage' on the front in black print. A message on the
+back asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70320
+Keywords:	keycard cerulean ls-office lsoffice
+Name:	a ^Ccerulean^n keycard marked 'LS-OFFICE'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the phrase 'LS-OFFICE' on the front in black print. A message on
+the back asks you to return this keycard to Lucien Sadi if found for a reward.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70321
+Keywords:	keycard cerulean boardroom
+Name:	a ^Ccerulean^n keycard marked 'Boardroom'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the name 'Boardroom' on the front in black print. A message on the
+back asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70322
+Keywords:	keycard cerulean dg-office dgoffice
+Name:	a ^Ccerulean^n keycard marked 'DG-OFFICE'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the phrase 'DG-OFFICE' on the front in black print. A message on
+the back asks you to return this keycard to Lucien Sadi if found for a reward.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70323
+Keywords:	onyx pendant
+Name:	a simple ^Lonyx^n pendant
+RoomDesc:$
+^gAn ^Lonyx^n pendant lies here.~
+LookDesc:$
+Dull and unremarkable, this onyx pendant appears to hold only sentimental
+value for its owner. The chain is of a tarnished silver, with an old clasp
+that's hard to lock in place. 
+~
+Type:	Key
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70324
+Keywords:	keycard cerulean lm-office lmoffice
+Name:	a ^Ccerulean^n keycard marked 'LM-OFFICE'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the phrase 'LM-OFFICE' on the front in black print. A message on
+the back asks you to return this keycard to Lucien Sadi if found for a reward.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70325
+Keywords:	keycard cerulean rp-office rpoffice
+Name:	a ^Ccerulean^n keycard marked 'RP-OFFICE'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the phrase 'RP-OFFICE' on the front in black print. A message on
+the back asks you to return this keycard to Lucien Sadi if found for a reward.
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70326
+Keywords:	keycard cerulean 301
+Name:	a ^Ccerulean^n keycard marked '301'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 301 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70327
+Keywords:	keycard cerulean 302
+Name:	a ^Ccerulean^n keycard marked '302'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 302 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70328
+Keywords:	keycard cerulean 303
+Name:	a ^Ccerulean^n keycard marked '303'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 303 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70329
+Keywords:	keycard cerulean 304
+Name:	a ^Ccerulean^n keycard marked '304'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 304 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70330
+Keywords:	keycard cerulean 305
+Name:	a ^Ccerulean^n keycard marked '305'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 305 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70331
+Keywords:	keycard cerulean 306
+Name:	a ^Ccerulean^n keycard marked '306'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 306 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70332
+Keywords:	keycard cerulean 307
+Name:	a ^Ccerulean^n keycard marked '307'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 307 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70333
+Keywords:	keycard cerulean 308
+Name:	a ^Ccerulean^n keycard marked '308'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 308 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70334
+Keywords:	keycard cerulean 309
+Name:	a ^Ccerulean^n keycard marked '309'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 309 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70335
+Keywords:	keycard cerulean 310
+Name:	a ^Ccerulean^n keycard marked '310'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 310 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70336
+Keywords:	keycard cerulean 311
+Name:	a ^Ccerulean^n keycard marked '311'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 311 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70337
+Keywords:	keycard cerulean 312
+Name:	a ^Ccerulean^n keycard marked '312'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 312 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70338
+Keywords:	keycard cerulean 313
+Name:	a ^Ccerulean^n keycard marked '313'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 313 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70339
+Keywords:	keycard cerulean 314
+Name:	a ^Ccerulean^n keycard marked '314'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 314 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70340
+Keywords:	keycard cerulean 315
+Name:	a ^Ccerulean^n keycard marked '315'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 315 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70341
+Keywords:	keycard cerulean 316
+Name:	a ^Ccerulean^n keycard marked '316'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 316 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70342
+Keywords:	keycard cerulean L1
+Name:	a ^Ccerulean^n keycard marked 'L1' 
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with 'L1' on the front in black print. A message on the back asks you
+to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70343
+Keywords:	salad bowl garden salad vegetables
+Name:	a bowl of garden salad
+RoomDesc:$
+A bowl full of garden salad is lying here.~
+LookDesc:$
+A typical bowl of fresh garden salad. Looks good. 
+~
+Type:	Food
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.20
+	Barrier:	2
+	Cost:	12
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#70344
+Keywords:	keycard cerulean L2
+Name:	a ^Ccerulean^n keycard marked 'L2' 
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with 'L2' on the front in black print. A message on the back asks you
+to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70345
+Keywords:	keycard cerulean L3
+Name:	a ^Ccerulean^n keycard marked 'L3'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with 'L3' on the front in black print. A message on the back asks you
+to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70346
+Keywords:	keycard cerulean L4
+Name:	a ^Ccerulean^n keycard marked 'L4'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with 'L4' on the front in black print. A message on the back asks you
+to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70347
+Keywords:	keycard cerulean L5
+Name:	a ^Ccerulean^n keycard marked 'L5'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with 'L5' on the front in black print. A message on the back asks you
+to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70348
+Keywords:	keycard cerulean R1
+Name:	a ^Ccerulean^n keycard marked 'R1'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with 'R1' on the front in black print. A message on the back asks you
+to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70349
+Keywords:	keycard cerulean R2
+Name:	a ^Ccerulean^n keycard marked 'R2'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with 'R2' on the front in black print. A message on the back asks you
+to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70350
+Keywords:	keycard cerulean R3
+Name:	a ^Ccerulean^n keycard marked 'R3'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with 'R3' on the front in black print. A message on the back asks you
+to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70351
+Keywords:	keycard cerulean R4
+Name:	a ^Ccerulean^n keycard marked 'R4'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with 'R4' on the front in black print. A message on the back asks you
+to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70352
+Keywords:	keycard cerulean R5
+Name:	a ^Ccerulean^n keycard marked 'R5'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with 'R5' on the front in black print. A message on the back asks you
+to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70353
+Keywords:	keycard cerulean 201
+Name:	a ^Ccerulean^n keycard marked '201'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 201 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70354
+Keywords:	keycard cerulean 202
+Name:	a ^Ccerulean^N keycard marked '202'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 202 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70355
+Keywords:	keycard cerulean 203
+Name:	a ^Ccerulean^n keycard marked '203'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 203 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70356
+Keywords:	keycard cerulean 204
+Name:	a ^Ccerulean^n keycard marked '204'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 204 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70357
+Keywords:	keycard cerulean 205
+Name:	a ^Ccerulean^n keycard marked '205'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 205 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70358
+Keywords:	keycard cerulean 206
+Name:	a ^Ccerulean^n keycard marked '206'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 206 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70359
+Keywords:	keycard cerulean 207
+Name:	a ^Ccerulean^n keycard marked '207'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 209 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70360
+Keywords:	keycard cerulean 208
+Name:	a ^Ccerulean^n keycard marked '208'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 208 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70361
+Keywords:	keycard cerulean 209
+Name:	a ^Ccerulean^n keycard marked '209'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 209 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70362
+Keywords:	keycard cerulean 210
+Name:	a ^Ccerulean^n keycard marked '210'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 210 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70363
+Keywords:	keycard cerulean 211
+Name:	a ^Ccerulean^n keycard marked '211'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 211 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70364
+Keywords:	keycard cerulean 212
+Name:	a ^Ccerulean^n keycard marked '212'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 212 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70365
+Keywords:	keycard cerulean 213
+Name:	a ^Ccerulean^n keycard marked '213'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 213 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70366
+Keywords:	keycard cerulean 214
+Name:	a ^Ccerulean^n keycard marked '214'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 214 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70367
+Keywords:	keycard cerulean 215
+Name:	a ^Ccerulean^n keycard marked '215'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 215 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70368
+Keywords:	keycard cerulean 216
+Name:	a ^Ccerulean^n keycard marked '216'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 216 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70369
+Keywords:	keycard cerulean 301
+Name:	a ^Ccerulean^n keycard marked '301'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 301 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70370
+Keywords:	keycard cerulean 302
+Name:	a ^Ccerulean^n keycard marked '302'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 302 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70371
+Keywords:	keycard cerulean 303
+Name:	a ^Ccerulean^n keycard marked '303'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 303 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70372
+Keywords:	keycard cerulean 304
+Name:	a ^Ccerulean^n keycard marked '304'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 304 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70373
+Keywords:	keycard cerulean 305
+Name:	a ^Ccerulean^n keycard marked '305'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 305 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70374
+Keywords:	keycard cerulean 306
+Name:	a ^Ccerulean^n keycard marked '306'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 306 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70375
+Keywords:	keycard cerulean 307
+Name:	a ^Ccerulean^n keycard marked '307'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 307 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70376
+Keywords:	keycard cerulean 308
+Name:	a ^Ccerulean^n keycard marked '308'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 308 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70377
+Keywords:	keycard cerulean 309
+Name:	a ^Ccerulean^n keycard marked '309'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 309 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70378
+Keywords:	keycard cerulean 310
+Name:	a ^Ccerulean^n keycard marked '310'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 310 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70379
+Keywords:	keycard cerulean 311
+Name:	a ^Ccerulean^n keycard marked '311'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 311 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70380
+Keywords:	keycard cerulean 312
+Name:	a ^Ccerulean^n keycard marked '312'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 312 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70381
+Keywords:	keycard cerulean 313
+Name:	a ^Ccerulean^n keycard marked '313'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 313 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70382
+Keywords:	keycard cerulean 314
+Name:	a ^Ccerulean^n keycard marked '314'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 314 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70383
+Keywords:	keycard cerulean 315
+Name:	a ^Ccerulean^n keycard marked '315'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 315 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70384
+Keywords:	keycard cerulean 316
+Name:	a ^Ccerulean^n keycard marked '316'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with the number 316 on the front in black print. A message on the back
+asks you to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70385
+Keywords:	keycard cerulean L1
+Name:	a ^Ccerulean^n keycard marked 'L1' 
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with 'L1' on the front in black print. A message on the back asks you
+to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70386
+Keywords:	salad bowl garden salad vegetables
+Name:	FREE ITEM
+RoomDesc:$
+A bowl full of garden salad is lying here.~
+LookDesc:$
+A typical bowl of fresh garden salad. Looks good. 
+~
+Type:	Food
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.20
+	Barrier:	2
+	Cost:	12
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#70387
+Keywords:	keycard cerulean L2
+Name:	a ^Ccerulean^n keycard marked 'L2' 
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with 'L2' on the front in black print. A message on the back asks you
+to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70388
+Keywords:	keycard cerulean L3
+Name:	a ^Ccerulean^n keycard marked 'L3'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with 'L3' on the front in black print. A message on the back asks you
+to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70389
+Keywords:	keycard cerulean L4
+Name:	a ^Ccerulean^n keycard marked 'L4'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with 'L4' on the front in black print. A message on the back asks you
+to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70390
+Keywords:	keycard cerulean L5
+Name:	a ^Ccerulean^n keycard marked 'L5'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with 'L5' on the front in black print. A message on the back asks you
+to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70391
+Keywords:	keycard cerulean R1
+Name:	a ^Ccerulean^n keycard marked 'R1'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with 'R1' on the front in black print. A message on the back asks you
+to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70392
+Keywords:	keycard cerulean R2
+Name:	a ^Ccerulean^n keycard marked 'R2'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with 'R2' on the front in black print. A message on the back asks you
+to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70393
+Keywords:	keycard cerulean R3
+Name:	a ^Ccerulean^n keycard marked 'R3'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with 'R3' on the front in black print. A message on the back asks you
+to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70394
+Keywords:	keycard cerulean R4
+Name:	a ^Ccerulean^n keycard marked 'R4'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with 'R4' on the front in black print. A message on the back asks you
+to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#70395
+Keywords:	keycard cerulean R5
+Name:	a ^Ccerulean^n keycard marked 'R5'
+RoomDesc:$
+^gA ^Ccerulean^g keycard has been left here carelessly.^N~
+LookDesc:$
+Emblazoned with the distinctive logo of the Star Sapphire, this keycard is
+marked with 'R5' on the front in black print. A message on the back asks you
+to return this keycard to Lucien Sadi if found for a reward. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	2
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
 BREAK
 END

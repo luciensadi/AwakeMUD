@@ -1,0 +1,2692 @@
+#3400
+Keywords:	cryogenic suit
+Name:	^ba cryogenic suit^n
+RoomDesc:$
+A sleak plastic jump suit is laying here.~
+LookDesc:$
+^RYou should not have this. 
+~
+Type:	Phone
+WearFlags:	1100000000010000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3401
+Keywords:	cryotank cryogenic tank frosted frosty deep freeze
+Name:	a frosted cryogenics 'deep freeze' tank
+RoomDesc:$
+A heavily frosted cryogenic tank with wires attached stands here.~
+LookDesc:$
+This ice cold tube is covered in frost, and its rim is starting to form a
+little bit of ice. An assortment of cables and wires navigate their way around
+inside, connecting to the bodies that are placed in it. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	300.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	500
+	Val2:	-1
+BREAK
+#3402
+Keywords:	nosign
+Name:	a shiney metal sign
+RoomDesc:$
+A shiney metal sign sits here.~
+LookDesc:$
+This desc should be set using extra room desc. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3403
+Keywords:	dev null frozen
+Name:	The frozen body of Dev Null
+RoomDesc:$
+This should only be contained within the cryotank.~
+LookDesc:$
+^RYou should not have this. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3404
+Keywords:	pandora null frozen
+Name:	The frozen body of Pandora Null
+RoomDesc:$
+This should only be contained in cryotank.~
+LookDesc:$
+^RYou should not have this. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	0.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[EXTRADESC 0]
+	Keywords:	inscription
+	Desc:$
+You see an inscription confessing undying Love. to Pandora. 
+~
+BREAK
+#3405
+Keywords:	leather trenchcoat coat
+Name:	a leather trenchcoat
+RoomDesc:$
+A large leather coat is hanging here.~
+LookDesc:$
+This floor length trenchcoat has many pockets, and is made of sturdy black
+leather. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.50
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	2
+	Val6:	2
+	Val7:	-2
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#3406
+Keywords:	tight pants silver shiney
+Name:	a pair of shiney ^wsilver^n pants
+RoomDesc:$
+A shiney pair of pants are folded up here.~
+LookDesc:$
+Shiney and skin tight, these pants have odd cargo pockets on the legs. 
+~
+Type:	Container
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val2:	-1
+BREAK
+#3407
+Keywords:	midnight blue fur vest
+Name:	a ^bmidnight blue^n fur vest
+RoomDesc:$
+A furry vest has been thrown on the ground.~
+LookDesc:$
+Some unknown animal's fur has been dyed a dark blue and fashioned into a vest.
+There is a hidden pocket on the inside left breast. 
+~
+Type:	Container
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+	Val2:	-1
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#3408
+Keywords:	datafile datachip chip file encrypted
+Name:	an encrypted datafile
+RoomDesc:$
+A small datachip sits on the floor here.~
+LookDesc:$
+Its a small black datachip, encrypted ten-fold and jam packed with some
+unknown software program. Whatever it is, its probably not nice. 
+~
+Type:	Decking Accessory
+WearFlags:	1
+ExtraFlags:	1000001100
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	1
+[AFFECT 0]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#3409
+Keywords:	documents stack bound
+Name:	a bound stack of documents
+RoomDesc:$
+A bound stack of documents has been careless left out here.~
+LookDesc:$
+It's a stack of documents bound with tape and wire, so its impossible to open
+without it being known. It's fairly heavy for just being paper, oddly enough.
+~
+Type:	Quest Item
+WearFlags:	1
+ExtraFlags:	1000001100
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3410
+Keywords:	pen ink
+Name:	an ink pen
+RoomDesc:$
+A small ink pen lies here.~
+LookDesc:$
+Your standard issue ink pen. Blue ink. 
+~
+Type:	Weapon
+WearFlags:	110000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	3
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	2
+BREAK
+#3411
+Keywords:	bottle medicine meds
+Name:	a bottle of medicine
+RoomDesc:$
+A small bottle lies here.~
+LookDesc:$
+A bottle of the pink stuff, helps with stomach problems. 
+~
+Type:	Liq Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	1
+	Val2:	10
+BREAK
+#3412
+Keywords:	shirt
+Name:	a form-fitted ^Lblack^n dress shirt
+RoomDesc:$
+A nice black woman's shirt is folded up here.~
+LookDesc:$
+A sleak woman's dress shirt, made of a black acrylic material. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	5.00
+	Barrier:	4
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3413
+Keywords:	gloves
+Name:	a pair of black leather gloves
+RoomDesc:$
+A pair of nice leather gloves are laying here.~
+LookDesc:$
+An expensive set of black leather gloves, form-fitted to the hand. 
+~
+Type:	Worn
+WearFlags:	10000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	-10
+[AFFECT 1]
+	Location:	Reaction
+	Modifier:	5
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	2
+BREAK
+#3414
+Keywords:	boots
+Name:	a pair of knee-high heeled leather boots
+RoomDesc:$
+A pair of nice woman's dress boots are sitting here.~
+LookDesc:$
+A nice pair of woman's dress boots. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3415
+Keywords:	shotgun gun
+Name:	an ink-black Ares pump action shotgun
+RoomDesc:$
+An ink-black shotgun is resting against the wall here.~
+LookDesc:$
+A customized pump action shotgun from the Ares line of Riot-tredder series. It
+bolsters a 50-shell drum and multiple attachments. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	11.00
+	Barrier:	6
+	Cost:	14200
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	5
+	LegalCode:	6
+	LegalPermit:	0
+[VALUES]
+	Val0:	8
+	Val1:	3
+	Val3:	14
+	Val4:	13
+	Val5:	50
+	Val6:	50
+	Val7:	629
+	Val8:	28614
+	Val9:	656
+	Val10:	2
+BREAK
+#3416
+Keywords:	helicopter rotorcraft Hughes WK-2 Stallion
+Name:	A Hughes WK-2 'Stallion' rotorcraft
+RoomDesc:$
+^yA Hughes WK-2 'Stallion' rotorcraft sits unused upon the helipad.^N~
+LookDesc:$
+This medium sized helicopter is a 2050 WK-2 cargo variant, updated and
+refitted from its WK-1 2012 design. This baby is fast enough to keep up with
+just about anything around, but pursuit and patrol weren't first or only
+priority, far from it actually. Several forward-mounted gun platforms were
+attached to its frame, as well as rear-facing cargo door mounts, all of which
+are stacked with heavy machine-guns, just itching to be put to use. A gun-pod
+sits below the pilots cabin, complete with a swiveling turret and flood light,
+just in case you had any ideas about hiding or trying to out-maneuver this
+thing. Fortunately, since its been put up for 'valuable' cargo deliveries and
+shipments, the only time it might cause anyone any trouble is if they're
+stupid enough to try and hijack it. 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	500.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3417
+Keywords:	key nix
+Name:	^wa ^Wplatinum^w keycard
+RoomDesc:$
+Key.~
+LookDesc:$
+An item of unbelievable beauty, this chain mail is worn under garments to
+protect the wearer from nearly anything. Delicately structured, this garment
+looks much more fragile than it realy is. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	1200000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3418
+Keywords:	pistol polished platinum ares predator ii
+Name:	a polished platinum Ares Predator II
+RoomDesc:$
+A customized Ares Predator lies here.~
+LookDesc:$
+A nice custom made polished platinum Ares Predator II. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	1420
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	9
+	Val1:	2
+	Val3:	8
+	Val4:	11
+	Val5:	15
+	Val6:	15
+	Val7:	629
+	Val8:	28614
+	Val9:	-1
+	Val10:	4
+BREAK
+#3419
+Keywords:	pants slacks
+Name:	a pait of fitted women's dress slacks
+RoomDesc:$
+A nice pair of women's slacks are folded here.~
+LookDesc:$
+A nice pair of women's dress slacks. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	100
+BREAK
+#3420
+Keywords:	sheath kayne
+Name:	a broadsword sheath with a ^Wsilver tip^n
+RoomDesc:$
+Kayne's sheath is laying here.~
+LookDesc:$
+A custom itme paid for by Kayne. 
+~
+Type:	Holster
+WearFlags:	1000100100000000001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#3421
+Keywords:	candy bar chocolate
+Name:	a candy bar
+RoomDesc:$
+A delicious looking candy bar sits here waiting for you to eat it.~
+LookDesc:$
+A thick bar of chocolate. Is it real chocolate? Eh.. Wouldn't get your hopes
+up. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	3
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+BREAK
+#3422
+Keywords:	can soda pop liquid
+Name:	a can of soda
+RoomDesc:$
+A glistening can of soda sits here, making your thirst grow.~
+LookDesc:$
+A can of carbonated soda. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.05
+	Barrier:	3
+	Cost:	6
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	12
+	Val2:	1
+BREAK
+#3423
+Keywords:	bag chips potato
+Name:	a bag of chips
+RoomDesc:$
+A tastey bag of potato chips rests here.~
+LookDesc:$
+A bag of deep fried potato chips. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.10
+	Barrier:	1
+	Cost:	2
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+BREAK
+#3424
+Keywords:	bowl slop
+Name:	a bowl of slop
+RoomDesc:$
+A bowl of some foul mush has been left here.~
+LookDesc:$
+A big bowl of edible sludge. The grey colour gives no hints as to what the
+contents might be.. and thats probably a good thing. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#3425
+Keywords:	plate today's todays special
+Name:	a plate of today's special
+RoomDesc:$
+A plate with a gelatinous blob perched on it sits here.~
+LookDesc:$
+Some large, unidentifiable blue gelatin blob sits perched atop this plate.. It
+wiggles oddly when touched, and for some strange reason, it almost looks
+alive. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	10
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+BREAK
+#3426
+Keywords:	dress blue sexy
+Name:	a blue dress
+RoomDesc:$
+A blue dress hangs here.~
+LookDesc:$
+A sexy blue low-cut dress. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	3
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3427
+Keywords:	boring grey business dress
+Name:	a boring grey dress
+RoomDesc:$
+A rather plain looking grey dress hangs here.~
+LookDesc:$
+A conservative grey business dress, no fancy frills. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.25
+	Barrier:	3
+	Cost:	125
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3428
+Keywords:	dress business dull blue
+Name:	a classy, dull blue dress
+RoomDesc:$
+A classy looking blue dress is hanging here.~
+LookDesc:$
+Its a conservative dull blue business dress, classy and tasteful. Not for
+tramps. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	3
+	Cost:	350
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val4:	1
+BREAK
+#3429
+Keywords:	suit armour jnl security
+Name:	a suit of JNL light security armour
+RoomDesc:$
+A suit of armor with a JNL logo lies here.~
+LookDesc:$
+This suit is covered sparsely but efficiently with strips of rigid armour
+plating that have been painted a sterile grey, beneath which the suit consists
+of a mixture of gel padding and kevlar weaved patterns. The overall design is
+bland and nearly colourless, aside from the simple raised edged letters over
+the right breast, designating "JNL" in a dark shade of blue. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	9.00
+	Barrier:	8
+	Cost:	4250
+	AvailTN:	12
+	AvailDay:	10.00
+	LegalNum:	4
+	LegalCode:	11
+	LegalPermit:	1
+[VALUES]
+	Val1:	4
+	Val2:	1
+	Val4:	2
+	Val5:	6
+	Val6:	4
+BREAK
+#3431
+Keywords:	ares marauder gun machinegun
+Name:	an ares marauder machine gun
+RoomDesc:$
+A prototype machine guns rest against the wall.~
+LookDesc:$
+Ares made this gun custom for Johnson NewBody Labs security. It features a
+built in laser sight, recoil modifier, and gas vent. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	15.00
+	Barrier:	6
+	Cost:	50000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+	Val1:	3
+	Val3:	15
+	Val4:	19
+	Val5:	50
+	Val6:	50
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	-2
+BREAK
+#3433
+Keywords:	cigarette marlboro menthol
+Name:	a Marlboro menthol
+RoomDesc:$
+A smoking cigarette sits in an ashtray.~
+LookDesc:$
+A minty tasting cigarette, for those people who like a little flavour with
+their cancer. Mmmmm.. Pleasure country. 
+~
+Type:	Light
+WearFlags:	10000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	-1
+BREAK
+#3434
+Keywords:	thick cigar
+Name:	a thick cigar
+RoomDesc:$
+A thick cigar is resting in an ashtray.~
+LookDesc:$
+A dark brown cigar, an inch wide and eight inches long. 
+~
+Type:	Light
+WearFlags:	1
+ExtraFlags:	1
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.20
+	Barrier:	2
+	Cost:	80
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	-1
+BREAK
+#3435
+Keywords:	glasses pair specs
+Name:	a pair of glasses
+RoomDesc:$
+A pair of glasses are folded up and lying here.~
+LookDesc:$
+A sturdy pair of perscription glasses with metal frames. 
+~
+Type:	Worn
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	100000000000000000
+Material:	glass
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3436
+Keywords:	hairnet net cap
+Name:	a hair net
+RoomDesc:$
+A wad of netting sits here.~
+LookDesc:$
+Used to keep your hair out of the food. This cap is made out of fishnet
+material. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.10
+	Barrier:	4
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3437
+Keywords:	ladle spoon
+Name:	a ladle
+RoomDesc:$
+A large bent spoon laying here.~
+LookDesc:$
+A large bent spoon, used to dish out slop. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3438
+Keywords:	diamond stud earring
+Name:	a diamond stud earring
+RoomDesc:$
+A tiny glimmer of light is hidden here, might be a diamond.~
+LookDesc:$
+A short stud with a diamond set into it. 
+~
+Type:	Worn
+WearFlags:	10000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	8
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Charisma
+	Modifier:	1
+BREAK
+#3439
+Keywords:	helmet security light JNL
+Name:	a light JNL security helmet
+RoomDesc:$
+A light security helmet rests here.~
+LookDesc:$
+Its a security helmet whos sturdy advanced plastic shell been painted a bland
+and colourless grey, its only real feature being the "JNL" stamped in raised
+letters above the brow curve. Its interior is lined with padding, and has a
+flip-down lense to both protect and enhance the wearers vision. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	10000000000000
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	250
+	AvailTN:	12
+	AvailDay:	14.00
+	LegalNum:	3
+	LegalCode:	11
+	LegalPermit:	1
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#3440
+Keywords:	security armor suit jnl heavy
+Name:	a suit of heavy JNL security armor
+RoomDesc:$
+A suit of heavy security armour has been left here.~
+LookDesc:$
+It looks like a suit of heavy armour plates that have been painted a bland
+grey colour, each one custom fitted over a padded undersuit to reinforce its
+durability. The only marking on the suit itself is a soft blue bold styled
+lettering with raised edges, which reads, "JNL". This is top of the line
+protection for corporate security goons far and wide. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	ceramic
+[POINTS]
+	Weight:	18.00
+	Barrier:	8
+	Cost:	6850
+	AvailTN:	16
+	AvailDay:	14.00
+	LegalNum:	2
+	LegalCode:	11
+	LegalPermit:	1
+[VALUES]
+	Val0:	1
+	Val1:	6
+	Val2:	4
+	Val4:	2
+	Val5:	7
+	Val6:	5
+	Val7:	4
+BREAK
+#3441
+Keywords:	spoon large
+Name:	a large spoon
+RoomDesc:$
+A large shiney spoon is resting here.~
+LookDesc:$
+A large stainless steel spoon used to stir slop, and it resembles a small boat
+oar more than a kitchen utensil. One can only assume it would smart something
+fierce to get walloped with this baby. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	80
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val3:	1
+	Val4:	6
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#3442
+Keywords:	latex rubber gloves
+Name:	a pair of latex gloves
+RoomDesc:$
+A wad of latex sits here.~
+LookDesc:$
+Used to keep the slop from permanently staining your hands. 
+~
+Type:	Worn
+WearFlags:	10000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	5
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3443
+Keywords:	plastic spork spoon fork
+Name:	a plastic spork
+RoomDesc:$
+A wierd combination of a spoon and a fork rests here.~
+LookDesc:$
+It's a spoon. No, it's a fork. No, it's a spork! 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.10
+	Barrier:	3
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#3444
+Keywords:	dress plaid tent multi-coloured
+Name:	a large plaid dress
+RoomDesc:$
+A multi-coloured dressed as big as a tent is hanging here.~
+LookDesc:$
+It looks like an old, large army tent that has been dyed with a plaid pattern
+and converted into a dress. Suitable for those of the trog'ish variety, its
+quite comfortable too. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	101100000000000000000
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	6
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	4
+	Val2:	2
+	Val3:	2
+	Val4:	4
+	Val6:	1
+BREAK
+#3445
+Keywords:	necronomicon book tome 23rd edition
+Name:	the Necronomicon, 23rd edition
+RoomDesc:$
+A large tome covered in skin is laying here.~
+LookDesc:$
+A dusty old tome with an intricate symbol on the front. A weird smell seems to
+be eminating from it. 
+~
+Type:	Spell Formula
+WearFlags:	100000000000001
+ExtraFlags:	1001000000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	15.00
+	Barrier:	32
+	Cost:	6000
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	6
+	Val1:	1
+BREAK
+#3446
+Keywords:	dull brown suit business
+Name:	a dull brown suit
+RoomDesc:$
+A brown suit is hanging here.~
+LookDesc:$
+A conservative brown business suit crafted from relatively expensive corduroy
+weave. For the fashion minded business tycoons who need something a bit more
+sturdy than silk. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.25
+	Barrier:	4
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	2
+	Val2:	1
+	Val4:	4
+	Val5:	1
+	Val6:	3
+	Val7:	4
+BREAK
+#3447
+Keywords:	boring tan suit business
+Name:	a boring tan suit
+RoomDesc:$
+A tan suit is hanging here.~
+LookDesc:$
+A conservative tan business suit. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	5.00
+	Barrier:	4
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3448
+Keywords:	broom push wide
+Name:	a wide push broom
+RoomDesc:$
+A cleaning broom is leaning against the wall.~
+LookDesc:$
+Your standard issue push broom, capable of tackling the biggest of messes you
+damn well wouldn't touch with just your hands. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	wood
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	2
+	Val3:	2
+	Val4:	4
+	Val5:	-1
+	Val6:	2
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#3449
+Keywords:	vacuum
+Name:	a vacuum
+RoomDesc:$
+A vacuum is standing here.~
+LookDesc:$
+An industrial strength vacuum. 
+~
+Type:	Other
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	10.00
+	Barrier:	4
+	Cost:	75
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3450
+Keywords:	garbage can rolling
+Name:	a rolling garbage can
+RoomDesc:$
+A garbage can on wheels is sitting here.~
+LookDesc:$
+A large garbage can with caster wheels attached to the bottom. 
+~
+Type:	Container
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	10.00
+	Barrier:	4
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	150
+	Val1:	5
+	Val2:	-1
+BREAK
+#3451
+Keywords:	grey coveralls cover-alls suit
+Name:	a suit of grey cover-alls
+RoomDesc:$
+A bunch of grey cloth is wadded up here.~
+LookDesc:$
+A zip-up suit of grey cover-alls. The cloth has been treated to resist
+moisture, and there are several large pockets. 
+~
+Type:	Container
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val1:	5
+	Val2:	-1
+BREAK
+#3452
+Keywords:	service elevator key
+Name:	a service elevator key
+RoomDesc:$
+A small key has been left behind here.~
+LookDesc:$
+A snub metal key with rough grooves along one edge. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1000001100
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.05
+	Barrier:	6
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3453
+Keywords:	sword
+Name:	a ^Lgrey^n cloak cover in ^bcircuitry^n
+RoomDesc:$
+A sparkling grey cloak is carefully folded here.~
+LookDesc:$
+A long grey and blue cloak, buzzin circuitry has been sewn into the fabric. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	100010
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	15.00
+	Barrier:	4
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	1
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	1
+BREAK
+#3454
+Keywords:	snowflake snowflakes chip data datachip key file beautiful
+Name:	a beautiful snowflake
+RoomDesc:$
+A glistening snowflake floats here.~
+LookDesc:$
+A datachip resembling a extremely complex snowflake. 
+~
+Type:	Decking Accessory
+WearFlags:	1
+ExtraFlags:	1000001100
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val2:	1
+BREAK
+#3455
+Keywords:	icecube cube
+Name:	an ice cube
+RoomDesc:$
+A shiney cube of ice is here melting.~
+LookDesc:$
+A datachip resembling a decahedron made of ice. 
+~
+Type:	Decking Accessory
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	100000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	100
+	Val2:	7
+	Val3:	7
+BREAK
+#3456
+Keywords:	keycard cryogenics chamber
+Name:	a cryogenics chamber keycard
+RoomDesc:$
+A shiney black keycard lies here.~
+LookDesc:$
+A flat piece of black metal that houses an electronic device. One of its ends
+has two exposed metallic prongs, apparently for inserting into whatever lock
+it was meant for. 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	100
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.10
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3457
+Keywords:	speakers
+Name:	a set of bi-directional speakers
+RoomDesc:$
+A set of nice speakers sit here.~
+LookDesc:$
+High-fidelity speakers made to both create and record sound. 
+~
+Type:	Worn
+WearFlags:	10000000000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	10.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Body
+	Modifier:	20
+[AFFECT 1]
+	Location:	Quickness
+	Modifier:	20
+[AFFECT 2]
+	Location:	Strength
+	Modifier:	20
+[AFFECT 3]
+	Location:	Charisma
+	Modifier:	20
+[AFFECT 4]
+	Location:	Intelligence
+	Modifier:	20
+[AFFECT 5]
+	Location:	Willpower
+	Modifier:	20
+BREAK
+#3458
+Keywords:	camera video
+Name:	a video camera
+RoomDesc:$
+A nice video camera rests here.~
+LookDesc:$
+A high-definition camera. 
+~
+Type:	Worn
+WearFlags:	1000000000000001
+ExtraFlags:	100000000000
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	15.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	1000
+	Val6:	1000
+[AFFECT 0]
+	Location:	Target Numbers
+	Modifier:	-100
+[AFFECT 1]
+	Location:	Init Dice
+	Modifier:	100
+[AFFECT 2]
+	Location:	Combat Pool
+	Modifier:	100
+[AFFECT 3]
+	Location:	Target Numbers
+	Modifier:	-100
+[AFFECT 4]
+	Location:	Combat Pool
+	Modifier:	100
+[AFFECT 5]
+	Location:	Init Dice
+	Modifier:	100
+BREAK
+#3459
+Keywords:	blue labcoat
+Name:	a ^Bblue^n labcoat
+RoomDesc:$
+A light blue labcoat is hanging here.~
+LookDesc:$
+A light blue labcoat with big pockets. 
+~
+Type:	Container
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val2:	-1
+BREAK
+#3460
+Keywords:	magnifying headset
+Name:	a magnifying headset
+RoomDesc:$
+A complex headset consisting of multiple lenses sits here.~
+LookDesc:$
+These extremely complex goggles consist of multiple layered lenses that can be
+switched and slide in place to allow the wearer to view material almost too
+small to see with the naked eye. 
+~
+Type:	Worn
+WearFlags:	1000000000000001
+ExtraFlags:	0
+AffFlags:	1000000000000000000000
+Material:	glass
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	800
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3461
+Keywords:	monomolecular soldering iron
+Name:	a monomolecular soldering iron
+RoomDesc:$
+A strange soldering iron rests here.~
+LookDesc:$
+A soldering iron tapering to a microscopic point. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val4:	3
+	Val5:	-1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#3462
+Keywords:	laser scalpel
+Name:	a laser scalpel
+RoomDesc:$
+A mob only item.~
+LookDesc:$
+A mob only item. 
+~
+Type:	Worn
+WearFlags:	10000000000000
+ExtraFlags:	1
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3463
+Keywords:	labcoat white heavy
+Name:	a heavy ^Wwhite^N labcoat
+RoomDesc:$
+^gA heavy ^Wwhite^g labcoat sits in a pile here.^N~
+LookDesc:$
+This labcoat is constructed of a relatively thick material, and is obviously
+intended to be used in colder than normal temperatures, specifically cold
+rooms. It has multiple pockets lining both its exterior as well as its
+interior. The fabric itself is reinforced to protect against accidental
+exposure to all sorts of chemicals, making it a very sturdy little piece of
+equipment. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.20
+	Barrier:	8
+	Cost:	850
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	8
+	Val2:	4
+	Val4:	6
+	Val6:	2
+	Val7:	8
+BREAK
+#3464
+Keywords:	power suit
+Name:	a power suit
+RoomDesc:$
+A fancy suit is hanging here.~
+LookDesc:$
+An expensive designer suit for the aspiring young businessman. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3465
+Keywords:	jet black suit
+Name:	a ^Ljet black^n suit
+RoomDesc:$
+A dark black suit is hanging here.~
+LookDesc:$
+A sharp looking suit, tailored to perfection. Most people couldn't afford a
+suit like this if they saved up their entire life, or robbed a few banks, even
+then, they'd still come up a bit short. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	6
+	Cost:	2250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	4
+	Val2:	1
+	Val4:	2
+	Val5:	2
+	Val6:	1
+	Val7:	4
+BREAK
+#3466
+Keywords:	pentagram necklace
+Name:	a pentagram
+RoomDesc:$
+A evil looking necklace is tangled here.~
+LookDesc:$
+A silver necklace in the shape of an upside down pentacle. 
+~
+Type:	Worn
+WearFlags:	1
+ExtraFlags:	1
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	50000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[AFFECT 0]
+	Location:	Magic
+	Modifier:	2
+[AFFECT 1]
+	Location:	Charisma
+	Modifier:	-4
+BREAK
+#3467
+Keywords:	expensive blue suit
+Name:	an expensive ^bblue^n suit
+RoomDesc:$
+An expensive blue suit is hanging here.~
+LookDesc:$
+An expensive, custom tailored suit, crafted from a fine blue silk, possibly
+Italian. It could make a hobo look like the president, its just that damn
+fine. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	0.50
+	Barrier:	4
+	Cost:	2150
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val1:	4
+	Val2:	2
+	Val4:	2
+	Val5:	3
+	Val6:	2
+	Val7:	4
+BREAK
+#3468
+Keywords:	keycard executive's executives
+Name:	an executive's keycard
+RoomDesc:$
+A small key sits on the floor here.~
+LookDesc:$
+Its a small, fairly plain keycard crafted from sturdy plastics. Along its back
+is a magnetic encryption stripe, while its front is labeled with one simple
+word, "Executive". 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1000001100
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.05
+	Barrier:	3
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3469
+Keywords:	magic mushroom
+Name:	a ^Rm^Ba^Yg^Mi^Gc^n mushroom
+RoomDesc:$
+A sparkling mushroom is growing here.~
+LookDesc:$
+A dull grey mushroom with flecks of gold throughout. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	1.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+	Val3:	5
+BREAK
+#3470
+Keywords:	gallon jug lemonade
+Name:	a gallon of lemonade
+RoomDesc:$
+A jug of lemonade sits here.~
+LookDesc:$
+A large plastic jug with "Lemonade" printed on the side. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	5.00
+	Barrier:	4
+	Cost:	25
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	20
+	Val2:	6
+BREAK
+#3471
+Keywords:	steak-on-a-stick stick
+Name:	a steak-on-a-stick
+RoomDesc:$
+A stick with chucks of steak on it is lying here.~
+LookDesc:$
+A foot long stake with large chunks of steak along the length. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	20
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	5
+BREAK
+#3472
+Keywords:	pie meat
+Name:	a meat pie
+RoomDesc:$
+A pie filled with meat is steaming here.~
+LookDesc:$
+A large pit filled with minced meat. 
+~
+Type:	Food
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	organic
+[POINTS]
+	Weight:	2.00
+	Barrier:	1
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	3
+BREAK
+#3473
+Keywords:	broad sword double edged red hand kayne
+Name:	a ^Ldouble^n edged broadsword with ^R|Red Hand|^n etched on the blade
+RoomDesc:$
+Kayne's sword is sticking in the ground here.~
+LookDesc:$
+A custom item paid for by Kayne. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1001000001000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	15.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+BREAK
+#3474
+Keywords:	no-dachi sheath elrond
+Name:	a no-dachi sheath
+RoomDesc:$
+Elronds sheath is standing here.~
+LookDesc:$
+A custom item paid for by Elrond. 
+~
+Type:	Holster
+WearFlags:	1000100100000000001
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	5.00
+	Barrier:	4
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#3475
+Keywords:	elrond no-dachi black-bladed red hand hilt sword katana
+Name:	a ^Lblack-bladed^n no-dachi with a ^R|Red Hand|^n hilt
+RoomDesc:$
+Elrond's sword is sticking in the ground.~
+LookDesc:$
+This is a custom item paid for by Elrond. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	1001000001000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	5.00
+	Barrier:	12
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val2:	4
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#3476
+Keywords:	headset phone
+Name:	a headset
+RoomDesc:$
+A small plastic headset is here.~
+LookDesc:$
+A small black plastic headset. 
+~
+Type:	Phone
+WearFlags:	10000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	1.00
+	Barrier:	32
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3477
+Keywords:	shirt
+Name:	a hunter green ribbed turtle-neck sweater
+RoomDesc:$
+A nice sweater is laying here.~
+LookDesc:$
+A nice turtle-neck sweater 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3478
+Keywords:	pants slacks
+Name:	a pair of tailored black slacks
+RoomDesc:$
+A pair of nice slacks are hanging here.~
+LookDesc:$
+A pait of custom tailored black dress slacks. 
+~
+Type:	Worn
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3479
+Keywords:	coat jacket leather fitted sport
+Name:	a mid-thigh length leather jacket
+RoomDesc:$
+A sleek leather jacket lies here.~
+LookDesc:$
+This expensive-looking leather coat reaches to mid-thigh and comes with its
+own leather belt. Very classic. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	5.00
+	Barrier:	4
+	Cost:	599
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	100
+	Val3:	100
+	Val4:	100
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	2
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	2
+BREAK
+#3480
+Keywords:	neckace cross
+Name:	a silver cross necklace
+RoomDesc:$
+A silver necklace hangs here.~
+LookDesc:$
+An expensive silver necklace with a celtic cross charm. 
+~
+Type:	Worn
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	1
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3481
+Keywords:	sword vibro vicious mechanical
+Name:	a vicious looking vibro sword
+RoomDesc:$
+Some kind of mechanical sword has been left here.~
+LookDesc:$
+The vibro sword lives up to both its namesake and reputation as a vicious
+close combat weapon. Its serrated blades vibrate at a rate of more than twenty
+times a second, acting like a saw as it chews through both armour and flesh
+alike with ease. The handle is a bit larger than most swords on the market,
+mostly due to the fact that it also doubles as the battery housing. Stealth is
+simply a function this weapon does not possess, since once it is activated, it
+emits a very audible hum due to its vibration. 
+~
+Type:	Weapon
+WearFlags:	10000000000001
+ExtraFlags:	10
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	8
+	Cost:	2000
+	AvailTN:	5
+	AvailDay:	2.50
+	LegalNum:	3
+	LegalCode:	2
+	LegalPermit:	0
+[VALUES]
+	Val1:	3
+	Val4:	3
+	Val5:	-1
+	Val6:	1
+	Val7:	-1
+	Val8:	-1
+	Val9:	-1
+BREAK
+#3482
+Keywords:	shoes boots
+Name:	a pair of stylish ankle-high dress boots
+RoomDesc:$
+A pair of nice dress boots sit here.~
+LookDesc:$
+Boots. 
+~
+Type:	Worn
+WearFlags:	1000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3483
+Keywords:	ares pin
+Name:	an Ares Macrotechnology pin
+RoomDesc:$
+A stylish pin is laying here.~
+LookDesc:$
+A pin proclaiming the owner a employee of Ares. 
+~
+Type:	Radio
+WearFlags:	101
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.00
+	Barrier:	4
+	Cost:	10000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	5
+	Val2:	6
+BREAK
+#3484
+Keywords:	bottle water
+Name:	a bottle of water
+RoomDesc:$
+A clear plastic bottle lies here.~
+LookDesc:$
+An ordinary clear plastic bottle. 
+~
+Type:	Liq Container
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.25
+	Barrier:	4
+	Cost:	10
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	12
+	Val1:	12
+BREAK
+#3485
+Keywords:	sheath
+Name:	a thin leather sheath
+RoomDesc:$
+A thin leather sheath is laying here.~
+LookDesc:$
+A thin leather sheath. 
+~
+Type:	Holster
+WearFlags:	10000000000100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	leather
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	1
+BREAK
+#3486
+Keywords:	coat jacket trench
+Name:	a long tailored trench coat
+RoomDesc:$
+A long tailored trench coat is hanging here.~
+LookDesc:$
+A long tailored trench coat. 
+~
+Type:	Worn
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	600000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	100
+	Val4:	100
+[AFFECT 0]
+	Location:	Ballistic
+	Modifier:	2
+[AFFECT 1]
+	Location:	Impact
+	Modifier:	2
+BREAK
+#3487
+Keywords:	backpack
+Name:	a denier ballistic nylon backpack
+RoomDesc:$
+A dark backpack is sitting here.~
+LookDesc:$
+A backpack of a thick nylon. 
+~
+Type:	Container
+WearFlags:	1000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	concrete
+[POINTS]
+	Weight:	2.00
+	Barrier:	32
+	Cost:	100
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	200
+	Val1:	5
+	Val2:	-1
+[AFFECT 0]
+	Location:	Reaction
+	Modifier:	2
+BREAK
+#3488
+Keywords:	armor
+Name:	a dura-polymer form-fitted under armor
+RoomDesc:$
+A thin armored suit is hanging here.~
+LookDesc:$
+A thin suit of a durable polymer material. 
+~
+Type:	Worn
+WearFlags:	100000000000000001
+ExtraFlags:	100000000
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	1.50
+	Barrier:	4
+	Cost:	4000
+	AvailTN:	6
+	AvailDay:	19.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val5:	4
+	Val6:	1
+	Val7:	7
+BREAK
+#3489
+Keywords:	black hoodie
+Name:	a ^Lblack^n hoodie
+RoomDesc:$
+A black hoodie is hanging here.~
+LookDesc:$
+A thick black hooded sweatshirt. Zippered up the front, and two belly pockets.
+~
+Type:	Container
+WearFlags:	10000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	75
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val2:	-1
+BREAK
+#3490
+Keywords:	kikwears pants
+Name:	a pair of kikwears
+RoomDesc:$
+A pair of kikwears are lying here.~
+LookDesc:$
+Designer baggy pants, with a multitude of pockets. 
+~
+Type:	Container
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	700
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	10
+	Val2:	-1
+BREAK
+#3491
+Keywords:	spaghetti strap tank top
+Name:	a spaghetti-strap tank top
+RoomDesc:$
+A tank top with thin straps lays here.~
+LookDesc:$
+A white tank top with delicate straps over the shoulder. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	65
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3492
+Keywords:	duffel bag
+Name:	a duffel bag
+RoomDesc:$
+A duffel bag sits here.~
+LookDesc:$
+A sturdy black canvas duffel bag with handles and a shoulder strap. 
+~
+Type:	Container
+WearFlags:	100010000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	5.00
+	Barrier:	4
+	Cost:	500
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	55
+	Val1:	1
+	Val2:	-1
+BREAK
+#3493
+Keywords:	fanny pack
+Name:	a fanny pack
+RoomDesc:$
+A small pack with straps is lying here.~
+LookDesc:$
+A small canvas bag that straps around your waist. 
+~
+Type:	Container
+WearFlags:	100000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	3.00
+	Barrier:	4
+	Cost:	80
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	20
+	Val1:	1
+	Val2:	-1
+BREAK
+#3494
+Keywords:	thigh holster
+Name:	a thigh holster
+RoomDesc:$
+A small holster lies here.~
+LookDesc:$
+A pistol holster with straps designed to wrap around your thigh. 
+~
+Type:	Holster
+WearFlags:	1000000000000000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	1.00
+	Barrier:	4
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3495
+Keywords:	safe large wall
+Name:	A large safe embedded into the wall
+RoomDesc:$
+A large safe is embedded into the far wall here.~
+LookDesc:$
+Almost two meters across and just as tall, this sturdy metal safe has been
+embedded into the wall and is built into the structure of the building itself,
+making it impossible to take or rip out with only conventional means. Its
+large dial has multitudes of numbers lining its rim, and a large metal handle
+helps open or close it. 
+~
+Type:	Container
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	100.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	500
+	Val1:	1
+	Val2:	-1
+BREAK
+#3496
+Keywords:	pants baggy
+Name:	a pair of baggy pants
+RoomDesc:$
+A pair of baggy pants are folded up here.~
+LookDesc:$
+Oversized denim pants with large cargo pockets. 
+~
+Type:	Container
+WearFlags:	100001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	5.00
+	Barrier:	4
+	Cost:	450
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	15
+	Val2:	-1
+BREAK
+#3497
+Keywords:	top hat
+Name:	a top hat
+RoomDesc:$
+A nice top hat is laying here.~
+LookDesc:$
+A stylish black top hat. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	300
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3498
+Keywords:	cowboy hat
+Name:	a cowboy hat
+RoomDesc:$
+A cowboy hat is laying here.~
+LookDesc:$
+A perfectly curved cowboy hat. 
+~
+Type:	Worn
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	5.00
+	Barrier:	4
+	Cost:	250
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#3499
+Keywords:	white tank top shirt
+Name:	a white tank top
+RoomDesc:$
+A white tank top is lying here.~
+LookDesc:$
+A bleached white ribbed tank top. 
+~
+Type:	Worn
+WearFlags:	1001
+ExtraFlags:	0
+AffFlags:	0
+Material:	fabric
+[POINTS]
+	Weight:	2.00
+	Barrier:	4
+	Cost:	15
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+END

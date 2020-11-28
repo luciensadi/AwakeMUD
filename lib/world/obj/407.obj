@@ -1,0 +1,413 @@
+#40700
+Keywords:	Federated boeing keycard ebony
+Name:	A Federated-Boeing KeyCard
+RoomDesc:$
+A card with a magnetic strip is lying here~
+LookDesc:$
+This is an ebony keycard for a high security Federated-Boeing Facility 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.00
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#40701
+Keywords:	slave girl
+Name:	A small very young Thai girl
+RoomDesc:$
+A small very young Thai girl is sitting here with a traumatized look ~
+LookDesc:$
+This girl, barely into puberty, looks out at the world with cold vacant eyes.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	40.00
+	Barrier:	1
+	Cost:	90000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#40702
+Keywords:	slave girl
+Name:	A small very young Malaysian girl
+RoomDesc:$
+A small very young Malaysian girl sits here, here eyes cold and vacant~
+LookDesc:$
+This young girl, barely out of puberty, sits here with a hopeless look in her
+eyes 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	40.00
+	Barrier:	1
+	Cost:	50000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#40703
+Keywords:	slave girl
+Name:	A small young Indian girl
+RoomDesc:$
+A small young Indian girl sits here, her head tilted to the side as if a corpse~
+LookDesc:$
+This girl, barely into her teens, sits motionless. A far off look in her eyes
+as if this life were just a dream. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	40.00
+	Barrier:	1
+	Cost:	70000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#40704
+Keywords:	slave girl
+Name:	A small young Elven girl
+RoomDesc:$
+A small elven girl sits here praying for a miracle~
+LookDesc:$
+This small Elven girl looks to barely be in puberty. Here long raven black
+hair falls over her hunched shoulders. She acts as if she were prey for some
+vicious predator, always lurking behind the next corner. 
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	1000001000
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	40.00
+	Barrier:	1
+	Cost:	120000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#40705
+Keywords:	A marble obelisk with a commemorative plaque attached to it sits here.
+Name:	A commemorative plaque
+RoomDesc:$
+^MA marble obelisk with a commemorative plaque attached to it sits here.^N~
+LookDesc:$
+This obelisk is 5 meters high. It is made of ^MRosa Aurora^N marble. It looks
+ancient. On the ^wtitanium^N plaque it reads, "^wDedicated to Nicholas Aurelius. May
+he rest easy on the long journey.^N 
+~
+Type:	Other
+WearFlags:	0
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	1000.00
+	Barrier:	32
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#40706
+Keywords:	Quest Item
+Name:	Quest Item
+RoomDesc:$
+Quest Item~
+LookDesc:$
+Quest Item 
+~
+Type:	Food
+WearFlags:	10001
+ExtraFlags:	0
+AffFlags:	0
+Material:	paper
+[POINTS]
+	Weight:	0.50
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	24
+	Val3:	100
+BREAK
+#40707
+Keywords:	credstick certified silver
+Name:	a certified credstick
+RoomDesc:$
+A silver credstick lies here.~
+LookDesc:$
+A silver credstick, certified to a set nuyen amount. 
+~
+Type:	Money
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	1
+	Cost:	25000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	25000
+	Val1:	1
+	Val2:	2
+BREAK
+#40708
+Keywords:	credstick plastic
+Name:	a plastic credstick
+RoomDesc:$
+A standard plastic credstick has been left here.~
+LookDesc:$
+A plastic cylinder, with a computer at the sharpened end used for making
+transactions.  A 10-digit keypad decorates part of it.
+~
+Type:	Money
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.25
+	Barrier:	4
+	Cost:	50
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	1
+BREAK
+#40709
+Keywords:	credstick steel
+Name:	a steel credstick
+RoomDesc:$
+A shiny steel credstick is lying here.~
+LookDesc:$
+Much like the plastic version, only more durable.
+~
+Type:	Money
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	275
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	1
+BREAK
+#40710
+Keywords:	credstick silver
+Name:	a silver credstick
+RoomDesc:$
+A silver credstick lies here.~
+LookDesc:$
+Much more valuable than the standard credsticks, the silver has a
+thumbprint pad instead of a 10-digit keypad.
+~
+Type:	Money
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	2000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+BREAK
+#40711
+Keywords:	credstick titanium
+Name:	a titanium credstick
+RoomDesc:$
+A metallic credstick lies on the ground.~
+LookDesc:$
+While housing the same technology as the silver model, the titanium
+is the most durable model of all.
+~
+Type:	Money
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	12
+	Cost:	5000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	2
+BREAK
+#40712
+Keywords:	credstick platinum
+Name:	a platinum credstick
+RoomDesc:$
+Someone has dropped their platinum credstick!~
+LookDesc:$
+The most expensive and most secure model of the credsticks, the platinum
+requires a successful retinal scan to access an account.
+~
+Type:	Money
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	metal
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	10000
+	AvailTN:	6
+	AvailDay:	7.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	3
+BREAK
+#40713
+Keywords:	A Federated-Boeing embossed KeyCard
+Name:	A Federated-Boeing embossed KeyCard
+RoomDesc:$
+A keycard with a magnetic strip is lying here~
+LookDesc:$
+A Federated-Boeing embossed KeyCard with "Renton Facility Main Gate" imprinted
+on the back 
+~
+Type:	Key
+WearFlags:	1
+ExtraFlags:	1000001100
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	0.01
+	Barrier:	1
+	Cost:	0
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
+#40714
+Keywords:	credstick emerald
+Name:	an emerald credstick
+RoomDesc:$
+A green crystalline credstick is lying here.~
+LookDesc:$
+Although it offers no technological advantages over the silver model,
+the emerald credstick is much more stylish.
+~
+Type:	Money
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	stone
+[POINTS]
+	Weight:	0.25
+	Barrier:	6
+	Cost:	50000
+	AvailTN:	6
+	AvailDay:	14.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	3
+BREAK
+#40715
+Keywords:	ebony credstick sin passport
+Name:	an ebony credstick
+RoomDesc:$
+A jet black credstick is lying here.~
+LookDesc:$
+This credstick is unlike any standard credstick in the UCAS or Tir Tairngire.
+Unlike being made of a steel, plastic, silver, titanium or emerald color, It
+is made of a very hard plastic, completely black in color, with a polish.
+Because of their high price and security, everyone know's when you pull this
+badboy out that you are indeed "The Man." 
+~
+Type:	Money
+WearFlags:	100000000000001
+ExtraFlags:	0
+AffFlags:	0
+Material:	adv. plastics
+[POINTS]
+	Weight:	0.01
+	Barrier:	32
+	Cost:	1000000
+	AvailTN:	12
+	AvailDay:	30.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val1:	1
+	Val2:	3
+BREAK
+END
