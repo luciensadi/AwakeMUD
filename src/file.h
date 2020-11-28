@@ -58,7 +58,7 @@ public:
 
   // reads a '~'-terminated string from the file, returns a newly-allocated
   // string.  Much like fread_string, only better.
-  char *ReadString();
+  char *ReadString(const char* section);
 
   // only works if vfprintf is defined
   // Note: this DOESN'T work on my slack8 machine, so I'd advise avoiding it
