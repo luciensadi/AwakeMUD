@@ -286,7 +286,7 @@ ACMD_DECLARE(do_snoop);
 ACMD_DECLARE(do_spec_comm);
 ACMD_DECLARE(do_spells);
 ACMD_DECLARE(do_spellset);
-//ACMD_DECLARE(do_spray);
+ACMD_DECLARE(do_spray);
 ACMD_DECLARE(do_spool);
 ACMD_DECLARE(do_stand);
 ACMD_DECLARE(do_stat);
@@ -728,7 +728,7 @@ struct command_info cmd_info[] =
     { "spells"   , POS_SLEEPING, do_spells   , 0, 0 },
     { "spellset" , POS_SLEEPING, do_spellset , LVL_DEVELOPER, 0 },
     { "spirits"  , POS_LYING   , do_elemental, 0, 0 },
-//    { "spray"    , POS_STANDING, do_spray    , 0, 0 },
+    { "spray"    , POS_STANDING, do_spray    , 0, 0 },
     { "stand"    , POS_LYING   , do_stand    , 0, 0 },
     { "stat"     , POS_DEAD    , do_stat     , LVL_BUILDER, 0 },
     { "status"   , POS_LYING   , do_status   , 0, 0 },
@@ -835,12 +835,12 @@ struct command_info cmd_info[] =
     { "buy"      , POS_SITTING , do_not_here , 0, 0 },
     { "check"    , POS_RESTING , do_not_here , 0, 0 },
     { "collect"  , POS_RESTING , do_not_here , 0, 0 },
-    //  { "blastoff" , POS_RESTING , do_not_here , 0, 0 },
+    { "blastoff" , POS_RESTING , do_not_here , 0, 0 },
     { "cancel"   , POS_RESTING , do_not_here , 0, 0 },
     { "climb"    , POS_STANDING, do_not_here , 0, 0 },
     { "deposit"  , POS_STANDING, do_not_here , 1, 0 },
     { "hours"    , POS_LYING   , do_not_here , 0, 0 },
-    //  { "land"     , POS_RESTING , do_not_here , 0, 0 },
+    { "land"     , POS_RESTING , do_not_here , 0, 0 },
     { "lease"    , POS_RESTING , do_not_here , 1, 0 },
     { "light"    , POS_STANDING, do_not_here , 0, 0 },
     { "list"     , POS_RESTING, do_not_here , 0, 0 },

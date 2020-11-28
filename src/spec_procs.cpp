@@ -158,6 +158,7 @@ int ability_cost(int abil, int level)
   case ADEPT_AIDSPELL:
   case ADEPT_MOTIONSENSE:
   case ADEPT_SIDESTEP:
+  case ADEPT_COUNTERSTRIKE:
     return 50;
   case ADEPT_COMBAT_SENSE:
   case ADEPT_MAGIC_RESISTANCE:
@@ -765,13 +766,12 @@ SPECIAL(teacher)
     send_to_char("You don't have enough karma to improve that skill.\r\n", ch);
     return TRUE;
   }
-  if (GET_NUYEN(ch) < MAX(1000, (GET_SKILL(ch, skill_num) * 5000)) &&
-      teachers[ind].type != NEWBIE) {
+  if (GET_NUYEN(ch) < MAX(1000, (GET_SKILL(ch, skill_num) * 5000)) && !PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
     send_to_char(ch, "You can't afford the %d nuyen practice fee!\r\n",
                  MAX(1000, (GET_SKILL(ch, skill_num) * 5000)));
     return TRUE;
   }
-  if (teachers[ind].type != NEWBIE)
+  if (!PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED))
     GET_NUYEN(ch) -= MAX(1000, (GET_SKILL(ch, skill_num) * 5000));
   if (GET_SKILL_POINTS(ch) > 0)
     GET_SKILL_POINTS(ch)--;
@@ -1103,51 +1103,52 @@ SPECIAL(spell_trainer)
       send_to_char(ch, "%s doesn't know the spell at that high a force to teach you.\r\n", GET_NAME(trainer));
     else {
       // TODO: Decrease force by amount already known.
+      int cost = force;
+      struct spell_data *spell = NULL;
       
-      if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
-        if (force > GET_FORCE_POINTS(ch)) {
-          send_to_char("You don't have enough force points to learn the spell at that high a force.\r\n", ch);
-          return TRUE;
-        }
-      } else {
-        if (force > GET_KARMA(ch) / 100) {
-          send_to_char("You don't have enough karma to learn the spell at that high a force.\r\n", ch);
-          return TRUE;
-        }
-      }
-      for (struct spell_data *spell = GET_SPELLS(ch); spell; spell = spell->next)
+      for (spell = GET_SPELLS(ch); spell; spell = spell->next)
         if (spell->type == spelltrainers[i].type && spell->subtype == spelltrainers[i].subtype) {
           if (spell->force >= force) {
             send_to_char("You already know this spell at an equal or higher force.\r\n", ch);
             return TRUE;
           } else {
-            // Lower the cost of the new spell by the old spell's value.
-            force -= spell->force;
-            
-            // Delete the old spell from their list.
-            struct spell_data *temp;
-            REMOVE_FROM_LIST(spell, GET_SPELLS(ch), next);
-            delete [] spell;
+            cost -= spell->force;
             break;
           }
         }
+        
+      // They must have the right number of force points or amount of karma to learn this new spell.
+      if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED)) {
+        if (cost > GET_FORCE_POINTS(ch)) {
+          send_to_char("You don't have enough force points to learn the spell at that high a force.\r\n", ch);
+          return TRUE;
+        }
+      } else {
+        if (cost > GET_KARMA(ch) / 100) {
+          send_to_char("You don't have enough karma to learn the spell at that high a force.\r\n", ch);
+          return TRUE;
+        }
+      }
       
       // Subtract the cost.
       if (PLR_FLAGGED(ch, PLR_NOT_YET_AUTHED))
-        GET_FORCE_POINTS(ch) -= force;
+        GET_FORCE_POINTS(ch) -= cost;
       else
-        GET_KARMA(ch) -= force * 100;
+        GET_KARMA(ch) -= cost * 100;
       
       send_to_char(ch, "%s sits you down and teaches you the ins and outs of casting %s at force %d.\r\n", GET_NAME(trainer), spelltrainers[i].name, force);
       
-      // Grant them the new spell.
-      struct spell_data *spell = new spell_data;
-      spell->name = str_dup(spelltrainers[i].name);
-      spell->type = spelltrainers[i].type;
-      spell->subtype = spelltrainers[i].subtype;
-      spell->force = force;
-      spell->next = GET_SPELLS(ch);
-      GET_SPELLS(ch) = spell;
+      if (spell) {
+        spell->force = force;
+      } else {
+        spell = new spell_data;
+        spell->name = str_dup(spelltrainers[i].name);
+        spell->type = spelltrainers[i].type;
+        spell->subtype = spelltrainers[i].subtype;
+        spell->force = force;
+        spell->next = GET_SPELLS(ch);
+        GET_SPELLS(ch) = spell;
+      }
     }
   }
   return TRUE;
@@ -1942,9 +1943,9 @@ SPECIAL(takehero_tsuyama)
 
   if (!FIGHTING(tsuyama)) {
     for(vict = tsuyama->in_room->people; vict; vict = vict->next_in_room) {
-      if (vict != ch && CAN_SEE(tsuyama, vict)
-          && ((IS_NPC(vict) || (GET_TKE(vict) > 19 && !IS_SENATOR(vict)))
-              && number(0,3) && tsuyama->in_room->number == 4101)) {
+      if (vict != ch && CAN_SEE(tsuyama, vict) && !IS_NPC(vict) 
+          && !IS_SENATOR(vict) && number(0, 3)
+          && tsuyama->in_room->number == 4101) {
             act("$n unsheathes $s deadly katana, swiftly attacking $N!",
                 FALSE, tsuyama, 0, vict, TO_NOTVICT);
             act("$n unsheathes $s deadly katana, swiftly attacking you!",
@@ -3253,6 +3254,8 @@ int find_hotel_cost(struct char_data *ch)
       break;
     case 9990:
     case 9991:
+    case 39287:
+    case 39288:
       cost = 5.5;
       break;
     case 18947:
@@ -3276,6 +3279,8 @@ int find_hotel_cost(struct char_data *ch)
 int find_hotel_room(int room)
 {
   switch (room) {
+    case 62136:
+      return 62179;
     case 1939:
       return 1940;
     case 2126:
@@ -3286,6 +3291,8 @@ int find_hotel_room(int room)
       return 9991;
     case 70760:
       return 70759;
+    case 39287:
+      return 39288;
   }
   return room;
 }
@@ -3977,6 +3984,28 @@ SPECIAL(bouncer_troll)
       toroom = 32661;
       dir = str_dup("east");
       break;
+    case 70002:
+      toroom = 70000;
+      dir = str_dup("north");
+      break;
+    case 70400:
+      toroom = 2062;
+      dir = str_dup("north");
+      dir2 = str_dup("up");
+      break;
+    case 70501:
+      toroom = 30515;
+      dir = str_dup("north");
+      break;
+    case 15801:
+      toroom = 32703;
+      dir = str_dup("north");
+      dir2 = str_dup("west");
+      break;
+    case 71001:
+      toroom = 71001;
+      dir = str_dup("south");
+      break;
   }
   if (toroom == -1)
     return FALSE;
@@ -4628,5 +4657,675 @@ SPECIAL(weapon_dominator) {
   }
   
   // We did nothing.
+  return FALSE;
+}
+
+extern void end_quest(struct char_data *ch);
+
+SPECIAL(orkish_truckdriver)
+{
+  struct char_data *driver = (struct char_data *) me;
+  if (FIGHTING(driver)) {
+    if (quest_table[GET_QUEST(FIGHTING(driver))].vnum == 5000) {
+      send_to_char("The driver has been alerted! The run is a failure!\r\n", FIGHTING(driver));
+      if (driver->in_room->dir_option[WEST]) {
+        delete driver->in_room->dir_option[WEST];
+        driver->in_room->dir_option[WEST] = NULL;
+        for (struct char_data *temp = world[real_room(5062)].people; temp; temp = temp->next_in_room) {
+          send_to_char("You jump off the truck as it takes off!\r\n", temp);
+          char_from_room(temp);
+          char_to_room(temp, driver->in_room);
+        }
+      }
+      end_quest(FIGHTING(driver));
+    }
+  }
+  if (driver->in_room->number == 8198 && (time_info.hours < 2 || time_info.hours > 3)) {
+    act("$n says goodbye to the girl at the stand and hops into his truck. It's engine rumbles into life and it drives off into the distance.", FALSE, driver, 0, 0, TO_ROOM);
+    if (driver->in_room->dir_option[WEST]) {
+      delete driver->in_room->dir_option[WEST];
+      driver->in_room->dir_option[WEST] = NULL;
+      struct char_data *next = NULL;
+      for (struct char_data *temp = world[real_room(5062)].people; next; temp = next) {
+        next = temp->next_in_room;
+        send_to_char("You jump off the truck as it takes off!\r\n", temp);
+        char_from_room(temp);
+        char_to_room(temp, driver->in_room);
+      }
+    }
+    char_from_room(driver);
+    char_to_room(driver, &world[real_room(5063)]);
+  } else if (driver->in_room->number == 5063 && (time_info.hours == 2 || time_info.hours == 3)) {
+    char_from_room(driver);
+    char_to_room(driver, &world[real_room(8198)]);
+    if (!driver->in_room->dir_option[WEST]) {
+      driver->in_room->dir_option[WEST] = new room_direction_data;
+      memset((char *) driver->in_room->dir_option[WEST], 0,
+             sizeof (struct room_direction_data));
+      driver->in_room->dir_option[WEST]->to_room = &world[real_room(5062)];
+    }
+    act("A GMC 4201 pulls into the rest stop, the orkish truck driver getting out and going over the coffee stand.", FALSE, driver, 0, 0, TO_ROOM);
+  }
+  return FALSE;
+}
+
+SPECIAL(Janis_Amer_Girl)
+{
+  struct char_data *mob = (struct char_data *) me, *tch = mob->in_room->people;
+  if (!AWAKE(mob))
+    return FALSE;
+  if (GET_SPARE1(mob) && !cmd) {
+    switch (GET_SPARE1(mob)) {
+    case 1:
+      do_say(mob, "About fraggin' time you got here.", 0, 0);
+      break;
+    case 3:
+      do_say(mob, "Shut the frag up, we'll geek him when we geek him, right now we're going to tell the newcomer what we already know.", 0, 0);
+      break;
+    case 5:
+      act("$n walks forward from the table, coming closer to you.", FALSE, mob, 0, 0, TO_ROOM);
+      do_say(mob, "It's taking place at the docks, take that uniform on the table and go collect, he said \"Blue-eyes\" sent him, make sure to remember that you may need it.", 0, 0);
+      break;
+    case 6:
+      for (; tch; tch = tch->next_in_room)
+        if (quest_table[GET_QUEST(tch)].vnum == 5001)
+          break;
+      if (!tch)
+        GET_SPARE1(mob) = 0;
+      else if (GET_RACE(tch) != RACE_HUMAN || GET_SEX(tch) != SEX_MALE)
+        do_say(mob, "And for frags sake, try and get someone who looks something like this guy to make the collection.", 0, 0);
+      else
+        do_say(mob, "Make sure you don't do anything weird, this guy won't hand it over if you're acting suspicious.", 0, 0);
+      break;
+    case 8:
+      act("$n walks back towards the table and rests on it casually, \"Yeah, Geek the little fraggin' slitch, it'll be the last time he ever tries to frag us over.\"", FALSE, mob, 0, 0, TO_ROOM);
+      break;
+    case 10:
+      do_say(mob, "Newcomer, your job, ^WLight^n the fragger up.", 0, 0);
+      break;
+    }
+    GET_SPARE1(mob)++;
+  } else if (!cmd)
+    for (; tch; tch = tch->next_in_room)
+      if (quest_table[GET_QUEST(tch)].vnum == 5001) {
+        GET_SPARE1(mob) = 1;
+        break;
+      }
+  if (CMD_IS("west")) {
+    for (; tch; tch = tch->next_in_room)
+      if (IS_NPC(tch) && GET_MOB_VNUM(tch) == 5030)
+        break;
+    if (GET_SPARE1(mob) < 11)
+      do_say(mob, "Where the frag do you think you're going? Don't think J won't fraggin' hear about you walking out on us.", 0, 0);
+    else if (tch)
+      do_say(mob, "Hey fragger, don't you try and fraggin' leave without lighting this slitch up, J will fraggin' hear about this.",  0, 0);
+    else
+      act("$n claps with glee, \"Hardcore chum, J will hear all about this, she'll fraggin' love it.\"", FALSE, mob, 0, 0, TO_ROOM);
+  }
+  return FALSE;
+}
+
+SPECIAL(Janis_Amer_Jerry)
+{
+  struct char_data *mob = (struct char_data *) me;
+  if (!AWAKE(mob) || cmd)
+    return FALSE;
+  if (GET_SPARE1(mob)) {
+    switch (GET_SPARE1(mob)) {
+    case 2:
+      do_say(mob, "Sent word to J over an hour ago, how long we have to keep this chump alive?", 0, 0);
+      break;
+    case 4:
+      do_say(mob, "Listen up, I don't want to have to repeat myself, you don't want to end up like this guy do you.", 0, 0);
+      act("$n reaches back and slams his fist into the prisoner's face.", FALSE, mob, 0, 0, TO_ROOM);
+      break;
+    case 7:
+      do_say(mob, "Can I fraggin' do him now?", 0, 0);
+      break;
+    case 9:
+      act("$n pours gasoline from the jerry can over captive who starts screaming, he then turns to you and tosses you a lighter, grinning all the while.", FALSE, mob, 0, 0, TO_ROOM);
+      break;
+    }
+    GET_SPARE1(mob)++;
+  } else
+    for (struct char_data *tch = mob->in_room->people; tch; tch = tch->next_in_room)
+      if (quest_table[GET_QUEST(tch)].vnum == 5001) {
+        act("The pair turn towards you as you enter.", FALSE, mob, 0, 0, TO_ROOM);
+        GET_SPARE1(mob) = 1;
+        break;
+      }
+  return FALSE;
+}
+
+SPECIAL(Janis_Amer_Door)
+{
+  struct char_data *mob = (struct char_data *) me;
+  if (!AWAKE(mob))
+    return FALSE;
+  if (CMD_IS("west") && !IS_SET(EXIT(mob, EAST)->exit_info, EX_CLOSED)) {
+    do_say(mob, "See you around, omae.", 0, 0);
+    do_gen_door(mob, "door", 0, SCMD_CLOSE);
+  } else if ((CMD_IS("east") || CMD_IS("open")) && quest_table[GET_QUEST(ch)].vnum != 5001) {
+    do_say(mob, "And just who do you think you are, punk?", 0, 0);
+    return TRUE;
+  } else if (!cmd && IS_SET(EXIT(mob, EAST)->exit_info, EX_CLOSED)) {
+    for (struct char_data *tch = mob->in_room->people; tch; tch = tch->next_in_room)
+      if (quest_table[GET_QUEST(tch)].vnum == 5001) {
+        do_say(mob, "You must be the chum that J sent, the guy's in here.", 0, 0);
+        do_gen_door(mob, "door", 0, SCMD_OPEN);
+        break;
+      }
+  }
+  return FALSE;
+}
+
+SPECIAL(Janis_Meet)
+{
+  struct char_data *mob = (struct char_data *) me;
+  if (!AWAKE(mob))
+    return FALSE;
+  if ((CMD_IS("say") || CMD_IS("'")) && !IS_ASTRAL(ch) && *argument) {
+    skip_spaces(&argument);
+    if (!str_cmp(argument, "Blue-eyes sent me")) {
+      if (GET_RACE(ch) != RACE_HUMAN || GET_SEX(ch) != SEX_MALE || !(GET_EQ(ch, WEAR_BODY) && GET_OBJ_VNUM(GET_EQ(ch, WEAR_BODY)) == 5032))  {
+        do_say(mob, "Who the frag are you!? Oh wait, I fraggin' get it! This is a bust!", 0, 0);
+        act("$n turns and starts running towards the road, quickly vanishing into the crowd.", FALSE, mob, 0, 0, TO_ROOM);
+      } else {
+        do_say(mob, "Ah, so you're the one they sent, here's the parcel. I've already collected payment.", 0, 0);
+        struct obj_data *parcel = read_object(5033, VIRTUAL);
+        obj_to_char(parcel, ch);
+        act("$n hands $N the parcel, then turns and vanishes into the crowd of dockworkers.", FALSE, mob, 0, ch, TO_ROOM);
+      }
+      extract_char(mob);
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+SPECIAL(Janis_Captive)
+{
+  struct char_data *mob = (struct char_data *) me;
+  if (CMD_IS("light") || CMD_IS("burn")) {
+    act("As $N brings the lighter close to $n the fumes from the petrol catch alight, quickly spreading around $n's body.", FALSE, mob, 0, ch, TO_ROOM);
+    act("The girl at the back of the warehouse begins to giggle with glee as the captive's screams are quickly stopped as he succumbs to the flames.", FALSE, mob, 0, 0, TO_ROOM);
+    check_quest_kill(ch, mob);
+    obj_to_room(read_object(5034, VIRTUAL), mob->in_room);
+    extract_char(mob);
+    return TRUE;
+  }
+  return FALSE;
+}
+
+SPECIAL(mageskill_hermes)
+{
+  struct char_data *mage = NULL;
+  struct obj_data *recom = NULL;
+
+  if (!ch)
+    return FALSE;  
+  for (mage = ch->in_room->people; mage; mage = mage->next_in_room)
+    if (GET_MOB_VNUM(mage) == 24806)
+      break;
+  if (!mage)
+    return FALSE;
+  if (CMD_IS("say") || CMD_IS("'")) {
+    skip_spaces(&argument);
+    for (recom = ch->carrying; recom; recom = recom->next_content)
+      if (GET_OBJ_VNUM(recom) == 5735)
+        break;
+    if (!*argument)
+      return FALSE;
+    if (!str_cmp(argument, "recommendation") && recom && GET_OBJ_VAL(recom, 0) == GET_IDNUM(ch)) {
+      if (GET_OBJ_VAL(recom, 1) && GET_OBJ_VAL(recom, 2) >= 3 && GET_OBJ_VAL(recom, 3) && GET_OBJ_VAL(recom, 4) >= 2) {
+        sprintf(arg, "%s So you have the recommendation from the other four. I guess that only leaves me. You put in the effort to get the other recommendations so you have mine.", GET_CHAR_NAME(ch));
+        do_say(mage, arg, 0, SCMD_SAYTO);
+        extract_obj(recom);
+        recom = read_object(5734, VIRTUAL);
+        obj_to_char(recom, ch);
+        GET_OBJ_VAL(recom, 0) = GET_IDNUM(ch);
+        sprintf(arg, "%s Congratulations, You are now a member of our group. Seek our master at the old Masonic Lodge on Swan Street in Tarislar for training.", GET_CHAR_NAME(ch));
+      } else
+        sprintf(arg, "%s Why do you want my recommendation?", GET_CHAR_NAME(ch));
+      do_say(mage, arg, 0, SCMD_SAYTO);
+    } else if (!str_cmp(argument, "chain")) {
+      if (recom && GET_OBJ_VAL(recom, 0) == GET_IDNUM(ch)) {
+        sprintf(arg, "%s You already have your letter, come back when you have all the recommendations.", GET_CHAR_NAME(ch));
+        do_say(mage, arg, 0, SCMD_SAYTO);
+      } else {
+        bool dq = FALSE;
+        int i = 0;
+        for (; i <= QUEST_TIMER; i++)
+          if (GET_LQUEST(ch, i) == 5743)
+            dq = TRUE;
+        if (dq) {
+          sprintf(arg, "%s So Harold has sent another one my way has he? Sometimes I don't trust his better judgement, but business is business.", GET_CHAR_NAME(ch));
+          do_say(mage, arg, 0, SCMD_SAYTO);          
+          sprintf(arg, "%s We are part of an order dedicated to higher learning in the field of magic. We are widespread around the metroplex and have our hands in more business than you would like to believe.", GET_CHAR_NAME(ch));
+          do_say(mage, arg, 0, SCMD_SAYTO);          
+          sprintf(arg, "%s There are 5 senior members that you must seek out and get the recommendation of to join us. Take this letter, once you have all 5 recommendations return to me.", GET_CHAR_NAME(ch));
+          do_say(mage, arg, 0, SCMD_SAYTO);
+          recom = read_object(5735, VIRTUAL);
+          GET_OBJ_VAL(recom, 0) = GET_IDNUM(ch);
+          obj_to_char(recom, ch);
+        } else {
+          sprintf(arg, "%s Why would you want to know about that?", GET_CHAR_NAME(ch));
+          do_say(mage, arg, 0, SCMD_SAYTO);
+        }
+      }
+      return (TRUE);
+    }
+  }
+  return(FALSE);
+}
+
+SPECIAL(mageskill_moore)
+{
+  struct char_data *mage = NULL;
+  struct obj_data *recom = NULL;
+
+  if (!ch)
+    return FALSE;  
+  for (mage = ch->in_room->people; mage; mage = mage->next_in_room)
+    if (GET_MOB_VNUM(mage) == 35538)
+      break;
+  if (!mage)
+    return FALSE;
+  if (CMD_IS("say") || CMD_IS("'")) {
+    skip_spaces(&argument);
+    if (!*argument || str_cmp(argument, "recommendation"))
+      return(FALSE);
+    for (recom = ch->carrying; recom; recom = recom->next_content)
+      if (GET_OBJ_VNUM(recom) == 5735)
+        break;
+    if (!recom || GET_OBJ_VAL(recom, 0) != GET_IDNUM(ch))
+      return FALSE;
+    if (GET_OBJ_VAL(recom, 1)) {
+      sprintf(arg, "%s I have already passed on my recommendation for you.", GET_CHAR_NAME(ch));
+      do_say(mage, arg, 0, SCMD_SAYTO);
+    } else if (GET_REP(ch) >= 150) {
+      sprintf(arg, "%s I feel you will be a welcome asset to our order.", GET_CHAR_NAME(ch));
+      do_say(mage, arg, 0, SCMD_SAYTO);
+      GET_OBJ_VAL(recom, 1) = 1;
+    } else {
+      sprintf(arg, "%s Why would we want someone as fresh faced as you? Come back when you have spent more time in the shadows.", GET_CHAR_NAME(ch));
+      do_say(mage, arg, 0, SCMD_SAYTO);
+    }
+    return TRUE;
+  }
+  return(FALSE);
+}
+
+SPECIAL(mageskill_herbie)
+{
+  struct char_data *mage = (struct char_data *) me;
+  struct obj_data *recom = NULL, *obj = NULL;
+  for (recom = ch->carrying; recom; recom = recom->next_content)
+    if (GET_OBJ_VNUM(recom) == 5735)
+      break;
+  if (!recom || GET_OBJ_VAL(recom, 0) != GET_IDNUM(ch))
+    return FALSE;
+  if (CMD_IS("say") || CMD_IS("'")) {
+    skip_spaces(&argument);
+    if (!*argument || str_cmp(argument, "recommendation"))
+      return(FALSE);
+    if (GET_OBJ_VAL(recom, 2) >= 3) {
+      sprintf(arg, "%s You have my recommendation, I can help you no further.", GET_CHAR_NAME(ch));
+      do_say(mage, arg, 0, SCMD_SAYTO);
+    } else if (!GET_OBJ_VAL(recom, 2)) {
+      sprintf(arg, "%s Excellent, you have come. I need someone to create a spell for me to sell on, two of them actually. Any spell is fine, just aslong as it is force 4 or above.", GET_CHAR_NAME(ch));
+      do_say(mage, arg, 0, SCMD_SAYTO);
+      GET_OBJ_VAL(recom, 2)++;
+    }
+    return TRUE;
+  } else if (CMD_IS("give")) {
+    skip_spaces(&argument);
+    if (!GET_OBJ_VAL(recom, 2)) {
+      return FALSE;
+    } else if (GET_OBJ_VAL(recom, 2) >= 3) {
+      sprintf(arg, "%s You have my recommendation, I can help you no further.", GET_CHAR_NAME(ch));
+      do_say(mage, arg, 0, SCMD_SAYTO);
+      return TRUE;
+    }
+    if (!(obj = get_obj_in_list_vis(ch, argument, ch->carrying))) {
+      sprintf(arg, "You don't seem to have %s %s.\r\n", AN(argument), argument);
+      send_to_char(arg, ch);
+      return TRUE;
+    } 
+    if (GET_OBJ_TYPE(obj) == ITEM_SPELL_FORMULA && GET_OBJ_TIMER(obj) == 0 && GET_OBJ_VAL(obj, 0) >= 4 && GET_OBJ_VAL(obj, 8) == GET_IDNUM(ch)) {
+      sprintf(arg, "%s Thank you, this will go towards providing for the order.", GET_CHAR_NAME(ch));
+      do_say(mage, arg, 0, SCMD_SAYTO);
+      GET_OBJ_VAL(recom, 2)++;
+      extract_obj(obj);
+      return TRUE;
+    } else {
+      sprintf(arg, "%s I have no need for that.", GET_CHAR_NAME(ch));
+      do_say(mage, arg, 0, SCMD_SAYTO);
+      return TRUE;
+    }
+  }
+  return(FALSE);
+}
+
+SPECIAL(mageskill_anatoly)
+{
+  struct char_data *mage = (struct char_data *) me;
+  struct obj_data *recom = NULL;
+  if (CMD_IS("say") || CMD_IS("'")) {
+    skip_spaces(&argument);
+    if (!*argument || str_cmp(argument, "recommendation"))
+      return FALSE;
+    for (recom = ch->carrying; recom; recom = recom->next_content)
+      if (GET_OBJ_VNUM(recom) == 5735)
+        break;
+    if (!recom || GET_OBJ_VAL(recom, 0) != GET_IDNUM(ch))
+      return FALSE;
+    if (GET_OBJ_VAL(recom, 3)) {
+      sprintf(arg, "%s Ih hahf ahlreahdhee gihffehn yhou mhy blehzzehng.", GET_CHAR_NAME(ch));
+      do_say(mage, arg, 0, SCMD_SAYTO);
+    } else if (GET_GRADE(ch) >= 3) {
+      sprintf(arg, "%s Yhou vihl bhe ah vehlkohm ahddihzhuhn tuh ouhr ohrdehr.", GET_CHAR_NAME(ch));
+      do_say(mage, arg, 0, SCMD_SAYTO);
+      GET_OBJ_VAL(recom, 3) = 1;
+    } else {
+      sprintf(arg, "%s Vhe ahr luuhkhehng vohr peohpl klohzehr tuh the ahztrahl plahyn.", GET_CHAR_NAME(ch));
+      do_say(mage, arg, 0, SCMD_SAYTO);
+    }
+    return TRUE;
+  }
+  return FALSE;
+}
+
+SPECIAL(mageskill_nightwing)
+{
+  struct char_data *mage = (struct char_data *) me;
+  struct obj_data *recom = NULL;
+  if (time_info.hours == 9 && GET_SPARE1(mage))
+    GET_SPARE1(mage) = 0;
+  if (!cmd && time_info.hours == 8 && !GET_SPARE1(mage)) {
+    int toroom = NOWHERE;
+    switch (number(0, 5)) {
+      case 0:
+        toroom = real_room(2496);
+        break;
+      case 1:
+        toroom = real_room(5405);
+        break;
+      case 2:
+        toroom = real_room(2347);
+        break;
+      case 3:
+        toroom = real_room(14379);
+        break;
+      case 4:
+        toroom = real_room(2590);
+        break;
+      case 5:
+        toroom = real_room(12502);
+        break;
+    }
+    act("$n suddenly dashes towards the nearest entrance.", FALSE, mage, 0, 0, TO_ROOM);
+    char_from_room(mage);
+    char_to_room(mage, &world[toroom]);
+    act("$n dashes into the room, searching for the darkest corner.", FALSE, mage, 0, 0, TO_ROOM);
+    GET_SPARE1(mage) = 1;
+    return TRUE;
+  }
+  if (CMD_IS("say") || CMD_IS("'")) {
+    skip_spaces(&argument);
+    if (!*argument || str_cmp(argument, "recommendation"))
+      return FALSE;
+    for (recom = ch->carrying; recom; recom = recom->next_content)
+      if (GET_OBJ_VNUM(recom) == 5735)
+        break;
+    if (!recom || GET_OBJ_VAL(recom, 0) != GET_IDNUM(ch))
+      return FALSE;
+    if (GET_OBJ_VAL(recom, 4) >= 2) {
+      sprintf(arg, "%s Bat given you recommendation, now fly.", GET_CHAR_NAME(ch));
+      do_say(mage, arg, 0, SCMD_SAYTO);
+    } else if (time_info.hours > 7 && time_info.hours < 19) {
+      sprintf(arg, "%s Bat must hide now, light blinding her.", GET_CHAR_NAME(ch));
+      do_say(mage, arg, 0, SCMD_SAYTO);
+    } else if (GET_OBJ_VAL(recom, 5) == ch->in_room->number) {
+      sprintf(arg, "%s Bat busy, Bat must leave, You come find Bat somewhere else.", GET_CHAR_NAME(ch));
+      do_say(mage, arg, 0, SCMD_SAYTO);
+    } else if (GET_OBJ_VAL(recom, 4) == 1) {
+      sprintf(arg, "%s Bat thinks you worthy, Bat gives you blessing.", GET_CHAR_NAME(ch));
+      do_say(mage, arg, 0, SCMD_SAYTO);
+      GET_OBJ_VAL(recom, 4)++;
+    } else {
+      sprintf(arg, "%s Bat see you, Bat no give blessing now, you find Bat again.", GET_CHAR_NAME(ch));
+      do_say(mage, arg, 0, SCMD_SAYTO);
+      GET_OBJ_VAL(recom, 4)++;
+      GET_OBJ_VAL(recom, 5) = ch->in_room->number;
+    }
+    return TRUE;
+  }
+  return FALSE;
+}
+
+SPECIAL(mageskill_trainer)
+{
+  struct char_data *mage = (struct char_data *) me;
+  struct obj_data *chain = NULL;
+  if (CMD_IS("say") || CMD_IS("'")) {
+    skip_spaces(&argument);
+    if (!*argument || str_cmp(argument, "training"))
+      return FALSE;
+    for (int i = 0; i < NUM_WEARS && !chain; i++)
+      if (GET_EQ(ch, i) && GET_OBJ_VNUM(GET_EQ(ch, i)) == 5734)
+        chain = GET_EQ(ch, i);
+    if (!chain)
+      return FALSE;
+    if (GET_OBJ_VAL(chain, 0) != GET_IDNUM(ch)) {
+      sprintf(arg, "%s What are you doing with this!? This is not yours!", GET_CHAR_NAME(ch));
+      do_say(mage, arg, 0, SCMD_SAYTO);
+      send_to_char(ch, "%s reaches out and snatches the chain from around your neck.\r\n", GET_NAME(mage));
+      act("$n reaches out and snatches the chain from around $N's neck.", FALSE, mage, 0, ch, TO_NOTVICT);
+      extract_obj(chain);
+    } else {
+      sprintf(arg, "%s Welcome %s, the Master awaits.", GET_SEX(ch) == SEX_FEMALE ? "Sister" : "Brother", GET_CHAR_NAME(ch));
+      do_say(mage, arg, 0, SCMD_SAYTO);
+      send_to_char(ch, "%s beckons you to pass through the field to the north, and you do.\r\n", GET_NAME(mage));
+      act("$n passes through the field to the north.", TRUE, ch, 0, 0, TO_ROOM);
+      char_from_room(ch);
+      char_to_room(ch, &world[real_room(778)]);
+    }
+  }
+  return FALSE;
+}
+
+SPECIAL(knightcenter_bouncer)
+{
+  struct char_data *wendigo = (char_data *) me;
+  struct obj_data *obj;
+  bool found = FALSE;
+
+  if (!AWAKE(ch))
+    return(FALSE);
+
+  if (CMD_IS("north")) {
+    for (obj = ch->carrying; obj; obj = obj->next_content)
+      if (GET_OBJ_VNUM(obj) == 19999)
+        found = TRUE;
+
+    if (found) {
+      act("$n tediously studies the handwriting on the note before waving you through.", FALSE, wendigo, 0, ch, TO_VICT);
+      perform_move(ch, NORTH, LEADER, NULL);
+    } else
+      act("$n steps infront of the doorway and waves you off, \"Not today, chump.\"", FALSE, wendigo, 0, 0, TO_ROOM);
+    return(TRUE);
+  }
+
+  return(FALSE);
+}
+
+
+SPECIAL(spraypaint)
+{
+  return FALSE;
+}
+
+SPECIAL(sombrero_bridge)
+{
+  if (!ch || !cmd || !(CMD_IS("land") || CMD_IS("blastoff") || CMD_IS("beam")))
+    return FALSE;
+
+  if (GET_LEVEL(ch) <= LVL_BUILDER) {
+    send_to_char("All the controls seem to be written in Esperanto.\r\n", ch);
+    return TRUE;
+  }
+  skip_spaces(&argument);
+  extern void open_taxi_door(struct room_data *room, int dir, struct room_data *taxi_room, sbyte rating=0);
+  extern void close_taxi_door(struct room_data *room, int dir, struct room_data *taxi_room);
+  int dir;
+  struct room_data *welcome = &world[real_room(1003)];
+
+  if (CMD_IS("land")) {
+    if (!*argument) {
+      send_to_char("Where do you want to land?\r\n", ch);
+      return TRUE;
+    }
+    vnum_t target = real_room(atol(argument));
+    int dir;
+
+    if (ROOM_FLAGGED(&world[target], ROOM_INDOORS)) {
+      send_to_char("Try landing outdoors somewhere.\r\n", ch);
+      return TRUE;
+    }
+    for (dir = number(NORTH, UP - 1);; dir = number(NORTH, UP - 1))
+      if (!world[target].dir_option[dir]) {
+        open_taxi_door(&world[target], dir, welcome);
+        if (world[target].people) {
+          sprintf(buf, "A large sombrero shaped object descends from the sky, a walkway extends and touches ground to the %s.", fulldirs[dir]);
+          act(buf, FALSE, world[target].people, 0, 0, TO_ROOM);
+          act(buf, FALSE, world[target].people, 0, 0, TO_CHAR);
+        }
+        if (welcome->people) {
+          sprintf(buf, "There is a small rumble as the El Sombrero lands, the bay doors opening to the %s.", fulldirs[dir]);
+          act(buf, FALSE, welcome->people, 0, 0, TO_ROOM);
+          act(buf, FALSE, welcome->people, 0, 0, TO_CHAR);
+        }
+        return TRUE;
+      }
+  } else if (CMD_IS("blastoff")) { 
+    for (dir = NORTH; dir < UP; dir++)
+      if (welcome->dir_option[dir]) {
+        struct room_data *to = welcome->dir_option[dir]->to_room;
+        close_taxi_door(to, rev_dir[dir], welcome);  
+        if (to->people) {
+          sprintf(buf, "The walkway retracts back into the sombrero shaped object and it silently shoots off into the sky.");
+          act(buf, FALSE, to->people, 0, 0, TO_ROOM);
+          act(buf, FALSE, to->people, 0, 0, TO_CHAR);
+        }
+        if (welcome->people) {
+          sprintf(buf, "The bay doors close and you feel a slight rumble as the El Sombrero blasts off into space.");
+          act(buf, FALSE, welcome->people, 0, 0, TO_ROOM);
+          act(buf, FALSE, welcome->people, 0, 0, TO_CHAR);
+        }
+        return TRUE;
+      }
+  } else if (CMD_IS("beam")) {
+    char_data *victim;
+    if (!*argument)
+      send_to_char("Who do you want to beam?\r\n", ch);
+    else if (!(victim = get_char_vis(ch, argument)))
+      send_to_char("You can't see that person.\r\n", ch);
+    else if (GET_ROOM_VNUM(victim->in_room) >= 1000 && GET_ROOM_VNUM(victim->in_room) <= 1099) {
+      send_to_char("PZZZAAAAAAATTTT!!!!\r\n", victim);
+      act("$n sparkles momentarily then fades from view.", FALSE, victim, 0, 0, TO_ROOM);
+      char_from_room(victim);
+      char_to_room(victim, &world[real_room(32611)]);
+      act("$n fades in to view, surrounded by sparkles and the faint smell of salsa.", FALSE, victim, 0, 0, TO_ROOM);
+      send_to_char(ch, "%s has been beamed down to the planet.\r\n", GET_CHAR_NAME(victim));
+    } else {
+      send_to_char("PZZZAAAAAAATTTT!!!!\r\n", victim);
+      act("$n sparkles momentarily then fades from view.", FALSE, victim, 0, 0, TO_ROOM);
+      char_from_room(victim);
+      char_to_room(victim, &world[real_room(1003)]);
+      act("$n fades in to view, surrounded by sparkles and the faint smell of salsa.", FALSE, victim, 0, 0, TO_ROOM);
+      send_to_char(ch, "%s has been beamed aboard.\r\n", GET_CHAR_NAME(victim));
+    }
+    return TRUE;
+  }
+  return FALSE;
+}
+
+SPECIAL(sombrero_infinity)
+{
+  if (!cmd)
+    return FALSE;
+  if (CMD_IS("west") && GET_LEVEL(ch) == LVL_MORTAL) {
+    send_to_char("Try as you might you can't seem to reach the end.\r\n", ch);
+    return TRUE;
+  }
+  return FALSE;
+}
+
+SPECIAL(cybered_yakuza)
+{
+  char_data *yakuza = (char_data *) me;
+
+  if (yakuza != NULL && CMD_IS("open") && CAN_SEE(yakuza, ch) &&
+      yakuza->in_room->number == 39355) {
+    skip_spaces(&argument);
+
+    if (!str_cmp(argument, "door")) {
+      act("$n swears loudly in japanese and attacks.", FALSE, yakuza, 0, ch, TO_VICT);
+      act("$n swears loudly in japanese and attacks $N.", FALSE, yakuza, 0, ch, TO_NOTVICT);
+      set_fighting(yakuza, ch);
+
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
+SPECIAL(airport_gate)
+{
+  if (!cmd)
+    return FALSE;
+  struct room_data *in_room = ch->in_veh ? ch->in_veh->in_room : ch->in_room;
+  long to_room = 0;
+  if (in_room->number == 62166)
+    to_room = real_room(62167);
+  else to_room = real_room(62197);
+
+  if ((in_room->number == 62166 && CMD_IS("east")) || (in_room->number == 62173 && CMD_IS("west"))) {
+    if (!PLR_FLAGGED(ch, PLR_VISA)) {
+      send_to_char("The guards won't let you pass.\r\n", ch);
+      return TRUE;
+    } 
+    send_to_char("You move through the checkpoint to the departure platform.\r\n", ch);
+    act("$n move through the checkpoint to the departure platform.\r\n", FALSE, ch, 0, 0, TO_ROOM);
+    PLR_FLAGS(ch).RemoveBit(PLR_VISA);
+    char_from_room(ch);
+    char_to_room(ch, &world[to_room]);
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+SPECIAL(airport_guard)
+{
+  if (cmd && CMD_IS("show")) {
+    skip_spaces(&argument);
+    struct char_data *guard = (struct char_data *) me;
+    struct obj_data *visa = get_obj_in_list_vis(ch, argument, ch->carrying);
+    if (visa && GET_OBJ_VNUM(visa) == 62100) {
+      if (GET_OBJ_VAL(visa, 0) == GET_IDNUM(ch)) {
+        PLR_FLAGS(ch).SetBit(PLR_VISA);
+        sprintf(arg, "%s Everything seems to be in order, proceed.", GET_CHAR_NAME(ch));
+        do_say(guard, arg, 0, SCMD_SAYTO);
+      } else {
+        sprintf(arg, "%s Get out of here, before we arrest you.", GET_CHAR_NAME(ch));
+        extract_obj(visa);
+        do_say(guard, arg, 0, SCMD_SAYTO);
+      }
+      return TRUE;
+    } else return FALSE;
+  }
   return FALSE;
 }

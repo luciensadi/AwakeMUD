@@ -3949,7 +3949,6 @@ ACMD(do_tridlog)
   }
 }
 
-/* Spray spec-proc not available.
 ACMD(do_spray)
 {
   skip_spaces(&argument);
@@ -3977,7 +3976,7 @@ ACMD(do_spray)
 
 
   send_to_char("You don't have anything to spray with.\r\n", ch);
-} */
+}
 
 ACMD(do_costtime)
 {

@@ -1297,9 +1297,12 @@ void enter_veh(struct char_data *ch, struct veh_data *found_veh, const char *arg
     next = k->next;
     if ((door && door == k->follower->in_room) && (GET_POS(k->follower) >= POS_STANDING)) {
       act("You follow $N.\r\n", FALSE, k->follower, 0, ch, TO_CHAR);
-      if (!found_veh->seating[front])
-        argument = "rear";
-      enter_veh(k->follower, found_veh, argument, FALSE);
+      if (!found_veh->seating[front]) {
+        strcpy(buf3, "rear");
+      } else {
+        strcpy(buf3, argument);
+      }
+      enter_veh(k->follower, found_veh, buf3, FALSE);
     }
   }
 }
