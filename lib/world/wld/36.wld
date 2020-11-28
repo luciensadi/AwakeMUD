@@ -1115,7 +1115,7 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
-	ToVnum:	10002
+	ToVnum:	100002
 	Flags:	0
 	Material:	brick
 	Barrier:	4

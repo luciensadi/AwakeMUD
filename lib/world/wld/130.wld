@@ -27,7 +27,7 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
-	ToVnum:	10021
+	ToVnum:	100021
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -2051,7 +2051,7 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
-	ToVnum:	10026
+	ToVnum:	100026
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -2537,7 +2537,7 @@ RoomType:	0
 	Barrier:	4
 	KeyVnum:	0
 [EXIT up]
-	ToVnum:	10012
+	ToVnum:	100012
 	Flags:	0
 	Material:	brick
 	Barrier:	4

@@ -16,7 +16,7 @@ it in the first place.
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1011
+MobFlags:	1010
 AffFlags:	0
 Race:	Human
 Gender:	Male
@@ -48,7 +48,7 @@ talking with his clientele.
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1011
+MobFlags:	1010
 AffFlags:	0
 Race:	Human
 Gender:	Male
@@ -111,7 +111,7 @@ something while apparently protecting a cache of armaments and other supplies.
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1011
+MobFlags:	1010
 AffFlags:	0
 Race:	Human
 Gender:	Male
@@ -144,7 +144,7 @@ with a number of supplies.
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1011
+MobFlags:	1010
 AffFlags:	0
 Race:	Human
 Gender:	Male
@@ -199,7 +199,7 @@ DefaultPos:	Standing
 	Height:	170
 	Weight:	60
 [SKILLS]
-	brawling:	12
+	Brawling:	12
 BREAK
 #705006
 Keywords:	Julius A quiet black man dressed in a tuxedo and sunglasses sits patiently here
@@ -216,7 +216,7 @@ basket of amenities, offering them to the patrons of the Opera.
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1011
+MobFlags:	1010
 AffFlags:	0
 Race:	Human
 Gender:	Male
@@ -233,6 +233,6 @@ DefaultPos:	Standing
 	Height:	180
 	Weight:	75
 [SKILLS]
-	brawling:	6
+	Brawling:	6
 BREAK
 END

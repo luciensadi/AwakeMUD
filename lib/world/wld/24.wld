@@ -926,7 +926,7 @@ RoomType:	0
 	Background:	0
 	BackgroundType:	0
 [EXIT east]
-	ToVnum:	10000
+	ToVnum:	100000
 	Flags:	0
 	Material:	brick
 	Barrier:	4

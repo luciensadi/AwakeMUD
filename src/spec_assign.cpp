@@ -123,7 +123,7 @@ teach_t teachers[] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     "After hours of study and practice, you feel like you've learned something.\r\n", NEWBIE },
   
-  { 60646, { SKILL_PROJECTILES, SKILL_THROWING_WEAPONS, // Kyle the Mall Ninja
+  { 60539, { SKILL_PROJECTILES, SKILL_THROWING_WEAPONS, // Kyle the Mall Ninja
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
     "Kyle teaches you things you're pretty sure were more effective in the late 1800s.\r\n", NEWBIE },
   
@@ -515,7 +515,7 @@ void assign_mobiles(void)
   for (i = 0; teachers[i].vnum != 0; i++)
     ASSIGNMOB(teachers[i].vnum, teacher);
   
-  ASSIGNMOB(60645, nerp_skills_teacher);
+  ASSIGNMOB(60541, nerp_skills_teacher);
 
   /* metamagic trainers */
   for (i = 0; metamagict[i].vnum != 0; i++)
@@ -611,7 +611,7 @@ void assign_mobiles(void)
   ASSIGNMOB(9913, receptionist);
 
   /* Crime Mall */
-  ASSIGNMOB(10022, crime_mall_guard);
+  ASSIGNMOB(100022, crime_mall_guard);
 
   /* Bradenton */
   ASSIGNMOB(14515, hacker);
@@ -657,9 +657,9 @@ void assign_mobiles(void)
   ASSIGNMOB(5000, bouncer_troll);
   ASSIGNMOB(35500, bouncer_troll);
   ASSIGNMOB(35505, bouncer_troll);
-  ASSIGNMOB(70000, bouncer_troll);
+  ASSIGNMOB(700000, bouncer_troll);
   ASSIGNMOB(70400, bouncer_troll);
-  ASSIGNMOB(70505, bouncer_troll);
+  ASSIGNMOB(705005, bouncer_troll);
   ASSIGNMOB(15824, bouncer_troll);
   ASSIGNMOB(71000, bouncer_troll);
   ASSIGNMOB(19888, knightcenter_bouncer);
