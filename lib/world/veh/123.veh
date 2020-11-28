@@ -1,0 +1,955 @@
+#12300
+Name:	Gaz-Willys Nomad SUV sports utility vehicle
+ShortDesc:	A Gaz-Willys Nomad SUV
+RoomDesc:	A Gaz-Willys Nomad SUV is parked here
+LongDesc:$
+The Gaz-Willys Nomad is highly toted in rigger circles as a tried and true
+piece of machinery, mostly due to its almost endless versatility and options.
+Aside from its price tag, which won't break the bank, it displays an ability
+for hauling with its abundance of cargo space. While it lacks heavily in the
+way of armour, it attempts to make up for it with carrying capacity and
+generous speed and maneuverability for a vehicle its size. 
+~
+Inside:$
+The interior of the Nomad is rather sparse and no nonsense in the way of
+looks, but it has all the standard creature comforts, such as a radio, heating
+and air conditioning, a phone link adapter and even some extra cup holders. It
+has two basic but comfortable bucket seats, not to mention plenty of leg and
+head room for those larger types. 
+~
+InsideRear:$
+The back of the Nomad is obviously designed with available cargo space in
+mind, and it looks like it has plenty enough to haul whatever it feels like. A
+large bench seat is bolted down for passengers and can be folded up to make
+even more room if the need arises. 
+~
+Leaving:	rolls out
+Arriving:	rolls in
+Handling:	3
+Speed:	100
+Accel:	9
+Body:	4
+Armour:	0
+Pilot:	0
+Sig:	2
+Autonav:	2
+Seating:	2
+SeatingBack:	3
+Load:	850
+Cost:	34500
+Type:	3
+Flags:	0
+Engine:	5
+BREAK
+#12301
+Name:	Nissan-Holden Brumby SUV sports utility vehicle truck
+ShortDesc:	A Nissan-Holden Brumby SUV
+RoomDesc:	A Nissan-Holden Brumby SUV is here, parked at the curb
+LongDesc:$
+The Nissan-Holden Brumby is smaller in comparison to most 4-wheel drive sports
+utility vehicles that you will see on the road, but its diesel engine and all
+terrain suspension make up for any downfall in that area. Automotive magazines
+label the Brumby as an affordable performance SUV, and has often received much
+higher reviews than other vehicles of its size. Its low price tag makes it a
+ideal choice for wageslaves and riggers alike. 
+~
+Inside:$
+The interior isn't anything to write home about, but all in all it has all the
+standard features one could hope for in an affordable civilian model vehicle.
+All of the basic options are in place, and the ride itself is smoother than
+most lower end sports utility vehicles, most likely due to the superior
+suspension system in place. 
+~
+InsideRear:$
+A considerable amount of cargo space lines the rear of this sports utility
+vehicle, which has enough room to fit just about anything you may want to
+haul. A sturdy bench seat is lined up behind the front seats, which can be
+folded down to make more room. 
+~
+Leaving:	rumbles out
+Arriving:	rumbles in
+Handling:	4
+Speed:	100
+Accel:	7
+Body:	4
+Armour:	0
+Pilot:	0
+Sig:	2
+Autonav:	2
+Seating:	2
+SeatingBack:	3
+Load:	850
+Cost:	19000
+Type:	3
+Flags:	0
+Engine:	5
+BREAK
+#12302
+Name:	Toyota Gopher Pickup truck
+ShortDesc:	A Toyota Gopher Pickup
+RoomDesc:	A Toyota Gopher Pickup truck is parked here
+LongDesc:$
+The Gopher is a classic pickup truck built by Toyota, which features a
+superior off-road suspension and handling, and has amassed quite a cult
+following with a loyal customer base that has grown through the years. Its low
+price tag and large amount of cargo space are considered its best features,
+which explains why this particular model has been duplicated and sold by other
+vehicle manufacturers. 
+~
+Inside:$
+The interior is well designed and the upholstery is top notch for a vehicle in
+its price bracket, which is apparently why its customer base praises it so
+highly. It comes with all the standard features that one would expect, but
+also has safety options, such as the built-in roll bars which are concealed so
+not to distract from its smooth and clean look. 
+~
+InsideRear:$
+Theres certainly plenty of space in the back, as if anything less would be
+expected from a pickup truck of this variety. There aren't any seating
+arrangements to speak of, aside from the sturdy rubber treated SureGrip(TM)
+lined truck bed, which has built-in rollers spaced apart to help with loading
+and unloading of any cargo. 
+~
+Leaving:	hauls off
+Arriving:	hauls in
+Handling:	4
+Speed:	105
+Accel:	7
+Body:	4
+Armour:	0
+Pilot:	0
+Sig:	2
+Autonav:	2
+Seating:	2
+SeatingBack:	1
+Load:	500
+Cost:	29500
+Type:	3
+Flags:	0
+Engine:	3
+BREAK
+#12303
+Name:	Gaz-Niki White Eagle off-road bike motorcycle
+ShortDesc:	A Gaz-Niki White Eagle off-road bike
+RoomDesc:	A Gaz-Niki White Eagle off-road bike is parked here
+LongDesc:$
+The Gaz-Niki White Eagle was designed as an off-road motorcycle and excels in
+that area due to its durability and generally easy maintenance. This bike is
+built to withstand almost any punishment from off-road trails, and even when
+it does eventually gets bogged down, it is very easy to service and repair
+under most conditions. 
+~
+Inside:$
+The ride on this bike is relatively smooth, even when driving conditions that
+would send most other motorcycles leaping, the superior suspension allows the
+rider to take every bump and groove in stride. While not as powerful as some
+other bikes, it makes up for it with its performance and reliability under any
+condition. The seating arrangement allows for a driver and a single passenger.
+~
+InsideRear:$
+The sidecar shell houses a single, quite comfortable bucket seat, along with a
+reinforced crash cage frame. The ride in the sidecar is surprisingly smooth,
+most likely due to its seperate suspension, and allows the passenger to ride
+in relative style and comfort. 
+~
+Leaving:	prowls off
+Arriving:	prowls in
+Handling:	3
+Speed:	100
+Accel:	4
+Body:	2
+Armour:	0
+Pilot:	0
+Sig:	1
+Autonav:	0
+Seating:	2
+SeatingBack:	0
+Load:	30
+Cost:	13000
+Type:	1
+Flags:	0
+Engine:	3
+BREAK
+#12304
+Name:	Hyundai Offroader motorbike motorcycle dirt bike
+ShortDesc:	A Hyundai Offroader motorbike
+RoomDesc:	A Hyundai Offroader motorbike is parked here with its kickstand down
+LongDesc:$
+The Hyundai Offroader ranks high on the list of all-terrain cycles on the
+market, making it a tough competitor in the business of off-road bikes, not to
+mention the fact it was voted best off-road terrain cycle by none other than
+Easy Rider magazine. It lives up to expectations and has earned quite a
+reputation for its reliable off-road performance, which has caught the eye of
+several military contracts in the countries of North America, who have already
+placed in orders for their own. 
+~
+Inside:$
+This bike offers an extremely smooth ride, reguardless of the terrain being
+traversed, its off-road suspension is second to none on the market in that
+respect. It has a comfortable, albeit synthetic molded leather seat, on the
+sides of which are small travel containers for any odds and ends the driver
+may need to bring along. This bike has a solid, powerful feel when mounted,
+immediately giving the impression it can handle anything the trail can throw
+at it. 
+~
+InsideRear:$
+The sidecar shell houses a single, quite comfortable bucket seat, along with a
+reinforced crash cage frame. The ride in the sidecar is surprisingly smooth,
+most likely due to its seperate suspension, and allows the passenger to ride
+in relative style and comfort. 
+~
+Leaving:	traverses out
+Arriving:	traverses in
+Handling:	2
+Speed:	90
+Accel:	4
+Body:	2
+Armour:	0
+Pilot:	0
+Sig:	4
+Autonav:	1
+Seating:	2
+SeatingBack:	0
+Load:	20
+Cost:	13000
+Type:	1
+Flags:	0
+Engine:	4
+BREAK
+#12305
+Name:	E.S. Papoose Electric Scooter Entertainment Systems ES cycle
+ShortDesc:	An E.S. Papoose Electric Scooter
+RoomDesc:	An E.S. Papoose Electric Scooter sits on its kickstand here
+LongDesc:$
+This electric racing cycle, brought to you by Entertainment Systems Papoose,
+pushes the envelope on scooters with its power and performance. It may not be
+able to keep up with a combustion engine, but its powerful electric motor
+helps it out shine other competitors in its field due to its overall speed and
+quick acceleration. Not only is it ecologically friendly, but its price tag is
+just right for anyone who still needs some speed in their diet. 
+~
+Inside:$
+This one seater is relatively comfortable, and aside from a few standard
+features this cycle has little in the way of extra options. The electric motor
+hums quietly beneath, while the handle controls themselves make almost more
+noise than the motor itself while its running. 
+~
+InsideRear:$
+The sidecar shell houses a single, quite comfortable bucket seat, along with a
+reinforced crash cage frame. The ride in the sidecar is surprisingly smooth,
+most likely due to its seperate suspension, and allows the passenger to ride
+in relative style and comfort. 
+~
+Leaving:	zips off
+Arriving:	zips in
+Handling:	3
+Speed:	90
+Accel:	3
+Body:	2
+Armour:	0
+Pilot:	0
+Sig:	5
+Autonav:	0
+Seating:	1
+SeatingBack:	0
+Load:	35
+Cost:	4550
+Type:	1
+Flags:	0
+Engine:	1
+BREAK
+#12306
+Name:	Harley-Davidson Electroglide motorcycle
+ShortDesc:	A Harley-Davidson Electroglide
+RoomDesc:	A Harley-Davidson Electroglide is parked here
+LongDesc:$
+The minds of the engineers at Harley-Davidson hit pay dirt with this instant
+classic, the Electroglide. This motorcycle can be seen all across the UCAS,
+being employed by Lone Star and a wide range of other private security
+agencies who can afford its hefty price tag. Well known for its ability to
+take large amounts of punishment and keep on going when its needed most, not
+to mention its highly sophisticated off-road suspension and standard runflat
+tires. 
+~
+Inside:$
+Not many frills are employed on this bike's one-seater design, but the
+necessities are all in place. Comfortable seating makes it all that much
+easier to enjoy and appreciate the powerful, low rumbling engine and its
+liquid smooth ride, which makes easy work of all types of terrain. 
+~
+InsideRear:$
+The sidecar shell houses a single, quite comfortable bucket seat, along with a
+reinforced crash cage frame. The ride in the sidecar is surprisingly smooth,
+most likely due to its seperate suspension, and allows the passenger to ride
+in relative style and comfort. 
+~
+Leaving:	roars loudly off
+Arriving:	roars loudly in
+Handling:	3
+Speed:	225
+Accel:	13
+Body:	2
+Armour:	2
+Pilot:	0
+Sig:	1
+Autonav:	1
+Seating:	1
+SeatingBack:	0
+Load:	140
+Cost:	70000
+Type:	1
+Flags:	0
+Engine:	3
+BREAK
+#12307
+Name:	Mitsuhama Blaze racing bike sports motorcycle
+ShortDesc:	A Mitsuhama Blaze racing bike
+RoomDesc:	A Mitsuhama Blaze racing bike is parked here
+LongDesc:$
+The Blaze is a well known model in the modern racing circuit, and with
+Mitsuhama behind its marketing, its no surprise that it has garnered much
+attention from the top-end racing market. Superior handling and
+maneuverability lend credence to its reputation for a top of the line product
+with reliable performance, not to mention its stable high speed capabilities.
+~
+Inside:$
+There isn't much to distract the driver as far as unnecessary features go,
+mostly bare bones aside from its compact dash with an array of sophisticated
+electronics. Like most racing bikes, it is designed for just the driver, but
+it offers a relatively comfortable ride. The lightweight design and powerful
+engine beneath give the impression that its at home in any racing situation. 
+~
+InsideRear:$
+The sidecar shell houses a single, quite comfortable bucket seat, along with a
+reinforced crash cage frame. The ride in the sidecar is surprisingly smooth,
+most likely due to its seperate suspension, and allows the passenger to ride
+in relative style and comfort. 
+~
+Leaving:	whines loudly off
+Arriving:	whines loudly in
+Handling:	2
+Speed:	210
+Accel:	10
+Body:	2
+Armour:	0
+Pilot:	0
+Sig:	2
+Autonav:	1
+Seating:	1
+SeatingBack:	0
+Load:	40
+Cost:	16500
+Type:	1
+Flags:	0
+Engine:	3
+BREAK
+#12308
+Name:	Suzuki Mirage racing bike motorcycle sports
+ShortDesc:	A Suzuki Mirage racing bike
+RoomDesc:	A Suzuki Mirage racing bike is parked here
+LongDesc:$
+The Mirage, while firmly planted in the racing bike category, excels at the
+role as a reality based street bike. While not as light or as maneuverable as
+some of its rivals, it makes up for it with power and a great acceleration
+rate. While not as suited to the race course, it more than shines on city
+streets. The suspension is very capable, but it has been known to have trouble
+compensating on unpaved surfaces, and certainly isn't the first choice for any
+off-road maneuvers. 
+~
+Inside:$
+This single seater is perfect for baseline operations around the sprawl, and
+aside from the lack of standard features, it offers a relatively comfortable
+and smooth ride. Power doesn't seem to be lacking, and the feel and sound of
+the engine let the rider know this heavy bike means serious business. 
+~
+InsideRear:$
+The sidecar shell houses a single, quite comfortable bucket seat, along with a
+reinforced crash cage frame. The ride in the sidecar is surprisingly smooth,
+most likely due to its seperate suspension, and allows the passenger to ride
+in relative style and comfort. 
+~
+Leaving:	resounds loudly off
+Arriving:	resounds loudly in
+Handling:	3
+Speed:	190
+Accel:	11
+Body:	2
+Armour:	0
+Pilot:	0
+Sig:	2
+Autonav:	1
+Seating:	1
+SeatingBack:	0
+Load:	40
+Cost:	13000
+Type:	1
+Flags:	0
+Engine:	3
+BREAK
+#12309
+Name:	Honda-GM 3220 sports car
+ShortDesc:	A Honda-GM 3220 sports car
+RoomDesc:	A Honda-GM 3220 sports car is parked here
+LongDesc:$
+The engineers at Honda-GM has almost cornered the market on low-priced sports
+cars with this design, which has risen to popularity all across the UCAS,
+amassing die hard fans and car clubs where ever its popped up. While it may
+lack some of the accomodations that the upper echelon of sports cars, it does
+feature a SOTA sound system, comfortable synthleather seats, and a few safety
+features that make it a worthwhile purchase for any wage slave or
+up-and-coming corporate lackey. 
+~
+Inside:$
+The interior of this sports car may not be the most spacious, but it does have
+all of the creature comforts. Its adjustable synthleather seats can be altered
+to allow most metahumans to ride in comfort as well as style. The SOTA sound
+system comes complete with a cellular uplink and various safety features that
+don't always come standard on most vehicles in its price bracket. 
+~
+InsideRear:$
+The adjustable synthleather seats in the back can be altered to allow most
+metahumans to ride in comfort as well as style, and comes complete with
+everything you would expect from the back seats of a sports car, which isn't
+much. Small speakers built into the inside paneling pump a steady flow of
+music from the SOTA sound system, allowing passengers to ride in style and
+relax. 
+~
+Leaving:	roars off
+Arriving:	roars in
+Handling:	4
+Speed:	160
+Accel:	10
+Body:	3
+Armour:	0
+Pilot:	0
+Sig:	2
+Autonav:	1
+Seating:	2
+SeatingBack:	2
+Load:	40
+Cost:	28000
+Type:	2
+Flags:	0
+Engine:	3
+BREAK
+#12310
+Name:	Honda-GM 3220 Turbo sports car
+ShortDesc:	A Honda-GM 3220 Turbo sports car
+RoomDesc:	A Honda-GM 3220 Turbo sports car is parked here
+LongDesc:$
+The engineers at Honda-GM Tubro has almost cornered the market on low-priced
+sports cars with this design, which has risen to popularity all across the
+UCAS, amassing die hard fans and car clubs where ever its popped up. While it
+may lack some of the accomodations that the upper echelon of sports cars, this
+particular model is an upgraded turbo-charged version of the standard 3200,
+and as such has greatly increased rates of acceleration and top speed, making
+it a very capable street racer. 
+~
+Inside:$
+The interior of this sports car may not be the most spacious, but it does have
+all of the creature comforts. Its adjustable synthleather seats can be altered
+to allow most metahumans to ride in comfort as well as style. The SOTA sound
+system comes complete with a cellular uplink and various safety features that
+don't always come standard on most vehicles in its price bracket. Rollbars
+have been installed on the 3220 Turbo model, since the increased rate of speed
+tends to be a bit rougher on the vehicle and its occupants. 
+~
+InsideRear:$
+The adjustable synthleather seats in the back can be altered to allow most
+metahumans to ride in comfort as well as style, and comes complete with
+everything you would expect from the back seats of a sports car, which isn't
+much. Small speakers built into the inside paneling pump a steady flow of
+music from the SOTA sound system, allowing passengers to ride in style and
+relax. 
+~
+Leaving:	thunders off
+Arriving:	thunders in
+Handling:	4
+Speed:	190
+Accel:	14
+Body:	3
+Armour:	0
+Pilot:	0
+Sig:	1
+Autonav:	2
+Seating:	2
+SeatingBack:	2
+Load:	40
+Cost:	44000
+Type:	2
+Flags:	0
+Engine:	3
+BREAK
+#12311
+Name:	Leyland-Zil Tsarina subcompact car
+ShortDesc:	A Leyland-Zil Tsarina
+RoomDesc:	A Leyland-Zil Tsarina is parked here
+LongDesc:$
+The Tsarina subcompact car is manufactured by Leyland-Zil, who has earned a
+reputation for putting economy above quality, and it shows. The saving grace
+of this subcompact, aside from its price, is the cargo space available, which
+is quite a deal on a vehicle of its size. The Tsarina has held steady on the
+market and doesn't look to be going under any time soon. 
+~
+Inside:$
+The interior of this subcompact is fairly spacious, and comes with most of the
+standard amenities available on the market. The unusual seating arrangement is
+sure to peak the consumers interest, as the driver's seat is elevated slightly
+above and to the rear of the passenger seat. 
+~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	dashes out
+Arriving:	dashes in
+Handling:	4
+Speed:	75
+Accel:	4
+Body:	3
+Armour:	0
+Pilot:	0
+Sig:	5
+Autonav:	1
+Seating:	2
+SeatingBack:	0
+Load:	50
+Cost:	12000
+Type:	2
+Flags:	0
+Engine:	1
+BREAK
+#12312
+Name:	Volkswagen Elektro subcompact car
+ShortDesc:	A Volkswagen Elektro
+RoomDesc:	A Volkswagen Elektro is parked here
+LongDesc:$
+The Elektro is inexpensive and stylish to boot, making it an immediate
+favourite in commuter circles. Its sleek, low-slung 3-wheel design has a
+distinct appearance, lending it some extra clout to low-end corporate figures
+who prefer to look above their budget without breaking the bank. Volkswagen
+seems to have done it again, and is reaping the rewards for their addition to
+the subcompact market. 
+~
+Inside:$
+The interior of this one-seat subcompact vehicle has a high-tech, almost
+jet-cockpit like appearance, making it look just as good inside as it does
+outside. While the car itself isn't very spacious, it makes up for it with
+extra features, synthleather upholstered seats and a sophisticated sound
+system. 
+~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	bustles off
+Arriving:	bustles in
+Handling:	4
+Speed:	75
+Accel:	4
+Body:	3
+Armour:	0
+Pilot:	0
+Sig:	5
+Autonav:	0
+Seating:	1
+SeatingBack:	0
+Load:	45
+Cost:	8000
+Type:	2
+Flags:	0
+Engine:	1
+BREAK
+#12313
+Name:	Conestoga Trailblazer light tractor truck transport
+ShortDesc:	A Conestoga Trailblazer light tractor
+RoomDesc:	A Conestoga Trailblazer light tractor is parked here
+LongDesc:$
+While the trucking scene has almost died off in the West as far as
+transporting goods go, the profession still thrives throughout the UCAS and
+CAS, and this piece of machinery is highly prized and often implemented in
+that field. The tractor is light and stands out in the smaller truck market,
+and while it may not have any armour, it makes up for it with a considerable
+amount of top speed. The light Trailblazer tractor is the mainstay of
+Conestoga, and will likely remain at the forefront of the industry in the
+future. 
+~
+Inside:$
+The interior of the cabin is spacious and quite comfortable, which comes
+standard with adjustable seats, heating, air conditioning, storage
+compartments and even an array of extra cupholders. There is plenty enough
+head and leg room to kick back and relax, and more than enough to accomodate
+any larger than average metatypes. The cabin is seperated from the rear by a
+sturdy retractable panel for quick and easy access inbetween the two
+compartments. 
+~
+InsideRear:$
+The spacious rear of this tractor is large enough to accomodate just about any
+type of cargo desired, and an extra folding bench seat allows for more
+passenger room if needed. Its easy to see why this model is highly praised for
+transporting goods, and fits perfectly with the motto, the more room, the
+better. 
+~
+Leaving:	rolls off
+Arriving:	rolls in
+Handling:	4
+Speed:	90
+Accel:	3
+Body:	5
+Armour:	0
+Pilot:	0
+Sig:	2
+Autonav:	2
+Seating:	2
+SeatingBack:	4
+Load:	15000
+Cost:	152000
+Type:	3
+Flags:	1000
+Engine:	5
+BREAK
+#12314
+Name:	Aztechnology GCR-23C Crawler drone
+ShortDesc:	An Aztechnology GCR-23C Crawler
+RoomDesc:	An Aztechnology GCR-23C Crawler is sitting here
+LongDesc:$
+This small drone is designed to operate in rough rural or urban terrain
+equally as well. The GCR-23C comes equipped with rugged crawler tracks that
+let it traverse the toughest of terrain, including stairs, which allow it
+access to most places other drones simply cannot get to. While very competent
+as a snooper, it should be noted that its crawler tracks are rather loud, and
+may not be very suited for situations that would require a good deal of
+stealth. 
+~
+Inside:$
+You see an uncreative vehicle.~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	noisily crawls off
+Arriving:	noisily crawls in
+Handling:	4
+Speed:	15
+Accel:	3
+Body:	1
+Armour:	0
+Pilot:	1
+Sig:	8
+Autonav:	0
+Seating:	0
+SeatingBack:	0
+Load:	15
+Cost:	3750
+Type:	0
+Flags:	0
+Engine:	1
+BREAK
+#12315
+Name:	Saab-Thyssen Bloodhound drone
+ShortDesc:	A Saab-Thyssen Bloodhound
+RoomDesc:	A Saab-Thyssen Bloodhound is sitting here
+LongDesc:$
+The Bloodhound is brought to you by the minds at Saab-Thyssen, and was
+designed for various HAZMAT duties, including identifying, surveying and
+marking areas contaminated by radioactive, biological and chemical
+contamination. Its uses, however, go beyond that, and with its Saab gasoline
+engine it proves to be a very versatile drone, capable of getting into and out
+of the most hazardous of areas. 
+~
+Inside:$
+You see an uncreative vehicle.~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	crawls rapidly off
+Arriving:	crawls rapidly in
+Handling:	3
+Speed:	90
+Accel:	6
+Body:	2
+Armour:	0
+Pilot:	2
+Sig:	4
+Autonav:	0
+Seating:	0
+SeatingBack:	0
+Load:	10
+Cost:	23500
+Type:	0
+Flags:	0
+Engine:	3
+BREAK
+#12316
+Name:	MCT Hachiman drone
+ShortDesc:	An MCT Hachiman
+RoomDesc:	An MCT Hachiman is sitting stationary here
+LongDesc:$
+This powerhouse of a security drone was thought up by the minds at MCT and is
+SOTA by any standard, which makes it perfect for the multiple "killing zones"
+that have popped up over the years under MCT's control. The most telling
+features of the Hachiman are its humanoid-like 'head' and 'torso', which have
+been sculpted to resemble the samurai of legend. Along with its very
+sophisticated robotic brain, it is capable of using its armour and weaponry
+proficiently in the process of defending itself and others. 
+~
+Inside:$
+You see an uncreative vehicle.~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	crawls slowly off
+Arriving:	crawls slowly in
+Handling:	3
+Speed:	10
+Accel:	2
+Body:	2
+Armour:	5
+Pilot:	3
+Sig:	7
+Autonav:	0
+Seating:	0
+SeatingBack:	0
+Load:	125
+Cost:	70000
+Type:	0
+Flags:	0
+Engine:	1
+BREAK
+#12317
+Name:	Aerodesign Systems Condor Series LDSD-23 drone miniblimp mini-blimp
+ShortDesc:	An Aerodesign Systems Condor Series LDSD-23
+RoomDesc:	An Aerodesign Systems Condor Series LDSD-23 floats here
+LongDesc:$
+Aerodesign has all but cornered the market on mini-blimp drones, and their
+newest addition is a testament as to why the Condor series has done so well.
+Not only is the LDSD-23 an affordable model, its has seen dramatic rises in
+sales due to the relentless advertisement done by Aerodesign, helping sky
+rocket it to the forefront of its market. Its nearly silent operation, along
+with its wide range of surveillance features make it a perfect choice for most
+security rigger details. 
+~
+Inside:$
+You see an uncreative vehicle.~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	floats off
+Arriving:	floats in
+Handling:	4
+Speed:	60
+Accel:	3
+Body:	2
+Armour:	0
+Pilot:	1
+Sig:	10
+Autonav:	0
+Seating:	0
+SeatingBack:	0
+Load:	50
+Cost:	9000
+Type:	0
+Flags:	10
+Engine:	1
+BREAK
+#12318
+Name:	Aerodesign Systems Condor Series LDSD-41 miniblimp mini-blimp drone
+ShortDesc:	An Aerodesign Systems Condor Series LDSD-41
+RoomDesc:	An Aerodesign Systems Condor Series LDSD-41 floats here
+LongDesc:$
+Aerodesign has all but cornered the market on mini-blimp drones, and their
+newest addition is a testament as to why the Condor series has done so well.
+Not only is the LDSD-41 an affordable model, its has seen dramatic rises in
+sales due to the relentless advertisement done by Aerodesign, helping sky
+rocket it to the forefront of its market. Its nearly silent operation, along
+with its wide range of surveillance features make it a perfect choice for most
+security rigger details. The LDSD-41 features a much more sophisticated
+piloting hardware than its predecessor, as well as a more effecient battery
+for longer operation times. 
+~
+Inside:$
+You see an uncreative vehicle.~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	floats out
+Arriving:	floats in
+Handling:	4
+Speed:	75
+Accel:	5
+Body:	2
+Armour:	3
+Pilot:	3
+Sig:	10
+Autonav:	0
+Seating:	0
+SeatingBack:	0
+Load:	28
+Cost:	33650
+Type:	0
+Flags:	10
+Engine:	1
+BREAK
+#12319
+Name:	Sikorsky-Bell Microskimmer-I drone
+ShortDesc:	A Sikorsky-Bell Microskimmer-I
+RoomDesc:	A Sikorsky-Bell Microskimmer-I hovers here
+LongDesc:$
+The Sikorsky-Bell Microskimmer-I ACV drone resembles an aerodynamic trashcan
+lid, but don't let its appearance fool you. It operates in a very quiet
+manner, is quite durable, and very capable of maintaining high speeds of
+flight. Its air-tight design allows it to maneuver in the roughest of elements
+without fear of it affecting the electronic equipment on board, which includes
+a full suite of standard sensors. 
+~
+Inside:$
+You see an uncreative vehicle.~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	hovers off
+Arriving:	hovers in
+Handling:	3
+Speed:	90
+Accel:	6
+Body:	1
+Armour:	0
+Pilot:	1
+Sig:	7
+Autonav:	0
+Seating:	0
+SeatingBack:	0
+Load:	5
+Cost:	7500
+Type:	0
+Flags:	10
+Engine:	1
+BREAK
+#12320
+Name:	Sikorsky-Bell Microskimmer-II drone
+ShortDesc:	A Sikorsky-Bell Microskimmer-II
+RoomDesc:	A Sikorsky-Bell Microskimmer-II hovers here
+LongDesc:$
+The Sikorsky-Bell Microskimmer-II ACV drone resembles an aerodynamic trashcan
+lid, but don't let its appearance fool you. It operates in a very quiet
+manner, is quite durable, and very capable of maintaining high speeds of
+flight. Its air-tight design allows it to maneuver in the roughest of elements
+without fear of it affecting the electronic equipment on board, which includes
+a full suite of standard sensors. The Microskimmer-II operates on methane
+power, and boasts an auxillary electric battery engine along with it, making
+it a more versatile drone than its previous model. 
+~
+Inside:$
+You see an uncreative vehicle.~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	hovers off
+Arriving:	hovers in
+Handling:	3
+Speed:	90
+Accel:	5
+Body:	1
+Armour:	0
+Pilot:	1
+Sig:	7
+Autonav:	0
+Seating:	0
+SeatingBack:	0
+Load:	5
+Cost:	18300
+Type:	0
+Flags:	10
+Engine:	4
+BREAK
+#12321
+Name:	GM-Nissan Spotter UAV unmanned aerial vehicle drone
+ShortDesc:	A GM-Nissan Spotter UAV
+RoomDesc:	A GM-Nissan Spotter UAV sits stationary here
+LongDesc:$
+The Spotter has been on the scene longer than most, and is widely accepted by
+the security rigger community due to its affordable price, folding wings for
+easy transport, and its reliable service in the field as a stealth winged
+craft. This particular drone comes standard with electronic equipment and
+sensors very similar to specialized surveillance drones, but at a fraction of
+its price tag, making it a good purchase for any security force. 
+~
+Inside:$
+You see an uncreative vehicle.~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	flies quickly off
+Arriving:	flies quickly in
+Handling:	3
+Speed:	200
+Accel:	30
+Body:	1
+Armour:	0
+Pilot:	2
+Sig:	6
+Autonav:	0
+Seating:	0
+SeatingBack:	0
+Load:	10
+Cost:	33000
+Type:	0
+Flags:	10
+Engine:	4
+BREAK
+#12322
+Name:	Eireann-Tir Prospero Roto-Drone drone
+ShortDesc:	An Eireann-Tir Prospero Roto-Drone
+RoomDesc:	An Eireann-Tir Prospero Roto-Drone sits here
+LongDesc:$
+Its inexpensive price tag lives up to the Prospero motto, making this
+roto-drone a great choice as an entry-level recon drone. Its low load capacity
+may limit its ability to be customized, but at its price, you won't find a
+better deal on the market. This drone is perfect for filling in any gaps in
+security systems that are spread out over a distance, and excels when backed
+up by more capable drones. 
+~
+Inside:$
+You see an uncreative vehicle.~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	hovers off
+Arriving:	hovers in
+Handling:	3
+Speed:	70
+Accel:	9
+Body:	1
+Armour:	0
+Pilot:	2
+Sig:	5
+Autonav:	0
+Seating:	0
+SeatingBack:	0
+Load:	10
+Cost:	8125
+Type:	0
+Flags:	10
+Engine:	4
+BREAK
+#12323
+Name:	Cyberspace Designs Wolfhound drone
+ShortDesc:	A Cyberspace Designs Wolfhound
+RoomDesc:	A Cyberspace Designs Wolfhound sits stationary here
+LongDesc:$
+The Wolfhound UAV drone is another hit on the market from the minds at
+Cyberspace Designs, who have once again proven to be at the top of their game,
+and very capable of meeting the demands of their customers. Its highly
+improved robotic pilot system has been pre-programmed with detection-avoidance
+maneuvers, which coupled with its incredible rate of speed and acceleration,
+allow it to out-run and out-maneuver almost any trouble it gets itself into. 
+~
+Inside:$
+You see an uncreative vehicle.~
+InsideRear:$
+You see an uncreative vehicle.~
+Leaving:	flies off
+Arriving:	flies in
+Handling:	3
+Speed:	210
+Accel:	12
+Body:	2
+Armour:	0
+Pilot:	2
+Sig:	6
+Autonav:	0
+Seating:	0
+SeatingBack:	0
+Load:	80
+Cost:	60000
+Type:	0
+Flags:	10
+Engine:	4
+BREAK
+END

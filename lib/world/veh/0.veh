@@ -9,9 +9,8 @@ enough armour to withstand a fairly vicious firefight, they are perfect for
 black ops and full field duty alike. 
 ~
 Inside:$
+
 ~
-InsideRear:$
-You are inside a boring vehicle.~
 Leaving:	leaves
 Arriving:	arrives
 Handling:	6
@@ -23,43 +22,9 @@ Pilot:	0
 Sig:	0
 Autonav:	0
 Seating:	2
-SeatingBack:	0
 Load:	0
 Cost:	245000000
 Type:	0
 Flags:	0
-Engine:	0
-BREAK
-#1
-Name:	forklift towmotor
-ShortDesc:	a towmotor
-RoomDesc:	A towmotor is parked here
-LongDesc:$
-It's a towmotor, or forklift if you prefer. Two big prongs on the front for
-picking stuff up, and a small cab for the operator.  
-~
-Inside:$
-Not much to see here, chummer. You have enough room to wiggle around a little
-and work the levers and pedals to make this thing work. 
-~
-InsideRear:$
-~
-Leaving:	scoots off
-Arriving:	motors in
-Handling:	5
-Speed:	40
-Accel:	0
-Body:	1
-Armour:	0
-Pilot:	0
-Sig:	0
-Autonav:	0
-Seating:	1
-SeatingBack:	0
-Load:	1
-Cost:	0
-Type:	1
-Flags:	0
-Engine:	1
 BREAK
 END

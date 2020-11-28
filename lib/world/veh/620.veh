@@ -1,0 +1,33 @@
+#62000
+Name:	A Saeder-Krupp Obsidimen Main Battle Tank
+ShortDesc:	A Saeder-Krupp Obsidimen Main Battle Tank
+RoomDesc:	A Saeder-Krupp Obsidimen Main Battle Tank is ominously parked here
+LongDesc:$
+This is the primary main battle tank used by the Saeder-Krupp corporation. It
+has been known to lay waste to small cities. 
+~
+Inside:$
+You are sitting in a freaking hover tank! 
+~
+InsideRear:$
+Your in the back of a god dam hover tank. Hell Yeah! 
+~
+Leaving:	Your lucky the hover tank leaves
+Arriving:	A fucking hover tanks hovers in
+Handling:	0
+Speed:	200
+Accel:	20
+Body:	10
+Armour:	22
+Pilot:	5
+Sig:	5
+Autonav:	6
+Seating:	2
+SeatingBack:	3
+Load:	5000
+Cost:	50000000
+Type:	3
+Flags:	0
+Engine:	5
+BREAK
+END

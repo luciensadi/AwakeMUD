@@ -1,0 +1,30 @@
+#40300
+Name:	corvette
+ShortDesc:	Corvette
+RoomDesc:	Jon's 1990 corvette is sitting here, looking hot
+LongDesc:$
+This is Jon's 1990 Corvette, he has one in real life too! 
+~
+Inside:$
+—@—@~
+InsideRear:$
+You are inside a boring vehicle.~
+Leaving:	speeds out
+Arriving:	speeds in
+Handling:	1
+Speed:	1
+Accel:	1
+Body:	1
+Armour:	1
+Pilot:	1
+Sig:	1
+Autonav:	1
+Seating:	2
+SeatingBack:	0
+Load:	15000
+Cost:	10000000
+Type:	2
+Flags:	0
+Engine:	0
+BREAK
+END

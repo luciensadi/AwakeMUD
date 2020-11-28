@@ -1,0 +1,76 @@
+#31500
+Name:	limo car tinted black
+ShortDesc:	A black stretch limo with dark tinting
+RoomDesc:	A black stretch limo with dark tinting is parked here
+LongDesc:$
+This limousine looks like it belongs to some sort of Mafia kingpin. An
+imaculate black paintjob adorns this three section stretch limo. Tinting on
+the back and side windows is so dark you cant even see through it. It's a
+bequtifull vehicle...and expensive as hell. 
+~
+Inside:$
+Heaven. That's about all that can describe this piece of machinery. From the
+leather consolw and the ultra-powerfull sound system, to the GPS system
+installed just aove the dash. This thing -screams- tech, yet the overstuffed
+leather interior, the full bar in the back, the trid, and the sunroof make
+this perhaps the most comfortable things you've ever had the pleasure of
+sitting in. 
+~
+InsideRear:$
+You are inside a boring vehicle.~
+Leaving:	rolls slowly to the
+Arriving:	rolls in slowly from the
+Handling:	10
+Speed:	6
+Accel:	5
+Body:	10
+Armour:	50
+Pilot:	0
+Sig:	10
+Autonav:	10
+Seating:	10
+SeatingBack:	0
+Load:	100
+Cost:	1000000
+Type:	2
+Flags:	0
+Engine:	0
+BREAK
+#31550
+Name:	vintage nissan skyline r34
+ShortDesc:	a vintage Nissan Skyline R34
+RoomDesc:	A vintage Nissan is parked here, attracting alot of attention
+LongDesc:$
+It's the vintage Skyline R34, the epitome of vehicle design in the 5th world.
+It's blue colouring seems to arrouse you somewhat, as you dream of sitting
+behind the wheel. 
+~
+Inside:$
+The interior is top class, woodgrain finish, racing spec seats, and a cute
+little air freshner hanging from the rear view mirror. The dashboard is full
+customized, half of it being devoted to a spectrum analysis of whatever track
+is currently playing through the stereo system. An old laptop sits between the
+two front seats, it's screen showing a seemingly random array of graphs and
+numbers associated with the engines performance. 
+~
+InsideRear:$
+You are inside a boring vehicle.~
+Leaving:	streaks to
+Arriving:	streaks in
+Handling:	5
+Speed:	260
+Accel:	50
+Body:	3
+Armour:	1
+Pilot:	0
+Sig:	2
+Autonav:	10
+Seating:	2
+SeatingBack:	0
+Load:	120
+Cost:	90000
+Type:	2
+Flags:	0
+Engine:	0
+BREAK
+END
