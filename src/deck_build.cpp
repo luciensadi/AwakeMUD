@@ -790,9 +790,9 @@ ACMD(do_progress)
         break;
       } 
   } else if (AFF_FLAGS(ch).IsSet(AFF_BONDING)) {
-    send_to_char(ch, "You are about %d%% of the way through bonding %s.\r\n", 
-                 (int)(((float)(GET_OBJ_VAL(GET_BUILDING(ch), 1) - GET_OBJ_VAL(GET_BUILDING(ch), 9)) / (GET_OBJ_VAL(GET_BUILDING(ch), 1) != 0 ? GET_OBJ_VAL(GET_BUILDING(ch), 1) : 1) * 60)*100),
-                 GET_OBJ_NAME(GET_BUILDING(ch)));
+    send_to_char(ch, "There are %d ticks remaining until you finish bonding %s.\r\n", GET_OBJ_VAL(GET_BUILDING(ch), 9));
+/*                 (int)(((float)(GET_OBJ_VAL(GET_BUILDING(ch), 1) - GET_OBJ_VAL(GET_BUILDING(ch), 9)) / (GET_OBJ_VAL(GET_BUILDING(ch), 1) != 0 ? GET_OBJ_VAL(GET_BUILDING(ch), 1) : 1) * 60)*100),
+                 GET_OBJ_NAME(GET_BUILDING(ch))); */
   } else if (AFF_FLAGS(ch).IsSet(AFF_PROGRAM)) {
     send_to_char(ch, "You are about %d%% of the way through programming %s.\r\n", 
            (int)(((float)(GET_OBJ_TIMER(GET_BUILDING(ch)) - GET_OBJ_VAL(GET_BUILDING(ch), 5)) / 

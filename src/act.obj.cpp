@@ -51,6 +51,9 @@ bool search_cyberdeck(struct obj_data *cyberdeck, struct obj_data *program)
 
 void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *cont)
 {
+  float old_carry_w = IS_CARRYING_W(ch);
+  int old_carry_n = IS_CARRYING_N(ch);
+  
   if (obj == ch->char_specials.programming)
   {
     send_to_char(ch, "You can't put something you are working on inside something.\r\n");
@@ -122,15 +125,14 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
       return;
     }
 
-    float old_carry_w = IS_CARRYING_W(ch);
-    int old_carry_n = IS_CARRYING_N(ch);
     if (obj->in_obj)
       obj_from_obj(obj);
     else
       obj_from_char(obj);
     obj_to_obj(obj, cont);
+    
     if (old_carry_w != IS_CARRYING_W(ch) || old_carry_n != IS_CARRYING_N(ch) - 1) {
-      sprintf(buf, "SYSERR: Weight/number calculations are off. Carry weight delta is %f, carry number delta is %d. Auto-fixing.",
+      sprintf(buf, "SYSERR: Weight/number calculations are off (worn branch). Carry weight delta is %f, carry number delta is %d. Auto-fixing.",
               IS_CARRYING_W(ch) - old_carry_w,
               IS_CARRYING_N(ch) - old_carry_n);
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
@@ -153,6 +155,15 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
     else {
       obj_from_char(obj);
       obj_to_obj(obj, cont);
+      
+      if (old_carry_w != IS_CARRYING_W(ch) || old_carry_n != IS_CARRYING_N(ch) - 1) {
+        sprintf(buf, "SYSERR: Weight/number calculations are off (quiver branch). Carry weight delta is %f, carry number delta is %d. Auto-fixing.",
+                IS_CARRYING_W(ch) - old_carry_w,
+                IS_CARRYING_N(ch) - old_carry_n);
+        mudlog(buf, ch, LOG_SYSLOG, TRUE);
+        calc_weight(ch);
+      }
+      
       GET_OBJ_VAL(cont, 2)++;
       act("You put $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
       act("$n puts $p in $P.", TRUE, ch, obj, cont, TO_ROOM);
@@ -189,6 +200,15 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
   else
     obj_from_char(obj);
   obj_to_obj(obj, cont);
+  
+  if (old_carry_w != IS_CARRYING_W(ch) || old_carry_n != IS_CARRYING_N(ch) - 1) {
+    sprintf(buf, "SYSERR: Weight/number calculations are off (default branch). Carry weight delta is %f, carry number delta is %d. Auto-fixing.",
+            IS_CARRYING_W(ch) - old_carry_w,
+            IS_CARRYING_N(ch) - old_carry_n);
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
+    calc_weight(ch);
+  }
+  
   act("You put $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
   act("$n puts $p in $P.", TRUE, ch, obj, cont, TO_ROOM);
   if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
