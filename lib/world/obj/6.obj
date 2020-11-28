@@ -1603,6 +1603,31 @@ Material:	adv. plastics
 	Val0:	2
 	Val1:	1
 BREAK
+#671
+Keywords:	gps gridguide handhelt unit small
+Name:	handheld GridGuide unit
+RoomDesc:$
+A small handheld GridGuide unit has been left here.~
+LookDesc:$
+Pretty basic, although useful for finding your way around the city. This unit
+is comprised of a sturdy grey polymer shell around a utilitarian screen with a
+single button for coordinate lookups.
+~
+Type:	Other
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	electronics
+[POINTS]
+	Weight:	0.50
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	0
+	AvailDay:	0.00
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+BREAK
 #672
 Keywords:	sword monosword
 Name:	a monosword
@@ -2282,6 +2307,32 @@ Material:	plastic
 [VALUES]
 	Val0:	2
 	Val1:	8
+BREAK
+#698
+Keywords:	tripod
+Name:	a tripod
+RoomDesc:$
+Someone has left an attachable tripod laying here.~
+LookDesc:$
+It attaches to the bottom of a weapon and helps provide recoil compensation. 
+~
+Type:	Gun Accessory
+WearFlags:	1
+ExtraFlags:	0
+AffFlags:	0
+Material:	plastic
+[POINTS]
+	Weight:	2.00
+	Barrier:	6
+	Cost:	1000
+	AvailTN:	6
+	AvailDay:	0.50
+	LegalNum:	0
+	LegalCode:	0
+	LegalPermit:	0
+[VALUES]
+	Val0:	2
+	Val1:	9
 BREAK
 #699
 Keywords:	sign metal
