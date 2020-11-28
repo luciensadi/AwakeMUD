@@ -50,7 +50,7 @@ bool search_cyberdeck(struct obj_data *cyberdeck, struct obj_data *program)
 }
 
 void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *cont)
-{
+{  
   if (obj == ch->char_specials.programming)
   {
     send_to_char(ch, "You can't put something you are working on inside something.\r\n");
@@ -122,12 +122,12 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
       return;
     }
 
-
     if (obj->in_obj)
       obj_from_obj(obj);
     else
       obj_from_char(obj);
     obj_to_obj(obj, cont);
+    
     act("You put $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
     act("$n puts $p in $P.", FALSE, ch, obj, cont, TO_ROOM);
     return;
@@ -144,6 +144,7 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
     else {
       obj_from_char(obj);
       obj_to_obj(obj, cont);
+      
       GET_OBJ_VAL(cont, 2)++;
       act("You put $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
       act("$n puts $p in $P.", TRUE, ch, obj, cont, TO_ROOM);
@@ -180,6 +181,7 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
   else
     obj_from_char(obj);
   obj_to_obj(obj, cont);
+  
   act("You put $p in $P.", FALSE, ch, obj, cont, TO_CHAR);
   act("$n puts $p in $P.", TRUE, ch, obj, cont, TO_ROOM);
   if ( (!IS_NPC(ch) && access_level( ch, LVL_BUILDER ))
@@ -635,7 +637,8 @@ void calc_weight(struct char_data *ch)
       IS_CARRYING_W(ch) += GET_OBJ_WEIGHT(GET_EQ(ch, i));
 
   for (obj = ch->carrying; obj; obj = obj->next_content)
-    IS_CARRYING_W(ch) +=GET_OBJ_WEIGHT(obj);
+    IS_CARRYING_W(ch) += GET_OBJ_WEIGHT(obj);
+    
   for (obj = ch->cyberware; obj; obj = obj->next_content)
     if (GET_OBJ_VAL(obj, 0) == CYB_BONELACING)
       switch (GET_OBJ_VAL(obj, 3))

@@ -575,6 +575,7 @@ struct command_info cmd_info[] =
     { "invitations", POS_LYING , do_invitations, 0, 0 },
 
     { "jack"     , POS_SITTING , do_jack     , 0, 0 },
+    { "jobs"     , POS_DEAD    , do_recap    , 0, 0 },
     { "junk"     , POS_RESTING , do_drop     , 0, SCMD_JUNK },
 
     { "kil"      , POS_FIGHTING, do_kil      , 0, 0 },
@@ -623,6 +624,7 @@ struct command_info cmd_info[] =
     { "open"     , POS_SITTING , do_gen_door , 0, SCMD_OPEN },
     { "osay"     , POS_LYING   , do_say      , 0, SCMD_OSAY },
     { "osays"    , POS_DEAD    , do_switched_message_history, 0, COMM_CHANNEL_OSAYS },
+    { "out"      , POS_SITTING , do_leave    , 0, 0 },
     { "."        , POS_LYING   , do_say      , 0, SCMD_OSAY },
 
     { "put"      , POS_RESTING , do_put      , 0, 0 },
@@ -659,6 +661,7 @@ struct command_info cmd_info[] =
     { "push"     , POS_SITTING , do_push     , 0, 0 },
     { "purge"    , POS_DEAD    , do_purge    , LVL_ARCHITECT, 0 },
 
+    { "quests"   , POS_DEAD    , do_recap    , 0, 0 },
     { "qui"      , POS_DEAD    , do_quit     , 0, 0 },
     { "quit"     , POS_SLEEPING, do_quit     , 0, SCMD_QUIT },
     { "qlist"    , POS_DEAD    , do_qlist    , LVL_FIXER, 0 },

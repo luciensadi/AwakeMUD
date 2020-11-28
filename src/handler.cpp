@@ -44,7 +44,6 @@ extern int skill_web(struct char_data *, int);
 extern int return_general(int skill_num);
 extern int can_wield_both(struct char_data *, struct obj_data *, struct obj_data *);
 extern int max_ability(int i);
-extern void weight_change_object(struct obj_data * obj, float weight);
 
 struct obj_data *find_obj(struct char_data *ch, char *name, int num);
 
@@ -1413,7 +1412,7 @@ void obj_from_bioware(struct obj_data *bio)
 /* take an object from a char */
 void obj_from_char(struct obj_data * object)
 {
-  struct obj_data *temp;
+  struct obj_data *temp = NULL;
   
   if (object == NULL)
   {
@@ -1777,7 +1776,7 @@ void obj_from_room(struct obj_data * object)
 /* put an object in an object (quaint)  */
 void obj_to_obj(struct obj_data * obj, struct obj_data * obj_to)
 {
-  struct obj_data *tmp_obj;
+  struct obj_data *tmp_obj = NULL;
   struct obj_data *i = NULL, *op = NULL;
   
   // Check our object-related preconditions. All error logging is done there.
@@ -1830,11 +1829,11 @@ void obj_to_obj(struct obj_data * obj, struct obj_data * obj_to)
   
   // Cascade the weight change all the way up to the second-highest containing object (handles bag-in-bag-in-bag situations).
   for (tmp_obj = obj->in_obj; tmp_obj->in_obj; tmp_obj = tmp_obj->in_obj)
-    weight_change_object(tmp_obj, GET_OBJ_WEIGHT(obj));
+    GET_OBJ_WEIGHT(tmp_obj) += GET_OBJ_WEIGHT(obj);
   
   // Update the highest container's weight as well.
   if (GET_OBJ_TYPE(tmp_obj) != ITEM_CYBERDECK || GET_OBJ_TYPE(tmp_obj) != ITEM_CUSTOM_DECK || GET_OBJ_TYPE(tmp_obj) != ITEM_DECK_ACCESSORY)
-    weight_change_object(tmp_obj, GET_OBJ_WEIGHT(obj));
+    GET_OBJ_WEIGHT(tmp_obj) += GET_OBJ_WEIGHT(obj);
   
   // If someone's carrying or wearing the highest container, increment their carry weight by the weight of the obj we just put in.
   if (tmp_obj->carried_by)
@@ -1856,21 +1855,28 @@ void obj_from_obj(struct obj_data * obj)
   }
   obj_from = obj->in_obj;
   REMOVE_FROM_LIST(obj, obj_from->contains, next_content);
+  
+  // Unready the holster it's in.
   if (GET_OBJ_TYPE(obj_from) == ITEM_HOLSTER && GET_OBJ_VAL(obj_from, 3))
     GET_OBJ_VAL(obj_from, 3) = 0;
-  /* Subtract weight from containers container */
   
+  // Remove weight from whatever's containing this (and its container, and its container...)
+  // temp->in_obj as the check is required here, we keep processing after this!
   for (temp = obj->in_obj; temp->in_obj; temp = temp->in_obj)
-    weight_change_object(temp, -GET_OBJ_WEIGHT(obj));
+    GET_OBJ_WEIGHT(temp) -= GET_OBJ_WEIGHT(obj);
+    
+  // Decks don't get their weight deducted from.
   if (GET_OBJ_TYPE(temp) != ITEM_CYBERDECK || GET_OBJ_TYPE(temp) != ITEM_DECK_ACCESSORY || GET_OBJ_TYPE(temp) != ITEM_CUSTOM_DECK)
-    weight_change_object(temp, -GET_OBJ_WEIGHT(obj));
+    GET_OBJ_WEIGHT(temp) -= GET_OBJ_WEIGHT(obj);
+  
+  obj->in_obj = NULL;
+  obj->next_content = NULL;
+  
+  // Recalculate the bearer's weight.
   if (temp->carried_by)
     IS_CARRYING_W(temp->carried_by) -= GET_OBJ_WEIGHT(obj);
   if (temp->worn_by)
     IS_CARRYING_W(temp->worn_by) -= GET_OBJ_WEIGHT(obj);
-  
-  obj->in_obj = NULL;
-  obj->next_content = NULL;
 }
 
 void extract_icon(struct matrix_icon * icon)

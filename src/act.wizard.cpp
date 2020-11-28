@@ -3607,7 +3607,8 @@ ACMD(do_set)
                { "helper",       LVL_ADMIN, PC, BINARY },
                { "blacklist",       LVL_VICEPRES, PC, BINARY },
                { "noidle", LVL_VICEPRES, PC, BINARY },
-               { "\n", 0, BOTH, MISC } // 70
+               { "tke", LVL_VICEPRES, PC, NUMBER }, //70
+               { "\n", 0, BOTH, MISC }
              };
 
   half_chop(argument, name, buf);
@@ -4122,9 +4123,13 @@ ACMD(do_set)
   case 68:
     SET_OR_REMOVE(PLR_FLAGS(vict), PLR_BLACKLIST);
     break;
-    case 69:
-      SET_OR_REMOVE(PLR_FLAGS(vict), PLR_NO_IDLE_OUT);
-      break;
+  case 69:
+    SET_OR_REMOVE(PLR_FLAGS(vict), PLR_NO_IDLE_OUT);
+    break;
+  case 70:
+    RANGE(0, 10000);
+    GET_TKE(vict) = value;
+    break;
   default:
     sprintf(buf, "Can't set that!");
     break;

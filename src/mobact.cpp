@@ -67,7 +67,7 @@ void mobact_change_firemode(struct char_data *ch) {
   int mode_count = 0;
   
   // Reload the weapon if possible. If not, swap weapons.
-  if (!weapon->contains && !attempt_reload(ch, WEAR_WIELD)) {
+  if (!weapon->contains && GET_WEAPON_MAX_AMMO(weapon) > 0 && !attempt_reload(ch, WEAR_WIELD)) {
     switch_weapons(ch, WEAR_WIELD);
   }
   
@@ -983,6 +983,11 @@ bool attempt_reload(struct char_data *mob, int pos)
   if (GET_OBJ_TYPE(gun) != ITEM_WEAPON) {
     act("$n can't reload weapon- $o is not a weapon.", TRUE, mob, gun, NULL, TO_ROLLS);
     return FALSE;
+  }
+  
+  // Unlimited ammo weapons don't need reloads.
+  if (GET_WEAPON_MAX_AMMO(gun) == -1) {
+    return TRUE;
   }
   
   // With the coming ammo rework, I can't be assed to give all NPCs blank mags in resets. -- LS

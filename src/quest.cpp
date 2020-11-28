@@ -680,7 +680,7 @@ SPECIAL(johnson)
   if (CMD_IS("say") || CMD_IS("'")) {
     if (str_str(argument, "quit"))
       comm = CMD_JOB_QUIT;
-    else if (str_str(argument, "collect") || str_str(argument, "complete") || str_str(argument, "done") || str_str(argument, "finish"))
+    else if (str_str(argument, "collect") || str_str(argument, "complete") || str_str(argument, "done") || str_str(argument, "finish") || str_str(argument, "pay"))
       comm = CMD_JOB_DONE;
     else if (str_str(argument, "work") || str_str(argument, "business") ||
              str_str(argument, "run") || str_str(argument, "shadowrun") ||
@@ -691,15 +691,26 @@ SPECIAL(johnson)
       comm = CMD_JOB_YES;
     else if (strstr(argument, "no"))
       comm = CMD_JOB_NO;
-    else
+    else {
+      sprintf(buf, "INFO: No Johnson keywords found in %s's speech: '%s'.", GET_CHAR_NAME(ch), argument);
+      mudlog(buf, ch, LOG_SYSLOG, TRUE);
       return FALSE;
+    }
     need_to_speak = TRUE;
-  } else if (CMD_IS("nod")) {
+  } else if (CMD_IS("nod") || CMD_IS("agree")) {
     comm = CMD_JOB_YES;
     need_to_act = TRUE;
-  } else if (CMD_IS("shake") && !*argument) {
+  } else if (CMD_IS("shake")) {
     comm = CMD_JOB_NO;
     need_to_act = TRUE;
+  } else if (CMD_IS("quests") || CMD_IS("jobs")) {
+    // Intercept the 'quests' and 'jobs' ease-of-use commands to give them a new one if they don't have one yet.
+    if (!GET_QUEST(ch)) {
+      do_say(ch, "I'm looking for a job.", 0, 0);
+      comm = CMD_JOB_START;
+    } else {
+      return FALSE;
+    }
   } else
     return FALSE;
   
@@ -725,6 +736,8 @@ SPECIAL(johnson)
   
   if (AFF_FLAGGED(johnson, AFF_GROUP) && ch->master) {
     send_to_char("I don't know how you ended up leading this Johnson around, but you can't take quests from your charmies.\r\n", ch);
+    sprintf(buf, "WARNING: %s somehow managed to start leading Johnson %s.", GET_CHAR_NAME(ch), GET_NAME(johnson));
+    mudlog(buf, ch, LOG_SYSLOG, TRUE);
     return FALSE;
   }
   
