@@ -1,4 +1,4 @@
-#70000
+#700000
 Name:	Parking lot of the Haven Apartments
 Desc:$
    A large metal gate sits at the entrance to the parking lot with two sets of
@@ -33,7 +33,7 @@ RoomType:	0
 	Desc:$
 A sturdy wooden door leading into the Haven Apartments complex. 
 ~
-	ToVnum:	70002
+	ToVnum:	700002
 	Flags:	1
 	Material:	wood
 	Barrier:	32
@@ -48,19 +48,19 @@ escape.
 	Flags:	2
 	Material:	metal
 	Barrier:	32
-	KeyVnum:	70088
+	KeyVnum:	700088
 [EXIT down]
 	Keywords:	garage door
 	Desc:$
 A set of large, metal sliding garage doors. 
 ~
-	ToVnum:	70001
+	ToVnum:	700001
 	Flags:	2
 	Material:	metal
 	Barrier:	32
-	KeyVnum:	70087
+	KeyVnum:	700087
 BREAK
-#70001
+#700001
 Name:	Garage of the Haven Apartments
 Desc:$
    If the doors leading in aren't any indication, then just looking around
@@ -93,24 +93,24 @@ RoomType:	6
 	Desc:$
 This entranceway is concealed and hidden away from the public. 
 ~
-	ToVnum:	70040
+	ToVnum:	700040
 	Flags:	2
 	Material:	metal
 	Barrier:	32
-	KeyVnum:	70089
+	KeyVnum:	700089
 	HiddenRating:	12
 [EXIT up]
 	Keywords:	garage door
 	Desc:$
 A set of large, metal sliding garage doors. 
 ~
-	ToVnum:	70000
+	ToVnum:	700000
 	Flags:	2
 	Material:	metal
 	Barrier:	32
-	KeyVnum:	70087
+	KeyVnum:	700087
 BREAK
-#70002
+#700002
 Name:	The entrance to the Haven Apartments
 Desc:$
    The entrance to this place is very simple and plain. The walls are white,
@@ -137,7 +137,7 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70003
+	ToVnum:	700003
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -147,13 +147,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door leading out into the parking lot. 
 ~
-	ToVnum:	70000
+	ToVnum:	700000
 	Flags:	1
 	Material:	wood
 	Barrier:	32
 	KeyVnum:	0
 BREAK
-#70003
+#700003
 Name:	The Foyer
 Desc:$
    As the door is closed behind you with a soft click, you enter a much more
@@ -186,13 +186,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden apartment entrance door. 
 ~
-	ToVnum:	70008
+	ToVnum:	700008
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70087
+	KeyVnum:	700087
 [EXIT east]
-	ToVnum:	70007
+	ToVnum:	700007
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -202,25 +202,25 @@ A sturdy wooden apartment entrance door.
 	Desc:$
 A strong wooden door labeled "Managers Office" sits to the southeast. 
 ~
-	ToVnum:	70094
+	ToVnum:	700094
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70086
+	KeyVnum:	700086
 [EXIT south]
-	ToVnum:	70002
+	ToVnum:	700002
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
-	ToVnum:	70004
+	ToVnum:	700004
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70004
+#700004
 Name:	A small cafe
 Desc:$
    The wonderful smell of real coffee fills the room and it has a very relaxed
@@ -248,25 +248,25 @@ RoomType:	8
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70005
+	ToVnum:	700005
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
-	ToVnum:	70003
+	ToVnum:	700003
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
-	ToVnum:	70006
+	ToVnum:	700006
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70005
+#700005
 Name:	Men's room
 Desc:$
    Pretty much your standard restroom, albeit it is kept very clean by the
@@ -292,13 +292,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT south]
-	ToVnum:	70004
+	ToVnum:	700004
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70006
+#700006
 Name:	Women's room
 Desc:$
    Pretty much your standard restroom, albeit it is kept very clean by the
@@ -324,13 +324,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70004
+	ToVnum:	700004
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70007
+#700007
 Name:	Dawn's Delights
 Desc:$
    There is stuff cluttered all over this store, but everything seems to be in
@@ -357,13 +357,13 @@ RoomType:	5
 	Background:	0
 	BackgroundType:	0
 [EXIT west]
-	ToVnum:	70003
+	ToVnum:	700003
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70008
+#700008
 Name:	Hallway
 Desc:$
    This long, carpeted hallway leads to the ground floor rooms. Like the rest
@@ -388,7 +388,7 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70009
+	ToVnum:	700009
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -398,13 +398,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden apartment entrance door. 
 ~
-	ToVnum:	70003
+	ToVnum:	700003
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70087
+	KeyVnum:	700087
 BREAK
-#70009
+#700009
 Name:	An intersection in the hallway
 Desc:$
    There is a split in the hallway here; one leading east and one west.
@@ -429,31 +429,31 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70018
+	ToVnum:	700018
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
-	ToVnum:	70014
+	ToVnum:	700014
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
-	ToVnum:	70008
+	ToVnum:	700008
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
-	ToVnum:	70010
+	ToVnum:	700010
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70010
+#700010
 Name:	The west wing
 Desc:$
    Coming down from the intersection brings you to three sturdy doors that
@@ -484,13 +484,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door labeled '1A'. 
 ~
-	ToVnum:	70011
+	ToVnum:	700011
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70000
+	KeyVnum:	700000
 [EXIT east]
-	ToVnum:	70009
+	ToVnum:	700009
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -500,23 +500,23 @@ A sturdy wooden door labeled '1A'.
 	Desc:$
 A sturdy wooden door labeled '3A'. 
 ~
-	ToVnum:	70013
+	ToVnum:	700013
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70067
+	KeyVnum:	700067
 [EXIT west]
 	Keywords:	door wooden
 	Desc:$
 A sturdy wooden door labeled '2A'. 
 ~
-	ToVnum:	70012
+	ToVnum:	700012
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70079
+	KeyVnum:	700079
 BREAK
-#70011
+#700011
 Name:	A comfy one room apartment
 Desc:$
    Simple yet comfortable, this room is just waiting to be lived in. Fresh
@@ -546,13 +546,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70010
+	ToVnum:	700010
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70000
+	KeyVnum:	700000
 BREAK
-#70012
+#700012
 Name:	A comfy one room apartment
 Desc:$
    Simple yet comfortable, this room is just waiting to be lived in. Fresh
@@ -582,13 +582,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70010
+	ToVnum:	700010
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70079
+	KeyVnum:	700079
 BREAK
-#70013
+#700013
 Name:	A comfy one room apartment
 Desc:$
    Simple yet comfortable, this room is just waiting to be lived in. Fresh
@@ -618,13 +618,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70010
+	ToVnum:	700010
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70067
+	KeyVnum:	700067
 BREAK
-#70014
+#700014
 Name:	The east wing
 Desc:$
    Coming down from the intersection brings you to three sturdy doors that
@@ -655,39 +655,39 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door labeled '4A'. 
 ~
-	ToVnum:	70015
+	ToVnum:	700015
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70003
+	KeyVnum:	700003
 [EXIT east]
 	Keywords:	door wooden
 	Desc:$
 A sturdy wooden door labeled '5A'. 
 ~
-	ToVnum:	70016
+	ToVnum:	700016
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70004
+	KeyVnum:	700004
 [EXIT south]
 	Keywords:	door wooden
 	Desc:$
 A sturdy wooden door labeled '6A'. 
 ~
-	ToVnum:	70017
+	ToVnum:	700017
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70080
+	KeyVnum:	700080
 [EXIT west]
-	ToVnum:	70009
+	ToVnum:	700009
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70015
+#700015
 Name:	A comfy one room apartment
 Desc:$
    Simple yet comfortable, this room is just waiting to be lived in. Fresh
@@ -717,13 +717,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70014
+	ToVnum:	700014
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70003
+	KeyVnum:	700003
 BREAK
-#70016
+#700016
 Name:	A comfy one room apartment
 Desc:$
    Simple yet comfortable, this room is just waiting to be lived in. Fresh
@@ -753,13 +753,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70014
+	ToVnum:	700014
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70004
+	KeyVnum:	700004
 BREAK
-#70017
+#700017
 Name:	A comfy one room apartment
 Desc:$
    Simple yet comfortable, this room is just waiting to be lived in. Fresh
@@ -789,13 +789,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70014
+	ToVnum:	700014
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70080
+	KeyVnum:	700080
 BREAK
-#70018
+#700018
 Name:	The north wing
 Desc:$
    Now this part of the building is a little bigger than the others with room
@@ -825,33 +825,33 @@ RoomType:	9
 	Desc:$
 A steel reinforced security door. 
 ~
-	ToVnum:	70023
+	ToVnum:	700023
 	Flags:	2
 	Material:	metal
 	Barrier:	32
-	KeyVnum:	70022
+	KeyVnum:	700022
 [EXIT northeast]
 	Keywords:	door wooden
 	Desc:$
 A sturdy wooden door labeled '8A'. 
 ~
-	ToVnum:	70020
+	ToVnum:	700020
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70007
+	KeyVnum:	700007
 [EXIT southeast]
 	Keywords:	door wooden
 	Desc:$
 A sturdy wooden door labeled '10A'. 
 ~
-	ToVnum:	70022
+	ToVnum:	700022
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70082
+	KeyVnum:	700082
 [EXIT south]
-	ToVnum:	70009
+	ToVnum:	700009
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -861,23 +861,23 @@ A sturdy wooden door labeled '10A'.
 	Desc:$
 A sturdy wooden door labeled '9A' 
 ~
-	ToVnum:	70021
+	ToVnum:	700021
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70081
+	KeyVnum:	700081
 [EXIT northwest]
 	Keywords:	door wooden
 	Desc:$
 A sturdy wooden door labeled '7A'. 
 ~
-	ToVnum:	70019
+	ToVnum:	700019
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70006
+	KeyVnum:	700006
 BREAK
-#70019
+#700019
 Name:	A comfy one room apartment
 Desc:$
    Simple yet comfortable, this room is just waiting to be lived in. Fresh
@@ -907,13 +907,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70018
+	ToVnum:	700018
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70006
+	KeyVnum:	700006
 BREAK
-#70020
+#700020
 Name:	A comfy one room apartment
 Desc:$
    Simple yet comfortable, this room is just waiting to be lived in. Fresh
@@ -943,13 +943,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70018
+	ToVnum:	700018
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70007
+	KeyVnum:	700007
 BREAK
-#70021
+#700021
 Name:	A comfy one room apartment
 Desc:$
    Simple yet comfortable, this room is just waiting to be lived in. Fresh
@@ -979,13 +979,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70018
+	ToVnum:	700018
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70081
+	KeyVnum:	700081
 BREAK
-#70022
+#700022
 Name:	A comfy one room apartment
 Desc:$
    Simple yet comfortable, this room is just waiting to be lived in. Fresh
@@ -1015,13 +1015,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70018
+	ToVnum:	700018
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70082
+	KeyVnum:	700082
 BREAK
-#70023
+#700023
 Name:	A fire escape
 Desc:$
    Nothing more than a regular set of metal stairs leading downwards to the
@@ -1049,19 +1049,19 @@ RoomType:	9
 	Desc:$
 A steel reinforced security door. 
 ~
-	ToVnum:	70018
+	ToVnum:	700018
 	Flags:	2
 	Material:	metal
 	Barrier:	32
-	KeyVnum:	70022
+	KeyVnum:	700022
 [EXIT up]
-	ToVnum:	70026
+	ToVnum:	700026
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70024
+#700024
 Name:	An elevator
 Desc:$
    This is just a typical elevator. Reflective doors, walls, and ceiling,
@@ -1085,7 +1085,7 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 BREAK
-#70025
+#700025
 Name:	The first floor landing
 Desc:$
    Stepping out of the elevator onto the first floor reveals that it looks
@@ -1116,20 +1116,20 @@ RoomType:	9
 	Desc:$
 A strong glass window leads out onto a fire escape. 
 ~
-	ToVnum:	70026
+	ToVnum:	700026
 	Flags:	2
 	Material:	glass
 	Barrier:	32
-	KeyVnum:	70022
+	KeyVnum:	700022
 	HiddenRating:	4
 [EXIT south]
-	ToVnum:	70027
+	ToVnum:	700027
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70026
+#700026
 Name:	A fire escape
 Desc:$
    Nothing more than a regular set of metal stairs leading downwards to the
@@ -1157,25 +1157,25 @@ RoomType:	9
 	Desc:$
 A strong glass window. 
 ~
-	ToVnum:	70025
+	ToVnum:	700025
 	Flags:	2
 	Material:	glass
 	Barrier:	32
-	KeyVnum:	70022
+	KeyVnum:	700022
 [EXIT up]
-	ToVnum:	70082
+	ToVnum:	700082
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
-	ToVnum:	70023
+	ToVnum:	700023
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70027
+#700027
 Name:	A long hallway
 Desc:$
    Long and wide, it is a bit of a stroll before coming to two solid doors to
@@ -1200,7 +1200,7 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70025
+	ToVnum:	700025
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -1210,13 +1210,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door labeled '2B'. 
 ~
-	ToVnum:	70029
+	ToVnum:	700029
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70011
+	KeyVnum:	700011
 [EXIT south]
-	ToVnum:	70030
+	ToVnum:	700030
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -1226,13 +1226,13 @@ A sturdy wooden door labeled '2B'.
 	Desc:$
 A sturdy wooden door labeled '1B'. 
 ~
-	ToVnum:	70028
+	ToVnum:	700028
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70068
+	KeyVnum:	700068
 BREAK
-#70028
+#700028
 Name:	A nice living room
 Desc:$
    This is a nice comfy spot for lounging about and relaxing. There is plenty
@@ -1263,19 +1263,19 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70027
+	ToVnum:	700027
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70068
+	KeyVnum:	700068
 [EXIT west]
-	ToVnum:	70062
+	ToVnum:	700062
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70029
+#700029
 Name:	A nice living room
 Desc:$
    This is a nice comfy spot for lounging about and relaxing. There is plenty
@@ -1302,7 +1302,7 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT east]
-	ToVnum:	70063
+	ToVnum:	700063
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -1312,13 +1312,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70027
+	ToVnum:	700027
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70011
+	KeyVnum:	700011
 BREAK
-#70030
+#700030
 Name:	More hallway
 Desc:$
    Two sturdy doors that look like the ones back down the hallway sit here,
@@ -1343,7 +1343,7 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70027
+	ToVnum:	700027
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -1353,13 +1353,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door labeled '4B'. 
 ~
-	ToVnum:	70032
+	ToVnum:	700032
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70013
+	KeyVnum:	700013
 [EXIT south]
-	ToVnum:	70033
+	ToVnum:	700033
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -1369,13 +1369,13 @@ A sturdy wooden door labeled '4B'.
 	Desc:$
 A sturdy wooden door labeled '3B'. 
 ~
-	ToVnum:	70031
+	ToVnum:	700031
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70012
+	KeyVnum:	700012
 BREAK
-#70031
+#700031
 Name:	A nice living room
 Desc:$
    This is a nice comfy spot for lounging about and relaxing. There is plenty
@@ -1406,23 +1406,23 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door lies to the east. 
 ~
-	ToVnum:	70030
+	ToVnum:	700030
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70012
+	KeyVnum:	700012
 [EXIT west]
 	Keywords:	door wooden
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70064
+	ToVnum:	700064
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70012
+	KeyVnum:	700012
 BREAK
-#70032
+#700032
 Name:	A nice living room
 Desc:$
    This is a nice comfy spot for lounging about and relaxing. There is plenty
@@ -1449,7 +1449,7 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT east]
-	ToVnum:	70065
+	ToVnum:	700065
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -1459,13 +1459,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70030
+	ToVnum:	700030
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70013
+	KeyVnum:	700013
 BREAK
-#70033
+#700033
 Name:	South end of the first floor
 Desc:$
    At the end of this hallway is a final room door and fire escape. A large
@@ -1491,7 +1491,7 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70030
+	ToVnum:	700030
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -1501,24 +1501,24 @@ RoomType:	9
 	Desc:$
 A strong glass window leads out onto a fire escape. 
 ~
-	ToVnum:	70035
+	ToVnum:	700035
 	Flags:	2
 	Material:	glass
 	Barrier:	32
-	KeyVnum:	70022
+	KeyVnum:	700022
 	HiddenRating:	4
 [EXIT west]
 	Keywords:	door wooden
 	Desc:$
 A sturdy wooden door labeled '5B.' 
 ~
-	ToVnum:	70034
+	ToVnum:	700034
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70014
+	KeyVnum:	700014
 BREAK
-#70034
+#700034
 Name:	A nice living room
 Desc:$
    This is a nice comfy spot for lounging about and relaxing. There is plenty
@@ -1549,19 +1549,19 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70033
+	ToVnum:	700033
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70014
+	KeyVnum:	700014
 [EXIT west]
-	ToVnum:	70066
+	ToVnum:	700066
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70035
+#700035
 Name:	A fire escape
 Desc:$
    Nothing more than a regular set of metal stairs leading downwards to the
@@ -1589,13 +1589,13 @@ RoomType:	0
 	Desc:$
 A strong glass window. 
 ~
-	ToVnum:	70033
+	ToVnum:	700033
 	Flags:	2
 	Material:	glass
 	Barrier:	32
-	KeyVnum:	70022
+	KeyVnum:	700022
 [EXIT up]
-	ToVnum:	70093
+	ToVnum:	700093
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -1604,13 +1604,13 @@ A strong glass window.
 	Desc:$
 A ladder drops off down into the parking lot below. 
 ~
-	ToVnum:	70000
+	ToVnum:	700000
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70036
+#700036
 Name:	An enviromentally sealed rooftop
 Desc:$
    As the elevator opens, there is a sight that you wouldn't have thought to
@@ -1642,20 +1642,20 @@ RoomType:	9
 	Desc:$
 A strong glass window leads out onto a fire escape. 
 ~
-	ToVnum:	70037
+	ToVnum:	700037
 	Flags:	2
 	Material:	glass
 	Barrier:	32
-	KeyVnum:	70022
+	KeyVnum:	700022
 	HiddenRating:	4
 [EXIT south]
-	ToVnum:	70038
+	ToVnum:	700038
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70037
+#700037
 Name:	A fire escape
 Desc:$
    Nothing more than a regular set of metal stairs leading downwards to the
@@ -1683,19 +1683,19 @@ RoomType:	9
 	Desc:$
 A strong glass window. 
 ~
-	ToVnum:	70036
+	ToVnum:	700036
 	Flags:	2
 	Material:	glass
 	Barrier:	32
-	KeyVnum:	70022
+	KeyVnum:	700022
 [EXIT down]
-	ToVnum:	70082
+	ToVnum:	700082
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70038
+#700038
 Name:	The sauna
 Desc:$
    Once you are done swimming and sitting in the hottub, you can come into the
@@ -1722,7 +1722,7 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70036
+	ToVnum:	700036
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -1732,14 +1732,14 @@ RoomType:	9
 	Desc:$
 A strong glass window leads out onto a fire escape. 
 ~
-	ToVnum:	70039
+	ToVnum:	700039
 	Flags:	2
 	Material:	glass
 	Barrier:	32
-	KeyVnum:	70022
+	KeyVnum:	700022
 	HiddenRating:	4
 BREAK
-#70039
+#700039
 Name:	A fire escape
 Desc:$
    Nothing more than a regular set of metal stairs leading downwards to the
@@ -1767,19 +1767,19 @@ RoomType:	0
 	Desc:$
 A strong glass window. 
 ~
-	ToVnum:	70038
+	ToVnum:	700038
 	Flags:	2
 	Material:	glass
 	Barrier:	32
-	KeyVnum:	70022
+	KeyVnum:	700022
 [EXIT down]
-	ToVnum:	70093
+	ToVnum:	700093
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70040
+#700040
 Name:	The security room
 Desc:$
    This is the room that sees everything that goes on in or around the
@@ -1810,13 +1810,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70043
+	ToVnum:	700043
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT northeast]
-	ToVnum:	70042
+	ToVnum:	700042
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -1826,19 +1826,19 @@ RoomType:	9
 	Desc:$
 This entranceway is concealed and hidden away from the public. 
 ~
-	ToVnum:	70001
+	ToVnum:	700001
 	Flags:	2
 	Material:	metal
 	Barrier:	32
-	KeyVnum:	70089
+	KeyVnum:	700089
 [EXIT northwest]
-	ToVnum:	70041
+	ToVnum:	700041
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70041
+#700041
 Name:	A large recreation room
 Desc:$
    Peace and tranquility? Not in this room. It's a goods thing that the
@@ -1868,13 +1868,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT east]
-	ToVnum:	70043
+	ToVnum:	700043
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT southeast]
-	ToVnum:	70040
+	ToVnum:	700040
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -1884,13 +1884,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70067
+	ToVnum:	700067
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70018
+	KeyVnum:	700018
 BREAK
-#70042
+#700042
 Name:	The library and reading room
 Desc:$
    Now this room is a bookworms paradise. There are many shelves of books in
@@ -1925,25 +1925,25 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70072
+	ToVnum:	700072
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70017
+	KeyVnum:	700017
 [EXIT southwest]
-	ToVnum:	70040
+	ToVnum:	700040
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
-	ToVnum:	70043
+	ToVnum:	700043
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70043
+#700043
 Name:	The meditation room
 Desc:$
    This room radiates peace and tranquility, and this is a great place to just
@@ -1973,7 +1973,7 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70046
+	ToVnum:	700046
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -1983,25 +1983,25 @@ RoomType:	9
 	Desc:$
 A very sturdy, reinforced wooden door. 
 ~
-	ToVnum:	70045
+	ToVnum:	700045
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70088
+	KeyVnum:	700088
 [EXIT east]
-	ToVnum:	70042
+	ToVnum:	700042
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
-	ToVnum:	70040
+	ToVnum:	700040
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
-	ToVnum:	70041
+	ToVnum:	700041
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -2011,13 +2011,13 @@ A very sturdy, reinforced wooden door.
 	Desc:$
 A very sturdy, reinforced steel door. 
 ~
-	ToVnum:	70044
+	ToVnum:	700044
 	Flags:	2
 	Material:	metal
 	Barrier:	32
-	KeyVnum:	70088
+	KeyVnum:	700088
 BREAK
-#70044
+#700044
 Name:	The keymaster's room
 Desc:$
    This room is very plain but has everything in here that the two men in here
@@ -2046,13 +2046,13 @@ RoomType:	9
 	Desc:$
 A very sturdy, reinforced steel door. 
 ~
-	ToVnum:	70043
+	ToVnum:	700043
 	Flags:	2
 	Material:	metal
 	Barrier:	32
-	KeyVnum:	70088
+	KeyVnum:	700088
 BREAK
-#70045
+#700045
 Name:	The armoury
 Desc:$
    The doors open with a small hiss, and upon entering, there is wal after
@@ -2084,13 +2084,13 @@ RoomType:	9
 	Desc:$
 A very sturdy, reinforced wooden door. 
 ~
-	ToVnum:	70043
+	ToVnum:	700043
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70088
+	KeyVnum:	700088
 BREAK
-#70046
+#700046
 Name:	A short hallway
 Desc:$
    This small hallway ends into a room with three doors. They both seem to
@@ -2117,23 +2117,23 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70047
+	ToVnum:	700047
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70021
+	KeyVnum:	700021
 [EXIT east]
 	Keywords:	door wooden
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70056
+	ToVnum:	700056
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70019
+	KeyVnum:	700019
 [EXIT south]
-	ToVnum:	70043
+	ToVnum:	700043
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -2143,13 +2143,13 @@ A sturdy wooden door.
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70057
+	ToVnum:	700057
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70020
+	KeyVnum:	700020
 BREAK
-#70047
+#700047
 Name:	Personal living quarters entranceway
 Desc:$
    Entering the living quarters is really the first look at any color to the
@@ -2175,7 +2175,7 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70058
+	ToVnum:	700058
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -2185,13 +2185,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70046
+	ToVnum:	700046
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70021
+	KeyVnum:	700021
 BREAK
-#70048
+#700048
 Name:	A private workshop
 Desc:$
    Most of the room seems to be unfinished, but it looks as if this room was
@@ -2217,13 +2217,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT southeast]
-	ToVnum:	70058
+	ToVnum:	700058
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70049
+#700049
 Name:	A massive bathroom
 Desc:$
    Still following the colors of the rest of the rooms except for the
@@ -2249,13 +2249,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT southwest]
-	ToVnum:	70058
+	ToVnum:	700058
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70050
+#700050
 Name:	A spacious living room
 Desc:$
    The colors of the entranceway flow into the living room giving it a
@@ -2281,31 +2281,31 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70051
+	ToVnum:	700051
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
-	ToVnum:	70057
+	ToVnum:	700057
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
-	ToVnum:	70052
+	ToVnum:	700052
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
-	ToVnum:	70060
+	ToVnum:	700060
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70051
+#700051
 Name:	A private workshop
 Desc:$
    Most of the room seems to be unfinished, but it looks as if this room was
@@ -2331,13 +2331,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT south]
-	ToVnum:	70050
+	ToVnum:	700050
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70052
+#700052
 Name:	A massive bathroom
 Desc:$
    Still following the colors of the rest of the rooms except for the
@@ -2363,13 +2363,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70050
+	ToVnum:	700050
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70053
+#700053
 Name:	A spacious living room
 Desc:$
    The colors of the entranceway flow into the living room giving it a
@@ -2395,31 +2395,31 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70054
+	ToVnum:	700054
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
-	ToVnum:	70061
+	ToVnum:	700061
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
-	ToVnum:	70055
+	ToVnum:	700055
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
-	ToVnum:	70056
+	ToVnum:	700056
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70054
+#700054
 Name:	A private workshop
 Desc:$
    Most of the room seems to be unfinished, but it looks as if this room was
@@ -2445,13 +2445,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT south]
-	ToVnum:	70053
+	ToVnum:	700053
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70055
+#700055
 Name:	A massive bathroom
 Desc:$
    Still following the colors of the rest of the rooms except for the
@@ -2477,13 +2477,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70053
+	ToVnum:	700053
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70056
+#700056
 Name:	Personal living quarters entranceway
 Desc:$
    Entering the living quarters is really the first look at any color to the
@@ -2509,7 +2509,7 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT east]
-	ToVnum:	70053
+	ToVnum:	700053
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -2519,13 +2519,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70046
+	ToVnum:	700046
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70019
+	KeyVnum:	700019
 BREAK
-#70057
+#700057
 Name:	Personal living quarters entranceway
 Desc:$
    Entering the living quarters is really the first look at any color to the
@@ -2555,19 +2555,19 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70046
+	ToVnum:	700046
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70020
+	KeyVnum:	700020
 [EXIT west]
-	ToVnum:	70050
+	ToVnum:	700050
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70058
+#700058
 Name:	A spacious living room
 Desc:$
    The colors of the entranceway flow into the living room giving it a
@@ -2593,31 +2593,31 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70059
+	ToVnum:	700059
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT northeast]
-	ToVnum:	70049
+	ToVnum:	700049
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
-	ToVnum:	70047
+	ToVnum:	700047
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT northwest]
-	ToVnum:	70048
+	ToVnum:	700048
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70059
+#700059
 Name:	A large bedroom
 Desc:$
    Going through the doorway across from the living room door goes into a
@@ -2643,13 +2643,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT south]
-	ToVnum:	70058
+	ToVnum:	700058
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70060
+#700060
 Name:	A large bedroom
 Desc:$
    Going through the doorway across from the living room door goes into a
@@ -2675,13 +2675,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT east]
-	ToVnum:	70050
+	ToVnum:	700050
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70061
+#700061
 Name:	A large bedroom
 Desc:$
    Going through the doorway across from the living room door goes into a
@@ -2707,13 +2707,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT west]
-	ToVnum:	70053
+	ToVnum:	700053
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70062
+#700062
 Name:	A large bedroom
 Desc:$
    Going through the doorway across from the living room door goes into a
@@ -2739,13 +2739,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT east]
-	ToVnum:	70028
+	ToVnum:	700028
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70063
+#700063
 Name:	A large bedroom
 Desc:$
    Going through the doorway across from the living room door goes into a
@@ -2771,13 +2771,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT west]
-	ToVnum:	70029
+	ToVnum:	700029
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70064
+#700064
 Name:	A large bedroom
 Desc:$
    Going through the doorway across from the living room door goes into a
@@ -2807,13 +2807,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door stands to the east. 
 ~
-	ToVnum:	70031
+	ToVnum:	700031
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70012
+	KeyVnum:	700012
 BREAK
-#70065
+#700065
 Name:	A large bedroom
 Desc:$
    Going through the doorway across from the living room door goes into a
@@ -2839,13 +2839,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT west]
-	ToVnum:	70032
+	ToVnum:	700032
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70066
+#700066
 Name:	A large bedroom
 Desc:$
    Going through the doorway across from the living room door goes into a
@@ -2871,13 +2871,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT east]
-	ToVnum:	70034
+	ToVnum:	700034
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70067
+#700067
 Name:	Personal living quarters entranceway
 Desc:$
    Entering the living quarters is really the first look at any color to the
@@ -2907,19 +2907,19 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70041
+	ToVnum:	700041
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70018
+	KeyVnum:	700018
 [EXIT west]
-	ToVnum:	70068
+	ToVnum:	700068
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70068
+#700068
 Name:	A spacious living room
 Desc:$
    The clolors of the entranceway flow into the living room giving it a
@@ -2945,31 +2945,31 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70069
+	ToVnum:	700069
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
-	ToVnum:	70067
+	ToVnum:	700067
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
-	ToVnum:	70071
+	ToVnum:	700071
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
-	ToVnum:	70070
+	ToVnum:	700070
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70069
+#700069
 Name:	A private workshop
 Desc:$
    Most of the room seems to be unfinished, but it looks as if this room was
@@ -2995,13 +2995,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT south]
-	ToVnum:	70068
+	ToVnum:	700068
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70070
+#700070
 Name:	A large bedroom
 Desc:$
    Going through the doorway across from the living room door goes into a
@@ -3027,13 +3027,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT east]
-	ToVnum:	70068
+	ToVnum:	700068
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70071
+#700071
 Name:	A massive bathroom
 Desc:$
    Still following the colors of the rest of the rooms except for the
@@ -3059,13 +3059,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70068
+	ToVnum:	700068
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70072
+#700072
 Name:	Personal living quarters entranceway
 Desc:$
    Entering the living quarters is really the first look at any color to the
@@ -3091,7 +3091,7 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT east]
-	ToVnum:	70073
+	ToVnum:	700073
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -3101,13 +3101,13 @@ RoomType:	9
 	Desc:$
 A sturdy wooden door. 
 ~
-	ToVnum:	70042
+	ToVnum:	700042
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70017
+	KeyVnum:	700017
 BREAK
-#70073
+#700073
 Name:	A spacious living room
 Desc:$
    The clolors of the entranceway flow into the living room giving it a
@@ -3133,31 +3133,31 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70074
+	ToVnum:	700074
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
-	ToVnum:	70075
+	ToVnum:	700075
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
-	ToVnum:	70076
+	ToVnum:	700076
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT west]
-	ToVnum:	70072
+	ToVnum:	700072
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70074
+#700074
 Name:	A private workshop
 Desc:$
    Most of the room seems to be unfinished, but it looks as if this room was
@@ -3183,13 +3183,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT south]
-	ToVnum:	70073
+	ToVnum:	700073
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70075
+#700075
 Name:	A large bedroom
 Desc:$
    Going through the doorway across from the living room door goes into a
@@ -3215,13 +3215,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT west]
-	ToVnum:	70073
+	ToVnum:	700073
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70076
+#700076
 Name:	A massive bathroom
 Desc:$
    Still following the colors of the rest of the rooms except for the
@@ -3247,13 +3247,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70073
+	ToVnum:	700073
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70077
+#700077
 Name:	Second floor landing
 Desc:$
    Stepping out of the elevator onto the second floor reveals that it looks
@@ -3279,19 +3279,19 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70081
+	ToVnum:	700081
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT south]
-	ToVnum:	70078
+	ToVnum:	700078
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70078
+#700078
 Name:	An intersection in the hallway
 Desc:$
    There is a split in the hallway here; one leading east and one west.
@@ -3316,13 +3316,13 @@ RoomType:	9
 	Background:	0
 	BackgroundType:	0
 [EXIT north]
-	ToVnum:	70077
+	ToVnum:	700077
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT east]
-	ToVnum:	70080
+	ToVnum:	700080
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -3332,19 +3332,19 @@ RoomType:	9
 	Desc:$
 A strong glass window leads out onto a fire escape. 
 ~
-	ToVnum:	70093
+	ToVnum:	700093
 	Flags:	2
 	Material:	glass
 	Barrier:	32
-	KeyVnum:	70022
+	KeyVnum:	700022
 [EXIT west]
-	ToVnum:	70079
+	ToVnum:	700079
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70079
+#700079
 Name:	The West Wing
 Desc:$
    Coming down from the intersection brings you to three sturdy doors that
@@ -3375,13 +3375,13 @@ RoomType:	9
 	Desc:$
 A strong wooden door marked '1C' stands to the north. 
 ~
-	ToVnum:	70087
+	ToVnum:	700087
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70069
+	KeyVnum:	700069
 [EXIT east]
-	ToVnum:	70078
+	ToVnum:	700078
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -3391,23 +3391,23 @@ A strong wooden door marked '1C' stands to the north.
 	Desc:$
 A strong wooden door marked '3C' stands to the south. 
 ~
-	ToVnum:	70089
+	ToVnum:	700089
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70071
+	KeyVnum:	700071
 [EXIT west]
 	Keywords:	door wooden strong
 	Desc:$
 A strong wooden door marked '2C' stands to the west. 
 ~
-	ToVnum:	70088
+	ToVnum:	700088
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70070
+	KeyVnum:	700070
 BREAK
-#70080
+#700080
 Name:	The East Wing
 Desc:$
    Coming down from the intersection brings you to three sturdy doors that
@@ -3438,39 +3438,39 @@ RoomType:	9
 	Desc:$
 A strong wooden door marked '4C' stands to the north. 
 ~
-	ToVnum:	70090
+	ToVnum:	700090
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70072
+	KeyVnum:	700072
 [EXIT east]
 	Keywords:	door wooden strong
 	Desc:$
 A strong wooden door marked '5C' stands to the east. 
 ~
-	ToVnum:	70091
+	ToVnum:	700091
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70073
+	KeyVnum:	700073
 [EXIT south]
 	Keywords:	door wooden strong
 	Desc:$
 A strong wooden door marked '6C' stands to the south. 
 ~
-	ToVnum:	70092
+	ToVnum:	700092
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70074
+	KeyVnum:	700074
 [EXIT west]
-	ToVnum:	70078
+	ToVnum:	700078
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70081
+#700081
 Name:	The North Wing
 Desc:$
    Now this part of the building is a little bigger than the others with room
@@ -3500,34 +3500,34 @@ RoomType:	9
 	Desc:$
 A strong glass window leads out onto a fire escape. 
 ~
-	ToVnum:	70082
+	ToVnum:	700082
 	Flags:	2
 	Material:	glass
 	Barrier:	32
-	KeyVnum:	70022
+	KeyVnum:	700022
 	HiddenRating:	8
 [EXIT northeast]
 	Keywords:	door wooden strong
 	Desc:$
 A strong wooden door marked '8C' stands to the northeast. 
 ~
-	ToVnum:	70084
+	ToVnum:	700084
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70076
+	KeyVnum:	700076
 [EXIT southeast]
 	Keywords:	door wooden strong
 	Desc:$
 A strong wooden door marked '9C' stands to the southeast. 
 ~
-	ToVnum:	70085
+	ToVnum:	700085
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70077
+	KeyVnum:	700077
 [EXIT south]
-	ToVnum:	70077
+	ToVnum:	700077
 	Flags:	0
 	Material:	brick
 	Barrier:	4
@@ -3537,23 +3537,23 @@ A strong wooden door marked '9C' stands to the southeast.
 	Desc:$
 A strong wooden door marked '10C' stands to the southwest. 
 ~
-	ToVnum:	70086
+	ToVnum:	700086
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70078
+	KeyVnum:	700078
 [EXIT northwest]
 	Keywords:	door wooden strong
 	Desc:$
 A strong wooden door marked '7C' stands to the northwest. 
 ~
-	ToVnum:	70083
+	ToVnum:	700083
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70075
+	KeyVnum:	700075
 BREAK
-#70082
+#700082
 Name:	A fire escape
 Desc:$
    Nothing more than a regular set of metal stairs leading downwards to the
@@ -3581,25 +3581,25 @@ RoomType:	0
 	Desc:$
 A strong glass window. 
 ~
-	ToVnum:	70081
+	ToVnum:	700081
 	Flags:	2
 	Material:	glass
 	Barrier:	32
-	KeyVnum:	70022
+	KeyVnum:	700022
 [EXIT up]
-	ToVnum:	70037
+	ToVnum:	700037
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
-	ToVnum:	70026
+	ToVnum:	700026
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70083
+#700083
 Name:	A comfy one room apartment
 Desc:$
    Simple yet comfortable, this room is just waiting to be lived in. Fresh
@@ -3629,13 +3629,13 @@ RoomType:	10
 	Desc:$
 A strong wooden door leads out into the hallway. 
 ~
-	ToVnum:	70081
+	ToVnum:	700081
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70075
+	KeyVnum:	700075
 BREAK
-#70084
+#700084
 Name:	A comfy one room apartment
 Desc:$
    Simple yet comfortable, this room is just waiting to be lived in. Fresh
@@ -3665,13 +3665,13 @@ RoomType:	10
 	Desc:$
 A strong wooden door leads out into the hallway. 
 ~
-	ToVnum:	70081
+	ToVnum:	700081
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70076
+	KeyVnum:	700076
 BREAK
-#70085
+#700085
 Name:	A comfy one room apartment
 Desc:$
    Simple yet comfortable, this room is just waiting to be lived in. Fresh
@@ -3701,13 +3701,13 @@ RoomType:	10
 	Desc:$
 A strong wooden door leads out into the hallway. 
 ~
-	ToVnum:	70081
+	ToVnum:	700081
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70077
+	KeyVnum:	700077
 BREAK
-#70086
+#700086
 Name:	A comfy one room apartment
 Desc:$
    Simple yet comfortable, this room is just waiting to be lived in. Fresh
@@ -3737,13 +3737,13 @@ RoomType:	10
 	Desc:$
 A strong wooden door leads out into the hallway. 
 ~
-	ToVnum:	70081
+	ToVnum:	700081
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70078
+	KeyVnum:	700078
 BREAK
-#70087
+#700087
 Name:	A comfy one room apartment
 Desc:$
    Simple yet comfortable, this room is just waiting to be lived in. Fresh
@@ -3773,13 +3773,13 @@ RoomType:	10
 	Desc:$
 A strong wooden door leads out into the hallway. 
 ~
-	ToVnum:	70079
+	ToVnum:	700079
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70069
+	KeyVnum:	700069
 BREAK
-#70088
+#700088
 Name:	A comfy one room apartment
 Desc:$
    Simple yet comfortable, this room is just waiting to be lived in. Fresh
@@ -3809,13 +3809,13 @@ RoomType:	10
 	Desc:$
 A strong wooden door leads out into the hallway. 
 ~
-	ToVnum:	70079
+	ToVnum:	700079
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70070
+	KeyVnum:	700070
 BREAK
-#70089
+#700089
 Name:	A comfy one room apartment
 Desc:$
    Simple yet comfortable, this room is just waiting to be lived in. Fresh
@@ -3845,13 +3845,13 @@ RoomType:	10
 	Desc:$
 A strong wooden door leads out into the hallway. 
 ~
-	ToVnum:	70079
+	ToVnum:	700079
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70071
+	KeyVnum:	700071
 BREAK
-#70090
+#700090
 Name:	A comfy one room apartment
 Desc:$
    Simple yet comfortable, this room is just waiting to be lived in. Fresh
@@ -3881,13 +3881,13 @@ RoomType:	10
 	Desc:$
 A strong wooden door leads out into the hallway. 
 ~
-	ToVnum:	70080
+	ToVnum:	700080
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70072
+	KeyVnum:	700072
 BREAK
-#70091
+#700091
 Name:	A comfy one room apartment
 Desc:$
    Simple yet comfortable, this room is just waiting to be lived in. Fresh
@@ -3917,13 +3917,13 @@ RoomType:	10
 	Desc:$
 A strong wooden door leads out into the hallway. 
 ~
-	ToVnum:	70080
+	ToVnum:	700080
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70073
+	KeyVnum:	700073
 BREAK
-#70092
+#700092
 Name:	A comfy one room apartment
 Desc:$
    Simple yet comfortable, this room is just waiting to be lived in. Fresh
@@ -3953,13 +3953,13 @@ RoomType:	10
 	Desc:$
 A strong wooden door leads out into the hallway. 
 ~
-	ToVnum:	70080
+	ToVnum:	700080
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70074
+	KeyVnum:	700074
 BREAK
-#70093
+#700093
 Name:	A fire escape
 Desc:$
    Nothing more than a regular set of metal stairs leading downwards to the
@@ -3987,25 +3987,25 @@ RoomType:	0
 	Desc:$
 A strong glass window. 
 ~
-	ToVnum:	70078
+	ToVnum:	700078
 	Flags:	2
 	Material:	glass
 	Barrier:	32
-	KeyVnum:	70022
+	KeyVnum:	700022
 [EXIT up]
-	ToVnum:	70039
+	ToVnum:	700039
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 [EXIT down]
-	ToVnum:	70035
+	ToVnum:	700035
 	Flags:	0
 	Material:	brick
 	Barrier:	4
 	KeyVnum:	0
 BREAK
-#70094
+#700094
 Name:	A large office
 Desc:$
    This room serves as the main office for Haven. And from the look of things
@@ -4036,13 +4036,13 @@ RoomType:	9
 	Desc:$
 A strong wooden door sits to the northwest. 
 ~
-	ToVnum:	70003
+	ToVnum:	700003
 	Flags:	2
 	Material:	wood
 	Barrier:	32
-	KeyVnum:	70086
+	KeyVnum:	700086
 BREAK
-#70099
+#700099
 Name:	The gutted husk of Haven Apartments
 Desc:$
    A large metal gate draped with ^Yyellow^N police '^YCAUTION ^L- ^YDO NOT PASS^N' tape
