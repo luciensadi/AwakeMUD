@@ -122,7 +122,7 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
       return;
     }
 
-    int old_carry_w = IS_CARRYING_W(ch);
+    float old_carry_w = IS_CARRYING_W(ch);
     int old_carry_n = IS_CARRYING_N(ch);
     if (obj->in_obj)
       obj_from_obj(obj);
@@ -130,7 +130,7 @@ void perform_put(struct char_data *ch, struct obj_data *obj, struct obj_data *co
       obj_from_char(obj);
     obj_to_obj(obj, cont);
     if (old_carry_w != IS_CARRYING_W(ch) || old_carry_n != IS_CARRYING_N(ch) - 1) {
-      sprintf(buf, "SYSERR: Weight/number calculations are off. Carry weight delta is %d, carry number delta is %d. Auto-fixing.",
+      sprintf(buf, "SYSERR: Weight/number calculations are off. Carry weight delta is %f, carry number delta is %d. Auto-fixing.",
               IS_CARRYING_W(ch) - old_carry_w,
               IS_CARRYING_N(ch) - old_carry_n);
       mudlog(buf, ch, LOG_SYSLOG, TRUE);
