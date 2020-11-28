@@ -1,0 +1,61 @@
+#70203
+Name:	Fellini's - Public Access
+Keywords:	satyricon fellini's public access
+Description:$
+The walls are painted black, with various images of death painted in red on
+the walls. The bartender is an elf in sort of a 20th century magician's
+outfit, black tophat, cape, and all.  His face is painted white with black
+circles around his eyes.  It looks very much like an analogue of the meat
+world side of the Satyricon, loud electronic music filling the virtual air,
+many people, deckers and matrix habitues enjoying the club's ambience without
+being there physically are seated about. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	1104
+Colour:	1
+Security:	4
+Difficulty:	0
+Access:	3
+Control:	3
+Index:	3
+Files:	3
+Slave:	3
+Type:	PLTG
+[EXITS]
+	[EXIT 0]
+		Exit:	70204
+		Number:	armory
+BREAK
+#70204
+Name:	The Armory
+Keywords:	backroom armory bookkeeping financial records
+Description:$
+Behind a hidden panel at the bar is a back room, filled with all sorts of
+files and trinkets. This room is well-hidden from the rest of the bar. There
+are plain brown fiberboard walls, completely bland and nondescript. There is a
+glass case and a counter with an elf smiling, wearing a cowboy hat. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	70203
+Colour:	2
+Security:	6
+Difficulty:	1
+Access:	6
+Control:	7
+Index:	6
+Files:	7
+Slave:	4
+Type:	Datastore
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	15
+		Alert:	No Alert
+		IC:	70200
+BREAK
+END

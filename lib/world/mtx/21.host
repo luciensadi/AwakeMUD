@@ -1,0 +1,31 @@
+#2100
+Name:	The data dominion
+Keywords:	dominion data
+Description:$
+This host is set up to look like a bar with a collection of stools and tables
+made out of glowing electricity 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	1100
+Colour:	1
+Security:	2
+Difficulty:	0
+Access:	0
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	0
+ControlTrapdoor:	0
+Index:	0
+IndexTrapdoor:	0
+Files:	0
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	0
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Controller
+BREAK
+END

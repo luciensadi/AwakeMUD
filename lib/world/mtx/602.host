@@ -1,0 +1,23 @@
+#60200
+Name:	Novatech Cyberdeck Outlet IOP
+Keywords:	novatech outlet iop
+Description:$
+The Matrix node around you bears a corporate feel to it- file cabinets,
+cubicles, loyal employees.. 
+~
+Colour:	0
+Security:	3
+Difficulty:	0
+Access:	3
+Control:	3
+Index:	3
+Files:	3
+Slave:	3
+Type:	PLTG
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	10
+		Alert:	Passive
+		IC:	0
+BREAK
+END

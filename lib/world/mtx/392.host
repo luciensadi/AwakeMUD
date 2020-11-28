@@ -1,0 +1,1144 @@
+#39300
+Name:	Everett Beacon Mall
+Keywords:	Beacon Mall
+Description:$
+Everett Beacon Mall is a busy hub of commerce within the city, and as such,
+its virtual representation is just as busy. Various datatrails spill through
+the sculpted node like multitudes of spiderwebs, while icons of all shapes and
+sizes zip through the host on errands. The exterior of the mall itself has an
+old market place like appearance, but has been modernized in such a manner
+that it is hard to tell at first glance. The node opens up further into the
+ground floor and first floor of the establishment, their expansive interiors
+oddly larger than they should possibly be, considering the size of the
+building they're housed within. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	1108
+Colour:	0
+Security:	6
+Difficulty:	0
+Access:	6
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	6
+ControlTrapdoor:	0
+Index:	6
+IndexTrapdoor:	0
+Files:	6
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	6
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	LTG
+[EXITS]
+	[EXIT 0]
+		Exit:	39302
+		Number:	First
+	[EXIT 1]
+		Exit:	39301
+		Number:	Ground
+BREAK
+#39301
+Name:	Everett Beacon Mall - Ground Floor
+Keywords:	Ground Floor
+Description:$
+The hustle and bustle of the mall atmosphere is reflected perfectly in its
+virtual counterpart, which is teaming with non-stop action as icons zip
+through the host. Various datatrails weave about the node as packets of
+information are uploaded and downloaded accordingly. A large virtual kiosk is
+found in the center of the sculpted host, offering information to all of the
+visitors that pour through each day.
+ Designations and information on the outlets in the first floor are labeled
+neatly, and are as follows: '^gThe Pied Pipers^N', '^mStreet Urchin Chic^N', '^cThe
+Downtown Delicatessen^N', '^WDelicious Desserts^N', '^rFanciful Furniture^N' and '^yWangs
+Sporting Goods^N'. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	39300
+Colour:	1
+Security:	5
+Difficulty:	0
+Access:	8
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	8
+ControlTrapdoor:	0
+Index:	8
+IndexTrapdoor:	0
+Files:	9
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	10
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	LTG
+[EXITS]
+	[EXIT 2]
+		Exit:	39308
+		Number:	Yellow
+	[EXIT 3]
+		Exit:	39307
+		Number:	Red
+	[EXIT 4]
+		Exit:	39306
+		Number:	White
+	[EXIT 5]
+		Exit:	39305
+		Number:	Blue
+	[EXIT 6]
+		Exit:	39304
+		Number:	Purple
+	[EXIT 7]
+		Exit:	39303
+		Number:	Green
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	54
+		Alert:	No Alert
+		IC:	39307
+	[TRIGGER 1]
+		Step:	48
+		Alert:	No Alert
+		IC:	39306
+	[TRIGGER 2]
+		Step:	43
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	37
+		Alert:	No Alert
+		IC:	39305
+	[TRIGGER 4]
+		Step:	33
+		Alert:	No Alert
+		IC:	39304
+	[TRIGGER 5]
+		Step:	28
+		Alert:	No Alert
+		IC:	39303
+	[TRIGGER 6]
+		Step:	22
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 7]
+		Step:	16
+		Alert:	No Alert
+		IC:	39302
+	[TRIGGER 8]
+		Step:	12
+		Alert:	No Alert
+		IC:	39301
+	[TRIGGER 9]
+		Step:	6
+		Alert:	No Alert
+		IC:	39300
+BREAK
+#39302
+Name:	Everett Beacon Mall - First Floor
+Keywords:	First Floor
+Description:$
+The hustle and bustle of the mall atmosphere is reflected perfectly in its
+virtual counterpart, which is teaming with non-stop action as icons zip
+through the host. Various datatrails weave about the node as packets of
+information are uploaded and downloaded accordingly. A large virtual kiosk is
+found in the center of the sculpted host, offering information to all of the
+visitors that pour through each day.
+ Designations and information on the outlets in the first floor are labeled
+neatly, and are as follows: '^gActiveSoft Central^N', '^mLinguaSoft Central^N',
+'^cMicrodeck Outlet^N', '^WThe Survival Store^N', '^rEye-Spy Cybereyes^N' and '^ySimons
+Cyberware Odds and Ends^N'. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	39300
+Colour:	1
+Security:	6
+Difficulty:	0
+Access:	10
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	8
+ControlTrapdoor:	0
+Index:	8
+IndexTrapdoor:	0
+Files:	9
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	9
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	LTG
+[EXITS]
+	[EXIT 10]
+		Exit:	39314
+		Number:	Yellow
+	[EXIT 11]
+		Exit:	39313
+		Number:	Red
+	[EXIT 12]
+		Exit:	39312
+		Number:	White
+	[EXIT 13]
+		Exit:	39311
+		Number:	Blue
+	[EXIT 14]
+		Exit:	39310
+		Number:	Purple
+	[EXIT 15]
+		Exit:	39309
+		Number:	Green
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	54
+		Alert:	No Alert
+		IC:	39307
+	[TRIGGER 1]
+		Step:	48
+		Alert:	No Alert
+		IC:	39306
+	[TRIGGER 2]
+		Step:	43
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	37
+		Alert:	No Alert
+		IC:	39305
+	[TRIGGER 4]
+		Step:	33
+		Alert:	No Alert
+		IC:	39304
+	[TRIGGER 5]
+		Step:	28
+		Alert:	No Alert
+		IC:	39303
+	[TRIGGER 6]
+		Step:	22
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 7]
+		Step:	16
+		Alert:	No Alert
+		IC:	39302
+	[TRIGGER 8]
+		Step:	12
+		Alert:	No Alert
+		IC:	39301
+	[TRIGGER 9]
+		Step:	6
+		Alert:	No Alert
+		IC:	39300
+BREAK
+#39303
+Name:	The Pied Pipers
+Keywords:	Pied Pipers
+Description:$
+Instruments of all shapes and sizes are depicted in this virtual
+representation of The Pied Pipers, catering to all the needs of both amateurs
+and professional musicians alike. Interactive information is available upon
+all of the displays, allowing visitors to peruse the merchandise and even
+handle it virtually to get a feel for its specifications, as well as any other
+subtle details that would be of interest in real life. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	39301
+Colour:	1
+Security:	4
+Difficulty:	0
+Access:	9
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	9
+ControlTrapdoor:	0
+Index:	8
+IndexTrapdoor:	0
+Files:	8
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	8
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	54
+		Alert:	No Alert
+		IC:	39307
+	[TRIGGER 1]
+		Step:	48
+		Alert:	No Alert
+		IC:	39306
+	[TRIGGER 2]
+		Step:	43
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	37
+		Alert:	No Alert
+		IC:	39305
+	[TRIGGER 4]
+		Step:	33
+		Alert:	No Alert
+		IC:	39304
+	[TRIGGER 5]
+		Step:	28
+		Alert:	No Alert
+		IC:	39303
+	[TRIGGER 6]
+		Step:	22
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 7]
+		Step:	16
+		Alert:	No Alert
+		IC:	39302
+	[TRIGGER 8]
+		Step:	12
+		Alert:	No Alert
+		IC:	39301
+	[TRIGGER 9]
+		Step:	6
+		Alert:	No Alert
+		IC:	39300
+BREAK
+#39304
+Name:	Street Urchin Chic
+Keywords:	Street Urchin Chic
+Description:$
+Much like its namesake suggests, the clothing and apparel offered here is
+aimed at the 'less than savoury' crowd of youngsters, who would gladly empty
+their parents bank accounts for a chance to look hip, considering most of them
+are wannabes and poseurs. Aside from being able to look over and try on some
+of the distinctive styles of clothing first hand (granted, a virtual first
+hand), this virtual store also allows for orders to be placed using verified
+credstick information. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	39301
+Colour:	1
+Security:	4
+Difficulty:	0
+Access:	10
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	8
+ControlTrapdoor:	0
+Index:	10
+IndexTrapdoor:	0
+Files:	8
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	8
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	54
+		Alert:	No Alert
+		IC:	39307
+	[TRIGGER 1]
+		Step:	48
+		Alert:	No Alert
+		IC:	39306
+	[TRIGGER 2]
+		Step:	43
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	37
+		Alert:	No Alert
+		IC:	39305
+	[TRIGGER 4]
+		Step:	33
+		Alert:	No Alert
+		IC:	39304
+	[TRIGGER 5]
+		Step:	28
+		Alert:	No Alert
+		IC:	39303
+	[TRIGGER 6]
+		Step:	22
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 7]
+		Step:	16
+		Alert:	No Alert
+		IC:	39302
+	[TRIGGER 8]
+		Step:	12
+		Alert:	No Alert
+		IC:	39301
+	[TRIGGER 9]
+		Step:	6
+		Alert:	No Alert
+		IC:	39300
+BREAK
+#39305
+Name:	The Downtown Delicatessen
+Keywords:	Downtown Delicatessen
+Description:$
+Fortunately, the smell of fresh cold cuts and other deli treats can be
+flawlessly translated via simsense feed, and is sure to be making the mouths
+on the meat bodies of visitors water heavily. Deliver orders can be placed
+here on this node, while information on daily specials and other deals the
+delicatessen has going on is displayed for all to see. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	39301
+Colour:	1
+Security:	4
+Difficulty:	0
+Access:	8
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	8
+ControlTrapdoor:	0
+Index:	9
+IndexTrapdoor:	0
+Files:	8
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	8
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	54
+		Alert:	No Alert
+		IC:	39307
+	[TRIGGER 1]
+		Step:	48
+		Alert:	No Alert
+		IC:	39306
+	[TRIGGER 2]
+		Step:	43
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	37
+		Alert:	No Alert
+		IC:	39305
+	[TRIGGER 4]
+		Step:	33
+		Alert:	No Alert
+		IC:	39304
+	[TRIGGER 5]
+		Step:	28
+		Alert:	No Alert
+		IC:	39303
+	[TRIGGER 6]
+		Step:	22
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 7]
+		Step:	16
+		Alert:	No Alert
+		IC:	39302
+	[TRIGGER 8]
+		Step:	12
+		Alert:	No Alert
+		IC:	39301
+	[TRIGGER 9]
+		Step:	6
+		Alert:	No Alert
+		IC:	39300
+BREAK
+#39306
+Name:	Delicious Desserts
+Keywords:	Delicious Desserts
+Description:$
+Sweet frozen treats and all other types of desserts are on display in this
+virtual representation, even the cold chill of the air is replicated to
+perfection, and is enough to cause goose bumps to rise on the skin of ones
+meat body. The smooth creamy tang of the desserts is enough to make most fat
+people topple over anyone else in their way as they rush to place their order,
+which some of the more 'dense' looking icons seem to be doing just that. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	39301
+Colour:	1
+Security:	4
+Difficulty:	0
+Access:	10
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	8
+ControlTrapdoor:	0
+Index:	8
+IndexTrapdoor:	0
+Files:	8
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	8
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	54
+		Alert:	No Alert
+		IC:	39307
+	[TRIGGER 1]
+		Step:	48
+		Alert:	No Alert
+		IC:	39306
+	[TRIGGER 2]
+		Step:	43
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	37
+		Alert:	No Alert
+		IC:	39305
+	[TRIGGER 4]
+		Step:	33
+		Alert:	No Alert
+		IC:	39304
+	[TRIGGER 5]
+		Step:	28
+		Alert:	No Alert
+		IC:	39303
+	[TRIGGER 6]
+		Step:	22
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 7]
+		Step:	16
+		Alert:	No Alert
+		IC:	39302
+	[TRIGGER 8]
+		Step:	12
+		Alert:	No Alert
+		IC:	39301
+	[TRIGGER 9]
+		Step:	6
+		Alert:	No Alert
+		IC:	39300
+BREAK
+#39307
+Name:	Fanciful Furniture
+Keywords:	Fanciful Furniture
+Description:$
+Floor displays are in full affect, from dining room set ups to bed room
+combinations whose price tags have been modified and enlarged, along with
+'marked down' products that are sure to catch the eye of any visitors. The
+virtual representations allow potential customers to lounge around in and kick
+up their feet, giving them a good feel for what the real thing would be like.
+Virtual shopkeepers move to and fro between visitor icons, attempting to offer
+them as much help as possible within their programming. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	39301
+Colour:	1
+Security:	5
+Difficulty:	0
+Access:	8
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	8
+ControlTrapdoor:	0
+Index:	8
+IndexTrapdoor:	0
+Files:	9
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	9
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	54
+		Alert:	No Alert
+		IC:	39307
+	[TRIGGER 1]
+		Step:	48
+		Alert:	No Alert
+		IC:	39306
+	[TRIGGER 2]
+		Step:	43
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	37
+		Alert:	No Alert
+		IC:	39305
+	[TRIGGER 4]
+		Step:	33
+		Alert:	No Alert
+		IC:	39304
+	[TRIGGER 5]
+		Step:	28
+		Alert:	No Alert
+		IC:	39303
+	[TRIGGER 6]
+		Step:	22
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 7]
+		Step:	16
+		Alert:	No Alert
+		IC:	39302
+	[TRIGGER 8]
+		Step:	12
+		Alert:	No Alert
+		IC:	39301
+	[TRIGGER 9]
+		Step:	6
+		Alert:	No Alert
+		IC:	39300
+BREAK
+#39308
+Name:	Wang's Sporting Goods
+Keywords:	Wang's Sporting Goods
+Description:$
+This sporting goods store is packed to the brim and filled along its edges
+with every assortment of equipment needed, in just about every sport
+imaginable. Virtual mannequins are set up and dressed accordingly in
+protective equipment, ranging from ice hockey displays, baseball displays, and
+even a cricket display oddly enough. Orders can be placed in advance, and even
+most of the gear can be tested in their own enviroments with a quick trip to
+the 'changing room', which is just a sub-host whose sculpting can be swapped
+from one sport avenue to the next, giving the customer a good feel for the
+merchandise before even buying it. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	39301
+Colour:	1
+Security:	4
+Difficulty:	0
+Access:	10
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	9
+ControlTrapdoor:	0
+Index:	9
+IndexTrapdoor:	0
+Files:	10
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	10
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	54
+		Alert:	No Alert
+		IC:	39307
+	[TRIGGER 1]
+		Step:	48
+		Alert:	No Alert
+		IC:	39306
+	[TRIGGER 2]
+		Step:	43
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	37
+		Alert:	No Alert
+		IC:	39305
+	[TRIGGER 4]
+		Step:	33
+		Alert:	No Alert
+		IC:	39304
+	[TRIGGER 5]
+		Step:	28
+		Alert:	No Alert
+		IC:	39303
+	[TRIGGER 6]
+		Step:	22
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 7]
+		Step:	16
+		Alert:	No Alert
+		IC:	39302
+	[TRIGGER 8]
+		Step:	12
+		Alert:	No Alert
+		IC:	39301
+	[TRIGGER 9]
+		Step:	6
+		Alert:	No Alert
+		IC:	39300
+BREAK
+#39309
+Name:	ActiveSoft Central
+Keywords:	ActiveSoft Central
+Description:$
+Aisle after aisle is filled to the brim with all sorts of datafiles that are
+for sale, either by virtual purchase and delivery, or pickup by those with
+meat bodies capable of two legged locomotion. Icons sift through the lines of
+merchandise, sifting and picking through the abundant mass of goods in stock.
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	39302
+Colour:	1
+Security:	4
+Difficulty:	0
+Access:	10
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	8
+ControlTrapdoor:	0
+Index:	8
+IndexTrapdoor:	0
+Files:	9
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	10
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	54
+		Alert:	No Alert
+		IC:	39307
+	[TRIGGER 1]
+		Step:	48
+		Alert:	No Alert
+		IC:	39306
+	[TRIGGER 2]
+		Step:	43
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	37
+		Alert:	No Alert
+		IC:	39305
+	[TRIGGER 4]
+		Step:	33
+		Alert:	No Alert
+		IC:	39304
+	[TRIGGER 5]
+		Step:	28
+		Alert:	No Alert
+		IC:	39303
+	[TRIGGER 6]
+		Step:	22
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 7]
+		Step:	16
+		Alert:	No Alert
+		IC:	39302
+	[TRIGGER 8]
+		Step:	12
+		Alert:	No Alert
+		IC:	39301
+	[TRIGGER 9]
+		Step:	6
+		Alert:	No Alert
+		IC:	39300
+BREAK
+#39310
+Name:	LinguaSoft Central
+Keywords:	LinguaSoft Central
+Description:$
+Aisle after aisle is filled to the brim with all sorts of datafiles that are
+for sale, either by virtual purchase and delivery, or pickup by those with
+meat bodies capable of two legged locomotion. Icons sift through the lines of
+merchandise, sifting and picking through the abundant mass of goods in stock.
+There seems to be online language courses offered as well, for those who would
+rather skip the ease of chiptruth. But, who would want to do that..? 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	39302
+Colour:	1
+Security:	4
+Difficulty:	0
+Access:	9
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	10
+ControlTrapdoor:	0
+Index:	10
+IndexTrapdoor:	0
+Files:	8
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	9
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	54
+		Alert:	No Alert
+		IC:	39307
+	[TRIGGER 1]
+		Step:	48
+		Alert:	No Alert
+		IC:	39306
+	[TRIGGER 2]
+		Step:	43
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	37
+		Alert:	No Alert
+		IC:	39305
+	[TRIGGER 4]
+		Step:	33
+		Alert:	No Alert
+		IC:	39304
+	[TRIGGER 5]
+		Step:	28
+		Alert:	No Alert
+		IC:	39303
+	[TRIGGER 6]
+		Step:	22
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 7]
+		Step:	16
+		Alert:	No Alert
+		IC:	39302
+	[TRIGGER 8]
+		Step:	12
+		Alert:	No Alert
+		IC:	39301
+	[TRIGGER 9]
+		Step:	6
+		Alert:	No Alert
+		IC:	39300
+BREAK
+#39311
+Name:	Microdeck Outlet
+Keywords:	Microdeck Outlet
+Description:$
+This virtual representation of the Microdeck Outlet isn't all that different
+from its physical counterpart, aside from the fact that nearly all of the
+customers seem to be sporting fairly SOTA wares, from resolution to fine
+detail almost etched into their icons. Of course several amateurs and other
+wannabes can be found wandering around, either too poor or too indecisive with
+their purchases to get on board with the SOTA rollercoaster. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	39302
+Colour:	1
+Security:	5
+Difficulty:	0
+Access:	9
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	10
+ControlTrapdoor:	0
+Index:	9
+IndexTrapdoor:	0
+Files:	9
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	10
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	54
+		Alert:	No Alert
+		IC:	39307
+	[TRIGGER 1]
+		Step:	48
+		Alert:	No Alert
+		IC:	39306
+	[TRIGGER 2]
+		Step:	43
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	37
+		Alert:	No Alert
+		IC:	39305
+	[TRIGGER 4]
+		Step:	33
+		Alert:	No Alert
+		IC:	39304
+	[TRIGGER 5]
+		Step:	28
+		Alert:	No Alert
+		IC:	39303
+	[TRIGGER 6]
+		Step:	22
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 7]
+		Step:	16
+		Alert:	No Alert
+		IC:	39302
+	[TRIGGER 8]
+		Step:	12
+		Alert:	No Alert
+		IC:	39301
+	[TRIGGER 9]
+		Step:	6
+		Alert:	No Alert
+		IC:	39300
+BREAK
+#39312
+Name:	Survival Store
+Keywords:	Survival Store
+Description:$
+Various tools and sundries are available for purchase in this virtual store,
+which is filled to the brim with all sorts of outdoor necessities, from
+camping gear to hiking gear, and even a few 'off the grid' alternatives to the
+modern rat race. The displays set up allow possible customers to test out and
+try the various tools available, letting them get a good feel for how to put
+them to use. The fact that easy to read directions are also noted with the
+displays certainly helps as well. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	39302
+Colour:	1
+Security:	4
+Difficulty:	0
+Access:	8
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	10
+ControlTrapdoor:	0
+Index:	8
+IndexTrapdoor:	0
+Files:	10
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	8
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	54
+		Alert:	No Alert
+		IC:	39307
+	[TRIGGER 1]
+		Step:	48
+		Alert:	No Alert
+		IC:	39306
+	[TRIGGER 2]
+		Step:	43
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	37
+		Alert:	No Alert
+		IC:	39305
+	[TRIGGER 4]
+		Step:	33
+		Alert:	No Alert
+		IC:	39304
+	[TRIGGER 5]
+		Step:	28
+		Alert:	No Alert
+		IC:	39303
+	[TRIGGER 6]
+		Step:	22
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 7]
+		Step:	16
+		Alert:	No Alert
+		IC:	39302
+	[TRIGGER 8]
+		Step:	12
+		Alert:	No Alert
+		IC:	39301
+	[TRIGGER 9]
+		Step:	6
+		Alert:	No Alert
+		IC:	39300
+BREAK
+#39313
+Name:	Eye-Spy Cybereyes
+Keywords:	Eye-Spy Cybereyes
+Description:$
+Masses of detached eyes float around the node, most of which are SOTA
+variations of popular models, allowing potential customers an up close and
+personal look at a new pair of peepers they have their old useless eyes set
+on. Various bits and pieces of useless information are displated in floating
+neon letters for easy viewing, giving all sorts of details and ordering
+information. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	39302
+Colour:	1
+Security:	4
+Difficulty:	0
+Access:	8
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	8
+ControlTrapdoor:	0
+Index:	9
+IndexTrapdoor:	0
+Files:	9
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	9
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	54
+		Alert:	No Alert
+		IC:	39307
+	[TRIGGER 1]
+		Step:	48
+		Alert:	No Alert
+		IC:	39306
+	[TRIGGER 2]
+		Step:	43
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	37
+		Alert:	No Alert
+		IC:	39305
+	[TRIGGER 4]
+		Step:	33
+		Alert:	No Alert
+		IC:	39304
+	[TRIGGER 5]
+		Step:	28
+		Alert:	No Alert
+		IC:	39303
+	[TRIGGER 6]
+		Step:	22
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 7]
+		Step:	16
+		Alert:	No Alert
+		IC:	39302
+	[TRIGGER 8]
+		Step:	12
+		Alert:	No Alert
+		IC:	39301
+	[TRIGGER 9]
+		Step:	6
+		Alert:	No Alert
+		IC:	39300
+BREAK
+#39314
+Name:	Simons Cyberware Odds and Ends
+Keywords:	Simons Cyberware Odds Ends
+Description:$
+This sterile enviroment is more akin to a virtual clinic than a store, as they
+cater to particular types of cyberware. Knowbots and other professionals mill
+through the node, offering their expertise to potential customers as they
+think over their purchases. Virtual pamphlets and other reading materials are
+offered as well, most of which consist of advertisements and explainations as
+to why buying their ware will enrich their lives. Propeganda at its finest. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	39302
+Colour:	1
+Security:	4
+Difficulty:	0
+Access:	9
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	8
+ControlTrapdoor:	0
+Index:	9
+IndexTrapdoor:	0
+Files:	8
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	10
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	54
+		Alert:	No Alert
+		IC:	39307
+	[TRIGGER 1]
+		Step:	48
+		Alert:	No Alert
+		IC:	39306
+	[TRIGGER 2]
+		Step:	43
+		Alert:	Active
+		IC:	0
+	[TRIGGER 3]
+		Step:	37
+		Alert:	No Alert
+		IC:	39305
+	[TRIGGER 4]
+		Step:	33
+		Alert:	No Alert
+		IC:	39304
+	[TRIGGER 5]
+		Step:	28
+		Alert:	No Alert
+		IC:	39303
+	[TRIGGER 6]
+		Step:	22
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 7]
+		Step:	16
+		Alert:	No Alert
+		IC:	39302
+	[TRIGGER 8]
+		Step:	12
+		Alert:	No Alert
+		IC:	39301
+	[TRIGGER 9]
+		Step:	6
+		Alert:	No Alert
+		IC:	39300
+BREAK
+END

@@ -164,22 +164,25 @@ FilesScramble:	0
 FilesTrapdoor:	0
 Slave:	6
 SlaveScramble:	0
-SlaveTrapdoor:	0
+SlaveTrapdoor:	4294967296
 Type:	LTG
 [EXITS]
 	[EXIT 11]
+		Exit:	19800
+		Number:	0321-0628
+	[EXIT 12]
 		Exit:	70326
 		Number:	0321-0099
-	[EXIT 12]
+	[EXIT 13]
 		Exit:	70320
 		Number:	1321-1111
-	[EXIT 13]
+	[EXIT 14]
 		Exit:	65052
 		Number:	5321-5398
-	[EXIT 14]
+	[EXIT 15]
 		Exit:	64900
 		Number:	0321-4229
-	[EXIT 15]
+	[EXIT 16]
 		Exit:	65000
 		Number:	0321-7001
 [TRIGGERS]
@@ -260,14 +263,23 @@ SlaveTrapdoor:	0
 Type:	RTG
 [EXITS]
 	[EXIT 11]
+		Exit:	39600
+		Number:	838-0396-0000
+	[EXIT 12]
+		Exit:	1108
+		Number:	838-3206-0000
+	[EXIT 13]
 		Exit:	1103
 		Number:	NA-TT
-	[EXIT 12]
+	[EXIT 14]
 		Exit:	1101
 		Number:	838-0321-0000
-	[EXIT 13]
+	[EXIT 15]
 		Exit:	1100
 		Number:	838-0206-0000
+	[EXIT 16]
+		Exit:	1109
+		Number:	CA-CL
 [TRIGGERS]
 	[TRIGGER 0]
 		Step:	60
@@ -350,6 +362,9 @@ Type:	RTG
 	[EXIT 12]
 		Exit:	1104
 		Number:	820-0503-0000
+	[EXIT 13]
+		Exit:	1109
+		Number:	CA-CL
 BREAK
 #1104
 Name:	Portland LTG
@@ -383,15 +398,24 @@ SlaveScramble:	0
 SlaveTrapdoor:	0
 Type:	LTG
 [EXITS]
-	[EXIT 13]
+	[EXIT 14]
+		Exit:	33010
+		Number:	0503-6847
+	[EXIT 15]
+		Exit:	33002
+		Number:	0503-1240
+	[EXIT 16]
 		Exit:	70340
 		Number:	0503-1230
-	[EXIT 14]
+	[EXIT 17]
 		Exit:	70203
 		Number:	0503-1123
-	[EXIT 15]
+	[EXIT 18]
 		Exit:	70301
 		Number:	0503-1224
+	[EXIT 19]
+		Exit:	33000
+		Number:	0503-1235
 BREAK
 #1105
 Name:	Shadowland
@@ -426,7 +450,7 @@ SlaveScramble:	0
 SlaveTrapdoor:	0
 Type:	PLTG
 [EXITS]
-	[EXIT 16]
+	[EXIT 20]
 		Exit:	1106
 		Number:	silver
 BREAK
@@ -463,7 +487,7 @@ SlaveScramble:	0
 SlaveTrapdoor:	0
 Type:	PLTG
 [EXITS]
-	[EXIT 17]
+	[EXIT 21]
 		Exit:	1105
 		Number:	silver
 BREAK
@@ -498,11 +522,184 @@ SlaveScramble:	0
 SlaveTrapdoor:	0
 Type:	LTG
 [EXITS]
-	[EXIT 18]
+	[EXIT 22]
 		Exit:	1100
 		Number:	seattle
-	[EXIT 19]
+	[EXIT 23]
 		Exit:	70338
 		Number:	3206-9585
+BREAK
+#1108
+Name:	Everett LTG
+Keywords:	Everett
+Description:$
+The representation of Everett is one of a mixture of both commercialization,
+industrialization and nature, combining in a relatively eloquent manner, which
+is fairly impressive considering the three clashing themes. The shimmering
+waves of the virtual Puget sound glitter with a deep blue glow of swirling 1's
+and 0's, undulating and crashing gently against the shores. Swathes of green
+dot the landscape, marking off state parks and other memorial sites, while
+other highrises and skyscrapers cleave upward into the skies, spires of
+glistening steel and glass. Data trails and packets of information sail
+through the skies, linking together most of the iconography offered in this
+local telecommunications grid. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	1102
+Colour:	1
+Security:	5
+Difficulty:	0
+Access:	6
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	9
+ControlTrapdoor:	0
+Index:	6
+IndexTrapdoor:	0
+Files:	6
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	6
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	LTG
+[EXITS]
+	[EXIT 24]
+		Exit:	39300
+		Number:	3206-8835
+	[EXIT 25]
+		Exit:	22830
+		Number:	3206-9265
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	64
+		Alert:	No Alert
+		IC:	39210
+	[TRIGGER 1]
+		Step:	59
+		Alert:	No Alert
+		IC:	39209
+	[TRIGGER 2]
+		Step:	55
+		Alert:	No Alert
+		IC:	39208
+	[TRIGGER 3]
+		Step:	49
+		Alert:	Active
+		IC:	0
+	[TRIGGER 4]
+		Step:	45
+		Alert:	No Alert
+		IC:	39207
+	[TRIGGER 5]
+		Step:	40
+		Alert:	No Alert
+		IC:	39206
+	[TRIGGER 6]
+		Step:	36
+		Alert:	No Alert
+		IC:	39205
+	[TRIGGER 7]
+		Step:	32
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 8]
+		Step:	26
+		Alert:	No Alert
+		IC:	39204
+	[TRIGGER 9]
+		Step:	20
+		Alert:	No Alert
+		IC:	39203
+	[TRIGGER 10]
+		Step:	15
+		Alert:	No Alert
+		IC:	39202
+	[TRIGGER 11]
+		Step:	10
+		Alert:	No Alert
+		IC:	39201
+	[TRIGGER 12]
+		Step:	6
+		Alert:	No Alert
+		IC:	39200
+BREAK
+#1109
+Name:	Caribbean League RTG
+Keywords:	Caribbean League
+Description:$
+A massive expanse of shimmering ocean envelopes the senses as one dives into
+this RTG, the wide open seascape littered with various icons of seabirds that
+float and soar upon updrafts of datastreams as if it were wind. Various
+islands make up this node, each one woven into different areas of the scenery,
+with lines of data connecting them together across the expanse of deep blue
+shades of the ever shifting and changing sea of data they float upon. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	0
+Colour:	1
+Security:	4
+Difficulty:	0
+Access:	6
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	8
+ControlTrapdoor:	0
+Index:	6
+IndexTrapdoor:	0
+Files:	6
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	6
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	RTG
+[EXITS]
+	[EXIT 13]
+		Exit:	1102
+		Number:	NA-UCAS
+	[EXIT 14]
+		Exit:	1103
+		Number:	NA-TT
+	[EXIT 15]
+		Exit:	1110
+		Number:	621-3200-0000
+BREAK
+#1110
+Name:	Grenada LTG
+Keywords:	Grenada
+Description:$
+Descending down through the cloud cover above, visitors to this LTG are
+greeted with a small island teeming with virtual activity. The sculpted
+scenery of the island is surrounded on all sides by an ever changing and
+shifting sea of various shades and tones of blue, which contrast heavily with
+the landscape it attempts to envelope. Lush tropical forest areas dominate the
+majority of the land, scattered about which are hubs of modern civilization,
+pouring from which are tendrils of data streams that stretch across the node
+like a spiders web, interconnecting the various dots of light and sound that
+are the virtual cities upon the island. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	1109
+Colour:	2
+Security:	4
+Difficulty:	0
+Access:	8
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	8
+ControlTrapdoor:	0
+Index:	8
+IndexTrapdoor:	0
+Files:	8
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	8
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	LTG
 BREAK
 END

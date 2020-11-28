@@ -1,0 +1,2124 @@
+#70301
+Name:	Annabel's Antiquities
+Keywords:	annabel's antiquities antique
+Description:$
+A high, tinkling windchime sounds as you enter this Matrix host. It looks like
+a small, dimly-lit antique shop, and is crammed floor-to-ceiling with
+trinkets, accessories, antiques and curiosities. A glass counter against the
+south wall holds both an old iron cash register and a thick, tattered ledger
+on it; mismatched wooden shelves along the east and west walls groan under the
+weight of folio volumes, old typewriters and other such bulky items. Racks and
+display cases clutter the center of the store. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	1104
+Colour:	0
+Security:	7
+Difficulty:	0
+Access:	10
+Control:	10
+Index:	11
+Files:	10
+Slave:	9
+Type:	Datastore
+[EXITS]
+	[EXIT 0]
+		Exit:	1104
+		Number:	820-0503-0000
+	[EXIT 1]
+		Exit:	70302
+		Number:	register
+	[EXIT 2]
+		Exit:	70303
+		Number:	ledger
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	26
+		Alert:	No Alert
+		IC:	70303
+	[TRIGGER 1]
+		Step:	21
+		Alert:	Active
+		IC:	70302
+	[TRIGGER 2]
+		Step:	16
+		Alert:	No Alert
+		IC:	70301
+	[TRIGGER 3]
+		Step:	10
+		Alert:	No Alert
+		IC:	70302
+	[TRIGGER 4]
+		Step:	5
+		Alert:	Passive
+		IC:	70301
+BREAK
+#70302
+Name:	Inside the Cash Register
+Keywords:	register cash finance
+Description:$
+This seems to be the cash drawer of a giant register. Metal walls reach to
+about the height of your "chest," creating rows of rectangular compartments.
+Giant nuyen bills and the occasional silver-colored coin gambol freely
+throughout, jumping from compartment to compartment and chasing each other
+around the host. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	70301
+Colour:	1
+Security:	6
+Difficulty:	1
+Access:	13
+Control:	11
+Index:	13
+Files:	13
+Slave:	12
+Type:	Datastore
+[EXITS]
+	[EXIT 5]
+		Exit:	70301
+		Number:	0503-1224
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	40
+		Alert:	No Alert
+		IC:	70304
+	[TRIGGER 1]
+		Step:	35
+		Alert:	No Alert
+		IC:	70304
+	[TRIGGER 2]
+		Step:	30
+		Alert:	No Alert
+		IC:	70303
+	[TRIGGER 3]
+		Step:	25
+		Alert:	Active
+		IC:	70303
+	[TRIGGER 4]
+		Step:	20
+		Alert:	No Alert
+		IC:	70302
+	[TRIGGER 5]
+		Step:	15
+		Alert:	No Alert
+		IC:	70302
+	[TRIGGER 6]
+		Step:	10
+		Alert:	Passive
+		IC:	70301
+	[TRIGGER 7]
+		Step:	5
+		Alert:	No Alert
+		IC:	70301
+BREAK
+#70303
+Name:	On a Giant Ledger
+Keywords:	ledger tattered inventory
+Description:$
+You stand directly above a large book, its smooth vellum pages the size of
+tennis courts. Every now and then a gigantic pen nib descends to inscribe
+intricate, oddly unreadable hieroglyphics onto the paper. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	70301
+Colour:	1
+Security:	6
+Difficulty:	0
+Access:	13
+Control:	10
+Index:	13
+Files:	13
+Slave:	12
+Type:	Datastore
+[EXITS]
+	[EXIT 8]
+		Exit:	70301
+		Number:	0503-1224
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	30
+		Alert:	No Alert
+		IC:	70304
+	[TRIGGER 1]
+		Step:	25
+		Alert:	No Alert
+		IC:	70304
+	[TRIGGER 2]
+		Step:	25
+		Alert:	No Alert
+		IC:	70303
+	[TRIGGER 3]
+		Step:	25
+		Alert:	Active
+		IC:	70303
+	[TRIGGER 4]
+		Step:	20
+		Alert:	No Alert
+		IC:	70302
+	[TRIGGER 5]
+		Step:	15
+		Alert:	No Alert
+		IC:	70302
+	[TRIGGER 6]
+		Step:	10
+		Alert:	Passive
+		IC:	70301
+	[TRIGGER 7]
+		Step:	5
+		Alert:	No Alert
+		IC:	70301
+BREAK
+#70310
+Name:	Erehwon Graphic Design
+Keywords:	erehwon graphic design EGD
+Description:$
+An odd, shifting sea of various shades and gradations of ^Mpink^n surround you,
+seeming at once solid and fluid, viscous and gauzy. Every now and then, a
+solid images will emerge - a corporate trideo ad, a promotional poster and
+other things that are presumably the work of the firm - display themselves,
+then swirl back into pink-shaded nothingness. A thin ^Yyellow^n ribbon snakes its
+way in and out of your point of view, occasionally twining itself around a
+tiny, bouncing ^Ggreen^n sphere. 
+~
+ShutdownStart:	Everything begins to blur and fade to black.
+ShutdownStop:	The colors shimmer, then brighten once more.
+Parent:	1100
+Colour:	0
+Security:	6
+Difficulty:	1
+Access:	9
+Control:	9
+Index:	10
+Files:	10
+Slave:	9
+Type:	Datastore
+[EXITS]
+	[EXIT 8]
+		Exit:	70312
+		Number:	green
+	[EXIT 9]
+		Exit:	1100
+		Number:	838-0206-0000
+	[EXIT 10]
+		Exit:	70311
+		Number:	yellow
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	40
+		Alert:	Active
+		IC:	70311
+	[TRIGGER 1]
+		Step:	13
+		Alert:	No Alert
+		IC:	70310
+	[TRIGGER 2]
+		Step:	8
+		Alert:	Passive
+		IC:	0
+BREAK
+#70311
+Name:	EGD - Projects (Yellow)
+Keywords:	yellow projects EGD erehwon
+Description:$
+A swirling, shifting mass of ^Yyellow^n undulates around you, occasionaly morphing
+into shapes suggestive of bananas, mangos, lemons, daffodils, sunflowers and
+other color-appropriate forms. Now and then, images and numbers briefly appear
+on the rough shapes, then sink back into sunny nothingness. Occasionally, a
+bright splash of ^Mpink^n squiggles at the edge of your vision, then disappears. 
+~
+ShutdownStart:	Everything begins to blur and fade to black.
+ShutdownStop:	The colors shimmer, then brighten once more.
+Parent:	70310
+Colour:	1
+Security:	6
+Difficulty:	0
+Access:	13
+Control:	12
+Index:	11
+Files:	11
+Slave:	13
+Type:	Datastore
+[EXITS]
+	[EXIT 3]
+		Exit:	70310
+		Number:	pink
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	35
+		Alert:	No Alert
+		IC:	70312
+	[TRIGGER 1]
+		Step:	30
+		Alert:	No Alert
+		IC:	70312
+	[TRIGGER 2]
+		Step:	20
+		Alert:	Active
+		IC:	70311
+	[TRIGGER 3]
+		Step:	12
+		Alert:	No Alert
+		IC:	70310
+	[TRIGGER 4]
+		Step:	8
+		Alert:	Passive
+		IC:	0
+BREAK
+#70312
+Name:	EGD - Finance (Green)
+Keywords:	green finance
+Description:$
+Every shade and possibility of ^Ggreen^n swirls around you, tart as unripe apples,
+musky as new-mown grass, cool as shade under oak trees and sharp as lime juice
+on a wound. Numbers, charts and figures swirl just under the surface; a thin
+ribbon of ^Mpink^n darts through them, remora-like. 
+~
+ShutdownStart:	Everything begins to blur and fade to black.
+ShutdownStop:	The colors shimmer, then brighten once more.
+Parent:	70310
+Colour:	1
+Security:	7
+Difficulty:	1
+Access:	7
+Control:	7
+Index:	7
+Files:	7
+Slave:	7
+Type:	Datastore
+[EXITS]
+	[EXIT 5]
+		Exit:	70310
+		Number:	pink
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	35
+		Alert:	No Alert
+		IC:	70312
+	[TRIGGER 1]
+		Step:	27
+		Alert:	No Alert
+		IC:	70312
+	[TRIGGER 2]
+		Step:	17
+		Alert:	Active
+		IC:	70311
+	[TRIGGER 3]
+		Step:	12
+		Alert:	Passive
+		IC:	70310
+	[TRIGGER 4]
+		Step:	8
+		Alert:	Passive
+		IC:	0
+BREAK
+#70313
+Name:	Veritas Investigations
+Keywords:	veritas investigations private investigator pi
+Description:$
+You enter a sharp black-and-white rendition of a plain, single-room office,
+furnished only with a desk and two chairs. A man wearing a brown trenchcoat
+and a battered grey fedora stands by the window, looking out at a city street
+and the mid-20th-century cars that currently drive through it. At intervals,
+an ancient steel typewriter on the desk clatters out a brief "^WWelcome to
+Veritas Investigations' Matrix host^n," and pops up both the firm's contact
+information and a small e-mail form. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	1100
+Colour:	0
+Security:	6
+Difficulty:	0
+Access:	9
+Control:	9
+Index:	9
+Files:	9
+Slave:	9
+Type:	LTG
+[EXITS]
+	[EXIT 5]
+		Exit:	1100
+		Number:	838-0206-0000
+BREAK
+#70314
+Name:	Universal Import/Export
+Keywords:	universal import export
+Description:$
+Recessed halogen corner lights cast a warm glow over the cream-painted walls
+and industrial carpeting of this small room. A synthwood reception desk
+dominates most of the area; a medium-sized synthleather sofa and small coffee
+table jockey for space along the north wall, beside the door leading back to
+the corridor. Two large filing cabinets flank a wooden door along the east
+wall. A large brass logo on the south wall, between two windows, identifies
+this virtual office as the home of ^YUniversal Import/Export^n. A small guestbook
+on the desk invites you to write a message; a rack of business cards next to
+it provides contact information for the company. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	1100
+Colour:	0
+Security:	7
+Difficulty:	0
+Access:	9
+Control:	9
+Index:	9
+Files:	9
+Slave:	9
+Type:	LTG
+[EXITS]
+	[EXIT 6]
+		Exit:	1100
+		Number:	838-0206-0000
+BREAK
+#70315
+Name:	Siren Song Telemarketing
+Keywords:	siren song telemarketing telemarketers
+Description:$
+A group of impossibly-beautiful mermaids and mermen sit on a large rock in the
+middle of a ^bdeep-blue^n sea, singing a slow, elaborate multi-part motet in
+perfect harmony. Ships of all shapes, sizes and ages, ranging from Chinese
+junks to 17th-century English pirate schooners to iron-clad battleships to
+gigantic hover-freighters sail towards the island, their captains obviously
+entranced by the music. Closer inspection reveals that each merperson is
+wearing a telephone headset. Sunlight glints off the clear ocean water. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	1100
+Colour:	0
+Security:	7
+Difficulty:	0
+Access:	10
+Control:	8
+Index:	9
+Files:	9
+Slave:	10
+Type:	PLTG
+[EXITS]
+	[EXIT 7]
+		Exit:	1100
+		Number:	838-0206-0000
+	[EXIT 8]
+		Exit:	1100
+		Number:	seattle
+	[EXIT 9]
+		Exit:	70316
+		Number:	water
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	23
+		Alert:	Active
+		IC:	70314
+	[TRIGGER 1]
+		Step:	17
+		Alert:	No Alert
+		IC:	70314
+	[TRIGGER 2]
+		Step:	11
+		Alert:	Passive
+		IC:	70313
+	[TRIGGER 3]
+		Step:	6
+		Alert:	No Alert
+		IC:	70313
+BREAK
+#70316
+Name:	Under the Sea
+Keywords:	water blue
+Description:$
+You find yourself in a bright, cartoonish underwater expanse, air bubbles
+bobbing in time to the tinny tinkle of synthesized calypso music.
+Brightly-colored tropical fish zip merrily in and out of gaps in a nearby
+coral reef and dart through undulating fronds of seaweed. A brief glimmer of
+^Ygold^n beckons from below. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	70315
+Colour:	0
+Security:	5
+Difficulty:	0
+Access:	9
+Control:	10
+Index:	10
+Files:	10
+Slave:	8
+Type:	Datastore
+[EXITS]
+	[EXIT 4]
+		Exit:	70315
+		Number:	siren
+	[EXIT 5]
+		Exit:	70317
+		Number:	treasure
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	40
+		Alert:	No Alert
+		IC:	70316
+	[TRIGGER 1]
+		Step:	35
+		Alert:	No Alert
+		IC:	70315
+	[TRIGGER 2]
+		Step:	30
+		Alert:	No Alert
+		IC:	70315
+	[TRIGGER 3]
+		Step:	25
+		Alert:	No Alert
+		IC:	70314
+	[TRIGGER 4]
+		Step:	21
+		Alert:	Active
+		IC:	70314
+	[TRIGGER 5]
+		Step:	16
+		Alert:	No Alert
+		IC:	70313
+	[TRIGGER 6]
+		Step:	11
+		Alert:	No Alert
+		IC:	70313
+	[TRIGGER 7]
+		Step:	6
+		Alert:	Passive
+		IC:	0
+BREAK
+#70317
+Name:	Pirate Treasure
+Keywords:	treasure booty pirate gold
+Description:$
+The water here is clear and still, save for the occasional clouds of silt and
+sand that swirl up from the ocean floor. The rotting remnants of a large
+wooden ship sit directly in front of you, a tattered skull-and-crossbones flag
+still dangling from a broken mast. A large metal chest sits in the middle of
+the wreck, open to reveal a glittering array of ^Ygold doubloons^n. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	70316
+Colour:	1
+Security:	9
+Difficulty:	1
+Access:	13
+Control:	11
+Index:	13
+Files:	13
+Slave:	12
+Type:	Datastore
+[EXITS]
+	[EXIT 8]
+		Exit:	70315
+		Number:	siren
+	[EXIT 9]
+		Exit:	70316
+		Number:	sea
+	[EXIT 10]
+		Exit:	70316
+		Number:	water
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	45
+		Alert:	No Alert
+		IC:	70316
+	[TRIGGER 1]
+		Step:	41
+		Alert:	No Alert
+		IC:	70316
+	[TRIGGER 2]
+		Step:	37
+		Alert:	No Alert
+		IC:	70316
+	[TRIGGER 3]
+		Step:	33
+		Alert:	No Alert
+		IC:	70315
+	[TRIGGER 4]
+		Step:	28
+		Alert:	No Alert
+		IC:	70315
+	[TRIGGER 5]
+		Step:	24
+		Alert:	No Alert
+		IC:	70314
+	[TRIGGER 6]
+		Step:	19
+		Alert:	Active
+		IC:	70314
+	[TRIGGER 7]
+		Step:	14
+		Alert:	No Alert
+		IC:	70313
+	[TRIGGER 8]
+		Step:	9
+		Alert:	No Alert
+		IC:	70313
+	[TRIGGER 9]
+		Step:	4
+		Alert:	Passive
+		IC:	0
+BREAK
+#70318
+Name:	Shoe-Fly
+Keywords:	shoe-fly
+Description:$
+What seems to be the middle of the Seattle Park is occupied by a giant silver
+platform shoe, at least four stories high, with a metal door set in its wide
+heel. A velvet rope cordons the door off from a long line of
+fashionably-dressed club kids, all of them dancing to some 220-bpm
+neo-tribal-techno-fusion number. The oft-repeated lyrics seem to be about an
+old woman who lived in a shoe. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	1100
+Colour:	0
+Security:	4
+Difficulty:	0
+Access:	4
+Control:	4
+Index:	4
+Files:	4
+Slave:	4
+Type:	LTG
+[EXITS]
+	[EXIT 10]
+		Exit:	1100
+		Number:	838-0206-0000
+	[EXIT 11]
+		Exit:	70319
+		Number:	door
+BREAK
+#70319
+Name:	In the Shoe
+Keywords:	shoe platform silver door
+Description:$
+The shoe's interior seems to be a large, raucous, vaguely retro club. Flashing
+floor tiles, color-shifting walls and a series of gigantic spinning mirror
+balls dangling from the ceiling threaten to blind you; the pounding dance beat
+manages to stay just shy of blowing out your hearing. Stylishly-dressed people
+- all very well-shod - wander to and fro, dancing, drinking, screaming at each
+other over the music, and generally having a good time. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	70318
+Colour:	0
+Security:	8
+Difficulty:	1
+Access:	10
+Control:	9
+Index:	10
+Files:	10
+Slave:	11
+Type:	Datastore
+[EXITS]
+	[EXIT 12]
+		Exit:	70318
+		Number:	shoe-fly
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	42
+		Alert:	No Alert
+		IC:	70319
+	[TRIGGER 1]
+		Step:	36
+		Alert:	No Alert
+		IC:	70318
+	[TRIGGER 2]
+		Step:	30
+		Alert:	Active
+		IC:	70318
+	[TRIGGER 3]
+		Step:	26
+		Alert:	No Alert
+		IC:	70319
+	[TRIGGER 4]
+		Step:	20
+		Alert:	No Alert
+		IC:	70318
+	[TRIGGER 5]
+		Step:	15
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 6]
+		Step:	10
+		Alert:	No Alert
+		IC:	70317
+	[TRIGGER 7]
+		Step:	5
+		Alert:	No Alert
+		IC:	70317
+BREAK
+#70320
+Name:	Evergreen Apartment Complex
+Keywords:	evergreen apartments
+Description:$
+You stand outside the entrance to a four-story brick apartment building. A
+^Wwhite^n awning stretches from the door to the sidewalk; the words "^YEvergreen
+Apartment Complex^n" are written on it in flowing gold script. A pretty young
+woman sits behind a small table next to the door, passing out promotional
+leaflets and answering questions about the apartment complex. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	1101
+Colour:	0
+Security:	2
+Difficulty:	0
+Access:	6
+Control:	6
+Index:	6
+Files:	6
+Slave:	6
+Type:	LTG
+[EXITS]
+	[EXIT 8]
+		Exit:	1101
+		Number:	838-0321-0000
+	[EXIT 9]
+		Exit:	70321
+		Number:	door
+BREAK
+#70321
+Name:	Building Lobby
+Keywords:	door building lobby
+Description:$
+Recessed halogen ceiling lights illuminate the pieces of generic abstract art
+and the two rows of mailboxes that hang from the beige-painted walls. A
+grey-suited young man stands behind a small synthwood reception desk, and a
+plain steel door is in the west wall. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	70320
+Colour:	0
+Security:	6
+Difficulty:	0
+Access:	9
+Control:	9
+Index:	9
+Files:	9
+Slave:	9
+Type:	Datastore
+[EXITS]
+	[EXIT 10]
+		Exit:	70320
+		Number:	evergreen
+	[EXIT 11]
+		Exit:	70322
+		Number:	door
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	16
+		Alert:	No Alert
+		IC:	70320
+	[TRIGGER 1]
+		Step:	12
+		Alert:	No Alert
+		IC:	70321
+	[TRIGGER 2]
+		Step:	8
+		Alert:	Passive
+		IC:	0
+BREAK
+#70322
+Name:	A Corridor
+Keywords:	corridor door steel
+Description:$
+A short, dimly-lit corridor with beige walls and brown industrial carpeting.
+Three doors to the north, west and east are labelled, respectively,
+"Accountant," "Manager," and "Custodian." 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	70321
+Colour:	1
+Security:	9
+Difficulty:	1
+Access:	12
+Control:	12
+Index:	12
+Files:	12
+Slave:	12
+Type:	LTG
+[EXITS]
+	[EXIT 3]
+		Exit:	70321
+		Number:	lobby
+	[EXIT 4]
+		Exit:	70323
+		Number:	Custodian
+	[EXIT 5]
+		Exit:	70324
+		Number:	Accountant
+	[EXIT 6]
+		Exit:	70325
+		Number:	Manager
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	25
+		Alert:	No Alert
+		IC:	70322
+	[TRIGGER 1]
+		Step:	20
+		Alert:	No Alert
+		IC:	70322
+	[TRIGGER 2]
+		Step:	15
+		Alert:	Active
+		IC:	70322
+	[TRIGGER 3]
+		Step:	10
+		Alert:	No Alert
+		IC:	70320
+	[TRIGGER 4]
+		Step:	5
+		Alert:	Passive
+		IC:	0
+BREAK
+#70323
+Name:	Custodian's Office
+Keywords:	custodian's office janitor
+Description:$
+Also known as "The Broom Closet." This tiny, shelf-laden area is filled with
+various cleaning supplies: mops, brooms, pails, soaps, disinfectants, paper
+towels and the like. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	70322
+Colour:	1
+Security:	8
+Difficulty:	1
+Access:	13
+Control:	13
+Index:	13
+Files:	13
+Slave:	13
+Type:	Datastore
+[EXITS]
+	[EXIT 5]
+		Exit:	70322
+		Number:	corridor
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	35
+		Alert:	No Alert
+		IC:	70324
+	[TRIGGER 1]
+		Step:	30
+		Alert:	No Alert
+		IC:	70323
+	[TRIGGER 2]
+		Step:	25
+		Alert:	No Alert
+		IC:	70323
+	[TRIGGER 3]
+		Step:	20
+		Alert:	No Alert
+		IC:	70323
+	[TRIGGER 4]
+		Step:	15
+		Alert:	Active
+		IC:	70322
+	[TRIGGER 5]
+		Step:	10
+		Alert:	Active
+		IC:	70322
+	[TRIGGER 6]
+		Step:	5
+		Alert:	Passive
+		IC:	70320
+BREAK
+#70324
+Name:	Accountant's Office
+Keywords:	accountant's office door
+Description:$
+A small, plain office, furnished with a steel desk, a chair and three large
+filing cabinets. A large desktop computer with a built-in printer take up most
+of the desk space; spreadsheets, folders and invoices are scattered across the
+rest. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	70322
+Colour:	1
+Security:	15
+Difficulty:	2
+Access:	15
+Control:	13
+Index:	15
+Files:	15
+Slave:	12
+Type:	Datastore
+[EXITS]
+	[EXIT 7]
+		Exit:	70322
+		Number:	corridor
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	36
+		Alert:	No Alert
+		IC:	70323
+	[TRIGGER 1]
+		Step:	32
+		Alert:	No Alert
+		IC:	70324
+	[TRIGGER 2]
+		Step:	28
+		Alert:	No Alert
+		IC:	70324
+	[TRIGGER 3]
+		Step:	24
+		Alert:	No Alert
+		IC:	70323
+	[TRIGGER 4]
+		Step:	20
+		Alert:	No Alert
+		IC:	70324
+	[TRIGGER 5]
+		Step:	16
+		Alert:	No Alert
+		IC:	70323
+	[TRIGGER 6]
+		Step:	12
+		Alert:	No Alert
+		IC:	70322
+	[TRIGGER 7]
+		Step:	8
+		Alert:	Active
+		IC:	70322
+	[TRIGGER 8]
+		Step:	4
+		Alert:	Passive
+		IC:	70320
+BREAK
+#70325
+Name:	Manager's Office
+Keywords:	manager's office door
+Description:$
+This windowless office is small, but comfortably furnished. A synthleather
+chair sits behind a large desk, and a small wet bar seems to have been built
+into the bookshelves that stand against the walls. Recessed halogen ceiling
+lights cast a warm yellow glow over the beige walls and brown carpeting, and
+soft jazz music pipes from hidden speakers. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	70322
+Colour:	1
+Security:	14
+Difficulty:	2
+Access:	15
+Control:	15
+Index:	15
+Files:	15
+Slave:	15
+Type:	Security
+[EXITS]
+	[EXIT 9]
+		Exit:	70322
+		Number:	corridor
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	35
+		Alert:	No Alert
+		IC:	70325
+	[TRIGGER 1]
+		Step:	34
+		Alert:	No Alert
+		IC:	70325
+	[TRIGGER 2]
+		Step:	30
+		Alert:	No Alert
+		IC:	70325
+	[TRIGGER 3]
+		Step:	26
+		Alert:	No Alert
+		IC:	70324
+	[TRIGGER 4]
+		Step:	23
+		Alert:	No Alert
+		IC:	70324
+	[TRIGGER 5]
+		Step:	20
+		Alert:	No Alert
+		IC:	70324
+	[TRIGGER 6]
+		Step:	17
+		Alert:	No Alert
+		IC:	70323
+	[TRIGGER 7]
+		Step:	15
+		Alert:	No Alert
+		IC:	70323
+	[TRIGGER 8]
+		Step:	11
+		Alert:	No Alert
+		IC:	70322
+	[TRIGGER 9]
+		Step:	7
+		Alert:	Active
+		IC:	70322
+	[TRIGGER 10]
+		Step:	4
+		Alert:	Passive
+		IC:	70320
+BREAK
+#70326
+Name:	Velasquez Securities & Investments
+Keywords:	velasquez securities investments bank
+Description:$
+This medium-sized lobby area is businesslike without being ostentatious: all
+simple grey marble, synthwood furniture and brass fixtures. A large computer
+on a table in the middle of the room flashes information about interest rates
+and financing packages; application forms and informational pamphlets are
+piled neatly around it. Several tellers sit behind a long counter along the
+west wall, protected by what looks like a thick sheet of bulletproof glass. A
+discreet synthwood door is set into the north wall. 
+~
+ShutdownStart:	A sweet, feminine voice announces that the bank is closing.
+ShutdownStop:	A sweet, feminine voice announces that the bank is open.
+Parent:	1101
+Colour:	0
+Security:	6
+Difficulty:	0
+Access:	6
+Control:	6
+Index:	6
+Files:	6
+Slave:	6
+Type:	LTG
+[EXITS]
+	[EXIT 11]
+		Exit:	70327
+		Number:	door
+	[EXIT 12]
+		Exit:	1101
+		Number:	tacoma
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	36
+		Alert:	No Alert
+		IC:	70329
+	[TRIGGER 1]
+		Step:	31
+		Alert:	No Alert
+		IC:	70327
+	[TRIGGER 2]
+		Step:	26
+		Alert:	No Alert
+		IC:	70327
+	[TRIGGER 3]
+		Step:	21
+		Alert:	Active
+		IC:	0
+	[TRIGGER 4]
+		Step:	16
+		Alert:	No Alert
+		IC:	70326
+	[TRIGGER 5]
+		Step:	11
+		Alert:	No Alert
+		IC:	70326
+	[TRIGGER 6]
+		Step:	6
+		Alert:	Passive
+		IC:	0
+BREAK
+#70327
+Name:	A Corridor
+Keywords:	corridor door
+Description:$
+This plain corridor is brightly lit by halogen ceiling lights. The floor and
+walls are of the same grey marble as the lobby, but the doors are made of
+solid steel. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	70326
+Colour:	2
+Security:	12
+Difficulty:	2
+Access:	16
+Control:	16
+Index:	16
+Files:	16
+Slave:	16
+Type:	LTG
+[EXITS]
+	[EXIT 7]
+		Exit:	70330
+		Number:	secure
+	[EXIT 8]
+		Exit:	70329
+		Number:	lounge
+	[EXIT 9]
+		Exit:	70328
+		Number:	office
+	[EXIT 10]
+		Exit:	70326
+		Number:	lobby
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	30
+		Alert:	No Alert
+		IC:	70331
+	[TRIGGER 1]
+		Step:	26
+		Alert:	No Alert
+		IC:	70330
+	[TRIGGER 2]
+		Step:	22
+		Alert:	No Alert
+		IC:	70330
+	[TRIGGER 3]
+		Step:	17
+		Alert:	Active
+		IC:	70329
+	[TRIGGER 4]
+		Step:	13
+		Alert:	Passive
+		IC:	70327
+	[TRIGGER 5]
+		Step:	9
+		Alert:	No Alert
+		IC:	70326
+	[TRIGGER 6]
+		Step:	5
+		Alert:	Passive
+		IC:	0
+BREAK
+#70328
+Name:	A Large Office
+Keywords:	office paperwork administration
+Description:$
+Rows of synthwood desks take up most of this large, bright room. Each desk is
+equipped with a desktop computer, an inbox and a small brass nameplate. The
+walls are lined with black steel filing cabinets that reach from floor to
+ceiling; occasionally, a worker will roll out one of the wheeled ladders
+attached to tracks in the ceiling and use that to get to one of the higher
+drawers. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	70327
+Colour:	2
+Security:	12
+Difficulty:	2
+Access:	17
+Control:	17
+Index:	17
+Files:	17
+Slave:	17
+Type:	Datastore
+[EXITS]
+	[EXIT 7]
+		Exit:	70326
+		Number:	lobby
+	[EXIT 8]
+		Exit:	70327
+		Number:	corridor
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	36
+		Alert:	No Alert
+		IC:	70331
+	[TRIGGER 1]
+		Step:	32
+		Alert:	No Alert
+		IC:	70330
+	[TRIGGER 2]
+		Step:	28
+		Alert:	No Alert
+		IC:	70330
+	[TRIGGER 3]
+		Step:	24
+		Alert:	No Alert
+		IC:	70329
+	[TRIGGER 4]
+		Step:	20
+		Alert:	No Alert
+		IC:	70328
+	[TRIGGER 5]
+		Step:	16
+		Alert:	Active
+		IC:	70328
+	[TRIGGER 6]
+		Step:	12
+		Alert:	No Alert
+		IC:	70327
+	[TRIGGER 7]
+		Step:	8
+		Alert:	No Alert
+		IC:	70326
+	[TRIGGER 8]
+		Step:	4
+		Alert:	Passive
+		IC:	0
+BREAK
+#70329
+Name:	A Staff Lounge
+Keywords:	staff lounge human resources
+Description:$
+This cozy lounge is decorated in soothing blues; reproductions of still lifes
+and posters of tranquil nature scenes hang from the walls. A fully-furnished
+kitchen occupies the north end of the area; the rest is taken up by small
+groups of counches and chairs clustered around low coffee tables. Groups of
+employees lounge around the area, conversing with each other. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	70327
+Colour:	2
+Security:	11
+Difficulty:	2
+Access:	15
+Control:	15
+Index:	15
+Files:	15
+Slave:	15
+Type:	Datastore
+[EXITS]
+	[EXIT 9]
+		Exit:	70327
+		Number:	corridor
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	40
+		Alert:	No Alert
+		IC:	70331
+	[TRIGGER 1]
+		Step:	36
+		Alert:	No Alert
+		IC:	70331
+	[TRIGGER 2]
+		Step:	32
+		Alert:	No Alert
+		IC:	70330
+	[TRIGGER 3]
+		Step:	28
+		Alert:	No Alert
+		IC:	70330
+	[TRIGGER 4]
+		Step:	24
+		Alert:	No Alert
+		IC:	70329
+	[TRIGGER 5]
+		Step:	20
+		Alert:	No Alert
+		IC:	70329
+	[TRIGGER 6]
+		Step:	16
+		Alert:	Active
+		IC:	70328
+	[TRIGGER 7]
+		Step:	12
+		Alert:	No Alert
+		IC:	70327
+	[TRIGGER 8]
+		Step:	8
+		Alert:	No Alert
+		IC:	70326
+	[TRIGGER 9]
+		Step:	4
+		Alert:	Passive
+		IC:	0
+BREAK
+#70330
+Name:	A Secure Corridor
+Keywords:	secure corridor
+Description:$
+This portion of the corridor looks like the previous one at first glance: grey
+marble walls and floor, bright halogen ceiling lights. But the doors here seem
+to be made of hard metal instead of synthwood. A preponderance of security
+cameras, sensors and other surveillance equipment seems to indicate that this
+is a carefully-watched sector.  
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	70327
+Colour:	3
+Security:	12
+Difficulty:	2
+Access:	16
+Control:	16
+Index:	16
+Files:	16
+Slave:	16
+Type:	Datastore
+[EXITS]
+	[EXIT 10]
+		Exit:	70326
+		Number:	lobby
+	[EXIT 11]
+		Exit:	70337
+		Number:	security
+	[EXIT 12]
+		Exit:	70336
+		Number:	archives
+	[EXIT 13]
+		Exit:	70335
+		Number:	internal
+	[EXIT 14]
+		Exit:	70334
+		Number:	projects
+	[EXIT 15]
+		Exit:	70333
+		Number:	contracts
+	[EXIT 16]
+		Exit:	70332
+		Number:	transaction
+	[EXIT 17]
+		Exit:	70331
+		Number:	customer
+	[EXIT 18]
+		Exit:	70327
+		Number:	corridor
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	28
+		Alert:	No Alert
+		IC:	70333
+	[TRIGGER 1]
+		Step:	25
+		Alert:	No Alert
+		IC:	70332
+	[TRIGGER 2]
+		Step:	22
+		Alert:	No Alert
+		IC:	70332
+	[TRIGGER 3]
+		Step:	19
+		Alert:	No Alert
+		IC:	70331
+	[TRIGGER 4]
+		Step:	16
+		Alert:	No Alert
+		IC:	70330
+	[TRIGGER 5]
+		Step:	13
+		Alert:	No Alert
+		IC:	70330
+	[TRIGGER 6]
+		Step:	11
+		Alert:	Active
+		IC:	70329
+	[TRIGGER 7]
+		Step:	9
+		Alert:	No Alert
+		IC:	70328
+	[TRIGGER 8]
+		Step:	6
+		Alert:	No Alert
+		IC:	70326
+	[TRIGGER 9]
+		Step:	3
+		Alert:	Passive
+		IC:	0
+BREAK
+#70331
+Name:	Customer Data Center
+Keywords:	customer data
+Description:$
+Halogen lights glare brightly overhead, illuminating every nook and cranny of
+this bare room. Security cameras, motion detectors and other assorted sensors
+blink quietly from their position the ceiling. The walls are covered with
+small metal drawers, each bearing a customer's name; a long table in the
+center of the room holds a host of terminals, each one scrolling through a
+list of customers. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	70330
+Colour:	3
+Security:	15
+Difficulty:	2
+Access:	18
+Control:	18
+Index:	18
+Files:	18
+Slave:	18
+Type:	Datastore
+[EXITS]
+	[EXIT 10]
+		Exit:	70330
+		Number:	corridor
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	27
+		Alert:	No Alert
+		IC:	70333
+	[TRIGGER 1]
+		Step:	24
+		Alert:	No Alert
+		IC:	70333
+	[TRIGGER 2]
+		Step:	21
+		Alert:	No Alert
+		IC:	70333
+	[TRIGGER 3]
+		Step:	19
+		Alert:	No Alert
+		IC:	70332
+	[TRIGGER 4]
+		Step:	17
+		Alert:	No Alert
+		IC:	70332
+	[TRIGGER 5]
+		Step:	15
+		Alert:	No Alert
+		IC:	70331
+	[TRIGGER 6]
+		Step:	12
+		Alert:	Active
+		IC:	70330
+	[TRIGGER 7]
+		Step:	9
+		Alert:	No Alert
+		IC:	70329
+	[TRIGGER 8]
+		Step:	6
+		Alert:	No Alert
+		IC:	70328
+	[TRIGGER 9]
+		Step:	3
+		Alert:	Passive
+		IC:	0
+BREAK
+#70332
+Name:	Transaction Data Center
+Keywords:	transaction
+Description:$
+Halogen lights glare brightly overhead, illuminating every nook and cranny of
+this bare room. Security cameras, motion detectors and other assorted sensors
+blink quietly from their positions on the steel walls and ceiling.
+Floor-to-ceiling steel bookshelves are crammed with old-fashioned black
+ledgers. Several state-of-the-art computer terminals sit on a large table in
+the room's center, their screens displaying an ever-changing assortment of
+graphs and spreadsheets. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	70330
+Colour:	3
+Security:	15
+Difficulty:	2
+Access:	19
+Control:	16
+Index:	18
+Files:	20
+Slave:	17
+Type:	Datastore
+[EXITS]
+	[EXIT 10]
+		Exit:	70330
+		Number:	secure
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	29
+		Alert:	No Alert
+		IC:	70333
+	[TRIGGER 1]
+		Step:	26
+		Alert:	No Alert
+		IC:	70333
+	[TRIGGER 2]
+		Step:	23
+		Alert:	No Alert
+		IC:	70333
+	[TRIGGER 3]
+		Step:	20
+		Alert:	No Alert
+		IC:	70332
+	[TRIGGER 4]
+		Step:	17
+		Alert:	No Alert
+		IC:	70332
+	[TRIGGER 5]
+		Step:	15
+		Alert:	No Alert
+		IC:	70331
+	[TRIGGER 6]
+		Step:	12
+		Alert:	Active
+		IC:	70330
+	[TRIGGER 7]
+		Step:	9
+		Alert:	No Alert
+		IC:	70330
+	[TRIGGER 8]
+		Step:	6
+		Alert:	No Alert
+		IC:	70329
+	[TRIGGER 9]
+		Step:	3
+		Alert:	Passive
+		IC:	70328
+BREAK
+#70333
+Name:	Contracts and Agreements
+Keywords:	contracts agreements
+Description:$
+Halogen lights glare brightly overhead, illuminating every nook and cranny of
+this bare room. Security cameras, motion detectors and other assorted sensors
+blink quietly from their positions on the steel walls and ceiling. Banks of
+floor-to-ceiling filing cabinets are the room's sole furnishings, lining the
+walls and standing in rows in the center. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	70330
+Colour:	3
+Security:	15
+Difficulty:	2
+Access:	18
+Control:	18
+Index:	18
+Files:	18
+Slave:	18
+Type:	Datastore
+[EXITS]
+	[EXIT 10]
+		Exit:	70330
+		Number:	corridor
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	30
+		Alert:	No Alert
+		IC:	70333
+	[TRIGGER 1]
+		Step:	28
+		Alert:	No Alert
+		IC:	70333
+	[TRIGGER 2]
+		Step:	25
+		Alert:	No Alert
+		IC:	70333
+	[TRIGGER 3]
+		Step:	22
+		Alert:	No Alert
+		IC:	70332
+	[TRIGGER 4]
+		Step:	20
+		Alert:	No Alert
+		IC:	70332
+	[TRIGGER 5]
+		Step:	17
+		Alert:	No Alert
+		IC:	70331
+	[TRIGGER 6]
+		Step:	15
+		Alert:	No Alert
+		IC:	70331
+	[TRIGGER 7]
+		Step:	12
+		Alert:	No Alert
+		IC:	70330
+	[TRIGGER 8]
+		Step:	9
+		Alert:	Active
+		IC:	70330
+	[TRIGGER 9]
+		Step:	6
+		Alert:	No Alert
+		IC:	70329
+	[TRIGGER 10]
+		Step:	3
+		Alert:	Passive
+		IC:	70328
+BREAK
+#70334
+Name:	Projects and Initiatives
+Keywords:	projects initiatives
+Description:$
+Despite the marble walls, expensive-looking wood-and-leather furniture and
+soft blue carpeting, this large room looks the hybrid offspring of a corporate
+boardroom and a military bunker. A ceiling-mounted projector displays an
+ever-changing assortment of maps, graphs and charts along the east wall; the
+large oval conference table is filled with scale models of buildings and
+cities, blueprints and complicated-looking spreadsheets. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	70330
+Colour:	3
+Security:	15
+Difficulty:	2
+Access:	19
+Control:	16
+Index:	18
+Files:	20
+Slave:	16
+Type:	Datastore
+[EXITS]
+	[EXIT 11]
+		Exit:	70330
+		Number:	corridor
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	30
+		Alert:	No Alert
+		IC:	70333
+	[TRIGGER 1]
+		Step:	27
+		Alert:	No Alert
+		IC:	70333
+	[TRIGGER 2]
+		Step:	25
+		Alert:	No Alert
+		IC:	70333
+	[TRIGGER 3]
+		Step:	22
+		Alert:	No Alert
+		IC:	70332
+	[TRIGGER 4]
+		Step:	20
+		Alert:	No Alert
+		IC:	70332
+	[TRIGGER 5]
+		Step:	17
+		Alert:	No Alert
+		IC:	70331
+	[TRIGGER 6]
+		Step:	14
+		Alert:	No Alert
+		IC:	70331
+	[TRIGGER 7]
+		Step:	11
+		Alert:	Active
+		IC:	70330
+	[TRIGGER 8]
+		Step:	8
+		Alert:	No Alert
+		IC:	70329
+	[TRIGGER 9]
+		Step:	5
+		Alert:	No Alert
+		IC:	70329
+	[TRIGGER 10]
+		Step:	2
+		Alert:	Passive
+		IC:	70328
+BREAK
+#70335
+Name:	Internal Finance
+Keywords:	finance internal
+Description:$
+This host looks like the interior of a large vault. Safety deposit boxes line
+three of the walls, and a row of black metal filing cabinets occupy the
+fourth. Bright halogen lights mounted in the corners of the floor and ceiling
+cast a merciless glare over ever square centimeter of the room. A large steel
+table in the center houses several terminals, all of which are flashing
+columns of numbers and lists of transactions. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	70330
+Colour:	3
+Security:	16
+Difficulty:	2
+Access:	20
+Control:	17
+Index:	18
+Files:	18
+Slave:	17
+Type:	Datastore
+[EXITS]
+	[EXIT 11]
+		Exit:	70330
+		Number:	corridor
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	27
+		Alert:	No Alert
+		IC:	70333
+	[TRIGGER 1]
+		Step:	24
+		Alert:	No Alert
+		IC:	70333
+	[TRIGGER 2]
+		Step:	21
+		Alert:	No Alert
+		IC:	70333
+	[TRIGGER 3]
+		Step:	19
+		Alert:	No Alert
+		IC:	70332
+	[TRIGGER 4]
+		Step:	17
+		Alert:	No Alert
+		IC:	70332
+	[TRIGGER 5]
+		Step:	14
+		Alert:	No Alert
+		IC:	70331
+	[TRIGGER 6]
+		Step:	11
+		Alert:	No Alert
+		IC:	70330
+	[TRIGGER 7]
+		Step:	9
+		Alert:	Active
+		IC:	70330
+	[TRIGGER 8]
+		Step:	6
+		Alert:	No Alert
+		IC:	70329
+	[TRIGGER 9]
+		Step:	4
+		Alert:	No Alert
+		IC:	70328
+	[TRIGGER 10]
+		Step:	2
+		Alert:	Passive
+		IC:	70327
+BREAK
+#70336
+Name:	Archives
+Keywords:	archives
+Description:$
+A huge, musty library, dimly lit by recessed ceiling lights and smelling
+faintly of dust. What seem to be genuine oak bookshelves line the walls,
+crammed with ancient-looking ledgers, manuscripts and folios. An oak desk sits
+in the middle of the room; the computer terminal on it is currently displaying
+a search menu. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	70330
+Colour:	3
+Security:	15
+Difficulty:	2
+Access:	18
+Control:	16
+Index:	19
+Files:	19
+Slave:	18
+Type:	Datastore
+[EXITS]
+	[EXIT 11]
+		Exit:	70330
+		Number:	corridor
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	33
+		Alert:	No Alert
+		IC:	70333
+	[TRIGGER 1]
+		Step:	30
+		Alert:	No Alert
+		IC:	70333
+	[TRIGGER 2]
+		Step:	27
+		Alert:	No Alert
+		IC:	70333
+	[TRIGGER 3]
+		Step:	24
+		Alert:	No Alert
+		IC:	70332
+	[TRIGGER 4]
+		Step:	21
+		Alert:	No Alert
+		IC:	70332
+	[TRIGGER 5]
+		Step:	19
+		Alert:	No Alert
+		IC:	70331
+	[TRIGGER 6]
+		Step:	17
+		Alert:	No Alert
+		IC:	70331
+	[TRIGGER 7]
+		Step:	14
+		Alert:	No Alert
+		IC:	70330
+	[TRIGGER 8]
+		Step:	12
+		Alert:	Active
+		IC:	70330
+	[TRIGGER 9]
+		Step:	9
+		Alert:	No Alert
+		IC:	70329
+	[TRIGGER 10]
+		Step:	6
+		Alert:	Passive
+		IC:	70328
+	[TRIGGER 11]
+		Step:	3
+		Alert:	No Alert
+		IC:	70327
+BREAK
+#70337
+Name:	Security
+Keywords:	security
+Description:$
+Banks of monitors cover the bare steel walls of this brightly-lit room, tuned
+to different areas of the bank building, both real and virtual. A large panel
+in the middle of the room features a dizzying array of switches, buttons,
+levers, gauges and other such controls. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	70330
+Colour:	3
+Security:	15
+Difficulty:	2
+Access:	19
+Control:	17
+Index:	17
+Files:	19
+Slave:	18
+Type:	Security
+[EXITS]
+	[EXIT 12]
+		Exit:	70330
+		Number:	corridor
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	30
+		Alert:	No Alert
+		IC:	70333
+	[TRIGGER 1]
+		Step:	27
+		Alert:	No Alert
+		IC:	70333
+	[TRIGGER 2]
+		Step:	24
+		Alert:	No Alert
+		IC:	70333
+	[TRIGGER 3]
+		Step:	21
+		Alert:	No Alert
+		IC:	70332
+	[TRIGGER 4]
+		Step:	19
+		Alert:	No Alert
+		IC:	70332
+	[TRIGGER 5]
+		Step:	16
+		Alert:	No Alert
+		IC:	70331
+	[TRIGGER 6]
+		Step:	14
+		Alert:	No Alert
+		IC:	70331
+	[TRIGGER 7]
+		Step:	11
+		Alert:	No Alert
+		IC:	70330
+	[TRIGGER 8]
+		Step:	9
+		Alert:	Active
+		IC:	70330
+	[TRIGGER 9]
+		Step:	6
+		Alert:	No Alert
+		IC:	70329
+	[TRIGGER 10]
+		Step:	4
+		Alert:	No Alert
+		IC:	70328
+	[TRIGGER 11]
+		Step:	2
+		Alert:	Passive
+		IC:	70327
+BREAK
+#70338
+Name:	Council Island Hospital - Outside
+Keywords:	hospital council island
+Description:$
+You stand in the center of a tranquil green clearing, the mingled scents of
+woodsmoke and fresh grass tickling your nose. A large pit has been dug into
+the ground here and lined with stones; the banked remains of a once-blazing
+fire smoulder within. A large, lodge-style wooden building stands nearby; a
+constant stream of people dressed in styles from medieval to modern walk in
+and out of it. 
+~
+ShutdownStart:	An unnatural darkness begins to fall.
+ShutdownStop:	The sky shimmers, then returns to normal.
+Parent:	1107
+Colour:	0
+Security:	6
+Difficulty:	0
+Access:	6
+Control:	3
+Index:	5
+Files:	5
+Slave:	6
+Type:	LTG
+[EXITS]
+	[EXIT 12]
+		Exit:	70339
+		Number:	lodge
+	[EXIT 13]
+		Exit:	1107
+		Number:	3206-9584
+BREAK
+#70339
+Name:	Inside the Lodge
+Keywords:	lodge hospital inside
+Description:$
+The lodge of course looks much larger from the inside, the curved walls of
+hide and wood seeming to disappear as they arch above. A well-tended fire
+burns brightly in the center, somehow managing to illuminate the area and give
+off the soothing smell of cedar smoke without blurring the air. Racks of
+drying herbs have been stacked against one portion of the walls; neat piles of
+parchments and cured hides occupy another. 
+~
+ShutdownStart:	The fire flickers and begins to burn out.
+ShutdownStop:	The fire blazes back to life.
+Parent:	70338
+Colour:	1
+Security:	9
+Difficulty:	1
+Access:	11
+Control:	9
+Index:	12
+Files:	11
+Slave:	11
+Type:	Datastore
+[EXITS]
+	[EXIT 14]
+		Exit:	70338
+		Number:	outside
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	25
+		Alert:	No Alert
+		IC:	70335
+	[TRIGGER 1]
+		Step:	20
+		Alert:	Active
+		IC:	0
+	[TRIGGER 2]
+		Step:	15
+		Alert:	No Alert
+		IC:	70334
+	[TRIGGER 3]
+		Step:	10
+		Alert:	No Alert
+		IC:	70334
+	[TRIGGER 4]
+		Step:	5
+		Alert:	Passive
+		IC:	0
+BREAK
+#70340
+Name:	Glasiril Industries
+Keywords:	glasiril industries
+Description:$
+This rather bland corporate host looks like a standard open-plan office: a
+bright, spacious white-walled area occupied by rows of cubicles in the middle.
+A smiling elven receptionist at an oak desk in the front interacts with
+visitors, and several displays on the west and east walls answer questions
+about Glasiril's corporate history, employees, projects and products. The
+muffled sounds of clacking keyboards and business conversations fill the air.
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	1104
+Colour:	1
+Security:	12
+Difficulty:	1
+Access:	7
+Control:	5
+Index:	5
+Files:	7
+Slave:	6
+Type:	Datastore
+[EXITS]
+	[EXIT 5]
+		Exit:	1104
+		Number:	portland
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	15
+		Alert:	Active
+		IC:	0
+	[TRIGGER 1]
+		Step:	10
+		Alert:	Active
+		IC:	70336
+	[TRIGGER 2]
+		Step:	5
+		Alert:	Passive
+		IC:	0
+BREAK
+#70341
+Name:	Suburban Outfitters
+Keywords:	suburban outfitters clothing
+Description:$
+This host is a glowing, abstract agglomeration of plasticy blobs that pulse
+and shift in time to the rapid-fire beats of some anonymous retro-techno band.
+Every now and then, an article of clothing or random picture of some party or
+concert will float out into the open, only to be swallowed by a passing glop
+of color. 
+~
+ShutdownStart:	The soundtrack switches to bland, synthesized elevator music.
+ShutdownStop:	A pulsing electronic beat drowns out the sleepy synthesizers.
+Parent:	0
+Colour:	0
+Security:	5
+Difficulty:	0
+Access:	6
+Control:	6
+Index:	6
+Files:	6
+Slave:	6
+Type:	Datastore
+BREAK
+#70342
+Name:	The Seattle Voice
+Keywords:	seattle voice newspaper magazine
+Description:$
+With its metal walls, matte-black floor and ceiling, halogen track lights and
+lack of furniture, this large space seems more like a modern art gallery than
+a publication's Matrix host. Visitors stand in front of the many framed
+squares that hang from the shining steel walls, accessing articles, responding
+to ads or making posts to the publication's online forums. The area seems to
+continue indefinitely to the north. A discreet door in the southwest corner is
+marked "Archives." 
+~
+ShutdownStart:	The lights blink, then begin to fade.
+ShutdownStop:	The lights flare momentarily, then return to their normal brightness.
+Parent:	1100
+Colour:	0
+Security:	4
+Difficulty:	0
+Access:	4
+Control:	4
+Index:	4
+Files:	4
+Slave:	4
+Type:	LTG
+[EXITS]
+	[EXIT 3]
+		Exit:	70343
+		Number:	archives
+	[EXIT 4]
+		Exit:	1100
+		Number:	seattle
+	[EXIT 5]
+		Exit:	70344
+		Number:	forums
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	21
+		Alert:	No Alert
+		IC:	70337
+	[TRIGGER 1]
+		Step:	16
+		Alert:	No Alert
+		IC:	70337
+	[TRIGGER 2]
+		Step:	11
+		Alert:	Active
+		IC:	70338
+	[TRIGGER 3]
+		Step:	6
+		Alert:	Passive
+		IC:	0
+BREAK
+#70343
+Name:	Archives
+Keywords:	archives
+Description:$
+Halogen corner lights cast a soft golden glow over this small, cubical,
+black-walled room. An old-fashioned metal card catalog, its drawers neatly
+labelled in thin, spiky script, sits in the center. Occasionally, a visitor
+will walk up to it, open a drawer, and grab an index card, which immediately
+metamorphoses into a hardcover copy of an article or issue. A few cast-iron
+benches surround the catalog, most of them occupied by busy readers. The door
+back to the main room is to the northwest. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	The lights flare, then return to their normal levels.
+Parent:	70342
+Colour:	0
+Security:	6
+Difficulty:	0
+Access:	7
+Control:	5
+Index:	6
+Files:	6
+Slave:	6
+Type:	Datastore
+[EXITS]
+	[EXIT 4]
+		Exit:	70342
+		Number:	door
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	16
+		Alert:	Active
+		IC:	70337
+	[TRIGGER 1]
+		Step:	11
+		Alert:	No Alert
+		IC:	70338
+	[TRIGGER 2]
+		Step:	6
+		Alert:	Passive
+		IC:	0
+BREAK
+#70344
+Name:	Forums
+Keywords:	forums
+Description:$
+Most of the visitors to this fairly crowded area are in the process of
+scribbling messages onto various bedsheet-sized strips of lined paper that
+almost completely cover the shiny steel walls of this large room. Others are
+gathered around a small bank of monitors in the room's center, reading the
+various posts. A large dome light in the ceiling's center casts a bright but
+not intrusive glow over the area. 
+~
+ShutdownStart:	The lights flicker, then begin to fade.
+ShutdownStop:	The lights flare, then return to their normal levels.
+Parent:	70342
+Colour:	0
+Security:	6
+Difficulty:	0
+Access:	4
+Control:	8
+Index:	7
+Files:	7
+Slave:	5
+Type:	LTG
+[EXITS]
+	[EXIT 3]
+		Exit:	70342
+		Number:	main
+BREAK
+#70345
+Name:	Allen & Associates Private Host
+Keywords:	allen associates private network host
+Description:$
+This host is very matter-of-factly designed: a vast, dark blue space with the
+company's logo floating above, and various labelled geometric shapes floating
+around within easy reach.  
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	0
+Colour:	1
+Security:	6
+Difficulty:	0
+Access:	5
+Control:	6
+Index:	4
+Files:	4
+Slave:	6
+Type:	Datastore
+BREAK
+END

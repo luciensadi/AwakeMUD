@@ -1,0 +1,12 @@
+#26200
+Name:	Shimmer
+LongDesc:	The formless space shimmers near you.
+Description:$
+A section of the matrix seems to change resolutions at random, creating a
+shimmering effect. 
+~
+Rating:	6
+Type:	^WProbe^n
+Subtype:	0
+BREAK
+END

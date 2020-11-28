@@ -1,0 +1,311 @@
+#38000
+Name:	Espanoza Way Complex, Central Node
+Keywords:	espanoza way complex
+Description:$
+This host acts as the main data router for the Espanoza Way Complex. It looks
+rather similiar to the complex itself, save for the fact it's constructed out
+of a blue crystal. Data packets -- little envelopes with wings, all marked
+with the various symbols of the companies who rent space within the complex --
+constantly fly out of the tower's top. Occasionally, an envelope, obviously a
+rejected data packet, can be seen flying back into the tower.  
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	1100
+Colour:	2
+Security:	8
+Difficulty:	1
+Access:	8
+Control:	10
+Index:	10
+Files:	10
+Slave:	12
+Type:	Datastore
+[EXITS]
+	[EXIT 0]
+		Exit:	38001
+		Number:	EWC-ACC
+	[EXIT 1]
+		Exit:	38002
+		Number:	EWC-MAN
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	65
+		Alert:	No Alert
+		IC:	38007
+	[TRIGGER 1]
+		Step:	61
+		Alert:	No Alert
+		IC:	38007
+	[TRIGGER 2]
+		Step:	57
+		Alert:	No Alert
+		IC:	38009
+	[TRIGGER 3]
+		Step:	53
+		Alert:	No Alert
+		IC:	38006
+	[TRIGGER 4]
+		Step:	49
+		Alert:	No Alert
+		IC:	38003
+	[TRIGGER 5]
+		Step:	46
+		Alert:	Active
+		IC:	0
+	[TRIGGER 6]
+		Step:	41
+		Alert:	No Alert
+		IC:	38006
+	[TRIGGER 7]
+		Step:	36
+		Alert:	No Alert
+		IC:	38007
+	[TRIGGER 8]
+		Step:	30
+		Alert:	No Alert
+		IC:	38000
+	[TRIGGER 9]
+		Step:	26
+		Alert:	No Alert
+		IC:	38003
+	[TRIGGER 10]
+		Step:	23
+		Alert:	No Alert
+		IC:	38004
+	[TRIGGER 11]
+		Step:	19
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 12]
+		Step:	16
+		Alert:	No Alert
+		IC:	38002
+	[TRIGGER 13]
+		Step:	11
+		Alert:	No Alert
+		IC:	38000
+	[TRIGGER 14]
+		Step:	7
+		Alert:	No Alert
+		IC:	38001
+	[TRIGGER 15]
+		Step:	4
+		Alert:	No Alert
+		IC:	38001
+BREAK
+#38001
+Name:	Espanoza Way Complex, Accounting Host
+Keywords:	accounting accounts
+Description:$
+Row after row of office cubicles stretch before you in all directions. The
+envelopes of the main host seem to be replaced with faceless drones wearing
+typical office wear, white shirt and black slacks. Each cubicle is set out
+identically, an old desktop on a desk and a filing cabinet in the corner. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	0
+Colour:	2
+Security:	10
+Difficulty:	1
+Access:	14
+Control:	9
+Index:	10
+Files:	14
+Slave:	6
+Type:	Datastore
+[EXITS]
+	[EXIT 16]
+		Exit:	38000
+		Number:	EWC-LTG
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	69
+		Alert:	No Alert
+		IC:	38011
+	[TRIGGER 1]
+		Step:	65
+		Alert:	No Alert
+		IC:	38011
+	[TRIGGER 2]
+		Step:	62
+		Alert:	No Alert
+		IC:	38011
+	[TRIGGER 3]
+		Step:	58
+		Alert:	No Alert
+		IC:	38004
+	[TRIGGER 4]
+		Step:	55
+		Alert:	No Alert
+		IC:	38010
+	[TRIGGER 5]
+		Step:	51
+		Alert:	No Alert
+		IC:	38010
+	[TRIGGER 6]
+		Step:	48
+		Alert:	No Alert
+		IC:	38005
+	[TRIGGER 7]
+		Step:	44
+		Alert:	No Alert
+		IC:	38008
+	[TRIGGER 8]
+		Step:	40
+		Alert:	Active
+		IC:	0
+	[TRIGGER 9]
+		Step:	36
+		Alert:	No Alert
+		IC:	38007
+	[TRIGGER 10]
+		Step:	33
+		Alert:	No Alert
+		IC:	38006
+	[TRIGGER 11]
+		Step:	27
+		Alert:	No Alert
+		IC:	38007
+	[TRIGGER 12]
+		Step:	25
+		Alert:	No Alert
+		IC:	38009
+	[TRIGGER 13]
+		Step:	21
+		Alert:	No Alert
+		IC:	38000
+	[TRIGGER 14]
+		Step:	18
+		Alert:	No Alert
+		IC:	38003
+	[TRIGGER 15]
+		Step:	15
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 16]
+		Step:	12
+		Alert:	No Alert
+		IC:	38005
+	[TRIGGER 17]
+		Step:	9
+		Alert:	No Alert
+		IC:	38000
+	[TRIGGER 18]
+		Step:	6
+		Alert:	No Alert
+		IC:	38002
+	[TRIGGER 19]
+		Step:	4
+		Alert:	No Alert
+		IC:	38001
+BREAK
+#38002
+Name:	Espanoza Way Complex, Management Host
+Keywords:	management
+Description:$
+This host takes the form of a large white hall, the floor and fixtures
+gleaming with cleanliness. A white foutain sits in the middle, spewing water
+into the air. Large elaborate desks sit away from the walls at regular
+intervals. On each desk is the name of one of the executives in charge of
+running the EWC. Envelopes stream into the host from the rest of the matrix,
+carefully filing themselves away in their relevant desk drawers. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+
+Parent:	0
+Colour:	2
+Security:	10
+Difficulty:	1
+Access:	14
+Control:	10
+Index:	12
+Files:	12
+Slave:	9
+Type:	Datastore
+[EXITS]
+	[EXIT 20]
+		Exit:	38000
+		Number:	EWC-LTG
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	68
+		Alert:	No Alert
+		IC:	38011
+	[TRIGGER 1]
+		Step:	65
+		Alert:	No Alert
+		IC:	38011
+	[TRIGGER 2]
+		Step:	61
+		Alert:	No Alert
+		IC:	38006
+	[TRIGGER 3]
+		Step:	56
+		Alert:	No Alert
+		IC:	38010
+	[TRIGGER 4]
+		Step:	53
+		Alert:	No Alert
+		IC:	38010
+	[TRIGGER 5]
+		Step:	50
+		Alert:	No Alert
+		IC:	38009
+	[TRIGGER 6]
+		Step:	45
+		Alert:	No Alert
+		IC:	38008
+	[TRIGGER 7]
+		Step:	41
+		Alert:	Active
+		IC:	38006
+	[TRIGGER 8]
+		Step:	38
+		Alert:	No Alert
+		IC:	38007
+	[TRIGGER 9]
+		Step:	33
+		Alert:	No Alert
+		IC:	38005
+	[TRIGGER 10]
+		Step:	30
+		Alert:	No Alert
+		IC:	38004
+	[TRIGGER 11]
+		Step:	24
+		Alert:	No Alert
+		IC:	38003
+	[TRIGGER 12]
+		Step:	20
+		Alert:	No Alert
+		IC:	38006
+	[TRIGGER 13]
+		Step:	17
+		Alert:	No Alert
+		IC:	38000
+	[TRIGGER 14]
+		Step:	13
+		Alert:	Passive
+		IC:	0
+	[TRIGGER 15]
+		Step:	10
+		Alert:	No Alert
+		IC:	38002
+	[TRIGGER 16]
+		Step:	6
+		Alert:	No Alert
+		IC:	38001
+	[TRIGGER 17]
+		Step:	3
+		Alert:	No Alert
+		IC:	38001
+BREAK
+END
