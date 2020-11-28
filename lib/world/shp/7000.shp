@@ -1,5 +1,5 @@
-#70000
-Keeper:	70003
+#700000
+Keeper:	700003
 ProfitBuy:	1.00
 ProfitSell:	1.00
 Random:	0
@@ -19,132 +19,132 @@ Buytypes:	1
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	70086
+		Vnum:	700086
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	70082
+		Vnum:	700082
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	70081
+		Vnum:	700081
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	70080
+		Vnum:	700080
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	70079
+		Vnum:	700079
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	70069
+		Vnum:	700069
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	70070
+		Vnum:	700070
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	70071
+		Vnum:	700071
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	70072
+		Vnum:	700072
 		Type:	Always
 		Stock:	0
 	[SELL 9]
-		Vnum:	70073
+		Vnum:	700073
 		Type:	Always
 		Stock:	0
 	[SELL 10]
-		Vnum:	70074
+		Vnum:	700074
 		Type:	Always
 		Stock:	0
 	[SELL 11]
-		Vnum:	70075
+		Vnum:	700075
 		Type:	Always
 		Stock:	0
 	[SELL 12]
-		Vnum:	70076
+		Vnum:	700076
 		Type:	Always
 		Stock:	0
 	[SELL 13]
-		Vnum:	70077
+		Vnum:	700077
 		Type:	Always
 		Stock:	0
 	[SELL 14]
-		Vnum:	70078
+		Vnum:	700078
 		Type:	Always
 		Stock:	0
 	[SELL 15]
-		Vnum:	70000
+		Vnum:	700000
 		Type:	Always
 		Stock:	0
 	[SELL 16]
-		Vnum:	70067
+		Vnum:	700067
 		Type:	Always
 		Stock:	0
 	[SELL 17]
-		Vnum:	70003
+		Vnum:	700003
 		Type:	Always
 		Stock:	0
 	[SELL 18]
-		Vnum:	70004
+		Vnum:	700004
 		Type:	Always
 		Stock:	0
 	[SELL 19]
-		Vnum:	70006
+		Vnum:	700006
 		Type:	Always
 		Stock:	0
 	[SELL 20]
-		Vnum:	70007
+		Vnum:	700007
 		Type:	Always
 		Stock:	0
 	[SELL 21]
-		Vnum:	70068
+		Vnum:	700068
 		Type:	Always
 		Stock:	0
 	[SELL 22]
-		Vnum:	70011
+		Vnum:	700011
 		Type:	Always
 		Stock:	0
 	[SELL 23]
-		Vnum:	70012
+		Vnum:	700012
 		Type:	Always
 		Stock:	0
 	[SELL 24]
-		Vnum:	70013
+		Vnum:	700013
 		Type:	Always
 		Stock:	0
 	[SELL 25]
-		Vnum:	70014
+		Vnum:	700014
 		Type:	Always
 		Stock:	0
 	[SELL 26]
-		Vnum:	70017
+		Vnum:	700017
 		Type:	Always
 		Stock:	0
 	[SELL 27]
-		Vnum:	70018
+		Vnum:	700018
 		Type:	Always
 		Stock:	0
 	[SELL 28]
-		Vnum:	70019
+		Vnum:	700019
 		Type:	Always
 		Stock:	0
 	[SELL 29]
-		Vnum:	70020
+		Vnum:	700020
 		Type:	Always
 		Stock:	0
 	[SELL 30]
-		Vnum:	70021
+		Vnum:	700021
 		Type:	Always
 		Stock:	0
 BREAK
-#70001
-Keeper:	70001
+#700001
+Keeper:	700001
 ProfitBuy:	1.00
 ProfitSell:	1.00
 Random:	0
@@ -164,88 +164,88 @@ Buytypes:	1
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	70023
+		Vnum:	700023
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	70024
+		Vnum:	700024
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	70025
+		Vnum:	700025
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	70026
+		Vnum:	700026
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	70027
+		Vnum:	700027
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	70028
+		Vnum:	700028
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	70029
+		Vnum:	700029
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	70030
+		Vnum:	700030
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	70031
+		Vnum:	700031
 		Type:	Always
 		Stock:	0
 	[SELL 9]
-		Vnum:	70032
+		Vnum:	700032
 		Type:	Always
 		Stock:	0
 	[SELL 10]
-		Vnum:	70033
+		Vnum:	700033
 		Type:	Always
 		Stock:	0
 	[SELL 11]
-		Vnum:	70034
+		Vnum:	700034
 		Type:	Always
 		Stock:	0
 	[SELL 12]
-		Vnum:	70035
+		Vnum:	700035
 		Type:	Always
 		Stock:	0
 	[SELL 13]
-		Vnum:	70036
+		Vnum:	700036
 		Type:	Always
 		Stock:	0
 	[SELL 14]
-		Vnum:	70037
+		Vnum:	700037
 		Type:	Always
 		Stock:	0
 	[SELL 15]
-		Vnum:	70038
+		Vnum:	700038
 		Type:	Always
 		Stock:	0
 	[SELL 16]
-		Vnum:	70039
+		Vnum:	700039
 		Type:	Always
 		Stock:	0
 	[SELL 17]
-		Vnum:	70040
+		Vnum:	700040
 		Type:	Always
 		Stock:	0
 	[SELL 18]
-		Vnum:	70041
+		Vnum:	700041
 		Type:	Always
 		Stock:	0
 	[SELL 19]
-		Vnum:	70042
+		Vnum:	700042
 		Type:	Always
 		Stock:	0
 BREAK
-#70002
-Keeper:	70002
+#700002
+Keeper:	700002
 ProfitBuy:	1.00
 ProfitSell:	1.00
 Random:	0
@@ -277,51 +277,51 @@ Etiquette:	46
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	70043
+		Vnum:	700043
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	70044
+		Vnum:	700044
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	70045
+		Vnum:	700045
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	70046
+		Vnum:	700046
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	70047
+		Vnum:	700047
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	70048
+		Vnum:	700048
 		Type:	Always
 		Stock:	0
 	[SELL 9]
-		Vnum:	70049
+		Vnum:	700049
 		Type:	Always
 		Stock:	0
 	[SELL 10]
-		Vnum:	70050
+		Vnum:	700050
 		Type:	Always
 		Stock:	0
 	[SELL 11]
-		Vnum:	70051
+		Vnum:	700051
 		Type:	Always
 		Stock:	0
 	[SELL 12]
-		Vnum:	70052
+		Vnum:	700052
 		Type:	Always
 		Stock:	0
 	[SELL 13]
-		Vnum:	70053
+		Vnum:	700053
 		Type:	Always
 		Stock:	0
 	[SELL 14]
-		Vnum:	70054
+		Vnum:	700054
 		Type:	Always
 		Stock:	0
 	[SELL 15]
@@ -333,27 +333,27 @@ Etiquette:	46
 		Type:	Always
 		Stock:	0
 	[SELL 17]
-		Vnum:	70055
+		Vnum:	700055
 		Type:	Always
 		Stock:	0
 	[SELL 18]
-		Vnum:	70056
+		Vnum:	700056
 		Type:	Always
 		Stock:	0
 	[SELL 19]
-		Vnum:	70057
+		Vnum:	700057
 		Type:	Always
 		Stock:	0
 	[SELL 20]
-		Vnum:	70058
+		Vnum:	700058
 		Type:	Avail
 		Stock:	0
 	[SELL 21]
-		Vnum:	70059
+		Vnum:	700059
 		Type:	Always
 		Stock:	0
 	[SELL 22]
-		Vnum:	70060
+		Vnum:	700060
 		Type:	Always
 		Stock:	0
 	[SELL 23]
