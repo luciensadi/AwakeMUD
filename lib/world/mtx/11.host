@@ -30,12 +30,12 @@ SlaveScramble:	0
 SlaveTrapdoor:	0
 Type:	LTG
 [EXITS]
-  [EXIT 0]
-    Exit:	1
-    Number:	9206-3216
-  [EXIT 1]
-    Exit:	666
-    Number:	0206-0000
+	[EXIT 0]
+		Exit:	1
+		Number:	9206-3216
+	[EXIT 1]
+		Exit:	666
+		Number:	0206-0000
 	[EXIT 2]
 		Exit:	70342
 		Number:	9206-1200
