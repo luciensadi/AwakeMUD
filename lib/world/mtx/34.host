@@ -1,0 +1,76 @@
+#3400
+Name:	A beautiful expanse of frozen tundra
+Keywords:	tundra frozen JNL
+Description:$
+Stretching into infinity in all directions is a frozen tundra, scattered with
+snowdrifts and hills that are covered in meters of snow and ice. A few trees
+are scattered about the landscape, all of which are frozen solid, their long
+dead branches encased in ice, making for a beautiful display. The wind rips
+and roars around, carrying with it millions of beautiful snowflakes, each one
+unique, with no two having the same design. A few of the snowflakes seem to be
+collecting around you, as if begging to be touched. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	0
+Colour:	3
+Security:	8
+Difficulty:	1
+Access:	10
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	10
+ControlTrapdoor:	0
+Index:	10
+IndexTrapdoor:	0
+Files:	10
+FilesScramble:	4
+FilesTrapdoor:	0
+Slave:	10
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Security
+BREAK
+#3401
+Name:	Frozen Dream Machine
+Keywords:	frozen dream machine
+Description:$
+Odd swirls of colours pulsate eerily in a tide-like fashion, as if there were
+some large, unseen creature whos breath expands and contracts slowly, causing
+ripples to form in the various patterns of colours. There is a distinct lack
+of spatial alignment, and the background itself offers no hints towards what
+is up and what is down. Small, glimmering particles occasionally blaze through
+the the aurora borealis like colour scheme, reminicent of shooting stars in
+the night sky. 
+~
+ShutdownStart:	A deep echoing voice announces a host shutdown.
+ShutdownStop:	A deep echoing voice announces the shutdown has been aborted.
+Parent:	0
+Colour:	2
+Security:	8
+Difficulty:	1
+Access:	10
+AccessScramble:	0
+AccessTrapdoor:	0
+Control:	10
+ControlTrapdoor:	0
+Index:	10
+IndexTrapdoor:	0
+Files:	10
+FilesScramble:	0
+FilesTrapdoor:	0
+Slave:	10
+SlaveScramble:	0
+SlaveTrapdoor:	0
+Type:	Datastore
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	40
+		Alert:	Active
+		IC:	3401
+	[TRIGGER 1]
+		Step:	20
+		Alert:	Passive
+		IC:	3400
+BREAK
+END

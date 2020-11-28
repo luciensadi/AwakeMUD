@@ -1,0 +1,34 @@
+#32500
+Name:	Seattle LTG
+Keywords:	Seattle LTG
+Description:$
+Before you floats a perfect representation of the city of Seattle. It sit's
+upon a huge floating stone, suspended above an endless void. The intricate
+detail is amazing, as data stream's zoom along the streets below, weaving in
+and out of buildings. The Seattle LTG provides link to every number within
+Seattle, and you can clearly make out where the huge masses of data stream out
+of the Renraku Arcology and the Mitsuhama Towers, amongst others. 
+~
+Parent:	0
+Colour:	1
+Security:	4
+Difficulty:	0
+Access:	6
+Control:	8
+Index:	6
+Files:	6
+Slave:	6
+Type:	LTG
+Search:	records
+[EXITS]
+	[EXIT 0]
+		Exit:	60300
+		Number:	2206-3554
+	[EXIT 1]
+		Exit:	26000
+		Number:	7206-6754
+	[EXIT 2]
+		Exit:	65050
+		Number:	5206-1929
+BREAK
+END

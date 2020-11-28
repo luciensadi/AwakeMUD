@@ -1,0 +1,335 @@
+#65000
+Name:	a seedy looking character
+LongDesc:	A seedy looking character follows you around the 'Shack.
+Description:$
+Dressed in a full length trenchcoat, you seriously expect him to open it up
+and flash you at any moment. He sneers are you as you go about your business.
+~
+Rating:	10
+Type:	^WProbe^n
+Subtype:	0
+Flags:	0
+BREAK
+#65001
+Name:	a bratty child
+LongDesc:	A bratty child chases after you through the host.
+Description:$
+Where are his parents? This snotty nosed young child seems very intent on
+sticking as close to you as possible, grabbing onto you and bumping into you
+at any opporunity. That's the problem with kids these days, no respect for
+their elders. 
+~
+Rating:	8
+Type:	Trace
+Subtype:	0
+Flags:	0
+BREAK
+#65002
+Name:	a troll ganger
+LongDesc:	A troll ganger reloads his shotgun behind a stack of beans.
+Description:$
+This guy means business, if this wasn't the matrix you would think he was
+about to rob the place. Dressed in street clothes overlaid with light armour,
+he reloads his shotgun and shoots a wide grin at you. 
+~
+Rating:	6
+Type:	Blaster
+Subtype:	0
+Flags:	0
+BREAK
+#65003
+Name:	a flying can of baked beans
+LongDesc:	A can of baked beans flies towards you.
+Description:$
+Who knows what joker hurled this at you, but you might want to duck...
+quickly. 
+~
+Rating:	8
+Type:	^WCrippler^n
+Subtype:	3
+Flags:	0
+BREAK
+#65004
+Name:	the cash register
+LongDesc:	The cash register sits here, although waiting for a purchase of some sort.
+Description:$
+It's a standard cash register, used for when you pay in hard cold nuyen
+instead of those flimsy credstick things. It's draw snaps open and shut
+violently, flinging nuyen bills all over the floor. 
+~
+Rating:	10
+Type:	Tar Pit
+Subtype:	0
+Flags:	0
+BREAK
+#65005
+Name:	a human ganger
+LongDesc:	A human ganger flicks his knife open and shut, waiting for you to make your move.
+Description:$
+One of the dregs of society. His tattered clothing shows the sure sign of
+recent battles. He seems set on getting that flick knife in you, one way or
+another. 
+~
+Rating:	8
+Type:	^WKiller^n
+Subtype:	0
+Flags:	0
+BREAK
+#65006
+Name:	a Stuffer Shack employee
+LongDesc:	A Stuffer Shack employee meanders along the eisles, check this stock.
+Description:$
+He seems to be in his late teens and incredibly skinny. He meander's slowly
+along the eisles, scanning stock with his pocket secretary and moving along,
+all the time keeping a close eye on you. 
+~
+Rating:	8
+Type:	^WScout^n
+Subtype:	0
+Flags:	0
+BREAK
+#65007
+Name:	a human ganger
+LongDesc:	A human ganger flicks his knife open and shut, waiting for you to make your move.
+Description:$
+One of the dregs of society. His tattered clothing shows the sure sign of
+recent battles. He seems set on getting that flick knife in you, one way or
+another.  
+~
+Rating:	10
+Type:	^WKiller^n
+Subtype:	0
+Flags:	0
+BREAK
+#65008
+Name:	a troll ganger
+LongDesc:	A troll ganger reloads his shotgun behind a stack of beans.
+Description:$
+This guy means business, if this wasn't the matrix you would think he was
+about to rob the place. Dressed in street clothes overlaid with light armour,
+he reloads his shotgun and shoots a wide grin at you.  
+~
+Rating:	8
+Type:	Blaster
+Subtype:	0
+Flags:	0
+BREAK
+#65009
+Name:	the Manager
+LongDesc:	The Manager of this Stuffer Shack steps out from behind the counter to deal out justice.
+Description:$
+This is a scary looking fellow, well he would be, if it wasn't for the tie,
+thick glasses and hunched back. He's actually more scary in an Igor looking
+way, except Igor doesn't dress this neatly. 
+~
+Rating:	8
+Type:	^LNon-Lethal Black^n
+Subtype:	0
+Flags:	0
+BREAK
+#65010
+Name:	a tub of salsa
+LongDesc:	Someone has hurled a tub of salsa dip at you.
+Description:$
+First baked beans now Salsa, what kind of bratty kids have got loose in this
+store anyway? 
+~
+Rating:	8
+Type:	Ripper
+Subtype:	3
+Flags:	0
+BREAK
+#65011
+Name:	a small ork wearing Trogs colours
+LongDesc:	A small ork wearing ^RTrogs ^Lcolours^n prowls the host.
+Description:$
+This Ork is small, not much larger than a human, he prowls the host, totally
+unarmed. 
+~
+Rating:	8
+Type:	^WScout^n
+Subtype:	0
+Flags:	100000
+BREAK
+#65012
+Name:	an ork tagger
+LongDesc:	An Ork teen with a spray can stands here looking rough.
+Description:$
+Dressed in red and black he stands around with his arms crossed. In one hand
+he has a can of red spraypaint. 
+~
+Rating:	6
+Type:	^WCrippler^n
+Subtype:	3
+Flags:	10000000
+Trap:	65013
+BREAK
+#65013
+Name:	a large troll carrying a baseball bat
+LongDesc:	A large troll dressed in red and black floats almost etherally here.
+Description:$
+This guy is huge, even for a troll. He carries his baseball bat like he is
+ready to pound something. 
+~
+Rating:	8
+Type:	Tar Pit
+Subtype:	1
+Flags:	1000010
+BREAK
+#65014
+Name:	an orkish Trog ganger
+LongDesc:	An orkish ganger is here looking menacing.
+Description:$
+He is carrying what seems to be a homemade shotgun, with a caliber larger than
+a human's head. He is muscled beyond belief but still moves quickly throughout
+the host. 
+~
+Rating:	10
+Type:	Blaster
+Subtype:	0
+Flags:	10000
+Expert:	2
+BREAK
+#65015
+Name:	a huge juggernaught
+LongDesc:	A huge armadillo looking creature stalks through the host.
+Description:$
+It's a juggernaught, one of the biggest creatures in existance. It resembles
+nothing more than a gigantic armadillo. 
+~
+Rating:	8
+Type:	^LLethal Black^n
+Subtype:	0
+Flags:	100
+BREAK
+#65016
+Name:	a troll ganger
+LongDesc:	A troll ganger stands here, looking hard.
+Description:$
+It's your stereotypical troll ganger, his large frame covered with tattooes.
+He also wears a black and red bandanna around his arm. 
+~
+Rating:	12
+Type:	^WKiller^n
+Subtype:	0
+Flags:	1000000
+BREAK
+#65050
+Name:	A glowing halo of light
+LongDesc:	A glowing halo appears behind you in a mirror.
+Description:$
+This glowing light appears only when you look into one of the many mirrors, it
+hangs just behind your head, bobbing gently. 
+~
+Rating:	6
+Type:	^WTar Baby^n
+Subtype:	2
+Flags:	0
+BREAK
+#65051
+Name:	A small flying robot
+LongDesc:	A small robot hovers here, as if waiting for something.
+Description:$
+A small disc-shaped robot, hoving just above your head. It has a large 'i' in
+a blue cicle stencilled on its undercarridge, and a buzzing voice politely,
+but insistantly, asks you if you need any help with anything. 
+~
+Rating:	2
+Type:	^WProbe^n
+Subtype:	0
+Flags:	0
+BREAK
+#65052
+Name:	Nurse
+LongDesc:	A featureless humanoid in a nurse's uniform looks at you expectantly.
+Description:$
+A nurses uniform seems to be draped over what appears to be an unfinished
+mannequin. She holds a clipboard and appears to be scribbling in it furiously
+all the while staring at you from her featureless face with what should be
+eyes. 
+~
+Rating:	4
+Type:	^WProbe^n
+Subtype:	0
+Flags:	0
+BREAK
+#65053
+Name:	An orderly
+LongDesc:	A large orderly stands here, glaring at you.
+Description:$
+What appears as a large man dressed in a surgical outfit glares at you. He
+features are very generic and ordinary, and the rest of him appears as
+something from a comic book, flawless in every way and covered in rippling
+muscles. 
+~
+Rating:	6
+Type:	^WKiller^n
+Subtype:	0
+Flags:	0
+BREAK
+#65090
+Name:	A Dante's Janitor
+LongDesc:	A man slowly vacuums through here.
+Description:$
+A man in overalls slowly vacuums through here, occasionally picking lint off
+the carpet. 
+~
+Rating:	7
+Type:	^WProbe^n
+Subtype:	0
+Flags:	0
+BREAK
+#65091
+Name:	Dante's Security
+LongDesc:	A huge troll dressed in kevlar grins evilly at you.
+Description:$
+A huge troll, wearing a troll-sized black t-shirt that says "^WSTAFF^n" on the
+back in white letters. He is wearing a kevlar overcoat and is flexing his
+hands at you menacingly. 
+~
+Rating:	8
+Type:	^WKiller^n
+Subtype:	0
+Flags:	0
+BREAK
+#65092
+Name:	A large red demon
+LongDesc:	A large red demon flaps its wings with menace.
+Description:$
+A large red demon stands here. His horns curling back from a heavily creased,
+leather face. Huge batlike wings sprout from his back, above a thickly haired
+chest. Below it's waist it fades into a red mist. He smells strongly of
+sulphur. 
+~
+Rating:	9
+Type:	Sparky
+Subtype:	0
+Flags:	0
+BREAK
+#65093
+Name:	A humongous black-skinned demon
+LongDesc:	A black-skinned demon absently scapes his claws along each other.
+Description:$
+A humongous black demon glares down on you. It's red, glowing eyes throbbing
+slowly beneath short, dark red horns. White fangs jut from its mouth as it
+grins at you appraisingly. Its movements are almost serpentine as it walks
+toward you, sometimes vanishing completely against patches of shadow. 
+~
+Rating:	7
+Type:	^LNon-Lethal Black^n
+Subtype:	0
+Flags:	0
+BREAK
+#65099
+Name:	Syberspace Bouncer
+LongDesc:	A large mechanical troll in a security uniform stands guard.
+Description:$
+A large mechanical troll stands here, flexing his metallic fingers. A pair of
+glowing blue lights serve as eyes that swivel slowly to face you. 
+~
+Rating:	6
+Type:	^WKiller^n
+Subtype:	0
+Flags:	0
+BREAK
+END

@@ -30,58 +30,64 @@ SlaveScramble:	0
 SlaveTrapdoor:	0
 Type:	LTG
 [EXITS]
-	[EXIT 0]
+  [EXIT 0]
+    Exit:	1
+    Number:	9206-3216
+  [EXIT 1]
+    Exit:	666
+    Number:	0206-0000
+	[EXIT 2]
 		Exit:	70342
 		Number:	9206-1200
-	[EXIT 1]
+	[EXIT 3]
 		Exit:	70310
 		Number:	9206-1101
-	[EXIT 2]
+	[EXIT 4]
 		Exit:	1105
 		Number:	2206-9529
-	[EXIT 3]
+	[EXIT 5]
 		Exit:	17100
 		Number:	6206-2266
-	[EXIT 4]
+	[EXIT 6]
 		Exit:	65056
 		Number:	9206-0930
-	[EXIT 5]
+	[EXIT 7]
 		Exit:	65053
 		Number:	0206-1037
-	[EXIT 6]
+	[EXIT 8]
 		Exit:	65050
 		Number:	5206-1929
-	[EXIT 7]
+	[EXIT 9]
 		Exit:	26000
 		Number:	7206-6754
-	[EXIT 8]
+	[EXIT 10]
 		Exit:	60300
 		Number:	2206-3554
-	[EXIT 9]
+	[EXIT 11]
 		Exit:	65090
 		Number:	9206-0666
-	[EXIT 10]
+	[EXIT 12]
 		Exit:	65099
 		Number:	3206-3593
-	[EXIT 11]
+	[EXIT 13]
 		Exit:	38000
 		Number:	2206-0933
-	[EXIT 12]
+	[EXIT 14]
 		Exit:	70313
 		Number:	9206-1102
-	[EXIT 13]
+	[EXIT 15]
 		Exit:	70314
 		Number:	9206-1103
-	[EXIT 14]
+	[EXIT 16]
 		Exit:	70318
 		Number:	9206-1111
-	[EXIT 15]
+	[EXIT 17]
 		Exit:	70315
 		Number:	9206-1104
-	[EXIT 16]
+	[EXIT 18]
 		Exit:	1107
 		Number:	3206-9584
-	[EXIT 17]
+	[EXIT 19]
 		Exit:	70342
 		Number:	92061200
 [TRIGGERS]

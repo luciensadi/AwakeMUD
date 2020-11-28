@@ -1,0 +1,289 @@
+#33000
+Name:	A nosey Spacebucks(TM) surviellance camera
+LongDesc:	A floating security camera is tracking icons in the node.
+Description:$
+This security camera is property of Spacebucks(TM), which patrols the node in
+search of anyone whos gotten a bit too comfortable about sticking their nose
+where it doesn't belong. It floats around with no discernable propulsion,
+aside from a small little orb that seems to be spitting out a thin data trail
+as it travels along, no doubt sending back all the information it gathers to
+the nodes security controller. 
+~
+Rating:	5
+Type:	^WProbe^n
+Subtype:	0
+Flags:	0
+BREAK
+#33001
+Name:	A pert little disembodied nose
+LongDesc:	A pert little disembodied nose sniffs constantly around the node.
+Description:$
+This trace intrusion countermeasure takes the form of a pert, scrunched little
+nose, which is busy sniffing at everyone and everything that gets near it. It
+seems to be inhaling small particles of data before sneezing them back out,
+attempting to find anything out of place on smell alone. 
+~
+Rating:	6
+Type:	Trace
+Subtype:	0
+Flags:	0
+BREAK
+#33002
+Name:	A jittery little coffee drinker
+LongDesc:	A jittery little coffee drinker is twitching around the node.
+Description:$
+This fairly non-descript little guy has rather bland features, but the most
+notable would have to be that he's imbibed way too much caffiene for his own
+good. He's so tweaked up on it that he can barely stand still, and twitches
+randomly when he moves even the slightest. He's on the lookout for someone, or
+something. 
+~
+Rating:	4
+Type:	Sparky
+Subtype:	0
+Flags:	0
+BREAK
+#33003
+Name:	A coffeehouse patron peering over a newspaper
+LongDesc:	A coffeehouse patron peering over a newspaper is lurking around.
+Description:$
+Sipping on a cup of hot coffee, and mostly hidden behind a newspaper, the only
+real feature of this patron that can be seen is its eyes, since they're busy
+shifting back and forth almost constantly. It seems they're on the lookout for
+other patrons that have strayed too far into parts of the node they weren't
+meant to. 
+~
+Rating:	6
+Type:	^WScout^n
+Subtype:	0
+Flags:	0
+BREAK
+#33004
+Name:	A large chrome hand-cranked coffee grinder
+LongDesc:	A large chrome hand-cranked coffee grinder is begging to grind you up.
+Description:$
+This large chrome plated instrument is used by baristas to grind up coffee
+beans, but, it serves just as well for grinding up nosey icons who don't know
+how to mind their business. It has some nasty looking teeth, and floats around
+the node, just begging to get ahold of something, hopefully you. 
+~
+Rating:	5
+Type:	^WCrippler^n
+Subtype:	0
+Flags:	0
+BREAK
+#33005
+Name:	A fat, pissed-off barista
+LongDesc:	A fat, pissed-off barista is shooting steam out of his ears.
+Description:$
+He's fat and righteously pissed-off to quite a degree. He's armed with various
+implements used in his day to day barista chores, and armoured up with a
+fashionable smock just in case he needs to get down and dirty. Steam seems to
+be pouring out of his ears, as an indication as to how truly pissed-off he
+really is. 
+~
+Rating:	6
+Type:	Blaster
+Subtype:	0
+Flags:	0
+BREAK
+#33010
+Name:	A wary Lordstrums salesclerk 
+LongDesc:	A wary Lordstrums salesclerk is peering over the racks at you.
+Description:$
+This Lordstrums salesclerk is attempting to be non-chalant in their attempts
+to keep an eye on suspicious customers, but is absolutely failing at it.
+Instead, they're extremely noticable, which can also act as the best deterent.
+~
+Rating:	5
+Type:	^WProbe^n
+Subtype:	0
+Flags:	0
+BREAK
+#33011
+Name:	A Lordstrums security camera
+LongDesc:	A Lordstrums security camera is panning around the node.
+Description:$
+This security camera has a thin cord trailing around behind it as it peers and
+pans around the node, attempting to pick up on any suspicious activity by any
+unauthorized icons. It transmits any data its collected back down its cord and
+into a security node nearby. 
+~
+Rating:	6
+Type:	^WScout^n
+Subtype:	0
+Flags:	0
+BREAK
+#33012
+Name:	A background credit check
+LongDesc:	A background credit check looms on the horizon here.
+Description:$
+Oh no! Its a poor person and a shadowrunners worst enemy imaginable... No, its
+not the fuzz. Its not APDS. Its not even a manabolt. Its a background credit
+check! Watch your ass, cause this baby is gonna start crunching numbers as it
+gets to the bottom of things. Beware. 
+~
+Rating:	6
+Type:	Trace
+Subtype:	0
+Flags:	0
+BREAK
+#33013
+Name:	A bounced check
+LongDesc:	A bounced check is here, bouncing around the node.
+Description:$
+Its one the poor persons worst enemies imaginable, a bounced check. Even if
+you know its coming, its still gonna come back to bite you on the ass. Thats
+what your broke ass gets! 
+~
+Rating:	7
+Type:	Blaster
+Subtype:	0
+Flags:	0
+BREAK
+#33014
+Name:	A finely dressed elven gentleman
+LongDesc:	A finely dressed elven gentleman is preparing to duel here.
+Description:$
+This finely dressed elven gentleman is decked out in all the prim and proper
+attire. He's currently sliding off one of his gloves, as if he were about to
+challenge someone to a duel.. Hopefully it isn't you? 
+~
+Rating:	6
+Type:	^WKiller^n
+Subtype:	0
+Flags:	0
+BREAK
+#33015
+Name:	A security guard sporting a splatgun
+LongDesc:	A security guard sporting a splatgun is looking for a target.
+Description:$
+This security guard is sporting a splatgun, and is aiming cautiously at any
+suspicious icons that come across his sights. His main job is to slow down and
+keep thieves and tresspassers from getting away, while other IC move in to
+handle them. Careful, you might get stuck in place if he nails you with that
+splatgun. 
+~
+Rating:	9
+Type:	Ripper
+Subtype:	1
+Flags:	0
+BREAK
+#33016
+Name:	A Netwatch security decker
+LongDesc:	A Netwatch security decker in the form of a blazing angel is here.
+Description:$
+Netwatch is the Tir's governments answer to any upstarts who think they can
+just waltz around their matrix nodes and screw around without paying for it.
+This particular Netwatch decker is sporting an icon of a stylized Christian
+angel, complete with blazing sword and massive white feathered wings. Prepare
+to be judged, fiend. 
+~
+Rating:	8
+Type:	^WKiller^n
+Subtype:	0
+Flags:	0
+BREAK
+#33020
+Name:	a small tonberry
+LongDesc:	A small tonberry carrying a lantern wanders around the node.
+Description:$
+This odd little creature looks like a small humanoid turtle, and is decked out
+in a brown robe, so only its head and feet show. It carries in one of its
+hands a small hooded lantern, its candle light flickering and flashing softly
+as it searches around the node for something. 
+~
+Rating:	5
+Type:	^WProbe^n
+Subtype:	0
+Flags:	0
+BREAK
+#33021
+Name:	a flickering will-of-wisp
+LongDesc:	A flickering will-o-wisp floats around the node.
+Description:$
+This small little ball of light hovers and floats around, dipping around the
+stalactites and stalagmites that are scattered through-out the system of
+caverns. It bobs and weaves, following around icons as it comes across them,
+attempting to snag ahold of their datatrails and follow them back to their
+source. 
+~
+Rating:	7
+Type:	Trace
+Subtype:	0
+Flags:	0
+BREAK
+#33022
+Name:	an old miner with a pick-axe
+LongDesc:	An old miner with a pick-axe wanders around, mining for ore.
+Description:$
+This old fourty-niner sports a long, ragged grey beard that juts out from his
+face, leaving little of it uncovered aside from his eyes. His helmet is
+cracked, and the lamp atop of it is barely lit. He mutters to himself as he
+wanders around, poking tapping the cavern walls with his pick-axe as he
+attempts to find a good vein of ore to mine. 
+~
+Rating:	8
+Type:	Sparky
+Subtype:	0
+Flags:	0
+BREAK
+#33023
+Name:	a large cave-in
+LongDesc:	A large cave-in attempts to crush icons beneath some rubble.
+Description:$
+It consists of nothing more than cracked chunks and boulders of rocks and raw
+ore, attempting to collapse around and crush any unsuspecting icons it comes
+across. The icons navigate their way around it, afterall, they've been down in
+the caves long enough to know its weak points, and avoid them. 
+~
+Rating:	8
+Type:	Blaster
+Subtype:	0
+Flags:	0
+BREAK
+#33024
+Name:	a large squeaking bat
+LongDesc:	A large squeaking bat flaps around the cave, making a ruckus.
+Description:$
+This bat is quite large, larger than any you've probably seen before. It flaps
+its wings, creating a loud distortion in the sound feeds of nearby icons,
+which echoes down through the caverns around it. When it finds any
+unauthorized icons in the node, it begins screeching loudly, which can become
+more than simply an annoyance. 
+~
+Rating:	10
+Type:	^WCrippler^n
+Subtype:	2
+Flags:	0
+BREAK
+#33025
+Name:	a wiley cavern surveyor
+LongDesc:	A wiley cavern surveyor makes notes as he explores the cave systems.
+Description:$
+His job it is to explore and collect data on the system of caverns that
+stretch out around him, which keeps him quite busy. He's very nosey, flipping
+and turning over every small rock as he tries to find anything thats out of
+place from the last time he checked. 
+~
+Rating:	10
+Type:	^WProbe^n
+Subtype:	0
+Flags:	0
+BREAK
+#33026
+Name:	a crazy old miner
+LongDesc:	a crazy old miner is tossing sticks of TNT around the node.
+Description:$
+This guys lost it, plain and simple. He's cackling madly to himself, and when
+he's not, he mumbles and murmurs the ramblings of a mad man. While he may seem
+harmless at first, it isn't until he starts whipping out old fashioned sticks
+of TNT and lighting them, that he goes from being simply an annoyance to a
+real threat. 
+~
+Rating:	7
+Type:	^LNon-Lethal Black^n
+Subtype:	0
+Flags:	0
+BREAK
+END

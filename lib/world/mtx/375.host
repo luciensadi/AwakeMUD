@@ -1,0 +1,45 @@
+#37500
+Name:	An unfinished host
+Keywords:	unfinished host
+Description:$
+This host is unfinished.~
+Colour:	0
+Security:	0
+Difficulty:	0
+Access:	0
+Control:	0
+Index:	0
+Files:	0
+Slave:	0
+Type:	Datastore
+Search:	finance
+[EXITS]
+	[EXIT 0]
+		Exit:	37501
+		Number:	UNF202
+	[EXIT 1]
+		Exit:	37500
+		Number:	UNF201
+[TRIGGERS]
+	[TRIGGER 0]
+		Step:	0
+		Alert:	Passive
+		IC:	0
+BREAK
+#37501
+Name:	An unfinished host
+Keywords:	unfinished host
+Description:$
+This host is unfinished.~
+Colour:	0
+Security:	0
+Difficulty:	0
+Access:	0
+Control:	0
+Index:	0
+Files:	0
+Slave:	0
+Type:	Datastore
+Search:	records
+BREAK
+END
