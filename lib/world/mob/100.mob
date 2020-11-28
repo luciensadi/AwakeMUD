@@ -1,772 +1,543 @@
 #10000
-Keywords:	drexl man rasta rastafarian strange
-Name:	Drexl
+Keywords:	being wreathed white fire protecting protector celestial guardian
+Name:	a celestial guardian
 RoomDesc:$
-A strange Rastafarian stands glaring at you.
+A being wreathed in white fire stands here, protecting those around it. 
 
 ~
 LookDesc:$
-Ewwww. This guy is sleaze, to a greater extent than anything you've seen
-before. Long, greasy dreads dangle over his bloodshot eyes, sweat dribbles
-onto the floor from his fevered brow. Lovely.
+Designed for testing purposes, this NPC's sole purpose is to beat the living
+hell out of anyone who commits violence within its line of sight. 
 ~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	11000101010100001101100
+ArriveMsg:	soars in from
+LeaveMsg:	soars
+MobFlags:	10000001000000001000
 AffFlags:	1000000000001000000000
-Race:	Human
+Race:	Dragon
 Gender:	Male
 DefaultPos:	Standing
-AttackType:	Stab
+AttackType:	Blast
 [ATTRIBUTES]
-	Bod:	13
-	Qui:	14
-	Str:	10
-	Cha:	1
-	Int:	5
-	Wil:	9
-	Mag:	8
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
 [POINTS]
-	Height:	0
-	Weight:	87
-	Ballistic:	7
-	Impact:	6
-	Cash:	500
+	Height:	200
+	Weight:	4
+	Level:	9
+	Ballistic:	50
+	Impact:	50
 [SKILLS]
-	machine guns:	7
-	brawling:	5
+	Rifles:	50
 BREAK
 #10001
-Keywords:	charly man cop
-Name:	Charly
+Keywords:	responsive target dummy
+Name:	a responsive target dummy
 RoomDesc:$
-Charly eyes you curiously.
+A responsive target dummy has been erected here, waiting to receive your
+punishment. 
 
 ~
 LookDesc:$
-Charly has only worked here a short while, but he's already discovered the
-tricks of the trade here in the Crime Mall -- always carry a gun.
+It looks barely coherent as it waits to be created.
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
 MobFlags:	1010
-AffFlags:	0
-Race:	Human
+AffFlags:	1000000010101000000000
+Race:	Undefined
 Gender:	Neutral
 DefaultPos:	Standing
+AttackType:	Rifle
 [ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	4
-	Int:	0
-	Wil:	0
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
 	Mag:	0
 [POINTS]
-	Height:	0
-	Weight:	0
+	Height:	2
+	Weight:	100
+	Ballistic:	500
+	Impact:	500
 [SKILLS]
+	Rifles:	50
 BREAK
 #10002
-Keywords:	karl man
-Name:	Karl
+Keywords:	armed guard
+Name:	a heavily-armed guard
 RoomDesc:$
-Karl stands behind the counter, waiting for a purchase.
+A heavily-armed guard stands here, daring you to make his day. 
 
 ~
 LookDesc:$
-Karl, a tad torn up and a little grunty, stands calmly behind the desk. Not
-much occurs around here save for the occasional mugging, but one supposedly
-gets used to it very quickly when one works here.
+It looks barely coherent as it waits to be created.
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1010
+MobFlags:	10000001000000001010
 AffFlags:	0
-Race:	Human
+Race:	Undef
 Gender:	Neutral
 DefaultPos:	Standing
+AttackType:	Rifle
 [ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	0
-	Int:	0
-	Wil:	0
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
 	Mag:	0
 [POINTS]
 	Height:	0
 	Weight:	0
+	Ballistic:	10000
+	Impact:	10000
 [SKILLS]
-BREAK
-#10003
-Keywords:	ekko woman
-Name:	Ekko
-RoomDesc:$
-Ekko waits for her next customer.
-
-~
-LookDesc:$
-Ekko is a veteran to the business around here, not caring much for the
-usual rabble that loves to harass. Obviously undeterred by the chaos that
-lives in constant presence around here, Ekko would most likely make a good
-runner. If she isn't one already.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	4
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
+	Rifles:	50
 BREAK
 #10004
-Keywords:	ross man
-Name:	Ross
+Keywords:	receptionist
+Name:	the Shamanic receptionist
 RoomDesc:$
-Ross, dressed in all sorts of military gear, stares at you oddly.
+A receptionist is seated here, waiting to assist you in renting a lodge. 
 
 ~
 LookDesc:$
-He likes his job, that's for sure. 
+Fairly nondescript. Floating above her in ethereal silver light are the words,
+"Please do not harass the receptionist." 
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	4
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#10005
-Keywords:	matt man
-Name:	Matt
-RoomDesc:$
-Matt waits for a customer.
-
-~
-LookDesc:$
-Matt sports a scar that seems to reach from his mouth to his right eye.
-Weird. Whatever the cause, it could very easily have come from this mall
-itself, considering the absolute chaos that rages outside the shop doors.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	4
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#10006
-Keywords:	jool man
-Name:	Jool
-RoomDesc:$
-Jool hobbles around, leaning on a crutch.
-
-~
-LookDesc:$
-Jool looks like one absolutely mad nutter. No joke. This guy is way
-past the clinically insane stage, and far into the talking carrot stage.
-Buying stuff off him might seem like a good laugh, but it might not be
-the best idea.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	4
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#10007
-Keywords:	falchion elf ancient
-Name:	Falchion
-RoomDesc:$
-An elf dressed in Ancient's colours stands here.
-
-~
-LookDesc:$
-Falchion is at the moment, debating on his position in the Ancient's. Known
-very well for his temperaments and easy allegiances, the Ancients have been
-the one gang he's stayed with long term. However, people are still
-dubious over whether that's credit to real loyalty or fear of redemption.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	0
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#10008
-Keywords:	parker troll
-Name:	Parker
-RoomDesc:$
-Parker, a massive troll, stands behind the desk examining some hardware.
-
-~
-LookDesc:$
-Parker is well known in these parts, for being a generally good guy. He'll
-usually help out anyone he can, and often provides cover for runners in
-hiding from the misfits of the mall.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	4
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#10009
-Keywords:	Ed man
-Name:	Ed
-RoomDesc:$
-Ed sharpens a knife at the counter, enthralled in the flying sparks.
-
-~
-LookDesc:$
-Ed looks like the sort of guy that would much rather fight with a blade than
-a shotgun. In fact, he looks like a complete madman. Still, when used
-effectively, good blades can be pretty damn deadly.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	4
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#10010
-Keywords:	leon man
-Name:	Leon
-RoomDesc:$
-Leon stares at you from behind a counter filled with extremely sharp objects.
-
-~
-LookDesc:$
-Leon used to be a notorious runner, but gave up the street life when a corp
-crippled him in a hit-n-run. Since then, he's started up a little shop here
-with his contacts on the streets and used it a safe house, until he can
-afford cyber replacements to wreak revenge.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	4
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#10011
-Keywords:	cobb man
-Name:	Cobb
-RoomDesc:$
-Cobb shuffles about, hanging up armour.
-
-~
-LookDesc:$
-Cobb has brown hair, blue eyes, and blonde eyebrows. Weird.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	4
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#10012
-Keywords:	jez man cop
-Name:	Jez
-RoomDesc:$
-Jez shuffles around, looking at his feet.
-
-~
-LookDesc:$
-Jez almost makes it a point to keep half of his face under his jacket collar.
-Short, cropped black hair sweeps forward, spilling over his forehead and
-providing cover for his eyes. From behind this canopy he stares out at
-every passer by, seemingly intent with his position.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	0
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#10013
-Keywords:	dylan man johnson
-Name:	Dylan
-RoomDesc:$
-Dylan leans against a wall, quietly scanning the premises.
-
-~
-LookDesc:$
-Dylan smokes a strange looking cigar, what would have been called a "blunt"
-a couple of decades ago. He stares openly out into space but at the same
-time seems to keep a constant gaze on the bystanders. He also seems to
-have an entourage of bodyguards.....not usual for people in the Mall...
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	0
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#10014
-Keywords:	cy man
-Name:	Cy
-RoomDesc:$
-Cy flexes his muscles and checks the shop.
-
-~
-LookDesc:$
-Cy is just a suped up samurai, who decided not to use his abilities. After
-taking on several extremely dangerous runs at an early stage, Cy decided it
-wasn't the life for him. Thus, he works here, standing before you.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1010
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	0
-	Qui:	0
-	Str:	0
-	Cha:	4
-	Int:	0
-	Wil:	0
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-BREAK
-#10015
-Keywords:	vic doc
-Name:	Vic
-RoomDesc:$
-Vic cleans his scalpel and monitors the bio-tubes.
-
-~
-LookDesc:$
-Vic is scruffy. Yet clean. Totally covered in a neat, if stained, biosuit,
-he takes pride in keeping one place out of the mall clean.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1011
-AffFlags:	0
-Race:	Human
-Gender:	Male
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	1
-	Qui:	1
-	Str:	1
-	Cha:	4
-	Int:	9
-	Wil:	1
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-	negotiation:	12
-	biotech:	8
-BREAK
-#10016
-Keywords:	lambert doc street
-Name:	Lambert
-RoomDesc:$
-Lambert wipes his hand on his apron and sniffs approvingly.
-
-~
-LookDesc:$
-Lambert works in the clinic all the time, confined here by its dangerous
-popularity. It's notorious with the city clinics for its better prices and
-often better merchandise. Lambert is totally aware of this, and although
-usually shaky with any mention of the outside world, utterly professional.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1011
-AffFlags:	0
-Race:	Human
-Gender:	Male
-DefaultPos:	Standing
-[ATTRIBUTES]
-	Bod:	1
-	Qui:	1
-	Str:	1
-	Cha:	4
-	Int:	9
-	Wil:	1
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	0
-[SKILLS]
-	negotiation:	12
-	biotech:	8
-BREAK
-#10017
-Keywords:	bum stinking man
-Name:	a bum
-RoomDesc:$
-A stinking bum shuffles around, stumbling over his feet.
-
-~
-LookDesc:$
-Scrounging around for any old shite people would rather die that eat, the
-bum doesn't have a brilliant life. Still, he'll stay out of your way if
-you stay out of his, and he might even help you if he can if you give him
-something worthwhile.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	10001100
-AffFlags:	0
-Race:	Human
-Gender:	Male
-DefaultPos:	Standing
-AttackType:	Bite
-[ATTRIBUTES]
-	Bod:	2
-	Qui:	2
-	Str:	2
-	Cha:	2
-	Int:	2
-	Wil:	2
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	49
-	Impact:	1
-	Cash:	10
-	Bank:	20
-[SKILLS]
-	brawling:	3
-BREAK
-#10018
-Keywords:	chiphead filthy man
-Name:	a chiphead
-RoomDesc:$
-A filthy chiphead skulks in the corners, begging for a shot.
-
-~
-LookDesc:$
-This guy is completely destroyed, leaving little in the place of a human.
-Chips, BTL and others alike have wrecked his systems, placing him in a
-constant state of total shock.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	10001100
-AffFlags:	0
-Race:	Human
-Gender:	Male
-DefaultPos:	Standing
-AttackType:	Claw
-[ATTRIBUTES]
-	Bod:	3
-	Qui:	2
-	Str:	2
-	Cha:	2
-	Int:	1
-	Wil:	2
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	54
-	Impact:	1
-	Cash:	20
-	Bank:	50
-[SKILLS]
-	brawling:	2
-BREAK
-#10019
-Keywords:	dog mangy stray
-Name:	a stray dog
-RoomDesc:$
-A stray mangy dog sniffs around the ground for remnants of moldy food.
-
-~
-LookDesc:$
-God, how this dog reeks. It looks up at you funnily, almost in pity, wishing
-you weren't here to see it like this. Still, some you lose, some you win.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	1000
-AffFlags:	0
-Race:	Human
-Gender:	Neutral
-DefaultPos:	Standing
-AttackType:	Bite
-[ATTRIBUTES]
-	Bod:	3
-	Qui:	2
-	Str:	3
-	Cha:	1
-	Int:	2
-	Wil:	3
-	Mag:	0
-[POINTS]
-	Height:	0
-	Weight:	23
-[SKILLS]
-BREAK
-#10020
-Keywords:	cat stray scrawny
-Name:	a stray cat
-RoomDesc:$
-A stray cat stretches and rolls in the muck.
-
-~
-LookDesc:$
-The cat is thin, its hair wirey and the face carved out of dark granite. 
-Naturally selfish, this cat has gone past that stage straight into deep
-hatred of all around it. No, it isn't a happy kitty.
-~
-ArriveMsg:	arrives from
-LeaveMsg:	leaves
-MobFlags:	10001000
-AffFlags:	0
+MobFlags:	1000000000000101110000000011010
+AffFlags:	10001000001000
 Race:	Human
 Gender:	Female
 DefaultPos:	Standing
-AttackType:	Bite
 [ATTRIBUTES]
-	Bod:	2
-	Qui:	4
-	Str:	2
-	Cha:	0
-	Int:	1
-	Wil:	2
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
 	Mag:	0
 [POINTS]
-	Height:	0
-	Weight:	20
+	Height:	180
+	Weight:	80
+	Ballistic:	10000
+	Impact:	10000
 [SKILLS]
-	brawling:	2
 BREAK
-#10021
-Keywords:	mercenary dark man
-Name:	a mercenary
+#10005
+Keywords:	close passive target dummy
+Name:	a close-range passive target dummy
 RoomDesc:$
-A dark mercenary is standing here.
+A close-range passive target dummy has been erected here. 
 
 ~
 LookDesc:$
-These guys don't look nice. They kill for money. Wait a second. So do you.
-But this guy doesn't look as nice as you. Oh no. This dude looks like he's
-been to hell and back, just because there were people here to kill. Draped in
-obvious combat clothing and probably packing some impressive firepower, he
-shifts around the Mall, waiting for someone to recruit him.
+Perfect for shooting. 
 ~
-ArriveMsg:	appears from
-LeaveMsg:	dissapears into the
-MobFlags:	100000001100
+ArriveMsg:	
+LeaveMsg:	leaves
+MobFlags:	100000000000000000000000000001010
 AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+BREAK
+#10006
+Keywords:	medium-range passive target dummy
+Name:	a medium-range passive target dummy
+RoomDesc:$
+A medium-range passive target dummy has been erected here. 
+
+~
+LookDesc:$
+Perfect for shooting. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	100000000000000000000000000001010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+BREAK
+#10007
+Keywords:	long-range passive target dummy
+Name:	a long-range passive target dummy
+RoomDesc:$
+A long-range passive target dummy has been erected here. 
+
+~
+LookDesc:$
+Perfect for shooting. 
+~
+ArriveMsg:	
+LeaveMsg:	leaves
+MobFlags:	100000000000000000000000000001010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+BREAK
+#10008
+Keywords:	extreme-range passive target dummy
+Name:	an extreme-range passive target dummy
+RoomDesc:$
+An extreme-range passive target dummy has been erected here. 
+
+~
+LookDesc:$
+Perfect for shooting. 
+~
+ArriveMsg:	
+LeaveMsg:	leaves
+MobFlags:	100000000000000000000000000001010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	1
+	Str:	1
+	Cha:	1
+	Int:	1
+	Wil:	1
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	10
+	Impact:	10
+[SKILLS]
+BREAK
+#10009
+Keywords:	transmitter small beacon immhq immortal headquarters hq
+Name:	the Immortal HQ Beacon
+RoomDesc:$
+A small transmitter has been erected on a workbench here. 
+
+~
+LookDesc:$
+A meter-tall structure, this steel antenna hums with latent power. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000000000001101010000000001010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Level:	10
+	Ballistic:	30000
+	Impact:	30000
+[SKILLS]
+BREAK
+#10010
+Keywords:	trainer albus dumbledore wizened old man
+Name:	Albus Dumbledore
+RoomDesc:$
+A wizened old man is seated at a table, browsing through the books. 
+
+~
+LookDesc:$
+Tall and thin, this wizened old man has silver hair and a beard so long it can
+be tucked into his belt. His nose is long and crooked, and his eyes are a
+twinkling blue. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000101110000000001010
+AffFlags:	10001000001000
 Race:	Human
 Gender:	Male
 DefaultPos:	Standing
 [ATTRIBUTES]
-	Bod:	4
-	Qui:	3
-	Str:	4
-	Cha:	0
-	Int:	2
-	Wil:	3
-	Mag:	0
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
 [POINTS]
-	Height:	0
-	Weight:	66
-	Ballistic:	2
-	Impact:	2
+	Height:	2
+	Weight:	80
+	Level:	10
+	Ballistic:	10000
+	Impact:	10000
 [SKILLS]
-	pistols:	3
+	Sorcery:	50
+	Conjuring:	50
+	Arcane Language:	50
 BREAK
-#10022
-Keywords:	guard man corridor
-Name:	a corridor guard
+#10011
+Keywords:	banzen retired monk
+Name:	a retired monk
 RoomDesc:$
-A guard steps out of the shadows, confronting you.
+A retired monk putters around the laboratory. 
 
 ~
 LookDesc:$
-Shady, clinging to the darkened backdrop of these dank corridors. He sports
-a nightshade trenchcoat, and stares at you inquisitively.
+After a long and storied time as the head of his temple, old master Banzen has
+retired to a life of scientific inquiry. 
 ~
 ArriveMsg:	arrives from
 LeaveMsg:	leaves
-MobFlags:	100010000000001011
+MobFlags:	1000000000000101010000000001010
+AffFlags:	10001000001000
+Race:	Undef
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	50
+[POINTS]
+	Height:	2
+	Weight:	100
+	Level:	10
+	Ballistic:	10000
+	Impact:	10000
+[SKILLS]
+BREAK
+#10012
+Keywords:	ammunition vendor vendomatic vend-o-matic
+Name:	an Ammunition Vend-O-Matic
+RoomDesc:$
+An Ammunition Vend-O-Matic has been installed in the alcove. 
+
+~
+LookDesc:$
+Unassuming and bland, this unit consists of a speaker grille, a delivery slot,
+and a keypad to punch your order into. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	0
+	Weight:	0
+	Ballistic:	50
+	Impact:	50
+[SKILLS]
+BREAK
+#10013
+Keywords:	luminous figure coalesced light hovers hovering incarnation knowledge
+Name:	The Incarnation of Knowledge
+RoomDesc:$
+A luminous figure of coalesced light hovers amongst the bookshelves. 
+
+~
+LookDesc:$
+Spun from light and shadow, this being's surface is covered in flickering
+sigils and formulae of advanced spells and mystical knowledge.  
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1000000000000000000000000001010
 AffFlags:	0
 Race:	Human
 Gender:	Male
 DefaultPos:	Standing
 [ATTRIBUTES]
 	Bod:	20
-	Qui:	6
-	Str:	30
-	Cha:	6
-	Int:	6
-	Wil:	17
+	Qui:	20
+	Str:	20
+	Cha:	20
+	Int:	20
+	Wil:	20
+	Mag:	20
+[POINTS]
+	Height:	188
+	Weight:	72
+	Level:	10
+	Ballistic:	50
+	Impact:	50
+[SKILLS]
+	Athletics:	50
+BREAK
+#10014
+Keywords:	greasy mechanic mike broad-shouldered shouldered man coveralls
+Name:	Mike the Mechanic
+RoomDesc:$
+A broad-shouldered man in coveralls is wiping his greasy hands on a rag. 
+
+~
+LookDesc:$
+Ruddy-skinned, brown-haired, and looking a bit like a brick house crossed with
+an ironworker, this imposing man strides through the garage with an imperious
+air. A set of heavy-duty denim coveralls enfolds his bulky frame, marred with
+oil and fluids from the innumerable vehicles that he's serviced. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+AttackType:	Taser
+[ATTRIBUTES]
+	Bod:	50
+	Qui:	50
+	Str:	50
+	Cha:	50
+	Int:	50
+	Wil:	50
+	Mag:	0
+[POINTS]
+	Height:	220
+	Weight:	200
+	Level:	10
+	Ballistic:	50
+	Impact:	50
+[SKILLS]
+	BR/Car:	50
+	BR/Bike:	50
+	BR/Truck:	50
+	BR/Drone:	50
+BREAK
+#10015
+Keywords:	road raging ganger
+Name:	A road-raging ganger
+RoomDesc:$
+A road-raging ganger has planted his feet here, his eyebrow twitching. 
+
+~
+LookDesc:$
+TBD 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	101000
+AffFlags:	0
+Race:	Human
+Gender:	Male
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	4
+	Int:	4
+	Wil:	4
+	Mag:	0
+[POINTS]
+	Height:	120
+	Weight:	50
+[SKILLS]
+BREAK
+#10016
+Keywords:	amorphous blob shifting code george long-suffering suffering shopkeeper
+Name:	George, the long-suffering shopkeeper
+RoomDesc:$
+An amorphous blob of shifting code stands here tolerantly. 
+
+~
+LookDesc:$
+He's apparently used to all the abuse builders hand out to him, possibly owing
+to the fact that his gelatinous skin is so thick that no trouble can truly
+perturb him. 
+~
+ArriveMsg:	arrives from
+LeaveMsg:	leaves
+MobFlags:	1010
+AffFlags:	0
+Race:	Undef
+Gender:	Neutral
+DefaultPos:	Standing
+[ATTRIBUTES]
+	Bod:	5
+	Qui:	5
+	Str:	5
+	Cha:	5
+	Int:	5
+	Wil:	5
 	Mag:	0
 [POINTS]
 	Height:	0
 	Weight:	0
-	Ballistic:	20
-	Impact:	15
 [SKILLS]
-	brawling:	10
-	firearms:	10
-	armed combat:	10
-	:	3
-	:	10
 BREAK
 END
