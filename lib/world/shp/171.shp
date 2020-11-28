@@ -12,6 +12,7 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
+Name:	unnamed shop
 Flags:	0
 Races:	0
 Buytypes:	0
@@ -60,6 +61,7 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
+Name:	unnamed shop
 Flags:	0
 Races:	0
 Buytypes:	0
@@ -88,6 +90,7 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
+Name:	Herbie's Herbals
 Flags:	0
 Races:	0
 Buytypes:	0
@@ -160,6 +163,7 @@ NoNuyen:	You no got the money!
 DoesntBuy:	I no buy that!
 Buy:	%d nuyen!
 Sell:	Your %d nuyen!
+Name:	Action Computers
 Flags:	100
 Races:	0
 Buytypes:	100000000110000000000000000000000000
@@ -244,6 +248,7 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
+Name:	Action Computers
 Flags:	100
 Races:	0
 Buytypes:	101001000000001000011000000000000010

@@ -12,94 +12,110 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1110
 Races:	0
 Buytypes:	1000000000000000000000000
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	85063
+		Vnum:	474
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	85064
+		Vnum:	971
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	85065
+		Vnum:	970
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	85066
+		Vnum:	473
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	85067
+		Vnum:	472
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	85071
+		Vnum:	471
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	85072
+		Vnum:	470
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	85073
+		Vnum:	570
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	85074
+		Vnum:	469
 		Type:	Always
 		Stock:	0
 	[SELL 9]
-		Vnum:	85075
+		Vnum:	569
 		Type:	Always
 		Stock:	0
 	[SELL 10]
-		Vnum:	85076
+		Vnum:	468
 		Type:	Always
 		Stock:	0
 	[SELL 11]
-		Vnum:	85077
+		Vnum:	571
 		Type:	Always
 		Stock:	0
 	[SELL 12]
-		Vnum:	85094
+		Vnum:	320
 		Type:	Always
 		Stock:	0
 	[SELL 13]
-		Vnum:	85095
+		Vnum:	319
 		Type:	Always
 		Stock:	0
 	[SELL 14]
-		Vnum:	85096
+		Vnum:	315
 		Type:	Always
 		Stock:	0
 	[SELL 15]
-		Vnum:	85097
+		Vnum:	314
 		Type:	Always
 		Stock:	0
 	[SELL 16]
-		Vnum:	85098
+		Vnum:	313
 		Type:	Always
 		Stock:	0
 	[SELL 17]
-		Vnum:	85103
+		Vnum:	303
 		Type:	Always
 		Stock:	0
 	[SELL 18]
-		Vnum:	85104
+		Vnum:	301
 		Type:	Always
 		Stock:	0
 	[SELL 19]
-		Vnum:	85105
+		Vnum:	300
 		Type:	Always
 		Stock:	0
 	[SELL 20]
-		Vnum:	85106
+		Vnum:	463
+		Type:	Always
+		Stock:	0
+	[SELL 21]
+		Vnum:	462
+		Type:	Always
+		Stock:	0
+	[SELL 22]
+		Vnum:	318
+		Type:	Always
+		Stock:	0
+	[SELL 23]
+		Vnum:	317
+		Type:	Always
+		Stock:	0
+	[SELL 24]
+		Vnum:	316
 		Type:	Always
 		Stock:	0
 BREAK
@@ -117,58 +133,54 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1110
 Races:	0
 Buytypes:	1000000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	85084
+		Vnum:	481
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	85086
+		Vnum:	302
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	85087
+		Vnum:	312
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	85088
+		Vnum:	369
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	85089
+		Vnum:	480
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	85090
+		Vnum:	479
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	85091
+		Vnum:	368
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	85092
+		Vnum:	478
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	85093
+		Vnum:	477
 		Type:	Always
 		Stock:	0
 	[SELL 9]
-		Vnum:	85108
+		Vnum:	476
 		Type:	Always
 		Stock:	0
 	[SELL 10]
-		Vnum:	85117
-		Type:	Always
-		Stock:	0
-	[SELL 11]
-		Vnum:	85118
+		Vnum:	475
 		Type:	Always
 		Stock:	0
 BREAK
@@ -186,82 +198,50 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1110
 Races:	0
 Buytypes:	1000000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	85068
+		Vnum:	485
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	85069
+		Vnum:	484
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	85070
+		Vnum:	483
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	85099
+		Vnum:	482
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	85107
+		Vnum:	323
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	85109
+		Vnum:	322
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	85110
+		Vnum:	311
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	85111
+		Vnum:	310
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	85112
+		Vnum:	309
 		Type:	Always
 		Stock:	0
 	[SELL 9]
-		Vnum:	85113
-		Type:	Always
-		Stock:	0
-	[SELL 10]
-		Vnum:	85114
-		Type:	Always
-		Stock:	0
-	[SELL 11]
-		Vnum:	85115
-		Type:	Always
-		Stock:	0
-	[SELL 12]
-		Vnum:	85116
-		Type:	Always
-		Stock:	0
-	[SELL 13]
-		Vnum:	85120
-		Type:	Always
-		Stock:	0
-	[SELL 14]
-		Vnum:	85121
-		Type:	Always
-		Stock:	0
-	[SELL 15]
-		Vnum:	85122
-		Type:	Always
-		Stock:	0
-	[SELL 16]
-		Vnum:	85123
-		Type:	Always
-		Stock:	0
-	[SELL 17]
-		Vnum:	85124
+		Vnum:	308
 		Type:	Always
 		Stock:	0
 BREAK
@@ -279,142 +259,118 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1110
 Races:	0
 Buytypes:	1000000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	85000
+		Vnum:	517
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	85001
+		Vnum:	516
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	85002
+		Vnum:	515
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	85003
+		Vnum:	514
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	85004
+		Vnum:	505
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	85005
+		Vnum:	504
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	85006
+		Vnum:	503
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	85007
+		Vnum:	502
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	85008
+		Vnum:	494
 		Type:	Always
 		Stock:	0
 	[SELL 9]
-		Vnum:	85009
+		Vnum:	493
 		Type:	Always
 		Stock:	0
 	[SELL 10]
-		Vnum:	85010
+		Vnum:	492
 		Type:	Always
 		Stock:	0
 	[SELL 11]
-		Vnum:	85011
+		Vnum:	491
 		Type:	Always
 		Stock:	0
 	[SELL 12]
-		Vnum:	85012
+		Vnum:	490
 		Type:	Always
 		Stock:	0
 	[SELL 13]
-		Vnum:	85013
+		Vnum:	489
 		Type:	Always
 		Stock:	0
 	[SELL 14]
-		Vnum:	85014
+		Vnum:	488
 		Type:	Always
 		Stock:	0
 	[SELL 15]
-		Vnum:	85016
+		Vnum:	487
 		Type:	Always
 		Stock:	0
 	[SELL 16]
-		Vnum:	85017
+		Vnum:	325
 		Type:	Always
 		Stock:	0
 	[SELL 17]
-		Vnum:	85018
+		Vnum:	427
 		Type:	Always
 		Stock:	0
 	[SELL 18]
-		Vnum:	85019
+		Vnum:	371
 		Type:	Always
 		Stock:	0
 	[SELL 19]
-		Vnum:	85020
+		Vnum:	373
 		Type:	Always
 		Stock:	0
 	[SELL 20]
-		Vnum:	85021
+		Vnum:	1110
 		Type:	Always
 		Stock:	0
 	[SELL 21]
-		Vnum:	85022
+		Vnum:	1109
 		Type:	Always
 		Stock:	0
 	[SELL 22]
-		Vnum:	85023
+		Vnum:	1108
 		Type:	Always
 		Stock:	0
 	[SELL 23]
-		Vnum:	85024
+		Vnum:	1107
 		Type:	Always
 		Stock:	0
 	[SELL 24]
-		Vnum:	85025
+		Vnum:	1106
 		Type:	Always
 		Stock:	0
 	[SELL 25]
-		Vnum:	85034
+		Vnum:	486
 		Type:	Always
 		Stock:	0
 	[SELL 26]
-		Vnum:	85035
-		Type:	Always
-		Stock:	0
-	[SELL 27]
-		Vnum:	85036
-		Type:	Always
-		Stock:	0
-	[SELL 28]
-		Vnum:	85037
-		Type:	Always
-		Stock:	0
-	[SELL 29]
-		Vnum:	85038
-		Type:	Always
-		Stock:	0
-	[SELL 30]
-		Vnum:	85039
-		Type:	Always
-		Stock:	0
-	[SELL 31]
-		Vnum:	85040
-		Type:	Always
-		Stock:	0
-	[SELL 32]
-		Vnum:	85041
+		Vnum:	304
 		Type:	Always
 		Stock:	0
 BREAK
@@ -432,86 +388,86 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1110
 Races:	0
 Buytypes:	1000000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	85042
+		Vnum:	513
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	85043
+		Vnum:	512
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	85044
+		Vnum:	511
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	85045
+		Vnum:	510
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	85046
+		Vnum:	509
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	85047
+		Vnum:	508
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	85048
+		Vnum:	507
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	85049
+		Vnum:	506
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	85050
+		Vnum:	305
 		Type:	Always
 		Stock:	0
 	[SELL 9]
-		Vnum:	85051
+		Vnum:	366
 		Type:	Always
 		Stock:	0
 	[SELL 10]
-		Vnum:	85052
+		Vnum:	365
 		Type:	Always
 		Stock:	0
 	[SELL 11]
-		Vnum:	85053
+		Vnum:	364
 		Type:	Always
 		Stock:	0
 	[SELL 12]
-		Vnum:	85054
+		Vnum:	363
 		Type:	Always
 		Stock:	0
 	[SELL 13]
-		Vnum:	85055
+		Vnum:	362
 		Type:	Always
 		Stock:	0
 	[SELL 14]
-		Vnum:	85056
+		Vnum:	307
 		Type:	Always
 		Stock:	0
 	[SELL 15]
-		Vnum:	85057
+		Vnum:	306
 		Type:	Always
 		Stock:	0
 	[SELL 16]
-		Vnum:	85058
+		Vnum:	442
 		Type:	Always
 		Stock:	0
 	[SELL 17]
-		Vnum:	85059
+		Vnum:	440
 		Type:	Always
 		Stock:	0
 	[SELL 18]
-		Vnum:	85060
+		Vnum:	439
 		Type:	Always
 		Stock:	0
 BREAK
@@ -529,18 +485,70 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1100
 Races:	0
 Buytypes:	10000000000000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	1902
+		Vnum:	9152
 		Type:	Always
 		Stock:	0
 	[SELL 1]
+		Vnum:	60560
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	60561
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	60562
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	1902
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	60563
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	19732
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	60564
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	4229
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	60565
+		Type:	Always
+		Stock:	0
+	[SELL 10]
 		Vnum:	1841
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	4906
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	60566
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	60567
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	60568
 		Type:	Always
 		Stock:	0
 BREAK
@@ -558,10 +566,10 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	100
 Races:	0
-Buytypes:	0
+Buytypes:	1000000000000
 Etiquette:	46
 [SELLING]
 	[SELL 0]
@@ -607,14 +615,14 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	100
 Races:	0
 Buytypes:	100000
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	60501
+		Vnum:	734
 		Type:	Always
 		Stock:	0
 	[SELL 1]
@@ -630,18 +638,22 @@ Etiquette:	46
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	781
+		Vnum:	60329
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	785
+		Vnum:	781
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	827
+		Vnum:	785
 		Type:	Always
 		Stock:	0
 	[SELL 7]
+		Vnum:	827
+		Type:	Always
+		Stock:	0
+	[SELL 8]
 		Vnum:	631
 		Type:	Always
 		Stock:	0
@@ -660,61 +672,69 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	100
 Races:	0
 Buytypes:	0
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	633
+		Vnum:	17220
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	666
-		Type:	Always
-		Stock:	0
-	[SELL 2]
 		Vnum:	35597
 		Type:	Always
 		Stock:	0
+	[SELL 2]
+		Vnum:	64977
+		Type:	Always
+		Stock:	0
 	[SELL 3]
-		Vnum:	60522
+		Vnum:	31526
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	60521
+		Vnum:	60522
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	60520
+		Vnum:	60521
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	60519
+		Vnum:	60520
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	656
+		Vnum:	60519
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	635
+		Vnum:	656
 		Type:	Always
 		Stock:	0
 	[SELL 9]
-		Vnum:	684
+		Vnum:	635
 		Type:	Always
 		Stock:	0
 	[SELL 10]
-		Vnum:	60514
+		Vnum:	26907
 		Type:	Always
 		Stock:	0
 	[SELL 11]
-		Vnum:	632
+		Vnum:	684
 		Type:	Always
 		Stock:	0
 	[SELL 12]
+		Vnum:	60514
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	632
+		Type:	Always
+		Stock:	0
+	[SELL 14]
 		Vnum:	60512
 		Type:	Always
 		Stock:	0
@@ -733,46 +753,106 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	100
 Races:	0
 Buytypes:	100000000000
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	679
+		Vnum:	60574
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	717
+		Vnum:	60573
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	716
+		Vnum:	3405
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	715
+		Vnum:	19603
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	714
-		Type:	Always
-		Stock:	0
-	[SELL 5]
 		Vnum:	713
 		Type:	Always
 		Stock:	0
-	[SELL 6]
+	[SELL 5]
 		Vnum:	712
 		Type:	Always
 		Stock:	0
+	[SELL 6]
+		Vnum:	60570
+		Type:	Always
+		Stock:	0
 	[SELL 7]
-		Vnum:	1830
+		Vnum:	64903
 		Type:	Always
 		Stock:	0
 	[SELL 8]
+		Vnum:	1830
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	29010
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	38005
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	22691
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	14607
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	3482
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	9402
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	38007
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	14626
+		Type:	Always
+		Stock:	0
+	[SELL 17]
 		Vnum:	1952
+		Type:	Always
+		Stock:	0
+	[SELL 18]
+		Vnum:	60572
+		Type:	Always
+		Stock:	0
+	[SELL 19]
+		Vnum:	60571
+		Type:	Always
+		Stock:	0
+	[SELL 20]
+		Vnum:	1433
+		Type:	Always
+		Stock:	0
+	[SELL 21]
+		Vnum:	8455
+		Type:	Always
+		Stock:	0
+	[SELL 22]
+		Vnum:	19627
+		Type:	Always
+		Stock:	0
+	[SELL 23]
+		Vnum:	14618
 		Type:	Always
 		Stock:	0
 BREAK
@@ -790,10 +870,10 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1100
 Races:	0
-Buytypes:	1000010001100000000000
+Buytypes:	1000000001000010001100000001100
 Etiquette:	46
 [SELLING]
 	[SELL 0]
@@ -817,22 +897,46 @@ Etiquette:	46
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	450
+		Vnum:	37597
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	374
+		Vnum:	38041
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	381
+		Vnum:	450
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	1816
+		Vnum:	2109
 		Type:	Always
 		Stock:	0
 	[SELL 9]
+		Vnum:	39847
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	39864
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	31542
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	374
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	381
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	1816
+		Type:	Always
+		Stock:	0
+	[SELL 15]
 		Vnum:	1844
 		Type:	Always
 		Stock:	0
@@ -851,66 +955,58 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	100
 Races:	0
-Buytypes:	0
+Buytypes:	1100000000110000000000000000000000000
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	1171
-		Type:	Always
-		Stock:	0
-	[SELL 1]
 		Vnum:	1170
 		Type:	Always
 		Stock:	0
+	[SELL 1]
+		Vnum:	1171
+		Type:	Always
+		Stock:	0
 	[SELL 2]
-		Vnum:	1847
+		Vnum:	1172
 		Type:	Always
 		Stock:	0
 	[SELL 3]
 		Vnum:	1846
 		Type:	Always
-		Stock:	2056
+		Stock:	0
 	[SELL 4]
-		Vnum:	1303
+		Vnum:	8459
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	1302
+		Vnum:	1847
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	1966
-		Type:	Always
-		Stock:	0
-	[SELL 7]
-		Vnum:	1802
-		Type:	Always
-		Stock:	0
-	[SELL 8]
-		Vnum:	9927
-		Type:	Always
-		Stock:	0
-	[SELL 9]
-		Vnum:	9926
-		Type:	Always
-		Stock:	0
-	[SELL 10]
-		Vnum:	9923
-		Type:	Always
-		Stock:	0
-	[SELL 11]
-		Vnum:	9921
-		Type:	Always
-		Stock:	0
-	[SELL 12]
 		Vnum:	1820
 		Type:	Always
 		Stock:	0
-	[SELL 13]
+	[SELL 7]
+		Vnum:	1116
+		Type:	Always
+		Stock:	0
+	[SELL 8]
 		Vnum:	1916
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	29005
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	1303
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	1302
 		Type:	Always
 		Stock:	0
 BREAK
@@ -928,14 +1024,34 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	100
 Races:	0
-Buytypes:	0
+Buytypes:	100000000000000
 Etiquette:	46
 [SELLING]
 	[SELL 0]
 		Vnum:	453
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	2510
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	2511
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	16208
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	16207
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	16206
 		Type:	Always
 		Stock:	0
 BREAK
@@ -953,34 +1069,54 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	100
 Races:	0
 Buytypes:	1000000000010000000000000000000000000000
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	60554
+		Vnum:	31512
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	60553
+		Vnum:	3494
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	60552
+		Vnum:	61522
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	60551
+		Vnum:	60554
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	60550
+		Vnum:	60553
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	603
+		Vnum:	60552
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	60551
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	60550
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	932
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	940
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	935
 		Type:	Always
 		Stock:	0
 BREAK
@@ -998,7 +1134,7 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	100
 Races:	0
 Buytypes:	0
@@ -1009,7 +1145,7 @@ Etiquette:	46
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	603
+		Vnum:	374
 		Type:	Always
 		Stock:	0
 	[SELL 2]
@@ -1035,7 +1171,7 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	100
 Races:	0
 Buytypes:	0
@@ -1068,30 +1204,30 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	100
 Races:	0
-Buytypes:	0
+Buytypes:	100000000000000000000000000
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	1150
+		Vnum:	1152
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	1155
+		Vnum:	1825
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	387
+		Vnum:	1155
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	9929
+		Vnum:	1150
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	9980
+		Vnum:	1151
 		Type:	Always
 		Stock:	0
 	[SELL 5]
@@ -1099,11 +1235,63 @@ Etiquette:	46
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	1152
+		Vnum:	1153
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	1151
+		Vnum:	1127
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	1128
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	1129
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	1130
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	1131
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	1132
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	1133
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	1134
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	387
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	1135
+		Type:	Always
+		Stock:	0
+	[SELL 17]
+		Vnum:	1136
+		Type:	Always
+		Stock:	0
+	[SELL 18]
+		Vnum:	4275
+		Type:	Always
+		Stock:	0
+	[SELL 19]
+		Vnum:	1137
+		Type:	Always
+		Stock:	0
+	[SELL 20]
+		Vnum:	9980
 		Type:	Always
 		Stock:	0
 BREAK
@@ -1121,26 +1309,58 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	%d nuyen, slotface.
 Sell:	%d nuyen, now go away.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	100
 Races:	0
 Buytypes:	11100000000110000000000000000000000000
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	1824
+		Vnum:	6103
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	1823
+		Vnum:	6102
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	1822
+		Vnum:	6101
 		Type:	Always
 		Stock:	0
 	[SELL 3]
+		Vnum:	6100
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	1824
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	1823
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	1822
+		Type:	Always
+		Stock:	0
+	[SELL 7]
 		Vnum:	1821
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	6107
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	6106
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	6105
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	6104
 		Type:	Always
 		Stock:	0
 BREAK
@@ -1158,50 +1378,135 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	%d nuyen is YOUR price.
 Sell:	Take your %d nuyen, tortoise-head!
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	100
 Races:	0
-Buytypes:	0
+Buytypes:	100000000000000000000000000
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	1163
+		Vnum:	9927
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	1965
+		Vnum:	9926
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	17116
+		Vnum:	9923
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	17113
+		Vnum:	9921
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	17114
+		Vnum:	9928
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	17115
-		Type:	Always
-		Stock:	0
-	[SELL 6]
-		Vnum:	9922
-		Type:	Always
-		Stock:	0
-	[SELL 7]
-		Vnum:	9924
-		Type:	Always
-		Stock:	0
-	[SELL 8]
 		Vnum:	9925
 		Type:	Always
 		Stock:	0
+	[SELL 6]
+		Vnum:	9924
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	9922
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	17116
+		Type:	Always
+		Stock:	0
 	[SELL 9]
-		Vnum:	9928
+		Vnum:	17115
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	17114
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	17113
+		Type:	Always
+		Stock:	0
+BREAK
+#60590
+Keeper:	60546
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Grey
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	It's %d yen, now get lost, i'm busy.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	100
+Races:	0
+Buytypes:	100000000000000000000000001
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	17118
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	9929
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	1162
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	1158
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	1157
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	1161
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	1160
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	1966
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	1138
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	1139
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	1140
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	6109
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	1141
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	6108
 		Type:	Always
 		Stock:	0
 BREAK
@@ -1219,22 +1524,38 @@ NoNuyen:	Money not enough haveth thee.... errr.
 DoesntBuy:	We don't buy that.
 Buy:	%d nuyen ...... chummer~r~r~r.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1110
 Races:	0
 Buytypes:	10000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	85802
+		Vnum:	60617
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	85821
+		Vnum:	60618
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	85822
+		Vnum:	60619
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	60614
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	60615
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	60616
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	60344
 		Type:	Always
 		Stock:	0
 BREAK
@@ -1252,42 +1573,42 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1110
 Races:	0
 Buytypes:	10000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	85926
+		Vnum:	410
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	85927
+		Vnum:	411
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	85928
+		Vnum:	413
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	85929
+		Vnum:	414
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	85937
+		Vnum:	60612
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	85938
+		Vnum:	60613
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	85939
+		Vnum:	412
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	85940
+		Vnum:	60611
 		Type:	Always
 		Stock:	0
 BREAK
@@ -1305,46 +1626,46 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That is %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1110
 Races:	0
 Buytypes:	10000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	85803
+		Vnum:	416
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	85805
+		Vnum:	417
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	85806
+		Vnum:	418
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	85807
+		Vnum:	419
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	85808
+		Vnum:	60607
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	85809
+		Vnum:	60608
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	85810
+		Vnum:	60609
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	85811
+		Vnum:	60610
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	85812
+		Vnum:	415
 		Type:	Always
 		Stock:	0
 BREAK
@@ -1362,30 +1683,54 @@ NoNuyen:	You don't seem to have enough 'yen there kiddo.
 DoesntBuy:	We don't buy that.
 Buy:	%d nuyen, thanks.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1110
 Races:	0
 Buytypes:	10000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	85804
+		Vnum:	60600
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	85816
+		Vnum:	60601
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	85818
+		Vnum:	60602
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	85819
+		Vnum:	401
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	85820
+		Vnum:	420
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	421
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	60603
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	60604
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	60605
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	60606
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	400
 		Type:	Always
 		Stock:	0
 BREAK
@@ -1403,30 +1748,30 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1100
 Races:	0
 Buytypes:	100001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	738
+		Vnum:	728
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	737
+		Vnum:	730
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	736
+		Vnum:	731
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	690
+		Vnum:	732
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	625
+		Vnum:	618
 		Type:	Always
 		Stock:	0
 	[SELL 5]
@@ -1434,63 +1779,87 @@ Etiquette:	46
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	732
+		Vnum:	625
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	747
+		Vnum:	734
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	623
+		Vnum:	690
 		Type:	Always
 		Stock:	0
 	[SELL 9]
-		Vnum:	744
+		Vnum:	2035
 		Type:	Always
 		Stock:	0
 	[SELL 10]
-		Vnum:	745
+		Vnum:	619
 		Type:	Always
 		Stock:	0
 	[SELL 11]
-		Vnum:	624
+		Vnum:	741
 		Type:	Always
 		Stock:	0
 	[SELL 12]
-		Vnum:	622
+		Vnum:	736
 		Type:	Always
 		Stock:	0
 	[SELL 13]
-		Vnum:	740
+		Vnum:	751
 		Type:	Always
 		Stock:	0
 	[SELL 14]
-		Vnum:	689
+		Vnum:	737
 		Type:	Always
 		Stock:	0
 	[SELL 15]
-		Vnum:	621
+		Vnum:	738
 		Type:	Always
 		Stock:	0
 	[SELL 16]
-		Vnum:	668
-		Type:	Always
-		Stock:	0
-	[SELL 17]
 		Vnum:	739
 		Type:	Always
 		Stock:	0
+	[SELL 17]
+		Vnum:	689
+		Type:	Always
+		Stock:	0
 	[SELL 18]
-		Vnum:	618
+		Vnum:	621
 		Type:	Always
 		Stock:	0
 	[SELL 19]
-		Vnum:	731
+		Vnum:	668
 		Type:	Always
 		Stock:	0
 	[SELL 20]
-		Vnum:	728
+		Vnum:	622
+		Type:	Always
+		Stock:	0
+	[SELL 21]
+		Vnum:	740
+		Type:	Always
+		Stock:	0
+	[SELL 22]
+		Vnum:	753
+		Type:	Always
+		Stock:	0
+	[SELL 23]
+		Vnum:	624
+		Type:	Always
+		Stock:	0
+	[SELL 24]
+		Vnum:	743
+		Type:	Always
+		Stock:	0
+	[SELL 25]
+		Vnum:	623
+		Type:	Always
+		Stock:	0
+	[SELL 26]
+		Vnum:	745
 		Type:	Always
 		Stock:	0
 BREAK
@@ -1508,38 +1877,38 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1100
 Races:	0
 Buytypes:	100001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	778
+		Vnum:	776
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	786
-		Type:	Always
-		Stock:	0
-	[SELL 2]
-		Vnum:	784
-		Type:	Always
-		Stock:	0
-	[SELL 3]
-		Vnum:	783
-		Type:	Always
-		Stock:	0
-	[SELL 4]
-		Vnum:	780
-		Type:	Always
-		Stock:	0
-	[SELL 5]
 		Vnum:	777
 		Type:	Always
 		Stock:	0
+	[SELL 2]
+		Vnum:	778
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	62366
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	759
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	779
+		Type:	Always
+		Stock:	0
 	[SELL 6]
-		Vnum:	785
+		Vnum:	780
 		Type:	Always
 		Stock:	0
 	[SELL 7]
@@ -1547,11 +1916,19 @@ Etiquette:	46
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	779
+		Vnum:	783
 		Type:	Always
 		Stock:	0
 	[SELL 9]
-		Vnum:	776
+		Vnum:	784
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	786
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	785
 		Type:	Always
 		Stock:	0
 BREAK
@@ -1569,22 +1946,22 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1100
 Races:	0
 Buytypes:	100001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	842
+		Vnum:	837
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	838
+		Vnum:	839
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	839
+		Vnum:	838
 		Type:	Always
 		Stock:	0
 	[SELL 3]
@@ -1592,7 +1969,7 @@ Etiquette:	46
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	837
+		Vnum:	842
 		Type:	Always
 		Stock:	0
 BREAK
@@ -1610,29 +1987,41 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1100
 Races:	0
 Buytypes:	100001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	835
-		Type:	Always
-		Stock:	0
-	[SELL 1]
 		Vnum:	832
 		Type:	Always
 		Stock:	0
+	[SELL 1]
+		Vnum:	835
+		Type:	Always
+		Stock:	0
 	[SELL 2]
-		Vnum:	828
+		Vnum:	760
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	827
+		Vnum:	758
 		Type:	Always
 		Stock:	0
 	[SELL 4]
+		Vnum:	744
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	828
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	827
+		Type:	Always
+		Stock:	0
+	[SELL 7]
 		Vnum:	826
 		Type:	Always
 		Stock:	0
@@ -1651,7 +2040,7 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1100
 Races:	0
 Buytypes:	100001
@@ -1678,24 +2067,28 @@ NoSuchItemKeeper:	Sorry, we don't have that.
 NoSuchItemPlayer:	You don't seem to have that.
 NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
-Buy:	That'll be %d nuyen.
+Buy:	That'll be %d nuyen. Remember to read HELP RELOAD.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1100
 Races:	0
-Buytypes:	1000000000000000000000000001
+Buytypes:	1000000000000001000000000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	603
-		Type:	Always
-		Stock:	0
-	[SELL 1]
 		Vnum:	601
 		Type:	Always
 		Stock:	0
+	[SELL 1]
+		Vnum:	953
+		Type:	Always
+		Stock:	0
 	[SELL 2]
-		Vnum:	602
+		Vnum:	856
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	850
 		Type:	Always
 		Stock:	0
 BREAK
@@ -1711,14 +2104,22 @@ NoSuchItemKeeper:	Sorry, we don't have that.
 NoSuchItemPlayer:	You don't seem to have that.
 NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
-Buy:	That'll be %d nuyen.
+Buy:	That'll be %d nuyen. Remember to read HELP RELOAD.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1100
 Races:	0
-Buytypes:	1000000000000000000000000001
+Buytypes:	1000000000000001000000000000000000000000001
 Etiquette:	46
 [SELLING]
+	[SELL 0]
+		Vnum:	601
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	916
+		Type:	Always
+		Stock:	0
 BREAK
 #60629
 Keeper:	60629
@@ -1732,14 +2133,26 @@ NoSuchItemKeeper:	Sorry, we don't have that.
 NoSuchItemPlayer:	You don't seem to have that.
 NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
-Buy:	That'll be %d nuyen.
+Buy:	That'll be %d nuyen. Remember to read HELP RELOAD.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1100
 Races:	0
-Buytypes:	1000000000000000000000000001
+Buytypes:	1000000000000001000000000000000000000000001
 Etiquette:	46
 [SELLING]
+	[SELL 0]
+		Vnum:	601
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	922
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	868
+		Type:	Always
+		Stock:	0
 BREAK
 #60630
 Keeper:	60630
@@ -1753,14 +2166,22 @@ NoSuchItemKeeper:	Sorry, we don't have that.
 NoSuchItemPlayer:	You don't seem to have that.
 NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
-Buy:	That'll be %d nuyen.
+Buy:	That'll be %d nuyen. Remember to read HELP RELOAD.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1100
 Races:	0
-Buytypes:	1000000000000000000000000001
+Buytypes:	1000000000000001000000000000000000000000001
 Etiquette:	46
 [SELLING]
+	[SELL 0]
+		Vnum:	601
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	862
+		Type:	Always
+		Stock:	0
 BREAK
 #60631
 Keeper:	60631
@@ -1776,10 +2197,10 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1100
 Races:	0
-Buytypes:	1000000000010000000000000000000000000001
+Buytypes:	1000000000010000000000000000001000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
@@ -1787,35 +2208,115 @@ Etiquette:	46
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	692
+		Vnum:	761
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	630
+		Vnum:	762
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	626
+		Vnum:	763
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	651
+		Vnum:	764
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	691
+		Vnum:	765
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	653
+		Vnum:	60554
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	650
+		Vnum:	630
 		Type:	Always
 		Stock:	0
 	[SELL 8]
+		Vnum:	626
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	60552
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	749
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	697
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	22437
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	29903
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	31526
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	692
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	28618
+		Type:	Always
+		Stock:	0
+	[SELL 17]
+		Vnum:	28702
+		Type:	Always
+		Stock:	0
+	[SELL 18]
+		Vnum:	2325
+		Type:	Always
+		Stock:	0
+	[SELL 19]
+		Vnum:	651
+		Type:	Always
+		Stock:	0
+	[SELL 20]
+		Vnum:	64963
+		Type:	Always
+		Stock:	0
+	[SELL 21]
+		Vnum:	691
+		Type:	Always
+		Stock:	0
+	[SELL 22]
+		Vnum:	653
+		Type:	Always
+		Stock:	0
+	[SELL 23]
+		Vnum:	650
+		Type:	Always
+		Stock:	0
+	[SELL 24]
+		Vnum:	28640
+		Type:	Always
+		Stock:	0
+	[SELL 25]
+		Vnum:	18981
+		Type:	Always
+		Stock:	0
+	[SELL 26]
 		Vnum:	2059
+		Type:	Always
+		Stock:	0
+	[SELL 27]
+		Vnum:	3494
+		Type:	Always
+		Stock:	0
+	[SELL 28]
+		Vnum:	9149
 		Type:	Always
 		Stock:	0
 BREAK
@@ -1831,14 +2332,22 @@ NoSuchItemKeeper:	Sorry, we don't have that.
 NoSuchItemPlayer:	You don't seem to have that.
 NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
-Buy:	That'll be %d nuyen.
+Buy:	That'll be %d nuyen. Remember to read HELP RELOAD.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1100
 Races:	0
-Buytypes:	1
+Buytypes:	1000000000000001000000000000000000000000001
 Etiquette:	46
 [SELLING]
+	[SELL 0]
+		Vnum:	601
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	928
+		Type:	Always
+		Stock:	0
 BREAK
 #60634
 Keeper:	60634
@@ -1854,33 +2363,49 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1100
 Races:	0
 Buytypes:	100001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	636
+		Vnum:	60514
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	637
+		Vnum:	60523
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	684
+		Vnum:	60524
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	652
+		Vnum:	370
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	633
+		Vnum:	636
 		Type:	Always
 		Stock:	0
 	[SELL 5]
+		Vnum:	637
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	684
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	652
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	633
+		Type:	Always
+		Stock:	0
+	[SELL 9]
 		Vnum:	632
 		Type:	Always
 		Stock:	0
@@ -1899,7 +2424,7 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1100
 Races:	0
 Buytypes:	100001
@@ -1910,15 +2435,27 @@ Etiquette:	46
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	695
+		Vnum:	19752
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	696
+		Vnum:	695
 		Type:	Always
 		Stock:	0
 	[SELL 3]
+		Vnum:	60520
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	696
+		Type:	Always
+		Stock:	0
+	[SELL 5]
 		Vnum:	60521
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	60518
 		Type:	Always
 		Stock:	0
 BREAK
@@ -1936,7 +2473,7 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1100
 Races:	0
 Buytypes:	100001
@@ -1947,15 +2484,43 @@ Etiquette:	46
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	635
+		Vnum:	60510
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	693
+		Vnum:	60513
 		Type:	Always
 		Stock:	0
 	[SELL 3]
+		Vnum:	60515
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	693
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	60516
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	60517
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	60519
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	60511
+		Type:	Always
+		Stock:	0
+	[SELL 9]
 		Vnum:	657
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	635
 		Type:	Always
 		Stock:	0
 BREAK
@@ -1973,12 +2538,84 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1100
 Races:	0
 Buytypes:	100000000001
 Etiquette:	46
 [SELLING]
+	[SELL 0]
+		Vnum:	8439
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	8438
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	8437
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	8436
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	8435
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	8456
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	8446
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	8445
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	8444
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	8443
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	8442
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	8441
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	8440
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	8434
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	8433
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	8432
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	8431
+		Type:	Always
+		Stock:	0
+	[SELL 17]
+		Vnum:	8430
+		Type:	Always
+		Stock:	0
 BREAK
 #60638
 Keeper:	60638
@@ -1994,7 +2631,7 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Unnamed Shop
+Name:	unnamed shop
 Flags:	1100
 Races:	0
 Buytypes:	100000000001
@@ -2061,92 +2698,84 @@ Random:	0
 Open:	0
 Close:	24
 Type:	Black
-NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemKeeper:	Sorry, we don't carry that.
 NoSuchItemPlayer:	You don't seem to have that.
 NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Eye Modification Alphaware
-Flags:	1110
+Name:	(null)
+Flags:	1100
 Races:	0
-Buytypes:	1000000000000000000000001
+Buytypes:	10000000000000000000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	85242
+		Vnum:	33378
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	85243
+		Vnum:	33379
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	85244
+		Vnum:	33380
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	85245
+		Vnum:	33381
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	85246
+		Vnum:	33382
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	85247
+		Vnum:	33383
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	85248
+		Vnum:	33384
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	85249
+		Vnum:	33385
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	85250
+		Vnum:	33386
 		Type:	Always
 		Stock:	0
 	[SELL 9]
-		Vnum:	85251
+		Vnum:	33387
 		Type:	Always
 		Stock:	0
 	[SELL 10]
-		Vnum:	85252
+		Vnum:	33388
 		Type:	Always
 		Stock:	0
 	[SELL 11]
-		Vnum:	85253
+		Vnum:	33389
 		Type:	Always
 		Stock:	0
 	[SELL 12]
-		Vnum:	85254
+		Vnum:	39300
 		Type:	Always
 		Stock:	0
 	[SELL 13]
-		Vnum:	85255
+		Vnum:	39302
 		Type:	Always
 		Stock:	0
 	[SELL 14]
-		Vnum:	85256
+		Vnum:	39304
 		Type:	Always
 		Stock:	0
 	[SELL 15]
-		Vnum:	85257
+		Vnum:	39306
 		Type:	Always
 		Stock:	0
 	[SELL 16]
-		Vnum:	85258
-		Type:	Always
-		Stock:	0
-	[SELL 17]
-		Vnum:	85259
-		Type:	Always
-		Stock:	0
-	[SELL 18]
-		Vnum:	85260
+		Vnum:	39308
 		Type:	Always
 		Stock:	0
 BREAK
@@ -2164,58 +2793,78 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Hand-based Alphaware
-Flags:	1110
+Name:	(null)
+Flags:	1100
 Races:	0
-Buytypes:	1000000000000000000000001
+Buytypes:	10000000000000000000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	85284
+		Vnum:	30722
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	85286
+		Vnum:	33390
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	85287
+		Vnum:	33391
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	85288
+		Vnum:	7428
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	85289
+		Vnum:	30725
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	85290
+		Vnum:	33392
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	85291
+		Vnum:	33393
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	85292
+		Vnum:	22840
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	85293
+		Vnum:	33394
 		Type:	Always
 		Stock:	0
 	[SELL 9]
-		Vnum:	85308
+		Vnum:	33395
 		Type:	Always
 		Stock:	0
 	[SELL 10]
-		Vnum:	85317
+		Vnum:	33396
 		Type:	Always
 		Stock:	0
 	[SELL 11]
-		Vnum:	85318
+		Vnum:	33397
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	39301
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	39303
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	39305
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	39307
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	39309
 		Type:	Always
 		Stock:	0
 BREAK
@@ -2233,94 +2882,98 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Hand-based Alphaware
-Flags:	1110
+Name:	(null)
+Flags:	1100
 Races:	0
-Buytypes:	1000000000000000000000001
+Buytypes:	10000000000000000000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	85263
+		Vnum:	33300
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	85264
+		Vnum:	33301
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	85265
+		Vnum:	33302
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	85266
+		Vnum:	33303
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	85267
+		Vnum:	33304
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	85271
+		Vnum:	33305
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	85272
+		Vnum:	33306
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	85273
+		Vnum:	33307
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	85274
+		Vnum:	33308
 		Type:	Always
 		Stock:	0
 	[SELL 9]
-		Vnum:	85275
+		Vnum:	33309
 		Type:	Always
 		Stock:	0
 	[SELL 10]
-		Vnum:	85276
+		Vnum:	33310
 		Type:	Always
 		Stock:	0
 	[SELL 11]
-		Vnum:	85277
+		Vnum:	33311
 		Type:	Always
 		Stock:	0
 	[SELL 12]
-		Vnum:	85294
+		Vnum:	33312
 		Type:	Always
 		Stock:	0
 	[SELL 13]
-		Vnum:	85295
+		Vnum:	33318
 		Type:	Always
 		Stock:	0
 	[SELL 14]
-		Vnum:	85296
+		Vnum:	33319
 		Type:	Always
 		Stock:	0
 	[SELL 15]
-		Vnum:	85297
+		Vnum:	33320
 		Type:	Always
 		Stock:	0
 	[SELL 16]
-		Vnum:	85298
+		Vnum:	33321
 		Type:	Always
 		Stock:	0
 	[SELL 17]
-		Vnum:	85303
+		Vnum:	33322
 		Type:	Always
 		Stock:	0
 	[SELL 18]
-		Vnum:	85304
+		Vnum:	19976
 		Type:	Always
 		Stock:	0
 	[SELL 19]
-		Vnum:	85305
+		Vnum:	33333
 		Type:	Always
 		Stock:	0
 	[SELL 20]
-		Vnum:	85306
+		Vnum:	33334
+		Type:	Always
+		Stock:	0
+	[SELL 21]
+		Vnum:	33335
 		Type:	Always
 		Stock:	0
 BREAK
@@ -2338,82 +2991,106 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Hand-based Alphaware
-Flags:	1110
+Name:	(null)
+Flags:	1100
 Races:	0
-Buytypes:	1000000000000000000000001
+Buytypes:	10000000000000000000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	85268
+		Vnum:	19856
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	85269
+		Vnum:	33313
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	85270
+		Vnum:	33314
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	85299
+		Vnum:	19987
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	85307
+		Vnum:	33315
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	85309
+		Vnum:	19986
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	85310
+		Vnum:	33316
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	85311
+		Vnum:	33317
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	85312
+		Vnum:	33336
 		Type:	Always
 		Stock:	0
 	[SELL 9]
-		Vnum:	85313
+		Vnum:	33337
 		Type:	Always
 		Stock:	0
 	[SELL 10]
-		Vnum:	85314
+		Vnum:	33338
 		Type:	Always
 		Stock:	0
 	[SELL 11]
-		Vnum:	85315
+		Vnum:	33339
 		Type:	Always
 		Stock:	0
 	[SELL 12]
-		Vnum:	85316
+		Vnum:	33340
 		Type:	Always
 		Stock:	0
 	[SELL 13]
-		Vnum:	85320
+		Vnum:	33323
 		Type:	Always
 		Stock:	0
 	[SELL 14]
-		Vnum:	85321
+		Vnum:	33324
 		Type:	Always
 		Stock:	0
 	[SELL 15]
-		Vnum:	85322
+		Vnum:	19985
 		Type:	Always
 		Stock:	0
 	[SELL 16]
-		Vnum:	85323
+		Vnum:	33325
 		Type:	Always
 		Stock:	0
 	[SELL 17]
-		Vnum:	85324
+		Vnum:	33326
+		Type:	Always
+		Stock:	0
+	[SELL 18]
+		Vnum:	33327
+		Type:	Always
+		Stock:	0
+	[SELL 19]
+		Vnum:	33328
+		Type:	Always
+		Stock:	0
+	[SELL 20]
+		Vnum:	33329
+		Type:	Always
+		Stock:	0
+	[SELL 21]
+		Vnum:	33330
+		Type:	Always
+		Stock:	0
+	[SELL 22]
+		Vnum:	33331
+		Type:	Always
+		Stock:	0
+	[SELL 23]
+		Vnum:	33332
 		Type:	Always
 		Stock:	0
 BREAK
@@ -2431,142 +3108,672 @@ NoNuyen:	You don't have enough nuyen!
 DoesntBuy:	We don't buy that.
 Buy:	That'll be %d nuyen.
 Sell:	Here's your %d nuyen.
-Name:	Hand-based Alphaware
+Name:	(null)
+Flags:	1100
+Races:	0
+Buytypes:	10000000000000000000000000000000000001
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	33341
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	33342
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	33343
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	39316
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	33344
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	33345
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	33346
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	33347
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	33348
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	33349
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	33350
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	33351
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	33352
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	33359
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	19897
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	33360
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	33361
+		Type:	Always
+		Stock:	0
+	[SELL 17]
+		Vnum:	33362
+		Type:	Always
+		Stock:	0
+	[SELL 18]
+		Vnum:	39310
+		Type:	Always
+		Stock:	0
+	[SELL 19]
+		Vnum:	33372
+		Type:	Always
+		Stock:	0
+	[SELL 20]
+		Vnum:	39312
+		Type:	Always
+		Stock:	0
+	[SELL 21]
+		Vnum:	19888
+		Type:	Always
+		Stock:	0
+BREAK
+#60644
+Keeper:	60644
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Black
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	1100
+Races:	0
+Buytypes:	10000000000000000000000000000000000001
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	7424
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	33353
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	33354
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	33355
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	33356
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	33357
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	33358
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	33363
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	33373
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	33374
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	33375
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	33376
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	33377
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	33364
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	33365
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	19855
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	33366
+		Type:	Always
+		Stock:	0
+	[SELL 17]
+		Vnum:	39314
+		Type:	Always
+		Stock:	0
+	[SELL 18]
+		Vnum:	39315
+		Type:	Always
+		Stock:	0
+	[SELL 19]
+		Vnum:	33367
+		Type:	Always
+		Stock:	0
+	[SELL 20]
+		Vnum:	33368
+		Type:	Always
+		Stock:	0
+	[SELL 21]
+		Vnum:	33369
+		Type:	Always
+		Stock:	0
+	[SELL 22]
+		Vnum:	33370
+		Type:	Always
+		Stock:	0
+	[SELL 23]
+		Vnum:	33371
+		Type:	Always
+		Stock:	0
+BREAK
+#60645
+Keeper:	60541
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Black
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll run you %d nuyen, chummer.
+Sell:	Here's your %d nuyen.
+Name:	(null)
 Flags:	1110
 Races:	0
 Buytypes:	1000000000000000000000001
 Etiquette:	46
 [SELLING]
 	[SELL 0]
-		Vnum:	85200
+		Vnum:	33220
 		Type:	Always
 		Stock:	0
 	[SELL 1]
-		Vnum:	85201
+		Vnum:	521
 		Type:	Always
 		Stock:	0
 	[SELL 2]
-		Vnum:	85202
+		Vnum:	522
 		Type:	Always
 		Stock:	0
 	[SELL 3]
-		Vnum:	85203
+		Vnum:	523
 		Type:	Always
 		Stock:	0
 	[SELL 4]
-		Vnum:	85204
+		Vnum:	39376
 		Type:	Always
 		Stock:	0
 	[SELL 5]
-		Vnum:	85205
+		Vnum:	524
 		Type:	Always
 		Stock:	0
 	[SELL 6]
-		Vnum:	85206
+		Vnum:	525
 		Type:	Always
 		Stock:	0
 	[SELL 7]
-		Vnum:	85207
+		Vnum:	526
 		Type:	Always
 		Stock:	0
 	[SELL 8]
-		Vnum:	85208
+		Vnum:	527
 		Type:	Always
 		Stock:	0
 	[SELL 9]
-		Vnum:	85209
+		Vnum:	528
 		Type:	Always
 		Stock:	0
 	[SELL 10]
-		Vnum:	85210
+		Vnum:	529
 		Type:	Always
 		Stock:	0
 	[SELL 11]
-		Vnum:	85211
+		Vnum:	530
 		Type:	Always
 		Stock:	0
 	[SELL 12]
-		Vnum:	85212
+		Vnum:	531
 		Type:	Always
 		Stock:	0
 	[SELL 13]
-		Vnum:	85213
+		Vnum:	532
 		Type:	Always
 		Stock:	0
 	[SELL 14]
-		Vnum:	85214
+		Vnum:	33249
 		Type:	Always
 		Stock:	0
 	[SELL 15]
-		Vnum:	85216
+		Vnum:	33248
 		Type:	Always
 		Stock:	0
 	[SELL 16]
-		Vnum:	85217
+		Vnum:	39379
 		Type:	Always
 		Stock:	0
 	[SELL 17]
-		Vnum:	85218
+		Vnum:	39378
 		Type:	Always
 		Stock:	0
 	[SELL 18]
-		Vnum:	85219
+		Vnum:	533
 		Type:	Always
 		Stock:	0
 	[SELL 19]
-		Vnum:	85220
+		Vnum:	39381
 		Type:	Always
 		Stock:	0
 	[SELL 20]
-		Vnum:	85221
+		Vnum:	39380
 		Type:	Always
 		Stock:	0
 	[SELL 21]
-		Vnum:	85222
+		Vnum:	39377
 		Type:	Always
 		Stock:	0
 	[SELL 22]
-		Vnum:	85223
+		Vnum:	444
+		Type:	Always
+		Stock:	0
+BREAK
+#60646
+Keeper:	60542
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Black
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That comes to %d yen.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	1110
+Races:	0
+Buytypes:	1000000000000000000000001
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	33213
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	33211
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	33209
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	33207
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	356
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	534
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	333
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	332
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	535
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	536
+		Type:	Always
+		Stock:	0
+BREAK
+#60647
+Keeper:	60543
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Black
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That procedure will cost you %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	1110
+Races:	0
+Buytypes:	1000000000000000000000001
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	62322
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	537
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	538
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	539
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	540
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	541
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	62326
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	33216
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	543
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	542
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	544
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	519
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	350
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	545
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	341
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	437
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	435
+		Type:	Always
+		Stock:	0
+	[SELL 17]
+		Vnum:	327
+		Type:	Always
+		Stock:	0
+	[SELL 18]
+		Vnum:	546
+		Type:	Always
+		Stock:	0
+	[SELL 19]
+		Vnum:	326
+		Type:	Always
+		Stock:	0
+	[SELL 20]
+		Vnum:	62324
+		Type:	Always
+		Stock:	0
+	[SELL 21]
+		Vnum:	62325
+		Type:	Always
+		Stock:	0
+	[SELL 22]
+		Vnum:	62323
 		Type:	Always
 		Stock:	0
 	[SELL 23]
-		Vnum:	85224
+		Vnum:	345
 		Type:	Always
 		Stock:	0
 	[SELL 24]
-		Vnum:	85225
+		Vnum:	344
 		Type:	Always
 		Stock:	0
-	[SELL 25]
-		Vnum:	85234
+BREAK
+#60648
+Keeper:	60544
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Black
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll be %d nuyen.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	1110
+Races:	0
+Buytypes:	1000000000000000000000001
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	547
 		Type:	Always
 		Stock:	0
-	[SELL 26]
-		Vnum:	85235
+	[SELL 1]
+		Vnum:	548
 		Type:	Always
 		Stock:	0
-	[SELL 27]
-		Vnum:	85236
+	[SELL 2]
+		Vnum:	338
 		Type:	Always
 		Stock:	0
-	[SELL 28]
-		Vnum:	85237
+	[SELL 3]
+		Vnum:	433
 		Type:	Always
 		Stock:	0
-	[SELL 29]
-		Vnum:	85238
+	[SELL 4]
+		Vnum:	549
 		Type:	Always
 		Stock:	0
-	[SELL 30]
-		Vnum:	85239
+	[SELL 5]
+		Vnum:	550
 		Type:	Always
 		Stock:	0
-	[SELL 31]
-		Vnum:	85240
+	[SELL 6]
+		Vnum:	431
 		Type:	Always
 		Stock:	0
-	[SELL 32]
-		Vnum:	85241
+	[SELL 7]
+		Vnum:	551
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	552
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	553
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	39374
+		Type:	Always
+		Stock:	0
+BREAK
+#60649
+Keeper:	60545
+ProfitBuy:	1.00
+ProfitSell:	1.00
+Random:	0
+Open:	0
+Close:	24
+Type:	Black
+NoSuchItemKeeper:	Sorry, we don't have that.
+NoSuchItemPlayer:	You don't seem to have that.
+NoNuyen:	You don't have enough nuyen!
+DoesntBuy:	We don't buy that.
+Buy:	That'll cost you %d yen.
+Sell:	Here's your %d nuyen.
+Name:	(null)
+Flags:	1110
+Races:	0
+Buytypes:	1000000000000000000000001
+Etiquette:	46
+[SELLING]
+	[SELL 0]
+		Vnum:	554
+		Type:	Always
+		Stock:	0
+	[SELL 1]
+		Vnum:	555
+		Type:	Always
+		Stock:	0
+	[SELL 2]
+		Vnum:	39370
+		Type:	Always
+		Stock:	0
+	[SELL 3]
+		Vnum:	39371
+		Type:	Always
+		Stock:	0
+	[SELL 4]
+		Vnum:	556
+		Type:	Always
+		Stock:	0
+	[SELL 5]
+		Vnum:	557
+		Type:	Always
+		Stock:	0
+	[SELL 6]
+		Vnum:	558
+		Type:	Always
+		Stock:	0
+	[SELL 7]
+		Vnum:	559
+		Type:	Always
+		Stock:	0
+	[SELL 8]
+		Vnum:	25588
+		Type:	Always
+		Stock:	0
+	[SELL 9]
+		Vnum:	560
+		Type:	Always
+		Stock:	0
+	[SELL 10]
+		Vnum:	561
+		Type:	Always
+		Stock:	0
+	[SELL 11]
+		Vnum:	562
+		Type:	Always
+		Stock:	0
+	[SELL 12]
+		Vnum:	563
+		Type:	Always
+		Stock:	0
+	[SELL 13]
+		Vnum:	564
+		Type:	Always
+		Stock:	0
+	[SELL 14]
+		Vnum:	441
+		Type:	Always
+		Stock:	0
+	[SELL 15]
+		Vnum:	565
+		Type:	Always
+		Stock:	0
+	[SELL 16]
+		Vnum:	566
+		Type:	Always
+		Stock:	0
+	[SELL 17]
+		Vnum:	567
+		Type:	Always
+		Stock:	0
+	[SELL 18]
+		Vnum:	568
 		Type:	Always
 		Stock:	0
 BREAK
